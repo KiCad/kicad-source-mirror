@@ -33,6 +33,7 @@
 #include "widgets/wx_html_report_panel.h"
 
 #include <libraries/legacy_symbol_library.h>
+#include <libraries/symbol_library_manager_adapter.h>
 #include <core/kicad_algo.h>
 #include <symbol_viewer_frame.h>
 #include <project_rescue.h>
@@ -130,7 +131,8 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
 
     createProjectSymbolLibTable( m_messagePanel->Reporter() );
     Prj().SetElem( PROJECT::ELEM::SYMBOL_LIB_TABLE, nullptr );
-    PROJECT_SCH::SchSymbolLibTable( &Prj() );
+    // TODO(JE) re-enable this
+    //PROJECT_SCH::SchSymbolLibTable( &Prj() );
 
     remapSymbolsToLibTable( m_messagePanel->Reporter() );
 
@@ -313,14 +315,12 @@ bool DIALOG_SYMBOL_REMAP::remapSymbolToLibTable( SCH_SYMBOL* aSymbol )
             // Find the same library in the symbol library table using the full path and file name.
             wxString libFileName = lib.GetFullFileName();
 
-            const LIB_TABLE_ROW* row =
-                    PROJECT_SCH::SchSymbolLibTable( &Prj() )->FindRowByURI( libFileName );
-
-            if( row )
+            if( std::optional<wxString> nickname =
+                    PROJECT_SCH::SymbolLibManager( &Prj() )->FindLibraryByURI( libFileName ) )
             {
                 LIB_ID id = aSymbol->GetLibId();
 
-                id.SetLibNickname( row->GetNickName() );
+                id.SetLibNickname( *nickname );
 
                 // Don't resolve symbol library links now.
                 aSymbol->SetLibId( id );

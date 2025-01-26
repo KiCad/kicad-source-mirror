@@ -20,6 +20,7 @@
 
 #include <fmt/format.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <pgm_base.h>
 #include "eeschema_test_utils.h"
 
 #include <libraries/symbol_library_manager_adapter.h>
@@ -66,7 +67,7 @@ BOOST_AUTO_TEST_CASE( ProjectLibraryTable )
     BOOST_REQUIRE( rows[0]->Nickname() == "Device" );
     BOOST_REQUIRE( rows[0]->URI() == "${KIPRJMOD}/Device.kicad_sym" );
 
-    SYMBOL_LIBRARY_MANAGER_ADAPTER adapter( manager, project );
+    SYMBOL_LIBRARY_MANAGER_ADAPTER adapter( manager );
 
     std::vector<LIB_SYMBOL*> symbols = adapter.GetSymbols( "Device" );
 
@@ -88,9 +89,8 @@ BOOST_AUTO_TEST_CASE( AsyncLoad )
     LIBRARY_MANAGER manager;
     manager.LoadGlobalTables();
 
-    SettingsManager().LoadProject( "" );
-    PROJECT& project = SettingsManager().Prj();
-    SYMBOL_LIBRARY_MANAGER_ADAPTER adapter( manager, project );
+    Pgm().GetSettingsManager().LoadProject( "" );
+    SYMBOL_LIBRARY_MANAGER_ADAPTER adapter( manager );
 
     auto tstart = std::chrono::high_resolution_clock::now();
     adapter.AsyncLoad();
@@ -138,7 +138,7 @@ BOOST_AUTO_TEST_CASE( AsyncLoad )
 
     BOOST_REQUIRE_GE( rows.size(), 2 );
 
-    for( auto& [nickname, status] : adapter.GetLibraryStatus() )
+    for( auto& [nickname, status] : adapter.GetLibraryStatuses() )
     {
         wxString msg = nickname;
         BOOST_REQUIRE( status.load_status != LOAD_STATUS::LOADING );

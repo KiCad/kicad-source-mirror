@@ -57,6 +57,8 @@
 #include <sim/sim_lib_mgr.h>
 #include <progress_reporter.h>
 #include <kiway.h>
+#include <pgm_base.h>
+#include <libraries/symbol_library_manager_adapter.h>
 
 
 /* ERC tests :
@@ -1447,7 +1449,8 @@ int ERC_TESTER::TestLibSymbolIssues()
 {
     wxCHECK( m_schematic, 0 );
 
-    SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &m_schematic->Project() );
+    LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
+    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_schematic->Project() );
     wxString          msg;
     int               err_count = 0;
 
@@ -1463,10 +1466,12 @@ int ERC_TESTER::TestLibSymbolIssues()
             if( !libSymbolInSchematic )
                 continue;
 
-            wxString             libName = symbol->GetLibId().GetLibNickname();
-            const LIB_TABLE_ROW* libTableRow = libTable->FindRow( libName, true );
+            wxString libName = symbol->GetLibId().GetLibNickname();
 
-            if( !libTableRow )
+            LIBRARY_RESULT<const LIBRARY_TABLE_ROW*> optRow =
+                    manager.GetRow( LIBRARY_TABLE_TYPE::SYMBOL, libName );
+
+            if( !optRow || !adapter->HasLibrary( libName, true ) )
             {
                 if( m_settings.IsTestEnabled( ERCE_LIB_SYMBOL_ISSUES ) )
                 {
@@ -1481,30 +1486,17 @@ int ERC_TESTER::TestLibSymbolIssues()
 
                 continue;
             }
-            else if( !libTable->HasLibrary( libName, true ) )
+            else if( !adapter->IsLibraryLoaded( libName ) )
             {
                 if( m_settings.IsTestEnabled( ERCE_LIB_SYMBOL_ISSUES ) )
                 {
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
-                    ercItem->SetItems( symbol );
-                    msg.Printf( _( "The symbol library '%s' is not enabled in the current configuration" ),
-                                UnescapeString( libName ) );
-                    ercItem->SetErrorMessage( msg );
-
-                    markers.emplace_back( new SCH_MARKER( std::move( ercItem ), symbol->GetPosition() ) );
-                }
-
-                continue;
-            }
-            else if( !libTableRow->LibraryExists() )
-            {
-                if( m_settings.IsTestEnabled( ERCE_LIB_SYMBOL_ISSUES ) )
-                {
-                    std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
+                    std::optional<wxString> uri =
+                            manager.GetFullURI( LIBRARY_TABLE_TYPE::SYMBOL, libName, true );
+                    wxCHECK2( uri.has_value(), uri = wxEmptyString );
                     ercItem->SetItems( symbol );
                     msg.Printf( _( "The symbol library '%s' was not found at '%s'" ),
-                                UnescapeString( libName ),
-                                libTableRow->GetFullURI( true ) );
+                                UnescapeString( libName ), *uri );
                     ercItem->SetErrorMessage( msg );
 
                     markers.emplace_back( new SCH_MARKER( std::move( ercItem ), symbol->GetPosition() ) );
@@ -1514,7 +1506,7 @@ int ERC_TESTER::TestLibSymbolIssues()
             }
 
             wxString    symbolName = symbol->GetLibId().GetLibItemName();
-            LIB_SYMBOL* libSymbol = SchGetLibSymbol( symbol->GetLibId(), libTable );
+            LIB_SYMBOL* libSymbol = adapter->LoadSymbol( symbol->GetLibId() );
 
             if( libSymbol == nullptr )
             {

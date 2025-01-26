@@ -50,6 +50,7 @@
 #include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
 #include <env_vars.h>
+#include <libraries/library_manager.h>
 
 
 SETTINGS_MANAGER::SETTINGS_MANAGER( bool aHeadless ) :
@@ -1043,6 +1044,9 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
         settings->LoadFromFile( path.GetPath() );
 
     m_projects[fullPath]->setLocalSettings( settings );
+
+    if( aSetActive )
+        Pgm().GetLibraryManager().ProjectChanged();
 
     if( aSetActive && m_kiway )
         m_kiway->ProjectChanged();

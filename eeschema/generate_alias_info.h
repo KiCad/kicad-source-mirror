@@ -24,12 +24,12 @@
 #include <wx/string.h>
 
 class LIB_ID;
-class SYMBOL_LIB_TABLE;
+class SYMBOL_LIBRARY_MANAGER_ADAPTER;
 
 /**
  * Return an HTML page describing a #LIB_ID in a #SYMBOL_LIB_TABLE. This is suitable for inclusion
  * in a HTML_WINDOW (wxHtmlWindow).
  */
-wxString GenerateAliasInfo( SYMBOL_LIB_TABLE* aSymLibTable, LIB_ID const& aLibId, int aUnit );
+wxString GenerateAliasInfo( SYMBOL_LIBRARY_MANAGER_ADAPTER* aLibs, LIB_ID const& aLibId, int aUnit );
 
 #endif // GENERATE_ALIAS_INFO_H

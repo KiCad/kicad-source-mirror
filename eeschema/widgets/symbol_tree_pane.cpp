@@ -40,7 +40,7 @@ SYMBOL_TREE_PANE::SYMBOL_TREE_PANE( SYMBOL_EDIT_FRAME* aParent,
 {
     // Create widgets
     wxBoxSizer* boxSizer = new wxBoxSizer( wxVERTICAL );
-    m_tree = new LIB_TREE( this, wxT( "symbols" ), &SYMBOL_LIB_TABLE::GetGlobalLibTable(),
+    m_tree = new LIB_TREE( this, wxT( "symbols" ),
                            m_libMgr->GetAdapter(), LIB_TREE::SEARCH | LIB_TREE::MULTISELECT );
     boxSizer->Add( m_tree, 1, wxEXPAND, 5 );
 

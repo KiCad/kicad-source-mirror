@@ -461,8 +461,9 @@ SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
         const_cast<KIID&>( rootSheet->m_Uuid ) = screen->GetUuid();
     }
 
-    SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &aSchematic->Project() );
-    wxCHECK_MSG( libTable, nullptr, wxS( "Could not load symbol lib table." ) );
+    // TODO(JE) library tables
+    // SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &aSchematic->Project() );
+    // wxCHECK_MSG( libTable, nullptr, wxS( "Could not load symbol lib table." ) );
 
     SCH_EASYEDAPRO_PARSER parser( nullptr, nullptr );
     wxFileName            fname( aFileName );
@@ -606,6 +607,8 @@ SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
 
     IO_RELEASER<SCH_IO> sch_plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
 
+    // TODO(JE) library tables
+#if 0
     if( !libTable->HasLibrary( libName ) )
     {
         // Create a new empty symbol library.
@@ -629,6 +632,7 @@ SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
         aSchematic->Project().SetElem( PROJECT::ELEM::SYMBOL_LIB_TABLE, NULL );
         PROJECT_SCH::SchSymbolLibTable( &aSchematic->Project() );
     }
+#endif
 
     // set properties to prevent save file on every symbol save
     std::map<std::string, UTF8> properties;

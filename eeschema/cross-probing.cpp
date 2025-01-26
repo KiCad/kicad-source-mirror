@@ -843,6 +843,8 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     {
         std::stringstream ss( payload );
         std::string       file;
+        // TODO(JE) library tables
+#if 0
         SYMBOL_LIB_TABLE* symLibTbl = PROJECT_SCH::SchSymbolLibTable( &Prj() );
 
         wxCHECK_RET( symLibTbl, "Could not load symbol lib table." );
@@ -880,7 +882,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
                 }
             }
         }
-
+#endif
         Kiway().ExpressMail( FRAME_CVPCB, MAIL_RELOAD_LIB, payload );
         Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_RELOAD_LIB, payload );
         Kiway().ExpressMail( FRAME_SCH_VIEWER, MAIL_RELOAD_LIB, payload );

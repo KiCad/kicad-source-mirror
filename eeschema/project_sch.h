@@ -42,7 +42,7 @@ public:
     static SEARCH_STACK* SchSearchS( PROJECT* aProject );
 
     /// Accessor for project symbol library table.
-    static SYMBOL_LIB_TABLE* SchSymbolLibTable( PROJECT* aProject );
+    //static SYMBOL_LIB_TABLE* SchSymbolLibTable( PROJECT* aProject );
 
     static SYMBOL_LIBRARY_MANAGER_ADAPTER*  SymbolLibManager( PROJECT* aProject );
 

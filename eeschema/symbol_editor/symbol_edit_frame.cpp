@@ -83,6 +83,7 @@
 #include <wildcards_and_files_ext.h>
 #include <panel_sym_lib_table.h>
 #include <string_utils.h>
+#include <libraries/symbol_library_manager_adapter.h>
 #include <wx/msgdlg.h>
 #include <wx/combobox.h>
 #include <wx/log.h>
@@ -868,7 +869,7 @@ wxString SYMBOL_EDIT_FRAME::GetCurLib() const
 
     if( !libNickname.empty() )
     {
-        if( !PROJECT_SCH::SchSymbolLibTable( &Prj() )->HasLibrary( libNickname ) )
+        if( !PROJECT_SCH::SymbolLibManager( &Prj() )->HasLibrary( libNickname ) )
         {
             Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_LIB, wxEmptyString );
             libNickname = wxEmptyString;
@@ -883,7 +884,7 @@ wxString SYMBOL_EDIT_FRAME::SetCurLib( const wxString& aLibNickname )
 {
     wxString old = GetCurLib();
 
-    if( aLibNickname.empty() || !PROJECT_SCH::SchSymbolLibTable( &Prj() )->HasLibrary( aLibNickname ) )
+    if( aLibNickname.empty() || !PROJECT_SCH::SymbolLibManager( &Prj() )->HasLibrary( aLibNickname ) )
         Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_LIB, wxEmptyString );
     else
         Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_LIB, aLibNickname );
@@ -1151,20 +1152,20 @@ wxString SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
     if( libName.IsEmpty() )
         return wxEmptyString;
 
-    useGlobalTable = tableChooser.GetUseGlobalTable();
+    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
+    LIBRARY_TABLE_SCOPE scope = tableChooser.GetUseGlobalTable() ? LIBRARY_TABLE_SCOPE::GLOBAL : LIBRARY_TABLE_SCOPE::PROJECT;
 
-    if( m_libMgr->LibraryExists( libName ) )
+    if( adapter->HasLibrary( libName ) )
     {
         DisplayError( this, wxString::Format( _( "Library '%s' already exists." ), libName ) );
         return wxEmptyString;
     }
 
-    SYMBOL_LIB_TABLE* libTable = useGlobalTable ? &SYMBOL_LIB_TABLE::GetGlobalLibTable()
-                                                : PROJECT_SCH::SchSymbolLibTable( &Prj() );
-
+    // TODO(JE) library tables
+#if 0
     if( aCreateNew )
     {
-        if( !m_libMgr->CreateLibrary( fn.GetFullPath(), *libTable ) )
+        if( !adapter->CreateLibrary( fn.GetFullPath(), scope ) )
         {
             DisplayError( this, wxString::Format( _( "Could not create the library file '%s'.\n"
                                                      "Make sure you have write permissions and "
@@ -1175,14 +1176,15 @@ wxString SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
     }
     else
     {
-        if( !m_libMgr->AddLibrary( fn.GetFullPath(), *libTable ) )
+        if( !adapter->AddLibrary( fn.GetFullPath(), scope ) )
         {
             DisplayError( this, _( "Could not open the library file." ) );
             return wxEmptyString;
         }
     }
+#endif
 
-    bool globalTable = ( libTable == &SYMBOL_LIB_TABLE::GetGlobalLibTable() );
+    bool globalTable = ( scope == LIBRARY_TABLE_SCOPE::GLOBAL );
     saveSymbolLibTables( globalTable, !globalTable );
 
     std::string packet = fn.GetFullPath().ToStdString();
@@ -1200,17 +1202,22 @@ void SYMBOL_EDIT_FRAME::DdAddLibrary( wxString aLibFile )
     if( libName.IsEmpty() )
         return;
 
-    if( m_libMgr->LibraryExists( libName ) )
+    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
+
+    if( adapter->HasLibrary( libName ) )
     {
         DisplayError( this, wxString::Format( _( "Library '%s' already exists." ), libName ) );
         return;
     }
 
-    if( !m_libMgr->AddLibrary( fn.GetFullPath(), *PROJECT_SCH::SchSymbolLibTable( &Prj() ) ) )
+    // TODO(JE) library tables
+#if 0
+    if( !adapter->AddLibrary( fn.GetFullPath(), LIBRARY_TABLE_SCOPE::PROJECT );
     {
         DisplayError( this, _( "Could not open the library file." ) );
         return;
     }
+#endif
 
     saveSymbolLibTables( false, true );
 
@@ -1614,6 +1621,8 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             wxString libNickname;
             wxString msg;
 
+            // TODO(JE) library tables
+#if 0
             SYMBOL_LIB_TABLE*    libTable = PROJECT_SCH::SchSymbolLibTable( &Prj() );
             const LIB_TABLE_ROW* libTableRow = libTable->FindRowByURI( libFileName );
 
@@ -1646,6 +1655,7 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
                 GetLibTree()->ExpandLibId( id );
                 GetLibTree()->CenterLibId( id );
             }
+#endif
         }
 
         break;
@@ -1653,12 +1663,12 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     case MAIL_RELOAD_LIB:
     {
         wxString          currentLib = GetCurLib();
-        SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &Prj() );
 
         FreezeLibraryTree();
 
         // Check if the currently selected symbol library been removed or disabled.
-        if( !currentLib.empty() && libTable && !libTable->HasLibrary( currentLib, true ) )
+        if( !currentLib.empty()
+            && !PROJECT_SCH::SymbolLibManager( &Prj() )->HasLibrary( currentLib, true ) )
         {
             SetCurLib( wxEmptyString );
             emptyScreen();
@@ -1673,6 +1683,8 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
     case MAIL_REFRESH_SYMBOL:
     {
+        // TODO(JE) library tables
+#if 0
         SYMBOL_LIB_TABLE* tbl = PROJECT_SCH::SchSymbolLibTable( &Prj() );
         LIB_SYMBOL* symbol = GetCurSymbol();
 
@@ -1713,7 +1725,7 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
                     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
             }
         }
-
+#endif
         break;
     }
 
@@ -1901,6 +1913,8 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
 
 bool SYMBOL_EDIT_FRAME::addLibTableEntry( const wxString& aLibFile, TABLE_SCOPE aScope )
 {
+    // TODO(JE) library tables
+#if 0
     wxFileName fn = aLibFile;
     wxFileName libTableFileName( Prj().GetProjectPath(),
                                  SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
@@ -1954,7 +1968,7 @@ bool SYMBOL_EDIT_FRAME::addLibTableEntry( const wxString& aLibFile, TABLE_SCOPE 
 
         return false;
     }
-
+#endif
     return true;
 }
 
@@ -1962,6 +1976,8 @@ bool SYMBOL_EDIT_FRAME::addLibTableEntry( const wxString& aLibFile, TABLE_SCOPE 
 bool SYMBOL_EDIT_FRAME::replaceLibTableEntry( const wxString& aLibNickname,
                                               const wxString& aLibFile )
 {
+    // TODO(JE) library tables
+#if 0
     // Check the global library table first because checking the project library table
     // checks the global library table as well due to library chaining.
     bool isGlobalTable = true;
@@ -2006,7 +2022,7 @@ bool SYMBOL_EDIT_FRAME::replaceLibTableEntry( const wxString& aLibNickname,
 
         return false;
     }
-
+#endif
     return true;
 }
 

@@ -71,9 +71,9 @@ SCH_SHEET* SCH_IO_LTSPICE::LoadSchematicFile( const wxString& aFileName, SCHEMAT
         const_cast<KIID&>( rootSheet->m_Uuid ) = screen->GetUuid();
     }
 
-    SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &aSchematic->Project() );
-
-    wxCHECK_MSG( libTable, nullptr, "Could not load symbol lib table." );
+    // TODO(JE) library tables
+    // SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &aSchematic->Project() );
+    // wxCHECK_MSG( libTable, nullptr, "Could not load symbol lib table." );
 
     // Windows path: C:\Users\USERNAME\AppData\Local\LTspice\lib
     wxFileName ltspiceDataDir( KIPLATFORM::ENV::GetUserLocalDataPath(), wxEmptyString );

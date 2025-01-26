@@ -344,7 +344,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
             {
                 m_toolMgr->RunAction( ACTIONS::selectionClear );
 
-                SYMBOL_LIB_TABLE* libs = PROJECT_SCH::SchSymbolLibTable( &m_frame->Prj() );
+                SYMBOL_LIBRARY_MANAGER_ADAPTER* libs = PROJECT_SCH::SymbolLibManager( &m_frame->Prj() );
                 LEGACY_SYMBOL_LIB*       cache = PROJECT_SCH::LegacySchLibs( &m_frame->Prj() )->GetCacheLibrary();
 
                 std::set<UTF8>             unique_libid;

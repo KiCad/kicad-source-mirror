@@ -66,6 +66,8 @@
 
 // TODO(JE) Debugging only
 #include <core/profile.h>
+#include <libraries/symbol_library_manager_adapter.h>
+
 #include "sch_bus_entry.h"
 #include "sch_shape.h"
 
@@ -668,7 +670,7 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
 
     wxString msg;
     std::vector<SCH_SYMBOL*> symbols;
-    SYMBOL_LIB_TABLE* libs = PROJECT_SCH::SchSymbolLibTable( &Schematic()->Project() );
+    SYMBOL_LIBRARY_MANAGER_ADAPTER* libs = PROJECT_SCH::SymbolLibManager( &Schematic()->Project() );
 
     // This will be a nullptr if an s-expression schematic is loaded.
     LEGACY_SYMBOL_LIBS* legacyLibs = PROJECT_SCH::LegacySchLibs( &Schematic()->Project() );

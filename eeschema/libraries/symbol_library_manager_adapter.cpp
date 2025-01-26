@@ -25,8 +25,10 @@
 #include <wx/log.h>
 
 #include <lib_symbol.h>
+#include <locale_io.h>
 #include <libraries/symbol_library_manager_adapter.h>
 #include <pgm_base.h>
+#include <project.h>
 #include <thread_pool.h>
 #include <trace_helpers.h>
 #include <settings/settings_manager.h>
@@ -36,11 +38,25 @@ std::map<wxString, LIB_DATA> SYMBOL_LIBRARY_MANAGER_ADAPTER::GlobalLibraries;
 
 std::mutex SYMBOL_LIBRARY_MANAGER_ADAPTER::GlobalLibraryMutex;
 
+const char* SYMBOL_LIBRARY_MANAGER_ADAPTER::PropPowerSymsOnly = "pwr_sym_only";
+const char* SYMBOL_LIBRARY_MANAGER_ADAPTER::PropNonPowerSymsOnly = "non_pwr_sym_only";
 
-SYMBOL_LIBRARY_MANAGER_ADAPTER::SYMBOL_LIBRARY_MANAGER_ADAPTER( LIBRARY_MANAGER& aManager,
-                                                                PROJECT& aProject ) :
-            LIBRARY_MANAGER_ADAPTER( aManager, aProject )
+
+SYMBOL_LIBRARY_MANAGER_ADAPTER::SYMBOL_LIBRARY_MANAGER_ADAPTER( LIBRARY_MANAGER& aManager ) :
+            LIBRARY_MANAGER_ADAPTER( aManager ),
+            m_loadTotal( 0 )
 {
+}
+
+
+void SYMBOL_LIBRARY_MANAGER_ADAPTER::ProjectChanged()
+{
+    abortLoad();
+
+    {
+        std::lock_guard lock( m_libraries_mutex );
+        m_libraries.clear();
+    }
 }
 
 
@@ -83,6 +99,7 @@ LIBRARY_RESULT<LIB_DATA*> SYMBOL_LIBRARY_MANAGER_ADAPTER::loadIfNeeded( const wx
 
                     std::lock_guard lock( aMutex );
 
+                    aTarget[ row->Nickname() ].status.load_status = LOAD_STATUS::LOADING;
                     aTarget[ row->Nickname() ].row = row;
                     aTarget[ row->Nickname() ].plugin.reset( plugin );
 
@@ -117,11 +134,30 @@ LIBRARY_RESULT<LIB_DATA*> SYMBOL_LIBRARY_MANAGER_ADAPTER::loadIfNeeded( const wx
 std::optional<const LIB_DATA*> SYMBOL_LIBRARY_MANAGER_ADAPTER::fetchIfLoaded(
         const wxString& aNickname ) const
 {
-    if( m_libraries.contains( aNickname ) )
+    if( m_libraries.contains( aNickname ) && m_libraries.at( aNickname ).status.load_status == LOAD_STATUS::LOADED )
         return &m_libraries.at( aNickname );
 
-    if( GlobalLibraries.contains( aNickname ) )
+    if( GlobalLibraries.contains( aNickname )
+        && GlobalLibraries.at( aNickname ).status.load_status == LOAD_STATUS::LOADED )
+    {
         return &GlobalLibraries.at( aNickname );
+    }
+
+    return std::nullopt;
+}
+
+
+std::optional<LIB_DATA*> SYMBOL_LIBRARY_MANAGER_ADAPTER::fetchIfLoaded(
+        const wxString& aNickname )
+{
+    if( m_libraries.contains( aNickname ) && m_libraries.at( aNickname ).status.load_status == LOAD_STATUS::LOADED )
+        return &m_libraries.at( aNickname );
+
+    if( GlobalLibraries.contains( aNickname )
+        && GlobalLibraries.at( aNickname ).status.load_status == LOAD_STATUS::LOADED )
+    {
+        return &GlobalLibraries.at( aNickname );
+    }
 
     return std::nullopt;
 }
@@ -129,17 +165,18 @@ std::optional<const LIB_DATA*> SYMBOL_LIBRARY_MANAGER_ADAPTER::fetchIfLoaded(
 
 wxString SYMBOL_LIBRARY_MANAGER_ADAPTER::getUri( const LIBRARY_TABLE_ROW* aRow )
 {
-    wxFileName path( ExpandEnvVarSubstitutions( aRow->URI(), &m_project ) );
+    wxFileName path( ExpandEnvVarSubstitutions( aRow->URI(), &Pgm().GetSettingsManager().Prj() ) );
     path.MakeAbsolute();
     return path.GetFullPath();
 }
 
 
-std::vector<LIB_SYMBOL*> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetSymbols( const wxString& aNickname )
+std::vector<LIB_SYMBOL*> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetSymbols( const wxString& aNickname,
+                                                                     SYMBOL_TYPE aType )
 {
     std::vector<LIB_SYMBOL*> symbols;
 
-    LIBRARY_RESULT<const LIB_DATA*> maybeLib = loadIfNeeded( aNickname );
+    std::optional<const LIB_DATA*> maybeLib = fetchIfLoaded( aNickname );
 
     if( !maybeLib )
         return symbols;
@@ -147,10 +184,12 @@ std::vector<LIB_SYMBOL*> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetSymbols( const wxStr
     const LIB_DATA* lib = *maybeLib;
     std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
 
+    if( aType == SYMBOL_TYPE::POWER_ONLY )
+        options[PropPowerSymsOnly] = "";
+
     try
     {
-        lib->plugin->EnumerateSymbolLib( symbols, getUri( lib->row ),
-                                         &options );
+        lib->plugin->EnumerateSymbolLib( symbols, getUri( lib->row ), &options );
     }
     catch( IO_ERROR& e )
     {
@@ -169,14 +208,23 @@ std::vector<LIB_SYMBOL*> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetSymbols( const wxStr
 }
 
 
-std::vector<wxString> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetSymbolNames( const wxString& aNickname )
+std::vector<wxString> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetSymbolNames( const wxString& aNickname,
+                                                                      SYMBOL_TYPE aType )
 {
     // TODO(JE) can we kill wxArrayString in internal API?
     wxArrayString namesAS;
     std::vector<wxString> names;
 
-    if( LIBRARY_RESULT<const LIB_DATA*> lib = loadIfNeeded( aNickname ) )
-        ( *lib )->plugin->EnumerateSymbolLib( namesAS, getUri( ( *lib )->row ) );
+    if( std::optional<const LIB_DATA*> maybeLib = fetchIfLoaded( aNickname ) )
+    {
+        const LIB_DATA* lib = *maybeLib;
+        std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
+
+        if( aType == SYMBOL_TYPE::POWER_ONLY )
+            options[PropPowerSymsOnly] = "";
+
+        lib->plugin->EnumerateSymbolLib( namesAS, getUri( lib->row ), &options );
+    }
 
     for( const wxString& name : namesAS )
         names.emplace_back( name );
@@ -188,7 +236,7 @@ std::vector<wxString> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetSymbolNames( const wxSt
 LIB_SYMBOL* SYMBOL_LIBRARY_MANAGER_ADAPTER::LoadSymbol( const wxString& aNickname,
                                                         const wxString& aName )
 {
-    if( LIBRARY_RESULT<const LIB_DATA*> lib = loadIfNeeded( aNickname ) )
+    if( std::optional<const LIB_DATA*> lib = fetchIfLoaded( aNickname ) )
     {
         if( LIB_SYMBOL* symbol = ( *lib )->plugin->LoadSymbol( getUri( ( *lib )->row ), aName ) )
         {
@@ -267,10 +315,39 @@ void SYMBOL_LIBRARY_MANAGER_ADAPTER::AsyncLoad()
 
     thread_pool& tp = GetKiCadThreadPool();
 
+    auto check =
+        []( const wxString& aLib, std::map<wxString, LIB_DATA>& aMap, std::mutex& aMutex )
+        {
+            std::lock_guard lock( aMutex );
+
+            if( aMap.contains( aLib ) )
+            {
+                if( aMap[aLib].status.load_status == LOAD_STATUS::LOADED )
+                    return true;
+
+                aMap.erase( aLib );
+            }
+
+            return false;
+        };
+
     for( const LIBRARY_TABLE_ROW* row : rows )
     {
         wxString nickname = row->Nickname();
         LIBRARY_TABLE_SCOPE scope = row->Scope();
+
+        // TODO(JE) library tables -- check for modified global files
+        if( check( nickname, m_libraries, m_libraries_mutex ) )
+        {
+            --m_loadTotal;
+            continue;
+        }
+
+        if( check( nickname, GlobalLibraries, GlobalLibraryMutex ) )
+        {
+            --m_loadTotal;
+            continue;
+        }
 
         m_futures.emplace_back( tp.submit_task(
             [this, nickname, scope]()
@@ -288,9 +365,9 @@ void SYMBOL_LIBRARY_MANAGER_ADAPTER::AsyncLoad()
 
                     try
                     {
-                        lib->plugin->EnumerateSymbolLib( dummyList, getUri( lib->row ),
-                                                         &options );
-                        //std::this_thread::sleep_for( std::chrono::milliseconds( 1000 ) );
+                        lib->plugin->EnumerateSymbolLib( dummyList, getUri( lib->row ), &options );
+                        // TODO(JE) remove testing delay
+                        std::this_thread::sleep_for( std::chrono::milliseconds( 500 ) );
                         lib->status.load_status = LOAD_STATUS::LOADED;
                     }
                     catch( IO_ERROR& e )
@@ -317,6 +394,7 @@ void SYMBOL_LIBRARY_MANAGER_ADAPTER::AsyncLoad()
 
                     case LIBRARY_TABLE_SCOPE::PROJECT:
                     {
+                        wxLogTrace( traceLibraries, "project library error: %s: %s", nickname, result.error().message );
                         std::lock_guard lock( m_libraries_mutex );
 
                         m_libraries[nickname].status = LIB_STATUS( {
@@ -340,6 +418,22 @@ void SYMBOL_LIBRARY_MANAGER_ADAPTER::AsyncLoad()
 }
 
 
+void SYMBOL_LIBRARY_MANAGER_ADAPTER::abortLoad()
+{
+    if( m_futures.empty() )
+        return;
+
+    wxLogTrace( traceLibraries, "Aborting library load..." );
+    m_abort.store( true );
+
+    BlockUntilLoaded();
+    wxLogTrace( traceLibraries, "Aborted" );
+
+    m_abort.store( false );
+    m_futures.clear();
+}
+
+
 std::optional<float> SYMBOL_LIBRARY_MANAGER_ADAPTER::AsyncLoadProgress() const
 {
     if( m_loadTotal == 0 )
@@ -350,7 +444,7 @@ std::optional<float> SYMBOL_LIBRARY_MANAGER_ADAPTER::AsyncLoadProgress() const
 }
 
 
-void SYMBOL_LIBRARY_MANAGER_ADAPTER::BlockUntilLoaded() const
+void SYMBOL_LIBRARY_MANAGER_ADAPTER::BlockUntilLoaded()
 {
     for( const std::future<void>& future : m_futures )
         future.wait();
@@ -360,8 +454,10 @@ void SYMBOL_LIBRARY_MANAGER_ADAPTER::BlockUntilLoaded() const
 std::optional<LIBRARY_ERROR> SYMBOL_LIBRARY_MANAGER_ADAPTER::LibraryError(
         const wxString& aNickname ) const
 {
-    if( std::optional<const LIB_DATA*> result = fetchIfLoaded( aNickname ); auto row = *result )
+    if( std::optional<const LIB_DATA*> result = fetchIfLoaded( aNickname ) )
     {
+        const LIB_DATA* row = *result;
+
         if( row->status.error )
             return row->status.error;
     }
@@ -370,16 +466,70 @@ std::optional<LIBRARY_ERROR> SYMBOL_LIBRARY_MANAGER_ADAPTER::LibraryError(
 }
 
 
-std::vector<std::pair<wxString, LIB_STATUS>> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetLibraryStatus() const
+std::optional<wxString> SYMBOL_LIBRARY_MANAGER_ADAPTER::FindLibraryByURI( const wxString& aURI ) const
+{
+    for( const LIBRARY_TABLE_ROW* row : m_manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL ) )
+    {
+        if( LIBRARY_MANAGER::UrisAreEquivalent( row->URI(), aURI ) )
+            return row->Nickname();
+    }
+
+    return std::nullopt;
+}
+
+
+std::vector<wxString> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetLibraryNames() const
+{
+    std::vector<wxString> ret;
+
+    for( const LIBRARY_TABLE_ROW* row : m_manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL ) )
+    {
+        if( fetchIfLoaded( row->Nickname() ) )
+            ret.emplace_back( row->Nickname() );
+    }
+
+    return ret;
+}
+
+
+std::optional<wxString> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetLibraryDescription( const wxString& aNickname ) const
+{
+    if( std::optional<const LIB_DATA*> optRow = fetchIfLoaded( aNickname ); optRow )
+        return ( *optRow )->row->Description();
+
+    return std::nullopt;
+}
+
+
+bool SYMBOL_LIBRARY_MANAGER_ADAPTER::HasLibrary( const wxString& aNickname,
+                                                 bool aCheckEnabled ) const
+{
+    if( std::optional<const LIB_DATA*> r = fetchIfLoaded( aNickname ); const LIB_DATA* lib = *r )
+        return !aCheckEnabled || !lib->row->Disabled();
+
+    return false;
+}
+
+
+std::optional<LIB_STATUS> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetLibraryStatus( const wxString& aNickname ) const
+{
+    // TODO(JE) should return status even if not loaded, so don't use fetchIfLoaded
+    if( std::optional<const LIB_DATA*> result = fetchIfLoaded( aNickname ) )
+        return ( *result )->status;
+
+    return std::nullopt;
+}
+
+
+std::vector<std::pair<wxString, LIB_STATUS>> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetLibraryStatuses() const
 {
     std::vector<std::pair<wxString, LIB_STATUS>> ret;
 
     for( const LIBRARY_TABLE_ROW* row : m_manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL ) )
     {
-        if( std::optional<const LIB_DATA*> result = fetchIfLoaded( row->Nickname() );
-            const LIB_DATA* rowData = *result )
+        if( std::optional<LIB_STATUS> result = GetLibraryStatus( row->Nickname() ) )
         {
-            ret.emplace_back( std::make_pair( row->Nickname(), rowData->status ) );
+            ret.emplace_back( std::make_pair( row->Nickname(), *result ) );
         }
         else
         {
@@ -395,18 +545,103 @@ std::vector<std::pair<wxString, LIB_STATUS>> SYMBOL_LIBRARY_MANAGER_ADAPTER::Get
 }
 
 
+std::vector<wxString> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetAvailableExtraFields(
+        const wxString& aNickname )
+{
+    std::vector<wxString> fields;
+
+    if( std::optional<LIB_DATA*> result = fetchIfLoaded( aNickname ) )
+    {
+        LIB_DATA* rowData = *result;
+        int hash = rowData->plugin->GetModifyHash();
+
+        if( hash != rowData->modify_hash )
+        {
+            rowData->modify_hash = hash;
+            rowData->plugin->GetAvailableSymbolFields( rowData->available_fields_cache );
+        }
+
+        return rowData->available_fields_cache;
+    }
+
+    return fields;
+}
+
+
+bool SYMBOL_LIBRARY_MANAGER_ADAPTER::SupportsSubLibraries( const wxString& aNickname ) const
+{
+    if( std::optional<const LIB_DATA*> result = fetchIfLoaded( aNickname ) )
+    {
+        const LIB_DATA* rowData = *result;
+        return rowData->plugin->SupportsSubLibraries();
+    }
+
+    return false;
+}
+
+
+std::vector<SUB_LIBRARY> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetSubLibraries(
+        const wxString& aNickname ) const
+{
+    std::vector<SUB_LIBRARY> ret;
+
+    if( std::optional<const LIB_DATA*> result = fetchIfLoaded( aNickname ) )
+    {
+        const LIB_DATA* rowData = *result;
+        std::vector<wxString> names;
+        rowData->plugin->GetSubLibraryNames( names );
+
+        for( const wxString& name : names )
+        {
+            ret.emplace_back( SUB_LIBRARY {
+                    .nickname = name,
+                    .description = rowData->plugin->GetSubLibraryDescription( name )
+                } );
+        }
+    }
+
+    return ret;
+}
+
+
+bool SYMBOL_LIBRARY_MANAGER_ADAPTER::SupportsSettingsDialog( const wxString& aNickname ) const
+{
+    if( std::optional<const LIB_DATA*> result = fetchIfLoaded( aNickname ) )
+    {
+        const LIB_DATA* rowData = *result;
+        // TODO(JE) move to enum SCH_FILE_T in LIBRARY_TABLE_ROW
+        return rowData->row->Type() == wxT( "Database" );
+    }
+
+    return false;
+}
+
+
 int SYMBOL_LIBRARY_MANAGER_ADAPTER::GetModifyHash() const
 {
     int hash = 0;
 
     for( const LIBRARY_TABLE_ROW* row : m_manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL ) )
     {
-        if( std::optional<const LIB_DATA*> result = fetchIfLoaded( row->Nickname() );
-            const LIB_DATA* rowData = *result )
+        if( std::optional<const LIB_DATA*> result = fetchIfLoaded( row->Nickname() ) )
         {
+            const LIB_DATA* rowData = *result;
+            wxCHECK2( rowData->row, continue );
             hash += rowData->plugin->GetModifyHash();
         }
     }
 
     return hash;
+}
+
+
+bool SYMBOL_LIBRARY_MANAGER_ADAPTER::IsWritable( const wxString& aNickname ) const
+{
+    if( std::optional<const LIB_DATA*> result = fetchIfLoaded( aNickname ) )
+    {
+        const LIB_DATA* rowData = *result;
+        return rowData->plugin->IsLibraryWritable( getUri( rowData->row ) );
+    }
+
+    return false;
 }

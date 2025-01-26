@@ -116,8 +116,7 @@ PANEL_DESIGN_BLOCK_CHOOSER::PANEL_DESIGN_BLOCK_CHOOSER( EDA_DRAW_FRAME* aFrame, 
 
     sizer->Add( m_vsplitter, 1, wxEXPAND, 5 );
 
-
-    m_tree = new LIB_TREE( treePanel, wxT( "design_blocks" ), libs, m_adapter, LIB_TREE::FLAGS::ALL_WIDGETS, nullptr );
+    m_tree = new LIB_TREE( treePanel, wxT( "design_blocks" ), m_adapter, LIB_TREE::FLAGS::ALL_WIDGETS, nullptr );
 
     treeSizer->Add( m_tree, 1, wxEXPAND, 5 );
     treePanel->Layout();

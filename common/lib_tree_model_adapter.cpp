@@ -130,6 +130,7 @@ LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent,
                                                 const wxString& aPinnedKey,
                                                 APP_SETTINGS_BASE::LIB_TREE& aSettingsStruct ) :
         m_widget( nullptr ),
+        m_lazyLoadHandler( nullptr ),
         m_parent( aParent ),
         m_cfg( aSettingsStruct ),
         m_sort_mode( BEST_MATCH ),
@@ -201,7 +202,10 @@ void LIB_TREE_MODEL_ADAPTER::SaveSettings()
         m_cfg.column_widths.clear();
 
         for( const std::pair<const wxString, wxDataViewColumn*>& pair : m_colNameMap )
-            m_cfg.column_widths[pair.first] = pair.second->GetWidth();
+        {
+            if( pair.second )
+                m_cfg.column_widths[pair.first] = pair.second->GetWidth();
+        }
 
         m_cfg.open_libs = GetOpenLibs();
     }
@@ -361,7 +365,12 @@ void LIB_TREE_MODEL_ADAPTER::recreateColumns()
 
     // The Item column is always shown
     doAddColumn( wxT( "Item" ) );
+    createMissingColumns();
+}
 
+
+void LIB_TREE_MODEL_ADAPTER::createMissingColumns()
+{
     for( const wxString& colName : m_shownColumns )
     {
         if( !m_colNameMap.count( colName ) )

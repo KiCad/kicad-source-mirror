@@ -137,7 +137,7 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
 
     sizer->Add( m_vsplitter, 1, wxEXPAND, 5 );
 
-    m_tree = new LIB_TREE( m_hsplitter, wxT( "footprints" ), fpTable, m_adapter,
+    m_tree = new LIB_TREE( m_hsplitter, wxT( "footprints" ), m_adapter,
                            LIB_TREE::FLAGS::ALL_WIDGETS, m_details );
 
     m_hsplitter->SetSashGravity( 0.8 );

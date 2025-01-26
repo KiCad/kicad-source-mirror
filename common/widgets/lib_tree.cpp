@@ -50,7 +50,7 @@ constexpr int RECENT_SEARCHES_MAX = 10;
 std::map<wxString, std::vector<wxString>> g_recentSearches;
 
 
-LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_TABLE* aLibTable,
+LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey,
                     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& aAdapter, int aFlags,
                     HTML_WINDOW* aDetails ) :
         wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
@@ -598,6 +598,11 @@ LIB_TREE::STATE LIB_TREE::getState() const
 
     state.selection = GetSelectedLibId();
 
+    state.scrollpos = {
+        m_tree_ctrl->GetScrollPos( wxHORIZONTAL ),
+        m_tree_ctrl->GetScrollPos( wxVERTICAL )
+    };
+
     return state;
 }
 
@@ -608,6 +613,10 @@ void LIB_TREE::setState( const STATE& aState )
 
     for( const wxDataViewItem& item : aState.expanded )
         m_tree_ctrl->Expand( item );
+
+    // TODO(JE) probably remove this; it fights with centerIfValid
+    // m_tree_ctrl->SetScrollPos( wxHORIZONTAL, aState.scrollpos.x );
+    // m_tree_ctrl->SetScrollPos( wxVERTICAL, aState.scrollpos.y );
 
     // wxDataViewCtrl cannot be frozen when a selection
     // command is issued, otherwise it selects a random item (Windows)

@@ -57,6 +57,7 @@
 #include <string_utils.h>
 #include <symbol_lib_table.h>
 #include <wildcards_and_files_ext.h>
+#include <libraries/symbol_library_manager_adapter.h>
 
 
 // Eagle schematic axes are aligned with x increasing left to right and Y increasing bottom to top
@@ -421,6 +422,8 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
         m_sheetPath.SetPageNumber( wxT( "1" ) );
     }
 
+    // TODO(JE) library tables
+#if 0
     SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &m_schematic->Project() );
 
     wxCHECK_MSG( libTable, nullptr, wxT( "Could not load symbol lib table." ) );
@@ -464,7 +467,7 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
     loadDrawing( m_eagleDoc->drawing );
 
     m_pi->SaveLibrary( getLibFileName().GetFullPath() );
-
+#endif
     SCH_SCREENS allSheets( m_rootSheet );
     allSheets.UpdateSymbolLinks(); // Update all symbol library links for all sheets.
 
@@ -1988,8 +1991,8 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
     symbol->AddHierarchicalReference( m_sheetPath.Path(), refPrefix + reference, unit );
 
     // Save the pin positions
-    SYMBOL_LIB_TABLE& schLibTable = *PROJECT_SCH::SchSymbolLibTable( &m_schematic->Project() );
-    LIB_SYMBOL* libSymbol = schLibTable.LoadSymbol( symbol->GetLibId() );
+    LIB_SYMBOL* libSymbol =
+            PROJECT_SCH::SymbolLibManager( &m_schematic->Project() )->LoadSymbol( symbol->GetLibId() );
 
     wxCHECK( libSymbol, /*void*/ );
 

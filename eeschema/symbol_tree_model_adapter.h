@@ -24,8 +24,7 @@
 
 #include <lib_tree_model_adapter.h>
 
-class LIB_TABLE;
-class SYMBOL_LIB_TABLE;
+class SYMBOL_LIBRARY_MANAGER_ADAPTER;
 class SCH_BASE_FRAME;
 
 class SYMBOL_TREE_MODEL_ADAPTER : public LIB_TREE_MODEL_ADAPTER
@@ -44,18 +43,14 @@ public:
      * @param aLibs library set from which parts will be loaded
      */
     static wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> Create( SCH_BASE_FRAME* aParent,
-                                                           LIB_TABLE* aLibs );
+                                                           SYMBOL_LIBRARY_MANAGER_ADAPTER* aLibs );
 
     /**
      * Add all the libraries in a SYMBOL_LIB_TABLE to the model.
      *
-     * Displays a progress dialog attached to the parent frame the first time it is run.
-     *
-     * @param aNicknames is the list of library nicknames
-     * @param aParent is the parent window to display the progress dialog
-     * @return false if loading was canceled by the user
+     * @param aFrame is the parent window to display the progress dialog
      */
-    bool AddLibraries( const std::vector<wxString>& aNicknames, SCH_BASE_FRAME* aFrame );
+    void AddLibraries( SCH_BASE_FRAME* aFrame );
 
     void AddLibrary( wxString const& aLibNickname, bool pinned );
 
@@ -65,7 +60,7 @@ protected:
     /**
      * Constructor; takes a set of libraries to be included in the search.
      */
-    SYMBOL_TREE_MODEL_ADAPTER( SCH_BASE_FRAME* aParent, LIB_TABLE* aLibs );
+    SYMBOL_TREE_MODEL_ADAPTER( SCH_BASE_FRAME* aParent, SYMBOL_LIBRARY_MANAGER_ADAPTER* aManager );
 
     PROJECT::LIB_TYPE_T getLibType() override { return PROJECT::LIB_TYPE_T::SYMBOL_LIB; }
 
@@ -77,7 +72,10 @@ private:
      */
     static bool        m_show_progress;
 
-    SYMBOL_LIB_TABLE*  m_libs;
+    SYMBOL_LIBRARY_MANAGER_ADAPTER*  m_adapter;
+
+    std::set<wxString> m_pending_load_libraries;
+    std::unique_ptr<wxTimer> m_check_pending_libraries_timer;
 };
 
 #endif // SYMBOL_TREE_MODEL_ADAPTER_H

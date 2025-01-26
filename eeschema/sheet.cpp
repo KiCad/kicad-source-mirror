@@ -48,6 +48,8 @@
 #include <wx/richmsgdlg.h>
 
 #include <advanced_config.h>
+#include <libraries/symbol_library_manager_adapter.h>
+
 #include "printing/sch_printout.h"
 
 
@@ -337,7 +339,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
             // library links are valid but it's better than nothing.
             for( const wxString& name : names )
             {
-                if( !PROJECT_SCH::SchSymbolLibTable( &Prj() )->HasLibrary( name ) )
+                if( !PROJECT_SCH::SymbolLibManager( &Prj() )->HasLibrary( name ) )
                     newLibNames.Add( name );
             }
 
@@ -368,7 +370,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
 
             for( const wxString& name : names )
             {
-                if( !PROJECT_SCH::SchSymbolLibTable( &Prj() )->HasLibrary( name ) )
+                if( !PROJECT_SCH::SymbolLibManager( &Prj() )->HasLibrary( name ) )
                     newLibNames.Add( name );
                 else
                     duplicateLibNames.Add( name );
@@ -459,8 +461,11 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
                     const SYMBOL_LIB_TABLE_ROW* thisRow = nullptr;
                     const SYMBOL_LIB_TABLE_ROW* otherRow = nullptr;
 
-                    if( PROJECT_SCH::SchSymbolLibTable( &Prj() )->HasLibrary( duplicateLibName ) )
-                        thisRow = PROJECT_SCH::SchSymbolLibTable( &Prj() )->FindRow( duplicateLibName );
+                    // TODO(JE) library tables
+#if 0
+                    if( PROJECT_SCH::SymbolLibManager( &Prj() )->HasLibrary( duplicateLibName ) )
+                        thisRow = PROJECT_SCH::SymbolLibManager( &Prj() )->FindRow( duplicateLibName );
+#endif
 
                     if( table.HasLibrary( duplicateLibName ) )
                         otherRow = table.FindRow( duplicateLibName );
@@ -516,7 +521,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
                 for( const wxString& libName : newLibNames )
                 {
                     if( !table.HasLibrary( libName )
-                      || PROJECT_SCH::SchSymbolLibTable( &Prj() )->HasLibrary( libName ) )
+                      || PROJECT_SCH::SymbolLibManager( &Prj() )->HasLibrary( libName ) )
                     {
                         continue;
                     }
@@ -550,7 +555,8 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
                                                                              row->GetOptions(),
                                                                              row->GetDescr() );
 
-                    PROJECT_SCH::SchSymbolLibTable( &Prj() )->InsertRow( newRow );
+                    // TODO(JE) library tables
+                    //PROJECT_SCH::SchSymbolLibTable( &Prj() )->InsertRow( newRow );
                     libTableChanged = true;
                 }
             }
@@ -560,11 +566,14 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
     SCH_SCREEN* newScreen = tmpSheet->GetScreen();
     wxCHECK_MSG( newScreen, false, "No screen defined for sheet." );
 
+    // TODO(JE) library tables
+#if 0
     if( libTableChanged )
     {
         PROJECT_SCH::SchSymbolLibTable( &Prj() )->Save( Prj().GetProjectPath() +
                                          SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
     }
+#endif
 
     // Make the best attempt to set the symbol instance data for the loaded schematic.
     if( newScreen->GetFileFormatVersionAtLoad() < 20221002 )

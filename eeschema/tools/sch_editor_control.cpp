@@ -424,6 +424,8 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
         }
     }
 
+    // TODO(JE) library tables
+#if 0
     // Save the modified symbol library table. We need to look this up by name in each table to find
     // whether the new library is a global or project entity as the code above to choose the library
     // returns a different type depending on whether a global or project library is chosen.
@@ -460,7 +462,7 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
             wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
         }
     }
-
+#endif
     if( append )
     {
         std::set<SCH_SCREEN*> processedScreens;

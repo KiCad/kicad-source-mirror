@@ -40,7 +40,6 @@ class wxPopupWindow;
 class STD_BITMAP_BUTTON;
 class ACTION_MENU;
 class LIB_ID;
-class LIB_TABLE;
 
 /**
  * Widget displaying a tree of symbols with optional search text control and description panel.
@@ -71,7 +70,7 @@ public:
      * @param aDetails if not null, a custom HTML_WINDOW to hold symbol details. If null this
      *                 will be created inside the LIB_TREE.
      */
-    LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_TABLE* aLibTable,
+    LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey,
               wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& aAdapter, int aFlags = ALL_WIDGETS,
               HTML_WINDOW* aDetails = nullptr );
 
@@ -218,6 +217,8 @@ protected:
 
         /// Current selection, might be not valid if nothing was selected.
         LIB_ID selection;
+
+        VECTOR2I scrollpos;
     };
 
     /**

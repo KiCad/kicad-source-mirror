@@ -501,6 +501,8 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
 
     rootScreen->m_sheetInstances.emplace_back( sheetInstance );
 
+    // TODO(JE) library tables
+#if 0
     SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &m_schematic->Project() );
 
     wxCHECK_MSG( libTable, nullptr, "Could not load symbol lib table." );
@@ -509,6 +511,7 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
         LoadSchematicProject( aSchematic, aProperties );
     else
         ParseAltiumSch( aFileName );
+#endif
 
     if( m_reporter )
     {

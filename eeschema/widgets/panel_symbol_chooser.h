@@ -104,6 +104,10 @@ public:
 
     void ShutdownCanvases();
 
+    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> Adapter() const { return m_adapter; }
+
+    void Regenerate();
+
 protected:
     static constexpr int DBLCLICK_DELAY = 100; // milliseconds
 

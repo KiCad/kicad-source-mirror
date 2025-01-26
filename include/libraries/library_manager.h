@@ -25,7 +25,6 @@
 
 #include <kicommon.h>
 #include <libraries/library_table.h>
-#include <project.h>
 
 
 struct KICOMMON_API LIBRARY_ERROR
@@ -37,6 +36,8 @@ struct KICOMMON_API LIBRARY_ERROR
 template<typename ResultType>
 using LIBRARY_RESULT = tl::expected<ResultType, LIBRARY_ERROR>;
 
+class LIBRARY_MANAGER_ADAPTER;
+
 
 class KICOMMON_API LIBRARY_MANAGER
 {
@@ -46,6 +47,14 @@ public:
     ~LIBRARY_MANAGER();
 
     void LoadGlobalTables();
+
+    /// Notify all adapters that the project has changed
+    void ProjectChanged();
+
+    void RegisterAdapter( LIBRARY_TABLE_TYPE aType,
+                          std::unique_ptr<LIBRARY_MANAGER_ADAPTER>&& aAdapter );
+
+    std::optional<LIBRARY_MANAGER_ADAPTER*> Adapter( LIBRARY_TABLE_TYPE aType ) const;
 
     /**
      * Returns a flattened list of libraries of the given type
@@ -71,11 +80,27 @@ public:
 
     void LoadProjectTables( const wxString& aProjectPath );
 
+    /**
+     * Return the full location specifying URI for the LIB, either in original UI form or
+     * in environment variable expanded form.
+     *
+     * @param aType determines which tables will be searched for the library
+     * @param aNickname is the library to look up
+     * @param aSubstituted Tells if caller wanted the substituted form, else not.
+     * @return the URI for the given library, or nullopt if the nickname is not a valid library
+     */
+    std::optional<wxString> GetFullURI( LIBRARY_TABLE_TYPE aType, const wxString& aNickname,
+                                        bool aSubstituted = false ) const;
+
+    static bool UrisAreEquivalent( const wxString& aURI1, const wxString& aURI2 );
+
 private:
     void loadTables( const wxString& aTablePath, LIBRARY_TABLE_SCOPE aScope );
 
     std::vector<std::unique_ptr<LIBRARY_TABLE>> m_tables;
     std::vector<std::unique_ptr<LIBRARY_TABLE>> m_project_tables;
+
+    std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_MANAGER_ADAPTER>> m_adapters;
 };
 
 
@@ -83,30 +108,38 @@ private:
  * The interface used by the classes that actually can load IO plugins for the
  * different parts of KiCad and return concrete types (symbols, footprints, etc)
  */
-class KICOMMON_API LIBRARY_MANAGER_ADAPTER : public PROJECT::_ELEM
+class KICOMMON_API LIBRARY_MANAGER_ADAPTER
 {
 public:
     /**
-     * Constructs a project-specific and schematic-specific adapter into the library manager.
+     * Constructs a type-specific adapter into the library manager.  The code for these
+     * generally resides in app-specific libraries (eeschema/pcbnew for example) rather than
+     * being in kicommon.
+     *
      * @param aManager should usually be Pgm().GetLibraryManager() except in QA tests
-     * @param aProject is the project to construct the adapter for
      */
-    LIBRARY_MANAGER_ADAPTER( LIBRARY_MANAGER& aManager, PROJECT& aProject ) :
-            m_manager( aManager ),
-            m_project( aProject )
+    LIBRARY_MANAGER_ADAPTER( LIBRARY_MANAGER& aManager ) :
+            m_manager( aManager )
     {}
 
-    ~LIBRARY_MANAGER_ADAPTER() override = default;
+    virtual ~LIBRARY_MANAGER_ADAPTER();
+
+    /// The type of library table this adapter works with
+    virtual LIBRARY_TABLE_TYPE Type() const = 0;
 
     virtual int GetModifyHash() const { return 0; };
+
+    /// Notify the adapter that the active project has changed
+    virtual void ProjectChanged() {};
+
+    /// Return true if the given nickname exists and is not a read-only library
+    virtual bool IsWritable( const wxString& aNickname ) const { return false; }
 
 protected:
 
     virtual void doPreload() = 0;
 
     LIBRARY_MANAGER& m_manager;
-
-    PROJECT& m_project;
 };
 
 

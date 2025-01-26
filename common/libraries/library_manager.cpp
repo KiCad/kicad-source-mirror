@@ -18,6 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <common.h>
 #include <list>
 
 #include <paths.h>
@@ -85,6 +86,33 @@ void LIBRARY_MANAGER::loadTables( const wxString& aTablePath, LIBRARY_TABLE_SCOP
 void LIBRARY_MANAGER::LoadGlobalTables()
 {
     loadTables( PATHS::GetUserSettingsPath(), LIBRARY_TABLE_SCOPE::GLOBAL );
+}
+
+
+void LIBRARY_MANAGER::ProjectChanged()
+{
+    LoadProjectTables( Pgm().GetSettingsManager().Prj().GetProjectDirectory() );
+
+    for( const std::unique_ptr<LIBRARY_MANAGER_ADAPTER>& adapter : m_adapters | std::views::values )
+        adapter->ProjectChanged();
+}
+
+
+void LIBRARY_MANAGER::RegisterAdapter( LIBRARY_TABLE_TYPE aType,
+                                       std::unique_ptr<LIBRARY_MANAGER_ADAPTER>&& aAdapter )
+{
+    wxCHECK_MSG( !m_adapters.contains( aType ), /**/, "You should only register an adapter once!" );
+
+    m_adapters[aType] = std::move( aAdapter );
+}
+
+
+std::optional<LIBRARY_MANAGER_ADAPTER*> LIBRARY_MANAGER::Adapter( LIBRARY_TABLE_TYPE aType ) const
+{
+    if( m_adapters.contains( aType ) )
+        return m_adapters.at( aType ).get();
+
+    return std::nullopt;
 }
 
 
@@ -183,4 +211,51 @@ void LIBRARY_MANAGER::LoadProjectTables( const wxString& aProjectPath )
                     "New project path %s is not readable, not loading project tables",
                     aProjectPath );
     }
+}
+
+
+std::optional<wxString> LIBRARY_MANAGER::GetFullURI( LIBRARY_TABLE_TYPE aType,
+                                                     const wxString& aNickname,
+                                                     bool aSubstituted ) const
+{
+    if( LIBRARY_RESULT<const LIBRARY_TABLE_ROW*> result = GetRow( aType, aNickname ) )
+    {
+        const LIBRARY_TABLE_ROW* row = *result;
+
+        if( aSubstituted )
+            return ExpandEnvVarSubstitutions( row->URI(), nullptr );
+
+        return row->URI();
+    }
+
+    return std::nullopt;
+}
+
+
+bool LIBRARY_MANAGER::UrisAreEquivalent( const wxString& aURI1, const wxString& aURI2 )
+{
+    // Avoid comparing filenames as wxURIs
+    if( aURI1.Find( "://" ) != wxNOT_FOUND )
+    {
+        // found as full path
+        return aURI1 == aURI2;
+    }
+    else
+    {
+        const wxFileName fn1( aURI1 );
+        const wxFileName fn2( aURI2 );
+
+        // This will also test if the file is a symlink so if we are comparing
+        // a symlink to the same real file, the comparison will be true.  See
+        // wxFileName::SameAs() in the wxWidgets source.
+
+        // found as full path and file name
+        return fn1 == fn2;
+    }
+}
+
+
+
+LIBRARY_MANAGER_ADAPTER::~LIBRARY_MANAGER_ADAPTER()
+{
 }

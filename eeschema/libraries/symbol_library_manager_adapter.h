@@ -28,10 +28,12 @@
 #include <sch_io/sch_io.h>
 
 class LIB_SYMBOL;
+class PROJECT;
 
 
 enum class LOAD_STATUS
 {
+    INVALID,
     LOADING,
     LOADED,
     ERROR
@@ -39,7 +41,7 @@ enum class LOAD_STATUS
 
 struct LIB_STATUS
 {
-    LOAD_STATUS load_status;
+    LOAD_STATUS load_status = LOAD_STATUS::INVALID;
     std::optional<LIBRARY_ERROR> error;
 };
 
@@ -50,9 +52,21 @@ struct LIB_STATUS
 struct LIB_DATA
 {
     std::unique_ptr<SCH_IO> plugin;
-    const LIBRARY_TABLE_ROW* row;
+    const LIBRARY_TABLE_ROW* row = nullptr;
     std::mutex mutex;
     LIB_STATUS status;
+
+    int modify_hash;
+    std::vector<wxString> available_fields_cache;
+};
+
+/**
+ * A descriptor for a sub-library (supported by database and http libraries)
+ */
+struct SUB_LIBRARY
+{
+    wxString nickname;
+    wxString description;
 };
 
 
@@ -64,9 +78,15 @@ struct LIB_DATA
 class SYMBOL_LIBRARY_MANAGER_ADAPTER : public LIBRARY_MANAGER_ADAPTER
 {
 public:
-    SYMBOL_LIBRARY_MANAGER_ADAPTER( LIBRARY_MANAGER& aManager, PROJECT& aProject );
+    static const char* PropPowerSymsOnly;
+    static const char* PropNonPowerSymsOnly;
 
-    PROJECT::ELEM ProjectElementType() override { return PROJECT::ELEM::SYM_LIB_ADAPTER; }
+public:
+    SYMBOL_LIBRARY_MANAGER_ADAPTER( LIBRARY_MANAGER& aManager );
+
+    LIBRARY_TABLE_TYPE Type() const override { return LIBRARY_TABLE_TYPE::SYMBOL; }
+
+    void ProjectChanged() override;
 
     /**
      * Loads all available symbol libraries in the background
@@ -76,14 +96,49 @@ public:
     /// Returns async load progress between 0.0 and 1.0, or nullopt if load is not in progress
     std::optional<float> AsyncLoadProgress() const;
 
-    void BlockUntilLoaded() const;
+    void BlockUntilLoaded();
 
-    std::vector<std::pair<wxString, LIB_STATUS>> GetLibraryStatus() const;
+    std::optional<wxString> FindLibraryByURI( const wxString& aURI ) const;
 
-    std::vector<LIB_SYMBOL*> GetSymbols( const wxString& aNickname );
+    /// Returns a list of library nicknames that are available (skips any that failed to load)
+    std::vector<wxString> GetLibraryNames() const;
 
-    std::vector<wxString> GetSymbolNames( const wxString& aNickname );
+    std::optional<wxString> GetLibraryDescription( const wxString& aNickname ) const;
 
+    /**
+     * Test for the existence of \a aNickname in the library tables.
+     *
+     * @param aCheckEnabled if true will only return true for enabled libraries
+     * @return true if a library \a aNickname exists in the loaded tables.
+     */
+    bool HasLibrary( const wxString& aNickname, bool aCheckEnabled = false ) const;
+
+    /// Returns the status of a loaded library, or nullopt if the library hasn't been loaded (yet)
+    std::optional<LIB_STATUS> GetLibraryStatus( const wxString& aNickname ) const;
+
+    /// Returns a list of all library nicknames and their status (even if they failed to load)
+    std::vector<std::pair<wxString, LIB_STATUS>> GetLibraryStatuses() const;
+
+    /// Returns a list of additional (non-mandatory) symbol fields present in the given library
+    std::vector<wxString> GetAvailableExtraFields( const wxString& aNickname );
+
+    bool SupportsSubLibraries( const wxString& aNickname ) const;
+
+    std::vector<SUB_LIBRARY> GetSubLibraries( const wxString& aNickname ) const;
+
+    bool SupportsSettingsDialog( const wxString& aNickname ) const;
+
+    enum class SYMBOL_TYPE
+    {
+        ALL_SYMBOLS,
+        POWER_ONLY
+    };
+
+    std::vector<LIB_SYMBOL*> GetSymbols( const wxString& aNickname,
+                                         SYMBOL_TYPE aType = SYMBOL_TYPE::ALL_SYMBOLS );
+
+    std::vector<wxString> GetSymbolNames( const wxString& aNickname,
+                                          SYMBOL_TYPE aType = SYMBOL_TYPE::ALL_SYMBOLS);
     /**
      * Load a #LIB_SYMBOL having @a aName from the library given by @a aNickname.
      *
@@ -163,17 +218,24 @@ public:
 
     int GetModifyHash() const override;
 
+    bool IsWritable( const wxString& aNickname ) const override;
+
 protected:
 
     void doPreload() override {}
 
 private:
 
-    wxString getUri( const LIBRARY_TABLE_ROW* aRow );
+    static wxString getUri( const LIBRARY_TABLE_ROW* aRow );
 
     LIBRARY_RESULT<LIB_DATA*> loadIfNeeded( const wxString& aNickname );
 
     std::optional<const LIB_DATA*> fetchIfLoaded( const wxString& aNickname ) const;
+
+    std::optional<LIB_DATA*> fetchIfLoaded( const wxString& aNickname );
+
+    /// Aborts any async load in progress; blocks until fully done aborting
+    void abortLoad();
 
     // The actual library content is held in an associated SCH_IO plugin
     // TODO(JE) should this be an expected<LIB_ROW> so we can store the
@@ -183,6 +245,7 @@ private:
 
     std::mutex m_libraries_mutex;
 
+    std::atomic_bool m_abort;
     std::vector<std::future<void>> m_futures;
 
     std::atomic<size_t> m_loadCount;

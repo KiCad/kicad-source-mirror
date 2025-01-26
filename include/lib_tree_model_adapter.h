@@ -195,6 +195,12 @@ public:
     std::vector<wxString> GetOpenLibs() const;
     void                  OpenLibs( const std::vector<wxString>& aLibs );
 
+    /// Registers a function to be called whenever new lazy-loaded library content is available
+    void RegisterLazyLoadHandler( std::function<void()>&& aHandler )
+    {
+        m_lazyLoadHandler = aHandler;
+    }
+
     /**
      * Sets which columns are shown in the widget.  Invalid column names are discarded.
      * @param aColumnNames is an ordered list of column names to show
@@ -418,6 +424,7 @@ protected:
     void addColumnIfNecessary( const wxString& aHeader );
 
     void recreateColumns();
+    void createMissingColumns();
 
     LIB_TREE_NODE_ROOT           m_tree;
     std::map<unsigned, wxString> m_colIdxMap;
@@ -425,6 +432,7 @@ protected:
 
     wxDataViewCtrl*              m_widget;
     std::vector<wxString>        m_shownColumns;   // Stored in display order
+    std::function<void()>        m_lazyLoadHandler;
 
 private:
     EDA_BASE_FRAME*              m_parent;

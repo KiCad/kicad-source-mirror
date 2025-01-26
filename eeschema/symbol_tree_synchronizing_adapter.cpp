@@ -92,6 +92,8 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( const wxString& aForceRefresh,
             nextUpdate = wxGetUTCTimeMillis() + PROGRESS_INTERVAL_MILLIS;
         }
 
+        // TODO(JE) library tables
+#if 0
         // There is a bug in SYMBOL_LIBRARY_MANAGER::LibraryExists() that uses the buffered
         // modified libraries before the symbol library table which prevents the library from
         // being removed from the tree control.
@@ -105,6 +107,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( const wxString& aForceRefresh,
             continue;
         }
         else
+#endif
         {
             updateLibrary( *(LIB_TREE_NODE_LIBRARY*) it->get() );
         }

@@ -82,9 +82,6 @@ public:
         SCHEMATIC,
         BOARD,
 
-        SYM_LIB_ADAPTER,
-        FP_LIB_ADAPTER,
-
         COUNT
     };
 

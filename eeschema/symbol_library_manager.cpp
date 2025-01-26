@@ -807,7 +807,9 @@ bool SYMBOL_LIBRARY_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate
 
 SYMBOL_LIB_TABLE* SYMBOL_LIBRARY_MANAGER::symTable() const
 {
-    return PROJECT_SCH::SchSymbolLibTable( &m_frame.Prj() );
+    // TODO(JE) library tables
+    return nullptr;
+    //return PROJECT_SCH::SchSymbolLibTable( &m_frame.Prj() );
 }
 
 

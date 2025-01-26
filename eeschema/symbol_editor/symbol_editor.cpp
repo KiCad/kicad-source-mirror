@@ -50,6 +50,7 @@
 #include "symbol_saveas_type.h"
 #include <widgets/symbol_library_save_as_filedlg_hook.h>
 #include <io/kicad/kicad_io_utils.h>
+#include <libraries/symbol_library_manager_adapter.h>
 
 
 void SYMBOL_EDIT_FRAME::UpdateTitle()
@@ -156,7 +157,7 @@ bool SYMBOL_EDIT_FRAME::LoadSymbol( const LIB_ID& aLibId, int aUnit, int aBodySt
         {
             try
             {
-                LIB_SYMBOL* readOnlySym = PROJECT_SCH::SchSymbolLibTable( &Prj() )->LoadSymbol( aLibId );
+                LIB_SYMBOL* readOnlySym = PROJECT_SCH::SymbolLibManager( &Prj() )->LoadSymbol( aLibId );
 
                 if( readOnlySym && readOnlySym->GetSourceLibId().IsValid() )
                     libId = readOnlySym->GetSourceLibId();
@@ -225,7 +226,7 @@ bool SYMBOL_EDIT_FRAME::LoadSymbolFromCurrentLib( const wxString& aSymbolName, i
 
     try
     {
-        symbol = PROJECT_SCH::SchSymbolLibTable( &Prj() )->LoadSymbol( GetCurLib(), aSymbolName );
+        symbol = PROJECT_SCH::SymbolLibManager( &Prj() )->LoadSymbol( GetCurLib(), aSymbolName );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -778,8 +779,6 @@ public:
             m_validator( std::move( aValidator ) ),
             m_params( aParams )
     {
-        SYMBOL_LIB_TABLE*          tbl = PROJECT_SCH::SchSymbolLibTable( &Prj() );
-        std::vector<wxString>      libNicknames = tbl->GetLogicalLibs();
         wxArrayString              headers;
         std::vector<wxArrayString> itemsToDisplay;
 
@@ -1500,7 +1499,8 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 
     m_toolManager->RunAction( ACTIONS::cancelInteractive );
 
-    if( !aNewFile && ( aLibrary.empty() || !PROJECT_SCH::SchSymbolLibTable( &prj )->HasLibrary( aLibrary ) ) )
+    if( !aNewFile
+        && ( aLibrary.empty() || !PROJECT_SCH::SymbolLibManager( &prj )->HasLibrary( aLibrary ) ) )
     {
         ShowInfoBarError( _( "No library specified." ) );
         return false;
@@ -1541,7 +1541,8 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
     }
     else
     {
-        fn = PROJECT_SCH::SchSymbolLibTable( &prj )->GetFullURI( aLibrary );
+        // TODO(JE) library tables
+        //fn = PROJECT_SCH::SymbolLibManager( &prj )->GetFullURI( aLibrary );
         fileType = SCH_IO_MGR::GuessPluginTypeFromLibPath( fn.GetFullPath() );
 
         if( fileType == SCH_IO_MGR::SCH_FILE_UNKNOWN )

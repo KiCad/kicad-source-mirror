@@ -53,7 +53,7 @@ class LIB_SYMBOL;
 class LEGACY_SYMBOL_LIB;
 class SYMBOL_LIBRARY_FILTER;
 class LIB_ID;
-class SYMBOL_LIB_TABLE;
+class SYMBOL_LIBRARY_MANAGER_ADAPTER;
 class EESCHEMA_SETTINGS;
 class SYMBOL_EDITOR_SETTINGS;
 struct SCH_SELECTION_FILTER_OPTIONS;
@@ -90,14 +90,14 @@ class wxFileSystemWatcherEvent;
  * check the optional cache library.
  *
  * @param aLibId is the symbol library identifier to load.
- * @param aLibTable is the #SYMBOL_LIBRARY_TABLE to load the alias from.
+ * @param aLibMgr is the #SYMBOL_LIBRARY_MANAGER_ADAPTER to load the alias from.
  * @param aCacheLib is an optional cache library.
  * @param aParent is an optional parent window when displaying an error message.
  * @param aShowErrorMessage set to true to show any error messages.
  *
  * @return The symbol found in the library or NULL if the symbol was not found.
  */
-LIB_SYMBOL* SchGetLibSymbol( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
+LIB_SYMBOL* SchGetLibSymbol( const LIB_ID& aLibId, SYMBOL_LIBRARY_MANAGER_ADAPTER* aLibMgr,
                              LEGACY_SYMBOL_LIB* aCacheLib = nullptr, wxWindow* aParent = nullptr,
                              bool aShowErrorMsg = false );
 
@@ -132,6 +132,8 @@ public:
 
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
+
+    void ProjectChanged() override;
 
     SCH_RENDER_SETTINGS* GetRenderSettings();
 
@@ -347,7 +349,9 @@ private:
 
     std::shared_ptr<BACKGROUND_JOB>         m_libraryPreloadBackgroundJob;
     std::future<void>                       m_libraryPreloadReturn;
-    bool                                    m_libraryPreloadInProgress;
+    std::atomic_bool                        m_libraryPreloadInProgress;
+    std::atomic_bool                        m_libraryPreloadAbort;
+    std::atomic_bool                        m_libraryPreloadRestart;
 };
 
 #endif // SCH_BASE_FRAME_H_

@@ -212,10 +212,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         Prj().SetElem( PROJECT::ELEM::SCH_SYMBOL_LIBS, nullptr );
     }
 
-    // Load the symbol library table, this will be used forever more.
-    Prj().SetElem( PROJECT::ELEM::SYMBOL_LIB_TABLE, nullptr );
-    PROJECT_SCH::SchSymbolLibTable( &Prj() );
-
     wxFileName rfn( GetCurrentFileName() );
     rfn.MakeRelativeTo( Prj().GetProjectPath() );
     LoadWindowState( rfn.GetFullPath() );
@@ -677,6 +673,13 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     wxCommandEvent changedEvt( EDA_EVT_SCHEMATIC_CHANGED );
     ProcessEventLocally( changedEvt );
 
+    if( !differentProject && Kiface().IsSingle() )
+    {
+        // If we didn't reload the project, we still want to send the notification so that
+        // things that are supposed to happen on project load can happen again on reload
+        ProjectChanged();
+    }
+
     for( wxEvtHandler* listener : m_schematicChangeListeners )
     {
         wxCHECK2( listener, continue );
@@ -710,6 +713,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // Ensure all items are redrawn (especially the drawing-sheet items):
     if( GetCanvas() )
         GetCanvas()->DisplaySheet( GetCurrentSheet().LastScreen() );
+
+    // Trigger a library load to handle any project-specific libraries
+    CallAfter( [&]() { PreloadLibraries(); } );
 
     return true;
 }

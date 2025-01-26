@@ -100,6 +100,8 @@ SCH_SHEET* SCH_IO_CADSTAR_ARCHIVE::LoadSchematicFile( const wxString&        aFi
     CADSTAR_SCH_ARCHIVE_LOADER csaLoader( aFileName, m_reporter, m_progressReporter );
     csaLoader.Load( aSchematic, rootSheet );
 
+    // TODO(JE) library tables
+#if 0
     // SAVE SYMBOLS TO PROJECT LIBRARY:
     SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &aSchematic->Project() );
 
@@ -162,6 +164,7 @@ SCH_SHEET* SCH_IO_CADSTAR_ARCHIVE::LoadSchematicFile( const wxString&        aFi
             }
         };
     }
+#endif
 
     // Need to fix up junctions after import to retain connectivity
     aSchematic->FixupJunctionsAfterImport();

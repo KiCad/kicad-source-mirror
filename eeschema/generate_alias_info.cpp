@@ -19,10 +19,11 @@
  */
 
 #include <generate_alias_info.h>
+#include <ki_exception.h>
 #include <string_utils.h>
 #include <template_fieldnames.h>
 #include <lib_symbol.h>
-#include <symbol_lib_table.h>
+#include <libraries/symbol_library_manager_adapter.h>
 #include <wx/log.h>
 
 static const wxString DescriptionFormat = wxS(
@@ -49,9 +50,9 @@ static const wxString LinkFormat = wxS( "<a href=\"__HREF__\">__TEXT__</a>" );
 class FOOTPRINT_INFO_GENERATOR
 {
 public:
-    FOOTPRINT_INFO_GENERATOR( SYMBOL_LIB_TABLE* aSymbolLibTable, LIB_ID const& aLibId, int aUnit ) :
+    FOOTPRINT_INFO_GENERATOR( SYMBOL_LIBRARY_MANAGER_ADAPTER* aLibs, LIB_ID const& aLibId, int aUnit ) :
             m_html( DescriptionFormat ),
-            m_sym_lib_table( aSymbolLibTable ),
+            m_libs( aLibs ),
             m_lib_id( aLibId ),
             m_symbol( nullptr ),
             m_unit( aUnit )
@@ -62,14 +63,14 @@ public:
      */
     void GenerateHtml()
     {
-        wxCHECK_RET( m_sym_lib_table, "Symbol library table pointer is not valid" );
+        wxCHECK_RET( m_libs, "Symbol library manager adapter pointer is not valid" );
 
         if( !m_lib_id.IsValid() )
             return;
 
         try
         {
-            m_symbol = m_sym_lib_table->LoadSymbol( m_lib_id );
+            m_symbol = m_libs->LoadSymbol( m_lib_id );
         }
         catch( const IO_ERROR& ioe )
         {
@@ -253,17 +254,17 @@ protected:
     }
 
 private:
-    wxString          m_html;
-    SYMBOL_LIB_TABLE* m_sym_lib_table;
-    LIB_ID const      m_lib_id;
-    LIB_SYMBOL*       m_symbol;
-    int               m_unit;
+    wxString                        m_html;
+    SYMBOL_LIBRARY_MANAGER_ADAPTER* m_libs;
+    LIB_ID const                    m_lib_id;
+    LIB_SYMBOL*                     m_symbol;
+    int                             m_unit;
 };
 
 
-wxString GenerateAliasInfo( SYMBOL_LIB_TABLE* aSymLibTable, LIB_ID const& aLibId, int aUnit )
+wxString GenerateAliasInfo( SYMBOL_LIBRARY_MANAGER_ADAPTER* aLibs, LIB_ID const& aLibId, int aUnit )
 {
-    FOOTPRINT_INFO_GENERATOR gen( aSymLibTable, aLibId, aUnit );
+    FOOTPRINT_INFO_GENERATOR gen( aLibs, aLibId, aUnit );
     gen.GenerateHtml();
     return gen.GetHtml();
 }

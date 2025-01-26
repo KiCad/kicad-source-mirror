@@ -31,6 +31,7 @@
 #include <sch_group.h>
 #include <string_utils.h>
 #include <connection_graph.h>
+#include <pgm_base.h>
 #include <core/kicad_algo.h>
 #include <wx/wfstream.h>
 #include <xnode.h>      // also nests: <wx/xml/xml.h>
@@ -41,6 +42,7 @@
 #include <symbol_lib_table.h>
 
 #include <set>
+#include <libraries/symbol_library_manager_adapter.h>
 
 static bool sortPinsByNumber( SCH_PIN* aPin1, SCH_PIN* aPin2 );
 
@@ -711,18 +713,20 @@ XNODE* NETLIST_EXPORTER_XML::makeDesignHeader()
 XNODE* NETLIST_EXPORTER_XML::makeLibraries()
 {
     XNODE*            xlibs = node( wxT( "libraries" ) );     // auto_ptr
-    SYMBOL_LIB_TABLE* symbolLibTable = PROJECT_SCH::SchSymbolLibTable( &m_schematic->Project() );
+    LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
 
     for( std::set<wxString>::iterator it = m_libraries.begin(); it!=m_libraries.end();  ++it )
     {
         wxString    libNickname = *it;
         XNODE*      xlibrary;
 
-        if( symbolLibTable->HasLibrary( libNickname ) )
+        std::optional<wxString> uri = manager.GetFullURI( LIBRARY_TABLE_TYPE::SYMBOL, libNickname );
+
+        if( uri )
         {
             xlibs->AddChild( xlibrary = node( wxT( "library" ) ) );
             xlibrary->AddAttribute( wxT( "logical" ), libNickname );
-            xlibrary->AddChild( node( wxT( "uri" ), symbolLibTable->GetFullURI( libNickname ) ) );
+            xlibrary->AddChild( node( wxT( "uri" ), *uri  ) );
         }
 
         // @todo: add more fun stuff here

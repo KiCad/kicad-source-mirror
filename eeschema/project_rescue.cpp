@@ -381,7 +381,8 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues( RESCUER& aRescuer,
             }
 
             // Get the library symbol from the symbol library table.
-            lib_match = SchGetLibSymbol( symbol_id, PROJECT_SCH::SchSymbolLibTable( aRescuer.GetPrj() ) );
+            // TODO(JE) library tables -- patched out for testing
+            // lib_match = SchGetLibSymbol( symbol_id, PROJECT_SCH::SchSymbolLibTable( aRescuer.GetPrj() ) );
 
             if( !cache_match && !lib_match )
                 continue;
@@ -775,6 +776,8 @@ void SYMBOL_LIB_TABLE_RESCUER::OpenRescueLibrary()
     (*m_properties)[ SCH_IO_KICAD_LEGACY::PropBuffering ] = "";
 
     wxFileName fn = GetRescueLibraryFileName( m_schematic );
+    // TODO(JE) library tables - patched out for testing
+#if 0
 
     SYMBOL_LIB_TABLE_ROW* row = PROJECT_SCH::SchSymbolLibTable( m_prj )->FindRow( fn.GetName() );
 
@@ -799,11 +802,14 @@ void SYMBOL_LIB_TABLE_RESCUER::OpenRescueLibrary()
         for( LIB_SYMBOL* symbol : symbols )
             m_rescueLibSymbols.emplace_back( std::make_unique<LIB_SYMBOL>( *symbol ) );
     }
+#endif
 }
 
 
 bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( wxWindow *aParent )
 {
+    // TODO(JE) library tables - patched out for testing
+#if 0
     wxString msg;
     wxFileName fn = GetRescueLibraryFileName( m_schematic );
     SYMBOL_LIB_TABLE_ROW* row = PROJECT_SCH::SchSymbolLibTable( m_prj )->FindRow( fn.GetName() );
@@ -855,7 +861,7 @@ bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( wxWindow *aParent )
     // This can only happen if the symbol library table file was corrupted on write.
     if( !PROJECT_SCH::SchSymbolLibTable( m_prj ) )
         return false;
-
+#endif
     // Update the schematic symbol library links since the library list has changed.
     SCH_SCREENS schematic( m_schematic->Root() );
     schematic.UpdateSymbolLinks();
