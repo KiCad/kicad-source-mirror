@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-26 07:55+0000\n"
+"PO-Revision-Date: 2025-01-27 21:23+0000\n"
 "Last-Translator: reimu105 <peter112548@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/v8/zh_Hant/>\n"
@@ -16240,7 +16240,7 @@ msgstr "尚未支援空白。"
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4350
 #, c-format
 msgid "Unknown or unexpected record id %d found in %s."
-msgstr "在 %2$s 中發現未知或意外記錄 ID %1$d。"
+msgstr "'未知' 或 '意外'的記錄 ID %d在 %s 中被發現。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1108
 #, c-format
@@ -16628,7 +16628,7 @@ msgstr "無法在 '%s' 中找到有效的原理圖檔案"
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:500
 #, c-format
 msgid "Error loading symbol '%s' from library '%s': %s"
-msgstr "從庫 %2$s 載入符號 '%1$s' 出錯: %3$s"
+msgstr "從庫‘%s’中載入符號‘%s’時出錯：%s"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:421
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:426
@@ -18479,7 +18479,7 @@ msgstr "未知"
 msgid ""
 "Error loading simulation model: could not find base model '%s' in library "
 "'%s'"
-msgstr "載入模擬模型時出錯: 在庫 %2$s 中找不到基礎模型 %1$s"
+msgstr "載入模擬模型時出錯：在庫“%s”中找不到基礎模型“%s”"
 
 #: eeschema/sim/sim_library_kibis.cpp:39 eeschema/sim/sim_model_kibis.cpp:82
 #, c-format
@@ -19728,14 +19728,14 @@ msgid "Change field '%s' value to '%s'."
 msgstr "將欄位 '%s' 的值更改為 '%s'。"
 
 #: eeschema/tools/backannotate.cpp:534
-#, c-format
+#, c-format, fuzzy
 msgid "Add field '%s' with value '%s'."
-msgstr "添加值為 '%2$s' 的欄位 '%1$s'。"
+msgstr "新增欄位‘%s’，值為‘%s’。"
 
 #: eeschema/tools/backannotate.cpp:563
 #, c-format
 msgid "Delete field '%s.'"
-msgstr "刪除欄位 '%s'。"
+msgstr "刪除字段 '%s'。"
 
 #: eeschema/tools/backannotate.cpp:703
 #, c-format
@@ -36784,9 +36784,9 @@ msgid "Pad is not a through hole pad; connection will be: %s."
 msgstr "焊盤不是通孔焊盤; 連接將是: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:784
-#, fuzzy, c-format
+#, c-format
 msgid "Net tie on %s; clearance: 0."
-msgstr "%s 上的局部覆蓋; 間隙: %s。"
+msgstr "網路連線 %s；間隙：0。"
 
 #: pcbnew/drc/drc_engine.cpp:787
 #, fuzzy
@@ -39011,7 +39011,7 @@ msgstr "調整"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2464
 #, fuzzy
 msgid "Select a track to tune first."
-msgstr "選擇要調整的值"
+msgstr "先選擇一路徑要調整的導線。"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2533
 msgid "Single track"
