@@ -16352,9 +16352,9 @@ msgid "Global Field Name Templates"
 msgstr "全域欄位名稱模板"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:209
-#, fuzzy, c-format
+#, c-format
 msgid "The field name \"%s\" contains trailing and/or leading whitespace."
-msgstr "條目包含尾隨空格。"
+msgstr "欄位名稱「%s」包含尾隨和/或前導空格。"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:215
 msgid ""
