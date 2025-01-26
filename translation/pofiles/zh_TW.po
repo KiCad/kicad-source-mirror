@@ -16365,9 +16365,8 @@ msgstr "這可能會導致看似重複的欄位名稱，但實際上是唯一名
 "刪除空白字元不會對現有符號欄位名稱產生影響。"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:221
-#, fuzzy
 msgid "Remove White Space"
-msgstr "移除3D模型"
+msgstr "移除空白字符"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:222
 #, fuzzy
