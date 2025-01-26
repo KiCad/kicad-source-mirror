@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-23 09:58+0000\n"
-"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
+"PO-Revision-Date: 2025-01-26 07:55+0000\n"
+"Last-Translator: reimu105 <peter112548@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/v8/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -1712,7 +1712,7 @@ msgstr "背景任務"
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
-msgstr "環境變數展開失敗: '%3$s' 中第 %2$u 處缺少 '%1$c'。"
+msgstr "環境變數擴展失敗：遺失 '%c'在位置 %u在 '%s'。"
 
 #: common/common.cpp:371
 #, c-format
@@ -2217,7 +2217,9 @@ msgstr "3D 搜索路徑不能為空。"
 msgid ""
 "This path was defined  externally to the running process and\n"
 "will only be temporarily overwritten."
-msgstr "此路徑是在運行行程外部定義的, 只會被暫時覆蓋。"
+msgstr ""
+"該路徑是在運行進程外部定義的，並且\n"
+"只會被暫時覆蓋。"
 
 #: common/dialogs/dialog_configure_paths.cpp:281
 msgid ""
@@ -2227,10 +2229,11 @@ msgid ""
 "this behavior, either rename any conflicting entries or remove\n"
 "the external environment variable(s) from your system."
 msgstr ""
-"下次啟動KiCad時, 任何已經定義好的路徑都會被遵守, \n"
-"而在路徑配置對話框中定義的任何設置都會被忽略。\n"
-"如果你不打算使用這種行為, 請重命名任何衝突的條目\n"
-"或從你的系統中移除外部環境變數。"
+"下次啟動 KiCad 時，任何已經存在的路徑\n"
+"已定義的內容將被尊重，並且在路徑中定義的任何設置\n"
+"配置對話框將被忽略。 如果你不打算\n"
+"對於此行為，請重新命名任何衝突的條目或刪除\n"
+"系統的外部環境變數。"
 
 #: common/dialogs/dialog_configure_paths.cpp:299
 #, c-format
@@ -2319,9 +2322,11 @@ msgid ""
 "of the options below.  If you are not sure which option to select, please\n"
 "use the default selection."
 msgstr ""
-"首次運行 KiCad 時使用了新的%s庫表來訪問庫。\n"
-"為了使 KiCad 能夠儲存%s庫資訊以供下次訪問, 您必須配置全域%s庫表。\n"
-"請從以下選項中選擇一個, 如果您不確定要選擇哪個選項, 請使用預設選項。"
+"KiCad 已使用新的 %s 庫表首次運行\n"
+"訪問圖書館。 為了讓 KiCad 存取 %s 庫，\n"
+"您必須配置全域 %s 庫表。 請選擇一項\n"
+"以下選項中。 如果您不確定要選擇哪個選項，請\n"
+"使用預設選擇。"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
 #, c-format
@@ -3960,15 +3965,18 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are never shared in this process."
 msgstr ""
-"允許 KiCad 匿名地向開發人員報告崩潰和特殊事件數據, 以幫助更有效地識別用戶群體"
-"中的關鍵 bug, 並幫助繪製功能畫像來指導改進。\n"
+"KiCad "
+"可以向開發人員匿名報告崩潰和特殊事件數據，以幫助更有效地識別整個用戶群中的關"
+"鍵錯誤，並幫助分析功能以指導改進。\n"
 "\n"
-"要鏈接來自相同 KiCad 安裝的自動報告, 將生成一個完全隨機的唯一標識符, 它僅用於"
-"崩潰報告的目的。沒有個人身份資訊(PII), 包括IP地址被存儲或連接到該標識符。\n"
-"您可以在任何時候通過提供的按鈕重置此 id。\n"
+"要連結來自同一 KiCad "
+"安裝的自動報告，會產生一個完全隨機的唯一標識符，並且僅用於崩潰報告的目的。"
+"包括 IP 位址在內的個人識別資訊 (PII) 不會被儲存或連接到此識別碼。"
+"您可以隨時使用提供的按鈕重設此 ID。\n"
 "\n"
-"如果您選擇自願參與, 那麼發生崩潰或事件時, KiCad 將自動處理發送上述報告。\n"
-"您的設計檔案(如原理圖或PCB) 在此過程中絕對不會被共享。"
+"如果您選擇自願參與，KiCad "
+"將在發生崩潰或事件時自動處理發送所述報告。在此過程中絕不會分享您的設計文件（"
+"例如原理圖或 PCB）。"
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
@@ -6292,12 +6300,12 @@ msgstr "目前不支援 DXF 中的圖像。"
 #: common/import_gfx/graphics_importer_buffer.cpp:123
 #, c-format
 msgid "Imported graphic is too large. Maximum scale is %f"
-msgstr ""
+msgstr "導入的圖形太大。最大比例為 %f"
 
 #: common/import_gfx/graphics_importer_buffer.cpp:178
 #, c-format
 msgid "Import offset adjusted to (%f, %f) to fit within numeric limits"
-msgstr ""
+msgstr "導入偏移調整為 (%f, %f) 以適應數位限制"
 
 #: common/io/altium/altium_binary_parser.cpp:56 common/richio.cpp:121
 #, c-format
@@ -6354,27 +6362,27 @@ msgstr "在 '%s' 中發現了非預期數量的點數。實際找到 %d 個, 但
 #: common/io/cadstar/cadstar_archive_parser.h:43
 #, c-format
 msgid "Missing node '%s' in '%s'"
-msgstr "在 '%2$s' 中缺少節點 '%1$s'"
+msgstr "“%s”中缺少節點“%s”"
 
 #: common/io/cadstar/cadstar_archive_parser.h:46
 #, c-format
 msgid "Unknown node '%s' in '%s'"
-msgstr "在 '%2$s' 出現未知節點 '%1$s'"
+msgstr "“%s”中的未知節點“%s”"
 
 #: common/io/cadstar/cadstar_archive_parser.h:49
 #, c-format
 msgid "Missing Parameter '%s' in '%s'"
-msgstr "在 '%2$s' 中缺少參數 '%1$s'"
+msgstr "“%s”中缺少參數“%s”"
 
 #: common/io/cadstar/cadstar_archive_parser.h:52
 #, c-format
 msgid "Unknown Parameter '%s' in '%s'"
-msgstr "在 '%2$s' 出現未知參數 '%1$s'"
+msgstr "“%s”中存在未知參數“%s”"
 
 #: common/io/cadstar/cadstar_archive_parser.h:55
 #, c-format
 msgid "Unable to parse '%s' in '%s'"
-msgstr "無法解析 '%2$s' 中的 '%1$s'"
+msgstr "無法解析“%s”中的“%s”"
 
 #: common/io/eagle/eagle_parser.cpp:249
 #, c-format
@@ -6421,7 +6429,7 @@ msgstr "無法讀取 ZIP 壓縮包 '%s'"
 #: common/io/easyedapro/easyedapro_import_utils.cpp:301
 #, c-format
 msgid "Cannot parse JSON line %d in '%s': %s"
-msgstr "無法解析 JSON 檔案 '%2$s' 中的第 %1$d 行: %3$s"
+msgstr "無法解析“%s”中的 JSON 行 %d：%s"
 
 #: common/kiway.cpp:243
 #, c-format
@@ -8297,9 +8305,7 @@ msgstr "重置為預設值"
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Are you sure you want to "
 "change its assignment?"
-msgstr ""
-"'%1$s' 已被 '%3$s' 中的 '%2$s' 操作所使用, 確定要修改其分配 (原有分配將被移"
-"除)?"
+msgstr "「%s」已分配給節「%s」中的「%s」。您確定要更改其分配嗎？"
 
 #: common/widgets/widget_hotkey_list.cpp:489
 msgid "Confirm change"
@@ -9761,9 +9767,9 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"從庫 %2$s 載入符號 %1$s 時出錯。\n"
+"從庫 %s 載入符號 %s 時出錯。\n"
 "\n"
-"%3$s"
+"%s"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:114
@@ -9874,7 +9880,7 @@ msgstr "它將放回 %s 列表中"
 
 #: eeschema/dialogs/dialog_erc.cpp:612 pcbnew/dialogs/dialog_drc.cpp:638
 msgid "Exclude this violation"
-msgstr "排除此違規"
+msgstr "排除此違規行為"
 
 #: eeschema/dialogs/dialog_erc.cpp:613 pcbnew/dialogs/dialog_drc.cpp:639
 #, c-format
@@ -10982,9 +10988,10 @@ msgid ""
 "This was previously known as an alias.  Do not select\n"
 "an existing symbol to create a new root symbol."
 msgstr ""
-"選擇當前庫中的符號作為父級符號。\n"
+"選擇目前庫中的符號作為父符號。\n"
 "\n"
-"請勿選擇現有符號來建立新的根符號。"
+"這以前稱為別名。 不要選擇\n"
+"現有符號來建立新的根符號。"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:60
 msgid "Default reference designator:"
@@ -11007,7 +11014,9 @@ msgstr "單元之間可以互換"
 msgid ""
 "Check this option when all symbol units are identical except\n"
 "for pin numbers."
-msgstr "除接腳編號不同之外, 所有的符號單元都相同時, 請勾選此選項。"
+msgstr ""
+"當所有符號單位都相同時，請選取此選項，除了\n"
+"對於引腳編號。"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:85
 msgid "Create symbol with alternate body style (De Morgan)"
@@ -11199,9 +11208,13 @@ msgid ""
 "derived from another symbols or they stand alone as\n"
 "root symbols."
 msgstr ""
-"選擇符號的衍生源或設置為 <無> 使此符號作為根符號。\n"
+"選擇從中衍生這個符號的符號或選擇\n"
+"<無> 表示根符號。\n"
 "\n"
-"所有的符號要麼是從另一個符號中衍生出來的, 要麼就是作為根符號獨立存在。"
+"衍生符號以前稱為別名。\n"
+"現在情況不再是這樣，所有符號都不是\n"
+"從另一個符號衍生或它們獨立為\n"
+"根符號。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:170
 msgid "Number of units:"
@@ -11246,10 +11259,10 @@ msgid ""
 "from editing in the schematic.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 msgstr ""
-"勾選此選項, 會使該符號出現在 \"添加電源符號\" 視窗中, 作為一個電源符號使"
-"用。\n"
-"電源符號的數值文字會被鎖定, 以防其在原理圖中被不慎編輯。\n"
-"電源符號不會在 BOM 中出現, 也不能對電源符號分配封裝。"
+"設定此選項會使相關符號出現在\n"
+"“新增電源符號”對話框。 它將鎖定值文字以保護它\n"
+"從原理圖中編輯。 該符號將不包含在\n"
+"BOM 且無法指派封裝。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:213
 msgid "Pin Text Options"
@@ -11329,14 +11342,8 @@ msgid ""
 "Footprints names can used wildcards like sm* to allow all footprints names "
 "starting by sm."
 msgstr ""
-"可以在封裝篩選規則列表中, 為符號預先分配一個可選封裝列表。在繪製原理圖添加符"
-"號時,\n"
-"會根據符號的封裝篩選規則, 在所有封裝庫中搜索並顯示與其規則匹配的封裝, 你可以"
-"從中\n"
-"選擇一個合適的封裝。\n"
-"篩選欄位可以包含萬用字元, 如 sm*, 可以匹配所有以 sm 開頭的封裝名稱, 意味著該"
-"符號\n"
-"預設可選所有以 sm 開頭的封裝。"
+"可用於該符號的封裝名稱清單。\n"
+"封裝名稱可以使用 sm* 等通配符，以允許所有以 sm 開頭的封裝名稱。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:316
 msgid "Add footprint filter"
@@ -11580,7 +11587,9 @@ msgstr "選擇輸出目錄"
 msgid ""
 "Do you want to use a path relative to\n"
 "'%s'?"
-msgstr "是否要使用'%s'的相對路徑?"
+msgstr ""
+"你想使用相對的路徑嗎\n"
+"“%s”？"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:199
 #: pcbnew/dialogs/dialog_export_svg.cpp:246
@@ -12097,9 +12106,8 @@ msgid "Clear colors to use Schematic Editor colors."
 msgstr "清除顏色以使用原理圖編輯器預設顏色。"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:167
-#, fuzzy
 msgid "Edit Sheet Pin"
-msgstr "新增圖框引腳"
+msgstr "编辑图纸引脚"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.h:84
 msgid "Sheet Pin Properties"
@@ -12193,7 +12201,7 @@ msgstr "該操作無法撤銷。"
 #: eeschema/dialogs/dialog_sheet_properties.cpp:582
 #, c-format
 msgid "Create new file '%s' with contents of '%s'?"
-msgstr "建立包含 '%2$s' 內容的新檔案 '%1$s'?"
+msgstr "是否創建內容為“%s”的新檔案“%s”？"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:614
 #, c-format
@@ -12801,9 +12809,9 @@ msgid "Not Connected"
 msgstr "沒有連接"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:855
-#, fuzzy, c-format
+#, c-format
 msgid "No model named '%s' in '%s'."
-msgstr "庫中沒有名為 '%s' 的模型。"
+msgstr "「%s」中沒有名為「%s」的模型。"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:1233
 msgid "Browse Models"
@@ -13252,8 +13260,8 @@ msgid ""
 "This is useful for adding symbols for board footprints such as fiducials\n"
 "and logos that you do not want to appear in the bill of materials export"
 msgstr ""
-"這對於添加一些不想出現在物料清單中的電路板封裝 (如基準定位點) 和 logo 標誌等"
-"符號很有用"
+"這對於添加電路板封裝符號（例如基準點）非常有用\n"
+"以及你不希望出現在匯出的物料清單中的徽標"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
 msgid ""
@@ -13261,8 +13269,8 @@ msgid ""
 "materials but\n"
 "not required to layout the board such as mechanical fasteners and enclosures"
 msgstr ""
-"這對於添加一些只匯出到物料清單但不需要在電路板中佈局的符號很有用, 例如機械固"
-"定件和外殼"
+"這對於添加僅導出到物料清單的符號很有用，但\n"
+"不需要佈局電路板，例如機械緊固件和外殼"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:217
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:215
@@ -13587,8 +13595,9 @@ msgid ""
 "and they will not be seen on the screen.  Are you\n"
 "sure you want to use these colors?"
 msgstr ""
-"部分項目的顏色與背景色相同, 在屏幕上將不可見。\n"
-"確定要使用這些顏色嗎?"
+"有些項目的顏色與背景相同\n"
+"並且它們不會在螢幕上看到。 你是否\n"
+"確定要使用這些顏色嗎？"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:208
 msgid "(symbol editor only)"
@@ -14196,7 +14205,9 @@ msgstr "預設線寬 (&D):"
 msgid ""
 "Set to 0 to allow symbols to inherit line width properties\n"
 "from schematic"
-msgstr "設置為 0 以允許符號從原理圖繼承線寬屬性"
+msgstr ""
+"設定為 0 以允許符號繼承線寬屬性\n"
+"從原理圖"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:62
 msgid "D&efault pin length:"
@@ -14258,7 +14269,7 @@ msgstr "取消更新表格"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:467
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'"
-msgstr "在名稱: '%2$s' 中出現非法字符 '%1$c'"
+msgstr "非法字元“%c存在於”暱稱“%s”中"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:480
 #: eeschema/dialogs/panel_sym_lib_table.cpp:532
@@ -14477,26 +14488,25 @@ msgid "Untitled Field"
 msgstr "無標題欄位"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "The field name \"%s\" contains trailing and/or leading whitespace."
-msgstr "條目包含尾隨空格。"
+msgstr "欄位名稱「%s」包含尾隨和/或前導空格。"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:211
 msgid ""
 "This may result in what appears to be duplicate field names but are actually "
 "unique names differing only by white space characters.  Removing the white "
 "space characters will have no effect on existing symbol field names."
-msgstr ""
+msgstr "這可能會導致看似重複的欄位名稱，但實際上是唯一名稱，僅空格字元不同。 "
+"刪除空白字元不會對現有符號欄位名稱產生影響。"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:217
-#, fuzzy
 msgid "Remove White Space"
-msgstr "移除3D模型"
+msgstr "移除空白字符"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:218
-#, fuzzy
 msgid "Keep White Space"
-msgstr "禁止放置焊盤"
+msgstr "保留空白字符"
 
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:20
 msgid "Field name templates:"
@@ -15031,6 +15041,8 @@ msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
+"'%s' 不是一個 KiCad 原理圖檔。\n"
+"請使用 \"檔案 -> 匯入\" 功能匯入非KiCad原理圖檔。"
 
 #: eeschema/files-io.cpp:275
 msgid "Root"
@@ -15127,7 +15139,7 @@ msgstr "此檔案由舊版 KiCad 建立。將在儲存檔案時將其轉換為�
 msgid ""
 "This schematic contains symbols that have leading and/or trailing white "
 "space field names."
-msgstr ""
+msgstr "此原理圖包含具有前導和/或尾隨空白欄位名稱的符號。"
 
 #: eeschema/files-io.cpp:598
 msgid "Schematic is read only."
@@ -15335,7 +15347,7 @@ msgstr "衍生自"
 #: eeschema/widgets/symbol_preview_widget.cpp:202
 #, c-format
 msgid "Error loading symbol %s from library '%s'."
-msgstr "從庫 %2$s 載入符號 '%1$s' 出錯。"
+msgstr "從庫“%s”載入符號 %s 時出錯。"
 
 #: eeschema/generate_alias_info.cpp:121 eeschema/sim/spice_simulator.cpp:69
 #: kicad/pcm/pcm.cpp:779 pcbnew/zone.cpp:646
@@ -15830,17 +15842,17 @@ msgstr "頁面 '%s' 的接腳 '%s'"
 #: eeschema/net_navigator.cpp:106
 #, c-format
 msgid "Label '%s' at %s, %s"
-msgstr "%2$s, %3$s 處的標籤 '%1$s'"
+msgstr "標籤“%s”位於 %s，%s"
 
 #: eeschema/net_navigator.cpp:116
 #, c-format
 msgid "Global label '%s' at %s, %s"
-msgstr "%2$s, %3$s 處的全域標籤 '%1$s'"
+msgstr "全域標籤‘%s’位於 %s，%s"
 
 #: eeschema/net_navigator.cpp:126
 #, c-format
 msgid "Hierarchical label '%s' at %s, %s"
-msgstr "%2$s, %3$s 處的層次標籤 '%1$s'"
+msgstr "層次標籤‘%s’位於 %s，%s"
 
 #: eeschema/net_navigator.cpp:136
 #, c-format
@@ -17861,10 +17873,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"檔案名 '%s' 可能會與原理圖中已定義的現有檔案名發生衝突, 如果您的作業系統支援"
-"不區分大小寫的檔案名, 抑或是您將此專案複製到這類作業系統中, 則可能會出現問"
-"題。\n"
-"是否繼續?"
+"檔案名稱“%s”可能會導致現有檔案名稱出現問題\n"
+"已在支援案例的系統原理圖中定義\n"
+"不敏感的檔名。 如果你複製此內容，將會導致問題\n"
+"項目到支援不區分大小寫檔案的作業系統\n"
+"名稱。\n"
+"\n"
+"你想繼續嗎？"
 
 #: eeschema/sheet.cpp:744
 msgid "Do not show this message again."
@@ -18649,18 +18664,12 @@ msgid "Spice Simulator"
 msgstr "Spice 模擬工具"
 
 #: eeschema/sim/simulator_frame.cpp:360 eeschema/tools/simulator_control.cpp:75
-#, fuzzy
 msgid "Errors during netlist generation."
-msgstr ""
-"生成網表出錯, 模擬中斷。\n"
-"\n"
+msgstr "網表產生期間出現錯誤。"
 
 #: eeschema/sim/simulator_frame.cpp:365 eeschema/tools/simulator_control.cpp:80
-#, fuzzy
 msgid "Warnings during netlist generation."
-msgstr ""
-"生成網表出錯, 模擬中斷。\n"
-"\n"
+msgstr "網表產生期間的警告。"
 
 #: eeschema/sim/simulator_frame.cpp:375
 msgid "Simulator requires a fully annotated schematic."
@@ -18683,9 +18692,9 @@ msgid "Another simulation is already running."
 msgstr "另一個模擬已經在運行。"
 
 #: eeschema/sim/simulator_frame.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load or parse file %s"
-msgstr "無法載入檔案 %s"
+msgstr "無法載入或解析檔案 %s"
 
 #: eeschema/sim/simulator_frame.cpp:625
 msgid "Save changes to workbook?"
@@ -19810,7 +19819,7 @@ msgstr "建立一個新符號"
 
 #: eeschema/tools/ee_actions.cpp:170
 msgid "Derive from Existing Symbol"
-msgstr "從現有符號衍生…"
+msgstr "從現有符號衍生"
 
 #: eeschema/tools/ee_actions.cpp:171
 msgid "Create a new symbol, derived from an existing symbol"
@@ -21511,9 +21520,8 @@ msgid "Place Pin Anyway"
 msgstr "任意位置放置接腳"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:452
-#, fuzzy
 msgid "Repeat Pin"
-msgstr "圖紙接腳"
+msgstr "重複引腳"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:32
 msgid "Create a new project for this schematic"
@@ -22801,9 +22809,8 @@ msgid "Leave unchanged"
 msgstr "保持不變"
 
 #: include/widgets/filedlg_import_non_kicad.h:36
-#, fuzzy
 msgid "Show import issues"
-msgstr "顯示或隱藏 %s"
+msgstr "顯示導入問題"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -23238,11 +23245,10 @@ msgid "Generate Position File"
 msgstr "生成定位檔案"
 
 #: kicad/cli/command_pcb_export_pos.cpp:50
-#, fuzzy
 msgid ""
 "Valid options: front,back,both. Gerber format only supports \"front\" or "
 "\"back\"."
-msgstr "有效選項: front、back、both。Gerber 格式僅支援\"both\"。"
+msgstr "有效選項：正面、背面、兩者。 Gerber 格式僅支援「正面」或「背面」。"
 
 #: kicad/cli/command_pcb_export_pos.cpp:55
 msgid "Valid options: ascii,csv,gerber"
@@ -25792,16 +25798,16 @@ msgid ""
 "OVC IV: Equipment at the origin of the installation (eg: electricity meters, "
 "primary overcurrent protection devices)"
 msgstr ""
-"OVC I: 不與市電直接連接的設備 (如: 由充電器供電的筆記本電腦和手機)\n"
+"OVC I：不直接連接主電源的設備\n"
 "\n"
-"OVC II: 需要依靠固定安裝設施供電的耗能設備 (如:家用電器, 便攜式工具, 家庭負"
-"載)。\n"
-"如果有可靠性和可用性要求, 則適用於 OVC III\n"
+"OVC II：由固定裝置供電的耗能設備。 "
+"（例如：電器、可攜式工具、家用負載）。如果有可靠性和可用性要求，則適用 "
+"OVCIII\n"
 "\n"
-"OVC III: 採用固定安裝方式的具有可靠性和可用性要求設備 (例如:電氣開關, 工業用"
-"設備)。\n"
+"OVC III：具有可靠性和可用性要求的固定安裝設備。 "
+"（例如：電氣開關、工業用設備）\n"
 "\n"
-"OVC IV: 安裝於供電進線處的設備 (如:電錶, 一次過流保護裝置)"
+"OVC IV：安裝來源設備（例如：電錶、初級過電流保護裝置）"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:60
 msgid "OVC I"
@@ -27047,13 +27053,13 @@ msgid ""
 "Selected cells shown with the default system's coloring choice after a table "
 "refill.\n"
 msgstr ""
-"該表顯示了各種金屬和合金之間的電化學電位差異。正數表示行為陽極, 列為陰極。"
-"<br>\n"
-" 電偶腐蝕會在特定條件下影響接觸的不同金屬。<br>\n"
-" 電化學對的陽極被氧化並被腐蝕掉, 而陰極則被溶解的金屬鍍在上面, 但仍受到保護。"
-"<br>\n"
-" EN 50310 暗示電壓差低於 300mV。已知的做法在主要金屬或合金對之間使用第三接觸"
-"金屬 (即化學金表面光潔度)。<br>\n"
+"表格顯示了各種金屬和合金之間電化學電位的差異。電偶腐蝕會在一定條件下影響接觸"
+"的不同金屬。\n"
+"電化學對的陽極被氧化並被腐蝕，而陰極被溶解的金屬鍍在其上，但仍受到保護。\n"
+"正數表示該行是陽極（-），該列是陰極（+），冷暖色調也表示行的電位。\n"
+"EN 50310 建議電壓差低於 300mV。已知的做法是在主對之間使用第三種界面金屬（即 "
+"ENIG 表面處理）。\n"
+"表格重新填入後，所選儲存格將顯示為預設系統的顏色選擇。\n"
 
 #: pcb_calculator/iec60664_help.h:2
 msgid ""
@@ -27071,15 +27077,14 @@ msgid ""
 "- Insulations trough liquids, compressed air or gases other than air are not "
 "in the scope of IEC60664"
 msgstr ""
-"IEC60664-1 旨在為連接主電源的產品提供絕緣設計指導。\n"
+"IEC60664-1 的目標是為連接主電源的產品的絕緣設計提供指導。\n"
 "\n"
-"但是, 本計算器不涵蓋以下情況:\n"
+"然而，該計算器不包括某些情況：\n"
 "\n"
-"- 對於高於30kHz的頻率, 介電性能會降低。IEC60664-4 涵蓋了這些情況\n"
-"- 為了防止汙染, 使用浸漬處理或進行灌封時, 如果滿足了 IEC60664-3 規定的所有條"
-"件,可以適當減小電氣間隙和爬電距離。\n"
-"一般不將焊盤視為浸漬。\n"
-"- 通過液體、壓縮空氣或除空氣以外的氣體的絕緣不在 IEC60664 的範圍內"
+"- 對於高於 30kHz 的頻率，介電性能會下降。 IEC60664-4 涵蓋了這些情況\n"
+"- 當使用保形塗層或灌封以防止污染時，如果滿足 IEC60664-3 "
+"規定的所有條件，則可以減少電氣間隙和爬電距離。阻焊層通常不被視為保形塗層。\n"
+"- 透過液體、壓縮空氣或空氣以外的氣體進行的絕緣不在 IEC60664 的範圍內"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:69
 msgid "KiCad Calculator Tools"
@@ -27187,30 +27192,19 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"E 系列是在 IEC (國際電工委員會) 60063 中定義的。\n"
+"- 此計算器可以找到標準 E 系列 (範圍在 10Ω 到 1MΩ 之間) "
+"的組合以建立任意值的電阻。\n"
+"- 您可以輸入所需的電阻值, 範圍從 0.0025 到 4000 kΩ。\n"
+"- 提供的解決方案最多使用4個元件。\n"
 "\n"
-"可用值在對數刻度上近似等距。\n"
+"請求的電阻值總是會被排除在解決方案集之外。 <br>\n"
+"您也可以選擇排除最多兩個額外的值, 以應對元件可用性問題。\n"
 "\n"
-"\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
-"4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
-"\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
-"\tE6(20%):  1.0  -  1.5  -  2.2  -  3.3  -  4.7  -  6.8  -\n"
-"\tE3(50%):  1.0  -   -   -  2.2  -   -   -  4.7  -   -   -\n"
-"\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
+"解決方案以以下格式給出:\n"
 "\n"
-"- 這個計算器可以尋找標準 E 系列 (在 10 Ω 和 1 MΩ 之間) 的組合以建立任意的數"
-"值。\n"
-"- 您可以輸入0.0025 到 4000 kΩ之間所需的電阻。\n"
-"- 給出了最多使用 4 個元件的解決方案。\n"
-"\n"
-"所要求的值總是被排除在解決方案集之外。<br>\n"
-"如果出現元件可用性問題, 最多可以排除兩個額外的值。\n"
-"\n"
-"解決方案依照下列格式提供: \n"
-"\n"
-"\tR1 + R2 +...+ Rn\t串聯電阻\n"
-"\tR1 | R2 |...| Rn\t並聯電阻\n"
-"\tR1 + (R2 | R3)...\t以上任意組合\n"
+"R1 + R2 + ... + Rn: 串聯電阻\n"
+"R1 | R2 | ... | Rn: 並聯電阻\n"
+"R1 + (R2 | R3)...: 任何上述組合\n"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
 msgid ""
@@ -34511,9 +34505,8 @@ msgid "Default properties for new graphic items:"
 msgstr "新建圖形項目的預設屬性:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:304
-#, fuzzy
 msgid "Hidden footprint libraries are not yet supported."
-msgstr "封裝庫未更新\n"
+msgstr "尚不支援隱藏的封裝庫。"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:486
 #, c-format
@@ -37942,7 +37935,7 @@ msgstr "當前配置中未啟用庫 '%s'。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:815
 #, c-format
 msgid "Footprint '%s' not found in library '%s'."
-msgstr "在庫 %2$s 中未找到封裝 '%1$s'。"
+msgstr "在庫‘%s’中未找到封裝‘%s’。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:828
 #, c-format
@@ -41773,7 +41766,7 @@ msgid "Cannot interpret date code %d"
 msgstr "無法解釋日期代碼 %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1089
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Items found on undefined layers (%s).\n"
 "Do you wish to rescue them to the %s layer?\n"
@@ -41781,7 +41774,9 @@ msgid ""
 "Zones will need to be refilled."
 msgstr ""
 "在未定義的層 (%s) 上發現項目。\n"
-"要將其復到 %s 層上嗎?"
+"要複製到 %s 圖層嗎?\n"
+"\n"
+"填充區需要重新填充。"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1095
 msgid "Undefined Layers Warning"
