@@ -62,6 +62,8 @@ public:
     const wxString& Options() const { return m_options; }
     const wxString& Description() const { return m_description; }
     LIBRARY_TABLE_SCOPE Scope() const { return m_scope; }
+    bool Disabled() const { return m_disabled; }
+    bool Hidden() const { return m_hidden; }
 
     std::map<std::string, UTF8> GetOptionsMap() const;
 
@@ -74,6 +76,8 @@ private:
     wxString m_type;
     wxString m_options;
     wxString m_description;
+    bool m_disabled;
+    bool m_hidden;
 
     bool m_ok = false;
     wxString m_errorDescription;

@@ -37,6 +37,8 @@ struct LIBRARY_TABLE_ROW_IR
     std::string type;
     std::string options;
     std::string description;
+    bool disabled = false;
+    bool hidden = false;
 };
 
 /**

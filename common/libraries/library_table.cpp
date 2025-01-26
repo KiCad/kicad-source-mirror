@@ -97,6 +97,8 @@ bool LIBRARY_TABLE::addRowFromIR( const LIBRARY_TABLE_ROW_IR& aIR )
     row.m_type = wxString::FromUTF8( aIR.type );
     row.m_options = wxString::FromUTF8( aIR.options );
     row.m_description = wxString::FromUTF8( aIR.description );
+    row.m_hidden = aIR.hidden;
+    row.m_disabled = aIR.disabled;
     row.m_ok = true;
     row.m_scope = m_scope;
 

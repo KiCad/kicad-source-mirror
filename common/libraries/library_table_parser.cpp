@@ -122,6 +122,20 @@ DEFINE_STRING_ACTION( KEYWORDS::URI, current_row_model.uri );
 DEFINE_STRING_ACTION( KEYWORDS::OPTIONS, current_row_model.options );
 DEFINE_STRING_ACTION( KEYWORDS::DESCR, current_row_model.description );
 
+// Handle (hidden), (disabled)
+#define DEFINE_FLAG_ACTION( Rule, StateVariable )                                                \
+template <>                                                                                      \
+struct LIBRARY_TABLE_PARSER_ACTION<Rule>                                                         \
+{                                                                                                \
+    static void apply0( LIBRARY_TABLE_PARSER_STATE& s )                                          \
+    {                                                                                            \
+        s.StateVariable = true;                                                                  \
+    }                                                                                            \
+}                                                                                                \
+
+DEFINE_FLAG_ACTION( HIDDEN_MARKER, current_row_model.hidden );
+DEFINE_FLAG_ACTION( DISABLED_MARKER, current_row_model.disabled );
+
 
 template <>
 struct LIBRARY_TABLE_PARSER_ACTION<LIB_ROW>

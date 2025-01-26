@@ -41,6 +41,8 @@ namespace KEYWORDS
     struct URI : TAO_PEGTL_STRING( "uri" ) {};
     struct OPTIONS : TAO_PEGTL_STRING( "options" ) {};
     struct DESCR : TAO_PEGTL_STRING( "descr" ) {};
+    struct HIDDEN : TAO_PEGTL_STRING( "hidden" ) {};
+    struct DISABLED : TAO_PEGTL_STRING( "disabled" ) {};
 
     struct SYM_LIB_TABLE : TAO_PEGTL_STRING( "sym_lib_table" ) {};
     struct FP_LIB_TABLE : TAO_PEGTL_STRING( "fp_lib_table" ) {};
@@ -99,12 +101,17 @@ struct TABLE_VERSION : seq<
         RPAREN
         > {};
 
+struct HIDDEN_MARKER : seq< LPAREN, KEYWORDS::HIDDEN, RPAREN > {};
+struct DISABLED_MARKER : seq< LPAREN, KEYWORDS::DISABLED, RPAREN > {};
+
 // (lib (name ...)(type ...)...)
 struct LIB_ROW : if_must<
         pad< LPAREN, space >,
         KEYWORDS::LIB,
         plus< space >,
         plus< pad< LIB_PROPERTY, space > >,
+        pad_opt<HIDDEN_MARKER, space>,
+        pad_opt<DISABLED_MARKER, space>,
         pad< RPAREN, space>
         > {};
 
