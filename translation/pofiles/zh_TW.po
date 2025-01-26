@@ -7249,7 +7249,7 @@ msgstr "“%s”中的未知節點“%s”"
 #: common/io/cadstar/cadstar_archive_parser.h:49
 #, c-format
 msgid "Missing Parameter '%s' in '%s'"
-msgstr "在 '%2$s' 中缺少參數 '%1$s'"
+msgstr "“%s”中缺少參數“%s”"
 
 #: common/io/cadstar/cadstar_archive_parser.h:52
 #, c-format
