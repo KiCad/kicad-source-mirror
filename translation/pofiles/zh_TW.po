@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-26 06:39+0000\n"
+"PO-Revision-Date: 2025-01-26 06:40+0000\n"
 "Last-Translator: reimu105 <peter112548@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -17127,7 +17127,7 @@ msgstr "此檔案由舊版 KiCad 建立。將在儲存檔案時將其轉換為�
 msgid ""
 "This schematic contains symbols that have leading and/or trailing white "
 "space field names."
-msgstr ""
+msgstr "此原理圖包含具有前導和/或尾隨空白欄位名稱的符號。"
 
 #: eeschema/files-io.cpp:609
 msgid "Schematic is read only."
