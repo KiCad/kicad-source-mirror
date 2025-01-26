@@ -25324,9 +25324,8 @@ msgid "Delete Column"
 msgstr "刪除行"
 
 #: include/widgets/filedlg_import_non_kicad.h:36
-#, fuzzy
 msgid "Show import issues"
-msgstr "顯示或隱藏 %s"
+msgstr "顯示導入問題"
 
 #: include/widgets/filedlg_open_embed_file.h:36
 #, fuzzy
