@@ -7193,7 +7193,7 @@ msgstr "目前不支援 DXF 中的圖像。"
 #: common/import_gfx/graphics_importer_buffer.cpp:126
 #, c-format
 msgid "Imported graphic is too large. Maximum scale is %f"
-msgstr ""
+msgstr "導入的圖形太大。最大比例為 %f"
 
 #: common/import_gfx/graphics_importer_buffer.cpp:186
 #, c-format
