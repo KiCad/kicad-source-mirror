@@ -34,18 +34,18 @@
 #include <tools/sch_design_block_control.h>
 
 wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>
-DESIGN_BLOCK_TREE_MODEL_ADAPTER::Create( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs )
+DESIGN_BLOCK_TREE_MODEL_ADAPTER::Create( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs,
+                                         APP_SETTINGS_BASE::LIB_TREE& aSettings )
 {
-    auto* adapter = new DESIGN_BLOCK_TREE_MODEL_ADAPTER( aParent, aLibs );
+    auto* adapter = new DESIGN_BLOCK_TREE_MODEL_ADAPTER( aParent, aLibs, aSettings );
     adapter->m_frame = aParent;
     return wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>( adapter );
 }
 
 
-DESIGN_BLOCK_TREE_MODEL_ADAPTER::DESIGN_BLOCK_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent,
-                                                                  LIB_TABLE*      aLibs ) :
-        LIB_TREE_MODEL_ADAPTER( aParent, wxT( "pinned_design_block_libs" ),
-                                Kiface().KifaceSettings() ),
+DESIGN_BLOCK_TREE_MODEL_ADAPTER::DESIGN_BLOCK_TREE_MODEL_ADAPTER(
+        EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs, APP_SETTINGS_BASE::LIB_TREE& aSettings ) :
+        LIB_TREE_MODEL_ADAPTER( aParent, wxT( "pinned_design_block_libs" ), aSettings ),
         m_libs( (DESIGN_BLOCK_LIB_TABLE*) aLibs ),
         m_frame( aParent )
 {

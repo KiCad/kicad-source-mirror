@@ -26,6 +26,7 @@
 #include <eda_base_frame.h>
 #include <lib_id.h>
 #include <lib_tree_model.h>
+#include <settings/app_settings.h>
 #include <wx/hashmap.h>
 #include <wx/dataview.h>
 #include <wx/headerctrl.h>
@@ -94,7 +95,7 @@
 
 #include <project.h>
 
-class APP_SETTINGS_BASE;
+;
 class TOOL_INTERACTIVE;
 class EDA_BASE_FRAME;
 
@@ -338,10 +339,10 @@ protected:
      *
      * @param aParent is the parent frame
      * @param aPinnedKey is the key to load the pinned libraries list from the project file
-     * @param aCfg app settings for the specific editor
+     * @param aSettingsStruct is the settings structure to load column visibility settings from
      */
     LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, const wxString& aPinnedKey,
-                            APP_SETTINGS_BASE* aCfg );
+                            APP_SETTINGS_BASE::LIB_TREE& aSettingsStruct );
 
     LIB_TREE_NODE_LIBRARY& DoAddLibraryNode( const wxString& aNodeName, const wxString& aDesc,
                                              bool pinned );
@@ -426,7 +427,7 @@ protected:
 
 private:
     EDA_BASE_FRAME*              m_parent;
-    APP_SETTINGS_BASE*           m_cfg;
+    APP_SETTINGS_BASE::LIB_TREE& m_cfg;
 
     SORT_MODE                    m_sort_mode;
     bool                         m_show_units;

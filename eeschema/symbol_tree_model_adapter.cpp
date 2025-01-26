@@ -50,7 +50,8 @@ SYMBOL_TREE_MODEL_ADAPTER::Create( SCH_BASE_FRAME* aParent, LIB_TABLE* aLibs )
 
 
 SYMBOL_TREE_MODEL_ADAPTER::SYMBOL_TREE_MODEL_ADAPTER( SCH_BASE_FRAME* aParent, LIB_TABLE* aLibs ) :
-        LIB_TREE_MODEL_ADAPTER( aParent, "pinned_symbol_libs", aParent->GetViewerSettingsBase() ),
+        LIB_TREE_MODEL_ADAPTER( aParent, "pinned_symbol_libs",
+                                aParent->GetViewerSettingsBase()->m_LibTree ),
         m_libs( (SYMBOL_LIB_TABLE*) aLibs )
 {
     // Symbols may have different value from name

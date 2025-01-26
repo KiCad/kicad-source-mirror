@@ -46,7 +46,8 @@ SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Create( SYMBOL_EDIT_FRAME* aParent,
 
 SYMBOL_TREE_SYNCHRONIZING_ADAPTER::SYMBOL_TREE_SYNCHRONIZING_ADAPTER( SYMBOL_EDIT_FRAME* aParent,
                                                                       SYMBOL_LIBRARY_MANAGER* aLibMgr ) :
-        LIB_TREE_MODEL_ADAPTER( aParent, "pinned_symbol_libs", aParent->GetViewerSettingsBase() ),
+        LIB_TREE_MODEL_ADAPTER( aParent, "pinned_symbol_libs",
+                                aParent->GetViewerSettingsBase()->m_LibTree ),
         m_frame( aParent ),
         m_libMgr( aLibMgr ),
         m_lastSyncHash( -1 )

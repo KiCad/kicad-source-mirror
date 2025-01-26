@@ -42,7 +42,7 @@ FP_TREE_MODEL_ADAPTER::Create( PCB_BASE_FRAME* aParent, LIB_TABLE* aLibs )
 
 FP_TREE_MODEL_ADAPTER::FP_TREE_MODEL_ADAPTER( PCB_BASE_FRAME* aParent, LIB_TABLE* aLibs ) :
         LIB_TREE_MODEL_ADAPTER( aParent, wxT( "pinned_footprint_libs" ),
-                                aParent->GetViewerSettingsBase() ),
+                                aParent->GetViewerSettingsBase()->m_LibTree ),
         m_libs( (FP_LIB_TABLE*) aLibs )
 {}
 

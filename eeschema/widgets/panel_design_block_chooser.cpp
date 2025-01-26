@@ -81,7 +81,8 @@ PANEL_DESIGN_BLOCK_CHOOSER::PANEL_DESIGN_BLOCK_CHOOSER( SCH_EDIT_FRAME* aFrame, 
     if( DESIGN_BLOCK_LIB_TABLE::GetGlobalList().GetErrorCount() )
         displayErrors( aFrame );
 
-    m_adapter = DESIGN_BLOCK_TREE_MODEL_ADAPTER::Create( m_frame, libs );
+    m_adapter = DESIGN_BLOCK_TREE_MODEL_ADAPTER::Create( m_frame, libs,
+        m_frame->eeconfig()->m_DesignBlockChooserPanel.tree );
 
     // -------------------------------------------------------------------------------------
     // Construct the actual panel

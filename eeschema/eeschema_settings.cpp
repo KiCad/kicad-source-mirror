@@ -677,6 +677,35 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "design_block_chooser.keep_annotations",
             &m_DesignBlockChooserPanel.keep_annotations, false ) );
 
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>(
+            "design_block_chooser.lib_tree.column_widths",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json ret = {};
+
+                for( const auto& [name, width] : m_DesignBlockChooserPanel.tree.column_widths )
+                    ret[std::string( name.ToUTF8() )] = width;
+
+                return ret;
+            },
+            [&]( const nlohmann::json& aJson )
+            {
+                if( !aJson.is_object() )
+                    return;
+
+                m_DesignBlockChooserPanel.tree.column_widths.clear();
+
+                for( const auto& entry : aJson.items() )
+                {
+                    if( !entry.value().is_number_integer() )
+                        continue;
+
+                    m_DesignBlockChooserPanel.tree.column_widths[ entry.key() ] =
+                            entry.value().get<int>();
+                }
+            },
+            {} ) );
+
     m_params.emplace_back( new PARAM<bool>( "import_graphics.interactive_placement",
             &m_ImportGraphics.interactive_placement, true ) );
 

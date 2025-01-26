@@ -127,10 +127,10 @@ LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ToNode( wxDataViewItem aItem )
 
 LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent,
                                                 const wxString& aPinnedKey,
-                                                APP_SETTINGS_BASE* aCfg ) :
+                                                APP_SETTINGS_BASE::LIB_TREE& aSettingsStruct ) :
         m_widget( nullptr ),
         m_parent( aParent ),
-        m_cfg( aCfg ),
+        m_cfg( aSettingsStruct ),
         m_sort_mode( BEST_MATCH ),
         m_show_units( true ),
         m_preselect_unit( 0 ),
@@ -143,10 +143,10 @@ LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent,
 
     m_availableColumns = { _HKI( "Item" ), _HKI( "Description" ) };
 
-    for( const std::pair<const wxString, int>& pair : m_cfg->m_LibTree.column_widths )
+    for( const std::pair<const wxString, int>& pair : m_cfg.column_widths )
         m_colWidths[pair.first] = pair.second;
 
-    m_shownColumns = m_cfg->m_LibTree.columns;
+    m_shownColumns = m_cfg.columns;
 
     if( m_shownColumns.empty() )
         m_shownColumns = {  _HKI( "Item" ), _HKI( "Description" ) };
@@ -196,13 +196,13 @@ void LIB_TREE_MODEL_ADAPTER::SaveSettings()
 {
     if( m_widget )
     {
-        m_cfg->m_LibTree.columns = GetShownColumns();
-        m_cfg->m_LibTree.column_widths.clear();
+        m_cfg.columns = GetShownColumns();
+        m_cfg.column_widths.clear();
 
         for( const std::pair<const wxString, wxDataViewColumn*>& pair : m_colNameMap )
-            m_cfg->m_LibTree.column_widths[pair.first] = pair.second->GetWidth();
+            m_cfg.column_widths[pair.first] = pair.second->GetWidth();
 
-        m_cfg->m_LibTree.open_libs = GetOpenLibs();
+        m_cfg.open_libs = GetOpenLibs();
     }
 }
 

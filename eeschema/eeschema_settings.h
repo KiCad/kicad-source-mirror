@@ -286,6 +286,9 @@ public:
         bool repeated_placement;
         bool place_as_sheet;
         bool keep_annotations;
+
+        // For saving tree columns and widths
+        LIB_TREE tree;
     };
 
     struct DIALOG_IMPORT_GRAPHICS

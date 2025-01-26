@@ -34,7 +34,8 @@ public:
      * @param aLibs library set from which parts will be loaded
      */
     static wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> Create( EDA_BASE_FRAME* aParent,
-                                                           LIB_TABLE*      aLibs );
+                                                           LIB_TABLE*      aLibs,
+                                                           APP_SETTINGS_BASE::LIB_TREE& aSettings );
 
     void AddLibraries( EDA_BASE_FRAME* aParent );
     void ClearLibraries();
@@ -47,7 +48,8 @@ protected:
     /**
      * Constructor; takes a set of libraries to be included in the search.
      */
-    DESIGN_BLOCK_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs );
+    DESIGN_BLOCK_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs,
+                                     APP_SETTINGS_BASE::LIB_TREE& aSettings );
 
     std::vector<LIB_TREE_ITEM*> getDesignBlocks( EDA_BASE_FRAME* aParent,
                                                  const wxString& aLibName );
