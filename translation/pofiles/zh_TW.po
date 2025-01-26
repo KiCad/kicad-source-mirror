@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-26 06:41+0000\n"
+"PO-Revision-Date: 2025-01-26 16:55+0000\n"
 "Last-Translator: reimu105 <peter112548@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -1943,38 +1943,38 @@ msgid "Insufficient permissions to delete folder '%s'."
 msgstr "刪除資料夾 '%s' 的權限不足。"
 
 #: common/design_block_io.cpp:210
-#, fuzzy, c-format
+#, c-format
 msgid "Library folder '%s' has unexpected files."
-msgstr "庫資料夾 '%s' 有意料外的子目錄。"
+msgstr "庫資料夾 '%s' 有非預期的的子目錄。"
 
 #: common/design_block_io.cpp:228
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected folder '%s' found in library path '%s'."
-msgstr "在庫路徑 '%s' 中找到了意料外的檔案 '%s'。"
+msgstr "在庫路徑 '%s' 中找到了非預期的檔案 '%s'。"
 
 #: common/design_block_io.cpp:245
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' cannot be deleted."
 msgstr "無法刪除符號庫 '%s'。"
 
 #: common/design_block_io.cpp:337
-#, fuzzy, c-format
+#, c-format
 msgid "Design block metadata file '%s' could not be read."
-msgstr "無法建立檔案 '%s'。"
+msgstr "無法讀取設計圖塊元資料檔 '%s'。"
 
 #: common/design_block_io.cpp:353
 msgid "Design block does not have a valid library ID."
-msgstr ""
+msgstr "設計圖塊缺少有效的庫標識。"
 
 #: common/design_block_io.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic source file '%s' does not exist."
-msgstr "原理圖檔案 '%s' 已存在。"
+msgstr "原理圖來源檔案‘%s’不存在。"
 
 #: common/design_block_io.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Design block folder '%s' could not be created."
-msgstr "無法建立檔案 '%s'。"
+msgstr "無法建立設計圖塊資料夾 '%s'。"
 
 #: common/design_block_io.cpp:389
 #, c-format
@@ -1982,9 +1982,9 @@ msgid "Schematic file '%s' could not be saved as design block at '%s'."
 msgstr "無法將原理圖檔案 '%s' 作為設計圖塊儲存到 '%s'。"
 
 #: common/design_block_io.cpp:423
-#, fuzzy, c-format
+#, c-format
 msgid "Design block metadata file '%s' could not be saved."
-msgstr "無法建立檔案 '%s'。"
+msgstr "無法儲存設計圖塊元資料檔 '%s'。"
 
 #: common/design_block_io.cpp:437
 #, c-format
@@ -1992,9 +1992,9 @@ msgid "Design block '%s' does not exist."
 msgstr "設計圖塊 '%s' 不存在。"
 
 #: common/design_block_io.cpp:443
-#, fuzzy, c-format
+#, c-format
 msgid "Design block folder '%s' could not be deleted."
-msgstr "無法建立檔案 '%s'。"
+msgstr "無法刪除設計圖塊資料夾 '%s'。"
 
 #: common/design_block_lib_table.cpp:232
 #, c-format
@@ -2004,9 +2004,9 @@ msgid ""
 msgstr "發現重複的庫稱“%s”在設計模組庫表檔案第 %d 行中。"
 
 #: common/design_block_lib_table.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "design-block-lib-table files contain no library named '%s'."
-msgstr "fp-lib-table 檔案不包含名為 '%s' 的庫。"
+msgstr "design-block-lib-table 檔案不包含名為「%s」的庫。"
 
 #: common/design_block_lib_table.cpp:577 common/fp_lib_table.cpp:566
 #: eeschema/symbol_lib_table.cpp:605
@@ -2442,21 +2442,19 @@ msgid "Path"
 msgstr "路徑"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:33
-#, fuzzy
 msgid "design block"
-msgstr "新增訊號到繪製"
+msgstr "設計圖塊"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating design block library table '%s'.\n"
 "%s"
 msgstr ""
-"建立符號庫表 '%s' 時出錯。\n"
+"建立符號庫表‘%s’時出錯 '%s'.\n"
 "%s"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:76
-#, fuzzy
 msgid "Please select a design block library table file."
 msgstr "請選擇一個符號庫表檔案。"
 
@@ -2469,7 +2467,7 @@ msgid "File '%s' not found."
 msgstr "找不到檔案 '%s'。"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading design block library table '%s'.\n"
 "%s"
@@ -2760,7 +2758,8 @@ msgstr "從選擇中移除鎖定的項目, 並只對未鎖定項目(如果有的
 msgid ""
 "Do not show this dialog again until KiCad restarts. You can re-enable this "
 "dialog in Pcbnew preferences."
-msgstr ""
+msgstr "在 KiCad 重新啟動之前, 不再顯示此對話框。可以在 PCB "
+"編輯器的偏好設定中重新啟用此對話方塊。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
 #, c-format
@@ -3395,7 +3394,7 @@ msgstr "頁面設置..."
 
 #: common/dialogs/dialog_rc_job.cpp:28
 msgid "JSON"
-msgstr ""
+msgstr "JSON"
 
 #: common/dialogs/dialog_rc_job_base.cpp:25
 #: eeschema/dialogs/dialog_plot_schematic.cpp:88
@@ -3428,7 +3427,7 @@ msgstr "警告"
 
 #: common/dialogs/dialog_rc_job_base.cpp:68
 msgid "Report job failure when violations present"
-msgstr ""
+msgstr "出現異常時報告工作失敗"
 
 #: common/dialogs/dialog_rc_job_base.cpp:74 kicad/cli/command_pcb_drc.cpp:56
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
@@ -3902,19 +3901,21 @@ msgstr ""
 #: common/dialogs/panel_common_settings.cpp:352
 #, c-format
 msgid "Default 'explorer.exe /n,/select,%F' for this OS."
-msgstr ""
+msgstr "此作業系統的預設設定是「explorer.exe /n,/select,%F」。"
 
 #: common/dialogs/panel_common_settings.cpp:356
 msgid ""
 "File explorer command.\n"
 "example:"
 msgstr ""
+"檔案瀏覽器命令。\n"
+"例子："
 
 #: common/dialogs/panel_common_settings.cpp:360
 #, c-format
 msgid ""
 "Explorer command with mandatory '%s' suffix after last entered character."
-msgstr ""
+msgstr "檔案管理器命令, 在輸入的最後必須加上後綴 '%s'。"
 
 #: common/dialogs/panel_common_settings.cpp:374
 msgid "Executable files ("
@@ -4628,7 +4629,7 @@ msgstr "帶參考點複製"
 
 #: common/dialogs/panel_embedded_files.cpp:54
 msgid "Copy the reference for this embedded file"
-msgstr ""
+msgstr "複製此嵌入檔案的引用"
 
 #: common/dialogs/panel_embedded_files.cpp:260
 #, fuzzy
@@ -4698,32 +4699,28 @@ msgid "Failed to write file '%s'."
 msgstr "建立檔案 '%s' 失敗。"
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
-#, fuzzy
 msgid "Internal Reference"
-msgstr "圖紙間參考"
+msgstr "內部參考"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
 msgstr "新增嵌入檔案"
 
 #: common/dialogs/panel_embedded_files_base.cpp:69
-#, fuzzy
 msgid "Remove embedded file"
-msgstr "保留已下載檔案"
+msgstr "刪除嵌入檔案"
 
 #: common/dialogs/panel_embedded_files_base.cpp:76
-#, fuzzy
 msgid "Embed fonts"
-msgstr "嵌入模型"
+msgstr "嵌入字體"
 
 #: common/dialogs/panel_embedded_files_base.cpp:77
 msgid "Store a copy of all fonts used"
-msgstr ""
+msgstr "儲存所有使用的字體的副本"
 
 #: common/dialogs/panel_embedded_files_base.cpp:84
-#, fuzzy
 msgid "&Export..."
-msgstr "匯出..."
+msgstr "匯出(&E)..."
 
 #: common/dialogs/panel_grid_settings.cpp:53
 msgid "Footprints/pads:"
@@ -5482,7 +5479,7 @@ msgstr "無法使用 OpenGL"
 
 #: common/draw_panel_gal.cpp:543
 msgid "Error switching GAL backend"
-msgstr ""
+msgstr "切換 GAL 後端時出錯"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:558
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3403
@@ -5508,7 +5505,7 @@ msgstr "無法完整地讀取圖紙 '%s'。"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1036
 msgid "Ran out of memory."
-msgstr ""
+msgstr "記憶體不足。"
 
 #: common/drawing_sheet/ds_data_item.cpp:365
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:352
@@ -6617,9 +6614,9 @@ msgstr ""
 "的目錄"
 
 #: common/env_vars.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Deprecated version of %s."
-msgstr "KICAD_SYMBOL_DIR 的棄用版本。"
+msgstr "%s 的已棄用版本。"
 
 #: common/exceptions.cpp:78
 #, c-format
@@ -6798,14 +6795,14 @@ msgid "Could not lookup remote '%s'"
 msgstr "無法找到遠程 '%s'"
 
 #: common/git/git_pull_handler.cpp:61
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote '%s': %s"
-msgstr "無法連接到遠程 '%s'"
+msgstr "無法連線到遠端“%s”：%s"
 
 #: common/git/git_pull_handler.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid "Could not fetch data from remote '%s': %s"
-msgstr "無法從遠程 '%s' 提取數據"
+msgstr "無法從遠端「%s」取得資料：%s"
 
 #: common/git/git_pull_handler.cpp:95
 msgid "Could not read 'FETCH_HEAD'"
@@ -6870,9 +6867,9 @@ msgid "Could not connect to remote: %s"
 msgstr "無法連接到遠程 '%s'"
 
 #: common/git/git_push_handler.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid "Could not push to remote: %s"
-msgstr "無法推送到遠程"
+msgstr "無法推送到遠端：%s"
 
 #: common/git/kicad_git_common.cpp:423
 #, c-format
@@ -7344,7 +7341,7 @@ msgstr "匯出鑽孔資料作業設置"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
 msgid "PCB: Export drill data"
-msgstr ""
+msgstr "PCB：導出鑽孔數據"
 
 #: common/jobs/job_export_pcb_dxf.cpp:58
 #: common/jobs/job_export_sch_plot.cpp:156 kicad/kicad_cli.cpp:141
@@ -7357,68 +7354,57 @@ msgid "Export DXF Job Settings"
 msgstr "匯出 DXF 作業設定"
 
 #: common/jobs/job_export_pcb_dxf.cpp:68
-#, fuzzy
 msgid "PCB: Export DXF"
-msgstr "匯出 DXF"
+msgstr "印刷電路板:匯出DXF"
 
 #: common/jobs/job_export_pcb_gencad.cpp:38
-#, fuzzy
 msgid "Export GenCAD Job Settings"
-msgstr "匯出 GenCAD 設置"
+msgstr "匯出 GenCAD 作業設置"
 
 #: common/jobs/job_export_pcb_gerber.cpp:71
-#, fuzzy
 msgid "Export single Gerber"
-msgstr "匯出絲印"
+msgstr "匯出單一 Gerber"
 
 #: common/jobs/job_export_pcb_gerber.cpp:77
-#, fuzzy
 msgid "Export Single Gerber Job Settings"
-msgstr "匯出 GenCAD 設置"
+msgstr "匯出單一 Gerber 作業設置"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:42
-#, fuzzy
 msgid "Export Gerbers"
-msgstr "匯出區域"
+msgstr "匯出Gerbers"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:48
-#, fuzzy
 msgid "Export Gerbers Job Settings"
-msgstr "匯出 GenCAD 設置"
+msgstr "匯出 Gerber 作業設置"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:52
 msgid "PCB: Export Gerbers"
-msgstr ""
+msgstr "PCB：導出 Gerber"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
-#, fuzzy
 msgid "Export IPC2581"
-msgstr "匯出 IPC-2581"
+msgstr "匯出 IPC2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
-#, fuzzy
 msgid "Export IPC2581 Job Settings"
-msgstr "匯出 IPC-2581 檔案"
+msgstr "匯出IPC2581作業設定"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
-#, fuzzy
 msgid "PCB: Export IPC2581"
-msgstr "匯出 IPC-2581"
+msgstr "印刷電路板: 匯出 IPC2581"
 
 #: common/jobs/job_export_pcb_odb.cpp:57
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
-#, fuzzy
 msgid "Export ODB++"
-msgstr "匯出 DXF"
+msgstr "匯出 ODB++"
 
 #: common/jobs/job_export_pcb_odb.cpp:63
 msgid "Export ODB++ Job Settings"
 msgstr "匯出 ODB++ 作業設定"
 
 #: common/jobs/job_export_pcb_odb.cpp:76
-#, fuzzy
 msgid "PCB: Export ODB++"
-msgstr "匯出 DXF"
+msgstr "印刷電路板: 匯出 ODB++"
 
 #: common/jobs/job_export_pcb_pdf.cpp:74
 #: common/jobs/job_export_sch_plot.cpp:137 kicad/kicad_cli.cpp:143
@@ -7431,23 +7417,20 @@ msgid "Export PDF Job Settings"
 msgstr "匯出 PDF 作業設定"
 
 #: common/jobs/job_export_pcb_pdf.cpp:84
-#, fuzzy
 msgid "PCB: Export PDF"
-msgstr "匯出 PDF"
+msgstr "印刷電路板:匯出PDF"
 
 #: common/jobs/job_export_pcb_pos.cpp:97
-#, fuzzy
 msgid "Export position data"
-msgstr "匯出封裝"
+msgstr "匯出位置資料"
 
 #: common/jobs/job_export_pcb_pos.cpp:103
-#, fuzzy
 msgid "Export Position Data Job Settings"
-msgstr "匯出 GenCAD 設置"
+msgstr "匯出位置資料作業設置"
 
 #: common/jobs/job_export_pcb_pos.cpp:121
 msgid "PCB: Export Position Data"
-msgstr ""
+msgstr "印刷電路板：匯出位置資料"
 
 #: common/jobs/job_export_pcb_svg.cpp:57
 #: common/jobs/job_export_sch_plot.cpp:175 kicad/kicad_cli.cpp:145
@@ -7460,9 +7443,8 @@ msgid "Export SVG Job Settings"
 msgstr "匯出 SVG 作業設定"
 
 #: common/jobs/job_export_pcb_svg.cpp:67
-#, fuzzy
 msgid "PCB: Export SVG"
-msgstr "匯出 SVG"
+msgstr "印刷電路板: 匯出SVG"
 
 #: common/jobs/job_export_sch_bom.cpp:92
 msgid "Generate bill of materials"
@@ -7477,24 +7459,21 @@ msgid "Schematic: Generate Bill of Materials"
 msgstr "示意圖：生成物料清單"
 
 #: common/jobs/job_export_sch_netlist.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Export %s netlist"
-msgstr "匯出網表"
+msgstr "匯出 %s 網表"
 
 #: common/jobs/job_export_sch_netlist.cpp:86
-#, fuzzy
 msgid "Export Netlist Job Settings"
-msgstr "匯出網表"
+msgstr "匯出網表作業設定"
 
 #: common/jobs/job_export_sch_netlist.cpp:90
-#, fuzzy
 msgid "Schematic: Export Netlist"
-msgstr "匯出網表"
+msgstr "原理圖：匯出網表"
 
 #: common/jobs/job_export_sch_plot.cpp:194
-#, fuzzy
 msgid "Export Postscript"
-msgstr "Postscript"
+msgstr "匯出Postscript"
 
 #: common/jobs/job_export_sch_plot.cpp:200
 msgid "Export Postscript Job Settings"
@@ -7509,53 +7488,45 @@ msgid "Export HPGL Job Settings"
 msgstr "匯出 HPGL 作業設定"
 
 #: common/jobs/job_export_sch_plot.cpp:223
-#, fuzzy
 msgid "Schematic: Export SVG"
-msgstr "原理圖編輯器"
+msgstr "示意圖：匯出 SVG"
 
 #: common/jobs/job_export_sch_plot.cpp:225
-#, fuzzy
 msgid "Schematic: Export HPGL"
-msgstr "原理圖編輯器"
+msgstr "示意圖：匯出 HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:227
-#, fuzzy
 msgid "Schematic: Export Postscript"
-msgstr "匯出網表"
+msgstr "示意圖: 匯出Postscript"
 
 #: common/jobs/job_export_sch_plot.cpp:229
-#, fuzzy
 msgid "Schematic: Export DXF"
-msgstr "原理圖編輯器"
+msgstr "示意圖: 匯出DXF"
 
 #: common/jobs/job_export_sch_plot.cpp:231
-#, fuzzy
 msgid "Schematic: Export PDF"
-msgstr "原理圖編輯器"
+msgstr "示意圖: 匯出PDF"
 
 #: common/jobs/job_export_sch_pythonbom.cpp:35
-#, fuzzy
 msgid "Schematic PythonBOM export"
-msgstr "原理圖文字"
+msgstr "匯出示意圖 PythonBOM"
 
 #: common/jobs/job_pcb_drc.cpp:37
-#, fuzzy
 msgid "Perform DRC"
-msgstr "從原理圖更新顏色"
+msgstr "執行 DRC"
 
 #: common/jobs/job_pcb_drc.cpp:43 pcbnew/dialogs/dialog_drc_job_config.cpp:24
-#, fuzzy
 msgid "DRC Job Settings"
-msgstr "3D 設定"
+msgstr "DRC 作業設定"
 
 #: common/jobs/job_pcb_drc.cpp:47
 msgid "PCB: Perform DRC"
-msgstr ""
+msgstr "印刷電路板：執行 DRC"
 
 #: common/jobs/job_pcb_render.cpp:127
-#, fuzzy, c-format
+#, c-format
 msgid "Render %s"
-msgstr "重新批註 PCB"
+msgstr "渲染 %s"
 
 #: common/jobs/job_pcb_render.cpp:133
 msgid "Render PCB Job Settings"
@@ -7563,31 +7534,27 @@ msgstr "渲染 PCB 作業設置"
 
 #: common/jobs/job_pcb_render.cpp:137
 msgid "PCB: Render"
-msgstr ""
+msgstr "印刷電路板: 渲染"
 
 #: common/jobs/job_sch_erc.cpp:33
-#, fuzzy
 msgid "Perform ERC"
-msgstr "從原理圖更新顏色"
+msgstr "執行 ERC"
 
 #: common/jobs/job_sch_erc.cpp:39
-#, fuzzy
 msgid "Schematic ERC Job Settings"
-msgstr "匯出網表"
+msgstr "示意圖ERC 作業設定"
 
 #: common/jobs/job_sch_erc.cpp:43
-#, fuzzy
 msgid "Schematic: Perform ERC"
-msgstr "從 PCB 更新原理圖"
+msgstr "示意圖: 執行 ERC"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy files"
-msgstr "特殊工具"
+msgstr "特殊：複製檔案"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
-msgstr ""
+msgstr "特殊：執行指令"
 
 #: common/jobs/jobs_output_archive.cpp:96 common/jobs/jobset.cpp:43
 msgid "Archive"
@@ -7730,9 +7697,8 @@ msgid "Symbol body fills"
 msgstr "符號主體填充"
 
 #: common/layer_id.cpp:133
-#, fuzzy
 msgid "Shape fills"
-msgstr "圖框檔案"
+msgstr "形狀填充"
 
 #: common/layer_id.cpp:134
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
@@ -8272,9 +8238,9 @@ msgid "Failed to create file '%s'."
 msgstr "建立檔案 '%s' 失敗。"
 
 #: common/project/project_archiver.cpp:356
-#, fuzzy, c-format
+#, c-format
 msgid "Error opening directory: '%s'."
-msgstr "移除目錄 '%s' 時出錯: %s"
+msgstr "開啟目錄時發生錯誤：「%s」。"
 
 #: common/project/project_archiver.cpp:392
 #, c-format
@@ -8282,9 +8248,9 @@ msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr "已建立 Zip 壓縮包 '%s'(%s 未壓縮, %s 已壓縮)。"
 
 #: common/project/project_archiver.cpp:412
-#, fuzzy, c-format
+#, c-format
 msgid "Error: '%s'."
-msgstr "錯誤: %s"
+msgstr "錯誤: %s。"
 
 #: common/rc_item.cpp:425 eeschema/erc/erc_item.cpp:407
 msgid "Excluded warning: "
@@ -8436,9 +8402,8 @@ msgid "Open a library file with a text editor"
 msgstr "使用文字編輯器打開庫檔案"
 
 #: common/tool/actions.cpp:82
-#, fuzzy
 msgid "Open in file explorer..."
-msgstr "在檔案資源管理員中打開目錄"
+msgstr "在檔案總管中開啟..."
 
 #: common/tool/actions.cpp:83
 #, fuzzy
@@ -9361,9 +9326,8 @@ msgid "Remove File"
 msgstr "重命名檔案"
 
 #: common/tool/actions.cpp:1256
-#, fuzzy
 msgid "Remove an embedded file"
-msgstr "移除所有匹配的層。"
+msgstr "刪除嵌入檔案"
 
 #: common/tool/actions.cpp:1261
 #, fuzzy
@@ -10415,9 +10379,8 @@ msgid "Footprint '%s' not found."
 msgstr "找不到封裝 '%s'。"
 
 #: cvpcb/display_footprints_frame.cpp:445
-#, fuzzy
 msgid "Error loading footprint"
-msgstr "載入字體 '%s' 時出錯。"
+msgstr "載入封裝時出錯"
 
 #: cvpcb/display_footprints_frame.cpp:508 pcbnew/footprint.cpp:1701
 #, c-format
@@ -10548,9 +10511,8 @@ msgid "Automatically Assign Footprints"
 msgstr "自動分配封裝"
 
 #: cvpcb/tools/cvpcb_actions.cpp:133
-#, fuzzy
 msgid "Assign footprints automatically using a footprint association file"
-msgstr "選擇一個封裝, 生成封裝關聯報告。。"
+msgstr "使用封裝關聯檔案自動指派封裝"
 
 #: cvpcb/tools/cvpcb_actions.cpp:140
 #, fuzzy
@@ -10591,14 +10553,14 @@ msgid "Delete all associations?"
 msgstr "是否刪除所有封裝分配?"
 
 #: eeschema/annotate.cpp:82
-#, fuzzy, c-format
+#, c-format
 msgid "Cleared annotation for %s (unit %s)."
-msgstr "繪製項選項"
+msgstr "已清除 %s 的註解（單位 %s）。"
 
 #: eeschema/annotate.cpp:88
-#, fuzzy, c-format
+#, c-format
 msgid "Cleared annotation for %s."
-msgstr "清除批註"
+msgstr "已清除 %s 的註解。"
 
 #: eeschema/annotate.cpp:174
 msgid "Delete Annotation"
@@ -10709,9 +10671,9 @@ msgid "Selected net:"
 msgstr "選擇的網路:"
 
 #: eeschema/design_block_tree_model_adapter.cpp:149
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading design block %s from library '%s'."
-msgstr "從庫 %2$s 載入符號 '%1$s' 出錯。"
+msgstr "從庫“%s”載入設計圖塊 %s 時出錯。"
 
 #: eeschema/design_block_utils.cpp:47
 #, fuzzy, c-format
@@ -10815,9 +10777,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/design_block_utils.cpp:493
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' deleted"
-msgstr "[沒有選擇庫]"
+msgstr "設計圖塊庫 '%s' 已刪除"
 
 #: eeschema/design_block_utils.cpp:518
 #, fuzzy, c-format
@@ -10830,9 +10792,9 @@ msgid "Design block '%s' deleted from library '%s'"
 msgstr "封裝 '%s' 刪除來自庫 '%s'"
 
 #: eeschema/design_block_utils.cpp:615
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading designblock %s from library '%s'."
-msgstr "從庫 %2$s 載入符號 '%1$s' 出錯。"
+msgstr "從庫“%s”載入設計圖塊 %s 時出錯。"
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -11359,7 +11321,7 @@ msgstr "更新/重置欄位可見性設置"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:154
 msgid "Update/reset field text sizes and styles"
-msgstr "更新/重置欄位文字大小和樣式。"
+msgstr "更新/重置欄位文字大小和樣式"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:157
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:81
@@ -11613,9 +11575,8 @@ msgid "Edit exclusion comment..."
 msgstr "編輯排除註解..."
 
 #: eeschema/dialogs/dialog_erc.cpp:656 pcbnew/dialogs/dialog_drc.cpp:711
-#, fuzzy
 msgid "Exclude this violation"
-msgstr "排除此違規..."
+msgstr "排除此違規行為"
 
 #: eeschema/dialogs/dialog_erc.cpp:657 eeschema/dialogs/dialog_erc.cpp:661
 #: pcbnew/dialogs/dialog_drc.cpp:712 pcbnew/dialogs/dialog_drc.cpp:716
@@ -11790,9 +11751,8 @@ msgid "Electrical Rules Checker"
 msgstr "電氣規則檢查 (ERC)"
 
 #: eeschema/dialogs/dialog_erc_job_config.cpp:23
-#, fuzzy
 msgid "ERC Job Settings"
-msgstr "編輯選項..."
+msgstr "ERC 作業設定"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:221
 #, fuzzy
@@ -13999,9 +13959,9 @@ msgid "Link '%s' to this file?"
 msgstr "將 '%s' 鏈接到此檔案?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:521
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to copy schematic file '%s' to destination '%s'."
-msgstr "無法分析 '%s' (在 '%s' 中)"
+msgstr "無法將原理圖檔案‘%s’複製到目標‘%s’。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:564
 #, c-format
@@ -14877,9 +14837,8 @@ msgid "Changes have not yet been saved. Export unsaved data?"
 msgstr "更改未儲存。匯出未儲存的數據?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1377
-#, fuzzy
 msgid "No output file specified in Export tab."
-msgstr "匯出器中未指定檔案名"
+msgstr "匯出選項卡中未指定輸出檔案。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1391
 #, c-format
@@ -16454,9 +16413,9 @@ msgstr "找不到 BOM 格式預設 '%s'"
 
 #: eeschema/eeschema_jobs_handler.cpp:744
 #: eeschema/eeschema_jobs_handler.cpp:817
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote bill of materials to '%s'."
-msgstr "生成物料清單..."
+msgstr "將物料清單寫入‘%s’。"
 
 #: eeschema/eeschema_jobs_handler.cpp:878
 #, c-format
@@ -16654,9 +16613,9 @@ msgid "Symbol '%s' not found in symbol library '%s'"
 msgstr "在符號庫中 '%s' 找不到符號 '%s'"
 
 #: eeschema/erc/erc.cpp:1458
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' has multiple pins with the same pin number"
-msgstr "符號 %s 在未放置的單元 %s 中有輸入電源接腳。"
+msgstr "符號‘%s’有多個相同引腳號的引腳"
 
 #: eeschema/erc/erc.cpp:1468
 #, c-format
@@ -16686,12 +16645,12 @@ msgstr "當前配置中未啟用封裝庫 '%s'。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:914
 #, c-format
 msgid "Footprint '%s' not found in library '%s'."
-msgstr "在庫 %2$s 中未找到封裝 '%1$s'。"
+msgstr "在庫‘%s’中未找到封裝‘%s’。"
 
 #: eeschema/erc/erc.cpp:1619
-#, fuzzy, c-format
+#, c-format
 msgid "Assigned footprint (%s) doesn't match footprint filters (%s)."
-msgstr "%s 的封裝 (%s) 與符號 (%s) 所指定的封裝不匹配。"
+msgstr "分配的封裝（％s）與封裝過濾器不匹配（％s）。"
 
 #: eeschema/erc/erc.cpp:1781
 msgid "Checking sheet names..."
@@ -17640,12 +17599,12 @@ msgstr "標籤“%s”位於 %s，%s"
 #: eeschema/net_navigator.cpp:123
 #, c-format
 msgid "Global label '%s' at %s, %s"
-msgstr "%2$s, %3$s 處的全域標籤 '%1$s'"
+msgstr "全域標籤‘%s’位於 %s，%s"
 
 #: eeschema/net_navigator.cpp:132
 #, c-format
 msgid "Hierarchical label '%s' at %s, %s"
-msgstr "%2$s, %3$s 處的層次標籤 '%1$s'"
+msgstr "層次標籤‘%s’位於 %s，%s"
 
 #: eeschema/net_navigator.cpp:141
 #, c-format
@@ -17670,7 +17629,7 @@ msgstr "從 %s, %s 到 %s, %s 的匯流排到匯流排入口"
 #: eeschema/net_navigator.cpp:181
 #, c-format
 msgid "Netclass label '%s' at %s, %s"
-msgstr "%2$s, %3$s 處的全域標籤 '%1$s'"
+msgstr "網路類別標籤‘%s’位於 %s，%s"
 
 #: eeschema/net_navigator.cpp:187
 #, c-format
@@ -17746,7 +17705,7 @@ msgstr "錯誤: 重複的圖紙名稱。要繼續嗎?"
 #: eeschema/picksymbol.cpp:126
 #, fuzzy, c-format
 msgid "Symbol unit '%s' is already placed (on sheet '%s')"
-msgstr "原理圖 '%s' 已由 '%s' 在 '%s' 中打開。"
+msgstr "原理圖單元 '%s' 已放置 (位於圖紙 '%s')"
 
 #: eeschema/picksymbol.cpp:129
 #, fuzzy
@@ -18114,9 +18073,9 @@ msgid "Compare Symbol with Library"
 msgstr "將符號與庫符號進行比較"
 
 #: eeschema/sch_field.cpp:1116
-#, fuzzy, c-format
+#, c-format
 msgid "Field %s '%s'"
-msgstr "%2$s 的欄位'%1$s"
+msgstr "符號 %s‘%s’"
 
 #: eeschema/sch_field.cpp:1126
 msgid "Symbol Field"
@@ -18205,7 +18164,7 @@ msgstr "尚未支援空白。"
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4467
 #, c-format
 msgid "Unknown or unexpected record id %d found in %s."
-msgstr "在 %2$s 中發現未知或意外記錄 ID %1$d。"
+msgstr "'未知' 或 '意外'的記錄 ID %d在 %s 中被發現。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1174
 #, c-format
@@ -19204,9 +19163,8 @@ msgid "Pin Name"
 msgstr "接腳名稱"
 
 #: eeschema/sch_plotter.cpp:140
-#, fuzzy
 msgid "No sheets to plot."
-msgstr "匯入圖紙頁碼"
+msgstr "沒有要繪製的圖紙。"
 
 #: eeschema/sch_plotter.cpp:238 pcbnew/pcbnew_jobs_handler.cpp:1042
 #, c-format
@@ -20565,7 +20523,7 @@ msgstr "未知"
 msgid ""
 "Error loading simulation model: could not find base model '%s' in library "
 "'%s'"
-msgstr "載入模擬模型時出錯: 在庫 %2$s 中找不到基礎模型 %1$s"
+msgstr "載入模擬模型時出錯：在庫“％s”中找不到基礎模型“％s”"
 
 #: eeschema/sim/sim_library_ibis.cpp:39 eeschema/sim/sim_model_ibis.cpp:75
 #, c-format
@@ -21303,9 +21261,9 @@ msgid ""
 msgstr "從原理圖編輯符號 %s。儲存將僅更新原理圖。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:889
-#, fuzzy, c-format
+#, c-format
 msgid "Open symbol from library %s"
-msgstr "與庫更新符號"
+msgstr "從庫 %s 開啟符號"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:902
 msgid ""
@@ -21333,9 +21291,9 @@ msgid "Create an editable copy"
 msgstr "建立一個新目錄"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:955
-#, fuzzy, c-format
+#, c-format
 msgid "Create an editable copy of the symbol or the entire library (%s)?"
-msgstr "清除並註釋整個電路圖中的所有符號？"
+msgstr "建立符號或整個庫的可編輯副本 (%s)?"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:959
 msgid "Select type of item to save"
@@ -21474,11 +21432,11 @@ msgid "A library must be specified."
 msgstr "必須指定一個庫。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:956
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' is read-only. Choose a different library to save the symbol "
 "'%s' to."
-msgstr "在封裝庫列表中，找不到封裝庫."
+msgstr "庫‘%s’是唯讀的。選擇不同的庫來保存符號‘%s’。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:972
 #, c-format
@@ -21874,9 +21832,9 @@ msgid "Cannot find %s pin '%s'."
 msgstr "找不到 %s 接腳 '%s'。"
 
 #: eeschema/tools/backannotate.cpp:509
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s field '%s' value to '%s'."
-msgstr "將欄位 '%s' 的值更改為 '%s'。"
+msgstr "將 %a 欄位的值變更為 '%s'。"
 
 #: eeschema/tools/backannotate.cpp:524
 #, fuzzy, c-format
@@ -21884,9 +21842,9 @@ msgid "Add %s field '%s' with value '%s'."
 msgstr "添加值為 '%2$s' 的欄位 '%1$s'。"
 
 #: eeschema/tools/backannotate.cpp:560
-#, fuzzy, c-format
+#, c-format
 msgid "Delete %s field '%s.'"
-msgstr "刪除欄位 '%s'。"
+msgstr "刪除 %s 的字段‘%s’"
 
 #: eeschema/tools/backannotate.cpp:700
 #, c-format
@@ -22002,9 +21960,8 @@ msgid "Save Library As..."
 msgstr "將庫另存為 ......"
 
 #: eeschema/tools/ee_actions.cpp:189
-#, fuzzy
 msgid "Save the current library to a new file"
-msgstr "將當前庫儲存到一個新的檔案。"
+msgstr "將當前庫儲存到一個新的檔案"
 
 #: eeschema/tools/ee_actions.cpp:195
 msgid "New Symbol..."
@@ -22040,18 +21997,16 @@ msgid "Rename Symbol..."
 msgstr "重命名符號..."
 
 #: eeschema/tools/ee_actions.cpp:229
-#, fuzzy
 msgid "Save the current symbol to a different library or name"
-msgstr "將當前符號另存到其他庫。"
+msgstr "將目前符號儲存到不同的庫或名稱"
 
 #: eeschema/tools/ee_actions.cpp:235
 msgid "Save Copy As..."
 msgstr "另存為..."
 
 #: eeschema/tools/ee_actions.cpp:236
-#, fuzzy
 msgid "Save a copy of the current symbol to a different library or name"
-msgstr "將當前符號另存到其他庫。"
+msgstr "將目前符號的副本儲存到不同的庫或名稱"
 
 #: eeschema/tools/ee_actions.cpp:243
 msgid "Remove the selected symbol from its library"
@@ -22765,9 +22720,8 @@ msgid "Fill in schematic symbol reference designators"
 msgstr "填寫原理圖符號參考位置"
 
 #: eeschema/tools/ee_actions.cpp:1082
-#, fuzzy
 msgid "Increment Annotations From..."
-msgstr "刪除批註"
+msgstr "增加註釋從..."
 
 #: eeschema/tools/ee_actions.cpp:1083
 #, fuzzy
@@ -23007,9 +22961,8 @@ msgid "Previous Symbol Unit"
 msgstr "符號單元"
 
 #: eeschema/tools/ee_actions.cpp:1300
-#, fuzzy
 msgid "Open the previous unit of the symbol"
-msgstr "依次放置符號的所有單元。"
+msgstr "打開符號的上一個單元"
 
 #: eeschema/tools/ee_actions.cpp:1306
 #, fuzzy
@@ -23143,9 +23096,8 @@ msgid "Drag"
 msgstr "拖動"
 
 #: eeschema/tools/ee_actions.cpp:1464
-#, fuzzy
 msgid "Move items while keeping their connections"
-msgstr "選擇完整銅箔連接。"
+msgstr "移動項目並保持其連接"
 
 #: eeschema/tools/ee_actions.cpp:1471 eeschema/tools/sch_move_tool.cpp:1823
 #: eeschema/tools/symbol_editor_move_tool.cpp:426
@@ -23390,9 +23342,8 @@ msgid "Select a single symbol to place the next unit."
 msgstr "選擇一個角落後新增新的拐角。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:587
-#, fuzzy
 msgid "This symbol has only one unit."
-msgstr "*** 新符號的單元過少 ***"
+msgstr "此符號只有一個符號單元。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:595
 msgid "All units of this symbol are already placed."
@@ -23509,9 +23460,9 @@ msgid "Draw Table"
 msgstr "繪製表格"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2891
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' does not exist."
-msgstr "目錄 '%s' 不存在"
+msgstr "檔案‘%s’不存在。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2975
 msgid "Press <ESC> to cancel sheet creation."
@@ -25565,12 +25516,11 @@ msgstr "匯出區域"
 
 #: kicad/cli/command_pcb_export_3d.cpp:149
 msgid "Export elements on inner copper layers"
-msgstr "匯出外部銅層上區域。"
+msgstr "導出內層銅層上的元素"
 
 #: kicad/cli/command_pcb_export_3d.cpp:153
-#, fuzzy
 msgid "Export silkscreen graphics as a set of flat faces"
-msgstr "匯出絲印圖形。"
+msgstr "將網版印刷圖形匯出為一組平面"
 
 #: kicad/cli/command_pcb_export_3d.cpp:157
 msgid "Export soldermask layers as a set of flat faces"
@@ -25914,11 +25864,10 @@ msgid "Generate Position File"
 msgstr "生成定位檔案"
 
 #: kicad/cli/command_pcb_export_pos.cpp:50
-#, fuzzy
 msgid ""
 "Valid options: front,back,both. Gerber format only supports \"front\" or "
 "\"back\"."
-msgstr "有效選項: front、back、both。Gerber 格式僅支援\"both\"。"
+msgstr "有效選項：正面、背面、兩者。 Gerber 格式僅支援「正面」或「背面」。"
 
 #: kicad/cli/command_pcb_export_pos.cpp:55
 msgid "Valid options: ascii,csv,gerber"
@@ -26298,9 +26247,8 @@ msgid "Ignore non-zero exit code"
 msgstr ""
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:52
-#, fuzzy
 msgid "Execute Command Job Settings"
-msgstr "編輯選項..."
+msgstr "執行命令作業設定"
 
 #: kicad/dialogs/dialog_jobset_output_options.cpp:54
 #: kicad/dialogs/dialog_jobset_output_options_base.h:62
@@ -26319,9 +26267,8 @@ msgid "Select output path"
 msgstr "選擇路徑"
 
 #: kicad/dialogs/dialog_jobset_output_options.cpp:117
-#, fuzzy
 msgid "Output path cannot be empty"
-msgstr "網路名稱變數名不能為空。"
+msgstr "輸出路徑不能為空"
 
 #: kicad/dialogs/dialog_jobset_output_options.cpp:194
 #, fuzzy
@@ -26451,9 +26398,8 @@ msgid "Running jobs"
 msgstr "調整模式"
 
 #: kicad/dialogs/panel_jobset.cpp:264
-#, fuzzy
 msgid "Edit Output Options..."
-msgstr "Postscript 選項"
+msgstr "編輯輸出選項..."
 
 #: kicad/dialogs/panel_jobset.cpp:265
 #, fuzzy
@@ -33594,9 +33540,9 @@ msgid "Output files '%s' already exists. Do you want to overwrite it?"
 msgstr "檔案 '%s' 已存在, 要覆蓋它嗎?"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:364
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot remove existing output file '%s'."
-msgstr "無法移除臨時輸出檔案"
+msgstr "無法刪除現有的輸出檔‘%s’。"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:372
 #, fuzzy, c-format
@@ -33809,9 +33755,8 @@ msgid "All components"
 msgstr "加入元件"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:99
-#, fuzzy
 msgid "Export only the component models that are selected in the PCB editor"
-msgstr "將原理圖符號參考與 PCB 的修改進行同步。"
+msgstr "僅匯出 PCB「印刷電路板」編輯器中選擇的組件模型"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:103
 msgid "Components matching filter:"
@@ -34858,9 +34803,8 @@ msgid "Get and Move Footprint"
 msgstr "獲取和移動封裝"
 
 #: pcbnew/dialogs/dialog_global_deletion.cpp:258
-#, fuzzy
 msgid "Global Delete"
-msgstr "全域刪除..."
+msgstr "全域刪除"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:23
 msgid "Items to Delete"
@@ -35271,9 +35215,8 @@ msgid "Footprint fields"
 msgstr "封裝欄位"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:35
-#, fuzzy
 msgid "Footprint fields that are not the reference designator or value field"
-msgstr "帶 '%s' 值的封裝有空參考位置。"
+msgstr "不是參考指示符號或值欄位的封裝字段"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:39
 msgid "Footprint graphic items"
@@ -36432,9 +36375,9 @@ msgid "Warning: Scale option set to a very large value"
 msgstr "警告: 縮放選項設置為一個非常大的值"
 
 #: pcbnew/dialogs/dialog_plot.cpp:1398
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' does not exist."
-msgstr "目錄 '%s' 不存在"
+msgstr "目錄 '%s' 不存在。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:24
 msgid "Plot format:"
@@ -37299,9 +37242,8 @@ msgid "Rectangle cannot be zero-sized."
 msgstr "弧線角不能為 0。"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:450
-#, fuzzy
 msgid "Arc angle must be greater than 0"
-msgstr "線路間隙必須大於 0。"
+msgstr "弧的度數必須大於 0"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:460
 msgid "Arc must have 3 distinct points"
@@ -37313,9 +37255,8 @@ msgid "Invalid Arc with radius %f and angle %f."
 msgstr "半徑為 %f 且角度為 %f 的無效弧線。"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:586
-#, fuzzy
 msgid "Radius must be greater than 0"
-msgstr "半徑必須大於 0。"
+msgstr "半徑必須大於 0"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:878
 #: pcbnew/dialogs/dialog_shape_properties.cpp:881
@@ -37342,9 +37283,8 @@ msgid "Mid Point"
 msgstr "結束點"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:916
-#, fuzzy
 msgid "Start Angle"
-msgstr "起始層:"
+msgstr "起始角度"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:933
 #, fuzzy
@@ -37456,9 +37396,8 @@ msgstr "焊錫膏"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:257
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:197
-#, fuzzy
 msgid "Expansion:"
-msgstr "排除"
+msgstr "擴展:"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:262
 #, fuzzy
@@ -37915,9 +37854,8 @@ msgid "Drag (free angle)"
 msgstr "拖動 (自由角度)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:90
-#, fuzzy
 msgid "Flip board items:"
-msgstr "翻轉電路板視圖"
+msgstr "翻轉電路板項目:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:94
 #, fuzzy
@@ -38039,9 +37977,8 @@ msgid "Internal Layers"
 msgstr "內層"
 
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:23
-#, fuzzy
 msgid "Default Field Properties for New Footprints"
-msgstr "新封裝的預設欄位屬性:"
+msgstr "新封裝的預設字段屬性"
 
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:73
 #, fuzzy
@@ -38114,9 +38051,8 @@ msgid "Failed to save footprint library file '%s'."
 msgstr "未能儲存封裝庫檔案 '%s'。"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:396
-#, fuzzy
 msgid "Error adding 3D model"
-msgstr "正在載入 3D 模型..."
+msgstr "新增 3D 模型時出錯"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:480
 msgid "No filename entered"
@@ -38450,9 +38386,8 @@ msgid "Minimum groove for creepage:"
 msgstr "最小銅皮間隙"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:165
-#, fuzzy
 msgid "The minimum slot width from DRC creepage checks"
-msgstr "兩個銅箔項目之間的最小寬度。"
+msgstr "DRC 爬電檢查中的最小槽寬度"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:185
 msgid "Holes"
@@ -39342,11 +39277,10 @@ msgid "Allow bridged solder mask apertures between pads within footprints"
 msgstr "允許封裝內的焊盤之間存在阻焊橋"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:106
-#, fuzzy
 msgid ""
 "Disable DRC error checking for solder mask aperture bridging between pads in "
 "the same footprint."
-msgstr "允許封裝內的焊盤之間存在阻焊橋"
+msgstr "停用同一封裝內焊盤之間的阻焊孔橋接的 DRC 錯誤檢查。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:113
 #, fuzzy
@@ -41906,9 +41840,9 @@ msgid "%s doesn't match footprint given by symbol (%s)."
 msgstr "%s 的封裝 (%s) 與符號 (%s) 所指定的封裝不匹配。"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid "%s doesn't match symbol's footprint filters (%s)."
-msgstr "使用符號的封裝篩選規則"
+msgstr "％s 與符號的封裝過濾器（％s）不匹配。"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:220
 msgid "No corresponding pin found in schematic."
@@ -42937,8 +42871,9 @@ msgstr "調整"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2512
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2530
+#, fuzzy
 msgid "Select a track to tune first."
-msgstr "選擇要調整的值"
+msgstr "先選擇一路徑要調整的導線。"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2599
 msgid "Single track"
