@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-26 06:13+0000\n"
+"PO-Revision-Date: 2025-01-26 06:29+0000\n"
 "Last-Translator: reimu105 <peter112548@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -7254,7 +7254,7 @@ msgstr "“%s”中缺少參數“%s”"
 #: common/io/cadstar/cadstar_archive_parser.h:52
 #, c-format
 msgid "Unknown Parameter '%s' in '%s'"
-msgstr "在 '%2$s' 出現未知參數 '%1$s'"
+msgstr "“%s”中存在未知參數“%s”"
 
 #: common/io/cadstar/cadstar_archive_parser.h:55
 #, c-format
