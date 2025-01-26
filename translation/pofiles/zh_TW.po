@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-26 05:33+0000\n"
+"PO-Revision-Date: 2025-01-26 05:34+0000\n"
 "Last-Translator: reimu105 <peter112548@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -1759,7 +1759,7 @@ msgstr "背景任務"
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
-msgstr "環境變數展開失敗: '%3$s' 中第 %2$u 處缺少 '%1$c'。"
+msgstr "環境變數展開失敗: 字串 '%3$s' 的位置 %2$u 處缺少字元 '%1$c'。"
 
 #: common/common.cpp:385
 #, c-format
