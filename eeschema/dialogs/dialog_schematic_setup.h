@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <memory>
 #include <widgets/paged_dialog.h>
 
 class SCH_EDIT_FRAME;
