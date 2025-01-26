@@ -1366,7 +1366,9 @@ void PCB_IO_KICAD_SEXPR::formatLayers( LSET aLayerMask, int aNestLevel ) const
 
     output += "(layers";
 
-    static const LSET cu_all( LSET::AllCuMask( m_board->GetCopperLayerCount() ) );
+    static const LSET cu_all( LSET::AllCuMask( m_board  // Can be null in some cases in fp editor
+                                                ? m_board->GetCopperLayerCount()
+                                                : MAX_CU_LAYERS ) );
     static const LSET fr_bk(  2, B_Cu,       F_Cu );
     static const LSET adhes(  2, B_Adhes,    F_Adhes );
     static const LSET paste(  2, B_Paste,    F_Paste );
