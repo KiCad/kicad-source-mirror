@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-23 15:38+0000\n"
-"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
+"PO-Revision-Date: 2025-01-26 16:55+0000\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -22215,9 +22215,8 @@ msgid "Create a new symbol in an existing library"
 msgstr "既存のライブラリに新しいシンボルを作成する"
 
 #: eeschema/tools/ee_actions.cpp:202
-#, fuzzy
 msgid "Derive from Existing Symbol"
-msgstr "既存のシンボルから派生…"
+msgstr "既存のシンボルから派生"
 
 #: eeschema/tools/ee_actions.cpp:203
 msgid "Create a new symbol, derived from an existing symbol"
