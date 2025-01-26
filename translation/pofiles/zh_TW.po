@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-26 06:33+0000\n"
+"PO-Revision-Date: 2025-01-26 06:35+0000\n"
 "Last-Translator: reimu105 <peter112548@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -16254,7 +16254,7 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:486
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'"
-msgstr "在名稱: '%2$s' 中出現非法字符 '%1$c'"
+msgstr "非法字元“%c存在於”暱稱“%s”中"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:592 eeschema/symbol_library.cpp:575
 #, c-format
