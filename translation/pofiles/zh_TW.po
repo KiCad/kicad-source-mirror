@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-26 06:11+0000\n"
+"PO-Revision-Date: 2025-01-26 06:12+0000\n"
 "Last-Translator: reimu105 <peter112548@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -14654,9 +14654,9 @@ msgid "Not Connected"
 msgstr "沒有連接"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:869
-#, fuzzy, c-format
+#, c-format
 msgid "No model named '%s' in '%s'."
-msgstr "庫中沒有名為 '%s' 的模型。"
+msgstr "「%s」中沒有名為「%s」的模型。"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:1253
 msgid "Browse Models"
