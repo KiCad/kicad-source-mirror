@@ -7306,7 +7306,7 @@ msgstr "無法讀取 ZIP 壓縮包 '%s'"
 #: common/io/easyedapro/easyedapro_import_utils.cpp:301
 #, c-format
 msgid "Cannot parse JSON line %d in '%s': %s"
-msgstr "無法解析 JSON 檔案 '%2$s' 中的第 %1$d 行: %3$s"
+msgstr "無法解析“%s”中的 JSON 行 %d：%s"
 
 #: common/io/io_base.cpp:139
 #, fuzzy
