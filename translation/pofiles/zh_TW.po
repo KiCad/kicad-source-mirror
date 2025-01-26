@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-26 06:35+0000\n"
+"PO-Revision-Date: 2025-01-26 06:36+0000\n"
 "Last-Translator: reimu105 <peter112548@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -17321,7 +17321,7 @@ msgstr "衍生自"
 #: eeschema/widgets/symbol_preview_widget.cpp:207
 #, c-format
 msgid "Error loading symbol %s from library '%s'."
-msgstr "從庫 %2$s 載入符號 '%1$s' 出錯。"
+msgstr "從庫“%s”載入符號 %s 時出錯。"
 
 #: eeschema/generate_alias_info.cpp:121 eeschema/sim/spice_simulator.cpp:69
 #: kicad/pcm/pcm.cpp:767 pcbnew/zone.cpp:859
