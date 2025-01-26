@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-26 06:31+0000\n"
+"PO-Revision-Date: 2025-01-26 06:32+0000\n"
 "Last-Translator: reimu105 <peter112548@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -14016,7 +14016,7 @@ msgstr "該操作無法撤銷。"
 #: eeschema/dialogs/dialog_sheet_properties.cpp:581
 #, c-format
 msgid "Create new file '%s' with contents of '%s'?"
-msgstr "建立包含 '%2$s' 內容的新檔案 '%1$s'?"
+msgstr "是否創建內容為“%s”的新檔案“%s”？"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:613
 #, c-format
