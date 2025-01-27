@@ -874,7 +874,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
                     // Pads connected to pads of a net-tie footprint are allowed to collide
                     // with the net-tie footprint's graphics.
                 }
-                else if( actual == 0 && otherNet && testShorting )
+                else if( actual == 0 && padNet && otherNet && testShorting )
                 {
                     std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
                     wxString msg;
