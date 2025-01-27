@@ -1588,7 +1588,9 @@ void ZONE::TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aBuffer, int aClea
 
 std::shared_ptr<SHAPE> ZONE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
 {
-    if( m_FilledPolysList.find( aLayer ) == m_FilledPolysList.end() )
+    if( GetIsRuleArea() )
+        return std::make_shared<SHAPE_POLY_SET>( *Outline() );
+    else if( m_FilledPolysList.find( aLayer ) == m_FilledPolysList.end() )
         return std::make_shared<SHAPE_NULL>();
     else
         return m_FilledPolysList.at( aLayer );

@@ -75,7 +75,11 @@ void GRID_CELL_LAYER_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC&
     }
 
     // draw the swatch
+#ifdef __WXMAC__
+    int      size = 14;
+#else
     int      size = KiROUND( 14 * aDC.GetContentScaleFactor() );
+#endif
     wxBitmap bitmap( size, size );
 
     LAYER_PRESENTATION::DrawColorSwatch( bitmap,
