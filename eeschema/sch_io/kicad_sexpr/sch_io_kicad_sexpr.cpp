@@ -1326,6 +1326,11 @@ void SCH_IO_KICAD_SEXPR::saveText( SCH_TEXT* aText )
     aText->EDA_TEXT::Format( m_out, 0 );
     KICAD_FORMAT::FormatUuid( m_out, aText->m_Uuid );
 
+    if( label && label->Type() == SCH_GLOBAL_LABEL_T )
+        m_nextFreeFieldId = GLOBALLABEL_MANDATORY_FIELD_COUNT;
+    else
+        m_nextFreeFieldId = 0;
+
     if( label )
     {
         for( SCH_FIELD& field : label->GetFields() )

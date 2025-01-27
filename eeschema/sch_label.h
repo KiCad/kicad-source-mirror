@@ -130,6 +130,17 @@ enum FLAG_SHAPE : unsigned int
 };
 
 
+enum  GLOBALLABEL_FIELD_T
+{
+    INTERSHEET_REFS = 0,
+
+    /// The first 2 are mandatory, and must be instantiated in SCH_SHEET
+    GLOBALLABEL_MANDATORY_FIELD_COUNT
+};
+
+#define GLOBALLABEL_MANDATORY_FIELDS { INTERSHEET_REFS }
+
+
 class SCH_LABEL_BASE : public SCH_TEXT
 {
 public:

@@ -119,6 +119,8 @@ public:
     wxString StringFromBool( bool aValue ) const;
     bool BoolFromString( const wxString& aValue ) const;
 
+    void DetachFields();
+
 protected:
     void initGrid( WX_GRID* aGrid );
 

@@ -1507,18 +1507,28 @@ VECTOR2I SCH_FIELD::GetParentPosition() const
 
 bool SCH_FIELD::IsMandatory() const
 {
-    if( m_parent && m_parent->Type() == SCH_SHEET_T )
+    if( !m_parent )
+        return false;
+
+    switch( m_parent->Type() )
     {
+    case SCH_SHEET_T:
         return m_id == SHEETNAME
             || m_id == SHEETFILENAME;
-    }
-    else
-    {
+
+    case SCH_SYMBOL_T:
+    case LIB_SYMBOL_T:
         return m_id == REFERENCE_FIELD
             || m_id == VALUE_FIELD
             || m_id == FOOTPRINT_FIELD
             || m_id == DATASHEET_FIELD
             || m_id == DESCRIPTION_FIELD;
+
+    case SCH_GLOBAL_LABEL_T:
+        return m_id == INTERSHEET_REFS;
+
+    default:
+        return false;
     }
 }
 

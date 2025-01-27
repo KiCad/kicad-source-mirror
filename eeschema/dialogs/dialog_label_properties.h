@@ -40,6 +40,8 @@ public:
     DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* parent, SCH_LABEL_BASE* aLabel );
     ~DIALOG_LABEL_PROPERTIES();
 
+    FIELDS_GRID_TABLE* GetFieldsGridTable() { return m_fields; }
+
 private:
     /**
      * wxEVT_COMMAND_ENTER event handler for single-line control.

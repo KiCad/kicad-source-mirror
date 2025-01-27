@@ -1046,6 +1046,13 @@ bool FIELDS_GRID_TABLE::BoolFromString( const wxString& aValue ) const
 }
 
 
+void FIELDS_GRID_TABLE::DetachFields()
+{
+    for( SCH_FIELD& field : *this )
+        field.SetParent( nullptr );
+}
+
+
 void FIELDS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 {
     if( m_grid->GetGridCursorRow() == FOOTPRINT_FIELD && m_grid->GetGridCursorCol() == FDC_VALUE
