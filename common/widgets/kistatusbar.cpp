@@ -30,6 +30,7 @@
 #include <array>
 #include <widgets/kistatusbar.h>
 #include <widgets/bitmap_button.h>
+#include <widgets/ui_common.h>
 #include <pgm_base.h>
 #include <background_jobs_monitor.h>
 #include <notifications_manager.h>
@@ -48,9 +49,9 @@ KISTATUSBAR::KISTATUSBAR( int aNumberFields, wxWindow* parent, wxWindowID id, ST
     // we need +1 extra field on OSX to offset from the rounded corner on the right
     // OSX doesn't use resize grippers like the other platforms and the statusbar field
     // includes the rounded part
-    int extraFields = 4;
-#else
     int extraFields = 3;
+#else
+    int extraFields = 2;
 #endif
 
     bool showNotification = ( m_styleFlags & NOTIFICATION_ICON );
@@ -167,10 +168,16 @@ void KISTATUSBAR::onBackgroundProgressClick( wxMouseEvent& aEvent )
 
 void KISTATUSBAR::onSize( wxSizeEvent& aEvent )
 {
+    constexpr int padding = 5;
+
     wxRect r;
     GetFieldRect( m_normalFieldsCount + *fieldIndex( FIELD::BGJOB_LABEL ), r );
     int x = r.GetLeft();
     int y = r.GetTop();
+    int textHeight = KIUI::GetTextSize( wxT( "bp" ), this ).y;
+
+    if( r.GetHeight() > textHeight )
+        y += ( r.GetHeight() - textHeight ) / 2;
 
     m_backgroundTxt->SetPosition( { x, y } );
 
@@ -179,7 +186,6 @@ void KISTATUSBAR::onSize( wxSizeEvent& aEvent )
     y = r.GetTop();
     int           w = r.GetWidth();
     int           h = r.GetHeight();
-    constexpr int b = 5;
     wxSize buttonSize( 0, 0 );
 
     if( m_backgroundStopButton )
@@ -187,10 +193,11 @@ void KISTATUSBAR::onSize( wxSizeEvent& aEvent )
         buttonSize = m_backgroundStopButton->GetEffectiveMinSize();
         m_backgroundStopButton->SetPosition( { x + w - buttonSize.GetWidth(), y } );
         m_backgroundStopButton->SetSize( buttonSize.GetWidth(), h );
+        buttonSize.x += padding;
     }
 
-    m_backgroundProgressBar->SetPosition( { x, y } );
-    m_backgroundProgressBar->SetSize( w - buttonSize.GetWidth() - b, h );
+    m_backgroundProgressBar->SetPosition( { x + padding, y } );
+    m_backgroundProgressBar->SetSize( w - buttonSize.GetWidth() - padding, h );
 
     if( m_notificationsButton )
     {
