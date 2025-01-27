@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-26 16:55+0000\n"
+"PO-Revision-Date: 2025-01-27 21:23+0000\n"
 "Last-Translator: reimu105 <peter112548@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -1897,11 +1897,11 @@ msgstr "否(&N)"
 
 #: common/design_block_info_impl.cpp:116
 msgid "Fetching design_block libraries..."
-msgstr "正在提取設計圖塊庫..."
+msgstr "正在提取符號庫..."
 
 #: common/design_block_info_impl.cpp:147
 msgid "Loading design_blocks..."
-msgstr "載入設計圖塊..."
+msgstr "載入符號..."
 
 #: common/design_block_io.cpp:47 common/design_block_io.cpp:56
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
@@ -1917,7 +1917,7 @@ msgstr "未知 (%d)"
 
 #: common/design_block_io.cpp:135
 msgid "KiCad Design Block folders"
-msgstr "KiCad 設計圖塊資料夾"
+msgstr "KiCad 符號資料夾"
 
 #: common/design_block_io.cpp:172
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3034
@@ -1960,11 +1960,11 @@ msgstr "無法刪除符號庫 '%s'。"
 #: common/design_block_io.cpp:337
 #, c-format
 msgid "Design block metadata file '%s' could not be read."
-msgstr "無法讀取設計圖塊元資料檔 '%s'。"
+msgstr "無法讀取符號元資料檔 '%s'。"
 
 #: common/design_block_io.cpp:353
 msgid "Design block does not have a valid library ID."
-msgstr "設計圖塊缺少有效的庫標識。"
+msgstr "符號缺少有效的庫標識。"
 
 #: common/design_block_io.cpp:358
 #, c-format
@@ -1974,34 +1974,34 @@ msgstr "原理圖來源檔案‘%s’不存在。"
 #: common/design_block_io.cpp:372
 #, c-format
 msgid "Design block folder '%s' could not be created."
-msgstr "無法建立設計圖塊資料夾 '%s'。"
+msgstr "無法建立符號資料夾 '%s'。"
 
 #: common/design_block_io.cpp:389
 #, c-format
 msgid "Schematic file '%s' could not be saved as design block at '%s'."
-msgstr "無法將原理圖檔案 '%s' 作為設計圖塊儲存到 '%s'。"
+msgstr "無法將原理圖檔案 '%s' 作為符號儲存到 '%s'。"
 
 #: common/design_block_io.cpp:423
 #, c-format
 msgid "Design block metadata file '%s' could not be saved."
-msgstr "無法儲存設計圖塊元資料檔 '%s'。"
+msgstr "無法儲存符號元資料檔 '%s'。"
 
 #: common/design_block_io.cpp:437
 #, c-format
 msgid "Design block '%s' does not exist."
-msgstr "設計圖塊 '%s' 不存在。"
+msgstr "符號 '%s' 不存在。"
 
 #: common/design_block_io.cpp:443
 #, c-format
 msgid "Design block folder '%s' could not be deleted."
-msgstr "無法刪除設計圖塊資料夾 '%s'。"
+msgstr "無法刪符號資料夾 '%s'。"
 
 #: common/design_block_lib_table.cpp:232
 #, c-format
 msgid ""
 "Duplicate library nickname '%s' found in design block library table file "
 "line %d."
-msgstr "發現重複的庫稱“%s”在設計模組庫表檔案第 %d 行中。"
+msgstr "發現重複的庫稱“%s”在符號庫表檔案第 %d 行中。"
 
 #: common/design_block_lib_table.cpp:342
 #, c-format
@@ -2443,7 +2443,7 @@ msgstr "路徑"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:33
 msgid "design block"
-msgstr "設計圖塊"
+msgstr "符號"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:63
 #, c-format
@@ -2451,7 +2451,7 @@ msgid ""
 "Error creating design block library table '%s'.\n"
 "%s"
 msgstr ""
-"建立符號庫表‘%s’時出錯 '%s'.\n"
+"建立符號庫表時出錯 '%s'.\n"
 "%s"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:76
@@ -5803,9 +5803,8 @@ msgid "Footprint Defaults"
 msgstr "新建封裝"
 
 #: common/eda_base_frame.cpp:1190
-#, fuzzy
 msgid "Graphics Defaults"
-msgstr "圖形清理"
+msgstr "圖形預設值"
 
 #: common/eda_base_frame.cpp:1195 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:616 kicad/tools/kicad_manager_actions.cpp:136
@@ -6760,14 +6759,14 @@ msgid "Error removing directory '%s': %s"
 msgstr "移除目錄 '%s' 時出錯: %s"
 
 #: common/gestfich.cpp:366 common/gestfich.cpp:420 common/gestfich.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open source directory: %s"
-msgstr "無法建立目錄 '%s'"
+msgstr "無法開啟來源目錄：%s"
 
 #: common/gestfich.cpp:373 common/gestfich.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create destination directory: %s"
-msgstr "無法建立目錄 '%s'"
+msgstr "無法建立目標目錄：%s"
 
 #: common/gestfich.cpp:397 common/gestfich.cpp:470
 #, c-format
@@ -7341,7 +7340,7 @@ msgstr "匯出鑽孔資料作業設置"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
 msgid "PCB: Export drill data"
-msgstr "PCB：導出鑽孔數據"
+msgstr "印刷電路板PCB：導出鑽孔數據"
 
 #: common/jobs/job_export_pcb_dxf.cpp:58
 #: common/jobs/job_export_sch_plot.cpp:156 kicad/kicad_cli.cpp:141
@@ -7456,7 +7455,7 @@ msgstr "生成物料清單作業設定"
 
 #: common/jobs/job_export_sch_bom.cpp:102
 msgid "Schematic: Generate Bill of Materials"
-msgstr "示意圖：生成物料清單"
+msgstr "原理圖：生成物料清單"
 
 #: common/jobs/job_export_sch_netlist.cpp:80
 #, c-format
@@ -7469,7 +7468,7 @@ msgstr "匯出網表作業設定"
 
 #: common/jobs/job_export_sch_netlist.cpp:90
 msgid "Schematic: Export Netlist"
-msgstr "原理圖：匯出網表"
+msgstr "示意圖：匯出網表"
 
 #: common/jobs/job_export_sch_plot.cpp:194
 msgid "Export Postscript"
@@ -7489,27 +7488,27 @@ msgstr "匯出 HPGL 作業設定"
 
 #: common/jobs/job_export_sch_plot.cpp:223
 msgid "Schematic: Export SVG"
-msgstr "示意圖：匯出 SVG"
+msgstr "原理圖：匯出 SVG"
 
 #: common/jobs/job_export_sch_plot.cpp:225
 msgid "Schematic: Export HPGL"
-msgstr "示意圖：匯出 HPGL"
+msgstr "原理圖：匯出 HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:227
 msgid "Schematic: Export Postscript"
-msgstr "示意圖: 匯出Postscript"
+msgstr "原理圖: 匯出Postscript"
 
 #: common/jobs/job_export_sch_plot.cpp:229
 msgid "Schematic: Export DXF"
-msgstr "示意圖: 匯出DXF"
+msgstr "原理圖: 匯出DXF"
 
 #: common/jobs/job_export_sch_plot.cpp:231
 msgid "Schematic: Export PDF"
-msgstr "示意圖: 匯出PDF"
+msgstr "原理圖: 匯出PDF"
 
 #: common/jobs/job_export_sch_pythonbom.cpp:35
 msgid "Schematic PythonBOM export"
-msgstr "匯出示意圖 PythonBOM"
+msgstr "匯出原理圖 PythonBOM"
 
 #: common/jobs/job_pcb_drc.cpp:37
 msgid "Perform DRC"
@@ -9742,7 +9741,7 @@ msgstr "基礎屬性"
 
 #: common/widgets/search_pane.cpp:40
 msgid "Toggle zooming to selections in the search pane"
-msgstr ""
+msgstr "切換縮放到搜尋視窗中的選擇內容"
 
 #: common/widgets/search_pane.cpp:42
 #, fuzzy
@@ -9751,7 +9750,7 @@ msgstr "添加到選區"
 
 #: common/widgets/search_pane.cpp:42
 msgid "Toggle panning to selections in the search pane"
-msgstr ""
+msgstr "切換平移到搜尋窗格中的選擇內容"
 
 #: common/widgets/unit_binder.cpp:359
 #, c-format
@@ -10000,7 +9999,7 @@ msgstr "KiCad 封裝庫路徑"
 
 #: common/wildcards_and_files_ext.cpp:359
 msgid "KiCad design block path"
-msgstr ""
+msgstr "KiCad 符號庫路徑"
 
 #: common/wildcards_and_files_ext.cpp:366
 #, fuzzy
@@ -10673,7 +10672,7 @@ msgstr "選擇的網路:"
 #: eeschema/design_block_tree_model_adapter.cpp:149
 #, c-format
 msgid "Error loading design block %s from library '%s'."
-msgstr "從庫“%s”載入設計圖塊 %s 時出錯。"
+msgstr "從庫“%s”載入符號 %s 時出錯。"
 
 #: eeschema/design_block_utils.cpp:47
 #, fuzzy, c-format
@@ -10745,15 +10744,15 @@ msgstr "請選擇一個符號庫表檔案。"
 
 #: eeschema/design_block_utils.cpp:301 eeschema/design_block_utils.cpp:394
 msgid "Design blocks with nested sheets are not supported."
-msgstr ""
+msgstr "不支援帶有巢狀表的符號庫。"
 
 #: eeschema/design_block_utils.cpp:333 eeschema/design_block_utils.cpp:427
 msgid "Error saving temporary schematic file to create design block."
-msgstr "在儲存臨時原理圖檔案以建立設計圖塊時出錯。"
+msgstr "在儲存臨時原理圖檔案以建立符號時出錯。"
 
 #: eeschema/design_block_utils.cpp:378
 msgid "Please select some items to save as a design block."
-msgstr ""
+msgstr "請選擇一些項目儲存為符號。"
 
 #: eeschema/design_block_utils.cpp:464
 #, fuzzy
@@ -10794,7 +10793,7 @@ msgstr "封裝 '%s' 刪除來自庫 '%s'"
 #: eeschema/design_block_utils.cpp:615
 #, c-format
 msgid "Error loading designblock %s from library '%s'."
-msgstr "從庫“%s”載入設計圖塊 %s 時出錯。"
+msgstr "從庫“%s”載入符號 %s 時出錯。"
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -16650,7 +16649,7 @@ msgstr "在庫‘%s’中未找到封裝‘%s’。"
 #: eeschema/erc/erc.cpp:1619
 #, c-format
 msgid "Assigned footprint (%s) doesn't match footprint filters (%s)."
-msgstr "分配的封裝（％s）與封裝過濾器不匹配（％s）。"
+msgstr "分配的封裝（%s）與封裝篩選規則不匹配（%s）。"
 
 #: eeschema/erc/erc.cpp:1781
 msgid "Checking sheet names..."
@@ -18560,7 +18559,7 @@ msgstr "無法在 '%s' 中找到有效的原理圖檔案"
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:500
 #, c-format
 msgid "Error loading symbol '%s' from library '%s': %s"
-msgstr "從庫 %2$s 載入符號 '%1$s' 出錯: %3$s"
+msgstr "從庫‘%s’中載入符號‘%s’時出錯：%s"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:421
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:426
@@ -20523,7 +20522,7 @@ msgstr "未知"
 msgid ""
 "Error loading simulation model: could not find base model '%s' in library "
 "'%s'"
-msgstr "載入模擬模型時出錯：在庫“％s”中找不到基礎模型“％s”"
+msgstr "載入模擬模型時出錯：在庫“%s”中找不到基礎模型“%s”"
 
 #: eeschema/sim/sim_library_ibis.cpp:39 eeschema/sim/sim_model_ibis.cpp:75
 #, c-format
@@ -21834,12 +21833,12 @@ msgstr "找不到 %s 接腳 '%s'。"
 #: eeschema/tools/backannotate.cpp:509
 #, c-format
 msgid "Change %s field '%s' value to '%s'."
-msgstr "將 %a 欄位的值變更為 '%s'。"
+msgstr "將 %s 欄位的值'%s'變更為 '%s'。"
 
 #: eeschema/tools/backannotate.cpp:524
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s field '%s' with value '%s'."
-msgstr "添加值為 '%2$s' 的欄位 '%1$s'。"
+msgstr "新增 %s 欄位‘%s’，值為‘%s’。"
 
 #: eeschema/tools/backannotate.cpp:560
 #, c-format
@@ -25375,7 +25374,7 @@ msgstr "重命名"
 msgid ""
 "Stops processing jobs as they are executed sequentially on the first failure "
 "of a job"
-msgstr ""
+msgstr "作業第一次失敗時，停止依序執行作業的處理"
 
 #: kicad/cli/command_jobset_run.cpp:53
 #, fuzzy
@@ -25955,10 +25954,10 @@ msgid "Render from side. Options: %s"
 msgstr "從側面算繪。選項: %s"
 
 #: kicad/cli/command_pcb_render.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Image background. Options: %s. Default: transparent for PNG, opaque for JPEG"
-msgstr "圖像背景。選項: 透明, 不透明。預設: PNG 為透明, JPEG 為不透明"
+msgstr "圖像背景。選項: %s。透明, 不透明。預設: PNG 為透明, JPEG 為不透明"
 
 #: kicad/cli/command_pcb_render.cpp:251
 #, c-format
@@ -26252,9 +26251,9 @@ msgstr "執行命令作業設定"
 
 #: kicad/dialogs/dialog_jobset_output_options.cpp:54
 #: kicad/dialogs/dialog_jobset_output_options_base.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "%s Output Options"
-msgstr "Postscript 選項"
+msgstr "%s 輸出選項"
 
 #: kicad/dialogs/dialog_jobset_output_options.cpp:85
 #, fuzzy
@@ -26816,9 +26815,9 @@ msgid "Plugins (%d)"
 msgstr "插件 (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Fabrication plugins (%d)"
-msgstr "製造輸出"
+msgstr "製造插件 (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:52
 #, c-format
@@ -36915,9 +36914,9 @@ msgid "Reference item: %s"
 msgstr "基準項: %s"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:267
-#, fuzzy, c-format
+#, c-format
 msgid "Reference location: selected point (%s, %s)"
-msgstr "參考位置: 網格原點"
+msgstr "參考位置：選定參考點 (%s, %s)"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 msgid "Reference item: <none selected>"
@@ -40528,9 +40527,9 @@ msgid "Pad is not a through hole pad; connection will be: %s."
 msgstr "焊盤不是通孔焊盤; 連接將是: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:782
-#, fuzzy, c-format
+#, c-format
 msgid "Net tie on %s; clearance: 0."
-msgstr "%s 上的局部覆蓋; 間隙: %s。"
+msgstr "網路連線 %s；間隙：0。"
 
 #: pcbnew/drc/drc_engine.cpp:785
 #, fuzzy
@@ -41479,14 +41478,14 @@ msgid "%s orientation differs."
 msgstr "%s 個 '方向' 差異。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:322
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad shape type differs on layer %s."
-msgstr "%s 個 '焊盤形狀類型' 差異。"
+msgstr "%s 焊盤形狀類型在層 %s 上有所不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:326
-#, fuzzy, c-format
+#, c-format
 msgid "%s size differs on layer %s."
-msgstr "%s 個 '大小' 差異。"
+msgstr "%s 的大小在層 %s 上有所不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:329
 #, fuzzy, c-format
@@ -41842,7 +41841,7 @@ msgstr "%s 的封裝 (%s) 與符號 (%s) 所指定的封裝不匹配。"
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:169
 #, c-format
 msgid "%s doesn't match symbol's footprint filters (%s)."
-msgstr "％s 與符號的封裝過濾器（％s）不匹配。"
+msgstr "%s 與符號的封裝篩選規則（%s ）不匹配。"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:220
 msgid "No corresponding pin found in schematic."
