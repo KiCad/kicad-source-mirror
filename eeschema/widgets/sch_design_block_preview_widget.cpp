@@ -204,7 +204,7 @@ void SCH_DESIGN_BLOCK_PREVIEW_WIDGET::DisplayDesignBlock( DESIGN_BLOCK* aDesignB
         m_previewItem = nullptr;
     }
 
-    if( aDesignBlock )
+    if( aDesignBlock && wxFileExists( aDesignBlock->GetSchematicFile() ) )
     {
         m_previewItem = EESCHEMA_HELPERS::LoadSchematic( aDesignBlock->GetSchematicFile(),
                                                          SCH_IO_MGR::SCH_KICAD, false, true );

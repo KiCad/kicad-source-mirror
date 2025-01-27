@@ -133,8 +133,7 @@ int PCB_DESIGN_BLOCK_CONTROL::SaveBoardAsDesignBlock( const TOOL_EVENT& aEvent )
     if( !current )
         return -1;
 
-    //m_editFrame->SaveSheetAsDesignBlock( current->m_LibId.GetLibNickname(),
-                                         //m_editFrame->GetCurrentSheet() );
+    m_editFrame->SaveBoardAsDesignBlock( current->m_LibId.GetLibNickname() );
 
     return 0;
 }

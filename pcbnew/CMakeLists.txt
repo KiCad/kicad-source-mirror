@@ -357,6 +357,7 @@ set( PCBNEW_CLASS_SRCS
     menubar_footprint_editor.cpp
     menubar_pcb_editor.cpp
     pcb_base_edit_frame.cpp
+    pcb_design_block_utils.cpp
     pcb_layer_box_selector.cpp
     pcb_edit_frame.cpp
     pcb_plotter.cpp

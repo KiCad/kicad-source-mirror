@@ -18,6 +18,7 @@
  */
 
 #include <board.h>
+#include <confirm.h>
 #include <pcb_view.h>
 #include <pcb_screen.h>
 #include <gal/gal_display_options.h>
@@ -29,11 +30,15 @@
 #include <pgm_base.h>
 #include <pcb_painter.h>
 #include <pcb_edit_frame.h>
+#include <pcb_field.h>
+#include <pcb_io/pcb_io.h>
+#include <pcb_io/pcb_io_mgr.h>
 #include <project_pcb.h>
 #include <pcbnew_settings.h>
 //#include <pcb_helpers.h>
 #include <settings/settings_manager.h>
 #include <widgets/pcb_design_block_preview_widget.h>
+#include <widgets/wx_progress_reporters.h>
 #include <wx/log.h>
 #include <wx/stattext.h>
 #include <wx/panel.h>
@@ -110,7 +115,9 @@ PCB_DESIGN_BLOCK_PREVIEW_WIDGET::PCB_DESIGN_BLOCK_PREVIEW_WIDGET( wxWindow*     
 
 PCB_DESIGN_BLOCK_PREVIEW_WIDGET::~PCB_DESIGN_BLOCK_PREVIEW_WIDGET()
 {
-    delete m_preview;
+    if( m_previewItem )
+        m_preview->GetView()->Remove( m_previewItem );
+
     delete m_previewItem;
 }
 
@@ -173,42 +180,70 @@ void PCB_DESIGN_BLOCK_PREVIEW_WIDGET::DisplayDesignBlock( DESIGN_BLOCK* aDesignB
         m_previewItem = nullptr;
     }
 
-    if( aDesignBlock )
+    if( aDesignBlock && wxFileExists( aDesignBlock->GetBoardFile() ) )
     {
-        //m_previewItem = PCB_HELPERS::LoadSchematic( aDesignBlock->GetSchematicFile(),
-                                                         //PCB_IO_MGR::PCB_KICAD, false, true );
-        //BOX2I bBox;
+        try
+        {
+            IO_RELEASER<PCB_IO>  pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
+            WX_PROGRESS_REPORTER progressReporter( this, _( "Loading PCB" ), 1 );
 
-        //if( m_previewItem )
-        //{
-            //for( EDA_ITEM* item : m_previewItem->CurrentSheet().LastScreen()->Items() )
-            //{
-                //view->Add( item );
+            pi->SetProgressReporter( &progressReporter );
 
-                //if( item->Type() == PCB_FIELD_T )
-                //{
-                    //if( !static_cast<const PCB_FIELD*>( item )->IsVisible() )
-                        //continue;
-                //}
+            m_previewItem = pi->LoadBoard( aDesignBlock->GetBoardFile(), nullptr );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            // You wouldn't think boardFn.GetFullPath() would throw, but we get a stack buffer
+            // underflow from ASAN.  While it's probably an ASAN error, a second try/catch doesn't
+            // cost us much.
+            try
+            {
+                if( ioe.Problem() != wxT( "CANCEL" ) )
+                {
+                    wxString msg = wxString::Format( _( "Error loading board file:\n%s" ),
+                                                     aDesignBlock->GetBoardFile() );
+                    DisplayErrorMessage( this, msg, ioe.What() );
+                }
+            }
+            catch( ... )
+            {
+                // That was already our best-efforts
+            }
+        }
 
-                //bBox.Merge( item->GetBoundingBox() );
-            //}
-        //}
 
-        //m_itemBBox = bBox;
+        BOX2I bBox;
 
-        //if( !m_preview->IsShownOnScreen() )
-        //{
-            //m_preview->Show();
+        if( m_previewItem )
+        {
+            for( BOARD_ITEM* item : m_previewItem->GetItemSet() )
+            {
+                view->Add( item );
 
-            //if( m_statusPanel )
-                //m_statusPanel->Hide();
+                if( item->Type() == PCB_FIELD_T )
+                {
+                    if( !static_cast<const PCB_FIELD*>( item )->IsVisible() )
+                        continue;
+                }
 
-            //Layout(); // Ensure panel size is up to date.
-        //}
+                bBox.Merge( item->GetBoundingBox() );
+            }
+        }
 
-        //// Calculate the draw scale to fit the drawing area
-        //fitOnDrawArea();
+        m_itemBBox = bBox;
+
+        if( !m_preview->IsShownOnScreen() )
+        {
+            m_preview->Show();
+
+            if( m_statusPanel )
+                m_statusPanel->Hide();
+
+            Layout(); // Ensure panel size is up to date.
+        }
+
+        // Calculate the draw scale to fit the drawing area
+        fitOnDrawArea();
     }
 
     m_preview->ForceRefresh();

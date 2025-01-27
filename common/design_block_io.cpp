@@ -287,17 +287,20 @@ DESIGN_BLOCK* DESIGN_BLOCK_IO::DesignBlockLoad( const wxString& aLibraryPath,
                       + FILEEXT::KiCadDesignBlockPathExtension + wxFileName::GetPathSeparator();
     wxString dbSchPath = dbPath + aDesignBlockName + wxT( "." )
                          + FILEEXT::KiCadSchematicFileExtension;
+    wxString dbPcbPath = dbPath + aDesignBlockName + wxT( "." ) + FILEEXT::KiCadPcbFileExtension;
     wxString dbMetadataPath = dbPath + aDesignBlockName + wxT( "." ) + FILEEXT::JsonFileExtension;
-
-    if( !wxFileExists( dbSchPath ) )
-        return nullptr;
 
     DESIGN_BLOCK* newDB = new DESIGN_BLOCK();
 
     // Library name needs to be empty for when we fill it in with the correct library nickname
     // one layer above
     newDB->SetLibId( LIB_ID( wxEmptyString, aDesignBlockName ) );
-    newDB->SetSchematicFile( dbSchPath );
+
+    if( wxFileExists( dbSchPath ) )
+        newDB->SetSchematicFile( dbSchPath );
+
+    if( wxFileExists( dbPcbPath ) )
+        newDB->SetBoardFile( dbPcbPath );
 
     // Parse the JSON file if it exists
     if( wxFileExists( dbMetadataPath ) )
@@ -353,10 +356,22 @@ void DESIGN_BLOCK_IO::DesignBlockSave( const wxString&                    aLibra
         THROW_IO_ERROR( _( "Design block does not have a valid library ID." ) );
     }
 
-    if( !wxFileExists( aDesignBlock->GetSchematicFile() ) )
+    if( aDesignBlock->GetSchematicFile().IsEmpty() && aDesignBlock->GetBoardFile().IsEmpty() )
+    {
+        THROW_IO_ERROR( _( "Design block does not have a schematic or board file." ) );
+    }
+
+    if( !aDesignBlock->GetSchematicFile().IsEmpty()
+        && !wxFileExists( aDesignBlock->GetSchematicFile() ) )
     {
         THROW_IO_ERROR( wxString::Format( _( "Schematic source file '%s' does not exist." ),
                                           aDesignBlock->GetSchematicFile() ) );
+    }
+
+    if( !aDesignBlock->GetBoardFile().IsEmpty() && !wxFileExists( aDesignBlock->GetBoardFile() ) )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "Board source file '%s' does not exist." ),
+                                          aDesignBlock->GetBoardFile() ) );
     }
 
     // Create the design block folder
@@ -374,23 +389,46 @@ void DESIGN_BLOCK_IO::DesignBlockSave( const wxString&                    aLibra
         }
     }
 
-    // The new schematic file name is based on the design block name, not the source sheet name
-    wxString dbSchematicFile = dbFolder.GetFullPath() + aDesignBlock->GetLibId().GetLibItemName()
-                               + wxT( "." ) + FILEEXT::KiCadSchematicFileExtension;
-
-    // If the source and destination files are the same, then we don't need to copy the file
-    // as we are just updating the metadata
-    if( aDesignBlock->GetSchematicFile() != dbSchematicFile )
+    if( !aDesignBlock->GetSchematicFile().IsEmpty() )
     {
-        // Copy the source sheet file to the design block folder, under the design block name
-        if( !wxCopyFile( aDesignBlock->GetSchematicFile(), dbSchematicFile ) )
+        // The new schematic file name is based on the design block name, not the source sheet name
+        wxString dbSchematicFile = dbFolder.GetFullPath()
+                                   + aDesignBlock->GetLibId().GetLibItemName() + wxT( "." )
+                                   + FILEEXT::KiCadSchematicFileExtension;
+
+        // If the source and destination files are the same, then we don't need to copy the file
+        // as we are just updating the metadata
+        if( aDesignBlock->GetSchematicFile() != dbSchematicFile )
         {
-            THROW_IO_ERROR( wxString::Format(
-                    _( "Schematic file '%s' could not be saved as design block at '%s'." ),
-                    aDesignBlock->GetSchematicFile().GetData(), dbSchematicFile ) );
+            // Copy the source sheet file to the design block folder, under the design block name
+            if( !wxCopyFile( aDesignBlock->GetSchematicFile(), dbSchematicFile ) )
+            {
+                THROW_IO_ERROR( wxString::Format(
+                        _( "Schematic file '%s' could not be saved as design block at '%s'." ),
+                        aDesignBlock->GetSchematicFile().GetData(), dbSchematicFile ) );
+            }
         }
     }
 
+    if( !aDesignBlock->GetBoardFile().IsEmpty() )
+    {
+        // The new Board file name is based on the design block name, not the source sheet name
+        wxString dbBoardFile = dbFolder.GetFullPath() + aDesignBlock->GetLibId().GetLibItemName()
+                               + wxT( "." ) + FILEEXT::KiCadPcbFileExtension;
+
+        // If the source and destination files are the same, then we don't need to copy the file
+        // as we are just updating the metadata
+        if( aDesignBlock->GetBoardFile() != dbBoardFile )
+        {
+            // Copy the source sheet file to the design block folder, under the design block name
+            if( !wxCopyFile( aDesignBlock->GetBoardFile(), dbBoardFile ) )
+            {
+                THROW_IO_ERROR( wxString::Format(
+                        _( "Board file '%s' could not be saved as design block at '%s'." ),
+                        aDesignBlock->GetBoardFile().GetData(), dbBoardFile ) );
+            }
+        }
+    }
 
     wxString dbMetadataFile = dbFolder.GetFullPath() + aDesignBlock->GetLibId().GetLibItemName()
                               + wxT( "." ) + FILEEXT::JsonFileExtension;

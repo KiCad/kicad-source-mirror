@@ -45,6 +45,9 @@ public:
     const wxString& GetSchematicFile() const { return m_schematicFile; }
     void            SetSchematicFile( const wxString& aFile ) { m_schematicFile = aFile; }
 
+    const wxString& GetBoardFile() const { return m_boardFile; }
+    void            SetBoardFile( const wxString& aFile ) { m_boardFile = aFile; }
+
     void SetFields( nlohmann::ordered_map<wxString, wxString>& aFields )
     {
         m_fields = std::move( aFields );
@@ -59,9 +62,10 @@ public:
 
 private:
     LIB_ID m_lib_id;
-    wxString m_schematicFile;  ///< File name and path for schematic symbol.
-    wxString m_libDescription; ///< File name and path for documentation file.
-    wxString m_keywords;       ///< Search keywords to find footprint in library.
+    wxString m_schematicFile;  // File name and path for schematic file.
+    wxString m_boardFile;      // File name and path for board file
+    wxString m_libDescription; // File name and path for documentation file.
+    wxString m_keywords;       // Search keywords to find design block in library.
 
     nlohmann::ordered_map<wxString, wxString> m_fields;
 };
