@@ -1810,8 +1810,9 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
 
 int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION sel =
-            m_selectionTool->RequestSelection( { SCH_FIELD_T, SCH_SYMBOL_T, SCH_PIN_T } );
+    EE_SELECTION sel = m_selectionTool->RequestSelection( { SCH_FIELD_T,
+                                                            SCH_SYMBOL_T,
+                                                            SCH_PIN_T } );
 
     if( sel.Size() != 1 )
         return 0;
@@ -1958,6 +1959,9 @@ int SCH_EDIT_TOOL::ChangeSymbols( const TOOL_EVENT& aEvent )
 
     // QuasiModal required to invoke symbol browser
     dlg.ShowQuasiModal();
+
+    if( selection.IsHover() )
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
     return 0;
 }
@@ -2905,6 +2909,9 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
             commit.Revert();
     }
 
+    if( selection.IsHover() )
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+
     return 0;
 }
 
@@ -3002,6 +3009,10 @@ int SCH_EDIT_TOOL::EditPageNumber( const TOOL_EVENT& aEvent )
     }
 
     commit.Push( wxS( "Change Sheet Page Number" ) );
+
+    if( selection.IsHover() )
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+
     return 0;
 }
 
@@ -3018,6 +3029,7 @@ int SCH_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
 
     KICAD_T type = selection.Front()->Type();
     bool    allSameType = true;
+
     for( EDA_ITEM* item : selection )
     {
         if( item->Type() != type )
@@ -3044,13 +3056,14 @@ int SCH_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
     if( !commit )
         commit = &localCommit;
 
-    const auto modifyItem = [&]( EDA_ITEM& aItem )
-    {
-        if( aItem.IsNew() )
-            m_toolMgr->PostAction( ACTIONS::refreshPreview );
-        else
-            commit->Modify( &aItem, m_frame->GetScreen() );
-    };
+    const auto modifyItem =
+            [&]( EDA_ITEM& aItem )
+            {
+                if( aItem.IsNew() )
+                    m_toolMgr->PostAction( ACTIONS::refreshPreview );
+                else
+                    commit->Modify( &aItem, m_frame->GetScreen() );
+            };
 
     for( EDA_ITEM* item : selection )
     {
@@ -3063,8 +3076,10 @@ int SCH_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
         {
             SCH_TEXT& label = static_cast<SCH_TEXT&>( *item );
 
-            std::optional<wxString> newLabel =
-                    incrementer.Increment( label.GetText(), incParam.Delta, incParam.Index );
+            std::optional<wxString> newLabel = incrementer.Increment( label.GetText(),
+                                                                      incParam.Delta,
+                                                                      incParam.Index );
+
             if( newLabel )
             {
                 modifyItem( label );
@@ -3079,6 +3094,9 @@ int SCH_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
     }
 
     commit->Push( _( "Increment" ) );
+
+    if( selection.IsHover() )
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
     return 0;
 }
@@ -3154,6 +3172,9 @@ int SCH_EDIT_TOOL::SetAttribute( const TOOL_EVENT& aEvent )
     if( !commit.Empty() )
         commit.Push( _( "Set Attribute" ) );
 
+    if( selection.IsHover() )
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+
     return 0;
 }
 
@@ -3187,6 +3208,9 @@ int SCH_EDIT_TOOL::UnsetAttribute( const TOOL_EVENT& aEvent )
     if( !commit.Empty() )
         commit.Push( _( "Clear Attribute" ) );
 
+    if( selection.IsHover() )
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+
     return 0;
 }
 
@@ -3219,6 +3243,9 @@ int SCH_EDIT_TOOL::ToggleAttribute( const TOOL_EVENT& aEvent )
 
     if( !commit.Empty() )
         commit.Push( _( "Toggle Attribute" ) );
+
+    if( selection.IsHover() )
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
     return 0;
 }
