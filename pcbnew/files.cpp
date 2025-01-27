@@ -1183,12 +1183,6 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
                                               rulesFile.GetFullPath() ) );
     }
 
-    if( !aHeadless )
-    {
-        DisplayInfoMessage( this, wxString::Format( _( "Board copied to:\n%s" ),
-                                                    pcbFileName.GetFullPath() ) );
-    }
-
     return true;
 }
 
