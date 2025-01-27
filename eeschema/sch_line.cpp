@@ -284,6 +284,15 @@ void SCH_LINE::SetLineStyle( const LINE_STYLE aStyle )
 }
 
 
+LINE_STYLE SCH_LINE::GetLineStyle() const
+{
+    if( IsGraphicLine() && m_stroke.GetLineStyle() == LINE_STYLE::DEFAULT )
+        return LINE_STYLE::SOLID;
+    else
+        return m_stroke.GetLineStyle();
+}
+
+
 LINE_STYLE SCH_LINE::GetEffectiveLineStyle() const
 {
     if( m_stroke.GetLineStyle() != LINE_STYLE::DEFAULT )

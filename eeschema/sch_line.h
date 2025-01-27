@@ -163,7 +163,7 @@ public:
     }
 
     void       SetLineStyle( const LINE_STYLE aStyle );
-    LINE_STYLE GetLineStyle() const { return m_stroke.GetLineStyle(); }
+    LINE_STYLE GetLineStyle() const;
     /// @return the style that the line should be drawn in
     /// this might be set on the line or inherited from the line's netclass
     LINE_STYLE GetEffectiveLineStyle() const;
