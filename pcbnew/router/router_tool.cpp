@@ -1011,6 +1011,12 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
         // ask the user for a target layer
         if( selectLayer )
         {
+            // When the currentLayer is undefined, trying to place a via does not work
+            // because it means there is no track in progress, and some other variables
+            // values are not defined like m_endSnapPoint. So do not continue.
+            if( currentLayer == UNDEFINED_LAYER )
+                return 0;
+
             wxPoint endPoint = ToWxPoint( view()->ToScreen( m_endSnapPoint ) );
             endPoint = frame()->GetCanvas()->ClientToScreen( endPoint );
 
