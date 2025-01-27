@@ -356,25 +356,27 @@ void PANEL_SYNC_SHEET_PINS::PostProcessModelSelection( int aIdex, wxDataViewItem
     else
         m_models[aIdex]->OnRowSelected( {} );
 
+    const bool has_selected_row = m_views[aIdex]->GetSelectedItemsCount() > 0;
+
     switch( aIdex )
     {
     case SHEET_SYNCHRONIZATION_MODEL::SHEET_PIN:
     {
         for( auto btn : { m_btnAddLabels, m_btnRmPins } )
-            btn->Enable( m_models[SHEET_SYNCHRONIZATION_MODEL::SHEET_PIN]->HasSelectedIndex() );
+            btn->Enable( has_selected_row );
 
         break;
     }
     case SHEET_SYNCHRONIZATION_MODEL::HIRE_LABEL:
     {
         for( auto btn : { m_btnAddSheetPins, m_btnRmLabels } )
-            btn->Enable( m_models[SHEET_SYNCHRONIZATION_MODEL::HIRE_LABEL]->HasSelectedIndex() );
+            btn->Enable( has_selected_row );
 
         break;
     }
     case SHEET_SYNCHRONIZATION_MODEL::ASSOCIATED:
     {
-        m_btnUndo->Enable( m_models[SHEET_SYNCHRONIZATION_MODEL::ASSOCIATED]->HasSelectedIndex() );
+        m_btnUndo->Enable( has_selected_row );
         break;
     }
     default:
