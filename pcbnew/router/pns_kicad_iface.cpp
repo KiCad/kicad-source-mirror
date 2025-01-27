@@ -1432,7 +1432,7 @@ bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_
 
 bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, PCB_TEXT* aText, PCB_LAYER_ID aLayer )
 {
-    if( !IsKicadCopperLayer( aLayer ) )
+    if( !IsKicadCopperLayer( aLayer ) || !aText->IsVisible() )
         return false;
 
     std::unique_ptr<PNS::SOLID> solid = std::make_unique<PNS::SOLID>();
