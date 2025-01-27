@@ -237,8 +237,9 @@ void PCB_IO_EASYEDAPRO_PARSER::fillFootprintModelInfo( FOOTPRINT* footprint, con
             footprint->AddField( field );
         }
 
-        // TODO: other axes
         kmodelRotation.z = -Convert( arr[3] );
+        kmodelRotation.x = -Convert( arr[4] );
+        kmodelRotation.y = -Convert( arr[5] );
 
         kmodelOffset.x = pcbIUScale.IUTomm( ScaleSize( Convert( arr[6] ) ) );
         kmodelOffset.y = pcbIUScale.IUTomm( ScaleSize( Convert( arr[7] ) ) );
