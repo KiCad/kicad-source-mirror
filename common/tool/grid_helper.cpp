@@ -32,6 +32,7 @@
 #include <math/vector2d.h>
 #include <render_settings.h>
 #include <tool/tool_manager.h>
+#include <tool/tools_holder.h>
 #include <view/view.h>
 #include <settings/app_settings.h>
 
@@ -68,6 +69,8 @@ GRID_HELPER::GRID_HELPER( TOOL_MANAGER* aToolMgr, int aConstructionLayer ) :
                 {
                     view->SetVisible( &m_constructionGeomPreview, aAnythingShown );
                 }
+
+                m_toolMgr->GetToolHolder()->RefreshCanvas();
             } );
 }
 

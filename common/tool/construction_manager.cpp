@@ -24,11 +24,12 @@
 #include "tool/construction_manager.h"
 
 #include <chrono>
-#include <condition_variable>
-#include <thread>
+
+#include <wx/timer.h>
 
 #include <advanced_config.h>
 #include <hash.h>
+
 
 /**
  * A helper class to manage the activation of a "proposal" after a timeout.
@@ -36,7 +37,8 @@
  * When a proposal is made, a timer starts. If no new proposal is made and the proposal
  * is not canceled before the timer expires, the proposal is "accepted" via a callback.
  *
- * Propos
+ * Proposals are "tagged" with a hash - this is used to avoid reproposing the same thing
+ * multiple times.
  *
  * @tparam T The type of the proposal, which will be passed to the callback (by value)
  */
@@ -47,29 +49,15 @@ public:
     using ACTIVATION_CALLBACK = std::function<void( T&& )>;
 
     ACTIVATION_HELPER( std::chrono::milliseconds aTimeout, ACTIVATION_CALLBACK aCallback ) :
-            m_timeout( aTimeout ), m_callback( std::move( aCallback ) ), m_stop( false ),
-            m_thread( &ACTIVATION_HELPER::ProposalCheckFunction, this )
+            m_timeout( aTimeout ),
+            m_callback( std::move( aCallback ) )
     {
-    }
-
-    ~ACTIVATION_HELPER()
-    {
-        // Stop the delay thread and wait for it
-        {
-            std::lock_guard<std::mutex> lock( m_mutex );
-            m_stop = true;
-            m_cv.notify_all();
-        }
-
-        if( m_thread.joinable() )
-        {
-            m_thread.join();
-        }
+        m_timer.Bind( wxEVT_TIMER, &ACTIVATION_HELPER::onTimerExpiry, this );
     }
 
     void ProposeActivation( T&& aProposal, std::size_t aProposalTag, bool aAcceptImmediately )
     {
-        std::lock_guard<std::mutex> lock( m_mutex );
+        std::unique_lock<std::mutex> lock( m_mutex );
 
         if( m_lastAcceptedProposalTag.has_value() && aProposalTag == *m_lastAcceptedProposalTag )
         {
@@ -86,74 +74,58 @@ public:
 
         m_pendingProposalTag = aProposalTag;
         m_lastProposal = std::move( aProposal );
-        m_proposalDeadline = std::chrono::steady_clock::now();
 
-        if( !aAcceptImmediately )
-            m_proposalDeadline += m_timeout;
-
-        m_cv.notify_all();
+        if( aAcceptImmediately )
+        {
+            // Synchonously accept the proposal
+            lock.unlock();
+            acceptPendingProposal();
+        }
+        else
+        {
+            m_timer.Start( m_timeout.count(), wxTIMER_ONE_SHOT );
+        }
     }
 
     void CancelProposal()
     {
         std::lock_guard<std::mutex> lock( m_mutex );
         m_pendingProposalTag.reset();
-        m_cv.notify_all();
-    }
-
-    void ProposalCheckFunction()
-    {
-        while( !m_stop )
-        {
-            std::unique_lock<std::mutex> lock( m_mutex );
-
-            if( !m_stop && !m_pendingProposalTag.has_value() )
-            {
-                // No active proposal - wait for one (unlocks while waiting)
-                m_cv.wait( lock );
-            }
-
-            if( !m_stop && m_pendingProposalTag.has_value() )
-            {
-                // Active proposal - wait for timeout
-                auto now = std::chrono::steady_clock::now();
-
-                if( m_cv.wait_for( lock, m_proposalDeadline - now ) == std::cv_status::timeout )
-                {
-                    // See if the timeout was extended for a new proposal
-                    now = std::chrono::steady_clock::now();
-
-                    if( now < m_proposalDeadline )
-                    {
-                        // Extended - wait for the new deadline
-                        continue;
-                    }
-
-                    // See if there is still a proposal to accept
-                    // (could have been canceled in the meantime)
-                    if( m_pendingProposalTag )
-                    {
-                        m_lastAcceptedProposalTag = m_pendingProposalTag;
-                        m_pendingProposalTag.reset();
-
-                        T proposalToAccept = std::move( m_lastProposal );
-                        lock.unlock();
-
-                        // Call the callback (outside the lock)
-                        m_callback( std::move( proposalToAccept ) );
-                    }
-                }
-            }
-        }
+        m_timer.Stop();
     }
 
 private:
+    /**
+     * Timer expiry callback in the UI thread.
+     */
+    void onTimerExpiry( wxTimerEvent& aEvent )
+    {
+        acceptPendingProposal();
+    }
+
+    void acceptPendingProposal()
+    {
+        std::unique_lock<std::mutex> lock( m_mutex );
+
+        if( m_pendingProposalTag )
+        {
+            m_lastAcceptedProposalTag = m_pendingProposalTag;
+            m_pendingProposalTag.reset();
+
+            // Move out from the locked variable
+            T proposalToAccept = std::move( m_lastProposal );
+            lock.unlock();
+
+            // Call the callback (outside the lock)
+            // This is all in the UI thread now, so it won't be concurrent
+            m_callback( std::move( proposalToAccept ) );
+        }
+    }
+
     mutable std::mutex m_mutex;
 
     /// Activation timeout in milliseconds.
     std::chrono::milliseconds m_timeout;
-
-    std::chrono::time_point<std::chrono::steady_clock> m_proposalDeadline;
 
     /// The last proposal tag that was made.
     std::optional<std::size_t> m_pendingProposalTag;
@@ -165,12 +137,9 @@ private:
     T m_lastProposal;
 
     /// Callback to call when the proposal is accepted.
-    ACTIVATION_CALLBACK     m_callback;
-    std::condition_variable m_cv;
-    std::atomic<bool>       m_stop;
+    ACTIVATION_CALLBACK m_callback;
 
-    /// The thread must be constructed last, as it starts running immediately.
-    std::thread             m_thread;
+    wxTimer m_timer;
 };
 
 
