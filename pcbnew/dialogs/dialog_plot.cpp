@@ -1072,11 +1072,11 @@ void DIALOG_PLOT::applyPlotSettings()
 
     if( getPlotFormat() == PLOT_FORMAT::SVG )
     {
-        tempOptions.SetBlackAndWhite( !!m_SVGColorChoice->GetSelection() );
+        tempOptions.SetBlackAndWhite( m_SVGColorChoice->GetSelection() == 1 );
     }
     else if( getPlotFormat() == PLOT_FORMAT::PDF )
     {
-        tempOptions.SetBlackAndWhite( !!m_PDFColorChoice->GetSelection() );
+        tempOptions.SetBlackAndWhite( m_PDFColorChoice->GetSelection() == 1 );
         tempOptions.m_PDFFrontFPPropertyPopups = m_frontFPPropertyPopups->GetValue();
         tempOptions.m_PDFBackFPPropertyPopups = m_backFPPropertyPopups->GetValue();
         tempOptions.m_PDFMetadata = m_pdfMetadata->GetValue();

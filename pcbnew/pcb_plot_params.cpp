@@ -227,6 +227,8 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter ) const
     KICAD_FORMAT::FormatBool( aFormatter, getTokenName( T_psnegative ), m_negative );
     KICAD_FORMAT::FormatBool( aFormatter, getTokenName( T_psa4output ), m_A4Output );
 
+    KICAD_FORMAT::FormatBool( aFormatter, getTokenName( T_plot_black_and_white ), m_blackAndWhite );
+
     KICAD_FORMAT::FormatBool( aFormatter, "plotinvisibletext", m_plotInvisibleText );
     KICAD_FORMAT::FormatBool( aFormatter, "sketchpadsonfab", m_sketchPadsOnFabLayers );
     KICAD_FORMAT::FormatBool( aFormatter, "plotpadnumbers", m_plotPadNumbers );
@@ -794,6 +796,10 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
 
         case T_psnegative:
             aPcbPlotParams->m_negative = parseBool();
+            break;
+
+        case T_plot_black_and_white:
+            aPcbPlotParams->m_blackAndWhite = parseBool();
             break;
 
         case T_plotinvisibletext:
