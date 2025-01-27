@@ -1483,7 +1483,8 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
     {
         drawShape = aPad->FlashLayer( m_pcbSettings.GetPrintLayers() );
     }
-    else if( aPad->FlashLayer( board->GetVisibleLayers() & board->GetEnabledLayers() ) )
+    else if( ( aLayer < PCB_LAYER_ID_COUNT || IsPadCopperLayer( aLayer ) )
+             && aPad->FlashLayer( pcbLayer ) )
     {
         drawShape = true;
     }
