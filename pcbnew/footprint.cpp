@@ -106,7 +106,8 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
 
 
 FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
-    BOARD_ITEM_CONTAINER( aFootprint )
+    BOARD_ITEM_CONTAINER( aFootprint ),
+    EMBEDDED_FILES( aFootprint )
 {
     m_pos          = aFootprint.m_pos;
     m_fpid         = aFootprint.m_fpid;
@@ -830,6 +831,8 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
     for( PCB_GROUP* group : aOther.Groups() )
         Add( group );
 
+    EMBEDDED_FILES::operator=( std::move( aOther ) );
+
     aOther.Groups().clear();
 
     // Copy auxiliary data
@@ -957,6 +960,8 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
 
     m_initial_comments = aOther.m_initial_comments ?
                             new wxArrayString( *aOther.m_initial_comments ) : nullptr;
+
+    EMBEDDED_FILES::operator=( aOther );
 
     return *this;
 }

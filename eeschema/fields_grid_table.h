@@ -85,9 +85,9 @@ class FIELDS_GRID_TABLE : public WX_GRID_TABLE_BASE, public std::vector<SCH_FIEL
 {
 public:
     FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame, WX_GRID* aGrid,
-                       LIB_SYMBOL* aSymbol );
+                       LIB_SYMBOL* aSymbol, EMBEDDED_FILES* aFiles = nullptr );
     FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFrame, WX_GRID* aGrid,
-                       SCH_SYMBOL* aSymbol );
+                       SCH_SYMBOL* aSymbol, EMBEDDED_FILES* aFiles = nullptr );
     FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFrame, WX_GRID* aGrid,
                        SCH_SHEET* aSheet );
     FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFrame, WX_GRID* aGrid,
@@ -136,6 +136,7 @@ private:
     DIALOG_SHIM*      m_dialog;
     KICAD_T           m_parentType;
     LIB_SYMBOL*       m_part;
+    EMBEDDED_FILES*   m_files;
     wxString          m_symbolNetlist;
     wxString          m_curdir;
 

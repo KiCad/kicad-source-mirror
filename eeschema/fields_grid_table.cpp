@@ -131,11 +131,12 @@ static wxString netList( LIB_SYMBOL* aSymbol )
 
 
 FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame, WX_GRID* aGrid,
-                                      LIB_SYMBOL* aSymbol ) :
+                                      LIB_SYMBOL* aSymbol, EMBEDDED_FILES* aFiles ) :
         m_frame( aFrame ),
         m_dialog( aDialog ),
         m_parentType( SCH_SYMBOL_T ),
         m_part( aSymbol ),
+        m_files( aFiles ),
         m_symbolNetlist( netList( aSymbol ) ),
         m_fieldNameValidator( FIELD_NAME ),
         m_referenceValidator( REFERENCE_FIELD ),
@@ -149,11 +150,12 @@ FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFra
 
 
 FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFrame, WX_GRID* aGrid,
-                                      SCH_SYMBOL* aSymbol ) :
+                                      SCH_SYMBOL* aSymbol, EMBEDDED_FILES* aFiles ) :
         m_frame( aFrame ),
         m_dialog( aDialog ),
         m_parentType( SCH_SYMBOL_T ),
         m_part( aSymbol->GetLibSymbolRef().get() ),
+        m_files( aFiles ),
         m_symbolNetlist( netList( aSymbol, aFrame->GetCurrentSheet() ) ),
         m_fieldNameValidator( FIELD_NAME ),
         m_referenceValidator( REFERENCE_FIELD ),
@@ -167,11 +169,12 @@ FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFra
 
 
 FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFrame, WX_GRID* aGrid,
-SCH_SHEET* aSheet ) :
+                                      SCH_SHEET* aSheet ) :
         m_frame( aFrame ),
         m_dialog( aDialog ),
         m_parentType( SCH_SHEET_T ),
         m_part( nullptr ),
+        m_files( nullptr ),
         m_fieldNameValidator( FIELD_NAME ),
         m_referenceValidator( SHEETNAME_V ),
         m_valueValidator( VALUE_FIELD ),
@@ -257,21 +260,9 @@ void FIELDS_GRID_TABLE::initGrid( WX_GRID* aGrid )
     fpIdEditor->SetValidator( m_nonUrlValidator );
     m_footprintAttr->SetEditor( fpIdEditor );
 
-    EMBEDDED_FILES* files = nullptr;
-
-    if( m_frame->GetFrameType() == FRAME_SCH )
-    {
-        files = m_frame->GetScreen()->Schematic();
-    }
-    else if( m_frame->GetFrameType() == FRAME_SCH_SYMBOL_EDITOR
-          || m_frame->GetFrameType() == FRAME_SCH_VIEWER )
-    {
-        files = m_part;
-    }
-
     m_urlAttr = new wxGridCellAttr;
     SEARCH_STACK* prjSearchStack = PROJECT_SCH::SchSearchS( &m_frame->Prj() );
-    GRID_CELL_URL_EDITOR* urlEditor = new GRID_CELL_URL_EDITOR( m_dialog, prjSearchStack, files );
+    GRID_CELL_URL_EDITOR* urlEditor = new GRID_CELL_URL_EDITOR( m_dialog, prjSearchStack, m_files );
     urlEditor->SetValidator( m_urlValidator );
     m_urlAttr->SetEditor( urlEditor );
 

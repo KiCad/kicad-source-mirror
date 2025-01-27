@@ -101,6 +101,9 @@ public:
 
     EMBEDDED_FILES() = default;
 
+    EMBEDDED_FILES( EMBEDDED_FILES&& other ) noexcept;
+    EMBEDDED_FILES( const EMBEDDED_FILES& other );
+
     ~EMBEDDED_FILES()
     {
         for( auto& file : m_files )
@@ -260,6 +263,9 @@ public:
     {
         return 0xABBA2345;
     }
+
+    EMBEDDED_FILES& operator=(EMBEDDED_FILES&& other) noexcept;
+    EMBEDDED_FILES& operator=( const EMBEDDED_FILES& other );
 
 private:
     std::map<wxString, EMBEDDED_FILE*> m_files;
