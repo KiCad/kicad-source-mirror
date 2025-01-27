@@ -137,7 +137,9 @@ DESIGN_BLOCK_PREVIEW_WIDGET::DESIGN_BLOCK_PREVIEW_WIDGET( wxWindow* aParent, boo
 
 DESIGN_BLOCK_PREVIEW_WIDGET::~DESIGN_BLOCK_PREVIEW_WIDGET()
 {
-    delete m_preview;
+    if( m_previewItem )
+        m_preview->GetView()->Remove( m_previewItem );
+
     delete m_previewItem;
 }
 
