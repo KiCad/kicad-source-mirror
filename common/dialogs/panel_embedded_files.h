@@ -24,11 +24,10 @@
 #ifndef PANEL_EMBEDDED_FILES_H
 #define PANEL_EMBEDDED_FILES_H
 
+#include <embedded_files.h>
 #include "panel_embedded_files_base.h"
 
 #include "grid_tricks.h"
-
-class EMBEDDED_FILES;
 
 class EMBEDDED_FILES_GRID_TRICKS : public GRID_TRICKS
 {
@@ -62,6 +61,10 @@ public:
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
     bool GetEmbedFonts() const { return m_cbEmbedFonts->GetValue(); }
+
+    EMBEDDED_FILES* GetLocalFiles() { return m_localFiles; }
+    EMBEDDED_FILES::EMBEDDED_FILE* AddEmbeddedFile( const wxString& aFileName );
+    bool RemoveEmbeddedFile( const wxString& aFileName );
 
 protected:
     void onFontEmbedClick( wxCommandEvent& event ) override;

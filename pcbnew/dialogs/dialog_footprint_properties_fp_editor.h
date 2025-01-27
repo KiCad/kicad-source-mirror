@@ -34,6 +34,7 @@
 
 class FOOTPRINT_EDIT_FRAME;
 class PANEL_FP_PROPERTIES_3D_MODEL;
+class PANEL_EMBEDDED_FILES;
 
 
 class PRIVATE_LAYERS_GRID_TABLE : public WX_GRID_TABLE_BASE, public std::vector<PCB_LAYER_ID>
@@ -126,6 +127,7 @@ private:
 
     wxSize                     m_gridSize;
     wxSize                     m_lastRequestedSize;
+    PANEL_EMBEDDED_FILES*      m_embeddedFiles;
 };
 
 

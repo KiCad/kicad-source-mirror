@@ -28,6 +28,7 @@
 #include <mmh3_hash.h>
 #include <picosha2.h>
 #include <wildcards_and_files_ext.h>
+#include <functional>
 
 class OUTPUTFORMATTER;
 
@@ -104,6 +105,18 @@ public:
     {
         for( auto& file : m_files )
             delete file.second;
+    }
+
+    using FileAddedCallback = std::function<void(EMBEDDED_FILE*)>;
+
+    void SetFileAddedCallback(FileAddedCallback callback)
+    {
+        m_fileAddedCallback = callback;
+    }
+
+    FileAddedCallback GetFileAddedCallback() const
+    {
+        return m_fileAddedCallback;
     }
 
     /**
@@ -251,6 +264,7 @@ public:
 private:
     std::map<wxString, EMBEDDED_FILE*> m_files;
     std::vector<wxString>              m_fontFiles;
+    FileAddedCallback                  m_fileAddedCallback;
 
 protected:
     bool m_embedFonts = false; ///< If set, fonts will be embedded in the element on save.

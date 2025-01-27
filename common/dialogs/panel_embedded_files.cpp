@@ -103,6 +103,24 @@ PANEL_EMBEDDED_FILES::PANEL_EMBEDDED_FILES( wxWindow* parent, EMBEDDED_FILES* aF
     m_files_grid->EnableAlternateRowColors();
 
     m_files_grid->PushEventHandler( new EMBEDDED_FILES_GRID_TRICKS( m_files_grid ) );
+
+    m_localFiles->SetFileAddedCallback( [this](EMBEDDED_FILES::EMBEDDED_FILE* file) {
+
+        for( int ii = 0; ii < m_files_grid->GetNumberRows(); ii++ )
+        {
+            if( m_files_grid->GetCellValue( ii, 1 ) == file->GetLink() )
+            {
+                m_files_grid->DeleteRows( ii );
+                break;
+            }
+        }
+
+        m_files_grid->AppendRows( 1 );
+        int ii = m_files_grid->GetNumberRows() - 1;
+        m_files_grid->SetCellValue( ii, 0, file->name );
+        m_files_grid->SetCellValue( ii, 1, file->GetLink() );
+
+    });
 }
 
 
@@ -255,55 +273,84 @@ void PANEL_EMBEDDED_FILES::onFontEmbedClick( wxCommandEvent& event )
 }
 
 
+EMBEDDED_FILES::EMBEDDED_FILE* PANEL_EMBEDDED_FILES::AddEmbeddedFile( const wxString& aFile )
+{
+    wxFileName fileName( aFile );
+    wxString   name = fileName.GetFullName();
+
+    if( m_localFiles->HasFile( name ) )
+    {
+        wxString msg = wxString::Format( _( "File '%s' already exists." ), name );
+
+        KIDIALOG errorDlg( m_parent, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+        errorDlg.SetOKLabel( _( "Overwrite" ) );
+
+        if( errorDlg.ShowModal() != wxID_OK )
+            return nullptr;
+
+        for( int ii = 0; ii < m_files_grid->GetNumberRows(); ii++ )
+        {
+            if( m_files_grid->GetCellValue( ii, 0 ) == name )
+            {
+                m_files_grid->DeleteRows( ii );
+                break;
+            }
+        }
+    }
+
+    EMBEDDED_FILES::EMBEDDED_FILE* result = m_localFiles->AddFile( fileName, true );
+
+    if( !result )
+    {
+        wxString msg = wxString::Format( _( "Failed to add file '%s'." ), name );
+
+        KIDIALOG errorDlg( m_parent, msg, _( "Error" ), wxOK | wxICON_ERROR );
+        errorDlg.ShowModal();
+        return nullptr;
+    }
+
+    return result;
+}
+
+
 void PANEL_EMBEDDED_FILES::onAddEmbeddedFile( wxCommandEvent& event )
 {
     wxFileDialog fileDialog( this, _( "Select a file to embed" ), wxEmptyString, wxEmptyString,
                              _( "All files|*.*" ), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( fileDialog.ShowModal() == wxID_OK )
-    {
-        wxFileName fileName( fileDialog.GetPath() );
-        wxString name = fileName.GetFullName();
-
-        if( m_localFiles->HasFile( name ) )
-        {
-            wxString msg = wxString::Format( _( "File '%s' already exists." ), name );
-
-            KIDIALOG errorDlg( m_parent, msg, _( "Confirmation" ),
-                                wxOK | wxCANCEL | wxICON_WARNING );
-            errorDlg.SetOKLabel( _( "Overwrite" ) );
-
-            if( errorDlg.ShowModal() != wxID_OK )
-                return;
-
-            for( int ii = 0; ii < m_files_grid->GetNumberRows(); ii++ )
-            {
-                if( m_files_grid->GetCellValue( ii, 0 ) == name )
-                {
-                    m_files_grid->DeleteRows( ii );
-                    break;
-                }
-            }
-        }
-
-        EMBEDDED_FILES::EMBEDDED_FILE* result = m_localFiles->AddFile( fileName, true );
-
-        if( !result )
-        {
-            wxString msg = wxString::Format( _( "Failed to add file '%s'." ),
-                        name );
-
-            KIDIALOG errorDlg( m_parent, msg, _( "Error" ), wxOK | wxICON_ERROR );
-            errorDlg.ShowModal();
-            return;
-        }
-
-        m_files_grid->AppendRows( 1 );
-        int ii = m_files_grid->GetNumberRows() - 1;
-        m_files_grid->SetCellValue( ii, 0, name );
-        m_files_grid->SetCellValue( ii, 1, result->GetLink() );
-    }
+        AddEmbeddedFile( fileDialog.GetPath() );
 }
+
+
+bool PANEL_EMBEDDED_FILES::RemoveEmbeddedFile( const wxString& aFileName )
+{
+    wxString name = aFileName;
+
+    if( name.StartsWith( FILEEXT::KiCadUriPrefix ) )
+        name = name.Mid( FILEEXT::KiCadUriPrefix.size() + 3 );
+
+    int row = std::max( 0, m_files_grid->GetGridCursorRow() );
+
+    for( int ii = 0; ii < m_files_grid->GetNumberRows(); ii++ )
+    {
+        if( m_files_grid->GetCellValue( ii, 0 ) == name )
+        {
+            m_files_grid->DeleteRows( ii );
+            m_localFiles->RemoveFile( name );
+
+            if( row < m_files_grid->GetNumberRows() )
+                m_files_grid->SetGridCursor( row, 0 );
+            else if( m_files_grid->GetNumberRows() > 0 )
+                m_files_grid->SetGridCursor( m_files_grid->GetNumberRows() - 1, 0 );
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
 
 void PANEL_EMBEDDED_FILES::onDeleteEmbeddedFile( wxCommandEvent& event )
 {

@@ -57,7 +57,7 @@ enum PCB_FIELDS_COL_ORDER
 class PCB_FIELDS_GRID_TABLE : public WX_GRID_TABLE_BASE, public std::vector<PCB_FIELD>
 {
 public:
-    PCB_FIELDS_GRID_TABLE( PCB_BASE_FRAME* aFrame, DIALOG_SHIM* aDialog );
+    PCB_FIELDS_GRID_TABLE( PCB_BASE_FRAME* aFrame, DIALOG_SHIM* aDialog, EMBEDDED_FILES* aFiles );
     ~PCB_FIELDS_GRID_TABLE();
 
     int GetNumberRows() override { return (int) size(); }

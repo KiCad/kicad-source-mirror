@@ -45,6 +45,7 @@
 #include <kiplatform/ui.h>
 #include <dialogs/panel_preview_3d_model.h>
 #include <dialogs/dialog_select_3d_model.h>
+#include <dialogs/panel_embedded_files.h>
 #include <settings/settings_manager.h>
 #include <project_pcb.h>
 
@@ -63,6 +64,7 @@ wxDEFINE_EVENT( wxCUSTOM_PANEL_SHOWN_EVENT, wxCommandEvent );
 PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL( PCB_BASE_EDIT_FRAME* aFrame,
                                                             FOOTPRINT* aFootprint,
                                                             DIALOG_SHIM* aDialogParent,
+                                                            PANEL_EMBEDDED_FILES* aFilesPanel,
                                                             wxWindow* aParent, wxWindowID aId,
                                                             const wxPoint& aPos,
                                                             const wxSize& aSize, long aStyle,
@@ -71,6 +73,7 @@ PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL( PCB_BASE_EDIT_FRAME*
         m_parentDialog( aDialogParent ),
         m_frame( aFrame ),
         m_footprint( aFootprint ),
+        m_filesPanel( aFilesPanel ),
         m_inSelect( false )
 {
     m_modelsGrid->SetDefaultRowSize( m_modelsGrid->GetDefaultRowSize() + 4 );
@@ -156,20 +159,7 @@ bool PANEL_FP_PROPERTIES_3D_MODEL::TransferDataToWindow()
 
 bool PANEL_FP_PROPERTIES_3D_MODEL::TransferDataFromWindow()
 {
-    // Only commit changes in the editor, not the models
-    // The container dialog is responsible for moving the new models into
-    // the footprint inside a commit.
-    if( !m_modelsGrid->CommitPendingChanges() )
-        return false;
-
-    FOOTPRINT* fp = m_previewPane->GetDummyFootprint();
-
-    for( const auto& [name, file] : fp->EmbeddedFileMap() )
-    {
-        if( !m_footprint->HasFile( name ) )
-            m_footprint->AddFile( new EMBEDDED_FILES::EMBEDDED_FILE( *file ) );
-    }
-    return true;
+    return m_modelsGrid->CommitPendingChanges();
 }
 
 
@@ -301,6 +291,8 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnRemove3DModel( wxCommandEvent&  )
         // has a tendency to get its knickers in a knot....
         m_inSelect = true;
 
+        // Not all files are embedded but this will ignore the ones that are not
+        m_filesPanel->RemoveEmbeddedFile( m_shapes3D_list[ idx ].m_Filename );
         m_shapes3D_list.erase( m_shapes3D_list.begin() + idx );
         m_modelsGrid->DeleteRows( idx );
 
@@ -388,7 +380,7 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnAdd3DModel( wxCommandEvent&  )
         wxString fullPath = res->ResolvePath( model.m_Filename, footprintBasePath, nullptr );
         wxFileName fname( fullPath );
 
-        EMBEDDED_FILES::EMBEDDED_FILE* result = m_previewPane->GetDummyFootprint()->AddFile( fname, false );
+        EMBEDDED_FILES::EMBEDDED_FILE* result = m_filesPanel->AddEmbeddedFile( fname.GetFullPath() );                                                                               ;
 
         if( !result )
         {

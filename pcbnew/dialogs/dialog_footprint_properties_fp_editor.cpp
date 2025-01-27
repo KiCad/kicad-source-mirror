@@ -24,31 +24,33 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <confirm.h>
-#include <dialogs/dialog_text_entry.h>
+#include <3d_rendering/opengl/3d_model.h>
 #include <3d_viewer/eda_3d_viewer_frame.h>
-#include <validators.h>
-#include <board_design_settings.h>
-#include <board_commit.h>
 #include <bitmaps.h>
-#include <kiplatform/ui.h>
-#include <widgets/grid_text_button_helpers.h>
-#include <widgets/wx_grid.h>
-#include <widgets/std_bitmap_button.h>
-#include <widgets/text_ctrl_eval.h>
+#include <board_commit.h>
+#include <board_design_settings.h>
+#include <confirm.h>
+#include <dialog_footprint_properties_fp_editor.h>
+#include <dialogs/dialog_text_entry.h>
+#include <dialogs/panel_preview_3d_model.h>
+#include <embedded_files.h>
+#include <filename_resolver.h>
 #include <footprint.h>
 #include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
-#include <dialog_footprint_properties_fp_editor.h>
+#include <grid_layer_box_helpers.h>
+#include <kiplatform/ui.h>
+#include <panel_embedded_files.h>
 #include <panel_fp_properties_3d_model.h>
-#include "3d_rendering/opengl/3d_model.h"
-#include "filename_resolver.h"
 #include <pgm_base.h>
-#include "dialogs/panel_preview_3d_model.h"
 #include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_selection_tool.h>
-#include <grid_layer_box_helpers.h>
+#include <validators.h>
+#include <widgets/grid_text_button_helpers.h>
+#include <widgets/std_bitmap_button.h>
+#include <widgets/text_ctrl_eval.h>
+#include <widgets/wx_grid.h>
 
 #include <fp_lib_table.h>
 
@@ -138,11 +140,15 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
         m_lastRequestedSize( 0, 0 )
 {
     SetEvtHandlerEnabled( false );
-    // Create the 3D models page
-    m_3dPanel = new PANEL_FP_PROPERTIES_3D_MODEL( m_frame, m_footprint, this, m_NoteBook );
-    m_NoteBook->AddPage( m_3dPanel, _("3D Models"), false );
 
-    m_fields = new PCB_FIELDS_GRID_TABLE( m_frame, this );
+    // Create the extra panels.
+    m_embeddedFiles = new PANEL_EMBEDDED_FILES( m_NoteBook, m_footprint );
+    m_3dPanel = new PANEL_FP_PROPERTIES_3D_MODEL( m_frame, m_footprint, this, m_embeddedFiles, m_NoteBook );
+
+    m_NoteBook->AddPage( m_3dPanel, _("3D Models"), false );
+    m_NoteBook->AddPage( m_embeddedFiles, _( "Embedded Files" ) );
+
+    m_fields = new PCB_FIELDS_GRID_TABLE( m_frame, this, m_embeddedFiles->GetLocalFiles() );
     m_privateLayers = new PRIVATE_LAYERS_GRID_TABLE( m_frame );
 
     m_delayedErrorMessage = wxEmptyString;
@@ -264,6 +270,9 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
 
     // Add the models to the panel
     if( !m_3dPanel->TransferDataToWindow() )
+        return false;
+
+    if( !m_embeddedFiles->TransferDataToWindow() )
         return false;
 
     // Footprint Fields
@@ -485,9 +494,6 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
     if( !Validate() )
         return false;
 
-    if( !DIALOG_SHIM::TransferDataFromWindow() )
-        return false;
-
     if( !m_itemsGrid->CommitPendingChanges()
             || !m_privateLayersGrid->CommitPendingChanges()
             || !m_padGroupsGrid->CommitPendingChanges() )
@@ -495,14 +501,44 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
         return false;
     }
 
-    // This only commits the editor, model updating is done below so it is inside
-    // the commit
-    if( !m_3dPanel->TransferDataFromWindow() )
-        return false;
-
     KIGFX::PCB_VIEW* view = m_frame->GetCanvas()->GetView();
     BOARD_COMMIT     commit( m_frame );
     commit.Modify( m_footprint );
+
+    // Must be done inside the commit to capture the undo state
+    // This will call TransferDataToWindow() on the 3D panel and
+    // the embedded files panel.
+    if( !DIALOG_SHIM::TransferDataFromWindow() )
+        return false;
+
+    // Clear out embedded files that are no longer in use
+    std::set<wxString> files;
+    std::set<wxString> files_to_delete;
+
+    // Get the new files from the footprint fields
+    for( size_t ii = 0; ii < m_fields->size(); ++ii )
+    {
+        const wxString& name = m_fields->at( ii ).GetText();
+
+        if( name.StartsWith( FILEEXT::KiCadUriPrefix ) )
+            files.insert( name );
+    }
+
+    // Find any files referenced in the old fields that are not in the new fields
+    for( PCB_FIELD* field : m_footprint->GetFields() )
+    {
+        if( field->GetText().StartsWith( FILEEXT::KiCadUriPrefix ) )
+        {
+            if( files.find( field->GetText() ) == files.end() )
+                files_to_delete.insert( field->GetText() );
+        }
+    }
+
+    for( const wxString& file : files_to_delete )
+    {
+        wxString name = file.Mid( FILEEXT::KiCadUriPrefix.size() + 3 ); // Skip "kicad-embed://"
+        m_footprint->RemoveFile( name );
+    }
 
     LIB_ID fpID = m_footprint->GetFPID();
     fpID.SetLibItemName( m_FootprintNameCtrl->GetValue() );

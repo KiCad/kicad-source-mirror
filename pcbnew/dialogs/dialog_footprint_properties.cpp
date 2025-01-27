@@ -71,18 +71,18 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
         m_gridSize( 0, 0 ),
         m_lastRequestedSize( 0, 0 )
 {
-    // Create the 3D models page
-    m_3dPanel = new PANEL_FP_PROPERTIES_3D_MODEL( m_frame, m_footprint, this, m_NoteBook );
-    m_NoteBook->AddPage( m_3dPanel, _("3D Models"), false );
-
+    // Create the extra panels.  Embedded files is referenced by the 3D model panel.
     m_embeddedFiles = new PANEL_EMBEDDED_FILES( m_NoteBook, m_footprint );
+    m_3dPanel = new PANEL_FP_PROPERTIES_3D_MODEL( m_frame, m_footprint, this, m_embeddedFiles, m_NoteBook );
+
+    m_NoteBook->AddPage( m_3dPanel, _("3D Models"), false );
     m_NoteBook->AddPage( m_embeddedFiles, _( "Embedded Files" ) );
 
     // Configure display origin transforms
     m_posX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
     m_posY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
 
-    m_fields = new PCB_FIELDS_GRID_TABLE( m_frame, this );
+    m_fields = new PCB_FIELDS_GRID_TABLE( m_frame, this, m_embeddedFiles->GetLocalFiles() );
 
     m_delayedErrorMessage = wxEmptyString;
     m_delayedFocusGrid = nullptr;
@@ -501,17 +501,45 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     if( !m_itemsGrid->CommitPendingChanges() )
         return false;
 
-    // This only commits the editor, model updating is done below so it is inside
-    // the commit
+    auto view = m_frame->GetCanvas()->GetView();
+    BOARD_COMMIT commit( m_frame );
+    commit.Modify( m_footprint );
+
+    // Make sure this happens inside a commit to capture any changed files
     if( !m_3dPanel->TransferDataFromWindow() )
         return false;
 
     if( !m_embeddedFiles->TransferDataFromWindow() )
         return false;
 
-    auto view = m_frame->GetCanvas()->GetView();
-    BOARD_COMMIT commit( m_frame );
-    commit.Modify( m_footprint );
+    // Clear out embedded files that are no longer in use
+    std::set<wxString> files;
+    std::set<wxString> files_to_delete;
+
+    // Get the new files from the footprint fields
+    for( size_t ii = 0; ii < m_fields->size(); ++ii )
+    {
+        const wxString& name = m_fields->at( ii ).GetText();
+
+        if( name.StartsWith( FILEEXT::KiCadUriPrefix ) )
+            files.insert( name );
+    }
+
+    // Find any files referenced in the old fields that are not in the new fields
+    for( PCB_FIELD* field : m_footprint->GetFields() )
+    {
+        if( field->GetText().StartsWith( FILEEXT::KiCadUriPrefix ) )
+        {
+            if( files.find( field->GetText() ) == files.end() )
+                files_to_delete.insert( field->GetText() );
+        }
+    }
+
+    for( const wxString& file : files_to_delete )
+    {
+        wxString name = file.Mid( FILEEXT::KiCadUriPrefix.size() + 3 ); // Skip "kicad-embed://"
+        m_footprint->RemoveFile( name );
+    }
 
     // Update fields
     for( size_t ii = 0; ii < m_fields->size(); ++ii )

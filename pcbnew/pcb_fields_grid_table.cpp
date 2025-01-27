@@ -47,14 +47,11 @@ enum
 wxArrayString g_menuOrientations;
 
 
-PCB_FIELDS_GRID_TABLE::PCB_FIELDS_GRID_TABLE( PCB_BASE_FRAME* aFrame, DIALOG_SHIM* aDialog ) :
-        m_frame( aFrame ),
-        m_dialog( aDialog ),
-        m_fieldNameValidator( FIELD_NAME ),
-        m_referenceValidator( REFERENCE_FIELD ),
-        m_valueValidator( VALUE_FIELD ),
-        m_urlValidator( FIELD_VALUE ),
-        m_nonUrlValidator( FIELD_VALUE )
+PCB_FIELDS_GRID_TABLE::PCB_FIELDS_GRID_TABLE( PCB_BASE_FRAME* aFrame, DIALOG_SHIM* aDialog,
+                                              EMBEDDED_FILES* aFiles ) :
+        m_frame( aFrame ), m_dialog( aDialog ), m_fieldNameValidator( FIELD_NAME ),
+        m_referenceValidator( REFERENCE_FIELD ), m_valueValidator( VALUE_FIELD ),
+        m_urlValidator( FIELD_VALUE ), m_nonUrlValidator( FIELD_VALUE )
 {
     // Build the column attributes.
 
@@ -91,36 +88,8 @@ PCB_FIELDS_GRID_TABLE::PCB_FIELDS_GRID_TABLE( PCB_BASE_FRAME* aFrame, DIALOG_SHI
     valueEditor->SetValidator( m_valueValidator );
     m_valueAttr->SetEditor( valueEditor );
 
-    EMBEDDED_FILES* files = nullptr;
-
-    // In the case of the footprint editor, we need to distinguish between the footprint
-    // in the library where the embedded files are stored with the footprint and the footprint
-    // from the board where the embedded files are stored with the board.
-    if( m_frame->GetFrameType() == FRAME_FOOTPRINT_EDITOR )
-    {
-        FOOTPRINT_EDIT_FRAME* fpFrame = static_cast<FOOTPRINT_EDIT_FRAME*>( m_frame );
-
-        if( fpFrame->IsCurrentFPFromBoard() )
-        {
-            PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_PCB_EDITOR, false );
-
-            if( pcbframe != nullptr )       // happens when the board editor is not active (or closed)
-            {
-                files = pcbframe->GetBoard();
-            }
-        }
-        else
-        {
-            files = fpFrame->GetBoard()->GetFirstFootprint();
-        }
-    }
-    else if( m_frame->GetFrameType() == FRAME_PCB_EDITOR )
-    {
-        files = static_cast<PCB_EDIT_FRAME*>( m_frame )->GetBoard();
-    }
-
     m_urlAttr = new wxGridCellAttr;
-    GRID_CELL_URL_EDITOR* urlEditor = new GRID_CELL_URL_EDITOR( m_dialog, nullptr, files );
+    GRID_CELL_URL_EDITOR* urlEditor = new GRID_CELL_URL_EDITOR( m_dialog, nullptr, aFiles );
     urlEditor->SetValidator( m_urlValidator );
     m_urlAttr->SetEditor( urlEditor );
 

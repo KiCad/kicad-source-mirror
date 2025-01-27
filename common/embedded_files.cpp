@@ -10,8 +10,8 @@
  *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
+ * Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
@@ -101,7 +101,11 @@ EMBEDDED_FILES::EMBEDDED_FILE* EMBEDDED_FILES::AddFile( const wxFileName& aName,
 
     efile->is_valid = true;
 
-    m_files[aName.GetFullName()] = efile.release();
+    EMBEDDED_FILE* result = efile.release();
+    m_files[aName.GetFullName()] = result;
+
+    if( m_fileAddedCallback )
+        m_fileAddedCallback( result );
 
     return m_files[aName.GetFullName()];
 }
@@ -110,6 +114,9 @@ EMBEDDED_FILES::EMBEDDED_FILE* EMBEDDED_FILES::AddFile( const wxFileName& aName,
 void EMBEDDED_FILES::AddFile( EMBEDDED_FILE* aFile )
 {
     m_files.insert( { aFile->name, aFile } );
+
+    if( m_fileAddedCallback )
+        m_fileAddedCallback( aFile );
 }
 
 
