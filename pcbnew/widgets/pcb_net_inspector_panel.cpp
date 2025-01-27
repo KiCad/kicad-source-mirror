@@ -86,9 +86,6 @@ PCB_NET_INSPECTOR_PANEL::~PCB_NET_INSPECTOR_PANEL()
 
     m_netsList->AssociateModel( nullptr );
 
-    if( m_brd != nullptr )
-        m_brd->RemoveListener( this );
-
     // Disconnect from board events
     m_frame->Unbind( EDA_EVT_UNITS_CHANGED, &PCB_NET_INSPECTOR_PANEL::onUnitsChanged, this );
 
@@ -865,7 +862,7 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardChanged()
 {
     m_brd = m_frame->GetBoard();
 
-    if( m_brd != nullptr )
+    if( m_brd )
         m_brd->AddListener( this );
 
     m_board_loaded = true;

@@ -181,6 +181,9 @@ BOARD::~BOARD()
     // cause call chains that query the containers
     for( BOARD_ITEM* item : ownedItems )
         delete item;
+
+    // Remove any listeners
+    RemoveAllListeners();
 }
 
 
