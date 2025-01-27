@@ -112,8 +112,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-23 10:20+0000\n"
-"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
+"PO-Revision-Date: 2025-01-27 21:23+0000\n"
+"Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v8/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -13133,9 +13133,9 @@ msgid "Not Connected"
 msgstr "Non connesso"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:855
-#, fuzzy, c-format
+#, c-format
 msgid "No model named '%s' in '%s'."
-msgstr "Nessun modello \"%s\" in libreria."
+msgstr "Nessun modello di nome '%s' in '%s'."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:1233
 msgid "Browse Models"
@@ -14878,11 +14878,11 @@ msgstr ""
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:217
 msgid "Remove White Space"
-msgstr "Rimuovi spazio bianco"
+msgstr "Rimuovi spazi bianchi"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:218
 msgid "Keep White Space"
-msgstr "Mantieni spazio bianco"
+msgstr "Mantieni spazi bianchi"
 
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:20
 msgid "Field name templates:"
