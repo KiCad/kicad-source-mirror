@@ -159,7 +159,11 @@ PANEL_DESIGN_BLOCK_CHOOSER::~PANEL_DESIGN_BLOCK_CHOOSER()
     m_open_libs_timer->Stop();
     delete m_dbl_click_timer;
     delete m_open_libs_timer;
+}
 
+
+void PANEL_DESIGN_BLOCK_CHOOSER::SaveSettings()
+{
     g_designBlockSearchString = m_tree->GetSearchString();
 
     if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )

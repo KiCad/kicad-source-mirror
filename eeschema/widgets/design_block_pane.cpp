@@ -154,6 +154,12 @@ void DESIGN_BLOCK_PANE::UpdateCheckboxes()
 }
 
 
+void DESIGN_BLOCK_PANE::SaveSettings()
+{
+    m_chooserPanel->SaveSettings();
+}
+
+
 LIB_ID DESIGN_BLOCK_PANE::GetSelectedLibId( int* aUnit ) const
 {
     return m_chooserPanel->GetSelectedLibId( aUnit );

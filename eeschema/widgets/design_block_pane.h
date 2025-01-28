@@ -52,6 +52,8 @@ public:
 
     ~DESIGN_BLOCK_PANE() override;
 
+    void SaveSettings();
+
     /**
      * To be called after this dialog returns from ShowModal().
      *

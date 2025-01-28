@@ -338,6 +338,8 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
             cfg->m_AuiPanels.design_blocks_panel_float_height = designBlocksPane.floating_size.y;
             cfg->m_AuiPanels.design_blocks_panel_float_width = designBlocksPane.floating_size.x;
         }
+
+        m_designBlocksPane->SaveSettings();
     }
 }
 

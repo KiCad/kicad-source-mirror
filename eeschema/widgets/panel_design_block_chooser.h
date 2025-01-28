@@ -52,6 +52,8 @@ public:
 
     ~PANEL_DESIGN_BLOCK_CHOOSER();
 
+    void SaveSettings();
+
     void OnChar( wxKeyEvent& aEvent );
 
     void FinishSetup();
