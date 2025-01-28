@@ -740,7 +740,7 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     brd->SynchronizeProperties();
 
     PCB_PLOT_PARAMS plotOpts;
-    PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aSvgJob );
+    PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aSvgJob, *m_reporter );
 
     PCB_PLOTTER     plotter( brd, m_reporter, plotOpts );
 
@@ -813,7 +813,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
     }
 
     PCB_PLOT_PARAMS plotOpts;
-    PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aDxfJob );
+    PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aDxfJob, *m_reporter);
 
     PCB_PLOTTER plotter( brd, m_reporter, plotOpts );
 
@@ -873,7 +873,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     }
 
     PCB_PLOT_PARAMS plotOpts;
-    PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aPdfJob );
+    PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aPdfJob, *m_reporter );
 
     int returnCode = CLI::EXIT_CODES::OK;
 

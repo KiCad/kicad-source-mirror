@@ -325,7 +325,8 @@ LSEQ PCB_PLOTTER::getPlotSequence( PCB_LAYER_ID aLayerToPlot, LSEQ aPlotWithAllL
 }
 
 
-void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT* aJob )
+void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT* aJob,
+                                     REPORTER& aReporter )
 {
     if( aJob->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::GERBER )
     {
@@ -408,15 +409,26 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT
         break;
     }
 
-
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     wxString          theme = aJob->m_colorTheme;
 
+    // Theme may be empty when running from a job in GUI context, so use the GUI settings.
     if( theme.IsEmpty() )
-        theme = wxT( "pcbnew" );
+    {
+        PCBNEW_SETTINGS* pcbSettings = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
+        theme = pcbSettings->m_ColorTheme;
+    }
 
-    PCBNEW_SETTINGS* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( theme );
-    aOpts.SetColorSettings( mgr.GetColorSettings( cfg->m_ColorTheme ) );
+    COLOR_SETTINGS* colors = mgr.GetColorSettings( aJob->m_colorTheme );
 
+    if( colors->GetFilename() != theme )
+    {
+        aReporter.Report( wxString::Format(
+                wxT( "Color theme '%s' not found, will use theme from PCB Editor settings.\n" ),
+                theme ),
+            RPT_SEVERITY_WARNING );
+    }
+
+    aOpts.SetColorSettings( colors );
     aOpts.SetOutputDirectory( aJob->GetConfiguredOutputPath() );
 }

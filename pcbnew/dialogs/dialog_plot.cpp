@@ -113,7 +113,7 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent,
     {
         SetTitle( aJob->GetSettingsDialogTitle() );
 
-        PCB_PLOTTER::PlotJobToPlotOpts( m_plotOpts, m_job );
+        PCB_PLOTTER::PlotJobToPlotOpts( m_plotOpts, m_job, m_messagesPanel->Reporter() );
         m_messagesPanel->Hide();
 
         m_browseButton->Hide();
