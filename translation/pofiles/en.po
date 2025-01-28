@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-21 01:58+0300\n"
+"POT-Creation-Date: 2025-01-28 19:42+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -4901,6 +4901,12 @@ msgstr "Unit"
 msgid "Item"
 msgstr "Item"
 
+msgid "Recently Used"
+msgstr "Recently Used"
+
+msgid "Already Placed"
+msgstr "Already Placed"
+
 #, c-format
 msgid "Unrecognized character '%c'"
 msgstr "Unrecognized character '%c'"
@@ -5115,10 +5121,6 @@ msgstr "KiCad Default"
 
 msgid "KiCad Classic"
 msgstr "KiCad Classic"
-
-#, c-format
-msgid "Field%d"
-msgstr "Field%d"
 
 #, c-format
 msgid "Close %s"
@@ -14927,8 +14929,8 @@ msgstr "New Symbol..."
 msgid "Create a new symbol in an existing library"
 msgstr "Create a new symbol in an existing library"
 
-msgid "Derive from Existing Symbol"
-msgstr "Derive from Existing Symbol"
+msgid "Derive from Existing Symbol..."
+msgstr "Derive from Existing Symbol..."
 
 msgid "Create a new symbol, derived from an existing symbol"
 msgstr "Create a new symbol, derived from an existing symbol"
@@ -16296,9 +16298,6 @@ msgstr "Loading Design Block Libraries"
 msgid "Updating Design Block Libraries"
 msgstr "Updating Design Block Libraries"
 
-msgid "Recently Used"
-msgstr "Recently Used"
-
 #, c-format
 msgid "Only %s"
 msgstr "Only %s"
@@ -16323,9 +16322,6 @@ msgstr "Other items"
 
 msgid "Graphical shapes"
 msgstr "Graphical shapes"
-
-msgid "Already Placed"
-msgstr "Already Placed"
 
 msgid "No footprint specified"
 msgstr "No footprint specified"
@@ -32897,6 +32893,10 @@ msgstr "Marker (%s)"
 msgid "No layers selected for plotting."
 msgstr "No layers selected for plotting."
 
+#, c-format
+msgid "Color theme '%s' not found, will use theme from PCB Editor settings.\n"
+msgstr "Color theme '%s' not found, will use theme from PCB Editor settings.\n"
+
 msgid "Associated Layer"
 msgstr "Associated Layer"
 
@@ -36861,6 +36861,13 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#, c-format
+#~ msgid "Field%d"
+#~ msgstr "Field%d"
+
+#~ msgid "Derive from Existing Symbol"
+#~ msgstr "Derive from Existing Symbol"
 
 #~ msgid "Pcb Layer for Graphics"
 #~ msgstr "Pcb Layer for Graphics"
