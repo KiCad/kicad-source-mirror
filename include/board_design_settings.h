@@ -739,6 +739,9 @@ public:
     // Variables used in footprint editing (default value in item/footprint creation)
     std::vector<TEXT_ITEM_INFO>   m_DefaultFPTextItems;
 
+    // Map between user layer default names and custom names
+    std::map<std::string, wxString>  m_UserLayerNames;
+
     // Arrays of default values for the various layer classes.
     int        m_LineThickness[ LAYER_CLASS_COUNT ];
     VECTOR2I   m_TextSize[LAYER_CLASS_COUNT];

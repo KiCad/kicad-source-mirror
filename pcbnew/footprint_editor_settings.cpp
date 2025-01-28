@@ -188,6 +188,9 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
                                        { "${REFERENCE}", true, F_Fab }
                                    } ) ) );
 
+    m_params.emplace_back( new PARAM_MAP<wxString>( "design_settings.default_footprint_layer_names",
+                                                    &m_DesignSettings.m_UserLayerNames, {} ) );
+
     int minTextSize = pcbIUScale.mmToIU( TEXT_MIN_SIZE_MM );
     int maxTextSize = pcbIUScale.mmToIU( TEXT_MAX_SIZE_MM );
     int minStroke = 1;

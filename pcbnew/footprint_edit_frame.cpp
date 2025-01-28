@@ -679,6 +679,16 @@ void FOOTPRINT_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
         m_selectionFilterPanel->SetCheckboxesFromFilter( cfg->m_SelectionFilter );
 
         GetLibTree()->SetSortMode( (LIB_TREE_MODEL_ADAPTER::SORT_MODE) cfg->m_LibrarySortMode );
+
+        for( auto& [source_name, dest_name] : cfg->m_DesignSettings.m_UserLayerNames )
+        {
+            wxString wx_source_name = source_name;
+            PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( LSET::NameToLayer( wx_source_name ) );
+
+            if( IsUserLayer( layer ) )
+                GetBoard()->SetLayerName( layer, dest_name );
+        }
+
     }
 }
 

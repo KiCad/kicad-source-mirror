@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -140,6 +140,76 @@ PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE( wxWind
 	bSizerMargins->Add( defaultTextItemsSizer, 1, wxEXPAND, 20 );
 
 
+	bSizerMargins->Add( 5, 25, 0, wxEXPAND, 5 );
+
+	defaultValuesLabel = new wxStaticText( this, wxID_ANY, _("Default Values"), wxDefaultPosition, wxDefaultSize, 0 );
+	defaultValuesLabel->Wrap( -1 );
+	bSizerMargins->Add( defaultValuesLabel, 0, wxEXPAND|wxLEFT|wxTOP, 8 );
+
+
+	bSizerMargins->Add( 0, 4, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* defaultFieldsSizer;
+	defaultFieldsSizer = new wxBoxSizer( wxVERTICAL );
+
+	m_layerNameitemsGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxTAB_TRAVERSAL );
+
+	// Grid
+	m_layerNameitemsGrid->CreateGrid( 0, 2 );
+	m_layerNameitemsGrid->EnableEditing( true );
+	m_layerNameitemsGrid->EnableGridLines( true );
+	m_layerNameitemsGrid->EnableDragGridSize( false );
+	m_layerNameitemsGrid->SetMargins( 0, 0 );
+
+	// Columns
+	m_layerNameitemsGrid->SetColSize( 0, 200 );
+	m_layerNameitemsGrid->SetColSize( 1, 380 );
+	m_layerNameitemsGrid->EnableDragColMove( false );
+	m_layerNameitemsGrid->EnableDragColSize( true );
+	m_layerNameitemsGrid->SetColLabelValue( 0, _("Layer") );
+	m_layerNameitemsGrid->SetColLabelValue( 1, _("Name") );
+	m_layerNameitemsGrid->SetColLabelSize( wxGRID_AUTOSIZE );
+	m_layerNameitemsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+
+	// Rows
+	m_layerNameitemsGrid->EnableDragRowSize( false );
+	m_layerNameitemsGrid->SetRowLabelSize( 0 );
+	m_layerNameitemsGrid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
+
+	// Label Appearance
+
+	// Cell Defaults
+	m_layerNameitemsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
+	m_layerNameitemsGrid->SetMinSize( wxSize( -1,140 ) );
+
+	defaultFieldsSizer->Add( m_layerNameitemsGrid, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* bButtonSize1;
+	bButtonSize1 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_bpAddLayer = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpAddLayer->SetMinSize( wxSize( 30,29 ) );
+
+	bButtonSize1->Add( m_bpAddLayer, 0, wxBOTTOM|wxLEFT|wxTOP, 5 );
+
+
+	bButtonSize1->Add( 20, 0, 0, wxEXPAND, 5 );
+
+	m_bpDeleteLayer = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpDeleteLayer->SetMinSize( wxSize( 30,29 ) );
+
+	bButtonSize1->Add( m_bpDeleteLayer, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxTOP, 5 );
+
+
+	bButtonSize1->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	defaultFieldsSizer->Add( bButtonSize1, 1, wxEXPAND, 5 );
+
+
+	bSizerMargins->Add( defaultFieldsSizer, 1, wxEXPAND, 20 );
+
+
 	bSizerMain->Add( bSizerMargins, 1, wxEXPAND, 5 );
 
 
@@ -152,6 +222,10 @@ PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE( wxWind
 	m_textItemsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::OnGridSize ), NULL, this );
 	m_bpAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::OnAddTextItem ), NULL, this );
 	m_bpDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::OnDeleteTextItem ), NULL, this );
+	m_layerNameitemsGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::onLayerChange ), NULL, this );
+	m_layerNameitemsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::OnGridSize ), NULL, this );
+	m_bpAddLayer->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::OnAddLayerItem ), NULL, this );
+	m_bpDeleteLayer->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::OnDeleteLayerItem ), NULL, this );
 }
 
 PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::~PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE()
@@ -161,5 +235,9 @@ PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::~PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE()
 	m_textItemsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::OnGridSize ), NULL, this );
 	m_bpAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::OnAddTextItem ), NULL, this );
 	m_bpDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::OnDeleteTextItem ), NULL, this );
+	m_layerNameitemsGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::onLayerChange ), NULL, this );
+	m_layerNameitemsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::OnGridSize ), NULL, this );
+	m_bpAddLayer->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::OnAddLayerItem ), NULL, this );
+	m_bpDeleteLayer->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::OnDeleteLayerItem ), NULL, this );
 
 }

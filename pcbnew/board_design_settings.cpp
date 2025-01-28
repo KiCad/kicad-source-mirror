@@ -977,6 +977,7 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_TentViasFront               = aOther.m_TentViasFront;
     m_TentViasBack                = aOther.m_TentViasBack;
     m_DefaultFPTextItems          = aOther.m_DefaultFPTextItems;
+    m_UserLayerNames              = aOther.m_UserLayerNames;
 
     std::copy( std::begin( aOther.m_LineThickness ), std::end( aOther.m_LineThickness ),
                std::begin( m_LineThickness ) );
@@ -1068,6 +1069,7 @@ bool BOARD_DESIGN_SETTINGS::operator==( const BOARD_DESIGN_SETTINGS& aOther ) co
     if( m_TentViasFront               != aOther.m_TentViasFront ) return false;
     if( m_TentViasBack                != aOther.m_TentViasBack ) return false;
     if( m_DefaultFPTextItems          != aOther.m_DefaultFPTextItems ) return false;
+    if( m_UserLayerNames              != aOther.m_UserLayerNames ) return false;
 
     if( !std::equal( std::begin( m_LineThickness ), std::end( m_LineThickness ),
                      std::begin( aOther.m_LineThickness ) ) )
