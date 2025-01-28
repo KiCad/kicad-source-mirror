@@ -1815,7 +1815,7 @@ void PROJECT_TREE_PANE::onGitSwitchBranch( wxCommandEvent& aEvent )
         std::vector<wxString> branches = m_TreeProject->GitCommon()->GetBranchNames();
         int branchIndex = aEvent.GetId() - ID_GIT_SWITCH_BRANCH;
 
-        if( branchIndex < 0 || branchIndex >= branches.size() )
+        if( branchIndex < 0 || static_cast<size_t>( branchIndex ) >= branches.size() )
             return;
 
         branchName = branches[branchIndex];
