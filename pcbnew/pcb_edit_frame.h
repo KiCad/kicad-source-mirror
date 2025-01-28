@@ -832,6 +832,18 @@ protected:
     bool importFile( const wxString& aFileName, int aFileType,
                      const std::map<std::string, UTF8>* aProperties = nullptr );
 
+    /**
+     * @brief Save a board object to a file
+     *
+     * @param aBoard The board object to save
+     * @param aFileName The file name to save the board to
+     * @param aHeadless If true, suppresses informational output (e.g. to be used from the API)
+     *
+     * @return
+     */
+    bool saveBoardAsFile( BOARD* aBoard, const wxString& aFileName, bool aHeadless = false );
+
+
     bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;
     void doCloseWindow() override;
 

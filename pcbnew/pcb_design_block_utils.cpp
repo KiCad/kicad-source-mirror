@@ -23,10 +23,13 @@
 
 #include <pgm_base.h>
 #include <kiway.h>
+#include <board_commit.h>
 #include <design_block.h>
 #include <design_block_lib_table.h>
 #include <widgets/pcb_design_block_pane.h>
 #include <pcb_edit_frame.h>
+#include <pcb_io/pcb_io.h>
+#include <pcb_io/pcb_io_mgr.h>
 #include <wx/choicdlg.h>
 #include <wx/msgdlg.h>
 #include <wx/textdlg.h>
@@ -34,8 +37,10 @@
 #include <paths.h>
 #include <env_paths.h>
 #include <common.h>
-#include <kidialog.h>
 #include <confirm.h>
+#include <kidialog.h>
+#include <locale_io.h>
+#include <netinfo.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_selection_tool.h>
 #include <dialogs/dialog_design_block_properties.h>
@@ -50,6 +55,48 @@ bool checkOverwrite( wxWindow* aFrame, wxString& libname, wxString& newName )
                           _( "Overwrite" ) )
         != wxID_OK )
     {
+        return false;
+    }
+
+    return true;
+}
+
+
+bool PCB_EDIT_FRAME::saveBoardAsFile( BOARD* aBoard, const wxString& aFileName, bool aHeadless )
+{
+    // Ensure the "C" locale is temporary set, before saving any file
+    // It also avoid wxWidget alerts about locale issues, later, when using Python 3
+    LOCALE_IO dummy;
+
+    wxFileName pcbFileName( aFileName );
+
+    if( !IsWritable( pcbFileName ) )
+    {
+        if( !aHeadless )
+        {
+            DisplayError( this,
+                          wxString::Format( _( "Insufficient permissions to write file '%s'." ),
+                                            pcbFileName.GetFullPath() ) );
+        }
+        return false;
+    }
+
+    try
+    {
+        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
+
+        wxASSERT( pcbFileName.IsAbsolute() );
+
+        pi->SaveBoard( pcbFileName.GetFullPath(), aBoard, nullptr );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        if( !aHeadless )
+        {
+            DisplayError( this, wxString::Format( _( "Error saving board file '%s'.\n%s" ),
+                                                  pcbFileName.GetFullPath(), ioe.What() ) );
+        }
+
         return false;
     }
 
@@ -115,95 +162,88 @@ void PCB_EDIT_FRAME::SaveBoardAsDesignBlock( const wxString& aLibraryName )
 
 void PCB_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
 {
-    //// Make sure the user has selected a library to save into
-    //if( m_designBlocksPane->GetSelectedLibId().GetLibNickname().empty() )
-    //{
-        //DisplayErrorMessage( this, _( "Please select a library to save the design block to." ) );
-        //return;
-    //}
+    // Make sure the user has selected a library to save into
+    if( m_designBlocksPane->GetSelectedLibId().GetLibNickname().empty() )
+    {
+        DisplayErrorMessage( this, _( "Please select a library to save the design block to." ) );
+        return;
+    }
 
-    //// Get all selected items
-    //EE_SELECTION selection = m_toolManager->GetTool<EE_SELECTION_TOOL>()->GetSelection();
+    // Get all selected items
+    PCB_SELECTION selection = m_toolManager->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
-    //if( selection.Empty() )
-    //{
-        //DisplayErrorMessage( this, _( "Please select some items to save as a design block." ) );
-        //return;
-    //}
+    if( selection.Empty() )
+    {
+        DisplayErrorMessage( this, _( "Please select some items to save as a design block." ) );
+        return;
+    }
 
-    //// Just block all attempts to create design blocks with nested sheets at this point
-    //if( selection.HasType( PCB_SHEET_T ) )
-    //{
-        //if( selection.Size() == 1 )
-        //{
-            //PCB_SHEET*     sheet = static_cast<PCB_SHEET*>( selection.Front() );
-            //PCB_SHEET_PATH curPath = GetCurrentSheet();
+    DESIGN_BLOCK blk;
+    wxFileName   fn = wxFileNameFromPath( GetBoard()->GetFileName() );
 
-            //curPath.push_back( sheet );
-            //SaveSheetAsDesignBlock( aLibraryName, curPath );
-        //}
-        //else
-            //DisplayErrorMessage( this, _( "Design blocks with nested sheets are not supported." ) );
+    blk.SetLibId( LIB_ID( aLibraryName, fn.GetName() ) );
 
-        //return;
-    //}
+    DIALOG_DESIGN_BLOCK_PROPERTIES dlg( this, &blk );
 
-    //DESIGN_BLOCK blk;
-    //wxFileName   fn = wxFileNameFromPath( GetScreen()->GetFileName() );
+    if( dlg.ShowModal() != wxID_OK )
+        return;
 
-    //blk.SetLibId( LIB_ID( aLibraryName, fn.GetName() ) );
+    // Create a temporary board
+    BOARD* tempBoard = new BOARD();
+    tempBoard->SetDesignSettings( GetBoard()->GetDesignSettings() );
+    tempBoard->SetProject( &Prj(), true );
+    tempBoard->SynchronizeProperties();
 
-    //DIALOG_DESIGN_BLOCK_PROPERTIES dlg( this, &blk );
+    // Copy all net info into the new board
+    for( NETINFO_ITEM* netInfo : GetBoard()->GetNetInfo() )
+    {
+        EDA_ITEM* copy = netInfo->Clone();
+        tempBoard->Add( static_cast<BOARD_ITEM*>( copy ), ADD_MODE::APPEND, false );
+    }
 
-    //if( dlg.ShowModal() != wxID_OK )
-        //return;
+    // Copy the selected items to the temporary board
+    for( EDA_ITEM* item : selection )
+    {
+        EDA_ITEM* copy = item->Clone();
+        tempBoard->Add( static_cast<BOARD_ITEM*>( copy ), ADD_MODE::APPEND, false );
+    }
 
-    //// Create a temporary screen
-    //PCB_SCREEN* tempScreen = new PCB_SCREEN( m_schematic );
+    // Rebuild connectivity, remove any unused nets
+    tempBoard->BuildListOfNets();
+    tempBoard->BuildConnectivity();
+    tempBoard->RemoveUnusedNets( nullptr );
 
-    //// Copy the selected items to the temporary screen
-    //for( EDA_ITEM* item : selection )
-    //{
-        //EDA_ITEM* copy = item->Clone();
-        //tempScreen->Append( static_cast<PCB_ITEM*>( copy ) );
-    //}
+    wxString tempFile = wxFileName::CreateTempFileName( "design_block" );
 
-    //// Create a sheet for the temporary screen
-    //PCB_SHEET* tempSheet = new PCB_SHEET( m_schematic );
-    //tempSheet->SetScreen( tempScreen );
+    if( !saveBoardAsFile( tempBoard, tempFile, false ) )
+    {
+        DisplayErrorMessage( this,
+                             _( "Error saving temporary board file to create design block." ) );
+        wxRemoveFile( tempFile );
+        return;
+    }
 
-    //// Save a temporary copy of the schematic file, as the plugin is just going to move it
-    //wxString tempFile = wxFileName::CreateTempFileName( "design_block" );
-    //if( !saveSchematicFile( tempSheet, tempFile ) )
-    //{
-        //DisplayErrorMessage( this, _( "Error saving temporary schematic file to create design block." ) );
-        //wxRemoveFile( tempFile );
-        //return;
-    //}
+    blk.SetBoardFile( tempFile );
 
-    //blk.SetSchematicFile( tempFile );
+    try
+    {
+        wxString libName = blk.GetLibId().GetLibNickname();
+        wxString newName = blk.GetLibId().GetLibItemName();
 
-    //try
-    //{
-        //wxString libName = blk.GetLibId().GetLibNickname();
-        //wxString newName = blk.GetLibId().GetLibItemName();
+        if( Prj().DesignBlockLibs()->DesignBlockExists( libName, newName ) )
+            if( !checkOverwrite( this, libName, newName ) )
+                return;
 
-        //if( Prj().DesignBlockLibs()->DesignBlockExists( libName, newName ) )
-            //if( !checkOverwrite( this, libName, newName ) )
-                //return;
+        Prj().DesignBlockLibs()->DesignBlockSave( aLibraryName, &blk );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        DisplayError( this, ioe.What() );
+    }
 
-        //Prj().DesignBlockLibs()->DesignBlockSave( aLibraryName, &blk );
-    //}
-    //catch( const IO_ERROR& ioe )
-    //{
-        //DisplayError( this, ioe.What() );
-    //}
+    // Clean up the temporary file
+    wxRemoveFile( tempFile );
 
-    //// Clean up the temporaries
-    //wxRemoveFile( tempFile );
-    //// This will also delete the screen
-    //delete tempSheet;
-
-    //m_designBlocksPane->RefreshLibs();
-    //m_designBlocksPane->SelectLibId( blk.GetLibId() );
+    m_designBlocksPane->RefreshLibs();
+    m_designBlocksPane->SelectLibId( blk.GetLibId() );
 }

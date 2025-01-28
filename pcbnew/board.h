@@ -694,6 +694,7 @@ public:
      * @return the BOARD_DESIGN_SETTINGS for this BOARD
      */
     BOARD_DESIGN_SETTINGS& GetDesignSettings() const;
+    void                   SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings );
 
     BOARD_STACKUP GetStackupOrDefault() const;
 

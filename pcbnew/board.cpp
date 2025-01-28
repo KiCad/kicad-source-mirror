@@ -951,6 +951,12 @@ BOARD_DESIGN_SETTINGS& BOARD::GetDesignSettings() const
 }
 
 
+void BOARD::SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings )
+{
+    *m_designSettings = aSettings;
+}
+
+
 int BOARD::GetMaxClearanceValue() const
 {
     if( !m_maxClearanceValue.has_value() )

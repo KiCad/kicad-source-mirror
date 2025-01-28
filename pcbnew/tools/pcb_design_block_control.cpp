@@ -146,7 +146,7 @@ int PCB_DESIGN_BLOCK_CONTROL::SaveSelectionAsDesignBlock( const TOOL_EVENT& aEve
     if( !current )
         return -1;
 
-    //m_editFrame->SaveSelectionAsDesignBlock( current->m_LibId.GetLibNickname() );
+    m_editFrame->SaveSelectionAsDesignBlock( current->m_LibId.GetLibNickname() );
 
     return 0;
 }
