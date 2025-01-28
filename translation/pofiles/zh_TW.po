@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 01:58+0300\n"
-"PO-Revision-Date: 2025-01-27 21:23+0000\n"
+"PO-Revision-Date: 2025-01-28 02:58+0000\n"
 "Last-Translator: reimu105 <peter112548@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -7302,7 +7302,7 @@ msgstr "無法讀取 ZIP 壓縮包 '%s'"
 #: common/io/easyedapro/easyedapro_import_utils.cpp:301
 #, c-format
 msgid "Cannot parse JSON line %d in '%s': %s"
-msgstr "無法解析“%s”中的 JSON 行 %d：%s"
+msgstr "無法解析 JSON 行 %d 在 '%s': %s"
 
 #: common/io/io_base.cpp:139
 #, fuzzy
