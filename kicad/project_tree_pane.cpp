@@ -165,6 +165,7 @@ BEGIN_EVENT_TABLE( PROJECT_TREE_PANE, wxSashLayoutWindow )
     EVT_MENU( ID_GIT_RESOLVE_CONFLICT, PROJECT_TREE_PANE::onGitResolveConflict )
     EVT_MENU( ID_GIT_REVERT_LOCAL, PROJECT_TREE_PANE::onGitRevertLocal )
     EVT_MENU( ID_GIT_SWITCH_BRANCH, PROJECT_TREE_PANE::onGitSwitchBranch )
+    EVT_MENU_RANGE( ID_GIT_SWITCH_QUICK1, ID_GIT_SWITCH_QUICK5 + 1, PROJECT_TREE_PANE::onGitSwitchBranch )
     EVT_MENU( ID_GIT_COMPARE, PROJECT_TREE_PANE::onGitCompare )
     EVT_MENU( ID_GIT_REMOVE_VCS, PROJECT_TREE_PANE::onGitRemoveVCS )
     EVT_MENU( ID_GIT_ADD_TO_INDEX, PROJECT_TREE_PANE::onGitAddToIndex )
@@ -1795,15 +1796,30 @@ void PROJECT_TREE_PANE::onGitSwitchBranch( wxCommandEvent& aEvent )
     if( !repo )
         return;
 
-    DIALOG_GIT_SWITCH dlg( wxGetTopLevelParent( this ), repo );
+    wxString branchName;
 
-    int retval = dlg.ShowModal();
-    wxString branchName = dlg.GetBranchName();
+    if( aEvent.GetId() == ID_GIT_SWITCH_BRANCH )
+    {
+        DIALOG_GIT_SWITCH dlg( wxGetTopLevelParent( this ), repo );
 
-    if( retval == wxID_ADD )
-        git_create_branch( repo, branchName );
-    else if( retval != wxID_OK )
-        return;
+        int retval = dlg.ShowModal();
+        branchName = dlg.GetBranchName();
+
+        if( retval == wxID_ADD )
+            git_create_branch( repo, branchName );
+        else if( retval != wxID_OK )
+            return;
+    }
+    else
+    {
+        std::vector<wxString> branches = m_TreeProject->GitCommon()->GetBranchNames();
+        int branchIndex = aEvent.GetId() - ID_GIT_SWITCH_BRANCH;
+
+        if( branchIndex < 0 || branchIndex >= branches.size() )
+            return;
+
+        branchName = branches[branchIndex];
+    }
 
     // Retrieve the reference to the existing branch using libgit2
     git_reference* branchRef = nullptr;
