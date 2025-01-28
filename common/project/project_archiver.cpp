@@ -43,8 +43,7 @@
 class PROJECT_ARCHIVER_DIR_ZIP_TRAVERSER : public wxDirTraverser
 {
 public:
-    PROJECT_ARCHIVER_DIR_ZIP_TRAVERSER( const std::string& aExtRegex, const wxString& aPrjDir,
-                                        wxZipOutputStream& aZipFileOutput,
+    PROJECT_ARCHIVER_DIR_ZIP_TRAVERSER( const std::string& aExtRegex, const wxString& aPrjDir, wxZipOutputStream& aZipFileOutput,
                                         REPORTER& aReporter, bool aVerbose ) :
         m_zipFile( aZipFileOutput ),
         m_prjDir( aPrjDir ),
@@ -92,21 +91,14 @@ public:
     }
 
 private:
-    void addFileToZip( const wxString& aFilename )
+    void addFileToZip( const wxString& aFilename)
     {
         wxString msg;
         wxFileSystem fsfile;
 
         wxFileName curr_fn( aFilename );
-        wxFileName curr_prjdir;
-        curr_prjdir.AssignDir( m_prjDir );
-
         KIPLATFORM::IO::LongPathAdjustment( curr_fn );
-        KIPLATFORM::IO::LongPathAdjustment( curr_prjdir );
-
-        // Note: MakeRelativeTo() works only if curr_fn and curr_prjdir use the same
-        // long path adjustment (no long path of both use long path)
-        curr_fn.MakeRelativeTo( curr_prjdir.GetFullPath() );
+        curr_fn.MakeRelativeTo( m_prjDir );
 
         wxString currFilename = curr_fn.GetFullPath();
 
@@ -155,11 +147,9 @@ private:
     unsigned long m_uncompressedBytes = 0;
 };
 
-
 PROJECT_ARCHIVER::PROJECT_ARCHIVER()
 {
 }
-
 
 bool PROJECT_ARCHIVER::AreZipArchivesIdentical( const wxString& aZipFileA,
                                                 const wxString& aZipFileB, REPORTER& aReporter )
@@ -250,7 +240,6 @@ bool PROJECT_ARCHIVER::Unarchive( const wxString& aSrcFile, const wxString& aDes
         // Now let's set the filetimes based on what's in the zip
         wxFileName outputFileName( fullname );
         wxDateTime fileTime = entry->GetDateTime();
-
         // For now we set access, mod, create to the same datetime
         // create (third arg) is only used on Windows
         outputFileName.SetTimes( &fileTime, &fileTime, &fileTime );
@@ -332,6 +321,7 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
 
     wxFileName sourceDir( aSrcDir );
     KIPLATFORM::IO::LongPathAdjustment( sourceDir );
+
     wxSetWorkingDirectory( sourceDir.GetFullPath() );
 
     wxFFileOutputStream ostream( aDestFile );
@@ -364,7 +354,7 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
     try
     {
         PROJECT_ARCHIVER_DIR_ZIP_TRAVERSER traverser( fileExtensionRegex, aSrcDir, zipstream,
-                                                      aReporter, aVerbose );
+                                                        aReporter, aVerbose );
 
         projectDir.Traverse( traverser );
 
