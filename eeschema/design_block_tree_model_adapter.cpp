@@ -193,6 +193,11 @@ wxString DESIGN_BLOCK_TREE_MODEL_ADAPTER::GenerateInfo( LIB_ID const& aLibId, in
 
         html.Replace( "__FIELDS__", fieldTable );
     }
+    else
+    {
+        html.Printf( _( "Error loading design block %s from library '%s'." ) + wxS( "\n" ),
+                     aLibId.GetLibItemName().wx_str(), aLibId.GetLibNickname().wx_str() );
+    }
 
     return html;
 }
