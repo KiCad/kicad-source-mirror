@@ -1242,8 +1242,6 @@ bool SETTINGS_MANAGER::BackupProject( REPORTER& aReporter, wxFileName& aTarget )
         aTarget.SetExt( FILEEXT::ArchiveFileExtension );
     }
 
-    KIPLATFORM::IO::LongPathAdjustment( aTarget );
-
     wxString test = aTarget.GetPath();
 
     if( !aTarget.DirExists() && !wxMkdir( aTarget.GetPath() ) )

@@ -65,7 +65,6 @@ public:
                 wxFileName package( aFilename );
                 package.MakeRelativeTo( m_prjDir );
                 package.SetExt( wxS( "pkg" ) );
-                KIPLATFORM::IO::LongPathAdjustment( package );
 
                 if( package.Exists() )
                     addFileToZip( package.GetFullPath() );
@@ -97,7 +96,6 @@ private:
         wxFileSystem fsfile;
 
         wxFileName curr_fn( aFilename );
-        KIPLATFORM::IO::LongPathAdjustment( curr_fn );
         curr_fn.MakeRelativeTo( m_prjDir );
 
         wxString currFilename = curr_fn.GetFullPath();
@@ -320,7 +318,6 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
     wxString oldCwd = wxGetCwd();
 
     wxFileName sourceDir( aSrcDir );
-    KIPLATFORM::IO::LongPathAdjustment( sourceDir );
 
     wxSetWorkingDirectory( sourceDir.GetFullPath() );
 
