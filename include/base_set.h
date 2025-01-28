@@ -186,21 +186,75 @@ public:
     // Compound assignment AND operator
     BASE_SET& operator&=(const BASE_SET& other)
     {
-        sul::dynamic_bitset<uint64_t>::operator&=(other);
+        size_t my_size = size();
+        size_t other_size = other.size();
+
+        if( my_size == other_size )
+        {
+            sul::dynamic_bitset<uint64_t>::operator&=(other);
+        }
+        else if( my_size < other_size )
+        {
+            sul::dynamic_bitset<uint64_t>::resize( other_size );
+            sul::dynamic_bitset<uint64_t>::operator&=( other );
+        }
+        else
+        {
+            BASE_SET tmp( other );
+            tmp.resize( my_size );
+            sul::dynamic_bitset<uint64_t>::operator&=( tmp );
+        }
+
         return *this;
     }
 
     // Compound assignment OR operator
     BASE_SET& operator|=(const BASE_SET& other)
     {
-        sul::dynamic_bitset<uint64_t>::operator|=(other);
+        size_t my_size = size();
+        size_t other_size = other.size();
+
+        if( my_size == other_size )
+        {
+            sul::dynamic_bitset<uint64_t>::operator|=(other);
+        }
+        else if( my_size < other_size )
+        {
+            sul::dynamic_bitset<uint64_t>::resize( other_size );
+            sul::dynamic_bitset<uint64_t>::operator|=( other );
+        }
+        else
+        {
+            BASE_SET tmp( other );
+            tmp.resize( my_size );
+            sul::dynamic_bitset<uint64_t>::operator|=( tmp );
+        }
+
         return *this;
     }
 
     // Compound assignment XOR operator
     BASE_SET& operator^=(const BASE_SET& other)
     {
-        sul::dynamic_bitset<uint64_t>::operator^=(other);
+        size_t my_size = size();
+        size_t other_size = other.size();
+
+        if( my_size == other_size )
+        {
+            sul::dynamic_bitset<uint64_t>::operator^=(other);
+        }
+        else if( my_size < other_size )
+        {
+            sul::dynamic_bitset<uint64_t>::resize( other_size );
+            sul::dynamic_bitset<uint64_t>::operator^=( other );
+        }
+        else
+        {
+            BASE_SET tmp( other );
+            tmp.resize( my_size );
+            sul::dynamic_bitset<uint64_t>::operator^=( tmp );
+        }
+
         return *this;
     }
 
