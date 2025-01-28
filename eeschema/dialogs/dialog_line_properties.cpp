@@ -117,7 +117,7 @@ void DIALOG_LINE_PROPERTIES::resetDefaults( wxCommandEvent& event )
     m_width.SetValue( 0 );
     m_colorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
 
-    m_typeCombo->SetStringSelection( DEFAULT_STYLE );
+    m_typeCombo->SetStringSelection( DEFAULT_LINE_STYLE_LABEL );
 
     Refresh();
 }

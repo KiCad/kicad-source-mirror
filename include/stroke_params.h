@@ -82,7 +82,8 @@ enum class WIRE_STYLE
 extern const std::map<LINE_STYLE, struct LINE_STYLE_DESC> lineTypeNames;
 
 
-#define DEFAULT_STYLE _( "Default" )
+#define DEFAULT_LINE_STYLE_LABEL _( "Solid" )
+#define DEFAULT_WIRE_STYLE_LABEL _( "Default" )
 #define INDETERMINATE_STYLE _( "Leave unchanged" )
 
 

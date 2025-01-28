@@ -138,7 +138,7 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataToWindow()
     int style = static_cast<int>( m_shape->GetStroke().GetLineStyle() );
 
     if( style == -1 )
-        m_borderStyleCombo->SetStringSelection( DEFAULT_STYLE );
+        m_borderStyleCombo->SetStringSelection( DEFAULT_LINE_STYLE_LABEL );
     else if( style < (int) lineTypeNames.size() )
         m_borderStyleCombo->SetSelection( style );
     else
