@@ -187,6 +187,7 @@ void GRID_CELL_LAYER_SELECTOR::BeginEdit( int aRow, int aCol, wxGrid* aGrid )
     if( m_frame && !m_frame->GetBoard()->IsLayerEnabled( ToLAYER_ID( m_value ) ) )
         LayerBox()->ShowNonActivatedLayers( true );
 
+    LayerBox()->SetNotAllowedLayerSet( m_mask );
     LayerBox()->Resync();
     LayerBox()->SetLayerSelection( m_value );
     LayerBox()->SetFocus();
