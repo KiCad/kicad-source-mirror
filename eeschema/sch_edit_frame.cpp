@@ -2196,9 +2196,17 @@ void SCH_EDIT_FRAME::ShowChangedLanguage()
     // tooltips in toolbars
     RecreateToolbars();
 
+    // For some obscure reason, the AUI manager hides the first modified pane.
+    // So force show panes
+    wxAuiPaneInfo& design_blocks_pane_info = m_auimgr.GetPane( m_designBlocksPane );
+    bool panel_shown = design_blocks_pane_info.IsShown();
+    design_blocks_pane_info.Caption( _( "Design Blocks" ) );
+    design_blocks_pane_info.Show( panel_shown );
+
     m_auimgr.GetPane( m_hierarchy ).Caption( _( "Schematic Hierarchy" ) );
     m_auimgr.GetPane( m_selectionFilterPanel ).Caption( _( "Selection Filter" ) );
     m_auimgr.GetPane( m_propertiesPanel ).Caption( _( "Properties" ) );
+    m_auimgr.GetPane( m_designBlocksPane ).Caption( _( "Design Blocks" ) );
     m_auimgr.Update();
     m_hierarchy->UpdateHierarchyTree();
 

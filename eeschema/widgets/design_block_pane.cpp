@@ -37,13 +37,16 @@
 #include <ee_actions.h>
 #include <tool/tool_manager.h>
 
-static const wxString REPEATED_PLACEMENT = _( "Place repeated copies" );
-static const wxString PLACE_AS_SHEET = _( "Place as sheet" );
-static const wxString KEEP_ANNOTATIONS = _( "Keep annotations" );
+
+// Do not make these static wxStrings; they need to respond to language changes
+#define REPEATED_PLACEMENT _( "Place repeated copies" )
+#define PLACE_AS_SHEET     _( "Place as sheet" )
+#define KEEP_ANNOTATIONS   _( "Keep annotations" )
 
 DESIGN_BLOCK_PANE::DESIGN_BLOCK_PANE( SCH_EDIT_FRAME* aParent, const LIB_ID* aPreselect,
                                       std::vector<LIB_ID>& aHistoryList ) :
-        WX_PANEL( aParent ), m_frame( aParent )
+        WX_PANEL( aParent ),
+        m_frame( aParent )
 {
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
     m_chooserPanel = new PANEL_DESIGN_BLOCK_CHOOSER( aParent, this, aHistoryList,
@@ -62,14 +65,9 @@ DESIGN_BLOCK_PANE::DESIGN_BLOCK_PANE( SCH_EDIT_FRAME* aParent, const LIB_ID* aPr
     wxBoxSizer* cbSizer = new wxBoxSizer( wxVERTICAL );
 
     m_repeatedPlacement = new wxCheckBox( this, wxID_ANY, REPEATED_PLACEMENT );
-    m_repeatedPlacement->SetToolTip( _( "Place copies of the design block on subsequent clicks." ) );
-
     m_placeAsSheet = new wxCheckBox( this, wxID_ANY, PLACE_AS_SHEET );
-    m_placeAsSheet->SetToolTip( _( "Place the design block as a new sheet." ) );
-
     m_keepAnnotations = new wxCheckBox( this, wxID_ANY, KEEP_ANNOTATIONS );
-    m_keepAnnotations->SetToolTip( _( "Preserve reference designators in the source schematic. "
-                                      "Otherwise, clear then reannotate according to settings." ) );
+    setLabelsAndTooltips();
     UpdateCheckboxes();
 
     // Set all checkbox handlers to the same function
@@ -88,6 +86,49 @@ DESIGN_BLOCK_PANE::DESIGN_BLOCK_PANE( SCH_EDIT_FRAME* aParent, const LIB_ID* aPr
     Layout();
 
     Bind( wxEVT_CHAR_HOOK, &PANEL_DESIGN_BLOCK_CHOOSER::OnChar, m_chooserPanel );
+    m_frame->Bind( EDA_LANG_CHANGED, &DESIGN_BLOCK_PANE::OnLanguageChanged, this );
+}
+
+
+DESIGN_BLOCK_PANE::~DESIGN_BLOCK_PANE()
+{
+    m_frame->Unbind( EDA_LANG_CHANGED, &DESIGN_BLOCK_PANE::OnLanguageChanged, this );
+}
+
+
+void DESIGN_BLOCK_PANE::setLabelsAndTooltips()
+{
+    if( m_repeatedPlacement )
+    {
+        m_repeatedPlacement->SetLabel( REPEATED_PLACEMENT );
+        m_repeatedPlacement->SetToolTip( _( "Place copies of the design block on subsequent "
+                                            "clicks." ) );
+    }
+
+    if( m_placeAsSheet )
+    {
+        m_placeAsSheet->SetLabel( PLACE_AS_SHEET );
+        m_placeAsSheet->SetToolTip( _( "Place the design block as a new sheet." ) );
+    }
+
+    if( m_keepAnnotations )
+    {
+        m_keepAnnotations->SetLabel( KEEP_ANNOTATIONS );
+        m_keepAnnotations->SetToolTip( _( "Preserve reference designators in the source "
+                                          "schematic. Otherwise, clear then reannotate according "
+                                          "to settings." ) );
+    }
+}
+
+
+void DESIGN_BLOCK_PANE::OnLanguageChanged( wxCommandEvent& aEvent )
+{
+    if( m_chooserPanel )
+        m_chooserPanel->ShowChangedLanguage();
+
+    setLabelsAndTooltips();
+
+    aEvent.Skip();
 }
 
 

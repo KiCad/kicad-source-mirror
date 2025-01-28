@@ -50,6 +50,8 @@ public:
     DESIGN_BLOCK_PANE( SCH_EDIT_FRAME* aParent, const LIB_ID* aPreselect,
                        std::vector<LIB_ID>& aHistoryList );
 
+    ~DESIGN_BLOCK_PANE() override;
+
     /**
      * To be called after this dialog returns from ShowModal().
      *
@@ -77,6 +79,11 @@ public:
     void OnDeleteDesignBlock( wxCommandEvent& aEvent );
 
     PANEL_DESIGN_BLOCK_CHOOSER* GetDesignBlockPanel() const { return m_chooserPanel; }
+
+protected:
+    void setLabelsAndTooltips();
+
+    virtual void OnLanguageChanged( wxCommandEvent& aEvent );
 
 protected:
     PANEL_DESIGN_BLOCK_CHOOSER* m_chooserPanel;

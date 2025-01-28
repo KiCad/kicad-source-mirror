@@ -169,13 +169,15 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
     processList( aAlreadyPlaced, already_placed_storage, already_placed );
 
     adapter->DoAddLibrary( wxT( "-- " ) + _( "Recently Used" ) + wxT( " --" ), wxEmptyString,
-                           history_list, false, true );
+                           history_list, false, true )
+            .m_IsRecentlyUsedGroup = true;
 
     if( !aHistoryList.empty() )
         adapter->SetPreselectNode( aHistoryList[0].LibId, aHistoryList[0].Unit );
 
     adapter->DoAddLibrary( wxT( "-- " ) + _( "Already Placed" ) + wxT( " --" ), wxEmptyString,
-                           already_placed, false, true );
+                           already_placed, false, true )
+            .m_IsAlreadyPlacedGroup = true;
 
     const std::vector< wxString > libNicknames = libs->GetLogicalLibs();
 

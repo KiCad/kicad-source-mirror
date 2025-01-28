@@ -87,17 +87,16 @@ bool LIB_TREE_NODE::Compare( LIB_TREE_NODE const& aNode1, LIB_TREE_NODE const& a
         return aNode1.m_Type < aNode2.m_Type;
 
     // Recently used sorts at top
-    if( aNode1.m_Name.StartsWith( wxT( "-- " ) ) )
+    if( aNode1.m_IsRecentlyUsedGroup )
     {
-        if( aNode2.m_Name.StartsWith( wxT( "-- " ) ) )
+        if( aNode2.m_IsRecentlyUsedGroup )
         {
-            // Make sure -- Recently Used is always at the top
-            // Start by checking the name of aNode2, because we
-            // want to satisfy the irreflexive property of the
-            // strict weak ordering.
-            if( aNode2.m_Name.StartsWith( wxT( "-- Recently Used" ) ) )
+            // Make sure "-- Recently Used" is always at the top
+            // Start by checking the name of aNode2, because we want to satisfy the irreflexive
+            // property of the strict weak ordering.
+            if( aNode2.m_IsRecentlyUsedGroup )
                 return false;
-            else if( aNode1.m_Name.StartsWith( wxT( "-- Recently Used" ) ) )
+            else if( aNode1.m_IsRecentlyUsedGroup )
                 return true;
 
             return aNode1.m_IntrinsicRank > aNode2.m_IntrinsicRank;
@@ -136,7 +135,9 @@ LIB_TREE_NODE::LIB_TREE_NODE()
       m_Pinned( false ),
       m_PinCount( 0 ),
       m_Unit( 0 ),
-      m_IsRoot( false )
+      m_IsRoot( false ),
+      m_IsRecentlyUsedGroup( false ),
+      m_IsAlreadyPlacedGroup( false )
 {}
 
 
@@ -359,12 +360,18 @@ LIB_TREE_NODE_LIBRARY& LIB_TREE_NODE_ROOT::AddLib( wxString const& aName, wxStri
 }
 
 
-void LIB_TREE_NODE_ROOT::RemoveLib( wxString const& aName )
+void LIB_TREE_NODE_ROOT::RemoveGroup( bool aRecentlyUsedGroup, bool aAlreadyPlacedGroup )
 {
     m_Children.erase( std::remove_if( m_Children.begin(), m_Children.end(),
                                       [&]( std::unique_ptr<LIB_TREE_NODE>& aNode )
                                       {
-                                          return aNode->m_Name == aName;
+                                          if( aRecentlyUsedGroup && aNode->m_IsRecentlyUsedGroup )
+                                              return true;
+
+                                          if( aAlreadyPlacedGroup && aNode->m_IsAlreadyPlacedGroup )
+                                              return true;
+
+                                          return false;
                                       } ),
                       m_Children.end() );
 }

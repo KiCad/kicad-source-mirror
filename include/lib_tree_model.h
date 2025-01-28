@@ -147,6 +147,9 @@ public:
     LIB_ID      m_LibId;       // LIB_ID determined by the parent library nickname and alias name.
     int         m_Unit;        // Actual unit, or zero
     bool        m_IsRoot;      // Indicates if the symbol is a root symbol instead of an alias.
+
+    bool        m_IsRecentlyUsedGroup;
+    bool        m_IsAlreadyPlacedGroup;
 };
 
 
@@ -288,7 +291,7 @@ public:
     /**
      * Remove a library node from the root.
      */
-    void RemoveLib( wxString const& aName );
+    void RemoveGroup( bool aRecentlyUsedGroup, bool aAlreadyPlacedGroup );
 
     /**
      * Clear the tree

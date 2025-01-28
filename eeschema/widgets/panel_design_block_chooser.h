@@ -76,6 +76,8 @@ public:
 
     LIB_TREE* GetLibTree() { return m_tree; }
 
+    void ShowChangedLanguage();
+
 protected:
     static constexpr int DBLCLICK_DELAY = 100; // milliseconds
 
@@ -98,21 +100,22 @@ protected:
 
     void displayErrors( wxTopLevelWindow* aWindow );
 
+protected:
     static wxString g_designBlockSearchString;
 
-    wxTimer*          m_dbl_click_timer;
-    wxTimer*          m_open_libs_timer;
-    wxSplitterWindow* m_vsplitter;
+    wxTimer*              m_dbl_click_timer;
+    wxTimer*              m_open_libs_timer;
+    wxSplitterWindow*     m_vsplitter;
 
     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> m_adapter;
 
-    LIB_TREE*    m_tree;
-    DESIGN_BLOCK_PREVIEW_WIDGET* m_preview;
+    LIB_TREE*                               m_tree;
+    DESIGN_BLOCK_PREVIEW_WIDGET*            m_preview;
 
     SCH_EDIT_FRAME*       m_frame;
     std::function<void()> m_selectHandler;
 
-    std::vector<LIB_ID> m_historyList;
+    std::vector<LIB_ID>   m_historyList;
 };
 
 #endif /* PANEL_DESIGN_BLOCK_CHOOSER_H */

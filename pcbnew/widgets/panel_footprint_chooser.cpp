@@ -94,7 +94,8 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
     }
 
     adapter->DoAddLibrary( wxT( "-- " ) + _( "Recently Used" ) + wxT( " --" ), wxEmptyString,
-                           historyInfos, false, true );
+                           historyInfos, false, true )
+            .m_IsRecentlyUsedGroup = true;
 
     if( historyInfos.size() )
         adapter->SetPreselectNode( historyInfos[0]->GetLIB_ID(), 0 );

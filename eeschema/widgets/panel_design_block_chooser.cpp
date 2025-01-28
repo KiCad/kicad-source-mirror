@@ -28,15 +28,11 @@
 #include <design_block_preview_widget.h>
 #include <kiface_base.h>
 #include <sch_edit_frame.h>
-#include <project_sch.h>
 #include <widgets/lib_tree.h>
 #include <settings/settings_manager.h>
 #include <project/project_file.h>
-#include <eeschema_settings.h>
 #include <dialogs/html_message_box.h>
 #include <string_utils.h>
-#include <wx/button.h>
-#include <wx/clipbrd.h>
 #include <wx/log.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
@@ -179,6 +175,13 @@ PANEL_DESIGN_BLOCK_CHOOSER::~PANEL_DESIGN_BLOCK_CHOOSER()
 
         cfg->m_DesignBlockChooserPanel.sort_mode = m_tree->GetSortMode();
     }
+}
+
+
+void PANEL_DESIGN_BLOCK_CHOOSER::ShowChangedLanguage()
+{
+    if( m_tree )
+        m_tree->ShowChangedLanguage();
 }
 
 
@@ -386,9 +389,7 @@ void PANEL_DESIGN_BLOCK_CHOOSER::addDesignBlockToHistory( const LIB_ID& aLibId )
 
 void PANEL_DESIGN_BLOCK_CHOOSER::rebuildHistoryNode()
 {
-    wxString history = wxT( "-- " ) + _( "Recently Used" ) + wxT( " --" );
-
-    m_adapter->DoRemoveLibrary( history );
+    m_adapter->RemoveGroup( true, false );
 
     // Build the history list
     std::vector<LIB_TREE_ITEM*> historyInfos;
@@ -403,7 +404,9 @@ void PANEL_DESIGN_BLOCK_CHOOSER::rebuildHistoryNode()
             historyInfos.push_back( fp_info );
     }
 
-    m_adapter->DoAddLibrary( history, wxEmptyString, historyInfos, false, true );
+    m_adapter->DoAddLibrary( wxT( "-- " ) + _( "Recently Used" ) + wxT( " --" ), wxEmptyString,
+                             historyInfos, false, true )
+            .m_IsRecentlyUsedGroup = true;
 }
 
 
