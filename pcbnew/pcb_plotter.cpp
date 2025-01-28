@@ -424,7 +424,7 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT
     if( colors->GetFilename() != theme )
     {
         aReporter.Report( wxString::Format(
-                wxT( "Color theme '%s' not found, will use theme from PCB Editor settings.\n" ),
+                _( "Color theme '%s' not found, will use theme from PCB Editor settings.\n" ),
                 theme ),
             RPT_SEVERITY_WARNING );
     }
