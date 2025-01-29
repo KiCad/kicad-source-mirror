@@ -2172,18 +2172,12 @@ void PAD::CheckPad( UNITS_PROVIDER* aUnitsProvider, bool aForPadProperties,
     LSET padlayers_mask = GetLayerSet();
     VECTOR2I drill_size = GetDrillSize();
 
-    if( padlayers_mask.none() )
-        aErrorHandler( DRCE_PADSTACK_INVALID, _( "(Pad has no layer)" ) );
-
-    if( GetAttribute() == PAD_ATTRIB::PTH && !IsOnCopperLayer() )
-        aErrorHandler( DRCE_PADSTACK, _( "(PTH pad has no copper layers)" ) );
-
     if( !padlayers_mask[F_Cu] && !padlayers_mask[B_Cu] )
     {
         if( ( drill_size.x || drill_size.y ) && GetAttribute() != PAD_ATTRIB::NPTH )
         {
             aErrorHandler( DRCE_PADSTACK, _( "(plated through holes normally have a copper pad on "
-                                             "at least one layer)" ) );
+                                             "at least one outer layer)" ) );
         }
     }
 
