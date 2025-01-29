@@ -574,6 +574,8 @@ int PCB_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
 
         if( IsCopperLayer( currentLayer ) )
             view->UpdateLayerColor( ZONE_LAYER_FOR( currentLayer ) );
+
+        m_frame->GetCanvas()->ForceRefresh();
     }
     else
     {
@@ -602,6 +604,8 @@ int PCB_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
 
         if( IsCopperLayer( currentLayer ) )
             view->UpdateLayerColor( ZONE_LAYER_FOR( currentLayer ) );
+
+        m_frame->GetCanvas()->ForceRefresh();
     }
     else
     {
