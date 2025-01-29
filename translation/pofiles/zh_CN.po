@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-28 19:43+0300\n"
+"POT-Creation-Date: 2025-01-29 19:59+0300\n"
 "PO-Revision-Date: 2025-01-29 16:58+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
@@ -183,8 +183,8 @@ msgid "Reload time %.3f s"
 msgstr "重新加载时间 %.3f s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:966
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:421
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:605
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:431
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:615
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:285
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:318
 #: eeschema/symbol_library.cpp:533 pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:348
@@ -4379,7 +4379,7 @@ msgstr "自动移除已卸载的库"
 msgid "Library nickname prefix:"
 msgstr "库名称前缀:"
 
-#: common/dialogs/panel_setup_netclasses.cpp:90 common/eda_shape.cpp:1972
+#: common/dialogs/panel_setup_netclasses.cpp:90 common/eda_shape.cpp:1983
 #: common/stroke_params.cpp:36
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:660 eeschema/sch_line.cpp:1048
@@ -4392,7 +4392,7 @@ msgstr "库名称前缀:"
 msgid "Solid"
 msgstr "实心"
 
-#: common/dialogs/panel_setup_netclasses.cpp:92 common/eda_shape.cpp:1973
+#: common/dialogs/panel_setup_netclasses.cpp:92 common/eda_shape.cpp:1984
 #: common/stroke_params.cpp:37
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:661 eeschema/sch_line.cpp:1049
@@ -4400,7 +4400,7 @@ msgstr "实心"
 msgid "Dashed"
 msgstr "虚线"
 
-#: common/dialogs/panel_setup_netclasses.cpp:94 common/eda_shape.cpp:1974
+#: common/dialogs/panel_setup_netclasses.cpp:94 common/eda_shape.cpp:1985
 #: common/stroke_params.cpp:38
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:662 eeschema/sch_line.cpp:1050
@@ -4408,7 +4408,7 @@ msgstr "虚线"
 msgid "Dotted"
 msgstr "点线"
 
-#: common/dialogs/panel_setup_netclasses.cpp:96 common/eda_shape.cpp:1975
+#: common/dialogs/panel_setup_netclasses.cpp:96 common/eda_shape.cpp:1986
 #: common/stroke_params.cpp:39
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:663 eeschema/sch_line.cpp:1051
@@ -4416,7 +4416,7 @@ msgstr "点线"
 msgid "Dash-Dot"
 msgstr "点划线"
 
-#: common/dialogs/panel_setup_netclasses.cpp:98 common/eda_shape.cpp:1976
+#: common/dialogs/panel_setup_netclasses.cpp:98 common/eda_shape.cpp:1987
 #: common/stroke_params.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:664 eeschema/sch_line.cpp:1052
@@ -4547,14 +4547,14 @@ msgstr "连线线宽"
 msgid "Bus Thickness"
 msgstr "总线线宽"
 
-#: common/dialogs/panel_setup_netclasses_base.cpp:63 common/eda_shape.cpp:2073
+#: common/dialogs/panel_setup_netclasses_base.cpp:63 common/eda_shape.cpp:2084
 #: common/stroke_params.cpp:219 eeschema/sch_bus_entry.cpp:672
 #: eeschema/sch_line.cpp:936 eeschema/sch_line.cpp:1061
 #: pcbnew/pcb_textbox.cpp:685
 msgid "Line Style"
 msgstr "线型"
 
-#: common/dialogs/panel_setup_netclasses_base.cpp:69 common/eda_shape.cpp:1971
+#: common/dialogs/panel_setup_netclasses_base.cpp:69 common/eda_shape.cpp:1982
 #: common/pgm_base.cpp:90 common/stroke_params.cpp:208
 #: common/widgets/footprint_select_widget.cpp:149
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:69
@@ -4701,8 +4701,8 @@ msgid "Line"
 msgstr "图线"
 
 #: common/drawing_sheet/ds_data_item.cpp:367
-#: common/drawing_sheet/ds_draw_item.cpp:125 common/eda_shape.cpp:742
-#: common/eda_shape.cpp:1961
+#: common/drawing_sheet/ds_draw_item.cpp:125 common/eda_shape.cpp:753
+#: common/eda_shape.cpp:1972
 #: eeschema/dialogs/dialog_label_properties_base.cpp:178
 #: eeschema/sch_label.cpp:2214
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2334
@@ -5306,12 +5306,12 @@ msgstr "编号框"
 msgid "Rect"
 msgstr "矩形"
 
-#: common/eda_shape.cpp:77 common/eda_shape.cpp:739 common/eda_shape.cpp:1962
+#: common/eda_shape.cpp:77 common/eda_shape.cpp:750 common/eda_shape.cpp:1973
 #: gerbview/gerber_draw_item.cpp:230
 msgid "Arc"
 msgstr "弧线"
 
-#: common/eda_shape.cpp:78 common/eda_shape.cpp:738 common/eda_shape.cpp:1963
+#: common/eda_shape.cpp:78 common/eda_shape.cpp:749 common/eda_shape.cpp:1974
 #: eeschema/dialogs/dialog_label_properties_base.cpp:172
 #: eeschema/sch_label.cpp:2212 gerbview/gerber_draw_item.cpp:231
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1289
@@ -5323,31 +5323,31 @@ msgstr "圆形"
 msgid "Bezier Curve"
 msgstr "贝塞尔曲线"
 
-#: common/eda_shape.cpp:80 common/eda_shape.cpp:741 common/eda_shape.cpp:1964
+#: common/eda_shape.cpp:80 common/eda_shape.cpp:752 common/eda_shape.cpp:1975
 msgid "Polygon"
 msgstr "多边形"
 
-#: common/eda_shape.cpp:729
+#: common/eda_shape.cpp:740
 msgid "Pad Number Box"
 msgstr "焊盘编号框"
 
-#: common/eda_shape.cpp:730 pcbnew/pcb_shape.cpp:785
+#: common/eda_shape.cpp:741 pcbnew/pcb_shape.cpp:785
 msgid "Thermal Spoke Template"
 msgstr "散热引线模板"
 
-#: common/eda_shape.cpp:731 common/eda_shape.cpp:744
+#: common/eda_shape.cpp:742 common/eda_shape.cpp:755
 msgid "Unrecognized"
 msgstr "无法识别"
 
-#: common/eda_shape.cpp:740
+#: common/eda_shape.cpp:751
 msgid "Curve"
 msgstr "曲线"
 
-#: common/eda_shape.cpp:743 common/eda_shape.cpp:1960
+#: common/eda_shape.cpp:754 common/eda_shape.cpp:1971
 msgid "Segment"
 msgstr "线段"
 
-#: common/eda_shape.cpp:754 common/eda_shape.cpp:2011
+#: common/eda_shape.cpp:765 common/eda_shape.cpp:2022
 #: eeschema/dialogs/dialog_label_properties_base.cpp:152
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:53
 #: eeschema/lib_textbox.cpp:556 eeschema/sch_label.cpp:2194
@@ -5360,17 +5360,17 @@ msgstr "线段"
 msgid "Shape"
 msgstr "形状"
 
-#: common/eda_shape.cpp:760 common/eda_shape.cpp:767 common/eda_shape.cpp:2038
+#: common/eda_shape.cpp:771 common/eda_shape.cpp:778 common/eda_shape.cpp:2049
 #: pcbnew/dialogs/dialog_shape_properties.cpp:212 pcbnew/pcb_track.cpp:1076
 msgid "Radius"
 msgstr "半径"
 
-#: common/eda_shape.cpp:765 common/eda_shape.cpp:795 common/eda_shape.cpp:2082
+#: common/eda_shape.cpp:776 common/eda_shape.cpp:806 common/eda_shape.cpp:2093
 #: pcbnew/pcb_text.cpp:243 pcbnew/pcb_textbox.cpp:375
 msgid "Angle"
 msgstr "角度"
 
-#: common/eda_shape.cpp:771 common/eda_shape.cpp:789
+#: common/eda_shape.cpp:782 common/eda_shape.cpp:800
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:127
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:95
 #: eeschema/lib_pin.cpp:1199 eeschema/lib_pin.cpp:1690 eeschema/sch_pin.cpp:267
@@ -5378,11 +5378,11 @@ msgstr "角度"
 msgid "Length"
 msgstr "长度"
 
-#: common/eda_shape.cpp:776
+#: common/eda_shape.cpp:787
 msgid "Points"
 msgstr "点"
 
-#: common/eda_shape.cpp:780 common/eda_shape.cpp:2056 common/eda_text.cpp:1276
+#: common/eda_shape.cpp:791 common/eda_shape.cpp:2067 common/eda_text.cpp:1276
 #: eeschema/lib_field.cpp:664 eeschema/lib_text.cpp:532
 #: eeschema/lib_textbox.cpp:559 eeschema/sch_bitmap.cpp:231
 #: eeschema/sch_field.cpp:1442 eeschema/sch_text.cpp:496
@@ -5400,7 +5400,7 @@ msgstr "点"
 msgid "Width"
 msgstr "宽度"
 
-#: common/eda_shape.cpp:783 common/eda_shape.cpp:2062 common/eda_text.cpp:1281
+#: common/eda_shape.cpp:794 common/eda_shape.cpp:2073 common/eda_text.cpp:1281
 #: eeschema/lib_field.cpp:665 eeschema/lib_text.cpp:533
 #: eeschema/lib_textbox.cpp:560 eeschema/sch_bitmap.cpp:232
 #: eeschema/sch_field.cpp:1443 eeschema/sch_text.cpp:497
@@ -5414,60 +5414,60 @@ msgstr "宽度"
 msgid "Height"
 msgstr "高度"
 
-#: common/eda_shape.cpp:1965
+#: common/eda_shape.cpp:1976
 msgid "Bezier"
 msgstr "贝塞尔曲线"
 
-#: common/eda_shape.cpp:2009 eeschema/lib_shape.cpp:604
+#: common/eda_shape.cpp:2020 eeschema/lib_shape.cpp:604
 #: eeschema/sch_shape.cpp:614
 msgid "Shape Properties"
 msgstr "形状属性"
 
-#: common/eda_shape.cpp:2015 pcbnew/pcb_textbox.cpp:680
+#: common/eda_shape.cpp:2026 pcbnew/pcb_textbox.cpp:680
 #: pcbnew/pcb_track.cpp:1495
 msgid "Start X"
 msgstr "起点 X"
 
-#: common/eda_shape.cpp:2020 pcbnew/pcb_textbox.cpp:681
+#: common/eda_shape.cpp:2031 pcbnew/pcb_textbox.cpp:681
 #: pcbnew/pcb_track.cpp:1499
 msgid "Start Y"
 msgstr "起点 Y"
 
-#: common/eda_shape.cpp:2026
+#: common/eda_shape.cpp:2037
 msgid "Center X"
 msgstr "中点 X"
 
-#: common/eda_shape.cpp:2032
+#: common/eda_shape.cpp:2043
 msgid "Center Y"
 msgstr "中点 Y"
 
-#: common/eda_shape.cpp:2044 pcbnew/generators/pcb_tuning_pattern.cpp:2552
+#: common/eda_shape.cpp:2055 pcbnew/generators/pcb_tuning_pattern.cpp:2552
 #: pcbnew/pcb_textbox.cpp:682 pcbnew/pcb_track.cpp:1502
 msgid "End X"
 msgstr "终点 X"
 
-#: common/eda_shape.cpp:2050 pcbnew/generators/pcb_tuning_pattern.cpp:2558
+#: common/eda_shape.cpp:2061 pcbnew/generators/pcb_tuning_pattern.cpp:2558
 #: pcbnew/pcb_textbox.cpp:683 pcbnew/pcb_track.cpp:1505
 msgid "End Y"
 msgstr "终点 Y"
 
-#: common/eda_shape.cpp:2068 common/stroke_params.cpp:223
+#: common/eda_shape.cpp:2079 common/stroke_params.cpp:223
 #: eeschema/sch_bus_entry.cpp:675 eeschema/sch_line.cpp:1064
 #: pcbnew/pcb_textbox.cpp:684
 msgid "Line Width"
 msgstr "线宽"
 
-#: common/eda_shape.cpp:2077 pcbnew/pcb_shape.cpp:719
+#: common/eda_shape.cpp:2088 pcbnew/pcb_shape.cpp:719
 msgid "Line Color"
 msgstr "线条颜色"
 
-#: common/eda_shape.cpp:2115 eeschema/lib_shape.cpp:587
+#: common/eda_shape.cpp:2126 eeschema/lib_shape.cpp:587
 #: eeschema/sch_shape.cpp:604 pcbnew/dialogs/dialog_plot_base.cpp:134
 #: pcbnew/pcb_textbox.cpp:686
 msgid "Filled"
 msgstr "填充"
 
-#: common/eda_shape.cpp:2120 eeschema/sch_shape.cpp:607
+#: common/eda_shape.cpp:2131 eeschema/sch_shape.cpp:607
 #: pcbnew/pcb_shape.cpp:720
 msgid "Fill Color"
 msgstr "填充颜色"
@@ -13537,7 +13537,7 @@ msgid "Update all other fields in the symbol from the footprint"
 msgstr "从封装更新符号的所有其它字段"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.h:57
-#: eeschema/tools/backannotate.cpp:584
+#: eeschema/tools/backannotate.cpp:570
 msgid "Update Schematic from PCB"
 msgstr "从 PCB 更新原理图"
 
@@ -16587,14 +16587,14 @@ msgstr "无法加载数据库库: 无法连接到数据库 %s (%s)"
 msgid "KiCad database library files"
 msgstr "KiCad 数据库库文件"
 
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:640
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:657
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:650
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:667
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:3203
 #, c-format
 msgid "Unable to read file '%s'."
 msgstr "无法读取文件 '%s'。"
 
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:649
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:659
 #, c-format
 msgid ""
 "'%s' is an Eagle binary-format file; only Eagle XML-format files can be "
@@ -16602,14 +16602,14 @@ msgid ""
 msgstr ""
 "'%s' 是 Eagle binary-format 格式文件; 只有 Eagle XML 格式文件才可以被导入。"
 
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1740
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1750
 #, c-format
 msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
 "in the schematic."
 msgstr "解析 Eagle 文件时出错。找不到 '%s' 实例, 但在原理图中引用了它。"
 
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1788
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1798
 #, c-format
 msgid "Could not find '%s' in the imported library."
 msgstr "在导入的库中找不到 '%s'。"
@@ -19691,15 +19691,15 @@ msgstr "请先将原理图批注完整, 然后才能重链接封装。"
 msgid "Footprint re-linking cancelled by user."
 msgstr "用户取消了封装重链接。"
 
-#: eeschema/tools/backannotate.cpp:381
+#: eeschema/tools/backannotate.cpp:382
 msgid "true"
 msgstr "true"
 
-#: eeschema/tools/backannotate.cpp:381
+#: eeschema/tools/backannotate.cpp:382
 msgid "false"
 msgstr "false"
 
-#: eeschema/tools/backannotate.cpp:387
+#: eeschema/tools/backannotate.cpp:390
 #, c-format
 msgid "Change '%s' reference designator to '%s'."
 msgstr "将 '%s' 的位号改为 '%s'。"
@@ -19709,53 +19709,53 @@ msgstr "将 '%s' 的位号改为 '%s'。"
 msgid "Change %s footprint assignment from '%s' to '%s'."
 msgstr "将 %s 的封装分配从 '%s' 替换为 '%s'。"
 
-#: eeschema/tools/backannotate.cpp:420
+#: eeschema/tools/backannotate.cpp:417
 #, c-format
 msgid "Change %s value from '%s' to '%s'."
 msgstr "将 %s 的值由 '%s' 更改为 '%s'。"
 
-#: eeschema/tools/backannotate.cpp:437
+#: eeschema/tools/backannotate.cpp:431
 #, c-format
 msgid "Change %s 'Do not populate' from '%s' to '%s'."
 msgstr "将 %s 的 '不作装配' 特性由 '%s' 更改为 '%s'。"
 
-#: eeschema/tools/backannotate.cpp:452
+#: eeschema/tools/backannotate.cpp:443
 #, c-format
 msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
 msgstr "将 %s 的 '从物料清单中移除' 特性由 '%s' 更改为 '%s'。"
 
-#: eeschema/tools/backannotate.cpp:475
+#: eeschema/tools/backannotate.cpp:463
 #, c-format
 msgid "Cannot find %s pin '%s'."
 msgstr "找不到 %s 引脚 '%s'。"
 
 # 可能会出现语序问题。待测试。
-#: eeschema/tools/backannotate.cpp:518
+#: eeschema/tools/backannotate.cpp:506
 #, c-format
 msgid "Change field '%s' value to '%s'."
 msgstr "将字段 '%s' 的值更改为 '%s'。"
 
-#: eeschema/tools/backannotate.cpp:534
+#: eeschema/tools/backannotate.cpp:519
 #, c-format
 msgid "Add field '%s' with value '%s'."
 msgstr "添加值为 '%2$s' 的字段 '%1$s'。"
 
-#: eeschema/tools/backannotate.cpp:563
+#: eeschema/tools/backannotate.cpp:552
 #, c-format
 msgid "Delete field '%s.'"
 msgstr "删除字段 '%s'。"
 
-#: eeschema/tools/backannotate.cpp:703
+#: eeschema/tools/backannotate.cpp:689
 #, c-format
 msgid "Change %s pin %s net label from '%s' to '%s'."
 msgstr "将引脚 %s 网络 %s 的标签由 '%s' 更改为 '%s'。"
 
-#: eeschema/tools/backannotate.cpp:725
+#: eeschema/tools/backannotate.cpp:711
 #, c-format
 msgid "Net %s cannot be changed to %s because it is driven by a power pin."
 msgstr "无法将网络 %s 更改为 %s, 因为它受电源引脚驱动。"
 
-#: eeschema/tools/backannotate.cpp:734
+#: eeschema/tools/backannotate.cpp:720
 #, c-format
 msgid "Add label '%s' to %s pin %s net."
 msgstr "添加标签 '%s' 到引脚%s网 %s。"
@@ -37432,16 +37432,16 @@ msgstr "无法识别的层 '%s'。"
 msgid "Missing severity name."
 msgstr "缺少严重级别名称。"
 
-#: pcbnew/drc/drc_test_provider_annular_width.cpp:89
+#: pcbnew/drc/drc_test_provider_annular_width.cpp:90
 msgid "Checking pad & via annular rings..."
 msgstr "检查焊盘和过孔孔环..."
 
-#: pcbnew/drc/drc_test_provider_annular_width.cpp:333
+#: pcbnew/drc/drc_test_provider_annular_width.cpp:323
 #, c-format
 msgid "(%s min annular width %s; actual %s)"
 msgstr "(%s 最小孔环宽度 %s; 实际 %s)"
 
-#: pcbnew/drc/drc_test_provider_annular_width.cpp:341
+#: pcbnew/drc/drc_test_provider_annular_width.cpp:331
 #, c-format
 msgid "(%s max annular width %s; actual %s)"
 msgstr "(%s 最大孔环宽度 %s; 实际 %s)"
@@ -37537,17 +37537,17 @@ msgstr "正在收集封装外框..."
 msgid "Checking footprints for overlapping courtyards..."
 msgstr "正在检查外框重叠的封装..."
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:612
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:615
 #, c-format
 msgid "(%s maximum uncoupled length %s; actual %s)"
 msgstr "(%s 最大未耦合长度 %s; 实际 %s )"
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:680
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:683
 #, c-format
 msgid "(%s minimum gap %s; actual %s)"
 msgstr "(%s 最小间隙 %s; 实际 %s)"
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:687
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:690
 #, c-format
 msgid "(%s maximum gap %s; actual %s)"
 msgstr "(%s 最大间隙 %s; 实际 %s)"
@@ -41527,28 +41527,28 @@ msgid "Generating history section"
 msgstr "生成 history section"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1164
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2774
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2773
 msgid "Generating BOM section"
 msgstr "生成 BOM section"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1328
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1324
 msgid "Generating CAD data"
 msgstr "生成 CAD data"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2393
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2392
 #, c-format
 msgid "Exporting Layer %s, Net %s"
 msgstr "导出层 %s, 网络 %s"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2929
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2928
 msgid "Generating logistic section"
 msgstr "生成 logistic section"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2941
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2940
 msgid "Saving file"
 msgstr "保存文件"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2973
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2972
 msgid "Failed to save file to buffer"
 msgstr "无法将文件保存到缓存"
 

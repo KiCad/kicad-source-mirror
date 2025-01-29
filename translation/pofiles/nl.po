@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-28 19:43+0300\n"
+"POT-Creation-Date: 2025-01-29 19:59+0300\n"
 "PO-Revision-Date: 2025-01-29 16:58+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v8/nl/>\n"
@@ -168,8 +168,8 @@ msgid "Reload time %.3f s"
 msgstr "Herlaadtijd %.3f s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:966
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:421
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:605
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:431
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:615
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:285
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:318
 #: eeschema/symbol_library.cpp:533 pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:348
@@ -4457,7 +4457,7 @@ msgstr "Gedeïnstalleerde bibliotheken automatisch verwijderen"
 msgid "Library nickname prefix:"
 msgstr "Voorvoegsel bibliotheekbijnaam:"
 
-#: common/dialogs/panel_setup_netclasses.cpp:90 common/eda_shape.cpp:1972
+#: common/dialogs/panel_setup_netclasses.cpp:90 common/eda_shape.cpp:1983
 #: common/stroke_params.cpp:36
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:660 eeschema/sch_line.cpp:1048
@@ -4470,7 +4470,7 @@ msgstr "Voorvoegsel bibliotheekbijnaam:"
 msgid "Solid"
 msgstr "Doorlopend"
 
-#: common/dialogs/panel_setup_netclasses.cpp:92 common/eda_shape.cpp:1973
+#: common/dialogs/panel_setup_netclasses.cpp:92 common/eda_shape.cpp:1984
 #: common/stroke_params.cpp:37
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:661 eeschema/sch_line.cpp:1049
@@ -4478,7 +4478,7 @@ msgstr "Doorlopend"
 msgid "Dashed"
 msgstr "Gestreept"
 
-#: common/dialogs/panel_setup_netclasses.cpp:94 common/eda_shape.cpp:1974
+#: common/dialogs/panel_setup_netclasses.cpp:94 common/eda_shape.cpp:1985
 #: common/stroke_params.cpp:38
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:662 eeschema/sch_line.cpp:1050
@@ -4486,7 +4486,7 @@ msgstr "Gestreept"
 msgid "Dotted"
 msgstr "Gestippeld"
 
-#: common/dialogs/panel_setup_netclasses.cpp:96 common/eda_shape.cpp:1975
+#: common/dialogs/panel_setup_netclasses.cpp:96 common/eda_shape.cpp:1986
 #: common/stroke_params.cpp:39
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:663 eeschema/sch_line.cpp:1051
@@ -4494,7 +4494,7 @@ msgstr "Gestippeld"
 msgid "Dash-Dot"
 msgstr "Streep-stip"
 
-#: common/dialogs/panel_setup_netclasses.cpp:98 common/eda_shape.cpp:1976
+#: common/dialogs/panel_setup_netclasses.cpp:98 common/eda_shape.cpp:1987
 #: common/stroke_params.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:664 eeschema/sch_line.cpp:1052
@@ -4625,14 +4625,14 @@ msgstr "Draaddikte"
 msgid "Bus Thickness"
 msgstr "Busdikte"
 
-#: common/dialogs/panel_setup_netclasses_base.cpp:63 common/eda_shape.cpp:2073
+#: common/dialogs/panel_setup_netclasses_base.cpp:63 common/eda_shape.cpp:2084
 #: common/stroke_params.cpp:219 eeschema/sch_bus_entry.cpp:672
 #: eeschema/sch_line.cpp:936 eeschema/sch_line.cpp:1061
 #: pcbnew/pcb_textbox.cpp:685
 msgid "Line Style"
 msgstr "Lijnstijl"
 
-#: common/dialogs/panel_setup_netclasses_base.cpp:69 common/eda_shape.cpp:1971
+#: common/dialogs/panel_setup_netclasses_base.cpp:69 common/eda_shape.cpp:1982
 #: common/pgm_base.cpp:90 common/stroke_params.cpp:208
 #: common/widgets/footprint_select_widget.cpp:149
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:69
@@ -4779,8 +4779,8 @@ msgid "Line"
 msgstr "Lijn"
 
 #: common/drawing_sheet/ds_data_item.cpp:367
-#: common/drawing_sheet/ds_draw_item.cpp:125 common/eda_shape.cpp:742
-#: common/eda_shape.cpp:1961
+#: common/drawing_sheet/ds_draw_item.cpp:125 common/eda_shape.cpp:753
+#: common/eda_shape.cpp:1972
 #: eeschema/dialogs/dialog_label_properties_base.cpp:178
 #: eeschema/sch_label.cpp:2214
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2334
@@ -5387,12 +5387,12 @@ msgstr "Nummervak"
 msgid "Rect"
 msgstr "Rechthoek"
 
-#: common/eda_shape.cpp:77 common/eda_shape.cpp:739 common/eda_shape.cpp:1962
+#: common/eda_shape.cpp:77 common/eda_shape.cpp:750 common/eda_shape.cpp:1973
 #: gerbview/gerber_draw_item.cpp:230
 msgid "Arc"
 msgstr "Boog"
 
-#: common/eda_shape.cpp:78 common/eda_shape.cpp:738 common/eda_shape.cpp:1963
+#: common/eda_shape.cpp:78 common/eda_shape.cpp:749 common/eda_shape.cpp:1974
 #: eeschema/dialogs/dialog_label_properties_base.cpp:172
 #: eeschema/sch_label.cpp:2212 gerbview/gerber_draw_item.cpp:231
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1289
@@ -5404,31 +5404,31 @@ msgstr "Cirkel"
 msgid "Bezier Curve"
 msgstr "Béziercurve"
 
-#: common/eda_shape.cpp:80 common/eda_shape.cpp:741 common/eda_shape.cpp:1964
+#: common/eda_shape.cpp:80 common/eda_shape.cpp:752 common/eda_shape.cpp:1975
 msgid "Polygon"
 msgstr "Polygoon"
 
-#: common/eda_shape.cpp:729
+#: common/eda_shape.cpp:740
 msgid "Pad Number Box"
 msgstr "Padnummervak"
 
-#: common/eda_shape.cpp:730 pcbnew/pcb_shape.cpp:785
+#: common/eda_shape.cpp:741 pcbnew/pcb_shape.cpp:785
 msgid "Thermal Spoke Template"
 msgstr "Thermische spaaksjabloon"
 
-#: common/eda_shape.cpp:731 common/eda_shape.cpp:744
+#: common/eda_shape.cpp:742 common/eda_shape.cpp:755
 msgid "Unrecognized"
 msgstr "Niet herkend"
 
-#: common/eda_shape.cpp:740
+#: common/eda_shape.cpp:751
 msgid "Curve"
 msgstr "Curve"
 
-#: common/eda_shape.cpp:743 common/eda_shape.cpp:1960
+#: common/eda_shape.cpp:754 common/eda_shape.cpp:1971
 msgid "Segment"
 msgstr "Segment"
 
-#: common/eda_shape.cpp:754 common/eda_shape.cpp:2011
+#: common/eda_shape.cpp:765 common/eda_shape.cpp:2022
 #: eeschema/dialogs/dialog_label_properties_base.cpp:152
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:53
 #: eeschema/lib_textbox.cpp:556 eeschema/sch_label.cpp:2194
@@ -5441,17 +5441,17 @@ msgstr "Segment"
 msgid "Shape"
 msgstr "Vorm"
 
-#: common/eda_shape.cpp:760 common/eda_shape.cpp:767 common/eda_shape.cpp:2038
+#: common/eda_shape.cpp:771 common/eda_shape.cpp:778 common/eda_shape.cpp:2049
 #: pcbnew/dialogs/dialog_shape_properties.cpp:212 pcbnew/pcb_track.cpp:1076
 msgid "Radius"
 msgstr "Straal"
 
-#: common/eda_shape.cpp:765 common/eda_shape.cpp:795 common/eda_shape.cpp:2082
+#: common/eda_shape.cpp:776 common/eda_shape.cpp:806 common/eda_shape.cpp:2093
 #: pcbnew/pcb_text.cpp:243 pcbnew/pcb_textbox.cpp:375
 msgid "Angle"
 msgstr "Hoek"
 
-#: common/eda_shape.cpp:771 common/eda_shape.cpp:789
+#: common/eda_shape.cpp:782 common/eda_shape.cpp:800
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:127
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:95
 #: eeschema/lib_pin.cpp:1199 eeschema/lib_pin.cpp:1690 eeschema/sch_pin.cpp:267
@@ -5459,11 +5459,11 @@ msgstr "Hoek"
 msgid "Length"
 msgstr "Lengte"
 
-#: common/eda_shape.cpp:776
+#: common/eda_shape.cpp:787
 msgid "Points"
 msgstr "Punten"
 
-#: common/eda_shape.cpp:780 common/eda_shape.cpp:2056 common/eda_text.cpp:1276
+#: common/eda_shape.cpp:791 common/eda_shape.cpp:2067 common/eda_text.cpp:1276
 #: eeschema/lib_field.cpp:664 eeschema/lib_text.cpp:532
 #: eeschema/lib_textbox.cpp:559 eeschema/sch_bitmap.cpp:231
 #: eeschema/sch_field.cpp:1442 eeschema/sch_text.cpp:496
@@ -5481,7 +5481,7 @@ msgstr "Punten"
 msgid "Width"
 msgstr "Breedte"
 
-#: common/eda_shape.cpp:783 common/eda_shape.cpp:2062 common/eda_text.cpp:1281
+#: common/eda_shape.cpp:794 common/eda_shape.cpp:2073 common/eda_text.cpp:1281
 #: eeschema/lib_field.cpp:665 eeschema/lib_text.cpp:533
 #: eeschema/lib_textbox.cpp:560 eeschema/sch_bitmap.cpp:232
 #: eeschema/sch_field.cpp:1443 eeschema/sch_text.cpp:497
@@ -5495,60 +5495,60 @@ msgstr "Breedte"
 msgid "Height"
 msgstr "Hoogte"
 
-#: common/eda_shape.cpp:1965
+#: common/eda_shape.cpp:1976
 msgid "Bezier"
 msgstr "Bézier"
 
-#: common/eda_shape.cpp:2009 eeschema/lib_shape.cpp:604
+#: common/eda_shape.cpp:2020 eeschema/lib_shape.cpp:604
 #: eeschema/sch_shape.cpp:614
 msgid "Shape Properties"
 msgstr "Vormeigenschappen"
 
-#: common/eda_shape.cpp:2015 pcbnew/pcb_textbox.cpp:680
+#: common/eda_shape.cpp:2026 pcbnew/pcb_textbox.cpp:680
 #: pcbnew/pcb_track.cpp:1495
 msgid "Start X"
 msgstr "Start X"
 
-#: common/eda_shape.cpp:2020 pcbnew/pcb_textbox.cpp:681
+#: common/eda_shape.cpp:2031 pcbnew/pcb_textbox.cpp:681
 #: pcbnew/pcb_track.cpp:1499
 msgid "Start Y"
 msgstr "Start Y"
 
-#: common/eda_shape.cpp:2026
+#: common/eda_shape.cpp:2037
 msgid "Center X"
 msgstr "Middelpunt X"
 
-#: common/eda_shape.cpp:2032
+#: common/eda_shape.cpp:2043
 msgid "Center Y"
 msgstr "Middelpunt Y"
 
-#: common/eda_shape.cpp:2044 pcbnew/generators/pcb_tuning_pattern.cpp:2552
+#: common/eda_shape.cpp:2055 pcbnew/generators/pcb_tuning_pattern.cpp:2552
 #: pcbnew/pcb_textbox.cpp:682 pcbnew/pcb_track.cpp:1502
 msgid "End X"
 msgstr "Eind X"
 
-#: common/eda_shape.cpp:2050 pcbnew/generators/pcb_tuning_pattern.cpp:2558
+#: common/eda_shape.cpp:2061 pcbnew/generators/pcb_tuning_pattern.cpp:2558
 #: pcbnew/pcb_textbox.cpp:683 pcbnew/pcb_track.cpp:1505
 msgid "End Y"
 msgstr "Eind Y"
 
-#: common/eda_shape.cpp:2068 common/stroke_params.cpp:223
+#: common/eda_shape.cpp:2079 common/stroke_params.cpp:223
 #: eeschema/sch_bus_entry.cpp:675 eeschema/sch_line.cpp:1064
 #: pcbnew/pcb_textbox.cpp:684
 msgid "Line Width"
 msgstr "Lijndikte"
 
-#: common/eda_shape.cpp:2077 pcbnew/pcb_shape.cpp:719
+#: common/eda_shape.cpp:2088 pcbnew/pcb_shape.cpp:719
 msgid "Line Color"
 msgstr "Lijnkleur"
 
-#: common/eda_shape.cpp:2115 eeschema/lib_shape.cpp:587
+#: common/eda_shape.cpp:2126 eeschema/lib_shape.cpp:587
 #: eeschema/sch_shape.cpp:604 pcbnew/dialogs/dialog_plot_base.cpp:134
 #: pcbnew/pcb_textbox.cpp:686
 msgid "Filled"
 msgstr "Gevuld"
 
-#: common/eda_shape.cpp:2120 eeschema/sch_shape.cpp:607
+#: common/eda_shape.cpp:2131 eeschema/sch_shape.cpp:607
 #: pcbnew/pcb_shape.cpp:720
 msgid "Fill Color"
 msgstr "Vulkleur"
@@ -13757,7 +13757,7 @@ msgid "Update all other fields in the symbol from the footprint"
 msgstr "Alle andere velden in het symbool bijwerken van de footprint"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.h:57
-#: eeschema/tools/backannotate.cpp:584
+#: eeschema/tools/backannotate.cpp:570
 msgid "Update Schematic from PCB"
 msgstr "Schema bijwerken van PCB"
 
@@ -16914,14 +16914,14 @@ msgstr ""
 msgid "KiCad database library files"
 msgstr "KiCad databasebibliotheekbestanden"
 
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:640
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:657
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:650
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:667
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:3203
 #, c-format
 msgid "Unable to read file '%s'."
 msgstr "Kan bestand '%s' niet lezen."
 
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:649
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:659
 #, c-format
 msgid ""
 "'%s' is an Eagle binary-format file; only Eagle XML-format files can be "
@@ -16930,7 +16930,7 @@ msgstr ""
 "'%s' is een Eagle-bestand met binaire indeling; alleen Eagle-bestanden met "
 "XML-indeling kunnen worden geïmporteerd."
 
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1740
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1750
 #, c-format
 msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
@@ -16939,7 +16939,7 @@ msgstr ""
 "Fout bij lezen van Eagle-bestand. Kan instantie '%s' niet vinden, maar er "
 "wordt naar verwezen in het schema."
 
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1788
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1798
 #, c-format
 msgid "Could not find '%s' in the imported library."
 msgstr "Kan '%s' niet vinden in de geïmporteerde bibliotheek."
@@ -20108,15 +20108,15 @@ msgstr ""
 msgid "Footprint re-linking cancelled by user."
 msgstr "Footprint opnieuw koppelen geannuleerd door gebruiker."
 
-#: eeschema/tools/backannotate.cpp:381
+#: eeschema/tools/backannotate.cpp:382
 msgid "true"
 msgstr "true"
 
-#: eeschema/tools/backannotate.cpp:381
+#: eeschema/tools/backannotate.cpp:382
 msgid "false"
 msgstr "false"
 
-#: eeschema/tools/backannotate.cpp:387
+#: eeschema/tools/backannotate.cpp:390
 #, c-format
 msgid "Change '%s' reference designator to '%s'."
 msgstr "'%s' referentie-aanduiding wijzigen naar '%s'."
@@ -20126,54 +20126,54 @@ msgstr "'%s' referentie-aanduiding wijzigen naar '%s'."
 msgid "Change %s footprint assignment from '%s' to '%s'."
 msgstr "%s footprinttoewijzing wijzigen van '%s' naar '%s'."
 
-#: eeschema/tools/backannotate.cpp:420
+#: eeschema/tools/backannotate.cpp:417
 #, c-format
 msgid "Change %s value from '%s' to '%s'."
 msgstr "%s-waarde wijzigen van '%s' naar '%s'."
 
-#: eeschema/tools/backannotate.cpp:437
+#: eeschema/tools/backannotate.cpp:431
 #, c-format
 msgid "Change %s 'Do not populate' from '%s' to '%s'."
 msgstr "%s 'niet plaatsen' wijzigen van '%s' naar '%s'."
 
-#: eeschema/tools/backannotate.cpp:452
+#: eeschema/tools/backannotate.cpp:443
 #, c-format
 msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
 msgstr "%s 'weglaten van stuklijst' wijzigen van '%s' naar '%s'."
 
-#: eeschema/tools/backannotate.cpp:475
+#: eeschema/tools/backannotate.cpp:463
 #, c-format
 msgid "Cannot find %s pin '%s'."
 msgstr "Kan pin %s '%s' niet vinden."
 
-#: eeschema/tools/backannotate.cpp:518
+#: eeschema/tools/backannotate.cpp:506
 #, c-format
 msgid "Change field '%s' value to '%s'."
 msgstr "Veldwaarde '%s' wijzigen naar '%s'."
 
-#: eeschema/tools/backannotate.cpp:534
+#: eeschema/tools/backannotate.cpp:519
 #, c-format
 msgid "Add field '%s' with value '%s'."
 msgstr "Veld '%s' toevoegen met waarde '%s'."
 
-#: eeschema/tools/backannotate.cpp:563
+#: eeschema/tools/backannotate.cpp:552
 #, c-format
 msgid "Delete field '%s.'"
 msgstr "Veld '%s' verwijderen"
 
-#: eeschema/tools/backannotate.cpp:703
+#: eeschema/tools/backannotate.cpp:689
 #, c-format
 msgid "Change %s pin %s net label from '%s' to '%s'."
 msgstr "%s pin %s netlabel wijzigen van '%s' naar '%s'."
 
-#: eeschema/tools/backannotate.cpp:725
+#: eeschema/tools/backannotate.cpp:711
 #, c-format
 msgid "Net %s cannot be changed to %s because it is driven by a power pin."
 msgstr ""
 "Net %s kan niet worden gewijzigd naar %s omdat het wordt aangedreven door "
 "een voedingspin."
 
-#: eeschema/tools/backannotate.cpp:734
+#: eeschema/tools/backannotate.cpp:720
 #, c-format
 msgid "Add label '%s' to %s pin %s net."
 msgstr "Voeg label '%s' toe aan %s pin %s net."
@@ -38327,16 +38327,16 @@ msgstr "Onbekende laag '%s'."
 msgid "Missing severity name."
 msgstr "Ontbrekende ernstnaam."
 
-#: pcbnew/drc/drc_test_provider_annular_width.cpp:89
+#: pcbnew/drc/drc_test_provider_annular_width.cpp:90
 msgid "Checking pad & via annular rings..."
 msgstr "Controle pad & via annulusringen..."
 
-#: pcbnew/drc/drc_test_provider_annular_width.cpp:333
+#: pcbnew/drc/drc_test_provider_annular_width.cpp:323
 #, c-format
 msgid "(%s min annular width %s; actual %s)"
 msgstr "(%s minimale annulusbreedte %s; werkelijk %s)"
 
-#: pcbnew/drc/drc_test_provider_annular_width.cpp:341
+#: pcbnew/drc/drc_test_provider_annular_width.cpp:331
 #, c-format
 msgid "(%s max annular width %s; actual %s)"
 msgstr "(%s maximale annulusbreedte %s; werkelijk %s)"
@@ -38432,17 +38432,17 @@ msgstr "Footprintafbakeningen verzamelen..."
 msgid "Checking footprints for overlapping courtyards..."
 msgstr "Controle footprints op overlappende afbakeningen..."
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:612
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:615
 #, c-format
 msgid "(%s maximum uncoupled length %s; actual %s)"
 msgstr "(%s maximale ontkoppelde lengte %s; werkelijk %s)"
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:680
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:683
 #, c-format
 msgid "(%s minimum gap %s; actual %s)"
 msgstr "(%s minimumopening %s; werkelijk %s)"
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:687
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:690
 #, c-format
 msgid "(%s maximum gap %s; actual %s)"
 msgstr "(%s maximumopening %s; werkelijk %s)"
@@ -42535,28 +42535,28 @@ msgid "Generating history section"
 msgstr "Geschiedenis-sectie genereren"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1164
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2774
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2773
 msgid "Generating BOM section"
 msgstr "BOM-sectie genereren"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1328
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1324
 msgid "Generating CAD data"
 msgstr "CAD-data genereren"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2393
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2392
 #, c-format
 msgid "Exporting Layer %s, Net %s"
 msgstr "Laag %s, net %s exporteren"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2929
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2928
 msgid "Generating logistic section"
 msgstr "Logistieke sectie genereren"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2941
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2940
 msgid "Saving file"
 msgstr "Bestand opslaan"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2973
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2972
 msgid "Failed to save file to buffer"
 msgstr "Opslaan bestand naar buffer mislukt"
 
