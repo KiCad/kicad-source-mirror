@@ -527,10 +527,19 @@ bool FOOTPRINT_EDIT_FRAME::DeleteFootprintFromLibrary( const LIB_ID& aFPID, bool
 
     wxString nickname = aFPID.GetLibNickname();
     wxString fpname = aFPID.GetLibItemName();
+    wxString libfullname;
 
     // Legacy libraries are readable, but modifying legacy format is not allowed
     // So prompt the user if he try to delete a footprint from a legacy lib
-    wxString libfullname = PROJECT_PCB::PcbFootprintLibs( &Prj() )->FindRow( nickname )->GetFullURI();
+    try
+    {
+        libfullname = PROJECT_PCB::PcbFootprintLibs( &Prj() )->FindRow( nickname )->GetFullURI();
+    }
+    catch( ... )
+    {
+        // If we can't find the nickname, stop here
+        return false;
+    }
 
     if( PCB_IO_MGR::GuessPluginTypeFromLibPath( libfullname ) == PCB_IO_MGR::LEGACY )
     {

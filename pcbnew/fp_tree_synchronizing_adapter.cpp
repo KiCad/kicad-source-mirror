@@ -79,16 +79,26 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::Sync( FP_LIB_TABLE* aLibs )
     {
         const wxString& name = it->get()->m_Name;
 
-        // Remove the library if it no longer exists or it exists in both the global and the
-        // project library but the project library entry is disabled.
-        if( !m_libs->HasLibrary( name, true )
-                || m_libs->FindRow( name, true ) != m_libs->FindRow( name, false ) )
+        try
         {
+            // Remove the library if it no longer exists or it exists in both the global and the
+            // project library but the project library entry is disabled.
+            if( !m_libs->HasLibrary( name, true )
+                || m_libs->FindRow( name, true ) != m_libs->FindRow( name, false ) )
+            {
+                it = deleteLibrary( it );
+                continue;
+            }
+
+            updateLibrary( *(LIB_TREE_NODE_LIBRARY*) it->get() );
+        }
+        catch( ... )
+        {
+            // If the library isn't found, remove it
             it = deleteLibrary( it );
             continue;
         }
 
-        updateLibrary( *(LIB_TREE_NODE_LIBRARY*) it->get() );
         ++it;
     }
 

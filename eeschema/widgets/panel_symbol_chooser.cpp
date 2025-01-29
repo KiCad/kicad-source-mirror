@@ -99,7 +99,9 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
                 bool pinned = alg::contains( session.pinned_symbol_libs, nickname )
                                 || alg::contains( project.m_PinnedSymbolLibs, nickname );
 
-                if( libs->FindRow( nickname )->GetIsVisible() )
+                SYMBOL_LIB_TABLE_ROW* row = libs->FindRow( nickname );
+
+                if( row && row->GetIsVisible() )
                     adapter->AddLibrary( nickname, pinned );
             }
         }
