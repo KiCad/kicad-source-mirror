@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-28 19:42+0300\n"
-"PO-Revision-Date: 2025-01-28 16:39+0000\n"
-"Last-Translator: reimu105 <peter112548@gmail.com>\n"
+"PO-Revision-Date: 2025-01-29 16:58+0000\n"
+"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -21981,9 +21981,8 @@ msgid "Create a new symbol in an existing library"
 msgstr "從現有符號衍生, 建立一個新符號"
 
 #: eeschema/tools/ee_actions.cpp:202
-#, fuzzy
 msgid "Derive from Existing Symbol..."
-msgstr "從現有符號衍生"
+msgstr "從現有符號衍生…"
 
 #: eeschema/tools/ee_actions.cpp:203
 msgid "Create a new symbol, derived from an existing symbol"
