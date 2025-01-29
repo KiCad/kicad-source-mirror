@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 19:59+0300\n"
-"PO-Revision-Date: 2025-01-29 16:58+0000\n"
-"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
+"PO-Revision-Date: 2025-01-29 22:33+0000\n"
+"Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -38676,9 +38676,9 @@ msgid "Internal Layers"
 msgstr "Camadas internas"
 
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:496
-#, fuzzy, c-format
+#, c-format
 msgid "Layer name %s already in use."
-msgstr "O nome da camada '%s' já está em uso."
+msgstr "A camada chamada '%s' já está em uso."
 
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:23
 msgid "Default Field Properties for New Footprints"
@@ -44294,11 +44294,10 @@ msgid "PTH pad %s"
 msgstr "Ilha PTH %s"
 
 #: pcbnew/pad.cpp:2179
-#, fuzzy
 msgid ""
 "(plated through holes normally have a copper pad on at least one outer layer)"
 msgstr ""
-"(os furos passantes metalizados geralmente devem ter uma ilha com cobre em "
+"(os furos passantes revestidos geralmente devem ter uma ilha de cobre em "
 "pelo menos uma camada)"
 
 #: pcbnew/pad.cpp:2187
@@ -46510,11 +46509,11 @@ msgid "No layers selected for plotting."
 msgstr "Nenhuma camada foi selecionada para plotagem."
 
 #: pcbnew/pcb_plotter.cpp:427
-#, fuzzy, c-format
+#, c-format
 msgid "Color theme '%s' not found, will use theme from PCB Editor settings.\n"
 msgstr ""
-"Tema das cores a ser utilizado (o padrão será as configurações do editor de "
-"PCI)"
+"O tema de cores '%s' não foi encontrado, será usado o tema das configurações "
+"do editor de PCI.\n"
 
 #: pcbnew/pcb_reference_image.cpp:343
 msgid "Associated Layer"
@@ -51181,184 +51180,148 @@ msgid "User defined layer 9"
 msgstr "Camada 9 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1684
-#, fuzzy
 msgid "User defined layer 10"
-msgstr "Camada 1 definida pelo usuário"
+msgstr "Camada 10 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1685
-#, fuzzy
 msgid "User defined layer 11"
-msgstr "Camada 1 definida pelo usuário"
+msgstr "Camada 11 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1686
-#, fuzzy
 msgid "User defined layer 12"
-msgstr "Camada 1 definida pelo usuário"
+msgstr "Camada 12 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1687
-#, fuzzy
 msgid "User defined layer 13"
-msgstr "Camada 1 definida pelo usuário"
+msgstr "Camada 13 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1688
-#, fuzzy
 msgid "User defined layer 14"
-msgstr "Camada 1 definida pelo usuário"
+msgstr "Camada 14 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1689
-#, fuzzy
 msgid "User defined layer 15"
-msgstr "Camada 1 definida pelo usuário"
+msgstr "Camada 15 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1690
-#, fuzzy
 msgid "User defined layer 16"
-msgstr "Camada 1 definida pelo usuário"
+msgstr "Camada 16 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1691
-#, fuzzy
 msgid "User defined layer 17"
-msgstr "Camada 1 definida pelo usuário"
+msgstr "Camada 17 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1692
-#, fuzzy
 msgid "User defined layer 18"
-msgstr "Camada 1 definida pelo usuário"
+msgstr "Camada 18 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1693
-#, fuzzy
 msgid "User defined layer 19"
-msgstr "Camada 1 definida pelo usuário"
+msgstr "Camada 19 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1694
-#, fuzzy
 msgid "User defined layer 20"
-msgstr "Camada 2 definida pelo usuário"
+msgstr "Camada 20 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1695
-#, fuzzy
 msgid "User defined layer 21"
-msgstr "Camada 2 definida pelo usuário"
+msgstr "Camada 21 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1696
-#, fuzzy
 msgid "User defined layer 22"
-msgstr "Camada 2 definida pelo usuário"
+msgstr "Camada 22 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1697
-#, fuzzy
 msgid "User defined layer 23"
-msgstr "Camada 2 definida pelo usuário"
+msgstr "Camada 23 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1698
-#, fuzzy
 msgid "User defined layer 24"
-msgstr "Camada 2 definida pelo usuário"
+msgstr "Camada 24 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1699
-#, fuzzy
 msgid "User defined layer 25"
-msgstr "Camada 2 definida pelo usuário"
+msgstr "Camada 25 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1700
-#, fuzzy
 msgid "User defined layer 26"
-msgstr "Camada 2 definida pelo usuário"
+msgstr "Camada 26 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1701
-#, fuzzy
 msgid "User defined layer 27"
-msgstr "Camada 2 definida pelo usuário"
+msgstr "Camada 27 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1702
-#, fuzzy
 msgid "User defined layer 28"
-msgstr "Camada 2 definida pelo usuário"
+msgstr "Camada 28 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1703
-#, fuzzy
 msgid "User defined layer 29"
-msgstr "Camada 2 definida pelo usuário"
+msgstr "Camada 29 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1704
-#, fuzzy
 msgid "User defined layer 30"
-msgstr "Camada 3 definida pelo usuário"
+msgstr "Camada 30 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1705
-#, fuzzy
 msgid "User defined layer 31"
-msgstr "Camada 3 definida pelo usuário"
+msgstr "Camada 31 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1706
-#, fuzzy
 msgid "User defined layer 32"
-msgstr "Camada 3 definida pelo usuário"
+msgstr "Camada 32 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1707
-#, fuzzy
 msgid "User defined layer 33"
-msgstr "Camada 3 definida pelo usuário"
+msgstr "Camada 33 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1708
-#, fuzzy
 msgid "User defined layer 34"
-msgstr "Camada 3 definida pelo usuário"
+msgstr "Camada 34 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1709
-#, fuzzy
 msgid "User defined layer 35"
-msgstr "Camada 3 definida pelo usuário"
+msgstr "Camada 35 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1710
-#, fuzzy
 msgid "User defined layer 36"
-msgstr "Camada 3 definida pelo usuário"
+msgstr "Camada 36 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1711
-#, fuzzy
 msgid "User defined layer 37"
-msgstr "Camada 3 definida pelo usuário"
+msgstr "Camada 37 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1712
-#, fuzzy
 msgid "User defined layer 38"
-msgstr "Camada 3 definida pelo usuário"
+msgstr "Camada 38 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1713
-#, fuzzy
 msgid "User defined layer 39"
-msgstr "Camada 3 definida pelo usuário"
+msgstr "Camada 39 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1714
-#, fuzzy
 msgid "User defined layer 40"
-msgstr "Camada 3 definida pelo usuário"
+msgstr "Camada 40 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1715
-#, fuzzy
 msgid "User defined layer 41"
-msgstr "Camada 3 definida pelo usuário"
+msgstr "Camada 41 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1716
-#, fuzzy
 msgid "User defined layer 42"
-msgstr "Camada 3 definida pelo usuário"
+msgstr "Camada 42 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1717
-#, fuzzy
 msgid "User defined layer 43"
-msgstr "Camada 3 definida pelo usuário"
+msgstr "Camada 43 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1718
-#, fuzzy
 msgid "User defined layer 44"
-msgstr "Camada 3 definida pelo usuário"
+msgstr "Camada 44 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1719
-#, fuzzy
 msgid "User defined layer 45"
-msgstr "Camada 3 definida pelo usuário"
+msgstr "Camada 45 definida pelo usuário"
 
 #: pcbnew/widgets/appearance_controls.cpp:1766
 msgid "Front copper layer"
