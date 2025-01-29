@@ -996,6 +996,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 text->SetLayer( layer );
                 text->SetAttributes( textAttrs );
                 text->SetTextPos( cursorPos );
+                text->SetFlags( IS_NEW );  // Prevent double undo commits
 
                 DIALOG_TEXT_PROPERTIES textDialog( m_frame, text );
                 bool cancelled;
@@ -1168,7 +1169,7 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
                                   COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        if( evt->IsCancelInteractive() || ( table && evt->IsAction( &ACTIONS::undo ) ) 
+        if( evt->IsCancelInteractive() || ( table && evt->IsAction( &ACTIONS::undo ) )
             || evt->IsDrag() )
         {
             if( table )
