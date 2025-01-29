@@ -347,7 +347,7 @@ bool PAD::FlashLayer( int aLayer, bool aOnlyCheckIfPermitted ) const
     if( aLayer > PCB_LAYER_ID_COUNT )
         return true;
 
-    const PCB_LAYER_ID& layer = static_cast<PCB_LAYER_ID>( aLayer );
+    PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( aLayer );
 
     if( !IsOnLayer( layer ) )
         return false;
