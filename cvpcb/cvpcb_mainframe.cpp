@@ -896,7 +896,7 @@ bool CVPCB_MAINFRAME::LoadFootprintFiles()
         return false;
     }
 
-    WX_PROGRESS_REPORTER progressReporter( this, _( "Loading Footprint Libraries" ), 2 );
+    WX_PROGRESS_REPORTER progressReporter( this, _( "Loading Footprint Libraries" ), 1 );
 
     m_FootprintsList->ReadFootprintFiles( fptbl, nullptr, &progressReporter );
 

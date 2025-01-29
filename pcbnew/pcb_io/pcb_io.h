@@ -185,26 +185,6 @@ public:
     virtual long long GetLibraryTimestamp( const wxString& aLibraryPath ) const = 0;
 
     /**
-     * If possible, prefetches the specified library (e.g. performing downloads). Does not parse.
-     * Threadsafe.
-     *
-     * This is a no-op for libraries that cannot be prefetched.  Plugins that cannot prefetch
-     * need not override this; a default no-op is provided.
-     *
-     * @param aLibraryPath is a locator for the "library", usually a directory, file, or URL
-     *                     containing several footprints.
-     *
-     * @param aProperties is an associative array that can be used to tell the plugin anything
-     *                    needed about how to perform with respect to @a aLibraryPath.  The
-     *                    caller continues to own this object (plugin may not delete it), and
-     *                    plugins should expect it to be optionally NULL.
-     *
-     * @throw IO_ERROR if there is an error prefetching the library.
-     */
-    virtual void PrefetchLib( const wxString& aLibraryPath,
-                              const std::map<std::string, UTF8>* aProperties = nullptr );
-
-    /**
      * Load a single footprint from @a aFootprintPath and put its name in @a aFootprintNameOut.
      * If this is a footprint library, the first footprint should be loaded.
      * The default implementation uses FootprintEnumerate and FootprintLoad to load first footprint.

@@ -316,14 +316,6 @@ void FP_LIB_TABLE::FootprintEnumerate( wxArrayString& aFootprintNames, const wxS
 }
 
 
-void FP_LIB_TABLE::PrefetchLib( const wxString& aNickname )
-{
-    const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
-    wxASSERT( row->plugin );
-    row->plugin->PrefetchLib( row->GetFullURI( true ), row->GetProperties() );
-}
-
-
 const FP_LIB_TABLE_ROW* FP_LIB_TABLE::FindRow( const wxString& aNickname, bool aCheckIfEnabled )
 {
     FP_LIB_TABLE_ROW* row = static_cast<FP_LIB_TABLE_ROW*>( findRow( aNickname, aCheckIfEnabled ) );

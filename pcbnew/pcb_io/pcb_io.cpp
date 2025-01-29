@@ -100,11 +100,6 @@ void PCB_IO::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString&
 }
 
 
-void PCB_IO::PrefetchLib( const wxString&, const std::map<std::string, UTF8>* )
-{
-}
-
-
 FOOTPRINT* PCB_IO::ImportFootprint( const wxString& aFootprintPath, wxString& aFootprintNameOut,
                                     const std::map<std::string, UTF8>* aProperties )
 {

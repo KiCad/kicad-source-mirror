@@ -156,18 +156,6 @@ public:
     long long GenerateTimestamp( const wxString* aNickname );
 
     /**
-     * If possible, prefetches the specified library (e.g. performing downloads). Does not parse.
-     * Threadsafe.
-     *
-     * This is a no-op for libraries that cannot be prefetched.
-     *
-     * @param aNickname is a locator for the library; it is a name in LIB_TABLE_ROW.
-     *
-     * @throw IO_ERROR if there is an error prefetching the library.
-     */
-    void PrefetchLib( const wxString& aNickname );
-
-    /**
      * Load a footprint having @a aFootprintName from the library given by @a aNickname.
      *
      * @param aNickname is a locator for the "library", it is a "name" in #LIB_TABLE_ROW.

@@ -125,47 +125,34 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
 
     m_progress_reporter = aProgressReporter;
 
-    if( m_progress_reporter )
-    {
-        m_progress_reporter->SetMaxProgress( m_queue_in.size() );
-        m_progress_reporter->Report( _( "Fetching footprint libraries..." ) );
-    }
-
     m_cancelled = false;
     m_lib_table = aTable;
 
     // Clear data before reading files
     m_errors.clear();
     m_list.clear();
-    m_queue_in.clear();
-    m_queue_out.clear();
+    m_queue.clear();
 
     if( aNickname )
     {
-        m_queue_in.push( *aNickname );
+        m_queue.push( *aNickname );
     }
     else
     {
         for( const wxString& nickname : aTable->GetLogicalLibs() )
-            m_queue_in.push( nickname );
+            m_queue.push( nickname );
     }
 
-    loadLibs();
-
-    if( !m_cancelled )
+    if( m_progress_reporter )
     {
-        if( m_progress_reporter )
-        {
-            m_progress_reporter->SetMaxProgress( m_queue_out.size() );
-            m_progress_reporter->AdvancePhase();
-            m_progress_reporter->Report( _( "Loading footprints..." ) );
-        }
-
-        loadFootprints();
-
-        if( m_progress_reporter )
-            m_progress_reporter->AdvancePhase();
+        m_progress_reporter->SetMaxProgress( (int) m_queue.size() );
+        m_progress_reporter->Report( _( "Loading footprints..." ) );
     }
+
+    loadFootprints();
+
+    if( m_progress_reporter )
+        m_progress_reporter->AdvancePhase();
 
     if( m_cancelled )
         m_list_timestamp = 0;       // God knows what we got before we were canceled
@@ -173,53 +160,6 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
         m_list_timestamp = generatedTimestamp;
 
     return m_errors.empty();
-}
-
-
-void FOOTPRINT_LIST_IMPL::loadLibs()
-{
-    thread_pool& tp = GetKiCadThreadPool();
-    size_t num_returns = m_queue_in.size();
-    std::vector<std::future<size_t>> returns( num_returns );
-
-    auto loader_job =
-            [this]() -> size_t
-            {
-                wxString nickname;
-                size_t retval = 0;
-
-                if( !m_cancelled && m_queue_in.pop( nickname ) )
-                {
-                    if( CatchErrors( [this, &nickname]()
-                                     {
-                                         m_lib_table->PrefetchLib( nickname );
-                                         m_queue_out.push( nickname );
-                                     } ) && m_progress_reporter )
-                    {
-                        m_progress_reporter->AdvanceProgress();
-                    }
-
-                    ++retval;
-                }
-
-                return retval;
-            };
-
-    for( size_t ii = 0; ii < num_returns; ++ii )
-        returns[ii] = tp.submit( loader_job );
-
-    for( const std::future<size_t>& ret : returns )
-    {
-        std::future_status status = ret.wait_for( std::chrono::milliseconds( 250 ) );
-
-        while( status != std::future_status::ready )
-        {
-            if( m_progress_reporter && !m_progress_reporter->KeepRefreshing() )
-                m_cancelled = true;
-
-            status = ret.wait_for( std::chrono::milliseconds( 250 ) );
-        }
-    }
 }
 
 
@@ -236,7 +176,7 @@ void FOOTPRINT_LIST_IMPL::loadFootprints()
 
     SYNC_QUEUE<std::unique_ptr<FOOTPRINT_INFO>> queue_parsed;
     thread_pool&                                tp = GetKiCadThreadPool();
-    size_t                                      num_elements = m_queue_out.size();
+    size_t                                      num_elements = m_queue.size();
     std::vector<std::future<size_t>>            returns( num_elements );
 
     auto fp_thread =
@@ -244,7 +184,7 @@ void FOOTPRINT_LIST_IMPL::loadFootprints()
             {
                 wxString nickname;
 
-                if( m_cancelled || !m_queue_out.pop( nickname ) )
+                if( m_cancelled || !m_queue.pop( nickname ) )
                     return 0;
 
                 wxArrayString fpnames;

@@ -65,7 +65,7 @@ void FOOTPRINT_SELECT_WIDGET::Load( KIWAY& aKiway, PROJECT& aProject )
         // If the fp-info-cache is empty (or, more likely, hasn't been created in a new
         // project yet), load footprints the hard way.
         FP_LIB_TABLE*        fpTable = aProject.PcbFootprintLibs( aKiway );
-        WX_PROGRESS_REPORTER progressReporter( m_frame, _( "Loading Footprint Libraries" ), 3 );
+        WX_PROGRESS_REPORTER progressReporter( m_frame, _( "Loading Footprint Libraries" ), 1 );
         FOOTPRINT_LIST_IMPL& fpList = static_cast<FOOTPRINT_LIST_IMPL&>( *m_fp_list );
 
         fpList.ReadFootprintFiles( fpTable, nullptr, &progressReporter );

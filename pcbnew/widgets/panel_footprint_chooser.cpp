@@ -66,7 +66,7 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
 
     // Load footprint files:
     WX_PROGRESS_REPORTER* progressReporter = new WX_PROGRESS_REPORTER( aParent,
-                                                    _( "Loading Footprint Libraries" ), 3 );
+                                                    _( "Loading Footprint Libraries" ), 1 );
     GFootprintList.ReadFootprintFiles( fpTable, nullptr, progressReporter );
 
     // Force immediate deletion of the WX_PROGRESS_REPORTER.  Do not use Destroy(), or use

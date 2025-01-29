@@ -64,7 +64,7 @@ PANEL_DESIGN_BLOCK_CHOOSER::PANEL_DESIGN_BLOCK_CHOOSER( SCH_EDIT_FRAME* aFrame, 
 
     // Load design block files:
     WX_PROGRESS_REPORTER* progressReporter =
-            new WX_PROGRESS_REPORTER( aParent, _( "Loading Design Block Libraries" ), 3 );
+            new WX_PROGRESS_REPORTER( aParent, _( "Loading Design Block Libraries" ), 1 );
     DESIGN_BLOCK_LIB_TABLE::GetGlobalList().ReadDesignBlockFiles( libs, nullptr, progressReporter );
 
     // Force immediate deletion of the WX_PROGRESS_REPORTER.  Do not use Destroy(), or use

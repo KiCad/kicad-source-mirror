@@ -322,14 +322,6 @@ void DESIGN_BLOCK_LIB_TABLE::DesignBlockEnumerate( wxArrayString&  aDesignBlockN
 }
 
 
-void DESIGN_BLOCK_LIB_TABLE::PrefetchLib( const wxString& aNickname )
-{
-    const DESIGN_BLOCK_LIB_TABLE_ROW* row = FindRow( aNickname, true );
-    wxASSERT( row->plugin );
-    row->plugin->PrefetchLib( row->GetFullURI( true ), row->GetProperties() );
-}
-
-
 const DESIGN_BLOCK_LIB_TABLE_ROW* DESIGN_BLOCK_LIB_TABLE::FindRow( const wxString& aNickname,
                                                                    bool            aCheckIfEnabled )
 {

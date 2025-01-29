@@ -106,11 +106,6 @@ public:
 
     void DesignBlockDelete( const wxString& aLibraryPath, const wxString& aDesignBlockName,
                             const std::map<std::string, UTF8>* aProperties = nullptr );
-
-    virtual void PrefetchLib( const wxString&                    aLibraryPath,
-                              const std::map<std::string, UTF8>* aProperties = nullptr )
-    {
-    }
 };
 
 #endif

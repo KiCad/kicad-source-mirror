@@ -96,7 +96,6 @@ public:
     void Clear() override;
 
 protected:
-    void loadLibs();
     void loadFootprints();
 
 private:
@@ -107,8 +106,7 @@ private:
      */
     bool CatchErrors( const std::function<void()>& aFunc );
 
-    SYNC_QUEUE<wxString>     m_queue_in;
-    SYNC_QUEUE<wxString>     m_queue_out;
+    SYNC_QUEUE<wxString>     m_queue;
     long long                m_list_timestamp;
     PROGRESS_REPORTER*       m_progress_reporter;
     std::atomic_bool         m_cancelled;

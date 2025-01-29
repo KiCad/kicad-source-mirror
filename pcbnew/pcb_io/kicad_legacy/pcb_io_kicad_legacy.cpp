@@ -3276,9 +3276,6 @@ bool PCB_IO_KICAD_LEGACY::DeleteLibrary( const wxString& aLibraryPath,
 
 bool PCB_IO_KICAD_LEGACY::IsLibraryWritable( const wxString& aLibraryPath )
 {
-#if 0   // no support for 32 Cu layers in legacy format
-    return false;
-#else
     LOCALE_IO   toggle;
 
     init( nullptr );
@@ -3286,7 +3283,6 @@ bool PCB_IO_KICAD_LEGACY::IsLibraryWritable( const wxString& aLibraryPath )
     cacheLib( aLibraryPath );
 
     return m_cache->m_writable;
-#endif
 }
 
 
