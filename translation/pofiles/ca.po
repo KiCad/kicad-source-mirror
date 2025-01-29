@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-28 19:43+0300\n"
-"PO-Revision-Date: 2025-01-23 09:58+0000\n"
-"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
+"PO-Revision-Date: 2025-01-29 16:58+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v8/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -20749,7 +20749,7 @@ msgstr "Crea un nou símbol"
 
 #: eeschema/tools/ee_actions.cpp:170
 msgid "Derive from Existing Symbol"
-msgstr "Derivat del símbol existent…"
+msgstr "Derivat del símbol existent"
 
 #: eeschema/tools/ee_actions.cpp:171
 #, fuzzy
