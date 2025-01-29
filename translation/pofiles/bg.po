@@ -6,11 +6,11 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-28 19:42+0300\n"
-"PO-Revision-Date: 2025-01-11 10:05+0000\n"
-"Last-Translator: 109247019824 <109247019824@users.noreply.hosted.weblate."
-"org>\n"
-"Language-Team: Bulgarian <https://hosted.weblate.org/projects/kicad/master-"
-"source/bg/>\n"
+"PO-Revision-Date: 2025-01-29 16:58+0000\n"
+"Last-Translator: 109247019824 <109247019824@users.noreply.hosted.weblate.org>"
+"\n"
+"Language-Team: Bulgarian <https://hosted.weblate.org/projects/kicad/"
+"master-source/bg/>\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -54,14 +54,14 @@ msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"Контурът на цокъла липсва или е повреден. Извършете проверка на цокли, за да "
-"получите по-пълна информация."
+"Контурът на цокъла липсва или е повреден. Отворете Проверка на цокли, за да "
+"получите пълна информация."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:971
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
 "Контурът на платката липсва или е повреден. Извършете проверка на правилата "
-"DRC, за да получите по-пълна информация."
+"DRC, за да получите пълна информация."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:259
 #, fuzzy
@@ -398,7 +398,7 @@ msgstr "Неуспешно копиране на изображение в бу�
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:799
 msgid "Can't save file"
-msgstr "Невъзможно съхранение на файл"
+msgstr "Грешка при запазване на файл"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:47
 #, fuzzy
@@ -1107,7 +1107,7 @@ msgstr "Указателен слой на задната част"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:41
 msgid "Show filled areas in zones"
-msgstr "Покажи заливката в зоните"
+msgstr "Показване на заливката в зоните"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:44
 msgid "Use bare copper color for unplated copper (slow)"
@@ -1466,7 +1466,7 @@ msgstr "Z"
 #: gerbview/gerber_draw_item.cpp:722 pcbnew/footprint.cpp:1676
 #: pcbnew/pad.cpp:1361
 msgid "Rotation"
-msgstr "Ротация"
+msgstr "Завъртане"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:113
 #, fuzzy
@@ -1732,12 +1732,12 @@ msgstr "Създай Архив за Отпечатъци на Компонен�
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:250
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:300
 msgid "mm"
-msgstr "mm"
+msgstr "мм"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:48
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
 msgid "Inch"
-msgstr "Инч"
+msgstr "инч"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:48
 #, fuzzy
@@ -1770,7 +1770,7 @@ msgstr "Оригинално изображение"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:25
 msgid "Greyscale Picture"
-msgstr "Изображение-сива скала"
+msgstr "Изображение в нюанси на сивото"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:28
 #, fuzzy
@@ -1818,7 +1818,7 @@ msgstr "BPP:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:85
 msgid "bits"
-msgstr "bits"
+msgstr "бит"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:98
 #, fuzzy
@@ -1866,7 +1866,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:49
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:98
 msgid "Options"
-msgstr "Опции"
+msgstr "Параметри"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:143
 #, fuzzy
@@ -1884,7 +1884,7 @@ msgstr ""
 #: bitmap2component/bitmap2cmp_panel_base.cpp:152
 #: gerbview/gerber_file_image.cpp:357
 msgid "Negative"
-msgstr "Негативно"
+msgstr "Негатив"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:159
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:44
@@ -2006,7 +2006,7 @@ msgstr ""
 #: common/confirm.cpp:54 common/confirm.cpp:59 common/confirm.cpp:124
 #: common/confirm.cpp:151 common/dialog_shim.cpp:794
 msgid "&Cancel"
-msgstr "Отмени"
+msgstr "&Отказ"
 
 #: common/confirm.cpp:54 common/confirm.cpp:59
 #, fuzzy
@@ -2024,7 +2024,7 @@ msgstr ""
 
 #: common/confirm.cpp:74 common/confirm.cpp:111 common/dialog_shim.cpp:798
 msgid "&Save"
-msgstr "Съхрани"
+msgstr "&Запазване"
 
 #: common/confirm.cpp:74 common/confirm.cpp:111
 #, fuzzy
@@ -2042,12 +2042,12 @@ msgstr ""
 
 #: common/confirm.cpp:124
 msgid "&Revert"
-msgstr "Върни"
+msgstr "В&ръщане"
 
 #: common/confirm.cpp:150 common/dialog_about/dialog_about_base.cpp:90
 #: common/dialog_shim.cpp:793
 msgid "&OK"
-msgstr "ОК"
+msgstr "Д&обре"
 
 #: common/confirm.cpp:187 common/dialogs/panel_setup_severities.cpp:44
 #: common/kidialog.cpp:125 eeschema/dialogs/dialog_erc.cpp:879
@@ -2250,7 +2250,7 @@ msgstr "Невъзможно отваряне на библиотечен фай
 #: pcbnew/footprint_libraries_utils.cpp:1006
 #: pcbnew/footprint_libraries_utils.cpp:1334
 msgid "Description"
-msgstr "Определение"
+msgstr "Описание"
 
 #: common/dialog_about/AboutDialog_main.cpp:116
 #, fuzzy
@@ -2298,7 +2298,7 @@ msgstr "KiCad в мрежата"
 
 #: common/dialog_about/AboutDialog_main.cpp:177
 msgid "The complete KiCad EDA Suite is released under the"
-msgstr "Пълният KiCad EDA пакет е издаден под"
+msgstr "Пълният пакет KiCad EDA се разпространява под"
 
 #: common/dialog_about/AboutDialog_main.cpp:179
 #, fuzzy
@@ -2350,7 +2350,7 @@ msgstr "Захранващ символ"
 #: pcbnew/widgets/panel_selection_filter_base.cpp:29
 #: pcbnew/widgets/search_handlers.cpp:116
 msgid "Footprints"
-msgstr "Комп. отпечатъци"
+msgstr "Цокли"
 
 #: common/dialog_about/AboutDialog_main.cpp:928
 #, fuzzy
@@ -2395,7 +2395,7 @@ msgstr "Библиотечни файлове:"
 
 #: common/dialog_about/dialog_about.cpp:149
 msgid "Artists"
-msgstr "Художествени редактори"
+msgstr "Художници"
 
 #: common/dialog_about/dialog_about.cpp:151
 msgid "Translators"
@@ -2425,15 +2425,15 @@ msgstr "Край"
 
 #: common/dialog_about/dialog_about_base.cpp:31
 msgid "App Title"
-msgstr "Приложение"
+msgstr "Име на приложението"
 
 #: common/dialog_about/dialog_about_base.cpp:37
 msgid "Build Version Info"
-msgstr "Информация за версия"
+msgstr "Информация за изданието"
 
 #: common/dialog_about/dialog_about_base.cpp:41
 msgid "Lib Version Info"
-msgstr "Информация за версия на библиотеки"
+msgstr "Информация за версия на библиотеките"
 
 #: common/dialog_about/dialog_about_base.cpp:54
 #, fuzzy
@@ -2474,7 +2474,7 @@ msgstr "Приложи"
 #: common/eda_base_frame.cpp:511 common/eda_base_frame.cpp:516
 #: common/eda_base_frame.cpp:537 common/eda_base_frame.cpp:541
 msgid "&Help"
-msgstr "Помощ"
+msgstr "&Помощ"
 
 #: common/dialogs/dialog_HTML_reporter_base.h:48
 #: common/dialogs/dialog_book_reporter_base.h:45
@@ -3010,7 +3010,7 @@ msgstr ""
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
 #, c-format
 msgid "The selection contains %lu locked items."
-msgstr "Избраното съдържа %lu заключени елемента"
+msgstr "Избраното съдържа %lu заключени елемента."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -3182,7 +3182,7 @@ msgstr "Електр. параметри:"
 #: eeschema/tools/sch_editor_control.cpp:197
 #: pcbnew/tools/board_editor_control.cpp:304
 msgid "Page Settings"
-msgstr "Параметри на страница"
+msgstr "Настройки на страницата"
 
 #: common/dialogs/dialog_page_settings.cpp:118
 #: common/dialogs/dialog_page_settings_base.cpp:27
@@ -3299,7 +3299,7 @@ msgstr "Особени ширини на пътечка:"
 #: common/dialogs/dialog_page_settings_base.cpp:369
 #: common/dialogs/dialog_page_settings_base.cpp:381
 msgid "Export to other sheets"
-msgstr "Експорт към други листове"
+msgstr "Изнасяне към всички листове"
 
 #: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:444
 #: eeschema/erc/erc_item.cpp:427 eeschema/sch_marker.cpp:382
@@ -3327,12 +3327,12 @@ msgstr "Електр. параметри:"
 #: common/dialogs/dialog_page_settings_base.cpp:196
 #, c-format
 msgid "Number of sheets: %d"
-msgstr "Брой листи: %d"
+msgstr "Брой листа: %d"
 
 #: common/dialogs/dialog_page_settings_base.cpp:203
 #, c-format
 msgid "Sheet number: %d"
-msgstr "Номер на лист: %d"
+msgstr "Номер на листа: %d"
 
 #: common/dialogs/dialog_page_settings_base.cpp:216
 msgid "Issue Date:"
@@ -3531,7 +3531,7 @@ msgstr "Печат"
 #: common/dialogs/dialog_print_generic.cpp:249
 #: eeschema/printing/dialog_print_using_printer.cpp:127
 msgid "Print Preview"
-msgstr "Преглед на печат"
+msgstr "Преглед преди отпечатване"
 
 #: common/dialogs/dialog_print_generic.cpp:98 common/hotkey_store.cpp:59
 #: common/tool/action_menu.cpp:214 common/tool/action_menu.cpp:219
@@ -3564,7 +3564,7 @@ msgstr "Преглед на печат"
 #: pcbnew/dialogs/dialog_import_netlist.cpp:84
 #: pcbnew/dialogs/dialog_plot.cpp:232 pcbnew/dialogs/dialog_update_pcb.cpp:61
 msgid "Close"
-msgstr "Затвори"
+msgstr "Затваряне"
 
 #: common/dialogs/dialog_print_generic.cpp:156
 #, fuzzy
@@ -3633,7 +3633,7 @@ msgstr "Негативен изход"
 #: pcbnew/pcb_tablecell.cpp:209 pcbnew/pcb_text.cpp:624
 #: pcbnew/pcb_textbox.cpp:820 pcbnew/tools/drawing_stackup_table_tool.cpp:271
 msgid "Color"
-msgstr "Цвят"
+msgstr "Цветно"
 
 #: common/dialogs/dialog_print_generic_base.cpp:35
 #: pcbnew/dialogs/dialog_plot_base.cpp:385
@@ -3669,7 +3669,7 @@ msgstr "По избор"
 
 #: common/dialogs/dialog_print_generic_base.cpp:77
 msgid "Set X scale adjust for exact scale plotting"
-msgstr "Установка на точен мащаб по ос Х"
+msgstr "Задаване на точен мащаб по оста X"
 
 #: common/dialogs/dialog_print_generic_base.cpp:96
 #, fuzzy
@@ -3867,7 +3867,7 @@ msgstr "Тест ERC"
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout.cpp:78
 #: pcbnew/tools/multichannel_tool.cpp:972
 msgid "OK"
-msgstr "OK"
+msgstr "Добре"
 
 #: common/dialogs/git/dialog_git_auth.cpp:54
 #: common/dialogs/git/dialog_git_commit.cpp:143
@@ -3882,7 +3882,7 @@ msgstr "OK"
 #: pcbnew/dialogs/dialog_drc.cpp:348
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:53
 msgid "Cancel"
-msgstr "Откажи"
+msgstr "Отказ"
 
 #: common/dialogs/git/dialog_git_auth.cpp:58
 msgid "Url"
@@ -3925,7 +3925,7 @@ msgstr "Име на файл:"
 #: pcbnew/pcb_text.cpp:279 pcbnew/pcb_textbox.cpp:485 pcbnew/pcb_track.cpp:1685
 #: pcbnew/zone.cpp:819
 msgid "Status"
-msgstr "Статус"
+msgstr "Състояние"
 
 #: common/dialogs/git/dialog_git_commit.cpp:99
 #, fuzzy
@@ -4098,7 +4098,7 @@ msgstr "Мрежа за бързо превключване"
 #: eeschema/design_block_utils.cpp:90 eeschema/sch_base_frame.cpp:307
 #: pcbnew/footprint_libraries_utils.cpp:430
 msgid "Add"
-msgstr "Добави"
+msgstr "Добавяне"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:23
 msgid "Git Commit Data"
@@ -4372,27 +4372,25 @@ msgid "When enabled, use a different color for every other table row"
 msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:185
-#, fuzzy
 msgid "Icon theme:"
-msgstr "Цвят"
+msgstr "Тема на пиктограмите:"
 
 #: common/dialogs/panel_common_settings_base.cpp:189
-#, fuzzy
 msgid "Light"
-msgstr "Дясно"
+msgstr "Светла"
 
 #: common/dialogs/panel_common_settings_base.cpp:190
 msgid "Use icons designed for light window backgrounds"
-msgstr ""
+msgstr "Използване на пиктограми, пригодени за светъл фон на прозорците"
 
 #: common/dialogs/panel_common_settings_base.cpp:194
 #: gerbview/gerber_draw_item.cpp:725
 msgid "Dark"
-msgstr "Тъмно"
+msgstr "Тъмна"
 
 #: common/dialogs/panel_common_settings_base.cpp:195
 msgid "Use icons designed for dark window backgrounds"
-msgstr ""
+msgstr "Използване на пиктограми, пригодени за тъмен фон на прозорците"
 
 #: common/dialogs/panel_common_settings_base.cpp:199
 #: common/dialogs/panel_common_settings_base.cpp:245
@@ -4400,29 +4398,29 @@ msgstr ""
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:122
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:33
 #: pcbnew/pcb_dimension.cpp:1741
-#, fuzzy
 msgid "Automatic"
-msgstr "Авто"
+msgstr "Автоматична"
 
 #: common/dialogs/panel_common_settings_base.cpp:201
 msgid ""
 "Automatically choose light or dark icons based on the system color theme"
 msgstr ""
+"Автоматично избиране на светли или тъмни пиктограми, в зависимоат от "
+"системната тема"
 
 #: common/dialogs/panel_common_settings_base.cpp:211
-#, fuzzy
 msgid "Toolbar icon size:"
-msgstr "Прекалено малка микро проходна връзка"
+msgstr "Размер на пиктограмите в лентата с инструменти:"
 
 #: common/dialogs/panel_common_settings_base.cpp:215
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
 #: pcbnew/dialogs/dialog_plot_base.cpp:118
 msgid "Small"
-msgstr "Малък"
+msgstr "Малки"
 
 #: common/dialogs/panel_common_settings_base.cpp:216
 msgid "Use compact icons in the toolbars"
-msgstr ""
+msgstr "Използване на компактни пиктограми в лентата с инструменти"
 
 #: common/dialogs/panel_common_settings_base.cpp:220 common/eda_text.cpp:974
 #: eeschema/sch_label.cpp:1197 eeschema/sch_tablecell.cpp:128
@@ -4435,37 +4433,37 @@ msgstr ""
 #: pcbnew/widgets/appearance_controls.cpp:637
 #: pcbnew/widgets/appearance_controls.cpp:1804
 msgid "Normal"
-msgstr "Нормален/-о"
+msgstr "Обикновени"
 
 #: common/dialogs/panel_common_settings_base.cpp:221
 msgid "Use the default KiCad icon size in the toolbars"
 msgstr ""
+"Използване на стандартния за KiCad размер пиктограми в лентата с инструменти"
 
 #: common/dialogs/panel_common_settings_base.cpp:225
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
 msgid "Large"
-msgstr "Голям"
+msgstr "Големи"
 
 #: common/dialogs/panel_common_settings_base.cpp:226
 msgid "Use larger icons in the toolbars"
-msgstr ""
+msgstr "Използване на големи пиктограми в лентата с инструменти"
 
 #: common/dialogs/panel_common_settings_base.cpp:237
-#, fuzzy
 msgid "Canvas scale:"
-msgstr "X мащаб:"
+msgstr "Мащаб на платното:"
 
 #: common/dialogs/panel_common_settings_base.cpp:254
 msgid "Apply icon scaling to fonts"
-msgstr ""
+msgstr "Прилагане мащаба на пиктограмите към шрифтовете"
 
 #: common/dialogs/panel_common_settings_base.cpp:257
 msgid "(This workaround will improve some GTK HiDPI font scaling issues.)"
-msgstr ""
+msgstr "(може да подобри проблеми с HiDPI в GTK)"
 
 #: common/dialogs/panel_common_settings_base.cpp:264
 msgid "High-contrast mode dimming factor:"
-msgstr ""
+msgstr "Ниво на затъмняване на силно-контрастния режим:"
 
 #: common/dialogs/panel_common_settings_base.cpp:271
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:73
@@ -4495,44 +4493,44 @@ msgstr "%"
 
 #: common/dialogs/panel_common_settings_base.cpp:287
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:20
-#, fuzzy
 msgid "Editing"
-msgstr "Редактирай извод"
+msgstr "Променяне"
 
 #: common/dialogs/panel_common_settings_base.cpp:297
 msgid "Warp mouse to anchor of moved object"
-msgstr ""
+msgstr "Преместване на показалеца на мишката в центъра на премествания обект"
 
 #: common/dialogs/panel_common_settings_base.cpp:301
-#, fuzzy
 msgid "First hotkey selects tool"
-msgstr "Редактор на горещи клавиши"
+msgstr "Първата клавишна комбинация избира инструмент"
 
 #: common/dialogs/panel_common_settings_base.cpp:302
 msgid ""
 "If not checked, hotkeys will immediately perform an action even if the "
 "relevant tool was not previously selected."
 msgstr ""
+"Ако не е отметнато, при натискане на клавишна комбинация съответният "
+"инструмент ще изпълни действието си, даже и в момента да не е бил избран."
 
 #: common/dialogs/panel_common_settings_base.cpp:312
-#, fuzzy
 msgid "Session"
-msgstr "Изменение №"
+msgstr "Сеанс"
 
 #: common/dialogs/panel_common_settings_base.cpp:322
 msgid "Remember open files for next project launch"
-msgstr ""
+msgstr "Запомняне на отворените файлове за следващо отваряне на проекта"
 
 #: common/dialogs/panel_common_settings_base.cpp:324
 msgid ""
 "If checked, launching a project will also launch tools such as the schematic "
 "and board editors with previously open files"
 msgstr ""
+"Ако е отметнато, при отваряне на проекти ще бъдат отваряни, в съответните "
+"редактори, и последните файлове като схеми или платки"
 
 #: common/dialogs/panel_common_settings_base.cpp:337
-#, fuzzy
 msgid "&Auto save:"
-msgstr "Автом.поставяне на модул"
+msgstr "&Автом. запазване:"
 
 #: common/dialogs/panel_common_settings_base.cpp:342
 #, fuzzy
@@ -23749,9 +23747,8 @@ msgid "Create a new symbol in an existing library"
 msgstr "Изтриване на елементи от компонент?"
 
 #: eeschema/tools/ee_actions.cpp:202
-#, fuzzy
 msgid "Derive from Existing Symbol..."
-msgstr "Изтриване на елементи от компонент?"
+msgstr "Производно от съществуващ символ…"
 
 #: eeschema/tools/ee_actions.cpp:203
 #, fuzzy
@@ -36981,9 +36978,8 @@ msgstr "Стартирай CVPcb"
 
 #: pcbnew/dialogs/dialog_footprint_checker_base.h:69
 #: pcbnew/tools/pcb_actions.cpp:775
-#, fuzzy
 msgid "Footprint Checker"
-msgstr "Филтър комп.отп."
+msgstr "Проверка на цокли"
 
 #: pcbnew/dialogs/dialog_footprint_chooser.cpp:44
 #, fuzzy
@@ -49074,21 +49070,20 @@ msgstr "Не е избран слой."
 #, c-format
 msgid "Color theme '%s' not found, will use theme from PCB Editor settings.\n"
 msgstr ""
+"Цветовата тема „%s“ не е намерена, ще бъде използвана тема от настройките на "
+"редактора на печатни платки.\n"
 
 #: pcbnew/pcb_reference_image.cpp:343
-#, fuzzy
 msgid "Associated Layer"
-msgstr "Медни слоеве:"
+msgstr "Свързан слой"
 
 #: pcbnew/pcb_reference_image.cpp:382
-#, fuzzy
 msgid "Greyscale"
-msgstr "Изображение-сива скала"
+msgstr "Нюанси на сивото"
 
 #: pcbnew/pcb_shape.cpp:639
-#, fuzzy
 msgid "Drawing"
-msgstr "Чертежи"
+msgstr "Чертеж"
 
 #: pcbnew/pcb_shape.cpp:664
 #, fuzzy, c-format
@@ -51920,9 +51915,8 @@ msgid "Footprint Properties..."
 msgstr "Текстови настройки на комп.отп."
 
 #: pcbnew/tools/pcb_actions.cpp:776
-#, fuzzy
 msgid "Show the footprint checker window"
-msgstr "Стартирай проверката на правила за проектиране"
+msgstr "Показване на прозореца за проверка на цокли"
 
 #: pcbnew/tools/pcb_actions.cpp:784
 #, fuzzy
