@@ -63,7 +63,13 @@ public:
     int GetBorderWidth() const        { return m_borderStroke.GetWidth(); }
 
     void SetBorderStyle( const LINE_STYLE aStyle ) { m_borderStroke.SetLineStyle( aStyle ); }
-    LINE_STYLE GetBorderStyle() const              { return m_borderStroke.GetLineStyle(); }
+    LINE_STYLE GetBorderStyle() const
+    {
+        if( m_borderStroke.GetLineStyle() == LINE_STYLE::DEFAULT )
+            return LINE_STYLE::SOLID;
+        else
+            return m_borderStroke.GetLineStyle();
+    }
 
     void SetBorderColor( const COLOR4D& aColor ) { m_borderStroke.SetColor( aColor ); }
     COLOR4D GetBorderColor() const               { return m_borderStroke.GetColor(); }
@@ -75,7 +81,13 @@ public:
     int GetSeparatorsWidth() const        { return m_separatorsStroke.GetWidth(); }
 
     void SetSeparatorsStyle( const LINE_STYLE aStyle ) { m_separatorsStroke.SetLineStyle( aStyle ); }
-    LINE_STYLE GetSeparatorsStyle() const              { return m_separatorsStroke.GetLineStyle(); }
+    LINE_STYLE GetSeparatorsStyle() const
+    {
+        if( m_separatorsStroke.GetLineStyle() == LINE_STYLE::DEFAULT )
+            return LINE_STYLE::SOLID;
+        else
+            return m_separatorsStroke.GetLineStyle();
+    }
 
     void SetSeparatorsColor( const COLOR4D& aColor ) { m_separatorsStroke.SetColor( aColor ); }
     COLOR4D GetSeparatorsColor() const               { return m_separatorsStroke.GetColor(); }
