@@ -121,7 +121,7 @@ std::optional<rectpack2D::rect_wh> spreadRectangles( rect_vector& vecSubRects, i
     return result;
 }
 
-
+#include <wx/log.h>
 void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, VECTOR2I aTargetBoxPosition,
                        bool aGroupBySheet, int aComponentGap, int aGroupGap )
 {
@@ -305,10 +305,10 @@ void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, VECTOR2I aTargetBox
 
         // Avoid too large coordinates: Overlapping components
         // are better than out of screen components
-        if( (uint64_t) target_pos.x + (uint64_t) target_size.x > INT_MAX / 2 )
+        if( (int64_t) target_pos.x + (int64_t) target_size.x > INT_MAX / 2 )
             target_pos.x -= INT_MAX / 2;
 
-        if( (uint64_t) target_pos.y + (uint64_t) target_size.y > INT_MAX / 2 )
+        if( (int64_t) target_pos.y + (int64_t) target_size.y > INT_MAX / 2 )
             target_pos.y -= INT_MAX / 2;
 
         for( auto& [fpSize, fpPair] : sizeToFpMap )
