@@ -13102,9 +13102,8 @@ msgid "Not Connected"
 msgstr "Non Connecté"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:855
-#, fuzzy, c-format
 msgid "No model named '%s' in '%s'."
-msgstr "Aucun modèle nommé '%s' dans la librairie."
+msgstr "Aucun modèle nommé '%s' dans '%s'."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:1233
 msgid "Browse Models"
@@ -31542,16 +31541,13 @@ msgid "Success"
 msgstr "Succès"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:213
-#, fuzzy
 msgid "Do you want to cancel the export process?"
 msgstr ""
-"Voulez vous utiliser un chemin relatif à\n"
-"'%s'?"
+"Voulez-vous annuler le processus d'exportation?"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:214
-#, fuzzy
 msgid "Cancel Export"
-msgstr "Rapport sur Isolation"
+msgstr "Annuler Exportation"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:257
 msgid "Command line:\n"
@@ -37946,14 +37942,12 @@ msgid "Pad is not a through hole pad; connection will be: %s."
 msgstr "Le pad n’est pas un pad à trou traversant; la connexion sera: %s."
 
 #: pcbnew/drc/drc_engine.cpp:784
-#, fuzzy, c-format
 msgid "Net tie on %s; clearance: 0."
-msgstr "Forçage local sur %s; isolation: %s."
+msgstr "Net tie sur %s; isolation: 0."
 
 #: pcbnew/drc/drc_engine.cpp:787
-#, fuzzy
 msgid "net tie"
-msgstr "Titres de feuilles"
+msgstr "net tie"
 
 #: pcbnew/drc/drc_engine.cpp:814 pcbnew/drc/drc_engine.cpp:824
 #, c-format
