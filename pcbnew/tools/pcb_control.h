@@ -101,7 +101,8 @@ public:
     int InteractiveDelete( const TOOL_EVENT& aEvent );
     int Paste( const TOOL_EVENT& aEvent );
     int AppendBoardFromFile( const TOOL_EVENT& aEvent );
-    int AppendBoard( PCB_IO& pi, wxString& fileName );
+    int AppendDesignBlock( const TOOL_EVENT& aEvent );
+    int AppendBoard( PCB_IO& pi, const wxString& fileName );
     int UpdateMessagePanel( const TOOL_EVENT& aEvent );
 
     int FlipPcbView( const TOOL_EVENT& aEvent );
@@ -137,7 +138,7 @@ private:
      * @param aAnchorAtOrigin = true if the items are translated so that the anchor is {0, 0}
      *                        (if false, the top-left item's origin will be used)
      * @param aReannotateDuplicates = true to reannotate any footprints with a designator
-                                      that already exist in the board.
+     *                                that already exist in the board.
      */
     bool placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
                           bool aAnchorAtOrigin, bool aReannotateDuplicates );

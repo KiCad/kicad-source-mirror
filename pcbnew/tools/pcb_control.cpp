@@ -40,6 +40,7 @@
 #include <board_design_settings.h>
 #include <board_item.h>
 #include <clipboard.h>
+#include <design_block.h>
 #include <dialogs/dialog_paste_special.h>
 #include <pcb_dimension.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -68,6 +69,7 @@
 #include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
 #include <widgets/appearance_controls.h>
+#include <widgets/pcb_design_block_pane.h>
 #include <widgets/wx_progress_reporters.h>
 #include <widgets/wx_infobar.h>
 #include <wx/hyperlink.h>
@@ -1265,6 +1267,48 @@ int PCB_CONTROL::AppendBoardFromFile( const TOOL_EVENT& aEvent )
 }
 
 
+int PCB_CONTROL::AppendDesignBlock( const TOOL_EVENT& aEvent )
+{
+    PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
+
+    if( !editFrame )
+        return 1;
+
+    DESIGN_BLOCK* designBlock = nullptr;
+
+    if( !editFrame->GetDesignBlockPane()->GetSelectedLibId().IsValid() )
+        return 1;
+
+
+    designBlock = editFrame->GetDesignBlockPane()->GetDesignBlock(
+            editFrame->GetDesignBlockPane()->GetSelectedLibId(), true, true );
+
+    if( !designBlock || designBlock->GetBoardFile().IsEmpty() )
+        return 1;
+
+
+    PCB_IO_MGR::PCB_FILE_T pluginType = PCB_IO_MGR::KICAD_SEXP;
+    IO_RELEASER<PCB_IO>    pi( PCB_IO_MGR::PluginFind( pluginType ) );
+
+    if( !pi )
+        return 1;
+
+    bool repeatPlacement = false;
+
+    if( APP_SETTINGS_BASE* cfg = editFrame->config() )
+        repeatPlacement = cfg->m_DesignBlockChooserPanel.repeated_placement;
+
+    int ret = 0;
+
+    do
+    {
+        ret = AppendBoard( *pi, designBlock->GetBoardFile() );
+    } while( repeatPlacement && ret == 0 );
+
+    return ret;
+}
+
+
 template<typename T>
 static void moveUnflaggedItems( const std::deque<T>& aList, std::vector<BOARD_ITEM*>& aTarget,
                                 bool aIsNew )
@@ -1436,7 +1480,7 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM
 }
 
 
-int PCB_CONTROL::AppendBoard( PCB_IO& pi, wxString& fileName )
+int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName )
 {
     PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
 
@@ -1544,15 +1588,67 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, wxString& fileName )
     brd->SetEnabledLayers( enabledLayers );
     brd->SetVisibleLayers( enabledLayers );
 
+    int ret = 0;
+
+    bool placeAsGroup = editFrame->config()
+                                ? editFrame->config()->m_DesignBlockChooserPanel.place_as_sheet
+                                : false;
+
     if( placeBoardItems( &commit, brd, false, false /* Don't reannotate dupes on Append Board */ ) )
+    {
         commit.Push( _( "Append Board" ) );
+
+        if( placeAsGroup )
+        {
+            BOARD_COMMIT grpCommit( m_toolMgr );
+            PCB_GROUP*   group = new PCB_GROUP( brd );
+
+            // Get the selection tool selection
+            PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+            PCB_SELECTION       selection = selTool->GetSelection();
+
+            for( EDA_ITEM* eda_item : selection )
+            {
+                if( eda_item->IsBOARD_ITEM() )
+                {
+                    if( static_cast<BOARD_ITEM*>( eda_item )->IsLocked() )
+                        group->SetLocked( true );
+                }
+            }
+
+            grpCommit.Add( group );
+
+            for( EDA_ITEM* eda_item : selection )
+            {
+                if( eda_item->IsBOARD_ITEM()
+                    && !static_cast<BOARD_ITEM*>( eda_item )->GetParentFootprint() )
+                {
+                    grpCommit.Stage( static_cast<BOARD_ITEM*>( eda_item ), CHT_GROUP );
+                }
+            }
+
+            grpCommit.Push( _( "Group Items" ), APPEND_UNDO );
+
+            selTool->ClearSelection();
+            selTool->select( group );
+
+            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+            m_frame->OnModify();
+            m_frame->Refresh();
+        }
+
+        ret = 0;
+    }
     else
+    {
         commit.Revert();
+        ret = 1;
+    }
 
     // Refresh the UI for the updated board properties
     editFrame->GetAppearancePanel()->OnBoardChanged();
 
-    return 0;
+    return ret;
 }
 
 
@@ -2046,6 +2142,7 @@ void PCB_CONTROL::setTransitions()
     Go( &PCB_CONTROL::InteractiveDelete,    ACTIONS::deleteTool.MakeEvent() );
 
     // Append control
+    Go( &PCB_CONTROL::AppendDesignBlock,    PCB_ACTIONS::placeDesignBlock.MakeEvent() );
     Go( &PCB_CONTROL::AppendBoardFromFile,  PCB_ACTIONS::appendBoard.MakeEvent() );
     Go( &PCB_CONTROL::DdAppendBoard,        PCB_ACTIONS::ddAppendBoard.MakeEvent() );
 
