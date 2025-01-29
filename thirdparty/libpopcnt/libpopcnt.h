@@ -542,7 +542,7 @@ static inline uint64_t popcnt_avx512(const uint8_t* ptr8, uint64_t size)
  * @data: An array
  * @size: Size of data in bytes
  */
-static uint64_t popcnt(const void* data, uint64_t size)
+[[maybe_unused]] static uint64_t popcnt(const void* data, uint64_t size)
 {
 /*
  * CPUID runtime checks are only enabled if this is needed.
@@ -700,7 +700,7 @@ static uint64_t popcnt(const void* data, uint64_t size)
  * @data: An array
  * @size: Size of data in bytes
  */
-static inline uint64_t popcnt(const void* data, uint64_t size)
+[[maybe_unused]] static inline uint64_t popcnt(const void* data, uint64_t size)
 {
   uint64_t i = 0;
   const uint64_t* ptr64 = (const uint64_t*) data;
@@ -769,7 +769,7 @@ static inline uint64x2_t vpadalq(uint64x2_t sum, uint8x16_t t)
  * @data: An array
  * @size: Size of data in bytes
  */
-static inline uint64_t popcnt(const void* data, uint64_t size)
+[[maybe_unused]] static inline uint64_t popcnt(const void* data, uint64_t size)
 {
   uint64_t i = 0;
   uint64_t cnt = 0;
@@ -866,7 +866,7 @@ static inline uint64_t popcnt(const void* data, uint64_t size)
  * @data: An array
  * @size: Size of data in bytes
  */
-static inline uint64_t popcnt(const void* data, uint64_t size)
+[[maybe_unused]] static inline uint64_t popcnt(const void* data, uint64_t size)
 {
   uint64_t i = 0;
   uint64_t cnt = 0;
