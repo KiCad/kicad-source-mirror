@@ -1168,7 +1168,8 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
                                   COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        if( evt->IsCancelInteractive() || ( table && evt->IsAction( &ACTIONS::undo ) ) )
+        if( evt->IsCancelInteractive() || ( table && evt->IsAction( &ACTIONS::undo ) ) 
+            || evt->IsDrag() )
         {
             if( table )
             {
