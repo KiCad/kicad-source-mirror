@@ -63,6 +63,15 @@ void FP_LIB_TABLE_ROW::SetType( const wxString& aType )
 }
 
 
+bool FP_LIB_TABLE_ROW::LibraryExists() const
+{
+    if( plugin )
+        return plugin->CanReadLibrary( GetFullURI() );
+
+    return false;
+}
+
+
 FP_LIB_TABLE::FP_LIB_TABLE( FP_LIB_TABLE* aFallBackTable ) :
     LIB_TABLE( aFallBackTable )
 {
