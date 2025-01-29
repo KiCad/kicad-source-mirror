@@ -58,14 +58,14 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::newFromRepository( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .LegacyHotkeyName( "Clone Project From Repository" )
         .FriendlyName( _( "Clone Project from Repository..." ) )
-        .Icon( BITMAPS::new_project_from_template ) );
+        .Icon( BITMAPS::project_clone ) );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::newJobsetFile( TOOL_ACTION_ARGS()
         .Name( "kicad.Control.newJobs" )
         .Scope( AS_GLOBAL )
         .LegacyHotkeyName( "New Jobset File" )
         .FriendlyName( _( "New Jobset File..." ) )
-        .Icon( BITMAPS::new_document ) );
+        .Icon( BITMAPS::jobset ) );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::openDemoProject( TOOL_ACTION_ARGS()
         .Name( "kicad.Control.openDemoProject" )
