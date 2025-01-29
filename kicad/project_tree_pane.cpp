@@ -1498,9 +1498,13 @@ void PROJECT_TREE_PANE::FileWatcherReset()
 
             if( wxFileName::IsDirReadable( path ) )   // linux whines about watching protected dir
             {
-                fn.AssignDir( path );
-                m_watcher->Add( fn );
-                total_watch_count++;
+                {
+                    // Silence OS errors that come from the watcher
+                    wxLogNull silence;
+                    fn.AssignDir( path );
+                    m_watcher->Add( fn );
+                    total_watch_count++;
+                }
 
                 // if kid is a subdir, push in list to explore it later
                 if( itemData->IsPopulated() && m_TreeProject->GetChildrenCount( kid ) )

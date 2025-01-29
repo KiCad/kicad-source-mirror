@@ -705,7 +705,11 @@ void SCH_BASE_FRAME::setSymWatcher( const LIB_ID* aID )
     fn.AssignDir( m_watcherFileName.GetPath() );
     fn.DontFollowLink();
 
-    m_watcher->Add( fn );
+    {
+        // Silence OS errors that come from the watcher
+        wxLogNull silence;
+        m_watcher->Add( fn );
+    }
 }
 
 

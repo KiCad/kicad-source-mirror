@@ -1172,7 +1172,11 @@ void PCB_BASE_FRAME::setFPWatcher( FOOTPRINT* aFootprint )
 
     wxLogTrace( "KICAD_LIB_WATCH", "Add watch: %s", fn.GetPath() );
 
-    m_watcher->Add( fn );
+    {
+        // Silence OS errors that come from the watcher
+        wxLogNull silence;
+        m_watcher->Add( fn );
+    }
 }
 
 
