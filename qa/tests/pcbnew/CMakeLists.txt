@@ -71,6 +71,8 @@ set( QA_PCBNEW_SRCS
     pcb_io/cadstar/test_cadstar_footprints.cpp
     pcb_io/eagle/test_eagle_lbr_import.cpp
 
+    pcb_io/kicad_sexpr/test_kicad_sexpr.cpp
+
     group_saveload.cpp
 )
 

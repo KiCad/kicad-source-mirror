@@ -1629,6 +1629,30 @@ void ZONE::TransformSolidAreasShapesToPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_S
 }
 
 
+void ZONE::SetLayerSetAndRemoveUnusedFills( const LSET& aLayerSet )
+{
+    if( aLayerSet.count() == 0 )
+        return;
+
+    if( m_layerSet != aLayerSet )
+    {
+        aLayerSet.RunOnLayers(
+                [&]( PCB_LAYER_ID layer )
+                {
+                    // Only keep layers that are present in the new set
+                    if( !aLayerSet.Contains( layer ) )
+                    {
+                        m_FilledPolysList[layer]  = std::make_shared<SHAPE_POLY_SET>();
+                        m_filledPolysHash[layer]  = {};
+                        m_insulatedIslands[layer] = {};
+                    }
+                } );
+    }
+
+    m_layerSet = aLayerSet;
+}
+
+
 bool ZONE::operator==( const BOARD_ITEM& aOther ) const
 {
     if( aOther.Type() != Type() )

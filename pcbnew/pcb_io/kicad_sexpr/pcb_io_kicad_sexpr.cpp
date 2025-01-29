@@ -1024,7 +1024,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_SHAPE* aShape ) const
         KICAD_FORMAT::FormatBool( m_out, "locked", true );
 
     if( aShape->GetLayerSet().count() > 1 )
-        formatLayers( aShape->GetLayerSet() );
+        formatLayers( aShape->GetLayerSet(), false /* enumerate layers */ );
     else
         formatLayer( aShape->GetLayer() );
 
@@ -1363,7 +1363,7 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
 }
 
 
-void PCB_IO_KICAD_SEXPR::formatLayers( LSET aLayerMask ) const
+void PCB_IO_KICAD_SEXPR::formatLayers( LSET aLayerMask, bool aEnumerateLayers ) const
 {
     static const LSET cu_all( LSET::AllCuMask( m_board
                                                 ? m_board->GetCopperLayerCount()
@@ -1380,53 +1380,55 @@ void PCB_IO_KICAD_SEXPR::formatLayers( LSET aLayerMask ) const
 
     std::string output;
 
-    // output copper layers first, then non copper
+    if( !aEnumerateLayers )
+    {
+        // output copper layers first, then non copper
+        if( ( aLayerMask & cu_mask ) == cu_mask )
+        {
+            output += ' ' + m_out->Quotew( "*.Cu" );
+            aLayerMask &= ~cu_all;          // clear bits, so they are not output again below
+        }
+        else if( ( aLayerMask & cu_mask ) == fr_bk )
+        {
+            output += ' ' + m_out->Quotew( "F&B.Cu" );
+            aLayerMask &= ~fr_bk;
+        }
 
-    if( ( aLayerMask & cu_mask ) == cu_mask )
-    {
-        output += ' ' + m_out->Quotew( "*.Cu" );
-        aLayerMask &= ~cu_all;          // clear bits, so they are not output again below
-    }
-    else if( ( aLayerMask & cu_mask ) == fr_bk )
-    {
-        output += ' ' + m_out->Quotew( "F&B.Cu" );
-        aLayerMask &= ~fr_bk;
-    }
+        if( ( aLayerMask & adhes ) == adhes )
+        {
+            output += ' ' + m_out->Quotew( "*.Adhes" );
+            aLayerMask &= ~adhes;
+        }
 
-    if( ( aLayerMask & adhes ) == adhes )
-    {
-        output += ' ' + m_out->Quotew( "*.Adhes" );
-        aLayerMask &= ~adhes;
-    }
+        if( ( aLayerMask & paste ) == paste )
+        {
+            output += ' ' + m_out->Quotew( "*.Paste" );
+            aLayerMask &= ~paste;
+        }
 
-    if( ( aLayerMask & paste ) == paste )
-    {
-        output += ' ' + m_out->Quotew( "*.Paste" );
-        aLayerMask &= ~paste;
-    }
+        if( ( aLayerMask & silks ) == silks )
+        {
+            output += ' ' + m_out->Quotew( "*.SilkS" );
+            aLayerMask &= ~silks;
+        }
 
-    if( ( aLayerMask & silks ) == silks )
-    {
-        output += ' ' + m_out->Quotew( "*.SilkS" );
-        aLayerMask &= ~silks;
-    }
+        if( ( aLayerMask & mask ) == mask )
+        {
+            output += ' ' + m_out->Quotew( "*.Mask" );
+            aLayerMask &= ~mask;
+        }
 
-    if( ( aLayerMask & mask ) == mask )
-    {
-        output += ' ' + m_out->Quotew( "*.Mask" );
-        aLayerMask &= ~mask;
-    }
+        if( ( aLayerMask & crt_yd ) == crt_yd )
+        {
+            output += ' ' + m_out->Quotew( "*.CrtYd" );
+            aLayerMask &= ~crt_yd;
+        }
 
-    if( ( aLayerMask & crt_yd ) == crt_yd )
-    {
-        output += ' ' + m_out->Quotew( "*.CrtYd" );
-        aLayerMask &= ~crt_yd;
-    }
-
-    if( ( aLayerMask & fab ) == fab )
-    {
-        output += ' ' + m_out->Quotew( "*.Fab" );
-        aLayerMask &= ~fab;
+        if( ( aLayerMask & fab ) == fab )
+        {
+            output += ' ' + m_out->Quotew( "*.Fab" );
+            aLayerMask &= ~fab;
+        }
     }
 
     // output any individual layers not handled in wildcard combos above
@@ -1551,7 +1553,7 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
     if( property )
         m_out->Print( "(property %s)", property );
 
-    formatLayers( aPad->GetLayerSet() );
+    formatLayers( aPad->GetLayerSet(), false /* enumerate layers */ );
 
     if( aPad->GetAttribute() == PAD_ATTRIB::PTH )
     {
@@ -2432,7 +2434,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TRACK* aTrack ) const
             KICAD_FORMAT::FormatBool( m_out, "locked", true );
 
         if( aTrack->GetLayerSet().count() > 1 )
-            formatLayers( aTrack->GetLayerSet() );
+            formatLayers( aTrack->GetLayerSet(), false /* enumerate layers */ );
         else
             formatLayer( aTrack->GetLayer() );
 
@@ -2474,8 +2476,9 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone ) const
     if( aZone->GetBoard() )
         layers &= aZone->GetBoard()->GetEnabledLayers();
 
+    // Always enumerate every layer for a zone on a copper layer
     if( layers.count() > 1 )
-        formatLayers( layers );
+        formatLayers( layers, aZone->IsOnCopperLayer() );
     else
         formatLayer( aZone->GetFirstLayer() );
 
