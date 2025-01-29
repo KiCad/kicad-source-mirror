@@ -305,6 +305,29 @@ void ZONE::SetLayerSet( LSET aLayerSet )
 }
 
 
+void ZONE::SetLayerSetAndRemoveUnusedFills( LSET aLayerSet )
+{
+    if( aLayerSet.count() == 0 )
+        return;
+
+    if( m_layerSet != aLayerSet )
+    {
+        for( PCB_LAYER_ID layer : aLayerSet.Seq() )
+        {
+            // Only keep layers that are present in the new set
+            if( !aLayerSet.Contains( layer ) )
+            {
+                m_FilledPolysList[layer]  = std::make_shared<SHAPE_POLY_SET>();
+                m_filledPolysHash[layer]  = {};
+                m_insulatedIslands[layer] = {};
+            }
+        }
+    }
+
+    m_layerSet = aLayerSet;
+}
+
+
 void ZONE::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 0;

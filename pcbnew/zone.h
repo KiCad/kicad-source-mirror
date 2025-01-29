@@ -128,6 +128,13 @@ public:
     void SetLayerSet( LSET aLayerSet ) override;
     virtual LSET GetLayerSet() const override { return m_layerSet; }
 
+    /**
+     * Set the zone to be on the aLayerSet layers and only remove the fill polygons
+     * from the unused layers, while keeping the fills on the layers in both the old
+     * and new layer sets.
+     */
+    void SetLayerSetAndRemoveUnusedFills( LSET aLayerSet );
+
     const wxString& GetZoneName() const { return m_zoneName; }
     void SetZoneName( const wxString& aName ) { m_zoneName = aName; }
 

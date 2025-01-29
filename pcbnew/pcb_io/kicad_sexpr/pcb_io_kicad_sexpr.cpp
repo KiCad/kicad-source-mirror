@@ -1357,7 +1357,7 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint, int aNestLevel ) c
 }
 
 
-void PCB_IO_KICAD_SEXPR::formatLayers( LSET aLayerMask, int aNestLevel ) const
+void PCB_IO_KICAD_SEXPR::formatLayers( LSET aLayerMask, int aNestLevel, bool aEnumerateLayers ) const
 {
     std::string output;
 
@@ -1379,53 +1379,55 @@ void PCB_IO_KICAD_SEXPR::formatLayers( LSET aLayerMask, int aNestLevel ) const
 
     LSET cu_mask = cu_all;
 
-    // output copper layers first, then non copper
+    if( !aEnumerateLayers )
+    {
+        // output copper layers first, then non copper
+        if( ( aLayerMask & cu_mask ) == cu_mask )
+        {
+            output += ' ' + m_out->Quotew( "*.Cu" );
+            aLayerMask &= ~cu_all;          // clear bits, so they are not output again below
+        }
+        else if( ( aLayerMask & cu_mask ) == fr_bk )
+        {
+            output += ' ' + m_out->Quotew( "F&B.Cu" );
+            aLayerMask &= ~fr_bk;
+        }
 
-    if( ( aLayerMask & cu_mask ) == cu_mask )
-    {
-        output += ' ' + m_out->Quotew( "*.Cu" );
-        aLayerMask &= ~cu_all;          // clear bits, so they are not output again below
-    }
-    else if( ( aLayerMask & cu_mask ) == fr_bk )
-    {
-        output += ' ' + m_out->Quotew( "F&B.Cu" );
-        aLayerMask &= ~fr_bk;
-    }
+        if( ( aLayerMask & adhes ) == adhes )
+        {
+            output += ' ' + m_out->Quotew( "*.Adhes" );
+            aLayerMask &= ~adhes;
+        }
 
-    if( ( aLayerMask & adhes ) == adhes )
-    {
-        output += ' ' + m_out->Quotew( "*.Adhes" );
-        aLayerMask &= ~adhes;
-    }
+        if( ( aLayerMask & paste ) == paste )
+        {
+            output += ' ' + m_out->Quotew( "*.Paste" );
+            aLayerMask &= ~paste;
+        }
 
-    if( ( aLayerMask & paste ) == paste )
-    {
-        output += ' ' + m_out->Quotew( "*.Paste" );
-        aLayerMask &= ~paste;
-    }
+        if( ( aLayerMask & silks ) == silks )
+        {
+            output += ' ' + m_out->Quotew( "*.SilkS" );
+            aLayerMask &= ~silks;
+        }
 
-    if( ( aLayerMask & silks ) == silks )
-    {
-        output += ' ' + m_out->Quotew( "*.SilkS" );
-        aLayerMask &= ~silks;
-    }
+        if( ( aLayerMask & mask ) == mask )
+        {
+            output += ' ' + m_out->Quotew( "*.Mask" );
+            aLayerMask &= ~mask;
+        }
 
-    if( ( aLayerMask & mask ) == mask )
-    {
-        output += ' ' + m_out->Quotew( "*.Mask" );
-        aLayerMask &= ~mask;
-    }
+        if( ( aLayerMask & crt_yd ) == crt_yd )
+        {
+            output += ' ' + m_out->Quotew( "*.CrtYd" );
+            aLayerMask &= ~crt_yd;
+        }
 
-    if( ( aLayerMask & crt_yd ) == crt_yd )
-    {
-        output += ' ' + m_out->Quotew( "*.CrtYd" );
-        aLayerMask &= ~crt_yd;
-    }
-
-    if( ( aLayerMask & fab ) == fab )
-    {
-        output += ' ' + m_out->Quotew( "*.Fab" );
-        aLayerMask &= ~fab;
+        if( ( aLayerMask & fab ) == fab )
+        {
+            output += ' ' + m_out->Quotew( "*.Fab" );
+            aLayerMask &= ~fab;
+        }
     }
 
     // output any individual layers not handled in wildcard combos above
@@ -2219,9 +2221,10 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone, int aNestLevel ) const
     if( aZone->GetBoard() )
         layers &= aZone->GetBoard()->GetEnabledLayers();
 
+    // Always enumerate every layer for a zone on a copper layer
     if( layers.count() > 1 )
     {
-        formatLayers( layers );
+        formatLayers( layers, 0 /* nest level */, aZone->IsOnCopperLayer() );
     }
     else
     {

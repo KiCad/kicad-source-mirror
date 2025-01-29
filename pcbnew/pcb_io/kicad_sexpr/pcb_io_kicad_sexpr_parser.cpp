@@ -1175,7 +1175,7 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
         {
             ZONE* z = static_cast<ZONE*>( zone );
 
-            z->SetLayerSet( z->GetLayerSet() & layers );
+            z->SetLayerSetAndRemoveUnusedFills( z->GetLayerSet() & layers );
         }
     }
 
