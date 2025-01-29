@@ -20,8 +20,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-28 19:43+0300\n"
-"PO-Revision-Date: 2025-01-23 10:20+0000\n"
-"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
+"PO-Revision-Date: 2025-01-29 16:58+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v8/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -20705,7 +20705,7 @@ msgstr "Güç sembolü olarak sembol oluştur"
 
 #: eeschema/tools/ee_actions.cpp:170
 msgid "Derive from Existing Symbol"
-msgstr "Varolan simgeden türet…"
+msgstr "Varolan simgeden türet"
 
 #: eeschema/tools/ee_actions.cpp:171
 #, fuzzy
