@@ -30,10 +30,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 19:59+0300\n"
-"PO-Revision-Date: 2025-01-29 16:58+0000\n"
+"PO-Revision-Date: 2025-01-29 22:33+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -38743,9 +38743,9 @@ msgid "Internal Layers"
 msgstr "Interne Lagen"
 
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:496
-#, fuzzy, c-format
+#, c-format
 msgid "Layer name %s already in use."
-msgstr "Lagenname \"%s\" wird bereits verwendet."
+msgstr "Lagenname %s wird bereits verwendet."
 
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:23
 msgid "Default Field Properties for New Footprints"
@@ -44379,12 +44379,11 @@ msgid "PTH pad %s"
 msgstr "Durchsteckpad %s"
 
 #: pcbnew/pad.cpp:2179
-#, fuzzy
 msgid ""
 "(plated through holes normally have a copper pad on at least one outer layer)"
 msgstr ""
 "(Metallisierte Löcher haben normalerweise ein Kupferpad auf mindestens einer "
-"Lage.)"
+"Außenlage.)"
 
 #: pcbnew/pad.cpp:2187
 msgid "('fiducial' property makes no sense on NPTH pads)"
@@ -51309,184 +51308,148 @@ msgid "User defined layer 9"
 msgstr "Benutzerdefinierte Lage 9"
 
 #: pcbnew/widgets/appearance_controls.cpp:1684
-#, fuzzy
 msgid "User defined layer 10"
-msgstr "Benutzerdefinierte Lage 1"
+msgstr "Benutzerdefinierte Lage 10"
 
 #: pcbnew/widgets/appearance_controls.cpp:1685
-#, fuzzy
 msgid "User defined layer 11"
-msgstr "Benutzerdefinierte Lage 1"
+msgstr "Benutzerdefinierte Lage 11"
 
 #: pcbnew/widgets/appearance_controls.cpp:1686
-#, fuzzy
 msgid "User defined layer 12"
-msgstr "Benutzerdefinierte Lage 1"
+msgstr "Benutzerdefinierte Lage 12"
 
 #: pcbnew/widgets/appearance_controls.cpp:1687
-#, fuzzy
 msgid "User defined layer 13"
-msgstr "Benutzerdefinierte Lage 1"
+msgstr "Benutzerdefinierte Lage 13"
 
 #: pcbnew/widgets/appearance_controls.cpp:1688
-#, fuzzy
 msgid "User defined layer 14"
-msgstr "Benutzerdefinierte Lage 1"
+msgstr "Benutzerdefinierte Lage 14"
 
 #: pcbnew/widgets/appearance_controls.cpp:1689
-#, fuzzy
 msgid "User defined layer 15"
-msgstr "Benutzerdefinierte Lage 1"
+msgstr "Benutzerdefinierte Lage 15"
 
 #: pcbnew/widgets/appearance_controls.cpp:1690
-#, fuzzy
 msgid "User defined layer 16"
-msgstr "Benutzerdefinierte Lage 1"
+msgstr "Benutzerdefinierte Lage 16"
 
 #: pcbnew/widgets/appearance_controls.cpp:1691
-#, fuzzy
 msgid "User defined layer 17"
-msgstr "Benutzerdefinierte Lage 1"
+msgstr "Benutzerdefinierte Lage 17"
 
 #: pcbnew/widgets/appearance_controls.cpp:1692
-#, fuzzy
 msgid "User defined layer 18"
-msgstr "Benutzerdefinierte Lage 1"
+msgstr "Benutzerdefinierte Lage 18"
 
 #: pcbnew/widgets/appearance_controls.cpp:1693
-#, fuzzy
 msgid "User defined layer 19"
-msgstr "Benutzerdefinierte Lage 1"
+msgstr "Benutzerdefinierte Lage 19"
 
 #: pcbnew/widgets/appearance_controls.cpp:1694
-#, fuzzy
 msgid "User defined layer 20"
-msgstr "Benutzerdefinierte Lage 2"
+msgstr "Benutzerdefinierte Lage 20"
 
 #: pcbnew/widgets/appearance_controls.cpp:1695
-#, fuzzy
 msgid "User defined layer 21"
-msgstr "Benutzerdefinierte Lage 2"
+msgstr "Benutzerdefinierte Lage 21"
 
 #: pcbnew/widgets/appearance_controls.cpp:1696
-#, fuzzy
 msgid "User defined layer 22"
-msgstr "Benutzerdefinierte Lage 2"
+msgstr "Benutzerdefinierte Lage 22"
 
 #: pcbnew/widgets/appearance_controls.cpp:1697
-#, fuzzy
 msgid "User defined layer 23"
-msgstr "Benutzerdefinierte Lage 2"
+msgstr "Benutzerdefinierte Lage 23"
 
 #: pcbnew/widgets/appearance_controls.cpp:1698
-#, fuzzy
 msgid "User defined layer 24"
-msgstr "Benutzerdefinierte Lage 2"
+msgstr "Benutzerdefinierte Lage 24"
 
 #: pcbnew/widgets/appearance_controls.cpp:1699
-#, fuzzy
 msgid "User defined layer 25"
-msgstr "Benutzerdefinierte Lage 2"
+msgstr "Benutzerdefinierte Lage 25"
 
 #: pcbnew/widgets/appearance_controls.cpp:1700
-#, fuzzy
 msgid "User defined layer 26"
-msgstr "Benutzerdefinierte Lage 2"
+msgstr "Benutzerdefinierte Lage 26"
 
 #: pcbnew/widgets/appearance_controls.cpp:1701
-#, fuzzy
 msgid "User defined layer 27"
-msgstr "Benutzerdefinierte Lage 2"
+msgstr "Benutzerdefinierte Lage 27"
 
 #: pcbnew/widgets/appearance_controls.cpp:1702
-#, fuzzy
 msgid "User defined layer 28"
-msgstr "Benutzerdefinierte Lage 2"
+msgstr "Benutzerdefinierte Lage 28"
 
 #: pcbnew/widgets/appearance_controls.cpp:1703
-#, fuzzy
 msgid "User defined layer 29"
-msgstr "Benutzerdefinierte Lage 2"
+msgstr "Benutzerdefinierte Lage 29"
 
 #: pcbnew/widgets/appearance_controls.cpp:1704
-#, fuzzy
 msgid "User defined layer 30"
-msgstr "Benutzerdefinierte Lage 3"
+msgstr "Benutzerdefinierte Lage 30"
 
 #: pcbnew/widgets/appearance_controls.cpp:1705
-#, fuzzy
 msgid "User defined layer 31"
-msgstr "Benutzerdefinierte Lage 3"
+msgstr "Benutzerdefinierte Lage 31"
 
 #: pcbnew/widgets/appearance_controls.cpp:1706
-#, fuzzy
 msgid "User defined layer 32"
-msgstr "Benutzerdefinierte Lage 3"
+msgstr "Benutzerdefinierte Lage 32"
 
 #: pcbnew/widgets/appearance_controls.cpp:1707
-#, fuzzy
 msgid "User defined layer 33"
-msgstr "Benutzerdefinierte Lage 3"
+msgstr "Benutzerdefinierte Lage 33"
 
 #: pcbnew/widgets/appearance_controls.cpp:1708
-#, fuzzy
 msgid "User defined layer 34"
-msgstr "Benutzerdefinierte Lage 3"
+msgstr "Benutzerdefinierte Lage 34"
 
 #: pcbnew/widgets/appearance_controls.cpp:1709
-#, fuzzy
 msgid "User defined layer 35"
-msgstr "Benutzerdefinierte Lage 3"
+msgstr "Benutzerdefinierte Lage 35"
 
 #: pcbnew/widgets/appearance_controls.cpp:1710
-#, fuzzy
 msgid "User defined layer 36"
-msgstr "Benutzerdefinierte Lage 3"
+msgstr "Benutzerdefinierte Lage 36"
 
 #: pcbnew/widgets/appearance_controls.cpp:1711
-#, fuzzy
 msgid "User defined layer 37"
-msgstr "Benutzerdefinierte Lage 3"
+msgstr "Benutzerdefinierte Lage 37"
 
 #: pcbnew/widgets/appearance_controls.cpp:1712
-#, fuzzy
 msgid "User defined layer 38"
-msgstr "Benutzerdefinierte Lage 3"
+msgstr "Benutzerdefinierte Lage 38"
 
 #: pcbnew/widgets/appearance_controls.cpp:1713
-#, fuzzy
 msgid "User defined layer 39"
-msgstr "Benutzerdefinierte Lage 3"
+msgstr "Benutzerdefinierte Lage 39"
 
 #: pcbnew/widgets/appearance_controls.cpp:1714
-#, fuzzy
 msgid "User defined layer 40"
-msgstr "Benutzerdefinierte Lage 4"
+msgstr "Benutzerdefinierte Lage 40"
 
 #: pcbnew/widgets/appearance_controls.cpp:1715
-#, fuzzy
 msgid "User defined layer 41"
-msgstr "Benutzerdefinierte Lage 4"
+msgstr "Benutzerdefinierte Lage 41"
 
 #: pcbnew/widgets/appearance_controls.cpp:1716
-#, fuzzy
 msgid "User defined layer 42"
-msgstr "Benutzerdefinierte Lage 4"
+msgstr "Benutzerdefinierte Lage 42"
 
 #: pcbnew/widgets/appearance_controls.cpp:1717
-#, fuzzy
 msgid "User defined layer 43"
-msgstr "Benutzerdefinierte Lage 4"
+msgstr "Benutzerdefinierte Lage 43"
 
 #: pcbnew/widgets/appearance_controls.cpp:1718
-#, fuzzy
 msgid "User defined layer 44"
-msgstr "Benutzerdefinierte Lage 4"
+msgstr "Benutzerdefinierte Lage 44"
 
 #: pcbnew/widgets/appearance_controls.cpp:1719
-#, fuzzy
 msgid "User defined layer 45"
-msgstr "Benutzerdefinierte Lage 4"
+msgstr "Benutzerdefinierte Lage 45"
 
 #: pcbnew/widgets/appearance_controls.cpp:1766
 msgid "Front copper layer"
