@@ -38,6 +38,8 @@
 #include <sch_screen.h>
 #include <wx/bookctrl.h>
 #include <eda_item.h>
+#include <wx/string.h>
+#include <string_utils.h>
 
 // sch_label.cpp
 extern wxString getElectricalTypeLabel( LABEL_FLAG_SHAPE aType );
@@ -111,6 +113,12 @@ void PANEL_SYNC_SHEET_PINS::UpdateForms()
             dedup_labels_ori.push_back( label );
         }
     }
+
+    std::sort( dedup_labels_ori.begin(), dedup_labels_ori.end(),
+               []( const SCH_HIERLABEL* label1, const SCH_HIERLABEL* label2 )
+               {
+                   return StrNumCmp( label1->GetText(), label2->GetText(), true ) < 0;
+               } );
 
     auto check_matched = [&]( SCH_HIERLABEL* label )
     {

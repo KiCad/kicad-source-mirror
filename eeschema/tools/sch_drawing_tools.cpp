@@ -3345,11 +3345,21 @@ SCH_HIERLABEL* SCH_DRAWING_TOOLS::importHierLabel( SCH_SHEET* aSheet )
     if( !aSheet->GetScreen() )
         return nullptr;
 
+    std::vector<SCH_HIERLABEL*> labels;
     for( EDA_ITEM* item : aSheet->GetScreen()->Items().OfType( SCH_HIER_LABEL_T ) )
     {
         SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( item );
+        labels.push_back( label );
+    }
 
-        /* A global label has been found: check if there a corresponding sheet label. */
+    std::sort( labels.begin(), labels.end(),
+               []( const SCH_HIERLABEL* label1, const SCH_HIERLABEL* label2 )
+               {
+                   return StrNumCmp( label1->GetText(), label2->GetText(), true ) < 0;
+               } );
+
+    for( SCH_HIERLABEL* label : labels )
+    {
         if( !aSheet->HasPin( label->GetText() ) )
             return label;
     }
