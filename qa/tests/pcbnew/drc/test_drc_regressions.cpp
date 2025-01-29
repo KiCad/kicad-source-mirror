@@ -64,6 +64,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalsePositiveRegressions, DRC_REGRESSION_TEST_FIXTUR
         "issue14412",   // Solder mask bridge between pads in a net-tie pad group
         "issue15280",   // Very wide spokes mis-counted as being single spoke
         "issue14008",   // Net-tie clearance error
+        "issue19521/issue19521", // oval annular ring size
         "unconnected-netnames/unconnected-netnames", // Raised false schematic partity error
     };
 
