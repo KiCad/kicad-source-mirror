@@ -65,7 +65,7 @@ void EDA_3D_VIEWER_FRAME::ReCreateMainToolbar()
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddTool( ID_RENDER_CURRENT_VIEW, wxEmptyString,
-                            KiBitmapBundle( BITMAPS::render_mode ),
+                            KiBitmapBundle( BITMAPS::ray_tracing ),
                             _( "Render current view using Raytracing" ), wxITEM_CHECK );
 
     m_mainToolBar->AddScaledSeparator( this );

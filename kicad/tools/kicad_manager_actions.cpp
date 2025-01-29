@@ -87,7 +87,7 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::openJobsetFile( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .LegacyHotkeyName( "Open Jobset File" )
         .FriendlyName( _( "Open Jobset File..." ) )
-        .Icon( BITMAPS::open_project ) );
+        .Icon( BITMAPS::jobset_open ) );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::closeProject( TOOL_ACTION_ARGS()
         .Name( "kicad.Control.closeProject" )

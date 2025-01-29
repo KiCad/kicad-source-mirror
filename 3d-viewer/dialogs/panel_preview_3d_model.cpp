@@ -90,7 +90,7 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
     m_bpvRight->SetBitmap( KiBitmapBundle( BITMAPS::axis3d_right ) );
     m_bpvBottom->SetBitmap( KiBitmapBundle( BITMAPS::axis3d_bottom ) );
     m_bpvISO->SetBitmap( KiBitmapBundle( BITMAPS::ortho ) );
-    m_bpvBodyStyle->SetBitmap( KiBitmapBundle( BITMAPS::axis3d ) );
+    m_bpvBodyStyle->SetBitmap( KiBitmapBundle( BITMAPS::show_board_body ) );
     m_bpUpdate->SetBitmap( KiBitmapBundle( BITMAPS::reload ) );
     m_bpSettings->SetBitmap( KiBitmapBundle( BITMAPS::options_3drender ) );
 

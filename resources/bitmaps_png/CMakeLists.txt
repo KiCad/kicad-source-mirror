@@ -220,6 +220,7 @@ set( BMAPS_MID
     axis3d_right
     axis3d_top
     axis3d
+    body_style
     break_line
     bug
     bus_definition_tool
@@ -355,6 +356,8 @@ set( BMAPS_MID
     info
     insert_module_board
     intersect_polygons
+    jobset
+    jobset_open
     language
     layers_manager
     leave_sheet
@@ -454,6 +457,7 @@ set( BMAPS_MID
     preference
     print_button
     project
+    project_clone
     project_close
     project_kicad
     ps_diff_pair
@@ -464,11 +468,11 @@ set( BMAPS_MID
     push_pad_settings
     puzzle_piece
     py_script
+    ray_tracing
     recent
     redo
     refresh
     reload
-    render_mode
     rescue
     restore_from_file
     right
@@ -494,6 +498,7 @@ set( BMAPS_MID
     shape_3d
     shape_3d_back
     sheetset
+    show_board_body
     simulator
     sim_add_plot
     sim_command
@@ -533,6 +538,16 @@ set( BMAPS_MID
     swap
     swap_layer
     switch_corner_rounding_shape
+    table_add_column_after
+    table_add_column_before
+    table_add_row_above
+    table_add_row_below
+    table_delete_column
+    table_delete_row
+    table_edit
+    table_select
+    table_select_column
+    table_select_row
     text
     text_sketch
     thermal_spokes
