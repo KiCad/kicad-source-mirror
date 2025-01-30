@@ -27,9 +27,9 @@
 
 
 SYMBOL_ASYNC_LOADER::SYMBOL_ASYNC_LOADER( const std::vector<wxString>& aNicknames,
-        SYMBOL_LIB_TABLE* aTable, bool aOnlyPowerSymbols,
-        std::unordered_map<wxString, std::vector<LIB_SYMBOL*>>* aOutput,
-        PROGRESS_REPORTER* aReporter ) :
+                                          SYMBOL_LIB_TABLE* aTable, bool aOnlyPowerSymbols,
+                                          std::unordered_map<wxString, std::vector<LIB_SYMBOL*>>* aOutput,
+                                          PROGRESS_REPORTER* aReporter ) :
         m_nicknames( aNicknames ),
         m_table( aTable ),
         m_onlyPowerSymbols( aOnlyPowerSymbols ),
