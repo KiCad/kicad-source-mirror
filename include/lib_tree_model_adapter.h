@@ -142,9 +142,7 @@ public:
     void SaveSettings();
 
     /**
-     * Set the symbol filter type. Must be set before adding libraries
-     *
-     * @param aFilter   if SYM_FILTER_POWER, only power parts are loaded
+     * Set the filter. Must be set before adding libraries.
      */
     void SetFilter( std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) { m_filter = aFilter; }
 
