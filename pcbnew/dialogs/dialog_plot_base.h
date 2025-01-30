@@ -41,8 +41,8 @@ class WX_HTML_REPORT_PANEL;
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define ID_ALLOW_PRINT_PAD_ON_SILKSCREEN 1000
-#define ID_MIROR_OPT 1001
+#define ID_ALLOW_PRINT_PAD_ON_SILKSCREEN 6000
+#define ID_MIROR_OPT 6001
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_PLOT_BASE
@@ -67,7 +67,6 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_plotDNP;
 		wxRadioButton* m_hideDNP;
 		wxRadioButton* m_crossoutDNP;
-		wxCheckBox* m_plotInvisibleText;
 		wxCheckBox* m_sketchPadsOnFabLayers;
 		wxCheckBox* m_plotPadNumbers;
 		wxCheckBox* m_zoneFillCheck;

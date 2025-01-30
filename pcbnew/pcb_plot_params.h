@@ -111,8 +111,6 @@ public:
     void        SetCrossoutDNPFPsOnFabLayers( bool aFlag ) { m_crossoutDNPFPsOnFabLayers = aFlag; }
     bool        GetCrossoutDNPFPsOnFabLayers() const { return m_crossoutDNPFPsOnFabLayers; }
 
-    void        SetPlotInvisibleText( bool aFlag ) { m_plotInvisibleText = aFlag; }
-    bool        GetPlotInvisibleText() const { return m_plotInvisibleText; }
     void        SetPlotValue( bool aFlag ) { m_plotValue = aFlag; }
     bool        GetPlotValue() const { return m_plotValue; }
     void        SetPlotReference( bool aFlag ) { m_plotReference = aFlag; }
@@ -274,7 +272,6 @@ private:
     bool       m_plotReference;         ///< Enable plotting of part references
     bool       m_plotValue;             ///< Enable plotting of part values
     bool       m_plotFPText;
-    bool       m_plotInvisibleText;     ///< Force plotting of fields marked invisible
 
     bool       m_sketchPadsOnFabLayers; ///< Plots pads outlines on fab layers
     int        m_sketchPadLineWidth;

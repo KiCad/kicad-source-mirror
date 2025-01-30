@@ -358,26 +358,28 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
     if( !GetPlotFPText() )
         return;
 
-    const PCB_TEXT* textItem = &aFootprint->Reference();
-    PCB_LAYER_ID    textLayer = textItem->GetLayer();
+    const PCB_TEXT* reference = &aFootprint->Reference();
+    PCB_LAYER_ID    refLayer = reference->GetLayer();
 
     // Reference and value have special controls for forcing their plotting
-    if( GetPlotReference() && m_layerMask[textLayer]
-            && ( textItem->IsVisible() || GetPlotInvisibleText() )
-            && !( aFootprint->IsDNP() && hideDNPItems( textLayer ) ) )
+    if( GetPlotReference()
+            && m_layerMask[refLayer]
+            && reference->IsVisible()
+            && !( aFootprint->IsDNP() && hideDNPItems( refLayer ) ) )
     {
-        PlotText( textItem, textLayer, textItem->IsKnockout(), textItem->GetFontMetrics(),
-                  aFootprint->IsDNP() && crossoutDNPItems( textLayer ) );
+        PlotText( reference, refLayer, reference->IsKnockout(), reference->GetFontMetrics(),
+                  aFootprint->IsDNP() && crossoutDNPItems( refLayer ) );
     }
 
-    textItem  = &aFootprint->Value();
-    textLayer = textItem->GetLayer();
+    const PCB_TEXT* value  = &aFootprint->Value();
+    PCB_LAYER_ID    valueLayer = reference->GetLayer();
 
-    if( GetPlotValue() && m_layerMask[textLayer]
-            && ( textItem->IsVisible() || GetPlotInvisibleText() )
-            && !( aFootprint->IsDNP() && hideDNPItems( textLayer ) ) )
+    if( GetPlotValue()
+            && m_layerMask[valueLayer]
+            && value->IsVisible()
+            && !( aFootprint->IsDNP() && hideDNPItems( valueLayer ) ) )
     {
-        PlotText( textItem, textLayer, textItem->IsKnockout(), textItem->GetFontMetrics(),
+        PlotText( value, valueLayer, value->IsKnockout(), value->GetFontMetrics(),
                   false );
     }
 
@@ -394,10 +396,8 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
 
     for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
     {
-        textItem = dynamic_cast<const PCB_TEXT*>( item );
-
-        if( textItem )
-            texts.push_back( static_cast<PCB_TEXT*>( item ) );
+        if( PCB_TEXT* textItem = dynamic_cast<PCB_TEXT*>( item ) )
+            texts.push_back( textItem );
     }
 
     for( const PCB_TEXT* text : texts )
@@ -405,8 +405,8 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
         if( !text->IsVisible() )
             continue;
 
-        textLayer = text->GetLayer();
-        bool strikeout = false;
+        PCB_LAYER_ID textLayer = text->GetLayer();
+        bool         strikeout = false;
 
         if( textLayer == Edge_Cuts || textLayer >= PCB_LAYER_ID_COUNT )
             continue;

@@ -390,9 +390,6 @@ void DIALOG_PLOT::init_Dialog()
     // Option to plot page references:
     m_plotSheetRef->SetValue( m_plotOpts.GetPlotFrameRef() );
 
-    // Option to force ploting of hidden text in footprints
-    m_plotInvisibleText->SetValue( m_plotOpts.GetPlotInvisibleText() );
-
     // Options to plot pads and vias holes
     m_drillShapeOpt->SetSelection( (int) m_plotOpts.GetDrillMarksType() );
 
@@ -494,7 +491,6 @@ void DIALOG_PLOT::transferPlotParamsToJob()
 
     m_job->m_plotDrawingSheet = m_plotOpts.GetPlotFrameRef();
     m_job->m_plotPadNumbers = m_plotOpts.GetPlotPadNumbers();
-    m_job->m_plotInvisibleText = m_plotOpts.GetPlotInvisibleText();
 
     m_job->m_blackAndWhite = m_plotOpts.GetBlackAndWhite();
     m_job->m_mirror = m_plotOpts.GetMirror();
@@ -1051,7 +1047,6 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetCrossoutDNPFPsOnFabLayers( m_plotDNP->GetValue()
                                             && m_crossoutDNP->GetValue() );
     tempOptions.SetUseAuxOrigin( m_useAuxOriginCheckBox->GetValue() );
-    tempOptions.SetPlotInvisibleText( m_plotInvisibleText->GetValue() );
     tempOptions.SetScaleSelection( m_scaleOpt->GetSelection() );
 
     int sel = m_drillShapeOpt->GetSelection();
