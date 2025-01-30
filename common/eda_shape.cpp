@@ -281,7 +281,6 @@ void EDA_SHAPE::move( const VECTOR2I& aMoveVector )
     case SHAPE_T::CIRCLE:
         m_start += aMoveVector;
         m_end += aMoveVector;
-        m_arcCenter += aMoveVector;
         break;
 
     case SHAPE_T::POLY:
