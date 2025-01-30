@@ -95,10 +95,6 @@ CLI::PCB_EXPORT_DXF_COMMAND::PCB_EXPORT_DXF_COMMAND() : PCB_EXPORT_BASE_COMMAND(
                                   "GUI plotting. The given output path specifies a directory in "
                                   "which files may be output." ) ) )
             .flag();
-
-    m_argParser.add_argument( ARG_PLOT_INVISIBLE_TEXT )
-            .help( UTF8STDSTR( _( ARG_PLOT_INVISIBLE_TEXT_DESC ) ) )
-            .flag();
 }
 
 
@@ -127,7 +123,6 @@ int CLI::PCB_EXPORT_DXF_COMMAND::doPerform( KIWAY& aKiway )
     dxfJob->m_polygonMode = m_argParser.get<bool>( ARG_USE_CONTOURS );
     dxfJob->m_useDrillOrigin = m_argParser.get<bool>( ARG_USE_DRILL_ORIGIN );
     dxfJob->m_plotDrawingSheet = m_argParser.get<bool>( ARG_INCLUDE_BORDER_TITLE );
-    dxfJob->m_plotInvisibleText = m_argParser.get<bool>( ARG_PLOT_INVISIBLE_TEXT );
 
     int drillShape = m_argParser.get<int>( ARG_DRILL_SHAPE_OPTION );
     dxfJob->m_drillShapeOption = static_cast<JOB_EXPORT_PCB_DXF::DRILL_MARKS>( drillShape );

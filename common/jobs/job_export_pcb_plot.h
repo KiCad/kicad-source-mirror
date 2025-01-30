@@ -64,7 +64,6 @@ public:
     bool m_plotRefDes;
     bool m_plotDrawingSheet;
     bool m_plotPadNumbers;
-    bool m_plotInvisibleText;
 
     LSEQ m_printMaskLayer;
     ///< Layers to include on all individual layer prints
