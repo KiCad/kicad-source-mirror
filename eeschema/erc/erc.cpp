@@ -1706,6 +1706,9 @@ int ERC_TESTER::TestOffGridEndpoints()
 
                 for( SCH_PIN* pin : symbol->GetPins( nullptr ) )
                 {
+                    if( pin->GetType() == ELECTRICAL_PINTYPE::PT_NC )
+                        continue;
+
                     VECTOR2I pinPos = pin->GetPosition();
 
                     if( ( pinPos.x % gridSize ) != 0 || ( pinPos.y % gridSize ) != 0 )
