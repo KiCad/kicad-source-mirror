@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 19:59+0300\n"
-"PO-Revision-Date: 2025-01-29 16:58+0000\n"
-"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
+"PO-Revision-Date: 2025-01-31 09:02+0000\n"
+"Last-Translator: reimu105 <peter112548@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -34483,10 +34483,11 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"這是該封裝的焊盤與阻焊之間的局部間隙。\n"
-"如果為 0 時, 使用全域設置值。\n"
-"在焊盤屬性的局部間隙和設置 選項卡中, \n"
-"可以覆蓋此值。"
+"這是焊盤和阻焊層之間的局部間隙\n"
+"這個封裝。\n"
+"如果為 0，則使用全域值。\n"
+"該值可以在本地逐個焊盤的基礎上被覆蓋\n"
+"焊盤屬性的間隙和設定選項卡。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:278
 msgid ""
@@ -43475,14 +43476,13 @@ msgid "(SMD pad has no outer layers)"
 msgstr "警告: 表面黏著焊盤沒有外形層。"
 
 #: pcbnew/pad.cpp:2283
-#, fuzzy
 msgid "(Pad must have a positive size)"
-msgstr "錯誤: 焊盤必須具有正尺寸。"
+msgstr "（焊盤大小必須為正）"
 
 #: pcbnew/pad.cpp:2294
-#, fuzzy, c-format
+#, c-format
 msgid "(PTH pad hole size must be larger than %s)"
-msgstr "貫孔孔徑尺寸必須小於貫孔直徑"
+msgstr "（PTH焊盤孔尺寸必須大於%s）"
 
 #: pcbnew/pad.cpp:2318
 #, fuzzy
@@ -43495,35 +43495,30 @@ msgid "(PTH pad hole not fully inside copper)"
 msgstr "(金屬化焊盤的孔沒留下銅)"
 
 #: pcbnew/pad.cpp:2335
-#, fuzzy
 msgid "(pad hole not inside pad shape)"
-msgstr "警告: 焊盤孔不在焊盤形狀內。"
+msgstr "（焊盤孔不在焊盤形狀內部）"
 
 #: pcbnew/pad.cpp:2340
-#, fuzzy
 msgid "(negative local clearance values have no effect)"
-msgstr "警告: 局部間隙值為負將沒有效果。"
+msgstr "（負局部間隙值無效）"
 
 #: pcbnew/pad.cpp:2359
-#, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than some shape primitives; "
 "results may be surprising)"
-msgstr "警告: 負阻焊間隙大於某些形狀原基板。可能產生意料之外的結果。"
+msgstr "（負阻焊層間隙大於某些形狀原型；結果可能令人驚訝）"
 
 #: pcbnew/pad.cpp:2369
-#, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than pad; no solder mask will be "
 "generated)"
-msgstr "警告: 阻焊層的負間隙大於焊盤。不會產生阻焊層。"
+msgstr "（負阻焊層間隙大於焊盤；不會產生阻焊層）"
 
 #: pcbnew/pad.cpp:2388
-#, fuzzy
 msgid ""
 "(negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated)"
-msgstr "警告: 負錫膏邊緣大於焊盤。不會生成錫膏層。"
+msgstr "（負錫膏餘量大於焊盤；不會產生錫膏層）"
 
 #: pcbnew/pad.cpp:2395
 msgid "(negative corner radius is not allowed)"
