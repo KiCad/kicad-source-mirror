@@ -66,7 +66,7 @@ void FP_LIB_TABLE_ROW::SetType( const wxString& aType )
 bool FP_LIB_TABLE_ROW::LibraryExists() const
 {
     if( plugin )
-        return plugin->CanReadLibrary( GetFullURI() );
+        return plugin->CanReadLibrary( GetFullURI( true ) );
 
     return false;
 }

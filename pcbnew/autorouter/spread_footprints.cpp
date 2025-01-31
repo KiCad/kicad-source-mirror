@@ -121,7 +121,7 @@ std::optional<rectpack2D::rect_wh> spreadRectangles( rect_vector& vecSubRects, i
     return result;
 }
 
-#include <wx/log.h>
+
 void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, VECTOR2I aTargetBoxPosition,
                        bool aGroupBySheet, int aComponentGap, int aGroupGap )
 {
