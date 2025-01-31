@@ -205,7 +205,8 @@ void DESIGN_BLOCK_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
                 row->SetVisible();
                 break;
 
-            default: in->Unexpected( tok );
+            default:
+                in->Unexpected( tok );
             }
 
             in->NeedRIGHT();
@@ -253,7 +254,9 @@ bool DESIGN_BLOCK_LIB_TABLE::operator==( const DESIGN_BLOCK_LIB_TABLE& aDesignBl
         {
             if( (DESIGN_BLOCK_LIB_TABLE_ROW&) m_rows[i]
                 != (DESIGN_BLOCK_LIB_TABLE_ROW&) aDesignBlockTable.m_rows[i] )
+            {
                 return false;
+            }
         }
 
         return true;
@@ -268,8 +271,8 @@ void DESIGN_BLOCK_LIB_TABLE::Format( OUTPUTFORMATTER* aOutput, int aIndentLevel 
     aOutput->Print( aIndentLevel, "(design_block_lib_table\n" );
     aOutput->Print( aIndentLevel + 1, "(version %d)\n", m_version );
 
-    for( LIB_TABLE_ROWS_CITER it = m_rows.begin(); it != m_rows.end(); ++it )
-        it->Format( aOutput, aIndentLevel + 1 );
+    for( const LIB_TABLE_ROW& row : m_rows)
+        row.Format( aOutput, aIndentLevel + 1 );
 
     aOutput->Print( aIndentLevel, ")\n" );
 }
@@ -330,9 +333,9 @@ const DESIGN_BLOCK_LIB_TABLE_ROW* DESIGN_BLOCK_LIB_TABLE::FindRow( const wxStrin
 
     if( !row )
     {
-        wxString msg = wxString::Format(
-                _( "design-block-lib-table files contain no library named '%s'." ), aNickname );
-        THROW_IO_ERROR( msg );
+        THROW_IO_ERROR( wxString::Format( _( "design-block-lib-table files contain no library "
+                                             "named '%s'." ),
+                                          aNickname ) );
     }
 
     if( !row->plugin )
@@ -490,14 +493,12 @@ DESIGN_BLOCK_LIB_TABLE::DesignBlockLoadWithOptionalNickname( const LIB_ID& aDesi
     // nickname is empty, sequentially search (alphabetically) all libs/nicks for first match:
     else
     {
-        std::vector<wxString> nicks = GetLogicalLibs();
-
         // Search each library going through libraries alphabetically.
-        for( unsigned i = 0; i < nicks.size(); ++i )
+        for( const wxString& library : GetLogicalLibs() )
         {
             // DesignBlockLoad() returns NULL on not found, does not throw exception
             // unless there's an IO_ERROR.
-            DESIGN_BLOCK* ret = DesignBlockLoad( nicks[i], DesignBlockname, aKeepUUID );
+            DESIGN_BLOCK* ret = DesignBlockLoad( library, DesignBlockname, aKeepUUID );
 
             if( ret )
                 return ret;
@@ -520,7 +521,8 @@ public:
     explicit PCM_DESIGN_BLOCK_LIB_TRAVERSER( const wxString& aPath, DESIGN_BLOCK_LIB_TABLE& aTable,
                                              const wxString& aPrefix ) :
             m_lib_table( aTable ),
-            m_path_prefix( aPath ), m_lib_prefix( aPrefix )
+            m_path_prefix( aPath ),
+            m_lib_prefix( aPrefix )
     {
         wxFileName f( aPath, wxS( "" ) );
         m_prefix_dir_count = f.GetDirCount();
@@ -539,8 +541,9 @@ public:
                                                 FILEEXT::KiCadDesignBlockLibPathExtension ) )
             && dir.GetDirCount() >= m_prefix_dir_count + 3 )
         {
-            wxString versionedPath = wxString::Format(
-                    wxS( "${%s}" ), ENV_VAR::GetVersionedEnvVarName( wxS( "3RD_PARTY" ) ) );
+            wxString versionedPath;
+            versionedPath.Printf( wxS( "${%s}" ),
+                                  ENV_VAR::GetVersionedEnvVarName( wxS( "3RD_PARTY" ) ) );
 
             wxArrayString parts = dir.GetDirs();
             parts.RemoveAt( 0, m_prefix_dir_count );
@@ -551,16 +554,21 @@ public:
             if( !m_lib_table.HasLibraryWithPath( libPath ) )
             {
                 wxString name = parts.Last().substr( 0, parts.Last().length() - 7 );
-                wxString nickname = wxString::Format( wxS( "%s%s" ), m_lib_prefix, name );
+                wxString nickname;
+                nickname.Printf( wxS( "%s%s" ),
+                                 m_lib_prefix,
+                                 name );
 
                 if( m_lib_table.HasLibrary( nickname ) )
                 {
                     int increment = 1;
+
                     do
                     {
-                        nickname =
-                                wxString::Format( wxS( "%s%s_%d" ), m_lib_prefix, name, increment );
-                        increment++;
+                        nickname.Printf( wxS( "%s%s_%d" ),
+                                         m_lib_prefix,
+                                         name,
+                                         increment++ );
                     } while( m_lib_table.HasLibrary( nickname ) );
                 }
 
@@ -603,8 +611,8 @@ bool DESIGN_BLOCK_LIB_TABLE::LoadGlobalTable( DESIGN_BLOCK_LIB_TABLE& aTable )
         SystemDirsAppend( &ss );
 
         const ENV_VAR_MAP&      envVars = Pgm().GetLocalEnvVariables();
-        std::optional<wxString> v =
-                ENV_VAR::GetVersionedEnvVarValue( envVars, wxT( "TEMPLATE_DIR" ) );
+        std::optional<wxString> v = ENV_VAR::GetVersionedEnvVarValue( envVars,
+                                                                      wxT( "TEMPLATE_DIR" ) );
 
         if( v && !v->IsEmpty() )
             ss.AddPaths( *v, 0 );
