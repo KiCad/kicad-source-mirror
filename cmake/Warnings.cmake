@@ -278,4 +278,6 @@ if( MSVC )
     string( APPEND WARN_FLAGS_CXX " /wd4290" )
     # disable non-bool is explicitly cast to bool, forcing value of 0 or 1
     string( APPEND WARN_FLAGS_CXX " /wd4800" )
+    # disable volatile access of '<expression>' is subject to /volatile:[iso|ms] setting;
+    string( APPEND WARN_FLAGS_CXX " /wd4746" )
 endif()
