@@ -41,7 +41,6 @@
     },
     "icu",
     "ngspice",
-    "wxpython",
     "libgit2",
     "nng",
     "protobuf",

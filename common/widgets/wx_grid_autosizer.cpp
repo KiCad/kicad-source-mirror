@@ -78,11 +78,13 @@ void WX_GRID_AUTOSIZER::recomputeGridWidths()
         {
             m_grid.AutoSizeColumn( colIndex );
             const int colSize = m_grid.GetColSize( colIndex );
-            m_grid.SetColSize( colIndex, std::max( minWidth, colSize ) );
+
+            int minWidthScaled = m_grid.FromDIP( minWidth );
+            m_grid.SetColSize( colIndex, std::max( minWidthScaled, colSize ) );
 
             if( colIndex == m_flexibleCol )
             {
-                flexibleMinWidth = minWidth;
+                flexibleMinWidth = minWidthScaled;
             }
         }
 
