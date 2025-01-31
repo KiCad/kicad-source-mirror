@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 19:59+0300\n"
-"PO-Revision-Date: 2025-01-20 22:52+0000\n"
-"Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
+"PO-Revision-Date: 2025-02-01 16:02+0000\n"
+"Last-Translator: iamPeter <lopert.peter.otto@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v8/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -70,7 +70,7 @@ msgstr "Vezetőrétegek sokszögeinek egyszerűsítése"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1063
 msgid "Calculating plated copper"
-msgstr ""
+msgstr "Galvanizált réz kiszámítása"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1149
 #, c-format
@@ -91,7 +91,7 @@ msgstr "Hiba az OpenGL kontextus létrehozásában"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:420
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
-msgstr "OpenGL verzió nem támogatott. Minimum 1.5-ös verzió szükséges."
+msgstr "Az Ön OpenGL verziója nem támogatott. Minimum 1.5 szükséges."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:554
 #, c-format
@@ -101,7 +101,7 @@ msgstr "Legutóbbi renderelési idő %.0f ms"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:661
 #, c-format
 msgid "Net %s\tNet class %s"
-msgstr "Vezeték %s\t Vezetékosztály %s"
+msgstr "Vezeték %s\tVezetékosztály %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:685
 #, c-format
@@ -145,7 +145,7 @@ msgstr "3D modellek betöltése..."
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:960
 #, c-format
 msgid "Reload time %.3f s"
-msgstr "Újratöltési idő %.3f sec"
+msgstr "Újratöltési idő: %.3f mp"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:966
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:431
@@ -183,7 +183,7 @@ msgstr "Renderelési idő: %.3f mp"
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:441
 #, c-format
 msgid "Rendering: %.0f %%"
-msgstr "Renderelés: %.0f%%"
+msgstr "Renderelés: %.0f %%"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:854
 msgid "Rendering: Post processing shader"
@@ -191,11 +191,11 @@ msgstr "Renderelés: árnyaló utófeldolgozása"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:51
 msgid "Export Current View as PNG..."
-msgstr "Aktuális nézet exportálása PNG-ként…"
+msgstr "Aktuális nézet exportálása PNG-ként..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:56
 msgid "Export Current View as JPEG..."
-msgstr "Aktuális nézet exportálása JPEG-ként…"
+msgstr "Aktuális nézet exportálása JPEG-ként..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:62
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:657
@@ -239,7 +239,7 @@ msgstr "&Fájl"
 #: pagelayout_editor/menubar.cpp:151 pcbnew/menubar_footprint_editor.cpp:235
 #: pcbnew/menubar_pcb_editor.cpp:460
 msgid "&Edit"
-msgstr "Szerkesztés"
+msgstr "&Szerkesztés"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:141 eeschema/menubar.cpp:340
 #: eeschema/sim/toolbars_simulator_frame.cpp:161
@@ -249,14 +249,14 @@ msgstr "Szerkesztés"
 #: pcbnew/menubar_footprint_editor.cpp:236 pcbnew/menubar_pcb_editor.cpp:461
 #: pcbnew/toolbars_footprint_viewer.cpp:194
 msgid "&View"
-msgstr "Nézet"
+msgstr "&Nézet"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:142
 #: bitmap2component/bitmap2cmp_frame.cpp:309 cvpcb/menubar.cpp:80
 #: eeschema/sim/toolbars_simulator_frame.cpp:163 gerbview/menubar.cpp:234
 #: kicad/menubar.cpp:225 pcb_calculator/pcb_calculator_frame.cpp:230
 msgid "&Preferences"
-msgstr "Beállítások"
+msgstr "&Preferenciák"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:57
 msgid "Reload board"
@@ -493,7 +493,7 @@ msgstr "Furatszerelt 3D modellek megjelenítése"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:280
 msgid "Show 3D models for 'Through hole' type footprints"
-msgstr "Átmenő furatok 3D modeljeinek megjelenítése"
+msgstr "Átmenő furatok 3D modelljeinek megjelenítése"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:288
 msgid "Show SMD 3D Models"
@@ -742,9 +742,8 @@ msgstr "Színátmenetes háttér zárószíne"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:125
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:207
-#, fuzzy
 msgid "Use board stackup colors"
-msgstr "X méretezés kényszerítve."
+msgstr ""
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:141
 #, c-format
