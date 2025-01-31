@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Слой_1"
    data-name="Слой 1"
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="grid.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,18 +22,21 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="2435"
+     inkscape:window-height="1539"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
-     inkscape:cy="13"
+     inkscape:cx="5.6148557"
+     inkscape:cy="8.6011006"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="55"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
-     inkscape:current-layer="Слой_1">
+     inkscape:current-layer="Слой_1"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1">
     <inkscape:grid
        type="xygrid"
        id="grid_kicad"
@@ -81,130 +84,142 @@
      id="title157370">grid</title>
   <rect
      class="cls-1"
-     x="1.416321"
-     y="-1.4134227"
+     x="2.8277559"
+     y="-1.4143173"
      width="2.8297"
      height="2.8297"
      transform="rotate(45.0014)"
      id="rect157372" />
   <rect
      class="cls-1"
-     x="6.1298695"
-     y="-6.1272392"
+     x="7.0709791"
+     y="-5.6576385"
      width="2.8297"
      height="2.8297"
      transform="rotate(45.0012)"
      id="rect157374" />
   <rect
      class="cls-1"
-     x="10.843364"
-     y="-10.841041"
+     x="11.31283"
+     y="-9.899806"
      width="2.8297"
      height="2.8297"
      transform="rotate(45.0014)"
      id="rect157376" />
   <rect
      class="cls-1"
-     x="15.557203"
-     y="-15.55429"
+     x="15.555076"
+     y="-14.142772"
      width="2.8297"
      height="2.8297"
      transform="rotate(45)"
      id="rect157378" />
   <rect
      class="cls-1"
-     x="6.1338067"
-     y="3.3038428"
+     x="7.0705004"
+     y="2.8282197"
      width="2.8297"
      height="2.8297"
      transform="rotate(45.0014)"
-     id="rect157380" />
+     id="rect157372-3"
+     style="fill:#ded3dd" />
   <rect
      class="cls-1"
-     x="10.847292"
-     y="-1.4098865"
+     x="11.313709"
+     y="-1.4150864"
      width="2.8297"
      height="2.8297"
      transform="rotate(45.0012)"
-     id="rect157382" />
+     id="rect157374-6"
+     style="fill:#ded3dd" />
   <rect
      class="cls-1"
-     x="15.560921"
-     y="-6.1237044"
+     x="15.555574"
+     y="-5.6572695"
      width="2.8297"
      height="2.8297"
      transform="rotate(45.0014)"
-     id="rect157384" />
+     id="rect157376-7"
+     style="fill:#ded3dd" />
   <rect
      class="cls-1"
-     x="20.274595"
-     y="-10.836909"
+     x="19.797716"
+     y="-9.9001312"
      width="2.8297"
      height="2.8297"
      transform="rotate(45)"
-     id="rect157386" />
+     id="rect157378-5"
+     style="fill:#ded3dd" />
   <rect
      class="cls-1"
-     x="10.851293"
-     y="8.0211086"
+     x="11.311971"
+     y="7.0706968"
      width="2.8297"
      height="2.8297"
      transform="rotate(45.0014)"
-     id="rect157388" />
+     id="rect157372-36"
+     style="fill:#ded3dd" />
   <rect
      class="cls-1"
-     x="15.564784"
-     y="3.3073959"
+     x="15.555164"
+     y="2.8274057"
      width="2.8297"
      height="2.8297"
      transform="rotate(45.0012)"
-     id="rect157390" />
+     id="rect157374-0"
+     style="fill:#ded3dd" />
   <rect
      class="cls-1"
-     x="20.278406"
-     y="-1.4064386"
+     x="19.797045"
+     y="-1.4147917"
      width="2.8297"
      height="2.8297"
      transform="rotate(45.0014)"
-     id="rect157392" />
+     id="rect157376-6"
+     style="fill:#ded3dd" />
   <rect
      class="cls-1"
-     x="24.991987"
-     y="-6.1195278"
+     x="24.039083"
+     y="-5.6575503"
      width="2.8297"
      height="2.8297"
      transform="rotate(45)"
-     id="rect157394" />
+     id="rect157378-2"
+     style="fill:#ded3dd" />
   <rect
      class="cls-1"
-     x="15.56885"
-     y="12.738305"
+     x="15.554715"
+     y="11.313233"
      width="2.8297"
      height="2.8297"
      transform="rotate(45.0014)"
-     id="rect157396" />
+     id="rect157372-3-6"
+     style="fill:#ded3dd" />
   <rect
      class="cls-1"
-     x="20.282276"
-     y="8.0246792"
+     x="19.797894"
+     y="7.0699573"
      width="2.8297"
      height="2.8297"
      transform="rotate(45.0012)"
-     id="rect157398" />
+     id="rect157374-6-1"
+     style="fill:#ded3dd" />
   <rect
      class="cls-1"
-     x="24.995892"
-     y="3.3108282"
+     x="24.039789"
+     y="2.827745"
      width="2.8297"
      height="2.8297"
      transform="rotate(45.0014)"
-     id="rect157400" />
+     id="rect157376-7-8"
+     style="fill:#ded3dd" />
   <rect
      class="cls-1"
-     x="29.709381"
-     y="-1.4021457"
+     x="28.281723"
+     y="-1.4149089"
      width="2.8297"
      height="2.8297"
      transform="rotate(45)"
-     id="rect157402" />
+     id="rect157378-5-7"
+     style="fill:#ded3dd" />
 </svg>
