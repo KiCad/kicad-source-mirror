@@ -142,6 +142,7 @@ std::ostream& boost_test_print_type( std::ostream& os, std::pair<K, V> const& aP
  */
 std::ostream& boost_test_print_type( std::ostream& os, wxPoint const& aVec );
 
+std::ostream& boost_test_print_type( std::ostream& os, wxSize const& aSize );
 
 namespace KI_TEST
 {

@@ -22,9 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-// base64 code. Needed for PCB_REFERENCE_IMAGE
-#define wxUSE_BASE64 1
-#include <wx/base64.h>
 #include <wx/dir.h>
 #include <wx/ffile.h>
 #include <wx/log.h>
@@ -1066,23 +1063,10 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_REFERENCE_IMAGE* aBitmap ) const
     if( aBitmap->IsLocked() )
         KICAD_FORMAT::FormatBool( m_out, "locked", true );
 
-    m_out->Print( "(data" );
+    wxMemoryOutputStream ostream;
+    refImage.GetImage().SaveImageData( ostream );
 
-    wxString out = wxBase64Encode( refImage.GetImage().GetImageDataBuffer() );
-
-    // Apparently the MIME standard character width for base64 encoding is 76 (unconfirmed)
-    // so use it in a vain attempt to be standard like.
-#define MIME_BASE64_LENGTH 76
-
-    size_t first = 0;
-
-    while( first < out.Length() )
-    {
-        m_out->Print( "\n\"%s\"", TO_UTF8( out( first, MIME_BASE64_LENGTH ) ) );
-        first += MIME_BASE64_LENGTH;
-    }
-
-    m_out->Print( ")" );  // Closes data token.
+    KICAD_FORMAT::FormatStreamData( *m_out, *ostream.GetOutputStreamBuffer() );
 
     KICAD_FORMAT::FormatUuid( m_out, aBitmap->m_Uuid );
     m_out->Print( ")" );      // Closes image token.

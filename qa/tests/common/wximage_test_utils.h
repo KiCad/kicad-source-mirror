@@ -43,6 +43,13 @@ namespace KI_TEST
  */
 bool IsImagePixelOfColor( const wxImage& aImage, int aX, int aY, const KIGFX::COLOR4D& aColor );
 
+/**
+ * Check if an image is identical to another image, pixel by pixel
+ *
+ * (this is exhaustive, avoid using it for large images)
+ */
+bool ImagesHaveSamePixels( const wxImage& aImgA, const wxImage& aImgB );
+
 } // namespace KI_TEST
 
 

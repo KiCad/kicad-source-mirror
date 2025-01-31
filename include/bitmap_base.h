@@ -240,17 +240,12 @@ public:
      */
     void SetImageType( wxBitmapType aType ) { m_imageType = aType; }
 
-    /**
-     * @return the image data buffer.
-     */
-    const wxMemoryBuffer& GetImageDataBuffer() const { return m_imageData; }
-
+private:
     /**
      * Resets the image data buffer using the current image data.
      */
-    void UpdateImageDataBuffer();
+    void updateImageDataBuffer();
 
-private:
     /**
      * Rebuild the internal bitmap used to draw/plot image.
      *

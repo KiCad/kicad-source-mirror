@@ -28,15 +28,7 @@
 
 namespace KI_TEST
 {
-/**
- * Predicate to check an image pixel matches color and alpha
- *
- * @param  aImage  the image to check
- * @param  aX      pixel x-coordinate
- * @param  aY      pixel y-coordinate
- * @param  aColor  expected color (alpha is 1.0 if image doesn't support alpha)
- * @return         true if colour match
- */
+
 bool IsImagePixelOfColor( const wxImage& aImage, int aX, int aY, const KIGFX::COLOR4D& aColor )
 {
     const wxSize imageSize = aImage.GetSize();
@@ -59,6 +51,40 @@ bool IsImagePixelOfColor( const wxImage& aImage, int aX, int aY, const KIGFX::CO
         BOOST_TEST_INFO( "Colour doesn't match: got rgba(" << r << ", " << g << ", " << b << ", "
                                                            << a << "), expected " << aColor );
         return false;
+    }
+
+    return true;
+}
+
+
+bool ImagesHaveSamePixels( const wxImage& aImgA, const wxImage& aImgB )
+{
+    if( aImgA.GetSize() != aImgB.GetSize() )
+    {
+        BOOST_TEST_INFO( "Image sizes differ: " << aImgA.GetSize() << " vs " << aImgB.GetSize() );
+        return false;
+    }
+
+    for( int y = 0; y < aImgA.GetHeight(); ++y )
+    {
+        for( int x = 0; x < aImgA.GetWidth(); ++x )
+        {
+            const int rA = aImgA.GetRed( x, y );
+            const int gA = aImgA.GetGreen( x, y );
+            const int bA = aImgA.GetBlue( x, y );
+
+            const int rB = aImgB.GetRed( x, y );
+            const int gB = aImgB.GetGreen( x, y );
+            const int bB = aImgB.GetBlue( x, y );
+
+            if( rA != rB || gA != gB || bA != bB )
+            {
+                BOOST_TEST_INFO( "Pixel (" << x << ", " << y << ") differs: "
+                                           << "A(" << rA << ", " << gA << ", " << bA << ") "
+                                           << "B(" << rB << ", " << gB << ", " << bB << ")" );
+                return false;
+            }
+        }
     }
 
     return true;

@@ -17,10 +17,12 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KICAD_IO_UTILS_H
-#define KICAD_IO_UTILS_H
+#pragma once
 
+#include <wx/stream.h>
 #include <wx/string.h>
+
+#include <kicommon.h>
 
 class OUTPUTFORMATTER;
 class KIID;
@@ -38,8 +40,11 @@ KICOMMON_API void FormatBool( OUTPUTFORMATTER* aOut, const wxString& aKey, bool 
 
 KICOMMON_API void FormatUuid( OUTPUTFORMATTER* aOut, const KIID& aUuid );
 
+/**
+ * Write binary data to the formatter as base 64 encoded string.
+ */
+KICOMMON_API void FormatStreamData( OUTPUTFORMATTER& aOut, const wxStreamBuffer& aStream );
+
 KICOMMON_API void Prettify( std::string& aSource, bool aCompactSave );
 
 } // namespace KICAD_FORMAT
-
-#endif //KICAD_IO_UTILS_H

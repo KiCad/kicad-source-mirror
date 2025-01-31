@@ -22,10 +22,6 @@
 
 #include <algorithm>
 
-// For some reason wxWidgets is built with wxUSE_BASE64 unset so expose the wxWidgets
-// base64 code.
-#define wxUSE_BASE64 1
-#include <wx/base64.h>
 #include <wx/log.h>
 #include <wx/mstream.h>
 
@@ -958,23 +954,11 @@ void SCH_IO_KICAD_SEXPR::saveBitmap( const SCH_BITMAP& aBitmap )
 
     KICAD_FORMAT::FormatUuid( m_out, aBitmap.m_Uuid );
 
-    m_out->Print( "(data" );
+    wxMemoryOutputStream stream;
+    bitmapBase.SaveImageData( stream );
 
-    wxString out = wxBase64Encode( bitmapBase.GetImageDataBuffer() );
+    KICAD_FORMAT::FormatStreamData( *m_out, *stream.GetOutputStreamBuffer() );
 
-    // Apparently the MIME standard character width for base64 encoding is 76 (unconfirmed)
-    // so use it in a vein attempt to be standard like.
-#define MIME_BASE64_LENGTH 76
-
-    size_t first = 0;
-
-    while( first < out.Length() )
-    {
-        m_out->Print( "\n\"%s\"", TO_UTF8( out( first, MIME_BASE64_LENGTH ) ) );
-        first += MIME_BASE64_LENGTH;
-    }
-
-    m_out->Print( ")" );        // Closes data token.
     m_out->Print( ")" );        // Closes image token.
 }
 

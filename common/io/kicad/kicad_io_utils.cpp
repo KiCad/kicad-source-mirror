@@ -17,10 +17,16 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "io/kicad/kicad_io_utils.h"
+
+// For some reason wxWidgets is built with wxUSE_BASE64 unset so expose the wxWidgets
+// base64 code.
+#define wxUSE_BASE64 1
+#include <wx/base64.h>
+
 #include <fmt/format.h>
 
 #include <kiid.h>
-#include <io/kicad/kicad_io_utils.h>
 #include <richio.h>
 #include <string_utils.h>
 
@@ -36,6 +42,29 @@ void FormatUuid( OUTPUTFORMATTER* aOut, const KIID& aUuid )
 {
     aOut->Print( "(uuid %s)", aOut->Quotew( aUuid.AsString() ).c_str() );
 }
+
+
+void FormatStreamData( OUTPUTFORMATTER& aOut, const wxStreamBuffer& aStream )
+{
+    aOut.Print( "(data" );
+
+    const wxString out = wxBase64Encode( aStream.GetBufferStart(), aStream.GetBufferSize() );
+
+    // Apparently the MIME standard character width for base64 encoding is 76 (unconfirmed)
+    // so use it in a vein attempt to be standard like.
+    static constexpr unsigned MIME_BASE64_LENGTH = 76;
+
+    size_t first = 0;
+
+    while( first < out.Length() )
+    {
+        aOut.Print( "\n\"%s\"", TO_UTF8( out( first, MIME_BASE64_LENGTH ) ) );
+        first += MIME_BASE64_LENGTH;
+    }
+
+    aOut.Print( ")" ); // Closes data token.
+}
+
 
 /*
  * Formatting rules:

@@ -34,10 +34,11 @@
 #include <drawing_sheet/drawing_sheet_lexer.h>
 #include <drawing_sheet/ds_file_versions.h>
 #include <font/font.h>
+#include <io/kicad/kicad_io_utils.h>
 #include <string_utils.h>
 
-#include <wx/base64.h>
 #include <wx/msgdlg.h>
+#include <wx/mstream.h>
 
 using namespace DRAWINGSHEET_T;
 
@@ -422,21 +423,11 @@ void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_BITMAP* aItem ) const
     // Write image in png readable format
     m_out->Print( "(data" );
 
-    wxString out = wxBase64Encode( aItem->m_ImageBitmap->GetImageDataBuffer() );
+    wxMemoryOutputStream stream;
+    aItem->m_ImageBitmap->SaveImageData( stream );
 
-    // Apparently the MIME standard character width for base64 encoding is 76 (unconfirmed)
-    // so use it in a vain attempt to be standard like.
-#define MIME_BASE64_LENGTH 76
+    KICAD_FORMAT::FormatStreamData( *m_out, *stream.GetOutputStreamBuffer() );
 
-    size_t first = 0;
-
-    while( first < out.Length() )
-    {
-        m_out->Print( "\n\"%s\"", TO_UTF8( out( first, MIME_BASE64_LENGTH ) ) );
-        first += MIME_BASE64_LENGTH;
-    }
-
-    m_out->Print( ")" );  // Closes data token.
     m_out->Print( ")" );  // Closes bitmap token.
 }
 

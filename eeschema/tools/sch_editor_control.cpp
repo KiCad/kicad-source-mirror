@@ -1657,7 +1657,14 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     {
         // Just image data
         auto bitmap = std::make_unique<SCH_BITMAP>();
-        bitmap->GetReferenceImage().SetImage( *clipImg );
+
+        bool ok = bitmap->GetReferenceImage().SetImage( *clipImg );
+
+        if( !ok )
+        {
+            delete tempScreen;
+            return 0;
+        }
 
         tempScreen->Append( bitmap.release() );
     }

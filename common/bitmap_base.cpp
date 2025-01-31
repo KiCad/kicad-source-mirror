@@ -239,7 +239,7 @@ bool BITMAP_BASE::LoadLegacyData( LINE_READER& aLine, wxString& aErrorMsg )
             m_image->LoadFile( istream, wxBITMAP_TYPE_ANY );
             m_bitmap = new wxBitmap( *m_image );
             m_originalImage = new wxImage( *m_image );
-            UpdateImageDataBuffer();
+            updateImageDataBuffer();
             break;
         }
 
@@ -433,7 +433,7 @@ void BITMAP_BASE::Mirror( FLIP_DIRECTION aFlipDirection )
             m_isMirroredX = !m_isMirroredX;
 
         rebuildBitmap( false );
-        UpdateImageDataBuffer();
+        updateImageDataBuffer();
     }
 }
 
@@ -458,7 +458,7 @@ void BITMAP_BASE::Rotate( bool aRotateCCW )
 
         m_rotation += ( aRotateCCW ? ANGLE_90 : -ANGLE_90 );
         rebuildBitmap( false );
-        UpdateImageDataBuffer();
+        updateImageDataBuffer();
     }
 }
 
@@ -470,7 +470,7 @@ void BITMAP_BASE::ConvertToGreyscale()
         *m_image  = m_image->ConvertToGreyscale();
         *m_originalImage = m_originalImage->ConvertToGreyscale();
         rebuildBitmap();
-        UpdateImageDataBuffer();
+        updateImageDataBuffer();
     }
 }
 
@@ -490,7 +490,7 @@ void BITMAP_BASE::PlotImage( PLOTTER*       aPlotter, const VECTOR2I& aPos,
 }
 
 
-void BITMAP_BASE::UpdateImageDataBuffer()
+void BITMAP_BASE::updateImageDataBuffer()
 {
     if( m_image )
     {

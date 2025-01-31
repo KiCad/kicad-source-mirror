@@ -31,6 +31,13 @@ std::ostream& boost_test_print_type( std::ostream& os, wxPoint const& aPt )
 }
 
 
+std::ostream& boost_test_print_type( std::ostream& os, wxSize const& aSize )
+{
+    os << "wxSize[ x=\"" << aSize.x << "\" y=\"" << aSize.y << "\" ]";
+    return os;
+}
+
+
 std::string KI_TEST::GetEeschemaTestDataDir()
 {
     const char* env = std::getenv( "KICAD_TEST_EESCHEMA_DATA_DIR" );
