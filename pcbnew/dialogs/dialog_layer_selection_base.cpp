@@ -215,7 +215,8 @@ DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE::DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE
 	m_presetsGrid->CreateGrid( 0, 4 );
 	m_presetsGrid->EnableEditing( true );
 	m_presetsGrid->EnableGridLines( true );
-	m_presetsGrid->EnableDragGridSize( false );
+    m_presetsGrid->EnableDragGridSize( false );
+    m_presetsGrid->SetMinSize( wxSize( -1, FromDIP( 100 ) ) );
     m_presetsGrid->SetMargins( FromDIP( 5 ), FromDIP( 3 ) );
 
 	// Columns
