@@ -1224,7 +1224,6 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
 
 void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 {
-    const BOARD* board = aPad->GetBoard();
     COLOR4D      color = m_pcbSettings.GetColor( aPad, aLayer );
 
     const int copperLayer = IsPadCopperLayer( aLayer ) ? aLayer - LAYER_PAD_COPPER_START : aLayer;
