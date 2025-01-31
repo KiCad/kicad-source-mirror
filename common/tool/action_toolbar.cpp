@@ -114,16 +114,15 @@ ACTION_TOOLBAR_PALETTE::ACTION_TOOLBAR_PALETTE( wxWindow* aParent, bool aVertica
 
 void ACTION_TOOLBAR_PALETTE::AddAction( const TOOL_ACTION& aAction )
 {
-    wxBitmapBundle normalBmp = KiBitmapBundle( aAction.GetIcon() );
+    int            size = Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size;
+    wxBitmapBundle normalBmp = KiBitmapBundle( aAction.GetIcon(), size );
 
     int bmpWidth = normalBmp.GetPreferredBitmapSizeFor( this ).GetWidth();
     int padding = ( m_buttonSize.GetWidth() - bmpWidth ) / 2;
-    int size = Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size;
     wxSize bmSize( size, size );
-    bmSize *= KIPLATFORM::UI::GetPixelScaleFactor( m_parent );
+    bmSize *= KIPLATFORM::UI::GetContentScaleFactor( m_parent );
 
-    BITMAP_BUTTON* button = new BITMAP_BUTTON( m_panel, aAction.GetUIId(), wxDefaultPosition,
-                                               bmSize );
+    BITMAP_BUTTON* button = new BITMAP_BUTTON( m_panel, aAction.GetUIId() );
 
     button->SetIsToolbarButton();
     button->SetBitmap( normalBmp );

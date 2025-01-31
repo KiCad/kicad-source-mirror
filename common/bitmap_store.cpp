@@ -121,13 +121,16 @@ wxBitmap BITMAP_STORE::GetBitmap( BITMAPS aBitmapId, int aHeight )
 }
 
 
-wxBitmapBundle BITMAP_STORE::GetBitmapBundle( BITMAPS aBitmapId )
+wxBitmapBundle BITMAP_STORE::GetBitmapBundle( BITMAPS aBitmapId, int aMinHeight )
 {
     wxVector<wxBitmap> bmps;
 
     for( const BITMAP_INFO& info : m_bitmapInfoCache[aBitmapId] )
     {
         if( info.theme != m_theme )
+            continue;
+
+        if( aMinHeight > 0 && info.height < aMinHeight )
             continue;
 
         bmps.push_back( wxBitmap( getImage( info.id, info.height ) ) );

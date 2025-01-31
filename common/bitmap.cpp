@@ -107,9 +107,9 @@ wxBitmap KiBitmap( BITMAPS aBitmap, int aHeightTag )
 }
 
 
-wxBitmapBundle KiBitmapBundle( BITMAPS aBitmap )
+wxBitmapBundle KiBitmapBundle( BITMAPS aBitmap, int aMinHeight )
 {
-    return GetBitmapStore()->GetBitmapBundle( aBitmap );
+    return GetBitmapStore()->GetBitmapBundle( aBitmap, aMinHeight );
 }
 
 

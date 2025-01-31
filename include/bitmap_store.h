@@ -60,9 +60,13 @@ public:
     /**
      * Constructs and returns a bitmap bundle containing all available sizes of the given ID
      * @param aBitmapId is from the BITMAPS enum in bitmaps_list.h
+     * @param aMinHeight is the minimum height of the bitmaps to include in the bundle.
+     * This is important for uses of GetPreferredBitmap and more on wxBitmap bundles because
+     * wx assumes the smallest bitmap is the "original" intended size. This is a problem where
+     * some icons may be reused between controls at different intended sizes.
      */
-    wxBitmapBundle GetBitmapBundle( BITMAPS aBitmapId );
-
+    wxBitmapBundle GetBitmapBundle( BITMAPS aBitmapId, int aMinHeight = -1 );
+     
     /**
      * Constructs and returns a bitmap bundle for the given icon ID, with the bitmaps
      * converted to disabled state according to the current UI theme.

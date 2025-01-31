@@ -56,7 +56,7 @@ KICOMMON_API BITMAP_STORE* GetBitmapStore();
  */
 KICOMMON_API wxBitmap KiBitmap( BITMAPS aBitmap, int aHeightTag = -1 );
 
-KICOMMON_API wxBitmapBundle KiBitmapBundle( BITMAPS aBitmap );
+KICOMMON_API wxBitmapBundle KiBitmapBundle( BITMAPS aBitmap, int aMinHeight = -1 );
 
 KICOMMON_API wxBitmapBundle KiDisabledBitmapBundle( BITMAPS aBitmap );
 
