@@ -527,6 +527,8 @@ bool ROUTER_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::routerUndoLastSegment, SELECTION_CONDITIONS::ShowAlways );
     menu.AddItem( PCB_ACTIONS::routerContinueFromEnd, hasOtherEnd );
     menu.AddItem( PCB_ACTIONS::routerAttemptFinish,   hasOtherEnd );
+    menu.AddItem( PCB_ACTIONS::routerAutorouteSelected, notRoutingCond
+                                                            && SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::breakTrack,            notRoutingCond );
 
     menu.AddItem( PCB_ACTIONS::drag45Degree,          notRoutingCond );

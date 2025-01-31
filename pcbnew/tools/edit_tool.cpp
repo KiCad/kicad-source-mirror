@@ -97,11 +97,11 @@ static const std::vector<KICAD_T> connectedTypes = { PCB_TRACE_T,
                                                      PCB_PAD_T,
                                                      PCB_ZONE_T };
 
-static const std::vector<KICAD_T> unroutableTypes = { PCB_TRACE_T,
-                                                      PCB_ARC_T,
-                                                      PCB_VIA_T,
-                                                      PCB_PAD_T,
-                                                      PCB_FOOTPRINT_T };
+static const std::vector<KICAD_T> routableTypes = { PCB_TRACE_T,
+                                                    PCB_ARC_T,
+                                                    PCB_VIA_T,
+                                                    PCB_PAD_T,
+                                                    PCB_FOOTPRINT_T };
 
 
 EDIT_TOOL::EDIT_TOOL() :
@@ -329,6 +329,13 @@ bool EDIT_TOOL::Init()
                 return frame()->IsCurrentTool( PCB_ACTIONS::moveIndividually );
             };
 
+    SELECTION_CONDITION isRoutable =
+           SELECTION_CONDITIONS::NotEmpty
+           && SELECTION_CONDITIONS::OnlyTypes( routableTypes )
+           && notMovingCondition
+           && !inFootprintEditor;
+
+
     const auto canCopyAsText = SELECTION_CONDITIONS::NotEmpty
                                && SELECTION_CONDITIONS::OnlyTypes( {
                                        PCB_FIELD_T,
@@ -349,10 +356,8 @@ bool EDIT_TOOL::Init()
     // clang-format off
     menu.AddItem( PCB_ACTIONS::move,              SELECTION_CONDITIONS::NotEmpty
                                                       && notMovingCondition );
-    menu.AddItem( PCB_ACTIONS::unrouteSelected,   SELECTION_CONDITIONS::NotEmpty
-                                                      && SELECTION_CONDITIONS::OnlyTypes( unroutableTypes )
-                                                      && notMovingCondition
-                                                      && !inFootprintEditor );
+    menu.AddItem( PCB_ACTIONS::unrouteSelected,         isRoutable );
+    menu.AddItem( PCB_ACTIONS::routerAutorouteSelected, isRoutable );
     menu.AddItem( PCB_ACTIONS::moveIndividually,  SELECTION_CONDITIONS::MoreThan( 1 )
                                                       && notMovingCondition );
     menu.AddItem( PCB_ACTIONS::skip,              isSkippable );
