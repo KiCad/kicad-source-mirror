@@ -125,6 +125,8 @@ public:
     void SaveLibrary( const wxString& aLibraryPath,
                       const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
+    bool CanReadLibrary( const wxString& aLibraryPath ) const override;
+
     bool IsLibraryWritable( const wxString& aLibraryPath ) override;
 
     void GetAvailableSymbolFields( std::vector<wxString>& aNames ) override;
