@@ -260,7 +260,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_EnableLibDir              = false;
 
     m_EnableEeschemaPrintCairo  = true;
-    m_EnableEeschemaExportClipboardCairo = false;
+    m_EnableEeschemaExportClipboardCairo = true;
 
     m_3DRT_BevelHeight_um       = 30;
     m_3DRT_BevelExtentFactor    = 1.0 / 16.0;
