@@ -65,11 +65,13 @@ DIALOG_CONFIGURE_PATHS::DIALOG_CONFIGURE_PATHS( wxWindow* aParent ) :
     m_errorGrid( nullptr ),
     m_errorRow( -1 ),
     m_errorCol( -1 ),
-    m_helpBox( nullptr ),
-    m_heightBeforeHelp( 400 )
+    m_helpBox( nullptr )
 {
+    m_heightBeforeHelp = FromDIP ( 400 );
     m_btnAddEnvVar->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_btnDeleteEnvVar->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+
+    m_EnvVars->SetMinSize( FromDIP( m_EnvVars->GetMinSize() ) );
 
     m_EnvVars->ClearRows();
     m_EnvVars->AppendCols( 1 );     // for the isExternal flags
@@ -81,7 +83,7 @@ DIALOG_CONFIGURE_PATHS::DIALOG_CONFIGURE_PATHS( wxWindow* aParent ) :
     m_EnvVars->SetColAttr( TV_VALUE_COL, attr );
 
     // Give a bit more room for combobox editors
-    m_EnvVars->SetDefaultRowSize( m_EnvVars->GetDefaultRowSize() + 4 );
+    m_EnvVars->SetDefaultRowSize( m_EnvVars->GetDefaultRowSize() + FromDIP( 4 ) );
 
     m_EnvVars->PushEventHandler( new GRID_TRICKS( m_EnvVars,
                                                   [this]( wxCommandEvent& aEvent )
