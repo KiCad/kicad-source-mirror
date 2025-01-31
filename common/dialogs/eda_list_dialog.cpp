@@ -99,7 +99,7 @@ void EDA_LIST_DIALOG::initDialog( const wxArrayString& aItemHeaders,
     if( aItemHeaders.Count() == 1 )
     {
         m_listBox->InsertColumn( 0, aItemHeaders.Item( 0 ), wxLIST_FORMAT_LEFT,
-                                 DEFAULT_SINGLE_COL_WIDTH );
+                                 FromDIP( DEFAULT_SINGLE_COL_WIDTH ) );
 
         m_listBox->SetMinClientSize( FromDIP( wxSize( DEFAULT_SINGLE_COL_WIDTH, 200 ) ) );
         SetMinClientSize( FromDIP( wxSize( DEFAULT_COL_WIDTHS[0], 220 ) ) );
@@ -109,7 +109,7 @@ void EDA_LIST_DIALOG::initDialog( const wxArrayString& aItemHeaders,
         for( unsigned i = 0; i < aItemHeaders.Count(); i++ )
         {
             m_listBox->InsertColumn( i, aItemHeaders.Item( i ), wxLIST_FORMAT_LEFT,
-                                     DEFAULT_COL_WIDTHS[ i ] );
+                                     FromDIP( DEFAULT_COL_WIDTHS[ i ] ) );
         }
 
         m_listBox->SetMinClientSize( FromDIP( wxSize( DEFAULT_COL_WIDTHS[0] * 3, 200 ) ) );
@@ -233,7 +233,7 @@ void EDA_LIST_DIALOG::InsertItems( const std::vector< wxArrayString >& itemList,
             info.m_itemId = row + position;
             info.m_col = col;
             info.m_text = itemList[row].Item( col );
-            info.m_width = DEFAULT_COL_WIDTHS[ col ];
+            info.m_width = FromDIP( DEFAULT_COL_WIDTHS[ col ] );
             info.m_mask = wxLIST_MASK_TEXT | wxLIST_MASK_WIDTH;
 
             if( col == 0 )
