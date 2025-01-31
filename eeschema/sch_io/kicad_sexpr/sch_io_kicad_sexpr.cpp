@@ -1697,14 +1697,24 @@ void SCH_IO_KICAD_SEXPR::SaveLibrary( const wxString& aLibraryPath,
     wxString oldFileName = m_cache->GetFileName();
 
     if( !m_cache->IsFile( aLibraryPath ) )
-    {
         m_cache->SetFileName( aLibraryPath );
-    }
 
     // This is a forced save.
     m_cache->SetModified();
     m_cache->Save();
     m_cache->SetFileName( oldFileName );
+}
+
+
+bool SCH_IO_KICAD_SEXPR::CanReadLibrary( const wxString& aLibraryPath ) const
+{
+    if( !SCH_IO::CanReadLibrary( aLibraryPath ) )
+        return false;
+
+    // Above just checks for proper extension; now check that it actually exists
+
+    wxFileName fn( aLibraryPath );
+    return fn.IsOk() && fn.FileExists();
 }
 
 
@@ -1785,7 +1795,6 @@ std::vector<LIB_SYMBOL*> SCH_IO_KICAD_SEXPR::ParseLibSymbols( std::string& aSymb
 
 void SCH_IO_KICAD_SEXPR::FormatLibSymbol( LIB_SYMBOL* symbol, OUTPUTFORMATTER & formatter )
 {
-
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
     SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( symbol, formatter );
 }

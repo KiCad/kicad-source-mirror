@@ -69,6 +69,14 @@ public:
      */
     void SetType( const wxString& aType ) override;
 
+    bool LibraryExists() const override
+    {
+        if( plugin )
+            return plugin->CanReadLibrary( GetFullURI( true ) );
+
+        return false;
+    }
+
     DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T GetFileType() { return type; }
 
 protected:

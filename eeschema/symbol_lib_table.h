@@ -115,6 +115,14 @@ public:
             plugin->GetDefaultSymbolFields( aNames );
     }
 
+    bool LibraryExists() const override
+    {
+        if( plugin )
+            return plugin->CanReadLibrary( GetFullURI( true ) );
+
+        return false;
+    }
+
     SCH_IO_MGR::SCH_FILE_T GetFileType() { return type; }
 
 protected:

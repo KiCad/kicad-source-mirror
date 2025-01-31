@@ -114,9 +114,6 @@ public:
     /**
      * Checks if this IO object can read the specified library file/directory.
      * If not overridden, extension check is used.
-     *
-     * @note This is not a check that the file system object is readable by the user,
-     *       but a check that this IO object can parse the given library.
      */
     virtual bool CanReadLibrary( const wxString& aFileName ) const;
 

@@ -67,7 +67,7 @@ public:
      */
     void SetType( const wxString& aType ) override;
 
-    bool LibraryExists() const;
+    bool LibraryExists() const override;
 
     PCB_IO_MGR::PCB_FILE_T GetFileType() { return type; }
 

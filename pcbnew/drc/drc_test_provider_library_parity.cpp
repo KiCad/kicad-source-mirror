@@ -837,10 +837,10 @@ bool DRC_TEST_PROVIDER_LIBRARY_PARITY::Run()
         if( !reportProgress( ii++, (int) board->Footprints().size(), progressDelta ) )
             return false;   // DRC cancelled
 
-        LIB_ID                  fpID = footprint->GetFPID();
-        wxString                libName = fpID.GetLibNickname();
-        wxString                fpName = fpID.GetLibItemName();
-        const FP_LIB_TABLE_ROW* libTableRow = nullptr;
+        LIB_ID               fpID = footprint->GetFPID();
+        wxString             libName = fpID.GetLibNickname();
+        wxString             fpName = fpID.GetLibItemName();
+        const LIB_TABLE_ROW* libTableRow = nullptr;
 
         if( libName.IsEmpty() )
         {
@@ -862,7 +862,7 @@ bool DRC_TEST_PROVIDER_LIBRARY_PARITY::Run()
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_LIB_FOOTPRINT_ISSUES );
                 msg.Printf( _( "The current configuration does not include the footprint library '%s'." ),
-                            libName );
+                            UnescapeString( libName ) );
                 drcItem->SetErrorMessage( msg );
                 drcItem->SetItems( footprint );
                 reportViolation( drcItem, footprint->GetCenter(), UNDEFINED_LAYER );
@@ -876,7 +876,7 @@ bool DRC_TEST_PROVIDER_LIBRARY_PARITY::Run()
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_LIB_FOOTPRINT_ISSUES );
                 msg.Printf( _( "The footprint library '%s' is not enabled in the current configuration." ),
-                            libName );
+                            UnescapeString( libName ) );
                 drcItem->SetErrorMessage( msg );
                 drcItem->SetItems( footprint );
                 reportViolation( drcItem, footprint->GetCenter(), UNDEFINED_LAYER );
@@ -889,8 +889,9 @@ bool DRC_TEST_PROVIDER_LIBRARY_PARITY::Run()
             if( !m_drcEngine->IsErrorLimitExceeded( DRCE_LIB_FOOTPRINT_ISSUES ) )
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_LIB_FOOTPRINT_ISSUES );
-                msg.Printf( _( "The footprint library '%s' was not found." ),
-                            libName );
+                msg.Printf( _( "The footprint library '%s' was not found at '%s'." ),
+                            UnescapeString( libName ),
+                            libTableRow->GetFullURI( true ) );
                 drcItem->SetErrorMessage( msg );
                 drcItem->SetItems( footprint );
                 reportViolation( drcItem, footprint->GetCenter(), UNDEFINED_LAYER );

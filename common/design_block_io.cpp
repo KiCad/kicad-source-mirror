@@ -74,8 +74,10 @@ DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T
 DESIGN_BLOCK_IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath, int aCtl )
 {
     if( IO_RELEASER<DESIGN_BLOCK_IO>( FindPlugin( KICAD_SEXP ) )->CanReadLibrary( aLibPath )
-      && aCtl != KICTL_NONKICAD_ONLY )
+            && aCtl != KICTL_NONKICAD_ONLY )
+    {
         return KICAD_SEXP;
+    }
 
     return DESIGN_BLOCK_IO_MGR::FILE_TYPE_NONE;
 }
