@@ -61,7 +61,10 @@ bool ImagesHaveSamePixels( const wxImage& aImgA, const wxImage& aImgB )
 {
     if( aImgA.GetSize() != aImgB.GetSize() )
     {
-        BOOST_TEST_INFO( "Image sizes differ: " << aImgA.GetSize() << " vs " << aImgB.GetSize() );
+        BOOST_TEST_INFO( "Image sizes differ: " << aImgA.GetSize().GetWidth() << "x"
+                                                << aImgA.GetSize().GetHeight() << " vs "
+                                                << aImgB.GetSize().GetWidth() << "x"
+                                                << aImgB.GetSize().GetHeight() );
         return false;
     }
 
