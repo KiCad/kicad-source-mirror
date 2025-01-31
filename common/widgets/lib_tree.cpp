@@ -305,6 +305,12 @@ LIB_ID LIB_TREE::GetSelectedLibId( int* aUnit ) const
     if( !sel )
         return LIB_ID();
 
+    if( m_adapter->GetTreeNodeFor( sel )->m_IsAlreadyPlacedGroup
+            || m_adapter->GetTreeNodeFor( sel )->m_IsRecentlyUsedGroup )
+    {
+        return LIB_ID();
+    }
+
     if( aUnit )
         *aUnit = m_adapter->GetUnitFor( sel );
 
