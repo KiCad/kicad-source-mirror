@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-62-g497c85bd-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -26,7 +26,7 @@ PANEL_JOBSET_BASE::PANEL_JOBSET_BASE( wxWindow* parent, wxWindowID id, const wxP
 	m_jobsGrid = new WX_GRID( sbJobs->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
-	m_jobsGrid->CreateGrid( 5, 2 );
+	m_jobsGrid->CreateGrid( 5, 3 );
 	m_jobsGrid->EnableEditing( true );
 	m_jobsGrid->EnableGridLines( true );
 	m_jobsGrid->EnableDragGridSize( false );
@@ -34,7 +34,8 @@ PANEL_JOBSET_BASE::PANEL_JOBSET_BASE( wxWindow* parent, wxWindowID id, const wxP
 
 	// Columns
 	m_jobsGrid->SetColSize( 0, 30 );
-	m_jobsGrid->SetColSize( 1, 260 );
+	m_jobsGrid->SetColSize( 1, 30 );
+	m_jobsGrid->SetColSize( 2, 260 );
 	m_jobsGrid->EnableDragColMove( false );
 	m_jobsGrid->EnableDragColSize( false );
 	m_jobsGrid->SetColLabelSize( 0 );

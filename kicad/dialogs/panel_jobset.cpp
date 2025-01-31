@@ -63,6 +63,7 @@ public:
         int jobBmpColId = m_jobList->AppendColumn( wxT( "" ) );
         int jobNoColId = m_jobList->AppendColumn( _( "No." ) );
         int jobDescColId = m_jobList->AppendColumn( _( "Job Description" ) );
+        int jobSourceColId = m_jobList->AppendColumn( wxT( "Source" ) );
         m_jobList->SetColumnWidth( jobBmpColId, wxLIST_AUTOSIZE_USEHEADER );
         m_jobList->SetColumnWidth( jobNoColId, wxLIST_AUTOSIZE_USEHEADER );
         m_jobList->SetColumnWidth( jobDescColId, wxLIST_AUTOSIZE_USEHEADER );
@@ -88,6 +89,22 @@ public:
 
             m_jobList->SetItem( itemIndex, jobNoColId, wxString::Format( "%d", num++ ) );
             m_jobList->SetItem( itemIndex, jobDescColId, job.GetDescription() );
+
+            KIWAY::FACE_T iface = JOB_REGISTRY::GetKifaceType( job.m_type );
+            wxString source = wxEmptyString;
+            if( iface < KIWAY::KIWAY_FACE_COUNT )
+            {
+                
+                if( iface == KIWAY::FACE_PCB )
+                {
+                    source = wxT( "PCB" );
+                }
+                else if( iface == KIWAY::FACE_SCH )
+				{
+					source = wxT( "SCH" );
+				}
+            }
+            m_jobList->SetItem( itemIndex, jobSourceColId, source );
         }
 
         SetupStandardButtons( { { wxID_OK, _( "Close" ) } } );
@@ -381,7 +398,7 @@ void JOBS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
     {
         if( selectedRows.size() > 0 )
         {
-            m_grid->SetGridCursor( selectedRows[0], 1 );
+            m_grid->SetGridCursor( selectedRows[0], 2 );
             m_grid->EnableCellEditControl();
         }
     }
@@ -409,7 +426,7 @@ bool JOBS_GRID_TRICKS::handleDoubleClick( wxGridEvent& aEvent )
     int curr_col = aEvent.GetCol();
     int curr_row = aEvent.GetRow();
 
-    if( ( curr_col == 0 || curr_col == 1 )
+    if( ( curr_col == 0 || curr_col == 1 || curr_col == 2 )
         && curr_row >= 0 && curr_row < (int) m_parent->GetJobsFile()->GetJobs().size() )
     {
         m_doubleClickRow = curr_row;
@@ -450,6 +467,7 @@ PANEL_JOBSET::PANEL_JOBSET( wxAuiNotebook* aParent, KICAD_MANAGER_FRAME* aFrame,
 
     // 'm' for margins
     m_jobsGrid->SetColSize( 0, GetTextExtent( wxT( "99m" ) ).x );
+    m_jobsGrid->SetColSize( 1, GetTextExtent( wxT( "PCBm" ) ).x );
 
     m_buttonAddJob->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_buttonUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
@@ -503,7 +521,25 @@ void PANEL_JOBSET::rebuildJobList()
         m_jobsGrid->SetCellValue( num - 1, 0, wxString::Format( "%d", num ) );
         m_jobsGrid->SetReadOnly( num - 1, 0 );
 
-        m_jobsGrid->SetCellValue( num - 1, 1, job.GetDescription() );
+        m_jobsGrid->SetCellValue( num - 1, 2, job.GetDescription() );
+
+        m_jobsGrid->SetReadOnly( num - 1, 1 );
+        
+        KIWAY::FACE_T iface = JOB_REGISTRY::GetKifaceType( job.m_type );
+        wxString      source = wxEmptyString;
+        if( iface < KIWAY::KIWAY_FACE_COUNT )
+        {
+            if( iface == KIWAY::FACE_PCB )
+            {
+                source = wxT( "PCB" );
+            }
+            else if( iface == KIWAY::FACE_SCH )
+            {
+                source = wxT( "SCH" );
+            }
+        }
+
+        m_jobsGrid->SetCellValue( num - 1, 1, source );
 
         num++;
     }
@@ -688,7 +724,7 @@ void PANEL_JOBSET::OnAddJobClick( wxCommandEvent& aEvent )
             {
                 rebuildJobList();
 
-                m_jobsGrid->SetGridCursor( row, 1 );
+                m_jobsGrid->SetGridCursor( row, 2 );
                 m_jobsGrid->EnableCellEditControl();
             }
             else
@@ -950,7 +986,8 @@ void PANEL_JOBSET::OnGenerateAllOutputsClick( wxCommandEvent& event )
 
 void PANEL_JOBSET::OnSizeGrid( wxSizeEvent& aEvent )
 {
-    m_jobsGrid->SetColSize( 1, m_jobsGrid->GetSize().x - m_jobsGrid->GetColSize( 0 ) );
+    m_jobsGrid->SetColSize( 2, m_jobsGrid->GetSize().x - m_jobsGrid->GetColSize( 1 )
+                                       - m_jobsGrid->GetColSize( 0 ) );
 
     // Always propagate for a grid repaint (needed if the height changes, as well as width)
     aEvent.Skip();
