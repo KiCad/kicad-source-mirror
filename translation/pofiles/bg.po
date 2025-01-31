@@ -4,9 +4,9 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 19:59+0300\n"
-"PO-Revision-Date: 2025-01-29 16:58+0000\n"
-"Last-Translator: 109247019824 <109247019824@users.noreply.hosted.weblate."
-"org>\n"
+"PO-Revision-Date: 2025-01-31 09:01+0000\n"
+"Last-Translator: 109247019824 <109247019824@users.noreply.hosted.weblate.org>"
+"\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/kicad/v8/bg/>\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
@@ -21477,24 +21477,20 @@ msgid "Derive from Existing Symbol"
 msgstr "Изтриване на елементи от компонент?"
 
 #: eeschema/tools/ee_actions.cpp:171
-#, fuzzy
 msgid "Create a new symbol, derived from an existing symbol"
-msgstr "Изтриване на елементи от компонент?"
+msgstr "Създаване на нов символ, производен на съществуващ символ"
 
 #: eeschema/tools/ee_actions.cpp:177
-#, fuzzy
 msgid "Edit Symbol"
-msgstr "Редактирай етикет"
+msgstr "Променяне на символ"
 
 #: eeschema/tools/ee_actions.cpp:178
-#, fuzzy
 msgid "Show selected symbol on editor canvas"
-msgstr "Избор на елемент за обзор"
+msgstr "Показване на избрания символ в екрана на редактора"
 
 #: eeschema/tools/ee_actions.cpp:184
-#, fuzzy
 msgid "Duplicate Symbol"
-msgstr "Дублиране"
+msgstr "Дублиране на символ"
 
 #: eeschema/tools/ee_actions.cpp:185
 #, fuzzy
@@ -21502,9 +21498,8 @@ msgid "Make a copy of the selected symbol"
 msgstr "Запази текущата платка като..."
 
 #: eeschema/tools/ee_actions.cpp:191
-#, fuzzy
 msgid "Rename Symbol..."
-msgstr "Захранващ символ"
+msgstr "Преименуване на символ…"
 
 #: eeschema/tools/ee_actions.cpp:192
 #, fuzzy
@@ -21512,9 +21507,8 @@ msgid "Rename the selected symbol"
 msgstr "Символ \"Несвързан\""
 
 #: eeschema/tools/ee_actions.cpp:198
-#, fuzzy
 msgid "Save Copy As..."
-msgstr "Съхрани като"
+msgstr "Запазване като…"
 
 #: eeschema/tools/ee_actions.cpp:199
 #, fuzzy
@@ -21522,19 +21516,16 @@ msgid "Save a copy of the current symbol to a different library."
 msgstr "Обозначи компонентите в схемата"
 
 #: eeschema/tools/ee_actions.cpp:206
-#, fuzzy
 msgid "Remove the selected symbol from its library"
-msgstr "Невъзможно отваряне на библиотечен файл за PCB отпечатък <%s>."
+msgstr "Премахване на избрания символ от неговата библиотека"
 
 #: eeschema/tools/ee_actions.cpp:224
-#, fuzzy
 msgid "Paste Symbol"
-msgstr "Захранващ символ"
+msgstr "Поставяне на символ"
 
 #: eeschema/tools/ee_actions.cpp:230
-#, fuzzy
 msgid "Import Symbol..."
-msgstr "Импорт изображението на символ"
+msgstr "Внасяне на символ…"
 
 #: eeschema/tools/ee_actions.cpp:231
 #, fuzzy
