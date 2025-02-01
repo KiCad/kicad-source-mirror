@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 19:59+0300\n"
-"PO-Revision-Date: 2025-02-01 16:02+0000\n"
+"PO-Revision-Date: 2025-02-01 17:11+0000\n"
 "Last-Translator: 109247019824 <109247019824@users.noreply.hosted.weblate.org>"
 "\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/kicad/"
@@ -501,11 +501,12 @@ msgstr "Изчертаване на реалистични материали"
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "Use all material properties from each 3D model file"
 msgstr ""
+"Използване на свойствата на всички материали от всеки файл на триизмерен "
+"модел"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:262
-#, fuzzy
 msgid "Render Solid Colors"
-msgstr "Оказвам"
+msgstr "Изчертаване с плътни цевтове"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:263
 msgid "Use only the diffuse color property from 3D model file"
