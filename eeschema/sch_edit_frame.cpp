@@ -2132,9 +2132,9 @@ std::unique_ptr<GRID_HELPER> SCH_EDIT_FRAME::MakeGridHelper()
 }
 
 
-void SCH_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
+void SCH_EDIT_FRAME::CommonSettingsChanged( int aFlags )
 {
-    SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
+    SCH_BASE_FRAME::CommonSettingsChanged( aFlags );
 
     SCHEMATIC_SETTINGS& settings = Schematic().Settings();
 

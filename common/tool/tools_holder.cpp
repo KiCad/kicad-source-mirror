@@ -150,10 +150,10 @@ void TOOLS_HOLDER::ShowChangedLanguage()
 }
 
 
-void TOOLS_HOLDER::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
+void TOOLS_HOLDER::CommonSettingsChanged( int aFlags )
 {
     if( GetToolManager() )
-        GetToolManager()->GetActionManager()->UpdateHotKeys( false );
+        GetToolManager()->GetActionManager()->UpdateHotKeys( aFlags & HOTKEYS_CHANGED );
 
     COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
 

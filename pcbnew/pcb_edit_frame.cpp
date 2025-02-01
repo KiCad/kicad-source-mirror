@@ -1348,7 +1348,7 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
         // We don't know if anything was modified, so err on the side of requiring a save
         OnModify();
 
-        Kiway().CommonSettingsChanged( false, true );
+        Kiway().CommonSettingsChanged( TEXTVARS_CHANGED );
 
         Prj().IncrementTextVarsTicker();
         Prj().IncrementNetclassesTicker();
@@ -2533,9 +2533,9 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
 }
 
 
-void PCB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
+void PCB_EDIT_FRAME::CommonSettingsChanged( int aFlags )
 {
-    PCB_BASE_EDIT_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
+    PCB_BASE_EDIT_FRAME::CommonSettingsChanged( aFlags );
 
     GetAppearancePanel()->OnColorThemeChanged();
 
@@ -2577,7 +2577,7 @@ void PCB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     GetCanvas()->ForceRefresh();
 
     // Update the environment variables in the Python interpreter
-    if( aEnvVarsChanged )
+    if( aFlags & ENVVARS_CHANGED )
         PythonSyncEnvironmentVariables();
 
     Layout();

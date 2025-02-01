@@ -162,7 +162,7 @@ public:
 
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
-    void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
+    void CommonSettingsChanged( int aFlags ) override;
 
     WINDOW_SETTINGS* GetWindowSettings( APP_SETTINGS_BASE* aCfg ) override;
 

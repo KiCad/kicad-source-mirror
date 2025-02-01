@@ -934,9 +934,9 @@ MAGNETIC_SETTINGS* PCB_BASE_FRAME::GetMagneticItemsSettings()
 }
 
 
-void PCB_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
+void PCB_BASE_FRAME::CommonSettingsChanged( int aFlags )
 {
-    EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
+    EDA_DRAW_FRAME::CommonSettingsChanged( aFlags );
 
     KIGFX::VIEW*         view = GetCanvas()->GetView();
     KIGFX::PCB_PAINTER*  painter = static_cast<KIGFX::PCB_PAINTER*>( view->GetPainter() );
@@ -946,7 +946,7 @@ void PCB_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     settings->LoadDisplayOptions( GetDisplayOptions() );
     settings->m_ForceShowFieldsWhenFPSelected = GetPcbNewSettings()->m_Display.m_ForceShowFieldsWhenFPSelected;
 
-    if( aTextVarsChanged )
+    if( aFlags & TEXTVARS_CHANGED )
         GetBoard()->SynchronizeProperties();
 
     // Note: KIGFX::REPAINT isn't enough for things that go from invisible to visible as
@@ -987,7 +987,7 @@ void PCB_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     EDA_3D_VIEWER_FRAME* viewer = Get3DViewerFrame();
 
     if( viewer )
-        viewer->CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
+        viewer->CommonSettingsChanged( aFlags );
 }
 
 

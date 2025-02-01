@@ -141,7 +141,7 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
         // Mark document as modified so that project settings can be saved as part of doc save
         OnModify();
 
-        Kiway().CommonSettingsChanged( false, true );
+        Kiway().CommonSettingsChanged( TEXTVARS_CHANGED );
 
         Prj().IncrementTextVarsTicker();
         Prj().IncrementNetclassesTicker();

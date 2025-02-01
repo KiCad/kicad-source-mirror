@@ -114,7 +114,7 @@ public:
      * This would be private (and only called by the Kiway), but we need to do this manually
      * from the PCB frame because the 3D viewer isn't updated via the #KIWAY.
      */
-    void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
+    void CommonSettingsChanged( int aFlags ) override;
     void ShowChangedLanguage() override;
 
     APPEARANCE_CONTROLS_3D* GetAppearanceManager() { return m_appearancePanel; }

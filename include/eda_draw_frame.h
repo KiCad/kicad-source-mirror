@@ -196,7 +196,7 @@ public:
                              const wxString& ext, bool isDirectory = false, bool aIsGlobal = false,
                              const wxString& aGlobalPath = wxEmptyString );
 
-    void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
+    void CommonSettingsChanged( int aFlags ) override;
 
     virtual wxString GetScreenDesc() const;
     virtual wxString GetFullScreenDesc() const;

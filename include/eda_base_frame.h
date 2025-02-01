@@ -498,7 +498,7 @@ public:
      * Notification event that some of the common (suite-wide) settings have changed.
      * Update menus, toolbars, local variables, etc.
      */
-    void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
+    void CommonSettingsChanged( int aFlags ) override;
 
     /**
      * Process light/dark theme change.

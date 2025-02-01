@@ -156,7 +156,7 @@ public:
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     void ShowChangedLanguage() override;
-    void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
+    void CommonSettingsChanged( int aFlags ) override;
     void ProjectChanged() override;
 
     /**

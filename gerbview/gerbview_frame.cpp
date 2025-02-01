@@ -1210,9 +1210,9 @@ void GERBVIEW_FRAME::setupUIConditions()
 }
 
 
-void GERBVIEW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
+void GERBVIEW_FRAME::CommonSettingsChanged( int aFlags )
 {
-    EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
+    EDA_DRAW_FRAME::CommonSettingsChanged( aFlags );
 
     // Update gal display options like cursor shape, grid options:
     SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();

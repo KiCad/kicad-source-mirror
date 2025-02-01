@@ -873,13 +873,13 @@ COLOR_SETTINGS* FOOTPRINT_VIEWER_FRAME::GetColorSettings( bool aForceRefresh ) c
 }
 
 
-void FOOTPRINT_VIEWER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
+void FOOTPRINT_VIEWER_FRAME::CommonSettingsChanged( int aFlags )
 {
-    PCB_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
+    PCB_BASE_FRAME::CommonSettingsChanged( aFlags );
 
     GetCanvas()->ForceRefresh();
 
-    if( aEnvVarsChanged )
+    if( aFlags & ENVVARS_CHANGED )
         ReCreateLibraryList();
 }
 

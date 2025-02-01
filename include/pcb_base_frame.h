@@ -364,7 +364,7 @@ public:
 
     virtual MAGNETIC_SETTINGS* GetMagneticItemsSettings();
 
-    void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
+    void CommonSettingsChanged( int aFlags ) override;
 
     PCB_DRAW_PANEL_GAL* GetCanvas() const override;
 

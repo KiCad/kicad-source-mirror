@@ -1398,9 +1398,9 @@ void FOOTPRINT_EDIT_FRAME::ActivateGalCanvas()
 }
 
 
-void FOOTPRINT_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
+void FOOTPRINT_EDIT_FRAME::CommonSettingsChanged( int aFlags )
 {
-    PCB_BASE_EDIT_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
+    PCB_BASE_EDIT_FRAME::CommonSettingsChanged( aFlags );
 
     SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
     FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
@@ -1415,7 +1415,7 @@ void FOOTPRINT_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTe
 
     UpdateUserInterface();
 
-    if( aEnvVarsChanged )
+    if( aFlags & ENVVARS_CHANGED )
         SyncLibraryTree( true );
 
     Layout();

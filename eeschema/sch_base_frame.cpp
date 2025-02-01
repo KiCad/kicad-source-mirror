@@ -513,9 +513,9 @@ COLOR4D SCH_BASE_FRAME::GetLayerColor( SCH_LAYER_ID aLayer )
 }
 
 
-void SCH_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
+void SCH_BASE_FRAME::CommonSettingsChanged( int aFlags )
 {
-    EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
+    EDA_DRAW_FRAME::CommonSettingsChanged( aFlags );
 
     COLOR_SETTINGS* colorSettings = GetColorSettings( true );
 

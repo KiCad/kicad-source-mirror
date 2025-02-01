@@ -282,14 +282,14 @@ int ACTION_MANAGER::GetHotKey( const TOOL_ACTION& aAction ) const
 
 void ACTION_MANAGER::UpdateHotKeys( bool aFullUpdate )
 {
-    static std::map<std::string, int> legacyHotKeyMap;
+    static std::map<std::string, int>                 legacyHotKeyMap;
     static std::map<std::string, std::pair<int, int>> userHotKeyMap;
-    static bool                       mapsInitialized = false;
+    static bool                                       mapsInitialized = false;
 
     m_actionHotKeys.clear();
     m_hotkeys.clear();
 
-    if( aFullUpdate && !mapsInitialized && m_toolMgr->GetToolHolder() )
+    if( m_toolMgr->GetToolHolder() && ( aFullUpdate || !mapsInitialized ) )
     {
         ReadLegacyHotkeyConfig( m_toolMgr->GetToolHolder()->ConfigBaseName(), legacyHotKeyMap );
         ReadHotKeyConfig( wxEmptyString, userHotKeyMap );

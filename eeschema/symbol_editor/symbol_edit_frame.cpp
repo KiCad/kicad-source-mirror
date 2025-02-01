@@ -1336,9 +1336,9 @@ void SYMBOL_EDIT_FRAME::emptyScreen()
 }
 
 
-void SYMBOL_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
+void SYMBOL_EDIT_FRAME::CommonSettingsChanged( int aFlags )
 {
-    SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
+    SCH_BASE_FRAME::CommonSettingsChanged( aFlags );
 
     SETTINGS_MANAGER*       mgr = GetSettingsManager();
     SYMBOL_EDITOR_SETTINGS* cfg = mgr->GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
@@ -1360,7 +1360,7 @@ void SYMBOL_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextV
 
     RecreateToolbars();
 
-    if( aEnvVarsChanged )
+    if( aFlags & ENVVARS_CHANGED )
         SyncLibraries( true );
 
     Layout();

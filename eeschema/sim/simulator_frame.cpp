@@ -276,9 +276,9 @@ void SIMULATOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 }
 
 
-void SIMULATOR_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
+void SIMULATOR_FRAME::CommonSettingsChanged( int aFlags )
 {
-    KIWAY_PLAYER::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
+    KIWAY_PLAYER::CommonSettingsChanged( aFlags );
 
     auto* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( m_toolManager->GetSettings() );
     wxASSERT( cfg != nullptr );

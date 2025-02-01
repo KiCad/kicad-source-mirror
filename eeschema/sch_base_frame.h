@@ -234,7 +234,7 @@ public:
      */
     void SyncView();
 
-    void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
+    void CommonSettingsChanged( int aFlags ) override;
 
     /**
      * Helper to retrieve a layer color from the global color settings

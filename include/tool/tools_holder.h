@@ -149,11 +149,15 @@ public:
      */
     bool GetMoveWarpsCursor() const { return m_moveWarpsCursor; }
 
+#define ENVVARS_CHANGED  0x0001
+#define TEXTVARS_CHANGED 0x0002
+#define HOTKEYS_CHANGED  0x0004
+
     /**
      * Notification event that some of the common (suite-wide) settings have changed.
      * Update hotkeys, preferences, etc.
      */
-    virtual void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged );
+    virtual void CommonSettingsChanged( int aFlags = 0 );
 
     /**
      * Canvas access.

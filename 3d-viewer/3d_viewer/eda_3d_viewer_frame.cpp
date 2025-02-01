@@ -634,12 +634,12 @@ void EDA_3D_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE *aCfg )
 }
 
 
-void EDA_3D_VIEWER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
+void EDA_3D_VIEWER_FRAME::CommonSettingsChanged( int aFlags )
 {
     wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::CommonSettingsChanged" ) );
 
     // Regen menu bars, etc
-    EDA_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
+    EDA_BASE_FRAME::CommonSettingsChanged( aFlags );
 
     // There is no base class that handles toolbars for this frame
     ReCreateMainToolbar();

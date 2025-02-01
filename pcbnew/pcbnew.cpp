@@ -136,7 +136,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
             // Use QuasiModal so that HTML help window will work
             if( dlg.ShowQuasiModal() == wxID_OK )
-                aKiway->CommonSettingsChanged( true, false );
+                aKiway->CommonSettingsChanged( ENVVARS_CHANGED );
 
             // Dialog has completed; nothing to return.
             return nullptr;

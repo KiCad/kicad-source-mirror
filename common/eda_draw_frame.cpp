@@ -293,9 +293,9 @@ void EDA_DRAW_FRAME::ToggleUserUnits()
 }
 
 
-void EDA_DRAW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
+void EDA_DRAW_FRAME::CommonSettingsChanged( int aFlags )
 {
-    EDA_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
+    EDA_BASE_FRAME::CommonSettingsChanged( aFlags );
 
     COMMON_SETTINGS*      settings = Pgm().GetCommonSettings();
     KIGFX::VIEW_CONTROLS* viewControls = GetCanvas()->GetViewControls();

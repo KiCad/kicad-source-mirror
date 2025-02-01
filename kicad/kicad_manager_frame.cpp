@@ -1010,14 +1010,12 @@ void KICAD_MANAGER_FRAME::ShowChangedLanguage()
 }
 
 
-void KICAD_MANAGER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
+void KICAD_MANAGER_FRAME::CommonSettingsChanged( int aFlags )
 {
-    EDA_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
+    EDA_BASE_FRAME::CommonSettingsChanged( aFlags );
 
-    if( m_pcm && aEnvVarsChanged )
-    {
+    if( m_pcm && ( aFlags & ENVVARS_CHANGED ) )
         m_pcm->ReadEnvVar();
-    }
 
     COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
 

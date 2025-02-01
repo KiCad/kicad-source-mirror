@@ -901,9 +901,9 @@ WINDOW_SETTINGS* SYMBOL_VIEWER_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg
 }
 
 
-void SYMBOL_VIEWER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
+void SYMBOL_VIEWER_FRAME::CommonSettingsChanged( int aFlags )
 {
-    SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
+    SCH_BASE_FRAME::CommonSettingsChanged( aFlags );
 
     SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
     EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
@@ -913,7 +913,7 @@ void SYMBOL_VIEWER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTex
     GetCanvas()->GetGAL()->DrawGrid();
     GetCanvas()->ForceRefresh();
 
-    if( aEnvVarsChanged )
+    if( aFlags && ENVVARS_CHANGED )
         ReCreateLibList();
 }
 
