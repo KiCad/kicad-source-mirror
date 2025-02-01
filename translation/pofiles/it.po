@@ -115,10 +115,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 19:59+0300\n"
-"PO-Revision-Date: 2025-01-27 21:23+0000\n"
+"PO-Revision-Date: 2025-02-03 00:02+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
-"source/it/>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
+"master-source/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20329,9 +20329,8 @@ msgstr ""
 "Continuare?"
 
 #: eeschema/sheet.cpp:695
-#, fuzzy
 msgid "Cannot create the schematic image"
-msgstr "Annota schema"
+msgstr "Impossibile creare l'immagine schema"
 
 #: eeschema/sheet.cpp:772
 #, c-format
@@ -21137,9 +21136,8 @@ msgstr ""
 "risultati."
 
 #: eeschema/sim/simulator_frame.cpp:346
-#, fuzzy
 msgid "SPICE Simulator"
-msgstr "Simulatore"
+msgstr "Simulatore SPICE"
 
 #: eeschema/sim/simulator_frame.cpp:370 eeschema/tools/simulator_control.cpp:84
 msgid "Errors during netlist generation."
@@ -21227,9 +21225,8 @@ msgid "Perform Fourier Analysis..."
 msgstr "Esegui analisi di Fourier..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:173
-#, fuzzy
 msgid "Copy Signal Name"
-msgstr "Nome impronta"
+msgstr "Copia nome segnale"
 
 #: eeschema/sim/simulator_frame_ui.cpp:217
 #: eeschema/sim/simulator_frame_ui.cpp:770
@@ -21402,9 +21399,9 @@ msgid "Please, fill required fields"
 msgstr "Riempire i campi richiesti"
 
 #: eeschema/sim/spice_value.cpp:417
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid SPICE value."
-msgstr "\"%s\" non è un valore Spice valido."
+msgstr "'%s' non è un valore SPICE valido."
 
 #: eeschema/sim/toolbars_simulator_frame.cpp:173
 msgid "&Simulation"
@@ -21718,9 +21715,9 @@ msgstr ""
 "Modifica simbolo %s dallo schema.  Salvando verrà aggiornato solo lo schema."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:889
-#, fuzzy, c-format
+#, c-format
 msgid "Open symbol from library %s"
-msgstr "Aggiorna simboli da libreria"
+msgstr "Apri il simbolo dalla libreria %s"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:902
 msgid ""
@@ -21747,29 +21744,25 @@ msgstr ""
 "questa libreria."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:949
-#, fuzzy
 msgid "Create an editable copy"
-msgstr "Crea una nuova cartella"
+msgstr "Crea una copia modificabile"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:955
-#, fuzzy, c-format
+#, c-format
 msgid "Create an editable copy of the symbol or the entire library (%s)?"
-msgstr "Salva una copia del simbolo corrente in una diversa libreria."
+msgstr "Creare una copia modificabile del simbolo o dell'intera libreria (%s)?"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:959
-#, fuzzy
 msgid "Select type of item to save"
-msgstr "Selezionare lo strato da rimuovere:"
+msgstr "Selezionare l'elemento da salvare"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:962
-#, fuzzy
 msgid "Copy symbol"
-msgstr "Simboli di gruppo"
+msgstr "Copia simbolo"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:963
-#, fuzzy
 msgid "Copy library"
-msgstr "Esporta sugli appunti"
+msgstr "Copia libreria"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1072
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1123
@@ -21803,26 +21796,24 @@ msgid "Failed to save backup to '%s'."
 msgstr "Fallito il salvataggio del backup su \"%s\"."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1537
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the symbol library '%s'."
-msgstr "La configurazione corrente non include la libreria \"%s\"."
+msgstr "La configurazione corrente non include la libreria di simboli '%s'."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1539
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1550
-#, fuzzy
 msgid "Use Manage Symbol Libraries to edit the configuration."
-msgstr ""
-"L'attuale configurazione non include la liberia \"%s\".\n"
-"Usare la gestione librerie di simboli per modificare la configurazione."
+msgstr "Usare la gestione librerie di simboli per modificare la configurazione."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1540
 msgid "Library not found in symbol library table."
 msgstr "Libreria non trovata nella tabella librerie di simboli."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1548
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration."
-msgstr "La libreria \"%s\" non è abilitata nella configurazione corrente."
+msgstr ""
+"La libreria di simboli '%s' non è abilitata nella configurazione corrente."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1551
 msgid "Symbol library not enabled."
@@ -21897,11 +21888,13 @@ msgid "A library must be specified."
 msgstr "È necessario specificare una libreria."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:956
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' is read-only. Choose a different library to save the symbol "
 "'%s' to."
-msgstr "La libreria \"%s\" non è nella tabella librerie impronte."
+msgstr ""
+"La libreria '%s' è di sola lettura. Scegliere una libreria diversa nella "
+"quale salvare il simbolo '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:972
 #, c-format
@@ -21918,16 +21911,18 @@ msgstr ""
 "discendente."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:994
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' already exists in library '%s'.Do you want to overwrite it?"
-msgstr "Il simbolo '%s' esiste già nella libreria '%s'."
+msgstr "Il simbolo '%s' esiste già nella libreria '%s'. Sovrascriverlo?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1009
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following symbols in the inheritance chain of '%s' already exist in "
 "library '%s':\n"
-msgstr "Il simbolo '%s' esiste già nella libreria '%s'."
+msgstr ""
+"I seguenti simboli nella catena di ereditarietà di '%s' esistono già nella "
+"libreria '%s':\n"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1016
 msgid ""
@@ -21938,14 +21933,12 @@ msgstr ""
 "Sovrascriverli tutti o rinominare i nuovi simboli?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1020
-#, fuzzy
 msgid "Overwrite All"
-msgstr "Sovrascrivere"
+msgstr "Sovrascrivi tutto"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1020
-#, fuzzy
 msgid "Rename All"
-msgstr "Rinomina file"
+msgstr "Rinomina tutto"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1098
 #, c-format
