@@ -34,7 +34,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 19:59+0300\n"
-"PO-Revision-Date: 2025-02-01 16:02+0000\n"
+"PO-Revision-Date: 2025-02-01 17:11+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -49139,7 +49139,7 @@ msgstr "접합, 패드 또는 전체 연결에 대한 연결 선택 또는 기�
 
 #: pcbnew/tools/pcb_actions.cpp:2102
 msgid "Unroute Selected"
-msgstr "경로 해제 선택됨"
+msgstr "선택한 라우팅 제거"
 
 #: pcbnew/tools/pcb_actions.cpp:2103
 msgid "Unroutes selected items to the nearest pad."
