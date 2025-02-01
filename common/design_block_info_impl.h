@@ -97,6 +97,7 @@ private:
      */
     bool CatchErrors( const std::function<void()>& aFunc );
 
+private:
     SYNC_QUEUE<wxString> m_queue;
     long long            m_list_timestamp;
     PROGRESS_REPORTER*   m_progress_reporter;

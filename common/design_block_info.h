@@ -21,10 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/*
- * @file design_block_info.h
- */
-
 #ifndef DESIGN_BLOCK_INFO_H_
 #define DESIGN_BLOCK_INFO_H_
 
@@ -119,15 +115,16 @@ protected:
     /// lazily load stuff not filled in by constructor.  This may throw IO_ERRORS.
     virtual void load(){};
 
-    DESIGN_BLOCK_LIST* m_owner; ///< provides access to DESIGN_BLOCK_LIB_TABLE
+protected:
+    DESIGN_BLOCK_LIST* m_owner;    ///< provides access to DESIGN_BLOCK_LIB_TABLE
 
-    bool m_loaded;
+    bool               m_loaded;
 
-    wxString m_nickname; ///< library as known in DESIGN_BLOCK_LIB_TABLE
-    wxString m_dbname;   ///< Module name.
-    int      m_num;      ///< Order number in the display list.
-    wxString m_doc;      ///< Design block description.
-    wxString m_keywords; ///< Design block keywords.
+    wxString           m_nickname; ///< library as known in DESIGN_BLOCK_LIB_TABLE
+    wxString           m_dbname;   ///< Module name.
+    int                m_num;      ///< Order number in the display list.
+    wxString           m_doc;      ///< Design block description.
+    wxString           m_keywords; ///< Design block keywords.
 };
 
 
@@ -141,9 +138,6 @@ protected:
 class KICOMMON_API DESIGN_BLOCK_LIST
 {
 public:
-    typedef std::vector<std::unique_ptr<DESIGN_BLOCK_INFO>> DBILIST;
-    typedef SYNC_QUEUE<std::unique_ptr<IO_ERROR>>           ERRLIST;
-
     DESIGN_BLOCK_LIST() : m_lib_table( nullptr ) {}
 
     virtual ~DESIGN_BLOCK_LIST() {}
@@ -154,7 +148,7 @@ public:
     unsigned GetCount() const { return m_list.size(); }
 
     /// Was forced to add this by modview_frame.cpp
-    const DBILIST& GetList() const { return m_list; }
+    const std::vector<std::unique_ptr<DESIGN_BLOCK_INFO>>& GetList() const { return m_list; }
 
     /**
      * @return Clears the design block info cache
@@ -209,10 +203,10 @@ public:
     DESIGN_BLOCK_LIB_TABLE* GetTable() const { return m_lib_table; }
 
 protected:
-    DESIGN_BLOCK_LIB_TABLE* m_lib_table = nullptr; ///< no ownership
+    DESIGN_BLOCK_LIB_TABLE*                         m_lib_table = nullptr; ///< no ownership
 
-    DBILIST m_list;
-    ERRLIST m_errors; ///< some can be PARSE_ERRORs also
+    std::vector<std::unique_ptr<DESIGN_BLOCK_INFO>> m_list;
+    SYNC_QUEUE<std::unique_ptr<IO_ERROR>>           m_errors; ///< some can be PARSE_ERRORs also
 };
 
 #endif // DESIGN_BLOCK_INFO_H_

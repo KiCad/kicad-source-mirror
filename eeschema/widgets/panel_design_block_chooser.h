@@ -103,7 +103,7 @@ protected:
     void displayErrors( wxTopLevelWindow* aWindow );
 
 protected:
-    static wxString g_designBlockSearchString;
+    static wxString       g_designBlockSearchString;
 
     wxTimer*              m_dbl_click_timer;
     wxTimer*              m_open_libs_timer;

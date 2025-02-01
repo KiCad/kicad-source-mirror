@@ -290,6 +290,7 @@ private:
 
     void setProperties( std::map<std::string, UTF8>* aProperties );
 
+private:
     wxString          nickName;
     wxString          uri_user;           ///< what user entered from UI or loaded from disk
     wxString          options;

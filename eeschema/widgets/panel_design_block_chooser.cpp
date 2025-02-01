@@ -50,6 +50,8 @@ PANEL_DESIGN_BLOCK_CHOOSER::PANEL_DESIGN_BLOCK_CHOOSER( SCH_EDIT_FRAME* aFrame, 
                                                         std::vector<LIB_ID>&  aHistoryList,
                                                         std::function<void()> aSelectHandler ) :
         wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize ),
+        m_dbl_click_timer( nullptr ),
+        m_open_libs_timer( nullptr ),
         m_vsplitter( nullptr ),
         m_tree( nullptr ),
         m_preview( nullptr ),

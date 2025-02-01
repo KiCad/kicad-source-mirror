@@ -161,9 +161,10 @@ void DESIGN_BLOCK_LIST_IMPL::loadDesignBlocks()
     // TODO: blast LOCALE_IO into the sun
 
     SYNC_QUEUE<std::unique_ptr<DESIGN_BLOCK_INFO>> queue_parsed;
-    thread_pool&                                tp = GetKiCadThreadPool();
-    size_t                                      num_elements = m_queue.size();
-    std::vector<std::future<size_t>>            returns( num_elements );
+
+    thread_pool&                     tp = GetKiCadThreadPool();
+    size_t                           num_elements = m_queue.size();
+    std::vector<std::future<size_t>> returns( num_elements );
 
     auto db_thread =
             [ this, &queue_parsed ]() -> size_t
@@ -231,6 +232,8 @@ void DESIGN_BLOCK_LIST_IMPL::loadDesignBlocks()
 
 
 DESIGN_BLOCK_LIST_IMPL::DESIGN_BLOCK_LIST_IMPL() :
-        m_list_timestamp( 0 ), m_progress_reporter( nullptr ), m_cancelled( false )
+        m_list_timestamp( 0 ),
+        m_progress_reporter( nullptr ),
+        m_cancelled( false )
 {
 }

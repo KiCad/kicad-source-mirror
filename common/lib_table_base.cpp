@@ -168,13 +168,13 @@ void LIB_TABLE_ROW::SetOptions( const wxString& aOptions )
 
 
 LIB_TABLE::LIB_TABLE( LIB_TABLE* aFallBackTable, std::unique_ptr<LIB_TABLE_IO> aTableIo ) :
-        m_io( std::move( aTableIo ) ), m_fallBack( aFallBackTable ), m_version( 0 )
+        m_io( std::move( aTableIo ) ),
+        m_fallBack( aFallBackTable ),
+        m_version( 0 )
 {
     // If not given, use the default file-based I/O.
     if( !m_io )
-    {
         m_io = std::make_unique<FILE_LIB_TABLE_IO>();
-    }
 
     // not copying fall back, simply search aFallBackTable separately
     // if "nickName not found".

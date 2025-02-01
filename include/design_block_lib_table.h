@@ -46,11 +46,18 @@ public:
         SetType( aType );
     }
 
-    DESIGN_BLOCK_LIB_TABLE_ROW() : type( DESIGN_BLOCK_IO_MGR::KICAD_SEXP ) {}
+    DESIGN_BLOCK_LIB_TABLE_ROW() :
+            LIB_TABLE_ROW(),
+            type( DESIGN_BLOCK_IO_MGR::KICAD_SEXP )
+    {
+    }
 
     bool operator==( const DESIGN_BLOCK_LIB_TABLE_ROW& aRow ) const;
 
-    bool operator!=( const DESIGN_BLOCK_LIB_TABLE_ROW& aRow ) const { return !( *this == aRow ); }
+    bool operator!=( const DESIGN_BLOCK_LIB_TABLE_ROW& aRow ) const
+    {
+        return !( *this == aRow );
+    }
 
     /**
      * Return the type of design block library table represented by this row.
@@ -66,7 +73,8 @@ public:
 
 protected:
     DESIGN_BLOCK_LIB_TABLE_ROW( const DESIGN_BLOCK_LIB_TABLE_ROW& aRow ) :
-            LIB_TABLE_ROW( aRow ), type( aRow.type )
+            LIB_TABLE_ROW( aRow ),
+            type( aRow.type )
     {
     }
 
