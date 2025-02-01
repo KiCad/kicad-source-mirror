@@ -29,7 +29,7 @@ DIALOG_RC_JOB_BASE::DIALOG_RC_JOB_BASE( wxWindow* parent, wxWindowID id, const w
 	m_textCtrlOutputPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_textCtrlOutputPath->SetMinSize( wxSize( 350,-1 ) );
 
-	fgSizer1->Add( m_textCtrlOutputPath, 1, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( m_textCtrlOutputPath, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_staticText18 = new wxStaticText( this, wxID_ANY, _("Format:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText18->Wrap( -1 );

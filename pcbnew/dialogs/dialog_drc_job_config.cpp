@@ -25,6 +25,7 @@ DIALOG_DRC_JOB_CONFIG::DIALOG_DRC_JOB_CONFIG( wxWindow* parent, JOB_PCB_DRC* aJo
         m_drcJob( aJob )
 {
     SetTitle( aJob->GetSettingsDialogTitle() );
+	SetMinSize( GetBestSize() );
 }
 
 

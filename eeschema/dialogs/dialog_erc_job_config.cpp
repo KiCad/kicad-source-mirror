@@ -30,4 +30,5 @@ DIALOG_ERC_JOB_CONFIG::DIALOG_ERC_JOB_CONFIG( wxWindow* parent, JOB_SCH_ERC* aJo
 
     Fit();
     Layout();
+	SetMinSize( GetBestSize() );
 }
