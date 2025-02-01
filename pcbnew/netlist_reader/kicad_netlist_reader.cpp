@@ -400,8 +400,6 @@ void KICAD_NETLIST_PARSER::parseComponent()
             break;
 
         case T_fields:
-
-            // Read fields
             while( ( token = NextTok() ) != T_RIGHT )
             {
                 if( token == T_LEFT )
@@ -448,6 +446,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
                     humanSheetPath = From_UTF8( CurText() );
                     NeedRIGHT();
                 }
+
                 if( token == T_tstamps )
                 {
                     NeedSYMBOLorNUMBER();
@@ -473,7 +472,6 @@ void KICAD_NETLIST_PARSER::parseComponent()
             break;
 
         case T_component_classes:
-        {
             while( ( token = NextTok() ) != T_RIGHT )
             {
                 if( token != T_LEFT )
@@ -488,7 +486,6 @@ void KICAD_NETLIST_PARSER::parseComponent()
             }
 
             break;
-        }
 
         default:
             // Skip not used data (i.e all other tokens)
