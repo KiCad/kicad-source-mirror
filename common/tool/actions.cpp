@@ -375,84 +375,84 @@ TOOL_ACTION ACTIONS::selectColumns( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Select Column(s)" ) )
         .Tooltip( _( "Select complete column(s) containing the current selected cell(s)" ) )
-        .Icon( BITMAPS::table_select_column ) );    // JEY TODO: need icon
+        .Icon( BITMAPS::table_select_column ) );
 
 TOOL_ACTION ACTIONS::selectRows( TOOL_ACTION_ARGS()
         .Name( "common.InteractiveSelection.Rows" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Select Row(s)" ) )
         .Tooltip( _( "Select complete row(s) containing the current selected cell(s)" ) )
-        .Icon( BITMAPS::table_select_row ) );    // JEY TODO: need icon
+        .Icon( BITMAPS::table_select_row ) );
 
 TOOL_ACTION ACTIONS::selectTable( TOOL_ACTION_ARGS()
         .Name( "common.InteractiveSelection.SelectTable" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Select Table" ) )
         .Tooltip( _( "Select parent table of selected cell(s)" ) )
-        .Icon( BITMAPS::table_select ) );    // JEY TODO: need icon
+        .Icon( BITMAPS::table_select ) );
 
 TOOL_ACTION ACTIONS::addRowAbove( TOOL_ACTION_ARGS()
         .Name( "common.TableEditor.addRowAbove" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Add Row Above" ) )
         .Tooltip( _( "Insert a new table row above the selected cell(s)" ) )
-        .Icon( BITMAPS::table_add_row_above ) );    // JEY TODO: need icon
+        .Icon( BITMAPS::table_add_row_above ) );
 
 TOOL_ACTION ACTIONS::addRowBelow( TOOL_ACTION_ARGS()
         .Name( "common.TableEditor.addRowBelow" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Add Row Below" ) )
         .Tooltip( _( "Insert a new table row below the selected cell(s)" ) )
-        .Icon( BITMAPS::table_add_row_below ) );    // JEY TODO: need icon
+        .Icon( BITMAPS::table_add_row_below ) );
 
 TOOL_ACTION ACTIONS::addColBefore( TOOL_ACTION_ARGS()
         .Name( "common.TableEditor.addColBefore" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Add Column Before" ) )
         .Tooltip( _( "Insert a new table column before the selected cell(s)" ) )
-        .Icon( BITMAPS::table_add_column_before ) );    // JEY TODO: need icon
+        .Icon( BITMAPS::table_add_column_before ) );
 
 TOOL_ACTION ACTIONS::addColAfter( TOOL_ACTION_ARGS()
         .Name( "common.TableEditor.addColAfter" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Add Column After" ) )
         .Tooltip( _( "Insert a new table column after the selected cell(s)" ) )
-        .Icon( BITMAPS::table_add_column_after ) );    // JEY TODO: need icon
+        .Icon( BITMAPS::table_add_column_after ) );
 
 TOOL_ACTION ACTIONS::deleteRows( TOOL_ACTION_ARGS()
         .Name( "common.TableEditor.deleteRows" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Delete Row(s)" ) )
         .Tooltip( _( "Delete rows containing the currently selected cell(s)" ) )
-        .Icon( BITMAPS::table_delete_row ) );    // JEY TODO: need icon
+        .Icon( BITMAPS::table_delete_row ) );
 
 TOOL_ACTION ACTIONS::deleteColumns( TOOL_ACTION_ARGS()
         .Name( "common.TableEditor.deleteColumns" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Delete Column(s)" ) )
         .Tooltip( _( "Delete columns containing the currently selected cell(s)" ) )
-        .Icon( BITMAPS::table_delete_column ) );    // JEY TODO: need icon
+        .Icon( BITMAPS::table_delete_column ) );
 
 TOOL_ACTION ACTIONS::mergeCells( TOOL_ACTION_ARGS()
         .Name( "common.TableEditor.mergeCells" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Merge Cells" ) )
         .Tooltip( _( "Turn selected table cells into a single cell" ) )
-        .Icon( BITMAPS::spreadsheet ) );   // JEY TODO: need icon
+        .Icon( BITMAPS::table ) );   // JEY TODO: need icon
 
 TOOL_ACTION ACTIONS::unmergeCells( TOOL_ACTION_ARGS()
         .Name( "common.TableEditor.unmergeCell" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Unmerge Cells" ) )
         .Tooltip( _( "Turn merged table cells back into separate cells." ) )
-        .Icon( BITMAPS::spreadsheet ) );   // JEY TODO: need icon
+        .Icon( BITMAPS::table ) );   // JEY TODO: need icon
 
 TOOL_ACTION ACTIONS::editTable( TOOL_ACTION_ARGS()
         .Name( "pcbnew.TableEditor.editTable" )
         .Scope( AS_GLOBAL )
         .DefaultHotkey( MD_CTRL + 'E' )
         .FriendlyName( _( "Edit Table..." ) )
-        .Icon( BITMAPS::table_edit ) );   // JEY TODO: need icon
+        .Icon( BITMAPS::table_edit ) );
 
 TOOL_ACTION ACTIONS::activatePointEditor( TOOL_ACTION_ARGS()
         .Name( "common.Control.activatePointEditor" )

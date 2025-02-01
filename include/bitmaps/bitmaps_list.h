@@ -592,6 +592,7 @@ enum class BITMAPS : unsigned int
     swap,
     swap_layer,
     switch_corner_rounding_shape,
+    table,
     table_add_column_after,
     table_add_column_before,
     table_add_row_above,

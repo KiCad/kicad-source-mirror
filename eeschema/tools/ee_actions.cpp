@@ -601,7 +601,7 @@ TOOL_ACTION EE_ACTIONS::drawTable( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.drawTable" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Draw Tables" ) )
-        .Icon( BITMAPS::spreadsheet )   // JEY TODO
+        .Icon( BITMAPS::table )
         .Flags( AF_ACTIVATE ) );
 
 TOOL_ACTION EE_ACTIONS::drawRectangle( TOOL_ACTION_ARGS()

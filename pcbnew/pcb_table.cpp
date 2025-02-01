@@ -354,7 +354,7 @@ wxString PCB_TABLE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFu
 
 BITMAPS PCB_TABLE::GetMenuImage() const
 {
-    return BITMAPS::spreadsheet;    // JEY TODO
+    return BITMAPS::table;
 }
 
 
