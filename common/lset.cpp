@@ -654,17 +654,21 @@ LSET LSET::PhysicalLayersMask()
 }
 
 
-LSET LSET::UserDefinedLayers()
+LSET LSET::UserDefinedLayersMask( int aUserDefinedLayerCount )
 {
-    static const LSET saved(
-            { User_1,  User_2,  User_3,  User_4,  User_5,  User_6,  User_7,  User_8,  User_9,
-              User_10, User_11, User_12, User_13, User_14, User_15, User_16, User_17, User_18,
-              User_19, User_20, User_21, User_22, User_23, User_24, User_25, User_26, User_27,
-              User_28, User_29, User_30, User_31, User_32, User_33, User_34, User_35, User_36,
-              User_37, User_38, User_39, User_40, User_41, User_42, User_43, User_44, User_45 } );
+    LSET   ret;
+    size_t layer = User_1;
 
+    for( int ulayer = 1; ulayer <= aUserDefinedLayerCount; ulayer++ )
+    {
+        if( layer > ret.size() )
+            break;
 
-    return saved;
+        ret.set( layer );
+        layer += 2;
+    }
+
+    return ret;
 }
 
 
@@ -905,6 +909,15 @@ LSET& LSET::ClearCopperLayers()
 LSET& LSET::ClearNonCopperLayers()
 {
     for( size_t ii = 1; ii < size(); ii += 2 )
+        reset( ii );
+
+    return *this;
+}
+
+
+LSET& LSET::ClearUserDefinedLayers()
+{
+    for( size_t ii = User_1; ii < size(); ii += 2 )
         reset( ii );
 
     return *this;

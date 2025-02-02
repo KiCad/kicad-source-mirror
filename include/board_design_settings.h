@@ -613,6 +613,21 @@ public:
     void SetCopperLayerCount( int aNewLayerCount );
 
     /**
+     * @return the number of enabled user defined layers.
+     */
+    inline int GetUserDefinedLayerCount() const
+    {
+        return m_userDefinedLayerCount;
+    }
+
+    /**
+     * Set the number of user defined layers to \a aNewLayerCount.
+     *
+     * @param aNewLayerCount The new number of enabled user defined layers.
+     */
+    void SetUserDefinedLayerCount( int aNewLayerCount );
+
+    /**
      * The full thickness of the board including copper and masks.
      * @return
      */
@@ -795,6 +810,8 @@ private:
     DIFF_PAIR_DIMENSION m_customDiffPair;
 
     int        m_copperLayerCount; ///< Number of copper layers for this design
+
+    int        m_userDefinedLayerCount; ///< Number of user defined layers for this design
 
     LSET       m_enabledLayers;    ///< Bit-mask for layer enabling
 

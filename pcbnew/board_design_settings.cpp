@@ -57,10 +57,13 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     SetDefaultMasterPad();
 
     LSET all_set = LSET().set();
-    m_enabledLayers = all_set;              // All layers enabled at first.
-                                            // SetCopperLayerCount() will adjust this.
+    m_enabledLayers = all_set;     // All layers enabled at first.
+                                   // SetCopperLayerCount() will adjust this.
 
-    SetCopperLayerCount( 2 );               // Default design is a double sided board
+    // Default design is a double layer board with 4 user defined layers
+    SetCopperLayerCount( 2 );
+    SetUserDefinedLayerCount( 4 );
+
     m_CurrentViaType = VIATYPE::THROUGH;
 
     // if true, when creating a new track starting on an existing track, use this track width
@@ -1020,6 +1023,7 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_useCustomDiffPair   = aOther.m_useCustomDiffPair;
     m_customDiffPair      = aOther.m_customDiffPair;
     m_copperLayerCount    = aOther.m_copperLayerCount;
+    m_userDefinedLayerCount = aOther.m_userDefinedLayerCount;
     m_enabledLayers       = aOther.m_enabledLayers;
     m_boardThickness      = aOther.m_boardThickness;
     m_currentNetClassName = aOther.m_currentNetClassName;
@@ -1115,6 +1119,7 @@ bool BOARD_DESIGN_SETTINGS::operator==( const BOARD_DESIGN_SETTINGS& aOther ) co
     if( m_useCustomDiffPair        != aOther.m_useCustomDiffPair ) return false;
     if( m_customDiffPair           != aOther.m_customDiffPair ) return false;
     if( m_copperLayerCount         != aOther.m_copperLayerCount ) return false;
+    if( m_userDefinedLayerCount    != aOther.m_userDefinedLayerCount ) return false;
     if( m_enabledLayers            != aOther.m_enabledLayers ) return false;
     if( m_boardThickness           != aOther.m_boardThickness ) return false;
     if( m_currentNetClassName      != aOther.m_currentNetClassName ) return false;
@@ -1446,6 +1451,17 @@ void BOARD_DESIGN_SETTINGS::SetCopperLayerCount( int aNewLayerCount )
 }
 
 
+void BOARD_DESIGN_SETTINGS::SetUserDefinedLayerCount( int aNewLayerCount )
+{
+    m_userDefinedLayerCount = aNewLayerCount;
+
+    m_enabledLayers.ClearUserDefinedLayers();
+
+    if( aNewLayerCount > 0 )
+        m_enabledLayers |= LSET::UserDefinedLayersMask( aNewLayerCount );
+}
+
+
 void BOARD_DESIGN_SETTINGS::SetEnabledLayers( LSET aMask )
 {
     // Ensures mandatory back and front layers are always enabled regardless of board file
@@ -1457,8 +1473,9 @@ void BOARD_DESIGN_SETTINGS::SetEnabledLayers( LSET aMask )
 
     m_enabledLayers = aMask;
 
-    // update m_CopperLayerCount to ensure its consistency with m_EnabledLayers
-    m_copperLayerCount = (int) aMask.ClearNonCopperLayers().count();
+    // update layer counts to ensure their consistency with m_EnabledLayers
+    m_copperLayerCount      = (int) aMask.ClearNonCopperLayers().count();
+    m_userDefinedLayerCount = (int) ( aMask & LSET::UserDefinedLayersMask() ).count();
 }
 
 

@@ -185,9 +185,11 @@ public:
     static LSET PhysicalLayersMask();
 
     /**
-     * Return a mask with all of the allowable user defined layers.
+     * Return a mask with the requested number of user defined layers.
+     *
+     * @param aUserDefinedLayerCount The number of user defined layers
      */
-    static LSET UserDefinedLayers();
+    static LSET UserDefinedLayersMask( int aUserDefinedLayerCount = MAX_USER_DEFINED_LAYERS );
 
     /**
      * Layers which are not allowed within footprint definitions.
@@ -293,6 +295,11 @@ public:
      * Clear the non-copper layers in this set.
      */
     LSET& ClearNonCopperLayers();
+
+    /**
+     * Clear the user defined layers in this set.
+     */
+    LSET& ClearUserDefinedLayers();
 
 #ifndef SWIG
     // Custom iterator to iterate over all set bits

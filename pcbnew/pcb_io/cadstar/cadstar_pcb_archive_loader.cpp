@@ -687,7 +687,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::remapUnsureLayers()
 {
     LSET enabledLayers        = m_board->GetEnabledLayers();
     LSET validRemappingLayers = enabledLayers    | LSET::AllBoardTechMask() |
-                                LSET::UserMask() | LSET::UserDefinedLayers();
+                                LSET::UserMask() | LSET::UserDefinedLayersMask();
 
     std::vector<INPUT_LAYER_DESC> inputLayers;
     std::map<wxString, LAYER_ID>  cadstarLayerNameMap;
@@ -4167,7 +4167,7 @@ LSET CADSTAR_PCB_ARCHIVE_LOADER::getKiCadLayerSet( const LAYER_ID& aCadstarLayer
                        PCB_LAYER_ID::Cmts_User,
                        PCB_LAYER_ID::Eco1_User,
                        PCB_LAYER_ID::Eco2_User } )
-                | LSET::UserDefinedLayers();
+                | LSET::UserDefinedLayersMask();
 
     case LAYER_TYPE::ALLELEC:
         return LSET::AllCuMask( m_numCopperLayers );
@@ -4178,7 +4178,7 @@ LSET CADSTAR_PCB_ARCHIVE_LOADER::getKiCadLayerSet( const LAYER_ID& aCadstarLayer
                           PCB_LAYER_ID::Cmts_User,
                           PCB_LAYER_ID::Eco1_User,
                           PCB_LAYER_ID::Eco2_User } )
-                | LSET::UserDefinedLayers()
+                | LSET::UserDefinedLayersMask()
                 | LSET::AllBoardTechMask();
 
     default:

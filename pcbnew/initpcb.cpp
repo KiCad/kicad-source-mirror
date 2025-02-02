@@ -79,6 +79,9 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool doAskAboutUnsavedChanges, bool aFinal )
         // Default copper layers count set to 2: double layer board
         GetBoard()->SetCopperLayerCount( 2 );
 
+        // Default user defined layers count set to 4
+        GetBoard()->SetUserDefinedLayerCount( 4 );
+
         // Update display (some options depend on the board setup)
         GetBoard()->SetVisibleLayers( LSET().set() );
         ReCreateLayerBox();

@@ -792,6 +792,17 @@ void BOARD::SetCopperLayerCount( int aCount )
 }
 
 
+int BOARD::GetUserDefinedLayerCount() const
+{
+    return GetDesignSettings().GetUserDefinedLayerCount();
+}
+
+
+void BOARD::SetUserDefinedLayerCount( int aCount )
+{
+    return GetDesignSettings().SetUserDefinedLayerCount( aCount );
+}
+
 PCB_LAYER_ID BOARD::GetCopperLayerStackMaxId() const
 {
     int imax = GetCopperLayerCount();

@@ -1121,7 +1121,7 @@ void ALTIUM_PCB::remapUnsureLayers( std::vector<ABOARD6_LAYER_STACKUP>& aStackup
 {
     LSET enabledLayers        = m_board->GetEnabledLayers();
     LSET validRemappingLayers = enabledLayers    | LSET::AllBoardTechMask() |
-                                LSET::UserMask() | LSET::UserDefinedLayers();
+                                LSET::UserMask() | LSET::UserDefinedLayersMask();
 
     if( aStackup.size() == 0 )
         return;

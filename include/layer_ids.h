@@ -173,7 +173,8 @@ enum PCB_LAYER_ID: int
 
 constexpr PCB_LAYER_ID PCBNEW_LAYER_ID_START = F_Cu;
 
-#define MAX_CU_LAYERS       32
+#define MAX_CU_LAYERS           32
+#define MAX_USER_DEFINED_LAYERS 45
 
 /**
  * Enum used during connectivity building to ensure we do not query connectivity while building

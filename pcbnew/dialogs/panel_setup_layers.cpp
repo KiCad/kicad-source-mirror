@@ -450,7 +450,7 @@ void PANEL_SETUP_LAYERS::initialize_layers_controls()
     m_layersControls[Cmts_User] = PANEL_SETUP_LAYERS_CTLs( m_CommentsName, m_CommentsCheckBox, m_CommentsStaticText );
     m_layersControls[Dwgs_User] = PANEL_SETUP_LAYERS_CTLs( m_DrawingsName, m_DrawingsCheckBox, m_DrawingsStaticText );
 
-    layers &= LSET::UserDefinedLayers();
+    layers &= LSET::UserDefinedLayersMask();
 
     for( auto it = layers.non_copper_layers_begin(); it != layers.non_copper_layers_end(); ++it )
     {
@@ -554,7 +554,7 @@ void PANEL_SETUP_LAYERS::SyncCopperLayers( int aNumCopperLayers )
 
 void PANEL_SETUP_LAYERS::setUserDefinedLayerCheckBoxes()
 {
-    LSET layers = m_enabledLayers & LSET::UserDefinedLayers();
+    LSET layers = m_enabledLayers & LSET::UserDefinedLayersMask();
 
     for( PCB_LAYER_ID layer : layers )
         setLayerCheckBox( layer, m_pcb->IsLayerEnabled( layer ) );
@@ -609,7 +609,7 @@ void PANEL_SETUP_LAYERS::showLayerTypes()
 
     }
 
-    layers = m_enabledLayers & LSET::UserDefinedLayers();
+    layers = m_enabledLayers & LSET::UserDefinedLayersMask();
 
     for( PCB_LAYER_ID layer : layers )
     {
@@ -891,7 +891,7 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
         }
     }
 
-    LSET layers = m_enabledLayers & LSET::UserDefinedLayers();
+    LSET layers = m_enabledLayers & LSET::UserDefinedLayersMask();
 
     for( PCB_LAYER_ID layer : layers )
     {
@@ -1127,7 +1127,7 @@ void PANEL_SETUP_LAYERS::addUserDefinedLayer( wxCommandEvent& aEvent )
     // Build the available user-defined layers list:
     std::vector<wxArrayString> list;
 
-    for( PCB_LAYER_ID layer : LSET::UserDefinedLayers().Seq() )
+    for( PCB_LAYER_ID layer : LSET::UserDefinedLayersMask().Seq() )
     {
         wxCheckBox* checkBox = getCheckBox( layer );
 
@@ -1157,7 +1157,7 @@ void PANEL_SETUP_LAYERS::addUserDefinedLayer( wxCommandEvent& aEvent )
 
     PCB_LAYER_ID layer = UNDEFINED_LAYER;
 
-    for( PCB_LAYER_ID layer2 : LSET::UserDefinedLayers().Seq() )
+    for( PCB_LAYER_ID layer2 : LSET::UserDefinedLayersMask().Seq() )
     {
         if( LayerName( layer2 ) == dlg.GetTextSelection() )
         {

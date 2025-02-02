@@ -578,6 +578,9 @@ public:
     int  GetCopperLayerCount() const;
     void SetCopperLayerCount( int aCount );
 
+    int GetUserDefinedLayerCount() const;
+    void SetUserDefinedLayerCount( int aCount );
+
     /**
      * @return The copper layer max PCB_LAYER_ID in the BOARD.
      * similar to GetCopperLayerCount(), but returns the max PCB_LAYER_ID
