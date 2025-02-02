@@ -35,7 +35,9 @@
 class SEARCH_PANE_MENU : public ACTION_MENU
 {
 public:
-    SEARCH_PANE_MENU( EDA_DRAW_FRAME& aFrame ) : ACTION_MENU( true, nullptr ), m_frame( aFrame )
+    SEARCH_PANE_MENU( EDA_DRAW_FRAME& aFrame ) :
+            ACTION_MENU( true, nullptr ),
+            m_frame( aFrame )
     {
         Add( _( "Zoom to Selection" ), _( "Toggle zooming to selections in the search pane" ),
              ID_TOGGLE_ZOOM_TO_SELECTION, BITMAPS::zoom_fit_to_objects, true );
