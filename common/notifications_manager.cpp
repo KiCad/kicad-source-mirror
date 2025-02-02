@@ -31,6 +31,7 @@
 #include <wx/settings.h>
 #include <wx/stattext.h>
 #include <wx/string.h>
+#include <wx/time.h>
 
 #include <paths.h>
 
@@ -38,6 +39,7 @@
 #include <widgets/kistatusbar.h>
 #include <widgets/ui_common.h>
 #include <json_common.h>
+#include <kiplatform/ui.h>
 
 #include <core/wx_stl_compat.h>
 #include <core/json_serializers.h>
@@ -50,6 +52,8 @@
 #include <tuple>
 #include <vector>
 
+
+static long long g_last_closed_timer = 0;
 
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE( NOTIFICATION, title, description, href, key, date )
 
@@ -67,7 +71,10 @@ public:
         wxBoxSizer* mainSizer;
         mainSizer = new wxBoxSizer( wxVERTICAL );
 
-        SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DLIGHT ) );
+        wxColour fg, bg;
+        KIPLATFORM::UI::GetInfoBarColours( fg, bg );
+        SetBackgroundColour( bg );
+        SetForegroundColour( fg );
 
         m_stTitle = new wxStaticText( this, wxID_ANY, aNoti->title );
         m_stTitle->Wrap( -1 );
@@ -155,7 +162,12 @@ public:
         bSizer1 = new wxBoxSizer( wxVERTICAL );
 
         m_scrolledWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition,
-                                                 wxSize( -1, -1 ), wxVSCROLL );
+                                                 wxSize( -1, -1 ), wxVSCROLL | wxBORDER_SIMPLE );
+        wxColour fg, bg;
+        KIPLATFORM::UI::GetInfoBarColours( fg, bg );
+        m_scrolledWindow->SetBackgroundColour( bg );
+        m_scrolledWindow->SetForegroundColour( fg );
+
         m_scrolledWindow->SetScrollRate( 5, 5 );
         m_contentSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -183,9 +195,15 @@ public:
 
     void onFocusLoss( wxFocusEvent& aEvent )
     {
-        // check if a child like say, the hyperlink texts got focus
-        if( !IsDescendant( aEvent.GetWindow() ) )
+        if( IsDescendant( aEvent.GetWindow() ) )
+        {
+            // Child (such as the hyperlink texts) got focus
+        }
+        else
+        {
             Close( true );
+            g_last_closed_timer = wxGetLocalTimeMillis().GetValue();
+        }
 
         aEvent.Skip();
     }
@@ -370,6 +388,15 @@ void NOTIFICATIONS_MANAGER::onListWindowClosed( wxCloseEvent& aEvent )
 
 void NOTIFICATIONS_MANAGER::ShowList( wxWindow* aParent, wxPoint aPos )
 {
+    // Debounce clicking on the icon with a list already showing.  The button will get focus
+    // first, which will cause a focus-loss on the list (thereby closing it), and then we'd open
+    // it again without this guard.
+    if( wxGetLocalTimeMillis().GetValue() - g_last_closed_timer < 300 )
+    {
+        g_last_closed_timer = 0;
+        return;
+    }
+
     NOTIFICATIONS_LIST* list = new NOTIFICATIONS_LIST( this, aParent, aPos );
 
     for( NOTIFICATION& job : m_notifications )
@@ -384,6 +411,7 @@ void NOTIFICATIONS_MANAGER::ShowList( wxWindow* aParent, wxPoint aPos )
     list->SetPosition( aPos - windowSize );
 
     list->Show();
+    KIPLATFORM::UI::ForceFocus( list );
 }
 
 
