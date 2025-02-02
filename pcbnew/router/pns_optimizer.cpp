@@ -237,9 +237,9 @@ bool AREA_CONSTRAINT::Check( int aVertex1, int aVertex2, const LINE* aOriginLine
                 .Angle( aCurrentPath.CSegment( aVertex2 - 1 ) )
                 .IsHorizontal();
 
-    PNS_DBG( dbg, AddShape, m_allowedArea, YELLOW, 10000, wxT( "drag-affected-area" ) );
-    PNS_DBG( dbg, AddPoint, p1, YELLOW, 1000000, wxT( "drag-p1" ) );
-    PNS_DBG( dbg, AddPoint, p2, YELLOW, 1000000, wxT( "drag-p2" ) );
+    //PNS_DBG( dbg, AddShape, m_allowedArea, YELLOW, 10000, wxT( "drag-affected-area" ) );
+    //PNS_DBG( dbg, AddPoint, p1, YELLOW, 1000000, wxT( "drag-p1" ) );
+    //PNS_DBG( dbg, AddPoint, p2, YELLOW, 1000000, wxT( "drag-p2" ) );
 
     return false;
 }
@@ -617,7 +617,7 @@ bool OPTIMIZER::Optimize( const LINE* aLine, LINE* aResult, LINE* aRoot )
 
     if( aRoot )
     {
-        PNS_DBG( dbg, AddItem, aRoot, BLUE, 100000, wxT( "root-line" ) );
+        //PNS_DBG( dbg, AddItem, aRoot, BLUE, 100000, wxT( "root-line" ) );
     }
 
 
@@ -636,9 +636,9 @@ bool OPTIMIZER::Optimize( const LINE* aLine, LINE* aResult, LINE* aRoot )
         int rootObtuseCorners = aRoot->CountCorners( angleMask );
         auto c = new CORNER_COUNT_LIMIT_CONSTRAINT( m_world, rootObtuseCorners,
                                                     aLine->SegmentCount(), angleMask );
-        PNS_DBG( dbg, Message,
-                 wxString::Format( "opt limit-corner-count root %d maxc %d mask %x",
-                                   rootObtuseCorners, aLine->SegmentCount(), angleMask ) );
+        //PNS_DBG( dbg, Message,
+         //        wxString::Format( "opt limit-corner-count root %d maxc %d mask %x",
+           //                        rootObtuseCorners, aLine->SegmentCount(), angleMask ) );
 
         addConstraint( c );
     }
@@ -660,7 +660,7 @@ bool OPTIMIZER::Optimize( const LINE* aLine, LINE* aResult, LINE* aRoot )
     {
         auto c = new AREA_CONSTRAINT( m_world, m_restrictArea, m_restrictAreaIsStrict );
         SHAPE_RECT r( m_restrictArea );
-        PNS_DBG( dbg, AddShape, &r, YELLOW, 0, wxT( "area-constraint" ) );
+        //PNS_DBG( dbg, AddShape, &r, YELLOW, 0, wxT( "area-constraint" ) );
         addConstraint( c );
     }
 
