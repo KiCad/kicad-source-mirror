@@ -637,17 +637,19 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSegment( LINE& aCurrent, SEGMENT* aObstacl
     if( Dbg() )
     {
         PNS_DBG( Dbg(), AddItem, aObstacleSeg, BLUE, 0, wxT( "colliding-segment" ) );
-        PNS_DBG( Dbg(), AddItem, &aCurrent, RED, 10000, wxString::Format( "current-line [l %d v %d]", aCurrent.Layer(), aCurrent.EndsWithVia() ) );
-        PNS_DBG( Dbg(), AddItem, &obstacleLine, GREEN, 10000, wxString::Format( "obstacle-line [l %d v %d]", obstacleLine.Layer(), obstacleLine.EndsWithVia() ) );
+        PNS_DBG( Dbg(), AddItem, &aCurrent, RED, 10000, wxString::Format( "current-line [links %d l %d v %d]", aCurrent.LinkCount(), aCurrent.Layer(), aCurrent.EndsWithVia() ) );
+        PNS_DBG( Dbg(), AddItem, &obstacleLine, GREEN, 10000, wxString::Format( "obstacle-line [links %d l %d v %d]", obstacleLine.LinkCount(), obstacleLine.Layer(), obstacleLine.EndsWithVia() ) );
         PNS_DBG( Dbg(), AddItem, &shovedLine, BLUE, 10000, wxT( "shoved-line" ) );
     }
 
     if( shoveOK )
     {
         int rank = aCurrent.Rank();
-        shovedLine.SetRank( rank - 1 );
 
+        shovedLine.SetRank( rank - 1 );
         shovedLine.Line().Simplify2();
+
+        unwindLineStack( &obstacleLine );
 
         replaceLine( obstacleLine, shovedLine, true, false );
 
@@ -740,9 +742,11 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingLine( LINE& aCurrent, LINE& aObstacle, int
 
         if( !pushLineStack( shovedLine ) )
             return SH_INCOMPLETE;
+
+        return SH_OK;
     }
 
-    return SH_OK;
+    return SH_INCOMPLETE;
 }
 
 
@@ -1372,15 +1376,10 @@ void SHOVE::unwindLineStack( const LINKED_ITEM* aSeg )
     {
         if( i->ContainsLink( aSeg ) )
         {
-            PNS_DBG(Dbg(), Message, wxString::Format("Unwind lc %d (depth %d/%d)", i->SegmentCount(), d, (int)m_lineStack.size() ) );
 
 // note to my future self: if we have a "tadpole" in the stack, keep track of the via even if the parent line has been deleted.
 // otherwise - the via will be ignored in the case of collisions with tracks on another layer. Can happen pretty often in densely packed PCBs.
             if( i->EndsWithVia() && !aSeg->OfKind( ITEM::VIA_T ) )
-            {
-                i = m_lineStack.erase( i );
-            }
-            else
             {
                 VIA* via = nullptr;
 
@@ -1398,6 +1397,10 @@ void SHOVE::unwindLineStack( const LINKED_ITEM* aSeg )
                     i->LinkVia( via );
                 }
                 i++;
+            }
+            else
+            {
+                i = m_lineStack.erase( i );
             }
         }
         else
@@ -2056,14 +2059,14 @@ void SHOVE::runOptimizer( NODE* aNode )
             {
                 assert( optimized.LinkCount() == 0 );
 
-                PNS_DBG( Dbg(), AddShape, &lineToOpt.CLine(), BLUE, 0, wxT( "shove-pre-opt" ) );
-                if( rootLine )
-                    PNS_DBG( Dbg(), AddItem, rootLine, RED, 0, wxT( "shove-root-opt" ) );
+                //PNS_DBG( Dbg(), AddShape, &lineToOpt.CLine(), BLUE, 0, wxT( "shove-pre-opt" ) );
+                //if( rootLine )
+                  //  PNS_DBG( Dbg(), AddItem, rootLine, RED, 0, wxT( "shove-root-opt" ) );
 
                 replaceLine( lineToOpt, optimized, false, aNode );
                 m_optimizerQueue[i] = optimized; // keep links in the lines in the queue up to date
 
-                PNS_DBG( Dbg(), AddShape, &optimized.CLine(), GREEN, 0, wxT( "shove-post-opt" ) );
+                //PNS_DBG( Dbg(), AddShape, &optimized.CLine(), GREEN, 0, wxT( "shove-post-opt" ) );
             }
         }
     }
@@ -2579,7 +2582,7 @@ enum SHOVE_POLICY
 const wxString SHOVE::formatPolicy( int aPolicy )
 {
     if( aPolicy == SHP_DEFAULT )
-        return wxString::Format( "default [%s]", m_defaultPolicy );
+        return wxT( "default" );
 
     wxString rv;
 
