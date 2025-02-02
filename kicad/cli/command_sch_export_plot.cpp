@@ -107,7 +107,7 @@ CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
                 .flag();
     }
 
-    m_argParser.add_argument( "-p", ARG_PAGES )
+    m_argParser.add_argument( ARG_PAGES )
             .default_value( std::string() )
             .help( UTF8STDSTR( _( "List of page numbers separated by comma to print, blank or "
                                   "unspecified is equivalent to all pages" ) ) )
