@@ -26,6 +26,7 @@
 #include <bitmaps.h>
 #include <kiway.h>
 #include <widgets/search_pane_tab.h>
+#include <widgets/std_bitmap_button.h>
 
 
 #define ID_TOGGLE_ZOOM_TO_SELECTION 14000
@@ -46,7 +47,6 @@ public:
 
         updateZoomPanCheckboxes();
     }
-
 
     OPT_TOOL_EVENT eventHandler( const wxMenuEvent& aEvent ) override
     {
@@ -86,6 +86,7 @@ private:
                       == APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::PAN );
     }
 
+private:
     EDA_DRAW_FRAME& m_frame;
 };
 

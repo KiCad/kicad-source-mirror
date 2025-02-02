@@ -10,17 +10,20 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-#include <wx/bmpbuttn.h>
+class STD_BITMAP_BUTTON;
+
 #include <wx/string.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
+#include <wx/srchctrl.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/statline.h>
+#include <wx/bmpbuttn.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/button.h>
-#include <wx/srchctrl.h>
 #include <wx/sizer.h>
 #include <wx/notebook.h>
 #include <wx/panel.h>
@@ -36,8 +39,9 @@ class SEARCH_PANE_BASE : public wxPanel
 
 	protected:
 		wxBoxSizer* m_sizerOuter;
-		wxBitmapButton* m_menuButton;
 		wxSearchCtrl* m_searchCtrl1;
+		wxStaticLine* m_staticline1;
+		STD_BITMAP_BUTTON* m_menuButton;
 		wxNotebook* m_notebook;
 
 		// Virtual event handlers, override them in your derived class
