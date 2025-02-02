@@ -138,6 +138,9 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
 
     std::map<BOARD_ITEM*, BOARD_ITEM*> ptrMap;
 
+    for( int id : MANDATORY_FIELDS )
+        m_fields.push_back( nullptr );
+
     // Copy fields
     for( PCB_FIELD* field : aFootprint.m_fields )
     {
@@ -1074,7 +1077,9 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectiv
 
         if( field->IsMandatory() )
         {
-            wxASSERT( m_fields[ field->GetId() ] == nullptr );
+            wxASSERT( m_fields.size() >= MANDATORY_FIELD_COUNT
+                        && m_fields[ field->GetId() ] == nullptr );
+
             m_fields[ field->GetId() ] = field;
         }
         else
