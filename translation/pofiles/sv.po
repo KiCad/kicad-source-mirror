@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 19:59+0300\n"
-"PO-Revision-Date: 2025-01-23 15:38+0000\n"
-"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"PO-Revision-Date: 2025-02-03 00:02+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3468,7 +3468,6 @@ msgid "Warnings"
 msgstr "Varningar"
 
 #: common/dialogs/dialog_rc_job_base.cpp:68
-#, fuzzy
 msgid "Report job failure when violations present"
 msgstr "Rapportera misslyckad åtgärd när överträdelser förekommer"
 
@@ -7411,18 +7410,16 @@ msgid "Loading file canceled by user."
 msgstr "Filöppning avbruten av användare."
 
 #: common/jobs/job.cpp:82
-#, fuzzy
 msgid "Job Settings"
-msgstr "Inställningar"
+msgstr "Inställningar för åtgärd"
 
 #: common/jobs/job_export_pcb_3d.cpp:144
 msgid "3D model export"
 msgstr "Export av 3D-modell"
 
 #: common/jobs/job_export_pcb_3d.cpp:150
-#, fuzzy
 msgid "Export 3D Model Job Settings"
-msgstr "Exportera 3D-modell"
+msgstr "Iställningar för åtgärden exportera 3D-modell"
 
 #: common/jobs/job_export_pcb_3d.cpp:168
 msgid "PCB: Export 3D Model"
@@ -7433,9 +7430,8 @@ msgid "Export drill data"
 msgstr "Exportera borrdata"
 
 #: common/jobs/job_export_pcb_drill.cpp:129
-#, fuzzy
 msgid "Export Drill Data Job Settings"
-msgstr "Redigera alternativ..."
+msgstr "Inställningar för åtgärden exportera borrdata"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
 msgid "PCB: Export drill data"
@@ -7448,36 +7444,32 @@ msgstr "Exportera DXF"
 
 #: common/jobs/job_export_pcb_dxf.cpp:64
 #: common/jobs/job_export_sch_plot.cpp:162
-#, fuzzy
 msgid "Export DXF Job Settings"
-msgstr "Redigera alternativ..."
+msgstr "Inställningar för åtgärden exportera DXF"
 
 #: common/jobs/job_export_pcb_dxf.cpp:68
 msgid "PCB: Export DXF"
 msgstr "Mönsterkort: Exportera DXF"
 
 #: common/jobs/job_export_pcb_gencad.cpp:38
-#, fuzzy
 msgid "Export GenCAD Job Settings"
-msgstr "Exportera till GenCAD-inställningar"
+msgstr "Inställningar för åtgärden exportera GenCAD"
 
 #: common/jobs/job_export_pcb_gerber.cpp:71
 msgid "Export single Gerber"
 msgstr "Exportera enskild gerberfil"
 
 #: common/jobs/job_export_pcb_gerber.cpp:77
-#, fuzzy
 msgid "Export Single Gerber Job Settings"
-msgstr "Exportera till GenCAD-inställningar"
+msgstr "Inställningar för åtgärden exportera till enskild Gerber"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:42
 msgid "Export Gerbers"
 msgstr "Exportera gerberfiler"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:48
-#, fuzzy
 msgid "Export Gerbers Job Settings"
-msgstr "Exportera till GenCAD-inställningar"
+msgstr "Inställningar för åtgärden exportera flera Gerber-filer"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:52
 msgid "PCB: Export Gerbers"
@@ -7488,9 +7480,8 @@ msgid "Export IPC2581"
 msgstr "Exportera IPC2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
-#, fuzzy
 msgid "Export IPC2581 Job Settings"
-msgstr "Exportera IPC-2581-fil"
+msgstr "Inställningar för åtgärden exportera IPC-2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
 msgid "PCB: Export IPC2581"
@@ -7502,9 +7493,8 @@ msgid "Export ODB++"
 msgstr "Exportera ODB++"
 
 #: common/jobs/job_export_pcb_odb.cpp:63
-#, fuzzy
 msgid "Export ODB++ Job Settings"
-msgstr "Redigera alternativ..."
+msgstr "Inställningar för åtgärden exportera ODB++"
 
 #: common/jobs/job_export_pcb_odb.cpp:76
 msgid "PCB: Export ODB++"
@@ -7517,9 +7507,8 @@ msgstr "Exportera PDF"
 
 #: common/jobs/job_export_pcb_pdf.cpp:80
 #: common/jobs/job_export_sch_plot.cpp:143
-#, fuzzy
 msgid "Export PDF Job Settings"
-msgstr "Redigera alternativ..."
+msgstr "Inställningar för åtgärden exportera PDF"
 
 #: common/jobs/job_export_pcb_pdf.cpp:84
 msgid "PCB: Export PDF"
@@ -7530,9 +7519,8 @@ msgid "Export position data"
 msgstr "Exportera placeringsdata"
 
 #: common/jobs/job_export_pcb_pos.cpp:103
-#, fuzzy
 msgid "Export Position Data Job Settings"
-msgstr "Mönsterkort: Exportera placeringsdata"
+msgstr "Inställningar för åtgärden exportera placeringsdata"
 
 #: common/jobs/job_export_pcb_pos.cpp:121
 msgid "PCB: Export Position Data"
@@ -7545,9 +7533,8 @@ msgstr "Exportera SVG"
 
 #: common/jobs/job_export_pcb_svg.cpp:63
 #: common/jobs/job_export_sch_plot.cpp:181
-#, fuzzy
 msgid "Export SVG Job Settings"
-msgstr "Redigera alternativ..."
+msgstr "Inställningar för åtgärden exportera SVG"
 
 #: common/jobs/job_export_pcb_svg.cpp:67
 msgid "PCB: Export SVG"
@@ -7558,9 +7545,8 @@ msgid "Generate bill of materials"
 msgstr "Generera komponentlista"
 
 #: common/jobs/job_export_sch_bom.cpp:98
-#, fuzzy
 msgid "Generate Bill of Materials Job Settings"
-msgstr "Generera komponentlista (BOM)..."
+msgstr "Inställningar för åtgärden generera komponentlista"
 
 #: common/jobs/job_export_sch_bom.cpp:102
 msgid "Schematic: Generate Bill of Materials"
@@ -7572,9 +7558,8 @@ msgid "Export %s netlist"
 msgstr "Exportera %s nätlista"
 
 #: common/jobs/job_export_sch_netlist.cpp:86
-#, fuzzy
 msgid "Export Netlist Job Settings"
-msgstr "Exportera nätlista"
+msgstr "Inställningar för åtgärden exportera nätlista"
 
 #: common/jobs/job_export_sch_netlist.cpp:90
 msgid "Schematic: Export Netlist"
@@ -7585,18 +7570,16 @@ msgid "Export Postscript"
 msgstr "Exportera Postscript"
 
 #: common/jobs/job_export_sch_plot.cpp:200
-#, fuzzy
 msgid "Export Postscript Job Settings"
-msgstr "Redigera alternativ..."
+msgstr "Inställningar för åtgärden exportera Postscript"
 
 #: common/jobs/job_export_sch_plot.cpp:213 kicad/kicad_cli.cpp:142
 msgid "Export HPGL"
 msgstr "Exportera HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:219
-#, fuzzy
 msgid "Export HPGL Job Settings"
-msgstr "Redigera alternativ..."
+msgstr "Inställningar för åtgärden exportera HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:223
 msgid "Schematic: Export SVG"
@@ -7627,9 +7610,8 @@ msgid "Perform DRC"
 msgstr "Utför designregelkontroll"
 
 #: common/jobs/job_pcb_drc.cpp:43 pcbnew/dialogs/dialog_drc_job_config.cpp:24
-#, fuzzy
 msgid "DRC Job Settings"
-msgstr "3D-inställningar"
+msgstr "Inställningar för åtgärden designregelkontroll"
 
 #: common/jobs/job_pcb_drc.cpp:47
 msgid "PCB: Perform DRC"
@@ -7641,9 +7623,8 @@ msgid "Render %s"
 msgstr "Rendera %s"
 
 #: common/jobs/job_pcb_render.cpp:133
-#, fuzzy
 msgid "Render PCB Job Settings"
-msgstr "Redigera alternativ..."
+msgstr "Inställningar för åtgärden rendera mönsterkort"
 
 #: common/jobs/job_pcb_render.cpp:137
 msgid "PCB: Render"
@@ -7654,9 +7635,9 @@ msgid "Perform ERC"
 msgstr "Utför elektrisk regelkontroll"
 
 #: common/jobs/job_sch_erc.cpp:39
-#, fuzzy
 msgid "Schematic ERC Job Settings"
-msgstr "Kretsschema: Exportera nätlista"
+msgstr ""
+"Inställningar för åtgärden utför elektrisk regelkontroll för kretsschema"
 
 #: common/jobs/job_sch_erc.cpp:43
 msgid "Schematic: Perform ERC"
@@ -10232,9 +10213,8 @@ msgid "Hotkey file"
 msgstr "Snabbtangentsfil"
 
 #: common/wildcards_and_files_ext.cpp:568
-#, fuzzy
 msgid "KiCad jobset files"
-msgstr "KiCad projektfiler"
+msgstr "KiCad åtgärdsseriefiler"
 
 #: cvpcb/auto_associate.cpp:108
 #, c-format
@@ -11893,9 +11873,8 @@ msgid "Electrical Rules Checker"
 msgstr "Kontrollera elektriska regler (ERC)"
 
 #: eeschema/dialogs/dialog_erc_job_config.cpp:23
-#, fuzzy
 msgid "ERC Job Settings"
-msgstr "Redigera alternativ..."
+msgstr "Inställningar för åtgärd elektrisk regelkontroll"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:221
 msgid "Export netlist in KiCad format"
@@ -22295,7 +22274,6 @@ msgid "Create a new symbol in an existing library"
 msgstr "Skapa en ny symbol i ett befintligt bibliotek"
 
 #: eeschema/tools/ee_actions.cpp:202
-#, fuzzy
 msgid "Derive from Existing Symbol..."
 msgstr "Härled från befintlig symbol…"
 
@@ -22528,7 +22506,7 @@ msgstr "Placera knutpunkter"
 #: eeschema/tools/ee_actions.cpp:483
 #, fuzzy
 msgid "Place Wire to Bus Entries"
-msgstr "Lägg till ledning till busspost"
+msgstr "Lägg till post för ledningsanslutning till buss"
 
 #: eeschema/tools/ee_actions.cpp:493
 msgid "Place Net Labels"
@@ -25668,32 +25646,31 @@ msgstr "Tvingar att spara om fotavtrycksbiblioteket oberoende av version"
 
 #: kicad/cli/command_jobset.h:32
 msgid "Jobset"
-msgstr ""
+msgstr "Åtgärdsserie"
 
 #: kicad/cli/command_jobset_run.cpp:45
-#, fuzzy
 msgid "Runs a jobset file"
-msgstr "Döp om fil"
+msgstr "Kör en åtgärdsseriefil"
 
 #: kicad/cli/command_jobset_run.cpp:49
-#, fuzzy
 msgid ""
 "Stops processing jobs as they are executed sequentially on the first failure "
 "of a job"
 msgstr ""
-"Stoppar bearbetning av arbeten vid första misslyckade arbetet, när dessa "
+"Stoppar bearbetning av åtgärder vid första misslyckade åtgärden, när dessa "
 "exekveras sekventiellt"
 
 #: kicad/cli/command_jobset_run.cpp:53
-#, fuzzy
 msgid "Jobset file to be run"
-msgstr "Välj en fil att bädda in"
+msgstr "Åtgärdsseriefil att köra"
 
 #: kicad/cli/command_jobset_run.cpp:58
 msgid ""
 "Jobset file output to generate, leave blank for all outputs defined in the "
 "jobset"
 msgstr ""
+"Utmatningar som skall genereras för åtgärdssereifiler, lämna blankt för alla "
+"definierade utmatningar i åtgärdsserien"
 
 #: kicad/cli/command_pcb_drc.cpp:47
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
@@ -26611,9 +26588,8 @@ msgid "Overwrite files in destination"
 msgstr "Skriv över befintliga filer i målkatalog"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.h:53
-#, fuzzy
 msgid "Copy Files Job Settings"
-msgstr "Filterinställningar"
+msgstr "Kopiera filens inställningar för åtgärd"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:48
 #, fuzzy
@@ -26622,12 +26598,11 @@ msgstr "Spara utmatningsmeddelanden"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:51
 msgid "Ignore non-zero exit code"
-msgstr ""
+msgstr "Ignorera utgångskod skild från noll"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:52
-#, fuzzy
 msgid "Execute Command Job Settings"
-msgstr "Redigera alternativ..."
+msgstr "Inställningar för åtgärden kör kommando"
 
 #: kicad/dialogs/dialog_jobset_output_options.cpp:54
 #: kicad/dialogs/dialog_jobset_output_options_base.h:62
@@ -26657,9 +26632,8 @@ msgid "Description:"
 msgstr "Beskrivning:"
 
 #: kicad/dialogs/dialog_jobset_output_options_base.cpp:64
-#, fuzzy
 msgid "Include jobs:"
-msgstr "Inkludera &zoner"
+msgstr "Inkludera åtgärder:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:122
 #: kicad/dialogs/dialog_template_selector_base.h:66
@@ -26741,7 +26715,7 @@ msgid "Update Available"
 msgstr "Tillgängliga uppdateringar"
 
 #: kicad/dialogs/panel_jobset.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid "Output: %s"
 msgstr "Utmatning: %s"
 
@@ -26750,14 +26724,12 @@ msgid "No."
 msgstr "Nej."
 
 #: kicad/dialogs/panel_jobset.cpp:65
-#, fuzzy
 msgid "Job Description"
-msgstr "Arbetsbeskrivning"
+msgstr "Åtgärdsbeskrivning"
 
 #: kicad/dialogs/panel_jobset.cpp:130
-#, fuzzy
 msgid "No output messages"
-msgstr "Utmatningsmeddelanden"
+msgstr "Inga utmatningsmeddelanden"
 
 #: kicad/dialogs/panel_jobset.cpp:201
 msgid "Last run successful"
@@ -26784,24 +26756,20 @@ msgid "View Last Run Results..."
 msgstr "Se resultat från senaste körning..."
 
 #: kicad/dialogs/panel_jobset.cpp:358
-#, fuzzy
 msgid "Edit Job Description"
-msgstr "Redigera Arbetsbeskrivning"
+msgstr "Redigera åtgärdsbeskrivning"
 
 #: kicad/dialogs/panel_jobset.cpp:359
-#, fuzzy
 msgid "Edit Job Settings..."
-msgstr "Redigera alternativ..."
+msgstr "Redigera inställningar för åtgärd..."
 
 #: kicad/dialogs/panel_jobset.cpp:364
-#, fuzzy
 msgid "Delete selected jobs"
-msgstr "Radera valda nät"
+msgstr "Radera valda åtgärder"
 
 #: kicad/dialogs/panel_jobset.cpp:366
-#, fuzzy
 msgid "Select all jobs"
-msgstr "Markera alla"
+msgstr "Välj alla åtgärder"
 
 #: kicad/dialogs/panel_jobset.cpp:648
 msgid "Job Types"
@@ -26832,19 +26800,16 @@ msgid "No outputs defined"
 msgstr "Inga utmatningar definierade"
 
 #: kicad/dialogs/panel_jobset_base.cpp:24
-#, fuzzy
 msgid "Jobs"
-msgstr "Utför %s"
+msgstr "Åtgärder"
 
 #: kicad/dialogs/panel_jobset_base.cpp:82
-#, fuzzy
 msgid "Outputs"
 msgstr "Utdata"
 
 #: kicad/dialogs/panel_jobset_base.cpp:115
-#, fuzzy
 msgid "Save Jobset"
-msgstr "Spara som"
+msgstr "Spara åtgärdsserie"
 
 #: kicad/dialogs/panel_jobset_base.cpp:121
 msgid "Generate All Outputs"
@@ -26986,9 +26951,8 @@ msgid "Job successful"
 msgstr "Arbetet lyckades"
 
 #: kicad/jobs_runner.cpp:303
-#, fuzzy
 msgid "Job failed"
-msgstr "Arbetet misslyckades"
+msgstr "Åtgärden misslyckades"
 
 #: kicad/kicad.cpp:316
 #, c-format
@@ -27053,9 +27017,8 @@ msgid "%d package update(s) avaliable"
 msgstr "%d paketuppdatering(ar) tillgänglig(a)"
 
 #: kicad/kicad_manager_frame.cpp:798
-#, fuzzy
 msgid "Error opening jobs file"
-msgstr "Fel vid försök att öppna jobb-fil"
+msgstr "Fel vid försök att öppna åtgärdsseriefil"
 
 #: kicad/kicad_manager_frame.cpp:956
 msgid "Edit File in Text Editor"
@@ -27770,9 +27733,8 @@ msgid "Edit in a Text Editor"
 msgstr "Redigera i en textredigerare"
 
 #: kicad/project_tree_pane.cpp:904
-#, fuzzy
 msgid "Run Jobs"
-msgstr "Utför"
+msgstr "Utför åtgärder"
 
 #: kicad/project_tree_pane.cpp:912
 msgid "Rename File..."
@@ -28010,9 +27972,8 @@ msgid "Clone Project from Repository..."
 msgstr "Klona projekt från förvar..."
 
 #: kicad/tools/kicad_manager_actions.cpp:67
-#, fuzzy
 msgid "New Jobset File..."
-msgstr "Ny Jobset fil..."
+msgstr "Ny åtgärdsseriefil..."
 
 #: kicad/tools/kicad_manager_actions.cpp:74
 msgid "Open Demo Project..."
@@ -28023,9 +27984,8 @@ msgid "Open Project..."
 msgstr "Öppna projekt..."
 
 #: kicad/tools/kicad_manager_actions.cpp:89
-#, fuzzy
 msgid "Open Jobset File..."
-msgstr "Ny Jobset fil..."
+msgstr "Öppna åtgärdsseriefil..."
 
 #: kicad/tools/kicad_manager_actions.cpp:96
 msgid "Close Project"
@@ -28110,9 +28070,8 @@ msgid "No project files were found in the repository."
 msgstr "Inga projektfiler hittades i förvaret."
 
 #: kicad/tools/kicad_manager_control.cpp:212
-#, fuzzy
 msgid "Create New Jobset"
-msgstr "Skapa nytt projekt"
+msgstr "Skapa ny åtgärdsserie"
 
 #: kicad/tools/kicad_manager_control.cpp:242
 msgid "System Templates"
@@ -28153,9 +28112,8 @@ msgid "Open Existing Project"
 msgstr "Öppna befintligt projekt"
 
 #: kicad/tools/kicad_manager_control.cpp:429
-#, fuzzy
 msgid "Open Jobset"
-msgstr "Spara som"
+msgstr "Öppna åtgärdsserie"
 
 #: kicad/tools/kicad_manager_control.cpp:636
 #, c-format
@@ -35204,7 +35162,6 @@ msgid "Gerber X2"
 msgstr "Gerber X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:93
-#, fuzzy
 msgid "Generate map:"
 msgstr "Skapa kartfil:"
 
@@ -35219,7 +35176,7 @@ msgstr "Absolut"
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:150
 #, fuzzy
 msgid "Zeros:"
-msgstr "Nollställen"
+msgstr "Nollställen:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:154
 msgid "Decimal format (recommended)"
@@ -37670,9 +37627,8 @@ msgid "Side lights elevation:"
 msgstr "Sidoljusens höjdvinkel:"
 
 #: pcbnew/dialogs/dialog_render_job_base.h:100
-#, fuzzy
 msgid "Render PCB Job Options"
-msgstr "Renderingsalternativ"
+msgstr "Alternativ för åtgärden rendera mönsterkort"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:126
 #: pcbnew/tools/board_inspection_tool.cpp:1467
@@ -38454,9 +38410,9 @@ msgid "Internal Layers"
 msgstr "Inre kopparlager"
 
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:496
-#, fuzzy, c-format
+#, c-format
 msgid "Layer name %s already in use."
-msgstr "Lagernamnet \"%s\" används redan."
+msgstr "Lagernamnet %s används redan."
 
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:23
 msgid "Default Field Properties for New Footprints"
@@ -40295,10 +40251,10 @@ msgid ""
 msgstr ""
 "### Egenskaper\n"
 "\n"
-"Många av objekts egenskaper är tillgängliga för test i uttryck för "
-"användardefinierade regler. Se den fullständinga dokumentationen på [https://"
-"docs.kicad.org](https://docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew."
-"html#custom_design_rules) för en fullständing lista.\n"
+"Många egenskaper för objekt är tillgängliga för test i uttryck för "
+"användardefinierade regler. Se den fullständinga dokumentationen på "
+"[https://docs.kicad.org](https://docs.kicad.org/GetMajorMinorVersion/en/"
+"pcbnew/pcbnew.html#custom_design_rules) för en fullständing lista.\n"
 "<br><br><br>\n"
 "\n"
 
@@ -44050,12 +44006,11 @@ msgid "PTH pad %s"
 msgstr "PTH-lödyta (genompläterat hål) %s"
 
 #: pcbnew/pad.cpp:2179
-#, fuzzy
 msgid ""
 "(plated through holes normally have a copper pad on at least one outer layer)"
 msgstr ""
-"(genompläterade hål ska normalt ha en lödyta eller kopparkrage på minst ett "
-"lager)"
+"(genompläterade hål har vanligen en lödyta eller kopparkrage på minst ett "
+"yttre lager)"
 
 #: pcbnew/pad.cpp:2187
 msgid "('fiducial' property makes no sense on NPTH pads)"
@@ -44240,9 +44195,8 @@ msgid "Corner Radius Ratio"
 msgstr "Hörnavrundningsradieförhållande"
 
 #: pcbnew/pad.cpp:2643
-#, fuzzy
 msgid "Corner Radius Size"
-msgstr "Hörnradie %"
+msgstr "Hörnradiens storlek"
 
 #: pcbnew/pad.cpp:2649
 msgid "Hole Shape"
@@ -46234,11 +46188,11 @@ msgid "No layers selected for plotting."
 msgstr "Inga lager valda för plottning."
 
 #: pcbnew/pcb_plotter.cpp:427
-#, fuzzy, c-format
+#, c-format
 msgid "Color theme '%s' not found, will use theme from PCB Editor settings.\n"
 msgstr ""
-"Färgschema som ska användas (om inget annat väljs används inställningarna i "
-"mönsterkortsredigeraren)"
+"Färgschema '%s' hittades inte, inställningarna i mönsterkortsredigeraren "
+"kommer att användas.\n"
 
 #: pcbnew/pcb_reference_image.cpp:343
 msgid "Associated Layer"
@@ -47932,9 +47886,8 @@ msgstr ""
 "specificerad radie"
 
 #: pcbnew/tools/edit_tool.cpp:1299
-#, fuzzy
 msgid "Dogbone Corner Settings"
-msgstr "Inställningar för dogbone hörn (urfrästa hörn)"
+msgstr "Inställningar för urfrästa hörn ('dogbone')"
 
 #: pcbnew/tools/edit_tool.cpp:1336
 #: pcbnew/tools/item_modification_routine.cpp:197
@@ -50865,184 +50818,148 @@ msgid "User defined layer 9"
 msgstr "Användardefinierat lager 9"
 
 #: pcbnew/widgets/appearance_controls.cpp:1684
-#, fuzzy
 msgid "User defined layer 10"
-msgstr "Användardefinierat lager 1"
+msgstr "Användardefinierat lager 10"
 
 #: pcbnew/widgets/appearance_controls.cpp:1685
-#, fuzzy
 msgid "User defined layer 11"
-msgstr "Användardefinierat lager 1"
+msgstr "Användardefinierat lager 11"
 
 #: pcbnew/widgets/appearance_controls.cpp:1686
-#, fuzzy
 msgid "User defined layer 12"
-msgstr "Användardefinierat lager 1"
+msgstr "Användardefinierat lager 12"
 
 #: pcbnew/widgets/appearance_controls.cpp:1687
-#, fuzzy
 msgid "User defined layer 13"
-msgstr "Användardefinierat lager 1"
+msgstr "Användardefinierat lager 13"
 
 #: pcbnew/widgets/appearance_controls.cpp:1688
-#, fuzzy
 msgid "User defined layer 14"
-msgstr "Användardefinierat lager 1"
+msgstr "Användardefinierat lager 14"
 
 #: pcbnew/widgets/appearance_controls.cpp:1689
-#, fuzzy
 msgid "User defined layer 15"
-msgstr "Användardefinierat lager 1"
+msgstr "Användardefinierat lager 15"
 
 #: pcbnew/widgets/appearance_controls.cpp:1690
-#, fuzzy
 msgid "User defined layer 16"
-msgstr "Användardefinierat lager 1"
+msgstr "Användardefinierat lager 16"
 
 #: pcbnew/widgets/appearance_controls.cpp:1691
-#, fuzzy
 msgid "User defined layer 17"
-msgstr "Användardefinierat lager 1"
+msgstr "Användardefinierat lager 17"
 
 #: pcbnew/widgets/appearance_controls.cpp:1692
-#, fuzzy
 msgid "User defined layer 18"
-msgstr "Användardefinierat lager 1"
+msgstr "Användardefinierat lager 18"
 
 #: pcbnew/widgets/appearance_controls.cpp:1693
-#, fuzzy
 msgid "User defined layer 19"
-msgstr "Användardefinierat lager 1"
+msgstr "Användardefinierat lager 19"
 
 #: pcbnew/widgets/appearance_controls.cpp:1694
-#, fuzzy
 msgid "User defined layer 20"
-msgstr "Användardefinierat lager 2"
+msgstr "Användardefinierat lager 20"
 
 #: pcbnew/widgets/appearance_controls.cpp:1695
-#, fuzzy
 msgid "User defined layer 21"
-msgstr "Användardefinierat lager 2"
+msgstr "Användardefinierat lager 21"
 
 #: pcbnew/widgets/appearance_controls.cpp:1696
-#, fuzzy
 msgid "User defined layer 22"
-msgstr "Användardefinierat lager 2"
+msgstr "Användardefinierat lager 22"
 
 #: pcbnew/widgets/appearance_controls.cpp:1697
-#, fuzzy
 msgid "User defined layer 23"
-msgstr "Användardefinierat lager 2"
+msgstr "Användardefinierat lager 23"
 
 #: pcbnew/widgets/appearance_controls.cpp:1698
-#, fuzzy
 msgid "User defined layer 24"
-msgstr "Användardefinierat lager 2"
+msgstr "Användardefinierat lager 24"
 
 #: pcbnew/widgets/appearance_controls.cpp:1699
-#, fuzzy
 msgid "User defined layer 25"
-msgstr "Användardefinierat lager 2"
+msgstr "Användardefinierat lager 25"
 
 #: pcbnew/widgets/appearance_controls.cpp:1700
-#, fuzzy
 msgid "User defined layer 26"
-msgstr "Användardefinierat lager 2"
+msgstr "Användardefinierat lager 26"
 
 #: pcbnew/widgets/appearance_controls.cpp:1701
-#, fuzzy
 msgid "User defined layer 27"
-msgstr "Användardefinierat lager 2"
+msgstr "Användardefinierat lager 27"
 
 #: pcbnew/widgets/appearance_controls.cpp:1702
-#, fuzzy
 msgid "User defined layer 28"
-msgstr "Användardefinierat lager 2"
+msgstr "Användardefinierat lager 28"
 
 #: pcbnew/widgets/appearance_controls.cpp:1703
-#, fuzzy
 msgid "User defined layer 29"
-msgstr "Användardefinierat lager 2"
+msgstr "Användardefinierat lager 29"
 
 #: pcbnew/widgets/appearance_controls.cpp:1704
-#, fuzzy
 msgid "User defined layer 30"
-msgstr "Användardefinierat lager 3"
+msgstr "Användardefinierat lager 30"
 
 #: pcbnew/widgets/appearance_controls.cpp:1705
-#, fuzzy
 msgid "User defined layer 31"
-msgstr "Användardefinierat lager 3"
+msgstr "Användardefinierat lager 31"
 
 #: pcbnew/widgets/appearance_controls.cpp:1706
-#, fuzzy
 msgid "User defined layer 32"
-msgstr "Användardefinierat lager 3"
+msgstr "Användardefinierat lager 32"
 
 #: pcbnew/widgets/appearance_controls.cpp:1707
-#, fuzzy
 msgid "User defined layer 33"
-msgstr "Användardefinierat lager 3"
+msgstr "Användardefinierat lager 33"
 
 #: pcbnew/widgets/appearance_controls.cpp:1708
-#, fuzzy
 msgid "User defined layer 34"
-msgstr "Användardefinierat lager 3"
+msgstr "Användardefinierat lager 34"
 
 #: pcbnew/widgets/appearance_controls.cpp:1709
-#, fuzzy
 msgid "User defined layer 35"
-msgstr "Användardefinierat lager 3"
+msgstr "Användardefinierat lager 35"
 
 #: pcbnew/widgets/appearance_controls.cpp:1710
-#, fuzzy
 msgid "User defined layer 36"
-msgstr "Användardefinierat lager 3"
+msgstr "Användardefinierat lager 36"
 
 #: pcbnew/widgets/appearance_controls.cpp:1711
-#, fuzzy
 msgid "User defined layer 37"
-msgstr "Användardefinierat lager 3"
+msgstr "Användardefinierat lager 37"
 
 #: pcbnew/widgets/appearance_controls.cpp:1712
-#, fuzzy
 msgid "User defined layer 38"
-msgstr "Användardefinierat lager 3"
+msgstr "Användardefinierat lager 38"
 
 #: pcbnew/widgets/appearance_controls.cpp:1713
-#, fuzzy
 msgid "User defined layer 39"
-msgstr "Användardefinierat lager 3"
+msgstr "Användardefinierat lager 39"
 
 #: pcbnew/widgets/appearance_controls.cpp:1714
-#, fuzzy
 msgid "User defined layer 40"
-msgstr "Användardefinierat lager 4"
+msgstr "Användardefinierat lager 40"
 
 #: pcbnew/widgets/appearance_controls.cpp:1715
-#, fuzzy
 msgid "User defined layer 41"
-msgstr "Användardefinierat lager 4"
+msgstr "Användardefinierat lager 41"
 
 #: pcbnew/widgets/appearance_controls.cpp:1716
-#, fuzzy
 msgid "User defined layer 42"
-msgstr "Användardefinierat lager 4"
+msgstr "Användardefinierat lager 42"
 
 #: pcbnew/widgets/appearance_controls.cpp:1717
-#, fuzzy
 msgid "User defined layer 43"
-msgstr "Användardefinierat lager 4"
+msgstr "Användardefinierat lager 43"
 
 #: pcbnew/widgets/appearance_controls.cpp:1718
-#, fuzzy
 msgid "User defined layer 44"
-msgstr "Användardefinierat lager 4"
+msgstr "Användardefinierat lager 44"
 
 #: pcbnew/widgets/appearance_controls.cpp:1719
-#, fuzzy
 msgid "User defined layer 45"
-msgstr "Användardefinierat lager 4"
+msgstr "Användardefinierat lager 45"
 
 #: pcbnew/widgets/appearance_controls.cpp:1766
 msgid "Front copper layer"
