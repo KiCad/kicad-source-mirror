@@ -35,7 +35,8 @@ constexpr int HULL_MARGIN = 10;
 
 class ITEM;
 class LINE;
-
+class DEBUG_DECORATOR;
+class NODE;
 /** Various utility functions */
 
 const SHAPE_LINE_CHAIN ArcHull( const SHAPE_ARC& aSeg, int aClearance, int aWalkaroundThickness );
@@ -67,6 +68,9 @@ void HullIntersection( const SHAPE_LINE_CHAIN& hull, const SHAPE_LINE_CHAIN& lin
 const SHAPE_LINE_CHAIN BuildHullForPrimitiveShape( const SHAPE* aShape, int aClearance,
                                                           int aWalkaroundThickness );
 
+void NodeStats( DEBUG_DECORATOR* aDbg, wxString aLabel, NODE *aNode );
+
 }
+
 
 #endif    // __PNS_UTILS_H

@@ -24,6 +24,7 @@
 #include "pns_via.h"
 #include "pns_router.h"
 #include "pns_debug_decorator.h"
+#include "pns_node.h"
 
 #include <geometry/shape_arc.h>
 #include <geometry/shape_segment.h>
@@ -528,6 +529,23 @@ const SHAPE_LINE_CHAIN BuildHullForPrimitiveShape( const SHAPE* aShape, int aCle
     }
 
     return SHAPE_LINE_CHAIN();
+}
+
+
+void NodeStats( DEBUG_DECORATOR* dbg, wxString label, PNS::NODE *node )
+{
+    NODE::ITEM_VECTOR added, removed;
+    node->GetUpdatedItems( removed, added );
+
+    PNS_DBG( dbg, BeginGroup, wxString::Format( "node:%s this=%p depth=%d added=%d removed=%d",
+        label, node, node->Depth(), (int)added.size(), (int) removed.size() ), 0 );
+
+    for( auto& item : added )
+        PNS_DBG( dbg, AddItem, item, BLUE, 10000, wxT("added-item") );
+    for( auto& item : removed )
+        PNS_DBG( dbg, AddItem, item, RED, 10000, wxString::Format("removed-item") );
+
+    PNS_DBGN( dbg, EndGroup );
 }
 
 
