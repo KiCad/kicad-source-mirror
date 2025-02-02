@@ -10,7 +10,7 @@
 # Flo082002 <flos6323@gmail.com>, 2021.
 # Benedikt Freisen <b.freisen@gmx.net>, 2021, 2022.
 # Mark Hämmerling <dev@markh.de>, 2021, 2022, 2023, 2024.
-# Henrik Kauhanen <henrik@kauhanen.se>, 2022, 2023, 2024.
+# Henrik Kauhanen <henrik@kauhanen.se>, 2022, 2023, 2024, 2025.
 # Ettore Atalan <atalanttore@googlemail.com>, 2022, 2023, 2024, 2025.
 # Ivan Chuba <xtrvweb@gmail.com>, 2022.
 # magical-obama <maschwaerzler@a1.net>, 2022.
@@ -30,8 +30,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 19:59+0300\n"
-"PO-Revision-Date: 2025-01-29 22:33+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2025-02-03 00:02+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -11992,7 +11992,7 @@ msgstr "Elektrische Regeln überprüfen (ERC)"
 
 #: eeschema/dialogs/dialog_erc_job_config.cpp:23
 msgid "ERC Job Settings"
-msgstr "ERC-Auftragseinstellungen exportieren"
+msgstr "ERC-Auftragseinstellungen"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:221
 msgid "Export netlist in KiCad format"
