@@ -429,8 +429,14 @@ bool SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen, wxDC* aDC, bool aForPrinting 
         gal->SetLookAtPoint( drawingAreaBBox.Centre() );
         gal->SetZoomFactor( print_scale );
         gal->SetClearColor( dstSettings->GetBackgroundColor() );
+
+    // Clearing the screen for the background color needs the screen set to the page size
+    // in pixels.  This can ?somehow? prevent some but not all foreground elements from being printed
+    // TODO: figure out what's going on here and fix printing.  See also board_printout
+        VECTOR2I size = gal->GetScreenPixelSize();
         gal->ResizeScreen( pageSizePix.GetWidth(),pageSizePix.GetHeight() );
         gal->ClearScreen();
+        gal->ResizeScreen( size.x, size.y );
 
         // Needed to use the same order for printing as for screen redraw
         view->UseDrawPriority( true );

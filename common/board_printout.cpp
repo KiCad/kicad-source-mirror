@@ -175,8 +175,14 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
     gal->SetLookAtPoint( drawingAreaBBox.Centre() );
     gal->SetZoomFactor( m_settings.m_scale );
     gal->SetClearColor( dstSettings->GetBackgroundColor() );
+
+    // Clearing the screen for the background color needs the screen set to the page size
+    // in pixels.  This can ?somehow? prevent some but not all foreground elements from being printed
+    // TODO: figure out what's going on here and fix printing.  See also sch_printout
+    VECTOR2I size = gal->GetScreenPixelSize();
     gal->ResizeScreen( pageSizePx.GetWidth(),pageSizePx.GetHeight() );
     gal->ClearScreen();
+    gal->ResizeScreen( size.x, size.y );
 
     if( m_gerbviewPrint )
         // Mandatory in Gerbview to use the same order for printing as for screen redraw
