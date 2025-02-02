@@ -371,14 +371,14 @@ bool SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
 
             if( minDist1 < c_ENDPOINT_ON_HULL_THRESHOLD )
             {
-                l.Line().SetPoint( -1, p1 );
+                l.Line().Append( p1 );
                 obs = l.CLine();
                 path = l.CLine();
             }
 
             if( minDist0 < c_ENDPOINT_ON_HULL_THRESHOLD )
             {
-                l.Line().SetPoint( 0, p0 );
+                l.Line().Insert( 0, p0 );
                 obs = l.CLine();
                 path = l.CLine();
             }
