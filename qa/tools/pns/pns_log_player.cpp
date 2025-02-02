@@ -102,6 +102,8 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
     int eventIdx = 0;
     int totalEvents = aLog->Events().size();
 
+    m_router->SetMode( aLog->GetMode() );
+
     for( auto evt : aLog->Events() )
     {
         if( eventIdx < aFrom || ( aTo >= 0 && eventIdx > aTo ) )
