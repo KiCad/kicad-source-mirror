@@ -210,8 +210,8 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     m_auimgr.SetManagedWindow( this );
     m_auimgr.SetFlags( wxAUI_MGR_LIVE_RESIZE );
 
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().VToolbar().Name( "MainToolbar" ).Left()
-                      .Layer( 2 ) );
+    m_auimgr.AddPane( m_mainToolBar,
+                      EDA_PANE().VToolbar().Name( "MainToolbar" ).Left().Layer( 2 ) );
 
     // BestSize() does not always set the actual pane size of m_leftWin to the required value.
     // It happens when m_leftWin is too large (roughly > 1/3 of the kicad manager frame width.
@@ -240,13 +240,9 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     m_notebook->SetTabCtrlHeight( 0 );
     m_notebook->Thaw();
 
-    m_auimgr.AddPane( m_notebook, EDA_PANE()
-                                          .Canvas()
-                                          .Name( "Editors" )
-                                          .Center()
-                                          .Caption( EDITORS_CAPTION )
-                                          .PaneBorder( false )
-                                          .MinSize( m_notebook->GetBestSize() ) );
+    m_auimgr.AddPane( m_notebook,
+                      EDA_PANE().Canvas().Name( "Editors" ).Center().Caption( EDITORS_CAPTION )
+                                .PaneBorder( false ).MinSize( m_notebook->GetBestSize() ) );
 
     m_auimgr.Update();
 
@@ -333,20 +329,15 @@ void KICAD_MANAGER_FRAME::onNotebookPageCountChanged( wxAuiNotebookEvent& evt )
 
 void KICAD_MANAGER_FRAME::onNotebookPageCloseRequest( wxAuiNotebookEvent& evt )
 {
-    wxAuiNotebook* ctrl = (wxAuiNotebook*) evt.GetEventObject();
+    wxAuiNotebook* notebook = (wxAuiNotebook*) evt.GetEventObject();
+    wxWindow*      page = notebook->GetPage( evt.GetSelection() );
 
-    wxWindow* pageWindow = ctrl->GetPage( evt.GetSelection() );
-
-    PANEL_NOTEBOOK_BASE* panel = dynamic_cast<PANEL_NOTEBOOK_BASE*>( pageWindow );
-
-    if( panel )
+    if( PANEL_NOTEBOOK_BASE* panel = dynamic_cast<PANEL_NOTEBOOK_BASE*>( page ) )
     {
         if( panel->GetClosable() )
         {
             if( !panel->GetCanClose() )
-            {
                 evt.Veto();
-            }
 
             CallAfter(
                     [this]()
@@ -444,8 +435,8 @@ void KICAD_MANAGER_FRAME::setupUIConditions()
     activeProjectCond.Enable( activeProject );
 
     manager->SetConditions( ACTIONS::saveAs,                       activeProjectCond );
-    manager->SetConditions( KICAD_MANAGER_ACTIONS::closeProject, activeProjectCond );
-    manager->SetConditions( KICAD_MANAGER_ACTIONS::newJobsetFile, activeProjectCond );
+    manager->SetConditions( KICAD_MANAGER_ACTIONS::closeProject,   activeProjectCond );
+    manager->SetConditions( KICAD_MANAGER_ACTIONS::newJobsetFile,  activeProjectCond );
     manager->SetConditions( KICAD_MANAGER_ACTIONS::openJobsetFile, activeProjectCond );
 
     // These are just here for text boxes, search boxes, etc. in places such as the standard

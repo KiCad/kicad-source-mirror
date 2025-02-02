@@ -50,8 +50,6 @@ public:
 
 class KICOMMON_API NOTIFICATIONS_MANAGER
 {
-    friend class NOTIFICATION_LIST;
-
 public:
     NOTIFICATIONS_MANAGER();
 
@@ -66,7 +64,7 @@ public:
      * @param aHref is link to external or internal content.
      */
     void CreateOrUpdate( const wxString& aKey, const wxString& aTitle, const wxString& aDescription,
-                 const wxString& aHref = wxEmptyString );
+                         const wxString& aHref = wxEmptyString );
 
     /**
      * Remove a notification by key.
@@ -106,6 +104,7 @@ private:
      */
     void onListWindowClosed( wxCloseEvent& aEvent );
 
+private:
     /// Current stack of notifications.
     std::vector<NOTIFICATION>        m_notifications;
 
@@ -113,10 +112,10 @@ private:
     std::vector<NOTIFICATIONS_LIST*> m_shownDialogs;
 
     /// Status bars registered for updates.
-    std::vector<KISTATUSBAR*> m_statusBars;
+    std::vector<KISTATUSBAR*>        m_statusBars;
 
     /// The cached file path to read/write notifications on disk.
-    wxFileName m_destFileName;
+    wxFileName                       m_destFileName;
 };
 
 #endif
