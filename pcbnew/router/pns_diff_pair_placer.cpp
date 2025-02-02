@@ -27,6 +27,7 @@
 #include "pns_topology.h"
 #include "pns_debug_decorator.h"
 #include "pns_arc.h"
+#include "pns_utils.h"
 
 namespace PNS {
 
@@ -366,10 +367,11 @@ bool DIFF_PAIR_PLACER::rhShoveOnly( const VECTOR2I& aP )
     LINE nLine( m_currentTrace.NLine() );
     ITEM_SET head;
 
-    head.Add( &pLine );
-    head.Add( &nLine );
+    m_shove->ClearHeads();
+    m_shove->AddHeads( pLine );
+    m_shove->AddHeads( nLine );
 
-    SHOVE::SHOVE_STATUS status = SHOVE::SH_INCOMPLETE; //->ShoveMultiLines( head );
+    SHOVE::SHOVE_STATUS status = m_shove->Run();
 
     m_currentNode = m_shove->CurrentNode();
 
@@ -377,12 +379,24 @@ bool DIFF_PAIR_PLACER::rhShoveOnly( const VECTOR2I& aP )
     {
         m_currentNode = m_shove->CurrentNode();
 
+        if( m_shove->HeadsModified( 0 ))
+            pLine = m_shove->GetModifiedHead(0);
+
+        if( m_shove->HeadsModified( 1 ))
+            nLine = m_shove->GetModifiedHead(1);
+
         if( !m_currentNode->CheckColliding( &m_currentTrace.PLine() ) &&
             !m_currentNode->CheckColliding( &m_currentTrace.NLine() ) )
         {
             m_fitOk = true;
         }
     }
+    else
+    {
+        // bring back previous state
+        m_currentTrace.SetShape( pLine.CLine(), nLine.CLine() );
+    }
+    
 
     return m_fitOk;
 }
