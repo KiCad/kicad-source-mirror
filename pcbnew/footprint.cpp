@@ -1069,10 +1069,21 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectiv
     switch( aBoardItem->Type() )
     {
     case PCB_FIELD_T:
-        // Always append fields
-        m_fields.push_back( static_cast<PCB_FIELD*>( aBoardItem ) );
+    {
+        PCB_FIELD* field = static_cast<PCB_FIELD*>( aBoardItem );
+
+        if( field->IsMandatory() )
+        {
+            wxASSERT( m_fields[ field->GetId() ] == nullptr );
+            m_fields[ field->GetId() ] = field;
+        }
+        else
+        {
+            m_fields.push_back( static_cast<PCB_FIELD*>( aBoardItem ) );
+        }
 
         break;
+    }
 
     case PCB_TEXT_T:
     case PCB_DIM_ALIGNED_T:
@@ -1133,16 +1144,26 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
     {
     case PCB_FIELD_T:
     {
-        for( auto it = m_fields.begin(); it != m_fields.end(); ++it )
+        PCB_FIELD* field = static_cast<PCB_FIELD*>( aBoardItem );
+
+        if( field->IsMandatory() )
         {
-            if( *it == aBoardItem )
+            m_fields[ field->GetId() ] = nullptr;
+        }
+        else
+        {
+            for( auto it = m_fields.begin(); it != m_fields.end(); ++it )
             {
-                m_fields.erase( it );
-                break;
+                if( *it == field )
+                {
+                    m_fields.erase( it );
+                    break;
+                }
             }
         }
+
+        break;
     }
-    break;
 
     case PCB_TEXT_T:
     case PCB_DIM_ALIGNED_T:
