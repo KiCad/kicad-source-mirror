@@ -262,6 +262,7 @@ protected:
     wxTimer*      m_showTimer;      ///< The timer counting the autoclose period
     wxAuiManager* m_auiManager;     ///< The AUI manager that contains this infobar
     MESSAGE_TYPE  m_type;           ///< The type of message being displayed
+    wxString      m_message;        ///< The original message without wrapping
 
     std::optional<std::function<void(void)>> m_callback;   ///< Optional callback made when closing infobar
 

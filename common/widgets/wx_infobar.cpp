@@ -23,12 +23,13 @@
 #include <widgets/wx_infobar.h>
 #include "wx/artprov.h"
 #include <wx/aui/framemanager.h>
+#include <wx/bmpbuttn.h>
 #include <wx/debug.h>
+#include <wx/hyperlink.h>
 #include <wx/infobar.h>
 #include <wx/sizer.h>
+#include <wx/stattext.h>
 #include <wx/timer.h>
-#include <wx/hyperlink.h>
-#include <wx/bmpbuttn.h>
 #include <eda_base_frame.h>
 
 #ifdef __WXMSW__
@@ -158,10 +159,10 @@ void WX_INFOBAR::ShowMessage( const wxString& aMessage, int aFlags )
 
     m_updateLock = true;
 
-    wxString msg = aMessage;
-    msg.Trim();
+    m_message = aMessage;
+    m_message.Trim();
 
-    wxInfoBarGeneric::ShowMessage( msg, aFlags );
+    wxInfoBarGeneric::ShowMessage( m_message, aFlags );
 
     if( m_auiManager )
         updateAuiLayout( true );
@@ -228,6 +229,18 @@ void WX_INFOBAR::onThemeChange( wxSysColourChangedEvent& aEvent )
 void WX_INFOBAR::onSize( wxSizeEvent& aEvent )
 {
     int barWidth = GetSize().GetWidth();
+    wxSizer* sizer = GetSizer();
+
+    if( !sizer )
+        return;
+
+    wxSizerItem* text = sizer->GetItem( 1 );
+
+    if( text )
+    {
+        if( auto textCtrl = dynamic_cast<wxStaticText*>( text->GetWindow() ) )
+            textCtrl->SetLabelText( m_message );
+    }
 
     // Calculate the horizontal size: because the infobar is shown on top of the draw canvas
     // it is adjusted to the canvas width.
@@ -239,9 +252,25 @@ void WX_INFOBAR::onSize( wxSizeEvent& aEvent )
     if( frame && frame->GetToolCanvas() )
         parentWidth = frame->GetToolCanvas()->GetSize().GetWidth();
 
-
     if( barWidth != parentWidth )
         SetSize( parentWidth, GetSize().GetHeight() );
+
+    if( text )
+    {
+        if( auto textCtrl = dynamic_cast<wxStaticText*>( text->GetWindow() ) )
+        {
+            // Re-wrap the text (this is done automatically later but we need it now)
+            // And count how many lines we need.  If we have embedded newlines, then
+            // multiply the number of lines by the text min height to find the correct
+            // min height for the control.  The min height of the text control will be the size
+            // of a single line of text.  This assumes that two lines of text are larger
+            // than the height of the icon for the bar.
+            textCtrl->Wrap( text->GetSize().GetWidth() );
+            wxString new_text = textCtrl->GetLabel();
+            int      height = ( new_text.Freq( '\n' ) + 1 ) * text->GetMinSize().GetHeight();
+            SetMinSize( wxSize( GetSize().GetWidth(), height ) );
+        }
+    }
 
     aEvent.Skip();
 }
@@ -287,7 +316,9 @@ void WX_INFOBAR::AddButton( wxButton* aButton )
     aButton->SetWindowVariant( wxWINDOW_VARIANT_SMALL );
 #endif // __WXMAC__
 
-    sizer->Add( aButton, wxSizerFlags().Centre().Border( wxRIGHT ) );
+    auto element = sizer->Add( aButton, wxSizerFlags( 0 ).Centre().Border( wxRIGHT ) );
+
+    element->SetFlag( wxSTRETCH_MASK );
 
     if( IsShownOnScreen() )
         sizer->Layout();
@@ -300,7 +331,7 @@ void WX_INFOBAR::AddButton( wxHyperlinkCtrl* aHypertextButton )
 
     wxASSERT( aHypertextButton );
 
-    sizer->Add( aHypertextButton, wxSizerFlags().Centre().Border( wxRIGHT ) );
+    sizer->Add( aHypertextButton, wxSizerFlags().Centre().Border( wxRIGHT ).Shaped() );
 
     if( IsShownOnScreen() )
         sizer->Layout();
