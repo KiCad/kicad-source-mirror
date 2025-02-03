@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-03 19:59+0300\n"
-"PO-Revision-Date: 2025-02-03 12:19+0000\n"
-"Last-Translator: Elek Zoltán <moncsa58@gmail.com>\n"
-"Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
-"source/hu/>\n"
+"PO-Revision-Date: 2025-02-03 18:48+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
+"master-source/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -35982,6 +35982,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:46
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:178
+#, fuzzy
 msgid "Tolerance:"
 msgstr "Tűrés ±"
 
@@ -56610,6 +56611,7 @@ msgstr "Szöveg X pozíció"
 
 #: pcbnew/widgets/search_handlers.cpp:310
 #: pcbnew/widgets/search_handlers.cpp:389
+#, fuzzy
 msgid "Class"
 msgstr "Vezetékosztály:"
 
