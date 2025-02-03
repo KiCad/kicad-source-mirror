@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-254-gc2ef7767)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -42,8 +42,8 @@ class DIALOG_PRINT_GENERIC_BASE : public DIALOG_SHIM
 	protected:
 		enum
 		{
-			wxID_FRAME_SEL = 1000,
-			wxID_PRINT_OPTIONS
+			wxID_FRAME_SEL = 8200,
+			wxID_PRINT_OPTIONS,
 		};
 
 		wxBoxSizer* m_bUpperSizer;

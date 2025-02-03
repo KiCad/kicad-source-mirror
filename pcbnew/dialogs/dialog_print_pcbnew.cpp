@@ -108,7 +108,22 @@ DIALOG_PRINT_PCBNEW::DIALOG_PRINT_PCBNEW( PCB_BASE_EDIT_FRAME* aParent,
     createExtraOptions();
     createLeftPanel();
 
-    m_infoText->SetFont( KIUI::GetInfoFont( this ) );
+    BOARD* board = m_parent->GetBoard();
+
+    // Create layer list
+    // Could devote a PlotOrder() function in place of UIOrder().
+    m_layerList = board->GetEnabledLayers().UIOrder();
+
+    // Populate the check list box by all enabled layers names
+    for( PCB_LAYER_ID layer : m_layerList )
+    {
+        int checkIndex = m_layerCheckListBox->Append( board->GetLayerName( layer ) );
+
+        if( settings()->m_LayerSet.test( layer ) )
+            m_layerCheckListBox->Check( checkIndex );
+    }
+
+    m_infoText->SetFont( KIUI::GetInfoFont( this ).Italic() );
     m_infoText->SetLabel( _( "Right-click for layer selection commands." ) );
     m_infoText->Show( true );
 
@@ -138,21 +153,6 @@ bool DIALOG_PRINT_PCBNEW::TransferDataToWindow()
 {
     if( !DIALOG_PRINT_GENERIC::TransferDataToWindow() )
         return false;
-
-    BOARD* board = m_parent->GetBoard();
-
-    // Create layer list
-    // Could devote a PlotOrder() function in place of UIOrder().
-    m_layerList = board->GetEnabledLayers().UIOrder();
-
-    // Populate the check list box by all enabled layers names
-    for( PCB_LAYER_ID layer : m_layerList )
-    {
-        int checkIndex = m_layerCheckListBox->Append( board->GetLayerName( layer ) );
-
-        if( settings()->m_LayerSet.test( layer ) )
-            m_layerCheckListBox->Check( checkIndex );
-    }
 
     m_checkAsItems->SetValue( settings()->m_AsItemCheckboxes );
     m_checkboxMirror->SetValue( settings()->m_Mirror );
@@ -195,9 +195,6 @@ bool DIALOG_PRINT_PCBNEW::TransferDataToWindow()
                                             == PCBNEW_PRINTOUT_SETTINGS::LAYER_PER_PAGE );
     onPagePerLayerClicked( dummy );
 
-    // Update the dialog layout when layers are added
-    GetSizer()->Fit( this );
-
     return true;
 }
 
@@ -207,32 +204,29 @@ void DIALOG_PRINT_PCBNEW::createExtraOptions()
     wxGridBagSizer* optionsSizer = getOptionsSizer();
     wxStaticBox*    box = getOptionsBox();
     int             rows = optionsSizer->GetEffectiveRowsCount();
-    int             cols = optionsSizer->GetEffectiveColsCount();
 
-    m_checkAsItems = new wxCheckBox( box, wxID_ANY,
-                                     _( "Print according to objects tab of appearance manager" ) );
-    optionsSizer->Add( m_checkAsItems, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 3 ),
+    m_checkAsItems = new wxCheckBox( box, wxID_ANY, _( "Print according to objects tab of "
+                                                       "appearance manager" ) );
+    optionsSizer->Add( m_checkAsItems, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 2 ),
                        wxLEFT|wxRIGHT|wxBOTTOM, 5 );
 
     m_checkBackground = new wxCheckBox( box, wxID_ANY, _( "Print background color" ) );
-    optionsSizer->Add( m_checkBackground, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 3 ),
+    optionsSizer->Add( m_checkBackground, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 2 ),
                        wxLEFT|wxRIGHT|wxBOTTOM, 5 );
 
-    m_checkUseTheme = new wxCheckBox( box, wxID_ANY,
-                                      _( "Use a different color theme for printing:" ) );
-    optionsSizer->Add( m_checkUseTheme, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 3 ),
+    m_checkUseTheme = new wxCheckBox( box, wxID_ANY, _( "Use a different color theme for "
+                                                        "printing:" ) );
+    optionsSizer->Add( m_checkUseTheme, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 2 ),
                        wxLEFT|wxRIGHT, 5 );
 
     m_checkUseTheme->Bind( wxEVT_COMMAND_CHECKBOX_CLICKED,
                            &DIALOG_PRINT_PCBNEW::onUseThemeClicked, this );
 
-    wxArrayString m_colorThemeChoices;
-    m_colorTheme = new wxChoice( box, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                 m_colorThemeChoices, 0 );
+    wxArrayString choices;
+    m_colorTheme = new wxChoice( box, wxID_ANY, wxDefaultPosition, wxDefaultSize, choices, 0 );
     m_colorTheme->SetSelection( 0 );
-
-    optionsSizer->Add( m_colorTheme, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 2 ),
-                       wxLEFT, 28 );
+    m_colorTheme->SetMinSize( { 200, -1 } );
+    optionsSizer->Add( m_colorTheme, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 2 ), wxLEFT, 28 );
 
     rows++;
 
@@ -247,13 +241,13 @@ void DIALOG_PRINT_PCBNEW::createExtraOptions()
 
     optionsSizer->Add( drillMarksLabel, wxGBPosition( rows, 0 ), wxGBSpan( 1, 1 ),
                        wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxBOTTOM, 5 );
-    optionsSizer->Add( m_drillMarksChoice, wxGBPosition( rows++, 1 ), wxGBSpan( 1, cols - 1 ),
-                       wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxBOTTOM, 5 );
+    optionsSizer->Add( m_drillMarksChoice, wxGBPosition( rows++, 1 ), wxGBSpan( 1, 1 ),
+                       wxALIGN_CENTER_VERTICAL|wxRIGHT|wxBOTTOM, 5 );
 
     // Print mirrored
     m_checkboxMirror = new wxCheckBox( box, wxID_ANY, _( "Print mirrored" ) );
 
-    optionsSizer->Add( m_checkboxMirror, wxGBPosition( rows++, 0 ), wxGBSpan( 1, cols ),
+    optionsSizer->Add( m_checkboxMirror, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 2 ),
                        wxLEFT|wxRIGHT|wxBOTTOM, 5 );
 
     // Pagination
@@ -265,9 +259,9 @@ void DIALOG_PRINT_PCBNEW::createExtraOptions()
     m_checkboxEdgesOnAllPages = new wxCheckBox( box, wxID_ANY,
                                                 _( "Print board edges on all pages" ) );
 
-    optionsSizer->Add( m_checkboxPagePerLayer, wxGBPosition( rows++, 0 ), wxGBSpan( 1, cols ),
+    optionsSizer->Add( m_checkboxPagePerLayer, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 2 ),
                        wxLEFT|wxRIGHT, 5 );
-    optionsSizer->Add( m_checkboxEdgesOnAllPages, wxGBPosition( rows++, 0 ), wxGBSpan( 1, cols ),
+    optionsSizer->Add( m_checkboxEdgesOnAllPages, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 2 ),
                        wxLEFT, 28 );
 }
 

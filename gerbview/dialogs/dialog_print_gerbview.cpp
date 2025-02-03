@@ -175,9 +175,8 @@ void DIALOG_PRINT_GERBVIEW::createExtraOptions()
 
 void DIALOG_PRINT_GERBVIEW::createLeftPanel()
 {
-    wxStaticBoxSizer* sbLayersSizer =
-            new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _( "Included Layers" ) ),
-                                  wxVERTICAL );
+    wxStaticBox* box = new wxStaticBox( this, wxID_ANY, _( "Include Layers" ) );
+    wxStaticBoxSizer* sbLayersSizer = new wxStaticBoxSizer( box, wxVERTICAL );
 
     // Layer lists
     wxBoxSizer* bLayerListsSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -188,9 +187,9 @@ void DIALOG_PRINT_GERBVIEW::createLeftPanel()
         bLayerListsSizer->Add( m_layerLists[i], 1, wxEXPAND, 5 );
     }
 
-
     // Select/Unselect all buttons
-    m_buttonSelectAll = new wxButton( sbLayersSizer->GetStaticBox(), wxID_ANY, _( "Select all" ) );
+    m_buttonSelectAll = new wxButton( sbLayersSizer->GetStaticBox(), wxID_ANY,
+                                      _( "Select all" ) );
     m_buttonDeselectAll = new wxButton( sbLayersSizer->GetStaticBox(), wxID_ANY,
                                         _( "Deselect all" ) );
 
@@ -206,10 +205,10 @@ void DIALOG_PRINT_GERBVIEW::createLeftPanel()
     buttonSizer->Add( m_buttonDeselectAll, 1, wxALL, 5 );
 
     // Static box sizer layout
-    sbLayersSizer->Add( bLayerListsSizer, 1, wxALL | wxEXPAND, 5 );
-    sbLayersSizer->Add( buttonSizer, 0, wxALL | wxEXPAND, 5 );
+    sbLayersSizer->Add( bLayerListsSizer, 1, wxEXPAND, 5 );
+    sbLayersSizer->Add( buttonSizer, 0, wxEXPAND, 5 );
 
-    getMainSizer()->Insert( 0, sbLayersSizer, 1, wxEXPAND );
+    getMainSizer()->Insert( 0, sbLayersSizer, 1, wxEXPAND | wxALL, 5 );
 }
 
 

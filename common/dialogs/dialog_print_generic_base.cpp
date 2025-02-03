@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-254-gc2ef7767)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -36,13 +36,13 @@ DIALOG_PRINT_GENERIC_BASE::DIALOG_PRINT_GENERIC_BASE( wxWindow* parent, wxWindow
 	int m_outputModeNChoices = sizeof( m_outputModeChoices ) / sizeof( wxString );
 	m_outputMode = new wxChoice( m_sbOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_outputModeNChoices, m_outputModeChoices, 0 );
 	m_outputMode->SetSelection( 0 );
-	m_gbOptionsSizer->Add( m_outputMode, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_gbOptionsSizer->Add( m_outputMode, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_titleBlock = new wxCheckBox( m_sbOptionsSizer->GetStaticBox(), wxID_FRAME_SEL, _("Print drawing sheet"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_titleBlock->SetValue(true);
 	m_titleBlock->SetToolTip( _("Print Frame references.") );
 
-	m_gbOptionsSizer->Add( m_titleBlock, wxGBPosition( 1, 0 ), wxGBSpan( 1, 3 ), wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_gbOptionsSizer->Add( m_titleBlock, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	m_gbOptionsSizer->AddGrowableCol( 1 );
