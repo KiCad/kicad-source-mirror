@@ -43,5 +43,5 @@ wxString JOB_SPECIAL_COPYFILES::GetDefaultDescription() const
 }
 
 
-REGISTER_JOB( special_copyfiles, _HKI( "Special: Copy files" ), KIWAY::KIWAY_FACE_COUNT,
+REGISTER_JOB( special_copyfiles, _HKI( "Special: Copy Files" ), KIWAY::KIWAY_FACE_COUNT,
               JOB_SPECIAL_COPYFILES );
