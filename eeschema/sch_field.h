@@ -52,6 +52,8 @@ class SCH_TEXT;
 class SCH_FIELD : public SCH_ITEM, public EDA_TEXT
 {
 public:
+    SCH_FIELD();    // For std::map::operator[]
+
     SCH_FIELD( const VECTOR2I& aPos, int aFieldId, SCH_ITEM* aParent,
                const wxString& aName = wxEmptyString );
 

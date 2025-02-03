@@ -47,6 +47,20 @@
 static const std::vector<KICAD_T> labelTypes = { SCH_LABEL_LOCATE_ANY_T };
 
 
+SCH_FIELD::SCH_FIELD() :
+        SCH_ITEM( nullptr, SCH_FIELD_T ),
+        EDA_TEXT( schIUScale, wxEmptyString ),
+        m_id( MANDATORY_FIELD_T::INVALID_FIELD ),
+        m_showName( false ),
+        m_allowAutoPlace( true ),
+        m_isGeneratedField( false ),
+        m_autoAdded( false ),
+        m_showInChooser( true ),
+        m_renderCacheValid( false ),
+        m_lastResolvedColor( COLOR4D::UNSPECIFIED )
+{
+}
+
 SCH_FIELD::SCH_FIELD( const VECTOR2I& aPos, int aFieldId, SCH_ITEM* aParent,
                       const wxString& aName ) :
         SCH_ITEM( aParent, SCH_FIELD_T ),

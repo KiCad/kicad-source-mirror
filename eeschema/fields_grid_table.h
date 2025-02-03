@@ -28,6 +28,7 @@
 #include <sch_symbol.h>
 #include <grid_tricks.h>
 #include <validators.h>
+#include <vector>
 
 class SCH_BASE_FRAME;
 class DIALOG_SHIM;
@@ -120,6 +121,37 @@ public:
     wxString StringFromBool( bool aValue ) const;
     bool BoolFromString( const wxString& aValue ) const;
 
+    SCH_FIELD* GetField( MANDATORY_FIELD_T aFieldId );
+    int GetFieldRow( MANDATORY_FIELD_T aFieldId );
+
+    void AddInheritedField( const SCH_FIELD& aParent );
+
+    void SetFieldInherited( size_t aRow, const SCH_FIELD& aParent )
+    {
+        m_isInherited.resize( aRow + 1, false );
+        m_parentFields.resize( aRow + 1 );
+        m_parentFields[aRow] = aParent;
+        m_isInherited[aRow] = true;
+    }
+
+
+    bool IsInherited( size_t aRow ) const
+    {
+        if( aRow >= m_isInherited.size() || aRow >= m_parentFields.size() )
+            return false;
+
+        return m_isInherited[aRow] && m_parentFields[aRow].GetText() == at( aRow ).GetText();
+    }
+
+    const SCH_FIELD& ParentField( size_t row ) const { return m_parentFields[row]; }
+
+    void push_back( const SCH_FIELD& field );
+    // For std::vector compatibility, but we don't use it directly.
+    void emplace_back( const SCH_FIELD& field ) { push_back( field ); }
+
+    bool EraseRow( size_t row );
+    void SwapRows( size_t a, size_t b );
+
     void DetachFields();
 
 protected:
@@ -163,6 +195,9 @@ private:
     wxGridCellAttr*   m_netclassAttr;
     wxGridCellAttr*   m_fontAttr;
     wxGridCellAttr*   m_colorAttr;
+
+    std::vector<bool>      m_isInherited;
+    std::vector<SCH_FIELD> m_parentFields;
 
     std::unique_ptr<NUMERIC_EVALUATOR>        m_eval;
     std::map< std::pair<int, int>, wxString > m_evalOriginal;

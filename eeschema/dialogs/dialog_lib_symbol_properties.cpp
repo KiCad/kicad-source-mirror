@@ -84,6 +84,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
                                                       } ) );
     m_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
+
     // Show/hide columns according to the user's preference
     SYMBOL_EDITOR_SETTINGS* cfg = m_Parent->GetSettings();
     m_grid->ShowHideColumns( cfg->m_EditSymbolVisibleColumns );
@@ -110,8 +111,11 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
 
     // wxFormBuilder doesn't include this event...
     m_grid->Connect( wxEVT_GRID_CELL_CHANGING,
-                     wxGridEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging ),
-                     nullptr, this );
+                     wxGridEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging ), nullptr, this );
+    m_grid->Connect( wxEVT_GRID_CELL_CHANGED,
+                     wxGridEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanged ), nullptr, this );
+    m_grid->GetGridWindow()->Bind( wxEVT_MOTION, &DIALOG_LIB_SYMBOL_PROPERTIES::OnGridMotion, this );
+
 
     // Forward the delete button to the tricks
     m_deleteFilterButton->Bind( wxEVT_BUTTON,
@@ -161,8 +165,10 @@ DIALOG_LIB_SYMBOL_PROPERTIES::~DIALOG_LIB_SYMBOL_PROPERTIES()
     m_grid->DestroyTable( m_fields );
 
     m_grid->Disconnect( wxEVT_GRID_CELL_CHANGING,
-                        wxGridEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging ),
-                        nullptr, this );
+                        wxGridEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging ), nullptr, this );
+    m_grid->Disconnect( wxEVT_GRID_CELL_CHANGED,
+                        wxGridEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanged ), nullptr, this );
+    m_grid->GetGridWindow()->Unbind( wxEVT_MOTION, &DIALOG_LIB_SYMBOL_PROPERTIES::OnGridMotion, this );
 
     // Delete the GRID_TRICKS.
     m_grid->PopEventHandler( true );
@@ -174,8 +180,57 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    // Push a copy of each field into m_updateFields
+    // Ensure the fields vector is empty before (re)loading.  Constructor no longer
+    // pre-populates fields to avoid double insertion of mandatory fields.
+    if( m_fields->size() > 0 )
+    {
+        // Clear existing entries; we recreate inheritance metadata via push_back()
+        // Note: We cannot simply reuse existing entries because alias inheritance
+        // state may have changed if the parent was edited prior to dialog open.
+        m_fields->clear();
+    }
+
+    // Load current symbol fields (mandatory first, then user fields)
     m_libEntry->CopyFields( *m_fields );
+
+    // Handle alias (derived) symbol inherited fields.  We only inherit non-mandatory fields
+    // and mark any matching names as inherited rather than duplicating them.
+    if( m_libEntry->IsAlias() )
+    {
+        if( LIB_SYMBOL_SPTR parent = m_libEntry->GetParent().lock() )
+        {
+            std::vector<SCH_FIELD*> parentFields;
+            parent->GetFields( parentFields );
+
+            for( SCH_FIELD* pf : parentFields )
+            {
+                if( pf->IsMandatory() )
+                    continue; // Never inherit mandatory fields
+
+                bool found = false;
+
+                for( size_t jj = 0; jj < m_fields->size(); ++jj )
+                {
+                    SCH_FIELD& f = m_fields->at( jj );
+
+                    if( f.IsMandatory() )
+                        continue; // Skip mandatory in child list for inheritance match
+
+                    if( f.GetCanonicalName() == pf->GetCanonicalName() )
+                    {
+                        m_fields->SetFieldInherited( jj, *pf );
+                        found = true;
+                        break;
+                    }
+                }
+
+                if( !found )
+                    m_fields->AddInheritedField( *pf );
+            }
+        }
+    }
+
+    // Fields already loaded above; avoid re-copying to prevent duplication.
 
     std::set<wxString> defined;
 
@@ -416,6 +471,8 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
         m_Parent->SaveCopyInUndoList( _( "Edit Symbol Properties" ), m_libEntry );
     }
 
+    std::vector<SCH_FIELD> fieldsToSave;
+
     // The Y axis for components in lib is from bottom to top while the screen axis is top
     // to bottom: we must change the y coord sign when writing back to the library
     for( int ii = 0; ii < (int) m_fields->size(); ++ii )
@@ -430,23 +487,32 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
     {
         SCH_FIELD& field = m_fields->at( ii );
 
-        if( field.IsMandatory() )
-            continue;
+        VECTOR2I pos = field.GetPosition();
+        pos.y = -pos.y;
+        field.SetPosition( pos );
 
-        const wxString& fieldName = field.GetCanonicalName();
+        // if( !field.IsMandatory() )
+            field.SetId( ii );
+
+        wxString fieldName = field.GetCanonicalName();
+
+        if( m_fields->IsInherited( ii ) && field == m_fields->ParentField( ii ) )
+            continue; // Skip inherited fields
 
         if( field.GetText().IsEmpty() )
         {
             if( fieldName.IsEmpty() || m_addedTemplateFields.contains( fieldName ) )
-                m_fields->erase( m_fields->begin() + ii );
+                continue; // Skip empty fields that are not mandatory or template fields
         }
         else if( fieldName.IsEmpty() )
         {
-            field.SetName( _( "untitled" ) );
+            field.SetName( _( "untitled" ) ); // Set a default name for unnamed fields
         }
+
+        fieldsToSave.push_back( field );
     }
 
-    m_libEntry->SetFields( *m_fields );
+    m_libEntry->SetFields( fieldsToSave );
 
     // Update the parent for inherited symbols
     if( m_libEntry->IsAlias() )
@@ -517,6 +583,27 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
 }
 
 
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnGridMotion( wxMouseEvent& aEvent )
+{
+    aEvent.Skip();
+
+    wxPoint pos = aEvent.GetPosition();
+    wxPoint unscolled_pos = m_grid->CalcUnscrolledPosition( pos );
+    int row = m_grid->YToRow( unscolled_pos.y );
+    int col = m_grid->XToCol( unscolled_pos.x );
+
+    if( row == wxNOT_FOUND || col == wxNOT_FOUND || !m_fields->IsInherited( row ) )
+    {
+        m_grid->SetToolTip( "" );
+        return;
+    }
+
+    m_grid->SetToolTip(
+            wxString::Format( _( "This field is inherited from '%s'." ),
+                              m_fields->ParentField( row ).GetName() ) );
+}
+
+
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
 {
     wxGridCellEditor* editor = m_grid->GetCellEditor( event.GetRow(), event.GetCol() );
@@ -552,6 +639,13 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
     }
 
     editor->DecRef();
+}
+
+
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanged( wxGridEvent& event )
+{
+    m_grid->ForceRefresh();
+    OnModify();
 }
 
 

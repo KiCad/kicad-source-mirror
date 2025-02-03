@@ -225,6 +225,15 @@ int FIELDS_GRID_TABLE::GetMandatoryRowCount() const
 }
 
 
+void FIELDS_GRID_TABLE::push_back( const SCH_FIELD& aField )
+{
+    std::vector<SCH_FIELD>::push_back( aField );
+
+    m_isInherited.resize( size() );
+    m_parentFields.resize( size() );
+}
+
+
 void FIELDS_GRID_TABLE::initGrid( WX_GRID* aGrid )
 {
     // Build the various grid cell attributes.
@@ -399,6 +408,9 @@ FIELDS_GRID_TABLE::~FIELDS_GRID_TABLE()
     m_fontAttr->DecRef();
     m_colorAttr->DecRef();
 
+    for( SCH_FIELD& field : m_parentFields )
+        field.SetParent( nullptr );
+
     m_frame->Unbind( EDA_EVT_UNITS_CHANGED, &FIELDS_GRID_TABLE::onUnitsChanged, this );
 }
 
@@ -538,33 +550,34 @@ wxGridCellAttr* FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::
     wxCHECK( aRow < GetNumberRows(), nullptr );
 
     const SCH_FIELD& field = getField( aRow );
-    wxGridCellAttr*  tmp;
+    wxGridCellAttr*  attr = nullptr;
 
     switch( aCol )
     {
     case FDC_NAME:
         if( field.IsMandatory() )
         {
-            tmp = m_fieldNameAttr->Clone();
-            tmp->SetReadOnly( true );
-            return enhanceAttr( tmp, aRow, aCol, aKind );
+            attr = m_fieldNameAttr->Clone();
+            attr->SetReadOnly( true );
         }
         else
         {
             m_fieldNameAttr->IncRef();
-            return enhanceAttr( m_fieldNameAttr, aRow, aCol, aKind );
+            attr = m_fieldNameAttr;
         }
+
+        break;
 
     case FDC_VALUE:
         if( m_parentType == SCH_SYMBOL_T && field.GetId() == REFERENCE_FIELD )
         {
             m_referenceAttr->IncRef();
-            return enhanceAttr( m_referenceAttr, aRow, aCol, aKind );
+            attr = m_referenceAttr;
         }
         else if( m_parentType == SCH_SYMBOL_T && field.GetId() == VALUE_FIELD )
         {
             m_valueAttr->IncRef();
-            return enhanceAttr( m_valueAttr, aRow, aCol, aKind );
+            attr = m_valueAttr;
         }
         else if( m_parentType == SCH_SYMBOL_T && field.GetId() == FOOTPRINT_FIELD )
         {
@@ -574,34 +587,34 @@ wxGridCellAttr* FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::
             if( m_part && m_part->IsPower() )
             {
                 m_readOnlyAttr->IncRef();
-                return enhanceAttr( m_readOnlyAttr, aRow, aCol, aKind );
+                attr = m_readOnlyAttr;
             }
             else
             {
                 m_footprintAttr->IncRef();
-                return enhanceAttr( m_footprintAttr, aRow, aCol, aKind );
+                attr = m_footprintAttr;
             }
         }
         else if( m_parentType == SCH_SYMBOL_T && field.GetId() == DATASHEET_FIELD )
         {
             m_urlAttr->IncRef();
-            return enhanceAttr( m_urlAttr, aRow, aCol, aKind );
+            attr = m_urlAttr;
         }
         else if( m_parentType == SCH_SHEET_T && field.GetId() == SHEETNAME )
         {
             m_referenceAttr->IncRef();
-            return enhanceAttr( m_referenceAttr, aRow, aCol, aKind );
+            attr = m_referenceAttr;
         }
         else if( m_parentType == SCH_SHEET_T && field.GetId() == SHEETFILENAME )
         {
             m_filepathAttr->IncRef();
-            return enhanceAttr( m_filepathAttr, aRow, aCol, aKind );
+            attr = m_filepathAttr;
         }
         else if( ( m_parentType == SCH_LABEL_LOCATE_ANY_T )
                 && field.GetCanonicalName() == wxT( "Netclass" ) )
         {
             m_netclassAttr->IncRef();
-            return enhanceAttr( m_netclassAttr, aRow, aCol, aKind );
+            attr = m_netclassAttr;
         }
         else
         {
@@ -615,31 +628,36 @@ wxGridCellAttr* FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::
             if( ( templateFn && templateFn->m_URL ) || field.IsHypertext() )
             {
                 m_urlAttr->IncRef();
-                return enhanceAttr( m_urlAttr, aRow, aCol, aKind );
+                attr = m_urlAttr;
             }
             else
             {
                 m_nonUrlAttr->IncRef();
-                return enhanceAttr( m_nonUrlAttr, aRow, aCol, aKind );
+                attr = m_nonUrlAttr;
             }
         }
+
+        break;
 
     case FDC_TEXT_SIZE:
     case FDC_POSX:
     case FDC_POSY:
-        return enhanceAttr( nullptr, aRow, aCol, aKind );
+        break;
 
     case FDC_H_ALIGN:
         m_hAlignAttr->IncRef();
-        return enhanceAttr( m_hAlignAttr, aRow, aCol, aKind );
+        attr = m_hAlignAttr;
+        break;
 
     case FDC_V_ALIGN:
         m_vAlignAttr->IncRef();
-        return enhanceAttr( m_vAlignAttr, aRow, aCol, aKind );
+        attr = m_vAlignAttr;
+        break;
 
     case FDC_ORIENTATION:
         m_orientationAttr->IncRef();
-        return enhanceAttr( m_orientationAttr, aRow, aCol, aKind );
+        attr = m_orientationAttr;
+        break;
 
     case FDC_SHOWN:
     case FDC_SHOW_NAME:
@@ -648,20 +666,50 @@ wxGridCellAttr* FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::
     case FDC_ALLOW_AUTOPLACE:
     case FDC_PRIVATE:
         m_boolAttr->IncRef();
-        return enhanceAttr( m_boolAttr, aRow, aCol, aKind );
+        attr = m_boolAttr;
+        break;
 
     case FDC_FONT:
         m_fontAttr->IncRef();
-        return enhanceAttr( m_fontAttr, aRow, aCol, aKind );
+        attr = m_fontAttr;
+        break;
 
     case FDC_COLOR:
         m_colorAttr->IncRef();
-        return enhanceAttr( m_colorAttr, aRow, aCol, aKind );
+        attr = m_colorAttr;
+        break;
 
     default:
-        wxFAIL;
-        return enhanceAttr( nullptr, aRow, aCol, aKind );
+        attr = nullptr;
+        break;
     }
+
+    if( !attr )
+        return nullptr;
+
+    attr = enhanceAttr( attr, aRow, aCol, aKind );
+
+    if( IsInherited( aRow ) )
+    {
+        wxGridCellAttr* text_attr = attr ? attr->Clone() : new wxGridCellAttr;
+        wxFont font;
+
+        if( !text_attr->HasFont() )
+            font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+        else
+            font = text_attr->GetFont();
+
+        font.MakeItalic();
+        text_attr->SetFont( font );
+        text_attr->SetTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
+
+        if( attr )
+            attr->DecRef();
+
+        attr = text_attr;
+    }
+
+    return attr;
 }
 
 
@@ -1042,9 +1090,81 @@ bool FIELDS_GRID_TABLE::BoolFromString( const wxString& aValue ) const
 }
 
 
+SCH_FIELD* FIELDS_GRID_TABLE::GetField( MANDATORY_FIELD_T aFieldId )
+{
+    for( SCH_FIELD& field : *this )
+    {
+        if( field.GetId() == aFieldId )
+            return &field;
+    }
+
+    return nullptr;
+}
+
+
+int FIELDS_GRID_TABLE::GetFieldRow( MANDATORY_FIELD_T aFieldId )
+{
+    for( int ii = 0; ii < (int) this->size(); ++ii )
+    {
+        if( this->at( ii ).GetId() == aFieldId )
+            return ii;
+    }
+
+    return -1;
+}
+
+
+void FIELDS_GRID_TABLE::AddInheritedField( const SCH_FIELD& aParent )
+{
+    push_back( aParent );
+    back().SetParent( m_part );
+    m_isInherited.back() = true;
+    m_parentFields.back() = aParent;
+}
+
+
+bool FIELDS_GRID_TABLE::EraseRow( size_t aRow )
+{
+    if( m_isInherited.size() > aRow )
+    {
+        // You can't erase inherited fields, but you can reset them to the parent value.
+        if( m_isInherited[aRow] )
+        {
+            at( aRow ) = m_parentFields[aRow];
+            return false;
+        }
+
+        m_isInherited.erase( m_isInherited.begin() + aRow );
+    }
+
+    if( m_parentFields.size() > aRow )
+        m_parentFields.erase( m_parentFields.begin() + aRow );
+
+    std::vector<SCH_FIELD>::erase( begin() + aRow );
+    return true;
+}
+
+
+void FIELDS_GRID_TABLE::SwapRows( size_t a, size_t b )
+{
+    wxCHECK( a < this->size() && b < this->size(), /*void*/ );
+
+    std::swap( at( a ), at( b ) );
+
+    bool tmpInherited = m_isInherited[a];
+    m_isInherited[a] = m_isInherited[b];
+    m_isInherited[b] = tmpInherited;
+
+    std::swap( m_parentFields[a], m_parentFields[b] );
+}
+
+
 void FIELDS_GRID_TABLE::DetachFields()
 {
     for( SCH_FIELD& field : *this )
+        field.SetParent( nullptr );
+
+    for( SCH_FIELD& field : m_parentFields )
         field.SetParent( nullptr );
 }
 
