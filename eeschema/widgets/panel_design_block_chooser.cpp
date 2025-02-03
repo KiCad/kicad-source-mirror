@@ -265,6 +265,7 @@ void PANEL_DESIGN_BLOCK_CHOOSER::RefreshLibs( bool aProgress )
 
     // Read the libraries from disk if they've changed
     DESIGN_BLOCK_LIB_TABLE* fpTable = m_frame->Prj().DesignBlockLibs();
+    adapter->SetLibTable( fpTable );
 
     // Sync FOOTPRINT_INFO list to the libraries on disk
     if( aProgress )

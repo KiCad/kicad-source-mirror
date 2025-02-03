@@ -44,6 +44,8 @@ public:
 
     TOOL_INTERACTIVE* GetContextMenuTool() override;
 
+    void SetLibTable( DESIGN_BLOCK_LIB_TABLE* aLibs ) { m_libs = aLibs; }
+
 protected:
     /**
      * Constructor; takes a set of libraries to be included in the search.
