@@ -2009,7 +2009,7 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
     }
     catch( const IO_ERROR& ioe )
     {
-        m_reporter->Report( wxString::Format( _( "Error generating IPC2581 file '%s'.\n%s" ),
+        m_reporter->Report( wxString::Format( _( "Error generating IPC-2581 file '%s'.\n%s" ),
                                               job->m_filename,
                                               ioe.What() ),
                             RPT_SEVERITY_ERROR );
@@ -2042,10 +2042,10 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
     // If save succeeded, replace the original with what we just wrote
     if( !wxRenameFile( tempFile, outPath ) )
     {
-        m_reporter->Report( wxString::Format( _( "Error generating IPC2581 file '%s'.\n"
-                                                 "Failed to rename temporary file '%s." )
-                                                      + wxS( "\n" ),
-                                              outPath, tempFile ),
+        m_reporter->Report( wxString::Format( _( "Error generating IPC-2581 file '%s'.\n"
+                                                 "Failed to rename temporary file '%s." ),
+                                              outPath,
+                                              tempFile ),
                             RPT_SEVERITY_ERROR );
     }
 

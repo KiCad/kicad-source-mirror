@@ -45,7 +45,7 @@ CLI::PCB_EXPORT_IPC2581_COMMAND::PCB_EXPORT_IPC2581_COMMAND() :
     addDrawingSheetArg();
     addDefineArg();
 
-    m_argParser.add_description( std::string( "Export the PCB in IPC2581 format" ) );
+    m_argParser.add_description( std::string( "Export the PCB in IPC-2581 format" ) );
 
     m_argParser.add_argument( ARG_PRECISION )
             .help( std::string( "Precision" ) )
@@ -59,7 +59,7 @@ CLI::PCB_EXPORT_IPC2581_COMMAND::PCB_EXPORT_IPC2581_COMMAND() :
 
     m_argParser.add_argument( ARG_VERSION )
             .default_value( std::string( "C" ) )
-            .help( std::string( "IPC2581 standard version" ) )
+            .help( std::string( "IPC-2581 standard version" ) )
             .choices( "B", "C" );
 
     m_argParser.add_argument( ARG_UNITS )
