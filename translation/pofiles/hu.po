@@ -4754,7 +4754,7 @@ msgstr "Könyvtár szerkesztő"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:839 pcbnew/footprint.cpp:3521
 #: pcbnew/pad.cpp:2362 pcbnew/pcb_textbox.cpp:665 pcbnew/zone.cpp:644
-#: pcbnew/zone.cpp:1566
+#: pcbnew/zone.cpp:1566 common/eda_shape.cpp:1983
 #, fuzzy
 msgid "Solid"
 msgstr "Tömör"
@@ -4763,7 +4763,7 @@ msgstr "Tömör"
 #: common/stroke_params.cpp:37
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:661 eeschema/sch_line.cpp:1049
-#: pcbnew/pcb_textbox.cpp:666
+#: pcbnew/pcb_textbox.cpp:666 common/eda_shape.cpp:1984
 msgid "Dashed"
 msgstr "Szaggatott"
 
@@ -4771,7 +4771,7 @@ msgstr "Szaggatott"
 #: common/stroke_params.cpp:38
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:662 eeschema/sch_line.cpp:1050
-#: pcbnew/pcb_textbox.cpp:667
+#: pcbnew/pcb_textbox.cpp:667 common/eda_shape.cpp:1985
 msgid "Dotted"
 msgstr "Pontozott"
 
@@ -4779,7 +4779,7 @@ msgstr "Pontozott"
 #: common/stroke_params.cpp:39
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:663 eeschema/sch_line.cpp:1051
-#: pcbnew/pcb_textbox.cpp:668
+#: pcbnew/pcb_textbox.cpp:668 common/eda_shape.cpp:1986
 msgid "Dash-Dot"
 msgstr "Pont-vonal"
 
@@ -4787,7 +4787,7 @@ msgstr "Pont-vonal"
 #: common/stroke_params.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:664 eeschema/sch_line.cpp:1052
-#: pcbnew/pcb_textbox.cpp:669
+#: pcbnew/pcb_textbox.cpp:669 common/eda_shape.cpp:1987
 msgid "Dash-Dot-Dot"
 msgstr "Vonal-Pont-Pont"
 
@@ -4941,7 +4941,7 @@ msgstr "Busz Vonalvastagság"
 #: common/dialogs/panel_setup_netclasses_base.cpp:63 common/eda_shape.cpp:2083
 #: common/stroke_params.cpp:219 eeschema/sch_bus_entry.cpp:672
 #: eeschema/sch_line.cpp:936 eeschema/sch_line.cpp:1061
-#: pcbnew/pcb_textbox.cpp:685
+#: pcbnew/pcb_textbox.cpp:685 common/eda_shape.cpp:2084
 #, fuzzy
 msgid "Line Style"
 msgstr "Vonalstílus"
@@ -4964,7 +4964,7 @@ msgstr "Vonalstílus"
 #: eeschema/sch_textbox.cpp:451 include/stroke_params.h:73
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2540 pcbnew/pcb_dimension.cpp:428
 #: pcbnew/pcb_text.cpp:245 pcbnew/pcb_textbox.cpp:377
-#: pcbnew/pcb_textbox.cpp:664
+#: pcbnew/pcb_textbox.cpp:664 common/eda_shape.cpp:1982
 #, fuzzy
 msgid "Default"
 msgstr "Alapértelmezett"
@@ -5111,7 +5111,8 @@ msgstr "Vonal"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:178
 #: eeschema/sch_label.cpp:2214
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2334
-#: pcbnew/pcb_dimension.cpp:1631
+#: pcbnew/pcb_dimension.cpp:1631 common/eda_shape.cpp:753
+#: common/eda_shape.cpp:1972
 #, fuzzy
 msgid "Rectangle"
 msgstr "Négyszög"
@@ -5807,7 +5808,8 @@ msgid "Rect"
 msgstr "Négyszög"
 
 #: common/eda_shape.cpp:77 common/eda_shape.cpp:749 common/eda_shape.cpp:1972
-#: gerbview/gerber_draw_item.cpp:230
+#: gerbview/gerber_draw_item.cpp:230 common/eda_shape.cpp:750
+#: common/eda_shape.cpp:1973
 #, fuzzy
 msgid "Arc"
 msgstr "Körív"
@@ -5816,7 +5818,8 @@ msgstr "Körív"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:172
 #: eeschema/sch_label.cpp:2212 gerbview/gerber_draw_item.cpp:231
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1289
-#: pcbnew/pad.cpp:2333 pcbnew/pcb_dimension.cpp:1632
+#: pcbnew/pad.cpp:2333 pcbnew/pcb_dimension.cpp:1632 common/eda_shape.cpp:749
+#: common/eda_shape.cpp:1974
 #, fuzzy
 msgid "Circle"
 msgstr "Kör"
@@ -5827,31 +5830,34 @@ msgid "Bezier Curve"
 msgstr "Bezier görbe"
 
 #: common/eda_shape.cpp:80 common/eda_shape.cpp:751 common/eda_shape.cpp:1974
+#: common/eda_shape.cpp:752 common/eda_shape.cpp:1975
 #, fuzzy
 msgid "Polygon"
 msgstr "Sokszög"
 
-#: common/eda_shape.cpp:739
+#: common/eda_shape.cpp:739 common/eda_shape.cpp:740
 #, fuzzy
 msgid "Pad Number Box"
 msgstr "Forrszem sorszám:"
 
-#: common/eda_shape.cpp:740 pcbnew/pcb_shape.cpp:785
+#: common/eda_shape.cpp:740 pcbnew/pcb_shape.cpp:785 common/eda_shape.cpp:741
 #, fuzzy
 msgid "Thermal Spoke Template"
 msgstr "Hőcsapda-küllő szélesség:"
 
-#: common/eda_shape.cpp:741 common/eda_shape.cpp:754
+#: common/eda_shape.cpp:741 common/eda_shape.cpp:754 common/eda_shape.cpp:742
+#: common/eda_shape.cpp:755
 #, fuzzy
 msgid "Unrecognized"
 msgstr "Nem meghatározott"
 
-#: common/eda_shape.cpp:750
+#: common/eda_shape.cpp:750 common/eda_shape.cpp:751
 #, fuzzy
 msgid "Curve"
 msgstr "Görbe"
 
-#: common/eda_shape.cpp:753 common/eda_shape.cpp:1970
+#: common/eda_shape.cpp:753 common/eda_shape.cpp:1970 common/eda_shape.cpp:754
+#: common/eda_shape.cpp:1971
 #, fuzzy
 msgid "Segment"
 msgstr "Szegmens"
@@ -5866,18 +5872,21 @@ msgstr "Szegmens"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:44
 #: pcbnew/microwave/microwave_polygon.cpp:129 pcbnew/pcb_target.cpp:157
 #: pcbnew/pcb_target.cpp:243 pcbnew/pcb_textbox.cpp:679
+#: common/eda_shape.cpp:765 common/eda_shape.cpp:2022
 #, fuzzy
 msgid "Shape"
 msgstr "Alak"
 
 #: common/eda_shape.cpp:770 common/eda_shape.cpp:777 common/eda_shape.cpp:2048
 #: pcbnew/dialogs/dialog_shape_properties.cpp:212 pcbnew/pcb_track.cpp:1076
+#: common/eda_shape.cpp:771 common/eda_shape.cpp:778 common/eda_shape.cpp:2049
 #, fuzzy
 msgid "Radius"
 msgstr "Sugár"
 
 #: common/eda_shape.cpp:775 common/eda_shape.cpp:805 common/eda_shape.cpp:2092
-#: pcbnew/pcb_text.cpp:243 pcbnew/pcb_textbox.cpp:375
+#: pcbnew/pcb_text.cpp:243 pcbnew/pcb_textbox.cpp:375 common/eda_shape.cpp:776
+#: common/eda_shape.cpp:806 common/eda_shape.cpp:2093
 #, fuzzy
 msgid "Angle"
 msgstr "Szög"
@@ -5886,12 +5895,12 @@ msgstr "Szög"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:127
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:95
 #: eeschema/lib_pin.cpp:1199 eeschema/lib_pin.cpp:1690 eeschema/sch_pin.cpp:267
-#: eeschema/sch_pin.cpp:559
+#: eeschema/sch_pin.cpp:559 common/eda_shape.cpp:782 common/eda_shape.cpp:800
 #, fuzzy
 msgid "Length"
 msgstr "Hosszúság"
 
-#: common/eda_shape.cpp:786
+#: common/eda_shape.cpp:786 common/eda_shape.cpp:787
 #, fuzzy
 msgid "Points"
 msgstr "Pontok"
@@ -5910,7 +5919,8 @@ msgstr "Pontok"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2080 pcbnew/pad.cpp:1089
 #: pcbnew/pcb_reference_image.cpp:259 pcbnew/pcb_target.cpp:156
 #: pcbnew/pcb_target.cpp:240 pcbnew/pcb_text.cpp:247 pcbnew/pcb_track.cpp:1071
-#: pcbnew/pcb_track.cpp:1492 pcbnew/pcb_track.cpp:1522
+#: pcbnew/pcb_track.cpp:1492 pcbnew/pcb_track.cpp:1522 common/eda_shape.cpp:791
+#: common/eda_shape.cpp:2067
 #, fuzzy
 msgid "Width"
 msgstr "Szélesség"
@@ -5925,77 +5935,79 @@ msgstr "Szélesség"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:56
 #: pcbnew/fp_text_grid_table.cpp:141 pcbnew/pad.cpp:1090
 #: pcbnew/pcb_dimension.cpp:833 pcbnew/pcb_reference_image.cpp:260
-#: pcbnew/pcb_text.cpp:248
+#: pcbnew/pcb_text.cpp:248 common/eda_shape.cpp:794 common/eda_shape.cpp:2073
 #, fuzzy
 msgid "Height"
 msgstr "Magasság"
 
-#: common/eda_shape.cpp:1975
+#: common/eda_shape.cpp:1975 common/eda_shape.cpp:1976
 #, fuzzy
 msgid "Bezier"
 msgstr "Bezier"
 
 #: common/eda_shape.cpp:2019 eeschema/lib_shape.cpp:604
-#: eeschema/sch_shape.cpp:614
+#: eeschema/sch_shape.cpp:614 common/eda_shape.cpp:2020
 #, fuzzy
 msgid "Shape Properties"
 msgstr "Lap Tulajdonságai"
 
 #: common/eda_shape.cpp:2025 pcbnew/pcb_textbox.cpp:680
-#: pcbnew/pcb_track.cpp:1495
+#: pcbnew/pcb_track.cpp:1495 common/eda_shape.cpp:2026
 #, fuzzy
 msgid "Start X"
 msgstr "Kezdőpont X"
 
 #: common/eda_shape.cpp:2030 pcbnew/pcb_textbox.cpp:681
-#: pcbnew/pcb_track.cpp:1499
+#: pcbnew/pcb_track.cpp:1499 common/eda_shape.cpp:2031
 #, fuzzy
 msgid "Start Y"
 msgstr "Kezdőpont Y"
 
-#: common/eda_shape.cpp:2036
+#: common/eda_shape.cpp:2036 common/eda_shape.cpp:2037
 #, fuzzy
 msgid "Center X"
 msgstr "Középre"
 
-#: common/eda_shape.cpp:2042
+#: common/eda_shape.cpp:2042 common/eda_shape.cpp:2043
 #, fuzzy
 msgid "Center Y"
 msgstr "Középre"
 
 #: common/eda_shape.cpp:2054 pcbnew/generators/pcb_tuning_pattern.cpp:2552
 #: pcbnew/pcb_textbox.cpp:682 pcbnew/pcb_track.cpp:1502
+#: common/eda_shape.cpp:2055
 #, fuzzy
 msgid "End X"
 msgstr "Végpont X"
 
 #: common/eda_shape.cpp:2060 pcbnew/generators/pcb_tuning_pattern.cpp:2558
 #: pcbnew/pcb_textbox.cpp:683 pcbnew/pcb_track.cpp:1505
+#: common/eda_shape.cpp:2061
 #, fuzzy
 msgid "End Y"
 msgstr "Végpont Y"
 
 #: common/eda_shape.cpp:2078 common/stroke_params.cpp:223
 #: eeschema/sch_bus_entry.cpp:675 eeschema/sch_line.cpp:1064
-#: pcbnew/pcb_textbox.cpp:684
+#: pcbnew/pcb_textbox.cpp:684 common/eda_shape.cpp:2079
 #, fuzzy
 msgid "Line Width"
 msgstr "Vonalszélesség"
 
-#: common/eda_shape.cpp:2087 pcbnew/pcb_shape.cpp:719
+#: common/eda_shape.cpp:2087 pcbnew/pcb_shape.cpp:719 common/eda_shape.cpp:2088
 #, fuzzy
 msgid "Line Color"
 msgstr "Vonal színe:"
 
 #: common/eda_shape.cpp:2125 eeschema/lib_shape.cpp:587
 #: eeschema/sch_shape.cpp:604 pcbnew/dialogs/dialog_plot_base.cpp:134
-#: pcbnew/pcb_textbox.cpp:686
+#: pcbnew/pcb_textbox.cpp:686 common/eda_shape.cpp:2126
 #, fuzzy
 msgid "Filled"
 msgstr "Kitöltve"
 
 #: common/eda_shape.cpp:2130 eeschema/sch_shape.cpp:607
-#: pcbnew/pcb_shape.cpp:720
+#: pcbnew/pcb_shape.cpp:720 common/eda_shape.cpp:2131
 #, fuzzy
 msgid "Fill Color"
 msgstr "Kitöltő szín:"
