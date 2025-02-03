@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 19:59+0300\n"
+"POT-Creation-Date: 2025-02-03 19:59+0300\n"
 "PO-Revision-Date: 2025-01-29 16:58+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v8/sk/>\n"
@@ -4416,7 +4416,7 @@ msgstr "Automaticky odstrániť odinštalované knižnice"
 msgid "Library nickname prefix:"
 msgstr "Predpona prezývky knižnice:"
 
-#: common/dialogs/panel_setup_netclasses.cpp:90 common/eda_shape.cpp:1983
+#: common/dialogs/panel_setup_netclasses.cpp:90 common/eda_shape.cpp:1982
 #: common/stroke_params.cpp:36
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:660 eeschema/sch_line.cpp:1048
@@ -4429,7 +4429,7 @@ msgstr "Predpona prezývky knižnice:"
 msgid "Solid"
 msgstr "Pevné"
 
-#: common/dialogs/panel_setup_netclasses.cpp:92 common/eda_shape.cpp:1984
+#: common/dialogs/panel_setup_netclasses.cpp:92 common/eda_shape.cpp:1983
 #: common/stroke_params.cpp:37
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:661 eeschema/sch_line.cpp:1049
@@ -4437,7 +4437,7 @@ msgstr "Pevné"
 msgid "Dashed"
 msgstr "Prerušovaný"
 
-#: common/dialogs/panel_setup_netclasses.cpp:94 common/eda_shape.cpp:1985
+#: common/dialogs/panel_setup_netclasses.cpp:94 common/eda_shape.cpp:1984
 #: common/stroke_params.cpp:38
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:662 eeschema/sch_line.cpp:1050
@@ -4445,7 +4445,7 @@ msgstr "Prerušovaný"
 msgid "Dotted"
 msgstr "Bodkovaný"
 
-#: common/dialogs/panel_setup_netclasses.cpp:96 common/eda_shape.cpp:1986
+#: common/dialogs/panel_setup_netclasses.cpp:96 common/eda_shape.cpp:1985
 #: common/stroke_params.cpp:39
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:663 eeschema/sch_line.cpp:1051
@@ -4453,7 +4453,7 @@ msgstr "Bodkovaný"
 msgid "Dash-Dot"
 msgstr "Čiarka-bodka"
 
-#: common/dialogs/panel_setup_netclasses.cpp:98 common/eda_shape.cpp:1987
+#: common/dialogs/panel_setup_netclasses.cpp:98 common/eda_shape.cpp:1986
 #: common/stroke_params.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:664 eeschema/sch_line.cpp:1052
@@ -4584,14 +4584,14 @@ msgstr "Hrúbka drôtu"
 msgid "Bus Thickness"
 msgstr "Hrúbka zbernice"
 
-#: common/dialogs/panel_setup_netclasses_base.cpp:63 common/eda_shape.cpp:2084
+#: common/dialogs/panel_setup_netclasses_base.cpp:63 common/eda_shape.cpp:2083
 #: common/stroke_params.cpp:219 eeschema/sch_bus_entry.cpp:672
 #: eeschema/sch_line.cpp:936 eeschema/sch_line.cpp:1061
 #: pcbnew/pcb_textbox.cpp:685
 msgid "Line Style"
 msgstr "Štýl čiary"
 
-#: common/dialogs/panel_setup_netclasses_base.cpp:69 common/eda_shape.cpp:1982
+#: common/dialogs/panel_setup_netclasses_base.cpp:69 common/eda_shape.cpp:1981
 #: common/pgm_base.cpp:90 common/stroke_params.cpp:208
 #: common/widgets/footprint_select_widget.cpp:149
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:69
@@ -4736,8 +4736,8 @@ msgid "Line"
 msgstr "Čiara"
 
 #: common/drawing_sheet/ds_data_item.cpp:367
-#: common/drawing_sheet/ds_draw_item.cpp:125 common/eda_shape.cpp:753
-#: common/eda_shape.cpp:1972
+#: common/drawing_sheet/ds_draw_item.cpp:125 common/eda_shape.cpp:752
+#: common/eda_shape.cpp:1971
 #: eeschema/dialogs/dialog_label_properties_base.cpp:178
 #: eeschema/sch_label.cpp:2214
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2334
@@ -5342,12 +5342,12 @@ msgstr "Číselné pole"
 msgid "Rect"
 msgstr "Obdĺžnik"
 
-#: common/eda_shape.cpp:77 common/eda_shape.cpp:750 common/eda_shape.cpp:1973
+#: common/eda_shape.cpp:77 common/eda_shape.cpp:749 common/eda_shape.cpp:1972
 #: gerbview/gerber_draw_item.cpp:230
 msgid "Arc"
 msgstr "Oblúk"
 
-#: common/eda_shape.cpp:78 common/eda_shape.cpp:749 common/eda_shape.cpp:1974
+#: common/eda_shape.cpp:78 common/eda_shape.cpp:748 common/eda_shape.cpp:1973
 #: eeschema/dialogs/dialog_label_properties_base.cpp:172
 #: eeschema/sch_label.cpp:2212 gerbview/gerber_draw_item.cpp:231
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1289
@@ -5359,31 +5359,31 @@ msgstr "Kruh"
 msgid "Bezier Curve"
 msgstr "Bezierova krivka"
 
-#: common/eda_shape.cpp:80 common/eda_shape.cpp:752 common/eda_shape.cpp:1975
+#: common/eda_shape.cpp:80 common/eda_shape.cpp:751 common/eda_shape.cpp:1974
 msgid "Polygon"
 msgstr "Mnohouholník"
 
-#: common/eda_shape.cpp:740
+#: common/eda_shape.cpp:739
 msgid "Pad Number Box"
 msgstr "Rámček s číslom plôšky"
 
-#: common/eda_shape.cpp:741 pcbnew/pcb_shape.cpp:785
+#: common/eda_shape.cpp:740 pcbnew/pcb_shape.cpp:785
 msgid "Thermal Spoke Template"
 msgstr "Šablóna tepelného spojenia"
 
-#: common/eda_shape.cpp:742 common/eda_shape.cpp:755
+#: common/eda_shape.cpp:741 common/eda_shape.cpp:754
 msgid "Unrecognized"
 msgstr "Nerozpoznané"
 
-#: common/eda_shape.cpp:751
+#: common/eda_shape.cpp:750
 msgid "Curve"
 msgstr "Krivka"
 
-#: common/eda_shape.cpp:754 common/eda_shape.cpp:1971
+#: common/eda_shape.cpp:753 common/eda_shape.cpp:1970
 msgid "Segment"
 msgstr "Segment"
 
-#: common/eda_shape.cpp:765 common/eda_shape.cpp:2022
+#: common/eda_shape.cpp:764 common/eda_shape.cpp:2021
 #: eeschema/dialogs/dialog_label_properties_base.cpp:152
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:53
 #: eeschema/lib_textbox.cpp:556 eeschema/sch_label.cpp:2194
@@ -5396,17 +5396,17 @@ msgstr "Segment"
 msgid "Shape"
 msgstr "Tvar"
 
-#: common/eda_shape.cpp:771 common/eda_shape.cpp:778 common/eda_shape.cpp:2049
+#: common/eda_shape.cpp:770 common/eda_shape.cpp:777 common/eda_shape.cpp:2048
 #: pcbnew/dialogs/dialog_shape_properties.cpp:212 pcbnew/pcb_track.cpp:1076
 msgid "Radius"
 msgstr "Polomer"
 
-#: common/eda_shape.cpp:776 common/eda_shape.cpp:806 common/eda_shape.cpp:2093
+#: common/eda_shape.cpp:775 common/eda_shape.cpp:805 common/eda_shape.cpp:2092
 #: pcbnew/pcb_text.cpp:243 pcbnew/pcb_textbox.cpp:375
 msgid "Angle"
 msgstr "Uhol"
 
-#: common/eda_shape.cpp:782 common/eda_shape.cpp:800
+#: common/eda_shape.cpp:781 common/eda_shape.cpp:799
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:127
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:95
 #: eeschema/lib_pin.cpp:1199 eeschema/lib_pin.cpp:1690 eeschema/sch_pin.cpp:267
@@ -5414,11 +5414,11 @@ msgstr "Uhol"
 msgid "Length"
 msgstr "Dĺžka"
 
-#: common/eda_shape.cpp:787
+#: common/eda_shape.cpp:786
 msgid "Points"
 msgstr "Body"
 
-#: common/eda_shape.cpp:791 common/eda_shape.cpp:2067 common/eda_text.cpp:1276
+#: common/eda_shape.cpp:790 common/eda_shape.cpp:2066 common/eda_text.cpp:1276
 #: eeschema/lib_field.cpp:664 eeschema/lib_text.cpp:532
 #: eeschema/lib_textbox.cpp:559 eeschema/sch_bitmap.cpp:231
 #: eeschema/sch_field.cpp:1442 eeschema/sch_text.cpp:496
@@ -5436,7 +5436,7 @@ msgstr "Body"
 msgid "Width"
 msgstr "Šírka"
 
-#: common/eda_shape.cpp:794 common/eda_shape.cpp:2073 common/eda_text.cpp:1281
+#: common/eda_shape.cpp:793 common/eda_shape.cpp:2072 common/eda_text.cpp:1281
 #: eeschema/lib_field.cpp:665 eeschema/lib_text.cpp:533
 #: eeschema/lib_textbox.cpp:560 eeschema/sch_bitmap.cpp:232
 #: eeschema/sch_field.cpp:1443 eeschema/sch_text.cpp:497
@@ -5450,61 +5450,61 @@ msgstr "Šírka"
 msgid "Height"
 msgstr "Výška"
 
-#: common/eda_shape.cpp:1976
+#: common/eda_shape.cpp:1975
 msgid "Bezier"
 msgstr "Bezierová krivka"
 
-#: common/eda_shape.cpp:2020 eeschema/lib_shape.cpp:604
+#: common/eda_shape.cpp:2019 eeschema/lib_shape.cpp:604
 #: eeschema/sch_shape.cpp:614
 #, fuzzy
 msgid "Shape Properties"
 msgstr "Vlastnosti listu"
 
-#: common/eda_shape.cpp:2026 pcbnew/pcb_textbox.cpp:680
+#: common/eda_shape.cpp:2025 pcbnew/pcb_textbox.cpp:680
 #: pcbnew/pcb_track.cpp:1495
 msgid "Start X"
 msgstr "Začiatok X"
 
-#: common/eda_shape.cpp:2031 pcbnew/pcb_textbox.cpp:681
+#: common/eda_shape.cpp:2030 pcbnew/pcb_textbox.cpp:681
 #: pcbnew/pcb_track.cpp:1499
 msgid "Start Y"
 msgstr "Začiatok Y"
 
-#: common/eda_shape.cpp:2037
+#: common/eda_shape.cpp:2036
 msgid "Center X"
 msgstr "Stred X"
 
-#: common/eda_shape.cpp:2043
+#: common/eda_shape.cpp:2042
 msgid "Center Y"
 msgstr "Stred Y"
 
-#: common/eda_shape.cpp:2055 pcbnew/generators/pcb_tuning_pattern.cpp:2552
+#: common/eda_shape.cpp:2054 pcbnew/generators/pcb_tuning_pattern.cpp:2552
 #: pcbnew/pcb_textbox.cpp:682 pcbnew/pcb_track.cpp:1502
 msgid "End X"
 msgstr "Koniec X"
 
-#: common/eda_shape.cpp:2061 pcbnew/generators/pcb_tuning_pattern.cpp:2558
+#: common/eda_shape.cpp:2060 pcbnew/generators/pcb_tuning_pattern.cpp:2558
 #: pcbnew/pcb_textbox.cpp:683 pcbnew/pcb_track.cpp:1505
 msgid "End Y"
 msgstr "Koniec Y"
 
-#: common/eda_shape.cpp:2079 common/stroke_params.cpp:223
+#: common/eda_shape.cpp:2078 common/stroke_params.cpp:223
 #: eeschema/sch_bus_entry.cpp:675 eeschema/sch_line.cpp:1064
 #: pcbnew/pcb_textbox.cpp:684
 msgid "Line Width"
 msgstr "Šírka čiary"
 
-#: common/eda_shape.cpp:2088 pcbnew/pcb_shape.cpp:719
+#: common/eda_shape.cpp:2087 pcbnew/pcb_shape.cpp:719
 msgid "Line Color"
 msgstr "Farba čiary"
 
-#: common/eda_shape.cpp:2126 eeschema/lib_shape.cpp:587
+#: common/eda_shape.cpp:2125 eeschema/lib_shape.cpp:587
 #: eeschema/sch_shape.cpp:604 pcbnew/dialogs/dialog_plot_base.cpp:134
 #: pcbnew/pcb_textbox.cpp:686
 msgid "Filled"
 msgstr "Vyplnené"
 
-#: common/eda_shape.cpp:2131 eeschema/sch_shape.cpp:607
+#: common/eda_shape.cpp:2130 eeschema/sch_shape.cpp:607
 #: pcbnew/pcb_shape.cpp:720
 msgid "Fill Color"
 msgstr "Farba výplne"
