@@ -22,10 +22,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-03 19:59+0300\n"
-"PO-Revision-Date: 2025-01-23 15:38+0000\n"
-"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"PO-Revision-Date: 2025-02-03 18:48+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3179,36 +3179,42 @@ msgid "Company:"
 msgstr "Организация:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:276
+#, fuzzy
 msgid "Comment1:"
 msgstr ""
 "Комментарий 1:\n"
 "(Децимальный номер)"
 
 #: common/dialogs/dialog_page_settings_base.cpp:288
+#, fuzzy
 msgid "Comment2:"
 msgstr ""
 "Комментарий 2:\n"
 "(Разработал)"
 
 #: common/dialogs/dialog_page_settings_base.cpp:300
+#, fuzzy
 msgid "Comment3:"
 msgstr ""
 "Комментарий 3:\n"
 "(Проверил)"
 
 #: common/dialogs/dialog_page_settings_base.cpp:312
+#, fuzzy
 msgid "Comment4:"
 msgstr ""
 "Комментарий 4:\n"
 "(Утвердил)"
 
 #: common/dialogs/dialog_page_settings_base.cpp:324
+#, fuzzy
 msgid "Comment5:"
 msgstr ""
 "Комментарий 5:\n"
 "(Т. контр.)"
 
 #: common/dialogs/dialog_page_settings_base.cpp:336
+#, fuzzy
 msgid "Comment6:"
 msgstr ""
 "Комментарий 6:\n"
