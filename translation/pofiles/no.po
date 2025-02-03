@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-03 19:59+0300\n"
-"PO-Revision-Date: 2025-01-23 15:38+0000\n"
-"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
+"PO-Revision-Date: 2025-02-03 18:48+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
 "master-source/nb_NO/>\n"
 "Language: no\n"
@@ -4205,6 +4205,7 @@ msgid "Helper Applications"
 msgstr "Hjelpeapplikasjoner"
 
 #: common/dialogs/panel_common_settings_base.cpp:84
+#, fuzzy
 msgid "Text editor:"
 msgstr "Tekstbehandler"
 
@@ -12815,6 +12816,7 @@ msgstr "Loddrett"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:246
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:117
 #: eeschema/dialogs/dialog_text_properties_base.cpp:180
+#, fuzzy
 msgid "Text size:"
 msgstr "Tekststørrelse"
 
@@ -12911,6 +12913,7 @@ msgstr "Filtrer gjenstander etter nett:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:86
+#, fuzzy
 msgid "Filter items by parent reference designator:"
 msgstr "Filtrer gjenstander etter overordnet referanseutpeker"
 
@@ -14432,6 +14435,7 @@ msgstr "Importer innstillinger fra"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:24
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:24
+#, fuzzy
 msgid "Import from:"
 msgstr "Importer fra"
 
@@ -14507,6 +14511,7 @@ msgid "Replace &with:"
 msgstr "Erstatt med:"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:52
+#, fuzzy
 msgid "Direction:"
 msgstr "Retning"
 
@@ -31786,6 +31791,7 @@ msgstr "Komponentparametere"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:197
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:27
+#, fuzzy
 msgid "Frequency:"
 msgstr "Frekvens"
 
@@ -33968,6 +33974,7 @@ msgid "Through hole:"
 msgstr "Gjennom hull:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:152
+#, fuzzy
 msgid "Connector:"
 msgstr "Connector[translate me]"
 
@@ -34998,6 +35005,7 @@ msgid "Leader Format"
 msgstr "Leader Format"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:39
+#, fuzzy
 msgid "Text frame:"
 msgstr "Tekstramme"
 
@@ -35089,6 +35097,7 @@ msgstr "Tekst som skal skrives ut etter dimensjonsverdien"
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:166
 #: pcbnew/dialogs/dialog_plot_base.cpp:372
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:71
+#, fuzzy
 msgid "Precision:"
 msgstr "Nøyaktighet"
 
@@ -35223,6 +35232,7 @@ msgstr "Tekst pos Y"
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:39
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:194
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:168
+#, fuzzy
 msgid "Thickness:"
 msgstr "Tykkelse"
 
@@ -36992,6 +37002,7 @@ msgid "Save Drill Report File"
 msgstr "Lagre drillrapportfil"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:23
+#, fuzzy
 msgid "Output folder:"
 msgstr "Mappe for utdata"
 
@@ -37741,6 +37752,7 @@ msgid "Prevents group from being moved on canvas"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:45
+#, fuzzy
 msgid "Group members:"
 msgstr "Gruppemedlemmer"
 
@@ -38983,6 +38995,7 @@ msgid "Remove silkscreen from areas without soldermask"
 msgstr "Fjern silketrykk fra områder uten loddemaske"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:221
+#, fuzzy
 msgid "Coordinate format:"
 msgstr "Koordinatformat"
 
@@ -42658,6 +42671,7 @@ msgid "Copper connection too narrow"
 msgstr "Padforbindelse til soner:"
 
 #: pcbnew/drc/drc_item.cpp:123
+#, fuzzy
 msgid "Track width"
 msgstr "Sporbredde:"
 
@@ -44255,6 +44269,7 @@ msgid "Status: "
 msgstr "Status: "
 
 #: pcbnew/footprint.cpp:1705
+#, fuzzy
 msgid "Attributes:"
 msgstr "Attributter"
 
@@ -45106,6 +45121,7 @@ msgid "Create Microwave Footprint"
 msgstr "Lag mikrobølgeovnens fotavtrykk"
 
 #: pcbnew/microwave/microwave_footprint.cpp:95
+#, fuzzy
 msgid "Angle in degrees:"
 msgstr "Vinkel i grader"
 
