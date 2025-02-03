@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 19:59+0300\n"
-"PO-Revision-Date: 2025-02-02 17:02+0000\n"
+"PO-Revision-Date: 2025-02-03 16:58+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v8/ko/>\n"
 "Language: ko\n"
@@ -970,11 +970,11 @@ msgstr "구역에 채워진 영역 표시"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:44
 msgid "Use bare copper color for unplated copper (slow)"
-msgstr "도금되지 않은 구리에는 베어 구리 색상 사용 (느림)"
+msgstr "도금되지 않은 구리의 경우 기본 구리 색상 사용(느림)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:45
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr "도금 된 구리와 도금되지 않은 구리에 다른 색상을 사용합니다. (느림)"
+msgstr "도금 된 구리와 미도금 구리에 다른 색상을 사용합니다. (느림)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:52
 msgid "Material properties:"
@@ -6351,7 +6351,7 @@ msgstr "현재 지원되지 않는 DXF 이미지."
 #: common/import_gfx/graphics_importer_buffer.cpp:123
 #, c-format
 msgid "Imported graphic is too large. Maximum scale is %f"
-msgstr ""
+msgstr "불러온 그래픽이 너무 큽니다. 최대 스케일은 %f"
 
 #: common/import_gfx/graphics_importer_buffer.cpp:178
 #, c-format
@@ -7318,7 +7318,7 @@ msgstr "마우스 오른쪽 버튼 동작 수행"
 
 #: common/tool/actions.cpp:175
 msgid "Undo last edit"
-msgstr "마지막 편집 실행 취소"
+msgstr "마지막 편집 취소"
 
 #: common/tool/actions.cpp:188
 msgid "Redo last edit"
@@ -7414,7 +7414,7 @@ msgstr "문자열 찾기 및 바꾸기"
 
 #: common/tool/actions.cpp:323 pcbnew/dialogs/dialog_find_base.cpp:91
 msgid "Find Next"
-msgstr "다음 항목 찾기"
+msgstr "다음 검색"
 
 #: common/tool/actions.cpp:324
 msgid "Find next match"
@@ -7434,7 +7434,7 @@ msgstr "다음 마커 찾기"
 
 #: common/tool/actions.cpp:347
 msgid "Replace and Find Next"
-msgstr "교체 및 다음 항목 찾기"
+msgstr "다음 검색 및 교체"
 
 #: common/tool/actions.cpp:348
 msgid "Replace current match and find next"
@@ -10098,13 +10098,13 @@ msgstr "위반 (%s)"
 #: eeschema/dialogs/dialog_erc_base.cpp:98
 #: pcbnew/dialogs/dialog_drc_base.cpp:148
 msgid "Edit ignored tests"
-msgstr "무시된 테스트 편집"
+msgstr "검사 제외 편집"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:108
 #: pcbnew/dialogs/dialog_drc_base.cpp:158
 #, c-format
 msgid "Ignored Tests (%s)"
-msgstr "무시된 테스트(%s)"
+msgstr "검사 제외 (%s)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:148
 #: pcbnew/dialogs/dialog_drc_base.cpp:198
@@ -14604,9 +14604,9 @@ msgid "Untitled Field"
 msgstr "제목 없는 필드"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "The field name \"%s\" contains trailing and/or leading whitespace."
-msgstr "항목 뒤에 공백이 있습니다."
+msgstr "필드 이름 “%s”에 후행 공백 또는 선행 공백이 포함되어 있습니다."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:211
 msgid ""
@@ -15267,7 +15267,7 @@ msgstr ""
 msgid ""
 "This schematic contains symbols that have leading and/or trailing white "
 "space field names."
-msgstr ""
+msgstr "이 회로도에는 선행 또는 후행 공백 필드 이름이 있는 심볼이 포함되어 있습니다."
 
 #: eeschema/files-io.cpp:598
 msgid "Schematic is read only."
@@ -18858,9 +18858,8 @@ msgid "Errors during netlist generation."
 msgstr "네트리스트 생성 중 오류."
 
 #: eeschema/sim/simulator_frame.cpp:365 eeschema/tools/simulator_control.cpp:80
-#, fuzzy
 msgid "Warnings during netlist generation."
-msgstr "네트리스트 생성 중 오류."
+msgstr "네트리스트 생성 중 경고."
 
 #: eeschema/sim/simulator_frame.cpp:375
 msgid "Simulator requires a fully annotated schematic."
@@ -21617,7 +21616,7 @@ msgstr "시트의 끝."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:328
 msgid "Find again to wrap around to the start."
-msgstr "처음으로 돌아가서 다시 검색합니다."
+msgstr "처음부터 다시 찾으려면 다시 찾기를 클릭합니다."
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:102
 msgid "No bus selected"
@@ -23138,7 +23137,7 @@ msgstr "각 배선별 모든 오류 보고"
 
 #: kicad/cli/command_pcb_drc.cpp:60 pcbnew/dialogs/dialog_drc_base.cpp:41
 msgid "Test for parity between PCB and schematic"
-msgstr "PCB와 회로도 간 동등성 테스트"
+msgstr "PCB와 회로도 간 동일성 테스트"
 
 #: kicad/cli/command_pcb_drc.cpp:65 kicad/cli/command_sch_erc.cpp:55
 msgid "Report units; valid options: in, mm, mils"
@@ -27095,7 +27094,7 @@ msgstr "적용된 전류:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:124
 msgid "Plating resistivity:"
-msgstr "도금 저항성:"
+msgstr "도금 저항:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:146
 msgid "Substrate relative permittivity:"
@@ -28103,11 +28102,11 @@ msgstr "유전체 재료 특성"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:20
 msgid "Has castellated pads"
-msgstr "카스텔레이티드 패드가 있음"
+msgstr "성곽 패드가 있음"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:23
 msgid "Plated board edge"
-msgstr "도금 패드 가장자리"
+msgstr "도금된 보드 가장자리"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:31
 msgid "Copper finish:"
@@ -28327,11 +28326,11 @@ msgstr "무전해 주석"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:44
 msgid "Immersion nickel"
-msgstr "치환 니켈도금"
+msgstr "침지 니켈도금"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:45
 msgid "Immersion silver"
-msgstr "치환 은도금"
+msgstr "침치 은도금"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:46
 msgid "Immersion gold"
@@ -29176,7 +29175,7 @@ msgstr "N/A"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1305
 msgid "PTH"
-msgstr "도금 관통 홀"
+msgstr "PTH"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1308
 msgid "NPTH"
@@ -30400,11 +30399,11 @@ msgstr "보고서 파일 '%s' 생성됨<br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1283
 msgid "not run"
-msgstr "실행 되지 않음"
+msgstr "실행 안함"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:27
 msgid "Refill all zones before performing DRC"
-msgstr "DRC 수행 전 모든 영역 다시 채우기"
+msgstr "DRC 수행 전에 모든 영역 채우기"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:31
 msgid ""
@@ -30422,12 +30421,12 @@ msgstr ""
 #: pcbnew/dialogs/dialog_drc_base.cpp:125
 #, c-format
 msgid "Unconnected Items (%s)"
-msgstr "연결되지 않은 항목 (%s)"
+msgstr "미연결 항목 (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:140
 #, c-format
 msgid "Schematic Parity (%s)"
-msgstr "회로도 동등성 (%s)"
+msgstr "회로도 동일성 (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.h:106 pcbnew/tools/pcb_actions.cpp:408
 msgid "Design Rules Checker"
@@ -30940,16 +30939,12 @@ msgid "Success"
 msgstr "성공"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:213
-#, fuzzy
 msgid "Do you want to cancel the export process?"
-msgstr ""
-"상대 경로를 사용하시겠습니까\n"
-"'%s'?"
+msgstr "내보내기 과정을 취소하시겠습니까?"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:214
-#, fuzzy
 msgid "Cancel Export"
-msgstr "공간거리 보고서"
+msgstr "내보내기 취소"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:257
 msgid "Command line:\n"
@@ -33297,7 +33292,7 @@ msgstr "히트 싱크 패드"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558
 msgid "Castellated pad (through hole only)"
-msgstr "성곽형 패드 (스루홀 전용)"
+msgstr "성곽 패드 (스루홀 전용)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:590
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:346
@@ -33560,7 +33555,7 @@ msgstr "플롯 시, F.Fab 레이어와 B.Fab 레이어에 패드 외곽선을 �
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:102
 msgid "Check zone fills before plotting"
-msgstr "플로팅 전에 채워진 영역을 체크"
+msgstr "플로팅 전에 채움 영역 체크"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:105
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:98
@@ -33720,7 +33715,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:237
 msgid "Disable aperture macros (not recommended)"
-msgstr "조리개 매크로 비활성화 (권장하지 않음)"
+msgstr "조리개 매크로 비활성화( 비추천)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:238
 msgid ""
@@ -34800,7 +34795,7 @@ msgstr "이동/끌기 시 부품자리 겹침 표시"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:382
 msgid "Automatically refill zones"
-msgstr "영역 자동 채우기"
+msgstr "영역 자동 채움"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:384
 msgid "If checked, zones will be re-filled after each edit operation"
@@ -37204,14 +37199,13 @@ msgid "Pad is not a through hole pad; connection will be: %s."
 msgstr "패드는 스루홀 패드가 아님; %s가 연결됨."
 
 #: pcbnew/drc/drc_engine.cpp:784
-#, fuzzy, c-format
+#, c-format
 msgid "Net tie on %s; clearance: 0."
-msgstr "%s에 대한 지역 재정의; 공간거리: %s."
+msgstr "네트 묶임 %s; 공간거리: 0."
 
 #: pcbnew/drc/drc_engine.cpp:787
-#, fuzzy
 msgid "net tie"
-msgstr "시트 제목"
+msgstr "네트 묶음"
 
 #: pcbnew/drc/drc_engine.cpp:814 pcbnew/drc/drc_engine.cpp:824
 #, c-format
@@ -37494,7 +37488,7 @@ msgstr "제조용 설계"
 
 #: pcbnew/drc/drc_item.cpp:47
 msgid "Schematic Parity"
-msgstr "회로도 동등성"
+msgstr "회로도 동일성"
 
 #: pcbnew/drc/drc_item.cpp:48
 msgid "Signal Integrity"
@@ -37994,15 +37988,15 @@ msgstr "마이크로 비아 홀 확인..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:162
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min hole %s; actual %s)"
-msgstr "(%s 최소 값 %s; 실제 값 %s)"
+msgstr "(%s 최소 홀 %s; 실제 값 %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:169
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max hole %s; actual %s)"
-msgstr "(%s 최대 높이 %s; 실제 %s)"
+msgstr "(%s 최대 홀 %s; 실제 %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:120
 msgid "Checking hole to hole clearances..."
@@ -38484,7 +38478,7 @@ msgstr "회로도에서 핀 %s에 해당하는 패드를 찾지 못했습니다.
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:290
 msgid "Checking PCB to schematic parity..."
-msgstr "PCB와 회로도의 동등성 확인 중..."
+msgstr "PCB와 회로도의 동일성 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:96
 msgid "Checking silkscreen for overlapping items..."
@@ -40259,7 +40253,7 @@ msgstr "히트 싱크"
 
 #: pcbnew/pad.cpp:1077
 msgid "Castellated"
-msgstr "카스텔레이티드"
+msgstr "성곽"
 
 #: pcbnew/pad.cpp:1106
 msgid "Length in Package"
@@ -40426,7 +40420,7 @@ msgstr "('히트싱크' 속성은 NPTH 패드에는 의미가 없음)"
 
 #: pcbnew/pad.cpp:2100
 msgid "('castellated' property is for PTH pads)"
-msgstr "('castellated' 속성은 PTH 패드임)"
+msgstr "('성곽' 속성은 PTH 패드임)"
 
 #: pcbnew/pad.cpp:2103
 msgid "('BGA' property is for SMD pads)"
@@ -40470,7 +40464,7 @@ msgstr "사다리꼴"
 
 #: pcbnew/pad.cpp:2348
 msgid "Castellated pad"
-msgstr "카스텔레이티드 패드"
+msgstr "성곽 패드"
 
 #: pcbnew/pad.cpp:2352
 msgid "Oblong"
@@ -40893,7 +40887,7 @@ msgstr "네트 불러오는 중..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1906
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2160
 msgid "Loading polygons..."
-msgstr "다각형을 불러오는 중..."
+msgstr "다각형 불러오기..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1946
 #, c-format
@@ -40920,7 +40914,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2289
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
-msgstr "%d 종류의 다각형 형상이 무시되었습니다 (아직 지원되지 않음)."
+msgstr "%d 종류의 다각형 형상이 무시됨 (미지원됨)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2365
 #, c-format
@@ -40954,12 +40948,11 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2435
 #, c-format
 msgid "Footprint %s contains polygon shape of kind %d (not yet supported)."
-msgstr ""
-"풋프린트 %s에 %d 종류의 다각형 모양이 포함되어 있음(아직 지원되지 않음)."
+msgstr "풋프린트 %s에 %d 종류의 다각형 모양이 포함되어 있음(미지원됨)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2593
 msgid "Loading zone fills..."
-msgstr "영역 채우기 불러오는 중..."
+msgstr "채움 영역 불러오기..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2668
 msgid "Loading arcs..."
@@ -41156,7 +41149,7 @@ msgstr ""
 "음)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4178
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown textbox justification %d, text %s"
 msgstr "알 수 없는 텍스트 상자 정렬 %d , 텍스트 %s"
 
@@ -41660,8 +41653,7 @@ msgstr "'%s' 패키지가 라이브러리 '%s'에 없습니다."
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:2323
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
-"Eagle 레이어 '%s' (%d) 이(가) 매핑되지 않았기 때문에 다각형을 무시합니다"
+msgstr "Eagle 레이어 '%s' (%d) 이(가) 매핑되지 않았기 때문에 다각형을 무시함"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1582
 #, c-format
@@ -42241,7 +42233,7 @@ msgid "Cannot interpret date code %d"
 msgstr "날짜 코드 %d을(를) 해석할 수 없습니다"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1089
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Items found on undefined layers (%s).\n"
 "Do you wish to rescue them to the %s layer?\n"
@@ -42249,7 +42241,9 @@ msgid ""
 "Zones will need to be refilled."
 msgstr ""
 "정의되지 않은 레이어에서 발견된 항목 (%s).\n"
-"%s 레이어로 복구하시겠습니까?"
+"해당 항목을 %s 레이어로 복구하시겠습니까?\n"
+"\n"
+"영역을 다시 채워야 합니다."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1095
 msgid "Undefined Layers Warning"
@@ -42771,7 +42765,7 @@ msgstr "DRC"
 #: pcbnew/pcbnew_jobs_handler.cpp:1202
 #, c-format
 msgid "Found %d unconnected items\n"
-msgstr "%d개의 연결되지 않은 항목 발견\n"
+msgstr "%d개의 미연결 항목 발견\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1208
 #, c-format
@@ -43935,7 +43929,7 @@ msgstr "구리 마감: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:453
 msgid "Castellated pads: "
-msgstr "카스텔레이티드 패드: "
+msgstr "성곽 패드: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:461
 msgid "Board Thickness: "
@@ -43951,7 +43945,7 @@ msgstr "임피던스 제어: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:492
 msgid "Plated Board Edge: "
-msgstr "도금 된 보드 가장자리: "
+msgstr "도금된 보드 가장자리: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:500
 msgid "Edge card connectors: "
@@ -44020,7 +44014,7 @@ msgstr "모든 영역을 다시 채우는 중..."
 
 #: pcbnew/tools/drc_tool.cpp:160
 msgid "Schematic parity tests require a fully annotated schematic."
-msgstr "회로도의 동등성 테스트에는 완전히 주석 처리된 회로도가 필요합니다."
+msgstr "회로도 동일성 테스트에는 완전한 주석이 달린 회로도가 필요합니다."
 
 #: pcbnew/tools/edit_tool.cpp:99
 msgid "Positioning Tools"
@@ -44257,7 +44251,7 @@ msgstr "일부 다각형은 뺄 수 없습니다."
 
 #: pcbnew/tools/item_modification_routine.cpp:468
 msgid "Intersect polygons."
-msgstr "다각형 교차하기."
+msgstr "다각형 교차."
 
 #: pcbnew/tools/item_modification_routine.cpp:476
 msgid "Unable to intersect the selected polygons."
@@ -44308,11 +44302,11 @@ msgstr "패드 편집 모드.  %s을(를) 눌러 종료하세요."
 
 #: pcbnew/tools/pcb_actions.cpp:53
 msgid "Create Polygon from Selection..."
-msgstr "선택에서 다각형 만들기..."
+msgstr "선택 항목으로 다각형 생성..."
 
 #: pcbnew/tools/pcb_actions.cpp:54
 msgid "Creates a graphic polygon from the selection"
-msgstr "다각형 그래픽 생성"
+msgstr "선택 항목으로 다각형 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:60
 msgid "Create Zone from Selection..."
@@ -44360,11 +44354,11 @@ msgstr "선 그리기"
 
 #: pcbnew/tools/pcb_actions.cpp:110
 msgid "Draw Graphic Polygon"
-msgstr "그래픽 폴리곤 그리기"
+msgstr "다각형 그리기"
 
 #: pcbnew/tools/pcb_actions.cpp:111
 msgid "Draw a graphic polygon"
-msgstr "그래픽 다각형 그리기"
+msgstr "다각형 그리기"
 
 #: pcbnew/tools/pcb_actions.cpp:120
 msgid "Draw a rectangle"
@@ -44752,11 +44746,11 @@ msgstr "다각형 빼기"
 
 #: pcbnew/tools/pcb_actions.cpp:641
 msgid "Subtract selected polygons from the last one selected"
-msgstr "마지막으로 선택한 다각형에서 선택한 다각형 빼기"
+msgstr "마지막으로 선택된 다각형에서 선택한 다각형 빼기"
 
 #: pcbnew/tools/pcb_actions.cpp:647
 msgid "Intersect Polygons"
-msgstr "다각형 교차"
+msgstr "다각형 교집합"
 
 #: pcbnew/tools/pcb_actions.cpp:648
 msgid "Create the intersection of the selected polygons"
@@ -44978,7 +44972,7 @@ msgstr "마이크로웨이브 다각형 모양 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:894
 msgid "Create a microwave polygonal shape from a list of vertices"
-msgstr "정점목록에서 마이크로파 다각형 모양 만들기"
+msgstr "꼭지점 목록에서 마이크로파 다각형 모양 만들기"
 
 #: pcbnew/tools/pcb_actions.cpp:902
 msgid "Add Microwave Line"
@@ -46317,7 +46311,7 @@ msgstr "%d개의 영역 다시 채우기"
 
 #: pcbnew/tools/zone_filler_tool.cpp:263
 msgid "Auto-fill Zone(s)"
-msgstr "자동 채우기 영역"
+msgstr "자동 채움 영역"
 
 #: pcbnew/tools/zone_filler_tool.cpp:274
 #: pcbnew/widgets/appearance_controls.cpp:3337
@@ -46336,7 +46330,7 @@ msgstr "영역 채우기"
 
 #: pcbnew/tools/zone_filler_tool.cpp:407
 msgid "Unfill Zone"
-msgstr "영역 채우기 제거"
+msgstr "영역 채움 제거"
 
 #: pcbnew/tracks_cleaner.cpp:68
 msgid "Checking null tracks and vias..."
@@ -47155,11 +47149,11 @@ msgstr "패드 연결"
 
 #: pcbnew/zone_filler.cpp:106
 msgid "Checking zone fills..."
-msgstr "영역 채우기 확인 중..."
+msgstr "영역 채움 확인..."
 
 #: pcbnew/zone_filler.cpp:107
 msgid "Building zone fills..."
-msgstr "영역 채우기 실행 중..."
+msgstr "영역 채움 생성..."
 
 #: pcbnew/zone_filler.cpp:521
 msgid "Removing isolated copper islands..."
