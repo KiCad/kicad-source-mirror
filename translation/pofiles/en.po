@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 19:59+0300\n"
+"POT-Creation-Date: 2025-02-03 19:59+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1079,9 +1079,6 @@ msgstr "&Yes"
 
 msgid "&No"
 msgstr "&No"
-
-msgid "Fetching design_block libraries..."
-msgstr "Fetching design_block libraries..."
 
 msgid "Loading design_blocks..."
 msgstr "Loading design_blocks..."
@@ -29338,6 +29335,10 @@ msgid "Checking board footprints against library..."
 msgstr "Checking board footprints against library..."
 
 #, c-format
+msgid "The footprint library '%s' was not found."
+msgstr "The footprint library '%s' was not found."
+
+#, c-format
 msgid "Footprint '%s' does not match copy in library '%s'."
 msgstr "Footprint '%s' does not match copy in library '%s'."
 
@@ -30004,9 +30005,6 @@ msgstr "Library not found in footprint library table."
 
 msgid "Footprint library not enabled."
 msgstr "Footprint library not enabled."
-
-msgid "Fetching footprint libraries..."
-msgstr "Fetching footprint libraries..."
 
 msgid "Loading footprints..."
 msgstr "Loading footprints..."
@@ -36782,6 +36780,12 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Fetching design_block libraries..."
+#~ msgstr "Fetching design_block libraries..."
+
+#~ msgid "Fetching footprint libraries..."
+#~ msgstr "Fetching footprint libraries..."
 
 #~ msgid "CrtYd_Front"
 #~ msgstr "CrtYd_Front"
