@@ -88,6 +88,26 @@ void KICAD_API_SERVER::Start()
         return;
     }
 
+#ifndef __WINDOWS__
+    // We use non-abstract sockets because macOS and some other non-Linux platforms don't support
+    // abstract sockets, which means there might be an old socket to unlink.  In order to try to
+    // recover this, we lock a file (which will be unlocked on process exit) and if we get the lock,
+    // we know the old socket is orphaned and can be removed.
+    wxFileName lockFilePath( socket.GetPath(), wxS( "api.lock" ) );
+
+    int lockFile = open( lockFilePath.GetFullPath().c_str(), O_RDONLY | O_CREAT, 0600 );
+
+    if( lockFile >= 0 && flock( lockFile, LOCK_EX | LOCK_NB ) == 0 )
+    {
+        if( socket.Exists() )
+        {
+            wxLogTrace( traceApi, wxString::Format( "Server: cleaning up stale socket path %s",
+                                                    socket.GetFullPath() ) );
+            wxRemoveFile( socket.GetFullPath() );
+        }
+    }
+#endif
+
     if( socket.Exists() )
     {
         socket.SetFullName( wxString::Format( wxS( "api-%lu.sock" ), ::wxGetProcessId() ) );
