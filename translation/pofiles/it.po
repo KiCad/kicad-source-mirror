@@ -115,10 +115,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-03 19:59+0300\n"
-"PO-Revision-Date: 2025-02-03 16:58+0000\n"
+"PO-Revision-Date: 2025-02-03 18:48+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
-"source/it/>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
+"master-source/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24851,18 +24851,16 @@ msgid "Sketch polygons"
 msgstr "Schizza poligoni"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:70
-#, fuzzy
 msgid "Display polygon items in outline mode"
-msgstr "Mostra poligoni in modalità contorno"
+msgstr "Mostra elementi poligoni in modalità contorno"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:75
 msgid "Forced Opacity Display Mode"
 msgstr "Forzata modalità di visualizzazione opacità"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:77
-#, fuzzy
 msgid "Forced opacity:"
-msgstr "Opacità:"
+msgstr "Opacità forzata:"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:79
 msgid "Opacity in forced opacity display mode"
@@ -25596,19 +25594,16 @@ msgid "Show DCodes"
 msgstr "Mostra i DCode"
 
 #: gerbview/tools/gerbview_actions.cpp:222
-#, fuzzy
 msgid "Show dcode numbers"
-msgstr "Mostra numero DCodes"
+msgstr "Mostra numeri dcode"
 
 #: gerbview/tools/gerbview_actions.cpp:228
-#, fuzzy
 msgid "Show with Forced Opacity Mode"
-msgstr "Mostra riquadro iscrizioni in modalità modifica"
+msgstr "Mostra con modalità opacità forzata"
 
 #: gerbview/tools/gerbview_actions.cpp:229
-#, fuzzy
 msgid "Show layers using opacity color forced mode"
-msgstr "Mostra strati in modalità comparativa EXOR"
+msgstr "Mostra strati in modalità forzata opacità colore"
 
 #: gerbview/tools/gerbview_actions.cpp:235
 msgid "Show in XOR Mode"
@@ -25804,34 +25799,28 @@ msgid "Leave unchanged"
 msgstr "Lascia non modificato"
 
 #: include/tool/edit_table_tool_base.h:397
-#, fuzzy
 msgid "Delete Rows"
-msgstr "Cancella"
+msgstr "Cancella righe"
 
 #: include/tool/edit_table_tool_base.h:399
-#, fuzzy
 msgid "Delete Row"
-msgstr "Cancella"
+msgstr "Cancella riga"
 
 #: include/tool/edit_table_tool_base.h:475
-#, fuzzy
 msgid "Delete Columns"
-msgstr "Seleziona colonne"
+msgstr "Cancella colonne"
 
 #: include/tool/edit_table_tool_base.h:477
-#, fuzzy
 msgid "Delete Column"
-msgstr "Seleziona colonne"
+msgstr "Cancella colonna"
 
 #: include/widgets/filedlg_import_non_kicad.h:36
-#, fuzzy
 msgid "Show import issues"
-msgstr "Mostra o nascondi %s"
+msgstr "Mostra problemi importazione"
 
 #: include/widgets/filedlg_open_embed_file.h:36
-#, fuzzy
 msgid "Embed File"
-msgstr "File immagine"
+msgstr "Incorpora file"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -25859,7 +25848,7 @@ msgstr "Cartella d'uscita"
 
 #: kicad/cli/command.cpp:150
 msgid "Output file"
-msgstr "File d'uscita:"
+msgstr "File d'uscita"
 
 #: kicad/cli/command.cpp:163
 msgid ""
@@ -26012,10 +26001,10 @@ msgstr ""
 "Utilità di esportazione (Gerber, forature, file di posizionamento, ecc.)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:79
-#, fuzzy
 msgid ""
 "Output file format, options: step, brep, xao, glb (binary glTF), ply, stl"
-msgstr "Formato file di uscita, opzioni: step, glb (binari glTF)"
+msgstr ""
+"Formato file d'uscita, opzioni: step, brep, xao, glb (glTF binari), ply, stl"
 
 #: kicad/cli/command_pcb_export_3d.cpp:83
 msgid "Overwrite output file"
@@ -26057,14 +26046,12 @@ msgstr ""
 "conduttori non vengono esportati."
 
 #: kicad/cli/command_pcb_export_3d.cpp:123
-#, fuzzy
 msgid "Exclude board body"
-msgstr "Escludi dalla scheda"
+msgstr "Escludi corpo scheda"
 
 #: kicad/cli/command_pcb_export_3d.cpp:127
-#, fuzzy
 msgid "Exclude 3D models for components"
-msgstr "Escludi i modelli 3D per i componenti con attributo 'non popolare'"
+msgstr "Escludi i modelli 3D per i componenti"
 
 #: kicad/cli/command_pcb_export_3d.cpp:131
 msgid ""
@@ -26076,15 +26063,13 @@ msgstr ""
 
 #: kicad/cli/command_pcb_export_3d.cpp:137
 #: pcbnew/dialogs/dialog_export_step_base.cpp:121
-#, fuzzy
 msgid "Export tracks and vias"
-msgstr "Esporta piste, piazzole e via"
+msgstr "Esporta piste e via"
 
 #: kicad/cli/command_pcb_export_3d.cpp:141
 #: pcbnew/dialogs/dialog_export_step_base.cpp:126
-#, fuzzy
 msgid "Export pads"
-msgstr "Esporta piste"
+msgstr "Esporta piazzole"
 
 #: kicad/cli/command_pcb_export_3d.cpp:145
 #: pcbnew/dialogs/dialog_export_step_base.cpp:129
