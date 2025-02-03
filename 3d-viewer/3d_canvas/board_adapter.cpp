@@ -519,7 +519,7 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
 
         case B_Mask:
             zposBottom = zpos_copperTop_back;
-            zposTop    = zpos_copperTop_back - m_nonCopperLayerThickness3DU;
+            zposTop    = zpos_copperTop_back - m_backMaskThickness3DU;
             break;
 
         case B_Paste:
@@ -529,7 +529,7 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
 
         case F_Mask:
             zposBottom = zpos_copperTop_front;
-            zposTop    = zpos_copperTop_front + m_nonCopperLayerThickness3DU;
+            zposTop    = zpos_copperTop_front + m_frontMaskThickness3DU;
             break;
 
         case F_Paste:
