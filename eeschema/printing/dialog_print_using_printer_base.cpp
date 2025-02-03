@@ -23,32 +23,33 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	m_checkReference->SetValue(true);
 	m_checkReference->SetToolTip( _("Print (or not) the Frame references.") );
 
-	bleftSizer->Add( m_checkReference, 0, wxALL, 5 );
+	bleftSizer->Add( m_checkReference, 0, wxTOP|wxBOTTOM, 10 );
 
 	wxBoxSizer* bSizerOttputMode;
 	bSizerOttputMode = new wxBoxSizer( wxHORIZONTAL );
 
 	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Output mode:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
-	bSizerOttputMode->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
+	bSizerOttputMode->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxString m_colorPrintChoices[] = { _("Color"), _("Black and White") };
 	int m_colorPrintNChoices = sizeof( m_colorPrintChoices ) / sizeof( wxString );
 	m_colorPrint = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_colorPrintNChoices, m_colorPrintChoices, 0 );
 	m_colorPrint->SetSelection( 0 );
-	m_colorPrint->SetMinSize( wxSize( 200,-1 ) );
-
-	bSizerOttputMode->Add( m_colorPrint, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 25 );
+	bSizerOttputMode->Add( m_colorPrint, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
-	bleftSizer->Add( bSizerOttputMode, 0, wxEXPAND, 5 );
+	bleftSizer->Add( bSizerOttputMode, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	m_checkBackgroundColor = new wxCheckBox( this, wxID_ANY, _("Print background color"), wxDefaultPosition, wxDefaultSize, 0 );
-	bleftSizer->Add( m_checkBackgroundColor, 0, wxALL, 5 );
+	bleftSizer->Add( m_checkBackgroundColor, 0, wxLEFT, 20 );
+
+
+	bleftSizer->Add( 0, 10, 0, wxEXPAND, 5 );
 
 	m_checkUseColorTheme = new wxCheckBox( this, wxID_ANY, _("Use a different color theme for printing:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkUseColorTheme->SetValue(true);
-	bleftSizer->Add( m_checkUseColorTheme, 0, wxALL, 5 );
+	bleftSizer->Add( m_checkUseColorTheme, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
@@ -58,22 +59,22 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	m_colorTheme->SetSelection( 0 );
 	m_colorTheme->Enable( false );
 
-	bSizer4->Add( m_colorTheme, 1, wxEXPAND|wxLEFT|wxRIGHT, 25 );
+	bSizer4->Add( m_colorTheme, 1, wxEXPAND|wxLEFT, 20 );
 
 
-	bleftSizer->Add( bSizer4, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bleftSizer->Add( bSizer4, 1, wxEXPAND, 5 );
 
 
-	bMainSizer->Add( bleftSizer, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 10 );
+	bMainSizer->Add( bleftSizer, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 	wxBoxSizer* bbuttonsSizer;
 	bbuttonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_buttonPageSetup = new wxButton( this, wxID_ANY, _("Page Setup..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bbuttonsSizer->Add( m_buttonPageSetup, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bbuttonsSizer->Add( m_buttonPageSetup, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bbuttonsSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	bbuttonsSizer->Add( 20, 0, 1, wxEXPAND, 5 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
@@ -84,10 +85,10 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 
-	bbuttonsSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 5 );
+	bbuttonsSizer->Add( m_sdbSizer1, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bMainSizer->Add( bbuttonsSizer, 0, wxEXPAND|wxLEFT|wxTOP, 10 );
+	bMainSizer->Add( bbuttonsSizer, 0, wxEXPAND|wxLEFT, 10 );
 
 
 	this->SetSizer( bMainSizer );
