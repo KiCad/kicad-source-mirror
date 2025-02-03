@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-03 19:59+0300\n"
-"PO-Revision-Date: 2025-01-29 22:33+0000\n"
+"PO-Revision-Date: 2025-02-04 09:03+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -42133,9 +42133,9 @@ msgid "Checking board footprints against library..."
 msgstr "Verificando os footprints da placa com a biblioteca..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:892
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' was not found."
-msgstr "O footprint da biblioteca '%s' não foi encontrada."
+msgstr "A biblioteca do footprint '%s' não foi encontrado."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:941
 #, c-format
