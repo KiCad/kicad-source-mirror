@@ -68,6 +68,7 @@
 #include <tools/ee_selection.h>
 #include <tools/ee_selection_tool.h>
 #include <tools/ee_tool_utils.h>
+#include <tools/sch_edit_table_tool.h>
 #include <drawing_sheet/ds_proxy_undo_item.h>
 #include <eda_list_dialog.h>
 #include <view/view_controls.h>
@@ -78,7 +79,7 @@
 #include <wx/treectrl.h>
 #include <wx/msgdlg.h>
 #include <io/kicad/kicad_io_utils.h>
-#include "sch_edit_table_tool.h"
+#include <printing/dialog_print.h>
 
 #ifdef KICAD_IPC_API
 #include <api/api_plugin_manager.h>
@@ -295,7 +296,10 @@ int SCH_EDITOR_CONTROL::RemapSymbols( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::Print( const TOOL_EVENT& aEvent )
 {
-    InvokeDialogPrintUsingPrinter( m_frame );
+    DIALOG_PRINT dlg( m_frame );
+
+    dlg.ShowModal();
+
     return 0;
 }
 

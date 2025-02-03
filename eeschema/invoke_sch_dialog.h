@@ -61,10 +61,6 @@ class SCH_EDIT_FRAME;
 int InvokeDialogRescueEach( wxWindow* aParent, RESCUER& aRescuer, SCH_SHEET_PATH* aCurrentSheet,
                             EDA_DRAW_PANEL_GAL::GAL_TYPE aGalBackEndType, bool aAskShowAgain );
 
-/// Create and show DIALOG_PRINT_USING_PRINTER and return whatever
-/// DIALOG_PRINT_USING_PRINTER::ShowModal() returns.
-int InvokeDialogPrintUsingPrinter( SCH_EDIT_FRAME* aCaller );
-
 /// Create and show DIALOG_BOM and return whatever
 /// DIALOG_BOM::ShowModal() returns.
 int InvokeDialogCreateBOM( SCH_EDIT_FRAME* aCaller );

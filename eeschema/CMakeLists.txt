@@ -318,8 +318,8 @@ set( EESCHEMA_IMPORT_GFX
     )
 
 set( EESCHEMA_PRINTING
-    printing/dialog_print_using_printer.cpp
-    printing/dialog_print_using_printer_base.cpp
+    printing/dialog_print.cpp
+    printing/dialog_print_base.cpp
     printing/sch_printout.cpp
     )
 

@@ -26,45 +26,13 @@
 #include <confirm.h>
 #include <sch_screen.h>
 #include <sch_edit_frame.h>
-#include <base_units.h>
 #include <math/vector2wx.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
-#include <sch_sheet.h>
-#include <schematic.h>
-#include <sch_sheet_path.h>
-#include "dialog_print_using_printer_base.h"
-#include <sch_painter.h>
 #include <wx/print.h>
 #include <wx/printdlg.h>
-
-#include <advanced_config.h>
-
+#include "dialog_print.h"
 #include "sch_printout.h"
-
-
-class DIALOG_PRINT_USING_PRINTER : public DIALOG_PRINT_USING_PRINTER_BASE
-{
-public:
-    DIALOG_PRINT_USING_PRINTER( SCH_EDIT_FRAME* aParent );
-    ~DIALOG_PRINT_USING_PRINTER() override;
-
-protected:
-    void OnOutputChoice( wxCommandEvent& event ) override;
-    void OnUseColorThemeChecked( wxCommandEvent& event ) override;
-
-private:
-    bool TransferDataToWindow() override;
-    bool TransferDataFromWindow() override;
-
-    void OnPageSetup( wxCommandEvent& event ) override;
-    void OnPrintPreview( wxCommandEvent& event ) override;
-
-    void SavePrintOptions();
-
-    SCH_EDIT_FRAME* m_parent;
-    bool m_useCairo;
-};
 
 
 /**
@@ -77,7 +45,7 @@ public:
     SCH_PREVIEW_FRAME( wxPrintPreview* aPreview, wxWindow* aParent,
                        const wxString& aTitle, const wxPoint& aPos = wxDefaultPosition,
                        const wxSize& aSize = wxDefaultSize ) :
-        wxPreviewFrame( aPreview, aParent, aTitle, aPos, aSize )
+            wxPreviewFrame( aPreview, aParent, aTitle, aPos, aSize )
     {
     }
 
@@ -116,9 +84,9 @@ wxPoint SCH_PREVIEW_FRAME::s_pos;
 wxSize  SCH_PREVIEW_FRAME::s_size;
 
 
-DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( SCH_EDIT_FRAME* aParent ) :
-    DIALOG_PRINT_USING_PRINTER_BASE( aParent ),
-    m_parent( aParent )
+DIALOG_PRINT::DIALOG_PRINT( SCH_EDIT_FRAME* aParent ) :
+        DIALOG_PRINT_BASE( aParent ),
+        m_parent( aParent )
 {
     wxASSERT( aParent );
     m_useCairo = ADVANCED_CFG::GetCfg().m_EnableEeschemaPrintCairo;
@@ -144,13 +112,13 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( SCH_EDIT_FRAME* aParent 
 }
 
 
-DIALOG_PRINT_USING_PRINTER::~DIALOG_PRINT_USING_PRINTER()
+DIALOG_PRINT::~DIALOG_PRINT()
 {
     SavePrintOptions();
 }
 
 
-bool DIALOG_PRINT_USING_PRINTER::TransferDataToWindow()
+bool DIALOG_PRINT::TransferDataToWindow()
 {
     EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
 
@@ -197,11 +165,15 @@ bool DIALOG_PRINT_USING_PRINTER::TransferDataToWindow()
     if( pageInfo.IsCustom() )
     {
         if( pageInfo.IsPortrait() )
+        {
             pageSetupDialogData.SetPaperSize( wxSize( EDA_UNIT_UTILS::Mils2mm( pageInfo.GetWidthMils() ),
                                                       EDA_UNIT_UTILS::Mils2mm( pageInfo.GetHeightMils() ) ) );
+        }
         else
+        {
             pageSetupDialogData.SetPaperSize( wxSize( EDA_UNIT_UTILS::Mils2mm( pageInfo.GetHeightMils() ),
                                                       EDA_UNIT_UTILS::Mils2mm( pageInfo.GetWidthMils() ) ) );
+        }
     }
 
     pageSetupDialogData.GetPrintData().SetOrientation( pageInfo.GetWxOrientation() );
@@ -212,13 +184,13 @@ bool DIALOG_PRINT_USING_PRINTER::TransferDataToWindow()
 }
 
 
-void DIALOG_PRINT_USING_PRINTER::OnUseColorThemeChecked( wxCommandEvent& event )
+void DIALOG_PRINT::OnUseColorThemeChecked( wxCommandEvent& event )
 {
     m_colorTheme->Enable( m_checkUseColorTheme->GetValue() );
 }
 
 
-void DIALOG_PRINT_USING_PRINTER::OnOutputChoice( wxCommandEvent& event )
+void DIALOG_PRINT::OnOutputChoice( wxCommandEvent& event )
 {
     long sel = event.GetSelection();
     m_checkBackgroundColor->Enable( sel == 0 );
@@ -230,7 +202,7 @@ void DIALOG_PRINT_USING_PRINTER::OnOutputChoice( wxCommandEvent& event )
 }
 
 
-void DIALOG_PRINT_USING_PRINTER::SavePrintOptions()
+void DIALOG_PRINT::SavePrintOptions()
 {
     EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
 
@@ -252,7 +224,7 @@ void DIALOG_PRINT_USING_PRINTER::SavePrintOptions()
 }
 
 
-void DIALOG_PRINT_USING_PRINTER::OnPageSetup( wxCommandEvent& event )
+void DIALOG_PRINT::OnPageSetup( wxCommandEvent& event )
 {
     wxPageSetupDialog pageSetupDialog( this, &m_parent->GetPageSetupData() );
     pageSetupDialog.ShowModal();
@@ -261,7 +233,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPageSetup( wxCommandEvent& event )
 }
 
 
-void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
+void DIALOG_PRINT::OnPrintPreview( wxCommandEvent& event )
 {
     SavePrintOptions();
 
@@ -300,7 +272,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 }
 
 
-bool DIALOG_PRINT_USING_PRINTER::TransferDataFromWindow()
+bool DIALOG_PRINT::TransferDataFromWindow()
 {
     if( Pgm().m_Printing )
     {
@@ -399,12 +371,4 @@ bool DIALOG_PRINT_USING_PRINTER::TransferDataFromWindow()
     Pgm().m_Printing = false;
 
     return true;
-}
-
-
-int InvokeDialogPrintUsingPrinter( SCH_EDIT_FRAME* aCaller )
-{
-    DIALOG_PRINT_USING_PRINTER dlg( aCaller );
-
-    return dlg.ShowModal();
 }
