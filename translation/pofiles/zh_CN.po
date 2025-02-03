@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 19:59+0300\n"
-"PO-Revision-Date: 2025-01-24 17:47+0000\n"
+"PO-Revision-Date: 2025-02-03 12:19+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -21862,7 +21862,6 @@ msgid "Create a new symbol in an existing library"
 msgstr "在现有库中创建一个新符号"
 
 #: eeschema/tools/ee_actions.cpp:202
-#, fuzzy
 msgid "Derive from Existing Symbol..."
 msgstr "从现有符号派生..."
 
@@ -37613,9 +37612,9 @@ msgid "Internal Layers"
 msgstr "内层"
 
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:496
-#, fuzzy, c-format
+#, c-format
 msgid "Layer name %s already in use."
-msgstr "层名称 '%s' 已经在使用中。"
+msgstr "层名称 %s 已在使用中。"
 
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:23
 msgid "Default Field Properties for New Footprints"
@@ -43077,10 +43076,9 @@ msgid "PTH pad %s"
 msgstr "PTH 焊盘 %s"
 
 #: pcbnew/pad.cpp:2179
-#, fuzzy
 msgid ""
 "(plated through holes normally have a copper pad on at least one outer layer)"
-msgstr "(PTH 焊盘通常在至少一个层上有一个铜焊盘)"
+msgstr "(PTH 焊盘通常应至少在一个外层上存在焊盘)"
 
 #: pcbnew/pad.cpp:2187
 msgid "('fiducial' property makes no sense on NPTH pads)"
@@ -45172,9 +45170,9 @@ msgid "No layers selected for plotting."
 msgstr "未选择要绘制的层。"
 
 #: pcbnew/pcb_plotter.cpp:427
-#, fuzzy, c-format
+#, c-format
 msgid "Color theme '%s' not found, will use theme from PCB Editor settings.\n"
-msgstr "要使用的配色主题 (默认使用PCB编辑器设置)"
+msgstr "未找到配色主题 '%s', 将使用 PCB 编辑器设置中的主题。\n"
 
 #: pcbnew/pcb_reference_image.cpp:343
 msgid "Associated Layer"
@@ -49688,184 +49686,148 @@ msgid "User defined layer 9"
 msgstr "用户定义层 9"
 
 #: pcbnew/widgets/appearance_controls.cpp:1684
-#, fuzzy
 msgid "User defined layer 10"
-msgstr "用户定义层 1"
+msgstr "用户定义层 10"
 
 #: pcbnew/widgets/appearance_controls.cpp:1685
-#, fuzzy
 msgid "User defined layer 11"
-msgstr "用户定义层 1"
+msgstr "用户定义层 11"
 
 #: pcbnew/widgets/appearance_controls.cpp:1686
-#, fuzzy
 msgid "User defined layer 12"
-msgstr "用户定义层 1"
+msgstr "用户定义层 12"
 
 #: pcbnew/widgets/appearance_controls.cpp:1687
-#, fuzzy
 msgid "User defined layer 13"
-msgstr "用户定义层 1"
+msgstr "用户定义层 13"
 
 #: pcbnew/widgets/appearance_controls.cpp:1688
-#, fuzzy
 msgid "User defined layer 14"
-msgstr "用户定义层 1"
+msgstr "用户定义层 14"
 
 #: pcbnew/widgets/appearance_controls.cpp:1689
-#, fuzzy
 msgid "User defined layer 15"
-msgstr "用户定义层 1"
+msgstr "用户定义层 15"
 
 #: pcbnew/widgets/appearance_controls.cpp:1690
-#, fuzzy
 msgid "User defined layer 16"
-msgstr "用户定义层 1"
+msgstr "用户定义层 16"
 
 #: pcbnew/widgets/appearance_controls.cpp:1691
-#, fuzzy
 msgid "User defined layer 17"
-msgstr "用户定义层 1"
+msgstr "用户定义层 17"
 
 #: pcbnew/widgets/appearance_controls.cpp:1692
-#, fuzzy
 msgid "User defined layer 18"
-msgstr "用户定义层 1"
+msgstr "用户定义层 18"
 
 #: pcbnew/widgets/appearance_controls.cpp:1693
-#, fuzzy
 msgid "User defined layer 19"
-msgstr "用户定义层 1"
+msgstr "用户定义层 19"
 
 #: pcbnew/widgets/appearance_controls.cpp:1694
-#, fuzzy
 msgid "User defined layer 20"
-msgstr "用户定义层 2"
+msgstr "用户定义层 20"
 
 #: pcbnew/widgets/appearance_controls.cpp:1695
-#, fuzzy
 msgid "User defined layer 21"
-msgstr "用户定义层 2"
+msgstr "用户定义层 21"
 
 #: pcbnew/widgets/appearance_controls.cpp:1696
-#, fuzzy
 msgid "User defined layer 22"
-msgstr "用户定义层 2"
+msgstr "用户定义层 22"
 
 #: pcbnew/widgets/appearance_controls.cpp:1697
-#, fuzzy
 msgid "User defined layer 23"
-msgstr "用户定义层 2"
+msgstr "用户定义层 23"
 
 #: pcbnew/widgets/appearance_controls.cpp:1698
-#, fuzzy
 msgid "User defined layer 24"
-msgstr "用户定义层 2"
+msgstr "用户定义层 24"
 
 #: pcbnew/widgets/appearance_controls.cpp:1699
-#, fuzzy
 msgid "User defined layer 25"
-msgstr "用户定义层 2"
+msgstr "用户定义层 25"
 
 #: pcbnew/widgets/appearance_controls.cpp:1700
-#, fuzzy
 msgid "User defined layer 26"
-msgstr "用户定义层 2"
+msgstr "用户定义层 26"
 
 #: pcbnew/widgets/appearance_controls.cpp:1701
-#, fuzzy
 msgid "User defined layer 27"
-msgstr "用户定义层 2"
+msgstr "用户定义层 27"
 
 #: pcbnew/widgets/appearance_controls.cpp:1702
-#, fuzzy
 msgid "User defined layer 28"
-msgstr "用户定义层 2"
+msgstr "用户定义层 28"
 
 #: pcbnew/widgets/appearance_controls.cpp:1703
-#, fuzzy
 msgid "User defined layer 29"
-msgstr "用户定义层 2"
+msgstr "用户定义层 29"
 
 #: pcbnew/widgets/appearance_controls.cpp:1704
-#, fuzzy
 msgid "User defined layer 30"
-msgstr "用户定义层 3"
+msgstr "用户定义层 30"
 
 #: pcbnew/widgets/appearance_controls.cpp:1705
-#, fuzzy
 msgid "User defined layer 31"
-msgstr "用户定义层 3"
+msgstr "用户定义层 31"
 
 #: pcbnew/widgets/appearance_controls.cpp:1706
-#, fuzzy
 msgid "User defined layer 32"
-msgstr "用户定义层 3"
+msgstr "用户定义层 32"
 
 #: pcbnew/widgets/appearance_controls.cpp:1707
-#, fuzzy
 msgid "User defined layer 33"
-msgstr "用户定义层 3"
+msgstr "用户定义层 33"
 
 #: pcbnew/widgets/appearance_controls.cpp:1708
-#, fuzzy
 msgid "User defined layer 34"
-msgstr "用户定义层 3"
+msgstr "用户定义层 34"
 
 #: pcbnew/widgets/appearance_controls.cpp:1709
-#, fuzzy
 msgid "User defined layer 35"
-msgstr "用户定义层 3"
+msgstr "用户定义层 35"
 
 #: pcbnew/widgets/appearance_controls.cpp:1710
-#, fuzzy
 msgid "User defined layer 36"
-msgstr "用户定义层 3"
+msgstr "用户定义层 36"
 
 #: pcbnew/widgets/appearance_controls.cpp:1711
-#, fuzzy
 msgid "User defined layer 37"
-msgstr "用户定义层 3"
+msgstr "用户定义层 37"
 
 #: pcbnew/widgets/appearance_controls.cpp:1712
-#, fuzzy
 msgid "User defined layer 38"
-msgstr "用户定义层 3"
+msgstr "用户定义层 38"
 
 #: pcbnew/widgets/appearance_controls.cpp:1713
-#, fuzzy
 msgid "User defined layer 39"
-msgstr "用户定义层 3"
+msgstr "用户定义层 39"
 
 #: pcbnew/widgets/appearance_controls.cpp:1714
-#, fuzzy
 msgid "User defined layer 40"
-msgstr "用户定义层 4"
+msgstr "用户定义层 40"
 
 #: pcbnew/widgets/appearance_controls.cpp:1715
-#, fuzzy
 msgid "User defined layer 41"
-msgstr "用户定义层 4"
+msgstr "用户定义层 41"
 
 #: pcbnew/widgets/appearance_controls.cpp:1716
-#, fuzzy
 msgid "User defined layer 42"
-msgstr "用户定义层 4"
+msgstr "用户定义层 42"
 
 #: pcbnew/widgets/appearance_controls.cpp:1717
-#, fuzzy
 msgid "User defined layer 43"
-msgstr "用户定义层 4"
+msgstr "用户定义层 43"
 
 #: pcbnew/widgets/appearance_controls.cpp:1718
-#, fuzzy
 msgid "User defined layer 44"
-msgstr "用户定义层 4"
+msgstr "用户定义层 44"
 
 #: pcbnew/widgets/appearance_controls.cpp:1719
-#, fuzzy
 msgid "User defined layer 45"
-msgstr "用户定义层 4"
+msgstr "用户定义层 45"
 
 #: pcbnew/widgets/appearance_controls.cpp:1766
 msgid "Front copper layer"
