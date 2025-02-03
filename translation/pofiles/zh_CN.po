@@ -36,8 +36,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 19:59+0300\n"
-"PO-Revision-Date: 2025-01-29 16:58+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2025-02-03 16:58+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v8/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -78,9 +78,8 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:933
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
-msgstr ""
-"电路板缺少外框或外框形状异常 (如板外框线条没有闭合)。可用设计规则检查 (DRC) "
-"分析原因。"
+msgstr "电路板缺少外框或外框形状异常 (如板外框线条没有闭合)。可以通过设计规则检查 "
+"(DRC) 来分析原因。"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:264
 msgid "Create tracks and vias"
@@ -3639,7 +3638,7 @@ msgstr "抗锯齿选项"
 
 #: common/dialogs/panel_common_settings_base.cpp:39
 msgid "Accelerated graphics:"
-msgstr "硬件图形加速:"
+msgstr "硬件加速模式:"
 
 #: common/dialogs/panel_common_settings_base.cpp:43
 #: common/dialogs/panel_common_settings_base.cpp:53
@@ -3658,7 +3657,7 @@ msgstr "高品质抗锯齿处理"
 
 #: common/dialogs/panel_common_settings_base.cpp:49
 msgid "Fallback graphics:"
-msgstr "软件图形加速:"
+msgstr "软件兼容模式:"
 
 #: common/dialogs/panel_common_settings_base.cpp:70
 msgid "Helper Applications"
@@ -8076,21 +8075,21 @@ msgstr "渲染引擎"
 
 #: common/widgets/gal_options_panel_base.cpp:31
 msgid "Accelerated graphics"
-msgstr "硬件图形加速"
+msgstr "硬件加速模式"
 
 #: common/widgets/gal_options_panel_base.cpp:32
 msgid "Hardware-accelerated graphics (recommended)"
-msgstr "硬件图形加速 (推荐)"
+msgstr "使用硬件加速图形处理 (推荐)"
 
 #: common/widgets/gal_options_panel_base.cpp:36
 msgid "Fallback graphics"
-msgstr "软件图形加速"
+msgstr "软件兼容模式"
 
 #: common/widgets/gal_options_panel_base.cpp:37
 msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
-msgstr "软件图形加速 (适用于不支持 KiCad 硬件加速要求的计算机)"
+msgstr "回落到软件图形处理 (适用于无法满足 KiCad 硬件图形加速条件的设备)"
 
 #: common/widgets/gal_options_panel_base.cpp:47
 msgid "Grid Display"
@@ -21862,7 +21861,7 @@ msgstr "绘图模式"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:60
 msgid "Sketch flashed items"
-msgstr "flashed 项目草图"
+msgstr "曝光项目草图"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:63
 msgid "Sketch lines"
@@ -22432,7 +22431,7 @@ msgstr "属性:"
 
 #: gerbview/toolbars_gerber.cpp:160
 msgid "Highlight items with this aperture attribute"
-msgstr "高亮显示含此光圈 (Aperture) 特性的项目"
+msgstr "高亮显示含此光圈特性的项目"
 
 #: gerbview/toolbars_gerber.cpp:174 gerbview/toolbars_gerber.cpp:176
 msgid "DCode:"
@@ -22589,11 +22588,11 @@ msgstr "在外框模式下显示线"
 
 #: gerbview/tools/gerbview_actions.cpp:201
 msgid "Sketch Flashed Items"
-msgstr "Flashed 草图项目"
+msgstr "曝光草图项目"
 
 #: gerbview/tools/gerbview_actions.cpp:202
 msgid "Show flashed items in outline mode"
-msgstr "在外框模式下 flashed 项目"
+msgstr "在外框模式下曝光项目"
 
 #: gerbview/tools/gerbview_actions.cpp:210
 msgid "Sketch Polygons"
@@ -22678,7 +22677,7 @@ msgstr "高亮网络 \"%s\" 的项目"
 #: gerbview/tools/gerbview_selection_tool.cpp:86
 #, c-format
 msgid "Highlight Aperture Type '%s'"
-msgstr "高亮光圈 (Aperture) 类型 '%s'"
+msgstr "高亮光圈类型 '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:94
 #, c-format
@@ -23195,7 +23194,7 @@ msgstr "剔除阻焊开窗中的丝印"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:68
 msgid "Disable aperture macros"
-msgstr "禁用光圈宏 (Aperture macros)"
+msgstr "禁用自定义光圈 (宏光圈)"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:73
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:87
@@ -33373,20 +33372,20 @@ msgid ""
 "They are comments in the X1 format.\n"
 "Used to check connectivity in CAM tools and Gerber viewers."
 msgstr ""
-"在 Gerber 文件中包含网表元数据和光圈 (Aperture) 特性。\n"
+"在 Gerber 文件中包含网表元数据和光圈特性。\n"
 "在 X1 格式中它们是注释。\n"
 "用于在 CAM 工具和 Gerber 查看器中检查连接性。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:237
 msgid "Disable aperture macros (not recommended)"
-msgstr "禁用光圈宏 (Aperture macros) (不推荐)"
+msgstr "禁用自定义光圈 (宏光圈) (不推荐)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:238
 msgid ""
 "Disable aperture macros in Gerber files\n"
 "Use *only* for broken Gerber viewers."
 msgstr ""
-"禁用 Gerber 文件中的光圈宏 (Aperture macros)\n"
+"禁用 Gerber 文件中的自定义光圈 (宏光圈)\n"
 "仅对有问题的 Gerber 查看器使用。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:252
@@ -33458,8 +33457,8 @@ msgid ""
 "Check to use KiCad stroke font\n"
 "Uncheck to plot single-line ASCII texts as editable text (using DXF font)"
 msgstr ""
-"勾选来使用 KiCad 笔画字体\n"
-"取消选中将单列 ASCII 文本绘制为可编辑文本(使用 DXF 字体)"
+"勾选以使用 KiCad 内置的矢量笔画字体 (由线段和弧线组成)\n"
+"取消选中可将文本以单线轮廓字的形式绘制为可编辑文本 (使用 DXF 字体)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:361
 msgid "SVG Options"
