@@ -7,13 +7,14 @@
 # Gergo Kamaras <kamaras.gergo@gmail.com>, 2025.
 # Sárkány Lőrinc <lsarkany@gmail.com>, 2025.
 # iamPeter <lopert.peter.otto@gmail.com>, 2025.
+# Elek Zoltán <moncsa58@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 19:59+0300\n"
-"PO-Revision-Date: 2025-02-01 16:02+0000\n"
-"Last-Translator: iamPeter <lopert.peter.otto@gmail.com>\n"
+"PO-Revision-Date: 2025-02-03 12:19+0000\n"
+"Last-Translator: Elek Zoltán <moncsa58@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
 "master-source/hu/>\n"
 "Language: hu\n"
@@ -419,7 +420,7 @@ msgstr "Alapértelmezett nézet"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
 msgid "Redraw at the home position and zoom"
-msgstr ""
+msgstr "Újrarajzolás a kiindulási pozícióban és nagyítás"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:149
 msgid "Flip Board"
@@ -814,6 +815,8 @@ msgstr ""
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:513
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
 msgstr ""
+"A színszerkesztés engedélyezéséhez vegye ki a jelölőnégyzetet a 'Board "
+"stackup színek használata' jelölőnégyzetből."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:563
 #: pcbnew/widgets/appearance_controls.cpp:2234
@@ -1159,6 +1162,9 @@ msgid ""
 "Interactions number that a ray can travel through objects. (higher number of "
 "levels improve results, specially on very transparent boards)"
 msgstr ""
+"Kölcsönhatások száma, amellyel egy sugár áthaladhat az objektumokon. (a "
+"magasabb szintek száma javítja az eredményeket, különösen a nagyon átlátszó "
+"táblákon)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:98
 #, fuzzy
@@ -1172,6 +1178,8 @@ msgstr "A töréspont kiszámításához a fény irányába vetített sugarak sz
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:111
 msgid "Number of bounces that a ray can hit reflective objects"
 msgstr ""
+"A visszaverődések száma, amelyekkel egy sugár fényvisszaverő tárgyakat "
+"találhat el."
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:121
 #, fuzzy
@@ -1179,9 +1187,8 @@ msgid "Lights Configuration"
 msgstr "Gyorsbillentyű konfigurációs fájl betöltése"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:134
-#, fuzzy
 msgid "Ambient camera light:"
-msgstr "Figyelembe vett hőmérséklet-emelkedés:"
+msgstr "Környezeti kamerafény:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:146
 msgid "Top light:"
@@ -1326,6 +1333,8 @@ msgid ""
 "Show or hide the board body\n"
 "If hidden, show only copper and silkscreen layers."
 msgstr ""
+"A board megjelenítése vagy elrejtése. Ha elrejti, csak a réz és a "
+"szitanyomás rétegek jelennek meg."
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:236
 msgid "Reload board and 3D models"
@@ -1373,9 +1382,8 @@ msgid "Image Files"
 msgstr "Képfájlok"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:438
-#, fuzzy
 msgid "Create Drawing Sheet File"
-msgstr "Rajzlap Fájl Kiválasztás"
+msgstr "Rajzlap fájl létrehozása"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:452
 #: bitmap2component/bitmap2cmp_frame.cpp:485
@@ -1390,14 +1398,12 @@ msgid "Create PostScript File"
 msgstr "Postscript fájl létrehozása"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:504
-#, fuzzy
 msgid "Create Symbol Library"
-msgstr "Rajzjel könyvtár létrehozása"
+msgstr "Rajzjel (symbol) könyvtár létrehozása"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:537
-#, fuzzy
 msgid "Create Footprint Library"
-msgstr "Alkatrészrajzolat könyvtár létrehozása"
+msgstr "Alkatrészrajzolat (footprint) könyvtár létrehozása"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:48 common/eda_draw_frame.cpp:653
 #: eeschema/dialogs/dialog_field_properties_base.cpp:229
@@ -1647,9 +1653,8 @@ msgid "bits"
 msgstr "bit"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:98
-#, fuzzy
 msgid "Load Source Image"
-msgstr "Kép Betöltés"
+msgstr "Forráskép betöltése"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:105
 #, fuzzy
@@ -1769,6 +1774,7 @@ msgstr "Másolás vágólapra"
 #: bitmap2component/bitmap2component.cpp:406
 msgid "No shape in black and white image to convert: no outline created."
 msgstr ""
+"Nincs alakzat a fekete-fehér képen a konvertáláshoz: nem jön létre körvonal."
 
 #: common/api/api_handler.cpp:27
 #, fuzzy
@@ -1824,7 +1830,7 @@ msgstr "Hiba a fájl megnyitása közben"
 
 #: common/confirm.cpp:52 common/confirm.cpp:58
 msgid "Interleaved saves may produce very unexpected results."
-msgstr ""
+msgstr "Az egymásra épülő mentések nagyon váratlan eredményeket hozhatnak."
 
 #: common/confirm.cpp:54 common/confirm.cpp:59 common/confirm.cpp:124
 #: common/confirm.cpp:151 common/dialog_shim.cpp:794
@@ -1997,7 +2003,7 @@ msgstr "A(z) '%s' fájl nem hozható létre."
 
 #: common/design_block_io.cpp:353
 msgid "Design block does not have a valid library ID."
-msgstr ""
+msgstr "A tervezési blokknak nincs érvényes könyvtári ID-je."
 
 #: common/design_block_io.cpp:358
 #, c-format
@@ -2044,7 +2050,7 @@ msgstr "A \"fp-lib-table\" fájlok nem tartalmazzák a(z) \"%s\" könyvtárnevet
 #: common/design_block_lib_table.cpp:577 common/fp_lib_table.cpp:566
 #: eeschema/symbol_lib_table.cpp:605
 msgid "Added by Plugin and Content Manager"
-msgstr ""
+msgstr "Plugin és tartalomkezelő által hozzáadott"
 
 #: common/design_block_lib_table.cpp:603 common/fp_lib_table.cpp:592
 #: eeschema/symbol_lib_table.cpp:633
@@ -3207,7 +3213,6 @@ msgstr "Elhelyezés minden lapra"
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:105
 #: gerbview/widgets/gerbview_layer_widget.cpp:137 pcbnew/pcb_marker.cpp:219
 #: pcbnew/widgets/appearance_controls.cpp:350
-#, fuzzy
 msgid "Drawing Sheet"
 msgstr "Rajzlap"
 
@@ -34759,9 +34764,8 @@ msgid "32"
 msgstr "32"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:39
-#, fuzzy
 msgid "Impedance controlled"
-msgstr "Bezier C1 kontrollpont X:"
+msgstr "Impedancia vezérelt"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:40
 msgid ""
