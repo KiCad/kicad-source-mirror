@@ -95,7 +95,6 @@ DIALOG_PRINT::DIALOG_PRINT( SCH_EDIT_FRAME* aParent ) :
         m_parent( aParent )
 {
     wxASSERT( aParent );
-    m_useCairo = ADVANCED_CFG::GetCfg().m_EnableEeschemaPrintCairo;
 
     // Show m_panelPrinters only if there are printers to list:
     m_panelPrinters->Show( m_panelPrinters->AsPrintersAvailable() );
@@ -111,8 +110,7 @@ DIALOG_PRINT::DIALOG_PRINT( SCH_EDIT_FRAME* aParent ) :
 #if defined(__WXGTK__)
     // Preview using Cairo does not work on GTK,
     // but this platform provide native print preview
-    if( m_useCairo )
-        m_sdbSizerApply->Hide();
+    m_sdbSizerApply->Hide();
 #endif
 
     m_sdbSizerOK->SetFocus();
@@ -258,9 +256,8 @@ void DIALOG_PRINT::OnPrintPreview( wxCommandEvent& event )
 
     // Pass two printout objects: for preview, and possible printing.
     wxString        title   = _( "Preview" );
-    wxPrintPreview* preview = new wxPrintPreview( new SCH_PRINTOUT( m_parent, title, m_useCairo ),
-                                                  new SCH_PRINTOUT( m_parent, title, m_useCairo ),
-                                                  &prn_data );
+    wxPrintPreview* preview = new wxPrintPreview( new SCH_PRINTOUT( m_parent, title ),
+                                                  new SCH_PRINTOUT( m_parent, title ), &prn_data );
 
     preview->SetZoom( 100 );
 
@@ -378,7 +375,7 @@ bool DIALOG_PRINT::TransferDataFromWindow()
         printDialogData.EnablePageNumbers( true );
 
     wxPrinter printer( &printDialogData );
-    SCH_PRINTOUT printout( m_parent, _( "Print Schematic" ), m_useCairo );
+    SCH_PRINTOUT printout( m_parent, _( "Print Schematic" ) );
 
     Pgm().m_Printing = true;
     {

@@ -812,11 +812,6 @@ public:
 
     DESIGN_BLOCK_PANE* GetDesignBlockPane() const { return m_designBlocksPane; }
 
-    /**
-     * Plot or print the current sheet to the clipboard.
-     */
-    virtual void PrintPage( const RENDER_SETTINGS* aSettings ) override;
-
     void SetNetListerCommand( const wxString& aCommand ) { m_netListerCommand = aCommand; }
 
     /**

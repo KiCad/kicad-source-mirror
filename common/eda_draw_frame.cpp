@@ -438,12 +438,6 @@ void EDA_DRAW_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
 }
 
 
-void EDA_DRAW_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
-{
-    DisplayErrorMessage( this, wxT( "EDA_DRAW_FRAME::PrintPage() error" ) );
-}
-
-
 void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 {
     wxCHECK_RET( m_gridSelectBox, wxS( "m_gridSelectBox uninitialized" ) );

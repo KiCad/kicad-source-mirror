@@ -188,13 +188,6 @@ public:
 
     void Files_io( wxCommandEvent& event );
 
-    /**
-     * Print a page.
-     *
-     * @param aDC is the device context used by the print function.
-     */
-    virtual void PrintPage( const RENDER_SETTINGS* aSettings ) override;
-
     void OnFileHistory( wxCommandEvent& event );
     void OnClearFileHistory( wxCommandEvent& aEvent );
 

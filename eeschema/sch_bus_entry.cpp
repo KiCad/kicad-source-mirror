@@ -263,34 +263,6 @@ void SCH_BUS_BUS_ENTRY::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemLis
 }
 
 
-void SCH_BUS_ENTRY_BASE::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
-                                const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
-{
-    wxDC*   DC = aSettings->GetPrintDC();
-    COLOR4D color = ( GetBusEntryColor() == COLOR4D::UNSPECIFIED )
-                                                            ? aSettings->GetLayerColor( m_layer )
-                                                            : GetBusEntryColor();
-    VECTOR2I start = m_pos + aOffset;
-    VECTOR2I end = GetEnd() + aOffset;
-    int      penWidth = ( GetPenWidth() == 0 ) ? aSettings->GetDefaultPenWidth() : GetPenWidth();
-
-    if( GetEffectiveLineStyle() <= LINE_STYLE::FIRST_TYPE )
-    {
-        GRLine( DC, start.x, start.y, end.x, end.y, penWidth, color );
-    }
-    else
-    {
-        SHAPE_SEGMENT segment( start, end );
-
-        STROKE_PARAMS::Stroke( &segment, GetEffectiveLineStyle(), penWidth, aSettings,
-                               [&]( const VECTOR2I& a, const VECTOR2I& b )
-                               {
-                                   GRLine( DC, a.x, a.y, b.x, b.y, penWidth, color );
-                               } );
-    }
-}
-
-
 void SCH_BUS_ENTRY_BASE::MirrorVertically( int aCenter )
 {
     MIRROR( m_pos.y, aCenter );

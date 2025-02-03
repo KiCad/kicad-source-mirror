@@ -41,12 +41,11 @@
 #include <wx/log.h>
 
 
-SCH_PRINTOUT::SCH_PRINTOUT( SCH_EDIT_FRAME* aParent, const wxString& aTitle, bool aUseCairo ) :
+SCH_PRINTOUT::SCH_PRINTOUT( SCH_EDIT_FRAME* aParent, const wxString& aTitle ) :
         wxPrintout( aTitle )
 {
     wxASSERT( aParent != nullptr );
     m_parent = aParent;
-    m_useCairo = aUseCairo;
     m_view = nullptr;
 }
 
@@ -126,325 +125,167 @@ int SCH_PRINTOUT::milsToIU( int aMils )
 bool SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen, wxDC* aDC, bool aForPrinting )
 {
     // Note: some data (like paper size) is available only when printing
+    wxDC* dc = aDC;
+    m_view = m_parent->GetCanvas()->GetView();
+    KIGFX::GAL_DISPLAY_OPTIONS options;
+    options.cairo_antialiasing_mode = KIGFX::CAIRO_ANTIALIASING_MODE::GOOD;
+    std::unique_ptr<KIGFX::GAL_PRINT> galPrint = KIGFX::GAL_PRINT::Create( options, dc );
+    KIGFX::GAL* gal = galPrint->GetGAL();
+    KIGFX::PRINT_CONTEXT* printCtx = galPrint->GetPrintCtx();
+    std::unique_ptr<KIGFX::SCH_PAINTER> painter = std::make_unique<KIGFX::SCH_PAINTER>( gal );
+    std::unique_ptr<KIGFX::VIEW> view( m_view->DataReference() );
 
-    if( !m_useCairo )
+    painter->SetSchematic( &m_parent->Schematic() );
+
+    SETTINGS_MANAGER&  mgr   = Pgm().GetSettingsManager();
+    EESCHEMA_SETTINGS* cfg   = m_parent->eeconfig();
+    COLOR_SETTINGS*    theme = mgr.GetColorSettings( cfg->m_Printing.color_theme );
+    EE_SELECTION_TOOL* selTool = m_parent->GetToolManager()->GetTool<EE_SELECTION_TOOL>();
+
+    // Target paper size
+    wxRect pageSizePix;
+    wxSize dcPPI = dc->GetPPI();
+
+    if( aForPrinting )
+        pageSizePix = GetLogicalPageRect();
+    else
     {
-        // Version using print to a wxDC
-        // Warning:
-        // When printing many pages, changes in the current wxDC will affect all next printings
-        // because all prints are using the same wxPrinterDC after creation
-        // So be careful and reinit parameters, especially when using offsets.
+        dc->SetUserScale( 1, 1 );
 
-        VECTOR2I tmp_startvisu;
-        wxSize   pageSizeIU;             // Page size in internal units
-        VECTOR2I old_org;
-        wxRect   fitRect;
-        wxDC*    dc = aDC;
-
-        wxBusyCursor dummy;
-
-        // Save current offsets and clip box.
-        tmp_startvisu = aScreen->m_StartVisu;
-        old_org = aScreen->m_DrawOrg;
-
-        SETTINGS_MANAGER&  mgr   = Pgm().GetSettingsManager();
-        EESCHEMA_SETTINGS* cfg   = m_parent->eeconfig();
-        COLOR_SETTINGS*    theme = mgr.GetColorSettings( cfg->m_Printing.color_theme );
-
-        // Change scale factor and offset to print the whole page.
-        bool printDrawingSheet = cfg->m_Printing.title_block;
-
-        pageSizeIU = ToWxSize( aScreen->GetPageSettings().GetSizeIU( schIUScale.IU_PER_MILS ) );
-        FitThisSizeToPaper( pageSizeIU );
-
-        if( aForPrinting )
-            fitRect = GetLogicalPaperRect();
-        else
+        if( wxMemoryDC* memdc = dynamic_cast<wxMemoryDC*>( dc ) )
         {
-            fitRect = wxRect( 0, 0, 6000, 4000 );
-
-            if( wxMemoryDC* memdc = dynamic_cast<wxMemoryDC*>( dc ) )
-            {
-                wxBitmap& bm = memdc->GetSelectedBitmap();
-                fitRect = wxRect( 0, 0, bm.GetWidth(), bm.GetHeight() );
-
-                // If the dc is a memory dc (should be the case when not printing on a printer,
-                // i.e. when printing on the clipboard), calculate a suitable dc user scale
-                double dc_scale;
-                double ppi = 300;   // Use 300 pixels per inch to create bitmap images on start
-                double inch2Iu = 1000.0 * schIUScale.IU_PER_MILS;
-                dc_scale = ppi / inch2Iu;
-                dc->SetUserScale( dc_scale, dc_scale );
-           }
-        }
-
-        // When is the actual paper size does not match the schematic page size, the drawing will
-        // not be centered on X or Y axis.  Give a draw offset to center the schematic page on the
-        // paper draw area.
-        int xoffset = ( fitRect.width - pageSizeIU.x ) / 2;
-        int yoffset = ( fitRect.height - pageSizeIU.y ) / 2;
-
-        // Using a wxAffineMatrix2D has a big advantage: it handles different pages orientations
-        //(PORTRAIT/LANDSCAPE), but the affine matrix is not always supported
-        if( dc->CanUseTransformMatrix() && aForPrinting )
-        {
-            wxAffineMatrix2D matrix;    // starts from a unity matrix (the current wxDC default)
-
-            // Check for portrait/landscape mismatch:
-            if( ( fitRect.width > fitRect.height ) != ( pageSizeIU.x > pageSizeIU.y ) )
-            {
-                // Rotate the coordinates, and keep the draw coordinates inside the page
-                matrix.Rotate( M_PI_2 );
-                matrix.Translate( 0, -pageSizeIU.y );
-
-                // Recalculate the offsets and page sizes according to the page rotation
-                std::swap( pageSizeIU.x, pageSizeIU.y );
-                FitThisSizeToPaper( pageSizeIU );
-                fitRect = GetLogicalPaperRect();
-
-                xoffset = ( fitRect.width - pageSizeIU.x ) / 2;
-                yoffset = ( fitRect.height - pageSizeIU.y ) / 2;
-
-                // All the coordinates will be rotated 90 deg when printing,
-                // so the X,Y offset vector must be rotated -90 deg before printing
-                std::swap( xoffset, yoffset );
-                std::swap( fitRect.width, fitRect.height );
-                yoffset = -yoffset;
-            }
-
-            matrix.Translate( xoffset, yoffset );
-            dc->SetTransformMatrix( matrix );
-
-            fitRect.x -= xoffset;
-            fitRect.y -= yoffset;
-        }
-        else if( aForPrinting )
-        {
-            SetLogicalOrigin( 0, 0 );   // Reset all offset settings made previously.
-                                        // When printing previous pages (all prints are using the same wxDC)
-            OffsetLogicalOrigin( xoffset, yoffset );
-        }
-
-        dc->SetLogicalFunction( wxCOPY );
-        GRResetPenAndBrush( dc );
-
-        COLOR4D savedBgColor = m_parent->GetDrawBgColor();
-        COLOR4D bgColor      = m_parent->GetColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND );
-
-        if( cfg->m_Printing.background )
-        {
-            if( cfg->m_Printing.use_theme && theme )
-                bgColor = theme->GetColor( LAYER_SCHEMATIC_BACKGROUND );
+            wxBitmap& bm = memdc->GetSelectedBitmap();
+            pageSizePix = wxRect( 0, 0, bm.GetWidth(), bm.GetHeight() );
         }
         else
         {
-            bgColor = COLOR4D::WHITE;
+            return false;
         }
+    }
 
-        m_parent->SetDrawBgColor( bgColor );
+    const VECTOR2D pageSizeIn( (double) pageSizePix.width / dcPPI.x,
+                               (double) pageSizePix.height / dcPPI.y );
+    const VECTOR2D pageSizeIU( milsToIU( pageSizeIn.x * 1000 ), milsToIU( pageSizeIn.y * 1000 ) );
 
-        GRSFilledRect( dc, fitRect.GetX(), fitRect.GetY(), fitRect.GetRight(), fitRect.GetBottom(), 0,
-                       bgColor, bgColor );
+    galPrint->SetSheetSize( pageSizeIn );
 
-        if( cfg->m_Printing.monochrome )
-            GRForceBlackPen( true );
+    view->SetGAL( gal );
+    view->SetPainter( painter.get() );
+    view->SetScaleLimits( ZOOM_MAX_LIMIT_EESCHEMA, ZOOM_MIN_LIMIT_EESCHEMA );
+    view->SetScale( 1.0 );
+    gal->SetWorldUnitLength( SCH_WORLD_UNIT );
 
-        SCH_RENDER_SETTINGS renderSettings( *m_parent->GetRenderSettings() );
-        renderSettings.SetPrintDC( dc );
+    // Init the SCH_RENDER_SETTINGS used by the painter used to print schematic
+    SCH_RENDER_SETTINGS* dstSettings = painter->GetSettings();
 
+    dstSettings->m_ShowPinsElectricalType = false;
+
+    // Set the color scheme
+    dstSettings->LoadColors( m_parent->GetColorSettings( false ) );
+
+    if( cfg->m_Printing.use_theme && theme )
+        dstSettings->LoadColors( theme );
+
+    bool printDrawingSheet = cfg->m_Printing.title_block;
+
+    COLOR4D bgColor = m_parent->GetColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND );
+
+    if( cfg->m_Printing.background )
+    {
         if( cfg->m_Printing.use_theme && theme )
-            renderSettings.LoadColors( theme );
-
-        renderSettings.SetBackgroundColor( bgColor );
-
-        // The drawing-sheet-item print code is shared between PCBNew and Eeschema, so it's easier
-        // if they just use the PCB layer.
-        renderSettings.SetLayerColor( LAYER_DRAWINGSHEET,
-                                      renderSettings.GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET ) );
-
-        renderSettings.SetDefaultFont( cfg->m_Appearance.default_font );
-
-        if( printDrawingSheet )
-        {
-            m_parent->PrintDrawingSheet( &renderSettings, aScreen, aScreen->Schematic()->GetProperties(),
-                                         schIUScale.IU_PER_MILS, aScreen->GetFileName(), wxEmptyString );
-        }
-
-        renderSettings.SetIsPrinting( true );
-
-        aScreen->Print( &renderSettings );
-
-        m_parent->SetDrawBgColor( savedBgColor );
-
-        GRForceBlackPen( false );
-
-        aScreen->m_StartVisu = tmp_startvisu;
-        aScreen->m_DrawOrg   = old_org;
+            bgColor = theme->GetColor( LAYER_SCHEMATIC_BACKGROUND );
     }
     else
     {
-        wxDC* dc = aDC;
-        m_view = m_parent->GetCanvas()->GetView();
-        KIGFX::GAL_DISPLAY_OPTIONS options;
-        options.cairo_antialiasing_mode = KIGFX::CAIRO_ANTIALIASING_MODE::GOOD;
-        std::unique_ptr<KIGFX::GAL_PRINT> galPrint = KIGFX::GAL_PRINT::Create( options, dc );
-        KIGFX::GAL* gal = galPrint->GetGAL();
-        KIGFX::PRINT_CONTEXT* printCtx = galPrint->GetPrintCtx();
-        std::unique_ptr<KIGFX::SCH_PAINTER> painter = std::make_unique<KIGFX::SCH_PAINTER>( gal );
-        std::unique_ptr<KIGFX::VIEW> view( m_view->DataReference() );
+        bgColor = COLOR4D::WHITE;
+    }
 
-        painter->SetSchematic( &m_parent->Schematic() );
+    dstSettings->SetBackgroundColor( bgColor );
 
-        SETTINGS_MANAGER&  mgr   = Pgm().GetSettingsManager();
-        EESCHEMA_SETTINGS* cfg   = m_parent->eeconfig();
-        COLOR_SETTINGS*    theme = mgr.GetColorSettings( cfg->m_Printing.color_theme );
-        EE_SELECTION_TOOL* selTool = m_parent->GetToolManager()->GetTool<EE_SELECTION_TOOL>();
+    // The drawing-sheet-item print code is shared between PCBNew and Eeschema, so it's easier
+    // if they just use the PCB layer.
+    dstSettings->SetLayerColor( LAYER_DRAWINGSHEET,
+                               dstSettings->GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET ) );
 
-        // Target paper size
-        wxRect pageSizePix;
-        wxSize dcPPI = dc->GetPPI();
+    dstSettings->SetDefaultFont( cfg->m_Appearance.default_font );
 
-        if( aForPrinting )
-            pageSizePix = GetLogicalPageRect();
-        else
+    if( cfg->m_Printing.monochrome )
+    {
+        for( int i = 0; i < LAYER_ID_COUNT; ++i )
+            dstSettings->SetLayerColor( i, COLOR4D::BLACK );
+
+        // In B&W mode, draw the background only in white, because any other color
+        // will be replaced by a black background
+        dstSettings->SetBackgroundColor( COLOR4D::WHITE );
+        dstSettings->m_OverrideItemColors = true;
+
+        // Disable print some backgrounds
+        dstSettings->SetPrintBlackAndWhite( true );
+    }
+    else // color enabled
+    {
+        for( int i = 0; i < LAYER_ID_COUNT; ++i )
         {
-            dc->SetUserScale( 1, 1 );
-
-            if( wxMemoryDC* memdc = dynamic_cast<wxMemoryDC*>( dc ) )
-            {
-                wxBitmap& bm = memdc->GetSelectedBitmap();
-                pageSizePix = wxRect( 0, 0, bm.GetWidth(), bm.GetHeight() );
-            }
-            else
-            {
-                return false;
-            }
+            // Cairo does not support translucent colors on PostScript surfaces
+            // see 'Features support by the PostScript surface' on
+            // https://www.cairographics.org/documentation/using_the_postscript_surface/
+            dstSettings->SetLayerColor( i, dstSettings->GetLayerColor( i ).WithAlpha( 1.0 ) );
         }
+    }
 
-        const VECTOR2D pageSizeIn( (double) pageSizePix.width / dcPPI.x,
-                                   (double) pageSizePix.height / dcPPI.y );
-        const VECTOR2D pageSizeIU( milsToIU( pageSizeIn.x * 1000 ), milsToIU( pageSizeIn.y * 1000 ) );
+    dstSettings->SetIsPrinting( true );
 
-        galPrint->SetSheetSize( pageSizeIn );
+    VECTOR2I sheetSizeIU = aScreen->GetPageSettings().GetSizeIU( schIUScale.IU_PER_MILS );
+    BOX2I    drawingAreaBBox = BOX2I( VECTOR2I( 0, 0 ), VECTOR2I( sheetSizeIU ) );
 
-        view->SetGAL( gal );
-        view->SetPainter( painter.get() );
-        view->SetScaleLimits( ZOOM_MAX_LIMIT_EESCHEMA, ZOOM_MIN_LIMIT_EESCHEMA );
-        view->SetScale( 1.0 );
-        gal->SetWorldUnitLength( SCH_WORLD_UNIT );
+    // Enable all layers and use KIGFX::TARGET_NONCACHED to force update drawings
+    // for printing with current GAL instance
+    for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; ++i )
+    {
+        view->SetLayerVisible( i, true );
+        view->SetLayerTarget( i, KIGFX::TARGET_NONCACHED );
+    }
 
-        // Init the SCH_RENDER_SETTINGS used by the painter used to print schematic
-        SCH_RENDER_SETTINGS* dstSettings = painter->GetSettings();
+    view->SetLayerVisible( LAYER_DRAWINGSHEET, printDrawingSheet );
 
-        dstSettings->m_ShowPinsElectricalType = false;
-
-        // Set the color scheme
-        dstSettings->LoadColors( m_parent->GetColorSettings( false ) );
-
-        if( cfg->m_Printing.use_theme && theme )
-            dstSettings->LoadColors( theme );
-
-        bool printDrawingSheet = cfg->m_Printing.title_block;
-
-        COLOR4D bgColor = m_parent->GetColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND );
-
-        if( cfg->m_Printing.background )
+    // Don't draw the selection if it's not from the current screen
+    for( EDA_ITEM* item : selTool->GetSelection() )
+    {
+        if( SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item ) )
         {
-            if( cfg->m_Printing.use_theme && theme )
-                bgColor = theme->GetColor( LAYER_SCHEMATIC_BACKGROUND );
+            if( !m_parent->GetScreen()->CheckIfOnDrawList( schItem ) )
+                view->SetLayerVisible( LAYER_SELECT_OVERLAY, false );
+
+            break;
         }
-        else
-        {
-            bgColor = COLOR4D::WHITE;
-        }
+    }
 
-        dstSettings->SetBackgroundColor( bgColor );
+    // When is the actual paper size does not match the schematic page size,
+    // we need to adjust the print scale to fit the selected paper size (pageSizeIU)
+    double scaleX = (double) pageSizeIU.x / drawingAreaBBox.GetWidth();
+    double scaleY = (double) pageSizeIU.y / drawingAreaBBox.GetHeight();
 
-        // The drawing-sheet-item print code is shared between PCBNew and Eeschema, so it's easier
-        // if they just use the PCB layer.
-        dstSettings->SetLayerColor( LAYER_DRAWINGSHEET,
-                                   dstSettings->GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET ) );
+    double print_scale = std::min( scaleX, scaleY );
 
-        dstSettings->SetDefaultFont( cfg->m_Appearance.default_font );
+    galPrint->SetNativePaperSize( pageSizeIn, printCtx->HasNativeLandscapeRotation() );
+    gal->SetLookAtPoint( drawingAreaBBox.Centre() );
+    gal->SetZoomFactor( print_scale );
+    gal->SetClearColor( dstSettings->GetBackgroundColor() );
 
-        if( cfg->m_Printing.monochrome )
-        {
-            for( int i = 0; i < LAYER_ID_COUNT; ++i )
-                dstSettings->SetLayerColor( i, COLOR4D::BLACK );
+// Clearing the screen for the background color needs the screen set to the page size
+// in pixels.  This can ?somehow? prevent some but not all foreground elements from being printed
+// TODO: figure out what's going on here and fix printing.  See also board_printout
+    VECTOR2I size = gal->GetScreenPixelSize();
+    gal->ResizeScreen( pageSizePix.GetWidth(),pageSizePix.GetHeight() );
+    gal->ClearScreen();
+    gal->ResizeScreen( size.x, size.y );
 
-            // In B&W mode, draw the background only in white, because any other color
-            // will be replaced by a black background
-            dstSettings->SetBackgroundColor( COLOR4D::WHITE );
-            dstSettings->m_OverrideItemColors = true;
+    // Needed to use the same order for printing as for screen redraw
+    view->UseDrawPriority( true );
 
-            // Disable print some backgrounds
-            dstSettings->SetPrintBlackAndWhite( true );
-        }
-        else // color enabled
-        {
-            for( int i = 0; i < LAYER_ID_COUNT; ++i )
-            {
-                // Cairo does not support translucent colors on PostScript surfaces
-                // see 'Features support by the PostScript surface' on
-                // https://www.cairographics.org/documentation/using_the_postscript_surface/
-                dstSettings->SetLayerColor( i, dstSettings->GetLayerColor( i ).WithAlpha( 1.0 ) );
-            }
-        }
-
-        dstSettings->SetIsPrinting( true );
-
-        VECTOR2I sheetSizeIU = aScreen->GetPageSettings().GetSizeIU( schIUScale.IU_PER_MILS );
-        BOX2I    drawingAreaBBox = BOX2I( VECTOR2I( 0, 0 ), VECTOR2I( sheetSizeIU ) );
-
-        // Enable all layers and use KIGFX::TARGET_NONCACHED to force update drawings
-        // for printing with current GAL instance
-        for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; ++i )
-        {
-            view->SetLayerVisible( i, true );
-            view->SetLayerTarget( i, KIGFX::TARGET_NONCACHED );
-        }
-
-        view->SetLayerVisible( LAYER_DRAWINGSHEET, printDrawingSheet );
-
-        // Don't draw the selection if it's not from the current screen
-        for( EDA_ITEM* item : selTool->GetSelection() )
-        {
-            if( SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item ) )
-            {
-                if( !m_parent->GetScreen()->CheckIfOnDrawList( schItem ) )
-                    view->SetLayerVisible( LAYER_SELECT_OVERLAY, false );
-
-                break;
-            }
-        }
-
-        // When is the actual paper size does not match the schematic page size,
-        // we need to adjust the print scale to fit the selected paper size (pageSizeIU)
-        double scaleX = (double) pageSizeIU.x / drawingAreaBBox.GetWidth();
-        double scaleY = (double) pageSizeIU.y / drawingAreaBBox.GetHeight();
-
-        double print_scale = std::min( scaleX, scaleY );
-
-        galPrint->SetNativePaperSize( pageSizeIn, printCtx->HasNativeLandscapeRotation() );
-        gal->SetLookAtPoint( drawingAreaBBox.Centre() );
-        gal->SetZoomFactor( print_scale );
-        gal->SetClearColor( dstSettings->GetBackgroundColor() );
-
-    // Clearing the screen for the background color needs the screen set to the page size
-    // in pixels.  This can ?somehow? prevent some but not all foreground elements from being printed
-    // TODO: figure out what's going on here and fix printing.  See also board_printout
-        VECTOR2I size = gal->GetScreenPixelSize();
-        gal->ResizeScreen( pageSizePix.GetWidth(),pageSizePix.GetHeight() );
-        gal->ClearScreen();
-        gal->ResizeScreen( size.x, size.y );
-
-        // Needed to use the same order for printing as for screen redraw
-        view->UseDrawPriority( true );
-
-        {
-            KIGFX::GAL_DRAWING_CONTEXT ctx( gal );
-            view->Redraw();
-        }
+    {
+        KIGFX::GAL_DRAWING_CONTEXT ctx( gal );
+        view->Redraw();
     }
 
     return true;

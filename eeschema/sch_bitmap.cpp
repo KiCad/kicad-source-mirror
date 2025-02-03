@@ -102,16 +102,6 @@ const BOX2I SCH_BITMAP::GetBoundingBox() const
 }
 
 
-void SCH_BITMAP::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
-                        const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
-{
-    VECTOR2I pos = GetPosition() + aOffset;
-
-    m_referenceImage.GetImage().DrawBitmap( aSettings->GetPrintDC(), pos,
-                                            aSettings->GetBackgroundColor() );
-}
-
-
 VECTOR2I SCH_BITMAP::GetPosition() const
 {
     return m_referenceImage.GetPosition();
@@ -176,9 +166,11 @@ void SCH_BITMAP::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
 {
     if( aBackground )
     {
-        m_referenceImage.GetImage().PlotImage(
-                aPlotter, GetPosition(), aPlotter->RenderSettings()->GetLayerColor( GetLayer() ),
-                aPlotter->RenderSettings()->GetDefaultPenWidth() );
+        RENDER_SETTINGS* cfg = aPlotter->RenderSettings();
+
+        m_referenceImage.GetImage().PlotImage( aPlotter, GetPosition(),
+                                               cfg->GetLayerColor( GetLayer() ),
+                                               cfg->GetDefaultPenWidth() );
     }
 }
 

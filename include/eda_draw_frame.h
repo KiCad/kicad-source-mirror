@@ -429,13 +429,6 @@ public:
     virtual EDA_ITEM* GetItem( const KIID& aId ) const { return nullptr; }
 
     /**
-     * Print the page pointed by current screen, set by the calling print function.
-     *
-     * @param aDC wxDC given by the calling print function
-     */
-    virtual void PrintPage( const RENDER_SETTINGS* aSettings );
-
-    /**
      * Use to start up the GAL drawing canvas.
      */
     virtual void ActivateGalCanvas();

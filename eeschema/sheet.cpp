@@ -623,7 +623,6 @@ bool SCH_EDIT_FRAME::EditSheetProperties( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHi
 
 void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
 {
-    bool useCairo = ADVANCED_CFG::GetCfg().m_EnableEeschemaExportClipboardCairo;;
     wxRect       drawArea;
     BASE_SCREEN* screen = GetScreen();
 
@@ -677,30 +676,25 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
 
     cfg->SetDefaultFont( eeconfig()->m_Appearance.default_font );
 
-    if( useCairo )
+    try
     {
-        try
-        {
-            dc.SetUserScale( 1.0, 1.0 );
-            SCH_PRINTOUT printout( this, wxEmptyString, true );
-            // Ensure title block will be when printed on clipboard, regardless
-            // the current Cairo print option
-            EESCHEMA_SETTINGS* eecfg = eeconfig();
-            bool print_tb_opt = eecfg->m_Printing.title_block;
-            eecfg->m_Printing.title_block = true;
-            bool success = printout.PrintPage( GetScreen(), cfg->GetPrintDC(), false );
-            eecfg->m_Printing.title_block = print_tb_opt;
+        dc.SetUserScale( 1.0, 1.0 );
+        SCH_PRINTOUT printout( this, wxEmptyString, true );
+        // Ensure title block will be when printed on clipboard, regardless
+        // the current Cairo print option
+        EESCHEMA_SETTINGS* eecfg = eeconfig();
+        bool print_tb_opt = eecfg->m_Printing.title_block;
+        eecfg->m_Printing.title_block = true;
+        bool success = printout.PrintPage( GetScreen(), cfg->GetPrintDC(), false );
+        eecfg->m_Printing.title_block = print_tb_opt;
 
-            if( !success )
-                wxLogMessage( _( "Cannot create the schematic image") );
-        }
-        catch( ... )
-        {
-            wxLogMessage( "printout internal error" );
-        }
+        if( !success )
+            wxLogMessage( _( "Cannot create the schematic image") );
     }
-    else
-        PrintPage( cfg );
+    catch( ... )
+    {
+        wxLogMessage( "printout internal error" );
+    }
 
     // Deselect Bitmap from DC before using the bitmap
     dc.SelectObject( wxNullBitmap );

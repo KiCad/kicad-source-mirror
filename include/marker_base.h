@@ -61,7 +61,7 @@ public:
 
     MARKER_BASE( int aScalingFactor, std::shared_ptr<RC_ITEM> aItem,
                  MARKER_T aType = MARKER_UNSPEC );
-    virtual ~MARKER_BASE();
+    virtual ~MARKER_BASE() {};
 
     /**
      * The scaling factor to convert polygonal shape coordinates to internal units.
@@ -76,11 +76,6 @@ public:
      * @param aPolygon is the #SHAPE_LINE_CHAIN to fill with the shape.
      */
     void ShapeToPolygon( SHAPE_LINE_CHAIN& aPolygon, int aScale = -1 ) const;
-
-    /**
-     * Print the shape is the polygon defined in m_Corners (array of VECTOR2Is).
-     */
-    void PrintMarker( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset );
 
     /**
      * @return the position of this marker in internal units.

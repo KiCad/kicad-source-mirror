@@ -241,14 +241,6 @@ public:
     void UpdateLocalLibSymbolLinks();
 
     /**
-     * Print all the items in the screen to \a aDC.
-     *
-     * @note This function is useful only for schematic.  The library editor and library viewer
-     *       do not use a draw list and therefore draws nothing.
-     */
-    void Print( const SCH_RENDER_SETTINGS* aSettings );
-
-    /**
      * Plot all the schematic objects to \a aPlotter.
      *
      * @note This function is useful only for schematic. The library editor and library viewer

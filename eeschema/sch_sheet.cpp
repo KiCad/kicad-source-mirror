@@ -1295,60 +1295,6 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
 }
 
 
-void SCH_SHEET::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
-                       const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
-{
-    wxDC*    DC = aSettings->GetPrintDC();
-    VECTOR2I pos = m_pos + aOffset;
-    int      lineWidth = GetEffectivePenWidth( aSettings );
-    COLOR4D  border = GetBorderColor();
-    COLOR4D  background = GetBackgroundColor();
-
-    if( aSettings->m_OverrideItemColors || border == COLOR4D::UNSPECIFIED )
-        border = aSettings->GetLayerColor( LAYER_SHEET );
-
-    if( aSettings->m_OverrideItemColors || background == COLOR4D::UNSPECIFIED )
-        background = aSettings->GetLayerColor( LAYER_SHEET_BACKGROUND );
-
-    if( GetGRForceBlackPenState() )     // printing in black & white
-        background = COLOR4D::UNSPECIFIED;
-
-    if( background.a > 0.0 )
-        GRFilledRect( DC, pos, pos + m_size, 0, background, background );
-
-    GRRect( DC, pos, pos + m_size, lineWidth, border );
-
-    for( SCH_FIELD& field : m_fields )
-        field.Print( aSettings, aUnit, aBodyStyle, aOffset, aForceNoFill, aDimmed );
-
-    for( SCH_SHEET_PIN* sheetPin : m_pins )
-        sheetPin->Print( aSettings, aUnit, aBodyStyle, aOffset, aForceNoFill, aDimmed );
-
-    if( GetDNP() )
-    {
-        BOX2I    bbox = GetBodyBoundingBox();
-        BOX2I    pins = GetBoundingBox();
-        COLOR4D  dnp_color = aSettings->GetLayerColor( LAYER_DNP_MARKER );
-        VECTOR2D margins( std::max( bbox.GetX() - pins.GetX(), pins.GetEnd().x - bbox.GetEnd().x ),
-                          std::max( bbox.GetY() - pins.GetY(),
-                                    pins.GetEnd().y - bbox.GetEnd().y ) );
-
-        margins.x = std::max( margins.x * 0.6, margins.y * 0.3 );
-        margins.y = std::max( margins.y * 0.6, margins.x * 0.3 );
-        bbox.Inflate( KiROUND( margins.x ), KiROUND( margins.y ) );
-
-        GRFilledSegment( DC, bbox.GetOrigin(), bbox.GetEnd(),
-                             3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ),
-                             dnp_color );
-
-        GRFilledSegment( DC, bbox.GetOrigin() + VECTOR2I( bbox.GetWidth(), 0 ),
-                             bbox.GetOrigin() + VECTOR2I( 0, bbox.GetHeight() ),
-                             3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ),
-                             dnp_color );
-    }
-}
-
-
 SCH_SHEET& SCH_SHEET::operator=( const SCH_ITEM& aItem )
 {
     wxCHECK_MSG( Type() == aItem.Type(), *this,

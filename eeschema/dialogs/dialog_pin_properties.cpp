@@ -35,6 +35,7 @@
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/std_bitmap_button.h>
 #include <wx/hyperlink.h>
+#include <symbol_preview_widget.h>
 
 class ALT_PIN_DATA_MODEL : public wxGridTableBase, public std::vector<SCH_PIN::ALT>
 {
@@ -137,22 +138,41 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, SCH_PIN
     m_delayedFocusColumn( -1 ),
     m_initialized( false )
 {
-    // Creates a dummy pin to show on a panel, inside this dialog:
+    // Create a dummy symbol with a single pin for the preview widget:
     m_dummyParent = new LIB_SYMBOL( *static_cast<LIB_SYMBOL*>( m_pin->GetParentSymbol() ) );
+
+    // Move everything in the copied symbol to unit 1; we'll use unit 2 for the dummy pin:
+    m_dummyParent->SetUnitCount( 2, false );
+    m_dummyParent->RunOnChildren( [&]( SCH_ITEM* child )
+                                  {
+                                      child->SetUnit( 1 );
+                                  } );
+
     m_dummyPin = new SCH_PIN( *m_pin );
-    m_dummyPin->SetParent( m_dummyParent );
+    m_dummyPin->SetUnit( 2 );
+    m_dummyParent->AddDrawItem( m_dummyPin, false );
+
     m_dummyParent->SetShowPinNames( true );
     m_dummyParent->SetShowPinNumbers( true );
 
-    COLOR4D bgColor = parent->GetRenderSettings()->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
-    m_panelShowPin->SetBackgroundColour( bgColor.ToColour() );
+    m_previewWidget = new SYMBOL_PREVIEW_WIDGET( m_panelShowPin, &m_frame->Kiway(), false,
+                                                 m_frame->GetCanvas()->GetBackend() );
 
-    const wxArrayString&           orientationNames = PinOrientationNames();
+    m_previewWidget->SetLayoutDirection( wxLayout_LeftToRight );
+    m_previewWidget->DisplayPart( m_dummyParent, m_dummyPin->GetUnit(), 0 );
+
+    wxBoxSizer* previewSizer = new wxBoxSizer( wxHORIZONTAL );
+    previewSizer->Add( m_previewWidget, 1, wxEXPAND, 5 );
+    m_panelShowPin->SetSizer( previewSizer );
+
+    const wxArrayString&        orientationNames = PinOrientationNames();
     const std::vector<BITMAPS>& orientationIcons = PinOrientationIcons();
 
     for ( unsigned ii = 0; ii < orientationNames.GetCount(); ii++ )
+    {
         m_choiceOrientation->Insert( orientationNames[ii], KiBitmapBundle( orientationIcons[ii] ),
                                      ii );
+    }
 
     // We can't set the tab order through wxWidgets due to shortcomings in their mnemonics
     // implementation on MSW
@@ -242,7 +262,6 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, SCH_PIN
 
 DIALOG_PIN_PROPERTIES::~DIALOG_PIN_PROPERTIES()
 {
-    delete m_dummyPin;
     delete m_dummyParent;
 
     // Prevents crash bug in wxGrid's d'tor
@@ -379,44 +398,6 @@ bool DIALOG_PIN_PROPERTIES::TransferDataFromWindow()
 }
 
 
-void DIALOG_PIN_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
-{
-    wxPaintDC dc( m_panelShowPin );
-    wxSize    dc_size = dc.GetSize();
-    dc.SetDeviceOrigin( dc_size.x / 2, dc_size.y / 2 );
-
-    // Give a parent to m_dummyPin for draw purposes.
-    // In fact m_dummyPin should not have a parent, but draw functions need a parent
-    // to know some options, about pin texts
-    SYMBOL_EDIT_FRAME* symbolEditor = (SYMBOL_EDIT_FRAME*) GetParent();
-
-    // Calculate a suitable scale to fit the available draw area
-    BOX2I  bBox = m_dummyPin->GetBoundingBox( true, true, false );
-    bBox.Inflate( schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE ) );
-
-    double xscale = (double) dc_size.x / bBox.GetWidth();
-    double yscale = (double) dc_size.y / bBox.GetHeight();
-    double scale = std::min( xscale, yscale );
-
-    // Give a 7% margin (each side) and limit to no more than 100% zoom
-    scale = std::min( scale * 0.85, 1.0 );
-    dc.SetUserScale( scale, scale );
-    GRResetPenAndBrush( &dc );
-
-    SCH_RENDER_SETTINGS renderSettings( *symbolEditor->GetRenderSettings() );
-    renderSettings.m_ShowPinNumbers = true;
-    renderSettings.m_ShowPinNames = true;
-    renderSettings.m_ShowHiddenFields = true;
-    renderSettings.m_ShowConnectionPoints = true;
-    renderSettings.m_Transform = TRANSFORM();
-    renderSettings.SetPrintDC( &dc );
-
-    m_dummyPin->Print( &renderSettings, 0, 0, -bBox.Centre(), false, false );
-
-    event.Skip();
-}
-
-
 void DIALOG_PIN_PROPERTIES::OnPropertiesChange( wxCommandEvent& event )
 {
     if( !IsShownOnScreen() )   // do nothing at init time
@@ -435,7 +416,7 @@ void DIALOG_PIN_PROPERTIES::OnPropertiesChange( wxCommandEvent& event )
     if( event.GetEventObject() == m_checkApplyToAllParts && m_frame->m_SyncPinEdit )
         m_infoBar->ShowMessage( getSyncPinsMessage() );
 
-    m_panelShowPin->Refresh();
+    m_previewWidget->DisplayPart( m_dummyParent, m_dummyPin->GetUnit(), 0 );
 }
 
 

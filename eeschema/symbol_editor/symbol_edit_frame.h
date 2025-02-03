@@ -317,11 +317,6 @@ public:
     bool LoadSymbol( const LIB_ID& aLibId, int aUnit, int aBodyStyle );
 
     /**
-     * Print a page.
-     */
-    void PrintPage( const RENDER_SETTINGS* aSettings ) override;
-
-    /**
      * Create the SVG print file for the current edited symbol.
      * @param aFullFileName is the full filename
      * @param aOffset is a plot offset, in iu

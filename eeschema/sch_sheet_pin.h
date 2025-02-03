@@ -105,9 +105,6 @@ public:
      */
     bool IsMovableFromAnchorPoint() const override { return true; }
 
-    void Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
-                const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed ) override;
-
     /**
      * Calculate the graphic shape (a polygon) associated to the text.
      *

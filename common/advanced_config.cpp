@@ -103,8 +103,6 @@ static const wxChar EnableGenerators[] = wxT( "EnableGenerators" );
 static const wxChar EnableGit[] = wxT( "EnableGit" );
 static const wxChar EnableLibWithText[] = wxT( "EnableLibWithText" );
 static const wxChar EnableLibDir[] = wxT( "EnableLibDir" );
-static const wxChar EnableEeschemaPrintCairo[] = wxT( "EnableEeschemaPrintCairo" );
-static const wxChar EnableEeschemaExportClipboardCairo[] = wxT( "EnableEeschemaExportClipboardCairo" );
 static const wxChar DisambiguationTime[] = wxT( "DisambiguationTime" );
 static const wxChar PcbSelectionVisibilityRatio[] = wxT( "PcbSelectionVisibilityRatio" );
 static const wxChar FontErrorSize[] = wxT( "FontErrorSize" );
@@ -261,9 +259,6 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_EnableGit                 = true;
     m_EnableLibWithText         = false;
     m_EnableLibDir              = false;
-
-    m_EnableEeschemaPrintCairo  = true;
-    m_EnableEeschemaExportClipboardCairo = true;
 
     m_3DRT_BevelHeight_um       = 30;
     m_3DRT_BevelExtentFactor    = 1.0 / 16.0;
@@ -507,14 +502,6 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableLibDir,
                                                 &m_EnableLibDir, m_EnableLibDir ) );
-
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableEeschemaPrintCairo,
-                                                &m_EnableEeschemaPrintCairo,
-                                                m_EnableEeschemaPrintCairo ) );
-
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableEeschemaExportClipboardCairo,
-                                                &m_EnableEeschemaExportClipboardCairo,
-                                                m_EnableEeschemaExportClipboardCairo ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::PcbSelectionVisibilityRatio,
                                                   &m_PcbSelectionVisibilityRatio,

@@ -578,30 +578,6 @@ public:
     virtual void SetStroke( const STROKE_PARAMS& aStroke ) { wxCHECK( false, /* void */ ); }
 
     /**
-     * Print an item.
-     *
-     * @param aUnit - Which unit to print.
-     * @param aBodyStyle - Which body style to print.
-     * @param aOffset - Relative offset.
-     * @param aForceNoFill - Disable printing of fills.
-     * @param aDimmed - Reduce brightness of item.
-     */
-    virtual void Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
-                        const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
-    {
-        wxCHECK_MSG( false, /*void*/, wxT( "Print not implemented in " ) + GetClass() );
-    }
-
-    /**
-     * Print just the background fills.
-     */
-    virtual void PrintBackground( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
-                                  const VECTOR2I& aOffset, bool aDimmed )
-    {
-        wxCHECK_MSG( false, /*void*/, wxT( "PrintBackground not implemented in " ) + GetClass() );
-    }
-
-    /**
      * Plot the item to \a aPlotter.
      *
      * @param aBackground a poor-man's Z-order.  The routine will get called twice, first with

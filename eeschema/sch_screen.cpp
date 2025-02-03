@@ -856,50 +856,6 @@ void SCH_SCREEN::SetConnectivityDirty()
 }
 
 
-void SCH_SCREEN::Print( const SCH_RENDER_SETTINGS* aSettings )
-{
-    // Ensure links are up to date, even if a library was reloaded for some reason:
-    std::vector<SCH_ITEM*> junctions;
-    std::vector<SCH_ITEM*> bitmaps;
-    std::vector<SCH_ITEM*> other;
-
-    for( SCH_ITEM* item : Items() )
-    {
-        if( item->IsMoving() )
-            continue;
-
-        if( item->Type() == SCH_JUNCTION_T )
-            junctions.push_back( item );
-        else if( item->Type() == SCH_BITMAP_T )
-            bitmaps.push_back( item );
-        else
-            other.push_back( item );
-    }
-
-    // Sort to ensure plot-order consistency with screen drawing.
-    std::stable_sort( other.begin(), other.end(),
-               []( const SCH_ITEM* a, const SCH_ITEM* b )
-               {
-                    if( a->Type() == b->Type() )
-                        return a->GetLayer() > b->GetLayer();
-
-                    return a->Type() < b->Type();
-               } );
-
-    for( SCH_ITEM* item : bitmaps )
-        item->Print( aSettings, 0, 0, VECTOR2I( 0, 0 ), false, false );
-
-    for( SCH_ITEM* item : other )
-        item->PrintBackground( aSettings, 0, 0, VECTOR2I( 0, 0 ), false );
-
-    for( SCH_ITEM* item : other )
-        item->Print( aSettings, 0, 0, VECTOR2I( 0, 0 ), false, false );
-
-    for( SCH_ITEM* item : junctions )
-        item->Print( aSettings, 0, 0, VECTOR2I( 0, 0 ), false, false );
-}
-
-
 void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts ) const
 {
     // Ensure links are up to date, even if a library was reloaded for some reason:

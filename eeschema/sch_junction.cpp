@@ -111,21 +111,6 @@ const BOX2I SCH_JUNCTION::GetBoundingBox() const
 }
 
 
-void SCH_JUNCTION::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
-                          const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
-{
-    wxDC*   DC    = aSettings->GetPrintDC();
-    COLOR4D color = GetJunctionColor();
-
-    if( color == COLOR4D::UNSPECIFIED )
-        color = aSettings->GetLayerColor( GetLayer() );
-
-    SHAPE_CIRCLE circle = getEffectiveShape();
-
-    GRFilledCircle( DC, circle.GetCenter() + aOffset, circle.GetRadius(), 0, color, color );
-}
-
-
 void SCH_JUNCTION::MirrorVertically( int aCenter )
 {
     MIRROR( m_pos.y, aCenter );

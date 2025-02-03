@@ -798,29 +798,6 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
 }
 
 
-void PL_EDITOR_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
-{
-    GetScreen()->SetVirtualPageNumber( GetPageNumberOption() ? 1 : 2 );
-    DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
-
-    for( DS_DATA_ITEM* dataItem : model.GetItems() )
-    {
-        // Ensure the scaling factor (used only in printing) of bitmaps is up to date
-        if( dataItem->GetType() == DS_DATA_ITEM::DS_BITMAP )
-        {
-            BITMAP_BASE* bitmap = static_cast<DS_DATA_ITEM_BITMAP*>( dataItem )->m_ImageBitmap;
-            bitmap->SetPixelSizeIu( drawSheetIUScale.IU_PER_MILS * 1000 / bitmap->GetPPI() );
-        }
-    }
-
-    PrintDrawingSheet( aSettings, GetScreen(), nullptr, drawSheetIUScale.IU_PER_MILS,
-                       wxEmptyString );
-
-    GetCanvas()->DisplayDrawingSheet();
-    GetCanvas()->Refresh();
-}
-
-
 PL_DRAW_PANEL_GAL* PL_EDITOR_FRAME::GetCanvas() const
 {
     return static_cast<PL_DRAW_PANEL_GAL*>( EDA_DRAW_FRAME::GetCanvas() );

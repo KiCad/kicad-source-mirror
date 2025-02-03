@@ -347,37 +347,6 @@ int SCH_LINE::GetPenWidth() const
 }
 
 
-void SCH_LINE::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
-                      const VECTOR2I& offset, bool aForceNoFill, bool aDimmed )
-{
-    wxDC*   DC = aSettings->GetPrintDC();
-    COLOR4D color = GetLineColor();
-
-    if( color == COLOR4D::UNSPECIFIED )
-        color = aSettings->GetLayerColor( GetLayer() );
-
-    VECTOR2I   start = m_start;
-    VECTOR2I   end = m_end;
-    LINE_STYLE lineStyle = GetEffectiveLineStyle();
-    int        penWidth = GetEffectivePenWidth( aSettings );
-
-    if( lineStyle <= LINE_STYLE::FIRST_TYPE )
-    {
-        GRLine( DC, start.x, start.y, end.x, end.y, penWidth, color );
-    }
-    else
-    {
-        SHAPE_SEGMENT segment( start, end );
-
-        STROKE_PARAMS::Stroke( &segment, lineStyle, penWidth, aSettings,
-                               [&]( const VECTOR2I& a, const VECTOR2I& b )
-                               {
-                                   GRLine( DC, a.x, a.y, b.x, b.y, penWidth, color );
-                               } );
-    }
-}
-
-
 void SCH_LINE::MirrorVertically( int aCenter )
 {
     if( m_flags & STARTPOINT )

@@ -101,21 +101,6 @@ int SCH_NO_CONNECT::GetPenWidth() const
 }
 
 
-void SCH_NO_CONNECT::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
-                            const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
-{
-    wxDC*   DC = aSettings->GetPrintDC();
-    int     half = GetSize() / 2;
-    int     penWidth = GetEffectivePenWidth( aSettings );
-    int     pX = m_pos.x + aOffset.x;
-    int     pY = m_pos.y + aOffset.y;
-    COLOR4D color = aSettings->GetLayerColor( LAYER_NOCONNECT );
-
-    GRLine( DC, pX - half, pY - half, pX + half, pY + half, penWidth, color );
-    GRLine( DC, pX + half, pY - half, pX - half, pY + half, penWidth, color );
-}
-
-
 void SCH_NO_CONNECT::MirrorVertically( int aCenter )
 {
     MIRROR( m_pos.y, aCenter );

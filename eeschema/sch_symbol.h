@@ -807,26 +807,6 @@ public:
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
-    /**
-     * Print a symbol.
-     *
-     * @param aSettings Render settings controlling output
-     * @param aOffset is the drawing offset (usually VECTOR2I(0,0), but can be different when
-     *                moving an object)
-     */
-    void Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
-                const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed ) override;
-
-    /**
-     * Print only the background parts of a symbol (if any)
-     *
-     * @param aSettings Render settings controlling output
-     * @param aOffset is the drawing offset (usually VECTOR2I(0,0), but can be different when
-     *                moving an object)
-     */
-    void PrintBackground( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
-                          const VECTOR2I& aOffset, bool aDimmed ) override;
-
     void Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
                int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed ) override;
 

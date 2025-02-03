@@ -74,17 +74,3 @@ void SYMBOL_EDIT_FRAME::SVGPlotSymbol( const wxString& aFullFileName, const VECT
     plotter->EndPlot();
     delete plotter;
 }
-
-
-void SYMBOL_EDIT_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
-{
-    if( !m_symbol )
-        return;
-
-    const SCH_RENDER_SETTINGS* cfg = static_cast<const SCH_RENDER_SETTINGS*>( aSettings );
-    VECTOR2I pagesize = GetScreen()->GetPageSettings().GetSizeIU( schIUScale.IU_PER_MILS );
-
-    // Print item centered to the page.
-    m_symbol->PrintBackground( cfg, m_unit, m_bodyStyle, pagesize / 2, false );
-    m_symbol->Print( cfg, m_unit, m_bodyStyle, pagesize / 2, false, false );
-}

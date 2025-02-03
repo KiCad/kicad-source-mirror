@@ -1361,52 +1361,6 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
 }
 
 
-void SCH_LABEL_BASE::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
-                            const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
-{
-    static std::vector<VECTOR2I> s_poly;
-
-    SCH_CONNECTION* connection = Connection();
-    int             layer = ( connection && connection->IsBus() ) ? LAYER_BUS : m_layer;
-    wxDC*           DC = aSettings->GetPrintDC();
-    COLOR4D         color = aSettings->GetLayerColor( layer );
-    bool            blackAndWhiteMode = GetGRForceBlackPenState();
-    int             penWidth = GetEffectivePenWidth( aSettings );
-    VECTOR2I        text_offset = aOffset + GetSchematicTextOffset( aSettings );
-    COLOR4D          labelColor = GetLabelColor();
-
-    if( !blackAndWhiteMode && labelColor != COLOR4D::UNSPECIFIED )
-        color = labelColor;
-
-    EDA_TEXT::Print( aSettings, text_offset, color );
-
-    CreateGraphicShape( aSettings, s_poly, GetTextPos() + aOffset );
-
-    if( GetShape() == LABEL_FLAG_SHAPE::F_DOT )
-    {
-        GRLine( DC, s_poly[0], s_poly[1], penWidth, color );
-
-        int radius = ( s_poly[2] - s_poly[1] ).EuclideanNorm();
-        GRFilledCircle( DC, s_poly[2], radius, penWidth, color, color );
-    }
-    else if( GetShape() == LABEL_FLAG_SHAPE::F_ROUND )
-    {
-        GRLine( DC, s_poly[0], s_poly[1], penWidth, color );
-
-        int radius = ( s_poly[2] - s_poly[1] ).EuclideanNorm();
-        GRCircle( DC, s_poly[2], radius, penWidth, color );
-    }
-    else
-    {
-        if( !s_poly.empty() )
-            GRPoly( DC, s_poly.size(), &s_poly[0], false, penWidth, color, color );
-    }
-
-    for( SCH_FIELD& field : m_fields )
-        field.Print( aSettings, aUnit, aBodyStyle, aOffset, aForceNoFill, aDimmed );
-}
-
-
 bool SCH_LABEL_BASE::AutoRotateOnPlacement() const
 {
     return m_autoRotateOnPlacement;

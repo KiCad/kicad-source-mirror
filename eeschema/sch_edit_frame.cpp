@@ -1515,22 +1515,6 @@ void SCH_EDIT_FRAME::OnExit( wxCommandEvent& event )
 }
 
 
-void SCH_EDIT_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
-{
-    wxString                   fileName = Prj().AbsolutePath( GetScreen()->GetFileName() );
-    const SCH_RENDER_SETTINGS* cfg = static_cast<const SCH_RENDER_SETTINGS*>( aSettings );
-    COLOR4D                    bg = GetColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND );
-
-    cfg->GetPrintDC()->SetBackground( wxBrush( bg.ToColour() ) );
-    cfg->GetPrintDC()->Clear();
-
-    cfg->GetPrintDC()->SetLogicalFunction( wxCOPY );
-    GetScreen()->Print( cfg );
-    PrintDrawingSheet( cfg, GetScreen(), Schematic().GetProperties(), schIUScale.IU_PER_MILS,
-                       fileName );
-}
-
-
 void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
 {
     SCHEMATIC_SETTINGS& settings = m_schematic->Settings();
