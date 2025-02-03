@@ -116,7 +116,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-03 19:59+0300\n"
 "PO-Revision-Date: 2025-02-03 18:48+0000\n"
-"Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
 "Language: it\n"
@@ -11284,6 +11284,7 @@ msgid "Bill of Materials"
 msgstr "Distinta di base"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
+#, fuzzy
 msgid ""
 "# 1. Summary\n"
 "\n"
@@ -11437,8 +11438,8 @@ msgstr ""
 "sarà:\n"
 "\n"
 "```\n"
-"python.exe C:\\Utenti\\nomeutente\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Utenti\\n"
+"omeutente\\kicad\\my_python_script.py \"%I\" \"%O.csv\"\n"
 "```\n"
 "\n"
 "Su Linux, se lo script del generatore desiderato per una DIBA CSV è `/home/"
@@ -23793,13 +23794,15 @@ msgstr "Schema rispetto alla libreria per:"
 #: eeschema/tools/ee_inspection_tool.cpp:389
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:48
 #: pcbnew/tools/board_inspection_tool.cpp:1589
+#, fuzzy
 msgid "Library: "
-msgstr "Libreria:"
+msgstr "Libreria: "
 
 #: eeschema/tools/ee_inspection_tool.cpp:390
 #: pcbnew/tools/board_inspection_tool.cpp:1590
+#, fuzzy
 msgid "Library item: "
-msgstr "Elemento libreria:"
+msgstr "Elemento libreria: "
 
 #: eeschema/tools/ee_inspection_tool.cpp:400
 #: pcbnew/tools/board_inspection_tool.cpp:1608
@@ -27633,8 +27636,9 @@ msgid "Package identifier: "
 msgstr "Identificatore pacchetto: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:231
+#, fuzzy
 msgid "License: "
-msgstr "Licenza:"
+msgstr "Licenza: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:245
 msgid "Tags: "
@@ -34202,6 +34206,7 @@ msgid "BOM Columns"
 msgstr "Colonne DIBA"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:120
+#, fuzzy
 msgid "Internal ID:"
 msgstr "ID interno"
 
@@ -34913,8 +34918,9 @@ msgid "Restart Search"
 msgstr "Ricomincia la ricerca"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:49
+#, fuzzy
 msgid "Footprint: "
-msgstr "Impronta:"
+msgstr "Impronta: "
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:98
 msgid "Symbol:"
@@ -38663,8 +38669,9 @@ msgid "Track and Via Dimensions"
 msgstr "Dimensioni piste e via"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:55
+#, fuzzy
 msgid "Target skew: "
-msgstr "Skew obiettivo:"
+msgstr "Skew obiettivo: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:95
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2197
