@@ -23,10 +23,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-03 19:59+0300\n"
-"PO-Revision-Date: 2025-01-23 15:38+0000\n"
-"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"PO-Revision-Date: 2025-02-03 18:48+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4846,6 +4846,7 @@ msgstr "Baskı izleri/padler:"
 
 #: common/dialogs/panel_grid_settings.cpp:54
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:81
+#, fuzzy
 msgid "Tracks:"
 msgstr "Yollar"
 
@@ -4898,6 +4899,7 @@ msgid "Wires:"
 msgstr "Yollar:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:138
+#, fuzzy
 msgid "Vias:"
 msgstr "Atlamalar"
 
@@ -45007,6 +45009,7 @@ msgid "Tuning"
 msgstr "Uyarı"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1464
+#, fuzzy
 msgid "too long"
 msgstr "çok uzun:"
 
@@ -50351,6 +50354,7 @@ msgid "Grouping"
 msgstr "Gruplama"
 
 #: pcbnew/tools/group_tool.cpp:65
+#, fuzzy
 msgid "Group is in inconsistent state:"
 msgstr "Tümünü iptal etmek için <esc> tuşuna basın; bitirmek için çift tıkla"
 
