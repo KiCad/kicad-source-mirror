@@ -666,9 +666,6 @@ std::optional<EDA_ITEM*> API_HANDLER_PCB::getItemFromDocument( const DocumentSpe
 HANDLER_RESULT<SelectionResponse> API_HANDLER_PCB::handleGetSelection(
             const HANDLER_CONTEXT<GetSelection>& aCtx )
 {
-    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
-        return tl::unexpected( *busy );
-
     if( !validateItemHeaderDocument( aCtx.Request.header() ) )
     {
         ApiResponseStatus e;
@@ -801,9 +798,6 @@ HANDLER_RESULT<SelectionResponse> API_HANDLER_PCB::handleRemoveFromSelection(
 HANDLER_RESULT<BoardStackupResponse> API_HANDLER_PCB::handleGetStackup(
         const HANDLER_CONTEXT<GetBoardStackup>& aCtx )
 {
-    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
-        return tl::unexpected( *busy );
-
     HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.board() );
 
     if( !documentValidation )
@@ -835,9 +829,6 @@ HANDLER_RESULT<BoardStackupResponse> API_HANDLER_PCB::handleGetStackup(
 HANDLER_RESULT<GraphicsDefaultsResponse> API_HANDLER_PCB::handleGetGraphicsDefaults(
         const HANDLER_CONTEXT<GetGraphicsDefaults>& aCtx )
 {
-    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
-        return tl::unexpected( *busy );
-
     HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.board() );
 
     if( !documentValidation )
@@ -1053,9 +1044,6 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleInteractiveMoveItems(
 
 HANDLER_RESULT<NetsResponse> API_HANDLER_PCB::handleGetNets( const HANDLER_CONTEXT<GetNets>& aCtx )
 {
-    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
-        return tl::unexpected( *busy );
-
     HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.board() );
 
     if( !documentValidation )
@@ -1324,6 +1312,9 @@ HANDLER_RESULT<BoardEditorAppearanceSettings> API_HANDLER_PCB::handleGetBoardEdi
 HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSetBoardEditorAppearanceSettings(
         const HANDLER_CONTEXT<SetBoardEditorAppearanceSettings>& aCtx )
 {
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
     PCB_DISPLAY_OPTIONS options = frame()->GetDisplayOptions();
     KIGFX::PCB_VIEW* view = frame()->GetCanvas()->GetView();
     PCBNEW_SETTINGS* editorSettings = frame()->GetPcbNewSettings();
