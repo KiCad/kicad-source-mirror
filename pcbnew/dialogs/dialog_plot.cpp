@@ -769,7 +769,7 @@ void DIALOG_PLOT::OnSetScaleOpt( wxCommandEvent& event )
 }
 
 
-void DIALOG_PLOT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
+void DIALOG_PLOT::onOutputDirectoryBrowseClicked( wxCommandEvent& event )
 {
     // Build the absolute path of current output directory to preselect it in the file browser.
     std::function<bool( wxString* )> textResolver =

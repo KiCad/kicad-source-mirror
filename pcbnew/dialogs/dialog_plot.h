@@ -50,7 +50,7 @@ private:
 
     // Event called functions
     void Plot( wxCommandEvent& event ) override;
-    void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
+    void onOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
     void OnRightClickLayers( wxMouseEvent& event );
     void OnRightClickAllLayers( wxMouseEvent& event );
     void SetPlotFormat( wxCommandEvent& event ) override;
