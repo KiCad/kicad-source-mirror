@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 19:59+0300\n"
-"PO-Revision-Date: 2025-02-03 12:19+0000\n"
+"PO-Revision-Date: 2025-02-03 12:57+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -3950,7 +3950,7 @@ msgstr "抗锯齿选项"
 
 #: common/dialogs/panel_common_settings_base.cpp:39
 msgid "Accelerated graphics:"
-msgstr "硬件图形加速:"
+msgstr "硬件加速模式:"
 
 #: common/dialogs/panel_common_settings_base.cpp:43
 #: common/dialogs/panel_common_settings_base.cpp:53
@@ -3969,7 +3969,7 @@ msgstr "高品质抗锯齿处理"
 
 #: common/dialogs/panel_common_settings_base.cpp:49
 msgid "Fallback graphics:"
-msgstr "软件图形加速:"
+msgstr "软件兼容模式:"
 
 #: common/dialogs/panel_common_settings_base.cpp:70
 msgid "Helper Applications"
@@ -9520,21 +9520,21 @@ msgstr "渲染引擎"
 
 #: common/widgets/gal_options_panel_base.cpp:31
 msgid "Accelerated graphics"
-msgstr "硬件图形加速"
+msgstr "硬件加速模式"
 
 #: common/widgets/gal_options_panel_base.cpp:32
 msgid "Hardware-accelerated graphics (recommended)"
-msgstr "硬件图形加速 (推荐)"
+msgstr "使用硬件加速图形处理 (推荐)"
 
 #: common/widgets/gal_options_panel_base.cpp:36
 msgid "Fallback graphics"
-msgstr "软件图形加速"
+msgstr "软件兼容模式"
 
 #: common/widgets/gal_options_panel_base.cpp:37
 msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
-msgstr "软件图形加速 (适用于不支持 KiCad 硬件加速要求的计算机)"
+msgstr "回落到软件图形处理 (适用于无法满足 KiCad 硬件图形加速条件的设备)"
 
 #: common/widgets/gal_options_panel_base.cpp:47
 msgid "Grid Display"
