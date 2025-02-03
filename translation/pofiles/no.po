@@ -167,6 +167,8 @@ msgstr "Lastetid %.3f s"
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:59
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:503
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2690
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:306
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2706
 #, fuzzy, c-format
 msgid "Loading %s..."
 msgstr "Laster %s"
@@ -1391,7 +1393,7 @@ msgstr "Z:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:68
 #: gerbview/gerber_draw_item.cpp:722 pcbnew/footprint.cpp:1707
-#: pcbnew/pad.cpp:1361
+#: pcbnew/pad.cpp:1361 pcbnew/footprint.cpp:1681
 msgid "Rotation"
 msgstr "Rotering"
 
@@ -1407,6 +1409,7 @@ msgstr "Dekkevne"
 #: common/dialogs/dialog_page_settings_base.cpp:123
 #: eeschema/printing/dialog_print.cpp:241
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:253
+#: eeschema/printing/dialog_print_using_printer.cpp:269
 msgid "Preview"
 msgstr "Forhåndsvis"
 
@@ -2010,6 +2013,7 @@ msgstr "Bekreftelse"
 #: pcbnew/footprint_libraries_utils.cpp:1157 pcbnew/router/router_tool.cpp:1851
 #: pcbnew/router/router_tool.cpp:2605
 #: pcbnew/tools/footprint_editor_control.cpp:470 pcbnew/zone_filler.cpp:881
+#: pcbnew/router/router_tool.cpp:1849 pcbnew/router/router_tool.cpp:2603
 msgid "Confirmation"
 msgstr "Bekreftelse"
 
@@ -2022,7 +2026,7 @@ msgstr ""
 msgid "&No"
 msgstr "Nei"
 
-#: common/design_block_info_impl.cpp:135
+#: common/design_block_info_impl.cpp:135 common/design_block_info_impl.cpp:147
 #, fuzzy
 msgid "Loading design_blocks..."
 msgstr "Laster inn Gerber-filer ..."
@@ -2046,6 +2050,7 @@ msgstr "KiCad eldre prosjektfiler"
 
 #: common/design_block_io.cpp:172
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3023
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3039
 #, fuzzy, c-format
 msgid "Cannot overwrite library path '%s'."
 msgstr "Kan ikke overskrive bibliotekstien \"%s\"."
@@ -2063,6 +2068,7 @@ msgstr ""
 
 #: common/design_block_io.cpp:201 pcbnew/pcb_io/geda/pcb_io_geda.cpp:977
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3048
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3064
 #, fuzzy, c-format
 msgid "Insufficient permissions to delete folder '%s'."
 msgstr ""
@@ -2132,18 +2138,20 @@ msgstr ""
 "Dupliserte kallenavn for biblioteket \"%s\" funnet i symbolbibliotekets "
 "tabellfillinje %d"
 
-#: common/design_block_lib_table.cpp:334
+#: common/design_block_lib_table.cpp:334 common/design_block_lib_table.cpp:342
 #, fuzzy, c-format
 msgid "design-block-lib-table files contain no library named '%s'."
 msgstr "fp-lib-tabellfiler inneholder ikke noe bibliotek med kallenavn \"%s\""
 
 #: common/design_block_lib_table.cpp:569 common/fp_lib_table.cpp:567
-#: eeschema/symbol_lib_table.cpp:605
+#: eeschema/symbol_lib_table.cpp:605 common/design_block_lib_table.cpp:577
+#: common/fp_lib_table.cpp:566
 msgid "Added by Plugin and Content Manager"
 msgstr ""
 
 #: common/design_block_lib_table.cpp:595 common/fp_lib_table.cpp:593
-#: eeschema/symbol_lib_table.cpp:633
+#: eeschema/symbol_lib_table.cpp:633 common/design_block_lib_table.cpp:603
+#: common/fp_lib_table.cpp:592
 #, fuzzy, c-format
 msgid "Cannot create global library table path '%s'."
 msgstr "Kan ikke lage den globale bibliotektabellen \"%s\"."
@@ -2472,23 +2480,30 @@ msgstr "Tilbakestill til forvalg"
 
 #: common/dialogs/dialog_configure_paths.cpp:205
 #: common/dialogs/dialog_configure_paths.cpp:263
+#: common/dialogs/dialog_configure_paths.cpp:203
+#: common/dialogs/dialog_configure_paths.cpp:261
 msgid "Environment variable name cannot be empty."
 msgstr "Navnet på miljøvariabelen kan ikke være tomt."
 
 #: common/dialogs/dialog_configure_paths.cpp:213
 #: common/dialogs/dialog_configure_paths.cpp:265
+#: common/dialogs/dialog_configure_paths.cpp:211
+#: common/dialogs/dialog_configure_paths.cpp:263
 msgid "Environment variable path cannot be empty."
 msgstr "Sti for miljøvariabler kan ikke være tom."
 
 #: common/dialogs/dialog_configure_paths.cpp:270
+#: common/dialogs/dialog_configure_paths.cpp:268
 msgid "3D search path alias cannot be empty."
 msgstr "3D-søkebanealias kan ikke være tomt."
 
 #: common/dialogs/dialog_configure_paths.cpp:272
+#: common/dialogs/dialog_configure_paths.cpp:270
 msgid "3D search path cannot be empty."
 msgstr "3D-søkebane kan ikke være tom."
 
 #: common/dialogs/dialog_configure_paths.cpp:287
+#: common/dialogs/dialog_configure_paths.cpp:285
 msgid ""
 "This path was defined  externally to the running process and\n"
 "will only be temporarily overwritten."
@@ -2497,6 +2512,7 @@ msgstr ""
 "vil bare bli overskrevet midlertidig."
 
 #: common/dialogs/dialog_configure_paths.cpp:289
+#: common/dialogs/dialog_configure_paths.cpp:287
 msgid ""
 "The next time KiCad is launched, any paths that have already\n"
 "been defined are honored and any settings defined in the path\n"
@@ -2512,11 +2528,13 @@ msgstr ""
 "eksterne miljøvariabler fra systemet ditt."
 
 #: common/dialogs/dialog_configure_paths.cpp:307
+#: common/dialogs/dialog_configure_paths.cpp:305
 #, fuzzy, c-format
 msgid "The name %s is reserved, and cannot be used."
 msgstr "Navnet %s er reservert, og kan ikke brukes her"
 
 #: common/dialogs/dialog_configure_paths.cpp:389
+#: common/dialogs/dialog_configure_paths.cpp:387
 msgid ""
 "Enter the name and value for each environment variable.  Grey entries are "
 "names that have been defined externally at the system or user level.  "
@@ -2530,6 +2548,7 @@ msgstr ""
 "denne tabellen. Dette betyr at verdiene i denne tabellen ignoreres."
 
 #: common/dialogs/dialog_configure_paths.cpp:395
+#: common/dialogs/dialog_configure_paths.cpp:393
 msgid ""
 "To ensure environment variable names are valid on all platforms, the name "
 "field will only accept upper case letters, digits, and the underscore "
@@ -2748,6 +2767,8 @@ msgstr "Velg global %s bibliotekstabellfil:"
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:324
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:340
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:208
+#: kicad/dialogs/panel_jobset_base.cpp:174
+#: kicad/dialogs/panel_jobset_base.cpp:235
 msgid "dummy"
 msgstr "dummy"
 
@@ -2882,7 +2903,7 @@ msgstr ""
 "%s\n"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
-#: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1384
+#: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1384 pcbnew/board.cpp:1373
 msgid "PCB"
 msgstr "PCB"
 
@@ -3090,6 +3111,7 @@ msgstr "Forhåndsvisning av tittelblokkdata"
 #: common/dialogs/dialog_page_settings_base.h:146
 #: eeschema/tools/sch_editor_control.cpp:198
 #: pcbnew/tools/board_editor_control.cpp:304
+#: eeschema/tools/sch_editor_control.cpp:197
 msgid "Page Settings"
 msgstr "Sideinnstillinger"
 
@@ -3388,7 +3410,7 @@ msgstr "Valg"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:439 pcbnew/footprint.cpp:4079
 #: pcbnew/footprint_wizard_frame.cpp:326 pcbnew/pcb_dimension.cpp:605
 #: pcbnew/pcb_fields_grid_table.cpp:144 pcbnew/plot_board_layers.cpp:107
-#: pcbnew/widgets/search_handlers.cpp:119
+#: pcbnew/widgets/search_handlers.cpp:119 pcbnew/footprint.cpp:4053
 msgid "Value"
 msgstr "Verdi"
 
@@ -3409,12 +3431,15 @@ msgstr "<< Legg til valgt alternativ"
 #: common/dialogs/dialog_print_generic_base.h:77
 #: eeschema/printing/dialog_print.cpp:94
 #: eeschema/printing/dialog_print_base.h:61
+#: eeschema/printing/dialog_print_using_printer.cpp:126
+#: eeschema/printing/dialog_print_using_printer_base.h:61
 msgid "Print"
 msgstr "Skriv ut"
 
 #: common/dialogs/dialog_print_generic.cpp:97
 #: common/dialogs/dialog_print_generic.cpp:249
 #: eeschema/printing/dialog_print.cpp:95
+#: eeschema/printing/dialog_print_using_printer.cpp:127
 msgid "Print Preview"
 msgstr "Utskriftsforhåndsvisning"
 
@@ -3448,6 +3473,8 @@ msgstr "Utskriftsforhåndsvisning"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:100
 #: pcbnew/dialogs/dialog_import_netlist.cpp:84
 #: pcbnew/dialogs/dialog_plot.cpp:232 pcbnew/dialogs/dialog_update_pcb.cpp:61
+#: eeschema/printing/dialog_print_using_printer.cpp:128
+#: kicad/dialogs/panel_jobset.cpp:93
 msgid "Close"
 msgstr "Lukk"
 
@@ -3481,6 +3508,7 @@ msgstr "Ingenting å skrive ut"
 
 #: common/dialogs/dialog_print_generic.cpp:286
 #: eeschema/printing/dialog_print.cpp:279
+#: eeschema/printing/dialog_print_using_printer.cpp:307
 msgid "Previous print job not yet complete."
 msgstr "Forrige utskriftsjobb ennå ikke fullført."
 
@@ -3497,6 +3525,7 @@ msgstr "Det oppstod en feil ved initialisering av skriverinformasjonen."
 #: eeschema/printing/dialog_print_base.cpp:31
 #: pcbnew/dialogs/dialog_plot_base.cpp:381
 #: pcbnew/dialogs/dialog_plot_base.cpp:404
+#: eeschema/printing/dialog_print_using_printer_base.cpp:31
 msgid "Output mode:"
 msgstr "Utdatamodus:"
 
@@ -3517,6 +3546,7 @@ msgstr "Utdatamodus:"
 #: pcbnew/dialogs/dialog_plot_base.cpp:408 pcbnew/pcb_field.cpp:274
 #: pcbnew/pcb_tablecell.cpp:209 pcbnew/pcb_text.cpp:624
 #: pcbnew/pcb_textbox.cpp:820 pcbnew/tools/drawing_stackup_table_tool.cpp:271
+#: eeschema/printing/dialog_print_using_printer_base.cpp:35
 msgid "Color"
 msgstr "Farge"
 
@@ -3528,6 +3558,7 @@ msgstr "Svart og hvit"
 
 #: common/dialogs/dialog_print_generic_base.cpp:41
 #: eeschema/printing/dialog_print_base.cpp:22
+#: eeschema/printing/dialog_print_using_printer_base.cpp:22
 #, fuzzy
 msgid "Print drawing sheet"
 msgstr "Tegningsmodus"
@@ -3560,6 +3591,7 @@ msgstr "Finn tekst"
 
 #: common/dialogs/dialog_print_generic_base.cpp:108
 #: eeschema/printing/dialog_print_base.cpp:73
+#: eeschema/printing/dialog_print_using_printer_base.cpp:72
 msgid "Page Setup..."
 msgstr "Sideoppsett..."
 
@@ -3652,6 +3684,7 @@ msgstr "plassering av fotavtrykk"
 #: pcbnew/footprint_viewer_frame.cpp:141 pcbnew/footprint_viewer_frame.cpp:156
 #: pcbnew/widgets/net_inspector_panel.cpp:42
 #: pcbnew/widgets/net_inspector_panel.cpp:95
+#: common/dialogs/eda_list_dialog.cpp:46 common/dialogs/eda_list_dialog.cpp:74
 msgid "Filter"
 msgstr "Filter"
 
@@ -4711,6 +4744,7 @@ msgstr "Bibliotek"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1245
 #: eeschema/tools/sch_editor_control.cpp:505
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1299
+#: eeschema/tools/sch_editor_control.cpp:501
 #, c-format
 msgid ""
 "Error saving global library table:\n"
@@ -4731,6 +4765,8 @@ msgstr ""
 #: eeschema/tools/sch_editor_control.cpp:521
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1300
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1313
+#: eeschema/tools/sch_editor_control.cpp:502
+#: eeschema/tools/sch_editor_control.cpp:517
 msgid "File Save Error"
 msgstr "Feil ved lagring av fil"
 
@@ -4738,6 +4774,7 @@ msgstr "Feil ved lagring av fil"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1258
 #: eeschema/tools/sch_editor_control.cpp:520
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1312
+#: eeschema/tools/sch_editor_control.cpp:516
 #, c-format
 msgid ""
 "Error saving project-specific library table:\n"
@@ -5246,6 +5283,7 @@ msgstr "Forstørr"
 #: pcbnew/widgets/appearance_controls.cpp:2595 pcbnew/zone.cpp:1828
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:83
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
+#: pcbnew/footprint.cpp:4012
 msgid "None"
 msgstr "Ingen"
 
@@ -5490,6 +5528,7 @@ msgstr "Ingen tilkobling"
 #: pcbnew/pad.cpp:2522 pcbnew/pcb_table.cpp:533 pcbnew/pcb_textbox.cpp:795
 #: pcbnew/zone.cpp:857 pcbnew/zone.cpp:1830
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
+#: pcbnew/footprint.cpp:4014
 msgid "Solid"
 msgstr "Ugjennomsiktig"
 
@@ -5882,6 +5921,8 @@ msgstr "Bilde"
 
 #: common/drawing_sheet/ds_data_model_io.cpp:102
 #: common/drawing_sheet/ds_data_model_io.cpp:133
+#: common/drawing_sheet/ds_data_model_io.cpp:101
+#: common/drawing_sheet/ds_data_model_io.cpp:132
 #, fuzzy
 msgid "Error writing drawing sheet file"
 msgstr "Fullfør tegningsarket"
@@ -6305,7 +6346,7 @@ msgstr "Nytt bibliotek"
 
 #: common/eda_draw_frame.cpp:1219 common/tool/actions.cpp:473
 #: common/widgets/search_pane.cpp:121 eeschema/sch_edit_frame.cpp:261
-#: pcbnew/pcb_edit_frame.cpp:364
+#: pcbnew/pcb_edit_frame.cpp:364 common/widgets/search_pane.cpp:118
 #, fuzzy
 msgid "Search"
 msgstr "Søketekst"
@@ -6831,7 +6872,7 @@ msgstr "Bunn"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
 #: pcbnew/footprint.cpp:4070 pcbnew/pad.cpp:2539 pcbnew/pcb_dimension.cpp:1756
 #: pcbnew/pcb_dimension.cpp:1831 pcbnew/pcb_fields_grid_table.cpp:151
-#: pcbnew/pcb_tablecell.cpp:207 pcbnew/zone.cpp:2001
+#: pcbnew/pcb_tablecell.cpp:207 pcbnew/zone.cpp:2001 pcbnew/footprint.cpp:4044
 msgid "Orientation"
 msgstr "Skjermretning"
 
@@ -7078,15 +7119,17 @@ msgstr "Fotavtrykk \"%s\" ble ikke funnet."
 #: eeschema/symbol_tree_model_adapter.cpp:107
 #: eeschema/symbol_viewer_frame.cpp:305
 #: eeschema/widgets/panel_design_block_chooser.cpp:426
+#: eeschema/widgets/panel_design_block_chooser.cpp:423
 msgid "Load Error"
 msgstr "Last Errors"
 
 #: common/footprint_info.cpp:121
 #: eeschema/widgets/panel_design_block_chooser.cpp:428
+#: eeschema/widgets/panel_design_block_chooser.cpp:425
 msgid "Errors were encountered loading footprints:"
 msgstr "Det ble oppdaget feil ved innlasting av fotavtrykk:"
 
-#: common/fp_lib_table.cpp:226
+#: common/fp_lib_table.cpp:226 common/fp_lib_table.cpp:217
 #, fuzzy, c-format
 msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
@@ -7397,6 +7440,7 @@ msgstr "feil"
 #: common/grid_tricks.cpp:359 common/tool/actions.cpp:214
 #: common/widgets/listbox_tricks.cpp:52 eeschema/tools/ee_actions.cpp:249
 #: pcbnew/dialogs/panel_setup_rules.cpp:130 pcbnew/tools/edit_tool.cpp:2638
+#: pcbnew/tools/edit_tool.cpp:2633
 msgid "Cut"
 msgstr "Klipp ut"
 
@@ -7407,10 +7451,12 @@ msgstr "Fjern valgte celler som plasserer originalinnholdet på utklippstavlen"
 #: common/grid_tricks.cpp:361 common/tool/actions.cpp:225
 #: common/widgets/listbox_tricks.cpp:50 eeschema/tools/ee_actions.cpp:255
 #: kicad/dialogs/panel_jobset.cpp:378 pcbnew/dialogs/panel_setup_rules.cpp:131
+#: kicad/dialogs/panel_jobset.cpp:361
 msgid "Copy"
 msgstr "Kopier"
 
 #: common/grid_tricks.cpp:362 kicad/dialogs/panel_jobset.cpp:379
+#: kicad/dialogs/panel_jobset.cpp:362
 msgid "Copy selected cells to clipboard"
 msgstr "Kopier valgte celler til utklippstavlen"
 
@@ -7419,6 +7465,7 @@ msgstr "Kopier valgte celler til utklippstavlen"
 #: eeschema/tools/sch_editor_control.cpp:2281
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1020
 #: pcbnew/dialogs/panel_setup_rules.cpp:132 pcbnew/tools/pcb_control.cpp:1238
+#: eeschema/tools/sch_editor_control.cpp:2270
 msgid "Paste"
 msgstr "Lim inn"
 
@@ -7431,6 +7478,7 @@ msgstr "Lim ut utklippstavlecellene til matrise ved gjeldende celle"
 #: eeschema/tools/symbol_editor_edit_tool.cpp:476
 #: kicad/dialogs/panel_jobset.cpp:380 kicad/project_tree_pane.cpp:942
 #: pcbnew/dialogs/panel_setup_rules.cpp:133 pcbnew/tools/edit_tool.cpp:2651
+#: kicad/dialogs/panel_jobset.cpp:363 pcbnew/tools/edit_tool.cpp:2646
 msgid "Delete"
 msgstr "Slett"
 
@@ -7447,7 +7495,7 @@ msgstr "Sletter valgte element(er)"
 #: pcbnew/dialogs/dialog_import_settings.cpp:49
 #: pcbnew/dialogs/dialog_import_settings.cpp:98
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:92
-#: pcbnew/dialogs/panel_setup_rules.cpp:137
+#: pcbnew/dialogs/panel_setup_rules.cpp:137 kicad/dialogs/panel_jobset.cpp:365
 msgid "Select All"
 msgstr "Velg alle"
 
@@ -8277,6 +8325,7 @@ msgstr "Hjelpeartikler"
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:103
 #: gerbview/widgets/gerbview_layer_widget.cpp:135
 #: pcbnew/widgets/appearance_controls.cpp:351
+#: eeschema/tools/sch_editor_control.cpp:2867
 msgid "Grid"
 msgstr "Rutenett"
 
@@ -8544,6 +8593,7 @@ msgstr "Element"
 #: eeschema/widgets/panel_design_block_chooser.cpp:414
 #: eeschema/widgets/panel_symbol_chooser.cpp:173
 #: pcbnew/widgets/panel_footprint_chooser.cpp:96
+#: eeschema/widgets/panel_design_block_chooser.cpp:411
 msgid "Recently Used"
 msgstr "Nylig brukt"
 
@@ -8623,21 +8673,21 @@ msgstr "%s og %s"
 msgid "%s, %s and %d more"
 msgstr "%s og %d til"
 
-#: common/notifications_manager.cpp:93
+#: common/notifications_manager.cpp:93 common/notifications_manager.cpp:91
 #, fuzzy
 msgid "View Details"
 msgstr "Detaljer"
 
-#: common/notifications_manager.cpp:97
+#: common/notifications_manager.cpp:97 common/notifications_manager.cpp:96
 msgid "Dismiss"
 msgstr ""
 
-#: common/notifications_manager.cpp:155
+#: common/notifications_manager.cpp:155 common/notifications_manager.cpp:156
 #, fuzzy
 msgid "Notifications"
 msgstr "Begrunnelse"
 
-#: common/notifications_manager.cpp:180
+#: common/notifications_manager.cpp:180 common/notifications_manager.cpp:176
 msgid "There are no notifications available"
 msgstr ""
 
@@ -8839,7 +8889,7 @@ msgstr "Standard enheter:"
 #: eeschema/sch_symbol.cpp:2110 eeschema/sch_symbol.cpp:2991
 #: eeschema/widgets/search_handlers.cpp:160
 #: eeschema/widgets/search_handlers.cpp:246 pcbnew/footprint.cpp:4076
-#: pcbnew/widgets/search_handlers.cpp:118
+#: pcbnew/widgets/search_handlers.cpp:118 pcbnew/footprint.cpp:4050
 msgid "Reference"
 msgstr "Referanse"
 
@@ -8862,7 +8912,7 @@ msgstr "Få og flytt fotavtrykk"
 #: eeschema/tools/sch_edit_tool.cpp:551
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:179
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
-#: pcbnew/footprint.cpp:4099
+#: pcbnew/footprint.cpp:4099 pcbnew/footprint.cpp:4073
 msgid "Attributes"
 msgstr "Attributter"
 
@@ -9090,7 +9140,7 @@ msgstr "Lim inn element (er) fra utklippstavlen med alternativer"
 
 #: common/tool/actions.cpp:278 common/widgets/listbox_tricks.cpp:53
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1101
-#: pcbnew/tools/edit_tool.cpp:2980
+#: pcbnew/tools/edit_tool.cpp:2980 pcbnew/tools/edit_tool.cpp:2975
 msgid "Duplicate"
 msgstr "Dupliser"
 
@@ -9112,7 +9162,7 @@ msgid "Delete clicked items"
 msgstr "Slett elementene du har klikket på"
 
 #: common/tool/actions.cpp:307 eeschema/tools/sch_edit_tool.cpp:2840
-#: pcbnew/tools/edit_tool.cpp:2293
+#: pcbnew/tools/edit_tool.cpp:2293 pcbnew/tools/edit_tool.cpp:2288
 #, fuzzy
 msgid "Left Justify"
 msgstr "X Begrunn"
@@ -9122,7 +9172,7 @@ msgid "Left-justify fields and text items"
 msgstr ""
 
 #: common/tool/actions.cpp:314 eeschema/tools/sch_edit_tool.cpp:2842
-#: pcbnew/tools/edit_tool.cpp:2295
+#: pcbnew/tools/edit_tool.cpp:2295 pcbnew/tools/edit_tool.cpp:2290
 #, fuzzy
 msgid "Center Justify"
 msgstr "X Begrunn"
@@ -9132,7 +9182,7 @@ msgid "Center-justify fields and text items"
 msgstr ""
 
 #: common/tool/actions.cpp:321 eeschema/tools/sch_edit_tool.cpp:2844
-#: pcbnew/tools/edit_tool.cpp:2297
+#: pcbnew/tools/edit_tool.cpp:2297 pcbnew/tools/edit_tool.cpp:2292
 #, fuzzy
 msgid "Right Justify"
 msgstr "X Begrunn"
@@ -9153,7 +9203,7 @@ msgstr "Erstatt Alle"
 
 #: common/tool/actions.cpp:342 eeschema/tools/sch_edit_tool.cpp:3096
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1214
-#: pcbnew/tools/edit_tool.cpp:3085
+#: pcbnew/tools/edit_tool.cpp:3085 pcbnew/tools/edit_tool.cpp:3080
 #, fuzzy
 msgid "Increment"
 msgstr "Øketrinn:"
@@ -9457,6 +9507,7 @@ msgid "Center on Cursor"
 msgstr "Senter på side"
 
 #: common/tool/actions.cpp:668 common/widgets/search_pane.cpp:43
+#: common/widgets/search_pane.cpp:40
 msgid "Zoom to Selection"
 msgstr "Zoom til utvalg"
 
@@ -10131,6 +10182,7 @@ msgstr "Tavle"
 #: eeschema/sch_base_frame.cpp:593 eeschema/sch_symbol.cpp:2086
 #: eeschema/sch_symbol.cpp:2090 eeschema/sch_symbol.cpp:2125
 #: eeschema/widgets/symbol_diff_widget.cpp:45 pcbnew/footprint.cpp:1655
+#: pcbnew/footprint.cpp:1629
 msgid "Library"
 msgstr "Bibliotek"
 
@@ -10366,16 +10418,16 @@ msgstr "Ingen buss valgt"
 msgid "Basic Properties"
 msgstr "Egenskaper"
 
-#: common/widgets/search_pane.cpp:43
+#: common/widgets/search_pane.cpp:43 common/widgets/search_pane.cpp:40
 msgid "Toggle zooming to selections in the search pane"
 msgstr ""
 
-#: common/widgets/search_pane.cpp:45
+#: common/widgets/search_pane.cpp:45 common/widgets/search_pane.cpp:42
 #, fuzzy
 msgid "Pan to Selection"
 msgstr "Legg til utvalg"
 
-#: common/widgets/search_pane.cpp:45
+#: common/widgets/search_pane.cpp:45 common/widgets/search_pane.cpp:42
 msgid "Toggle panning to selections in the search pane"
 msgstr ""
 
@@ -10883,6 +10935,7 @@ msgstr "\"%s\" er ikke et gyldig fotavtrykk."
 #: eeschema/symbol_editor/symbol_editor.cpp:1629
 #: eeschema/symbol_viewer_frame.cpp:462 pcbnew/footprint.cpp:4089
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:133
+#: eeschema/design_block_tree_model_adapter.cpp:129 pcbnew/footprint.cpp:4063
 msgid "Keywords"
 msgstr "Nøkkelord"
 
@@ -11046,6 +11099,7 @@ msgstr ""
 "%s"
 
 #: cvpcb/display_footprints_frame.cpp:508 pcbnew/footprint.cpp:1715
+#: pcbnew/footprint.cpp:1689
 #, c-format
 msgid "Footprint: %s"
 msgstr "Fotavtrykk: %s"
@@ -11355,6 +11409,8 @@ msgstr "Valgt nett:"
 
 #: eeschema/design_block_tree_model_adapter.cpp:150
 #: eeschema/design_block_tree_model_adapter.cpp:199
+#: eeschema/design_block_tree_model_adapter.cpp:149
+#: eeschema/design_block_tree_model_adapter.cpp:198
 #, fuzzy, c-format
 msgid "Error loading design block %s from library '%s'."
 msgstr "Feil ved lasting av symbolet '%s' fra biblioteket '%s'."
@@ -11420,6 +11476,7 @@ msgstr "Alternativer for biblioteket \"%s\""
 
 #: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:3000
 #: pcbnew/footprint.cpp:4086 pcbnew/plot_board_layers.cpp:129
+#: pcbnew/footprint.cpp:4060
 #, fuzzy
 msgid "Library Description"
 msgstr "Beskrivelse"
@@ -11454,6 +11511,8 @@ msgstr "Velg en symbolbibliotekstabellfil."
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:958
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2926
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3004
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2942
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3020
 #, c-format
 msgid "Library '%s' is read only."
 msgstr "Biblioteket '%s' er skrivebeskyttet."
@@ -11578,6 +11637,7 @@ msgstr "Kommenter skjematisk"
 
 #: eeschema/dialogs/dialog_bom.cpp:85 kicad/dialogs/panel_jobset_base.cpp:199
 #: pcbnew/dialogs/dialog_gendrill.cpp:93
+#: kicad/dialogs/panel_jobset_base.cpp:198
 msgid "Generate"
 msgstr "Generer"
 
@@ -13170,7 +13230,7 @@ msgstr "Vis konsollvindu"
 #: eeschema/sch_symbol.cpp:2989
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:28
-#: pcbnew/footprint.cpp:4074
+#: pcbnew/footprint.cpp:4074 pcbnew/footprint.cpp:4048
 msgid "Fields"
 msgstr "Jorder"
 
@@ -14166,6 +14226,7 @@ msgstr "Skriv ut kant og tittelblokk"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:78
 #: eeschema/printing/dialog_print_base.cpp:35
+#: eeschema/printing/dialog_print_using_printer_base.cpp:35
 msgid "Black and White"
 msgstr "Svart og hvit"
 
@@ -15594,6 +15655,7 @@ msgstr "Vis datablad i nettleseren"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:200
 #: eeschema/sch_label.cpp:1180
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:232
+#: pcbnew/dialogs/dialog_layer_selection_base.cpp:231
 msgid "Label"
 msgstr "Etikett"
 
@@ -17664,6 +17726,7 @@ msgstr "Biblioteket «%s» er ikke påskrudd i nåværende oppsett."
 
 #: eeschema/erc/erc.cpp:1549
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:928
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:914
 #, fuzzy, c-format
 msgid "Footprint '%s' not found in library '%s'."
 msgstr "Fotavtrykk ikke funnet i endringslisten"
@@ -17983,6 +18046,7 @@ msgstr ""
 
 #: eeschema/fields_grid_table.cpp:278 eeschema/files-io.cpp:919
 #: eeschema/tools/sch_editor_control.cpp:129
+#: eeschema/tools/sch_editor_control.cpp:128
 msgid "Schematic Files"
 msgstr "Skjematiske filer"
 
@@ -18463,7 +18527,7 @@ msgstr "Deaktiver symbol for simulering"
 #: eeschema/lib_symbol.cpp:591 eeschema/sch_sheet.cpp:336
 #: eeschema/sch_sheet.cpp:880 eeschema/sch_symbol.cpp:1620
 #: eeschema/sch_symbol.cpp:2036 eeschema/widgets/search_handlers.cpp:169
-#: pcbnew/footprint.cpp:1703
+#: pcbnew/footprint.cpp:1703 pcbnew/footprint.cpp:1677
 #, fuzzy
 msgid "DNP"
 msgstr "DPI (skjermoppløsning)"
@@ -18731,7 +18795,7 @@ msgstr "Kan ikke håndtere teksttype for fotavtrykk %s"
 #: pcbnew/widgets/appearance_controls.cpp:2455
 #: pcbnew/widgets/appearance_controls_base.cpp:61
 #: pcbnew/widgets/appearance_controls_base.cpp:151
-#: pcbnew/widgets/search_handlers.cpp:307
+#: pcbnew/widgets/search_handlers.cpp:307 pcbnew/board.cpp:1810
 msgid "Nets"
 msgstr "Nett"
 
@@ -18900,24 +18964,29 @@ msgid "NonLogic"
 msgstr "NonLogic"
 
 #: eeschema/printing/dialog_print.cpp:356
+#: eeschema/printing/dialog_print_using_printer.cpp:384
 msgid "Print Schematic"
 msgstr "Skriv ut skjematisk"
 
 #: eeschema/printing/dialog_print.cpp:363
+#: eeschema/printing/dialog_print_using_printer.cpp:391
 msgid "An error occurred attempting to print the schematic."
 msgstr "Det oppstod en feil under forsøk på å skrive ut skjematisk."
 
 #: eeschema/printing/dialog_print_base.cpp:24
+#: eeschema/printing/dialog_print_using_printer_base.cpp:24
 msgid "Print (or not) the Frame references."
 msgstr "Skriv ut (eller ikke) rammereferansene."
 
 #: eeschema/printing/dialog_print_base.cpp:44
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:217
+#: eeschema/printing/dialog_print_using_printer_base.cpp:46
 msgid "Print background color"
 msgstr "Skriv ut bakgrunnsfarge"
 
 #: eeschema/printing/dialog_print_base.cpp:50
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:222
+#: eeschema/printing/dialog_print_using_printer_base.cpp:49
 msgid "Use a different color theme for printing:"
 msgstr "Bruk et annet fargetema for utskrift:"
 
@@ -19012,7 +19081,7 @@ msgstr "Ingen symbolbiblioteker er lastet inn."
 msgid "Select Symbol Library"
 msgstr "Velg Symbolbibliotek"
 
-#: eeschema/sch_base_frame.cpp:751
+#: eeschema/sch_base_frame.cpp:751 eeschema/sch_base_frame.cpp:747
 #, fuzzy
 msgid ""
 "The library containing the current symbol has changed.\n"
@@ -19105,7 +19174,7 @@ msgstr "Ny skjematisk fil er ikke lagret"
 #: eeschema/symbol_editor/symbol_editor.cpp:1532
 #: kicad/dialogs/panel_jobset.cpp:823 pagelayout_editor/pl_editor_frame.cpp:411
 #: pcbnew/footprint_edit_frame.cpp:815 pcbnew/footprint_edit_frame.cpp:855
-#: pcbnew/pcb_edit_frame.cpp:1181
+#: pcbnew/pcb_edit_frame.cpp:1181 kicad/dialogs/panel_jobset.cpp:787
 #, fuzzy, c-format
 msgid "Save changes to '%s' before closing?"
 msgstr "Lagre endringer til '%s' før lukking?"
@@ -19145,7 +19214,7 @@ msgstr "Kunne ikke åpne CvPcb"
 
 #: eeschema/sch_edit_frame.cpp:1741 eeschema/sim/simulator_frame.cpp:341
 #: kicad/kicad_manager_frame.cpp:1034 pcbnew/footprint_edit_frame.cpp:1029
-#: pcbnew/pcb_edit_frame.cpp:1796
+#: pcbnew/pcb_edit_frame.cpp:1796 kicad/kicad_manager_frame.cpp:1045
 msgid "[Read Only]"
 msgstr "[Skrivebeskyttet]"
 
@@ -19780,6 +19849,8 @@ msgstr "KiCad-symbolbibliotekfiler"
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:506
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2693
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:154
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:309
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2709
 #, fuzzy
 msgid "Open cancelled by user."
 msgstr "-------- ERC kansellert av bruker. <br> <br>"
@@ -19828,12 +19899,14 @@ msgstr "komponentfelttekstattributter må være tre tegn brede"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:2243
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1649
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1665
 #, fuzzy, c-format
 msgid "Symbol library '%s' already exists."
 msgstr "Bibliotek %s eksisterer allerede."
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:2269
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1675
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1691
 #, fuzzy, c-format
 msgid "Symbol library '%s' cannot be deleted."
 msgstr "biblioteket \"%s\" kan ikke slettes"
@@ -19875,6 +19948,7 @@ msgid "library %s does not contain a symbol named %s"
 msgstr "bibliotek %s inneholder ikke et symbol som heter %s"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:211
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:215
 #, c-format
 msgid ""
 "Could not load sheet '%s' because it already appears as a direct ancestor in "
@@ -20137,6 +20211,7 @@ msgstr "Geringsstil:"
 #: pcbnew/pcb_textbox.cpp:485 pcbnew/pcb_track.cpp:1685
 #: pcbnew/tools/generator_tool.cpp:47 pcbnew/zone.cpp:819
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:52
+#: pcbnew/footprint.cpp:1662
 msgid "Locked"
 msgstr "Låst"
 
@@ -20534,12 +20609,14 @@ msgstr "Deaktiver symbol for simulering"
 
 #: eeschema/sch_sheet.cpp:1733 eeschema/sch_symbol.cpp:1100
 #: eeschema/sch_symbol.cpp:3041 pcbnew/footprint.cpp:4106
+#: pcbnew/footprint.cpp:4080
 #, fuzzy
 msgid "Exclude From Bill of Materials"
 msgstr "Ekskluder fra materiallister"
 
 #: eeschema/sch_sheet.cpp:1736 eeschema/sch_symbol.cpp:1101
 #: eeschema/sch_symbol.cpp:3044 pcbnew/footprint.cpp:4109
+#: pcbnew/footprint.cpp:4083
 #, fuzzy
 msgid "Do not Populate"
 msgstr "Ikke eksporter"
@@ -20598,6 +20675,7 @@ msgid "Mirror Y"
 msgstr "Speil"
 
 #: eeschema/sch_symbol.cpp:2997 pcbnew/footprint.cpp:4083
+#: pcbnew/footprint.cpp:4057
 #, fuzzy
 msgid "Library Link"
 msgstr "Bibliotek lenke:"
@@ -22689,6 +22767,7 @@ msgstr "Eksporter til utklippstavlen"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1072
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1123
 #: eeschema/tools/sch_editor_control.cpp:413
+#: eeschema/tools/sch_editor_control.cpp:409
 #, fuzzy, c-format
 msgid "Library '%s' already exists."
 msgstr "Bibliotek %s eksisterer allerede."
@@ -23051,6 +23130,7 @@ msgstr ""
 
 #: eeschema/symbol_library_manager.cpp:1009
 #: eeschema/tools/sch_editor_control.cpp:461
+#: eeschema/tools/sch_editor_control.cpp:457
 #, fuzzy, c-format
 msgid "Error saving symbol %s to library '%s'."
 msgstr "Feil ved lasting av symbolet '%s' fra biblioteket '%s'."
@@ -25098,13 +25178,14 @@ msgstr "Endre"
 
 #: eeschema/tools/sch_edit_tool.cpp:1013
 #: eeschema/tools/symbol_editor_edit_tool.cpp:208
-#: pcbnew/tools/edit_tool.cpp:2059
+#: pcbnew/tools/edit_tool.cpp:2059 pcbnew/tools/edit_tool.cpp:2054
 msgid "Rotate"
 msgstr "Roter"
 
 #: eeschema/tools/sch_edit_tool.cpp:1211 gerbview/gerber_draw_item.cpp:731
 #: pcbnew/pcb_tablecell.cpp:109 pcbnew/pcb_text.cpp:286
 #: pcbnew/pcb_textbox.cpp:488 pcbnew/tools/edit_tool.cpp:2223
+#: pcbnew/tools/edit_tool.cpp:2218
 msgid "Mirror"
 msgstr "Speil"
 
@@ -25185,39 +25266,47 @@ msgid "Toggle Attribute"
 msgstr "Attributt"
 
 #: eeschema/tools/sch_editor_control.cpp:166
+#: eeschema/tools/sch_editor_control.cpp:165
 #, fuzzy, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
 msgstr "Tilbakestill \"%s\" til siste versjon lagret?"
 
 #: eeschema/tools/sch_editor_control.cpp:359
+#: eeschema/tools/sch_editor_control.cpp:355
 #, fuzzy
 msgid "Include power symbols in schematic to the library?"
 msgstr "Oppdater fotavtrykk slik at de inkluderer endringer fra biblioteket"
 
 #: eeschema/tools/sch_editor_control.cpp:425
+#: eeschema/tools/sch_editor_control.cpp:421
 #, fuzzy, c-format
 msgid "Could not add library '%s'."
 msgstr "Fant ikke biblioteksfilen %s"
 
 #: eeschema/tools/sch_editor_control.cpp:438
+#: eeschema/tools/sch_editor_control.cpp:434
 #, fuzzy
 msgid "Update symbols in schematic to refer to new library?"
 msgstr "Oppdater fotavtrykk slik at de inkluderer endringer fra biblioteket"
 
 #: eeschema/tools/sch_editor_control.cpp:827
+#: eeschema/tools/sch_editor_control.cpp:823
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "Feil: dupliserte underarknavn funnet i gjeldende ark."
 
 #: eeschema/tools/sch_editor_control.cpp:934
+#: eeschema/tools/sch_editor_control.cpp:930
 #, fuzzy
 msgid "No net selected."
 msgstr "Ingen lag valgt."
 
 #: eeschema/tools/sch_editor_control.cpp:960
+#: eeschema/tools/sch_editor_control.cpp:956
 msgid "Net must be labeled to assign a netclass."
 msgstr "Nett må merkes for å tilordne en nettklasse."
 
 #: eeschema/tools/sch_editor_control.cpp:1811
+#: eeschema/tools/sch_editor_control.cpp:1800
 #, fuzzy, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -25229,11 +25318,13 @@ msgstr ""
 "som foreldre."
 
 #: eeschema/tools/sch_editor_control.cpp:2327
+#: eeschema/tools/sch_editor_control.cpp:2316
 #, fuzzy
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr "biblioteket \"%s\" kan ikke slettes"
 
 #: eeschema/tools/sch_editor_control.cpp:2415
+#: eeschema/tools/sch_editor_control.cpp:2404
 #, fuzzy
 msgid "Increment Annotations"
 msgstr "Fjern merknader"
@@ -25241,6 +25332,7 @@ msgstr "Fjern merknader"
 #: eeschema/tools/sch_editor_control.cpp:2835
 #: pcbnew/tools/board_editor_control.cpp:614
 #: pcbnew/tools/footprint_editor_control.cpp:889
+#: eeschema/tools/sch_editor_control.cpp:2824
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d dupliserte ID-er erstattet.\n"
@@ -25248,12 +25340,14 @@ msgstr "%d dupliserte ID-er erstattet.\n"
 #: eeschema/tools/sch_editor_control.cpp:2845
 #: pcbnew/tools/board_editor_control.cpp:629
 #: pcbnew/tools/footprint_editor_control.cpp:896
+#: eeschema/tools/sch_editor_control.cpp:2834
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d potensielle problemer reparert."
 
 #: eeschema/tools/sch_editor_control.cpp:2852
 #: pcbnew/drc/drc_rule_parser.cpp:179
+#: eeschema/tools/sch_editor_control.cpp:2841
 msgid "No errors found."
 msgstr "Ingen feil funnet."
 
@@ -25381,13 +25475,13 @@ msgid "Place Pin"
 msgstr "Plasser via"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:468
-#: pcbnew/tools/edit_tool.cpp:2643
+#: pcbnew/tools/edit_tool.cpp:2643 pcbnew/tools/edit_tool.cpp:2638
 #, fuzzy
 msgid "Hide Field"
 msgstr "Legg til felt"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:470
-#: pcbnew/tools/edit_tool.cpp:2645
+#: pcbnew/tools/edit_tool.cpp:2645 pcbnew/tools/edit_tool.cpp:2640
 #, fuzzy
 msgid "Hide Fields"
 msgstr "Vis skjulte felt"
@@ -25493,11 +25587,13 @@ msgid "(page %s)"
 msgstr "(lag %s)"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:69
+#: eeschema/widgets/panel_design_block_chooser.cpp:67
 #, fuzzy
 msgid "Loading Design Block Libraries"
 msgstr "Laster inn symbolbiblioteker"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:273
+#: eeschema/widgets/panel_design_block_chooser.cpp:270
 #, fuzzy
 msgid "Updating Design Block Libraries"
 msgstr "Oppdaterer Footprint Libraries"
@@ -25908,7 +26004,8 @@ msgstr "Velg lag: %s"
 #: pcbnew/widgets/search_handlers.cpp:120
 #: pcbnew/widgets/search_handlers.cpp:178
 #: pcbnew/widgets/search_handlers.cpp:243 pcbnew/zone.cpp:850
-#: pcbnew/zone.cpp:1922 pcbnew/zone.cpp:1923
+#: pcbnew/zone.cpp:1922 pcbnew/zone.cpp:1923 pcbnew/footprint.cpp:4039
+#: pcbnew/footprint.cpp:4042
 msgid "Layer"
 msgstr "Lag"
 
@@ -26816,6 +26913,7 @@ msgstr "Framhev DCode D%d"
 #: pcbnew/widgets/appearance_controls.cpp:1025
 #: pcbnew/widgets/appearance_controls_base.cpp:32
 #: pcbnew/zone_manager/model_zones_overview_table.h:77
+#: pcbnew/dialogs/dialog_layer_selection_base.cpp:230
 msgid "Layers"
 msgstr "Lag"
 
@@ -28147,90 +28245,91 @@ msgstr "Nei"
 msgid "Job Description"
 msgstr "Beskrivelse"
 
-#: kicad/dialogs/panel_jobset.cpp:147
+#: kicad/dialogs/panel_jobset.cpp:147 kicad/dialogs/panel_jobset.cpp:130
 #, fuzzy
 msgid "No output messages"
 msgstr "Output Meldinger"
 
-#: kicad/dialogs/panel_jobset.cpp:218
+#: kicad/dialogs/panel_jobset.cpp:218 kicad/dialogs/panel_jobset.cpp:201
 #, fuzzy
 msgid "Last run successful"
 msgstr "Filskrivingsoperasjonen mislyktes."
 
-#: kicad/dialogs/panel_jobset.cpp:224
+#: kicad/dialogs/panel_jobset.cpp:224 kicad/dialogs/panel_jobset.cpp:207
 msgid "Last run failed"
 msgstr ""
 
 #: kicad/dialogs/panel_jobset.cpp:252 kicad/dialogs/panel_jobset.cpp:972
+#: kicad/dialogs/panel_jobset.cpp:235 kicad/dialogs/panel_jobset.cpp:936
 #, fuzzy
 msgid "Running jobs"
 msgstr "Linjefarge:"
 
-#: kicad/dialogs/panel_jobset.cpp:281
+#: kicad/dialogs/panel_jobset.cpp:281 kicad/dialogs/panel_jobset.cpp:264
 #, fuzzy
 msgid "Edit Output Options..."
 msgstr "Alternativer for etterskrift"
 
-#: kicad/dialogs/panel_jobset.cpp:282
+#: kicad/dialogs/panel_jobset.cpp:282 kicad/dialogs/panel_jobset.cpp:265
 #, fuzzy
 msgid "Delete Output"
 msgstr "Generelle innstillinger"
 
-#: kicad/dialogs/panel_jobset.cpp:285
+#: kicad/dialogs/panel_jobset.cpp:285 kicad/dialogs/panel_jobset.cpp:268
 msgid "View Last Run Results..."
 msgstr ""
 
-#: kicad/dialogs/panel_jobset.cpp:375
+#: kicad/dialogs/panel_jobset.cpp:375 kicad/dialogs/panel_jobset.cpp:358
 #, fuzzy
 msgid "Edit Job Description"
 msgstr "Beskrivelse"
 
-#: kicad/dialogs/panel_jobset.cpp:376
+#: kicad/dialogs/panel_jobset.cpp:376 kicad/dialogs/panel_jobset.cpp:359
 #, fuzzy
 msgid "Edit Job Settings..."
 msgstr "Rediger alternativer"
 
-#: kicad/dialogs/panel_jobset.cpp:381
+#: kicad/dialogs/panel_jobset.cpp:381 kicad/dialogs/panel_jobset.cpp:364
 #, fuzzy
 msgid "Delete selected jobs"
 msgstr "Sletter valgte element(er)"
 
-#: kicad/dialogs/panel_jobset.cpp:383
+#: kicad/dialogs/panel_jobset.cpp:383 kicad/dialogs/panel_jobset.cpp:366
 #, fuzzy
 msgid "Select all jobs"
 msgstr "Velg alle"
 
-#: kicad/dialogs/panel_jobset.cpp:684
+#: kicad/dialogs/panel_jobset.cpp:684 kicad/dialogs/panel_jobset.cpp:648
 #, fuzzy
 msgid "Job Types"
 msgstr "Jobbfiler"
 
-#: kicad/dialogs/panel_jobset.cpp:695
+#: kicad/dialogs/panel_jobset.cpp:695 kicad/dialogs/panel_jobset.cpp:659
 #, fuzzy
 msgid "Add New Job"
 msgstr "Legg til tekst"
 
-#: kicad/dialogs/panel_jobset.cpp:696
+#: kicad/dialogs/panel_jobset.cpp:696 kicad/dialogs/panel_jobset.cpp:660
 #, fuzzy
 msgid "Select job type:"
 msgstr "Velg forhåndsinnstilling:"
 
-#: kicad/dialogs/panel_jobset.cpp:776
+#: kicad/dialogs/panel_jobset.cpp:776 kicad/dialogs/panel_jobset.cpp:740
 #, fuzzy
 msgid "Output Types"
 msgstr "Utgangsstift"
 
-#: kicad/dialogs/panel_jobset.cpp:785
+#: kicad/dialogs/panel_jobset.cpp:785 kicad/dialogs/panel_jobset.cpp:749
 #, fuzzy
 msgid "Add New Output"
 msgstr "Legg til en Zone Cutout"
 
-#: kicad/dialogs/panel_jobset.cpp:786
+#: kicad/dialogs/panel_jobset.cpp:786 kicad/dialogs/panel_jobset.cpp:750
 #, fuzzy
 msgid "Select output type:"
 msgstr "Velg Output Directory"
 
-#: kicad/dialogs/panel_jobset.cpp:951
+#: kicad/dialogs/panel_jobset.cpp:951 kicad/dialogs/panel_jobset.cpp:915
 #, fuzzy
 msgid "No outputs defined"
 msgstr "Ingen tilkobling"
@@ -28241,16 +28340,19 @@ msgid "Jobs"
 msgstr "%s på %s"
 
 #: kicad/dialogs/panel_jobset_base.cpp:83
+#: kicad/dialogs/panel_jobset_base.cpp:82
 #, fuzzy
 msgid "Outputs"
 msgstr "Utdata"
 
 #: kicad/dialogs/panel_jobset_base.cpp:116
+#: kicad/dialogs/panel_jobset_base.cpp:115
 #, fuzzy
 msgid "Save Jobset"
 msgstr "Lagre som"
 
 #: kicad/dialogs/panel_jobset_base.cpp:122
+#: kicad/dialogs/panel_jobset_base.cpp:121
 #, fuzzy
 msgid "Generate All Outputs"
 msgstr "Generelle innstillinger"
@@ -28450,41 +28552,41 @@ msgstr "Rediger"
 msgid "Project Files"
 msgstr "Bla gjennom prosjektfiler"
 
-#: kicad/kicad_manager_frame.cpp:378
+#: kicad/kicad_manager_frame.cpp:378 kicad/kicad_manager_frame.cpp:387
 #, fuzzy
 msgid "PCM Updates Available"
 msgstr "Oppdater"
 
-#: kicad/kicad_manager_frame.cpp:379
+#: kicad/kicad_manager_frame.cpp:379 kicad/kicad_manager_frame.cpp:388
 #, c-format
 msgid "%d package update(s) avaliable"
 msgstr ""
 
-#: kicad/kicad_manager_frame.cpp:789
+#: kicad/kicad_manager_frame.cpp:789 kicad/kicad_manager_frame.cpp:798
 #, fuzzy
 msgid "Error opening jobs file"
 msgstr "Feil ved utpakking av fil!\n"
 
-#: kicad/kicad_manager_frame.cpp:947
+#: kicad/kicad_manager_frame.cpp:947 kicad/kicad_manager_frame.cpp:956
 #, fuzzy
 msgid "Edit File in Text Editor"
 msgstr "Rediger i en teksteditor"
 
-#: kicad/kicad_manager_frame.cpp:1038
+#: kicad/kicad_manager_frame.cpp:1038 kicad/kicad_manager_frame.cpp:1049
 #, fuzzy
 msgid "[no project loaded]"
 msgstr "Ingen fotavtrykk lastet."
 
-#: kicad/kicad_manager_frame.cpp:1081
+#: kicad/kicad_manager_frame.cpp:1081 kicad/kicad_manager_frame.cpp:1092
 #, c-format
 msgid "Project: %s"
 msgstr "Prosjekt: %s"
 
-#: kicad/kicad_manager_frame.cpp:1117
+#: kicad/kicad_manager_frame.cpp:1117 kicad/kicad_manager_frame.cpp:1128
 msgid "Restoring session"
 msgstr "Gjenopprettingsøkt"
 
-#: kicad/kicad_manager_frame.cpp:1130
+#: kicad/kicad_manager_frame.cpp:1130 kicad/kicad_manager_frame.cpp:1141
 #, fuzzy, c-format
 msgid "Restoring '%s'"
 msgstr "Gjenoppretter \"%s\""
@@ -29332,120 +29434,121 @@ msgstr ""
 msgid "Local path: monitoring folder changes"
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:1600
+#: kicad/project_tree_pane.cpp:1600 kicad/project_tree_pane.cpp:1596
 #, fuzzy
 msgid "The selected directory is already a git project."
 msgstr "Den valgte filen er ikke gyldig eller kan være ødelagt!"
 
-#: kicad/project_tree_pane.cpp:1607
+#: kicad/project_tree_pane.cpp:1607 kicad/project_tree_pane.cpp:1603
 #, fuzzy
 msgid "Set default remote"
 msgstr "Sett til Standard"
 
-#: kicad/project_tree_pane.cpp:1622
+#: kicad/project_tree_pane.cpp:1622 kicad/project_tree_pane.cpp:1618
 msgid "Failed to initialize git project."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:1682
+#: kicad/project_tree_pane.cpp:1682 kicad/project_tree_pane.cpp:1678
 #, fuzzy
 msgid "Failed to set default remote."
 msgstr "Kunne ikke opprette filen \"%s\""
 
 #: kicad/project_tree_pane.cpp:1694 kicad/project_tree_pane.cpp:1728
-#: kicad/project_tree_pane.cpp:1750
+#: kicad/project_tree_pane.cpp:1750 kicad/project_tree_pane.cpp:1690
+#: kicad/project_tree_pane.cpp:1724 kicad/project_tree_pane.cpp:1746
 #, fuzzy
 msgid "Fetching Remote"
 msgstr "Legg ledning til bussoppføring"
 
-#: kicad/project_tree_pane.cpp:1735
+#: kicad/project_tree_pane.cpp:1735 kicad/project_tree_pane.cpp:1731
 #, fuzzy
 msgid "Failed to pull project"
 msgstr "Kunne ikke laste inn \"%s\""
 
-#: kicad/project_tree_pane.cpp:1757
+#: kicad/project_tree_pane.cpp:1757 kicad/project_tree_pane.cpp:1753
 #, fuzzy
 msgid "Failed to push project"
 msgstr "Kunne ikke laste inn \"%s\""
 
-#: kicad/project_tree_pane.cpp:1834
+#: kicad/project_tree_pane.cpp:1834 kicad/project_tree_pane.cpp:1830
 #, fuzzy, c-format
 msgid "Failed to lookup branch '%s': %s"
 msgstr "Kunne ikke laste inn \"%s\""
 
-#: kicad/project_tree_pane.cpp:1847
+#: kicad/project_tree_pane.cpp:1847 kicad/project_tree_pane.cpp:1843
 #, fuzzy, c-format
 msgid "Failed to find branch head for '%s'"
 msgstr "Kunne ikke finne en PDF-visning for \"%s\""
 
-#: kicad/project_tree_pane.cpp:1858
+#: kicad/project_tree_pane.cpp:1858 kicad/project_tree_pane.cpp:1854
 #, fuzzy, c-format
 msgid "Failed to switch to branch '%s'"
 msgstr "Kunne ikke laste inn \"%s\""
 
-#: kicad/project_tree_pane.cpp:1869
+#: kicad/project_tree_pane.cpp:1869 kicad/project_tree_pane.cpp:1865
 #, fuzzy, c-format
 msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "trenger et nummer for '%s'"
 
-#: kicad/project_tree_pane.cpp:1888
+#: kicad/project_tree_pane.cpp:1888 kicad/project_tree_pane.cpp:1884
 #, fuzzy
 msgid "Are you sure you want to remove git tracking from this project?"
 msgstr "Vil du virkelig slette «%s»?"
 
-#: kicad/project_tree_pane.cpp:1905
+#: kicad/project_tree_pane.cpp:1905 kicad/project_tree_pane.cpp:1901
 #, fuzzy
 msgid "Failed to remove git directory"
 msgstr "Kan ikke opprette katalogen \"%s\""
 
-#: kicad/project_tree_pane.cpp:2241
+#: kicad/project_tree_pane.cpp:2241 kicad/project_tree_pane.cpp:2237
 msgid "Discarding commit due to empty commit message."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2247
+#: kicad/project_tree_pane.cpp:2247 kicad/project_tree_pane.cpp:2243
 msgid "Discarding commit due to empty file selection."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2253
+#: kicad/project_tree_pane.cpp:2253 kicad/project_tree_pane.cpp:2249
 #, fuzzy, c-format
 msgid "Failed to get repository index: %s"
 msgstr "Kan ikke analysere '%s' i '%s'"
 
-#: kicad/project_tree_pane.cpp:2261
+#: kicad/project_tree_pane.cpp:2261 kicad/project_tree_pane.cpp:2257
 #, fuzzy, c-format
 msgid "Failed to add file to index: %s"
 msgstr "Kunne ikke slette '%s'"
 
-#: kicad/project_tree_pane.cpp:2269
+#: kicad/project_tree_pane.cpp:2269 kicad/project_tree_pane.cpp:2265
 #, fuzzy, c-format
 msgid "Failed to write index: %s"
 msgstr "Kunne ikke opprette filen \"%s\""
 
-#: kicad/project_tree_pane.cpp:2276
+#: kicad/project_tree_pane.cpp:2276 kicad/project_tree_pane.cpp:2272
 #, fuzzy, c-format
 msgid "Failed to write tree: %s"
 msgstr "Kunne ikke slette '%s'"
 
-#: kicad/project_tree_pane.cpp:2285
+#: kicad/project_tree_pane.cpp:2285 kicad/project_tree_pane.cpp:2281
 #, fuzzy, c-format
 msgid "Failed to lookup tree: %s"
 msgstr "Kunne ikke slette '%s'"
 
-#: kicad/project_tree_pane.cpp:2293
+#: kicad/project_tree_pane.cpp:2293 kicad/project_tree_pane.cpp:2289
 #, fuzzy, c-format
 msgid "Failed to get HEAD reference: %s"
 msgstr "Kan ikke opprette katalogen \"%s\""
 
-#: kicad/project_tree_pane.cpp:2300
+#: kicad/project_tree_pane.cpp:2300 kicad/project_tree_pane.cpp:2296
 #, fuzzy, c-format
 msgid "Failed to get commit: %s"
 msgstr "Kunne ikke lagre skjematisk \"%s\""
 
-#: kicad/project_tree_pane.cpp:2316
+#: kicad/project_tree_pane.cpp:2316 kicad/project_tree_pane.cpp:2312
 #, fuzzy, c-format
 msgid "Failed to create author signature: %s"
 msgstr "Kunne ikke opprette midlertidig fil \"%s\""
 
-#: kicad/project_tree_pane.cpp:2351
+#: kicad/project_tree_pane.cpp:2351 kicad/project_tree_pane.cpp:2347
 #, fuzzy, c-format
 msgid "Failed to create commit: %s"
 msgstr "Kunne ikke opprette filen \"%s\""
@@ -29987,6 +30090,7 @@ msgid "File \"%s\" saved."
 msgstr "Fil %s lagret"
 
 #: pagelayout_editor/files.cpp:182 pcbnew/router/router_tool.cpp:647
+#: pcbnew/router/router_tool.cpp:645
 #, fuzzy, c-format
 msgid "Unable to write '%s'."
 msgstr "Kan ikke skrive \"%s\""
@@ -32633,6 +32737,7 @@ msgid "Autoplace Components"
 msgstr "Autoplace Components"
 
 #: pcbnew/board.cpp:997 pcbnew/drc/drc_cache_generator.cpp:156
+#: pcbnew/board.cpp:986
 msgid "Tessellating copper zones..."
 msgstr "Tessellating kobbersoner ..."
 
@@ -32642,7 +32747,8 @@ msgstr "Tessellating kobbersoner ..."
 #: pcbnew/footprint.cpp:1659 pcbnew/netinfo_item.cpp:108
 #: pcbnew/pcb_draw_panel_gal.cpp:714 pcbnew/widgets/appearance_controls.cpp:331
 #: pcbnew/widgets/panel_selection_filter.cpp:198
-#: pcbnew/widgets/panel_selection_filter_base.cpp:45
+#: pcbnew/widgets/panel_selection_filter_base.cpp:45 pcbnew/board.cpp:1807
+#: pcbnew/footprint.cpp:1633
 msgid "Pads"
 msgstr "Pads"
 
@@ -32657,15 +32763,17 @@ msgstr "Pads"
 #: pcbnew/netinfo_item.cpp:123 pcbnew/pcb_draw_panel_gal.cpp:715
 #: pcbnew/widgets/appearance_controls.cpp:330
 #: pcbnew/widgets/panel_selection_filter.cpp:197
-#: pcbnew/widgets/panel_selection_filter_base.cpp:41
+#: pcbnew/widgets/panel_selection_filter_base.cpp:41 pcbnew/board.cpp:1808
 msgid "Vias"
 msgstr "Via-er"
 
 #: pcbnew/board.cpp:1820 pcbnew/pcb_draw_panel_gal.cpp:716
+#: pcbnew/board.cpp:1809
 msgid "Track Segments"
 msgstr "Spor segmenter"
 
 #: pcbnew/board.cpp:1822 pcbnew/pcb_draw_panel_gal.cpp:718
+#: pcbnew/board.cpp:1811
 msgid "Unrouted"
 msgstr "Urørt"
 
@@ -33625,7 +33733,7 @@ msgstr "Kommentaromfang"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:154
 #: pcbnew/dialogs/dialog_render_job.cpp:41
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:117
-#: pcbnew/footprint.cpp:1671
+#: pcbnew/footprint.cpp:1671 pcbnew/footprint.cpp:1645
 msgid "Front"
 msgstr "Front"
 
@@ -34390,6 +34498,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4039
 #: pcbnew/pad.cpp:2521 pcbnew/zone.cpp:1829
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
+#: pcbnew/footprint.cpp:4013
 msgid "Thermal reliefs"
 msgstr "Termiske relieffer"
 
@@ -36391,14 +36500,14 @@ msgstr "Fotavtrykk navn:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:193
-#: pcbnew/footprint.cpp:1317
+#: pcbnew/footprint.cpp:1317 pcbnew/footprint.cpp:1291
 msgid "Through hole"
 msgstr "Gjennom hull"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:193
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/footprint.cpp:1314
-#: pcbnew/pad.cpp:1532 pcbnew/pad.cpp:2487
+#: pcbnew/pad.cpp:1532 pcbnew/pad.cpp:2487 pcbnew/footprint.cpp:1288
 msgid "SMD"
 msgstr "SMD"
 
@@ -37832,6 +37941,7 @@ msgid "Copper Layer Pair Presets"
 msgstr "Kobberlag:"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:229
+#: pcbnew/dialogs/dialog_layer_selection_base.cpp:228
 #, fuzzy
 msgid "Enabled"
 msgstr "Aktiver"
@@ -39078,12 +39188,12 @@ msgid "Differential Pair Dimensions"
 msgstr "Differensialpar Dimensjoner"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:23
-#: pcbnew/router/router_tool.cpp:2751
+#: pcbnew/router/router_tool.cpp:2751 pcbnew/router/router_tool.cpp:2749
 msgid "Mode"
 msgstr "Modus"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:25
-#: pcbnew/router/router_tool.cpp:2745
+#: pcbnew/router/router_tool.cpp:2745 pcbnew/router/router_tool.cpp:2743
 msgid "Highlight collisions"
 msgstr "Fremhev kollisjoner"
 
@@ -39105,7 +39215,7 @@ msgstr ""
 "bryter med DRC-reglene."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:45
-#: pcbnew/router/router_tool.cpp:2747
+#: pcbnew/router/router_tool.cpp:2747 pcbnew/router/router_tool.cpp:2745
 msgid "Shove"
 msgstr "Skubbe"
 
@@ -39136,7 +39246,7 @@ msgstr ""
 "kollisjonen"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
-#: pcbnew/router/router_tool.cpp:2746
+#: pcbnew/router/router_tool.cpp:2746 pcbnew/router/router_tool.cpp:2744
 msgid "Walk around"
 msgstr "Gå rundt"
 
@@ -40089,7 +40199,10 @@ msgstr "Skjeve mål:"
 #: pcbnew/router/router_tool.cpp:2769 pcbnew/router/router_tool.cpp:2780
 #: pcbnew/router/router_tool.cpp:2788 pcbnew/router/router_tool.cpp:2793
 #: pcbnew/tools/pcb_control.cpp:1702 pcbnew/tools/pcb_control.cpp:1712
-#: pcbnew/zone.cpp:874
+#: pcbnew/zone.cpp:874 pcbnew/router/router_tool.cpp:2757
+#: pcbnew/router/router_tool.cpp:2762 pcbnew/router/router_tool.cpp:2767
+#: pcbnew/router/router_tool.cpp:2778 pcbnew/router/router_tool.cpp:2786
+#: pcbnew/router/router_tool.cpp:2791
 #, c-format
 msgid "(from %s)"
 msgstr "(fra %s)"
@@ -43345,7 +43458,7 @@ msgid "'%s' settings differ."
 msgstr "Fotavtrykk navn:"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:619
-#: pcbnew/footprint.cpp:4116
+#: pcbnew/footprint.cpp:4116 pcbnew/footprint.cpp:4090
 msgid "Exempt From Courtyard Requirement"
 msgstr ""
 
@@ -43409,6 +43522,7 @@ msgid "The footprint library '%s' was not found."
 msgstr "Fotavtrykksbibliotek ble ikke funnet."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:941
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:927
 #, fuzzy, c-format
 msgid "Footprint '%s' does not match copy in library '%s'."
 msgstr "Eksporter fotavtrykk til biblioteket ..."
@@ -44091,49 +44205,52 @@ msgstr ""
 msgid "Generating ODB++ output files"
 msgstr "Generer IPC-D-356 netlist-filen"
 
-#: pcbnew/footprint.cpp:1319
+#: pcbnew/footprint.cpp:1319 pcbnew/footprint.cpp:1293
 msgid "Other"
 msgstr "Annet"
 
-#: pcbnew/footprint.cpp:1657
+#: pcbnew/footprint.cpp:1657 pcbnew/footprint.cpp:1631
 msgid "Footprint Name"
 msgstr "Fotavtrykk Navn"
 
 #: pcbnew/footprint.cpp:1661 pcbnew/footprint.cpp:1720
+#: pcbnew/footprint.cpp:1635 pcbnew/footprint.cpp:1694
 #, c-format
 msgid "Doc: %s"
 msgstr "Dok: %s"
 
 #: pcbnew/footprint.cpp:1662 pcbnew/footprint.cpp:1721
+#: pcbnew/footprint.cpp:1636 pcbnew/footprint.cpp:1695
 #, c-format
 msgid "Keywords: %s"
 msgstr "Nøkkelord: %s"
 
 #: pcbnew/footprint.cpp:1671 pcbnew/footprint.cpp:1672
+#: pcbnew/footprint.cpp:1645 pcbnew/footprint.cpp:1646
 msgid "Board Side"
 msgstr "Board Side"
 
-#: pcbnew/footprint.cpp:1672
+#: pcbnew/footprint.cpp:1672 pcbnew/footprint.cpp:1646
 msgid "Back (Flipped)"
 msgstr "Tilbake (Vendt)"
 
-#: pcbnew/footprint.cpp:1691
+#: pcbnew/footprint.cpp:1691 pcbnew/footprint.cpp:1665
 msgid "autoplaced"
 msgstr "autoplaced"
 
-#: pcbnew/footprint.cpp:1694
+#: pcbnew/footprint.cpp:1694 pcbnew/footprint.cpp:1668
 msgid "not in schematic"
 msgstr "ikke i skjematisk"
 
-#: pcbnew/footprint.cpp:1697
+#: pcbnew/footprint.cpp:1697 pcbnew/footprint.cpp:1671
 msgid "exclude from pos files"
 msgstr "ekskludere fra pos-filer"
 
-#: pcbnew/footprint.cpp:1700
+#: pcbnew/footprint.cpp:1700 pcbnew/footprint.cpp:1674
 msgid "exclude from BOM"
 msgstr "ekskluder fra BOM"
 
-#: pcbnew/footprint.cpp:1705
+#: pcbnew/footprint.cpp:1705 pcbnew/footprint.cpp:1679
 msgid "Status: "
 msgstr "Status: "
 
@@ -44142,88 +44259,91 @@ msgid "Attributes:"
 msgstr "Attributter"
 
 #: pcbnew/footprint.cpp:1712 pcbnew/footprint.cpp:4095 pcbnew/zone.cpp:1861
+#: pcbnew/footprint.cpp:1686 pcbnew/footprint.cpp:4069
 #, fuzzy
 msgid "Component Class"
 msgstr "Komponenter"
 
-#: pcbnew/footprint.cpp:1716
+#: pcbnew/footprint.cpp:1716 pcbnew/footprint.cpp:1690
 #, c-format
 msgid "3D-Shape: %s"
 msgstr "3D-form: %s"
 
-#: pcbnew/footprint.cpp:1716
+#: pcbnew/footprint.cpp:1716 pcbnew/footprint.cpp:1690
 msgid "<none>"
 msgstr "<ingen>"
 
-#: pcbnew/footprint.cpp:2131
+#: pcbnew/footprint.cpp:2131 pcbnew/footprint.cpp:2105
 msgid "<no reference designator>"
 msgstr "<ingen referansebetegnere>"
 
-#: pcbnew/footprint.cpp:2133
+#: pcbnew/footprint.cpp:2133 pcbnew/footprint.cpp:2107
 #, c-format
 msgid "Footprint %s"
 msgstr "Fotavtrykk %s"
 
-#: pcbnew/footprint.cpp:3273
+#: pcbnew/footprint.cpp:3273 pcbnew/footprint.cpp:3247
 #, fuzzy, c-format
 msgid "(expected 'Through hole'; actual '%s')"
 msgstr "Gjennomgående hull %s av %s"
 
-#: pcbnew/footprint.cpp:3276
+#: pcbnew/footprint.cpp:3276 pcbnew/footprint.cpp:3250
 #, fuzzy, c-format
 msgid "(expected 'SMD'; actual '%s')"
 msgstr "(%s maks diameter %s; faktisk %s)"
 
-#: pcbnew/footprint.cpp:3497
+#: pcbnew/footprint.cpp:3497 pcbnew/footprint.cpp:3471
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
 msgstr ""
 
-#: pcbnew/footprint.cpp:3502
+#: pcbnew/footprint.cpp:3502 pcbnew/footprint.cpp:3476
 #, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr ""
 
 #: pcbnew/footprint.cpp:4037 pcbnew/pad.cpp:2519 pcbnew/zone.cpp:1827
+#: pcbnew/footprint.cpp:4011
 msgid "Inherited"
 msgstr "Nedarvet"
 
 #: pcbnew/footprint.cpp:4041 pcbnew/pad.cpp:2523 pcbnew/zone.cpp:1831
+#: pcbnew/footprint.cpp:4015
 #, fuzzy
 msgid "Thermal reliefs for PTH"
 msgstr "Termiske relieffer"
 
-#: pcbnew/footprint.cpp:4101
+#: pcbnew/footprint.cpp:4101 pcbnew/footprint.cpp:4075
 #, fuzzy
 msgid "Not in Schematic"
 msgstr "Ikke skjematisk"
 
-#: pcbnew/footprint.cpp:4103
+#: pcbnew/footprint.cpp:4103 pcbnew/footprint.cpp:4077
 #, fuzzy
 msgid "Exclude From Position Files"
 msgstr "Ekskluder fra posisjonsfiler"
 
-#: pcbnew/footprint.cpp:4113 pcbnew/pad.cpp:2688
+#: pcbnew/footprint.cpp:4113 pcbnew/pad.cpp:2688 pcbnew/footprint.cpp:4087
 #, fuzzy
 msgid "Overrides"
 msgstr "Overskriv"
 
-#: pcbnew/footprint.cpp:4120 pcbnew/pad.cpp:2691
+#: pcbnew/footprint.cpp:4120 pcbnew/pad.cpp:2691 pcbnew/footprint.cpp:4094
 #, fuzzy
 msgid "Clearance Override"
 msgstr "Clearance disposisjoner"
 
-#: pcbnew/footprint.cpp:4125 pcbnew/pad.cpp:2701
+#: pcbnew/footprint.cpp:4125 pcbnew/pad.cpp:2701 pcbnew/footprint.cpp:4099
 #, fuzzy
 msgid "Solderpaste Margin Override"
 msgstr "Lokal loddemasse Margin"
 
-#: pcbnew/footprint.cpp:4130 pcbnew/pad.cpp:2706
+#: pcbnew/footprint.cpp:4130 pcbnew/pad.cpp:2706 pcbnew/footprint.cpp:4104
 #, fuzzy
 msgid "Solderpaste Margin Ratio Override"
 msgstr "Lokal forhold for loddepasta"
 
-#: pcbnew/footprint.cpp:4136 pcbnew/pad.cpp:2712
+#: pcbnew/footprint.cpp:4136 pcbnew/pad.cpp:2712 pcbnew/footprint.cpp:4110
 #, fuzzy
 msgid "Zone Connection Style"
 msgstr "Ingen tilkobling"
@@ -44325,7 +44445,7 @@ msgstr "Biblioteket ble ikke funnet i tabellen over fotavtrykk."
 msgid "Footprint library not enabled."
 msgstr "Fotavtrykksbiblioteket er ikke aktivert."
 
-#: pcbnew/footprint_info_impl.cpp:149
+#: pcbnew/footprint_info_impl.cpp:149 pcbnew/footprint_info_impl.cpp:161
 #, fuzzy
 msgid "Loading footprints..."
 msgstr "Laster inn fotavtrykk"
@@ -44765,6 +44885,7 @@ msgstr ""
 "Nåværende styre vil gå tapt, og denne operasjonen kan ikke angres. Fortsette?"
 
 #: pcbnew/initpcb.cpp:120 pcbnew/tools/footprint_editor_control.cpp:246
+#: pcbnew/initpcb.cpp:117
 msgid "The current footprint has been modified.  Save changes?"
 msgstr "Gjeldende fotavtrykk er endret. Lagre endringer?"
 
@@ -45417,6 +45538,7 @@ msgid "Total warnings: %d, errors: %d."
 msgstr "Totale advarsler: %d, feil: %d."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:500
+#: pcbnew/netlist_reader/kicad_netlist_reader.cpp:503
 #, fuzzy, c-format
 msgid ""
 "Invalid footprint ID in\n"
@@ -45553,7 +45675,8 @@ msgstr "Bor X / Y"
 
 #: pcbnew/pad.cpp:1393 pcbnew/pcb_track.cpp:1610 pcbnew/pcb_track.cpp:1650
 #: pcbnew/router/router_tool.cpp:2762 pcbnew/router/router_tool.cpp:2791
-#: pcbnew/zone.cpp:872
+#: pcbnew/zone.cpp:872 pcbnew/router/router_tool.cpp:2760
+#: pcbnew/router/router_tool.cpp:2789
 #, c-format
 msgid "Min Clearance: %s"
 msgstr "Min. Klarering: %s"
@@ -45876,7 +45999,7 @@ msgstr "Termisk lindring"
 msgid "Thermal Relief Gap"
 msgstr "Termisk lindring"
 
-#: pcbnew/pcb_base_frame.cpp:1222
+#: pcbnew/pcb_base_frame.cpp:1222 pcbnew/pcb_base_frame.cpp:1218
 #, fuzzy
 msgid ""
 "The library containing the current footprint has changed.\n"
@@ -47020,6 +47143,7 @@ msgstr "CADSTAR PCB-arkivfiler"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:362
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:218
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:221
 #, fuzzy, c-format
 msgid "Unable to read file '%s'"
 msgstr "Kan ikke lese filen \"%s\""
@@ -47330,12 +47454,14 @@ msgstr "Kan ikke konvertere \"%s\" til et helt tall"
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:230
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:878
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:178
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:181
 #, fuzzy, c-format
 msgid "Footprint library '%s' not found."
 msgstr "Fotavtrykksbibliotek ble ikke funnet."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:284
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:238
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:241
 #, fuzzy, c-format
 msgid "Library '%s' has no footprint '%s'."
 msgstr "biblioteket \"%s\" har ikke noe fotavtrykk \"%s\" å slette"
@@ -47354,6 +47480,7 @@ msgstr "Elementtoken inneholder %d parametere."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:985
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3056
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3072
 #, fuzzy, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
 msgstr "Bibliotekkatalogen \"%s\" har uventede underkataloger."
@@ -47366,6 +47493,7 @@ msgstr "Uventet fil \"%s\" ble funnet i biblioteksti \"%s\"."
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:1023
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3263
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3093
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3109
 #, fuzzy, c-format
 msgid "Footprint library '%s' cannot be deleted."
 msgstr "Fotavtrykksbiblioteket \"%s\" kan ikke slettes."
@@ -47516,16 +47644,19 @@ msgid "Legacy footprint library files"
 msgstr "Eldre arkivfiler for fotavtrykk"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:97
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:100
 #, fuzzy, c-format
 msgid "Cannot create footprint library '%s'."
 msgstr "Kan ikke opprette fotavtrykk-biblioteksti \"%s\""
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:103
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:106
 #, fuzzy, c-format
 msgid "Footprint library '%s' is read only."
 msgstr "Fotavtrykk-biblioteksti \"%s\" er skrivebeskyttet"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:152
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:155
 #, fuzzy, c-format
 msgid "Cannot rename temporary file '%s' to '%s'"
 msgstr ""
@@ -47533,11 +47664,13 @@ msgstr ""
 "biblioteksfilen \"%s\""
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:316
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:319
 #, fuzzy
 msgid "Internal Group Data Error"
 msgstr "Intern datastruktur for gruppen er ødelagt"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:317
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:320
 #, c-format
 msgid ""
 "Please report this bug.  Error validating group structure: %s\n"
@@ -47549,30 +47682,36 @@ msgstr ""
 "Lagre uansett?"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:319
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:322
 msgid "Save Anyway"
 msgstr "Lagre uansett"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1449
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1465
 #, c-format
 msgid "unknown pad type: %d"
 msgstr "ukjent putetype: %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2298
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2314
 #, c-format
 msgid "unknown via type %d"
 msgstr "ukjent via type %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2590
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2606
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "ukjent sonehjørneutjevningstype %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2739
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2755
 #, fuzzy
 msgid "This file does not contain a PCB."
 msgstr "denne filen inneholder ikke et PCB"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2912
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2928
 #, fuzzy, c-format
 msgid ""
 "Library '%s' does not exist.\n"
@@ -47582,15 +47721,18 @@ msgstr ""
 "Vil du lage den?"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2917
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2933
 msgid "Library Not Found"
 msgstr "Biblioteket ble ikke funnet"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2945
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2961
 #, fuzzy, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "Footprint-filnavnet \"%s\" er ikke gyldig."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2951
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2967
 #, fuzzy, c-format
 msgid "Insufficient permissions to delete '%s'."
 msgstr ""
@@ -47598,6 +47740,7 @@ msgstr ""
 "%s"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3075
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3091
 #, fuzzy, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
 msgstr "Uventet fil \"%s\" ble funnet i biblioteksti \"%s\"."
@@ -47837,7 +47980,7 @@ msgstr "Kunne ikke finne en PDF-visning for \"%s\""
 msgid "P-Cad 200x ASCII PCB files"
 msgstr "P-Cad 200x ASCII PCB-filer"
 
-#: pcbnew/pcb_io/pcb_io.cpp:115
+#: pcbnew/pcb_io/pcb_io.cpp:115 pcbnew/pcb_io/pcb_io.cpp:120
 msgid ""
 "Selected file contains multiple footprints. Only the first one will be "
 "imported.\n"
@@ -47845,18 +47988,18 @@ msgid ""
 "Footprint Libraries..."
 msgstr ""
 
-#: pcbnew/pcb_io/pcb_io.cpp:175
+#: pcbnew/pcb_io/pcb_io.cpp:175 pcbnew/pcb_io/pcb_io.cpp:180
 #, fuzzy
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
 msgstr ""
 "Aktiver <b> feilsøking </b> logging for Footprint * () -funksjoner i dette "
 "PLUGIN."
 
-#: pcbnew/pcb_io/pcb_io.cpp:178
+#: pcbnew/pcb_io/pcb_io.cpp:178 pcbnew/pcb_io/pcb_io.cpp:183
 msgid "Regular expression <b>footprint name</b> filter."
 msgstr "Vanlig uttrykk <b> filter for fotavtrykk </b>."
 
-#: pcbnew/pcb_io/pcb_io.cpp:181
+#: pcbnew/pcb_io/pcb_io.cpp:181 pcbnew/pcb_io/pcb_io.cpp:186
 msgid ""
 "Enable transaction logging. The mere presence of this option turns on the "
 "logging, no need to set a Value."
@@ -47864,15 +48007,15 @@ msgstr ""
 "Aktiver transaksjonslogging. Bare tilstedeværelsen av dette alternativet "
 "slår på loggingen, det er ikke nødvendig å sette en verdi."
 
-#: pcbnew/pcb_io/pcb_io.cpp:186
+#: pcbnew/pcb_io/pcb_io.cpp:186 pcbnew/pcb_io/pcb_io.cpp:191
 msgid "User name for <b>login</b> to some special library server."
 msgstr "Brukernavn for <b> pålogging </b> til en spesiell bibliotektjener."
 
-#: pcbnew/pcb_io/pcb_io.cpp:189
+#: pcbnew/pcb_io/pcb_io.cpp:189 pcbnew/pcb_io/pcb_io.cpp:194
 msgid "Password for <b>login</b> to some special library server."
 msgstr "Passord for <b> pålogging </b> til en spesiell bibliotektjener."
 
-#: pcbnew/pcb_io/pcb_io.cpp:196
+#: pcbnew/pcb_io/pcb_io.cpp:196 pcbnew/pcb_io/pcb_io.cpp:201
 #, fuzzy
 msgid ""
 "Enter the python module which implements the PCB_IO::Footprint*() functions."
@@ -48317,6 +48460,7 @@ msgid "Error loading drawing sheet '%s': %s"
 msgstr "Feil ved lasting av redigeringsprogram"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:523
+#: pcbnew/router/pns_diff_pair_placer.cpp:509
 #, fuzzy
 msgid ""
 "Unable to find complementary differential pair nets. Make sure the names of "
@@ -48327,6 +48471,7 @@ msgstr ""
 "+/-."
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:540
+#: pcbnew/router/pns_diff_pair_placer.cpp:526
 msgid ""
 "Can't find a suitable starting point.  If starting from an existing "
 "differential pair make sure you are at the end."
@@ -48335,6 +48480,7 @@ msgstr ""
 "differensialpar, må du sørge for at du er på slutten."
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:595
+#: pcbnew/router/pns_diff_pair_placer.cpp:581
 #, c-format
 msgid "Can't find a suitable starting point for coupled net \"%s\"."
 msgstr "Finner ikke et passende utgangspunkt for koblet nett \"%s\"."
@@ -48356,17 +48502,20 @@ msgstr ""
 
 #: pcbnew/router/pns_kicad_iface.cpp:665 pcbnew/router/pns_kicad_iface.cpp:781
 #: pcbnew/router/router_tool.cpp:755 pcbnew/router/router_tool.cpp:819
+#: pcbnew/router/router_tool.cpp:753 pcbnew/router/router_tool.cpp:817
 #, fuzzy
 msgid "board minimum clearance"
 msgstr "Minimum klaring:"
 
 #: pcbnew/router/pns_kicad_iface.cpp:700 pcbnew/router/pns_kicad_iface.cpp:780
 #: pcbnew/router/router_tool.cpp:781 pcbnew/router/router_tool.cpp:806
+#: pcbnew/router/router_tool.cpp:779 pcbnew/router/router_tool.cpp:804
 #, fuzzy
 msgid "board minimum track width"
 msgstr "Minimum bredde:"
 
 #: pcbnew/router/pns_kicad_iface.cpp:707 pcbnew/router/router_tool.cpp:783
+#: pcbnew/router/router_tool.cpp:781
 #, fuzzy
 msgid "existing track"
 msgstr "Når du lager spor"
@@ -48618,109 +48767,116 @@ msgstr "Bredde %s, gap %s, via gap %s"
 msgid "Interactive Router"
 msgstr "Interaktiv ruter"
 
-#: pcbnew/router/router_tool.cpp:591
+#: pcbnew/router/router_tool.cpp:591 pcbnew/router/router_tool.cpp:589
 #, fuzzy
 msgid "Save router log"
 msgstr "Lagre prosjekt til"
 
-#: pcbnew/router/router_tool.cpp:1103
+#: pcbnew/router/router_tool.cpp:1103 pcbnew/router/router_tool.cpp:1101
 #, fuzzy
 msgid "Via needs 2 different layers."
 msgstr "Ikke modifiser elektroder med forskjellige lag"
 
-#: pcbnew/router/router_tool.cpp:1176
+#: pcbnew/router/router_tool.cpp:1176 pcbnew/router/router_tool.cpp:1174
 #, fuzzy
 msgid "Tracks on Copper layers only."
 msgstr "Bare spor på kobberlag"
 
 #: pcbnew/router/router_tool.cpp:1851 pcbnew/router/router_tool.cpp:2605
+#: pcbnew/router/router_tool.cpp:1849 pcbnew/router/router_tool.cpp:2603
 msgid "The selected item is locked."
 msgstr "Det valgte elementet er låst."
 
-#: pcbnew/router/router_tool.cpp:1853
+#: pcbnew/router/router_tool.cpp:1853 pcbnew/router/router_tool.cpp:1851
 msgid "Drag Anyway"
 msgstr "Dra uansett"
 
 #: pcbnew/router/router_tool.cpp:1911 pcbnew/router/router_tool.cpp:2446
+#: pcbnew/router/router_tool.cpp:1909 pcbnew/router/router_tool.cpp:2444
 #, c-format
 msgid "(%s to commit anyway.)"
 msgstr ""
 
 #: pcbnew/router/router_tool.cpp:1915 pcbnew/router/router_tool.cpp:2450
+#: pcbnew/router/router_tool.cpp:1913 pcbnew/router/router_tool.cpp:2448
 #, fuzzy
 msgid "Track violates DRC."
 msgstr "Ruteplanets startpunkt bryter med DRC."
 
 #: pcbnew/router/router_tool.cpp:2607 pcbnew/tools/pcb_actions.cpp:2410
+#: pcbnew/router/router_tool.cpp:2605
 msgid "Break Track"
 msgstr "Break Track"
 
-#: pcbnew/router/router_tool.cpp:2688
+#: pcbnew/router/router_tool.cpp:2688 pcbnew/router/router_tool.cpp:2686
 #, fuzzy, c-format
 msgid "Routing Diff Pair: %s"
 msgstr "Rute Differensialpar"
 
 #: pcbnew/router/router_tool.cpp:2701 pcbnew/router/router_tool.cpp:2712
+#: pcbnew/router/router_tool.cpp:2699 pcbnew/router/router_tool.cpp:2710
 #, fuzzy, c-format
 msgid "Resolved Netclass: %s"
 msgstr "Løst klaring: %s."
 
-#: pcbnew/router/router_tool.cpp:2708
+#: pcbnew/router/router_tool.cpp:2708 pcbnew/router/router_tool.cpp:2706
 #, fuzzy, c-format
 msgid "Routing Track: %s"
 msgstr "Rute enkelt spor"
 
-#: pcbnew/router/router_tool.cpp:2717
+#: pcbnew/router/router_tool.cpp:2717 pcbnew/router/router_tool.cpp:2715
 #, fuzzy
 msgid "Routing Track"
 msgstr "Rute enkelt spor"
 
-#: pcbnew/router/router_tool.cpp:2718
+#: pcbnew/router/router_tool.cpp:2718 pcbnew/router/router_tool.cpp:2716
 #, fuzzy
 msgid "(no net)"
 msgstr "<ingen nett>"
 
-#: pcbnew/router/router_tool.cpp:2727
+#: pcbnew/router/router_tool.cpp:2727 pcbnew/router/router_tool.cpp:2725
 #, fuzzy
 msgid "Free-angle"
 msgstr "vinkel"
 
-#: pcbnew/router/router_tool.cpp:2733
+#: pcbnew/router/router_tool.cpp:2733 pcbnew/router/router_tool.cpp:2731
 #, fuzzy
 msgid "45-degree"
 msgstr "45 grader"
 
-#: pcbnew/router/router_tool.cpp:2734
+#: pcbnew/router/router_tool.cpp:2734 pcbnew/router/router_tool.cpp:2732
 #, fuzzy
 msgid "45-degree rounded"
 msgstr "Dra (45 graders modus)"
 
-#: pcbnew/router/router_tool.cpp:2735
+#: pcbnew/router/router_tool.cpp:2735 pcbnew/router/router_tool.cpp:2733
 #, fuzzy
 msgid "90-degree"
 msgstr "grad"
 
-#: pcbnew/router/router_tool.cpp:2736
+#: pcbnew/router/router_tool.cpp:2736 pcbnew/router/router_tool.cpp:2734
 #, fuzzy
 msgid "90-degree rounded"
 msgstr "Dra (45 graders modus)"
 
-#: pcbnew/router/router_tool.cpp:2741
+#: pcbnew/router/router_tool.cpp:2741 pcbnew/router/router_tool.cpp:2739
 #, fuzzy
 msgid "Corner Style"
 msgstr "Linjestil"
 
 #: pcbnew/router/router_tool.cpp:2757 pcbnew/router/router_tool.cpp:2786
+#: pcbnew/router/router_tool.cpp:2755 pcbnew/router/router_tool.cpp:2784
 #, fuzzy, c-format
 msgid "Track Width: %s"
 msgstr "Sporbredde"
 
-#: pcbnew/router/router_tool.cpp:2767
+#: pcbnew/router/router_tool.cpp:2767 pcbnew/router/router_tool.cpp:2765
 #, fuzzy, c-format
 msgid "Diff Pair Gap: %s"
 msgstr "Differensialpar"
 
 #: pcbnew/router/router_tool.cpp:2778 pcbnew/tools/pcb_control.cpp:1711
+#: pcbnew/router/router_tool.cpp:2776
 #, fuzzy, c-format
 msgid "DP Max Uncoupled-length: %s"
 msgstr "Fjern ubrukt nett \"%s\"."
@@ -49666,140 +49822,149 @@ msgstr "Posisjonsforskyvning:"
 msgid "Shape Modification"
 msgstr "Formalternativ"
 
-#: pcbnew/tools/edit_tool.cpp:648
+#: pcbnew/tools/edit_tool.cpp:648 pcbnew/tools/edit_tool.cpp:643
 #, c-format
 msgid "Unable to resize arc tracks of %s or greater."
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:983
+#: pcbnew/tools/edit_tool.cpp:983 pcbnew/tools/edit_tool.cpp:978
 #, fuzzy
 msgid "Drag Arc Track"
 msgstr "Break Track"
 
-#: pcbnew/tools/edit_tool.cpp:1048
+#: pcbnew/tools/edit_tool.cpp:1048 pcbnew/tools/edit_tool.cpp:1043
 #, fuzzy
 msgid "Edit Track Width/Via Size"
 msgstr "Rediger sporbredde / via størrelse"
 
-#: pcbnew/tools/edit_tool.cpp:1083
+#: pcbnew/tools/edit_tool.cpp:1083 pcbnew/tools/edit_tool.cpp:1078
 #, fuzzy
 msgid "At least two straight track segments must be selected."
 msgstr "Minst to segmenter med rett spor må velges."
 
 #: pcbnew/tools/edit_tool.cpp:1087 pcbnew/tools/edit_tool.cpp:1244
-#: pcbnew/tools/pcb_actions.cpp:598
+#: pcbnew/tools/pcb_actions.cpp:598 pcbnew/tools/edit_tool.cpp:1082
+#: pcbnew/tools/edit_tool.cpp:1239
 msgid "Fillet Tracks"
 msgstr "Filetspor"
 
 #: pcbnew/tools/edit_tool.cpp:1087 pcbnew/tools/edit_tool.cpp:1271
+#: pcbnew/tools/edit_tool.cpp:1082 pcbnew/tools/edit_tool.cpp:1266
 #, fuzzy
 msgid "Radius:"
 msgstr "Radius"
 
-#: pcbnew/tools/edit_tool.cpp:1251
+#: pcbnew/tools/edit_tool.cpp:1251 pcbnew/tools/edit_tool.cpp:1246
 msgid "Unable to fillet the selected track segments."
 msgstr "Kan ikke filetere de valgte sporsegmentene."
 
-#: pcbnew/tools/edit_tool.cpp:1253
+#: pcbnew/tools/edit_tool.cpp:1253 pcbnew/tools/edit_tool.cpp:1248
 msgid "Some of the track segments could not be filleted."
 msgstr "Noen av sporsegmentene kunne ikke fylles ut."
 
-#: pcbnew/tools/edit_tool.cpp:1293
+#: pcbnew/tools/edit_tool.cpp:1293 pcbnew/tools/edit_tool.cpp:1288
 #, fuzzy
 msgid "Arc radius:"
 msgstr "Bue, radius %s"
 
-#: pcbnew/tools/edit_tool.cpp:1298
+#: pcbnew/tools/edit_tool.cpp:1298 pcbnew/tools/edit_tool.cpp:1293
 #, fuzzy
 msgid "Add slots in acute corners"
 msgstr "Legg til et sonehjørne"
 
-#: pcbnew/tools/edit_tool.cpp:1300
+#: pcbnew/tools/edit_tool.cpp:1300 pcbnew/tools/edit_tool.cpp:1295
 msgid ""
 "Add slots in acute corners to allow access to a cutter of the given radius"
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:1304
+#: pcbnew/tools/edit_tool.cpp:1304 pcbnew/tools/edit_tool.cpp:1299
 #, fuzzy
 msgid "Dogbone Corner Settings"
 msgstr "Fjern hjørnet"
 
 #: pcbnew/tools/edit_tool.cpp:1341
 #: pcbnew/tools/item_modification_routine.cpp:197
+#: pcbnew/tools/edit_tool.cpp:1336
 #, fuzzy
 msgid "Chamfer Lines"
 msgstr "Fasestørrelse:"
 
-#: pcbnew/tools/edit_tool.cpp:1341
+#: pcbnew/tools/edit_tool.cpp:1341 pcbnew/tools/edit_tool.cpp:1336
 #, fuzzy
 msgid "Chamfer setback:"
 msgstr "Faseavstand:"
 
-#: pcbnew/tools/edit_tool.cpp:1436
+#: pcbnew/tools/edit_tool.cpp:1436 pcbnew/tools/edit_tool.cpp:1431
 #, fuzzy
 msgid "Exactly two lines must be selected to extend them."
 msgstr "Minst to segmenter med rett spor må velges."
 
-#: pcbnew/tools/edit_tool.cpp:1445
+#: pcbnew/tools/edit_tool.cpp:1445 pcbnew/tools/edit_tool.cpp:1440
 #, fuzzy
 msgid "A shape with at least two lines must be selected."
 msgstr "Minst to segmenter med rett spor må velges."
 
 #: pcbnew/tools/edit_tool.cpp:1523
 #: pcbnew/tools/item_modification_routine.cpp:102
+#: pcbnew/tools/edit_tool.cpp:1518
 #, fuzzy
 msgid "Fillet Lines"
 msgstr "Fyll soner"
 
-#: pcbnew/tools/edit_tool.cpp:1633
+#: pcbnew/tools/edit_tool.cpp:1633 pcbnew/tools/edit_tool.cpp:1628
 #, fuzzy
 msgid "Simplify Shapes"
 msgstr "Kompleks form"
 
 #: pcbnew/tools/edit_tool.cpp:1633 pcbnew/tools/edit_tool.cpp:1702
+#: pcbnew/tools/edit_tool.cpp:1628 pcbnew/tools/edit_tool.cpp:1697
 #, fuzzy
 msgid "Tolerance value:"
 msgstr "Toleranse:"
 
 #: pcbnew/tools/edit_tool.cpp:1667 pcbnew/tools/pcb_actions.cpp:624
+#: pcbnew/tools/edit_tool.cpp:1662
 #, fuzzy
 msgid "Simplify Polygons"
 msgstr "Forenkling av polygoner på F_Cu"
 
 #: pcbnew/tools/edit_tool.cpp:1702 pcbnew/tools/edit_tool.cpp:1739
-#: pcbnew/tools/pcb_actions.cpp:630
+#: pcbnew/tools/pcb_actions.cpp:630 pcbnew/tools/edit_tool.cpp:1697
+#: pcbnew/tools/edit_tool.cpp:1734
 #, fuzzy
 msgid "Heal Shapes"
 msgstr "Rutenettinnstillinger"
 
 #: pcbnew/tools/edit_tool.cpp:2379 pcbnew/tools/pcb_actions.cpp:547
+#: pcbnew/tools/edit_tool.cpp:2374
 #, fuzzy
 msgid "Change Side / Flip"
 msgstr "Bytt til tekst"
 
-#: pcbnew/tools/edit_tool.cpp:2647
+#: pcbnew/tools/edit_tool.cpp:2647 pcbnew/tools/edit_tool.cpp:2642
 msgid "Use the Footprint Properties dialog to remove fields."
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:2806
+#: pcbnew/tools/edit_tool.cpp:2806 pcbnew/tools/edit_tool.cpp:2801
 #, fuzzy
 msgid "Move Exactly"
 msgstr "Flytt nøyaktig ..."
 
-#: pcbnew/tools/edit_tool.cpp:2975
+#: pcbnew/tools/edit_tool.cpp:2975 pcbnew/tools/edit_tool.cpp:2970
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "Duplisert %d vare (r)"
 
-#: pcbnew/tools/edit_tool.cpp:3316
+#: pcbnew/tools/edit_tool.cpp:3316 pcbnew/tools/edit_tool.cpp:3311
 msgid "Select reference point for the copy..."
 msgstr "Velg referansepunkt for kopien ..."
 
 #: pcbnew/tools/edit_tool.cpp:3317 pcbnew/tools/edit_tool.cpp:3334
+#: pcbnew/tools/edit_tool.cpp:3312 pcbnew/tools/edit_tool.cpp:3329
 msgid "Selection copied"
 msgstr "Valget ble kopiert"
 
-#: pcbnew/tools/edit_tool.cpp:3318
+#: pcbnew/tools/edit_tool.cpp:3318 pcbnew/tools/edit_tool.cpp:3313
 #, fuzzy
 msgid "Copy canceled"
 msgstr "Kopien avbrutt"
@@ -53859,13 +54024,15 @@ msgstr "Rediger skjematiske symboler"
 msgid "KiCad Drawing Sheet"
 msgstr "Regneark"
 
+#: common/design_block_info_impl.cpp:116
 #, fuzzy
-#~ msgid "Fetching design_block libraries..."
-#~ msgstr "Henter fotavtrykksbiblioteker"
+msgid "Fetching design_block libraries..."
+msgstr "Henter fotavtrykksbiblioteker"
 
+#: pcbnew/footprint_info_impl.cpp:131
 #, fuzzy
-#~ msgid "Fetching footprint libraries..."
-#~ msgstr "Henter fotavtrykksbiblioteker"
+msgid "Fetching footprint libraries..."
+msgstr "Henter fotavtrykksbiblioteker"
 
 #~ msgid "CrtYd_Front"
 #~ msgstr "CrtYd_Front"
