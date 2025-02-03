@@ -108,7 +108,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RenameColumn( int aCol, const wxString& newN
 }
 
 
-int FIELDS_EDITOR_GRID_DATA_MODEL::GetFieldNameCol( wxString aFieldName )
+int FIELDS_EDITOR_GRID_DATA_MODEL::GetFieldNameCol( const wxString& aFieldName )
 {
     for( size_t i = 0; i < m_cols.size(); i++ )
     {

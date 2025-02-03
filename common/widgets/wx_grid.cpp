@@ -157,12 +157,12 @@ public:
 class WX_GRID_ALT_ROW_COLOR_PROVIDER : public wxGridCellAttrProvider
 {
 public:
-    WX_GRID_ALT_ROW_COLOR_PROVIDER( const wxColor& aBaseColor ) : wxGridCellAttrProvider(),
-        m_attrEven( new wxGridCellAttr() )
+    WX_GRID_ALT_ROW_COLOR_PROVIDER( const wxColor& aBaseColor ) :
+            wxGridCellAttrProvider(),
+            m_attrEven( new wxGridCellAttr() )
     {
         UpdateColors( aBaseColor );
     }
-
 
     void UpdateColors( const wxColor& aBaseColor )
     {
@@ -172,9 +172,7 @@ public:
         m_attrEven->SetBackgroundColour( rowColor );
     }
 
-
-    wxGridCellAttr* GetAttr( int row, int col,
-                             wxGridCellAttr::wxAttrKind  kind ) const override
+    wxGridCellAttr* GetAttr( int row, int col, wxGridCellAttr::wxAttrKind kind ) const override
     {
         wxGridCellAttrPtr cellAttr( wxGridCellAttrProvider::GetAttr( row, col, kind ) );
 

@@ -432,13 +432,15 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties( int aCol )
     {
         attr->SetReadOnly();
         m_grid->SetColAttr( aCol, attr );
-        m_grid->SetColFormatNumber( aCol );
+        attr->SetAlignment( wxALIGN_RIGHT, wxALIGN_CENTER );
+        attr->SetRenderer( new wxGridCellNumberRenderer() );
     }
     else if( m_dataModel->ColIsAttribute( aCol ) )
     {
         attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+        attr->SetRenderer( new wxGridCellBoolRenderer() );
+        attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
         m_grid->SetColAttr( aCol, attr );
-        m_grid->SetColFormatBool( aCol );
     }
     else if( IsTextVar( m_dataModel->GetColFieldName( aCol ) ) )
     {
@@ -449,7 +451,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties( int aCol )
     {
         attr->SetEditor( m_grid->GetDefaultEditor() );
         m_grid->SetColAttr( aCol, attr );
-        m_grid->SetColFormatCustom( aCol, wxGRID_VALUE_STRING );
     }
 }
 
