@@ -4407,7 +4407,7 @@ msgstr "நூலக புனைப்பெயர் முன்னொட்�
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:839 pcbnew/footprint.cpp:3521
 #: pcbnew/pad.cpp:2362 pcbnew/pcb_textbox.cpp:665 pcbnew/zone.cpp:644
-#: pcbnew/zone.cpp:1566
+#: pcbnew/zone.cpp:1566 common/eda_shape.cpp:1983
 msgid "Solid"
 msgstr "திடமான"
 
@@ -4415,7 +4415,7 @@ msgstr "திடமான"
 #: common/stroke_params.cpp:37
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:661 eeschema/sch_line.cpp:1049
-#: pcbnew/pcb_textbox.cpp:666
+#: pcbnew/pcb_textbox.cpp:666 common/eda_shape.cpp:1984
 msgid "Dashed"
 msgstr "கோடு"
 
@@ -4423,7 +4423,7 @@ msgstr "கோடு"
 #: common/stroke_params.cpp:38
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:662 eeschema/sch_line.cpp:1050
-#: pcbnew/pcb_textbox.cpp:667
+#: pcbnew/pcb_textbox.cpp:667 common/eda_shape.cpp:1985
 msgid "Dotted"
 msgstr "புள்ளியிடப்பட்ட"
 
@@ -4431,7 +4431,7 @@ msgstr "புள்ளியிடப்பட்ட"
 #: common/stroke_params.cpp:39
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:663 eeschema/sch_line.cpp:1051
-#: pcbnew/pcb_textbox.cpp:668
+#: pcbnew/pcb_textbox.cpp:668 common/eda_shape.cpp:1986
 msgid "Dash-Dot"
 msgstr "டாச்-டாட்"
 
@@ -4439,7 +4439,7 @@ msgstr "டாச்-டாட்"
 #: common/stroke_params.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:664 eeschema/sch_line.cpp:1052
-#: pcbnew/pcb_textbox.cpp:669
+#: pcbnew/pcb_textbox.cpp:669 common/eda_shape.cpp:1987
 msgid "Dash-Dot-Dot"
 msgstr "டாச்-டாட்-டாட்"
 
@@ -4569,7 +4569,7 @@ msgstr "பச் தடிமன்"
 #: common/dialogs/panel_setup_netclasses_base.cpp:63 common/eda_shape.cpp:2083
 #: common/stroke_params.cpp:219 eeschema/sch_bus_entry.cpp:672
 #: eeschema/sch_line.cpp:936 eeschema/sch_line.cpp:1061
-#: pcbnew/pcb_textbox.cpp:685
+#: pcbnew/pcb_textbox.cpp:685 common/eda_shape.cpp:2084
 msgid "Line Style"
 msgstr "வரி நடை"
 
@@ -4591,7 +4591,7 @@ msgstr "வரி நடை"
 #: eeschema/sch_textbox.cpp:451 include/stroke_params.h:73
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2540 pcbnew/pcb_dimension.cpp:428
 #: pcbnew/pcb_text.cpp:245 pcbnew/pcb_textbox.cpp:377
-#: pcbnew/pcb_textbox.cpp:664
+#: pcbnew/pcb_textbox.cpp:664 common/eda_shape.cpp:1982
 msgid "Default"
 msgstr "இயல்புநிலை"
 
@@ -4725,7 +4725,8 @@ msgstr "வரி"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:178
 #: eeschema/sch_label.cpp:2214
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2334
-#: pcbnew/pcb_dimension.cpp:1631
+#: pcbnew/pcb_dimension.cpp:1631 common/eda_shape.cpp:753
+#: common/eda_shape.cpp:1972
 msgid "Rectangle"
 msgstr "செவ்வகம்"
 
@@ -5326,7 +5327,8 @@ msgid "Rect"
 msgstr "செவ்வகம்"
 
 #: common/eda_shape.cpp:77 common/eda_shape.cpp:749 common/eda_shape.cpp:1972
-#: gerbview/gerber_draw_item.cpp:230
+#: gerbview/gerber_draw_item.cpp:230 common/eda_shape.cpp:750
+#: common/eda_shape.cpp:1973
 msgid "Arc"
 msgstr "வில்"
 
@@ -5334,7 +5336,8 @@ msgstr "வில்"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:172
 #: eeschema/sch_label.cpp:2212 gerbview/gerber_draw_item.cpp:231
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1289
-#: pcbnew/pad.cpp:2333 pcbnew/pcb_dimension.cpp:1632
+#: pcbnew/pad.cpp:2333 pcbnew/pcb_dimension.cpp:1632 common/eda_shape.cpp:749
+#: common/eda_shape.cpp:1974
 msgid "Circle"
 msgstr "வட்டம்"
 
@@ -5343,26 +5346,29 @@ msgid "Bezier Curve"
 msgstr "பெசியர் வளைவு"
 
 #: common/eda_shape.cpp:80 common/eda_shape.cpp:751 common/eda_shape.cpp:1974
+#: common/eda_shape.cpp:752 common/eda_shape.cpp:1975
 msgid "Polygon"
 msgstr "பலகோணம்"
 
-#: common/eda_shape.cpp:739
+#: common/eda_shape.cpp:739 common/eda_shape.cpp:740
 msgid "Pad Number Box"
 msgstr "திண்டு எண் பெட்டி"
 
-#: common/eda_shape.cpp:740 pcbnew/pcb_shape.cpp:785
+#: common/eda_shape.cpp:740 pcbnew/pcb_shape.cpp:785 common/eda_shape.cpp:741
 msgid "Thermal Spoke Template"
 msgstr "வெப்ப பேச்சு வார்ப்புரு"
 
-#: common/eda_shape.cpp:741 common/eda_shape.cpp:754
+#: common/eda_shape.cpp:741 common/eda_shape.cpp:754 common/eda_shape.cpp:742
+#: common/eda_shape.cpp:755
 msgid "Unrecognized"
 msgstr "அங்கீகரிக்கப்படாத"
 
-#: common/eda_shape.cpp:750
+#: common/eda_shape.cpp:750 common/eda_shape.cpp:751
 msgid "Curve"
 msgstr "வளைவு"
 
-#: common/eda_shape.cpp:753 common/eda_shape.cpp:1970
+#: common/eda_shape.cpp:753 common/eda_shape.cpp:1970 common/eda_shape.cpp:754
+#: common/eda_shape.cpp:1971
 msgid "Segment"
 msgstr "பிரிவு"
 
@@ -5376,16 +5382,19 @@ msgstr "பிரிவு"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:44
 #: pcbnew/microwave/microwave_polygon.cpp:129 pcbnew/pcb_target.cpp:157
 #: pcbnew/pcb_target.cpp:243 pcbnew/pcb_textbox.cpp:679
+#: common/eda_shape.cpp:765 common/eda_shape.cpp:2022
 msgid "Shape"
 msgstr "வடிவம்"
 
 #: common/eda_shape.cpp:770 common/eda_shape.cpp:777 common/eda_shape.cpp:2048
 #: pcbnew/dialogs/dialog_shape_properties.cpp:212 pcbnew/pcb_track.cpp:1076
+#: common/eda_shape.cpp:771 common/eda_shape.cpp:778 common/eda_shape.cpp:2049
 msgid "Radius"
 msgstr "ஆரம்"
 
 #: common/eda_shape.cpp:775 common/eda_shape.cpp:805 common/eda_shape.cpp:2092
-#: pcbnew/pcb_text.cpp:243 pcbnew/pcb_textbox.cpp:375
+#: pcbnew/pcb_text.cpp:243 pcbnew/pcb_textbox.cpp:375 common/eda_shape.cpp:776
+#: common/eda_shape.cpp:806 common/eda_shape.cpp:2093
 msgid "Angle"
 msgstr "கோணம்"
 
@@ -5393,11 +5402,11 @@ msgstr "கோணம்"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:127
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:95
 #: eeschema/lib_pin.cpp:1199 eeschema/lib_pin.cpp:1690 eeschema/sch_pin.cpp:267
-#: eeschema/sch_pin.cpp:559
+#: eeschema/sch_pin.cpp:559 common/eda_shape.cpp:782 common/eda_shape.cpp:800
 msgid "Length"
 msgstr "நீளம்"
 
-#: common/eda_shape.cpp:786
+#: common/eda_shape.cpp:786 common/eda_shape.cpp:787
 msgid "Points"
 msgstr "பிரிவகம்"
 
@@ -5415,7 +5424,8 @@ msgstr "பிரிவகம்"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2080 pcbnew/pad.cpp:1089
 #: pcbnew/pcb_reference_image.cpp:259 pcbnew/pcb_target.cpp:156
 #: pcbnew/pcb_target.cpp:240 pcbnew/pcb_text.cpp:247 pcbnew/pcb_track.cpp:1071
-#: pcbnew/pcb_track.cpp:1492 pcbnew/pcb_track.cpp:1522
+#: pcbnew/pcb_track.cpp:1492 pcbnew/pcb_track.cpp:1522 common/eda_shape.cpp:791
+#: common/eda_shape.cpp:2067
 msgid "Width"
 msgstr "அகலம்"
 
@@ -5429,65 +5439,67 @@ msgstr "அகலம்"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:56
 #: pcbnew/fp_text_grid_table.cpp:141 pcbnew/pad.cpp:1090
 #: pcbnew/pcb_dimension.cpp:833 pcbnew/pcb_reference_image.cpp:260
-#: pcbnew/pcb_text.cpp:248
+#: pcbnew/pcb_text.cpp:248 common/eda_shape.cpp:794 common/eda_shape.cpp:2073
 msgid "Height"
 msgstr "உயரம்"
 
-#: common/eda_shape.cpp:1975
+#: common/eda_shape.cpp:1975 common/eda_shape.cpp:1976
 msgid "Bezier"
 msgstr "பெசியர்"
 
 #: common/eda_shape.cpp:2019 eeschema/lib_shape.cpp:604
-#: eeschema/sch_shape.cpp:614
+#: eeschema/sch_shape.cpp:614 common/eda_shape.cpp:2020
 msgid "Shape Properties"
 msgstr "வடிவ பண்புகள்"
 
 #: common/eda_shape.cpp:2025 pcbnew/pcb_textbox.cpp:680
-#: pcbnew/pcb_track.cpp:1495
+#: pcbnew/pcb_track.cpp:1495 common/eda_shape.cpp:2026
 msgid "Start X"
 msgstr "ஃச் தொடங்கு"
 
 #: common/eda_shape.cpp:2030 pcbnew/pcb_textbox.cpp:681
-#: pcbnew/pcb_track.cpp:1499
+#: pcbnew/pcb_track.cpp:1499 common/eda_shape.cpp:2031
 msgid "Start Y"
 msgstr "ஒய் ஐத் தொடங்குங்கள்"
 
-#: common/eda_shape.cpp:2036
+#: common/eda_shape.cpp:2036 common/eda_shape.cpp:2037
 msgid "Center X"
 msgstr "நடுவண் ஃச்"
 
-#: common/eda_shape.cpp:2042
+#: common/eda_shape.cpp:2042 common/eda_shape.cpp:2043
 msgid "Center Y"
 msgstr "நடுவண் மற்றும்"
 
 #: common/eda_shape.cpp:2054 pcbnew/generators/pcb_tuning_pattern.cpp:2552
 #: pcbnew/pcb_textbox.cpp:682 pcbnew/pcb_track.cpp:1502
+#: common/eda_shape.cpp:2055
 msgid "End X"
 msgstr "முடிவு ஃச்"
 
 #: common/eda_shape.cpp:2060 pcbnew/generators/pcb_tuning_pattern.cpp:2558
 #: pcbnew/pcb_textbox.cpp:683 pcbnew/pcb_track.cpp:1505
+#: common/eda_shape.cpp:2061
 msgid "End Y"
 msgstr "இறுதி ஒய்"
 
 #: common/eda_shape.cpp:2078 common/stroke_params.cpp:223
 #: eeschema/sch_bus_entry.cpp:675 eeschema/sch_line.cpp:1064
-#: pcbnew/pcb_textbox.cpp:684
+#: pcbnew/pcb_textbox.cpp:684 common/eda_shape.cpp:2079
 msgid "Line Width"
 msgstr "வரி அகலம்"
 
-#: common/eda_shape.cpp:2087 pcbnew/pcb_shape.cpp:719
+#: common/eda_shape.cpp:2087 pcbnew/pcb_shape.cpp:719 common/eda_shape.cpp:2088
 msgid "Line Color"
 msgstr "வரி நிறம்"
 
 #: common/eda_shape.cpp:2125 eeschema/lib_shape.cpp:587
 #: eeschema/sch_shape.cpp:604 pcbnew/dialogs/dialog_plot_base.cpp:134
-#: pcbnew/pcb_textbox.cpp:686
+#: pcbnew/pcb_textbox.cpp:686 common/eda_shape.cpp:2126
 msgid "Filled"
 msgstr "நிரப்பப்பட்டது"
 
 #: common/eda_shape.cpp:2130 eeschema/sch_shape.cpp:607
-#: pcbnew/pcb_shape.cpp:720
+#: pcbnew/pcb_shape.cpp:720 common/eda_shape.cpp:2131
 msgid "Fill Color"
 msgstr "நிறத்தை நிரப்பவும்"
 
