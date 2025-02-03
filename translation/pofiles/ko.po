@@ -34,7 +34,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 19:59+0300\n"
-"PO-Revision-Date: 2025-02-03 12:19+0000\n"
+"PO-Revision-Date: 2025-02-03 12:57+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -7238,7 +7238,7 @@ msgstr "현재 지원되지 않는 DXF 이미지."
 #: common/import_gfx/graphics_importer_buffer.cpp:126
 #, c-format
 msgid "Imported graphic is too large. Maximum scale is %f"
-msgstr "가져온 그래픽이 너무 큽니다. 최대 배율은 %f 임"
+msgstr "불러온 그래픽이 너무 큽니다. 최대 스케일은 %f"
 
 #: common/import_gfx/graphics_importer_buffer.cpp:186
 #, c-format
@@ -39960,7 +39960,7 @@ msgstr "패드는 스루홀 패드가 아님; %s가 연결됨."
 #: pcbnew/drc/drc_engine.cpp:782
 #, c-format
 msgid "Net tie on %s; clearance: 0."
-msgstr "%s에서 네트 묶임; 간격: 0."
+msgstr "네트 묶임 %s; 공간거리: 0."
 
 #: pcbnew/drc/drc_engine.cpp:785
 msgid "net tie"
@@ -45164,7 +45164,7 @@ msgid ""
 "\n"
 "Zones will need to be refilled."
 msgstr ""
-"정의되지 않은 레이어(%s)에서 발견된 항목입니다.\n"
+"정의되지 않은 레이어에서 발견된 항목 (%s).\n"
 "해당 항목을 %s 레이어로 복구하시겠습니까?\n"
 "\n"
 "영역을 다시 채워야 합니다."
