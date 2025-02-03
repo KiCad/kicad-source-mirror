@@ -73,6 +73,23 @@ void DESIGN_BLOCK_LIB_TABLE_ROW::SetType( const wxString& aType )
 }
 
 
+bool DESIGN_BLOCK_LIB_TABLE_ROW::Refresh()
+{
+    if( !plugin )
+    {
+        wxArrayString dummyList;
+
+        plugin.reset( DESIGN_BLOCK_IO_MGR::FindPlugin( type ) );
+        SetLoaded( false );
+        plugin->DesignBlockEnumerate( dummyList, GetFullURI( true ), true, GetProperties() );
+        SetLoaded( true );
+        return true;
+    }
+
+    return false;
+}
+
+
 DESIGN_BLOCK_LIB_TABLE::DESIGN_BLOCK_LIB_TABLE( DESIGN_BLOCK_LIB_TABLE* aFallBackTable ) :
         LIB_TABLE( aFallBackTable )
 {

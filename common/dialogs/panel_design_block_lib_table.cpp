@@ -633,6 +633,46 @@ bool PANEL_DESIGN_BLOCK_LIB_TABLE::verifyTables()
         }
     }
 
+    for( DESIGN_BLOCK_LIB_TABLE* table : { global_model(), project_model() } )
+    {
+        if( !table )
+            continue;
+
+        for( unsigned int r = 0; r < table->GetCount(); ++r )
+        {
+            DESIGN_BLOCK_LIB_TABLE_ROW& row =
+                    dynamic_cast<DESIGN_BLOCK_LIB_TABLE_ROW&>( table->At( r ) );
+
+            // Newly-added rows won't have set this yet
+            row.SetParent( table );
+
+            if( !row.GetIsEnabled() )
+                continue;
+
+            try
+            {
+                if( row.Refresh() )
+                {
+                    if( table == global_model() )
+                        m_parent->m_GlobalTableChanged = true;
+                    else
+                        m_parent->m_ProjectTableChanged = true;
+                }
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                msg.Printf( _( "Design block library '%s' failed to load." ), row.GetNickName() );
+
+                wxWindow*       topLevelParent = wxGetTopLevelParent( this );
+                wxMessageDialog errdlg( topLevelParent, msg + wxS( "\n" ) + ioe.What(),
+                                        _( "Error Loading Library" ) );
+                errdlg.ShowModal();
+
+                return true;
+            }
+        }
+    }
+
     return true;
 }
 

@@ -265,7 +265,10 @@ void DESIGN_BLOCK_IO::DesignBlockEnumerate( wxArrayString&  aDesignBlockNames,
     wxDir dir( aLibraryPath );
 
     if( !dir.IsOpened() )
-        return;
+    {
+        THROW_IO_ERROR(
+                wxString::Format( _( "Design block '%s' does not exist." ), aLibraryPath ) );
+    }
 
     wxString dirname;
     wxString fileSpec = wxT( "*." ) + wxString( FILEEXT::KiCadDesignBlockPathExtension );

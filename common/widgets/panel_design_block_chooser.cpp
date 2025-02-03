@@ -430,7 +430,7 @@ void PANEL_DESIGN_BLOCK_CHOOSER::displayErrors( wxTopLevelWindow* aWindow )
 
     HTML_MESSAGE_BOX dlg( aWindow, _( "Load Error" ) );
 
-    dlg.MessageSet( _( "Errors were encountered loading footprints:" ) );
+    dlg.MessageSet( _( "Errors were encountered loading design blocks:" ) );
 
     wxString msg;
 
