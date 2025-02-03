@@ -68,6 +68,8 @@ private:
     void OnEditFootprintFilter( wxCommandEvent& event ) override;
     void OnSizeGrid( wxSizeEvent& event ) override;
     void OnGridCellChanging( wxGridEvent& event );
+    void OnGridCellChanged( wxGridEvent& event );
+    void OnGridMotion( wxMouseEvent& event );
     void OnEditSpiceModel( wxCommandEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
     void OnCancelButtonClick( wxCommandEvent& event ) override;
