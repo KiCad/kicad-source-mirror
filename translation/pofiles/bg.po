@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-03 19:59+0300\n"
+"POT-Creation-Date: 2025-02-05 02:27+0300\n"
 "PO-Revision-Date: 2025-02-01 17:11+0000\n"
 "Last-Translator: 109247019824 <109247019824@users.noreply.hosted.weblate."
 "org>\n"
@@ -342,8 +342,8 @@ msgstr "Няма права за запазване на файла „%s“."
 #: common/dialogs/panel_embedded_files.cpp:457
 #: common/dialogs/panel_setup_severities.cpp:44 common/kidialog.cpp:126
 #: eeschema/dialogs/dialog_erc.cpp:878
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1812
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2214
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1813
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2215
 #: eeschema/erc/erc_item.cpp:84 eeschema/files-io.cpp:943
 #: eeschema/files-io.cpp:1011 eeschema/sch_marker.cpp:374
 #: kicad/import_proj.cpp:79 kicad/import_project.cpp:123 kicad/kicad.cpp:318
@@ -886,16 +886,16 @@ msgid "Presets (%s+Tab):"
 msgstr "Нулиране"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:647
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1644
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2078
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1645
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2079
 #: pcbnew/widgets/appearance_controls.cpp:2632
 #, fuzzy
 msgid "Save preset..."
 msgstr "Съхрани като"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:648
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1645
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2079
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1646
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2080
 #: pcbnew/widgets/appearance_controls.cpp:2633
 #, fuzzy
 msgid "Delete preset..."
@@ -914,32 +914,32 @@ msgid "Save Layer Preset"
 msgstr "Запази платка"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:770
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1819
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2221
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1820
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2222
 #: pcbnew/widgets/appearance_controls.cpp:2772
 #, fuzzy
 msgid "Overwrite existing preset?"
 msgstr "Отвори съществуващ проект"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:796
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1844
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2246
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1845
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2247
 #: pcbnew/widgets/appearance_controls.cpp:2798
 #, fuzzy
 msgid "Presets"
 msgstr "Нулиране"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:805
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1856
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2258
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1857
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2259
 #: pcbnew/widgets/appearance_controls.cpp:2810
 #, fuzzy
 msgid "Delete Preset"
 msgstr "Изтрий лист"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:806
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1857
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2259
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1858
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2260
 #: pcbnew/widgets/appearance_controls.cpp:2811
 #, fuzzy
 msgid "Select preset:"
@@ -1411,7 +1411,7 @@ msgid "Z:"
 msgstr "Z"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:68
-#: gerbview/gerber_draw_item.cpp:722 pcbnew/footprint.cpp:1707
+#: gerbview/gerber_draw_item.cpp:722 pcbnew/footprint.cpp:1717
 #: pcbnew/pad.cpp:1361
 msgid "Rotation"
 msgstr "Завъртане"
@@ -3443,7 +3443,7 @@ msgstr "Опции"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:169
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:48
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:57
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:439 pcbnew/footprint.cpp:4079
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:439 pcbnew/footprint.cpp:4089
 #: pcbnew/footprint_wizard_frame.cpp:326 pcbnew/pcb_dimension.cpp:605
 #: pcbnew/pcb_fields_grid_table.cpp:144 pcbnew/plot_board_layers.cpp:107
 #: pcbnew/widgets/search_handlers.cpp:119
@@ -3807,7 +3807,7 @@ msgstr "Тест ERC"
 
 #: common/dialogs/git/dialog_git_auth.cpp:53
 #: common/dialogs/git/dialog_git_commit.cpp:142
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1344
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1345
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:147
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout.cpp:78
 #: pcbnew/tools/multichannel_tool.cpp:972
@@ -3819,7 +3819,7 @@ msgstr "Добре"
 #: common/dialogs/git/dialog_git_switch.cpp:69
 #: common/dialogs/panel_embedded_files.cpp:417 common/tool/actions.cpp:159
 #: eeschema/dialogs/dialog_erc.cpp:426
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1344 eeschema/sheet.cpp:783
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1345 eeschema/sheet.cpp:783
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:962
 #: eeschema/symbol_editor/symbol_editor.cpp:1020
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:151
@@ -5320,7 +5320,7 @@ msgstr "Увеличение"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1099
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:583
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:854
-#: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4038
+#: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4048
 #: pcbnew/pad.cpp:2501 pcbnew/pad.cpp:2520 pcbnew/pcb_dimension.cpp:1973
 #: pcbnew/widgets/appearance_controls.cpp:729
 #: pcbnew/widgets/appearance_controls.cpp:771
@@ -5563,7 +5563,7 @@ msgstr "Несвързан"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:854 pcbnew/footprint.cpp:4040
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:854 pcbnew/footprint.cpp:4050
 #: pcbnew/pad.cpp:2522 pcbnew/pcb_table.cpp:533 pcbnew/pcb_textbox.cpp:795
 #: pcbnew/zone.cpp:857 pcbnew/zone.cpp:1830
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
@@ -6941,7 +6941,7 @@ msgstr "Дъно"
 #: eeschema/sch_text.cpp:783 eeschema/sch_textbox.cpp:714
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
-#: pcbnew/footprint.cpp:4070 pcbnew/pad.cpp:2539 pcbnew/pcb_dimension.cpp:1756
+#: pcbnew/footprint.cpp:4080 pcbnew/pad.cpp:2539 pcbnew/pcb_dimension.cpp:1756
 #: pcbnew/pcb_dimension.cpp:1831 pcbnew/pcb_fields_grid_table.cpp:151
 #: pcbnew/pcb_tablecell.cpp:207 pcbnew/zone.cpp:2001
 msgid "Orientation"
@@ -8966,7 +8966,7 @@ msgstr "По подразбиране"
 #: eeschema/dialogs/dialog_sim_model_base.cpp:271 eeschema/sch_symbol.cpp:2058
 #: eeschema/sch_symbol.cpp:2110 eeschema/sch_symbol.cpp:2991
 #: eeschema/widgets/search_handlers.cpp:160
-#: eeschema/widgets/search_handlers.cpp:246 pcbnew/footprint.cpp:4076
+#: eeschema/widgets/search_handlers.cpp:246 pcbnew/footprint.cpp:4086
 #: pcbnew/widgets/search_handlers.cpp:118
 msgid "Reference"
 msgstr "Обозначение"
@@ -8990,7 +8990,7 @@ msgstr "Вземи и премести комп.отп."
 #: eeschema/tools/sch_edit_tool.cpp:551
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:179
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
-#: pcbnew/footprint.cpp:4099
+#: pcbnew/footprint.cpp:4109
 #, fuzzy
 msgid "Attributes"
 msgstr "Атрибути:"
@@ -10366,7 +10366,7 @@ msgstr "На платката"
 #: common/widgets/footprint_diff_widget.cpp:42 cvpcb/cvpcb_mainframe.cpp:814
 #: eeschema/sch_base_frame.cpp:593 eeschema/sch_symbol.cpp:2086
 #: eeschema/sch_symbol.cpp:2090 eeschema/sch_symbol.cpp:2125
-#: eeschema/widgets/symbol_diff_widget.cpp:45 pcbnew/footprint.cpp:1655
+#: eeschema/widgets/symbol_diff_widget.cpp:45 pcbnew/footprint.cpp:1665
 msgid "Library"
 msgstr "Библиотека"
 
@@ -11180,7 +11180,7 @@ msgstr "%s не е Библиотечен файл"
 #: eeschema/generate_alias_info.cpp:39 eeschema/sch_symbol.cpp:2105
 #: eeschema/sch_symbol.cpp:2678 eeschema/sch_symbol.cpp:3003
 #: eeschema/symbol_editor/symbol_editor.cpp:1629
-#: eeschema/symbol_viewer_frame.cpp:462 pcbnew/footprint.cpp:4089
+#: eeschema/symbol_viewer_frame.cpp:462 pcbnew/footprint.cpp:4099
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:133
 msgid "Keywords"
 msgstr "Ключови думи"
@@ -11347,7 +11347,7 @@ msgstr "%s изводи %s ненамерени"
 msgid "Error loading footprint"
 msgstr "Печат на схема"
 
-#: cvpcb/display_footprints_frame.cpp:508 pcbnew/footprint.cpp:1715
+#: cvpcb/display_footprints_frame.cpp:508 pcbnew/footprint.cpp:1725
 #, fuzzy, c-format
 msgid "Footprint: %s"
 msgstr "Комп.отп.:"
@@ -11722,7 +11722,7 @@ msgid "Enter a description for the library:"
 msgstr "Четене на връзки \"%s\""
 
 #: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:3000
-#: pcbnew/footprint.cpp:4086 pcbnew/plot_board_layers.cpp:129
+#: pcbnew/footprint.cpp:4096 pcbnew/plot_board_layers.cpp:129
 #, fuzzy
 msgid "Library Description"
 msgstr "Определение"
@@ -13549,7 +13549,7 @@ msgstr "Стартирай проверката на правила за про�
 #: eeschema/sch_symbol.cpp:2989
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:28
-#: pcbnew/footprint.cpp:4074
+#: pcbnew/footprint.cpp:4084
 msgid "Fields"
 msgstr "Полета"
 
@@ -13778,7 +13778,7 @@ msgid "Read Only"
 msgstr "[Четене само]"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1222
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1492
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1493
 #, fuzzy
 msgid "Save changes?"
 msgstr "Запамети текуща библиотека като"
@@ -14431,7 +14431,7 @@ msgid "Select Output Directory"
 msgstr "Изберете изходна папка"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:271
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1319
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1320
 #: pcbnew/dialogs/dialog_gendrill.cpp:338 pcbnew/dialogs/dialog_plot.cpp:803
 #, fuzzy, c-format
 msgid ""
@@ -16070,125 +16070,125 @@ msgstr "Етикет"
 msgid "Group By"
 msgstr "Захранващ символ"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:698
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:699
 msgid "Qty"
 msgstr ""
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:699
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:700
 msgid "#"
 msgstr ""
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:733
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:827
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:734
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:828
 #, fuzzy
 msgid "New field name:"
 msgstr "Име на поле"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:733
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:734
 #, fuzzy
 msgid "Add Field"
 msgstr "Поле"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:742
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:743
 #, fuzzy
 msgid "Field must have a name."
 msgstr "Стойност на класа на веригите"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:750
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:751
 #: eeschema/dialogs/dialog_symbol_properties.cpp:811
 #, fuzzy, c-format
 msgid "Field name '%s' already in use."
 msgstr "Лист с име \"%s\" вече съществува."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:778
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:779
 #, fuzzy, c-format
 msgid "Are you sure you want to remove the field '%s'?"
 msgstr "ОК за изтриване на избраните артикули?"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:827
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:828
 #, fuzzy
 msgid "Rename Field"
 msgstr "Преименувай файл"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:841
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:842
 #, fuzzy, c-format
 msgid "Field name %s already exists."
 msgstr "Библиотеката <%s> вече съществува."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:935
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:936
 #, fuzzy
 msgid "The Quantity column cannot be grouped by."
 msgstr "Обозначаващото поле не може да е празно! Без промяна"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:943
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:944
 #, fuzzy
 msgid "The Item Number column cannot be grouped by."
 msgstr "Обозначаващото поле не може да е празно! Без промяна"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1309
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1310
 #, fuzzy
 msgid "Bill of Materials Output File"
 msgstr "Таблица с използваните материали и елементи"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1321
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1330
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1322
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1331
 #, fuzzy
 msgid "BOM Output File"
 msgstr "Изход"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1328
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1329
 msgid ""
 "Cannot make path relative (target volume different from schematic file "
 "volume)!"
 msgstr ""
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1342
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1343
 msgid "Unsaved data"
 msgstr ""
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1343
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1344
 msgid "Changes have not yet been saved. Export unsaved data?"
 msgstr ""
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1367
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1368
 #, fuzzy
 msgid "No output file specified in Export tab."
 msgstr "Не е избран слой"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1381
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1382
 #, fuzzy, c-format
 msgid "Could not open/create path '%s'."
 msgstr "Невъзможност за създаване на файл %s"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1390
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1391
 #, fuzzy, c-format
 msgid "Could not create BOM output '%s'."
 msgstr "Нямате права за запис в папка <%s>."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1399
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1400
 #, fuzzy, c-format
 msgid "Could not write BOM output '%s'."
 msgstr "Нямате права за запис в папка <%s>."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1406
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1407
 #, fuzzy, c-format
 msgid "Wrote BOM output to '%s'"
 msgstr "Невъзможност за създаване на файл %s"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1785
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2187
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1786
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2188
 #, fuzzy
 msgid "BOM preset name:"
 msgstr "Избор на слой:"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1785
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2187
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1786
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2188
 #, fuzzy
 msgid "Save BOM Preset"
 msgstr "Запази платка"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1811
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2213
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1812
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2214
 #: pcbnew/widgets/appearance_controls.cpp:2764
 msgid ""
 "Default presets cannot be modified.\n"
@@ -18996,7 +18996,7 @@ msgstr "Начертай конт.пл. на обозн. слой"
 #: eeschema/lib_symbol.cpp:591 eeschema/sch_sheet.cpp:336
 #: eeschema/sch_sheet.cpp:880 eeschema/sch_symbol.cpp:1620
 #: eeschema/sch_symbol.cpp:2036 eeschema/widgets/search_handlers.cpp:169
-#: pcbnew/footprint.cpp:1703
+#: pcbnew/footprint.cpp:1713
 #, fuzzy
 msgid "DNP"
 msgstr "Пи-образен"
@@ -19449,13 +19449,13 @@ msgid "Print (or not) the Frame references."
 msgstr "Печатай (или не) рамка на листа"
 
 #: eeschema/printing/dialog_print_base.cpp:44
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:217
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:213
 #, fuzzy
 msgid "Print background color"
 msgstr "Фонов цвят"
 
 #: eeschema/printing/dialog_print_base.cpp:50
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:222
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:217
 msgid "Use a different color theme for printing:"
 msgstr ""
 
@@ -20619,7 +20619,7 @@ msgstr "Тип на контура:"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:83
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:73
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:58
-#: pcbnew/footprint.cpp:1688 pcbnew/pad.cpp:1299 pcbnew/pad.cpp:2537
+#: pcbnew/footprint.cpp:1698 pcbnew/pad.cpp:1299 pcbnew/pad.cpp:2537
 #: pcbnew/pcb_dimension.cpp:659 pcbnew/pcb_group.cpp:396
 #: pcbnew/pcb_marker.cpp:381 pcbnew/pcb_shape.cpp:642
 #: pcbnew/pcb_tablecell.cpp:106 pcbnew/pcb_text.cpp:279
@@ -21029,13 +21029,13 @@ msgid "Exclude From Simulation"
 msgstr "Начертай конт.пл. на обозн. слой"
 
 #: eeschema/sch_sheet.cpp:1733 eeschema/sch_symbol.cpp:1100
-#: eeschema/sch_symbol.cpp:3041 pcbnew/footprint.cpp:4106
+#: eeschema/sch_symbol.cpp:3041 pcbnew/footprint.cpp:4116
 #, fuzzy
 msgid "Exclude From Bill of Materials"
 msgstr "Генерирай \"Таблица на използваните материали\""
 
 #: eeschema/sch_sheet.cpp:1736 eeschema/sch_symbol.cpp:1101
-#: eeschema/sch_symbol.cpp:3044 pcbnew/footprint.cpp:4109
+#: eeschema/sch_symbol.cpp:3044 pcbnew/footprint.cpp:4119
 #, fuzzy
 msgid "Do not Populate"
 msgstr "Не експортирай"
@@ -21097,7 +21097,7 @@ msgstr "Огледално по Y"
 msgid "Mirror Y"
 msgstr "Огледално по Y"
 
-#: eeschema/sch_symbol.cpp:2997 pcbnew/footprint.cpp:4083
+#: eeschema/sch_symbol.cpp:2997 pcbnew/footprint.cpp:4093
 #, fuzzy
 msgid "Library Link"
 msgstr "Библиотека"
@@ -26229,22 +26229,24 @@ msgid "Layer Selection"
 msgstr "Избор на слой:"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:170
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:254
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:248
 #, fuzzy
 msgid "Print mirrored"
 msgstr "Режим на печат"
 
-#: gerbview/dialogs/dialog_print_gerbview.cpp:179
+#: gerbview/dialogs/dialog_print_gerbview.cpp:178
+#: pcbnew/dialogs/dialog_plot_base.cpp:59
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:271
 #, fuzzy
-msgid "Included Layers"
+msgid "Include Layers"
 msgstr "Включи зони"
 
-#: gerbview/dialogs/dialog_print_gerbview.cpp:193
+#: gerbview/dialogs/dialog_print_gerbview.cpp:192
 #, fuzzy
 msgid "Select all"
 msgstr "<< Избери всички"
 
-#: gerbview/dialogs/dialog_print_gerbview.cpp:195
+#: gerbview/dialogs/dialog_print_gerbview.cpp:194
 #, fuzzy
 msgid "Deselect all"
 msgstr "<< Избери всички"
@@ -26266,7 +26268,7 @@ msgstr "Избор на слой:"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:50
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:100
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:169
-#: pcbnew/footprint.cpp:4065 pcbnew/footprint.cpp:4068
+#: pcbnew/footprint.cpp:4075 pcbnew/footprint.cpp:4078
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2137 pcbnew/pad.cpp:1303
 #: pcbnew/pad.cpp:2536 pcbnew/pcb_dimension.cpp:661
 #: pcbnew/pcb_dimension.cpp:1457 pcbnew/pcb_fields_grid_table.cpp:150
@@ -33127,7 +33129,7 @@ msgstr "Отстояния на подложки...\n"
 #: pcbnew/board.cpp:1818 pcbnew/dialogs/dialog_board_statistics.cpp:701
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:78
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:27
-#: pcbnew/footprint.cpp:1659 pcbnew/netinfo_item.cpp:108
+#: pcbnew/footprint.cpp:1669 pcbnew/netinfo_item.cpp:108
 #: pcbnew/pcb_draw_panel_gal.cpp:714 pcbnew/widgets/appearance_controls.cpp:331
 #: pcbnew/widgets/panel_selection_filter.cpp:198
 #: pcbnew/widgets/panel_selection_filter_base.cpp:45
@@ -34119,7 +34121,7 @@ msgstr "Избор на обозначение"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:154
 #: pcbnew/dialogs/dialog_render_job.cpp:41
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:117
-#: pcbnew/footprint.cpp:1671
+#: pcbnew/footprint.cpp:1681
 msgid "Front"
 msgstr "Лицев"
 
@@ -34925,7 +34927,7 @@ msgid ""
 "This setting can be overridden by local  pad settings"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4039
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4049
 #: pcbnew/pad.cpp:2521 pcbnew/zone.cpp:1829
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 #, fuzzy
@@ -37019,14 +37021,14 @@ msgstr "Компонентен отпечатък"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:193
-#: pcbnew/footprint.cpp:1317
+#: pcbnew/footprint.cpp:1327
 #, fuzzy
 msgid "Through hole"
 msgstr "Проходна връзка"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:193
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/footprint.cpp:1314
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/footprint.cpp:1324
 #: pcbnew/pad.cpp:1532 pcbnew/pad.cpp:2487
 msgid "SMD"
 msgstr "повърхностен монтаж"
@@ -39357,7 +39359,7 @@ msgid "Generate Drill Files..."
 msgstr "Създаване на файл за разпробиване"
 
 #: pcbnew/dialogs/dialog_plot.cpp:621
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:289
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:283
 #, fuzzy
 msgid "Select Fab Layers"
 msgstr "Избор на слой:"
@@ -39440,12 +39442,6 @@ msgstr "Gerber"
 msgid "Open output directory"
 msgstr "Изходна директория:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:59
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:277
-#, fuzzy
-msgid "Include Layers"
-msgstr "Включи зони"
-
 #: pcbnew/dialogs/dialog_plot_base.cpp:85
 #, fuzzy
 msgid "Indicate DNP on fabrication layers"
@@ -39502,7 +39498,7 @@ msgid "Check zone fills before plotting"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:114
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:240
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:234
 msgid "Drill marks:"
 msgstr "Маркери на отвори:"
 
@@ -39597,8 +39593,10 @@ msgid ""
 msgstr "Отвори скорошно отварян Gerber файл"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
-msgid "Remove silkscreen from areas without soldermask"
-msgstr "Премахни обозначенията от области с открита запойваща маска"
+msgid ""
+"Knock out the corresponding solder mask layer after plotting a silkscreen "
+"layer.  This will knock out all previously plotted layers."
+msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:221
 #, fuzzy
@@ -40020,52 +40018,52 @@ msgstr ""
 msgid "Position Relative To Reference Item"
 msgstr "Позиция X"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:112
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:127
 msgid "Right-click for layer selection commands."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:213
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:208
 msgid "Print according to objects tab of appearance manager"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:241
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:235
 msgid "No drill mark"
 msgstr "Не маркирай отворите"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:242
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:236
 msgid "Small mark"
 msgstr "Малък маркер"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:243
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:237
 msgid "Real drill"
 msgstr "Реален отвор"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:260
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:254
 #, fuzzy
 msgid "Print one page per layer"
 msgstr "Вътрешен слой"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:266
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:260
 #, fuzzy
 msgid "Print board edges on all pages"
 msgstr "Печат на контур на платката"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:292
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:286
 #, fuzzy
 msgid "Select all Copper Layers"
 msgstr "Покажи всички медни слоеве"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:295
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:289
 #, fuzzy
 msgid "Deselect all Copper Layers"
 msgstr "Скрий всички медни слоеве"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:298
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:292
 #, fuzzy
 msgid "Select all Layers"
 msgstr "Избор на слой:"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:301
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:295
 #, fuzzy
 msgid "Deselect all Layers"
 msgstr "Избор на слой:"
@@ -44171,7 +44169,7 @@ msgid "'%s' settings differ."
 msgstr "Брой отвори:"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:619
-#: pcbnew/footprint.cpp:4116
+#: pcbnew/footprint.cpp:4126
 msgid "Exempt From Courtyard Requirement"
 msgstr ""
 
@@ -44904,151 +44902,151 @@ msgstr ""
 msgid "Generating ODB++ output files"
 msgstr "Генерирай лист на веригите"
 
-#: pcbnew/footprint.cpp:1319
+#: pcbnew/footprint.cpp:1329
 #, fuzzy
 msgid "Other"
 msgstr "Други:"
 
-#: pcbnew/footprint.cpp:1657
+#: pcbnew/footprint.cpp:1667
 #, fuzzy
 msgid "Footprint Name"
 msgstr "Компонентен отпечатък"
 
-#: pcbnew/footprint.cpp:1661 pcbnew/footprint.cpp:1720
+#: pcbnew/footprint.cpp:1671 pcbnew/footprint.cpp:1730
 #, fuzzy, c-format
 msgid "Doc: %s"
 msgstr "Документ:"
 
-#: pcbnew/footprint.cpp:1662 pcbnew/footprint.cpp:1721
+#: pcbnew/footprint.cpp:1672 pcbnew/footprint.cpp:1731
 #, fuzzy, c-format
 msgid "Keywords: %s"
 msgstr "Ключови думи"
 
-#: pcbnew/footprint.cpp:1671 pcbnew/footprint.cpp:1672
+#: pcbnew/footprint.cpp:1681 pcbnew/footprint.cpp:1682
 #, fuzzy
 msgid "Board Side"
 msgstr "Страна:"
 
-#: pcbnew/footprint.cpp:1672
+#: pcbnew/footprint.cpp:1682
 #, fuzzy
 msgid "Back (Flipped)"
 msgstr "Обръщане на блок"
 
-#: pcbnew/footprint.cpp:1691
+#: pcbnew/footprint.cpp:1701
 #, fuzzy
 msgid "autoplaced"
 msgstr "Автом.поставяне на модул"
 
-#: pcbnew/footprint.cpp:1694
+#: pcbnew/footprint.cpp:1704
 #, fuzzy
 msgid "not in schematic"
 msgstr "Печат на схема"
 
-#: pcbnew/footprint.cpp:1697
+#: pcbnew/footprint.cpp:1707
 #, fuzzy
 msgid "exclude from pos files"
 msgstr "Начертай конт.пл. на обозн. слой"
 
-#: pcbnew/footprint.cpp:1700
+#: pcbnew/footprint.cpp:1710
 #, fuzzy
 msgid "exclude from BOM"
 msgstr "Изчистване на платката"
 
-#: pcbnew/footprint.cpp:1705
+#: pcbnew/footprint.cpp:1715
 #, fuzzy
 msgid "Status: "
 msgstr "Статус"
 
-#: pcbnew/footprint.cpp:1705
+#: pcbnew/footprint.cpp:1715
 #, fuzzy
 msgid "Attributes:"
 msgstr "Атрибути:"
 
-#: pcbnew/footprint.cpp:1712 pcbnew/footprint.cpp:4095 pcbnew/zone.cpp:1861
+#: pcbnew/footprint.cpp:1722 pcbnew/footprint.cpp:4105 pcbnew/zone.cpp:1861
 #, fuzzy
 msgid "Component Class"
 msgstr "Компоненти"
 
-#: pcbnew/footprint.cpp:1716
+#: pcbnew/footprint.cpp:1726
 #, fuzzy, c-format
 msgid "3D-Shape: %s"
 msgstr "3D форма"
 
-#: pcbnew/footprint.cpp:1716
+#: pcbnew/footprint.cpp:1726
 #, fuzzy
 msgid "<none>"
 msgstr "без име"
 
-#: pcbnew/footprint.cpp:2131
+#: pcbnew/footprint.cpp:2141
 #, fuzzy
 msgid "<no reference designator>"
 msgstr "Обозначение по подразбиране:"
 
-#: pcbnew/footprint.cpp:2133
+#: pcbnew/footprint.cpp:2143
 #, fuzzy, c-format
 msgid "Footprint %s"
 msgstr "Комп.отп.:"
 
-#: pcbnew/footprint.cpp:3273
+#: pcbnew/footprint.cpp:3283
 #, fuzzy, c-format
 msgid "(expected 'Through hole'; actual '%s')"
 msgstr "Прем.прох.отв.:"
 
-#: pcbnew/footprint.cpp:3276
+#: pcbnew/footprint.cpp:3286
 #, fuzzy, c-format
 msgid "(expected 'SMD'; actual '%s')"
 msgstr "Локална стойност на отст. на маската:"
 
-#: pcbnew/footprint.cpp:3497
+#: pcbnew/footprint.cpp:3507
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
 msgstr ""
 
-#: pcbnew/footprint.cpp:3502
+#: pcbnew/footprint.cpp:3512
 #, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr ""
 
-#: pcbnew/footprint.cpp:4037 pcbnew/pad.cpp:2519 pcbnew/zone.cpp:1827
+#: pcbnew/footprint.cpp:4047 pcbnew/pad.cpp:2519 pcbnew/zone.cpp:1827
 msgid "Inherited"
 msgstr ""
 
-#: pcbnew/footprint.cpp:4041 pcbnew/pad.cpp:2523 pcbnew/zone.cpp:1831
+#: pcbnew/footprint.cpp:4051 pcbnew/pad.cpp:2523 pcbnew/zone.cpp:1831
 #, fuzzy
 msgid "Thermal reliefs for PTH"
 msgstr "Термично облекчение"
 
-#: pcbnew/footprint.cpp:4101
+#: pcbnew/footprint.cpp:4111
 #, fuzzy
 msgid "Not in Schematic"
 msgstr "Печат на схема"
 
-#: pcbnew/footprint.cpp:4103
+#: pcbnew/footprint.cpp:4113
 #, fuzzy
 msgid "Exclude From Position Files"
 msgstr "Начертай конт.пл. на обозн. слой"
 
-#: pcbnew/footprint.cpp:4113 pcbnew/pad.cpp:2688
+#: pcbnew/footprint.cpp:4123 pcbnew/pad.cpp:2688
 #, fuzzy
 msgid "Overrides"
 msgstr "Скрит текст"
 
-#: pcbnew/footprint.cpp:4120 pcbnew/pad.cpp:2691
+#: pcbnew/footprint.cpp:4130 pcbnew/pad.cpp:2691
 #, fuzzy
 msgid "Clearance Override"
 msgstr "Отстояние:"
 
-#: pcbnew/footprint.cpp:4125 pcbnew/pad.cpp:2701
+#: pcbnew/footprint.cpp:4135 pcbnew/pad.cpp:2701
 #, fuzzy
 msgid "Solderpaste Margin Override"
 msgstr "Отстояние на припойната замаска"
 
-#: pcbnew/footprint.cpp:4130 pcbnew/pad.cpp:2706
+#: pcbnew/footprint.cpp:4140 pcbnew/pad.cpp:2706
 #, fuzzy
 msgid "Solderpaste Margin Ratio Override"
 msgstr "Отстояние на припойната замаска"
 
-#: pcbnew/footprint.cpp:4136 pcbnew/pad.cpp:2712
+#: pcbnew/footprint.cpp:4146 pcbnew/pad.cpp:2712
 #, fuzzy
 msgid "Zone Connection Style"
 msgstr "Несвързан"
@@ -54787,6 +54785,13 @@ msgstr "Печат на схемата"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Текстов редактор"
+
+#, fuzzy
+#~ msgid "Included Layers"
+#~ msgstr "Включи зони"
+
+#~ msgid "Remove silkscreen from areas without soldermask"
+#~ msgstr "Премахни обозначенията от области с открита запойваща маска"
 
 #, fuzzy
 #~ msgid "Fetching design_block libraries..."

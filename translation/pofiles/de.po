@@ -29,11 +29,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-03 19:59+0300\n"
+"POT-Creation-Date: 2025-02-05 02:27+0300\n"
 "PO-Revision-Date: 2025-02-04 09:03+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
-"master-source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
+"source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -369,8 +369,8 @@ msgstr "Unzureichende Berechtigungen zum Speichern der Datei \"%s\"."
 #: common/dialogs/panel_embedded_files.cpp:457
 #: common/dialogs/panel_setup_severities.cpp:44 common/kidialog.cpp:126
 #: eeschema/dialogs/dialog_erc.cpp:878
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1812
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2214
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1813
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2215
 #: eeschema/erc/erc_item.cpp:84 eeschema/files-io.cpp:943
 #: eeschema/files-io.cpp:1011 eeschema/sch_marker.cpp:374
 #: kicad/import_proj.cpp:79 kicad/import_project.cpp:123 kicad/kicad.cpp:318
@@ -873,15 +873,15 @@ msgid "Presets (%s+Tab):"
 msgstr "Voreinstellungen (%s+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:647
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1644
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2078
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1645
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2079
 #: pcbnew/widgets/appearance_controls.cpp:2632
 msgid "Save preset..."
 msgstr "Voreinstellung speichern..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:648
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1645
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2079
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1646
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2080
 #: pcbnew/widgets/appearance_controls.cpp:2633
 msgid "Delete preset..."
 msgstr "Voreinstellung löschen..."
@@ -897,29 +897,29 @@ msgid "Save Layer Preset"
 msgstr "Lagen-Voreinstellung speichern"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:770
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1819
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2221
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1820
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2222
 #: pcbnew/widgets/appearance_controls.cpp:2772
 msgid "Overwrite existing preset?"
 msgstr "Bestehende Voreinstellung überschreiben?"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:796
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1844
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2246
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1845
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2247
 #: pcbnew/widgets/appearance_controls.cpp:2798
 msgid "Presets"
 msgstr "Voreinstellungen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:805
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1856
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2258
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1857
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2259
 #: pcbnew/widgets/appearance_controls.cpp:2810
 msgid "Delete Preset"
 msgstr "Voreinstellung löschen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:806
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1857
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2259
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1858
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2260
 #: pcbnew/widgets/appearance_controls.cpp:2811
 msgid "Select preset:"
 msgstr "Voreinstellung wählen:"
@@ -1339,7 +1339,7 @@ msgid "Z:"
 msgstr "Z:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:68
-#: gerbview/gerber_draw_item.cpp:722 pcbnew/footprint.cpp:1707
+#: gerbview/gerber_draw_item.cpp:722 pcbnew/footprint.cpp:1717
 #: pcbnew/pad.cpp:1361
 msgid "Rotation"
 msgstr "Drehung"
@@ -3313,7 +3313,7 @@ msgstr "Option"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:169
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:48
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:57
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:439 pcbnew/footprint.cpp:4079
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:439 pcbnew/footprint.cpp:4089
 #: pcbnew/footprint_wizard_frame.cpp:326 pcbnew/pcb_dimension.cpp:605
 #: pcbnew/pcb_fields_grid_table.cpp:144 pcbnew/plot_board_layers.cpp:107
 #: pcbnew/widgets/search_handlers.cpp:119
@@ -3653,7 +3653,7 @@ msgstr "Test"
 
 #: common/dialogs/git/dialog_git_auth.cpp:53
 #: common/dialogs/git/dialog_git_commit.cpp:142
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1344
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1345
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:147
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout.cpp:78
 #: pcbnew/tools/multichannel_tool.cpp:972
@@ -3665,7 +3665,7 @@ msgstr "OK"
 #: common/dialogs/git/dialog_git_switch.cpp:69
 #: common/dialogs/panel_embedded_files.cpp:417 common/tool/actions.cpp:159
 #: eeschema/dialogs/dialog_erc.cpp:426
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1344 eeschema/sheet.cpp:783
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1345 eeschema/sheet.cpp:783
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:962
 #: eeschema/symbol_editor/symbol_editor.cpp:1020
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:151
@@ -5122,7 +5122,7 @@ msgstr "Zoom"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1099
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:583
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:854
-#: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4038
+#: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4048
 #: pcbnew/pad.cpp:2501 pcbnew/pad.cpp:2520 pcbnew/pcb_dimension.cpp:1973
 #: pcbnew/widgets/appearance_controls.cpp:729
 #: pcbnew/widgets/appearance_controls.cpp:771
@@ -5358,7 +5358,7 @@ msgstr "<Nicht definiert>"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:854 pcbnew/footprint.cpp:4040
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:854 pcbnew/footprint.cpp:4050
 #: pcbnew/pad.cpp:2522 pcbnew/pcb_table.cpp:533 pcbnew/pcb_textbox.cpp:795
 #: pcbnew/zone.cpp:857 pcbnew/zone.cpp:1830
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
@@ -6636,7 +6636,7 @@ msgstr "Unten"
 #: eeschema/sch_text.cpp:783 eeschema/sch_textbox.cpp:714
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
-#: pcbnew/footprint.cpp:4070 pcbnew/pad.cpp:2539 pcbnew/pcb_dimension.cpp:1756
+#: pcbnew/footprint.cpp:4080 pcbnew/pad.cpp:2539 pcbnew/pcb_dimension.cpp:1756
 #: pcbnew/pcb_dimension.cpp:1831 pcbnew/pcb_fields_grid_table.cpp:151
 #: pcbnew/pcb_tablecell.cpp:207 pcbnew/zone.cpp:2001
 msgid "Orientation"
@@ -8486,7 +8486,7 @@ msgstr "Standardbearbeitung"
 #: eeschema/dialogs/dialog_sim_model_base.cpp:271 eeschema/sch_symbol.cpp:2058
 #: eeschema/sch_symbol.cpp:2110 eeschema/sch_symbol.cpp:2991
 #: eeschema/widgets/search_handlers.cpp:160
-#: eeschema/widgets/search_handlers.cpp:246 pcbnew/footprint.cpp:4076
+#: eeschema/widgets/search_handlers.cpp:246 pcbnew/footprint.cpp:4086
 #: pcbnew/widgets/search_handlers.cpp:118
 msgid "Reference"
 msgstr "Referenz"
@@ -8508,7 +8508,7 @@ msgstr "Nach Wert und Footprint gruppieren"
 #: eeschema/tools/sch_edit_tool.cpp:551
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:179
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
-#: pcbnew/footprint.cpp:4099
+#: pcbnew/footprint.cpp:4109
 msgid "Attributes"
 msgstr "Attribute"
 
@@ -9693,7 +9693,7 @@ msgstr "Platine"
 #: common/widgets/footprint_diff_widget.cpp:42 cvpcb/cvpcb_mainframe.cpp:814
 #: eeschema/sch_base_frame.cpp:593 eeschema/sch_symbol.cpp:2086
 #: eeschema/sch_symbol.cpp:2090 eeschema/sch_symbol.cpp:2125
-#: eeschema/widgets/symbol_diff_widget.cpp:45 pcbnew/footprint.cpp:1655
+#: eeschema/widgets/symbol_diff_widget.cpp:45 pcbnew/footprint.cpp:1665
 msgid "Library"
 msgstr "Bibliothek"
 
@@ -10416,7 +10416,7 @@ msgstr "\"%s\" ist kein gültiger Footprint."
 #: eeschema/generate_alias_info.cpp:39 eeschema/sch_symbol.cpp:2105
 #: eeschema/sch_symbol.cpp:2678 eeschema/sch_symbol.cpp:3003
 #: eeschema/symbol_editor/symbol_editor.cpp:1629
-#: eeschema/symbol_viewer_frame.cpp:462 pcbnew/footprint.cpp:4089
+#: eeschema/symbol_viewer_frame.cpp:462 pcbnew/footprint.cpp:4099
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:133
 msgid "Keywords"
 msgstr "Schlüsselwörter"
@@ -10573,7 +10573,7 @@ msgstr "Footprint \"%s\" nicht gefunden."
 msgid "Error loading footprint"
 msgstr "Fehler beim Laden des Footprints"
 
-#: cvpcb/display_footprints_frame.cpp:508 pcbnew/footprint.cpp:1715
+#: cvpcb/display_footprints_frame.cpp:508 pcbnew/footprint.cpp:1725
 #, c-format
 msgid "Footprint: %s"
 msgstr "Footprint: %s"
@@ -10937,7 +10937,7 @@ msgid "Enter a description for the library:"
 msgstr "Geben Sie eine Beschreibung für die Bibliothek ein:"
 
 #: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:3000
-#: pcbnew/footprint.cpp:4086 pcbnew/plot_board_layers.cpp:129
+#: pcbnew/footprint.cpp:4096 pcbnew/plot_board_layers.cpp:129
 msgid "Library Description"
 msgstr "Bibliotheksbeschreibung"
 
@@ -12696,7 +12696,7 @@ msgstr "Syntaxhilfe-Fenster anzeigen"
 #: eeschema/sch_symbol.cpp:2989
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:28
-#: pcbnew/footprint.cpp:4074
+#: pcbnew/footprint.cpp:4084
 msgid "Fields"
 msgstr "Felder"
 
@@ -12908,7 +12908,7 @@ msgid "Read Only"
 msgstr "Schreibgeschützt"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1222
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1492
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1493
 msgid "Save changes?"
 msgstr "Änderungen speichern?"
 
@@ -13529,7 +13529,7 @@ msgid "Select Output Directory"
 msgstr "Ausgabeverzeichnis wählen"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:271
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1319
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1320
 #: pcbnew/dialogs/dialog_gendrill.cpp:338 pcbnew/dialogs/dialog_plot.cpp:803
 #, c-format
 msgid ""
@@ -15038,65 +15038,65 @@ msgstr "Bezeichner"
 msgid "Group By"
 msgstr "Gruppieren nach"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:698
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:699
 msgid "Qty"
 msgstr "Menge"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:699
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:700
 msgid "#"
 msgstr "#"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:733
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:827
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:734
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:828
 msgid "New field name:"
 msgstr "Neuer Feldname:"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:733
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:734
 msgid "Add Field"
 msgstr "Feld hinzufügen"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:742
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:743
 msgid "Field must have a name."
 msgstr "Feld muss einen Namen haben."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:750
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:751
 #: eeschema/dialogs/dialog_symbol_properties.cpp:811
 #, c-format
 msgid "Field name '%s' already in use."
 msgstr "Feldname \"%s\" wird bereits verwendet."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:778
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:779
 #, c-format
 msgid "Are you sure you want to remove the field '%s'?"
 msgstr "Sind Sie sicher, dass Sie das Feld \"%s\" entfernen möchten?"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:827
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:828
 msgid "Rename Field"
 msgstr "Feld umbenennen"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:841
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:842
 #, c-format
 msgid "Field name %s already exists."
 msgstr "Feldname %s ist bereits vorhanden."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:935
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:936
 msgid "The Quantity column cannot be grouped by."
 msgstr "Die Menge kann nicht für die Gruppierung verwendet werden."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:943
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:944
 msgid "The Item Number column cannot be grouped by."
 msgstr "Die Elementnummer kann nicht für die Gruppierung verwendet werden."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1309
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1310
 msgid "Bill of Materials Output File"
 msgstr "Stückliste-Ausgabedatei"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1321
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1330
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1322
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1331
 msgid "BOM Output File"
 msgstr "Stückliste-Ausgabedatei"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1328
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1329
 msgid ""
 "Cannot make path relative (target volume different from schematic file "
 "volume)!"
@@ -15104,51 +15104,51 @@ msgstr ""
 "Kann keinen relativen Pfadnamen erstellen (unterschiedliche Datenträger für "
 "Ziel und Schaltplandatei)!"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1342
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1343
 msgid "Unsaved data"
 msgstr "Nicht gespeicherte Daten"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1343
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1344
 msgid "Changes have not yet been saved. Export unsaved data?"
 msgstr ""
 "Änderungen wurden noch nicht gespeichert. Ungespeicherte Daten exportieren?"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1367
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1368
 msgid "No output file specified in Export tab."
 msgstr "Kein Ausgabedateiname im Exporttab angegeben."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1381
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1382
 #, c-format
 msgid "Could not open/create path '%s'."
 msgstr "Konnte Pfad \"%s\" nicht öffnen/erstellen."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1390
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1391
 #, c-format
 msgid "Could not create BOM output '%s'."
 msgstr "Konnte Stückliste-Ausgabe \"%s\" nicht erstellen."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1399
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1400
 #, c-format
 msgid "Could not write BOM output '%s'."
 msgstr "Konnte Stückliste-Ausgabe \"%s\" nicht schreiben."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1406
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1407
 #, c-format
 msgid "Wrote BOM output to '%s'"
 msgstr "Stückliste wurde in \"%s\" geschrieben"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1785
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2187
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1786
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2188
 msgid "BOM preset name:"
 msgstr "Name der Stückliste-Voreinstellung:"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1785
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2187
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1786
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2188
 msgid "Save BOM Preset"
 msgstr "Stückliste-Voreinstellung speichern"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1811
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2213
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1812
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2214
 #: pcbnew/widgets/appearance_controls.cpp:2764
 msgid ""
 "Default presets cannot be modified.\n"
@@ -17749,7 +17749,7 @@ msgstr "Von Simulation ausgeschlossen"
 #: eeschema/lib_symbol.cpp:591 eeschema/sch_sheet.cpp:336
 #: eeschema/sch_sheet.cpp:880 eeschema/sch_symbol.cpp:1620
 #: eeschema/sch_symbol.cpp:2036 eeschema/widgets/search_handlers.cpp:169
-#: pcbnew/footprint.cpp:1703
+#: pcbnew/footprint.cpp:1713
 msgid "DNP"
 msgstr "Nicht bestücken"
 
@@ -18178,12 +18178,12 @@ msgid "Print (or not) the Frame references."
 msgstr "Drucke die Seitenreferenzen (oder nicht)."
 
 #: eeschema/printing/dialog_print_base.cpp:44
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:217
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:213
 msgid "Print background color"
 msgstr "Hintergrundfarbe drucken"
 
 #: eeschema/printing/dialog_print_base.cpp:50
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:222
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:217
 msgid "Use a different color theme for printing:"
 msgstr "Anderes Farbthema zum Drucken verwenden:"
 
@@ -19391,7 +19391,7 @@ msgstr "Symbolform"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:83
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:73
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:58
-#: pcbnew/footprint.cpp:1688 pcbnew/pad.cpp:1299 pcbnew/pad.cpp:2537
+#: pcbnew/footprint.cpp:1698 pcbnew/pad.cpp:1299 pcbnew/pad.cpp:2537
 #: pcbnew/pcb_dimension.cpp:659 pcbnew/pcb_group.cpp:396
 #: pcbnew/pcb_marker.cpp:381 pcbnew/pcb_shape.cpp:642
 #: pcbnew/pcb_tablecell.cpp:106 pcbnew/pcb_text.cpp:279
@@ -19780,12 +19780,12 @@ msgid "Exclude From Simulation"
 msgstr "Von Simulation ausschließen"
 
 #: eeschema/sch_sheet.cpp:1733 eeschema/sch_symbol.cpp:1100
-#: eeschema/sch_symbol.cpp:3041 pcbnew/footprint.cpp:4106
+#: eeschema/sch_symbol.cpp:3041 pcbnew/footprint.cpp:4116
 msgid "Exclude From Bill of Materials"
 msgstr "Von Stückliste ausschließen"
 
 #: eeschema/sch_sheet.cpp:1736 eeschema/sch_symbol.cpp:1101
-#: eeschema/sch_symbol.cpp:3044 pcbnew/footprint.cpp:4109
+#: eeschema/sch_symbol.cpp:3044 pcbnew/footprint.cpp:4119
 msgid "Do not Populate"
 msgstr "Nicht bestücken"
 
@@ -19840,7 +19840,7 @@ msgstr "Horiz. spiegeln"
 msgid "Mirror Y"
 msgstr "Spiegeln Y"
 
-#: eeschema/sch_symbol.cpp:2997 pcbnew/footprint.cpp:4083
+#: eeschema/sch_symbol.cpp:2997 pcbnew/footprint.cpp:4093
 msgid "Library Link"
 msgstr "Bibliotheksverknüpfung"
 
@@ -24723,19 +24723,21 @@ msgid "Layer Selection"
 msgstr "Lagenauswahl"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:170
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:254
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:248
 msgid "Print mirrored"
 msgstr "Gespiegelt drucken"
 
-#: gerbview/dialogs/dialog_print_gerbview.cpp:179
-msgid "Included Layers"
-msgstr "Beinhaltende Lagen"
+#: gerbview/dialogs/dialog_print_gerbview.cpp:178
+#: pcbnew/dialogs/dialog_plot_base.cpp:59
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:271
+msgid "Include Layers"
+msgstr "Lagenauswahl"
 
-#: gerbview/dialogs/dialog_print_gerbview.cpp:193
+#: gerbview/dialogs/dialog_print_gerbview.cpp:192
 msgid "Select all"
 msgstr "Alles auswählen"
 
-#: gerbview/dialogs/dialog_print_gerbview.cpp:195
+#: gerbview/dialogs/dialog_print_gerbview.cpp:194
 msgid "Deselect all"
 msgstr "Alle abwählen"
 
@@ -24756,7 +24758,7 @@ msgstr "Wähle Lage: %s"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:50
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:100
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:169
-#: pcbnew/footprint.cpp:4065 pcbnew/footprint.cpp:4068
+#: pcbnew/footprint.cpp:4075 pcbnew/footprint.cpp:4078
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2137 pcbnew/pad.cpp:1303
 #: pcbnew/pad.cpp:2536 pcbnew/pcb_dimension.cpp:661
 #: pcbnew/pcb_dimension.cpp:1457 pcbnew/pcb_fields_grid_table.cpp:150
@@ -31298,7 +31300,7 @@ msgstr "Tesseliere Kupferzonen..."
 #: pcbnew/board.cpp:1818 pcbnew/dialogs/dialog_board_statistics.cpp:701
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:78
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:27
-#: pcbnew/footprint.cpp:1659 pcbnew/netinfo_item.cpp:108
+#: pcbnew/footprint.cpp:1669 pcbnew/netinfo_item.cpp:108
 #: pcbnew/pcb_draw_panel_gal.cpp:714 pcbnew/widgets/appearance_controls.cpp:331
 #: pcbnew/widgets/panel_selection_filter.cpp:198
 #: pcbnew/widgets/panel_selection_filter_base.cpp:45
@@ -32261,7 +32263,7 @@ msgstr "Geltungsbereich der Neu-Annotierung"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:154
 #: pcbnew/dialogs/dialog_render_job.cpp:41
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:117
-#: pcbnew/footprint.cpp:1671
+#: pcbnew/footprint.cpp:1681
 msgid "Front"
 msgstr "Vorderseite"
 
@@ -33004,7 +33006,7 @@ msgstr ""
 "Standard-Padverbindungtyp zur Zone.\n"
 "Diese Einstellung kann durch lokale Pad-Einstellungen überschrieben werden"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4039
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4049
 #: pcbnew/pad.cpp:2521 pcbnew/zone.cpp:1829
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Thermal reliefs"
@@ -34915,13 +34917,13 @@ msgstr "Footprint-Typ:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:193
-#: pcbnew/footprint.cpp:1317
+#: pcbnew/footprint.cpp:1327
 msgid "Through hole"
 msgstr "Durchsteckmontage"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:193
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/footprint.cpp:1314
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/footprint.cpp:1324
 #: pcbnew/pad.cpp:1532 pcbnew/pad.cpp:2487
 msgid "SMD"
 msgstr "SMD"
@@ -37071,7 +37073,7 @@ msgid "Generate Drill Files..."
 msgstr "Bohrdateien erzeugen..."
 
 #: pcbnew/dialogs/dialog_plot.cpp:621
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:289
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:283
 msgid "Select Fab Layers"
 msgstr "Fabrikationslage auswählen"
 
@@ -37145,11 +37147,6 @@ msgstr "Gerber"
 msgid "Open output directory"
 msgstr "Ausgabeverzeichnis öffnen"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:59
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:277
-msgid "Include Layers"
-msgstr "Lagenauswahl"
-
 #: pcbnew/dialogs/dialog_plot_base.cpp:85
 msgid "Indicate DNP on fabrication layers"
 msgstr "Nicht zu bestückende Bauteile Fabrikationslagen markieren"
@@ -37201,7 +37198,7 @@ msgid "Check zone fills before plotting"
 msgstr "Füllung von Kupferzonen vor dem Plotten prüfen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:114
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:240
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:234
 msgid "Drill marks:"
 msgstr "Bohrlochmarkierungen:"
 
@@ -37299,8 +37296,10 @@ msgstr ""
 "als auch die Liste der erstellten Gerber-Plotdateien"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
-msgid "Remove silkscreen from areas without soldermask"
-msgstr "Entfernt Bestückungsdruck aus Bereichen ohne Lötstopplack"
+msgid ""
+"Knock out the corresponding solder mask layer after plotting a silkscreen "
+"layer.  This will knock out all previously plotted layers."
+msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:221
 msgid "Coordinate format:"
@@ -37718,47 +37717,47 @@ msgstr ""
 msgid "Position Relative To Reference Item"
 msgstr "Positioniere relativ zum Referenelement"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:112
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:127
 msgid "Right-click for layer selection commands."
 msgstr "Rechts klicken für Befehle zur Lagenauswahl."
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:213
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:208
 msgid "Print according to objects tab of appearance manager"
 msgstr "Gemäß der Registerkarte \"Objekte\" der Darstellungsverwaltung drucken"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:241
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:235
 msgid "No drill mark"
 msgstr "Keine Bohrlochmarkierung"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:242
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:236
 msgid "Small mark"
 msgstr "Kleine Bohrlochmarkierung"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:243
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:237
 msgid "Real drill"
 msgstr "Realer Bohrdurchmesser"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:260
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:254
 msgid "Print one page per layer"
 msgstr "Eine Seite pro Lage drucken"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:266
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:260
 msgid "Print board edges on all pages"
 msgstr "Platinenumriss auf allen Seiten drucken"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:292
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:286
 msgid "Select all Copper Layers"
 msgstr "Alle Kupferlagen auswählen"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:295
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:289
 msgid "Deselect all Copper Layers"
 msgstr "Alle Kupferlagen abwählen"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:298
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:292
 msgid "Select all Layers"
 msgstr "Alle Lagen auswählen"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:301
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:295
 msgid "Deselect all Layers"
 msgstr "Alle Lagen abwählen"
 
@@ -42172,7 +42171,7 @@ msgid "'%s' settings differ."
 msgstr "\"%s\" Einstellungen weichen ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:619
-#: pcbnew/footprint.cpp:4116
+#: pcbnew/footprint.cpp:4126
 msgid "Exempt From Courtyard Requirement"
 msgstr "Keine Abstandsfläche erforderlich"
 
@@ -42886,131 +42885,131 @@ msgstr ""
 msgid "Generating ODB++ output files"
 msgstr "Erzeuge ODB++-Ausgabedatei"
 
-#: pcbnew/footprint.cpp:1319
+#: pcbnew/footprint.cpp:1329
 msgid "Other"
 msgstr "Sonstige"
 
-#: pcbnew/footprint.cpp:1657
+#: pcbnew/footprint.cpp:1667
 msgid "Footprint Name"
 msgstr "Footprintname"
 
-#: pcbnew/footprint.cpp:1661 pcbnew/footprint.cpp:1720
+#: pcbnew/footprint.cpp:1671 pcbnew/footprint.cpp:1730
 #, c-format
 msgid "Doc: %s"
 msgstr "Beschreibung: %s"
 
-#: pcbnew/footprint.cpp:1662 pcbnew/footprint.cpp:1721
+#: pcbnew/footprint.cpp:1672 pcbnew/footprint.cpp:1731
 #, c-format
 msgid "Keywords: %s"
 msgstr "Schlüsselwörter: %s"
 
-#: pcbnew/footprint.cpp:1671 pcbnew/footprint.cpp:1672
+#: pcbnew/footprint.cpp:1681 pcbnew/footprint.cpp:1682
 msgid "Board Side"
 msgstr "Platinenseite"
 
-#: pcbnew/footprint.cpp:1672
+#: pcbnew/footprint.cpp:1682
 msgid "Back (Flipped)"
 msgstr "Rückseite (gedreht)"
 
-#: pcbnew/footprint.cpp:1691
+#: pcbnew/footprint.cpp:1701
 msgid "autoplaced"
 msgstr "autoplatziert"
 
-#: pcbnew/footprint.cpp:1694
+#: pcbnew/footprint.cpp:1704
 msgid "not in schematic"
 msgstr "nicht im Schaltplan"
 
-#: pcbnew/footprint.cpp:1697
+#: pcbnew/footprint.cpp:1707
 msgid "exclude from pos files"
 msgstr "aus pos-Dateien ausschließen"
 
-#: pcbnew/footprint.cpp:1700
+#: pcbnew/footprint.cpp:1710
 msgid "exclude from BOM"
 msgstr "von Stückliste ausschließen"
 
-#: pcbnew/footprint.cpp:1705
+#: pcbnew/footprint.cpp:1715
 msgid "Status: "
 msgstr "Status: "
 
-#: pcbnew/footprint.cpp:1705
+#: pcbnew/footprint.cpp:1715
 msgid "Attributes:"
 msgstr "Attribute:"
 
-#: pcbnew/footprint.cpp:1712 pcbnew/footprint.cpp:4095 pcbnew/zone.cpp:1861
+#: pcbnew/footprint.cpp:1722 pcbnew/footprint.cpp:4105 pcbnew/zone.cpp:1861
 msgid "Component Class"
 msgstr "Bauteilklasse"
 
-#: pcbnew/footprint.cpp:1716
+#: pcbnew/footprint.cpp:1726
 #, c-format
 msgid "3D-Shape: %s"
 msgstr "3D-Form: %s"
 
-#: pcbnew/footprint.cpp:1716
+#: pcbnew/footprint.cpp:1726
 msgid "<none>"
 msgstr "<keine>"
 
-#: pcbnew/footprint.cpp:2131
+#: pcbnew/footprint.cpp:2141
 msgid "<no reference designator>"
 msgstr "<kein Referenzbezeichner>"
 
-#: pcbnew/footprint.cpp:2133
+#: pcbnew/footprint.cpp:2143
 #, c-format
 msgid "Footprint %s"
 msgstr "Footprint %s"
 
-#: pcbnew/footprint.cpp:3273
+#: pcbnew/footprint.cpp:3283
 #, c-format
 msgid "(expected 'Through hole'; actual '%s')"
 msgstr "(\"Durchsteckmontage\" erwartet; tatsächlich \"%s\")"
 
-#: pcbnew/footprint.cpp:3276
+#: pcbnew/footprint.cpp:3286
 #, c-format
 msgid "(expected 'SMD'; actual '%s')"
 msgstr "(\"SMD\" erwartet; tatsächlich \"%s\")"
 
-#: pcbnew/footprint.cpp:3497
+#: pcbnew/footprint.cpp:3507
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
 msgstr "(Netzverbund-Padgruppe enthält unbekannte Padnummer %s)"
 
-#: pcbnew/footprint.cpp:3502
+#: pcbnew/footprint.cpp:3512
 #, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr "(Pad %s erscheint in mehr als einer Netzverbund-Padgruppe)"
 
-#: pcbnew/footprint.cpp:4037 pcbnew/pad.cpp:2519 pcbnew/zone.cpp:1827
+#: pcbnew/footprint.cpp:4047 pcbnew/pad.cpp:2519 pcbnew/zone.cpp:1827
 msgid "Inherited"
 msgstr "Vererbt"
 
-#: pcbnew/footprint.cpp:4041 pcbnew/pad.cpp:2523 pcbnew/zone.cpp:1831
+#: pcbnew/footprint.cpp:4051 pcbnew/pad.cpp:2523 pcbnew/zone.cpp:1831
 msgid "Thermal reliefs for PTH"
 msgstr "Thermische Entlastungen für PTH"
 
-#: pcbnew/footprint.cpp:4101
+#: pcbnew/footprint.cpp:4111
 msgid "Not in Schematic"
 msgstr "Nicht im Schaltplan"
 
-#: pcbnew/footprint.cpp:4103
+#: pcbnew/footprint.cpp:4113
 msgid "Exclude From Position Files"
 msgstr "Von Positionsdateien ausschließen"
 
-#: pcbnew/footprint.cpp:4113 pcbnew/pad.cpp:2688
+#: pcbnew/footprint.cpp:4123 pcbnew/pad.cpp:2688
 msgid "Overrides"
 msgstr "Überschreibungen"
 
-#: pcbnew/footprint.cpp:4120 pcbnew/pad.cpp:2691
+#: pcbnew/footprint.cpp:4130 pcbnew/pad.cpp:2691
 msgid "Clearance Override"
 msgstr "Überschreibung des Freiraums"
 
-#: pcbnew/footprint.cpp:4125 pcbnew/pad.cpp:2701
+#: pcbnew/footprint.cpp:4135 pcbnew/pad.cpp:2701
 msgid "Solderpaste Margin Override"
 msgstr "Überschreibung des Lötpastenrands"
 
-#: pcbnew/footprint.cpp:4130 pcbnew/pad.cpp:2706
+#: pcbnew/footprint.cpp:4140 pcbnew/pad.cpp:2706
 msgid "Solderpaste Margin Ratio Override"
 msgstr "Überschreibung des Lötpastenrand-Verhältnisses"
 
-#: pcbnew/footprint.cpp:4136 pcbnew/pad.cpp:2712
+#: pcbnew/footprint.cpp:4146 pcbnew/pad.cpp:2712
 msgid "Zone Connection Style"
 msgstr "Zonenverbindungsstil"
 
@@ -52143,6 +52142,12 @@ msgstr "KiCad Schaltplansymbol"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Zeichnungsblatt"
+
+#~ msgid "Included Layers"
+#~ msgstr "Beinhaltende Lagen"
+
+#~ msgid "Remove silkscreen from areas without soldermask"
+#~ msgstr "Entfernt Bestückungsdruck aus Bereichen ohne Lötstopplack"
 
 #~ msgid "Fetching design_block libraries..."
 #~ msgstr "Designblock-Bibliotheken werden geladen..."

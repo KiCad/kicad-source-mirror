@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-03 19:59+0300\n"
+"POT-Creation-Date: 2025-02-05 02:27+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
@@ -341,8 +341,8 @@ msgstr "Nedostatočné oprávnenia na uloženie súboru '%s'."
 #: common/dialogs/panel_embedded_files.cpp:457
 #: common/dialogs/panel_setup_severities.cpp:44 common/kidialog.cpp:126
 #: eeschema/dialogs/dialog_erc.cpp:878
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1812
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2214
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1813
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2215
 #: eeschema/erc/erc_item.cpp:84 eeschema/files-io.cpp:943
 #: eeschema/files-io.cpp:1011 eeschema/sch_marker.cpp:374
 #: kicad/import_proj.cpp:79 kicad/import_project.cpp:123 kicad/kicad.cpp:318
@@ -836,15 +836,15 @@ msgid "Presets (%s+Tab):"
 msgstr "Prednastavuje (%s+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:647
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1644
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2078
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1645
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2079
 #: pcbnew/widgets/appearance_controls.cpp:2632
 msgid "Save preset..."
 msgstr "Uložiť predvoľbu..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:648
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1645
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2079
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1646
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2080
 #: pcbnew/widgets/appearance_controls.cpp:2633
 msgid "Delete preset..."
 msgstr "Odstrániť predvoľbu..."
@@ -860,29 +860,29 @@ msgid "Save Layer Preset"
 msgstr "Uložiť predvoľbu vrstvy"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:770
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1819
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2221
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1820
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2222
 #: pcbnew/widgets/appearance_controls.cpp:2772
 msgid "Overwrite existing preset?"
 msgstr "Prepísať existujúce prednastavenie?"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:796
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1844
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2246
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1845
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2247
 #: pcbnew/widgets/appearance_controls.cpp:2798
 msgid "Presets"
 msgstr "Predvoľby"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:805
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1856
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2258
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1857
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2259
 #: pcbnew/widgets/appearance_controls.cpp:2810
 msgid "Delete Preset"
 msgstr "Odstrániť predvoľbu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:806
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1857
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2259
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1858
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2260
 #: pcbnew/widgets/appearance_controls.cpp:2811
 msgid "Select preset:"
 msgstr "Vybrať predvoľbu:"
@@ -1297,7 +1297,7 @@ msgid "Z:"
 msgstr "Z:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:68
-#: gerbview/gerber_draw_item.cpp:722 pcbnew/footprint.cpp:1707
+#: gerbview/gerber_draw_item.cpp:722 pcbnew/footprint.cpp:1717
 #: pcbnew/pad.cpp:1361
 msgid "Rotation"
 msgstr "Rotácia"
@@ -3255,7 +3255,7 @@ msgstr "Voľba"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:169
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:48
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:57
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:439 pcbnew/footprint.cpp:4079
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:439 pcbnew/footprint.cpp:4089
 #: pcbnew/footprint_wizard_frame.cpp:326 pcbnew/pcb_dimension.cpp:605
 #: pcbnew/pcb_fields_grid_table.cpp:144 pcbnew/plot_board_layers.cpp:107
 #: pcbnew/widgets/search_handlers.cpp:119
@@ -3597,7 +3597,7 @@ msgstr "Test"
 
 #: common/dialogs/git/dialog_git_auth.cpp:53
 #: common/dialogs/git/dialog_git_commit.cpp:142
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1344
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1345
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:147
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout.cpp:78
 #: pcbnew/tools/multichannel_tool.cpp:972
@@ -3609,7 +3609,7 @@ msgstr "OK"
 #: common/dialogs/git/dialog_git_switch.cpp:69
 #: common/dialogs/panel_embedded_files.cpp:417 common/tool/actions.cpp:159
 #: eeschema/dialogs/dialog_erc.cpp:426
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1344 eeschema/sheet.cpp:783
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1345 eeschema/sheet.cpp:783
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:962
 #: eeschema/symbol_editor/symbol_editor.cpp:1020
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:151
@@ -5064,7 +5064,7 @@ msgstr "Zväčšenie"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1099
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:583
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:854
-#: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4038
+#: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4048
 #: pcbnew/pad.cpp:2501 pcbnew/pad.cpp:2520 pcbnew/pcb_dimension.cpp:1973
 #: pcbnew/widgets/appearance_controls.cpp:729
 #: pcbnew/widgets/appearance_controls.cpp:771
@@ -5295,7 +5295,7 @@ msgstr "Nespojené"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:854 pcbnew/footprint.cpp:4040
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:854 pcbnew/footprint.cpp:4050
 #: pcbnew/pad.cpp:2522 pcbnew/pcb_table.cpp:533 pcbnew/pcb_textbox.cpp:795
 #: pcbnew/zone.cpp:857 pcbnew/zone.cpp:1830
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
@@ -6576,7 +6576,7 @@ msgstr "Dolná"
 #: eeschema/sch_text.cpp:783 eeschema/sch_textbox.cpp:714
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
-#: pcbnew/footprint.cpp:4070 pcbnew/pad.cpp:2539 pcbnew/pcb_dimension.cpp:1756
+#: pcbnew/footprint.cpp:4080 pcbnew/pad.cpp:2539 pcbnew/pcb_dimension.cpp:1756
 #: pcbnew/pcb_dimension.cpp:1831 pcbnew/pcb_fields_grid_table.cpp:151
 #: pcbnew/pcb_tablecell.cpp:207 pcbnew/zone.cpp:2001
 msgid "Orientation"
@@ -8489,7 +8489,7 @@ msgstr "Predvolené jednotky:"
 #: eeschema/dialogs/dialog_sim_model_base.cpp:271 eeschema/sch_symbol.cpp:2058
 #: eeschema/sch_symbol.cpp:2110 eeschema/sch_symbol.cpp:2991
 #: eeschema/widgets/search_handlers.cpp:160
-#: eeschema/widgets/search_handlers.cpp:246 pcbnew/footprint.cpp:4076
+#: eeschema/widgets/search_handlers.cpp:246 pcbnew/footprint.cpp:4086
 #: pcbnew/widgets/search_handlers.cpp:118
 msgid "Reference"
 msgstr "Odkaz"
@@ -8512,7 +8512,7 @@ msgstr "Vybrať a presunúť puzdro"
 #: eeschema/tools/sch_edit_tool.cpp:551
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:179
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
-#: pcbnew/footprint.cpp:4099
+#: pcbnew/footprint.cpp:4109
 msgid "Attributes"
 msgstr "Atribúty"
 
@@ -9775,7 +9775,7 @@ msgstr "Tabuľa"
 #: common/widgets/footprint_diff_widget.cpp:42 cvpcb/cvpcb_mainframe.cpp:814
 #: eeschema/sch_base_frame.cpp:593 eeschema/sch_symbol.cpp:2086
 #: eeschema/sch_symbol.cpp:2090 eeschema/sch_symbol.cpp:2125
-#: eeschema/widgets/symbol_diff_widget.cpp:45 pcbnew/footprint.cpp:1655
+#: eeschema/widgets/symbol_diff_widget.cpp:45 pcbnew/footprint.cpp:1665
 msgid "Library"
 msgstr "Knižnica"
 
@@ -10520,7 +10520,7 @@ msgstr "'%s' nie je platné puzdro."
 #: eeschema/generate_alias_info.cpp:39 eeschema/sch_symbol.cpp:2105
 #: eeschema/sch_symbol.cpp:2678 eeschema/sch_symbol.cpp:3003
 #: eeschema/symbol_editor/symbol_editor.cpp:1629
-#: eeschema/symbol_viewer_frame.cpp:462 pcbnew/footprint.cpp:4089
+#: eeschema/symbol_viewer_frame.cpp:462 pcbnew/footprint.cpp:4099
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:133
 msgid "Keywords"
 msgstr "Kľúčové slová"
@@ -10678,7 +10678,7 @@ msgstr "Stopa '%s' sa nenašla."
 msgid "Error loading footprint"
 msgstr "Pri načítaní písma sa vyskytla chyba '%s'."
 
-#: cvpcb/display_footprints_frame.cpp:508 pcbnew/footprint.cpp:1715
+#: cvpcb/display_footprints_frame.cpp:508 pcbnew/footprint.cpp:1725
 #, c-format
 msgid "Footprint: %s"
 msgstr "puzdro: %s"
@@ -11054,7 +11054,7 @@ msgid "Enter a description for the library:"
 msgstr "Upraviť možnosti tejto položky knižnice"
 
 #: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:3000
-#: pcbnew/footprint.cpp:4086 pcbnew/plot_board_layers.cpp:129
+#: pcbnew/footprint.cpp:4096 pcbnew/plot_board_layers.cpp:129
 #, fuzzy
 msgid "Library Description"
 msgstr "Popis"
@@ -12879,7 +12879,7 @@ msgstr "Zobraziť okno konzoly"
 #: eeschema/sch_symbol.cpp:2989
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:28
-#: pcbnew/footprint.cpp:4074
+#: pcbnew/footprint.cpp:4084
 msgid "Fields"
 msgstr "Polia"
 
@@ -13091,7 +13091,7 @@ msgid "Read Only"
 msgstr "Iba na čítanie"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1222
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1492
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1493
 msgid "Save changes?"
 msgstr "Uložiť zmeny?"
 
@@ -13717,7 +13717,7 @@ msgid "Select Output Directory"
 msgstr "Vyberte výstupný adresár"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:271
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1319
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1320
 #: pcbnew/dialogs/dialog_gendrill.cpp:338 pcbnew/dialogs/dialog_plot.cpp:803
 #, c-format
 msgid ""
@@ -15312,69 +15312,69 @@ msgstr "Menovka"
 msgid "Group By"
 msgstr "Zoskupiť podľa"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:698
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:699
 msgid "Qty"
 msgstr "Množstvo"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:699
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:700
 msgid "#"
 msgstr "#"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:733
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:827
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:734
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:828
 msgid "New field name:"
 msgstr "Nový názov poľa:"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:733
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:734
 msgid "Add Field"
 msgstr "Pridať pole"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:742
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:743
 msgid "Field must have a name."
 msgstr "Pole musí mať názov."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:750
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:751
 #: eeschema/dialogs/dialog_symbol_properties.cpp:811
 #, fuzzy, c-format
 msgid "Field name '%s' already in use."
 msgstr "Názov poľa '%s' sa už používa."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:778
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:779
 #, fuzzy, c-format
 msgid "Are you sure you want to remove the field '%s'?"
 msgstr "Naozaj chcete odstrániť '%s'?"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:827
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:828
 #, fuzzy
 msgid "Rename Field"
 msgstr "Premenovať súbor"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:841
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:842
 #, fuzzy, c-format
 msgid "Field name %s already exists."
 msgstr "Súbor %s už existuje."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:935
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:936
 #, fuzzy
 msgid "The Quantity column cannot be grouped by."
 msgstr "Stĺpec Referencie nemožno skryť."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:943
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:944
 #, fuzzy
 msgid "The Item Number column cannot be grouped by."
 msgstr "Stĺpec Referencie nemožno skryť."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1309
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1310
 msgid "Bill of Materials Output File"
 msgstr "Výstupný súbor so zoznamom materiálov"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1321
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1330
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1322
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1331
 #, fuzzy
 msgid "BOM Output File"
 msgstr "Výstupný vývod"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1328
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1329
 #, fuzzy
 msgid ""
 "Cannot make path relative (target volume different from schematic file "
@@ -15383,55 +15383,55 @@ msgstr ""
 "Nie je možné vytvoriť relatívnu cestu (cieľový objem sa líši od objemu "
 "súboru)!"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1342
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1343
 #, fuzzy
 msgid "Unsaved data"
 msgstr "[Neuložené]"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1343
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1344
 #, fuzzy
 msgid "Changes have not yet been saved. Export unsaved data?"
 msgstr "Změny nejsou uloženy. Exportovat neuložená data?"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1367
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1368
 #, fuzzy
 msgid "No output file specified in Export tab."
 msgstr "Názov súboru nie je špecifikovaný pre exportovanie"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1381
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1382
 #, fuzzy, c-format
 msgid "Could not open/create path '%s'."
 msgstr "Nebolo možné vytvoriť súbor \"%s\"."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1390
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1391
 #, fuzzy, c-format
 msgid "Could not create BOM output '%s'."
 msgstr "Nepodarilo sa zapísať súbory vykreslenia do priečinka \"%s\"."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1399
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1400
 #, fuzzy, c-format
 msgid "Could not write BOM output '%s'."
 msgstr "Nepodarilo sa zapísať súbory vykreslenia do priečinka \"%s\"."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1406
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1407
 #, fuzzy, c-format
 msgid "Wrote BOM output to '%s'"
 msgstr "Nemožno vytvoriť výstupný adresár '%s'."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1785
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2187
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1786
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2188
 #, fuzzy
 msgid "BOM preset name:"
 msgstr "Názov predvoľby vrstvy:"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1785
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2187
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1786
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2188
 #, fuzzy
 msgid "Save BOM Preset"
 msgstr "Uložiť predvoľbu vrstvy"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1811
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2213
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1812
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2214
 #: pcbnew/widgets/appearance_controls.cpp:2764
 msgid ""
 "Default presets cannot be modified.\n"
@@ -18170,7 +18170,7 @@ msgstr "Vyloučeno ze simulace"
 #: eeschema/lib_symbol.cpp:591 eeschema/sch_sheet.cpp:336
 #: eeschema/sch_sheet.cpp:880 eeschema/sch_symbol.cpp:1620
 #: eeschema/sch_symbol.cpp:2036 eeschema/widgets/search_handlers.cpp:169
-#: pcbnew/footprint.cpp:1703
+#: pcbnew/footprint.cpp:1713
 msgid "DNP"
 msgstr "DNP"
 
@@ -18619,12 +18619,12 @@ msgid "Print (or not) the Frame references."
 msgstr "Vytlačte (alebo nevytlačte) odkazy na rám."
 
 #: eeschema/printing/dialog_print_base.cpp:44
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:217
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:213
 msgid "Print background color"
 msgstr "Farba pozadia tlače"
 
 #: eeschema/printing/dialog_print_base.cpp:50
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:222
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:217
 msgid "Use a different color theme for printing:"
 msgstr "Na tlač použite inú farebnú tému:"
 
@@ -19856,7 +19856,7 @@ msgstr "Štýl pokosu:"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:83
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:73
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:58
-#: pcbnew/footprint.cpp:1688 pcbnew/pad.cpp:1299 pcbnew/pad.cpp:2537
+#: pcbnew/footprint.cpp:1698 pcbnew/pad.cpp:1299 pcbnew/pad.cpp:2537
 #: pcbnew/pcb_dimension.cpp:659 pcbnew/pcb_group.cpp:396
 #: pcbnew/pcb_marker.cpp:381 pcbnew/pcb_shape.cpp:642
 #: pcbnew/pcb_tablecell.cpp:106 pcbnew/pcb_text.cpp:279
@@ -20249,13 +20249,13 @@ msgid "Exclude From Simulation"
 msgstr "Vyloučit ze simulace"
 
 #: eeschema/sch_sheet.cpp:1733 eeschema/sch_symbol.cpp:1100
-#: eeschema/sch_symbol.cpp:3041 pcbnew/footprint.cpp:4106
+#: eeschema/sch_symbol.cpp:3041 pcbnew/footprint.cpp:4116
 #, fuzzy
 msgid "Exclude From Bill of Materials"
 msgstr "Vyloučit z rozpisky materiálu"
 
 #: eeschema/sch_sheet.cpp:1736 eeschema/sch_symbol.cpp:1101
-#: eeschema/sch_symbol.cpp:3044 pcbnew/footprint.cpp:4109
+#: eeschema/sch_symbol.cpp:3044 pcbnew/footprint.cpp:4119
 #, fuzzy
 msgid "Do not Populate"
 msgstr "Není osazeno (DNP)"
@@ -20312,7 +20312,7 @@ msgstr "Zrcadlit Y"
 msgid "Mirror Y"
 msgstr "Zrcadlit Y"
 
-#: eeschema/sch_symbol.cpp:2997 pcbnew/footprint.cpp:4083
+#: eeschema/sch_symbol.cpp:2997 pcbnew/footprint.cpp:4093
 #, fuzzy
 msgid "Library Link"
 msgstr "Odkaz na knihovnu"
@@ -25551,19 +25551,22 @@ msgid "Layer Selection"
 msgstr "Výber vrstvy"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:170
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:254
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:248
 msgid "Print mirrored"
 msgstr "Tlačiť zrkadlovo"
 
-#: gerbview/dialogs/dialog_print_gerbview.cpp:179
-msgid "Included Layers"
+#: gerbview/dialogs/dialog_print_gerbview.cpp:178
+#: pcbnew/dialogs/dialog_plot_base.cpp:59
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:271
+#, fuzzy
+msgid "Include Layers"
 msgstr "Zahrnuté vrstvy"
 
-#: gerbview/dialogs/dialog_print_gerbview.cpp:193
+#: gerbview/dialogs/dialog_print_gerbview.cpp:192
 msgid "Select all"
 msgstr "Vybrať všetko"
 
-#: gerbview/dialogs/dialog_print_gerbview.cpp:195
+#: gerbview/dialogs/dialog_print_gerbview.cpp:194
 msgid "Deselect all"
 msgstr "Zrušiť výber všetkých"
 
@@ -25584,7 +25587,7 @@ msgstr "Vyberte vrstvu: %s"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:50
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:100
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:169
-#: pcbnew/footprint.cpp:4065 pcbnew/footprint.cpp:4068
+#: pcbnew/footprint.cpp:4075 pcbnew/footprint.cpp:4078
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2137 pcbnew/pad.cpp:1303
 #: pcbnew/pad.cpp:2536 pcbnew/pcb_dimension.cpp:661
 #: pcbnew/pcb_dimension.cpp:1457 pcbnew/pcb_fields_grid_table.cpp:150
@@ -32294,7 +32297,7 @@ msgstr "Teselačné medené zóny..."
 #: pcbnew/board.cpp:1818 pcbnew/dialogs/dialog_board_statistics.cpp:701
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:78
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:27
-#: pcbnew/footprint.cpp:1659 pcbnew/netinfo_item.cpp:108
+#: pcbnew/footprint.cpp:1669 pcbnew/netinfo_item.cpp:108
 #: pcbnew/pcb_draw_panel_gal.cpp:714 pcbnew/widgets/appearance_controls.cpp:331
 #: pcbnew/widgets/panel_selection_filter.cpp:198
 #: pcbnew/widgets/panel_selection_filter_base.cpp:45
@@ -33278,7 +33281,7 @@ msgstr "Rozsah prečíslovania"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:154
 #: pcbnew/dialogs/dialog_render_job.cpp:41
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:117
-#: pcbnew/footprint.cpp:1671
+#: pcbnew/footprint.cpp:1681
 msgid "Front"
 msgstr "Predná"
 
@@ -34041,7 +34044,7 @@ msgstr ""
 "Predvolený typ pripojenia podložky k zóne.\n"
 "Toto nastavenie možno prepísať lokálnym nastavením podložky"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4039
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4049
 #: pcbnew/pad.cpp:2521 pcbnew/zone.cpp:1829
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Thermal reliefs"
@@ -36040,13 +36043,13 @@ msgstr "Názov stopy:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:193
-#: pcbnew/footprint.cpp:1317
+#: pcbnew/footprint.cpp:1327
 msgid "Through hole"
 msgstr "Cez dieru"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:193
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/footprint.cpp:1314
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/footprint.cpp:1324
 #: pcbnew/pad.cpp:1532 pcbnew/pad.cpp:2487
 msgid "SMD"
 msgstr "SMD"
@@ -38267,7 +38270,7 @@ msgid "Generate Drill Files..."
 msgstr "Generovať súbory Drill..."
 
 #: pcbnew/dialogs/dialog_plot.cpp:621
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:289
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:283
 msgid "Select Fab Layers"
 msgstr "Vybrať výrobné vrstvy"
 
@@ -38346,12 +38349,6 @@ msgstr "Gerber"
 msgid "Open output directory"
 msgstr "Výstupný adresár:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:59
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:277
-#, fuzzy
-msgid "Include Layers"
-msgstr "Zahrnuté vrstvy"
-
 #: pcbnew/dialogs/dialog_plot_base.cpp:85
 #, fuzzy
 msgid "Indicate DNP on fabrication layers"
@@ -38405,7 +38402,7 @@ msgid "Check zone fills before plotting"
 msgstr "Pred vykreslením skontrolujte výplne zón"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:114
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:240
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:234
 msgid "Drill marks:"
 msgstr "Vŕtacie značky:"
 
@@ -38505,8 +38502,10 @@ msgstr ""
 "a zoznam vygenerovaných súborov grafu Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
-msgid "Remove silkscreen from areas without soldermask"
-msgstr "Sieťotlač odstráňte z oblastí bez spájkovacej masky"
+msgid ""
+"Knock out the corresponding solder mask layer after plotting a silkscreen "
+"layer.  This will knock out all previously plotted layers."
+msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:221
 msgid "Coordinate format:"
@@ -38934,49 +38933,49 @@ msgstr ""
 msgid "Position Relative To Reference Item"
 msgstr "Pozícia relatívna k referenčnej položke"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:112
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:127
 msgid "Right-click for layer selection commands."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:213
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:208
 msgid "Print according to objects tab of appearance manager"
 msgstr "Tlač podľa záložky objektov správcu vzhľadu"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:241
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:235
 msgid "No drill mark"
 msgstr "Bez vŕtacej značky"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:242
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:236
 msgid "Small mark"
 msgstr "Malá značka"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:243
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:237
 msgid "Real drill"
 msgstr "Skutočné vŕtanie"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:260
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:254
 #, fuzzy
 msgid "Print one page per layer"
 msgstr "Jedna stránka na vrstvu"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:266
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:260
 #, fuzzy
 msgid "Print board edges on all pages"
 msgstr "Tlač okrajov dosky"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:292
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:286
 msgid "Select all Copper Layers"
 msgstr "Vybrať všetky medené vrstvy"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:295
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:289
 msgid "Deselect all Copper Layers"
 msgstr "Zrušiť výber všetkých medených vrstiev"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:298
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:292
 msgid "Select all Layers"
 msgstr "Vybrať všetky vrstvy"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:301
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:295
 msgid "Deselect all Layers"
 msgstr "Zrušiť výber všetkých vrstiev"
 
@@ -42970,7 +42969,7 @@ msgid "'%s' settings differ."
 msgstr "Počet segmentov"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:619
-#: pcbnew/footprint.cpp:4116
+#: pcbnew/footprint.cpp:4126
 msgid "Exempt From Courtyard Requirement"
 msgstr ""
 
@@ -43728,139 +43727,139 @@ msgstr ""
 msgid "Generating ODB++ output files"
 msgstr "Vytvorte súbor netlistu IPC-D-356"
 
-#: pcbnew/footprint.cpp:1319
+#: pcbnew/footprint.cpp:1329
 msgid "Other"
 msgstr "Iné"
 
-#: pcbnew/footprint.cpp:1657
+#: pcbnew/footprint.cpp:1667
 msgid "Footprint Name"
 msgstr "Názov stopy"
 
-#: pcbnew/footprint.cpp:1661 pcbnew/footprint.cpp:1720
+#: pcbnew/footprint.cpp:1671 pcbnew/footprint.cpp:1730
 #, c-format
 msgid "Doc: %s"
 msgstr "Doc: %s"
 
-#: pcbnew/footprint.cpp:1662 pcbnew/footprint.cpp:1721
+#: pcbnew/footprint.cpp:1672 pcbnew/footprint.cpp:1731
 #, c-format
 msgid "Keywords: %s"
 msgstr "Kľúčové slová: %s"
 
-#: pcbnew/footprint.cpp:1671 pcbnew/footprint.cpp:1672
+#: pcbnew/footprint.cpp:1681 pcbnew/footprint.cpp:1682
 msgid "Board Side"
 msgstr "Bočná strana"
 
-#: pcbnew/footprint.cpp:1672
+#: pcbnew/footprint.cpp:1682
 msgid "Back (Flipped)"
 msgstr "Chrbát (prevrátený)"
 
-#: pcbnew/footprint.cpp:1691
+#: pcbnew/footprint.cpp:1701
 msgid "autoplaced"
 msgstr "autoplaced"
 
-#: pcbnew/footprint.cpp:1694
+#: pcbnew/footprint.cpp:1704
 msgid "not in schematic"
 msgstr "nie schematicky"
 
-#: pcbnew/footprint.cpp:1697
+#: pcbnew/footprint.cpp:1707
 msgid "exclude from pos files"
 msgstr "vylúčiť zo súborov pos"
 
-#: pcbnew/footprint.cpp:1700
+#: pcbnew/footprint.cpp:1710
 msgid "exclude from BOM"
 msgstr "vylúčiť z kusovníka"
 
-#: pcbnew/footprint.cpp:1705
+#: pcbnew/footprint.cpp:1715
 msgid "Status: "
 msgstr "Stav: "
 
-#: pcbnew/footprint.cpp:1705
+#: pcbnew/footprint.cpp:1715
 msgid "Attributes:"
 msgstr "Atribúty:"
 
-#: pcbnew/footprint.cpp:1712 pcbnew/footprint.cpp:4095 pcbnew/zone.cpp:1861
+#: pcbnew/footprint.cpp:1722 pcbnew/footprint.cpp:4105 pcbnew/zone.cpp:1861
 #, fuzzy
 msgid "Component Class"
 msgstr "Súčiastky"
 
-#: pcbnew/footprint.cpp:1716
+#: pcbnew/footprint.cpp:1726
 #, c-format
 msgid "3D-Shape: %s"
 msgstr "3D tvar: %s"
 
-#: pcbnew/footprint.cpp:1716
+#: pcbnew/footprint.cpp:1726
 msgid "<none>"
 msgstr "<žiadny>"
 
-#: pcbnew/footprint.cpp:2131
+#: pcbnew/footprint.cpp:2141
 msgid "<no reference designator>"
 msgstr "<bez referenčného označenia>"
 
-#: pcbnew/footprint.cpp:2133
+#: pcbnew/footprint.cpp:2143
 #, c-format
 msgid "Footprint %s"
 msgstr "puzdro: %s"
 
-#: pcbnew/footprint.cpp:3273
+#: pcbnew/footprint.cpp:3283
 #, fuzzy, c-format
 msgid "(expected 'Through hole'; actual '%s')"
 msgstr "Podložky do priechodných otvorov"
 
-#: pcbnew/footprint.cpp:3276
+#: pcbnew/footprint.cpp:3286
 #, fuzzy, c-format
 msgid "(expected 'SMD'; actual '%s')"
 msgstr "(%s maximálny priemer %s; skutočný %s)"
 
-#: pcbnew/footprint.cpp:3497
+#: pcbnew/footprint.cpp:3507
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
 msgstr ""
 
-#: pcbnew/footprint.cpp:3502
+#: pcbnew/footprint.cpp:3512
 #, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr ""
 
-#: pcbnew/footprint.cpp:4037 pcbnew/pad.cpp:2519 pcbnew/zone.cpp:1827
+#: pcbnew/footprint.cpp:4047 pcbnew/pad.cpp:2519 pcbnew/zone.cpp:1827
 msgid "Inherited"
 msgstr "Zdedené"
 
-#: pcbnew/footprint.cpp:4041 pcbnew/pad.cpp:2523 pcbnew/zone.cpp:1831
+#: pcbnew/footprint.cpp:4051 pcbnew/pad.cpp:2523 pcbnew/zone.cpp:1831
 #, fuzzy
 msgid "Thermal reliefs for PTH"
 msgstr "Tepelný reliéf"
 
-#: pcbnew/footprint.cpp:4101
+#: pcbnew/footprint.cpp:4111
 #, fuzzy
 msgid "Not in Schematic"
 msgstr "Nie je to schematické"
 
-#: pcbnew/footprint.cpp:4103
+#: pcbnew/footprint.cpp:4113
 #, fuzzy
 msgid "Exclude From Position Files"
 msgstr "Vylúčiť z pozičných súborov"
 
-#: pcbnew/footprint.cpp:4113 pcbnew/pad.cpp:2688
+#: pcbnew/footprint.cpp:4123 pcbnew/pad.cpp:2688
 #, fuzzy
 msgid "Overrides"
 msgstr "Prepísať"
 
-#: pcbnew/footprint.cpp:4120 pcbnew/pad.cpp:2691
+#: pcbnew/footprint.cpp:4130 pcbnew/pad.cpp:2691
 #, fuzzy
 msgid "Clearance Override"
 msgstr "Obrysy klírensu"
 
-#: pcbnew/footprint.cpp:4125 pcbnew/pad.cpp:2701
+#: pcbnew/footprint.cpp:4135 pcbnew/pad.cpp:2701
 #, fuzzy
 msgid "Solderpaste Margin Override"
 msgstr "Miestna marža spájkovacej pasty"
 
-#: pcbnew/footprint.cpp:4130 pcbnew/pad.cpp:2706
+#: pcbnew/footprint.cpp:4140 pcbnew/pad.cpp:2706
 #, fuzzy
 msgid "Solderpaste Margin Ratio Override"
 msgstr "Pomer marže miestnej spájkovacej pasty"
 
-#: pcbnew/footprint.cpp:4136 pcbnew/pad.cpp:2712
+#: pcbnew/footprint.cpp:4146 pcbnew/pad.cpp:2712
 #, fuzzy
 msgid "Zone Connection Style"
 msgstr "Nespojený"
@@ -53452,6 +53451,12 @@ msgstr "KiCad schematický symbol"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad pracovný list"
+
+#~ msgid "Included Layers"
+#~ msgstr "Zahrnuté vrstvy"
+
+#~ msgid "Remove silkscreen from areas without soldermask"
+#~ msgstr "Sieťotlač odstráňte z oblastí bez spájkovacej masky"
 
 #, fuzzy
 #~ msgid "Fetching design_block libraries..."
