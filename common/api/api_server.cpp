@@ -37,6 +37,10 @@
 
 #include <api/common/envelope.pb.h>
 
+#ifdef __UNIX__
+#include <sys/file.h>
+#endif
+
 using kiapi::common::ApiRequest, kiapi::common::ApiResponse, kiapi::common::ApiStatusCode;
 
 
