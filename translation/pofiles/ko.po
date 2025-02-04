@@ -34,10 +34,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-03 19:59+0300\n"
-"PO-Revision-Date: 2025-02-03 12:57+0000\n"
+"PO-Revision-Date: 2025-02-04 09:03+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -39646,6 +39646,118 @@ msgid ""
 "<br><br>\n"
 "\n"
 msgstr ""
+"### 표현식 함수\n"
+"\n"
+"모든 함수 매개변수는 간단한 와일드카드를 지원함 (`*` and `?`).\n"
+"<br><br>\n"
+"\n"
+"    A.enclosedByArea('<zone_name>')\n"
+"주어진 영역의 윤곽선 안에 `A`가 모두 있으면 참입니다.\n"
+"\n"
+"참고: 이 함수는 `intersectsArea()`보다 많은 호출 횟수가 발생할 수 있습니다.\n"
+"가능하면 `intersectsArea()`를 사용합니다.\n"
+"<br><br>\n"
+"\n"
+"    A.existsOnLayer('<layer_name>')\n"
+"주어진 레이어에 `A`가 존재하면 참입니다.  레이어 이름은\n"
+"보드 설정 > 보드 편집기 레이어에서 지정한 이름 또는\n"
+"표준 이름(예: `F.Cu`)일 수 있습니다.\n"
+"\n"
+"참고: 해당 레이어에 대해 규칙이 평가되고 있는지 여부와 관계없이\n"
+"`A`가 지정된 레이어에 있으면 참을 반환합니다.\n"
+"후자의 경우 규칙에 `(layer “layer_name”)` 절을 사용합니다.\n"
+"<br><br>\n"
+"\n"
+"    A.fromTo('x', 'y')\n"
+"객체가 주어진 패드 사이의 구리 경로에 존재하면 참입니다. \n"
+"`x` 및 `y`는 디자인에서 패드의 전체 이름(예: `R1-Pad1`) \n"
+"입니다.\n"
+"<br><br>\n"
+"\n"
+"    A.getField('<field_name>')\n"
+"주어진 필드의 값. 풋프린트에만 필드가 있으므로 `A`가 풋프린트인 경우에만\n"
+"필드가 반환됩니다.\n"
+"<br><br>\n"
+"\n"
+"    A.hasComponentClass('<component_class_name>')\n"
+"`A`에 할당된 컴포넌트 클래스 집합에 명명된 컴포넌트 유형이 \n"
+"포함되어 있으면 true입니다.\n"
+"<br><br>\n"
+"\n"
+"    A.hasNetclass('<netclass_name>')\n"
+"명시적인 네트클래스 레이블이나 패턴 일치 할당을 통해 `A`에 지정된\n"
+"네트클래스가 할당된 경우 참입니다.\n"
+"<br><br>\n"
+"\n"
+"    A.inDiffPair('<net_name>')\n"
+"`A`에 지정된 차동 쌍의 일부인 네트가 있는 경우 참입니다.\n"
+"`<net_name>`은 차동 쌍의 기본 이름입니다.  예를 들어, `inDiffPair('/CLK')`"
+"는\n"
+"`/CLK_P` 및 `/CLK_N` 네트의 항목과 일치합니다.\n"
+"<br><br>\n"
+"\n"
+"    A.intersectsArea('<zone_name>')\n"
+"`A`의 일부가 주어진 영역의 윤곽선 안에 있으면 참입니다.\n"
+"<br><br>\n"
+"\n"
+"    A.intersectsCourtyard('<footprint_identifier>')\n"
+"`A`의 일부가 주어진 풋프린트의 부품자리 안에 있으면 참입니다.\n"
+"<br><br>\n"
+"\n"
+"    A.intersectsFrontCourtyard('<footprint_identifier>')\n"
+"`A`의 일부가 주어진 풋프린트의 앞쪽 부품자리 안에 있으면 참입니다.\n"
+"<br><br>\n"
+"\n"
+"    A.intersectsBackCourtyard('<footprint_identifier>')\n"
+"`A`의 일부가 주어진 풋프린트의 뒤쪽 부품자리 안에 있으면 참입니다.\n"
+"<br><br>\n"
+"\n"
+"위에 나열된 `footprint_identifier`는 다음 중 하나일 수 있습니다:\n"
+"\n"
+"1. 참조 지정자, 와일드카드 `*` 및 `?` 포함 가능\n"
+"2. 풋프린트 라이브러리 식별자(예: `LibName:FootprintName`). 이 경우\n"
+"   라이브러리 식별자에는 `:` 문자가 포함되어 라이브러리 이름과 풋프린트 "
+"이름을\n"
+"   구분해야 하며, 두 이름 모두 와일드카드를 포함할 수 있습니다.\n"
+"3. 컴포넌트 클래스, `${Class:ClassName}` 형식.  키워드 `Class`는 대소문자를\n"
+"   구분하지 않지만 컴포넌트 클래스 이름은 대소문자를 구분합니다.\n"
+"\n"
+"<br>\n"
+"\n"
+"    A.isBlindBuriedVia()\n"
+"`A`가 매립/매장 비아인 경우 참입니다.\n"
+"<br><br>\n"
+"\n"
+"    AB.isCoupledDiffPair()\n"
+"`A`와 `B`가 동일한 차동 쌍의 멤버인 경우 참입니다.\n"
+"<br><br>\n"
+"\n"
+"    A.isMicroVia()\n"
+"`A`가 마이크로비아인 경우 참입니다.\n"
+"<br><br>\n"
+"\n"
+"    A.isPlated()\n"
+"`A`에 도금된 구멍이 있는 경우 참입니다.\n"
+"<br><br>\n"
+"\n"
+"    A.memberOfGroup('<group_name>')\n"
+"`A`가 지정된 그룹의 멤버인 경우 참입니다. 이름에 와일드카드를 포함할 수 "
+"있습니다.\n"
+"중첩된 멤버십을 포함합니다.\n"
+"<br><br>\n"
+"\n"
+"    A.memberOfFootprint('<footprint_identifier>')\n"
+"`A`가 주어진 풋프린트의 멤버(예: 해당 풋프린트 안에 정의된 패드 또는 그래픽 "
+"모양)인\n"
+" 경우 참입니다. `footprint_identifier`를 지정하는 다양한 방법은 위에 "
+"설명되어 있습니다.\n"
+"<br><br>\n"
+"\n"
+"    A.memberOfSheet('<sheet_path>')\n"
+"`A`가 지정된 회로도 시트의 멤버인 경우 참. 시트 경로에는 와일드카드를 포함할 "
+"수 있음.\n"
+"<br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_9more_examples.h:2
 msgid ""
@@ -39792,6 +39904,146 @@ msgid ""
 "        (severity ignore))\n"
 "\n"
 msgstr ""
+"### 추가 예제\n"
+"\n"
+"    (rule \"copper keepout\"\n"
+"       (constraint disallow track via zone)\n"
+"       (condition \"A.intersectsArea('zone3')\"))\n"
+"\n"
+"\n"
+"    (rule \"BGA neckdown\"\n"
+"       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
+"       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
+"       (condition \"A.intersectsCourtyard('U3')\"))\n"
+"\n"
+"\n"
+"    # 텐트 비아에 실크가 덮이지 않도록 방지\n"
+"    (rule silk_over_via\n"
+"       (constraint silk_clearance (min 0.2mm))\n"
+"       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
+"\n"
+"\n"
+"    (rule \"Distance between Vias of Different Nets\"\n"
+"        (constraint hole_to_hole (min 0.254mm))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
+"\n"
+"    (rule \"Clearance between Pads of Different Nets\"\n"
+"        (constraint clearance (min 3.0mm))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
+"\n"
+"\n"
+"    (rule \"Via Hole to Track Clearance\"\n"
+"        (constraint hole_clearance (min 0.254mm))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
+"\n"
+"    (rule \"Pad to Track Clearance\"\n"
+"        (constraint clearance (min 0.2mm))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Track'\"))\n"
+"\n"
+"\n"
+"    (rule \"clearance-to-1mm-cutout\"\n"
+"        (constraint edge_clearance (min 0.8mm))\n"
+"        (condition \"A.Layer == 'Edge.Cuts' && A.Line_Width == 1.0mm\"))\n"
+"\n"
+"\n"
+"    (rule \"Max Drill Hole Size Mechanical\"\n"
+"        (constraint hole_size (max 6.3mm))\n"
+"        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
+"\n"
+"    (rule \"Max Drill Hole Size PTH\"\n"
+"        (constraint hole_size (max 6.35mm))\n"
+"        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
+"\n"
+"\n"
+"    # 특정 차등 쌍에 대한 최적의 간격을 지정\n"
+"    (rule \"dp clock gap\"\n"
+"        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
+"        (condition \"A.inDiffPair('/CLK')\"))\n"
+"\n"
+"    # 차동 쌍 주위에 더 큰 공간거리를 지정\n"
+"    (rule \"dp clearance\"\n"
+"        (constraint clearance (min \"1.5mm\"))\n"
+"        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
+"\n"
+"\n"
+"    # 방열 패드에 써멀 릴리프 사용 금지\n"
+"    (rule heat_sink_pad\n"
+"        (constraint zone_connection solid)\n"
+"        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
+"\n"
+"    # 4개의 열 완화 스포크가 모두 상위 영역에 연결해야 함\n"
+"    (rule fully_spoked_pads\n"
+"        (constraint min_resolved_spokes 4))\n"
+"\n"
+"    # 모든 영역에 대한 열 완화 간격 및 스포크 너비 설정\n"
+"    (rule defined_relief\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil)))\n"
+"\n"
+"    # GND 및 PWR 영역의 방열 간격 및 스포크 너비 재정의\n"
+"    (rule defined_relief_pwr\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil))\n"
+"        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
+"\n"
+"    # 커패시터의 부품자리 아래 구리가 채우는 것을 방지\n"
+"    (rule no_copper_under_caps\n"
+"        (constraint physical_clearance (min 0mm))\n"
+"        (condition \"A.Type == 'Zone' && B.Reference == 'C*'\"))\n"
+"\n"
+"\n"
+"    # SMD 패드에서 솔더 위킹 방지\n"
+"    (rule holes_in_pads\n"
+"        (constraint physical_hole_clearance (min 0.2mm))\n"
+"        (condition \"B.Pad_Type == 'SMD'\"))\n"
+"\n"
+"    # 솔더 마스크 마진 재정의 허용 안 함\n"
+"    (rule \"disallow solder mask margin overrides\"\n"
+"        (constraint assertion \"A.Soldermask_Margin_Override == null\")\n"
+"        (condition \"A.Type == 'Pad'\"))\n"
+"\n"
+"\n"
+"    # 부품과 기판 모서리 사이의 기계적 공간거리 확보\n"
+"    (rule front_mechanical_board_edge_clearance\n"
+"        (layer \"F.Courtyard\")\n"
+"        (constraint physical_clearance (min 3mm))\n"
+"        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
+"\n"
+"\n"
+"    # 커넥터를 위한 보드 가장자리와 실크 교차 허용\n"
+"    (rule silk_board_edge_clearance\n"
+"        (constraint silk_clearance)\n"
+"        (severity ignore)\n"
+"        (condition \"A.memberOfFootprint('J*') && B.Layer=='Edge.Cuts'\"))\n"
+"\n"
+"\n"
+"    # 전류 전송 용량 확인\n"
+"    (rule high-current\n"
+"        (constraint track_width (min 1.0mm))\n"
+"        (constraint connection_width (min 0.8mm))\n"
+"        (condition \"A.hasNetclass('Power')\"))\n"
+"\n"
+"\n"
+"    # 별도의 드릴 비트 및 밀링 커터 크기 제약 조건\n"
+"    (rule \"Plated through-hole size\"\n"
+"        (constraint hole_size (min 0.2mm) (max 6.35mm))\n"
+"        (condition \"A.isPlated() && A.Hole_Size_X == A.Hole_Size_Y\"))\n"
+"    (rule \"Plated slot size\"\n"
+"        (constraint hole_size (min 0.5mm))\n"
+"        (condition \"A.isPlated() && A.Hole_Size_X != A.Hole_Size_Y\"))\n"
+"\n"
+"\n"
+"    # 팹에서 레이저 드릴링 마이크로 비아를 뚫기 전에 매장/매립형 비아\n"
+"    #구멍을 기계적으로 뚫는다는 것이 알려진 경우 매장/매립형 마이크로 비아 \n"
+"    # 구멍 간 위반을 허용합니다.\n"
+"    (rule hole_to_hole_uvia_exclusion\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
+"\n"
+"        (constraint hole_to_hole)\n"
+"        (severity ignore))\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
 msgid "Default Properties for Round Shapes"
@@ -41143,9 +41395,9 @@ msgid "Checking board footprints against library..."
 msgstr "라이브러리에 대한 보드 풋프린트 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:892
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' was not found."
-msgstr "풋프린트 라이브러리 '%s'을(를) 찾을 수 없습니다."
+msgstr "풋프린트 라이브러리 '%s'을(를) 찾을 수 없음."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:941
 #, c-format
@@ -43320,9 +43572,8 @@ msgid "(PTH pad hole leaves no copper)"
 msgstr "(PTH 패드 구멍에 구리가 남지 않음)"
 
 #: pcbnew/pad.cpp:2328
-#, fuzzy
 msgid "(PTH pad hole not fully inside copper)"
-msgstr "(구리 내부에 PTH 패드 구멍이 완전하지 않음)"
+msgstr "(구리 내부에 PTH 패드 홀이 완전치 않음)"
 
 #: pcbnew/pad.cpp:2335
 msgid "(pad hole not inside pad shape)"
@@ -43429,9 +43680,8 @@ msgid "Corner Radius Ratio"
 msgstr "모서리 반경 비율"
 
 #: pcbnew/pad.cpp:2643
-#, fuzzy
 msgid "Corner Radius Size"
-msgstr "모서리 반경 %"
+msgstr "모서리 반경 크기"
 
 #: pcbnew/pad.cpp:2649
 msgid "Hole Shape"
@@ -45269,25 +45519,23 @@ msgstr ""
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5611
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6548
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid padstack layer in\n"
 "file: %s\n"
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"잘못된 네트 ID가 발견됨\n"
+"패드스택 레이어 오류\n"
 "파일: %s\n"
-"행: %d\n"
+"라인: %d\n"
 "오프셋: %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5626
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6563
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
-msgstr ""
-"중복 네트클래스 이름 '%s'이(가) 파일 '%s'의 라인 %d, 오프셋 %d에서 발견되었습"
-"니다."
+msgstr "패드스택 레이어 오류 '%s'이 파일 '%s'의 라인 %d, 오프셋 %d에서 발견됨."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6199
 #, c-format
@@ -45341,19 +45589,16 @@ msgid "Failed to add component data"
 msgstr "컴포넌트 데이터 추가 실패"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:100
-#, fuzzy
 msgid "Creating ODB++ Structure"
-msgstr "IPC2581 파일 생성"
+msgstr "ODB++ 구조 생성"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:118
-#, fuzzy
 msgid "Exporting board to ODB++"
-msgstr "보드 본체 내보내기"
+msgstr "ODB++로 보드 내보내기"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.h:63
-#, fuzzy
 msgid "ODB++ Production File"
-msgstr "IPC-2581 생산 파일"
+msgstr "ODB++ 제조 파일"
 
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:48 pcbnew/pcb_io/pcad/pcad_pcb.cpp:59
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:70
@@ -45430,9 +45675,8 @@ msgid "Marker (%s)"
 msgstr "마커 (%s)"
 
 #: pcbnew/pcb_plotter.cpp:67
-#, fuzzy
 msgid "No layers selected for plotting."
-msgstr "레이어가 선택되지 않았습니다."
+msgstr "플로팅을 위해 선택된 레이어가 없음."
 
 #: pcbnew/pcb_plotter.cpp:427
 #, c-format
@@ -45480,9 +45724,8 @@ msgid "Technical Layers"
 msgstr "기술적 계층"
 
 #: pcbnew/pcb_shape.cpp:994 pcbnew/pcb_track.cpp:2094
-#, fuzzy
 msgid "Soldermask"
-msgstr "솔더 페이스트"
+msgstr "솔더마스크"
 
 #: pcbnew/pcb_target.cpp:151
 msgid "PCB Target"
@@ -45668,9 +45911,8 @@ msgid "Missing netclass name argument to hasNetclass()"
 msgstr "hasNetclass()에 대한 네트클래스 이름 인수가 누락됨"
 
 #: pcbnew/pcbexpr_functions.cpp:1250
-#, fuzzy
 msgid "Missing component class name argument to hasComponentClass()"
-msgstr "hasNetclass()에 대한 네트클래스 이름 인수가 누락됨"
+msgstr "hasComponentClass()에 컴포넌트 유형 이름 인수가 누락됨"
 
 #: pcbnew/pcbnew.cpp:479
 msgid ""
@@ -45699,9 +45941,8 @@ msgid "Error exporting VRML"
 msgstr "VRML 내보내기 오류"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:464
-#, fuzzy
 msgid "Invalid image dimensions"
-msgstr "잘못된 핀 이름 정의"
+msgstr "이미지 치수가 틀림"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:691
 msgid "Successfully created 3D render image"
@@ -45899,9 +46140,8 @@ msgid "Routing"
 msgstr "배선"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:52
-#, fuzzy
 msgid "Please select a differential pair track you want to tune."
-msgstr "조정을 원하는 차동 쌍을 선택하세요."
+msgstr "조정할 차동 쌍 트랙을 선택하세요."
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:68
 msgid ""
@@ -46521,34 +46761,30 @@ msgid "Resolved width constraints: min %s; max %s."
 msgstr "확인된 너비 제약 조건: 최소 %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:448
-#, fuzzy
 msgid "Track Angle"
-msgstr "배선 길이"
+msgstr "트랙 각도"
 
 #: pcbnew/tools/board_inspection_tool.cpp:449
-#, fuzzy
 msgid "Track Angle resolution for:"
-msgstr "배선 폭 해법:"
+msgstr "트랙 각도 해상도:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:457
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved angle constraints: min %s; max %s."
-msgstr "확인된 직경 제약 조건: 최소 %s; 최대 %s."
+msgstr "확인된 각도 조건: 최소 %s, 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:463
-#, fuzzy
 msgid "Track Segment Length"
-msgstr "세그먼트 길이"
+msgstr "트랙 세그먼트 길이"
 
 #: pcbnew/tools/board_inspection_tool.cpp:464
-#, fuzzy
 msgid "Track segment length resolution for:"
-msgstr "배선 폭 해법:"
+msgstr "트랙 세그먼트 길이 해상도:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:472
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved segment length constraints: min %s; max %s."
-msgstr "확인된 직경 제약 조건: 최소 %s; 최대 %s."
+msgstr "확인된 세그먼트 길이 조건: 최소 %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:478
 msgid "Connection Width"
@@ -47031,9 +47267,8 @@ msgid "Draw Arc"
 msgstr "원호 그리기"
 
 #: pcbnew/tools/drawing_tool.cpp:591
-#, fuzzy
 msgid "Draw Bezier"
-msgstr "베지어"
+msgstr "베지어 그리기"
 
 #: pcbnew/tools/drawing_tool.cpp:1597
 msgid "Draw Dimension"
@@ -47102,9 +47337,8 @@ msgid "Arc radius:"
 msgstr "원호 반경:"
 
 #: pcbnew/tools/edit_tool.cpp:1298
-#, fuzzy
 msgid "Add slots in acute corners"
-msgstr "영역 모서리 추가"
+msgstr "예각 모서리에 슬롯 추가"
 
 #: pcbnew/tools/edit_tool.cpp:1300
 msgid ""
@@ -47112,9 +47346,8 @@ msgid ""
 msgstr "지정된 반경의 커터에 접근할 수 있도록 예각 모서리에 슬롯을 추가함"
 
 #: pcbnew/tools/edit_tool.cpp:1304
-#, fuzzy
 msgid "Dogbone Corner Settings"
-msgstr "도그본 모서리"
+msgstr "도그본 모서리 설정"
 
 #: pcbnew/tools/edit_tool.cpp:1341
 #: pcbnew/tools/item_modification_routine.cpp:197
@@ -47229,14 +47462,12 @@ msgid "Footprint '%s' already exists in library '%s'."
 msgstr "라이브러리 '%s'에 '%s' 풋프린트가 이미 있음."
 
 #: pcbnew/tools/footprint_editor_control.cpp:522
-#, fuzzy
 msgid "Error renaming footprint"
-msgstr "상위 풋프린트에서"
+msgstr "풋프린트 이름 변경 오류"
 
 #: pcbnew/tools/footprint_editor_control.cpp:720
-#, fuzzy
 msgid "No datasheet found in the footprint."
-msgstr "정의된 데이터시트가 없습니다."
+msgstr "풋프린트에 데이터시트가 없음."
 
 #: pcbnew/tools/footprint_editor_control.cpp:901
 msgid "No footprint problems found."
@@ -47383,19 +47614,16 @@ msgid "Outset items."
 msgstr "시작 항목."
 
 #: pcbnew/tools/item_modification_routine.cpp:668
-#, fuzzy
 msgid "Unable to outset the selected items."
-msgstr "선택한 선을 모깎기할 수 없습니다."
+msgstr "선택한 항목을 시작할 수 없음."
 
 #: pcbnew/tools/item_modification_routine.cpp:672
-#, fuzzy
 msgid "Some of the items could not be outset."
-msgstr "일부 선을 모깎기할 수 없습니다."
+msgstr "일부 항목은 시작할 수 없음."
 
 #: pcbnew/tools/multichannel_tool.cpp:420
-#, fuzzy
 msgid "Select a reference Rule Area to copy from..."
-msgstr "복사할 참조 규칙 영역을 하나만 선택하세요."
+msgstr "복사할 참조 규칙 영역 선택..."
 
 #: pcbnew/tools/multichannel_tool.cpp:439
 msgid "No Rule Areas to repeat layout to have been found."
@@ -47432,13 +47660,11 @@ msgid "Topology mismatch"
 msgstr "토폴로지 불일치"
 
 #: pcbnew/tools/multichannel_tool.cpp:1039
-#, fuzzy
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheet(s) or component classes."
-msgstr ""
-"회로도에 계층적 시트가 하나뿐이거나 없기 때문에 배치 영역을 자동으로 생성할 "
-"수 없습니다."
+msgstr "회로도에 계층 시트 또는 컴포넌트 유형이 하나이거나 없기 때문에 배치 영역을 "
+"자동 생성할 수 없습니다."
 
 #: pcbnew/tools/multichannel_tool.cpp:1157
 msgid "Auto-generate placement rule areas"
@@ -47540,9 +47766,8 @@ msgid "Create Outsets from Selection"
 msgstr "선택 항목 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:97
-#, fuzzy
 msgid "Create outset lines from the selected item"
-msgstr "선택 영역에서 그래픽 선 생성"
+msgstr "선택한 항목으로 아웃라인 만들기"
 
 #: pcbnew/tools/pcb_actions.cpp:159
 msgid "Add Board Characteristics"
@@ -47656,9 +47881,8 @@ msgid "Place the Footprint Anchor"
 msgstr "풋프린트 앵커 배치"
 
 #: pcbnew/tools/pcb_actions.cpp:349
-#, fuzzy
 msgid "Set the anchor point of the footprint"
-msgstr "풋프린트의 좌표 원점 (앵커) 설정"
+msgstr "풋프린트의 앵커 포인트 설정"
 
 #: pcbnew/tools/pcb_actions.cpp:358
 msgid "Increase Line Width"
@@ -48232,9 +48456,8 @@ msgid "ODB++ Output File..."
 msgstr "ODB++ 출력 파일..."
 
 #: pcbnew/tools/pcb_actions.cpp:1059
-#, fuzzy
 msgid "Generate ODB++ output files"
-msgstr "출력 파일 덮어쓰기"
+msgstr "ODB++ 출력 파일 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:1065
 msgid "IPC-D-356 Netlist File..."
@@ -48917,16 +49140,14 @@ msgid "Positions the selected item(s) by an exact amount relative to another"
 msgstr "선택한 항목을 다른 항목의 위치에 정확한 양만큼 상대적으로 배치"
 
 #: pcbnew/tools/pcb_actions.cpp:2032
-#, fuzzy
 msgid "Position Interactively..."
-msgstr "상대 위치..."
+msgstr "대화형 위치..."
 
 #: pcbnew/tools/pcb_actions.cpp:2033
-#, fuzzy
 msgid ""
 "Positions the selected item(s) by an exact amount relative to another, "
 "interactively"
-msgstr "선택한 항목을 다른 항목의 위치에 정확한 양만큼 상대적으로 배치"
+msgstr "선택한 항목을 다른 항목과 비교하여 대화형으로 정확한 양으로 배치"
 
 #: pcbnew/tools/pcb_actions.cpp:2095
 msgid "Select/Expand Connection"
@@ -49306,9 +49527,8 @@ msgstr ""
 "이 항목은 붙여넣을 수 없습니다.\n"
 
 #: pcbnew/tools/pcb_control.cpp:1074
-#, fuzzy
 msgid "Paste Text"
-msgstr "텍스트 배치"
+msgstr "텍스트 붙여넣기"
 
 #: pcbnew/tools/pcb_control.cpp:1231
 msgid "Invalid clipboard contents"
@@ -49413,14 +49633,12 @@ msgid "Remove Polygon Corner"
 msgstr "다각형 모서리 제거"
 
 #: pcbnew/tools/pcb_point_editor.cpp:3026
-#, fuzzy
 msgid "Break Zone Corner"
-msgstr "영역 모서리 추가"
+msgstr "영역 코너 끊기"
 
 #: pcbnew/tools/pcb_point_editor.cpp:3028
-#, fuzzy
 msgid "Break Polygon Corner"
-msgstr "다각형 모서리 제거"
+msgstr "다각형 코너 끊기"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:1427
 msgid "Select/Expand Connection..."
@@ -49439,19 +49657,16 @@ msgid "Align to Center"
 msgstr "중앙에 정렬"
 
 #: pcbnew/tools/position_relative_tool.cpp:231
-#, fuzzy
 msgid "Set Relative Position Interactively"
-msgstr "위치 증가 반복"
+msgstr "대화형 상대 위치 설정"
 
 #: pcbnew/tools/position_relative_tool.cpp:246
-#, fuzzy
 msgid "Select the reference point on the item to move."
-msgstr "이동할 기준점 선택..."
+msgstr "이동할 항목의 기준점을 선택한다."
 
 #: pcbnew/tools/position_relative_tool.cpp:251
-#, fuzzy
 msgid "Select the point to define the new offset from."
-msgstr "다음에 새 모서리를 추가할 모서리를 선택하세요."
+msgstr "새로운 오프셋을 정의할 지점을 선택합니다."
 
 #: pcbnew/tools/position_relative_tool.cpp:430
 msgid "Position Relative"
@@ -50007,184 +50222,148 @@ msgid "User defined layer 9"
 msgstr "사용자 정의 레이어 9"
 
 #: pcbnew/widgets/appearance_controls.cpp:1684
-#, fuzzy
 msgid "User defined layer 10"
-msgstr "사용자 정의 레이어 1"
+msgstr "사용자 정의 레이어 10"
 
 #: pcbnew/widgets/appearance_controls.cpp:1685
-#, fuzzy
 msgid "User defined layer 11"
-msgstr "사용자 정의 레이어 1"
+msgstr "사용자 정의 레이어 11"
 
 #: pcbnew/widgets/appearance_controls.cpp:1686
-#, fuzzy
 msgid "User defined layer 12"
-msgstr "사용자 정의 레이어 1"
+msgstr "사용자 정의 레이어 12"
 
 #: pcbnew/widgets/appearance_controls.cpp:1687
-#, fuzzy
 msgid "User defined layer 13"
-msgstr "사용자 정의 레이어 1"
+msgstr "사용자 정의 레이어 13"
 
 #: pcbnew/widgets/appearance_controls.cpp:1688
-#, fuzzy
 msgid "User defined layer 14"
-msgstr "사용자 정의 레이어 1"
+msgstr "사용자 정의 레이어 14"
 
 #: pcbnew/widgets/appearance_controls.cpp:1689
-#, fuzzy
 msgid "User defined layer 15"
-msgstr "사용자 정의 레이어 1"
+msgstr "사용자 정의 레이어 15"
 
 #: pcbnew/widgets/appearance_controls.cpp:1690
-#, fuzzy
 msgid "User defined layer 16"
-msgstr "사용자 정의 레이어 1"
+msgstr "사용자 정의 레이어 16"
 
 #: pcbnew/widgets/appearance_controls.cpp:1691
-#, fuzzy
 msgid "User defined layer 17"
-msgstr "사용자 정의 레이어 1"
+msgstr "사용자 정의 레이어 17"
 
 #: pcbnew/widgets/appearance_controls.cpp:1692
-#, fuzzy
 msgid "User defined layer 18"
-msgstr "사용자 정의 레이어 1"
+msgstr "사용자 정의 레이어 18"
 
 #: pcbnew/widgets/appearance_controls.cpp:1693
-#, fuzzy
 msgid "User defined layer 19"
-msgstr "사용자 정의 레이어 1"
+msgstr "사용자 정의 레이어 19"
 
 #: pcbnew/widgets/appearance_controls.cpp:1694
-#, fuzzy
 msgid "User defined layer 20"
-msgstr "사용자 정의 레이어 2"
+msgstr "사용자 정의 레이어 20"
 
 #: pcbnew/widgets/appearance_controls.cpp:1695
-#, fuzzy
 msgid "User defined layer 21"
-msgstr "사용자 정의 레이어 2"
+msgstr "사용자 정의 레이어 21"
 
 #: pcbnew/widgets/appearance_controls.cpp:1696
-#, fuzzy
 msgid "User defined layer 22"
-msgstr "사용자 정의 레이어 2"
+msgstr "사용자 정의 레이어 22"
 
 #: pcbnew/widgets/appearance_controls.cpp:1697
-#, fuzzy
 msgid "User defined layer 23"
-msgstr "사용자 정의 레이어 2"
+msgstr "사용자 정의 레이어 23"
 
 #: pcbnew/widgets/appearance_controls.cpp:1698
-#, fuzzy
 msgid "User defined layer 24"
-msgstr "사용자 정의 레이어 2"
+msgstr "사용자 정의 레이어 24"
 
 #: pcbnew/widgets/appearance_controls.cpp:1699
-#, fuzzy
 msgid "User defined layer 25"
-msgstr "사용자 정의 레이어 2"
+msgstr "사용자 정의 레이어 25"
 
 #: pcbnew/widgets/appearance_controls.cpp:1700
-#, fuzzy
 msgid "User defined layer 26"
-msgstr "사용자 정의 레이어 2"
+msgstr "사용자 정의 레이어 26"
 
 #: pcbnew/widgets/appearance_controls.cpp:1701
-#, fuzzy
 msgid "User defined layer 27"
-msgstr "사용자 정의 레이어 2"
+msgstr "사용자 정의 레이어 27"
 
 #: pcbnew/widgets/appearance_controls.cpp:1702
-#, fuzzy
 msgid "User defined layer 28"
-msgstr "사용자 정의 레이어 2"
+msgstr "사용자 정의 레이어 28"
 
 #: pcbnew/widgets/appearance_controls.cpp:1703
-#, fuzzy
 msgid "User defined layer 29"
-msgstr "사용자 정의 레이어 2"
+msgstr "사용자 정의 레이어 29"
 
 #: pcbnew/widgets/appearance_controls.cpp:1704
-#, fuzzy
 msgid "User defined layer 30"
-msgstr "사용자 정의 레이어 3"
+msgstr "사용자 정의 레이어 30"
 
 #: pcbnew/widgets/appearance_controls.cpp:1705
-#, fuzzy
 msgid "User defined layer 31"
-msgstr "사용자 정의 레이어 3"
+msgstr "사용자 정의 레이어 31"
 
 #: pcbnew/widgets/appearance_controls.cpp:1706
-#, fuzzy
 msgid "User defined layer 32"
-msgstr "사용자 정의 레이어 3"
+msgstr "사용자 정의 레이어 32"
 
 #: pcbnew/widgets/appearance_controls.cpp:1707
-#, fuzzy
 msgid "User defined layer 33"
-msgstr "사용자 정의 레이어 3"
+msgstr "사용자 정의 레이어 33"
 
 #: pcbnew/widgets/appearance_controls.cpp:1708
-#, fuzzy
 msgid "User defined layer 34"
-msgstr "사용자 정의 레이어 3"
+msgstr "사용자 정의 레이어 34"
 
 #: pcbnew/widgets/appearance_controls.cpp:1709
-#, fuzzy
 msgid "User defined layer 35"
-msgstr "사용자 정의 레이어 3"
+msgstr "사용자 정의 레이어 35"
 
 #: pcbnew/widgets/appearance_controls.cpp:1710
-#, fuzzy
 msgid "User defined layer 36"
-msgstr "사용자 정의 레이어 3"
+msgstr "사용자 정의 레이어 36"
 
 #: pcbnew/widgets/appearance_controls.cpp:1711
-#, fuzzy
 msgid "User defined layer 37"
-msgstr "사용자 정의 레이어 3"
+msgstr "사용자 정의 레이어 37"
 
 #: pcbnew/widgets/appearance_controls.cpp:1712
-#, fuzzy
 msgid "User defined layer 38"
-msgstr "사용자 정의 레이어 3"
+msgstr "사용자 정의 레이어 38"
 
 #: pcbnew/widgets/appearance_controls.cpp:1713
-#, fuzzy
 msgid "User defined layer 39"
-msgstr "사용자 정의 레이어 3"
+msgstr "사용자 정의 레이어 39"
 
 #: pcbnew/widgets/appearance_controls.cpp:1714
-#, fuzzy
 msgid "User defined layer 40"
-msgstr "사용자 정의 레이어 4"
+msgstr "사용자 정의 레이어 40"
 
 #: pcbnew/widgets/appearance_controls.cpp:1715
-#, fuzzy
 msgid "User defined layer 41"
-msgstr "사용자 정의 레이어 4"
+msgstr "사용자 정의 레이어 41"
 
 #: pcbnew/widgets/appearance_controls.cpp:1716
-#, fuzzy
 msgid "User defined layer 42"
-msgstr "사용자 정의 레이어 4"
+msgstr "사용자 정의 레이어 42"
 
 #: pcbnew/widgets/appearance_controls.cpp:1717
-#, fuzzy
 msgid "User defined layer 43"
-msgstr "사용자 정의 레이어 4"
+msgstr "사용자 정의 레이어 43"
 
 #: pcbnew/widgets/appearance_controls.cpp:1718
-#, fuzzy
 msgid "User defined layer 44"
-msgstr "사용자 정의 레이어 4"
+msgstr "사용자 정의 레이어 44"
 
 #: pcbnew/widgets/appearance_controls.cpp:1719
-#, fuzzy
 msgid "User defined layer 45"
-msgstr "사용자 정의 레이어 4"
+msgstr "사용자 정의 레이어 45"
 
 #: pcbnew/widgets/appearance_controls.cpp:1766
 msgid "Front copper layer"
@@ -50515,9 +50694,8 @@ msgid "Restrictions"
 msgstr "제한"
 
 #: pcbnew/zone.cpp:797
-#, fuzzy
 msgid "Placement source"
-msgstr "배치"
+msgstr "배치 출처"
 
 #: pcbnew/zone.cpp:827
 #, c-format
@@ -50593,17 +50771,14 @@ msgid "Keepout"
 msgstr "금지영역"
 
 #: pcbnew/zone.cpp:1942
-#, fuzzy
 msgid "Keep Out Tracks"
-msgstr "배선 금지"
+msgstr "트랙 금지"
 
 #: pcbnew/zone.cpp:1948
-#, fuzzy
 msgid "Keep Out Vias"
 msgstr "비아 금지"
 
 #: pcbnew/zone.cpp:1954
-#, fuzzy
 msgid "Keep Out Pads"
 msgstr "패드 금지"
 
@@ -50612,23 +50787,20 @@ msgid "Keep Out Copper Pours"
 msgstr "구리 채움 금지구역"
 
 #: pcbnew/zone.cpp:1966
-#, fuzzy
 msgid "Keep Out Footprints"
 msgstr "풋프린트 금지"
 
 #: pcbnew/zone.cpp:1975
-#, fuzzy
 msgid "Enable"
-msgstr "사용"
+msgstr "켜기"
 
 #: pcbnew/zone.cpp:1982
 msgid "Source Type"
 msgstr "소스 유형"
 
 #: pcbnew/zone.cpp:1987
-#, fuzzy
 msgid "Source Name"
-msgstr "소스 2"
+msgstr "출처 이름"
 
 #: pcbnew/zone.cpp:2019
 msgid "Cannot be less than zone minimum width"
