@@ -85,6 +85,14 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
     m_fileFormatVersionAtLoad = 0;
     m_embedFonts = false;
 
+    addMandatoryFields();
+
+    m_3D_Drawings.clear();
+}
+
+
+void FOOTPRINT::addMandatoryFields()
+{
     auto addField =
             [this]( int id, PCB_LAYER_ID layer, bool visible )
             {
@@ -100,8 +108,6 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
     m_fields.push_back( nullptr );  // FOOTPRINT_FIELD
     addField( DATASHEET_FIELD, F_Fab, false );
     addField( DESCRIPTION_FIELD, F_Fab, false );
-
-    m_3D_Drawings.clear();
 }
 
 
@@ -138,7 +144,7 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
 
     std::map<BOARD_ITEM*, BOARD_ITEM*> ptrMap;
 
-    for( int id : MANDATORY_FIELDS )
+    for( [[maybe_unused]] int id : MANDATORY_FIELDS )
         m_fields.push_back( nullptr );
 
     // Copy fields
@@ -787,13 +793,17 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
 
     // Move the fields
     m_fields.clear();
+    addMandatoryFields();
 
     for( PCB_FIELD* field : aOther.m_fields )
     {
-        if( field )
+        if( !field )
+            continue;
+
+        if( !field->IsMandatory() )
             Add( field );
         else
-            m_fields.push_back( nullptr );
+            *GetField( static_cast<MANDATORY_FIELD_T>( field->GetId() ) ) = *field;
     }
 
     // Move the pads

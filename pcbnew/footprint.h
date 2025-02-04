@@ -1059,6 +1059,8 @@ public:
 protected:
     virtual void swapData( BOARD_ITEM* aImage ) override;
 
+    void addMandatoryFields();
+
 private:
     PCB_FIELDS      m_fields;
     DRAWINGS        m_drawings;          // BOARD_ITEMs for drawings on the board, owned by pointer.
