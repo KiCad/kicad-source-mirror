@@ -77,20 +77,23 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                     return;
                 }
 
-                m_VisibleItems.reset();
+                m_VisibleItems &= ~GAL_SET::UserVisbilityLayers();
+                GAL_SET visible;
 
                 for( const nlohmann::json& entry : aVal )
                 {
                     try
                     {
                         int i = entry.get<int>();
-                        m_VisibleItems.set( i );
+                        visible.set( i );
                     }
                     catch( ... )
                     {
                         // Non-integer or out of range entry in the array; ignore
                     }
                 }
+
+                m_VisibleItems |= GAL_SET::UserVisbilityLayers() & visible;
             },
             {} ) );
 

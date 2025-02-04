@@ -1092,3 +1092,35 @@ GAL_SET GAL_SET::DefaultVisible()
     static const GAL_SET saved( visible, arrayDim( visible ) );
     return saved;
 }
+
+
+/// The layers the user has control over the visibility of, stored in project local settings
+GAL_SET GAL_SET::UserVisbilityLayers()
+{
+    static const GAL_LAYER_ID layers[] = {
+        LAYER_TRACKS,
+        LAYER_VIAS,
+        LAYER_PADS,
+        LAYER_ZONES,
+        LAYER_DRAW_BITMAPS,
+        LAYER_FOOTPRINTS_FR,
+        LAYER_FOOTPRINTS_BK,
+        LAYER_PADS_TH,
+        LAYER_FP_VALUES,
+        LAYER_FP_REFERENCES,
+        LAYER_FP_TEXT,
+        LAYER_HIDDEN_TEXT,
+        LAYER_ANCHOR,
+        LAYER_RATSNEST,
+        LAYER_DRC_WARNING,
+        LAYER_DRC_ERROR,
+        LAYER_DRC_EXCLUSION,
+        LAYER_LOCKED_ITEM_SHADOW,
+        LAYER_CONFLICTS_SHADOW,
+        LAYER_DRAWINGSHEET,
+        LAYER_GRID,
+    };
+
+    static const GAL_SET saved( layers, arrayDim( layers ) );
+    return saved;
+}

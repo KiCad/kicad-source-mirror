@@ -36,6 +36,7 @@
 // Force the GAL_LAYER_ID version to be exposed
 %ignore GAL_SET::set(int, bool);
 %ignore GAL_SET::set(int);
+%ignore GAL_SET::UserVisbilityLayers();
 
 %include layer_ids.h
 

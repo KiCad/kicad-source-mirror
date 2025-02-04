@@ -345,6 +345,8 @@ public:
     std::vector<GAL_LAYER_ID> Seq() const;
 
     static GAL_SET DefaultVisible();
+
+    static GAL_SET UserVisbilityLayers();
 };
 
 /// Eeschema drawing layers
