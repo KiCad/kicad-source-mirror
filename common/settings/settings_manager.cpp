@@ -155,6 +155,13 @@ void SETTINGS_MANAGER::Save()
         if( dynamic_cast<COLOR_SETTINGS*>( settings.get() ) )
             continue;
 
+        // Never automatically save project settings, caller should use SaveProject or UnloadProject
+        if( dynamic_cast<PROJECT_FILE*>( settings.get() )
+            || dynamic_cast<PROJECT_LOCAL_SETTINGS*>( settings.get() ) )
+        {
+            continue;
+        }
+
         settings->SaveToFile( GetPathForSettingsFile( settings.get() ) );
     }
 }
@@ -1178,6 +1185,9 @@ bool SETTINGS_MANAGER::unloadProjectFile( PROJECT* aProject, bool aSave )
 
     PROJECT_FILE* file = m_project_files[name];
 
+    if( file->WasMigrated() )
+        aSave = false;
+
     auto it = std::find_if( m_settings.begin(), m_settings.end(),
                             [&file]( const std::unique_ptr<JSON_SETTINGS>& aPtr )
                             {
@@ -1188,7 +1198,9 @@ bool SETTINGS_MANAGER::unloadProjectFile( PROJECT* aProject, bool aSave )
     {
         wxString projectPath = GetPathForSettingsFile( it->get() );
 
-        FlushAndRelease( &aProject->GetLocalSettings(), aSave );
+        bool saveLocalSettings = aSave && !aProject->GetLocalSettings().WasMigrated();
+
+        FlushAndRelease( &aProject->GetLocalSettings(), saveLocalSettings );
 
         if( aSave )
             ( *it )->SaveToFile( projectPath );
