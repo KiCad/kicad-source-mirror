@@ -18,10 +18,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-03 19:59+0300\n"
-"PO-Revision-Date: 2025-01-31 09:02+0000\n"
+"PO-Revision-Date: 2025-02-04 23:24+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -42020,7 +42020,7 @@ msgid "Checking board footprints against library..."
 msgstr "Porównywanie footprintów na płytce z ich źródłami w bibliotece..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:892
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' was not found."
 msgstr "Biblioteka footprintów '%s' nie została znaleziona."
 
