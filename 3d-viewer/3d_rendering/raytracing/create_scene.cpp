@@ -1278,6 +1278,9 @@ void RENDER_3D_RAYTRACE_BASE::load3DModels( CONTAINER_3D& aDstContainer,
 
             for( FP_3DMODEL& model : fp->Models() )
             {
+                if( !model.m_Show || model.m_Filename.empty() )
+                    continue;
+
                 // get it from cache
                 const S3DMODEL* modelPtr =
                         cacheMgr->GetModel( model.m_Filename, footprintBasePath, fp );
