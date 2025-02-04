@@ -115,8 +115,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-03 19:59+0300\n"
-"PO-Revision-Date: 2025-02-03 18:48+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2025-02-04 09:03+0000\n"
+"Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
 "Language: it\n"
@@ -23794,13 +23794,11 @@ msgstr "Schema rispetto alla libreria per:"
 #: eeschema/tools/ee_inspection_tool.cpp:389
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:48
 #: pcbnew/tools/board_inspection_tool.cpp:1589
-#, fuzzy
 msgid "Library: "
 msgstr "Libreria: "
 
 #: eeschema/tools/ee_inspection_tool.cpp:390
 #: pcbnew/tools/board_inspection_tool.cpp:1590
-#, fuzzy
 msgid "Library item: "
 msgstr "Elemento libreria: "
 
@@ -26080,14 +26078,12 @@ msgid "Export zones"
 msgstr "Esporta zone"
 
 #: kicad/cli/command_pcb_export_3d.cpp:149
-#, fuzzy
 msgid "Export elements on inner copper layers"
-msgstr "Esporta zone su strati rame esterni."
+msgstr "Esporta elementi su strati rame interni"
 
 #: kicad/cli/command_pcb_export_3d.cpp:153
-#, fuzzy
 msgid "Export silkscreen graphics as a set of flat faces"
-msgstr "Esporta le grafiche della serigrafia."
+msgstr "Esporta le grafiche della serigrafia come insieme di facce piatte"
 
 #: kicad/cli/command_pcb_export_3d.cpp:157
 msgid "Export soldermask layers as a set of flat faces"
@@ -26100,9 +26096,8 @@ msgstr "Fondi insieme le geometrie sovrapposte"
 
 #: kicad/cli/command_pcb_export_3d.cpp:165
 #: pcbnew/dialogs/dialog_export_step_base.cpp:143
-#, fuzzy
 msgid "Don't cut via holes in conductor layers."
-msgstr "(piazzola PTH senza strati rame)"
+msgstr "Non tagliare i fori via negli strati conduttori."
 
 #: kicad/cli/command_pcb_export_3d.cpp:171
 msgid "Minimum distance between points to treat them as separate ones"
@@ -26267,9 +26262,8 @@ msgid "Plot graphic items using their contours"
 msgstr "Disegna gli elementi grafici usando i loro profili"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:61
-#, fuzzy
 msgid "Plot using the drill/place file origin"
-msgstr "Origine file posizionamenti/forature"
+msgstr "Traccia usando l'origine file posizionamenti/forature"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:65
 #: kicad/cli/command_pcb_export_gerber.cpp:53
@@ -26340,9 +26334,8 @@ msgid "The new behavior will match --mode-multi"
 msgstr "Il nuovo comportamento corrisponderà a --mode-multi"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:37
-#, fuzzy
 msgid "Generate Gencad from a list of layers"
-msgstr "Genera un DXF da un elenco di strati"
+msgstr "Genera Gencad da un elenco di strati"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:45
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:134
@@ -26439,19 +26432,16 @@ msgid "Color theme to use (will default to PCB Editor settings)"
 msgstr "Tema colore da usare (predefinito come l'editor del C.S.)"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:113
-#, fuzzy
 msgid "Plot the layers to individual PDF files"
-msgstr "Traccia gli strati dati su un singolo file Gerber"
+msgstr "Traccia gli strati su singoli file PDF"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:117
-#, fuzzy
 msgid "Plot the layers to a single PDF file with multiple pages"
-msgstr "Traccia gli strati dati su un singolo file Gerber"
+msgstr "Traccia gli strati su un singolo file PDF a più pagine"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:169
-#, fuzzy
 msgid "Cannot use more than one mode flag\n"
-msgstr "L'etichetta collega più di un filo"
+msgstr "Impossibile usare più di un flag di modalità\n"
 
 #: kicad/cli/command_pcb_export_pos.cpp:46
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:58
@@ -26459,12 +26449,12 @@ msgid "Generate Position File"
 msgstr "Genera file posizione"
 
 #: kicad/cli/command_pcb_export_pos.cpp:50
-#, fuzzy
 msgid ""
 "Valid options: front,back,both. Gerber format only supports \"front\" or "
 "\"back\"."
 msgstr ""
-"Opzioni valide: front, back, both. Il formato gerber supporta solo \"both\"."
+"Opzioni valide: front, back, both. Il formato gerber supporta solo \"front\" "
+"o \"back\"."
 
 #: kicad/cli/command_pcb_export_pos.cpp:55
 msgid "Valid options: ascii,csv,gerber"
@@ -26542,32 +26532,30 @@ msgid "Renders the PCB in 3D view to PNG or JPEG image"
 msgstr "Converte il C.S. nella vista 3D in immagine PNG o JPEG"
 
 #: kicad/cli/command_pcb_render.cpp:225
-#, fuzzy
 msgid "Image width"
-msgstr "Larghezza pagina"
+msgstr "Larghezza immagine"
 
 #: kicad/cli/command_pcb_render.cpp:231
-#, fuzzy
 msgid "Image height"
-msgstr "Altezza pagina"
+msgstr "Altezza immagine"
 
 #: kicad/cli/command_pcb_render.cpp:237
-#, fuzzy, c-format
+#, c-format
 msgid "Render from side. Options: %s"
-msgstr "Opzioni di rendering"
+msgstr "Render dal lato. Opzioni: %s"
 
 #: kicad/cli/command_pcb_render.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Image background. Options: %s. Default: transparent for PNG, opaque for JPEG"
 msgstr ""
-"Sondo immagine. Opzioni: trasparente, opaco. Predefinito: trasparente per "
-"PNG, opaco per JPEG"
+"Sfondo immagine. Opzioni: %s. Predefinito: trasparente per PNG, opaco per "
+"JPEG"
 
 #: kicad/cli/command_pcb_render.cpp:251
-#, fuzzy, c-format
+#, c-format
 msgid "Render quality. Options: %s"
-msgstr "Opzioni di disegno"
+msgstr "Qualità render. Opzioni: %s"
 
 #: kicad/cli/command_pcb_render.cpp:257
 #, c-format
@@ -26587,9 +26575,8 @@ msgid "Use perspective projection instead of orthogonal"
 msgstr "Usa la proiezione prospettica anziché quella ortogonale"
 
 #: kicad/cli/command_pcb_render.cpp:274
-#, fuzzy
 msgid "Camera zoom"
-msgstr "Opzioni fotocamera"
+msgstr "Zoom fotocamera"
 
 #: kicad/cli/command_pcb_render.cpp:279
 msgid "Pan camera, format 'X,Y,Z' e.g.: '3,0,0'"
@@ -26637,49 +26624,40 @@ msgid "Side lights elevation angle in degrees, range: 0-90"
 msgstr "Angolo di elevazione delle luci laterali in gradi, intervallo: 0-90"
 
 #: kicad/cli/command_pcb_render.cpp:342
-#, fuzzy
 msgid "Invalid background\n"
-msgstr "Sfondo"
+msgstr "Sfondo non valido\n"
 
 #: kicad/cli/command_pcb_render.cpp:348
-#, fuzzy
 msgid "Invalid rotation format\n"
-msgstr "Formato rapporto non valido\n"
+msgstr "Formato rotazione non valido\n"
 
 #: kicad/cli/command_pcb_render.cpp:354
-#, fuzzy
 msgid "Invalid pan format\n"
-msgstr "Formato non valido\n"
+msgstr "Formato pan non valido\n"
 
 #: kicad/cli/command_pcb_render.cpp:360
-#, fuzzy
 msgid "Invalid pivot format\n"
-msgstr "Formato rapporto non valido\n"
+msgstr "Formato pivot non valido\n"
 
 #: kicad/cli/command_pcb_render.cpp:367
-#, fuzzy
 msgid "Invalid light top intensity format\n"
-msgstr "Formato rapporto non valido\n"
+msgstr "Formato intensità luce in cima non valido\n"
 
 #: kicad/cli/command_pcb_render.cpp:374
-#, fuzzy
 msgid "Invalid light bottom intensity format\n"
-msgstr "Formato rapporto non valido\n"
+msgstr "Formato intensità luce in fondo non valido\n"
 
 #: kicad/cli/command_pcb_render.cpp:381
-#, fuzzy
 msgid "Invalid light side intensity format\n"
-msgstr "Formato non valido\n"
+msgstr "Formato intensità luce laterale non valido\n"
 
 #: kicad/cli/command_pcb_render.cpp:388
-#, fuzzy
 msgid "Invalid light camera intensity format\n"
-msgstr "Formato non valido\n"
+msgstr "Formato intensità luce fotocamera non valido\n"
 
 #: kicad/cli/command_pcb_render.cpp:403
-#, fuzzy
 msgid "Invalid image format\n"
-msgstr "Formato non valido\n"
+msgstr "Formato immagine non valido\n"
 
 #: kicad/cli/command_sch.h:31
 msgid "Schematics"
@@ -26747,22 +26725,20 @@ msgid "Export a netlist"
 msgstr "Esporta netlist"
 
 #: kicad/cli/command_sch_export_netlist.cpp:40
-#, fuzzy
 msgid ""
 "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, "
 "orcadpcb2, spice, spicemodel, pads, allegro"
 msgstr ""
 "Formato di uscita netlist, opzioni valide: kicadsexpr, kicadxml, cadstar, "
-"orcadpcb2, spice, spicemodel"
+"orcadpcb2, spice, spicemodel, pads, allegro"
 
 #: kicad/cli/command_sch_export_plot.cpp:68
 msgid "Color theme to use (will default to schematic settings)"
 msgstr "Tema colore da usare (predefinito come l'editor degli schemi)"
 
 #: kicad/cli/command_sch_export_plot.cpp:82
-#, fuzzy
 msgid "Default font name"
-msgstr "Font predefinito:"
+msgstr "Nome font predefinito"
 
 #: kicad/cli/command_sch_export_plot.cpp:88
 msgid "Do not generate property popups in PDF"
@@ -26862,14 +26838,12 @@ msgid "version info format (plain, commit, about)"
 msgstr "formato info versione (semplice, commit, info)"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:33
-#, fuzzy
 msgid "Destination:"
-msgstr "Valore"
+msgstr "Destinazione:"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:48
-#, fuzzy
 msgid "Generate error if no files copied"
-msgstr "Genera file di lavoro Gerber"
+msgstr "Genera errore senza file copiati"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:51
 msgid "Overwrite files in destination"
@@ -26880,9 +26854,8 @@ msgid "Copy Files Job Settings"
 msgstr "Impostazioni lavoro Copia file"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:48
-#, fuzzy
 msgid "Record output messages"
-msgstr "Messaggi d'uscita"
+msgstr "Registra i messaggi d'uscita"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:51
 msgid "Ignore non-zero exit code"
@@ -26894,24 +26867,21 @@ msgstr "Impostazioni lavoro Esegui comando"
 
 #: kicad/dialogs/dialog_jobset_output_options.cpp:54
 #: kicad/dialogs/dialog_jobset_output_options_base.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "%s Output Options"
-msgstr "Opzioni Postscript"
+msgstr "%s opzioni d'uscita"
 
 #: kicad/dialogs/dialog_jobset_output_options.cpp:85
-#, fuzzy
 msgid "Select output directory"
-msgstr "Seleziona percorso di uscita"
+msgstr "Seleziona cartella d'uscita"
 
 #: kicad/dialogs/dialog_jobset_output_options.cpp:99
-#, fuzzy
 msgid "Select output path"
-msgstr "Seleziona percorso"
+msgstr "Seleziona percorso d'uscita"
 
 #: kicad/dialogs/dialog_jobset_output_options.cpp:117
-#, fuzzy
 msgid "Output path cannot be empty"
-msgstr "Il nome collegamento non può essere vuoto."
+msgstr "Il percorso d'uscita non può essere vuoto"
 
 #: kicad/dialogs/dialog_jobset_output_options.cpp:194
 msgid "Zip"
@@ -26923,9 +26893,8 @@ msgid "Description:"
 msgstr "Descrizione:"
 
 #: kicad/dialogs/dialog_jobset_output_options_base.cpp:64
-#, fuzzy
 msgid "Include jobs:"
-msgstr "Includi &zone"
+msgstr "Includi lavori:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:122
 #: kicad/dialogs/dialog_template_selector_base.h:66
@@ -26963,9 +26932,8 @@ msgid "A new version of KiCad is available!"
 msgstr "Una nuova versione di KiCad è disponibile!"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:52
-#, fuzzy
 msgid "&Skip This Version"
-msgstr "Salta questa versione"
+msgstr "&Salta questa versione"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:53
 msgid ""
@@ -26976,9 +26944,8 @@ msgstr ""
 "note di aggiornamento saranno visualizzate per le versioni più recenti."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
-#, fuzzy
 msgid "&Remind Me Later"
-msgstr "Ricordamelo più avanti"
+msgstr "&Ricordamelo più avanti"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:61
 msgid ""
@@ -26989,18 +26956,16 @@ msgstr ""
 "mostrata di nuovo quando si riavvierà KiCad."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:65
-#, fuzzy
 msgid "&View Details"
-msgstr "Visualizza dettagli"
+msgstr "&Visualizza dettagli"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
 msgid "Launch a web browser to the release announcements page."
 msgstr "Avvia un browser Web e va alla pagina degli annunci della versione."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
-#, fuzzy
 msgid "Open &Downloads Page"
-msgstr "Apri pagina scaricamento"
+msgstr "Apri pagina &di scaricamento"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:71
 msgid "Go to the platform appropriate downloads page."
@@ -27011,28 +26976,25 @@ msgid "Update Available"
 msgstr "Aggiornamento disponibile"
 
 #: kicad/dialogs/panel_jobset.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid "Output: %s"
-msgstr "Uscita:"
+msgstr "Uscita: %s"
 
 #: kicad/dialogs/panel_jobset.cpp:64
-#, fuzzy
 msgid "No."
-msgstr "No"
+msgstr "No."
 
 #: kicad/dialogs/panel_jobset.cpp:65
 msgid "Job Description"
 msgstr "Descrizione lavoro"
 
 #: kicad/dialogs/panel_jobset.cpp:147 kicad/dialogs/panel_jobset.cpp:130
-#, fuzzy
 msgid "No output messages"
-msgstr "Messaggi d'uscita"
+msgstr "Nessun messaggio d'uscita"
 
 #: kicad/dialogs/panel_jobset.cpp:218 kicad/dialogs/panel_jobset.cpp:201
-#, fuzzy
 msgid "Last run successful"
-msgstr "Connessione riuscita"
+msgstr "Ultima esecuzione riuscita"
 
 #: kicad/dialogs/panel_jobset.cpp:224 kicad/dialogs/panel_jobset.cpp:207
 msgid "Last run failed"
@@ -27040,19 +27002,16 @@ msgstr "Ultima esecuzione non riuscita"
 
 #: kicad/dialogs/panel_jobset.cpp:252 kicad/dialogs/panel_jobset.cpp:972
 #: kicad/dialogs/panel_jobset.cpp:235 kicad/dialogs/panel_jobset.cpp:936
-#, fuzzy
 msgid "Running jobs"
-msgstr "Modalità regolazione"
+msgstr "Lavori in esecuzione"
 
 #: kicad/dialogs/panel_jobset.cpp:281 kicad/dialogs/panel_jobset.cpp:264
-#, fuzzy
 msgid "Edit Output Options..."
-msgstr "Opzioni Postscript"
+msgstr "Modifica opzioni d'uscita..."
 
 #: kicad/dialogs/panel_jobset.cpp:282 kicad/dialogs/panel_jobset.cpp:265
-#, fuzzy
 msgid "Delete Output"
-msgstr "Opzioni generali"
+msgstr "Elimina uscita"
 
 #: kicad/dialogs/panel_jobset.cpp:285 kicad/dialogs/panel_jobset.cpp:268
 msgid "View Last Run Results..."
@@ -27067,14 +27026,12 @@ msgid "Edit Job Settings..."
 msgstr "Impostazioni modifica lavoro..."
 
 #: kicad/dialogs/panel_jobset.cpp:381 kicad/dialogs/panel_jobset.cpp:364
-#, fuzzy
 msgid "Delete selected jobs"
-msgstr "Elimina gli elementi selezionati"
+msgstr "Elimina i lavori selezionati"
 
 #: kicad/dialogs/panel_jobset.cpp:383 kicad/dialogs/panel_jobset.cpp:366
-#, fuzzy
 msgid "Select all jobs"
-msgstr "Seleziona tutto"
+msgstr "Seleziona tutti i lavori"
 
 #: kicad/dialogs/panel_jobset.cpp:684 kicad/dialogs/panel_jobset.cpp:648
 msgid "Job Types"
@@ -27085,29 +27042,24 @@ msgid "Add New Job"
 msgstr "Aggiungi nuovo lavoro"
 
 #: kicad/dialogs/panel_jobset.cpp:696 kicad/dialogs/panel_jobset.cpp:660
-#, fuzzy
 msgid "Select job type:"
-msgstr "Seleziona preimpostazione:"
+msgstr "Seleziona tipo lavoro:"
 
 #: kicad/dialogs/panel_jobset.cpp:776 kicad/dialogs/panel_jobset.cpp:740
-#, fuzzy
 msgid "Output Types"
-msgstr "Dimensione in uscita"
+msgstr "Tipi d'uscita"
 
 #: kicad/dialogs/panel_jobset.cpp:785 kicad/dialogs/panel_jobset.cpp:749
-#, fuzzy
 msgid "Add New Output"
-msgstr "Aggiungi zona ritaglio"
+msgstr "Aggiungi nuova uscita"
 
 #: kicad/dialogs/panel_jobset.cpp:786 kicad/dialogs/panel_jobset.cpp:750
-#, fuzzy
 msgid "Select output type:"
-msgstr "Seleziona percorso di uscita"
+msgstr "Seleziona tipo d'uscita:"
 
 #: kicad/dialogs/panel_jobset.cpp:951 kicad/dialogs/panel_jobset.cpp:915
-#, fuzzy
 msgid "No outputs defined"
-msgstr "Non connesso"
+msgstr "Nessuna uscita definita"
 
 #: kicad/dialogs/panel_jobset_base.cpp:24
 msgid "Jobs"
@@ -27115,9 +27067,8 @@ msgstr "Lavori"
 
 #: kicad/dialogs/panel_jobset_base.cpp:83
 #: kicad/dialogs/panel_jobset_base.cpp:82
-#, fuzzy
 msgid "Outputs"
-msgstr "Uscita"
+msgstr "Uscite"
 
 #: kicad/dialogs/panel_jobset_base.cpp:116
 #: kicad/dialogs/panel_jobset_base.cpp:115
@@ -27126,9 +27077,8 @@ msgstr "Salva insieme di lavori"
 
 #: kicad/dialogs/panel_jobset_base.cpp:122
 #: kicad/dialogs/panel_jobset_base.cpp:121
-#, fuzzy
 msgid "Generate All Outputs"
-msgstr "Opzioni generali"
+msgstr "Genera tutte le uscite"
 
 #: kicad/dialogs/panel_jobset_base.h:133
 msgid "Job Output Run Log"
@@ -27284,28 +27234,24 @@ msgid "Export STEP"
 msgstr "Esporta STEP"
 
 #: kicad/kicad_cli.cpp:121
-#, fuzzy
 msgid "Export BREP"
-msgstr "Esporta STEP"
+msgstr "Esporta BREP"
 
 #: kicad/kicad_cli.cpp:122
-#, fuzzy
 msgid "Export XAO"
-msgstr "Esporta DXF"
+msgstr "Esporta XAO"
 
 #: kicad/kicad_cli.cpp:123
 msgid "Export VRML"
 msgstr "Esporta VRLM"
 
 #: kicad/kicad_cli.cpp:124
-#, fuzzy
 msgid "Export PLY"
-msgstr "Esporta HPGL"
+msgstr "Esporta PLY"
 
 #: kicad/kicad_cli.cpp:125
-#, fuzzy
 msgid "Export STL"
-msgstr "Esporta STEP"
+msgstr "Esporta STL"
 
 #: kicad/kicad_cli.cpp:144
 msgid "Export PS"
@@ -27333,9 +27279,8 @@ msgid "%d package update(s) avaliable"
 msgstr "%d aggiornamento(i) pacchetti disponibile"
 
 #: kicad/kicad_manager_frame.cpp:789 kicad/kicad_manager_frame.cpp:798
-#, fuzzy
 msgid "Error opening jobs file"
-msgstr "Errore nel creare il file svg"
+msgstr "Errore nel aprire il file lavori"
 
 #: kicad/kicad_manager_frame.cpp:947 kicad/kicad_manager_frame.cpp:956
 msgid "Edit File in Text Editor"
@@ -27470,9 +27415,9 @@ msgid "Plugins (%d)"
 msgstr "Plugin (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Fabrication plugins (%d)"
-msgstr "File per fabbricazione"
+msgstr "Plugin fabbricazione (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:52
 #, c-format
@@ -27636,7 +27581,6 @@ msgid "Package identifier: "
 msgstr "Identificatore pacchetto: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:231
-#, fuzzy
 msgid "License: "
 msgstr "Licenza: "
 
@@ -28184,9 +28128,8 @@ msgid "Fetching Remote"
 msgstr "Recupero remoto"
 
 #: kicad/project_tree_pane.cpp:1735 kicad/project_tree_pane.cpp:1731
-#, fuzzy
 msgid "Failed to pull project"
-msgstr "Fallito push progetto"
+msgstr "Fallito pull del progetto"
 
 #: kicad/project_tree_pane.cpp:1757 kicad/project_tree_pane.cpp:1753
 msgid "Failed to push project"
@@ -28278,7 +28221,6 @@ msgid "New Project..."
 msgstr "Nuovo progetto..."
 
 #: kicad/tools/kicad_manager_actions.cpp:44
-#, fuzzy
 msgid "Create a new, blank project"
 msgstr "Crea un nuovo progetto vuoto"
 
@@ -28287,9 +28229,8 @@ msgid "New Project from Template..."
 msgstr "Nuovo progetto da modello..."
 
 #: kicad/tools/kicad_manager_actions.cpp:53
-#, fuzzy
 msgid "Create a new project based on an existing project"
-msgstr "Crea un nuovo simbolo, derivato da un simbolo esistente"
+msgstr "Crea un nuovo progetto derivato da un progetto esistente"
 
 #: kicad/tools/kicad_manager_actions.cpp:60
 msgid "Clone Project from Repository..."
@@ -28316,19 +28257,16 @@ msgid "Close Project"
 msgstr "Chiudi progetto"
 
 #: kicad/tools/kicad_manager_actions.cpp:115
-#, fuzzy
 msgid "Edit schematic in schematic editor"
 msgstr "Apri schema nell'editor schemi elettrici"
 
 #: kicad/tools/kicad_manager_actions.cpp:137
-#, fuzzy
 msgid "Edit PCB in PCB editor"
-msgstr "Modifica in un editor di testo"
+msgstr "Modifica C.S nell'editor dei C.S."
 
 #: kicad/tools/kicad_manager_actions.cpp:148
-#, fuzzy
 msgid "Create, delete and edit PCB footprints"
-msgstr "Crea, cancella e modifica le impronte"
+msgstr "Crea, cancella e modifica impronte per C.S."
 
 #: kicad/tools/kicad_manager_actions.cpp:159
 msgid "Preview Gerber output files"
@@ -28869,9 +28807,8 @@ msgstr ""
 "che non sono su tutte le pagine sono visualizzati"
 
 #: pagelayout_editor/tools/pl_actions.cpp:69
-#, fuzzy
 msgid "Place Bitmaps"
-msgstr "Piazza immagine"
+msgstr "Piazza immagini"
 
 #: pagelayout_editor/tools/pl_actions.cpp:89
 msgid "Append Existing Drawing Sheet..."
