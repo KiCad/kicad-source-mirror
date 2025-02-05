@@ -22,10 +22,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-05 18:25+0300\n"
-"PO-Revision-Date: 2025-02-04 09:03+0000\n"
+"PO-Revision-Date: 2025-02-05 17:06+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1934,7 +1934,7 @@ msgstr "Нет"
 
 #: common/design_block_info_impl.cpp:135
 msgid "Loading design_blocks..."
-msgstr "Загрузка блоков_дизайна..."
+msgstr "Загрузка design_blocks..."
 
 #: common/design_block_io.cpp:47 common/design_block_io.cpp:56
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
@@ -1950,7 +1950,7 @@ msgstr "НЕИЗВЕСТНЫЙ (%d)"
 
 #: common/design_block_io.cpp:135
 msgid "KiCad Design Block folders"
-msgstr "Папки для блоков KiCad дизайна"
+msgstr "Папки дизайн-блоков KiCad"
 
 #: common/design_block_io.cpp:172
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3023
@@ -1966,7 +1966,6 @@ msgid ""
 "Make sure you have write permissions and try again."
 msgstr ""
 "Не удалось создать путь к библиотеке '%s'.\n"
-"\n"
 "\n"
 "Убедитесь, что у вас есть права на запись, и повторите попытку."
 
@@ -1989,16 +1988,16 @@ msgstr "Неожиданная папка '%s' найдена в пути к б�
 #: common/design_block_io.cpp:245
 #, c-format
 msgid "Design block library '%s' cannot be deleted."
-msgstr "Библиотека блоков проектирования '%s' не может быть удалена."
+msgstr "Библиотека дизайн-блоков '%s' не может быть удалена."
 
 #: common/design_block_io.cpp:337
 #, c-format
 msgid "Design block metadata file '%s' could not be read."
-msgstr "Файл метаданных блока проектирования '%s' не может быть прочитан."
+msgstr "Файл метаданных дизайн-блока '%s' не может быть прочитан."
 
 #: common/design_block_io.cpp:353
 msgid "Design block does not have a valid library ID."
-msgstr "Блок дизайна не имеет действительного идентификатора библиотеки."
+msgstr "Дизайн-блок не имеет действительного идентификатора библиотеки."
 
 #: common/design_block_io.cpp:358
 #, c-format
@@ -2008,29 +2007,27 @@ msgstr "Исходный файл схемы '%s' не существует."
 #: common/design_block_io.cpp:372
 #, c-format
 msgid "Design block folder '%s' could not be created."
-msgstr "Не удалось создать папку блока дизайна '%s'."
+msgstr "Не удалось создать папку дизайн-блока '%s'."
 
 #: common/design_block_io.cpp:389
 #, c-format
 msgid "Schematic file '%s' could not be saved as design block at '%s'."
-msgstr ""
-"Файл схемы '%s' не может быть сохранен в качестве блока проектирования по "
-"адресу '%s'."
+msgstr "Файл схемы '%s' не может быть сохранен как дизайн-блок в '%s'."
 
 #: common/design_block_io.cpp:423
 #, c-format
 msgid "Design block metadata file '%s' could not be saved."
-msgstr "Не удалось сохранить файл метаданных блока проектирования '%s'."
+msgstr "Не удалось сохранить файл метаданных дизайн-блока '%s'."
 
 #: common/design_block_io.cpp:437
 #, c-format
 msgid "Design block '%s' does not exist."
-msgstr "Проектный блок '%s' не существует."
+msgstr "Дизайн-блок '%s' не существует."
 
 #: common/design_block_io.cpp:443
 #, c-format
 msgid "Design block folder '%s' could not be deleted."
-msgstr "Не удалось удалить папку проектного блока '%s'."
+msgstr "Не удалось удалить папку дизайн-блока '%s'."
 
 #: common/design_block_lib_table.cpp:232
 #, c-format
@@ -2038,15 +2035,13 @@ msgid ""
 "Duplicate library nickname '%s' found in design block library table file "
 "line %d."
 msgstr ""
-"В строке %d файла таблицы библиотеки блоков проектирования обнаружен "
-"дубликат библиотечного псевдонима '%s'."
+"Обнаружен дубликат псевдонима библиотеки '%s' в строке %d файла таблицы "
+"библиотек дизайн-блоков."
 
 #: common/design_block_lib_table.cpp:334
 #, c-format
 msgid "design-block-lib-table files contain no library named '%s'."
-msgstr ""
-"Файлы конструкции-блока-библиотеки-таблицы не содержат библиотеки с именем "
-"'%s'."
+msgstr "Файлы design-block-lib-table не содержат библиотеки с именем '%s'."
 
 #: common/design_block_lib_table.cpp:569 common/fp_lib_table.cpp:567
 #: eeschema/symbol_lib_table.cpp:605
@@ -2494,7 +2489,7 @@ msgstr "Путь"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:33
 msgid "design block"
-msgstr "дизайнерский блок"
+msgstr "дизайн-блок"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:63
 #, c-format
@@ -2502,13 +2497,12 @@ msgid ""
 "Error creating design block library table '%s'.\n"
 "%s"
 msgstr ""
-"Ошибка при создании таблицы библиотеки блоков проектирования '%s'.\n"
-"\n"
+"Ошибка создания таблицы библиотек дизайн-блоков '%s'.\n"
 "%s"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:76
 msgid "Please select a design block library table file."
-msgstr "Выберите файл таблицы библиотеки конструкторских блоков."
+msgstr "Выберите файл таблицы библиотек дизайн-блоков."
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:85
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:83
@@ -2524,8 +2518,7 @@ msgid ""
 "Error reading design block library table '%s'.\n"
 "%s"
 msgstr ""
-"Ошибка при чтении таблицы библиотеки блоков проектирования '%s'.\n"
-"\n"
+"Ошибка чтения таблицы библиотек дизайн-блоков '%s'.\n"
 "%s"
 
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:112
@@ -2538,8 +2531,7 @@ msgstr "Не удалось создать глобальную таблицу �
 #, c-format
 msgid "Error copying global design block library table '%s' to '%s'."
 msgstr ""
-"Ошибка при копировании таблицы глобальной библиотеки блоков проектирования "
-"'%s' в '%s'."
+"Ошибка копирования глобальной таблицы библиотек дизайн-блоков '%s' в '%s'."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:41
 #, c-format
@@ -2556,7 +2548,7 @@ msgid ""
 "use the default selection."
 msgstr ""
 "KiCad был запущен впервые, используя новую таблицу библиотек %s для\n"
-"управления библиотеками. Чтобы KiCad получил доступ к библиотекам %s, нужно\n"
+"доступа к библиотеками. Чтобы KiCad получил доступ к библиотекам %s, нужно\n"
 "настроить глобальную таблицу библиотек %s. Выберите одну из опций снизу.\n"
 "Если не уверены что выбрать, используйте вариант по умолчанию."
 
@@ -2671,7 +2663,7 @@ msgstr "Размер сетки X вне диапазона."
 
 #: common/dialogs/dialog_grid_settings.cpp:89
 msgid "Grid size Y out of range."
-msgstr "Размер сетки Y вне диапазона"
+msgstr "Размер сетки Y вне диапазона."
 
 #: common/dialogs/dialog_grid_settings_base.cpp:25
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:109
@@ -3243,7 +3235,7 @@ msgstr ""
 
 #: common/dialogs/dialog_paste_special_base.h:47
 msgid "Paste Special"
-msgstr "Вставить как..."
+msgstr "Специальная вставка"
 
 #: common/dialogs/dialog_plugin_options.cpp:37
 msgid ""
@@ -3371,8 +3363,7 @@ msgid ""
 "Warning: scale set to a very large value.\n"
 "It will be clamped to %f."
 msgstr ""
-"Внимание: масштаб установлен на очень большое значение.\n"
-"\n"
+"Внимание: масштабу присвоено очень большое значение.\n"
 "Оно будет ограничено до %f."
 
 #: common/dialogs/dialog_print_generic.cpp:172
@@ -3381,9 +3372,8 @@ msgid ""
 "Warning: scale set to a very small value.\n"
 "It will be clamped to %f."
 msgstr ""
-"Внимание: масштаб установлен на очень маленькое значение.\n"
-"\n"
-"Она будет ограничена до %f."
+"Внимание: масштабу присвоено очень маленькое значение.\n"
+"Оно будет ограничено до %f."
 
 #: common/dialogs/dialog_print_generic.cpp:244
 #: common/dialogs/dialog_print_generic.cpp:295
@@ -3722,7 +3712,7 @@ msgstr "Закоммитить"
 
 #: common/dialogs/git/dialog_git_commit.cpp:169
 msgid "Commit message cannot be empty"
-msgstr "Сообщение коммита не может быть пустым."
+msgstr "Сообщение коммита не может быть пустым"
 
 #: common/dialogs/git/dialog_git_repository.cpp:154
 #: common/dialogs/git/dialog_git_repository.cpp:383
@@ -3994,8 +3984,7 @@ msgid ""
 "File explorer command.\n"
 "example:"
 msgstr ""
-"Команда проводника файлов.\n"
-"\n"
+"Команда менеджера файлов.\n"
 "пример:"
 
 #: common/dialogs/panel_common_settings.cpp:360
@@ -4279,7 +4268,7 @@ msgid ""
 msgstr ""
 "Задержка времени от первого изменения до создания файла резервной копии на "
 "диске.\n"
-"Если установить 0, резервное копирование будет отключено."
+"Если установить 0, резервное копирование будет отключено"
 
 #: common/dialogs/panel_common_settings_base.cpp:347
 #: common/dialogs/panel_common_settings_base.cpp:434
@@ -4526,8 +4515,8 @@ msgstr "Библиотека '%s' не найдена."
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing design blocks?"
 msgstr ""
-"Папка '%s' уже существует. Хотите ли вы перезаписать все существующие блоки "
-"дизайна?"
+"Папка '%s' уже существует. Хотите ли вы перезаписать существующие "
+"дизайн-блоки?"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:862
 #: eeschema/dialogs/panel_sym_lib_table.cpp:989
@@ -4538,7 +4527,7 @@ msgstr "Конвертировать библиотеку"
 #: common/dialogs/panel_design_block_lib_table.cpp:891
 #, c-format
 msgid "Failed to save design block library file '%s'."
-msgstr "Не удалось сохранить файл библиотеки блоков проектирования '%s'."
+msgstr "Не удалось сохранить файл библиотеки дизайн-блоков '%s'."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:930
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:959
@@ -4583,7 +4572,7 @@ msgstr "Добавить в любом случае"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1176
 msgid "Design Block Libraries"
-msgstr "Библиотеки блоков проектирования"
+msgstr "Библиотеки дизайн-блоков"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1197
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1245
@@ -5475,7 +5464,7 @@ msgstr "Сверло перех. отв."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:56
 msgid "uVia Size"
-msgstr "Размер перех.микроотв."
+msgstr "Размер перех. микроотв."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:57
 msgid "uVia Hole"
@@ -6888,7 +6877,7 @@ msgstr "Каталог '%s' не существует"
 #: common/gestfich.cpp:338
 #, c-format
 msgid "'%s' is not a directory"
-msgstr "'%s' не является каталогом."
+msgstr "'%s' не является каталогом"
 
 #: common/gestfich.cpp:350
 #, c-format
@@ -8317,7 +8306,7 @@ msgstr "Ошибка загрузки таблицы библиотек поса
 
 #: common/project.cpp:451 common/project.cpp:457
 msgid "Error loading project design block library table."
-msgstr "Ошибка при загрузке таблицы библиотеки проектных блоков."
+msgstr "Ошибка загрузки таблицы библиотек дизайн-блоков."
 
 #: common/project/net_settings.cpp:65 pcbnew/board.cpp:131
 msgid "This is the default net class."
@@ -9200,7 +9189,7 @@ msgstr "Выбрать столбцы..."
 
 #: common/tool/actions.cpp:978
 msgid "Switch units"
-msgstr "Переключить ед.изм."
+msgstr "Переключить ед. изм."
 
 #: common/tool/actions.cpp:979
 msgid "Switch between imperial and metric units"
@@ -9365,12 +9354,11 @@ msgstr "Редактировать таблицы библиотек посад.
 
 #: common/tool/actions.cpp:1177
 msgid "Manage Design Block Libraries..."
-msgstr "Управление библиотеками проектных блоков..."
+msgstr "Менеджер библиотек дизайн-блоков..."
 
 #: common/tool/actions.cpp:1178
 msgid "Edit the global and project design block library lists"
-msgstr ""
-"Редактирование списков библиотеки блоков глобального и проектного дизайна"
+msgstr "Редактировать таблицы библиотек дизайн-блоков, глобальные и проекта"
 
 #: common/tool/actions.cpp:1184
 msgid "Getting Started with KiCad"
@@ -9386,7 +9374,7 @@ msgstr "Открыть руководство для начинающих \"На
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:136
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:187
 msgid "Help"
-msgstr "Руководство пользователя"
+msgstr "Помощь"
 
 #: common/tool/actions.cpp:1192
 msgid "Open product documentation in a web browser"
@@ -10123,11 +10111,11 @@ msgstr "Каталоги библиотек посад. мест KiCad"
 
 #: common/wildcards_and_files_ext.cpp:359
 msgid "KiCad design block path"
-msgstr "Путь к блоку проектирования в KiCad"
+msgstr "Путь к дизайн-блокам KiCad"
 
 #: common/wildcards_and_files_ext.cpp:366
 msgid "KiCad design block library paths"
-msgstr "Пути библиотеки конструкторских блоков KiCad"
+msgstr "Пути библиотек дизайн-блоков KiCad"
 
 #: common/wildcards_and_files_ext.cpp:373
 msgid "Drawing sheet files"
@@ -10807,16 +10795,16 @@ msgstr "Выбрана цепь:"
 #: eeschema/design_block_tree_model_adapter.cpp:199
 #, c-format
 msgid "Error loading design block %s from library '%s'."
-msgstr "Ошибка при загрузке блока проектирования %s из библиотеки '%s'."
+msgstr "Ошибка загрузки дизайн-блока %s из библиотеки '%s'."
 
 #: eeschema/design_block_utils.cpp:47
 #, c-format
 msgid "Design block '%s' already exists in library '%s'."
-msgstr "Блок проектирования '%s' уже существует в библиотеке '%s'."
+msgstr "Дизайн-блок '%s' уже существует в библиотеке '%s'."
 
 #: eeschema/design_block_utils.cpp:50
 msgid "Overwrite existing design block?"
-msgstr "Перезаписать существующий блок дизайна?"
+msgstr "Перезаписать существующий дизайн-блок?"
 
 #: eeschema/design_block_utils.cpp:70 eeschema/sch_base_frame.cpp:287
 #: pcbnew/footprint_libraries_utils.cpp:410
@@ -10873,22 +10861,20 @@ msgstr "Описание библиотеки"
 
 #: eeschema/design_block_utils.cpp:291 eeschema/design_block_utils.cpp:369
 msgid "Please select a library to save the design block to."
-msgstr "Выберите библиотеку, в которой будет сохранен блок дизайна."
+msgstr "Выберите библиотеку, в которую сохранить дизайн-блок."
 
 #: eeschema/design_block_utils.cpp:301 eeschema/design_block_utils.cpp:394
 msgid "Design blocks with nested sheets are not supported."
-msgstr "Блоки дизайна с вложенными листами не поддерживаются."
+msgstr "Дизайн-блоки со вложенными листами не поддерживаются."
 
 #: eeschema/design_block_utils.cpp:333 eeschema/design_block_utils.cpp:427
 msgid "Error saving temporary schematic file to create design block."
-msgstr ""
-"Ошибка сохранения временного файла схемы для создания блока проектирования."
+msgstr "Ошибка сохранения временного файла схемы для создания дизайн-блока."
 
 #: eeschema/design_block_utils.cpp:378
 msgid "Please select some items to save as a design block."
 msgstr ""
-"Пожалуйста, выберите несколько элементов, чтобы сохранить их в виде "
-"дизайнерского блока."
+"Пожалуйста, выберите несколько элементов, для сохранения в дизайн-блоке."
 
 #: eeschema/design_block_utils.cpp:464
 msgid "Please select a library to delete."
@@ -10909,28 +10895,28 @@ msgid ""
 "Delete design block library '%s' from disk? This will delete all design "
 "blocks within the library."
 msgstr ""
-"Удалить библиотеку блоков проектирования '%s' с диска? Это приведет к "
-"удалению всех блоков дизайна в библиотеке."
+"Удалить библиотеку дизайн-блоков '%s' с диска? Это приведет к удалению всех "
+"дизайн-блоков в библиотеке."
 
 #: eeschema/design_block_utils.cpp:493
 #, c-format
 msgid "Design block library '%s' deleted"
-msgstr "Библиотека блоков проектирования '%s' удалена"
+msgstr "Библиотека дизайн-блоков '%s' удалена"
 
 #: eeschema/design_block_utils.cpp:518
 #, c-format
 msgid "Delete design block '%s' in library '%s' from disk?"
-msgstr "Удалить блок проектирования '%s' в библиотеке '%s' с диска?"
+msgstr "Удалить дизайн-блок '%s' в библиотеке '%s' с диска?"
 
 #: eeschema/design_block_utils.cpp:534
 #, c-format
 msgid "Design block '%s' deleted from library '%s'"
-msgstr "Блок проектирования '%s' удален из библиотеки '%s'"
+msgstr "Дизайн-блок '%s' удален из библиотеки '%s'"
 
 #: eeschema/design_block_utils.cpp:615
 #, c-format
 msgid "Error loading designblock %s from library '%s'."
-msgstr "Ошибка при загрузке дизайн-блока %s из библиотеки '%s'."
+msgstr "Ошибка загрузки дизайн-блока %s из библиотеки '%s'."
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -13072,8 +13058,7 @@ msgid ""
 "For instance, this should be checked for a quad NAND gate, while it should "
 "not be checked for a dual triode (where unit C is the filament)."
 msgstr ""
-"Поставьте этот флажок, если все\n"
-"части символа имеют одну и ту же функцию.\n"
+"Поставьте этот флажок, если все части символа имеют одну и ту же функцию.\n"
 "Например, следует ставить флажок для счетверенного вентиля И-НЕ, но не для "
 "двойного триода (где часть C представляет собой нить накала)."
 
@@ -14221,11 +14206,11 @@ msgstr "Свойства листа"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:273
 msgid "A DC source must be specified."
-msgstr "Должен быть указан источник DC"
+msgstr "Должен быть указан источник DC."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:366
 msgid "Source 1 and Source 2 must be different."
-msgstr "Источник 1 и источник 2 должны отличаться"
+msgstr "Источник 1 и источник 2 должны отличаться."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:422
 msgid "A frequency range must be specified."
@@ -14793,10 +14778,8 @@ msgid ""
 msgstr ""
 "Не удалось разобрать:\n"
 "\n"
-"\n"
 "%s\n"
-"\n"
-"Использование общей модели SPICE."
+"Используется общая модель SPICE."
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
@@ -15028,7 +15011,7 @@ msgstr "Не удалось записать BOM '%s'."
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1407
 #, c-format
 msgid "Wrote BOM output to '%s'"
-msgstr "BOM записан в '%s'."
+msgstr "BOM записан в '%s'"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1786
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2188
@@ -15396,7 +15379,7 @@ msgstr "Править таблицу"
 #: eeschema/dialogs/dialog_table_properties_base.cpp:36
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:36
 msgid "Cell contents:"
-msgstr "Содержимое ячейки:"
+msgstr "Содержимое ячеек:"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:64
@@ -16543,11 +16526,10 @@ msgid ""
 "An error occurred attempting to load the global design block library table.\n"
 "Please edit this global design block library table in Preferences menu."
 msgstr ""
-"Произошла ошибка при попытке загрузить таблицу глобальной библиотеки "
-"конструкторских блоков.\n"
-"\n"
-"Пожалуйста, отредактируйте эту таблицу глобальной библиотеки проектных "
-"блоков в меню Параметры."
+"Произошла ошибка при попытке загрузить глобальную таблицу библиотек "
+"дизайн-блоков.\n"
+"Пожалуйста, отредактируйте эту глобальную таблицу библиотек дизайн-блоков в "
+"меню Настройки."
 
 #: eeschema/eeschema.cpp:482
 #, c-format
@@ -16608,7 +16590,7 @@ msgstr "Невозможно открыть путь назначения '%s'"
 #: eeschema/eeschema_jobs_handler.cpp:722
 #, c-format
 msgid "BOM format preset '%s' not found"
-msgstr "Пресет формата BOM '%s' не найден."
+msgstr "Пресет формата BOM '%s' не найден"
 
 #: eeschema/eeschema_jobs_handler.cpp:747
 #: eeschema/eeschema_jobs_handler.cpp:820
@@ -16679,7 +16661,7 @@ msgstr "Фильтр выделения"
 #: eeschema/sch_edit_frame.cpp:2203 eeschema/sch_edit_frame.cpp:2209
 #: eeschema/tools/ee_actions.cpp:149
 msgid "Design Blocks"
-msgstr "Блоки для конструирования"
+msgstr "Дизайн-блоки"
 
 #: eeschema/erc/erc.cpp:79 eeschema/erc/erc.cpp:96
 msgid "Input Pin"
@@ -16821,7 +16803,7 @@ msgstr "Символ '%s' имеет несколько выводов с оди
 #: eeschema/erc/erc.cpp:1468
 #, c-format
 msgid "Symbol '%s' doesn't match copy in library '%s'"
-msgstr "Символ '%s' не совпадает с копией в библиотеке '%s'."
+msgstr "Символ '%s' не совпадает с копией в библиотеке '%s'"
 
 #: eeschema/erc/erc.cpp:1517
 #, c-format
@@ -17857,7 +17839,7 @@ msgstr "Цепи"
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:56
 msgid "Failed to create directory 'devices' ."
-msgstr "Не удалось удалить каталог 'devices'"
+msgstr "Не удалось создать каталог 'devices'."
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:407
 #: pcbnew/pcbnew_jobs_handler.cpp:1112
@@ -18511,7 +18493,7 @@ msgid ""
 "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
 "re-use block information has been discarded during the import."
 msgstr ""
-"Схема CADSTAR содержит повторно используемые блоки, которые не имеют "
+"Дизайн CADSTAR содержит повторно используемые блоки, которые не имеют "
 "аналогов в KiCad. Информация о повторно используемых блоках будет отклонена "
 "при импорте."
 
@@ -19673,7 +19655,7 @@ msgstr "Таблица с %d столб."
 #: eeschema/sch_table.cpp:566 pcbnew/pcb_table.cpp:387
 #, c-format
 msgid "%d Columns"
-msgstr "%d ст."
+msgstr "%d столбцов"
 
 #: eeschema/sch_table.cpp:634 pcbnew/pcb_table.cpp:557
 msgid "External Border"
@@ -20832,7 +20814,7 @@ msgstr ""
 #: eeschema/sim/sim_model.cpp:787
 #, c-format
 msgid "Unknown simulation model pin '%s'"
-msgstr "Неизвестная модель симуляции вывода '%s'"
+msgstr "Неизвестный вывод '%s' модели симуляции"
 
 #: eeschema/sim/sim_model_ibis.cpp:80
 #, c-format
@@ -21526,7 +21508,7 @@ msgstr "Cимвол..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:79
 msgid "View as PNG..."
-msgstr "Просмотреть в PNG..."
+msgstr "Вид в PNG..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:80
 msgid "Symbol as SVG..."
@@ -21583,8 +21565,8 @@ msgstr "Менеджер библиотек символов"
 #, c-format
 msgid "Symbol %s is a derived symbol. Symbol graphics will not be editable."
 msgstr ""
-"Символ %s является производным символом. Графика символа не может быть "
-"отредактирована."
+"Символ %s является производным символом. Графические элементы символа не "
+"могут быть изменены."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:947
 msgid "Library is read-only.  Changes cannot be saved to this library."
@@ -21594,7 +21576,7 @@ msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:949
 msgid "Create an editable copy"
-msgstr "Создайте редактируемую копию"
+msgstr "Создать редактируемую копию"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:955
 #, c-format
@@ -21607,11 +21589,11 @@ msgstr "Выберите тип элемента для сохранения"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:962
 msgid "Copy symbol"
-msgstr "Символ копирования"
+msgstr "Копировать символ"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:963
 msgid "Copy library"
-msgstr "Библиотека копий"
+msgstr "Копировать библиотеку"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1072
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1123
@@ -21782,7 +21764,7 @@ msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1020
 msgid "Overwrite All"
-msgstr "Переписать все"
+msgstr "Перезаписать все"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1020
 msgid "Rename All"
@@ -21947,9 +21929,7 @@ msgstr "Не удалось просмотреть библиотеку '%s'."
 #: eeschema/symbol_library_manager.cpp:867
 #, c-format
 msgid "Error updating library buffer: %s"
-msgstr ""
-"Ошибка обновления буфера библиотеки:\n"
-"%s"
+msgstr "Ошибка обновления буфера библиотеки: %s"
 
 #: eeschema/symbol_library_manager.cpp:872
 msgid "Error updating library buffer."
@@ -22162,7 +22142,7 @@ msgstr "Добавьте поле %s '%s' со значением '%s'."
 #: eeschema/tools/backannotate.cpp:559
 #, c-format
 msgid "Delete %s field '%s.'"
-msgstr "Удалить поле %s '%s'."
+msgstr "Удалить поле %s '%s'"
 
 #: eeschema/tools/backannotate.cpp:699
 #, c-format
@@ -22232,31 +22212,31 @@ msgstr "Выделить всё соединение"
 
 #: eeschema/tools/ee_actions.cpp:150
 msgid "Show/hide design blocks library"
-msgstr "Показать/скрыть библиотеку блоков дизайна"
+msgstr "Показать/скрыть библиотеку дизайн-блоков"
 
 #: eeschema/tools/ee_actions.cpp:156
 msgid "Save Current Sheet as Design Block..."
-msgstr "Сохранить текущий лист как блок дизайна..."
+msgstr "Сохранить текущий лист как дизайн-блок..."
 
 #: eeschema/tools/ee_actions.cpp:157
 msgid "Create a new design block from the current sheet"
-msgstr "Создайте новый блок дизайна на текущем листе"
+msgstr "Создать новый дизайн-блок из текущего листа"
 
 #: eeschema/tools/ee_actions.cpp:163
 msgid "Save Selection as Design Block..."
-msgstr "Сохранить выбор как блок дизайна..."
+msgstr "Сохранить выделенное как дизайн-блок..."
 
 #: eeschema/tools/ee_actions.cpp:164
 msgid "Create a new design block from the current selection"
-msgstr "Создайте новый блок дизайна на основе текущего выбора"
+msgstr "Создать новый дизайн-блок из текущего выделения"
 
 #: eeschema/tools/ee_actions.cpp:170
 msgid "Delete Design Block"
-msgstr "Удалить блок дизайна"
+msgstr "Удалить дизайн-блок"
 
 #: eeschema/tools/ee_actions.cpp:171
 msgid "Remove the selected design block from its library"
-msgstr "Удалите выбранный блок дизайна из его библиотеки"
+msgstr "Удалите выбранный дизайн-блок из его библиотеки"
 
 #: eeschema/tools/ee_actions.cpp:177 eeschema/tools/ee_actions.cpp:729
 #: pcbnew/tools/pcb_actions.cpp:677
@@ -22265,7 +22245,7 @@ msgstr "Свойства..."
 
 #: eeschema/tools/ee_actions.cpp:178
 msgid "Edit properies of design block"
-msgstr "Редактирование свойств блока дизайна"
+msgstr "Редактировать свойства дизайн-блока"
 
 #: eeschema/tools/ee_actions.cpp:188
 msgid "Save Library As..."
@@ -22419,36 +22399,36 @@ msgstr "Показать скрытые поля"
 
 #: eeschema/tools/ee_actions.cpp:348
 msgid "Draw Pins"
-msgstr "Булавки для рисования"
+msgstr "Чертить выводы"
 
 #: eeschema/tools/ee_actions.cpp:356 eeschema/tools/ee_actions.cpp:588
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:301
 #: pagelayout_editor/tools/pl_actions.cpp:61 pcbnew/tools/drawing_tool.cpp:1044
 #: pcbnew/tools/pcb_actions.cpp:185
 msgid "Draw Text"
-msgstr "Нарисовать текст"
+msgstr "Чертить текст"
 
 #: eeschema/tools/ee_actions.cpp:364 eeschema/tools/ee_actions.cpp:595
 #: pcbnew/tools/pcb_actions.cpp:192
 msgid "Draw Text Boxes"
-msgstr "Рисовать текстовые поля"
+msgstr "Чертить текстовые блоки"
 
 #: eeschema/tools/ee_actions.cpp:371 eeschema/tools/ee_actions.cpp:1425
 #: pagelayout_editor/tools/pl_actions.cpp:45 pcbnew/tools/pcb_actions.cpp:108
 msgid "Draw Lines"
-msgstr "Рисовать линии"
+msgstr "Чертить линии"
 
 #: eeschema/tools/ee_actions.cpp:372
 msgid "Draw connected graphic lines"
-msgstr "Рисуйте соединенные графические линии"
+msgstr "Чертить соединенные графические линии"
 
 #: eeschema/tools/ee_actions.cpp:380 pcbnew/tools/pcb_actions.cpp:117
 msgid "Draw Polygons"
-msgstr "Рисовать многоугольники"
+msgstr "Чертить многоугольники"
 
 #: eeschema/tools/ee_actions.cpp:388
 msgid "Move Symbol Anchor"
-msgstr "Переместить опорную точку"
+msgstr "Переместить опорную точку символа"
 
 #: eeschema/tools/ee_actions.cpp:397
 msgid "Push Pin Length"
@@ -22476,76 +22456,76 @@ msgstr "Копировать размер номера вывода осталь
 
 #: eeschema/tools/ee_actions.cpp:423
 msgid "Place Symbols"
-msgstr "Символы места"
+msgstr "Разместить символы"
 
 #: eeschema/tools/ee_actions.cpp:431
 msgid "Place Next Symbol Unit"
-msgstr "Разместите следующий блок символов"
+msgstr "Разместить следующую часть символа"
 
 #: eeschema/tools/ee_actions.cpp:432
 msgid ""
 "Place the next unit of the current symbol that is missing from the schematic"
-msgstr "Поместите следующую единицу текущего символа, отсутствующую в схеме"
+msgstr "Разместить следующую часть текущего символа, отсутствующую в схеме"
 
 #: eeschema/tools/ee_actions.cpp:442
 msgid "Place Power Symbols"
-msgstr "Символы власти"
+msgstr "Разместить символы питания"
 
 #: eeschema/tools/ee_actions.cpp:451
 msgid "Place Design Block"
-msgstr "Разместить блок дизайна"
+msgstr "Разместить дизайн-блок"
 
 #: eeschema/tools/ee_actions.cpp:452
 msgid "Add selected design block to current sheet"
-msgstr "Добавление выбранного блока дизайна на текущий лист"
+msgstr "Добавить выбранный дизайн-блок на текущий лист"
 
 #: eeschema/tools/ee_actions.cpp:463
 msgid "Place No Connect Flags"
-msgstr "Установите флаги отсутствия соединения"
+msgstr "Разместить флаги \"Не подключено\""
 
 #: eeschema/tools/ee_actions.cpp:473
 msgid "Place Junctions"
-msgstr "Место пересечения"
+msgstr "Разместить точки соединений"
 
 #: eeschema/tools/ee_actions.cpp:483
 msgid "Place Wire to Bus Entries"
-msgstr "Подведите провод к шинным вводам"
+msgstr "Разместить вводы проводника в шину"
 
 #: eeschema/tools/ee_actions.cpp:493
 msgid "Place Net Labels"
-msgstr "Разместите этикетки на сетке"
+msgstr "Разместить метки цепей"
 
 #: eeschema/tools/ee_actions.cpp:501
 msgid "Place Directive Labels"
-msgstr "Разместите этикетки с директивами"
+msgstr "Разместить директивные метки"
 
 #: eeschema/tools/ee_actions.cpp:510
 msgid "Place Hierarchical Labels"
-msgstr "Размещение иерархических меток"
+msgstr "Разместить иерархические метки"
 
 #: eeschema/tools/ee_actions.cpp:519
 msgid "Draw Hierarchical Sheets"
-msgstr "Рисовать иерархические листы"
+msgstr "Чертить иерархические листы"
 
 #: eeschema/tools/ee_actions.cpp:527
 msgid "Draw Sheet from File"
-msgstr "Вытащить лист из файла"
+msgstr "Чертить лист из файла"
 
 #: eeschema/tools/ee_actions.cpp:528
 msgid "Copy sheet into project and draw on current sheet"
-msgstr "Скопируйте лист в проект и нарисуйте на текущем листе"
+msgstr "Скопировать лист в проект и начертить его на текущем листе"
 
 #: eeschema/tools/ee_actions.cpp:536
 msgid "Draw Sheet from Design Block"
-msgstr "Лист чертежа из блока проектирования"
+msgstr "Чертить лист из дизайн-блока"
 
 #: eeschema/tools/ee_actions.cpp:537
 msgid "Copy design block into project as a sheet on current sheet"
-msgstr "Скопируйте блок дизайна в проект как лист на текущем листе"
+msgstr "Скопировать дизайн-блок в проект как лист на текущем листе"
 
 #: eeschema/tools/ee_actions.cpp:545
 msgid "Place Sheet Pins"
-msgstr "Установите булавки для листов"
+msgstr "Разместить выводы листа"
 
 #: eeschema/tools/ee_actions.cpp:552 eeschema/tools/ee_actions.cpp:560
 msgid "Sync Sheet Pins"
@@ -22553,7 +22533,7 @@ msgstr "Синхронизировать выводы листа"
 
 #: eeschema/tools/ee_actions.cpp:568
 msgid "Import Sheet"
-msgstr "Лист импорта"
+msgstr "Импорт листа"
 
 #: eeschema/tools/ee_actions.cpp:569
 msgid "Import sheet into project"
@@ -22561,36 +22541,36 @@ msgstr "Импорт листа в проект"
 
 #: eeschema/tools/ee_actions.cpp:579
 msgid "Place Global Labels"
-msgstr "Разместить глобальные ярлыки"
+msgstr "Разместить глобальные метки"
 
 #: eeschema/tools/ee_actions.cpp:603 pcbnew/tools/pcb_actions.cpp:199
 msgid "Draw Tables"
-msgstr "Столы для рисования"
+msgstr "Чертить таблицы"
 
 #: eeschema/tools/ee_actions.cpp:610 pagelayout_editor/tools/pl_actions.cpp:53
 #: pcbnew/tools/pcb_actions.cpp:125
 msgid "Draw Rectangles"
-msgstr "Рисовать прямоугольники"
+msgstr "Чертить прямоугольники"
 
 #: eeschema/tools/ee_actions.cpp:618 pcbnew/tools/pcb_actions.cpp:134
 msgid "Draw Circles"
-msgstr "Рисовать круги"
+msgstr "Чертить круги"
 
 #: eeschema/tools/ee_actions.cpp:626 pcbnew/tools/pcb_actions.cpp:143
 msgid "Draw Arcs"
-msgstr "Рисовать дуги"
+msgstr "Чертить дуги"
 
 #: eeschema/tools/ee_actions.cpp:634 pcbnew/tools/pcb_actions.cpp:151
 msgid "Draw Bezier Curve"
-msgstr "Нарисовать кривую Безье"
+msgstr "Чертить кривую Безье"
 
 #: eeschema/tools/ee_actions.cpp:642
 msgid "Place Images"
-msgstr "Изображения мест"
+msgstr "Разместить изображения"
 
 #: eeschema/tools/ee_actions.cpp:650 pcbnew/tools/pcb_actions.cpp:306
 msgid "Draw Rule Areas"
-msgstr "Области правил рисования"
+msgstr "Чертить области правил (запрета)"
 
 #: eeschema/tools/ee_actions.cpp:658 pcbnew/tools/pcb_actions.cpp:404
 msgid "Delete Last Point"
@@ -22606,15 +22586,15 @@ msgstr "Замкнуть контур"
 
 #: eeschema/tools/ee_actions.cpp:666
 msgid "Close the in-progress outline"
-msgstr "Закройте текущий набросок"
+msgstr "Закрыть текущий контур"
 
 #: eeschema/tools/ee_actions.cpp:681
 msgid "Repeat Last Item"
-msgstr "Добавить последний выбранный символ"
+msgstr "Повторить последний элемент"
 
 #: eeschema/tools/ee_actions.cpp:682
 msgid "Duplicates the last drawn item"
-msgstr "Дублировать последний начерченный элемент"
+msgstr "Дублирует последний начерченный элемент"
 
 #: eeschema/tools/ee_actions.cpp:687 pcbnew/tools/pcb_actions.cpp:527
 msgid "Rotate Clockwise"
@@ -23637,7 +23617,7 @@ msgstr "Все единицы этого символа уже размещен�
 
 #: eeschema/tools/sch_drawing_tools.cpp:753
 msgid "Add design block"
-msgstr "Добавьте блок дизайна"
+msgstr "Добавить дизайн-блок"
 
 #: eeschema/tools/sch_drawing_tools.cpp:754
 msgid "Import Schematic Sheet Content..."
@@ -24117,11 +24097,11 @@ msgstr "Сохранить аннотации"
 
 #: eeschema/widgets/design_block_pane.cpp:104
 msgid "Place copies of the design block on subsequent clicks."
-msgstr "Разместите копии блока дизайна на последующих кликах."
+msgstr "Разместить копии дизайн-блока на последующих кликах."
 
 #: eeschema/widgets/design_block_pane.cpp:111
 msgid "Place the design block as a new sheet."
-msgstr "Поместите блок дизайна как новый лист."
+msgstr "Разместить дизайн-блок как новый лист."
 
 #: eeschema/widgets/design_block_pane.cpp:117
 msgid ""
@@ -24163,11 +24143,11 @@ msgstr "(лист %s)"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:69
 msgid "Loading Design Block Libraries"
-msgstr "Загрузка библиотек блоков проектирования"
+msgstr "Загрузка библиотек дизайн-блоков"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:273
 msgid "Updating Design Block Libraries"
-msgstr "Обновление библиотек блоков проектирования"
+msgstr "Обновление библиотек дизайн-блоков"
 
 #: eeschema/widgets/panel_sch_selection_filter.cpp:164
 #: pcbnew/widgets/panel_selection_filter.cpp:154
@@ -24296,11 +24276,11 @@ msgstr "Ограничить значениями ряда E48."
 
 #: eeschema/widgets/tuner_slider_base.cpp:61
 msgid "Limit to E96 series values"
-msgstr "Ограничить значениями ряда E96."
+msgstr "Ограничить значениями ряда E96"
 
 #: eeschema/widgets/tuner_slider_base.cpp:69
 msgid "Limit to E192 series values"
-msgstr "Ограничить значениями ряда E192."
+msgstr "Ограничить значениями ряда E192"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -26617,7 +26597,7 @@ msgstr "Выберите выходной путь"
 
 #: kicad/dialogs/dialog_jobset_output_options.cpp:117
 msgid "Output path cannot be empty"
-msgstr "Выходной путь не может быть пустым."
+msgstr "Выходной путь не может быть пустым"
 
 #: kicad/dialogs/dialog_jobset_output_options.cpp:194
 msgid "Zip"
@@ -29329,7 +29309,7 @@ msgid ""
 "creepage"
 msgstr ""
 "Канавка, имеющая меньшую ширину, не влияет на путь, рассматриваемый для "
-"утечки."
+"утечки"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:313
 msgid ""
@@ -30443,7 +30423,7 @@ msgstr ""
 "зазоров и утечек могут быть уменьшены. Паяльная маска обычно не "
 "рассматривается как конформное покрытие.\n"
 "- Изоляция через жидкости, сжатый воздух или газы, отличные от воздуха, не "
-"входит в рамки IEC60664."
+"входит в рамки IEC60664"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:69
 msgid "KiCad Calculator Tools"
