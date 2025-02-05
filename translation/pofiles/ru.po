@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-05 18:25+0300\n"
-"PO-Revision-Date: 2025-02-05 18:29+0000\n"
+"PO-Revision-Date: 2025-02-05 18:36+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -43775,13 +43775,10 @@ msgid ""
 "line: %d\n"
 "offf: %d"
 msgstr ""
-"Неверный идентификатор отпечатка в\n"
-"\n"
-"файле: '%s'\n"
-"\n"
+"Неверный идентификатор посад. места в\n"
+"файл: '%s'\n"
 "строка: %d\n"
-"\n"
-"офф: %d"
+"смещение: %d"
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:114
 msgid "Cannot parse time stamp in symbol section of netlist."
@@ -44239,7 +44236,7 @@ msgstr "1234 (мм)"
 
 #: pcbnew/pcb_dimension.cpp:1800
 msgid "Units Format"
-msgstr "Формат ед.изм."
+msgstr "Формат ед. изм."
 
 #: pcbnew/pcb_dimension.cpp:1808
 msgid "Suppress Trailing Zeroes"
@@ -45914,12 +45911,10 @@ msgid ""
 "\n"
 "Zones will need to be refilled."
 msgstr ""
-"Предметы найдены на неопределенных слоях (%s).\n"
+"Найдены элементы на неопределенных слоях (%s).\n"
+"Перенести их на слой %s?\n"
 "\n"
-"Хотите ли вы перенести их на слой %s?\n"
-"\n"
-"\n"
-"Зоны нужно будет пополнить."
+"Зоны нужно будет перезалить."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1148
 msgid "Undefined Layers Warning"
@@ -46029,11 +46024,8 @@ msgid ""
 "offset: %d."
 msgstr ""
 "Недопустимый слой padstack в\n"
-"\n"
-"файле: %s\n"
-"\n"
+"файл: %s\n"
 "строка: %d\n"
-"\n"
 "смещение: %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5626
@@ -48328,8 +48320,8 @@ msgid ""
 "Add bitmap images to be used as reference (images will not be included in "
 "any output)"
 msgstr ""
-"Добавьте растровые изображения для использования в качестве ссылок "
-"(изображения не будут включены в выходные данные)."
+"Добавить растровые изображения для использования в качестве фона ("
+"изображения не будут включены в выходные данные)"
 
 #: pcbnew/tools/pcb_actions.cpp:208
 msgid "Increase Spacing"
@@ -51151,7 +51143,7 @@ msgstr "Создать группу"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1256
 msgid "(Use /.../ to indicate a regular expression.)"
-msgstr "(Используйте /.../ для обозначения регулярного выражения)."
+msgstr "(Используйте /.../ для обозначения регулярного выражения.)"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1329
 msgid "Filter by Net Name"
