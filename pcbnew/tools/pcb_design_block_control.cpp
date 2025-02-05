@@ -39,6 +39,7 @@ bool PCB_DESIGN_BLOCK_CONTROL::Init()
 {
     m_editFrame     = getEditFrame<PCB_EDIT_FRAME>();
     m_frame         = m_editFrame;
+    m_framesToNotify = { FRAME_SCH };
 
     auto isInLibrary =
             [this](const SELECTION& aSel )
@@ -75,7 +76,10 @@ int PCB_DESIGN_BLOCK_CONTROL::SaveBoardAsDesignBlock( const TOOL_EVENT& aEvent )
     if( !current )
         return -1;
 
-    m_editFrame->SaveBoardAsDesignBlock( current->m_LibId.GetLibNickname() );
+    if( !m_editFrame->SaveBoardAsDesignBlock( current->m_LibId.GetLibNickname() ) )
+        return -1;
+
+    notifyOtherFrames();
 
     return 0;
 }
@@ -88,7 +92,10 @@ int PCB_DESIGN_BLOCK_CONTROL::SaveSelectionAsDesignBlock( const TOOL_EVENT& aEve
     if( !current )
         return -1;
 
-    m_editFrame->SaveSelectionAsDesignBlock( current->m_LibId.GetLibNickname() );
+    if( !m_editFrame->SaveSelectionAsDesignBlock( current->m_LibId.GetLibNickname() ) )
+        return -1;
+
+    notifyOtherFrames();
 
     return 0;
 }

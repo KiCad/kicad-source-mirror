@@ -26,6 +26,8 @@
 #include <widgets/design_block_pane.h>
 #include <widgets/panel_design_block_chooser.h>
 #include <dialog_design_block_properties.h>
+#include <mail_type.h>
+#include <kiway.h>
 
 
 DESIGN_BLOCK_CONTROL::~DESIGN_BLOCK_CONTROL()
@@ -88,9 +90,12 @@ int DESIGN_BLOCK_CONTROL::PinLibrary( const TOOL_EVENT& aEvent )
                                    PROJECT::LIB_TYPE_T::DESIGN_BLOCK_LIB );
         current->m_Pinned = true;
         getDesignBlockPane()->RefreshLibs();
+        notifyOtherFrames();
+
+        return 0;
     }
 
-    return 0;
+    return -1;
 }
 
 
@@ -104,17 +109,24 @@ int DESIGN_BLOCK_CONTROL::UnpinLibrary( const TOOL_EVENT& aEvent )
                                      PROJECT::LIB_TYPE_T::DESIGN_BLOCK_LIB );
         current->m_Pinned = false;
         getDesignBlockPane()->RefreshLibs();
+        notifyOtherFrames();
+
+        return 0;
     }
 
-    return 0;
+    return -1;
 }
 
 
 int DESIGN_BLOCK_CONTROL::NewLibrary( const TOOL_EVENT& aEvent )
 {
-    getDesignBlockPane()->CreateNewDesignBlockLibrary();
+    if( getDesignBlockPane()->CreateNewDesignBlockLibrary() != wxEmptyString )
+    {
+        notifyOtherFrames();
+        return 0;
+    }
 
-    return 0;
+    return -1;
 }
 
 
@@ -125,9 +137,13 @@ int DESIGN_BLOCK_CONTROL::DeleteDesignBlock( const TOOL_EVENT& aEvent )
     if( !current )
         return -1;
 
-    getDesignBlockPane()->DeleteDesignBlockFromLibrary( current->m_LibId, true );
+    if( getDesignBlockPane()->DeleteDesignBlockFromLibrary( current->m_LibId, true ) )
+    {
+        notifyOtherFrames();
+        return 0;
+    }
 
-    return 0;
+    return -1;
 }
 
 
@@ -139,7 +155,10 @@ int DESIGN_BLOCK_CONTROL::EditDesignBlockProperties( const TOOL_EVENT& aEvent )
         return -1;
 
     if( getDesignBlockPane()->EditDesignBlockProperties( current->m_LibId ) )
+    {
+        notifyOtherFrames();
         return 0;
+    }
 
     return -1;
 }
@@ -189,4 +208,13 @@ LIB_TREE_NODE* DESIGN_BLOCK_CONTROL::getCurrentTreeNode()
 {
     LIB_TREE* libTree = getDesignBlockPane()->GetDesignBlockPanel()->GetLibTree();
     return libTree ? libTree->GetCurrentTreeNode() : nullptr;
+}
+
+
+void DESIGN_BLOCK_CONTROL::notifyOtherFrames()
+{
+    std::string payload = "";
+
+    for( FRAME_T frame : m_framesToNotify )
+        m_frame->Kiway().ExpressMail( frame, MAIL_RELOAD_LIB, payload );
 }

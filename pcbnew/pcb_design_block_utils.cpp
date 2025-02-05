@@ -104,13 +104,13 @@ bool PCB_EDIT_FRAME::saveBoardAsFile( BOARD* aBoard, const wxString& aFileName, 
 }
 
 
-void PCB_EDIT_FRAME::SaveBoardAsDesignBlock( const wxString& aLibraryName )
+bool PCB_EDIT_FRAME::SaveBoardAsDesignBlock( const wxString& aLibraryName )
 {
     // Make sure the user has selected a library to save into
     if( m_designBlocksPane->GetSelectedLibId().GetLibNickname().empty() )
     {
         DisplayErrorMessage( this, _( "Please select a library to save the design block to." ) );
-        return;
+        return false;
     }
 
     DESIGN_BLOCK blk;
@@ -121,7 +121,16 @@ void PCB_EDIT_FRAME::SaveBoardAsDesignBlock( const wxString& aLibraryName )
     DIALOG_DESIGN_BLOCK_PROPERTIES dlg( this, &blk );
 
     if( dlg.ShowModal() != wxID_OK )
-        return;
+        return false;
+
+    wxString libName = blk.GetLibId().GetLibNickname();
+    wxString newName = blk.GetLibId().GetLibItemName();
+
+    if( Prj().DesignBlockLibs()->DesignBlockExists( libName, newName )
+        && !checkOverwrite( this, libName, newName ) )
+    {
+        return false;
+    }
 
     // Save a temporary copy of the schematic file, as the plugin is just going to move it
     wxString tempFile = wxFileName::CreateTempFileName( "design_block" );
@@ -131,21 +140,17 @@ void PCB_EDIT_FRAME::SaveBoardAsDesignBlock( const wxString& aLibraryName )
         DisplayErrorMessage( this,
                              _( "Error saving temporary board file to create design block." ) );
         wxRemoveFile( tempFile );
-        return;
+        return false;
     }
 
     blk.SetBoardFile( tempFile );
 
+    bool success = false;
+
     try
     {
-        wxString libName = blk.GetLibId().GetLibNickname();
-        wxString newName = blk.GetLibId().GetLibItemName();
-
-        if( Prj().DesignBlockLibs()->DesignBlockExists( libName, newName ) )
-            if( !checkOverwrite( this, libName, newName ) )
-                return;
-
-        Prj().DesignBlockLibs()->DesignBlockSave( aLibraryName, &blk );
+        success = Prj().DesignBlockLibs()->DesignBlockSave( aLibraryName, &blk )
+                  == DESIGN_BLOCK_LIB_TABLE::SAVE_OK;
     }
     catch( const IO_ERROR& ioe )
     {
@@ -157,16 +162,18 @@ void PCB_EDIT_FRAME::SaveBoardAsDesignBlock( const wxString& aLibraryName )
 
     m_designBlocksPane->RefreshLibs();
     m_designBlocksPane->SelectLibId( blk.GetLibId() );
+
+    return success;
 }
 
 
-void PCB_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
+bool PCB_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
 {
     // Make sure the user has selected a library to save into
     if( m_designBlocksPane->GetSelectedLibId().GetLibNickname().empty() )
     {
         DisplayErrorMessage( this, _( "Please select a library to save the design block to." ) );
-        return;
+        return false;
     }
 
     // Get all selected items
@@ -175,7 +182,7 @@ void PCB_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
     if( selection.Empty() )
     {
         DisplayErrorMessage( this, _( "Please select some items to save as a design block." ) );
-        return;
+        return false;
     }
 
     DESIGN_BLOCK blk;
@@ -186,7 +193,16 @@ void PCB_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
     DIALOG_DESIGN_BLOCK_PROPERTIES dlg( this, &blk );
 
     if( dlg.ShowModal() != wxID_OK )
-        return;
+        return false;
+
+    wxString libName = blk.GetLibId().GetLibNickname();
+    wxString newName = blk.GetLibId().GetLibItemName();
+
+    if( Prj().DesignBlockLibs()->DesignBlockExists( libName, newName )
+        && !checkOverwrite( this, libName, newName ) )
+    {
+        return false;
+    }
 
     // Create a temporary board
     BOARD* tempBoard = new BOARD();
@@ -220,21 +236,17 @@ void PCB_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
         DisplayErrorMessage( this,
                              _( "Error saving temporary board file to create design block." ) );
         wxRemoveFile( tempFile );
-        return;
+        return false;
     }
 
     blk.SetBoardFile( tempFile );
 
+    bool success = false;
+
     try
     {
-        wxString libName = blk.GetLibId().GetLibNickname();
-        wxString newName = blk.GetLibId().GetLibItemName();
-
-        if( Prj().DesignBlockLibs()->DesignBlockExists( libName, newName ) )
-            if( !checkOverwrite( this, libName, newName ) )
-                return;
-
-        Prj().DesignBlockLibs()->DesignBlockSave( aLibraryName, &blk );
+        success = Prj().DesignBlockLibs()->DesignBlockSave( aLibraryName, &blk )
+                  == DESIGN_BLOCK_LIB_TABLE::SAVE_OK;
     }
     catch( const IO_ERROR& ioe )
     {
@@ -246,4 +258,6 @@ void PCB_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
 
     m_designBlocksPane->RefreshLibs();
     m_designBlocksPane->SelectLibId( blk.GetLibId() );
+
+    return success;
 }

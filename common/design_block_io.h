@@ -76,10 +76,7 @@ public:
     }
 
     bool DesignBlockExists( const wxString& aLibraryPath, const wxString& aDesignBlockName,
-                            const std::map<std::string, UTF8>* aProperties = nullptr )
-    {
-        return DesignBlockLoad( aLibraryPath, aDesignBlockName, true, aProperties ) != nullptr;
-    }
+                            const std::map<std::string, UTF8>* aProperties = nullptr );
 
     DESIGN_BLOCK* ImportDesignBlock( const wxString&                    aDesignBlockPath,
                                      wxString&                          aDesignBlockNameOut,

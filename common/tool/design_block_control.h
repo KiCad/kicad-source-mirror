@@ -66,6 +66,10 @@ protected:
     virtual DESIGN_BLOCK_PANE* getDesignBlockPane() = 0;
     LIB_TREE_NODE*             getCurrentTreeNode();
 
+    /// Notify other frames that the design block lib table has changed
+    std::vector<FRAME_T> m_framesToNotify;
+    void                 notifyOtherFrames();
+
     EDA_DRAW_FRAME* m_frame = nullptr;
 };
 

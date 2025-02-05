@@ -744,9 +744,9 @@ public:
      */
     bool CreateArchiveLibrary( const wxString& aFileName );
 
-    void SaveSheetAsDesignBlock( const wxString& aLibraryName, SCH_SHEET_PATH& aSheetPath );
+    bool SaveSheetAsDesignBlock( const wxString& aLibraryName, SCH_SHEET_PATH& aSheetPath );
 
-    void SaveSelectionAsDesignBlock( const wxString& aLibraryName );
+    bool SaveSelectionAsDesignBlock( const wxString& aLibraryName );
 
     SCH_DESIGN_BLOCK_PANE* GetDesignBlockPane() const { return m_designBlocksPane; }
 

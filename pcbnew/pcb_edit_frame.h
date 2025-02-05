@@ -464,9 +464,9 @@ public:
      */
     void RecreateCmpFileFromBoard( wxCommandEvent& aEvent );
 
-    void SaveBoardAsDesignBlock( const wxString& aLibraryName );
+    bool SaveBoardAsDesignBlock( const wxString& aLibraryName );
 
-    void SaveSelectionAsDesignBlock( const wxString& aLibraryName );
+    bool SaveSelectionAsDesignBlock( const wxString& aLibraryName );
 
     PCB_DESIGN_BLOCK_PANE* GetDesignBlockPane() const { return m_designBlocksPane; }
 

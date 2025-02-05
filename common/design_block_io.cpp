@@ -293,6 +293,9 @@ DESIGN_BLOCK* DESIGN_BLOCK_IO::DesignBlockLoad( const wxString& aLibraryPath,
     wxString dbPcbPath = dbPath + aDesignBlockName + wxT( "." ) + FILEEXT::KiCadPcbFileExtension;
     wxString dbMetadataPath = dbPath + aDesignBlockName + wxT( "." ) + FILEEXT::JsonFileExtension;
 
+    if( !wxDir::Exists( dbPath ) )
+        THROW_IO_ERROR( wxString::Format( _( "Design block '%s' does not exist." ), dbPath ) );
+
     DESIGN_BLOCK* newDB = new DESIGN_BLOCK();
 
     // Library name needs to be empty for when we fill it in with the correct library nickname
@@ -339,13 +342,24 @@ DESIGN_BLOCK* DESIGN_BLOCK_IO::DesignBlockLoad( const wxString& aLibraryPath,
         }
         catch( ... )
         {
+            delete newDB;
             THROW_IO_ERROR( wxString::Format(
                     _( "Design block metadata file '%s' could not be read." ), dbMetadataPath ) );
         }
     }
 
-
     return newDB;
+}
+
+
+bool DESIGN_BLOCK_IO::DesignBlockExists( const wxString&                    aLibraryPath,
+                                         const wxString&                    aDesignBlockName,
+                                         const std::map<std::string, UTF8>* aProperties )
+{
+    wxString dbPath = aLibraryPath + wxFileName::GetPathSeparator() + aDesignBlockName + wxT( "." )
+                      + FILEEXT::KiCadDesignBlockPathExtension + wxFileName::GetPathSeparator();
+
+    return wxDir::Exists( dbPath );
 }
 
 

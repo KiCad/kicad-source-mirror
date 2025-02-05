@@ -39,6 +39,7 @@ bool SCH_DESIGN_BLOCK_CONTROL::Init()
 {
     m_editFrame     = getEditFrame<SCH_EDIT_FRAME>();
     m_frame         = m_editFrame;
+    m_framesToNotify = { FRAME_PCB_EDITOR };
 
     auto isInLibrary =
             [this](const SELECTION& aSel )
@@ -75,8 +76,11 @@ int SCH_DESIGN_BLOCK_CONTROL::SaveSheetAsDesignBlock( const TOOL_EVENT& aEvent )
     if( !current )
         return -1;
 
-    m_editFrame->SaveSheetAsDesignBlock( current->m_LibId.GetLibNickname(),
-                                         m_editFrame->GetCurrentSheet() );
+    if( !m_editFrame->SaveSheetAsDesignBlock( current->m_LibId.GetLibNickname(),
+                                              m_editFrame->GetCurrentSheet() ) )
+        return -1;
+
+    notifyOtherFrames();
 
     return 0;
 }
@@ -89,7 +93,10 @@ int SCH_DESIGN_BLOCK_CONTROL::SaveSelectionAsDesignBlock( const TOOL_EVENT& aEve
     if( !current )
         return -1;
 
-    m_editFrame->SaveSelectionAsDesignBlock( current->m_LibId.GetLibNickname() );
+    if( !m_editFrame->SaveSelectionAsDesignBlock( current->m_LibId.GetLibNickname() ) )
+        return -1;
+
+    notifyOtherFrames();
 
     return 0;
 }
