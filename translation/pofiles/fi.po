@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 18:25+0300\n"
+"POT-Creation-Date: 2025-02-05 21:38+0300\n"
 "PO-Revision-Date: 2025-02-03 00:02+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
@@ -10770,6 +10770,7 @@ msgstr "Valittu verkko:"
 
 #: eeschema/design_block_tree_model_adapter.cpp:150
 #: eeschema/design_block_tree_model_adapter.cpp:199
+#: eeschema/design_block_utils.cpp:615
 #, c-format
 msgid "Error loading design block %s from library '%s'."
 msgstr "Virhe ladattaessa suunnittelulohkoa %s kirjastosta '%s'."
@@ -10890,11 +10891,6 @@ msgstr "Poistetaanko suunnittelulohko '%s' kirjastosta '%s' levyltä?"
 #, c-format
 msgid "Design block '%s' deleted from library '%s'"
 msgstr "Suunnittelulohko '%s' poistettu kirjastosta '%s'"
-
-#: eeschema/design_block_utils.cpp:615
-#, c-format
-msgid "Error loading designblock %s from library '%s'."
-msgstr "Virhe ladattaessa suunnittelulohkoa %s kirjastosta '%s'."
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -51144,6 +51140,10 @@ msgstr "KiCad kytkentäkaaviosymboli"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Piirustuslehti"
+
+#, c-format
+#~ msgid "Error loading designblock %s from library '%s'."
+#~ msgstr "Virhe ladattaessa suunnittelulohkoa %s kirjastosta '%s'."
 
 #~ msgid "Included Layers"
 #~ msgstr "Mukana olevat kerrokset"

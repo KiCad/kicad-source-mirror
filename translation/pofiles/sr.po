@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 18:25+0300\n"
+"POT-Creation-Date: 2025-02-05 21:38+0300\n"
 "PO-Revision-Date: 2024-12-07 18:00+0000\n"
 "Last-Translator: Daniel Petrovich <danielthe@cyberdude.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"
@@ -11483,6 +11483,7 @@ msgstr "Изабери"
 
 #: eeschema/design_block_tree_model_adapter.cpp:150
 #: eeschema/design_block_tree_model_adapter.cpp:199
+#: eeschema/design_block_utils.cpp:615
 #, fuzzy, c-format
 msgid "Error loading design block %s from library '%s'."
 msgstr "Грешка у учитавању симбола %s из библиотеке '%s'."
@@ -11608,11 +11609,6 @@ msgstr "Избриши поље"
 #, fuzzy, c-format
 msgid "Design block '%s' deleted from library '%s'"
 msgstr "Маркер није пронађен"
-
-#: eeschema/design_block_utils.cpp:615
-#, fuzzy, c-format
-msgid "Error loading designblock %s from library '%s'."
-msgstr "Грешка у учитавању симбола %s из библиотеке '%s'."
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 #, fuzzy
@@ -54005,6 +54001,10 @@ msgstr "Додјела шеме"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Опције цртања"
+
+#, fuzzy, c-format
+#~ msgid "Error loading designblock %s from library '%s'."
+#~ msgstr "Грешка у учитавању симбола %s из библиотеке '%s'."
 
 #, fuzzy
 #~ msgid "Included Layers"

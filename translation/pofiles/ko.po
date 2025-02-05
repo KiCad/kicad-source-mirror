@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 18:25+0300\n"
+"POT-Creation-Date: 2025-02-05 21:38+0300\n"
 "PO-Revision-Date: 2025-02-04 09:03+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
@@ -10690,6 +10690,7 @@ msgstr "선택한 네트:"
 
 #: eeschema/design_block_tree_model_adapter.cpp:150
 #: eeschema/design_block_tree_model_adapter.cpp:199
+#: eeschema/design_block_utils.cpp:615
 #, c-format
 msgid "Error loading design block %s from library '%s'."
 msgstr "라이브러리 '%s'에서 디자인 블록 %s을 로드 중 오류가 발생했습니다."
@@ -10808,11 +10809,6 @@ msgstr "디자인 블록 '%s'를 디스크 라이브러리 '%s'에서 삭제하�
 #, c-format
 msgid "Design block '%s' deleted from library '%s'"
 msgstr "디자인 블록 '%s'가 라이브러리 '%s'에서 삭제됨"
-
-#: eeschema/design_block_utils.cpp:615
-#, c-format
-msgid "Error loading designblock %s from library '%s'."
-msgstr "디자인 블록 %s를 라이브러리 '%s'에서 로드 중 오류 발생."
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -51054,6 +51050,10 @@ msgstr "KiCad 회로도 심볼"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad 도면 시트"
+
+#, c-format
+#~ msgid "Error loading designblock %s from library '%s'."
+#~ msgstr "디자인 블록 %s를 라이브러리 '%s'에서 로드 중 오류 발생."
 
 #~ msgid "Included Layers"
 #~ msgstr "레이어 포함"

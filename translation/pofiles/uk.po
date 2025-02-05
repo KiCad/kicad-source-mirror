@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 18:25+0300\n"
+"POT-Creation-Date: 2025-02-05 21:38+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
@@ -10918,6 +10918,7 @@ msgstr "Вибраний зв'язок:"
 
 #: eeschema/design_block_tree_model_adapter.cpp:150
 #: eeschema/design_block_tree_model_adapter.cpp:199
+#: eeschema/design_block_utils.cpp:615
 #, fuzzy, c-format
 msgid "Error loading design block %s from library '%s'."
 msgstr "Помилка завантаження символу %s з бібліотеки '%s'."
@@ -11042,11 +11043,6 @@ msgstr "Видалити посадкове місце '%s' з бібліоте�
 #, fuzzy, c-format
 msgid "Design block '%s' deleted from library '%s'"
 msgstr "Посадкове місце '%s' видалено з бібліотеки '%s'"
-
-#: eeschema/design_block_utils.cpp:615
-#, fuzzy, c-format
-msgid "Error loading designblock %s from library '%s'."
-msgstr "Помилка завантаження символу %s з бібліотеки '%s'."
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -52461,6 +52457,10 @@ msgstr "KiCad схема"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Редактор форматних рамок KiCad"
+
+#, fuzzy, c-format
+#~ msgid "Error loading designblock %s from library '%s'."
+#~ msgstr "Помилка завантаження символу %s з бібліотеки '%s'."
 
 #~ msgid "Included Layers"
 #~ msgstr "Внутрішні шари"

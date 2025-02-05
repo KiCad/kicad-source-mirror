@@ -40,7 +40,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 18:25+0300\n"
+"POT-Creation-Date: 2025-02-05 21:38+0300\n"
 "PO-Revision-Date: 2025-02-04 09:03+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
@@ -10624,6 +10624,7 @@ msgstr "选择的网络:"
 
 #: eeschema/design_block_tree_model_adapter.cpp:150
 #: eeschema/design_block_tree_model_adapter.cpp:199
+#: eeschema/design_block_utils.cpp:615
 #, c-format
 msgid "Error loading design block %s from library '%s'."
 msgstr "从库 '%2$s' 加载设计图块 %1$s 时出错。"
@@ -10740,11 +10741,6 @@ msgstr "删除库 '%2$s' 的设计图块 '%1$s'?"
 #, c-format
 msgid "Design block '%s' deleted from library '%s'"
 msgstr "库 '%2$s' 的设计图块 '%1$s' 已删除"
-
-#: eeschema/design_block_utils.cpp:615
-#, c-format
-msgid "Error loading designblock %s from library '%s'."
-msgstr "从库 '%2$s' 加载设计图块 %1$s 出错。"
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -50511,6 +50507,10 @@ msgstr "KiCad 原理图符号"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad 图框编辑器"
+
+#, c-format
+#~ msgid "Error loading designblock %s from library '%s'."
+#~ msgstr "从库 '%2$s' 加载设计图块 %1$s 出错。"
 
 #~ msgid "Included Layers"
 #~ msgstr "包含层"

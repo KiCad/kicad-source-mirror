@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 18:25+0300\n"
+"POT-Creation-Date: 2025-02-05 21:38+0300\n"
 "PO-Revision-Date: 2025-02-03 18:48+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/master-"
@@ -10971,6 +10971,7 @@ msgstr "Red seleccionada:"
 
 #: eeschema/design_block_tree_model_adapter.cpp:150
 #: eeschema/design_block_tree_model_adapter.cpp:199
+#: eeschema/design_block_utils.cpp:615
 #, fuzzy, c-format
 msgid "Error loading design block %s from library '%s'."
 msgstr "Ha ocurrido un error al cargar el símbolo %s desde la biblioteca '%s'."
@@ -11094,11 +11095,6 @@ msgstr "¿Eliminar la huella '%s' de la biblioteca '%s'?"
 #, fuzzy, c-format
 msgid "Design block '%s' deleted from library '%s'"
 msgstr "Huella '%s' eliminada de la biblioteca '%s'"
-
-#: eeschema/design_block_utils.cpp:615
-#, fuzzy, c-format
-msgid "Error loading designblock %s from library '%s'."
-msgstr "Ha ocurrido un error al cargar el símbolo %s desde la biblioteca '%s'."
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -52799,6 +52795,11 @@ msgstr "Símbolo esquemático"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Editor de hoja de dibujo de KiCad"
+
+#, fuzzy, c-format
+#~ msgid "Error loading designblock %s from library '%s'."
+#~ msgstr ""
+#~ "Ha ocurrido un error al cargar el símbolo %s desde la biblioteca '%s'."
 
 #~ msgid "Included Layers"
 #~ msgstr "Capas incluidas"

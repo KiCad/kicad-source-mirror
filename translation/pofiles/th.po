@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 18:25+0300\n"
+"POT-Creation-Date: 2025-02-05 21:38+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
@@ -10994,6 +10994,7 @@ msgstr "เน็ตที่เลือก:"
 
 #: eeschema/design_block_tree_model_adapter.cpp:150
 #: eeschema/design_block_tree_model_adapter.cpp:199
+#: eeschema/design_block_utils.cpp:615
 #, fuzzy, c-format
 msgid "Error loading design block %s from library '%s'."
 msgstr "ผิดพลาดอ่านสัญลักษณ์ %s จากไลบรารี '%s'"
@@ -11118,11 +11119,6 @@ msgstr "ลบฟุ้ทพรินท์ '%s' ออกจากไลบร
 #, fuzzy, c-format
 msgid "Design block '%s' deleted from library '%s'"
 msgstr "ฟุ้ทพรินท์ '%s' ถูกลบออกจากไลบรารี '%s'"
-
-#: eeschema/design_block_utils.cpp:615
-#, fuzzy, c-format
-msgid "Error loading designblock %s from library '%s'."
-msgstr "ผิดพลาดอ่านสัญลักษณ์ %s จากไลบรารี '%s'"
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -52280,6 +52276,10 @@ msgstr "สัญลักษณ์ในวงจร"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "ตัวแก้ไขแผ่นเขียนแบบของ KiCad"
+
+#, fuzzy, c-format
+#~ msgid "Error loading designblock %s from library '%s'."
+#~ msgstr "ผิดพลาดอ่านสัญลักษณ์ %s จากไลบรารี '%s'"
 
 #~ msgid "Included Layers"
 #~ msgstr "เลเยอร์ที่รวม"

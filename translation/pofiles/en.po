@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 18:25+0300\n"
+"POT-Creation-Date: 2025-02-05 21:38+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -6858,10 +6858,6 @@ msgstr "Delete design block '%s' in library '%s' from disk?"
 #, c-format
 msgid "Design block '%s' deleted from library '%s'"
 msgstr "Design block '%s' deleted from library '%s'"
-
-#, c-format
-msgid "Error loading designblock %s from library '%s'."
-msgstr "Error loading designblock %s from library '%s'."
 
 msgid "Annotation Messages:"
 msgstr "Annotation Messages:"
@@ -36777,6 +36773,10 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#, c-format
+#~ msgid "Error loading designblock %s from library '%s'."
+#~ msgstr "Error loading designblock %s from library '%s'."
 
 #~ msgid ""
 #~ "Knock out the corresponding solder mask layer after plotting a silkscreen "

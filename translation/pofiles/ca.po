@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 18:25+0300\n"
+"POT-Creation-Date: 2025-02-05 21:38+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
@@ -11246,6 +11246,7 @@ msgstr "Xarxa seleccionada:"
 
 #: eeschema/design_block_tree_model_adapter.cpp:150
 #: eeschema/design_block_tree_model_adapter.cpp:199
+#: eeschema/design_block_utils.cpp:615
 #, fuzzy, c-format
 msgid "Error loading design block %s from library '%s'."
 msgstr "Error al carregar el símbol %s des de la biblioteca '%s'."
@@ -11372,11 +11373,6 @@ msgstr "Voleu eliminar el component «%s» de la biblioteca «%s»?"
 #, fuzzy, c-format
 msgid "Design block '%s' deleted from library '%s'"
 msgstr "S'ha eliminat l'empremta %s de la biblioteca «%s»"
-
-#: eeschema/design_block_utils.cpp:615
-#, fuzzy, c-format
-msgid "Error loading designblock %s from library '%s'."
-msgstr "Error al carregar el símbol %s des de la biblioteca '%s'."
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -53603,6 +53599,10 @@ msgstr "Símbol de l'esquemàtic"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Editor de fulles de dibuix"
+
+#, fuzzy, c-format
+#~ msgid "Error loading designblock %s from library '%s'."
+#~ msgstr "Error al carregar el símbol %s des de la biblioteca '%s'."
 
 #~ msgid "Included Layers"
 #~ msgstr "Capes incloses"

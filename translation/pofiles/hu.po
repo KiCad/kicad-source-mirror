@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 18:25+0300\n"
+"POT-Creation-Date: 2025-02-05 21:38+0300\n"
 "PO-Revision-Date: 2025-02-03 18:48+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
@@ -11932,6 +11932,7 @@ msgstr "Kiválasztott vezeték: "
 
 #: eeschema/design_block_tree_model_adapter.cpp:150
 #: eeschema/design_block_tree_model_adapter.cpp:199
+#: eeschema/design_block_utils.cpp:615
 #, fuzzy, c-format
 msgid "Error loading design block %s from library '%s'."
 msgstr ""
@@ -12064,12 +12065,6 @@ msgstr "Alkatrészrajzolat törlése a könyvtárból"
 #, fuzzy, c-format
 msgid "Design block '%s' deleted from library '%s'"
 msgstr "A(z) '%s' alkatrészrajzolat a(z) '%s' könyvtárból törölésre került."
-
-#: eeschema/design_block_utils.cpp:615
-#, fuzzy, c-format
-msgid "Error loading designblock %s from library '%s'."
-msgstr ""
-"Hiba történt a(z) '%s' rajzjel '%s' könyvtárból történő betöltése során."
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 #, fuzzy
@@ -56912,6 +56907,11 @@ msgstr "Alkatrész rajzjelek szerkesztése"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Lapkeret szerkesztő"
+
+#, fuzzy, c-format
+#~ msgid "Error loading designblock %s from library '%s'."
+#~ msgstr ""
+#~ "Hiba történt a(z) '%s' rajzjel '%s' könyvtárból történő betöltése során."
 
 #, fuzzy
 #~ msgid "Included Layers"

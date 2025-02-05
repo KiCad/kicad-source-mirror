@@ -114,7 +114,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 18:25+0300\n"
+"POT-Creation-Date: 2025-02-05 21:38+0300\n"
 "PO-Revision-Date: 2025-02-04 09:03+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
@@ -10898,6 +10898,7 @@ msgstr "Connessione selezionata:"
 
 #: eeschema/design_block_tree_model_adapter.cpp:150
 #: eeschema/design_block_tree_model_adapter.cpp:199
+#: eeschema/design_block_utils.cpp:615
 #, c-format
 msgid "Error loading design block %s from library '%s'."
 msgstr "Errore caricando il blocco progetto %s dalla libreria '%s'."
@@ -11017,11 +11018,6 @@ msgstr "Eliminare il blocco progetto '%s' nella libreria '%s dal disco?"
 #, c-format
 msgid "Design block '%s' deleted from library '%s'"
 msgstr "Blocco progetto '%s' eliminato dalla libreria '%s'"
-
-#: eeschema/design_block_utils.cpp:615
-#, c-format
-msgid "Error loading designblock %s from library '%s'."
-msgstr "Errore caricando il blocco progetto %s dalla libreria '%s'."
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -52656,6 +52652,10 @@ msgstr "Simbolo schema di KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "Foglo di disegno KiCad"
+
+#, c-format
+#~ msgid "Error loading designblock %s from library '%s'."
+#~ msgstr "Errore caricando il blocco progetto %s dalla libreria '%s'."
 
 #~ msgid "Included Layers"
 #~ msgstr "Strati inclusi"

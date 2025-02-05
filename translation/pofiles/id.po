@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 18:25+0300\n"
+"POT-Creation-Date: 2025-02-05 21:38+0300\n"
 "PO-Revision-Date: 2022-12-17 19:13+0000\n"
 "Last-Translator: Neko Nekowazarashi <kodra@nekoweb.my.id>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/master-"
@@ -11336,6 +11336,7 @@ msgstr "Item yang Dipilih"
 
 #: eeschema/design_block_tree_model_adapter.cpp:150
 #: eeschema/design_block_tree_model_adapter.cpp:199
+#: eeschema/design_block_utils.cpp:615
 #, fuzzy, c-format
 msgid "Error loading design block %s from library '%s'."
 msgstr ""
@@ -11469,14 +11470,6 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Design block '%s' deleted from library '%s'"
 msgstr "Berkas '%s' tidak ditemukan."
-
-#: eeschema/design_block_utils.cpp:615
-#, fuzzy, c-format
-msgid "Error loading designblock %s from library '%s'."
-msgstr ""
-"Terjadi kesalahan saat memuat simbol %s dari pustaka %s.\n"
-"\n"
-"%s"
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 #, fuzzy
@@ -53616,6 +53609,13 @@ msgstr "Simbol Skematik"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Buka Penyunting Teks"
+
+#, fuzzy, c-format
+#~ msgid "Error loading designblock %s from library '%s'."
+#~ msgstr ""
+#~ "Terjadi kesalahan saat memuat simbol %s dari pustaka %s.\n"
+#~ "\n"
+#~ "%s"
 
 #, fuzzy
 #~ msgid "Included Layers"

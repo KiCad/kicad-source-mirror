@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 18:25+0300\n"
+"POT-Creation-Date: 2025-02-05 21:38+0300\n"
 "PO-Revision-Date: 2025-02-01 17:11+0000\n"
 "Last-Translator: 109247019824 <109247019824@users.noreply.hosted.weblate."
 "org>\n"
@@ -11651,6 +11651,7 @@ msgstr "Избор на верига"
 
 #: eeschema/design_block_tree_model_adapter.cpp:150
 #: eeschema/design_block_tree_model_adapter.cpp:199
+#: eeschema/design_block_utils.cpp:615
 #, fuzzy, c-format
 msgid "Error loading design block %s from library '%s'."
 msgstr "Грешка <%s> при зареждане на символна библиотека <%s>."
@@ -11780,11 +11781,6 @@ msgstr "Отвори модул компонентен отпечатък от �
 #, fuzzy, c-format
 msgid "Design block '%s' deleted from library '%s'"
 msgstr "Компонент %s е изтрит в библиотека %s"
-
-#: eeschema/design_block_utils.cpp:615
-#, fuzzy, c-format
-msgid "Error loading designblock %s from library '%s'."
-msgstr "Грешка <%s> при зареждане на символна библиотека <%s>."
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 #, fuzzy
@@ -54783,6 +54779,10 @@ msgstr "Печат на схемата"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Текстов редактор"
+
+#, fuzzy, c-format
+#~ msgid "Error loading designblock %s from library '%s'."
+#~ msgstr "Грешка <%s> при зареждане на символна библиотека <%s>."
 
 #, fuzzy
 #~ msgid "Included Layers"

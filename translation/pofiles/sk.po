@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 18:25+0300\n"
+"POT-Creation-Date: 2025-02-05 21:38+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
@@ -10990,6 +10990,7 @@ msgstr "Vybraná sieť:"
 
 #: eeschema/design_block_tree_model_adapter.cpp:150
 #: eeschema/design_block_tree_model_adapter.cpp:199
+#: eeschema/design_block_utils.cpp:615
 #, fuzzy, c-format
 msgid "Error loading design block %s from library '%s'."
 msgstr "Chyba pri načítaní symbolu '%s' z knižnice '%s'."
@@ -11114,11 +11115,6 @@ msgstr "Zmazať puzdra '%s' z knižnice '%s'?"
 #, fuzzy, c-format
 msgid "Design block '%s' deleted from library '%s'"
 msgstr "Stopa '%s' bola odstránená z knižnice '%s'"
-
-#: eeschema/design_block_utils.cpp:615
-#, fuzzy, c-format
-msgid "Error loading designblock %s from library '%s'."
-msgstr "Chyba pri načítaní symbolu '%s' z knižnice '%s'."
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -53449,6 +53445,10 @@ msgstr "KiCad schematický symbol"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad pracovný list"
+
+#, fuzzy, c-format
+#~ msgid "Error loading designblock %s from library '%s'."
+#~ msgstr "Chyba pri načítaní symbolu '%s' z knižnice '%s'."
 
 #~ msgid "Included Layers"
 #~ msgstr "Zahrnuté vrstvy"

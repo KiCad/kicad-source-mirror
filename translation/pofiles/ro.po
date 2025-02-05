@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 18:25+0300\n"
+"POT-Creation-Date: 2025-02-05 21:38+0300\n"
 "PO-Revision-Date: 2025-02-03 18:48+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/master-"
@@ -11236,6 +11236,7 @@ msgstr "Rețea selectată:"
 
 #: eeschema/design_block_tree_model_adapter.cpp:150
 #: eeschema/design_block_tree_model_adapter.cpp:199
+#: eeschema/design_block_utils.cpp:615
 #, fuzzy, c-format
 msgid "Error loading design block %s from library '%s'."
 msgstr "Eroare la încărcarea simbolului %s din biblioteca „%s”."
@@ -11364,11 +11365,6 @@ msgstr "Eroare la încărcarea amprentei %s din biblioteca \"%s\"."
 #, fuzzy, c-format
 msgid "Design block '%s' deleted from library '%s'"
 msgstr "Amprenta nu a fost găsită."
-
-#: eeschema/design_block_utils.cpp:615
-#, fuzzy, c-format
-msgid "Error loading designblock %s from library '%s'."
-msgstr "Eroare la încărcarea simbolului %s din biblioteca „%s”."
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -53760,6 +53756,10 @@ msgstr "Schematică KiCad"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Editor foi de desen"
+
+#, fuzzy, c-format
+#~ msgid "Error loading designblock %s from library '%s'."
+#~ msgstr "Eroare la încărcarea simbolului %s din biblioteca „%s”."
 
 #, fuzzy
 #~ msgid "Included Layers"

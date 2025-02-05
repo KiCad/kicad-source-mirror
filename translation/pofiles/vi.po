@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 18:25+0300\n"
+"POT-Creation-Date: 2025-02-05 21:38+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
@@ -11089,6 +11089,7 @@ msgstr "net đã chọn:"
 
 #: eeschema/design_block_tree_model_adapter.cpp:150
 #: eeschema/design_block_tree_model_adapter.cpp:199
+#: eeschema/design_block_utils.cpp:615
 #, fuzzy, c-format
 msgid "Error loading design block %s from library '%s'."
 msgstr "Lỗi khi tải biểu tượng %s từ thư viện '%s'."
@@ -11215,11 +11216,6 @@ msgstr "Xóa footprint '%s' khỏi thư viện '%s'?"
 #, fuzzy, c-format
 msgid "Design block '%s' deleted from library '%s'"
 msgstr "Không tìm thấy Footprint"
-
-#: eeschema/design_block_utils.cpp:615
-#, fuzzy, c-format
-msgid "Error loading designblock %s from library '%s'."
-msgstr "Lỗi khi tải biểu tượng %s từ thư viện '%s'."
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -53438,6 +53434,10 @@ msgstr "Tệp sơ đồ mạch Altium"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Worksheet"
+
+#, fuzzy, c-format
+#~ msgid "Error loading designblock %s from library '%s'."
+#~ msgstr "Lỗi khi tải biểu tượng %s từ thư viện '%s'."
 
 #, fuzzy
 #~ msgid "Included Layers"

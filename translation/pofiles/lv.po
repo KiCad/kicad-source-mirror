@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 18:25+0300\n"
+"POT-Creation-Date: 2025-02-05 21:38+0300\n"
 "PO-Revision-Date: 2023-01-20 06:51+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Latvian <https://hosted.weblate.org/projects/kicad/master-"
@@ -11099,6 +11099,7 @@ msgstr "Atlases krāsa:"
 
 #: eeschema/design_block_tree_model_adapter.cpp:150
 #: eeschema/design_block_tree_model_adapter.cpp:199
+#: eeschema/design_block_utils.cpp:615
 #, fuzzy, c-format
 msgid "Error loading design block %s from library '%s'."
 msgstr "Ielādē %s"
@@ -11222,11 +11223,6 @@ msgstr "Nospiedums nav ielādēts."
 #, fuzzy, c-format
 msgid "Design block '%s' deleted from library '%s'"
 msgstr "Nospiedums nav ielādēts."
-
-#: eeschema/design_block_utils.cpp:615
-#, fuzzy, c-format
-msgid "Error loading designblock %s from library '%s'."
-msgstr "Ielādē %s"
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 #, fuzzy
@@ -51616,6 +51612,10 @@ msgstr "Rādīt vara biezumu"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Rādīt vara biezumu"
+
+#, fuzzy, c-format
+#~ msgid "Error loading designblock %s from library '%s'."
+#~ msgstr "Ielādē %s"
 
 #, fuzzy
 #~ msgid "Included Layers"

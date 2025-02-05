@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 18:25+0300\n"
+"POT-Creation-Date: 2025-02-05 21:38+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/kicad/master-"
@@ -12244,6 +12244,7 @@ msgstr "Izbrano vozlišče:"
 
 #: eeschema/design_block_tree_model_adapter.cpp:150
 #: eeschema/design_block_tree_model_adapter.cpp:199
+#: eeschema/design_block_utils.cpp:615
 #, fuzzy, c-format
 msgid "Error loading design block %s from library '%s'."
 msgstr "Napaka pri nalaganju simbola '%s' iz knjižnice '%s'."
@@ -12374,11 +12375,6 @@ msgstr "Želite izbrisati odtis '%s' iz knjižnice '%s'?"
 #, fuzzy, c-format
 msgid "Design block '%s' deleted from library '%s'"
 msgstr "Odtis '%s' izbrisan iz knjižnice '%s'"
-
-#: eeschema/design_block_utils.cpp:615
-#, fuzzy, c-format
-msgid "Error loading designblock %s from library '%s'."
-msgstr "Napaka pri nalaganju simbola '%s' iz knjižnice '%s'."
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 #, fuzzy
@@ -57737,6 +57733,10 @@ msgstr "Uredi shematske simbole"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Urejevalnik knjižnic"
+
+#, fuzzy, c-format
+#~ msgid "Error loading designblock %s from library '%s'."
+#~ msgstr "Napaka pri nalaganju simbola '%s' iz knjižnice '%s'."
 
 #, fuzzy
 #~ msgid "Included Layers"

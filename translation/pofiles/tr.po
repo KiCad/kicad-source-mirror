@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 18:25+0300\n"
+"POT-Creation-Date: 2025-02-05 21:38+0300\n"
 "PO-Revision-Date: 2025-02-03 18:48+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
@@ -10857,6 +10857,7 @@ msgstr "Seçilen ağ:"
 
 #: eeschema/design_block_tree_model_adapter.cpp:150
 #: eeschema/design_block_tree_model_adapter.cpp:199
+#: eeschema/design_block_utils.cpp:615
 #, fuzzy, c-format
 msgid "Error loading design block %s from library '%s'."
 msgstr "'%s' kitaplığından %s sembolü yüklenirken hata oluştu."
@@ -10985,11 +10986,6 @@ msgstr "'%s' kitaplığından %s ayak izi(footprint) yüklenirken hata oluştu."
 #, fuzzy, c-format
 msgid "Design block '%s' deleted from library '%s'"
 msgstr "Kütüphanelerde ayak izi bulunamadı"
-
-#: eeschema/design_block_utils.cpp:615
-#, fuzzy, c-format
-msgid "Error loading designblock %s from library '%s'."
-msgstr "'%s' kitaplığından %s sembolü yüklenirken hata oluştu."
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -54302,6 +54298,10 @@ msgstr "Şema Düzenleyici"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Çizim Sayfası Düzenleyici"
+
+#, fuzzy, c-format
+#~ msgid "Error loading designblock %s from library '%s'."
+#~ msgstr "'%s' kitaplığından %s sembolü yüklenirken hata oluştu."
 
 #, fuzzy
 #~ msgid "Included Layers"

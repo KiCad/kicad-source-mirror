@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 18:25+0300\n"
+"POT-Creation-Date: 2025-02-05 21:38+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/master-"
@@ -11354,6 +11354,7 @@ msgstr "Pasirinktas tinklas:"
 
 #: eeschema/design_block_tree_model_adapter.cpp:150
 #: eeschema/design_block_tree_model_adapter.cpp:199
+#: eeschema/design_block_utils.cpp:615
 #, fuzzy, c-format
 msgid "Error loading design block %s from library '%s'."
 msgstr "Klaida įkeliant simbolį „%s“ iš bibliotekos „%s“."
@@ -11478,11 +11479,6 @@ msgstr "Ištrinti pėdsaką „%s“ iš bibliotekos „%s“?"
 #, fuzzy, c-format
 msgid "Design block '%s' deleted from library '%s'"
 msgstr "Pėdsakas „%s“ ištrintas iš bibliotekos „%s“"
-
-#: eeschema/design_block_utils.cpp:615
-#, fuzzy, c-format
-msgid "Error loading designblock %s from library '%s'."
-msgstr "Klaida įkeliant simbolį „%s“ iš bibliotekos „%s“."
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -53930,6 +53926,10 @@ msgstr "Redaguoti scheminius simbolius"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Lapo formatų redaktorius"
+
+#, fuzzy, c-format
+#~ msgid "Error loading designblock %s from library '%s'."
+#~ msgstr "Klaida įkeliant simbolį „%s“ iš bibliotekos „%s“."
 
 #~ msgid "Included Layers"
 #~ msgstr "Įtraukti sluoksnius"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 18:25+0300\n"
+"POT-Creation-Date: 2025-02-05 21:38+0300\n"
 "PO-Revision-Date: 2025-02-03 18:48+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
@@ -11356,6 +11356,7 @@ msgstr "Valgt nett:"
 
 #: eeschema/design_block_tree_model_adapter.cpp:150
 #: eeschema/design_block_tree_model_adapter.cpp:199
+#: eeschema/design_block_utils.cpp:615
 #, fuzzy, c-format
 msgid "Error loading design block %s from library '%s'."
 msgstr "Feil ved lasting av symbolet '%s' fra biblioteket '%s'."
@@ -11480,11 +11481,6 @@ msgstr "Vil du slette fotavtrykk '%s' fra biblioteket '%s'?"
 #, fuzzy, c-format
 msgid "Design block '%s' deleted from library '%s'"
 msgstr "Fotavtrykk '%s' slettet fra biblioteket '%s'"
-
-#: eeschema/design_block_utils.cpp:615
-#, fuzzy, c-format
-msgid "Error loading designblock %s from library '%s'."
-msgstr "Feil ved lasting av symbolet '%s' fra biblioteket '%s'."
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -53871,6 +53867,10 @@ msgstr "Rediger skjematiske symboler"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Regneark"
+
+#, fuzzy, c-format
+#~ msgid "Error loading designblock %s from library '%s'."
+#~ msgstr "Feil ved lasting av symbolet '%s' fra biblioteket '%s'."
 
 #~ msgid "Included Layers"
 #~ msgstr "Inkluderte lag"

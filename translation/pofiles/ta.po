@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 18:25+0300\n"
+"POT-Creation-Date: 2025-02-05 21:38+0300\n"
 "PO-Revision-Date: 2025-01-06 10:27+0000\n"
 "Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/master-"
@@ -10516,6 +10516,7 @@ msgstr ""
 
 #: eeschema/design_block_tree_model_adapter.cpp:150
 #: eeschema/design_block_tree_model_adapter.cpp:199
+#: eeschema/design_block_utils.cpp:615
 #, c-format
 msgid "Error loading design block %s from library '%s'."
 msgstr "' %s' இலிருந்து வடிவமைப்பு தொகுதி %s ஐ ஏற்றுவது."
@@ -10634,11 +10635,6 @@ msgstr "வட்டில் இருந்து நூலகத்தில�
 #, c-format
 msgid "Design block '%s' deleted from library '%s'"
 msgstr "வடிவமைப்புத் தொகுதி '%s' நூலகத்திலிருந்து நீக்கப்பட்டது '%s'"
-
-#: eeschema/design_block_utils.cpp:615
-#, c-format
-msgid "Error loading designblock %s from library '%s'."
-msgstr "' %s' இலிருந்து வடிவமைப்பு பிளாக் %s ஐ ஏற்றுவது பிழை."
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -49234,6 +49230,10 @@ msgstr ""
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr ""
+
+#, c-format
+#~ msgid "Error loading designblock %s from library '%s'."
+#~ msgstr "' %s' இலிருந்து வடிவமைப்பு பிளாக் %s ஐ ஏற்றுவது பிழை."
 
 #~ msgid "Fetching design_block libraries..."
 #~ msgstr "வடிவமைப்பு_ பிளாக் நூலகங்களைப் பெறுதல் ..."
