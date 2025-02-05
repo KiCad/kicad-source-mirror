@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 02:27+0300\n"
+"POT-Creation-Date: 2025-02-05 18:25+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
@@ -38586,10 +38586,8 @@ msgid ""
 msgstr "Obre un fitxer de treball Gerber obert recentment"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
-msgid ""
-"Knock out the corresponding solder mask layer after plotting a silkscreen "
-"layer.  This will knock out all previously plotted layers."
-msgstr ""
+msgid "Remove silkscreen from areas without soldermask"
+msgstr "Suprimeix la serigrafia de les àrees sense màscara de soldadura"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:221
 msgid "Coordinate format:"
@@ -53608,9 +53606,6 @@ msgstr "Editor de fulles de dibuix"
 
 #~ msgid "Included Layers"
 #~ msgstr "Capes incloses"
-
-#~ msgid "Remove silkscreen from areas without soldermask"
-#~ msgstr "Suprimeix la serigrafia de les àrees sense màscara de soldadura"
 
 #, fuzzy
 #~ msgid "Fetching design_block libraries..."

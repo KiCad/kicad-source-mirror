@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 02:27+0300\n"
+"POT-Creation-Date: 2025-02-05 18:25+0300\n"
 "PO-Revision-Date: 2025-02-03 18:48+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
@@ -39116,10 +39116,9 @@ msgstr ""
 "içeren bir Gerber iş dosyası oluştur"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
-msgid ""
-"Knock out the corresponding solder mask layer after plotting a silkscreen "
-"layer.  This will knock out all previously plotted layers."
-msgstr ""
+#, fuzzy
+msgid "Remove silkscreen from areas without soldermask"
+msgstr "Lehim maskesinin kenarlarındaki serigrafiyi kesin"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:221
 #, fuzzy
@@ -54307,10 +54306,6 @@ msgstr "Çizim Sayfası Düzenleyici"
 #, fuzzy
 #~ msgid "Included Layers"
 #~ msgstr "Katmanları Dahil Et"
-
-#, fuzzy
-#~ msgid "Remove silkscreen from areas without soldermask"
-#~ msgstr "Lehim maskesinin kenarlarındaki serigrafiyi kesin"
 
 #, fuzzy
 #~ msgid "Fetching design_block libraries..."

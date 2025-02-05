@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 02:27+0300\n"
+"POT-Creation-Date: 2025-02-05 18:25+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
@@ -38530,10 +38530,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
-msgid ""
-"Knock out the corresponding solder mask layer after plotting a silkscreen "
-"layer.  This will knock out all previously plotted layers."
-msgstr ""
+#, fuzzy
+msgid "Remove silkscreen from areas without soldermask"
+msgstr "Xén lớp silkscreen tại via annulus"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:221
 #, fuzzy
@@ -53443,10 +53442,6 @@ msgstr "Worksheet"
 #, fuzzy
 #~ msgid "Included Layers"
 #~ msgstr "Tạo các lớp"
-
-#, fuzzy
-#~ msgid "Remove silkscreen from areas without soldermask"
-#~ msgstr "Xén lớp silkscreen tại via annulus"
 
 #~ msgid "Fetching design_block libraries..."
 #~ msgstr "Thu thập Thư viện thiết kế theo khối..."

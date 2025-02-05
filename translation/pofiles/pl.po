@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 02:27+0300\n"
+"POT-Creation-Date: 2025-02-05 18:25+0300\n"
 "PO-Revision-Date: 2025-02-04 23:24+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
@@ -37108,10 +37108,8 @@ msgstr ""
 "i listę plików Gerber podlegających generowaniu"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
-msgid ""
-"Knock out the corresponding solder mask layer after plotting a silkscreen "
-"layer.  This will knock out all previously plotted layers."
-msgstr ""
+msgid "Remove silkscreen from areas without soldermask"
+msgstr "Usuń maskę opisową z pól wokół maski lutowniczej"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:221
 msgid "Coordinate format:"
@@ -51897,9 +51895,6 @@ msgstr "Obramowanie strony programu KiCad"
 
 #~ msgid "Included Layers"
 #~ msgstr "Dołączone warstwy"
-
-#~ msgid "Remove silkscreen from areas without soldermask"
-#~ msgstr "Usuń maskę opisową z pól wokół maski lutowniczej"
 
 #~ msgid "Fetching design_block libraries..."
 #~ msgstr "Pobieranie bibliotek bloków projektowych..."

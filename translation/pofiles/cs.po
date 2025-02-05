@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 02:27+0300\n"
+"POT-Creation-Date: 2025-02-05 18:25+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
@@ -37079,10 +37079,8 @@ msgstr ""
 "a seznam generovaných souborů Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
-msgid ""
-"Knock out the corresponding solder mask layer after plotting a silkscreen "
-"layer.  This will knock out all previously plotted layers."
-msgstr ""
+msgid "Remove silkscreen from areas without soldermask"
+msgstr "Odstranit potisk z oblastí bez masky"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:221
 msgid "Coordinate format:"
@@ -51728,9 +51726,6 @@ msgstr "KiCad Editor výkresu"
 
 #~ msgid "Included Layers"
 #~ msgstr "Zahrnuté vrstvy"
-
-#~ msgid "Remove silkscreen from areas without soldermask"
-#~ msgstr "Odstranit potisk z oblastí bez masky"
 
 #~ msgid "Fetching design_block libraries..."
 #~ msgstr "Načítání knihovny návrhových bloků..."

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 02:27+0300\n"
+"POT-Creation-Date: 2025-02-05 18:25+0300\n"
 "PO-Revision-Date: 2023-01-20 06:51+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Latvian <https://hosted.weblate.org/projects/kicad/master-"
@@ -37259,10 +37259,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
-msgid ""
-"Knock out the corresponding solder mask layer after plotting a silkscreen "
-"layer.  This will knock out all previously plotted layers."
-msgstr ""
+#, fuzzy
+msgid "Remove silkscreen from areas without soldermask"
+msgstr "Apgriezt virsmas apdruku ap tiltiņu gredzeniem"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:221
 msgid "Coordinate format:"
@@ -51621,10 +51620,6 @@ msgstr "Rādīt vara biezumu"
 #, fuzzy
 #~ msgid "Included Layers"
 #~ msgstr "Izveidot slāņus"
-
-#, fuzzy
-#~ msgid "Remove silkscreen from areas without soldermask"
-#~ msgstr "Apgriezt virsmas apdruku ap tiltiņu gredzeniem"
 
 #, fuzzy
 #~ msgid "Fetching design_block libraries..."

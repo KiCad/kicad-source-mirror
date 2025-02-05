@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 02:27+0300\n"
+"POT-Creation-Date: 2025-02-05 18:25+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
@@ -37729,10 +37729,8 @@ msgstr ""
 "และรายการไฟล์พล็อตเกอร์เบอร์ที่สร้างขึ้น"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
-msgid ""
-"Knock out the corresponding solder mask layer after plotting a silkscreen "
-"layer.  This will knock out all previously plotted layers."
-msgstr ""
+msgid "Remove silkscreen from areas without soldermask"
+msgstr "นำซิลค์สกรีนออกจากบริเวณที่ไม่มีโซลเดอร์มาส์ก"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:221
 msgid "Coordinate format:"
@@ -52285,9 +52283,6 @@ msgstr "ตัวแก้ไขแผ่นเขียนแบบของ Ki
 
 #~ msgid "Included Layers"
 #~ msgstr "เลเยอร์ที่รวม"
-
-#~ msgid "Remove silkscreen from areas without soldermask"
-#~ msgstr "นำซิลค์สกรีนออกจากบริเวณที่ไม่มีโซลเดอร์มาส์ก"
 
 #, fuzzy
 #~ msgid "Fetching design_block libraries..."

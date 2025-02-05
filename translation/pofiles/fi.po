@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 02:27+0300\n"
+"POT-Creation-Date: 2025-02-05 18:25+0300\n"
 "PO-Revision-Date: 2025-02-03 00:02+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
@@ -36929,10 +36929,8 @@ msgstr ""
 "ja luettelo luotuista Gerber-juontotiedostoista"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
-msgid ""
-"Knock out the corresponding solder mask layer after plotting a silkscreen "
-"layer.  This will knock out all previously plotted layers."
-msgstr ""
+msgid "Remove silkscreen from areas without soldermask"
+msgstr "Poista silkkipainatus juotteenestopinnoittamattomilta alueilta"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:221
 msgid "Coordinate format:"
@@ -51149,9 +51147,6 @@ msgstr "KiCad Piirustuslehti"
 
 #~ msgid "Included Layers"
 #~ msgstr "Mukana olevat kerrokset"
-
-#~ msgid "Remove silkscreen from areas without soldermask"
-#~ msgstr "Poista silkkipainatus juotteenestopinnoittamattomilta alueilta"
 
 #~ msgid "Fetching design_block libraries..."
 #~ msgstr "Haetaan suunnittelulohkokirjastoja..."

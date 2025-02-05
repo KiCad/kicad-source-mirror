@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 02:27+0300\n"
+"POT-Creation-Date: 2025-02-05 18:25+0300\n"
 "PO-Revision-Date: 2025-02-04 09:03+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
@@ -36571,10 +36571,8 @@ msgstr ""
 "거버 작업 파일을 생성합니다"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
-msgid ""
-"Knock out the corresponding solder mask layer after plotting a silkscreen "
-"layer.  This will knock out all previously plotted layers."
-msgstr ""
+msgid "Remove silkscreen from areas without soldermask"
+msgstr "솔더 마스크가 없는 영역에서 실크스크린 제거"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:221
 msgid "Coordinate format:"
@@ -51059,9 +51057,6 @@ msgstr "KiCad 도면 시트"
 
 #~ msgid "Included Layers"
 #~ msgstr "레이어 포함"
-
-#~ msgid "Remove silkscreen from areas without soldermask"
-#~ msgstr "솔더 마스크가 없는 영역에서 실크스크린 제거"
 
 #~ msgid "Fetching design_block libraries..."
 #~ msgstr "디자인_블록 라이브러리 가져오기..."

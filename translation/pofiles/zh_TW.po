@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 02:27+0300\n"
+"POT-Creation-Date: 2025-02-05 18:25+0300\n"
 "PO-Revision-Date: 2025-02-04 09:03+0000\n"
 "Last-Translator: reimu105 <peter112548@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
@@ -36533,10 +36533,8 @@ msgstr ""
 "及生成的 Gerber 繪製檔案列表"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
-msgid ""
-"Knock out the corresponding solder mask layer after plotting a silkscreen "
-"layer.  This will knock out all previously plotted layers."
-msgstr ""
+msgid "Remove silkscreen from areas without soldermask"
+msgstr "去除沒有阻焊區域上的絲印"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:221
 msgid "Coordinate format:"
@@ -51024,9 +51022,6 @@ msgstr "KiCad 專案圖編輯器"
 
 #~ msgid "Included Layers"
 #~ msgstr "包含層"
-
-#~ msgid "Remove silkscreen from areas without soldermask"
-#~ msgstr "去除沒有阻焊區域上的絲印"
 
 #~ msgid "Fetching design_block libraries..."
 #~ msgstr "正在提取符號庫..."

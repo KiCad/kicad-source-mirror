@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 02:27+0300\n"
+"POT-Creation-Date: 2025-02-05 18:25+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/master-"
@@ -38916,10 +38916,8 @@ msgstr ""
 "ir sugeneruotų „Gerber“ siužeto failų sąrašas"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
-msgid ""
-"Knock out the corresponding solder mask layer after plotting a silkscreen "
-"layer.  This will knock out all previously plotted layers."
-msgstr ""
+msgid "Remove silkscreen from areas without soldermask"
+msgstr "Pašalinkite šilkografiją iš vietų be litavimo kaukės"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:221
 msgid "Coordinate format:"
@@ -53935,9 +53933,6 @@ msgstr "Lapo formatų redaktorius"
 
 #~ msgid "Included Layers"
 #~ msgstr "Įtraukti sluoksnius"
-
-#~ msgid "Remove silkscreen from areas without soldermask"
-#~ msgstr "Pašalinkite šilkografiją iš vietų be litavimo kaukės"
 
 #, fuzzy
 #~ msgid "Fetching design_block libraries..."
