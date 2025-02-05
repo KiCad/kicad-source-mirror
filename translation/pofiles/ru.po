@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-05 02:29+0300\n"
-"PO-Revision-Date: 2025-02-05 18:29+0000\n"
+"PO-Revision-Date: 2025-02-05 18:36+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v8/ru/>\n"
 "Language: ru\n"
@@ -40970,7 +40970,7 @@ msgstr "1234 (мм)"
 
 #: pcbnew/pcb_dimension.cpp:1483
 msgid "Units Format"
-msgstr "Формат ед.изм."
+msgstr "Формат ед. изм."
 
 #: pcbnew/pcb_dimension.cpp:1491
 msgid "Suppress Trailing Zeroes"
@@ -42664,7 +42664,7 @@ msgid ""
 "Zones will need to be refilled."
 msgstr ""
 "Найдены элементы на неопределенных слоях (%s).\n"
-"Восстановить их на слой %s?\n"
+"Перенести их на слой %s?\n"
 "\n"
 "Зоны нужно будет перезалить."
 
