@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-05 02:29+0300\n"
-"PO-Revision-Date: 2025-01-29 16:58+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2025-02-06 22:01+0000\n"
+"Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v8/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -35039,9 +35039,8 @@ msgid "Select %s Library"
 msgstr "Vybrat %s knihovnu"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1001
-#, fuzzy
 msgid "Warning: Duplicate Nicknames"
-msgstr "Varování: Zdvojené jméno"
+msgstr "Varování: Duplicitní aliasy"
 
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:97
 msgid "LIbrary Format"
