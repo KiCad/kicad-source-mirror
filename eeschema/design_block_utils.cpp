@@ -612,7 +612,7 @@ DESIGN_BLOCK* SchGetDesignBlock( const LIB_ID& aLibId, DESIGN_BLOCK_LIB_TABLE* a
     {
         if( aShowErrorMsg )
         {
-            wxString msg = wxString::Format( _( "Error loading designblock %s from library '%s'." ),
+            wxString msg = wxString::Format( _( "Error loading design block %s from library '%s'." ),
                                              aLibId.GetLibItemName().wx_str(),
                                              aLibId.GetLibNickname().wx_str() );
             DisplayErrorMessage( aParent, msg, ioe.What() );
