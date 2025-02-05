@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-05 02:29+0300\n"
-"PO-Revision-Date: 2025-02-04 18:01+0000\n"
+"PO-Revision-Date: 2025-02-05 17:06+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v8/ru/>\n"
 "Language: ru\n"
@@ -2365,7 +2365,7 @@ msgid ""
 "use the default selection."
 msgstr ""
 "KiCad был запущен впервые, используя новую таблицу библиотек %s для\n"
-"управления библиотеками. Чтобы KiCad получил доступ к библиотекам %s, нужно\n"
+"доступа к библиотеками. Чтобы KiCad получил доступ к библиотекам %s, нужно\n"
 "настроить глобальную таблицу библиотек %s. Выберите одну из опций снизу.\n"
 "Если не уверены что выбрать, используйте вариант по умолчанию."
 
@@ -2478,7 +2478,7 @@ msgstr "Размер сетки X вне диапазона."
 
 #: common/dialogs/dialog_grid_settings.cpp:68
 msgid "Grid size Y out of range."
-msgstr "Размер сетки Y вне диапазона"
+msgstr "Размер сетки Y вне диапазона."
 
 #: common/dialogs/dialog_grid_settings_base.cpp:25
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:96
@@ -3024,7 +3024,7 @@ msgstr "Параметры вставки"
 
 #: common/dialogs/dialog_paste_special_base.h:46
 msgid "Paste Special"
-msgstr "Вставить как..."
+msgstr "Специальная вставка"
 
 #: common/dialogs/dialog_plugin_options.cpp:37
 msgid ""
@@ -3419,7 +3419,7 @@ msgstr "Закоммитить"
 
 #: common/dialogs/git/dialog_git_commit.cpp:169
 msgid "Commit message cannot be empty"
-msgstr "Сообщение коммита не может быть пустым."
+msgstr "Сообщение коммита не может быть пустым"
 
 #: common/dialogs/git/dialog_git_repository.cpp:154
 #: common/dialogs/git/dialog_git_repository.cpp:382
@@ -3933,7 +3933,7 @@ msgid ""
 msgstr ""
 "Задержка времени от первого изменения до создания файла резервной копии на "
 "диске.\n"
-"Если установить 0, резервное копирование будет отключено."
+"Если установить 0, резервное копирование будет отключено"
 
 #: common/dialogs/panel_common_settings_base.cpp:330
 #: common/dialogs/panel_common_settings_base.cpp:417
@@ -4610,7 +4610,7 @@ msgstr "Сверло перех. отв."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:56
 msgid "uVia Size"
-msgstr "Размер перех.микроотв."
+msgstr "Размер перех. микроотв."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:57
 msgid "uVia Hole"
@@ -6003,7 +6003,7 @@ msgstr "Каталог '%s' не существует"
 #: common/gestfich.cpp:326
 #, c-format
 msgid "'%s' is not a directory"
-msgstr "'%s' не является каталогом."
+msgstr "'%s' не является каталогом"
 
 #: common/gestfich.cpp:338
 #, c-format
@@ -7777,7 +7777,7 @@ msgstr "Выбрать столбцы..."
 
 #: common/tool/actions.cpp:757
 msgid "Switch units"
-msgstr "Переключить ед.изм."
+msgstr "Переключить ед. изм."
 
 #: common/tool/actions.cpp:758
 msgid "Switch between imperial and metric units"
@@ -7956,7 +7956,7 @@ msgstr "Открыть руководство для начинающих \"На
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:136
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:187
 msgid "Help"
-msgstr "Руководство пользователя"
+msgstr "Помощь"
 
 #: common/tool/actions.cpp:957
 msgid "Open product documentation in a web browser"
@@ -11417,8 +11417,7 @@ msgid ""
 "For instance, this should be checked for a quad NAND gate, while it should "
 "not be checked for a dual triode (where unit C is the filament)."
 msgstr ""
-"Поставьте этот флажок, если все\n"
-"части символа имеют одну и ту же функцию.\n"
+"Поставьте этот флажок, если все части символа имеют одну и ту же функцию.\n"
 "Например, следует ставить флажок для счетверенного вентиля И-НЕ, но не для "
 "двойного триода (где часть C представляет собой нить накала)."
 
@@ -12465,11 +12464,11 @@ msgstr "Свойства листа"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:271
 msgid "A DC source must be specified."
-msgstr "Должен быть указан источник DC"
+msgstr "Должен быть указан источник DC."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:364
 msgid "Source 1 and Source 2 must be different."
-msgstr "Источник 1 и источник 2 должны отличаться"
+msgstr "Источник 1 и источник 2 должны отличаться."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:420
 msgid "A frequency range must be specified."
@@ -13254,7 +13253,7 @@ msgstr "Не удалось записать BOM '%s'."
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1301
 #, c-format
 msgid "Wrote BOM output to '%s'"
-msgstr "BOM записан в '%s'."
+msgstr "BOM записан в '%s'"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1609
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2010
@@ -14824,7 +14823,7 @@ msgstr "Невозможно открыть путь назначения '%s'"
 #: eeschema/eeschema_jobs_handler.cpp:568
 #, c-format
 msgid "BOM format preset '%s' not found"
-msgstr "Пресет формата BOM '%s' не найден."
+msgstr "Пресет формата BOM '%s' не найден"
 
 #: eeschema/eeschema_jobs_handler.cpp:727
 #, c-format
@@ -16132,7 +16131,7 @@ msgstr "Необработанный тип элемента %d"
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:56
 msgid "Failed to create directory 'devices' ."
-msgstr "Не удалось удалить каталог 'devices'"
+msgstr "Не удалось создать каталог 'devices'."
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:419
 #, c-format
@@ -16638,7 +16637,7 @@ msgid ""
 "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
 "re-use block information has been discarded during the import."
 msgstr ""
-"Схема CADSTAR содержит повторно используемые блоки, которые не имеют "
+"Дизайн CADSTAR содержит повторно используемые блоки, которые не имеют "
 "аналогов в KiCad. Информация о повторно используемых блоках будет отклонена "
 "при импорте."
 
@@ -18840,7 +18839,7 @@ msgstr ""
 #: eeschema/sim/sim_model.cpp:795
 #, c-format
 msgid "Unknown simulation model pin '%s'"
-msgstr "Неизвестная модель симуляции вывода '%s'"
+msgstr "Неизвестный вывод '%s' модели симуляции"
 
 #: eeschema/sim/sim_model_kibis.cpp:87
 #, c-format
@@ -19545,7 +19544,7 @@ msgstr "Cимвол..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:78
 msgid "View as PNG..."
-msgstr "Просмотреть в PNG..."
+msgstr "Вид в PNG..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:79
 msgid "Symbol as SVG..."
@@ -19937,9 +19936,7 @@ msgstr "Не удалось просмотреть библиотеку '%s'."
 #: eeschema/symbol_library_manager.cpp:854
 #, c-format
 msgid "Error updating library buffer: %s"
-msgstr ""
-"Ошибка обновления буфера библиотеки:\n"
-"%s"
+msgstr "Ошибка обновления буфера библиотеки: %s"
 
 #: eeschema/symbol_library_manager.cpp:859
 msgid "Error updating library buffer."
@@ -20396,7 +20393,7 @@ msgstr "Чертить полигоны"
 
 #: eeschema/tools/ee_actions.cpp:376
 msgid "Move Symbol Anchor"
-msgstr "Переместить опорную точку"
+msgstr "Переместить опорную точку символа"
 
 #: eeschema/tools/ee_actions.cpp:377
 msgid "Specify a new location for the symbol anchor"
@@ -20558,11 +20555,11 @@ msgstr "Добавить растровые изображения"
 
 #: eeschema/tools/ee_actions.cpp:586
 msgid "Repeat Last Item"
-msgstr "Добавить последний выбранный символ"
+msgstr "Повторить последний элемент"
 
 #: eeschema/tools/ee_actions.cpp:587
 msgid "Duplicates the last drawn item"
-msgstr "Дублировать последний начерченный элемент"
+msgstr "Дублирует последний начерченный элемент"
 
 #: eeschema/tools/ee_actions.cpp:592 pcbnew/tools/pcb_actions.cpp:527
 msgid "Rotate Clockwise"
@@ -22012,11 +22009,11 @@ msgstr "Ограничить значениями ряда E48."
 
 #: eeschema/widgets/tuner_slider_base.cpp:61
 msgid "Limit to E96 series values"
-msgstr "Ограничить значениями ряда E96."
+msgstr "Ограничить значениями ряда E96"
 
 #: eeschema/widgets/tuner_slider_base.cpp:69
 msgid "Limit to E192 series values"
-msgstr "Ограничить значениями ряда E192."
+msgstr "Ограничить значениями ряда E192"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -26533,7 +26530,7 @@ msgid ""
 "creepage"
 msgstr ""
 "Канавка, имеющая меньшую ширину, не влияет на путь, рассматриваемый для "
-"утечки."
+"утечки"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:313
 msgid ""
@@ -27595,7 +27592,7 @@ msgstr ""
 "зазоров и утечек могут быть уменьшены. Паяльная маска обычно не "
 "рассматривается как конформное покрытие.\n"
 "- Изоляция через жидкости, сжатый воздух или газы, отличные от воздуха, не "
-"входит в рамки IEC60664."
+"входит в рамки IEC60664"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:69
 msgid "KiCad Calculator Tools"
