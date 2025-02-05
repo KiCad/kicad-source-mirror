@@ -22,10 +22,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-05 21:38+0300\n"
-"PO-Revision-Date: 2025-01-23 15:38+0000\n"
-"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"PO-Revision-Date: 2025-02-05 21:30+0000\n"
+"Last-Translator: Jan Straka <bach@email.cz>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1742,9 +1742,8 @@ msgid "Drawing Sheet (.kicad_wks file)"
 msgstr "List výkresu (soubor .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:200
-#, fuzzy
 msgid "Export to File..."
-msgstr "Export do souboru"
+msgstr "Export do souboru..."
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:203
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:147
@@ -4491,9 +4490,8 @@ msgstr "Vybrat %s knihovnu"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:988
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1016
-#, fuzzy
 msgid "Warning: Duplicate Nicknames"
-msgstr "Varování: Zdvojené jméno"
+msgstr "Varování: Duplicitní aliasy"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:989
 #: eeschema/dialogs/panel_sym_lib_table.cpp:668
@@ -7402,9 +7400,8 @@ msgid "Export drill data"
 msgstr "Exportovat data vrtání"
 
 #: common/jobs/job_export_pcb_drill.cpp:129
-#, fuzzy
 msgid "Export Drill Data Job Settings"
-msgstr "Upravit možnosti..."
+msgstr "Nastavení úlohy exportu dat vrtání"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
 msgid "PCB: Export drill data"
@@ -7431,9 +7428,8 @@ msgid "Export GenCAD Job Settings"
 msgstr "Export do nastavení GenCADu"
 
 #: common/jobs/job_export_pcb_gerber.cpp:71
-#, fuzzy
 msgid "Export single Gerber"
-msgstr "DPS: Export souborů Gerber"
+msgstr "Export jednoho souboru Gerber"
 
 #: common/jobs/job_export_pcb_gerber.cpp:77
 #, fuzzy
@@ -7441,9 +7437,8 @@ msgid "Export Single Gerber Job Settings"
 msgstr "Export do nastavení GenCADu"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:42
-#, fuzzy
 msgid "Export Gerbers"
-msgstr "DPS: Export souborů Gerber"
+msgstr "Export souborů Gerber"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:48
 #, fuzzy
@@ -7455,9 +7450,8 @@ msgid "PCB: Export Gerbers"
 msgstr "DPS: Export souborů Gerber"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
-#, fuzzy
 msgid "Export IPC2581"
-msgstr "Export IPC-2581"
+msgstr "Export IPC2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
 #, fuzzy
@@ -7470,9 +7464,8 @@ msgstr "DPS: Export IPC2581"
 
 #: common/jobs/job_export_pcb_odb.cpp:57
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
-#, fuzzy
 msgid "Export ODB++"
-msgstr "Exportovat IDFv3"
+msgstr "Export ODB++"
 
 #: common/jobs/job_export_pcb_odb.cpp:63
 #, fuzzy
@@ -7480,9 +7473,8 @@ msgid "Export ODB++ Job Settings"
 msgstr "Upravit možnosti..."
 
 #: common/jobs/job_export_pcb_odb.cpp:76
-#, fuzzy
 msgid "PCB: Export ODB++"
-msgstr "Exportovat IDFv3"
+msgstr "DPS: Export ODB++"
 
 #: common/jobs/job_export_pcb_pdf.cpp:74
 #: common/jobs/job_export_sch_plot.cpp:137 kicad/kicad_cli.cpp:143
@@ -7500,9 +7492,8 @@ msgid "PCB: Export PDF"
 msgstr "DPS: Export PDF"
 
 #: common/jobs/job_export_pcb_pos.cpp:97
-#, fuzzy
 msgid "Export position data"
-msgstr "Export pouzdra"
+msgstr "Export dat umístění"
 
 #: common/jobs/job_export_pcb_pos.cpp:103
 #, fuzzy
@@ -7529,9 +7520,8 @@ msgid "PCB: Export SVG"
 msgstr "DPS: Export SVG"
 
 #: common/jobs/job_export_sch_bom.cpp:92
-#, fuzzy
 msgid "Generate bill of materials"
-msgstr "Generovat rozpisku materiálů..."
+msgstr "Generovat rozpisku materiálů"
 
 #: common/jobs/job_export_sch_bom.cpp:98
 #, fuzzy
@@ -7539,14 +7529,13 @@ msgid "Generate Bill of Materials Job Settings"
 msgstr "Generovat rozpisku materiálů..."
 
 #: common/jobs/job_export_sch_bom.cpp:102
-#, fuzzy
 msgid "Schematic: Generate Bill of Materials"
-msgstr "Generovat rozpisku materiálů..."
+msgstr "Schéma: Generovat rozpisku materiálů"
 
 #: common/jobs/job_export_sch_netlist.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Export %s netlist"
-msgstr "Exportovat netlist"
+msgstr "Exportovat %s netlist"
 
 #: common/jobs/job_export_sch_netlist.cpp:86
 #, fuzzy
@@ -7559,9 +7548,8 @@ msgid "Schematic: Export Netlist"
 msgstr "Exportovat Netlist"
 
 #: common/jobs/job_export_sch_plot.cpp:194
-#, fuzzy
 msgid "Export Postscript"
-msgstr "Kreslit Postscript"
+msgstr "Exportovat Postscript"
 
 #: common/jobs/job_export_sch_plot.cpp:200
 #, fuzzy
@@ -7622,9 +7610,9 @@ msgid "PCB: Perform DRC"
 msgstr ""
 
 #: common/jobs/job_pcb_render.cpp:127
-#, fuzzy, c-format
+#, c-format
 msgid "Render %s"
-msgstr "Vykreslit"
+msgstr "Vykreslit %s"
 
 #: common/jobs/job_pcb_render.cpp:133
 #, fuzzy
@@ -7661,9 +7649,8 @@ msgid "Special: Execute Command"
 msgstr ""
 
 #: common/jobs/jobs_output_archive.cpp:96 common/jobs/jobset.cpp:43
-#, fuzzy
 msgid "Archive"
-msgstr "Rozbalit"
+msgstr "Archiv"
 
 #: common/jobs/jobs_output_folder.cpp:85 common/jobs/jobset.cpp:41
 msgid "Folder"
@@ -7802,9 +7789,8 @@ msgid "Symbol body fills"
 msgstr "Výplň těla symbolu"
 
 #: common/layer_id.cpp:88
-#, fuzzy
 msgid "Shape fills"
-msgstr "Soubor listu"
+msgstr "Plnění tvarů"
 
 #: common/layer_id.cpp:89
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
@@ -7925,9 +7911,8 @@ msgid "Selection highlight"
 msgstr "Výběr Zvýraznit"
 
 #: common/layer_id.cpp:115
-#, fuzzy
 msgid "Net color highlight"
-msgstr "Výběr Zvýraznit"
+msgstr "Barva zvýraznění sítě"
 
 #: common/layer_id.cpp:116 common/layer_id.cpp:145
 msgid "Drawing sheet"
@@ -8053,9 +8038,8 @@ msgid "Courtyard collision shadow"
 msgstr "Stín kolize obsazených oblastí"
 
 #: common/layer_id.cpp:155
-#, fuzzy
 msgid "Track net names"
-msgstr "Hledat názvy sítí"
+msgstr "Názvy sítě spojů"
 
 #: common/layer_id.cpp:156
 #, fuzzy
@@ -9074,9 +9058,8 @@ msgid "No longer keep the library at the top of the list"
 msgstr "Uvolněte knihovnu, aby se nezobrazila v horní části seznamu"
 
 #: common/tool/actions.cpp:805
-#, fuzzy
 msgid "Library Tree"
-msgstr "Zobraz strom souborů knihovny"
+msgstr "Strom knihovny"
 
 #: common/tool/actions.cpp:811
 msgid "Hide Library Tree"
@@ -11412,9 +11395,8 @@ msgid "New library identifier:"
 msgstr "Nový identifikátor knihovny:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:95
-#, fuzzy
 msgid "Update/Reset Fields"
-msgstr "Aktualizovat/resetovat pole"
+msgstr "Aktualizovat/obnovit pole"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:109
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:50
@@ -12049,7 +12031,6 @@ msgstr "Musíte poskytnout název generátoru netlistu"
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:27
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:33
 #: kicad/dialogs/dialog_jobset_output_options_base.cpp:46
-#, fuzzy
 msgid "Output path:"
 msgstr "Výstupní cesta:"
 
@@ -14465,9 +14446,8 @@ msgid "Compute noise current correlation matrix"
 msgstr "Výpočet korelační matice šumu"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:538
-#, fuzzy
 msgid "SPICE directives:"
-msgstr "Spice směrnice:"
+msgstr "Směrnice SPICE:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:547
 #, fuzzy
@@ -25733,7 +25713,7 @@ msgstr ""
 
 #: kicad/cli/command_jobset.h:32
 msgid "Jobset"
-msgstr ""
+msgstr "Sada úloh"
 
 #: kicad/cli/command_jobset_run.cpp:45
 #, fuzzy
@@ -39545,6 +39525,11 @@ msgid ""
 "For the full documentation see [https://docs.kicad.org](https://go.kicad.org/"
 "docs/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 msgstr ""
+"### Dokumentace\n"
+"\n"
+"Úplná dokumentace je uvedena na [https://docs.kicad.org](https://"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
+"pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -39766,6 +39751,14 @@ msgid ""
 "<br>\n"
 "\n"
 msgstr ""
+"### Položky\n"
+"\n"
+" * `A` &nbsp;&nbsp; _ první (nebo jediná) testovaná položka_\n"
+" * `B` &nbsp;&nbsp; _druhá testovaná položka (pro binární testy)_\n"
+" * `L` &nbsp;&nbsp; _vrstva, která je právě testována_\n"
+"\n"
+"<br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_4severity_names.h:2
 msgid ""
