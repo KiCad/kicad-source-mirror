@@ -25,42 +25,32 @@
 #ifndef SCH_DESIGN_BLOCK_CONTROL_H
 #define SCH_DESIGN_BLOCK_CONTROL_H
 
-#include <sch_base_frame.h>
-#include <tools/ee_tool_base.h>
+#include <tool/design_block_control.h>
 
 class DESIGN_BLOCK_PANE;
+class SCH_EDIT_FRAME;
 
 /**
- * Handle schematic design block actions in the schematic editor.
+ * Handle design block actions in the schematic editor.
  */
-class SCH_DESIGN_BLOCK_CONTROL : public wxEvtHandler, public EE_TOOL_BASE<SCH_BASE_FRAME>
+class SCH_DESIGN_BLOCK_CONTROL : public DESIGN_BLOCK_CONTROL
 {
 public:
-    SCH_DESIGN_BLOCK_CONTROL() : EE_TOOL_BASE<SCH_BASE_FRAME>( "eeschema.SchDesignBlockControl" ) {}
+    SCH_DESIGN_BLOCK_CONTROL() : DESIGN_BLOCK_CONTROL( "eeschema.SchDesignBlockControl" ) {}
+    virtual ~SCH_DESIGN_BLOCK_CONTROL();
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
 
-    int PinLibrary( const TOOL_EVENT& aEvent );
-    int UnpinLibrary( const TOOL_EVENT& aEvent );
-
-    int NewLibrary( const TOOL_EVENT& aEvent );
-    int DeleteLibrary( const TOOL_EVENT& aEvent );
-
     int SaveSheetAsDesignBlock( const TOOL_EVENT& aEvent );
     int SaveSelectionAsDesignBlock( const TOOL_EVENT& aEvent );
-    int DeleteDesignBlock( const TOOL_EVENT& aEvent );
-    int EditDesignBlockProperties( const TOOL_EVENT& aEvent );
-
-    int HideLibraryTree( const TOOL_EVENT& aEvent );
 
 private:
     LIB_ID getSelectedLibId();
     ///< Set up handlers for various events.
     void setTransitions() override;
 
-    SCH_DESIGN_BLOCK_PANE* getDesignBlockPane();
-    LIB_TREE_NODE*     getCurrentTreeNode();
+    DESIGN_BLOCK_PANE* getDesignBlockPane() override;
 
     SCH_EDIT_FRAME*    m_editFrame = nullptr;
 };

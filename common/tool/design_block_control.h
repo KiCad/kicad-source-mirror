@@ -22,37 +22,51 @@
  */
 
 
-#ifndef PCB_DESIGN_BLOCK_CONTROL_H
-#define PCB_DESIGN_BLOCK_CONTROL_H
+#ifndef DESIGN_BLOCK_CONTROL_H
+#define DESIGN_BLOCK_CONTROL_H
 
-#include <tool/design_block_control.h>
+#include <eda_draw_frame.h>
+#include <tool/tool_interactive.h>
 
 class DESIGN_BLOCK_PANE;
-class PCB_EDIT_FRAME;
 
 /**
- * Handle design block actions in the PCB editor.
+ * Handle schematic design block actions in the schematic editor.
  */
-class PCB_DESIGN_BLOCK_CONTROL : public DESIGN_BLOCK_CONTROL
+class DESIGN_BLOCK_CONTROL : public TOOL_INTERACTIVE, public wxEvtHandler
 {
 public:
-    PCB_DESIGN_BLOCK_CONTROL() : DESIGN_BLOCK_CONTROL( "pcbnew.PcbDesignBlockControl" ) {}
-    virtual ~PCB_DESIGN_BLOCK_CONTROL();
+    DESIGN_BLOCK_CONTROL( const std::string& aName );
+    virtual ~DESIGN_BLOCK_CONTROL();
 
-    /// @copydoc TOOL_INTERACTIVE::Init()
-    bool Init() override;
+    /// @copydoc TOOL_INTERACTIVE::Reset()
+    void Reset( RESET_REASON aReason ) override;
 
-    int SaveBoardAsDesignBlock( const TOOL_EVENT& aEvent );
-    int SaveSelectionAsDesignBlock( const TOOL_EVENT& aEvent );
+    void AddContextMenuItems( CONDITIONAL_MENU* aMenu );
 
-private:
+    int PinLibrary( const TOOL_EVENT& aEvent );
+    int UnpinLibrary( const TOOL_EVENT& aEvent );
+
+    int NewLibrary( const TOOL_EVENT& aEvent );
+    int DeleteLibrary( const TOOL_EVENT& aEvent );
+
+    int DeleteDesignBlock( const TOOL_EVENT& aEvent );
+    int EditDesignBlockProperties( const TOOL_EVENT& aEvent );
+
+    int HideLibraryTree( const TOOL_EVENT& aEvent );
+
+protected:
+    bool selIsInLibrary( const SELECTION& aSel );
+    bool selIsDesignBlock( const SELECTION& aSel );
+
     LIB_ID getSelectedLibId();
     ///< Set up handlers for various events.
     void setTransitions() override;
 
-    DESIGN_BLOCK_PANE* getDesignBlockPane() override;
+    virtual DESIGN_BLOCK_PANE* getDesignBlockPane() = 0;
+    LIB_TREE_NODE*             getCurrentTreeNode();
 
-    PCB_EDIT_FRAME* m_editFrame = nullptr;
+    EDA_DRAW_FRAME* m_frame = nullptr;
 };
 
 

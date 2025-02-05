@@ -645,6 +645,7 @@ set( COMMON_SRCS
     tool/construction_manager.cpp
     tool/common_tools.cpp
     tool/conditional_menu.cpp
+    tool/design_block_control.cpp
     tool/edit_constraints.cpp
     tool/edit_points.cpp
     tool/editor_conditions.cpp

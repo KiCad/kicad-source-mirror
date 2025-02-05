@@ -20,57 +20,40 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-#include <tool/library_editor_control.h>
-#include <sch_design_block_control.h>
-#include <widgets/sch_design_block_pane.h>
-#include <widgets/panel_design_block_chooser.h>
 #include <dialog_design_block_properties.h>
 #include <ee_actions.h>
+#include <ee_selection_tool.h>
+#include <sch_design_block_control.h>
+#include <sch_edit_frame.h>
+#include <tool/tool_manager.h>
+#include <widgets/sch_design_block_pane.h>
+#include <widgets/panel_design_block_chooser.h>
+
+
+SCH_DESIGN_BLOCK_CONTROL::~SCH_DESIGN_BLOCK_CONTROL()
+{
+}
+
 
 bool SCH_DESIGN_BLOCK_CONTROL::Init()
 {
     m_editFrame     = getEditFrame<SCH_EDIT_FRAME>();
     m_frame         = m_editFrame;
-    m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-
-    auto pinnedLib =
-            [this]( const SELECTION& aSel )
-            {
-                //
-                LIB_TREE_NODE* current = getCurrentTreeNode();
-                return current && current->m_Type == LIB_TREE_NODE::TYPE::LIBRARY
-                       && current->m_Pinned;
-            };
-    auto unpinnedLib =
-            [this](const SELECTION& aSel )
-            {
-                LIB_TREE_NODE* current = getCurrentTreeNode();
-                return current && current->m_Type == LIB_TREE_NODE::TYPE::LIBRARY
-                       && !current->m_Pinned;
-            };
 
     auto isInLibrary =
             [this](const SELECTION& aSel )
             {
-                LIB_TREE_NODE* current = getCurrentTreeNode();
-                return current
-                       && ( current->m_Type == LIB_TREE_NODE::TYPE::LIBRARY
-                            || current->m_Type == LIB_TREE_NODE::TYPE::ITEM );
+                return this->selIsInLibrary(aSel);
             };
 
     auto isDesignBlock =
             [this](const SELECTION& aSel )
             {
-                LIB_TREE_NODE* current = getCurrentTreeNode();
-                return current && current->m_Type == LIB_TREE_NODE::TYPE::ITEM;
+                return this->selIsDesignBlock(aSel);
             };
 
     CONDITIONAL_MENU& ctxMenu = m_menu->GetMenu();
-
-    ctxMenu.AddItem( ACTIONS::pinLibrary,                    unpinnedLib, 1 );
-    ctxMenu.AddItem( ACTIONS::unpinLibrary,                  pinnedLib, 1 );
-    ctxMenu.AddItem( ACTIONS::newLibrary,                    !isDesignBlock, 1 );
-    ctxMenu.AddSeparator( 1 );
+    AddContextMenuItems( &ctxMenu );
 
     ctxMenu.AddItem( EE_ACTIONS::placeDesignBlock,           isDesignBlock, 50 );
     ctxMenu.AddSeparator( 50 );
@@ -81,49 +64,7 @@ bool SCH_DESIGN_BLOCK_CONTROL::Init()
     ctxMenu.AddItem( EE_ACTIONS::deleteDesignBlock,          isDesignBlock, 100 );
     ctxMenu.AddSeparator( 100 );
 
-    ctxMenu.AddItem( ACTIONS::hideLibraryTree,               SELECTION_CONDITIONS::ShowAlways, 400 );
-
     return true;
-}
-
-
-int SCH_DESIGN_BLOCK_CONTROL::PinLibrary( const TOOL_EVENT& aEvent )
-{
-    LIB_TREE_NODE* current = getCurrentTreeNode();
-
-    if( current && !current->m_Pinned )
-    {
-        m_frame->Prj().PinLibrary( current->m_LibId.GetLibNickname(),
-                                   PROJECT::LIB_TYPE_T::DESIGN_BLOCK_LIB );
-        current->m_Pinned = true;
-        getDesignBlockPane()->RefreshLibs();
-    }
-
-    return 0;
-}
-
-
-int SCH_DESIGN_BLOCK_CONTROL::UnpinLibrary( const TOOL_EVENT& aEvent )
-{
-    LIB_TREE_NODE* current = getCurrentTreeNode();
-
-    if( current && current->m_Pinned )
-    {
-        m_frame->Prj().UnpinLibrary( current->m_LibId.GetLibNickname(),
-                                     PROJECT::LIB_TYPE_T::DESIGN_BLOCK_LIB );
-        current->m_Pinned = false;
-        getDesignBlockPane()->RefreshLibs();
-    }
-
-    return 0;
-}
-
-
-int SCH_DESIGN_BLOCK_CONTROL::NewLibrary( const TOOL_EVENT& aEvent )
-{
-    getDesignBlockPane()->CreateNewDesignBlockLibrary();
-
-    return 0;
 }
 
 
@@ -154,72 +95,18 @@ int SCH_DESIGN_BLOCK_CONTROL::SaveSelectionAsDesignBlock( const TOOL_EVENT& aEve
 }
 
 
-int SCH_DESIGN_BLOCK_CONTROL::DeleteDesignBlock( const TOOL_EVENT& aEvent )
-{
-    LIB_TREE_NODE* current = getCurrentTreeNode();
-
-    if( !current )
-        return -1;
-
-    getDesignBlockPane()->DeleteDesignBlockFromLibrary( current->m_LibId, true );
-
-    return 0;
-}
-
-
-int SCH_DESIGN_BLOCK_CONTROL::EditDesignBlockProperties( const TOOL_EVENT& aEvent )
-{
-    LIB_TREE_NODE* current = getCurrentTreeNode();
-
-    if( !current )
-        return -1;
-
-    if( getDesignBlockPane()->EditDesignBlockProperties( current->m_LibId ) )
-        return 0;
-
-    return -1;
-}
-
-
-int SCH_DESIGN_BLOCK_CONTROL::HideLibraryTree( const TOOL_EVENT& aEvent )
-{
-    m_editFrame->ToggleLibraryTree();
-    return 0;
-}
-
-
 void SCH_DESIGN_BLOCK_CONTROL::setTransitions()
 {
-    Go( &SCH_DESIGN_BLOCK_CONTROL::PinLibrary,                  ACTIONS::pinLibrary.MakeEvent() );
-    Go( &SCH_DESIGN_BLOCK_CONTROL::UnpinLibrary,                ACTIONS::unpinLibrary.MakeEvent() );
-
-    Go( &SCH_DESIGN_BLOCK_CONTROL::NewLibrary,                  ACTIONS::newLibrary.MakeEvent() );
+    DESIGN_BLOCK_CONTROL::setTransitions();
 
     Go( &SCH_DESIGN_BLOCK_CONTROL::SaveSheetAsDesignBlock,      EE_ACTIONS::saveSheetAsDesignBlock.MakeEvent() );
     Go( &SCH_DESIGN_BLOCK_CONTROL::SaveSelectionAsDesignBlock,  EE_ACTIONS::saveSelectionAsDesignBlock.MakeEvent() );
     Go( &SCH_DESIGN_BLOCK_CONTROL::DeleteDesignBlock,           EE_ACTIONS::deleteDesignBlock.MakeEvent() );
     Go( &SCH_DESIGN_BLOCK_CONTROL::EditDesignBlockProperties,   EE_ACTIONS::editDesignBlockProperties.MakeEvent() );
-
-    Go( &SCH_DESIGN_BLOCK_CONTROL::HideLibraryTree,             ACTIONS::hideLibraryTree.MakeEvent() );
 }
 
 
-LIB_ID SCH_DESIGN_BLOCK_CONTROL::getSelectedLibId()
-{
-    getDesignBlockPane()->GetSelectedLibId();
-
-    return LIB_ID();
-}
-
-
-SCH_DESIGN_BLOCK_PANE* SCH_DESIGN_BLOCK_CONTROL::getDesignBlockPane()
+DESIGN_BLOCK_PANE* SCH_DESIGN_BLOCK_CONTROL::getDesignBlockPane()
 {
     return m_editFrame->GetDesignBlockPane();
-}
-
-
-LIB_TREE_NODE* SCH_DESIGN_BLOCK_CONTROL::getCurrentTreeNode()
-{
-    LIB_TREE* libTree = getDesignBlockPane()->GetDesignBlockPanel()->GetLibTree();
-    return libTree ? libTree->GetCurrentTreeNode() : nullptr;
 }
