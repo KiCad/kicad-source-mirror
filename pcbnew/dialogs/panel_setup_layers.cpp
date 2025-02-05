@@ -47,6 +47,16 @@
 #include <set>
 
 
+/**
+ * Configure a layer checkbox to be mandatory and disabled.
+ */
+static void mandatoryLayerCbSetup( wxCheckBox& aCheckBox )
+{
+    aCheckBox.Show();
+    aCheckBox.Disable();
+    aCheckBox.SetValue( true );
+}
+
 
 PANEL_SETUP_LAYERS::PANEL_SETUP_LAYERS( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_LAYERS_BASE( aParentWindow ),
@@ -171,8 +181,7 @@ void PANEL_SETUP_LAYERS::initialize_front_tech_layers()
     m_MaskFrontStaticText->Wrap( -1 );
     m_LayersSizer->Add( m_MaskFrontStaticText, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxLEFT, 5 );
 
-    m_CrtYdFrontCheckBox->SetValue( true);
-    m_CrtYdFrontCheckBox->Hide();
+    mandatoryLayerCbSetup( *m_CrtYdFrontCheckBox );
 }
 
 
@@ -382,14 +391,9 @@ void PANEL_SETUP_LAYERS::initialize_back_tech_layers()
     m_LayersSizer->Add( m_DrawingsStaticText, 0,
                         wxALIGN_CENTER_VERTICAL | wxBOTTOM | wxLEFT | wxRIGHT, 5 );
 
-    // These layers are always enabled, so hide the checkboxes
-    m_CrtYdBackCheckBox->SetValue( true);
-    m_CrtYdBackCheckBox->Hide();
-    m_PCBEdgesCheckBox->SetValue( true);
-    m_PCBEdgesCheckBox->Hide();
-    m_MarginCheckBox->SetValue( true);
-    m_MarginCheckBox->Hide();
-
+    mandatoryLayerCbSetup( *m_CrtYdBackCheckBox );
+    mandatoryLayerCbSetup( *m_PCBEdgesCheckBox );
+    mandatoryLayerCbSetup( *m_MarginCheckBox );
 }
 
 
@@ -658,15 +662,13 @@ void PANEL_SETUP_LAYERS::setCopperLayerCheckBoxes( int copperCount )
     if( copperCount > 0 )
     {
         wxCheckBox* fcu = getCheckBox( F_Cu );
-        fcu->SetValue( true );
-        fcu->Hide();
+        mandatoryLayerCbSetup( *fcu );
     }
 
     if( copperCount > 0 )
     {
         wxCheckBox* bcu = getCheckBox( B_Cu );
-        bcu->SetValue( true );
-        bcu->Hide();
+        mandatoryLayerCbSetup( *bcu );
     }
 
     LSET layers = m_enabledLayers & LSET::AllCuMask( copperCount );
@@ -676,10 +678,7 @@ void PANEL_SETUP_LAYERS::setCopperLayerCheckBoxes( int copperCount )
     for( PCB_LAYER_ID layer : layers )
     {
         wxCheckBox* cb = getCheckBox( layer );
-
-        cb->SetValue( true );
-        cb->Show();
-        cb->Disable();
+        mandatoryLayerCbSetup( *cb );
     }
 
 }
