@@ -255,7 +255,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_ShowRepairSchematic       = false;
     m_EnableDesignBlocks        = true;
     m_EnableGenerators          = false;
-    m_EnableGit                 = false;
+    m_EnableGit                 = true;
     m_EnableLibWithText         = false;
     m_EnableLibDir              = false;
 
