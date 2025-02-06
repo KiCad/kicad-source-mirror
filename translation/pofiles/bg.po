@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 21:38+0300\n"
+"POT-Creation-Date: 2025-02-07 01:15+0300\n"
 "PO-Revision-Date: 2025-02-01 17:11+0000\n"
 "Last-Translator: 109247019824 <109247019824@users.noreply.hosted.weblate."
 "org>\n"
@@ -241,9 +241,9 @@ msgstr "Нулиране на настройките"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:139
 #: bitmap2component/bitmap2cmp_frame.cpp:307 cvpcb/menubar.cpp:79
-#: eeschema/menubar.cpp:363 eeschema/sim/toolbars_simulator_frame.cpp:171
+#: eeschema/menubar.cpp:365 eeschema/sim/toolbars_simulator_frame.cpp:171
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:180
-#: eeschema/toolbars_symbol_viewer.cpp:129 gerbview/menubar.cpp:231
+#: eeschema/toolbars_symbol_viewer.cpp:130 gerbview/menubar.cpp:231
 #: kicad/menubar.cpp:227 pagelayout_editor/menubar.cpp:150
 #: pcb_calculator/pcb_calculator_frame.cpp:229
 #: pcbnew/menubar_footprint_editor.cpp:243 pcbnew/menubar_pcb_editor.cpp:476
@@ -252,17 +252,17 @@ msgid "&File"
 msgstr "&Файл"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:140 cvpcb/menubar.cpp:80
-#: eeschema/menubar.cpp:364
+#: eeschema/menubar.cpp:366
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:181 kicad/menubar.cpp:228
 #: pagelayout_editor/menubar.cpp:151 pcbnew/menubar_footprint_editor.cpp:244
 #: pcbnew/menubar_pcb_editor.cpp:477
 msgid "&Edit"
 msgstr "&Редактиране"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:141 eeschema/menubar.cpp:365
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:141 eeschema/menubar.cpp:367
 #: eeschema/sim/toolbars_simulator_frame.cpp:172
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:182
-#: eeschema/toolbars_symbol_viewer.cpp:130 gerbview/menubar.cpp:232
+#: eeschema/toolbars_symbol_viewer.cpp:131 gerbview/menubar.cpp:232
 #: kicad/menubar.cpp:229 pagelayout_editor/menubar.cpp:152
 #: pcbnew/menubar_footprint_editor.cpp:245 pcbnew/menubar_pcb_editor.cpp:478
 #: pcbnew/toolbars_footprint_viewer.cpp:194
@@ -345,7 +345,7 @@ msgstr "Няма права за запазване на файла „%s“."
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1813
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2215
 #: eeschema/erc/erc_item.cpp:84 eeschema/files-io.cpp:943
-#: eeschema/files-io.cpp:1011 eeschema/sch_marker.cpp:374
+#: eeschema/files-io.cpp:1011 eeschema/sch_marker.cpp:376
 #: kicad/import_proj.cpp:79 kicad/import_project.cpp:123 kicad/kicad.cpp:318
 #: kicad/tools/kicad_manager_control.cpp:269
 #: kicad/tools/kicad_manager_control.cpp:326
@@ -1462,14 +1462,14 @@ msgstr "Преобразувай"
 msgid "Image files"
 msgstr "Файл на изображение"
 
-#: bitmap2component/bitmap2cmp_frame.cpp:282 eeschema/menubar.cpp:71
+#: bitmap2component/bitmap2cmp_frame.cpp:282 eeschema/menubar.cpp:72
 #: kicad/menubar.cpp:74 pagelayout_editor/menubar.cpp:63
 #: pcbnew/menubar_pcb_editor.cpp:73
 #, fuzzy
 msgid "Open Recent"
 msgstr "Отвори текущ"
 
-#: bitmap2component/bitmap2cmp_frame.cpp:283 eeschema/menubar.cpp:72
+#: bitmap2component/bitmap2cmp_frame.cpp:283 eeschema/menubar.cpp:73
 #: include/file_history.h:54 pagelayout_editor/menubar.cpp:64
 #: pcbnew/menubar_pcb_editor.cpp:74
 #, fuzzy
@@ -1706,7 +1706,7 @@ msgstr ""
 #: common/widgets/wx_html_report_panel_base.cpp:41
 #: eeschema/dialogs/dialog_erc_base.cpp:136 gerbview/files.cpp:404
 #: gerbview/readgerb.cpp:77
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1274
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1266
 #: pcbnew/dialogs/dialog_drc_base.cpp:186
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:43
 msgid "Errors"
@@ -2006,7 +2006,7 @@ msgstr "Д&обре"
 #: eeschema/dialogs/panel_template_fieldnames.cpp:212
 #: eeschema/erc/erc_item.cpp:80 eeschema/files-io.cpp:452
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:261
-#: eeschema/sch_marker.cpp:371 eeschema/sheet.cpp:779
+#: eeschema/sch_marker.cpp:373 eeschema/sheet.cpp:780
 #: eeschema/symbol_editor/symbol_editor.cpp:134
 #: eeschema/symbol_editor/symbol_editor.cpp:504
 #: eeschema/symbol_editor/symbol_editor.cpp:1156
@@ -2169,7 +2169,7 @@ msgid "Added by Plugin and Content Manager"
 msgstr ""
 
 #: common/design_block_lib_table.cpp:595 common/fp_lib_table.cpp:593
-#: eeschema/symbol_lib_table.cpp:633
+#: eeschema/symbol_lib_table.cpp:634
 #, fuzzy, c-format
 msgid "Cannot create global library table path '%s'."
 msgstr "Невъзможно отваряне на библиотечен файл за PCB отпечатък <%s>."
@@ -2182,7 +2182,7 @@ msgstr "Невъзможно отваряне на библиотечен фай
 #: common/widgets/widget_hotkey_list.cpp:529
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:50
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:100
-#: eeschema/sch_symbol.cpp:2103 eeschema/symbol_editor/symbol_editor.cpp:827
+#: eeschema/sch_symbol.cpp:2107 eeschema/symbol_editor/symbol_editor.cpp:827
 #: eeschema/symbol_editor/symbol_editor.cpp:1628
 #: eeschema/symbol_viewer_frame.cpp:461 include/lib_table_grid.h:214
 #: kicad/pcm/dialogs/panel_package_base.cpp:59
@@ -2278,7 +2278,7 @@ msgstr "TE-Modes"
 #: common/dialog_about/AboutDialog_main.cpp:907
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:114
-#: eeschema/sch_symbol.cpp:2689
+#: eeschema/sch_symbol.cpp:2696
 #: eeschema/widgets/panel_sch_selection_filter.cpp:202
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:29
 #: eeschema/widgets/search_handlers.cpp:158
@@ -2601,8 +2601,8 @@ msgstr "Редактирай документен файл"
 #: eeschema/dialogs/panel_bom_presets_base.cpp:80
 #: eeschema/dialogs/panel_sym_lib_table.cpp:384
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
-#: eeschema/fields_grid_table.cpp:469 eeschema/sch_pin.cpp:1579
-#: eeschema/sch_symbol.cpp:2065 eeschema/sch_symbol.cpp:2115
+#: eeschema/fields_grid_table.cpp:470 eeschema/sch_pin.cpp:1578
+#: eeschema/sch_symbol.cpp:2068 eeschema/sch_symbol.cpp:2121
 #: eeschema/symbol_editor/symbol_editor.cpp:1598
 #: eeschema/symbol_viewer_frame.cpp:459
 #: eeschema/sync_sheet_pin/sheet_synchronization_model.h:66
@@ -2919,7 +2919,7 @@ msgid "PCB"
 msgstr ""
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
-#: eeschema/sch_edit_frame.cpp:1339 eeschema/sch_plotter.cpp:1039
+#: eeschema/sch_edit_frame.cpp:1342 eeschema/sch_plotter.cpp:1041
 #: eeschema/widgets/symbol_diff_widget.cpp:44
 msgid "Schematic"
 msgstr "Схема"
@@ -3247,7 +3247,7 @@ msgid "Export to other sheets"
 msgstr "Изнасяне към всички листове"
 
 #: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:444
-#: eeschema/erc/erc_item.cpp:427 eeschema/sch_marker.cpp:382
+#: eeschema/erc/erc_item.cpp:427 eeschema/sch_marker.cpp:384
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:105
 #: gerbview/widgets/gerbview_layer_widget.cpp:137 pcbnew/pcb_marker.cpp:219
 #: pcbnew/widgets/appearance_controls.cpp:350
@@ -3429,9 +3429,9 @@ msgstr "Опции"
 #: eeschema/dialogs/dialog_sim_format_value.cpp:75
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
 #: eeschema/dialogs/panel_sym_lib_table.cpp:385
-#: eeschema/fields_grid_table.cpp:470 eeschema/sch_symbol.cpp:1098
-#: eeschema/sch_symbol.cpp:2062 eeschema/sch_symbol.cpp:2112
-#: eeschema/sch_symbol.cpp:2994 eeschema/sim/simulator_frame_ui.cpp:616
+#: eeschema/fields_grid_table.cpp:471 eeschema/sch_symbol.cpp:1099
+#: eeschema/sch_symbol.cpp:2064 eeschema/sch_symbol.cpp:2117
+#: eeschema/sch_symbol.cpp:3004 eeschema/sim/simulator_frame_ui.cpp:616
 #: eeschema/sim/simulator_frame_ui.cpp:2673
 #: eeschema/sim/simulator_frame_ui_base.cpp:170
 #: eeschema/sim/simulator_frame_ui_base.cpp:222
@@ -3567,8 +3567,8 @@ msgstr "Негативен изход"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:78
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:72
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:69
-#: eeschema/fields_grid_table.cpp:482
-#: eeschema/printing/dialog_print_base.cpp:35 eeschema/sch_bus_entry.cpp:674
+#: eeschema/fields_grid_table.cpp:483
+#: eeschema/printing/dialog_print_base.cpp:35 eeschema/sch_bus_entry.cpp:678
 #: eeschema/sch_junction.cpp:383 eeschema/sch_line.cpp:1099
 #: eeschema/sim/simulator_frame_ui.cpp:609
 #: eeschema/sim/simulator_frame_ui_base.cpp:113
@@ -3819,7 +3819,7 @@ msgstr "Добре"
 #: common/dialogs/git/dialog_git_switch.cpp:69
 #: common/dialogs/panel_embedded_files.cpp:417 common/tool/actions.cpp:159
 #: eeschema/dialogs/dialog_erc.cpp:426
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1345 eeschema/sheet.cpp:783
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1345 eeschema/sheet.cpp:784
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:962
 #: eeschema/symbol_editor/symbol_editor.cpp:1020
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:151
@@ -4368,7 +4368,7 @@ msgid "Use compact icons in the toolbars"
 msgstr "Използване на компактни пиктограми в лентата с инструменти"
 
 #: common/dialogs/panel_common_settings_base.cpp:220 common/eda_text.cpp:974
-#: eeschema/sch_label.cpp:1197 eeschema/sch_tablecell.cpp:128
+#: eeschema/sch_label.cpp:1199 eeschema/sch_tablecell.cpp:128
 #: eeschema/sch_text.cpp:637 eeschema/sch_textbox.cpp:543
 #: gerbview/gerber_file_image.cpp:357 gerbview/gerber_file_image.cpp:361
 #: gerbview/gerber_file_image.cpp:364
@@ -4826,8 +4826,8 @@ msgstr "Грешка <%s> при зареждане на символна биб
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:45
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:95
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:43
-#: eeschema/sch_field.cpp:1134 eeschema/sch_pin.cpp:1584
-#: eeschema/sch_pin.cpp:2249 eeschema/sch_text.cpp:773
+#: eeschema/sch_field.cpp:1137 eeschema/sch_pin.cpp:1583
+#: eeschema/sch_pin.cpp:2182 eeschema/sch_text.cpp:774
 #: eeschema/sch_textbox.cpp:685 include/lib_table_grid.h:216
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:86
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:45
@@ -5558,7 +5558,7 @@ msgstr "Несвързан"
 #: common/dialogs/panel_setup_netclasses.cpp:98 common/eda_shape.cpp:2213
 #: common/stroke_params.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
-#: eeschema/sch_bus_entry.cpp:660 eeschema/sch_line.cpp:1047
+#: eeschema/sch_bus_entry.cpp:661 eeschema/sch_line.cpp:1047
 #: eeschema/sch_line.cpp:1059 include/stroke_params.h:85
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
@@ -5573,7 +5573,7 @@ msgstr "Твърд"
 #: common/dialogs/panel_setup_netclasses.cpp:100 common/eda_shape.cpp:2214
 #: common/stroke_params.cpp:41
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
-#: eeschema/sch_bus_entry.cpp:661 eeschema/sch_line.cpp:1048
+#: eeschema/sch_bus_entry.cpp:662 eeschema/sch_line.cpp:1048
 #: eeschema/sch_line.cpp:1060 pcbnew/pcb_table.cpp:534
 #: pcbnew/pcb_textbox.cpp:796
 #, fuzzy
@@ -5583,7 +5583,7 @@ msgstr "Документация"
 #: common/dialogs/panel_setup_netclasses.cpp:102 common/eda_shape.cpp:2215
 #: common/stroke_params.cpp:42
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
-#: eeschema/sch_bus_entry.cpp:662 eeschema/sch_line.cpp:1049
+#: eeschema/sch_bus_entry.cpp:663 eeschema/sch_line.cpp:1049
 #: eeschema/sch_line.cpp:1061 pcbnew/pcb_table.cpp:535
 #: pcbnew/pcb_textbox.cpp:797
 msgid "Dotted"
@@ -5592,7 +5592,7 @@ msgstr ""
 #: common/dialogs/panel_setup_netclasses.cpp:104 common/eda_shape.cpp:2216
 #: common/stroke_params.cpp:43
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
-#: eeschema/sch_bus_entry.cpp:663 eeschema/sch_line.cpp:1050
+#: eeschema/sch_bus_entry.cpp:664 eeschema/sch_line.cpp:1050
 #: eeschema/sch_line.cpp:1062 pcbnew/pcb_table.cpp:536
 #: pcbnew/pcb_textbox.cpp:798
 msgid "Dash-Dot"
@@ -5601,7 +5601,7 @@ msgstr ""
 #: common/dialogs/panel_setup_netclasses.cpp:106 common/eda_shape.cpp:2217
 #: common/stroke_params.cpp:44
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
-#: eeschema/sch_bus_entry.cpp:664 eeschema/sch_line.cpp:1051
+#: eeschema/sch_bus_entry.cpp:665 eeschema/sch_line.cpp:1051
 #: eeschema/sch_line.cpp:1063 pcbnew/pcb_table.cpp:537
 #: pcbnew/pcb_textbox.cpp:799
 msgid "Dash-Dot-Dot"
@@ -5767,9 +5767,9 @@ msgid "Bus Thickness"
 msgstr "Cu дебелина"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:64 common/eda_shape.cpp:2313
-#: common/stroke_params.cpp:272 eeschema/sch_bus_entry.cpp:667
+#: common/stroke_params.cpp:272 eeschema/sch_bus_entry.cpp:669
 #: eeschema/sch_line.cpp:936 eeschema/sch_line.cpp:1088
-#: eeschema/sch_line.cpp:1092 eeschema/sch_tablecell.cpp:197
+#: eeschema/sch_line.cpp:1092 eeschema/sch_tablecell.cpp:198
 #: pcbnew/pcb_tablecell.cpp:200 pcbnew/pcb_textbox.cpp:817
 #, fuzzy
 msgid "Line Style"
@@ -5784,8 +5784,8 @@ msgstr "Стил на заливка"
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:265
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:60
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
-#: eeschema/sch_bus_entry.cpp:659 eeschema/sch_field.cpp:1136
-#: eeschema/sch_label.cpp:1195 eeschema/sch_line.cpp:1058
+#: eeschema/sch_bus_entry.cpp:660 eeschema/sch_field.cpp:1139
+#: eeschema/sch_label.cpp:1197 eeschema/sch_line.cpp:1058
 #: eeschema/sch_tablecell.cpp:126 eeschema/sch_text.cpp:635
 #: eeschema/sch_textbox.cpp:541 include/stroke_params.h:86
 #: pcbnew/dialogs/dialog_render_job.cpp:27
@@ -5815,7 +5815,7 @@ msgid "Pattern"
 msgstr "Щриховка"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:153
-#: eeschema/sch_field.cpp:1270 eeschema/sch_label.cpp:207
+#: eeschema/sch_field.cpp:1273 eeschema/sch_label.cpp:207
 #: pcbnew/board_connected_item.cpp:200 pcbnew/pad.cpp:2576 pcbnew/zone.cpp:1931
 #, fuzzy
 msgid "Net Class"
@@ -5823,7 +5823,7 @@ msgstr "Класове на вериги:"
 
 #: common/dialogs/panel_setup_severities.cpp:44
 #: common/dialogs/panel_setup_severities.cpp:118
-#: eeschema/dialogs/dialog_erc.cpp:880 eeschema/sch_marker.cpp:368
+#: eeschema/dialogs/dialog_erc.cpp:880 eeschema/sch_marker.cpp:370
 #: pcbnew/dialogs/dialog_drc.cpp:986 pcbnew/pcb_marker.cpp:205
 msgid "Ignore"
 msgstr ""
@@ -5912,8 +5912,8 @@ msgstr ""
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:352
 #: common/eda_item.cpp:353 common/eda_item.cpp:381 common/eda_text.cpp:1353
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:47
-#: eeschema/sch_field.cpp:1132 eeschema/sch_field.cpp:1792
-#: eeschema/sch_label.cpp:2267 eeschema/sch_tablecell.cpp:119
+#: eeschema/sch_field.cpp:1135 eeschema/sch_field.cpp:1799
+#: eeschema/sch_label.cpp:2272 eeschema/sch_tablecell.cpp:119
 #: eeschema/sch_text.cpp:630 eeschema/sch_text.h:59 eeschema/schematic.cpp:69
 #: eeschema/widgets/panel_sch_selection_filter.cpp:203
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:55
@@ -5937,7 +5937,7 @@ msgstr "Текст"
 
 #: common/drawing_sheet/ds_data_item.cpp:366
 #: common/drawing_sheet/ds_draw_item.cpp:120 common/eda_item.cpp:377
-#: common/eda_shape.cpp:328 eeschema/pin_type.cpp:100 eeschema/sch_pin.cpp:2169
+#: common/eda_shape.cpp:328 eeschema/pin_type.cpp:101 eeschema/sch_pin.cpp:2102
 #: gerbview/gerber_draw_item.cpp:229
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:134
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:59
@@ -5950,7 +5950,7 @@ msgstr "Линия"
 #: common/drawing_sheet/ds_draw_item.cpp:124 common/eda_shape.cpp:974
 #: common/eda_shape.cpp:2203
 #: eeschema/dialogs/dialog_label_properties_base.cpp:178
-#: eeschema/sch_label.cpp:2249
+#: eeschema/sch_label.cpp:2253
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2493
 #: pcbnew/pcb_dimension.cpp:1974
 msgid "Rectangle"
@@ -6178,8 +6178,8 @@ msgid "Colors"
 msgstr "Цветове"
 
 #: common/eda_base_frame.cpp:1156 common/hotkey_store.cpp:77
-#: common/tool/common_tools.cpp:614 eeschema/menubar.cpp:136
-#: eeschema/sch_edit_frame.cpp:1751 kicad/tools/kicad_manager_actions.cpp:114
+#: common/tool/common_tools.cpp:614 eeschema/menubar.cpp:137
+#: eeschema/sch_edit_frame.cpp:1756 kicad/tools/kicad_manager_actions.cpp:114
 #, fuzzy
 msgid "Schematic Editor"
 msgstr "Опции на схематичния редактор"
@@ -6403,7 +6403,7 @@ msgid "Search"
 msgstr "Графичен текст"
 
 #: common/eda_draw_frame.cpp:1225 common/tool/actions.cpp:1115
-#: eeschema/eeschema_settings.cpp:92 eeschema/sch_edit_frame.cpp:2208
+#: eeschema/eeschema_settings.cpp:93 eeschema/sch_edit_frame.cpp:2213
 #: pagelayout_editor/pl_editor_frame.cpp:195
 #: pcbnew/footprint_edit_frame.cpp:233 pcbnew/pcb_edit_frame.cpp:342
 #: pcbnew/pcb_edit_frame.cpp:1710
@@ -6421,7 +6421,7 @@ msgstr "Не е избрана верига"
 msgid "Screen"
 msgstr "Silkscreen Cmp"
 
-#: common/eda_item.cpp:347 eeschema/sch_symbol.cpp:2100
+#: common/eda_item.cpp:347 eeschema/sch_symbol.cpp:2104
 #: eeschema/widgets/search_handlers.cpp:162 pcbnew/build_BOM_from_board.cpp:111
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:141
 #: pcbnew/load_select_footprint.cpp:295 pcbnew/pad.cpp:1280
@@ -6480,7 +6480,7 @@ msgstr "Пътека"
 msgid "Via"
 msgstr "Проходна връзка"
 
-#: common/eda_item.cpp:360 common/eda_item.cpp:372 eeschema/sch_marker.cpp:362
+#: common/eda_item.cpp:360 common/eda_item.cpp:372 eeschema/sch_marker.cpp:364
 #: pcbnew/pcb_marker.cpp:199
 msgid "Marker"
 msgstr "Маркер"
@@ -6557,18 +6557,18 @@ msgstr "Настройки на листов извод"
 msgid "Net Label"
 msgstr "Изтрий етикет"
 
-#: common/eda_item.cpp:386 eeschema/sch_label.cpp:1181
-#: eeschema/sch_label.cpp:1757
+#: common/eda_item.cpp:386 eeschema/sch_label.cpp:1183
+#: eeschema/sch_label.cpp:1761
 #, fuzzy
 msgid "Directive Label"
 msgstr "Изтрий етикет"
 
-#: common/eda_item.cpp:387 eeschema/sch_label.cpp:1182
+#: common/eda_item.cpp:387 eeschema/sch_label.cpp:1184
 #: eeschema/tools/sch_edit_tool.cpp:253
 msgid "Global Label"
 msgstr "Глобален етикет"
 
-#: common/eda_item.cpp:388 eeschema/sch_label.cpp:1183
+#: common/eda_item.cpp:388 eeschema/sch_label.cpp:1185
 #: eeschema/tools/sch_edit_tool.cpp:252
 msgid "Hierarchical Label"
 msgstr "Йерархичен етикет"
@@ -6584,7 +6584,7 @@ msgstr "Поле"
 msgid "Symbol"
 msgstr "Захранващ символ"
 
-#: common/eda_item.cpp:391 eeschema/sch_pin.cpp:1562 eeschema/sch_pin.h:78
+#: common/eda_item.cpp:391 eeschema/sch_pin.cpp:1561 eeschema/sch_pin.h:85
 msgid "Pin"
 msgstr "Извод"
 
@@ -6634,7 +6634,7 @@ msgstr "Дъга"
 
 #: common/eda_shape.cpp:331 common/eda_shape.cpp:970 common/eda_shape.cpp:2205
 #: eeschema/dialogs/dialog_label_properties_base.cpp:172
-#: eeschema/sch_label.cpp:2247 gerbview/gerber_draw_item.cpp:231
+#: eeschema/sch_label.cpp:2251 gerbview/gerber_draw_item.cpp:231
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1515
 #: pcbnew/pad.cpp:2492 pcbnew/pcb_dimension.cpp:1975
 msgid "Circle"
@@ -6674,8 +6674,8 @@ msgstr "Сегмент"
 #: common/eda_shape.cpp:986 common/eda_shape.cpp:2252
 #: eeschema/dialogs/dialog_label_properties_base.cpp:152
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:53
-#: eeschema/sch_label.cpp:2229 eeschema/sch_label.cpp:2260
-#: eeschema/sch_tablecell.cpp:195 eeschema/sch_textbox.cpp:683
+#: eeschema/sch_label.cpp:2233 eeschema/sch_label.cpp:2265
+#: eeschema/sch_tablecell.cpp:196 eeschema/sch_textbox.cpp:683
 #: eeschema/sync_sheet_pin/sheet_synchronization_model.h:67
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:228
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:120
@@ -6695,7 +6695,7 @@ msgstr "Радиус"
 #: common/eda_shape.cpp:996 common/eda_shape.cpp:1005 common/eda_shape.cpp:1023
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:127
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:95
-#: eeschema/sch_pin.cpp:1587 eeschema/sch_pin.cpp:2234
+#: eeschema/sch_pin.cpp:1586 eeschema/sch_pin.cpp:2167
 #: pcbnew/dialogs/dialog_shape_properties.cpp:900
 msgid "Length"
 msgstr "Дължина"
@@ -6713,8 +6713,8 @@ msgstr "Комп. отпечатъци"
 
 #: common/eda_shape.cpp:1014 common/eda_shape.cpp:2297 common/eda_text.cpp:1381
 #: eeschema/sch_bitmap.cpp:201 eeschema/sch_bitmap.cpp:340
-#: eeschema/sch_field.cpp:1773 eeschema/sch_tablecell.cpp:200
-#: eeschema/sch_text.cpp:774 eeschema/sch_textbox.cpp:686
+#: eeschema/sch_field.cpp:1780 eeschema/sch_tablecell.cpp:201
+#: eeschema/sch_text.cpp:775 eeschema/sch_textbox.cpp:686
 #: pcbnew/dialogs/dialog_board_statistics.cpp:685
 #: pcbnew/dialogs/dialog_board_statistics.cpp:695
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:54
@@ -6732,8 +6732,8 @@ msgstr "Ширина"
 
 #: common/eda_shape.cpp:1017 common/eda_shape.cpp:2303 common/eda_text.cpp:1386
 #: eeschema/sch_bitmap.cpp:203 eeschema/sch_bitmap.cpp:347
-#: eeschema/sch_field.cpp:1774 eeschema/sch_tablecell.cpp:201
-#: eeschema/sch_text.cpp:775 eeschema/sch_textbox.cpp:687
+#: eeschema/sch_field.cpp:1781 eeschema/sch_tablecell.cpp:202
+#: eeschema/sch_text.cpp:776 eeschema/sch_textbox.cpp:687
 #: pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
@@ -6757,7 +6757,7 @@ msgid "Shape Properties"
 msgstr "Настройки на листов извод"
 
 #: common/eda_shape.cpp:2256 eeschema/sch_table.cpp:625
-#: eeschema/sch_tablecell.cpp:190 pcbnew/pcb_table.cpp:548
+#: eeschema/sch_tablecell.cpp:191 pcbnew/pcb_table.cpp:548
 #: pcbnew/pcb_tablecell.cpp:192 pcbnew/pcb_textbox.cpp:810
 #: pcbnew/pcb_track.cpp:2069
 #, fuzzy
@@ -6765,7 +6765,7 @@ msgid "Start X"
 msgstr "Започни DRC"
 
 #: common/eda_shape.cpp:2261 eeschema/sch_table.cpp:628
-#: eeschema/sch_tablecell.cpp:191 pcbnew/pcb_table.cpp:551
+#: eeschema/sch_tablecell.cpp:192 pcbnew/pcb_table.cpp:551
 #: pcbnew/pcb_tablecell.cpp:193 pcbnew/pcb_textbox.cpp:811
 #: pcbnew/pcb_track.cpp:2073
 #, fuzzy
@@ -6782,14 +6782,14 @@ msgstr "Център"
 msgid "Center Y"
 msgstr "Център"
 
-#: common/eda_shape.cpp:2285 eeschema/sch_tablecell.cpp:192
+#: common/eda_shape.cpp:2285 eeschema/sch_tablecell.cpp:193
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2618 pcbnew/pcb_tablecell.cpp:194
 #: pcbnew/pcb_textbox.cpp:812 pcbnew/pcb_track.cpp:2076
 #, fuzzy
 msgid "End X"
 msgstr "Край на инструмент"
 
-#: common/eda_shape.cpp:2291 eeschema/sch_tablecell.cpp:193
+#: common/eda_shape.cpp:2291 eeschema/sch_tablecell.cpp:194
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2624 pcbnew/pcb_tablecell.cpp:195
 #: pcbnew/pcb_textbox.cpp:813 pcbnew/pcb_track.cpp:2079
 #, fuzzy
@@ -6797,13 +6797,13 @@ msgid "End Y"
 msgstr "Край на инструмент"
 
 #: common/eda_shape.cpp:2309 common/stroke_params.cpp:276
-#: eeschema/sch_bus_entry.cpp:670 eeschema/sch_line.cpp:1096
-#: eeschema/sch_tablecell.cpp:196 pcbnew/pcb_tablecell.cpp:199
+#: eeschema/sch_bus_entry.cpp:673 eeschema/sch_line.cpp:1096
+#: eeschema/sch_tablecell.cpp:197 pcbnew/pcb_tablecell.cpp:199
 #: pcbnew/pcb_textbox.cpp:816
 msgid "Line Width"
 msgstr "Ширина на линия"
 
-#: common/eda_shape.cpp:2317 eeschema/sch_tablecell.cpp:198
+#: common/eda_shape.cpp:2317 eeschema/sch_tablecell.cpp:199
 #: pcbnew/pcb_shape.cpp:910 pcbnew/pcb_tablecell.cpp:201
 #, fuzzy
 msgid "Line Color"
@@ -6831,8 +6831,8 @@ msgstr "Определени отвори"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:62
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:119
 #: eeschema/dialogs/dialog_text_properties_base.cpp:113
-#: eeschema/fields_grid_table.cpp:475 eeschema/sch_label.cpp:1197
-#: eeschema/sch_label.cpp:2269 eeschema/sch_tablecell.cpp:128
+#: eeschema/fields_grid_table.cpp:476 eeschema/sch_label.cpp:1199
+#: eeschema/sch_label.cpp:2274 eeschema/sch_tablecell.cpp:128
 #: eeschema/sch_text.cpp:637 eeschema/sch_textbox.cpp:543
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:98
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:57
@@ -6857,8 +6857,8 @@ msgstr "Курсив"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:63
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:116
 #: eeschema/dialogs/dialog_text_properties_base.cpp:108
-#: eeschema/fields_grid_table.cpp:476 eeschema/sch_label.cpp:1197
-#: eeschema/sch_label.cpp:2270 eeschema/sch_tablecell.cpp:128
+#: eeschema/fields_grid_table.cpp:477 eeschema/sch_label.cpp:1199
+#: eeschema/sch_label.cpp:2275 eeschema/sch_tablecell.cpp:128
 #: eeschema/sch_text.cpp:637 eeschema/sch_textbox.cpp:543
 #: eeschema/widgets/tuner_slider_base.cpp:48
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:93
@@ -6874,10 +6874,10 @@ msgstr "Bold+Italic"
 #: common/eda_text.cpp:1330
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
-#: eeschema/fields_grid_table.cpp:301 eeschema/fields_grid_table.cpp:716
-#: eeschema/fields_grid_table.cpp:860 eeschema/pin_type.cpp:113
-#: eeschema/sch_field.cpp:1144 eeschema/sch_field.cpp:1731
-#: eeschema/sch_pin.cpp:2185 pcbnew/dialogs/dialog_render_job.cpp:42
+#: eeschema/fields_grid_table.cpp:302 eeschema/fields_grid_table.cpp:717
+#: eeschema/fields_grid_table.cpp:861 eeschema/pin_type.cpp:118
+#: eeschema/sch_field.cpp:1147 eeschema/sch_field.cpp:1734
+#: eeschema/sch_pin.cpp:2118 pcbnew/dialogs/dialog_render_job.cpp:42
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2604
 msgid "Left"
 msgstr "Ляво"
@@ -6885,11 +6885,11 @@ msgstr "Ляво"
 #: common/eda_text.cpp:1331 common/eda_text.cpp:1340
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
-#: eeschema/fields_grid_table.cpp:294 eeschema/fields_grid_table.cpp:302
-#: eeschema/fields_grid_table.cpp:717 eeschema/fields_grid_table.cpp:728
-#: eeschema/fields_grid_table.cpp:862 eeschema/fields_grid_table.cpp:886
-#: eeschema/sch_field.cpp:1145 eeschema/sch_field.cpp:1155
-#: eeschema/sch_field.cpp:1732 eeschema/sch_field.cpp:1741
+#: eeschema/fields_grid_table.cpp:295 eeschema/fields_grid_table.cpp:303
+#: eeschema/fields_grid_table.cpp:718 eeschema/fields_grid_table.cpp:729
+#: eeschema/fields_grid_table.cpp:863 eeschema/fields_grid_table.cpp:887
+#: eeschema/sch_field.cpp:1148 eeschema/sch_field.cpp:1158
+#: eeschema/sch_field.cpp:1735 eeschema/sch_field.cpp:1744
 #: eeschema/sch_text.cpp:658 gerbview/gerber_file_image.cpp:361
 #: gerbview/gerber_file_image.cpp:364
 #: pcbnew/dialogs/dialog_shape_properties.cpp:884
@@ -6902,28 +6902,28 @@ msgstr "Център"
 #: common/eda_text.cpp:1332
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
-#: eeschema/fields_grid_table.cpp:303 eeschema/fields_grid_table.cpp:718
-#: eeschema/fields_grid_table.cpp:864 eeschema/pin_type.cpp:112
-#: eeschema/sch_field.cpp:1146 eeschema/sch_field.cpp:1733
-#: eeschema/sch_pin.cpp:2184 pcbnew/dialogs/dialog_render_job.cpp:43
+#: eeschema/fields_grid_table.cpp:304 eeschema/fields_grid_table.cpp:719
+#: eeschema/fields_grid_table.cpp:865 eeschema/pin_type.cpp:117
+#: eeschema/sch_field.cpp:1149 eeschema/sch_field.cpp:1736
+#: eeschema/sch_pin.cpp:2117 pcbnew/dialogs/dialog_render_job.cpp:43
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2605
 msgid "Right"
 msgstr "Дясно"
 
 #: common/eda_text.cpp:1339
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
-#: eeschema/fields_grid_table.cpp:293 eeschema/fields_grid_table.cpp:727
-#: eeschema/fields_grid_table.cpp:884 eeschema/sch_field.cpp:1154
-#: eeschema/sch_field.cpp:1740 eeschema/sch_text.cpp:657
+#: eeschema/fields_grid_table.cpp:294 eeschema/fields_grid_table.cpp:728
+#: eeschema/fields_grid_table.cpp:885 eeschema/sch_field.cpp:1157
+#: eeschema/sch_field.cpp:1743 eeschema/sch_text.cpp:657
 #: pcbnew/dialogs/dialog_render_job.cpp:44
 msgid "Top"
 msgstr "Връх"
 
 #: common/eda_text.cpp:1341
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
-#: eeschema/fields_grid_table.cpp:295 eeschema/fields_grid_table.cpp:729
-#: eeschema/fields_grid_table.cpp:888 eeschema/sch_field.cpp:1156
-#: eeschema/sch_field.cpp:1742 eeschema/sch_text.cpp:659
+#: eeschema/fields_grid_table.cpp:296 eeschema/fields_grid_table.cpp:730
+#: eeschema/fields_grid_table.cpp:889 eeschema/sch_field.cpp:1159
+#: eeschema/sch_field.cpp:1745 eeschema/sch_text.cpp:659
 #: pcbnew/dialogs/dialog_render_job.cpp:40
 msgid "Bottom"
 msgstr "Дъно"
@@ -6935,10 +6935,10 @@ msgstr "Дъно"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:68
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
-#: eeschema/fields_grid_table.cpp:478 eeschema/sch_field.cpp:1781
-#: eeschema/sch_pin.cpp:1589 eeschema/sch_pin.cpp:2230
-#: eeschema/sch_symbol.cpp:2965 eeschema/sch_tablecell.cpp:203
-#: eeschema/sch_text.cpp:783 eeschema/sch_textbox.cpp:714
+#: eeschema/fields_grid_table.cpp:479 eeschema/sch_field.cpp:1788
+#: eeschema/sch_pin.cpp:1588 eeschema/sch_pin.cpp:2163
+#: eeschema/sch_symbol.cpp:2975 eeschema/sch_tablecell.cpp:204
+#: eeschema/sch_text.cpp:784 eeschema/sch_textbox.cpp:714
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
 #: pcbnew/footprint.cpp:4080 pcbnew/pad.cpp:2539 pcbnew/pcb_dimension.cpp:1756
@@ -6948,8 +6948,8 @@ msgid "Orientation"
 msgstr "Ориентация"
 
 #: common/eda_text.cpp:1351 eeschema/dialogs/dialog_text_properties_base.h:117
-#: eeschema/sch_field.cpp:1752 eeschema/sch_field.cpp:1779
-#: eeschema/sch_text.cpp:780 eeschema/sch_textbox.cpp:712
+#: eeschema/sch_field.cpp:1755 eeschema/sch_field.cpp:1786
+#: eeschema/sch_text.cpp:781 eeschema/sch_textbox.cpp:712
 #: pcbnew/dialogs/dialog_text_properties.cpp:151
 #: pcbnew/dialogs/dialog_text_properties_base.h:112
 #: pcbnew/pcb_dimension.cpp:1818 pcbnew/pcb_text.cpp:628
@@ -6962,8 +6962,8 @@ msgstr "Настройки на текст"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:71
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:71
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:68
-#: eeschema/fields_grid_table.cpp:481 eeschema/sch_field.cpp:1136
-#: eeschema/sch_label.cpp:1195 eeschema/sch_tablecell.cpp:126
+#: eeschema/fields_grid_table.cpp:482 eeschema/sch_field.cpp:1139
+#: eeschema/sch_label.cpp:1197 eeschema/sch_tablecell.cpp:126
 #: eeschema/sch_text.cpp:635 eeschema/sch_textbox.cpp:541
 #: eeschema/widgets/sch_properties_panel.cpp:258 pcbnew/pcb_dimension.cpp:628
 #: pcbnew/pcb_tablecell.cpp:116 pcbnew/pcb_text.cpp:290
@@ -6972,9 +6972,9 @@ msgstr "Настройки на текст"
 msgid "Font"
 msgstr "Фронтална страна"
 
-#: common/eda_text.cpp:1364 eeschema/sch_field.cpp:1771
-#: eeschema/sch_label.cpp:2268 eeschema/sch_tablecell.cpp:202
-#: eeschema/sch_text.cpp:776 eeschema/sch_textbox.cpp:688
+#: common/eda_text.cpp:1364 eeschema/sch_field.cpp:1778
+#: eeschema/sch_label.cpp:2273 eeschema/sch_tablecell.cpp:203
+#: eeschema/sch_text.cpp:777 eeschema/sch_textbox.cpp:688
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:91
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:56
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:57
@@ -6983,20 +6983,20 @@ msgstr "Фронтална страна"
 msgid "Thickness"
 msgstr "Дебелина"
 
-#: common/eda_text.cpp:1375 eeschema/sch_field.cpp:1772
-#: eeschema/sch_text.cpp:772 pcbnew/microwave/microwave_polygon.cpp:127
+#: common/eda_text.cpp:1375 eeschema/sch_field.cpp:1779
+#: eeschema/sch_text.cpp:773 pcbnew/microwave/microwave_polygon.cpp:127
 #: pcbnew/pcb_fields_grid_table.cpp:156
 msgid "Mirrored"
 msgstr "Огледално"
 
-#: common/eda_text.cpp:1392 eeschema/sch_field.cpp:1754
-#: eeschema/sch_field.cpp:1757 eeschema/sch_label.cpp:2272
+#: common/eda_text.cpp:1392 eeschema/sch_field.cpp:1758
+#: eeschema/sch_field.cpp:1761 eeschema/sch_label.cpp:2277
 #, fuzzy
 msgid "Horizontal Justification"
 msgstr "Ориентация:"
 
-#: common/eda_text.cpp:1396 eeschema/sch_field.cpp:1759
-#: eeschema/sch_field.cpp:1762 eeschema/sch_label.cpp:2274
+#: common/eda_text.cpp:1396 eeschema/sch_field.cpp:1765
+#: eeschema/sch_field.cpp:1768 eeschema/sch_label.cpp:2279
 #: pcbnew/pcb_dimension.cpp:1879 pcbnew/pcb_dimension.cpp:1915
 #: pcbnew/pcb_dimension.cpp:1956 pcbnew/pcb_dimension.cpp:2001
 #: pcbnew/pcb_dimension.cpp:2038
@@ -7004,8 +7004,8 @@ msgstr "Ориентация:"
 msgid "Vertical Justification"
 msgstr "Текстово подравняване:"
 
-#: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1770
-#: eeschema/sch_label.cpp:2233 eeschema/sch_tablecell.cpp:204
+#: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1777
+#: eeschema/sch_label.cpp:2237 eeschema/sch_tablecell.cpp:205
 #: pcbnew/pcb_dimension.cpp:1882 pcbnew/pcb_dimension.cpp:1918
 #: pcbnew/pcb_dimension.cpp:1959 pcbnew/pcb_dimension.cpp:2004
 #: pcbnew/pcb_dimension.cpp:2041 pcbnew/pcb_field.cpp:273
@@ -8236,12 +8236,12 @@ msgstr "Глобален етикет"
 msgid "Hierarchical labels"
 msgstr "Йерархичен етикет"
 
-#: common/layer_id.cpp:78 eeschema/sch_symbol.cpp:2981
+#: common/layer_id.cpp:78 eeschema/sch_symbol.cpp:2991
 #, fuzzy
 msgid "Pin numbers"
 msgstr "Номер на извод:"
 
-#: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:2985
+#: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:2995
 #, fuzzy
 msgid "Pin names"
 msgstr "Име на извод"
@@ -8644,9 +8644,9 @@ msgstr "Редактирай условията за нови подложки"
 #: common/lib_tree_model.cpp:153
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
-#: eeschema/dialogs/dialog_sim_model.cpp:621 eeschema/sch_item.cpp:509
-#: eeschema/sch_item.cpp:558 eeschema/sch_pin.cpp:1568
-#: eeschema/sch_symbol.cpp:3025 eeschema/symbol_editor/symbol_editor.cpp:1611
+#: eeschema/dialogs/dialog_sim_model.cpp:621 eeschema/sch_item.cpp:510
+#: eeschema/sch_item.cpp:559 eeschema/sch_pin.cpp:1567
+#: eeschema/sch_symbol.cpp:3035 eeschema/symbol_editor/symbol_editor.cpp:1611
 msgid "Unit"
 msgstr "Елемент"
 
@@ -8880,8 +8880,8 @@ msgstr "Грешка при създаване"
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:55
 #: eeschema/netlist_exporters/netlist_exporter_pads.cpp:43
 #: eeschema/sch_plotter.cpp:197 eeschema/sch_plotter.cpp:413
-#: eeschema/sch_plotter.cpp:556 eeschema/sch_plotter.cpp:766
-#: eeschema/sch_plotter.cpp:929 gerbview/export_to_pcbnew.cpp:67
+#: eeschema/sch_plotter.cpp:556 eeschema/sch_plotter.cpp:768
+#: eeschema/sch_plotter.cpp:931 gerbview/export_to_pcbnew.cpp:67
 #: pagelayout_editor/files.cpp:214 pcbnew/build_BOM_from_board.cpp:102
 #: pcbnew/dialogs/dialog_board_statistics.cpp:670
 #: pcbnew/dialogs/dialog_drc.cpp:1075 pcbnew/dialogs/dialog_export_idf.cpp:200
@@ -8963,8 +8963,8 @@ msgstr "По подразбиране"
 #: common/settings/bom_settings.cpp:126 common/settings/bom_settings.cpp:147
 #: common/settings/bom_settings.cpp:166 common/settings/bom_settings.cpp:186
 #: eeschema/dialogs/dialog_rescue_each.cpp:131
-#: eeschema/dialogs/dialog_sim_model_base.cpp:271 eeschema/sch_symbol.cpp:2058
-#: eeschema/sch_symbol.cpp:2110 eeschema/sch_symbol.cpp:2991
+#: eeschema/dialogs/dialog_sim_model_base.cpp:271 eeschema/sch_symbol.cpp:2060
+#: eeschema/sch_symbol.cpp:2114 eeschema/sch_symbol.cpp:3001
 #: eeschema/widgets/search_handlers.cpp:160
 #: eeschema/widgets/search_handlers.cpp:246 pcbnew/footprint.cpp:4086
 #: pcbnew/widgets/search_handlers.cpp:118
@@ -8985,8 +8985,8 @@ msgstr "Вземи и премести комп.отп."
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:268
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:128
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:199
-#: eeschema/dialogs/dialog_update_from_pcb_base.cpp:72 eeschema/menubar.cpp:169
-#: eeschema/sch_sheet.cpp:1725 eeschema/sch_symbol.cpp:3033
+#: eeschema/dialogs/dialog_update_from_pcb_base.cpp:72 eeschema/menubar.cpp:170
+#: eeschema/sch_sheet.cpp:1727 eeschema/sch_symbol.cpp:3043
 #: eeschema/tools/sch_edit_tool.cpp:551
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:179
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
@@ -9963,7 +9963,7 @@ msgid "Show 3D viewer window"
 msgstr "Покажи платката в 3D изглед"
 
 #: common/tool/actions.cpp:1081 eeschema/symbol_diff_frame.cpp:57
-#: eeschema/symbol_viewer_frame.cpp:104 eeschema/symbol_viewer_frame.cpp:1108
+#: eeschema/symbol_viewer_frame.cpp:104 eeschema/symbol_viewer_frame.cpp:1113
 #, fuzzy
 msgid "Symbol Library Browser"
 msgstr "Библиотечен обзор"
@@ -9991,7 +9991,7 @@ msgstr "Покажи/скрий инструментите за управлен
 
 #: common/tool/actions.cpp:1124
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:101
-#: eeschema/fields_grid_table.cpp:1059
+#: eeschema/fields_grid_table.cpp:1061
 #, fuzzy
 msgid "Show Datasheet"
 msgstr "Документация"
@@ -10357,15 +10357,15 @@ msgstr "Филтър:"
 msgid "<not found>"
 msgstr "> не е намерен"
 
-#: common/widgets/footprint_diff_widget.cpp:41 eeschema/sch_sheet.cpp:877
-#: eeschema/sch_symbol.cpp:2033 pcbnew/dialogs/dialog_board_statistics.cpp:681
+#: common/widgets/footprint_diff_widget.cpp:41 eeschema/sch_sheet.cpp:878
+#: eeschema/sch_symbol.cpp:2034 pcbnew/dialogs/dialog_board_statistics.cpp:681
 #, fuzzy
 msgid "Board"
 msgstr "На платката"
 
 #: common/widgets/footprint_diff_widget.cpp:42 cvpcb/cvpcb_mainframe.cpp:814
-#: eeschema/sch_base_frame.cpp:593 eeschema/sch_symbol.cpp:2086
-#: eeschema/sch_symbol.cpp:2090 eeschema/sch_symbol.cpp:2125
+#: eeschema/sch_base_frame.cpp:594 eeschema/sch_symbol.cpp:2090
+#: eeschema/sch_symbol.cpp:2094 eeschema/sch_symbol.cpp:2131
 #: eeschema/widgets/symbol_diff_widget.cpp:45 pcbnew/footprint.cpp:1665
 msgid "Library"
 msgstr "Библиотека"
@@ -11177,8 +11177,8 @@ msgstr "%s не е Библиотечен файл"
 
 #: cvpcb/cvpcb_mainframe.cpp:785
 #: eeschema/design_block_tree_model_adapter.cpp:130
-#: eeschema/generate_alias_info.cpp:39 eeschema/sch_symbol.cpp:2105
-#: eeschema/sch_symbol.cpp:2678 eeschema/sch_symbol.cpp:3003
+#: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2109
+#: eeschema/sch_symbol.cpp:2685 eeschema/sch_symbol.cpp:3013
 #: eeschema/symbol_editor/symbol_editor.cpp:1629
 #: eeschema/symbol_viewer_frame.cpp:462 pcbnew/footprint.cpp:4099
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:133
@@ -11590,34 +11590,34 @@ msgid ""
 "not found. Script not available."
 msgstr ""
 
-#: eeschema/connection_graph.cpp:3265
+#: eeschema/connection_graph.cpp:3275
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr ""
 
-#: eeschema/connection_graph.cpp:3502
+#: eeschema/connection_graph.cpp:3512
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr ""
 
-#: eeschema/connection_graph.cpp:3795 eeschema/erc/erc_item.cpp:232
+#: eeschema/connection_graph.cpp:3807 eeschema/erc/erc_item.cpp:232
 #, fuzzy
 msgid "Unconnected wire endpoint"
 msgstr "Несвързан"
 
-#: eeschema/connection_graph.cpp:3819
+#: eeschema/connection_graph.cpp:3832
 #, fuzzy
 msgid "Unconnected wire to bus entry"
 msgstr "Несвързан"
 
-#: eeschema/connection_graph.cpp:4194
+#: eeschema/connection_graph.cpp:4207
 #, fuzzy, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "Различие между йерархически обозначения и изводи на листа"
 
-#: eeschema/connection_graph.cpp:4212
+#: eeschema/connection_graph.cpp:4225
 #, fuzzy, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "Йерархичен етикет %s не е свързан към листов етикет"
@@ -11651,7 +11651,7 @@ msgstr "Избор на верига"
 
 #: eeschema/design_block_tree_model_adapter.cpp:150
 #: eeschema/design_block_tree_model_adapter.cpp:199
-#: eeschema/design_block_utils.cpp:615
+#: eeschema/design_block_utils.cpp:622
 #, fuzzy, c-format
 msgid "Error loading design block %s from library '%s'."
 msgstr "Грешка <%s> при зареждане на символна библиотека <%s>."
@@ -11722,7 +11722,7 @@ msgstr "Библиотеката <%s> вече съществува."
 msgid "Enter a description for the library:"
 msgstr "Четене на връзки \"%s\""
 
-#: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:3000
+#: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:3010
 #: pcbnew/footprint.cpp:4096 pcbnew/plot_board_layers.cpp:129
 #, fuzzy
 msgid "Library Description"
@@ -11733,11 +11733,11 @@ msgstr "Определение"
 msgid "Please select a library to save the design block to."
 msgstr "Моля, изберете компонентна библиотека."
 
-#: eeschema/design_block_utils.cpp:301 eeschema/design_block_utils.cpp:394
+#: eeschema/design_block_utils.cpp:301 eeschema/design_block_utils.cpp:395
 msgid "Design blocks with nested sheets are not supported."
 msgstr ""
 
-#: eeschema/design_block_utils.cpp:333 eeschema/design_block_utils.cpp:427
+#: eeschema/design_block_utils.cpp:333 eeschema/design_block_utils.cpp:431
 #, fuzzy
 msgid "Error saving temporary schematic file to create design block."
 msgstr "Грешка при съхранение на библиотечен файл \""
@@ -11746,13 +11746,13 @@ msgstr "Грешка при съхранение на библиотечен ф�
 msgid "Please select some items to save as a design block."
 msgstr ""
 
-#: eeschema/design_block_utils.cpp:464
+#: eeschema/design_block_utils.cpp:469
 #, fuzzy
 msgid "Please select a library to delete."
 msgstr "Моля, изберете компонентна библиотека."
 
-#: eeschema/design_block_utils.cpp:470 eeschema/design_block_utils.cpp:512
-#: eeschema/design_block_utils.cpp:555 pcbnew/footprint_libraries_utils.cpp:552
+#: eeschema/design_block_utils.cpp:475 eeschema/design_block_utils.cpp:517
+#: eeschema/design_block_utils.cpp:560 pcbnew/footprint_libraries_utils.cpp:552
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:958
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2926
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3004
@@ -11760,24 +11760,24 @@ msgstr "Моля, изберете компонентна библиотека."
 msgid "Library '%s' is read only."
 msgstr "Библиотека %s не е намерена"
 
-#: eeschema/design_block_utils.cpp:476
+#: eeschema/design_block_utils.cpp:481
 #, c-format
 msgid ""
 "Delete design block library '%s' from disk? This will delete all design "
 "blocks within the library."
 msgstr ""
 
-#: eeschema/design_block_utils.cpp:493
+#: eeschema/design_block_utils.cpp:498
 #, fuzzy, c-format
 msgid "Design block library '%s' deleted"
 msgstr "не са избрани библиотеки"
 
-#: eeschema/design_block_utils.cpp:518
+#: eeschema/design_block_utils.cpp:523
 #, fuzzy, c-format
 msgid "Delete design block '%s' in library '%s' from disk?"
 msgstr "Отвори модул компонентен отпечатък от Библиотека"
 
-#: eeschema/design_block_utils.cpp:534
+#: eeschema/design_block_utils.cpp:539
 #, fuzzy, c-format
 msgid "Design block '%s' deleted from library '%s'"
 msgstr "Компонент %s е изтрит в библиотека %s"
@@ -13034,7 +13034,7 @@ msgstr "Изход от KiCad"
 #: eeschema/dialogs/dialog_field_properties_base.cpp:162
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:53
 #: eeschema/dialogs/dialog_text_properties_base.cpp:123
-#: eeschema/sch_label.cpp:1207 eeschema/sch_text.cpp:645
+#: eeschema/sch_label.cpp:1209 eeschema/sch_text.cpp:645
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:49
 msgid "Align left"
 msgstr "Наляво"
@@ -13050,7 +13050,7 @@ msgstr "Централно"
 #: eeschema/dialogs/dialog_field_properties_base.cpp:172
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:63
 #: eeschema/dialogs/dialog_text_properties_base.cpp:133
-#: eeschema/sch_label.cpp:1205 eeschema/sch_text.cpp:647
+#: eeschema/sch_label.cpp:1207 eeschema/sch_text.cpp:647
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:59
 msgid "Align right"
 msgstr "Надясно"
@@ -13058,7 +13058,7 @@ msgstr "Надясно"
 #: eeschema/dialogs/dialog_field_properties_base.cpp:182
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:80
 #: eeschema/dialogs/dialog_text_properties_base.cpp:143
-#: eeschema/sch_label.cpp:1208
+#: eeschema/sch_label.cpp:1210
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:76
 msgid "Align top"
 msgstr "Нагоре"
@@ -13074,7 +13074,7 @@ msgstr "Централно"
 #: eeschema/dialogs/dialog_field_properties_base.cpp:192
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:90
 #: eeschema/dialogs/dialog_text_properties_base.cpp:153
-#: eeschema/sch_label.cpp:1206
+#: eeschema/sch_label.cpp:1208
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:86
 msgid "Align bottom"
 msgstr "Надолу"
@@ -13259,12 +13259,12 @@ msgid "Text color:"
 msgstr "Име на нов клас верига:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
-#: eeschema/pin_type.cpp:114 eeschema/sch_pin.cpp:2186
+#: eeschema/pin_type.cpp:119 eeschema/sch_pin.cpp:2119
 msgid "Up"
 msgstr "Нагоре"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
-#: eeschema/pin_type.cpp:115 eeschema/sch_pin.cpp:2187
+#: eeschema/pin_type.cpp:120 eeschema/sch_pin.cpp:2120
 msgid "Down"
 msgstr "Надолу"
 
@@ -13542,7 +13542,7 @@ msgstr "Стартирай проверката на правила за про�
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:31
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:33
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:28
-#: eeschema/sch_symbol.cpp:2989
+#: eeschema/sch_symbol.cpp:2999
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:28
 #: pcbnew/footprint.cpp:4084
@@ -13554,7 +13554,7 @@ msgstr "Полета"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:201
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:58
-#: eeschema/fields_grid_table.cpp:471
+#: eeschema/fields_grid_table.cpp:472
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:54
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:158
@@ -13568,7 +13568,7 @@ msgstr "Покажи"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:90
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:59
-#: eeschema/fields_grid_table.cpp:472
+#: eeschema/fields_grid_table.cpp:473
 #, fuzzy
 msgid "Show Name"
 msgstr "Покажи всички слоеве"
@@ -13577,7 +13577,7 @@ msgstr "Покажи всички слоеве"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:63
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:63
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:60
-#: eeschema/fields_grid_table.cpp:473
+#: eeschema/fields_grid_table.cpp:474
 #, fuzzy
 msgid "H Align"
 msgstr "Нагоре"
@@ -13586,7 +13586,7 @@ msgstr "Нагоре"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:64
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:64
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:61
-#: eeschema/fields_grid_table.cpp:474
+#: eeschema/fields_grid_table.cpp:475
 #, fuzzy
 msgid "V Align"
 msgstr "Нагоре"
@@ -13595,10 +13595,10 @@ msgstr "Нагоре"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:67
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:64
-#: eeschema/fields_grid_table.cpp:477 eeschema/sch_field.cpp:1140
-#: eeschema/sch_field.cpp:1777 eeschema/sch_label.cpp:1201
+#: eeschema/fields_grid_table.cpp:478 eeschema/sch_field.cpp:1143
+#: eeschema/sch_field.cpp:1784 eeschema/sch_label.cpp:1203
 #: eeschema/sch_tablecell.cpp:132 eeschema/sch_text.cpp:641
-#: eeschema/sch_text.cpp:778 eeschema/sch_textbox.cpp:547
+#: eeschema/sch_text.cpp:779 eeschema/sch_textbox.cpp:547
 #: eeschema/sch_textbox.cpp:709 pcbnew/tools/board_inspection_tool.cpp:1434
 #, fuzzy
 msgid "Text Size"
@@ -13610,7 +13610,7 @@ msgstr "Размер на текста H"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:69
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:69
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:66
-#: eeschema/fields_grid_table.cpp:479
+#: eeschema/fields_grid_table.cpp:480
 #, fuzzy
 msgid "X Position"
 msgstr "Позиция"
@@ -13621,7 +13621,7 @@ msgstr "Позиция"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:70
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:70
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:67
-#: eeschema/fields_grid_table.cpp:480
+#: eeschema/fields_grid_table.cpp:481
 #, fuzzy
 msgid "Y Position"
 msgstr "Позиция"
@@ -13647,46 +13647,46 @@ msgstr "Изтриване на артикул"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:154
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:55
 #: eeschema/pin_type.cpp:85 eeschema/sch_label.cpp:97
-#: eeschema/sch_label.cpp:2191 eeschema/sch_pin.cpp:2151
+#: eeschema/sch_label.cpp:2195 eeschema/sch_pin.cpp:2084
 msgid "Input"
 msgstr "Вход"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:157
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:58
 #: eeschema/pin_type.cpp:86 eeschema/sch_label.cpp:98
-#: eeschema/sch_label.cpp:2192 eeschema/sch_pin.cpp:2152
+#: eeschema/sch_label.cpp:2196 eeschema/sch_pin.cpp:2085
 msgid "Output"
 msgstr "Изход"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:160
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:61
 #: eeschema/pin_type.cpp:87 eeschema/sch_label.cpp:99
-#: eeschema/sch_label.cpp:2193 eeschema/sch_pin.cpp:2153
+#: eeschema/sch_label.cpp:2197 eeschema/sch_pin.cpp:2086
 msgid "Bidirectional"
 msgstr "Двупосочен"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:163
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:64
-#: eeschema/pin_type.cpp:88 eeschema/sch_label.cpp:2194
-#: eeschema/sch_pin.cpp:2154
+#: eeschema/pin_type.cpp:88 eeschema/sch_label.cpp:2198
+#: eeschema/sch_pin.cpp:2087
 msgid "Tri-state"
 msgstr "Tri-state"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:166
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:67
 #: eeschema/pin_type.cpp:89 eeschema/sch_label.cpp:101
-#: eeschema/sch_label.cpp:2195 eeschema/sch_pin.cpp:2155
+#: eeschema/sch_label.cpp:2199 eeschema/sch_pin.cpp:2088
 msgid "Passive"
 msgstr "Пасивен"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:169
-#: eeschema/sch_label.cpp:2246
+#: eeschema/sch_label.cpp:2250
 #, fuzzy
 msgid "Dot"
 msgstr "Dout"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:175
-#: eeschema/sch_label.cpp:2248
+#: eeschema/sch_label.cpp:2252
 msgid "Diamond"
 msgstr ""
 
@@ -13720,7 +13720,7 @@ msgstr "Брой отвори:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:120
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:88
-#: eeschema/dialogs/dialog_symbol_properties.cpp:151 eeschema/sch_pin.cpp:1580
+#: eeschema/dialogs/dialog_symbol_properties.cpp:151 eeschema/sch_pin.cpp:1579
 msgid "Number"
 msgstr "Номер"
 
@@ -13730,7 +13730,7 @@ msgstr "Номер"
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:213
 #: eeschema/dialogs/dialog_symbol_properties.cpp:154
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:282
-#: eeschema/sch_pin.cpp:2213
+#: eeschema/sch_pin.cpp:2146
 #, fuzzy
 msgid "Electrical Type"
 msgstr "Електр. тип:"
@@ -13741,21 +13741,21 @@ msgstr "Електр. тип:"
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:214
 #: eeschema/dialogs/dialog_symbol_properties.cpp:155
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:283
-#: eeschema/sch_pin.cpp:2218
+#: eeschema/sch_pin.cpp:2151
 #, fuzzy
 msgid "Graphic Style"
 msgstr "Графичен стил:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:125
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:93
-#: eeschema/sch_pin.cpp:2244
+#: eeschema/sch_pin.cpp:2177
 #, fuzzy
 msgid "Number Text Size"
 msgstr "Размер номер на шрифта:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:126
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:94
-#: eeschema/sch_pin.cpp:2239
+#: eeschema/sch_pin.cpp:2172
 #, fuzzy
 msgid "Name Text Size"
 msgstr "Размер на текста V"
@@ -14781,7 +14781,7 @@ msgid "Never Show Again"
 msgstr ""
 
 #: eeschema/dialogs/dialog_rescue_each_base.h:67
-#: eeschema/project_rescue.cpp:599 eeschema/project_rescue.cpp:614
+#: eeschema/project_rescue.cpp:603 eeschema/project_rescue.cpp:618
 #, fuzzy
 msgid "Project Rescue Helper"
 msgstr "Грешка на файл на проекта"
@@ -15004,7 +15004,7 @@ msgid "Loading Bus Aliases"
 msgstr "Псевдоним"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:269 eeschema/files-io.cpp:280
-#: eeschema/picksymbol.cpp:123
+#: eeschema/picksymbol.cpp:124
 msgid "Root"
 msgstr "Основен лист"
 
@@ -15240,8 +15240,8 @@ msgid "Do not populate"
 msgstr "Не експортирай"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:169
-#: eeschema/sch_field.cpp:1138 eeschema/sch_label.cpp:1199
-#: eeschema/sch_pin.cpp:1582 eeschema/sch_tablecell.cpp:130
+#: eeschema/sch_field.cpp:1141 eeschema/sch_label.cpp:1201
+#: eeschema/sch_pin.cpp:1581 eeschema/sch_tablecell.cpp:130
 #: eeschema/sch_text.cpp:639 eeschema/sch_textbox.cpp:545
 msgid "Style"
 msgstr "Стил"
@@ -15870,9 +15870,9 @@ msgstr ""
 msgid "Parameter"
 msgstr "Параметри"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:623 eeschema/sch_item.cpp:504
-#: eeschema/sch_label.cpp:1193 eeschema/sch_marker.cpp:362
-#: eeschema/sch_pin.cpp:1562 eeschema/sch_pin.cpp:1581
+#: eeschema/dialogs/dialog_sim_model.cpp:623 eeschema/sch_item.cpp:505
+#: eeschema/sch_label.cpp:1195 eeschema/sch_marker.cpp:364
+#: eeschema/sch_pin.cpp:1561 eeschema/sch_pin.cpp:1580
 #: eeschema/symbol_editor/symbol_editor.cpp:1627
 #: eeschema/widgets/search_handlers.cpp:317
 #: eeschema/widgets/search_handlers.cpp:401 gerbview/gerber_draw_item.cpp:668
@@ -16038,25 +16038,25 @@ msgid "Sequentially place all units of the symbol."
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:95
-#: eeschema/fields_grid_table.cpp:1052
+#: eeschema/fields_grid_table.cpp:1054
 #, fuzzy
 msgid "Select Footprint..."
 msgstr "Печат на комп.отп."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:96
-#: eeschema/fields_grid_table.cpp:1053
+#: eeschema/fields_grid_table.cpp:1055
 #, fuzzy
 msgid "Browse for footprint"
 msgstr "Архивирай Отпечатъци"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:102
-#: eeschema/fields_grid_table.cpp:1060
+#: eeschema/fields_grid_table.cpp:1062
 #, fuzzy
 msgid "Show datasheet in browser"
 msgstr "Покажи име на извод"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:200
-#: eeschema/sch_label.cpp:1180
+#: eeschema/sch_label.cpp:1182
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:232
 msgid "Label"
 msgstr "Етикет"
@@ -16307,7 +16307,7 @@ msgstr "Формула"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:322
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:332
-#: eeschema/menubar.cpp:116 eeschema/symbol_editor/menubar_symbol_editor.cpp:77
+#: eeschema/menubar.cpp:117 eeschema/symbol_editor/menubar_symbol_editor.cpp:77
 #: pcbnew/dialogs/dialog_export_2581.cpp:48
 #: pcbnew/dialogs/dialog_export_step.cpp:109
 #: pcbnew/menubar_footprint_editor.cpp:74 pcbnew/menubar_pcb_editor.cpp:126
@@ -16423,7 +16423,7 @@ msgid "Edit Library Symbol..."
 msgstr "Библиотека"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:279
-#: eeschema/sch_pin.cpp:2208
+#: eeschema/sch_pin.cpp:2141
 #, fuzzy
 msgid "Pin Number"
 msgstr "Брой пера"
@@ -16817,7 +16817,7 @@ msgid "Update/reset field sizes and styles"
 msgstr "Опресни стойностите"
 
 #: eeschema/dialogs/dialog_user_defined_signals.cpp:260
-#: eeschema/sch_label.cpp:2168 pcbnew/dialogs/panel_setup_rules.cpp:877
+#: eeschema/sch_label.cpp:2172 pcbnew/dialogs/panel_setup_rules.cpp:877
 msgid "Syntax Help"
 msgstr ""
 
@@ -17723,7 +17723,7 @@ msgstr ""
 msgid "Illegal character '%c' in nickname '%s'"
 msgstr ""
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:592 eeschema/symbol_library.cpp:575
+#: eeschema/dialogs/panel_sym_lib_table.cpp:592 eeschema/symbol_library.cpp:576
 #, fuzzy, c-format
 msgid "Symbol library '%s' failed to load."
 msgstr ""
@@ -17882,11 +17882,11 @@ msgstr ""
 msgid "Failed to load schematic\n"
 msgstr "Неуспешно създаване"
 
-#: eeschema/eeschema_jobs_handler.cpp:327
-#: eeschema/eeschema_jobs_handler.cpp:468
-#: eeschema/eeschema_jobs_handler.cpp:685
-#: eeschema/eeschema_jobs_handler.cpp:811
-#: eeschema/eeschema_jobs_handler.cpp:1134 pcbnew/pcbnew_jobs_handler.cpp:366
+#: eeschema/eeschema_jobs_handler.cpp:331
+#: eeschema/eeschema_jobs_handler.cpp:474
+#: eeschema/eeschema_jobs_handler.cpp:691
+#: eeschema/eeschema_jobs_handler.cpp:817
+#: eeschema/eeschema_jobs_handler.cpp:1143 pcbnew/pcbnew_jobs_handler.cpp:366
 #: pcbnew/pcbnew_jobs_handler.cpp:502 pcbnew/pcbnew_jobs_handler.cpp:734
 #: pcbnew/pcbnew_jobs_handler.cpp:811 pcbnew/pcbnew_jobs_handler.cpp:892
 #: pcbnew/pcbnew_jobs_handler.cpp:945 pcbnew/pcbnew_jobs_handler.cpp:1106
@@ -17896,113 +17896,113 @@ msgstr "Неуспешно създаване"
 msgid "Failed to create output directory\n"
 msgstr "Невъзможност за създаване на файл %s"
 
-#: eeschema/eeschema_jobs_handler.cpp:390
-#: eeschema/eeschema_jobs_handler.cpp:513
-#: eeschema/eeschema_jobs_handler.cpp:783
+#: eeschema/eeschema_jobs_handler.cpp:396
+#: eeschema/eeschema_jobs_handler.cpp:519
+#: eeschema/eeschema_jobs_handler.cpp:789
 msgid ""
 "Warning: schematic has annotation errors, please use the schematic editor to "
 "fix them\n"
 msgstr ""
 
-#: eeschema/eeschema_jobs_handler.cpp:400
-#: eeschema/eeschema_jobs_handler.cpp:523
-#: eeschema/eeschema_jobs_handler.cpp:793
+#: eeschema/eeschema_jobs_handler.cpp:406
+#: eeschema/eeschema_jobs_handler.cpp:529
+#: eeschema/eeschema_jobs_handler.cpp:799
 #, fuzzy
 msgid "Warning: duplicate sheet names.\n"
 msgstr "Дубликат на име на лист"
 
-#: eeschema/eeschema_jobs_handler.cpp:451
+#: eeschema/eeschema_jobs_handler.cpp:457
 #, fuzzy
 msgid "Unknown netlist format.\n"
 msgstr "Неизвестен файлов формат <%s>"
 
-#: eeschema/eeschema_jobs_handler.cpp:586
+#: eeschema/eeschema_jobs_handler.cpp:592
 #, fuzzy, c-format
 msgid "BOM preset '%s' not found"
 msgstr "Файл %s не е намерен"
 
-#: eeschema/eeschema_jobs_handler.cpp:693
-#: eeschema/eeschema_jobs_handler.cpp:906
+#: eeschema/eeschema_jobs_handler.cpp:699
+#: eeschema/eeschema_jobs_handler.cpp:914
 #, fuzzy, c-format
 msgid "Unable to open destination '%s'"
 msgstr "Невъзможност за отваряне на %s"
 
-#: eeschema/eeschema_jobs_handler.cpp:722
+#: eeschema/eeschema_jobs_handler.cpp:728
 #, fuzzy, c-format
 msgid "BOM format preset '%s' not found"
 msgstr "%s изводи %s ненамерени"
 
-#: eeschema/eeschema_jobs_handler.cpp:747
-#: eeschema/eeschema_jobs_handler.cpp:820
+#: eeschema/eeschema_jobs_handler.cpp:753
+#: eeschema/eeschema_jobs_handler.cpp:826
 #, fuzzy, c-format
 msgid "Wrote bill of materials to '%s'."
 msgstr "Генерирай \"Таблица на използваните материали\""
 
-#: eeschema/eeschema_jobs_handler.cpp:881
+#: eeschema/eeschema_jobs_handler.cpp:888
 #, fuzzy, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "%s шина от (%s,%s) до (%s,%s)"
 
-#: eeschema/eeschema_jobs_handler.cpp:958
-#: eeschema/eeschema_jobs_handler.cpp:1054 pcbnew/pcbnew_jobs_handler.cpp:1586
+#: eeschema/eeschema_jobs_handler.cpp:966
+#: eeschema/eeschema_jobs_handler.cpp:1062 pcbnew/pcbnew_jobs_handler.cpp:1586
 #: pcbnew/pcbnew_jobs_handler.cpp:1651
 #, fuzzy
 msgid "Unable to load library\n"
 msgstr "Неуспешно създаване на файл"
 
-#: eeschema/eeschema_jobs_handler.cpp:971
+#: eeschema/eeschema_jobs_handler.cpp:979
 #, fuzzy
 msgid "There is no symbol selected to save."
 msgstr "Не е избран компонент за съхранение."
 
-#: eeschema/eeschema_jobs_handler.cpp:1029 pcbnew/pcbnew_jobs_handler.cpp:1555
+#: eeschema/eeschema_jobs_handler.cpp:1037 pcbnew/pcbnew_jobs_handler.cpp:1555
 msgid "Output path must not conflict with existing path\n"
 msgstr ""
 
-#: eeschema/eeschema_jobs_handler.cpp:1037 pcbnew/pcbnew_jobs_handler.cpp:1562
+#: eeschema/eeschema_jobs_handler.cpp:1045 pcbnew/pcbnew_jobs_handler.cpp:1562
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
 
-#: eeschema/eeschema_jobs_handler.cpp:1064
+#: eeschema/eeschema_jobs_handler.cpp:1072
 #, fuzzy
 msgid "Saving symbol library in updated format\n"
 msgstr "Kicad библ.файлове на комп.отп. (*.mod)|*.mod"
 
-#: eeschema/eeschema_jobs_handler.cpp:1085
+#: eeschema/eeschema_jobs_handler.cpp:1093
 #, fuzzy
 msgid "Symbol library was not updated\n"
 msgstr "Библиотечен редактор"
 
-#: eeschema/eeschema_jobs_handler.cpp:1159 pcbnew/pcbnew_jobs_handler.cpp:1884
+#: eeschema/eeschema_jobs_handler.cpp:1168 pcbnew/pcbnew_jobs_handler.cpp:1884
 #, fuzzy, c-format
 msgid "Found %d violations\n"
 msgstr "Разреши микро прох.отв."
 
-#: eeschema/eeschema_jobs_handler.cpp:1174
+#: eeschema/eeschema_jobs_handler.cpp:1183
 #, fuzzy, c-format
 msgid "Unable to save ERC report to %s\n"
 msgstr "Невъзможност за отваряне на %s"
 
-#: eeschema/eeschema_jobs_handler.cpp:1179
+#: eeschema/eeschema_jobs_handler.cpp:1188
 #, fuzzy, c-format
 msgid "Saved ERC Report to %s\n"
 msgstr "Запази DRC докладен файл"
 
-#: eeschema/eeschema_settings.cpp:70 eeschema/tools/ee_actions.cpp:951
+#: eeschema/eeschema_settings.cpp:71 eeschema/tools/ee_actions.cpp:951
 #, fuzzy
 msgid "Net Navigator"
 msgstr "Премести йерархичен етикет"
 
-#: eeschema/eeschema_settings.cpp:114 eeschema/sch_edit_frame.cpp:2207
+#: eeschema/eeschema_settings.cpp:115 eeschema/sch_edit_frame.cpp:2212
 #: pcbnew/footprint_edit_frame.cpp:246 pcbnew/footprint_edit_frame.cpp:967
 #: pcbnew/pcb_edit_frame.cpp:334 pcbnew/pcb_edit_frame.cpp:1709
 #, fuzzy
 msgid "Selection Filter"
 msgstr "Избор на клавиш"
 
-#: eeschema/eeschema_settings.cpp:134 eeschema/menubar.cpp:208
-#: eeschema/sch_edit_frame.cpp:2203 eeschema/sch_edit_frame.cpp:2209
+#: eeschema/eeschema_settings.cpp:135 eeschema/menubar.cpp:210
+#: eeschema/sch_edit_frame.cpp:2208 eeschema/sch_edit_frame.cpp:2214
 #: eeschema/tools/ee_actions.cpp:149
 #, fuzzy
 msgid "Design Blocks"
@@ -18524,31 +18524,31 @@ msgid ""
 " ** ERC messages: %d  Errors %d  Warnings %d\n"
 msgstr ""
 
-#: eeschema/fields_grid_table.cpp:278 eeschema/files-io.cpp:919
+#: eeschema/fields_grid_table.cpp:279 eeschema/files-io.cpp:919
 #: eeschema/tools/sch_editor_control.cpp:129
 msgid "Schematic Files"
 msgstr "Схематични файлове"
 
-#: eeschema/fields_grid_table.cpp:309 eeschema/fields_grid_table.cpp:746
-#: eeschema/fields_grid_table.cpp:918
+#: eeschema/fields_grid_table.cpp:310 eeschema/fields_grid_table.cpp:747
+#: eeschema/fields_grid_table.cpp:919
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:154
 #, fuzzy
 msgid "Horizontal"
 msgstr "хоризонтал"
 
-#: eeschema/fields_grid_table.cpp:310 eeschema/fields_grid_table.cpp:748
-#: eeschema/fields_grid_table.cpp:920
+#: eeschema/fields_grid_table.cpp:311 eeschema/fields_grid_table.cpp:749
+#: eeschema/fields_grid_table.cpp:921
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:154
 msgid "Vertical"
 msgstr "Вертикално"
 
-#: eeschema/fields_grid_table.cpp:483 eeschema/sch_field.cpp:1767
+#: eeschema/fields_grid_table.cpp:484 eeschema/sch_field.cpp:1774
 #, fuzzy
 msgid "Allow Autoplacement"
 msgstr "Автом.поставяне на нови модули"
 
-#: eeschema/fields_grid_table.cpp:484 eeschema/sch_field.cpp:1805
-#: eeschema/sch_item.cpp:516 eeschema/sch_item.cpp:568
+#: eeschema/fields_grid_table.cpp:485 eeschema/sch_field.cpp:1813
+#: eeschema/sch_item.cpp:517 eeschema/sch_item.cpp:569
 #, fuzzy
 msgid "Private"
 msgstr "Draft layer"
@@ -18849,12 +18849,12 @@ msgstr "Файлът не може да бъде отворен."
 msgid "Manual removal will be required for the file(s) above."
 msgstr ""
 
-#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:2082
+#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:2086
 #, fuzzy
 msgid "Derived from"
 msgstr "Изтриване на елементи от компонент?"
 
-#: eeschema/generate_alias_info.cpp:81 eeschema/sch_base_frame.cpp:85
+#: eeschema/generate_alias_info.cpp:82 eeschema/sch_base_frame.cpp:85
 #: eeschema/symbol_editor/symbol_editor.cpp:171
 #: eeschema/symbol_editor/symbol_editor.cpp:237
 #: eeschema/symbol_library_manager.cpp:458
@@ -18865,7 +18865,7 @@ msgstr "Изтриване на елементи от компонент?"
 msgid "Error loading symbol %s from library '%s'."
 msgstr "Грешка <%s> при зареждане на символна библиотека <%s>."
 
-#: eeschema/generate_alias_info.cpp:121 eeschema/sim/spice_simulator.cpp:69
+#: eeschema/generate_alias_info.cpp:122 eeschema/sim/spice_simulator.cpp:69
 #: kicad/pcm/pcm.cpp:767 pcbnew/zone.cpp:859
 #, fuzzy
 msgid "Unknown"
@@ -18965,124 +18965,124 @@ msgstr "По подразбиране"
 msgid "Import Vector Graphics File"
 msgstr "Запамети Проектов файл"
 
-#: eeschema/lib_symbol.cpp:297 eeschema/sch_symbol.cpp:445
+#: eeschema/lib_symbol.cpp:299 eeschema/sch_symbol.cpp:445
 #: eeschema/tools/sch_edit_tool.cpp:108
 #, fuzzy, c-format
 msgid "Unit %s"
 msgstr "Единици"
 
-#: eeschema/lib_symbol.cpp:576 eeschema/sch_sheet.cpp:309
-#: eeschema/sch_symbol.cpp:1593
+#: eeschema/lib_symbol.cpp:578 eeschema/sch_sheet.cpp:310
+#: eeschema/sch_symbol.cpp:1594
 #, fuzzy
 msgid "Excluded from BOM"
 msgstr "Изчистване на платката"
 
-#: eeschema/lib_symbol.cpp:581 eeschema/sch_sheet.cpp:318
-#: eeschema/sch_symbol.cpp:1602
+#: eeschema/lib_symbol.cpp:583 eeschema/sch_sheet.cpp:319
+#: eeschema/sch_symbol.cpp:1603
 #, fuzzy
 msgid "Excluded from board"
 msgstr "Изчистване на платката"
 
-#: eeschema/lib_symbol.cpp:586 eeschema/sch_sheet.cpp:327
-#: eeschema/sch_symbol.cpp:1611
+#: eeschema/lib_symbol.cpp:588 eeschema/sch_sheet.cpp:328
+#: eeschema/sch_symbol.cpp:1612
 #, fuzzy
 msgid "Excluded from simulation"
 msgstr "Начертай конт.пл. на обозн. слой"
 
-#: eeschema/lib_symbol.cpp:591 eeschema/sch_sheet.cpp:336
-#: eeschema/sch_sheet.cpp:880 eeschema/sch_symbol.cpp:1620
-#: eeschema/sch_symbol.cpp:2036 eeschema/widgets/search_handlers.cpp:169
+#: eeschema/lib_symbol.cpp:593 eeschema/sch_sheet.cpp:337
+#: eeschema/sch_sheet.cpp:881 eeschema/sch_symbol.cpp:1621
+#: eeschema/sch_symbol.cpp:2037 eeschema/widgets/search_handlers.cpp:169
 #: pcbnew/footprint.cpp:1713
 #, fuzzy
 msgid "DNP"
 msgstr "Пи-образен"
 
-#: eeschema/lib_symbol.cpp:1601
+#: eeschema/lib_symbol.cpp:1604
 msgid "Power flag differs."
 msgstr ""
 
-#: eeschema/lib_symbol.cpp:1610
+#: eeschema/lib_symbol.cpp:1613
 #, fuzzy
 msgid "Unit count differs."
 msgstr "Брой отвори:"
 
-#: eeschema/lib_symbol.cpp:1650
+#: eeschema/lib_symbol.cpp:1653
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:745
 #, fuzzy
 msgid "Graphic item count differs."
 msgstr "Покажи пътечките в контурен режим"
 
-#: eeschema/lib_symbol.cpp:1662
+#: eeschema/lib_symbol.cpp:1665
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:759
 #, c-format
 msgid "%s differs."
 msgstr ""
 
-#: eeschema/lib_symbol.cpp:1673
+#: eeschema/lib_symbol.cpp:1676
 #, fuzzy
 msgid "Pin count differs."
 msgstr "Брой отвори:"
 
-#: eeschema/lib_symbol.cpp:1689
+#: eeschema/lib_symbol.cpp:1692
 #, fuzzy, c-format
 msgid "Pin %s not found."
 msgstr "%s ненамерени"
 
-#: eeschema/lib_symbol.cpp:1697
+#: eeschema/lib_symbol.cpp:1700
 #, fuzzy, c-format
 msgid "Pin %s differs."
 msgstr "Брой отвори:"
 
-#: eeschema/lib_symbol.cpp:1724
+#: eeschema/lib_symbol.cpp:1727
 #, c-format
 msgid "%s field differs."
 msgstr ""
 
-#: eeschema/lib_symbol.cpp:1734
+#: eeschema/lib_symbol.cpp:1737
 #, fuzzy
 msgid "Field count differs."
 msgstr "Брой отвори:"
 
-#: eeschema/lib_symbol.cpp:1743
+#: eeschema/lib_symbol.cpp:1746
 #, fuzzy
 msgid "Footprint filters differs."
 msgstr "Компонентен отпечатък"
 
-#: eeschema/lib_symbol.cpp:1755
+#: eeschema/lib_symbol.cpp:1758
 #, fuzzy
 msgid "Footprint filters differ."
 msgstr "Компонентен отпечатък"
 
-#: eeschema/lib_symbol.cpp:1766
+#: eeschema/lib_symbol.cpp:1769
 #, fuzzy
 msgid "Symbol keywords differ."
 msgstr "Компонентен отпечатък"
 
-#: eeschema/lib_symbol.cpp:1775
+#: eeschema/lib_symbol.cpp:1778
 msgid "Symbol pin name offsets differ."
 msgstr ""
 
-#: eeschema/lib_symbol.cpp:1786
+#: eeschema/lib_symbol.cpp:1789
 #, fuzzy
 msgid "Show pin names settings differ."
 msgstr "Покажи име на извода"
 
-#: eeschema/lib_symbol.cpp:1795
+#: eeschema/lib_symbol.cpp:1798
 #, fuzzy
 msgid "Show pin numbers settings differ."
 msgstr "Покажи номер на извода"
 
-#: eeschema/lib_symbol.cpp:1804
+#: eeschema/lib_symbol.cpp:1807
 #, fuzzy
 msgid "Exclude from simulation settings differ."
 msgstr "Изчистване на платката"
 
-#: eeschema/lib_symbol.cpp:1813
+#: eeschema/lib_symbol.cpp:1816
 #, fuzzy
 msgid "Exclude from bill of materials settings differ."
 msgstr "Генерирай \"Таблица на използваните материали\""
 
-#: eeschema/lib_symbol.cpp:1822
+#: eeschema/lib_symbol.cpp:1825
 #, fuzzy
 msgid "Exclude from board settings differ."
 msgstr "Изчистване на платката"
@@ -19107,68 +19107,68 @@ msgstr "Компонент <%s> не е намерен в библиотека <
 msgid "Errors occurred creating symbol library %s."
 msgstr "Грешка <%s> при зареждане на символна библиотека <%s>."
 
-#: eeschema/menubar.cpp:99 eeschema/symbol_editor/menubar_symbol_editor.cpp:67
+#: eeschema/menubar.cpp:100 eeschema/symbol_editor/menubar_symbol_editor.cpp:67
 #: pcbnew/menubar_footprint_editor.cpp:65 pcbnew/menubar_pcb_editor.cpp:111
 msgid "Import"
 msgstr "Внеси"
 
-#: eeschema/menubar.cpp:102
+#: eeschema/menubar.cpp:103
 #, fuzzy
 msgid "Non-KiCad Schematic..."
 msgstr "Печат на схемата"
 
-#: eeschema/menubar.cpp:103
+#: eeschema/menubar.cpp:104
 #, fuzzy
 msgid ""
 "Replace current schematic sheet with one imported from another application"
 msgstr "Съхрани текущата схема като..."
 
-#: eeschema/menubar.cpp:108
+#: eeschema/menubar.cpp:109
 #, fuzzy
 msgid "Footprint Assignments..."
 msgstr "Документация на комп.отпечатък"
 
-#: eeschema/menubar.cpp:109 eeschema/symbol_editor/menubar_symbol_editor.cpp:71
+#: eeschema/menubar.cpp:110 eeschema/symbol_editor/menubar_symbol_editor.cpp:71
 #: pcbnew/menubar_footprint_editor.cpp:69 pcbnew/menubar_pcb_editor.cpp:116
 #, fuzzy
 msgid "Graphics..."
 msgstr "Графика"
 
-#: eeschema/menubar.cpp:119
+#: eeschema/menubar.cpp:120
 #, fuzzy
 msgid "Drawing to Clipboard"
 msgstr "Експорт на чертежите в clipboard буфера"
 
-#: eeschema/menubar.cpp:120 pcbnew/menubar_pcb_editor.cpp:114
+#: eeschema/menubar.cpp:121 pcbnew/menubar_pcb_editor.cpp:114
 #: pcbnew/pcb_edit_frame.cpp:235
 #, fuzzy
 msgid "Netlist..."
 msgstr "Списък вериги"
 
-#: eeschema/menubar.cpp:122
+#: eeschema/menubar.cpp:123
 #, fuzzy
 msgid "Symbols to Library..."
 msgstr "Отвори модул компонентен отпечатък от Библиотека"
 
-#: eeschema/menubar.cpp:124
+#: eeschema/menubar.cpp:125
 #, fuzzy
 msgid "Symbols to New Library..."
 msgstr "Отвори модул компонентен отпечатък от Библиотека"
 
-#: eeschema/menubar.cpp:198
+#: eeschema/menubar.cpp:199
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:120
 #: pcbnew/menubar_footprint_editor.cpp:124 pcbnew/menubar_pcb_editor.cpp:232
 msgid "Panels"
 msgstr ""
 
-#: eeschema/menubar.cpp:366
+#: eeschema/menubar.cpp:368
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:183
 #: pagelayout_editor/menubar.cpp:153 pcbnew/menubar_footprint_editor.cpp:246
 #: pcbnew/menubar_pcb_editor.cpp:479
 msgid "&Place"
 msgstr "Поставяне"
 
-#: eeschema/menubar.cpp:367
+#: eeschema/menubar.cpp:369
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:184
 #: pagelayout_editor/menubar.cpp:154 pcbnew/menubar_footprint_editor.cpp:247
 #: pcbnew/menubar_pcb_editor.cpp:481
@@ -19176,12 +19176,12 @@ msgstr "Поставяне"
 msgid "&Inspect"
 msgstr "Не е избрана верига"
 
-#: eeschema/menubar.cpp:368 gerbview/menubar.cpp:233 kicad/menubar.cpp:230
+#: eeschema/menubar.cpp:370 gerbview/menubar.cpp:233 kicad/menubar.cpp:230
 #: pcbnew/menubar_footprint_editor.cpp:248 pcbnew/menubar_pcb_editor.cpp:482
 msgid "&Tools"
 msgstr "Инструменти"
 
-#: eeschema/menubar.cpp:369
+#: eeschema/menubar.cpp:371
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:185
 #: pagelayout_editor/menubar.cpp:155 pcbnew/menubar_footprint_editor.cpp:249
 #: pcbnew/menubar_pcb_editor.cpp:483
@@ -19312,8 +19312,8 @@ msgstr ""
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:164
 #: eeschema/sch_plotter.cpp:240 eeschema/sch_plotter.cpp:430
-#: eeschema/sch_plotter.cpp:583 eeschema/sch_plotter.cpp:783
-#: eeschema/sch_plotter.cpp:950
+#: eeschema/sch_plotter.cpp:583 eeschema/sch_plotter.cpp:785
+#: eeschema/sch_plotter.cpp:952
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:396
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:493
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:542
@@ -19326,109 +19326,109 @@ msgstr ""
 msgid "Error: duplicate sheet names. Continue?"
 msgstr "Грешка: дубликат имена на листове. Продължение?"
 
-#: eeschema/picksymbol.cpp:126
+#: eeschema/picksymbol.cpp:127
 #, fuzzy, c-format
 msgid "Symbol unit '%s' is already placed (on sheet '%s')"
 msgstr "Филтър комп.отп. <%s> е вече определен."
 
-#: eeschema/picksymbol.cpp:129
+#: eeschema/picksymbol.cpp:130
 #, fuzzy
 msgid "Unit Already Placed"
 msgstr "Глобално преместване и поставяне"
 
-#: eeschema/picksymbol.cpp:131
+#: eeschema/picksymbol.cpp:132
 #, fuzzy, c-format
 msgid "&Swap '%s' and '%s'"
 msgstr "Добави изводи за ист"
 
-#: eeschema/picksymbol.cpp:132
+#: eeschema/picksymbol.cpp:133
 #, fuzzy, c-format
 msgid "&Duplicate '%s'"
 msgstr "Дублиране"
 
-#: eeschema/picksymbol.cpp:176
+#: eeschema/picksymbol.cpp:177
 #, fuzzy
 msgid "Change Unit"
 msgstr "Промени тип"
 
-#: eeschema/picksymbol.cpp:193
+#: eeschema/picksymbol.cpp:194
 #, fuzzy, c-format
 msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr "Не са намерени компоненти в сиволна библиотека <%s>."
 
-#: eeschema/picksymbol.cpp:216 eeschema/tools/sch_edit_tool.cpp:2002
+#: eeschema/picksymbol.cpp:217 eeschema/tools/sch_edit_tool.cpp:2002
 #, fuzzy
 msgid "Change Body Style"
 msgstr "Тип на контура:"
 
-#: eeschema/picksymbol.cpp:233
+#: eeschema/picksymbol.cpp:234
 #, fuzzy
 msgid "Set Pin Function"
 msgstr "Изтрий връзка"
 
-#: eeschema/pin_numbers.cpp:124 pcbnew/zones.h:62
+#: eeschema/pin_numbers.cpp:129 pcbnew/zones.h:62
 msgid "none"
 msgstr "без име"
 
-#: eeschema/pin_type.cpp:90 eeschema/sch_pin.cpp:2156
+#: eeschema/pin_type.cpp:90 eeschema/sch_pin.cpp:2089
 msgid "Free"
 msgstr "Свободно"
 
-#: eeschema/pin_type.cpp:91 eeschema/sch_pin.cpp:2157
+#: eeschema/pin_type.cpp:91 eeschema/sch_pin.cpp:2090
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:193
 msgid "Unspecified"
 msgstr "Неопределен"
 
-#: eeschema/pin_type.cpp:92 eeschema/sch_pin.cpp:2158
+#: eeschema/pin_type.cpp:92 eeschema/sch_pin.cpp:2091
 msgid "Power input"
 msgstr "Захранващ вход"
 
-#: eeschema/pin_type.cpp:93 eeschema/sch_pin.cpp:2159
+#: eeschema/pin_type.cpp:93 eeschema/sch_pin.cpp:2092
 msgid "Power output"
 msgstr "Захранващ изход"
 
-#: eeschema/pin_type.cpp:94 eeschema/sch_pin.cpp:2160
+#: eeschema/pin_type.cpp:94 eeschema/sch_pin.cpp:2093
 msgid "Open collector"
 msgstr "Отворен колектор"
 
-#: eeschema/pin_type.cpp:95 eeschema/sch_pin.cpp:2161
+#: eeschema/pin_type.cpp:96 eeschema/sch_pin.cpp:2094
 msgid "Open emitter"
 msgstr "Отворен емитер"
 
-#: eeschema/pin_type.cpp:96 eeschema/sch_pin.cpp:2162
+#: eeschema/pin_type.cpp:97 eeschema/sch_pin.cpp:2095
 msgid "Unconnected"
 msgstr "Несвързан"
 
-#: eeschema/pin_type.cpp:101 eeschema/sch_pin.cpp:2170
+#: eeschema/pin_type.cpp:102 eeschema/sch_pin.cpp:2103
 msgid "Inverted"
 msgstr "Инверсен"
 
-#: eeschema/pin_type.cpp:102 eeschema/sch_pin.cpp:2171
+#: eeschema/pin_type.cpp:103 eeschema/sch_pin.cpp:2104
 msgid "Clock"
 msgstr "Такт"
 
-#: eeschema/pin_type.cpp:103 eeschema/sch_pin.cpp:2172
+#: eeschema/pin_type.cpp:104 eeschema/sch_pin.cpp:2105
 msgid "Inverted clock"
 msgstr "Инверсен такт"
 
-#: eeschema/pin_type.cpp:104 eeschema/sch_pin.cpp:2173
+#: eeschema/pin_type.cpp:106 eeschema/sch_pin.cpp:2106
 msgid "Input low"
 msgstr "Негативен вход"
 
-#: eeschema/pin_type.cpp:105 eeschema/sch_pin.cpp:2174
+#: eeschema/pin_type.cpp:107 eeschema/sch_pin.cpp:2107
 msgid "Clock low"
 msgstr "Негативен такт"
 
-#: eeschema/pin_type.cpp:106 eeschema/sch_pin.cpp:2175
+#: eeschema/pin_type.cpp:108 eeschema/sch_pin.cpp:2108
 msgid "Output low"
 msgstr "Негативен изход"
 
-#: eeschema/pin_type.cpp:107 eeschema/sch_pin.cpp:2176
+#: eeschema/pin_type.cpp:110 eeschema/sch_pin.cpp:2109
 msgid "Falling edge clock"
 msgstr "Такт по падащ фронт"
 
-#: eeschema/pin_type.cpp:108 eeschema/sch_pin.cpp:2177
+#: eeschema/pin_type.cpp:112 eeschema/sch_pin.cpp:2110
 msgid "NonLogic"
 msgstr "Нелогически"
 
@@ -19465,42 +19465,42 @@ msgstr "Печат на страница %d"
 msgid "Rename %s to %s"
 msgstr "Преименувай директория"
 
-#: eeschema/project_rescue.cpp:319 eeschema/project_rescue.cpp:492
+#: eeschema/project_rescue.cpp:320 eeschema/project_rescue.cpp:496
 #, fuzzy, c-format
 msgid ""
 "Cannot rescue symbol %s which is not available in any library or the cache."
 msgstr "Компонент <%s> не е намерен в библиотека <%s>."
 
-#: eeschema/project_rescue.cpp:322 eeschema/project_rescue.cpp:498
+#: eeschema/project_rescue.cpp:323 eeschema/project_rescue.cpp:502
 #, fuzzy, c-format
 msgid "Rescue symbol %s found only in cache library to %s."
 msgstr "Компонент \"%s\" не е намерен в библиотека \"%s\"."
 
-#: eeschema/project_rescue.cpp:325 eeschema/project_rescue.cpp:504
+#: eeschema/project_rescue.cpp:326 eeschema/project_rescue.cpp:508
 #, fuzzy, c-format
 msgid "Rescue modified symbol %s to %s"
 msgstr "%s шина от (%s,%s) до (%s,%s)"
 
-#: eeschema/project_rescue.cpp:598
+#: eeschema/project_rescue.cpp:602
 msgid "This project has nothing to rescue."
 msgstr ""
 
-#: eeschema/project_rescue.cpp:613
+#: eeschema/project_rescue.cpp:617
 #, fuzzy
 msgid "No symbols were rescued."
 msgstr "Не е избран инструмент"
 
-#: eeschema/project_rescue.cpp:721
+#: eeschema/project_rescue.cpp:725
 #, fuzzy, c-format
 msgid "Failed to create symbol library file '%s'."
 msgstr "Неуспешно създаване на файл"
 
-#: eeschema/project_rescue.cpp:875
+#: eeschema/project_rescue.cpp:879
 #, fuzzy, c-format
 msgid "Failed to save rescue library %s."
 msgstr "Файл %s не е eeschema библиотека"
 
-#: eeschema/project_rescue.cpp:898
+#: eeschema/project_rescue.cpp:902
 #, fuzzy
 msgid "Error occurred saving project specific symbol library table."
 msgstr "Грешка <%s> при зареждане на символна библиотека <%s>."
@@ -19533,25 +19533,25 @@ msgid ""
 "%s"
 msgstr "Грешка <%s> при зареждане на символна библиотека <%s>."
 
-#: eeschema/sch_base_frame.cpp:587
+#: eeschema/sch_base_frame.cpp:588
 #, fuzzy
 msgid "No symbol libraries are loaded."
 msgstr "Не са заредени компонентни библиотеки."
 
-#: eeschema/sch_base_frame.cpp:632
+#: eeschema/sch_base_frame.cpp:633
 #, fuzzy
 msgid "Select Symbol Library"
 msgstr "Избери библиотека"
 
-#: eeschema/sch_base_frame.cpp:751
+#: eeschema/sch_base_frame.cpp:754
 #, fuzzy
 msgid ""
 "The library containing the current symbol has changed.\n"
 "Do you want to reload the library?"
 msgstr "Конфигурацията на проекта е променена. Да я запазя ли?"
 
-#: eeschema/sch_bitmap.cpp:309 eeschema/sch_pin.cpp:2222
-#: eeschema/sch_shape.cpp:743 eeschema/sch_symbol.cpp:2957
+#: eeschema/sch_bitmap.cpp:309 eeschema/sch_pin.cpp:2155
+#: eeschema/sch_shape.cpp:743 eeschema/sch_symbol.cpp:2967
 #: pcbnew/board_item.cpp:405 pcbnew/pcb_group.cpp:501 pcbnew/pcb_shape.cpp:906
 #: pcbnew/pcb_tablecell.cpp:182 pcbnew/pcb_track.cpp:2068 pcbnew/zone.cpp:1869
 #: pcbnew/zone.cpp:1881
@@ -19559,8 +19559,8 @@ msgstr "Конфигурацията на проекта е променена. 
 msgid "Position X"
 msgstr "Позиция X"
 
-#: eeschema/sch_bitmap.cpp:314 eeschema/sch_pin.cpp:2226
-#: eeschema/sch_shape.cpp:745 eeschema/sch_symbol.cpp:2960
+#: eeschema/sch_bitmap.cpp:314 eeschema/sch_pin.cpp:2159
+#: eeschema/sch_shape.cpp:745 eeschema/sch_symbol.cpp:2970
 #: pcbnew/board_item.cpp:408 pcbnew/pcb_group.cpp:502 pcbnew/pcb_shape.cpp:908
 #: pcbnew/pcb_tablecell.cpp:183 pcbnew/pcb_track.cpp:2072 pcbnew/zone.cpp:1875
 #: pcbnew/zone.cpp:1882
@@ -19578,31 +19578,31 @@ msgstr "Увеличи избора"
 msgid "Transform Offset Y"
 msgstr "Увеличи избора"
 
-#: eeschema/sch_bus_entry.cpp:448
+#: eeschema/sch_bus_entry.cpp:449
 msgid "Bus to Wire Entry"
 msgstr "Вход шина-проводник"
 
-#: eeschema/sch_bus_entry.cpp:454
+#: eeschema/sch_bus_entry.cpp:455
 msgid "Bus to Bus Entry"
 msgstr "Вход шина-шина"
 
-#: eeschema/sch_bus_entry.cpp:526 eeschema/sch_line.cpp:143
+#: eeschema/sch_bus_entry.cpp:527 eeschema/sch_line.cpp:143
 #: eeschema/sch_line.cpp:926 eeschema/tools/sch_edit_tool.cpp:249
 msgid "Wire"
 msgstr "Проводник"
 
-#: eeschema/sch_bus_entry.cpp:527 eeschema/sch_line.cpp:144
+#: eeschema/sch_bus_entry.cpp:528 eeschema/sch_line.cpp:144
 #: eeschema/sch_line.cpp:927
 msgid "Bus"
 msgstr "Шина"
 
-#: eeschema/sch_bus_entry.cpp:530
+#: eeschema/sch_bus_entry.cpp:531
 #, fuzzy
 msgid "Bus Entry Type"
 msgstr "Установи вход на шина /"
 
-#: eeschema/sch_bus_entry.cpp:542 eeschema/sch_junction.cpp:319
-#: eeschema/sch_label.cpp:1225 eeschema/sch_line.cpp:951
+#: eeschema/sch_bus_entry.cpp:543 eeschema/sch_junction.cpp:319
+#: eeschema/sch_label.cpp:1227 eeschema/sch_line.cpp:951
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2134 pcbnew/pad.cpp:1295
 #: pcbnew/pcb_track.cpp:1667 pcbnew/tools/pcb_control.cpp:1874
 #: pcbnew/zone.cpp:807
@@ -19610,12 +19610,12 @@ msgstr "Установи вход на шина /"
 msgid "Resolved Netclass"
 msgstr "(използвай клас на връзката)"
 
-#: eeschema/sch_connection.cpp:440
+#: eeschema/sch_connection.cpp:445
 #, fuzzy
 msgid "Connection Name"
 msgstr "Тип на връзката:"
 
-#: eeschema/sch_connection.cpp:444 eeschema/sch_connection.cpp:453
+#: eeschema/sch_connection.cpp:449 eeschema/sch_connection.cpp:458
 #, fuzzy, c-format
 msgid "Bus Alias %s Members"
 msgstr "Класове на вериги:"
@@ -19626,7 +19626,7 @@ msgstr "Класове на вериги:"
 msgid "KiCad Schematic Editor"
 msgstr "Опции на схематичния редактор"
 
-#: eeschema/sch_edit_frame.cpp:230 eeschema/sch_edit_frame.cpp:2206
+#: eeschema/sch_edit_frame.cpp:230 eeschema/sch_edit_frame.cpp:2211
 #, fuzzy
 msgid "Schematic Hierarchy"
 msgstr "Размер на схемата"
@@ -19636,7 +19636,7 @@ msgstr "Размер на схемата"
 msgid "New schematic file is unsaved"
 msgstr "Помощен файл %s не е намерен."
 
-#: eeschema/sch_edit_frame.cpp:1029
+#: eeschema/sch_edit_frame.cpp:1032
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:640
 #: eeschema/symbol_editor/symbol_editor.cpp:1532
 #: kicad/dialogs/panel_jobset.cpp:823 pagelayout_editor/pl_editor_frame.cpp:411
@@ -19646,84 +19646,84 @@ msgstr "Помощен файл %s не е намерен."
 msgid "Save changes to '%s' before closing?"
 msgstr "Съхрани файлове списък на вериги и комп.отп."
 
-#: eeschema/sch_edit_frame.cpp:1190
+#: eeschema/sch_edit_frame.cpp:1194
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
 "and create a project."
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:1360
+#: eeschema/sch_edit_frame.cpp:1363
 #, fuzzy
 msgid "New Schematic"
 msgstr "Схема"
 
-#: eeschema/sch_edit_frame.cpp:1372
+#: eeschema/sch_edit_frame.cpp:1375
 #, fuzzy, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "Филтър комп.отп. <%s> е вече определен."
 
-#: eeschema/sch_edit_frame.cpp:1397
+#: eeschema/sch_edit_frame.cpp:1400
 msgid "Open Schematic"
 msgstr "Отваряне на схема"
 
-#: eeschema/sch_edit_frame.cpp:1467
+#: eeschema/sch_edit_frame.cpp:1470
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:1494
+#: eeschema/sch_edit_frame.cpp:1497
 #, fuzzy
 msgid "Could not open CvPcb"
 msgstr "Невъзможно отваряне на библиотечен файл за PCB отпечатък <%s>."
 
-#: eeschema/sch_edit_frame.cpp:1741 eeschema/sim/simulator_frame.cpp:341
+#: eeschema/sch_edit_frame.cpp:1746 eeschema/sim/simulator_frame.cpp:341
 #: kicad/kicad_manager_frame.cpp:1034 pcbnew/footprint_edit_frame.cpp:1029
 #: pcbnew/pcb_edit_frame.cpp:1796
 #, fuzzy
 msgid "[Read Only]"
 msgstr "[Четене само]"
 
-#: eeschema/sch_edit_frame.cpp:1744 eeschema/sim/simulator_frame.cpp:344
+#: eeschema/sch_edit_frame.cpp:1749 eeschema/sim/simulator_frame.cpp:344
 #: pcbnew/footprint_edit_frame.cpp:1038 pcbnew/pcb_edit_frame.cpp:1799
 msgid "[Unsaved]"
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:1748
+#: eeschema/sch_edit_frame.cpp:1753
 #, fuzzy
 msgid "[no schematic loaded]"
 msgstr "Размер на схемата"
 
-#: eeschema/sch_edit_frame.cpp:2104
+#: eeschema/sch_edit_frame.cpp:2109
 #, fuzzy
 msgid "Schematic Cleanup"
 msgstr "Размер на схемата"
 
-#: eeschema/sch_edit_frame.cpp:2232
+#: eeschema/sch_edit_frame.cpp:2237
 #, fuzzy, c-format
 msgid "Highlighted net: %s"
 msgstr "Подчертаване на връзка"
 
-#: eeschema/sch_edit_frame.cpp:2410
+#: eeschema/sch_edit_frame.cpp:2415
 #, fuzzy
 msgid "Save Symbol to Schematic"
 msgstr "Печат на схемата"
 
-#: eeschema/sch_edit_frame.cpp:2516 eeschema/tools/ee_actions.cpp:61
+#: eeschema/sch_edit_frame.cpp:2521 eeschema/tools/ee_actions.cpp:61
 #, fuzzy
 msgid "Compare Symbol with Library"
 msgstr "Отвори модул компонентен отпечатък от Библиотека"
 
-#: eeschema/sch_field.cpp:1119
+#: eeschema/sch_field.cpp:1122
 #, fuzzy, c-format
 msgid "Field %s '%s'"
 msgstr "Поле %s %s"
 
-#: eeschema/sch_field.cpp:1129
+#: eeschema/sch_field.cpp:1132
 #, fuzzy
 msgid "Symbol Field"
 msgstr "Системни полета:"
 
-#: eeschema/sch_field.cpp:1134 eeschema/sch_pin.cpp:1584
+#: eeschema/sch_field.cpp:1137 eeschema/sch_pin.cpp:1583
 #: gerbview/gerber_draw_item.cpp:729 gerbview/gerber_draw_item.cpp:730
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
 #: pcbnew/pcb_tablecell.cpp:109 pcbnew/pcb_text.cpp:282 pcbnew/pcb_text.cpp:286
@@ -19734,7 +19734,7 @@ msgstr "Системни полета:"
 msgid "Yes"
 msgstr "Да"
 
-#: eeschema/sch_field.cpp:1134 eeschema/sch_pin.cpp:1584
+#: eeschema/sch_field.cpp:1137 eeschema/sch_pin.cpp:1583
 #: gerbview/gerber_draw_item.cpp:729 gerbview/gerber_draw_item.cpp:730
 #: pcbnew/pcb_tablecell.cpp:109 pcbnew/pcb_text.cpp:282 pcbnew/pcb_text.cpp:286
 #: pcbnew/pcb_textbox.cpp:488 pcbnew/tools/drawing_stackup_table_tool.cpp:458
@@ -19744,32 +19744,32 @@ msgstr "Да"
 msgid "No"
 msgstr "Не"
 
-#: eeschema/sch_field.cpp:1150 eeschema/sch_text.cpp:653
+#: eeschema/sch_field.cpp:1153 eeschema/sch_text.cpp:653
 #, fuzzy
 msgid "H Justification"
 msgstr "Подравняване:"
 
-#: eeschema/sch_field.cpp:1160 eeschema/sch_text.cpp:663
+#: eeschema/sch_field.cpp:1163 eeschema/sch_text.cpp:663
 #, fuzzy
 msgid "V Justification"
 msgstr "Подравняване:"
 
-#: eeschema/sch_field.cpp:1181
+#: eeschema/sch_field.cpp:1184
 #, fuzzy, c-format
 msgid "Go to Page %s (%s)"
 msgstr "Стойност"
 
-#: eeschema/sch_field.cpp:1187
+#: eeschema/sch_field.cpp:1190
 #, fuzzy
 msgid "Back to Previous Selected Sheet"
 msgstr "Създай PNG файл от екрана"
 
-#: eeschema/sch_field.cpp:1274 eeschema/sch_label.cpp:205
+#: eeschema/sch_field.cpp:1277 eeschema/sch_label.cpp:205
 #, fuzzy
 msgid "Sheet References"
 msgstr "EESchema настройки"
 
-#: eeschema/sch_field.cpp:1764
+#: eeschema/sch_field.cpp:1771
 #, fuzzy
 msgid "Show Field Name"
 msgstr "Име на поле"
@@ -20596,14 +20596,14 @@ msgstr "Помощен файл %s не е намерен."
 msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Неизвестна форма на подложка"
 
-#: eeschema/sch_item.cpp:512 eeschema/sch_item.cpp:563
-#: eeschema/sch_pin.cpp:1575 eeschema/sch_symbol.cpp:3029
+#: eeschema/sch_item.cpp:513 eeschema/sch_item.cpp:564
+#: eeschema/sch_pin.cpp:1574 eeschema/sch_symbol.cpp:3039
 #: eeschema/tools/sch_edit_tool.cpp:142
 #, fuzzy
 msgid "Body Style"
 msgstr "Тип на контура:"
 
-#: eeschema/sch_item.cpp:530 pcbnew/board_item.cpp:413
+#: eeschema/sch_item.cpp:531 pcbnew/board_item.cpp:413
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:127
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:163
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:40
@@ -20642,22 +20642,22 @@ msgstr "Диаметър"
 msgid "Tri-State"
 msgstr "Три-степенен"
 
-#: eeschema/sch_label.cpp:1184
+#: eeschema/sch_label.cpp:1186
 #, fuzzy
 msgid "Hierarchical Sheet Pin"
 msgstr "Йерархичен извод на лист %s"
 
-#: eeschema/sch_label.cpp:1197 eeschema/sch_tablecell.cpp:128
+#: eeschema/sch_label.cpp:1199 eeschema/sch_tablecell.cpp:128
 #: eeschema/sch_text.cpp:637 eeschema/sch_textbox.cpp:543
 msgid "Bold Italic"
 msgstr "Bold Italic"
 
-#: eeschema/sch_label.cpp:1212 eeschema/sch_text.cpp:667
+#: eeschema/sch_label.cpp:1214 eeschema/sch_text.cpp:667
 #, fuzzy
 msgid "Justification"
 msgstr "Подравняване:"
 
-#: eeschema/sch_label.cpp:1330 eeschema/sch_line.cpp:890
+#: eeschema/sch_label.cpp:1333 eeschema/sch_line.cpp:890
 #: pcbnew/board_connected_item.cpp:187
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
 #: pcbnew/generators/pcb_tuning_pattern.cpp:478
@@ -20671,38 +20671,38 @@ msgstr "Подравняване:"
 msgid "Net"
 msgstr "Верига"
 
-#: eeschema/sch_label.cpp:1334 eeschema/sch_line.cpp:894
+#: eeschema/sch_label.cpp:1337 eeschema/sch_line.cpp:894
 #: eeschema/sch_rule_area.cpp:386
 #, fuzzy
 msgid "Resolved netclass"
 msgstr "(използвай клас на връзката)"
 
-#: eeschema/sch_label.cpp:1352
+#: eeschema/sch_label.cpp:1355
 #, fuzzy
 msgid "Hierarchical Labels"
 msgstr "Йерархичен етикет"
 
-#: eeschema/sch_label.cpp:1484
+#: eeschema/sch_label.cpp:1487
 #, fuzzy, c-format
 msgid "Label '%s'"
 msgstr "Етикетl %s"
 
-#: eeschema/sch_label.cpp:1761
+#: eeschema/sch_label.cpp:1765
 #, fuzzy, c-format
 msgid "Directive Label [%s %s]"
 msgstr "Изтрий етикет"
 
-#: eeschema/sch_label.cpp:2004
+#: eeschema/sch_label.cpp:2008
 #, fuzzy, c-format
 msgid "Global Label '%s'"
 msgstr "Глобален етикетl %s"
 
-#: eeschema/sch_label.cpp:2151
+#: eeschema/sch_label.cpp:2155
 #, fuzzy, c-format
 msgid "Hierarchical Label '%s'"
 msgstr "Йерархичен етикетl %s"
 
-#: eeschema/sch_label.cpp:2263
+#: eeschema/sch_label.cpp:2268
 #, fuzzy
 msgid "Pin length"
 msgstr "Дължина на линия"
@@ -20772,25 +20772,25 @@ msgstr "Стил на заливка"
 msgid "from netclass"
 msgstr "От клас на веригата"
 
-#: eeschema/sch_marker.cpp:363 pcbnew/pcb_marker.cpp:200
+#: eeschema/sch_marker.cpp:365 pcbnew/pcb_marker.cpp:200
 #, fuzzy
 msgid "Violation"
 msgstr "Старт на симулатор"
 
-#: eeschema/sch_marker.cpp:368 eeschema/sch_marker.cpp:371
-#: eeschema/sch_marker.cpp:374 pcbnew/pcb_marker.cpp:205
+#: eeschema/sch_marker.cpp:370 eeschema/sch_marker.cpp:373
+#: eeschema/sch_marker.cpp:376 pcbnew/pcb_marker.cpp:205
 #: pcbnew/pcb_marker.cpp:208 pcbnew/pcb_marker.cpp:211
 #, fuzzy
 msgid "Severity"
 msgstr "Върни"
 
-#: eeschema/sch_marker.cpp:407 pcbnew/dialogs/dialog_board_reannotate.cpp:99
+#: eeschema/sch_marker.cpp:409 pcbnew/dialogs/dialog_board_reannotate.cpp:99
 #: pcbnew/pcb_marker.cpp:244
 #, fuzzy
 msgid "Excluded"
 msgstr "Значение на полето"
 
-#: eeschema/sch_marker.h:101
+#: eeschema/sch_marker.h:102
 msgid "ERC Marker"
 msgstr "ERC Маркер"
 
@@ -20798,37 +20798,37 @@ msgstr "ERC Маркер"
 msgid "No Connect"
 msgstr "Несвързан"
 
-#: eeschema/sch_pin.cpp:1593
+#: eeschema/sch_pin.cpp:1592
 #, fuzzy
 msgid "Pos X"
 msgstr "Поз"
 
-#: eeschema/sch_pin.cpp:1594
+#: eeschema/sch_pin.cpp:1593
 #, fuzzy
 msgid "Pos Y"
 msgstr "Поз"
 
-#: eeschema/sch_pin.cpp:1855
+#: eeschema/sch_pin.cpp:1854
 #, fuzzy, c-format
 msgid "Pin %s [%s, %s, %s]"
 msgstr "Извод %s, %s, %s"
 
-#: eeschema/sch_pin.cpp:1863
+#: eeschema/sch_pin.cpp:1862
 #, fuzzy, c-format
 msgid "Pin %s [%s, %s]"
 msgstr "Извод %s, %s, %s"
 
-#: eeschema/sch_pin.cpp:1873
+#: eeschema/sch_pin.cpp:1872
 #, fuzzy, c-format
 msgid "Hidden pin %s [%s, %s, %s]"
 msgstr "Извод %s, %s, %s"
 
-#: eeschema/sch_pin.cpp:1881
+#: eeschema/sch_pin.cpp:1880
 #, fuzzy, c-format
 msgid "Hidden pin %s [%s, %s]"
 msgstr "Извод %s, %s, %s"
 
-#: eeschema/sch_pin.cpp:2204 pcbnew/pad.cpp:1286 pcbnew/pad.cpp:2594
+#: eeschema/sch_pin.cpp:2137 pcbnew/pad.cpp:1286 pcbnew/pad.cpp:2594
 #, fuzzy
 msgid "Pin Name"
 msgstr "Име на извод"
@@ -20844,13 +20844,13 @@ msgid "Plotted to '%s'.\n"
 msgstr "Неуспешно отваряне"
 
 #: eeschema/sch_plotter.cpp:404 eeschema/sch_plotter.cpp:564
-#: eeschema/sch_plotter.cpp:758 eeschema/sch_plotter.cpp:921
+#: eeschema/sch_plotter.cpp:760 eeschema/sch_plotter.cpp:923
 #: pcbnew/pcb_plotter.cpp:237
 #, fuzzy, c-format
 msgid "Plotted to '%s'."
 msgstr "Неуспешно отваряне"
 
-#: eeschema/sch_plotter.cpp:1047
+#: eeschema/sch_plotter.cpp:1049
 #, fuzzy, c-format
 msgid "Failed to write plot files to folder '%s'."
 msgstr "Нямате права за запис в папка <%s>."
@@ -20890,36 +20890,36 @@ msgstr "Различни стойности за %s%d%c (%s) и %s%d%c (%s)"
 msgid "Schematic rule area"
 msgstr "Размер на схемата"
 
-#: eeschema/sch_screen.cpp:700 eeschema/sch_screen.cpp:792
+#: eeschema/sch_screen.cpp:705 eeschema/sch_screen.cpp:797
 #, fuzzy, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
 msgstr "Файл <%s> не е валиден библиотечен файл компонентна документация."
 
-#: eeschema/sch_screen.cpp:716
+#: eeschema/sch_screen.cpp:721
 #, c-format
 msgid ""
 "Schematic symbol reference '%s' library identifier is not valid. Unable to "
 "link library symbol."
 msgstr ""
 
-#: eeschema/sch_screen.cpp:732
+#: eeschema/sch_screen.cpp:737
 #, c-format
 msgid ""
 "Symbol library '%s' not found and no fallback cache library available.  "
 "Unable to link library symbol."
 msgstr ""
 
-#: eeschema/sch_screen.cpp:751
+#: eeschema/sch_screen.cpp:756
 #, fuzzy, c-format
 msgid "I/O error %s resolving library symbol %s"
 msgstr "Грешка при съхранение на библиотечен файл \""
 
-#: eeschema/sch_screen.cpp:771
+#: eeschema/sch_screen.cpp:776
 #, c-format
 msgid "Falling back to cache to set symbol '%s:%s' link '%s'."
 msgstr ""
 
-#: eeschema/sch_screen.cpp:803
+#: eeschema/sch_screen.cpp:808
 #, fuzzy, c-format
 msgid "No library symbol found for schematic symbol '%s %s'."
 msgstr "Не са намерени компоненти в сиволна библиотека <%s>."
@@ -20959,84 +20959,84 @@ msgstr "Фонов цвят"
 msgid "Fill color"
 msgstr "Определени отвори"
 
-#: eeschema/sch_sheet.cpp:852 eeschema/sch_sheet.cpp:1712 pcbnew/zone.cpp:1859
+#: eeschema/sch_sheet.cpp:853 eeschema/sch_sheet.cpp:1714 pcbnew/zone.cpp:1859
 #, fuzzy
 msgid "Sheet Name"
 msgstr "Име на лист"
 
-#: eeschema/sch_sheet.cpp:860
+#: eeschema/sch_sheet.cpp:861
 #, fuzzy
 msgid "Hierarchical Path"
 msgstr "Йерархичен етикет"
 
-#: eeschema/sch_sheet.cpp:864
+#: eeschema/sch_sheet.cpp:865
 #, fuzzy
 msgid "File Name"
 msgstr "Име на файл"
 
-#: eeschema/sch_sheet.cpp:871 eeschema/sch_symbol.cpp:2027
+#: eeschema/sch_sheet.cpp:872 eeschema/sch_symbol.cpp:2028
 #: eeschema/sch_text.cpp:633 eeschema/sch_textbox.cpp:539
 #, fuzzy
 msgid "Simulation"
 msgstr "Старт на симулатор"
 
-#: eeschema/sch_sheet.cpp:874 eeschema/sch_symbol.cpp:2030
+#: eeschema/sch_sheet.cpp:875 eeschema/sch_symbol.cpp:2031
 msgid "BOM"
 msgstr "BOM"
 
-#: eeschema/sch_sheet.cpp:886 eeschema/sch_symbol.cpp:2042
+#: eeschema/sch_sheet.cpp:887 eeschema/sch_symbol.cpp:2043
 #: eeschema/sch_text.cpp:633 eeschema/sch_textbox.cpp:539
 #, fuzzy
 msgid "Exclude from"
 msgstr "Изчистване на платката"
 
-#: eeschema/sch_sheet.cpp:1178
+#: eeschema/sch_sheet.cpp:1179
 #, fuzzy, c-format
 msgid "Hierarchical Sheet %s"
 msgstr "Йерархичен лист"
 
-#: eeschema/sch_sheet.cpp:1715 eeschema/sch_table.cpp:642
+#: eeschema/sch_sheet.cpp:1717 eeschema/sch_table.cpp:642
 #: pcbnew/pcb_table.cpp:565 pcbnew/pcb_tablecell.cpp:190
 #: pcbnew/pcb_textbox.cpp:835
 #, fuzzy
 msgid "Border Width"
 msgstr "Ширина на контура на платката"
 
-#: eeschema/sch_sheet.cpp:1719 eeschema/sch_table.cpp:651
+#: eeschema/sch_sheet.cpp:1721 eeschema/sch_table.cpp:651
 #: pcbnew/pcb_table.cpp:574
 #, fuzzy
 msgid "Border Color"
 msgstr "Медни слоеве"
 
-#: eeschema/sch_sheet.cpp:1722
+#: eeschema/sch_sheet.cpp:1724
 #, fuzzy
 msgid "Background Color"
 msgstr "Фонов цвят"
 
-#: eeschema/sch_sheet.cpp:1727 eeschema/sch_symbol.cpp:1099
-#: eeschema/sch_symbol.cpp:3035
+#: eeschema/sch_sheet.cpp:1729 eeschema/sch_symbol.cpp:1100
+#: eeschema/sch_symbol.cpp:3045
 #, fuzzy
 msgid "Exclude From Board"
 msgstr "Изчистване на платката"
 
-#: eeschema/sch_sheet.cpp:1730 eeschema/sch_symbol.cpp:3038
+#: eeschema/sch_sheet.cpp:1732 eeschema/sch_symbol.cpp:3048
 #, fuzzy
 msgid "Exclude From Simulation"
 msgstr "Начертай конт.пл. на обозн. слой"
 
-#: eeschema/sch_sheet.cpp:1733 eeschema/sch_symbol.cpp:1100
-#: eeschema/sch_symbol.cpp:3041 pcbnew/footprint.cpp:4116
+#: eeschema/sch_sheet.cpp:1736 eeschema/sch_symbol.cpp:1101
+#: eeschema/sch_symbol.cpp:3051 pcbnew/footprint.cpp:4116
 #, fuzzy
 msgid "Exclude From Bill of Materials"
 msgstr "Генерирай \"Таблица на използваните материали\""
 
-#: eeschema/sch_sheet.cpp:1736 eeschema/sch_symbol.cpp:1101
-#: eeschema/sch_symbol.cpp:3044 pcbnew/footprint.cpp:4119
+#: eeschema/sch_sheet.cpp:1740 eeschema/sch_symbol.cpp:1102
+#: eeschema/sch_symbol.cpp:3054 pcbnew/footprint.cpp:4119
 #, fuzzy
 msgid "Do not Populate"
 msgstr "Не експортирай"
 
-#: eeschema/sch_sheet_path.cpp:58 include/board_item.h:465
+#: eeschema/sch_sheet_path.cpp:59 include/board_item.h:465
 #, fuzzy
 msgid "(Deleted Item)"
 msgstr "Изтриване на артикул"
@@ -21046,54 +21046,54 @@ msgstr "Изтриване на артикул"
 msgid "Hierarchical Sheet Pin %s"
 msgstr "Йерархичен извод на лист %s"
 
-#: eeschema/sch_symbol.cpp:2053
+#: eeschema/sch_symbol.cpp:2054
 msgid "Power symbol"
 msgstr "Захранващ символ"
 
-#: eeschema/sch_symbol.cpp:2070
+#: eeschema/sch_symbol.cpp:2074
 msgid "flags"
 msgstr ""
 
-#: eeschema/sch_symbol.cpp:2075
+#: eeschema/sch_symbol.cpp:2079
 #, fuzzy
 msgid "Missing parent"
 msgstr "Липсва:"
 
-#: eeschema/sch_symbol.cpp:2090
+#: eeschema/sch_symbol.cpp:2094
 #, fuzzy
 msgid "Undefined!!!"
 msgstr "Неопределен(а)"
 
-#: eeschema/sch_symbol.cpp:2098
+#: eeschema/sch_symbol.cpp:2102
 #, fuzzy
 msgid "<Unknown>"
 msgstr "Неизвестна форма на подложка"
 
-#: eeschema/sch_symbol.cpp:2121
+#: eeschema/sch_symbol.cpp:2127
 #, fuzzy
 msgid "No library defined!"
 msgstr "Не е указана библиотека."
 
-#: eeschema/sch_symbol.cpp:2123
+#: eeschema/sch_symbol.cpp:2129
 #, fuzzy, c-format
 msgid "Symbol not found in %s!"
 msgstr "ненамерен."
 
-#: eeschema/sch_symbol.cpp:2375
+#: eeschema/sch_symbol.cpp:2382
 #, fuzzy, c-format
 msgid "Symbol %s [%s]"
 msgstr "Компонент %s, %s"
 
-#: eeschema/sch_symbol.cpp:2967
+#: eeschema/sch_symbol.cpp:2977
 #, fuzzy
 msgid "Mirror X"
 msgstr "Огледално по Y"
 
-#: eeschema/sch_symbol.cpp:2969
+#: eeschema/sch_symbol.cpp:2979
 msgid "Mirror Y"
 msgstr "Огледално по Y"
 
-#: eeschema/sch_symbol.cpp:2997 pcbnew/footprint.cpp:4093
+#: eeschema/sch_symbol.cpp:3007 pcbnew/footprint.cpp:4093
 #, fuzzy
 msgid "Library Link"
 msgstr "Библиотека"
@@ -21406,7 +21406,7 @@ msgid ""
 "file version resulting in  missing symbol instance data.  This will result "
 "in all of the symbols in the loaded schematic to use either the default "
 "instance setting or fall back to the library symbol settings.  Loading the "
-"project that uses this schematic file and saving to the lastest file version "
+"project that uses this schematic file and saving to the latest file version "
 "will resolve this issue.\n"
 "\n"
 "Do you wish to continue?"
@@ -21459,7 +21459,7 @@ msgstr ""
 msgid "Cannot create the schematic image"
 msgstr "Обозначи схемата"
 
-#: eeschema/sheet.cpp:772
+#: eeschema/sheet.cpp:773
 #, c-format
 msgid ""
 "The file name '%s' can cause issues with an existing file name\n"
@@ -21471,12 +21471,12 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 
-#: eeschema/sheet.cpp:781
+#: eeschema/sheet.cpp:782
 #, fuzzy
 msgid "Do not show this message again."
 msgstr "Не показвай скритите изводи"
 
-#: eeschema/sheet.cpp:782
+#: eeschema/sheet.cpp:783
 #, fuzzy
 msgid "Create New Sheet"
 msgstr "Създай нов проект"
@@ -22714,7 +22714,7 @@ msgid ""
 "%s\n"
 msgstr "Грешка <%s> при зареждане на символна библиотека <%s>."
 
-#: eeschema/symbol_checker.cpp:76
+#: eeschema/symbol_checker.cpp:78
 #, fuzzy, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
@@ -22723,7 +22723,7 @@ msgstr ""
 "<b>дубликат на извод %s</b> \"%s\" на позиция <b>(%.3f, %.3f)</b> , конфликт "
 "с извод %s \"%s\" на позиция <b>(%.3f, %.3f)</b>"
 
-#: eeschema/symbol_checker.cpp:91
+#: eeschema/symbol_checker.cpp:93
 #, fuzzy, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
@@ -22732,7 +22732,7 @@ msgstr ""
 "<b>дубликат на извод %s</b> \"%s\" на позиция <b>(%.3f, %.3f)</b> , конфликт "
 "с извод %s \"%s\" на позиция <b>(%.3f, %.3f)</b>"
 
-#: eeschema/symbol_checker.cpp:111
+#: eeschema/symbol_checker.cpp:113
 #, fuzzy, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
@@ -22741,7 +22741,7 @@ msgstr ""
 "<b>дубликат на извод %s</b> \"%s\" на позиция <b>(%.3f, %.3f)</b> , конфликт "
 "с извод %s \"%s\" на позиция <b>(%.3f, %.3f)</b>"
 
-#: eeschema/symbol_checker.cpp:124
+#: eeschema/symbol_checker.cpp:126
 #, fuzzy, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
@@ -22750,38 +22750,38 @@ msgstr ""
 "<b>дубликат на извод %s</b> \"%s\" на позиция <b>(%.3f, %.3f)</b> , конфликт "
 "с извод %s \"%s\" на позиция <b>(%.3f, %.3f)</b>"
 
-#: eeschema/symbol_checker.cpp:176
+#: eeschema/symbol_checker.cpp:180
 #, c-format
 msgid ""
 "<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues "
 "if saved in a symbol library"
 msgstr ""
 
-#: eeschema/symbol_checker.cpp:204
+#: eeschema/symbol_checker.cpp:208
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
 msgstr ""
 
-#: eeschema/symbol_checker.cpp:210
+#: eeschema/symbol_checker.cpp:214
 msgid "<b>A Power Symbol should not have DeMorgan variants</b><br><br>"
 msgstr ""
 
-#: eeschema/symbol_checker.cpp:216
+#: eeschema/symbol_checker.cpp:220
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
 msgstr ""
 
-#: eeschema/symbol_checker.cpp:225
+#: eeschema/symbol_checker.cpp:229
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only an input or output power pin has "
 "meaning<br><br>"
 msgstr ""
 
-#: eeschema/symbol_checker.cpp:232
+#: eeschema/symbol_checker.cpp:236
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Invisible input power pins are no longer "
 "required<br><br>"
 msgstr ""
 
-#: eeschema/symbol_checker.cpp:257
+#: eeschema/symbol_checker.cpp:261
 #, fuzzy, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in %s body "
@@ -22789,7 +22789,7 @@ msgid ""
 msgstr ""
 "<b>Извод %s не е по решетката</b> \"%s\" с координати <b>(%.3f, %.3f)</b>"
 
-#: eeschema/symbol_checker.cpp:267
+#: eeschema/symbol_checker.cpp:271
 #, fuzzy, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
@@ -22797,31 +22797,31 @@ msgid ""
 msgstr ""
 "<b>Извод %s не е по решетката</b> \"%s\" с координати <b>(%.3f, %.3f)</b>"
 
-#: eeschema/symbol_checker.cpp:281
+#: eeschema/symbol_checker.cpp:285
 #, fuzzy, c-format
 msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr ""
 "<b>Извод %s не е по решетката</b> \"%s\" с координати <b>(%.3f, %.3f)</b>"
 
-#: eeschema/symbol_checker.cpp:289
+#: eeschema/symbol_checker.cpp:294
 #, fuzzy, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
 "<b>Извод %s не е по решетката</b> \"%s\" с координати <b>(%.3f, %.3f)</b>"
 
-#: eeschema/symbol_checker.cpp:300
+#: eeschema/symbol_checker.cpp:305
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 msgstr ""
 
-#: eeschema/symbol_checker.cpp:315
+#: eeschema/symbol_checker.cpp:320
 #, fuzzy, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of %s body style."
 msgstr ""
 "<b>Извод %s не е по решетката</b> \"%s\" с координати <b>(%.3f, %.3f)</b>"
 
-#: eeschema/symbol_checker.cpp:325
+#: eeschema/symbol_checker.cpp:330
 #, fuzzy, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c of %s body "
@@ -22829,25 +22829,25 @@ msgid ""
 msgstr ""
 "<b>Извод %s не е по решетката</b> \"%s\" с координати <b>(%.3f, %.3f)</b>"
 
-#: eeschema/symbol_checker.cpp:339
+#: eeschema/symbol_checker.cpp:344
 #, fuzzy, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr ""
 "<b>Извод %s не е по решетката</b> \"%s\" с координати <b>(%.3f, %.3f)</b>"
 
-#: eeschema/symbol_checker.cpp:347
+#: eeschema/symbol_checker.cpp:352
 #, fuzzy, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
 "<b>Извод %s не е по решетката</b> \"%s\" с координати <b>(%.3f, %.3f)</b>"
 
-#: eeschema/symbol_checker.cpp:389
+#: eeschema/symbol_checker.cpp:394
 #, fuzzy, c-format
 msgid "<b>Graphic circle has radius = 0</b> at location <b>(%s, %s)</b>."
 msgstr ""
 "<b>Извод %s не е по решетката</b> \"%s\" с координати <b>(%.3f, %.3f)</b>"
 
-#: eeschema/symbol_checker.cpp:400
+#: eeschema/symbol_checker.cpp:406
 #, fuzzy, c-format
 msgid "<b>Graphic rectangle has size 0</b> at location <b>(%s, %s)</b>."
 msgstr ""
@@ -23280,7 +23280,7 @@ msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
 msgstr "Не са намерени компоненти в сиволна библиотека <%s>."
 
-#: eeschema/symbol_library.cpp:597 eeschema/symbol_tree_model_adapter.cpp:222
+#: eeschema/symbol_library.cpp:598 eeschema/symbol_tree_model_adapter.cpp:222
 #, fuzzy, c-format
 msgid "Error loading symbol library '%s'."
 msgstr "Грешка <%s> при зареждане на символна библиотека <%s>."
@@ -23341,7 +23341,7 @@ msgstr "Неуспешно отваряне"
 msgid "KiCad Symbol Library Browser"
 msgstr "Библиотечен обзор"
 
-#: eeschema/symbol_viewer_frame.cpp:1106 pcbnew/footprint_viewer_frame.cpp:1026
+#: eeschema/symbol_viewer_frame.cpp:1111 pcbnew/footprint_viewer_frame.cpp:1026
 #: pcbnew/footprint_viewer_frame.cpp:1031
 #, fuzzy
 msgid "[no library selected]"
@@ -23402,17 +23402,17 @@ msgstr "Промени към йерархичен етикет"
 msgid "Break sheet pin and hierarchical label association(s)"
 msgstr ""
 
-#: eeschema/toolbars_symbol_viewer.cpp:51
+#: eeschema/toolbars_symbol_viewer.cpp:52
 #, fuzzy
 msgid "Display previous symbol"
 msgstr "Покажи предходен елемент"
 
-#: eeschema/toolbars_symbol_viewer.cpp:55
+#: eeschema/toolbars_symbol_viewer.cpp:56
 #, fuzzy
 msgid "Display next symbol"
 msgstr "Покажи следващ елемент"
 
-#: eeschema/toolbars_symbol_viewer.cpp:108
+#: eeschema/toolbars_symbol_viewer.cpp:109
 #, fuzzy
 msgid "Symbol Viewer"
 msgstr "Редактирай преференции на размерите"
@@ -27254,7 +27254,7 @@ msgstr "Подчертаване на връзка"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:290
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:352
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:231
-#: pcbnew/dialogs/panel_setup_layers.cpp:1125
+#: pcbnew/dialogs/panel_setup_layers.cpp:1124
 #: pcbnew/widgets/appearance_controls.cpp:1025
 #: pcbnew/widgets/appearance_controls_base.cpp:32
 #: pcbnew/zone_manager/model_zones_overview_table.h:77
@@ -30957,7 +30957,7 @@ msgstr "Специфично съпротивление в ohms * meters"
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:136
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:158
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:96
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:887
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:879
 msgid "..."
 msgstr "..."
 
@@ -31562,7 +31562,7 @@ msgid "Nickel"
 msgstr "Име на верига"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:53
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:862
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:854
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:30
 #, fuzzy
 msgid "Copper"
@@ -33390,7 +33390,7 @@ msgid "Add Dielectric Layer"
 msgstr "Избор на слой:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:330
-#: pcbnew/dialogs/panel_setup_layers.cpp:1152
+#: pcbnew/dialogs/panel_setup_layers.cpp:1151
 #, fuzzy
 msgid "Select layer to add:"
 msgstr "Избор на библиотека за обзор"
@@ -33410,22 +33410,22 @@ msgstr "Относителна диелектрична константа"
 msgid "Select layer to remove:"
 msgstr "Избор на библиотека за обзор"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1178
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1170
 msgid ""
 "Incorrect value for Epsilon R (Epsilon R must be positive or null if not "
 "used)"
 msgstr ""
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1199
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1191
 msgid ""
 "Incorrect value for Loss tg (Loss tg must be positive or null if not used)"
 msgstr ""
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1245
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1237
 msgid "A layer thickness is < 0. Fix it"
 msgstr ""
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1695
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1687
 #, fuzzy
 msgid "Custom..."
 msgstr "По избор"
@@ -41807,125 +41807,125 @@ msgstr "Търсене на комп.отп."
 msgid "Apply board defaults to non-copper footprint shapes"
 msgstr "Търсене на комп.отп."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:77
-#: pcbnew/dialogs/panel_setup_layers.cpp:284
+#: pcbnew/dialogs/panel_setup_layers.cpp:87
+#: pcbnew/dialogs/panel_setup_layers.cpp:293
 #, fuzzy
 msgid "Off-board, testing"
 msgstr "Off-board, manufacturing"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:87
+#: pcbnew/dialogs/panel_setup_layers.cpp:97
 #, fuzzy
 msgid "If you want a fabrication layer for the front side of the board"
 msgstr "Ако е необходим обозначаващ слой на фронталната страна на платката"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:97
-#: pcbnew/dialogs/panel_setup_layers.cpp:266
+#: pcbnew/dialogs/panel_setup_layers.cpp:107
+#: pcbnew/dialogs/panel_setup_layers.cpp:275
 msgid "Off-board, manufacturing"
 msgstr "Off-board, manufacturing"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:105
+#: pcbnew/dialogs/panel_setup_layers.cpp:115
 msgid "If you want an adhesive template for the front side of the board"
 msgstr "Ако искате адхесив за фронталната страна на платката"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:115
-#: pcbnew/dialogs/panel_setup_layers.cpp:133
-#: pcbnew/dialogs/panel_setup_layers.cpp:151
-#: pcbnew/dialogs/panel_setup_layers.cpp:169
-#: pcbnew/dialogs/panel_setup_layers.cpp:194
-#: pcbnew/dialogs/panel_setup_layers.cpp:212
-#: pcbnew/dialogs/panel_setup_layers.cpp:230
-#: pcbnew/dialogs/panel_setup_layers.cpp:248
+#: pcbnew/dialogs/panel_setup_layers.cpp:125
+#: pcbnew/dialogs/panel_setup_layers.cpp:143
+#: pcbnew/dialogs/panel_setup_layers.cpp:161
+#: pcbnew/dialogs/panel_setup_layers.cpp:179
+#: pcbnew/dialogs/panel_setup_layers.cpp:203
+#: pcbnew/dialogs/panel_setup_layers.cpp:221
+#: pcbnew/dialogs/panel_setup_layers.cpp:239
+#: pcbnew/dialogs/panel_setup_layers.cpp:257
 msgid "On-board, non-copper"
 msgstr "На платката, немеден"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:123
+#: pcbnew/dialogs/panel_setup_layers.cpp:133
 #, fuzzy
 msgid "If you want a solder paste layer for front side of the board"
 msgstr "Ако искате припойна паста за фронталната страна на платката"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:141
+#: pcbnew/dialogs/panel_setup_layers.cpp:151
 msgid "If you want a silk screen layer for the front side of the board"
 msgstr "Ако е необходим обозначаващ слой на фронталната страна на платката"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:159
+#: pcbnew/dialogs/panel_setup_layers.cpp:169
 msgid "If you want a solder mask layer for the front of the board"
 msgstr "Ако искате припойна маска за фринталната страна на платката"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:184
+#: pcbnew/dialogs/panel_setup_layers.cpp:193
 msgid "If you want a solder mask layer for the back side of the board"
 msgstr "Ако искате припойна маска за задната страна на платката"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:202
+#: pcbnew/dialogs/panel_setup_layers.cpp:211
 msgid "If you want a silk screen layer for the back side of the board"
 msgstr "Ако е необходим обозначаващ слой на задната страна на платката"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:220
+#: pcbnew/dialogs/panel_setup_layers.cpp:229
 msgid "If you want a solder paste layer for the back side of the board"
 msgstr "Ако искате припойна паста за задната страна на платката"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:238
+#: pcbnew/dialogs/panel_setup_layers.cpp:247
 msgid "If you want an adhesive layer for the back side of the board"
 msgstr "Ако искате адхесив слой за задната страна на платката"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:256
+#: pcbnew/dialogs/panel_setup_layers.cpp:265
 #, fuzzy
 msgid "If you want a fabrication layer for the back side of the board"
 msgstr "Ако е необходим обозначаващ слой на задната страна на платката"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:302
+#: pcbnew/dialogs/panel_setup_layers.cpp:311
 msgid "Board contour"
 msgstr "Контур на платката"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:319
+#: pcbnew/dialogs/panel_setup_layers.cpp:328
 #, fuzzy
 msgid "Board contour setback"
 msgstr "Контур на платката"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:333
-#: pcbnew/dialogs/panel_setup_layers.cpp:347
-#: pcbnew/dialogs/panel_setup_layers.cpp:363
-#: pcbnew/dialogs/panel_setup_layers.cpp:379
-#: pcbnew/dialogs/panel_setup_layers.cpp:477
+#: pcbnew/dialogs/panel_setup_layers.cpp:342
+#: pcbnew/dialogs/panel_setup_layers.cpp:356
+#: pcbnew/dialogs/panel_setup_layers.cpp:372
+#: pcbnew/dialogs/panel_setup_layers.cpp:388
+#: pcbnew/dialogs/panel_setup_layers.cpp:481
 msgid "Auxiliary"
 msgstr "Спомагателен"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:354
+#: pcbnew/dialogs/panel_setup_layers.cpp:363
 msgid "If you want a separate layer for comments or notes"
 msgstr "Ако искате отделен слой за коментар и бележки"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:370
+#: pcbnew/dialogs/panel_setup_layers.cpp:379
 msgid "If you want a layer for documentation drawings"
 msgstr "Ако искате слой за графична документация"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:415
+#: pcbnew/dialogs/panel_setup_layers.cpp:419
 msgid "Use the Physical Stackup page to change the number of copper layers."
 msgstr ""
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:421
-#: pcbnew/dialogs/panel_setup_layers.cpp:473
+#: pcbnew/dialogs/panel_setup_layers.cpp:425
+#: pcbnew/dialogs/panel_setup_layers.cpp:477
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:247
 #, fuzzy
 msgid "Layer Name"
 msgstr "Име на верига"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:426
+#: pcbnew/dialogs/panel_setup_layers.cpp:430
 msgid "signal"
 msgstr "сигнален"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:427
+#: pcbnew/dialogs/panel_setup_layers.cpp:431
 #, fuzzy
 msgid "power plane"
 msgstr "захранване"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:428
+#: pcbnew/dialogs/panel_setup_layers.cpp:432
 msgid "mixed"
 msgstr "смесен"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:429
+#: pcbnew/dialogs/panel_setup_layers.cpp:433
 msgid "jumper"
 msgstr "съединителен"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:432
+#: pcbnew/dialogs/panel_setup_layers.cpp:436
 #, fuzzy
 msgid ""
 "Copper layer type for Freerouter and other external routers.\n"
@@ -41934,22 +41934,22 @@ msgstr ""
 "Тип на медния слой за Freerouter. Захранващите слоеве са премахнати от "
 "менюто за слоеве на Freerouter."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:478
+#: pcbnew/dialogs/panel_setup_layers.cpp:482
 #, fuzzy
 msgid "Off-board, front"
 msgstr "Off-board, manufacturing"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:479
+#: pcbnew/dialogs/panel_setup_layers.cpp:483
 #, fuzzy
 msgid "Off-board, back"
 msgstr "Off-board, manufacturing"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:485
+#: pcbnew/dialogs/panel_setup_layers.cpp:489
 msgid ""
 "Auxiliary layers do not flip with board side, while back and front layers do."
 msgstr ""
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:712
+#: pcbnew/dialogs/panel_setup_layers.cpp:711
 #, c-format
 msgid ""
 "Footprints have some items on removed layers:\n"
@@ -41958,34 +41958,34 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:723
+#: pcbnew/dialogs/panel_setup_layers.cpp:722
 msgid ""
 "Items have been found on removed layers. This operation will delete all "
 "items from removed layers and cannot be undone.\n"
 "Do you wish to continue?"
 msgstr ""
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:947
+#: pcbnew/dialogs/panel_setup_layers.cpp:946
 #, fuzzy
 msgid "Layer must have a name."
 msgstr "Стойност на класа на веригите"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:953
+#: pcbnew/dialogs/panel_setup_layers.cpp:952
 #, c-format
 msgid "%s are forbidden in layer names."
 msgstr ""
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:960
+#: pcbnew/dialogs/panel_setup_layers.cpp:959
 #, fuzzy
 msgid "Layer name \"signal\" is reserved."
 msgstr "'signal' е резервирано име на слой"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:969
+#: pcbnew/dialogs/panel_setup_layers.cpp:968
 #, fuzzy, c-format
 msgid "Layer name '%s' already in use."
 msgstr "Лист с име \"%s\" вече съществува."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:1102
+#: pcbnew/dialogs/panel_setup_layers.cpp:1101
 #, c-format
 msgid ""
 "Imported settings have fewer copper layers than the current board (%i "
@@ -41994,16 +41994,16 @@ msgid ""
 "Continue and delete the extra inner copper layers from the current board?"
 msgstr ""
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:1111
+#: pcbnew/dialogs/panel_setup_layers.cpp:1110
 #, fuzzy
 msgid "Inner Layers to Be Deleted"
 msgstr "Елементи за изтриване"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:1146
+#: pcbnew/dialogs/panel_setup_layers.cpp:1145
 msgid "All user-defined layers have already been added."
 msgstr ""
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:1150
+#: pcbnew/dialogs/panel_setup_layers.cpp:1149
 #, fuzzy
 msgid "Add User-defined Layer"
 msgstr "Потребителска Мрежа"
@@ -43354,6 +43354,11 @@ msgstr "Изтр. на размер"
 #: pcbnew/drc/drc_item.cpp:143
 msgid "Via diameter"
 msgstr "Диаметър на прох.отв."
+
+#: pcbnew/drc/drc_item.cpp:147
+#, fuzzy
+msgid "Padstack is questionable"
+msgstr "Името на файла е невалидно!"
 
 #: pcbnew/drc/drc_item.cpp:151
 #, fuzzy
@@ -48172,7 +48177,7 @@ msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr ""
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2527
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7248
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7252
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
@@ -48343,7 +48348,7 @@ msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
 msgstr "Промяна на библиотечен файл \""
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3150
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6294
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6298
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -48382,7 +48387,7 @@ msgid ""
 "line: %d offset: %d"
 msgstr "Промяна на библиотечен файл \""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5489
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5493
 #, fuzzy, c-format
 msgid ""
 "Invalid zero-sized pad pinned to %s in\n"
@@ -48391,8 +48396,8 @@ msgid ""
 "offset: %d"
 msgstr "Промяна на библиотечен файл \""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5611
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6548
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5615
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6552
 #, fuzzy, c-format
 msgid ""
 "Invalid padstack layer in\n"
@@ -48401,13 +48406,13 @@ msgid ""
 "offset: %d."
 msgstr "Промяна на библиотечен файл \""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5626
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6563
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5630
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6567
 #, fuzzy, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
 msgstr "Промяна на библиотечен файл \""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6199
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6203
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -48416,7 +48421,7 @@ msgid ""
 "offset: %d."
 msgstr "Промяна на библиотечен файл \""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6399
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6403
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -48425,7 +48430,7 @@ msgid ""
 "offset: %d"
 msgstr "Промяна на библиотечен файл \""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6654
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6658
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -48434,7 +48439,7 @@ msgid ""
 "offset: %d."
 msgstr "Промяна на библиотечен файл \""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7218
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7222
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
