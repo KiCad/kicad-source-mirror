@@ -42,6 +42,7 @@
 void SCH_EDIT_FRAME::doReCreateMenuBar()
 {
     EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
+
     // wxWidgets handles the Mac Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar*  oldMenuBar = GetMenuBar();
@@ -205,7 +206,8 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
         showHidePanels->Add( EE_ACTIONS::showNetNavigator, ACTION_MENU::CHECK );
 
     if( ADVANCED_CFG::GetCfg().m_EnableDesignBlocks )
-        showHidePanels->Add( EE_ACTIONS::showDesignBlockPanel, ACTION_MENU::CHECK, _( "Design Blocks" ) );
+        showHidePanels->Add( EE_ACTIONS::showDesignBlockPanel, ACTION_MENU::CHECK,
+                             _( "Design Blocks" ) );
 
     viewMenu->Add( showHidePanels );
 

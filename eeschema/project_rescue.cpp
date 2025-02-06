@@ -271,7 +271,8 @@ void RESCUE_CACHE_CANDIDATE::FindRescues( RESCUER& aRescuer,
             // A new symbol name is found (a new group starts here).
             // Search the symbol names candidates only once for this group:
             old_symbol_name = symbol_name;
-            cache_match = findSymbol( symbol_name, PROJECT_SCH::SchLibs( aRescuer.GetPrj() ), true );
+            cache_match = findSymbol( symbol_name, PROJECT_SCH::SchLibs( aRescuer.GetPrj() ),
+                                      true );
             lib_match = findSymbol( symbol_name, PROJECT_SCH::SchLibs( aRescuer.GetPrj() ), false );
 
             // At some point during V5 development, the LIB_ID delimiter character ':' was
@@ -422,11 +423,13 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
             {
                 symbolName = symbol_id.GetLibNickname().wx_str() + wxT( "_" ) +
                              symbol_id.GetLibItemName().wx_str();
-                cache_match = findSymbol( symbolName, PROJECT_SCH::SchLibs( aRescuer.GetPrj() ), true );
+                cache_match = findSymbol( symbolName, PROJECT_SCH::SchLibs( aRescuer.GetPrj() ),
+                                          true );
             }
 
             // Get the library symbol from the symbol library table.
-            lib_match = SchGetLibSymbol( symbol_id, PROJECT_SCH::SchSymbolLibTable( aRescuer.GetPrj() ) );
+            lib_match = SchGetLibSymbol( symbol_id,
+                                         PROJECT_SCH::SchSymbolLibTable( aRescuer.GetPrj() ) );
 
             if( !cache_match && !lib_match )
                 continue;
@@ -465,7 +468,8 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
             // library.
             wxString libNickname = GetRescueLibraryFileName( aRescuer.Schematic() ).GetName();
 
-            LIB_ID new_id( libNickname, new_name + wxS( "-" ) + symbol_id.GetLibNickname().wx_str() );
+            LIB_ID new_id( libNickname, new_name + wxS( "-" ) +
+                           symbol_id.GetLibNickname().wx_str() );
 
             RESCUE_SYMBOL_LIB_TABLE_CANDIDATE candidate( symbol_id, new_id, cache_match, lib_match,
                                                          eachSymbol->GetUnit(),
@@ -682,8 +686,8 @@ void LEGACY_RESCUER::OpenRescueLibrary()
 {
     wxFileName fn = GetRescueLibraryFileName( m_schematic );
 
-    std::unique_ptr<SYMBOL_LIB> rescue_lib = std::make_unique<SYMBOL_LIB>( SCH_LIB_TYPE::LT_EESCHEMA,
-                                                                           fn.GetFullPath() );
+    std::unique_ptr<SYMBOL_LIB> rescue_lib =
+            std::make_unique<SYMBOL_LIB>( SCH_LIB_TYPE::LT_EESCHEMA, fn.GetFullPath() );
 
     m_rescue_lib = std::move( rescue_lib );
     m_rescue_lib->EnableBuffering();

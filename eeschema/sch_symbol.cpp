@@ -531,7 +531,8 @@ void SCH_SYMBOL::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBo
         BOX2I    pins = GetBodyAndPinsBoundingBox();
         COLOR4D  dnp_color = localRenderSettings.GetLayerColor( LAYER_DNP_MARKER );
         VECTOR2D margins( std::max( bbox.GetX() - pins.GetX(), pins.GetEnd().x - bbox.GetEnd().x ),
-                          std::max( bbox.GetY() - pins.GetY(), pins.GetEnd().y - bbox.GetEnd().y ) );
+                          std::max( bbox.GetY() - pins.GetY(),
+                                    pins.GetEnd().y - bbox.GetEnd().y ) );
 
         margins.x = std::max( margins.x * 0.6, margins.y * 0.3 );
         margins.y = std::max( margins.y * 0.6, margins.x * 0.3 );
@@ -1113,7 +1114,7 @@ void SCH_SYMBOL::SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT&
         return;
     }
 
-    // Keep fields other than the reference, include/exclude flags, and alternate pin assignements
+    // Keep fields other than the reference, include/exclude flags, and alternate pin assignments
     // in sync in multi-unit parts.
     if( GetUnitCount() > 1 && IsAnnotated( &aSourceSheet ) )
     {
@@ -2051,7 +2052,8 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
             {
                 // Don't use GetShownText(); we want to see the variable references here
                 aList.emplace_back( _( "Power symbol" ),
-                                    KIUI::EllipsizeStatusText( aFrame, GetField( VALUE_FIELD )->GetText() ) );
+                                    KIUI::EllipsizeStatusText( aFrame,
+                                                               GetField( VALUE_FIELD )->GetText() ) );
             }
             else
             {
@@ -2060,10 +2062,12 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
 
                 // Don't use GetShownText(); we want to see the variable references here
                 aList.emplace_back( _( "Value" ),
-                                    KIUI::EllipsizeStatusText( aFrame, GetField( VALUE_FIELD )->GetText() ) );
+                                    KIUI::EllipsizeStatusText( aFrame,
+                                                               GetField( VALUE_FIELD )->GetText() ) );
                 addExcludes();
                 aList.emplace_back( _( "Name" ),
-                                    KIUI::EllipsizeStatusText( aFrame, GetLibId().GetLibItemName() ) );
+                                    KIUI::EllipsizeStatusText( aFrame,
+                                                               GetLibId().GetLibItemName() ) );
             }
 
 #if 0       // Display symbol flags, for debug only
@@ -2108,9 +2112,11 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
     else
     {
         aList.emplace_back( _( "Reference" ), GetRef( currentSheet ) );
+
         // Don't use GetShownText(); we want to see the variable references here
         aList.emplace_back( _( "Value" ),
-                            KIUI::EllipsizeStatusText( aFrame, GetField( VALUE_FIELD )->GetText() ) );
+                            KIUI::EllipsizeStatusText( aFrame,
+                                                       GetField( VALUE_FIELD )->GetText() ) );
         addExcludes();
         aList.emplace_back( _( "Name" ),
                             KIUI::EllipsizeStatusText( aFrame, GetLibId().GetLibItemName() ) );
@@ -2235,6 +2241,7 @@ bool SCH_SYMBOL::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemListB
         for( auto it = lower; it < aItemListByPos.end() && it->GetPosition() == pos; it++ )
         {
             DANGLING_END_ITEM& each_item = *it;
+
             // Some people like to stack pins on top of each other in a symbol to indicate
             // internal connection. While technically connected, it is not particularly useful
             // to display them that way, so skip any pins that are in the same symbol as this
@@ -2777,16 +2784,19 @@ bool SCH_SYMBOL::GetShowPinNames() const
     return m_part && m_part->GetShowPinNames();
 }
 
+
 void SCH_SYMBOL::SetShowPinNames( bool aShow )
 {
     if( m_part )
         m_part->SetShowPinNames( aShow );
 }
 
+
 bool SCH_SYMBOL::GetShowPinNumbers() const
 {
     return m_part && m_part->GetShowPinNumbers();
 }
+
 
 void SCH_SYMBOL::SetShowPinNumbers( bool aShow )
 {

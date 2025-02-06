@@ -350,7 +350,8 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
             wxTreeItemId selection = m_netNavigator->GetSelection();
 
             if( selection.IsOk() )
-                itemData = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( selection ) );
+                itemData = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>(
+                        m_netNavigator->GetItemData( selection ) );
 
             m_netNavigator->DeleteAllItems();
             nodeCnt++;
@@ -401,7 +402,8 @@ void SCH_EDIT_FRAME::SelectNetNavigatorItem( const NET_NAVIGATOR_ITEM_DATA* aSel
 
             while( itemId.IsOk() )
             {
-                itemData = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( itemId ) );
+                itemData = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>(
+                        m_netNavigator->GetItemData( itemId ) );
 
                 wxCHECK2( itemData, continue );
 
@@ -533,7 +535,8 @@ void SCH_EDIT_FRAME::ToggleNetNavigator()
         wxTreeItemId selection = m_netNavigator->GetSelection();
 
         if( selection.IsOk() )
-            itemData = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( selection ) );
+            itemData = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>(
+                    m_netNavigator->GetItemData( selection ) );
 
         RefreshNetNavigator( itemData );
 
@@ -559,7 +562,7 @@ void SCH_EDIT_FRAME::onResizeNetNavigator( wxSizeEvent& aEvent )
     // Store the current pane size
     // It allows to retrieve the last defined pane size when switching between
     // docked and floating pane state
-    // Note: *DO NOT* call m_auimgr.Update() here: it crashes Kicad at least on Windows
+    // Note: *DO NOT* call m_auimgr.Update() here: it crashes KiCad at least on Windows
 
     EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 

@@ -55,7 +55,7 @@ public:
     int GetRow() const;
     int GetColumn() const;
 
-    // @return the spreadsheet nomenclature for the cell (ie: B3 for 2nd column, 3rd row)
+    /// @return the spreadsheet nomenclature for the cell (ie: B3 for 2nd column, 3rd row)
     wxString GetAddr() const;
 
     int  GetColSpan() const { return m_colSpan; }

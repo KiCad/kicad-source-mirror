@@ -35,7 +35,7 @@ class PROJECT;
 /**
  * Helper functions to do things like load schematics behind the scenes for special functions
  *
- * Similar to the pcbnew scripting helpers, this is just to have one spot
+ * Similar to the Pcbnew scripting helpers, this is just to have one spot
  * for these types of "hacky" solutions
  */
 class EESCHEMA_HELPERS
@@ -44,10 +44,13 @@ public:
     static SETTINGS_MANAGER* GetSettingsManager();
     static void              SetSchEditFrame( SCH_EDIT_FRAME* aSchEditFrame );
     static PROJECT*          GetDefaultProject( bool aSetActive );
-    static SCHEMATIC*        LoadSchematic( const wxString& aFileName, bool aSetActive, bool aForceDefaultProject,
+    static SCHEMATIC*        LoadSchematic( const wxString& aFileName, bool aSetActive,
+                                            bool aForceDefaultProject,
                                             PROJECT* aProject = nullptr );
-    static SCHEMATIC*        LoadSchematic( const wxString& aFileName, SCH_IO_MGR::SCH_FILE_T aFormat,
-                                            bool aSetActive, bool aForceDefaultProject, PROJECT* aProject = nullptr );
+    static SCHEMATIC*        LoadSchematic( const wxString& aFileName,
+                                            SCH_IO_MGR::SCH_FILE_T aFormat,
+                                            bool aSetActive, bool aForceDefaultProject,
+                                            PROJECT* aProject = nullptr );
 
 private:
     static SCH_EDIT_FRAME*   s_SchEditFrame;

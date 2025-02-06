@@ -141,7 +141,7 @@ void SYMBOL_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
     wxString errMsg;    // to collect error messages
 
     // This table may be nested within a larger s-expression, or not.
-    // Allow for parser of that optional containing s-epression to have looked ahead.
+    // Allow for parser of that optional containing s-expression to have looked ahead.
     if( in->CurTok() != T_sym_lib_table )
     {
         in->NeedLEFT();
@@ -270,7 +270,7 @@ void SYMBOL_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
 
         // All nickNames within this table fragment must be unique, so we do not use doReplace
         // in doInsertRow().  (However a fallBack table can have a conflicting nickName and ours
-        // will supercede that one since in FindLib() we search this table before any fall back.)
+        // will supersede that one since in FindLib() we search this table before any fall back.)
         wxString       nickname = row->GetNickName();   // store it to be able to used it
                                                         // after row deletion if an error occurs
         bool           doReplace = false;
@@ -602,7 +602,8 @@ public:
 
                 m_lib_table.InsertRow(
                         new SYMBOL_LIB_TABLE_ROW( nickname, libPath, wxT( "KiCad" ), wxEmptyString,
-                                                  _( "Added by Plugin and Content Manager" ) ), false );
+                                                  _( "Added by Plugin and Content Manager" ) ),
+                        false );
             }
         }
 
@@ -724,7 +725,8 @@ bool SYMBOL_LIB_TABLE::operator==( const SYMBOL_LIB_TABLE& aOther ) const
     for( i = 0; i < m_rows.size(); ++i )
     {
         const SYMBOL_LIB_TABLE_ROW& curr = static_cast<const SYMBOL_LIB_TABLE_ROW&>( m_rows[i] );
-        const SYMBOL_LIB_TABLE_ROW& curr_other = static_cast<const SYMBOL_LIB_TABLE_ROW&>( aOther.m_rows[i] );
+        const SYMBOL_LIB_TABLE_ROW& curr_other =
+                static_cast<const SYMBOL_LIB_TABLE_ROW&>( aOther.m_rows[i] );
 
         if( curr != curr_other )
             return false;

@@ -252,8 +252,9 @@ std::shared_ptr<NETCLASS> SCH_ITEM::GetEffectiveNetClass( const SCH_SHEET_PATH* 
 
     if( schematic )
     {
-        std::shared_ptr<NET_SETTINGS>& netSettings = schematic->Prj().GetProjectFile().m_NetSettings;
-        SCH_CONNECTION*                connection = Connection( aSheet );
+        std::shared_ptr<NET_SETTINGS>& netSettings =
+                schematic->Prj().GetProjectFile().m_NetSettings;
+        SCH_CONNECTION* connection = Connection( aSheet );
 
         if( connection )
             return netSettings->GetEffectiveNetClass( connection->Name() );
@@ -616,6 +617,7 @@ void DANGLING_END_ITEM_HELPER::sort_dangling_end_items(
 {
     // WIRE_END pairs must be kept together. Hence stable sort.
     std::stable_sort( aItemListByType.begin(), aItemListByType.end(), lessType );
+
     // Sort by y first, pins are more likely to share x than y.
     std::sort( aItemListByPos.begin(), aItemListByPos.end(), lessYX );
 }

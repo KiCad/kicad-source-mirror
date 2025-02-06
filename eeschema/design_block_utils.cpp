@@ -391,7 +391,9 @@ void SCH_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
             SaveSheetAsDesignBlock( aLibraryName, curPath );
         }
         else
+        {
             DisplayErrorMessage( this, _( "Design blocks with nested sheets are not supported." ) );
+        }
 
         return;
     }
@@ -422,9 +424,11 @@ void SCH_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
 
     // Save a temporary copy of the schematic file, as the plugin is just going to move it
     wxString tempFile = wxFileName::CreateTempFileName( "design_block" );
+
     if( !saveSchematicFile( tempSheet, tempFile ) )
     {
-        DisplayErrorMessage( this, _( "Error saving temporary schematic file to create design block." ) );
+        DisplayErrorMessage( this,
+                             _( "Error saving temporary schematic file to create design block." ) );
         wxRemoveFile( tempFile );
         return;
     }
@@ -449,6 +453,7 @@ void SCH_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
 
     // Clean up the temporaries
     wxRemoveFile( tempFile );
+
     // This will also delete the screen
     delete tempSheet;
 
@@ -582,7 +587,9 @@ bool SCH_EDIT_FRAME::EditDesignBlockProperties( const LIB_ID& aLibId )
             Prj().DesignBlockLibs()->DesignBlockDelete( libname, originalName );
         }
         else
+        {
             Prj().DesignBlockLibs()->DesignBlockSave( libname, designBlock );
+        }
     }
     catch( const IO_ERROR& ioe )
     {
@@ -612,7 +619,8 @@ DESIGN_BLOCK* SchGetDesignBlock( const LIB_ID& aLibId, DESIGN_BLOCK_LIB_TABLE* a
     {
         if( aShowErrorMsg )
         {
-            wxString msg = wxString::Format( _( "Error loading design block %s from library '%s'." ),
+            wxString msg = wxString::Format( _( "Error loading design block %s from "
+                                                "library '%s'." ),
                                              aLibId.GetLibItemName().wx_str(),
                                              aLibId.GetLibNickname().wx_str() );
             DisplayErrorMessage( aParent, msg, ioe.What() );

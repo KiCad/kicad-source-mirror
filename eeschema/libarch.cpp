@@ -46,7 +46,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
 
     // Create a new empty library to archive symbols:
     std::unique_ptr<SYMBOL_LIB> archLib = std::make_unique<SYMBOL_LIB>( SCH_LIB_TYPE::LT_EESCHEMA,
-                                                                    aFileName );
+                                                                        aFileName );
 
     // Save symbols to file only when the library will be fully filled
     archLib->EnableBuffering();

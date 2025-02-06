@@ -278,7 +278,7 @@ private:
     /// Local prefix for group bus members (used with m_local_name)
     wxString m_local_prefix;
 
-    /// Optional prefix of a bux group (always empty for nets and vector buses)
+    /// Optional prefix of a bus group (always empty for nets and vector buses)
     wxString m_bus_prefix;
 
     wxString m_suffix;      ///< Name suffix (used only for disambiguation)
@@ -295,7 +295,7 @@ private:
 
     long m_vector_end;      ///< Lowest member of a vector bus
 
-    ///< Prefix name of the vector, if m_type == CONNECTION_BUS (or "" if not)
+    /// Prefix name of the vector, if m_type == CONNECTION_BUS (or "" if not).
     wxString m_vector_prefix;
 
     /**

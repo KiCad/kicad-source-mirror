@@ -876,7 +876,9 @@ void SCH_REFERENCE::Split()
         while( ll >= 0 )
         {
             if( (refText[ll] <= ' ' ) || isdigit( refText[ll] ) )
+            {
                 ll--;
+            }
             else
             {
                 if( isdigit( refText[ll + 1] ) )
@@ -968,6 +970,7 @@ wxString SCH_REFERENCE::formatRefStr( int aNumber ) const
 
     return wxString::Format( "%d", aNumber );
 }
+
 
 #if defined( DEBUG )
 void SCH_REFERENCE_LIST::Show( const char* aPrefix )

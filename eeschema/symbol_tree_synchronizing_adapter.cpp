@@ -79,7 +79,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( const wxString& aForceRefresh,
     int i = 0, max = GetLibrariesCount();
 
     // Process already stored libraries
-    for( auto it = m_tree.m_Children.begin(); it != m_tree.m_Children.end(); /* iteration inside */ )
+    for( auto it = m_tree.m_Children.begin(); it != m_tree.m_Children.end(); )
     {
         const wxString& name = it->get()->m_Name;
 
@@ -93,10 +93,10 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( const wxString& aForceRefresh,
         // modified libraries before the symbol library table which prevents the library from
         // being removed from the tree control.
         if( !m_libMgr->LibraryExists( name, true )
-              || !PROJECT_SCH::SchSymbolLibTable( &m_frame->Prj() )->HasLibrary( name, true )
-              || PROJECT_SCH::SchSymbolLibTable( &m_frame->Prj() )->FindRow( name, true ) !=
-                                    PROJECT_SCH::SchSymbolLibTable( &m_frame->Prj() )->FindRow( name, false )
-              || name == aForceRefresh )
+          || !PROJECT_SCH::SchSymbolLibTable( &m_frame->Prj() )->HasLibrary( name, true )
+          || PROJECT_SCH::SchSymbolLibTable( &m_frame->Prj() )->FindRow( name, true )
+                   != PROJECT_SCH::SchSymbolLibTable( &m_frame->Prj() )->FindRow( name, false )
+          || name == aForceRefresh )
         {
             it = deleteLibrary( it );
             continue;
@@ -345,6 +345,7 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
                                                   // proxy for "is canvas item"
             }
         }
+
         break;
 
     case LIB_TREE_NODE::TYPE::ITEM:
@@ -360,6 +361,7 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
             aAttr.SetStrikethrough( true );   // LIB_TREE_RENDERER uses strikethrough as a
                                               // proxy for "is canvas item"
         }
+
         break;
 
     default:

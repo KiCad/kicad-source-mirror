@@ -536,6 +536,7 @@ void SYMBOL_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
             // Remember lib_names[i] can contain a '.' in name, so using a wxFileName
             // before adding the extension can create incorrect full filename
             wxString fullname = lib_names[i] + "." + FILEEXT::LegacySymbolLibFileExtension;
+
             // Now the full name is set, we can use a wxFileName.
             wxFileName fn( fullname );
 

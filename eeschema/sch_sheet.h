@@ -63,8 +63,10 @@ public:
                                           schIUScale.MilsToIU( MIN_SHEET_HEIGHT ) ) );
 
     /**
-     * Copy \a aSheet into a new object.  All sheet pins are copied as is except and
-     * the SCH_SHEET_PIN's #m_Parent pointers are set to the new copied parent object.
+     * Copy \a aSheet into a new object.
+     *
+     * All sheet pins are copied as is except and the #SCH_SHEET_PIN object's #m_Parent pointers
+     * are set to the new copied parent object.
      */
     SCH_SHEET( const SCH_SHEET& aSheet );
 
@@ -207,7 +209,7 @@ public:
     SCH_SHEET_PIN* GetPin( const VECTOR2I& aPosition );
 
     /**
-     * Checks if the sheet already has a sheet pin named \a aName.
+     * Check if the sheet already has a sheet pin named \a aName.
      *
      * @param aName Name of the sheet pin to search for.
      * @return  True if sheet pin with \a aName is found, otherwise false.
@@ -259,8 +261,9 @@ public:
 
     /**
      * Rotating around the boundingBox's center can cause walking when the sheetname or
-     * filename is longer than the edge it's on.  Use this instead, which always returns
-     * the center of the sheet itself.
+     * filename is longer than the edge it's on.
+     *
+     * Use this instead, which always returns the center of the sheet itself.
      */
     VECTOR2I GetRotationCenter() const;
 
@@ -383,7 +386,7 @@ public:
     bool GetExcludedFromBoard() const { return m_excludedFromBoard; }
 
     /**
-     * Set or clear the 'Do Not Populate' flaga
+     * Set or clear the 'Do Not Populate' flags
      */
     bool GetDNP() const { return m_DNP; }
     void SetDNP( bool aDNP ) { m_DNP = aDNP; }
@@ -454,7 +457,7 @@ public:
     bool HasPageNumberChanges( const SCH_SHEET& aOther ) const;
 
     /**
-     * Compares page numbers of schematic sheets.
+     * Compare page numbers of schematic sheets.
      *
      * @return 0 if the page numbers are equal, -1 if aPageNumberA < aPageNumberB, 1 otherwise
      */

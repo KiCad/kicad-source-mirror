@@ -130,7 +130,7 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_OPTS& aPlotOpts,
     }
     else
     {
-        // in eeschema, this prints the current page
+        // in Eeschema, this prints the current page
         sheetList.push_back( m_schematic->CurrentSheet() );
     }
 
@@ -515,7 +515,7 @@ void SCH_PLOTTER::createSVGFiles( const SCH_PLOT_OPTS& aPlotOpts,
     }
     else
     {
-        // in eeschema, this prints the current page
+        // in Eeschema, this prints the current page
         sheetList.push_back( m_schematic->CurrentSheet() );
     }
 
@@ -592,6 +592,7 @@ bool SCH_PLOTTER::plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScree
                                    const SCH_PLOT_OPTS& aPlotOpts )
 {
     PAGE_INFO plotPage;
+
     // Adjust page size and scaling requests
     const PAGE_INFO& actualPage = aScreen->GetPageSettings(); // page size selected in schematic
 
@@ -658,7 +659,8 @@ bool SCH_PLOTTER::plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScree
 
         PlotDrawingSheet( plotter, &aScreen->Schematic()->Prj(),
                           aScreen->GetTitleBlock(),
-                          actualPage, aScreen->Schematic()->GetProperties(), aScreen->GetPageNumber(),
+                          actualPage, aScreen->Schematic()->GetProperties(),
+                          aScreen->GetPageNumber(),
                           aScreen->GetPageCount(), sheetName, sheetPath, aScreen->GetFileName(),
                           plotter->GetColorMode() ? color : COLOR4D::BLACK,
                           aScreen->GetVirtualPageNumber() == 1 );
@@ -699,7 +701,7 @@ void SCH_PLOTTER::createHPGLFiles( const SCH_PLOT_OPTS& aPlotOpts,
     }
     else
     {
-        // in eeschema, this prints the current page
+        // in Eeschema, this prints the current page
         sheetList.push_back( m_schematic->CurrentSheet() );
     }
 
@@ -882,7 +884,7 @@ void SCH_PLOTTER::createDXFFiles( const SCH_PLOT_OPTS& aPlotOpts,
     }
     else
     {
-        // in eeschema, this prints the current page
+        // in Eeschema, this prints the current page
         sheetList.push_back( m_schematic->CurrentSheet() );
     }
 
@@ -1048,6 +1050,7 @@ wxFileName SCH_PLOTTER::createPlotFileName( const SCH_PLOT_OPTS& aPlotOpts,
                                              tmp.GetPath() );
             aReporter->Report( msg, RPT_SEVERITY_ERROR );
         }
+
         retv.Clear();
 
         SCHEMATIC_SETTINGS& settings = m_schematic->Settings();

@@ -119,6 +119,7 @@ void SCH_EDIT_FRAME::SelectUnit( SCH_SYMBOL* aSymbol, int aUnit )
         const wxString targetUnitName = symbol->GetUnitDisplayName( aUnit );
         const wxString currUnitName = symbol->GetUnitDisplayName( currentUnit );
         wxString otherSheetName = otherSymbolRef->GetSheetPath().PathHumanReadable( true, true );
+
         if( otherSheetName.IsEmpty() )
             otherSheetName = _( "Root" );
 

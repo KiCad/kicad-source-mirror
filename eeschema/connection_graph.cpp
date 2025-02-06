@@ -820,7 +820,7 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
             symbol->SetUnit( originalUnit );
     }
 
-    // Restore the danlging states of items in the current SCH_SCREEN to match the current
+    // Restore the dangling states of items in the current SCH_SCREEN to match the current
     // SCH_SHEET_PATH.
     m_schematic->CurrentSheet().LastScreen()->TestDanglingEnds( &m_schematic->CurrentSheet(),
                                                                 aChangedItemHandler );
@@ -877,9 +877,11 @@ std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>> CONNECTION_GRAPH::ExtractAffected
 
         if( !item_sg )
         {
-            wxLogTrace( ConnTrace, wxT( "Item %s not found in connection graph" ), aItem->GetTypeDesc() );
+            wxLogTrace( ConnTrace, wxT( "Item %s not found in connection graph" ),
+                        aItem->GetTypeDesc() );
             return;
         }
+
         if( !item_sg->ResolveDrivers( true ) )
         {
             wxLogTrace( ConnTrace, wxT( "Item %s in subgraph %ld (%p) has no driver" ),
@@ -902,7 +904,6 @@ std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>> CONNECTION_GRAPH::ExtractAffected
                     sg_to_scan.size() );
 
         for( CONNECTION_SUBGRAPH* sg : sg_to_scan )
-
         {
             traverse_subgraph( sg );
 
@@ -1046,15 +1047,15 @@ void CONNECTION_GRAPH::removeSubgraphs( std::set<CONNECTION_SUBGRAPH*>& aSubgrap
         }
 
         auto remove_sg = [sg]( auto it ) -> bool
-                        {
-                            for( const CONNECTION_SUBGRAPH* test_sg : it->second )
-                            {
-                                if( sg == test_sg )
-                                    return true;
-                            }
+                         {
+                             for( const CONNECTION_SUBGRAPH* test_sg : it->second )
+                             {
+                                 if( sg == test_sg )
+                                     return true;
+                             }
 
-                            return false;
-                        };
+                             return false;
+                         };
 
         for( auto it = m_global_label_cache.begin(); it != m_global_label_cache.end(); )
         {
@@ -1081,7 +1082,9 @@ void CONNECTION_GRAPH::removeSubgraphs( std::set<CONNECTION_SUBGRAPH*>& aSubgrap
                 it = m_net_code_to_subgraphs_map.erase( it );
             }
             else
+            {
                 ++it;
+            }
         }
 
         for( auto it = m_net_name_to_subgraphs_map.begin();
@@ -1446,6 +1449,7 @@ void CONNECTION_GRAPH::buildItemSubGraphs()
 
 }
 
+
 void CONNECTION_GRAPH::resolveAllDrivers()
 {
     // Resolve drivers for subgraphs and propagate connectivity info
@@ -1642,6 +1646,7 @@ void CONNECTION_GRAPH::generateBusAliasMembers()
                std::back_inserter( m_driver_subgraphs ) );
 }
 
+
 void CONNECTION_GRAPH::generateGlobalPowerPinSubGraphs()
 {
     // Generate subgraphs for global power pins.  These will be merged with other subgraphs
@@ -1656,7 +1661,8 @@ void CONNECTION_GRAPH::generateGlobalPowerPinSubGraphs()
         SCH_SHEET_PATH sheet = it.first;
         SCH_PIN*       pin   = it.second;
 
-        if( !pin->ConnectedItems( sheet ).empty() && !pin->GetLibPin()->GetParentSymbol()->IsPower() )
+        if( !pin->ConnectedItems( sheet ).empty()
+          && !pin->GetLibPin()->GetParentSymbol()->IsPower() )
         {
             // ERC will warn about this: user has wired up an invisible pin
             continue;
@@ -1845,7 +1851,8 @@ void CONNECTION_GRAPH::processSubGraphs()
                                     wxS( "%ld (%s) weakly driven by unique sheet pin %s, "
                                          "promoting" ),
                                     subgraph->m_code, name,
-                                    subgraph->m_driver->GetItemDescription( &unitsProvider, true ) );
+                                    subgraph->m_driver->GetItemDescription( &unitsProvider,
+                                                                            true ) );
 
                         subgraph->m_strong_driver = true;
                     }
@@ -2026,7 +2033,8 @@ void CONNECTION_GRAPH::processSubGraphs()
                         subgraph->m_bus_neighbors[member].insert( candidate );
                         candidate->m_bus_parents[member].insert( subgraph );
                     }
-                    else if( !connection->IsBus() || connection->Type() == candidate->m_driver_connection->Type() )
+                    else if( !connection->IsBus()
+                           || connection->Type() == candidate->m_driver_connection->Type() )
                     {
                         wxLogTrace( ConnTrace, wxS( "%lu (%s) absorbs neighbor %lu (%s)" ),
                                     subgraph->m_code, connection->Name(),
@@ -2076,7 +2084,8 @@ void CONNECTION_GRAPH::processSubGraphs()
 //     on some portion of the items.
 
 
-void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* aChangedItemHandler, bool aUnconditional )
+void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* aChangedItemHandler,
+                                             bool                              aUnconditional )
 {
     // Recache all bus aliases for later use
     wxCHECK_RET( m_schematic, wxT( "Connection graph cannot be built without schematic pointer" ) );
@@ -2094,7 +2103,6 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
 
     if( wxLog::IsAllowedTraceMask( DanglingProfileMask ) )
         sub_graph.Show();
-
 
     /**
      * TODO(JE): Net codes are non-deterministic.  Fortunately, they are also not really used for
@@ -2144,6 +2152,7 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
                 for( int ii = a; ii < b; ++ii )
                     m_driver_subgraphs[ii]->UpdateItemConnections();
             });
+
     tp.wait_for_tasks();
 
     // Next time through the subgraphs, we do some post-processing to handle things like
@@ -3018,7 +3027,8 @@ std::vector<const CONNECTION_SUBGRAPH*> CONNECTION_GRAPH::GetBusesNeedingMigrati
 
             for( unsigned i = 1; i < labels.size(); ++i )
             {
-                if( static_cast<SCH_TEXT*>( labels.at( i ) )->GetShownText( sheet, false ) != first )
+                if( static_cast<SCH_TEXT*>( labels.at( i ) )->GetShownText( sheet,
+                                                                            false ) != first )
                 {
                     different = true;
                     break;
@@ -3660,7 +3670,8 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
                 SCH_PIN* test_pin = static_cast<SCH_PIN*>( item );
 
                 // Stacked pins do not count as other connections but non-stacked pins do
-                if( !has_other_connections && !pins.empty() && !test_pin->GetParentSymbol()->IsPower() )
+                if( !has_other_connections && !pins.empty()
+                  && !test_pin->GetParentSymbol()->IsPower() )
                 {
                     for( SCH_PIN* other_pin  : pins )
                     {
@@ -3692,8 +3703,8 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
         for( SCH_PIN* test_pin : pins )
         {
             // Prefer the pin is part of a real component rather than some stray power symbol
-            // Or else we may fail walking connected components to a power symbol pin since we reject
-            // starting at a power symbol
+            // Or else we may fail walking connected components to a power symbol pin since we
+            // reject starting at a power symbol
             if( test_pin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN
                 && !test_pin->IsGlobalPower() )
             {
@@ -3788,7 +3799,8 @@ bool CONNECTION_GRAPH::ercCheckDanglingWireEndpoints( const CONNECTION_SUBGRAPH*
 
             auto report_error = [&]( VECTOR2I& location )
             {
-                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_UNCONNECTED_WIRE_ENDPOINT );
+                std::shared_ptr<ERC_ITEM> ercItem =
+                        ERC_ITEM::Create( ERCE_UNCONNECTED_WIRE_ENDPOINT );
 
                 ercItem->SetItems( line );
                 ercItem->SetSheetSpecificPath( sheet );
@@ -3812,7 +3824,8 @@ bool CONNECTION_GRAPH::ercCheckDanglingWireEndpoints( const CONNECTION_SUBGRAPH*
 
             auto report_error = [&]( VECTOR2I& location )
             {
-                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_UNCONNECTED_WIRE_ENDPOINT );
+                std::shared_ptr<ERC_ITEM> ercItem =
+                        ERC_ITEM::Create( ERCE_UNCONNECTED_WIRE_ENDPOINT );
 
                 ercItem->SetItems( entry );
                 ercItem->SetSheetSpecificPath( sheet );

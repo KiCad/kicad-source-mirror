@@ -766,7 +766,8 @@ bool SCH_FIELD::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) co
 
     try
     {
-        const SCH_SEARCH_DATA& schSearchData = dynamic_cast<const SCH_SEARCH_DATA&>( aSearchData ); // downcast
+        // downcast
+        const SCH_SEARCH_DATA& schSearchData = dynamic_cast<const SCH_SEARCH_DATA&>( aSearchData );
         searchHiddenFields = schSearchData.searchAllFields;
         searchAndReplace = schSearchData.searchAndReplace;
         replaceReferences = schSearchData.replaceReferences;
@@ -1045,6 +1046,7 @@ void SCH_FIELD::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
         case GR_TEXT_H_ALIGN_CENTER:
         case GR_TEXT_H_ALIGN_INDETERMINATE: break;
         }
+
         SetTextAngle( ANGLE_HORIZONTAL );
     }
     else if( GetTextAngle().IsHorizontal() )
@@ -1062,6 +1064,7 @@ void SCH_FIELD::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
         case GR_TEXT_H_ALIGN_CENTER:
         case GR_TEXT_H_ALIGN_INDETERMINATE: break;
         }
+
         SetTextAngle( ANGLE_VERTICAL );
     }
     else
@@ -1366,8 +1369,8 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
         return;
 
     SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
-    COLOR4D              color = renderSettings->GetLayerColor( GetLayer() );
-    int                  penWidth = GetEffectiveTextPenWidth( renderSettings->GetDefaultPenWidth() );
+    COLOR4D color = renderSettings->GetLayerColor( GetLayer() );
+    int penWidth = GetEffectiveTextPenWidth( renderSettings->GetDefaultPenWidth() );
 
     COLOR4D bg = renderSettings->GetBackgroundColor();;
 
@@ -1751,15 +1754,19 @@ static struct SCH_FIELD_DESC
 
         const wxString textProps = _HKI( "Text Properties" );
 
-        auto horiz = new PROPERTY_ENUM<SCH_FIELD, GR_TEXT_H_ALIGN_T>( _HKI( "Horizontal Justification" ),
-                    &SCH_FIELD::SetEffectiveHorizJustify, &SCH_FIELD::GetEffectiveHorizJustify );
+        auto horiz = new PROPERTY_ENUM<SCH_FIELD, GR_TEXT_H_ALIGN_T>(
+                _HKI( "Horizontal Justification" ), &SCH_FIELD::SetEffectiveHorizJustify,
+                &SCH_FIELD::GetEffectiveHorizJustify );
 
-        propMgr.ReplaceProperty( TYPE_HASH( EDA_TEXT ), _HKI( "Horizontal Justification" ), horiz, textProps );
+        propMgr.ReplaceProperty( TYPE_HASH( EDA_TEXT ), _HKI( "Horizontal Justification" ), horiz,
+                                 textProps );
 
-        auto vert = new PROPERTY_ENUM<SCH_FIELD, GR_TEXT_V_ALIGN_T>( _HKI( "Vertical Justification" ),
-                    &SCH_FIELD::SetEffectiveVertJustify, &SCH_FIELD::GetEffectiveVertJustify );
+        auto vert = new PROPERTY_ENUM<SCH_FIELD, GR_TEXT_V_ALIGN_T>(
+                _HKI( "Vertical Justification" ), &SCH_FIELD::SetEffectiveVertJustify,
+                &SCH_FIELD::GetEffectiveVertJustify );
 
-        propMgr.ReplaceProperty( TYPE_HASH( EDA_TEXT ), _HKI( "Vertical Justification" ), vert, textProps );
+        propMgr.ReplaceProperty( TYPE_HASH( EDA_TEXT ), _HKI( "Vertical Justification" ), vert,
+                                 textProps );
 
         propMgr.AddProperty( new PROPERTY<SCH_FIELD, bool>( _HKI( "Show Field Name" ),
                 &SCH_FIELD::SetNameShown, &SCH_FIELD::IsNameShown ) );
@@ -1802,8 +1809,8 @@ static struct SCH_FIELD_DESC
                     return false;
                 };
 
-        propMgr.OverrideAvailability( TYPE_HASH( SCH_FIELD ), TYPE_HASH( SCH_ITEM ), _HKI( "Private" ),
-                                      isNonMandatoryField );
+        propMgr.OverrideAvailability( TYPE_HASH( SCH_FIELD ), TYPE_HASH( SCH_ITEM ),
+                                      _HKI( "Private" ), isNonMandatoryField );
     }
 } _SCH_FIELD_DESC;
 

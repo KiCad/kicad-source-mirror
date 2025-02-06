@@ -81,10 +81,6 @@ void OrientAndMirrorSymbolItems( LIB_SYMBOL* aSymbol, int aOrientation )
 
 
 
-// Rotate and/or mirror a SCH_PIN according to aOrientMirror.
-// aOrientMirror is the orientation/mirror of the parent symbol.
-// The modified pin orientation is the actual pin orientation/mirror
-// when the parent symbol is drawn.
 void RotateAndMirrorPin( SCH_PIN& aPin, int aOrientMirror )
 {
     ORIENT_MIRROR o = symbols_orientations_list[ 0 ];
@@ -107,6 +103,7 @@ void RotateAndMirrorPin( SCH_PIN& aPin, int aOrientMirror )
     if( o.mirror_y )
         aPin.MirrorHorizontallyPin( 0 );
 }
+
 
 SPIN_STYLE GetPinSpinStyle( const SCH_PIN& aPin, const SCH_SYMBOL& aSymbol )
 {
@@ -150,7 +147,9 @@ SPIN_STYLE GetPinSpinStyle( const SCH_PIN& aPin, const SCH_SYMBOL& aSymbol )
             else if( ret == SPIN_STYLE::RIGHT )
                 ret = SPIN_STYLE::LEFT;
         }
+
         break;
+
     case SYM_ROTATE_COUNTERCLOCKWISE:
     case SYM_ORIENT_270:
         if( ret == SPIN_STYLE::UP )
@@ -177,7 +176,9 @@ SPIN_STYLE GetPinSpinStyle( const SCH_PIN& aPin, const SCH_SYMBOL& aSymbol )
             else if( ret == SPIN_STYLE::RIGHT )
                 ret = SPIN_STYLE::LEFT;
         }
+
         break;
+
     case SYM_ORIENT_180:
         if( ret == SPIN_STYLE::UP )
             ret = SPIN_STYLE::BOTTOM;
@@ -203,7 +204,9 @@ SPIN_STYLE GetPinSpinStyle( const SCH_PIN& aPin, const SCH_SYMBOL& aSymbol )
             else if( ret == SPIN_STYLE::RIGHT )
                 ret = SPIN_STYLE::LEFT;
         }
+
         break;
+
     case SYM_ORIENT_0:
     case SYM_NORMAL:
     default:
@@ -222,6 +225,7 @@ SPIN_STYLE GetPinSpinStyle( const SCH_PIN& aPin, const SCH_SYMBOL& aSymbol )
             else if( ret == SPIN_STYLE::RIGHT )
                 ret = SPIN_STYLE::LEFT;
         }
+
         break;
     }
 

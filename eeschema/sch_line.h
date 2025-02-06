@@ -96,7 +96,7 @@ public:
     int GetReverseAngleFrom( const VECTOR2I& aPoint ) const;
 
     /**
-     * Gets the angle between the start and end lines.
+     * Get the angle between the start and end lines.
      *
      * @return Line angle in radians.
      */
@@ -106,8 +106,10 @@ public:
     }
 
     /**
-     * Saves the current line angle. Useful when dragging a line and its important to
-     * be able to restart the line from length 0 in the correct direction.
+     * Save the current line angle.
+     *
+     * Useful when dragging a line and its important to be able to restart the line from length
+     * 0 in the correct direction.
      */
     inline void StoreAngle()
     {
@@ -118,14 +120,14 @@ public:
     inline void StoreAngle( const EDA_ANGLE& aAngle ) { m_storedAngle = aAngle; }
 
     /**
-     * Returns the angle stored by StoreAngle()
+     * Return the angle stored by StoreAngle().
      *
      * @return Stored angle in radians.
      */
     inline EDA_ANGLE GetStoredAngle() const { return m_storedAngle; }
 
     /**
-     * Checks if line is orthogonal (to the grid).
+     * Check if line is orthogonal (to the grid).
      *
      * @return True if orthogonal, false if not or the line is zero length.
      */
@@ -164,12 +166,13 @@ public:
 
     void       SetLineStyle( const LINE_STYLE aStyle );
     LINE_STYLE GetLineStyle() const;
+
     /// @return the style that the line should be drawn in
     /// this might be set on the line or inherited from the line's netclass
     LINE_STYLE GetEffectiveLineStyle() const;
 
-    // Special Getter/Setters for properties panel.  Required because it uses WIRE_STYLE instead
-    // of LINE_STYLE.  (The two enums are identical, but we expose "default" in the WIRE_STYLE
+    // Special Getter/Setters for properties panel.  Required because it uses #WIRE_STYLE instead
+    // of #LINE_STYLE.  (The two enums are identical, but we expose "default" in the #WIRE_STYLE
     // property while we don't with the LINE_STYLE property.)
     void       SetWireStyle( const WIRE_STYLE aStyle ) { SetLineStyle( (LINE_STYLE) aStyle ); }
     WIRE_STYLE GetWireStyle() const { return (WIRE_STYLE) GetLineStyle(); }
@@ -179,7 +182,7 @@ public:
 
     void SetLineColor( const double r, const double g, const double b, const double a );
 
-    /// Returns COLOR4D::UNSPECIFIED if a custom color hasn't been set for this line
+    /// Return #COLOR4D::UNSPECIFIED if a custom color hasn't been set for this line.
     COLOR4D GetLineColor() const;
 
     void SetLineWidth( const int aSize );

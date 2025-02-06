@@ -484,9 +484,9 @@ void SCH_EDIT_FRAME::OnResizeHierarchyNavigator( wxSizeEvent& aEvent )
     CaptureHierarchyPaneSize();
 
     // Defer the second size capture
-    CallAfter([this]() {
+    CallAfter( [this]() {
         CaptureHierarchyPaneSize();
-    });
+    } );
 }
 
 
@@ -642,8 +642,10 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::cut,                 ENABLE( hasElements ) );
     mgr->SetConditions( ACTIONS::copy,                ENABLE( hasElements ) );
     mgr->SetConditions( ACTIONS::copyAsText,          ENABLE( hasElements ) );
-    mgr->SetConditions( ACTIONS::paste,               ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
-    mgr->SetConditions( ACTIONS::pasteSpecial,        ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
+    mgr->SetConditions( ACTIONS::paste,
+                        ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
+    mgr->SetConditions( ACTIONS::pasteSpecial,
+                        ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
     mgr->SetConditions( ACTIONS::doDelete,            ENABLE( hasElements ) );
     mgr->SetConditions( ACTIONS::duplicate,           ENABLE( hasElements ) );
     mgr->SetConditions( ACTIONS::selectAll,           ENABLE( hasElements ) );
@@ -776,7 +778,8 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::toggleBoundingBoxes,      CHECK( cond.BoundingBoxes() ) );
 
     mgr->SetConditions( EE_ACTIONS::saveSheetAsDesignBlock,     ENABLE( hasElements ) );
-    mgr->SetConditions( EE_ACTIONS::saveSelectionAsDesignBlock, ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( EE_ACTIONS::saveSelectionAsDesignBlock,
+                        ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
 
 #define CURRENT_TOOL( action ) mgr->SetConditions( action, CHECK( cond.CurrentTool( action ) ) )
 
@@ -909,7 +912,7 @@ void SCH_EDIT_FRAME::CreateScreens()
     m_schematic->RootScreen()->SetPageNumber( wxT( "1" ) );
     rootSheetPath.SetPageNumber( wxT( "1" ) );
 
-    // Rehash sheetpaths in heirarchy since we changed the uuid.
+    // Rehash sheetpaths in hierarchy since we changed the uuid.
     m_schematic->RefreshHierarchy();
 
     if( GetScreen() == nullptr )
@@ -1102,6 +1105,7 @@ void SCH_EDIT_FRAME::doCloseWindow()
     if( m_toolManager )
     {
         m_toolManager->ShutdownAllTools();
+
         // prevent the canvas from trying to dispatch events during close
         GetCanvas()->SetEventDispatcher( nullptr );
         delete m_toolManager;
@@ -1238,7 +1242,7 @@ void SCH_EDIT_FRAME::UpdateHierarchyNavigator( bool aRefreshNetNavigator )
 void SCH_EDIT_FRAME::UpdateLabelsHierarchyNavigator()
 {
     // Update only the hierarchy navigation tree labels.
-    // The tree list is expectyed to be up to date
+    // The tree list is expected to be up to date
     m_hierarchy->UpdateLabelsHierarchyTree();
 }
 
@@ -1295,10 +1299,9 @@ void SCH_EDIT_FRAME::ShowFindReplaceDialog( bool aReplace )
     if( m_findReplaceDialog )
         m_findReplaceDialog->Destroy();
 
-    m_findReplaceDialog = new DIALOG_SCH_FIND( this,
-                                               static_cast<SCH_SEARCH_DATA*>( m_findReplaceData.get() ),
-                                               wxDefaultPosition, wxDefaultSize,
-                                               aReplace ? wxFR_REPLACEDIALOG : 0 );
+    m_findReplaceDialog = new DIALOG_SCH_FIND(
+            this, static_cast<SCH_SEARCH_DATA*>( m_findReplaceData.get() ), wxDefaultPosition,
+            wxDefaultSize, aReplace ? wxFR_REPLACEDIALOG : 0 );
 
     m_findReplaceDialog->SetFindEntries( m_findStringHistoryList, findString );
     m_findReplaceDialog->SetReplaceEntries( m_replaceStringHistoryList );
@@ -1517,7 +1520,8 @@ void SCH_EDIT_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
 
     cfg->GetPrintDC()->SetLogicalFunction( wxCOPY );
     GetScreen()->Print( cfg );
-    PrintDrawingSheet( cfg, GetScreen(), Schematic().GetProperties(), schIUScale.IU_PER_MILS, fileName );
+    PrintDrawingSheet( cfg, GetScreen(), Schematic().GetProperties(), schIUScale.IU_PER_MILS,
+                       fileName );
 }
 
 
@@ -1580,6 +1584,7 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
                 GetCanvas()->GetView()->Update( line );
 
             line->SetOperatingPoint( wxEmptyString );
+
             // update value from netlist, below
         }
         else if( item->Type() == SCH_SYMBOL_T )
@@ -1889,15 +1894,15 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
         {
             switch( changed_list->GetPickedItemStatus( ii ) )
             {
-                // Only care about changed, new, and deleted items, the other
-                // cases are not connectivity-related
-                case UNDO_REDO::CHANGED:
-                case UNDO_REDO::NEWITEM:
-                case UNDO_REDO::DELETED:
-                    break;
+            // Only care about changed, new, and deleted items, the other
+            // cases are not connectivity-related
+            case UNDO_REDO::CHANGED:
+            case UNDO_REDO::NEWITEM:
+            case UNDO_REDO::DELETED:
+                break;
 
-                default:
-                    continue;
+            default:
+                continue;
             }
 
             SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( changed_list->GetPickedItem( ii ) );

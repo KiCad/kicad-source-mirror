@@ -32,7 +32,9 @@ class SYMBOL_TREE_MODEL_ADAPTER : public LIB_TREE_MODEL_ADAPTER
 {
 public:
     /**
-     * Destructor. Do NOT delete this class manually; it is reference-counted by wxObject.
+     * Destructor.
+     *
+     * @warning Do **not** delete this class manually.  It is reference-counted by wxObject.
      */
     ~SYMBOL_TREE_MODEL_ADAPTER();
 
@@ -46,11 +48,12 @@ public:
 
     /**
      * Add all the libraries in a SYMBOL_LIB_TABLE to the model.
+     *
      * Displays a progress dialog attached to the parent frame the first time it is run.
      *
      * @param aNicknames is the list of library nicknames
      * @param aParent is the parent window to display the progress dialog
-     * @return false if loading was cancelled by the user
+     * @return false if loading was canceled by the user
      */
     bool AddLibraries( const std::vector<wxString>& aNicknames, SCH_BASE_FRAME* aFrame );
 
@@ -68,6 +71,7 @@ protected:
 
 private:
     friend class SYMBOL_ASYNC_LOADER;
+
     /**
      * Flag to only show the symbol library table load progress dialog the first time.
      */

@@ -34,7 +34,8 @@ static const wxString DescriptionFormat = wxS(
     "__FIELDS__"
     "</table>" );
 
-static const wxString AliasOfFormat =   wxS( "<br><i>" ) + _( "Derived from" ) + wxS( " %s (%s)</i>" );
+static const wxString AliasOfFormat =   wxS( "<br><i>" ) + _( "Derived from" ) +
+                                        wxS( " %s (%s)</i>" );
 static const wxString DescFormat =      wxS( "<br>%s" );
 static const wxString KeywordsFormat =  wxS( "<br>" ) + _( "Keywords" ) + wxS( ": %s" );
 static const wxString FieldFormat = wxS(
@@ -129,9 +130,10 @@ protected:
                 root_desc = parent->GetDesc();
             }
 
-            m_html.Replace( wxS( "__ALIASOF__" ), wxString::Format(  AliasOfFormat,
-                                                              EscapeHTML( UnescapeString( root_name ) ),
-                                                              EscapeHTML( root_desc ) ) );
+            m_html.Replace( wxS( "__ALIASOF__" ),
+                            wxString::Format(  AliasOfFormat,
+                                               EscapeHTML( UnescapeString( root_name ) ),
+                                               EscapeHTML( root_desc ) ) );
         }
     }
 
@@ -157,7 +159,8 @@ protected:
         if( keywords.empty() )
             m_html.Replace( wxS( "__KEY__" ), wxEmptyString );
         else
-            m_html.Replace( wxS( "__KEY__" ), wxString::Format( KeywordsFormat, EscapeHTML( keywords ) ) );
+            m_html.Replace( wxS( "__KEY__" ),
+                            wxString::Format( KeywordsFormat, EscapeHTML( keywords ) ) );
     }
 
 

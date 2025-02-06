@@ -91,7 +91,7 @@ public:
     virtual ~LIB_SYMBOL()
     {}
 
-    ///< http://www.boost.org/doc/libs/1_55_0/libs/smart_ptr/sp_techniques.html#weak_without_shared
+    /// http://www.boost.org/doc/libs/1_55_0/libs/smart_ptr/sp_techniques.html#weak_without_shared.
     LIB_SYMBOL_SPTR SharedPtr() const { return m_me; }
 
     /**
@@ -120,7 +120,7 @@ public:
     /**
      * Get the number of parents for this symbol.
      *
-     * @return the inhertance depth for this symbol.
+     * @return the inheritance depth for this symbol.
      */
     unsigned GetInheritanceDepth() const;
 
@@ -252,7 +252,7 @@ public:
      *  If aUnit == 0, unit is not used
      *  if aBodyStyle == 0 Convert is non used
      *  Fields are not taken in account
-     **/
+     */
     const BOX2I GetBodyBoundingBox( int aUnit, int aBodyStyle, bool aIncludePins,
                                     bool aIncludePrivateItems ) const;
 
@@ -549,7 +549,7 @@ public:
      * greater that count are removed from the symbol.
      *
      * @param aCount - Number of units per package.
-     * @param aDuplicateDrawItems Create duplicate draw items of unit 1 for each additionl unit.
+     * @param aDuplicateDrawItems Create duplicate draw items of unit 1 for each additional unit.
      */
     void SetUnitCount( int aCount, bool aDuplicateDrawItems = true );
     int GetUnitCount() const override;
@@ -637,7 +637,7 @@ public:
      * @note #SCH_FIELD objects are not included.
      *
      * @param aUnit is the unit number of the item, -1 includes all units.
-     * @param aBodyStyle is the alternate body styple of the item, -1 includes all body styles.
+     * @param aBodyStyle is the alternate body style of the item, -1 includes all body styles.
      *
      * @return a list of unit items.
      */

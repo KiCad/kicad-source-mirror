@@ -668,6 +668,7 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
     }
 }
 
+
 bool SCH_TEXT::operator==( const SCH_ITEM& aOther ) const
 {
     if( Type() != aOther.Type() )

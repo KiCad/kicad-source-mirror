@@ -37,7 +37,8 @@ wxString PIN_NUMBERS::getNextSymbol( const wxString& str, wxString::size_type& c
     wxChar c = str[cursor];
 
     // Need to check that there is a digit in the string before we parse it as a numeric
-    if( ( wxIsdigit( c ) || ( ( c == '+' || c == '-' )  && ( cursor < str.size() - 1 ) && wxIsdigit( str[cursor + 1] ) ) ) )
+    if( ( wxIsdigit( c ) || ( ( c == '+' || c == '-' )  && ( cursor < str.size() - 1 )
+                            && wxIsdigit( str[cursor + 1] ) ) ) )
     {
         // number, possibly with sign
         while( ++cursor < str.size() )
@@ -72,6 +73,7 @@ wxString PIN_NUMBERS::GetSummary() const
     wxString ret;
 
     const_iterator i = begin();
+
     if( i == end() )
         return ret;
 
@@ -92,13 +94,16 @@ wxString PIN_NUMBERS::GetSummary() const
             continue;
 
         ret += *begin_of_range;
+
         if( begin_of_range != last )
         {
             ret += '-';
             ret += *last;
         }
+
         if( i == end() )
             break;
+
         begin_of_range = i;
         ret += ',';
     }
@@ -188,7 +193,9 @@ int PIN_NUMBERS::Compare( const wxString& lhs, const wxString& rhs )
                 }
             }
             else
+            {
                 return -2;
+            }
         }
         else
         {

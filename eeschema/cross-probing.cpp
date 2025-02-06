@@ -851,13 +851,15 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         // Try to select specified items.
 
         // $SELECT: 1,<spec1>,<spec2>,<spec3>
-        // Select and focus on <spec1> item, select other specified items that are on the same sheet.
+        // Select and focus on <spec1> item, select other specified items that are on the
+        // same sheet.
 
         std::string prefix = "$SELECT: ";
 
         std::string paramStr = payload.substr( prefix.size() );
 
-        if( paramStr.size() < 2 )   // Empty/broken command: we need at least 2 chars for sync string.
+        // Empty/broken command: we need at least 2 chars for sync string.
+        if( paramStr.size() < 2 )
             break;
 
         std::string syncStr = paramStr.substr( 2 );
@@ -945,7 +947,8 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
     case MAIL_IMPORT_FILE:
     {
-        // Extract file format type and path (plugin type, path and properties keys, values separated with \n)
+        // Extract file format type and path (plugin type, path and properties keys, values
+        // separated with \n)
         std::stringstream ss( payload );
         char              delim = '\n';
 

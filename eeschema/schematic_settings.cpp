@@ -69,7 +69,8 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
     SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
     EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
-    int defaultLineThickness = cfg ? cfg->m_Drawing.default_line_thickness : DEFAULT_LINE_WIDTH_MILS;
+    int defaultLineThickness =
+            cfg ? cfg->m_Drawing.default_line_thickness : DEFAULT_LINE_WIDTH_MILS;
     int defaultTextSize = cfg ? cfg->m_Drawing.default_text_size : DEFAULT_TEXT_SIZE;
     int defaultPinSymbolSize = cfg ? cfg->m_Drawing.pin_symbol_size : DEFAULT_TEXT_SIZE / 2;
     int defaultJunctionSizeChoice = cfg ? cfg->m_Drawing.junction_size_choice : 3;
@@ -186,7 +187,8 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
 
                 // Read global fieldname templates
                 SETTINGS_MANAGER&  curr_mgr = Pgm().GetSettingsManager();
-                EESCHEMA_SETTINGS* curr_cfg = curr_mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+                EESCHEMA_SETTINGS* curr_cfg =
+                        curr_mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
                 if( curr_cfg && !curr_cfg->m_Drawing.field_names.IsEmpty() )
                     m_TemplateFieldNames.AddTemplateFieldNames( curr_cfg->m_Drawing.field_names );

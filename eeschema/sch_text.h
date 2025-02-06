@@ -139,7 +139,10 @@ public:
     BITMAPS GetMenuImage() const override;
 
     VECTOR2I GetPosition() const override { return EDA_TEXT::GetTextPos(); }
-    void     SetPosition( const VECTOR2I& aPosition ) override { EDA_TEXT::SetTextPos( aPosition ); }
+    void     SetPosition( const VECTOR2I& aPosition ) override
+    {
+        EDA_TEXT::SetTextPos( aPosition );
+    }
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;

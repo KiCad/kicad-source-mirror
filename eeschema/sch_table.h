@@ -80,7 +80,11 @@ public:
     void SetSeparatorsWidth( int aWidth ) { m_separatorsStroke.SetWidth( aWidth ); }
     int GetSeparatorsWidth() const        { return m_separatorsStroke.GetWidth(); }
 
-    void SetSeparatorsStyle( const LINE_STYLE aStyle ) { m_separatorsStroke.SetLineStyle( aStyle ); }
+    void SetSeparatorsStyle( const LINE_STYLE aStyle )
+    {
+        m_separatorsStroke.SetLineStyle( aStyle );
+    }
+
     LINE_STYLE GetSeparatorsStyle() const
     {
         if( m_separatorsStroke.GetLineStyle() == LINE_STYLE::DEFAULT )

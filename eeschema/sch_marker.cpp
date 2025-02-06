@@ -211,10 +211,10 @@ SCH_MARKER* SCH_MARKER::DeserializeFromString( const SCH_SHEET_LIST& aSheetList,
 
     bool isLegacyMarker = true;
 
-    // Deserialize sheet / item specific paths - we are not able to use the file version to determine
-    // if markers are legacy as there could be a file opened with a prior version but which has
-    // new markers - this code is called not just during schematic load, but also to match new
-    // ERC exceptions to exclusions.
+    // Deserialize sheet / item specific paths - we are not able to use the file version to
+    // determine if markers are legacy as there could be a file opened with a prior version
+    // but which has new markers - this code is called not just during schematic load, but
+    // also to match new ERC exceptions to exclusions.
     if( props.size() == 8 )
     {
         isLegacyMarker = false;
@@ -224,6 +224,7 @@ SCH_MARKER* SCH_MARKER::DeserializeFromString( const SCH_SHEET_LIST& aSheetList,
             KIID_PATH                     sheetSpecificKiidPath( props[5] );
             std::optional<SCH_SHEET_PATH> sheetSpecificPath =
                     aSheetList.GetSheetPathByKIIDPath( sheetSpecificKiidPath, true );
+
             if( sheetSpecificPath.has_value() )
                 ercItem->SetSheetSpecificPath( sheetSpecificPath.value() );
         }
@@ -233,6 +234,7 @@ SCH_MARKER* SCH_MARKER::DeserializeFromString( const SCH_SHEET_LIST& aSheetList,
             KIID_PATH                     mainItemKiidPath( props[6] );
             std::optional<SCH_SHEET_PATH> mainItemPath =
                     aSheetList.GetSheetPathByKIIDPath( mainItemKiidPath, true );
+
             if( mainItemPath.has_value() )
             {
                 if( props[7].IsEmpty() )

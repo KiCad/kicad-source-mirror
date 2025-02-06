@@ -33,7 +33,7 @@
 #include <geometry/rtree.h>
 
 /**
- * Implements an R-tree for fast spatial and type indexing of schematic items.
+ * Implement an R-tree for fast spatial and type indexing of schematic items.
  * Non-owning.
  */
 class EE_RTREE
@@ -72,8 +72,9 @@ public:
     }
 
     /**
-     * Remove an item from the tree. Removal is done by comparing pointers, attempting
-     * to remove a copy of the item will fail.
+     * Remove an item from the tree.
+     *
+     * Removal is done by comparing pointers, attempting to remove a copy of the item will fail.
      */
     bool remove( SCH_ITEM* aItem )
     {
@@ -115,8 +116,10 @@ public:
     }
 
     /**
-     * Determine if a given item exists in the tree.  Note that this does not search the full tree
-     * so if the item has been moved, this will return false when it should be true.
+     * Determine if a given item exists in the tree.
+     *
+     * @note This does not search the full tree so if the item has been moved, this will return
+     *       false when it should be true.
      *
      * @param aItem Item that may potentially exist in the tree.
      * @param aRobust If true, search the whole tree, not just the bounding box.
@@ -265,13 +268,15 @@ public:
     }
 
     /**
-     * Returns a read/write iterator that points to the first
-     * element in the %EE_RTREE
-     * N.B. The iteration order of the RTree is not readily apparent and will change
+     * Return a read/write iterator that points to the first.
+     * element in the #EE_RTREE.
+     *
+     * @note The iteration order of the RTree is not readily apparent and will change
      * if/when you add or move items and the RTree is re-balanced.  Any exposure of the
-     * RTree contents to the user MUST be sorted before being presented.  See SCH_IO_KICAD_SEXPR::Format
-     * or SCH_EDITOR_CONTROL::nextMatch for examples.
-     * @return Complete RTree of the screen's items
+     * RTree contents to the user MUST be sorted before being presented.  See
+     * SCH_IO_KICAD_SEXPR::Format() or SCH_EDITOR_CONTROL::nextMatch() for examples.
+     *
+     * @return Complete RTree of the screen's items.
      */
     iterator begin()
     {
@@ -279,8 +284,7 @@ public:
     }
 
     /**
-     * Returns a read/write iterator that points to one past the last
-     * element in the %EE_RTREE
+     * Return a read/write iterator that points to one past the last element in the #EE_RTREE.
      */
     iterator end()
     {

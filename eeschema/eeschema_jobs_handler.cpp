@@ -268,6 +268,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     std::unique_ptr<SCH_PLOTTER> schPlotter = std::make_unique<SCH_PLOTTER>( sch );
 
     PLOT_FORMAT format = PLOT_FORMAT::PDF;
+
     switch( aPlotJob->m_plotFormat )
     {
     case SCH_PLOT_FORMAT::DXF:    format = PLOT_FORMAT::DXF;    break;
@@ -278,6 +279,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     }
 
     HPGL_PAGE_SIZE hpglPageSize = HPGL_PAGE_SIZE::DEFAULT;
+
     switch( aPlotJob->m_HPGLPaperSizeSelect )
     {
     case JOB_HPGL_PAGE_SIZE::DEFAULT: hpglPageSize = HPGL_PAGE_SIZE::DEFAULT; break;
@@ -295,6 +297,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     }
 
     HPGL_PLOT_ORIGIN_AND_UNITS hpglOrigin = HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE;
+
     switch( aPlotJob->m_HPGLPlotOrigin )
     {
     case JOB_HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT:
@@ -321,6 +324,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     }
 
     wxString outPath = aPlotJob->GetFullOutputPath( &sch->Prj() );
+
     if( !PATHS::EnsurePathExists( outPath,
                                   !aPlotJob->GetOutputPathIsDirectory() ) )
     {
@@ -336,6 +340,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     plotOpts.m_PDFPropertyPopups = aPlotJob->m_PDFPropertyPopups;
     plotOpts.m_PDFHierarchicalLinks = aPlotJob->m_PDFHierarchicalLinks;
     plotOpts.m_PDFMetadata = aPlotJob->m_PDFMetadata;
+
     if( aPlotJob->GetOutputPathIsDirectory() )
     {
         plotOpts.m_outputDirectory = outPath;
@@ -346,6 +351,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
         plotOpts.m_outputDirectory = wxEmptyString;
         plotOpts.m_outputFile = outPath;
     }
+
     plotOpts.m_pageSizeSelect = pageSizeSelect;
     plotOpts.m_plotAll = aPlotJob->m_plotAll;
     plotOpts.m_plotDrawingSheet = aPlotJob->m_plotDrawingSheet;
@@ -851,7 +857,8 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*  aSvgJob,
     // iterate from unit 1, unit 0 would be "all units" which we don't want
     for( int unit = 1; unit < symbol->GetUnitCount() + 1; unit++ )
     {
-        for( int bodyStyle = 1; bodyStyle < ( symbol->HasAlternateBodyStyle() ? 2 : 1 ) + 1; ++bodyStyle )
+        for( int bodyStyle = 1; bodyStyle < ( symbol->HasAlternateBodyStyle() ? 2 : 1 ) + 1;
+             ++bodyStyle )
         {
             wxString   filename;
             wxFileName fn;
@@ -883,7 +890,8 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*  aSvgJob,
                                 RPT_SEVERITY_ACTION );
 
             // Get the symbol bounding box to fit the plot page to it
-            BOX2I     symbolBB = symbol->Flatten()->GetUnitBoundingBox( unit, bodyStyle, !aSvgJob->m_includeHiddenFields );
+            BOX2I symbolBB = symbol->Flatten()->GetUnitBoundingBox(
+                    unit, bodyStyle, !aSvgJob->m_includeHiddenFields );
             PAGE_INFO pageInfo( PAGE_INFO::Custom );
             pageInfo.SetHeightMils( schIUScale.IUToMils( symbolBB.GetHeight() * 1.2 ) );
             pageInfo.SetWidthMils( schIUScale.IUToMils( symbolBB.GetWidth() * 1.2 ) );
@@ -1087,7 +1095,8 @@ int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
     }
     else
     {
-        if( !SCH_IO_MGR::ConvertLibrary( nullptr, fn.GetAbsolutePath(), upgradeJob->m_outputLibraryPath ) )
+        if( !SCH_IO_MGR::ConvertLibrary( nullptr, fn.GetAbsolutePath(),
+                                         upgradeJob->m_outputLibraryPath ) )
         {
             m_reporter->Report( ( "Unable to convert library\n" ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_UNKNOWN;

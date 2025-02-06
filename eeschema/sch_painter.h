@@ -103,14 +103,21 @@ private:
 
     void drawPinDanglingIndicator( const SCH_PIN& aPin, const COLOR4D& aColor, bool aDrawingShadows,
                                    bool aBrightened );
+
+    /**
+     * Draw the target (an open square) for a wire or label which has no connection or is
+     * being moved.
+     */
     void drawDanglingIndicator( const VECTOR2I& aPos, const COLOR4D& aColor, int aWidth,
                                 bool aDangling, bool aDrawingShadows, bool aBrightened );
+
+    /// Draw anchor indicating the anchor position of text objects, local labels, or fields.
     void drawAnchor( const VECTOR2I& aPos, bool aDrawingShadows );
 
     int internalPinDecoSize( const SCH_PIN &aPin );
     int externalPinDecoSize( const SCH_PIN &aPin );
 
-    // Indicates the item is drawn on a non-cached layer in OpenGL
+    /// Indicates the item is drawn on a non-cached layer in OpenGL.
     bool nonCached( const EDA_ITEM* aItem );
 
     bool isUnitAndConversionShown( const SCH_ITEM* aItem ) const;

@@ -233,7 +233,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
                 if( connectivityCleanUp == NO_CLEANUP )
                     connectivityCleanUp = LOCAL_CLEANUP;
 
-                // Do a full rebauild of the connectivity if there is a sheet in the commit.
+                // Do a full rebuild of the connectivity if there is a sheet in the commit.
                 if( schItem->Type() == SCH_SHEET_T )
                     connectivityCleanUp = GLOBAL_CLEANUP;
             }
@@ -402,7 +402,8 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
             {
                 wxLogTrace( wxS( "CONN_PROFILE" ),
                             wxS( "SCH_COMMIT::pushSchEdit() %s clean up connectivity rebuild." ),
-                            ( connectivityCleanUp == LOCAL_CLEANUP ) ? wxS( "local" ) : wxS( "global" ) );
+                            ( connectivityCleanUp == LOCAL_CLEANUP ) ? wxS( "local" )
+                                                                     : wxS( "global" ) );
                 frame->RecalculateConnections( this, connectivityCleanUp );
             }
         }

@@ -485,7 +485,7 @@ bool SYMBOL_LIBRARY_MANAGER::UpdateSymbol( LIB_SYMBOL* aSymbol, const wxString& 
 {
     wxCHECK_MSG( aSymbol, false, wxString::Format( "Null symbol in library: %s", aLibrary ) );
     wxCHECK_MSG( LibraryExists( aLibrary ), false,
-                 wxString::Format( "Library missing: %s, for smybol %s", aLibrary,
+                 wxString::Format( "Library missing: %s, for symbol %s", aLibrary,
                                    aSymbol->GetName() ) );
 
     LIB_BUFFER&                    libBuf = getLibraryBuffer( aLibrary );

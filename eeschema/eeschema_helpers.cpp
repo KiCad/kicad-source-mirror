@@ -82,22 +82,23 @@ PROJECT* EESCHEMA_HELPERS::GetDefaultProject( bool aSetActive )
 }
 
 
-SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString&        aFileName,
-                                            bool aSetActive,
-                                            bool aForceDefaultProject,
-                                            PROJECT* aProject )
+SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName, bool aSetActive,
+                                            bool aForceDefaultProject, PROJECT* aProject )
 {
     if( aFileName.EndsWith( FILEEXT::KiCadSchematicFileExtension ) )
-        return LoadSchematic( aFileName, SCH_IO_MGR::SCH_KICAD, aSetActive, aForceDefaultProject, aProject );
+        return LoadSchematic( aFileName, SCH_IO_MGR::SCH_KICAD, aSetActive, aForceDefaultProject,
+                              aProject );
     else if( aFileName.EndsWith( FILEEXT::LegacySchematicFileExtension ) )
-        return LoadSchematic( aFileName, SCH_IO_MGR::SCH_LEGACY, aSetActive, aForceDefaultProject, aProject );
+        return LoadSchematic( aFileName, SCH_IO_MGR::SCH_LEGACY, aSetActive, aForceDefaultProject,
+                              aProject );
 
     // as fall back for any other kind use the legacy format
     return LoadSchematic( aFileName, SCH_IO_MGR::SCH_LEGACY, aSetActive, aForceDefaultProject, aProject );
 }
 
 
-SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName, SCH_IO_MGR::SCH_FILE_T aFormat,
+SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
+                                            SCH_IO_MGR::SCH_FILE_T aFormat,
                                             bool aSetActive,
                                             bool aForceDefaultProject,
                                             PROJECT* aProject )
@@ -149,7 +150,6 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName, SCH_IO_MG
     SCH_SCREEN* rootScreen = new SCH_SCREEN( schematic );
     const_cast<KIID&>( rootSheet->m_Uuid ) = rootScreen->GetUuid();
     schematic->Root().SetScreen( rootScreen );
-
 
     schematic->RootScreen()->SetFileName( wxEmptyString );
 

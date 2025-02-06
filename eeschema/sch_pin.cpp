@@ -70,9 +70,8 @@ wxString SCH_PIN::GetCanonicalElectricalTypeName( ELECTRICAL_PINTYPE aType )
 
 
 /// Utility for getting the size of the 'internal' pin decorators (as a radius)
-// i.e. the clock symbols (falling clock is actually external but is of
-// the same kind)
-
+/// i.e. the clock symbols (falling clock is actually external but is of
+/// the same kind)
 static int internalPinDecoSize( const RENDER_SETTINGS* aSettings, const SCH_PIN &aPin )
 {
     const SCH_RENDER_SETTINGS* settings = static_cast<const SCH_RENDER_SETTINGS*>( aSettings );
@@ -83,9 +82,10 @@ static int internalPinDecoSize( const RENDER_SETTINGS* aSettings, const SCH_PIN 
     return aPin.GetNameTextSize() != 0 ? aPin.GetNameTextSize() / 2 : aPin.GetNumberTextSize() / 2;
 }
 
+
 /// Utility for getting the size of the 'external' pin decorators (as a radius)
-// i.e. the negation circle, the polarity 'slopes' and the nonlogic
-// marker
+/// i.e. the negation circle, the polarity 'slopes' and the nonlogic
+/// marker
 static int externalPinDecoSize( const RENDER_SETTINGS* aSettings, const SCH_PIN &aPin )
 {
     const SCH_RENDER_SETTINGS* settings = static_cast<const SCH_RENDER_SETTINGS*>( aSettings );
@@ -175,10 +175,6 @@ SCH_PIN::SCH_PIN( SCH_SYMBOL* aParentSymbol, SCH_PIN* aLibPin ) :
 }
 
 
-/**
- * Create a proxy pin from an alternate pin designation.
- * The SCH_PIN data will be filled in when the pin is resolved (see SCH_SYMBOL::UpdatePins).
- */
 SCH_PIN::SCH_PIN( SCH_SYMBOL* aParentSymbol, const wxString& aNumber, const wxString& aAlt,
                   const KIID& aUuid ) :
         SCH_ITEM( aParentSymbol, SCH_PIN_T ),
@@ -409,6 +405,7 @@ void SCH_PIN::SetName( const wxString& aName )
         return;
 
     m_name = aName;
+
     // pin name string does not support spaces
     m_name.Replace( wxT( " " ), wxT( "_" ) );
 
@@ -1244,7 +1241,8 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
                 attrs.m_Valign = vJustify;
                 attrs.m_Multiline = false;
 
-                aPlotter->PlotText( VECTOR2I( x, y ), nameColor, name, attrs, font, GetFontMetrics() );
+                aPlotter->PlotText( VECTOR2I( x, y ), nameColor, name, attrs, font,
+                                    GetFontMetrics() );
             };
 
     auto plotNum =
@@ -1259,14 +1257,15 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
                 attrs.m_Valign = vJustify;
                 attrs.m_Multiline = false;
 
-                aPlotter->PlotText( VECTOR2I( x, y ), numColor, number, attrs, font, GetFontMetrics() );
+                aPlotter->PlotText( VECTOR2I( x, y ), numColor, number, attrs, font,
+                                    GetFontMetrics() );
             };
 
-    /* Draw the text inside, but the pin numbers outside. */
+    // Draw the text inside, but the pin numbers outside.
     if( aTextInside )
     {
         if( ( aPinOrient == PIN_ORIENTATION::PIN_LEFT )
-            || ( aPinOrient == PIN_ORIENTATION::PIN_RIGHT ) ) /* Its an horizontal line. */
+          || ( aPinOrient == PIN_ORIENTATION::PIN_RIGHT ) ) // It's a horizontal line.
         {
             if( aDrawPinName )
             {
@@ -1288,7 +1287,7 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
                          GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM );
             }
         }
-        else         /* Its a vertical line. */
+        else         // It's a vertical line.
         {
             if( aPinOrient == PIN_ORIENTATION::PIN_DOWN )
             {
@@ -1320,12 +1319,12 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
             }
         }
     }
-    else     /* Draw num & text pin outside */
+    else     // Draw num & text pin outside.
     {
         if( ( aPinOrient == PIN_ORIENTATION::PIN_LEFT )
             || ( aPinOrient == PIN_ORIENTATION::PIN_RIGHT ) )
         {
-            /* Its an horizontal line. */
+            // It's an horizontal line.
             if( aDrawPinName && aDrawPinNum )
             {
                 plotName( ( x1 + aPinPos.x) / 2, y1 - name_offset, ANGLE_HORIZONTAL,
@@ -1347,7 +1346,7 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
         }
         else
         {
-            /* Its a vertical line. */
+            // Its a vertical line.
             if( aDrawPinName && aDrawPinNum )
             {
                 plotName( x1 - name_offset, ( y1 + aPinPos.y ) / 2, ANGLE_VERTICAL,
@@ -1887,8 +1886,6 @@ wxString SCH_PIN::getItemDescription( ALT* aAlt ) const
 }
 
 
-
-
 int SCH_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 {
     // Ignore the UUID here.
@@ -1900,69 +1897,6 @@ int SCH_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
     const SCH_PIN* tmp = static_cast<const SCH_PIN*>( &aOther );
 
     wxCHECK( tmp, -1 );
-
-    // When comparing units, we do not compare the part numbers.  If everything else is
-    // identical, then we can just renumber the parts for the inherited symbol.
-    // if( !( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::UNIT ) && m_number != tmp->m_number )
-    //     return m_number.Cmp( tmp->m_number );
-
-    // int result = m_name.Cmp( tmp->m_name );
-
-    // if( result )
-    //     return result;
-
-    // if( m_position.x != tmp->m_position.x )
-    //     return m_position.x - tmp->m_position.x;
-
-    // if( m_position.y != tmp->m_position.y )
-    //     return m_position.y - tmp->m_position.y;
-
-    // if( m_length != tmp->m_length )
-    //     return m_length.value_or( 0 ) - tmp->m_length.value_or( 0 );
-
-    // if( m_orientation != tmp->m_orientation )
-    //     return static_cast<int>( m_orientation ) - static_cast<int>( tmp->m_orientation );
-
-    // if( m_shape != tmp->m_shape )
-    //     return static_cast<int>( m_shape ) - static_cast<int>( tmp->m_shape );
-
-    // if( m_type != tmp->m_type )
-    //     return static_cast<int>( m_type ) - static_cast<int>( tmp->m_type );
-
-    // if( m_hidden != tmp->m_hidden )
-    //     return m_hidden.value_or( false ) - tmp->m_hidden.value_or( false );
-
-    // if( m_numTextSize != tmp->m_numTextSize )
-    //     return m_numTextSize.value_or( 0 ) - tmp->m_numTextSize.value_or( 0 );
-
-    // if( m_nameTextSize != tmp->m_nameTextSize )
-    //     return m_nameTextSize.value_or( 0 ) - tmp->m_nameTextSize.value_or( 0 );
-
-    // if( m_alternates.size() != tmp->m_alternates.size() )
-    //     return static_cast<int>( m_alternates.size() - tmp->m_alternates.size() );
-
-    // auto lhsItem = m_alternates.begin();
-    // auto rhsItem = tmp->m_alternates.begin();
-
-    // while( lhsItem != m_alternates.end() )
-    // {
-    //     const ALT& lhsAlt = lhsItem->second;
-    //     const ALT& rhsAlt = rhsItem->second;
-
-    //     int retv = lhsAlt.m_Name.Cmp( rhsAlt.m_Name );
-
-    //     if( retv )
-    //         return retv;
-
-    //     if( lhsAlt.m_Type != rhsAlt.m_Type )
-    //         return static_cast<int>( lhsAlt.m_Type ) - static_cast<int>( rhsAlt.m_Type );
-
-    //     if( lhsAlt.m_Shape != rhsAlt.m_Shape )
-    //         return static_cast<int>( lhsAlt.m_Shape ) - static_cast<int>( rhsAlt.m_Shape );
-
-    //     ++lhsItem;
-    //     ++rhsItem;
-    // }
 
     if( m_number != tmp->m_number )
         return m_number.Cmp( tmp->m_number );
@@ -2127,11 +2061,10 @@ void SCH_PIN::Show( int nestLevel, std::ostream& os ) const
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str()
                                  << " num=\"" << m_number.mb_str()
                                  << '"' << "/>\n";
-
-//    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
 
 #endif
+
 
 void SCH_PIN::CalcEdit( const VECTOR2I& aPosition )
 {

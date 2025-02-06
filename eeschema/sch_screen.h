@@ -97,13 +97,14 @@ public:
     SCHEMATIC* Schematic() const;
 
     /**
-     * Gets the full RTree, usually for iterating.
-     * N.B. The iteration order of the RTree is not readily apparent and will change
-     * if/when you add or move items and the RTree is re-balanced.  Any exposure of the
-     * RTree contents to the user MUST be sorted before being presented.  See
-     * SCH_IO_KICAD_SEXPR::Format() or SCH_EDITOR_CONTROL::nextMatch() for examples.
+     * Get the full RTree, usually for iterating.
      *
-     * @return Complete RTree of the screen's items
+     * @note The iteration order of the RTree is not readily apparent and will change
+     *       if/when you add or move items and the RTree is re-balanced.  Any exposure of the
+     *       RTree contents to the user MUST be sorted before being presented.  See
+     *       SCH_IO_KICAD_SEXPR::Format() or SCH_EDITOR_CONTROL::nextMatch() for examples.
+     *
+     * @return Complete RTree of the screen's items.
      */
     EE_RTREE& Items() { return m_rtree; }
     const EE_RTREE& Items() const { return m_rtree; }
@@ -276,7 +277,7 @@ public:
     void Update( SCH_ITEM* aItem, bool aUpdateLibSymbol = true );
 
     /**
-     * Removes \a aItem from the linked list and deletes the object.
+     * Remove \a aItem from the linked list and deletes the object.
      *
      * If \a aItem is a schematic sheet label, it is removed from the screen associated with
      * the sheet that contains the label to be deleted.
@@ -313,7 +314,7 @@ public:
 
     /**
      * Test if a junction is required for the items at \a aPosition on the screen.  Note that
-     * this coule be either an implied junction (bus entry) or an explicit junction (dot).
+     * this could be either an implied junction (bus entry) or an explicit junction (dot).
      *
      * A junction is required at \a aPosition if one of the following criteria is satisfied:
      *  - One wire midpoint and one or more wire endpoints.
@@ -328,14 +329,16 @@ public:
     bool IsJunction( const VECTOR2I& aPosition ) const;
 
     /**
-     * Indicates that a junction dot is necessary at the given location.  See IsJunctionNeeded
-     * for more info.
+     * Indicate that a junction dot is necessary at the given location.
+     *
+     * See IsJunctionNeeded() for more info.
      */
     bool IsExplicitJunction( const VECTOR2I& aPosition ) const;
 
     /**
-     * Indicates that a junction dot is necessary at the given location, and does not yet exist.
-     * See IsJunctionNeeded for more info.
+     * Indicate that a junction dot is necessary at the given location, and does not yet exist.
+     *
+     * See IsJunctionNeeded() for more info.
      */
     bool IsExplicitJunctionNeeded( const VECTOR2I& aPosition ) const;
 
@@ -343,8 +346,9 @@ public:
                                             SPIN_STYLE            aDefaultOrientation,
                                             const SCH_SHEET_PATH* aSheet ) const;
     /**
-     * Indicates that a juction dot may be placed at the given location.  See IsJunctionNeeded
-     * for more info.
+     * Indicate that a junction dot may be placed at the given location.
+     *
+     * See IsJunctionNeeded() for more info.
      */
     bool IsExplicitJunctionAllowed( const VECTOR2I& aPosition ) const;
 
@@ -511,7 +515,7 @@ public:
     }
 
     /**
-     * Return a set of bus aliases defined in this screen
+     * Return a set of bus aliases defined in this screen.
      */
     auto& GetBusAliases() const
     {
@@ -663,7 +667,7 @@ private:
 
     bool        m_isReadOnly;               ///< Read only status of the screen file.
 
-    ///< Flag to indicate the file associated with this screen has been created.
+    /// Flag to indicate the file associated with this screen has been created.
     bool        m_fileExists;
 
     /// List of bus aliases stored in this screen.
@@ -704,9 +708,9 @@ private:
  *
  * Individual #SCH_SCREEN objects are unique and correspond to .sch files.
  *
- * NOTE: It may be desirable to fold the functionality of SCH_SCREENS into
- * the new SCHEMATIC class at some point, since SCHEMATIC can also be thought
- * of as owning the collection of all the SCH_SCREEN objects.
+ * @note It may be desirable to fold the functionality of #SCH_SCREENS into the new #SCHEMATIC
+ *       class at some point, since SCHEMATIC can also be thought of as owning the collection
+ *       of all the #SCH_SCREEN objects.
  */
 class SCH_SCREENS
 {
@@ -816,7 +820,7 @@ public:
     bool HasSchematic( const wxString& aSchematicFileName );
 
     /**
-     * built the list of sheet paths sharing a screen for each screen in use
+     * Build the list of sheet paths sharing a screen for each screen in use.
      */
     void BuildClientSheetPathList();
 

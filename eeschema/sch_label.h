@@ -34,8 +34,9 @@ class SCH_RULE_AREA;
 
 
 /*
- * Spin style for labels of all kinds on schematics
- * Basically a higher level abstraction of rotation and justification of text
+ * Spin style for labels of all kinds on schematics.
+ *
+ * Basically a higher level abstraction of rotation and justification of text.
  */
 class SPIN_STYLE
 {
@@ -134,7 +135,7 @@ enum  GLOBALLABEL_FIELD_T
 {
     INTERSHEET_REFS = 0,
 
-    /// The first 2 are mandatory, and must be instantiated in SCH_SHEET
+    /// The first 2 are mandatory, and must be instantiated in #SCH_SHEET.
     GLOBALLABEL_MANDATORY_FIELD_COUNT
 };
 
@@ -233,7 +234,7 @@ public:
     }
 
     /**
-     * Increment the label text, if it ends with a number.
+     * Increment the label text if it ends with a number.
      *
      * @param aIncrement = the increment value to add to the number ending the text.
      */
@@ -253,7 +254,8 @@ public:
     void AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo ) override;
 
     /**
-     * Builds an array of { pageNumber, pageName } pairs.
+     * Build an array of { pageNumber, pageName } pairs.
+     *
      * @param pages [out] Array of { pageNumber, pageName } pairs.
      */
     void GetIntersheetRefs( const SCH_SHEET_PATH* aPath,
@@ -350,21 +352,19 @@ public:
 
     /**
      * @brief autoRotateOnPlacement
-     * @return Returns true if the label rotation will be automatically set on the placement
+     * @return true if the label rotation will be automatically set on the placement.
      */
     bool AutoRotateOnPlacement() const;
 
     /**
-     * @brief setAutoRotateOnPlacement
      * @param autoRotate If set to true when the label is placed in the connection to a
-     * pin/net the direction will be automatically set according to the positioning of the net/pin
+     * pin/net the direction will be automatically set according to the positioning of the net/pin.
      */
     void SetAutoRotateOnPlacement( bool autoRotate = true );
 
     /**
-     * @brief AutoRotateOnPlacementSupported
      * @return true if the automated rotation of the label is supported after the placement
-     * At the moment it is supported for global and hierarchial labels
+     * At the moment it is supported for global and hierarchical labels
      */
     virtual bool AutoRotateOnPlacementSupported() const = 0;
 
@@ -512,7 +512,7 @@ private:
     int       m_pinLength;
     int       m_symbolSize;
 
-    /// Cache of any rule areas with borders which this label connects to
+    /// Cache of any rule areas with borders which this label connects to.
     std::unordered_set<SCH_RULE_AREA*> m_connected_rule_areas;
 };
 

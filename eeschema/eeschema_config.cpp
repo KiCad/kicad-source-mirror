@@ -160,7 +160,8 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
 
         std::vector<std::shared_ptr<BUS_ALIAS>> newAliases;
 
-        for( SCH_SCREEN* screen = screens.GetFirst(); screen != nullptr; screen = screens.GetNext() )
+        for( SCH_SCREEN* screen = screens.GetFirst(); screen != nullptr;
+             screen = screens.GetNext() )
         {
             for( const std::shared_ptr<BUS_ALIAS>& alias : screen->GetBusAliases() )
                 newAliases.push_back( alias );
@@ -321,7 +322,9 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_AuiPanels.float_net_nav_panel = netNavigatorPane.IsFloating();
 
         if( netNavigatorPane.IsDocked() )
+        {
             cfg->m_AuiPanels.net_nav_panel_docked_size = m_netNavigator->GetSize();
+        }
         else
         {
             cfg->m_AuiPanels.net_nav_panel_float_pos = netNavigatorPane.floating_pos;

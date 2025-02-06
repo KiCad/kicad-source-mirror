@@ -54,6 +54,13 @@ public:
 
     SCH_PIN( SCH_SYMBOL* aParentSymbol, SCH_PIN* aLibPin );
 
+    /**
+     * Create a proxy pin from an alternate pin designation.
+     *
+     * The #SCH_PIN data will be filled in when the pin is resolved.
+     *
+     * @see SCH_SYMBOL::UpdatePins().
+     */
     SCH_PIN( SCH_SYMBOL* aParentSymbol, const wxString& aNumber, const wxString& aAlt,
              const KIID& aUuid );
 
@@ -206,14 +213,14 @@ public:
     VECTOR2I GetPinRoot() const;
 
     /**
-     * these transforms have effect only if the pin has a LIB_SYMBOL as parent
+     * These transforms have effect only if the pin has a #LIB_SYMBOL as parent.
      */
     void MirrorHorizontally( int aCenter ) override;
     void MirrorVertically( int aCenter ) override;
     void Rotate( const VECTOR2I& aCenter, bool aRotateCCW = true ) override;
 
     /**
-     * these transforms have always effects
+     * These transforms have always effects.
      */
     void MirrorHorizontallyPin( int aCenter );
     void MirrorVerticallyPin( int aCenter );
@@ -221,6 +228,7 @@ public:
 
     /**
      * Plot the pin name and number.
+     *
      * @param aTextInside - draw the names & numbers inside the symbol body (ie: in the opposite
      *                      direction of \a aPinOrient).
      */
@@ -311,6 +319,7 @@ protected:
 
     /**
      * Print the pin symbol without text.
+     *
      * If \a aColor != 0, draw with \a aColor, else with the normal pin color.
      */
     void printPinSymbol( const SCH_RENDER_SETTINGS *aSettings, const VECTOR2I &aPos,
@@ -318,6 +327,7 @@ protected:
 
     /**
      * Put the pin number and pin text info, given the pin line coordinates.
+     *
      * The line must be vertical or horizontal.
      * If aDrawPinName == false the pin name is not printed.
      * If aDrawPinNum = false the pin number is not printed.
@@ -329,7 +339,7 @@ protected:
                         bool aDrawPinName, bool aDimmed );
 
     /**
-     * Draw the electrical type text of the pin (only for the footprint editor)
+     * Draw the electrical type text of the pin (only for the footprint editor).
      */
     void printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, const VECTOR2I& aPosition,
                                      PIN_ORIENTATION aOrientation, bool aDimmed );
@@ -379,7 +389,8 @@ protected:
 
     /**
      * The layout cache for this pin.
-     * SCH_PIN doesn't *have* to own this, it could be part a central cache.
+     *
+     * #SCH_PIN doesn't *have* to own this, it could be part a central cache.
      */
     mutable std::unique_ptr<PIN_LAYOUT_CACHE> m_layoutCache;
 

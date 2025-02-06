@@ -402,11 +402,12 @@ void SCH_BASE_FRAME::UpdateItem( EDA_ITEM* aItem, bool isAddOrDelete, bool aUpda
             GetCanvas()->GetView()->Update( aItem );
 
         // Some children are drawn from their parents.  Mark them for re-paint.
-        if( parent && parent->IsType( { SCH_SYMBOL_T, SCH_SHEET_T, SCH_LABEL_LOCATE_ANY_T, SCH_TABLE_T } ) )
+        if( parent
+          && parent->IsType( { SCH_SYMBOL_T, SCH_SHEET_T, SCH_LABEL_LOCATE_ANY_T, SCH_TABLE_T } ) )
             GetCanvas()->GetView()->Update( parent, KIGFX::REPAINT );
     }
 
-    /**
+    /*
      * Be careful when calling this.  Update will invalidate RTree iterators, so you cannot
      * call this while doing things like `for( SCH_ITEM* item : screen->Items() )`
      */
@@ -431,7 +432,6 @@ void SCH_BASE_FRAME::RefreshZoomDependentItems()
     //
     // Thus, as it currently stands, all zoom-dependent items can be found in the list of selected
     // items.
-
     if( m_toolManager )
     {
         EE_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
@@ -538,7 +538,8 @@ COLOR_SETTINGS* SCH_BASE_FRAME::GetColorSettings( bool aForceRefresh ) const
 
         if( IsType( FRAME_SCH_SYMBOL_EDITOR ) )
         {
-            SYMBOL_EDITOR_SETTINGS* symCfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
+            SYMBOL_EDITOR_SETTINGS* symCfg =
+                    mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
 
             if( !symCfg->m_UseEeschemaColorSettings )
                 colorTheme = symCfg->m_ColorTheme;
@@ -738,6 +739,7 @@ void SCH_BASE_FRAME::OnSymChange( wxFileSystemWatcherEvent& aEvent )
 void SCH_BASE_FRAME::OnSymChangeDebounceTimer( wxTimerEvent& aEvent )
 {
     wxLogTrace( "KICAD_LIB_WATCH", "OnSymChangeDebounceTimer" );
+
     // Disable logging to avoid spurious messages and check if the file has changed
     wxLog::EnableLogging( false );
     wxDateTime lastModified = m_watcherFileName.GetModificationTime();
@@ -748,8 +750,9 @@ void SCH_BASE_FRAME::OnSymChangeDebounceTimer( wxTimerEvent& aEvent )
 
     m_watcherLastModified = lastModified;
 
-    if( !GetScreen()->IsContentModified() || IsOK( this, _( "The library containing the current symbol has changed.\n"
-                                                            "Do you want to reload the library?" ) ) )
+    if( !GetScreen()->IsContentModified()
+      || IsOK( this, _( "The library containing the current symbol has changed.\n"
+                        "Do you want to reload the library?" ) ) )
     {
         wxLogTrace( "KICAD_LIB_WATCH", "Sending refresh symbol mail" );
         std::string libName = m_watcherFileName.GetFullPath().ToStdString();

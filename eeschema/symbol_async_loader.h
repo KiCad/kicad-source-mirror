@@ -38,12 +38,13 @@ class SYMBOL_ASYNC_LOADER
 {
 public:
     /**
-     * Constructs a loader for symbol libraries
-     * @param aNicknames is a list of library nicknames to load
-     * @param aTable is a pointer to the symbol library table to load libraries for
-     * @param aOnlyPowerSymbols, if true, will only return power symbols in the output map
-     * @param aOutput will be filled with the loaded parts
-     * @param aReporter will be used to repord progress, of not null
+     * Construct a loader for symbol libraries.
+     *
+     * @param aNicknames is a list of library nicknames to load.
+     * @param aTable is a pointer to the symbol library table to load libraries for.
+     * @param aOnlyPowerSymbols, if true, will only return power symbols in the output map.
+     * @param aOutput will be filled with the loaded parts.
+     * @param aReporter will be used to report progress, of not null.
      */
     SYMBOL_ASYNC_LOADER( const std::vector<wxString>& aNicknames,
                          SYMBOL_LIB_TABLE* aTable, bool aOnlyPowerSymbols = false,
@@ -53,41 +54,41 @@ public:
     ~SYMBOL_ASYNC_LOADER();
 
     /**
-     * Spins up threads to load all the libraries in m_nicknames
+     * Spin up threads to load all the libraries in m_nicknames.
      */
     void Start();
 
     /**
-     * Finalizes the threads and combines the output into the target output map
+     * Finalize the threads and combines the output into the target output map.
      */
     bool Join();
 
-    ///< Return true if loading is done
+    /// @return true if loading is done
     bool Done();
 
-    ///< Returns a string containing any errors generated during the load
+    /// @return a string containing any errors generated during the load.
     const wxString& GetErrors() const { return m_errors; }
 
-    ///< Represents a pair of <nickname, loaded parts list>
+    /// Represent a pair of <nickname, loaded parts list>.
     typedef std::pair<wxString, std::vector<LIB_SYMBOL*>> LOADED_PAIR;
 
 private:
-    ///< Worker job that loads libraries and returns a list of pairs of <nickname, loaded parts>
+    /// Worker job that loads libraries and returns a list of pairs of <nickname, loaded parts>.
     std::vector<LOADED_PAIR> worker();
 
-    ///<  list of libraries to load
+    /// List of libraries to load.
     std::vector<wxString> m_nicknames;
 
-    ///< Handle to the symbol library table being loaded into
+    /// Handle to the symbol library table being loaded into.
     SYMBOL_LIB_TABLE* m_table;
 
-    ///< True if we are loading only power symbols
+    /// True if we are loading only power symbols.
     bool m_onlyPowerSymbols;
 
-    ///< Handle to map that will be filled with the loaded parts per library
+    /// Handle to map that will be filled with the loaded parts per library.
     std::unordered_map<wxString, std::vector<LIB_SYMBOL*>>* m_output;
 
-    ///< Progress reporter (may be null)
+    /// Progress reporter (may be null).
     PROGRESS_REPORTER* m_reporter;
 
     size_t              m_threadCount;

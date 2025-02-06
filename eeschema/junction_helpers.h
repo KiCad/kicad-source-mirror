@@ -29,20 +29,23 @@ namespace JUNCTION_HELPERS
 */
 struct POINT_INFO
 {
-    ///< True if the point has 3+ wires and/or 3+ buses meeting there
+    /// True if the point has 3+ wires and/or 3+ buses meeting there
     bool isJunction;
-    ///< True if there is already junction dot at the point
+
+    /// True if there is already junction dot at the point
     bool hasExplicitJunctionDot;
-    ///< True if there is a bus entry at the point (either end)
+
+    /// True if there is a bus entry at the point (either end)
     bool hasBusEntry;
-    ///< True if there is a bus entry at the point and it connects to more than one wire
+
+    /// True if there is a bus entry at the point and it connects to more than one wire
     bool hasBusEntryToMultipleWires;
 };
 
 /**
  * Check a tree of items for a confluence at a given point and work out what kind of junction
  * it is, if any.
-*/
+ */
 POINT_INFO AnalyzePoint( const EE_RTREE& aItem, const VECTOR2I& aPosition, bool aBreakCrossings );
 
 } // namespace JUNCTION_HELPERS

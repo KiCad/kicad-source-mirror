@@ -115,6 +115,7 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
     return false;
 }
 
+
 void SCH_PAINTER::draw( const EDA_ITEM* aItem, int aLayer, bool aDimmed )
 {
 
@@ -143,75 +144,75 @@ void SCH_PAINTER::draw( const EDA_ITEM* aItem, int aLayer, bool aDimmed )
 
     switch( aItem->Type() )
     {
-        case LIB_SYMBOL_T:
-            draw( static_cast<const LIB_SYMBOL*>( aItem ), aLayer );
-            break;
-        case SCH_PIN_T:
-            drawBoundingBox = false;
-            draw( static_cast<const SCH_PIN*>( aItem ), aLayer, aDimmed  );
-            break;
-        case SCH_SYMBOL_T:
-            draw( static_cast<const SCH_SYMBOL*>( aItem ), aLayer );
-            break;
-        case SCH_JUNCTION_T:
-            draw( static_cast<const SCH_JUNCTION*>( aItem ), aLayer );
-            break;
-        case SCH_LINE_T:
-            draw( static_cast<const SCH_LINE*>( aItem ), aLayer );
-            break;
-        case SCH_SHAPE_T:
-            draw( static_cast<const SCH_SHAPE*>( aItem ), aLayer, aDimmed );
-            break;
-        case SCH_RULE_AREA_T:
-            draw( static_cast<const SCH_SHAPE*>( aItem ), aLayer, aDimmed );
-            break;
-        case SCH_TEXT_T:
-            draw( static_cast<const SCH_TEXT*>( aItem ), aLayer, aDimmed );
-            break;
-        case SCH_TEXTBOX_T:
-            draw( static_cast<const SCH_TEXTBOX*>( aItem ), aLayer, aDimmed );
-            break;
-        case SCH_TABLE_T:
-            draw( static_cast<const SCH_TABLE*>( aItem ), aLayer, aDimmed );
-            break;
-        case SCH_LABEL_T:
-            draw( static_cast<const SCH_LABEL*>( aItem ), aLayer );
-            break;
-        case SCH_DIRECTIVE_LABEL_T:
-            draw( static_cast<const SCH_DIRECTIVE_LABEL*>( aItem ), aLayer );
-            break;
-        case SCH_FIELD_T:
-            draw( static_cast<const SCH_FIELD*>( aItem ), aLayer, aDimmed );
-            break;
-        case SCH_HIER_LABEL_T:
-            draw( static_cast<const SCH_HIERLABEL*>( aItem ), aLayer, aDimmed );
-            break;
-        case SCH_GLOBAL_LABEL_T:
-            draw( static_cast<const SCH_GLOBALLABEL*>( aItem ), aLayer );
-            break;
-        case SCH_SHEET_T:
-            draw( static_cast<const SCH_SHEET*>( aItem ), aLayer );
-            break;
-        case SCH_SHEET_PIN_T:
-            draw( static_cast<const SCH_HIERLABEL*>( aItem ), aLayer, aDimmed );
-            break;
-        case SCH_NO_CONNECT_T:
-            draw( static_cast<const SCH_NO_CONNECT*>( aItem ), aLayer );
-            break;
-        case SCH_BUS_WIRE_ENTRY_T:
-            draw( static_cast<const SCH_BUS_ENTRY_BASE*>( aItem ), aLayer );
-            break;
-        case SCH_BUS_BUS_ENTRY_T:
-            draw( static_cast<const SCH_BUS_ENTRY_BASE*>( aItem ), aLayer );
-            break;
-        case SCH_BITMAP_T:
-            draw( static_cast<const SCH_BITMAP*>( aItem ), aLayer );
-            break;
-        case SCH_MARKER_T:
-            draw( static_cast<const SCH_MARKER*>( aItem ), aLayer );
-            break;
+    case LIB_SYMBOL_T:
+        draw( static_cast<const LIB_SYMBOL*>( aItem ), aLayer );
+        break;
+    case SCH_PIN_T:
+        drawBoundingBox = false;
+        draw( static_cast<const SCH_PIN*>( aItem ), aLayer, aDimmed  );
+        break;
+    case SCH_SYMBOL_T:
+        draw( static_cast<const SCH_SYMBOL*>( aItem ), aLayer );
+        break;
+    case SCH_JUNCTION_T:
+        draw( static_cast<const SCH_JUNCTION*>( aItem ), aLayer );
+        break;
+    case SCH_LINE_T:
+        draw( static_cast<const SCH_LINE*>( aItem ), aLayer );
+        break;
+    case SCH_SHAPE_T:
+        draw( static_cast<const SCH_SHAPE*>( aItem ), aLayer, aDimmed );
+        break;
+    case SCH_RULE_AREA_T:
+        draw( static_cast<const SCH_SHAPE*>( aItem ), aLayer, aDimmed );
+        break;
+    case SCH_TEXT_T:
+        draw( static_cast<const SCH_TEXT*>( aItem ), aLayer, aDimmed );
+        break;
+    case SCH_TEXTBOX_T:
+        draw( static_cast<const SCH_TEXTBOX*>( aItem ), aLayer, aDimmed );
+        break;
+    case SCH_TABLE_T:
+        draw( static_cast<const SCH_TABLE*>( aItem ), aLayer, aDimmed );
+        break;
+    case SCH_LABEL_T:
+        draw( static_cast<const SCH_LABEL*>( aItem ), aLayer );
+        break;
+    case SCH_DIRECTIVE_LABEL_T:
+        draw( static_cast<const SCH_DIRECTIVE_LABEL*>( aItem ), aLayer );
+        break;
+    case SCH_FIELD_T:
+        draw( static_cast<const SCH_FIELD*>( aItem ), aLayer, aDimmed );
+        break;
+    case SCH_HIER_LABEL_T:
+        draw( static_cast<const SCH_HIERLABEL*>( aItem ), aLayer, aDimmed );
+        break;
+    case SCH_GLOBAL_LABEL_T:
+        draw( static_cast<const SCH_GLOBALLABEL*>( aItem ), aLayer );
+        break;
+    case SCH_SHEET_T:
+        draw( static_cast<const SCH_SHEET*>( aItem ), aLayer );
+        break;
+    case SCH_SHEET_PIN_T:
+        draw( static_cast<const SCH_HIERLABEL*>( aItem ), aLayer, aDimmed );
+        break;
+    case SCH_NO_CONNECT_T:
+        draw( static_cast<const SCH_NO_CONNECT*>( aItem ), aLayer );
+        break;
+    case SCH_BUS_WIRE_ENTRY_T:
+        draw( static_cast<const SCH_BUS_ENTRY_BASE*>( aItem ), aLayer );
+        break;
+    case SCH_BUS_BUS_ENTRY_T:
+        draw( static_cast<const SCH_BUS_ENTRY_BASE*>( aItem ), aLayer );
+        break;
+    case SCH_BITMAP_T:
+        draw( static_cast<const SCH_BITMAP*>( aItem ), aLayer );
+        break;
+    case SCH_MARKER_T:
+        draw( static_cast<const SCH_MARKER*>( aItem ), aLayer );
+        break;
 
-        default: return;
+    default: return;
     }
 
     if( drawBoundingBox )
@@ -296,6 +297,7 @@ COLOR4D SCH_PAINTER::getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDr
                                      bool aDimmed ) const
 {
     COLOR4D color = m_schSettings.GetLayerColor( aLayer );
+
     // Graphic items of a SYMBOL frequently use the LAYER_DEVICE layer color
     // (i.e. when no specific color is set)
     bool isSymbolChild = aItem->GetParentSymbol() != nullptr;
@@ -766,6 +768,7 @@ static void drawAltPinModesIcon( GAL& aGal, const VECTOR2D& aPos, double aSize, 
     aGal.Save();
 
     aGal.Translate( aPos );
+
     if( aRotate )
     {
         aGal.Rotate( ANGLE_270.AsRadians() );
@@ -807,6 +810,7 @@ static void drawAltPinModesIcon( GAL& aGal, const VECTOR2D& aPos, double aSize, 
         aGal.DrawLine( topLineREnd - VECTOR2D{ aSize, 0 },
                        topLineREnd - VECTOR2D{ aSize * 0.7, 0 } );
     }
+
     aGal.DrawLine( topLineREnd, topLineREnd - VECTOR2D{ arrowHead * 1.2, arrowHead } );
     aGal.DrawLine( topLineREnd, topLineREnd - VECTOR2D{ arrowHead * 1.2, -arrowHead } );
 
@@ -819,10 +823,11 @@ static void drawAltPinModesIcon( GAL& aGal, const VECTOR2D& aPos, double aSize, 
     if( !aBaseSelected )
     {
         aGal.DrawArc( topLineREnd - VECTOR2D{ aSize, -lineYOffset },
-                        lineYOffset, ANGLE_0, -ANGLE_90 );
+                      lineYOffset, ANGLE_0, -ANGLE_90 );
     }
+
     aGal.DrawArc( topLineREnd - VECTOR2D{ aSize - lineYOffset * 2, -lineYOffset },
-                    lineYOffset, ANGLE_180, -ANGLE_90 );
+                  lineYOffset, ANGLE_180, -ANGLE_90 );
 
     aGal.Restore();
 };
@@ -1138,7 +1143,7 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
         return getRenderColor( aPin, aDrawnLayer, drawingShadows, aDimmed );
     };
 
-    // Request text layout infor and draw it
+    // Request text layout info and draw it
 
     if( std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> numInfo = cache.GetPinNumberInfo( shadowWidth ) )
     {
@@ -1167,7 +1172,6 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
 }
 
 
-// Draw anchor indicating the anchor position of text objects, local labels, or fields.
 void SCH_PAINTER::drawAnchor( const VECTOR2I& aPos, bool aDrawingShadows )
 {
     if( m_schSettings.IsPrinting() )
@@ -1192,8 +1196,6 @@ void SCH_PAINTER::drawAnchor( const VECTOR2I& aPos, bool aDrawingShadows )
 }
 
 
-// Draw the target (an open square) for a wire or label which has no connection or is
-// being moved.
 void SCH_PAINTER::drawDanglingIndicator( const VECTOR2I& aPos, const COLOR4D& aColor, int aWidth,
                                          bool aDangling, bool aDrawingShadows, bool aBrightened )
 {
@@ -2118,9 +2120,11 @@ void SCH_PAINTER::draw( const SCH_TABLE* aTable, int aLayer, bool aDimmed )
         if( aTable->StrokeHeader() )
         {
             if( !first->GetTextAngle().IsHorizontal() )
-                strokeLine( VECTOR2I( first->GetEndX(), pos.y ), VECTOR2I( first->GetEndX(), first->GetEndY() ) );
+                strokeLine( VECTOR2I( first->GetEndX(), pos.y ),
+                            VECTOR2I( first->GetEndX(), first->GetEndY() ) );
             else
-                strokeLine( VECTOR2I( pos.x, first->GetEndY() ), VECTOR2I( end.x, first->GetEndY() ) );
+                strokeLine( VECTOR2I( pos.x, first->GetEndY() ),
+                            VECTOR2I( end.x, first->GetEndY() ) );
         }
 
         if( aTable->StrokeExternal() )
@@ -2257,7 +2261,8 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
         BOX2I    bbox = aSymbol->GetBodyBoundingBox();
         BOX2I    pins = aSymbol->GetBodyAndPinsBoundingBox();
         VECTOR2D margins( std::max( bbox.GetX() - pins.GetX(), pins.GetEnd().x - bbox.GetEnd().x ),
-                          std::max( bbox.GetY() - pins.GetY(), pins.GetEnd().y - bbox.GetEnd().y ) );
+                          std::max( bbox.GetY() - pins.GetY(),
+                                    pins.GetEnd().y - bbox.GetEnd().y ) );
         int      strokeWidth = 3 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS );
 
         margins.x = std::max( margins.x * 0.6, margins.y * 0.3 );
@@ -2713,7 +2718,8 @@ void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
         BOX2I    bbox = aSheet->GetBodyBoundingBox();
         BOX2I    pins = aSheet->GetBoundingBox();
         VECTOR2D margins( std::max( bbox.GetX() - pins.GetX(), pins.GetEnd().x - bbox.GetEnd().x ),
-                          std::max( bbox.GetY() - pins.GetY(), pins.GetEnd().y - bbox.GetEnd().y ) );
+                          std::max( bbox.GetY() - pins.GetY(),
+                                    pins.GetEnd().y - bbox.GetEnd().y ) );
         int      strokeWidth = 3 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS );
 
         margins.x = std::max( margins.x * 0.6, margins.y * 0.3 );
@@ -2792,11 +2798,14 @@ void SCH_PAINTER::draw( const SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
     if( aEntry->IsSelected() )
     {
         line.SetSelected();
+
         // Never show unselected endpoints on bus entries
         line.SetFlags( STARTPOINT | ENDPOINT );
     }
     else if( aEntry->IsBrightened() )
+    {
         line.SetBrightened();
+    }
 
     line.SetStartPoint( aEntry->GetPosition() );
     line.SetEndPoint( aEntry->GetEnd() );
@@ -2889,6 +2898,7 @@ void SCH_PAINTER::draw( const SCH_BITMAP* aBitmap, int aLayer )
 
             // Draws a bounding box.
             VECTOR2D bm_size( refImage.GetSize() );
+
             // bm_size is the actual image size in UI.
             // but m_gal scale was previously set to img_scale
             // so recalculate size relative to this image size.

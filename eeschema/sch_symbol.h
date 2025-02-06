@@ -510,19 +510,23 @@ public:
     {
         return GetRef( &Schematic()->CurrentSheet() );
     }
+
     void SetRefProp( const wxString& aRef );
     wxString GetValueProp() const
     {
         return GetValue( false, &Schematic()->CurrentSheet(), false );
     }
+
     void SetValueProp( const wxString& aRef )
     {
         SetValueFieldText( aRef );
     }
+
     int GetUnitProp() const
     {
         return GetUnitSelection( &Schematic()->CurrentSheet() );
     }
+
     void SetUnitProp( int aUnit )
     {
         if( aUnit < 1 )
@@ -534,10 +538,12 @@ public:
         SetUnitSelection( &Schematic()->CurrentSheet(), aUnit );
         SetUnit( aUnit );
     }
+
     int GetBodyStyleProp() const
     {
         return GetBodyStyle();
     }
+
     void SetBodyStyleProp( int aBodyStyle )
     {
         SetBodyStyle( aBodyStyle );
@@ -557,7 +563,7 @@ public:
                        bool aUpdateOtherFields, bool aResetRef, bool aResetOtherFields );
 
     /**
-     * Keep fields other than the reference, include/exclude flags, and alternate pin assignements
+     * Keep fields other than the reference, include/exclude flags, and alternate pin assignments
      * in sync in multi-unit parts.
      *
      * @param aSourceSheet the sheet instance of the unit to sync to
@@ -855,7 +861,7 @@ public:
 
     double Similarity( const SCH_ITEM& aOther ) const override;
 
-    /// Returns the component classes this symbol belongs in
+    /// Return the component classes this symbol belongs in.
     std::unordered_set<wxString> GetComponentClassNames( const SCH_SHEET_PATH* aPath ) const;
 
     bool operator==( const SCH_ITEM& aOther ) const override;
@@ -886,15 +892,18 @@ private:
 
     std::vector<SCH_FIELD>      m_fields;        ///< Variable length list of fields.
 
-    std::unique_ptr<LIB_SYMBOL> m_part;          ///< A flattened copy of the LIB_SYMBOL from the
-                                                 ///<   PROJECT's libraries.
+    std::unique_ptr<LIB_SYMBOL> m_part;          ///< A flattened copy of the #LIB_SYMBOL from the
+                                                 ///< #PROJECT object's libraries.
     bool                        m_isInNetlist;   ///< True if the symbol should appear in netlist
 
-    std::vector<std::unique_ptr<SCH_PIN>>  m_pins;     ///< a SCH_PIN for every SCH_PIN (all units)
-    std::unordered_map<SCH_PIN*, SCH_PIN*> m_pinMap;   ///< library pin pointer : SCH_PIN's index
+    std::vector<std::unique_ptr<SCH_PIN>>  m_pins;     ///< A #SCH_PIN for every #LIB_PIN.
+    std::unordered_map<SCH_PIN*, SCH_PIN*> m_pinMap;   ///< Library pin pointer : #SCH_PIN indices.
 
-    // Defines the hierarchical path and reference of the symbol.  This allows support for multiple
-    // references to a single sub-sheet.
+    /**
+     * Define the hierarchical path and reference of the symbol.
+     *
+     * This allows support for multiple references to a single sub-sheet.
+     */
     std::vector<SCH_SYMBOL_INSTANCE>       m_instanceReferences;
 
     /// @see SCH_SYMBOL::GetOrientation

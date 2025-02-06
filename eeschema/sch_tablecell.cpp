@@ -171,6 +171,7 @@ bool SCH_TABLECELL::operator==( const SCH_TABLECELL& aOtherItem ) const
            && SCH_TEXTBOX::operator==( aOtherItem );
 }
 
+
 static struct SCH_TABLECELL_DESC
 {
     SCH_TABLECELL_DESC()

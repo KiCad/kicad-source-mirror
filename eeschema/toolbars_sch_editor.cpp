@@ -55,7 +55,8 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     {
         m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR,
                                             wxDefaultPosition, wxDefaultSize,
-                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_HORIZONTAL );
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT |
+                                            wxAUI_TB_HORIZONTAL );
         m_mainToolBar->SetAuiManager( &m_auimgr );
     }
 
@@ -124,6 +125,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
 
     // Add scripting console and API plugins
     bool scriptingAvailable = SCRIPTING::IsWxAvailable();
+
 #ifdef KICAD_IPC_API
     bool haveApiPlugins = Pgm().GetCommonSettings()->m_Api.enable_server &&
             !Pgm().GetPluginManager().GetActionsForScope( PLUGIN_ACTION_SCOPE::SCHEMATIC ).empty();
@@ -144,8 +146,6 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
 }
 
 
-/* Create Vertical Right Toolbar
- */
 void SCH_EDIT_FRAME::ReCreateVToolbar()
 {
     if( m_drawToolBar )

@@ -174,7 +174,7 @@ private:
     OPT_BOX2I getUntransformedPinTypeBox() const;
     OPT_BOX2I getUntransformedAltIconBox() const;
 
-    ///< Pin type decoration if any
+    /// Pin type decoration if any
     OPT_BOX2I getUntransformedDecorationBox() const;
 
     /// The pin in question

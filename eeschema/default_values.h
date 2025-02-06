@@ -26,7 +26,7 @@
 #define DEFAULT_VALUES_H
 
 
-///< The size of the rectangle indicating an unconnected wire or label
+/// The size of the rectangle indicating an unconnected wire or label
 #define DANGLING_SYMBOL_SIZE 12
 
 ///< The size of the rectangle indicating a connected, unselected wire end

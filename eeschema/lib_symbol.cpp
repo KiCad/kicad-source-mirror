@@ -265,6 +265,8 @@ unsigned LIB_SYMBOL::GetInheritanceDepth() const
 
     return depth;
 }
+
+
 LIB_SYMBOL_SPTR LIB_SYMBOL::GetRootSymbol() const
 {
     const LIB_SYMBOL_SPTR sp = m_parent.lock();
@@ -643,6 +645,7 @@ void LIB_SYMBOL::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBo
                 prms.SetColor( color );
                 shape.SetStroke( prms );
             }
+
             shape.Print( aSettings, aUnit, aBodyStyle, aOffset, aForceNoFill, aDimmed );
             prms.SetColor( init_color );
             shape.SetStroke( prms );

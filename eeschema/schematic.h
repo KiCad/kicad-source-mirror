@@ -66,6 +66,7 @@ public:
     virtual void OnSchItemsAdded( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem ) {}
     virtual void OnSchItemsRemoved( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem ) {}
     virtual void OnSchItemsChanged( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem ) {}
+
     // This is called when the user changes to a new sheet, not when a sheet is altered.
     // Sheet alteration events will call OnSchItems*
     virtual void OnSchSheetChanged( SCHEMATIC& aSch ) {}
@@ -189,16 +190,18 @@ public:
     std::shared_ptr<BUS_ALIAS> GetBusAlias( const wxString& aLabel ) const;
 
     /**
-     * Return the set of netname candidates for netclass assignment.  The list will include both
-     * composite names (buses) and atomic net names.  Names are fetched from available labels,
-     * power pins, etc.
+     * Return the set of netname candidates for netclass assignment.
+     *
+     * The list will include both composite names (buses) and atomic net names.  Names are
+     * fetched from available labels, power pins, etc.
      */
     std::set<wxString> GetNetClassAssignmentCandidates();
 
     /**
      * Resolves text vars that refer to other items.
-     * Note that the actual resolve is delegated to the symbol/sheet in question.  This routine
-     * just does the look-up and delegation.
+     *
+     * @note The actual resolve is delegated to the symbol/sheet in question.  This routine
+     *       just does the look-up and delegation.
      */
     bool ResolveCrossReference( wxString* token, int aDepth ) const;
 
@@ -220,11 +223,15 @@ public:
     void SetLegacySymbolInstanceData();
 
     /**
+     * Get the unique file name for the current sheet.
+     *
+     * This file name is unique and must be used instead of the screen file name when one must
+     * create files for each sheet in the hierarchy.  The name is
+     * &ltroot sheet filename&gt-&ltsheet path&gt and has no extension.
+     * If filename is too long name is &ltsheet filename&gt-&ltsheet number&gt
+     *
      * @return a filename that can be used in plot and print functions for the current screen
-     * and sheet path.  This filename is unique and must be used instead of the screen filename
-     * when one must create files for each sheet in the hierarchy.
-     * Name is &ltroot sheet filename&gt-&ltsheet path&gt and has no extension.
-     * However if filename is too long name is &ltsheet filename&gt-&ltsheet number&gt
+     * and sheet path.
      */
     wxString GetUniqueFilenameForCurrentSheet();
 
@@ -250,7 +257,9 @@ public:
     }
 
     /**
-     * Set operating points from a .op simulation.  Called after the simulation completes.
+     * Set operating points from a .op simulation.
+     *
+     * Called after the simulation completes.
      */
     void SetOperatingPoint( const wxString& aSignal, double aValue )
     {
@@ -260,8 +269,10 @@ public:
     wxString GetOperatingPoint( const wxString& aNetName, int aPrecision, const wxString& aRange );
 
     /**
-     * Add junctions to this schematic where required. This function is needed for some plugins
-     * (e.g. Legacy and Cadstar) in order to retain connectivity after loading.
+     * Add junctions to this schematic where required.
+     *
+     * This function is needed for some plugins (e.g. Legacy and Cadstar) in order to retain
+     * connectivity after loading.
      */
     void FixupJunctions();
 
@@ -295,6 +306,7 @@ public:
 
     /**
       * Notify the schematic and its listeners that the current sheet has been changed.
+      *
       * This is called when the user navigates to a different sheet, not when the sheet is
       * altered.
       */
@@ -302,32 +314,34 @@ public:
 
     /**
      * Add a listener to the schematic to receive calls whenever something on the
-     * schematic has been modified.  The schematic does not take ownership of the
-     * listener object.  Make sure to call RemoveListener before deleting the
-     * listener object.  The order of listener invocations is not guaranteed.
-     * If the specified listener object has been added before, it will not be
-     * added again.
+     * schematic has been modified.
+     *
+     * The schematic does not take ownership of the listener object.  Make sure to call
+     * RemoveListener before deleting the listener object.  The order of listener invocations
+     * is not guaranteed.  If the specified listener object has been added before, it will
+     * not be added again.
      */
     void AddListener( SCHEMATIC_LISTENER* aListener );
 
     /**
-     * Remove the specified listener.  If it has not been added before, it
-     * will do nothing.
+     * Remove the specified listener.
+     *
+     * If it has not been added before, it will do nothing.
      */
     void RemoveListener( SCHEMATIC_LISTENER* aListener );
 
     /**
-     * Remove all listeners
+     * Remove all listeners.
      */
     void RemoveAllListeners();
 
     /**
-     * Embed fonts in the schematic
+     * Embed fonts in the schematic.
      */
     void EmbedFonts() override;
 
     /**
-     * Get a set of fonts used in the schematic
+     * Get a set of fonts used in the schematic.
      */
     std::set<KIFONT::OUTLINE_FONT*> GetFonts() const override;
 
@@ -372,18 +386,20 @@ private:
 
     /**
      * The sheet path of the sheet currently being edited or displayed.
-     * Note that this was moved here from SCH_EDIT_FRAME because currently many places in the code
+     *
+     * @note This was moved here from #SCH_EDIT_FRAME because currently many places in the code
      * want to know the current sheet.  Potentially this can be moved back to the UI code once
-     * the only places that want to know it are UI-related
+     * the only places that want to know it are UI-related.
      */
     SCH_SHEET_PATH* m_currentSheet;
 
-    /// Holds and calculates connectivity information of this schematic
+    /// Hold and calculate connectivity information of this schematic.
     CONNECTION_GRAPH* m_connectionGraph;
 
     /**
-     * Holds a map of labels to the page sequence (virtual page number) that they appear on.  It is
-     * used for updating global label intersheet references.
+     * Holds a map of labels to the page sequence (virtual page number) that they appear on.
+     *
+     * It is used for updating global label intersheet references.
      */
     std::map<wxString, std::set<int>> m_labelToPageRefsMap;
 
@@ -403,7 +419,7 @@ private:
     SCH_SHEET_LIST m_hierarchy;
 
     /**
-     * Currently installed listeners
+     * Currently installed listeners.
      */
     std::vector<SCHEMATIC_LISTENER*> m_listeners;
 };

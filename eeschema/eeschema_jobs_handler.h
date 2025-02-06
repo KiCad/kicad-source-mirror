@@ -50,7 +50,7 @@ public:
      * Configure the SCH_RENDER_SETTINGS object with the correct data to be used with plotting.
      *
      * It's sort of a kludge due to the plotter depending on this object normally managed by
-     *the frame and canvas
+     * the frame and canvas.
      *
      * @param aRenderSettings The object to populate with working settings.
      * @param aTheme The theme to take color data from to stick into render settings, can be

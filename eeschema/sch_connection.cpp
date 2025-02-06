@@ -240,12 +240,15 @@ void SCH_CONNECTION::Reset()
 void SCH_CONNECTION::Clone( const SCH_CONNECTION& aOther )
 {
     m_graph = aOther.m_graph;
+
     // Note: m_lastDriver is not cloned as it needs to be the last driver of *this* connection
     m_driver = aOther.Driver();
     m_sheet  = aOther.Sheet();
+
     // Note: m_local_sheet is not cloned
     m_name   = aOther.m_name;
     m_type   = aOther.m_type;
+
     // Note: m_local_name is not cloned if not set yet
     if( m_local_name.IsEmpty() )
     {
@@ -254,12 +257,14 @@ void SCH_CONNECTION::Clone( const SCH_CONNECTION& aOther )
     }
 
     m_prefix       = aOther.Prefix();
+
     // m_bus_prefix is not cloned; only used for local names
     m_suffix       = aOther.Suffix();
     m_net_code     = aOther.NetCode();
     m_bus_code     = aOther.BusCode();
     m_vector_start = aOther.VectorStart();
     m_vector_end   = aOther.VectorEnd();
+
     // Note: m_vector_index is not cloned
     m_vector_prefix = aOther.VectorPrefix();
 

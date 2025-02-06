@@ -41,8 +41,9 @@
 
 using namespace T_BOMCFG_T;     // for the BOM_CFG_PARSER parser and its keywords
 
-///! Update the schema version whenever a migration is required
+/// Update the schema version whenever a migration is required.
 const int eeschemaSchemaVersion = 3;
+
 
 /// Default value for bom.plugins
 const nlohmann::json defaultBomPlugins =
@@ -763,9 +764,7 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<wxString>( "system.last_symbol_lib_dir",
             &m_lastSymbolLibDir, "" ) );
 
-
     // Migrations
-
     registerMigration( 0, 1,
             [&]() -> bool
             {

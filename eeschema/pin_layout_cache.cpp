@@ -425,6 +425,7 @@ OPT_BOX2I PIN_LAYOUT_CACHE::getUntransformedPinNameBox() const
 OPT_BOX2I PIN_LAYOUT_CACHE::getUntransformedPinNumberBox() const
 {
     int pinNameOffset = 0;
+
     if( const SYMBOL* parentSymbol = m_pin.GetParentSymbol() )
     {
         if( parentSymbol->GetShowPinNames() )
@@ -613,7 +614,7 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNameInfo( int
     // But it's not hugely expensive to recompute, and that's what's always been
     // done to now
     //
-    // Becasue pins are very likely to share a lot of characteristics, a global
+    // Because pins are very likely to share a lot of characteristics, a global
     // cache might make more sense than a per-pin cache.
 
     if( name.IsEmpty() || !m_pin.GetParentSymbol()->GetShowPinNames() )
@@ -673,6 +674,7 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( i
     const bool numAbove =
             m_pin.GetParentSymbol()->GetPinNameOffset() > 0
             || ( m_pin.GetShownName().empty() || !m_pin.GetParentSymbol()->GetShowPinNames() );
+
     if( numAbove )
     {
         info->m_TextPosition.y -= getPinTextOffset() + info->m_Thickness / 2;
@@ -687,6 +689,7 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( i
     transformTextForPin( *info );
     return info;
 }
+
 
 std::optional<PIN_LAYOUT_CACHE::TEXT_INFO>
 PIN_LAYOUT_CACHE::GetPinElectricalTypeInfo( int aShadowWidth )

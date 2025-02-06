@@ -65,11 +65,13 @@
 #include <core/profile.h>
 #include "sch_bus_entry.h"
 
-/*
+/**
  * Flag to enable profiling of the TestDanglingEnds() function.
+ *
  * @ingroup trace_env_vars
  */
 static const wxChar DanglingProfileMask[] = wxT( "DANGLING_PROFILE" );
+
 
 SCH_SCREEN::SCH_SCREEN( EDA_ITEM* aParent ) :
     BASE_SCREEN( aParent, SCH_SCREEN_T ),
@@ -517,6 +519,7 @@ SPIN_STYLE SCH_SCREEN::GetLabelOrientationForPoint( const VECTOR2I&       aPosit
                                                     const SCH_SHEET_PATH* aSheet ) const
 {
     auto ret = aDefaultOrientation;
+
     for( SCH_ITEM* item : Items().Overlapping( aPosition ) )
     {
         if( item->GetEditFlags() & STRUCT_DELETED )
@@ -529,7 +532,7 @@ SPIN_STYLE SCH_SCREEN::GetLabelOrientationForPoint( const VECTOR2I&       aPosit
             auto busEntry = static_cast<const SCH_BUS_WIRE_ENTRY*>( item );
             if( busEntry->m_connected_bus_item )
             {
-                // bus connected, take the bus direction into consideration ony if it is
+                // bus connected, take the bus direction into consideration only if it is
                 // vertical or horizontal
                 auto bus = static_cast<const SCH_LINE*>( busEntry->m_connected_bus_item );
                 if( bus->Angle().AsDegrees() == 90.0 )
@@ -591,9 +594,11 @@ SPIN_STYLE SCH_SCREEN::GetLabelOrientationForPoint( const VECTOR2I&       aPosit
             }
         }
         break;
+
         default: break;
         }
     }
+
     return ret;
 }
 
@@ -871,7 +876,7 @@ void SCH_SCREEN::Print( const SCH_RENDER_SETTINGS* aSettings )
             other.push_back( item );
     }
 
-    /// Sort to ensure plot-order consistency with screen drawing
+    // Sort to ensure plot-order consistency with screen drawing.
     std::stable_sort( other.begin(), other.end(),
                []( const SCH_ITEM* a, const SCH_ITEM* b )
                {
@@ -1131,21 +1136,21 @@ void SCH_SCREEN::GetSheets( std::vector<SCH_ITEM*>* aItems ) const
         aItems->push_back( item );
 
     std::sort( aItems->begin(), aItems->end(),
-            []( EDA_ITEM* a, EDA_ITEM* b ) -> bool
-            {
-                if( a->GetPosition().x == b->GetPosition().x )
-                {
-                    // Ensure deterministic sort
-                    if( a->GetPosition().y == b->GetPosition().y )
-                        return a->m_Uuid < b->m_Uuid;
+               []( EDA_ITEM* a, EDA_ITEM* b ) -> bool
+               {
+                   if( a->GetPosition().x == b->GetPosition().x )
+                   {
+                       // Ensure deterministic sort
+                       if( a->GetPosition().y == b->GetPosition().y )
+                           return a->m_Uuid < b->m_Uuid;
 
-                    return a->GetPosition().y < b->GetPosition().y;
-                }
-                else
-                {
-                    return a->GetPosition().x < b->GetPosition().x;
-                }
-            } );
+                       return a->GetPosition().y < b->GetPosition().y;
+                   }
+                   else
+                   {
+                       return a->GetPosition().x < b->GetPosition().x;
+                   }
+               } );
 }
 
 
@@ -1279,6 +1284,7 @@ std::vector<VECTOR2I> SCH_SCREEN::GetConnections() const
                {
                    return a.x < b.x || ( a.x == b.x && a.y < b.y );
                } );
+
     retval.erase( std::unique( retval.begin(), retval.end() ), retval.end() );
 
     return retval;
@@ -1785,8 +1791,8 @@ int SCH_SCREENS::ReplaceDuplicateTimeStamps()
             const_cast<KIID&>( item->m_Uuid ) = KIID();
             count++;
 
-            // @todo If the item is a sheet, we need to decend the heirarchy from the sheet
-            //       and repace all instances of the changed UUID in sheet paths.  Otherwise,
+            // @todo If the item is a sheet, we need to descend the hierarchy from the sheet
+            //       and replace all instances of the changed UUID in sheet paths.  Otherwise,
             //       all instance paths with the sheet's UUID will get clobbered.
         }
     }

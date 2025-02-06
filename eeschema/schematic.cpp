@@ -688,7 +688,8 @@ void SCHEMATIC::SetSheetNumberAndCount()
 }
 
 
-void SCHEMATIC::RecomputeIntersheetRefs( const std::function<void( SCH_GLOBALLABEL* )>& aItemCallback )
+void SCHEMATIC::RecomputeIntersheetRefs(
+        const std::function<void( SCH_GLOBALLABEL* )>& aItemCallback )
 {
     std::map<wxString, std::set<int>>& pageRefsMap = GetPageRefsMap();
 

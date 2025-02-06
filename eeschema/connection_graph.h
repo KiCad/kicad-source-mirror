@@ -538,7 +538,8 @@ private:
      * and re-created.  Otherwise, we will preserve existing net classes that do not
      * conflict with the new net classes.
      */
-    void buildConnectionGraph( std::function<void( SCH_ITEM* )>* aChangedItemHandler, bool aUnconditional );
+    void buildConnectionGraph( std::function<void( SCH_ITEM* )>* aChangedItemHandler,
+                               bool aUnconditional );
 
     /**
      * Generate individual item subgraphs on a per-sheet basis.
@@ -741,7 +742,7 @@ private:
     int ercCheckHierSheets();
 
     /**
-     * Check that a global label is instantiated more that once across the schematic heirarchy
+     * Check that a global label is instantiated more that once across the schematic hierarchy
      */
     int ercCheckSingleGlobalLabel();
 

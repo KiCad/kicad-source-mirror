@@ -37,8 +37,10 @@ enum class ELECTRICAL_PINTYPE
     PT_INPUT,         ///< usual pin input: must be connected
     PT_OUTPUT,        ///< usual output
     PT_BIDI,          ///< input or output (like port for a microprocessor)
-    PT_TRISTATE,      ///< tris state bus pin
-    PT_PASSIVE,       ///< pin for passive symbols: must be connected, and can be connected to any pin
+    PT_TRISTATE,      ///< tri state bus pin
+
+    /// pin for passive symbols: must be connected, and can be connected to any pin.
+    PT_PASSIVE,
     PT_NIC,           ///< not internally connected (may be connected to anything)
     PT_UNSPECIFIED,   ///< unknown electrical properties: creates always a warning when connected
     PT_POWER_IN,      ///< power input (GND, VCC for ICs). Must be connected to a power output.
@@ -82,12 +84,14 @@ enum class PIN_ORIENTATION
      * x---|
      */
     PIN_RIGHT,
+
     /**
      * The pin extends leftwards from the connection point:
      * Probably on the right side of the symbol.
      * |---x
      */
     PIN_LEFT,
+
     /**
      * The pin extends upwards from the connection point:
      * Probably on the bottom side of the symbol.
@@ -96,6 +100,7 @@ enum class PIN_ORIENTATION
      *   x
      */
     PIN_UP,
+
     /**
      * The pin extends downwards from the connection:
      * Probably on the top side of the symbol.

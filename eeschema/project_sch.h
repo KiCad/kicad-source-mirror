@@ -31,7 +31,7 @@ class SYMBOL_LIBS;
 class PROJECT_SCH
 {
 public:
-    // These are all prefaced with "Sch"
+    /// These are all prefaced with "Sch".
     static SYMBOL_LIBS* SchLibs( PROJECT* aProject );
 
     /// Accessor for Eeschema search stack.

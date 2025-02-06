@@ -180,8 +180,8 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_symbolFilter->SetMinSize( wxSize( -1, GetTextExtent( wxT( "qb" ) ).y + 10 ) );
 #endif
 
-    m_symbolList = new WX_LISTBOX( symbolPanel, ID_LIBVIEW_SYM_LIST, wxDefaultPosition, wxDefaultSize,
-                                   0, nullptr, wxLB_HSCROLL | wxNO_BORDER );
+    m_symbolList = new WX_LISTBOX( symbolPanel, ID_LIBVIEW_SYM_LIST, wxDefaultPosition,
+                                   wxDefaultSize, 0, nullptr, wxLB_HSCROLL | wxNO_BORDER );
     symbolSizer->Add( m_symbolList, 1, wxEXPAND, 5 );
 
     symbolPanel->SetSizer( symbolSizer );
@@ -281,8 +281,8 @@ void SYMBOL_VIEWER_FRAME::loadAllLibraries()
 
     std::unordered_map<wxString, std::vector<LIB_SYMBOL*>> loadedSymbols;
 
-    SYMBOL_ASYNC_LOADER loader( libraryNames, PROJECT_SCH::SchSymbolLibTable( &Prj() ), false, nullptr,
-                                progressReporter.get() );
+    SYMBOL_ASYNC_LOADER loader( libraryNames, PROJECT_SCH::SchSymbolLibTable( &Prj() ), false,
+                                nullptr, progressReporter.get() );
 
     LOCALE_IO toggle;
 
@@ -562,7 +562,9 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
                 {
                     wxArrayString aliasNames;
 
-                    PROJECT_SCH::SchSymbolLibTable( &Prj() )->EnumerateSymbolLib( aLib, aliasNames, true );
+                    PROJECT_SCH::SchSymbolLibTable( &Prj() )->EnumerateSymbolLib( aLib,
+                                                                                  aliasNames,
+                                                                                  true );
 
                     if( aliasNames.IsEmpty() )
                         return;
@@ -627,7 +629,8 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
         m_libList->Append( UnescapeString( name ) );
 
     // Search for a previous selection:
-    int index = m_libList->FindString( UnescapeString( m_currentSymbol.GetUniStringLibNickname() ) );
+    int index =
+            m_libList->FindString( UnescapeString( m_currentSymbol.GetUniStringLibNickname() ) );
 
     if( index != wxNOT_FOUND )
     {
@@ -670,7 +673,8 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
     try
     {
         if( row )
-            PROJECT_SCH::SchSymbolLibTable( &Prj() )->LoadSymbolLib( symbols, libName, m_listPowerOnly );
+            PROJECT_SCH::SchSymbolLibTable( &Prj() )->LoadSymbolLib( symbols, libName,
+                                                                     m_listPowerOnly );
     }
     catch( const IO_ERROR& ) {}   // ignore, it is handled below
 
@@ -721,7 +725,8 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
         return true;
     }
 
-    int  index = m_symbolList->FindString( UnescapeString( m_currentSymbol.GetUniStringLibItemName() ) );
+    int index =
+            m_symbolList->FindString( UnescapeString( m_currentSymbol.GetUniStringLibItemName() ) );
     bool changed = false;
 
     if( index == wxNOT_FOUND )
@@ -1059,7 +1064,7 @@ void SYMBOL_VIEWER_FRAME::onSelectNextSymbol( wxCommandEvent& aEvent )
     int            ii = m_symbolList->GetSelection();
 
     // Select the next symbol or stop at the end of the list.
-    if( ii != wxNOT_FOUND && ii < (int)(m_symbolList->GetCount() - 1) )
+    if( ii != wxNOT_FOUND && ii < (int) ( m_symbolList->GetCount() - 1 ) )
         ii += 1;
 
     m_symbolList->SetSelection( ii );

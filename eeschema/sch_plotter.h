@@ -120,23 +120,23 @@ struct SCH_PLOT_OPTS
 
 
 /**
- * Schematic plotting class
+ * Schematic plotting class.
  */
 class SCH_PLOTTER
 {
 public:
     /**
-     * Constructor for usage with a frame having the schematic we want to print loaded
+     * Constructor for usage with a frame having the schematic we want to print loaded.
      */
     SCH_PLOTTER( SCH_EDIT_FRAME* aFrame );
 
     /**
-     * Constructor for usage with a schematic that can be headless
+     * Constructor for usage with a schematic that can be headless.
      */
     SCH_PLOTTER( SCHEMATIC* aSch );
 
     /**
-     * Perform the plotting of the schematic using the given aPlotFormat and aPlotSettings
+     * Perform the plotting of the schematic using the given \a aPlotFormat and a\ aPlotSettings.
      *
      * @param aPlotFormat The resulting output plot format (PDF, SVG, DXF, etc)
      * @param aPlotSettings The configuration for the plotting operation
@@ -147,13 +147,14 @@ public:
                SCH_RENDER_SETTINGS* aRenderSettings, REPORTER* aReporter = nullptr );
 
     /**
-     * Get the last output file path, this is mainly intended for PDFs with the open after plot GUI option
+     * Get the last output file path, this is mainly intended for PDFs with the open after
+     * plot GUI option.
      */
     wxString GetLastOutputFilePath() const { return m_lastOutputFilePath; }
 
 protected:
     /**
-     * Returns the output filename for formats where the output is a single file
+     * Return the output filename for formats where the output is a single file.
      */
     wxFileName getOutputFilenameSingle( const SCH_PLOT_OPTS& aPlotOpts, REPORTER* aReporter,
                                         const wxString& ext );

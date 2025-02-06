@@ -132,10 +132,10 @@ public:
     DANGLING_END_T GetType() const { return m_type; }
 
 private:
-    EDA_ITEM*       m_item;         /// A pointer to the connectable object.
-    VECTOR2I        m_pos;          /// The position of the connection point.
-    DANGLING_END_T  m_type;         /// The type of connection of #m_item.
-    const EDA_ITEM* m_parent;       /// A pointer to the parent object (in the case of pins)
+    EDA_ITEM*       m_item;         ///< A pointer to the connectable object.
+    VECTOR2I        m_pos;          ///< The position of the connection point.
+    DANGLING_END_T  m_type;         ///< The type of connection of #m_item.
+    const EDA_ITEM* m_parent;       ///< A pointer to the parent object (in the case of pins).
 };
 
 
@@ -204,7 +204,9 @@ public:
 
     /**
      * Swap the internal data structures \a aItem with the schematic item.
+     *
      * Obviously, aItem must have the same type than me.
+     *
      * @param aItem The item to swap the data structures with.
      */
     virtual void SwapData( SCH_ITEM* aItem );
@@ -216,6 +218,7 @@ public:
 
     /**
      * Routine to create a new copy of given item.
+     *
      * The new object is not put in draw list (not linked).
      *
      * @param doClone (default = false) indicates unique values (such as timestamp and
@@ -239,23 +242,26 @@ public:
     virtual bool GetExcludedFromSim() const { return false; }
 
     /**
-     * @return true for items which are moved with the anchor point at mouse cursor
-     *  and false for items moved with no reference to anchor
+     * Check if object is movable from the anchor point.
+     *
      * Usually return true for small items (labels, junctions) and false for
-     * items which can be large (hierarchical sheets, symbols)
+     * items which can be large (hierarchical sheets, symbols).
+     *
+     * @retval true for items which are moved with the anchor point at mouse cursor.
+     * @retval false for items moved with no reference to anchor.
      */
     virtual bool IsMovableFromAnchorPoint() const { return true; }
 
     VECTOR2I& GetStoredPos() { return m_storedPos; }
-    void     SetStoredPos( const VECTOR2I& aPos ) { m_storedPos = aPos; }
+    void      SetStoredPos( const VECTOR2I& aPos ) { m_storedPos = aPos; }
 
     /**
-     * Searches the item hierarchy to find a SCHEMATIC.
+     * Search the item hierarchy to find a #SCHEMATIC.
      *
-     * Every SCH_ITEM that lives on a SCH_SCREEN should be parented to either that screen
-     * or another SCH_ITEM on the same screen (for example, pins to their symbols).
+     * Every #SCH_ITEM that lives on a #SCH_SCREEN should be parented to either that screen
+     * or another #SCH_ITEM on the same screen (for example, pins to their symbols).
      *
-     * Every SCH_SCREEN should be parented to the SCHEMATIC.
+     * Every #SCH_SCREEN should be parented to the #SCHEMATIC.
      *
      * @note This hierarchy is not the same as the sheet hierarchy!
      *
@@ -302,7 +308,9 @@ public:
 
     /**
      * Return a measure of how likely the other object is to represent the same
-     * object.  The scale runs from 0.0 (definitely different objects) to 1.0 (same)
+     * object.
+     *
+     * The scale runs from 0.0 (definitely different objects) to 1.0 (same)
      */
     virtual double Similarity( const SCH_ITEM& aItem ) const
     {
@@ -343,7 +351,8 @@ public:
      */
     virtual void MirrorHorizontally( int aCenter )
     {
-        wxCHECK_MSG( false, /*void*/, wxT( "MirrorHorizontally not implemented in " ) + GetClass() );
+        wxCHECK_MSG( false, /*void*/,
+                     wxT( "MirrorHorizontally not implemented in " ) + GetClass() );
     }
 
     /**
@@ -533,7 +542,7 @@ public:
         return false;
     }
 
-    /// Updates the connection graph for all connections in this item
+    /// Update the connection graph for all connections in this item.
     void SetConnectionGraph( CONNECTION_GRAPH* aGraph );
 
     virtual bool HasCachedDriverName() const { return false; }
@@ -609,17 +618,17 @@ public:
     }
 
     /**
-     * Reset the cache of rule areas (called prior to schematic connectivity recomputation)
+     * Reset the cache of rule areas (called prior to schematic connectivity computation)
      */
     void ClearRuleAreasCache() { m_rule_areas_cache.clear(); }
 
     /**
-     * Adds a rule area to the item's cache
+     * Add a rule area to the item's cache.
      */
     void AddRuleAreaToCache( SCH_RULE_AREA* aRuleArea ) { m_rule_areas_cache.insert( aRuleArea ); }
 
     /**
-     * Gets the cache of rule areas enclosing this item
+     * Get the cache of rule areas enclosing this item.
      */
     const std::unordered_set<SCH_RULE_AREA*>& GetRuleAreaCache() const
     {

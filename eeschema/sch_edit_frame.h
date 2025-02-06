@@ -217,7 +217,9 @@ public:
      * \li \c \$NET: \c "netname" Highlight a specified net
      * \li \c \$CLEAR: \c "HIGHLIGHTED" Clear symbols highlight
      * <p>
+     *
      * They are a keyword followed by a quoted string.
+     *
      * @param cmdline is the command received from Pcbnew.
      */
     void ExecuteRemoteCommand( const char* cmdline ) override;
@@ -225,12 +227,12 @@ public:
     void KiwayMailIn( KIWAY_EXPRESS& aEvent ) override;
 
     /**
-     * Refresh the display of any operaintg points.  Called after a .op simulation completes.
+     * Refresh the display of any operating points.  Called after a .op simulation completes.
      */
     void RefreshOperatingPointDisplay();
 
     /**
-     * Automatically set the rotation of an item (if the item supports it)
+     * Automatically set the rotation of an item (if the item supports it).
      */
     void AutoRotateItem( SCH_SCREEN* aScreen, SCH_ITEM* aItem );
 
@@ -246,6 +248,7 @@ public:
 
     /**
      * Update the hierarchy navigation tree labels.
+     *
      * No change for the tree, only the labels are updated, after editing a sheet
      * name or a sheet number.
      */
@@ -272,6 +275,7 @@ public:
 
     /**
      * Break a single segment into two at the specified point.
+     *
      * @param aCommit Transaction container used to record changes for undo/redo
      * @param aSegment Line segment to break
      * @param aPoint Point at which to break the segment
@@ -284,6 +288,7 @@ public:
     /**
      * Check every wire and bus for a intersection at \a aPoint and break into two segments
      * at \a aPoint if an intersection is found.
+     *
      * @param aCommit Transaction container used to record changes for undo/redo
      * @param aPoint Test this point for an intersection.
      * @param aScreen is the screen to examine.
@@ -294,6 +299,7 @@ public:
     /**
      * Test all junctions and bus entries in the schematic for intersections with wires and
      * buses and breaks any intersections into multiple segments.
+     *
      * @param aCommit Transaction container used to record changes for undo/redo
      * @param aScreen is the screen to examine.
      * @return True if any wires or buses were broken.
@@ -302,6 +308,7 @@ public:
 
     /**
      * Test all of the connectable objects in the schematic for unused connection points.
+     *
      * @return True if any connection state changes were made.
      */
     void TestDanglingEnds();
@@ -309,10 +316,10 @@ public:
     /**
      * Send items to board editor for selection.
      *
-     * This is used for when the eeschema user is using the cross-probe tool.
+     * This is used for when the Eeschema user is using the cross-probe tool.
      *
      * @param aItems are the items to select
-     * @param aForce select the element in pcbnew whether or not the user has the select option
+     * @param aForce select the element in Pcbnew whether or not the user has the select option
      *        chosen
      */
     void SendSelectItemsToPcb( const std::vector<EDA_ITEM*>& aItems, bool aForce );
@@ -382,9 +389,11 @@ public:
     void DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool aRecursive, REPORTER& aReporter );
 
     /**
-     * Annotate the symbols in the schematic that are not currently annotated. Multi-unit symbols
-     * are annotated together. E.g. if two symbols were R8A and R8B, they may become R3A and
-     * R3B, but not R3A and R3C or R3C and R4D.
+     * Annotate the symbols in the schematic that are not currently annotated.
+     *
+     * Multi-unit symbols are annotated together. E.g. if two symbols were R8A and R8B, they may
+     * become R3A and R3B, but not R3A and R3C or R3C and R4D.
+     *
      * @param aCommit Transaction container used to record changes for undo/redo
      * @param aAnnotateScope See #ANNOTATE_SCOPE_T
      * @param aSortOption Define the annotation order.  See #ANNOTATE_ORDER_T.
@@ -445,7 +454,9 @@ public:
                      bool aUpdateRtree = false ) override;
 
     /**
-     * Rebuild the GAL and redraw the screen.  Call when something went wrong.
+     * Rebuild the GAL and redraw the screen.
+     *
+     * Call when something went wrong.
      */
     void HardRedraw() override;
 
@@ -506,6 +517,7 @@ public:
     /**
      * Perform routine schematic cleaning including breaking wire and buses and deleting
      * identical objects superimposed on top of each other.
+     *
      * @param aCommit Transaction container used to record changes for undo/redo
      * @param aScreen is the screen to examine, or nullptr to examine the current screen
      */
@@ -514,8 +526,9 @@ public:
     /**
      * If any single wire passes through _both points_, remove the portion between the two points,
      * potentially splitting the wire into two.
+     *
      * @param aCommit Transaction container used to record changes for undo/redo
-     * @param aStart The starting point for trimmming
+     * @param aStart The starting point for trimming
      * @param aEnd The ending point for trimming
      * @return True if any wires were changed by this operation
      */
@@ -546,7 +559,8 @@ public:
      * @param aSchematicFileName is the absolute path and file name of the file to test.
      * @return true if the user accepts the potential file name clash risk.
      */
-    bool AllowCaseSensitiveFileNameClashes( const wxString& aOldName, const wxString& aSchematicFileName );
+    bool AllowCaseSensitiveFileNameClashes( const wxString& aOldName,
+                                            const wxString& aSchematicFileName );
 
     /**
      * Edit an existing sheet or add a new sheet to the schematic.
@@ -631,9 +645,11 @@ public:
      *                  path.
      * @param aSkipRecursionCheck is true to skip the recursion check. This is used when loading
      *                  a schematic sheet that is not part of the current project. If we are placing
-     *                  sheet contents instead of a sheet, then we do not need to check for recursion.
-     * @param aSkipLibCheck is true to skip the new/duplicate lib check. This is always triggered when
-     *                  placing design blocks so it is not necessary to check for new/duplicate libs.
+     *                  sheet contents instead of a sheet, then we do not need to check for
+     *                  recursion.
+     * @param aSkipLibCheck is true to skip the new/duplicate lib check. This is always triggered
+     *                      when placing design blocks so it is not necessary to check for
+     *                      new/duplicate libs.
      * @return True if the schematic was imported properly.
      */
     bool LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurrentSheet,
@@ -641,7 +657,7 @@ public:
                             bool aSkipLibCheck = false );
 
     /**
-     * Removes a given junction and heals any wire segments under the junction
+     * Remove a given junction and heals any wire segments under the junction.
      *
      * @param aItem The junction to delete
      */
@@ -712,8 +728,9 @@ public:
     void AddCopyForRepeatItem( const SCH_ITEM* aItem );
 
     /**
-     * Return the items which are to be repeated with the insert key.  Such objects are owned by
-     * this container, and must be cloned.
+     * Return the items which are to be repeated with the insert key.
+     *
+     * Such objects are owned by this container and must be cloned.
      */
     const std::vector<std::unique_ptr<SCH_ITEM>>& GetRepeatItems() const
     {
@@ -722,6 +739,7 @@ public:
 
     /**
      * Clear the list of items which are to be repeated with the insert key.
+     *
      * These objects are owned by this container.
      */
     void ClearRepeatItemsList()
@@ -732,8 +750,9 @@ public:
     EDA_ITEM* GetItem( const KIID& aId ) const override;
 
     /**
-     * Perform an undo of the last edit WITHOUT logging a corresponding redo.  Used to cancel
-     * an in-progress operation.
+     * Perform an undo of the last edit **without** logging a corresponding redo.
+     *
+     * Used to cancel an in-progress operation.
      */
     void RollbackSchematicFromUndo();
 
@@ -747,10 +766,11 @@ public:
 
     /**
      * If a library name is given, creates a new design block library in the project folder
-     * with the given name. If no library name is given it prompts user for a library path,
-     * then creates a new design block library at that location.
-     * If library exists, user is warned about that, and is given a chance
-     * to abort the new creation, and in that case existing library is first deleted.
+     * with the given name.
+     *
+     * If no library name is given it prompts user for a library path, then creates a new design
+     * block library at that location.  If library exists, user is warned about that, and is given
+     * a chance to abort the new creation, and in that case existing library is first deleted.
      *
      * @param aProposedName is the initial path and filename shown in the file chooser dialog.
      * @return The newly created library path if library was successfully created, else
@@ -898,7 +918,7 @@ public:
     const SCH_ITEM* GetSelectedNetNavigatorItem() const;
 
     /**
-     * @return the name of the wxAuiPaneInfo managing the Hierarchy Navigator panel
+     * @return the name of the wxAuiPaneInfo managing the Hierarchy Navigator panel.
      */
     static const wxString SchematicHierarchyPaneName()
     {
@@ -906,14 +926,14 @@ public:
     }
 
     /**
-     * @return the name of the wxAuiPaneInfo managing the Search panel
+     * @return the name of the wxAuiPaneInfo managing the Search panel.
      */
     static const wxString SearchPaneName() { return wxT( "Search" ); }
 
     /**
      * Add \a aListener to post #EDA_EVT_SCHEMATIC_CHANGED command events to.
      *
-     * @warning The caller is reponsible for removing any listeners that are no long valid.
+     * @warning The caller is responsible for removing any listeners that are no long valid.
      *
      * @note This only gets called when the schematic editor is in stand alone mode.  Changing
      *       projects in the project manager closes the schematic editor when a new project is
@@ -982,9 +1002,9 @@ protected:
 #endif
 
     /**
-     * Prompts a user to select global or project library tables
+     * Prompt user to select global or project library tables.
      *
-     * @return Pointer to library table selected or nullptr if none selected/canceled
+     * @return Pointer to library table selected or nullptr if none selected/canceled.
      */
     DESIGN_BLOCK_LIB_TABLE* selectDesignBlockLibTable( bool aOptional = false );
 

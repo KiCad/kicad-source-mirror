@@ -44,6 +44,7 @@
 
 /**
  * A singleton item of this class is returned for a weak reference that no longer exists.
+ *
  * Its sole purpose is to flag the item as having been deleted.
  */
 class DELETED_SHEET_ITEM : public SCH_ITEM
@@ -95,6 +96,7 @@ public:
 #endif
 };
 
+
 namespace std
 {
     size_t hash<SCH_SHEET_PATH>::operator()( const SCH_SHEET_PATH& path ) const
@@ -144,8 +146,9 @@ void SCH_SHEET_PATH::initFromOther( const SCH_SHEET_PATH& aOther )
     m_current_hash       = aOther.m_current_hash;
     m_cached_page_number = aOther.m_cached_page_number;
 
-    // Note: don't copy m_recursion_test_cache as it is slow and we want std::vector<SCH_SHEET_PATH> to be
-    // very fast to construct for use in the connectivity algorithm.
+    // Note: don't copy m_recursion_test_cache as it is slow and we want
+    // std::vector<SCH_SHEET_PATH> to be very fast to construct for use in
+    // the connectivity algorithm.
 }
 
 
@@ -173,7 +176,7 @@ int SCH_SHEET_PATH::Cmp( const SCH_SHEET_PATH& aSheetPathToTest ) const
     if( size() < aSheetPathToTest.size() )
         return -1;
 
-    //otherwise, same number of sheets.
+    // otherwise, same number of sheets.
     for( unsigned i = 0; i < size(); i++ )
     {
         if( at( i )->m_Uuid < aSheetPathToTest.at( i )->m_Uuid )
@@ -417,7 +420,6 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences() const
 }
 
 
-
 void SCH_SHEET_PATH::GetSymbols( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols,
                                  bool aForceIncludeOrphanSymbols ) const
 {
@@ -621,8 +623,8 @@ void SCH_SHEET_PATH::AddNewSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPa
         if( symbol->GetInstance( newSymbolInstance, Path(), true ) )
         {
             newSymbolInstance.m_ProjectName = aProjectName;
-            // Use an existing symbol instance for this path if it exists.
 
+            // Use an existing symbol instance for this path if it exists.
             newSymbolInstance.m_Path = newSheetPath.Path();
             symbol->AddHierarchicalReference( newSymbolInstance );
         }
@@ -687,7 +689,7 @@ void SCH_SHEET_PATH::CheckForMissingSymbolInstances( const wxString& aProjectNam
                         symbol->m_Uuid.AsString(), PathHumanReadable( false ) );
 
             // Legacy schematics that are not shared do not contain separate instance data.
-            // The symbol refrence and unit are saved in the reference field and unit entries.
+            // The symbol reference and unit are saved in the reference field and unit entries.
             if( ( LastScreen()->GetRefCount() <= 1 ) &&
                 ( LastScreen()->GetFileFormatVersionAtLoad() <= 20200310 ) )
             {
@@ -835,7 +837,7 @@ void SCH_SHEET_LIST::SortByPageNumbers( bool aUpdateVirtualPageNums )
             else if( a.GetVirtualPageNumber() > b.GetVirtualPageNumber() )
                 return false;
 
-            /// Enforce strict ordering.  If the page numbers are the same, use UUIDs
+            // Enforce strict ordering.  If the page numbers are the same, use UUIDs
             return a.GetCurrentHash() < b.GetCurrentHash();
         } );
 

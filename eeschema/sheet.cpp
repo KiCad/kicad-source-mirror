@@ -319,7 +319,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
                  "result in all of the symbols in the loaded schematic to use either the "
                  "default instance setting or fall back to the library symbol settings.  "
                  "Loading the project that uses this schematic file and saving to the "
-                 "lastest file version will resolve this issue.\n\n"
+                 "latest file version will resolve this issue.\n\n"
                  "Do you wish to continue?" );
         wxMessageDialog msgDlg7( this, msg, _( "Continue Load Schematic" ),
                                  wxOK | wxCANCEL | wxCANCEL_DEFAULT | wxCENTER | wxICON_QUESTION );
@@ -568,7 +568,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
                                          SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
     }
 
-    // Make the best attempt to set the symbol instance data for the loaded scheamtic.
+    // Make the best attempt to set the symbol instance data for the loaded schematic.
     if( newScreen->GetFileFormatVersionAtLoad() < 20221002 )
     {
         if( !newScreen->GetSymbolInstances().empty() )
@@ -684,7 +684,7 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
             dc.SetUserScale( 1.0, 1.0 );
             SCH_PRINTOUT printout( this, wxEmptyString, true );
             // Ensure title block will be when printed on clipboard, regardless
-            // the current cairo print option
+            // the current Cairo print option
             EESCHEMA_SETTINGS* eecfg = eeconfig();
             bool print_tb_opt = eecfg->m_Printing.title_block;
             eecfg->m_Printing.title_block = true;
@@ -725,7 +725,8 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
 }
 
 
-bool SCH_EDIT_FRAME::AllowCaseSensitiveFileNameClashes( const wxString& aOldName, const wxString& aSchematicFileName )
+bool SCH_EDIT_FRAME::AllowCaseSensitiveFileNameClashes( const wxString& aOldName,
+                                                        const wxString& aSchematicFileName )
 {
     wxString       msg;
     SCH_SHEET_LIST sheets = Schematic().Hierarchy();

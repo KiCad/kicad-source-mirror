@@ -100,7 +100,8 @@ SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const VECTOR2I& aPos, VECTOR2I aSize ) 
     m_fields.back().SetVisible( true );
     m_fields.back().SetLayer( LAYER_SHEETNAME );
 
-    m_fields.emplace_back( aPos, SHEETFILENAME, this, GetDefaultFieldName( SHEETFILENAME, DO_TRANSLATE ) );
+    m_fields.emplace_back( aPos, SHEETFILENAME, this,
+                           GetDefaultFieldName( SHEETFILENAME, DO_TRANSLATE ) );
     m_fields.back().SetVisible( true );
     m_fields.back().SetLayer( LAYER_SHEETNAME );
 
@@ -1329,7 +1330,8 @@ void SCH_SHEET::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBod
         BOX2I    pins = GetBoundingBox();
         COLOR4D  dnp_color = aSettings->GetLayerColor( LAYER_DNP_MARKER );
         VECTOR2D margins( std::max( bbox.GetX() - pins.GetX(), pins.GetEnd().x - bbox.GetEnd().x ),
-                          std::max( bbox.GetY() - pins.GetY(), pins.GetEnd().y - bbox.GetEnd().y ) );
+                          std::max( bbox.GetY() - pins.GetY(),
+                                    pins.GetEnd().y - bbox.GetEnd().y ) );
 
         margins.x = std::max( margins.x * 0.6, margins.y * 0.3 );
         margins.y = std::max( margins.y * 0.6, margins.x * 0.3 );
@@ -1545,7 +1547,7 @@ bool SCH_SHEET::HasPageNumberChanges( const SCH_SHEET& aOther ) const
     std::vector<SCH_SHEET_INSTANCE> instances = GetInstances();
     std::vector<SCH_SHEET_INSTANCE> otherInstances = aOther.GetInstances();
 
-    // Sorting may not be necessary but there is no guaratee that sheet
+    // Sorting may not be necessary but there is no guarantee that sheet
     // instance data will be in the correct KIID_PATH order.  We should
     // probably use a std::map instead of a std::vector to store the sheet
     // instance data.
@@ -1730,9 +1732,11 @@ static struct SCH_SHEET_DESC
         propMgr.AddProperty( new PROPERTY<SCH_SHEET, bool>( _HKI( "Exclude From Simulation" ),
                     &SCH_SHEET::SetExcludedFromSim, &SCH_SHEET::GetExcludedFromSim ),
                     groupAttributes );
-        propMgr.AddProperty( new PROPERTY<SCH_SHEET, bool>( _HKI( "Exclude From Bill of Materials" ),
-                    &SCH_SHEET::SetExcludedFromBOM, &SCH_SHEET::GetExcludedFromBOM ),
-                    groupAttributes );
+        propMgr.AddProperty(
+                new PROPERTY<SCH_SHEET, bool>( _HKI( "Exclude From Bill of Materials" ),
+                                               &SCH_SHEET::SetExcludedFromBOM,
+                                               &SCH_SHEET::GetExcludedFromBOM ),
+                groupAttributes );
         propMgr.AddProperty( new PROPERTY<SCH_SHEET, bool>( _HKI( "Do not Populate" ),
                     &SCH_SHEET::SetDNP, &SCH_SHEET::GetDNP ),
                     groupAttributes );

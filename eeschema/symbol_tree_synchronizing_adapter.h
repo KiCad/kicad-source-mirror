@@ -72,10 +72,10 @@ protected:
     SYMBOL_EDIT_FRAME*      m_frame;
     SYMBOL_LIBRARY_MANAGER* m_libMgr;
 
-    ///< Hashes to decide whether a library needs an update.
+    /// Hashes to decide whether a library needs an update.
     std::map<wxString, int> m_libHashes;
 
-    ///< SYMBOL_LIBRARY_MANAGER hash value returned in the last synchronization.
+    /// #SYMBOL_LIBRARY_MANAGER hash value returned in the last synchronization.
     int                     m_lastSyncHash;
 };
 

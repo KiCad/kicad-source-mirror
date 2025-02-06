@@ -57,7 +57,7 @@ enum SYMBOL_ORIENTATION_PROP
 
 
 /**
- * A base class for LIB_SYMBOL and SCH_SYMBOL.
+ * A base class for #LIB_SYMBOL and #SCH_SYMBOL.
  */
 class SYMBOL : public SCH_ITEM
 {
@@ -165,7 +165,11 @@ public:
     /**
      * Set or clear the exclude from simulation flag.
      */
-    void SetExcludedFromSim( bool aExcludeFromSim ) override { m_excludedFromSim = aExcludeFromSim; }
+    void SetExcludedFromSim( bool aExcludeFromSim ) override
+    {
+        m_excludedFromSim = aExcludeFromSim;
+    }
+
     bool GetExcludedFromSim() const override { return m_excludedFromSim; }
 
     /**

@@ -398,6 +398,7 @@ bool SCH_BUS_BUS_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aIt
 
             if( IsPointOnSegment( item.GetPosition(), nextItem.GetPosition(), m_pos ) )
                 m_isStartDangling = false;
+
             if( IsPointOnSegment( item.GetPosition(), nextItem.GetPosition(), GetEnd() ) )
                 m_isEndDangling = false;
         }
@@ -427,7 +428,7 @@ std::vector<VECTOR2I> SCH_BUS_ENTRY_BASE::GetConnectionPoints() const
 bool SCH_BUS_ENTRY_BASE::HasConnectivityChanges( const SCH_ITEM* aItem,
                                                  const SCH_SHEET_PATH* aInstance ) const
 {
-    // Do not compare to ourself.
+    // Do not compare to ourselves.
     if( aItem == this )
         return false;
 
@@ -664,14 +665,17 @@ static struct SCH_BUS_ENTRY_DESC
                              .Map( WIRE_STYLE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
         }
 
-        propMgr.AddProperty( new PROPERTY_ENUM<SCH_BUS_ENTRY_BASE, WIRE_STYLE>( _HKI( "Line Style" ),
-                    &SCH_BUS_ENTRY_BASE::SetWireStyle, &SCH_BUS_ENTRY_BASE::GetWireStyle ) );
+        propMgr.AddProperty( new PROPERTY_ENUM<SCH_BUS_ENTRY_BASE,
+                             WIRE_STYLE>( _HKI( "Line Style" ),
+                                          &SCH_BUS_ENTRY_BASE::SetWireStyle,
+                                          &SCH_BUS_ENTRY_BASE::GetWireStyle ) );
 
         propMgr.AddProperty( new PROPERTY<SCH_BUS_ENTRY_BASE, int>( _HKI( "Line Width" ),
                     &SCH_BUS_ENTRY_BASE::SetPenWidth, &SCH_BUS_ENTRY_BASE::GetPenWidth,
                     PROPERTY_DISPLAY::PT_SIZE ) );
 
-        propMgr.AddProperty( new PROPERTY<SCH_BUS_ENTRY_BASE, COLOR4D>( _HKI( "Color" ),
-                    &SCH_BUS_ENTRY_BASE::SetBusEntryColor, &SCH_BUS_ENTRY_BASE::GetBusEntryColor ) );
+        propMgr.AddProperty( new PROPERTY<SCH_BUS_ENTRY_BASE, COLOR4D>(
+                _HKI( "Color" ), &SCH_BUS_ENTRY_BASE::SetBusEntryColor,
+                &SCH_BUS_ENTRY_BASE::GetBusEntryColor ) );
     }
 } _SCH_BUS_ENTRY_DESC;

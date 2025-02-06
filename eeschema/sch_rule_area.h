@@ -69,61 +69,63 @@ public:
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
-    /// @brief Resets all item and directive caches, saving the current state first
+    /// Reset all item and directive caches, saving the current state first.
     void ResetCaches( KIGFX::SCH_VIEW* view );
 
-    /// @brief Refreshes the list of items which this rule area affects
+    /// Refresh the list of items which this rule area affects.
     void RefreshContainedItemsAndDirectives(
             SCH_SCREEN* screen, KIGFX::SCH_VIEW* view,
             std::vector<std::pair<SCH_RULE_AREA*, SCH_SCREEN*>>& forceUpdateRuleAreas );
 
-    /// @brief Fetches all items which were, or are, within the rule area
+    /// Fetch all items which were, or are, within the rule area.
     std::unordered_set<SCH_ITEM*> GetPastAndPresentContainedItems() const;
 
-    /// @brief Updates all rule area connectvity / caches in the given sheet paths
-    /// @returns A map of all updated rule areas and their owning screen
+    /// Update all rule area connectvity / caches in the given sheet paths.
+    ///
+    /// @return A map of all updated rule areas and their owning screen.
     static std::vector<std::pair<SCH_RULE_AREA*, SCH_SCREEN*>>
     UpdateRuleAreasInScreens( std::unordered_set<SCH_SCREEN*>& screens, KIGFX::SCH_VIEW* view );
 
-    /// @brief Returns a set of all items contained within the rule area
+    /// Return a set of all items contained within the rule area.
     const std::unordered_set<SCH_ITEM*>& GetContainedItems() const;
 
-    /// @brief Returns the set of all directive labels attached to the rule area border
+    /// Return the set of all directive labels attached to the rule area border.
     const std::unordered_set<SCH_DIRECTIVE_LABEL*>& GetDirectives() const;
 
-    /// @brief Resolves the netclass of this rule area from connected directive labels
-    /// @returns The resolved netclass (if any), and the SCH_ITEM providing the declaration
+    /// Resolve the netclass of this rule area from connected directive labels.
+    ///
+    /// @return The resolved netclass (if any), and the SCH_ITEM providing the declaration.
     const std::vector<std::pair<wxString, SCH_ITEM*>> GetResolvedNetclasses() const;
 
-    /// @brief Clears and resets items and directives attached to this rule area
+    /// Clear and resets items and directives attached to this rule area.
     void ResetDirectivesAndItems( KIGFX::SCH_VIEW* view );
 
-    /// @brief Gets the message panel info for the rule area
+    /// Get the message panel info for the rule area.
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
 protected:
-    /// @brief Adds a directive label which applies to items within ths rule area
+    /// Add a directive label which applies to items within ths rule area.
     void addDirective( SCH_DIRECTIVE_LABEL* label, KIGFX::SCH_VIEW* view );
 
-    /// @brief Clears the list of directives
+    /// Clear the list of directives.
     void clearDirectives( KIGFX::SCH_VIEW* view );
 
-    /// @briefs Adds an item to the list of items which this rule area affects
+    /// Add an item to the list of items which this rule area affects.
     void addContainedItem( SCH_ITEM* item );
 
-    /// @brief Clears the list of items which this rule area affects
+    /// Clear the list of items which this rule area affects.
     void clearContainedItems();
 
-    /// All SCH_ITEMs currently contained or intersecting the rule area
+    /// All #SCH_ITEM objects currently contained or intersecting the rule area.
     std::unordered_set<SCH_ITEM*>            m_items;
 
-    /// All SCH_DIRECTIVE_LABELs attached to the rule area border
+    /// All #SCH_DIRECTIVE_LABEL objectss attached to the rule area border.
     std::unordered_set<SCH_DIRECTIVE_LABEL*> m_directives;
 
-    /// All SCH_ITEMs contained or intersecting the rule area in the previous update
+    /// All #SCH_ITEM objectss contained or intersecting the rule area in the previous update.
     std::unordered_set<SCH_ITEM*> m_prev_items;
 
-    /// All SCH_DIRECTIVE_LABELs attached to the rule area border in the previous update
+    /// All SCH_DIRECTIVE_LABEL objects attached to the rule area border in the previous update.
     std::unordered_set<SCH_DIRECTIVE_LABEL*> m_prev_directives;
 };
 

@@ -126,6 +126,7 @@ public:
 
     /**
      * Get the initial name of the field set at creation (or set by SetName()).
+     *
      * This is the raw field name with no translation and no change.
      */
     const wxString& GetInternalName() { return m_name; }
@@ -135,9 +136,11 @@ public:
     void SetId( int aId );
 
     /**
-     * Gets the fields name as displayed on the schematic or
-     * in the symbol fields table. This is either the same as GetName() or
-     * if the field has a variable for name, the variable namer with the ${} stripped.
+     * Get the fields name as displayed on the schematic or
+     * in the symbol fields table.
+     *
+     * This is either the same as GetName() or if the field has a variable for name, the
+     * variable name with the ${} stripped.
      */
     wxString GetShownName() const;
     wxString GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText,
@@ -157,9 +160,10 @@ public:
     wxString GetFullText( int unit = 1 ) const;
 
     /**
-     * Return true if both the name and value of the field are empty.  Whitespace
-     * does not count as non-empty
-    */
+     * Return true if both the name and value of the field are empty.
+     *
+     * Whitespace does not count as non-empty.
+     */
     bool IsEmpty()
     {
         wxString name( m_name );
@@ -249,7 +253,8 @@ public:
     void BeginEdit( const VECTOR2I& aStartPoint ) override;
     void CalcEdit( const VECTOR2I& aPosition ) override;
 
-    void OnScintillaCharAdded( SCINTILLA_TRICKS* aScintillaTricks, wxStyledTextEvent &aEvent ) const;
+    void OnScintillaCharAdded( SCINTILLA_TRICKS* aScintillaTricks,
+                               wxStyledTextEvent &aEvent ) const;
 
     bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override;
 
@@ -283,14 +288,16 @@ public:
     /**
      * Copy parameters from a SCH_FIELD source.
      *
-     * Pointers and specific values (position) are not copied.
+     * @note Pointers and specific values (position) are not copied.
      *
      * @param aSource is the SCH_FIELD to read.
      */
     void ImportValues( const SCH_FIELD& aSource );
 
     /**
-     * Copy parameters of this field to another field. Pointers are not copied.
+     * Copy parameters of this field to another field.
+     *
+     * @note Pointers are not copied.
      *
      * @param aTarget Target field to copy values to.
      */

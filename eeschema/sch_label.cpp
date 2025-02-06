@@ -1093,6 +1093,7 @@ bool SCH_LABEL_BASE::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemL
                 AddConnectionTo( *aPath, sch_item );
                 sch_item->AddConnectionTo( *aPath, this );
             }
+
             break;
         }
 
@@ -1122,6 +1123,7 @@ bool SCH_LABEL_BASE::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemL
                     AddConnectionTo( *aPath, sch_item );
                     sch_item->AddConnectionTo( *aPath, this );
                 }
+
                 break;
             }
         }
@@ -1295,6 +1297,7 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
 
         // Make sheet pins and hierarchical labels clickable hyperlinks
         bool linkAlreadyPlotted = false;
+
         if( aPlotOpts.m_PDFHierarchicalLinks )
         {
             if( Type() == SCH_HIER_LABEL_T )
@@ -1330,9 +1333,9 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
                                                            _( "Net" ),
                                                            connection->Name() ) );
 
-                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
-                                                           _( "Resolved netclass" ),
-                                                           GetEffectiveNetClass()->GetHumanReadableName() ) );
+                properties.emplace_back(
+                        wxString::Format( wxT( "!%s = %s" ), _( "Resolved netclass" ),
+                                          GetEffectiveNetClass()->GetHumanReadableName() ) );
             }
 
             for( const SCH_FIELD& field : GetFields() )
@@ -1580,6 +1583,7 @@ void SCH_DIRECTIVE_LABEL::MirrorSpinStyle( bool aLeftRight )
 void SCH_DIRECTIVE_LABEL::MirrorHorizontally( int aCenter )
 {
     VECTOR2I old_pos = GetPosition();
+
     // The "text" is in fact a graphic shape. For a horizontal "text", it looks like a
     // vertical shape (like a text reduced to only "I" letter).
     // So the mirroring is not exactly similar to a SCH_TEXT item
@@ -2257,8 +2261,9 @@ static struct SCH_DIRECTIVE_LABEL_DESC
 
         propMgr.InheritsAfter( TYPE_HASH( SCH_DIRECTIVE_LABEL ), TYPE_HASH( SCH_LABEL_BASE ) );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<SCH_DIRECTIVE_LABEL, FLAG_SHAPE>( _HKI( "Shape" ),
-                             &SCH_DIRECTIVE_LABEL::SetFlagShape, &SCH_DIRECTIVE_LABEL::GetFlagShape ) );
+        propMgr.AddProperty( new PROPERTY_ENUM<SCH_DIRECTIVE_LABEL, FLAG_SHAPE>(
+                _HKI( "Shape" ), &SCH_DIRECTIVE_LABEL::SetFlagShape,
+                &SCH_DIRECTIVE_LABEL::GetFlagShape ) );
 
         propMgr.AddProperty( new PROPERTY<SCH_DIRECTIVE_LABEL, int>( _HKI( "Pin length" ),
                              &SCH_DIRECTIVE_LABEL::SetPinLength, &SCH_DIRECTIVE_LABEL::GetPinLength,
