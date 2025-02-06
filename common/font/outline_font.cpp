@@ -267,6 +267,7 @@ struct GLYPH_CACHE_KEY {
     bool           fakeItalic;
     bool           fakeBold;
     bool           mirror;
+    bool           supersub;
     EDA_ANGLE      angle;
 
     bool operator==(const GLYPH_CACHE_KEY& rhs ) const
@@ -278,6 +279,7 @@ struct GLYPH_CACHE_KEY {
                 && fakeItalic == rhs.fakeItalic
                 && fakeBold == rhs.fakeBold
                 && mirror == rhs.mirror
+                && supersub == rhs.supersub
                 && angle == rhs.angle;
     }
 };
@@ -296,6 +298,7 @@ namespace std
                         ^ hash<int>()( k.fakeItalic )
                         ^ hash<int>()( k.fakeBold )
                         ^ hash<int>()( k.mirror )
+                        ^ hash<int>()( k.supersub )
                         ^ hash<int>()( k.angle.AsTenthsOfADegree() );
         }
     };
@@ -312,11 +315,10 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
     VECTOR2D glyphSize = aSize;
     FT_Face  face = m_face;
     double   scaler = faceSize();
+    bool     supersub = IsSuperscript( aTextStyle ) || IsSubscript( aTextStyle );
 
-    if( IsSubscript( aTextStyle ) || IsSuperscript( aTextStyle ) )
-    {
+    if( supersub )
         scaler = subscriptSize();
-    }
 
     // set glyph resolution so that FT_Load_Glyph() results are good enough for decomposing
     FT_Set_Char_Size( face, 0, scaler, GLYPH_RESOLUTION, 0 );
@@ -355,7 +357,7 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
         if( aGlyphs )
         {
             GLYPH_CACHE_KEY key = { face, glyphInfo[i].codepoint, scaler, m_forDrawingSheet,
-                                    m_fakeItal, m_fakeBold, aMirror, aAngle };
+                                    m_fakeItal, m_fakeBold, aMirror, supersub, aAngle };
             GLYPH_DATA&     glyphData = s_glyphCache[ key ];
 
             if( glyphData.m_Contours.empty() )
