@@ -10,16 +10,19 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class PANEL_PRINTER_LIST;
+
 #include "dialog_shim.h"
-#include <wx/string.h>
-#include <wx/checkbox.h>
+#include <wx/panel.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/string.h>
+#include <wx/sizer.h>
+#include <wx/checkbox.h>
 #include <wx/stattext.h>
 #include <wx/choice.h>
-#include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -36,6 +39,7 @@ class DIALOG_PRINT_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
+		PANEL_PRINTER_LIST* m_panelPrinters;
 		wxCheckBox* m_checkReference;
 		wxStaticText* m_staticText1;
 		wxChoice* m_colorPrint;
@@ -43,10 +47,10 @@ class DIALOG_PRINT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkUseColorTheme;
 		wxChoice* m_colorTheme;
 		wxButton* m_buttonPageSetup;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Apply;
-		wxButton* m_sdbSizer1Cancel;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerApply;
+		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }

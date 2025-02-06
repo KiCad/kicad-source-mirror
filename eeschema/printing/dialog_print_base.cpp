@@ -5,6 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "dialogs/panel_printer_list.h"
+
 #include "dialog_print_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -15,6 +17,15 @@ DIALOG_PRINT_BASE::DIALOG_PRINT_BASE( wxWindow* parent, wxWindowID id, const wxS
 
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
+
+	wxBoxSizer* bSizerPrintersPanel;
+	bSizerPrintersPanel = new wxBoxSizer( wxVERTICAL );
+
+	m_panelPrinters = new PANEL_PRINTER_LIST( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	bSizerPrintersPanel->Add( m_panelPrinters, 1, wxEXPAND | wxALL, 5 );
+
+
+	bMainSizer->Add( bSizerPrintersPanel, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bleftSizer;
 	bleftSizer = new wxBoxSizer( wxVERTICAL );
@@ -51,18 +62,18 @@ DIALOG_PRINT_BASE::DIALOG_PRINT_BASE( wxWindow* parent, wxWindowID id, const wxS
 	m_checkUseColorTheme->SetValue(true);
 	bleftSizer->Add( m_checkUseColorTheme, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
-	wxBoxSizer* bSizer4;
-	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizerTheme;
+	bSizerTheme = new wxBoxSizer( wxHORIZONTAL );
 
 	wxArrayString m_colorThemeChoices;
 	m_colorTheme = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_colorThemeChoices, 0 );
 	m_colorTheme->SetSelection( 0 );
 	m_colorTheme->Enable( false );
 
-	bSizer4->Add( m_colorTheme, 1, wxEXPAND|wxLEFT, 20 );
+	bSizerTheme->Add( m_colorTheme, 1, wxEXPAND|wxLEFT, 20 );
 
 
-	bleftSizer->Add( bSizer4, 1, wxEXPAND, 5 );
+	bleftSizer->Add( bSizerTheme, 0, wxEXPAND, 5 );
 
 
 	bMainSizer->Add( bleftSizer, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
@@ -76,16 +87,16 @@ DIALOG_PRINT_BASE::DIALOG_PRINT_BASE( wxWindow* parent, wxWindowID id, const wxS
 
 	bbuttonsSizer->Add( 20, 0, 1, wxEXPAND, 5 );
 
-	m_sdbSizer1 = new wxStdDialogButtonSizer();
-	m_sdbSizer1OK = new wxButton( this, wxID_OK );
-	m_sdbSizer1->AddButton( m_sdbSizer1OK );
-	m_sdbSizer1Apply = new wxButton( this, wxID_APPLY );
-	m_sdbSizer1->AddButton( m_sdbSizer1Apply );
-	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
-	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
-	m_sdbSizer1->Realize();
+	m_sdbSizer = new wxStdDialogButtonSizer();
+	m_sdbSizerOK = new wxButton( this, wxID_OK );
+	m_sdbSizer->AddButton( m_sdbSizerOK );
+	m_sdbSizerApply = new wxButton( this, wxID_APPLY );
+	m_sdbSizer->AddButton( m_sdbSizerApply );
+	m_sdbSizerCancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer->AddButton( m_sdbSizerCancel );
+	m_sdbSizer->Realize();
 
-	bbuttonsSizer->Add( m_sdbSizer1, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bbuttonsSizer->Add( m_sdbSizer, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bMainSizer->Add( bbuttonsSizer, 0, wxEXPAND|wxLEFT, 10 );
@@ -100,7 +111,7 @@ DIALOG_PRINT_BASE::DIALOG_PRINT_BASE( wxWindow* parent, wxWindowID id, const wxS
 	m_colorPrint->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PRINT_BASE::OnOutputChoice ), NULL, this );
 	m_checkUseColorTheme->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PRINT_BASE::OnUseColorThemeChecked ), NULL, this );
 	m_buttonPageSetup->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_BASE::OnPageSetup ), NULL, this );
-	m_sdbSizer1Apply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_BASE::OnPrintPreview ), NULL, this );
+	m_sdbSizerApply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_BASE::OnPrintPreview ), NULL, this );
 }
 
 DIALOG_PRINT_BASE::~DIALOG_PRINT_BASE()
@@ -110,6 +121,6 @@ DIALOG_PRINT_BASE::~DIALOG_PRINT_BASE()
 	m_colorPrint->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PRINT_BASE::OnOutputChoice ), NULL, this );
 	m_checkUseColorTheme->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PRINT_BASE::OnUseColorThemeChecked ), NULL, this );
 	m_buttonPageSetup->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_BASE::OnPageSetup ), NULL, this );
-	m_sdbSizer1Apply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_BASE::OnPrintPreview ), NULL, this );
+	m_sdbSizerApply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_BASE::OnPrintPreview ), NULL, this );
 
 }
