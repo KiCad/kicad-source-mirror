@@ -339,17 +339,7 @@ void BITMAP_BUTTON::OnPaint( wxPaintEvent& aEvent )
     double scale = KIPLATFORM::UI::GetContentScaleFactor( this );
     wxSize bmSize;
 
-    if( m_isToolbarButton )
-    {
-        int size = Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size;
-        bmSize = wxSize( size, size ) * scale;
-        bmpImg = bmp.GetBitmap( bmSize );
-
-        // wxBitmapBundle::GetBitmap thinks we need this rescaled to match the base size
-        if( bmpImg.IsOk() )
-            bmpImg.SetScaleFactor( scale );
-    }
-    else if( bmp.IsOk() )
+    if( bmp.IsOk() )
     {
         bmpImg = bmp.GetBitmap( ToPhys( m_unadjustedMinSize ) );
         bmSize = bmpImg.GetLogicalSize();
