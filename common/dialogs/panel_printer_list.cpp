@@ -100,6 +100,8 @@ static bool GetPrinterList(wxArrayString &aPrinterList, wxString &aDefaultPrinte
    if(aPrinterList.GetCount())
         return true;
 #endif
+
+    return false;
 }
 
 
