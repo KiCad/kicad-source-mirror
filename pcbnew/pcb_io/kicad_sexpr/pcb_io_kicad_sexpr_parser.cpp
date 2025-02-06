@@ -5400,6 +5400,10 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
             break;
         }
 
+        case T_tenting:
+            parseTenting( pad->Padstack() );
+            break;
+
         case T_zone_layer_connections:
         {
             LSET cuLayers = pad->GetLayerSet() & LSET::AllCuMask();
