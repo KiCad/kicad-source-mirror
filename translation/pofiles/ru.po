@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-05 02:29+0300\n"
-"PO-Revision-Date: 2025-02-05 18:36+0000\n"
+"PO-Revision-Date: 2025-02-06 22:01+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v8/ru/>\n"
 "Language: ru\n"
@@ -1773,7 +1773,8 @@ msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
 msgstr ""
-"Нет возможности сообщить о проблеме с KiCad в официальный реестр ошибок."
+"Проблемы с KiCad на этой системе не могут быть отправлены в официальный "
+"реестр ошибок."
 
 #: common/confirm.cpp:58
 msgid "Do not show again"
@@ -1859,7 +1860,7 @@ msgstr "Внесённые изменения будут необратимо п
 
 #: common/confirm.cpp:234 common/tool/actions.cpp:107
 msgid "Revert"
-msgstr "Восстановить"
+msgstr "Отбросить изменения"
 
 #: common/confirm.cpp:260 common/dialogs/git/dialog_git_auth.cpp:53
 #: common/dialogs/git/dialog_git_commit.cpp:142
@@ -1938,7 +1939,7 @@ msgid ""
 "The KiCad EDA Suite is a set of open source applications for the creation of "
 "electronic schematics and printed circuit boards."
 msgstr ""
-"KiCad EDA Suite — программный комплекс с открытыми исходными текстами, "
+"KiCad EDA Suite — программный комплекс с открытым исходным кодом, "
 "предназначенный для разработки электрических схем и печатных плат."
 
 #: common/dialog_about/AboutDialog_main.cpp:127
@@ -1951,7 +1952,7 @@ msgstr "Официальный веб-сайт KiCad - "
 
 #: common/dialog_about/AboutDialog_main.cpp:137
 msgid "Developer website - "
-msgstr "Веб-сайт разработчика - "
+msgstr "Веб-сайт для разработчиков - "
 
 #: common/dialog_about/AboutDialog_main.cpp:142
 msgid "Official KiCad library repositories - "
@@ -1967,7 +1968,7 @@ msgstr "Сообщить об ошибках или проверить ошиб�
 
 #: common/dialog_about/AboutDialog_main.cpp:161
 msgid "KiCad users group and community"
-msgstr "Пользовательская группа и сообщество KiCad"
+msgstr "Группа пользователей и сообщество KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:166
 msgid "KiCad forum - "
@@ -3738,7 +3739,7 @@ msgstr "Показывать иконки в меню"
 
 #: common/dialogs/panel_common_settings_base.cpp:146
 msgid "Show scrollbars in editors"
-msgstr "Показать прокрутки в редакторах"
+msgstr "Показать полосы прокрутки в редакторах"
 
 #: common/dialogs/panel_common_settings_base.cpp:148
 msgid "This change takes effect when relaunching the editor."
@@ -4261,7 +4262,7 @@ msgstr "Более быстрое масштабирование при прок
 
 #: common/dialogs/panel_mouse_settings_base.cpp:55
 msgid "Zoom speed:"
-msgstr "Скорость смены масштаба:"
+msgstr "Скорость масштабирования:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:61
 msgid "How far to zoom in for each rotation of the mouse wheel"
@@ -4294,7 +4295,7 @@ msgstr "Формировать область выделения"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
 msgid "Drag selected objects; otherwise draw selection rectangle"
-msgstr "Перетащить выделенные объекты; если не выделено– выделять"
+msgstr "Перетащить выделенные объекты; если не выделено – выделять"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
 msgid "Drag any object (selected or not)"
@@ -8946,7 +8947,7 @@ msgstr "Удалить файл сопоставления"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:169
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:163
 msgid "Available path substitutions:"
-msgstr "Доступные замены путей:"
+msgstr "Доступные подстановки путей:"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:37
 msgid "Ref"
@@ -20637,7 +20638,7 @@ msgstr "Показать диалоговое окно для назначени
 
 #: eeschema/tools/ee_actions.cpp:672 eeschema/tools/sch_edit_tool.cpp:1673
 msgid "Autoplace Fields"
-msgstr "Разместить поля автомат."
+msgstr "Разместить поля автоматически"
 
 #: eeschema/tools/ee_actions.cpp:673
 msgid "Runs the automatic placement algorithm on the symbol or sheet's fields"
@@ -21220,7 +21221,7 @@ msgstr "Сменить содержимое редактора схем соде
 
 #: eeschema/tools/ee_actions.cpp:1210
 msgid "Enter Sheet"
-msgstr "Открыть лист"
+msgstr "Войти в лист"
 
 #: eeschema/tools/ee_actions.cpp:1211
 msgid "Display the selected sheet's contents in the schematic editor"
@@ -21276,7 +21277,7 @@ msgstr "Перейти к следующему листу по номеру"
 
 #: eeschema/tools/ee_actions.cpp:1267
 msgid "Hierarchy Navigator"
-msgstr "Навигатор по иерархии листов"
+msgstr "Навигатор по иерархии"
 
 #: eeschema/tools/ee_actions.cpp:1268
 msgid "Show or hide the schematic sheet hierarchy navigator"
@@ -21396,11 +21397,11 @@ msgstr "Сохранить текущий набор вкладок и наст�
 
 #: eeschema/tools/ee_actions.cpp:1420
 msgid "Export Current Plot as PNG..."
-msgstr "Экспорт графика в PNG..."
+msgstr "Экспорт текущего графика в PNG..."
 
 #: eeschema/tools/ee_actions.cpp:1426
 msgid "Export Current Plot as CSV..."
-msgstr "Экспорт графика в CSV..."
+msgstr "Экспорт текущего графика в CSV..."
 
 #: eeschema/tools/ee_actions.cpp:1432
 msgid "Show Legend"
@@ -25419,7 +25420,7 @@ msgstr "Печать"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:646
 msgid "Predefined Keywords"
-msgstr "Пред.установленные метки форматирования"
+msgstr "Предустановленные ключевые слова"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:649
 msgid "Texts can include keywords."
@@ -28218,11 +28219,11 @@ msgstr "Каплевидные переходы"
 
 #: pcbnew/board_connected_item.cpp:250
 msgid "Enable Teardrops"
-msgstr "Включить каплевидные переходы"
+msgstr "Вкл. каплевидные переходы"
 
 #: pcbnew/board_connected_item.cpp:256
 msgid "Best Length Ratio"
-msgstr "Лучшее соотношение длины"
+msgstr "Лучшее соотнош. длины"
 
 #: pcbnew/board_connected_item.cpp:263
 msgid "Max Length"
@@ -28230,7 +28231,7 @@ msgstr "Макс. длина"
 
 #: pcbnew/board_connected_item.cpp:269
 msgid "Best Width Ratio"
-msgstr "Лучшее соотношение ширины"
+msgstr "Лучшее соотнош. ширины"
 
 #: pcbnew/board_connected_item.cpp:276
 msgid "Max Width"
@@ -28246,7 +28247,7 @@ msgstr "Предпочитать соединения зон"
 
 #: pcbnew/board_connected_item.cpp:294
 msgid "Allow Teardrops To Span Two Tracks"
-msgstr "Разрешить каплевидным переходам охватывать две дорожки"
+msgstr "Разреш. каплевидным переходам охватывать две дорожки"
 
 #: pcbnew/board_connected_item.cpp:300
 msgid "Max Width Ratio"
@@ -29300,7 +29301,7 @@ msgstr "Ограничения"
 #: pcbnew/dialogs/dialog_board_setup.cpp:158 pcbnew/edit_track_width.cpp:180
 #: pcbnew/edit_track_width.cpp:204
 msgid "Pre-defined Sizes"
-msgstr "Пред.установленные размеры"
+msgstr "Предустановленные размеры"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:177
 msgid "Length-tuning Patterns"
@@ -32092,7 +32093,7 @@ msgstr "Выбор файла для экспорта в формате GenCAD"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:136
 msgid "Flip bottom footprint padstacks"
-msgstr "Перевернуть стопки конт. пл. компонентов снизу"
+msgstr "Перевернуть стеки конт. пл. компонентов снизу"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:137
 msgid "Generate unique pin names"
@@ -32641,7 +32642,7 @@ msgstr "Макс. ширина (W):"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:799
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:544
 msgid "Curved edges"
-msgstr "Закругленные края"
+msgstr "Плавные края"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:324
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:805
@@ -34793,7 +34794,7 @@ msgstr "Конец X:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:121
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:220
 msgid "Pre-defined sizes:"
-msgstr "Пред.установленные:"
+msgstr "Предустановленные:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:233
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
@@ -37952,7 +37953,7 @@ msgstr "Диаметр перех. отв."
 
 #: pcbnew/drc/drc_item.cpp:137
 msgid "Padstack is not valid"
-msgstr "Неверная стопка перех. отв."
+msgstr "Неверный стек конт. пл."
 
 #: pcbnew/drc/drc_item.cpp:141
 msgid "Micro via hole size out of range"
@@ -38024,7 +38025,7 @@ msgstr "Тонкий участок меди"
 
 #: pcbnew/drc/drc_item.cpp:213
 msgid "Solder mask aperture bridges items with different nets"
-msgstr "Апертура паяльной маски объединяет элементы с различными цепями"
+msgstr "Апертура паяльной маски объединяет элементы с различ. цепями"
 
 #: pcbnew/drc/drc_item.cpp:217
 msgid "Silkscreen clipped by solder mask"
@@ -38868,13 +38869,12 @@ msgstr "мин. ширина маски из параметров платы"
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:571
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:665
 msgid "Front solder mask aperture bridges items with different nets"
-msgstr ""
-"Апертура передней паяльной маски объединяет элементы с различными цепями"
+msgstr "Апертура передней паяльной маски объединяет элементы с различ. цепями"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:573
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:667
 msgid "Rear solder mask aperture bridges items with different nets"
-msgstr "Апертура задней паяльной маски объединяет элементы с различными цепями"
+msgstr "Апертура задней паяльной маски объединяет элементы с различ. цепями"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:790
 msgid "Building solder mask..."
@@ -38952,7 +38952,7 @@ msgstr "(слой %s; %d мостиков подключены к изолиро
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:229
 #, c-format
 msgid "(layer %s; %s min spoke count %d; actual %d)"
-msgstr "(слой %s; %s мин. кол-во мостиков %d; фактическое %d)"
+msgstr "(слой %s; %s мин. кол-во мостиков %d; текущее %d)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:254
 msgid "Checking thermal reliefs..."
@@ -41706,7 +41706,7 @@ msgid ""
 "items have been imported as graphical elements."
 msgstr ""
 "Определение посад. места '%s' имеет медь компонента, связанную с конт. пл. "
-"на нескольких слоях. Особые стопки конт. пл. не поддерживаются в KiCad. "
+"на нескольких слоях. Особые стеки конт. пл. не поддерживаются в KiCad. "
 "Медные элементы импортированы как графические."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:997
@@ -42258,7 +42258,7 @@ msgstr ""
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1054
 #, c-format
 msgid "Could not insert graphical item %d into padstack '%s'."
-msgstr "Не удалось вставить графический элемент %d в стопку кон.пл. '%s'."
+msgstr "Не удалось вставить графический элемент %d в стек конт. пл. '%s'."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1061
 #, c-format
@@ -43663,7 +43663,7 @@ msgstr "Файл сессии использует неверный иденти
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:211
 msgid "Session via padstack has no shapes"
-msgstr "Стопка площадок перех. отв. сессии не имеет формы"
+msgstr "Стек конт. пл. перех. отв. сессии не имеет фигур"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:220
 #, c-format
@@ -43701,7 +43701,7 @@ msgstr "Обозначение '%s' не найдено."
 #: pcbnew/specctra_import_export/specctra_import.cpp:521
 #, c-format
 msgid "A wire_via refers to missing padstack '%s'."
-msgstr "wire_via ссылается на несуществующую стопку конт. пл. '%s'."
+msgstr "wire_via ссылается на несуществующий стек конт. пл. '%s'."
 
 #: pcbnew/toolbars_footprint_editor.cpp:92
 msgid "Load footprint from current board"
@@ -45758,20 +45758,21 @@ msgstr "Подсветить все элементы меди выбранных
 
 #: pcbnew/tools/pcb_actions.cpp:1276
 msgid "Hide Net in Ratsnest"
-msgstr "Скрыть сеть в вид.связях"
+msgstr "Скрыть цепь в видимых связях"
 
 #: pcbnew/tools/pcb_actions.cpp:1277
 msgid "Hide the selected net in the ratsnest of unconnected net lines/arcs"
 msgstr ""
-"Не показывать выбранную сеть в видимых связях (ratsnest) неподключенных цепей"
+"Не показывать выбранную цепь в видимых связях (ratsnest) неподключенных цепей"
 
 #: pcbnew/tools/pcb_actions.cpp:1284
 msgid "Show Net in Ratsnest"
-msgstr "Показать сеть в видимых связях"
+msgstr "Показать цепь в видимых связях"
 
 #: pcbnew/tools/pcb_actions.cpp:1285
 msgid "Show the selected net in the ratsnest of unconnected net lines/arcs"
-msgstr "Показать выбранную сеть в видимых связях неподключенных цепей"
+msgstr ""
+"Показать выбранную цепь в видимых связях (ratsnest) неподключенных цепей"
 
 #: pcbnew/tools/pcb_actions.cpp:1292
 msgid "Switch to Schematic Editor"
@@ -46290,7 +46291,7 @@ msgstr "Выделить все неподключённые посад. мес�
 msgid "Selects all unconnected footprints belonging to each selected net."
 msgstr ""
 "Выделяет все неподключённые посад. места, принадлежащие каждой выбранной "
-"сети."
+"цепи."
 
 #: pcbnew/tools/pcb_actions.cpp:2088
 msgid "Grab Nearest Unconnected Footprints"
