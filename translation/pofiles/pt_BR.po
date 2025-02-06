@@ -9,13 +9,14 @@
 # pedrolinharesmoreira <pedrolinhares@unifei.edu.br>, 2024.
 # Pedro Moreira <pedroltmoreira@gmail.com>, 2024.
 # John Beard <john.j.beard@gmail.com>, 2025.
+# dsa-t <dudesuchamazing@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-07 01:15+0300\n"
-"PO-Revision-Date: 2025-02-04 09:03+0000\n"
-"Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
+"PO-Revision-Date: 2025-02-06 23:35+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -20244,7 +20245,6 @@ msgid "Cancel Load"
 msgstr "Cancele o carregamento"
 
 #: eeschema/sheet.cpp:317
-#, fuzzy
 msgid ""
 "There are hierarchical sheets in the loaded schematic file from an older "
 "file version resulting in  missing symbol instance data.  This will result "
