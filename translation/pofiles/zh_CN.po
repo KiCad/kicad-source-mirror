@@ -30,7 +30,7 @@
 # 向阳阳 <hinata.hoshino@foxmail.com>, 2024.
 # Lao·Zhu <2208213223@qq.com>, 2024.
 # CloverGit <CloverGit@users.noreply.hosted.weblate.org>, 2024.
-# dsa-t <dudesuchamazing@gmail.com>, 2024.
+# dsa-t <dudesuchamazing@gmail.com>, 2024, 2025.
 # zly20129 <zly20129@icloud.com>, 2024.
 # Wang <wang@plasma.ac.cn>, 2024.
 # HalfSweet <HalfSweet@halfsweet.cn>, 2024.
@@ -41,8 +41,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-07 01:15+0300\n"
-"PO-Revision-Date: 2025-02-04 09:03+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"PO-Revision-Date: 2025-02-06 23:35+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -19729,7 +19729,6 @@ msgid "Cancel Load"
 msgstr "取消加载"
 
 #: eeschema/sheet.cpp:317
-#, fuzzy
 msgid ""
 "There are hierarchical sheets in the loaded schematic file from an older "
 "file version resulting in  missing symbol instance data.  This will result "
@@ -19740,9 +19739,10 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"在加载的原理图文件中存在来自旧文件版本的层次图纸, 导致符号实例数据丢失。这将"
-"导致加载的原理图中的所有符号都使用默认的实例设置或退回到库中的符号设置。加载"
-"使用该原理图文件的工程并保存为最新的文件版本将解决这个问题。\n"
+"在加载的原理图文件中存在来自旧文件版本的层次图纸, "
+"导致符号实例数据丢失。这将导致加载的原理图中的所有符号都使用默认的实例设置或"
+"退回到库中的符号设置。加载使用该原理图文件的工程并保存为最新的文件版本将解决"
+"这个问题。\n"
 "\n"
 "是否继续?"
 
