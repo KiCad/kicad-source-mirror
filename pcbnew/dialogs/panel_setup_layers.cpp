@@ -55,6 +55,7 @@ static void mandatoryLayerCbSetup( wxCheckBox& aCheckBox )
     aCheckBox.Show();
     aCheckBox.Disable();
     aCheckBox.SetValue( true );
+    aCheckBox.SetToolTip( _( "This layer is required and cannot be disabled" ) );
 }
 
 
