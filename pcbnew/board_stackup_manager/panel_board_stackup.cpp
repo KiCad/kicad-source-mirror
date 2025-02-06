@@ -605,20 +605,12 @@ int PANEL_SETUP_BOARD_STACKUP::GetCopperLayerCount() const
 
 void PANEL_SETUP_BOARD_STACKUP::updateCopperLayerCount()
 {
-    int copperCount = GetCopperLayerCount();
+    const int copperCount = GetCopperLayerCount();
 
     wxASSERT( copperCount >= 2 );
 
     m_enabledLayers.ClearCopperLayers();
-    m_enabledLayers |= F_Cu | B_Cu;
-
-    // F_Cu and B_Cu are already enabled. Enable internal cu layers
-    int internal_cu_count = copperCount - 2;
-
-    // Inner layers start at B_Cu+2: B_Cu+2, B_Cu+4 ... B_Cu+2n
-    // and use even indexes (F_Cu, B_Cu, 4, 6, ...)
-    for( int i = 1; i <= internal_cu_count; i++ )
-        m_enabledLayers.set( B_Cu + (i*2) );
+    m_enabledLayers |= LSET::AllCuMask( copperCount );
 }
 
 
