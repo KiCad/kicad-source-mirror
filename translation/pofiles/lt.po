@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 02:29+0300\n"
+"POT-Creation-Date: 2025-02-07 01:15+0300\n"
 "PO-Revision-Date: 2025-01-29 16:58+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/v8/lt/"
@@ -186,7 +186,7 @@ msgstr "Perkrovimo laikas %.3f s"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:117
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:59
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:502
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2449
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2452
 #, fuzzy, c-format
 msgid "Loading %s..."
 msgstr "Įkeliama %s"
@@ -2462,8 +2462,8 @@ msgstr "aplinkos įvairovė"
 #: pcbnew/fp_text_grid_table.cpp:137 pcbnew/pcb_group.cpp:494
 #: pcbnew/widgets/search_handlers.cpp:140
 #: pcbnew/widgets/search_handlers.cpp:273
-#: pcbnew/widgets/search_handlers.cpp:352 pcbnew/zone.cpp:640
-#: pcbnew/zone.cpp:1653
+#: pcbnew/widgets/search_handlers.cpp:352 pcbnew/zone.cpp:663
+#: pcbnew/zone.cpp:1676
 msgid "Name"
 msgstr "Pavadinimas"
 
@@ -3526,7 +3526,7 @@ msgstr "Failo pavadinimas:"
 #: pcbnew/dialogs/dialog_find_base.cpp:118 pcbnew/pad.cpp:1057
 #: pcbnew/pcb_dimension.cpp:459 pcbnew/pcb_group.cpp:389
 #: pcbnew/pcb_shape.cpp:505 pcbnew/pcb_text.cpp:234 pcbnew/pcb_textbox.cpp:371
-#: pcbnew/pcb_track.cpp:1178 pcbnew/zone.cpp:606
+#: pcbnew/pcb_track.cpp:1178 pcbnew/zone.cpp:629
 msgid "Status"
 msgstr "Būsena"
 
@@ -4499,7 +4499,7 @@ msgstr "Mastelis"
 #: pcbnew/widgets/appearance_controls.cpp:730
 #: pcbnew/widgets/appearance_controls.cpp:772
 #: pcbnew/widgets/appearance_controls.cpp:2486
-#: pcbnew/widgets/appearance_controls.cpp:2505 pcbnew/zone.cpp:1564
+#: pcbnew/widgets/appearance_controls.cpp:2505 pcbnew/zone.cpp:1587
 msgid "None"
 msgstr "Niekas"
 
@@ -4649,8 +4649,8 @@ msgstr "Bibliotekos slapyvardžio klaida"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:364
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:839 pcbnew/footprint.cpp:3521
-#: pcbnew/pad.cpp:2362 pcbnew/pcb_textbox.cpp:665 pcbnew/zone.cpp:644
-#: pcbnew/zone.cpp:1566
+#: pcbnew/pad.cpp:2362 pcbnew/pcb_textbox.cpp:665 pcbnew/zone.cpp:667
+#: pcbnew/zone.cpp:1589
 msgid "Solid"
 msgstr "Solidus"
 
@@ -4777,7 +4777,7 @@ msgstr "Tinklo klasės"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:539
-#: pcbnew/tools/board_inspection_tool.cpp:1107 pcbnew/zone.cpp:1733
+#: pcbnew/tools/board_inspection_tool.cpp:1107 pcbnew/zone.cpp:1756
 msgid "Clearance"
 msgstr "Saugos tarpas"
 
@@ -4869,7 +4869,7 @@ msgstr "Liuko modelis"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:137
 #: eeschema/sch_field.cpp:1086 eeschema/sch_label.cpp:252
-#: pcbnew/board_connected_item.cpp:199 pcbnew/pad.cpp:2400 pcbnew/zone.cpp:1647
+#: pcbnew/board_connected_item.cpp:199 pcbnew/pad.cpp:2400 pcbnew/zone.cpp:1670
 msgid "Net Class"
 msgstr "Grynoji klasė"
 
@@ -5910,7 +5910,7 @@ msgstr "Apačia"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
 #: pcbnew/footprint.cpp:3551 pcbnew/fp_text_grid_table.cpp:145
-#: pcbnew/pad.cpp:2372 pcbnew/zone.cpp:1663
+#: pcbnew/pad.cpp:2372 pcbnew/zone.cpp:1686
 msgid "Orientation"
 msgstr "Orientacija"
 
@@ -8612,7 +8612,7 @@ msgstr "Pritvirtinkite prie tinklelio:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
 #: pcbnew/dialogs/panel_edit_options_base.cpp:297
 #: pcbnew/dialogs/panel_edit_options_base.cpp:311
-#: pcbnew/dialogs/panel_edit_options_base.cpp:325 pcbnew/zone.cpp:1584
+#: pcbnew/dialogs/panel_edit_options_base.cpp:325 pcbnew/zone.cpp:1607
 msgid "Always"
 msgstr "Visuomet"
 
@@ -8624,7 +8624,7 @@ msgstr "Kai rodomas tinklelis"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
 #: pcbnew/dialogs/panel_edit_options_base.cpp:297
 #: pcbnew/dialogs/panel_edit_options_base.cpp:311
-#: pcbnew/dialogs/panel_edit_options_base.cpp:325 pcbnew/zone.cpp:1585
+#: pcbnew/dialogs/panel_edit_options_base.cpp:325 pcbnew/zone.cpp:1608
 msgid "Never"
 msgstr "Niekada"
 
@@ -11665,7 +11665,7 @@ msgid "Set border width to 0 to use schematic's default symbol line width."
 msgstr "Perjunkite į scheminį redaktorių"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:111
-#: pcbnew/zone.cpp:1656
+#: pcbnew/zone.cpp:1679
 msgid "Fill Style"
 msgstr "Užpildymo stilius"
 
@@ -13475,7 +13475,7 @@ msgstr "Parametras"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2036 pcbnew/pcb_marker.cpp:194
 #: pcbnew/pcb_shape.cpp:502 pcbnew/pcb_text.cpp:231 pcbnew/pcb_track.cpp:1065
 #: pcbnew/pcb_track.cpp:1132 pcbnew/tools/drawing_stackup_table_tool.cpp:250
-#: pcbnew/widgets/search_handlers.cpp:205 pcbnew/zone.cpp:564
+#: pcbnew/widgets/search_handlers.cpp:205 pcbnew/zone.cpp:587
 msgid "Type"
 msgstr "Tipas"
 
@@ -16245,7 +16245,7 @@ msgid "Error loading symbol %s from library '%s'."
 msgstr "Klaida įkeliant simbolį „%s“ iš bibliotekos „%s“."
 
 #: eeschema/generate_alias_info.cpp:121 eeschema/sim/spice_simulator.cpp:69
-#: kicad/pcm/pcm.cpp:779 pcbnew/zone.cpp:646
+#: kicad/pcm/pcm.cpp:779 pcbnew/zone.cpp:669
 msgid "Unknown"
 msgstr "Nežinoma"
 
@@ -16462,14 +16462,14 @@ msgstr "PIN vardas"
 #: eeschema/lib_pin.cpp:1681 eeschema/lib_shape.cpp:583
 #: eeschema/sch_shape.cpp:599 eeschema/sch_symbol.cpp:2778
 #: pcbnew/board_item.cpp:334 pcbnew/pcb_group.cpp:488 pcbnew/pcb_shape.cpp:715
-#: pcbnew/pcb_track.cpp:1494 pcbnew/zone.cpp:1594 pcbnew/zone.cpp:1606
+#: pcbnew/pcb_track.cpp:1494 pcbnew/zone.cpp:1617 pcbnew/zone.cpp:1629
 msgid "Position X"
 msgstr "Pozicijos X"
 
 #: eeschema/lib_pin.cpp:1684 eeschema/lib_shape.cpp:585
 #: eeschema/sch_shape.cpp:601 eeschema/sch_symbol.cpp:2781
 #: pcbnew/board_item.cpp:337 pcbnew/pcb_group.cpp:489 pcbnew/pcb_shape.cpp:717
-#: pcbnew/pcb_track.cpp:1498 pcbnew/zone.cpp:1600 pcbnew/zone.cpp:1607
+#: pcbnew/pcb_track.cpp:1498 pcbnew/zone.cpp:1623 pcbnew/zone.cpp:1630
 msgid "Position Y"
 msgstr "Pozicijos Y"
 
@@ -17028,7 +17028,7 @@ msgstr "Autobuso įvažiavimo tipas"
 #: eeschema/sch_label.cpp:1300 eeschema/sch_line.cpp:951
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2075 pcbnew/pad.cpp:1053
 #: pcbnew/pcb_track.cpp:1160 pcbnew/tools/pcb_control.cpp:1693
-#: pcbnew/zone.cpp:594
+#: pcbnew/zone.cpp:617
 #, fuzzy
 msgid "Resolved Netclass"
 msgstr "Priskirtas „Netclass“"
@@ -17691,7 +17691,7 @@ msgstr "KiCad simbolių bibliotekos failai"
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:62
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:221
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:505
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2452
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2455
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:148
 #, fuzzy
 msgid "Open cancelled by user."
@@ -18050,8 +18050,8 @@ msgstr "Nežinoma SCH_FILE_T vertė: %d"
 #: pcbnew/widgets/pcb_properties_panel.cpp:250
 #: pcbnew/widgets/pcb_properties_panel.cpp:254
 #: pcbnew/widgets/search_handlers.cpp:84 pcbnew/widgets/search_handlers.cpp:142
-#: pcbnew/widgets/search_handlers.cpp:207 pcbnew/zone.cpp:637
-#: pcbnew/zone.cpp:1638 pcbnew/zone.cpp:1639
+#: pcbnew/widgets/search_handlers.cpp:207 pcbnew/zone.cpp:660
+#: pcbnew/zone.cpp:1661 pcbnew/zone.cpp:1662
 msgid "Layer"
 msgstr "Sluoksnis"
 
@@ -18069,7 +18069,7 @@ msgstr "Sluoksnis"
 #: pcbnew/footprint.cpp:1310 pcbnew/pad.cpp:1057 pcbnew/pcb_dimension.cpp:459
 #: pcbnew/pcb_group.cpp:389 pcbnew/pcb_marker.cpp:364 pcbnew/pcb_shape.cpp:505
 #: pcbnew/pcb_text.cpp:234 pcbnew/pcb_textbox.cpp:371 pcbnew/pcb_track.cpp:1178
-#: pcbnew/tools/generator_tool.cpp:47 pcbnew/zone.cpp:606
+#: pcbnew/tools/generator_tool.cpp:47 pcbnew/zone.cpp:629
 msgid "Locked"
 msgstr "Užrakintas"
 
@@ -18106,8 +18106,8 @@ msgstr "Lygiavimas:"
 #: pcbnew/pad.cpp:2398 pcbnew/pcb_shape.cpp:732 pcbnew/pcb_track.cpp:1158
 #: pcbnew/tools/pcb_control.cpp:1690
 #: pcbnew/widgets/pcb_properties_panel.cpp:274
-#: pcbnew/widgets/search_handlers.cpp:141 pcbnew/zone.cpp:592
-#: pcbnew/zone.cpp:1645
+#: pcbnew/widgets/search_handlers.cpp:141 pcbnew/zone.cpp:615
+#: pcbnew/zone.cpp:1668
 msgid "Net"
 msgstr "Grandinė"
 
@@ -31153,7 +31153,7 @@ msgstr "Kontūrų rodymas:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:134
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:59
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:120 pcbnew/zone.cpp:645
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:120 pcbnew/zone.cpp:668
 msgid "Hatched"
 msgstr "Brūkšniuota"
 
@@ -31224,7 +31224,7 @@ msgstr ""
 "Šį nustatymą gali pakeisti vietiniai trinkelių nustatymai"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:3520
-#: pcbnew/pad.cpp:2361 pcbnew/zone.cpp:1565
+#: pcbnew/pad.cpp:2361 pcbnew/zone.cpp:1588
 msgid "Thermal reliefs"
 msgstr "Terminiai reljefai"
 
@@ -31261,14 +31261,14 @@ msgstr "Užpildymo tipas:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:290
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:129
-#: pcbnew/zone.cpp:1575
+#: pcbnew/zone.cpp:1598
 #, fuzzy
 msgid "Solid fill"
 msgstr "Solidus"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:290
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:129
-#: pcbnew/zone.cpp:1576
+#: pcbnew/zone.cpp:1599
 msgid "Hatch pattern"
 msgstr "Liuko modelis"
 
@@ -31326,7 +31326,7 @@ msgstr "Pašalinti salas:"
 msgid "Choose what to do with unconnected copper islands"
 msgstr "Pasirinkite, ką daryti su nesujungtomis vario salomis"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:357 pcbnew/zone.cpp:1586
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:357 pcbnew/zone.cpp:1609
 msgid "Below area limit"
 msgstr "Žemiau ploto ribos"
 
@@ -34814,7 +34814,7 @@ msgstr "%s, %s ir sujungtus sluoksnius"
 msgid "Connected layers only"
 msgstr "Tik prijungti sluoksniai"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:915 pcbnew/zone.cpp:618
+#: pcbnew/dialogs/dialog_pad_properties.cpp:915 pcbnew/zone.cpp:641
 #, c-format
 msgid "%s and %s"
 msgstr "%s ir %s"
@@ -36455,7 +36455,7 @@ msgstr "Tikslinis iškreipimas:"
 #: pcbnew/router/router_tool.cpp:2746 pcbnew/router/router_tool.cpp:2757
 #: pcbnew/router/router_tool.cpp:2765 pcbnew/router/router_tool.cpp:2770
 #: pcbnew/tools/pcb_control.cpp:1522 pcbnew/tools/pcb_control.cpp:1532
-#: pcbnew/zone.cpp:661
+#: pcbnew/zone.cpp:684
 #, c-format
 msgid "(from %s)"
 msgstr "(nuo %s)"
@@ -38998,7 +38998,7 @@ msgid "%s pad connection: %s."
 msgstr "Zonos ryšio tipas: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1499 pcbnew/drc/drc_engine.cpp:1516
-#: pcbnew/drc/drc_engine.cpp:1533 pcbnew/zone.cpp:399 pcbnew/zone.cpp:510
+#: pcbnew/drc/drc_engine.cpp:1533 pcbnew/zone.cpp:422 pcbnew/zone.cpp:533
 msgid "zone"
 msgstr "zona"
 
@@ -39017,7 +39017,7 @@ msgstr "Terminio stipino plotis:"
 msgid "Checking rule assertion \"%s\"."
 msgstr "Tikrinama taisyklės sąlyga \"%s\"."
 
-#: pcbnew/drc/drc_item.cpp:45 pcbnew/zone.cpp:1731
+#: pcbnew/drc/drc_item.cpp:45 pcbnew/zone.cpp:1754
 msgid "Electrical"
 msgstr "Elektros"
 
@@ -40626,11 +40626,11 @@ msgstr ""
 msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr ""
 
-#: pcbnew/footprint.cpp:3518 pcbnew/pad.cpp:2359 pcbnew/zone.cpp:1563
+#: pcbnew/footprint.cpp:3518 pcbnew/pad.cpp:2359 pcbnew/zone.cpp:1586
 msgid "Inherited"
 msgstr "Paveldėtas"
 
-#: pcbnew/footprint.cpp:3522 pcbnew/pad.cpp:2363 pcbnew/zone.cpp:1567
+#: pcbnew/footprint.cpp:3522 pcbnew/pad.cpp:2363 pcbnew/zone.cpp:1590
 #, fuzzy
 msgid "Thermal reliefs for PTH"
 msgstr "Terminiai reljefai"
@@ -40825,8 +40825,8 @@ msgstr "Biblioteka %s jau yra."
 
 #: pcbnew/footprint_libraries_utils.cpp:544
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:956
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2685
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2763
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2688
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2766
 #, c-format
 msgid "Library '%s' is read only."
 msgstr "Biblioteka „%s“ yra tik skaitoma."
@@ -41956,7 +41956,7 @@ msgstr "Gręžkite X / Y"
 
 #: pcbnew/pad.cpp:1132 pcbnew/pcb_track.cpp:1105 pcbnew/pcb_track.cpp:1143
 #: pcbnew/router/router_tool.cpp:2739 pcbnew/router/router_tool.cpp:2768
-#: pcbnew/zone.cpp:659
+#: pcbnew/zone.cpp:682
 #, c-format
 msgid "Min Clearance: %s"
 msgstr "Minimalus atstumas: %s"
@@ -42237,7 +42237,7 @@ msgstr "Gamybos savybė"
 msgid "Soldermask Margin Override"
 msgstr "Vietinė „Soldermask“ marža"
 
-#: pcbnew/pad.cpp:2510 pcbnew/zone.cpp:1758
+#: pcbnew/pad.cpp:2510 pcbnew/zone.cpp:1781
 #, fuzzy
 msgid "Thermal Relief Spoke Width"
 msgstr "Terminio reljefo stipinų plotis"
@@ -42247,7 +42247,7 @@ msgstr "Terminio reljefo stipinų plotis"
 msgid "Thermal Relief Spoke Angle"
 msgstr "Terminis reljefas"
 
-#: pcbnew/pad.cpp:2519 pcbnew/zone.cpp:1752
+#: pcbnew/pad.cpp:2519 pcbnew/zone.cpp:1775
 #, fuzzy
 msgid "Thermal Relief Gap"
 msgstr "Terminis reljefas"
@@ -43736,7 +43736,7 @@ msgid "Element token contains %d parameters."
 msgstr "Elemento žetone yra %d parametrai."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:975
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2807
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2810
 #, fuzzy, c-format
 msgid "Insufficient permissions to delete folder '%s'."
 msgstr ""
@@ -43744,7 +43744,7 @@ msgstr ""
 "%s"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:983
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2815
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2818
 #, fuzzy, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
 msgstr "Bibliotekos kataloge „%s“ yra netikėtų pakatalogių."
@@ -43756,7 +43756,7 @@ msgstr "Bibliotekos kelyje „%s“ rastas netikėtas failas „%s“."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:1021
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3258
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2852
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2855
 #, fuzzy, c-format
 msgid "Footprint library '%s' cannot be deleted."
 msgstr "Pėdsakų bibliotekos „%s“ negalima ištrinti."
@@ -43941,27 +43941,27 @@ msgstr ""
 msgid "Save Anyway"
 msgstr "Išsaugoti vis tiek"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1464
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1466
 #, c-format
 msgid "unknown pad type: %d"
 msgstr "nežinomas pagalvėlės tipas: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2111
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2113
 #, c-format
 msgid "unknown via type %d"
 msgstr "nežinoma per tipą %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2344
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2347
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "nežinomas zonos kampų lyginimo tipas %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2498
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2501
 #, fuzzy
 msgid "This file does not contain a PCB."
 msgstr "šiame faile nėra PCB"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2671
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2674
 #, fuzzy, c-format
 msgid ""
 "Library '%s' does not exist.\n"
@@ -43970,28 +43970,28 @@ msgstr ""
 "Bibliotekos „%s“ nėra.\n"
 "Ar norėtumėte jį sukurti?"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2676
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2679
 msgid "Library Not Found"
 msgstr "Biblioteka nerasta"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2704
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2707
 #, fuzzy, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "Netinkamas pėdsako failo pavadinimas „%s“."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2710
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2713
 #, fuzzy, c-format
 msgid "Insufficient permissions to delete '%s'."
 msgstr ""
 "Neturite reikiamų teisių failo įrašymui\n"
 "%s"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2782
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2785
 #, fuzzy, c-format
 msgid "Cannot overwrite library path '%s'."
 msgstr "Negalima perrašyti bibliotekos kelio „%s“."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2834
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2837
 #, fuzzy, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
 msgstr "Bibliotekos kelyje „%s“ rastas netikėtas failas „%s“."
@@ -49175,8 +49175,8 @@ msgstr "Matmuo"
 msgid "Other items"
 msgstr "Kiti daiktai"
 
-#: pcbnew/widgets/search_handlers.cpp:143 pcbnew/zone.cpp:599
-#: pcbnew/zone.cpp:1649
+#: pcbnew/widgets/search_handlers.cpp:143 pcbnew/zone.cpp:622
+#: pcbnew/zone.cpp:1672
 msgid "Priority"
 msgstr "Prioritetas"
 
@@ -49196,163 +49196,163 @@ msgstr "Klasė"
 msgid "No Net"
 msgstr "Naujas tinklas"
 
-#: pcbnew/zone.cpp:562
+#: pcbnew/zone.cpp:585
 msgid "Cutout"
 msgstr "Iškirpti"
 
-#: pcbnew/zone.cpp:571
+#: pcbnew/zone.cpp:594
 msgid "No vias"
 msgstr "Ignoruoti perėjimus"
 
-#: pcbnew/zone.cpp:574
+#: pcbnew/zone.cpp:597
 msgid "No tracks"
 msgstr "Jokių takelių"
 
-#: pcbnew/zone.cpp:577
+#: pcbnew/zone.cpp:600
 msgid "No pads"
 msgstr "Jokių pagalvėlių"
 
-#: pcbnew/zone.cpp:580
+#: pcbnew/zone.cpp:603
 msgid "No copper zones"
 msgstr "Nėra vario zonų"
 
-#: pcbnew/zone.cpp:583
+#: pcbnew/zone.cpp:606
 msgid "No footprints"
 msgstr "Jokių pėdsakų"
 
-#: pcbnew/zone.cpp:586
+#: pcbnew/zone.cpp:609
 msgid "Restrictions"
 msgstr "Apribojimai"
 
-#: pcbnew/zone.cpp:614
+#: pcbnew/zone.cpp:637
 #, fuzzy, c-format
 msgid "%s"
 msgstr "%"
 
-#: pcbnew/zone.cpp:624
+#: pcbnew/zone.cpp:647
 #, fuzzy, c-format
 msgid "%s, %s and %s"
 msgstr "%s ir %s"
 
-#: pcbnew/zone.cpp:631
+#: pcbnew/zone.cpp:654
 #, fuzzy, c-format
 msgid "%s, %s and %d more"
 msgstr "%s ir dar %d"
 
-#: pcbnew/zone.cpp:649 pcbnew/zone.cpp:1658
+#: pcbnew/zone.cpp:672 pcbnew/zone.cpp:1681
 msgid "Fill Mode"
 msgstr "Užpildymo būdas"
 
-#: pcbnew/zone.cpp:651
+#: pcbnew/zone.cpp:674
 msgid "Filled Area"
 msgstr "Užpildytas plotas"
 
-#: pcbnew/zone.cpp:672
+#: pcbnew/zone.cpp:695
 msgid "Corner Count"
 msgstr "Kampų skaičius"
 
-#: pcbnew/zone.cpp:707
+#: pcbnew/zone.cpp:730
 msgid "Rule Area"
 msgstr "Taisyklės sritis"
 
-#: pcbnew/zone.cpp:709
+#: pcbnew/zone.cpp:732
 #, fuzzy
 msgid "Teardrop Area"
 msgstr "Tinklelio nustatymai"
 
-#: pcbnew/zone.cpp:711
+#: pcbnew/zone.cpp:734
 msgid "Copper Zone"
 msgstr "Vario zona"
 
-#: pcbnew/zone.cpp:713
+#: pcbnew/zone.cpp:736
 msgid "Non-copper Zone"
 msgstr "Ne vario zona"
 
-#: pcbnew/zone.cpp:848
+#: pcbnew/zone.cpp:871
 #, fuzzy, c-format
 msgid "on %s"
 msgstr "%s %s"
 
-#: pcbnew/zone.cpp:852
+#: pcbnew/zone.cpp:875
 #, fuzzy, c-format
 msgid "on %s and %s"
 msgstr "%s ir %s"
 
-#: pcbnew/zone.cpp:858
+#: pcbnew/zone.cpp:881
 #, fuzzy, c-format
 msgid "on %s, %s and %s"
 msgstr "(tinklai %s ir %s)"
 
-#: pcbnew/zone.cpp:865
+#: pcbnew/zone.cpp:888
 #, fuzzy, c-format
 msgid "on %s, %s and %zu more"
 msgstr "%s ir dar %d"
 
-#: pcbnew/zone.cpp:875
+#: pcbnew/zone.cpp:898
 #, fuzzy, c-format
 msgid "Rule Area Cutout %s"
 msgstr "Taisyklės srities išpjova %s"
 
-#: pcbnew/zone.cpp:877
+#: pcbnew/zone.cpp:900
 #, fuzzy, c-format
 msgid "Zone Cutout %s"
 msgstr "Zonos išpjova %s"
 
-#: pcbnew/zone.cpp:882
+#: pcbnew/zone.cpp:905
 #, fuzzy, c-format
 msgid "Rule Area %s"
 msgstr "Taisyklių sritys"
 
-#: pcbnew/zone.cpp:884
+#: pcbnew/zone.cpp:907
 #, fuzzy, c-format
 msgid "Zone %s %s"
 msgstr "%s zona %s"
 
-#: pcbnew/zone.cpp:1680
+#: pcbnew/zone.cpp:1703
 #, fuzzy
 msgid "Cannot be less than zone minimum width"
 msgstr "Terminio stipino plotis negali būti mažesnis už minimalų plotį."
 
-#: pcbnew/zone.cpp:1686
+#: pcbnew/zone.cpp:1709
 #, fuzzy
 msgid "Hatch Width"
 msgstr "Liuko plotis:"
 
-#: pcbnew/zone.cpp:1693
+#: pcbnew/zone.cpp:1716
 #, fuzzy
 msgid "Hatch Gap"
 msgstr "Liuko tarpas:"
 
-#: pcbnew/zone.cpp:1700
+#: pcbnew/zone.cpp:1723
 msgid "Hatch Minimum Hole Ratio"
 msgstr ""
 
-#: pcbnew/zone.cpp:1708
+#: pcbnew/zone.cpp:1731
 #, fuzzy
 msgid "Smoothing Effort"
 msgstr "Lyginimo pastangos:"
 
-#: pcbnew/zone.cpp:1714
+#: pcbnew/zone.cpp:1737
 #, fuzzy
 msgid "Smoothing Amount"
 msgstr "Švelninantis kiekis:"
 
-#: pcbnew/zone.cpp:1720
+#: pcbnew/zone.cpp:1743
 #, fuzzy
 msgid "Remove Islands"
 msgstr "Pašalinti salas:"
 
-#: pcbnew/zone.cpp:1725
+#: pcbnew/zone.cpp:1748
 #, fuzzy
 msgid "Minimum Island Area"
 msgstr "Mažiausias salos dydis:"
 
-#: pcbnew/zone.cpp:1740
+#: pcbnew/zone.cpp:1763
 #, fuzzy
 msgid "Minimum Width"
 msgstr "Mažiausias plotis:"
 
-#: pcbnew/zone.cpp:1748
+#: pcbnew/zone.cpp:1771
 msgid "Pad Connections"
 msgstr "Trinkelių jungtys"
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-05 02:29+0300\n"
+"POT-Creation-Date: 2025-02-07 01:15+0300\n"
 "PO-Revision-Date: 2025-01-01 16:15+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -172,7 +172,7 @@ msgstr "Temps de rechargement %.3fs"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:117
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:59
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:502
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2449
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2452
 #, c-format
 msgid "Loading %s..."
 msgstr "Chargement %s..."
@@ -2335,8 +2335,8 @@ msgstr "Variables d'Environnement"
 #: pcbnew/fp_text_grid_table.cpp:137 pcbnew/pcb_group.cpp:494
 #: pcbnew/widgets/search_handlers.cpp:140
 #: pcbnew/widgets/search_handlers.cpp:273
-#: pcbnew/widgets/search_handlers.cpp:352 pcbnew/zone.cpp:640
-#: pcbnew/zone.cpp:1653
+#: pcbnew/widgets/search_handlers.cpp:352 pcbnew/zone.cpp:663
+#: pcbnew/zone.cpp:1676
 msgid "Name"
 msgstr "Nom"
 
@@ -3383,7 +3383,7 @@ msgstr "Nom fichier"
 #: pcbnew/dialogs/dialog_find_base.cpp:118 pcbnew/pad.cpp:1057
 #: pcbnew/pcb_dimension.cpp:459 pcbnew/pcb_group.cpp:389
 #: pcbnew/pcb_shape.cpp:505 pcbnew/pcb_text.cpp:234 pcbnew/pcb_textbox.cpp:371
-#: pcbnew/pcb_track.cpp:1178 pcbnew/zone.cpp:606
+#: pcbnew/pcb_track.cpp:1178 pcbnew/zone.cpp:629
 msgid "Status"
 msgstr "Statut"
 
@@ -4341,7 +4341,7 @@ msgstr "Zoom"
 #: pcbnew/widgets/appearance_controls.cpp:730
 #: pcbnew/widgets/appearance_controls.cpp:772
 #: pcbnew/widgets/appearance_controls.cpp:2486
-#: pcbnew/widgets/appearance_controls.cpp:2505 pcbnew/zone.cpp:1564
+#: pcbnew/widgets/appearance_controls.cpp:2505 pcbnew/zone.cpp:1587
 msgid "None"
 msgstr "Aucun"
 
@@ -4475,8 +4475,8 @@ msgstr "Préfixe de nom logique de librairie:"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:364
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:839 pcbnew/footprint.cpp:3521
-#: pcbnew/pad.cpp:2362 pcbnew/pcb_textbox.cpp:665 pcbnew/zone.cpp:644
-#: pcbnew/zone.cpp:1566
+#: pcbnew/pad.cpp:2362 pcbnew/pcb_textbox.cpp:665 pcbnew/zone.cpp:667
+#: pcbnew/zone.cpp:1589
 msgid "Solid"
 msgstr "Solide"
 
@@ -4592,7 +4592,7 @@ msgstr "Classes d'Equipots:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:539
-#: pcbnew/tools/board_inspection_tool.cpp:1107 pcbnew/zone.cpp:1733
+#: pcbnew/tools/board_inspection_tool.cpp:1107 pcbnew/zone.cpp:1756
 msgid "Clearance"
 msgstr "Isolation"
 
@@ -4681,7 +4681,7 @@ msgstr "Motif"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:137
 #: eeschema/sch_field.cpp:1086 eeschema/sch_label.cpp:252
-#: pcbnew/board_connected_item.cpp:199 pcbnew/pad.cpp:2400 pcbnew/zone.cpp:1647
+#: pcbnew/board_connected_item.cpp:199 pcbnew/pad.cpp:2400 pcbnew/zone.cpp:1670
 msgid "Net Class"
 msgstr "Classe d'Equipot"
 
@@ -5687,7 +5687,7 @@ msgstr "Dessous"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
 #: pcbnew/footprint.cpp:3551 pcbnew/fp_text_grid_table.cpp:145
-#: pcbnew/pad.cpp:2372 pcbnew/zone.cpp:1663
+#: pcbnew/pad.cpp:2372 pcbnew/zone.cpp:1686
 msgid "Orientation"
 msgstr "Orientation"
 
@@ -8276,7 +8276,7 @@ msgstr "Accrochage à la grille:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
 #: pcbnew/dialogs/panel_edit_options_base.cpp:297
 #: pcbnew/dialogs/panel_edit_options_base.cpp:311
-#: pcbnew/dialogs/panel_edit_options_base.cpp:325 pcbnew/zone.cpp:1584
+#: pcbnew/dialogs/panel_edit_options_base.cpp:325 pcbnew/zone.cpp:1607
 msgid "Always"
 msgstr "Toujours"
 
@@ -8288,7 +8288,7 @@ msgstr "Quand la grille est affichée"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
 #: pcbnew/dialogs/panel_edit_options_base.cpp:297
 #: pcbnew/dialogs/panel_edit_options_base.cpp:311
-#: pcbnew/dialogs/panel_edit_options_base.cpp:325 pcbnew/zone.cpp:1585
+#: pcbnew/dialogs/panel_edit_options_base.cpp:325 pcbnew/zone.cpp:1608
 msgid "Never"
 msgstr "Jamais"
 
@@ -11341,7 +11341,7 @@ msgstr ""
 "symbole schématique par défaut."
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:111
-#: pcbnew/zone.cpp:1656
+#: pcbnew/zone.cpp:1679
 msgid "Fill Style"
 msgstr "Style de Remplissage"
 
@@ -13092,7 +13092,7 @@ msgstr "Paramètre"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2036 pcbnew/pcb_marker.cpp:194
 #: pcbnew/pcb_shape.cpp:502 pcbnew/pcb_text.cpp:231 pcbnew/pcb_track.cpp:1065
 #: pcbnew/pcb_track.cpp:1132 pcbnew/tools/drawing_stackup_table_tool.cpp:250
-#: pcbnew/widgets/search_handlers.cpp:205 pcbnew/zone.cpp:564
+#: pcbnew/widgets/search_handlers.cpp:205 pcbnew/zone.cpp:587
 msgid "Type"
 msgstr "Type"
 
@@ -15752,7 +15752,7 @@ msgid "Error loading symbol %s from library '%s'."
 msgstr "Erreur lors du chargement du symbole %s de la librairie %s."
 
 #: eeschema/generate_alias_info.cpp:121 eeschema/sim/spice_simulator.cpp:69
-#: kicad/pcm/pcm.cpp:779 pcbnew/zone.cpp:646
+#: kicad/pcm/pcm.cpp:779 pcbnew/zone.cpp:669
 msgid "Unknown"
 msgstr "Inconnu"
 
@@ -15964,14 +15964,14 @@ msgstr "Nom Pin"
 #: eeschema/lib_pin.cpp:1681 eeschema/lib_shape.cpp:583
 #: eeschema/sch_shape.cpp:599 eeschema/sch_symbol.cpp:2778
 #: pcbnew/board_item.cpp:334 pcbnew/pcb_group.cpp:488 pcbnew/pcb_shape.cpp:715
-#: pcbnew/pcb_track.cpp:1494 pcbnew/zone.cpp:1594 pcbnew/zone.cpp:1606
+#: pcbnew/pcb_track.cpp:1494 pcbnew/zone.cpp:1617 pcbnew/zone.cpp:1629
 msgid "Position X"
 msgstr "Position X"
 
 #: eeschema/lib_pin.cpp:1684 eeschema/lib_shape.cpp:585
 #: eeschema/sch_shape.cpp:601 eeschema/sch_symbol.cpp:2781
 #: pcbnew/board_item.cpp:337 pcbnew/pcb_group.cpp:489 pcbnew/pcb_shape.cpp:717
-#: pcbnew/pcb_track.cpp:1498 pcbnew/zone.cpp:1600 pcbnew/zone.cpp:1607
+#: pcbnew/pcb_track.cpp:1498 pcbnew/zone.cpp:1623 pcbnew/zone.cpp:1630
 msgid "Position Y"
 msgstr "Position Y"
 
@@ -16508,7 +16508,7 @@ msgstr "Type Entrée de Bus"
 #: eeschema/sch_label.cpp:1300 eeschema/sch_line.cpp:951
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2075 pcbnew/pad.cpp:1053
 #: pcbnew/pcb_track.cpp:1160 pcbnew/tools/pcb_control.cpp:1693
-#: pcbnew/zone.cpp:594
+#: pcbnew/zone.cpp:617
 msgid "Resolved Netclass"
 msgstr "NetClasses Résolues"
 
@@ -17192,7 +17192,7 @@ msgstr "Fichiers librairies HTTP"
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:62
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:221
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:505
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2452
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2455
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:148
 msgid "Open cancelled by user."
 msgstr "Lecture annulée par l’utilisateur."
@@ -17519,8 +17519,8 @@ msgstr "Valeur inconnue pour SCH_FILE_T : %d"
 #: pcbnew/widgets/pcb_properties_panel.cpp:250
 #: pcbnew/widgets/pcb_properties_panel.cpp:254
 #: pcbnew/widgets/search_handlers.cpp:84 pcbnew/widgets/search_handlers.cpp:142
-#: pcbnew/widgets/search_handlers.cpp:207 pcbnew/zone.cpp:637
-#: pcbnew/zone.cpp:1638 pcbnew/zone.cpp:1639
+#: pcbnew/widgets/search_handlers.cpp:207 pcbnew/zone.cpp:660
+#: pcbnew/zone.cpp:1661 pcbnew/zone.cpp:1662
 msgid "Layer"
 msgstr "Couche"
 
@@ -17538,7 +17538,7 @@ msgstr "Couche"
 #: pcbnew/footprint.cpp:1310 pcbnew/pad.cpp:1057 pcbnew/pcb_dimension.cpp:459
 #: pcbnew/pcb_group.cpp:389 pcbnew/pcb_marker.cpp:364 pcbnew/pcb_shape.cpp:505
 #: pcbnew/pcb_text.cpp:234 pcbnew/pcb_textbox.cpp:371 pcbnew/pcb_track.cpp:1178
-#: pcbnew/tools/generator_tool.cpp:47 pcbnew/zone.cpp:606
+#: pcbnew/tools/generator_tool.cpp:47 pcbnew/zone.cpp:629
 msgid "Locked"
 msgstr "Verrouillé"
 
@@ -17574,8 +17574,8 @@ msgstr "Justification"
 #: pcbnew/pad.cpp:2398 pcbnew/pcb_shape.cpp:732 pcbnew/pcb_track.cpp:1158
 #: pcbnew/tools/pcb_control.cpp:1690
 #: pcbnew/widgets/pcb_properties_panel.cpp:274
-#: pcbnew/widgets/search_handlers.cpp:141 pcbnew/zone.cpp:592
-#: pcbnew/zone.cpp:1645
+#: pcbnew/widgets/search_handlers.cpp:141 pcbnew/zone.cpp:615
+#: pcbnew/zone.cpp:1668
 msgid "Net"
 msgstr "Net"
 
@@ -30090,7 +30090,7 @@ msgstr "Aspect des contours:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:134
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:59
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:120 pcbnew/zone.cpp:645
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:120 pcbnew/zone.cpp:668
 msgid "Hatched"
 msgstr "Hachuré"
 
@@ -30161,7 +30161,7 @@ msgstr ""
 "Ce paramètre peut être outrepassé  par les paramètres locaux du pad"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:3520
-#: pcbnew/pad.cpp:2361 pcbnew/zone.cpp:1565
+#: pcbnew/pad.cpp:2361 pcbnew/zone.cpp:1588
 msgid "Thermal reliefs"
 msgstr "Freins thermiques"
 
@@ -30200,13 +30200,13 @@ msgstr "Style de Remplissage:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:290
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:129
-#: pcbnew/zone.cpp:1575
+#: pcbnew/zone.cpp:1598
 msgid "Solid fill"
 msgstr "Remplissage solide"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:290
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:129
-#: pcbnew/zone.cpp:1576
+#: pcbnew/zone.cpp:1599
 msgid "Hatch pattern"
 msgstr "Forme hachurée"
 
@@ -30264,7 +30264,7 @@ msgstr "Supprimer les îlots :"
 msgid "Choose what to do with unconnected copper islands"
 msgstr "Choisissez ce qu’il faut faire avec les îlots de cuivre non connectés"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:357 pcbnew/zone.cpp:1586
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:357 pcbnew/zone.cpp:1609
 msgid "Below area limit"
 msgstr "Inférieur à la limite de zone"
 
@@ -33633,7 +33633,7 @@ msgstr "%s, %s et couches connectées"
 msgid "Connected layers only"
 msgstr "Couches connectées seulement"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:915 pcbnew/zone.cpp:618
+#: pcbnew/dialogs/dialog_pad_properties.cpp:915 pcbnew/zone.cpp:641
 #, c-format
 msgid "%s and %s"
 msgstr "%s et %s"
@@ -35232,7 +35232,7 @@ msgstr "Décalage cible: "
 #: pcbnew/router/router_tool.cpp:2746 pcbnew/router/router_tool.cpp:2757
 #: pcbnew/router/router_tool.cpp:2765 pcbnew/router/router_tool.cpp:2770
 #: pcbnew/tools/pcb_control.cpp:1522 pcbnew/tools/pcb_control.cpp:1532
-#: pcbnew/zone.cpp:661
+#: pcbnew/zone.cpp:684
 #, c-format
 msgid "(from %s)"
 msgstr "(de %s)"
@@ -38204,7 +38204,7 @@ msgid "%s pad connection: %s."
 msgstr "%s connexion de pad: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1499 pcbnew/drc/drc_engine.cpp:1516
-#: pcbnew/drc/drc_engine.cpp:1533 pcbnew/zone.cpp:399 pcbnew/zone.cpp:510
+#: pcbnew/drc/drc_engine.cpp:1533 pcbnew/zone.cpp:422 pcbnew/zone.cpp:533
 msgid "zone"
 msgstr "zone"
 
@@ -38223,7 +38223,7 @@ msgstr "%s largeur rayon frein thermique: %s."
 msgid "Checking rule assertion \"%s\"."
 msgstr "Vérification assertion de règle \"%s\"."
 
-#: pcbnew/drc/drc_item.cpp:45 pcbnew/zone.cpp:1731
+#: pcbnew/drc/drc_item.cpp:45 pcbnew/zone.cpp:1754
 msgid "Electrical"
 msgstr "Électrique"
 
@@ -39769,11 +39769,11 @@ msgstr ""
 msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr "(le pad %s apparaît dans plus d'un groupe de pad de \"net-tie\")"
 
-#: pcbnew/footprint.cpp:3518 pcbnew/pad.cpp:2359 pcbnew/zone.cpp:1563
+#: pcbnew/footprint.cpp:3518 pcbnew/pad.cpp:2359 pcbnew/zone.cpp:1586
 msgid "Inherited"
 msgstr "Hérité"
 
-#: pcbnew/footprint.cpp:3522 pcbnew/pad.cpp:2363 pcbnew/zone.cpp:1567
+#: pcbnew/footprint.cpp:3522 pcbnew/pad.cpp:2363 pcbnew/zone.cpp:1590
 msgid "Thermal reliefs for PTH"
 msgstr "Freins thermiques pour pads traversants"
 
@@ -39958,8 +39958,8 @@ msgstr "La librairie '%s' existe déjà."
 
 #: pcbnew/footprint_libraries_utils.cpp:544
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:956
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2685
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2763
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2688
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2766
 #, c-format
 msgid "Library '%s' is read only."
 msgstr "La librairie '%s' est en lecture seule."
@@ -41056,7 +41056,7 @@ msgstr "Trou X/Y"
 
 #: pcbnew/pad.cpp:1132 pcbnew/pcb_track.cpp:1105 pcbnew/pcb_track.cpp:1143
 #: pcbnew/router/router_tool.cpp:2739 pcbnew/router/router_tool.cpp:2768
-#: pcbnew/zone.cpp:659
+#: pcbnew/zone.cpp:682
 #, c-format
 msgid "Min Clearance: %s"
 msgstr "Isolation Minimum: %s"
@@ -41315,7 +41315,7 @@ msgstr "Propriétés de Fabrication"
 msgid "Soldermask Margin Override"
 msgstr "Forçage Marge Vernis Epargne"
 
-#: pcbnew/pad.cpp:2510 pcbnew/zone.cpp:1758
+#: pcbnew/pad.cpp:2510 pcbnew/zone.cpp:1781
 msgid "Thermal Relief Spoke Width"
 msgstr "Largeur Rayon Frein Thermique"
 
@@ -41323,7 +41323,7 @@ msgstr "Largeur Rayon Frein Thermique"
 msgid "Thermal Relief Spoke Angle"
 msgstr "Angle Rayon Frein Thermique"
 
-#: pcbnew/pad.cpp:2519 pcbnew/zone.cpp:1752
+#: pcbnew/pad.cpp:2519 pcbnew/zone.cpp:1775
 msgid "Thermal Relief Gap"
 msgstr "Longueur Frein Thermique"
 
@@ -42819,13 +42819,13 @@ msgid "Element token contains %d parameters."
 msgstr "Element token contains %d parameters."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:975
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2807
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2810
 #, c-format
 msgid "Insufficient permissions to delete folder '%s'."
 msgstr "Autorisations insuffisantes pour effacer le dossier '%s'."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:983
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2815
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2818
 #, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
 msgstr "Le répertoire librairie '%s' a des sous-répertoires inattendus."
@@ -42837,7 +42837,7 @@ msgstr "Fichier inattendu '%s' trouvé en librairie '%s'."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:1021
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3258
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2852
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2855
 #, c-format
 msgid "Footprint library '%s' cannot be deleted."
 msgstr "La librairie d'empreintes  '%s' ne peut pas être supprimée."
@@ -43010,26 +43010,26 @@ msgstr ""
 msgid "Save Anyway"
 msgstr "Sauver de Toute Façon"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1464
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1466
 #, c-format
 msgid "unknown pad type: %d"
 msgstr "type pad inconnu: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2111
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2113
 #, c-format
 msgid "unknown via type %d"
 msgstr "type via inconnu %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2344
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2347
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "unknown zone corner smoothing type %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2498
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2501
 msgid "This file does not contain a PCB."
 msgstr "Ce fichier ne contient pas de PCB."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2671
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2674
 #, c-format
 msgid ""
 "Library '%s' does not exist.\n"
@@ -43038,26 +43038,26 @@ msgstr ""
 "La librairie '%s' n'existe pas.\n"
 "Voulez vous la créer?"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2676
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2679
 msgid "Library Not Found"
 msgstr "Librairie non trouvée"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2704
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2707
 #, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "Nom de fichier d'empreinte '%s' non valide."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2710
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2713
 #, c-format
 msgid "Insufficient permissions to delete '%s'."
 msgstr "Autorisations insuffisantes pour effacer le fichier '%s'."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2782
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2785
 #, c-format
 msgid "Cannot overwrite library path '%s'."
 msgstr "Impossible de remplacer le chemin librairie  '%s'."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2834
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2837
 #, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
 msgstr "Fichier inattendu '%s' trouvé dans le chemin de librairie '%s'."
@@ -47952,8 +47952,8 @@ msgstr "Dimensions"
 msgid "Other items"
 msgstr "Autres éléments"
 
-#: pcbnew/widgets/search_handlers.cpp:143 pcbnew/zone.cpp:599
-#: pcbnew/zone.cpp:1649
+#: pcbnew/widgets/search_handlers.cpp:143 pcbnew/zone.cpp:622
+#: pcbnew/zone.cpp:1672
 msgid "Priority"
 msgstr "Priorité"
 
@@ -47971,154 +47971,154 @@ msgstr "Classe"
 msgid "No Net"
 msgstr "Pas de Net"
 
-#: pcbnew/zone.cpp:562
+#: pcbnew/zone.cpp:585
 msgid "Cutout"
 msgstr "Découpe"
 
-#: pcbnew/zone.cpp:571
+#: pcbnew/zone.cpp:594
 msgid "No vias"
 msgstr "Sans vias"
 
-#: pcbnew/zone.cpp:574
+#: pcbnew/zone.cpp:597
 msgid "No tracks"
 msgstr "Sans pistes"
 
-#: pcbnew/zone.cpp:577
+#: pcbnew/zone.cpp:600
 msgid "No pads"
 msgstr "Sans pads"
 
-#: pcbnew/zone.cpp:580
+#: pcbnew/zone.cpp:603
 msgid "No copper zones"
 msgstr "Pas de zones cuivre"
 
-#: pcbnew/zone.cpp:583
+#: pcbnew/zone.cpp:606
 msgid "No footprints"
 msgstr "Pas d'empreinte"
 
-#: pcbnew/zone.cpp:586
+#: pcbnew/zone.cpp:609
 msgid "Restrictions"
 msgstr "Restrictions"
 
-#: pcbnew/zone.cpp:614
+#: pcbnew/zone.cpp:637
 #, c-format
 msgid "%s"
 msgstr "%s"
 
-#: pcbnew/zone.cpp:624
+#: pcbnew/zone.cpp:647
 #, c-format
 msgid "%s, %s and %s"
 msgstr "%s, %s et %s"
 
-#: pcbnew/zone.cpp:631
+#: pcbnew/zone.cpp:654
 #, c-format
 msgid "%s, %s and %d more"
 msgstr "%s, %s et %d en plus"
 
-#: pcbnew/zone.cpp:649 pcbnew/zone.cpp:1658
+#: pcbnew/zone.cpp:672 pcbnew/zone.cpp:1681
 msgid "Fill Mode"
 msgstr "Mode de Remplissage"
 
-#: pcbnew/zone.cpp:651
+#: pcbnew/zone.cpp:674
 msgid "Filled Area"
 msgstr "Surface Remplie"
 
-#: pcbnew/zone.cpp:672
+#: pcbnew/zone.cpp:695
 msgid "Corner Count"
 msgstr "Nb Points"
 
-#: pcbnew/zone.cpp:707
+#: pcbnew/zone.cpp:730
 msgid "Rule Area"
 msgstr "Surface à Règles"
 
-#: pcbnew/zone.cpp:709
+#: pcbnew/zone.cpp:732
 msgid "Teardrop Area"
 msgstr "Teardrop"
 
-#: pcbnew/zone.cpp:711
+#: pcbnew/zone.cpp:734
 msgid "Copper Zone"
 msgstr "Zone Cuivre"
 
-#: pcbnew/zone.cpp:713
+#: pcbnew/zone.cpp:736
 msgid "Non-copper Zone"
 msgstr "Zone non Cuivre"
 
-#: pcbnew/zone.cpp:848
+#: pcbnew/zone.cpp:871
 #, c-format
 msgid "on %s"
 msgstr "sur %s"
 
-#: pcbnew/zone.cpp:852
+#: pcbnew/zone.cpp:875
 #, c-format
 msgid "on %s and %s"
 msgstr "sur %s et %s"
 
-#: pcbnew/zone.cpp:858
+#: pcbnew/zone.cpp:881
 #, c-format
 msgid "on %s, %s and %s"
 msgstr "sur %s, %s et %s"
 
-#: pcbnew/zone.cpp:865
+#: pcbnew/zone.cpp:888
 #, c-format
 msgid "on %s, %s and %zu more"
 msgstr "sur %s, %s et %zu en plus"
 
-#: pcbnew/zone.cpp:875
+#: pcbnew/zone.cpp:898
 #, c-format
 msgid "Rule Area Cutout %s"
 msgstr "Découpe   Zone de Règle %s"
 
-#: pcbnew/zone.cpp:877
+#: pcbnew/zone.cpp:900
 #, c-format
 msgid "Zone Cutout %s"
 msgstr "Zone de Découpe %s"
 
-#: pcbnew/zone.cpp:882
+#: pcbnew/zone.cpp:905
 #, c-format
 msgid "Rule Area %s"
 msgstr "Surface à Règles %s"
 
-#: pcbnew/zone.cpp:884
+#: pcbnew/zone.cpp:907
 #, c-format
 msgid "Zone %s %s"
 msgstr "Zone %s %s"
 
-#: pcbnew/zone.cpp:1680
+#: pcbnew/zone.cpp:1703
 msgid "Cannot be less than zone minimum width"
 msgstr "Ne peut pas être plus petit que la largeur minimum de zone."
 
-#: pcbnew/zone.cpp:1686
+#: pcbnew/zone.cpp:1709
 msgid "Hatch Width"
 msgstr "Largeur de la Hachure"
 
-#: pcbnew/zone.cpp:1693
+#: pcbnew/zone.cpp:1716
 msgid "Hatch Gap"
 msgstr "Espacement des Hachures"
 
-#: pcbnew/zone.cpp:1700
+#: pcbnew/zone.cpp:1723
 msgid "Hatch Minimum Hole Ratio"
 msgstr "Rapport Minimum de Trous the Hachures"
 
-#: pcbnew/zone.cpp:1708
+#: pcbnew/zone.cpp:1731
 msgid "Smoothing Effort"
 msgstr "Effort de Lissage"
 
-#: pcbnew/zone.cpp:1714
+#: pcbnew/zone.cpp:1737
 msgid "Smoothing Amount"
 msgstr "Importance de Lissage"
 
-#: pcbnew/zone.cpp:1720
+#: pcbnew/zone.cpp:1743
 msgid "Remove Islands"
 msgstr "Supprimer les îlots"
 
-#: pcbnew/zone.cpp:1725
+#: pcbnew/zone.cpp:1748
 msgid "Minimum Island Area"
 msgstr "Surface Minimale de l’îlot"
 
-#: pcbnew/zone.cpp:1740
+#: pcbnew/zone.cpp:1763
 msgid "Minimum Width"
 msgstr "Épaisseur Minimum"
 
-#: pcbnew/zone.cpp:1748
+#: pcbnew/zone.cpp:1771
 msgid "Pad Connections"
 msgstr "Connexions des Pads"
 
