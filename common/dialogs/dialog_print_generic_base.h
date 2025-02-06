@@ -10,20 +10,17 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class PANEL_PRINTER_LIST;
-
 #include "dialog_shim.h"
-#include <wx/panel.h>
+#include <wx/string.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/string.h>
-#include <wx/sizer.h>
-#include <wx/stattext.h>
 #include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/gbsizer.h>
+#include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/radiobut.h>
 #include <wx/textctrl.h>
@@ -49,7 +46,6 @@ class DIALOG_PRINT_GENERIC_BASE : public DIALOG_SHIM
 			wxID_PRINT_OPTIONS,
 		};
 
-		PANEL_PRINTER_LIST* m_panelPrinters;
 		wxBoxSizer* m_bUpperSizer;
 		wxStaticBoxSizer* m_sbOptionsSizer;
 		wxGridBagSizer* m_gbOptionsSizer;

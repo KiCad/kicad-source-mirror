@@ -404,9 +404,6 @@ set( COMMON_DLG_SRCS
     dialogs/panel_plugin_settings.cpp
     dialogs/panel_plugin_settings_base.cpp
     dialogs/panel_setup_netclasses.cpp
-    dialogs/panel_printer_list.cpp
-    dialogs/panel_printer_list_base.cpp
-
     dialogs/panel_setup_netclasses_base.cpp
     dialogs/panel_setup_severities.cpp
     dialogs/panel_text_variables.cpp

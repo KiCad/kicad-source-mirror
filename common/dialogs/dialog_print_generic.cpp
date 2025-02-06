@@ -27,8 +27,6 @@
 #include <wx/print.h>
 #include <wx/printdlg.h>
 
-#include <dialogs/panel_printer_list.h>
-
 // Define min and max reasonable values for print scale
 static constexpr double MIN_SCALE = 0.01;
 static constexpr double MAX_SCALE = 100.0;
@@ -94,9 +92,6 @@ DIALOG_PRINT_GENERIC::DIALOG_PRINT_GENERIC( EDA_DRAW_FRAME* aParent, PRINTOUT_SE
     // that start by 0
     m_scaleValidator.SetRange( 0.0, MAX_SCALE );
     m_scaleCustomText->SetValidator( m_scaleValidator );
-
-    // Show m_panelPrinters only if there are printers to list:
-    m_panelPrinters->Show( m_panelPrinters->AsPrintersAvailable() );
 
     SetupStandardButtons( { { wxID_OK,     _( "Print" )         },
                             { wxID_APPLY,  _( "Print Preview" ) },
@@ -250,13 +245,6 @@ void DIALOG_PRINT_GENERIC::onPrintPreview( wxCommandEvent& event )
         return;
     }
 
-    wxString selectedPrinterName;
-
-    if( m_panelPrinters )
-        selectedPrinterName = m_panelPrinters->GetSelectedPrinterName();
-
-    s_PrintData->SetPrinterName( selectedPrinterName );
-
     // Pass two printout objects: for preview, and possible printing.
     wxString title = _( "Print Preview" );
     wxPrintPreview* preview =
@@ -307,13 +295,6 @@ void DIALOG_PRINT_GENERIC::onPrintButtonClick( wxCommandEvent& event )
         DisplayError( this, _( "Nothing to print" ) );
         return;
     }
-
-    wxString selectedPrinterName;
-
-    if( m_panelPrinters )
-        selectedPrinterName = m_panelPrinters->GetSelectedPrinterName();
-
-    s_PrintData->SetPrinterName( selectedPrinterName );
 
     wxPrintDialogData printDialogData( *s_PrintData );
     printDialogData.SetMaxPage( m_settings->m_pageCount );

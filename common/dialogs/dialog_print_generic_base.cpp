@@ -5,8 +5,6 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "dialogs/panel_printer_list.h"
-
 #include "dialog_print_generic_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -17,15 +15,6 @@ DIALOG_PRINT_GENERIC_BASE::DIALOG_PRINT_GENERIC_BASE( wxWindow* parent, wxWindow
 
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
-
-	wxBoxSizer* bSizerPanelPrinters;
-	bSizerPanelPrinters = new wxBoxSizer( wxVERTICAL );
-
-	m_panelPrinters = new PANEL_PRINTER_LIST( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	bSizerPanelPrinters->Add( m_panelPrinters, 1, wxEXPAND | wxALL, 5 );
-
-
-	bMainSizer->Add( bSizerPanelPrinters, 0, wxEXPAND, 5 );
 
 	m_bUpperSizer = new wxBoxSizer( wxHORIZONTAL );
 
