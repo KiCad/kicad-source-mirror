@@ -25,10 +25,11 @@
 
 #include "geometry/roundrect.h"
 
-#include <stdexcept>
+#include <ki_exception.h>
 
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_utils.h>
+#include <wx/intl.h>
 
 
 namespace
@@ -55,13 +56,13 @@ ROUNDRECT::ROUNDRECT( SHAPE_RECT aRect, int aRadius ) :
 {
     if( m_radius > m_rect.MajorDimension() )
     {
-        throw std::invalid_argument(
-                "Roundrect radius is larger than the rectangle's major dimension" );
+        throw KI_PARAM_ERROR(
+                _( "Roundrect radius is larger than the rectangle's major dimension" ) );
     }
 
     if( m_radius < 0 )
     {
-        throw std::invalid_argument( "Roundrect radius must be non-negative" );
+        throw KI_PARAM_ERROR( _( "Roundrect radius must be non-negative" ) );
     }
 }
 

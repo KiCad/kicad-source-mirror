@@ -33,6 +33,8 @@
 #include <pad.h>
 #include <pcb_track.h>
 #include <tools/pcb_tool_utils.h>
+#include <confirm.h>
+#include <ki_exception.h>
 
 namespace
 {
@@ -908,10 +910,18 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
             SHAPE_RECT rect( box );
             if( m_params.roundCorners )
             {
-                ROUNDRECT      rrect( rect, m_params.outsetDistance );
-                SHAPE_POLY_SET poly;
-                rrect.TransformToPolygon( poly, 0, ERROR_LOC::ERROR_OUTSIDE );
-                addPoly( poly );
+                try
+                {
+                    ROUNDRECT      rrect( rect, m_params.outsetDistance );
+                    SHAPE_POLY_SET poly;
+                    rrect.TransformToPolygon( poly, 0, ERROR_LOC::ERROR_OUTSIDE );
+                    addPoly( poly );
+                }
+                catch( const KI_PARAM_ERROR& error )
+                {
+                    DisplayErrorMessage( nullptr, error.What() );
+                }
+
             }
             else
             {
