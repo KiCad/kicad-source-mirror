@@ -294,7 +294,7 @@ void DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BO
                                               REPORTER*          aReporter )
 {
     wxCHECK( aBoard, /* void */ );
-    wxString outputPath = aJob.GetFullOutputPath( NULL );
+    wxString outputPath = aJob.GetFullOutputPath( aBoard->GetProject() );
 
     if( outputPath.IsEmpty() )
         outputPath = wxFileName( aJob.m_filename ).GetPath();
