@@ -89,8 +89,8 @@ COMPONENT_CLASS_MANAGER::COMPONENT_CLASS_MANAGER()
 }
 
 
-COMPONENT_CLASS*
-COMPONENT_CLASS_MANAGER::GetEffectiveComponentClass( std::unordered_set<wxString>& classNames )
+COMPONENT_CLASS* COMPONENT_CLASS_MANAGER::GetEffectiveComponentClass(
+        const std::unordered_set<wxString>& classNames )
 {
     if( classNames.size() == 0 )
         return m_noneClass.get();
@@ -177,8 +177,8 @@ void COMPONENT_CLASS_MANAGER::FinishNetlistUpdate()
 }
 
 
-wxString
-COMPONENT_CLASS_MANAGER::GetFullClassNameForConstituents( std::unordered_set<wxString>& classNames )
+wxString COMPONENT_CLASS_MANAGER::GetFullClassNameForConstituents(
+        const std::unordered_set<wxString>& classNames )
 {
     std::vector<wxString> sortedClassNames( classNames.begin(), classNames.end() );
 
@@ -193,7 +193,7 @@ COMPONENT_CLASS_MANAGER::GetFullClassNameForConstituents( std::unordered_set<wxS
 
 
 wxString
-COMPONENT_CLASS_MANAGER::GetFullClassNameForConstituents( std::vector<wxString>& classNames )
+COMPONENT_CLASS_MANAGER::GetFullClassNameForConstituents( const std::vector<wxString>& classNames )
 {
     if( classNames.size() == 0 )
         return wxEmptyString;

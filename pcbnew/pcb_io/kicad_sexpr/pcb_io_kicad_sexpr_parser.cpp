@@ -4879,13 +4879,10 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
                 NeedRIGHT();
             }
 
+            footprint->SetTransientComponentClassNames( componentClassNames );
+
             if( m_board )
-            {
-                const COMPONENT_CLASS* componentClass =
-                        m_board->GetComponentClassManager().GetEffectiveComponentClass(
-                                componentClassNames );
-                footprint->SetComponentClass( componentClass );
-            }
+                footprint->ResolveComponentClassNames( m_board, componentClassNames );
 
             break;
         }

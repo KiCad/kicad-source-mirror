@@ -1021,10 +1021,37 @@ public:
 
     double Similarity( const BOARD_ITEM& aOther ) const override;
 
+    /// Sets the component class object pointer for this footprint
     void SetComponentClass( const COMPONENT_CLASS* aClass ) { m_componentClass = aClass; }
 
+    /**
+     * @brief Sets the transient component class names
+     *
+     * This is used during paste operations as we can't resolve the component classes immediately
+     * until we have the true board context once the pasted items have been placed
+     */
+    void SetTransientComponentClassNames( const std::unordered_set<wxString>& classNames )
+    {
+        m_transientComponentClassNames = classNames;
+    }
+
+    /// Gets the transient component class names
+    const std::unordered_set<wxString>& GetTransientComponentClassNames()
+    {
+        return m_transientComponentClassNames;
+    }
+
+    /// Remove the transient component class names
+    void ClearTransientComponentClassNames() { m_transientComponentClassNames.clear(); };
+
+    /// Resolves a set of component class names to this footprint's actual component class
+    void ResolveComponentClassNames( BOARD*                              aBoard,
+                                     const std::unordered_set<wxString>& aComponentClassNames );
+
+    /// Returns the component class for this footprint
     const COMPONENT_CLASS* GetComponentClass() const { return m_componentClass; }
 
+    /// Used for display in the properties panel
     wxString GetComponentClassAsString() const;
 
 
@@ -1129,6 +1156,7 @@ private:
     mutable std::mutex m_courtyard_cache_mutex;
 
     const COMPONENT_CLASS* m_componentClass;
+    std::unordered_set<wxString> m_transientComponentClassNames;
 };
 
 #endif     // FOOTPRINT_H

@@ -4035,6 +4035,15 @@ wxString FOOTPRINT::GetComponentClassAsString() const
 }
 
 
+void FOOTPRINT::ResolveComponentClassNames(
+        BOARD* aBoard, const std::unordered_set<wxString>& aComponentClassNames )
+{
+    const COMPONENT_CLASS* componentClass =
+            aBoard->GetComponentClassManager().GetEffectiveComponentClass( aComponentClassNames );
+    SetComponentClass( componentClass );
+}
+
+
 static struct FOOTPRINT_DESC
 {
     FOOTPRINT_DESC()

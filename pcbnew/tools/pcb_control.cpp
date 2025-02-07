@@ -1188,6 +1188,14 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
             }
             else    // isBoardEditor
             {
+                // Fixup footprint component classes
+                for( FOOTPRINT* clipFootprint : clipBoard->Footprints() )
+                {
+                    clipFootprint->ResolveComponentClassNames(
+                            board(), clipFootprint->GetTransientComponentClassNames() );
+                    clipFootprint->ClearTransientComponentClassNames();
+                }
+
                 if( mode == PASTE_MODE::REMOVE_ANNOTATIONS )
                 {
                     for( FOOTPRINT* clipFootprint : clipBoard->Footprints() )
@@ -1217,6 +1225,9 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
                     clipFootprint->SetReference( defaultRef );
 
                 clipFootprint->SetParent( board() );
+                clipFootprint->ResolveComponentClassNames(
+                        board(), clipFootprint->GetTransientComponentClassNames() );
+                clipFootprint->ClearTransientComponentClassNames();
                 pastedItems.push_back( clipFootprint );
             }
 

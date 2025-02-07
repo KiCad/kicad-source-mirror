@@ -87,16 +87,17 @@ public:
     COMPONENT_CLASS_MANAGER();
 
     /// @brief Gets the full effective class name for the given set of constituent classes
-    static wxString GetFullClassNameForConstituents( std::unordered_set<wxString>& classNames );
+    static wxString
+    GetFullClassNameForConstituents( const std::unordered_set<wxString>& classNames );
 
     /// @brief Gets the full effective class name for the given set of constituent classes
     /// @param classNames a sorted vector of consituent class names
-    static wxString GetFullClassNameForConstituents( std::vector<wxString>& classNames );
+    static wxString GetFullClassNameForConstituents( const std::vector<wxString>& classNames );
 
     /// @brief Gets an effective component class for the given constituent class names
     /// @param classes The names of the constituent component classes
     /// @return Effective COMPONENT_CLASS object
-    COMPONENT_CLASS* GetEffectiveComponentClass( std::unordered_set<wxString>& classNames );
+    COMPONENT_CLASS* GetEffectiveComponentClass( const std::unordered_set<wxString>& classNames );
 
     /// Returns the unassigned component class
     const COMPONENT_CLASS* GetNoneComponentClass() const { return m_noneClass.get(); }
