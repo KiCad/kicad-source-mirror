@@ -588,7 +588,6 @@ set( COMMON_SRCS
     eda_item.cpp
     eda_shape.cpp
     eda_text.cpp
-    eda_tools.cpp
     embedded_files.cpp
     env_paths.cpp
     executable_names.cpp
