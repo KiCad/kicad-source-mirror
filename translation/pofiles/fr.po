@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-07 02:35+0300\n"
-"PO-Revision-Date: 2025-01-22 10:57+0100\n"
+"POT-Creation-Date: 2025-02-07 20:15+0100\n"
+"PO-Revision-Date: 2025-02-07 20:15+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -3282,7 +3282,7 @@ msgstr "Option"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:169
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:48
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:57
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:439 pcbnew/footprint.cpp:4089
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:439 pcbnew/footprint.cpp:4098
 #: pcbnew/footprint_wizard_frame.cpp:326 pcbnew/pcb_dimension.cpp:605
 #: pcbnew/pcb_fields_grid_table.cpp:144 pcbnew/plot_board_layers.cpp:107
 #: pcbnew/widgets/search_handlers.cpp:119
@@ -5096,7 +5096,7 @@ msgstr "Zoom"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1099
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:583
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:854
-#: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4048
+#: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4057
 #: pcbnew/pad.cpp:2501 pcbnew/pad.cpp:2520 pcbnew/pcb_dimension.cpp:1973
 #: pcbnew/widgets/appearance_controls.cpp:729
 #: pcbnew/widgets/appearance_controls.cpp:771
@@ -5334,7 +5334,7 @@ msgstr "<Non defini>"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:854 pcbnew/footprint.cpp:4050
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:854 pcbnew/footprint.cpp:4059
 #: pcbnew/pad.cpp:2522 pcbnew/pcb_table.cpp:533 pcbnew/pcb_textbox.cpp:795
 #: pcbnew/zone.cpp:857 pcbnew/zone.cpp:1830
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
@@ -6617,7 +6617,7 @@ msgstr "Dessous"
 #: eeschema/sch_text.cpp:784 eeschema/sch_textbox.cpp:714
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
-#: pcbnew/footprint.cpp:4080 pcbnew/pad.cpp:2539 pcbnew/pcb_dimension.cpp:1756
+#: pcbnew/footprint.cpp:4089 pcbnew/pad.cpp:2539 pcbnew/pcb_dimension.cpp:1756
 #: pcbnew/pcb_dimension.cpp:1831 pcbnew/pcb_fields_grid_table.cpp:151
 #: pcbnew/pcb_tablecell.cpp:207 pcbnew/zone.cpp:2001
 msgid "Orientation"
@@ -6992,6 +6992,7 @@ msgid "Failed to perform checkout operation."
 msgstr "Échec de l'opération d'extraction."
 
 #: common/git/git_pull_handler.cpp:228
+#, c++-format
 msgid "Could not lookup commit '{}'"
 msgstr "Impossible de rechercher le commit '{}'"
 
@@ -7173,7 +7174,7 @@ msgstr "Copier les cellules sélectionnées dans le Presse papier"
 #: common/widgets/listbox_tricks.cpp:51
 #: eeschema/tools/sch_editor_control.cpp:2281
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1020
-#: pcbnew/dialogs/panel_setup_rules.cpp:132 pcbnew/tools/pcb_control.cpp:1238
+#: pcbnew/dialogs/panel_setup_rules.cpp:132 pcbnew/tools/pcb_control.cpp:1249
 msgid "Paste"
 msgstr "Copie des éléments sauvegardés"
 
@@ -8226,12 +8227,10 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Unités manquantes pour '%s'| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1161
-#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Non correspondance de type entre '%s' et %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1167
-#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Non correspondance de type entre %lf et '%s'"
 
@@ -8467,7 +8466,7 @@ msgstr "Défaut d'Edition"
 #: eeschema/dialogs/dialog_sim_model_base.cpp:271 eeschema/sch_symbol.cpp:2060
 #: eeschema/sch_symbol.cpp:2114 eeschema/sch_symbol.cpp:3001
 #: eeschema/widgets/search_handlers.cpp:160
-#: eeschema/widgets/search_handlers.cpp:246 pcbnew/footprint.cpp:4086
+#: eeschema/widgets/search_handlers.cpp:246 pcbnew/footprint.cpp:4095
 #: pcbnew/widgets/search_handlers.cpp:118
 msgid "Reference"
 msgstr "Référence"
@@ -8489,7 +8488,7 @@ msgstr "Groupés par Valeur et Empreinte"
 #: eeschema/tools/sch_edit_tool.cpp:551
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:179
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
-#: pcbnew/footprint.cpp:4109
+#: pcbnew/footprint.cpp:4118
 msgid "Attributes"
 msgstr "Attributs"
 
@@ -10401,7 +10400,7 @@ msgstr "'%s' n’est pas une empreinte valide."
 #: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2109
 #: eeschema/sch_symbol.cpp:2685 eeschema/sch_symbol.cpp:3013
 #: eeschema/symbol_editor/symbol_editor.cpp:1629
-#: eeschema/symbol_viewer_frame.cpp:462 pcbnew/footprint.cpp:4099
+#: eeschema/symbol_viewer_frame.cpp:462 pcbnew/footprint.cpp:4108
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:133
 msgid "Keywords"
 msgstr "Mots Clés"
@@ -10926,7 +10925,7 @@ msgid "Enter a description for the library:"
 msgstr "Entrez une description pour la lirairie:"
 
 #: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:3010
-#: pcbnew/footprint.cpp:4096 pcbnew/plot_board_layers.cpp:129
+#: pcbnew/footprint.cpp:4105 pcbnew/plot_board_layers.cpp:129
 msgid "Library Description"
 msgstr "Description de Librairie"
 
@@ -12692,7 +12691,7 @@ msgstr "Afficher la fenêtre d’aide de syntaxe"
 #: eeschema/sch_symbol.cpp:2999
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:28
-#: pcbnew/footprint.cpp:4084
+#: pcbnew/footprint.cpp:4093
 msgid "Fields"
 msgstr "Champs"
 
@@ -14961,6 +14960,7 @@ msgid "Code"
 msgstr "Code"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:223
+#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Enregistrer {} dans le champ Valeur comme \"{}\""
 
@@ -18350,7 +18350,7 @@ msgstr "Type Entrée de Bus"
 #: eeschema/sch_bus_entry.cpp:543 eeschema/sch_junction.cpp:319
 #: eeschema/sch_label.cpp:1227 eeschema/sch_line.cpp:951
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2134 pcbnew/pad.cpp:1295
-#: pcbnew/pcb_track.cpp:1667 pcbnew/tools/pcb_control.cpp:1874
+#: pcbnew/pcb_track.cpp:1667 pcbnew/tools/pcb_control.cpp:1885
 #: pcbnew/zone.cpp:807
 msgid "Resolved Netclass"
 msgstr "NetClasses Résolues"
@@ -19451,7 +19451,7 @@ msgstr "Justification"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:478
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2130 pcbnew/pad.cpp:1293
 #: pcbnew/pad.cpp:2574 pcbnew/pcb_shape.cpp:923 pcbnew/pcb_tablecell.cpp:186
-#: pcbnew/pcb_track.cpp:1665 pcbnew/tools/pcb_control.cpp:1871
+#: pcbnew/pcb_track.cpp:1665 pcbnew/tools/pcb_control.cpp:1882
 #: pcbnew/widgets/pcb_properties_panel.cpp:273
 #: pcbnew/widgets/search_handlers.cpp:177 pcbnew/zone.cpp:805
 #: pcbnew/zone.cpp:1929 pcbnew/zone_manager/dialog_zone_manager_base.cpp:42
@@ -19791,12 +19791,12 @@ msgid "Exclude From Simulation"
 msgstr "Exclure de la Simulation"
 
 #: eeschema/sch_sheet.cpp:1736 eeschema/sch_symbol.cpp:1101
-#: eeschema/sch_symbol.cpp:3051 pcbnew/footprint.cpp:4116
+#: eeschema/sch_symbol.cpp:3051 pcbnew/footprint.cpp:4125
 msgid "Exclude From Bill of Materials"
 msgstr "Exclure de la Liste du Matériel"
 
 #: eeschema/sch_sheet.cpp:1740 eeschema/sch_symbol.cpp:1102
-#: eeschema/sch_symbol.cpp:3054 pcbnew/footprint.cpp:4119
+#: eeschema/sch_symbol.cpp:3054 pcbnew/footprint.cpp:4128
 msgid "Do not Populate"
 msgstr "Ne pas Monter"
 
@@ -19851,7 +19851,7 @@ msgstr "Miroir X"
 msgid "Mirror Y"
 msgstr "Miroir Y"
 
-#: eeschema/sch_symbol.cpp:3007 pcbnew/footprint.cpp:4093
+#: eeschema/sch_symbol.cpp:3007 pcbnew/footprint.cpp:4102
 msgid "Library Link"
 msgstr "Lien de Librairie"
 
@@ -20288,7 +20288,6 @@ msgid "Cancel Load"
 msgstr "Annuler Chargement"
 
 #: eeschema/sheet.cpp:317
-#, fuzzy
 msgid ""
 "There are hierarchical sheets in the loaded schematic file from an older "
 "file version resulting in  missing symbol instance data.  This will result "
@@ -20303,7 +20302,7 @@ msgstr ""
 "provenant d'une ancienne version, ce qui entraîne des données d'instance de "
 "symbole manquantes.  Par conséquent, tous les symboles du schéma chargé "
 "utilisent soit le paramètre d'instance par défaut, soit les paramètres de "
-"symbole de la bibliothèque.  Le chargement du projet qui utilise ce fichier "
+"symbole de la librairie.  Le chargement du projet qui utilise ce fichier "
 "schématique et l'enregistrement dans la dernière version du fichier "
 "résoudront ce problème.\n"
 "\n"
@@ -22519,9 +22518,8 @@ msgid "Create a new symbol in an existing library"
 msgstr "Créer un nouveau symbole dans une librairie existante"
 
 #: eeschema/tools/ee_actions.cpp:202
-#, fuzzy
 msgid "Derive from Existing Symbol..."
-msgstr "Dériver d'un Symbole Existant"
+msgstr "Dériver d'un Symbole Existant..."
 
 #: eeschema/tools/ee_actions.cpp:203
 msgid "Create a new symbol, derived from an existing symbol"
@@ -23860,7 +23858,7 @@ msgstr "Aucune fiche de données n’a été définie."
 
 #: eeschema/tools/ee_inspection_tool.cpp:574
 #: pagelayout_editor/tools/pl_editor_control.cpp:160
-#: pcbnew/tools/pcb_control.cpp:1665
+#: pcbnew/tools/pcb_control.cpp:1676
 msgid "UUID"
 msgstr "UUID"
 
@@ -24795,7 +24793,7 @@ msgstr "Sélection couche: %s"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:50
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:100
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:169
-#: pcbnew/footprint.cpp:4075 pcbnew/footprint.cpp:4078
+#: pcbnew/footprint.cpp:4084 pcbnew/footprint.cpp:4087
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2137 pcbnew/pad.cpp:1303
 #: pcbnew/pad.cpp:2536 pcbnew/pcb_dimension.cpp:661
 #: pcbnew/pcb_dimension.cpp:1457 pcbnew/pcb_fields_grid_table.cpp:150
@@ -28480,6 +28478,15 @@ msgstr "Impossible d'analyser la réponse de mise à jour : %s"
 #: kicad/widgets/filedlg_new_project.h:32
 msgid "Create a new folder for the project"
 msgstr "Créer un nouveau répertoire pour le projet"
+
+#: libs/kimath/src/geometry/roundrect.cpp:60
+msgid "Roundrect radius is larger than the rectangle's major dimension"
+msgstr ""
+"Le rayon de l'arrondi est plus grand que la dimension principale du rectangle"
+
+#: libs/kimath/src/geometry/roundrect.cpp:65
+msgid "Roundrect radius must be non-negative"
+msgstr "Le rayon de courbure doit être non négatif"
 
 #: libs/kiplatform/os/windows/environment.cpp:72
 #, c-format
@@ -32510,7 +32517,7 @@ msgstr ""
 "Impossible de charger le fichier de projet associé %s"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:301 pcbnew/files.cpp:583
-#: pcbnew/tools/pcb_control.cpp:1506
+#: pcbnew/tools/pcb_control.cpp:1517
 msgid "Loading PCB"
 msgstr "Chargement du PCB"
 
@@ -33068,7 +33075,7 @@ msgstr ""
 "Type de connexion par défaut des pads à la zone.\n"
 "Ce paramètre peut être outrepassé  par les paramètres locaux du pad"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4049
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4058
 #: pcbnew/pad.cpp:2521 pcbnew/zone.cpp:1829
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Thermal reliefs"
@@ -38501,7 +38508,7 @@ msgstr "Décalage cible: "
 #: pcbnew/router/router_tool.cpp:2759 pcbnew/router/router_tool.cpp:2764
 #: pcbnew/router/router_tool.cpp:2769 pcbnew/router/router_tool.cpp:2780
 #: pcbnew/router/router_tool.cpp:2788 pcbnew/router/router_tool.cpp:2793
-#: pcbnew/tools/pcb_control.cpp:1702 pcbnew/tools/pcb_control.cpp:1712
+#: pcbnew/tools/pcb_control.cpp:1713 pcbnew/tools/pcb_control.cpp:1723
 #: pcbnew/zone.cpp:874
 #, c-format
 msgid "(from %s)"
@@ -38797,9 +38804,9 @@ msgid "Internal Layers"
 msgstr "Couches Internes"
 
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:496
-#, fuzzy, c-format
+#, c-format
 msgid "Layer name %s already in use."
-msgstr "Le nom de couche '%s' existe déjà."
+msgstr "Le nom de la couche %s est déjà utilisé."
 
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:23
 msgid "Default Field Properties for New Footprints"
@@ -41475,9 +41482,8 @@ msgid "Via diameter"
 msgstr "Diamètre via"
 
 #: pcbnew/drc/drc_item.cpp:147
-#, fuzzy
 msgid "Padstack is questionable"
-msgstr "Le padstack n’est pas valide"
+msgstr "Le \"padstack\" est discutable"
 
 #: pcbnew/drc/drc_item.cpp:151
 msgid "Padstack is not valid"
@@ -42221,7 +42227,7 @@ msgid "'%s' settings differ."
 msgstr "les paramètres '%s' diffèrent."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:619
-#: pcbnew/footprint.cpp:4126
+#: pcbnew/footprint.cpp:4135
 msgid "Exempt From Courtyard Requirement"
 msgstr "Exempté de l’Exigence de Zone d'Occupation"
 
@@ -42271,9 +42277,9 @@ msgid "Checking board footprints against library..."
 msgstr "Vérification des empreintes du PCB contre librairies..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:892
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' was not found."
-msgstr "Librairies d'empreintes '%s' non trouvée."
+msgstr "La librairies d'empreinte '%s' est non trouvée."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:941
 #, c-format
@@ -42990,7 +42996,7 @@ msgstr "Statut: "
 msgid "Attributes:"
 msgstr "Attributs:"
 
-#: pcbnew/footprint.cpp:1722 pcbnew/footprint.cpp:4105 pcbnew/zone.cpp:1861
+#: pcbnew/footprint.cpp:1722 pcbnew/footprint.cpp:4114 pcbnew/zone.cpp:1861
 msgid "Component Class"
 msgstr "Classe de Composant"
 
@@ -43033,39 +43039,39 @@ msgstr ""
 msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr "(le pad %s apparaît dans plus d'un groupe de pad de \"net-tie\")"
 
-#: pcbnew/footprint.cpp:4047 pcbnew/pad.cpp:2519 pcbnew/zone.cpp:1827
+#: pcbnew/footprint.cpp:4056 pcbnew/pad.cpp:2519 pcbnew/zone.cpp:1827
 msgid "Inherited"
 msgstr "Hérité"
 
-#: pcbnew/footprint.cpp:4051 pcbnew/pad.cpp:2523 pcbnew/zone.cpp:1831
+#: pcbnew/footprint.cpp:4060 pcbnew/pad.cpp:2523 pcbnew/zone.cpp:1831
 msgid "Thermal reliefs for PTH"
 msgstr "Freins thermiques pour pads traversants"
 
-#: pcbnew/footprint.cpp:4111
+#: pcbnew/footprint.cpp:4120
 msgid "Not in Schematic"
 msgstr "Non en Schématique"
 
-#: pcbnew/footprint.cpp:4113
+#: pcbnew/footprint.cpp:4122
 msgid "Exclude From Position Files"
 msgstr "Exclure des Fichiers de Position"
 
-#: pcbnew/footprint.cpp:4123 pcbnew/pad.cpp:2688
+#: pcbnew/footprint.cpp:4132 pcbnew/pad.cpp:2688
 msgid "Overrides"
 msgstr "Outrepasser"
 
-#: pcbnew/footprint.cpp:4130 pcbnew/pad.cpp:2691
+#: pcbnew/footprint.cpp:4139 pcbnew/pad.cpp:2691
 msgid "Clearance Override"
 msgstr "Forçage d'Isolation"
 
-#: pcbnew/footprint.cpp:4135 pcbnew/pad.cpp:2701
+#: pcbnew/footprint.cpp:4144 pcbnew/pad.cpp:2701
 msgid "Solderpaste Margin Override"
 msgstr "Forçage Marge Pate à Souder"
 
-#: pcbnew/footprint.cpp:4140 pcbnew/pad.cpp:2706
+#: pcbnew/footprint.cpp:4149 pcbnew/pad.cpp:2706
 msgid "Solderpaste Margin Ratio Override"
 msgstr "Forçage Marge de Soudure"
 
-#: pcbnew/footprint.cpp:4146 pcbnew/pad.cpp:2712
+#: pcbnew/footprint.cpp:4155 pcbnew/pad.cpp:2712
 msgid "Zone Connection Style"
 msgstr "Style de Connexion de Zone"
 
@@ -44430,12 +44436,11 @@ msgid "PTH pad %s"
 msgstr "Pad Métallisé %s"
 
 #: pcbnew/pad.cpp:2179
-#, fuzzy
 msgid ""
 "(plated through holes normally have a copper pad on at least one outer layer)"
 msgstr ""
-"(les pads traversants devrait normalement avoir une pastille de cuivre sur "
-"au moins une couche)"
+"(les pads traversants ont normalement une pastille de cuivre sur au moins "
+"une couche externe)"
 
 #: pcbnew/pad.cpp:2187
 msgid "('fiducial' property makes no sense on NPTH pads)"
@@ -46240,7 +46245,7 @@ msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "Mauvais ZSmoothing pour CZONE_CONTAINER '%s'"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2527
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7252
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7249
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
@@ -46425,7 +46430,7 @@ msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
 msgstr "Nom NETCLASS '%s' dupliqué dans le fichier '%s' ligne %d, offset %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3150
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6298
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6295
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -46455,7 +46460,7 @@ msgstr ""
 "ligne : %d\n"
 "offset : %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5143
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5140
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -46466,7 +46471,7 @@ msgstr ""
 "fichier: '%s'\n"
 "ligne: %d offset: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5162
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5159
 #, c-format
 msgid ""
 "Net name doesn't match ID in\n"
@@ -46477,7 +46482,7 @@ msgstr ""
 "fichier: '%s'\n"
 "ligne: %d offset: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5493
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5490
 #, c-format
 msgid ""
 "Invalid zero-sized pad pinned to %s in\n"
@@ -46490,8 +46495,8 @@ msgstr ""
 "ligne : %d\n"
 "décalage : %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5615
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6552
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5612
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6549
 #, c-format
 msgid ""
 "Invalid padstack layer in\n"
@@ -46504,15 +46509,15 @@ msgstr ""
 "ligne : %d\n"
 "décalage : %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5630
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6567
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5627
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6564
 #, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
 msgstr ""
 "Invalide couche de pile de pad '%s'  dans le fichier '%s' ligne %d, offset "
 "%d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6203
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6200
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -46525,7 +46530,7 @@ msgstr ""
 "ligne: %d\n"
 "offset: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6403
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6400
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -46538,7 +46543,7 @@ msgstr ""
 "ligne: %d\n"
 "offset: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6658
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6655
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -46551,7 +46556,7 @@ msgstr ""
 "ligne: %d\n"
 "offset: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7222
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7219
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
@@ -46656,10 +46661,11 @@ msgid "No layers selected for plotting."
 msgstr "Pas de couche sélectionnée pour le tracé."
 
 #: pcbnew/pcb_plotter.cpp:427
-#, fuzzy, c-format
+#, c-format
 msgid "Color theme '%s' not found, will use theme from PCB Editor settings.\n"
 msgstr ""
-"Thème de couleur à utiliser (par défaut, les paramètres de l'Editeur de PCB)"
+"Thème de couleur '%s' introuvable,  le thème des paramètres de l'éditeur PCB "
+"sera utilisé.\n"
 
 #: pcbnew/pcb_reference_image.cpp:343
 msgid "Associated Layer"
@@ -47439,7 +47445,7 @@ msgstr "Largeur Piste: '%s'"
 msgid "Diff Pair Gap: %s"
 msgstr "Ecart Paire Différentielle: %s"
 
-#: pcbnew/router/router_tool.cpp:2778 pcbnew/tools/pcb_control.cpp:1711
+#: pcbnew/router/router_tool.cpp:2778 pcbnew/tools/pcb_control.cpp:1722
 #, c-format
 msgid "DP Max Uncoupled-length: %s"
 msgstr "Longueur maximale de DP non couplée: %s"
@@ -48362,7 +48368,7 @@ msgid "Dogbone Corner Settings"
 msgstr "Réglage Coin \"dogbone\""
 
 #: pcbnew/tools/edit_tool.cpp:1341
-#: pcbnew/tools/item_modification_routine.cpp:197
+#: pcbnew/tools/item_modification_routine.cpp:199
 msgid "Chamfer Lines"
 msgstr "Chanfreiner Lignes"
 
@@ -48379,7 +48385,7 @@ msgid "A shape with at least two lines must be selected."
 msgstr "Une forme avec au moins deux lignes doit être sélectionnée."
 
 #: pcbnew/tools/edit_tool.cpp:1523
-#: pcbnew/tools/item_modification_routine.cpp:102
+#: pcbnew/tools/item_modification_routine.cpp:104
 msgid "Fillet Lines"
 msgstr "Arrondir Lignes"
 
@@ -48531,35 +48537,35 @@ msgstr "Dégrouper éléments"
 msgid "Remove Group Items"
 msgstr "Suppression éléments de groupe"
 
-#: pcbnew/tools/item_modification_routine.cpp:110
+#: pcbnew/tools/item_modification_routine.cpp:112
 msgid "Unable to fillet the selected lines."
 msgstr "Impossible d'arrondir les segments de piste sélectionnés."
 
-#: pcbnew/tools/item_modification_routine.cpp:114
+#: pcbnew/tools/item_modification_routine.cpp:116
 msgid "Some of the lines could not be filleted."
 msgstr "Certaines lignes n'ont pas pu être arrondies."
 
-#: pcbnew/tools/item_modification_routine.cpp:205
+#: pcbnew/tools/item_modification_routine.cpp:207
 msgid "Unable to chamfer the selected lines."
 msgstr "Impossible de chanfreiner les lignes sélectionnées."
 
-#: pcbnew/tools/item_modification_routine.cpp:209
+#: pcbnew/tools/item_modification_routine.cpp:211
 msgid "Some of the lines could not be chamfered."
 msgstr "Certaines lignes n'ont pas pu être chanfreinées."
 
-#: pcbnew/tools/item_modification_routine.cpp:264
+#: pcbnew/tools/item_modification_routine.cpp:266
 msgid "Dogbone Corners"
 msgstr "Coin du \"dogbone\""
 
-#: pcbnew/tools/item_modification_routine.cpp:274
+#: pcbnew/tools/item_modification_routine.cpp:276
 msgid "Unable to add dogbone corners to the selected lines."
 msgstr "Impossible d'ajouter des coins \"dogbone\" aux lignes sélectionnées."
 
-#: pcbnew/tools/item_modification_routine.cpp:278
+#: pcbnew/tools/item_modification_routine.cpp:280
 msgid "Some of the lines could not have dogbone corners added."
 msgstr "Certaines lignes n'ont pas pu être dotées de coins \"dogbone\"."
 
-#: pcbnew/tools/item_modification_routine.cpp:286
+#: pcbnew/tools/item_modification_routine.cpp:288
 msgid ""
 "Some of the dogbone corners are too narrow to fit a cutter of the specified "
 "radius."
@@ -48567,73 +48573,73 @@ msgstr ""
 "Certains coins du \"dogbone\" sont trop étroits pour accueillir une découpe "
 "du rayon spécifié."
 
-#: pcbnew/tools/item_modification_routine.cpp:290
+#: pcbnew/tools/item_modification_routine.cpp:292
 msgid " Consider enabling the 'Add Slots' option."
 msgstr " Pensez à activer l'option \"Ajouter Fentes\"."
 
-#: pcbnew/tools/item_modification_routine.cpp:292
+#: pcbnew/tools/item_modification_routine.cpp:294
 msgid " Slots were added."
 msgstr " Des fentes ont été ajoutées."
 
-#: pcbnew/tools/item_modification_routine.cpp:383
+#: pcbnew/tools/item_modification_routine.cpp:385
 #: pcbnew/tools/pcb_actions.cpp:637
 msgid "Extend Lines to Meet"
 msgstr "Prolonger les Lignes pour se Rejoindre"
 
-#: pcbnew/tools/item_modification_routine.cpp:391
+#: pcbnew/tools/item_modification_routine.cpp:393
 msgid "Unable to extend the selected lines to meet."
 msgstr ""
 "Impossible d'étendre les lignes sélectionnées pour qu'elles se rencontrent."
 
-#: pcbnew/tools/item_modification_routine.cpp:395
+#: pcbnew/tools/item_modification_routine.cpp:397
 msgid "Some of the lines could not be extended to meet."
 msgstr "Certaines lignes n'ont pas pu être prolongées jusqu'à la rencontre."
 
-#: pcbnew/tools/item_modification_routine.cpp:554
+#: pcbnew/tools/item_modification_routine.cpp:556
 msgid "Merge polygons."
 msgstr "Fusionner des polygones."
 
-#: pcbnew/tools/item_modification_routine.cpp:562
+#: pcbnew/tools/item_modification_routine.cpp:564
 msgid "Unable to merge the selected polygons."
 msgstr "Impossible de fusionner les polygones sélectionnés."
 
-#: pcbnew/tools/item_modification_routine.cpp:566
+#: pcbnew/tools/item_modification_routine.cpp:568
 msgid "Some of the polygons could not be merged."
 msgstr "Certains polygones n'ont pas pu être fusionnés."
 
-#: pcbnew/tools/item_modification_routine.cpp:581
+#: pcbnew/tools/item_modification_routine.cpp:583
 msgid "Subtract polygons."
 msgstr "Soustraire polygones."
 
-#: pcbnew/tools/item_modification_routine.cpp:589
+#: pcbnew/tools/item_modification_routine.cpp:591
 msgid "Unable to subtract the selected polygons."
 msgstr "Impossible de soustraire les polygones sélectionnés."
 
-#: pcbnew/tools/item_modification_routine.cpp:593
+#: pcbnew/tools/item_modification_routine.cpp:595
 msgid "Some of the polygons could not be subtracted."
 msgstr "Certains polygones n'ont pas pu être soustraits."
 
-#: pcbnew/tools/item_modification_routine.cpp:622
+#: pcbnew/tools/item_modification_routine.cpp:624
 msgid "Intersect polygons."
 msgstr "Intersection de polygones."
 
-#: pcbnew/tools/item_modification_routine.cpp:630
+#: pcbnew/tools/item_modification_routine.cpp:632
 msgid "Unable to intersect the selected polygons."
 msgstr "Impossible d'intersecter les polygones sélectionnés."
 
-#: pcbnew/tools/item_modification_routine.cpp:634
+#: pcbnew/tools/item_modification_routine.cpp:636
 msgid "Some of the polygons could not be intersected."
 msgstr "Certains polygones n'ont pas pu être intersectés."
 
-#: pcbnew/tools/item_modification_routine.cpp:661
+#: pcbnew/tools/item_modification_routine.cpp:663
 msgid "Outset items."
 msgstr "Eléments d'enveloppe."
 
-#: pcbnew/tools/item_modification_routine.cpp:668
+#: pcbnew/tools/item_modification_routine.cpp:670
 msgid "Unable to outset the selected items."
 msgstr "Impossible d'envelopper les éléments sélectionnés."
 
-#: pcbnew/tools/item_modification_routine.cpp:672
+#: pcbnew/tools/item_modification_routine.cpp:674
 msgid "Some of the items could not be outset."
 msgstr "Certains éléments n'ont pas pu être mis en enveloppe."
 
@@ -50642,65 +50648,65 @@ msgstr ""
 msgid "Paste Text"
 msgstr "Coller Texte"
 
-#: pcbnew/tools/pcb_control.cpp:1231
+#: pcbnew/tools/pcb_control.cpp:1242
 msgid "Invalid clipboard contents"
 msgstr "Contenu du presse-papier invalide"
 
-#: pcbnew/tools/pcb_control.cpp:1514
+#: pcbnew/tools/pcb_control.cpp:1525
 msgid "Error loading board."
 msgstr "Erreur en chargement du PCB."
 
-#: pcbnew/tools/pcb_control.cpp:1548
+#: pcbnew/tools/pcb_control.cpp:1559
 msgid "Append Board"
 msgstr "Ajout PCB"
 
-#: pcbnew/tools/pcb_control.cpp:1609
+#: pcbnew/tools/pcb_control.cpp:1620
 msgid "Active Layer"
 msgstr "Couche Active"
 
-#: pcbnew/tools/pcb_control.cpp:1610 pcbnew/widgets/appearance_controls.cpp:373
+#: pcbnew/tools/pcb_control.cpp:1621 pcbnew/widgets/appearance_controls.cpp:373
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 msgid "All Layers"
 msgstr "Toutes Couches"
 
-#: pcbnew/tools/pcb_control.cpp:1622
+#: pcbnew/tools/pcb_control.cpp:1633
 msgid "Object Snapping"
 msgstr "Accrochage sur Objets"
 
-#: pcbnew/tools/pcb_control.cpp:1701
+#: pcbnew/tools/pcb_control.cpp:1712
 #, c-format
 msgid "DP Gap Constraints: %s"
 msgstr "Contraintes d'écart de DP : %s"
 
-#: pcbnew/tools/pcb_control.cpp:1742
+#: pcbnew/tools/pcb_control.cpp:1753
 msgid "Resolved clearance"
 msgstr "Isolation résolue"
 
-#: pcbnew/tools/pcb_control.cpp:1752
+#: pcbnew/tools/pcb_control.cpp:1763
 msgid "Actual clearance"
 msgstr "Isolation réelle"
 
-#: pcbnew/tools/pcb_control.cpp:1795
+#: pcbnew/tools/pcb_control.cpp:1806
 msgid "Resolved hole clearance"
 msgstr "Isolation de trou résolue"
 
-#: pcbnew/tools/pcb_control.cpp:1800
+#: pcbnew/tools/pcb_control.cpp:1811
 msgid "Actual hole clearance"
 msgstr "Isolation trou réelle"
 
-#: pcbnew/tools/pcb_control.cpp:1833
+#: pcbnew/tools/pcb_control.cpp:1844
 msgid "Resolved edge clearance"
 msgstr "Isolation pour les contours résolue"
 
-#: pcbnew/tools/pcb_control.cpp:1838
+#: pcbnew/tools/pcb_control.cpp:1849
 msgid "Resolved margin clearance"
 msgstr "Isolation pour la couche \"margin\" résolue"
 
-#: pcbnew/tools/pcb_control.cpp:1849
+#: pcbnew/tools/pcb_control.cpp:1860
 msgid "Selected Items"
 msgstr "Éléments Sélectionnés"
 
-#: pcbnew/tools/pcb_control.cpp:1920
+#: pcbnew/tools/pcb_control.cpp:1931
 msgid "Selected 2D Length"
 msgstr "Longueur 2D Sélectionnée"
 
@@ -51349,184 +51355,148 @@ msgid "User defined layer 9"
 msgstr "Couche définie utilisateur 9"
 
 #: pcbnew/widgets/appearance_controls.cpp:1684
-#, fuzzy
 msgid "User defined layer 10"
-msgstr "Couche définie utilisateur 1"
+msgstr "Couche définie utilisateur 10"
 
 #: pcbnew/widgets/appearance_controls.cpp:1685
-#, fuzzy
 msgid "User defined layer 11"
-msgstr "Couche définie utilisateur 1"
+msgstr "Couche définie utilisateur 11"
 
 #: pcbnew/widgets/appearance_controls.cpp:1686
-#, fuzzy
 msgid "User defined layer 12"
-msgstr "Couche définie utilisateur 1"
+msgstr "Couche définie utilisateur 12"
 
 #: pcbnew/widgets/appearance_controls.cpp:1687
-#, fuzzy
 msgid "User defined layer 13"
-msgstr "Couche définie utilisateur 1"
+msgstr "Couche définie utilisateur 13"
 
 #: pcbnew/widgets/appearance_controls.cpp:1688
-#, fuzzy
 msgid "User defined layer 14"
-msgstr "Couche définie utilisateur 1"
+msgstr "Couche définie utilisateur 14"
 
 #: pcbnew/widgets/appearance_controls.cpp:1689
-#, fuzzy
 msgid "User defined layer 15"
-msgstr "Couche définie utilisateur 1"
+msgstr "Couche définie utilisateur 15"
 
 #: pcbnew/widgets/appearance_controls.cpp:1690
-#, fuzzy
 msgid "User defined layer 16"
-msgstr "Couche définie utilisateur 1"
+msgstr "Couche définie utilisateur 16"
 
 #: pcbnew/widgets/appearance_controls.cpp:1691
-#, fuzzy
 msgid "User defined layer 17"
-msgstr "Couche définie utilisateur 1"
+msgstr "Couche définie utilisateur 17"
 
 #: pcbnew/widgets/appearance_controls.cpp:1692
-#, fuzzy
 msgid "User defined layer 18"
-msgstr "Couche définie utilisateur 1"
+msgstr "Couche définie utilisateur 18"
 
 #: pcbnew/widgets/appearance_controls.cpp:1693
-#, fuzzy
 msgid "User defined layer 19"
-msgstr "Couche définie utilisateur 1"
+msgstr "Couche définie utilisateur 19"
 
 #: pcbnew/widgets/appearance_controls.cpp:1694
-#, fuzzy
 msgid "User defined layer 20"
-msgstr "Couche définie utilisateur 2"
+msgstr "Couche définie utilisateur 20"
 
 #: pcbnew/widgets/appearance_controls.cpp:1695
-#, fuzzy
 msgid "User defined layer 21"
-msgstr "Couche définie utilisateur 2"
+msgstr "Couche définie utilisateur 21"
 
 #: pcbnew/widgets/appearance_controls.cpp:1696
-#, fuzzy
 msgid "User defined layer 22"
-msgstr "Couche définie utilisateur 2"
+msgstr "Couche définie utilisateur 22"
 
 #: pcbnew/widgets/appearance_controls.cpp:1697
-#, fuzzy
 msgid "User defined layer 23"
-msgstr "Couche définie utilisateur 2"
+msgstr "Couche définie utilisateur 23"
 
 #: pcbnew/widgets/appearance_controls.cpp:1698
-#, fuzzy
 msgid "User defined layer 24"
-msgstr "Couche définie utilisateur 2"
+msgstr "Couche définie utilisateur 24"
 
 #: pcbnew/widgets/appearance_controls.cpp:1699
-#, fuzzy
 msgid "User defined layer 25"
-msgstr "Couche définie utilisateur 2"
+msgstr "Couche définie utilisateur 25"
 
 #: pcbnew/widgets/appearance_controls.cpp:1700
-#, fuzzy
 msgid "User defined layer 26"
-msgstr "Couche définie utilisateur 2"
+msgstr "Couche définie utilisateur 26"
 
 #: pcbnew/widgets/appearance_controls.cpp:1701
-#, fuzzy
 msgid "User defined layer 27"
-msgstr "Couche définie utilisateur 2"
+msgstr "Couche définie utilisateur 27"
 
 #: pcbnew/widgets/appearance_controls.cpp:1702
-#, fuzzy
 msgid "User defined layer 28"
-msgstr "Couche définie utilisateur 2"
+msgstr "Couche définie utilisateur 28"
 
 #: pcbnew/widgets/appearance_controls.cpp:1703
-#, fuzzy
 msgid "User defined layer 29"
-msgstr "Couche définie utilisateur 2"
+msgstr "Couche définie utilisateur 29"
 
 #: pcbnew/widgets/appearance_controls.cpp:1704
-#, fuzzy
 msgid "User defined layer 30"
-msgstr "Couche définie utilisateur 3"
+msgstr "Couche définie utilisateur 30"
 
 #: pcbnew/widgets/appearance_controls.cpp:1705
-#, fuzzy
 msgid "User defined layer 31"
-msgstr "Couche définie utilisateur 3"
+msgstr "Couche définie utilisateur 31"
 
 #: pcbnew/widgets/appearance_controls.cpp:1706
-#, fuzzy
 msgid "User defined layer 32"
-msgstr "Couche définie utilisateur 3"
+msgstr "Couche définie utilisateur 32"
 
 #: pcbnew/widgets/appearance_controls.cpp:1707
-#, fuzzy
 msgid "User defined layer 33"
-msgstr "Couche définie utilisateur 3"
+msgstr "Couche définie utilisateur 33"
 
 #: pcbnew/widgets/appearance_controls.cpp:1708
-#, fuzzy
 msgid "User defined layer 34"
-msgstr "Couche définie utilisateur 3"
+msgstr "Couche définie utilisateur 34"
 
 #: pcbnew/widgets/appearance_controls.cpp:1709
-#, fuzzy
 msgid "User defined layer 35"
-msgstr "Couche définie utilisateur 3"
+msgstr "Couche définie utilisateur 35"
 
 #: pcbnew/widgets/appearance_controls.cpp:1710
-#, fuzzy
 msgid "User defined layer 36"
-msgstr "Couche définie utilisateur 3"
+msgstr "Couche définie utilisateur 36"
 
 #: pcbnew/widgets/appearance_controls.cpp:1711
-#, fuzzy
 msgid "User defined layer 37"
-msgstr "Couche définie utilisateur 3"
+msgstr "Couche définie utilisateur 37"
 
 #: pcbnew/widgets/appearance_controls.cpp:1712
-#, fuzzy
 msgid "User defined layer 38"
-msgstr "Couche définie utilisateur 3"
+msgstr "Couche définie utilisateur 38"
 
 #: pcbnew/widgets/appearance_controls.cpp:1713
-#, fuzzy
 msgid "User defined layer 39"
-msgstr "Couche définie utilisateur 3"
+msgstr "Couche définie utilisateur 39"
 
 #: pcbnew/widgets/appearance_controls.cpp:1714
-#, fuzzy
 msgid "User defined layer 40"
-msgstr "Couche définie utilisateur 4"
+msgstr "Couche définie utilisateur 40"
 
 #: pcbnew/widgets/appearance_controls.cpp:1715
-#, fuzzy
 msgid "User defined layer 41"
-msgstr "Couche définie utilisateur 4"
+msgstr "Couche définie utilisateur 41"
 
 #: pcbnew/widgets/appearance_controls.cpp:1716
-#, fuzzy
 msgid "User defined layer 42"
-msgstr "Couche définie utilisateur 4"
+msgstr "Couche définie utilisateur 42"
 
 #: pcbnew/widgets/appearance_controls.cpp:1717
-#, fuzzy
 msgid "User defined layer 43"
-msgstr "Couche définie utilisateur 4"
+msgstr "Couche définie utilisateur 43"
 
 #: pcbnew/widgets/appearance_controls.cpp:1718
-#, fuzzy
 msgid "User defined layer 44"
-msgstr "Couche définie utilisateur 4"
+msgstr "Couche définie utilisateur 44"
 
 #: pcbnew/widgets/appearance_controls.cpp:1719
-#, fuzzy
 msgid "User defined layer 45"
-msgstr "Couche définie utilisateur 4"
+msgstr "Couche définie utilisateur 45"
 
 #: pcbnew/widgets/appearance_controls.cpp:1766
 msgid "Front copper layer"
@@ -52231,14 +52201,19 @@ msgstr "Feuille de Dessin KiCad"
 #~ msgstr ""
 #~ "Erreur lors du chargement du bloc de conception %s de la librairie %s."
 
-#~ msgid "Included Layers"
-#~ msgstr "Couches Incluses"
+#~ msgid ""
+#~ "Knock out the corresponding solder mask layer after plotting a silkscreen "
+#~ "layer.  This will knock out all previously plotted layers."
+#~ msgstr ""
+#~ "Découper la couche de masque de soudure correspondante après avoir tracé "
+#~ "une couche de sérigraphie.  Cette opération découpe toutes les couches "
+#~ "précédemment tracées."
 
 #~ msgid "Fetching design_block libraries..."
 #~ msgstr "Récupération des librairies de bloc de conception..."
 
-#~ msgid "Fetching footprint libraries..."
-#~ msgstr "Recherche librairies d'empreintes..."
+#~ msgid "Included Layers"
+#~ msgstr "Couches Incluses"
 
 #~ msgid "CrtYd_Front"
 #~ msgstr "CrtYd_Front"
@@ -52425,6 +52400,9 @@ msgstr "Feuille de Dessin KiCad"
 
 #~ msgid "User9"
 #~ msgstr "User9"
+
+#~ msgid "Fetching footprint libraries..."
+#~ msgstr "Recherche librairies d'empreintes..."
 
 #~ msgid "(Pad has no layer)"
 #~ msgstr "(Pad n'a pas de couche)"
