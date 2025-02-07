@@ -30,10 +30,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-07 02:35+0300\n"
-"PO-Revision-Date: 2025-02-06 23:34+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2025-02-07 21:06+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -41422,9 +41422,8 @@ msgid "Via diameter"
 msgstr "Via-Durchmesser"
 
 #: pcbnew/drc/drc_item.cpp:147
-#, fuzzy
 msgid "Padstack is questionable"
-msgstr "Padstack ist ungültig"
+msgstr "Padstack ist fragwürdig"
 
 #: pcbnew/drc/drc_item.cpp:151
 msgid "Padstack is not valid"
