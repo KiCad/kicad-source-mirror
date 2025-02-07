@@ -11,10 +11,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-08 00:06+0300\n"
-"PO-Revision-Date: 2025-01-23 15:38+0000\n"
-"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
-"source/el/>\n"
+"PO-Revision-Date: 2025-02-08 17:30+0000\n"
+"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
+"master-source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1765,6 +1765,8 @@ msgstr "Εξαγωγή στο Πρόχειρο"
 #: bitmap2component/bitmap2component.cpp:406
 msgid "No shape in black and white image to convert: no outline created."
 msgstr ""
+"Δεν υπάρχει σχήμα σε ασπρόμαυρη εικόνα για μετατροπή: δεν δημιουργήθηκε "
+"περίγραμμα."
 
 #: common/api/api_handler.cpp:27
 msgid "Modification from API"
@@ -1991,8 +1993,9 @@ msgid "Design block metadata file '%s' could not be read."
 msgstr "Δεν ήταν δυνατή η δημιουργία του αρχείου '%s'."
 
 #: common/design_block_io.cpp:353
+#, fuzzy
 msgid "Design block does not have a valid library ID."
-msgstr ""
+msgstr "Η συλλογή σχεδίου δεν έχει έγκυρο αναγνωριστικό βιβλιοθήκης."
 
 #: common/design_block_io.cpp:358
 #, fuzzy, c-format
@@ -2814,10 +2817,14 @@ msgstr ""
 "μόνο στα ξεκλείδωτα στοιχεία (αν υπάρχουν)."
 
 #: common/dialogs/dialog_locked_items_query.cpp:42
+#, fuzzy
 msgid ""
 "Do not show this dialog again until KiCad restarts. You can re-enable this "
 "dialog in Pcbnew preferences."
 msgstr ""
+"Να μην εμφανιστεί ξανά αυτό το παράθυρο διαλόγου μέχρι την επανεκκίνηση του "
+"KiCad. Μπορείτε να ενεργοποιήσετε ξανά αυτό το παράθυρο διαλόγου στις "
+"Προτιμήσεις Επεξεργαστή Πλακέτας."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
 #, fuzzy, c-format
@@ -3498,7 +3505,7 @@ msgstr "Προειδοποιήσεις"
 
 #: common/dialogs/dialog_rc_job_base.cpp:68
 msgid "Report job failure when violations present"
-msgstr ""
+msgstr "Αναφορά αποτυχίας εργασίας όταν υπάρχουν παραβάσεις"
 
 #: common/dialogs/dialog_rc_job_base.cpp:74 kicad/cli/command_pcb_drc.cpp:56
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
@@ -3984,12 +3991,16 @@ msgid ""
 "File explorer command.\n"
 "example:"
 msgstr ""
+"Εντολή εξερεύνησης αρχείων.\n"
+"παράδειγμα:"
 
 #: common/dialogs/panel_common_settings.cpp:360
 #, c-format
 msgid ""
 "Explorer command with mandatory '%s' suffix after last entered character."
 msgstr ""
+"Εντολή εξερεύνησης αρχείων με υποχρεωτική κατάληξη '%s' μετά τον τελευταίο "
+"χαρακτήρα."
 
 #: common/dialogs/panel_common_settings.cpp:374
 msgid "Executable files ("
@@ -4743,7 +4754,7 @@ msgstr "Μετακίνηση με Αναφορά"
 
 #: common/dialogs/panel_embedded_files.cpp:54
 msgid "Copy the reference for this embedded file"
-msgstr ""
+msgstr "Αντιγραφή αναφοράς για αυτό το ενσωματωμένο αρχείο"
 
 #: common/dialogs/panel_embedded_files.cpp:283
 #: common/dialogs/panel_embedded_files.cpp:390
@@ -4801,7 +4812,7 @@ msgstr "Η βιβλιοθήκη συμβόλων '%s' δεν είναι εγγρ
 
 #: common/dialogs/panel_embedded_files.cpp:417
 msgid "Retry"
-msgstr ""
+msgstr "Επανάληψη"
 
 #: common/dialogs/panel_embedded_files.cpp:444
 #, fuzzy, c-format
@@ -4820,7 +4831,7 @@ msgstr "Εσωτερικές Αναφορές Φύλλων"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
-msgstr ""
+msgstr "Προσθήκη ενσωματωμένου αρχείου"
 
 #: common/dialogs/panel_embedded_files_base.cpp:69
 #, fuzzy
@@ -4834,7 +4845,7 @@ msgstr "Μοντέλο"
 
 #: common/dialogs/panel_embedded_files_base.cpp:77
 msgid "Store a copy of all fonts used"
-msgstr ""
+msgstr "Αποθήκευση αντιγράφου όλων των γραμματοσειρών που χρησιμοποιούνται"
 
 #: common/dialogs/panel_embedded_files_base.cpp:84
 #, fuzzy
@@ -5638,7 +5649,7 @@ msgstr "Αδυναμία χρήσης OpenGL"
 
 #: common/draw_panel_gal.cpp:543
 msgid "Error switching GAL backend"
-msgstr ""
+msgstr "Σφάλμα κατά την εναλλαγή συστήματος GAL"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:558
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3399
@@ -7370,14 +7381,16 @@ msgid "DXF images not currently supported."
 msgstr "Οι εικόνες DXF δεν υποστηρίζονται αυτήν τη στιγμή."
 
 #: common/import_gfx/graphics_importer_buffer.cpp:126
-#, c-format
+#, c-format, fuzzy
 msgid "Imported graphic is too large. Maximum scale is %f"
-msgstr ""
+msgstr "Το εισαγόμενο γραφικό είναι πολύ μεγάλο. Η μέγιστη κλίμακα είναι %f"
 
 #: common/import_gfx/graphics_importer_buffer.cpp:186
-#, c-format
+#, c-format, fuzzy
 msgid "Import offset adjusted to (%f, %f) to fit within numeric limits"
 msgstr ""
+"Η μετατόπιση κατα την εισαγωγή προσαρμόστηκε σε (%f, %f) ώστε να είναι εντός "
+"αριθμητικών ορίων"
 
 #: common/io/altium/altium_binary_parser.cpp:57 common/richio.cpp:123
 #, c-format
@@ -10270,7 +10283,7 @@ msgstr "Διαδρομές βιβλιοθήκης αποτυπωμάτων KiCad
 
 #: common/wildcards_and_files_ext.cpp:359
 msgid "KiCad design block path"
-msgstr ""
+msgstr "Διαδρομή τοποθεσίας συλλογής σχεδίου KiCad"
 
 #: common/wildcards_and_files_ext.cpp:366
 #, fuzzy
@@ -11059,8 +11072,9 @@ msgid "Please select a library to save the design block to."
 msgstr "Επιλέξτε αρχείου καταλόγου βιβλιοθήκης συμβόλων."
 
 #: eeschema/design_block_utils.cpp:301 eeschema/design_block_utils.cpp:395
+#, fuzzy
 msgid "Design blocks with nested sheets are not supported."
-msgstr ""
+msgstr "Συλλογές σχεδίου με ένθετα φύλλα δεν υποστηρίζονται."
 
 #: eeschema/design_block_utils.cpp:333 eeschema/design_block_utils.cpp:431
 #, fuzzy
@@ -11071,7 +11085,7 @@ msgstr ""
 
 #: eeschema/design_block_utils.cpp:378
 msgid "Please select some items to save as a design block."
-msgstr ""
+msgstr "Επιλέξτε ορισμένα στοιχεία για αποθήκευση ως συλλογή σχεδίου."
 
 #: eeschema/design_block_utils.cpp:469
 #, fuzzy
@@ -16834,9 +16848,9 @@ msgid ""
 "Please edit this global design block library table in Preferences menu."
 msgstr ""
 "Εμφανίστηκε σφάλμα κατά τη φόρτωση του καθολικού καταλόγου βιβλιοθήκης "
-"συμβόλων.\n"
-"Επεξεργαστείτε το αρχείο του καθολικού καταλόγου βιβλιοθήκης συμβόλων από "
-"τις Προτιμήσεις."
+"συλλογής σχεδίου.\n"
+"Επεξεργαστείτε το αρχείο του καθολικού καταλόγου βιβλιοθήκης συλλογής "
+"σχεδίου από τις Προτιμήσεις."
 
 #: eeschema/eeschema.cpp:482
 #, c-format
@@ -28570,7 +28584,7 @@ msgstr "Άνοιγμα σχηματικού στον επεξεργαστή σχ
 #: kicad/tools/kicad_manager_actions.cpp:137
 #, fuzzy
 msgid "Edit PCB in PCB editor"
-msgstr "Επεξεργασία σε Επεξεργαστή Κειμένου"
+msgstr "Επεξεργασία σε Επεξεργαστή Πλακέτας"
 
 #: kicad/tools/kicad_manager_actions.cpp:148
 #, fuzzy
@@ -47049,7 +47063,9 @@ msgid ""
 "Footprint Libraries..."
 msgstr ""
 "Το επιλεγμένο αρχείο περιέχει πολλαπλά αποτυπώματα. Μόνο το πρώτο θα "
-"εισαχθεί."
+"εισαχθεί.\n"
+"Για να φορτώσετε όλα τα αποτυπώματα, προσθέστε τα ως βιβλιοθήκη "
+"χρησιμοποιώντας τις Προτιμήσεις -> Διαχείριση βιβλιοθηκών αποτυπώματος..."
 
 #: pcbnew/pcb_io/pcb_io.cpp:175
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
