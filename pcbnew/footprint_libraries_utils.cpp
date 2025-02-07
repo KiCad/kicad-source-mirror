@@ -1282,7 +1282,7 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( wxString aFootprintName, const wx
 
     footprint->Reference().SetText( settings.m_DefaultFPTextItems[0].m_Text );
     footprint->Reference().SetVisible( settings.m_DefaultFPTextItems[0].m_Visible );
-    txt_layer = (PCB_LAYER_ID) settings.m_DefaultFPTextItems[0].m_Layer;
+    txt_layer = settings.m_DefaultFPTextItems[0].m_Layer;
     footprint->Reference().SetLayer( txt_layer );
     default_pos.y -= settings.GetTextSize( txt_layer ).y / 2;
     footprint->Reference().SetPosition( default_pos );
@@ -1290,7 +1290,7 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( wxString aFootprintName, const wx
 
     footprint->Value().SetText( settings.m_DefaultFPTextItems[1].m_Text );
     footprint->Value().SetVisible( settings.m_DefaultFPTextItems[1].m_Visible );
-    txt_layer = (PCB_LAYER_ID) settings.m_DefaultFPTextItems[1].m_Layer;
+    txt_layer = settings.m_DefaultFPTextItems[1].m_Layer;
     footprint->Value().SetLayer( txt_layer );
     default_pos.y += settings.GetTextSize( txt_layer ).y / 2;
     footprint->Value().SetPosition( default_pos );

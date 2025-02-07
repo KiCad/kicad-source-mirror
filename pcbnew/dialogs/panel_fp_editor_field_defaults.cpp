@@ -82,7 +82,7 @@ public:
     void SetValueAsLong( int row, int col, long value ) override
     {
         if( col == 0 )
-            m_items[row].m_Layer = static_cast<int>( value );
+            m_items[row].m_Layer = static_cast<PCB_LAYER_ID>( value );
     }
 
     bool AppendRows( size_t aNumRows = 1 ) override
@@ -102,7 +102,7 @@ public:
             if( IsUserLayer( static_cast<PCB_LAYER_ID>( layer ) ) )
             {
                 layers.insert( layer );
-                m_items.emplace_back( wxT( "" ), true, layer );
+                m_items.emplace_back( wxT( "" ), true, static_cast<PCB_LAYER_ID>( layer ) );
             }
             else
             {
@@ -205,7 +205,7 @@ public:
     void SetValueAsLong( int row, int col, long value ) override
     {
         if( col == 2 )
-            m_items[row].m_Layer = (int) value;
+            m_items[row].m_Layer = static_cast<PCB_LAYER_ID>( value );
     }
 
     bool AppendRows( size_t aNumRows = 1 ) override
@@ -405,8 +405,8 @@ bool PANEL_FP_EDITOR_FIELD_DEFAULTS::TransferDataFromWindow()
     for( int i : { REFERENCE_FIELD, VALUE_FIELD } )
     {
         wxString text = table->GetValue( i, 0 );
-        bool     visible = table->GetValueAsBool( i, 1 );
-        int      layer = (int) table->GetValueAsLong( i, 2 );
+        bool visible = table->GetValueAsBool( i, 1 );
+        PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( table->GetValueAsLong( i, 2 ) );
 
         cfg.m_DefaultFPTextItems.emplace_back( text, visible, layer );
     }
@@ -416,8 +416,8 @@ bool PANEL_FP_EDITOR_FIELD_DEFAULTS::TransferDataFromWindow()
     for( int i = 0; i < m_textItemsGrid->GetNumberRows(); ++i )
     {
         wxString text = table->GetValue( i, 0 );
-        bool     visible = table->GetValueAsBool( i, 1 );
-        int      layer = (int) table->GetValueAsLong( i, 2 );
+        bool visible = table->GetValueAsBool( i, 1 );
+        PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( table->GetValueAsLong( i, 2 ) );
 
         cfg.m_DefaultFPTextItems.emplace_back( text, visible, layer );
     }

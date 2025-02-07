@@ -210,11 +210,11 @@ enum
 
 struct TEXT_ITEM_INFO
 {
-    wxString m_Text;
-    bool     m_Visible;
-    int      m_Layer;
+    wxString     m_Text;
+    bool         m_Visible;
+    PCB_LAYER_ID m_Layer;
 
-    TEXT_ITEM_INFO( const wxString& aText, bool aVisible, int aLayer )
+    TEXT_ITEM_INFO( const wxString& aText, bool aVisible, PCB_LAYER_ID aLayer )
     {
         m_Text = aText;
         m_Visible = aVisible;

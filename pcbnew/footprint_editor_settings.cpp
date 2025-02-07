@@ -37,7 +37,7 @@
 
 
 ///! Update the schema version whenever a migration is required
-const int fpEditSchemaVersion = 4;
+const int fpEditSchemaVersion = 5;
 
 
 FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
@@ -156,7 +156,7 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
                 {
                     js.push_back( nlohmann::json( { item.m_Text.ToUTF8(),
                                                     item.m_Visible,
-                                                    item.m_Layer } ) );
+                                                    LSET::Name( item.m_Layer ) } ) );
                 }
 
                 return js;
@@ -177,15 +177,19 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
 
                     textInfo.m_Text = entry.at(0).get<wxString>();
                     textInfo.m_Visible = entry.at(1).get<bool>();
-                    textInfo.m_Layer = entry.at(2).get<int>();
+                    wxString layerName = entry.at(2).get<wxString>();
+                    int candidateLayer = LSET::NameToLayer( layerName );
+                    textInfo.m_Layer = candidateLayer >= 0
+                                           ? static_cast<PCB_LAYER_ID>(candidateLayer)
+                                           : F_SilkS;
 
                     m_DesignSettings.m_DefaultFPTextItems.push_back( std::move( textInfo ) );
                 }
             },
             nlohmann::json::array( {
-                                       { "REF**", true, F_SilkS },
-                                       { "", true, F_Fab },
-                                       { "${REFERENCE}", true, F_Fab }
+                                       { "REF**", true, LSET::Name( F_SilkS ) },
+                                       { "", true, LSET::Name( F_Fab ) },
+                                       { "${REFERENCE}", true, LSET::Name( F_Fab ) }
                                    } ) ) );
 
     m_params.emplace_back( new PARAM_MAP<wxString>( "design_settings.default_footprint_layer_names",
@@ -377,6 +381,7 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
 
     registerMigration( 2, 3, std::bind( &FOOTPRINT_EDITOR_SETTINGS::migrateSchema2To3, this ) );
     registerMigration( 3, 4, std::bind( &FOOTPRINT_EDITOR_SETTINGS::migrateSchema3To4, this ) );
+    registerMigration( 4, 5, std::bind( &FOOTPRINT_EDITOR_SETTINGS::migrateSchema4To5, this ) );
 }
 
 
@@ -566,6 +571,54 @@ bool FOOTPRINT_EDITOR_SETTINGS::migrateSchema3To4()
 
     for( nlohmann::json& entry : presets )
         PARAM_LAYER_PRESET::MigrateToNamedRenderLayers( entry );
+
+    return true;
+}
+
+
+/**
+ * Schema version 5: move text defaults to used named layers
+ */
+bool FOOTPRINT_EDITOR_SETTINGS::migrateSchema4To5   ()
+{
+    auto p( "/design_settings/default_footprint_text_items"_json_pointer );
+
+    if( !m_internals->contains( p ) || !m_internals->at( p ).is_array() )
+        return true;
+
+    nlohmann::json& defaults = m_internals->at( p );
+
+    bool reset = false;
+
+    for( nlohmann::json& entry : defaults )
+    {
+        TEXT_ITEM_INFO textInfo( wxT( "" ), true, F_SilkS );
+
+        textInfo.m_Text = entry.at(0).get<wxString>();
+        textInfo.m_Visible = entry.at(1).get<bool>();
+        textInfo.m_Layer = static_cast<PCB_LAYER_ID>( entry.at(2).get<int>() );
+
+        if( textInfo.m_Layer == Rescue || textInfo.m_Layer >= User_5 )
+        {
+            // KiCad pre-9.0 nightlies would write buggy preferences out with invalid layers.
+            // If we detect that, reset to defaults
+            reset = true;
+        }
+        else
+        {
+            // Coming from 8.0 or earlier, just migrate to named layers
+            entry.at(2) = LSET::Name( textInfo.m_Layer );
+        }
+    }
+
+    if( reset )
+    {
+        defaults = nlohmann::json::array( {
+                                       { "REF**", true, LSET::Name( F_SilkS ) },
+                                       { "", true, LSET::Name( F_Fab ) },
+                                       { "${REFERENCE}", true, LSET::Name( F_Fab ) }
+                                   } );
+    }
 
     return true;
 }

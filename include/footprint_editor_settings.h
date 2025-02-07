@@ -101,6 +101,8 @@ private:
     bool migrateSchema2To3();
 
     bool migrateSchema3To4();
+
+    bool migrateSchema4To5();
 };
 
 
