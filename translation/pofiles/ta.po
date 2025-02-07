@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-07 02:35+0300\n"
+"POT-Creation-Date: 2025-02-08 00:06+0300\n"
 "PO-Revision-Date: 2025-01-06 10:27+0000\n"
 "Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/master-"
@@ -3180,7 +3180,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:169
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:48
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:57
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:439 pcbnew/footprint.cpp:4089
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:439 pcbnew/footprint.cpp:4098
 #: pcbnew/footprint_wizard_frame.cpp:326 pcbnew/pcb_dimension.cpp:605
 #: pcbnew/pcb_fields_grid_table.cpp:144 pcbnew/plot_board_layers.cpp:107
 #: pcbnew/widgets/search_handlers.cpp:119
@@ -4911,7 +4911,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1099
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:583
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:854
-#: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4048
+#: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4057
 #: pcbnew/pad.cpp:2501 pcbnew/pad.cpp:2520 pcbnew/pcb_dimension.cpp:1973
 #: pcbnew/widgets/appearance_controls.cpp:729
 #: pcbnew/widgets/appearance_controls.cpp:771
@@ -5142,7 +5142,7 @@ msgstr "<வரையறுக்கப்படவில்லை>"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:854 pcbnew/footprint.cpp:4050
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:854 pcbnew/footprint.cpp:4059
 #: pcbnew/pad.cpp:2522 pcbnew/pcb_table.cpp:533 pcbnew/pcb_textbox.cpp:795
 #: pcbnew/zone.cpp:857 pcbnew/zone.cpp:1830
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
@@ -6397,7 +6397,7 @@ msgstr ""
 #: eeschema/sch_text.cpp:784 eeschema/sch_textbox.cpp:714
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
-#: pcbnew/footprint.cpp:4080 pcbnew/pad.cpp:2539 pcbnew/pcb_dimension.cpp:1756
+#: pcbnew/footprint.cpp:4089 pcbnew/pad.cpp:2539 pcbnew/pcb_dimension.cpp:1756
 #: pcbnew/pcb_dimension.cpp:1831 pcbnew/pcb_fields_grid_table.cpp:151
 #: pcbnew/pcb_tablecell.cpp:207 pcbnew/zone.cpp:2001
 msgid "Orientation"
@@ -6923,7 +6923,7 @@ msgstr ""
 #: common/widgets/listbox_tricks.cpp:51
 #: eeschema/tools/sch_editor_control.cpp:2281
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1020
-#: pcbnew/dialogs/panel_setup_rules.cpp:132 pcbnew/tools/pcb_control.cpp:1238
+#: pcbnew/dialogs/panel_setup_rules.cpp:132 pcbnew/tools/pcb_control.cpp:1249
 msgid "Paste"
 msgstr ""
 
@@ -8205,7 +8205,7 @@ msgstr "இயல்புநிலை திருத்துதல்"
 #: eeschema/dialogs/dialog_sim_model_base.cpp:271 eeschema/sch_symbol.cpp:2060
 #: eeschema/sch_symbol.cpp:2114 eeschema/sch_symbol.cpp:3001
 #: eeschema/widgets/search_handlers.cpp:160
-#: eeschema/widgets/search_handlers.cpp:246 pcbnew/footprint.cpp:4086
+#: eeschema/widgets/search_handlers.cpp:246 pcbnew/footprint.cpp:4095
 #: pcbnew/widgets/search_handlers.cpp:118
 msgid "Reference"
 msgstr ""
@@ -8227,7 +8227,7 @@ msgstr ""
 #: eeschema/tools/sch_edit_tool.cpp:551
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:179
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
-#: pcbnew/footprint.cpp:4109
+#: pcbnew/footprint.cpp:4118
 msgid "Attributes"
 msgstr ""
 
@@ -10091,7 +10091,7 @@ msgstr ""
 #: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2109
 #: eeschema/sch_symbol.cpp:2685 eeschema/sch_symbol.cpp:3013
 #: eeschema/symbol_editor/symbol_editor.cpp:1629
-#: eeschema/symbol_viewer_frame.cpp:462 pcbnew/footprint.cpp:4099
+#: eeschema/symbol_viewer_frame.cpp:462 pcbnew/footprint.cpp:4108
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:133
 msgid "Keywords"
 msgstr ""
@@ -10579,7 +10579,7 @@ msgid "Enter a description for the library:"
 msgstr "நூலகத்திற்கான விளக்கத்தை உள்ளிடவும்:"
 
 #: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:3010
-#: pcbnew/footprint.cpp:4096 pcbnew/plot_board_layers.cpp:129
+#: pcbnew/footprint.cpp:4105 pcbnew/plot_board_layers.cpp:129
 msgid "Library Description"
 msgstr ""
 
@@ -12198,7 +12198,7 @@ msgstr ""
 #: eeschema/sch_symbol.cpp:2999
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:28
-#: pcbnew/footprint.cpp:4084
+#: pcbnew/footprint.cpp:4093
 msgid "Fields"
 msgstr ""
 
@@ -17568,7 +17568,7 @@ msgstr ""
 #: eeschema/sch_bus_entry.cpp:543 eeschema/sch_junction.cpp:319
 #: eeschema/sch_label.cpp:1227 eeschema/sch_line.cpp:951
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2134 pcbnew/pad.cpp:1295
-#: pcbnew/pcb_track.cpp:1667 pcbnew/tools/pcb_control.cpp:1874
+#: pcbnew/pcb_track.cpp:1667 pcbnew/tools/pcb_control.cpp:1885
 #: pcbnew/zone.cpp:807
 msgid "Resolved Netclass"
 msgstr ""
@@ -18565,7 +18565,7 @@ msgstr ""
 #: pcbnew/generators/pcb_tuning_pattern.cpp:478
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2130 pcbnew/pad.cpp:1293
 #: pcbnew/pad.cpp:2574 pcbnew/pcb_shape.cpp:923 pcbnew/pcb_tablecell.cpp:186
-#: pcbnew/pcb_track.cpp:1665 pcbnew/tools/pcb_control.cpp:1871
+#: pcbnew/pcb_track.cpp:1665 pcbnew/tools/pcb_control.cpp:1882
 #: pcbnew/widgets/pcb_properties_panel.cpp:273
 #: pcbnew/widgets/search_handlers.cpp:177 pcbnew/zone.cpp:805
 #: pcbnew/zone.cpp:1929 pcbnew/zone_manager/dialog_zone_manager_base.cpp:42
@@ -18899,12 +18899,12 @@ msgid "Exclude From Simulation"
 msgstr ""
 
 #: eeschema/sch_sheet.cpp:1736 eeschema/sch_symbol.cpp:1101
-#: eeschema/sch_symbol.cpp:3051 pcbnew/footprint.cpp:4116
+#: eeschema/sch_symbol.cpp:3051 pcbnew/footprint.cpp:4125
 msgid "Exclude From Bill of Materials"
 msgstr ""
 
 #: eeschema/sch_sheet.cpp:1740 eeschema/sch_symbol.cpp:1102
-#: eeschema/sch_symbol.cpp:3054 pcbnew/footprint.cpp:4119
+#: eeschema/sch_symbol.cpp:3054 pcbnew/footprint.cpp:4128
 msgid "Do not Populate"
 msgstr ""
 
@@ -18959,7 +18959,7 @@ msgstr ""
 msgid "Mirror Y"
 msgstr ""
 
-#: eeschema/sch_symbol.cpp:3007 pcbnew/footprint.cpp:4093
+#: eeschema/sch_symbol.cpp:3007 pcbnew/footprint.cpp:4102
 msgid "Library Link"
 msgstr ""
 
@@ -22601,7 +22601,7 @@ msgstr ""
 
 #: eeschema/tools/ee_inspection_tool.cpp:574
 #: pagelayout_editor/tools/pl_editor_control.cpp:160
-#: pcbnew/tools/pcb_control.cpp:1665
+#: pcbnew/tools/pcb_control.cpp:1676
 msgid "UUID"
 msgstr ""
 
@@ -23516,7 +23516,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:50
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:100
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:169
-#: pcbnew/footprint.cpp:4075 pcbnew/footprint.cpp:4078
+#: pcbnew/footprint.cpp:4084 pcbnew/footprint.cpp:4087
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2137 pcbnew/pad.cpp:1303
 #: pcbnew/pad.cpp:2536 pcbnew/pcb_dimension.cpp:661
 #: pcbnew/pcb_dimension.cpp:1457 pcbnew/pcb_fields_grid_table.cpp:150
@@ -27015,6 +27015,14 @@ msgstr ""
 
 #: kicad/widgets/filedlg_new_project.h:32
 msgid "Create a new folder for the project"
+msgstr ""
+
+#: libs/kimath/src/geometry/roundrect.cpp:60
+msgid "Roundrect radius is larger than the rectangle's major dimension"
+msgstr ""
+
+#: libs/kimath/src/geometry/roundrect.cpp:65
+msgid "Roundrect radius must be non-negative"
 msgstr ""
 
 #: libs/kiplatform/os/windows/environment.cpp:72
@@ -30731,7 +30739,7 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:301 pcbnew/files.cpp:583
-#: pcbnew/tools/pcb_control.cpp:1506
+#: pcbnew/tools/pcb_control.cpp:1517
 msgid "Loading PCB"
 msgstr ""
 
@@ -31266,7 +31274,7 @@ msgid ""
 "This setting can be overridden by local  pad settings"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4049
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4058
 #: pcbnew/pad.cpp:2521 pcbnew/zone.cpp:1829
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Thermal reliefs"
@@ -36421,7 +36429,7 @@ msgstr ""
 #: pcbnew/router/router_tool.cpp:2759 pcbnew/router/router_tool.cpp:2764
 #: pcbnew/router/router_tool.cpp:2769 pcbnew/router/router_tool.cpp:2780
 #: pcbnew/router/router_tool.cpp:2788 pcbnew/router/router_tool.cpp:2793
-#: pcbnew/tools/pcb_control.cpp:1702 pcbnew/tools/pcb_control.cpp:1712
+#: pcbnew/tools/pcb_control.cpp:1713 pcbnew/tools/pcb_control.cpp:1723
 #: pcbnew/zone.cpp:874
 #, c-format
 msgid "(from %s)"
@@ -39814,7 +39822,7 @@ msgid "'%s' settings differ."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:619
-#: pcbnew/footprint.cpp:4126
+#: pcbnew/footprint.cpp:4135
 msgid "Exempt From Courtyard Requirement"
 msgstr ""
 
@@ -40547,7 +40555,7 @@ msgstr ""
 msgid "Attributes:"
 msgstr ""
 
-#: pcbnew/footprint.cpp:1722 pcbnew/footprint.cpp:4105 pcbnew/zone.cpp:1861
+#: pcbnew/footprint.cpp:1722 pcbnew/footprint.cpp:4114 pcbnew/zone.cpp:1861
 msgid "Component Class"
 msgstr "கூறு வகுப்பு"
 
@@ -40589,39 +40597,39 @@ msgstr ""
 msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr ""
 
-#: pcbnew/footprint.cpp:4047 pcbnew/pad.cpp:2519 pcbnew/zone.cpp:1827
+#: pcbnew/footprint.cpp:4056 pcbnew/pad.cpp:2519 pcbnew/zone.cpp:1827
 msgid "Inherited"
 msgstr ""
 
-#: pcbnew/footprint.cpp:4051 pcbnew/pad.cpp:2523 pcbnew/zone.cpp:1831
+#: pcbnew/footprint.cpp:4060 pcbnew/pad.cpp:2523 pcbnew/zone.cpp:1831
 msgid "Thermal reliefs for PTH"
 msgstr ""
 
-#: pcbnew/footprint.cpp:4111
+#: pcbnew/footprint.cpp:4120
 msgid "Not in Schematic"
 msgstr ""
 
-#: pcbnew/footprint.cpp:4113
+#: pcbnew/footprint.cpp:4122
 msgid "Exclude From Position Files"
 msgstr ""
 
-#: pcbnew/footprint.cpp:4123 pcbnew/pad.cpp:2688
+#: pcbnew/footprint.cpp:4132 pcbnew/pad.cpp:2688
 msgid "Overrides"
 msgstr ""
 
-#: pcbnew/footprint.cpp:4130 pcbnew/pad.cpp:2691
+#: pcbnew/footprint.cpp:4139 pcbnew/pad.cpp:2691
 msgid "Clearance Override"
 msgstr ""
 
-#: pcbnew/footprint.cpp:4135 pcbnew/pad.cpp:2701
+#: pcbnew/footprint.cpp:4144 pcbnew/pad.cpp:2701
 msgid "Solderpaste Margin Override"
 msgstr ""
 
-#: pcbnew/footprint.cpp:4140 pcbnew/pad.cpp:2706
+#: pcbnew/footprint.cpp:4149 pcbnew/pad.cpp:2706
 msgid "Solderpaste Margin Ratio Override"
 msgstr ""
 
-#: pcbnew/footprint.cpp:4146 pcbnew/pad.cpp:2712
+#: pcbnew/footprint.cpp:4155 pcbnew/pad.cpp:2712
 msgid "Zone Connection Style"
 msgstr ""
 
@@ -43502,7 +43510,7 @@ msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr ""
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2527
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7252
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7249
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
@@ -43667,7 +43675,7 @@ msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
 msgstr ""
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3150
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6298
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6295
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -43690,7 +43698,7 @@ msgid ""
 "offset: %d."
 msgstr ""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5143
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5140
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -43698,7 +43706,7 @@ msgid ""
 "line: %d offset: %d"
 msgstr ""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5162
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5159
 #, c-format
 msgid ""
 "Net name doesn't match ID in\n"
@@ -43706,7 +43714,7 @@ msgid ""
 "line: %d offset: %d"
 msgstr ""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5493
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5490
 #, c-format
 msgid ""
 "Invalid zero-sized pad pinned to %s in\n"
@@ -43715,8 +43723,8 @@ msgid ""
 "offset: %d"
 msgstr ""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5615
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6552
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5612
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6549
 #, c-format
 msgid ""
 "Invalid padstack layer in\n"
@@ -43729,13 +43737,13 @@ msgstr ""
 " வரி: %d\n"
 " ஆஃப்செட்: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5630
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6567
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5627
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6564
 #, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
 msgstr "வரி %d இல் ' %s' கோப்பில் தவறான பேட்ச்டாக் லேயர் ' %s', ஆஃப்செட் %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6203
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6200
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -43744,7 +43752,7 @@ msgid ""
 "offset: %d."
 msgstr ""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6403
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6400
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -43753,7 +43761,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6658
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6655
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -43762,7 +43770,7 @@ msgid ""
 "offset: %d."
 msgstr ""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7222
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7219
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
@@ -44605,7 +44613,7 @@ msgstr ""
 msgid "Diff Pair Gap: %s"
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:2778 pcbnew/tools/pcb_control.cpp:1711
+#: pcbnew/router/router_tool.cpp:2778 pcbnew/tools/pcb_control.cpp:1722
 #, c-format
 msgid "DP Max Uncoupled-length: %s"
 msgstr ""
@@ -45506,7 +45514,7 @@ msgid "Dogbone Corner Settings"
 msgstr "டாக் போன் மூலையில் அமைப்புகள்"
 
 #: pcbnew/tools/edit_tool.cpp:1341
-#: pcbnew/tools/item_modification_routine.cpp:197
+#: pcbnew/tools/item_modification_routine.cpp:199
 msgid "Chamfer Lines"
 msgstr ""
 
@@ -45523,7 +45531,7 @@ msgid "A shape with at least two lines must be selected."
 msgstr ""
 
 #: pcbnew/tools/edit_tool.cpp:1523
-#: pcbnew/tools/item_modification_routine.cpp:102
+#: pcbnew/tools/item_modification_routine.cpp:104
 msgid "Fillet Lines"
 msgstr ""
 
@@ -45671,107 +45679,107 @@ msgstr ""
 msgid "Remove Group Items"
 msgstr "குழு உருப்படிகளை அகற்று"
 
-#: pcbnew/tools/item_modification_routine.cpp:110
+#: pcbnew/tools/item_modification_routine.cpp:112
 msgid "Unable to fillet the selected lines."
 msgstr ""
 
-#: pcbnew/tools/item_modification_routine.cpp:114
+#: pcbnew/tools/item_modification_routine.cpp:116
 msgid "Some of the lines could not be filleted."
 msgstr ""
 
-#: pcbnew/tools/item_modification_routine.cpp:205
+#: pcbnew/tools/item_modification_routine.cpp:207
 msgid "Unable to chamfer the selected lines."
 msgstr ""
 
-#: pcbnew/tools/item_modification_routine.cpp:209
+#: pcbnew/tools/item_modification_routine.cpp:211
 msgid "Some of the lines could not be chamfered."
 msgstr ""
 
-#: pcbnew/tools/item_modification_routine.cpp:264
+#: pcbnew/tools/item_modification_routine.cpp:266
 msgid "Dogbone Corners"
 msgstr "டாக் போன் மூலைகள்"
 
-#: pcbnew/tools/item_modification_routine.cpp:274
+#: pcbnew/tools/item_modification_routine.cpp:276
 msgid "Unable to add dogbone corners to the selected lines."
 msgstr "தேர்ந்தெடுக்கப்பட்ட வரிகளில் டாக் போன் மூலைகளைச் சேர்க்க முடியவில்லை."
 
-#: pcbnew/tools/item_modification_routine.cpp:278
+#: pcbnew/tools/item_modification_routine.cpp:280
 msgid "Some of the lines could not have dogbone corners added."
 msgstr "சில வரிகளில் டாக் போன் மூலைகள் சேர்க்க முடியாது."
 
-#: pcbnew/tools/item_modification_routine.cpp:286
+#: pcbnew/tools/item_modification_routine.cpp:288
 msgid ""
 "Some of the dogbone corners are too narrow to fit a cutter of the specified "
 "radius."
 msgstr ""
 "சில டாக் போன் மூலைகள் குறிப்பிட்ட ஆரம் ஒரு கட்டருக்கு பொருந்தும் வகையில் மிகக் குறுகியவை."
 
-#: pcbnew/tools/item_modification_routine.cpp:290
+#: pcbnew/tools/item_modification_routine.cpp:292
 msgid " Consider enabling the 'Add Slots' option."
 msgstr " 'ச்லாட்டுகளைச் சேர்' விருப்பத்தை இயக்குவதைக் கவனியுங்கள்."
 
-#: pcbnew/tools/item_modification_routine.cpp:292
+#: pcbnew/tools/item_modification_routine.cpp:294
 msgid " Slots were added."
 msgstr " இடங்கள் சேர்க்கப்பட்டன."
 
-#: pcbnew/tools/item_modification_routine.cpp:383
+#: pcbnew/tools/item_modification_routine.cpp:385
 #: pcbnew/tools/pcb_actions.cpp:637
 msgid "Extend Lines to Meet"
 msgstr ""
 
-#: pcbnew/tools/item_modification_routine.cpp:391
+#: pcbnew/tools/item_modification_routine.cpp:393
 msgid "Unable to extend the selected lines to meet."
 msgstr ""
 
-#: pcbnew/tools/item_modification_routine.cpp:395
+#: pcbnew/tools/item_modification_routine.cpp:397
 msgid "Some of the lines could not be extended to meet."
 msgstr ""
 
-#: pcbnew/tools/item_modification_routine.cpp:554
+#: pcbnew/tools/item_modification_routine.cpp:556
 msgid "Merge polygons."
 msgstr ""
 
-#: pcbnew/tools/item_modification_routine.cpp:562
+#: pcbnew/tools/item_modification_routine.cpp:564
 msgid "Unable to merge the selected polygons."
 msgstr ""
 
-#: pcbnew/tools/item_modification_routine.cpp:566
+#: pcbnew/tools/item_modification_routine.cpp:568
 msgid "Some of the polygons could not be merged."
 msgstr ""
 
-#: pcbnew/tools/item_modification_routine.cpp:581
+#: pcbnew/tools/item_modification_routine.cpp:583
 msgid "Subtract polygons."
 msgstr ""
 
-#: pcbnew/tools/item_modification_routine.cpp:589
+#: pcbnew/tools/item_modification_routine.cpp:591
 msgid "Unable to subtract the selected polygons."
 msgstr ""
 
-#: pcbnew/tools/item_modification_routine.cpp:593
+#: pcbnew/tools/item_modification_routine.cpp:595
 msgid "Some of the polygons could not be subtracted."
 msgstr ""
 
-#: pcbnew/tools/item_modification_routine.cpp:622
+#: pcbnew/tools/item_modification_routine.cpp:624
 msgid "Intersect polygons."
 msgstr ""
 
-#: pcbnew/tools/item_modification_routine.cpp:630
+#: pcbnew/tools/item_modification_routine.cpp:632
 msgid "Unable to intersect the selected polygons."
 msgstr ""
 
-#: pcbnew/tools/item_modification_routine.cpp:634
+#: pcbnew/tools/item_modification_routine.cpp:636
 msgid "Some of the polygons could not be intersected."
 msgstr ""
 
-#: pcbnew/tools/item_modification_routine.cpp:661
+#: pcbnew/tools/item_modification_routine.cpp:663
 msgid "Outset items."
 msgstr "தொடக்க உருப்படிகள்."
 
-#: pcbnew/tools/item_modification_routine.cpp:668
+#: pcbnew/tools/item_modification_routine.cpp:670
 msgid "Unable to outset the selected items."
 msgstr "தேர்ந்தெடுக்கப்பட்ட உருப்படிகளைத் தொடங்க முடியவில்லை."
 
-#: pcbnew/tools/item_modification_routine.cpp:672
+#: pcbnew/tools/item_modification_routine.cpp:674
 msgid "Some of the items could not be outset."
 msgstr "சில உருப்படிகள் தொடங்க முடியாது."
 
@@ -47683,65 +47691,65 @@ msgstr ""
 msgid "Paste Text"
 msgstr "உரையை ஒட்டவும்"
 
-#: pcbnew/tools/pcb_control.cpp:1231
+#: pcbnew/tools/pcb_control.cpp:1242
 msgid "Invalid clipboard contents"
 msgstr ""
 
-#: pcbnew/tools/pcb_control.cpp:1514
+#: pcbnew/tools/pcb_control.cpp:1525
 msgid "Error loading board."
 msgstr "பிழை ஏற்றுதல் போர்டு."
 
-#: pcbnew/tools/pcb_control.cpp:1548
+#: pcbnew/tools/pcb_control.cpp:1559
 msgid "Append Board"
 msgstr ""
 
-#: pcbnew/tools/pcb_control.cpp:1609
+#: pcbnew/tools/pcb_control.cpp:1620
 msgid "Active Layer"
 msgstr ""
 
-#: pcbnew/tools/pcb_control.cpp:1610 pcbnew/widgets/appearance_controls.cpp:373
+#: pcbnew/tools/pcb_control.cpp:1621 pcbnew/widgets/appearance_controls.cpp:373
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 msgid "All Layers"
 msgstr ""
 
-#: pcbnew/tools/pcb_control.cpp:1622
+#: pcbnew/tools/pcb_control.cpp:1633
 msgid "Object Snapping"
 msgstr ""
 
-#: pcbnew/tools/pcb_control.cpp:1701
+#: pcbnew/tools/pcb_control.cpp:1712
 #, c-format
 msgid "DP Gap Constraints: %s"
 msgstr ""
 
-#: pcbnew/tools/pcb_control.cpp:1742
+#: pcbnew/tools/pcb_control.cpp:1753
 msgid "Resolved clearance"
 msgstr ""
 
-#: pcbnew/tools/pcb_control.cpp:1752
+#: pcbnew/tools/pcb_control.cpp:1763
 msgid "Actual clearance"
 msgstr ""
 
-#: pcbnew/tools/pcb_control.cpp:1795
+#: pcbnew/tools/pcb_control.cpp:1806
 msgid "Resolved hole clearance"
 msgstr ""
 
-#: pcbnew/tools/pcb_control.cpp:1800
+#: pcbnew/tools/pcb_control.cpp:1811
 msgid "Actual hole clearance"
 msgstr ""
 
-#: pcbnew/tools/pcb_control.cpp:1833
+#: pcbnew/tools/pcb_control.cpp:1844
 msgid "Resolved edge clearance"
 msgstr ""
 
-#: pcbnew/tools/pcb_control.cpp:1838
+#: pcbnew/tools/pcb_control.cpp:1849
 msgid "Resolved margin clearance"
 msgstr ""
 
-#: pcbnew/tools/pcb_control.cpp:1849
+#: pcbnew/tools/pcb_control.cpp:1860
 msgid "Selected Items"
 msgstr ""
 
-#: pcbnew/tools/pcb_control.cpp:1920
+#: pcbnew/tools/pcb_control.cpp:1931
 #, fuzzy
 msgid "Selected 2D Length"
 msgstr "3D மாதிரியைத் தேர்ந்தெடுக்கவும்"

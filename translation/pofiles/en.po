@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-07 02:35+0300\n"
+"POT-Creation-Date: 2025-02-08 00:06+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -19177,6 +19177,12 @@ msgstr "Unable to parse update response: %s"
 
 msgid "Create a new folder for the project"
 msgstr "Create a new folder for the project"
+
+msgid "Roundrect radius is larger than the rectangle's major dimension"
+msgstr "Roundrect radius is larger than the rectangle's major dimension"
+
+msgid "Roundrect radius must be non-negative"
+msgstr "Roundrect radius must be non-negative"
 
 #, c-format
 msgid "Error code: %d"

@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-07 02:35+0300\n"
+"POT-Creation-Date: 2025-02-08 00:06+0300\n"
 "PO-Revision-Date: 2025-02-06 23:35+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
@@ -3288,7 +3288,7 @@ msgstr "Параметр"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:169
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:48
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:57
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:439 pcbnew/footprint.cpp:4089
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:439 pcbnew/footprint.cpp:4098
 #: pcbnew/footprint_wizard_frame.cpp:326 pcbnew/pcb_dimension.cpp:605
 #: pcbnew/pcb_fields_grid_table.cpp:144 pcbnew/plot_board_layers.cpp:107
 #: pcbnew/widgets/search_handlers.cpp:119
@@ -5079,7 +5079,7 @@ msgstr "Масштаб"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1099
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:583
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:854
-#: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4048
+#: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4057
 #: pcbnew/pad.cpp:2501 pcbnew/pad.cpp:2520 pcbnew/pcb_dimension.cpp:1973
 #: pcbnew/widgets/appearance_controls.cpp:729
 #: pcbnew/widgets/appearance_controls.cpp:771
@@ -5313,7 +5313,7 @@ msgstr "<Не определено>"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:854 pcbnew/footprint.cpp:4050
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:854 pcbnew/footprint.cpp:4059
 #: pcbnew/pad.cpp:2522 pcbnew/pcb_table.cpp:533 pcbnew/pcb_textbox.cpp:795
 #: pcbnew/zone.cpp:857 pcbnew/zone.cpp:1830
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
@@ -6590,7 +6590,7 @@ msgstr "Снизу"
 #: eeschema/sch_text.cpp:784 eeschema/sch_textbox.cpp:714
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
-#: pcbnew/footprint.cpp:4080 pcbnew/pad.cpp:2539 pcbnew/pcb_dimension.cpp:1756
+#: pcbnew/footprint.cpp:4089 pcbnew/pad.cpp:2539 pcbnew/pcb_dimension.cpp:1756
 #: pcbnew/pcb_dimension.cpp:1831 pcbnew/pcb_fields_grid_table.cpp:151
 #: pcbnew/pcb_tablecell.cpp:207 pcbnew/zone.cpp:2001
 msgid "Orientation"
@@ -7140,7 +7140,7 @@ msgstr "Копировать содержимое выбранных ячеек 
 #: common/widgets/listbox_tricks.cpp:51
 #: eeschema/tools/sch_editor_control.cpp:2281
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1020
-#: pcbnew/dialogs/panel_setup_rules.cpp:132 pcbnew/tools/pcb_control.cpp:1238
+#: pcbnew/dialogs/panel_setup_rules.cpp:132 pcbnew/tools/pcb_control.cpp:1249
 msgid "Paste"
 msgstr "Вставить"
 
@@ -8426,7 +8426,7 @@ msgstr "Правка по умолчанию"
 #: eeschema/dialogs/dialog_sim_model_base.cpp:271 eeschema/sch_symbol.cpp:2060
 #: eeschema/sch_symbol.cpp:2114 eeschema/sch_symbol.cpp:3001
 #: eeschema/widgets/search_handlers.cpp:160
-#: eeschema/widgets/search_handlers.cpp:246 pcbnew/footprint.cpp:4086
+#: eeschema/widgets/search_handlers.cpp:246 pcbnew/footprint.cpp:4095
 #: pcbnew/widgets/search_handlers.cpp:118
 msgid "Reference"
 msgstr "Обозначение"
@@ -8448,7 +8448,7 @@ msgstr "Группировать по значению и посад. месту
 #: eeschema/tools/sch_edit_tool.cpp:551
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:179
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
-#: pcbnew/footprint.cpp:4109
+#: pcbnew/footprint.cpp:4118
 msgid "Attributes"
 msgstr "Атрибуты"
 
@@ -10344,7 +10344,7 @@ msgstr "'%s' — неверное посад. место."
 #: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2109
 #: eeschema/sch_symbol.cpp:2685 eeschema/sch_symbol.cpp:3013
 #: eeschema/symbol_editor/symbol_editor.cpp:1629
-#: eeschema/symbol_viewer_frame.cpp:462 pcbnew/footprint.cpp:4099
+#: eeschema/symbol_viewer_frame.cpp:462 pcbnew/footprint.cpp:4108
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:133
 msgid "Keywords"
 msgstr "Ключевые слова"
@@ -10857,7 +10857,7 @@ msgid "Enter a description for the library:"
 msgstr "Введите описание библиотеки:"
 
 #: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:3010
-#: pcbnew/footprint.cpp:4096 pcbnew/plot_board_layers.cpp:129
+#: pcbnew/footprint.cpp:4105 pcbnew/plot_board_layers.cpp:129
 msgid "Library Description"
 msgstr "Описание библиотеки"
 
@@ -12589,7 +12589,7 @@ msgstr "Показать окно справки по синтаксису"
 #: eeschema/sch_symbol.cpp:2999
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:28
-#: pcbnew/footprint.cpp:4084
+#: pcbnew/footprint.cpp:4093
 msgid "Fields"
 msgstr "Поля"
 
@@ -18160,7 +18160,7 @@ msgstr "Тип элемента шины"
 #: eeschema/sch_bus_entry.cpp:543 eeschema/sch_junction.cpp:319
 #: eeschema/sch_label.cpp:1227 eeschema/sch_line.cpp:951
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2134 pcbnew/pad.cpp:1295
-#: pcbnew/pcb_track.cpp:1667 pcbnew/tools/pcb_control.cpp:1874
+#: pcbnew/pcb_track.cpp:1667 pcbnew/tools/pcb_control.cpp:1885
 #: pcbnew/zone.cpp:807
 msgid "Resolved Netclass"
 msgstr "Разрешенный класс цепи"
@@ -19241,7 +19241,7 @@ msgstr "Выравнивание"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:478
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2130 pcbnew/pad.cpp:1293
 #: pcbnew/pad.cpp:2574 pcbnew/pcb_shape.cpp:923 pcbnew/pcb_tablecell.cpp:186
-#: pcbnew/pcb_track.cpp:1665 pcbnew/tools/pcb_control.cpp:1871
+#: pcbnew/pcb_track.cpp:1665 pcbnew/tools/pcb_control.cpp:1882
 #: pcbnew/widgets/pcb_properties_panel.cpp:273
 #: pcbnew/widgets/search_handlers.cpp:177 pcbnew/zone.cpp:805
 #: pcbnew/zone.cpp:1929 pcbnew/zone_manager/dialog_zone_manager_base.cpp:42
@@ -19580,12 +19580,12 @@ msgid "Exclude From Simulation"
 msgstr "Исключить из симуляции"
 
 #: eeschema/sch_sheet.cpp:1736 eeschema/sch_symbol.cpp:1101
-#: eeschema/sch_symbol.cpp:3051 pcbnew/footprint.cpp:4116
+#: eeschema/sch_symbol.cpp:3051 pcbnew/footprint.cpp:4125
 msgid "Exclude From Bill of Materials"
 msgstr "Исключить из перечня элементов"
 
 #: eeschema/sch_sheet.cpp:1740 eeschema/sch_symbol.cpp:1102
-#: eeschema/sch_symbol.cpp:3054 pcbnew/footprint.cpp:4119
+#: eeschema/sch_symbol.cpp:3054 pcbnew/footprint.cpp:4128
 msgid "Do not Populate"
 msgstr "Не устанавливать (DNP)"
 
@@ -19640,7 +19640,7 @@ msgstr "Отразить по X"
 msgid "Mirror Y"
 msgstr "Отразить по Y"
 
-#: eeschema/sch_symbol.cpp:3007 pcbnew/footprint.cpp:4093
+#: eeschema/sch_symbol.cpp:3007 pcbnew/footprint.cpp:4102
 msgid "Library Link"
 msgstr "Ссылка библиотеки"
 
@@ -23575,7 +23575,7 @@ msgstr "Документация не указана."
 
 #: eeschema/tools/ee_inspection_tool.cpp:574
 #: pagelayout_editor/tools/pl_editor_control.cpp:160
-#: pcbnew/tools/pcb_control.cpp:1665
+#: pcbnew/tools/pcb_control.cpp:1676
 msgid "UUID"
 msgstr "UUID"
 
@@ -24506,7 +24506,7 @@ msgstr "Выбор слоя: %s"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:50
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:100
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:169
-#: pcbnew/footprint.cpp:4075 pcbnew/footprint.cpp:4078
+#: pcbnew/footprint.cpp:4084 pcbnew/footprint.cpp:4087
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2137 pcbnew/pad.cpp:1303
 #: pcbnew/pad.cpp:2536 pcbnew/pcb_dimension.cpp:661
 #: pcbnew/pcb_dimension.cpp:1457 pcbnew/pcb_fields_grid_table.cpp:150
@@ -28132,6 +28132,14 @@ msgstr "Не удалось разобрать ответ об обновлен�
 #: kicad/widgets/filedlg_new_project.h:32
 msgid "Create a new folder for the project"
 msgstr "Создать новый каталог для проекта"
+
+#: libs/kimath/src/geometry/roundrect.cpp:60
+msgid "Roundrect radius is larger than the rectangle's major dimension"
+msgstr ""
+
+#: libs/kimath/src/geometry/roundrect.cpp:65
+msgid "Roundrect radius must be non-negative"
+msgstr ""
 
 #: libs/kiplatform/os/windows/environment.cpp:72
 #, c-format
@@ -32135,7 +32143,7 @@ msgstr ""
 "Не удалось загрузить соответствующий файл проекта %s"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:301 pcbnew/files.cpp:583
-#: pcbnew/tools/pcb_control.cpp:1506
+#: pcbnew/tools/pcb_control.cpp:1517
 msgid "Loading PCB"
 msgstr "Загрузка платы"
 
@@ -32693,7 +32701,7 @@ msgstr ""
 "Тип соединения конт. пл. с зоной по умолчанию.\n"
 "Эта настройка может быть переопределена локальной настройкой конт. пл."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4049
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4058
 #: pcbnew/pad.cpp:2521 pcbnew/zone.cpp:1829
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Thermal reliefs"
@@ -38098,7 +38106,7 @@ msgstr "Целевой перекос: "
 #: pcbnew/router/router_tool.cpp:2759 pcbnew/router/router_tool.cpp:2764
 #: pcbnew/router/router_tool.cpp:2769 pcbnew/router/router_tool.cpp:2780
 #: pcbnew/router/router_tool.cpp:2788 pcbnew/router/router_tool.cpp:2793
-#: pcbnew/tools/pcb_control.cpp:1702 pcbnew/tools/pcb_control.cpp:1712
+#: pcbnew/tools/pcb_control.cpp:1713 pcbnew/tools/pcb_control.cpp:1723
 #: pcbnew/zone.cpp:874
 #, c-format
 msgid "(from %s)"
@@ -41791,7 +41799,7 @@ msgid "'%s' settings differ."
 msgstr "Значения '%s' отличаются."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:619
-#: pcbnew/footprint.cpp:4126
+#: pcbnew/footprint.cpp:4135
 msgid "Exempt From Courtyard Requirement"
 msgstr "Не учитывать область установки в DRC"
 
@@ -42549,7 +42557,7 @@ msgstr "Статус: "
 msgid "Attributes:"
 msgstr "Атрибуты:"
 
-#: pcbnew/footprint.cpp:1722 pcbnew/footprint.cpp:4105 pcbnew/zone.cpp:1861
+#: pcbnew/footprint.cpp:1722 pcbnew/footprint.cpp:4114 pcbnew/zone.cpp:1861
 msgid "Component Class"
 msgstr "Класс компонентов"
 
@@ -42593,39 +42601,39 @@ msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr ""
 "(конт. пл. %s присутствует более чем в одной группе связки цепей конт. пл.)"
 
-#: pcbnew/footprint.cpp:4047 pcbnew/pad.cpp:2519 pcbnew/zone.cpp:1827
+#: pcbnew/footprint.cpp:4056 pcbnew/pad.cpp:2519 pcbnew/zone.cpp:1827
 msgid "Inherited"
 msgstr "Унаследовано"
 
-#: pcbnew/footprint.cpp:4051 pcbnew/pad.cpp:2523 pcbnew/zone.cpp:1831
+#: pcbnew/footprint.cpp:4060 pcbnew/pad.cpp:2523 pcbnew/zone.cpp:1831
 msgid "Thermal reliefs for PTH"
 msgstr "Терморазгрузка для выводных конт. пл."
 
-#: pcbnew/footprint.cpp:4111
+#: pcbnew/footprint.cpp:4120
 msgid "Not in Schematic"
 msgstr "Нет на схеме"
 
-#: pcbnew/footprint.cpp:4113
+#: pcbnew/footprint.cpp:4122
 msgid "Exclude From Position Files"
 msgstr "Исключить из файлов размещения"
 
-#: pcbnew/footprint.cpp:4123 pcbnew/pad.cpp:2688
+#: pcbnew/footprint.cpp:4132 pcbnew/pad.cpp:2688
 msgid "Overrides"
 msgstr "Переопределения"
 
-#: pcbnew/footprint.cpp:4130 pcbnew/pad.cpp:2691
+#: pcbnew/footprint.cpp:4139 pcbnew/pad.cpp:2691
 msgid "Clearance Override"
 msgstr "Установка зазора"
 
-#: pcbnew/footprint.cpp:4135 pcbnew/pad.cpp:2701
+#: pcbnew/footprint.cpp:4144 pcbnew/pad.cpp:2701
 msgid "Solderpaste Margin Override"
 msgstr "Установка отступов паяльной пасты"
 
-#: pcbnew/footprint.cpp:4140 pcbnew/pad.cpp:2706
+#: pcbnew/footprint.cpp:4149 pcbnew/pad.cpp:2706
 msgid "Solderpaste Margin Ratio Override"
 msgstr "Установка относительных отступов паяльной пасты"
 
-#: pcbnew/footprint.cpp:4146 pcbnew/pad.cpp:2712
+#: pcbnew/footprint.cpp:4155 pcbnew/pad.cpp:2712
 msgid "Zone Connection Style"
 msgstr "Стиль соединения с зоной"
 
@@ -45759,7 +45767,7 @@ msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "Плохой ZSmoothing для CZONE_CONTAINER \"%s\""
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2527
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7252
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7249
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
@@ -45944,7 +45952,7 @@ msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
 msgstr "Дубликат имени NETCLASS '%s' в файле '%s' в строке %d, позиция %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3150
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6298
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6295
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -45975,7 +45983,7 @@ msgstr ""
 "строка: %d\n"
 "позиция: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5143
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5140
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -45987,7 +45995,7 @@ msgstr ""
 "строка: %d\n"
 "позиция: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5162
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5159
 #, c-format
 msgid ""
 "Net name doesn't match ID in\n"
@@ -45999,7 +46007,7 @@ msgstr ""
 "строка: %d\n"
 "позиция: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5493
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5490
 #, c-format
 msgid ""
 "Invalid zero-sized pad pinned to %s in\n"
@@ -46012,8 +46020,8 @@ msgstr ""
 "строка: %d\n"
 "позиция: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5615
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6552
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5612
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6549
 #, c-format
 msgid ""
 "Invalid padstack layer in\n"
@@ -46026,13 +46034,13 @@ msgstr ""
 "строка: %d\n"
 "смещение: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5630
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6567
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5627
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6564
 #, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
 msgstr "Недопустимый слой padstack '%s' в файле '%s' в строке %d, смещение %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6203
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6200
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -46045,7 +46053,7 @@ msgstr ""
 "строка: %d\n"
 "позиция: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6403
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6400
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -46058,7 +46066,7 @@ msgstr ""
 "строка: %d\n"
 "позиция: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6658
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6655
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -46071,7 +46079,7 @@ msgstr ""
 "строка: %d\n"
 "позиция: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7222
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7219
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
@@ -46947,7 +46955,7 @@ msgstr "Ширина дорожки: %s"
 msgid "Diff Pair Gap: %s"
 msgstr "Зазор диф.пары: %s"
 
-#: pcbnew/router/router_tool.cpp:2778 pcbnew/tools/pcb_control.cpp:1711
+#: pcbnew/router/router_tool.cpp:2778 pcbnew/tools/pcb_control.cpp:1722
 #, c-format
 msgid "DP Max Uncoupled-length: %s"
 msgstr "Макс. разрешенная длина диф.пары без взаимной связи: %s"
@@ -47867,7 +47875,7 @@ msgid "Dogbone Corner Settings"
 msgstr "Угловые установки для собак"
 
 #: pcbnew/tools/edit_tool.cpp:1341
-#: pcbnew/tools/item_modification_routine.cpp:197
+#: pcbnew/tools/item_modification_routine.cpp:199
 msgid "Chamfer Lines"
 msgstr "Фаска линий"
 
@@ -47884,7 +47892,7 @@ msgid "A shape with at least two lines must be selected."
 msgstr "Необходимо выбрать фигуру, состоящую как минимум из двух линий."
 
 #: pcbnew/tools/edit_tool.cpp:1523
-#: pcbnew/tools/item_modification_routine.cpp:102
+#: pcbnew/tools/item_modification_routine.cpp:104
 msgid "Fillet Lines"
 msgstr "Скруглить линии"
 
@@ -48036,35 +48044,35 @@ msgstr "Разгруппировать элементы"
 msgid "Remove Group Items"
 msgstr "Удалить элементы группы"
 
-#: pcbnew/tools/item_modification_routine.cpp:110
+#: pcbnew/tools/item_modification_routine.cpp:112
 msgid "Unable to fillet the selected lines."
 msgstr "Не удалось скруглить выбранные линии."
 
-#: pcbnew/tools/item_modification_routine.cpp:114
+#: pcbnew/tools/item_modification_routine.cpp:116
 msgid "Some of the lines could not be filleted."
 msgstr "Не все линии удалось скруглить."
 
-#: pcbnew/tools/item_modification_routine.cpp:205
+#: pcbnew/tools/item_modification_routine.cpp:207
 msgid "Unable to chamfer the selected lines."
 msgstr "Не удалось скруглить выбранные линии."
 
-#: pcbnew/tools/item_modification_routine.cpp:209
+#: pcbnew/tools/item_modification_routine.cpp:211
 msgid "Some of the lines could not be chamfered."
 msgstr "Не все линии удалось скруглить."
 
-#: pcbnew/tools/item_modification_routine.cpp:264
+#: pcbnew/tools/item_modification_routine.cpp:266
 msgid "Dogbone Corners"
 msgstr "Углы собачьей кости"
 
-#: pcbnew/tools/item_modification_routine.cpp:274
+#: pcbnew/tools/item_modification_routine.cpp:276
 msgid "Unable to add dogbone corners to the selected lines."
 msgstr "Невозможно добавить углы собачьих костей к выбранным линиям."
 
-#: pcbnew/tools/item_modification_routine.cpp:278
+#: pcbnew/tools/item_modification_routine.cpp:280
 msgid "Some of the lines could not have dogbone corners added."
 msgstr "Некоторые линии не могли быть дополнены костяными уголками."
 
-#: pcbnew/tools/item_modification_routine.cpp:286
+#: pcbnew/tools/item_modification_routine.cpp:288
 msgid ""
 "Some of the dogbone corners are too narrow to fit a cutter of the specified "
 "radius."
@@ -48072,72 +48080,72 @@ msgstr ""
 "Некоторые углы косточек слишком узкие, чтобы в них поместилась фреза "
 "указанного радиуса."
 
-#: pcbnew/tools/item_modification_routine.cpp:290
+#: pcbnew/tools/item_modification_routine.cpp:292
 msgid " Consider enabling the 'Add Slots' option."
 msgstr " Рассмотрите возможность включения опции \"Добавить слоты\"."
 
-#: pcbnew/tools/item_modification_routine.cpp:292
+#: pcbnew/tools/item_modification_routine.cpp:294
 msgid " Slots were added."
 msgstr " Были добавлены слоты."
 
-#: pcbnew/tools/item_modification_routine.cpp:383
+#: pcbnew/tools/item_modification_routine.cpp:385
 #: pcbnew/tools/pcb_actions.cpp:637
 msgid "Extend Lines to Meet"
 msgstr "Удлинить линии до пересечения"
 
-#: pcbnew/tools/item_modification_routine.cpp:391
+#: pcbnew/tools/item_modification_routine.cpp:393
 msgid "Unable to extend the selected lines to meet."
 msgstr "Не удалось продлить выбранные линии до пересечения."
 
-#: pcbnew/tools/item_modification_routine.cpp:395
+#: pcbnew/tools/item_modification_routine.cpp:397
 msgid "Some of the lines could not be extended to meet."
 msgstr "Не все линии удалось продлить до пересечения."
 
-#: pcbnew/tools/item_modification_routine.cpp:554
+#: pcbnew/tools/item_modification_routine.cpp:556
 msgid "Merge polygons."
 msgstr "Объединить полигоны."
 
-#: pcbnew/tools/item_modification_routine.cpp:562
+#: pcbnew/tools/item_modification_routine.cpp:564
 msgid "Unable to merge the selected polygons."
 msgstr "Не удалось объединить выбранные полигоны."
 
-#: pcbnew/tools/item_modification_routine.cpp:566
+#: pcbnew/tools/item_modification_routine.cpp:568
 msgid "Some of the polygons could not be merged."
 msgstr "Некоторые полигоны не удалось объединить."
 
-#: pcbnew/tools/item_modification_routine.cpp:581
+#: pcbnew/tools/item_modification_routine.cpp:583
 msgid "Subtract polygons."
 msgstr "Вычесть полигоны."
 
-#: pcbnew/tools/item_modification_routine.cpp:589
+#: pcbnew/tools/item_modification_routine.cpp:591
 msgid "Unable to subtract the selected polygons."
 msgstr "Не удалось вычесть выбранные полигоны."
 
-#: pcbnew/tools/item_modification_routine.cpp:593
+#: pcbnew/tools/item_modification_routine.cpp:595
 msgid "Some of the polygons could not be subtracted."
 msgstr "Некоторые полигоны не удалось вычесть."
 
-#: pcbnew/tools/item_modification_routine.cpp:622
+#: pcbnew/tools/item_modification_routine.cpp:624
 msgid "Intersect polygons."
 msgstr "Пересечение полигонов."
 
-#: pcbnew/tools/item_modification_routine.cpp:630
+#: pcbnew/tools/item_modification_routine.cpp:632
 msgid "Unable to intersect the selected polygons."
 msgstr "Не удалось пересечь выбранные полигоны."
 
-#: pcbnew/tools/item_modification_routine.cpp:634
+#: pcbnew/tools/item_modification_routine.cpp:636
 msgid "Some of the polygons could not be intersected."
 msgstr "Некоторые полигоны не удалось пересечь."
 
-#: pcbnew/tools/item_modification_routine.cpp:661
+#: pcbnew/tools/item_modification_routine.cpp:663
 msgid "Outset items."
 msgstr "Аутсетные предметы."
 
-#: pcbnew/tools/item_modification_routine.cpp:668
+#: pcbnew/tools/item_modification_routine.cpp:670
 msgid "Unable to outset the selected items."
 msgstr "Невозможно запустить выбранные элементы."
 
-#: pcbnew/tools/item_modification_routine.cpp:672
+#: pcbnew/tools/item_modification_routine.cpp:674
 msgid "Some of the items could not be outset."
 msgstr "Некоторые предметы не удалось достать."
 
@@ -50098,65 +50106,65 @@ msgstr ""
 msgid "Paste Text"
 msgstr "Вставить текст"
 
-#: pcbnew/tools/pcb_control.cpp:1231
+#: pcbnew/tools/pcb_control.cpp:1242
 msgid "Invalid clipboard contents"
 msgstr "Содержимое буфера обмена повреждено"
 
-#: pcbnew/tools/pcb_control.cpp:1514
+#: pcbnew/tools/pcb_control.cpp:1525
 msgid "Error loading board."
 msgstr "Ошибка загрузки платы."
 
-#: pcbnew/tools/pcb_control.cpp:1548
+#: pcbnew/tools/pcb_control.cpp:1559
 msgid "Append Board"
 msgstr "Добавить плату"
 
-#: pcbnew/tools/pcb_control.cpp:1609
+#: pcbnew/tools/pcb_control.cpp:1620
 msgid "Active Layer"
 msgstr "Активный слой"
 
-#: pcbnew/tools/pcb_control.cpp:1610 pcbnew/widgets/appearance_controls.cpp:373
+#: pcbnew/tools/pcb_control.cpp:1621 pcbnew/widgets/appearance_controls.cpp:373
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 msgid "All Layers"
 msgstr "Все слои"
 
-#: pcbnew/tools/pcb_control.cpp:1622
+#: pcbnew/tools/pcb_control.cpp:1633
 msgid "Object Snapping"
 msgstr "Привязка объектов"
 
-#: pcbnew/tools/pcb_control.cpp:1701
+#: pcbnew/tools/pcb_control.cpp:1712
 #, c-format
 msgid "DP Gap Constraints: %s"
 msgstr "Ограничения зазора диф.пары: %s"
 
-#: pcbnew/tools/pcb_control.cpp:1742
+#: pcbnew/tools/pcb_control.cpp:1753
 msgid "Resolved clearance"
 msgstr "Разрешенный зазор"
 
-#: pcbnew/tools/pcb_control.cpp:1752
+#: pcbnew/tools/pcb_control.cpp:1763
 msgid "Actual clearance"
 msgstr "Фактический зазор"
 
-#: pcbnew/tools/pcb_control.cpp:1795
+#: pcbnew/tools/pcb_control.cpp:1806
 msgid "Resolved hole clearance"
 msgstr "Разрешенный зазор отверстия"
 
-#: pcbnew/tools/pcb_control.cpp:1800
+#: pcbnew/tools/pcb_control.cpp:1811
 msgid "Actual hole clearance"
 msgstr "Фактический зазор отверстия"
 
-#: pcbnew/tools/pcb_control.cpp:1833
+#: pcbnew/tools/pcb_control.cpp:1844
 msgid "Resolved edge clearance"
 msgstr "Разрешенный отступ у края"
 
-#: pcbnew/tools/pcb_control.cpp:1838
+#: pcbnew/tools/pcb_control.cpp:1849
 msgid "Resolved margin clearance"
 msgstr "Разрешенный отступ от Margin"
 
-#: pcbnew/tools/pcb_control.cpp:1849
+#: pcbnew/tools/pcb_control.cpp:1860
 msgid "Selected Items"
 msgstr "Выбранные элементы"
 
-#: pcbnew/tools/pcb_control.cpp:1920
+#: pcbnew/tools/pcb_control.cpp:1931
 msgid "Selected 2D Length"
 msgstr "2D длина выделенного"
 

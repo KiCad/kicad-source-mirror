@@ -40,7 +40,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-07 02:35+0300\n"
+"POT-Creation-Date: 2025-02-08 00:06+0300\n"
 "PO-Revision-Date: 2025-02-06 23:35+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
@@ -3232,7 +3232,7 @@ msgstr "选项"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:169
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:48
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:57
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:439 pcbnew/footprint.cpp:4089
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:439 pcbnew/footprint.cpp:4098
 #: pcbnew/footprint_wizard_frame.cpp:326 pcbnew/pcb_dimension.cpp:605
 #: pcbnew/pcb_fields_grid_table.cpp:144 pcbnew/plot_board_layers.cpp:107
 #: pcbnew/widgets/search_handlers.cpp:119
@@ -4979,7 +4979,7 @@ msgstr "缩放"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1099
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:583
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:854
-#: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4048
+#: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4057
 #: pcbnew/pad.cpp:2501 pcbnew/pad.cpp:2520 pcbnew/pcb_dimension.cpp:1973
 #: pcbnew/widgets/appearance_controls.cpp:729
 #: pcbnew/widgets/appearance_controls.cpp:771
@@ -5204,7 +5204,7 @@ msgstr "<未定义>"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:854 pcbnew/footprint.cpp:4050
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:854 pcbnew/footprint.cpp:4059
 #: pcbnew/pad.cpp:2522 pcbnew/pcb_table.cpp:533 pcbnew/pcb_textbox.cpp:795
 #: pcbnew/zone.cpp:857 pcbnew/zone.cpp:1830
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
@@ -6476,7 +6476,7 @@ msgstr "向下"
 #: eeschema/sch_text.cpp:784 eeschema/sch_textbox.cpp:714
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
-#: pcbnew/footprint.cpp:4080 pcbnew/pad.cpp:2539 pcbnew/pcb_dimension.cpp:1756
+#: pcbnew/footprint.cpp:4089 pcbnew/pad.cpp:2539 pcbnew/pcb_dimension.cpp:1756
 #: pcbnew/pcb_dimension.cpp:1831 pcbnew/pcb_fields_grid_table.cpp:151
 #: pcbnew/pcb_tablecell.cpp:207 pcbnew/zone.cpp:2001
 msgid "Orientation"
@@ -7016,7 +7016,7 @@ msgstr "复制所选单元格内容到剪贴板"
 #: common/widgets/listbox_tricks.cpp:51
 #: eeschema/tools/sch_editor_control.cpp:2281
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1020
-#: pcbnew/dialogs/panel_setup_rules.cpp:132 pcbnew/tools/pcb_control.cpp:1238
+#: pcbnew/dialogs/panel_setup_rules.cpp:132 pcbnew/tools/pcb_control.cpp:1249
 msgid "Paste"
 msgstr "粘贴"
 
@@ -8294,7 +8294,7 @@ msgstr "编辑默认值"
 #: eeschema/dialogs/dialog_sim_model_base.cpp:271 eeschema/sch_symbol.cpp:2060
 #: eeschema/sch_symbol.cpp:2114 eeschema/sch_symbol.cpp:3001
 #: eeschema/widgets/search_handlers.cpp:160
-#: eeschema/widgets/search_handlers.cpp:246 pcbnew/footprint.cpp:4086
+#: eeschema/widgets/search_handlers.cpp:246 pcbnew/footprint.cpp:4095
 #: pcbnew/widgets/search_handlers.cpp:118
 msgid "Reference"
 msgstr "位号"
@@ -8316,7 +8316,7 @@ msgstr "按值和封装分组"
 #: eeschema/tools/sch_edit_tool.cpp:551
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:179
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
-#: pcbnew/footprint.cpp:4109
+#: pcbnew/footprint.cpp:4118
 msgid "Attributes"
 msgstr "特性"
 
@@ -10191,7 +10191,7 @@ msgstr "'%s' 不是有效封装。"
 #: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2109
 #: eeschema/sch_symbol.cpp:2685 eeschema/sch_symbol.cpp:3013
 #: eeschema/symbol_editor/symbol_editor.cpp:1629
-#: eeschema/symbol_viewer_frame.cpp:462 pcbnew/footprint.cpp:4099
+#: eeschema/symbol_viewer_frame.cpp:462 pcbnew/footprint.cpp:4108
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:133
 msgid "Keywords"
 msgstr "关键字"
@@ -10687,7 +10687,7 @@ msgid "Enter a description for the library:"
 msgstr "输入库描述:"
 
 #: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:3010
-#: pcbnew/footprint.cpp:4096 pcbnew/plot_board_layers.cpp:129
+#: pcbnew/footprint.cpp:4105 pcbnew/plot_board_layers.cpp:129
 msgid "Library Description"
 msgstr "库描述"
 
@@ -12389,7 +12389,7 @@ msgstr "显示语法帮助窗口"
 #: eeschema/sch_symbol.cpp:2999
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:28
-#: pcbnew/footprint.cpp:4084
+#: pcbnew/footprint.cpp:4093
 msgid "Fields"
 msgstr "字段"
 
@@ -17872,7 +17872,7 @@ msgstr "总线输入类型"
 #: eeschema/sch_bus_entry.cpp:543 eeschema/sch_junction.cpp:319
 #: eeschema/sch_label.cpp:1227 eeschema/sch_line.cpp:951
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2134 pcbnew/pad.cpp:1295
-#: pcbnew/pcb_track.cpp:1667 pcbnew/tools/pcb_control.cpp:1874
+#: pcbnew/pcb_track.cpp:1667 pcbnew/tools/pcb_control.cpp:1885
 #: pcbnew/zone.cpp:807
 msgid "Resolved Netclass"
 msgstr "已解析的网络类"
@@ -18904,7 +18904,7 @@ msgstr "齐行"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:478
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2130 pcbnew/pad.cpp:1293
 #: pcbnew/pad.cpp:2574 pcbnew/pcb_shape.cpp:923 pcbnew/pcb_tablecell.cpp:186
-#: pcbnew/pcb_track.cpp:1665 pcbnew/tools/pcb_control.cpp:1871
+#: pcbnew/pcb_track.cpp:1665 pcbnew/tools/pcb_control.cpp:1882
 #: pcbnew/widgets/pcb_properties_panel.cpp:273
 #: pcbnew/widgets/search_handlers.cpp:177 pcbnew/zone.cpp:805
 #: pcbnew/zone.cpp:1929 pcbnew/zone_manager/dialog_zone_manager_base.cpp:42
@@ -19239,12 +19239,12 @@ msgid "Exclude From Simulation"
 msgstr "不参与电路仿真"
 
 #: eeschema/sch_sheet.cpp:1736 eeschema/sch_symbol.cpp:1101
-#: eeschema/sch_symbol.cpp:3051 pcbnew/footprint.cpp:4116
+#: eeschema/sch_symbol.cpp:3051 pcbnew/footprint.cpp:4125
 msgid "Exclude From Bill of Materials"
 msgstr "不在物料清单中显示"
 
 #: eeschema/sch_sheet.cpp:1740 eeschema/sch_symbol.cpp:1102
-#: eeschema/sch_symbol.cpp:3054 pcbnew/footprint.cpp:4119
+#: eeschema/sch_symbol.cpp:3054 pcbnew/footprint.cpp:4128
 msgid "Do not Populate"
 msgstr "不作装配"
 
@@ -19299,7 +19299,7 @@ msgstr "X 轴镜像"
 msgid "Mirror Y"
 msgstr "Y 轴镜像"
 
-#: eeschema/sch_symbol.cpp:3007 pcbnew/footprint.cpp:4093
+#: eeschema/sch_symbol.cpp:3007 pcbnew/footprint.cpp:4102
 msgid "Library Link"
 msgstr "库链接"
 
@@ -23146,7 +23146,7 @@ msgstr "未设置数据手册链接。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:574
 #: pagelayout_editor/tools/pl_editor_control.cpp:160
-#: pcbnew/tools/pcb_control.cpp:1665
+#: pcbnew/tools/pcb_control.cpp:1676
 msgid "UUID"
 msgstr "UUID"
 
@@ -24061,7 +24061,7 @@ msgstr "选择层: %s"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:50
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:100
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:169
-#: pcbnew/footprint.cpp:4075 pcbnew/footprint.cpp:4078
+#: pcbnew/footprint.cpp:4084 pcbnew/footprint.cpp:4087
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2137 pcbnew/pad.cpp:1303
 #: pcbnew/pad.cpp:2536 pcbnew/pcb_dimension.cpp:661
 #: pcbnew/pcb_dimension.cpp:1457 pcbnew/pcb_fields_grid_table.cpp:150
@@ -27585,6 +27585,14 @@ msgstr "无法解析更新响应: %s"
 #: kicad/widgets/filedlg_new_project.h:32
 msgid "Create a new folder for the project"
 msgstr "为工程创建一个新目录"
+
+#: libs/kimath/src/geometry/roundrect.cpp:60
+msgid "Roundrect radius is larger than the rectangle's major dimension"
+msgstr ""
+
+#: libs/kimath/src/geometry/roundrect.cpp:65
+msgid "Roundrect radius must be non-negative"
+msgstr ""
 
 #: libs/kiplatform/os/windows/environment.cpp:72
 #, c-format
@@ -31520,7 +31528,7 @@ msgstr ""
 "无法加载关联项目文件 %s"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:301 pcbnew/files.cpp:583
-#: pcbnew/tools/pcb_control.cpp:1506
+#: pcbnew/tools/pcb_control.cpp:1517
 msgid "Loading PCB"
 msgstr "加载 PCB 中"
 
@@ -32067,7 +32075,7 @@ msgstr ""
 "焊盘与填充区的默认连接类型。\n"
 "该设置可被局部焊盘设置覆盖"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4049
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4058
 #: pcbnew/pad.cpp:2521 pcbnew/zone.cpp:1829
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Thermal reliefs"
@@ -37319,7 +37327,7 @@ msgstr "目标 skew: "
 #: pcbnew/router/router_tool.cpp:2759 pcbnew/router/router_tool.cpp:2764
 #: pcbnew/router/router_tool.cpp:2769 pcbnew/router/router_tool.cpp:2780
 #: pcbnew/router/router_tool.cpp:2788 pcbnew/router/router_tool.cpp:2793
-#: pcbnew/tools/pcb_control.cpp:1702 pcbnew/tools/pcb_control.cpp:1712
+#: pcbnew/tools/pcb_control.cpp:1713 pcbnew/tools/pcb_control.cpp:1723
 #: pcbnew/zone.cpp:874
 #, c-format
 msgid "(from %s)"
@@ -40921,7 +40929,7 @@ msgid "'%s' settings differ."
 msgstr "%s 设置不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:619
-#: pcbnew/footprint.cpp:4126
+#: pcbnew/footprint.cpp:4135
 msgid "Exempt From Courtyard Requirement"
 msgstr "忽略封装外框要求"
 
@@ -41674,7 +41682,7 @@ msgstr "状态: "
 msgid "Attributes:"
 msgstr "特性:"
 
-#: pcbnew/footprint.cpp:1722 pcbnew/footprint.cpp:4105 pcbnew/zone.cpp:1861
+#: pcbnew/footprint.cpp:1722 pcbnew/footprint.cpp:4114 pcbnew/zone.cpp:1861
 msgid "Component Class"
 msgstr "元件类"
 
@@ -41716,39 +41724,39 @@ msgstr "(net-tie 焊盘组包含未知的焊盘编号 %s)"
 msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr "(焊盘 %s 出现在一个以上的 net-tie 焊盘组中)"
 
-#: pcbnew/footprint.cpp:4047 pcbnew/pad.cpp:2519 pcbnew/zone.cpp:1827
+#: pcbnew/footprint.cpp:4056 pcbnew/pad.cpp:2519 pcbnew/zone.cpp:1827
 msgid "Inherited"
 msgstr "继承"
 
-#: pcbnew/footprint.cpp:4051 pcbnew/pad.cpp:2523 pcbnew/zone.cpp:1831
+#: pcbnew/footprint.cpp:4060 pcbnew/pad.cpp:2523 pcbnew/zone.cpp:1831
 msgid "Thermal reliefs for PTH"
 msgstr "对金属化孔 (PTH) 使用缓释热焊盘 (花焊盘)"
 
-#: pcbnew/footprint.cpp:4111
+#: pcbnew/footprint.cpp:4120
 msgid "Not in Schematic"
 msgstr "不在原理图中"
 
-#: pcbnew/footprint.cpp:4113
+#: pcbnew/footprint.cpp:4122
 msgid "Exclude From Position Files"
 msgstr "从定位文件中排除"
 
-#: pcbnew/footprint.cpp:4123 pcbnew/pad.cpp:2688
+#: pcbnew/footprint.cpp:4132 pcbnew/pad.cpp:2688
 msgid "Overrides"
 msgstr "覆盖"
 
-#: pcbnew/footprint.cpp:4130 pcbnew/pad.cpp:2691
+#: pcbnew/footprint.cpp:4139 pcbnew/pad.cpp:2691
 msgid "Clearance Override"
 msgstr "间距重写"
 
-#: pcbnew/footprint.cpp:4135 pcbnew/pad.cpp:2701
+#: pcbnew/footprint.cpp:4144 pcbnew/pad.cpp:2701
 msgid "Solderpaste Margin Override"
 msgstr "锡膏边距重写"
 
-#: pcbnew/footprint.cpp:4140 pcbnew/pad.cpp:2706
+#: pcbnew/footprint.cpp:4149 pcbnew/pad.cpp:2706
 msgid "Solderpaste Margin Ratio Override"
 msgstr "锡膏边距比例重写"
 
-#: pcbnew/footprint.cpp:4146 pcbnew/pad.cpp:2712
+#: pcbnew/footprint.cpp:4155 pcbnew/pad.cpp:2712
 msgid "Zone Connection Style"
 msgstr "填充区连接样式"
 
@@ -44763,7 +44771,7 @@ msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "CZONE_CONTAINER \"%s\"是坏的 ZSmoothing"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2527
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7252
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7249
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
@@ -44943,7 +44951,7 @@ msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
 msgstr "文件 '%2$s' 中第 %3$d 行, 偏移量 %4$d 处的 NETCLASS 名称 '%1$s' 重复。"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3150
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6298
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6295
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -44974,7 +44982,7 @@ msgstr ""
 "行: %d\n"
 "偏移: %d。"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5143
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5140
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -44985,7 +44993,7 @@ msgstr ""
 "文件: \"%s\"\n"
 "行: %d 偏移: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5162
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5159
 #, c-format
 msgid ""
 "Net name doesn't match ID in\n"
@@ -44996,7 +45004,7 @@ msgstr ""
 "文件: %s\n"
 "行: %d 偏移: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5493
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5490
 #, c-format
 msgid ""
 "Invalid zero-sized pad pinned to %s in\n"
@@ -45009,8 +45017,8 @@ msgstr ""
 "行: %d\n"
 "偏移: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5615
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6552
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5612
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6549
 #, c-format
 msgid ""
 "Invalid padstack layer in\n"
@@ -45023,13 +45031,13 @@ msgstr ""
 "行: %d\n"
 "偏移: %d。"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5630
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6567
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5627
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6564
 #, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
 msgstr "无效的 padstack 层 '%s', 位于文件: %s, 行: %d, 偏移: %d。"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6203
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6200
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -45042,7 +45050,7 @@ msgstr ""
 "行: %d\n"
 "偏移: %d。"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6403
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6400
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -45055,7 +45063,7 @@ msgstr ""
 "行: %d\n"
 "偏移: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6658
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6655
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -45068,7 +45076,7 @@ msgstr ""
 "行: %d\n"
 "偏移: %d。"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7222
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7219
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
@@ -45920,7 +45928,7 @@ msgstr "走线宽度: %s"
 msgid "Diff Pair Gap: %s"
 msgstr "差分对间隙: %s"
 
-#: pcbnew/router/router_tool.cpp:2778 pcbnew/tools/pcb_control.cpp:1711
+#: pcbnew/router/router_tool.cpp:2778 pcbnew/tools/pcb_control.cpp:1722
 #, c-format
 msgid "DP Max Uncoupled-length: %s"
 msgstr "DP 最大未耦合长度: %s"
@@ -46828,7 +46836,7 @@ msgid "Dogbone Corner Settings"
 msgstr "狗骨角设置"
 
 #: pcbnew/tools/edit_tool.cpp:1341
-#: pcbnew/tools/item_modification_routine.cpp:197
+#: pcbnew/tools/item_modification_routine.cpp:199
 msgid "Chamfer Lines"
 msgstr "倒角线"
 
@@ -46845,7 +46853,7 @@ msgid "A shape with at least two lines must be selected."
 msgstr "必须选择至少包含两条线的形状。"
 
 #: pcbnew/tools/edit_tool.cpp:1523
-#: pcbnew/tools/item_modification_routine.cpp:102
+#: pcbnew/tools/item_modification_routine.cpp:104
 msgid "Fillet Lines"
 msgstr "圆角线"
 
@@ -46994,106 +47002,106 @@ msgstr "解组项目"
 msgid "Remove Group Items"
 msgstr "移除分组项目"
 
-#: pcbnew/tools/item_modification_routine.cpp:110
+#: pcbnew/tools/item_modification_routine.cpp:112
 msgid "Unable to fillet the selected lines."
 msgstr "无法对选定的线段进行圆角处理。"
 
-#: pcbnew/tools/item_modification_routine.cpp:114
+#: pcbnew/tools/item_modification_routine.cpp:116
 msgid "Some of the lines could not be filleted."
 msgstr "部分线段无法进行圆角处理。"
 
-#: pcbnew/tools/item_modification_routine.cpp:205
+#: pcbnew/tools/item_modification_routine.cpp:207
 msgid "Unable to chamfer the selected lines."
 msgstr "无法对选定的线段进行倒角处理。"
 
-#: pcbnew/tools/item_modification_routine.cpp:209
+#: pcbnew/tools/item_modification_routine.cpp:211
 msgid "Some of the lines could not be chamfered."
 msgstr "部分线段无法进行倒角处理。"
 
-#: pcbnew/tools/item_modification_routine.cpp:264
+#: pcbnew/tools/item_modification_routine.cpp:266
 msgid "Dogbone Corners"
 msgstr "狗骨角"
 
-#: pcbnew/tools/item_modification_routine.cpp:274
+#: pcbnew/tools/item_modification_routine.cpp:276
 msgid "Unable to add dogbone corners to the selected lines."
 msgstr "无法为选定的线段添加狗骨角。"
 
-#: pcbnew/tools/item_modification_routine.cpp:278
+#: pcbnew/tools/item_modification_routine.cpp:280
 msgid "Some of the lines could not have dogbone corners added."
 msgstr "部分线段无法添加狗骨角。"
 
-#: pcbnew/tools/item_modification_routine.cpp:286
+#: pcbnew/tools/item_modification_routine.cpp:288
 msgid ""
 "Some of the dogbone corners are too narrow to fit a cutter of the specified "
 "radius."
 msgstr "部分狗骨角过小, 没有适合其半径的铣刀。"
 
-#: pcbnew/tools/item_modification_routine.cpp:290
+#: pcbnew/tools/item_modification_routine.cpp:292
 msgid " Consider enabling the 'Add Slots' option."
 msgstr " 请考虑启用 '添加槽' 选项。"
 
-#: pcbnew/tools/item_modification_routine.cpp:292
+#: pcbnew/tools/item_modification_routine.cpp:294
 msgid " Slots were added."
 msgstr " 已添加槽。"
 
-#: pcbnew/tools/item_modification_routine.cpp:383
+#: pcbnew/tools/item_modification_routine.cpp:385
 #: pcbnew/tools/pcb_actions.cpp:637
 msgid "Extend Lines to Meet"
 msgstr "延长线段至相交"
 
-#: pcbnew/tools/item_modification_routine.cpp:391
+#: pcbnew/tools/item_modification_routine.cpp:393
 msgid "Unable to extend the selected lines to meet."
 msgstr "无法延长选定的线段使其相交。"
 
-#: pcbnew/tools/item_modification_routine.cpp:395
+#: pcbnew/tools/item_modification_routine.cpp:397
 msgid "Some of the lines could not be extended to meet."
 msgstr "部分线段无法延长使其相交。"
 
-#: pcbnew/tools/item_modification_routine.cpp:554
+#: pcbnew/tools/item_modification_routine.cpp:556
 msgid "Merge polygons."
 msgstr "合并多边形。"
 
-#: pcbnew/tools/item_modification_routine.cpp:562
+#: pcbnew/tools/item_modification_routine.cpp:564
 msgid "Unable to merge the selected polygons."
 msgstr "无法合并所选多边形。"
 
-#: pcbnew/tools/item_modification_routine.cpp:566
+#: pcbnew/tools/item_modification_routine.cpp:568
 msgid "Some of the polygons could not be merged."
 msgstr "部分多边形无法合并。"
 
-#: pcbnew/tools/item_modification_routine.cpp:581
+#: pcbnew/tools/item_modification_routine.cpp:583
 msgid "Subtract polygons."
 msgstr "减去多边形。"
 
-#: pcbnew/tools/item_modification_routine.cpp:589
+#: pcbnew/tools/item_modification_routine.cpp:591
 msgid "Unable to subtract the selected polygons."
 msgstr "无法减去所选多边形。"
 
-#: pcbnew/tools/item_modification_routine.cpp:593
+#: pcbnew/tools/item_modification_routine.cpp:595
 msgid "Some of the polygons could not be subtracted."
 msgstr "部分多边形无法减去。"
 
-#: pcbnew/tools/item_modification_routine.cpp:622
+#: pcbnew/tools/item_modification_routine.cpp:624
 msgid "Intersect polygons."
 msgstr "相交多边形。"
 
-#: pcbnew/tools/item_modification_routine.cpp:630
+#: pcbnew/tools/item_modification_routine.cpp:632
 msgid "Unable to intersect the selected polygons."
 msgstr "无法与所选多边形相交。"
 
-#: pcbnew/tools/item_modification_routine.cpp:634
+#: pcbnew/tools/item_modification_routine.cpp:636
 msgid "Some of the polygons could not be intersected."
 msgstr "部分多边形无法相交。"
 
-#: pcbnew/tools/item_modification_routine.cpp:661
+#: pcbnew/tools/item_modification_routine.cpp:663
 msgid "Outset items."
 msgstr "外扩项目。"
 
-#: pcbnew/tools/item_modification_routine.cpp:668
+#: pcbnew/tools/item_modification_routine.cpp:670
 msgid "Unable to outset the selected items."
 msgstr "无法对选定项目进行外扩。"
 
-#: pcbnew/tools/item_modification_routine.cpp:672
+#: pcbnew/tools/item_modification_routine.cpp:674
 msgid "Some of the items could not be outset."
 msgstr "部分项目无法进行外扩。"
 
@@ -48990,65 +48998,65 @@ msgstr ""
 msgid "Paste Text"
 msgstr "粘贴文本"
 
-#: pcbnew/tools/pcb_control.cpp:1231
+#: pcbnew/tools/pcb_control.cpp:1242
 msgid "Invalid clipboard contents"
 msgstr "无效的剪贴板内容"
 
-#: pcbnew/tools/pcb_control.cpp:1514
+#: pcbnew/tools/pcb_control.cpp:1525
 msgid "Error loading board."
 msgstr "电路板加载出错。"
 
-#: pcbnew/tools/pcb_control.cpp:1548
+#: pcbnew/tools/pcb_control.cpp:1559
 msgid "Append Board"
 msgstr "添加电路板"
 
-#: pcbnew/tools/pcb_control.cpp:1609
+#: pcbnew/tools/pcb_control.cpp:1620
 msgid "Active Layer"
 msgstr "活动层"
 
-#: pcbnew/tools/pcb_control.cpp:1610 pcbnew/widgets/appearance_controls.cpp:373
+#: pcbnew/tools/pcb_control.cpp:1621 pcbnew/widgets/appearance_controls.cpp:373
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 msgid "All Layers"
 msgstr "所有层"
 
-#: pcbnew/tools/pcb_control.cpp:1622
+#: pcbnew/tools/pcb_control.cpp:1633
 msgid "Object Snapping"
 msgstr "对象捕获"
 
-#: pcbnew/tools/pcb_control.cpp:1701
+#: pcbnew/tools/pcb_control.cpp:1712
 #, c-format
 msgid "DP Gap Constraints: %s"
 msgstr "DP 间隙约束: %s"
 
-#: pcbnew/tools/pcb_control.cpp:1742
+#: pcbnew/tools/pcb_control.cpp:1753
 msgid "Resolved clearance"
 msgstr "已解析的间距"
 
-#: pcbnew/tools/pcb_control.cpp:1752
+#: pcbnew/tools/pcb_control.cpp:1763
 msgid "Actual clearance"
 msgstr "实际间距"
 
-#: pcbnew/tools/pcb_control.cpp:1795
+#: pcbnew/tools/pcb_control.cpp:1806
 msgid "Resolved hole clearance"
 msgstr "已解析的孔间距"
 
-#: pcbnew/tools/pcb_control.cpp:1800
+#: pcbnew/tools/pcb_control.cpp:1811
 msgid "Actual hole clearance"
 msgstr "实际孔间距"
 
-#: pcbnew/tools/pcb_control.cpp:1833
+#: pcbnew/tools/pcb_control.cpp:1844
 msgid "Resolved edge clearance"
 msgstr "已解析的边缘间距"
 
-#: pcbnew/tools/pcb_control.cpp:1838
+#: pcbnew/tools/pcb_control.cpp:1849
 msgid "Resolved margin clearance"
 msgstr "已解析的边界层间距"
 
-#: pcbnew/tools/pcb_control.cpp:1849
+#: pcbnew/tools/pcb_control.cpp:1860
 msgid "Selected Items"
 msgstr "选中项"
 
-#: pcbnew/tools/pcb_control.cpp:1920
+#: pcbnew/tools/pcb_control.cpp:1931
 msgid "Selected 2D Length"
 msgstr "选中的二维长度"
 

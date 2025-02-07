@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-07 20:15+0100\n"
+"POT-Creation-Date: 2025-02-08 00:06+0300\n"
 "PO-Revision-Date: 2025-02-07 20:15+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -6992,7 +6992,6 @@ msgid "Failed to perform checkout operation."
 msgstr "Échec de l'opération d'extraction."
 
 #: common/git/git_pull_handler.cpp:228
-#, c++-format
 msgid "Could not lookup commit '{}'"
 msgstr "Impossible de rechercher le commit '{}'"
 
@@ -8227,10 +8226,12 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Unités manquantes pour '%s'| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1161
+#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Non correspondance de type entre '%s' et %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1167
+#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Non correspondance de type entre %lf et '%s'"
 
@@ -14960,7 +14961,6 @@ msgid "Code"
 msgstr "Code"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:223
-#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Enregistrer {} dans le champ Valeur comme \"{}\""
 
