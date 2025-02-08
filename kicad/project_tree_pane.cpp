@@ -2208,10 +2208,28 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
             continue;
         }
 
-        wxFileName fn( entry->index_to_workdir->old_file.path );
-        fn.MakeAbsolute( git_repository_workdir( repo ) );
+        wxFileName fn;
+        wxString filePath;
 
-        wxString filePath( entry->index_to_workdir->old_file.path, wxConvUTF8 );
+        // TODO: we are kind of erasing the difference between workdir and index here,
+        // because the Commit dialog doesn't show that difference.
+        // Entry may only have a head_to_index if it was previously staged
+        if( entry->index_to_workdir )
+        {
+            fn.Assign( entry->index_to_workdir->old_file.path );
+            fn.MakeAbsolute( git_repository_workdir( repo ) );
+            filePath = wxString( entry->index_to_workdir->old_file.path, wxConvUTF8 );
+        }
+        else if( entry->head_to_index )
+        {
+            fn.Assign( entry->head_to_index->old_file.path );
+            fn.MakeAbsolute( git_repository_workdir( repo ) );
+            filePath = wxString( entry->head_to_index->old_file.path, wxConvUTF8 );
+        }
+        else
+        {
+            wxCHECK2_MSG( false, continue, "File status with neither git_status_entry set!" );
+        }
 
         if( aEvent.GetId() == ID_GIT_COMMIT_PROJECT )
         {
