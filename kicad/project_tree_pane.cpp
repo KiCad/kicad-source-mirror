@@ -2254,7 +2254,8 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
 
         if( git_repository_index( &index, repo ) != 0 )
         {
-            wxMessageBox( _( "Failed to get repository index: %s" ), giterr_last()->message );
+            wxMessageBox( wxString::Format( _( "Failed to get repository index: %s" ),
+                                            giterr_last()->message ) );
             return;
         }
 
@@ -2262,7 +2263,8 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
         {
             if( git_index_add_bypath( index, file.mb_str() ) != 0 )
             {
-                wxMessageBox( _( "Failed to add file to index: %s" ), giterr_last()->message );
+                wxMessageBox( wxString::Format( _( "Failed to add file to index: %s" ),
+                                                giterr_last()->message ) );
                 git_index_free( index );
                 return;
             }
@@ -2270,14 +2272,16 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
 
         if( git_index_write( index ) != 0 )
         {
-            wxMessageBox( _( "Failed to write index: %s" ), giterr_last()->message );
+            wxMessageBox( wxString::Format( _( "Failed to write index: %s" ),
+                                            giterr_last()->message ) );
             git_index_free( index );
             return;
         }
 
-        if (git_index_write_tree( &tree_id, index ) != 0)
+        if( git_index_write_tree( &tree_id, index ) != 0)
         {
-            wxMessageBox( _( "Failed to write tree: %s" ), giterr_last()->message );
+            wxMessageBox( wxString::Format( _( "Failed to write tree: %s" ),
+                                            giterr_last()->message ) );
             git_index_free( index );
             return;
         }
@@ -2286,7 +2290,8 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
 
         if( git_tree_lookup( &tree, repo, &tree_id ) != 0 )
         {
-            wxMessageBox( _( "Failed to lookup tree: %s" ), giterr_last()->message );
+            wxMessageBox( wxString::Format( _( "Failed to lookup tree: %s" ),
+                                            giterr_last()->message ) );
             return;
         }
 
@@ -2294,14 +2299,16 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
 
         if( git_repository_head( &headRef, repo ) != 0 )
         {
-            wxMessageBox( _( "Failed to get HEAD reference: %s" ), giterr_last()->message );
+            wxMessageBox( wxString::Format( _( "Failed to get HEAD reference: %s" ),
+                                            giterr_last()->message ) );
             git_index_free( index );
             return;
         }
 
         if( git_reference_peel( (git_object**) &parent, headRef, GIT_OBJECT_COMMIT ) != 0 )
         {
-            wxMessageBox( _( "Failed to get commit: %s" ), giterr_last()->message );
+            wxMessageBox( wxString::Format( _( "Failed to get commit: %s" ),
+                                            giterr_last()->message ) );
             git_reference_free( headRef );
             git_index_free( index );
             return;
@@ -2317,7 +2324,8 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
 
         if( git_signature_now( &author, author_name.mb_str(), author_email.mb_str() ) != 0 )
         {
-            wxMessageBox( _( "Failed to create author signature: %s" ), giterr_last()->message );
+            wxMessageBox( wxString::Format( _( "Failed to create author signature: %s" ),
+                                            giterr_last()->message ) );
             return;
         }
 
@@ -2352,7 +2360,8 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
         if( git_commit_create( &oid, repo, "HEAD", author, author, nullptr, commit_msg.mb_str(), tree,
                            1, parents ) != 0 )
         {
-            wxMessageBox( _( "Failed to create commit: %s" ), giterr_last()->message );
+            wxMessageBox( wxString::Format( _( "Failed to create commit: %s" ),
+                                            giterr_last()->message ) );
             return;
         }
 
