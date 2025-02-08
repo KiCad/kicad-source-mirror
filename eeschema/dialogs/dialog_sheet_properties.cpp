@@ -352,6 +352,8 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
         {
             if( clearFileName )
                 currentScreen->SetFileName( wxEmptyString );
+            else
+                m_fields->at( SHEETFILENAME ).SetText( oldFilename );
 
             return false;
         }
@@ -561,6 +563,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
             if( useScreen || loadFromFile )           // Load from existing file.
             {
                 clearAnnotation = true;
+                oldScreen = m_sheet->GetScreen();
 
                 if( !IsOK( this, wxString::Format( _( "Change '%s' link from '%s' to '%s'?" ),
                                                    newAbsoluteFilename,
