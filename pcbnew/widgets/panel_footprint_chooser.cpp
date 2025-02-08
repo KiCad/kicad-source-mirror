@@ -373,8 +373,6 @@ void PANEL_FOOTPRINT_CHOOSER::onFootprintSelected( wxCommandEvent& aEvent )
     event.SetEventObject( this );
 
     ProcessWindowEvent( event );
-
-    m_frame->GetToolManager()->RunAction( ACTIONS::measureTool );
 }
 
 
