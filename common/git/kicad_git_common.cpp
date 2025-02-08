@@ -48,6 +48,7 @@ git_repository* KIGIT_COMMON::GetRepo() const
 
 wxString KIGIT_COMMON::GetCurrentBranchName() const
 {
+    wxCHECK( m_repo, wxEmptyString );
     git_reference* head = nullptr;
 
     int retval = git_repository_head( &head, m_repo );
@@ -80,6 +81,7 @@ wxString KIGIT_COMMON::GetCurrentBranchName() const
 
 std::vector<wxString> KIGIT_COMMON::GetBranchNames() const
 {
+    wxCHECK( m_repo, {} );
     std::vector<wxString> branchNames;
     std::map<git_time_t, wxString> branchNamesMap;
     wxString firstName;
@@ -133,6 +135,7 @@ std::vector<wxString> KIGIT_COMMON::GetBranchNames() const
 
 std::vector<wxString> KIGIT_COMMON::GetProjectDirs()
 {
+    wxCHECK( m_repo, {} );
     std::vector<wxString> projDirs;
 
     git_oid oid;
@@ -366,6 +369,7 @@ bool KIGIT_COMMON::HasLocalCommits() const
 
 bool KIGIT_COMMON::HasPushAndPullRemote() const
 {
+    wxCHECK( m_repo, false );
     git_remote* remote = nullptr;
 
     if( git_remote_lookup( &remote, m_repo, "origin" ) != GIT_OK )
@@ -393,6 +397,8 @@ bool KIGIT_COMMON::HasPushAndPullRemote() const
 
 wxString KIGIT_COMMON::GetRemotename() const
 {
+    wxCHECK( m_repo, wxEmptyString );
+
     wxString retval;
     git_reference* head = nullptr;
     git_reference* upstream = nullptr;
@@ -500,6 +506,8 @@ void KIGIT_COMMON::updatePublicKeys()
 
 void KIGIT_COMMON::UpdateCurrentBranchInfo()
 {
+    wxCHECK( m_repo, /* void */ );
+
     // We want to get the current branch's upstream url as well as the stored password
     // if one exists given the url and username.
 
