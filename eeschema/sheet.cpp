@@ -679,7 +679,7 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
     try
     {
         dc.SetUserScale( 1.0, 1.0 );
-        SCH_PRINTOUT printout( this, wxEmptyString, true );
+        SCH_PRINTOUT printout( this, wxEmptyString );
         // Ensure title block will be when printed on clipboard, regardless
         // the current Cairo print option
         EESCHEMA_SETTINGS* eecfg = eeconfig();

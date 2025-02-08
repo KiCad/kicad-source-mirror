@@ -129,7 +129,7 @@ LIB_SYMBOL* SCH_IO_LIB_CACHE::removeSymbol( LIB_SYMBOL* aSymbol )
                 {
                     SCH_FIELD& field = static_cast<SCH_FIELD&>( drawItem );
 
-                    if( firstChild->FindField( field.GetCanonicalName() ) )
+                    if( firstChild->GetField( field.GetCanonicalName() ) )
                         continue;
                 }
 

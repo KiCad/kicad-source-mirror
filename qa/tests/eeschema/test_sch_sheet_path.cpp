@@ -51,7 +51,7 @@ public:
 
             std::ostringstream ss;
             ss << "Sheet" << i;
-            m_sheets[i].GetFields()[SHEETNAME].SetText( ss.str() );
+            m_sheets[i].GetField( FIELD_T::SHEET_NAME )->SetText( ss.str() );
         }
 
         // 0->1->2

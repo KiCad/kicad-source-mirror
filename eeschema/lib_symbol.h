@@ -292,12 +292,15 @@ public:
     void SetFields( const std::vector<SCH_FIELD>& aFieldsList );
 
     /**
-     * Return a list of fields within this symbol.
+     * Populate a std::vector with SCH_FIELDs, sorted in ordinal order.
      *
-     * @param aList - List to add fields to
+     * @param aList is the vector to populate.
      */
-    void GetFields( std::vector<SCH_FIELD*>& aList, bool aVisibleOnly = false ) override;
+    void GetFields( std::vector<SCH_FIELD*>& aList, bool aVisibleOnly = false ) const override;
 
+    /**
+     * Create a copy of the SCH_FIELDs, sorted in ordinal order.
+     */
     void CopyFields( std::vector<SCH_FIELD>& aList );
 
     /**
@@ -308,40 +311,35 @@ public:
     void AddField( SCH_FIELD& aField ) { AddField( new SCH_FIELD( aField ) ); }
 
     /**
-     * Find a field within this symbol matching \a aFieldName and returns it
-     * or NULL if not found.
-     * @param aFieldName is the name of the field to find.
-     * @param aCaseInsensitive ignore the filed name case if true.
-     *
-     * @return the field if found or NULL if the field was not found.
+     * Find a field within this symbol matching \a aFieldName; return nullptr if not found.
      */
-    SCH_FIELD* FindField( const wxString& aFieldName, bool aCaseInsensitive = false );
+    SCH_FIELD* GetField( const wxString& aFieldName );
+    const SCH_FIELD* GetField( const wxString& aFieldName ) const;
 
-    const SCH_FIELD* FindField( const wxString& aFieldName,
-                                bool aCaseInsensitive = false ) const;
+    SCH_FIELD* FindFieldCaseInsensitive( const wxString& aFieldName );
 
-    /**
-     * Return pointer to the requested field.
-     *
-     * @param aId - Id of field to return.
-     * @return The field if found, otherwise NULL.
-     */
-    SCH_FIELD* GetFieldById( int aId ) const;
+    const SCH_FIELD* GetField( FIELD_T aFieldType ) const;
+    SCH_FIELD* GetField( FIELD_T aFieldType );
 
     /** Return reference to the value field. */
-    SCH_FIELD& GetValueField() const;
+    SCH_FIELD& GetValueField() { return *GetField( FIELD_T::VALUE ); }
+    const SCH_FIELD& GetValueField() const;
 
     /** Return reference to the reference designator field. */
-    SCH_FIELD& GetReferenceField() const;
+    SCH_FIELD& GetReferenceField() { return *GetField( FIELD_T::REFERENCE ); }
+    const SCH_FIELD& GetReferenceField() const;
 
     /** Return reference to the footprint field */
-    SCH_FIELD& GetFootprintField() const;
+    SCH_FIELD& GetFootprintField() { return *GetField( FIELD_T::FOOTPRINT ); }
+    const SCH_FIELD& GetFootprintField() const;
 
     /** Return reference to the datasheet field. */
-    SCH_FIELD& GetDatasheetField() const;
+    SCH_FIELD& GetDatasheetField() { return *GetField( FIELD_T::DATASHEET ); }
+    const SCH_FIELD& GetDatasheetField() const;
 
     /** Return reference to the description field. */
-    SCH_FIELD& GetDescriptionField() const;
+    SCH_FIELD& GetDescriptionField() {return *GetField( FIELD_T::DESCRIPTION ); }
+    const SCH_FIELD& GetDescriptionField() const;
 
     wxString GetPrefix();
 
@@ -372,17 +370,6 @@ public:
     void AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo ) override;
 
     void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;
-
-    /**
-     * Order optional field indices.
-     *
-     * It's possible when calling #LIB_SYMBOL::Flatten that there can be gaps and/or duplicate
-     * optional field indices.  This method correctly orders the indices so there are no gaps
-     * and/or duplicate indices.
-     */
-    int UpdateFieldOrdinals();
-
-    int GetNextAvailableFieldId() const;
 
     /**
      * Resolve any references to system tokens supported by the symbol.

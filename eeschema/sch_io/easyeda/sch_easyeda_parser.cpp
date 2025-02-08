@@ -963,11 +963,11 @@ LIB_SYMBOL* SCH_EASYEDA_PARSER::ParseSymbol( const VECTOR2D&              aOrigi
             if( valOpt->empty() )
                 continue;
 
-            SCH_FIELD* fd = ksymbol->FindField( attrName, true );
+            SCH_FIELD* fd = ksymbol->FindFieldCaseInsensitive( attrName );
 
             if( !fd )
             {
-                fd = new SCH_FIELD( ksymbol.get(), ksymbol->GetNextAvailableFieldId(), attrName );
+                fd = new SCH_FIELD( ksymbol.get(), FIELD_T::USER, attrName );
                 ksymbol->AddField( fd );
             }
 
@@ -1245,7 +1245,7 @@ void SCH_EASYEDA_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRoot
 
                 schSym->SetPosition( RelPos( pos ) );
 
-                SCH_FIELD* valField = schSym->GetField( VALUE_FIELD );
+                SCH_FIELD* valField = schSym->GetField( FIELD_T::VALUE );
 
                 valField->SetPosition( RelPos( valuePos ) );
                 valField->SetTextAngleDegrees( textAngle - angle );

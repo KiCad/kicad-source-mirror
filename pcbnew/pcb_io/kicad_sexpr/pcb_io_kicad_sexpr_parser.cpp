@@ -3319,11 +3319,11 @@ PCB_TEXT* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT( BOARD_ITEM* aParent, PCB_TEX
         switch( token )
         {
         case T_reference:
-            text = std::make_unique<PCB_FIELD>( parentFP, REFERENCE_FIELD );
+            text = std::make_unique<PCB_FIELD>( parentFP, FIELD_T::REFERENCE );
             break;
 
         case T_value:
-            text = std::make_unique<PCB_FIELD>( parentFP, VALUE_FIELD );
+            text = std::make_unique<PCB_FIELD>( parentFP, FIELD_T::VALUE );
             break;
 
         case T_user:
@@ -3365,7 +3365,7 @@ PCB_TEXT* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT( BOARD_ITEM* aParent, PCB_TEX
     {
         // Convert hidden footprint text (which is no longer supported) into a hidden field
         if( !text->IsVisible() && text->Type() == PCB_TEXT_T )
-            return new PCB_FIELD( text.get(), -1 );
+            return new PCB_FIELD( text.get(), FIELD_T::USER );
     }
     else
     {
@@ -4526,7 +4526,7 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
                 // used to be stored as a reserved key value
                 if( pName == "ki_description" )
                 {
-                    footprint->GetFieldById( DESCRIPTION_FIELD )->SetText( pValue );
+                    footprint->GetField( FIELD_T::DESCRIPTION )->SetText( pValue );
                     NeedRIGHT();
                     break;
                 }
@@ -4547,6 +4547,9 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
                 }
             }
 
+            PCB_FIELD* field = nullptr;
+            std::unique_ptr<PCB_FIELD> unusedField;
+
             // 8.0.0rc3 had a bug where these properties were mistakenly added to the footprint as
             // fields, this will remove them as fields but still correctly set the footprint filters
             if( pName == "ki_fp_filters" )
@@ -4556,34 +4559,26 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
                 // Use the text effect parsing function because it will handle ki_fp_filters as a
                 // property with no text effects, but will also handle parsing the text effects.
                 // We just drop the effects if they're present.
-                PCB_FIELD ignored = PCB_FIELD( footprint.get(), footprint->GetNextFieldId(),
-                                               pName );
-
-                parsePCB_TEXT_effects( &ignored );
-
-                break;
+                unusedField = std::make_unique<PCB_FIELD>( footprint.get(), FIELD_T::USER );
+                field = unusedField.get();
             }
-
-            PCB_FIELD* field = nullptr;
-            std::unique_ptr<PCB_FIELD> unusedField;
-
-            if( pName == "Footprint" )
+            else if( pName == "Footprint" )
             {
                 // Until V9, footprints had a Footprint field that usually (but not always)
                 // duplicated the footprint's LIB_ID.  In V9 this was removed.  Parse it
                 // like any other, but don't add it to anything.
-                unusedField = std::make_unique<PCB_FIELD>( footprint.get(), 0 );
+                unusedField = std::make_unique<PCB_FIELD>( footprint.get(), FIELD_T::FOOTPRINT );
                 field = unusedField.get();
             }
-            else if( footprint->HasFieldByName( pName ) )
+            else if( footprint->HasField( pName ) )
             {
-                field = footprint->GetFieldByName( pName );
+                field = footprint->GetField( pName );
                 field->SetText( pValue );
             }
             else
             {
-                field = footprint->AddField(
-                        PCB_FIELD( footprint.get(), footprint->GetNextFieldId(), pName ) );
+                field = new PCB_FIELD( footprint.get(), FIELD_T::USER, pName );
+                footprint->Add( field );
 
                 field->SetText( pValue );
                 field->SetLayer( footprint->GetLayer() == F_Cu ? F_Fab : B_Fab );
@@ -4765,20 +4760,23 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
 
             if( PCB_FIELD* field = dynamic_cast<PCB_FIELD*>( text ) )
             {
-                // Fields other than reference and value weren't historically
-                // stored in fp_texts so we don't need to handle them here
                 switch( field->GetId() )
                 {
-                case REFERENCE_FIELD:
-                    footprint->Reference() = PCB_FIELD( *text, REFERENCE_FIELD );
+                case FIELD_T::REFERENCE:
+                    footprint->Reference() = PCB_FIELD( *text, FIELD_T::REFERENCE );
                     const_cast<KIID&>( footprint->Reference().m_Uuid ) = text->m_Uuid;
                     delete text;
                     break;
 
-                case VALUE_FIELD:
-                    footprint->Value() = PCB_FIELD( *text, VALUE_FIELD );
+                case FIELD_T::VALUE:
+                    footprint->Value() = PCB_FIELD( *text, FIELD_T::VALUE );
                     const_cast<KIID&>( footprint->Value().m_Uuid ) = text->m_Uuid;
                     delete text;
+                    break;
+
+                default:
+                    // Fields other than reference and value weren't historically
+                    // stored in fp_texts so we don't need to handle them here
                     break;
                 }
             }

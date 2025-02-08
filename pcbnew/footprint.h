@@ -653,34 +653,21 @@ public:
     }
 
     /// read/write accessors:
-    PCB_FIELD& Value()           { return *GetField( VALUE_FIELD ); }
-    PCB_FIELD& Reference()       { return *GetField( REFERENCE_FIELD ); }
+    PCB_FIELD& Value()           { return *GetField( FIELD_T::VALUE ); }
+    PCB_FIELD& Reference()       { return *GetField( FIELD_T::REFERENCE ); }
 
     /// The const versions to keep the compiler happy.
-    const PCB_FIELD& Value() const     { return *GetField( VALUE_FIELD ); }
-    const PCB_FIELD& Reference() const { return *GetField( REFERENCE_FIELD ); }
+    const PCB_FIELD& Value() const     { return *GetField( FIELD_T::VALUE ); }
+    const PCB_FIELD& Reference() const { return *GetField( FIELD_T::REFERENCE ); }
 
     //-----<Fields>-----------------------------------------------------------
 
     /**
-     * Return a mandatory field in this symbol.
-     *
-     * @note If you need to fetch a user field, use GetFieldById.
-     *
-     * @param aFieldType is one of the mandatory field types (REFERENCE_FIELD, VALUE_FIELD, etc.).
-     * @return is the field at \a aFieldType or NULL if the field does not exist.
+     * Return a mandatory field in this footprint.  The const version will return nullptr if
+     * the field doesn't exist; the non-const version will create the field and return it.
      */
-    PCB_FIELD*       GetField( MANDATORY_FIELD_T aFieldType );
-    const PCB_FIELD* GetField( MANDATORY_FIELD_T aFieldNdx ) const;
-
-    /**
-     * Return a field in this symbol.
-     *
-     * @param aFieldId is the id of the field requested.  Note that this id ONLY SOMETIMES equates
-     *                 to the field's position in the vector.
-     * @return is the field at \a aFieldType or NULL if the field does not exist.
-     */
-    PCB_FIELD* GetFieldById( int aFieldId );
+    PCB_FIELD*       GetField( FIELD_T aFieldType );
+    const PCB_FIELD* GetField( FIELD_T aFieldNdx ) const;
 
     /**
      * Return a field in this symbol.
@@ -689,16 +676,9 @@ public:
      *
      * @return is the field with \a aFieldName or NULL if the field does not exist.
      */
-    PCB_FIELD* GetFieldByName( const wxString& aFieldName );
+    PCB_FIELD* GetField( const wxString& aFieldName ) const;
 
-    bool HasFieldByName( const wxString& aFieldName ) const;
-
-    /**
-     * Search for a field named \a aFieldName and returns text associated with this field.
-     *
-     * @param aFieldName is the name of the field
-     */
-    wxString GetFieldText( const wxString& aFieldName ) const;
+    bool HasField( const wxString& aFieldName ) const;
 
     /**
      * Populate a std::vector with PCB_TEXTs.
@@ -709,37 +689,15 @@ public:
     void GetFields( std::vector<PCB_FIELD*>& aVector, bool aVisibleOnly ) const;
 
     /**
-     * Return a vector of fields from the symbol
-     *
-     * @param aVisibleOnly is used to add only the fields that are visible and contain text.
+     * Return a reference to the deque holding the footprint's fields
      */
-    std::vector<PCB_FIELD*> GetFields( bool aVisibleOnly = false ) const;
-
-    /**
-     * Clears all fields from the footprint
-     */
-    void ClearFields() { m_fields.clear(); }
-
-    /**
-     * Add a field to the symbol.
-     *
-     * @param aField is the field to add to this symbol.
-     *
-     * @return the newly inserted field.
-     */
-    PCB_FIELD* AddField( const PCB_FIELD& aField );
-
-    /**
-     * Remove a user field from the footprint.
-     * @param aFieldName is the user fieldName to remove.  Attempts to remove a mandatory
-     *                   field or a non-existant field are silently ignored.
-     */
-    void RemoveField( const wxString& aFieldName );
+    const std::deque<PCB_FIELD*>& GetFields() const { return m_fields; }
+    std::deque<PCB_FIELD*>& GetFields() { return m_fields; }
 
     /**
      * Return the next ID for a field for this footprint
      */
-    int GetNextFieldId() const { return m_fields.size(); }
+    int GetNextFieldOrdinal() const;
 
     /**
      * @brief Apply default board settings to the footprint field text properties.
@@ -1089,11 +1047,11 @@ protected:
     void addMandatoryFields();
 
 private:
-    PCB_FIELDS      m_fields;
-    DRAWINGS        m_drawings;          // BOARD_ITEMs for drawings on the board, owned by pointer.
-    std::deque<PAD*> m_pads;              // PAD items, owned by pointer
-    ZONES           m_zones;             // PCB_ZONE items, owned by pointer
-    GROUPS          m_groups;            // PCB_GROUP items, owned by pointer
+    std::deque<PCB_FIELD*>  m_fields;    // Fields, mapped by name, owned by pointer
+    std::deque<BOARD_ITEM*> m_drawings;  // Drawings in the footprint, owned by pointer
+    std::deque<PAD*>        m_pads;      // Pads, owned by pointer
+    std::vector<ZONE*>      m_zones;     // Rule area zones, owned by pointer
+    std::deque<PCB_GROUP*>  m_groups;    // Groups, owned by pointer
 
     EDA_ANGLE       m_orient;            // Orientation
     VECTOR2I        m_pos;               // Position of footprint on the board in internal units.

@@ -533,7 +533,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     FIELDS_EDITOR_GRID_DATA_MODEL dataModel( referenceList, nullptr );
 
     // Mandatory fields + quantity virtual field first
-    for( int fieldId : MANDATORY_FIELDS )
+    for( FIELD_T fieldId : MANDATORY_FIELDS )
     {
         dataModel.AddColumn( GetCanonicalFieldName( fieldId ),
                              GetDefaultFieldName( fieldId, DO_TRANSLATE ), false );

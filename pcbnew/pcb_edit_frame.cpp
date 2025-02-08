@@ -2460,7 +2460,7 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
         if( oldField->IsReference() || oldField->IsValue() )
             continue;
 
-        PCB_FIELD* newField = aNew->GetFieldByName( oldField->GetName() );
+        PCB_FIELD* newField = aNew->GetField( oldField->GetName() );
 
         if( newField )
         {

@@ -474,7 +474,7 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString&          aSymbo
             // This proves useful in situations where, for instance, an individual requires a particular value, such as
             // the material type showcased at a specific position for a capacitor. Subsequently, this value could be defined
             // in the symbol itself and then, potentially, be modified by the HTTP library as necessary.
-            field = symbol->FindField( fieldName );
+            field = symbol->GetField( fieldName );
 
             if( field != nullptr )
             {
@@ -485,7 +485,7 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString&          aSymbo
             else
             {
                 // Generic fields
-                field = new SCH_FIELD( nullptr, symbol->GetNextAvailableFieldId() );
+                field = new SCH_FIELD( symbol, FIELD_T::USER );
                 field->SetName( fieldName );
 
                 field->SetText( std::get<0>( fieldProperties ) );

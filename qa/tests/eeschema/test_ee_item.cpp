@@ -120,7 +120,7 @@ public:
         case SCH_DIRECTIVE_LABEL_T: return new SCH_DIRECTIVE_LABEL( VECTOR2I( 0, 0 ) );
         case SCH_GLOBAL_LABEL_T:    return new SCH_GLOBALLABEL();
         case SCH_HIER_LABEL_T:      return new SCH_HIERLABEL();
-        case SCH_FIELD_T:           return new SCH_FIELD( VECTOR2I( 0, 0 ), 0, nullptr );
+        case SCH_FIELD_T:           return new SCH_FIELD( { 0, 0 }, FIELD_T::USER, nullptr );
         case SCH_SYMBOL_T:          return new SCH_SYMBOL();
 
         case SCH_SHEET_PIN_T:

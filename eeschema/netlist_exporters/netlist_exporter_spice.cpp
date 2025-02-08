@@ -184,9 +184,10 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
 
                 for( const SCH_FIELD& field : symbol->GetFields() )
                 {
-                    spiceItem.fields.emplace_back( VECTOR2I(), -1, symbol, field.GetName() );
+                    spiceItem.fields.emplace_back( VECTOR2I(), FIELD_T::USER, symbol,
+                                                   field.GetName() );
 
-                    if( field.GetId() == REFERENCE_FIELD )
+                    if( field.GetId() == FIELD_T::REFERENCE )
                         spiceItem.fields.back().SetText( symbol->GetRef( &sheet ) );
                     else
                         spiceItem.fields.back().SetText( field.GetShownText( &sheet, false ) );
@@ -488,7 +489,7 @@ void NETLIST_EXPORTER_SPICE::readPinNetNames( SCH_SYMBOL& aSymbol, SPICE_ITEM& a
 void NETLIST_EXPORTER_SPICE::getNodePattern( SPICE_ITEM&               aItem,
                                              std::vector<std::string>& aModifiers )
 {
-    std::string input = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_NODES_FORMAT_FIELD, true );
+    std::string input = GetFieldValue( &aItem.fields, SIM_NODES_FORMAT_FIELD, true );
 
     if( input == "" )
         return;

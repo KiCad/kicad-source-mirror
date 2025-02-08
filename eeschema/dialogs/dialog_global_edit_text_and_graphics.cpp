@@ -421,16 +421,18 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( SCH_COMMIT* aCommit,
         SCH_SYMBOL* symbol = (SCH_SYMBOL*) aItem;
 
         if( m_references->GetValue() )
-            processItem( aCommit, aSheetPath, symbol->GetField( REFERENCE_FIELD ) );
+            processItem( aCommit, aSheetPath, symbol->GetField( FIELD_T::REFERENCE ) );
 
         if( m_values->GetValue() )
-            processItem( aCommit, aSheetPath, symbol->GetField( VALUE_FIELD ) );
+            processItem( aCommit, aSheetPath, symbol->GetField( FIELD_T::VALUE ) );
 
         if( m_otherFields->GetValue() )
         {
-            for( int i = 2; i < symbol->GetFieldCount(); ++i )
+            for( SCH_FIELD& field : symbol->GetFields() )
             {
-                SCH_FIELD&      field = symbol->GetFields()[i];
+                if( field.GetId() == FIELD_T::REFERENCE || field.GetId() == FIELD_T::VALUE )
+                    continue;
+
                 const wxString& fieldName = field.GetName();
 
                 if( !m_fieldnameFilterOpt->GetValue() || m_fieldnameFilter->GetValue().IsEmpty()
@@ -449,13 +451,13 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( SCH_COMMIT* aCommit,
         SCH_SHEET* sheet = static_cast<SCH_SHEET*>( aItem );
 
         if( m_sheetTitles->GetValue() )
-            processItem( aCommit, aSheetPath, &sheet->GetFields()[SHEETNAME] );
+            processItem( aCommit, aSheetPath, sheet->GetField( FIELD_T::SHEET_NAME ) );
 
         if( m_sheetFields->GetValue() )
         {
             for( SCH_FIELD& field : sheet->GetFields() )
             {
-                if( field.GetId() == SHEETNAME )
+                if( field.GetId() == FIELD_T::SHEET_NAME )
                     continue;
 
                 const wxString& fieldName = field.GetName();

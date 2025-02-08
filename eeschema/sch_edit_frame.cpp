@@ -1274,7 +1274,7 @@ void SCH_EDIT_FRAME::ShowFindReplaceDialog( bool aReplace )
         case SCH_SYMBOL_T:
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( front );
-            findString = UnescapeString( symbol->GetField( VALUE_FIELD )->GetText() );
+            findString = UnescapeString( symbol->GetField( FIELD_T::VALUE )->GetText() );
             break;
         }
 

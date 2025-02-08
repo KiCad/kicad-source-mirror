@@ -40,18 +40,6 @@ class EDA_DRAW_FRAME;
 #define MIN_SHEET_HEIGHT 150    // Units are mils.
 
 
-enum  SHEET_FIELD_TYPE
-{
-    SHEETNAME = 0,
-    SHEETFILENAME,
-
-    /// The first 2 are mandatory, and must be instantiated in SCH_SHEET
-    SHEET_MANDATORY_FIELD_COUNT
-};
-
-#define SHEET_MANDATORY_FIELDS { SHEETNAME, SHEETFILENAME }
-
-
 /**
  * Sheet symbol placed in a schematic, and is the entry point for a sub schematic.
  */
@@ -93,8 +81,18 @@ public:
      */
     bool IsMovableFromAnchorPoint() const override { return false; }
 
+    /**
+     * Return a reference to the vector holding the sheet's fields
+     */
     std::vector<SCH_FIELD>& GetFields() { return m_fields; }
     const std::vector<SCH_FIELD>& GetFields() const { return m_fields; }
+
+    /**
+     * Return a mandatory field in this sheet.  The const version will return nullptr if the
+     * field does not exist; the non-const version will create it.
+     */
+    SCH_FIELD* GetField( FIELD_T aFieldType );
+    const SCH_FIELD* GetField( FIELD_T aFieldNdx ) const;
 
     /**
      * Set multiple schematic fields.
@@ -105,10 +103,10 @@ public:
 
     wxString GetShownName( bool aAllowExtraText ) const
     {
-        return m_fields[SHEETNAME].GetShownText( aAllowExtraText );
+        return GetField( FIELD_T::SHEET_NAME )->GetShownText( aAllowExtraText );
     }
-    wxString GetName() const { return m_fields[ SHEETNAME ].GetText(); }
-    void SetName( const wxString& aName ) { m_fields[ SHEETNAME ].SetText( aName ); }
+    wxString GetName() const { return GetField( FIELD_T::SHEET_NAME )->GetText(); }
+    void SetName( const wxString& aName ) { GetField( FIELD_T::SHEET_NAME )->SetText( aName ); }
 
     SCH_SCREEN* GetScreen() const { return m_screen; }
 
@@ -309,7 +307,7 @@ public:
      */
     wxString GetFileName() const
     {
-        return m_fields[ SHEETFILENAME ].GetText();
+        return GetField( FIELD_T::SHEET_FILENAME )->GetText();
     }
 
     // Set a new filename without changing anything else
@@ -318,7 +316,7 @@ public:
         // Filenames are stored using unix notation
         wxString tmp = aFilename;
         tmp.Replace( wxT( "\\" ), wxT( "/" ) );
-        m_fields[ SHEETFILENAME ].SetText( tmp );
+        GetField( FIELD_T::SHEET_FILENAME )->SetText( tmp );
     }
 
     // Geometric transforms (used in block operations):
@@ -464,8 +462,6 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
-
-    static const wxString GetDefaultFieldName( int aFieldNdx, bool aTranslated );
 
 protected:
     friend SCH_SHEET_PATH;

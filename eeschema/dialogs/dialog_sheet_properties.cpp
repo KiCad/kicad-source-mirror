@@ -61,11 +61,11 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
     m_sourceSheetFilename( aSourceSheetFilename ),
     m_borderWidth( aParent, m_borderWidthLabel, m_borderWidthCtrl, m_borderWidthUnits ),
     m_dummySheet( *aSheet ),
-    m_dummySheetNameField( VECTOR2I( -1, -1 ), SHEETNAME, &m_dummySheet )
+    m_dummySheetNameField( VECTOR2I( -1, -1 ), FIELD_T::SHEET_NAME, &m_dummySheet )
 {
     m_sheet = aSheet;
     m_fields = new FIELDS_GRID_TABLE( this, aParent, m_grid, m_sheet );
-    m_delayedFocusRow = SHEETNAME;
+    m_delayedFocusRow = 0;
     m_delayedFocusColumn = FDC_VALUE;
 
     // Give a bit more room for combobox editors
@@ -245,13 +245,19 @@ static bool positioningChanged( const SCH_FIELD& a, const SCH_FIELD& b )
 }
 
 
-static bool positioningChanged( FIELDS_GRID_TABLE* a, std::vector<SCH_FIELD>& b )
+static bool positioningChanged( FIELDS_GRID_TABLE* a, SCH_SHEET* b )
 {
-    if( positioningChanged( a->at( SHEETNAME ), b.at( SHEETNAME ) ) )
+    if( positioningChanged( a->GetField( FIELD_T::SHEET_NAME ),
+                            b->GetField( FIELD_T::SHEET_NAME ) ) )
+    {
         return true;
+    }
 
-    if( positioningChanged( a->at( SHEETFILENAME ), b.at( SHEETFILENAME ) ) )
+    if( positioningChanged( a->GetField( FIELD_T::SHEET_FILENAME ),
+                            b->GetField( FIELD_T::SHEET_FILENAME ) ) )
+    {
         return true;
+    }
 
     return false;
 }
@@ -268,7 +274,7 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
         *m_isUndoable = true;
 
     // Sheet file names can be relative or absolute.
-    wxString sheetFileName = m_fields->at( SHEETFILENAME ).GetText();
+    wxString sheetFileName = m_fields->GetField( FIELD_T::SHEET_FILENAME )->GetText();
 
     // Ensure filepath is not empty.  (In normal use will be caught by grid validators,
     // but unedited data from existing files can be bad.)
@@ -296,7 +302,7 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
     // Inside Eeschema, filenames are stored using unix notation
     newRelativeFilename.Replace( wxT( "\\" ), wxT( "/" ) );
 
-    wxString oldFilename = m_sheet->GetFields()[ SHEETFILENAME ].GetText();
+    wxString oldFilename = m_sheet->GetField( FIELD_T::SHEET_FILENAME )->GetText();
     oldFilename.Replace( wxT( "\\" ), wxT( "/" ) );
 
     bool filename_changed = oldFilename != newRelativeFilename;
@@ -338,7 +344,7 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
                                                 "\n    to relative path: '%s'",
                                                 tmp.GetPath(),
                                                 fn.GetPath() );
-                m_fields->at( SHEETFILENAME ).SetText( fn.GetFullPath() );
+                m_fields->GetField( FIELD_T::SHEET_FILENAME )->SetText( fn.GetFullPath() );
                 newRelativeFilename = fn.GetFullPath();
             }
         }
@@ -348,7 +354,7 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
             if( clearFileName )
                 currentScreen->SetFileName( wxEmptyString );
             else
-                m_fields->at( SHEETFILENAME ).SetText( oldFilename );
+                FindField( *m_fields, FIELD_T::SHEET_FILENAME )->SetText( oldFilename );
 
             return false;
         }
@@ -365,7 +371,7 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
         repairedList.BuildSheetList( &m_frame->Schematic().Root(), true );
     }
 
-    wxString newSheetname = m_fields->at( SHEETNAME ).GetText();
+    wxString newSheetname = m_fields->GetField( FIELD_T::SHEET_NAME )->GetText();
 
     if( ( newSheetname != m_sheet->GetName() ) && m_updateHierarchyNavigator )
         *m_updateHierarchyNavigator = true;
@@ -373,13 +379,13 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
     if( newSheetname.IsEmpty() )
         newSheetname = _( "Untitled Sheet" );
 
-    m_fields->at( SHEETNAME ).SetText( newSheetname );
+    m_fields->GetField( FIELD_T::SHEET_NAME )->SetText( newSheetname );
 
     // change all field positions from relative to absolute
     for( SCH_FIELD& m_field : *m_fields)
         m_field.Offset( m_sheet->GetPosition() );
 
-    if( positioningChanged( m_fields, m_sheet->GetFields() ) )
+    if( positioningChanged( m_fields, m_sheet ) )
         m_sheet->SetFieldsAutoplaced( AUTOPLACE_NONE );
 
     for( int ii = m_fields->GetNumberRows() - 1; ii >= 0; ii-- )
@@ -648,8 +654,8 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
     {
         // Create a temporary sheet for recursion testing to prevent a possible recursion error.
         std::unique_ptr< SCH_SHEET> tmpSheet = std::make_unique<SCH_SHEET>( &schematic );
-        tmpSheet->GetFields()[SHEETNAME] = m_fields->at( SHEETNAME );
-        tmpSheet->GetFields()[SHEETFILENAME].SetText( sheetFileName.GetFullPath() );
+        *tmpSheet->GetField( FIELD_T::SHEET_NAME ) = m_fields->GetField( FIELD_T::SHEET_NAME );
+        tmpSheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( sheetFileName.GetFullPath() );
         tmpSheet->SetScreen( useScreen );
 
         // No need to check for valid library IDs if we are using an existing screen.
@@ -711,28 +717,8 @@ void DIALOG_SHEET_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
     bool              success = true;
     wxGridCellEditor* editor = m_grid->GetCellEditor( event.GetRow(), event.GetCol() );
     wxControl*        control = editor->GetControl();
-    wxTextEntry*      textControl = dynamic_cast<wxTextEntry*>( control );
 
-    // Short-circuit the validator's more generic "can't be empty" message for the
-    // two mandatory fields:
-    if( event.GetRow() == SHEETNAME && event.GetCol() == FDC_VALUE )
-    {
-        if( textControl && textControl->IsEmpty() )
-        {
-            wxMessageBox( _( "A sheet must have a name." ) );
-            success = false;
-        }
-    }
-    else if( event.GetRow() == SHEETFILENAME && event.GetCol() == FDC_VALUE && textControl )
-    {
-        if( textControl->IsEmpty() )
-        {
-            wxMessageBox( _( "A sheet must have a file specified." ) );
-            success = false;
-        }
-    }
-
-    if( success && control && control->GetValidator() )
+    if( control && control->GetValidator() )
         success = control->GetValidator()->Validate( control );
 
     if( !success )
@@ -751,11 +737,10 @@ void DIALOG_SHEET_PROPERTIES::OnAddField( wxCommandEvent& event )
     if( !m_grid->CommitPendingChanges() )
         return;
 
-    int       fieldID = m_fields->size();
-    SCH_FIELD newField( VECTOR2I( 0, 0 ), fieldID, m_sheet,
-                        SCH_SHEET::GetDefaultFieldName( fieldID, DO_TRANSLATE ) );
+    SCH_FIELD newField( { 0, 0 }, FIELD_T::SHEET_USER, m_sheet,
+                        GetUserFieldName( (int) m_fields->size(), DO_TRANSLATE ) );
 
-    newField.SetTextAngle( m_fields->at( SHEETNAME ).GetTextAngle() );
+    newField.SetTextAngle( m_fields->GetField( FIELD_T::SHEET_NAME )->GetTextAngle() );
 
     m_fields->push_back( newField );
 
@@ -891,12 +876,13 @@ void DIALOG_SHEET_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
     }
 
     // Propagate changes in sheetname to displayed hierarchical path
+    int       sheetnameRow = m_fields->GetFieldRow( FIELD_T::SHEET_NAME );
     wxString  path = m_frame->GetCurrentSheet().PathHumanReadable( false );
 
     if( path.Last() != '/' )
         path.Append( '/' );
 
-    wxGridCellEditor* editor = m_grid->GetCellEditor( SHEETNAME, FDC_VALUE );
+    wxGridCellEditor* editor = m_grid->GetCellEditor( sheetnameRow, FDC_VALUE );
     wxControl*        control = editor->GetControl();
     wxTextEntry*      textControl = dynamic_cast<wxTextEntry*>( control );
     wxString          sheetName;
@@ -904,7 +890,7 @@ void DIALOG_SHEET_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
     if( textControl )
         sheetName = textControl->GetValue();
     else
-        sheetName = m_grid->GetCellValue( SHEETNAME, FDC_VALUE );
+        sheetName = m_grid->GetCellValue( sheetnameRow, FDC_VALUE );
 
     m_dummySheet.SetFields( *m_fields );
     m_dummySheetNameField.SetText( sheetName );

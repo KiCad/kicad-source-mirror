@@ -152,14 +152,14 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
             curSheet->SetPosition( parser.ToKicadCoords( ascFiles[i].Offset ) + bbox.GetOrigin() );
             curSheet->SetParent( ascFiles[ascFiles[i].ParentIndex].Sheet );
 
-            SCH_FIELD& sheetNameField = curSheet->GetFields()[SHEETNAME];
-            SCH_FIELD& fileNameSheet = curSheet->GetFields()[SHEETFILENAME];
+            SCH_FIELD* sheetNameField = curSheet->GetField( FIELD_T::SHEET_NAME );
+            SCH_FIELD* fileNameSheet = curSheet->GetField( FIELD_T::SHEET_FILENAME );
             wxString   sheetName = wxString::Format( wxS( "%s-subsheet-%d" ),
                                                      ascFiles[i].ElementName,
                                                      i );
 
-            sheetNameField.SetText( sheetName );
-            fileNameSheet.SetText( sheetName + ".kicad_sch" );
+            sheetNameField->SetText( sheetName );
+            fileNameSheet->SetText( sheetName + ".kicad_sch" );
 
             curSheet->SetScreen( ascFiles[i].Screen );
 

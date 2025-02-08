@@ -79,8 +79,7 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_SYMBO
 
         m_newId->ChangeValue( UnescapeString( m_symbol->GetLibId().Format() ) );
         m_specifiedReference->ChangeValue( m_symbol->GetRef( currentSheet ) );
-        m_specifiedValue->ChangeValue(
-                UnescapeString( m_symbol->GetField( VALUE_FIELD )->GetText() ) );
+        m_specifiedValue->ChangeValue( UnescapeString( m_symbol->GetField( FIELD_T::VALUE )->GetText() ) );
         m_specifiedId->ChangeValue( UnescapeString( m_symbol->GetLibId().Format() ) );
     }
     else
@@ -101,16 +100,20 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_SYMBO
     m_matchSizer->SetEmptyCellSize( wxSize( 0, 0 ) );
     m_matchSizer->Layout();
 
-    for( int i = 0; i < MANDATORY_FIELD_COUNT; ++i )
+    for( FIELD_T fieldId : MANDATORY_FIELDS )
     {
-        m_fieldsBox->Append( GetDefaultFieldName( i, DO_TRANSLATE ) );
+        int listIdx = m_fieldsBox->GetCount();
 
-        if( i == REFERENCE_FIELD )
-            m_fieldsBox->Check( i, g_selectRefDes );
-        else if( i == VALUE_FIELD )
-            m_fieldsBox->Check( i, g_selectValue );
+        m_fieldsBox->Append( GetDefaultFieldName( fieldId, DO_TRANSLATE ) );
+
+        if( fieldId == FIELD_T::REFERENCE )
+            m_fieldsBox->Check( listIdx, g_selectRefDes );
+        else if( fieldId == FIELD_T::VALUE )
+            m_fieldsBox->Check( listIdx, g_selectValue );
         else
-            m_fieldsBox->Check( i, true );
+            m_fieldsBox->Check( listIdx, true );
+
+        m_mandatoryFieldListIndexes[fieldId] = listIdx;
     }
 
     m_messagePanel->SetLazyUpdate( true );
@@ -221,8 +224,8 @@ void DIALOG_CHANGE_SYMBOLS::onNewLibIDKillFocus( wxFocusEvent& event )
 
 DIALOG_CHANGE_SYMBOLS::~DIALOG_CHANGE_SYMBOLS()
 {
-    g_selectRefDes = m_fieldsBox->IsChecked( REFERENCE_FIELD );
-    g_selectValue = m_fieldsBox->IsChecked( VALUE_FIELD );
+    g_selectRefDes = m_fieldsBox->IsChecked( m_mandatoryFieldListIndexes[FIELD_T::REFERENCE] );
+    g_selectValue = m_fieldsBox->IsChecked( m_mandatoryFieldListIndexes[FIELD_T::VALUE] );
 
     g_removeExtraFields[ (int) m_mode ] = m_removeExtraBox->GetValue();
     g_resetEmptyFields[ (int) m_mode ] = m_resetEmptyFields->GetValue();
@@ -286,9 +289,7 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
     wxCHECK( frame, /* void */ );
 
     // Load non-mandatory fields from all matching symbols and their library symbols
-    std::vector<SCH_FIELD*> fields;
-    std::vector<SCH_FIELD*> libFields;
-    std::set<wxString>      fieldNames;
+    std::set<wxString> fieldNames;
 
     for( SCH_SHEET_PATH& instance : frame->Schematic().Hierarchy() )
     {
@@ -305,13 +306,10 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
             if( !isMatch( symbol, &instance ) )
                 continue;
 
-            fields.clear();
-            symbol->GetFields( fields, false );
-
-            for( SCH_FIELD* field : fields )
+            for( SCH_FIELD& field : symbol->GetFields() )
             {
-                if( !field->IsMandatory() && !field->IsPrivate() )
-                    fieldNames.insert( field->GetName() );
+                if( !field.IsMandatory() && !field.IsPrivate() )
+                    fieldNames.insert( field.GetName() );
             }
 
             if( m_mode == MODE::UPDATE && symbol->GetLibId().IsValid() )
@@ -321,16 +319,15 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
                 if( libSymbol )
                 {
                     std::unique_ptr<LIB_SYMBOL> flattenedSymbol = libSymbol->Flatten();
+                    std::vector<SCH_FIELD*>     orderedLibFields;
 
-                    flattenedSymbol->GetFields( libFields );
+                    flattenedSymbol->GetFields( orderedLibFields );
 
-                    for( SCH_FIELD* libField : libFields )
+                    for( SCH_FIELD* libField : orderedLibFields )
                     {
                         if( !libField->IsMandatory() && !libField->IsPrivate() )
                             fieldNames.insert( libField->GetName() );
                     }
-
-                    libFields.clear();  // flattenedSymbol is about to go out of scope...
                 }
             }
         }
@@ -350,16 +347,15 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
             if( libSymbol )
             {
                 std::unique_ptr<LIB_SYMBOL> flattenedSymbol = libSymbol->Flatten();
+                std::vector<SCH_FIELD*>     orderedLibFields;
 
-                flattenedSymbol->GetFields( libFields );
+                flattenedSymbol->GetFields( orderedLibFields );
 
-                for( SCH_FIELD* libField : libFields )
+                for( SCH_FIELD* libField : orderedLibFields )
                 {
                     if( !libField->IsMandatory() && !libField->IsPrivate() )
                         fieldNames.insert( libField->GetName() );
                 }
-
-                libFields.clear();  // flattenedSymbol is about to go out of scope...
             }
         }
     }
@@ -375,17 +371,35 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
 
     bool allChecked = true;
 
-    for( unsigned ii = 0; ii < m_fieldsBox->GetCount(); ++ii )
+    for( int ii = 0; ii < (int) m_fieldsBox->GetCount(); ++ii )
     {
-        if( ii == REFERENCE_FIELD || ii == VALUE_FIELD )
-            continue;
-
-        if( !m_fieldsBox->IsChecked( ii ) )
+        if( !m_fieldsBox->IsChecked( ii )
+                && ii != m_mandatoryFieldListIndexes[FIELD_T::REFERENCE]
+                && ii != m_mandatoryFieldListIndexes[FIELD_T::VALUE] )
+        {
             allChecked = false;
+        }
     }
 
-    for( unsigned ii = m_fieldsBox->GetCount() - 1; ii >= MANDATORY_FIELD_COUNT; --ii )
+    auto isMandatoryField =
+            [&]( int listbox_idx )
+            {
+                for( FIELD_T fieldId : MANDATORY_FIELDS )
+                {
+                    if( m_mandatoryFieldListIndexes[fieldId] == listbox_idx )
+                        return true;
+                }
+
+                return false;
+            };
+
+    for( int ii = (int) m_fieldsBox->GetCount() - 1; ii >= 0; --ii )
+    {
+        if( isMandatoryField( ii ) )
+            continue;
+
         m_fieldsBox->Delete( ii );
+    }
 
     for( const wxString& fieldName : fieldNames )
     {
@@ -420,15 +434,16 @@ void DIALOG_CHANGE_SYMBOLS::onOkButtonClicked( wxCommandEvent& aEvent )
     // for mandatory fields
     m_updateFields.clear();
 
-    for( unsigned i = 0; i < m_fieldsBox->GetCount(); ++i )
+    for( unsigned ii = 0; ii < m_fieldsBox->GetCount(); ++ii )
     {
-        if( m_fieldsBox->IsChecked( i ) )
-        {
-            if( i < MANDATORY_FIELD_COUNT )
-                m_updateFields.insert( GetCanonicalFieldName( i ) );
-            else
-                m_updateFields.insert( m_fieldsBox->GetString( i ) );
-        }
+        if( m_fieldsBox->IsChecked( ii ) )
+            m_updateFields.insert( m_fieldsBox->GetString( ii ) );
+    }
+
+    for( FIELD_T fieldId : MANDATORY_FIELDS )
+    {
+        if( m_fieldsBox->IsChecked( m_mandatoryFieldListIndexes[fieldId] ) )
+            m_updateFields.insert( GetCanonicalFieldName( fieldId ) );
     }
 
     if( processMatchingSymbols( &commit) )
@@ -464,7 +479,7 @@ bool DIALOG_CHANGE_SYMBOLS::isMatch( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aInsta
     else if( m_matchByValue->GetValue() )
     {
         return WildCompareString( m_specifiedValue->GetValue(),
-                                  UnescapeString( aSymbol->GetField( VALUE_FIELD )->GetText() ),
+                                  UnescapeString( aSymbol->GetField( FIELD_T::VALUE )->GetText() ),
                                   false );
     }
     else if( m_matchById )
@@ -655,9 +670,9 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
         bool resetEffects = m_resetFieldEffects->GetValue();
         bool resetPositions = m_resetFieldPositions->GetValue();
 
-        for( unsigned i = 0; i < symbol->GetFields().size(); ++i )
+        for( int ii = (int) symbol->GetFields().size() - 1; ii >= 0; ii-- )
         {
-            SCH_FIELD& field = symbol->GetFields()[i];
+            SCH_FIELD& field = symbol->GetFields()[ii];
             SCH_FIELD* libField = nullptr;
             bool       doUpdate = field.IsPrivate();
 
@@ -668,10 +683,10 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
             if( !doUpdate )
                 continue;
 
-            if( i < MANDATORY_FIELD_COUNT )
-                libField = symbol->GetLibSymbolRef()->GetFieldById( (int) i );
+            if( field.IsMandatory() )
+                libField = symbol->GetLibSymbolRef()->GetField( field.GetId() );
             else
-                libField = symbol->GetLibSymbolRef()->FindField( field.GetName() );
+                libField = symbol->GetLibSymbolRef()->GetField( field.GetName() );
 
             if( libField )
             {
@@ -682,7 +697,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
 
                 if( resetText )
                 {
-                    if( i == REFERENCE_FIELD )
+                    if( field.GetId() == FIELD_T::REFERENCE )
                     {
                         wxString prefix = UTIL::GetRefDesPrefix( libField->GetText() );
 
@@ -699,15 +714,10 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
                             symbol->SetRef( &instance, ref );
                         }
                     }
-                    else if( i == VALUE_FIELD )
+                    else if( field.GetId() == FIELD_T::VALUE )
                     {
-                        if( ( symbol->IsPower() && m_resetCustomPower->IsChecked() )
-                            || !symbol->IsPower() )
+                        if( !symbol->IsPower() || m_resetCustomPower->IsChecked() )
                             symbol->SetValueFieldText( UnescapeString( libField->GetText() ) );
-                    }
-                    else if( i == FOOTPRINT_FIELD )
-                    {
-                        symbol->SetFootprintFieldText( libField->GetText() );
                     }
                     else
                     {
@@ -735,10 +745,9 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
                 if( resetPositions )
                     field.SetTextPos( symbol->GetPosition() + libField->GetTextPos() );
             }
-            else if( i >= MANDATORY_FIELD_COUNT && removeExtras )
+            else if( !field.IsMandatory() && removeExtras )
             {
                 symbol->RemoveField( field.GetName() );
-                i--;
             }
         }
 
@@ -753,11 +762,10 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
             if( !alg::contains( m_updateFields, libField->GetCanonicalName() ) )
                 continue;
 
-            if( !symbol->FindField( libField->GetName(), false ) )
+            if( !symbol->GetField( libField->GetName() ) )
             {
-                SCH_FIELD  newField( VECTOR2I( 0, 0 ), symbol->GetNextFieldId(), symbol,
-                                     libField->GetCanonicalName() );
-                SCH_FIELD* schField = symbol->AddField( newField );
+                SCH_FIELD* schField = symbol->AddField( SCH_FIELD( { 0, 0 }, FIELD_T::USER, symbol,
+                                                                   libField->GetName() ) );
 
                 // Careful: the visible bit and position are also set by SetAttributes()
                 schField->SetAttributes( *libField );

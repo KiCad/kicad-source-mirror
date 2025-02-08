@@ -200,9 +200,10 @@ static void AlignText( EDA_TEXT* text, int align )
 }
 
 
-void PCB_IO_EASYEDAPRO_PARSER::fillFootprintModelInfo( FOOTPRINT* footprint, const wxString& modelUuid,
-                                                    const wxString& modelTitle,
-                                                    const wxString& modelTransform ) const
+void PCB_IO_EASYEDAPRO_PARSER::fillFootprintModelInfo( FOOTPRINT* footprint,
+                                                       const wxString& modelUuid,
+                                                       const wxString& modelTitle,
+                                                       const wxString& modelTransform ) const
 {
     // TODO: make this path configurable?
     const wxString easyedaModelDir = wxS( "EASYEDA_MODELS" );
@@ -211,16 +212,16 @@ void PCB_IO_EASYEDAPRO_PARSER::fillFootprintModelInfo( FOOTPRINT* footprint, con
     VECTOR3D kmodelOffset;
     VECTOR3D kmodelRotation;
 
-    if( !modelUuid.IsEmpty() && !footprint->GetFieldByName( QUERY_MODEL_UUID_KEY ) )
+    if( !modelUuid.IsEmpty() && !footprint->GetField( QUERY_MODEL_UUID_KEY ) )
     {
-        PCB_FIELD field( footprint, footprint->GetNextFieldId(), QUERY_MODEL_UUID_KEY );
-        field.SetLayer( Cmts_User );
-        field.SetVisible( false );
-        field.SetText( modelUuid );
-        footprint->AddField( field );
+        PCB_FIELD* field = new PCB_FIELD( footprint, FIELD_T::USER, QUERY_MODEL_UUID_KEY );
+        field->SetLayer( Cmts_User );
+        field->SetVisible( false );
+        field->SetText( modelUuid );
+        footprint->Add( field );
     }
 
-    if( !modelTransform.IsEmpty() && !footprint->GetFieldByName( MODEL_SIZE_KEY ) )
+    if( !modelTransform.IsEmpty() && !footprint->GetField( MODEL_SIZE_KEY ) )
     {
         wxArrayString arr = wxSplit( modelTransform, ',', '\0' );
 
@@ -229,12 +230,12 @@ void PCB_IO_EASYEDAPRO_PARSER::fillFootprintModelInfo( FOOTPRINT* footprint, con
 
         if( fitXmm > 0.0 && fitYmm > 0.0 )
         {
-            PCB_FIELD field( footprint, footprint->GetNextFieldId(), MODEL_SIZE_KEY );
-            field.SetLayer( Cmts_User );
-            field.SetVisible( false );
-            field.SetText( wxString::FromCDouble( fitXmm ) + wxS( " " )
+            PCB_FIELD* field = new PCB_FIELD( footprint, FIELD_T::USER, MODEL_SIZE_KEY );
+            field->SetLayer( Cmts_User );
+            field->SetVisible( false );
+            field->SetText( wxString::FromCDouble( fitXmm ) + wxS( " " )
                            + wxString::FromCDouble( fitYmm ) );
-            footprint->AddField( field );
+            footprint->Add( field );
         }
 
         kmodelRotation.z = -Convert( arr[3] );
@@ -848,7 +849,7 @@ FOOTPRINT* PCB_IO_EASYEDAPRO_PARSER::ParseFootprint( const nlohmann::json&      
                 EASYEDAPRO::PCB_ATTR attr = line;
 
                 if( attr.key == wxS( "Designator" ) )
-                    footprint->GetField( REFERENCE_FIELD )->SetText( attr.value );
+                    footprint->GetField( FIELD_T::REFERENCE )->SetText( attr.value );
             }
         }
         else if( type == wxS( "REGION" ) )
@@ -1672,18 +1673,17 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
                 PCB_LAYER_ID klayer = LayerToKi( attr.layer );
 
                 PCB_FIELD* field = nullptr;
-                bool       add = false;
 
                 if( attr.key == wxS( "Designator" ) )
                 {
                     if( attr.key == wxS( "Designator" ) )
                     {
-                        field = footprint->GetField( REFERENCE_FIELD );
+                        field = footprint->GetField( FIELD_T::REFERENCE );
                     }
                     else
                     {
-                        field = new PCB_FIELD( footprint.get(), -1, attr.key );
-                        add = true;
+                        field = new PCB_FIELD( footprint.get(), FIELD_T::USER, attr.key );
+                        footprint->Add( field, ADD_MODE::APPEND );
                     }
 
                     if( attr.fontName != wxS( "default" ) )
@@ -1713,9 +1713,6 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
                                                   ScaleSize( attr.height * 0.6 ) ) );
 
                     AlignText( field, attr.textOrigin );
-
-                    if( add )
-                        footprint->Add( field, ADD_MODE::APPEND );
                 }
             }
             else if( type == wxS( "PAD_NET" ) )

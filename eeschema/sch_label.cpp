@@ -577,7 +577,7 @@ void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo 
             field.SetTextAngle( ANGLE_HORIZONTAL );
             field.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
 
-            if( field.GetCanonicalName() == wxT( "Intersheetrefs" ) )
+            if( field.GetId() == FIELD_T::INTERSHEET_REFS )
                 offset.x = - ( labelLen + margin );
             else
                 offset.y = accumulated + field.GetTextHeight() / 2;
@@ -588,7 +588,7 @@ void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo 
             field.SetTextAngle( ANGLE_VERTICAL );
             field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
 
-            if( field.GetCanonicalName() == wxT( "Intersheetrefs" ) )
+            if( field.GetId() == FIELD_T::INTERSHEET_REFS )
                 offset.y = - ( labelLen + margin );
             else
                 offset.x = accumulated + field.GetTextHeight() / 2;
@@ -599,7 +599,7 @@ void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo 
             field.SetTextAngle( ANGLE_HORIZONTAL );
             field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
 
-            if( field.GetCanonicalName() == wxT( "Intersheetrefs" ) )
+            if( field.GetId() == FIELD_T::INTERSHEET_REFS )
                 offset.x = labelLen + margin;
             else
                 offset.y = accumulated + field.GetTextHeight() / 2;
@@ -610,7 +610,7 @@ void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo 
             field.SetTextAngle( ANGLE_VERTICAL );
             field.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
 
-            if( field.GetCanonicalName() == wxT( "Intersheetrefs" ) )
+            if( field.GetId() == FIELD_T::INTERSHEET_REFS )
                 offset.y = labelLen + margin;
             else
                 offset.x = accumulated + field.GetTextHeight() / 2;
@@ -620,7 +620,7 @@ void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo 
 
         field.SetTextPos( GetTextPos() + offset );
 
-        if( field.GetCanonicalName() != wxT( "Intersheetrefs" ) )
+        if( field.GetId() == FIELD_T::INTERSHEET_REFS )
             accumulated += field.GetTextHeight() + margin;
     }
 
@@ -904,7 +904,10 @@ std::vector<VECTOR2I> SCH_LABEL_BASE::GetConnectionPoints() const
 
 std::vector<int> SCH_LABEL_BASE::ViewGetLayers() const
 {
-    return { LAYER_DANGLING, LAYER_DEVICE, LAYER_NETCLASS_REFS, LAYER_FIELDS,
+    return { LAYER_DANGLING,
+             LAYER_DEVICE,
+             LAYER_NETCLASS_REFS,
+             LAYER_FIELDS,
              LAYER_SELECTION_SHADOWS };
 }
 
@@ -1757,11 +1760,12 @@ SCH_GLOBALLABEL::SCH_GLOBALLABEL( const VECTOR2I& pos, const wxString& text ) :
 
     SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
 
-    m_fields.emplace_back( SCH_FIELD( pos, INTERSHEET_REFS, this, wxT( "Sheet References" ) ) );
-    m_fields[0].SetText( wxT( "${INTERSHEET_REFS}" ) );
-    m_fields[0].SetVisible( false );
-    m_fields[0].SetLayer( LAYER_INTERSHEET_REFS );
-    m_fields[0].SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+    m_fields.emplace_back( SCH_FIELD( pos, FIELD_T::INTERSHEET_REFS, this,
+                                      ::GetDefaultFieldName( FIELD_T::INTERSHEET_REFS, false ) ) );
+    m_fields.back().SetText( wxT( "${INTERSHEET_REFS}" ) );
+    m_fields.back().SetVisible( false );
+    m_fields.back().SetLayer( LAYER_INTERSHEET_REFS );
+    m_fields.back().SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
 }
 
 
@@ -1781,6 +1785,22 @@ bool SCH_GLOBALLABEL::Deserialize( const google::protobuf::Any &aContainer )
 {
     // TODO
     return false;
+}
+
+
+SCH_FIELD* SCH_GLOBALLABEL::GetField( FIELD_T aFieldType )
+{
+    if( SCH_FIELD* field = FindField( m_fields, aFieldType ) )
+        return field;
+
+    m_fields.emplace_back( this, aFieldType );
+    return &m_fields.back();
+}
+
+
+const SCH_FIELD* SCH_GLOBALLABEL::GetField( FIELD_T aFieldType ) const
+{
+    return FindField( m_fields, aFieldType );
 }
 
 
@@ -1884,8 +1904,13 @@ bool SCH_GLOBALLABEL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* tok
 
 std::vector<int> SCH_GLOBALLABEL::ViewGetLayers() const
 {
-    return { LAYER_DANGLING,      LAYER_GLOBLABEL, LAYER_DEVICE,           LAYER_INTERSHEET_REFS,
-             LAYER_NETCLASS_REFS, LAYER_FIELDS,    LAYER_SELECTION_SHADOWS };
+    return { LAYER_DANGLING,
+             LAYER_GLOBLABEL,
+             LAYER_DEVICE,
+             LAYER_INTERSHEET_REFS,
+             LAYER_NETCLASS_REFS,
+             LAYER_FIELDS,
+             LAYER_SELECTION_SHADOWS };
 }
 
 

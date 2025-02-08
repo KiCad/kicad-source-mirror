@@ -65,8 +65,8 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME*      aParent,
     wxCommandEvent dummyEvent;
     onParentSymbolSelect( dummyEvent );
 
-    m_textName->SetValidator( FIELD_VALIDATOR( VALUE_FIELD ) );
-    m_textReference->SetValidator( FIELD_VALIDATOR( REFERENCE_FIELD ) );
+    m_textName->SetValidator( FIELD_VALIDATOR( FIELD_T::VALUE ) );
+    m_textReference->SetValidator( FIELD_VALIDATOR( FIELD_T::REFERENCE ) );
 
     if( !aInheritFromSymbolName.IsEmpty() )
     {

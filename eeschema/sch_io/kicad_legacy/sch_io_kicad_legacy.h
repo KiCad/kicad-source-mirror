@@ -158,7 +158,7 @@ private:
     std::shared_ptr<BUS_ALIAS> loadBusAlias( LINE_READER& aReader, SCH_SCREEN* aScreen );
 
     void saveSymbol( SCH_SYMBOL* aSymbol );
-    void saveField( SCH_FIELD* aField );
+    void saveField( SCH_FIELD* aField, int aLegacyId );
     void saveBitmap( const SCH_BITMAP& aBitmap );
     void saveSheet( SCH_SHEET* aSheet );
     void saveJunction( SCH_JUNCTION* aJunction );

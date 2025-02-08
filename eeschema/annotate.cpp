@@ -190,7 +190,7 @@ std::unordered_set<SCH_SYMBOL*> getInferredSymbols( const EE_SELECTION& aSelecti
         {
             SCH_FIELD*  field = static_cast<SCH_FIELD*>( item );
 
-            if( field->GetId() == REFERENCE_FIELD && field->GetParent()->Type() == SCH_SYMBOL_T )
+            if( field->GetId() == FIELD_T::REFERENCE && field->GetParent()->Type() == SCH_SYMBOL_T )
                 symbols.insert( static_cast<SCH_SYMBOL*>( field->GetParent() ) );
 
             break;

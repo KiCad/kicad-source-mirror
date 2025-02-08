@@ -63,7 +63,7 @@ ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
 
     for( PCB_FIELD* field : aFp->GetFields() )
     {
-        if( field->GetId() == REFERENCE_FIELD )
+        if( field->GetId() == FIELD_T::REFERENCE )
             continue;
 
         wxString key = field->GetName();

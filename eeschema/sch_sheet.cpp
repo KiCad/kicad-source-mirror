@@ -48,37 +48,6 @@
 #include <pgm_base.h>
 #include <wx/log.h>
 
-// N.B. Do not change these values without transitioning the file format
-#define SHEET_NAME_CANONICAL "Sheetname"
-#define SHEET_FILE_CANONICAL "Sheetfile"
-#define USER_FIELD_CANONICAL "Field%d"
-
-static wxString s_CanonicalSheetName( SHEET_NAME_CANONICAL );
-static wxString s_CanonicalSheetFile( SHEET_FILE_CANONICAL );
-
-const wxString SCH_SHEET::GetDefaultFieldName( int aFieldNdx, bool aTranslated )
-{
-    if( !aTranslated )
-    {
-        switch( aFieldNdx )
-        {
-        case  SHEETNAME:     return s_CanonicalSheetName;
-        case  SHEETFILENAME: return s_CanonicalSheetFile;
-        default:             return wxString::Format( wxS( USER_FIELD_CANONICAL ), aFieldNdx );
-        }
-    }
-    else
-    {
-        switch( aFieldNdx )
-        {
-        case  SHEETNAME:     return _( SHEET_NAME_CANONICAL );
-        case  SHEETFILENAME: return _( SHEET_FILE_CANONICAL );
-        default:             return wxString::Format( _( USER_FIELD_CANONICAL ), aFieldNdx );
-        }
-    }
-}
-
-
 SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const VECTOR2I& aPos, VECTOR2I aSize ) :
         SCH_ITEM( aParent, SCH_SHEET_T ),
         m_excludedFromSim( false ),
@@ -96,12 +65,13 @@ SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const VECTOR2I& aPos, VECTOR2I aSize ) 
     m_backgroundColor = COLOR4D::UNSPECIFIED;
     m_fieldsAutoplaced = AUTOPLACE_AUTO;
 
-    m_fields.emplace_back( aPos, SHEETNAME, this, GetDefaultFieldName( SHEETNAME, DO_TRANSLATE ) );
+    m_fields.emplace_back( aPos, FIELD_T::SHEET_NAME, this,
+                           GetDefaultFieldName( FIELD_T::SHEET_NAME, DO_TRANSLATE ) );
     m_fields.back().SetVisible( true );
     m_fields.back().SetLayer( LAYER_SHEETNAME );
 
-    m_fields.emplace_back( aPos, SHEETFILENAME, this,
-                           GetDefaultFieldName( SHEETFILENAME, DO_TRANSLATE ) );
+    m_fields.emplace_back( aPos, FIELD_T::SHEET_FILENAME, this,
+                           GetDefaultFieldName( FIELD_T::SHEET_FILENAME, DO_TRANSLATE ) );
     m_fields.back().SetVisible( true );
     m_fields.back().SetLayer( LAYER_SHEETNAME );
 
@@ -400,26 +370,28 @@ void SCH_SHEET::SwapData( SCH_ITEM* aItem )
 }
 
 
+SCH_FIELD* SCH_SHEET::GetField( FIELD_T aFieldType )
+{
+    if( SCH_FIELD* field = FindField( m_fields, aFieldType ) )
+        return field;
+
+    m_fields.emplace_back( this, aFieldType );
+    return &m_fields.back();
+}
+
+
+const SCH_FIELD* SCH_SHEET::GetField( FIELD_T aFieldType ) const
+{
+    return FindField( m_fields, aFieldType );
+}
+
+
 void SCH_SHEET::SetFields( const std::vector<SCH_FIELD>& aFields )
 {
     m_fields = aFields;
 
-    // Ensure that mandatory fields are at the beginning
-    std::sort( m_fields.begin(), m_fields.end(),
-               []( const SCH_FIELD& a, const SCH_FIELD& b )
-               {
-                   return a.GetId() < b.GetId();
-               } );
-
-    // After mandatory fields, the rest should be sequential user fields
-    for( int ii = 0; ii < static_cast<int>( m_fields.size() ); ++ii )
-    {
-        if( !m_fields[ii].IsMandatory() )
-            m_fields[ii].SetId( ii );
-    }
-
     // Make sure that we get the UNIX variant of the file path
-    SetFileName( m_fields[SHEETFILENAME].GetText() );
+    SetFileName( GetField( FIELD_T::SHEET_FILENAME )->GetText() );
 }
 
 
@@ -662,41 +634,44 @@ int SCH_SHEET::GetPenWidth() const
 
 void SCH_SHEET::AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo )
 {
-    VECTOR2I textSize = m_fields[SHEETNAME].GetTextSize();
-    int      borderMargin = KiROUND( GetPenWidth() / 2.0 ) + 4;
-    int      margin = borderMargin + KiROUND( std::max( textSize.x, textSize.y ) * 0.5 );
+    SCH_FIELD* sheetNameField = GetField( FIELD_T::SHEET_NAME );
+    VECTOR2I  textSize = sheetNameField->GetTextSize();
+    int       borderMargin = KiROUND( GetPenWidth() / 2.0 ) + 4;
+    int       margin = borderMargin + KiROUND( std::max( textSize.x, textSize.y ) * 0.5 );
 
     if( IsVerticalOrientation() )
     {
-        m_fields[SHEETNAME].SetTextPos( m_pos + VECTOR2I( -margin, m_size.y ) );
-        m_fields[ SHEETNAME ].SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-        m_fields[ SHEETNAME ].SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
-        m_fields[ SHEETNAME ].SetTextAngle( ANGLE_VERTICAL );
+        sheetNameField->SetTextPos( m_pos + VECTOR2I( -margin, m_size.y ) );
+        sheetNameField->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        sheetNameField->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+        sheetNameField->SetTextAngle( ANGLE_VERTICAL );
     }
     else
     {
-        m_fields[SHEETNAME].SetTextPos( m_pos + VECTOR2I( 0, -margin ) );
-        m_fields[ SHEETNAME ].SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-        m_fields[ SHEETNAME ].SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
-        m_fields[ SHEETNAME ].SetTextAngle( ANGLE_HORIZONTAL );
+        sheetNameField->SetTextPos( m_pos + VECTOR2I( 0, -margin ) );
+        sheetNameField->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        sheetNameField->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+        sheetNameField->SetTextAngle( ANGLE_HORIZONTAL );
     }
 
-    textSize = m_fields[ SHEETFILENAME ].GetTextSize();
+    SCH_FIELD* sheetFilenameField = GetField( FIELD_T::SHEET_FILENAME );
+
+    textSize = sheetFilenameField->GetTextSize();
     margin = borderMargin + KiROUND( std::max( textSize.x, textSize.y ) * 0.4 );
 
     if( IsVerticalOrientation() )
     {
-        m_fields[SHEETFILENAME].SetTextPos( m_pos + VECTOR2I( m_size.x + margin, m_size.y ) );
-        m_fields[ SHEETFILENAME ].SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-        m_fields[ SHEETFILENAME ].SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-        m_fields[ SHEETFILENAME ].SetTextAngle( ANGLE_VERTICAL );
+        sheetFilenameField->SetTextPos( m_pos + VECTOR2I( m_size.x + margin, m_size.y ) );
+        sheetFilenameField->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        sheetFilenameField->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+        sheetFilenameField->SetTextAngle( ANGLE_VERTICAL );
     }
     else
     {
-        m_fields[SHEETFILENAME].SetTextPos( m_pos + VECTOR2I( 0, m_size.y + margin ) );
-        m_fields[ SHEETFILENAME ].SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-        m_fields[ SHEETFILENAME ].SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-        m_fields[ SHEETFILENAME ].SetTextAngle( ANGLE_HORIZONTAL );
+        sheetFilenameField->SetTextPos( m_pos + VECTOR2I( 0, m_size.y + margin ) );
+        sheetFilenameField->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        sheetFilenameField->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+        sheetFilenameField->SetTextAngle( ANGLE_HORIZONTAL );
     }
 
     if( aAlgo == AUTOPLACE_AUTO || aAlgo == AUTOPLACE_MANUAL )
@@ -761,7 +736,7 @@ int SCH_SHEET::SymbolCount() const
         {
             SCH_SYMBOL* symbol = (SCH_SYMBOL*) aItem;
 
-            if( symbol->GetField( VALUE_FIELD )->GetText().GetChar( 0 ) != '#' )
+            if( symbol->GetField( FIELD_T::VALUE )->GetText().GetChar( 0 ) != '#' )
                 n++;
         }
 
@@ -850,8 +825,7 @@ int SCH_SHEET::CountSheets() const
 void SCH_SHEET::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     // Don't use GetShownText(); we want to see the variable references here
-    aList.emplace_back( _( "Sheet Name" ),
-                        KIUI::EllipsizeStatusText( aFrame, m_fields[ SHEETNAME ].GetText() ) );
+    aList.emplace_back( _( "Sheet Name" ), KIUI::EllipsizeStatusText( aFrame, GetName() ) );
 
     if( SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( aFrame ) )
     {
@@ -862,8 +836,7 @@ void SCH_SHEET::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
     }
 
     // Don't use GetShownText(); we want to see the variable references here
-    aList.emplace_back( _( "File Name" ),
-                        KIUI::EllipsizeStatusText( aFrame, m_fields[ SHEETFILENAME ].GetText() ) );
+    aList.emplace_back( _( "File Name" ), KIUI::EllipsizeStatusText( aFrame, GetFileName() ) );
 
     wxArrayString msgs;
     wxString      msg;
@@ -1176,9 +1149,11 @@ void SCH_SHEET::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction
 
 wxString SCH_SHEET::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
+    const SCH_FIELD* sheetnameField = GetField( FIELD_T::SHEET_NAME );
+
     return wxString::Format( _( "Hierarchical Sheet %s" ),
-                             aFull ? m_fields[ SHEETNAME ].GetShownText( false )
-                                   : KIUI::EllipsizeMenuText( m_fields[ SHEETNAME ].GetText() ) );
+                             aFull ? sheetnameField->GetShownText( false )
+                                   : KIUI::EllipsizeMenuText( sheetnameField->GetText() ) );
 }
 
 
@@ -1330,13 +1305,13 @@ bool SCH_SHEET::operator <( const SCH_ITEM& aItem ) const
     if( Type() != aItem.Type() )
         return Type() < aItem.Type();
 
-    auto sheet = static_cast<const SCH_SHEET*>( &aItem );
+    const SCH_SHEET* otherSheet = static_cast<const SCH_SHEET*>( &aItem );
 
-    if (m_fields[ SHEETNAME ].GetText() != sheet->m_fields[ SHEETNAME ].GetText() )
-        return m_fields[ SHEETNAME ].GetText() < sheet->m_fields[ SHEETNAME ].GetText();
+    if( GetName() != otherSheet->GetName() )
+        return GetName() < otherSheet->GetName();
 
-    if (m_fields[ SHEETFILENAME ].GetText() != sheet->m_fields[ SHEETFILENAME ].GetText() )
-        return m_fields[ SHEETFILENAME ].GetText() < sheet->m_fields[ SHEETFILENAME ].GetText();
+    if( GetFileName() != otherSheet->GetFileName() )
+        return GetFileName() < otherSheet->GetFileName();
 
     return false;
 }
@@ -1638,7 +1613,7 @@ void SCH_SHEET::Show( int nestLevel, std::ostream& os ) const
     wxString s = GetClass();
 
     NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << ">" << " sheet_name=\""
-                                 << TO_UTF8( m_fields[ SHEETNAME ].GetText() ) << '"' << ">\n";
+                                 << TO_UTF8( GetName() ) << '"' << ">\n";
 
     // show all the pins, and check the linked list integrity
     for( SCH_SHEET_PIN* sheetPin : m_pins )

@@ -240,9 +240,6 @@ private:
     wxString m_symbolName;        ///< The current symbol name.
     bool     m_appending;         ///< Appending load status.
 
-    /// Field IDs that have been read so far for the current symbol.
-    std::set<int>      m_fieldIDsRead;
-
     std::set<KIID>     m_uuids;
 
     PROGRESS_REPORTER* m_progressReporter;  // optional; may be nullptr

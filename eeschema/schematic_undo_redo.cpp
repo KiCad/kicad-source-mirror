@@ -475,7 +475,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                     SCH_FIELD*  field = static_cast<SCH_FIELD*>( schItem );
                     SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( schItem->GetParent() );
 
-                    if( field->GetId() == REFERENCE_FIELD )
+                    if( field->GetId() == FIELD_T::REFERENCE )
                     {
                         // Lazy eval of sheet list; this is expensive even when unsorted
                         if( sheets.empty() )

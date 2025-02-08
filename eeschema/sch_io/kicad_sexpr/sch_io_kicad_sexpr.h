@@ -166,7 +166,6 @@ private:
 
 protected:
     int                     m_version;          ///< Version of file being loaded.
-    int                     m_nextFreeFieldId;
     bool                    m_appending;        ///< Schematic load append status.
     wxString                m_error;            ///< For throwing exceptions or errors on partial
                                                 ///<  loads.

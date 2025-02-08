@@ -125,7 +125,7 @@ LIB_ID DIALOG_SYMBOL_CHOOSER::GetSelectedLibId( int* aUnit ) const
 }
 
 
-std::vector<std::pair<int, wxString>> DIALOG_SYMBOL_CHOOSER::GetFields() const
+std::vector<std::pair<FIELD_T, wxString>> DIALOG_SYMBOL_CHOOSER::GetFields() const
 {
     return m_chooserPanel->GetFields();
 }

@@ -74,7 +74,8 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
 
     // Give a bit more room for combobox editors
     m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
-    m_fields = new FIELDS_GRID_TABLE( this, aParent, m_grid, m_libEntry, m_embeddedFiles->GetLocalFiles() );
+    m_fields = new FIELDS_GRID_TABLE( this, aParent, m_grid, m_libEntry,
+                                      m_embeddedFiles->GetLocalFiles() );
     m_grid->SetTable( m_fields );
     m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this, aLibEntry,
                                                       [&]( wxCommandEvent& aEvent )
@@ -83,11 +84,14 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
                                                       } ) );
     m_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
+    // Load the FIELDS_GRID_TABLE
+    m_libEntry->CopyFields( *m_fields );
+
     // Show/hide columns according to the user's preference
     SYMBOL_EDITOR_SETTINGS* cfg = m_Parent->GetSettings();
     m_grid->ShowHideColumns( cfg->m_EditSymbolVisibleColumns );
 
-    m_SymbolNameCtrl->SetValidator( FIELD_VALIDATOR( VALUE_FIELD ) );
+    m_SymbolNameCtrl->SetValidator( FIELD_VALIDATOR( FIELD_T::VALUE ) );
 
     // Configure button logos
     m_bpAdd->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
@@ -173,9 +177,6 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    // Push a copy of each field into m_updateFields
-    m_libEntry->CopyFields( *m_fields );
-
     std::set<wxString> defined;
 
     for( SCH_FIELD& field : *m_fields )
@@ -197,7 +198,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
         {
             if( defined.count( templateFieldname.m_Name ) <= 0 )
             {
-                SCH_FIELD field( VECTOR2I( 0, 0 ), -1, m_libEntry, templateFieldname.m_Name );
+                SCH_FIELD field( { 0, 0 }, FIELD_T::USER, m_libEntry, templateFieldname.m_Name );
                 field.SetVisible( templateFieldname.m_Visible );
                 m_fields->push_back( field );
                 m_addedTemplateFields.insert( templateFieldname.m_Name );
@@ -299,20 +300,24 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::Validate()
     if( !m_grid->CommitPendingChanges() )
         return false;
 
-    // Alias symbol reference can be empty because it inherits from the parent symbol.
-    if( m_libEntry->IsRoot()
-            && UTIL::GetRefDesPrefix( m_fields->at( REFERENCE_FIELD ).GetText() ).IsEmpty() )
+    // Symbol reference can be empty because it inherits from the parent symbol.
+    if( m_libEntry->IsRoot() )
     {
-        if( m_NoteBook->GetSelection() != 0 )
-            m_NoteBook->SetSelection( 0 );
+        SCH_FIELD* field = m_fields->GetField( FIELD_T::REFERENCE );
 
-        m_delayedErrorMessage = _( "References must start with a letter." );
-        m_delayedFocusGrid = m_grid;
-        m_delayedFocusColumn = FDC_VALUE;
-        m_delayedFocusRow = REFERENCE_FIELD;
-        m_delayedFocusPage = 0;
+        if( UTIL::GetRefDesPrefix( field->GetText() ).IsEmpty() )
+        {
+            if( m_NoteBook->GetSelection() != 0 )
+                m_NoteBook->SetSelection( 0 );
 
-        return false;
+            m_delayedErrorMessage = _( "References must start with a letter." );
+            m_delayedFocusGrid = m_grid;
+            m_delayedFocusColumn = FDC_VALUE;
+            m_delayedFocusRow = m_fields->GetFieldRow( FIELD_T::REFERENCE );
+            m_delayedFocusPage = 0;
+
+            return false;
+        }
     }
 
     // Check for missing field names.
@@ -414,12 +419,19 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     // The Y axis for components in lib is from bottom to top while the screen axis is top
     // to bottom: we must change the y coord sign when writing back to the library
-    for( int ii = 0; ii < (int) m_fields->size(); ++ii )
+    for( SCH_FIELD& field : *m_fields )
     {
-        VECTOR2I pos = m_fields->at( ii ).GetPosition();
+        VECTOR2I pos = field.GetPosition();
         pos.y = -pos.y;
-        m_fields->at( ii ).SetPosition( pos );
-        m_fields->at( ii ).SetId( ii );
+        field.SetPosition( pos );
+    }
+
+    int ordinal = 42;   // Arbitrarily larger than any mandatory FIELD_T ids.
+
+    for( SCH_FIELD& field : *m_fields )
+    {
+        if( !field.IsMandatory() )
+            field.SetOrdinal( ordinal++ );
     }
 
     for( int ii = m_fields->GetNumberRows() - 1; ii >= 0; ii-- )
@@ -554,7 +566,10 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnSymbolNameText( wxCommandEvent& event )
 {
     if( m_OptionPower->IsChecked() )
-        m_grid->SetCellValue( VALUE_FIELD, FDC_VALUE, m_SymbolNameCtrl->GetValue() );
+    {
+        m_grid->SetCellValue( m_fields->GetFieldRow( FIELD_T::VALUE ), FDC_VALUE,
+                              m_SymbolNameCtrl->GetValue() );
+    }
 
     OnModify();
 }
@@ -587,8 +602,8 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
         return;
 
     SYMBOL_EDITOR_SETTINGS* settings = m_Parent->GetSettings();
-    int       fieldID = (int) m_fields->size();
-    SCH_FIELD newField( m_libEntry, fieldID );
+    SCH_FIELD               newField( m_libEntry, FIELD_T::USER,
+                                      GetUserFieldName( m_fields->size(), DO_TRANSLATE ) );
 
     newField.SetTextSize( VECTOR2I( schIUScale.MilsToIU( settings->m_Defaults.text_size ),
                                     schIUScale.MilsToIU( settings->m_Defaults.text_size ) ) );
@@ -861,7 +876,8 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
         int row = m_grid->GetGridCursorRow();
         int col = m_grid->GetGridCursorCol();
 
-        if( row == VALUE_FIELD && col == FDC_VALUE && m_OptionPower->IsChecked() )
+        if( row == m_fields->GetFieldRow( FIELD_T::VALUE ) && col == FDC_VALUE
+                && m_OptionPower->IsChecked() )
         {
             wxGridCellEditor* editor = m_grid->GetCellEditor( row, col );
             m_SymbolNameCtrl->ChangeValue( editor->GetValue() );

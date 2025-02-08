@@ -146,12 +146,12 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
                     {
                         storageList.emplace_back( *symbol );
 
-                        for( const std::pair<int, wxString>& fieldDef : i.Fields )
+                        for( const auto& [fieldType, fieldValue] : i.Fields )
                         {
-                            SCH_FIELD* field = storageList.back().GetFieldById( fieldDef.first );
+                            SCH_FIELD* field = storageList.back().GetField( fieldType );
 
                             if( field )
-                                field->SetText( fieldDef.second );
+                                field->SetText( fieldValue );
                         }
 
                         resultList.push_back( &storageList.back() );
@@ -572,7 +572,7 @@ void PANEL_SYMBOL_CHOOSER::showFootprintFor( LIB_ID const& aLibId )
     if( !symbol )
         return;
 
-    SCH_FIELD* fp_field = symbol->GetFieldById( FOOTPRINT_FIELD );
+    SCH_FIELD* fp_field = symbol->GetField( FIELD_T::FOOTPRINT );
     wxString   fp_name = fp_field ? fp_field->GetFullText() : wxString( "" );
 
     showFootprint( fp_name );
@@ -632,7 +632,7 @@ void PANEL_SYMBOL_CHOOSER::populateFootprintSelector( LIB_ID const& aLibId )
     if( symbol != nullptr )
     {
         int        pinCount = symbol->GetPins( 0 /* all units */, 1 /* single bodyStyle */ ).size();
-        SCH_FIELD* fp_field = symbol->GetFieldById( FOOTPRINT_FIELD );
+        SCH_FIELD* fp_field = symbol->GetField( FIELD_T::FOOTPRINT );
         wxString   fp_name = fp_field ? fp_field->GetFullText() : wxString( "" );
 
         m_fp_sel_ctrl->FilterByPinCount( pinCount );
@@ -653,12 +653,12 @@ void PANEL_SYMBOL_CHOOSER::onFootprintSelected( wxCommandEvent& aEvent )
 {
     m_fp_override = aEvent.GetString();
 
-    alg::delete_if( m_field_edits, []( std::pair<int, wxString> const& i )
+    alg::delete_if( m_field_edits, []( std::pair<FIELD_T, wxString> const& i )
                                    {
-                                       return i.first == FOOTPRINT_FIELD;
+                                       return i.first == FIELD_T::FOOTPRINT;
                                    } );
 
-    m_field_edits.emplace_back( std::make_pair( FOOTPRINT_FIELD, m_fp_override ) );
+    m_field_edits.emplace_back( std::make_pair( FIELD_T::FOOTPRINT, m_fp_override ) );
 
     showFootprint( m_fp_override );
 }

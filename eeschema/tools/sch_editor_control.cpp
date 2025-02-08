@@ -1164,21 +1164,21 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
             {
                 if( SCH_CONNECTION* pinConn = symbol->GetPins()[0]->Connection() )
                 {
-                    std::vector<SCH_FIELD>& fields = symbol->GetFields();
-
-                    for( int id : { REFERENCE_FIELD, VALUE_FIELD } )
+                    for( FIELD_T id : { FIELD_T::REFERENCE, FIELD_T::VALUE } )
                     {
-                        if( !fields[id].IsVisible() )
+                        SCH_FIELD* field = symbol->GetField( id );
+
+                        if( !field->IsVisible() )
                             continue;
 
-                        if( !fields[id].IsBrightened() && connNames.count( pinConn->Name() ) )
+                        if( !field->IsBrightened() && connNames.count( pinConn->Name() ) )
                         {
-                            fields[id].SetBrightened();
+                            field->SetBrightened();
                             redrawItem = symbol;
                         }
-                        else if( fields[id].IsBrightened() && !connNames.count( pinConn->Name() ) )
+                        else if( field->IsBrightened() && !connNames.count( pinConn->Name() ) )
                         {
-                            fields[id].ClearBrightened();
+                            field->ClearBrightened();
                             redrawItem = symbol;
                         }
                     }
@@ -1499,12 +1499,12 @@ void SCH_EDITOR_CONTROL::updatePastedSymbol( SCH_SYMBOL* aSymbol,
 
         // Some legacy versions saved value fields escaped.  While we still do in the symbol
         // editor, we don't anymore in the schematic, so be sure to unescape them.
-        SCH_FIELD* valueField = aSymbol->GetField( VALUE_FIELD );
+        SCH_FIELD* valueField = aSymbol->GetField( FIELD_T::VALUE );
         valueField->SetText( UnescapeString( valueField->GetText() ) );
 
         // Pasted from notepad or an older instance of eeschema.  Use the values in the fields
         // instead.
-        newInstance.m_Reference = aSymbol->GetField( REFERENCE_FIELD )->GetText();
+        newInstance.m_Reference = aSymbol->GetField( FIELD_T::REFERENCE )->GetText();
         newInstance.m_Unit = aSymbol->GetUnit();
     }
 
@@ -1798,8 +1798,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         if( item->Type() == SCH_SHEET_T )
         {
             SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
-            SCH_FIELD& nameField = sheet->GetFields()[SHEETNAME];
-            wxString   baseName = nameField.GetText();
+            SCH_FIELD* nameField = sheet->GetField( FIELD_T::SHEET_NAME );
+            wxString   baseName = nameField->GetText();
             wxFileName srcFn = sheet->GetFileName();
 
             if( srcFn.IsRelative() )
@@ -1909,8 +1909,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         else if( item->Type() == SCH_SHEET_T )
         {
             SCH_SHEET*  sheet          = (SCH_SHEET*) item;
-            SCH_FIELD&  nameField      = sheet->GetFields()[SHEETNAME];
-            wxString    baseName       = nameField.GetText();
+            SCH_FIELD*  nameField      = sheet->GetField( FIELD_T::SHEET_NAME );
+            wxString    baseName       = nameField->GetText();
             wxString    candidateName  = baseName;
             wxString    number;
 
@@ -1931,7 +1931,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             while( hierarchy.NameExists( candidateName ) )
                 candidateName = wxString::Format( wxT( "%s%d" ), baseName, uniquifier++ );
 
-            nameField.SetText( candidateName );
+            nameField->SetText( candidateName );
 
             wxFileName     fn = sheet->GetFileName();
             SCH_SCREEN*    existingScreen = nullptr;

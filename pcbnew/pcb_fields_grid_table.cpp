@@ -49,9 +49,12 @@ wxArrayString g_menuOrientations;
 
 PCB_FIELDS_GRID_TABLE::PCB_FIELDS_GRID_TABLE( PCB_BASE_FRAME* aFrame, DIALOG_SHIM* aDialog,
                                               EMBEDDED_FILES* aFiles ) :
-        m_frame( aFrame ), m_dialog( aDialog ), m_fieldNameValidator( FIELD_NAME ),
-        m_referenceValidator( REFERENCE_FIELD ), m_valueValidator( VALUE_FIELD ),
-        m_urlValidator( FIELD_VALUE ), m_nonUrlValidator( FIELD_VALUE )
+        m_frame( aFrame ), m_dialog( aDialog ),
+        m_fieldNameValidator( FIELD_T::USER ),
+        m_referenceValidator( FIELD_T::REFERENCE ),
+        m_valueValidator( FIELD_T::VALUE ),
+        m_urlValidator( FIELD_T::USER ),
+        m_nonUrlValidator( FIELD_T::USER )
 {
     // Build the column attributes.
 
@@ -213,17 +216,17 @@ wxGridCellAttr* PCB_FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol,
         return enhanceAttr( nullptr, aRow, aCol, aKind );
 
     case PFC_VALUE:
-        if( field.GetId() == REFERENCE_FIELD )
+        if( field.GetId() == FIELD_T::REFERENCE )
         {
             m_referenceAttr->IncRef();
             return enhanceAttr( m_referenceAttr, aRow, aCol, aKind );
         }
-        else if( field.GetId() == VALUE_FIELD )
+        else if( field.GetId() == FIELD_T::VALUE )
         {
             m_valueAttr->IncRef();
             return enhanceAttr( m_valueAttr, aRow, aCol, aKind );
         }
-        else if( field.GetId() == DATASHEET_FIELD || field.IsHypertext() )
+        else if( field.GetId() == FIELD_T::DATASHEET || field.IsHypertext() )
         {
             m_urlAttr->IncRef();
             return enhanceAttr( m_urlAttr, aRow, aCol, aKind );

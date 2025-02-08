@@ -174,7 +174,7 @@ protected:
 
         switch( aField.GetId() )
         {
-        case DATASHEET_FIELD:
+        case FIELD_T::DATASHEET:
             text = m_symbol->GetDatasheetField().GetShownText( false );
 
             if( text.IsEmpty() || text == wxT( "~" ) )
@@ -196,11 +196,11 @@ protected:
 
             break;
 
-        case VALUE_FIELD:
+        case FIELD_T::VALUE:
             // showing the value just repeats the name, so that's not much use...
             return wxEmptyString;
 
-        case REFERENCE_FIELD:
+        case FIELD_T::REFERENCE:
             text = aField.GetFullText( m_unit > 0 ? m_unit : 1 );
             fieldhtml.Replace( wxS( "__VALUE__" ), EscapeHTML( text ) );
             break;
@@ -237,7 +237,7 @@ protected:
 
                 for( const SCH_FIELD* parentField : parentFields )
                 {
-                    if( m_symbol->FindField( parentField->GetCanonicalName() ) )
+                    if( m_symbol->GetField( parentField->GetCanonicalName() ) )
                         continue;
 
                     fieldtable += GetHtmlFieldRow( *parentField );

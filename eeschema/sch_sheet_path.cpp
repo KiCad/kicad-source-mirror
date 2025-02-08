@@ -364,7 +364,7 @@ wxString SCH_SHEET_PATH::PathHumanReadable( bool aUseShortRootName,
 
     // Start at 1 since we've already processed the root sheet.
     for( unsigned i = 1; i < size(); i++ )
-        s << at( i )->GetFields()[SHEETNAME].GetShownText( false ) << wxS( "/" );
+        s << at( i )->GetField( FIELD_T::SHEET_NAME )->GetShownText( false ) << wxS( "/" );
 
     if( aStripTrailingSeparator && s.EndsWith( "/" ) )
         s = s.Left( s.length() - 1 );
@@ -390,7 +390,7 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences() const
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
-            symbol->GetField( REFERENCE_FIELD )->SetText( symbol->GetRef( this ) );
+            symbol->GetField( FIELD_T::REFERENCE )->SetText( symbol->GetRef( this ) );
             symbol->SetUnit( symbol->GetUnitSelection( this ) );
             LastScreen()->Update( item, false );
         }
@@ -400,20 +400,15 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences() const
 
             if( label->GetFields().size() > 0 ) // Possible when reading a legacy .sch schematic
             {
-                SCH_FIELD&  intersheetRefs = label->GetFields()[0];
+                SCH_FIELD* intersheetRefs = label->GetField( FIELD_T::INTERSHEET_REFS );
 
                 // Fixup for legacy files which didn't store a position for the intersheet refs
                 // unless they were shown.
-                if( label->GetFields().size() == 1
-                        && intersheetRefs.GetInternalName() == wxT( "Intersheet References" )
-                        && intersheetRefs.GetPosition() == VECTOR2I( 0, 0 )
-                        && !intersheetRefs.IsVisible() )
-                {
+                if( intersheetRefs->GetPosition() == VECTOR2I() && !intersheetRefs->IsVisible() )
                     label->AutoplaceFields( LastScreen(), AUTOPLACE_AUTO );
-                }
 
-                intersheetRefs.SetVisible( label->Schematic()->Settings().m_IntersheetRefsShow );
-                LastScreen()->Update( &intersheetRefs );
+                intersheetRefs->SetVisible( label->Schematic()->Settings().m_IntersheetRefsShow );
+                LastScreen()->Update( intersheetRefs );
             }
         }
     }
@@ -644,7 +639,7 @@ void SCH_SHEET_PATH::AddNewSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPa
             // Fall back to the last saved symbol field and unit settings if there is no
             // instance data.
             newSymbolInstance.m_Path = newSheetPath.Path();
-            newSymbolInstance.m_Reference = symbol->GetField( REFERENCE_FIELD )->GetText();
+            newSymbolInstance.m_Reference = symbol->GetField( FIELD_T::REFERENCE )->GetText();
             newSymbolInstance.m_Unit = symbol->GetUnit();
             symbol->AddHierarchicalReference( newSymbolInstance );
         }
@@ -693,8 +688,8 @@ void SCH_SHEET_PATH::CheckForMissingSymbolInstances( const wxString& aProjectNam
             if( ( LastScreen()->GetRefCount() <= 1 ) &&
                 ( LastScreen()->GetFileFormatVersionAtLoad() <= 20200310 ) )
             {
-                symbolInstance.m_Reference =
-                        symbol->GetField( REFERENCE_FIELD )->GetShownText( this, true );
+                SCH_FIELD* refField = symbol->GetField( FIELD_T::REFERENCE );
+                symbolInstance.m_Reference = refField->GetShownText( this, true );
                 symbolInstance.m_Unit = symbol->GetUnit();
             }
             else
@@ -1223,7 +1218,7 @@ void SCH_SHEET_LIST::UpdateSymbolInstanceData(
             // Symbol instance paths are stored and looked up in memory with the root path so use
             // the full path here.
             symbol->AddHierarchicalReference( sheetPath.Path(), it->m_Reference, it->m_Unit );
-            symbol->GetField( REFERENCE_FIELD )->SetText( it->m_Reference );
+            symbol->GetField( FIELD_T::REFERENCE )->SetText( it->m_Reference );
 
             if( !it->m_Value.IsEmpty() )
                 symbol->SetValueFieldText( it->m_Value );

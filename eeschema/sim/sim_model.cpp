@@ -407,11 +407,13 @@ TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<SCH_FIELD>& aFields, REPOR
     if( typeFieldValue.empty() )
         return TYPE::NONE;
 
-    if( aFields.size() > REFERENCE_FIELD )
+    wxString reference = GetFieldValue( &aFields, FIELD_T::REFERENCE );
+
+    if( !reference.IsEmpty() )
     {
         aReporter.Report( wxString::Format( _( "No simulation model definition found for "
                                                "symbol '%s'." ),
-                          aFields[REFERENCE_FIELD].GetText() ),
+                          reference ),
                           RPT_SEVERITY_ERROR );
     }
     else
@@ -473,22 +475,6 @@ void SIM_MODEL::WriteFields( std::vector<SCH_FIELD>& aFields ) const
 
     if( IsStoredInValue() )
         SetFieldValue( aFields, SIM_VALUE_FIELD, m_serializer->GenerateValue(), false );
-
-    int lastFreeId = MANDATORY_FIELD_COUNT;
-
-    // Search for the first available value:
-    for( auto& fld : aFields )
-    {
-        if( fld.GetId() >= lastFreeId )
-            lastFreeId = fld.GetId() + 1;
-    }
-
-    // Set undefined IDs to a better value
-    for( auto& fld : aFields )
-    {
-        if( fld.GetId() < 0 )
-            fld.SetId( lastFreeId++ );
-    }
 }
 
 
@@ -592,7 +578,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
     {
         aReporter.Report( wxString::Format( _( "Error reading simulation model from "
                                                "symbol '%s':\n%s" ),
-                                            aFields[REFERENCE_FIELD].GetText(),
+                                            GetFieldValue( &aFields, FIELD_T::REFERENCE ),
                                             err.Problem() ),
                           RPT_SEVERITY_ERROR );
     }
@@ -640,66 +626,13 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<SCH_FIELD>& aFie
             // We own the pin syntax, so if we can't parse it then there's an error.
             aReporter.Report( wxString::Format( _( "Error reading simulation model from "
                                                    "symbol '%s':\n%s" ),
-                                                aFields[REFERENCE_FIELD].GetText(),
+                                                GetFieldValue( &aFields, FIELD_T::REFERENCE ),
                                                 err.Problem() ),
                               RPT_SEVERITY_ERROR );
         }
     }
 
     return model;
-}
-
-
-std::string SIM_MODEL::GetFieldValue( const std::vector<SCH_FIELD>* aFields,
-                                      const wxString& aFieldName, bool aResolve )
-{
-    if( !aFields )
-        return ""; // Should not happen, T=void specialization will be called instead.
-
-    for( const SCH_FIELD& field : *aFields )
-    {
-        if( field.GetName() == aFieldName )
-        {
-            return aResolve ? field.GetShownText( false ).ToStdString()
-                            : field.GetText().ToStdString();
-        }
-    }
-
-    return "";
-}
-
-
-void SIM_MODEL::SetFieldValue( std::vector<SCH_FIELD>& aFields, const wxString& aFieldName,
-                               const std::string& aValue, bool aIsVisible )
-{
-    auto fieldIt = std::find_if( aFields.begin(), aFields.end(),
-                                 [&]( const SCH_FIELD& f )
-                                 {
-                                    return f.GetName() == aFieldName;
-                                 } );
-
-    if( fieldIt != aFields.end() )
-    {
-        if( aValue == "" )
-        {
-            aFields.erase( fieldIt );
-        }
-        else
-        {
-            fieldIt->SetText( aValue );
-        }
-
-        return;
-    }
-
-    if( aValue == "" )
-        return;
-
-    SCH_ITEM* parent = static_cast<SCH_ITEM*>( aFields.at( 0 ).GetParent() );
-    aFields.emplace_back( VECTOR2I(), aFields.size(), parent, aFieldName );
-
-    aFields.back().SetText( aValue );
-    aFields.back().SetVisible( aIsVisible );
 }
 
 
@@ -1436,7 +1369,7 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
 
         SCH_FIELD CreateField( T* aSymbol, const wxString& aFieldName )
         {
-            SCH_FIELD field( aSymbol, -1, aFieldName );
+            SCH_FIELD field( aSymbol, FIELD_T::USER, aFieldName );
 
             field.SetText( m_Text );
             field.SetVisible( m_Visible );
@@ -1453,10 +1386,10 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
         VECTOR2I        m_Pos;
     };
 
-    SCH_FIELD* existing_deviceField = aSymbol.FindField( SIM_DEVICE_FIELD );
-    SCH_FIELD* existing_deviceSubtypeField = aSymbol.FindField( SIM_DEVICE_SUBTYPE_FIELD );
-    SCH_FIELD* existing_pinsField = aSymbol.FindField( SIM_PINS_FIELD );
-    SCH_FIELD* existing_paramsField = aSymbol.FindField( SIM_PARAMS_FIELD );
+    SCH_FIELD* existing_deviceField = aSymbol.GetField( SIM_DEVICE_FIELD );
+    SCH_FIELD* existing_deviceSubtypeField = aSymbol.GetField( SIM_DEVICE_SUBTYPE_FIELD );
+    SCH_FIELD* existing_pinsField = aSymbol.GetField( SIM_PINS_FIELD );
+    SCH_FIELD* existing_paramsField = aSymbol.GetField( SIM_PARAMS_FIELD );
 
     wxString existing_deviceSubtype;
 
@@ -1574,7 +1507,7 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
             };
 
     wxString              prefix = aSymbol.GetPrefix();
-    SCH_FIELD*            valueField = aSymbol.FindField( wxT( "Value" ) );
+    SCH_FIELD*            valueField = aSymbol.GetField( FIELD_T::VALUE );
     std::vector<SCH_PIN*> sourcePins = aSymbol.GetPins();
     bool                  sourcePinsSorted = false;
 
@@ -1601,19 +1534,19 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
     FIELD_INFO pinMapInfo;
     bool       modelFromValueField = false;
 
-    if( aSymbol.FindField( SIM_LEGACY_PRIMITIVE_FIELD )
-        || aSymbol.FindField( SIM_LEGACY_PINS_FIELD )
-        || aSymbol.FindField( SIM_LEGACY_MODEL_FIELD )
-        || aSymbol.FindField( SIM_LEGACY_ENABLE_FIELD )
-        || aSymbol.FindField( SIM_LEGACY_LIBRARY_FIELD ) )
+    if( aSymbol.GetField( SIM_LEGACY_PRIMITIVE_FIELD )
+        || aSymbol.GetField( SIM_LEGACY_PINS_FIELD )
+        || aSymbol.GetField( SIM_LEGACY_MODEL_FIELD )
+        || aSymbol.GetField( SIM_LEGACY_ENABLE_FIELD )
+        || aSymbol.GetField( SIM_LEGACY_LIBRARY_FIELD ) )
     {
-        if( SCH_FIELD* primitiveField = aSymbol.FindField( SIM_LEGACY_PRIMITIVE_FIELD ) )
+        if( SCH_FIELD* primitiveField = aSymbol.GetField( SIM_LEGACY_PRIMITIVE_FIELD ) )
         {
             deviceInfo = FIELD_INFO( primitiveField->GetText(), primitiveField );
             aSymbol.RemoveField( primitiveField );
         }
 
-        if( SCH_FIELD* nodeSequenceField = aSymbol.FindField( SIM_LEGACY_PINS_FIELD ) )
+        if( SCH_FIELD* nodeSequenceField = aSymbol.GetField( SIM_LEGACY_PINS_FIELD ) )
         {
             const wxString  delimiters( "{:,; }" );
             const wxString& nodeSequence = nodeSequenceField->GetText();
@@ -1639,7 +1572,7 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
             aSymbol.RemoveField( nodeSequenceField );
         }
 
-        if( SCH_FIELD* modelField = aSymbol.FindField( SIM_LEGACY_MODEL_FIELD ) )
+        if( SCH_FIELD* modelField = aSymbol.GetField( SIM_LEGACY_MODEL_FIELD ) )
         {
             modelInfo = FIELD_INFO( getSIValue( modelField ), modelField );
             aSymbol.RemoveField( modelField );
@@ -1650,7 +1583,7 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
             modelFromValueField = true;
         }
 
-        if( SCH_FIELD* libFileField = aSymbol.FindField( SIM_LEGACY_LIBRARY_FIELD ) )
+        if( SCH_FIELD* libFileField = aSymbol.GetField( SIM_LEGACY_LIBRARY_FIELD ) )
         {
             libInfo = FIELD_INFO( libFileField->GetText(), libFileField );
             aSymbol.RemoveField( libFileField );
@@ -1660,17 +1593,17 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
     {
         // Auto convert some legacy fields used in the middle of 7.0 development...
 
-        if( SCH_FIELD* legacyType = aSymbol.FindField( wxT( "Sim_Type" ) ) )
+        if( SCH_FIELD* legacyType = aSymbol.GetField( wxT( "Sim_Type" ) ) )
         {
             legacyType->SetName( SIM_DEVICE_SUBTYPE_FIELD );
         }
 
-        if( SCH_FIELD* legacyDevice = aSymbol.FindField( wxT( "Sim_Device" ) ) )
+        if( SCH_FIELD* legacyDevice = aSymbol.GetField( wxT( "Sim_Device" ) ) )
         {
             legacyDevice->SetName( SIM_DEVICE_FIELD );
         }
 
-        if( SCH_FIELD* legacyPins = aSymbol.FindField( wxT( "Sim_Pins" ) ) )
+        if( SCH_FIELD* legacyPins = aSymbol.GetField( wxT( "Sim_Pins" ) ) )
         {
             bool isPassive =   prefix.StartsWith( wxT( "R" ) )
                             || prefix.StartsWith( wxT( "L" ) )
@@ -1716,7 +1649,7 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
             legacyPins->SetText( pinMap );
         }
 
-        if( SCH_FIELD* legacyParams = aSymbol.FindField( wxT( "Sim_Params" ) ) )
+        if( SCH_FIELD* legacyParams = aSymbol.GetField( wxT( "Sim_Params" ) ) )
         {
             legacyParams->SetName( SIM_PARAMS_FIELD );
         }
@@ -1921,7 +1854,7 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
         if( modelFromValueField )
         {
             // Get the current Value field, after previous changes.
-            valueField = aSymbol.FindField( wxT( "Value" ) );
+            valueField = aSymbol.GetField( FIELD_T::VALUE );
 
             if( valueField )
                 valueField->SetText( wxT( "${SIM.PARAMS}" ) );

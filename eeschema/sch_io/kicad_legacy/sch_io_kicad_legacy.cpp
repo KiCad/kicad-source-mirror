@@ -571,23 +571,24 @@ SCH_SHEET* SCH_IO_KICAD_LEGACY::loadSheet( LINE_READER& aReader )
 
             wxString text;
             int size;
-            int fieldId = parseInt( aReader, line, &line );
+            int legacy_field_id = parseInt( aReader, line, &line );
 
-            if( fieldId == 0 || fieldId == 1 )      // Sheet name and file name.
+            if( legacy_field_id == 0 || legacy_field_id == 1 )      // Sheet name and file name.
             {
                 parseQuotedString( text, aReader, line, &line );
                 size = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
 
-                SCH_FIELD& field = sheet->GetFields()[ fieldId ];
-                field.SetText( text );
-                field.SetTextSize( VECTOR2I( size, size ) );
+                SCH_FIELD* field = sheet->GetField( legacy_field_id == 0 ? FIELD_T::SHEET_NAME
+                                                                         : FIELD_T::SHEET_FILENAME );
+                field->SetText( text );
+                field->SetTextSize( VECTOR2I( size, size ) );
             }
             else                                   // Sheet pin.
             {
                 // Use a unique_ptr so that we clean up in the case of a throw
                 std::unique_ptr<SCH_SHEET_PIN> sheetPin = std::make_unique<SCH_SHEET_PIN>( sheet.get() );
 
-                sheetPin->SetNumber( fieldId );
+                sheetPin->SetNumber( legacy_field_id );
 
                 // Can be empty fields.
                 parseQuotedString( text, aReader, line, &line, true );
@@ -1274,11 +1275,11 @@ SCH_SYMBOL* SCH_IO_KICAD_LEGACY::loadSymbol( LINE_READER& aReader )
                 SCH_PARSE_ERROR( "unit value out of range", aReader, line );
 
             symbol->AddHierarchicalReference( path, reference, (int)tmp );
-            symbol->GetField( REFERENCE_FIELD )->SetText( reference );
+            symbol->GetField( FIELD_T::REFERENCE )->SetText( reference );
         }
         else if( strCompare( "F", line, &line ) )
         {
-            int index = parseInt( aReader, line, &line );
+            int legacy_field_id = parseInt( aReader, line, &line );
 
             wxString text, name;
 
@@ -1295,36 +1296,20 @@ SCH_SYMBOL* SCH_IO_KICAD_LEGACY::loadSymbol( LINE_READER& aReader )
             int size = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
             int attributes = parseHex( aReader, line, &line );
 
-            // Description was not mandatory until v8.0, so any fields with an index
-            // past this point should be user fields
-            if( index > DATASHEET_FIELD )
+            SCH_FIELD* field;
+
+            // Map fixed legacy IDs
+            switch( legacy_field_id )
             {
-                // The first MANDATOR_FIELDS _must_ be constructed within the SCH_SYMBOL
-                // constructor.  This assert is simply here to guard against a change in that
-                // constructor.
-                wxASSERT( symbol->GetFieldCount() >= MANDATORY_FIELD_COUNT );
+            case 0:  field = symbol->GetField( FIELD_T::REFERENCE ); break;
+            case 1:  field = symbol->GetField( FIELD_T::VALUE );     break;
+            case 2:  field = symbol->GetField( FIELD_T::FOOTPRINT ); break;
+            case 3:  field = symbol->GetField( FIELD_T::DATASHEET ); break;
 
-                // We need to check for an existing field by name that happens to have the same
-                // name and index as any field that was made mandatory after this point, e.g. Description
-                // is now mandatory but a user could have easily added their own user field named Description
-                // after Datasheet before it was mandatory, and we don't want to add a second Description field.
-                SCH_FIELD* existingField = symbol->GetFieldByName( name );
-
-                if( !existingField )
-                {
-                    // Ignore the _supplied_ fieldNdx.  It is not important anymore if within the
-                    // user defined fields region (i.e. >= MANDATORY_FIELD_COUNT).
-                    // We freely renumber the index to fit the next available field slot.
-                    index = symbol->GetNextFieldId(); // new has this index after insertion
-
-                    SCH_FIELD field( VECTOR2I( 0, 0 ), index, symbol.get(), name );
-                    symbol->AddField( field );
-                }
-                else
-                    index = existingField->GetId();
+            default:
+                field = symbol->AddField( SCH_FIELD( { 0, 0 }, FIELD_T::USER, symbol.get() ) );
+                break;
             }
-
-            SCH_FIELD& field = symbol->GetFields()[index];
 
             // Prior to version 2 of the schematic file format, none of the following existed.
             if( m_version > 1 )
@@ -1338,9 +1323,9 @@ SCH_SYMBOL* SCH_IO_KICAD_LEGACY::loadSymbol( LINE_READER& aReader )
                 parseQuotedString( name, aReader, line, &line, true );
 
                 if( hjustify == 'L' )
-                    field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+                    field->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
                 else if( hjustify == 'R' )
-                    field.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+                    field->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
                 else if( hjustify != 'C' )
                     SCH_PARSE_ERROR( "symbol field text horizontal justification must be "
                                      "L, R, or C", aReader, line );
@@ -1348,9 +1333,9 @@ SCH_SYMBOL* SCH_IO_KICAD_LEGACY::loadSymbol( LINE_READER& aReader )
                 // We are guaranteed to have a least one character here for older file formats
                 // otherwise an exception would have been raised..
                 if( textAttrs[0] == 'T' )
-                    field.SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+                    field->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
                 else if( textAttrs[0] == 'B' )
-                    field.SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+                    field->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
                 else if( textAttrs[0] != 'C' )
                     SCH_PARSE_ERROR( "symbol field text vertical justification must be "
                                      "B, T, or C", aReader, line );
@@ -1366,7 +1351,7 @@ SCH_SYMBOL* SCH_IO_KICAD_LEGACY::loadSymbol( LINE_READER& aReader )
 
                     if( textAttrs[1] == 'I' )
                     {
-                        field.SetItalicFlag( true );
+                        field->SetItalicFlag( true );
                     }
                     else if( textAttrs[1] != 'N' )
                     {
@@ -1376,7 +1361,7 @@ SCH_SYMBOL* SCH_IO_KICAD_LEGACY::loadSymbol( LINE_READER& aReader )
 
                     if( textAttrs[2] == 'B' )
                     {
-                        field.SetBoldFlag( true );
+                        field->SetBoldFlag( true );
                     }
                     else if( textAttrs[2] != 'N' )
                     {
@@ -1386,22 +1371,27 @@ SCH_SYMBOL* SCH_IO_KICAD_LEGACY::loadSymbol( LINE_READER& aReader )
                 }
             }
 
-            field.SetText( text );
-            field.SetTextPos( pos );
-            field.SetVisible( !attributes );
-            field.SetTextSize( VECTOR2I( size, size ) );
+            field->SetText( text );
+            field->SetTextPos( pos );
+            field->SetVisible( !attributes );
+            field->SetTextSize( VECTOR2I( size, size ) );
 
             if( orientation == 'H' )
-                field.SetTextAngle( ANGLE_HORIZONTAL );
+                field->SetTextAngle( ANGLE_HORIZONTAL );
             else if( orientation == 'V' )
-                field.SetTextAngle( ANGLE_VERTICAL );
+                field->SetTextAngle( ANGLE_VERTICAL );
             else
                 SCH_PARSE_ERROR( "symbol field orientation must be H or V", aReader, line );
 
             if( name.IsEmpty() )
-                name = GetDefaultFieldName( index, !DO_TRANSLATE );
+            {
+                if( field->IsMandatory() )
+                    name = GetCanonicalFieldName( field->GetId() );
+                else
+                    name = GetUserFieldName( legacy_field_id, !DO_TRANSLATE );
+            }
 
-            field.SetName( name );
+            field->SetName( name );
         }
         else if( strCompare( "$EndComp", line ) )
         {
@@ -1414,7 +1404,7 @@ SCH_SYMBOL* SCH_IO_KICAD_LEGACY::loadSymbol( LINE_READER& aReader )
 
                     SCH_SYMBOL_INSTANCE instance;
                     instance.m_Path = path;
-                    instance.m_Reference = symbol->GetField( REFERENCE_FIELD )->GetText();
+                    instance.m_Reference = symbol->GetField( FIELD_T::REFERENCE )->GetText();
                     instance.m_Unit = symbol->GetUnit();
                     symbol->AddHierarchicalReference( instance );
                 }
@@ -1688,10 +1678,10 @@ void SCH_IO_KICAD_LEGACY::saveSymbol( SCH_SYMBOL* aSymbol )
     }
     else
     {
-        if( aSymbol->GetField( REFERENCE_FIELD )->GetText().IsEmpty() )
+        if( aSymbol->GetField( FIELD_T::REFERENCE )->GetText().IsEmpty() )
             name1 = toUTFTildaText( aSymbol->GetPrefix() );
         else
-            name1 = toUTFTildaText( aSymbol->GetField( REFERENCE_FIELD )->GetText() );
+            name1 = toUTFTildaText( aSymbol->GetField( FIELD_T::REFERENCE )->GetText() );
     }
 
     wxString symbol_name = aSymbol->GetLibId().Format();
@@ -1748,29 +1738,11 @@ void SCH_IO_KICAD_LEGACY::saveSymbol( SCH_SYMBOL* aSymbol )
         }
     }
 
-    // update the ugly field id, which I would like to see go away someday soon.
-    for( int i = 0;  i < aSymbol->GetFieldCount();  ++i )
-        aSymbol->GetFields()[i].SetId( i );
+    // NB: FieldIDs in legacy libraries must be consecutive, and include user fields
+    int legacy_field_id = 0;
 
-    // Fixed fields:
-    // Save mandatory fields even if they are blank,
-    // because the visibility, size and orientation are set from library editor.
     for( SCH_FIELD& field : aSymbol->GetFields() )
-    {
-        if( field.IsMandatory() )
-            saveField( &field );
-    }
-
-    // User defined fields:
-    // The *policy* about which user defined fields are symbol of a symbol is now
-    // only in the dialog editors.  No policy should be enforced here, simply
-    // save all the user defined fields, they are present because a dialog editor
-    // thought they should be.  If you disagree, go fix the dialog editors.
-    for( SCH_FIELD& field : aSymbol->GetFields() )
-    {
-        if( !field.IsMandatory() )
-            saveField( &field );
-    }
+        saveField( &field, legacy_field_id++ );
 
     // Unit number, position, box ( old standard )
     m_out->Print( 0, "\t%-4d %-4d %-4d\n", aSymbol->GetUnit(),
@@ -1785,7 +1757,7 @@ void SCH_IO_KICAD_LEGACY::saveSymbol( SCH_SYMBOL* aSymbol )
 }
 
 
-void SCH_IO_KICAD_LEGACY::saveField( SCH_FIELD* aField )
+void SCH_IO_KICAD_LEGACY::saveField( SCH_FIELD* aField, int aLegacyId )
 {
     char hjustify = 'C';
 
@@ -1802,7 +1774,7 @@ void SCH_IO_KICAD_LEGACY::saveField( SCH_FIELD* aField )
         vjustify = 'T';
 
     m_out->Print( 0, "F %d %s %c %-3d %-3d %-3d %4.4X %c %c%c%c",
-                  aField->GetId(),
+                  aLegacyId,
                   EscapedUTF8( aField->GetText() ).c_str(),     // wraps in quotes too
                   aField->GetTextAngle().IsHorizontal() ? 'H' : 'V',
                   schIUScale.IUToMils( aField->GetLibPosition().x ),
@@ -1874,21 +1846,21 @@ void SCH_IO_KICAD_LEGACY::saveSheet( SCH_SHEET* aSheet )
 
     m_out->Print( 0, "U %8.8X\n", aSheet->m_Uuid.AsLegacyTimestamp() );
 
-    SCH_FIELD& sheetName = aSheet->GetFields()[SHEETNAME];
-    SCH_FIELD& fileName = aSheet->GetFields()[SHEETFILENAME];
+    SCH_FIELD* sheetName = aSheet->GetField( FIELD_T::SHEET_NAME );
+    SCH_FIELD* fileName = aSheet->GetField( FIELD_T::SHEET_FILENAME );
 
-    if( !sheetName.GetText().IsEmpty() )
+    if( !sheetName->GetText().IsEmpty() )
     {
         m_out->Print( 0, "F0 %s %d\n",
-                      EscapedUTF8( sheetName.GetText() ).c_str(),
-                      schIUScale.IUToMils( sheetName.GetTextSize().x ) );
+                      EscapedUTF8( sheetName->GetText() ).c_str(),
+                      schIUScale.IUToMils( sheetName->GetTextSize().x ) );
     }
 
-    if( !fileName.GetText().IsEmpty() )
+    if( !fileName->GetText().IsEmpty() )
     {
         m_out->Print( 0, "F1 %s %d\n",
-                      EscapedUTF8( fileName.GetText() ).c_str(),
-                      schIUScale.IUToMils( fileName.GetTextSize().x ) );
+                      EscapedUTF8( fileName->GetText() ).c_str(),
+                      schIUScale.IUToMils( fileName->GetTextSize().x ) );
     }
 
     for( const SCH_SHEET_PIN* pin : aSheet->GetPins() )
@@ -1901,9 +1873,9 @@ void SCH_IO_KICAD_LEGACY::saveSheet( SCH_SHEET* aSheet )
         switch( pin->GetSide() )
         {
         default:
-        case SHEET_SIDE::LEFT: side = 'L'; break;
-        case SHEET_SIDE::RIGHT: side = 'R'; break;
-        case SHEET_SIDE::TOP: side = 'T'; break;
+        case SHEET_SIDE::LEFT:   side = 'L'; break;
+        case SHEET_SIDE::RIGHT:  side = 'R'; break;
+        case SHEET_SIDE::TOP:    side = 'T'; break;
         case SHEET_SIDE::BOTTOM: side = 'B'; break;
         }
 

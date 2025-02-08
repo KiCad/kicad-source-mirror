@@ -488,11 +488,11 @@ void BACK_ANNOTATE::applyChangelist()
             {
                 const wxString& fpFieldName = field.first;
                 const wxString& fpFieldValue = field.second;
-                SCH_FIELD*      symField = symbol->FindField( fpFieldName );
+                SCH_FIELD*      symField = symbol->GetField( fpFieldName );
 
                 // Skip fields that are individually controlled
-                if( fpFieldName == GetCanonicalFieldName( REFERENCE_FIELD )
-                    || fpFieldName == GetCanonicalFieldName( VALUE_FIELD ) )
+                if( fpFieldName == GetCanonicalFieldName( FIELD_T::REFERENCE )
+                    || fpFieldName == GetCanonicalFieldName( FIELD_T::VALUE ) )
                 {
                     continue;
                 }
@@ -527,8 +527,8 @@ void BACK_ANNOTATE::applyChangelist()
 
                     if( !m_dryRun )
                     {
-                        SCH_FIELD newField( symbol->GetPosition(), symbol->GetNextFieldId(),
-                                            symbol, fpFieldName );
+                        SCH_FIELD newField( symbol->GetPosition(), FIELD_T::USER, symbol,
+                                            fpFieldName );
                         newField.SetText( fpFieldValue );
                         newField.SetVisible( false ); // Don't clutter up the schematic
                         symbol->AddField( newField );
@@ -540,28 +540,22 @@ void BACK_ANNOTATE::applyChangelist()
 
             // 3. Existing field has been deleted from footprint and needs to be deleted from symbol
             // Check all symbol fields for existence in the footprint field map
-            for( int ii = symbol->GetFieldCount() - 1; ii >= 0; --ii )
+            for( SCH_FIELD& field : symbol->GetFields() )
             {
-                SCH_FIELD* field = symbol->GetFieldById( ii );
-
-                if( !field )
-                    continue;
-
                 // Never delete mandatory fields
-                if( field->IsMandatory() )
+                if( field.IsMandatory() )
                     continue;
 
-                if( fpData.m_fieldsMap.find( field->GetCanonicalName() )
-                    == fpData.m_fieldsMap.end() )
+                if( fpData.m_fieldsMap.find( field.GetCanonicalName() ) == fpData.m_fieldsMap.end() )
                 {
                     // Field not found in footprint field map, delete it
                     m_changesCount++;
                     msg.Printf( _( "Delete %s field '%s.'" ),
                                 ref.GetRef(),
-                                EscapeHTML( field->GetCanonicalName() ) );
+                                EscapeHTML( field.GetName() ) );
 
                     if( !m_dryRun )
-                        symbol->RemoveField( field );
+                        symbol->RemoveField( symbol->GetField( field.GetName() ) );
 
                     m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
                 }

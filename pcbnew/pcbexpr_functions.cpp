@@ -1186,7 +1186,7 @@ static void getFieldFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                 {
                     FOOTPRINT* fp = static_cast<FOOTPRINT*>( item );
 
-                    PCB_FIELD* field = fp->GetFieldByName( arg->AsString() );
+                    PCB_FIELD* field = fp->GetField( arg->AsString() );
 
                     if( field )
                         return field->GetText();

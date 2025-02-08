@@ -68,8 +68,7 @@ private:
     static void saveText( SCH_TEXT* aText, OUTPUTFORMATTER& aFormatter );
     static void saveTextBox( SCH_TEXTBOX* aTextBox, OUTPUTFORMATTER& aFormatter );
 
-    static void saveDcmInfoAsFields( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aFormatter,
-                                     int& aNextFreeFieldId );
+    static void saveDcmInfoAsFields( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aFormatter );
 };
 
 #endif    // SCH_IO_KICAD_SEXPR_LIB_CACHE_H_

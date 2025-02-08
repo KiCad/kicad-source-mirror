@@ -1174,7 +1174,7 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
         // Don't use GetShownText(); we want to see the variable references here
         aList.emplace_back( symbol->GetRef( currentSheet ),
-                            UnescapeString( schsymbol->GetField( VALUE_FIELD )->GetText() ) );
+                            UnescapeString( schsymbol->GetField( FIELD_T::VALUE )->GetText() ) );
     }
 
 #if defined(DEBUG)
@@ -1402,7 +1402,7 @@ wxString SCH_PIN::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull
         const SCH_SYMBOL* symbol = static_cast<const SCH_SYMBOL*>( GetParentSymbol() );
 
         return wxString::Format( "Symbol %s %s",
-                                 UnescapeString( symbol->GetField( REFERENCE_FIELD )->GetText() ),
+                                 UnescapeString( symbol->GetField( FIELD_T::REFERENCE )->GetText() ),
                                  itemDesc );
     }
 

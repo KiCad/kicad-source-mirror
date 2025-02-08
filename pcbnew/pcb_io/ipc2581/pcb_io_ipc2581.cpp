@@ -2437,7 +2437,7 @@ void PCB_IO_IPC2581::generateComponents( wxXmlNode* aStepNode )
         PCB_FIELD* field = nullptr;
 
         if( !generate_unique )
-            field = fp->GetFieldByName( m_OEMRef );
+            field = fp->GetField( m_OEMRef );
 
         if( field && !field->GetText().empty() )
         {
@@ -3031,8 +3031,8 @@ wxXmlNode* PCB_IO_IPC2581::generateAvlSection()
         wxXmlNode* part = appendNode( avl, "AvlItem" );
         addAttribute( part,  "OEMDesignNumber", genString( name, "REF" ) );
 
-        PCB_FIELD* nums[2] = { fp->GetFieldByName( m_mpn ), fp->GetFieldByName( m_distpn ) };
-        PCB_FIELD* company[2] = { fp->GetFieldByName( m_mfg ), nullptr };
+        PCB_FIELD* nums[2] = { fp->GetField( m_mpn ), fp->GetField( m_distpn ) };
+        PCB_FIELD* company[2] = { fp->GetField( m_mfg ), nullptr };
         wxString company_name[2] = { m_mfg, m_dist };
 
         for ( int ii = 0; ii < 2; ++ii )

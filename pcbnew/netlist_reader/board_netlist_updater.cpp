@@ -467,9 +467,9 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
 
     // Remove the ref/value/footprint fields that are individually handled
     nlohmann::ordered_map<wxString, wxString> compFields = aNetlistComponent->GetFields();
-    compFields.erase( GetCanonicalFieldName( REFERENCE_FIELD ) );
-    compFields.erase( GetCanonicalFieldName( VALUE_FIELD ) );
-    compFields.erase( GetCanonicalFieldName( FOOTPRINT_FIELD ) );
+    compFields.erase( GetCanonicalFieldName( FIELD_T::REFERENCE ) );
+    compFields.erase( GetCanonicalFieldName( FIELD_T::VALUE ) );
+    compFields.erase( GetCanonicalFieldName( FIELD_T::FOOTPRINT ) );
 
     // Remove any component class fields - these are not editable in the pcb editor
     compFields.erase( wxT( "Component Class" ) );
@@ -520,14 +520,14 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
             // Add or change field value
             for( auto& [name, value] : compFields )
             {
-                if( aPcbFootprint->HasFieldByName( name ) )
+                if( aPcbFootprint->HasField( name ) )
                 {
-                    aPcbFootprint->GetFieldByName( name )->SetText( value );
+                    aPcbFootprint->GetField( name )->SetText( value );
                 }
                 else
                 {
-                    int        idx = aPcbFootprint->GetNextFieldId();
-                    PCB_FIELD* newField = aPcbFootprint->AddField( PCB_FIELD( aPcbFootprint, idx ) );
+                    PCB_FIELD* newField = new PCB_FIELD( aPcbFootprint, FIELD_T::USER );
+                    aPcbFootprint->Add( newField );
 
                     newField->SetName( name );
                     newField->SetText( value );
@@ -562,10 +562,12 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
                         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
                     }
 
-                    aPcbFootprint->RemoveField( field->GetCanonicalName() );
+                    aPcbFootprint->Remove( field );
 
                     if( m_frame )
                         m_frame->GetCanvas()->GetView()->Remove( field );
+
+                    delete field;
                 }
             }
         }

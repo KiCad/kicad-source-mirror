@@ -138,12 +138,12 @@ FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFra
         m_part( aSymbol ),
         m_files( aFiles ),
         m_symbolNetlist( netList( aSymbol ) ),
-        m_fieldNameValidator( FIELD_NAME ),
-        m_referenceValidator( REFERENCE_FIELD ),
-        m_valueValidator( VALUE_FIELD ),
-        m_urlValidator( FIELD_VALUE ),
-        m_nonUrlValidator( FIELD_VALUE ),
-        m_filepathValidator( SHEETFILENAME )
+        m_fieldNameValidator( FIELD_T::USER ),
+        m_referenceValidator( FIELD_T::REFERENCE ),
+        m_valueValidator( FIELD_T::VALUE ),
+        m_urlValidator( FIELD_T::USER ),
+        m_nonUrlValidator( FIELD_T::USER ),
+        m_filepathValidator( FIELD_T::SHEET_FILENAME )
 {
     initGrid( aGrid );
 }
@@ -157,12 +157,12 @@ FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFra
         m_part( aSymbol->GetLibSymbolRef().get() ),
         m_files( aFiles ),
         m_symbolNetlist( netList( aSymbol, aFrame->GetCurrentSheet() ) ),
-        m_fieldNameValidator( FIELD_NAME ),
-        m_referenceValidator( REFERENCE_FIELD ),
-        m_valueValidator( VALUE_FIELD ),
-        m_urlValidator( FIELD_VALUE ),
-        m_nonUrlValidator( FIELD_VALUE ),
-        m_filepathValidator( SHEETFILENAME )
+        m_fieldNameValidator( FIELD_T::USER ),
+        m_referenceValidator( FIELD_T::REFERENCE ),
+        m_valueValidator( FIELD_T::VALUE ),
+        m_urlValidator( FIELD_T::USER ),
+        m_nonUrlValidator( FIELD_T::USER ),
+        m_filepathValidator( FIELD_T::SHEET_FILENAME )
 {
     initGrid( aGrid );
 }
@@ -175,12 +175,12 @@ FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFra
         m_parentType( SCH_SHEET_T ),
         m_part( nullptr ),
         m_files( nullptr ),
-        m_fieldNameValidator( FIELD_NAME ),
-        m_referenceValidator( SHEETNAME_V ),
-        m_valueValidator( VALUE_FIELD ),
-        m_urlValidator( FIELD_VALUE ),
-        m_nonUrlValidator( FIELD_VALUE ),
-        m_filepathValidator( SHEETFILENAME_V )
+        m_fieldNameValidator( FIELD_T::USER ),
+        m_referenceValidator( FIELD_T::SHEET_NAME ),
+        m_valueValidator( FIELD_T::VALUE ),
+        m_urlValidator( FIELD_T::USER ),
+        m_nonUrlValidator( FIELD_T::USER ),
+        m_filepathValidator( FIELD_T::SHEET_FILENAME )
 {
     initGrid( aGrid );
 }
@@ -192,12 +192,12 @@ FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFra
         m_dialog( aDialog ),
         m_parentType( SCH_LABEL_LOCATE_ANY_T ),
         m_part( nullptr ),
-        m_fieldNameValidator( FIELD_NAME ),
-        m_referenceValidator( 0 ),
-        m_valueValidator( 0 ),
-        m_urlValidator( FIELD_VALUE ),
-        m_nonUrlValidator( FIELD_VALUE ),
-        m_filepathValidator( 0 )
+        m_fieldNameValidator( FIELD_T::USER ),
+        m_referenceValidator( FIELD_T::USER ),
+        m_valueValidator( FIELD_T::USER ),
+        m_urlValidator( FIELD_T::USER ),
+        m_nonUrlValidator( FIELD_T::USER ),
+        m_filepathValidator( FIELD_T::USER )
 {
     initGrid( aGrid );
 }
@@ -249,8 +249,8 @@ void FIELDS_GRID_TABLE::initGrid( WX_GRID* aGrid )
         GRID_CELL_STC_EDITOR* valueEditor = new GRID_CELL_STC_EDITOR( true,
                 [this]( wxStyledTextEvent& aEvent, SCINTILLA_TRICKS* aScintillaTricks )
                 {
-                    SCH_FIELD& valueField = static_cast<SCH_FIELD&>( this->at( VALUE_FIELD ) );
-                    valueField.OnScintillaCharAdded( aScintillaTricks, aEvent );
+                    SCH_FIELD* valueField = this->GetField( FIELD_T::VALUE );
+                    valueField->OnScintillaCharAdded( aScintillaTricks, aEvent );
                 } );
 
         m_valueAttr->SetEditor( valueEditor );
@@ -548,17 +548,17 @@ wxGridCellAttr* FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::
         }
 
     case FDC_VALUE:
-        if( m_parentType == SCH_SYMBOL_T && field.GetId() == REFERENCE_FIELD )
+        if( field.GetId() == FIELD_T::REFERENCE )
         {
             m_referenceAttr->IncRef();
             return enhanceAttr( m_referenceAttr, aRow, aCol, aKind );
         }
-        else if( m_parentType == SCH_SYMBOL_T && field.GetId() == VALUE_FIELD )
+        else if( field.GetId() == FIELD_T::VALUE )
         {
             m_valueAttr->IncRef();
             return enhanceAttr( m_valueAttr, aRow, aCol, aKind );
         }
-        else if( m_parentType == SCH_SYMBOL_T && field.GetId() == FOOTPRINT_FIELD )
+        else if( field.GetId() == FIELD_T::FOOTPRINT )
         {
             // Power symbols have do not appear in the board, so don't allow
             // a footprint (m_part can be nullptr when loading a old schematic
@@ -574,17 +574,17 @@ wxGridCellAttr* FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::
                 return enhanceAttr( m_footprintAttr, aRow, aCol, aKind );
             }
         }
-        else if( m_parentType == SCH_SYMBOL_T && field.GetId() == DATASHEET_FIELD )
+        else if( field.GetId() == FIELD_T::DATASHEET )
         {
             m_urlAttr->IncRef();
             return enhanceAttr( m_urlAttr, aRow, aCol, aKind );
         }
-        else if( m_parentType == SCH_SHEET_T && field.GetId() == SHEETNAME )
+        else if( field.GetId() == FIELD_T::SHEET_NAME )
         {
             m_referenceAttr->IncRef();
             return enhanceAttr( m_referenceAttr, aRow, aCol, aKind );
         }
-        else if( m_parentType == SCH_SHEET_T && field.GetId() == SHEETFILENAME )
+        else if( field.GetId() == FIELD_T::SHEET_FILENAME )
         {
             m_filepathAttr->IncRef();
             return enhanceAttr( m_filepathAttr, aRow, aCol, aKind );
@@ -678,28 +678,16 @@ wxString FIELDS_GRID_TABLE::GetValue( int aRow, int aCol )
     case FDC_NAME:
         // Use default field names for mandatory and system fields because they are translated
         // according to the current locale
-        if( m_parentType == SCH_SYMBOL_T || m_parentType == LIB_SYMBOL_T )
-        {
-            if( field.IsMandatory() )
-                return GetDefaultFieldName( aRow, DO_TRANSLATE );
-            else
-                return field.GetName( false );
-        }
-        else if( m_parentType == SCH_SHEET_T )
-        {
-            if( field.IsMandatory() )
-                return SCH_SHEET::GetDefaultFieldName( field.GetId(), DO_TRANSLATE );
-            else
-                return field.GetName( false );
-        }
-        else if( m_parentType == SCH_LABEL_LOCATE_ANY_T )
+        if( m_parentType == SCH_LABEL_LOCATE_ANY_T )
         {
             return SCH_LABEL_BASE::GetDefaultFieldName( field.GetCanonicalName(), false );
         }
         else
         {
-            wxFAIL_MSG( wxS( "Unhandled field owner type." ) );
-            return field.GetName( false );
+            if( field.IsMandatory() )
+                return GetDefaultFieldName( field.GetId(), DO_TRANSLATE );
+            else
+                return field.GetName( false );
         }
 
     case FDC_VALUE:
@@ -833,11 +821,11 @@ void FIELDS_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
 
     case FDC_VALUE:
     {
-        if( m_parentType == SCH_SHEET_T && field.GetId() == SHEETFILENAME )
+        if( m_parentType == SCH_SHEET_T && field.GetId() == FIELD_T::SHEET_FILENAME )
         {
             value = EnsureFileExtension( value, FILEEXT::KiCadSchematicFileExtension );
         }
-        else if( m_parentType == LIB_SYMBOL_T && field.GetId() == VALUE_FIELD )
+        else if( m_parentType == LIB_SYMBOL_T && field.GetId() == FIELD_T::VALUE )
         {
             value = EscapeString( value, CTX_LIBID );
         }
@@ -1039,6 +1027,30 @@ bool FIELDS_GRID_TABLE::BoolFromString( const wxString& aValue ) const
 }
 
 
+SCH_FIELD* FIELDS_GRID_TABLE::GetField( FIELD_T aFieldId )
+{
+    for( SCH_FIELD& field : *this )
+    {
+        if( field.GetId() == aFieldId )
+            return &field;
+    }
+
+    return nullptr;
+}
+
+
+int FIELDS_GRID_TABLE::GetFieldRow( FIELD_T aFieldId )
+{
+    for( int ii = 0; ii < (int) this->size(); ++ii )
+    {
+        if( this->at( ii ).GetId() == aFieldId )
+            return ii;
+    }
+
+    return -1;
+}
+
+
 void FIELDS_GRID_TABLE::DetachFields()
 {
     for( SCH_FIELD& field : *this )
@@ -1046,17 +1058,25 @@ void FIELDS_GRID_TABLE::DetachFields()
 }
 
 
+int FIELDS_GRID_TRICKS::getFieldRow( FIELD_T aFieldId )
+{
+    return static_cast<FIELDS_GRID_TABLE*>( m_grid->GetTable() )->GetFieldRow( aFieldId );
+}
+
+
 void FIELDS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 {
-    if( m_grid->GetGridCursorRow() == FOOTPRINT_FIELD && m_grid->GetGridCursorCol() == FDC_VALUE
-        && !m_grid->IsReadOnly( FOOTPRINT_FIELD, FDC_VALUE ) )
+    if( m_grid->GetGridCursorRow() == getFieldRow( FIELD_T::FOOTPRINT )
+        && m_grid->GetGridCursorCol() == FDC_VALUE
+        && !m_grid->IsReadOnly( getFieldRow( FIELD_T::FOOTPRINT ), FDC_VALUE ) )
     {
         menu.Append( MYID_SELECT_FOOTPRINT, _( "Select Footprint..." ),
                      _( "Browse for footprint" ) );
         menu.AppendSeparator();
     }
-    else if( m_grid->GetGridCursorRow() == DATASHEET_FIELD
-           && m_grid->GetGridCursorCol() == FDC_VALUE )
+    else if( m_grid->GetGridCursorRow() == getFieldRow( FIELD_T::DATASHEET )
+           && m_grid->GetGridCursorCol() == FDC_VALUE
+           && !m_grid->IsReadOnly( getFieldRow( FIELD_T::DATASHEET ), FDC_VALUE ) )
     {
         menu.Append( MYID_SHOW_DATASHEET, _( "Show Datasheet" ),
                      _( "Show datasheet in browser" ) );
@@ -1072,19 +1092,19 @@ void FIELDS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
     if( event.GetId() == MYID_SELECT_FOOTPRINT )
     {
         // pick a footprint using the footprint picker.
-        wxString fpid = m_grid->GetCellValue( FOOTPRINT_FIELD, FDC_VALUE );
+        wxString fpid = m_grid->GetCellValue( getFieldRow( FIELD_T::FOOTPRINT ), FDC_VALUE );
 
         if( KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true, m_dlg ) )
         {
             if( frame->ShowModal( &fpid, m_dlg ) )
-                m_grid->SetCellValue( FOOTPRINT_FIELD, FDC_VALUE, fpid );
+                m_grid->SetCellValue( getFieldRow( FIELD_T::FOOTPRINT ), FDC_VALUE, fpid );
 
             frame->Destroy();
         }
     }
     else if (event.GetId() == MYID_SHOW_DATASHEET )
     {
-        wxString datasheet_uri = m_grid->GetCellValue( DATASHEET_FIELD, FDC_VALUE );
+        wxString datasheet_uri = m_grid->GetCellValue( getFieldRow( FIELD_T::DATASHEET ), FDC_VALUE );
 
         GetAssociatedDocument( m_dlg, datasheet_uri, &m_dlg->Prj(),
                                PROJECT_SCH::SchSearchS( &m_dlg->Prj() ), m_files );

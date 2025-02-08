@@ -630,7 +630,7 @@ wxString NETLIST_EXPORTER_ALLEGRO::getGroupField( int aGroupIndex, const wxArray
 
         for( const wxString& field : aFieldArray )
         {
-            if( SCH_FIELD* fld = sym->FindField( field, true, true ) )
+            if( SCH_FIELD* fld = sym->FindFieldCaseInsensitive( field ) )
             {
                 wxString fieldText = fld->GetShownText( &sheetPath, true );
 
@@ -651,7 +651,7 @@ wxString NETLIST_EXPORTER_ALLEGRO::getGroupField( int aGroupIndex, const wxArray
 
         for( const wxString& field : aFieldArray )
         {
-            if( SCH_FIELD* fld = sym->GetLibSymbolRef()->FindField( field, true ) )
+            if( SCH_FIELD* fld = sym->GetLibSymbolRef()->FindFieldCaseInsensitive( field ) )
             {
                 wxString fieldText = fld->GetShownText( false, 0 );
 

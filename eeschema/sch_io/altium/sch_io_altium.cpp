@@ -1456,7 +1456,7 @@ void SCH_IO_ALTIUM::ParseComponent( int aIndex, const std::map<wxString, wxStrin
     // component->SetOrientation( elem.orientation );
     symbol->SetLibId( libId );
     symbol->SetUnit( std::max( 0, elem.currentpartid ) );
-    symbol->GetField( DESCRIPTION_FIELD )->SetText( elem.componentdescription );
+    symbol->GetField( FIELD_T::DESCRIPTION )->SetText( elem.componentdescription );
 
     SCH_SCREEN* screen = getCurrentScreen();
     wxCHECK( screen, /* void */ );
@@ -3628,12 +3628,12 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
     // each symbol has its own powerSymbolIt for now
     SCH_SYMBOL* symbol = new SCH_SYMBOL();
     symbol->SetRef( &m_sheetPath, "#PWR?" );
-    symbol->GetField( REFERENCE_FIELD )->SetVisible( false );
+    symbol->GetField( FIELD_T::REFERENCE )->SetVisible( false );
     symbol->SetValueFieldText( elem.text );
     symbol->SetLibId( libId );
     symbol->SetLibSymbol( new LIB_SYMBOL( *libSymbol ) );
 
-    SCH_FIELD* valueField = symbol->GetField( VALUE_FIELD );
+    SCH_FIELD* valueField = symbol->GetField( FIELD_T::VALUE );
     valueField->SetVisible( elem.showNetName );
 
     // TODO: Why do I need to set this a second time?
@@ -3778,6 +3778,9 @@ void SCH_IO_ALTIUM::ParsePortHelper( const ASCH_PORT& aElem )
     }
 #else
     label = new SCH_GLOBALLABEL( position, aElem.Name );
+
+    // Default "Sheet References" field should be hidden, at least for now
+    label->GetField( INTERSHEET_REFS )->SetVisible( false );
 #endif
 
     switch( aElem.IOtype )
@@ -3816,11 +3819,6 @@ void SCH_IO_ALTIUM::ParsePortHelper( const ASCH_PORT& aElem )
     }
 
     label->AutoplaceFields( screen, AUTOPLACE_AUTO );
-
-    // Default "Sheet References" field should be hidden, at least for now
-    if( label->GetFields().size() > 0 )
-        label->GetFields()[0].SetVisible( false );
-
     label->SetFlags( IS_NEW );
 
     screen->Append( label );
@@ -4076,12 +4074,12 @@ void SCH_IO_ALTIUM::ParseSheetName( const std::map<wxString, wxString>& aPropert
         return;
     }
 
-    SCH_FIELD& sheetNameField = sheetIt->second->GetFields()[SHEETNAME];
+    SCH_FIELD* sheetNameField = sheetIt->second->GetField( FIELD_T::SHEET_NAME );
 
-    sheetNameField.SetPosition( elem.location + m_sheetOffset );
-    sheetNameField.SetText( elem.text );
-    sheetNameField.SetVisible( !elem.isHidden );
-    SetTextPositioning( &sheetNameField, ASCH_LABEL_JUSTIFICATION::BOTTOM_LEFT, elem.orientation );
+    sheetNameField->SetPosition( elem.location + m_sheetOffset );
+    sheetNameField->SetText( elem.text );
+    sheetNameField->SetVisible( !elem.isHidden );
+    SetTextPositioning( sheetNameField, ASCH_LABEL_JUSTIFICATION::BOTTOM_LEFT, elem.orientation );
 }
 
 
@@ -4099,14 +4097,14 @@ void SCH_IO_ALTIUM::ParseFileName( const std::map<wxString, wxString>& aProperti
         return;
     }
 
-    SCH_FIELD& filenameField = sheetIt->second->GetFields()[SHEETFILENAME];
+    SCH_FIELD* filenameField = sheetIt->second->GetField( FIELD_T::SHEET_FILENAME );
 
-    filenameField.SetPosition( elem.location + m_sheetOffset );
+    filenameField->SetPosition( elem.location + m_sheetOffset );
 
     // Keep the filename of the Altium file until after the file is actually loaded.
-    filenameField.SetText( elem.text );
-    filenameField.SetVisible( !elem.isHidden );
-    SetTextPositioning( &filenameField, ASCH_LABEL_JUSTIFICATION::BOTTOM_LEFT, elem.orientation );
+    filenameField->SetText( elem.text );
+    filenameField->SetVisible( !elem.isHidden );
+    SetTextPositioning( filenameField, ASCH_LABEL_JUSTIFICATION::BOTTOM_LEFT, elem.orientation );
 }
 
 
@@ -4120,7 +4118,7 @@ void SCH_IO_ALTIUM::ParseDesignator( const std::map<wxString, wxString>& aProper
     {
         // TODO: e.g. can depend on Template (RECORD=39
         m_errorMessages.emplace( wxString::Format( wxT( "Designator's owner (%d) not found." ),
-                                            elem.ownerindex ),
+                                                   elem.ownerindex ),
                             RPT_SEVERITY_DEBUG );
         return;
     }
@@ -4140,10 +4138,10 @@ void SCH_IO_ALTIUM::ParseDesignator( const std::map<wxString, wxString>& aProper
     // I have examples with this criteria fully incorrect.
     bool visible = !emptyRef;
 
-    symbol->GetField( VALUE_FIELD )->SetVisible( visible );
-    symbol->GetField( REFERENCE_FIELD )->SetVisible( visible );
+    symbol->GetField( FIELD_T::VALUE )->SetVisible( visible );
 
-    SCH_FIELD* field = symbol->GetField( REFERENCE_FIELD );
+    SCH_FIELD* field = symbol->GetField( FIELD_T::REFERENCE );
+    field->SetVisible( visible );
     field->SetPosition( elem.location + m_sheetOffset );
     SetTextPositioning( field, elem.justification, elem.orientation );
 }
@@ -4253,11 +4251,10 @@ void SCH_IO_ALTIUM::ParseParameter( const std::map<wxString, wxString>& aPropert
 
         if( upperName == "COMMENT" )
         {
-            field = symbol->GetField( VALUE_FIELD );
+            field = symbol->GetField( FIELD_T::VALUE );
         }
         else
         {
-            int      fieldIdx = symbol->GetNextFieldId();
             wxString fieldName = elem.name.Upper();
 
             if( fieldName.IsEmpty() )
@@ -4268,9 +4265,8 @@ void SCH_IO_ALTIUM::ParseParameter( const std::map<wxString, wxString>& aPropert
                 {
                     fieldName = wxString::Format( "ALTIUM_UNNAMED_%d", disambiguate++ );
 
-                    if( !symbol->FindField( fieldName ) )
+                    if( !symbol->GetField( fieldName ) )
                         break;
-
                 }
             }
             else if( fieldName == "VALUE" )
@@ -4278,7 +4274,7 @@ void SCH_IO_ALTIUM::ParseParameter( const std::map<wxString, wxString>& aPropert
                 fieldName = "ALTIUM_VALUE";
             }
 
-            field = symbol->AddField( SCH_FIELD( VECTOR2I(), fieldIdx, symbol, fieldName ) );
+            field = symbol->AddField( SCH_FIELD( { 0, 0 }, FIELD_T::USER, symbol, fieldName ) );
         }
 
         wxString kicadText = AltiumSchSpecialStringsToKiCadVariables( elem.text, variableMap );
@@ -4328,7 +4324,6 @@ void SCH_IO_ALTIUM::ParseLibParameter( const std::map<wxString, wxString>& aProp
         }
         else
         {
-            int      fieldIdx = libSymbol->GetNextAvailableFieldId();
             wxString fieldNameStem = elem.name;
             wxString fieldName = fieldNameStem;
             int disambiguate = 1;
@@ -4346,10 +4341,10 @@ void SCH_IO_ALTIUM::ParseLibParameter( const std::map<wxString, wxString>& aProp
             }
 
             // Avoid adding duplicate fields
-            while( libSymbol->FindField( fieldName ) )
+            while( libSymbol->GetField( fieldName ) )
                 fieldName = wxString::Format( "%s_%d", fieldNameStem, disambiguate++ );
 
-            SCH_FIELD* new_field = new SCH_FIELD( libSymbol, fieldIdx, fieldName );
+            SCH_FIELD* new_field = new SCH_FIELD( libSymbol, FIELD_T::USER, fieldName );
             libSymbol->AddField( new_field );
             field = new_field;
         }
@@ -4411,8 +4406,7 @@ void SCH_IO_ALTIUM::ParseImplementation( const std::map<wxString, wxString>& aPr
             LIB_ID fpLibId = AltiumToKiCadLibID( libName, elem.name );
 
             symbol->SetFPFilters( fpFilters );
-            SCH_FIELD& footprintField = symbol->GetFootprintField();
-            footprintField.SetText( fpLibId.Format() );
+            symbol->GetField( FIELD_T::FOOTPRINT )->SetText( fpLibId.Format() );
         }
 
         return;

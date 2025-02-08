@@ -33,9 +33,9 @@ class BOARD_DESIGN_SETTINGS;
 class PCB_FIELD : public PCB_TEXT
 {
 public:
-    PCB_FIELD( FOOTPRINT* aParent, int aFieldId, const wxString& aName = wxEmptyString );
+    PCB_FIELD( FOOTPRINT* aParent, FIELD_T aFieldId, const wxString& aName = wxEmptyString );
 
-    PCB_FIELD( const PCB_TEXT& aText, int aFieldId, const wxString& aName = wxEmptyString );
+    PCB_FIELD( const PCB_TEXT& aText, FIELD_T aFieldId, const wxString& aName = wxEmptyString );
 
     void Serialize( google::protobuf::Any &aContainer ) const override;
     bool Deserialize( const google::protobuf::Any &aContainer ) override;
@@ -54,20 +54,20 @@ public:
 
         for( KICAD_T scanType : aScanTypes )
         {
-            if( scanType == PCB_FIELD_LOCATE_REFERENCE_T && m_id == REFERENCE_FIELD )
+            if( scanType == PCB_FIELD_LOCATE_REFERENCE_T && m_id == FIELD_T::REFERENCE )
                 return true;
-            else if( scanType == PCB_FIELD_LOCATE_VALUE_T && m_id == VALUE_FIELD )
+            else if( scanType == PCB_FIELD_LOCATE_VALUE_T && m_id == FIELD_T::VALUE )
                 return true;
-            else if( scanType == PCB_FIELD_LOCATE_DATASHEET_T && m_id == DATASHEET_FIELD )
+            else if( scanType == PCB_FIELD_LOCATE_DATASHEET_T && m_id == FIELD_T::DATASHEET )
                 return true;
         }
 
         return false;
     }
 
-    bool IsReference() const { return m_id == REFERENCE_FIELD; }
-    bool IsValue() const { return m_id == VALUE_FIELD; }
-    bool IsDatasheet() const { return m_id == DATASHEET_FIELD; }
+    bool IsReference() const { return m_id == FIELD_T::REFERENCE; }
+    bool IsValue() const { return m_id == FIELD_T::VALUE; }
+    bool IsDatasheet() const { return m_id == FIELD_T::DATASHEET; }
     bool IsComponentClass() const { return GetName() == wxT( "Component Class" ); }
 
     bool IsMandatory() const;
@@ -90,11 +90,10 @@ public:
     PCB_FIELD* CloneField() const { return (PCB_FIELD*) Clone(); }
 
     /**
-     * Return the field name (not translated)..
+     * Return the field name (not translated).
      *
      * @param aUseDefaultName When true return the default field name if the field name is
      *                        empty.  Otherwise the default field name is returned.
-     * @return the name of the field.
      */
     wxString GetName( bool aUseDefaultName = true ) const;
 
@@ -106,8 +105,17 @@ public:
 
     void SetName( const wxString& aName ) { m_name = aName; }
 
-    int GetId() const { return m_id; }
-    void SetId( int aId ) { m_id = aId; }
+    FIELD_T GetId() const { return m_id; }
+
+    int GetOrdinal() const
+    {
+        return IsMandatory() ? (int) m_id : m_ordinal;
+    }
+    void SetOrdinal( int aOrdinal )
+    {
+        m_id = FIELD_T::USER;
+        m_ordinal = aOrdinal;
+    }
 
     double Similarity( const BOARD_ITEM& aOther ) const override;
 
@@ -118,10 +126,11 @@ protected:
     void swapData( BOARD_ITEM* aImage ) override;
 
 private:
-    void setId( int aId ) { m_id = aId; }
+    void setId( FIELD_T aId ) { m_id = aId; }
 
-    int m_id; ///< Field index, @see enum MANDATORY_FIELD_T
-
+private:
+    FIELD_T  m_id;           ///< Field id, @see enum FIELD_T
+    int      m_ordinal;      ///< Sort order for non-mandatory fields
     wxString m_name;
 };
 

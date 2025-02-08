@@ -38,16 +38,7 @@
 #include <wx/regex.h>
 
 #include <lib_id.h>
-
-
-#define FIELD_NAME  -1
-#define FIELD_VALUE -2
-
-#define SHEETNAME_V      100    // We can't use SHEETNAME and SHEETFILENAME because they
-#define SHEETFILENAME_V  101    //   overlap with REFERENCE_FIELD and VALUE_FIELD
-#define SHEETUSERFIELD_V 102
-
-#define LABELUSERFIELD_V 200
+#include <template_fieldnames.h>
 
 
 /**
@@ -62,20 +53,6 @@ class FOOTPRINT_NAME_VALIDATOR : public wxTextValidator
 {
 public:
     FOOTPRINT_NAME_VALIDATOR( wxString* aValue = nullptr );
-};
-
-
-/**
- * Provide a custom wxValidator object for limiting the allowable characters when
- * defining file names with path, for instance in schematic sheet file names.
- *
- * The characters *?|"<> are illegal and filtered by the validator,
- * but /\: are valid (\ and : only on Windows.)
- */
-class FILE_NAME_WITH_PATH_CHAR_VALIDATOR : public wxTextValidator
-{
-public:
-    FILE_NAME_WITH_PATH_CHAR_VALIDATOR( wxString* aValue = nullptr );
 };
 
 
@@ -108,64 +85,6 @@ public:
     void OnTextChanged( wxCommandEvent& event );
 };
 
-
-/**
- * Custom validator that checks verifies that a string *exactly* matches a regular expression.
- */
-class REGEX_VALIDATOR : public wxTextValidator
-{
-public:
-    /**
-     * @param aRegEx is a regular expression to validate strings.
-     * @param aValue is a pointer to a wxString containing the value to validate.
-     */
-    REGEX_VALIDATOR( const wxString& aRegEx, wxString* aValue = nullptr )
-        : wxTextValidator( wxFILTER_NONE, aValue )
-    {
-        compileRegEx( aRegEx, wxRE_DEFAULT );
-    }
-
-    /**
-     * @param aRegEx is a regular expression to validate strings.
-     * @param aFlags are compilation flags (normally wxRE_DEFAULT).
-     * @param aValue is a pointer to a wxString containing the value to validate.
-     */
-    REGEX_VALIDATOR( const wxString& aRegEx, int aFlags, wxString* aValue = nullptr )
-        : wxTextValidator( wxFILTER_NONE, aValue )
-    {
-        compileRegEx( aRegEx, aFlags );
-    }
-
-    REGEX_VALIDATOR( const REGEX_VALIDATOR& aOther ) : wxTextValidator( aOther )
-    {
-        compileRegEx( aOther.m_regExString, aOther.m_regExFlags );
-    }
-
-    virtual wxObject* Clone() const override
-    {
-        return new REGEX_VALIDATOR( *this );
-    }
-
-    bool Validate( wxWindow* aParent ) override;
-
-    const wxString& GetRegEx() const
-    {
-        return m_regExString;
-    }
-
-protected:
-    /// Compiles and stores a regular expression.
-    void compileRegEx( const wxString& aRegEx, int aFlags );
-
-    /// Original regular expression (for copy constructor).
-    wxString m_regExString;
-
-    /// Original compilation flags (for copy constructor).
-    int m_regExFlags;
-
-    /// Compiled regular expression.
-    wxRegEx m_regEx;
-};
 
 class NETNAME_VALIDATOR : public wxTextValidator
 {
@@ -223,7 +142,7 @@ void ValidatorTransferToWindowWithoutEvents( wxValidator& aValidator );
 class FIELD_VALIDATOR : public wxTextValidator
 {
 public:
-    FIELD_VALIDATOR( int aFieldId, wxString* aValue = nullptr );
+    FIELD_VALIDATOR( FIELD_T aFieldId, wxString* aValue = nullptr );
 
     FIELD_VALIDATOR( const FIELD_VALIDATOR& aValidator );
 
@@ -241,7 +160,7 @@ public:
     bool DoValidate( const wxString& aValue, wxWindow* aParent );
 
 private:
-    int m_fieldId;
+    FIELD_T m_fieldId;
 };
 
 

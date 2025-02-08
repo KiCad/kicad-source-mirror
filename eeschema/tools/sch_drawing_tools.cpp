@@ -1594,6 +1594,7 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
     SCHEMATIC_SETTINGS& settings = schematic->Settings();
     SCH_TEXT*           textItem = nullptr;
     SCH_LABEL_BASE*     labelItem = nullptr;
+    SCH_GLOBALLABEL*    globalLabel = nullptr;
     wxString            netName;
 
     switch( aType )
@@ -1614,9 +1615,8 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
     case LAYER_NETCLASS_REFS:
         labelItem = new SCH_DIRECTIVE_LABEL( aPosition );
         labelItem->SetShape( m_lastNetClassFlagShape );
-        labelItem->GetFields().emplace_back( SCH_FIELD( {0,0}, 0, labelItem, wxT( "Netclass" ) ) );
-        labelItem->GetFields().emplace_back(
-                SCH_FIELD( { 0, 0 }, 0, labelItem, wxT( "Component Class" ) ) );
+        labelItem->GetFields().emplace_back( VECTOR2I(), FIELD_T::USER, labelItem, wxT( "Netclass" ) );
+        labelItem->GetFields().emplace_back( VECTOR2I(), FIELD_T::USER, labelItem, wxT( "Component Class" ) );
         labelItem->GetFields().back().SetItalic( true );
         labelItem->GetFields().back().SetVisible( true );
         textItem = labelItem;
@@ -1630,11 +1630,11 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
         break;
 
     case LAYER_GLOBLABEL:
-        labelItem = new SCH_GLOBALLABEL( aPosition );
-        labelItem->SetShape( m_lastGlobalLabelShape );
-        labelItem->GetFields()[0].SetVisible( settings.m_IntersheetRefsShow );
-        labelItem->SetAutoRotateOnPlacement( m_lastAutoLabelRotateOnPlacement );
-        textItem = labelItem;
+        globalLabel = new SCH_GLOBALLABEL( aPosition );
+        globalLabel->SetShape( m_lastGlobalLabelShape );
+        globalLabel->GetField( FIELD_T::INTERSHEET_REFS )->SetVisible( settings.m_IntersheetRefsShow );
+        globalLabel->SetAutoRotateOnPlacement( m_lastAutoLabelRotateOnPlacement );
+        textItem = globalLabel;
 
         if( SCH_LINE* wire = findWire( aPosition ) )
             netName = findWireLabelDriverName( wire );
@@ -3026,35 +3026,30 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             {
                 wxFileName fn( filename );
 
-                sheet->GetFields()[SHEETNAME].SetText( fn.GetName() );
-                sheet->GetFields()[SHEETFILENAME].SetText( fn.GetName() + wxT( "." )
-                                                           + FILEEXT::KiCadSchematicFileExtension );
+                sheet->GetField( FIELD_T::SHEET_NAME )->SetText( fn.GetName() );
+                sheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( fn.GetName() + wxT( "." ) + FILEEXT::KiCadSchematicFileExtension );
             }
             else if( isDrawSheetFromDesignBlock )
             {
                 wxFileName fn( filename );
 
-                sheet->GetFields()[SHEETNAME].SetText( designBlock->GetLibId().GetLibItemName() );
-                sheet->GetFields()[SHEETFILENAME].SetText( fn.GetName() + wxT( "." )
-                                                           + FILEEXT::KiCadSchematicFileExtension );
+                sheet->GetField( FIELD_T::SHEET_NAME )->SetText( designBlock->GetLibId().GetLibItemName() );
+                sheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( fn.GetName() + wxT( "." ) + FILEEXT::KiCadSchematicFileExtension );
 
                 std::vector<SCH_FIELD>& sheetFields = sheet->GetFields();
 
                 // Copy default fields into the sheet
-                for( const auto& field : designBlock->GetFields() )
+                for( const auto& [fieldName, fieldValue] : designBlock->GetFields() )
                 {
-                    SCH_FIELD newField( sheet, sheetFields.size(), field.first );
-                    newField.SetText( field.second );
-                    newField.SetVisible( false );
-
-                    sheetFields.emplace_back( newField );
+                    sheetFields.emplace_back( sheet, FIELD_T::USER, fieldName );
+                    sheetFields.back().SetText( fieldValue );
+                    sheetFields.back().SetVisible( false );
                 }
             }
             else
             {
-                sheet->GetFields()[SHEETNAME].SetText( wxT( "Untitled Sheet" ) );
-                sheet->GetFields()[SHEETFILENAME].SetText(
-                    wxString::Format( wxT( "untitled.%s" ), FILEEXT::KiCadSchematicFileExtension ) );
+                sheet->GetField( FIELD_T::SHEET_NAME )->SetText( wxT( "Untitled Sheet" ) );
+                sheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( wxString::Format( wxT( "untitled.%s" ), FILEEXT::KiCadSchematicFileExtension ) );
             }
 
             sheet->SetFlags( IS_NEW | IS_MOVING );

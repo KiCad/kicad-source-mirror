@@ -439,36 +439,33 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& aInheritFrom )
         new_symbol.SetParent( parent );
 
         // Inherit the parent mandatory field attributes.
-        for( int fieldId : MANDATORY_FIELDS )
+        for( FIELD_T fieldId : MANDATORY_FIELDS )
         {
-            SCH_FIELD* field = new_symbol.GetFieldById( fieldId );
-
-            // the MANDATORY_FIELD_COUNT are exactly that in RAM.
-            wxCHECK( field, /* void */ );
-
-            SCH_FIELD* parentField = parent->GetFieldById( fieldId );
-
-            wxCHECK( parentField, /* void */ );
+            SCH_FIELD* field = new_symbol.GetField( fieldId );
+            SCH_FIELD* parentField = parent->GetField( fieldId );
 
             *field = *parentField;
 
             switch( fieldId )
             {
-            case REFERENCE_FIELD:
+            case FIELD_T::REFERENCE:
                 // parent's reference already copied
                 break;
 
-            case VALUE_FIELD:
+            case FIELD_T::VALUE:
                 if( parent->IsPower() )
                     field->SetText( name );
                 break;
 
-            case FOOTPRINT_FIELD:
-            case DATASHEET_FIELD:
+            case FIELD_T::FOOTPRINT:
+            case FIELD_T::DATASHEET:
                 // - footprint might be the same as parent, but might not
                 // - datasheet is most likely different
                 // - probably best to play it safe and copy neither
                 field->SetText( wxEmptyString );
+                break;
+
+            default:
                 break;
             }
 

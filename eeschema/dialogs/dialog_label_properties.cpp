@@ -287,8 +287,10 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
                     // Ensure the symbol has the Power (i.e. equivalent to a global label
                     // before adding its value in list
                     if( power->IsSymbolLikePowerGlobalLabel() )
-                        existingLabels.insert(
-                                UnescapeString( power->GetField( VALUE_FIELD )->GetText() ) );
+                    {
+                        const SCH_FIELD* valueField = power->GetField( FIELD_T::VALUE );
+                        existingLabels.insert( UnescapeString( valueField->GetText() ) );
+                    }
                 }
             }
 
@@ -471,7 +473,7 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
         {
             field.SetLayer( LAYER_NETCLASS_REFS );
         }
-        else if( field.GetCanonicalName() == wxT( "Intersheetrefs" ) )
+        else if( field.GetId() == FIELD_T::INTERSHEET_REFS )
         {
             if( field.IsVisible() != m_Parent->Schematic().Settings().m_IntersheetRefsShow )
             {
@@ -521,6 +523,14 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
             // give non-empty, unnamed fields a name
             field.SetName( _( "untitled" ) );
         }
+    }
+
+    int ordinal = 42;   // Arbitrarily larger than any mandatory FIELD_T ids.
+
+    for( SCH_FIELD& field : *m_fields )
+    {
+        if( !field.IsMandatory() )
+            field.SetOrdinal( ordinal++ );
     }
 
     m_currentLabel->SetFields( *m_fields );
@@ -622,20 +632,20 @@ void DIALOG_LABEL_PROPERTIES::OnAddField( wxCommandEvent& event )
     if( !m_grid->CommitPendingChanges() )
         return;
 
-    int      fieldID = (int) m_fields->size();
-    wxString fieldName;
+    wxString fieldName = wxT( "Netclass" );
 
-    if( (int) fieldID == m_currentLabel->GetMandatoryFieldCount()
-            || m_fields->at( m_fields->size()-1 ).GetCanonicalName() == wxT( "Netclass" ) )
+    for( SCH_FIELD& field : *m_fields )
     {
-        fieldName = wxT( "Netclass" );
-    }
-    else
-    {
-        fieldName = SCH_LABEL_BASE::GetDefaultFieldName( fieldName, true );
+        if( field.GetId() != FIELD_T::INTERSHEET_REFS && field.GetName() != wxT( "Netclass" ) )
+        {
+            fieldName = wxEmptyString;
+            break;
+        }
     }
 
-    SCH_FIELD newField( VECTOR2I( 0, 0 ), fieldID, m_currentLabel, fieldName );
+    fieldName = SCH_LABEL_BASE::GetDefaultFieldName( fieldName, true );
+
+    SCH_FIELD newField( VECTOR2I( 0, 0 ), FIELD_T::USER, m_currentLabel, fieldName );
 
     if( m_fields->size() > 0 )
     {

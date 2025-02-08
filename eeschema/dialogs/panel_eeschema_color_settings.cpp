@@ -441,12 +441,9 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         addItem( symbol );
     }
 
-    SCH_SHEET* s = new SCH_SHEET(
-            /* aParent */ nullptr,
-            /* aPosition */ MILS_POINT( 4000, 1300 ),
-            /* aSize */ VECTOR2I( schIUScale.MilsToIU( 800 ), schIUScale.MilsToIU( 1300 ) ) );
-    s->GetFields().at( SHEETNAME ).SetText( wxT( "SHEET" ) );
-    s->GetFields().at( SHEETFILENAME ).SetText( _( "/path/to/sheet" ) );
+    SCH_SHEET* s = new SCH_SHEET( nullptr, MILS_POINT( 4000, 1300 ), MILS_POINT( 800, 1300 ) );
+    s->GetField( FIELD_T::SHEET_NAME )->SetText( wxT( "SHEET" ) );
+    s->GetField( FIELD_T::SHEET_FILENAME )->SetText( _( "/path/to/sheet" ) );
     s->AutoplaceFields( nullptr, AUTOPLACE_AUTO );
     addItem( s );
 

@@ -458,22 +458,9 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAll( const TOOL_EVENT& aEvent )
                     {
                         SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
 
-                        if( field->GetParent() && field->GetParent()->Type() == SCH_SYMBOL_T )
-                        {
-                            switch( field->GetId() )
-                            {
-                            case REFERENCE_FIELD:
-                            case VALUE_FIELD:
-                            case FOOTPRINT_FIELD:
-                                // must be handled for each distinct sheet
-                                doReplace( field, &sheets[ii], data );
-                                break;
-
-                            default:
-                                // handled in first iteration
-                                break;
-                            }
-                        }
+                        // References must be handled for each distinct sheet
+                        if( field->GetId() == FIELD_T::REFERENCE )
+                            doReplace( field, &sheets[ii], data );
                     }
 
                     item = nextMatch( screen, &sheets[ii], item, data, false );

@@ -47,7 +47,7 @@ struct LEGACY_POWER_SYMBOLS_TEST_FIXTURE
                 && symbol->GetAllLibPins()[0]->IsGlobalPower()
                 && !symbol->GetAllLibPins()[0]->IsVisible() )
             {
-                BOOST_CHECK_EQUAL( symbol->GetField( VALUE_FIELD )->GetText(),
+                BOOST_CHECK_EQUAL( symbol->GetField( FIELD_T::VALUE )->GetText(),
                                    symbol->GetAllLibPins()[0]->GetName() );
             }
         }

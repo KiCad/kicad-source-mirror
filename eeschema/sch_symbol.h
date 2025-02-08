@@ -411,46 +411,28 @@ public:
     //-----<Fields>-----------------------------------------------------------
 
     /**
-     * Return a mandatory field in this symbol.
-     *
-     * @note If you need to fetch a user field, use GetFieldById.
-     *
-     * @param aFieldType is one of the mandatory field types (REFERENCE_FIELD, VALUE_FIELD, etc.).
-     * @return is the field at \a aFieldType or NULL if the field does not exist.
+     * Return a mandatory field in this symbol.  The const version will return nullptr if the
+     * field is not found; non-const version will create the field.
      */
-    SCH_FIELD* GetField( MANDATORY_FIELD_T aFieldType );
-    const SCH_FIELD* GetField( MANDATORY_FIELD_T aFieldNdx ) const;
+    SCH_FIELD* GetField( FIELD_T aFieldType );
+    const SCH_FIELD* GetField( FIELD_T aFieldNdx ) const;
 
     /**
-     * Return a field in this symbol.
-     *
-     * @param aFieldId is the id of the field requested.  Note that this id ONLY SOMETIMES equates
-     *                 to the field's position in the vector.
-     * @return is the field at \a aFieldType or NULL if the field does not exist.
+     * Return a field in this symbol.  Both versions return nullptr if the field is not found.
      */
-    SCH_FIELD* GetFieldById( int aFieldId );
+    SCH_FIELD* GetField( const wxString& aFieldName );
+    const SCH_FIELD* GetField( const wxString& aFieldName ) const;
 
     /**
-     * Return a field in this symbol.
-     *
-     * @param aFieldName is the name of the field
-     *
-     * @return is the field with \a aFieldName or NULL if the field does not exist.
-     */
-    SCH_FIELD* GetFieldByName( const wxString& aFieldName );
-
-    const SCH_FIELD* GetFieldByName( const wxString& aFieldName ) const;
-
-    /**
-     * Populate a std::vector with SCH_FIELDs.
+     * Populate a std::vector with SCH_FIELDs, sorted in ordinal order.
      *
      * @param aVector is the vector to populate.
      * @param aVisibleOnly is used to add only the fields that are visible and contain text.
      */
-    void GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOnly ) override;
+    void GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOnly ) const override;
 
     /**
-     * Return a vector of fields from the symbol
+     * Return a reference to the vector holding the symbol's fields
      */
     std::vector<SCH_FIELD>& GetFields() { return m_fields; }
     const std::vector<SCH_FIELD>& GetFields() const { return m_fields; }
@@ -466,8 +448,8 @@ public:
 
     /**
      * Remove a user field from the symbol.
-     * @param aFieldName is the user fieldName to remove.  Attempts to remove a mandatory
-     *                   field or a non-existant field are silently ignored.
+     *
+     * @param aFieldName is the user fieldName to remove.
      */
     void RemoveField( const wxString& aFieldName );
 
@@ -477,13 +459,10 @@ public:
      * Search for a #SCH_FIELD with \a aFieldName
      *
      * @param aFieldName is the name of the field to find.
-     * @param aIncludeDefaultFields searches the library symbol default fields if true.
-     * @param aCaseInsensitive ignore the filed name case if true.
      *
      * @return the field if found or NULL if the field was not found.
      */
-    SCH_FIELD* FindField( const wxString& aFieldName, bool aIncludeDefaultFields = true,
-                          bool aCaseInsensitive = false );
+    SCH_FIELD* FindFieldCaseInsensitive( const wxString& aFieldName );
 
     /**
      * @return the reference for the instance on the given sheet.

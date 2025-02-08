@@ -526,8 +526,8 @@ int SYMBOL_EDITOR_CONTROL::RenameSymbol( const TOOL_EVENT& aEvent )
 
     libSymbol->SetName( newName );
 
-    if( libSymbol->GetFieldById( VALUE_FIELD )->GetText() == oldName )
-        libSymbol->GetFieldById( VALUE_FIELD )->SetText( newName );
+    if( libSymbol->GetValueField().GetText() == oldName )
+        libSymbol->GetValueField().SetText( newName );
 
     libMgr.UpdateSymbolAfterRename( libSymbol, newName, libName );
     libMgr.SetSymbolModified( newName, libName );
@@ -545,8 +545,8 @@ int SYMBOL_EDITOR_CONTROL::RenameSymbol( const TOOL_EVENT& aEvent )
 
         libSymbol->SetName( newName );
 
-        if( libSymbol->GetFieldById( VALUE_FIELD )->GetText() == oldName )
-            libSymbol->GetFieldById( VALUE_FIELD )->SetText( newName );
+        if( libSymbol->GetValueField().GetText() == oldName )
+            libSymbol->GetValueField().SetText( newName );
 
         editFrame->RebuildView();
         editFrame->OnModify();

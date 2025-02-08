@@ -88,7 +88,8 @@ private:
     static void     saveArc( SCH_SHAPE* aArc, OUTPUTFORMATTER& aFormatter );
     static void     saveBezier( SCH_SHAPE* aBezier, OUTPUTFORMATTER& aFormatter );
     static void     saveCircle( SCH_SHAPE* aCircle, OUTPUTFORMATTER& aFormatter );
-    static void     saveField( const SCH_FIELD* aField, OUTPUTFORMATTER& aFormatter );
+    static void     saveField( const SCH_FIELD* aField, int aLegacyFieldIdx,
+                               OUTPUTFORMATTER& aFormatter );
     static void     savePin( const SCH_PIN* aPin, OUTPUTFORMATTER& aFormatter );
     static void     savePolyLine( SCH_SHAPE* aPolyLine, OUTPUTFORMATTER& aFormatter );
     static void     saveRectangle( SCH_SHAPE* aRectangle, OUTPUTFORMATTER& aFormatter );

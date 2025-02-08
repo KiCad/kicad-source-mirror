@@ -27,6 +27,7 @@
 
 #include <lib_id.h>
 #include <sch_sheet_path.h>
+#include <template_fieldnames.h>
 
 
 class SCH_SYMBOL;
@@ -90,11 +91,15 @@ private:
     wxString getSymbolReferences( SCH_SYMBOL& aSymbol, const LIB_ID& aNewId,
                                   const wxString* aOldLibLinkName = nullptr );
 
+private:
     SCH_SYMBOL* m_symbol;
     MODE        m_mode;
 
     /// Set of field names that should have values updated.
-    std::set<wxString> m_updateFields;
+    std::set<wxString>       m_updateFields;
+
+    /// Index in the list control for each mandatory FIELD_T type
+    std::map<FIELD_T, int>   m_mandatoryFieldListIndexes;
 };
 
 #endif // _DIALOG_CHANGE_SYMBOLS_H_

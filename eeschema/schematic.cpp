@@ -74,7 +74,7 @@ SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
 
                 wxString newValue = aItem->Get<wxString>( aProperty );
 
-                if( field->GetId() == REFERENCE_FIELD )
+                if( field->GetId() == FIELD_T::REFERENCE )
                 {
                     symbol->SetRef( &sheetPath, newValue );
 
@@ -98,30 +98,14 @@ SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
                     {
                         switch( field->GetId() )
                         {
-                        case VALUE_FIELD:
+                        case FIELD_T::VALUE:
+                        case FIELD_T::FOOTPRINT:
+                        case FIELD_T::DATASHEET:
                         {
                             if( aCommit )
                                 aCommit->Modify( otherUnit, sheet.LastScreen() );
 
-                            otherUnit->SetValueFieldText( newValue );
-                            break;
-                        }
-
-                        case FOOTPRINT_FIELD:
-                        {
-                            if( aCommit )
-                                aCommit->Modify( otherUnit, sheet.LastScreen() );
-
-                            otherUnit->SetFootprintFieldText( newValue );
-                            break;
-                        }
-
-                        case DATASHEET_FIELD:
-                        {
-                            if( aCommit )
-                                aCommit->Modify( otherUnit, sheet.LastScreen() );
-
-                            otherUnit->GetField( DATASHEET_FIELD )->SetText( newValue );
+                            otherUnit->GetField( field->GetId() )->SetText( newValue );
                             break;
                         }
 

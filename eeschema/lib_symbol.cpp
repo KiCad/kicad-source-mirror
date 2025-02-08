@@ -59,7 +59,7 @@ std::vector<SEARCH_TERM> LIB_SYMBOL::GetSearchTerms()
     terms.emplace_back( SEARCH_TERM( GetKeyWords(), 1 ) );
     terms.emplace_back( SEARCH_TERM( GetDescription(), 1 ) );
 
-    wxString  footprint = GetFootprintField().GetText();
+    wxString footprint = GetFootprint();
 
     if( !footprint.IsEmpty() )
         terms.emplace_back( SEARCH_TERM( GetFootprintField().GetText(), 1 ) );
@@ -105,23 +105,20 @@ LIB_SYMBOL::LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent, SYMBOL_LIB* 
     m_options        = ENTRY_NORMAL;
     m_unitsLocked    = false;
 
-    // Add the MANDATORY_FIELDS in RAM only.  These are assumed to be present
-    // when the field editors are invoked.
-    m_drawings[SCH_FIELD_T].reserve( MANDATORY_FIELD_COUNT );
+    auto addField =
+            [&]( FIELD_T id, bool visible )
+            {
+                SCH_FIELD* field = new SCH_FIELD( this, id );
+                field->SetVisible( visible );
+                m_drawings[SCH_FIELD_T].push_back( field );
+            };
 
-    for( int fieldId : MANDATORY_FIELDS )
-        m_drawings[SCH_FIELD_T].push_back( new SCH_FIELD( this, fieldId ) );
-
-    // Ensure reference and value fields are visible when creating a lib symbol
-    // whatever the SCH_FIELD Ctor default value is.
-    GetReferenceField().SetVisible( true );
-    GetValueField().SetVisible( true );
-
-    // Set visibilty to false for these other mandatory fields (at lest for now)
-    // whatever the SCH_FIELD Ctor default value is.
-    GetFootprintField().SetVisible( false );
-    GetDatasheetField().SetVisible( false );
-    GetDescriptionField().SetVisible( false );
+    // construct only the mandatory fields
+    addField( FIELD_T::REFERENCE,   true  );
+    addField( FIELD_T::VALUE,       true  );
+    addField( FIELD_T::FOOTPRINT,   false );
+    addField( FIELD_T::DATASHEET,   false );
+    addField( FIELD_T::DESCRIPTION, false );
 
     SetName( aName );
 
@@ -355,31 +352,26 @@ std::unique_ptr< LIB_SYMBOL > LIB_SYMBOL::Flatten() const
         retv->m_name = m_name;
         retv->SetLibId( m_libId );
 
-        // Now add the inherited part mandatory field (this) information.
-        for( int fieldId : MANDATORY_FIELDS )
+        // Overwrite parent's mandatory fields for fields which are defined in this.
+        for( FIELD_T fieldId : MANDATORY_FIELDS )
         {
-            wxString tmp = GetFieldById( fieldId )->GetText();
-
-            // If the field isn't defined then inherit the parent field value.
-            if( tmp.IsEmpty() )
-                retv->GetFieldById( fieldId )->SetText( retv->GetFieldById( fieldId )->GetText() );
-            else
-                *retv->GetFieldById( fieldId ) = *GetFieldById( fieldId );
+            if( !GetField( fieldId )->GetText().IsEmpty() )
+                *retv->GetField( fieldId ) = *GetField( fieldId );
         }
 
         // Grab all the rest of derived symbol fields.
         for( const SCH_ITEM& item : m_drawings[ SCH_FIELD_T ] )
         {
-            const SCH_FIELD* aliasField = static_cast<const SCH_FIELD*>( &item );
+            const SCH_FIELD* field = static_cast<const SCH_FIELD*>( &item );
 
             // Mandatory fields were already resolved.
-            if( aliasField->IsMandatory() )
+            if( field->IsMandatory() )
                 continue;
 
-            SCH_FIELD* newField = new SCH_FIELD( *aliasField );
+            SCH_FIELD* newField = new SCH_FIELD( *field );
             newField->SetParent( retv.get() );
 
-            SCH_FIELD* parentField = retv->FindField( aliasField->GetName() );
+            SCH_FIELD* parentField = retv->GetField( field->GetName() );
 
             if( !parentField )  // Derived symbol field does not exist in parent symbol.
             {
@@ -399,7 +391,6 @@ std::unique_ptr< LIB_SYMBOL > LIB_SYMBOL::Flatten() const
         retv->SetExcludedFromBOM( parent->GetExcludedFromBOM() );
         retv->SetExcludedFromBoard( parent->GetExcludedFromBoard() );
 
-        retv->UpdateFieldOrdinals();
         retv->m_parent.reset();
     }
     else
@@ -507,7 +498,7 @@ bool LIB_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
         {
             const SCH_FIELD& field = static_cast<const SCH_FIELD&>( item );
 
-            if( field.GetId() == FOOTPRINT_FIELD )
+            if( field.GetId() == FIELD_T::FOOTPRINT )
                 footprint = field.GetShownText( nullptr, false, aDepth + 1 );
 
             if( token->IsSameAs( field.GetCanonicalName().Upper() )
@@ -977,12 +968,11 @@ void LIB_SYMBOL::SetFields( const std::vector<SCH_FIELD>& aFieldsList )
 }
 
 
-void LIB_SYMBOL::GetFields( std::vector<SCH_FIELD*>& aList, bool aVisibleOnly )
+void LIB_SYMBOL::GetFields( std::vector<SCH_FIELD*>& aList, bool aVisibleOnly ) const
 {
-    // Grab the MANDATORY_FIELDS first, in expected order given by enum MANDATORY_FIELD_T
-    for( int fieldId : MANDATORY_FIELDS )
+    for( const SCH_ITEM& item : m_drawings[ SCH_FIELD_T ] )
     {
-        SCH_FIELD* field = GetFieldById( fieldId );
+        const SCH_FIELD* field = static_cast<const SCH_FIELD*>( &item );
 
         if( aVisibleOnly )
         {
@@ -990,50 +980,35 @@ void LIB_SYMBOL::GetFields( std::vector<SCH_FIELD*>& aList, bool aVisibleOnly )
                 continue;
         }
 
-        aList.push_back( field );
+        aList.push_back( const_cast<SCH_FIELD*>( field ) );
     }
 
-    // Now grab all the rest of fields.
-    for( SCH_ITEM& item : m_drawings[ SCH_FIELD_T ] )
-    {
-        SCH_FIELD* field = static_cast<SCH_FIELD*>( &item );
-
-        if( aVisibleOnly )
-        {
-            if( !field->IsVisible() || field->GetText().IsEmpty() )
-                continue;
-        }
-
-        if( !field->IsMandatory() )
-            aList.push_back( field );
-    }
+    std::sort( aList.begin(), aList.end(),
+               []( SCH_FIELD* lhs, SCH_FIELD* rhs )
+               {
+                   return lhs->GetOrdinal() < rhs->GetOrdinal();
+               } );
 }
 
 
 void LIB_SYMBOL::CopyFields( std::vector<SCH_FIELD>& aList )
 {
-    // Grab the MANDATORY_FIELDS first, in expected order given by enum MANDATORY_FIELD_T
-    for( int fieldId : MANDATORY_FIELDS )
-        aList.push_back( *GetFieldById( fieldId ) );
+    std::vector<SCH_FIELD*> orderedFields;
 
-    // Now grab all the rest of fields.
-    for( SCH_ITEM& item : m_drawings[ SCH_FIELD_T ] )
-    {
-        SCH_FIELD* field = static_cast<SCH_FIELD*>( &item );
+    GetFields( orderedFields );
 
-        if( !field->IsMandatory() )
-            aList.push_back( *field );
-    }
+    for( SCH_FIELD* field : orderedFields )
+        aList.emplace_back( *field );
 }
 
 
-SCH_FIELD* LIB_SYMBOL::GetFieldById( int aId ) const
+const SCH_FIELD* LIB_SYMBOL::GetField( FIELD_T aFieldType ) const
 {
     for( const SCH_ITEM& item : m_drawings[ SCH_FIELD_T ] )
     {
-        SCH_FIELD* field = ( SCH_FIELD* ) &item;
+        const SCH_FIELD* field = static_cast<const SCH_FIELD*>( &item );
 
-        if( field->GetId() == aId )
+        if( field->GetId() == aFieldType )
             return field;
     }
 
@@ -1041,84 +1016,97 @@ SCH_FIELD* LIB_SYMBOL::GetFieldById( int aId ) const
 }
 
 
-SCH_FIELD* LIB_SYMBOL::FindField( const wxString& aFieldName, bool aCaseInsensitive )
+SCH_FIELD* LIB_SYMBOL::GetField( FIELD_T aFieldType )
 {
     for( SCH_ITEM& item : m_drawings[ SCH_FIELD_T ] )
     {
-        if( aCaseInsensitive )
-        {
-            if( static_cast<SCH_FIELD*>( &item )->GetCanonicalName().Upper() == aFieldName.Upper() )
-                return static_cast<SCH_FIELD*>( &item );
-        }
-        else
-        {
-            if( static_cast<SCH_FIELD*>( &item )->GetCanonicalName() == aFieldName )
-                return static_cast<SCH_FIELD*>( &item );
-        }
+        SCH_FIELD* field = static_cast<SCH_FIELD*>( &item );
+
+        if( field->GetId() == aFieldType )
+            return field;
     }
 
     return nullptr;
 }
 
 
-const SCH_FIELD* LIB_SYMBOL::FindField( const wxString& aFieldName,
-                                        bool aCaseInsensitive ) const
+const SCH_FIELD* LIB_SYMBOL::GetField( const wxString& aFieldName ) const
 {
     for( const SCH_ITEM& item : m_drawings[ SCH_FIELD_T ] )
     {
         const SCH_FIELD& field = static_cast<const SCH_FIELD&>( item );
 
-        if( aCaseInsensitive )
-        {
-            if( field.GetCanonicalName().Upper() == aFieldName.Upper() )
-                return &field;
-        }
-        else
-        {
-            if( field.GetCanonicalName() == aFieldName )
-                return &field;
-        }
+        if( field.GetName() == aFieldName )
+            return &field;
     }
 
     return nullptr;
 }
 
 
-SCH_FIELD& LIB_SYMBOL::GetValueField() const
+SCH_FIELD* LIB_SYMBOL::GetField( const wxString& aFieldName )
 {
-    SCH_FIELD* field = GetFieldById( VALUE_FIELD );
+    for( SCH_ITEM& item : m_drawings[ SCH_FIELD_T ] )
+    {
+        SCH_FIELD& field = static_cast<SCH_FIELD&>( item );
+
+        if( field.GetName() == aFieldName )
+            return &field;
+    }
+
+    return nullptr;
+}
+
+
+SCH_FIELD* LIB_SYMBOL::FindFieldCaseInsensitive( const wxString& aFieldName )
+{
+    for( SCH_ITEM& item : m_drawings[ SCH_FIELD_T ] )
+    {
+        SCH_FIELD& field = static_cast<SCH_FIELD&>( item );
+
+        if( field.GetCanonicalName().IsSameAs( aFieldName, false ) )
+            return &field;
+    }
+
+    return nullptr;
+}
+
+
+const SCH_FIELD& LIB_SYMBOL::GetValueField() const
+{
+    const SCH_FIELD* field = GetField( FIELD_T::VALUE );
     wxASSERT( field != nullptr );
     return *field;
 }
 
 
-SCH_FIELD& LIB_SYMBOL::GetReferenceField() const
+const SCH_FIELD& LIB_SYMBOL::GetReferenceField() const
 {
-    SCH_FIELD* field = GetFieldById( REFERENCE_FIELD );
+    const SCH_FIELD* field = GetField( FIELD_T::REFERENCE );
     wxASSERT( field != nullptr );
     return *field;
 }
 
 
-SCH_FIELD& LIB_SYMBOL::GetFootprintField() const
+const SCH_FIELD& LIB_SYMBOL::GetFootprintField() const
 {
-    SCH_FIELD* field = GetFieldById( FOOTPRINT_FIELD );
+    const SCH_FIELD* field = GetField( FIELD_T::FOOTPRINT );
     wxASSERT( field != nullptr );
     return *field;
 }
 
 
-SCH_FIELD& LIB_SYMBOL::GetDatasheetField() const
+const SCH_FIELD& LIB_SYMBOL::GetDatasheetField() const
 {
-    SCH_FIELD* field = GetFieldById( DATASHEET_FIELD );
+    const SCH_FIELD* field = GetField( FIELD_T::DATASHEET );
     wxASSERT( field != nullptr );
     return *field;
 }
 
 
-SCH_FIELD& LIB_SYMBOL::GetDescriptionField() const
+const SCH_FIELD& LIB_SYMBOL::GetDescriptionField() const
 {
-    SCH_FIELD* field = GetFieldById( DESCRIPTION_FIELD );
+    const SCH_FIELD* field = GetField( FIELD_T::DESCRIPTION );
     wxASSERT( field != nullptr );
     return *field;
 }
@@ -1126,7 +1114,7 @@ SCH_FIELD& LIB_SYMBOL::GetDescriptionField() const
 
 wxString LIB_SYMBOL::GetPrefix()
 {
-    wxString refDesignator = GetFieldById( REFERENCE_FIELD )->GetText();
+    wxString refDesignator = GetField( FIELD_T::REFERENCE )->GetText();
 
     refDesignator.Replace( wxS( "~" ), wxS( " " ) );
 
@@ -1154,43 +1142,6 @@ void LIB_SYMBOL::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunctio
 {
     for( SCH_ITEM& item : m_drawings )
         aFunction( &item );
-}
-
-
-int LIB_SYMBOL::UpdateFieldOrdinals()
-{
-    int retv = 0;
-    int lastOrdinal = MANDATORY_FIELD_COUNT;
-
-    for( SCH_ITEM& item : m_drawings[ SCH_FIELD_T ] )
-    {
-        SCH_FIELD* field = static_cast<SCH_FIELD*>( &item );
-
-        // Mandatory fields were already resolved always have the same ordinal values.
-        if( field->IsMandatory() )
-            continue;
-
-        if( field->GetId() != lastOrdinal )
-        {
-            field->SetId( lastOrdinal );
-            retv += 1;
-        }
-
-        lastOrdinal += 1;
-    }
-
-    return retv;
-}
-
-
-int LIB_SYMBOL::GetNextAvailableFieldId() const
-{
-    int retv = MANDATORY_FIELD_COUNT;
-
-    while( GetFieldById( retv ) )
-        retv += 1;
-
-    return retv;
 }
 
 
@@ -1618,9 +1569,9 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
         int              tmp = 0;
 
         if( aField->IsMandatory() )
-            bField = aRhs.GetFieldById( aField->GetId() );
+            bField = aRhs.GetField( aField->GetId() );
         else
-            bField = aRhs.FindField( aField->GetName() );
+            bField = aRhs.GetField( aField->GetName() );
 
         if( !bField )
             tmp = 1;

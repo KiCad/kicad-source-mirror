@@ -501,7 +501,6 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     if( !m_itemsGrid->CommitPendingChanges() )
         return false;
 
-    auto view = m_frame->GetCanvas()->GetView();
     BOARD_COMMIT commit( m_frame );
     commit.Modify( m_footprint );
 
@@ -517,12 +516,10 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     std::set<wxString> files_to_delete;
 
     // Get the new files from the footprint fields
-    for( size_t ii = 0; ii < m_fields->size(); ++ii )
+    for( PCB_FIELD& field : *m_fields )
     {
-        const wxString& name = m_fields->at( ii ).GetText();
-
-        if( name.StartsWith( FILEEXT::KiCadUriPrefix ) )
-            files.insert( name );
+        if( field.GetText().StartsWith( FILEEXT::KiCadUriPrefix ) )
+            files.insert( field.GetText() );
     }
 
     // Find any files referenced in the old fields that are not in the new fields
@@ -542,27 +539,22 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     }
 
     // Update fields
-    for( size_t ii = 0; ii < m_fields->size(); ++ii )
-    {
-        PCB_FIELD& field = m_fields->at( ii );
-        field.SetText( m_footprint->GetBoard()->ConvertCrossReferencesToKIIDs( field.GetText() ) );
-    }
+    for( PCB_FIELD* existing : m_footprint->GetFields() )
+        delete existing;
 
-    size_t i = 0;
+    m_footprint->GetFields().clear();
 
-    for( PCB_FIELD* field : m_footprint->GetFields() )
-    {
-        // copy grid table entries till we run out, then delete any remaining texts
-        if( i < m_fields->size() )
-            *field = m_fields->at( i++ );
-        else
-            field->DeleteStructure();
-    }
+    int ordinal = 42;   // Arbitrarily larger than any mandatory FIELD_T ids.
 
-    // if there are still grid table entries, create new fields for them
-    while( i < m_fields->size() )
+    for( PCB_FIELD& field : *m_fields )
     {
-        view->Add( m_footprint->AddField( m_fields->at( i++ ) ) );
+        PCB_FIELD* newField = field.CloneField();
+        newField->SetText( commit.GetBoard()->ConvertCrossReferencesToKIIDs( field.GetText() ) );
+
+        if( !field.IsMandatory() )
+            newField->SetOrdinal( ordinal++ );
+
+        m_footprint->Add( newField );
     }
 
     // Initialize masks clearances
@@ -670,7 +662,7 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnAddField( wxCommandEvent&  )
     if( !m_itemsGrid->CommitPendingChanges() )
         return;
 
-    PCB_FIELD newField( m_footprint, m_footprint->GetNextFieldId(),
+    PCB_FIELD newField( m_footprint, FIELD_T::USER,
                         GetUserFieldName( m_fields->GetNumberRows(), DO_TRANSLATE ) );
 
     newField.SetVisible( false );

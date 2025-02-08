@@ -218,9 +218,9 @@ wxString SYMBOL_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int a
     if( aCol == 0 )
         return sym->GetRef( aHit.sheetPath, true );
     else if( aCol == 1 )
-        return sym->GetField( VALUE_FIELD )->GetShownText( aHit.sheetPath, false );
+        return sym->GetField( FIELD_T::VALUE )->GetShownText( aHit.sheetPath, false );
     else if( aCol == 2 )
-        return sym->GetField( FOOTPRINT_FIELD )->GetShownText( aHit.sheetPath, false );
+        return sym->GetField( FIELD_T::FOOTPRINT )->GetShownText( aHit.sheetPath, false );
     else if( aCol == 3 )
         return aHit.sheetPath->GetPageNumber();
     else if( aCol == 4 )
@@ -299,7 +299,7 @@ wxString POWER_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int aC
     if( aCol == 0 )
         return sym->GetRef( aHit.sheetPath, true );
     else if( aCol == 1 )
-        return sym->GetField( VALUE_FIELD )->GetShownText( aHit.sheetPath, false );
+        return sym->GetField( FIELD_T::VALUE )->GetShownText( aHit.sheetPath, false );
     else if( aCol == 2 )
         return aHit.sheetPath->GetPageNumber();
     else if( aCol == 3 )

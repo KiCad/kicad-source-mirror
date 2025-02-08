@@ -903,7 +903,7 @@ static void pasteFootprintItemsToFootprintEditor( FOOTPRINT* aClipFootprint, BOA
         }
     }
 
-    aClipFootprint->ClearFields();
+    aClipFootprint->GetFields().clear();
 
     for( BOARD_ITEM* item : aClipFootprint->GraphicalItems() )
     {

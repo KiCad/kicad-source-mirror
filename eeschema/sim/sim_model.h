@@ -425,13 +425,6 @@ public:
                                               const std::vector<SCH_PIN*>& aPins,
                                               bool aResolved, REPORTER& aReporter );
 
-    static std::string GetFieldValue( const std::vector<SCH_FIELD>* aFields,
-                                      const wxString& aFieldName,
-                                      bool aResolve = true );
-
-    static void SetFieldValue( std::vector<SCH_FIELD>& aFields, const wxString& aFieldName,
-                               const std::string& aValue, bool aIsVisible = true );
-
     const SPICE_GENERATOR& SpiceGenerator() const { return *m_spiceGenerator; }
     const SIM_MODEL_SERIALIZER& Serializer() const { return *m_serializer; }
 

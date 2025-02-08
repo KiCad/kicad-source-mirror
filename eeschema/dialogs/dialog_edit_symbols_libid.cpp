@@ -760,7 +760,7 @@ bool DIALOG_EDIT_SYMBOLS_LIBID::TransferDataFromWindow()
             m_isModified = true;
 
             candidate.m_Screen->Remove( candidate.m_Symbol );
-            SCH_FIELD* value = candidate.m_Symbol->GetField( VALUE_FIELD );
+            SCH_FIELD* value = candidate.m_Symbol->GetField( FIELD_T::VALUE );
 
             // If value is a proxy for the itemName then make sure it gets updated
             if( getName( candidate.m_Symbol->GetLibId() ) == value->GetText() )

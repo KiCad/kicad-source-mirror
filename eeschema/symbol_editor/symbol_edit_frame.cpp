@@ -1737,11 +1737,10 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
 
     std::vector<SCH_FIELD> fullSetOfFields;
 
-    for( int i = 0; i < (int) aSymbol->GetFields().size(); ++i )
+    for( const SCH_FIELD& field : aSymbol->GetFields() )
     {
-        const SCH_FIELD& field = aSymbol->GetFields()[i];
-        VECTOR2I         pos = field.GetPosition() - aSymbol->GetPosition();
-        SCH_FIELD        libField( symbol.get(), field.GetId() );
+        VECTOR2I  pos = field.GetPosition() - aSymbol->GetPosition();
+        SCH_FIELD libField( symbol.get(), field.GetId() );
 
         libField = field;
 
@@ -1783,7 +1782,7 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
 
     m_isSymbolFromSchematic = true;
     m_schematicSymbolUUID = aSymbol->m_Uuid;
-    m_reference = symbol->GetFieldById( REFERENCE_FIELD )->GetText();
+    m_reference = symbol->GetReferenceField().GetText();
     m_unit = std::max( 1, aSymbol->GetUnit() );
     m_bodyStyle = std::max( 1, aSymbol->GetBodyStyle() );
 

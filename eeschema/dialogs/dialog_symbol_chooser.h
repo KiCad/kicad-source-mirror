@@ -24,6 +24,7 @@
 #define DIALOG_SYMBOL_CHOOSER_H
 
 #include "dialog_shim.h"
+#include <template_fieldnames.h>
 #include <symbol_library_common.h>
 #include <symbol_tree_model_adapter.h>
 #include <footprint_info.h>
@@ -74,7 +75,7 @@ public:
      *
      * @return vector of pairs; each.first = field ID, each.second = new value.
      */
-    std::vector<std::pair<int, wxString>> GetFields() const;
+    std::vector<std::pair<FIELD_T, wxString>> GetFields() const;
 
 public:
     static std::mutex         g_Mutex;

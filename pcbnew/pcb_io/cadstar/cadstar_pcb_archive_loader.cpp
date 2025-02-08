@@ -3273,7 +3273,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::addAttribute( const ATTRIBUTE_LOCATION& aCadsta
         }
         else
         {
-            field = new PCB_FIELD( aFootprint, -1, aCadstarAttributeID );
+            field = new PCB_FIELD( aFootprint, FIELD_T::USER, aCadstarAttributeID );
             aFootprint->Add( field );
             field->SetText( aAttributeValue );
         }
@@ -3294,7 +3294,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::addAttribute( const ATTRIBUTE_LOCATION& aCadsta
     }
     else
     {
-        field = new PCB_FIELD( aFootprint, -1, aCadstarAttributeID );
+        field = new PCB_FIELD( aFootprint, FIELD_T::USER, aCadstarAttributeID );
         aFootprint->Add( field );
         field->SetText( aAttributeValue );
         field->SetVisible( false ); //make all user attributes invisible to avoid clutter.

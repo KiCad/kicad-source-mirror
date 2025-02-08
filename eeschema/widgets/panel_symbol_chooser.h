@@ -24,6 +24,7 @@
 #ifndef PANEL_SYMBOL_CHOOSER_H
 #define PANEL_SYMBOL_CHOOSER_H
 
+#include <template_fieldnames.h>
 #include <widgets/lib_tree.h>
 #include <symbol_tree_model_adapter.h>
 #include <footprint_info.h>
@@ -92,9 +93,9 @@ public:
     /**
      * Get a list of fields edited by the user.
      *
-     * @return vector of pairs; each.first = field ID, each.second = new value.
+     * @return vector of pairs; each.first = field type, each.second = new value.
      */
-    std::vector<std::pair<int, wxString>> GetFields() const
+    std::vector<std::pair<FIELD_T, wxString>> GetFields() const
     {
         return m_field_edits;
     }
@@ -171,7 +172,7 @@ protected:
     bool                      m_show_footprints;
     wxString                  m_fp_override;
 
-    std::vector<std::pair<int, wxString>>  m_field_edits;
+    std::vector<std::pair<FIELD_T, wxString>>  m_field_edits;
 };
 
 #endif /* PANEL_SYMBOL_CHOOSER_H */

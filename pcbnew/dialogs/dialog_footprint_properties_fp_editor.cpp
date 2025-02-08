@@ -45,6 +45,7 @@
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
+#include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
 #include <validators.h>
 #include <widgets/grid_text_button_helpers.h>
@@ -544,12 +545,10 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
     std::set<wxString> files_to_delete;
 
     // Get the new files from the footprint fields
-    for( PCB_FIELD& m_field : *m_fields)
+    for( const PCB_FIELD& field : *m_fields )
     {
-        const wxString& name = m_field.GetText();
-
-        if( name.StartsWith( FILEEXT::KiCadUriPrefix ) )
-            files.insert( name );
+        if( field.GetText().StartsWith( FILEEXT::KiCadUriPrefix ) )
+            files.insert( field.GetText() );
     }
 
     // Find any files referenced in the old fields that are not in the new fields
@@ -576,32 +575,21 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
     m_footprint->SetKeywords( m_KeywordCtrl->GetValue() );
 
     // Update fields
+    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
 
-    std::vector<PCB_FIELD*> items_to_remove;
-    size_t                  i = 0;
-
-    for( PCB_FIELD* field : m_footprint->GetFields() )
+    for( PCB_FIELD* existing : m_footprint->GetFields() )
     {
-        // copy grid table entries till we run out, then delete any remaining texts
-        if( i < m_fields->size() )
-            *field = m_fields->at( i++ );
-        else
-            items_to_remove.push_back( field );
+        m_footprint->Remove( existing );
+        view->Remove( existing );
+        delete existing;
     }
 
-    // Remove text items:
-    PCB_SELECTION_TOOL* selTool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
-
-    for( PCB_TEXT* item : items_to_remove )
+    for( PCB_FIELD& field : *m_fields )
     {
-        selTool->RemoveItemFromSel( item );
-        view->Remove( item );
-        item->DeleteStructure();
+        PCB_FIELD* newField = field.CloneField();
+        m_footprint->Add( newField );
+        view->Add( newField );
     }
-
-    // if there are still grid table entries, create new fields for them
-    while( i < m_fields->size() )
-        view->Add( m_footprint->AddField( m_fields->at( i++ ) ) );
 
     LSET privateLayers;
 
@@ -698,7 +686,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddField( wxCommandEvent& event )
 
     const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
 
-    PCB_FIELD newField( m_footprint, m_footprint->GetNextFieldId(),
+    PCB_FIELD newField( m_footprint, FIELD_T::USER,
                         GetUserFieldName( m_fields->GetNumberRows(), DO_TRANSLATE ) );
 
     // Set active layer if legal; otherwise copy layer from previous text item

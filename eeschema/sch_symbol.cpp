@@ -117,12 +117,12 @@ SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const SCH_SHEET_PATH* aSheet,
         SCH_SYMBOL( aSymbol, aSel.LibId, aSheet, aSel.Unit, aSel.Convert, aPosition, aParent )
 {
     // Set any fields that were modified as part of the symbol selection
-    for( const std::pair<int, wxString>& i : aSel.Fields )
+    for( const auto& [fieldId, fieldValue] : aSel.Fields )
     {
-        if( i.first == REFERENCE_FIELD )
-            SetRef( aSheet, i.second );
-        else if( SCH_FIELD* field = GetFieldById( i.first ) )
-            field->SetText( i.second );
+        if( fieldId == FIELD_T::REFERENCE )
+            SetRef( aSheet, fieldValue );
+        else if( SCH_FIELD* field = GetField( fieldId ) )
+            field->SetText( fieldValue );
     }
 }
 
@@ -182,18 +182,18 @@ void SCH_SYMBOL::Init( const VECTOR2I& pos )
     m_transform = TRANSFORM();
 
     auto addField =
-            [&]( int id, SCH_LAYER_ID layer )
+            [&]( FIELD_T id, SCH_LAYER_ID layer )
             {
                 m_fields.emplace_back( pos, id, this, GetCanonicalFieldName( id ) );
                 m_fields.back().SetLayer( layer );
             };
 
     // construct only the mandatory fields
-    addField( REFERENCE_FIELD, LAYER_REFERENCEPART );
-    addField( VALUE_FIELD, LAYER_VALUEPART );
-    addField( FOOTPRINT_FIELD, LAYER_FIELDS );
-    addField( DATASHEET_FIELD, LAYER_FIELDS );
-    addField( DESCRIPTION_FIELD, LAYER_FIELDS );
+    addField( FIELD_T::REFERENCE,   LAYER_REFERENCEPART );
+    addField( FIELD_T::VALUE,       LAYER_VALUEPART     );
+    addField( FIELD_T::FOOTPRINT,   LAYER_FIELDS        );
+    addField( FIELD_T::DATASHEET,   LAYER_FIELDS        );
+    addField( FIELD_T::DESCRIPTION, LAYER_FIELDS        );
 
     m_prefix = wxString( wxT( "U" ) );
     m_isInNetlist = true;
@@ -548,7 +548,7 @@ void SCH_SYMBOL::AddHierarchicalReference( const KIID_PATH& aPath, const wxStrin
     // when importing sheets.
     if( m_instanceReferences.size() == 1 )
     {
-        m_fields[ REFERENCE_FIELD ].SetText( aRef );
+        GetField( FIELD_T::REFERENCE )->SetText( aRef );
         m_unit = aUnit;
     }
 }
@@ -602,7 +602,7 @@ void SCH_SYMBOL::AddHierarchicalReference( const SCH_SYMBOL_INSTANCE& aInstance 
     // when importing sheets.
     if( m_instanceReferences.size() == 1 )
     {
-        m_fields[ REFERENCE_FIELD ].SetText( instance.m_Reference );
+        GetField( FIELD_T::REFERENCE )->SetText( instance.m_Reference );
         m_unit = instance.m_Unit;
     }
 }
@@ -628,8 +628,8 @@ const wxString SCH_SYMBOL::GetRef( const SCH_SHEET_PATH* sheet, bool aIncludeUni
     // use this as a default for this path.  This will happen if we load a version 1 schematic
     // file.  It will also mean that multiple instances of the same sheet by default all have
     // the same symbol references, but perhaps this is best.
-    if( ref.IsEmpty() && !GetField( REFERENCE_FIELD )->GetText().IsEmpty() )
-        ref = GetField( REFERENCE_FIELD )->GetText();
+    if( ref.IsEmpty() && !GetField( FIELD_T::REFERENCE )->GetText().IsEmpty() )
+        ref = GetField( FIELD_T::REFERENCE )->GetText();
 
     if( ref.IsEmpty() )
         ref = UTIL::GetRefDesUnannotated( m_prefix );
@@ -643,7 +643,7 @@ const wxString SCH_SYMBOL::GetRef( const SCH_SHEET_PATH* sheet, bool aIncludeUni
 
 void SCH_SYMBOL::SetRefProp( const wxString& aRef )
 {
-    FIELD_VALIDATOR validator( REFERENCE_FIELD );
+    FIELD_VALIDATOR validator( FIELD_T::REFERENCE );
 
     if( validator.DoValidate( aRef, nullptr ) )
         SetRef( &Schematic()->CurrentSheet(), aRef );
@@ -673,7 +673,7 @@ void SCH_SYMBOL::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
         pin->ClearDefaultNetName( sheet );
 
     if( Schematic() && *sheet == Schematic()->CurrentSheet() )
-        m_fields[ REFERENCE_FIELD ].SetText( ref );
+        GetField( FIELD_T::REFERENCE )->SetText( ref );
 
     // Reinit the m_prefix member if needed
     m_prefix = UTIL::GetRefDesPrefix( ref );
@@ -702,7 +702,7 @@ bool SCH_SYMBOL::IsAnnotated( const SCH_SHEET_PATH* aSheet ) const
 
 void SCH_SYMBOL::UpdatePrefix()
 {
-    wxString refDesignator = GetField( REFERENCE_FIELD )->GetText();
+    wxString refDesignator = GetField( FIELD_T::REFERENCE )->GetText();
 
     refDesignator.Replace( "~", " " );
 
@@ -782,15 +782,15 @@ const wxString SCH_SYMBOL::GetValue( bool aResolve, const SCH_SHEET_PATH* aPath,
                                      bool aAllowExtraText ) const
 {
     if( aResolve )
-        return GetField( VALUE_FIELD )->GetShownText( aPath, aAllowExtraText );
+        return GetField( FIELD_T::VALUE )->GetShownText( aPath, aAllowExtraText );
 
-    return GetField( VALUE_FIELD )->GetText();
+    return GetField( FIELD_T::VALUE )->GetText();
 }
 
 
 void SCH_SYMBOL::SetValueFieldText( const wxString& aValue )
 {
-    m_fields[ VALUE_FIELD ].SetText( aValue );
+    GetField( FIELD_T::VALUE )->SetText( aValue );
 }
 
 
@@ -798,69 +798,49 @@ const wxString SCH_SYMBOL::GetFootprintFieldText( bool aResolve, const SCH_SHEET
                                                   bool aAllowExtraText ) const
 {
     if( aResolve )
-        return GetField( FOOTPRINT_FIELD )->GetShownText( aPath, aAllowExtraText );
+        return GetField( FIELD_T::FOOTPRINT )->GetShownText( aPath, aAllowExtraText );
 
-    return GetField( FOOTPRINT_FIELD )->GetText();
+    return GetField( FIELD_T::FOOTPRINT )->GetText();
 }
 
 
 void SCH_SYMBOL::SetFootprintFieldText( const wxString& aFootprint )
 {
-    m_fields[ FOOTPRINT_FIELD ].SetText( aFootprint );
+    GetField( FIELD_T::FOOTPRINT )->SetText( aFootprint );
 }
 
 
-SCH_FIELD* SCH_SYMBOL::GetField( MANDATORY_FIELD_T aFieldType )
+SCH_FIELD* SCH_SYMBOL::GetField( FIELD_T aFieldType )
 {
-    return &m_fields[aFieldType];
+    if( SCH_FIELD* field = FindField( m_fields, aFieldType ) )
+        return field;
+
+    m_fields.emplace_back( this, aFieldType );
+    return &m_fields.back();
 }
 
 
-const SCH_FIELD* SCH_SYMBOL::GetField( MANDATORY_FIELD_T aFieldType ) const
+const SCH_FIELD* SCH_SYMBOL::GetField( FIELD_T aFieldType ) const
 {
-    return &m_fields[aFieldType];
+    return FindField( m_fields, aFieldType );
 }
 
 
-SCH_FIELD* SCH_SYMBOL::GetFieldById( int aFieldId )
+SCH_FIELD* SCH_SYMBOL::GetField( const wxString& aFieldName )
 {
-    for( SCH_FIELD& field : m_fields )
-    {
-        if( field.GetId() == aFieldId )
-            return &field;
-    }
-
-    return nullptr;
+    return FindField( m_fields, aFieldName );
 }
 
 
-SCH_FIELD* SCH_SYMBOL::GetFieldByName( const wxString& aFieldName )
+const SCH_FIELD* SCH_SYMBOL::GetField( const wxString& aFieldName ) const
 {
-    for( SCH_FIELD& field : m_fields )
-    {
-        if( field.GetName() == aFieldName )
-            return &field;
-    }
-
-    return nullptr;
+    return FindField( m_fields, aFieldName );
 }
 
 
-const SCH_FIELD* SCH_SYMBOL::GetFieldByName( const wxString& aFieldName ) const
+void SCH_SYMBOL::GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOnly ) const
 {
     for( const SCH_FIELD& field : m_fields )
-    {
-        if( field.GetName() == aFieldName )
-            return &field;
-    }
-
-    return nullptr;
-}
-
-
-void SCH_SYMBOL::GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOnly )
-{
-    for( SCH_FIELD& field : m_fields )
     {
         if( aVisibleOnly )
         {
@@ -868,8 +848,14 @@ void SCH_SYMBOL::GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOnly 
                 continue;
         }
 
-        aVector.push_back( &field );
+        aVector.push_back( const_cast<SCH_FIELD*>( &field ) );
     }
+
+    std::sort( aVector.begin(), aVector.end(),
+               []( SCH_FIELD* lhs, SCH_FIELD* rhs )
+               {
+                   return lhs->GetOrdinal() < rhs->GetOrdinal();
+               } );
 }
 
 
@@ -896,24 +882,12 @@ void SCH_SYMBOL::RemoveField( const wxString& aFieldName )
 }
 
 
-SCH_FIELD* SCH_SYMBOL::FindField( const wxString& aFieldName, bool aIncludeDefaultFields,
-                                  bool aCaseInsensitive )
+SCH_FIELD* SCH_SYMBOL::FindFieldCaseInsensitive( const wxString& aFieldName )
 {
     for( SCH_FIELD& field : m_fields )
     {
-        if( field.IsMandatory() && !aIncludeDefaultFields )
-            continue;
-
-        if( aCaseInsensitive )
-        {
-            if( aFieldName.Upper() == field.GetName( false ).Upper() )
-                return &field;
-        }
-        else
-        {
-            if( aFieldName == field.GetName( false ) )
-                return &field;
-        }
+        if( field.GetName().IsSameAs( aFieldName, false ) )
+            return &field;
     }
 
     return nullptr;
@@ -930,22 +904,22 @@ void SCH_SYMBOL::UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle, b
 
         for( const SCH_FIELD* libField : fields )
         {
-            int        id = libField->GetId();
             SCH_FIELD* schField;
+            FIELD_T    fieldType = FIELD_T::USER;
 
             if( libField->IsMandatory() )
             {
-                schField = GetFieldById( id );
+                fieldType = libField->GetId();
+                schField = GetField( fieldType );
             }
             else
             {
-                schField = FindField( libField->GetCanonicalName() );
+                schField = GetField( libField->GetCanonicalName() );
 
                 if( !schField )
                 {
-                    SCH_FIELD newField( VECTOR2I( 0, 0 ), GetNextFieldId(), this,
-                                        libField->GetCanonicalName() );
-                    schField = AddField( newField );
+                    schField = AddField( SCH_FIELD( { 0, 0 }, FIELD_T::USER, this,
+                                                    libField->GetCanonicalName() ) );
                 }
             }
 
@@ -957,23 +931,18 @@ void SCH_SYMBOL::UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle, b
                 schField->SetTextPos( m_pos + libField->GetTextPos() );
             }
 
-            if( id == REFERENCE_FIELD && aPath )
+            if( fieldType == FIELD_T::REFERENCE && aPath )
             {
                 if( aResetRef )
-                    SetRef( aPath, m_part->GetReferenceField().GetText() );
+                    SetRef( aPath, m_part->GetField( FIELD_T::REFERENCE )->GetText() );
                 else if( aUpdateRef )
                     SetRef( aPath, libField->GetText() );
             }
-            else if( id == VALUE_FIELD )
+            else if( fieldType == FIELD_T::VALUE )
             {
                 SetValueFieldText( UnescapeString( libField->GetText() ) );
             }
-            else if( id == FOOTPRINT_FIELD )
-            {
-                if( aResetOtherFields || aUpdateOtherFields )
-                    SetFootprintFieldText( libField->GetText() );
-            }
-            else if( id == DATASHEET_FIELD )
+            else if( fieldType == FIELD_T::DATASHEET )
             {
                 if( aResetOtherFields )
                     schField->SetText( GetDatasheet() ); // alias-specific value
@@ -1038,23 +1007,32 @@ void SCH_SYMBOL::SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT&
                 aCommit.Modify( otherUnit, screen );
 
                 if( updateValue )
-                    otherUnit->SetValueFieldText( GetField( VALUE_FIELD )->GetText() );
+                    otherUnit->SetValueFieldText( GetField( FIELD_T::VALUE )->GetText() );
 
                 if( updateOtherFields )
                 {
-                    otherUnit->SetFootprintFieldText( GetField( FOOTPRINT_FIELD )->GetText() );
-
-                    for( size_t ii = DATASHEET_FIELD; ii < m_fields.size(); ++ii )
+                    for( SCH_FIELD& field : m_fields )
                     {
-                        SCH_FIELD* otherField = otherUnit->FindField( m_fields[ii].GetName() );
+                        if( field.GetId() == FIELD_T::REFERENCE || field.GetId() == FIELD_T::VALUE )
+                        {
+                            // already handled
+                            continue;
+                        }
+
+                        SCH_FIELD* otherField;
+
+                        if( field.IsMandatory() )
+                            otherField = otherUnit->GetField( field.GetId() );
+                        else
+                            otherField = otherUnit->GetField( field.GetName() );
 
                         if( otherField )
                         {
-                            otherField->SetText( m_fields[ii].GetText() );
+                            otherField->SetText( field.GetText() );
                         }
                         else
                         {
-                            SCH_FIELD newField( m_fields[ii] );
+                            SCH_FIELD newField( field );
                             const_cast<KIID&>( newField.m_Uuid ) = KIID();
 
                             newField.Offset( -GetPosition() );
@@ -1065,11 +1043,11 @@ void SCH_SYMBOL::SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT&
                         }
                     }
 
-                    for( size_t ii = otherUnit->GetFields().size() - 1; ii > DATASHEET_FIELD; ii-- )
+                    for( int ii = (int) otherUnit->GetFields().size() - 1; ii >= 0; ii-- )
                     {
-                        SCH_FIELD& otherField = otherUnit->GetFields().at( ii );
+                        SCH_FIELD& otherField = otherUnit->GetFields()[ii];
 
-                        if( !FindField( otherField.GetName() ) )
+                        if( !otherField.IsMandatory() && !GetField( otherField.GetName() ) )
                             otherUnit->GetFields().erase( otherUnit->GetFields().begin() + ii );
                     }
                 }
@@ -1402,7 +1380,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
 
         if( token->IsSameAs( fieldName, false ) )
         {
-            if( field.GetId() == REFERENCE_FIELD )
+            if( field.GetId() == FIELD_T::REFERENCE )
                 *token = GetRef( aPath, true );
             else
                 *token = field.GetShownText( aPath, false, aDepth + 1 );
@@ -1605,12 +1583,12 @@ void SCH_SYMBOL::ClearAnnotation( const SCH_SHEET_PATH* aSheetPath, bool aResetP
     // When a clear annotation is made, the calling function must call a
     // UpdateAllScreenReferences for the active sheet.
     // But this call cannot made here.
-    wxString currentReference = m_fields[REFERENCE_FIELD].GetText();
+    wxString currentReference = GetField( FIELD_T::REFERENCE )->GetText();
 
     if( currentReference.IsEmpty() || aResetPrefix )
-        m_fields[REFERENCE_FIELD].SetText( UTIL::GetRefDesUnannotated( m_prefix ) );
+        GetField( FIELD_T::REFERENCE )->SetText( UTIL::GetRefDesUnannotated( m_prefix ) );
     else
-        m_fields[REFERENCE_FIELD].SetText( UTIL::GetRefDesUnannotated( currentReference ) );
+        GetField( FIELD_T::REFERENCE )->SetText( UTIL::GetRefDesUnannotated( currentReference ) );
 }
 
 
@@ -1627,7 +1605,7 @@ bool SCH_SYMBOL::AddSheetPathReferenceEntryIfMissing( const KIID_PATH& aSheetPat
     }
 
     // This entry does not exist: add it, with its last-used reference
-    AddHierarchicalReference( aSheetPath, m_fields[REFERENCE_FIELD].GetText(), m_unit );
+    AddHierarchicalReference( aSheetPath, GetField( FIELD_T::REFERENCE )->GetText(), m_unit );
     return true;
 }
 
@@ -1838,7 +1816,7 @@ void SCH_SYMBOL::Show( int nestLevel, std::ostream& os ) const
 {
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str()
-                                 << " ref=\"" << TO_UTF8( GetField( REFERENCE_FIELD )->GetName() )
+                                 << " ref=\"" << TO_UTF8( GetField( FIELD_T::REFERENCE )->GetName() )
                                  << '"' << " chipName=\""
                                  << GetLibId().Format().wx_str() << '"' << m_pos
                                  << " layer=\"" << m_layer
@@ -1958,8 +1936,7 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
             {
                 // Don't use GetShownText(); we want to see the variable references here
                 aList.emplace_back( _( "Power symbol" ),
-                                    KIUI::EllipsizeStatusText( aFrame,
-                                                               GetField( VALUE_FIELD )->GetText() ) );
+                                    KIUI::EllipsizeStatusText( aFrame, GetField( FIELD_T::VALUE )->GetText() ) );
             }
             else
             {
@@ -1968,8 +1945,7 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
 
                 // Don't use GetShownText(); we want to see the variable references here
                 aList.emplace_back( _( "Value" ),
-                                    KIUI::EllipsizeStatusText( aFrame,
-                                                               GetField( VALUE_FIELD )->GetText() ) );
+                                    KIUI::EllipsizeStatusText( aFrame, GetField( FIELD_T::VALUE )->GetText() ) );
                 addExcludes();
                 aList.emplace_back( _( "Name" ),
                                     KIUI::EllipsizeStatusText( aFrame,
@@ -2002,7 +1978,7 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
 
             // Display the current associated footprint, if exists.
             // Don't use GetShownText(); we want to see the variable references here
-            msg = KIUI::EllipsizeStatusText( aFrame, GetField( FOOTPRINT_FIELD )->GetText() );
+            msg = KIUI::EllipsizeStatusText( aFrame, GetField( FIELD_T::FOOTPRINT )->GetText() );
 
             if( msg.IsEmpty() )
                 msg = _( "<Unknown>" );
@@ -2011,7 +1987,7 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
 
             // Display description of the symbol, and keywords found in lib
             aList.emplace_back( _( "Description" ) + wxT( ": " )
-                                        + GetField( DESCRIPTION_FIELD )->GetText(),
+                                        + GetField( FIELD_T::DESCRIPTION )->GetText(),
                                 _( "Keywords" ) + wxT( ": " ) + m_part->GetKeyWords() );
         }
     }
@@ -2021,8 +1997,7 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
 
         // Don't use GetShownText(); we want to see the variable references here
         aList.emplace_back( _( "Value" ),
-                            KIUI::EllipsizeStatusText( aFrame,
-                                                       GetField( VALUE_FIELD )->GetText() ) );
+                            KIUI::EllipsizeStatusText( aFrame, GetField( FIELD_T::VALUE )->GetText() ) );
         addExcludes();
         aList.emplace_back( _( "Name" ),
                             KIUI::EllipsizeStatusText( aFrame, GetLibId().GetLibItemName() ) );
@@ -2286,7 +2261,7 @@ SCH_ITEM* SCH_SYMBOL::GetDrawItem( const VECTOR2I& aPosition, KICAD_T aType )
 wxString SCH_SYMBOL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     return wxString::Format( _( "Symbol %s [%s]" ),
-                             KIUI::EllipsizeMenuText( GetField( REFERENCE_FIELD )->GetText() ),
+                             KIUI::EllipsizeMenuText( GetField( FIELD_T::REFERENCE )->GetText() ),
                              KIUI::EllipsizeMenuText( GetLibId().GetLibItemName() ) );
 }
 
@@ -2315,26 +2290,26 @@ INSPECT_RESULT SCH_SYMBOL::Visit( INSPECTOR aInspector, void* aTestData,
 
         if( scanType == SCH_FIELD_LOCATE_REFERENCE_T )
         {
-            if( INSPECT_RESULT::QUIT == aInspector( GetField( REFERENCE_FIELD ), (void*) this ) )
+            if( INSPECT_RESULT::QUIT == aInspector( GetField( FIELD_T::REFERENCE ), (void*) this ) )
                 return INSPECT_RESULT::QUIT;
         }
 
         if( scanType == SCH_FIELD_LOCATE_VALUE_T
             || ( scanType == SCH_SYMBOL_LOCATE_POWER_T && m_part && m_part->IsPower() ) )
         {
-            if( INSPECT_RESULT::QUIT == aInspector( GetField( VALUE_FIELD ), (void*) this ) )
+            if( INSPECT_RESULT::QUIT == aInspector( GetField( FIELD_T::VALUE ), (void*) this ) )
                 return INSPECT_RESULT::QUIT;
         }
 
         if( scanType == SCH_FIELD_LOCATE_FOOTPRINT_T )
         {
-            if( INSPECT_RESULT::QUIT == aInspector( GetField( FOOTPRINT_FIELD ), (void*) this ) )
+            if( INSPECT_RESULT::QUIT == aInspector( GetField( FIELD_T::FOOTPRINT ), (void*) this ) )
                 return INSPECT_RESULT::QUIT;
         }
 
         if( scanType == SCH_FIELD_LOCATE_DATASHEET_T )
         {
-            if( INSPECT_RESULT::QUIT == aInspector( GetField( DATASHEET_FIELD ), (void*) this ) )
+            if( INSPECT_RESULT::QUIT == aInspector( GetField( FIELD_T::DATASHEET ), (void*) this ) )
                 return INSPECT_RESULT::QUIT;
         }
 
@@ -2392,12 +2367,17 @@ bool SCH_SYMBOL::operator==( const SCH_SYMBOL& aSymbol ) const
     if( GetFieldCount() !=  aSymbol.GetFieldCount() )
         return false;
 
+    std::vector<SCH_FIELD*> fields, otherFields;
+
+    GetFields( fields, false );
+    aSymbol.GetFields( otherFields, false );
+
     for( int ii = 0; ii < GetFieldCount(); ii++ )
     {
-        if( ii == REFERENCE_FIELD )
+        if( fields[ii]->GetId() == FIELD_T::REFERENCE )
             continue;
 
-        if( GetFields()[ii].GetText().Cmp( aSymbol.GetFields()[ii].GetText() ) != 0 )
+        if( fields[ii]->GetText().Cmp( otherFields[ii]->GetText() ) != 0 )
             return false;
     }
 
@@ -2540,7 +2520,7 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
             if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( &item ) )
             {
                 // Use SCH_FIELD's text resolver
-                SCH_FIELD dummy( this, -1 );
+                SCH_FIELD dummy( this, FIELD_T::USER );
                 dummy.SetText( text->GetText() );
                 text->SetText( dummy.GetShownText( false ) );
             }
@@ -2773,17 +2753,18 @@ std::unordered_set<wxString> SCH_SYMBOL::GetComponentClassNames( const SCH_SHEET
 {
     std::unordered_set<wxString> componentClass;
 
-    auto getComponentClassFields = [&]( const auto& fields )
-    {
-        for( const SCH_FIELD& field : fields )
-        {
-            if( field.GetCanonicalName() == wxT( "Component Class" ) )
+    auto getComponentClassFields =
+            [&]( const std::vector<SCH_FIELD>& fields )
             {
-                if( field.GetShownText( aPath, false ) != wxEmptyString )
-                    componentClass.insert( field.GetShownText( aPath, false ) );
-            }
-        }
-    };
+                for( const SCH_FIELD& field : fields )
+                {
+                    if( field.GetCanonicalName() == wxT( "Component Class" ) )
+                    {
+                        if( field.GetShownText( aPath, false ) != wxEmptyString )
+                            componentClass.insert( field.GetShownText( aPath, false ) );
+                    }
+                }
+            };
 
     // First get component classes set on the symbol itself
     getComponentClassFields( m_fields );

@@ -178,43 +178,27 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 
     WX_STRING_REPORTER reporter;
 
-    auto setFieldValue =
-            [&]( const wxString& aFieldName, const wxString& aValue )
-            {
-                for( SCH_FIELD& field : m_fields )
-                {
-                    if( field.GetName() == aFieldName )
-                    {
-                        field.SetText( aValue );
-                        return;
-                    }
-                }
-
-                m_fields.emplace_back( &m_symbol, -1, aFieldName );
-                m_fields.back().SetText( aValue );
-            };
-
     // Infer RLC and VI models if they aren't specified
     if( SIM_MODEL::InferSimModel( m_symbol, &m_fields, false, SIM_VALUE_GRAMMAR::NOTATION::SI,
                                   &deviceType, &modelType, &modelParams, &pinMap ) )
     {
-        setFieldValue( SIM_DEVICE_FIELD, deviceType );
+        SetFieldValue( m_fields, SIM_DEVICE_FIELD, deviceType.ToStdString() );
 
         if( !modelType.IsEmpty() )
-            setFieldValue( SIM_DEVICE_SUBTYPE_FIELD, modelType );
+            SetFieldValue( m_fields, SIM_DEVICE_SUBTYPE_FIELD, modelType.ToStdString() );
 
-        setFieldValue( SIM_PARAMS_FIELD, modelParams );
+        SetFieldValue( m_fields, SIM_PARAMS_FIELD, modelParams.ToStdString() );
 
-        setFieldValue( SIM_PINS_FIELD, pinMap );
+        SetFieldValue( m_fields, SIM_PINS_FIELD, pinMap.ToStdString() );
 
         storeInValue = true;
 
         // In case the storeInValue checkbox is turned off (if it's left on then we'll overwrite
         // this field with the actual value):
-        m_fields[ VALUE_FIELD ].SetText( wxT( "${SIM.PARAMS}" ) );
+        FindField( m_fields, FIELD_T::VALUE )->SetText( wxT( "${SIM.PARAMS}" ) );
     }
 
-    std::string libraryFilename = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::LIBRARY_FIELD );
+    wxString libraryFilename = GetFieldValue( &m_fields, SIM_LIBRARY::LIBRARY_FIELD );
 
     if( libraryFilename != "" )
     {
@@ -236,7 +220,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
         }
         else
         {
-            std::string modelName = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD );
+            std::string modelName = GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD );
             int         modelIdx = m_modelListBox->FindString( modelName );
 
             if( modelIdx == wxNOT_FOUND )
@@ -275,8 +259,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 
                 for( const std::pair<std::string, std::string>& strs : ibismodel->GetIbisPins() )
                 {
-                    if( strs.first
-                        == SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_IBIS::PIN_FIELD ) )
+                    if( strs.first == GetFieldValue( &m_fields, SIM_LIBRARY_IBIS::PIN_FIELD ) )
                     {
                         auto ibisLibrary = static_cast<const SIM_LIBRARY_IBIS*>( library() );
 
@@ -291,11 +274,10 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
                 {
                     onPinCombobox( dummyEvent ); // refresh list of models
 
-                    m_pinModelCombobox->SetStringSelection(
-                            SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_IBIS::MODEL_FIELD ) );
+                    m_pinModelCombobox->SetStringSelection( GetFieldValue( &m_fields, SIM_LIBRARY_IBIS::MODEL_FIELD ) );
                 }
 
-                if( SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_IBIS::DIFF_FIELD ) == "1" )
+                if( GetFieldValue( &m_fields, SIM_LIBRARY_IBIS::DIFF_FIELD ) == "1" )
                 {
                     ibismodel->SwitchSingleEndedDiff( true );
                     m_differentialCheckbox->SetValue( true );
@@ -308,8 +290,8 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
             }
         }
     }
-    else if( !SIM_MODEL::GetFieldValue( &m_fields, SIM_DEVICE_FIELD ).empty()
-                || !SIM_MODEL::GetFieldValue( &m_fields, SIM_DEVICE_SUBTYPE_FIELD ).empty() )
+    else if( !GetFieldValue( &m_fields, SIM_DEVICE_FIELD ).empty()
+                || !GetFieldValue( &m_fields, SIM_DEVICE_SUBTYPE_FIELD ).empty() )
     {
         // The model is sourced from the instance.
         m_rbBuiltinModel->SetValue( true );
@@ -382,11 +364,11 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
         if( m_modelListBox->GetSelection() >= 0 )
             name = m_modelListBox->GetStringSelection().ToStdString();
         else if( dynamic_cast<SIM_MODEL_SPICE_FALLBACK*>( &model ) )
-            name = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD, false );
+            name = GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD, false );
     }
 
-    SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY::LIBRARY_FIELD, path, false );
-    SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY::NAME_FIELD, name, false );
+    SetFieldValue( m_fields, SIM_LIBRARY::LIBRARY_FIELD, path, false );
+    SetFieldValue( m_fields, SIM_LIBRARY::NAME_FIELD, name, false );
 
     if( isIbisLoaded() )
     {
@@ -411,9 +393,9 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
             if( ibismodel->CanDifferential() && m_differentialCheckbox->GetValue() )
                 differential = "1";
 
-            SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY_IBIS::PIN_FIELD, pins );
-            SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY_IBIS::MODEL_FIELD, modelName );
-            SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY_IBIS::DIFF_FIELD, differential );
+            SetFieldValue( m_fields, SIM_LIBRARY_IBIS::PIN_FIELD, pins );
+            SetFieldValue( m_fields, SIM_LIBRARY_IBIS::MODEL_FIELD, modelName );
+            SetFieldValue( m_fields, SIM_LIBRARY_IBIS::DIFF_FIELD, differential );
         }
     }
 
@@ -483,7 +465,7 @@ void DIALOG_SIM_MODEL<T>::updateWidgets()
     updateModelCodeTab( model );
     updatePinAssignments( model, model != m_prevModel );
 
-    std::string ref = SIM_MODEL::GetFieldValue( &m_fields, SIM_REFERENCE_FIELD );
+    std::string ref = GetFieldValue( &m_fields, SIM_REFERENCE_FIELD );
 
     m_modelPanel->Layout();
     m_pinAssignmentsPanel->Layout();
@@ -724,7 +706,7 @@ void DIALOG_SIM_MODEL<T>::updateModelCodeTab( SIM_MODEL* aModel )
     item.modelName = m_modelListBox->GetStringSelection();
 
     if( m_rbBuiltinModel->GetValue() || item.modelName == "" )
-        item.modelName = m_fields.at( REFERENCE_FIELD ).GetText();
+        item.modelName = GetFieldValue( &m_fields, FIELD_T::REFERENCE );
 
     text << aModel->SpiceGenerator().Preview( item );
 
@@ -841,7 +823,7 @@ bool DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, REPORTER& a
     if( aReporter.HasMessageOfSeverity( RPT_SEVERITY_UNDEFINED | RPT_SEVERITY_ERROR ) )
         return false;
 
-    std::string modelName = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD );
+    std::string modelName = GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD );
 
     for( const auto& [baseModelName, baseModel] : library()->GetModels() )
     {

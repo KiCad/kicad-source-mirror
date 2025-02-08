@@ -163,7 +163,7 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_OPTS& aPlotOpts,
         m_schematic->SetSheetNumberAndCount();
 
         SCH_SCREEN* screen = m_schematic->CurrentSheet().LastScreen();
-        wxString    sheetName = sheetList[i].Last()->GetFields()[SHEETNAME].GetShownText( false );
+        wxString    sheetName = sheetList[i].Last()->GetField( FIELD_T::SHEET_NAME )->GetShownText( false );
 
         if( aPlotOpts.m_PDFMetadata )
         {

@@ -91,7 +91,7 @@ protected:
     UNIT_BINDER       m_posY;
     UNIT_BINDER       m_textSize;
 
-    int               m_fieldId;
+    FIELD_T           m_fieldId;
     wxString          m_text;
     KIFONT::FONT*     m_font;
     bool              m_isItalic;

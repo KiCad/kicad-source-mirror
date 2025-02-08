@@ -301,7 +301,7 @@ void SCH_EDIT_FRAME::SendSelectItemsToPcb( const std::vector<EDA_ITEM*>& aItems,
         case SCH_SYMBOL_T:
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-            wxString    ref = symbol->GetField( REFERENCE_FIELD )->GetText();
+            wxString    ref = symbol->GetField( FIELD_T::REFERENCE )->GetText();
 
             parts.push_back( wxT( "F" ) + EscapeString( ref, CTX_IPC ) );
             break;

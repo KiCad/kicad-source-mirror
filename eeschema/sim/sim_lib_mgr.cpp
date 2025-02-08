@@ -191,15 +191,14 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
 
     for( const SCH_FIELD& field : aSymbol.GetFields() )
     {
-        if( field.GetId() == REFERENCE_FIELD )
+        if( field.GetId() == FIELD_T::REFERENCE )
         {
-            fields.emplace_back( VECTOR2I(), -1, &aSymbol, field.GetName() );
+            fields.emplace_back( VECTOR2I(), FIELD_T::USER, &aSymbol, field.GetName() );
             fields.back().SetText( aSymbol.GetRef( aSheetPath ) );
         }
-        else if( field.GetId() == VALUE_FIELD
-                 || field.GetName().StartsWith( wxS( "Sim." ) ) )
+        else if( field.GetId() == FIELD_T::VALUE || field.GetName().StartsWith( wxS( "Sim." ) ) )
         {
-            fields.emplace_back( VECTOR2I(), -1, &aSymbol, field.GetName() );
+            fields.emplace_back( VECTOR2I(), FIELD_T::USER, &aSymbol, field.GetName() );
             fields.back().SetText( field.GetShownText( aSheetPath, false ) );
         }
     }
@@ -213,7 +212,7 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
                         return &field;
                 }
 
-                fields.emplace_back( &aSymbol, -1, name );
+                fields.emplace_back( &aSymbol, FIELD_T::USER, name );
                 return &fields.back();
             };
 
@@ -258,8 +257,8 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const std::vector<SCH_FIELD>& aFiel
                                              const std::vector<SCH_PIN*>& aPins, bool aResolved,
                                              REPORTER& aReporter )
 {
-    std::string libraryPath = SIM_MODEL::GetFieldValue( &aFields, SIM_LIBRARY::LIBRARY_FIELD );
-    std::string baseModelName = SIM_MODEL::GetFieldValue( &aFields, SIM_LIBRARY::NAME_FIELD );
+    std::string libraryPath = GetFieldValue( &aFields, SIM_LIBRARY::LIBRARY_FIELD );
+    std::string baseModelName = GetFieldValue( &aFields, SIM_LIBRARY::NAME_FIELD );
 
     if( libraryPath != "" )
     {

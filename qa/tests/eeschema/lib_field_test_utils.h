@@ -69,7 +69,7 @@ bool FieldNameIdMatches( const SCH_FIELD& aField, const std::string& aExpectedNa
         ok = false;
     }
 
-    const int gotId = aField.GetId();
+    const int gotId = (int) aField.GetId();
 
     if( gotId != aExpectedId )
     {
@@ -85,7 +85,7 @@ bool FieldNameIdMatches( const SCH_FIELD& aField, const std::string& aExpectedNa
  */
 bool AreDefaultFieldsCorrect( const std::vector<SCH_FIELD>& aFields )
 {
-    const unsigned expectedCount = MANDATORY_FIELD_T::MANDATORY_FIELD_COUNT;
+    const unsigned expectedCount = 5;
 
     if( aFields.size() < expectedCount )
     {
@@ -95,10 +95,10 @@ bool AreDefaultFieldsCorrect( const std::vector<SCH_FIELD>& aFields )
 
     bool ok = true;
 
-    ok &= FieldNameIdMatches( aFields[0], "Reference", MANDATORY_FIELD_T::REFERENCE_FIELD );
-    ok &= FieldNameIdMatches( aFields[1], "Value", MANDATORY_FIELD_T::VALUE_FIELD );
-    ok &= FieldNameIdMatches( aFields[2], "Footprint", MANDATORY_FIELD_T::FOOTPRINT_FIELD );
-    ok &= FieldNameIdMatches( aFields[3], "Datasheet", MANDATORY_FIELD_T::DATASHEET_FIELD );
+    ok &= FieldNameIdMatches( aFields[0], "Reference", (int) FIELD_T::REFERENCE );
+    ok &= FieldNameIdMatches( aFields[1], "Value",     (int) FIELD_T::VALUE );
+    ok &= FieldNameIdMatches( aFields[2], "Footprint", (int) FIELD_T::FOOTPRINT );
+    ok &= FieldNameIdMatches( aFields[3], "Datasheet", (int) FIELD_T::DATASHEET );
 
     return ok;
 }

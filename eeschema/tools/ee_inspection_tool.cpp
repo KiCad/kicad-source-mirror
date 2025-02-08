@@ -377,7 +377,7 @@ void EE_INSPECTION_TOOL::DiffSymbol( SCH_SYMBOL* symbol )
     dialog->DeleteAllPages();
 
     wxString symbolDesc = wxString::Format( _( "Symbol %s" ),
-                                            symbol->GetField( REFERENCE_FIELD )->GetText() );
+                                            symbol->GetField( FIELD_T::REFERENCE )->GetText() );
     LIB_ID   libId = symbol->GetLibId();
     wxString libName = libId.GetLibNickname();
     wxString symbolName = libId.GetLibItemName();
@@ -532,7 +532,7 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
             return 0;
 
         SCH_SYMBOL* symbol = (SCH_SYMBOL*) selection.Front();
-        SCH_FIELD*  field = symbol->GetField( DATASHEET_FIELD );
+        SCH_FIELD*  field = symbol->GetField( FIELD_T::DATASHEET );
 
         // Use GetShownText() to resolve any text variables, but don't allow adding extra text
         // (ie: the field name)

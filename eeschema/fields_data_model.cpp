@@ -58,7 +58,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::updateDataStoreSymbolField( const SCH_SYMBOL
     {
         m_dataStore[aSymbol.m_Uuid][aFieldName] = getAttributeValue( aSymbol, aFieldName );
     }
-    else if( const SCH_FIELD* field = aSymbol.GetFieldByName( aFieldName ) )
+    else if( const SCH_FIELD* field = aSymbol.GetField( aFieldName ) )
     {
         if( field->IsPrivate() )
         {
@@ -178,7 +178,7 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
 wxGridCellAttr* FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol,
                                                         wxGridCellAttr::wxAttrKind aKind )
 {
-    if( GetColFieldName( aCol ) == GetCanonicalFieldName( DATASHEET_FIELD )
+    if( GetColFieldName( aCol ) == GetCanonicalFieldName( FIELD_T::DATASHEET )
             || IsURL( GetValue( m_rows[aRow], aCol ) ) )
     {
         if( m_urlEditor )
@@ -324,14 +324,14 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxString
 bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsReference( int aCol )
 {
     wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
-    return m_cols[aCol].m_fieldName == GetCanonicalFieldName( REFERENCE_FIELD );
+    return m_cols[aCol].m_fieldName == GetCanonicalFieldName( FIELD_T::REFERENCE );
 }
 
 
 bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsValue( int aCol )
 {
     wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
-    return m_cols[aCol].m_fieldName == GetCanonicalFieldName( VALUE_FIELD );
+    return m_cols[aCol].m_fieldName == GetCanonicalFieldName( FIELD_T::VALUE );
 }
 
 
@@ -383,7 +383,7 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::cmp( const DATA_MODEL_ROW&          lhGroup,
     wxString lhs = dataModel->GetValue( lhGroup, sortCol ).Trim( true ).Trim( false );
     wxString rhs = dataModel->GetValue( rhGroup, sortCol ).Trim( true ).Trim( false );
 
-    if( lhs == rhs || sortCol == REFERENCE_FIELD )
+    if( lhs == rhs || dataModel->ColIsReference( sortCol ) )
     {
         wxString lhRef = lhGroup.m_Refs[0].GetRef() + lhGroup.m_Refs[0].GetRefNumber();
         wxString rhRef = rhGroup.m_Refs[0].GetRef() + rhGroup.m_Refs[0].GetRefNumber();
@@ -445,7 +445,7 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef,
                                                 const SCH_REFERENCE& rhRef )
 
 {
-    int  refCol = GetFieldNameCol( GetCanonicalFieldName( REFERENCE_FIELD ) );
+    int  refCol = GetFieldNameCol( GetCanonicalFieldName( FIELD_T::REFERENCE ) );
     bool matchFound = false;
 
     if( refCol == -1 )
@@ -516,7 +516,7 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef,
 wxString FIELDS_EDITOR_GRID_DATA_MODEL::getFieldShownText( const SCH_REFERENCE& aRef,
                                                            const wxString&      aFieldName )
 {
-    SCH_FIELD* field = aRef.GetSymbol()->GetFieldByName( aFieldName );
+    SCH_FIELD* field = aRef.GetSymbol()->GetField( aFieldName );
 
     if( field )
     {
@@ -809,7 +809,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit )
             if( IsTextVar( srcName ) )
                 continue;
 
-            SCH_FIELD* destField = symbol.FindField( srcName );
+            SCH_FIELD* destField = symbol.GetField( srcName );
 
             if( destField && destField->IsPrivate() )
             {
@@ -828,13 +828,13 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit )
             if( createField )
             {
                 const VECTOR2I symbolPos = symbol.GetPosition();
-                destField = symbol.AddField( SCH_FIELD( symbolPos, -1, &symbol, srcName ) );
+                destField = symbol.AddField( SCH_FIELD( symbolPos, FIELD_T::USER, &symbol, srcName ) );
             }
 
             if( !destField )
                 continue;
 
-            if( destField->GetId() == REFERENCE_FIELD )
+            if( destField->GetId() == FIELD_T::REFERENCE )
             {
                 // Reference is not editable from this dialog
                 continue;
@@ -928,7 +928,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyBomPreset( const BOM_PRESET& aPreset )
     int sortCol = GetFieldNameCol( aPreset.sortField );
 
     if( sortCol == -1 )
-        sortCol = GetFieldNameCol( GetCanonicalFieldName( REFERENCE_FIELD ) );
+        sortCol = GetFieldNameCol( GetCanonicalFieldName( FIELD_T::REFERENCE ) );
 
     SetSorting( sortCol, aPreset.sortAsc );
 

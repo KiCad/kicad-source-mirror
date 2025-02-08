@@ -336,34 +336,38 @@ PANEL_FP_EDITOR_FIELD_DEFAULTS::~PANEL_FP_EDITOR_FIELD_DEFAULTS()
 void PANEL_FP_EDITOR_FIELD_DEFAULTS::loadFPSettings( const FOOTPRINT_EDITOR_SETTINGS* aCfg )
 {
     // Footprint defaults
-    m_fieldPropsGrid->GetTable()->DeleteRows( 0, m_fieldPropsGrid->GetNumberRows() );
-    m_fieldPropsGrid->GetTable()->AppendRows( 2 );
+    wxGridTableBase* table = m_fieldPropsGrid->GetTable();
+    table->DeleteRows( 0, m_fieldPropsGrid->GetNumberRows() );
+    table->AppendRows( 2 );
 
-    for( int i : { REFERENCE_FIELD, VALUE_FIELD } )
+    for( int i : { 0, 1 } )
     {
         TEXT_ITEM_INFO item = aCfg->m_DesignSettings.m_DefaultFPTextItems[i];
 
-        m_fieldPropsGrid->GetTable()->SetValue( i, 0, item.m_Text );
-        m_fieldPropsGrid->GetTable()->SetValueAsBool( i, 1, item.m_Visible );
-        m_fieldPropsGrid->GetTable()->SetValueAsLong( i, 2, item.m_Layer );
+        table->SetValue( i, 0, item.m_Text );
+        table->SetValueAsBool( i, 1, item.m_Visible );
+        table->SetValueAsLong( i, 2, item.m_Layer );
     }
 
-    m_textItemsGrid->GetTable()->DeleteRows( 0, m_textItemsGrid->GetNumberRows() );
+    table = m_textItemsGrid->GetTable();
+    table->DeleteRows( 0, m_textItemsGrid->GetNumberRows() );
 
-    // if aCfg->m_DesignSettings.m_DefaultFPTextItems.size() is > 2 (0 and 1 are ref and value),
-    // some extra texts must be added to the list of default texts
+    // if aCfg->m_DesignSettings.m_DefaultFPTextItems.size() is > 2 (first and second are ref and
+    // value), some extra texts must be added to the list of default texts
     int extra_texts_cnt = aCfg->m_DesignSettings.m_DefaultFPTextItems.size() - 2;
 
     if( extra_texts_cnt > 0 )
-        m_textItemsGrid->GetTable()->AppendRows( extra_texts_cnt );
+        table->AppendRows( extra_texts_cnt );
 
     for( int i = 2; i < (int) aCfg->m_DesignSettings.m_DefaultFPTextItems.size(); ++i )
     {
         TEXT_ITEM_INFO item = aCfg->m_DesignSettings.m_DefaultFPTextItems[i];
 
-        m_textItemsGrid->GetTable()->SetValue( i - 2, 0, item.m_Text );
-        m_textItemsGrid->GetTable()->SetValueAsLong( i - 2, 1, item.m_Layer );
+        table->SetValue( i - 2, 0, item.m_Text );
+        table->SetValueAsLong( i - 2, 1, item.m_Layer );
     }
+
+    table = m_layerNameitemsGrid->GetTable();
 
     for( auto& item : aCfg->m_DesignSettings.m_UserLayerNames )
     {
@@ -373,12 +377,10 @@ void PANEL_FP_EDITOR_FIELD_DEFAULTS::loadFPSettings( const FOOTPRINT_EDITOR_SETT
         if( !IsUserLayer( static_cast<PCB_LAYER_ID>( layer ) ) )
             continue;
 
-        if( !m_layerNameitemsGrid->GetTable()->AppendRows( 1 ) )
-            break;
-
-        int row = m_layerNameitemsGrid->GetNumberRows() - 1;
-        m_layerNameitemsGrid->GetTable()->SetValueAsLong( row, 0, layer );
-        m_layerNameitemsGrid->GetTable()->SetValue( row, 1, item.second );
+        int row = m_layerNameitemsGrid->GetNumberRows();
+        table->AppendRows( 1 );
+        table->SetValueAsLong( row, 0, layer );
+        table->SetValue( row, 1, item.second );
     }
 
     Layout();
@@ -426,7 +428,7 @@ bool PANEL_FP_EDITOR_FIELD_DEFAULTS::TransferDataFromWindow()
 
     wxGridTableBase* table = m_fieldPropsGrid->GetTable();
 
-    for( int i : { REFERENCE_FIELD, VALUE_FIELD } )
+    for( int i : { 0, 1 } )
     {
         wxString text = table->GetValue( i, 0 );
         bool visible = table->GetValueAsBool( i, 1 );

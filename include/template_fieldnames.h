@@ -36,21 +36,33 @@ class TEMPLATE_FIELDNAMES_LEXER;
  *
  * The first fields are fixed fields and are defined by #MANDATORY_FIELDS.  After that come
  * an unlimited number of user defined fields, only some of which have indices defined here.
+ *
+ * NOTE: this must stay a enum class to prevent developers from trying to use it as an array
+ * index.
  */
-enum  MANDATORY_FIELD_T {
-    INVALID_FIELD = -1,           ///< The field ID hasn't been set yet; field is invalid
-    REFERENCE_FIELD = 0,          ///< Field Reference of part, i.e. "IC21"
-    VALUE_FIELD,                  ///< Field Value of part, i.e. "3.3K"
-    FOOTPRINT_FIELD,              ///< Field Name Module PCB, i.e. "16DIP300"
-    DATASHEET_FIELD,              ///< name of datasheet
-    DESCRIPTION_FIELD,            ///< Field Description of part, i.e. "1/4W 1% Metal Film Resistor"
-
-    /// The first 5 are mandatory, and must be instantiated in SCH_COMPONENT, LIB_PART, and
-    /// FOOTPRINT constructors
-    MANDATORY_FIELD_COUNT
+enum class FIELD_T {
+    USER,                   ///< The field ID hasn't been set yet; field is invalid
+    REFERENCE,              ///< Field Reference of part, i.e. "IC21"
+    VALUE,                  ///< Field Value of part, i.e. "3.3K"
+    FOOTPRINT,              ///< Field Name Module PCB, i.e. "16DIP300"
+    DATASHEET,              ///< name of datasheet
+    DESCRIPTION,            ///< Field Description of part, i.e. "1/4W 1% Metal Film Resistor"
+    INTERSHEET_REFS,        ///< Global label cross-reference page numbers
+    SHEET_NAME,
+    SHEET_FILENAME,
+    SHEET_USER
 };
 
-#define MANDATORY_FIELDS { REFERENCE_FIELD, VALUE_FIELD, FOOTPRINT_FIELD, DATASHEET_FIELD, DESCRIPTION_FIELD }
+#define MANDATORY_FIELDS { FIELD_T::REFERENCE,        \
+                           FIELD_T::VALUE,            \
+                           FIELD_T::FOOTPRINT,        \
+                           FIELD_T::DATASHEET,        \
+                           FIELD_T::DESCRIPTION }
+
+#define GLOBALLABEL_MANDATORY_FIELDS { FIELD_T::INTERSHEET_REFS }
+
+#define SHEET_MANDATORY_FIELDS { FIELD_T::SHEET_NAME,        \
+                                 FIELD_T::SHEET_FILENAME }
 
 // A helper to call GetDefaultFieldName with or without translation.
 // Translation should be used only to display field names in dialogs
@@ -58,25 +70,20 @@ enum  MANDATORY_FIELD_T {
 
 
 /**
- * Return a default symbol field name for field \a aFieldNdx for all components.
+ * Return a default symbol field name for a mandatory field type.
  *
  * These field names are not modifiable but template field names are.
  *
- * @param aFieldNdx The field number index, > 0.
  * @param aTranslateForHI If true, return the translated field name,
  * else get the canonical name (defualt). Translation is intended only for dialogs
  */
-wxString GetDefaultFieldName( int aFieldNdx, bool aTranslateForHI );
+wxString GetDefaultFieldName( FIELD_T aFieldId, bool aTranslateForHI );
 wxString GetUserFieldName( int aFieldNdx, bool aTranslateForHI );
 
 
-inline wxString GetCanonicalFieldName( int idx )
+inline wxString GetCanonicalFieldName( FIELD_T aFieldType )
 {
-    // While TEMPLATE_FIELDNAME::GetDefaultFieldName() still works for non-mandatory fields,
-    // it's confusing to call it through this function.
-    wxASSERT( idx < MANDATORY_FIELD_COUNT );
-
-    return GetDefaultFieldName( idx, !DO_TRANSLATE );
+    return GetDefaultFieldName( aFieldType, !DO_TRANSLATE );
 }
 
 

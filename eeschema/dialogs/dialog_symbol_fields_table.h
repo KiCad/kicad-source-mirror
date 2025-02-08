@@ -91,7 +91,6 @@ private:
     void OnOk( wxCommandEvent& aEvent ) override;
     void OnFilterText( wxCommandEvent& aEvent ) override;
     void OnFilterMouseMoved( wxMouseEvent& event ) override;
-    void OnFieldsCtrlSelectionChanged( wxDataViewEvent& event ) override;
 
     void OnOutputFileBrowseClicked( wxCommandEvent& event ) override;
     void OnPageChanged( wxNotebookEvent& event ) override;
@@ -152,6 +151,10 @@ private:
     wxArrayString                      m_bomFmtPresetMRU;
 
     SCH_EDIT_FRAME*                    m_parent;
+
+    // Index in the fields list control for each MANDATORY_FIELD type
+    std::map<FIELD_T, int>             m_mandatoryFieldListIndexes;
+
     int                                m_fieldNameColWidth;
     int                                m_labelColWidth;
     int                                m_showColWidth;

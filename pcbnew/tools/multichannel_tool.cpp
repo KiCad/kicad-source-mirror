@@ -902,7 +902,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
                 if( !refField->IsVisible() )
                     continue;
 
-                PCB_FIELD* targetField = targetFP->GetFieldById( refField->GetId() );
+                PCB_FIELD* targetField = targetFP->GetField( refField->GetName() );
                 wxCHECK2( targetField, continue );
 
                 targetField->SetAttributes( refField->GetAttributes() );

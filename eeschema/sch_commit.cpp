@@ -590,7 +590,7 @@ void SCH_COMMIT::Revert()
                 SCH_FIELD*  field = static_cast<SCH_FIELD*>( item );
                 SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item->GetParent() );
 
-                if( field->GetId() == REFERENCE_FIELD )
+                if( field->GetId() == FIELD_T::REFERENCE )
                 {
                     // Lazy eval of sheet list; this is expensive even when unsorted
                     if( sheets.empty() )
