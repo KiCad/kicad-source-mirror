@@ -1961,7 +1961,7 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
     // Get Current Branch
 
     git_reference* currentBranchReference = nullptr;
-    git_repository_head( &currentBranchReference, repo );
+    int rc = git_repository_head( &currentBranchReference, repo );
 
     PROJECT_TREE_ITEM* rootItem = GetItemIdData( kid );
     wxFileName         rootFilename( rootItem->GetFileName() );
@@ -1975,6 +1975,11 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
 
         m_TreeProject->SetItemText( kid, filename + " [" + branchName + "]" );
         git_reference_free( currentBranchReference );
+    }
+    else if( rc == GIT_EUNBORNBRANCH )
+    {
+        // TODO: couldn't immediately figure out if libgit2 can return the name of an unborn branch
+        // For now, just do nothing
     }
     else
     {
