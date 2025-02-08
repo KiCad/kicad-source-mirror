@@ -182,16 +182,25 @@ std::string GIT_PULL_HANDLER::getFormattedCommitDate( const git_time& aTime )
 PullResult GIT_PULL_HANDLER::handleFastForward()
 {
         // Update local references with fetched data
-        git_reference* updatedRef = nullptr;
+        auto git_reference_deleter =
+                []( void* p )
+                {
+                    git_reference_free( static_cast<git_reference*>( p ) );
+                };
 
-        if( git_repository_head( &updatedRef, m_repo ) )
+        git_reference* rawRef = nullptr;
+
+        if( git_repository_head( &rawRef, m_repo ) )
         {
             AddErrorString( _( "Could not get repository head" ) );
             return PullResult::Error;
         }
 
-        const char* updatedRefName = git_reference_name( updatedRef );
-        git_reference_free( updatedRef );
+        // Defer destruction of the git_reference until this function exits somewhere, since
+        // updatedRefName etc. just point to memory inside the reference
+        std::unique_ptr<git_reference, decltype( git_reference_deleter )> updatedRef( rawRef );
+
+        const char* updatedRefName = git_reference_name( updatedRef.get() );
 
         git_oid     updatedRefOid;
 
@@ -205,6 +214,7 @@ PullResult GIT_PULL_HANDLER::handleFastForward()
         git_checkout_options checkoutOptions;
         git_checkout_init_options( &checkoutOptions, GIT_CHECKOUT_OPTIONS_VERSION );
         checkoutOptions.checkout_strategy = GIT_CHECKOUT_SAFE;
+
         if( git_checkout_head( m_repo, &checkoutOptions ) )
         {
             AddErrorString( _( "Failed to perform checkout operation." ) );
