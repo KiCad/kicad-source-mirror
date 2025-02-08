@@ -37,7 +37,6 @@
 #include <eda_pattern_match.h>
 
 #include <wx/wupdlock.h>
-#include <wx/headerctrl.h>
 #include <wx/filedlg.h>
 
 #include <algorithm>
@@ -408,6 +407,20 @@ void PCB_NET_INSPECTOR_PANEL::buildNetsList( bool rebuildColumns )
     m_show_zero_pad_nets = cfg->show_zero_pad_nets;
     m_group_by_netclass = cfg->group_by_netclass;
     m_group_by_constraint = cfg->group_by_constraint;
+
+    // Attempt to keep any expanded groups open
+    if( m_board_loaded && !m_board_loading )
+    {
+        cfg->expanded_rows.clear();
+        DATA_MODEL* model = static_cast<DATA_MODEL*>( m_netsList->GetModel() );
+
+        for( const auto& groupItems = model->getGroupDataViewItems();
+             auto& [groupName, groupItem] : groupItems )
+        {
+            if( m_netsList->IsExpanded( groupItem ) )
+                cfg->expanded_rows.push_back( groupName );
+        }
+    }
 
     // when rebuilding the netlist, try to keep the row selection
     wxDataViewItemArray sel;
@@ -1666,7 +1679,8 @@ void PCB_NET_INSPECTOR_PANEL::highlightSelectedNets()
 
 void PCB_NET_INSPECTOR_PANEL::OnColumnSorted( wxDataViewEvent& event )
 {
-    SaveSettings();
+    if( !m_in_build_nets_list )
+        SaveSettings();
 }
 
 
