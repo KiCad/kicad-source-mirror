@@ -2320,24 +2320,27 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
 
         git_reference* headRef = nullptr;
 
-        if( git_repository_head( &headRef, repo ) != 0 )
+        if( 0 == git_repository_head_unborn( repo ) )
         {
-            wxMessageBox( wxString::Format( _( "Failed to get HEAD reference: %s" ),
-                                            giterr_last()->message ) );
-            git_index_free( index );
-            return;
-        }
+            if( git_repository_head( &headRef, repo ) != 0 )
+            {
+                wxMessageBox( wxString::Format( _( "Failed to get HEAD reference: %s" ),
+                                                giterr_last()->message ) );
+                git_index_free( index );
+                return;
+            }
 
-        if( git_reference_peel( (git_object**) &parent, headRef, GIT_OBJECT_COMMIT ) != 0 )
-        {
-            wxMessageBox( wxString::Format( _( "Failed to get commit: %s" ),
-                                            giterr_last()->message ) );
+            if( git_reference_peel( (git_object**) &parent, headRef, GIT_OBJECT_COMMIT ) != 0 )
+            {
+                wxMessageBox( wxString::Format( _( "Failed to get commit: %s" ),
+                                                giterr_last()->message ) );
+                git_reference_free( headRef );
+                git_index_free( index );
+                return;
+            }
+
             git_reference_free( headRef );
-            git_index_free( index );
-            return;
         }
-
-        git_reference_free( headRef );
 
         const wxString& commit_msg = dlg.GetCommitMessage();
         const wxString& author_name = dlg.GetAuthorName();
