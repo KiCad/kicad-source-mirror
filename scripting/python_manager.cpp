@@ -115,8 +115,13 @@ void PYTHON_MANAGER::Execute( const wxString& aArgs,
             }
         };
 
+#ifdef __WXMAC__
+    wxString cmd = wxString::Format( wxS( "open -a %s --args %s" ), m_interpreterPath, aArgs );
+#else
     wxString cmd = wxString::Format( wxS( "%s %s" ), m_interpreterPath, aArgs );
-    long     pid = wxExecute( cmd, wxEXEC_ASYNC, process, aEnv );
+#endif
+
+    long pid = wxExecute( cmd, wxEXEC_ASYNC, process, aEnv );
 
     if( pid == 0 )
     {
