@@ -639,9 +639,13 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
     if( ADVANCED_CFG::GetCfg().m_EnableGit )
     {
         m_TreeProject->SetGitRepo( get_git_repository_for_file( fn.GetPath().c_str() ) );
-        m_TreeProject->GitCommon()->SetUsername( Prj().GetLocalSettings().m_GitRepoUsername );
-        m_TreeProject->GitCommon()->SetSSHKey( Prj().GetLocalSettings().m_GitSSHKey );
-        m_TreeProject->GitCommon()->UpdateCurrentBranchInfo();
+
+        if( m_TreeProject->GetGitRepo() )
+        {
+            m_TreeProject->GitCommon()->SetUsername( Prj().GetLocalSettings().m_GitRepoUsername );
+            m_TreeProject->GitCommon()->SetSSHKey( Prj().GetLocalSettings().m_GitSSHKey );
+            m_TreeProject->GitCommon()->UpdateCurrentBranchInfo();
+        }
     }
 
     // We may have opened a legacy project, in which case GetProjectFileName will return the
