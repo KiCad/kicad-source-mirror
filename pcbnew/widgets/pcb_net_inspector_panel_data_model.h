@@ -698,9 +698,9 @@ protected:
     {
         if( LIST_ITEM* i = static_cast<LIST_ITEM*>( aItem.GetID() ) )
         {
-            if( i->GetIsGroup() )
+            if( aCol == COLUMN_NAME )
             {
-                if( aCol == COLUMN_NAME )
+                if( i->GetIsGroup() )
                 {
                     switch( i->GetGroupType() )
                     {
@@ -717,12 +717,9 @@ protected:
                 }
                 else
                 {
-                    aOutValue = "";
+                    aOutValue = i->GetNetName();
                 }
             }
-
-            else if( aCol == COLUMN_NAME )
-                aOutValue = i->GetNetName();
 
             else if( aCol == COLUMN_NETCLASS )
                 aOutValue = i->GetNetclassName();
