@@ -20,9 +20,11 @@
 
 #include <common.h>
 #include <list>
+#include <unordered_set>
 
 #include <paths.h>
 #include <pgm_base.h>
+#include <richio.h>
 #include <trace_helpers.h>
 #include <wildcards_and_files_ext.h>
 
@@ -47,7 +49,7 @@ LIBRARY_MANAGER::~LIBRARY_MANAGER() = default;
 void LIBRARY_MANAGER::loadTables( const wxString& aTablePath, LIBRARY_TABLE_SCOPE aScope )
 {
     auto getTarget =
-        [&]() -> std::vector<std::unique_ptr<LIBRARY_TABLE>>&
+        [&]() -> std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_TABLE>>&
         {
             switch( aScope )
             {
@@ -55,14 +57,14 @@ void LIBRARY_MANAGER::loadTables( const wxString& aTablePath, LIBRARY_TABLE_SCOP
                 return m_tables;
 
             case LIBRARY_TABLE_SCOPE::PROJECT:
-                return m_project_tables;
+                return m_projectTables;
 
             default:
                 wxCHECK_MSG( false, m_tables, "Invalid scope passed to loadTables" );
             }
         };
 
-    std::vector<std::unique_ptr<LIBRARY_TABLE>>& aTarget = getTarget();
+    std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_TABLE>>& aTarget = getTarget();
 
     aTarget.clear();
 
@@ -73,13 +75,62 @@ void LIBRARY_MANAGER::loadTables( const wxString& aTablePath, LIBRARY_TABLE_SCOP
         wxFileName fn( aTablePath, name );
 
         if( fn.IsFileReadable() )
-            aTarget.emplace_back( std::make_unique<LIBRARY_TABLE>( fn, aScope ) );
+        {
+            auto table = std::make_unique<LIBRARY_TABLE>( fn, aScope );
+            aTarget[table->Type()] = std::move( table );
+        }
         else
+        {
             wxLogTrace( traceLibraries, "No library table found at %s", fn.GetFullPath() );
+        }
     }
 
-    for( const std::unique_ptr<LIBRARY_TABLE>& t : aTarget )
-        t->LoadNestedTables();
+    for( const std::unique_ptr<LIBRARY_TABLE>& t : aTarget | std::views::values )
+        loadNestedTables( *t );
+}
+
+
+void LIBRARY_MANAGER::loadNestedTables( LIBRARY_TABLE& aRootTable )
+{
+    std::unordered_set<wxString> seenTables;
+
+    std::function<void(LIBRARY_TABLE&)> processOneTable =
+        [&]( LIBRARY_TABLE& aTable )
+        {
+            seenTables.insert( aTable.Path() );
+
+            for( LIBRARY_TABLE_ROW& row : aTable.Rows() )
+            {
+                if( row.Type() == wxT( "Table" ) )
+                {
+                    wxFileName file( row.URI() );
+
+                    // URI may be relative to parent
+                    file.MakeAbsolute( wxFileName( aTable.Path() ).GetPath() );
+
+                    WX_FILENAME::ResolvePossibleSymlinks( file );
+                    wxString src = file.GetFullPath();
+
+                    if( seenTables.contains( src ) )
+                    {
+                        wxLogTrace( traceLibraries, "Library table %s has already been loaded!",
+                                    src );
+                        row.SetOk( false );
+                        row.SetErrorDescription(
+                            _( "A reference to this library table already exists" ) );
+                        continue;
+                    }
+
+                    auto child = std::make_unique<LIBRARY_TABLE>( file, aRootTable.Scope() );
+
+                    processOneTable( *child );
+
+                    m_childTables.insert( { row.URI(), std::move( child ) } );
+                }
+            }
+        };
+
+    processOneTable( aRootTable );
 }
 
 
@@ -116,6 +167,29 @@ std::optional<LIBRARY_MANAGER_ADAPTER*> LIBRARY_MANAGER::Adapter( LIBRARY_TABLE_
 }
 
 
+std::optional<LIBRARY_TABLE*> LIBRARY_MANAGER::Table( LIBRARY_TABLE_TYPE aType,
+                                                      LIBRARY_TABLE_SCOPE aScope ) const
+{
+    switch( aScope )
+    {
+    case LIBRARY_TABLE_SCOPE::BOTH:
+    case LIBRARY_TABLE_SCOPE::UNINITIALIZED:
+        wxCHECK_MSG( false, std::nullopt, "Table() requires a single scope" );
+
+    case LIBRARY_TABLE_SCOPE::GLOBAL:
+        wxCHECK( m_tables.contains( aType ), std::nullopt );
+        return m_tables.at( aType ).get();
+
+    case LIBRARY_TABLE_SCOPE::PROJECT:
+        // TODO: handle multiple projects
+        wxCHECK( m_projectTables.contains( aType ), std::nullopt );
+        return m_projectTables.at( aType ).get();
+    }
+
+    return std::nullopt;
+}
+
+
 std::vector<const LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::Rows( LIBRARY_TABLE_TYPE aType,
                                                              LIBRARY_TABLE_SCOPE aScope,
                                                              bool aIncludeInvalid ) const
@@ -123,7 +197,9 @@ std::vector<const LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::Rows( LIBRARY_TABLE_TYPE 
     std::map<wxString, const LIBRARY_TABLE_ROW*> rows;
     std::vector<wxString> rowOrder;
 
-    std::list<std::ranges::ref_view<const std::vector<std::unique_ptr<LIBRARY_TABLE>>>> tables;
+    std::list<std::ranges::ref_view<
+            const std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_TABLE>>
+        >> tables;
 
     switch( aScope )
     {
@@ -132,11 +208,11 @@ std::vector<const LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::Rows( LIBRARY_TABLE_TYPE 
         break;
 
     case LIBRARY_TABLE_SCOPE::PROJECT:
-        tables = { std::views::all( m_project_tables ) };
+        tables = { std::views::all( m_projectTables ) };
         break;
 
     case LIBRARY_TABLE_SCOPE::BOTH:
-        tables = { std::views::all( m_tables ), std::views::all( m_project_tables ) };
+        tables = { std::views::all( m_tables ), std::views::all( m_projectTables ) };
         break;
 
     case LIBRARY_TABLE_SCOPE::UNINITIALIZED:
@@ -157,8 +233,8 @@ std::vector<const LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::Rows( LIBRARY_TABLE_TYPE 
                         {
                             if( row.Type() == "Table" )
                             {
-                                wxCHECK2( aTable->Children().contains( row.Nickname() ), continue );
-                                processTable( aTable->Children().at( row.Nickname() ) );
+                                wxCHECK2( m_childTables.contains( row.URI() ), continue );
+                                processTable( m_childTables.at( row.URI() ) );
                             }
                             else
                             {
@@ -172,8 +248,11 @@ std::vector<const LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::Rows( LIBRARY_TABLE_TYPE 
                 }
             };
 
-    for( const std::unique_ptr<LIBRARY_TABLE>& table : std::views::join( tables ) )
+    for( const std::unique_ptr<LIBRARY_TABLE>& table :
+         std::views::join( tables ) | std::views::values )
+    {
         processTable( table );
+    }
 
     std::vector<const LIBRARY_TABLE_ROW*> ret;
 
@@ -206,11 +285,46 @@ void LIBRARY_MANAGER::LoadProjectTables( const wxString& aProjectPath )
     }
     else
     {
-        m_project_tables.clear();
+        m_projectTables.clear();
         wxLogTrace( traceLibraries,
                     "New project path %s is not readable, not loading project tables",
                     aProjectPath );
     }
+}
+
+
+LIBRARY_RESULT<void> LIBRARY_MANAGER::Save( LIBRARY_TABLE* aTable ) const
+{
+    wxCHECK( aTable, tl::unexpected( LIBRARY_ERROR( "Internal error" ) ) );
+
+    // TODO(JE) clean this up; shouldn't need to iterate
+    for( const std::unique_ptr<LIBRARY_TABLE>& t : m_tables | std::views::values )
+    {
+        if( t.get() == aTable )
+        {
+            wxLogTrace( traceLibraries, "Saving %s", aTable->Path() );
+            wxFileName fn( aTable->Path() );
+            // This should already be normalized, but just in case...
+            fn.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
+
+            try
+            {
+                PRETTIFIED_FILE_OUTPUTFORMATTER formatter( fn.GetFullPath(), KICAD_FORMAT::FORMAT_MODE::LIBRARY_TABLE );
+                aTable->Format( &formatter );
+            }
+            catch( IO_ERROR& e )
+            {
+                wxLogTrace( traceLibraries, "Exception while saving: %s", e.What() );
+                return tl::unexpected( LIBRARY_ERROR( e.What() ) );
+            }
+
+            return LIBRARY_RESULT<void>();
+        }
+    }
+
+    // Unmanaged table?  TODO(JE) should this happen?
+    wxLogTrace( traceLibraries, "Can't save %s; unmanaged library", aTable->Path() );
+    return tl::unexpected( LIBRARY_ERROR( "Internal error" ) );
 }
 
 
@@ -229,6 +343,14 @@ std::optional<wxString> LIBRARY_MANAGER::GetFullURI( LIBRARY_TABLE_TYPE aType,
     }
 
     return std::nullopt;
+}
+
+
+wxString LIBRARY_MANAGER::ExpandURI( const wxString& aShortURI, const PROJECT& aProject )
+{
+    wxFileName path( ExpandEnvVarSubstitutions( aShortURI, &aProject ) );
+    path.MakeAbsolute();
+    return path.GetFullPath();
 }
 
 

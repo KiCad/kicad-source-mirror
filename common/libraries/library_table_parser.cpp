@@ -192,3 +192,43 @@ tl::expected<LIBRARY_TABLE_IR, LIBRARY_PARSE_ERROR> LIBRARY_TABLE_PARSER::Parse(
 
     return state.model;
 }
+
+
+tl::expected<LIBRARY_TABLE_IR, LIBRARY_PARSE_ERROR> LIBRARY_TABLE_PARSER::ParseBuffer(
+        const std::string& aBuffer )
+{
+    memory_input in( aBuffer, "" );
+    LIBRARY_TABLE_PARSER_STATE state;
+    wxLogTrace( traceLibraries, "LIBRARY_TABLE_PARSER::Parse from string buffer" );
+
+    try
+    {
+        if( !parse<LIB_TABLE_FILE, LIBRARY_TABLE_PARSER_ACTION>( in, state ) )
+        {
+            wxLogTrace( traceLibraries, "Parsing failed without throwing" );
+            wxString msg =
+                wxString::Format( _( "An unexpected error occurred while reading library table") );
+            return tl::unexpected( LIBRARY_PARSE_ERROR( { .description = msg } ) );
+        }
+    }
+    catch( const parse_error& e )
+    {
+        const auto& p = e.positions().front();
+        std::string msg = fmt::format( "Error at line {}, column {}:\n{}\n{:>{}}\n{}",
+                                       p.line, p.column, in.line_at( p ), "^", p.column,
+                                       e.message() );
+
+        wxLogTrace( traceLibraries, "%s", msg.c_str() );
+
+        wxString description = wxString::Format( _( "Syntax error at line %zu, column %zu" ),
+                                                 p.line, p.column );
+
+        return tl::unexpected( LIBRARY_PARSE_ERROR( {
+            .description = description,
+            .line = p.line,
+            .column = p.column
+        } ) );
+    }
+
+    return state.model;
+}

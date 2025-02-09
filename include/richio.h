@@ -40,6 +40,7 @@
 
 #include <ki_exception.h>
 #include <kicommon.h>
+#include <io/kicad/kicad_io_utils.h>
 
 /**
  * This is like sprintf() but the output is appended to a std::string instead of to a
@@ -520,8 +521,9 @@ protected:
 class KICOMMON_API PRETTIFIED_FILE_OUTPUTFORMATTER : public OUTPUTFORMATTER
 {
 public:
-    PRETTIFIED_FILE_OUTPUTFORMATTER( const wxString& aFileName, const wxChar* aMode = wxT( "wt" ),
-                                     char aQuoteChar = '"' );
+    PRETTIFIED_FILE_OUTPUTFORMATTER( const wxString& aFileName,
+            KICAD_FORMAT::FORMAT_MODE aFormatMode = KICAD_FORMAT::FORMAT_MODE::NORMAL,
+            const wxChar* aMode = wxT( "wt" ), char aQuoteChar = '"' );
 
     ~PRETTIFIED_FILE_OUTPUTFORMATTER();
 
@@ -537,6 +539,7 @@ protected:
 private:
     FILE* m_fp;
     std::string m_buf;
+    KICAD_FORMAT::FORMAT_MODE m_mode;
 };
 
 

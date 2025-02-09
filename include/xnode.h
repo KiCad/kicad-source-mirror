@@ -38,6 +38,14 @@
 class OUTPUTFORMATTER;
 class KIID;
 
+
+/**
+ * An extension of wxXmlAttribute that stores a variant type rather than just a string.
+ * Technically, XML requires that all attribute values be strings, but since XNODE is
+ * primarily used for s-expression formatting rather than XML formatting, and KiCad's
+ * s-expression format permits integer and floating-point numeric values in lists, this
+ * class allows storage of the source value so that it can be properly formatted in the output.
+ */
 class KICOMMON_API XATTR : public wxXmlAttribute
 {
 public:

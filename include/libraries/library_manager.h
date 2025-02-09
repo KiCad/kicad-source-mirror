@@ -37,6 +37,7 @@ template<typename ResultType>
 using LIBRARY_RESULT = tl::expected<ResultType, LIBRARY_ERROR>;
 
 class LIBRARY_MANAGER_ADAPTER;
+class PROJECT;
 
 
 class KICOMMON_API LIBRARY_MANAGER
@@ -55,6 +56,9 @@ public:
                           std::unique_ptr<LIBRARY_MANAGER_ADAPTER>&& aAdapter );
 
     std::optional<LIBRARY_MANAGER_ADAPTER*> Adapter( LIBRARY_TABLE_TYPE aType ) const;
+
+    std::optional<LIBRARY_TABLE*> Table( LIBRARY_TABLE_TYPE aType,
+                                         LIBRARY_TABLE_SCOPE aScope ) const;
 
     /**
      * Returns a flattened list of libraries of the given type
@@ -80,6 +84,8 @@ public:
 
     void LoadProjectTables( const wxString& aProjectPath );
 
+    LIBRARY_RESULT<void> Save( LIBRARY_TABLE* aTable ) const;
+
     /**
      * Return the full location specifying URI for the LIB, either in original UI form or
      * in environment variable expanded form.
@@ -92,13 +98,22 @@ public:
     std::optional<wxString> GetFullURI( LIBRARY_TABLE_TYPE aType, const wxString& aNickname,
                                         bool aSubstituted = false ) const;
 
+    static wxString ExpandURI( const wxString& aShortURI, const PROJECT& aProject );
+
     static bool UrisAreEquivalent( const wxString& aURI1, const wxString& aURI2 );
 
 private:
     void loadTables( const wxString& aTablePath, LIBRARY_TABLE_SCOPE aScope );
 
-    std::vector<std::unique_ptr<LIBRARY_TABLE>> m_tables;
-    std::vector<std::unique_ptr<LIBRARY_TABLE>> m_project_tables;
+    void loadNestedTables( LIBRARY_TABLE& aTable );
+
+    std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_TABLE>> m_tables;
+
+    /// Map of full URI to table object for tables that are referenced by global or project tables
+    std::map<wxString, std::unique_ptr<LIBRARY_TABLE>> m_childTables;
+
+    // TODO: support multiple projects
+    std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_TABLE>> m_projectTables;
 
     std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_MANAGER_ADAPTER>> m_adapters;
 };

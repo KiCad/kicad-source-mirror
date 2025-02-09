@@ -65,7 +65,84 @@
 #include <paths.h>
 #include <macros.h>
 
+// clang-format off
 
+/**
+ * Container that describes file type info for the add a library options
+ */
+struct SUPPORTED_FILE_TYPE
+{
+    wxString m_Description;            ///< Description shown in the file picker dialog.
+    wxString m_FileFilter;             ///< Filter used for file pickers if m_IsFile is true.
+    wxString m_FolderSearchExtension;  ///< In case of folders it stands for extensions of files
+                                       ///< stored inside.
+    bool     m_IsFile;                 ///< Whether the library is a folder or a file.
+    DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T m_Plugin;
+};
+
+// clang-format on
+
+/**
+ * Traverser implementation that looks to find any and all "folder" libraries by looking for files
+ * with a specific extension inside folders
+ */
+class LIBRARY_TRAVERSER : public wxDirTraverser
+{
+public:
+    LIBRARY_TRAVERSER( std::vector<std::string> aSearchExtensions, wxString aInitialDir ) :
+            m_searchExtensions( aSearchExtensions ), m_currentDir( aInitialDir )
+    {
+    }
+
+    virtual wxDirTraverseResult OnFile( const wxString& aFileName ) override
+    {
+        wxFileName file( aFileName );
+
+        for( const std::string& ext : m_searchExtensions )
+        {
+            if( file.GetExt().IsSameAs( ext, false ) )
+                m_foundDirs.insert( { m_currentDir, 1 } );
+        }
+
+        return wxDIR_CONTINUE;
+    }
+
+    virtual wxDirTraverseResult OnOpenError( const wxString& aOpenErrorName ) override
+    {
+        m_failedDirs.insert( { aOpenErrorName, 1 } );
+        return wxDIR_IGNORE;
+    }
+
+    bool HasDirectoryOpenFailures() { return m_failedDirs.size() > 0; }
+
+    virtual wxDirTraverseResult OnDir( const wxString& aDirName ) override
+    {
+        m_currentDir = aDirName;
+        return wxDIR_CONTINUE;
+    }
+
+    void GetPaths( wxArrayString& aPathArray )
+    {
+        for( std::pair<const wxString, int>& foundDirsPair : m_foundDirs )
+            aPathArray.Add( foundDirsPair.first );
+    }
+
+    void GetFailedPaths( wxArrayString& aPathArray )
+    {
+        for( std::pair<const wxString, int>& failedDirsPair : m_failedDirs )
+            aPathArray.Add( failedDirsPair.first );
+    }
+
+private:
+    std::vector<std::string>          m_searchExtensions;
+    wxString                          m_currentDir;
+    std::unordered_map<wxString, int> m_foundDirs;
+    std::unordered_map<wxString, int> m_failedDirs;
+};
+
+
+// TODO(JE) library tables
+#if 0
 /**
  * This class builds a wxGridTableBase by wrapping an #DESIGN_BLOCK_LIB_TABLE object.
  */
@@ -1065,7 +1142,7 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::populateEnvironReadOnlyTable()
 
 //-----</event handlers>---------------------------------
 
-
+#endif
 size_t PANEL_DESIGN_BLOCK_LIB_TABLE::m_pageNdx = 0;
 
 
@@ -1081,12 +1158,14 @@ void InvokeEditDesignBlockLibTable( KIWAY* aKiway, wxWindow *aParent )
 
     if( aKiway->Prj().IsNullProject() )
         projectTable = nullptr;
-
+    // TODO(JE) library tables
+#if 0
     dlg.InstallPanel( new PANEL_DESIGN_BLOCK_LIB_TABLE( &dlg, &aKiway->Prj(), globalTable,
                                                         globalTablePath,
                                                         projectTable, projectTablePath,
                                                         aKiway->Prj().GetProjectPath() ) );
 
+#endif
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 

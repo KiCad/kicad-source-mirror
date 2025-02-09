@@ -609,10 +609,15 @@ void FILE_OUTPUTFORMATTER::write( const char* aOutBuf, int aCount )
 
 
 PRETTIFIED_FILE_OUTPUTFORMATTER::PRETTIFIED_FILE_OUTPUTFORMATTER( const wxString& aFileName,
+                                                                  KICAD_FORMAT::FORMAT_MODE aFormatMode,
                                                                   const wxChar* aMode,
                                                                   char aQuoteChar ) :
-        OUTPUTFORMATTER( OUTPUTFMTBUFZ, aQuoteChar )
+        OUTPUTFORMATTER( OUTPUTFMTBUFZ, aQuoteChar ),
+        m_mode( aFormatMode )
 {
+    if( ADVANCED_CFG::GetCfg().m_CompactSave && m_mode == KICAD_FORMAT::FORMAT_MODE::NORMAL )
+        m_mode = KICAD_FORMAT::FORMAT_MODE::COMPACT_TEXT_PROPERTIES;
+
     m_fp = wxFopen( aFileName, aMode );
 
     if( !m_fp )
@@ -636,9 +641,7 @@ bool PRETTIFIED_FILE_OUTPUTFORMATTER::Finish()
     if( !m_fp )
         return false;
 
-    KICAD_FORMAT::Prettify( m_buf, ADVANCED_CFG::GetCfg().m_CompactSave
-                                       ? KICAD_FORMAT::FORMAT_MODE::COMPACT_TEXT_PROPERTIES
-                                       : KICAD_FORMAT::FORMAT_MODE::NORMAL );
+    KICAD_FORMAT::Prettify( m_buf, m_mode );
 
     if( fwrite( m_buf.c_str(), m_buf.length(), 1, m_fp ) != 1 )
         THROW_IO_ERROR( strerror( errno ) );

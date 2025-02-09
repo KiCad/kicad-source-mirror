@@ -29,8 +29,8 @@
 #include <project.h>
 #include <panel_sym_lib_table.h>
 #include <lib_id.h>
-#include <symbol_lib_table.h>
-#include <lib_table_lexer.h>
+#include <libraries/library_table.h>
+#include <libraries/library_manager.h>
 #include <lib_table_grid_tricks.h>
 #include <widgets/wx_grid.h>
 #include <confirm.h>
@@ -40,10 +40,13 @@
 #include <env_paths.h>
 #include <functional>
 #include <eeschema_id.h>
+#include <env_vars.h>
+#include <sch_io/sch_io.h>
 #include <symbol_edit_frame.h>
 #include <symbol_viewer_frame.h>
 #include <sch_edit_frame.h>
 #include <kiway.h>
+#include <lib_table_base.h>
 #include <paths.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
@@ -54,7 +57,6 @@
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
 #include <project_sch.h>
-
 
 
 // clang-format off
@@ -84,37 +86,38 @@ enum {
 
 // clang-format on
 
-/**
- * Build a wxGridTableBase by wrapping an #SYMBOL_LIB_TABLE object.
- */
-class SYMBOL_LIB_TABLE_GRID : public LIB_TABLE_GRID, public SYMBOL_LIB_TABLE
+class SYMBOL_LIB_TABLE_GRID : public LIB_TABLE_GRID
 {
     friend class PANEL_SYM_LIB_TABLE;
     friend class SYMBOL_GRID_TRICKS;
 
 protected:
-    LIB_TABLE_ROW* at( size_t aIndex ) override { return &m_rows.at( aIndex ); }
+    LIBRARY_TABLE_ROW& at( size_t aIndex ) override { return m_table.Rows().at( aIndex ); }
 
-    size_t size() const override { return m_rows.size(); }
+    size_t size() const override { return m_table.Rows().size(); }
 
-    LIB_TABLE_ROW* makeNewRow() override
+    LIBRARY_TABLE_ROW makeNewRow() override
     {
-        return dynamic_cast< LIB_TABLE_ROW* >( new SYMBOL_LIB_TABLE_ROW );
+        return LIBRARY_TABLE_ROW();
     }
 
-    LIB_TABLE_ROWS_ITER begin() override { return m_rows.begin(); }
+    LIBRARY_TABLE_ROWS_ITER begin() override { return m_table.Rows().begin(); }
 
-    LIB_TABLE_ROWS_ITER insert( LIB_TABLE_ROWS_ITER aIterator, LIB_TABLE_ROW* aRow ) override
+    LIBRARY_TABLE_ROWS_ITER insert( LIBRARY_TABLE_ROWS_ITER aIterator,
+                                    const LIBRARY_TABLE_ROW& aRow ) override
     {
-        return m_rows.insert( aIterator, aRow );
+        return m_table.Rows().insert( aIterator, aRow );
     }
 
-    void push_back( LIB_TABLE_ROW* aRow ) override { m_rows.push_back( aRow ); }
+    void push_back( const LIBRARY_TABLE_ROW& aRow ) override { m_table.Rows().push_back( aRow ); }
 
-    LIB_TABLE_ROWS_ITER erase( LIB_TABLE_ROWS_ITER aFirst, LIB_TABLE_ROWS_ITER aLast ) override
+    LIBRARY_TABLE_ROWS_ITER erase( LIBRARY_TABLE_ROWS_ITER aFirst,
+                                   LIBRARY_TABLE_ROWS_ITER aLast ) override
     {
-        return m_rows.erase( aFirst, aLast );
+        return m_table.Rows().erase( aFirst, aLast );
     }
+
+    LIBRARY_TABLE& Table() { return m_table; }
 
 public:
     void SetValue( int aRow, int aCol, const wxString &aValue ) override
@@ -126,10 +129,9 @@ public:
         // If setting a filepath, attempt to auto-detect the format
         if( aCol == COL_URI )
         {
-            LIB_TABLE_ROW* row = at( (size_t) aRow );
-            wxString       fullURI = row->GetFullURI( true );
-
-            SCH_IO_MGR::SCH_FILE_T pluginType = SCH_IO_MGR::GuessPluginTypeFromLibPath( fullURI );
+            LIBRARY_TABLE_ROW& row = at( static_cast<size_t>(aRow) );
+            wxString uri = LIBRARY_MANAGER::ExpandURI( row.URI(), Pgm().GetSettingsManager().Prj() );
+            SCH_IO_MGR::SCH_FILE_T pluginType = SCH_IO_MGR::GuessPluginTypeFromLibPath( uri );
 
             if( pluginType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
                 pluginType = SCH_IO_MGR::SCH_KICAD;
@@ -139,11 +141,16 @@ public:
     }
 
 
-    SYMBOL_LIB_TABLE_GRID( const SYMBOL_LIB_TABLE& aTableToEdit )
+    SYMBOL_LIB_TABLE_GRID( const LIBRARY_TABLE& aTableToEdit ) :
+            m_table( aTableToEdit )
     {
-        m_rows = aTableToEdit.m_rows;
     }
+
+private:
+    /// Working copy of a table
+    LIBRARY_TABLE m_table;
 };
+
 
 class SYMBOL_GRID_TRICKS : public LIB_TABLE_GRID_TRICKS
 {
@@ -164,27 +171,27 @@ public:
 protected:
     DIALOG_EDIT_LIBRARY_TABLES* m_dialog;
 
-    virtual void optionsEditor( int aRow ) override
+    void optionsEditor( int aRow ) override
     {
         SYMBOL_LIB_TABLE_GRID* tbl = (SYMBOL_LIB_TABLE_GRID*) m_grid->GetTable();
 
         if( tbl->GetNumberRows() > aRow )
         {
-            LIB_TABLE_ROW*  row = tbl->at( (size_t) aRow );
-            const wxString& options = row->GetOptions();
-            wxString        result = options;
+            LIBRARY_TABLE_ROW& row = tbl->at( static_cast<size_t>( aRow ) );
+            const wxString&    options = row.Options();
+            wxString           result = options;
             std::map<std::string, UTF8> choices;
 
-            SCH_IO_MGR::SCH_FILE_T pi_type = SCH_IO_MGR::EnumFromStr( row->GetType() );
+            SCH_IO_MGR::SCH_FILE_T pi_type = SCH_IO_MGR::EnumFromStr( row.Type() );
             IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( pi_type ) );
             pi->GetLibraryOptions( &choices );
 
-            DIALOG_PLUGIN_OPTIONS dlg( m_dialog, row->GetNickName(), choices, options, &result );
+            DIALOG_PLUGIN_OPTIONS dlg( m_dialog, row.Nickname(), choices, options, &result );
             dlg.ShowModal();
 
             if( options != result )
             {
-                row->SetOptions( result );
+                row.SetOptions( result );
                 m_grid->Refresh();
             }
         }
@@ -193,42 +200,30 @@ protected:
 
     /// handle specialized clipboard text, with leading "(sym_lib_table" or
     /// spreadsheet formatted text.
-    virtual void paste_text( const wxString& cb_text ) override
+    void paste_text( const wxString& cb_text ) override
     {
-        SYMBOL_LIB_TABLE_GRID* tbl = (SYMBOL_LIB_TABLE_GRID*) m_grid->GetTable();
-        size_t                 ndx = cb_text.find( "(sym_lib_table" );
+        SYMBOL_LIB_TABLE_GRID* tbl = static_cast<SYMBOL_LIB_TABLE_GRID*>( m_grid->GetTable() );
 
-        if( ndx != std::string::npos )
+        if( size_t ndx = cb_text.find( "(sym_lib_table" ); ndx != std::string::npos )
         {
             // paste the SYMBOL_LIB_TABLE_ROWs of s-expression (sym_lib_table), starting
             // at column 0 regardless of current cursor column.
 
-            STRING_LINE_READER  slr( TO_UTF8( cb_text ), wxS( "Clipboard" ) );
-            LIB_TABLE_LEXER     lexer( &slr );
-            SYMBOL_LIB_TABLE    tmp_tbl;
-            bool                parsed = true;
-
-            try
+            if( LIBRARY_TABLE tempTable( cb_text, tbl->Table().Scope() ); tempTable.IsOk() )
             {
-                tmp_tbl.Parse( &lexer );
+                std::ranges::copy( tempTable.Rows(),
+                                   std::inserter( tbl->Table().Rows(), tbl->Table().Rows().begin() ) );
+
+                if( tbl->GetView() )
+                {
+                    wxGridTableMessage msg( tbl, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, 0, 0 );
+                    tbl->GetView()->ProcessTableMessage( msg );
+                }
             }
-            catch( PARSE_ERROR& pe )
+            else
             {
-                DisplayError( m_dialog, pe.What() );
-                parsed = false;
+                DisplayError( m_dialog, tempTable.ErrorDescription() );
             }
-
-            if( parsed )
-            {
-                // make sure the table is big enough...
-                if( tmp_tbl.GetCount() > (unsigned) tbl->GetNumberRows() )
-                    tbl->AppendRows( tmp_tbl.GetCount() - tbl->GetNumberRows() );
-
-                for( unsigned i = 0;  i < tmp_tbl.GetCount();  ++i )
-                    tbl->ReplaceRow( i, tmp_tbl.At( i ).clone() );
-            }
-
-            m_grid->AutoSizeColumns( false );
         }
         else
         {
@@ -250,6 +245,8 @@ protected:
 
             m_grid->AutoSizeColumns( false );
         }
+
+        m_grid->AutoSizeColumns( false );
     }
 
     bool supportsVisibilityColumn() override
@@ -288,10 +285,11 @@ void PANEL_SYM_LIB_TABLE::setupGrid( WX_GRID* aGrid )
                 m_parent, aGrid, &cfg->m_lastSymbolLibDir, true, m_project->GetProjectPath(),
                 []( WX_GRID* grid, int row ) -> wxString
                 {
-                    auto* libTable = static_cast<SYMBOL_LIB_TABLE_GRID*>( grid->GetTable() );
-                    auto* tableRow = static_cast<SYMBOL_LIB_TABLE_ROW*>( libTable->at( row ) );
+                    auto libTable = static_cast<SYMBOL_LIB_TABLE_GRID*>( grid->GetTable() );
+                    LIBRARY_TABLE_ROW& tableRow = libTable->at( row );
+                    SCH_IO_MGR::SCH_FILE_T pi_type = SCH_IO_MGR::EnumFromStr( tableRow.Type() );
 
-                    IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( tableRow->GetFileType() ) );
+                    IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( pi_type ) );
 
                     if( pi )
                     {
@@ -335,20 +333,17 @@ void PANEL_SYM_LIB_TABLE::setupGrid( WX_GRID* aGrid )
 };
 
 
-PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PROJECT* aProject,
-                                          SYMBOL_LIB_TABLE* aGlobalTable,
-                                          const wxString& aGlobalTablePath,
-                                          SYMBOL_LIB_TABLE* aProjectTable,
-                                          const wxString& aProjectTablePath ) :
+PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PROJECT* aProject ) :
         PANEL_SYM_LIB_TABLE_BASE( aParent ),
-        m_globalTable( aGlobalTable ),
-        m_projectTable( aProjectTable ),
         m_project( aProject ),
         m_parent( aParent )
 {
+    std::optional<LIBRARY_TABLE*> table =
+        Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::GLOBAL );
+    wxASSERT( table );
     // wxGrid only supports user owned tables if they exist past end of ~wxGrid(),
     // so make it a grid owned table.
-    m_global_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *m_globalTable ), true );
+    m_global_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *table.value() ) );
 
     for( const SCH_IO_MGR::SCH_FILE_T& type : SCH_IO_MGR::SCH_FILE_T_vector )
     {
@@ -371,9 +366,12 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
 
     setupGrid( m_global_grid );
 
-    if( m_projectTable )
+    std::optional<LIBRARY_TABLE*> projectTable =
+            Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::PROJECT );
+
+    if( projectTable )
     {
-        m_project_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *m_projectTable ), true );
+        m_project_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *projectTable.value() ), true );
         setupGrid( m_project_grid );
     }
     else
@@ -563,45 +561,6 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
 
                     return false;
                 }
-            }
-        }
-    }
-
-    for( SYMBOL_LIB_TABLE* table : { global_model(), project_model() } )
-    {
-        if( !table )
-            continue;
-
-        for( unsigned int r = 0; r < table->GetCount(); ++r )
-        {
-            SYMBOL_LIB_TABLE_ROW& row = dynamic_cast<SYMBOL_LIB_TABLE_ROW&>( table->At( r ) );
-
-            // Newly-added rows won't have set this yet
-            row.SetParent( table );
-
-            if( !row.GetIsEnabled() )
-                continue;
-
-            try
-            {
-                if( row.Refresh() )
-                {
-                    if( table == global_model() )
-                        m_parent->m_GlobalTableChanged = true;
-                    else
-                        m_parent->m_ProjectTableChanged = true;
-                }
-            }
-            catch( const IO_ERROR& ioe )
-            {
-                msg.Printf( _( "Symbol library '%s' failed to load." ), row.GetNickName() );
-
-                wxWindow* topLevelParent = wxGetTopLevelParent( this );
-                wait.reset();
-                wxMessageDialog errdlg( topLevelParent, msg + wxS( "\n" ) + ioe.What(), _( "Error Loading Library" ) );
-                errdlg.ShowModal();
-
-                return true;
             }
         }
     }
@@ -809,7 +768,15 @@ void PANEL_SYM_LIB_TABLE::moveUpHandler( wxCommandEvent& event )
     m_cur_grid->OnMoveRowUp(
             [&]( int row )
             {
-                cur_model()->ChangeRowOrder( row, -1 );
+                SYMBOL_LIB_TABLE_GRID* tbl = cur_model();
+                int curRow = m_cur_grid->GetGridCursorRow();
+
+                std::vector<LIBRARY_TABLE_ROW>& rows = tbl->Table().Rows();
+
+                auto current = rows.begin() + curRow;
+                auto prev    = rows.begin() + curRow - 1;
+
+                std::iter_swap( current, prev );
 
                 // Update the wxGrid
                 wxGridTableMessage msg( cur_model(), wxGRIDTABLE_NOTIFY_ROWS_INSERTED, row - 1, 0 );
@@ -823,7 +790,14 @@ void PANEL_SYM_LIB_TABLE::moveDownHandler( wxCommandEvent& event )
     m_cur_grid->OnMoveRowDown(
             [&]( int row )
             {
-                cur_model()->ChangeRowOrder( row, 1 );
+                SYMBOL_LIB_TABLE_GRID* tbl = cur_model();
+                int curRow = m_cur_grid->GetGridCursorRow();
+                std::vector<LIBRARY_TABLE_ROW>& rows = tbl->Table().Rows();
+
+                auto current = rows.begin() + curRow;
+                auto next    = rows.begin() + curRow + 1;
+
+                std::iter_swap( current, next );
 
                 // Update the wxGrid
                 wxGridTableMessage msg( cur_model(), wxGRIDTABLE_NOTIFY_ROWS_INSERTED, row, 0 );
@@ -845,7 +819,6 @@ void PANEL_SYM_LIB_TABLE::onReset( wxCommandEvent& event )
         return;
     }
 
-
     DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG dlg( m_parent );
 
     if( dlg.ShowModal() == wxID_OK )
@@ -855,7 +828,12 @@ void PANEL_SYM_LIB_TABLE::onReset( wxCommandEvent& event )
         wxGridTableBase* table = m_global_grid->GetTable();
         m_global_grid->DestroyTable( table );
 
-        m_global_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *m_globalTable ), true );
+        std::optional<LIBRARY_TABLE*> newTable =
+                Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
+                                                 LIBRARY_TABLE_SCOPE::GLOBAL );
+        wxASSERT( newTable );
+
+        m_global_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *newTable.value() ) );
         m_global_grid->PopEventHandler( true );
         setupGrid( m_global_grid );
         m_parent->m_GlobalTableChanged = true;
@@ -1001,16 +979,29 @@ bool PANEL_SYM_LIB_TABLE::TransferDataFromWindow()
     if( !verifyTables() )
         return false;
 
-    if( *global_model() != *m_globalTable )
+    std::optional<LIBRARY_TABLE*> optTable =
+        Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::GLOBAL );
+    wxCHECK( optTable, false );
+    LIBRARY_TABLE* globalTable = *optTable;
+
+    if( global_model()->Table() != *globalTable )
     {
         m_parent->m_GlobalTableChanged = true;
-        m_globalTable->TransferRows( global_model()->m_rows );
+        *globalTable = global_model()->Table();
     }
 
-    if( project_model() && *project_model() != *m_projectTable )
+    optTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
+                                                LIBRARY_TABLE_SCOPE::PROJECT );
+
+    if( optTable && project_model() )
     {
-        m_parent->m_ProjectTableChanged = true;
-        m_projectTable->TransferRows( project_model()->m_rows );
+        LIBRARY_TABLE* projectTable = *optTable;
+
+        if( project_model()->Table() != *projectTable )
+        {
+            m_parent->m_ProjectTableChanged = true;
+            *projectTable = project_model()->Table();
+        }
     }
 
     return true;
@@ -1057,7 +1048,7 @@ void PANEL_SYM_LIB_TABLE::populateEnvironReadOnlyTable()
     // not used yet.  It is automatically set by KiCad to the directory holding
     // the current project.
     unique.insert( PROJECT_VAR_NAME );
-    unique.insert( SYMBOL_LIB_TABLE::GlobalPathEnvVariableName() );
+    unique.insert( ENV_VAR::GetVersionedEnvVarName( wxS( "SYMBOL_DIR" ) ) );
 
     for( const wxString& evName : unique )
     {
@@ -1098,19 +1089,19 @@ void PANEL_SYM_LIB_TABLE::onSizeGrid( wxSizeEvent& event )
 
 SYMBOL_LIB_TABLE_GRID* PANEL_SYM_LIB_TABLE::global_model() const
 {
-    return (SYMBOL_LIB_TABLE_GRID*) m_global_grid->GetTable();
+    return static_cast<SYMBOL_LIB_TABLE_GRID*>( m_global_grid->GetTable() );
 }
 
 
 SYMBOL_LIB_TABLE_GRID* PANEL_SYM_LIB_TABLE::project_model() const
 {
-    return m_project_grid ? (SYMBOL_LIB_TABLE_GRID*) m_project_grid->GetTable() : nullptr;
+    return m_project_grid ? static_cast<SYMBOL_LIB_TABLE_GRID*>( m_project_grid->GetTable() ) : nullptr;
 }
 
 
 SYMBOL_LIB_TABLE_GRID* PANEL_SYM_LIB_TABLE::cur_model() const
 {
-    return (SYMBOL_LIB_TABLE_GRID*) m_cur_grid->GetTable();
+    return static_cast<SYMBOL_LIB_TABLE_GRID*>( m_cur_grid->GetTable() );
 }
 
 
@@ -1119,25 +1110,12 @@ size_t PANEL_SYM_LIB_TABLE::m_pageNdx = 0;
 
 void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
 {
-    auto* symbolEditor = (SYMBOL_EDIT_FRAME*) aKiway->Player( FRAME_SCH_SYMBOL_EDITOR, false );
-
-    SYMBOL_LIB_TABLE* globalTable = &SYMBOL_LIB_TABLE::GetGlobalLibTable();
-    wxString          globalTablePath = SYMBOL_LIB_TABLE::GetGlobalTableFileName();
-    SYMBOL_LIB_TABLE* projectTable = nullptr;
-    wxString          projectPath = aKiway->Prj().GetProjectPath();
-    wxFileName        projectTableFn( projectPath, SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
-    wxString          msg;
-    wxString          currentLib;
-
-    // TODO(JE)
-    // Don't allow editing project tables if no project is open
-    // if( !aKiway->Prj().IsNullProject() )
-    //     projectTable = PROJECT_SCH::SchSymbolLibTable( &aKiway->Prj() );
+    auto symbolEditor = static_cast<SYMBOL_EDIT_FRAME*>( aKiway->Player( FRAME_SCH_SYMBOL_EDITOR,
+                                                                         false ) );
+    wxString msg;
 
     if( symbolEditor )
     {
-        currentLib = symbolEditor->GetCurLib();
-
         // This prevents an ugly crash on OSX (https://bugs.launchpad.net/kicad/+bug/1765286)
         symbolEditor->FreezeLibraryTree();
 
@@ -1159,8 +1137,7 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
     DIALOG_EDIT_LIBRARY_TABLES dlg( aParent, _( "Symbol Libraries" ) );
     dlg.SetKiway( &dlg, aKiway );
 
-    dlg.InstallPanel( new PANEL_SYM_LIB_TABLE( &dlg, &aKiway->Prj(), globalTable, globalTablePath,
-                                               projectTable, projectTableFn.GetFullPath() ) );
+    dlg.InstallPanel( new PANEL_SYM_LIB_TABLE( &dlg, &aKiway->Prj() ) );
 
     if( dlg.ShowModal() == wxID_CANCEL )
     {
@@ -1172,28 +1149,31 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
 
     if( dlg.m_GlobalTableChanged )
     {
-        try
-        {
-            globalTable->Save( globalTablePath );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            msg.Printf( _( "Error saving global library table:\n\n%s" ), ioe.What() );
-            wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
-        }
+        std::optional<LIBRARY_TABLE*> optTable =
+                Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::GLOBAL );
+        wxCHECK( optTable, /* void */ );
+        LIBRARY_TABLE* globalTable = *optTable;
+
+        Pgm().GetLibraryManager().Save( globalTable ).map_error(
+            []( const LIBRARY_ERROR& aError )
+            {
+                wxMessageBox( wxString::Format( _( "Error saving global library table:\n\n%s" ), aError.message ),
+                              _( "File Save Error" ), wxOK | wxICON_ERROR );
+            } );
     }
+
+    std::optional<LIBRARY_TABLE*> projectTable =
+            Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::PROJECT );
 
     if( projectTable && dlg.m_ProjectTableChanged )
     {
-        try
-        {
-            projectTable->Save( projectTableFn.GetFullPath() );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            msg.Printf( _( "Error saving project-specific library table:\n\n%s" ), ioe.What() );
-            wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
-        }
+        Pgm().GetLibraryManager().Save( *projectTable ).map_error(
+            []( const LIBRARY_ERROR& aError )
+            {
+                wxMessageBox( wxString::Format( _( "Error saving project-specific library table:\n\n%s" ),
+                                                aError.message ),
+                              _( "File Save Error" ), wxOK | wxICON_ERROR );
+            } );
     }
 
     if( symbolEditor )

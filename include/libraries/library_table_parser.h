@@ -65,6 +65,8 @@ public:
 
     tl::expected<LIBRARY_TABLE_IR, LIBRARY_PARSE_ERROR> Parse( const std::filesystem::path& aPath );
 
+    tl::expected<LIBRARY_TABLE_IR, LIBRARY_PARSE_ERROR> ParseBuffer( const std::string& aBuffer );
+
 private:
 
 };

@@ -36,9 +36,7 @@ class PANEL_SYM_LIB_TABLE : public PANEL_SYM_LIB_TABLE_BASE
 {
 
 public:
-    PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PROJECT* m_project,
-                         SYMBOL_LIB_TABLE* aGlobal, const wxString& aGlobalTablePath,
-                         SYMBOL_LIB_TABLE* aProject, const wxString& aProjectTablePath );
+    PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PROJECT* m_project );
     virtual ~PANEL_SYM_LIB_TABLE();
 
 private:
@@ -84,10 +82,6 @@ private:
      */
     bool allowAutomaticPluginTypeSelection( wxString& aLibraryPath );
 
-private:
-    // Caller's tables are modified only on OK button and successful verification.
-    SYMBOL_LIB_TABLE*           m_globalTable;
-    SYMBOL_LIB_TABLE*           m_projectTable;
     PROJECT*                    m_project;
 
     DIALOG_EDIT_LIBRARY_TABLES* m_parent;

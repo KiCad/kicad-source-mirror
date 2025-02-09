@@ -57,18 +57,38 @@ public:
 
     LIBRARY_TABLE_ROW() = default;
 
+    bool operator==( const LIBRARY_TABLE_ROW& aOther ) const;
+
+    void SetNickname( const wxString& aNickname ) { m_nickname = aNickname; }
     const wxString& Nickname() const { return m_nickname; }
+
+    void SetURI( const wxString& aUri ) { m_uri = aUri; }
     const wxString& URI() const { return m_uri; }
+
+    void SetType( const wxString& aType ) { m_type = aType; }
     const wxString& Type() const { return m_type; }
+
+    void SetOptions( const wxString& aOptions ) { m_options = aOptions; }
     const wxString& Options() const { return m_options; }
+
+    void SetDescription( const wxString& aDescription ) { m_description = aDescription; }
     const wxString& Description() const { return m_description; }
+
+    void SetScope( LIBRARY_TABLE_SCOPE aScope ) { m_scope = aScope; }
     LIBRARY_TABLE_SCOPE Scope() const { return m_scope; }
+
+    void SetDisabled( bool aDisabled = true ) { m_disabled = aDisabled; }
     bool Disabled() const { return m_disabled; }
+
+    void SetHidden( bool aHidden = true ) { m_hidden = aHidden; }
     bool Hidden() const { return m_hidden; }
 
     std::map<std::string, UTF8> GetOptionsMap() const;
 
+    void SetOk( bool aOk = true ) { m_ok = aOk; }
     bool IsOk() const { return m_ok; }
+
+    void SetErrorDescription( const wxString& aDescription ) { m_errorDescription = aDescription; }
     const wxString& ErrorDescription() const { return m_errorDescription; }
 
 private:
@@ -84,6 +104,10 @@ private:
     wxString m_errorDescription;
     LIBRARY_TABLE_SCOPE m_scope = LIBRARY_TABLE_SCOPE::UNINITIALIZED;
 };
+
+
+typedef std::vector<LIBRARY_TABLE_ROW>::iterator       LIBRARY_TABLE_ROWS_ITER;
+typedef std::vector<LIBRARY_TABLE_ROW>::const_iterator LIBRARY_TABLE_ROWS_CITER;
 
 
 class KICOMMON_API LIBRARY_TABLE
@@ -105,14 +129,16 @@ public:
 
     ~LIBRARY_TABLE() = default;
 
-    // TODO move out of this class
-    void LoadNestedTables();
+    bool operator==( const LIBRARY_TABLE& aOther ) const;
 
     const wxString& Path() const { return m_path; }
     void SetPath( const wxString &aPath ) { m_path = aPath; }
 
     LIBRARY_TABLE_TYPE Type() const { return m_type; }
     void SetType( const LIBRARY_TABLE_TYPE aType ) { m_type = aType; }
+
+    void SetScope( LIBRARY_TABLE_SCOPE aScope ) { m_scope = aScope; }
+    LIBRARY_TABLE_SCOPE Scope() const { return m_scope; }
 
     std::optional<int> Version() const{ return m_version; }
     void SetVersion( const std::optional<int> &aVersion ) { m_version = aVersion; }
@@ -122,8 +148,6 @@ public:
 
     const std::vector<LIBRARY_TABLE_ROW>& Rows() const { return m_rows; }
     std::vector<LIBRARY_TABLE_ROW>& Rows() { return m_rows; }
-
-    const std::map<wxString, std::unique_ptr<LIBRARY_TABLE>>& Children() { return m_children; }
 
     void Format( OUTPUTFORMATTER* aOutput ) const;
 
@@ -146,8 +170,6 @@ private:
     wxString m_errorDescription;
 
     std::vector<LIBRARY_TABLE_ROW> m_rows;
-
-    std::map<wxString, std::unique_ptr<LIBRARY_TABLE>> m_children;
 };
 
 #endif //LIBRARY_TABLE_H

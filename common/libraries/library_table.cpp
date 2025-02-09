@@ -18,8 +18,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <unordered_set>
-
 #include <boost/lexical_cast.hpp>
 
 #include <lib_table_base.h>
@@ -29,6 +27,19 @@
 #include <trace_helpers.h>
 #include <wx_filename.h>
 #include <xnode.h>
+
+
+bool LIBRARY_TABLE_ROW::operator==( const LIBRARY_TABLE_ROW& aOther ) const
+{
+    return m_scope == aOther.m_scope
+            && m_nickname == aOther.m_nickname
+            && m_uri == aOther.m_uri
+            && m_type == aOther.m_type
+            && m_options == aOther.m_options
+            && m_description == aOther.m_description
+            && m_disabled == aOther.m_disabled
+            && m_hidden == aOther.m_hidden;
+}
 
 
 std::map<std::string, UTF8> LIBRARY_TABLE_ROW::GetOptionsMap() const
@@ -46,8 +57,7 @@ LIBRARY_TABLE::LIBRARY_TABLE( const wxFileName &aPath, LIBRARY_TABLE_SCOPE aScop
     WX_FILENAME::ResolvePossibleSymlinks( file );
     m_path = file.GetAbsolutePath();
 
-    tl::expected<LIBRARY_TABLE_IR, LIBRARY_PARSE_ERROR> ir =
-            parser.Parse( m_path.ToStdString() );
+    tl::expected<LIBRARY_TABLE_IR, LIBRARY_PARSE_ERROR> ir = parser.Parse( m_path.ToStdString() );
 
     if( ir.has_value() )
     {
@@ -62,10 +72,33 @@ LIBRARY_TABLE::LIBRARY_TABLE( const wxFileName &aPath, LIBRARY_TABLE_SCOPE aScop
 
 
 LIBRARY_TABLE::LIBRARY_TABLE( const wxString &aBuffer, LIBRARY_TABLE_SCOPE aScope ) :
+        m_path( wxEmptyString ),
         m_scope( aScope )
 {
-    m_ok = false;
-    // TODO
+    LIBRARY_TABLE_PARSER parser;
+
+    tl::expected<LIBRARY_TABLE_IR, LIBRARY_PARSE_ERROR> ir =
+            parser.ParseBuffer( aBuffer.ToStdString() );
+
+    if( ir.has_value() )
+    {
+        m_ok = initFromIR( *ir );
+    }
+    else
+    {
+        m_ok = false;
+        m_errorDescription = ir.error().description;
+    }
+}
+
+
+bool LIBRARY_TABLE::operator==( const LIBRARY_TABLE& aOther ) const
+{
+    return m_path == aOther.m_path
+            && m_scope == aOther.m_scope
+            && m_type == aOther.m_type
+            && m_version == aOther.m_version
+            && m_rows == aOther.m_rows;
 }
 
 
@@ -108,56 +141,9 @@ bool LIBRARY_TABLE::addRowFromIR( const LIBRARY_TABLE_ROW_IR& aIR )
 }
 
 
-// TODO(JE) this shouldn't be called from ctor and probably shouldn't be in LIBRARY_TABLE at all,
-// but instead in LIBRARY_MANAGER - just opening one LIBRARY_TABLE shouldn't necessarily attempt a
-// load on all the child tables
-void LIBRARY_TABLE::LoadNestedTables()
-{
-    std::unordered_set<wxString> seenTables;
-
-    std::function<void(LIBRARY_TABLE&)> processOneTable =
-        [&]( LIBRARY_TABLE& aTable )
-        {
-            seenTables.insert( aTable.Path() );
-
-            for( LIBRARY_TABLE_ROW& row : aTable.m_rows )
-            {
-                if( row.m_type == wxT( "Table" ) )
-                {
-                    wxFileName file( row.m_uri );
-
-                    // URI may be relative to parent
-                    file.MakeAbsolute( wxFileName( aTable.Path() ).GetPath() );
-
-                    WX_FILENAME::ResolvePossibleSymlinks( file );
-                    wxString src = file.GetFullPath();
-
-                    if( seenTables.contains( src ) )
-                    {
-                        wxLogTrace( traceLibraries, "Library table %s has already been loaded!",
-                                    src );
-                        row.m_ok = false;
-                        row.m_errorDescription = _( "A reference to this library table already exists" );
-                        continue;
-                    }
-
-                    auto child = std::make_unique<LIBRARY_TABLE>( file, m_scope );
-
-                    processOneTable( *child );
-
-                    aTable.m_children.insert( { row.m_nickname, std::move( child ) } );
-                }
-            }
-        };
-
-    processOneTable( *this );
-}
-
-
 void LIBRARY_TABLE::Format( OUTPUTFORMATTER* aOutput ) const
 {
-    if( !IsOk() )
-        return;
+    wxCHECK_MSG( IsOk(), /* void */, "Don't attempt to format a table that isn't OK!" );
 
     static const std::map<LIBRARY_TABLE_TYPE, wxString> types = {
         { LIBRARY_TABLE_TYPE::SYMBOL, "sym_lib_table" },

@@ -165,9 +165,7 @@ std::optional<LIB_DATA*> SYMBOL_LIBRARY_MANAGER_ADAPTER::fetchIfLoaded(
 
 wxString SYMBOL_LIBRARY_MANAGER_ADAPTER::getUri( const LIBRARY_TABLE_ROW* aRow )
 {
-    wxFileName path( ExpandEnvVarSubstitutions( aRow->URI(), &Pgm().GetSettingsManager().Prj() ) );
-    path.MakeAbsolute();
-    return path.GetFullPath();
+    return LIBRARY_MANAGER::ExpandURI( aRow->URI(), Pgm().GetSettingsManager().Prj() );
 }
 
 
@@ -367,7 +365,7 @@ void SYMBOL_LIBRARY_MANAGER_ADAPTER::AsyncLoad()
                     {
                         lib->plugin->EnumerateSymbolLib( dummyList, getUri( lib->row ), &options );
                         // TODO(JE) remove testing delay
-                        std::this_thread::sleep_for( std::chrono::milliseconds( 500 ) );
+                        //std::this_thread::sleep_for( std::chrono::milliseconds( 500 ) );
                         lib->status.load_status = LOAD_STATUS::LOADED;
                     }
                     catch( IO_ERROR& e )
@@ -504,8 +502,8 @@ std::optional<wxString> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetLibraryDescription( c
 bool SYMBOL_LIBRARY_MANAGER_ADAPTER::HasLibrary( const wxString& aNickname,
                                                  bool aCheckEnabled ) const
 {
-    if( std::optional<const LIB_DATA*> r = fetchIfLoaded( aNickname ); const LIB_DATA* lib = *r )
-        return !aCheckEnabled || !lib->row->Disabled();
+    if( std::optional<const LIB_DATA*> r = fetchIfLoaded( aNickname ); r.has_value() )
+        return !aCheckEnabled || !( *r )->row->Disabled();
 
     return false;
 }
@@ -513,9 +511,11 @@ bool SYMBOL_LIBRARY_MANAGER_ADAPTER::HasLibrary( const wxString& aNickname,
 
 std::optional<LIB_STATUS> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetLibraryStatus( const wxString& aNickname ) const
 {
-    // TODO(JE) should return status even if not loaded, so don't use fetchIfLoaded
-    if( std::optional<const LIB_DATA*> result = fetchIfLoaded( aNickname ) )
-        return ( *result )->status;
+    if( m_libraries.contains( aNickname ) )
+        return m_libraries.at( aNickname ).status;
+
+    if( GlobalLibraries.contains( aNickname ) )
+        return GlobalLibraries.at( aNickname ).status;
 
     return std::nullopt;
 }

@@ -103,9 +103,6 @@ BOOST_AUTO_TEST_CASE( ParseAndConstruct )
                                    wxString::Format( "Expected error '%s' but got '%s'",
                                                      expected_error, table.ErrorDescription() ) );
 
-            // TODO this should move to manager test suite
-            table.LoadNestedTables();
-
             // Non-parsed tables can't be formatted
             if( !table.IsOk() )
                 continue;
@@ -141,7 +138,7 @@ BOOST_AUTO_TEST_CASE( Manager )
     LIBRARY_MANAGER manager;
     manager.LoadGlobalTables();
 
-    BOOST_REQUIRE( manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL ).size() == 2 );
+    BOOST_REQUIRE( manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL ).size() == 3 );
     BOOST_REQUIRE( manager.Rows( LIBRARY_TABLE_TYPE::FOOTPRINT ).size() == 146 );
 }
 

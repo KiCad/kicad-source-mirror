@@ -699,7 +699,7 @@ void GRID_TRICKS::paste_clipboard()
 {
     wxLogNull doNotLog; // disable logging of failed clipboard actions
 
-    if( m_grid->IsEditable() && wxTheClipboard->Open() )
+    if( m_grid->IsEditable() && ( wxTheClipboard->IsOpened() || wxTheClipboard->Open() ) )
     {
         if( wxTheClipboard->IsSupported( wxDF_TEXT )
             || wxTheClipboard->IsSupported( wxDF_UNICODETEXT ) )

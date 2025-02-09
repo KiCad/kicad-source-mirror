@@ -20,7 +20,7 @@
 #ifndef __LIB_TABLE_GRID_H__
 #define __LIB_TABLE_GRID_H__
 
-#include <lib_table_base.h>
+#include <libraries/library_table.h>
 #include <string_utils.h>
 #include <wx/grid.h>
 
@@ -61,19 +61,22 @@ public:
 
     wxString GetValue( int aRow, int aCol ) override
     {
-        if( aRow < (int) size() )
+        wxCHECK( aRow >= 0, wxEmptyString );
+        size_t row = static_cast<size_t>( aRow );
+
+        if( row < size() )
         {
-            const LIB_TABLE_ROW* r  = at( (size_t) aRow );
+            const LIBRARY_TABLE_ROW& r = at( row );
 
             switch( aCol )
             {
-            case COL_NICKNAME: return UnescapeString( r->GetNickName() );
-            case COL_URI:      return r->GetFullURI();
-            case COL_TYPE:     return r->GetType();
-            case COL_OPTIONS:  return r->GetOptions();
-            case COL_DESCR:    return r->GetDescr();
-            case COL_ENABLED:  return r->GetIsEnabled() ? wxT( "1" ) : wxT( "0" );
-            case COL_VISIBLE:  return r->GetIsVisible() ? wxT( "1" ) : wxT( "0" );
+            case COL_NICKNAME: return UnescapeString( r.Nickname() );
+            case COL_URI:      return r.URI();
+            case COL_TYPE:     return r.Type();
+            case COL_OPTIONS:  return r.Options();
+            case COL_DESCR:    return r.Description();
+            case COL_ENABLED:  return r.Disabled() ? wxT( "0" ) : wxT( "1" );
+            case COL_VISIBLE:  return r.Hidden() ? wxT( "0" ) : wxT( "1" );
             default:           return wxEmptyString;
             }
         }
@@ -101,39 +104,48 @@ public:
 
     bool GetValueAsBool( int aRow, int aCol ) override
     {
-        if( aRow < (int) size() && aCol == COL_ENABLED )
-            return at( (size_t) aRow )->GetIsEnabled();
-        else if( aRow < (int) size() && aCol == COL_VISIBLE )
-            return at( (size_t) aRow )->GetIsVisible();
+        wxCHECK( aRow >= 0, false );
+        size_t row = static_cast<size_t>( aRow );
+
+        if( row < size() && aCol == COL_ENABLED )
+            return !at( row ).Disabled();
+        else if( row < size() && aCol == COL_VISIBLE )
+            return !at( row ).Hidden();
         else
             return false;
     }
 
     void SetValue( int aRow, int aCol, const wxString& aValue ) override
     {
-        if( aRow < (int) size() )
+        wxCHECK( aRow >= 0, /* void */ );
+        size_t row = static_cast<size_t>( aRow );
+
+        if( row < size() )
         {
-            LIB_TABLE_ROW* r  = at( (size_t) aRow );
+            LIBRARY_TABLE_ROW& r = at( row );
 
             switch( aCol )
             {
-            case COL_NICKNAME: r->SetNickName( EscapeString( aValue, CTX_LIBID ) ); break;
-            case COL_URI:      r->SetFullURI( aValue );                             break;
-            case COL_TYPE:     r->SetType( aValue  );                               break;
-            case COL_OPTIONS:  r->SetOptions( aValue );                             break;
-            case COL_DESCR:    r->SetDescr( aValue );                               break;
-            case COL_ENABLED:  r->SetEnabled( aValue == wxT( "1" ) );               break;
-            case COL_VISIBLE:  r->SetVisible( aValue == wxT( "1" ) );               break;
+            case COL_NICKNAME: r.SetNickname( EscapeString( aValue, CTX_LIBID ) );  break;
+            case COL_URI:      r.SetURI( aValue );                                  break;
+            case COL_TYPE:     r.SetType( aValue  );                                break;
+            case COL_OPTIONS:  r.SetOptions( aValue );                              break;
+            case COL_DESCR:    r.SetDescription( aValue );                          break;
+            case COL_ENABLED:  r.SetDisabled( aValue == wxT( "0" ) );               break;
+            case COL_VISIBLE:  r.SetHidden( aValue == wxT( "0" ) );                 break;
             }
         }
     }
 
     void SetValueAsBool( int aRow, int aCol, bool aValue ) override
     {
-        if( aRow < (int) size() && aCol == COL_ENABLED )
-            at( (size_t) aRow )->SetEnabled( aValue );
-        else if( aRow < (int) size() && aCol == COL_VISIBLE )
-            at( (size_t) aRow )->SetVisible( aValue );
+        wxCHECK( aRow >= 0, /* void */ );
+        size_t row = static_cast<size_t>( aRow );
+
+        if( row < size() && aCol == COL_ENABLED )
+            at( row ).SetDisabled( !aValue );
+        else if( row < size() && aCol == COL_VISIBLE )
+            at( row ).SetHidden( !aValue );
     }
 
     bool IsEmptyCell( int aRow, int aCol ) override
@@ -188,7 +200,7 @@ public:
         // aPos+aNumRows may wrap here, so both ends of the range are tested.
         if( aPos < size() && aPos + aNumRows <= size() )
         {
-            LIB_TABLE_ROWS_ITER start = begin() + aPos;
+            LIBRARY_TABLE_ROWS_ITER start = begin() + aPos;
             erase( start, start + aNumRows );
 
             if( GetView() )
@@ -225,33 +237,35 @@ public:
     {
         for( size_t i = 0; i < size(); ++i )
         {
-            LIB_TABLE_ROW* row = at( i );
+            LIBRARY_TABLE_ROW& row = at( i );
 
-            if( row->GetNickName() == aNickname )
+            if( row.Nickname() == aNickname )
                 return true;
         }
         return false;
     }
 
-    LIB_TABLE_ROW* At( size_t aIndex )
+    LIBRARY_TABLE_ROW& At( size_t aIndex )
     {
         return at( aIndex );
     }
 
 protected:
-    virtual LIB_TABLE_ROW* at( size_t aIndex ) = 0;
+    virtual LIBRARY_TABLE_ROW& at( size_t aIndex ) = 0;
 
     virtual size_t size() const = 0;
 
-    virtual LIB_TABLE_ROW* makeNewRow() = 0;
+    virtual LIBRARY_TABLE_ROW makeNewRow() = 0;
 
-    virtual LIB_TABLE_ROWS_ITER begin() = 0;
+    virtual LIBRARY_TABLE_ROWS_ITER begin() = 0;
 
-    virtual LIB_TABLE_ROWS_ITER insert( LIB_TABLE_ROWS_ITER aIterator, LIB_TABLE_ROW* aRow ) = 0;
+    virtual LIBRARY_TABLE_ROWS_ITER insert( LIBRARY_TABLE_ROWS_ITER aIterator,
+                                            const LIBRARY_TABLE_ROW& aRow ) = 0;
 
-    virtual void push_back( LIB_TABLE_ROW* aRow ) = 0;
+    virtual void push_back( const LIBRARY_TABLE_ROW& aRow ) = 0;
 
-    virtual LIB_TABLE_ROWS_ITER erase( LIB_TABLE_ROWS_ITER aFirst, LIB_TABLE_ROWS_ITER aLast ) = 0;
+    virtual LIBRARY_TABLE_ROWS_ITER erase( LIBRARY_TABLE_ROWS_ITER aFirst,
+                                           LIBRARY_TABLE_ROWS_ITER aLast ) = 0;
 };
 
 
