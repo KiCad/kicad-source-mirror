@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-08 00:06+0300\n"
-"PO-Revision-Date: 2025-02-03 00:02+0000\n"
+"PO-Revision-Date: 2025-02-10 02:02+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5562,9 +5562,8 @@ msgid "Could not use OpenGL"
 msgstr "Kunde inte använda OpenGL"
 
 #: common/draw_panel_gal.cpp:543
-#, fuzzy
 msgid "Error switching GAL backend"
-msgstr "Fel vid byte av GAL-backend"
+msgstr "Fel vid byte av grafikabstraktionslagrets grundsystem"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:558
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3399
@@ -5881,9 +5880,8 @@ msgid "Origins & Axes"
 msgstr "Origo & Koordinataxlar"
 
 #: common/eda_base_frame.cpp:1188
-#, fuzzy
 msgid "Footprint Defaults"
-msgstr "Fotavtrycksförinställningar / Förinställningar för fotavtryck"
+msgstr "Fotavtrycksförinställningar"
 
 #: common/eda_base_frame.cpp:1190
 msgid "Graphics Defaults"
@@ -8054,9 +8052,9 @@ msgid "Illegal character found in library nickname"
 msgstr "Otillåtet tecken hittades i bibliotekets kortnamn"
 
 #: common/lib_table_base.cpp:544
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get writer for %s"
-msgstr "Lyckades inte skriva träd: %s"
+msgstr "Lyckades inte få skrivanrop för %s"
 
 #: common/lib_table_grid_tricks.cpp:33
 msgid "Edit options..."
@@ -10720,9 +10718,8 @@ msgid "Unconnected wire endpoint"
 msgstr "Ej ansluten ledningsändpunkt"
 
 #: eeschema/connection_graph.cpp:3832
-#, fuzzy
 msgid "Unconnected wire to bus entry"
-msgstr "Ej ansluten ledningsändpunkt på buss"
+msgstr "Ej ansluten ledningsanslutning på buss"
 
 #: eeschema/connection_graph.cpp:4207
 #, c-format
@@ -15724,9 +15721,8 @@ msgid "Highlight netclass colors"
 msgstr "Markera nätklassfärger"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:144
-#, fuzzy
 msgid "Color highlight thickness:"
-msgstr "Linjebredd för markering:"
+msgstr "Markeringsfärgens bredd:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:152
 msgid "Color highlight opacity:"
@@ -16463,14 +16459,12 @@ msgid "Reset Libraries"
 msgstr "Återställ bibliotek"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:45
-#, fuzzy
 msgid "Project Field Name Templates"
 msgstr "Projektspecifika fältnamnsmallar"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:51
-#, fuzzy
 msgid "Global Field Name Templates"
-msgstr "Globala mallar för fältnamn"
+msgstr "Globala fältnamnsmallar"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:209
 #, c-format
@@ -18130,14 +18124,12 @@ msgid "Position Y"
 msgstr "Position Y"
 
 #: eeschema/sch_bitmap.cpp:326 pcbnew/pcb_reference_image.cpp:354
-#, fuzzy
 msgid "Transform Offset X"
-msgstr "Transformera valda objekt"
+msgstr "X-förskjutning av transformering"
 
 #: eeschema/sch_bitmap.cpp:333 pcbnew/pcb_reference_image.cpp:361
-#, fuzzy
 msgid "Transform Offset Y"
-msgstr "Transformera valda objekt"
+msgstr "Y-förskjutning av transformering"
 
 #: eeschema/sch_bus_entry.cpp:449
 msgid "Bus to Wire Entry"
@@ -20078,7 +20070,6 @@ msgid "Cancel Load"
 msgstr "Avbryt belastning"
 
 #: eeschema/sheet.cpp:317
-#, fuzzy
 msgid ""
 "There are hierarchical sheets in the loaded schematic file from an older "
 "file version resulting in  missing symbol instance data.  This will result "
@@ -20090,11 +20081,12 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 "Det öppnade kretsschemat innehåller hierarkiska ark från en äldre filversion "
-"som orsakar saknade data för symbolinstanser. Det resulterar i att alla "
-"symboler i det öppnade kretsschemat använder antingen förinställningar för "
-"instanser eller faller tillbaka på bibliotekets symbolinställningar. "
-"Problemet kan lösas genom att öppna det projekt som använder detta "
-"kretsschema och spara som senaste filversion.\n"
+"där data för symbolinstanser bara lagrades i rotarket och därför orsakar "
+"saknade data för symbolinstanser. Det resulterar i att alla symboler i det "
+"öppnade kretsschemat antingen använder förinställningar för instanser eller "
+"faller tillbaka på bibliotekets symbolinställningar. Problemet kan lösas "
+"genom att öppna det projekt som använder detta kretsschema och spara som "
+"senaste filversion.\n"
 "\n"
 "Vill du fortsätta?"
 
@@ -22497,9 +22489,8 @@ msgid "Place Junctions"
 msgstr "Placera knutpunkter"
 
 #: eeschema/tools/ee_actions.cpp:483
-#, fuzzy
 msgid "Place Wire to Bus Entries"
-msgstr "Lägg till post för ledningsanslutning till buss"
+msgstr "Lägg till ledningsanslutning till buss"
 
 #: eeschema/tools/ee_actions.cpp:493
 msgid "Place Net Labels"
@@ -23188,9 +23179,8 @@ msgid "Show operating point current data from simulation"
 msgstr "Visa data för arbetspunktsströmmar från simulation"
 
 #: eeschema/tools/ee_actions.cpp:1245
-#, fuzzy
 msgid "Show Pin Alternate Icons"
-msgstr "Visa stiftalternativsikoner"
+msgstr "Visa alternativa stiftikoner"
 
 #: eeschema/tools/ee_actions.cpp:1246
 msgid "Show indicator icons for pins with alternate modes"
@@ -26570,7 +26560,6 @@ msgid "version info format (plain, commit, about)"
 msgstr "format för versionsinformation (plain, commit, about)"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:33
-#, fuzzy
 msgid "Destination:"
 msgstr "Mål:"
 
@@ -26587,9 +26576,8 @@ msgid "Copy Files Job Settings"
 msgstr "Kopiera filens inställningar för åtgärd"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:48
-#, fuzzy
 msgid "Record output messages"
-msgstr "Spara utmatningsmeddelanden"
+msgstr "Spara utmatade meddelanden"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:51
 msgid "Ignore non-zero exit code"
@@ -26812,7 +26800,7 @@ msgstr "Generera alla utmatningar"
 
 #: kicad/dialogs/panel_jobset_base.h:133
 msgid "Job Output Run Log"
-msgstr ""
+msgstr "Logg för utmatningar från åtgärder"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:143
 msgid "Edit the project schematic"
@@ -28169,11 +28157,11 @@ msgstr "Skapa en ny katalog för projektet"
 
 #: libs/kimath/src/geometry/roundrect.cpp:60
 msgid "Roundrect radius is larger than the rectangle's major dimension"
-msgstr ""
+msgstr "Rundad rektangels hörnradie är större än sidans längd"
 
 #: libs/kimath/src/geometry/roundrect.cpp:65
 msgid "Roundrect radius must be non-negative"
-msgstr ""
+msgstr "Rundad rektangels hörnradie måste vara icke-negativ"
 
 #: libs/kiplatform/os/windows/environment.cpp:72
 #, c-format
@@ -28580,9 +28568,8 @@ msgid "Show Title Block in Edit Mode"
 msgstr "Visa namnruta i redigeringsläge"
 
 #: pagelayout_editor/tools/pl_actions.cpp:121
-#, fuzzy
 msgid "Text placeholders are shown as ${keyword} tokens"
-msgstr "Textplatshållare visas som ${keyword} tokens"
+msgstr "Textplatshållare visas som ${keyword} värdebärare"
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:533
 msgid "Error writing objects to clipboard"
@@ -35177,9 +35164,8 @@ msgid "Absolute"
 msgstr "Absolut"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:150
-#, fuzzy
 msgid "Zeros:"
-msgstr "Nollställen:"
+msgstr "Nollor:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:154
 msgid "Decimal format (recommended)"
@@ -35708,9 +35694,8 @@ msgid "Center on footprint"
 msgstr "Centrera på fotavtryck"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:254
-#, fuzzy
 msgid "Move footprint texts to the center of their parent"
-msgstr "Flytta fotavtrycks texter till centrum av deras förälder"
+msgstr "Flytta fotavtrycks texter till centrum av fotavtrycket de tillhör"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:83
 msgid "Filter tracks by width:"
@@ -36164,9 +36149,8 @@ msgid "Non Copper Zone Properties"
 msgstr "Egenskaper för icke-kopparzoner"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:26
-#, fuzzy
 msgid "Outset:"
-msgstr "Utanför"
+msgstr "Marginal:"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:30
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:79
@@ -36215,14 +36199,12 @@ msgid "Layer default"
 msgstr "Standardinställning för lager"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:92
-#, fuzzy
 msgid "Delete source items after outset"
-msgstr "Ta bort källobjekt efter konvertering"
+msgstr "Ta bort källobjekt efter att kontur skapats"
 
 #: pcbnew/dialogs/dialog_outset_items_base.h:77
-#, fuzzy
 msgid "Outset Items"
-msgstr "Textobjekt"
+msgstr "Skapa kontur"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:179
 #: pcbnew/dialogs/dialog_pad_properties_base.h:288 pcbnew/pad.cpp:2578
@@ -37668,12 +37650,10 @@ msgid "Reset this value to the original value."
 msgstr "Återställ detta värde till sitt ursprungliga värde."
 
 #: pcbnew/dialogs/dialog_set_offset_base.cpp:19
-#, fuzzy
 msgid "Set a new value for this offset:"
 msgstr "Sätt ett nytt värde för denna förskjutning:"
 
 #: pcbnew/dialogs/dialog_set_offset_base.h:63
-#, fuzzy
 msgid "Set Offset"
 msgstr "Sätt förskjutning"
 
@@ -37822,9 +37802,8 @@ msgstr "Lödmask"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:257
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:197
-#, fuzzy
 msgid "Expansion:"
-msgstr "Uteslutningar"
+msgstr "Frigång:"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:262
 msgid ""
@@ -39394,7 +39373,6 @@ msgid "Check rule syntax"
 msgstr "Kontrollera regelsyntax"
 
 #: pcbnew/dialogs/panel_setup_rules_help_10documentation.h:2
-#, fuzzy
 msgid ""
 "### Documentation\n"
 "\n"
@@ -39404,8 +39382,8 @@ msgstr ""
 "### Dokumentation\n"
 "\n"
 "För den fullständiga dokumentationen se [https://docs.kicad.org](https://"
-"docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew."
-"html#custom_design_rules)."
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
+"pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -40236,7 +40214,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_7properties.h:2
-#, fuzzy
 msgid ""
 "### Properties\n"
 "\n"
@@ -40250,9 +40227,9 @@ msgstr ""
 "### Egenskaper\n"
 "\n"
 "Många egenskaper för objekt är tillgängliga för test i uttryck för "
-"användardefinierade regler. Se den fullständinga dokumentationen på [https://"
-"docs.kicad.org](https://docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew."
-"html#custom_design_rules) för en fullständing lista.\n"
+"användardefinierade regler. Se den fullständinga dokumentationen på "
+"[https://docs.kicad.org](https://go.kicad.org/docs/GetMajorMinorVersion/en/"
+"pcbnew/pcbnew.html#custom_design_rules) för en fullständing lista.\n"
 "<br><br><br>\n"
 "\n"
 
@@ -41086,9 +41063,8 @@ msgid "Via diameter"
 msgstr "Via-diameter"
 
 #: pcbnew/drc/drc_item.cpp:147
-#, fuzzy
 msgid "Padstack is questionable"
-msgstr "Kragstapeln är inte giltig"
+msgstr "Kragstapeln är tveksam"
 
 #: pcbnew/drc/drc_item.cpp:151
 msgid "Padstack is not valid"
@@ -41882,7 +41858,7 @@ msgid "Checking board footprints against library..."
 msgstr "Kontrollerar kortets fotavtryck mot bibliotek..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:892
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' was not found."
 msgstr "Fotavtrycksbiblioteket '%s' hittades inte."
 
@@ -46484,9 +46460,9 @@ msgid "Wrote front position data to '%s'.\n"
 msgstr "Skrev framsidans placeringsdata till '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1442 pcbnew/pcbnew_jobs_handler.cpp:1521
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote back position data to '%s'.\n"
-msgstr "Skrev materiallistefil till '%s'"
+msgstr "Skrev baksidans positionsdata till '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1471
 #, c-format
@@ -48159,19 +48135,16 @@ msgid "Some of the polygons could not be intersected."
 msgstr "Det gick inte att ta snittet av vissa polygoner."
 
 #: pcbnew/tools/item_modification_routine.cpp:663
-#, fuzzy
 msgid "Outset items."
-msgstr "Andra saker"
+msgstr "Skapa kontur."
 
 #: pcbnew/tools/item_modification_routine.cpp:670
-#, fuzzy
 msgid "Unable to outset the selected items."
-msgstr "Det går inte att runda av de valda linjerna."
+msgstr "Kan inte skapa kontur kring de valda objekten."
 
 #: pcbnew/tools/item_modification_routine.cpp:674
-#, fuzzy
 msgid "Some of the items could not be outset."
-msgstr "Vissa av linjerna kunde inte rundas av."
+msgstr "Kunde inte skapa kontur kring vissa av objekten."
 
 #: pcbnew/tools/multichannel_tool.cpp:420
 msgid "Select a reference Rule Area to copy from..."
@@ -48317,14 +48290,12 @@ msgid "Creates tracks from the selected graphic lines"
 msgstr "Skapar ledare från de valda grafiska linjerna"
 
 #: pcbnew/tools/pcb_actions.cpp:96
-#, fuzzy
 msgid "Create Outsets from Selection"
-msgstr "Skapa från markering"
+msgstr "Skapa kontur kring valda objekt"
 
 #: pcbnew/tools/pcb_actions.cpp:97
-#, fuzzy
 msgid "Create outset lines from the selected item"
-msgstr "Skapar grafiska linjer från urvalet"
+msgstr "Skapa konturlinjer runt det valda objektet"
 
 #: pcbnew/tools/pcb_actions.cpp:159
 msgid "Add Board Characteristics"
