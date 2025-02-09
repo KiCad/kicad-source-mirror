@@ -202,6 +202,8 @@ static struct SCH_TABLECELL_DESC
         propMgr.Mask( TYPE_HASH( SCH_TABLECELL ), TYPE_HASH( EDA_TEXT ), _HKI( "Height" ) );
         propMgr.Mask( TYPE_HASH( SCH_TABLECELL ), TYPE_HASH( EDA_TEXT ), _HKI( "Thickness" ) );
         propMgr.Mask( TYPE_HASH( SCH_TABLECELL ), TYPE_HASH( EDA_TEXT ), _HKI( "Orientation" ) );
+        propMgr.Mask( TYPE_HASH( SCH_TABLECELL ), TYPE_HASH( EDA_TEXT ), _HKI( "Mirrored" ) );
+        propMgr.Mask( TYPE_HASH( SCH_TABLECELL ), TYPE_HASH( EDA_TEXT ), _HKI( "Visible" ) );
         propMgr.Mask( TYPE_HASH( SCH_TABLECELL ), TYPE_HASH( EDA_TEXT ), _HKI( "Hyperlink" ) );
     }
 } _SCH_TABLECELL_DESC;
