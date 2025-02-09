@@ -20,10 +20,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-08 00:06+0300\n"
-"PO-Revision-Date: 2025-02-03 00:02+0000\n"
+"PO-Revision-Date: 2025-02-10 02:02+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -15729,11 +15729,11 @@ msgstr "Korosta verkkoluokan värit"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:144
 msgid "Color highlight thickness:"
-msgstr "Värin korostuksen paksuus:"
+msgstr "Korostuksvärin paksuus:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:152
 msgid "Color highlight opacity:"
-msgstr "Värin korostuksen peittävyys:"
+msgstr "Korostuksvärin peittävyys:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:169
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:120
@@ -35661,7 +35661,7 @@ msgstr "Keskitä jalanjälkeen"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:254
 msgid "Move footprint texts to the center of their parent"
-msgstr "Siirrä jalanjälkitekstit vanhemman keskelle"
+msgstr "Siirrä jalanjälkitekstit jalanjäljen keskelle"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:83
 msgid "Filter tracks by width:"
@@ -36119,6 +36119,7 @@ msgid "Non Copper Zone Properties"
 msgstr "Ei Kupari Vyöhykkeen Ominaisuudet"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:26
+#, fuzzy
 msgid "Outset:"
 msgstr "Aloitus:"
 
@@ -36169,6 +36170,7 @@ msgid "Layer default"
 msgstr "Kerroksen oletukset"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:92
+#, fuzzy
 msgid "Delete source items after outset"
 msgstr "Poista lähdekohteet alun jälkeen"
 
@@ -47597,6 +47599,7 @@ msgid "Outset items."
 msgstr "Alkukohteet."
 
 #: pcbnew/tools/item_modification_routine.cpp:670
+#, fuzzy
 msgid "Unable to outset the selected items."
 msgstr "Valittuja kohteita ei voi aloittaa."
 
