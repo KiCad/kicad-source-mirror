@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-08 00:06+0300\n"
-"PO-Revision-Date: 2025-02-07 21:06+0000\n"
+"PO-Revision-Date: 2025-02-10 02:02+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -28379,10 +28379,11 @@ msgstr "Crie uma nova pasta para o projeto"
 #: libs/kimath/src/geometry/roundrect.cpp:60
 msgid "Roundrect radius is larger than the rectangle's major dimension"
 msgstr ""
+"O raio do arredondamento é maior do que a dimensão principal do retângulo"
 
 #: libs/kimath/src/geometry/roundrect.cpp:65
 msgid "Roundrect radius must be non-negative"
-msgstr ""
+msgstr "O raio de arredondamento deve ser não negativo"
 
 #: libs/kiplatform/os/windows/environment.cpp:72
 #, c-format
