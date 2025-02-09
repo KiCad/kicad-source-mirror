@@ -34,10 +34,9 @@
 
 CLI::PCB_EXPORT_GENCAD_COMMAND::PCB_EXPORT_GENCAD_COMMAND() : PCB_EXPORT_BASE_COMMAND( "gencad" )
 {
+    // TODO: Update string to remove reference to layers
     m_argParser.add_description( UTF8STDSTR( _( "Generate Gencad from a list of layers" ) ) );
 
-    addLayerArg( true );
-    addDrawingSheetArg();
     addDefineArg();
 
     m_argParser.add_argument( "-f", ARG_FLIP_BOTTOM_PADS )
