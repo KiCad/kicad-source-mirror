@@ -435,10 +435,10 @@ SCH_PIN* SYMBOL_EDITOR_PIN_TOOL::RepeatPin( const SCH_PIN* aSourcePin )
     switch( pin->GetOrientation() )
     {
     default:
-    case PIN_ORIENTATION::PIN_RIGHT: step.y = schIUScale.MilsToIU( -cfg->m_Repeat.pin_step ); break;
+    case PIN_ORIENTATION::PIN_RIGHT: step.y = schIUScale.MilsToIU( cfg->m_Repeat.pin_step );   break;
     case PIN_ORIENTATION::PIN_UP:    step.x = schIUScale.MilsToIU( cfg->m_Repeat.pin_step );  break;
     case PIN_ORIENTATION::PIN_DOWN:  step.x = schIUScale.MilsToIU( cfg->m_Repeat.pin_step) ;  break;
-    case PIN_ORIENTATION::PIN_LEFT:  step.y = schIUScale.MilsToIU( -cfg->m_Repeat.pin_step ); break;
+    case PIN_ORIENTATION::PIN_LEFT:  step.y = schIUScale.MilsToIU( cfg->m_Repeat.pin_step );   break;
     }
 
     pin->Move( step );
