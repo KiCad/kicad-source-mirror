@@ -81,6 +81,7 @@ private:
         // prepare curl
         aCurl->SetHeader( "Accept", "application/json" );
         aCurl->SetHeader( "Authorization", "Token " + m_source.token );
+        aCurl->SetFollowRedirects( true );
 
         return aCurl;
     }
