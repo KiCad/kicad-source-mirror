@@ -115,10 +115,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-08 00:06+0300\n"
-"PO-Revision-Date: 2025-02-04 09:03+0000\n"
+"PO-Revision-Date: 2025-02-10 02:02+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
-"source/it/>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
+"master-source/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30035,14 +30035,12 @@ msgstr ""
 "Soltanto per regolatori a 3 terminali, il piedino di regolazione corrente"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:278
-#, fuzzy
 msgid "Overall tolerance:"
-msgstr "Avanzamento generale"
+msgstr "Tolleranza complessiva:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:305
-#, fuzzy
 msgid "Resistor tolerance:"
-msgstr "Resistenza:"
+msgstr "Tolleranza resistenza:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:312
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:217
@@ -30060,14 +30058,12 @@ msgid "1"
 msgstr "1"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:325
-#, fuzzy
 msgid "Power Comment:"
-msgstr "Commento:"
+msgstr "Commento potenza:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:337
-#, fuzzy
 msgid "Copy to Clipboard"
-msgstr "Esporta sugli appunti"
+msgstr "Copia negli appunti"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators.cpp:220
 #, c-format
@@ -30145,19 +30141,16 @@ msgid "Copper resistivity:"
 msgstr "Resistività rame:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:95
-#, fuzzy
 msgid "External Layer Tracks"
 msgstr "Piste strati esterni"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:103
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:199
-#, fuzzy
 msgid "Track width (W):"
 msgstr "Larghezza pista (W):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:115
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:213
-#, fuzzy
 msgid "Track thickness (H):"
 msgstr "Spessore pista (H):"
 
@@ -30191,7 +30184,6 @@ msgid "W"
 msgstr "W"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:191
-#, fuzzy
 msgid "Internal Layer Tracks"
 msgstr "Piste strati interni"
 
@@ -31189,9 +31181,8 @@ msgid "mi/h"
 msgstr "mi/h"
 
 #: pcbnew/api/api_handler_pcb.cpp:652
-#, fuzzy
 msgid "Deleted items via API"
-msgstr "Cancella elementi"
+msgstr "Elementi cancellati tramite API"
 
 #: pcbnew/autorouter/ar_autoplacer.cpp:882
 msgid "Autoplacing components..."
@@ -31286,9 +31277,8 @@ msgid "Max Width"
 msgstr "Larghezza max"
 
 #: pcbnew/board_connected_item.cpp:283
-#, fuzzy
 msgid "Curved Teardrops"
-msgstr "Imposta lacrime"
+msgstr "Lacrime curve"
 
 #: pcbnew/board_connected_item.cpp:289
 msgid "Prefer Zone Connections"
@@ -32076,9 +32066,8 @@ msgid "Reannotate anyway?"
 msgstr "Riannotare comunque?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:644
-#, fuzzy
 msgid "Annotation"
-msgstr "Annotazioni"
+msgstr "Annotazione"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:806
 #, c-format
@@ -32344,9 +32333,8 @@ msgid "Length-tuning Patterns"
 msgstr "Modelli di regolazione lunghezze"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:204
-#, fuzzy
 msgid "Board Data"
-msgstr "Nome scheda"
+msgstr "Dati scheda"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:221
 msgid "Project is missing or read-only. Some settings will not be editable."
@@ -32622,14 +32610,12 @@ msgid "Refilling all zones..."
 msgstr "Ri-riempimento di tutte le zone..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:289
-#, fuzzy
 msgid "Board Cleanup"
 msgstr "Pulizia scheda"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:27
-#, fuzzy
 msgid "Refill zones before and after cleanup"
-msgstr "Aggiorna tutte le zone prima di eseguire il DRC"
+msgstr "Ri-riempi zone prima e dopo la pulizia"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:33
 msgid "Delete &tracks connecting different nets"
@@ -32700,9 +32686,8 @@ msgid "Filter items by layer:"
 msgstr "Filtra elementi per strato:"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:160
-#, fuzzy
 msgid "Progress:"
-msgstr "Avanzamento generale"
+msgstr "Avanzamento:"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.h:82
 msgid "Cleanup Tracks and Vias"
@@ -33081,14 +33066,12 @@ msgid "Alphabet, full 26 characters"
 msgstr "Alfabetica, completa a 26 caratteri"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:247
-#, fuzzy
 msgid "Select center item..."
-msgstr "Seleziona elemento..."
+msgstr "Seleziona l'elemento centrale..."
 
 #: pcbnew/dialogs/dialog_create_array.cpp:253
-#, fuzzy
 msgid "Select center point..."
-msgstr "Seleziona impronta..."
+msgstr "Seleziona il punto centrale..."
 
 #: pcbnew/dialogs/dialog_create_array.cpp:346
 #, c-format
@@ -33137,9 +33120,8 @@ msgid "Horizontal count:"
 msgstr "Conteggio orizzontale:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:43
-#, fuzzy
 msgid "Number of columns"
-msgstr "Numero di cicli"
+msgstr "Numero di colonne"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:52
 msgid "Vertical count:"
@@ -33147,9 +33129,8 @@ msgstr "Conteggio verticale:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:54
 #: pcbnew/dialogs/dialog_create_array_base.cpp:59
-#, fuzzy
 msgid "Number of rows"
-msgstr "Numero di bit"
+msgstr "Numero di righe"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:71
 msgid "Items Spacing"
@@ -33208,18 +33189,16 @@ msgid "Columns"
 msgstr "Colonne"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:175
-#, fuzzy
 msgid "Grid Position"
-msgstr "Posizione finale"
+msgstr "Posizione griglia"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:177
 msgid "Source items remain in place"
 msgstr "Gli elementi origine rimangono al loro posto"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:180
-#, fuzzy
 msgid "Centre on source items"
-msgstr "Centra la vista sugli elementi sottoposti ad analisi-incrociata"
+msgstr "Centra sugli elementi sorgenti"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:197
 msgid "Horizontal, then vertical"
@@ -33278,18 +33257,16 @@ msgstr "Avvio numerazione piazzole:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:260
 #: pcbnew/dialogs/dialog_create_array_base.cpp:439
-#, fuzzy
 msgid "Pad numbering increment:"
-msgstr "Avvio numerazione piazzole:"
+msgstr "Incremento numerazione piazzole:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:290
 msgid "Grid Array"
 msgstr "Schiere a griglia"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:299
-#, fuzzy
 msgid "Center position"
-msgstr "Posizione testo:"
+msgstr "Posizione centro"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:307
 msgid "Center pos X:"
@@ -33301,9 +33278,8 @@ msgstr "Y posizione centro:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:338
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:45
-#, fuzzy
 msgid "Select Point..."
-msgstr "Seleziona impronta..."
+msgstr "Seleziona punto..."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:341
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:40
@@ -33311,19 +33287,16 @@ msgid "Select Item..."
 msgstr "Seleziona elemento..."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:351
-#, fuzzy
 msgid "Duplication Settings"
-msgstr "Pin duplicati:"
+msgstr "Impostazioni di duplicazione"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:353
-#, fuzzy
 msgid "Full circle"
-msgstr "Dimensioni intere"
+msgstr "Cerchio completo"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:363
-#, fuzzy
 msgid "Angle between items:"
-msgstr "Angolo tra punto di rif e pos. centro"
+msgstr "Angolo tra elementi:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:367
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:142
@@ -33348,9 +33321,8 @@ msgid "How many items in the array."
 msgstr "Quanti elementi nell'array."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:388
-#, fuzzy
 msgid "Rotate items"
-msgstr "Ruota elementi:"
+msgstr "Ruota elementi"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:390
 msgid ""
@@ -33408,9 +33380,8 @@ msgstr ""
 "È stato spostato sul primo strato definito."
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:318
-#, fuzzy
 msgid "Edit Dimension Properties"
-msgstr "Proprietà dimensioni"
+msgstr "Modifica proprietà dimensioni"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:22
 msgid "Leader Format"
@@ -33517,9 +33488,8 @@ msgid "Choose how many digits of precision to display"
 msgstr "Scegli quante cifre di precisione da mostrare"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
-#, fuzzy
 msgid "Arrow direction:"
-msgstr "Direzione:"
+msgstr "Direzione freccia:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:357
@@ -33766,19 +33736,19 @@ msgid "Remove all exclusions for violations of rule '%s'"
 msgstr "Rimuovi tutte le esclusioni per la violazione della regola '%s'"
 
 #: pcbnew/dialogs/dialog_drc.cpp:705
-#, fuzzy, c-format
+#, c-format
 msgid "They will be placed back in the %s list"
-msgstr "Verrà rimesso nuovamente nell'elenco %s"
+msgstr "Verranno rimessi nuovamente nell'elenco %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:721
-#, fuzzy, c-format
+#, c-format
 msgid "Exclude all violations of rule '%s'..."
-msgstr "Escludi tutte le violazioni della regola '%s'"
+msgstr "Escludi tutte le violazioni della regola '%s'..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:723
-#, fuzzy, c-format
+#, c-format
 msgid "They will be excluded from the %s list"
-msgstr "Verrà escluso dall'elenco %s"
+msgstr "Verranno esclusi dall'elenco %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:739 pcbnew/dialogs/dialog_drc.cpp:746
 msgid "Violation severities can also be edited in the Board Setup... dialog"
@@ -33884,9 +33854,8 @@ msgid "Update text sizes, styles and positions"
 msgstr "Aggiorna dimensioni, stili e posizioni del testo"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:84
-#, fuzzy
 msgid "Update text content"
-msgstr "Aggiorna testo campi"
+msgstr "Aggiorna contenuti testo"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:85
 msgid "Update fabrication attributes"
@@ -33971,9 +33940,8 @@ msgid "Update/reset text sizes, styles and positions"
 msgstr "Aggiorna/reimposta dimensioni, stili e posizioni testo"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:108
-#, fuzzy
 msgid "Update/reset text content"
-msgstr "Aggiorna/reimposta testo campi"
+msgstr "Aggiorna/reimposta contenuti testo"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:111
 msgid "Update/reset fabrication attributes"
@@ -34041,9 +34009,8 @@ msgid "BOM Columns"
 msgstr "Colonne DIBA"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:120
-#, fuzzy
 msgid "Internal ID:"
-msgstr "ID interno"
+msgstr "ID interno:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:122
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:130
@@ -34150,29 +34117,24 @@ msgid "Export IDFv3"
 msgstr "Esporta IDFv3"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:109
-#, fuzzy
 msgid "zip files"
-msgstr "File zip"
+msgstr "file zip"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:111
-#, fuzzy
 msgid "tgz files"
-msgstr "File di testo"
+msgstr "file tgz"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:123
-#, fuzzy
 msgid "Export ODB++ File"
-msgstr "Esporta su file"
+msgstr "Esporta file ODB++"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:151
-#, fuzzy
 msgid "The selected output file name is not a supported archive format."
-msgstr "Il file selezionato non è valido o potrebbe essere corrotto!"
+msgstr "Il nome file d'uscita selezionato non è un formato archivio supportato."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:204
-#, fuzzy
 msgid "Output file name cannot be empty."
-msgstr "Il nome variabile non può essere vuoto."
+msgstr "Il nome file d'uscita non può essere vuoto."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:223
 msgid "The output file name conflicts with the selected compression format."
@@ -34181,60 +34143,59 @@ msgstr ""
 "selezionato."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:351
-#, fuzzy, c-format
+#, c-format
 msgid "Output files '%s' already exists. Do you want to overwrite it?"
-msgstr "Il file \"%s\" esiste già. Vuoi sovrascrivere questo file?"
+msgstr "Il file d'uscita '%s' esiste già. Sovrascriverlo?"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:364
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot remove existing output file '%s'."
-msgstr "Impossibile rimuovere il file temporaneo di uscita"
+msgstr "Impossibile rimuovere il file d'uscita esistente '%s'."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Output file '%s' already exists."
-msgstr "Il file %s esiste già."
+msgstr "Il file d'uscita '%s' esiste già."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:388
-#, fuzzy
 msgid "Cannot create temporary output directory."
-msgstr "Impossibile creare la cartella risultati '%s'."
+msgstr "Impossibile creare cartella temporanea risultati."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:405
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Output directory '%s' already exists and is not empty. Do you want to "
 "overwrite it?"
-msgstr "Il simbolo '%s' esiste già nella libreria '%s'."
+msgstr ""
+"La cartella d'uscita '%s' esiste già e non è vuota. Sovrascriverla "
+"ugualmente?"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:418
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot remove existing output directory '%s'."
-msgstr "Impossibile creare la cartella risultati '%s'."
+msgstr "Impossibile rimuovere la cartella d'uscita esistente '%s'."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:426
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory '%s' already exists."
-msgstr "Cartella risultati '%s' creata."
+msgstr "Cartella d'uscita '%s' esiste già."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:458
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating ODBPP files '%s'.\n"
 "%s"
 msgstr ""
-"Errore nel generare il file IPC2581 '%s'.\n"
+"Errore nel generare i file ODBPP '%s'.\n"
 "%s"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:501
-#, fuzzy
 msgid "Compressing output"
-msgstr "Risultati compressi"
+msgstr "Compressione uscita"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:69
-#, fuzzy
 msgid "Compression format:"
-msgstr "Formato dimensione"
+msgstr "Formato compressione:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:71
 msgid "Select the format to compress the output ODB++ files"
@@ -34276,28 +34237,24 @@ msgid "Binary glTF files"
 msgstr "File binari glTF"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:449
-#, fuzzy
 msgid "XAO files"
-msgstr "Tutti i file"
+msgstr "File XAO"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:451
 msgid "BREP (OCCT) files"
 msgstr "File BREP (OCCT)"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:453
-#, fuzzy
 msgid "PLY files"
-msgstr "File HTML"
+msgstr "File PLY"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:455
-#, fuzzy
 msgid "STL files"
-msgstr "File HTML"
+msgstr "File STL"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:463
-#, fuzzy
 msgid "3D Model Output File"
-msgstr "File uscita DIBA"
+msgstr "File d'uscita modelli 3D"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:540
 msgid "No filename for output file"
@@ -34317,14 +34274,12 @@ msgid "STEP/GLTF Export"
 msgstr "Esportazione STEP/GLTF"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
-#, fuzzy
 msgid "STEP"
-msgstr "STEP..."
+msgstr "STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
-#, fuzzy
 msgid "GLB (Binary glTF)"
-msgstr "Esporta GLB (binario GLTF)"
+msgstr "GLB (binario glTF)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "XAO"
@@ -34335,18 +34290,16 @@ msgid "BREP (OCCT)"
 msgstr "BREP (OCCT)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
-#, fuzzy
 msgid "PLY (ASCII)"
-msgstr "ASCII"
+msgstr "PLY (ASCII)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "STL"
 msgstr "STL"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
-#, fuzzy
 msgid "Board Options"
-msgstr "Opzioni fotocamera"
+msgstr "Opzioni scheda"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:58
 msgid "Export as Compound shape"
@@ -34361,32 +34314,28 @@ msgstr ""
 "che esegua la deduplicazione in base ai nomi delle forme."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:64
-#, fuzzy
 msgid "Export board body"
-msgstr "Mostra il corpo scheda"
+msgstr "Esporta corpo scheda"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:67
-#, fuzzy
 msgid "Cut vias in board body"
-msgstr "Mostra il corpo scheda"
+msgstr "Taglia i via nel corpo scheda"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:72
 msgid "Export silkscreen"
 msgstr "Esporta serigrafia"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:73
-#, fuzzy
 msgid "Export silkscreen graphics as a set of flat faces."
-msgstr "Esporta le grafiche della serigrafia."
+msgstr "Esporta grafiche serigrafia come insieme di facce piatte."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:77
 msgid "Export solder mask"
 msgstr "Esporta maschera di saldatura"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:78
-#, fuzzy
 msgid "Export solder mask layers as a set of flat faces."
-msgstr "Esporta le grafiche della maschera di saldatura."
+msgstr "Esporta grafiche maschere di saldatura come insieme di facce piatte."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:82
 msgid "Export solder paste"
@@ -34397,14 +34346,12 @@ msgid "Export solder paste graphics."
 msgstr "Esporta le grafiche della pasta salda."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:88
-#, fuzzy
 msgid "Export components"
-msgstr "Esporta zone"
+msgstr "Esporta componenti"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:94
-#, fuzzy
 msgid "All components"
-msgstr "Autopiazza componenti"
+msgstr "Tutti i componenti"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:99
 #, fuzzy
