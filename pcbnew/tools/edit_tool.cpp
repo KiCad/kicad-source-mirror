@@ -356,6 +356,8 @@ bool EDIT_TOOL::Init()
     // clang-format off
     menu.AddItem( PCB_ACTIONS::move,              SELECTION_CONDITIONS::NotEmpty
                                                       && notMovingCondition );
+
+    menu.AddItem( PCB_ACTIONS::routerRouteSelected,     isRoutable );
     menu.AddItem( PCB_ACTIONS::unrouteSelected,         isRoutable );
     menu.AddItem( PCB_ACTIONS::routerAutorouteSelected, isRoutable );
     menu.AddItem( PCB_ACTIONS::moveIndividually,  SELECTION_CONDITIONS::MoreThan( 1 )
