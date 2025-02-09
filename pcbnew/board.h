@@ -268,7 +268,7 @@ public:
     virtual void OnBoardRatsnestChanged( BOARD& aBoard ) { }
     virtual void OnBoardCompositeUpdate( BOARD& aBoard, std::vector<BOARD_ITEM*>& aAddedItems,
                                          std::vector<BOARD_ITEM*>& aRemovedItems,
-                                         std::vector<BOARD_ITEM*>& aDeletedItems )
+                                         std::vector<BOARD_ITEM*>& aChangedItems )
     {
     }
 };

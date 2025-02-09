@@ -345,7 +345,7 @@ void DIALOG_GENERATORS::OnBoardItemsChanged( BOARD& aBoard, std::vector<BOARD_IT
 void DIALOG_GENERATORS::OnBoardCompositeUpdate( BOARD&                    aBoard,
                                                 std::vector<BOARD_ITEM*>& aAddedItems,
                                                 std::vector<BOARD_ITEM*>& aRemovedItems,
-                                                std::vector<BOARD_ITEM*>& aDeletedItems )
+                                                std::vector<BOARD_ITEM*>& aChangedItems )
 {
     RebuildModels();
 }

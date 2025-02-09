@@ -1157,10 +1157,10 @@ void APPEARANCE_CONTROLS::OnBoardItemsChanged( BOARD& aBoard, std::vector<BOARD_
 void APPEARANCE_CONTROLS::OnBoardCompositeUpdate( BOARD&                    aBoard,
                                                   std::vector<BOARD_ITEM*>& aAddedItems,
                                                   std::vector<BOARD_ITEM*>& aRemovedItems,
-                                                  std::vector<BOARD_ITEM*>& aDeletedItems )
+                                                  std::vector<BOARD_ITEM*>& aChangedItems )
 {
     if( doesBoardItemNeedRebuild( aAddedItems ) || doesBoardItemNeedRebuild( aRemovedItems )
-        || doesBoardItemNeedRebuild( aDeletedItems ) )
+        || doesBoardItemNeedRebuild( aChangedItems ) )
     {
         handleBoardItemsChanged();
     }

@@ -73,7 +73,7 @@ private:
                                       std::vector<BOARD_ITEM*>& aBoardItems ) override;
     virtual void OnBoardCompositeUpdate( BOARD& aBoard, std::vector<BOARD_ITEM*>& aAddedItems,
                                          std::vector<BOARD_ITEM*>& aRemovedItems,
-                                         std::vector<BOARD_ITEM*>& aDeletedItems ) override;
+                                         std::vector<BOARD_ITEM*>& aChangedItems ) override;
 
     std::map<wxString, std::vector<std::pair<wxString, wxString>>> m_columnNameTypes;
     std::map<wxString, wxDataViewListStore*>                       m_dataModels;

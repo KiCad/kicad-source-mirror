@@ -1117,7 +1117,7 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardItemsChanged( BOARD&                    aBo
 void PCB_NET_INSPECTOR_PANEL::OnBoardCompositeUpdate( BOARD&                    aBoard,
                                                       std::vector<BOARD_ITEM*>& aAddedItems,
                                                       std::vector<BOARD_ITEM*>& aRemovedItems,
-                                                      std::vector<BOARD_ITEM*>& aDeletedItems )
+                                                      std::vector<BOARD_ITEM*>& aChangedItems )
 {
     if( !IsShownOnScreen() )
         return;
