@@ -125,6 +125,8 @@ static const wxChar MinParallelAngle[] = wxT( "MinParallelAngle" );
 static const wxChar HoleWallPaintingMultiplier[] = wxT( "HoleWallPaintingMultiplier" );
 static const wxChar MsgPanelShowUuids[] = wxT( "MsgPanelShowUuids" );
 static const wxChar MaximumThreads[] = wxT( "MaximumThreads" );
+static const wxChar NetInspectorBulkUpdateOptimisationThreshold[] =
+        wxT( "NetInspectorBulkUpdateOptimisationThreshold" );
 
 } // namespace KEYS
 
@@ -302,6 +304,8 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_MaximumThreads = 0;
 
     m_MinimumMarkerSeparationDistance = 0.15;
+
+    m_NetInspectorBulkUpdateOptimisationThreshold = 25;
 
     loadFromConfigFile();
 }
@@ -582,6 +586,11 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::MaximumThreads,
                                                   &m_MaximumThreads, m_MaximumThreads,
                                                   0, 500 ) );
+
+    configParams.push_back(
+            new PARAM_CFG_INT( true, AC_KEYS::NetInspectorBulkUpdateOptimisationThreshold,
+                               &m_NetInspectorBulkUpdateOptimisationThreshold,
+                               m_NetInspectorBulkUpdateOptimisationThreshold, 0, 1000 ) );
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config

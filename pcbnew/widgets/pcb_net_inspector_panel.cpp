@@ -20,6 +20,7 @@
 #include <widgets/pcb_net_inspector_panel.h>
 #include <widgets/pcb_net_inspector_panel_data_model.h>
 
+#include <advanced_config.h>
 #include <board_design_settings.h>
 #include <board_stackup_manager/board_stackup.h>
 #include <confirm.h>
@@ -982,7 +983,7 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardItemsAdded( BOARD&                    aBoar
         return;
 
     // Rebuild full netlist for large changes
-    if( aBoardItems.size() > 25 )
+    if( aBoardItems.size() > ADVANCED_CFG::GetCfg().m_NetInspectorBulkUpdateOptimisationThreshold )
     {
         buildNetsList();
         m_netsList->Refresh();
@@ -1064,7 +1065,7 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardItemsRemoved( BOARD&                    aBo
     if( !IsShownOnScreen() )
         return;
 
-    if( aBoardItems.size() > 25 )
+    if( aBoardItems.size() > ADVANCED_CFG::GetCfg().m_NetInspectorBulkUpdateOptimisationThreshold )
     {
         buildNetsList();
         m_netsList->Refresh();

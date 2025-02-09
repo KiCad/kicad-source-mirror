@@ -740,7 +740,17 @@ public:
      */
     double m_MinimumMarkerSeparationDistance;
 
-///@}
+    /**
+     * When updating the net inspector, it either recalculates all nets or iterates through items
+     * one-by-one. This value controls the threshold at which all nets are recalculated rather than
+     * iterating over the items.
+     *
+     * Setting name: "NetInspectorBulkUpdateOptimisationThreshold"
+     * Default value: 25
+     */
+    int m_NetInspectorBulkUpdateOptimisationThreshold;
+
+    ///@}
 
 private:
     ADVANCED_CFG();
