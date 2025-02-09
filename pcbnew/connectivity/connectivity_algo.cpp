@@ -228,6 +228,7 @@ void CN_CONNECTIVITY_ALGO::RemoveInvalidRefs()
 
 void CN_CONNECTIVITY_ALGO::searchConnections()
 {
+    std::lock_guard lock( m_mutex );
 #ifdef PROFILE
     PROF_TIMER garbage_collection( "garbage-collection" );
 #endif

@@ -298,6 +298,8 @@ private:
     bool                                                  m_isLocal;
     std::shared_ptr<CONNECTIVITY_DATA>                    m_globalConnectivityData;
 
+    std::mutex m_mutex;
+
     PROGRESS_REPORTER* m_progressReporter = nullptr;
 };
 
