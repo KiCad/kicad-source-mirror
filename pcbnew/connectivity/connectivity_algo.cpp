@@ -353,7 +353,7 @@ CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode, const std::vect
     std::set<CN_ITEM*> visited;
 
     auto addToSearchList =
-            [&item_set, withinAnyNet, aSingleNet, &aTypes, rootItem, &visited]( CN_ITEM *aItem )
+            [&item_set, withinAnyNet, aSingleNet, &aTypes, rootItem]( CN_ITEM *aItem )
             {
                 if( withinAnyNet && aItem->Net() <= 0 )
                     return;
