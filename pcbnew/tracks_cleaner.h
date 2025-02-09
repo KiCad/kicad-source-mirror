@@ -24,6 +24,7 @@
 #ifndef KICAD_TRACKS_CLEANER_H
 #define KICAD_TRACKS_CLEANER_H
 
+#include <mutex>
 #include <pcb_track.h>
 #include <board.h>
 
@@ -127,6 +128,7 @@ private:
     std::map<PCB_TRACK*, std::vector<BOARD_CONNECTED_ITEM*>> m_connectedItemsCache;
 
     std::function<bool( BOARD_CONNECTED_ITEM* aItem )>       m_filter;
+    std::mutex m_mutex;
 };
 
 

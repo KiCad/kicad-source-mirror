@@ -612,6 +612,7 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
             while( !m_brd->BuildConnectivity() )
                 wxSafeYield();
 
+            std::lock_guard lock( m_mutex );
             m_connectedItemsCache.clear();
         } while( mergeSegments( m_brd->GetConnectivity()->GetConnectivityAlgo() ) );
     }
@@ -631,10 +632,13 @@ const std::vector<BOARD_CONNECTED_ITEM*>& TRACKS_CLEANER::getConnectedItems( PCB
 
     const std::shared_ptr<CONNECTIVITY_DATA>& connectivity = m_brd->GetConnectivity();
 
-    if( m_connectedItemsCache.count( aTrack ) == 0 )
+    if( !m_connectedItemsCache.contains( aTrack ) )
+    {
+        std::lock_guard lock( m_mutex );
         m_connectedItemsCache[ aTrack ] = connectivity->GetConnectedItems( aTrack, connectedTypes );
+    }
 
-    return m_connectedItemsCache[ aTrack ];
+    return m_connectedItemsCache.at( aTrack );
 }
 
 
