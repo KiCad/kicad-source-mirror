@@ -30,8 +30,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-08 00:06+0300\n"
-"PO-Revision-Date: 2025-02-08 17:30+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2025-02-10 02:02+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -36006,7 +36006,7 @@ msgstr "Auf Footprint zentrieren"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:254
 msgid "Move footprint texts to the center of their parent"
-msgstr "Footprinttexte zum Mittelpunkt ihres übergeordneten Texts verschieben"
+msgstr "Footprinttexte zum Mittelpunkt des jeweiligen Footprints verschieben"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:83
 msgid "Filter tracks by width:"
@@ -36473,6 +36473,7 @@ msgid "Non Copper Zone Properties"
 msgstr "Nicht-Kupfer-Zonen-Eigenschaften"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:26
+#, fuzzy
 msgid "Outset:"
 msgstr "Außenlinien:"
 
@@ -46905,7 +46906,7 @@ msgstr "Vorderseitige Platzierungsdaten nach \"%s\" geschrieben.\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:1442 pcbnew/pcbnew_jobs_handler.cpp:1521
 #, c-format
 msgid "Wrote back position data to '%s'.\n"
-msgstr "Stückliste wurde in \"%s\" geschrieben.\n"
+msgstr "Hinterseitige Platzierungsdaten wurden nach '%s' geschrieben.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1471
 #, c-format
