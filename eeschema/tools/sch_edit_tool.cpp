@@ -138,7 +138,7 @@ public:
     BODY_STYLE_MENU() :
         ACTION_MENU( true )
     {
-        SetIcon( BITMAPS::component_select_alternate_shape );
+        SetIcon( BITMAPS::body_style );
         SetTitle( _( "Body Style" ) );
     }
 
