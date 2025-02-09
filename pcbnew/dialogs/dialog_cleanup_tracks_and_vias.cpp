@@ -188,10 +188,29 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
     BOARD_COMMIT commit( m_parentFrame );
     TRACKS_CLEANER cleaner( m_brd, commit );
 
+    struct FILTER_STATE
+    {
+        bool selectedOnly;
+        int netCodeOnly;
+        wxString netClassOnly;
+        int layerOnly;
+    };
+
+    FILTER_STATE filter_state = {
+            .selectedOnly = m_selectedItemsFilter->GetValue(),
+            .netCodeOnly = m_netFilterOpt->GetValue() ? m_netFilter->GetSelectedNetcode() : -1,
+            .netClassOnly = m_netclassFilterOpt->GetValue()
+                                ? m_netclassFilter->GetStringSelection()
+                                : wxString(),
+            .layerOnly = m_layerFilterOpt->GetValue()
+                             ? m_layerFilter->GetLayerSelection()
+                             : UNDEFINED_LAYER
+            };
+
     cleaner.SetFilter(
-            [&]( BOARD_CONNECTED_ITEM* aItem ) -> bool
+            [&, filter_state]( BOARD_CONNECTED_ITEM* aItem ) -> bool
             {
-                if( m_selectedItemsFilter->GetValue() )
+                if( filter_state.selectedOnly )
                 {
                     if( !aItem->IsSelected() )
                     {
@@ -205,26 +224,23 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
                     }
                 }
 
-                if( m_netFilterOpt->GetValue() && m_netFilter->GetSelectedNetcode() >= 0 )
+                if( filter_state.netCodeOnly >= 0 )
                 {
-                    if( aItem->GetNetCode() != m_netFilter->GetSelectedNetcode() )
+                    if( aItem->GetNetCode() != filter_state.netCodeOnly )
                         return true;
                 }
 
-                if( m_netclassFilterOpt->GetValue()
-                        && !m_netclassFilter->GetStringSelection().IsEmpty() )
+                if( !filter_state.netClassOnly.IsEmpty() )
                 {
-                    wxString  filterNetclass = m_netclassFilter->GetStringSelection();
                     NETCLASS* netclass = aItem->GetEffectiveNetClass();
 
-                    if( !netclass->ContainsNetclassWithName( filterNetclass ) )
+                    if( !netclass->ContainsNetclassWithName( filter_state.netClassOnly ) )
                         return true;
                 }
 
-                if( m_layerFilterOpt->GetValue()
-                        && m_layerFilter->GetLayerSelection() != UNDEFINED_LAYER )
+                if( filter_state.layerOnly != UNDEFINED_LAYER )
                 {
-                    if( aItem->GetLayer() != m_layerFilter->GetLayerSelection() )
+                    if( aItem->GetLayer() != filter_state.layerOnly )
                         return true;
                 }
 

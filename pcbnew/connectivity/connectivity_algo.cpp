@@ -350,8 +350,10 @@ CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode, const std::vect
     if( m_itemList.IsDirty() )
         searchConnections();
 
+    std::set<CN_ITEM*> visited;
+
     auto addToSearchList =
-            [&item_set, withinAnyNet, aSingleNet, &aTypes, rootItem ]( CN_ITEM *aItem )
+            [&item_set, withinAnyNet, aSingleNet, &aTypes, rootItem, &visited]( CN_ITEM *aItem )
             {
                 if( withinAnyNet && aItem->Net() <= 0 )
                     return;
@@ -376,8 +378,6 @@ CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode, const std::vect
                 if( !found && aItem != rootItem )
                     return;
 
-                aItem->SetVisited( false );
-
                 item_set.insert( aItem );
             };
 
@@ -392,14 +392,14 @@ CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode, const std::vect
         CN_ITEM*                    root;
         auto                        it = item_set.begin();
 
-        while( it != item_set.end() && (*it)->Visited() )
+        while( it != item_set.end() && visited.contains( *it ) )
             it = item_set.erase( item_set.begin() );
 
         if( it == item_set.end() )
             break;
 
         root = *it;
-        root->SetVisited( true );
+        visited.insert( root );
 
         Q.clear();
         Q.push_back( root );
@@ -416,9 +416,9 @@ CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode, const std::vect
                 if( withinAnyNet && n->Net() != root->Net() )
                     continue;
 
-                if( !n->Visited() && n->Valid() )
+                if( !visited.contains( n ) && n->Valid() )
                 {
-                    n->SetVisited( true );
+                    visited.insert( n );
                     Q.push_back( n );
                 }
             }
