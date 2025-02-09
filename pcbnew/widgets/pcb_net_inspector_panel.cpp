@@ -1123,7 +1123,22 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardCompositeUpdate( BOARD&                    
     if( !IsShownOnScreen() )
         return;
 
-    buildNetsList();
+    const int threshold = ADVANCED_CFG::GetCfg().m_NetInspectorBulkUpdateOptimisationThreshold;
+
+    // Rebuild the full list if the number of items affected is > the optimisation threshold
+    // Note: Always rebuild for any changed items as there is no way to determine what property
+    // of the item has changed in the net inspector data model
+    if( aChangedItems.size() > 0 || aAddedItems.size() > threshold
+        || aRemovedItems.size() > threshold )
+    {
+        buildNetsList();
+    }
+    else
+    {
+        OnBoardItemsAdded( aBoard, aAddedItems );
+        OnBoardItemsRemoved( aBoard, aRemovedItems );
+    }
+
     m_netsList->Refresh();
 }
 
