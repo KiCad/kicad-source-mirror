@@ -112,7 +112,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-07 01:15+0300\n"
-"PO-Revision-Date: 2025-02-04 18:02+0000\n"
+"PO-Revision-Date: 2025-02-10 02:01+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v8/it/>\n"
 "Language: it\n"
@@ -31105,9 +31105,8 @@ msgid "BOM Columns"
 msgstr "Colonne DIBA"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:102
-#, fuzzy
 msgid "Internal ID:"
-msgstr "ID interno"
+msgstr "ID interno:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:104
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:112
