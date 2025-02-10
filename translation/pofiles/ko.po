@@ -30,15 +30,16 @@
 # jeong-sangwon <drone5023@gmail.com>, 2024.
 # John Beard <john.j.beard@gmail.com>, 2025.
 # dsa-t <dudesuchamazing@gmail.com>, 2025.
+# Seth Hillbrand <seth@kipro-pcb.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-10 14:43-0800\n"
-"PO-Revision-Date: 2025-02-06 23:34+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"PO-Revision-Date: 2025-02-10 23:20+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -50775,9 +50776,9 @@ msgid "Rule Area %s"
 msgstr "규칙 영역 %s"
 
 #: pcbnew/zone.cpp:1097
-#, fuzzy, c-format
+#, c-format
 msgid "Teardrop %s %s"
-msgstr "물방울모양"
+msgstr "티어드롭 %s %s"
 
 #: pcbnew/zone.cpp:1099
 #, c-format
