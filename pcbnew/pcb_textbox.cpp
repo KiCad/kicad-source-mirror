@@ -701,44 +701,57 @@ void PCB_TEXTBOX::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearanc
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
     KIFONT::FONT*              font = getDrawFont();
     int                        penWidth = GetEffectiveTextPenWidth();
+    TEXT_ATTRIBUTES            attrs = GetAttributes();
+    wxString                   shownText = GetShownText( true );
 
-    // Note: this function is mainly used in 3D viewer.
-    // the polygonal shape of a text can have many basic shapes,
-    // so combining these shapes can be very useful to create a final shape
-    // swith a lot less vertices to speedup calculations using this final shape
+    // The polygonal shape of a text can have many basic shapes, so combining these shapes can
+    // be very useful to create a final shape with a lot less vertices to speedup calculations.
     // Simplify shapes is not usually always efficient, but in this case it is.
-    SHAPE_POLY_SET buffer;
+    SHAPE_POLY_SET textShape;
 
     CALLBACK_GAL callback_gal( empty_opts,
             // Stroke callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
             {
-                TransformOvalToPolygon( buffer, aPt1, aPt2, penWidth, aMaxError, aErrorLoc );
+                TransformOvalToPolygon( textShape, aPt1, aPt2, penWidth, aMaxError, aErrorLoc );
             },
             // Triangulation callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2, const VECTOR2I& aPt3 )
             {
-                buffer.NewOutline();
+                textShape.NewOutline();
 
                 for( const VECTOR2I& point : { aPt1, aPt2, aPt3 } )
-                    buffer.Append( point.x, point.y );
+                    textShape.Append( point.x, point.y );
             } );
 
-    font->Draw( &callback_gal, GetShownText( true ), GetDrawPos(), GetAttributes(), GetFontMetrics() );
+    if( auto* cache = GetRenderCache( font, shownText ) )
+        callback_gal.DrawGlyphs( *cache );
+    else
+        font->Draw( &callback_gal, shownText, GetDrawPos(), attrs, GetFontMetrics() );
 
-    if( aClearance > 0 || aErrorLoc == ERROR_OUTSIDE )
+    textShape.Simplify();
+
+    if( IsKnockout() )
     {
-        if( aErrorLoc == ERROR_OUTSIDE )
-            aClearance += aMaxError;
+        SHAPE_POLY_SET finalPoly;
 
-        buffer.Inflate( aClearance, CORNER_STRATEGY::ROUND_ALL_CORNERS, aMaxError, true );
+        TransformShapeToPolygon( finalPoly, GetLayer(), aClearance, aMaxError, aErrorLoc );
+        finalPoly.BooleanSubtract( textShape );
+
+        aBuffer.Append( finalPoly );
     }
     else
     {
-        buffer.Simplify();
-    }
+        if( aClearance > 0 || aErrorLoc == ERROR_OUTSIDE )
+        {
+            if( aErrorLoc == ERROR_OUTSIDE )
+                aClearance += aMaxError;
 
-    aBuffer.Append( buffer );
+            textShape.Inflate( aClearance, CORNER_STRATEGY::ROUND_ALL_CORNERS, aMaxError, true );
+        }
+
+        aBuffer.Append( textShape );
+    }
 }
 
 
@@ -889,6 +902,10 @@ static struct PCB_TEXTBOX_DESC
         propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "Line Style" ) );
         propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "Filled" ) );
         propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( EDA_TEXT ), _HKI( "Color" ) );
+
+        propMgr.AddProperty( new PROPERTY<PCB_TEXTBOX, bool, BOARD_ITEM>( _HKI( "Knockout" ),
+                &BOARD_ITEM::SetIsKnockout, &BOARD_ITEM::IsKnockout ),
+                _HKI( "Text Properties" ) );
 
         const wxString borderProps = _( "Border Properties" );
 

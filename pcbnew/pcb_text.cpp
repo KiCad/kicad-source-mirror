@@ -640,8 +640,6 @@ static struct PCB_TEXT_DESC
         propMgr.OverrideAvailability( TYPE_HASH( PCB_TEXT ), TYPE_HASH( EDA_TEXT ),
                                       _HKI( "Keep Upright" ), isFootprintText );
 
-        propMgr.OverrideAvailability( TYPE_HASH( PCB_TEXT ), TYPE_HASH( EDA_TEXT ),
-                                      _HKI( "Hyperlink" ),
-                                      []( INSPECTABLE* aItem ) { return false; } );
+        propMgr.Mask( TYPE_HASH( PCB_TEXT ), TYPE_HASH( EDA_TEXT ), _HKI( "Hyperlink" ) );
     }
 } _PCB_TEXT_DESC;

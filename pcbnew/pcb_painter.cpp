@@ -2425,33 +2425,46 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
 #endif
     }
 
-    if( resolvedText.Length() == 0 )
-        return;
-
-    const KIFONT::METRICS& metrics = aTextBox->GetFontMetrics();
-    TEXT_ATTRIBUTES        attrs = aTextBox->GetAttributes();
-    attrs.m_StrokeWidth = getLineThickness( aTextBox->GetEffectiveTextPenWidth() );
-
-    if( m_gal->IsFlippedX() && !aTextBox->IsSideSpecific() )
+    if( aTextBox->IsKnockout() )
     {
-        attrs.m_Mirrored = !attrs.m_Mirrored;
-        strokeText( resolvedText, aTextBox->GetDrawPos( true ), attrs, metrics );
-        return;
-    }
+        SHAPE_POLY_SET finalPoly;
+        aTextBox->TransformTextToPolySet( finalPoly, 0, m_maxError, ERROR_INSIDE );
+        finalPoly.Fracture();
 
-    std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
-
-    if( font->IsOutline() )
-        cache = aTextBox->GetRenderCache( font, resolvedText );
-
-    if( cache )
-    {
-        m_gal->SetLineWidth( attrs.m_StrokeWidth );
-        m_gal->DrawGlyphs( *cache );
+        m_gal->SetIsStroke( false );
+        m_gal->SetIsFill( true );
+        m_gal->DrawPolygon( finalPoly );
     }
     else
     {
-        strokeText( resolvedText, aTextBox->GetDrawPos(), attrs, metrics );
+        if( resolvedText.Length() == 0 )
+            return;
+
+        const KIFONT::METRICS& metrics = aTextBox->GetFontMetrics();
+        TEXT_ATTRIBUTES        attrs = aTextBox->GetAttributes();
+        attrs.m_StrokeWidth = getLineThickness( aTextBox->GetEffectiveTextPenWidth() );
+
+        if( m_gal->IsFlippedX() && !aTextBox->IsSideSpecific() )
+        {
+            attrs.m_Mirrored = !attrs.m_Mirrored;
+            strokeText( resolvedText, aTextBox->GetDrawPos( true ), attrs, metrics );
+            return;
+        }
+
+        std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
+
+        if( font->IsOutline() )
+            cache = aTextBox->GetRenderCache( font, resolvedText );
+
+        if( cache )
+        {
+            m_gal->SetLineWidth( attrs.m_StrokeWidth );
+            m_gal->DrawGlyphs( *cache );
+        }
+        else
+        {
+            strokeText( resolvedText, aTextBox->GetDrawPos(), attrs, metrics );
+        }
     }
 }
 

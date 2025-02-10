@@ -172,7 +172,9 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
 //#define SEXPR_BOARD_FILE_VERSION    20241030  // Dimension arrow directions, suppress_zeroes normalization
 //#define SEXPR_BOARD_FILE_VERSION    20241129  // Normalise keep_text_aligned and fill properties
 //#define SEXPR_BOARD_FILE_VERSION    20241228  // Convert teardrop curve points to bool
-#define SEXPR_BOARD_FILE_VERSION      20241229  // Expand User layers to arbitrary count
+//#define SEXPR_BOARD_FILE_VERSION    20241229  // Expand User layers to arbitrary count
+//----------------- Start of 10.0 development -----------------
+#define SEXPR_BOARD_FILE_VERSION      20250210  // Knockout for textboxes
 
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag

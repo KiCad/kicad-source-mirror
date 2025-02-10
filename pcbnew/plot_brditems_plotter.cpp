@@ -729,11 +729,19 @@ void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, boo
 
     if( aIsKnockout )
     {
-        const PCB_TEXT* text = static_cast<const PCB_TEXT*>( aText );
         SHAPE_POLY_SET  finalPoly;
 
-        text->TransformTextToPolySet( finalPoly, 0, m_board->GetDesignSettings().m_MaxError,
-                                      ERROR_INSIDE );
+        if( const PCB_TEXT* text = dynamic_cast<const PCB_TEXT*>( aText) )
+        {
+            text->TransformTextToPolySet( finalPoly, 0, m_board->GetDesignSettings().m_MaxError,
+                                          ERROR_INSIDE );
+        }
+        else if( const PCB_TEXTBOX* textbox = dynamic_cast<const PCB_TEXTBOX*>( aText ) )
+        {
+            textbox->TransformTextToPolySet( finalPoly, 0, m_board->GetDesignSettings().m_MaxError,
+                                             ERROR_INSIDE );
+        }
+
         finalPoly.Fracture();
 
         for( int ii = 0; ii < finalPoly.OutlineCount(); ++ii )
