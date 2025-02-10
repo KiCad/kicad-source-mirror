@@ -336,7 +336,6 @@ void BITMAP_BUTTON::OnPaint( wxPaintEvent& aEvent )
 
     wxPoint drawBmpPos( m_padding, m_padding );
     wxBitmap bmpImg;
-    double scale = KIPLATFORM::UI::GetContentScaleFactor( this );
     wxSize bmSize;
 
     if( bmp.IsOk() )

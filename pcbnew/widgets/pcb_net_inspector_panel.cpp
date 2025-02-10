@@ -982,8 +982,10 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardItemsAdded( BOARD&                    aBoar
     if( !IsShownOnScreen() )
         return;
 
+    const size_t threshold = ADVANCED_CFG::GetCfg().m_NetInspectorBulkUpdateOptimisationThreshold;
+
     // Rebuild full netlist for large changes
-    if( aBoardItems.size() > ADVANCED_CFG::GetCfg().m_NetInspectorBulkUpdateOptimisationThreshold )
+    if( aBoardItems.size() > threshold )
     {
         buildNetsList();
         m_netsList->Refresh();
@@ -1065,7 +1067,9 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardItemsRemoved( BOARD&                    aBo
     if( !IsShownOnScreen() )
         return;
 
-    if( aBoardItems.size() > ADVANCED_CFG::GetCfg().m_NetInspectorBulkUpdateOptimisationThreshold )
+    const size_t threshold = ADVANCED_CFG::GetCfg().m_NetInspectorBulkUpdateOptimisationThreshold;
+
+    if( aBoardItems.size() > threshold )
     {
         buildNetsList();
         m_netsList->Refresh();
@@ -1123,7 +1127,7 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardCompositeUpdate( BOARD&                    
     if( !IsShownOnScreen() )
         return;
 
-    const int threshold = ADVANCED_CFG::GetCfg().m_NetInspectorBulkUpdateOptimisationThreshold;
+    const size_t threshold = ADVANCED_CFG::GetCfg().m_NetInspectorBulkUpdateOptimisationThreshold;
 
     // Rebuild the full list if the number of items affected is > the optimisation threshold
     // Note: Always rebuild for any changed items as there is no way to determine what property
