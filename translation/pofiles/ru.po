@@ -8,7 +8,7 @@
 # dsa-t <dudesuchamazing@gmail.com>, 2022, 2023, 2024, 2025.
 # Andrey Fedorushkov <andrf@mail.ru>, 2022, 2023.
 # Ivan Chuba <xtrvweb@gmail.com>, 2022, 2023.
-# Seth Hillbrand <seth@kipro-pcb.com>, 2023.
+# Seth Hillbrand <seth@kipro-pcb.com>, 2023, 2025.
 # Dmitry Mikhirev <mikhirev@gmail.com>, 2024.
 # alevtina-karashokova <karashokovaaa@basealt.ru>, 2024.
 # Alex Life <life.alex.v@gmail.com>, 2024.
@@ -22,10 +22,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-10 14:43-0800\n"
-"PO-Revision-Date: 2025-02-06 23:35+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"PO-Revision-Date: 2025-02-10 23:20+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -51350,9 +51350,9 @@ msgid "Rule Area %s"
 msgstr "Область запрета %s"
 
 #: pcbnew/zone.cpp:1097
-#, fuzzy, c-format
+#, c-format
 msgid "Teardrop %s %s"
-msgstr "Каплевидные переходы"
+msgstr "Каплевидные переход %s %s"
 
 #: pcbnew/zone.cpp:1099
 #, c-format
