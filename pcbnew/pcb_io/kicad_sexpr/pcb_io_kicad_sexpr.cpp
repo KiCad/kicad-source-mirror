@@ -1349,9 +1349,7 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
 
 void PCB_IO_KICAD_SEXPR::formatLayers( LSET aLayerMask, bool aEnumerateLayers ) const
 {
-    static const LSET cu_all( LSET::AllCuMask( m_board
-                                                ? m_board->GetCopperLayerCount()
-                                                : MAX_CU_LAYERS ) );
+    static const LSET cu_all( LSET::AllCuMask() );
     static const LSET fr_bk(  { B_Cu, F_Cu } );
     static const LSET adhes(  { B_Adhes, F_Adhes } );
     static const LSET paste(  { B_Paste, F_Paste } );
@@ -1360,19 +1358,25 @@ void PCB_IO_KICAD_SEXPR::formatLayers( LSET aLayerMask, bool aEnumerateLayers ) 
     static const LSET crt_yd( { B_CrtYd, F_CrtYd } );
     static const LSET fab(    { B_Fab, F_Fab } );
 
-    LSET cu_mask = cu_all;
+    LSET cu_board_mask = LSET::AllCuMask( m_board
+                                           ? m_board->GetCopperLayerCount()
+                                           : MAX_CU_LAYERS );
 
     std::string output;
 
     if( !aEnumerateLayers )
     {
-        // output copper layers first, then non copper
-        if( ( aLayerMask & cu_mask ) == cu_mask )
+        // If all copper layers present on the board are enabled, then output the wildcard
+        if( ( aLayerMask & cu_board_mask ) == cu_board_mask )
         {
             output += ' ' + m_out->Quotew( "*.Cu" );
-            aLayerMask &= ~cu_all;          // clear bits, so they are not output again below
+
+            // Clear all copper bits because pads might have internal layers that aren't part of the
+            // board enabled, and we don't want to output those in the layers listing if we already
+            // output the wildcard.
+            aLayerMask &= ~cu_all;
         }
-        else if( ( aLayerMask & cu_mask ) == fr_bk )
+        else if( ( aLayerMask & cu_board_mask ) == fr_bk )
         {
             output += ' ' + m_out->Quotew( "F&B.Cu" );
             aLayerMask &= ~fr_bk;
