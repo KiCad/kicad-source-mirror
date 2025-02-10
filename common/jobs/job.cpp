@@ -146,7 +146,7 @@ wxString JOB::GetFullOutputPath( PROJECT* aProject ) const
         }
 	}
 
-    return m_outputPath;
+    return outPath;
 }
 
 
