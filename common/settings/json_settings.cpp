@@ -79,6 +79,7 @@ JSON_SETTINGS::JSON_SETTINGS( const wxString& aFilename, SETTINGS_LOC aLocation,
         m_deleteLegacyAfterMigration( true ),
         m_resetParamsIfMissing( true ),
         m_schemaVersion( aSchemaVersion ),
+        m_isFutureFormat( false ),
         m_manager( nullptr )
 {
     m_internals = std::make_unique<JSON_SETTINGS_INTERNALS>();
@@ -325,6 +326,7 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
                     wxLogTrace( traceSettings,
                                 wxT( "%s: warning: file version %d is newer than latest (%d)" ),
                                 GetFullFilename(), filever, m_schemaVersion );
+                    m_isFutureFormat = true;
                 }
             }
             else

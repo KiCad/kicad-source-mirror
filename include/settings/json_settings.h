@@ -332,6 +332,9 @@ protected:
     /// Version of this settings schema.
     int m_schemaVersion;
 
+    /// Set to true if this settings is loaded from a file with a newer schema version than is known
+    bool m_isFutureFormat;
+
     /// A pointer to the settings manager managing this file (may be null)
     SETTINGS_MANAGER* m_manager;
 

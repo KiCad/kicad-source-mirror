@@ -589,6 +589,10 @@ bool PROJECT_FILE::SaveToFile( const wxString& aDirectory, bool aForce )
 
     Set( "meta.filename", m_project->GetProjectName() + "." + FILEEXT::ProjectFileExtension );
 
+    // If we're actually going ahead and doing the save, the flag that keeps code from doing the save
+    // should be cleared at this point
+    m_wasMigrated = false;
+
     return JSON_SETTINGS::SaveToFile( aDirectory, aForce );
 }
 
@@ -630,6 +634,10 @@ bool PROJECT_FILE::SaveAs( const wxString& aDirectory, const wxString& aFile )
     updatePathByPtr( "schematic.plot_directory" );
     updatePathByPtr( "schematic.ngspice.workbook_filename" );
     updatePathByPtr( "pcbnew.page_layout_descr_file" );
+
+    // If we're actually going ahead and doing the save, the flag that keeps code from doing the save
+    // should be cleared at this point
+    m_wasMigrated = false;
 
     // While performing Save As, we have already checked that we can write to the directory
     // so don't carry the previous flag

@@ -1168,7 +1168,7 @@ void PCB_EDIT_FRAME::doCloseWindow()
     }
 
     // Make sure local settings are persisted
-    if( !Prj().GetLocalSettings().WasMigrated() )
+    if( Prj().GetLocalSettings().ShouldAutoSave() )
         SaveProjectLocalSettings();
     else
         wxLogTrace( traceAutoSave, wxT( "Skipping auto-save of migrated local settings" ) );

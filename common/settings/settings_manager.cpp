@@ -1185,7 +1185,7 @@ bool SETTINGS_MANAGER::unloadProjectFile( PROJECT* aProject, bool aSave )
 
     PROJECT_FILE* file = m_project_files[name];
 
-    if( file->WasMigrated() )
+    if( !file->ShouldAutoSave() )
         aSave = false;
 
     auto it = std::find_if( m_settings.begin(), m_settings.end(),
@@ -1198,7 +1198,7 @@ bool SETTINGS_MANAGER::unloadProjectFile( PROJECT* aProject, bool aSave )
     {
         wxString projectPath = GetPathForSettingsFile( it->get() );
 
-        bool saveLocalSettings = aSave && !aProject->GetLocalSettings().WasMigrated();
+        bool saveLocalSettings = aSave && aProject->GetLocalSettings().ShouldAutoSave();
 
         FlushAndRelease( &aProject->GetLocalSettings(), saveLocalSettings );
 

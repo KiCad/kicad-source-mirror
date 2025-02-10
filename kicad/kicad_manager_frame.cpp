@@ -602,8 +602,8 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
     if( !Kiway().PlayersClose( false ) )
         return false;
 
-    bool shouldSaveProject = !Prj().GetLocalSettings().WasMigrated()
-                             && !Prj().GetProjectFile().WasMigrated();
+    bool shouldSaveProject = Prj().GetLocalSettings().ShouldAutoSave()
+                             && Prj().GetProjectFile().ShouldAutoSave();
 
     // Save the project file for the currently loaded project.
     if( m_active_project )

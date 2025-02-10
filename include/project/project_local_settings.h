@@ -72,9 +72,9 @@ public:
     void ClearFileState();
 
     /**
-     * @return true if the local settings needed to be migrated, and shouldn't be auto-saved
+     * @return true if it should be safe to auto-save this file without user action
      */
-    bool WasMigrated() const { return m_wasMigrated; }
+    bool ShouldAutoSave() const { return !m_wasMigrated && !m_isFutureFormat; }
 
 protected:
     wxString getFileExt() const override
