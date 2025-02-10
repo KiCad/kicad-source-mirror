@@ -88,6 +88,7 @@ private:
 	void onChangePadMode( wxCommandEvent& event ) override;
 	void OnOffsetCheckbox( wxCommandEvent& event ) override;
 	void OnPadToDieCheckbox( wxCommandEvent& event ) override;
+    void OnPadToDieDelayCheckbox( wxCommandEvent& event ) override;
 
     void PadOrientEvent( wxCommandEvent& event ) override;
     void PadTypeSelected( wxCommandEvent& event ) override;
@@ -155,6 +156,7 @@ private:
     UNIT_BINDER m_sizeX, m_sizeY;
     UNIT_BINDER m_offsetX, m_offsetY;
     UNIT_BINDER m_padToDie;
+    UNIT_BINDER m_padToDieDelay;
     UNIT_BINDER m_trapDelta;
     UNIT_BINDER m_cornerRadius;
     UNIT_BINDER m_cornerRatio;

@@ -191,9 +191,16 @@ public:
     /**
      * Get the length of the track using the hypotenuse calculation.
      *
-     * @return the length of the track.
+     * @return the length of the track
      */
     virtual double GetLength() const;
+
+    /**
+     * Get the time delay of the track
+     *
+     * @return the delay of the track
+     */
+    virtual double GetDelay() const;
 
     /**
      * Convert the track shape to a closed polygon.

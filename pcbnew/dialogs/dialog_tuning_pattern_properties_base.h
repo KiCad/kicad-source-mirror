@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,17 +20,17 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/string.h>
+#include <wx/radiobut.h>
 #include <wx/stattext.h>
+#include <wx/sizer.h>
 #include <wx/textctrl.h>
 #include <wx/checkbox.h>
 #include <wx/choice.h>
 #include <wx/gbsizer.h>
-#include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_TUNING_PATTERN_PROPERTIES_BASE
@@ -41,9 +41,14 @@ class DIALOG_TUNING_PATTERN_PROPERTIES_BASE : public DIALOG_SHIM
 
 	protected:
 		wxStaticBitmap* m_legend;
+		wxRadioButton* m_radioBtnLength;
 		wxStaticText* m_targetLengthLabel;
 		wxTextCtrl* m_targetLengthCtrl;
 		wxStaticText* m_targetLengthUnits;
+		wxRadioButton* m_radioBtnDelay;
+		wxStaticText* m_targetDelayLabel;
+		wxTextCtrl* m_targetDelayCtrl;
+		wxStaticText* m_targetDelayUnits;
 		wxCheckBox* m_overrideCustomRules;
 		wxStaticText* m_sourceInfo;
 		wxStaticText* m_track_minALabel;
@@ -66,6 +71,8 @@ class DIALOG_TUNING_PATTERN_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_stdButtonsCancel;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void onRadioBtnTargetLengthClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onRadioBtnTargetDelayClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onOverrideCustomRules( wxCommandEvent& event ) { event.Skip(); }
 
 

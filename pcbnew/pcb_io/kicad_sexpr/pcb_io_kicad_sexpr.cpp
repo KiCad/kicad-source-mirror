@@ -1696,6 +1696,11 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
                       formatInternalUnits( aPad->GetPadToDieLength() ).c_str() );
     }
 
+    if( aPad->GetPadToDieDelay() != 0 )
+    {
+        m_out->Print( "(die_delay %s)", formatInternalUnits( aPad->GetPadToDieDelay() ).c_str() );
+    }
+
     if( aPad->GetLocalSolderMaskMargin().has_value() )
     {
         m_out->Print( "(solder_mask_margin %s)",

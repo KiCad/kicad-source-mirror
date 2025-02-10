@@ -77,6 +77,7 @@ struct CONSTRAINT
     wxString        m_RuleName;
     wxString        m_FromName;
     wxString        m_ToName;
+    bool            m_IsTimeDomain;
 };
 
 

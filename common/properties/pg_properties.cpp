@@ -210,6 +210,11 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty, EDA_DRAW_FRAME*
 
     switch( display )
     {
+    case PROPERTY_DISPLAY::PT_TIME:
+        ret = new PGPROPERTY_TIME( aFrame );
+        ret->SetEditor( PG_UNIT_EDITOR::BuildEditorName( aFrame ) );
+        break;
+
     case PROPERTY_DISPLAY::PT_SIZE:
         ret = new PGPROPERTY_SIZE( aFrame );
         ret->SetEditor( PG_UNIT_EDITOR::BuildEditorName( aFrame ) );
@@ -723,4 +728,67 @@ wxString PGPROPERTY_COLOR4D::ValueToString( wxVariant& aValue, int aFlags ) cons
         return wxStringProperty::ValueToString( aValue, aFlags );
 
     return ret;
+}
+
+
+PGPROPERTY_TIME::PGPROPERTY_TIME( EDA_DRAW_FRAME* aParentFrame ) :
+        wxIntProperty( wxPG_LABEL, wxPG_LABEL, 0 ),
+        m_parentFrame( aParentFrame )
+{
+}
+
+
+#if wxCHECK_VERSION( 3, 3, 0 )
+bool PGPROPERTY_AREA::StringToValue( wxVariant& aVariant, const wxString& aText,
+                                     wxPGPropValFormatFlags aArgFlags ) const
+#else
+bool PGPROPERTY_TIME::StringToValue( wxVariant& aVariant, const wxString& aText,
+                                    int aArgFlags ) const
+#endif
+{
+    wxCHECK_MSG( false, false, wxS( "PGPROPERTY_RATIO::StringToValue should not be used." ) );
+}
+
+
+#if wxCHECK_VERSION( 3, 3, 0 )
+wxString PGPROPERTY_AREA::ValueToString( wxVariant& aVariant,
+                                         wxPGPropValFormatFlags aArgFlags ) const
+#else
+wxString PGPROPERTY_TIME::ValueToString( wxVariant& aVariant, int aArgFlags ) const
+#endif
+{
+    int value;
+
+    if( aVariant.GetType() == wxT( "std::optional<int>" ) )
+    {
+        auto* variantData = static_cast<STD_OPTIONAL_INT_VARIANT_DATA*>( aVariant.GetData() );
+
+        if( !variantData->Value().has_value() )
+            return wxEmptyString;
+
+        value = variantData->Value().value();
+    }
+    else if( aVariant.GetType() == wxPG_VARIANT_TYPE_LONG )
+    {
+        value = static_cast<int>( aVariant.GetInteger() );
+    }
+    else
+    {
+        wxFAIL_MSG( wxT( "Expected int (or std::optional<int>) value type" ) );
+        return wxEmptyString;
+    }
+
+    return m_parentFrame->StringFromValue( value, true, EDA_DATA_TYPE::TIME );
+}
+
+
+bool PGPROPERTY_TIME::ValidateValue( wxVariant& aValue, wxPGValidationInfo& aValidationInfo ) const
+{
+    return true;
+}
+
+
+wxValidator* PGPROPERTY_TIME::DoGetValidator() const
+{
+    return nullptr;
 }

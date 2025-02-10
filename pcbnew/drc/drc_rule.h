@@ -141,7 +141,12 @@ public:
 
     enum class OPTIONS : std::size_t
     {
-        SKEW_WITHIN_DIFF_PAIRS = 0
+        SKEW_WITHIN_DIFF_PAIRS = 0,
+        SPACE_DOMAIN,
+        TIME_DOMAIN,
+
+        // Keep this last value - used to statically size the options bitset
+        NUM_OPTIONS
     };
 
     bool IsNull() const
@@ -180,10 +185,14 @@ public:
 
     void SetOption( OPTIONS option ) { m_options.set( static_cast<std::size_t>( option ), true ); }
 
+    void ClearOption( OPTIONS option ) { m_options.set( static_cast<std::size_t>( option ), false ); }
+
     bool GetOption( OPTIONS option ) const
     {
         return m_options.test( static_cast<std::size_t>( option ) );
     }
+
+    void SetOptionsFromOther( const DRC_CONSTRAINT& aOther ) { m_options = aOther.m_options; }
 
 public:
     DRC_CONSTRAINT_T    m_Type;
@@ -196,8 +205,8 @@ public:
 private:
     wxString            m_name;          // For just-in-time constraints
     DRC_RULE*           m_parentRule;    // For constraints found in rules
-    std::bitset<1>      m_options;       // Constraint-specific option bits
-                                         // (indexed from DRC_CONSTRAINT::OPTIONS)
+    std::bitset<static_cast<int>( OPTIONS::NUM_OPTIONS )> m_options;       // Constraint-specific option bits
+                                                                           // (indexed from DRC_CONSTRAINT::OPTIONS)
 };
 
 

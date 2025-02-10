@@ -28,8 +28,12 @@
 
 namespace PNS {
 
-const long long int MEANDER_SETTINGS::DEFAULT_TOLERANCE( pcbIUScale.mmToIU( 0.1 ) );
+const long long int MEANDER_SETTINGS::DEFAULT_LENGTH_TOLERANCE( pcbIUScale.mmToIU( 0.1 ) );
 const long long int MEANDER_SETTINGS::LENGTH_UNCONSTRAINED( 1000000 * pcbIUScale.IU_PER_MM );
+
+const long long int MEANDER_SETTINGS::DEFAULT_DELAY_TOLERANCE( 0.1 * pcbIUScale.IU_PER_PS );
+const long long int MEANDER_SETTINGS::DELAY_UNCONSTRAINED( 1000000 * pcbIUScale.IU_PER_PS );
+
 const int MEANDER_SETTINGS::SKEW_UNCONSTRAINED( std::numeric_limits<int>::max() );
 
 
@@ -41,7 +45,9 @@ MEANDER_SETTINGS::MEANDER_SETTINGS()
     m_lenPadToDie = 0;
     m_spacing = 600000;
     SetTargetLength( LENGTH_UNCONSTRAINED );
+    SetTargetLengthDelay( DELAY_UNCONSTRAINED );
     SetTargetSkew( 0 );
+    SetTargetSkewDelay( 0 );
     m_overrideCustomRules = false;
     m_cornerStyle = MEANDER_STYLE_ROUND;
     m_cornerRadiusPercentage = 80;
@@ -49,6 +55,7 @@ MEANDER_SETTINGS::MEANDER_SETTINGS()
     m_initialSide = MEANDER_SIDE_LEFT;
     m_lengthTolerance = 0;
     m_keepEndpoints = false;
+    m_isTimeDomain = false;
 }
 
 
@@ -63,8 +70,8 @@ void MEANDER_SETTINGS::SetTargetLength( long long int aOpt )
     }
     else
     {
-        m_targetLength.SetMin( aOpt - DEFAULT_TOLERANCE );
-        m_targetLength.SetMax( aOpt + DEFAULT_TOLERANCE );
+        m_targetLength.SetMin( aOpt - DEFAULT_LENGTH_TOLERANCE );
+        m_targetLength.SetMax( aOpt + DEFAULT_LENGTH_TOLERANCE );
     }
 }
 
@@ -81,6 +88,35 @@ void MEANDER_SETTINGS::SetTargetLength( const MINOPTMAX<int>& aConstraint )
 }
 
 
+void MEANDER_SETTINGS::SetTargetLengthDelay( long long int aOpt )
+{
+    m_targetLengthDelay.SetOpt( aOpt );
+
+    if( aOpt == PNS::MEANDER_SETTINGS::DELAY_UNCONSTRAINED )
+    {
+        m_targetLengthDelay.SetMin( 0 );
+        m_targetLengthDelay.SetMax( aOpt );
+    }
+    else
+    {
+        m_targetLengthDelay.SetMin( aOpt - DEFAULT_DELAY_TOLERANCE );
+        m_targetLengthDelay.SetMax( aOpt + DEFAULT_DELAY_TOLERANCE );
+    }
+}
+
+
+void MEANDER_SETTINGS::SetTargetLengthDelay( const MINOPTMAX<int>& aConstraint )
+{
+    SetTargetLengthDelay( aConstraint.Opt() );
+
+    if( aConstraint.HasMin() )
+        m_targetLengthDelay.SetMin( aConstraint.Min() );
+
+    if( aConstraint.HasMax() )
+        m_targetLengthDelay.SetMax( aConstraint.Max() );
+}
+
+
 void MEANDER_SETTINGS::SetTargetSkew( int aOpt )
 {
     m_targetSkew.SetOpt( aOpt );
@@ -92,8 +128,8 @@ void MEANDER_SETTINGS::SetTargetSkew( int aOpt )
     }
     else
     {
-        m_targetSkew.SetMin( aOpt - DEFAULT_TOLERANCE );
-        m_targetSkew.SetMax( aOpt + DEFAULT_TOLERANCE );
+        m_targetSkew.SetMin( aOpt - DEFAULT_LENGTH_TOLERANCE );
+        m_targetSkew.SetMax( aOpt + DEFAULT_LENGTH_TOLERANCE );
     }
 }
 
@@ -107,6 +143,35 @@ void MEANDER_SETTINGS::SetTargetSkew( const MINOPTMAX<int>& aConstraint )
 
     if( aConstraint.HasMax() )
         m_targetSkew.SetMax( aConstraint.Max() );
+}
+
+
+void MEANDER_SETTINGS::SetTargetSkewDelay( int aOpt )
+{
+    m_targetSkewDelay.SetOpt( aOpt );
+
+    if( aOpt == PNS::MEANDER_SETTINGS::SKEW_UNCONSTRAINED )
+    {
+        m_targetSkewDelay.SetMin( 0 );
+        m_targetSkewDelay.SetMax( aOpt );
+    }
+    else
+    {
+        m_targetSkewDelay.SetMin( aOpt - DEFAULT_LENGTH_TOLERANCE );
+        m_targetSkewDelay.SetMax( aOpt + DEFAULT_LENGTH_TOLERANCE );
+    }
+}
+
+
+void MEANDER_SETTINGS::SetTargetSkewDelay( const MINOPTMAX<int>& aConstraint )
+{
+    SetTargetSkewDelay( aConstraint.Opt() );
+
+    if( aConstraint.HasMin() )
+        m_targetSkewDelay.SetMin( aConstraint.Min() );
+
+    if( aConstraint.HasMax() )
+        m_targetSkewDelay.SetMax( aConstraint.Max() );
 }
 
 

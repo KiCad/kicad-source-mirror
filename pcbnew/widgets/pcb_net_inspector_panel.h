@@ -108,6 +108,7 @@ private:
     static wxString formatNetName( const NETINFO_ITEM* aNet );
     static wxString formatCount( unsigned int aValue );
     wxString formatLength( int64_t aValue ) const;
+    wxString        formatDelay( int64_t aValue ) const;
 
     /// Generates a sub-menu for the show / hide columns submenu
     void generateShowHideColumnMenu( wxMenu* target );
@@ -255,6 +256,7 @@ private:
     bool m_showUnconnectedNets = false;
     bool m_groupByNetclass = false;
     bool m_groupByConstraint = false;
+    bool m_showTimeDomainDetails = false;
 
     /// Custom net grouping rules
     std::vector<std::unique_ptr<EDA_COMBINED_MATCHER>> m_custom_group_rules;
@@ -324,6 +326,7 @@ private:
         ID_GENERATE_REPORT,
         ID_HIGHLIGHT_SELECTED_NETS,
         ID_CLEAR_HIGHLIGHTING,
+        ID_SHOW_TIME_DOMAIN_DETAILS,
         ID_LAST_STATIC_MENU = ID_CLEAR_HIGHLIGHTING,
         ID_HIDE_COLUMN,
     };

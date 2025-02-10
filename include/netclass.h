@@ -238,6 +238,12 @@ public:
     void    SetPriority( int aPriority )    { m_Priority = aPriority; }
     int     GetPriority() const             { return m_Priority; }
 
+    bool      HasTuningProfile() const { return !m_TuningProfile.empty(); }
+    void      SetTuningProfile( const wxString& aTuningProfile ) { m_TuningProfile = aTuningProfile; }
+    wxString  GetTuningProfile() const { return m_TuningProfile; }
+    void      SetTuningProfileParent( NETCLASS* aParent ) { m_tuningProfileParent = aParent; }
+    NETCLASS* GetTuningProfileParent() const { return m_tuningProfileParent; }
+
 protected:
     bool m_isDefault; ///< Mark if this instance is the default netclass
 
@@ -267,6 +273,8 @@ protected:
 
     COLOR4D            m_pcbColor;          ///< Optional PCB color override for this netclass
 
+    wxString m_TuningProfile; ///< The tuning profile name being used by this netclass
+
     // The NETCLASS providing each parameter
     NETCLASS* m_clearanceParent;
     NETCLASS* m_trackWidthParent;
@@ -282,6 +290,7 @@ protected:
     NETCLASS* m_busWidthParent;
     NETCLASS* m_schematicColorParent;
     NETCLASS* m_lineStyleParent;
+    NETCLASS* m_tuningProfileParent;
 };
 
 #endif  // CLASS_NETCLASS_H

@@ -48,20 +48,30 @@ public:
     /// @copydoc PLACEMENT_ALGO::Move()
     bool Move( const VECTOR2I& aP, ITEM* aEndItem ) override;
 
-    /// @copydoc MEANDER_PLACER_BASE::TuningResult()
-    long long int TuningResult() const override;
+    /// @copydoc MEANDER_PLACER_BASE::TuningLengthResult()
+    long long int TuningLengthResult() const override;
+
+    /// @copydoc MEANDER_PLACER_BASE::TuningDelayResult()
+    int64_t TuningDelayResult() const override;
 
     long long int CurrentSkew() const;
 
 private:
     long long int origPathLength() const override;
 
+    int64_t origPathDelay() const override;
+
+    void calculateTimeDomainTargets() override;
+
     DIFF_PAIR m_originPair;
     ITEM_SET  m_tunedPathP, m_tunedPathN;
 
     long long int m_coupledLength;
-    int           m_padToDieP;
-    int           m_padToDieN;
+    int64_t       m_coupledDelay;
+    int           m_padToDieLengthP;
+    int           m_padToDieLengthN;
+    int64_t       m_padToDieDelayP;
+    int64_t       m_padToDieDelayN;
 };
 
 }

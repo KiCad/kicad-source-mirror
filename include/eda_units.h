@@ -36,22 +36,29 @@
  */
 enum class EDA_DATA_TYPE
 {
-    DISTANCE = 0,
-    AREA     = 1,
-    VOLUME   = 2,
-    UNITLESS = 3
+    DISTANCE     = 0,
+    AREA         = 1,
+    VOLUME       = 2,
+    UNITLESS     = 3,
+    TIME         = 4,
+    LENGTH_DELAY = 5
 };
 
 enum class EDA_UNITS
 {
-    INCH     = 0,       // Do not use IN: it conflicts with a Windows header
-    MM       = 1,
-    UNSCALED = 2,
-    DEGREES  = 3,
-    PERCENT  = 4,
-    MILS     = 5,
-    UM       = 6,
-    CM       = 7
+    INCH              = 0,       // Do not use IN: it conflicts with a Windows header
+    MM                = 1,
+    UNSCALED          = 2,
+    DEGREES           = 3,
+    PERCENT           = 4,
+    MILS              = 5,
+    UM                = 6,
+    CM                = 7,
+    FS                = 8,   // Femtoseconds
+    PS                = 9,   // Picoseconds
+    PS_PER_INCH       = 10,
+    PS_PER_CM         = 11,
+    PS_PER_MM         = 12
 };
 
 namespace EDA_UNIT_UTILS

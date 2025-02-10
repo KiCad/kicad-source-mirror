@@ -38,6 +38,7 @@
 #include <dialogs/panel_setup_tuning_patterns.h>
 #include <dialogs/panel_setup_netclasses.h>
 #include <dialogs/panel_assign_component_classes.h>
+#include <dialogs/panel_setup_time_domain_parameters.h>
 #include <panel_text_variables.h>
 #include <project.h>
 #include <project/project_file.h>
@@ -48,6 +49,7 @@
 
 #include "dialog_board_setup.h"
 
+#include <advanced_config.h>
 #include <footprint.h>
 
 
@@ -60,6 +62,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
         m_layers( nullptr ),
         m_boardFinish( nullptr ),
         m_physicalStackup( nullptr ),
+        m_timeDomainParameters( nullptr ),
         m_currentPage( 0 ),
         m_layersPage( 0 ),
         m_physicalStackupPage( 0 ),
@@ -73,7 +76,8 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
         m_tuningPatternsPage( 0 ),
         m_netclassesPage( 0 ),
         m_customRulesPage( 0 ),
-        m_severitiesPage( 0 )
+        m_severitiesPage( 0 ),
+        m_timeDomainParametersPage( 0 )
 
 {
     SetEvtHandlerEnabled( false );
@@ -199,42 +203,56 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
             },
             _( "Component Classes" ) );
 
-    m_customRulesPage = m_treebook->GetPageCount();
-    m_treebook->AddLazySubPage(
-            [this]( wxWindow* aParent ) -> wxWindow*
-            {
-                return new PANEL_SETUP_RULES( aParent, m_frame );
-            }, _( "Custom Rules" ) );
+        m_timeDomainParametersPage = m_treebook->GetPageCount();
+        m_treebook->AddLazySubPage(
+                [this]( wxWindow* aParent ) -> wxWindow*
+                {
+                    BOARD* board = m_frame->GetBoard();
+                    return new PANEL_SETUP_TIME_DOMAIN_PARAMETERS(
+                            aParent, m_frame, board, m_frame->Prj().GetProjectFile().TimeDomainParameters() );
+                },
+                _( "Time Domain Parameters" ) );
 
-    m_severitiesPage = m_treebook->GetPageCount();
-    m_treebook->AddLazySubPage(
-            [this]( wxWindow* aParent ) -> wxWindow*
-            {
-                BOARD* board = m_frame->GetBoard();
-                return new PANEL_SETUP_SEVERITIES( aParent, DRC_ITEM::GetItemsWithSeverities(),
-                                                   board->GetDesignSettings().m_DRCSeverities );
-            }, _( "Violation Severity" ) );
+        m_customRulesPage = m_treebook->GetPageCount();
+        m_treebook->AddLazySubPage(
+                [this]( wxWindow* aParent ) -> wxWindow*
+                {
+                    return new PANEL_SETUP_RULES( aParent, m_frame );
+                },
+                _( "Custom Rules" ) );
 
-    m_treebook->AddPage( new wxPanel( GetTreebook() ), _( "Board Data" ) );
-    m_embeddedFilesPage = m_treebook->GetPageCount();
-    m_treebook->AddLazySubPage(
-            [this]( wxWindow* aParent ) -> wxWindow*
-            {
-                return new PANEL_EMBEDDED_FILES( aParent, m_frame->GetBoard() );
-            }, _( "Embedded Files" ) );
+        m_severitiesPage = m_treebook->GetPageCount();
+        m_treebook->AddLazySubPage(
+                [this]( wxWindow* aParent ) -> wxWindow*
+                {
+                    BOARD* board = m_frame->GetBoard();
+                    return new PANEL_SETUP_SEVERITIES( aParent, DRC_ITEM::GetItemsWithSeverities(),
+                                                       board->GetDesignSettings().m_DRCSeverities );
+                },
+                _( "Violation Severity" ) );
 
-    for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
-        m_treebook->ExpandNode( i );
+        m_treebook->AddPage( new wxPanel( GetTreebook() ), _( "Board Data" ) );
+        m_embeddedFilesPage = m_treebook->GetPageCount();
+        m_treebook->AddLazySubPage(
+                [this]( wxWindow* aParent ) -> wxWindow*
+                {
+                    return new PANEL_EMBEDDED_FILES( aParent, m_frame->GetBoard() );
+                },
+                _( "Embedded Files" ) );
 
-    SetEvtHandlerEnabled( true );
+        for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
+            m_treebook->ExpandNode( i );
 
-    finishDialogSettings();
+        SetEvtHandlerEnabled( true );
 
-    if( Prj().IsReadOnly() )
-    {
-        m_infoBar->ShowMessage( _( "Project is missing or read-only. Some settings will not "
-                                   "be editable." ), wxICON_WARNING );
-    }
+        finishDialogSettings();
+
+        if( Prj().IsReadOnly() )
+        {
+            m_infoBar->ShowMessage( _( "Project is missing or read-only. Some settings will not "
+                                       "be editable." ),
+                                    wxICON_WARNING );
+        }
 
     wxBookCtrlEvent evt( wxEVT_TREEBOOK_PAGE_CHANGED, wxID_ANY, 0 );
 
@@ -255,20 +273,41 @@ void DIALOG_BOARD_SETUP::onPageChanged( wxBookCtrlEvent& aEvent )
 
     if( m_physicalStackupPage > 0 )     // Don't run this during initialization
     {
-        if( m_currentPage == m_physicalStackupPage || page == m_physicalStackupPage )
+        if( m_currentPage == m_physicalStackupPage || m_currentPage == m_timeDomainParametersPage
+            || page == m_physicalStackupPage || page == m_timeDomainParametersPage || page == m_netclassesPage )
         {
             m_layers = RESOLVE_PAGE( PANEL_SETUP_LAYERS, m_layersPage );
             m_physicalStackup = RESOLVE_PAGE( PANEL_SETUP_BOARD_STACKUP, m_physicalStackupPage );
+            m_timeDomainParameters = RESOLVE_PAGE( PANEL_SETUP_TIME_DOMAIN_PARAMETERS, m_timeDomainParametersPage );
+            m_netClasses = RESOLVE_PAGE( PANEL_SETUP_NETCLASSES, m_netclassesPage );
         }
 
         // Ensure layer page always gets updated even if we aren't moving towards it
         if( m_currentPage == m_physicalStackupPage )
+        {
             m_layers->SyncCopperLayers( m_physicalStackup->GetCopperLayerCount() );
 
+            // Avoid calling SyncCopperLayers twice if moving from stackup to time domain directly
+            m_timeDomainParameters->SyncCopperLayers( m_physicalStackup->GetCopperLayerCount() );
+        }
+
         if( page == m_physicalStackupPage )
+        {
             m_physicalStackup->OnLayersOptionsChanged( m_layers->GetUILayerMask() );
-        else if( Prj().IsReadOnly() )
+        }
+        else if( page == m_netclassesPage || m_currentPage == m_timeDomainParametersPage )
+        {
+            m_netClasses->UpdateTuningProfileNames( m_timeDomainParameters->GetDelayProfileNames() );
+        }
+        else if( page == m_timeDomainParametersPage )
+        {
+            m_timeDomainParameters->SyncCopperLayers( m_physicalStackup->GetCopperLayerCount() );
+        }
+
+        if( Prj().IsReadOnly() )
+        {
             KIUI::Disable( m_treebook->GetPage( page ) );
+        }
     }
 
     m_currentPage = page;
@@ -435,6 +474,14 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
 
             RESOLVE_PAGE( PANEL_SETUP_SEVERITIES,
                           m_severitiesPage )->ImportSettingsFrom( otherSettings.m_DRCSeverities );
+        }
+
+        if( importDlg.m_TimeDomainParametersOpt->GetValue() )
+        {
+            PROJECT_FILE& otherProjectFile = otherPrj->GetProjectFile();
+
+            RESOLVE_PAGE( PANEL_SETUP_TIME_DOMAIN_PARAMETERS, m_timeDomainParametersPage )
+                    ->ImportSettingsFrom( otherProjectFile.TimeDomainParameters() );
         }
 
         if( otherPrj != &m_frame->Prj() )

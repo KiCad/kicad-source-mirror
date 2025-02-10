@@ -251,44 +251,6 @@ void MEANDER_PLACER_BASE::tuneLineLength( MEANDERED_LINE& aTuned, long long int 
 }
 
 
-int MEANDER_PLACER_BASE::GetTotalPadToDieLength( const LINE& aLine ) const
-{
-    int   length = 0;
-    JOINT start;
-    JOINT end;
-
-    m_world->FindLineEnds( aLine, start, end );
-
-    // Extract the length of the pad to die for start and end pads
-    for( auto& link : start.LinkList() )
-    {
-        if( const SOLID* solid = dyn_cast<const SOLID*>( link ) )
-        {
-            // If there are overlapping pads, choose the first with a non-zero length
-            if( solid->GetPadToDie() > 0 )
-            {
-                length += solid->GetPadToDie();
-                break;
-            }
-        }
-    }
-
-    for( auto& link : end.LinkList() )
-    {
-        if( const SOLID* solid = dyn_cast<const SOLID*>( link ) )
-        {
-            if( solid->GetPadToDie() > 0 )
-            {
-                length += solid->GetPadToDie();
-                break;
-            }
-        }
-    }
-
-    return length;
-}
-
-
 const MEANDER_SETTINGS& MEANDER_PLACER_BASE::MeanderSettings() const
 {
     return m_settings;
@@ -325,6 +287,16 @@ long long int MEANDER_PLACER_BASE::lineLength( const ITEM_SET& aLine, const SOLI
         return 0;
 
     ROUTER_IFACE* iface = Router()->GetInterface();
-    return iface->CalculateRoutedPathLength( aLine, aStartPad, aEndPad );
+    return iface->CalculateRoutedPathLength( aLine, aStartPad, aEndPad, m_settings.m_netClass );
+}
+
+
+int64_t MEANDER_PLACER_BASE::lineDelay( const ITEM_SET& aLine, const SOLID* aStartPad, const SOLID* aEndPad ) const
+{
+    if( aLine.Empty() )
+        return 0;
+
+    ROUTER_IFACE* iface = Router()->GetInterface();
+    return iface->CalculateRoutedPathDelay( aLine, aStartPad, aEndPad, m_settings.m_netClass );
 }
 }

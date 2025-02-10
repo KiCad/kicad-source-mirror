@@ -93,15 +93,34 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkLengths( const DRC_CONSTRAINT& aCons
         int  minLen = 0;
         int  maxLen = 0;
 
-        if( aConstraint.GetValue().HasMin() && ent.total < aConstraint.GetValue().Min() )
+        const bool          isTimeDomain = aConstraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN );
+        const EDA_DATA_TYPE dataType = isTimeDomain ? EDA_DATA_TYPE::TIME : EDA_DATA_TYPE::DISTANCE;
+
+        if( !isTimeDomain )
         {
-            minViolation = true;
-            minLen       = aConstraint.GetValue().Min();
+            if( aConstraint.GetValue().HasMin() && ent.total < aConstraint.GetValue().Min() )
+            {
+                minViolation = true;
+                minLen = aConstraint.GetValue().Min();
+            }
+            else if( aConstraint.GetValue().HasMax() && ent.total > aConstraint.GetValue().Max() )
+            {
+                maxViolation = true;
+                maxLen = aConstraint.GetValue().Max();
+            }
         }
-        else if( aConstraint.GetValue().HasMax() && ent.total > aConstraint.GetValue().Max() )
+        else
         {
-            maxViolation = true;
-            maxLen       = aConstraint.GetValue().Max();
+            if( aConstraint.GetValue().HasMin() && ent.totalDelay < aConstraint.GetValue().Min() )
+            {
+                minViolation = true;
+                minLen = aConstraint.GetValue().Min();
+            }
+            else if( aConstraint.GetValue().HasMax() && ent.totalDelay > aConstraint.GetValue().Max() )
+            {
+                maxViolation = true;
+                maxLen = aConstraint.GetValue().Max();
+            }
         }
 
         if( ( minViolation || maxViolation ) )
@@ -111,17 +130,29 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkLengths( const DRC_CONSTRAINT& aCons
 
             if( minViolation )
             {
-                msg = formatMsg( _( "(%s min length %s; actual %s)" ),
-                                 aConstraint.GetName(),
-                                 minLen,
-                                 ent.total );
+                if( aConstraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN ) )
+                {
+                    msg = formatMsg( _( "(%s min length %s; actual %s)" ), aConstraint.GetName(), minLen,
+                                     ent.totalDelay, dataType );
+                }
+                else
+                {
+                    msg = formatMsg( _( "(%s min length %s; actual %s)" ), aConstraint.GetName(), minLen, ent.total,
+                                     dataType );
+                }
             }
             else if( maxViolation )
             {
-                msg = formatMsg( _( "(%s max length %s; actual %s)" ),
-                                 aConstraint.GetName(),
-                                 maxLen,
-                                 ent.total );
+                if( aConstraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN ) )
+                {
+                    msg = formatMsg( _( "(%s max length %s; actual %s)" ), aConstraint.GetName(), maxLen,
+                                     ent.totalDelay, dataType );
+                }
+                else
+                {
+                    msg = formatMsg( _( "(%s max length %s; actual %s)" ), aConstraint.GetName(), maxLen, ent.total,
+                                     dataType );
+                }
             }
 
             drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
@@ -142,21 +173,44 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkSkews( const DRC_CONSTRAINT& aConstr
 {
     auto checkSkewsImpl = [this, &aConstraint]( const std::vector<CONNECTION>& connections )
     {
+        const bool          isTimeDomain = aConstraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN );
+        const EDA_DATA_TYPE dataType = isTimeDomain ? EDA_DATA_TYPE::TIME : EDA_DATA_TYPE::DISTANCE;
+
         double   maxLength = 0;
         wxString maxNetname;
 
-        for( const DRC_LENGTH_REPORT::ENTRY& ent : connections )
+        if( !isTimeDomain )
         {
-            if( ent.total > maxLength )
+            for( const DRC_LENGTH_REPORT::ENTRY& ent : connections )
             {
-                maxLength = ent.total;
-                maxNetname = ent.netname;
+                if( ent.total > maxLength )
+                {
+                    maxLength = ent.total;
+                    maxNetname = ent.netname;
+                }
+            }
+        }
+        else
+        {
+            for( const DRC_LENGTH_REPORT::ENTRY& ent : connections )
+            {
+                if( ent.totalDelay > maxLength )
+                {
+                    maxLength = ent.totalDelay;
+                    maxNetname = ent.netname;
+                }
             }
         }
 
         for( const auto& ent : connections )
         {
-            int  skew = KiROUND( ent.total - maxLength );
+            int skew = 0;
+
+            if( isTimeDomain )
+                skew = KiROUND( ent.totalDelay - maxLength );
+            else
+                skew = KiROUND( ent.total - maxLength );
+
             bool fail_min = false;
             bool fail_max = false;
 
@@ -170,23 +224,27 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkSkews( const DRC_CONSTRAINT& aConstr
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SKEW_OUT_OF_RANGE );
                 wxString                  msg;
 
+                double reportTotal = isTimeDomain ? ent.totalDelay : ent.total;
+
                 if( fail_min )
                 {
                     msg.Printf( _( "(%s min skew %s; actual %s; target net length %s (from %s); "
                                    "actual %s)" ),
                                 aConstraint.GetName(),
-                                MessageTextFromValue( aConstraint.GetValue().Min() ),
-                                MessageTextFromValue( skew ), MessageTextFromValue( maxLength ),
-                                maxNetname, MessageTextFromValue( ent.total ) );
+                                MessageTextFromValue( aConstraint.GetValue().Min(), true, dataType ),
+                                MessageTextFromValue( skew, true, dataType ),
+                                MessageTextFromValue( maxLength, true, dataType ), maxNetname,
+                                MessageTextFromValue( reportTotal, true, dataType ) );
                 }
                 else
                 {
                     msg.Printf( _( "(%s max skew %s; actual %s; target net length %s (from %s); "
                                    "actual %s)" ),
                                 aConstraint.GetName(),
-                                MessageTextFromValue( aConstraint.GetValue().Max() ),
-                                MessageTextFromValue( skew ), MessageTextFromValue( maxLength ),
-                                maxNetname, MessageTextFromValue( ent.total ) );
+                                MessageTextFromValue( aConstraint.GetValue().Max(), true, dataType ),
+                                MessageTextFromValue( skew, true, dataType ),
+                                MessageTextFromValue( maxLength, true, dataType ), maxNetname,
+                                MessageTextFromValue( reportTotal, true, dataType ) );
                 }
 
                 drcItem->SetErrorMessage( drcItem->GetErrorText() + " " + msg );
@@ -345,7 +403,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                 return true;
             } );
 
-    LENGTH_CALCULATION* calc = m_board->GetLengthCalculation();
+    LENGTH_DELAY_CALCULATION* calc = m_board->GetLengthCalculation();
 
     std::map< DRC_RULE*, std::vector<CONNECTION> > matches;
 
@@ -358,7 +416,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
 
         for( const auto& [netCode, netItems] : netMap )
         {
-            std::vector<LENGTH_CALCULATION_ITEM> lengthItems;
+            std::vector<LENGTH_DELAY_CALCULATION_ITEM> lengthItems;
             lengthItems.reserve( netItems.size() );
 
             CONNECTION ent;
@@ -376,21 +434,28 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
 
             for( BOARD_CONNECTED_ITEM* item : netItems )
             {
-                LENGTH_CALCULATION_ITEM lengthItem = calc->GetLengthCalculationItem( item );
+                LENGTH_DELAY_CALCULATION_ITEM lengthItem = calc->GetLengthCalculationItem( item );
 
-                if( lengthItem.Type() != LENGTH_CALCULATION_ITEM::TYPE::UNKNOWN )
+                if( lengthItem.Type() != LENGTH_DELAY_CALCULATION_ITEM::TYPE::UNKNOWN )
                     lengthItems.emplace_back( lengthItem );
             }
 
             constexpr PATH_OPTIMISATIONS opts = {
                 .OptimiseViaLayers = true, .MergeTracks = true, .OptimiseTracesInPads = true, .InferViaInPad = false
             };
-            LENGTH_DETAILS details = calc->CalculateLengthDetails( lengthItems, opts );
+            LENGTH_DELAY_STATS details = calc->CalculateLengthDetails( lengthItems, opts, nullptr, nullptr,
+                                                                       LENGTH_DELAY_LAYER_OPT::NO_LAYER_DETAIL,
+                                                                       LENGTH_DELAY_DOMAIN_OPT::WITH_DELAY_DETAIL );
             ent.viaCount = details.NumVias;
             ent.totalVia = details.ViaLength;
+            ent.totalViaDelay = details.ViaDelay;
             ent.totalRoute = static_cast<double>( details.TrackLength );
+            ent.totalRouteDelay = static_cast<double>( details.TrackDelay );
             ent.totalPadToDie = details.PadToDieLength;
+            ent.totalPadToDieDelay = details.PadToDieDelay;
             ent.total = ent.totalRoute + ent.totalVia + ent.totalPadToDie;
+            ent.totalDelay = ent.totalRouteDelay + static_cast<double>( ent.totalViaDelay )
+                             + static_cast<double>( ent.totalPadToDieDelay );
             ent.matchingRule = rule;
 
             // fixme: doesn't seem to work ;-)

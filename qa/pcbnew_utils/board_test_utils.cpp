@@ -463,6 +463,7 @@ void CheckFpPad( const PAD* expected, const PAD* pad )
         BOOST_CHECK_EQUAL( expected->GetPinFunction(), pad->GetPinFunction() );
         BOOST_CHECK_EQUAL( expected->GetPinType(), pad->GetPinType() );
         BOOST_CHECK_EQUAL( expected->GetPadToDieLength(), pad->GetPadToDieLength() );
+        BOOST_CHECK_EQUAL( expected->GetPadToDieDelay(), pad->GetPadToDieDelay() );
         BOOST_CHECK_EQUAL( expected->GetLocalSolderMaskMargin().value_or( 0 ),
                                   pad->GetLocalSolderMaskMargin().value_or( 0 ) );
         BOOST_CHECK_EQUAL( expected->GetLocalSolderPasteMargin().value_or( 0 ),

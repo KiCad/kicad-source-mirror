@@ -40,9 +40,13 @@ public:
         std::set<BOARD_CONNECTED_ITEM*> items;
         int                             viaCount;
         double                          totalRoute;
+        double                          totalRouteDelay;
         int                             totalVia;
+        int64_t                         totalViaDelay;
         int                             totalPadToDie;
+        int64_t                         totalPadToDieDelay;
         double                          total;
+        double                          totalDelay;
     };
 
     DRC_LENGTH_REPORT()

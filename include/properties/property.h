@@ -64,7 +64,8 @@ enum PROPERTY_DISPLAY
     PT_COORD,      ///< Coordinate expressed in distance units (mm/inch)
     PT_DEGREE,     ///< Angle expressed in degrees
     PT_DECIDEGREE, ///< Angle expressed in decidegrees
-    PT_RATIO
+    PT_RATIO,
+    PT_TIME, ///< Time expressed in ps
 };
 
 ///< Macro to generate unique identifier for a type

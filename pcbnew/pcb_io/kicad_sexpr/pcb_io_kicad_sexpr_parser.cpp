@@ -5370,6 +5370,11 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
             NeedRIGHT();
             break;
 
+        case T_die_delay:
+            pad->SetPadToDieDelay( parseBoardUnits( T_die_delay ) );
+            NeedRIGHT();
+            break;
+
         case T_solder_mask_margin:
             pad->SetLocalSolderMaskMargin( parseBoardUnits( "local solder mask margin value" ) );
             NeedRIGHT();

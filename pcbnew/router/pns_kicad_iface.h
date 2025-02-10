@@ -37,6 +37,7 @@ class PCB_TOOL_BASE;
 class FOOTPRINT;
 class PAD;
 class EDA_TEXT;
+class LENGTH_DELAY_CALCULATION_ITEM;
 
 namespace PNS
 {
@@ -84,7 +85,15 @@ public:
     void SetDebugDecorator( PNS::DEBUG_DECORATOR* aDec );
 
     long long int CalculateRoutedPathLength( const PNS::ITEM_SET& aLine, const PNS::SOLID* aStartPad,
-                                             const PNS::SOLID* aEndPad ) override;
+                                             const PNS::SOLID* aEndPad, const NETCLASS* aNetClass ) override;
+    int64_t       CalculateRoutedPathDelay( const PNS::ITEM_SET& aLine, const PNS::SOLID* aStartPad,
+                                            const PNS::SOLID* aEndPad, const NETCLASS* aNetClass ) override;
+    int64_t       CalculateLengthForDelay( int64_t aDesiredDelay, int aWidth, bool aIsDiffPairCoupled,
+                                           int aDiffPairCouplingGap, int aPNSLayer, const NETCLASS* aNetClass ) override;
+    int64_t       CalculateDelayForShapeLineChain( const SHAPE_LINE_CHAIN& aShape, int aWidth, bool aIsDiffPairCoupled,
+                                                   int aDiffPairCouplingGap, int aPNSLayer,
+                                                   const NETCLASS* aNetClass ) override;
+
     PCB_LAYER_ID GetBoardLayerFromPNSLayer( int aLayer ) const override;
     int GetPNSLayerFromBoardLayer( PCB_LAYER_ID aLayer ) const override;
 
@@ -114,6 +123,8 @@ protected:
     bool syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aItem );
     bool syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_SET* aBoardOutline );
     bool inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedWidth );
+    std::vector<LENGTH_DELAY_CALCULATION_ITEM> getLengthDelayCalculationItems( const PNS::ITEM_SET& aLine,
+                                                                               const NETCLASS*      aNetClass ) const;
 
 protected:
     PNS::NODE* m_world;

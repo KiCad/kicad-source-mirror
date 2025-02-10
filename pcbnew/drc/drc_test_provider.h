@@ -122,8 +122,8 @@ protected:
 
     bool isInvisibleText( const BOARD_ITEM* aItem ) const;
 
-    wxString formatMsg( const wxString& aFormatString, const wxString& aSource, double aConstraint,
-                        double aActual );
+    wxString formatMsg( const wxString& aFormatString, const wxString& aSource, double aConstraint, double aActual,
+                        EDA_DATA_TYPE aDataType = EDA_DATA_TYPE::DISTANCE );
     wxString formatMsg( const wxString& aFormatString, const wxString& aSource,
                         const EDA_ANGLE& aConstraint, const EDA_ANGLE& aActual );
 

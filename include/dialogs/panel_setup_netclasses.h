@@ -48,6 +48,8 @@ public:
 
     void ImportSettingsFrom( const std::shared_ptr<NET_SETTINGS>& aNetSettings );
 
+    void UpdateTuningProfileNames( const std::vector<wxString>& aNames ) const;
+
 private:
     void OnAddNetclassClick( wxCommandEvent& event ) override;
     void OnRemoveNetclassClick( wxCommandEvent& event ) override;

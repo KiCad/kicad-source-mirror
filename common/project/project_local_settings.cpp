@@ -230,6 +230,8 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                                             &m_NetInspectorPanel.show_zero_pad_nets, false ) );
     m_params.emplace_back( new PARAM<bool>( "net_inspector_panel.show_unconnected_nets",
                                             &m_NetInspectorPanel.show_unconnected_nets, false ) );
+    m_params.emplace_back( new PARAM<bool>( "net_inspector_panel.show_time_domain_details",
+                                            &m_NetInspectorPanel.show_time_domain_details, false ) );
     m_params.emplace_back( new PARAM<int>( "net_inspector_panel.sorting_column",
                                            &m_NetInspectorPanel.sorting_column, -1 ) );
     m_params.emplace_back( new PARAM<bool>( "net_inspector_panel.sort_ascending",

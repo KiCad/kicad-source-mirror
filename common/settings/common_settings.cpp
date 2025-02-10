@@ -34,13 +34,14 @@
 #include <wx/config.h>
 #include <wx/log.h>
 #include <wx/regex.h>
+#include <wx/tokenzr.h>
 
 
 ///! The following environment variables will never be migrated from a previous version
 const wxRegEx versionedEnvVarRegex( wxS( "KICAD[0-9]+_[A-Z0-9_]+(_DIR)?" ) );
 
 ///! Update the schema version whenever a migration is required
-const int commonSchemaVersion = 3;
+const int commonSchemaVersion = 4;
 
 COMMON_SETTINGS::COMMON_SETTINGS() :
         JSON_SETTINGS( "kicad_common", SETTINGS_LOC::USER, commonSchemaVersion ),
@@ -357,10 +358,10 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
             &m_NetclassPanel.sash_pos, 160 ) );
 
     m_params.emplace_back( new PARAM<wxString>( "netclass_panel.eeschema_shown_columns",
-            &m_NetclassPanel.eeschema_visible_columns, "0 10 11 12 13" ) );
+                                                &m_NetclassPanel.eeschema_visible_columns, "0 11 12 13 14" ) );
 
     m_params.emplace_back( new PARAM<wxString>( "netclass_panel.pcbnew_shown_columns",
-            &m_NetclassPanel.pcbnew_visible_columns, "0 1 2 3 4 5 6 7 8 9" ) );
+                                                &m_NetclassPanel.pcbnew_visible_columns, "0 1 2 3 4 5 6 7 8 9 10" ) );
 
     m_params.emplace_back( new PARAM<int>( "package_manager.sash_pos",
             &m_PackageManager.sash_pos, 380 ) );
@@ -434,6 +435,7 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     registerMigration( 0, 1, std::bind( &COMMON_SETTINGS::migrateSchema0to1, this ) );
     registerMigration( 1, 2, std::bind( &COMMON_SETTINGS::migrateSchema1to2, this ) );
     registerMigration( 2, 3, std::bind( &COMMON_SETTINGS::migrateSchema2to3, this ) );
+    registerMigration( 3, 4, std::bind( &COMMON_SETTINGS::migrateSchema3to4, this ) );
 }
 
 
@@ -555,6 +557,66 @@ bool COMMON_SETTINGS::migrateSchema2to3()
     if( cfgpath.FileExists() )
     {
         wxRemoveFile( cfgpath.GetFullPath() );
+    }
+
+    return true;
+}
+
+
+bool COMMON_SETTINGS::migrateSchema3to4()
+{
+    // >= 10 = add 1
+    try
+    {
+        // Update netclass panel shown columns for eeschema
+        const nlohmann::json::json_pointer v3_pointer_eeschema( "/netclass_panel/eeschema_shown_columns"_json_pointer );
+        wxString                           eeSchemaColumnList_old = m_internals->at( v3_pointer_eeschema );
+
+        wxStringTokenizer eeSchemaShownTokens( eeSchemaColumnList_old );
+        wxString          eeSchemaColumnList_new;
+
+        while( eeSchemaShownTokens.HasMoreTokens() )
+        {
+            long colNumber;
+            eeSchemaShownTokens.GetNextToken().ToLong( &colNumber );
+
+            if( colNumber >= 10 )
+                ++colNumber;
+
+            eeSchemaColumnList_new += wxString::Format( wxT( "%ld " ), colNumber );
+        }
+
+        eeSchemaColumnList_new.Trim( true );
+        eeSchemaColumnList_new.Trim( false );
+
+        m_internals->at( v3_pointer_eeschema ) = eeSchemaColumnList_new.ToUTF8();
+
+        // Update netclass panel shown columns for pcbnew
+        const nlohmann::json::json_pointer v3_pointer_pcbnew( "/netclass_panel/pcbnew_shown_columns"_json_pointer );
+        wxString                           pcbnewColumnList_old = m_internals->at( v3_pointer_pcbnew );
+
+        wxStringTokenizer pcbnewShownTokens( pcbnewColumnList_old );
+        wxString          pcbnewColumnList_new;
+
+        while( pcbnewShownTokens.HasMoreTokens() )
+        {
+            long colNumber;
+            pcbnewShownTokens.GetNextToken().ToLong( &colNumber );
+
+            if( colNumber >= 10 )
+                ++colNumber;
+
+            pcbnewColumnList_new += wxString::Format( wxT( "%ld " ), colNumber );
+        }
+
+        pcbnewColumnList_new.Trim( true );
+        pcbnewColumnList_new.Trim( false );
+
+        m_internals->at( v3_pointer_pcbnew ) = pcbnewColumnList_new.ToUTF8();
+    }
+    catch( ... )
+    {
+        wxLogTrace( traceSettings, wxT( "COMMON_SETTINGS::Migrate 3->4: /netclass_panel/shown_columns not found" ) );
     }
 
     return true;

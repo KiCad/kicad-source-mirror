@@ -382,7 +382,7 @@ const ITEM_SET TOPOLOGY::AssembleTuningPath( ROUTER_IFACE* aRouterIface, ITEM* a
             SHAPE_LINE_CHAIN&  slc = line->Line();
             const PCB_LAYER_ID pcbLayer = aRouterIface->GetBoardLayerFromPNSLayer( line->Layer() );
 
-            LENGTH_CALCULATION::OptimiseTraceInPad( slc, aPad, pcbLayer );
+            LENGTH_DELAY_CALCULATION::OptimiseTraceInPad( slc, aPad, pcbLayer );
         }
     };
 

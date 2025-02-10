@@ -67,8 +67,12 @@ enum MEANDER_SIDE
 class MEANDER_SETTINGS
 {
 public:
-    static const long long int DEFAULT_TOLERANCE;
+    static const long long int DEFAULT_LENGTH_TOLERANCE;
     static const long long int LENGTH_UNCONSTRAINED;
+
+    static const long long int DEFAULT_DELAY_TOLERANCE;
+    static const long long int DELAY_UNCONSTRAINED;
+
     static const int SKEW_UNCONSTRAINED;
 
     MEANDER_SETTINGS();
@@ -76,8 +80,14 @@ public:
     void SetTargetLength( long long int aOpt );
     void SetTargetLength( const MINOPTMAX<int>& aConstraint );
 
+    void SetTargetLengthDelay( long long int aOpt );
+    void SetTargetLengthDelay( const MINOPTMAX<int>& aConstraint );
+
     void SetTargetSkew( int aOpt );
     void SetTargetSkew( const MINOPTMAX<int>& aConstraint );
+
+    void SetTargetSkewDelay( int aOpt );
+    void SetTargetSkewDelay( const MINOPTMAX<int>& aConstraint );
 
     ///< Minimum meandering amplitude.
     int m_minAmplitude;
@@ -97,8 +107,14 @@ public:
     ///< Desired length of the tuned line/diff pair (this is in nm, so allow more than board width).
     MINOPTMAX<long long int> m_targetLength;
 
+    ///< Desired propagation delay of the tuned line
+    MINOPTMAX<long long int> m_targetLengthDelay;
+
     ///< Target skew value for diff pair de-skewing.
     MINOPTMAX<int>           m_targetSkew;
+
+    ///< Target skew value for diff pair de-skewing.
+    MINOPTMAX<int> m_targetSkewDelay;
 
     bool                     m_overrideCustomRules;
 
@@ -119,6 +135,12 @@ public:
 
     ///< Keep vertices between pre, tuned and post parts of the line.
     bool m_keepEndpoints;
+
+    ///< Calculate tuning in the time domain
+    bool m_isTimeDomain;
+
+    ///< The net class this meander pattern belongs to
+    NETCLASS* m_netClass;
 };
 
 /**

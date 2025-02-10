@@ -213,6 +213,7 @@ class PCBEXPR_UNIT_RESOLVER : public LIBEVAL::UNIT_RESOLVER
 {
 public:
     const std::vector<wxString>& GetSupportedUnits() const override;
+    const std::vector<EDA_UNITS>& GetSupportedUnitsTypes() const override;
 
     wxString GetSupportedUnitsMessage() const override;
 
@@ -224,6 +225,7 @@ class PCBEXPR_UNITLESS_RESOLVER : public LIBEVAL::UNIT_RESOLVER
 {
 public:
     const std::vector<wxString>& GetSupportedUnits() const override;
+    const std::vector<EDA_UNITS>& GetSupportedUnitsTypes() const override;
 
     double Convert( const wxString& aString, int unitId ) const override;
 };
@@ -244,6 +246,7 @@ public:
 
     bool Evaluate( const wxString& aExpr );
     int  Result() const { return m_result; }
+    EDA_UNITS Units() const { return m_units; }
 
     void SetErrorCallback( std::function<void( const wxString& aMessage, int aOffset )> aCallback )
     {
@@ -255,6 +258,7 @@ public:
 
 private:
     int  m_result;
+    EDA_UNITS m_units;
 
     PCBEXPR_COMPILER      m_compiler;
     PCBEXPR_UCODE         m_ucode;

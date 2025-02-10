@@ -336,4 +336,34 @@ public:
      KIGFX::COLOR4D m_backgroundColor;
 };
 
+
+class PGPROPERTY_TIME : public wxIntProperty
+{
+public:
+    PGPROPERTY_TIME( EDA_DRAW_FRAME* aParentFrame );
+
+    virtual ~PGPROPERTY_TIME() = default;
+
+protected:
+#if wxCHECK_VERSION( 3, 3, 0 )
+    bool StringToValue( wxVariant& aVariant, const wxString& aText,
+            wxPGPropValFormatFlags aFlags = wxPGPropValFormatFlags::Null ) const override;
+
+    wxString ValueToString( wxVariant& aVariant,
+            wxPGPropValFormatFlags aFlags = wxPGPropValFormatFlags::Null ) const override;
+#else
+    bool StringToValue( wxVariant& aVariant, const wxString& aText,
+                        int aArgFlags = 0 ) const override;
+
+    wxString ValueToString( wxVariant& aVariant, int aArgFlags = 0 ) const override;
+#endif
+
+    bool ValidateValue( wxVariant& aValue, wxPGValidationInfo& aValidationInfo ) const override;
+
+    wxValidator* DoGetValidator() const override;
+
+protected:
+    EDA_DRAW_FRAME* m_parentFrame;
+};
+
 #endif /* PG_PROPERTIES_H */

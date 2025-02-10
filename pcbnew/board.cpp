@@ -79,7 +79,7 @@ BOARD::BOARD() :
         m_timeStamp( 1 ), m_paper( PAGE_INFO::A4 ), m_project( nullptr ), m_userUnits( EDA_UNITS::MM ),
         m_designSettings( new BOARD_DESIGN_SETTINGS( nullptr, "board.design_settings" ) ), m_NetInfo( this ),
         m_embedFonts( false ), m_componentClassManager( std::make_unique<COMPONENT_CLASS_MANAGER>( this ) ),
-        m_lengthCalc( std::make_unique<LENGTH_CALCULATION>( this ) )
+        m_lengthDelayCalc( std::make_unique<LENGTH_DELAY_CALCULATION>( this ) )
 {
     // A too small value do not allow connecting 2 shapes (i.e. segments) not exactly connected
     // A too large value do not allow safely connecting 2 shapes like very short segments.
@@ -2141,6 +2141,12 @@ void BOARD::SynchronizeProperties()
 }
 
 
+void BOARD::SynchronizeTimeDomainProperties()
+{
+    m_lengthDelayCalc->SynchronizeTimeDomainProperties();
+}
+
+
 void BOARD::SynchronizeNetsAndNetClasses( bool aResetTrackAndViaSizes )
 {
     if( !m_project )
@@ -2377,26 +2383,29 @@ BOARD_STACKUP BOARD::GetStackupOrDefault() const
 }
 
 
-std::tuple<int, double, double> BOARD::GetTrackLength( const PCB_TRACK& aTrack ) const
+std::tuple<int, double, double, double, double> BOARD::GetTrackLength( const PCB_TRACK& aTrack ) const
 {
     auto connectivity = GetBoard()->GetConnectivity();
 
-    std::vector<LENGTH_CALCULATION_ITEM> items;
+    std::vector<LENGTH_DELAY_CALCULATION_ITEM> items;
 
     for( BOARD_CONNECTED_ITEM* boardItem : connectivity->GetConnectedItems( &aTrack, EXCLUDE_ZONES ) )
     {
-        LENGTH_CALCULATION_ITEM item = GetLengthCalculation()->GetLengthCalculationItem( boardItem );
+        LENGTH_DELAY_CALCULATION_ITEM item = GetLengthCalculation()->GetLengthCalculationItem( boardItem );
 
-        if( item.Type() != LENGTH_CALCULATION_ITEM::TYPE::UNKNOWN )
+        if( item.Type() != LENGTH_DELAY_CALCULATION_ITEM::TYPE::UNKNOWN )
             items.push_back( item );
     }
 
     constexpr PATH_OPTIMISATIONS opts = {
         .OptimiseViaLayers = true, .MergeTracks = true, .OptimiseTracesInPads = true, .InferViaInPad = false
     };
-    LENGTH_DETAILS details = GetLengthCalculation()->CalculateLengthDetails( items, opts );
+    LENGTH_DELAY_STATS details = GetLengthCalculation()->CalculateLengthDetails(
+            items, opts, nullptr, nullptr, LENGTH_DELAY_LAYER_OPT::NO_LAYER_DETAIL,
+            LENGTH_DELAY_DOMAIN_OPT::WITH_DELAY_DETAIL );
 
-    return std::make_tuple( items.size(), details.TrackLength + details.ViaLength, details.PadToDieLength );
+    return std::make_tuple( items.size(), details.TrackLength + details.ViaLength, details.PadToDieLength,
+                            details.TrackDelay + details.ViaDelay, details.PadToDieDelay );
 }
 
 

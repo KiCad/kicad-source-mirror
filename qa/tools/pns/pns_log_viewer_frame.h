@@ -28,7 +28,7 @@
 #ifndef __PNS_LOG_VIEWER_FRAME_H
 #define __PNS_LOG_VIEWER_FRAME_H
 
-#include <length_calculation.h>
+#include <length_delay_calculation/length_delay_calculation.h>
 #include <pcb_painter.h>
 #include <pcb_test_frame.h>
 #include <pcbnew_utils/board_test_utils.h>
@@ -108,40 +108,9 @@ public:
     }
 
     long long int CalculateRoutedPathLength( const PNS::ITEM_SET& aLine, const PNS::SOLID* aStartPad,
-                                             const PNS::SOLID* aEndPad ) override
+                                             const PNS::SOLID* aEndPad, const NETCLASS* aNetClass ) override
     {
-        std::vector<LENGTH_CALCULATION_ITEM> lengthItems;
-
-        for( int idx = 0; idx < aLine.Size(); idx++ )
-        {
-            const PNS::ITEM* lineItem = aLine[idx];
-
-            if( const PNS::LINE* l = dyn_cast<const PNS::LINE*>( lineItem ) )
-            {
-                LENGTH_CALCULATION_ITEM item;
-                item.SetLine( l->CLine() );
-
-                const PCB_LAYER_ID layer = GetBoardLayerFromPNSLayer( lineItem->Layer() );
-                item.SetLayers( layer );
-
-                lengthItems.emplace_back( std::move( item ) );
-            }
-            else if( lineItem->OfKind( PNS::ITEM::VIA_T ) && idx > 0 && idx < aLine.Size() - 1 )
-            {
-                const int          layerPrev = aLine[idx - 1]->Layer();
-                const int          layerNext = aLine[idx + 1]->Layer();
-                const PCB_LAYER_ID pcbLayerPrev = GetBoardLayerFromPNSLayer( layerPrev );
-                const PCB_LAYER_ID pcbLayerNext = GetBoardLayerFromPNSLayer( layerNext );
-
-                if( layerPrev != layerNext )
-                {
-                    LENGTH_CALCULATION_ITEM item;
-                    item.SetVia( static_cast<PCB_VIA*>( lineItem->GetSourceItem() ) );
-                    item.SetLayers( pcbLayerPrev, pcbLayerNext );
-                    lengthItems.emplace_back( std::move( item ) );
-                }
-            }
-        }
+        std::vector<LENGTH_DELAY_CALCULATION_ITEM> lengthItems = getLengthDelayCalculationItems( aLine, aNetClass );
 
         const PAD* startPad = nullptr;
         const PAD* endPad = nullptr;
@@ -157,6 +126,96 @@ public:
         };
 
         return m_board->GetLengthCalculation()->CalculateLength( lengthItems, opts, startPad, endPad );
+    }
+
+    int64_t CalculateRoutedPathDelay( const PNS::ITEM_SET& aLine, const PNS::SOLID* aStartPad,
+                                      const PNS::SOLID* aEndPad, const NETCLASS* aNetClass ) override
+    {
+        std::vector<LENGTH_DELAY_CALCULATION_ITEM> lengthItems = getLengthDelayCalculationItems( aLine, aNetClass );
+
+        const PAD* startPad = nullptr;
+        const PAD* endPad = nullptr;
+
+        if( aStartPad )
+            startPad = static_cast<PAD*>( aStartPad->Parent() );
+
+        if( aEndPad )
+            endPad = static_cast<PAD*>( aEndPad->Parent() );
+
+        constexpr PATH_OPTIMISATIONS opts = {
+            .OptimiseViaLayers = false, .MergeTracks = false, .OptimiseTracesInPads = false, .InferViaInPad = true
+        };
+
+        return m_board->GetLengthCalculation()->CalculateDelay( lengthItems, opts, startPad, endPad );
+    }
+
+    std::vector<LENGTH_DELAY_CALCULATION_ITEM> getLengthDelayCalculationItems( const PNS::ITEM_SET& aLine,
+                                                                               const NETCLASS*      aNetClass ) const
+    {
+        std::vector<LENGTH_DELAY_CALCULATION_ITEM> lengthItems;
+
+        for( int idx = 0; idx < aLine.Size(); idx++ )
+        {
+            const PNS::ITEM* lineItem = aLine[idx];
+
+            if( const PNS::LINE* l = dyn_cast<const PNS::LINE*>( lineItem ) )
+            {
+                LENGTH_DELAY_CALCULATION_ITEM item;
+                item.SetLine( l->CLine() );
+
+                const PCB_LAYER_ID layer = GetBoardLayerFromPNSLayer( lineItem->Layer() );
+                item.SetLayers( layer );
+                item.SetEffectiveNetClass( aNetClass );
+
+                lengthItems.emplace_back( std::move( item ) );
+            }
+            else if( lineItem->OfKind( PNS::ITEM::VIA_T ) && idx > 0 && idx < aLine.Size() - 1 )
+            {
+                const int          layerPrev = aLine[idx - 1]->Layer();
+                const int          layerNext = aLine[idx + 1]->Layer();
+                const PCB_LAYER_ID pcbLayerPrev = GetBoardLayerFromPNSLayer( layerPrev );
+                const PCB_LAYER_ID pcbLayerNext = GetBoardLayerFromPNSLayer( layerNext );
+
+                if( layerPrev != layerNext )
+                {
+                    LENGTH_DELAY_CALCULATION_ITEM item;
+                    item.SetVia( static_cast<PCB_VIA*>( lineItem->GetSourceItem() ) );
+                    item.SetLayers( pcbLayerPrev, pcbLayerNext );
+                    item.SetEffectiveNetClass( aNetClass );
+                    lengthItems.emplace_back( std::move( item ) );
+                }
+            }
+        }
+
+        return lengthItems;
+    }
+
+    int64_t CalculateLengthForDelay( int64_t aDesiredDelay, const int aWidth, const bool aIsDiffPairCoupled,
+                                     const int aDiffPairCouplingGap, const int aPNSLayer,
+                                     const NETCLASS* aNetClass ) override
+    {
+        TIME_DOMAIN_GEOMETRY_CONTEXT ctx;
+        ctx.NetClass = aNetClass;
+        ctx.Width = aWidth;
+        ctx.IsDiffPairCoupled = aIsDiffPairCoupled;
+        ctx.DiffPairCouplingGap = aDiffPairCouplingGap;
+        ctx.Layer = GetBoardLayerFromPNSLayer( aPNSLayer );
+
+        return m_board->GetLengthCalculation()->CalculateLengthForDelay( aDesiredDelay, ctx );
+    }
+
+    int64_t CalculateDelayForShapeLineChain( const SHAPE_LINE_CHAIN& aShape, int aWidth, bool aIsDiffPairCoupled,
+                                             int aDiffPairCouplingGap, int aPNSLayer,
+                                             const NETCLASS* aNetClass ) override
+    {
+        TIME_DOMAIN_GEOMETRY_CONTEXT ctx;
+        ctx.NetClass = aNetClass;
+        ctx.Width = aWidth;
+        ctx.IsDiffPairCoupled = aIsDiffPairCoupled;
+        ctx.DiffPairCouplingGap = aDiffPairCouplingGap;
+        ctx.Layer = GetBoardLayerFromPNSLayer( aPNSLayer );
+
+        return m_board->GetLengthCalculation()->CalculatePropagationDelayForShapeLineChain( aShape, ctx );
     }
 
     private:

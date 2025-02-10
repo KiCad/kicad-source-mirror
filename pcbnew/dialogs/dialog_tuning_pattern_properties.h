@@ -49,11 +49,14 @@ private:
     bool TransferDataFromWindow() override;
 
     void onOverrideCustomRules( wxCommandEvent& event ) override;
+    void onRadioBtnTargetLengthClick( wxCommandEvent& event ) override;
+    void onRadioBtnTargetDelayClick( wxCommandEvent& event ) override;
 
 private:
     const DRC_CONSTRAINT&  m_constraint;
 
     UNIT_BINDER            m_targetLength;
+    UNIT_BINDER            m_targetDelay;
     UNIT_BINDER            m_minA;
     UNIT_BINDER            m_maxA;
     UNIT_BINDER            m_spacing;

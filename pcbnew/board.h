@@ -33,7 +33,7 @@
 #include <convert_shape_list_to_polygon.h> // for OUTLINE_ERROR_HANDLER
 #include <hash.h>
 #include <layer_ids.h>
-#include <length_calculation.h>
+#include <length_delay_calculation/length_delay_calculation.h>
 #include <lset.h>
 #include <netinfo.h>
 #include <pcb_item_containers.h>
@@ -1016,6 +1016,11 @@ public:
     void SynchronizeProperties();
 
     /**
+     * Ensure that all time domain properties providers are in sync with current settings
+     */
+    void SynchronizeTimeDomainProperties();
+
+    /**
      * Return the Similarity.  Because we compare board to board, we just return 1.0 here
     */
     double Similarity( const BOARD_ITEM& aOther ) const override
@@ -1159,9 +1164,9 @@ public:
      * This uses the connectivity data for the board to calculate connections
      *
      * @param aTrack Starting track (can also be a via) to check against for connection.
-     * @return a tuple containing <number, length, package length>
+     * @return a tuple containing <number, length, package length, delay, package delay>
      */
-    std::tuple<int, double, double> GetTrackLength( const PCB_TRACK& aTrack ) const;
+    std::tuple<int, double, double, double, double> GetTrackLength( const PCB_TRACK& aTrack ) const;
 
     /**
      * Collect all the TRACKs and VIAs that are members of a net given by aNetCode.
@@ -1283,7 +1288,7 @@ public:
     /**
      * Returns the track length calculator
      */
-    LENGTH_CALCULATION* GetLengthCalculation() const { return m_lengthCalc.get(); }
+    LENGTH_DELAY_CALCULATION* GetLengthCalculation() const { return m_lengthDelayCalc.get(); }
 
     /**
      * Gets the component class manager
@@ -1410,7 +1415,7 @@ private:
 
     std::unique_ptr<COMPONENT_CLASS_MANAGER> m_componentClassManager;
 
-    std::unique_ptr<LENGTH_CALCULATION> m_lengthCalc;
+    std::unique_ptr<LENGTH_DELAY_CALCULATION> m_lengthDelayCalc;
 };
 
 

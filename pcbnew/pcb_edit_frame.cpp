@@ -1403,6 +1403,8 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
                                     wxICON_WARNING, WX_INFOBAR::MESSAGE_TYPE::GENERIC );
         }
 
+        GetBoard()->SynchronizeTimeDomainProperties();
+
         // We don't know if anything was modified, so err on the side of requiring a save
         OnModify();
 

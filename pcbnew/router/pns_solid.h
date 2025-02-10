@@ -39,10 +39,11 @@ public:
     SOLID() :
             ITEM( SOLID_T ),
             m_shape( nullptr ),
+            m_padToDie(0),
+            m_padToDieDelay(0),
             m_hole( nullptr )
     {
         m_movable = false;
-        m_padToDie = 0;
     }
 
     ~SOLID()
@@ -64,6 +65,7 @@ public:
 
         m_pos = aSolid.m_pos;
         m_padToDie = aSolid.m_padToDie;
+        m_padToDieDelay = aSolid.m_padToDieDelay;
         m_orientation = aSolid.m_orientation;
         m_anchorPoints = aSolid.m_anchorPoints;
     }
@@ -81,6 +83,7 @@ public:
 
         m_pos = aB.m_pos;
         m_padToDie = aB.m_padToDie;
+        m_padToDieDelay = aB.m_padToDieDelay;
         m_orientation = aB.m_orientation;
         m_anchorPoints = aB.m_anchorPoints;
 
@@ -115,7 +118,10 @@ public:
     void SetPos( const VECTOR2I& aCenter );
 
     int GetPadToDie() const { return m_padToDie; }
-    void SetPadToDie( int aLen ) { m_padToDie = aLen; }
+    void SetPadToDie( const int aLen ) { m_padToDie = aLen; }
+
+    int GetPadToDieDelay() const { return m_padToDieDelay; }
+    void SetPadToDieDelay( const int aDelay ) { m_padToDieDelay = aDelay; }
 
     virtual VECTOR2I Anchor( int aN ) const override;
 
@@ -150,6 +156,7 @@ private:
     SHAPE*      m_shape;
     VECTOR2I    m_offset;
     int         m_padToDie;
+    int         m_padToDieDelay;
     EDA_ANGLE   m_orientation;
     HOLE*       m_hole;
     std::vector<VECTOR2I> m_anchorPoints;

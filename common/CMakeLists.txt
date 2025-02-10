@@ -118,6 +118,7 @@ set( KICOMMON_SRCS
     project/project_archiver.cpp
     project/project_file.cpp
     project/project_local_settings.cpp
+    project/time_domain_parameters.cpp
 
     # This is basically a settings object, but for the toolbar
     tool/ui/toolbar_configuration.cpp
@@ -864,7 +865,9 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_editor_conditions.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_viewer_tools.cpp
 
-    ${CMAKE_SOURCE_DIR}/pcbnew/length_calculation.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/length_delay_calculation/length_delay_calculation.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/length_delay_calculation/length_delay_calculation_item.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/length_delay_calculation/time_domain_parameters_user_defined.cpp
 
     widgets/net_selector.cpp
 )

@@ -94,7 +94,22 @@ namespace numEval
 
 class KICOMMON_API NUMERIC_EVALUATOR
 {
-    enum class Unit { Invalid, UM, MM, CM, Inch, Mil, Degrees, SI };
+    enum class Unit
+    {
+        Invalid,
+        UM,
+        MM,
+        CM,
+        Inch,
+        Mil,
+        Degrees,
+        SI,
+        Femtoseconds,
+        Picoseconds,
+        PsPerInch,
+        PsPerCm,
+        PsPerMm
+    };
 
 public:
     NUMERIC_EVALUATOR( EDA_UNITS aUnits );

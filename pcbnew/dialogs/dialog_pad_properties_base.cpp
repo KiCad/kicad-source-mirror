@@ -501,6 +501,26 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_padToDieUnits->Wrap( -1 );
 	fgSizerPadToDie->Add( m_padToDieUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxRIGHT, 5 );
 
+	wxBoxSizer* bSizer341;
+	bSizer341 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_padToDieDelayOpt = new wxCheckBox( m_panelGeneral, wxID_ANY, _("Specify pad to die delay"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer341->Add( m_padToDieDelayOpt, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_padToDieDelayLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _(":"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_padToDieDelayLabel->Wrap( -1 );
+	bSizer341->Add( m_padToDieDelayLabel, 0, wxALIGN_CENTER_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
+
+
+	fgSizerPadToDie->Add( bSizer341, 1, wxEXPAND, 5 );
+
+	m_padToDieDelayCtrl = new wxTextCtrl( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerPadToDie->Add( m_padToDieDelayCtrl, 0, wxEXPAND|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxTOP, 5 );
+
+	m_padToDieDelayUnits = new wxStaticText( m_panelGeneral, wxID_ANY, _("ps"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_padToDieDelayUnits->Wrap( -1 );
+	fgSizerPadToDie->Add( m_padToDieDelayUnits, 0, wxALL, 5 );
+
 
 	m_LeftBoxSizer->Add( fgSizerPadToDie, 0, wxEXPAND, 5 );
 
@@ -1268,6 +1288,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_holeXCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_holeYCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_padToDieOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnPadToDieCheckbox ), NULL, this );
+	m_padToDieDelayOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnPadToDieDelayCheckbox ), NULL, this );
 	m_rbCopperLayersSel->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetCopperLayers ), NULL, this );
 	m_layerFrontAdhesive->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
 	m_layerBackAdhesive->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
@@ -1355,6 +1376,7 @@ DIALOG_PAD_PROPERTIES_BASE::~DIALOG_PAD_PROPERTIES_BASE()
 	m_holeXCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_holeYCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_padToDieOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnPadToDieCheckbox ), NULL, this );
+	m_padToDieDelayOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnPadToDieDelayCheckbox ), NULL, this );
 	m_rbCopperLayersSel->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetCopperLayers ), NULL, this );
 	m_layerFrontAdhesive->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
 	m_layerBackAdhesive->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );

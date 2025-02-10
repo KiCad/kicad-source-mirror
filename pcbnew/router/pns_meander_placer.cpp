@@ -27,6 +27,8 @@
 #include "pns_solid.h"
 #include "pns_topology.h"
 
+#include <length_delay_calculation/time_domain_parameters_iface.h>
+
 namespace PNS {
 
 MEANDER_PLACER::MEANDER_PLACER( ROUTER* aRouter ) :
@@ -37,8 +39,11 @@ MEANDER_PLACER::MEANDER_PLACER( ROUTER* aRouter ) :
     // Init temporary variables (do not leave uninitialized members)
     m_initialSegment = nullptr;
     m_lastLength = 0;
+    m_lastDelay = 0;
     m_lastStatus = TOO_SHORT;
     m_padToDieLength = 0;
+    m_padToDieDelay = 0;
+    m_netClass = nullptr;
 }
 
 
@@ -75,17 +80,29 @@ bool MEANDER_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     m_tunedPath = topo.AssembleTuningPath( Router()->GetInterface(), m_initialSegment, &m_startPad_n, &m_endPad_n );
 
     m_padToDieLength = 0;
+    m_padToDieDelay = 0;
 
     if( m_startPad_n )
+    {
         m_padToDieLength += m_startPad_n->GetPadToDie();
+        m_padToDieDelay += m_startPad_n->GetPadToDieDelay();
+    }
 
     if( m_endPad_n )
+    {
         m_padToDieLength += m_endPad_n->GetPadToDie();
+        m_padToDieDelay += m_endPad_n->GetPadToDieDelay();
+    }
 
     m_world->Remove( m_originLine );
 
     m_currentWidth = m_originLine.Width();
     m_currentEnd = VECTOR2I( 0, 0 );
+
+    const BOARD_CONNECTED_ITEM* conItem = static_cast<BOARD_CONNECTED_ITEM*>( aStartItem->GetSourceItem() );
+    m_netClass = conItem->GetEffectiveNetClass();
+
+    calculateTimeDomainTargets();
 
     return true;
 }
@@ -97,8 +114,49 @@ long long int MEANDER_PLACER::origPathLength() const
 }
 
 
+int64_t MEANDER_PLACER::origPathDelay() const
+{
+    return m_padToDieDelay + lineDelay( m_tunedPath, m_startPad_n, m_endPad_n );
+}
+
+
+void MEANDER_PLACER::calculateTimeDomainTargets()
+{
+    // If this is a time domain tuning, calculate the target length for the desired total delay
+    if( m_settings.m_isTimeDomain )
+    {
+        const int64_t curDelay = origPathDelay();
+
+        const int64_t desiredDelayMin = m_settings.m_targetLengthDelay.Min();
+        const int64_t desiredDelayOpt = m_settings.m_targetLengthDelay.Opt();
+        const int64_t desiredDelayMax = m_settings.m_targetLengthDelay.Max();
+
+        const int64_t delayDifferenceOpt = desiredDelayOpt - curDelay;
+
+        const int64_t curLength = origPathLength();
+        const int64_t lengthDiffMin = m_router->GetInterface()->CalculateLengthForDelay(
+                desiredDelayOpt - desiredDelayMin, m_currentWidth, false, m_router->Sizes().DiffPairGap(),
+                m_router->GetCurrentLayer(), m_netClass );
+        int64_t lengthDiffOpt = m_router->GetInterface()->CalculateLengthForDelay(
+                std::abs( delayDifferenceOpt ), m_currentWidth, false, m_router->Sizes().DiffPairGap(),
+                m_router->GetCurrentLayer(), m_netClass );
+        const int64_t lengthDiffMax = m_router->GetInterface()->CalculateLengthForDelay(
+                desiredDelayMax - desiredDelayOpt, m_currentWidth, false, m_router->Sizes().DiffPairGap(),
+                m_router->GetCurrentLayer(), m_netClass );
+
+        lengthDiffOpt = delayDifferenceOpt > 0 ? lengthDiffOpt : -lengthDiffOpt;
+
+        m_settings.m_targetLength.SetMin( curLength + lengthDiffOpt - lengthDiffMin );
+        m_settings.m_targetLength.SetOpt( curLength + lengthDiffOpt );
+        m_settings.m_targetLength.SetMax( curLength + lengthDiffOpt + lengthDiffMax );
+    }
+}
+
+
 bool MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 {
+    calculateTimeDomainTargets();
+
     return doMove( aP, aEndItem, m_settings.m_targetLength.Opt(), m_settings.m_targetLength.Min(),
                    m_settings.m_targetLength.Max() );
 }
@@ -152,8 +210,10 @@ bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int a
     }
 
     long long int lineLen = origPathLength();
+    int64_t       lineDelay = origPathDelay();
 
     m_lastLength = lineLen;
+    m_lastDelay = lineDelay;
     m_lastStatus = TUNED;
 
     if( lineLen > m_settings.m_targetLength.Max() )
@@ -163,6 +223,15 @@ bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int a
     else
     {
         m_lastLength = lineLen - tuned.Length();
+
+        if( m_settings.m_isTimeDomain )
+        {
+            m_lastDelay = lineDelay
+                          - m_router->GetInterface()->CalculateDelayForShapeLineChain(
+                                  tuned, m_currentWidth, false, m_router->Sizes().DiffPairGap(),
+                                  m_router->GetCurrentLayer(), m_netClass );
+        }
+
         tuneLineLength( m_result, aTargetLength - lineLen );
     }
 
@@ -189,6 +258,13 @@ bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int a
         }
 
         m_lastLength += tuned.Length();
+
+        if( m_settings.m_isTimeDomain )
+        {
+            m_lastDelay += m_router->GetInterface()->CalculateDelayForShapeLineChain(
+                    tuned, m_currentWidth, false, m_router->Sizes().DiffPairGap(), m_router->GetCurrentLayer(),
+                    m_netClass );
+        }
 
         if( m_lastLength > aTargetMax )
             m_lastStatus = TOO_LONG;
@@ -299,12 +375,21 @@ int MEANDER_PLACER::CurrentLayer() const
 }
 
 
-long long int MEANDER_PLACER::TuningResult() const
+long long int MEANDER_PLACER::TuningLengthResult() const
 {
     if( m_lastLength )
         return m_lastLength;
     else
         return origPathLength();
+}
+
+
+int64_t MEANDER_PLACER::TuningDelayResult() const
+{
+    if( m_lastDelay )
+        return m_lastDelay;
+    else
+        return origPathDelay();
 }
 
 

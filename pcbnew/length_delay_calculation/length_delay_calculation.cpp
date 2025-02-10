@@ -21,14 +21,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <length_calculation.h>
+#include <length_delay_calculation/length_delay_calculation.h>
 
 #include <board.h>
 #include <board_design_settings.h>
 #include <geometry/geometry_utils.h>
 
 
-void LENGTH_CALCULATION_ITEM::CalculateViaLayers( const BOARD* aBoard )
+void LENGTH_DELAY_CALCULATION_ITEM::CalculateViaLayers( const BOARD* aBoard )
 {
     static std::initializer_list<KICAD_T> traceAndPadTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T };
 
@@ -53,11 +53,12 @@ void LENGTH_CALCULATION_ITEM::CalculateViaLayers( const BOARD* aBoard )
     if( bottom_layer == UNDEFINED_LAYER )
         bottom_layer = m_via->BottomLayer();
 
-    SetLayers( bottom_layer, top_layer );
+    SetLayers( top_layer, bottom_layer );
 }
 
 
-void LENGTH_CALCULATION::clipLineToPad( SHAPE_LINE_CHAIN& aLine, const PAD* aPad, PCB_LAYER_ID aLayer, bool aForward )
+void LENGTH_DELAY_CALCULATION::clipLineToPad( SHAPE_LINE_CHAIN& aLine, const PAD* aPad, PCB_LAYER_ID aLayer,
+                                              bool aForward )
 {
     const int start = aForward ? 0 : aLine.PointCount() - 1;
     const int delta = aForward ? 1 : -1;
@@ -106,36 +107,37 @@ void LENGTH_CALCULATION::clipLineToPad( SHAPE_LINE_CHAIN& aLine, const PAD* aPad
 }
 
 
-LENGTH_DETAILS LENGTH_CALCULATION::CalculateLengthDetails( std::vector<LENGTH_CALCULATION_ITEM>& aItems,
-                                                           const PATH_OPTIMISATIONS              aOptimisations,
-                                                           const PAD* aStartPad, const PAD* aEndPad,
-                                                           const bool aWithLayerLengths ) const
+LENGTH_DELAY_STATS LENGTH_DELAY_CALCULATION::CalculateLengthDetails( std::vector<LENGTH_DELAY_CALCULATION_ITEM>& aItems,
+                                                                     const PATH_OPTIMISATIONS aOptimisations,
+                                                                     const PAD* aStartPad, const PAD* aEndPad,
+                                                                     const LENGTH_DELAY_LAYER_OPT  aLayerOpt,
+                                                                     const LENGTH_DELAY_DOMAIN_OPT aDomain ) const
 {
     // If this set of items has not been optimised, optimise for shortest electrical path
     if( aOptimisations.OptimiseViaLayers || aOptimisations.MergeTracks || aOptimisations.MergeTracks )
     {
-        std::vector<LENGTH_CALCULATION_ITEM*> pads;
-        std::vector<LENGTH_CALCULATION_ITEM*> lines;
-        std::vector<LENGTH_CALCULATION_ITEM*> vias;
+        std::vector<LENGTH_DELAY_CALCULATION_ITEM*> pads;
+        std::vector<LENGTH_DELAY_CALCULATION_ITEM*> lines;
+        std::vector<LENGTH_DELAY_CALCULATION_ITEM*> vias;
 
         // Map of line endpoints to line objects
-        std::map<VECTOR2I, std::unordered_set<LENGTH_CALCULATION_ITEM*>> linesPositionMap;
+        std::map<VECTOR2I, std::unordered_set<LENGTH_DELAY_CALCULATION_ITEM*>> linesPositionMap;
 
         // Map of pad positions to pad objects
-        std::map<VECTOR2I, std::unordered_set<LENGTH_CALCULATION_ITEM*>> padsPositionMap;
+        std::map<VECTOR2I, std::unordered_set<LENGTH_DELAY_CALCULATION_ITEM*>> padsPositionMap;
 
-        for( LENGTH_CALCULATION_ITEM& item : aItems )
+        for( LENGTH_DELAY_CALCULATION_ITEM& item : aItems )
         {
-            if( item.Type() == LENGTH_CALCULATION_ITEM::TYPE::PAD )
+            if( item.Type() == LENGTH_DELAY_CALCULATION_ITEM::TYPE::PAD )
             {
                 pads.emplace_back( &item );
                 padsPositionMap[item.GetPad()->GetPosition()].insert( &item );
             }
-            else if( item.Type() == LENGTH_CALCULATION_ITEM::TYPE::VIA )
+            else if( item.Type() == LENGTH_DELAY_CALCULATION_ITEM::TYPE::VIA )
             {
                 vias.emplace_back( &item );
             }
-            else if( item.Type() == LENGTH_CALCULATION_ITEM::TYPE::LINE )
+            else if( item.Type() == LENGTH_DELAY_CALCULATION_ITEM::TYPE::LINE )
             {
                 lines.emplace_back( &item );
                 linesPositionMap[item.GetLine().CPoint( 0 )].insert( &item );
@@ -153,10 +155,16 @@ LENGTH_DETAILS LENGTH_CALCULATION::CalculateLengthDetails( std::vector<LENGTH_CA
             optimiseTracesInPads( pads, lines );
     }
 
-    LENGTH_DETAILS details;
+    LENGTH_DELAY_STATS details;
 
-    if( aWithLayerLengths )
+    // Create the layer detail maps if required
+    if( aLayerOpt == LENGTH_DELAY_LAYER_OPT::WITH_LAYER_DETAIL )
+    {
         details.LayerLengths = std::make_unique<std::map<PCB_LAYER_ID, int64_t>>();
+
+        if( aDomain == LENGTH_DELAY_DOMAIN_OPT::WITH_DELAY_DETAIL )
+            details.LayerDelays = std::make_unique<std::map<PCB_LAYER_ID, int64_t>>();
+    }
 
     const bool useHeight = m_board->GetDesignSettings().m_UseHeightForLengthCalcs;
 
@@ -170,16 +178,17 @@ LENGTH_DETAILS LENGTH_CALCULATION::CalculateLengthDetails( std::vector<LENGTH_CA
     }
 
     // Add stats for each item
-    for( const LENGTH_CALCULATION_ITEM& item : aItems )
+    for( const LENGTH_DELAY_CALCULATION_ITEM& item : aItems )
     {
         // Don't include merged items
-        if( item.GetMergeStatus() == LENGTH_CALCULATION_ITEM::MERGE_STATUS::MERGED_RETIRED
-            || item.Type() == LENGTH_CALCULATION_ITEM::TYPE::UNKNOWN )
+        if( item.GetMergeStatus() == LENGTH_DELAY_CALCULATION_ITEM::MERGE_STATUS::MERGED_RETIRED
+            || item.Type() == LENGTH_DELAY_CALCULATION_ITEM::TYPE::UNKNOWN )
         {
             continue;
         }
 
-        if( item.Type() == LENGTH_CALCULATION_ITEM::TYPE::LINE )
+        // Calculate the space domain statistics
+        if( item.Type() == LENGTH_DELAY_CALCULATION_ITEM::TYPE::LINE )
         {
             const int64_t length = item.GetLine().Length();
 
@@ -188,16 +197,49 @@ LENGTH_DETAILS LENGTH_CALCULATION::CalculateLengthDetails( std::vector<LENGTH_CA
             if( details.LayerLengths )
                 ( *details.LayerLengths )[item.GetStartLayer()] += length;
         }
-        else if( item.Type() == LENGTH_CALCULATION_ITEM::TYPE::VIA && useHeight )
+        else if( item.Type() == LENGTH_DELAY_CALCULATION_ITEM::TYPE::VIA && useHeight )
         {
             const auto [layerStart, layerEnd] = item.GetLayers();
-            details.ViaLength += stackupHeight( layerStart, layerEnd );
+            details.ViaLength += StackupHeight( layerStart, layerEnd );
             details.NumVias += 1;
         }
-        else if( item.Type() == LENGTH_CALCULATION_ITEM::TYPE::PAD )
+        else if( item.Type() == LENGTH_DELAY_CALCULATION_ITEM::TYPE::PAD )
         {
             details.PadToDieLength += item.GetPad()->GetPadToDieLength();
             details.NumPads += 1;
+        }
+    }
+
+    // Calculate the time domain statistics if required
+    if( aDomain == LENGTH_DELAY_DOMAIN_OPT::WITH_DELAY_DETAIL )
+    {
+        // TODO(JJ): Populate this
+        TIME_DOMAIN_GEOMETRY_CONTEXT ctx;
+        ctx.NetClass = aItems.front().GetEffectiveNetClass(); // We don't care if this is merged for net class lookup
+
+        const std::vector<int64_t> itemDelays = m_timeDomainParameters->GetPropagationDelays( aItems, ctx );
+
+        wxASSERT( itemDelays.size() == aItems.size() );
+
+        for( size_t i = 0; i < aItems.size(); ++i )
+        {
+            const LENGTH_DELAY_CALCULATION_ITEM& item = aItems[i];
+
+            if( item.Type() == LENGTH_DELAY_CALCULATION_ITEM::TYPE::LINE )
+            {
+                details.TrackDelay += itemDelays[i];
+
+                if( details.LayerDelays )
+                    ( *details.LayerDelays )[item.GetStartLayer()] += itemDelays[i];
+            }
+            else if( item.Type() == LENGTH_DELAY_CALCULATION_ITEM::TYPE::VIA && useHeight )
+            {
+                details.ViaDelay += itemDelays[i];
+            }
+            else if( item.Type() == LENGTH_DELAY_CALCULATION_ITEM::TYPE::PAD )
+            {
+                details.PadToDieDelay += itemDelays[i];
+            }
         }
     }
 
@@ -205,10 +247,10 @@ LENGTH_DETAILS LENGTH_CALCULATION::CalculateLengthDetails( std::vector<LENGTH_CA
 }
 
 
-void LENGTH_CALCULATION::inferViaInPad( const PAD* aPad, const LENGTH_CALCULATION_ITEM& aItem,
-                                        LENGTH_DETAILS& aDetails ) const
+void LENGTH_DELAY_CALCULATION::inferViaInPad( const PAD* aPad, const LENGTH_DELAY_CALCULATION_ITEM& aItem,
+                                              LENGTH_DELAY_STATS& aDetails ) const
 {
-    if( aPad && aItem.Type() == LENGTH_CALCULATION_ITEM::TYPE::LINE )
+    if( aPad && aItem.Type() == LENGTH_DELAY_CALCULATION_ITEM::TYPE::LINE )
     {
         const PCB_LAYER_ID startBottomLayer = aItem.GetStartLayer();
         const LSET         padLayers = aPad->Padstack().LayerSet();
@@ -219,21 +261,31 @@ void LENGTH_CALCULATION::inferViaInPad( const PAD* aPad, const LENGTH_CALCULATIO
             const PCB_LAYER_ID padLayer = padLayers.Contains( F_Cu ) ? F_Cu : B_Cu;
 
             aDetails.NumVias += 1;
-            aDetails.ViaLength += stackupHeight( startBottomLayer, padLayer );
+            aDetails.ViaLength += StackupHeight( startBottomLayer, padLayer );
         }
     }
 }
 
 
-int64_t LENGTH_CALCULATION::CalculateLength( std::vector<LENGTH_CALCULATION_ITEM>& aItems,
-                                             const PATH_OPTIMISATIONS aOptimisations, const PAD* aStartPad,
-                                             const PAD* aEndPad ) const
+int64_t LENGTH_DELAY_CALCULATION::CalculateLength( std::vector<LENGTH_DELAY_CALCULATION_ITEM>& aItems,
+                                                   const PATH_OPTIMISATIONS aOptimisations, const PAD* aStartPad,
+                                                   const PAD* aEndPad ) const
 {
     return CalculateLengthDetails( aItems, aOptimisations, aStartPad, aEndPad ).TotalLength();
 }
 
 
-int LENGTH_CALCULATION::stackupHeight( const PCB_LAYER_ID aFirstLayer, const PCB_LAYER_ID aSecondLayer ) const
+int64_t LENGTH_DELAY_CALCULATION::CalculateDelay( std::vector<LENGTH_DELAY_CALCULATION_ITEM>& aItems,
+                                                  const PATH_OPTIMISATIONS aOptimisations, const PAD* aStartPad,
+                                                  const PAD* aEndPad ) const
+{
+    return CalculateLengthDetails( aItems, aOptimisations, aStartPad, aEndPad, LENGTH_DELAY_LAYER_OPT::NO_LAYER_DETAIL,
+                                   LENGTH_DELAY_DOMAIN_OPT::WITH_DELAY_DETAIL )
+            .TotalDelay();
+}
+
+
+int LENGTH_DELAY_CALCULATION::StackupHeight( const PCB_LAYER_ID aFirstLayer, const PCB_LAYER_ID aSecondLayer ) const
 {
     if( !m_board || !m_board->GetDesignSettings().m_UseHeightForLengthCalcs )
         return 0;
@@ -252,23 +304,23 @@ int LENGTH_CALCULATION::stackupHeight( const PCB_LAYER_ID aFirstLayer, const PCB
 }
 
 
-void LENGTH_CALCULATION::mergeLines(
-        std::vector<LENGTH_CALCULATION_ITEM*>&                            aLines,
-        std::map<VECTOR2I, std::unordered_set<LENGTH_CALCULATION_ITEM*>>& aLinesPositionMap )
+void LENGTH_DELAY_CALCULATION::mergeLines(
+        std::vector<LENGTH_DELAY_CALCULATION_ITEM*>&                            aLines,
+        std::map<VECTOR2I, std::unordered_set<LENGTH_DELAY_CALCULATION_ITEM*>>& aLinesPositionMap )
 {
     // Vector of pads, and an associated flag to indicate whether they have been visited by the clustering algorithm
-    std::vector<LENGTH_CALCULATION_ITEM*> pads;
+    std::vector<LENGTH_DELAY_CALCULATION_ITEM*> pads;
 
-    auto removeFromPositionMap = [&aLinesPositionMap]( LENGTH_CALCULATION_ITEM* line )
+    auto removeFromPositionMap = [&aLinesPositionMap]( LENGTH_DELAY_CALCULATION_ITEM* line )
     {
         aLinesPositionMap[line->GetLine().CPoint( 0 )].erase( line );
         aLinesPositionMap[line->GetLine().CLastPoint()].erase( line );
     };
 
     // Attempts to merge unmerged lines in to aPrimaryLine
-    auto tryMerge = [&removeFromPositionMap, &aLinesPositionMap]( const MERGE_POINT              aMergePoint,
-                                                                  const VECTOR2I&                aMergePos,
-                                                                  const LENGTH_CALCULATION_ITEM* aPrimaryItem,
+    auto tryMerge = [&removeFromPositionMap, &aLinesPositionMap]( const MERGE_POINT                    aMergePoint,
+                                                                  const VECTOR2I&                      aMergePos,
+                                                                  const LENGTH_DELAY_CALCULATION_ITEM* aPrimaryItem,
                                                                   SHAPE_LINE_CHAIN& aPrimaryLine, bool* aDidMerge )
     {
         const auto startItr = aLinesPositionMap.find( aMergePos );
@@ -276,12 +328,12 @@ void LENGTH_CALCULATION::mergeLines(
         if( startItr == aLinesPositionMap.end() )
             return;
 
-        std::unordered_set<LENGTH_CALCULATION_ITEM*>& startItems = startItr->second;
+        std::unordered_set<LENGTH_DELAY_CALCULATION_ITEM*>& startItems = startItr->second;
 
         if( startItems.size() != 1 )
             return;
 
-        LENGTH_CALCULATION_ITEM* lineToMerge = *startItems.begin();
+        LENGTH_DELAY_CALCULATION_ITEM* lineToMerge = *startItems.begin();
 
         // Don't merge if line is an arc
         if( !lineToMerge->GetLine().CArcs().empty() )
@@ -292,17 +344,17 @@ void LENGTH_CALCULATION::mergeLines(
             return;
 
         // Merge the lines
-        lineToMerge->SetMergeStatus( LENGTH_CALCULATION_ITEM::MERGE_STATUS::MERGED_RETIRED );
+        lineToMerge->SetMergeStatus( LENGTH_DELAY_CALCULATION_ITEM::MERGE_STATUS::MERGED_RETIRED );
         mergeShapeLineChains( aPrimaryLine, lineToMerge->GetLine(), aMergePoint );
         removeFromPositionMap( lineToMerge );
         *aDidMerge = true;
     };
 
     // Cluster all lines in to contiguous entities
-    for( LENGTH_CALCULATION_ITEM* primaryItem : aLines )
+    for( LENGTH_DELAY_CALCULATION_ITEM* primaryItem : aLines )
     {
         // Don't start with an already merged line
-        if( primaryItem->GetMergeStatus() != LENGTH_CALCULATION_ITEM::MERGE_STATUS::UNMERGED )
+        if( primaryItem->GetMergeStatus() != LENGTH_DELAY_CALCULATION_ITEM::MERGE_STATUS::UNMERGED )
             continue;
 
         // Remove starting line from the position map
@@ -311,7 +363,7 @@ void LENGTH_CALCULATION::mergeLines(
         SHAPE_LINE_CHAIN& primaryLine = primaryItem->GetLine();
 
         // Merge all endpoints
-        primaryItem->SetMergeStatus( LENGTH_CALCULATION_ITEM::MERGE_STATUS::MERGED_IN_USE );
+        primaryItem->SetMergeStatus( LENGTH_DELAY_CALCULATION_ITEM::MERGE_STATUS::MERGED_IN_USE );
         bool mergeComplete = false;
 
         while( !mergeComplete )
@@ -331,8 +383,8 @@ void LENGTH_CALCULATION::mergeLines(
 }
 
 
-void LENGTH_CALCULATION::mergeShapeLineChains( SHAPE_LINE_CHAIN& aPrimary, const SHAPE_LINE_CHAIN& aSecondary,
-                                               const MERGE_POINT aMergePoint )
+void LENGTH_DELAY_CALCULATION::mergeShapeLineChains( SHAPE_LINE_CHAIN& aPrimary, const SHAPE_LINE_CHAIN& aSecondary,
+                                                     const MERGE_POINT aMergePoint )
 {
     if( aMergePoint == MERGE_POINT::START )
     {
@@ -367,17 +419,17 @@ void LENGTH_CALCULATION::mergeShapeLineChains( SHAPE_LINE_CHAIN& aPrimary, const
 }
 
 
-void LENGTH_CALCULATION::optimiseTracesInPads( const std::vector<LENGTH_CALCULATION_ITEM*>& aPads,
-                                               const std::vector<LENGTH_CALCULATION_ITEM*>& aLines )
+void LENGTH_DELAY_CALCULATION::optimiseTracesInPads( const std::vector<LENGTH_DELAY_CALCULATION_ITEM*>& aPads,
+                                                     const std::vector<LENGTH_DELAY_CALCULATION_ITEM*>& aLines )
 {
-    for( LENGTH_CALCULATION_ITEM* padItem : aPads )
+    for( LENGTH_DELAY_CALCULATION_ITEM* padItem : aPads )
     {
-        PAD* pad = padItem->GetPad();
+        const PAD* pad = padItem->GetPad();
 
-        for( LENGTH_CALCULATION_ITEM* lineItem : aLines )
+        for( LENGTH_DELAY_CALCULATION_ITEM* lineItem : aLines )
         {
             // Ignore merged lines
-            if( lineItem->GetMergeStatus() != LENGTH_CALCULATION_ITEM::MERGE_STATUS::MERGED_IN_USE )
+            if( lineItem->GetMergeStatus() != LENGTH_DELAY_CALCULATION_ITEM::MERGE_STATUS::MERGED_IN_USE )
                 continue;
 
             const PCB_LAYER_ID pcbLayer = lineItem->GetStartLayer();
@@ -389,19 +441,19 @@ void LENGTH_CALCULATION::optimiseTracesInPads( const std::vector<LENGTH_CALCULAT
 }
 
 
-void LENGTH_CALCULATION::optimiseViaLayers(
-        const std::vector<LENGTH_CALCULATION_ITEM*>& aVias, std::vector<LENGTH_CALCULATION_ITEM*>& aLines,
-        std::map<VECTOR2I, std::unordered_set<LENGTH_CALCULATION_ITEM*>>&       aLinesPositionMap,
-        const std::map<VECTOR2I, std::unordered_set<LENGTH_CALCULATION_ITEM*>>& aPadsPositionMap )
+void LENGTH_DELAY_CALCULATION::optimiseViaLayers(
+        const std::vector<LENGTH_DELAY_CALCULATION_ITEM*>& aVias, std::vector<LENGTH_DELAY_CALCULATION_ITEM*>& aLines,
+        std::map<VECTOR2I, std::unordered_set<LENGTH_DELAY_CALCULATION_ITEM*>>&       aLinesPositionMap,
+        const std::map<VECTOR2I, std::unordered_set<LENGTH_DELAY_CALCULATION_ITEM*>>& aPadsPositionMap )
 {
-    for( LENGTH_CALCULATION_ITEM* via : aVias )
+    for( LENGTH_DELAY_CALCULATION_ITEM* via : aVias )
     {
         auto lineItr = aLinesPositionMap.find( via->GetVia()->GetPosition() );
 
         if( lineItr == aLinesPositionMap.end() )
             continue;
 
-        std::unordered_set<LENGTH_CALCULATION_ITEM*>& connectedLines = lineItr->second;
+        std::unordered_set<LENGTH_DELAY_CALCULATION_ITEM*>& connectedLines = lineItr->second;
 
         if( connectedLines.empty() )
         {
@@ -419,11 +471,11 @@ void LENGTH_CALCULATION::optimiseViaLayers(
             if( padItr != aPadsPositionMap.end() )
             {
                 // This could be a via-in-pad - check for overlapping pads which are not on the line layer
-                const std::unordered_set<LENGTH_CALCULATION_ITEM*>& pads = padItr->second;
+                const std::unordered_set<LENGTH_DELAY_CALCULATION_ITEM*>& pads = padItr->second;
 
                 if( pads.size() == 1 )
                 {
-                    const LENGTH_CALCULATION_ITEM* padItem = *pads.begin();
+                    const LENGTH_DELAY_CALCULATION_ITEM* padItem = *pads.begin();
 
                     if( !padItem->GetPad()->Padstack().LayerSet().Contains( lineLayer ) )
                     {
@@ -446,7 +498,7 @@ void LENGTH_CALCULATION::optimiseViaLayers(
             // than the overall via span)
             LSET layers;
 
-            for( const LENGTH_CALCULATION_ITEM* lineItem : connectedLines )
+            for( const LENGTH_DELAY_CALCULATION_ITEM* lineItem : connectedLines )
                 layers.set( lineItem->GetStartLayer() );
 
             LSEQ cuStack = layers.CuStack();
@@ -471,7 +523,8 @@ void LENGTH_CALCULATION::optimiseViaLayers(
 }
 
 
-void LENGTH_CALCULATION::OptimiseTraceInPad( SHAPE_LINE_CHAIN& aLine, const PAD* aPad, const PCB_LAYER_ID aPcbLayer )
+void LENGTH_DELAY_CALCULATION::OptimiseTraceInPad( SHAPE_LINE_CHAIN& aLine, const PAD* aPad,
+                                                   const PCB_LAYER_ID aPcbLayer )
 {
     // Only consider lines which terminate in the pad
     if( aLine.CPoint( 0 ) != aPad->GetPosition() && aLine.CLastPoint() != aPad->GetPosition() )
@@ -489,31 +542,34 @@ void LENGTH_CALCULATION::OptimiseTraceInPad( SHAPE_LINE_CHAIN& aLine, const PAD*
 }
 
 
-LENGTH_CALCULATION_ITEM LENGTH_CALCULATION::GetLengthCalculationItem( BOARD_CONNECTED_ITEM* aBoardItem ) const
+LENGTH_DELAY_CALCULATION_ITEM
+LENGTH_DELAY_CALCULATION::GetLengthCalculationItem( const BOARD_CONNECTED_ITEM* aBoardItem ) const
 {
-    if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( aBoardItem ) )
+    if( const PCB_TRACK* track = dynamic_cast<const PCB_TRACK*>( aBoardItem ) )
     {
         if( track->Type() == PCB_VIA_T )
         {
-            PCB_VIA* via = static_cast<PCB_VIA*>( track );
+            const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
 
-            LENGTH_CALCULATION_ITEM item;
+            LENGTH_DELAY_CALCULATION_ITEM item;
             item.SetVia( via );
             item.CalculateViaLayers( m_board );
+            item.SetEffectiveNetClass( via->GetEffectiveNetClass() );
 
             return item;
         }
 
         if( track->Type() == PCB_ARC_T )
         {
-            PCB_ARC*         arcParent = static_cast<PCB_ARC*>( track );
+            const PCB_ARC*   arcParent = static_cast<const PCB_ARC*>( track );
             SHAPE_ARC        shapeArc( arcParent->GetStart(), arcParent->GetMid(), arcParent->GetEnd(),
                                        arcParent->GetWidth() );
             SHAPE_LINE_CHAIN chainArc( shapeArc );
 
-            LENGTH_CALCULATION_ITEM item;
+            LENGTH_DELAY_CALCULATION_ITEM item;
             item.SetLine( chainArc );
             item.SetLayers( track->GetLayer() );
+            item.SetEffectiveNetClass( arcParent->GetEffectiveNetClass() );
 
             return item;
         }
@@ -523,19 +579,20 @@ LENGTH_CALCULATION_ITEM LENGTH_CALCULATION::GetLengthCalculationItem( BOARD_CONN
             std::vector<VECTOR2I> points{ track->GetStart(), track->GetEnd() };
             SHAPE_LINE_CHAIN      shape( points );
 
-            LENGTH_CALCULATION_ITEM item;
+            LENGTH_DELAY_CALCULATION_ITEM item;
             item.SetLine( shape );
             item.SetLayers( track->GetLayer() );
+            item.SetEffectiveNetClass( track->GetEffectiveNetClass() );
 
             return item;
         }
     }
-    else if( PAD* pad = dynamic_cast<PAD*>( aBoardItem ) )
+    else if( const PAD* pad = dynamic_cast<const PAD*>( aBoardItem ) )
     {
-        LENGTH_CALCULATION_ITEM item;
+        LENGTH_DELAY_CALCULATION_ITEM item;
         item.SetPad( pad );
 
-        LSET&        layers = pad->Padstack().LayerSet();
+        const LSET&  layers = pad->Padstack().LayerSet();
         PCB_LAYER_ID firstLayer = UNDEFINED_LAYER;
         PCB_LAYER_ID secondLayer = UNDEFINED_LAYER;
 
@@ -548,9 +605,38 @@ LENGTH_CALCULATION_ITEM LENGTH_CALCULATION::GetLengthCalculationItem( BOARD_CONN
         }
 
         item.SetLayers( firstLayer, secondLayer );
+        item.SetEffectiveNetClass( pad->GetEffectiveNetClass() );
 
         return item;
     }
 
     return {};
+}
+
+
+void LENGTH_DELAY_CALCULATION::SetTimeDomainParametersProvider(
+        std::unique_ptr<TIME_DOMAIN_PARAMETERS_IFACE>&& aProvider )
+{
+    m_timeDomainParameters = std::move( aProvider );
+}
+
+
+void LENGTH_DELAY_CALCULATION::SynchronizeTimeDomainProperties() const
+{
+    m_timeDomainParameters->OnSettingsChanged();
+}
+
+
+int64_t LENGTH_DELAY_CALCULATION::CalculateLengthForDelay( const int64_t                       aDesiredDelay,
+                                                           const TIME_DOMAIN_GEOMETRY_CONTEXT& aCtx ) const
+{
+    return m_timeDomainParameters->GetTrackLengthForPropagationDelay( aDesiredDelay, aCtx );
+}
+
+
+int64_t
+LENGTH_DELAY_CALCULATION::CalculatePropagationDelayForShapeLineChain( const SHAPE_LINE_CHAIN&             aShape,
+                                                                      const TIME_DOMAIN_GEOMETRY_CONTEXT& aCtx ) const
+{
+    return m_timeDomainParameters->CalculatePropagationDelayForShapeLineChain( aShape, aCtx );
 }

@@ -108,7 +108,11 @@ public:
 
     long long int totalLength();
 
-    long long int TuningResult() const override;
+    long long int TuningLengthResult() const override;
+
+    /// @copydoc MEANDER_PLACER_BASE::TuningDelayResult()
+    int64_t TuningDelayResult() const override;
+
     TUNING_STATUS TuningStatus() const override;
 
     bool CheckFit( MEANDER_SHAPE* aShape ) override;
@@ -130,6 +134,10 @@ private:
 
     long long int origPathLength() const;
 
+    int64_t origPathDelay() const;
+
+    void calculateTimeDomainTargets();
+
     ///< Current routing start point (end of tail, beginning of head).
     VECTOR2I m_currentStart;
 
@@ -147,9 +155,14 @@ private:
     LINKED_ITEM* m_initialSegment;
 
     long long int m_lastLength;
-    int           m_padToDieP;
-    int           m_padToDieN;
+    int64_t       m_lastDelay;
+    int           m_padToDieLengthP;
+    int           m_padToDieLengthN;
+    int64_t       m_padToDieDelayP;
+    int64_t       m_padToDieDelayN;
     TUNING_STATUS m_lastStatus;
+
+    NETCLASS* m_netClass;
 };
 
 }

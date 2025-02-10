@@ -117,16 +117,40 @@ void PCB_NET_INSPECTOR_PANEL::buildColumns()
                             CSV_COLUMN_DESC::CSV_QUOTE, false );
     m_columns.emplace_back( 1u, UNDEFINED_LAYER, _( "Netclass" ), _( "Netclass" ),
                             CSV_COLUMN_DESC::CSV_QUOTE, false );
-    m_columns.emplace_back( 2u, UNDEFINED_LAYER, _( "Total Length" ), _( "Net Length" ),
-                            CSV_COLUMN_DESC::CSV_NONE, true );
+
+    if( m_showTimeDomainDetails )
+    {
+        m_columns.emplace_back( 2u, UNDEFINED_LAYER, _( "Total Delay" ), _( "Net Delay" ), CSV_COLUMN_DESC::CSV_NONE,
+                                true );
+    }
+    else
+    {
+        m_columns.emplace_back( 2u, UNDEFINED_LAYER, _( "Total Length" ), _( "Net Length" ), CSV_COLUMN_DESC::CSV_NONE,
+                                true );
+    }
+
     m_columns.emplace_back( 3u, UNDEFINED_LAYER, _( "Via Count" ), _( "Via Count" ),
                             CSV_COLUMN_DESC::CSV_NONE, false );
-    m_columns.emplace_back( 4u, UNDEFINED_LAYER, _( "Via Length" ), _( "Via Length" ),
-                            CSV_COLUMN_DESC::CSV_NONE, true );
-    m_columns.emplace_back( 5u, UNDEFINED_LAYER, _( "Track Length" ), _( "Track Length" ),
-                            CSV_COLUMN_DESC::CSV_NONE, true );
-    m_columns.emplace_back( 6u, UNDEFINED_LAYER, _( "Die Length" ), _( "Die Length" ),
-                            CSV_COLUMN_DESC::CSV_NONE, true );
+
+    if( m_showTimeDomainDetails )
+    {
+        m_columns.emplace_back( 4u, UNDEFINED_LAYER, _( "Via Delay" ), _( "Via Delay" ), CSV_COLUMN_DESC::CSV_NONE,
+                                true );
+        m_columns.emplace_back( 5u, UNDEFINED_LAYER, _( "Track Delay" ), _( "Track Delay" ), CSV_COLUMN_DESC::CSV_NONE,
+                                true );
+        m_columns.emplace_back( 6u, UNDEFINED_LAYER, _( "Die Delay" ), _( "Die Delay" ), CSV_COLUMN_DESC::CSV_NONE,
+                                true );
+    }
+    else
+    {
+        m_columns.emplace_back( 4u, UNDEFINED_LAYER, _( "Via Length" ), _( "Via Length" ), CSV_COLUMN_DESC::CSV_NONE,
+                                true );
+        m_columns.emplace_back( 5u, UNDEFINED_LAYER, _( "Track Length" ), _( "Track Length" ),
+                                CSV_COLUMN_DESC::CSV_NONE, true );
+        m_columns.emplace_back( 6u, UNDEFINED_LAYER, _( "Die Length" ), _( "Die Length" ), CSV_COLUMN_DESC::CSV_NONE,
+                                true );
+    }
+
     m_columns.emplace_back( 7u, UNDEFINED_LAYER, _( "Pad Count" ), _( "Pad Count" ), CSV_COLUMN_DESC::CSV_NONE, false );
 
     const std::vector<std::function<void( void )>> add_col{
@@ -386,6 +410,8 @@ void PCB_NET_INSPECTOR_PANEL::buildNetsList( const bool rebuildColumns )
 
     m_netsList->Freeze();
 
+    m_dataModel->SetIsTimeDomain( m_showTimeDomainDetails );
+
     PROJECT_LOCAL_SETTINGS& localSettings = Pgm().GetSettingsManager().Prj().GetLocalSettings();
     PANEL_NET_INSPECTOR_SETTINGS* cfg = &localSettings.m_NetInspectorPanel;
 
@@ -393,6 +419,7 @@ void PCB_NET_INSPECTOR_PANEL::buildNetsList( const bool rebuildColumns )
     m_filterByNetName = cfg->filter_by_net_name;
     m_filterByNetclass = cfg->filter_by_netclass;
     m_showZeroPadNets = cfg->show_zero_pad_nets;
+    m_showTimeDomainDetails = cfg->show_time_domain_details;
     m_groupByNetclass = cfg->group_by_netclass;
     m_groupByConstraint = cfg->group_by_constraint;
 
@@ -612,13 +639,13 @@ PCB_NET_INSPECTOR_PANEL::calculateNets( const std::vector<NETINFO_ITEM*>& aNetCo
 {
     std::vector<std::unique_ptr<LIST_ITEM>> results;
 
-    LENGTH_CALCULATION*         calc = m_board->GetLengthCalculation();
+    LENGTH_DELAY_CALCULATION*   calc = m_board->GetLengthCalculation();
     const std::vector<CN_ITEM*> conItems = relevantConnectivityItems();
 
     // First assemble the LENGTH_CALCULATION_ITEMs for board items which match the nets we need to recompute
     // Precondition: conItems and aNetCodes are sorted in increasing netcode value
     // Functionality: This extracts any items from conItems which have a netcode which is present in aNetCodes
-    std::unordered_map<int, std::vector<LENGTH_CALCULATION_ITEM>> netItemsMap;
+    std::unordered_map<int, std::vector<LENGTH_DELAY_CALCULATION_ITEM>> netItemsMap;
     std::vector<NETINFO_ITEM*>                                    foundNets;
 
     auto itemItr = conItems.begin();
@@ -635,7 +662,7 @@ PCB_NET_INSPECTOR_PANEL::calculateNets( const std::vector<NETINFO_ITEM*>& aNetCo
                 foundNets.emplace_back( *netCodeItr );
 
             // Take the item
-            LENGTH_CALCULATION_ITEM lengthItem = calc->GetLengthCalculationItem( ( *itemItr )->Parent() );
+            LENGTH_DELAY_CALCULATION_ITEM lengthItem = calc->GetLengthCalculationItem( ( *itemItr )->Parent() );
             netItemsMap[curItemNetCode].emplace_back( std::move( lengthItem ) );
             ++itemItr;
         }
@@ -670,8 +697,10 @@ PCB_NET_INSPECTOR_PANEL::calculateNets( const std::vector<NETINFO_ITEM*>& aNetCo
                                                           .MergeTracks = true,
                                                           .OptimiseTracesInPads = true,
                                                           .InferViaInPad = false };
-                    LENGTH_DETAILS               lengthDetails =
-                            calc->CalculateLengthDetails( netItemsMap[netCode], opts, nullptr, nullptr, true );
+                    LENGTH_DELAY_STATS           lengthDetails = calc->CalculateLengthDetails(
+                            netItemsMap[netCode], opts, nullptr, nullptr, LENGTH_DELAY_LAYER_OPT::WITH_LAYER_DETAIL,
+                            m_showTimeDomainDetails ? LENGTH_DELAY_DOMAIN_OPT::WITH_DELAY_DETAIL
+                                                              : LENGTH_DELAY_DOMAIN_OPT::NO_DELAY_DETAIL );
 
                     if( aIncludeZeroPadNets || lengthDetails.NumPads > 0 )
                     {
@@ -680,9 +709,14 @@ PCB_NET_INSPECTOR_PANEL::calculateNets( const std::vector<NETINFO_ITEM*>& aNetCo
                         new_item->SetPadCount( lengthDetails.NumPads );
                         new_item->SetLayerCount( m_board->GetCopperLayerCount() );
                         new_item->SetPadDieLength( lengthDetails.PadToDieLength );
+                        new_item->SetPadDieDelay( lengthDetails.PadToDieDelay );
                         new_item->SetViaCount( lengthDetails.NumVias );
                         new_item->SetViaLength( lengthDetails.ViaLength );
+                        new_item->SetViaDelay( lengthDetails.ViaDelay );
                         new_item->SetLayerWireLengths( *lengthDetails.LayerLengths );
+
+                        if( m_showTimeDomainDetails )
+                            new_item->SetLayerWireDelays( *lengthDetails.LayerDelays );
 
                         std::scoped_lock lock( resultsMutex );
                         results.emplace_back( std::move( new_item ) );
@@ -726,6 +760,13 @@ wxString PCB_NET_INSPECTOR_PANEL::formatLength( const int64_t aValue ) const
     return m_frame->MessageTextFromValue( aValue,
                                           // don't include unit label in the string when reporting
                                           !m_inReporting );
+}
+
+wxString PCB_NET_INSPECTOR_PANEL::formatDelay( const int64_t aValue ) const
+{
+    return m_frame->MessageTextFromValue( aValue,
+                                          // don't include unit label in the string when reporting
+                                          !m_inReporting, EDA_DATA_TYPE::TIME );
 }
 
 
@@ -887,9 +928,14 @@ void PCB_NET_INSPECTOR_PANEL::updateNets( const std::vector<NETINFO_ITEM*>& aNet
         {
             curListItem->SetPadCount( newListItem->GetPadCount() );
             curListItem->SetPadDieLength( newListItem->GetPadDieLength() );
+            curListItem->SetPadDieDelay( newListItem->GetPadDieDelay() );
             curListItem->SetViaCount( newListItem->GetViaCount() );
             curListItem->SetViaLength( newListItem->GetViaLength() );
+            curListItem->SetViaDelay( newListItem->GetViaDelay() );
             curListItem->SetLayerWireLengths( newListItem->GetLayerWireLengths() );
+
+            if( m_showTimeDomainDetails )
+                curListItem->SetLayerWireDelays( newListItem->GetLayerWireDelays() );
 
             updateDisplayedRowValues( curNetRow );
         }
@@ -1229,6 +1275,13 @@ void PCB_NET_INSPECTOR_PANEL::OnConfigButton( wxCommandEvent& event )
 
     menu.AppendSeparator();
 
+    wxMenuItem* showTimeDomainDetails = new wxMenuItem( &menu, ID_SHOW_TIME_DOMAIN_DETAILS,
+                                                        _( "Show Time Domain Details" ), wxEmptyString, wxITEM_CHECK );
+    menu.Append( showTimeDomainDetails );
+    showTimeDomainDetails->Check( m_showTimeDomainDetails );
+
+    menu.AppendSeparator();
+
     // Report generation
     wxMenuItem* generateReport = new wxMenuItem( &menu, ID_GENERATE_REPORT,
                                                  _( "Save Net Inspector Report..." ),
@@ -1313,6 +1366,8 @@ void PCB_NET_INSPECTOR_PANEL::onContextMenuSelection( wxCommandEvent& event )
     case ID_SHOW_ZERO_NET_PADS: m_showZeroPadNets = !m_showZeroPadNets; break;
 
     case ID_SHOW_UNCONNECTED_NETS: m_showUnconnectedNets = !m_showUnconnectedNets; break;
+
+    case ID_SHOW_TIME_DOMAIN_DETAILS: m_showTimeDomainDetails = !m_showTimeDomainDetails; break;
 
     case ID_GENERATE_REPORT:
         generateReport();
@@ -1766,6 +1821,7 @@ void PCB_NET_INSPECTOR_PANEL::SaveSettings()
     cfg.group_by_constraint = m_groupByConstraint;
     cfg.show_zero_pad_nets = m_showZeroPadNets;
     cfg.show_unconnected_nets = m_showUnconnectedNets;
+    cfg.show_time_domain_details = m_showTimeDomainDetails;
 
     // Grid sorting
     wxDataViewColumn* sortingCol = m_netsList->GetSortingColumn();

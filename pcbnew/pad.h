@@ -452,6 +452,9 @@ public:
     void SetPadToDieLength( int aLength )       { m_lengthPadToDie = aLength; }
     int GetPadToDieLength() const               { return m_lengthPadToDie; }
 
+    void SetPadToDieDelay( int aDelay ) { m_delayPadToDie = aDelay; }
+    int  GetPadToDieDelay() const { return m_delayPadToDie; }
+
     std::optional<int> GetLocalClearance() const override   { return m_padStack.Clearance(); }
     void SetLocalClearance( std::optional<int> aClearance ) { m_padStack.Clearance() = aClearance; }
 
@@ -959,7 +962,8 @@ private:
 
     PAD_PROP    m_property;         // Property in fab files (BGA, FIDUCIAL, TESTPOINT, etc.)
 
-    int         m_lengthPadToDie;   // Length net from pad to die, inside the package
+    int m_lengthPadToDie; // Length net from pad to die, inside the package
+    int m_delayPadToDie;  // Propagation delay from pad to die
 
     mutable std::mutex                          m_zoneLayerOverridesMutex;
     std::map<PCB_LAYER_ID, ZONE_LAYER_OVERRIDE> m_zoneLayerOverrides;

@@ -47,7 +47,8 @@ BOOST_FIXTURE_TEST_CASE( DRCLengths, DRC_REGRESSION_TEST_FIXTURE )
     // Check for minimum copper connection errors
 
     std::vector<std::pair<wxString, int>> tests = {
-        { "length_calculations", 0 } // Exclude warnings on unconnected pads
+        { "length_calculations", 0 },
+        { "time_calculations", 1 } // Expect one skew DRC error from NET_P
     };
 
     for( const std::pair<wxString, int>& test : tests )

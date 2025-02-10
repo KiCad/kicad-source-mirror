@@ -373,17 +373,17 @@ bool DRC_TEST_PROVIDER::isInvisibleText( const BOARD_ITEM* aItem ) const
 }
 
 
-wxString DRC_TEST_PROVIDER::formatMsg( const wxString& aFormatString, const wxString& aSource,
-                                       double aConstraint, double aActual )
+wxString DRC_TEST_PROVIDER::formatMsg( const wxString& aFormatString, const wxString& aSource, double aConstraint,
+                                       double aActual, EDA_DATA_TYPE aType )
 {
-    wxString constraint_str = MessageTextFromValue( aConstraint );
-    wxString actual_str = MessageTextFromValue( aActual );
+    wxString constraint_str = MessageTextFromValue( aConstraint, true, aType );
+    wxString actual_str = MessageTextFromValue( aActual, true, aType );
 
     if( constraint_str == actual_str )
     {
         // Use more precise formatting if the message-text strings were equal.
-        constraint_str = StringFromValue( aConstraint, true );
-        actual_str = StringFromValue( aActual, true );
+        constraint_str = StringFromValue( aConstraint, true, aType );
+        actual_str = StringFromValue( aActual, true, aType );
     }
 
     return wxString::Format( aFormatString, aSource, constraint_str, actual_str );

@@ -603,7 +603,8 @@ BOARD* PCBEXPR_CONTEXT::GetBoard() const
 const std::vector<wxString>& PCBEXPR_UNIT_RESOLVER::GetSupportedUnits() const
 {
     static const std::vector<wxString> pcbUnits = { wxT( "mil" ), wxT( "mm" ), wxT( "in" ),
-                                                    wxT( "deg" ) };
+                                                    wxT( "deg" ), wxT( "fs" ), wxT( "ps" ) };
+
 
     return pcbUnits;
 }
@@ -611,7 +612,16 @@ const std::vector<wxString>& PCBEXPR_UNIT_RESOLVER::GetSupportedUnits() const
 
 wxString PCBEXPR_UNIT_RESOLVER::GetSupportedUnitsMessage() const
 {
-    return _( "must be mm, in, mil, or deg" );
+    return _( "must be mm, in, mil, deg, fs, or ps" );
+}
+
+
+const std::vector<EDA_UNITS>& PCBEXPR_UNIT_RESOLVER::GetSupportedUnitsTypes() const
+{
+    static const std::vector<EDA_UNITS> pcbUnits = { EDA_UNITS::MILS,    EDA_UNITS::MM, EDA_UNITS::INCH,
+                                                     EDA_UNITS::DEGREES, EDA_UNITS::FS, EDA_UNITS::PS };
+
+    return pcbUnits;
 }
 
 
@@ -624,6 +634,9 @@ double PCBEXPR_UNIT_RESOLVER::Convert( const wxString& aString, int unitId ) con
     case 0: return EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::MILS, aString );
     case 1: return EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::MM, aString );
     case 2: return EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::INCH, aString );
+    case 3: return v;
+    case 4: return EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::FS, aString );
+    case 5: return EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::PS, aString );
     default: return v;
     }
 };
@@ -632,6 +645,14 @@ double PCBEXPR_UNIT_RESOLVER::Convert( const wxString& aString, int unitId ) con
 const std::vector<wxString>& PCBEXPR_UNITLESS_RESOLVER::GetSupportedUnits() const
 {
     static const std::vector<wxString> emptyUnits;
+
+    return emptyUnits;
+}
+
+
+const std::vector<EDA_UNITS>& PCBEXPR_UNITLESS_RESOLVER::GetSupportedUnitsTypes() const
+{
+    static const std::vector<EDA_UNITS> emptyUnits;
 
     return emptyUnits;
 }
@@ -679,7 +700,10 @@ bool PCBEXPR_EVALUATOR::Evaluate( const wxString& aExpr )
     LIBEVAL::VALUE*  result = ucode.Run( &evaluationContext );
 
     if( result->GetType() == LIBEVAL::VT_NUMERIC )
+    {
         m_result = KiROUND( result->AsDouble() );
+        m_units = result->GetUnits();
+    }
 
     return true;
 }

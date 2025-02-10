@@ -81,6 +81,7 @@ PAD::PAD( FOOTPRINT* parent ) :
                         PADSTACK::ALL_LAYERS );
     drill.x = drill.y = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 30 );       // Default drill size 30 mils.
     m_lengthPadToDie      = 0;
+    m_delayPadToDie = 0;
 
     if( m_parent && m_parent->Type() == PCB_FOOTPRINT_T )
         m_pos = GetParent()->GetPosition();
@@ -130,6 +131,7 @@ PAD& PAD::operator=( const PAD &aOther )
 
     ImportSettingsFrom( aOther );
     SetPadToDieLength( aOther.GetPadToDieLength() );
+    SetPadToDieDelay( aOther.GetPadToDieDelay() );
     SetPosition( aOther.GetPosition() );
     SetNumber( aOther.GetNumber() );
     SetPinType( aOther.GetPinType() );
@@ -1887,6 +1889,7 @@ void PAD::ImportSettingsFrom( const PAD& aMasterPad )
     // really specific to a given pad (JPC).
 #if 0
     SetPadToDieLength( aMasterPad.GetPadToDieLength() );
+    SetPadToDieDelay( aMasterPad.GetPadToDieDelay() );
 #endif
 
     // The pad orientation, for historical reasons is the pad rotation + parent rotation.
@@ -2884,6 +2887,11 @@ static struct PAD_DESC
                                                 PROPERTY_DISPLAY::PT_SIZE );
         padToDie->SetAvailableFunc( isCopperPad );
         propMgr.AddProperty( padToDie, groupPad );
+
+        auto padToDieDelay = new PROPERTY<PAD, int>( _HKI( "Pad To Die Delay" ), &PAD::SetPadToDieDelay,
+                                                     &PAD::GetPadToDieDelay, PROPERTY_DISPLAY::PT_TIME );
+        padToDieDelay->SetAvailableFunc( isCopperPad );
+        propMgr.AddProperty( padToDieDelay, groupPad );
 
         const wxString groupOverrides = _HKI( "Overrides" );
 

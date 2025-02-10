@@ -96,6 +96,7 @@ data
 date
 defaults
 descr
+die_delay
 die_length
 dielectric_constraints
 dimension

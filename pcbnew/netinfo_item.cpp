@@ -125,20 +125,39 @@ void NETINFO_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANE
 
         if( startTrack )
         {
-            double lengthNet      = 0.0; // This  is the length of tracks on pcb
-            double lengthPadToDie = 0.0; // this is the length of internal ICs connections
+            double lengthNet = 0.0;      // This  is the length of tracks / vias on the pcb
+            double lengthPadToDie = 0.0; // This is the length of internal IC connections
+            double delayNet = 0.0;       // This is the delay of tracks / vias on the pcb
+            double delayPadToDie = 0.0;  // This is the delay of internal IC connections
 
-            std::tie( count, lengthNet, lengthPadToDie ) = board->GetTrackLength( *startTrack );
+            std::tie( count, lengthNet, lengthPadToDie, delayNet, delayPadToDie ) =
+                    board->GetTrackLength( *startTrack );
 
-            // Displays the full net length (tracks on pcb + internal ICs connections ):
-            aList.emplace_back( _( "Net Length" ),
-                                aFrame->MessageTextFromValue( lengthNet + lengthPadToDie ) );
+            if( delayNet == 0.0 )
+            {
+                // Displays the full net length (tracks on pcb + internal ICs connections ):
+                aList.emplace_back( _( "Net Length" ), aFrame->MessageTextFromValue( lengthNet + lengthPadToDie ) );
 
-            // Displays the net length of tracks only:
-            aList.emplace_back( _( "On Board" ), aFrame->MessageTextFromValue( lengthNet ) );
+                // Displays the net length of tracks only:
+                aList.emplace_back( _( "On Board" ), aFrame->MessageTextFromValue( lengthNet ) );
 
-            // Displays the net length of internal ICs connections (wires inside ICs):
-            aList.emplace_back( _( "In Package" ), aFrame->MessageTextFromValue( lengthPadToDie ) );
+                // Displays the net length of internal ICs connections (wires inside ICs):
+                aList.emplace_back( _( "In Package" ), aFrame->MessageTextFromValue( lengthPadToDie ) );
+            }
+            else
+            {
+                // Displays the full net length (tracks on pcb + internal ICs connections ):
+                aList.emplace_back( _( "Net Delay" ), aFrame->MessageTextFromValue( delayNet + delayPadToDie, true,
+                                                                                    EDA_DATA_TYPE::TIME ) );
+
+                // Displays the net length of tracks only:
+                aList.emplace_back( _( "On Board" ),
+                                    aFrame->MessageTextFromValue( delayNet, true, EDA_DATA_TYPE::TIME ) );
+
+                // Displays the net length of internal ICs connections (wires inside ICs):
+                aList.emplace_back( _( "In Package" ),
+                                    aFrame->MessageTextFromValue( delayPadToDie, true, EDA_DATA_TYPE::TIME ) );
+            }
         }
     }
 }

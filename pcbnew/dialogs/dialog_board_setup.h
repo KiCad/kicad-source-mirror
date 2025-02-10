@@ -29,6 +29,7 @@ class PANEL_SETUP_CONSTRAINTS;
 class PANEL_SETUP_LAYERS;
 class PANEL_SETUP_TEXT_AND_GRAPHICS;
 class PANEL_SETUP_NETCLASSES;
+class PANEL_SETUP_TIME_DOMAIN_PARAMETERS;
 class PANEL_SETUP_RULES;
 class PANEL_SETUP_TRACKS_AND_VIAS;
 class PANEL_SETUP_MASK_AND_PASTE;
@@ -49,10 +50,12 @@ protected:
     void onPageChanged( wxBookCtrlEvent& aEvent ) override;
     void onAuxiliaryAction( wxCommandEvent& aEvent ) override;
 
-    PCB_EDIT_FRAME*            m_frame;
-    PANEL_SETUP_LAYERS*        m_layers;
-    PANEL_SETUP_BOARD_FINISH*  m_boardFinish;
-    PANEL_SETUP_BOARD_STACKUP* m_physicalStackup;
+    PCB_EDIT_FRAME*                     m_frame;
+    PANEL_SETUP_LAYERS*                 m_layers;
+    PANEL_SETUP_BOARD_FINISH*           m_boardFinish;
+    PANEL_SETUP_BOARD_STACKUP*          m_physicalStackup;
+    PANEL_SETUP_TIME_DOMAIN_PARAMETERS* m_timeDomainParameters;
+    PANEL_SETUP_NETCLASSES*             m_netClasses;
 
 private:
     size_t m_currentPage;              // the current page index
@@ -71,6 +74,7 @@ private:
     size_t m_customRulesPage;
     size_t m_severitiesPage;
     size_t m_embeddedFilesPage;
+    size_t m_timeDomainParametersPage;
 };
 
 

@@ -82,11 +82,8 @@ class TUNING_STATUS_VIEW_ITEM : public EDA_ITEM
 {
 public:
     TUNING_STATUS_VIEW_ITEM( PCB_BASE_EDIT_FRAME* aFrame ) :
-            EDA_ITEM( NOT_USED ),    // Never added to anything - just a preview
-            m_frame( aFrame ),
-            m_min( 0.0 ),
-            m_max( 0.0 ),
-            m_current( 0.0 )
+            EDA_ITEM( NOT_USED ), // Never added to anything - just a preview
+            m_frame( aFrame ), m_min( 0.0 ), m_max( 0.0 ), m_current( 0.0 ), m_isTimeDomain( false )
     { }
 
     wxString GetClass() const override { return wxT( "TUNING_STATUS" ); }
@@ -98,12 +95,14 @@ public:
     VECTOR2I GetPosition() const override { return m_pos; }
     void     SetPosition( const VECTOR2I& aPos ) override { m_pos = aPos; };
 
-    void SetMinMax( double aMin, double aMax )
+    void SetMinMax( const double aMin, const double aMax )
     {
+        const EDA_DATA_TYPE unitType = m_isTimeDomain ? EDA_DATA_TYPE::TIME : EDA_DATA_TYPE::DISTANCE;
+
         m_min = aMin;
-        m_minText = m_frame->MessageTextFromValue( m_min, false );
+        m_minText = m_frame->MessageTextFromValue( m_min, false, unitType );
         m_max = aMax;
-        m_maxText = m_frame->MessageTextFromValue( m_max, false );
+        m_maxText = m_frame->MessageTextFromValue( m_max, false, unitType );
     }
 
     void ClearMinMax()
@@ -114,12 +113,16 @@ public:
         m_maxText = wxT( "---" );
     }
 
-    void SetCurrent( double aCurrent, const wxString& aLabel )
+    void SetCurrent( const double aCurrent, const wxString& aLabel )
     {
+        const EDA_DATA_TYPE unitType = m_isTimeDomain ? EDA_DATA_TYPE::TIME : EDA_DATA_TYPE::DISTANCE;
+
         m_current = aCurrent;
-        m_currentText = m_frame->MessageTextFromValue( aCurrent );
+        m_currentText = m_frame->MessageTextFromValue( aCurrent, true, unitType );
         m_currentLabel = aLabel;
     }
+
+    void SetIsTimeDomain( const bool aIsTimeDomain ) { m_isTimeDomain = aIsTimeDomain; }
 
     const BOX2I ViewBBox() const override
     {
@@ -237,6 +240,7 @@ protected:
     wxString        m_currentText;
     wxString        m_minText;
     wxString        m_maxText;
+    bool            m_isTimeDomain;
 };
 
 
@@ -450,14 +454,37 @@ public:
 
     void SetTargetLength( std::optional<int> aValue )
     {
+        m_settings.m_isTimeDomain = false;
+
         if( aValue.has_value() )
             m_settings.SetTargetLength( aValue.value() );
         else
             m_settings.SetTargetLength( PNS::MEANDER_SETTINGS::LENGTH_UNCONSTRAINED );
     }
 
+    std::optional<int> GetTargetDelay() const
+    {
+        if( m_settings.m_targetLengthDelay.Opt() == PNS::MEANDER_SETTINGS::DELAY_UNCONSTRAINED )
+            return std::optional<int>();
+        else
+            return m_settings.m_targetLengthDelay.Opt();
+    }
+
+    void SetTargetDelay( std::optional<int> aValue )
+    {
+        m_settings.m_isTimeDomain = true;
+
+        if( aValue.has_value() )
+            m_settings.SetTargetLengthDelay( aValue.value() );
+        else
+            m_settings.SetTargetLengthDelay( PNS::MEANDER_SETTINGS::DELAY_UNCONSTRAINED );
+    }
+
     int  GetTargetSkew() const { return m_settings.m_targetSkew.Opt(); }
     void SetTargetSkew( int aValue ) { m_settings.SetTargetSkew( aValue ); }
+
+    int  GetTargetSkewDelay() const { return m_settings.m_targetSkewDelay.Opt(); }
+    void SetTargetSkewDelay( int aValue ) { m_settings.SetTargetSkewDelay( aValue ); }
 
     bool GetOverrideCustomRules() const { return m_settings.m_overrideCustomRules; }
     void SetOverrideCustomRules( bool aOverride ) { m_settings.m_overrideCustomRules = aOverride; }
@@ -745,17 +772,49 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
     case DIFF_PAIR_SKEW: pattern->m_settings = bds.m_SkewMeanderSettings;        break;
     }
 
-    constraint = bds.m_DRCEngine->EvalRules( LENGTH_CONSTRAINT, aStartItem, nullptr, layer );
-
-    if( !constraint.IsNull() )
+    if( aMode == SINGLE || aMode == DIFF_PAIR )
     {
-        if( aMode == DIFF_PAIR_SKEW )
-            pattern->m_settings.SetTargetSkew( constraint.GetValue() );
-        else
-            pattern->m_settings.SetTargetLength( constraint.GetValue() );
+        constraint = bds.m_DRCEngine->EvalRules( LENGTH_CONSTRAINT, aStartItem, nullptr, layer );
+
+        if( !constraint.IsNull() )
+        {
+            if( constraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN ) )
+            {
+                pattern->m_settings.SetTargetLengthDelay( constraint.GetValue() );
+                pattern->m_settings.SetTargetLength( MINOPTMAX<int>() );
+                pattern->m_settings.m_isTimeDomain = true;
+            }
+            else
+            {
+                pattern->m_settings.SetTargetLengthDelay( MINOPTMAX<int>() );
+                pattern->m_settings.SetTargetLength( constraint.GetValue() );
+                pattern->m_settings.m_isTimeDomain = false;
+            }
+        }
+    }
+    else
+    {
+        constraint = bds.m_DRCEngine->EvalRules( SKEW_CONSTRAINT, aStartItem, nullptr, layer );
+
+        if( !constraint.IsNull() )
+        {
+            if( constraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN ) )
+            {
+                pattern->m_settings.SetTargetSkew( MINOPTMAX<int>() );
+                pattern->m_settings.SetTargetLengthDelay( constraint.GetValue() );
+                pattern->m_settings.m_isTimeDomain = true;
+            }
+            else
+            {
+                pattern->m_settings.SetTargetSkew( constraint.GetValue() );
+                pattern->m_settings.SetTargetSkewDelay( MINOPTMAX<int>() );
+                pattern->m_settings.m_isTimeDomain = true;
+            }
+        }
     }
 
     pattern->SetFlags( IS_NEW );
+    pattern->m_settings.m_netClass = aStartItem->GetEffectiveNetClass();
 
     return pattern;
 }
@@ -814,14 +873,15 @@ void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_
         m_updateSideFromEnd = false;
     }
 
+    PCB_TRACK* track = nullptr;
+    m_origin = snapToNearestTrack( m_origin, aBoard, nullptr, &track );
+    wxCHECK( track, /* void */ );
+
+    m_settings.m_netClass = track->GetEffectiveNetClass();
+
     if( !m_settings.m_overrideCustomRules )
     {
-        PCB_TRACK*   track = nullptr;
-        PNS::SEGMENT pnsItem;
-
-        m_origin = snapToNearestTrack( m_origin, aBoard, nullptr, &track );
-        wxCHECK( track, /* void */ );
-
+        PNS::SEGMENT  pnsItem;
         NETINFO_ITEM* net = track->GetNet();
 
         pnsItem.SetParent( track );
@@ -832,7 +892,18 @@ void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_
             if( resolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_LENGTH,
                                            &pnsItem, nullptr, layer, &constraint ) )
             {
-                m_settings.SetTargetLength( constraint.m_Value );
+                if( constraint.m_IsTimeDomain )
+                {
+                    m_settings.SetTargetLengthDelay( constraint.m_Value );
+                    m_settings.SetTargetLength( MINOPTMAX<int>() );
+                }
+                else
+                {
+                    m_settings.SetTargetLengthDelay( MINOPTMAX<int>() );
+                    m_settings.SetTargetLength( constraint.m_Value );
+                }
+
+                m_settings.m_isTimeDomain = constraint.m_IsTimeDomain;
                 aTool->GetManager()->PostEvent( EVENTS::SelectedItemsModified );
             }
         }
@@ -853,7 +924,18 @@ void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_
                 if( resolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_LENGTH,
                                                &pnsItem, &pnsCoupledItem, layer, &constraint ) )
                 {
-                    m_settings.SetTargetLength( constraint.m_Value );
+                    if( constraint.m_IsTimeDomain )
+                    {
+                        m_settings.SetTargetLengthDelay( constraint.m_Value );
+                        m_settings.SetTargetLength( MINOPTMAX<int>() );
+                    }
+                    else
+                    {
+                        m_settings.SetTargetLengthDelay( MINOPTMAX<int>() );
+                        m_settings.SetTargetLength( constraint.m_Value );
+                    }
+
+                    m_settings.m_isTimeDomain = constraint.m_IsTimeDomain;
                     aTool->GetManager()->PostEvent( EVENTS::SelectedItemsModified );
                 }
             }
@@ -862,7 +944,18 @@ void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_
                 if( resolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_SKEW,
                                                &pnsItem, &pnsCoupledItem, layer, &constraint ) )
                 {
-                    m_settings.m_targetSkew = constraint.m_Value;
+                    if( constraint.m_IsTimeDomain )
+                    {
+                        m_settings.SetTargetSkewDelay( constraint.m_Value );
+                        m_settings.SetTargetSkew( MINOPTMAX<int>() );
+                    }
+                    else
+                    {
+                        m_settings.SetTargetSkewDelay( MINOPTMAX<int>() );
+                        m_settings.SetTargetSkew( constraint.m_Value );
+                    }
+
+                    m_settings.m_isTimeDomain = constraint.m_IsTimeDomain;
                     aTool->GetManager()->PostEvent( EVENTS::SelectedItemsModified );
                 }
             }
@@ -1473,8 +1566,16 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
     if( aTool->GetManager()->GetSettings() )
         userUnits = static_cast<EDA_UNITS>( aTool->GetManager()->GetSettings()->m_System.units );
 
-    result = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits,
-                                                       (double) placer->TuningResult() );
+    if( m_settings.m_isTimeDomain )
+    {
+        result = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, EDA_UNITS::PS,
+                                                           (double) placer->TuningLengthResult() );
+    }
+    else
+    {
+        result = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits,
+                                                           (double) placer->TuningLengthResult() );
+    }
 
     m_tuningInfo.Printf( wxS( "%s (%s)" ), result, statusMessage );
 
@@ -1900,6 +2001,7 @@ const STRING_ANY_MAP PCB_TUNING_PATTERN::GetProperties() const
     props.set( "tuning_mode", tuningToString( m_tuningMode ) );
     props.set( "initial_side", sideToString( m_settings.m_initialSide ) );
     props.set( "last_status", statusToString( m_tuningStatus ) );
+    props.set( "is_time_domain", m_settings.m_isTimeDomain );
 
     props.set( "end", m_end );
     props.set( "corner_radius_percent", m_settings.m_cornerRadiusPercentage );
@@ -1912,6 +2014,9 @@ const STRING_ANY_MAP PCB_TUNING_PATTERN::GetProperties() const
     props.set_iu( "target_length_min", m_settings.m_targetLength.Min() );
     props.set_iu( "target_length", m_settings.m_targetLength.Opt() );
     props.set_iu( "target_length_max", m_settings.m_targetLength.Max() );
+    props.set_iu( "target_delay_min", m_settings.m_targetLengthDelay.Min() );
+    props.set_iu( "target_delay", m_settings.m_targetLengthDelay.Opt() );
+    props.set_iu( "target_delay_max", m_settings.m_targetLengthDelay.Max() );
     props.set_iu( "target_skew_min", m_settings.m_targetSkew.Min() );
     props.set_iu( "target_skew", m_settings.m_targetSkew.Opt() );
     props.set_iu( "target_skew_max", m_settings.m_targetSkew.Max() );
@@ -1948,6 +2053,8 @@ void PCB_TUNING_PATTERN::SetProperties( const STRING_ANY_MAP& aProps )
     aProps.get_to( "last_status", status );
     m_tuningStatus = statusFromString( status.utf8_string() );
 
+    aProps.get_to( "is_time_domain", m_settings.m_isTimeDomain );
+
     aProps.get_to( "end", m_end );
     aProps.get_to( "corner_radius_percent", m_settings.m_cornerRadiusPercentage );
     aProps.get_to( "single_sided", m_settings.m_singleSided );
@@ -1967,6 +2074,15 @@ void PCB_TUNING_PATTERN::SetProperties( const STRING_ANY_MAP& aProps )
 
     if( aProps.get_to_iu( "target_length_max", val ) )
         m_settings.m_targetLength.SetMax( val );
+
+    aProps.get_to_iu( "target_delay", val );
+    m_settings.SetTargetLengthDelay( val );
+
+    if( aProps.get_to_iu( "target_delay_min", val ) )
+        m_settings.m_targetLengthDelay.SetMin( val );
+
+    if( aProps.get_to_iu( "target_delay_max", val ) )
+        m_settings.m_targetLengthDelay.SetMax( val );
 
     int int_val;
 
@@ -2007,10 +2123,46 @@ void PCB_TUNING_PATTERN::ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame )
         BOARD_ITEM*                  startItem = static_cast<BOARD_ITEM*>( *m_items.begin() );
         std::shared_ptr<DRC_ENGINE>& drcEngine = GetBoard()->GetDesignSettings().m_DRCEngine;
 
-        constraint = drcEngine->EvalRules( LENGTH_CONSTRAINT, startItem, nullptr, GetLayer() );
+        if( m_tuningMode == DIFF_PAIR_SKEW )
+        {
+            constraint = drcEngine->EvalRules( SKEW_CONSTRAINT, startItem, nullptr, GetLayer() );
 
-        if( !constraint.IsNull() && !settings.m_overrideCustomRules )
-            settings.SetTargetLength( constraint.GetValue() );
+            if( !constraint.IsNull() && !settings.m_overrideCustomRules )
+            {
+                if( constraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN ) )
+                {
+                    settings.SetTargetLengthDelay( constraint.GetValue() );
+                    settings.SetTargetLength( MINOPTMAX<int>() );
+                    settings.m_isTimeDomain = true;
+                }
+                else
+                {
+                    settings.SetTargetLengthDelay( MINOPTMAX<int>() );
+                    settings.SetTargetLength( constraint.GetValue() );
+                    settings.m_isTimeDomain = false;
+                }
+            }
+        }
+        else
+        {
+            constraint = drcEngine->EvalRules( LENGTH_CONSTRAINT, startItem, nullptr, GetLayer() );
+
+            if( !constraint.IsNull() && !settings.m_overrideCustomRules )
+            {
+                if( constraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN ) )
+                {
+                    settings.SetTargetLengthDelay( constraint.GetValue() );
+                    settings.SetTargetLength( MINOPTMAX<int>() );
+                    settings.m_isTimeDomain = true;
+                }
+                else
+                {
+                    settings.SetTargetLengthDelay( MINOPTMAX<int>() );
+                    settings.SetTargetLength( constraint.GetValue() );
+                    settings.m_isTimeDomain = false;
+                }
+            }
+        }
     }
 
     DIALOG_TUNING_PATTERN_PROPERTIES dlg( aEditFrame, settings, GetPNSMode(), constraint );
@@ -2052,25 +2204,55 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
 
         if( m_tuningMode == DIFF_PAIR_SKEW )
         {
-            statusItem->SetMinMax( m_settings.m_targetSkew.Min(), m_settings.m_targetSkew.Max() );
+            if( m_settings.m_isTimeDomain )
+                statusItem->SetMinMax( m_settings.m_targetSkewDelay.Min(), m_settings.m_targetSkewDelay.Max() );
+            else
+                statusItem->SetMinMax( m_settings.m_targetSkew.Min(), m_settings.m_targetSkew.Max() );
         }
         else
         {
-            if( m_settings.m_targetLength.Opt() == PNS::MEANDER_SETTINGS::LENGTH_UNCONSTRAINED )
+            if( m_settings.m_isTimeDomain )
             {
-                statusItem->ClearMinMax();
+                if( m_settings.m_targetLengthDelay.Opt() == PNS::MEANDER_SETTINGS::DELAY_UNCONSTRAINED )
+                {
+                    statusItem->ClearMinMax();
+                }
+                else
+                {
+                    statusItem->SetMinMax( static_cast<double>( m_settings.m_targetLengthDelay.Min() ),
+                                           static_cast<double>( m_settings.m_targetLengthDelay.Max() ) );
+                }
             }
             else
             {
-                statusItem->SetMinMax( (double) m_settings.m_targetLength.Min(),
-                                       (double) m_settings.m_targetLength.Max() );
+                if( m_settings.m_targetLengthDelay.Opt() == PNS::MEANDER_SETTINGS::LENGTH_UNCONSTRAINED )
+                {
+                    statusItem->ClearMinMax();
+                }
+                else
+                {
+                    statusItem->SetMinMax( static_cast<double>( m_settings.m_targetLength.Min() ),
+                                           static_cast<double>( m_settings.m_targetLength.Max() ) );
+                }
             }
         }
 
+        statusItem->SetIsTimeDomain( m_settings.m_isTimeDomain );
+
         if( m_tuningMode == DIFF_PAIR_SKEW )
-            statusItem->SetCurrent( (double) placer->TuningResult(), _( "current skew" ) );
+        {
+            if( m_settings.m_isTimeDomain )
+                statusItem->SetCurrent( static_cast<double>( placer->TuningDelayResult() ), _( "current skew" ) );
+            else
+                statusItem->SetCurrent( static_cast<double>( placer->TuningLengthResult() ), _( "current skew" ) );
+        }
         else
-            statusItem->SetCurrent( (double) placer->TuningResult(), _( "current length" ) );
+        {
+            if( m_settings.m_isTimeDomain )
+                statusItem->SetCurrent( static_cast<double>( placer->TuningDelayResult() ), _( "current delay" ) );
+            else
+                statusItem->SetCurrent( static_cast<double>( placer->TuningLengthResult() ), _( "current length" ) );
+        }
 
         statusItem->SetPosition( aFrame->GetToolManager()->GetMousePosition() );
         previewItems.push_back( statusItem );
@@ -2091,6 +2273,8 @@ void PCB_TUNING_PATTERN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     NETCLASS*     netclass = nullptr;
     int           width = 0;
     bool          mixedWidth = false;
+
+    EDA_DATA_TYPE unitType = m_settings.m_isTimeDomain ? EDA_DATA_TYPE::TIME : EDA_DATA_TYPE::DISTANCE;
 
     aList.emplace_back( _( "Type" ), GetFriendlyName() );
 
@@ -2146,33 +2330,65 @@ void PCB_TUNING_PATTERN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     // Display full track length (in Pcbnew)
     if( board && primaryItem && primaryItem->GetNetCode() > 0 )
     {
-        int    count;
-        double trackLen;
-        double lenPadToDie;
+        int    count = 0;
+        double trackLen = 0.0;
+        double lenPadToDie = 0.0;
+        double trackDelay = 0.0;
+        double delayPadToDie = 0.0;
 
-        std::tie( count, trackLen, lenPadToDie ) = board->GetTrackLength( *primaryItem );
+        std::tie( count, trackLen, lenPadToDie, trackDelay, delayPadToDie ) = board->GetTrackLength( *primaryItem );
 
         if( coupledItem && coupledItem->GetNetCode() > 0 )
         {
-            double coupledLen;
-            std::tie( count, coupledLen, lenPadToDie ) = board->GetTrackLength( *coupledItem );
+            double coupledLen = 0.0;
+            double coupledLenPadToDie = 0.0;
+            double coupledTrackDelay = 0.0;
+            double doubledDelayPadToDie = 0.0;
 
-            aList.emplace_back( _( "Routed Lengths" ), aFrame->MessageTextFromValue( trackLen )
-                                                     + wxS( ", " )
-                                                     + aFrame->MessageTextFromValue( coupledLen ) );
+            std::tie( count, coupledLen, coupledLenPadToDie, coupledTrackDelay, doubledDelayPadToDie ) =
+                    board->GetTrackLength( *coupledItem );
+
+            if( trackDelay == 0.0 || coupledTrackDelay == 0.0 )
+            {
+                aList.emplace_back( _( "Routed Lengths" ), aFrame->MessageTextFromValue( trackLen ) + wxS( ", " )
+                                                                   + aFrame->MessageTextFromValue( coupledLen ) );
+            }
+            else
+            {
+                aList.emplace_back(
+                        _( "Routed Delays" ),
+                        aFrame->MessageTextFromValue( trackDelay, true, EDA_DATA_TYPE::TIME ) + wxS( ", " )
+                                + aFrame->MessageTextFromValue( coupledTrackDelay, true, EDA_DATA_TYPE::TIME ) );
+            }
         }
         else
         {
-            aList.emplace_back( _( "Routed Length" ), aFrame->MessageTextFromValue( trackLen ) );
+            if( trackDelay == 0.0 )
+            {
+                aList.emplace_back( _( "Routed Length" ), aFrame->MessageTextFromValue( trackLen ) );
+            }
+            else
+            {
+                aList.emplace_back( _( "Routed Delay" ),
+                                    aFrame->MessageTextFromValue( trackDelay, true, EDA_DATA_TYPE::TIME ) );
+            }
         }
 
-        if( lenPadToDie != 0 )
+        if( lenPadToDie != 0 && delayPadToDie == 0.0 )
         {
             msg = aFrame->MessageTextFromValue( lenPadToDie );
             aList.emplace_back( _( "Pad To Die Length" ), msg );
 
             msg = aFrame->MessageTextFromValue( trackLen + lenPadToDie );
             aList.emplace_back( _( "Full Length" ), msg );
+        }
+        else if( delayPadToDie > 0.0 )
+        {
+            msg = aFrame->MessageTextFromValue( delayPadToDie, true, EDA_DATA_TYPE::TIME );
+            aList.emplace_back( _( "Pad To Die Delay" ), msg );
+
+            msg = aFrame->MessageTextFromValue( trackDelay + delayPadToDie, true, EDA_DATA_TYPE::TIME );
+            aList.emplace_back( _( "Full Delay" ), msg );
         }
     }
 
@@ -2204,18 +2420,32 @@ void PCB_TUNING_PATTERN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 
         if( constraint.IsNull() || m_settings.m_overrideCustomRules )
         {
-            msg = aFrame->MessageTextFromValue( (double) m_settings.m_targetLength.Opt() );
+            wxString caption;
 
-            aList.emplace_back( wxString::Format( _( "Target Length: %s" ), msg ),
+            if( m_settings.m_isTimeDomain )
+            {
+                caption = _( "Target Delay: %s" );
+                msg = aFrame->MessageTextFromValue( static_cast<double>( m_settings.m_targetLengthDelay.Opt() ), true,
+                                                    EDA_DATA_TYPE::TIME );
+            }
+            else
+            {
+                caption = _( "Target Length: %s" );
+                msg = aFrame->MessageTextFromValue( static_cast<double>( m_settings.m_targetLength.Opt() ) );
+            }
+
+            aList.emplace_back( wxString::Format( caption, msg ),
                                 wxString::Format( _( "(from tuning pattern properties)" ) ) );
         }
         else
         {
-            msg = aFrame->MessageTextFromMinOptMax( constraint.GetValue() );
+            msg = aFrame->MessageTextFromMinOptMax( constraint.GetValue(), unitType );
+
+            wxString caption = m_settings.m_isTimeDomain ? _( "Delay Constraints: %s" ) : _( "Length Constraints: %s" );
 
             if( !msg.IsEmpty() )
             {
-                aList.emplace_back( wxString::Format( _( "Length Constraints: %s" ), msg ),
+                aList.emplace_back( wxString::Format( caption, msg ),
                                     wxString::Format( _( "(from %s)" ), constraint.GetName() ) );
             }
         }
@@ -2673,28 +2903,61 @@ static struct PCB_TUNING_PATTERN_DESC
                     return false;
                 };
 
-        auto notIsSkew =
-                [&]( INSPECTABLE* aItem ) -> bool
-                {
-                    return !isSkew( aItem );
-                };
+        auto isTimeDomain = []( INSPECTABLE* aItem ) -> bool
+        {
+            if( PCB_TUNING_PATTERN* pattern = dynamic_cast<PCB_TUNING_PATTERN*>( aItem ) )
+                return pattern->GetSettings().m_isTimeDomain;
+
+            return false;
+        };
+
+        auto isLengthIsSpaceDomain = [&]( INSPECTABLE* aItem ) -> bool
+        {
+            return !isSkew( aItem ) && !isTimeDomain( aItem );
+        };
+
+        auto isLengthIsTimeDomain = [&]( INSPECTABLE* aItem ) -> bool
+        {
+            return !isSkew( aItem ) && isTimeDomain( aItem );
+        };
+
+        auto isSkewIsSpaceDomain = [&]( INSPECTABLE* aItem ) -> bool
+        {
+            return isSkew( aItem ) && !isTimeDomain( aItem );
+        };
+
+        auto isSkewIsTimeDomain = [&]( INSPECTABLE* aItem ) -> bool
+        {
+            return isSkew( aItem ) && isTimeDomain( aItem );
+        };
 
         propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, std::optional<int>>(
-                                     _HKI( "Target Length" ),
-                                     &PCB_TUNING_PATTERN::SetTargetLength,
-                                     &PCB_TUNING_PATTERN::GetTargetLength,
-                                     PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::ABS_X_COORD ),
+                                     _HKI( "Target Length" ), &PCB_TUNING_PATTERN::SetTargetLength,
+                                     &PCB_TUNING_PATTERN::GetTargetLength, PROPERTY_DISPLAY::PT_SIZE,
+                                     ORIGIN_TRANSFORMS::ABS_X_COORD ),
                              groupTab )
-                .SetAvailableFunc( notIsSkew );
+                .SetAvailableFunc( isLengthIsSpaceDomain );
 
+        propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, std::optional<int>>(
+                                     _HKI( "Target Delay" ), &PCB_TUNING_PATTERN::SetTargetDelay,
+                                     &PCB_TUNING_PATTERN::GetTargetDelay, PROPERTY_DISPLAY::PT_TIME,
+                                     ORIGIN_TRANSFORMS::NOT_A_COORD ),
+                             groupTab )
+                .SetAvailableFunc( isLengthIsTimeDomain );
 
         propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, int>(
                                      _HKI( "Target Skew" ), &PCB_TUNING_PATTERN::SetTargetSkew,
-                                     &PCB_TUNING_PATTERN::GetTargetSkew,
-                                     PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::ABS_X_COORD ),
+                                     &PCB_TUNING_PATTERN::GetTargetSkew, PROPERTY_DISPLAY::PT_SIZE,
+                                     ORIGIN_TRANSFORMS::ABS_X_COORD ),
                              groupTab )
-                .SetAvailableFunc( isSkew );
+                .SetAvailableFunc( isSkewIsSpaceDomain );
 
+        propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, int>(
+                                     _HKI( "Target Skew Delay" ), &PCB_TUNING_PATTERN::SetTargetSkewDelay,
+                                     &PCB_TUNING_PATTERN::GetTargetSkewDelay, PROPERTY_DISPLAY::PT_TIME,
+                                     ORIGIN_TRANSFORMS::NOT_A_COORD ),
+                             groupTab )
+                .SetAvailableFunc( isSkewIsTimeDomain );
 
         propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, bool>(
                                      _HKI( "Override Custom Rules" ),

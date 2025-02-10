@@ -201,6 +201,8 @@ set( PCBNEW_DIALOGS
     dialogs/panel_setup_tracks_and_vias_base.cpp
     dialogs/panel_setup_tuning_patterns.cpp
     dialogs/panel_setup_tuning_patterns_base.cpp
+    dialogs/panel_setup_time_domain_parameters.cpp
+    dialogs/panel_setup_time_domain_parameters_base.cpp
     footprint_wizard.cpp
     footprint_wizard_frame.cpp
     footprint_wizard_frame_functions.cpp

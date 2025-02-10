@@ -117,10 +117,7 @@ void PCB_BASE_FRAME::ShowPadPropertiesDialog( PAD* aPad )
 
 
 DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad ) :
-        DIALOG_PAD_PROPERTIES_BASE( aParent ),
-        m_parent( aParent ),
-        m_initialized( false ),
-        m_editLayer( F_Cu ),
+        DIALOG_PAD_PROPERTIES_BASE( aParent ), m_parent( aParent ), m_initialized( false ), m_editLayer( F_Cu ),
         m_posX( aParent, m_posXLabel, m_posXCtrl, m_posXUnits ),
         m_posY( aParent, m_posYLabel, m_posYCtrl, m_posYUnits ),
         m_sizeX( aParent, m_sizeXLabel, m_sizeXCtrl, m_sizeXUnits ),
@@ -128,21 +125,19 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
         m_offsetX( aParent, m_offsetXLabel, m_offsetXCtrl, m_offsetXUnits ),
         m_offsetY( aParent, m_offsetYLabel, m_offsetYCtrl, m_offsetYUnits ),
         m_padToDie( aParent, m_padToDieLabel, m_padToDieCtrl, m_padToDieUnits ),
+        m_padToDieDelay( aParent, m_padToDieDelayLabel, m_padToDieDelayCtrl, m_padToDieDelayUnits ),
         m_trapDelta( aParent, m_trapDeltaLabel, m_trapDeltaCtrl, m_trapDeltaUnits ),
         m_cornerRadius( aParent, m_cornerRadiusLabel, m_cornerRadiusCtrl, m_cornerRadiusUnits ),
         m_cornerRatio( aParent, m_cornerRatioLabel, m_cornerRatioCtrl, m_cornerRatioUnits ),
         m_chamferRatio( aParent, m_chamferRatioLabel, m_chamferRatioCtrl, m_chamferRatioUnits ),
-        m_mixedCornerRatio( aParent, m_mixedCornerRatioLabel, m_mixedCornerRatioCtrl,
-                            m_mixedCornerRatioUnits ),
-        m_mixedChamferRatio( aParent, m_mixedChamferRatioLabel, m_mixedChamferRatioCtrl,
-                             m_mixedChamferRatioUnits ),
+        m_mixedCornerRatio( aParent, m_mixedCornerRatioLabel, m_mixedCornerRatioCtrl, m_mixedCornerRatioUnits ),
+        m_mixedChamferRatio( aParent, m_mixedChamferRatioLabel, m_mixedChamferRatioCtrl, m_mixedChamferRatioUnits ),
         m_holeX( aParent, m_holeXLabel, m_holeXCtrl, m_holeXUnits ),
         m_holeY( aParent, m_holeYLabel, m_holeYCtrl, m_holeYUnits ),
         m_clearance( aParent, m_clearanceLabel, m_clearanceCtrl, m_clearanceUnits ),
         m_maskMargin( aParent, m_maskMarginLabel, m_maskMarginCtrl, m_maskMarginUnits ),
         m_pasteMargin( aParent, m_pasteMarginLabel, m_pasteMarginCtrl, m_pasteMarginUnits ),
-        m_pasteMarginRatio( aParent, m_pasteMarginRatioLabel, m_pasteMarginRatioCtrl,
-                            m_pasteMarginRatioUnits ),
+        m_pasteMarginRatio( aParent, m_pasteMarginRatioLabel, m_pasteMarginRatioCtrl, m_pasteMarginRatioUnits ),
         m_thermalGap( aParent, m_thermalGapLabel, m_thermalGapCtrl, m_thermalGapUnits ),
         m_spokeWidth( aParent, m_spokeWidthLabel, m_spokeWidthCtrl, m_spokeWidthUnits ),
         m_spokeAngle( aParent, m_spokeAngleLabel, m_spokeAngleCtrl, m_spokeAngleUnits ),
@@ -229,6 +224,8 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
 
     m_pasteMarginRatio.SetUnits( EDA_UNITS::PERCENT );
     m_pasteMarginRatio.SetNegativeZero();
+
+    m_padToDieDelay.SetUnits( EDA_UNITS::PS );
 
     initValues();
 
@@ -651,6 +648,9 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     m_padToDieOpt->SetValue( m_previewPad->GetPadToDieLength() != 0 );
     m_padToDie.ChangeValue( m_previewPad->GetPadToDieLength() );
+
+    m_padToDieDelayOpt->SetValue( m_previewPad->GetPadToDieDelay() != 0 );
+    m_padToDieDelay.ChangeValue( m_previewPad->GetPadToDieDelay() );
 
     if( m_previewPad->GetLocalClearance().has_value() )
         m_clearance.ChangeValue( m_previewPad->GetLocalClearance().value() );
@@ -1147,6 +1147,7 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
         m_padNumCtrl->ChangeValue( wxEmptyString );
         m_padNetSelector->SetSelectedNetcode( 0 );
         m_padToDieOpt->SetValue( false );
+        m_padToDieDelayOpt->SetValue( false );
     }
     else if( m_padNumCtrl->GetValue().IsEmpty() && m_currentPad )
     {
@@ -1212,14 +1213,19 @@ void DIALOG_PAD_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 
     // Enable/disable pad length-to-die
     m_padToDieOpt->Enable( hasConnection );
+    m_padToDieDelayOpt->Enable( hasConnection );
 
     if( !m_padToDieOpt->IsEnabled() )
         m_padToDieOpt->SetValue( false );
+
+    if( !m_padToDieDelayOpt->IsEnabled() )
+        m_padToDieDelayOpt->SetValue( false );
 
     // We can show/hide this here because it doesn't require the layout to be refreshed.
     // All the others have to be done in their event handlers because doing a layout here
     // causes infinite looping on MSW.
     m_padToDie.Show( m_padToDieOpt->GetValue() );
+    m_padToDieDelay.Show( m_padToDieDelayOpt->GetValue() );
 
     // Enable/disable Copper Layers control
     m_rbCopperLayersSel->Enable( m_padType->GetSelection() != APERTURE_DLG_TYPE );
@@ -1574,6 +1580,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     m_currentPad->SetAttribute( m_masterPad->GetAttribute() );
     m_currentPad->SetFPRelativeOrientation( m_masterPad->GetOrientation() );
     m_currentPad->SetPadToDieLength( m_masterPad->GetPadToDieLength() );
+    m_currentPad->SetPadToDieDelay( m_masterPad->GetPadToDieDelay() );
     m_currentPad->SetLayerSet( m_masterPad->GetLayerSet() );
     m_currentPad->SetNumber( m_masterPad->GetNumber() );
 
@@ -1839,6 +1846,11 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     else
         aPad->SetPadToDieLength( 0 );
 
+    if( m_padToDieDelayOpt->GetValue() )
+        aPad->SetPadToDieDelay( m_padToDieDelay.GetIntValue() );
+    else
+        aPad->SetPadToDieDelay( 0 );
+
     aPad->SetNumber( m_padNumCtrl->GetValue() );
     aPad->SetNetCode( m_padNetSelector->GetSelectedNetcode() );
 
@@ -2063,6 +2075,15 @@ void DIALOG_PAD_PROPERTIES::OnPadToDieCheckbox( wxCommandEvent& event )
 {
     if( m_padToDieOpt->GetValue() && m_currentPad )
         m_padToDie.SetValue( m_currentPad->GetPadToDieLength() );
+
+    OnValuesChanged( event );
+}
+
+
+void DIALOG_PAD_PROPERTIES::OnPadToDieDelayCheckbox( wxCommandEvent& event )
+{
+    if( m_padToDieDelayOpt->GetValue() && m_currentPad )
+        m_padToDieDelay.SetValue( m_currentPad->GetPadToDieDelay() );
 
     OnValuesChanged( event );
 }

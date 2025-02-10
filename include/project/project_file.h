@@ -32,6 +32,7 @@ class BOARD_DESIGN_SETTINGS;
 class ERC_SETTINGS;
 class NET_SETTINGS;
 class COMPONENT_CLASS_SETTINGS;
+class TIME_DOMAIN_PARAMETERS;
 class LAYER_PAIR_SETTINGS;
 class SCHEMATIC_SETTINGS;
 class TEMPLATES;
@@ -109,6 +110,11 @@ public:
     std::shared_ptr<COMPONENT_CLASS_SETTINGS>& ComponentClassSettings()
     {
         return m_ComponentClassSettings;
+    }
+
+    std::shared_ptr<TIME_DOMAIN_PARAMETERS>& TimeDomainParameters()
+    {
+        return m_timeDomainParameters;
     }
 
     /**
@@ -192,6 +198,11 @@ public:
      * Component class settings for the project (owned here)
      */
     std::shared_ptr<COMPONENT_CLASS_SETTINGS> m_ComponentClassSettings;
+
+    /**
+     * Time domain parameters for this project
+     */
+    std::shared_ptr<TIME_DOMAIN_PARAMETERS> m_timeDomainParameters;
 
     std::vector<LAYER_PRESET>     m_LayerPresets;   /// List of stored layer presets
     std::vector<VIEWPORT>         m_Viewports;      /// List of stored viewports (pos + zoom)

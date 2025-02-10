@@ -102,6 +102,10 @@ wxPGWindowList PG_UNIT_EDITOR::CreateControls( wxPropertyGrid* aPropGrid, wxPGPr
         m_unitBinder->SetCoordType( ORIGIN_TRANSFORMS::NOT_A_COORD );
         m_unitBinder->SetUnits( EDA_UNITS::DEGREES );
     }
+    else if( dynamic_cast<PGPROPERTY_TIME*>( aProperty ) != nullptr )
+    {
+        m_unitBinder->SetUnits( EDA_UNITS::PS );
+    }
 
     UpdateControl( aProperty, win );
 

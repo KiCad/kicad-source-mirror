@@ -183,6 +183,35 @@ public:
         m_via_length -= aValue;
     }
 
+    int64_t GetViaDelay() const { return m_via_delay; }
+
+    void SetViaDelay( unsigned int aValue )
+    {
+        if( m_parent )
+            m_parent->SetViaDelay( m_parent->GetViaDelay() - m_via_delay + aValue );
+
+        m_column_changed[COLUMN_VIA_LENGTH] |= ( m_via_delay != aValue );
+        m_via_delay = aValue;
+    }
+
+    void AddViaDelay( unsigned int aValue )
+    {
+        if( m_parent )
+            m_parent->AddViaDelay( aValue );
+
+        m_column_changed[COLUMN_VIA_LENGTH] |= ( aValue != 0 );
+        m_via_delay += aValue;
+    }
+
+    void SubViaDelay( int64_t aValue )
+    {
+        if( m_parent )
+            m_parent->SubViaDelay( aValue );
+
+        m_column_changed[COLUMN_VIA_LENGTH] |= ( aValue != 0 );
+        m_via_delay -= aValue;
+    }
+
     int64_t GetBoardWireLength() const
     {
         int64_t retval = 0;
@@ -193,10 +222,26 @@ public:
         return retval;
     }
 
+    int64_t GetBoardWireDelay() const
+    {
+        int64_t retval = 0;
+
+        for( auto& [layer, delay] : m_layer_wire_delay )
+            retval += delay;
+
+        return retval;
+    }
+
     int64_t GetLayerWireLength( PCB_LAYER_ID aLayer ) const
     {
         auto it = m_layer_wire_length.find( aLayer );
         return it != m_layer_wire_length.end() ? it->second : 0;
+    }
+
+    int64_t GetLayerWireDelay( PCB_LAYER_ID aLayer ) const
+    {
+        auto it = m_layer_wire_delay.find( aLayer );
+        return it != m_layer_wire_delay.end() ? it->second : 0;
     }
 
     bool BoardWireLengthChanged() const { return m_column_changed[COLUMN_BOARD_LENGTH]; }
@@ -220,6 +265,8 @@ public:
     }
 
     std::map<PCB_LAYER_ID, int64_t> GetLayerWireLengths() const { return m_layer_wire_length; }
+
+    std::map<PCB_LAYER_ID, int64_t> GetLayerWireDelays() const { return m_layer_wire_delay; }
 
     void SetLayerWireLengths( const std::map<PCB_LAYER_ID, int64_t>& aValue )
     {
@@ -253,6 +300,38 @@ public:
         m_layer_wire_length[aLayer] -= aValue;
     }
 
+    void SetLayerWireDelays( const std::map<PCB_LAYER_ID, int64_t>& aValue )
+    {
+        if( m_parent )
+        {
+            for( auto& [oldLayer, oldLength] : m_layer_wire_delay )
+                m_parent->SubLayerWireDelay( oldLength, oldLayer );
+
+            for( auto& [newLayer, newLength] : aValue )
+                m_parent->AddLayerWireDelay( newLength, newLayer );
+        }
+
+        m_layer_wire_delay = aValue;
+    }
+
+    void AddLayerWireDelay( const int64_t aValue, PCB_LAYER_ID aLayer )
+    {
+        if( m_parent )
+            m_parent->AddLayerWireDelay( aValue, aLayer );
+
+        m_column_changed[COLUMN_BOARD_LENGTH] |= ( m_layer_wire_delay[aLayer] != 0 );
+        m_layer_wire_delay[aLayer] += aValue;
+    }
+
+    void SubLayerWireDelay( const int64_t aValue, PCB_LAYER_ID aLayer )
+    {
+        if( m_parent )
+            m_parent->SubLayerWireDelay( aValue, aLayer );
+
+        m_column_changed[COLUMN_BOARD_LENGTH] |= ( m_layer_wire_delay[aLayer] != 0 );
+        m_layer_wire_delay[aLayer] -= aValue;
+    }
+
     int64_t GetPadDieLength() const { return m_pad_die_length; }
 
     bool PadDieLengthChanged() const { return m_column_changed[COLUMN_PAD_DIE_LENGTH]; }
@@ -284,11 +363,42 @@ public:
         m_pad_die_length -= aValue;
     }
 
+    int64_t GetPadDieDelay() const { return m_pad_die_delay; }
+
+    void SetPadDieDelay( int64_t aValue )
+    {
+        if( m_parent )
+            m_parent->SetPadDieDelay( m_parent->GetPadDieDelay() - m_pad_die_delay + aValue );
+
+        m_column_changed[COLUMN_PAD_DIE_LENGTH] |= ( m_pad_die_delay != aValue );
+        m_pad_die_delay = aValue;
+    }
+
+    void AddPadDieDelay( int64_t aValue )
+    {
+        if( m_parent )
+            m_parent->AddPadDieDelay( aValue );
+
+        m_column_changed[COLUMN_PAD_DIE_LENGTH] |= ( aValue != 0 );
+        m_pad_die_delay += aValue;
+    }
+
+    void SubPadDieDelay( int64_t aValue )
+    {
+        if( m_parent )
+            m_parent->SubPadDieDelay( aValue );
+
+        m_column_changed[COLUMN_PAD_DIE_LENGTH] |= ( aValue != 0 );
+        m_pad_die_delay -= aValue;
+    }
+
     // the total length column is always computed, never stored.
     unsigned long long int GetTotalLength() const
     {
         return GetBoardWireLength() + GetViaLength() + GetPadDieLength();
     }
+
+    unsigned long long int GetTotalDelay() const { return GetBoardWireDelay() + GetViaDelay() + GetPadDieDelay(); }
 
     bool TotalLengthChanged() const
     {
@@ -307,11 +417,16 @@ public:
             m_parent->SubPadCount( GetPadCount() );
             m_parent->SubViaCount( GetViaCount() );
             m_parent->SubViaLength( GetViaLength() );
+            m_parent->SubViaDelay( GetViaDelay() );
 
             for( auto& [layer, length] : m_layer_wire_length )
                 m_parent->SubLayerWireLength( length, layer );
 
+            for( auto& [layer, delay] : m_layer_wire_delay )
+                m_parent->SubLayerWireDelay( delay, layer );
+
             m_parent->SubPadDieLength( GetPadDieLength() );
+            m_parent->SubPadDieDelay( GetPadDieDelay() );
 
             m_parent->m_children.erase( std::find( m_parent->m_children.begin(),
                                                    m_parent->m_children.end(), this ) );
@@ -324,11 +439,16 @@ public:
             m_parent->AddPadCount( GetPadCount() );
             m_parent->AddViaCount( GetViaCount() );
             m_parent->AddViaLength( GetViaLength() );
+            m_parent->AddViaDelay( GetViaDelay() );
 
             for( auto& [layer, length] : m_layer_wire_length )
                 m_parent->AddLayerWireLength( length, layer );
 
+            for( auto& [layer, delay] : m_layer_wire_delay )
+                m_parent->AddLayerWireDelay( delay, layer );
+
             m_parent->AddPadDieLength( GetPadDieLength() );
+            m_parent->AddPadDieDelay( GetPadDieDelay() );
 
             m_parent->m_children.push_back( this );
         }
@@ -344,9 +464,12 @@ private:
     unsigned int  m_pad_count = 0;
     unsigned int  m_via_count = 0;
     int64_t       m_via_length = 0;
+    int64_t       m_via_delay = 0;
     int64_t       m_pad_die_length = 0;
+    int64_t       m_pad_die_delay = 0;
 
     std::map<PCB_LAYER_ID, int64_t> m_layer_wire_length{};
+    std::map<PCB_LAYER_ID, int64_t> m_layer_wire_delay{};
 
     // Dirty bits to record when some attribute has changed, in order to avoid unnecessary sort
     // operations.
@@ -694,6 +817,8 @@ public:
         return false;
     }
 
+    void SetIsTimeDomain( const bool aIsTimeDomain ) { m_show_time_domain_details = aIsTimeDomain; }
+
     // implementation of wxDataViewModel interface
     // these are used to query the data model by the GUI view implementation.
     // these are not supposed to be used to modify the data model.  for that
@@ -740,19 +865,44 @@ protected:
                 aOutValue = m_parent.formatCount( i->GetViaCount() );
 
             else if( aCol == COLUMN_VIA_LENGTH )
-                aOutValue = m_parent.formatLength( i->GetViaLength() );
+            {
+                if( m_show_time_domain_details )
+                    aOutValue = m_parent.formatDelay( i->GetViaDelay() );
+                else
+                    aOutValue = m_parent.formatLength( i->GetViaLength() );
+            }
 
             else if( aCol == COLUMN_BOARD_LENGTH )
-                aOutValue = m_parent.formatLength( i->GetBoardWireLength() );
+            {
+                if( m_show_time_domain_details )
+                    aOutValue = m_parent.formatDelay( i->GetBoardWireDelay() );
+                else
+                    aOutValue = m_parent.formatLength( i->GetBoardWireLength() );
+            }
 
             else if( aCol == COLUMN_PAD_DIE_LENGTH )
-                aOutValue = m_parent.formatLength( i->GetPadDieLength() );
+            {
+                if( m_show_time_domain_details )
+                    aOutValue = m_parent.formatDelay( i->GetPadDieDelay() );
+                else
+                    aOutValue = m_parent.formatLength( i->GetPadDieLength() );
+            }
 
             else if( aCol == COLUMN_TOTAL_LENGTH )
-                aOutValue = m_parent.formatLength( i->GetTotalLength() );
+            {
+                if( m_show_time_domain_details )
+                    aOutValue = m_parent.formatDelay( i->GetTotalDelay() );
+                else
+                    aOutValue = m_parent.formatLength( i->GetTotalLength() );
+            }
 
             else if( aCol > COLUMN_LAST_STATIC_COL && aCol <= m_parent.m_columns.size() )
-                aOutValue = m_parent.formatLength( i->GetLayerWireLength( m_parent.m_columns[aCol].layer ) );
+            {
+                if( m_show_time_domain_details )
+                    aOutValue = m_parent.formatDelay( i->GetLayerWireDelay( m_parent.m_columns[aCol].layer ) );
+                else
+                    aOutValue = m_parent.formatLength( i->GetLayerWireLength( m_parent.m_columns[aCol].layer ) );
+            }
 
             else
                 aOutValue = "";
@@ -796,24 +946,59 @@ protected:
         else if( aCol == COLUMN_VIA_COUNT && i1.GetViaCount() != i2.GetViaCount() )
             return compareUInt( i1.GetViaCount(), i2.GetViaCount(), aAsc );
 
-        else if( aCol == COLUMN_VIA_LENGTH && i1.GetViaLength() != i2.GetViaLength() )
-            return compareUInt( i1.GetViaLength(), i2.GetViaLength(), aAsc );
-
-        else if( aCol == COLUMN_BOARD_LENGTH && i1.GetBoardWireLength() != i2.GetBoardWireLength() )
-            return compareUInt( i1.GetBoardWireLength(), i2.GetBoardWireLength(), aAsc );
-
-        else if( aCol == COLUMN_PAD_DIE_LENGTH && i1.GetPadDieLength() != i2.GetPadDieLength() )
-            return compareUInt( i1.GetPadDieLength(), i2.GetPadDieLength(), aAsc );
-
-        else if( aCol == COLUMN_TOTAL_LENGTH && i1.GetTotalLength() != i2.GetTotalLength() )
-            return compareUInt( i1.GetTotalLength(), i2.GetTotalLength(), aAsc );
-
-        else if( aCol > COLUMN_LAST_STATIC_COL && aCol < m_parent.m_columns.size()
-                 && i1.GetLayerWireLength( m_parent.m_columns[aCol].layer )
-                            != i2.GetLayerWireLength( m_parent.m_columns[aCol].layer ) )
+        else if( aCol == COLUMN_VIA_LENGTH )
         {
-            return compareUInt( i1.GetLayerWireLength( m_parent.m_columns[aCol].layer ),
-                                i2.GetLayerWireLength( m_parent.m_columns[aCol].layer ), aAsc );
+            if( m_show_time_domain_details && i1.GetViaDelay() != i2.GetViaDelay() )
+                return compareUInt( i1.GetViaDelay(), i2.GetViaDelay(), aAsc );
+
+            if( !m_show_time_domain_details && i1.GetViaLength() != i2.GetViaLength() )
+                return compareUInt( i1.GetViaLength(), i2.GetViaLength(), aAsc );
+        }
+
+        else if( aCol == COLUMN_BOARD_LENGTH )
+        {
+            if( m_show_time_domain_details && i1.GetBoardWireDelay() != i2.GetBoardWireDelay() )
+                return compareUInt( i1.GetBoardWireDelay(), i2.GetBoardWireDelay(), aAsc );
+
+            if( !m_show_time_domain_details && i1.GetBoardWireLength() != i2.GetBoardWireLength() )
+                return compareUInt( i1.GetBoardWireLength(), i2.GetBoardWireLength(), aAsc );
+        }
+
+        else if( aCol == COLUMN_PAD_DIE_LENGTH )
+        {
+            if( m_show_time_domain_details && i1.GetPadDieDelay() != i2.GetPadDieDelay() )
+                return compareUInt( i1.GetPadDieDelay(), i2.GetPadDieDelay(), aAsc );
+
+            if( !m_show_time_domain_details && i1.GetPadDieLength() != i2.GetPadDieLength() )
+                return compareUInt( i1.GetPadDieLength(), i2.GetPadDieLength(), aAsc );
+        }
+
+        else if( aCol == COLUMN_TOTAL_LENGTH )
+        {
+            if( m_show_time_domain_details && i1.GetTotalDelay() != i2.GetTotalDelay() )
+                return compareUInt( i1.GetTotalDelay(), i2.GetTotalDelay(), aAsc );
+
+            if( !m_show_time_domain_details && i1.GetTotalLength() != i2.GetTotalLength() )
+                return compareUInt( i1.GetTotalLength(), i2.GetTotalLength(), aAsc );
+        }
+
+        else if( aCol > COLUMN_LAST_STATIC_COL && aCol < m_parent.m_columns.size() )
+        {
+            if( m_show_time_domain_details
+                && i1.GetLayerWireDelay( m_parent.m_columns[aCol].layer )
+                           != i2.GetLayerWireDelay( m_parent.m_columns[aCol].layer ) )
+            {
+                return compareUInt( i1.GetLayerWireDelay( m_parent.m_columns[aCol].layer ),
+                                    i2.GetLayerWireDelay( m_parent.m_columns[aCol].layer ), aAsc );
+            }
+
+            if( !m_show_time_domain_details
+                && i1.GetLayerWireLength( m_parent.m_columns[aCol].layer )
+                           != i2.GetLayerWireLength( m_parent.m_columns[aCol].layer ) )
+            {
+                return compareUInt( i1.GetLayerWireLength( m_parent.m_columns[aCol].layer ),
+                                    i2.GetLayerWireLength( m_parent.m_columns[aCol].layer ), aAsc );
+            }
         }
 
         // when the item values compare equal resort to pointer comparison.
@@ -897,6 +1082,8 @@ private:
 
     /// Map of custom group names to their representative list item
     std::map<wxString, LIST_ITEM*> m_custom_group_map;
+
+    bool m_show_time_domain_details{ false };
 };
 
 #endif

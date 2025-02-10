@@ -144,7 +144,7 @@ public:
     bool       isVisited;
     int        srcPos;
 
-    void SetUop( int aOp, double aValue );
+    void SetUop( int aOp, double aValue, EDA_UNITS aUnits );
     void SetUop( int aOp, const wxString& aValue, bool aStringIsWildcard );
     void SetUop( int aOp, std::unique_ptr<VAR_REF> aRef = nullptr );
     void SetUop( int aOp, FUNC_CALL_REF aFunc, std::unique_ptr<VAR_REF> aRef = nullptr );
@@ -172,6 +172,14 @@ public:
         return nullUnits;
     }
 
+
+    virtual const std::vector<EDA_UNITS>& GetSupportedUnitsTypes() const
+    {
+        static const std::vector<EDA_UNITS> nullUnits;
+
+        return nullUnits;
+    }
+
     virtual wxString GetSupportedUnitsMessage() const
     {
         return wxEmptyString;
@@ -188,29 +196,16 @@ class KICOMMON_API VALUE
 {
 public:
     VALUE() :
-        m_type( VT_UNDEFINED ),
-        m_valueDbl( 0 ),
-        m_stringIsWildcard( false ),
-        m_isDeferredDbl( false ),
-        m_isDeferredStr( false )
-    {};
+            m_type( VT_UNDEFINED ), m_valueDbl( 0 ), m_stringIsWildcard( false ), m_isDeferredDbl( false ),
+            m_isDeferredStr( false ), m_units( EDA_UNITS::UNSCALED ) {};
 
     VALUE( const wxString& aStr, bool aIsWildcard = false ) :
-        m_type( VT_STRING ),
-        m_valueDbl( 0 ),
-        m_valueStr( aStr ),
-        m_stringIsWildcard( aIsWildcard ),
-        m_isDeferredDbl( false ),
-        m_isDeferredStr( false )
-    {};
+            m_type( VT_STRING ), m_valueDbl( 0 ), m_valueStr( aStr ), m_stringIsWildcard( aIsWildcard ),
+            m_isDeferredDbl( false ), m_isDeferredStr( false ), m_units( EDA_UNITS::UNSCALED ) {};
 
     VALUE( const double aVal ) :
-        m_type( VT_NUMERIC ),
-        m_valueDbl( aVal ),
-        m_stringIsWildcard( false ),
-        m_isDeferredDbl( false ),
-        m_isDeferredStr( false )
-    {};
+            m_type( VT_NUMERIC ), m_valueDbl( aVal ), m_stringIsWildcard( false ), m_isDeferredDbl( false ),
+            m_isDeferredStr( false ), m_units( EDA_UNITS::UNSCALED ) {};
 
     static VALUE* MakeNullValue()
     {
@@ -286,6 +281,10 @@ public:
             m_valueStr = val.m_valueStr;
     }
 
+    void SetUnits( const EDA_UNITS aUnits ) { m_units = aUnits; }
+
+    EDA_UNITS GetUnits() const { return m_units; }
+
 private:
     VAR_TYPE_T                m_type;
     mutable double            m_valueDbl;               // mutable to support deferred evaluation
@@ -297,6 +296,8 @@ private:
 
     mutable bool              m_isDeferredStr;
     std::function<wxString()> m_lambdaStr;
+
+    EDA_UNITS                 m_units;
 };
 
 class KICOMMON_API VAR_REF

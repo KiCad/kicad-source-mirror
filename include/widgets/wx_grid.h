@@ -128,6 +128,16 @@ public:
     void SetAutoEvalCols( const std::vector<int>& aCols ) { m_autoEvalCols = aCols; }
 
     /**
+     * Set the unit and unit data type to use for a given column
+     */
+    void SetAutoEvalColUnits( int col, EDA_UNITS aUnit, EDA_DATA_TYPE aUnitType );
+
+    /**
+     * Set the unit to use for a given column. The unit data type is inferred from the unit type
+     */
+    void SetAutoEvalColUnits( int col, EDA_UNITS aUnit );
+
+    /**
      * Apply standard KiCad unit and eval services to a numeric cell.
      *
      * @param aRow the cell row index to fetch.
@@ -250,12 +260,18 @@ protected:
 
     void onDPIChanged(wxDPIChangedEvent& event);
 
+    /**
+     * Returns the units and data type associated with a given column
+     */
+    std::pair<EDA_UNITS, EDA_DATA_TYPE> getColumnUnits( int aCol ) const;
+
 protected:
     bool                               m_weOwnTable;
 
     std::map<int, UNITS_PROVIDER*>     m_unitsProviders;
     std::unique_ptr<NUMERIC_EVALUATOR> m_eval;
     std::vector<int>                   m_autoEvalCols;
+    std::unordered_map<int, std::pair<EDA_UNITS, EDA_DATA_TYPE>> m_autoEvalColsUnits;
 
     std::map< std::pair<int, int>, std::pair<wxString, wxString> > m_evalBeforeAfter;
 

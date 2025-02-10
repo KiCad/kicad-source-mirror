@@ -420,7 +420,41 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 {
     DRC_CONSTRAINT c;
     int            value;
+    EDA_UNITS      units = EDA_UNITS::UNSCALED;
+    EDA_DATA_TYPE  unitsType = EDA_DATA_TYPE::UNITLESS;
     wxString       msg;
+    bool           allowsTimeDomain = false;
+
+    auto validateAndSetValueWithUnits =
+            [this, &allowsTimeDomain, &unitsType, &c]( int aValue, const EDA_UNITS aUnits, auto aSetter )
+    {
+        const EDA_DATA_TYPE unitsTypeTmp = UNITS_PROVIDER::GetTypeFromUnits( aUnits );
+
+        if( !allowsTimeDomain && unitsTypeTmp == EDA_DATA_TYPE::TIME )
+            reportError( _( "Time based units not allowed for constraint type." ) );
+
+        if( ( c.m_Value.HasMin() || c.m_Value.HasMax() || c.m_Value.HasOpt() ) && unitsType != unitsTypeTmp )
+        {
+            reportError( _( "Mixed units for constraint values." ) );
+        }
+
+        unitsType = unitsTypeTmp;
+        aSetter( aValue );
+
+        if( allowsTimeDomain )
+        {
+            if( unitsType == EDA_DATA_TYPE::TIME )
+            {
+                c.SetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN );
+                c.ClearOption( DRC_CONSTRAINT::OPTIONS::SPACE_DOMAIN );
+            }
+            else
+            {
+                c.SetOption( DRC_CONSTRAINT::OPTIONS::SPACE_DOMAIN );
+                c.ClearOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN );
+            }
+        }
+    };
 
     T token = NextTok();
 
@@ -503,6 +537,8 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     bool unitless = c.m_Type == VIA_COUNT_CONSTRAINT
                     || c.m_Type == MIN_RESOLVED_SPOKES_CONSTRAINT
                     || c.m_Type == TRACK_ANGLE_CONSTRAINT;
+
+    allowsTimeDomain = c.m_Type == LENGTH_CONSTRAINT || c.m_Type == SKEW_CONSTRAINT;
 
     if( c.m_Type == DISALLOW_CONSTRAINT )
     {
@@ -661,8 +697,12 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                 break;
             }
 
-            parseValueWithUnits( FromUTF8(), value, unitless );
-            c.m_Value.SetMin( value );
+            parseValueWithUnits( FromUTF8(), value, units, unitless );
+            validateAndSetValueWithUnits( value, units,
+                                          [&c]( const int aValue )
+                                          {
+                                              c.m_Value.SetMin( aValue );
+                                          } );
 
             if( (int) NextTok() != DSN_RIGHT )
             {
@@ -681,9 +721,12 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                 break;
             }
 
-            parseValueWithUnits( FromUTF8(), value, unitless );
-
-            c.m_Value.SetMax( value );
+            parseValueWithUnits( FromUTF8(), value, units, unitless );
+            validateAndSetValueWithUnits( value, units,
+                                          [&c]( const int aValue )
+                                          {
+                                              c.m_Value.SetMax( aValue );
+                                          } );
 
             if( (int) NextTok() != DSN_RIGHT )
             {
@@ -702,8 +745,12 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                 break;
             }
 
-            parseValueWithUnits( FromUTF8(), value, unitless );
-            c.m_Value.SetOpt( value );
+            parseValueWithUnits( FromUTF8(), value, units, unitless );
+            validateAndSetValueWithUnits( value, units,
+                                          [&c]( const int aValue )
+                                          {
+                                              c.m_Value.SetOpt( aValue );
+                                          } );
 
             if( (int) NextTok() != DSN_RIGHT )
             {
@@ -733,8 +780,11 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 }
 
 
-void DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aResult, bool aUnitless )
+void DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aResult, EDA_UNITS& aUnits, bool aUnitless )
 {
+    aResult = 0.0;
+    aUnits = EDA_UNITS::UNSCALED;
+
     auto errorHandler = [&]( const wxString& aMessage, int aOffset )
     {
         wxString rest;
@@ -760,8 +810,11 @@ void DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aResult,
                                             : (LIBEVAL::UNIT_RESOLVER*) new PCBEXPR_UNIT_RESOLVER() );
     evaluator.SetErrorCallback( errorHandler );
 
-    evaluator.Evaluate( aExpr );
-    aResult = evaluator.Result();
+    if( evaluator.Evaluate( aExpr ) )
+    {
+        aResult = evaluator.Result();
+        aUnits = evaluator.Units();
+    }
 }
 
 

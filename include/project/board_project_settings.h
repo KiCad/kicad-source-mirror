@@ -352,6 +352,7 @@ struct KICOMMON_API PANEL_NET_INSPECTOR_SETTINGS
     std::vector<wxString> custom_group_rules;
     bool                  show_zero_pad_nets;
     bool                  show_unconnected_nets;
+    bool                  show_time_domain_details;
     int                   sorting_column;
     bool                  sort_order_asc;
     std::vector<int>      col_order;
@@ -369,6 +370,7 @@ struct KICOMMON_API PANEL_NET_INSPECTOR_SETTINGS
         group_by_constraint = false;
         show_zero_pad_nets = false;
         show_unconnected_nets = false;
+        show_time_domain_details = false;
         sorting_column = -1;
         sort_order_asc = true;
     }

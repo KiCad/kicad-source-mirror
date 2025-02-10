@@ -1,0 +1,36 @@
+(version 1)
+
+(rule CLASS1
+   (condition "A.hasNetclass('CLASS1')")
+   (constraint length (min 29.83ps) (opt 29.84ps) (max 29.85ps))
+)
+
+(rule CLASS2
+   (condition "A.hasNetclass('CLASS2')")
+   (constraint length (min 59.83ps) (opt 59.84ps) (max 59.85ps))
+)
+
+(rule CLASS3
+   (condition "A.hasNetclass('CLASS3')")
+   (constraint length (min 59.68ps) (opt 59.69ps) (max 59.70ps))
+)
+
+(rule CLASS4
+   (condition "A.hasNetclass('CLASS4')")
+   (constraint length (min 31.38ps) (opt 31.39ps) (max 31.40ps))
+)
+
+(rule CLASS5
+   (condition "A.hasNetclass('CLASS5')")
+   (constraint length (min 49.83ps) (opt 49.84ps) (max 49.85ps))
+)
+
+(rule CLASS6
+   (condition "A.hasNetclass('CLASS6')")
+   (constraint length (min 75.71ps) (opt 75.72ps) (max 75.73ps))
+)
+
+(rule CLASS7
+   (condition "A.hasNetclass('CLASS7')")
+   (constraint skew (min 4.44ps) (opt 4.45ps) (max 4.46ps))
+)

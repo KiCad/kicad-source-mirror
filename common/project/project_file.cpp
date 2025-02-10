@@ -22,10 +22,13 @@
 #include <project.h>
 #include <project/component_class_settings.h>
 #include <project/net_settings.h>
+#include <project/time_domain_parameters.h>
 #include <settings/json_settings_internals.h>
 #include <project/project_file.h>
+#include <settings/common_settings.h>
 #include <settings/parameters.h>
 #include <wildcards_and_files_ext.h>
+#include <project/project_file.h>
 #include <wx/config.h>
 #include <wx/log.h>
 
@@ -36,8 +39,13 @@ const int projectFileSchemaVersion = 3;
 
 PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
         JSON_SETTINGS( aFullPath, SETTINGS_LOC::PROJECT, projectFileSchemaVersion ),
-        m_ErcSettings( nullptr ), m_SchematicSettings( nullptr ), m_BoardSettings(),
-        m_project( nullptr ), m_wasMigrated( false )
+        m_ErcSettings( nullptr ),
+        m_SchematicSettings( nullptr ),
+        m_BoardSettings(),
+        m_sheets(),
+        m_boards(),
+        m_project( nullptr ),
+        m_wasMigrated( false )
 {
     // Keep old files around
     m_deleteLegacyAfterMigration = false;
@@ -116,6 +124,9 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
 
     m_ComponentClassSettings =
             std::make_shared<COMPONENT_CLASS_SETTINGS>( this, "component_class_settings" );
+
+    m_timeDomainParameters =
+            std::make_shared<TIME_DOMAIN_PARAMETERS>( this, "time_domain_parameters" );
 
     m_params.emplace_back( new PARAM_LAYER_PRESET( "board.layer_presets", &m_LayerPresets ) );
 

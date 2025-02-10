@@ -65,10 +65,10 @@
   },
   "meta": {
     "filename": "kicad_common.json",
-    "version": 3
+    "version": 4
   },
   "netclass_panel": {
-    "eeschema_shown_columns": "0 10 11 12 13",
+    "eeschema_shown_columns": "0 11 12 13 14",
     "pcbnew_shown_columns": "0 1 2 3 4 5 6 7 8 9",
     "sash_pos": 160
   },

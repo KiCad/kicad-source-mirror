@@ -91,8 +91,11 @@ public:
     /// @copydoc PLACEMENT_ALGO::CurrentLayer()
     int CurrentLayer() const override;
 
-    /// @copydoc MEANDER_PLACER_BASE::TuningResult()
-    long long int TuningResult() const override;
+    /// @copydoc MEANDER_PLACER_BASE::TuningLengthResult()
+    long long int TuningLengthResult() const override;
+
+    /// @copydoc MEANDER_PLACER_BASE::TuningDelayResult()
+    int64_t TuningDelayResult() const override;
 
     /// @copydoc MEANDER_PLACER_BASE::TuningStatus()
     TUNING_STATUS TuningStatus() const override;
@@ -105,6 +108,10 @@ protected:
                  long long int aTargetMin, long long int aTargetMax );
 
     virtual long long int origPathLength() const;
+
+    virtual int64_t origPathDelay() const;
+
+    virtual void calculateTimeDomainTargets();
 
     ///< current routing start point (end of tail, beginning of head)
     VECTOR2I m_currentStart;
@@ -123,7 +130,14 @@ protected:
     ///< Total length added by pad to die size.
     int m_padToDieLength;
 
+    ///< Total length added by pad to die size.
+    int m_padToDieDelay;
+
+    ///< The netclass for the placed segments
+    NETCLASS* m_netClass;
+
     long long int m_lastLength;
+    int64_t       m_lastDelay;
     TUNING_STATUS m_lastStatus;
 };
 

@@ -35,7 +35,8 @@
 // const int netSettingsSchemaVersion = 1;     // new overbar syntax
 // const int netSettingsSchemaVersion = 2;     // exclude buses from netclass members
 // const int netSettingsSchemaVersion = 3;     // netclass assignment patterns
-const int netSettingsSchemaVersion = 4;     // netclass ordering
+// const int netSettingsSchemaVersion = 4;     // netclass ordering
+const int netSettingsSchemaVersion = 5; // Tuning profile names
 
 
 static std::optional<int> getInPcbUnits( const nlohmann::json& aObj, const std::string& aKey,
@@ -73,7 +74,8 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                 nlohmann::json nc_json = { { "name", nc->GetName().ToUTF8() },
                                            { "priority", nc->GetPriority() },
                                            { "schematic_color", nc->GetSchematicColor( true ) },
-                                           { "pcb_color", nc->GetPcbColor( true ) } };
+                                           { "pcb_color", nc->GetPcbColor( true ) },
+                                           { "tuning_profile", nc->GetTuningProfile() } };
 
                 auto saveInPcbUnits =
                         []( nlohmann::json& json, const std::string& aKey, int aValue )
@@ -130,6 +132,8 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
 
                 int priority = entry["priority"];
                 nc->SetPriority( priority );
+
+                nc->SetTuningProfile( entry["tuning_profile"] );
 
                 if( auto value = getInPcbUnits( entry, "clearance" ) )
                     nc->SetClearance( *value );
@@ -327,6 +331,7 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
     registerMigration( 1, 2, std::bind( &NET_SETTINGS::migrateSchema1to2, this ) );
     registerMigration( 2, 3, std::bind( &NET_SETTINGS::migrateSchema2to3, this ) );
     registerMigration( 3, 4, std::bind( &NET_SETTINGS::migrateSchema3to4, this ) );
+    registerMigration( 4, 5, std::bind( &NET_SETTINGS::migrateSchema4to5, this ) );
 }
 
 
@@ -460,6 +465,21 @@ bool NET_SETTINGS::migrateSchema3to4()
         }
 
         m_internals->SetFromString( "netclass_assignments", migrated );
+    }
+
+    return true;
+}
+
+
+bool NET_SETTINGS::migrateSchema4to5()
+{
+    // Add tuning profile name field to netclasses
+    if( m_internals->contains( "classes" ) && m_internals->At( "classes" ).is_array() )
+    {
+        const wxString emptyStr = "";
+
+        for( auto& netClass : m_internals->At( "classes" ).items() )
+            netClass.value()["tuning_profile"] = emptyStr.ToUTF8();
     }
 
     return true;
@@ -907,6 +927,12 @@ void NET_SETTINGS::makeEffectiveNetclass( std::shared_ptr<NETCLASS>& effectiveNe
             effectiveNetclass->SetSchematicColor( schColor );
             effectiveNetclass->SetSchematicColorParent( nc );
         }
+
+        if( nc->HasTuningProfile() )
+        {
+            effectiveNetclass->SetTuningProfile( nc->GetTuningProfile() );
+            effectiveNetclass->SetTuningProfileParent( nc );
+        }
     }
 
     // Fill in any required defaults
@@ -995,6 +1021,14 @@ bool NET_SETTINGS::addMissingDefaults( NETCLASS* nc ) const
         addedDefault = true;
         nc->SetBusWidth( m_defaultNetClass->GetBusWidth() );
         nc->SetBusWidthParent( m_defaultNetClass.get() );
+    }
+
+    // The tuning profile can be empty - only fill if a default tuning profile is set
+    if( !nc->HasTuningProfile() && m_defaultNetClass->HasTuningProfile() )
+    {
+        addedDefault = true;
+        nc->SetTuningProfile( m_defaultNetClass->GetTuningProfile() );
+        nc->SetTuningProfileParent( m_defaultNetClass.get() );
     }
 
     return addedDefault;

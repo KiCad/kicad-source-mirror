@@ -79,7 +79,7 @@ public:
     wxString StringFromValue( double aValue, bool aAddUnitLabel = false,
                               EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE ) const
     {
-        return EDA_UNIT_UTILS::UI::StringFromValue( GetIuScale(), GetUserUnits(), aValue,
+        return EDA_UNIT_UTILS::UI::StringFromValue( GetIuScale(), GetUnitsFromType( aType ), aValue,
                                                     aAddUnitLabel, aType );
     }
 
@@ -103,7 +103,7 @@ public:
         if( !aValue )
             return NullUiString;
         else
-            return EDA_UNIT_UTILS::UI::StringFromValue( GetIuScale(), GetUserUnits(),
+            return EDA_UNIT_UTILS::UI::StringFromValue( GetIuScale(), GetUnitsFromType( aType ),
                                                         aValue.value(), aAddUnitLabel, aType );
     }
 
@@ -123,8 +123,8 @@ public:
     wxString MessageTextFromValue( double aValue, bool aAddUnitLabel = true,
                                    EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE ) const
     {
-        return EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(), aValue,
-                                                         aAddUnitLabel, aType );
+        return EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUnitsFromType( aType ),
+                                                         aValue, aAddUnitLabel, aType );
     }
 
     wxString MessageTextFromValue( const EDA_ANGLE& aValue, bool aAddUnitLabel = true ) const
@@ -134,9 +134,10 @@ public:
                                                          EDA_DATA_TYPE::DISTANCE );
     }
 
-    wxString MessageTextFromMinOptMax( const MINOPTMAX<int>& aValue ) const
+    wxString MessageTextFromMinOptMax( const MINOPTMAX<int>& aValue,
+                                       EDA_DATA_TYPE         aType = EDA_DATA_TYPE::DISTANCE ) const
     {
-        return EDA_UNIT_UTILS::UI::MessageTextFromMinOptMax( GetIuScale(), GetUserUnits(), aValue );
+        return EDA_UNIT_UTILS::UI::MessageTextFromMinOptMax( GetIuScale(), GetUnitsFromType( aType ), aValue );
     };
 
     /**
@@ -151,8 +152,9 @@ public:
     int ValueFromString( const wxString& aTextValue,
                          EDA_DATA_TYPE   aType = EDA_DATA_TYPE::DISTANCE ) const
     {
-        double value = EDA_UNIT_UTILS::UI::DoubleValueFromString( GetIuScale(), GetUserUnits(),
-                                                                  aTextValue, aType );
+        double value = EDA_UNIT_UTILS::UI::DoubleValueFromString(
+                GetIuScale(), GetUnitsFromType( aType ), aTextValue, aType );
+
 
         return KiROUND<double, int>( value );
     }
@@ -175,8 +177,8 @@ public:
         if( aTextValue == NullUiString )
             return {};
 
-        double value = EDA_UNIT_UTILS::UI::DoubleValueFromString( GetIuScale(), GetUserUnits(),
-                                                                  aTextValue, aType );
+        double value = EDA_UNIT_UTILS::UI::DoubleValueFromString(
+                GetIuScale(), GetUnitsFromType( aType ), aTextValue, aType );
 
         return KiROUND<double, int>( value );
     }
@@ -187,6 +189,58 @@ public:
                                                                   aTextValue );
 
         return EDA_ANGLE( angle, DEGREES_T );
+    }
+
+    /**
+     * Gets the units to use in the conversion based on the underlying user units
+     */
+    EDA_UNITS GetUnitsFromType( EDA_DATA_TYPE aType ) const
+    {
+        // Get the unit type depending on the requested unit type and the underlying user setting
+        if( aType == EDA_DATA_TYPE::TIME )
+        {
+            return EDA_UNITS::PS;
+        }
+        else if( aType == EDA_DATA_TYPE::LENGTH_DELAY )
+        {
+            if( EDA_UNIT_UTILS::IsMetricUnit( GetUserUnits() ) )
+                return EDA_UNITS::PS_PER_CM;
+            else
+                return EDA_UNITS::PS_PER_INCH;
+        }
+
+        return GetUserUnits();
+    }
+
+    /**
+     * Gets the inferred type from the given units. Note: will always return the most simple
+     * type (e.g. a DISTANCE rather than AREA or VOLUME for a measurement unit).
+     */
+    static EDA_DATA_TYPE GetTypeFromUnits( const EDA_UNITS aUnits )
+    {
+        switch( aUnits )
+        {
+        case EDA_UNITS::INCH:
+        case EDA_UNITS::MM:
+        case EDA_UNITS::UM:
+        case EDA_UNITS::CM:
+        case EDA_UNITS::MILS:
+            return EDA_DATA_TYPE::DISTANCE;
+        case EDA_UNITS::DEGREES:
+        case EDA_UNITS::PERCENT:
+        case EDA_UNITS::UNSCALED:
+            return EDA_DATA_TYPE::UNITLESS;
+        case EDA_UNITS::FS:
+        case EDA_UNITS::PS:
+            return EDA_DATA_TYPE::TIME;
+        case EDA_UNITS::PS_PER_INCH:
+        case EDA_UNITS::PS_PER_CM:
+        case EDA_UNITS::PS_PER_MM:
+            return EDA_DATA_TYPE::LENGTH_DELAY;
+        }
+
+        wxString msg = wxString::Format( wxT( "Unhandled unit data type %d" ), static_cast<int>( aUnits ) );
+        wxCHECK_MSG( false, EDA_DATA_TYPE::UNITLESS, msg );
     }
 
     /// @brief The string that is used in the UI to represent a null value

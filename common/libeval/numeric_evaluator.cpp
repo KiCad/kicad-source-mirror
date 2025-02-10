@@ -82,12 +82,17 @@ void NUMERIC_EVALUATOR::SetDefaultUnits( EDA_UNITS aUnits )
 {
     switch( aUnits )
     {
-    case EDA_UNITS::MM:       m_defaultUnits = Unit::MM;      break;
-    case EDA_UNITS::MILS:     m_defaultUnits = Unit::Mil;     break;
-    case EDA_UNITS::INCH:     m_defaultUnits = Unit::Inch;    break;
-    case EDA_UNITS::DEGREES:  m_defaultUnits = Unit::Degrees; break;
-    case EDA_UNITS::UNSCALED: m_defaultUnits = Unit::SI;      break;
-    default:                  m_defaultUnits = Unit::MM;      break;
+    case EDA_UNITS::MM:          m_defaultUnits = Unit::MM;           break;
+    case EDA_UNITS::MILS:        m_defaultUnits = Unit::Mil;          break;
+    case EDA_UNITS::INCH:        m_defaultUnits = Unit::Inch;         break;
+    case EDA_UNITS::DEGREES:     m_defaultUnits = Unit::Degrees;      break;
+    case EDA_UNITS::FS:          m_defaultUnits = Unit::Femtoseconds; break;
+    case EDA_UNITS::PS:          m_defaultUnits = Unit::Picoseconds;  break;
+    case EDA_UNITS::PS_PER_INCH: m_defaultUnits = Unit::PsPerInch;    break;
+    case EDA_UNITS::PS_PER_CM:   m_defaultUnits = Unit::PsPerCm;      break;
+    case EDA_UNITS::PS_PER_MM:   m_defaultUnits = Unit::PsPerMm;      break;
+    case EDA_UNITS::UNSCALED:    m_defaultUnits = Unit::SI;           break;
+    default:                     m_defaultUnits = Unit::MM;           break;
     }
 }
 
@@ -282,7 +287,7 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
             };
 
     // Lamda: Get unit for current token.
-    // Valid units are ", in, um, cm, mm, mil and thou. Returns Unit::Invalid otherwise.
+    // Valid units are ", in, um, cm, mm, mil, ps and thou. Returns Unit::Invalid otherwise.
     auto checkUnit =
             [&]( double* siScaler ) -> Unit
             {
@@ -313,6 +318,39 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
                 {
                     m_token.pos += 2;
                     return Unit::UM;
+                }
+
+                if( sizeLeft >= 5 && ch == 'p' && cptr[1] == 's' && cptr[2] == '/' && cptr[3] == 'i'
+                    && cptr[4] == 'n' && !isalnum( cptr[5] ) )
+                {
+                    m_token.pos += 5;
+                    return Unit::PsPerInch;
+                }
+
+                if( sizeLeft >= 5 && ch == 'p' && cptr[1] == 's' && cptr[2] == '/' && cptr[3] == 'c'
+                    && cptr[4] == 'm' && !isalnum( cptr[5] ) )
+                {
+                    m_token.pos += 5;
+                    return Unit::PsPerCm;
+                }
+
+                if( sizeLeft >= 5 && ch == 'p' && cptr[1] == 's' && cptr[2] == '/' && cptr[3] == 'm'
+                    && cptr[4] == 'm' && !isalnum( cptr[5] ) )
+                {
+                    m_token.pos += 5;
+                    return Unit::PsPerMm;
+                }
+
+                if( sizeLeft >= 2 && ch == 'f' && cptr[1] == 's' && !isalnum( cptr[2] ) )
+                {
+                    m_token.pos += 2;
+                    return Unit::Femtoseconds;
+                }
+
+                if( sizeLeft >= 2 && ch == 'p' && cptr[1] == 's' && !isalnum( cptr[2] ) )
+                {
+                    m_token.pos += 2;
+                    return Unit::Picoseconds;
                 }
 
                 if( sizeLeft >= 2 && ch == 'm' && cptr[ 1 ] == 'm' && !isalnum( cptr[ 2 ] ) )
@@ -442,6 +480,59 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
         else if( m_defaultUnits == Unit::SI )
         {
             retval.value.dValue = siScaler;
+        }
+        else if( m_defaultUnits == Unit::Picoseconds )
+        {
+            switch( convertFrom )
+            {
+            case Unit::Picoseconds: retval.value.dValue = 1.0;           break;
+            case Unit::Femtoseconds: retval.value.dValue = 1.0 / 1000.0; break;
+            default:
+            case Unit::Invalid:                                          break;
+            }
+        }
+        else if( m_defaultUnits == Unit::Femtoseconds )
+        {
+            switch( convertFrom )
+            {
+            case Unit::Picoseconds: retval.value.dValue = 1000.0; break;
+            case Unit::Femtoseconds: retval.value.dValue = 1.0;   break;
+            default:
+            case Unit::Invalid:                                   break;
+            }
+        }
+        else if( m_defaultUnits == Unit::PsPerInch )
+        {
+            switch( convertFrom )
+            {
+            case Unit::PsPerInch: retval.value.dValue = 1.0;  break;
+            case Unit::PsPerCm:   retval.value.dValue = 2.54; break;
+            case Unit::PsPerMm:   retval.value.dValue = 25.4; break;
+            default:
+            case Unit::Invalid:                               break;
+            }
+        }
+        else if( m_defaultUnits == Unit::PsPerCm )
+        {
+            switch( convertFrom )
+            {
+            case Unit::PsPerInch: retval.value.dValue = 1.0 / 2.54; break;
+            case Unit::PsPerCm:   retval.value.dValue = 1.0;        break;
+            case Unit::PsPerMm:   retval.value.dValue = 10.0;       break;
+            default:
+            case Unit::Invalid:                                     break;
+            }
+        }
+        else if( m_defaultUnits == Unit::PsPerMm )
+        {
+            switch( convertFrom )
+            {
+            case Unit::PsPerInch: retval.value.dValue = 1.0 / 25.4; break;
+            case Unit::PsPerCm:   retval.value.dValue = 1.0 / 10.0; break;
+            case Unit::PsPerMm:   retval.value.dValue = 1.0;        break;
+            default:
+            case Unit::Invalid:                                     break;
+            }
         }
     }
     else if( isalpha( ch ) )

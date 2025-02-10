@@ -773,6 +773,24 @@ double PCB_TRACK::GetLength() const
 }
 
 
+double PCB_TRACK::GetDelay() const
+{
+    const BOARD* board = GetBoard();
+
+    if( !board )
+        return 0.0;
+
+    const LENGTH_DELAY_CALCULATION*            calc = board->GetLengthCalculation();
+    const LENGTH_DELAY_CALCULATION_ITEM        calcItem = calc->GetLengthCalculationItem( this );
+    std::vector<LENGTH_DELAY_CALCULATION_ITEM> items{ calcItem };
+    constexpr PATH_OPTIMISATIONS               opts = {
+                      .OptimiseViaLayers = false, .MergeTracks = false, .OptimiseTracesInPads = false, .InferViaInPad = false
+    };
+
+    return calc->CalculateDelay( items, opts );
+}
+
+
 void PCB_TRACK::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
     RotatePoint( m_Start, aRotCentre, aAngle );
@@ -1761,26 +1779,56 @@ void PCB_TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
         aList.emplace_back( _( "Radius" ), aFrame->MessageTextFromValue( radius ) );
     }
 
-    aList.emplace_back( _( "Segment Length" ), aFrame->MessageTextFromValue( GetLength() ) );
+    double segmentLength = GetLength();
+    double segmentDelay = GetDelay();
+
+    if( segmentDelay == 0.0 )
+    {
+        aList.emplace_back( _( "Segment Length" ), aFrame->MessageTextFromValue( segmentLength ) );
+    }
+    else
+    {
+        aList.emplace_back( _( "Segment Delay" ),
+                            aFrame->MessageTextFromValue( segmentDelay, true, EDA_DATA_TYPE::TIME ) );
+    }
 
     // Display full track length (in Pcbnew)
     if( board && GetNetCode() > 0 )
     {
-        int    count;
-        double trackLen;
-        double lenPadToDie;
+        int    count = 0;
+        double trackLen = 0.0;
+        double lenPadToDie = 0.0;
+        double trackDelay = 0.0;
+        double delayPadToDie = 0.0;
 
-        std::tie( count, trackLen, lenPadToDie ) = board->GetTrackLength( *this );
+        std::tie( count, trackLen, lenPadToDie, trackDelay, delayPadToDie ) = board->GetTrackLength( *this );
 
-        aList.emplace_back( _( "Routed Length" ), aFrame->MessageTextFromValue( trackLen ) );
-
-        if( lenPadToDie != 0 )
+        if( trackDelay == 0.0 )
         {
-            msg = aFrame->MessageTextFromValue( lenPadToDie );
-            aList.emplace_back( _( "Pad To Die Length" ), msg );
+            aList.emplace_back( _( "Routed Length" ), aFrame->MessageTextFromValue( trackLen ) );
 
-            msg = aFrame->MessageTextFromValue( trackLen + lenPadToDie );
-            aList.emplace_back( _( "Full Length" ), msg );
+            if( lenPadToDie != 0 )
+            {
+                msg = aFrame->MessageTextFromValue( lenPadToDie );
+                aList.emplace_back( _( "Pad To Die Length" ), msg );
+
+                msg = aFrame->MessageTextFromValue( trackLen + lenPadToDie );
+                aList.emplace_back( _( "Full Length" ), msg );
+            }
+        }
+        else
+        {
+            aList.emplace_back( _( "Routed Delay" ),
+                                aFrame->MessageTextFromValue( trackDelay, true, EDA_DATA_TYPE::TIME ) );
+
+            if( delayPadToDie != 0.0 )
+            {
+                msg = aFrame->MessageTextFromValue( delayPadToDie, true, EDA_DATA_TYPE::TIME );
+                aList.emplace_back( _( "Pad To Die Delay" ), msg );
+
+                msg = aFrame->MessageTextFromValue( trackDelay + delayPadToDie, true, EDA_DATA_TYPE::TIME );
+                aList.emplace_back( _( "Full Delay" ), msg );
+            }
         }
     }
 

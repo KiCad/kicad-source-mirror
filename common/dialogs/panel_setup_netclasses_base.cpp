@@ -39,7 +39,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_netclassGrid = new WX_GRID( m_netclassesPane, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxTAB_TRAVERSAL|wxVSCROLL );
 
 	// Grid
-	m_netclassGrid->CreateGrid( 3, 14 );
+	m_netclassGrid->CreateGrid( 3, 15 );
 	m_netclassGrid->EnableEditing( true );
 	m_netclassGrid->EnableGridLines( true );
 	m_netclassGrid->EnableDragGridSize( false );
@@ -57,11 +57,12 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_netclassGrid->SetColLabelValue( 6, _("uVia Hole") );
 	m_netclassGrid->SetColLabelValue( 7, _("DP Width") );
 	m_netclassGrid->SetColLabelValue( 8, _("DP Gap") );
-	m_netclassGrid->SetColLabelValue( 9, _("PCB Color") );
-	m_netclassGrid->SetColLabelValue( 10, _("Wire Thickness") );
-	m_netclassGrid->SetColLabelValue( 11, _("Bus Thickness") );
-	m_netclassGrid->SetColLabelValue( 12, _("Color") );
-	m_netclassGrid->SetColLabelValue( 13, _("Line Style") );
+	m_netclassGrid->SetColLabelValue( 9, _("Delay Profile") );
+	m_netclassGrid->SetColLabelValue( 10, _("PCB Color") );
+	m_netclassGrid->SetColLabelValue( 11, _("Wire Thickness") );
+	m_netclassGrid->SetColLabelValue( 12, _("Bus Thickness") );
+	m_netclassGrid->SetColLabelValue( 13, _("Color") );
+	m_netclassGrid->SetColLabelValue( 14, _("Line Style") );
 	m_netclassGrid->SetColLabelSize( wxGRID_AUTOSIZE );
 	m_netclassGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 

@@ -118,7 +118,14 @@ enum DRAG_MODE
     virtual DEBUG_DECORATOR* GetDebugDecorator() = 0;
 
     virtual long long int CalculateRoutedPathLength( const ITEM_SET& aLine, const SOLID* aStartPad,
-                                                     const SOLID* aEndPad ) = 0;
+                                                     const SOLID* aEndPad, const NETCLASS* aNetClass ) = 0;
+    virtual int64_t       CalculateRoutedPathDelay( const ITEM_SET& aLine, const SOLID* aStartPad, const SOLID* aEndPad,
+                                                    const NETCLASS* aNetClass ) = 0;
+    virtual int64_t       CalculateLengthForDelay( int64_t aDesiredDelay, int aWidth, bool aIsDiffPairCoupled,
+                                                   int aDiffPairCouplingGap, int aPNSLayer, const NETCLASS* aNetClass ) = 0;
+    virtual int64_t       CalculateDelayForShapeLineChain( const SHAPE_LINE_CHAIN& aShape, int aWidth,
+                                                           bool aIsDiffPairCoupled, int aDiffPairCouplingGap, int aPNSLayer,
+                                                           const NETCLASS* aNetClass ) = 0;
     virtual PCB_LAYER_ID GetBoardLayerFromPNSLayer( int aLayer ) const = 0;
     virtual int GetPNSLayerFromBoardLayer( PCB_LAYER_ID aLayer ) const = 0;
 };

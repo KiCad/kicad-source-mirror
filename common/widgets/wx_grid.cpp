@@ -371,17 +371,20 @@ void WX_GRID::onCellEditorShown( wxGridEvent& aEvent )
 
 void WX_GRID::onCellEditorHidden( wxGridEvent& aEvent )
 {
-    if( alg::contains( m_autoEvalCols, aEvent.GetCol() ) )
+    const int col = aEvent.GetCol();
+
+    if( alg::contains( m_autoEvalCols, col ) )
     {
         UNITS_PROVIDER* unitsProvider = m_unitsProviders[ aEvent.GetCol() ];
 
         if( !unitsProvider )
             unitsProvider = m_unitsProviders.begin()->second;
 
-        m_eval->SetDefaultUnits( unitsProvider->GetUserUnits() );
+        auto [cellUnits, cellDataType] = getColumnUnits( col );
 
-        int row = aEvent.GetRow();
-        int col = aEvent.GetCol();
+        m_eval->SetDefaultUnits( cellUnits );
+
+        const int row = aEvent.GetRow();
 
         // Determine if this cell is marked as holding nullable values
         bool              isNullable = false;
@@ -399,7 +402,7 @@ void WX_GRID::onCellEditorHidden( wxGridEvent& aEvent )
         }
 
         CallAfter(
-                [this, row, col, isNullable, unitsProvider]()
+                [this, row, col, isNullable, unitsProvider, cellDataType]()
                 {
                     wxString stringValue = GetCellValue( row, col );
                     bool     processedOk = true;
@@ -418,19 +421,22 @@ void WX_GRID::onCellEditorHidden( wxGridEvent& aEvent )
                             if( stringValue == UNITS_PROVIDER::NullUiString )
                             {
                                 val = unitsProvider->OptionalValueFromString(
-                                        UNITS_PROVIDER::NullUiString );
+                                        UNITS_PROVIDER::NullUiString, cellDataType );
                             }
                             else
                             {
-                                val = unitsProvider->OptionalValueFromString( m_eval->Result() );
+                                val = unitsProvider->OptionalValueFromString( m_eval->Result(),
+                                                                              cellDataType );
                             }
 
-                            evalValue = unitsProvider->StringFromOptionalValue( val, true );
+                            evalValue = unitsProvider->StringFromOptionalValue( val, true,
+                                                                                cellDataType );
                         }
                         else
                         {
-                            int val = unitsProvider->ValueFromString( m_eval->Result() );
-                            evalValue = unitsProvider->StringFromValue( val, true );
+                            int val = unitsProvider->ValueFromString( m_eval->Result(),
+                                                                      cellDataType );
+                            evalValue = unitsProvider->StringFromValue( val, true, cellDataType );
                         }
 
                         if( stringValue != evalValue )
@@ -702,6 +708,19 @@ void WX_GRID::SetUnitsProvider( UNITS_PROVIDER* aProvider, int aCol )
 }
 
 
+void WX_GRID::SetAutoEvalColUnits( const int col, EDA_UNITS aUnit, EDA_DATA_TYPE aUnitType )
+{
+    m_autoEvalColsUnits[col] = std::make_pair( aUnit, aUnitType );
+}
+
+
+void WX_GRID::SetAutoEvalColUnits( const int col, EDA_UNITS aUnit )
+{
+    const EDA_DATA_TYPE type = UNITS_PROVIDER::GetTypeFromUnits( aUnit );
+    SetAutoEvalColUnits( col, aUnit, type );
+}
+
+
 int WX_GRID::GetUnitValue( int aRow, int aCol )
 {
     UNITS_PROVIDER* unitsProvider = m_unitsProviders[ aCol ];
@@ -711,15 +730,17 @@ int WX_GRID::GetUnitValue( int aRow, int aCol )
 
     wxString stringValue = GetCellValue( aRow, aCol );
 
+    auto [cellUnits, cellDataType] = getColumnUnits( aCol );
+
     if( alg::contains( m_autoEvalCols, aCol ) )
     {
-        m_eval->SetDefaultUnits( unitsProvider->GetUserUnits() );
+        m_eval->SetDefaultUnits( cellUnits );
 
         if( m_eval->Process( stringValue ) )
             stringValue = m_eval->Result();
     }
 
-    return unitsProvider->ValueFromString( stringValue );
+    return unitsProvider->ValueFromString( stringValue, cellDataType );
 }
 
 
@@ -732,15 +753,17 @@ std::optional<int> WX_GRID::GetOptionalUnitValue( int aRow, int aCol )
 
     wxString stringValue = GetCellValue( aRow, aCol );
 
+    auto [cellUnits, cellDataType] = getColumnUnits( aCol );
+
     if( alg::contains( m_autoEvalCols, aCol ) )
     {
-        m_eval->SetDefaultUnits( unitsProvider->GetUserUnits() );
+        m_eval->SetDefaultUnits( cellUnits );
 
         if( stringValue != UNITS_PROVIDER::NullUiString && m_eval->Process( stringValue ) )
             stringValue = m_eval->Result();
     }
 
-    return unitsProvider->OptionalValueFromString( stringValue );
+    return unitsProvider->OptionalValueFromString( stringValue, cellDataType );
 }
 
 
@@ -751,7 +774,14 @@ void WX_GRID::SetUnitValue( int aRow, int aCol, int aValue )
     if( !unitsProvider )
         unitsProvider = m_unitsProviders.begin()->second;
 
-    SetCellValue( aRow, aCol, unitsProvider->StringFromValue( aValue, true ) );
+    EDA_DATA_TYPE cellDataType;
+
+    if( m_autoEvalColsUnits.contains( aCol ) )
+        cellDataType = m_autoEvalColsUnits[aCol].second;
+    else
+        cellDataType = EDA_DATA_TYPE::DISTANCE;
+
+    SetCellValue( aRow, aCol, unitsProvider->StringFromValue( aValue, true, cellDataType ) );
 }
 
 
@@ -839,4 +869,21 @@ void WX_GRID::EnsureColLabelsVisible()
     // and perhaps annoying UI events when the size does not change
     if( initial_row_height != row_height )
         SetColLabelSize( row_height );
+}
+
+
+std::pair<EDA_UNITS, EDA_DATA_TYPE> WX_GRID::getColumnUnits( const int aCol ) const
+{
+    if( m_autoEvalColsUnits.contains( aCol ) )
+        return { m_autoEvalColsUnits.at( aCol ).first, m_autoEvalColsUnits.at( aCol ).second };
+
+    UNITS_PROVIDER* unitsProvider;
+
+    if( m_unitsProviders.contains( aCol ) )
+        unitsProvider = m_unitsProviders.at( aCol );
+    else
+        unitsProvider = m_unitsProviders.begin()->second;
+
+    // Legacy - default always DISTANCE
+    return { unitsProvider->GetUserUnits(), EDA_DATA_TYPE::DISTANCE };
 }

@@ -775,6 +775,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 constraint.m_ZoneConnection = c->constraint.m_ZoneConnection;
 
                 constraint.SetParentRule( c->constraint.GetParentRule() );
+
+                constraint.SetOptionsFromOther( c->constraint );
             };
 
     const FOOTPRINT* footprints[2] = {a ? a->GetParentFootprint() : nullptr,

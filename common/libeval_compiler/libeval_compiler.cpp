@@ -719,11 +719,12 @@ void COMPILER::freeTree( LIBEVAL::TREE_NODE *tree )
 }
 
 
-void TREE_NODE::SetUop( int aOp, double aValue )
+void TREE_NODE::SetUop( int aOp, double aValue, EDA_UNITS aUnits )
 {
     delete uop;
 
     std::unique_ptr<VALUE> val = std::make_unique<VALUE>( aValue );
+    val->SetUnits( aUnits );
     uop = new UOP( aOp, std::move( val ) );
 }
 
@@ -872,7 +873,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                 node->leaf[0]->isVisited = true;
                 node->leaf[1]->isVisited = true;
 
-                node->SetUop( TR_UOP_PUSH_VALUE, 0.0 );
+                node->SetUop( TR_UOP_PUSH_VALUE, 0.0, EDA_UNITS::UNSCALED );
                 node->isTerminal = true;
                 break;
             }
@@ -1005,7 +1006,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     node->leaf[0]->isVisited = true;
                     node->leaf[1]->isVisited = true;
 
-                    node->SetUop( TR_UOP_PUSH_VALUE, 0.0 );
+                    node->SetUop( TR_UOP_PUSH_VALUE, 0.0, EDA_UNITS::UNSCALED );
                     node->isTerminal = true;
                     break;
             }
@@ -1017,6 +1018,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
         {
             TREE_NODE* son = node->leaf[0];
             double     value;
+            EDA_UNITS  unitsType = EDA_UNITS::UNSCALED;
 
             if( !node->value.str )
             {
@@ -1031,6 +1033,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                 }
 
                 int units = son->value.idx;
+                unitsType = m_unitResolver->GetSupportedUnitsTypes().at( units );
                 value =  m_unitResolver->Convert( formatNode( node ), units );
                 son->isVisited = true;
             }
@@ -1047,7 +1050,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                 value = EDA_UNIT_UTILS::UI::DoubleValueFromString( formatNode( node ) );
             }
 
-            node->SetUop( TR_UOP_PUSH_VALUE, value );
+            node->SetUop( TR_UOP_PUSH_VALUE, value, unitsType );
             node->isTerminal = true;
             break;
         }
@@ -1170,19 +1173,45 @@ void UOP::Exec( CONTEXT* ctx )
             }
         }
 
+        // TODO: This doesn't fully calculate units correctly yet. We really need to work out the dimensional analysis
+        // TODO: (and do this independently of unit specifics - e.g. MM + INCH needs to return one of the dimension
+        // TODO: types, but our units framework doesn't currently allow this. Therefore, use some heuristics to
+        // TODO: determine the resulting operation unit type for now
+        auto getOpResultUnits = []( const VALUE* aVal1, const VALUE* aVal2 )
+        {
+            // This condition can occur in, e.g., a unary negation operation
+            if( aVal1->GetUnits() == EDA_UNITS::UNSCALED && aVal2->GetUnits() != EDA_UNITS::UNSCALED )
+            {
+                return aVal2->GetUnits();
+            }
+
+            if( aVal1->GetUnits() != EDA_UNITS::UNSCALED && aVal2->GetUnits() == EDA_UNITS::UNSCALED )
+            {
+                return aVal1->GetUnits();
+            }
+
+            return aVal2->GetUnits();
+        };
+
+        EDA_UNITS resultUnits = EDA_UNITS::UNSCALED;
+
         switch( m_op )
         {
         case TR_OP_ADD:
             result = AS_DOUBLE( arg1 ) + AS_DOUBLE( arg2 );
+            resultUnits = getOpResultUnits( arg1, arg2 );
             break;
         case TR_OP_SUB:
             result = AS_DOUBLE( arg1 ) - AS_DOUBLE( arg2 );
+            resultUnits = getOpResultUnits( arg1, arg2 );
             break;
         case TR_OP_MUL:
             result = AS_DOUBLE( arg1 ) * AS_DOUBLE( arg2 );
+            resultUnits = getOpResultUnits( arg1, arg2 );
             break;
         case TR_OP_DIV:
             result = AS_DOUBLE( arg1 ) / AS_DOUBLE( arg2 );
+            resultUnits = getOpResultUnits( arg1, arg2 );
             break;
         case TR_OP_LESS_EQUAL:
             result = AS_DOUBLE( arg1 ) <= AS_DOUBLE( arg2 ) ? 1 : 0;
@@ -1225,6 +1254,7 @@ void UOP::Exec( CONTEXT* ctx )
 
         auto rp = ctx->AllocValue();
         rp->Set( result );
+        rp->SetUnits( resultUnits );
         ctx->Push( rp );
         return;
     }
@@ -1246,6 +1276,7 @@ void UOP::Exec( CONTEXT* ctx )
 
         auto rp = ctx->AllocValue();
         rp->Set( result );
+        rp->SetUnits( arg1->GetUnits() );
         ctx->Push( rp );
         return;
     }

@@ -147,6 +147,10 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_padToDieLabel;
 		wxTextCtrl* m_padToDieCtrl;
 		wxStaticText* m_padToDieUnits;
+		wxCheckBox* m_padToDieDelayOpt;
+		wxStaticText* m_padToDieDelayLabel;
+		wxTextCtrl* m_padToDieDelayCtrl;
+		wxStaticText* m_padToDieDelayUnits;
 		wxBoxSizer* m_middleBoxSizer;
 		wxBoxSizer* m_FlippedWarningSizer;
 		wxStaticBitmap* m_FlippedWarningIcon;
@@ -273,6 +277,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnOffsetCheckbox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDrillShapeSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPadToDieCheckbox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPadToDieDelayCheckbox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSetCopperLayers( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onModify( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onTeardropsUpdateUi( wxUpdateUIEvent& event ) { event.Skip(); }

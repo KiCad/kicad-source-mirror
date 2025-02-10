@@ -58,7 +58,12 @@ public:
     /**
      * Return the resultant length or skew of the tuned traces.
      */
-    virtual long long int TuningResult() const = 0;
+    virtual long long int TuningLengthResult() const = 0;
+
+    /**
+     * Return the resultant delay or skew of the tuned traces.
+     */
+    virtual int64_t TuningDelayResult() const { return 0; };
 
     /**
      * Return the tuning status (too short, too long, etc.) of the trace(s) being tuned.
@@ -112,8 +117,6 @@ public:
         return false;
     }
 
-    int GetTotalPadToDieLength( const LINE& aLine ) const;
-
     virtual const ITEM_SET TunedPath() = 0;
 
 protected:
@@ -131,6 +134,13 @@ protected:
      * @return
      */
     long long int lineLength( const ITEM_SET& aLine, const SOLID* aStartPad, const SOLID* aEndPad ) const;
+
+    /**
+     * Calculate the total delay of the line represented by an item set (tracks and vias)
+     * @param aLine
+     * @return
+     */
+    int64_t lineDelay( const ITEM_SET& aLine, const SOLID* aStartPad, const SOLID* aEndPad ) const;
 
     ///< Pointer to world to search colliding items.
     NODE* m_world;

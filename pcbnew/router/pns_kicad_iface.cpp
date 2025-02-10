@@ -443,6 +443,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
             aConstraint->m_Value = hostConstraint.GetValue();
             aConstraint->m_RuleName = hostConstraint.GetName();
             aConstraint->m_Type = aType;
+            aConstraint->m_IsTimeDomain = hostConstraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN );
             return true;
 
         default:
@@ -1193,6 +1194,7 @@ std::vector<std::unique_ptr<PNS::SOLID>> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPa
             solid->SetNet( aPad->GetNet() );
             solid->SetParent( aPad );
             solid->SetPadToDie( aPad->GetPadToDieLength() );
+            solid->SetPadToDieDelay( aPad->GetPadToDieDelay() );
             solid->SetOrientation( aPad->GetOrientation() );
 
             if( aPad->IsFreePad() )
@@ -2325,40 +2327,9 @@ PNS_LAYER_RANGE PNS_KICAD_IFACE_BASE::SetLayersFromPCBNew( PCB_LAYER_ID aStartLa
 
 
 long long int PNS_KICAD_IFACE_BASE::CalculateRoutedPathLength( const PNS::ITEM_SET& aLine, const PNS::SOLID* aStartPad,
-                                                               const PNS::SOLID* aEndPad )
+                                                               const PNS::SOLID* aEndPad, const NETCLASS* aNetClass )
 {
-    std::vector<LENGTH_CALCULATION_ITEM> lengthItems;
-
-    for( int idx = 0; idx < aLine.Size(); idx++ )
-    {
-        const PNS::ITEM* lineItem = aLine[idx];
-
-        if( const PNS::LINE* l = dyn_cast<const PNS::LINE*>( lineItem ) )
-        {
-            LENGTH_CALCULATION_ITEM item;
-            item.SetLine( l->CLine() );
-
-            const PCB_LAYER_ID layer = GetBoardLayerFromPNSLayer( lineItem->Layer() );
-            item.SetLayers( layer );
-
-            lengthItems.emplace_back( std::move( item ) );
-        }
-        else if( lineItem->OfKind( PNS::ITEM::VIA_T ) && idx > 0 && idx < aLine.Size() - 1 )
-        {
-            const int          layerPrev = aLine[idx - 1]->Layer();
-            const int          layerNext = aLine[idx + 1]->Layer();
-            const PCB_LAYER_ID pcbLayerPrev = GetBoardLayerFromPNSLayer( layerPrev );
-            const PCB_LAYER_ID pcbLayerNext = GetBoardLayerFromPNSLayer( layerNext );
-
-            if( layerPrev != layerNext )
-            {
-                LENGTH_CALCULATION_ITEM item;
-                item.SetVia( static_cast<PCB_VIA*>( lineItem->GetSourceItem() ) );
-                item.SetLayers( pcbLayerPrev, pcbLayerNext );
-                lengthItems.emplace_back( std::move( item ) );
-            }
-        }
-    }
+    std::vector<LENGTH_DELAY_CALCULATION_ITEM> lengthItems = getLengthDelayCalculationItems( aLine, aNetClass );
 
     const PAD* startPad = nullptr;
     const PAD* endPad = nullptr;
@@ -2374,4 +2345,100 @@ long long int PNS_KICAD_IFACE_BASE::CalculateRoutedPathLength( const PNS::ITEM_S
     };
     const BOARD* board = GetBoard();
     return board->GetLengthCalculation()->CalculateLength( lengthItems, opts, startPad, endPad );
+}
+
+
+int64_t PNS_KICAD_IFACE_BASE::CalculateRoutedPathDelay( const PNS::ITEM_SET& aLine, const PNS::SOLID* aStartPad,
+                                                        const PNS::SOLID* aEndPad, const NETCLASS* aNetClass )
+{
+    std::vector<LENGTH_DELAY_CALCULATION_ITEM> lengthItems = getLengthDelayCalculationItems( aLine, aNetClass );
+
+    const PAD* startPad = nullptr;
+    const PAD* endPad = nullptr;
+
+    if( aStartPad )
+        startPad = static_cast<PAD*>( aStartPad->Parent() );
+
+    if( aEndPad )
+        endPad = static_cast<PAD*>( aEndPad->Parent() );
+
+    constexpr PATH_OPTIMISATIONS opts = {
+        .OptimiseViaLayers = false, .MergeTracks = false, .OptimiseTracesInPads = false, .InferViaInPad = true
+    };
+    const BOARD* board = GetBoard();
+    return board->GetLengthCalculation()->CalculateDelay( lengthItems, opts, startPad, endPad );
+}
+
+
+int64_t PNS_KICAD_IFACE_BASE::CalculateLengthForDelay( int64_t aDesiredDelay, const int aWidth,
+                                                       const bool aIsDiffPairCoupled, const int aDiffPairCouplingGap,
+                                                       const int aPNSLayer, const NETCLASS* aNetClass )
+{
+    TIME_DOMAIN_GEOMETRY_CONTEXT ctx;
+    ctx.NetClass = aNetClass;
+    ctx.Width = aWidth;
+    ctx.IsDiffPairCoupled = aIsDiffPairCoupled;
+    ctx.DiffPairCouplingGap = aDiffPairCouplingGap;
+    ctx.Layer = GetBoardLayerFromPNSLayer( aPNSLayer );
+
+    const BOARD* board = GetBoard();
+    return board->GetLengthCalculation()->CalculateLengthForDelay( aDesiredDelay, ctx );
+}
+
+
+int64_t PNS_KICAD_IFACE_BASE::CalculateDelayForShapeLineChain( const SHAPE_LINE_CHAIN& aShape, int aWidth,
+                                                               bool aIsDiffPairCoupled, int aDiffPairCouplingGap,
+                                                               int aPNSLayer, const NETCLASS* aNetClass )
+{
+    TIME_DOMAIN_GEOMETRY_CONTEXT ctx;
+    ctx.NetClass = aNetClass;
+    ctx.Width = aWidth;
+    ctx.IsDiffPairCoupled = aIsDiffPairCoupled;
+    ctx.DiffPairCouplingGap = aDiffPairCouplingGap;
+    ctx.Layer = GetBoardLayerFromPNSLayer( aPNSLayer );
+
+    const BOARD* board = GetBoard();
+    return board->GetLengthCalculation()->CalculatePropagationDelayForShapeLineChain( aShape, ctx );
+}
+
+
+std::vector<LENGTH_DELAY_CALCULATION_ITEM>
+PNS_KICAD_IFACE_BASE::getLengthDelayCalculationItems( const PNS::ITEM_SET& aLine, const NETCLASS* aNetClass ) const
+{
+    std::vector<LENGTH_DELAY_CALCULATION_ITEM> lengthItems;
+
+    for( int idx = 0; idx < aLine.Size(); idx++ )
+    {
+        const PNS::ITEM* lineItem = aLine[idx];
+
+        if( const PNS::LINE* l = dyn_cast<const PNS::LINE*>( lineItem ) )
+        {
+            LENGTH_DELAY_CALCULATION_ITEM item;
+            item.SetLine( l->CLine() );
+
+            const PCB_LAYER_ID layer = GetBoardLayerFromPNSLayer( lineItem->Layer() );
+            item.SetLayers( layer );
+            item.SetEffectiveNetClass( aNetClass );
+
+            lengthItems.emplace_back( std::move( item ) );
+        }
+        else if( lineItem->OfKind( PNS::ITEM::VIA_T ) && idx > 0 && idx < aLine.Size() - 1 )
+        {
+            const int          layerPrev = aLine[idx - 1]->Layer();
+            const int          layerNext = aLine[idx + 1]->Layer();
+            const PCB_LAYER_ID pcbLayerPrev = GetBoardLayerFromPNSLayer( layerPrev );
+            const PCB_LAYER_ID pcbLayerNext = GetBoardLayerFromPNSLayer( layerNext );
+
+            if( layerPrev != layerNext )
+            {
+                LENGTH_DELAY_CALCULATION_ITEM item;
+                item.SetVia( static_cast<PCB_VIA*>( lineItem->GetSourceItem() ) );
+                item.SetLayers( pcbLayerPrev, pcbLayerNext ); // TODO: BUG IS HERE!!!
+                item.SetEffectiveNetClass( aNetClass );
+                lengthItems.emplace_back( std::move( item ) );
+            }
+        }
+    }
+
+    return lengthItems;
 }
