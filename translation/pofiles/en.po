@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-08 00:06+0300\n"
+"POT-Creation-Date: 2025-02-10 14:43-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -36557,6 +36557,10 @@ msgid "Rule Area %s"
 msgstr "Rule Area %s"
 
 #, c-format
+msgid "Teardrop %s %s"
+msgstr "Teardrop %s %s"
+
+#, c-format
 msgid "Zone %s %s"
 msgstr "Zone %s %s"
 
@@ -36737,6 +36741,12 @@ msgstr "Standalone circuit board editor for KiCad boards"
 
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "An EDA suite for schematic and circuit board design"
+
+msgid "EDA"
+msgstr "EDA"
+
+msgid "Circuit board"
+msgstr "Circuit board"
 
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
@@ -37988,12 +37998,6 @@ msgstr "KiCad Drawing Sheet"
 #~ "|\n"
 #~ "\n"
 #~ "\n"
-
-#~ msgid "EDA"
-#~ msgstr "EDA"
-
-#~ msgid "Circuit board"
-#~ msgstr "Circuit board"
 
 #~ msgid "Deprecated version of KICAD_TEMPLATE_DIR."
 #~ msgstr "Deprecated version of KICAD_TEMPLATE_DIR."
