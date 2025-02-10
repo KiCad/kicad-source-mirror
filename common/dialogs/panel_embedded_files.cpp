@@ -313,13 +313,21 @@ EMBEDDED_FILES::EMBEDDED_FILE* PANEL_EMBEDDED_FILES::AddEmbeddedFile( const wxSt
 }
 
 
-void PANEL_EMBEDDED_FILES::onAddEmbeddedFile( wxCommandEvent& event )
+void PANEL_EMBEDDED_FILES::onAddEmbeddedFiles( wxCommandEvent& event )
 {
+    // TODO: Update strings to reflect that multiple files can be selected.
     wxFileDialog fileDialog( this, _( "Select a file to embed" ), wxEmptyString, wxEmptyString,
-                             _( "All files|*.*" ), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+                             _( "All files|*.*" ),
+                             wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
 
     if( fileDialog.ShowModal() == wxID_OK )
-        AddEmbeddedFile( fileDialog.GetPath() );
+    {
+        wxArrayString paths;
+        fileDialog.GetPaths( paths );
+
+        for( wxString path : paths )
+            AddEmbeddedFile( path );
+    }
 }
 
 

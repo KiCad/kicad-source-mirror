@@ -68,7 +68,7 @@ public:
 
 protected:
     void onFontEmbedClick( wxCommandEvent& event ) override;
-    void onAddEmbeddedFile( wxCommandEvent& event ) override;
+    void onAddEmbeddedFiles( wxCommandEvent& event ) override;
     void onDeleteEmbeddedFile( wxCommandEvent& event ) override;
     void onExportFiles( wxCommandEvent& event ) override;
     void onSize( wxSizeEvent& event ) override;

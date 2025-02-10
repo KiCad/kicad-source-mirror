@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -101,7 +101,7 @@ PANEL_EMBEDDED_FILES_BASE::PANEL_EMBEDDED_FILES_BASE( wxWindow* parent, wxWindow
 	// Connect Events
 	this->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_EMBEDDED_FILES_BASE::onSize ) );
 	m_files_grid->Connect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( PANEL_EMBEDDED_FILES_BASE::onGridRightClick ), NULL, this );
-	m_browse_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_EMBEDDED_FILES_BASE::onAddEmbeddedFile ), NULL, this );
+	m_browse_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_EMBEDDED_FILES_BASE::onAddEmbeddedFiles ), NULL, this );
 	m_delete_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_EMBEDDED_FILES_BASE::onDeleteEmbeddedFile ), NULL, this );
 	m_cbEmbedFonts->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_EMBEDDED_FILES_BASE::onFontEmbedClick ), NULL, this );
 	m_export->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_EMBEDDED_FILES_BASE::onExportFiles ), NULL, this );
@@ -112,7 +112,7 @@ PANEL_EMBEDDED_FILES_BASE::~PANEL_EMBEDDED_FILES_BASE()
 	// Disconnect Events
 	this->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_EMBEDDED_FILES_BASE::onSize ) );
 	m_files_grid->Disconnect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( PANEL_EMBEDDED_FILES_BASE::onGridRightClick ), NULL, this );
-	m_browse_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_EMBEDDED_FILES_BASE::onAddEmbeddedFile ), NULL, this );
+	m_browse_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_EMBEDDED_FILES_BASE::onAddEmbeddedFiles ), NULL, this );
 	m_delete_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_EMBEDDED_FILES_BASE::onDeleteEmbeddedFile ), NULL, this );
 	m_cbEmbedFonts->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_EMBEDDED_FILES_BASE::onFontEmbedClick ), NULL, this );
 	m_export->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_EMBEDDED_FILES_BASE::onExportFiles ), NULL, this );

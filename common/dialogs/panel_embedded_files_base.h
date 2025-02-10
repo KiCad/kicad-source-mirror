@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -47,7 +47,7 @@ class PANEL_EMBEDDED_FILES_BASE : public wxPanel
 		// Virtual event handlers, override them in your derived class
 		virtual void onSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void onGridRightClick( wxGridEvent& event ) { event.Skip(); }
-		virtual void onAddEmbeddedFile( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onAddEmbeddedFiles( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onDeleteEmbeddedFile( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFontEmbedClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onExportFiles( wxCommandEvent& event ) { event.Skip(); }
