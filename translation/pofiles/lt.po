@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-10 14:43-0800\n"
+"POT-Creation-Date: 2025-02-10 15:21-0800\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/master-"
@@ -24028,7 +24028,7 @@ msgid "Highlight net under cursor"
 msgstr "Pažymėkite tinklą po žymekliu"
 
 #: eeschema/tools/ee_actions.cpp:933 pcbnew/tools/pcb_actions.cpp:1251
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1213
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1217
 msgid "Clear Net Highlighting"
 msgstr "Išvalyti tinklo paryškinimą"
 
@@ -38240,8 +38240,8 @@ msgid "Pad number:"
 msgstr "Aikštelės numeris:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:52
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1716
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1773
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1720
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1777
 msgid "Net name:"
 msgstr "Grandinės pavadinimas:"
 
@@ -53349,139 +53349,139 @@ msgstr "Die ilgis"
 msgid "Pad Count"
 msgstr "„Pad Count“"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1208
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1212
 #, fuzzy
 msgid "Highlight Selected Net"
 msgstr "Pažymėkite pasirinktą tinklą"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1225
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1229
 #, fuzzy
 msgid "Rename Selected Net"
 msgstr "Tinklelio žingsnis"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1229
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1233
 #, fuzzy
 msgid "Delete Selected Net"
 msgstr "Ištrina pasirinktą (-us) elementą (-us)"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1235
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1239
 #, fuzzy
 msgid "Add Net"
 msgstr "Tekstas"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1249
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1253
 #, fuzzy
 msgid "Highlight Selected Nets"
 msgstr "Pažymėkite pasirinktą tinklą"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1251
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1255
 #, fuzzy
 msgid "Delete Selected Nets"
 msgstr "Ištrina pasirinktą (-us) elementą (-us)"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1258
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1391
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1262
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1395
 #, fuzzy
 msgid "Remove Selected Custom Group"
 msgstr "Pašalinti elementus iš grupės"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1283
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1287
 #, fuzzy
 msgid "Group name / pattern:"
 msgstr "Grupės vardas:"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1283
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1287
 #, fuzzy
 msgid "New Group"
 msgstr "Grupė"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1285
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1289
 msgid "(Use /.../ to indicate a regular expression.)"
 msgstr ""
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1358
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1362
 #, fuzzy
 msgid "Filter by Net Name"
 msgstr "Filtruoti tinklus"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1364
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1368
 #, fuzzy
 msgid "Filter by Netclass"
 msgstr "Filtruoti elementus pagal grynąją klasę:"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1379
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1383
 #, fuzzy
 msgid "Group by Netclass"
 msgstr "Grupuokite pagal pavadinimą"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1386
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1390
 #, fuzzy
 msgid "Add Custom Group"
 msgstr "Tinkinto sluoksnio rinkinys"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1399
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1403
 #, fuzzy
 msgid "Remove All Custom Groups"
 msgstr "Pašalinti elementus iš grupės"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1407
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1411
 #, fuzzy
 msgid "Show Zero Pad Nets"
 msgstr "Rodyti grandines be išvadų"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1413
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1417
 #, fuzzy
 msgid "Show Unconnected Nets"
 msgstr "Nesujungta"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1422
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1426
 #, fuzzy
 msgid "Save Net Inspector Report"
 msgstr "Grynasis inspektorius"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1431
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1435
 #, fuzzy
 msgid "Show / Hide Columns"
 msgstr "Rodyti paslėptus kaiščius"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1580
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1584
 #, fuzzy
 msgid "Save Net Inspector Report File"
 msgstr "Išsaugoti ataskaitos failą"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1581
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1585
 msgid "Report file"
 msgstr "Pranešti apie failą"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1602
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1606
 #, fuzzy, c-format
 msgid "%s (%s)"
 msgstr "Eiti į %s (%s) puslapį"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1716
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1720
 msgid "New Net"
 msgstr "Naujas tinklas"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1729
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1796
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1733
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1800
 #, c-format
 msgid "Net name '%s' is already in use."
 msgstr "Grynasis vardas „%s“ jau naudojamas."
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1773
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1777
 msgid "Rename Net"
 msgstr "Pervardyti „Net“"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1786
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1790
 msgid "Net name cannot be empty."
 msgstr "Grynasis vardas negali būti tuščias."
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1854
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1858
 #, c-format
 msgid "Net '%s' is in use.  Delete anyway?"
 msgstr "Naudojamas tinklas „%s“. Vis tiek ištrinti?"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1895
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1899
 #, c-format
 msgid "Delete all nets in group '%s'?"
 msgstr "Ištrinti visus grupės „%s“ tinklus?"

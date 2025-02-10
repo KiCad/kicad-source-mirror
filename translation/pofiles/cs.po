@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-10 14:43-0800\n"
+"POT-Creation-Date: 2025-02-10 15:21-0800\n"
 "PO-Revision-Date: 2025-02-05 21:30+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
@@ -22831,7 +22831,7 @@ msgid "Highlight net under cursor"
 msgstr "Zvýrazněte síť pod kurzorem"
 
 #: eeschema/tools/ee_actions.cpp:933 pcbnew/tools/pcb_actions.cpp:1251
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1213
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1217
 msgid "Clear Net Highlighting"
 msgstr "Vymazat zvýraznění sítě"
 
@@ -36412,8 +36412,8 @@ msgid "Pad number:"
 msgstr "Číslo plošky:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:52
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1716
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1773
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1720
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1777
 msgid "Net name:"
 msgstr "Název sítě:"
 
@@ -51156,139 +51156,139 @@ msgstr "Délka od plošky po čip"
 msgid "Pad Count"
 msgstr "Počet plošek"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1208
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1212
 #, fuzzy
 msgid "Highlight Selected Net"
 msgstr "Zvýraznit vybranou síť"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1225
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1229
 #, fuzzy
 msgid "Rename Selected Net"
 msgstr "Výběr mřížky"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1229
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1233
 #, fuzzy
 msgid "Delete Selected Net"
 msgstr "Odstraní vybranou položku(y)"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1235
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1239
 #, fuzzy
 msgid "Add Net"
 msgstr "Přidat text"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1249
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1253
 #, fuzzy
 msgid "Highlight Selected Nets"
 msgstr "Zvýraznit vybranou síť"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1251
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1255
 #, fuzzy
 msgid "Delete Selected Nets"
 msgstr "Odstraní vybranou položku(y)"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1258
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1391
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1262
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1395
 #, fuzzy
 msgid "Remove Selected Custom Group"
 msgstr "Odebrat položky ze skupiny"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1283
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1287
 #, fuzzy
 msgid "Group name / pattern:"
 msgstr "Název skupiny:"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1283
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1287
 #, fuzzy
 msgid "New Group"
 msgstr "Skupina"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1285
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1289
 msgid "(Use /.../ to indicate a regular expression.)"
 msgstr ""
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1358
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1362
 #, fuzzy
 msgid "Filter by Net Name"
 msgstr "Filtr sítí"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1364
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1368
 #, fuzzy
 msgid "Filter by Netclass"
 msgstr "Filtrování položek podle třídy sítě"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1379
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1383
 #, fuzzy
 msgid "Group by Netclass"
 msgstr "Seskupit dle třídy spojů"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1386
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1390
 #, fuzzy
 msgid "Add Custom Group"
 msgstr "Vlastní pravidla"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1399
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1403
 #, fuzzy
 msgid "Remove All Custom Groups"
 msgstr "Odebrat položky ze skupiny"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1407
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1411
 #, fuzzy
 msgid "Show Zero Pad Nets"
 msgstr "Zobrazit nepřipojené sítě"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1413
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1417
 #, fuzzy
 msgid "Show Unconnected Nets"
 msgstr "Nezapojeno"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1422
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1426
 #, fuzzy
 msgid "Save Net Inspector Report"
 msgstr "Kontrola sítě"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1431
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1435
 #, fuzzy
 msgid "Show / Hide Columns"
 msgstr "Zobrazit skryté vývody"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1580
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1584
 #, fuzzy
 msgid "Save Net Inspector Report File"
 msgstr "Uložit soubor hlášení"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1581
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1585
 msgid "Report file"
 msgstr "Soubor hlášení"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1602
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1606
 #, fuzzy, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1716
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1720
 msgid "New Net"
 msgstr "Nová síť"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1729
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1796
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1733
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1800
 #, c-format
 msgid "Net name '%s' is already in use."
 msgstr "Název sítě '%s' se již používá."
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1773
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1777
 msgid "Rename Net"
 msgstr "Přejmenuje síť"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1786
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1790
 msgid "Net name cannot be empty."
 msgstr "Název sítě nemůže být prázdný."
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1854
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1858
 #, c-format
 msgid "Net '%s' is in use.  Delete anyway?"
 msgstr "Síť '%s' se používá.  Přesto odstranit?"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1895
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1899
 #, c-format
 msgid "Delete all nets in group '%s'?"
 msgstr "Smazat všechny sítě ve skupině '%s'?"

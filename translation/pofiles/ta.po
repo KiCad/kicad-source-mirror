@@ -4,11 +4,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-10 14:43-0800\n"
+"POT-Creation-Date: 2025-02-10 15:21-0800\n"
 "PO-Revision-Date: 2025-02-10 23:20+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/"
-"master-source/ta/>\n"
+"Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/master-"
+"source/ta/>\n"
 "Language: ta\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21857,7 +21857,7 @@ msgid "Highlight net under cursor"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:933 pcbnew/tools/pcb_actions.cpp:1251
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1213
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1217
 msgid "Clear Net Highlighting"
 msgstr ""
 
@@ -34723,8 +34723,8 @@ msgid "Pad number:"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:52
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1716
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1773
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1720
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1777
 msgid "Net name:"
 msgstr ""
 
@@ -48723,120 +48723,120 @@ msgstr ""
 msgid "Pad Count"
 msgstr ""
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1208
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1212
 msgid "Highlight Selected Net"
 msgstr "தேர்ந்தெடுக்கப்பட்ட வலையை முன்னிலைப்படுத்தவும்"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1225
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1229
 msgid "Rename Selected Net"
 msgstr "தேர்ந்தெடுக்கப்பட்ட வலையை மறுபெயரிடுங்கள்"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1229
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1233
 msgid "Delete Selected Net"
 msgstr "தேர்ந்தெடுக்கப்பட்ட வலையை நீக்கு"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1235
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1239
 msgid "Add Net"
 msgstr "வலையைச் சேர்க்கவும்"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1249
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1253
 msgid "Highlight Selected Nets"
 msgstr "தேர்ந்தெடுக்கப்பட்ட வலைகளை முன்னிலைப்படுத்தவும்"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1251
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1255
 msgid "Delete Selected Nets"
 msgstr "தேர்ந்தெடுக்கப்பட்ட வலைகளை நீக்கு"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1258
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1391
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1262
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1395
 msgid "Remove Selected Custom Group"
 msgstr "தேர்ந்தெடுக்கப்பட்ட தனிப்பயன் குழுவை அகற்று"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1283
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1287
 msgid "Group name / pattern:"
 msgstr "குழு பெயர் / முறை:"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1283
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1287
 msgid "New Group"
 msgstr "புதிய குழு"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1285
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1289
 msgid "(Use /.../ to indicate a regular expression.)"
 msgstr "(வழக்கமான வெளிப்பாட்டைக் குறிக்க /.../ ஐப் பயன்படுத்தவும்.)"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1358
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1362
 msgid "Filter by Net Name"
 msgstr "நிகர பெயரால் வடிகட்டவும்"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1364
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1368
 msgid "Filter by Netclass"
 msgstr "நெட் கிளாச் மூலம் வடிகட்டவும்"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1379
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1383
 msgid "Group by Netclass"
 msgstr "நெட் கிளாச் மூலம் குழு"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1386
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1390
 msgid "Add Custom Group"
 msgstr "தனிப்பயன் குழுவைச் சேர்க்கவும்"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1399
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1403
 msgid "Remove All Custom Groups"
 msgstr "அனைத்து தனிப்பயன் குழுக்களையும் அகற்று"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1407
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1411
 msgid "Show Zero Pad Nets"
 msgstr "சுழிய பேட் வலைகளைக் காட்டு"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1413
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1417
 msgid "Show Unconnected Nets"
 msgstr "இணைக்கப்படாத வலைகளைக் காட்டு"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1422
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1426
 msgid "Save Net Inspector Report"
 msgstr "நிகர இன்ச்பெக்டர் அறிக்கையைச் சேமிக்கவும்"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1431
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1435
 msgid "Show / Hide Columns"
 msgstr "நெடுவரிசைகளைக் காட்டு / மறைக்கவும்"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1580
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1584
 msgid "Save Net Inspector Report File"
 msgstr "நிகர இன்ச்பெக்டர் அறிக்கை கோப்பை சேமிக்கவும்"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1581
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1585
 msgid "Report file"
 msgstr ""
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1602
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1606
 #, c-format
 msgid "%s (%s)"
 msgstr ""
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1716
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1720
 msgid "New Net"
 msgstr ""
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1729
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1796
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1733
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1800
 #, c-format
 msgid "Net name '%s' is already in use."
 msgstr ""
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1773
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1777
 msgid "Rename Net"
 msgstr ""
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1786
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1790
 msgid "Net name cannot be empty."
 msgstr ""
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1854
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1858
 #, c-format
 msgid "Net '%s' is in use.  Delete anyway?"
 msgstr ""
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1895
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1899
 #, c-format
 msgid "Delete all nets in group '%s'?"
 msgstr ""

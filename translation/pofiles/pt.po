@@ -14,11 +14,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-10 14:43-0800\n"
+"POT-Creation-Date: 2025-02-10 15:21-0800\n"
 "PO-Revision-Date: 2025-02-10 23:20+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/"
-"master-source/pt/>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/master-"
+"source/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23086,7 +23086,7 @@ msgid "Highlight net under cursor"
 msgstr "Destaca a rede sob o cursor"
 
 #: eeschema/tools/ee_actions.cpp:933 pcbnew/tools/pcb_actions.cpp:1251
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1213
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1217
 msgid "Clear Net Highlighting"
 msgstr "Remover Destaque de Rede"
 
@@ -36746,8 +36746,8 @@ msgid "Pad number:"
 msgstr "Número da ilha:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:52
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1716
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1773
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1720
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1777
 msgid "Net name:"
 msgstr "Nome da rede:"
 
@@ -51313,120 +51313,120 @@ msgstr "Comprimento da Pastilha"
 msgid "Pad Count"
 msgstr "Contagem de Ilha"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1208
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1212
 msgid "Highlight Selected Net"
 msgstr "Realce a net selecionada"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1225
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1229
 msgid "Rename Selected Net"
 msgstr "Renomear a(s) net(s) selecionada(s)"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1229
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1233
 msgid "Delete Selected Net"
 msgstr "Apagar o(s) elemento(s) selecionado(s)"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1235
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1239
 msgid "Add Net"
 msgstr "Adicionar net"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1249
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1253
 msgid "Highlight Selected Nets"
 msgstr "Realce a(s) net(s) selecionada(s)"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1251
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1255
 msgid "Delete Selected Nets"
 msgstr "Apagar a(s) net(s) selecionada(s)"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1258
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1391
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1262
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1395
 msgid "Remove Selected Custom Group"
 msgstr "Remover o grupo personalizado selecionado"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1283
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1287
 msgid "Group name / pattern:"
 msgstr "Nome do grupo / padrão:"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1283
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1287
 msgid "New Group"
 msgstr "Novo grupo"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1285
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1289
 msgid "(Use /.../ to indicate a regular expression.)"
 msgstr "(Use /.../ para indicar uma expressão regular.)"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1358
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1362
 msgid "Filter by Net Name"
 msgstr "Net filtrada por nome"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1364
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1368
 msgid "Filter by Netclass"
 msgstr "Filtrar por netclass"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1379
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1383
 msgid "Group by Netclass"
 msgstr "Agrupar por netclass"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1386
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1390
 msgid "Add Custom Group"
 msgstr "Adicionar grupo personalizado"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1399
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1403
 msgid "Remove All Custom Groups"
 msgstr "Remover todos os grupos personalizados"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1407
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1411
 msgid "Show Zero Pad Nets"
 msgstr "Exibir as nets sem ilhas"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1413
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1417
 msgid "Show Unconnected Nets"
 msgstr "Exibir as nets sem conexão"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1422
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1426
 msgid "Save Net Inspector Report"
 msgstr "Gravar o relatório do inspetor net"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1431
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1435
 msgid "Show / Hide Columns"
 msgstr "Exibe / Oculta as colunas"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1580
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1584
 msgid "Save Net Inspector Report File"
 msgstr "Gravar o ficheiro de relatório do inspetor net"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1581
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1585
 msgid "Report file"
 msgstr "Ficheiro de relatório"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1602
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1606
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1716
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1720
 msgid "New Net"
 msgstr "Nova rede"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1729
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1796
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1733
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1800
 #, c-format
 msgid "Net name '%s' is already in use."
 msgstr "O nome da rede '%s' já está em uso."
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1773
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1777
 msgid "Rename Net"
 msgstr "Renomeie a rede"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1786
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1790
 msgid "Net name cannot be empty."
 msgstr "O nome da rede não pode estar vazio."
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1854
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1858
 #, c-format
 msgid "Net '%s' is in use.  Delete anyway?"
 msgstr "A rede '%s' está em uso.  Excluir mesmo assim?"
 
-#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1895
+#: pcbnew/widgets/pcb_net_inspector_panel.cpp:1899
 #, c-format
 msgid "Delete all nets in group '%s'?"
 msgstr "Excluir todas as redes no grupo '%s'?"
