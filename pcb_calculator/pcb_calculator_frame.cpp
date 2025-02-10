@@ -146,6 +146,10 @@ PCB_CALCULATOR_FRAME::~PCB_CALCULATOR_FRAME()
     // This needed for OSX: avoids further OnDraw processing after this destructor and before
     // the native window is destroyed
     this->Freeze();
+
+    // Clean up the tool framework
+    delete m_toolManager;
+    delete m_toolDispatcher;
 }
 
 
