@@ -702,7 +702,9 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
         std::optional<SCH_SHEET_PATH> ordinalPath =
                 m_schematic->Hierarchy().GetOrdinalPath( parentScreen );
 
-        wxASSERT( ordinalPath );
+        // Design blocks are saved from a temporary sheet & screen which will not be found in
+        // the schematic, and will therefore have no ordinal path.
+        // wxASSERT( ordinalPath );
 
         if( ordinalPath )
             aSymbol->GetInstance( ordinalInstance, ordinalPath->Path() );
