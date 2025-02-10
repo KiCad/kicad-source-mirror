@@ -12,15 +12,16 @@
 # Laurens Holst <laurens@grauw.nl>, 2024.
 # Stefan De Raedemaeker <stefandr.dev@gmail.com>, 2024.
 # John Beard <john.j.beard@gmail.com>, 2025.
+# Robin Janssens <robin@robinjanssens.net>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-08 00:06+0300\n"
-"PO-Revision-Date: 2025-01-23 15:38+0000\n"
-"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/master-"
-"source/nl/>\n"
+"PO-Revision-Date: 2025-02-10 22:37+0000\n"
+"Last-Translator: Robin Janssens <robin@robinjanssens.net>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
+"master-source/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1757,7 +1758,6 @@ msgid "Drawing Sheet (.kicad_wks file)"
 msgstr "Tekenblad (.kicad_wks bestand)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:200
-#, fuzzy
 msgid "Export to File..."
 msgstr "Naar bestand exporteren"
 
@@ -1769,6 +1769,7 @@ msgstr "Naar klembord exporteren"
 #: bitmap2component/bitmap2component.cpp:406
 msgid "No shape in black and white image to convert: no outline created."
 msgstr ""
+"Geen vorm in zwart-wit beeld om te converteren: geen contour aangemaakt."
 
 #: common/api/api_handler.cpp:27
 msgid "Modification from API"
@@ -1833,7 +1834,6 @@ msgid "&Cancel"
 msgstr "&Annuleren"
 
 #: common/confirm.cpp:54 common/confirm.cpp:59
-#, fuzzy
 msgid "&Open Anyway"
 msgstr "Alsnog openen"
 
@@ -1855,7 +1855,6 @@ msgid "&Discard Changes"
 msgstr "Wijzigingen afwijzen"
 
 #: common/confirm.cpp:77 common/confirm.cpp:157
-#, fuzzy
 msgid "&Apply to all"
 msgstr "Toepassen op alles"
 
@@ -1928,9 +1927,8 @@ msgid "&No"
 msgstr "&Nee"
 
 #: common/design_block_info_impl.cpp:135
-#, fuzzy
 msgid "Loading design_blocks..."
-msgstr "Bestanden inladen..."
+msgstr "Ontwerpblokken inladen..."
 
 #: common/design_block_io.cpp:47 common/design_block_io.cpp:56
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
@@ -38537,9 +38535,8 @@ msgstr "Van ontwerpregels"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:398
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:419
 #: pcbnew/pcb_track.cpp:2047
-#, fuzzy
 msgid "Tented"
-msgstr "Centreren"
+msgstr "Bedekt"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:398
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:419
@@ -39828,14 +39825,12 @@ msgstr "Via’s tenten"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:118
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:123
-#, fuzzy
 msgid ""
 "Tented: vias are covered with solder mask.\n"
 "Not tented: vias are not covered with solder mask."
 msgstr ""
-"Getente via’s: niet geplot op soldeermaskerlaag\n"
-"Niet-getente via’s: geplot op soldeermaskerlaag\n"
-"(Soldeermasker is een negatieve laag)"
+"Bedekte via’s: via's bedekt met soldeermaskerlaag.\n"
+"Niet-bedekte via’s: via's niet bedekt met soldeermaskerlaag."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:136
 #, fuzzy
