@@ -1098,7 +1098,7 @@ void SCH_EDIT_FRAME::doCloseWindow()
     }
 
     // Make sure local settings are persisted
-    if( !Prj().GetLocalSettings().WasMigrated() )
+    if( Prj().GetLocalSettings().ShouldAutoSave() )
         SaveProjectLocalSettings();
 
     // Shutdown all running tools

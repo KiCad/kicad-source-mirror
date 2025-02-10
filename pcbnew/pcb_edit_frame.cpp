@@ -1271,7 +1271,7 @@ void PCB_EDIT_FRAME::doCloseWindow()
     }
 
     // Make sure local settings are persisted
-    if( !Prj().GetLocalSettings().WasMigrated() )
+    if( Prj().GetLocalSettings().ShouldAutoSave() )
     {
         m_netInspectorPanel->SaveSettings();
         SaveProjectLocalSettings();
