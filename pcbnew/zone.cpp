@@ -1093,6 +1093,8 @@ wxString ZONE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) 
     {
         if( GetIsRuleArea() )
             return wxString::Format( _( "Rule Area %s" ), layerDesc );
+        else if( IsTeardropArea() )
+            return wxString::Format( _( "Teardrop %s %s" ), GetNetnameMsg(), layerDesc );
         else
             return wxString::Format( _( "Zone %s %s" ), GetNetnameMsg(), layerDesc );
     }
