@@ -127,10 +127,10 @@ void EMBEDDED_FILES::RemoveFile( const wxString& name, bool aErase )
 
     if( it != m_files.end() )
     {
-        m_files.erase( it );
-
         if( aErase )
             delete it->second;
+
+        m_files.erase( it );
     }
 }
 
