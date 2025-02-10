@@ -114,6 +114,9 @@ private:
     /// Validates all data
     bool Validate() override;
 
+    /// Validates all via override rows
+    bool validateViaRows();
+
     /// Adds a tuning profile row with the given persisted parameters
     void addProfileRow( const TIME_DOMAIN_TUNING_PROFILE& aDelayProfile );
 
@@ -125,6 +128,9 @@ private:
 
     /// Gets a via override row as a set of persistable parameters
     TUNING_PROFILE_VIA_OVERRIDE_ENTRY getViaRow( int aRow );
+
+    /// Gets the profile name for the given profile grid row
+    wxString getProfileNameForProfileGridRow( int aRow ) const;
 
     /// The parameters object to load / save data from / to
     std::shared_ptr<TIME_DOMAIN_PARAMETERS> m_timeDomainParameters;

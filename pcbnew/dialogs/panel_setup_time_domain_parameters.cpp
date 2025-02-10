@@ -179,7 +179,7 @@ void PANEL_SETUP_TIME_DOMAIN_PARAMETERS::addProfileRow( const TIME_DOMAIN_TUNING
 TIME_DOMAIN_TUNING_PROFILE PANEL_SETUP_TIME_DOMAIN_PARAMETERS::getProfileRow( const int aRow )
 {
     TIME_DOMAIN_TUNING_PROFILE entry;
-    entry.m_ProfileName = m_tracePropagationGrid->GetCellValue( aRow, PROFILE_GRID_PROFILE_NAME );
+    entry.m_ProfileName = getProfileNameForProfileGridRow( aRow );
     entry.m_ViaPropagationDelay = m_tracePropagationGrid->GetUnitValue( aRow, PROFILE_GRID_VIA_PROP_DELAY );
 
     std::map<PCB_LAYER_ID, int> propDelays;
@@ -224,10 +224,10 @@ TUNING_PROFILE_VIA_OVERRIDE_ENTRY PANEL_SETUP_TIME_DOMAIN_PARAMETERS::getViaRow(
     PCB_LAYER_ID   viaLayerIdTo = m_layerNamesToIDs[viaLayerTo];
 
     // Order layers in stackup order (from F_Cu first)
-    if( signalLayerIdTo != B_Cu && ( signalLayerIdTo < signalLayerIdFrom || signalLayerIdFrom == B_Cu ) )
+    if( IsCopperLayerLowerThan( signalLayerIdFrom, signalLayerIdTo ) )
         std::swap( signalLayerIdFrom, signalLayerIdTo );
 
-    if( viaLayerIdTo != B_Cu && ( viaLayerIdTo < viaLayerIdFrom || viaLayerIdFrom == B_Cu ) )
+    if( IsCopperLayerLowerThan( viaLayerIdFrom, viaLayerIdTo ) )
         std::swap( viaLayerIdFrom, viaLayerIdTo );
 
     const TUNING_PROFILE_VIA_OVERRIDE_ENTRY entry{ signalLayerIdFrom, signalLayerIdTo, viaLayerIdFrom, viaLayerIdTo,
@@ -432,9 +432,7 @@ void PANEL_SETUP_TIME_DOMAIN_PARAMETERS::OnRemoveDelayProfileClick( wxCommandEve
     if( curRow < 0 )
         return;
 
-    wxString profileName = m_tracePropagationGrid->GetCellValue( curRow, PROFILE_GRID_PROFILE_NAME );
-    profileName.Trim( true );
-    profileName.Trim( false );
+    wxString profileName = getProfileNameForProfileGridRow( curRow );
 
     // Delete associated via overrides
     for( int viaRow = m_viaPropagationGrid->GetNumberRows() - 1; viaRow >= 0; --viaRow )
@@ -494,8 +492,9 @@ void PANEL_SETUP_TIME_DOMAIN_PARAMETERS::OnDelayProfileGridCellChanging( wxGridE
     {
         if( validateDelayProfileName( event.GetRow(), event.GetString() ) )
         {
-            const wxString oldName = m_tracePropagationGrid->GetCellValue( event.GetRow(), PROFILE_GRID_PROFILE_NAME );
-            const wxString newName = event.GetString();
+            const wxString oldName = getProfileNameForProfileGridRow( event.GetRow() );
+            wxString       newName = event.GetString();
+            newName.Trim( true ).Trim( false );
 
             if( !oldName.IsEmpty() )
             {
@@ -532,7 +531,7 @@ void PANEL_SETUP_TIME_DOMAIN_PARAMETERS::updateViaProfileNamesEditor( const wxSt
 
     for( int i = 0; i < m_tracePropagationGrid->GetNumberRows(); ++i )
     {
-        wxString profileName = m_tracePropagationGrid->GetCellValue( i, PROFILE_GRID_PROFILE_NAME );
+        wxString profileName = getProfileNameForProfileGridRow( i );
 
         if( profileName == aOldName )
             profileName = aNewName;
@@ -555,22 +554,21 @@ void PANEL_SETUP_TIME_DOMAIN_PARAMETERS::updateViaProfileNamesEditor( const wxSt
 bool PANEL_SETUP_TIME_DOMAIN_PARAMETERS::validateDelayProfileName( int aRow, const wxString& aName, bool focusFirst )
 {
     wxString tmp = aName;
-
     tmp.Trim( true );
     tmp.Trim( false );
 
     if( tmp.IsEmpty() )
     {
-        const wxString msg = _( "Tuning profile must have a name." );
+        const wxString msg = _( "Tuning profile must have a name" );
         PAGED_DIALOG::GetDialog( this )->SetError( msg, this, m_tracePropagationGrid, aRow, PROFILE_GRID_PROFILE_NAME );
         return false;
     }
 
     for( int ii = 0; ii < m_tracePropagationGrid->GetNumberRows(); ii++ )
     {
-        if( ii != aRow && m_tracePropagationGrid->GetCellValue( ii, PROFILE_GRID_PROFILE_NAME ).CmpNoCase( tmp ) == 0 )
+        if( ii != aRow && getProfileNameForProfileGridRow( ii ).CmpNoCase( tmp ) == 0 )
         {
-            const wxString msg = _( "Tuning profile name already in use." );
+            const wxString msg = _( "Tuning profile name already in use" );
             PAGED_DIALOG::GetDialog( this )->SetError( msg, this, m_tracePropagationGrid, focusFirst ? aRow : ii,
                                                        PROFILE_GRID_PROFILE_NAME );
             return false;
@@ -586,15 +584,43 @@ bool PANEL_SETUP_TIME_DOMAIN_PARAMETERS::Validate()
     if( !m_tracePropagationGrid->CommitPendingChanges() || !m_viaPropagationGrid->CommitPendingChanges() )
         return false;
 
-    // Test net class parameters.
+    // Test delay profile parameters
     for( int row = 0; row < m_tracePropagationGrid->GetNumberRows(); row++ )
     {
-        wxString profileName = m_tracePropagationGrid->GetCellValue( row, PROFILE_GRID_PROFILE_NAME );
-        profileName.Trim( true );
-        profileName.Trim( false );
+        const wxString profileName = getProfileNameForProfileGridRow( row );
 
         if( !validateDelayProfileName( row, profileName, false ) )
             return false;
+    }
+
+    // Test via override parameters
+    if( !validateViaRows() )
+        return false;
+
+    return true;
+}
+
+
+bool PANEL_SETUP_TIME_DOMAIN_PARAMETERS::validateViaRows()
+{
+    std::map<wxString, std::set<TUNING_PROFILE_VIA_OVERRIDE_ENTRY>> rowCache;
+
+    for( int row = 0; row < m_viaPropagationGrid->GetNumberRows(); row++ )
+    {
+        TUNING_PROFILE_VIA_OVERRIDE_ENTRY entry = getViaRow( row );
+        const wxString profileName = m_viaPropagationGrid->GetCellValue( row, VIA_GRID_PROFILE_NAME );
+        std::set<TUNING_PROFILE_VIA_OVERRIDE_ENTRY>& viaOverrides = rowCache[profileName];
+
+        if( viaOverrides.contains( entry ) )
+        {
+            const wxString msg = _( "Via override configuration is duplicated" );
+            PAGED_DIALOG::GetDialog( this )->SetError( msg, this, m_viaPropagationGrid, row, VIA_GRID_PROFILE_NAME );
+            return false;
+        }
+        else
+        {
+            viaOverrides.insert( entry );
+        }
     }
 
     return true;
@@ -606,7 +632,10 @@ std::vector<wxString> PANEL_SETUP_TIME_DOMAIN_PARAMETERS::GetDelayProfileNames()
     std::vector<wxString> profileNames;
 
     for( int i = 0; i < m_tracePropagationGrid->GetNumberRows(); i++ )
-        profileNames.emplace_back( m_tracePropagationGrid->GetCellValue( i, PROFILE_GRID_PROFILE_NAME ) );
+    {
+        const wxString profileName = getProfileNameForProfileGridRow( i );
+        profileNames.emplace_back( profileName );
+    }
 
     std::ranges::sort( profileNames,
                        []( const wxString& a, const wxString& b )
@@ -631,4 +660,12 @@ void PANEL_SETUP_TIME_DOMAIN_PARAMETERS::ImportSettingsFrom(
     m_viaPropagationGrid->ForceRefresh();
 
     m_timeDomainParameters = std::move( savedParameters );
+}
+
+
+wxString PANEL_SETUP_TIME_DOMAIN_PARAMETERS::getProfileNameForProfileGridRow( const int aRow ) const
+{
+    wxString profileName = m_tracePropagationGrid->GetCellValue( aRow, PROFILE_GRID_PROFILE_NAME );
+    profileName.Trim( true ).Trim( false );
+    return profileName;
 }

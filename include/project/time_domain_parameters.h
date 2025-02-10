@@ -35,6 +35,23 @@ struct TUNING_PROFILE_VIA_OVERRIDE_ENTRY
     PCB_LAYER_ID m_ViaLayerFrom;
     PCB_LAYER_ID m_ViaLayerTo;
     int          m_Delay;
+
+    bool operator<( const TUNING_PROFILE_VIA_OVERRIDE_ENTRY& other ) const
+    {
+        if( m_SignalLayerFrom != other.m_SignalLayerFrom )
+            return IsCopperLayerLowerThan( m_SignalLayerFrom, other.m_SignalLayerFrom );
+
+        if( m_SignalLayerTo != other.m_SignalLayerTo )
+            return IsCopperLayerLowerThan( m_SignalLayerTo, other.m_SignalLayerTo );
+
+        if( m_ViaLayerFrom != other.m_ViaLayerFrom )
+            return IsCopperLayerLowerThan( m_ViaLayerFrom, other.m_ViaLayerFrom );
+
+        if( m_ViaLayerTo != other.m_ViaLayerTo )
+            return IsCopperLayerLowerThan( m_ViaLayerTo, other.m_ViaLayerTo );
+
+        return m_Delay < other.m_Delay;
+    }
 };
 
 
