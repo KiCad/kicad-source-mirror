@@ -3,7 +3,7 @@
 # Michalis <michalisntovas@yahoo.gr>, 2021.
 # Michael Misirlis <MMISIRLIS@gmail.com>, 2021, 2022, 2023.
 # Axel Henriksson <axe.henriksson@gmail.com>, 2021.
-# Seth Hillbrand <seth@kipro-pcb.com>, 2023.
+# Seth Hillbrand <seth@kipro-pcb.com>, 2023, 2025.
 # dsa-t <dudesuchamazing@gmail.com>, 2024.
 # John Beard <john.j.beard@gmail.com>, 2025.
 msgid ""
@@ -11,10 +11,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-10 14:43-0800\n"
-"PO-Revision-Date: 2025-02-10 22:37+0000\n"
-"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
-"source/el/>\n"
+"PO-Revision-Date: 2025-02-10 23:20+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
+"master-source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -52511,9 +52511,9 @@ msgid "Rule Area %s"
 msgstr "Περιοχή Κανόνα %s"
 
 #: pcbnew/zone.cpp:1097
-#, fuzzy, c-format
+#, c-format
 msgid "Teardrop %s %s"
-msgstr "Δάκρυα"
+msgstr "Δάκρυ %s %s"
 
 #: pcbnew/zone.cpp:1099
 #, c-format
