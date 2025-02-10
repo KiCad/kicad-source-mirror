@@ -98,7 +98,7 @@ void LoadBoard( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath,
         BOOST_TEST_ERROR( ioe.What() );
     }
 
-    BOOST_REQUIRE( aBoard );
+    BOOST_REQUIRE_MESSAGE( aBoard, "Failed to load board file: " << boardPath );
 
     if( projectFile.Exists() || legacyProject.Exists() )
         aBoard->SetProject( &aSettingsManager.Prj() );
