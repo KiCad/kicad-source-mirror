@@ -19,7 +19,7 @@
 # yangyangdaji <1504305527@qq.com>, 2022, 2023.
 # Huanyin Liu <13316560709@189.cn>, 2022.
 # Eric <hamburger1024@duck.com>, 2022.
-# Seth Hillbrand <seth@kipro-pcb.com>, 2023.
+# Seth Hillbrand <seth@kipro-pcb.com>, 2023, 2025.
 # wh201906 <wh201906@yandex.com>, 2023.
 # Hubert Hu <qinghan.hu@gmail.com>, 2023, 2024.
 # Li Yidong <alenks@foxmail.com>, 2023, 2024.
@@ -41,8 +41,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-10 14:43-0800\n"
-"PO-Revision-Date: 2025-02-06 23:35+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2025-02-10 23:20+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -50234,9 +50234,9 @@ msgid "Rule Area %s"
 msgstr "规则域 %s"
 
 #: pcbnew/zone.cpp:1097
-#, fuzzy, c-format
+#, c-format
 msgid "Teardrop %s %s"
-msgstr "泪滴"
+msgstr "泪滴 %s %s"
 
 #: pcbnew/zone.cpp:1099
 #, c-format
