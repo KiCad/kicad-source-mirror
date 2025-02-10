@@ -632,11 +632,8 @@ const std::vector<BOARD_CONNECTED_ITEM*>& TRACKS_CLEANER::getConnectedItems( PCB
 
     const std::shared_ptr<CONNECTIVITY_DATA>& connectivity = m_brd->GetConnectivity();
 
-    if( !m_connectedItemsCache.contains( aTrack ) )
-    {
-        std::lock_guard lock( m_mutex );
-        m_connectedItemsCache[ aTrack ] = connectivity->GetConnectedItems( aTrack, connectedTypes );
-    }
+    if( std::lock_guard lock( m_mutex ); !m_connectedItemsCache.contains( aTrack ) )
+        m_connectedItemsCache[aTrack] = connectivity->GetConnectedItems( aTrack, connectedTypes );
 
     return m_connectedItemsCache.at( aTrack );
 }
