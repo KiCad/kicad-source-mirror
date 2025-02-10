@@ -24,6 +24,7 @@
 #include <fmt/format.h>
 #include <wx/dir.h>
 #include <wx/log.h>
+#include <wx/timer.h>
 #include <wx/utils.h>
 
 #include <api/api_plugin_manager.h>
@@ -43,7 +44,9 @@ wxDEFINE_EVENT( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED, wxCommandEvent );
 
 API_PLUGIN_MANAGER::API_PLUGIN_MANAGER( wxEvtHandler* aEvtHandler ) :
         wxEvtHandler(),
-        m_parent( aEvtHandler )
+        m_parent( aEvtHandler ),
+        m_lastPid( 0 ),
+        m_raiseTimer( nullptr )
 {
     // Read and store pcm schema
     wxFileName schemaFile( PATHS::GetStockDataPath( true ), wxS( "api.v1.schema.json" ) );
@@ -281,7 +284,7 @@ void API_PLUGIN_MANAGER::InvokeAction( const wxString& aIdentifier )
         if( pythonHome )
             env.env[wxS( "VIRTUAL_ENV" )] = *pythonHome;
 
-        manager.Execute( pluginFile.GetFullPath(),
+        long pid = manager.Execute( pluginFile.GetFullPath(),
                 []( int aRetVal, const wxString& aOutput, const wxString& aError )
                 {
                     wxLogTrace( traceApi,
@@ -291,6 +294,36 @@ void API_PLUGIN_MANAGER::InvokeAction( const wxString& aIdentifier )
                         wxLogTrace( traceApi, wxString::Format( "Manager: action stderr: %s", aError ) );
                 },
                 &env, true );
+
+#ifdef __WXMAC__
+        if( pid )
+        {
+            if( !m_raiseTimer )
+            {
+                m_raiseTimer = new wxTimer( this );
+
+                Bind( wxEVT_TIMER,
+                        [&]( wxTimerEvent& )
+                        {
+                            wxString script = wxString::Format(
+                                wxS( "tell application \"System Events\"\n"
+                                  "  set plist to every process whose unix id is %ld\n"
+                                  "  repeat with proc in plist\n"
+                                  "    set the frontmost of proc to true\n"
+                                  "  end repeat\n"
+                                  "end tell" ), m_lastPid );
+
+                            wxString cmd = wxString::Format( "osascript -e '%s'", script );
+                            wxLogTrace( traceApi, wxString::Format( "Execute: %s", cmd ) );
+                            wxExecute( cmd );
+                        },
+                        m_raiseTimer->GetId() );
+            }
+
+            m_lastPid = pid;
+            m_raiseTimer->StartOnce( 250 );
+        }
+#endif
 
         break;
     }

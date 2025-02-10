@@ -90,7 +90,7 @@ PYTHON_MANAGER::PYTHON_MANAGER( const wxString& aInterpreterPath )
 }
 
 
-void PYTHON_MANAGER::Execute( const wxString& aArgs,
+long PYTHON_MANAGER::Execute( const wxString& aArgs,
         const std::function<void(int, const wxString&, const wxString&)>& aCallback,
         const wxExecuteEnv* aEnv, bool aSaveOutput )
 {
@@ -115,12 +115,9 @@ void PYTHON_MANAGER::Execute( const wxString& aArgs,
             }
         };
 
-#ifdef __WXMAC__
-    wxString cmd = wxString::Format( wxS( "open -a %s --args %s" ), m_interpreterPath, aArgs );
-#else
     wxString cmd = wxString::Format( wxS( "%s %s" ), m_interpreterPath, aArgs );
-#endif
 
+    wxLogTrace( traceApi, wxString::Format( "Execute: %s", cmd ) );
     long pid = wxExecute( cmd, wxEXEC_ASYNC, process, aEnv );
 
     if( pid == 0 )
@@ -144,6 +141,8 @@ void PYTHON_MANAGER::Execute( const wxString& aArgs,
             auto ret = tp.submit( monitor, process );
         }
     }
+
+    return pid;
 }
 
 

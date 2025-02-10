@@ -28,6 +28,8 @@
 #include <json_schema_validator.h>
 #include <kicommon.h>
 
+class wxTimer;
+
 /// Internal event used for handling async tasks
 wxDECLARE_EVENT( EDA_EVT_PLUGIN_MANAGER_JOB_FINISHED, wxCommandEvent );
 
@@ -101,4 +103,7 @@ private:
     std::deque<JOB> m_jobs;
 
     std::unique_ptr<JSON_SCHEMA_VALIDATOR> m_schema_validator;
+
+    long m_lastPid;
+    wxTimer* m_raiseTimer;
 };
