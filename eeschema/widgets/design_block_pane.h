@@ -80,6 +80,8 @@ public:
     void OnDeleteLibrary( wxCommandEvent& aEvent );
     void OnDeleteDesignBlock( wxCommandEvent& aEvent );
 
+    void OnSize( wxSizeEvent& aEvent );
+
     PANEL_DESIGN_BLOCK_CHOOSER* GetDesignBlockPanel() const { return m_chooserPanel; }
 
 protected:

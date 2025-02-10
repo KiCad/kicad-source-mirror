@@ -24,7 +24,6 @@
 #include <design_block.h>
 #include <widgets/design_block_pane.h>
 #include <widgets/panel_design_block_chooser.h>
-#include <eeschema_settings.h>
 #include <kiface_base.h>
 #include <sch_edit_frame.h>
 #include <core/kicad_algo.h>
@@ -32,8 +31,6 @@
 #include <wx/button.h>
 #include <wx/checkbox.h>
 #include <wx/sizer.h>
-#include <confirm.h>
-#include <wildcards_and_files_ext.h>
 #include <ee_actions.h>
 #include <tool/tool_manager.h>
 
@@ -49,12 +46,14 @@ DESIGN_BLOCK_PANE::DESIGN_BLOCK_PANE( SCH_EDIT_FRAME* aParent, const LIB_ID* aPr
         m_frame( aParent )
 {
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+
     m_chooserPanel = new PANEL_DESIGN_BLOCK_CHOOSER( aParent, this, aHistoryList,
-                                                     [aParent]()
-                                                     {
-                                                         aParent->GetToolManager()->RunAction(
-                                                                 EE_ACTIONS::placeDesignBlock );
-                                                     } );
+            // Accept handler
+            [this]()
+            {
+                m_frame->GetToolManager()->RunAction( EE_ACTIONS::placeDesignBlock );
+            } );
+
     sizer->Add( m_chooserPanel, 1, wxEXPAND, 5 );
 
     if( aPreselect && aPreselect->IsValid() )
@@ -86,6 +85,7 @@ DESIGN_BLOCK_PANE::DESIGN_BLOCK_PANE( SCH_EDIT_FRAME* aParent, const LIB_ID* aPr
     Layout();
 
     Bind( wxEVT_CHAR_HOOK, &PANEL_DESIGN_BLOCK_CHOOSER::OnChar, m_chooserPanel );
+    Bind( wxEVT_SIZE, &DESIGN_BLOCK_PANE::OnSize, this );
     m_frame->Bind( EDA_LANG_CHANGED, &DESIGN_BLOCK_PANE::OnLanguageChanged, this );
 }
 
@@ -93,6 +93,15 @@ DESIGN_BLOCK_PANE::DESIGN_BLOCK_PANE( SCH_EDIT_FRAME* aParent, const LIB_ID* aPr
 DESIGN_BLOCK_PANE::~DESIGN_BLOCK_PANE()
 {
     m_frame->Unbind( EDA_LANG_CHANGED, &DESIGN_BLOCK_PANE::OnLanguageChanged, this );
+}
+
+
+void DESIGN_BLOCK_PANE::OnSize( wxSizeEvent &aEvent )
+{
+    if( APP_SETTINGS_BASE* cfg = m_frame->config() )
+        m_frame->SaveSettings( cfg );
+
+    aEvent.Skip();
 }
 
 

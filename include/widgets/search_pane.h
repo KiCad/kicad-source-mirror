@@ -61,12 +61,6 @@ protected:
 };
 
 
-struct SEARCH_SETTINGS
-{
-    bool m_ZoomToSelection = false;
-};
-
-
 class SEARCH_PANE : public SEARCH_PANE_BASE
 {
 public:
@@ -76,6 +70,7 @@ public:
     void AddSearcher( SEARCH_HANDLER* aHandler );
     void OnSearchTextEntry( wxCommandEvent& aEvent ) override;
     void OnNotebookPageChanged( wxBookCtrlEvent& aEvent ) override;
+    void OnSize( wxSizeEvent& aEvent ) override;
 
     void RefreshSearch();
     void FocusSearch();

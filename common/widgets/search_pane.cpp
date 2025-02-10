@@ -157,9 +157,7 @@ void SEARCH_PANE::RefreshSearch()
 void SEARCH_PANE::ClearAllResults()
 {
     for( SEARCH_PANE_TAB* tab : m_tabs )
-    {
         tab->Clear();
-    }
 }
 
 
@@ -184,6 +182,15 @@ void SEARCH_PANE::OnNotebookPageChanged( wxBookCtrlEvent& aEvent )
 
     if( tab )
         tab->Search( m_lastQuery );
+}
+
+
+void SEARCH_PANE::OnSize( wxSizeEvent& aEvent )
+{
+    if( APP_SETTINGS_BASE* cfg = m_frame->config() )
+        m_frame->SaveSettings( cfg );
+
+    aEvent.Skip();
 }
 
 
