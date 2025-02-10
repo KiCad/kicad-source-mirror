@@ -856,5 +856,6 @@ static struct PCB_TEXTBOX_DESC
                     PROPERTY_DISPLAY::PT_SIZE ),
                 marginProps );
 
+        propMgr.Mask( TYPE_HASH( PCB_TEXT ), TYPE_HASH( EDA_TEXT ), _HKI( "Hyperlink" ) );
     }
 } _PCB_TEXTBOX_DESC;
