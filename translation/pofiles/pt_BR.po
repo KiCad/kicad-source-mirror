@@ -10,13 +10,14 @@
 # Pedro Moreira <pedroltmoreira@gmail.com>, 2024.
 # John Beard <john.j.beard@gmail.com>, 2025.
 # dsa-t <dudesuchamazing@gmail.com>, 2025.
+# Seth Hillbrand <seth@kipro-pcb.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-10 14:43-0800\n"
-"PO-Revision-Date: 2025-02-10 02:02+0000\n"
-"Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
+"PO-Revision-Date: 2025-02-10 23:20+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -51729,9 +51730,9 @@ msgid "Rule Area %s"
 msgstr "Regra da área %s"
 
 #: pcbnew/zone.cpp:1097
-#, fuzzy, c-format
+#, c-format
 msgid "Teardrop %s %s"
-msgstr "Reforço da junção"
+msgstr "Reforço da junção %s %s"
 
 #: pcbnew/zone.cpp:1099
 #, c-format
