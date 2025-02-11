@@ -136,7 +136,6 @@ public:
     bool              m_Bold;
     bool              m_Underlined;
     KIGFX::COLOR4D    m_Color;
-    bool              m_Visible;
     bool              m_Mirrored;
     bool              m_Multiline;
     VECTOR2I          m_Size;
@@ -159,9 +158,8 @@ struct std::hash<TEXT_ATTRIBUTES>
         return hash_val( aAttributes.m_Font, aAttributes.m_Halign, aAttributes.m_Valign,
                          aAttributes.m_Angle.AsDegrees(), aAttributes.m_LineSpacing,
                          aAttributes.m_StrokeWidth, aAttributes.m_Italic, aAttributes.m_Bold,
-                         aAttributes.m_Underlined, aAttributes.m_Color, aAttributes.m_Visible,
-                         aAttributes.m_Mirrored, aAttributes.m_Multiline, aAttributes.m_Size.x,
-                         aAttributes.m_Size.y );
+                         aAttributes.m_Underlined, aAttributes.m_Color, aAttributes.m_Mirrored,
+                         aAttributes.m_Multiline, aAttributes.m_Size.x, aAttributes.m_Size.y );
     }
 };
 

@@ -659,6 +659,9 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         break;
 
     case PCB_FIELD_T:
+        draw( static_cast<const PCB_FIELD*>( item ), aLayer );
+        break;
+
     case PCB_TEXT_T:
         draw( static_cast<const PCB_TEXT*>( item ), aLayer );
         break;
@@ -2186,11 +2189,18 @@ void PCB_PAINTER::draw( const PCB_REFERENCE_IMAGE* aBitmap, int aLayer )
 }
 
 
+void PCB_PAINTER::draw( const PCB_FIELD* aField, int aLayer )
+{
+    if( aField->IsVisible() )
+        draw( static_cast<const PCB_TEXT*>( aField ), aLayer );
+}
+
+
 void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
 {
     wxString resolvedText( aText->GetShownText( true ) );
 
-    if( resolvedText.Length() == 0 || !aText->GetAttributes().m_Visible )
+    if( resolvedText.Length() == 0 )
         return;
 
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )    // happens only if locked

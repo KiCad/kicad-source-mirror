@@ -22,14 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/*
- * Fields are texts attached to a symbol, some of which have a special meaning.
- * Fields 0 and 1 are very important: reference and value.
- * Field 2 is used as default footprint name.
- * Field 3 is used to point to a datasheet (usually a URL).
- * Fields 4+ are user fields.  They can be renamed and can appear in reports.
- */
-
 #include <wx/log.h>
 #include <wx/menu.h>
 
@@ -39,13 +31,8 @@
 #include <sch_edit_frame.h>
 #include <plotters/plotter.h>
 #include <bitmaps.h>
-#include <core/mirror.h>
 #include <kiway.h>
 #include <symbol_library.h>
-#include <sch_symbol.h>
-#include <sch_field.h>
-#include <sch_label.h>
-#include <schematic.h>
 #include <settings/color_settings.h>
 #include <string_utils.h>
 #include <trace_helpers.h>
@@ -83,9 +70,17 @@ SCH_FIELD::SCH_FIELD( const VECTOR2I& aPos, int aFieldId, SCH_ITEM* aParent,
 }
 
 
-SCH_FIELD::SCH_FIELD( SCH_ITEM* aParent, int aFieldId, const wxString& aName) :
+SCH_FIELD::SCH_FIELD( SCH_ITEM* aParent, int aFieldId, const wxString& aName ) :
         SCH_FIELD( VECTOR2I(), aFieldId, aParent, aName )
 {
+}
+
+
+SCH_FIELD::SCH_FIELD( SCH_TEXT* aText ) :
+        SCH_FIELD( VECTOR2I(), INVALID_FIELD, nullptr, wxEmptyString )
+{
+    SCH_ITEM::operator=( *aText );
+    EDA_TEXT::operator=( *aText );
 }
 
 
@@ -515,6 +510,7 @@ void SCH_FIELD::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBod
 void SCH_FIELD::ImportValues( const SCH_FIELD& aSource )
 {
     SetAttributes( aSource );
+    SetVisible( aSource.IsVisible() );
     SetNameShown( aSource.IsNameShown() );
     SetCanAutoplace( aSource.CanAutoplace() );
 }

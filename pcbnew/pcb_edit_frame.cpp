@@ -2273,10 +2273,8 @@ static void processTextItem( const PCB_TEXT& aSrc, PCB_TEXT& aDest,
     }
     else
     {
-        // Careful: the visible bit and position are also set by SetAttributes()
-        bool visible = aDest.IsVisible();
+        // Careful: SetAttributes() will clobber the position
         aDest.SetAttributes( aSrc );
-        aDest.SetVisible( visible );
         aDest.SetFPRelativePosition( aSrc.GetFPRelativePosition() );
     }
 

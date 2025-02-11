@@ -1455,15 +1455,17 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText ) const
     // Groups do not contribute to the rect, only their members
     if( aIncludeText || noDrawItems )
     {
-        // Only PCB_TEXT and PCB_FIELD items are independently selectable;
-        // PCB_TEXTBOX items go in with other graphic items above.
+        // Only PCB_TEXT and PCB_FIELD items are independently selectable; PCB_TEXTBOX items go
+        // in with other graphic items above.
         for( PCB_TEXT* text : texts )
         {
             if( !isFPEdit && m_privateLayers.test( text->GetLayer() ) )
                 continue;
 
-            if( text->IsVisible() )
-                bbox.Merge( text->GetBoundingBox() );
+            if( text->Type() == PCB_FIELD_T && !text->IsVisible() )
+                continue;
+
+            bbox.Merge( text->GetBoundingBox() );
         }
 
         // This can be further optimized when aIncludeInvisibleText is true, but currently
@@ -3942,7 +3944,7 @@ void FOOTPRINT::TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_I
         {
             PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
 
-            if( aLayer != UNDEFINED_LAYER && text->GetLayer() == aLayer && text->IsVisible() )
+            if( aLayer != UNDEFINED_LAYER && text->GetLayer() == aLayer )
                 texts.push_back( text );
         }
 
@@ -3950,7 +3952,7 @@ void FOOTPRINT::TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_I
         {
             PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( item );
 
-            if( aLayer != UNDEFINED_LAYER && textbox->GetLayer() == aLayer && textbox->IsVisible() )
+            if( aLayer != UNDEFINED_LAYER && textbox->GetLayer() == aLayer )
             {
                 // border
                 if( textbox->IsBorderEnabled() )

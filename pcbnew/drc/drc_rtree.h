@@ -27,7 +27,7 @@
 
 #include <board_item.h>
 #include <pad.h>
-#include <pcb_text.h>
+#include <pcb_field.h>
 #include <memory>
 #include <unordered_set>
 #include <set>
@@ -115,11 +115,8 @@ public:
     {
         wxCHECK( aTargetLayer != UNDEFINED_LAYER, /* void */ );
 
-        if( ( aItem->Type() == PCB_FIELD_T || aItem->Type() == PCB_TEXT_T )
-            && !static_cast<PCB_TEXT*>( aItem )->IsVisible() )
-        {
+        if( aItem->Type() == PCB_FIELD_T && !static_cast<PCB_FIELD*>( aItem )->IsVisible() )
             return;
-        }
 
         std::vector<const SHAPE*> subshapes;
         std::shared_ptr<SHAPE> shape = aItem->GetEffectiveShape( aRefLayer );

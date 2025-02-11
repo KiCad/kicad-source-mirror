@@ -2966,6 +2966,9 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
     case PCB_FIELD_T:
         field = static_cast<const PCB_FIELD*>( aItem );
 
+        if( !field->IsVisible() )
+            return false;
+
         if( field->IsReference() && !view()->IsLayerVisible( LAYER_FP_REFERENCES ) )
             return false;
 
@@ -2976,12 +2979,6 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         KI_FALLTHROUGH;
     case PCB_TEXT_T:
         text = static_cast<const PCB_TEXT*>( aItem );
-
-        if( !text->IsVisible() )
-        {
-            if( !m_isFootprintEditor )
-                return false;
-        }
 
         if( !layerVisible( text->GetLayer() ) )
             return false;

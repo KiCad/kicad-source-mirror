@@ -1671,51 +1671,51 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
 
                 PCB_LAYER_ID klayer = LayerToKi( attr.layer );
 
-                PCB_TEXT* text = nullptr;
-                bool      add = false;
+                PCB_FIELD* field = nullptr;
+                bool       add = false;
 
                 if( attr.key == wxS( "Designator" ) )
                 {
                     if( attr.key == wxS( "Designator" ) )
                     {
-                        text = footprint->GetField( REFERENCE_FIELD );
+                        field = footprint->GetField( REFERENCE_FIELD );
                     }
                     else
                     {
-                        text = new PCB_TEXT( footprint.get() );
+                        field = new PCB_FIELD( footprint.get(), -1, attr.key );
                         add = true;
                     }
 
                     if( attr.fontName != wxS( "default" ) )
-                        text->SetFont( KIFONT::FONT::GetFont( attr.fontName ) );
+                        field->SetFont( KIFONT::FONT::GetFont( attr.fontName ) );
 
                     if( attr.valVisible && attr.keyVisible )
                     {
-                        text->SetText( attr.key + ':' + attr.value );
+                        field->SetText( attr.key + ':' + attr.value );
                     }
                     else if( attr.keyVisible )
                     {
-                        text->SetText( attr.key );
+                        field->SetText( attr.key );
                     }
                     else
                     {
-                        text->SetText( attr.value );
+                        field->SetVisible( false );
+                        field->SetText( attr.value );
                     }
 
-                    text->SetVisible( attr.keyVisible || attr.valVisible );
-                    text->SetLayer( klayer );
-                    text->SetPosition( ScalePos( attr.position ) );
-                    text->SetTextAngleDegrees( footprint->IsFlipped() ? -attr.rotation
-                                                                      : attr.rotation );
-                    text->SetIsKnockout( attr.inverted );
-                    text->SetTextThickness( ScaleSize( attr.strokeWidth ) );
-                    text->SetTextSize( VECTOR2D( ScaleSize( attr.height * 0.55 ),
-                                                 ScaleSize( attr.height * 0.6 ) ) );
+                    field->SetLayer( klayer );
+                    field->SetPosition( ScalePos( attr.position ) );
+                    field->SetTextAngleDegrees( footprint->IsFlipped() ? -attr.rotation
+                                                                       : attr.rotation );
+                    field->SetIsKnockout( attr.inverted );
+                    field->SetTextThickness( ScaleSize( attr.strokeWidth ) );
+                    field->SetTextSize( VECTOR2D( ScaleSize( attr.height * 0.55 ),
+                                                  ScaleSize( attr.height * 0.6 ) ) );
 
-                    AlignText( text, attr.textOrigin );
+                    AlignText( field, attr.textOrigin );
 
                     if( add )
-                        footprint->Add( text, ADD_MODE::APPEND );
+                        footprint->Add( field, ADD_MODE::APPEND );
                 }
             }
             else if( type == wxS( "PAD_NET" ) )

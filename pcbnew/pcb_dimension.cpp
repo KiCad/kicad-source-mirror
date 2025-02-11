@@ -1870,9 +1870,6 @@ static struct ALIGNED_DIMENSION_DESC
                 groupDimension );
 
         propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( EDA_TEXT ),
-                                      _HKI( "Visible" ),
-                                      []( INSPECTABLE* aItem ) { return false; } );
-        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( EDA_TEXT ),
                                       _HKI( "Text" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
         propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( EDA_TEXT ),
@@ -1905,9 +1902,6 @@ static struct ORTHOGONAL_DIMENSION_DESC
         propMgr.InheritsAfter( TYPE_HASH( PCB_DIM_ORTHOGONAL ), TYPE_HASH( PCB_DIMENSION_BASE ) );
         propMgr.InheritsAfter( TYPE_HASH( PCB_DIM_ORTHOGONAL ), TYPE_HASH( PCB_DIM_ALIGNED ) );
 
-        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ORTHOGONAL ), TYPE_HASH( EDA_TEXT ),
-                                      _HKI( "Visible" ),
-                                      []( INSPECTABLE* aItem ) { return false; } );
         propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ORTHOGONAL ), TYPE_HASH( EDA_TEXT ),
                                       _HKI( "Text" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
@@ -1946,9 +1940,6 @@ static struct RADIAL_DIMENSION_DESC
                 PROPERTY_DISPLAY::PT_SIZE ),
                 groupDimension );
 
-        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_RADIAL ), TYPE_HASH( EDA_TEXT ),
-                                      _HKI( "Visible" ),
-                                      []( INSPECTABLE* aItem ) { return false; } );
         propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_RADIAL ), TYPE_HASH( EDA_TEXT ),
                                       _HKI( "Text" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
@@ -1992,9 +1983,6 @@ static struct LEADER_DIMENSION_DESC
                 groupDimension );
 
         propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_LEADER ), TYPE_HASH( EDA_TEXT ),
-                                      _HKI( "Visible" ),
-                                      []( INSPECTABLE* aItem ) { return false; } );
-        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_LEADER ), TYPE_HASH( EDA_TEXT ),
                                       _HKI( "Text" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
         propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_LEADER ), TYPE_HASH( EDA_TEXT ),
@@ -2028,9 +2016,6 @@ static struct CENTER_DIMENSION_DESC
         propMgr.InheritsAfter( TYPE_HASH( PCB_DIM_CENTER ), TYPE_HASH( PCB_DIMENSION_BASE ) );
 
 
-        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_CENTER ), TYPE_HASH( EDA_TEXT ),
-                                      _HKI( "Visible" ),
-                                      []( INSPECTABLE* aItem ) { return false; } );
         propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_CENTER ), TYPE_HASH( EDA_TEXT ),
                                       _HKI( "Text" ),
                                       []( INSPECTABLE* aItem ) { return false; } );

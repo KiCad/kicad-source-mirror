@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -42,7 +42,7 @@ PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE( wxWind
 	// Columns
 	m_fieldPropsGrid->SetColSize( 0, 240 );
 	m_fieldPropsGrid->SetColSize( 1, 60 );
-	m_fieldPropsGrid->SetColSize( 2, 120 );
+	m_fieldPropsGrid->SetColSize( 2, 150 );
 	m_fieldPropsGrid->EnableDragColMove( false );
 	m_fieldPropsGrid->EnableDragColSize( true );
 	m_fieldPropsGrid->SetColLabelValue( 0, _("Value") );
@@ -83,21 +83,19 @@ PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE::PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE( wxWind
 	m_textItemsGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxTAB_TRAVERSAL );
 
 	// Grid
-	m_textItemsGrid->CreateGrid( 0, 3 );
+	m_textItemsGrid->CreateGrid( 0, 2 );
 	m_textItemsGrid->EnableEditing( true );
 	m_textItemsGrid->EnableGridLines( true );
 	m_textItemsGrid->EnableDragGridSize( false );
 	m_textItemsGrid->SetMargins( 0, 0 );
 
 	// Columns
-	m_textItemsGrid->SetColSize( 0, 400 );
-	m_textItemsGrid->SetColSize( 1, 60 );
-	m_textItemsGrid->SetColSize( 2, 120 );
+	m_textItemsGrid->SetColSize( 0, 460 );
+	m_textItemsGrid->SetColSize( 1, 150 );
 	m_textItemsGrid->EnableDragColMove( false );
 	m_textItemsGrid->EnableDragColSize( true );
 	m_textItemsGrid->SetColLabelValue( 0, _("Text Items") );
-	m_textItemsGrid->SetColLabelValue( 1, _("Show") );
-	m_textItemsGrid->SetColLabelValue( 2, _("Layer") );
+	m_textItemsGrid->SetColLabelValue( 1, _("Layer") );
 	m_textItemsGrid->SetColLabelSize( wxGRID_AUTOSIZE );
 	m_textItemsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 

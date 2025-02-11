@@ -957,7 +957,7 @@ SCH_SHAPE* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadCircle( LINE_READER& aReader )
 }
 
 
-SCH_TEXT* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadText( LINE_READER& aReader,
+SCH_ITEM* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadText( LINE_READER& aReader,
                                                    int aMajorVersion, int aMinorVersion )
 {
     const char* line = aReader.Line();
@@ -1002,12 +1002,27 @@ SCH_TEXT* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadText( LINE_READER& aReader,
         str.Replace( "''", "\"" );
     }
 
-    SCH_TEXT* text = new SCH_TEXT( center, str, LAYER_DEVICE );
-    text->SetTextAngle( EDA_ANGLE( angleInTenths, TENTHS_OF_A_DEGREE_T ) );
-    text->SetTextSize( size );
-    text->SetVisible( visible );
-    text->SetUnit( unit );
-    text->SetBodyStyle( bodyStyle );
+    SCH_ITEM* sch_item = nullptr;
+    EDA_TEXT* eda_text = nullptr;
+
+    if( !visible )
+    {
+        SCH_FIELD* field = new SCH_FIELD( center, -1, nullptr );
+        sch_item = field;
+        eda_text = field;
+    }
+    else
+    {
+        SCH_TEXT* sch_text = new SCH_TEXT( center, str, LAYER_DEVICE );
+        sch_item = sch_text;
+        eda_text = sch_text;
+    }
+
+    eda_text->SetTextAngle( EDA_ANGLE( angleInTenths, TENTHS_OF_A_DEGREE_T ) );
+    eda_text->SetTextSize( size );
+    eda_text->SetVisible( visible );
+    sch_item->SetUnit( unit );
+    sch_item->SetBodyStyle( bodyStyle );
 
     // Here things are murky and not well defined.  At some point it appears the format
     // was changed to add text properties.  However rather than add the token to the end of
@@ -1021,37 +1036,37 @@ SCH_TEXT* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadText( LINE_READER& aReader,
              && !is_eol( *line ) )
     {
         if( strCompare( "Italic", line, &line ) )
-            text->SetItalicFlag( true );
+            eda_text->SetItalicFlag( true );
         else if( !strCompare( "Normal", line, &line ) )
-            SCH_PARSE_ERROR( "invalid text stype, expected 'Normal' or 'Italic'", aReader, line );
+            SCH_PARSE_ERROR( "invalid eda_text stype, expected 'Normal' or 'Italic'", aReader, line );
 
         if( parseInt( aReader, line, &line ) > 0 )
-            text->SetBoldFlag( true );
+            eda_text->SetBoldFlag( true );
 
-        // Some old libaries version > 2.0 do not have these options for text justification:
+        // Some old libaries version > 2.0 do not have these options for eda_text justification:
         if( !is_eol( *line ) )
         {
             switch( parseChar( aReader, line, &line ) )
             {
-            case 'L': text->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );   break;
-            case 'C': text->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER ); break;
-            case 'R': text->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );  break;
-            default: SCH_PARSE_ERROR( "invalid horizontal text justication; expected L, C, or R",
+            case 'L': eda_text->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );   break;
+            case 'C': eda_text->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER ); break;
+            case 'R': eda_text->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );  break;
+            default: SCH_PARSE_ERROR( "invalid horizontal eda_text justication; expected L, C, or R",
                                       aReader, line );
             }
 
             switch( parseChar( aReader, line, &line ) )
             {
-            case 'T': text->SetVertJustify( GR_TEXT_V_ALIGN_TOP );    break;
-            case 'C': text->SetVertJustify( GR_TEXT_V_ALIGN_CENTER ); break;
-            case 'B': text->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM ); break;
-            default: SCH_PARSE_ERROR( "invalid vertical text justication; expected T, C, or B",
+            case 'T': eda_text->SetVertJustify( GR_TEXT_V_ALIGN_TOP );    break;
+            case 'C': eda_text->SetVertJustify( GR_TEXT_V_ALIGN_CENTER ); break;
+            case 'B': eda_text->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM ); break;
+            default: SCH_PARSE_ERROR( "invalid vertical eda_text justication; expected T, C, or B",
                                       aReader, line );
             }
         }
     }
 
-    return text;
+    return sch_item;
 }
 
 

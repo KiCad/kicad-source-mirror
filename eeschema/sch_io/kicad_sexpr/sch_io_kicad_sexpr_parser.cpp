@@ -825,7 +825,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOve
 
         case T_hide:
         {
-            bool hide = parseMaybeAbsentBool( true );
+            bool hide = parseMaybeAbsentBool( false );
             aText->SetVisible( !hide );
             break;
         }
@@ -1039,6 +1039,11 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>
             NeedRIGHT();
             break;
 
+        case T_hide:
+            field->SetVisible( !parseBool() );
+            NeedRIGHT();
+            break;
+
         case T_effects:
             parseEDA_TEXT( static_cast<EDA_TEXT*>( field.get() ), field->GetId() == VALUE_FIELD );
             break;
@@ -1058,7 +1063,7 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>
         }
 
         default:
-            Expecting( "id, at, show_name, do_not_autoplace, or effects" );
+            Expecting( "id, at, hide, show_name, do_not_autoplace, or effects" );
         }
     }
 
@@ -1845,7 +1850,7 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolRectangle()
 }
 
 
-SCH_TEXT* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolText()
+SCH_ITEM* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolText()
 {
     wxCHECK_MSG( CurTok() == T_text, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a text token." ) );
@@ -1896,6 +1901,10 @@ SCH_TEXT* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolText()
             Expecting( "at or effects" );
         }
     }
+
+    // Convert hidden symbol text (which is no longer supported) into a hidden field
+    if( !text->IsVisible() )
+        return new SCH_FIELD( text.get(), -1 );
 
     return text.release();
 }
@@ -2294,6 +2303,11 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
             NeedRIGHT();
             break;
 
+        case T_hide:
+            field->SetVisible( !parseBool() );
+            NeedRIGHT();
+            break;
+
         case T_effects:
             parseEDA_TEXT( static_cast<EDA_TEXT*>( field.get() ), field->GetId() == VALUE_FIELD );
             break;
@@ -2313,7 +2327,7 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
         }
 
         default:
-            Expecting( "id, at, show_name, do_not_autoplace or effects" );
+            Expecting( "id, at, hide, show_name, do_not_autoplace or effects" );
         }
     }
 
@@ -4341,6 +4355,9 @@ SCH_TEXT* SCH_IO_KICAD_SEXPR_PARSER::parseSchText()
 
         case T_effects:
             parseEDA_TEXT( static_cast<EDA_TEXT*>( text.get() ), true );
+
+            // Hidden schematic text is no longer supported
+            text->SetVisible( true );
             break;
 
         case T_iref:    // legacy format; current is a T_property (aka SCH_FIELD)

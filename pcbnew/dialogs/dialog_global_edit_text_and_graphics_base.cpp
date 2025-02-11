@@ -144,7 +144,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 
 	fgSizer1->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	m_visible = new wxCheckBox( m_specifiedValues, wxID_ANY, _("Visible  (text only)"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
+	m_visible = new wxCheckBox( m_specifiedValues, wxID_ANY, _("Visible  (fields only)"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
 	m_visible->SetValue(true);
 	fgSizer1->Add( m_visible, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 120 );
 

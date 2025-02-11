@@ -752,25 +752,34 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
         {
         case PCB_TRACE_T:
         case PCB_ARC_T:
-        case PCB_VIA_T: add_track( static_cast<PCB_TRACK*>( item ) ); break;
+        case PCB_VIA_T:
+            add_track( static_cast<PCB_TRACK*>( item ) );
+            break;
 
-        case PCB_ZONE_T: add_zone( static_cast<ZONE*>( item ) ); break;
+        case PCB_ZONE_T:
+            add_zone( static_cast<ZONE*>( item ) );
+            break;
 
-        case PCB_PAD_T: add_pad( static_cast<PAD*>( item ) ); break;
+        case PCB_PAD_T:
+            add_pad( static_cast<PAD*>( item ) );
+            break;
 
-        case PCB_SHAPE_T: add_shape( static_cast<PCB_SHAPE*>( item ) ); break;
+        case PCB_SHAPE_T:
+            add_shape( static_cast<PCB_SHAPE*>( item ) );
+            break;
 
         case PCB_TEXT_T:
-        case PCB_FIELD_T: add_text( item ); break;
+        case PCB_FIELD_T:
+            add_text( item );
+            break;
+
         case PCB_TEXTBOX_T:
-        {
-            PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( item );
             add_text( item );
 
-            if( textbox->IsBorderEnabled() )
-                add_shape( textbox );
-        }
-        break;
+            if( static_cast<PCB_TEXTBOX*>( item )->IsBorderEnabled() )
+                add_shape( static_cast<PCB_TEXTBOX*>( item ) );
+
+            break;
 
         case PCB_DIMENSION_T:
         case PCB_TARGET_T:

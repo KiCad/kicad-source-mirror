@@ -1420,13 +1420,14 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
     public:
         FIELD_INFO()
         {
-            m_Attributes.m_Visible = false;
+            m_Visible = false;
             m_Attributes.m_Size = VECTOR2I( DEFAULT_SIZE_TEXT * schIUScale.IU_PER_MILS,
                                             DEFAULT_SIZE_TEXT * schIUScale.IU_PER_MILS );
         };
 
         FIELD_INFO( const wxString& aText, SCH_FIELD* aField ) :
                 m_Text( aText ),
+                m_Visible( aField->IsVisible() ),
                 m_Attributes( aField->GetAttributes() ),
                 m_Pos( aField->GetPosition() )
         {}
@@ -1438,6 +1439,7 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
             SCH_FIELD field( aSymbol, -1, aFieldName );
 
             field.SetText( m_Text );
+            field.SetVisible( m_Visible );
             field.SetAttributes( m_Attributes );
             field.SetPosition( m_Pos );
 
@@ -1446,6 +1448,7 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
 
     public:
         wxString        m_Text;
+        bool            m_Visible;
         TEXT_ATTRIBUTES m_Attributes;
         VECTOR2I        m_Pos;
     };

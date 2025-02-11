@@ -62,7 +62,7 @@ public:
 protected:
     void init();
 
-    void updateText( EDA_TEXT* aText );
+    void updateText( SCH_FIELD* aField );
 
     void onScintillaCharAdded( wxStyledTextEvent &aEvent );
 

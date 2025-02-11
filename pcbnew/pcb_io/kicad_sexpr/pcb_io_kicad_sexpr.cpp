@@ -1958,11 +1958,11 @@ void PCB_IO_KICAD_SEXPR::formatTenting( const PADSTACK& aPadstack ) const
 
 void PCB_IO_KICAD_SEXPR::format( const PCB_TEXT* aText ) const
 {
-    FOOTPRINT*  parentFP = aText->GetParentFootprint();
-    std::string prefix;
-    std::string type;
-    VECTOR2I    pos = aText->GetTextPos();
-    bool        isField = dynamic_cast<const PCB_FIELD*>( aText ) != nullptr;
+    FOOTPRINT*       parentFP = aText->GetParentFootprint();
+    std::string      prefix;
+    std::string      type;
+    VECTOR2I         pos = aText->GetTextPos();
+    const PCB_FIELD* field = dynamic_cast<const PCB_FIELD*>( aText );
 
     // Always format dimension text as gr_text
     if( dynamic_cast<const PCB_DIMENSION_BASE*>( aText ) )
@@ -1981,7 +1981,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TEXT* aText ) const
         prefix = "gr";
     }
 
-    if( !isField )
+    if( !field )
     {
         m_out->Print( "(%s_text %s %s",
                       prefix.c_str(),
@@ -2001,23 +2001,21 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TEXT* aText ) const
 
     formatLayer( aText->GetLayer(), aText->IsKnockout() );
 
-    if( parentFP && !aText->IsVisible() )
+    if( field && !field->IsVisible() )
         KICAD_FORMAT::FormatBool( m_out, "hide", true );
 
     KICAD_FORMAT::FormatUuid( m_out, aText->m_Uuid );
 
-    int ctl_flags = m_ctl | CTL_OMIT_HIDE;
-
     // Currently, texts have no specific color and no hyperlink.
     // so ensure they are never written in kicad_pcb file
-    ctl_flags |= CTL_OMIT_COLOR | CTL_OMIT_HYPERLINK;
+    int ctl_flags = CTL_OMIT_COLOR | CTL_OMIT_HYPERLINK;
 
     aText->EDA_TEXT::Format( m_out, ctl_flags );
 
     if( aText->GetFont() && aText->GetFont()->IsOutline() )
         formatRenderCache( aText );
 
-    if( !isField )
+    if( !field )
         m_out->Print( ")" );
 }
 
@@ -2077,8 +2075,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TEXTBOX* aTextBox ) const
 
     KICAD_FORMAT::FormatUuid( m_out, aTextBox->m_Uuid );
 
-    // PCB_TEXTBOXes are never hidden, so always omit "hide" attribute
-    aTextBox->EDA_TEXT::Format( m_out, m_ctl | CTL_OMIT_HIDE );
+    aTextBox->EDA_TEXT::Format( m_out, 0 );
 
     if( aTextBox->Type() != PCB_TABLECELL_T )
     {

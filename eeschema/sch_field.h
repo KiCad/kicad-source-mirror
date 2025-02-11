@@ -34,6 +34,7 @@
 #include "scintilla_tricks.h"
 
 class SCH_EDIT_FRAME;
+class SCH_TEXT;
 
 
 /**
@@ -55,6 +56,8 @@ public:
 
     SCH_FIELD( SCH_ITEM* aParent, int aFieldId = INVALID_FIELD,
                const wxString& aName = wxEmptyString );
+
+    SCH_FIELD( SCH_TEXT* aText );
 
     SCH_FIELD( const SCH_FIELD& aText );
 

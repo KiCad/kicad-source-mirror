@@ -791,6 +791,11 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             {
                 text = footprint->GetField( VALUE_FIELD );
             }
+            else if( arr[12] == wxS( "none" ) )
+            {
+                text = new PCB_FIELD( aContainer, -1 );
+                static_cast<PCB_FIELD*>( text )->SetVisible( false );
+            }
             else
             {
                 text = new PCB_TEXT( aContainer );
@@ -825,8 +830,6 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             text->SetText( UnescapeHTML( textStr ) );
 
             //arr[11] // Geometry data
-
-            text->SetVisible( arr[12] != wxS( "none" ) );
 
             wxString font = arr[14];
             if( !font.IsEmpty() )
