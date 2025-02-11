@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-07 01:15+0300\n"
-"PO-Revision-Date: 2025-01-31 09:01+0000\n"
+"PO-Revision-Date: 2025-02-12 01:01+0000\n"
 "Last-Translator: reimu105 <peter112548@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/v8/zh_Hant/>\n"
@@ -37570,15 +37570,15 @@ msgstr "正在檢查微孔孔洞..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:162
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min hole %s; actual %s)"
-msgstr "(%s 最小 %s; 實際 %s)"
+msgstr "（%s 最小孔徑 %s；實際 %s）"
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:169
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max hole %s; actual %s)"
-msgstr "(%s 最大高度 %s; 實際 %s)"
+msgstr "（%s 最大孔徑 %s；實際 %s）"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:120
 msgid "Checking hole to hole clearances..."
@@ -37692,9 +37692,9 @@ msgid "%s rounded corners differ."
 msgstr "%s 個 '圓角' 差異。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:282
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corner sizes differ."
-msgstr "%s 個 '倒角' 差異。"
+msgstr "%s 個 '倒角' 尺寸差異。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:285
 #, c-format
@@ -39956,9 +39956,8 @@ msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
 msgstr "警告: 連接器焊盤上通常不會使用錫膏。請使用表面黏著焊盤。"
 
 #: pcbnew/pad.cpp:2044
-#, fuzzy
 msgid "(SMD pad has a hole)"
-msgstr "錯誤: 表面黏著焊盤上存在一個孔。"
+msgstr "(SMD焊盤上存在一個孔)"
 
 #: pcbnew/pad.cpp:2050
 #, fuzzy
@@ -39976,9 +39975,8 @@ msgid "(SMD pad has copper and paste layers on different sides of the board)"
 msgstr "如果您希望在電路板正面使用焊膏層"
 
 #: pcbnew/pad.cpp:2080
-#, fuzzy
 msgid "(SMD pad has no outer layers)"
-msgstr "警告: 表面黏著焊盤沒有外形層。"
+msgstr "(SMD焊盤沒有外形層)"
 
 #: pcbnew/pad.cpp:2090
 #, fuzzy
@@ -40007,7 +40005,7 @@ msgstr "警告: BGA 屬性適用於表面黏著焊盤。"
 
 #: pcbnew/pad.cpp:2108
 msgid "(negative corner radius is not allowed)"
-msgstr ""
+msgstr "(圓角半徑不允許為負值)"
 
 #: pcbnew/pad.cpp:2110
 #, fuzzy
@@ -40015,19 +40013,16 @@ msgid "(corner size will make pad circular)"
 msgstr "警告: 拐角大小將使焊盤呈圓形。"
 
 #: pcbnew/pad.cpp:2115
-#, fuzzy
 msgid "(negative corner chamfer is not allowed)"
-msgstr "下載過大。"
+msgstr "(倒角尺寸不允許為負值)"
 
 #: pcbnew/pad.cpp:2117
-#, fuzzy
 msgid "(corner chamfer is too large)"
-msgstr "下載過大。"
+msgstr "(倒角尺寸過大)"
 
 #: pcbnew/pad.cpp:2126
-#, fuzzy
 msgid "(trapazoid delta is too large)"
-msgstr "錯誤: Trapazoid delta 過大。"
+msgstr "(trapazoid delta 過大)"
 
 #: pcbnew/pad.cpp:2137
 #, fuzzy
