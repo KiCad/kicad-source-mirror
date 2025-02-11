@@ -291,7 +291,8 @@ message TextAttributes
   bool                        italic               = 7;
   bool                        bold                 = 8;
   bool                        underlined           = 9;
-  bool                        visible              = 10;
+  // Visible now exposed only at the field level
+  // bool                        visible              = 10;
   bool                        mirrored             = 11;
   bool                        multiline            = 12;
   bool                        keep_upright         = 13;
@@ -305,7 +306,7 @@ message Text
   kiapi.common.types.Vector2        position   = 2;
   kiapi.common.types.TextAttributes attributes = 3;
 
-  // Reserved for future use; base objects don't support locking right nos
+  // Reserved for future use; base objects don't support locking right now
   //kiapi.common.types.LockedState    locked     = 4;
 
   string                            text       = 5;
@@ -318,7 +319,7 @@ message TextBox
   kiapi.common.types.Vector2        bottom_right = 3;
   kiapi.common.types.TextAttributes attributes   = 4;
 
-  // Reserved for future use; base objects don't support locking right nos
+  // Reserved for future use; base objects don't support locking right now
   //kiapi.common.types.LockedState    locked       = 5;
 
   string                            text         = 6;

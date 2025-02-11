@@ -220,6 +220,9 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
     case PCB_FIELD_T:
         field = static_cast<PCB_FIELD*>( aTestItem );
 
+        if( !field->IsVisible() )
+            return INSPECT_RESULT::CONTINUE;
+
         if( field->IsReference() && m_Guide->IgnoreFPReferences() )
             return INSPECT_RESULT::CONTINUE;
 
@@ -235,9 +238,6 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
         if( text->GetParentFootprint() )
         {
             PCB_LAYER_ID layer = text->GetLayer();
-
-            if( !text->IsVisible() )
-                return INSPECT_RESULT::CONTINUE;
 
             if( m_Guide->IgnoreFPTextOnBack() && IsBackLayer( layer ) )
                 return INSPECT_RESULT::CONTINUE;

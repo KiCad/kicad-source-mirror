@@ -1240,6 +1240,14 @@ void PCB_IO_KICAD_LEGACY::loadFOOTPRINT( FOOTPRINT* aFootprint )
             }
 
             loadMODULE_TEXT( text );
+
+            // Convert hidden footprint text (which is no longer supported) to a hidden field
+            if( !text->IsVisible() && text->Type() == PCB_TEXT_T )
+            {
+                aFootprint->Remove( text );
+                aFootprint->Add( new PCB_FIELD( text, -1 ) );
+                delete text;
+            }
         }
         else if( TESTLINE( "Po" ) )
         {

@@ -768,6 +768,7 @@ message Field
   FieldId id = 1;
   string name = 2;
   BoardText text = 3;
+  bool visible = 4;
 }
 
 enum FootprintMountingStyle

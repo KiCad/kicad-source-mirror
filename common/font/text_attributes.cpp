@@ -32,7 +32,6 @@ TEXT_ATTRIBUTES::TEXT_ATTRIBUTES( KIFONT::FONT* aFont ) :
     m_Bold( false ),
     m_Underlined( false ),
     m_Color( KIGFX::COLOR4D::UNSPECIFIED ),
-    m_Visible( true ),
     m_Mirrored( false ),
     m_Multiline( true ),
     m_KeepUpright( false ),
@@ -93,9 +92,6 @@ int TEXT_ATTRIBUTES::Compare( const TEXT_ATTRIBUTES& aRhs ) const
     if( retv )
         return retv;
 
-    if( m_Visible != aRhs.m_Visible )
-        return m_Visible - aRhs.m_Visible;
-
     if( m_Mirrored != aRhs.m_Mirrored )
         return m_Mirrored - aRhs.m_Mirrored;
 
@@ -125,7 +121,6 @@ std::ostream& operator<<( std::ostream& aStream, const TEXT_ATTRIBUTES& aAttribu
             << "Bold: " << aAttributes.m_Bold << std::endl
             << "Underline: " << aAttributes.m_Underlined << std::endl
             << "Color: " << aAttributes.m_Color << std::endl
-            << "Visible " << aAttributes.m_Visible << std::endl
             << "Mirrored " << aAttributes.m_Mirrored << std::endl
             << "Multilined: " << aAttributes.m_Multiline << std::endl
             << "Size: " << aAttributes.m_Size << std::endl

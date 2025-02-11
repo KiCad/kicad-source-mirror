@@ -1300,7 +1300,6 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( wxString aFootprintName, const wx
     {
         PCB_TEXT* textItem = new PCB_TEXT( footprint );
         textItem->SetText( settings.m_DefaultFPTextItems[i].m_Text );
-        textItem->SetVisible( settings.m_DefaultFPTextItems[i].m_Visible );
         txt_layer = (PCB_LAYER_ID) settings.m_DefaultFPTextItems[i].m_Layer;
         textItem->SetLayer( txt_layer );
         default_pos.y += settings.GetTextSize( txt_layer ).y / 2;

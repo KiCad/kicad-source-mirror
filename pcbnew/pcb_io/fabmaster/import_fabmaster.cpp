@@ -2411,14 +2411,9 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                     }
 
                     if( layer == F_SilkS || layer == B_SilkS )
-                    {
                         txt = &( fp->Reference() );
-                        txt->SetVisible( true );
-                    }
                     else
-                    {
                         txt = new PCB_TEXT( fp );
-                    }
 
                     OPT_VECTOR2I flip_point = std::nullopt;
                     if( src->mirror )
@@ -2588,6 +2583,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         std::unique_ptr<PCB_TEXT> txt = std::make_unique<PCB_TEXT>( fp );
 
                         OPT_VECTOR2I flip_point;
+
                         if( src->mirror )
                             flip_point = VECTOR2I( src->x, src->y );
 
@@ -2596,9 +2592,16 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         // FABMASTER doesn't have visibility flags but layers that are not silk
                         // should be hidden by default to prevent clutter.
                         if( txt->GetLayer() != F_SilkS && txt->GetLayer() != B_SilkS )
-                            txt->SetVisible( false );
+                        {
+                            PCB_FIELD* field = new PCB_FIELD( txt.get(), -1 );
+                            field->SetVisible( false );
+                            fp->Add( field, ADD_MODE::APPEND );
+                        }
+                        else
+                        {
+                            fp->Add( txt.release(), ADD_MODE::APPEND );
+                        }
 
-                        fp->Add( txt.release(), ADD_MODE::APPEND );
                         break;
                     }
                     default:

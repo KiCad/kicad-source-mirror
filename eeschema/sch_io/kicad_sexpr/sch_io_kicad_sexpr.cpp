@@ -911,6 +911,9 @@ void SCH_IO_KICAD_SEXPR::saveField( SCH_FIELD* aField )
                                                        aField->GetPosition().y ).c_str(),
                   EDA_UNIT_UTILS::FormatAngle( aField->GetTextAngle() ).c_str() );
 
+    if( !aField->IsVisible() )
+        KICAD_FORMAT::FormatBool( m_out, "hide", true );
+
     if( aField->IsNameShown() )
         KICAD_FORMAT::FormatBool( m_out, "show_name", true );
 

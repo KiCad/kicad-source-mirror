@@ -97,7 +97,6 @@ void PCB_TEXTBOX::Serialize( google::protobuf::Any &aContainer ) const
     attrs->set_italic( IsItalic() );
     attrs->set_bold( IsBold() );
     attrs->set_underlined( GetAttributes().m_Underlined );
-    attrs->set_visible( IsVisible() );
     attrs->set_mirrored( IsMirrored() );
     attrs->set_multiline( IsMultilineAllowed() );
     attrs->set_keep_upright( IsKeepUpright() );
@@ -133,7 +132,6 @@ bool PCB_TEXTBOX::Deserialize( const google::protobuf::Any &aContainer )
         attrs.m_Bold = text.attributes().bold();
         attrs.m_Italic = text.attributes().italic();
         attrs.m_Underlined = text.attributes().underlined();
-        attrs.m_Visible = text.attributes().visible();
         attrs.m_Mirrored = text.attributes().mirrored();
         attrs.m_Multiline = text.attributes().multiline();
         attrs.m_KeepUpright = text.attributes().keep_upright();
@@ -816,7 +814,6 @@ static struct PCB_TEXTBOX_DESC
         propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "Line Width" ) );
         propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "Line Style" ) );
         propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "Filled" ) );
-        propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( EDA_TEXT ), _HKI( "Visible" ) );
         propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( EDA_TEXT ), _HKI( "Color" ) );
 
         const wxString borderProps = _( "Border Properties" );

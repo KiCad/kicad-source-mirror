@@ -202,7 +202,7 @@ private:
     SCH_PIN* parseSymbolPin();
     SCH_SHAPE* parseSymbolPolyLine();
     SCH_SHAPE* parseSymbolRectangle();
-    SCH_TEXT* parseSymbolText();
+    SCH_ITEM* parseSymbolText();
     SCH_TEXTBOX* parseSymbolTextBox();
 
     void parsePAGE_INFO( PAGE_INFO& aPageInfo );

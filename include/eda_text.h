@@ -163,7 +163,7 @@ public:
     void SetBold( bool aBold );
 
     /**
-     * Set only the italic flag, without changing the font.
+     * Set only the bold flag, without changing the font.
      *
      * Used when bulk-changing text attributes (e.g. from a dialog or import).
      */
@@ -171,7 +171,7 @@ public:
     bool IsBold() const                         { return m_attributes.m_Bold; }
 
     virtual void SetVisible( bool aVisible );
-    virtual bool IsVisible() const              { return m_attributes.m_Visible; }
+    virtual bool IsVisible() const              { return m_visible; }
 
     void SetMirrored( bool isMirrored );
     bool IsMirrored() const                     { return m_attributes.m_Mirrored; }
@@ -464,6 +464,7 @@ private:
     TEXT_ATTRIBUTES  m_attributes;
     wxString         m_unresolvedFontName;
     VECTOR2I         m_pos;
+    bool             m_visible;                 // For SCH_FIELDs and PCB_FIELDs
 };
 
 

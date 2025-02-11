@@ -48,7 +48,7 @@
 #include <font/outline_font.h>
 #include <geometry/shape_poly_set.h>
 #include <properties/property_validators.h>
-#include <ctl_flags.h>         // for CTL_OMIT_HIDE definition
+#include <ctl_flags.h>
 #include <api/api_enums.h>
 #include <api/api_utils.h>
 #include <api/common/types/base_types.pb.h>
@@ -95,7 +95,8 @@ GR_TEXT_V_ALIGN_T EDA_TEXT::MapVertJustify( int aVertJustify )
 EDA_TEXT::EDA_TEXT( const EDA_IU_SCALE& aIuScale, const wxString& aText ) :
         m_text( aText ),
         m_IuScale( aIuScale ),
-        m_render_cache_font( nullptr )
+        m_render_cache_font( nullptr ),
+        m_visible( true )
 {
     SetTextSize( VECTOR2I( EDA_UNIT_UTILS::Mils2IU( m_IuScale, DEFAULT_SIZE_TEXT ),
                            EDA_UNIT_UTILS::Mils2IU( m_IuScale, DEFAULT_SIZE_TEXT ) ) );
@@ -122,6 +123,7 @@ EDA_TEXT::EDA_TEXT( const EDA_TEXT& aText ) :
 
     m_attributes = aText.m_attributes;
     m_pos = aText.m_pos;
+    m_visible = aText.m_visible;
 
     m_render_cache_font = aText.m_render_cache_font;
     m_render_cache_text = aText.m_render_cache_text;
@@ -157,6 +159,7 @@ EDA_TEXT& EDA_TEXT::operator=( const EDA_TEXT& aText )
 
     m_attributes = aText.m_attributes;
     m_pos = aText.m_pos;
+    m_visible = aText.m_visible;
 
     m_render_cache_font = aText.m_render_cache_font;
     m_render_cache_text = aText.m_render_cache_text;
@@ -207,7 +210,6 @@ void EDA_TEXT::Serialize( google::protobuf::Any &aContainer ) const
     attrs->set_italic( IsItalic() );
     attrs->set_bold( IsBold() );
     attrs->set_underlined( GetAttributes().m_Underlined );
-    attrs->set_visible( IsVisible() );
     attrs->set_mirrored( IsMirrored() );
     attrs->set_multiline( IsMultilineAllowed() );
     attrs->set_keep_upright( IsKeepUpright() );
@@ -236,7 +238,6 @@ bool EDA_TEXT::Deserialize( const google::protobuf::Any &aContainer )
         attrs.m_Bold = text.attributes().bold();
         attrs.m_Italic = text.attributes().italic();
         attrs.m_Underlined = text.attributes().underlined();
-        attrs.m_Visible = text.attributes().visible();
         attrs.m_Mirrored = text.attributes().mirrored();
         attrs.m_Multiline = text.attributes().multiline();
         attrs.m_KeepUpright = text.attributes().keep_upright();
@@ -376,7 +377,7 @@ void EDA_TEXT::SetBoldFlag( bool aBold )
 
 void EDA_TEXT::SetVisible( bool aVisible )
 {
-    m_attributes.m_Visible = aVisible;
+    m_visible = aVisible;
     ClearRenderCache();
 }
 
@@ -1036,8 +1037,7 @@ void EDA_TEXT::SetFontIndex( int aIdx )
 
 bool EDA_TEXT::IsDefaultFormatting() const
 {
-    return ( IsVisible()
-             && !IsMirrored()
+    return ( !IsMirrored()
              && GetHorizJustify() == GR_TEXT_H_ALIGN_CENTER
              && GetVertJustify() == GR_TEXT_V_ALIGN_CENTER
              && GetTextThickness() == 0
@@ -1109,13 +1109,8 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aControlBits ) const
         aFormatter->Print( ")" ); // (justify
     }
 
-    if( !( aControlBits & CTL_OMIT_HIDE ) && !IsVisible() )
-        KICAD_FORMAT::FormatBool( aFormatter, "hide", true );
-
     if( !( aControlBits & CTL_OMIT_HYPERLINK ) && HasHyperlink() )
-    {
         aFormatter->Print( "(href %s)", aFormatter->Quotew( GetHyperlink() ).c_str() );
-    }
 
     aFormatter->Print( ")" ); // (effects
 }
@@ -1374,9 +1369,6 @@ static struct EDA_TEXT_DESC
                 textProps );
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Mirrored" ),
                 &EDA_TEXT::SetMirrored, &EDA_TEXT::IsMirrored ),
-                textProps );
-        propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Visible" ),
-                &EDA_TEXT::SetVisible, &EDA_TEXT::IsVisible ),
                 textProps );
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _HKI( "Width" ),
                 &EDA_TEXT::SetTextWidth, &EDA_TEXT::GetTextWidth,

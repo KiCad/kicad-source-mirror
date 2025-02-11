@@ -215,7 +215,7 @@ void BOARD_ADAPTER::addFootprintShapes( const FOOTPRINT* aFootprint, CONTAINER_2
         {
             PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
 
-            if( text->GetLayer() == aLayerId && text->IsVisible() )
+            if( text->GetLayer() == aLayerId )
             {
                 if( !aVisibilityFlags.test( LAYER_FP_TEXT ) )
                     continue;

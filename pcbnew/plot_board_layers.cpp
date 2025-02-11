@@ -910,9 +910,6 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 if( !itemplotter.GetPlotFPText() )
                     return;
 
-                if( !aText.IsVisible() && !itemplotter.GetPlotInvisibleText()  )
-                    return;
-
                 if( aText.GetText() == wxT( "${REFERENCE}" ) && !itemplotter.GetPlotReference() )
                     return;
 
@@ -944,6 +941,9 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                     continue;
 
                 if( field->IsValue() && !itemplotter.GetPlotValue() )
+                    continue;
+
+                if( !field->IsVisible() && !itemplotter.GetPlotInvisibleText() )
                     continue;
 
                 if( field->IsOnLayer( layer ) )

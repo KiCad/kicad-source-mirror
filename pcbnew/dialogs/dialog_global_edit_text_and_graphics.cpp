@@ -364,6 +364,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
 {
     aCommit.Modify( aItem );
 
+    PCB_FIELD*          field = dynamic_cast<PCB_FIELD*>( aItem );
     PCB_TEXT*           text = dynamic_cast<PCB_TEXT*>( aItem );
     PCB_SHAPE*          shape = dynamic_cast<PCB_SHAPE*>( aItem );
     PCB_DIMENSION_BASE* dimension = dynamic_cast<PCB_DIMENSION_BASE*>( aItem );
@@ -412,15 +413,18 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
 
             if( parentFP )
             {
-                if( m_visible->Get3StateValue() != wxCHK_UNDETERMINED )
-                    text->SetVisible( m_visible->GetValue() );
-
                 if( m_keepUpright->Get3StateValue() != wxCHK_UNDETERMINED )
                     text->SetKeepUpright( m_keepUpright->GetValue() );
 
                 if( m_centerOnFP->GetValue() == wxCHK_CHECKED )
                     text->SetTextPos( text->GetParent()->GetCenter() );
             }
+        }
+
+        if( field )
+        {
+            if( m_visible->Get3StateValue() != wxCHK_UNDETERMINED )
+                field->SetVisible( m_visible->GetValue() );
         }
 
         if( !m_lineWidth.IsIndeterminate() )

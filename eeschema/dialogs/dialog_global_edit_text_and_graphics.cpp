@@ -284,9 +284,6 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( SCH_COMMIT* aCommit,
             eda_text->SetVertJustify( vAlign );
         }
 
-        if( m_visible->Get3StateValue() != wxCHK_UNDETERMINED )
-            eda_text->SetVisible( m_visible->GetValue() );
-
         if( m_italic->Get3StateValue() != wxCHK_UNDETERMINED )
             eda_text->SetItalic( m_italic->GetValue() );
 
@@ -320,6 +317,9 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( SCH_COMMIT* aCommit,
 
     if( SCH_FIELD* sch_field = dynamic_cast<SCH_FIELD*>( aItem ) )
     {
+        if( m_visible->Get3StateValue() != wxCHK_UNDETERMINED )
+            sch_field->SetVisible( m_visible->GetValue() );
+
         if( m_showFieldNames->Get3StateValue() != wxCHK_UNDETERMINED )
             sch_field->SetNameShown( m_showFieldNames->GetValue() );
     }

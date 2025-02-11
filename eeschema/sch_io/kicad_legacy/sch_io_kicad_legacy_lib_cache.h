@@ -76,7 +76,7 @@ private:
     void              loadDocs();
     static SCH_SHAPE* loadArc( LINE_READER& aReader );
     static SCH_SHAPE* loadCircle( LINE_READER& aReader );
-    static SCH_TEXT*  loadText( LINE_READER& aReader, int aMajorVersion, int aMinorVersion );
+    static SCH_ITEM*  loadText( LINE_READER& aReader, int aMajorVersion, int aMinorVersion );
     static SCH_SHAPE* loadRect( LINE_READER& aReader );
     static SCH_PIN*   loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
     static SCH_SHAPE* loadPolyLine( LINE_READER& aReader );

@@ -52,7 +52,6 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_TextLabel;
 		wxTextCtrl* m_SingleLineText;
 		wxCheckBox* m_cbLocked;
-		wxCheckBox* m_Visible;
 		wxStaticText* m_LayerLabel;
 		PCB_LAYER_BOX_SELECTOR* m_LayerSelectionCtrl;
 		wxCheckBox* m_cbKnockout;

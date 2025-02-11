@@ -543,17 +543,17 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataFromWindow()
 }
 
 
-void DIALOG_FIELD_PROPERTIES::updateText( EDA_TEXT* aText )
+void DIALOG_FIELD_PROPERTIES::updateText( SCH_FIELD* aField )
 {
-    if( aText->GetTextWidth() != m_size )
-        aText->SetTextSize( VECTOR2I( m_size, m_size ) );
+    if( aField->GetTextWidth() != m_size )
+        aField->SetTextSize( VECTOR2I( m_size, m_size ) );
 
-    aText->SetFont( m_font );
-    aText->SetVisible( m_isVisible );
-    aText->SetTextAngle( m_isVertical ? ANGLE_VERTICAL : ANGLE_HORIZONTAL );
-    aText->SetItalic( m_isItalic );
-    aText->SetBold( m_isBold );
-    aText->SetTextColor( m_color );
+    aField->SetFont( m_font );
+    aField->SetVisible( m_isVisible );
+    aField->SetTextAngle( m_isVertical ? ANGLE_VERTICAL : ANGLE_HORIZONTAL );
+    aField->SetItalic( m_isItalic );
+    aField->SetBold( m_isBold );
+    aField->SetTextColor( m_color );
 }
 
 

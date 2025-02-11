@@ -57,6 +57,7 @@ void PCB_FIELD::Serialize( google::protobuf::Any &aContainer ) const
 
     field.set_name( GetCanonicalName().ToStdString() );
     field.mutable_id()->set_id( GetId() );
+    field.set_visible( IsVisible() );
 
     aContainer.PackFrom( field );
 }
@@ -82,6 +83,8 @@ bool PCB_FIELD::Deserialize( const google::protobuf::Any &aContainer )
         anyText.PackFrom( field.text() );
         PCB_TEXT::Deserialize( anyText );
     }
+
+    SetVisible( field.visible() );
 
     if( field.text().layer() == kiapi::board::types::BoardLayer::BL_UNKNOWN )
         SetLayer( F_SilkS );

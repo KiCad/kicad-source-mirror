@@ -109,14 +109,6 @@ BOOST_AUTO_TEST_CASE( Compare )
     BOOST_CHECK_LT( a, b );
 
     b.m_Color = KIGFX::COLOR4D( UNSPECIFIED_COLOR );
-    b.m_Visible = false;
-    BOOST_CHECK_GT( a, b );
-
-    b.m_Visible = true;
-    a.m_Visible = false;
-    BOOST_CHECK_LT( a, b );
-
-    a.m_Visible = true;
     a.m_Mirrored = true;
     BOOST_CHECK_GT( a, b );
 
