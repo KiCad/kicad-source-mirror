@@ -371,6 +371,8 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT
     aOpts.SetUseAuxOrigin( aJob->m_useDrillOrigin );
     aOpts.SetPlotFrameRef( aJob->m_plotDrawingSheet );
     aOpts.SetPlotInvisibleText( aJob->m_plotInvisibleText );
+    aOpts.SetPlotReference( aJob->m_plotRefDes );
+    aOpts.SetPlotValue( aJob->m_plotFootprintValues );
     aOpts.SetSketchPadsOnFabLayers( aJob->m_sketchPadsOnFabLayers );
     aOpts.SetHideDNPFPsOnFabLayers( aJob->m_hideDNPFPsOnFabLayers );
     aOpts.SetSketchDNPFPsOnFabLayers( aJob->m_sketchDNPFPsOnFabLayers );
