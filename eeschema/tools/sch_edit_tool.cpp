@@ -290,7 +290,7 @@ bool SCH_EDIT_TOOL::Init()
             };
 
     auto attribDNPCond =
-        [this] ( const SELECTION& aSel )
+        [] ( const SELECTION& aSel )
         {
             return std::all_of( aSel.Items().begin(), aSel.Items().end(),
                                 []( const EDA_ITEM* item )
@@ -301,7 +301,7 @@ bool SCH_EDIT_TOOL::Init()
         };
 
     auto attribExcludeFromSimCond =
-        [this] ( const SELECTION& aSel )
+        [] ( const SELECTION& aSel )
         {
             return std::all_of( aSel.Items().begin(), aSel.Items().end(),
                                 []( const EDA_ITEM* item )
@@ -312,7 +312,7 @@ bool SCH_EDIT_TOOL::Init()
         };
 
     auto attribExcludeFromBOMCond =
-        [this] ( const SELECTION& aSel )
+        [] ( const SELECTION& aSel )
         {
             return std::all_of( aSel.Items().begin(), aSel.Items().end(),
                                 []( const EDA_ITEM* item )
@@ -324,7 +324,7 @@ bool SCH_EDIT_TOOL::Init()
 
 
     auto attribExcludeFromBoardCond =
-        [this] ( const SELECTION& aSel )
+        [] ( const SELECTION& aSel )
         {
             return std::all_of( aSel.Items().begin(), aSel.Items().end(),
                                 []( const EDA_ITEM* item )
