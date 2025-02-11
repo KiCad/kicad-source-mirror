@@ -72,6 +72,7 @@ JOB_EXPORT_SCH_PLOT::JOB_EXPORT_SCH_PLOT( bool aOutputIsDirectory ) :
         m_blackAndWhite( false ),
         m_pageSizeSelect( JOB_PAGE_SIZE::PAGE_SIZE_AUTO ),
         m_useBackgroundColor( true ),
+        m_minPenWidth( 847 /* hairline @ 300dpi */ ),
         m_HPGLPenSize( 1.0 ),
         m_HPGLPaperSizeSelect( JOB_HPGL_PAGE_SIZE::DEFAULT ),
         m_PDFPropertyPopups( true ),
@@ -100,6 +101,9 @@ JOB_EXPORT_SCH_PLOT::JOB_EXPORT_SCH_PLOT( bool aOutputIsDirectory ) :
 
     m_params.emplace_back( new JOB_PARAM<bool>( "use_background_color",
             &m_useBackgroundColor, m_useBackgroundColor ) );
+
+    m_params.emplace_back( new JOB_PARAM<int>( "min_pen_width",
+            &m_minPenWidth, m_minPenWidth ) );
 
     m_params.emplace_back( new JOB_PARAM<double>( "hpgl_pen_size",
             &m_HPGLPenSize, m_HPGLPenSize ) );

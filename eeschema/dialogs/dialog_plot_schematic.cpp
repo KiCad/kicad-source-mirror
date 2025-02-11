@@ -198,6 +198,7 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
             m_colorTheme->SetSelection( 0 );
 
         m_plotBackgroundColor->SetValue( m_job->m_useBackgroundColor );
+        m_defaultLineWidth.SetValue( m_job->m_minPenWidth );
         m_penWidth.SetDoubleValue( m_job->m_HPGLPenSize );
         m_HPGLPaperSizeSelect = static_cast<HPGL_PAGE_SIZE>( m_job->m_HPGLPaperSizeSelect );
         m_plotPDFPropertyPopups->SetValue( m_job->m_PDFPropertyPopups );
@@ -215,9 +216,9 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
         {
         default:
         case SCH_PLOT_FORMAT::POST: m_plotFormatOpt->SetSelection( 0 ); break;
-        case SCH_PLOT_FORMAT::PDF: m_plotFormatOpt->SetSelection( 1 ); break;
-        case SCH_PLOT_FORMAT::SVG: m_plotFormatOpt->SetSelection( 2 ); break;
-        case SCH_PLOT_FORMAT::DXF: m_plotFormatOpt->SetSelection( 3 ); break;
+        case SCH_PLOT_FORMAT::PDF:  m_plotFormatOpt->SetSelection( 1 ); break;
+        case SCH_PLOT_FORMAT::SVG:  m_plotFormatOpt->SetSelection( 2 ); break;
+        case SCH_PLOT_FORMAT::DXF:  m_plotFormatOpt->SetSelection( 3 ); break;
         case SCH_PLOT_FORMAT::HPGL: m_plotFormatOpt->SetSelection( 4 ); break;
         }
 
@@ -445,6 +446,7 @@ void DIALOG_PLOT_SCHEMATIC::OnPlotAll( wxCommandEvent& event )
     {
         m_job->m_blackAndWhite = !getModeColor();
         m_job->m_useBackgroundColor = m_plotBackgroundColor->GetValue();
+        m_job->m_minPenWidth = m_defaultLineWidth.GetIntValue();
         m_job->m_HPGLPenSize = m_penWidth.GetDoubleValue();
 
         //  m_job->m_HPGLPaperSizeSelect = m_HPGLPaperSizeSelect;

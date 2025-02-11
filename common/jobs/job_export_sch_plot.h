@@ -88,6 +88,7 @@ public:
     bool                  m_blackAndWhite;
     JOB_PAGE_SIZE         m_pageSizeSelect;
     bool                  m_useBackgroundColor;
+    int                   m_minPenWidth;
     double                m_HPGLPenSize; // for HPGL format only: pen size
     JOB_HPGL_PAGE_SIZE    m_HPGLPaperSizeSelect;
     bool                  m_PDFPropertyPopups;
