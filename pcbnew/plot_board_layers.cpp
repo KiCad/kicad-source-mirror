@@ -60,29 +60,22 @@ void PlotBoardLayers( BOARD* aBoard, PLOTTER* aPlotter, const LSEQ& aLayers,
     if( !aBoard || !aPlotter || aLayers.empty() )
         return;
 
-    // if a drill mark must be plotted, the copper layer needs to be plotted
-    // after other layers because the drill mark must be plotted as a filled
-    // white shape *after* all other shapes are plotted
-    bool plot_mark = aPlotOptions.GetDrillMarksType() != DRILL_MARKS::NO_DRILL_SHAPE;
+    // if a drill mark must be plotted,it must be plotted as a filled
+    // white shape *after* all other shapes are plotted, provided that
+    // the other shapes are not copper layers
+    bool plot_mark = ( aPlotOptions.GetDrillMarksType() != DRILL_MARKS::NO_DRILL_SHAPE
+                       && !aPlotOptions.GetLayerSelection().ClearCopperLayers().empty()
+                       && !aPlotOptions.GetLayerSelection().ClearNonCopperLayers().empty() );
 
     for( PCB_LAYER_ID layer : aLayers )
-    {
-        // copper layers with drill marks will be plotted after all other layers
-        if( IsCopperLayer( layer ) && plot_mark )
-            continue;
-
         PlotOneBoardLayer( aBoard, aPlotter, layer, aPlotOptions );
-    }
 
-    if( !plot_mark )
-        return;
 
-    for( PCB_LAYER_ID layer : aLayers )
+    if( plot_mark )
     {
-        if( !IsCopperLayer( layer ) )
-            continue;
-
-        PlotOneBoardLayer( aBoard, aPlotter, layer, aPlotOptions );
+        aPlotter->SetColor( WHITE );
+        BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOptions );
+        itemplotter.PlotDrillMarks();
     }
 }
 
