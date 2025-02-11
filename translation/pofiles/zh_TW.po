@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-10 15:21-0800\n"
-"PO-Revision-Date: 2025-02-10 23:20+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2025-02-12 01:02+0000\n"
+"Last-Translator: reimu105 <peter112548@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -7306,34 +7306,28 @@ msgid "Cannot parse JSON line %d in '%s': %s"
 msgstr "無法解析 JSON 行 %d 在 '%s': %s"
 
 #: common/io/io_base.cpp:139
-#, fuzzy
 msgid "Loading file canceled by user."
-msgstr "用戶取消了打開操作。"
+msgstr "載入檔案被使用者取消。"
 
 #: common/jobs/job.cpp:82
-#, fuzzy
 msgid "Job Settings"
-msgstr "設定"
+msgstr "作業設定"
 
 #: common/jobs/job_export_pcb_3d.cpp:144
-#, fuzzy
 msgid "3D model export"
-msgstr "不匯出"
+msgstr "3D 模型匯出"
 
 #: common/jobs/job_export_pcb_3d.cpp:150
-#, fuzzy
 msgid "Export 3D Model Job Settings"
-msgstr "選擇 3D 模型"
+msgstr "匯出 3D 模型作業設置"
 
 #: common/jobs/job_export_pcb_3d.cpp:168
-#, fuzzy
 msgid "PCB: Export 3D Model"
-msgstr "選擇 3D 模型"
+msgstr "PCB：匯出 3D 模型"
 
 #: common/jobs/job_export_pcb_drill.cpp:123
-#, fuzzy
 msgid "Export drill data"
-msgstr "匯出錫膏"
+msgstr "匯出鑽孔資料"
 
 #: common/jobs/job_export_pcb_drill.cpp:129
 msgid "Export Drill Data Job Settings"
@@ -38877,9 +38871,8 @@ msgstr ""
 "(阻焊層為負片)"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:136
-#, fuzzy
 msgid "Solder Paste Settings"
-msgstr "錫膏相對間隙:"
+msgstr "焊膏設定"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:149
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:154
@@ -39935,18 +39928,16 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
-#, fuzzy
 msgid "Default Properties for Round Shapes"
-msgstr "圓形的預設屬性:"
+msgstr "圓形的預設屬性"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:171
 msgid "Allow teardrop to span two track segments"
 msgstr "允許淚滴跨越兩個走線段"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:189
-#, fuzzy
 msgid "Default Properties for Rectangular Shapes"
-msgstr "矩形形狀的預設屬性:"
+msgstr "矩形的預設屬性"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:341
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:506
@@ -39972,9 +39963,8 @@ msgid "Tracks which are similar in size do not need teardrops."
 msgstr "尺寸接近的走線無需淚滴。"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:20
-#, fuzzy
 msgid "Default Properties for New Graphics and Text"
-msgstr "新建圖形或文字的預設屬性:"
+msgstr "新圖形和文字的預設屬性"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:373
 msgid "No via hole size defined."
@@ -40958,15 +40948,15 @@ msgstr "正在檢查微孔孔洞..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:162
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min hole %s; actual %s)"
-msgstr "(%s 最小 %s; 實際 %s)"
+msgstr "（%s 最小孔徑 %s；實際 %s）"
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:169
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max hole %s; actual %s)"
-msgstr "(%s 最大高度 %s; 實際 %s)"
+msgstr "（%s 最大孔徑 %s；實際 %s）"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:120
 msgid "Checking hole to hole clearances..."
@@ -43459,9 +43449,8 @@ msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
 msgstr "警告: 連接器焊盤上通常不會使用錫膏。請使用表面黏著焊盤。"
 
 #: pcbnew/pad.cpp:2227
-#, fuzzy
 msgid "(SMD pad has a hole)"
-msgstr "錯誤: 表面黏著焊盤上存在一個孔。"
+msgstr "(SMD焊盤上存在一個孔)"
 
 #: pcbnew/pad.cpp:2233
 #, fuzzy
@@ -43479,9 +43468,8 @@ msgid "(SMD pad has copper and paste layers on different sides of the board)"
 msgstr "如果您希望在電路板正面使用焊膏層"
 
 #: pcbnew/pad.cpp:2263
-#, fuzzy
 msgid "(SMD pad has no outer layers)"
-msgstr "警告: 表面黏著焊盤沒有外形層。"
+msgstr "(SMD焊盤沒有外形層)"
 
 #: pcbnew/pad.cpp:2283
 msgid "(Pad must have a positive size)"
@@ -43530,7 +43518,7 @@ msgstr "（負錫膏餘量大於焊盤；不會產生錫膏層）"
 
 #: pcbnew/pad.cpp:2395
 msgid "(negative corner radius is not allowed)"
-msgstr ""
+msgstr "(圓角半徑不允許為負值)"
 
 #: pcbnew/pad.cpp:2397
 #, fuzzy
@@ -43538,14 +43526,12 @@ msgid "(corner size will make pad circular)"
 msgstr "警告: 拐角大小將使焊盤呈圓形。"
 
 #: pcbnew/pad.cpp:2402
-#, fuzzy
 msgid "(negative corner chamfer is not allowed)"
-msgstr "下載過大。"
+msgstr "(倒角尺寸不允許為負值)"
 
 #: pcbnew/pad.cpp:2404
-#, fuzzy
 msgid "(corner chamfer is too large)"
-msgstr "下載過大。"
+msgstr "(倒角尺寸過大)"
 
 #: pcbnew/pad.cpp:2413
 #, fuzzy
