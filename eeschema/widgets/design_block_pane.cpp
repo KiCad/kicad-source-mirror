@@ -99,7 +99,10 @@ DESIGN_BLOCK_PANE::~DESIGN_BLOCK_PANE()
 void DESIGN_BLOCK_PANE::OnSize( wxSizeEvent &aEvent )
 {
     if( APP_SETTINGS_BASE* cfg = m_frame->config() )
-        m_frame->SaveSettings( cfg );
+    {
+        if( IsShownOnScreen() )     // Ensure the panel is shown when trying to save its size
+            m_frame->SaveSettings( cfg );
+    }
 
     aEvent.Skip();
 }
