@@ -1184,11 +1184,12 @@ void SCH_IO_ALTIUM::ParseComponent( int aIndex, const std::map<wxString, wxStrin
     const ASCH_SYMBOL& elem = pair.first->second;
 
     // TODO: this is a hack until we correctly apply all transformations to every element
-    wxString name = wxString::Format( "%s_%d%s_%s",
+    wxString name = wxString::Format( "%s_%d%s_%s_%s",
                                       sheetName,
                                       elem.orientation,
                                       elem.isMirrored ? "_mirrored" : "",
-                                      elem.libreference );
+                                      elem.libreference,
+                                      elem.sourcelibraryname );
 
     if( elem.displaymodecount > 1 )
         name << '_' << elem.displaymode;
