@@ -571,14 +571,19 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     // Load a preset if one is specified
     if( !aBomJob->m_bomPresetName.IsEmpty() )
     {
-        // Make sure the built-in presets are loaded
-        for( const BOM_PRESET& p : BOM_PRESET::BuiltInPresets() )
-            sch->Settings().m_BomPresets.emplace_back( p );
-
         // Find the preset
-        BOM_PRESET* schPreset = nullptr;
+        const BOM_PRESET* schPreset = nullptr;
 
-        for( BOM_PRESET& p : sch->Settings().m_BomPresets )
+        for( const BOM_PRESET& p : BOM_PRESET::BuiltInPresets() )
+        {
+            if( p.name == aBomJob->m_bomPresetName )
+            {
+                schPreset = &p;
+                break;
+            }
+        }
+
+        for( const BOM_PRESET& p : sch->Settings().m_BomPresets )
         {
             if( p.name == aBomJob->m_bomPresetName )
             {
@@ -707,14 +712,19 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     // Load a format preset if one is specified
     if( !aBomJob->m_bomFmtPresetName.IsEmpty() )
     {
-        // Make sure the built-in presets are loaded
-        for( const BOM_FMT_PRESET& p : BOM_FMT_PRESET::BuiltInPresets() )
-            sch->Settings().m_BomFmtPresets.emplace_back( p );
-
         // Find the preset
-        BOM_FMT_PRESET* schFmtPreset = nullptr;
+        const BOM_FMT_PRESET* schFmtPreset = nullptr;
 
-        for( BOM_FMT_PRESET& p : sch->Settings().m_BomFmtPresets )
+        for( const BOM_FMT_PRESET& p : BOM_FMT_PRESET::BuiltInPresets() )
+        {
+            if( p.name == aBomJob->m_bomFmtPresetName )
+            {
+                schFmtPreset = &p;
+                break;
+            }
+        }
+
+        for( const BOM_FMT_PRESET& p : sch->Settings().m_BomFmtPresets )
         {
             if( p.name == aBomJob->m_bomFmtPresetName )
             {
