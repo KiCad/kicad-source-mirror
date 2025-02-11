@@ -136,7 +136,7 @@ void PANEL_PLUGIN_SETTINGS::validatePythonInterpreter()
 
     PYTHON_MANAGER manager( pythonExe.GetFullPath() );
 
-    manager.Execute( wxS( "--version" ),
+    manager.Execute( { wxS( "--version" ) },
                      [&]( int aRetCode, const wxString& aStdOut, const wxString& aStdErr )
                      {
                          wxString msg;

@@ -42,7 +42,7 @@ public:
      * @param aSaveOutput
      * @return the process ID of the created process, or 0 if one was not created
      */
-    long Execute( const wxString& aArgs,
+    long Execute( const std::vector<wxString>& aArgs,
                   const std::function<void(int, const wxString&, const wxString&)>& aCallback,
                   const wxExecuteEnv* aEnv = nullptr,
                   bool aSaveOutput = false );

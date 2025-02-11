@@ -284,7 +284,7 @@ void API_PLUGIN_MANAGER::InvokeAction( const wxString& aIdentifier )
         if( pythonHome )
             env.env[wxS( "VIRTUAL_ENV" )] = *pythonHome;
 
-        long pid = manager.Execute( pluginFile.GetFullPath(),
+        long pid = manager.Execute( { pluginFile.GetFullPath() },
                 []( int aRetVal, const wxString& aOutput, const wxString& aError )
                 {
                     wxLogTrace( traceApi,
@@ -495,10 +495,14 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
             env.env.erase( "PYTHONPATH" );
         }
 #endif
+        std::vector<wxString> args = {
+                "-m",
+                "venv",
+                "--system-site-packages",
+                job.env_path
+            };
 
-        manager.Execute(
-                wxString::Format( wxS( "-m venv --system-site-packages \"%s\"" ),
-                                  job.env_path ),
+        manager.Execute( args,
                 [this]( int aRetVal, const wxString& aOutput, const wxString& aError )
                 {
                     wxLogTrace( traceApi,
@@ -553,10 +557,15 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
             }
 #endif
 
-            wxString cmd = wxS( "-m pip install --upgrade pip" );
-            wxLogTrace( traceApi, "Manager: calling python %s", cmd );
+            std::vector<wxString> args = {
+                    "-m",
+                    "pip",
+                    "install",
+                    "--upgrade",
+                    "pip"
+                };
 
-            manager.Execute( cmd,
+            manager.Execute( args,
                 [this]( int aRetVal, const wxString& aOutput, const wxString& aError )
                 {
                     wxLogTrace( traceApi, wxString::Format( "Manager: upgrade pip returned %d",
@@ -618,14 +627,22 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
             if( pythonHome )
                 env.env[wxS( "VIRTUAL_ENV" )] = *pythonHome;
 
-            wxString cmd = wxString::Format(
-                    wxS( "-m pip install --no-input --isolated --only-binary :all: --require-virtualenv "
-                         "--exists-action i -r \"%s\"" ),
-                    reqs.GetFullPath() );
+            std::vector<wxString> args = {
+                    "-m",
+                    "pip",
+                    "install",
+                    "--no-input",
+                    "--isolated",
+                    "--only-binary",
+                    ":all:",
+                    "--require-virtualenv",
+                    "--exists-action",
+                    "i",
+                    "-r",
+                    reqs.GetFullPath()
+                };
 
-            wxLogTrace( traceApi, "Manager: calling python %s", cmd );
-
-            manager.Execute( cmd,
+            manager.Execute( args,
                 [this, job]( int aRetVal, const wxString& aOutput, const wxString& aError )
                 {
                     if( !aError.IsEmpty() )

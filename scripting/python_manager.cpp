@@ -90,7 +90,7 @@ PYTHON_MANAGER::PYTHON_MANAGER( const wxString& aInterpreterPath )
 }
 
 
-long PYTHON_MANAGER::Execute( const wxString& aArgs,
+long PYTHON_MANAGER::Execute( const std::vector<wxString>& aArgs,
         const std::function<void(int, const wxString&, const wxString&)>& aCallback,
         const wxExecuteEnv* aEnv, bool aSaveOutput )
 {
@@ -115,10 +115,19 @@ long PYTHON_MANAGER::Execute( const wxString& aArgs,
             }
         };
 
-    wxString cmd = wxString::Format( wxS( "%s %s" ), m_interpreterPath, aArgs );
+    wxString argsStr;
+    std::vector<const wchar_t*> args = { m_interpreterPath.wc_str() };
 
-    wxLogTrace( traceApi, wxString::Format( "Execute: %s", cmd ) );
-    long pid = wxExecute( cmd, wxEXEC_ASYNC, process, aEnv );
+    for( const wxString& arg : aArgs )
+    {
+        args.emplace_back( arg.wc_str() );
+        argsStr << arg << " ";
+    }
+
+    args.emplace_back( nullptr );
+
+    wxLogTrace( traceApi, wxString::Format( "Execute: %s %s", m_interpreterPath, argsStr ) );
+    long pid = wxExecute( args.data(), wxEXEC_ASYNC, process, aEnv );
 
     if( pid == 0 )
     {
