@@ -90,10 +90,9 @@ public:
     /// Drag and drop
     int DdAppendFile( const TOOL_EVENT& aEvent );
 
-    /// Modify Attributes
+    /// Modify Attributes (DNP, Exclude, etc.)  All attributes are
+    /// set to true unless all symbols already have the attribute set to true.
     int SetAttribute( const TOOL_EVENT& aEvent );
-    int UnsetAttribute( const TOOL_EVENT& aEvent );
-    int ToggleAttribute( const TOOL_EVENT& aEvent );
 
 private:
     void editFieldText( SCH_FIELD* aField );

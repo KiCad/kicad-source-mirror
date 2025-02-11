@@ -966,35 +966,11 @@ TOOL_ACTION EE_ACTIONS::setExcludeFromBOM( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Exclude from Bill of Materials" ) )
         .Tooltip( _( "Set the exclude from bill of materials attribute" ) ) );
 
-TOOL_ACTION EE_ACTIONS::unsetExcludeFromBOM( TOOL_ACTION_ARGS()
-        .Name( "eeschema.EditorControl.unsetExcludeFromBOM" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Include in Bill of Materials" ) )
-        .Tooltip( _( "Clear the exclude from bill of materials attribute" ) ) );
-
-TOOL_ACTION EE_ACTIONS::toggleExcludeFromBOM( TOOL_ACTION_ARGS()
-        .Name( "eeschema.EditorControl.toggleExcludeFromBOM" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Toggle Exclude from Bill of Materials" ) )
-        .Tooltip( _( "Toggle the exclude from bill of materials attribute" ) ) );
-
 TOOL_ACTION EE_ACTIONS::setExcludeFromSimulation( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.setExcludeFromSimulation" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Exclude from Simulation" ) )
         .Tooltip( _( "Set the exclude from simulation attribute" ) ) );
-
-TOOL_ACTION EE_ACTIONS::unsetExcludeFromSimulation( TOOL_ACTION_ARGS()
-        .Name( "eeschema.EditorControl.unsetExcludeFromSimulation" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Include in Simulation" ) )
-        .Tooltip( _( "Clear the exclude from simulation attribute" ) ) );
-
-TOOL_ACTION EE_ACTIONS::toggleExcludeFromSimulation( TOOL_ACTION_ARGS()
-        .Name( "eeschema.EditorControl.toggleExcludeFromSimulation" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Toggle Exclude from Simulation" ) )
-        .Tooltip( _( "Toggle the exclude from simulation attribute" ) ) );
 
 TOOL_ACTION EE_ACTIONS::setExcludeFromBoard( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.setExcludeFromBoard" )
@@ -1002,36 +978,11 @@ TOOL_ACTION EE_ACTIONS::setExcludeFromBoard( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Exclude from Board" ) )
         .Tooltip( _( "Set the exclude from board attribute" ) ) );
 
-TOOL_ACTION EE_ACTIONS::unsetExcludeFromBoard( TOOL_ACTION_ARGS()
-        .Name( "eeschema.EditorControl.unsetExcludeFromBoard" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Include on Board" ) )
-        .Tooltip( _( "Clear the exclude from board attribute" ) ) );
-
-TOOL_ACTION EE_ACTIONS::toggleExcludeFromBoard( TOOL_ACTION_ARGS()
-        .Name( "eeschema.EditorControl.toggleExcludeFromBoard" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Toggle Exclude from Board" ) )
-        .Tooltip( _( "Toggle the exclude from board attribute" ) ) );
-
 TOOL_ACTION EE_ACTIONS::setDNP( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.setDNP" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Set Do Not Populate" ) )
+        .FriendlyName( _( "Do not Populate" ) )
         .Tooltip( _( "Set the do not populate attribute" ) ) );
-
-TOOL_ACTION EE_ACTIONS::unsetDNP( TOOL_ACTION_ARGS()
-        .Name( "eeschema.EditorControl.unsetDNP" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Unset Do Not Populate" ) )
-        .Tooltip( _( "Clear the do not populate attribute" ) ) );
-
-TOOL_ACTION EE_ACTIONS::toggleDNP( TOOL_ACTION_ARGS()
-        .Name( "eeschema.EditorControl.toggleDNP" )
-        .Scope( AS_GLOBAL )
-        .DefaultHotkey( MD_CTRL + MD_ALT + 'X' )
-        .FriendlyName( _( "Toggle Do Not Populate" ) )
-        .Tooltip( _( "Toggle the do not populate attribute" ) ) );
 
 TOOL_ACTION EE_ACTIONS::editLibSymbolWithLibEdit( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.editLibSymbolWithSymbolEditor" )

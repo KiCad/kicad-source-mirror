@@ -190,17 +190,9 @@ public:
 
     // Attribute Toggles
     static TOOL_ACTION setExcludeFromBOM;
-    static TOOL_ACTION unsetExcludeFromBOM;
-    static TOOL_ACTION toggleExcludeFromBOM;
     static TOOL_ACTION setExcludeFromSimulation;
-    static TOOL_ACTION unsetExcludeFromSimulation;
-    static TOOL_ACTION toggleExcludeFromSimulation;
     static TOOL_ACTION setExcludeFromBoard;
-    static TOOL_ACTION unsetExcludeFromBoard;
-    static TOOL_ACTION toggleExcludeFromBoard;
     static TOOL_ACTION setDNP;
-    static TOOL_ACTION unsetDNP;
-    static TOOL_ACTION toggleDNP;
 
     // Design Block management
     static TOOL_ACTION showDesignBlockPanel;

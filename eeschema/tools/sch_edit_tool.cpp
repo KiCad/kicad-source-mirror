@@ -23,6 +23,7 @@
  */
 
 #include <kiway.h>
+#include <tool/action_manager.h>
 #include <tool/picker_tool.h>
 #include <tools/sch_edit_tool.h>
 #include <tools/ee_inspection_tool.h>
@@ -288,6 +289,51 @@ bool SCH_EDIT_TOOL::Init()
                 return false;
             };
 
+    auto attribDNPCond =
+        [this] ( const SELECTION& aSel )
+        {
+            return std::all_of( aSel.Items().begin(), aSel.Items().end(),
+                                []( const EDA_ITEM* item )
+                                {
+                                    return !item->IsType( { SCH_SYMBOL_T } )
+                                        || static_cast<const SCH_SYMBOL*>( item )->GetDNP();
+                                } );
+        };
+
+    auto attribExcludeFromSimCond =
+        [this] ( const SELECTION& aSel )
+        {
+            return std::all_of( aSel.Items().begin(), aSel.Items().end(),
+                                []( const EDA_ITEM* item )
+                                {
+                                    return !item->IsType( { SCH_SYMBOL_T } )
+                                        || static_cast<const SCH_SYMBOL*>( item )->GetExcludedFromSim();
+                                } );
+        };
+
+    auto attribExcludeFromBOMCond =
+        [this] ( const SELECTION& aSel )
+        {
+            return std::all_of( aSel.Items().begin(), aSel.Items().end(),
+                                []( const EDA_ITEM* item )
+                                {
+                                    return !item->IsType( { SCH_SYMBOL_T } )
+                                        || static_cast<const SCH_SYMBOL*>( item )->GetExcludedFromBOM();
+                                } );
+        };
+
+
+    auto attribExcludeFromBoardCond =
+        [this] ( const SELECTION& aSel )
+        {
+            return std::all_of( aSel.Items().begin(), aSel.Items().end(),
+                                []( const EDA_ITEM* item )
+                                {
+                                    return !item->IsType( { SCH_SYMBOL_T } )
+                                        || static_cast<const SCH_SYMBOL*>( item )->GetExcludedFromBoard();
+                                } );
+        };
+
     static const std::vector<KICAD_T> sheetTypes = { SCH_SHEET_T };
 
     auto sheetSelection = E_C::Count( 1 ) && E_C::OnlyTypes( sheetTypes );
@@ -550,24 +596,10 @@ bool SCH_EDIT_TOOL::Init()
                 CONDITIONAL_MENU* menu = new CONDITIONAL_MENU( moveTool );
                 menu->SetTitle( _( "Attributes" ) );
 
-                menu->AddItem( EE_ACTIONS::setExcludeFromSimulation,    E_C::ShowAlways );
-                menu->AddItem( EE_ACTIONS::unsetExcludeFromSimulation,  E_C::ShowAlways );
-                menu->AddItem( EE_ACTIONS::toggleExcludeFromSimulation, E_C::ShowAlways );
-
-                menu->AddSeparator();
-                menu->AddItem( EE_ACTIONS::setExcludeFromBOM,           E_C::ShowAlways );
-                menu->AddItem( EE_ACTIONS::unsetExcludeFromBOM,         E_C::ShowAlways );
-                menu->AddItem( EE_ACTIONS::toggleExcludeFromBOM,        E_C::ShowAlways );
-
-                menu->AddSeparator();
-                menu->AddItem( EE_ACTIONS::setExcludeFromBoard,         E_C::ShowAlways );
-                menu->AddItem( EE_ACTIONS::unsetExcludeFromBoard,       E_C::ShowAlways );
-                menu->AddItem( EE_ACTIONS::toggleExcludeFromBoard,      E_C::ShowAlways );
-
-                menu->AddSeparator();
-                menu->AddItem( EE_ACTIONS::setDNP,                      E_C::ShowAlways );
-                menu->AddItem( EE_ACTIONS::unsetDNP,                    E_C::ShowAlways );
-                menu->AddItem( EE_ACTIONS::toggleDNP,                   E_C::ShowAlways );
+                menu->AddCheckItem( EE_ACTIONS::setExcludeFromSimulation,    E_C::ShowAlways );
+                menu->AddCheckItem( EE_ACTIONS::setExcludeFromBOM,           E_C::ShowAlways );
+                menu->AddCheckItem( EE_ACTIONS::setExcludeFromBoard,         E_C::ShowAlways );
+                menu->AddCheckItem( EE_ACTIONS::setDNP,                      E_C::ShowAlways );
 
                 return menu;
             };
@@ -704,6 +736,16 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddSeparator( 400 );
     selToolMenu.AddItem( ACTIONS::selectAll,           hasElements, 400 );
     selToolMenu.AddItem( ACTIONS::unselectAll,         hasElements, 400 );
+
+    ACTION_MANAGER* mgr = m_toolMgr->GetActionManager();
+    mgr->SetConditions( EE_ACTIONS::setDNP,
+                        ACTION_CONDITIONS().Check( attribDNPCond ) );
+    mgr->SetConditions( EE_ACTIONS::setExcludeFromSimulation,
+                        ACTION_CONDITIONS().Check( attribExcludeFromSimCond ) );
+    mgr->SetConditions( EE_ACTIONS::setExcludeFromBOM,
+                        ACTION_CONDITIONS().Check( attribExcludeFromBOMCond ) );
+    mgr->SetConditions( EE_ACTIONS::setExcludeFromBoard,
+                        ACTION_CONDITIONS().Check( attribExcludeFromBoardCond ) );
 
     return true;
 }
@@ -3151,94 +3193,35 @@ int SCH_EDIT_TOOL::SetAttribute( const TOOL_EVENT& aEvent )
     std::set<std::pair<SCH_SYMBOL*, SCH_SCREEN*>> collectedUnits;
 
     collectUnits( selection, collectedUnits );
+    bool new_state = false;
+
+    for( const auto& [symbol, _] : collectedUnits )
+    {
+        if( ( aEvent.IsAction( &EE_ACTIONS::setDNP ) && !symbol->GetDNP() )
+         || ( aEvent.IsAction( &EE_ACTIONS::setExcludeFromSimulation ) && !symbol->GetExcludedFromSim() )
+         || ( aEvent.IsAction( &EE_ACTIONS::setExcludeFromBOM ) && !symbol->GetExcludedFromBOM() )
+         || ( aEvent.IsAction( &EE_ACTIONS::setExcludeFromBoard ) && !symbol->GetExcludedFromBoard() ) )
+        {
+            new_state = true;
+            break;
+        }
+    }
 
     for( const auto& [symbol, screen] : collectedUnits )
     {
         commit.Modify( symbol, screen );
 
         if( aEvent.IsAction( &EE_ACTIONS::setDNP ) )
-            symbol->SetDNP( true );
+            symbol->SetDNP( new_state );
 
         if( aEvent.IsAction( &EE_ACTIONS::setExcludeFromSimulation ) )
-            symbol->SetExcludedFromSim( true );
+            symbol->SetExcludedFromSim( new_state );
 
         if( aEvent.IsAction( &EE_ACTIONS::setExcludeFromBOM ) )
-            symbol->SetExcludedFromBOM( true );
+            symbol->SetExcludedFromBOM( new_state );
 
         if( aEvent.IsAction( &EE_ACTIONS::setExcludeFromBoard ) )
-            symbol->SetExcludedFromBoard( true );
-    }
-
-    if( !commit.Empty() )
-        commit.Push( _( "Set Attribute" ) );
-
-    if( selection.IsHover() )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
-
-    return 0;
-}
-
-
-int SCH_EDIT_TOOL::UnsetAttribute( const TOOL_EVENT& aEvent )
-{
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
-    SCH_COMMIT    commit( m_toolMgr );
-
-    std::set<std::pair<SCH_SYMBOL*, SCH_SCREEN*>> collectedUnits;
-
-    collectUnits( selection, collectedUnits );
-
-    for( const auto& [symbol, screen] : collectedUnits )
-    {
-        commit.Modify( symbol, screen );
-
-        if( aEvent.IsAction( &EE_ACTIONS::unsetDNP ) )
-            symbol->SetDNP( false );
-
-        if( aEvent.IsAction( &EE_ACTIONS::unsetExcludeFromSimulation ) )
-            symbol->SetExcludedFromSim( false );
-
-        if( aEvent.IsAction( &EE_ACTIONS::unsetExcludeFromBOM ) )
-            symbol->SetExcludedFromBOM( false );
-
-        if( aEvent.IsAction( &EE_ACTIONS::unsetExcludeFromBoard ) )
-            symbol->SetExcludedFromBoard( false );
-    }
-
-    if( !commit.Empty() )
-        commit.Push( _( "Clear Attribute" ) );
-
-    if( selection.IsHover() )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
-
-    return 0;
-}
-
-
-int SCH_EDIT_TOOL::ToggleAttribute( const TOOL_EVENT& aEvent )
-{
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
-    SCH_COMMIT    commit( m_toolMgr );
-
-    std::set<std::pair<SCH_SYMBOL*, SCH_SCREEN*>> collectedUnits;
-
-    collectUnits( selection, collectedUnits );
-
-    for( const auto& [symbol, screen] : collectedUnits )
-    {
-        commit.Modify( symbol, screen );
-
-        if( aEvent.IsAction( &EE_ACTIONS::toggleDNP ) )
-            symbol->SetDNP( !symbol->GetDNP() );
-
-        if( aEvent.IsAction( &EE_ACTIONS::toggleExcludeFromSimulation ) )
-            symbol->SetExcludedFromSim( !symbol->GetExcludedFromSim() );
-
-        if( aEvent.IsAction( &EE_ACTIONS::toggleExcludeFromBOM ) )
-            symbol->SetExcludedFromBOM( !symbol->GetExcludedFromBOM() );
-
-        if( aEvent.IsAction( &EE_ACTIONS::toggleExcludeFromBoard ) )
-            symbol->SetExcludedFromBoard( !symbol->GetExcludedFromBoard() );
+            symbol->SetExcludedFromBoard( new_state );
     }
 
     if( !commit.Empty() )
@@ -3298,14 +3281,6 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::SetAttribute,       EE_ACTIONS::setExcludeFromBOM.MakeEvent() );
     Go( &SCH_EDIT_TOOL::SetAttribute,       EE_ACTIONS::setExcludeFromBoard.MakeEvent() );
     Go( &SCH_EDIT_TOOL::SetAttribute,       EE_ACTIONS::setExcludeFromSimulation.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::UnsetAttribute,     EE_ACTIONS::unsetDNP.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::UnsetAttribute,     EE_ACTIONS::unsetExcludeFromBOM.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::UnsetAttribute,     EE_ACTIONS::unsetExcludeFromBoard.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::UnsetAttribute,     EE_ACTIONS::unsetExcludeFromSimulation.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ToggleAttribute,    EE_ACTIONS::toggleDNP.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ToggleAttribute,    EE_ACTIONS::toggleExcludeFromBOM.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ToggleAttribute,    EE_ACTIONS::toggleExcludeFromBoard.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ToggleAttribute,    EE_ACTIONS::toggleExcludeFromSimulation.MakeEvent() );
 
     Go( &SCH_EDIT_TOOL::CleanupSheetPins,   EE_ACTIONS::cleanupSheetPins.MakeEvent() );
     Go( &SCH_EDIT_TOOL::GlobalEdit,         EE_ACTIONS::editTextAndGraphics.MakeEvent() );

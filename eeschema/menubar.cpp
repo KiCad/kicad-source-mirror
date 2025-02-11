@@ -169,24 +169,10 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     ACTION_MENU* submenuAttributes = new ACTION_MENU( false, selTool );
     submenuAttributes->SetTitle( _( "Attributes" ) );
 
-    submenuAttributes->Add( EE_ACTIONS::setExcludeFromSimulation );
-    submenuAttributes->Add( EE_ACTIONS::unsetExcludeFromSimulation );
-    submenuAttributes->Add( EE_ACTIONS::toggleExcludeFromSimulation );
-
-    submenuAttributes->AppendSeparator();
-    submenuAttributes->Add( EE_ACTIONS::setExcludeFromBOM );
-    submenuAttributes->Add( EE_ACTIONS::unsetExcludeFromBOM );
-    submenuAttributes->Add( EE_ACTIONS::toggleExcludeFromBOM );
-
-    submenuAttributes->AppendSeparator();
-    submenuAttributes->Add( EE_ACTIONS::setExcludeFromBoard );
-    submenuAttributes->Add( EE_ACTIONS::unsetExcludeFromBoard );
-    submenuAttributes->Add( EE_ACTIONS::toggleExcludeFromBoard );
-
-    submenuAttributes->AppendSeparator();
-    submenuAttributes->Add( EE_ACTIONS::setDNP );
-    submenuAttributes->Add( EE_ACTIONS::unsetDNP );
-    submenuAttributes->Add( EE_ACTIONS::toggleDNP );
+    submenuAttributes->Add( EE_ACTIONS::setExcludeFromSimulation, ACTION_MENU::CHECK );
+    submenuAttributes->Add( EE_ACTIONS::setExcludeFromBOM, ACTION_MENU::CHECK );
+    submenuAttributes->Add( EE_ACTIONS::setExcludeFromBoard, ACTION_MENU::CHECK );
+    submenuAttributes->Add( EE_ACTIONS::setDNP, ACTION_MENU::CHECK );
 
     editMenu->Add( submenuAttributes );
 
