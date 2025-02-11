@@ -253,12 +253,7 @@ bool PLUGIN_CONTENT_MANAGER::FetchRepository( const wxString& aUrl, PCM_REPOSITO
     aReporter->SetTitle( _( "Fetching repository" ) );
 
     if( !DownloadToStream( aUrl, &repository_stream, aReporter, 20480 ) )
-    {
-        if( m_dialog )
-            wxLogError( _( "Unable to load repository url" ) );
-
         return false;
-    }
 
     nlohmann::json repository_json;
 
