@@ -56,6 +56,7 @@
 #include <compoundfilereader.h>
 #include <font/fontconfig.h>
 #include <geometry/ellipse.h>
+#include <geometry/shape_utils.h>
 #include <string_utils.h>
 #include <sch_edit_frame.h>
 #include <wildcards_and_files_ext.h>
@@ -465,6 +466,16 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
 
     ParseAltiumSch( aFileName );
 
+    if( m_reporter )
+    {
+        for( auto& [msg, severity] : m_errorMessages )
+        {
+            m_reporter->Report( msg, severity );
+        }
+    }
+
+    m_errorMessages.clear();
+
     m_pi->SaveLibrary( getLibFileName().GetFullPath() );
 
     SCH_SCREENS allSheets( m_rootSheet );
@@ -514,6 +525,229 @@ SCH_SCREEN* SCH_IO_ALTIUM::getCurrentScreen()
 SCH_SHEET* SCH_IO_ALTIUM::getCurrentSheet()
 {
     return m_sheetPath.Last();
+}
+
+
+void SCH_IO_ALTIUM::CreateAliases()
+{
+    std::vector<SCH_LINE*> busLines;
+    std::map<VECTOR2I, std::vector<SCH_LINE*>> busLineMap;
+
+    for( auto elem : getCurrentScreen()->Items().OfType( SCH_LINE_T) )
+    {
+        SCH_LINE* line = static_cast<SCH_LINE*>( elem );
+
+        if( line->IsBus() )
+        {
+            busLines.push_back( line );
+            busLineMap[ line->GetStartPoint() ].push_back( line );
+            busLineMap[ line->GetEndPoint() ].push_back( line );
+        }
+    }
+
+    std::function<SCH_LABEL*(VECTOR2I, std::set<SCH_LINE*>&)> walkBusLine =
+    [&]( VECTOR2I aStart, std::set<SCH_LINE*>& aVisited ) -> SCH_LABEL*
+    {
+        auto it = busLineMap.find( aStart );
+
+        if( it == busLineMap.end() )
+            return nullptr;
+
+        for( SCH_LINE* line : it->second )
+        {
+            // Skip lines we've already checked to avoid cycles
+            if( aVisited.count( line ) )
+                continue;
+
+            aVisited.insert( line );
+
+            for( auto elem : getCurrentScreen()->Items().
+                                Overlapping( SCH_LABEL_T, line->GetBoundingBox() ) )
+            {
+                SCH_LABEL* label = static_cast<SCH_LABEL*>( elem );
+
+                if( line->HitTest( label->GetPosition() ) )
+                    return label;
+            }
+
+            SCH_LABEL* result = walkBusLine( KIGEOM::GetOtherEnd( line->GetSeg(), aStart ),
+                                           aVisited );
+            if( result )
+                return result;
+        }
+
+        return nullptr;
+    };
+
+    for( auto& [_, harness] : m_altiumHarnesses )
+    {
+        SCH_SCREEN* screen = getCurrentScreen();
+
+        wxCHECK( screen, /* void */ );
+        std::shared_ptr<BUS_ALIAS> alias = std::make_shared<BUS_ALIAS>( screen);
+        alias->SetName( harness.m_name );
+
+        for( auto& port : harness.m_ports )
+            alias->Members().push_back( port.m_name );
+
+        screen->AddBusAlias( alias );
+
+        VECTOR2I  pos;
+        BOX2I     box( harness.m_location, harness.m_size );
+        SCH_LINE* busLine = nullptr;
+
+        for( auto elem : getCurrentScreen()->Items().Overlapping(
+                     SCH_LINE_T, box ) )
+        {
+            SCH_LINE* line = static_cast<SCH_LINE*>( elem );
+
+            if( !line->IsBus() )
+                continue;
+
+            busLine = line;
+
+            for( VECTOR2I pt : line->GetConnectionPoints() )
+            {
+                if( box.Contains( pt ) )
+                {
+                    pos = pt;
+                    break;
+                }
+            }
+        }
+
+        if( !busLine )
+        {
+            for( auto elem : getCurrentScreen()->Items().Overlapping(
+                         SCH_HIER_LABEL_T, box ) )
+            {
+                SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( elem );
+
+                pos = label->GetPosition();
+                VECTOR2I center = box.GetCenter();
+                int delta_x = center.x - pos.x;
+                int delta_y = center.y - pos.y;
+
+                if( std::abs( delta_x ) > std::abs( delta_y ) )
+                {
+                    busLine = new SCH_LINE( pos, SCH_LAYER_ID::LAYER_BUS );
+                    busLine->SetEndPoint( VECTOR2I( center.x, pos.y ) );
+                    busLine->SetFlags( IS_NEW );
+                    screen->Append( busLine );
+                }
+                else
+                {
+                    busLine = new SCH_LINE( pos, SCH_LAYER_ID::LAYER_BUS );
+                    busLine->SetEndPoint( VECTOR2I( pos.x, center.y ) );
+                    busLine->SetFlags( IS_NEW );
+                    screen->Append( busLine );
+
+                }
+
+                break;
+            }
+        }
+
+        if( !busLine )
+            continue;
+
+        std::set<SCH_LINE*> visited;
+        SCH_LABEL* label = walkBusLine( pos, visited );
+
+        // Altium supports two different naming conventions for harnesses.  If there is a specific
+        // harness name, then the nets inside the harness will be named harnessname.netname.
+        // However, if there is no harness name, the nets will be named just netname.
+
+        // KiCad bus labels need some special handling to be recognized as bus labels
+        if( label && !label->GetText().StartsWith( wxT( "{" ) ) )
+            label->SetText( label->GetText() + wxT( "{" ) + harness.m_name + wxT( "}" ) );
+
+        if( !label )
+        {
+            label = new SCH_LABEL( busLine->GetStartPoint(), wxT( "{" ) + harness.m_name + wxT( "}" ) );
+            label->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+
+            if( busLine->GetEndPoint().x < busLine->GetStartPoint().x )
+                label->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+            else
+                label->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+
+            screen->Append( label );
+        }
+
+        // Draw the bus line from the individual ports to the harness
+
+        bool isVertical = true;
+
+        if( harness.m_ports.size() > 1 )
+        {
+            VECTOR2I first = harness.m_ports.front().m_location;
+            VECTOR2I last = harness.m_ports.back().m_location;
+
+            if( first.y == last.y )
+                isVertical = false;
+        }
+
+        if( isVertical )
+        {
+            VECTOR2I bottom = harness.m_ports.front().m_entryLocation;
+            VECTOR2I top = harness.m_ports.front().m_entryLocation;
+            int delta_space = EDA_UNIT_UTILS::Mils2IU( schIUScale, 100 );
+
+            for( HARNESS::HARNESS_PORT& port : harness.m_ports )
+            {
+                if( port.m_entryLocation.y > bottom.y )
+                    bottom = port.m_entryLocation;
+
+                if( port.m_entryLocation.y < top.y )
+                    top = port.m_entryLocation;
+            }
+
+            VECTOR2I last_pt;
+            SCH_LINE* line = new SCH_LINE( bottom, SCH_LAYER_ID::LAYER_BUS );
+            line->SetStartPoint( bottom );
+            line->SetEndPoint( top );
+            line->SetLineWidth( busLine->GetLineWidth() );
+            line->SetLineColor( busLine->GetLineColor() );
+            getCurrentScreen()->Append( line );
+
+            last_pt = ( busLine->GetStartPoint() - line->GetEndPoint() ).SquaredEuclideanNorm() <
+                      ( busLine->GetStartPoint() - line->GetStartPoint() ).SquaredEuclideanNorm()
+                           ? line->GetEndPoint()
+                           : line->GetStartPoint();
+
+            // If the busline is not on the save y coordinate as the bus/wire connectors, add a short
+            // hop to bring the bus down to the level of the connectors
+            if( last_pt.y != busLine->GetStartPoint().y )
+            {
+                line = new SCH_LINE( last_pt, SCH_LAYER_ID::LAYER_BUS );
+                line->SetStartPoint( last_pt );
+                line->SetEndPoint( last_pt
+                                + VECTOR2I( alg::signbit( busLine->GetStartPoint().x - last_pt.x )
+                                                    ? -delta_space: delta_space, 0 ) );
+                line->SetLineWidth( busLine->GetLineWidth() );
+                line->SetLineColor( busLine->GetLineColor() );
+                getCurrentScreen()->Append( line );
+                last_pt = line->GetEndPoint();
+
+                line = new SCH_LINE( last_pt, SCH_LAYER_ID::LAYER_BUS );
+                line->SetStartPoint( last_pt );
+                line->SetEndPoint( last_pt + VECTOR2I( 0, busLine->GetStartPoint().y - last_pt.y ) );
+                line->SetLineWidth( busLine->GetLineWidth() );
+                line->SetLineColor( busLine->GetLineColor() );
+                getCurrentScreen()->Append( line );
+                last_pt = line->GetEndPoint();
+            }
+
+            line = new SCH_LINE( last_pt, SCH_LAYER_ID::LAYER_BUS );
+            line->SetStartPoint( last_pt );
+            line->SetEndPoint( busLine->GetStartPoint() );
+            line->SetLineWidth( busLine->GetLineWidth() );
+            line->SetLineColor( busLine->GetLineColor() );
+            getCurrentScreen()->Append( line );
+
+        }
+    }
 }
 
 
@@ -591,7 +825,7 @@ void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
             msg.Printf( _( "The file name for sheet %s is undefined, this is probably an"
                            " Altium signal harness that got converted to a sheet." ),
                         sheet->GetName() );
-            m_reporter->Report( msg );
+            m_errorMessages.emplace( msg, SEVERITY::RPT_SEVERITY_INFO );
             sheet->SetScreen( new SCH_SCREEN( m_schematic ) );
             continue;
         }
@@ -614,6 +848,7 @@ void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
             wxCHECK2( screen, continue );
 
             m_sheetPath.push_back( sheet );
+            m_sheets.clear();
             ParseAltiumSch( loadAltiumFileName.GetFullPath() );
 
             // Map the loaded Altium file to the project file.
@@ -655,7 +890,7 @@ void SCH_IO_ALTIUM::ParseStorage( const ALTIUM_COMPOUND_FILE& aAltiumSchFile )
     // throw IO Error.
     if( reader.GetRemainingBytes() != 0 )
     {
-        m_reporter->Report( wxString::Format( _( "Storage file not fully parsed "
+        m_errorMessages.emplace( wxString::Format( _( "Storage file not fully parsed "
                                                  "(%d bytes remaining)." ),
                                               reader.GetRemainingBytes() ),
                             RPT_SEVERITY_ERROR );
@@ -701,12 +936,15 @@ void SCH_IO_ALTIUM::ParseAdditional( const ALTIUM_COMPOUND_FILE& aAltiumSchFile 
     for( const ASCH_PORT& port : m_altiumHarnessPortsCurrentSheet )
         ParseHarnessPort( port );
 
+    CreateAliases();
+
     if( reader.HasParsingError() )
         THROW_IO_ERROR( "stream was not parsed correctly!" );
 
     if( reader.GetRemainingBytes() != 0 )
         THROW_IO_ERROR( "stream is not fully parsed" );
 
+    m_altiumHarnesses.clear();
     m_altiumHarnessPortsCurrentSheet.clear();
 }
 
@@ -899,6 +1137,10 @@ void SCH_IO_ALTIUM::ParseASCIISchematic( const wxString& aFileName )
     for( const ASCH_PORT& port : m_altiumPortsCurrentSheet )
         ParsePort( port );
 
+    // Add the aliases used for harnesses
+    CreateAliases();
+
+    m_altiumHarnesses.clear();
     m_altiumPortsCurrentSheet.clear();
     m_altiumComponents.clear();
     m_altiumTemplates.clear();
@@ -939,7 +1181,7 @@ void SCH_IO_ALTIUM::ParseRecord( int index, std::map<wxString, wxString>& proper
         break;
 
         case ALTIUM_SCH_RECORD::IEEE_SYMBOL:
-            m_reporter->Report( _( "Record 'IEEE_SYMBOL' not handled." ), RPT_SEVERITY_INFO );
+            m_errorMessages.emplace( _( "Record 'IEEE_SYMBOL' not handled." ), RPT_SEVERITY_INFO );
             break;
 
     case ALTIUM_SCH_RECORD::LABEL:
@@ -1058,7 +1300,7 @@ void SCH_IO_ALTIUM::ParseRecord( int index, std::map<wxString, wxString>& proper
         break;
 
     case ALTIUM_SCH_RECORD::PARAMETER_SET:
-        m_reporter->Report( _( "Parameter Set not currently supported." ), RPT_SEVERITY_ERROR );
+        m_errorMessages.emplace( _( "Parameter Set not currently supported." ), RPT_SEVERITY_ERROR );
         break;
 
     case ALTIUM_SCH_RECORD::IMPLEMENTATION_LIST:
@@ -1083,7 +1325,7 @@ void SCH_IO_ALTIUM::ParseRecord( int index, std::map<wxString, wxString>& proper
         break;
 
     case ALTIUM_SCH_RECORD::COMPILE_MASK:
-        m_reporter->Report( _( "Compile mask not currently supported." ), RPT_SEVERITY_ERROR );
+        m_errorMessages.emplace( _( "Compile mask not currently supported." ), RPT_SEVERITY_ERROR );
         break;
 
     case ALTIUM_SCH_RECORD::HYPERLINK:
@@ -1108,11 +1350,11 @@ void SCH_IO_ALTIUM::ParseRecord( int index, std::map<wxString, wxString>& proper
         break;
 
     case ALTIUM_SCH_RECORD::BLANKET:
-        m_reporter->Report( _( "Blanket not currently supported." ), RPT_SEVERITY_ERROR );
+        m_errorMessages.emplace( _( "Blanket not currently supported." ), RPT_SEVERITY_ERROR );
         break;
 
     default:
-        m_reporter->Report(
+        m_errorMessages.emplace(
                 wxString::Format( _( "Unknown or unexpected record id %d found in %s." ), recordId,
                                   aSectionName ),
                 RPT_SEVERITY_ERROR );
@@ -1171,7 +1413,7 @@ void SCH_IO_ALTIUM::ParseComponent( int aIndex, const std::map<wxString, wxStrin
     {
         const ASCH_SYMBOL& currentSymbol = m_altiumComponents.at( aIndex );
 
-        m_reporter->Report( wxString::Format( _( "Symbol \"%s\" in sheet \"%s\" at index %d "
+        m_errorMessages.emplace( wxString::Format( _( "Symbol \"%s\" in sheet \"%s\" at index %d "
                                                  "replaced with symbol \"%s\"." ),
                                               currentSymbol.libreference,
                                               sheetName,
@@ -1265,7 +1507,7 @@ void SCH_IO_ALTIUM::ParsePin( const std::map<wxString, wxString>& aProperties,
         if( libSymbolIt == m_libSymbols.end() )
         {
             // TODO: e.g. can depend on Template (RECORD=39
-            m_reporter->Report( wxString::Format( wxT( "Pin's owner (%d) not found." ),
+            m_errorMessages.emplace( wxString::Format( wxT( "Pin's owner (%d) not found." ),
                                                   elem.ownerindex ),
                                 RPT_SEVERITY_DEBUG );
             return;
@@ -1327,7 +1569,7 @@ void SCH_IO_ALTIUM::ParsePin( const std::map<wxString, wxString>& aProperties,
         break;
 
     default:
-        m_reporter->Report( _( "Pin has unexpected orientation." ), RPT_SEVERITY_WARNING );
+        m_errorMessages.emplace( _( "Pin has unexpected orientation." ), RPT_SEVERITY_WARNING );
         break;
     }
 
@@ -1375,15 +1617,15 @@ void SCH_IO_ALTIUM::ParsePin( const std::map<wxString, wxString>& aProperties,
     case ASCH_PIN_ELECTRICAL::UNKNOWN:
     default:
         pin->SetType( ELECTRICAL_PINTYPE::PT_UNSPECIFIED );
-        m_reporter->Report( _( "Pin has unexpected electrical type." ), RPT_SEVERITY_WARNING );
+        m_errorMessages.emplace( _( "Pin has unexpected electrical type." ), RPT_SEVERITY_WARNING );
         break;
     }
 
     if( elem.symbolOuterEdge == ASCH_PIN_SYMBOL::UNKNOWN )
-        m_reporter->Report( _( "Pin has unexpected outer edge type." ), RPT_SEVERITY_WARNING );
+        m_errorMessages.emplace( _( "Pin has unexpected outer edge type." ), RPT_SEVERITY_WARNING );
 
     if( elem.symbolInnerEdge == ASCH_PIN_SYMBOL::UNKNOWN )
-        m_reporter->Report( _( "Pin has unexpected inner edge type." ), RPT_SEVERITY_WARNING );
+        m_errorMessages.emplace( _( "Pin has unexpected inner edge type." ), RPT_SEVERITY_WARNING );
 
     if( elem.symbolOuterEdge == ASCH_PIN_SYMBOL::NEGATED )
     {
@@ -1562,7 +1804,7 @@ void SCH_IO_ALTIUM::ParseLabel( const std::map<wxString, wxString>& aProperties,
             textItem->SetItalic( font.Italic );
         }
 
-        textItem->SetFlags(IS_NEW );
+        textItem->SetFlags( IS_NEW );
 
         SCH_SCREEN* screen = getCurrentScreen();
         wxCHECK( screen, /* void */ );
@@ -1583,7 +1825,7 @@ void SCH_IO_ALTIUM::ParseLabel( const std::map<wxString, wxString>& aProperties,
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
-                m_reporter->Report( wxString::Format( wxT( "Label's owner (%d) not found." ),
+                m_errorMessages.emplace( wxString::Format( wxT( "Label's owner (%d) not found." ),
                                                       elem.ownerindex ),
                                     RPT_SEVERITY_DEBUG );
                 return;
@@ -1724,7 +1966,7 @@ void SCH_IO_ALTIUM::AddLibTextBox( const ASCH_TEXT_FRAME *aElem, std::vector<LIB
         if( libSymbolIt == m_libSymbols.end() )
         {
             // TODO: e.g. can depend on Template (RECORD=39
-            m_reporter->Report(
+            m_errorMessages.emplace(
                     wxString::Format( wxT( "Label's owner (%d) not found." ), aElem->ownerindex ),
                     RPT_SEVERITY_DEBUG );
             return;
@@ -1795,7 +2037,7 @@ void SCH_IO_ALTIUM::ParseBezier( const std::map<wxString, wxString>& aProperties
 
     if( elem.points.size() < 2 )
     {
-        m_reporter->Report( wxString::Format( _( "Bezier has %d control points. At least 2 are "
+        m_errorMessages.emplace( wxString::Format( _( "Bezier has %d control points. At least 2 are "
                                                  "expected." ),
                                               static_cast<int>( elem.points.size() ) ),
                             RPT_SEVERITY_WARNING );
@@ -1862,7 +2104,7 @@ void SCH_IO_ALTIUM::ParseBezier( const std::map<wxString, wxString>& aProperties
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
-                m_reporter->Report( wxString::Format( wxT( "Bezier's owner (%d) not found." ),
+                m_errorMessages.emplace( wxString::Format( wxT( "Bezier's owner (%d) not found." ),
                                                       elem.ownerindex ),
                                     RPT_SEVERITY_DEBUG );
                 return;
@@ -1995,7 +2237,7 @@ void SCH_IO_ALTIUM::ParsePolyline( const std::map<wxString, wxString>& aProperti
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
-                m_reporter->Report( wxString::Format( wxT( "Polyline's owner (%d) not found." ),
+                m_errorMessages.emplace( wxString::Format( wxT( "Polyline's owner (%d) not found." ),
                                                       elem.ownerindex ),
                                     RPT_SEVERITY_DEBUG );
                 return;
@@ -2066,7 +2308,7 @@ void SCH_IO_ALTIUM::ParsePolygon( const std::map<wxString, wxString>& aPropertie
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
-                m_reporter->Report( wxString::Format( wxT( "Polygon's owner (%d) not found." ),
+                m_errorMessages.emplace( wxString::Format( wxT( "Polygon's owner (%d) not found." ),
                                                       elem.ownerindex ),
                                     RPT_SEVERITY_DEBUG );
                 return;
@@ -2148,7 +2390,7 @@ void SCH_IO_ALTIUM::ParseRoundRectangle( const std::map<wxString, wxString>& aPr
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
-                m_reporter->Report( wxString::Format( wxT( "Rounded rectangle's owner (%d) not "
+                m_errorMessages.emplace( wxString::Format( wxT( "Rounded rectangle's owner (%d) not "
                                                            "found." ),
                                                       elem.ownerindex ),
                                     RPT_SEVERITY_DEBUG );
@@ -2268,7 +2510,7 @@ void SCH_IO_ALTIUM::ParseArc( const std::map<wxString, wxString>& aProperties,
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
-                m_reporter->Report( wxString::Format( wxT( "Arc's owner (%d) not found." ),
+                m_errorMessages.emplace( wxString::Format( wxT( "Arc's owner (%d) not found." ),
                                                       elem.ownerindex ),
                                     RPT_SEVERITY_DEBUG );
                 return;
@@ -2369,7 +2611,7 @@ void SCH_IO_ALTIUM::ParseEllipticalArc( const std::map<wxString, wxString>& aPro
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
-                m_reporter->Report( wxString::Format( wxT( "Elliptical Arc's owner (%d) not found." ),
+                m_errorMessages.emplace( wxString::Format( wxT( "Elliptical Arc's owner (%d) not found." ),
                                                       elem.ownerindex ),
                                     RPT_SEVERITY_DEBUG );
                 return;
@@ -2469,7 +2711,7 @@ void SCH_IO_ALTIUM::ParsePieChart( const std::map<wxString, wxString>& aProperti
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
-                m_reporter->Report( wxString::Format( wxT( "Piechart's owner (%d) not found." ),
+                m_errorMessages.emplace( wxString::Format( wxT( "Piechart's owner (%d) not found." ),
                                                       elem.ownerindex ),
                                     RPT_SEVERITY_DEBUG );
                 return;
@@ -2582,7 +2824,7 @@ void SCH_IO_ALTIUM::ParseEllipse( const std::map<wxString, wxString>& aPropertie
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
-                m_reporter->Report( wxString::Format( wxT( "Ellipse's owner (%d) not found." ),
+                m_errorMessages.emplace( wxString::Format( wxT( "Ellipse's owner (%d) not found." ),
                                                       elem.ownerindex ),
                                     RPT_SEVERITY_DEBUG );
                 return;
@@ -2687,7 +2929,7 @@ void SCH_IO_ALTIUM::ParseCircle( const std::map<wxString, wxString>& aProperties
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
-                m_reporter->Report( wxString::Format( wxT( "Ellipse's owner (%d) not found." ),
+                m_errorMessages.emplace( wxString::Format( wxT( "Ellipse's owner (%d) not found." ),
                                                       elem.ownerindex ),
                                     RPT_SEVERITY_DEBUG );
                 return;
@@ -2749,7 +2991,7 @@ void SCH_IO_ALTIUM::ParseLine( const std::map<wxString, wxString>& aProperties,
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
-                m_reporter->Report( wxString::Format( wxT( "Line's owner (%d) not found." ),
+                m_errorMessages.emplace( wxString::Format( wxT( "Line's owner (%d) not found." ),
                                                       elem.ownerindex ),
                                     RPT_SEVERITY_DEBUG );
                 return;
@@ -2793,21 +3035,22 @@ void SCH_IO_ALTIUM::ParseSignalHarness( const std::map<wxString, wxString>& aPro
         SCH_SCREEN* screen = getCurrentScreen();
         wxCHECK( screen, /* void */ );
 
-        SCH_SHAPE* poly = new SCH_SHAPE( SHAPE_T::POLY );
+        for( size_t ii = 0; ii < elem.points.size() - 1; ii++ )
+        {
+            SCH_LINE* line = new SCH_LINE( elem.points[ii] + m_sheetOffset,
+                                           SCH_LAYER_ID::LAYER_BUS );
+            line->SetEndPoint( elem.points[ii + 1] + m_sheetOffset );
+            line->SetStroke( STROKE_PARAMS( elem.lineWidth, LINE_STYLE::SOLID,
+                                            GetColorFromInt( elem.color ) ) );
 
-        for( VECTOR2I& point : elem.Points )
-            poly->AddPoint( point + m_sheetOffset );
-
-        poly->SetStroke( STROKE_PARAMS( elem.LineWidth, LINE_STYLE::SOLID,
-                                        GetColorFromInt( elem.Color ) ) );
-        poly->SetFlags( IS_NEW );
-
-        screen->Append( poly );
+            line->SetFlags( IS_NEW );
+            screen->Append( line );
+        }
     }
     else
     {
         // No clue if this situation can ever exist
-        m_reporter->Report( wxT( "Signal harness, belonging to the part is not currently "
+        m_errorMessages.emplace( wxT( "Signal harness, belonging to the part is not currently "
                                  "supported." ), RPT_SEVERITY_DEBUG );
     }
 }
@@ -2820,30 +3063,38 @@ void SCH_IO_ALTIUM::ParseHarnessConnector( int aIndex, const std::map<wxString,
 
     if( ShouldPutItemOnSheet( elem.ownerindex ) )
     {
-        SCH_SCREEN* currentScreen = getCurrentScreen();
-        wxCHECK( currentScreen, /* void */ );
-
-        SCH_SHEET* sheet = new SCH_SHEET( getCurrentSheet(), elem.Location + m_sheetOffset,
-                                          elem.Size );
-
-        sheet->SetScreen( new SCH_SCREEN( m_schematic ) );
-        sheet->SetBackgroundColor( GetColorFromInt( elem.AreaColor ) );
-        sheet->SetBorderColor( GetColorFromInt( elem.Color ) );
-
-        currentScreen->Append( sheet );
-
-        SCH_SHEET_PATH sheetpath = m_sheetPath;
-        sheetpath.push_back( sheet );
-
-        sheetpath.SetPageNumber( "Harness #" );
-
         m_harnessEntryParent = aIndex + m_harnessOwnerIndexOffset;
-        m_sheets.insert( { m_harnessEntryParent, sheet } );
+        auto [it, _] = m_altiumHarnesses.insert( { m_harnessEntryParent, HARNESS()} );
+
+        HARNESS& harness = it->second;
+        HARNESS::HARNESS_PORT& port = harness.m_entry;
+        harness.m_location = elem.m_location + m_sheetOffset;
+        harness.m_size = elem.m_size;
+
+        VECTOR2I pos = elem.m_location + m_sheetOffset;
+        VECTOR2I size = elem.m_size;
+
+        switch( elem.m_harnessConnectorSide )
+        {
+        default:
+        case ASCH_SHEET_ENTRY_SIDE::LEFT:
+            port.m_location = { pos.x, pos.y + elem.m_primaryConnectionPosition };
+            break;
+        case ASCH_SHEET_ENTRY_SIDE::RIGHT:
+            port.m_location = { pos.x + size.x, pos.y + elem.m_primaryConnectionPosition };
+            break;
+        case ASCH_SHEET_ENTRY_SIDE::TOP:
+            port.m_location = { pos.x + elem.m_primaryConnectionPosition, pos.y };
+            break;
+        case ASCH_SHEET_ENTRY_SIDE::BOTTOM:
+            port.m_location = { pos.x + elem.m_primaryConnectionPosition, pos.y + size.y };
+            break;
+        }
     }
     else
     {
         // I have no clue if this situation can ever exist
-        m_reporter->Report( wxT( "Harness connector, belonging to the part is not currently "
+        m_errorMessages.emplace( wxT( "Harness connector, belonging to the part is not currently "
                                  "supported." ),
                             RPT_SEVERITY_DEBUG );
     }
@@ -2854,49 +3105,53 @@ void SCH_IO_ALTIUM::ParseHarnessEntry( const std::map<wxString, wxString>& aProp
 {
     ASCH_HARNESS_ENTRY elem( aProperties );
 
-    const auto& sheetIt = m_sheets.find( m_harnessEntryParent );
+    auto harnessIt = m_altiumHarnesses.find( m_harnessEntryParent );
 
-    if( sheetIt == m_sheets.end() )
+    if( harnessIt == m_altiumHarnesses.end() )
     {
-        m_reporter->Report( wxString::Format( wxT( "Harness entry's parent (%d) not found." ),
+        m_errorMessages.emplace( wxString::Format( wxT( "Harness entry's parent (%d) not found." ),
                                               SCH_IO_ALTIUM::m_harnessEntryParent ),
                             RPT_SEVERITY_DEBUG );
         return;
     }
 
-    SCH_SHEET_PIN* sheetPin = new SCH_SHEET_PIN( sheetIt->second );
-    sheetIt->second->AddPin( sheetPin );
+    HARNESS& harness = harnessIt->second;
+    HARNESS::HARNESS_PORT port;
+    port.m_name = elem.Name;
+    port.m_harnessConnectorSide = elem.Side;
 
-    sheetPin->SetText( elem.Name );
-    sheetPin->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
-
-    VECTOR2I pos = sheetIt->second->GetPosition();
-    VECTOR2I size = sheetIt->second->GetSize();
+    VECTOR2I pos = harness.m_location;
+    VECTOR2I size = harness.m_size;
+    int quadrant = 1;
 
     switch( elem.Side )
     {
     default:
     case ASCH_SHEET_ENTRY_SIDE::LEFT:
-        sheetPin->SetPosition( { pos.x, pos.y + elem.DistanceFromTop } );
-        sheetPin->SetSpinStyle( SPIN_STYLE::LEFT );
-        sheetPin->SetSide( SHEET_SIDE::LEFT );
+        port.m_location = { pos.x, pos.y + elem.DistanceFromTop };
         break;
     case ASCH_SHEET_ENTRY_SIDE::RIGHT:
-        sheetPin->SetPosition( { pos.x + size.x, pos.y + elem.DistanceFromTop } );
-        sheetPin->SetSpinStyle( SPIN_STYLE::RIGHT );
-        sheetPin->SetSide( SHEET_SIDE::RIGHT );
+        quadrant = 4;
+        port.m_location = { pos.x + size.x, pos.y + elem.DistanceFromTop };
         break;
     case ASCH_SHEET_ENTRY_SIDE::TOP:
-        sheetPin->SetPosition( { pos.x + elem.DistanceFromTop, pos.y } );
-        sheetPin->SetSpinStyle( SPIN_STYLE::UP );
-        sheetPin->SetSide( SHEET_SIDE::TOP );
+        port.m_location = { pos.x + elem.DistanceFromTop, pos.y };
         break;
     case ASCH_SHEET_ENTRY_SIDE::BOTTOM:
-        sheetPin->SetPosition( { pos.x + elem.DistanceFromTop, pos.y + size.y } );
-        sheetPin->SetSpinStyle( SPIN_STYLE::BOTTOM );
-        sheetPin->SetSide( SHEET_SIDE::BOTTOM );
+        quadrant = 2;
+        port.m_location = { pos.x + elem.DistanceFromTop, pos.y + size.y };
         break;
     }
+
+
+    SCH_SCREEN* screen = getCurrentScreen();
+    wxCHECK( screen, /* void */ );
+
+    SCH_BUS_WIRE_ENTRY* entry = new SCH_BUS_WIRE_ENTRY( port.m_location, quadrant );
+    port.m_entryLocation = entry->GetPosition() + entry->GetSize();
+    entry->SetFlags( IS_NEW );
+    screen->Append( entry );
+    harness.m_ports.emplace_back( port );
 }
 
 
@@ -2904,46 +3159,19 @@ void SCH_IO_ALTIUM::ParseHarnessType( const std::map<wxString, wxString>& aPrope
 {
     ASCH_HARNESS_TYPE elem( aProperties );
 
-    const auto& sheetIt = m_sheets.find( m_harnessEntryParent );
+    auto harnessIt = m_altiumHarnesses.find( m_harnessEntryParent );
 
-    if( sheetIt == m_sheets.end() )
+    if( harnessIt == m_altiumHarnesses.end() )
     {
-        m_reporter->Report( wxString::Format( wxT( "Harness type's parent (%d) not found." ),
-                                              m_harnessEntryParent ),
+        m_errorMessages.emplace( wxString::Format( wxT( "Harness type's parent (%d) not found." ),
+                                              SCH_IO_ALTIUM::m_harnessEntryParent ),
                             RPT_SEVERITY_DEBUG );
         return;
     }
 
-    SCH_FIELD& sheetNameField = sheetIt->second->GetFields()[SHEETNAME];
+    HARNESS& harness = harnessIt->second;
+    harness.m_name = elem.Text;
 
-    sheetNameField.SetPosition( elem.Location + m_sheetOffset );
-    sheetNameField.SetText( elem.Text );
-
-    // Always set as visible so user is aware about ( !elem.isHidden );
-    sheetNameField.SetVisible( true );
-    SetTextPositioning( &sheetNameField, ASCH_LABEL_JUSTIFICATION::BOTTOM_LEFT,
-                        ASCH_RECORD_ORIENTATION::RIGHTWARDS );
-    sheetNameField.SetTextColor( GetColorFromInt( elem.Color ) );
-
-    SCH_FIELD& sheetFileName = sheetIt->second->GetFields()[SHEETFILENAME];
-    sheetFileName.SetText( elem.Text + wxT( "." ) + FILEEXT::KiCadSchematicFileExtension );
-
-    wxFileName fn( m_schematic->Prj().GetProjectPath(), elem.Text,
-                   FILEEXT::KiCadSchematicFileExtension );
-    wxString fullPath = fn.GetFullPath();
-
-    fullPath.Replace( wxT( "\\" ), wxT( "/" ) );
-
-    SCH_SCREEN* screen = sheetIt->second->GetScreen();
-
-    wxCHECK( screen, /* void */ );
-    screen->SetFileName( fullPath );
-
-    m_reporter->Report( wxString::Format( _( "Altium's harness connector (%s) was imported as a "
-                                             "hierarchical sheet. Please review the imported "
-                                             "schematic." ),
-                                          elem.Text ),
-                        RPT_SEVERITY_WARNING );
 }
 
 
@@ -2984,7 +3212,7 @@ void SCH_IO_ALTIUM::ParseRectangle( const std::map<wxString, wxString>& aPropert
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
-                m_reporter->Report( wxString::Format( wxT( "Rectangle's owner (%d) not found." ),
+                m_errorMessages.emplace( wxString::Format( wxT( "Rectangle's owner (%d) not found." ),
                                                     elem.ownerindex ),
                                     RPT_SEVERITY_DEBUG );
                 return;
@@ -3063,7 +3291,7 @@ void SCH_IO_ALTIUM::ParseSheetEntry( const std::map<wxString, wxString>& aProper
 
     if( sheetIt == m_sheets.end() )
     {
-        m_reporter->Report( wxString::Format( wxT( "Sheet entry's owner (%d) not found." ),
+        m_errorMessages.emplace( wxString::Format( wxT( "Sheet entry's owner (%d) not found." ),
                                               elem.ownerindex ),
                             RPT_SEVERITY_DEBUG );
         return;
@@ -3440,7 +3668,7 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
         break;
 
     default:
-        m_reporter->Report( _( "Pin has unexpected orientation." ), RPT_SEVERITY_WARNING );
+        m_errorMessages.emplace( _( "Pin has unexpected orientation." ), RPT_SEVERITY_WARNING );
         break;
     }
 
@@ -3450,67 +3678,7 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
 
 void SCH_IO_ALTIUM::ParseHarnessPort( const ASCH_PORT& aElem )
 {
-    SCH_TEXTBOX* textBox = new SCH_TEXTBOX();
-
-    textBox->SetText( aElem.Name );
-    textBox->SetTextColor( GetColorFromInt( aElem.TextColor ) );
-
-    int height = aElem.Height;
-    if( height <= 0 )
-        height = schIUScale.MilsToIU( 100 ); //  chose default 50 grid
-
-    textBox->SetStartX( ( aElem.Location + m_sheetOffset ).x );
-    textBox->SetStartY( ( aElem.Location + m_sheetOffset ).y - ( height / 2 ) );
-    textBox->SetEndX( ( aElem.Location + m_sheetOffset ).x + ( aElem.Width ) );
-    textBox->SetEndY( ( aElem.Location + m_sheetOffset ).y + ( height / 2 ) );
-
-    textBox->SetFillColor( HARNESS_PORT_COLOR_DEFAULT_BACKGROUND );
-    textBox->SetFillMode( FILL_T::FILLED_WITH_COLOR );
-
-    textBox->SetStroke( STROKE_PARAMS( 2, LINE_STYLE::DEFAULT,
-                                       HARNESS_PORT_COLOR_DEFAULT_OUTLINE ) );
-
-    switch( aElem.Alignment )
-    {
-    default:
-    case ASCH_TEXT_FRAME_ALIGNMENT::LEFT:
-        textBox->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-        break;
-
-    case ASCH_TEXT_FRAME_ALIGNMENT::CENTER:
-        textBox->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
-        break;
-
-    case ASCH_TEXT_FRAME_ALIGNMENT::RIGHT:
-        textBox->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-        break;
-    }
-
-    size_t fontId = static_cast<int>( aElem.FontID );
-
-    if( m_altiumSheet && fontId > 0 && fontId <= m_altiumSheet->fonts.size() )
-    {
-        const ASCH_SHEET_FONT& font = m_altiumSheet->fonts.at( fontId - 1 );
-        textBox->SetTextSize( { font.Size / 2, font.Size / 2 } );
-
-        // Must come after SetTextSize()
-        textBox->SetBold( font.Bold );
-        textBox->SetItalic( font.Italic );
-        //textBox->SetFont(  //how to set font, we have a font name here: ( font.fontname );
-    }
-
-    textBox->SetFlags( IS_NEW );
-
-    SCH_SCREEN* screen = getCurrentScreen();
-    wxCHECK( screen, /* void */ );
-
-    screen->Append( textBox );
-
-    m_reporter->Report( wxString::Format( _( "Altium's harness port (%s) was imported as "
-                                             "a text box. Please review the imported "
-                                             "schematic." ),
-                                          aElem.Name ),
-                        RPT_SEVERITY_WARNING );
+    ParsePortHelper( aElem );
 }
 
 
@@ -3523,6 +3691,12 @@ void SCH_IO_ALTIUM::ParsePort( const ASCH_PORT& aElem )
         return;
     }
 
+    ParsePortHelper( aElem );
+}
+
+
+void SCH_IO_ALTIUM::ParsePortHelper( const ASCH_PORT& aElem )
+{
     VECTOR2I start = aElem.Location + m_sheetOffset;
     VECTOR2I end = start;
 
@@ -3563,8 +3737,34 @@ void SCH_IO_ALTIUM::ParsePort( const ASCH_PORT& aElem )
 
     if( !connectionFound )
     {
-        m_reporter->Report( wxString::Format( _( "Port %s has no connections." ), aElem.Name ),
+        for( auto& [ _, harness ] : m_altiumHarnesses )
+        {
+            if( harness.m_name.CmpNoCase( aElem.HarnessType ) != 0 )
+                continue;
+
+            BOX2I bbox( harness.m_location, harness.m_size );
+            bbox.Inflate( 10 );
+
+            if( bbox.Contains( start ) )
+            {
+                startIsBusTerminal = true;
+                connectionFound = true;
+                break;
+            }
+
+            if( bbox.Contains( end ) )
+            {
+                endIsBusTerminal = true;
+                connectionFound = true;
+                break;
+            }
+        }
+
+        if( !connectionFound )
+        {
+            m_errorMessages.emplace( wxString::Format( _( "Port %s has no connections." ), aElem.Name ),
                             RPT_SEVERITY_WARNING );
+        }
     }
 
     // Select label position. In case both match, we will add a line later.
@@ -3758,7 +3958,7 @@ void SCH_IO_ALTIUM::ParseImage( const std::map<wxString, wxString>& aProperties 
         {
             wxString msg = wxString::Format( _( "Embedded file %s not found in storage." ),
                                              elem.filename );
-            m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+            m_errorMessages.emplace( msg, RPT_SEVERITY_ERROR );
             return;
         }
 
@@ -3773,7 +3973,7 @@ void SCH_IO_ALTIUM::ParseImage( const std::map<wxString, wxString>& aProperties 
 
         if( !refImage.ReadImageFile( storagePath ) )
         {
-            m_reporter->Report( wxString::Format( _( "Error reading image %s." ), storagePath ),
+            m_errorMessages.emplace( wxString::Format( _( "Error reading image %s." ), storagePath ),
                                 RPT_SEVERITY_ERROR );
             return;
         }
@@ -3785,15 +3985,16 @@ void SCH_IO_ALTIUM::ParseImage( const std::map<wxString, wxString>& aProperties 
     {
         if( !wxFileExists( elem.filename ) )
         {
-            m_reporter->Report( wxString::Format( _( "File not found %s." ), elem.filename ),
+            m_errorMessages.emplace( wxString::Format( _( "File not found %s." ), elem.filename ),
                                 RPT_SEVERITY_ERROR );
             return;
         }
 
         if( !refImage.ReadImageFile( elem.filename ) )
         {
-            m_reporter->Report( wxString::Format( _( "Error reading image %s." ), elem.filename ),
-                                RPT_SEVERITY_ERROR );
+            m_errorMessages.emplace(
+                    wxString::Format( _( "Error reading image %s." ), elem.filename ),
+                    RPT_SEVERITY_ERROR );
             return;
         }
     }
@@ -3869,7 +4070,7 @@ void SCH_IO_ALTIUM::ParseSheetName( const std::map<wxString, wxString>& aPropert
 
     if( sheetIt == m_sheets.end() )
     {
-        m_reporter->Report( wxString::Format( wxT( "Sheetname's owner (%d) not found." ),
+        m_errorMessages.emplace( wxString::Format( wxT( "Sheetname's owner (%d) not found." ),
                                               elem.ownerindex ),
                             RPT_SEVERITY_DEBUG );
         return;
@@ -3892,7 +4093,7 @@ void SCH_IO_ALTIUM::ParseFileName( const std::map<wxString, wxString>& aProperti
 
     if( sheetIt == m_sheets.end() )
     {
-        m_reporter->Report( wxString::Format( wxT( "Filename's owner (%d) not found." ),
+        m_errorMessages.emplace( wxString::Format( wxT( "Filename's owner (%d) not found." ),
                                               elem.ownerindex ),
                             RPT_SEVERITY_DEBUG );
         return;
@@ -3918,7 +4119,7 @@ void SCH_IO_ALTIUM::ParseDesignator( const std::map<wxString, wxString>& aProper
     if( libSymbolIt == m_libSymbols.end() )
     {
         // TODO: e.g. can depend on Template (RECORD=39
-        m_reporter->Report( wxString::Format( wxT( "Designator's owner (%d) not found." ),
+        m_errorMessages.emplace( wxString::Format( wxT( "Designator's owner (%d) not found." ),
                                             elem.ownerindex ),
                             RPT_SEVERITY_DEBUG );
         return;
@@ -4221,7 +4422,7 @@ void SCH_IO_ALTIUM::ParseImplementation( const std::map<wxString, wxString>& aPr
 
     if( implementationOwnerIt == m_altiumImplementationList.end() )
     {
-        m_reporter->Report( wxString::Format( wxT( "Implementation's owner (%d) not found." ),
+        m_errorMessages.emplace( wxString::Format( wxT( "Implementation's owner (%d) not found." ),
                                               elem.ownerindex ),
                             RPT_SEVERITY_DEBUG );
         return;
@@ -4231,7 +4432,7 @@ void SCH_IO_ALTIUM::ParseImplementation( const std::map<wxString, wxString>& aPr
 
     if( libSymbolIt == m_libSymbols.end() )
     {
-        m_reporter->Report( wxString::Format( wxT( "Footprint's owner (%d) not found." ),
+        m_errorMessages.emplace( wxString::Format( wxT( "Footprint's owner (%d) not found." ),
                                               implementationOwnerIt->second ),
                             RPT_SEVERITY_DEBUG );
         return;
@@ -4463,7 +4664,7 @@ std::map<wxString,LIB_SYMBOL*> SCH_IO_ALTIUM::ParseLibFile( const ALTIUM_COMPOUN
             case ALTIUM_SCH_RECORD::IMAGE: break;
 
             default:
-                m_reporter->Report( wxString::Format( _( "Unknown or unexpected record id %d found "
+                m_errorMessages.emplace( wxString::Format( _( "Unknown or unexpected record id %d found "
                                                          "in %s." ),
                                                       recordId, symbols[0]->GetName() ),
                                     RPT_SEVERITY_ERROR );
