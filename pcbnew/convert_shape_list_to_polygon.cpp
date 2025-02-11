@@ -354,15 +354,13 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
                         std::swap( pstart, pend );
                     }
 
+                    // Snap the arc start point to avoid potential self-intersections
+                    pstart = prevPt;
+
                     SHAPE_ARC sarc( pstart, pmid, pend, 0 );
 
                     SHAPE_LINE_CHAIN arcChain;
                     arcChain.Append( sarc, aErrorMax );
-
-                    // if this arc is after another object, pop off the first point
-                    // the previous point from the last object should be already close enough as part of chaining
-                    if( prevGraphic != nullptr )
-                        arcChain.Remove( 0 );
 
                     if( !aAllowUseArcsInPolygons )
                         arcChain.ClearArcs();
@@ -454,6 +452,47 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
                 // Finished, or ran into trouble...
                 if( close_enough( startPt, prevPt, aChainingEpsilon ) )
                 {
+                    if( startPt != prevPt && currContour.PointCount() > 2 )
+                    {
+                        // Snap the last shape's endpoint to the outline startpoint
+                        PCB_SHAPE* owner = fetchOwner( currContour.CSegment( -1 ) );
+
+                        if( currContour.IsArcEnd( currContour.PointCount() - 1 ) )
+                        {
+                            SHAPE_ARC arc = currContour.Arc(
+                                    currContour.ArcIndex( currContour.PointCount() - 1 ) );
+
+                            // Snap the arc endpoint
+                            SHAPE_ARC sarc( arc.GetP0(), arc.GetArcMid(), startPt, 0 );
+
+                            SHAPE_LINE_CHAIN arcChain;
+                            arcChain.Append( sarc, aErrorMax );
+
+                            if( !aAllowUseArcsInPolygons )
+                                arcChain.ClearArcs();
+
+                            // Set shapeOwners for arcChain points created by appending the sarc:
+                            for( int ii = 1; ii < arcChain.PointCount(); ++ii )
+                            {
+                                shapeOwners[std::make_pair( arcChain.CPoint( ii - 1 ),
+                                                            arcChain.CPoint( ii ) )] = owner;
+                            }
+
+                            currContour.RemoveShape( currContour.PointCount() - 1 );
+                            currContour.Append( arcChain );
+                        }
+                        else
+                        {
+                            // Snap the segment endpoint
+                            currContour.SetPoint( -1, startPt );
+
+                            shapeOwners[std::make_pair( currContour.CPoint( -2 ),
+                                                        currContour.CPoint( -1 ) )] = owner;
+                        }
+
+                        prevPt = startPt;
+                    }
+
                     currContour.SetClosed( true );
                     break;
                 }
