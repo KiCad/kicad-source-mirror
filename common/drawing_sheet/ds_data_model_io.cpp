@@ -421,8 +421,6 @@ void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_BITMAP* aItem ) const
         m_out->Print( "(comment %s)", m_out->Quotew( aItem->m_Info ).c_str() );
 
     // Write image in png readable format
-    m_out->Print( "(data" );
-
     wxMemoryOutputStream stream;
     aItem->m_ImageBitmap->SaveImageData( stream );
 
