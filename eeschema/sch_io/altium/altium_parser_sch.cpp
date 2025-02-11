@@ -521,12 +521,12 @@ ASCH_SIGNAL_HARNESS::ASCH_SIGNAL_HARNESS( const std::map<wxString, wxString>& aP
     for( int i = 1; i <= locationCount; i++ )
     {
         const wxString si = std::to_string( i );
-        Points.emplace_back( ReadKiCadUnitFrac( aProps, "X" + si ),
+        points.emplace_back( ReadKiCadUnitFrac( aProps, "X" + si ),
                              -ReadKiCadUnitFrac( aProps, "Y" + si ) );
     }
 
-    Color = ALTIUM_PROPS_UTILS::ReadInt( aProps, "COLOR", 0 );
-    LineWidth = ReadKiCadUnitFrac( aProps, "LINEWIDTH" );
+    color = ALTIUM_PROPS_UTILS::ReadInt( aProps, "COLOR", 0 );
+    lineWidth = ReadKiCadUnitFrac( aProps, "LINEWIDTH" );
 }
 
 
@@ -536,16 +536,18 @@ ASCH_HARNESS_CONNECTOR::ASCH_HARNESS_CONNECTOR( const std::map<wxString, wxStrin
     wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::HARNESS_CONNECTOR );
 
 
-    Location = VECTOR2I( ReadKiCadUnitFrac( aProps, "LOCATION.X" ),
+    m_location = VECTOR2I( ReadKiCadUnitFrac( aProps, "LOCATION.X" ),
                          -ReadKiCadUnitFrac( aProps, "LOCATION.Y" ) );
-    Size = VECTOR2I( ReadKiCadUnitFrac( aProps, "XSIZE" ), ReadKiCadUnitFrac( aProps, "YSIZE" ) );
+    m_size = VECTOR2I( ReadKiCadUnitFrac( aProps, "XSIZE" ), ReadKiCadUnitFrac( aProps, "YSIZE" ) );
 
-    Color = ALTIUM_PROPS_UTILS::ReadInt( aProps, "COLOR", 0 );
-    AreaColor = ALTIUM_PROPS_UTILS::ReadInt( aProps, "AREACOLOR", 0 );
+    m_color = ALTIUM_PROPS_UTILS::ReadInt( aProps, "COLOR", 0 );
+    m_areaColor = ALTIUM_PROPS_UTILS::ReadInt( aProps, "AREACOLOR", 0 );
 
     indexinsheet = 0;
-    LineWidth = 0;;
-    LocationPrimaryConnectionPosition = 0;
+    m_lineWidth = 0;;
+    m_primaryConnectionPosition = ALTIUM_PROPS_UTILS::ReadInt( aProps, "PRIMARYCONNECTIONPOSITION", 0 );
+    m_harnessConnectorSide = ReadEnum<ASCH_SHEET_ENTRY_SIDE>( aProps, "SIDE", 0, 3, ASCH_SHEET_ENTRY_SIDE::RIGHT );
+
 }
 
 
@@ -687,8 +689,7 @@ ASCH_PORT::ASCH_PORT( const std::map<wxString, wxString>& aProps ) :
     FontID = ALTIUM_PROPS_UTILS::ReadInt( aProps, "TEXTFONTID", 0 );
     TextColor = ALTIUM_PROPS_UTILS::ReadInt( aProps, "TEXTCOLOR", 0 );
 
-    Alignment = ReadEnum<ASCH_TEXT_FRAME_ALIGNMENT>( aProps, "ALIGNMENT", 1, 3,
-                                                     ASCH_TEXT_FRAME_ALIGNMENT::LEFT );
+    m_align = ReadEnum<ASCH_PORT_ALIGNMENT>( aProps, "ALIGNMENT", 0, 2, ASCH_PORT_ALIGNMENT::CENTER );
 }
 
 

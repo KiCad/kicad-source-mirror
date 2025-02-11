@@ -52,6 +52,23 @@ class ALTIUM_COMPOUND_FILE;
 static std::vector<LIB_SYMBOL*> nullsym;
 static std::vector<int> nullint;
 
+struct HARNESS
+{
+    struct HARNESS_PORT
+    {
+        VECTOR2I              m_location;
+        VECTOR2I              m_entryLocation;
+        ASCH_SHEET_ENTRY_SIDE m_harnessConnectorSide;
+        int                   m_primaryConnectionPosition;
+        wxString              m_name;
+    };
+
+    wxString                  m_name;
+    VECTOR2I                  m_location;
+    VECTOR2I                  m_size;
+    std::vector<HARNESS_PORT> m_ports;
+    HARNESS_PORT              m_entry;
+};
 
 class SCH_IO_ALTIUM : public SCH_IO
 {
@@ -129,6 +146,7 @@ private:
     bool ShouldPutItemOnSheet( int aOwnerindex );
     bool IsComponentPartVisible( const ASCH_OWNER_INTERFACE& aElem ) const;
     const ASCH_STORAGE_FILE* GetFileFromStorage( const wxString& aFilename ) const;
+    void CreateAliases();
     void AddTextBox( const ASCH_TEXT_FRAME* aElem );
     void AddLibTextBox( const ASCH_TEXT_FRAME* aElem, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym, std::vector<int>& aFontSize = nullint );
 
@@ -159,6 +177,7 @@ private:
     void ParseSheetEntry( const std::map<wxString, wxString>& aProperties );
     void ParsePowerPort( const std::map<wxString, wxString>& aProperties );
     void ParsePort( const ASCH_PORT& aElem );
+    void ParsePortHelper( const ASCH_PORT& aElem );
     void ParseNoERC( const std::map<wxString, wxString>& aProperties );
     void ParseNetLabel( const std::map<wxString, wxString>& aProperties );
     void ParseBus( const std::map<wxString, wxString>& aProperties );
@@ -215,6 +234,7 @@ private:
 
     // parse harness ports after "FileHeader" was parsed, in 2nd run.
     std::vector<ASCH_PORT>          m_altiumHarnessPortsCurrentSheet;
+    std::map<int, HARNESS>          m_altiumHarnesses;
 
     // Add offset to all harness ownerIndex'es after parsing FileHeader.
     int m_harnessOwnerIndexOffset;
@@ -233,6 +253,9 @@ private:
 
     // List of available fonts with font name and font size in pt
     std::vector<std::pair<wxString, int>> m_fonts;
+
+    // Cache the error messages to avoid duplicate messages
+    std::unordered_map<wxString, SEVERITY > m_errorMessages;
 };
 
 #endif // _SCH_IO_ALTIUM_H_
