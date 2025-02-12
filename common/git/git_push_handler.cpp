@@ -53,13 +53,17 @@ PushResult GIT_PUSH_HANDLER::PerformPush()
     remoteCallbacks.transfer_progress = transfer_progress_cb;
     remoteCallbacks.update_tips = update_cb;
     remoteCallbacks.push_transfer_progress = push_transfer_progress_cb;
+    remoteCallbacks.credentials = credentials_cb;
     remoteCallbacks.payload = this;
+
+    m_testedTypes = 0;
+    ResetNextKey();
 
     if( git_remote_connect( remote, GIT_DIRECTION_PUSH, &remoteCallbacks, nullptr, nullptr ) )
     {
-        git_remote_free( remote );
         AddErrorString( wxString::Format( _( "Could not connect to remote: %s" ),
                                           git_error_last()->message ) );
+        git_remote_free( remote );
         return PushResult::Error;
     }
 
@@ -67,13 +71,33 @@ PushResult GIT_PUSH_HANDLER::PerformPush()
     git_push_init_options( &pushOptions, GIT_PUSH_OPTIONS_VERSION );
     pushOptions.callbacks = remoteCallbacks;
 
-    if( git_remote_push( remote, nullptr, &pushOptions ) )
+    // Get the current HEAD reference
+    git_reference* head = nullptr;
+
+    if( git_repository_head( &head, m_repo ) != 0 )
     {
+        AddErrorString( _( "Could not get repository head" ) );
         git_remote_free( remote );
-        AddErrorString( wxString::Format( _( "Could not push to remote: %s" ),
-                                          git_error_last()->message ) );
         return PushResult::Error;
     }
+
+    // Create refspec for current branch
+    const char* refs[1];
+    refs[0] = git_reference_name( head );
+    const git_strarray refspecs = { (char**) refs, 1 };
+
+    git_reference_free(head);
+    if( git_remote_push( remote, &refspecs, &pushOptions ) )
+    {
+        AddErrorString( wxString::Format( _( "Could not push to remote: %s" ),
+                                          git_error_last()->message ) );
+        git_remote_disconnect( remote );
+        git_remote_free( remote );
+        return PushResult::Error;
+    }
+
+    git_remote_disconnect( remote );
+    git_remote_free( remote );
 
     return result;
 }

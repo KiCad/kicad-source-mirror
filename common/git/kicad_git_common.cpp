@@ -678,15 +678,15 @@ extern "C" int update_cb( const char* aRefname, const git_oid* aFirst, const git
 extern "C" int push_transfer_progress_cb( unsigned int aCurrent, unsigned int aTotal, size_t aBytes,
                                           void* aPayload )
 {
-    int64_t           progress = 100;
+    long long     progress = 100;
     KIGIT_COMMON* parent = (KIGIT_COMMON*) aPayload;
 
     if( aTotal != 0 )
     {
-        progress = ( aCurrent * 100 ) / aTotal;
+        progress = ( aCurrent * 100ll ) / aTotal;
     }
 
-    wxString progressMessage = wxString::Format( _( "Writing objects: %d%% (%d/%d), %d bytes" ),
+    wxString progressMessage = wxString::Format( _( "Writing objects: %lld%% (%u/%u), %zu bytes" ),
                                                  progress, aCurrent, aTotal, aBytes );
     parent->UpdateProgress( aCurrent, aTotal, progressMessage );
 
