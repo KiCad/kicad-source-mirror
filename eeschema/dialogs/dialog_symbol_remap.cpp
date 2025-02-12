@@ -471,6 +471,27 @@ bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
                                           srcFileName.GetFullPath() );
         }
 
+        // Back up the old (2007) cache library.
+        srcFileName.SetPath( Prj().GetProjectPath() );
+        srcFileName.SetName( Prj().GetProjectName() + wxS( ".cache" ) );
+        srcFileName.SetExt( FILEEXT::LegacySymbolLibFileExtension );
+
+        destFileName = srcFileName;
+        destFileName.SetName( destFileName.GetName() + timeStamp );
+        destFileName.AppendDir( backupFolder );
+
+        aReporter.Report( wxString::Format( _( "Backing up file '%s' to '%s'." ),
+                                            srcFileName.GetFullPath(),
+                                            destFileName.GetFullPath() ),
+                          RPT_SEVERITY_INFO );
+
+        if( srcFileName.Exists()
+                && !wxCopyFile( srcFileName.GetFullPath(), destFileName.GetFullPath() ) )
+        {
+            errorMsg += wxString::Format( _( "Failed to back up file '%s'.\n" ),
+                                          srcFileName.GetFullPath() );
+        }
+
         // Back up the rescue symbol library if it exists.
         srcFileName.SetName( Prj().GetProjectName() + wxS( "-rescue" ) );
         destFileName.SetName( srcFileName.GetName() + timeStamp );
