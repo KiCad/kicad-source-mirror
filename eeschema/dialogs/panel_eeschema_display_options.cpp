@@ -40,7 +40,7 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS::PANEL_EESCHEMA_DISPLAY_OPTIONS( wxWindow* aParen
 {
     m_galOptsPanel = new GAL_OPTIONS_PANEL( this, aAppSettings );
 
-    m_galOptionsSizer->Add( m_galOptsPanel, 1, wxEXPAND|wxRIGHT, 15 );
+    m_galOptionsSizer->Add( m_galOptsPanel, 1, wxEXPAND|wxRIGHT, 0 );
 
     m_highlightColorNote->SetFont( KIUI::GetInfoFont( this ).Italic() );
 }

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,8 +21,8 @@ class FONT_CHOICE;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/statline.h>
-#include <wx/choice.h>
 #include <wx/checkbox.h>
+#include <wx/choice.h>
 #include <wx/spinctrl.h>
 #include <wx/gbsizer.h>
 #include <wx/panel.h>
@@ -38,6 +38,12 @@ class PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 
 	protected:
 		wxBoxSizer* m_galOptionsSizer;
+		wxStaticText* m_crossprobeLabel;
+		wxStaticLine* m_staticline3;
+		wxCheckBox* m_checkCrossProbeOnSelection;
+		wxCheckBox* m_checkCrossProbeCenter;
+		wxCheckBox* m_checkCrossProbeZoom;
+		wxCheckBox* m_checkCrossProbeAutoHighlight;
 		wxStaticText* m_appearanceLabel;
 		wxStaticLine* m_staticline1;
 		wxStaticText* m_defaultFontLabel;
@@ -66,12 +72,6 @@ class PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxSpinCtrlDouble* m_colHighlightThickness;
 		wxStaticText* m_colHighlightLabel2;
 		wxSpinCtrlDouble* m_colHighlightTransparency;
-		wxStaticText* m_crossprobeLabel;
-		wxStaticLine* m_staticline3;
-		wxCheckBox* m_checkCrossProbeOnSelection;
-		wxCheckBox* m_checkCrossProbeCenter;
-		wxCheckBox* m_checkCrossProbeZoom;
-		wxCheckBox* m_checkCrossProbeAutoHighlight;
 
 	public:
 
