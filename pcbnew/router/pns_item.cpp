@@ -196,7 +196,8 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode, int aLayer,
         // a pad associated with a "free" pin (NIC) doesn't have a net until it has been used
         clearance = -1;
     }
-    else if( aNode->GetRuleResolver()->IsKeepout( this, aHead, &enforce ) )
+    else if( aNode->GetRuleResolver()->IsKeepout( this, aHead, &enforce )
+             || aNode->GetRuleResolver()->IsKeepout( aHead, this, &enforce ) )
     {
         if( enforce )
             clearance = 0;    // keepouts are exact boundary; no clearance
