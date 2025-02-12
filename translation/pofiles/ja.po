@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-10 15:21-0800\n"
-"PO-Revision-Date: 2025-02-10 23:20+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"PO-Revision-Date: 2025-02-13 09:01+0000\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -41676,7 +41676,7 @@ msgid "Checking board footprints against library..."
 msgstr "ライブラリに対するフットプリントをチェックしています..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:892
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' was not found."
 msgstr "フットプリント ライブラリ '%s' が見つかりません。"
 
@@ -50684,7 +50684,6 @@ msgid "User defined layer 39"
 msgstr "ユーザー定義レイヤー 39"
 
 #: pcbnew/widgets/appearance_controls.cpp:1714
-#, fuzzy
 msgid "User defined layer 40"
 msgstr "ユーザー定義レイヤー 40"
 
