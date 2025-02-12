@@ -1948,10 +1948,9 @@ const EMBEDDED_FILES* LIB_SYMBOL::GetEmbeddedFiles() const
 
 std::set<KIFONT::OUTLINE_FONT*> LIB_SYMBOL::GetFonts() const
 {
-    using OUTLINE_FONT = KIFONT::OUTLINE_FONT;
-    using EMBEDDING_PERMISSION = OUTLINE_FONT::EMBEDDING_PERMISSION;
+    using EMBEDDING_PERMISSION = KIFONT::OUTLINE_FONT::EMBEDDING_PERMISSION;
 
-    std::set<OUTLINE_FONT*> fonts;
+    std::set<KIFONT::OUTLINE_FONT*> fonts;
 
     for( const SCH_ITEM& item : m_drawings )
     {
@@ -1961,7 +1960,7 @@ std::set<KIFONT::OUTLINE_FONT*> LIB_SYMBOL::GetFonts() const
 
             if( auto* font = text.GetFont(); font && !font->IsStroke() )
             {
-                auto* outline = static_cast<OUTLINE_FONT*>( font );
+                auto* outline = static_cast<KIFONT::OUTLINE_FONT*>( font );
                 auto permission = outline->GetEmbeddingPermission();
 
                 if( permission == EMBEDDING_PERMISSION::EDITABLE

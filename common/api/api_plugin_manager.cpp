@@ -284,7 +284,7 @@ void API_PLUGIN_MANAGER::InvokeAction( const wxString& aIdentifier )
         if( pythonHome )
             env.env[wxS( "VIRTUAL_ENV" )] = *pythonHome;
 
-        long pid = manager.Execute( { pluginFile.GetFullPath() },
+        [[maybe_unused]] long pid = manager.Execute( { pluginFile.GetFullPath() },
                 []( int aRetVal, const wxString& aOutput, const wxString& aError )
                 {
                     wxLogTrace( traceApi,

@@ -663,7 +663,7 @@ void KICAD_MANAGER_FRAME::doCloseWindow()
     {
         wxWindow* page = m_notebook->GetPage( i );
 
-        if( PANEL_NOTEBOOK_BASE* panel = dynamic_cast<PANEL_NOTEBOOK_BASE*>( page ) )
+        if( dynamic_cast<PANEL_NOTEBOOK_BASE*>( page ) )
             m_notebook->DeletePage( i );
     }
 
