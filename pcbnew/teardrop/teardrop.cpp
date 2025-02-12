@@ -101,7 +101,6 @@ void TEARDROP_MANAGER::RemoveTeardrops( BOARD_COMMIT& aCommit,
                                         const std::set<PCB_TRACK*>* dirtyTracks )
 {
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_board->GetConnectivity();
-    std::vector<ZONE*>                 stale_teardrops;
 
     auto isStale =
             [&]( ZONE* zone )
@@ -135,14 +134,10 @@ void TEARDROP_MANAGER::RemoveTeardrops( BOARD_COMMIT& aCommit,
     for( ZONE* zone : m_board->Zones() )
     {
         if( zone->IsTeardropArea() && isStale( zone ) )
-            stale_teardrops.push_back( zone );
+            zone->SetFlags( STRUCT_DELETED );
     }
 
-    for( ZONE* td : stale_teardrops )
-    {
-        m_board->Remove( td, REMOVE_MODE::BULK );
-        aCommit.Removed( td );
-    }
+    m_board->BulkRemoveStaleTeardrops( aCommit );
 }
 
 
@@ -162,19 +157,13 @@ void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
     // Old teardrops must be removed, to ensure a clean teardrop rebuild
     if( aForceFullUpdate )
     {
-        std::vector<ZONE*> teardrops;
-
         for( ZONE* zone : m_board->Zones() )
         {
             if( zone->IsTeardropArea() )
-                teardrops.push_back( zone );
+                zone->SetFlags( STRUCT_DELETED );
         }
 
-        for( ZONE* td : teardrops )
-        {
-            m_board->Remove( td, REMOVE_MODE::BULK );
-            aCommit.Removed( td );
-        }
+        m_board->BulkRemoveStaleTeardrops( aCommit );
     }
 
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_board->GetConnectivity();
@@ -283,19 +272,13 @@ void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
 
 void TEARDROP_MANAGER::DeleteTrackToTrackTeardrops( BOARD_COMMIT& aCommit )
 {
-    std::vector<ZONE*> stale_teardrops;
-
     for( ZONE* zone : m_board->Zones() )
     {
         if( zone->IsTeardropArea() && zone->GetTeardropAreaType() == TEARDROP_TYPE::TD_TRACKEND )
-            stale_teardrops.push_back( zone );
+            zone->SetFlags( STRUCT_DELETED );
     }
 
-    for( ZONE* td : stale_teardrops )
-    {
-        m_board->Remove( td, REMOVE_MODE::BULK );
-        aCommit.Removed( td );
-    }
+    m_board->BulkRemoveStaleTeardrops( aCommit );
 }
 
 

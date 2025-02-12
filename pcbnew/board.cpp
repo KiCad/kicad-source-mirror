@@ -1187,6 +1187,23 @@ void BOARD::FinalizeBulkRemove( std::vector<BOARD_ITEM*>& aRemovedItems )
 }
 
 
+void BOARD::BulkRemoveStaleTeardrops( BOARD_COMMIT& aCommit )
+{
+    for( int ii = (int) m_zones.size() - 1; ii > 0; --ii )
+    {
+        ZONE* zone = m_zones[ii];
+
+        if( zone->IsTeardropArea() && zone->HasFlag( STRUCT_DELETED ) )
+        {
+            m_itemByIdCache.erase( zone->m_Uuid );
+            m_zones.erase( m_zones.begin() + ii );
+            m_connectivity->Remove( zone );
+            aCommit.Removed( zone );
+        }
+    }
+}
+
+
 void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
 {
     // find these calls and fix them!  Don't send me no stinking' nullptr.
