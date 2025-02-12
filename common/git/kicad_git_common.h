@@ -116,6 +116,8 @@ public:
     // Updates the password and remote information for the repository given the current branch
     void UpdateCurrentBranchInfo();
 
+    wxString GetGitRootDirectory() const;
+
     wxString GetRemotename() const;
 
     void ResetNextKey() { m_nextPublicKey = 0; }

@@ -81,7 +81,9 @@ wxString KIGIT_COMMON::GetCurrentBranchName() const
 
 std::vector<wxString> KIGIT_COMMON::GetBranchNames() const
 {
-    wxCHECK( m_repo, {} );
+    if( !m_repo )
+        return {};
+
     std::vector<wxString> branchNames;
     std::map<git_time_t, wxString> branchNamesMap;
     wxString firstName;
@@ -432,6 +434,17 @@ void KIGIT_COMMON::SetSSHKey( const wxString& aKey )
         m_publicKeys.erase( it );
 
     m_publicKeys.insert( m_publicKeys.begin(), aKey );
+}
+
+
+wxString KIGIT_COMMON::GetGitRootDirectory() const
+{
+    if( !m_repo )
+        return wxEmptyString;
+
+    const char *path = git_repository_path( m_repo );
+    wxString    retval = path;
+    return retval;
 }
 
 

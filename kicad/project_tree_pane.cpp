@@ -744,6 +744,15 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
     m_TreeProject->SelectItem( curr_item );
 
     std::vector<PROJECT_TREE_ITEM*> selection = GetSelectedData();
+    KIGIT_COMMON* git = m_TreeProject->GitCommon();
+    wxFileName prj_dir( Prj().GetProjectPath(), wxEmptyString );
+    wxFileName git_dir( git->GetGitRootDirectory(), wxEmptyString );
+    prj_dir.Normalize( wxPATH_NORM_ABSOLUTE | wxPATH_NORM_CASE | wxPATH_NORM_DOTS
+                       | wxPATH_NORM_ENV_VARS | wxPATH_NORM_TILDE );
+    git_dir.Normalize( wxPATH_NORM_ABSOLUTE | wxPATH_NORM_CASE | wxPATH_NORM_DOTS
+                       | wxPATH_NORM_ENV_VARS | wxPATH_NORM_TILDE );
+    wxString  prj_name = prj_dir.GetFullPath();
+    wxString  git_name = git_dir.GetFullPath();
 
     bool can_switch_to_project = true;
     bool can_create_new_directory = true;
@@ -756,9 +765,9 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
     bool vcs_has_repo    = m_TreeProject->GetGitRepo() != nullptr;
     bool vcs_can_commit  = hasChangedFiles();
     bool vcs_can_init    = !vcs_has_repo;
-    bool vcs_can_remove  = vcs_has_repo;
-    bool vcs_can_fetch   = vcs_has_repo && m_TreeProject->GitCommon()->HasPushAndPullRemote();
-    bool vcs_can_push    = vcs_can_fetch && m_TreeProject->GitCommon()->HasLocalCommits();
+    bool vcs_can_remove = vcs_has_repo && git_name.StartsWith( prj_name ); // This means the .git is a subdirectory of the project
+    bool vcs_can_fetch   = vcs_has_repo && git->HasPushAndPullRemote();
+    bool vcs_can_push    = vcs_can_fetch && git->HasLocalCommits();
     bool vcs_can_pull    = vcs_can_fetch;
     bool vcs_can_switch  = vcs_has_repo;
     bool vcs_menu        = ADVANCED_CFG::GetCfg().m_EnableGit;
