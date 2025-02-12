@@ -329,7 +329,7 @@ PCB_LAYER_ID PCB_IO_KICAD_LEGACY::leg_layer2new( int cu_count, int aLayerNum )
         }
         else
         {
-            newid = cu_count - 1 - old;
+            newid = BoardLayerFromLegacyId( cu_count - 1 - old );
             wxASSERT( newid >= 0 );
 
             // This is of course incorrect, but at least it avoid crashing pcbnew:
