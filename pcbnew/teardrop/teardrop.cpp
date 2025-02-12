@@ -103,41 +103,39 @@ void TEARDROP_MANAGER::RemoveTeardrops( BOARD_COMMIT& aCommit,
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_board->GetConnectivity();
     std::vector<ZONE*>                 stale_teardrops;
 
-    for( ZONE* zone : m_board->Zones() )
-    {
-        if( zone->IsTeardropArea() )
-        {
-            bool stale = false;
-
-            std::vector<PAD*>     connectedPads;
-            std::vector<PCB_VIA*> connectedVias;
-
-            connectivity->GetConnectedPadsAndVias( zone, &connectedPads, &connectedVias );
-
-            for( PAD* pad : connectedPads )
+    auto isStale =
+            [&]( ZONE* zone )
             {
-                if( alg::contains( *dirtyPadsAndVias, pad ) )
+                std::vector<PAD*>     connectedPads;
+                std::vector<PCB_VIA*> connectedVias;
+
+                connectivity->GetConnectedPadsAndVias( zone, &connectedPads, &connectedVias );
+
+                for( PAD* pad : connectedPads )
                 {
-                    stale = true;
-                    break;
+                    if( alg::contains( *dirtyPadsAndVias, pad ) )
+                        return true;
                 }
-            }
 
-            if( !stale )
-            {
                 for( PCB_VIA* via : connectedVias )
                 {
                     if( alg::contains( *dirtyPadsAndVias, via ) )
-                    {
-                        stale = true;
-                        break;
-                    }
+                        return true;
                 }
-            }
 
-            if( stale )
-                stale_teardrops.push_back( zone );
-        }
+                for( PCB_TRACK* track : connectivity->GetConnectedTracks( zone ) )
+                {
+                    if( alg::contains( *dirtyTracks, track ) )
+                        return true;
+                }
+
+                return false;
+            };
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( zone->IsTeardropArea() && isStale( zone ) )
+            stale_teardrops.push_back( zone );
     }
 
     for( ZONE* td : stale_teardrops )
