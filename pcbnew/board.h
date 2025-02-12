@@ -425,6 +425,12 @@ public:
                                                               PCB_TRACE_T, PCB_SHAPE_T } );
 
     /**
+     * Remove all teardrop zones with the STRUCT_DELETED flag set.  This avoids O(n^2) traversal
+     * over the zone list.
+     */
+    void BulkRemoveStaleTeardrops( BOARD_COMMIT& aCommit );
+
+    /**
      * Must be used if Add() is used using a BULK_x ADD_MODE to generate a change event for
      * listeners.
      */
