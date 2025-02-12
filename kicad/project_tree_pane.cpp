@@ -2236,6 +2236,26 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
             wxCHECK2_MSG( false, continue, "File status with neither git_status_entry set!" );
         }
 
+        // Do not commit files outside the project directory
+        if( !fn.GetPath().StartsWith( Prj().GetProjectPath() ) )
+            continue;
+
+        // Skip lock files
+        if( fn.GetExt().CmpNoCase( FILEEXT::LockFileExtension ) == 0 )
+            continue;
+
+        // Skip autosave, lock, and backup files
+        if( fn.GetName().StartsWith( FILEEXT::AutoSaveFilePrefix )
+            || fn.GetName().StartsWith( FILEEXT::LockFilePrefix )
+            || fn.GetName().EndsWith( FILEEXT::BackupFileSuffix ) )
+        {
+            continue;
+        }
+
+        // Skip archived project backups
+        if( fn.GetPath().Contains( Prj().GetProjectName() + wxT( "-backups" ) ) )
+            continue;
+
         if( aEvent.GetId() == ID_GIT_COMMIT_PROJECT )
         {
             modifiedFiles.emplace( filePath, entry->status );
