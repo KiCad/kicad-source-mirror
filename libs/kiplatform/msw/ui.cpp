@@ -73,7 +73,7 @@ wxColour KIPLATFORM::UI::GetDialogBGColour()
 }
 
 
-wxColour KIPLATFORM::UI::GetInfoBarColours( wxColour& aFGColour, wxColour& aBGColour )
+void KIPLATFORM::UI::GetInfoBarColours( wxColour& aFGColour, wxColour& aBGColour )
 {
     aBGColour = wxSystemSettings::GetColour( wxSYS_COLOUR_INFOBK );
     aFGColour = wxSystemSettings::GetColour( wxSYS_COLOUR_INFOTEXT );
