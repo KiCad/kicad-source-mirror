@@ -485,13 +485,20 @@ void SYMBOL_LIBS::SetLibNamesAndPaths( PROJECT* aProject, const wxString& aPaths
 
 const wxString SYMBOL_LIBS::CacheName( const wxString& aFullProjectFilename )
 {
-    wxFileName  name = aFullProjectFilename;
+    wxFileName filename( aFullProjectFilename );
+    wxString   name = filename.GetName();
 
-    name.SetName( name.GetName() + "-cache" );
-    name.SetExt( FILEEXT::LegacySymbolLibFileExtension );
+    filename.SetName( name + "-cache" );
+    filename.SetExt( FILEEXT::LegacySymbolLibFileExtension );
 
-    if( name.FileExists() )
-        return name.GetFullPath();
+    if( filename.FileExists() )
+        return filename.GetFullPath();
+
+    // Try the old (2007) cache name
+    filename.SetName( name + ".cache" );
+
+    if( filename.FileExists() )
+        return filename.GetFullPath();
 
     return wxEmptyString;
 }
