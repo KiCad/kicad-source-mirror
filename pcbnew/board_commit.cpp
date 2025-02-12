@@ -683,7 +683,7 @@ void BOARD_COMMIT::Revert()
 
             BOARD_ITEM* parent = board->GetItem( ent.m_parent );
 
-            if( parent->Type() == PCB_FOOTPRINT_T )
+            if( parent && parent->Type() == PCB_FOOTPRINT_T )
             {
                 static_cast<FOOTPRINT*>( parent )->Add( boardItem, ADD_MODE::INSERT );
             }
