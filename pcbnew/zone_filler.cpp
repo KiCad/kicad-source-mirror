@@ -135,6 +135,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 
         // Rules may depend on insideCourtyard() or other expressions
         footprint->BuildCourtyardCaches();
+        footprint->BuildNetTieCache();
     }
 
     LSET boardCuMask = m_board->GetEnabledLayers() & LSET::AllCuMask();
