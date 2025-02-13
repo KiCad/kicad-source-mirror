@@ -862,16 +862,6 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
  *
  * Solder mask layers have a minimum thickness value and cannot be drawn like standard layers,
  * unless the minimum thickness is 0.
- *
- * The algorithm is somewhat complicated to allow for min web thickness while also preserving
- * pad attributes in Gerber.
- *
- * 1 - create initial polygons for every shape
- * 2 - inflate and deflate polygons with Min Thickness/2, and merges the result
- * 3 - substract all initial polygons from (2), leaving the areas where the thickness was less
- *      than min thickness
- * 4 - plot all initial shapes by flashing (or using regions), including Gerber attribute data
- * 5 - plot remaining polygons from (2) (witout any Gerber attributes)
  */
 
 void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
@@ -904,7 +894,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     // Will contain exact shapes of all items on solder mask
     SHAPE_POLY_SET initialPolys;
 
-    auto plotFPTextItem =
+    auto handleFPTextItem =
             [&]( const PCB_TEXT& aText )
             {
                 if( !itemplotter.GetPlotFPText() )
@@ -947,7 +937,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                     continue;
 
                 if( field->IsOnLayer( layer ) )
-                    plotFPTextItem( static_cast<const PCB_TEXT&>( *field ) );
+                    handleFPTextItem( static_cast<const PCB_TEXT&>( *field ) );
             }
 
             for( const BOARD_ITEM* item : footprint->GraphicalItems() )
@@ -956,7 +946,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 {
                     if( item->Type() == PCB_TEXT_T )
                     {
-                        plotFPTextItem( static_cast<const PCB_TEXT&>( *item ) );
+                        handleFPTextItem( static_cast<const PCB_TEXT&>( *item ) );
                     }
                     else
                     {

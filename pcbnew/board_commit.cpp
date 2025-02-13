@@ -702,7 +702,7 @@ void BOARD_COMMIT::Revert()
             view->Remove( boardItem );
             connectivity->Remove( boardItem );
 
-            wxASSERT( entry.m_copy && ent.m_copy->IsBOARD_ITEM() );
+            wxASSERT( entry.m_copy && entry.m_copy->IsBOARD_ITEM() );
             BOARD_ITEM* boardItemCopy = static_cast<BOARD_ITEM*>( entry.m_copy );
             boardItem->SwapItemData( boardItemCopy );
 
