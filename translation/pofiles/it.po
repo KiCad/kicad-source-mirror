@@ -115,10 +115,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-10 15:21-0800\n"
-"PO-Revision-Date: 2025-02-10 23:20+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
-"source/it/>\n"
+"PO-Revision-Date: 2025-02-13 09:01+0000\n"
+"Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
+"master-source/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20246,7 +20246,6 @@ msgid "Cancel Load"
 msgstr "Annulla caricamento"
 
 #: eeschema/sheet.cpp:317
-#, fuzzy
 msgid ""
 "There are hierarchical sheets in the loaded schematic file from an older "
 "file version resulting in  missing symbol instance data.  This will result "
@@ -20259,9 +20258,9 @@ msgid ""
 msgstr ""
 "Sono presenti fogli gerarchici nel file schema caricato provenienti da un "
 "file di versione precedente, con conseguente mancanza di dati di istanza dei "
-"simboli. Ciò significa che tutti i simboli dello schema caricato useranno "
+"simboli.  Ciò significa che tutti i simboli dello schema caricato useranno "
 "l'impostazione dell'istanza predefinita o torneranno alle impostazioni dei "
-"simboli di libreria. Caricando il progetto che usa questo file schema e "
+"simboli di libreria.  Caricando il progetto che usa questo file schema e "
 "salvandolo nell'ultima versione del file si risolverà il problema.\n"
 "\n"
 "Continuare?"
@@ -28339,10 +28338,12 @@ msgstr "Crea una nuova cartella per il progetto"
 #: libs/kimath/src/geometry/roundrect.cpp:60
 msgid "Roundrect radius is larger than the rectangle's major dimension"
 msgstr ""
+"Il raggio del rettangolo stondato è maggiore della dimensione maggiore del "
+"rettangolo"
 
 #: libs/kimath/src/geometry/roundrect.cpp:65
 msgid "Roundrect radius must be non-negative"
-msgstr ""
+msgstr "Il raggio del rettangolo stondato deve essere non-negativo"
 
 #: libs/kiplatform/os/windows/environment.cpp:72
 #, c-format
@@ -28723,7 +28724,6 @@ msgid "Append Existing Drawing Sheet..."
 msgstr "Aggiungi foglio da disegno esistente..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:90
-#, fuzzy
 msgid "Append an existing drawing sheet file to the current file"
 msgstr "Aggiungi un file foglio di disegno esistente al file corrente"
 
@@ -28744,22 +28744,16 @@ msgid "Show Title Block in Preview Mode"
 msgstr "Mostra riquadro iscrizioni in modalità anteprima"
 
 #: pagelayout_editor/tools/pl_actions.cpp:114
-#, fuzzy
 msgid "Text placeholders will be replaced with preview data"
-msgstr ""
-"Mostra il riquadro iscrizioni nell'anteprima:\n"
-"i segnaposto dei testi verranno rimpiazzati dalle anteprime dei dati."
+msgstr "I segnaposto dei testi verranno rimpiazzati dalle anteprime dati"
 
 #: pagelayout_editor/tools/pl_actions.cpp:120
 msgid "Show Title Block in Edit Mode"
 msgstr "Mostra riquadro iscrizioni in modalità modifica"
 
 #: pagelayout_editor/tools/pl_actions.cpp:121
-#, fuzzy
 msgid "Text placeholders are shown as ${keyword} tokens"
-msgstr ""
-"Mostra il riquadro iscrizioni in modalità modifica:\n"
-"i segnaposto dei testi vengono visualizzati come elementi ${parolachiave}."
+msgstr "I segnaposto dei testi vengono visualizzati come token ${parolachiave}"
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:533
 msgid "Error writing objects to clipboard"
@@ -29110,7 +29104,7 @@ msgid "Linear resistance:"
 msgstr "Resistenza lineare:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "Frequency for 100% skin depth:"
 msgstr "Freq. per 100% profondità di pelle:"
 
@@ -29995,9 +29989,8 @@ msgid "Remove an item from the current list of available regulators"
 msgstr "Elimina un elemento dal corrente elenco"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:147
-#, fuzzy
 msgid "typ"
-msgstr "Qtà"
+msgstr "tip"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:161
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:119
@@ -34360,15 +34353,12 @@ msgid "All components"
 msgstr "Tutti i componenti"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:99
-#, fuzzy
 msgid "Export only the component models that are selected in the PCB editor"
-msgstr ""
-"Aggiorna i riferimenti dei simboli che sono cambiati nell'editor del C.S."
+msgstr "Esporta solo i modelli dei componenti selezionati nell'editor dei C.S."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:103
-#, fuzzy
 msgid "Components matching filter:"
-msgstr "File di piazzamento componenti"
+msgstr "Componenti corrispondenti al filtro:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:108
 msgid ""
@@ -34379,24 +34369,20 @@ msgstr ""
 "caratteri jolly)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:119
-#, fuzzy
 msgid "Conductor Options"
-msgstr "Grezzezza conduttore"
+msgstr "Opzioni conduttore"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:122
-#, fuzzy
 msgid "Export tracks and vias on external conductor layers."
-msgstr "Esporta piste, piazzole e via su strati rame esterni."
+msgstr "Esporta piste e via su strati conduttori esterni."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:130
-#, fuzzy
 msgid "Export zones on external conductor layers."
-msgstr "Esporta zone su strati rame esterni."
+msgstr "Esporta zone su strati conduttori esterni."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:134
-#, fuzzy
 msgid "Export inner conductor layers"
-msgstr "Strato in rame interno"
+msgstr "Esporta strati conduttori interni"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:137
 msgid "Fuse shapes (time consuming)"
@@ -34407,14 +34393,12 @@ msgid "Combine intersecting geometry into one shape."
 msgstr "Combina la geometria che si interseca in un'unica forma."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:142
-#, fuzzy
 msgid "Fill all vias"
-msgstr "Mostra tutti i via"
+msgstr "Riempi tutti i via"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:147
-#, fuzzy
 msgid "Net filter (supports wildcards):"
-msgstr "Testo con caratteri jolly opzionali"
+msgstr "Filtro net (supporta caratteri jolly):"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:152
 msgid ""
@@ -34510,9 +34494,8 @@ msgstr ""
 "considerati uniti quando si creano i contorni scheda."
 
 #: pcbnew/dialogs/dialog_export_step_base.h:107
-#, fuzzy
 msgid "Export 3D Model"
-msgstr "Seleziona modello 3D"
+msgstr "Esporta modello 3D"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:184
 #, c-format
@@ -34524,16 +34507,12 @@ msgid "Success"
 msgstr "Successo"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:213
-#, fuzzy
 msgid "Do you want to cancel the export process?"
-msgstr ""
-"Usare un percorso relativo a\n"
-"\"%s\"?"
+msgstr "Annullare il processo di esportazione?"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:214
-#, fuzzy
 msgid "Cancel Export"
-msgstr "Rapporto distanza"
+msgstr "Annulla esportazione"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:257
 msgid "Command line:\n"
@@ -34677,36 +34656,30 @@ msgid "Wra&p"
 msgstr "A ca&po"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
-#, fuzzy
 msgid "Search footprint reference &designators"
-msgstr "Cerca i riferimenti impronte"
+msgstr "Cerca &designatori di riferimento impronte"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:66
-#, fuzzy
 msgid "Search footprint &values"
-msgstr "Cerca valori impronte"
+msgstr "Cerca &valori impronte"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:70
-#, fuzzy
 msgid "Search &other text items"
-msgstr "Cerca altri elementi testo"
+msgstr "Cerca altri elementi test&o"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:74
-#, fuzzy
 msgid "Search DRC &markers"
-msgstr "Cerca marcatori DRC"
+msgstr "Cerca &marcatori DRC"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:78
-#, fuzzy
 msgid "Search &net names"
-msgstr "Cerca nomi net"
+msgstr "Cerca nomi &net"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:99
 msgid "Restart Search"
 msgstr "Ricomincia la ricerca"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:49
-#, fuzzy
 msgid "Footprint: "
 msgstr "Impronta: "
 
@@ -34789,7 +34762,6 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:661
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:660
-#, fuzzy
 msgid "Edit Footprint Properties"
 msgstr "Modifica proprietà impronta"
 
@@ -34892,9 +34864,9 @@ msgid "Clearances"
 msgstr "Distanze"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:268
-#, fuzzy
 msgid "Leave values blank to use Board Setup values."
-msgstr "Imposta i valori a 0 per usare valori i valori di impostazione scheda."
+msgstr ""
+"Lascia i valori in bianco per usare valori i valori di impostazione scheda."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:278
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:247
@@ -35101,9 +35073,8 @@ msgid "Component type:"
 msgstr "Tipo componente:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:237
-#, fuzzy
 msgid "Leave values blank to use netclass values."
-msgstr "Imposta i valori a 0 per usare i valori della netclass."
+msgstr "Lascia i valori in bianco per usare i valori della netclass."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:249
 msgid ""
@@ -35372,9 +35343,8 @@ msgstr ""
 "metallizzati e non, in un unico file."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:75
-#, fuzzy
 msgid "Use alternate drill mode for oval holes"
-msgstr "Usa la modalità forature alternativa"
+msgstr "Usa la modalità forature alternativa per i fori ovali"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:84
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
@@ -35382,23 +35352,20 @@ msgid "Gerber X2"
 msgstr "Gerber X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:93
-#, fuzzy
 msgid "Generate map:"
-msgstr "Genera file mappa"
+msgstr "Genera mappa:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:130
-#, fuzzy
 msgid "Origin:"
-msgstr "Origine"
+msgstr "Origine:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:134
 msgid "Absolute"
 msgstr "Assoluta"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:150
-#, fuzzy
 msgid "Zeros:"
-msgstr "Zeri"
+msgstr "Zeri:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:154
 msgid "Decimal format (recommended)"
@@ -35427,9 +35394,8 @@ msgid "Generators A (%s)"
 msgstr "Generatori A (%s)"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:51
-#, fuzzy
 msgid "Rebuild Selected"
-msgstr "Ricompila selezionato"
+msgstr "Ricrea selezionato"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:54
 msgid "Rebuild this type"
@@ -35462,9 +35428,8 @@ msgid "Get and Move Footprint"
 msgstr "Ottieni e sposta impronta"
 
 #: pcbnew/dialogs/dialog_global_deletion.cpp:258
-#, fuzzy
 msgid "Global Delete"
-msgstr "Cancellazioni globali..."
+msgstr "Cancellazioni globali"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:23
 msgid "Items to Delete"
@@ -35560,9 +35525,8 @@ msgstr "Aggiungi lacrime ai valori specificati:"
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:171
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:171
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:99
-#, fuzzy
 msgid "Apply and Close"
-msgstr "Applica i cambiamenti"
+msgstr "Applica e chiudi"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:529
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:533
@@ -35600,14 +35564,12 @@ msgid "Remove teardrops according to filtering options"
 msgstr "Rimuovi teardrops in base alle opzioni di filtro"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:119
-#, fuzzy
 msgid "Remove all teardrops"
-msgstr "Rimuovi teardrop"
+msgstr "Rimuovi tutte le lacrime"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:120
-#, fuzzy
 msgid "Remove all teardrops, regardless of filtering options"
-msgstr "Rimuovi tutte le teardrops, indipendentemente dalle opzioni di filtro"
+msgstr "Rimuovi tutte le lacrime, indipendentemente dalle opzioni di filtro"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:130
 msgid "Edit default values in Board Setup"
@@ -35633,7 +35595,6 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:153
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:476
-#, fuzzy
 msgid "Allow teardrops to span two track segments"
 msgstr "Permetti lacrime estese su due segmenti di pista"
 
@@ -35642,22 +35603,20 @@ msgstr "Permetti lacrime estese su due segmenti di pista"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:173
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:343
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:508
-#, fuzzy
 msgid ""
 "Allows a teardrop to extend over the first 2 connected track segments if the "
 "first track segment is too short to accommodate the best length."
 msgstr ""
-"Permetti alle lacrime di estendersi su 2 piste se il primo segmento di pista "
-"è troppo corto"
+"Permetti alle lacrime di estendersi su 2 tratti di pista connessi se il "
+"primo segmento di pista è troppo corto per una lunghezza ottimale."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:170
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:662
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:136
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:306
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:471
-#, fuzzy
 msgid "Track width limit:"
-msgstr "Larghezza pista:"
+msgstr "Limite larghezza pista:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:172
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:664
@@ -35680,9 +35639,8 @@ msgstr ""
 "Piste simili in dimensione alla piazzola o via non necessitano di lacrime."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:188
-#, fuzzy
 msgid "(as a percentage of pad/via minor dimension)"
-msgstr "(come percentuale dimensione piazzola/via)"
+msgstr "(come percentuale della dimensione minore piazzola/via)"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:231
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:731
@@ -35882,7 +35840,7 @@ msgstr "Imposta ai valori predefiniti dello strato:"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:34
 #, fuzzy
 msgid "Footprint fields"
-msgstr "Filtri impronte:"
+msgstr "Campi impronte:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:35
 #, fuzzy
