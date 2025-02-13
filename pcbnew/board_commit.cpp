@@ -634,16 +634,14 @@ void BOARD_COMMIT::Revert()
     std::vector<BOARD_ITEM*> bulkRemovedItems;
     std::vector<BOARD_ITEM*> itemsChanged;
 
-    for( auto it = m_changes.rbegin(); it != m_changes.rend(); ++it )
+    for( COMMIT_LINE& entry : m_changes )
     {
-        COMMIT_LINE& ent = *it;
-
-        if( !ent.m_item || !ent.m_item->IsBOARD_ITEM() )
+        if( !entry.m_item || !entry.m_item->IsBOARD_ITEM() )
             continue;
 
-        BOARD_ITEM*  boardItem = static_cast<BOARD_ITEM*>( ent.m_item );
-        int          changeType = ent.m_type & CHT_TYPE;
-        int          changeFlags = ent.m_type & CHT_FLAGS;
+        BOARD_ITEM*  boardItem = static_cast<BOARD_ITEM*>( entry.m_item );
+        int          changeType = entry.m_type & CHT_TYPE;
+        int          changeFlags = entry.m_type & CHT_FLAGS;
 
         switch( changeType )
         {
@@ -682,9 +680,9 @@ void BOARD_COMMIT::Revert()
             view->Add( boardItem );
             connectivity->Add( boardItem );
 
-            // Note: parent can be nullptr, because ent.m_parent is not
-            // initialized for every ent.m_item, only for some.
-            BOARD_ITEM* parent = board->GetItem( ent.m_parent );
+            // Note: parent can be nullptr, because entry.m_parent is only set for children
+            // of footprints.
+            BOARD_ITEM* parent = board->GetItem( entry.m_parent );
 
             if( parent && parent->Type() == PCB_FOOTPRINT_T )
             {
@@ -704,8 +702,8 @@ void BOARD_COMMIT::Revert()
             view->Remove( boardItem );
             connectivity->Remove( boardItem );
 
-            wxASSERT( ent.m_copy && ent.m_copy->IsBOARD_ITEM() );
-            BOARD_ITEM* boardItemCopy = static_cast<BOARD_ITEM*>( ent.m_copy );
+            wxASSERT( entry.m_copy && ent.m_copy->IsBOARD_ITEM() );
+            BOARD_ITEM* boardItemCopy = static_cast<BOARD_ITEM*>( entry.m_copy );
             boardItem->SwapItemData( boardItemCopy );
 
             if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( boardItem ) )
@@ -721,7 +719,7 @@ void BOARD_COMMIT::Revert()
             connectivity->Add( boardItem );
             itemsChanged.push_back( boardItem );
 
-            delete ent.m_copy;
+            delete entry.m_copy;
             break;
         }
 
