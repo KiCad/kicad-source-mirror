@@ -308,3 +308,41 @@ BOOST_DATA_TEST_CASE_F( ZONE_FILL_TEST_FIXTURE, RegressionTeardropFill,
                                                             << relPath << ", found "
                                                             << zoneCount );
 }
+
+
+BOOST_FIXTURE_TEST_CASE( RegressionNetTie, ZONE_FILL_TEST_FIXTURE )
+{
+
+    std::vector<wxString> tests = { { "issue19956/issue19956" }    // Arcs with teardrops connecting to pads
+                                };
+
+    for( const wxString& relPath : tests )
+    {
+        KI_TEST::LoadBoard( m_settingsManager, relPath, m_board );
+        BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+        KI_TEST::FillZones( m_board.get() );
+
+        for( ZONE* zone : m_board->Zones() )
+        {
+            for( PCB_LAYER_ID layer : zone->GetLayerSet() )
+            {
+                std::shared_ptr<SHAPE> a_shape( zone->GetEffectiveShape( layer ) );
+
+                for( PAD* pad : m_board->GetPads() )
+                {
+                    std::shared_ptr<SHAPE> pad_shape( pad->GetEffectiveShape( layer ) );
+                    int                    clearance = pad_shape->GetClearance( a_shape.get() );
+                    BOOST_CHECK_MESSAGE( pad->GetNetCode() == zone->GetNetCode() || clearance != 0,
+                                         "Pad " << pad->GetNumber() << " from Footprint "
+                                                << pad->GetParentFootprint()
+                                                           ->GetReferenceAsString()
+                                                           .ToStdString()
+                                                << " has net code "
+                                                << pad->GetNetname().ToStdString()
+                                                << " and is connected to zone with net code "
+                                                << zone->GetNetname().ToStdString() );
+                }
+            }
+        }
+    }
+}

@@ -756,11 +756,19 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 constraint.SetParentRule( c->constraint.GetParentRule() );
             };
 
+    const FOOTPRINT* footprints[2] = {a ? a->GetParentFootprint() : nullptr,
+                                      b ? b->GetParentFootprint() : nullptr};
+
     // Handle Footprint net ties, which will zero out the clearance for footprint objects
-    if( aConstraintType == CLEARANCE_CONSTRAINT && ( ac || bc ) && !a_is_non_copper && !b_is_non_copper )
+    if( aConstraintType == CLEARANCE_CONSTRAINT // Only zero clearance, other constraints still apply
+        && ( ( ( !ac ) ^ ( !bc ) )// Only apply to cases where we are comparing a connected item to a non-connected item
+                                  // and not both connected.  Connected items of different nets still need to be checked
+                                  // for their standard clearance value
+            || ( ( footprints[0] == footprints[1] )  // Unless both items are in the same footprint
+                   && footprints[0] ) )              // And that footprint exists
+        && !a_is_non_copper       // Also, both elements need to be on copper layers
+        && !b_is_non_copper )
     {
-        const FOOTPRINT* footprints[2] = {a ? a->GetParentFootprint() : nullptr,
-                                          b ? b->GetParentFootprint() : nullptr};
         const BOARD_ITEM* child_items[2] = {a, b};
 
         // These are the items being compared against, so the order is reversed
