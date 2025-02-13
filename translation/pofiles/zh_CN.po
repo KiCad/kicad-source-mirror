@@ -41,8 +41,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-10 15:21-0800\n"
-"PO-Revision-Date: 2025-02-10 23:20+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2025-02-13 13:57+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -19744,9 +19744,10 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"在加载的原理图文件中存在来自旧文件版本的层次图纸, 导致符号实例数据丢失。这将"
-"导致加载的原理图中的所有符号都使用默认的实例设置或退回到库中的符号设置。加载"
-"使用该原理图文件的工程并保存为最新的文件版本将解决这个问题。\n"
+"在已加载的原理图文件中存在来自旧的文件版本的层次图纸, 导致符号实例数据丢失。"
+"这将导致已加载的原理图中, "
+"所有符号都使用默认实例设置或回退到库符号设置。加载使用该原理图文件的工程并保"
+"存为最新的文件版本将解决这个问题。\n"
 "\n"
 "是否继续?"
 
@@ -20038,7 +20039,7 @@ msgstr "OEM 不能为空。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:724
 msgid "Negative number of pins."
-msgstr "负数的引脚。"
+msgstr "引脚编号为负。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:744
 msgid "Empty pin number."
@@ -24865,11 +24866,11 @@ msgstr "在外框模式下显示多边形"
 
 #: gerbview/tools/gerbview_actions.cpp:212
 msgid "Ghost Negative Objects"
-msgstr "显示负片对象"
+msgstr "重影显示负片对象"
 
 #: gerbview/tools/gerbview_actions.cpp:213
 msgid "Show negative objects in ghost color"
-msgstr "以鬼影颜色显示负片对象"
+msgstr "以重影颜色显示负片对象"
 
 #: gerbview/tools/gerbview_actions.cpp:221
 msgid "Show DCodes"
@@ -24968,7 +24969,7 @@ msgstr "显示 D 码识别 ID"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:133
 msgid "Show negative objects in this color"
-msgstr "以此颜色显示负片"
+msgstr "以此颜色显示负片对象"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:136
 #: pcbnew/widgets/appearance_controls.cpp:351
@@ -27593,11 +27594,11 @@ msgstr "为工程创建一个新目录"
 
 #: libs/kimath/src/geometry/roundrect.cpp:60
 msgid "Roundrect radius is larger than the rectangle's major dimension"
-msgstr ""
+msgstr "圆角矩形的圆角半径大于矩形尺寸"
 
 #: libs/kimath/src/geometry/roundrect.cpp:65
 msgid "Roundrect radius must be non-negative"
-msgstr ""
+msgstr "圆角矩形的圆角半径不允许为负"
 
 #: libs/kiplatform/os/windows/environment.cpp:72
 #, c-format
@@ -40188,9 +40189,8 @@ msgstr "过孔直径"
 
 # Padstack 焊盘槽/孔
 #: pcbnew/drc/drc_item.cpp:147
-#, fuzzy
 msgid "Padstack is questionable"
-msgstr "Padstack 无效"
+msgstr "Padstack 存在问题"
 
 # Padstack 焊盘槽/孔
 #: pcbnew/drc/drc_item.cpp:151
