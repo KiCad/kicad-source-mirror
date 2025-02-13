@@ -237,6 +237,18 @@ ACTION_TOOLBAR::~ACTION_TOOLBAR()
 }
 
 
+void ACTION_TOOLBAR::Add( const TOOL_ACTION& aAction )
+{
+    wxASSERT_MSG( !aAction.CheckToolbarState( TOOLBAR_STATE::HIDDEN ),
+                  wxString::Format( "Attempting to add hidden action %s to the toolbar", aAction.GetName() ) );
+
+    bool isToggleEntry = aAction.CheckToolbarState( TOOLBAR_STATE::TOGGLE );
+    bool isCancellable = aAction.CheckToolbarState( TOOLBAR_STATE::CANCEL );
+
+    Add( aAction, isToggleEntry, isCancellable );
+}
+
+
 void ACTION_TOOLBAR::Add( const TOOL_ACTION& aAction, bool aIsToggleEntry, bool aIsCancellable )
 {
     wxASSERT( GetParent() );

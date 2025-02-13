@@ -201,13 +201,24 @@ public:
     /**
      * Add a TOOL_ACTION-based button to the toolbar.
      *
+     * The toggle/cancel attributes are set using the attributes in the action.
+     *
+     * After selecting the entry, a #TOOL_EVENT command containing name of the action is sent.
+     *
+     * @param aAction is the action to add.
+     */
+    void Add( const TOOL_ACTION& aAction );
+
+    /**
+     * Add a TOOL_ACTION-based button to the toolbar.
+     *
      * After selecting the entry, a #TOOL_EVENT command containing name of the action is sent.
      *
      * @param aAction is the action to add.
      * @param aIsToggleEntry makes the toolbar item a toggle entry when true.
      * @param aIsCancellable when true, cancels the tool if clicked when tool is active.
      */
-    void Add( const TOOL_ACTION& aAction, bool aIsToggleEntry = false,
+    void Add( const TOOL_ACTION& aAction, bool aIsToggleEntry,
               bool aIsCancellable = false );
 
     /**

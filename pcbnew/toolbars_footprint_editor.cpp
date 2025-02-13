@@ -72,7 +72,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::zoomInCenter );
     m_mainToolBar->Add( ACTIONS::zoomOutCenter );
     m_mainToolBar->Add( ACTIONS::zoomFitScreen );
-    m_mainToolBar->Add( ACTIONS::zoomTool, ACTION_TOOLBAR::TOGGLE, ACTION_TOOLBAR::CANCEL );
+    m_mainToolBar->Add( ACTIONS::zoomTool );
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( PCB_ACTIONS::rotateCcw );
@@ -175,30 +175,30 @@ void FOOTPRINT_EDIT_FRAME::ReCreateVToolbar()
     }
 
     // clang-format off
-    m_drawToolBar->Add( ACTIONS::selectionTool,           ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( ACTIONS::selectionTool );
 
     m_drawToolBar->AddScaledSeparator( this );
-    m_drawToolBar->Add( PCB_ACTIONS::placePad,            ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::drawRuleArea,        ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::placePad );
+    m_drawToolBar->Add( PCB_ACTIONS::drawRuleArea );
 
     m_drawToolBar->AddScaledSeparator( this );
-    m_drawToolBar->Add( PCB_ACTIONS::drawLine,            ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::drawArc,             ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::drawRectangle,       ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::drawCircle,          ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::drawPolygon,         ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::drawBezier,          ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::placeReferenceImage, ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::placeText,           ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::drawTextBox,         ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::drawTable,           ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::drawLine );
+    m_drawToolBar->Add( PCB_ACTIONS::drawArc );
+    m_drawToolBar->Add( PCB_ACTIONS::drawRectangle );
+    m_drawToolBar->Add( PCB_ACTIONS::drawCircle );
+    m_drawToolBar->Add( PCB_ACTIONS::drawPolygon );
+    m_drawToolBar->Add( PCB_ACTIONS::drawBezier );
+    m_drawToolBar->Add( PCB_ACTIONS::placeReferenceImage );
+    m_drawToolBar->Add( PCB_ACTIONS::placeText );
+    m_drawToolBar->Add( PCB_ACTIONS::drawTextBox );
+    m_drawToolBar->Add( PCB_ACTIONS::drawTable );
     m_drawToolBar->AddGroup( dimensionGroup,              ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( ACTIONS::deleteTool,              ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( ACTIONS::deleteTool );
 
     m_drawToolBar->AddScaledSeparator( this );
-    m_drawToolBar->Add( PCB_ACTIONS::setAnchor,           ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::gridSetOrigin,       ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( ACTIONS::measureTool,             ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::setAnchor );
+    m_drawToolBar->Add( ACTIONS::gridSetOrigin );
+    m_drawToolBar->Add( ACTIONS::measureTool );
     // clang-format on
 
     PCB_SELECTION_TOOL* selTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
@@ -233,30 +233,30 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
         m_optionsToolBar->SetAuiManager( &m_auimgr );
     }
 
-    m_optionsToolBar->Add( ACTIONS::toggleGrid,              ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::toggleGridOverrides,     ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( PCB_ACTIONS::togglePolarCoords,   ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::inchesUnits,             ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::milsUnits,               ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::millimetersUnits,        ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,       ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::toggleGrid );
+    m_optionsToolBar->Add( ACTIONS::toggleGridOverrides );
+    m_optionsToolBar->Add( PCB_ACTIONS::togglePolarCoords );
+    m_optionsToolBar->Add( ACTIONS::inchesUnits );
+    m_optionsToolBar->Add( ACTIONS::milsUnits );
+    m_optionsToolBar->Add( ACTIONS::millimetersUnits );
+    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle );
 
     m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( PCB_ACTIONS::toggleHV45Mode,      ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::toggleHV45Mode );
 
     m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( PCB_ACTIONS::padDisplayMode,      ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( PCB_ACTIONS::graphicsOutlines,    ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( PCB_ACTIONS::textOutlines,        ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::highContrastMode,        ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::padDisplayMode );
+    m_optionsToolBar->Add( PCB_ACTIONS::graphicsOutlines );
+    m_optionsToolBar->Add( PCB_ACTIONS::textOutlines );
+    m_optionsToolBar->Add( ACTIONS::highContrastMode );
 
     if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
-        m_optionsToolBar->Add( ACTIONS::toggleBoundingBoxes, ACTION_TOOLBAR::TOGGLE );
+        m_optionsToolBar->Add( ACTIONS::toggleBoundingBoxes );
 
     m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( ACTIONS::showLibraryTree,         ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( PCB_ACTIONS::showLayersManager,   ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( PCB_ACTIONS::showProperties,      ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::showLibraryTree );
+    m_optionsToolBar->Add( PCB_ACTIONS::showLayersManager );
+    m_optionsToolBar->Add( ACTIONS::showProperties );
 
     PCB_SELECTION_TOOL*          selTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
     std::unique_ptr<ACTION_MENU> gridMenu = std::make_unique<ACTION_MENU>( false, selTool );

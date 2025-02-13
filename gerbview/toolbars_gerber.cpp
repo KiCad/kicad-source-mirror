@@ -72,7 +72,7 @@ void GERBVIEW_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::zoomInCenter );
     m_mainToolBar->Add( ACTIONS::zoomOutCenter );
     m_mainToolBar->Add( ACTIONS::zoomFitScreen );
-    m_mainToolBar->Add( ACTIONS::zoomTool, ACTION_TOOLBAR::TOGGLE, ACTION_TOOLBAR::CANCEL );
+    m_mainToolBar->Add( ACTIONS::zoomTool );
 
 
     m_mainToolBar->AddScaledSeparator( this );
@@ -238,31 +238,31 @@ void GERBVIEW_FRAME::ReCreateOptToolbar()
     // TODO: these can be moved to the 'proper' vertical toolbar if and when there are
     // actual tools to put there. That, or I'll get around to implementing configurable
     // toolbars.
-    m_optionsToolBar->Add( ACTIONS::selectionTool,                    ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::measureTool,                      ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::selectionTool );
+    m_optionsToolBar->Add( ACTIONS::measureTool );
 
     m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( ACTIONS::toggleGrid,                       ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::togglePolarCoords,                ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::inchesUnits,                      ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::milsUnits,                        ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::millimetersUnits,                 ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,                ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::toggleGrid );
+    m_optionsToolBar->Add( ACTIONS::togglePolarCoords );
+    m_optionsToolBar->Add( ACTIONS::inchesUnits );
+    m_optionsToolBar->Add( ACTIONS::milsUnits );
+    m_optionsToolBar->Add( ACTIONS::millimetersUnits );
+    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle );
 
     m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( GERBVIEW_ACTIONS::flashedDisplayOutlines,  ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( GERBVIEW_ACTIONS::linesDisplayOutlines,    ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( GERBVIEW_ACTIONS::polygonsDisplayOutlines, ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( GERBVIEW_ACTIONS::negativeObjectDisplay,   ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( GERBVIEW_ACTIONS::dcodeDisplay,            ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( GERBVIEW_ACTIONS::flashedDisplayOutlines );
+    m_optionsToolBar->Add( GERBVIEW_ACTIONS::linesDisplayOutlines );
+    m_optionsToolBar->Add( GERBVIEW_ACTIONS::polygonsDisplayOutlines );
+    m_optionsToolBar->Add( GERBVIEW_ACTIONS::negativeObjectDisplay );
+    m_optionsToolBar->Add( GERBVIEW_ACTIONS::dcodeDisplay );
     m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( GERBVIEW_ACTIONS::toggleForceOpacityMode,  ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( GERBVIEW_ACTIONS::toggleXORMode,           ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::highContrastMode,                 ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( GERBVIEW_ACTIONS::flipGerberView,          ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( GERBVIEW_ACTIONS::toggleForceOpacityMode );
+    m_optionsToolBar->Add( GERBVIEW_ACTIONS::toggleXORMode );
+    m_optionsToolBar->Add( ACTIONS::highContrastMode );
+    m_optionsToolBar->Add( GERBVIEW_ACTIONS::flipGerberView );
 
     m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( GERBVIEW_ACTIONS::toggleLayerManager,      ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( GERBVIEW_ACTIONS::toggleLayerManager );
 
     m_optionsToolBar->KiRealize();
 }

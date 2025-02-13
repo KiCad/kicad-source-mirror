@@ -74,6 +74,7 @@ TOOL_ACTION GERBVIEW_ACTIONS::toggleLayerManager( TOOL_ACTION_ARGS()
         .Name( "gerbview.Control.toggleLayerManager" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Show Layers Manager" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Icon( BITMAPS::layers_manager ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::showDCodes( TOOL_ACTION_ARGS()
@@ -185,6 +186,7 @@ TOOL_ACTION GERBVIEW_ACTIONS::linesDisplayOutlines( TOOL_ACTION_ARGS()
         .LegacyHotkeyName( "Gbr Lines Display Mode" )
         .FriendlyName( _( "Sketch Lines" ) )
         .Tooltip( _( "Show lines in outline mode" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Icon( BITMAPS::showtrack ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::flashedDisplayOutlines( TOOL_ACTION_ARGS()
@@ -194,6 +196,7 @@ TOOL_ACTION GERBVIEW_ACTIONS::flashedDisplayOutlines( TOOL_ACTION_ARGS()
         .LegacyHotkeyName( "Gbr Flashed Display Mode" )
         .FriendlyName( _( "Sketch Flashed Items" ) )
         .Tooltip( _( "Show flashed items in outline mode" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Icon( BITMAPS::pad_sketch ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::polygonsDisplayOutlines( TOOL_ACTION_ARGS()
@@ -203,6 +206,7 @@ TOOL_ACTION GERBVIEW_ACTIONS::polygonsDisplayOutlines( TOOL_ACTION_ARGS()
         .LegacyHotkeyName( "Gbr Polygons Display Mode" )
         .FriendlyName( _( "Sketch Polygons" ) )
         .Tooltip( _( "Show polygons in outline mode" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Icon( BITMAPS::opt_show_polygon ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::negativeObjectDisplay( TOOL_ACTION_ARGS()
@@ -211,6 +215,7 @@ TOOL_ACTION GERBVIEW_ACTIONS::negativeObjectDisplay( TOOL_ACTION_ARGS()
         .LegacyHotkeyName( "Gbr Negative Obj Display Mode" )
         .FriendlyName( _( "Ghost Negative Objects" ) )
         .Tooltip( _( "Show negative objects in ghost color" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Icon( BITMAPS::gerbview_show_negative_objects ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::dcodeDisplay( TOOL_ACTION_ARGS()
@@ -220,6 +225,7 @@ TOOL_ACTION GERBVIEW_ACTIONS::dcodeDisplay( TOOL_ACTION_ARGS()
         .LegacyHotkeyName( "DCodes Display Mode" )
         .FriendlyName( _( "Show DCodes" ) )
         .Tooltip( _( "Show dcode numbers" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Icon( BITMAPS::show_dcodenumber ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::toggleForceOpacityMode( TOOL_ACTION_ARGS()
@@ -227,6 +233,7 @@ TOOL_ACTION GERBVIEW_ACTIONS::toggleForceOpacityMode( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Show with Forced Opacity Mode" ) )
         .Tooltip( _( "Show layers using opacity color forced mode" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Icon( BITMAPS::gbr_select_mode1 ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::toggleXORMode( TOOL_ACTION_ARGS()
@@ -234,6 +241,7 @@ TOOL_ACTION GERBVIEW_ACTIONS::toggleXORMode( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Show in XOR Mode" ) )
         .Tooltip( _( "Show layers in exclusive-or compare mode" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Icon( BITMAPS::gbr_select_mode2 ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::flipGerberView( TOOL_ACTION_ARGS()
@@ -241,6 +249,7 @@ TOOL_ACTION GERBVIEW_ACTIONS::flipGerberView( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Flip Gerber View" ) )
         .Tooltip( _( "Show as mirror image" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Icon( BITMAPS::flip_board ) );
 
 

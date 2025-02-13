@@ -58,8 +58,9 @@ ACTION_MANAGER::ACTION_MANAGER( TOOL_MANAGER* aToolManager ) :
 
         wxLogTrace( kicadTraceToolStack,
                     "ACTION_MANAGER::ACTION_MANAGER: Registering action %s with ID %d, UI ID %d, "
-                    "and group %s(%d)",
-                    action->m_name, action->m_id, action->GetUIId(), groupName, groupID );
+                    "group %s(%d), toolbar state %s",
+                    action->m_name, action->m_id, action->GetUIId(), groupName, groupID,
+                    action->m_toolbarState.to_string() );
 
         RegisterAction( action );
     }

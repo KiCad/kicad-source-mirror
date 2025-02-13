@@ -28,6 +28,7 @@
 #ifndef __TOOL_ACTION_H
 #define __TOOL_ACTION_H
 
+#include <bitset>
 #include <cassert>
 #include <optional>
 #include <string>
@@ -55,6 +56,21 @@ enum TOOL_ACTION_FLAGS
     AF_ACTIVATE = 1,    ///< Action activates a tool
     AF_NOTIFY   = 2     ///< Action is a notification (it is by default passed to all tools)
 };
+
+/// Flags that control how actions appear and interact on the toolbar
+enum class TOOLBAR_STATE
+{
+    HIDDEN = 0,         ///< Action is hidden from the toolbar
+    TOGGLE = 1,         ///< Action is a toggle button on the toolbar
+    CANCEL = 2,         ///< Action can be cancelled by clicking the toolbar button again
+
+    ENUM_LENGTH = 3
+};
+
+// The length of the TOOLBAR_STATE enum as a size_t (used for bitset creation)
+const size_t gToolbarStateNumber = static_cast<size_t>( TOOLBAR_STATE::ENUM_LENGTH );
+
+typedef std::bitset<gToolbarStateNumber> TOOLBAR_STATE_FLAGS;
 
 /**
  * Define a group that can be used to group actions (and their events) of similar operations.
@@ -228,6 +244,23 @@ public:
         return *this;
     }
 
+    TOOL_ACTION_ARGS& ToolbarState( TOOLBAR_STATE aState )
+    {
+        m_toolbarState = TOOLBAR_STATE_FLAGS();
+        m_toolbarState.value().set( static_cast<size_t>( aState ) );
+        return *this;
+    }
+
+    TOOL_ACTION_ARGS& ToolbarState( std::initializer_list<TOOLBAR_STATE> aState )
+    {
+        m_toolbarState = TOOLBAR_STATE_FLAGS();
+
+        for( auto flag : aState )
+            m_toolbarState.value().set( static_cast<size_t>( flag ) );
+
+        return *this;
+    }
+
 protected:
     // Let the TOOL_ACTION constructor have direct access to the members here
     friend class TOOL_ACTION;
@@ -250,6 +283,8 @@ protected:
     std::optional<BITMAPS>              m_icon;
 
     std::optional<TOOL_ACTION_GROUP>    m_group;
+
+    std::optional<TOOLBAR_STATE_FLAGS>  m_toolbarState;
 
     ki::any                             m_param;
 };
@@ -423,8 +458,23 @@ public:
      */
     BITMAPS GetIcon() const
     {
-        return m_icon;
+        // The value of 0 corresponds to BITMAPS::INVALID_BITMAP, but is just
+        // used here to make it so we don't need to include the full list in this
+        // header.
+        return m_icon.value_or( static_cast<BITMAPS>( 0 ) );
     }
+
+    /**
+     * Check if a specific toolbar state is required for this action.
+     *
+     * @param aState The state (from TOOLBAR_STATE enum) to check
+     * @return true if the state should be used for this action
+     */
+    bool CheckToolbarState( TOOLBAR_STATE aState ) const
+    {
+        return m_toolbarState[static_cast<std::size_t>( aState )];
+    }
+
 
 protected:
     TOOL_ACTION();
@@ -453,10 +503,12 @@ protected:
     wxString                m_tooltip;      ///< User facing tooltip help text.
     std::optional<wxString> m_description;  ///< Description of the action.
 
-    BITMAPS m_icon; ///< Icon for the menu entry
+    std::optional<BITMAPS> m_icon; ///< Icon for the menu entry
 
     int                m_id;   ///< Unique ID for maps. Assigned by #ACTION_MANAGER.
     std::optional<int> m_uiid; ///< ID to use when interacting with the UI (if empty, generate one).
+
+    TOOLBAR_STATE_FLAGS m_toolbarState;    ///< Toolbar state behavior for the action
 
     TOOL_ACTION_FLAGS m_flags;
     ki::any           m_param; ///< Generic parameter.

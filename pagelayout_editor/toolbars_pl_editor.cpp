@@ -58,7 +58,7 @@ void PL_EDITOR_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::zoomInCenter );
     m_mainToolBar->Add( ACTIONS::zoomOutCenter );
     m_mainToolBar->Add( ACTIONS::zoomFitScreen );
-    m_mainToolBar->Add( ACTIONS::zoomTool, ACTION_TOOLBAR::TOGGLE, ACTION_TOOLBAR::CANCEL );
+    m_mainToolBar->Add( ACTIONS::zoomTool );
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( PL_ACTIONS::showInspector );
@@ -66,8 +66,8 @@ void PL_EDITOR_FRAME::ReCreateHToolbar()
 
     // Display mode switch
     m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( PL_ACTIONS::layoutNormalMode, ACTION_TOOLBAR::TOGGLE );
-    m_mainToolBar->Add( PL_ACTIONS::layoutEditMode,   ACTION_TOOLBAR::TOGGLE );
+    m_mainToolBar->Add( PL_ACTIONS::layoutNormalMode );
+    m_mainToolBar->Add( PL_ACTIONS::layoutEditMode );
     m_mainToolBar->AddScaledSeparator( this );
 
     wxString choiceList[5] =
@@ -141,17 +141,17 @@ void PL_EDITOR_FRAME::ReCreateVToolbar()
         m_drawToolBar->SetAuiManager( &m_auimgr );
     }
 
-    m_drawToolBar->Add( ACTIONS::selectionTool,                 ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( ACTIONS::selectionTool );
 
     m_drawToolBar->AddScaledSeparator( this );
-    m_drawToolBar->Add( PL_ACTIONS::drawLine,                   ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PL_ACTIONS::drawRectangle,              ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PL_ACTIONS::placeText,                  ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PL_ACTIONS::placeImage,                 ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PL_ACTIONS::appendImportedDrawingSheet, ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PL_ACTIONS::drawLine );
+    m_drawToolBar->Add( PL_ACTIONS::drawRectangle );
+    m_drawToolBar->Add( PL_ACTIONS::placeText );
+    m_drawToolBar->Add( PL_ACTIONS::placeImage );
+    m_drawToolBar->Add( PL_ACTIONS::appendImportedDrawingSheet );
 
     m_drawToolBar->AddScaledSeparator( this );
-    m_drawToolBar->Add( ACTIONS::deleteTool,                    ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( ACTIONS::deleteTool );
 
     m_drawToolBar->KiRealize();
 }
@@ -176,10 +176,10 @@ void PL_EDITOR_FRAME::ReCreateOptToolbar()
     gridMenu->Add( ACTIONS::gridProperties );
     m_optionsToolBar->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
 
-    m_optionsToolBar->Add( ACTIONS::toggleGrid, ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::inchesUnits, ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::milsUnits, ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::millimetersUnits, ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::toggleGrid );
+    m_optionsToolBar->Add( ACTIONS::inchesUnits );
+    m_optionsToolBar->Add( ACTIONS::milsUnits );
+    m_optionsToolBar->Add( ACTIONS::millimetersUnits );
 
     m_optionsToolBar->KiRealize();
 }

@@ -62,7 +62,6 @@ TOOL_ACTION::TOOL_ACTION() :
         m_group( std::nullopt ),
         m_defaultHotKey( 0 ),
         m_defaultHotKeyAlt( 0 ),
-        m_icon( BITMAPS::INVALID_BITMAP ),
         m_id( -1 ),
         m_flags( AF_NONE )
 {
@@ -80,7 +79,6 @@ TOOL_ACTION::TOOL_ACTION( const TOOL_ACTION_ARGS& aArgs ) :
         m_legacyName( aArgs.m_legacyName.value_or( "" ) ),
         m_friendlyName( TowxString( aArgs.m_friendlyName.value_or( "" ) ) ),
         m_tooltip( TowxString( aArgs.m_tooltip.value_or( "" ) ) ),
-        m_icon( aArgs.m_icon.value_or( BITMAPS::INVALID_BITMAP) ),
         m_id( -1 ),
         m_uiid( std::nullopt ),
         m_flags( aArgs.m_flags.value_or( AF_NONE ) )
@@ -102,6 +100,16 @@ TOOL_ACTION::TOOL_ACTION( const TOOL_ACTION_ARGS& aArgs ) :
 
     if( aArgs.m_group.has_value() )
         m_group = aArgs.m_group;
+
+    if( aArgs.m_icon.has_value() )
+        m_icon = aArgs.m_icon.value();
+
+    if( aArgs.m_toolbarState.has_value() )
+        m_toolbarState = aArgs.m_toolbarState.value();
+
+    // If there is no icon, then the action should be hidden from the toolbar
+    if( !m_icon.has_value() )
+        m_toolbarState.set( static_cast<size_t>( TOOLBAR_STATE::HIDDEN ) );
 
     ACTION_MANAGER::GetActionList().push_back( this );
 }

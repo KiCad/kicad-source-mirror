@@ -59,20 +59,20 @@ void SYMBOL_EDIT_FRAME::ReCreateVToolbar()
 
     // Set up toolbar
     // clang-format off
-    m_drawToolBar->Add( ACTIONS::selectionTool,           ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( ACTIONS::selectionTool );
 
     m_drawToolBar->AddScaledSeparator( this );
-    m_drawToolBar->Add( EE_ACTIONS::placeSymbolPin,       ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::placeSymbolText,      ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::drawSymbolTextBox,    ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::drawRectangle,        ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::drawCircle,           ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::drawArc,              ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::drawBezier,           ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::drawSymbolLines,      ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::drawSymbolPolygon,    ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::placeSymbolAnchor,    ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( ACTIONS::deleteTool,              ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::placeSymbolPin );
+    m_drawToolBar->Add( EE_ACTIONS::placeSymbolText );
+    m_drawToolBar->Add( EE_ACTIONS::drawSymbolTextBox );
+    m_drawToolBar->Add( EE_ACTIONS::drawRectangle );
+    m_drawToolBar->Add( EE_ACTIONS::drawCircle );
+    m_drawToolBar->Add( EE_ACTIONS::drawArc );
+    m_drawToolBar->Add( EE_ACTIONS::drawBezier );
+    m_drawToolBar->Add( EE_ACTIONS::drawSymbolLines );
+    m_drawToolBar->Add( EE_ACTIONS::drawSymbolPolygon );
+    m_drawToolBar->Add( EE_ACTIONS::placeSymbolAnchor );
+    m_drawToolBar->Add( ACTIONS::deleteTool);
     // clang-format on
 
     m_drawToolBar->Realize();
@@ -109,7 +109,7 @@ void SYMBOL_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::zoomInCenter );
     m_mainToolBar->Add( ACTIONS::zoomOutCenter );
     m_mainToolBar->Add( ACTIONS::zoomFitScreen );
-    m_mainToolBar->Add( ACTIONS::zoomTool, ACTION_TOOLBAR::TOGGLE, ACTION_TOOLBAR::CANCEL );
+    m_mainToolBar->Add( ACTIONS::zoomTool );
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EE_ACTIONS::rotateCCW );
@@ -126,8 +126,8 @@ void SYMBOL_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( EE_ACTIONS::checkSymbol );
 
     m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EE_ACTIONS::showDeMorganStandard,  ACTION_TOOLBAR::TOGGLE );
-    m_mainToolBar->Add( EE_ACTIONS::showDeMorganAlternate, ACTION_TOOLBAR::TOGGLE );
+    m_mainToolBar->Add( EE_ACTIONS::showDeMorganStandard );
+    m_mainToolBar->Add( EE_ACTIONS::showDeMorganAlternate );
 
     m_mainToolBar->AddScaledSeparator( this );
 
@@ -138,7 +138,7 @@ void SYMBOL_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddControl( m_unitSelectBox );
 
     m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EE_ACTIONS::toggleSyncedPinsMode, ACTION_TOOLBAR::TOGGLE );
+    m_mainToolBar->Add( EE_ACTIONS::toggleSyncedPinsMode );
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EE_ACTIONS::addSymbolToSchematic );
@@ -162,25 +162,25 @@ void SYMBOL_EDIT_FRAME::ReCreateOptToolbar()
         m_optionsToolBar->SetAuiManager( &m_auimgr );
     }
 
-    m_optionsToolBar->Add( ACTIONS::toggleGrid,             ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::toggleGridOverrides,    ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::inchesUnits,            ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::milsUnits,              ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::millimetersUnits,       ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,      ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::toggleGrid );
+    m_optionsToolBar->Add( ACTIONS::toggleGridOverrides );
+    m_optionsToolBar->Add( ACTIONS::inchesUnits );
+    m_optionsToolBar->Add( ACTIONS::milsUnits );
+    m_optionsToolBar->Add( ACTIONS::millimetersUnits );
+    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle );
 
     m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( EE_ACTIONS::showElectricalTypes, ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( EE_ACTIONS::showHiddenPins,      ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( EE_ACTIONS::showHiddenFields,    ACTION_TOOLBAR::TOGGLE );
-    // m_optionsToolBar->Add( EE_ACTIONS::togglePinAltIcons,   ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( EE_ACTIONS::showElectricalTypes );
+    m_optionsToolBar->Add( EE_ACTIONS::showHiddenPins );
+    m_optionsToolBar->Add( EE_ACTIONS::showHiddenFields );
+    // m_optionsToolBar->Add( EE_ACTIONS::togglePinAltIcons );
 
     if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
-        m_optionsToolBar->Add( ACTIONS::toggleBoundingBoxes, ACTION_TOOLBAR::TOGGLE );
+        m_optionsToolBar->Add( ACTIONS::toggleBoundingBoxes );
 
     m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( ACTIONS::showLibraryTree,        ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::showProperties,         ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::showLibraryTree );
+    m_optionsToolBar->Add( ACTIONS::showProperties );
 
     EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
     std::unique_ptr<ACTION_MENU> gridMenu = std::make_unique<ACTION_MENU>( false, selTool );

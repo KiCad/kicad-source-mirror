@@ -1333,7 +1333,7 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
 
     mgr->SetConditions( ACTIONS::showLibraryTree,           CHECK( libraryTreeCond ) );
     mgr->SetConditions( PCB_ACTIONS::showLayersManager,     CHECK( layerManagerCond ) );
-    mgr->SetConditions( PCB_ACTIONS::showProperties,        CHECK( propertiesCond ) );
+    mgr->SetConditions( ACTIONS::showProperties,            CHECK( propertiesCond ) );
 
     mgr->SetConditions( ACTIONS::print,                     ENABLE( haveFootprintCond ) );
     mgr->SetConditions( PCB_ACTIONS::exportFootprint,       ENABLE( haveFootprintCond ) );
@@ -1388,7 +1388,7 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawRadialDimension );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawLeader );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::setAnchor );
-    CURRENT_EDIT_TOOL( PCB_ACTIONS::gridSetOrigin );
+    CURRENT_EDIT_TOOL( ACTIONS::gridSetOrigin );
 
 #undef CURRENT_EDIT_TOOL
 #undef ENABLE

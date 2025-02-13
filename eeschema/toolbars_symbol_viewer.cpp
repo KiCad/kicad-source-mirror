@@ -62,12 +62,12 @@ void SYMBOL_VIEWER_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::zoomFitScreen );
 
     m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EE_ACTIONS::showElectricalTypes,   ACTION_TOOLBAR::TOGGLE );
-    m_mainToolBar->Add( EE_ACTIONS::showPinNumbers,        ACTION_TOOLBAR::TOGGLE );
+    m_mainToolBar->Add( EE_ACTIONS::showElectricalTypes );
+    m_mainToolBar->Add( EE_ACTIONS::showPinNumbers );
 
     m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EE_ACTIONS::showDeMorganStandard,  ACTION_TOOLBAR::TOGGLE );
-    m_mainToolBar->Add( EE_ACTIONS::showDeMorganAlternate, ACTION_TOOLBAR::TOGGLE );
+    m_mainToolBar->Add( EE_ACTIONS::showDeMorganStandard );
+    m_mainToolBar->Add( EE_ACTIONS::showDeMorganAlternate );
 
     m_mainToolBar->AddScaledSeparator( this );
 
