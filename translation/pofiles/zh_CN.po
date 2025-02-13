@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-07 01:15+0300\n"
-"PO-Revision-Date: 2025-02-03 16:58+0000\n"
+"PO-Revision-Date: 2025-02-13 13:58+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v8/zh_Hans/>\n"
@@ -18100,7 +18100,7 @@ msgstr "OEM 不能为空。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:703
 msgid "Negative number of pins."
-msgstr "负数的引脚。"
+msgstr "引脚编号为负。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:723
 msgid "Empty pin number."
@@ -22605,11 +22605,11 @@ msgstr "在外框模式下显示多边形"
 
 #: gerbview/tools/gerbview_actions.cpp:218
 msgid "Ghost Negative Objects"
-msgstr "显示负片对象"
+msgstr "重影显示负片对象"
 
 #: gerbview/tools/gerbview_actions.cpp:219
 msgid "Show negative objects in ghost color"
-msgstr "以鬼影颜色显示负片对象"
+msgstr "以重影颜色显示负片对象"
 
 #: gerbview/tools/gerbview_actions.cpp:227
 msgid "Show DCodes"
@@ -22707,7 +22707,7 @@ msgstr "显示 D 码识别 ID"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:132
 msgid "Show negative objects in this color"
-msgstr "以此颜色显示负片"
+msgstr "以此颜色显示负片对象"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:135
 #: pcbnew/widgets/appearance_controls.cpp:351
