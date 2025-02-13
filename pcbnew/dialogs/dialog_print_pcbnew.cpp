@@ -114,16 +114,13 @@ DIALOG_PRINT_PCBNEW::DIALOG_PRINT_PCBNEW( PCB_BASE_EDIT_FRAME* aParent,
     // Could devote a PlotOrder() function in place of UIOrder().
     m_layerList = board->GetEnabledLayers().UIOrder();
 
-    // Populate the check list box by all enabled layers names
+    // Populate the check list box by all enabled layers names. They will be enabled later
+    // when the dlg settings are loaded (i.e. after DIALOG_PRINT_GENERIC::TransferDataToWindow()
+    // is called
     for( PCB_LAYER_ID layer : m_layerList )
-    {
-        int checkIndex = m_layerCheckListBox->Append( board->GetLayerName( layer ) );
+        m_layerCheckListBox->Append( board->GetLayerName( layer ) );
 
-        if( settings()->m_LayerSet.test( layer ) )
-            m_layerCheckListBox->Check( checkIndex );
-    }
-
-    m_infoText->SetFont( KIUI::GetInfoFont( this ).Italic() );
+    m_infoText->SetFont( KIUI::GetInfoFont( this ) );
     m_infoText->SetLabel( _( "Right-click for layer selection commands." ) );
     m_infoText->Show( true );
 
@@ -153,6 +150,20 @@ bool DIALOG_PRINT_PCBNEW::TransferDataToWindow()
 {
     if( !DIALOG_PRINT_GENERIC::TransferDataToWindow() )
         return false;
+
+    BOARD* board = m_parent->GetBoard();
+
+    // Enable layers from previous dlg settings
+    m_layerList = board->GetEnabledLayers().UIOrder();
+    int choice_ly_id = 0;
+
+    for( PCB_LAYER_ID layer : m_layerList )
+    {
+        if( settings()->m_LayerSet.test( layer ) )
+            m_layerCheckListBox->Check( choice_ly_id );
+
+        choice_ly_id++;
+    }
 
     m_checkAsItems->SetValue( settings()->m_AsItemCheckboxes );
     m_checkboxMirror->SetValue( settings()->m_Mirror );
@@ -194,6 +205,9 @@ bool DIALOG_PRINT_PCBNEW::TransferDataToWindow()
     m_checkboxPagePerLayer->SetValue( settings()->m_Pagination
                                             == PCBNEW_PRINTOUT_SETTINGS::LAYER_PER_PAGE );
     onPagePerLayerClicked( dummy );
+
+    // Update the dialog layout when layers are added
+    GetSizer()->Fit( this );
 
     return true;
 }
