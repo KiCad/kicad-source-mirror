@@ -92,6 +92,7 @@ class PANEL_SETUP_TUNING_PATTERNS_BASE : public wxPanel
 		wxStaticText* m_skew_rLabel;
 		TEXT_CTRL_EVAL* m_skew_rCtrl;
 		wxStaticText* m_skew_rUnits;
+		wxCheckBox* m_skew_singleSided;
 
 	public:
 

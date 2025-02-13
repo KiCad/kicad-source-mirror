@@ -77,6 +77,7 @@ bool PANEL_SETUP_TUNING_PATTERNS::TransferDataToWindow()
     m_skew_spacing.SetValue( m_skewSettings.m_spacing );
     m_skew_cornerCtrl->SetSelection( m_skewSettings.m_cornerStyle == PNS::MEANDER_STYLE_ROUND ? 1 : 0 );
     m_skew_r.SetValue( m_skewSettings.m_cornerRadiusPercentage );
+    m_skew_singleSided->SetValue( m_skewSettings.m_singleSided );
 
     return true;
 }
@@ -106,6 +107,7 @@ bool PANEL_SETUP_TUNING_PATTERNS::TransferDataFromWindow()
     m_skewSettings.m_cornerStyle = m_skew_cornerCtrl->GetSelection() ? PNS::MEANDER_STYLE_ROUND
                                                                      : PNS::MEANDER_STYLE_CHAMFER;
     m_skewSettings.m_cornerRadiusPercentage = m_skew_r.GetIntValue();
+    m_skewSettings.m_singleSided = m_skew_singleSided->GetValue();
 
     return true;
 }
