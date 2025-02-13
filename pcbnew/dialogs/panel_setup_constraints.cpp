@@ -57,19 +57,24 @@ PANEL_SETUP_CONSTRAINTS::PANEL_SETUP_CONSTRAINTS( wxWindow* aParentWindow, PCB_E
     m_Frame = aFrame;
     m_BrdSettings = &m_Frame->GetBoard()->GetDesignSettings();
 
-    m_filletBitmap->SetBitmap( KiBitmapBundle( BITMAPS::zone_fillet ) );
-    m_spokeBitmap->SetBitmap( KiBitmapBundle( BITMAPS::thermal_spokes ) );
-    m_bitmapClearance->SetBitmap( KiBitmapBundle( BITMAPS::ps_diff_pair_gap ) );
-    m_bitmapMinTrackWidth->SetBitmap( KiBitmapBundle( BITMAPS::width_track ) );
-    m_bitmapMinConn->SetBitmap( KiBitmapBundle( BITMAPS::width_conn ) );
-    m_bitmapMinViaAnnulus->SetBitmap( KiBitmapBundle( BITMAPS::via_annulus ) );
-    m_bitmapMinViaDiameter->SetBitmap( KiBitmapBundle( BITMAPS::via_diameter ) );
-    m_bitmapMinViaDrill->SetBitmap( KiBitmapBundle( BITMAPS::via_hole_diameter ) );
-    m_bitmapMinuViaDiameter->SetBitmap( KiBitmapBundle( BITMAPS::via_diameter ) );
-    m_bitmapMinuViaDrill->SetBitmap( KiBitmapBundle( BITMAPS::via_hole_diameter ) );
-    m_bitmapHoleClearance->SetBitmap( KiBitmapBundle( BITMAPS::hole_to_copper_clearance ) );
-    m_bitmapMinHoleClearance->SetBitmap( KiBitmapBundle( BITMAPS::hole_to_hole_clearance ) );
-    m_bitmapEdgeClearance->SetBitmap( KiBitmapBundle( BITMAPS::edge_to_copper_clearance ) );
+    auto getBitmap = [&]( const BITMAPS& aBitmap )
+    {
+        return KiBitmapBundle( aBitmap ).GetBitmap( FromDIP( wxSize( 24, 24 ) ) );
+    };
+
+    m_filletBitmap->SetBitmap( getBitmap( BITMAPS::zone_fillet ) );
+    m_spokeBitmap->SetBitmap( getBitmap( BITMAPS::thermal_spokes ) );
+    m_bitmapClearance->SetBitmap( getBitmap( BITMAPS::ps_diff_pair_gap ) );
+    m_bitmapMinTrackWidth->SetBitmap( getBitmap( BITMAPS::width_track ) );
+    m_bitmapMinConn->SetBitmap( getBitmap( BITMAPS::width_conn ) );
+    m_bitmapMinViaAnnulus->SetBitmap( getBitmap( BITMAPS::via_annulus ) );
+    m_bitmapMinViaDiameter->SetBitmap( getBitmap( BITMAPS::via_diameter ) );
+    m_bitmapMinViaDrill->SetBitmap( getBitmap( BITMAPS::via_hole_diameter ) );
+    m_bitmapMinuViaDiameter->SetBitmap( getBitmap( BITMAPS::via_diameter ) );
+    m_bitmapMinuViaDrill->SetBitmap( getBitmap( BITMAPS::via_hole_diameter ) );
+    m_bitmapHoleClearance->SetBitmap( getBitmap( BITMAPS::hole_to_copper_clearance ) );
+    m_bitmapMinHoleClearance->SetBitmap( getBitmap( BITMAPS::hole_to_hole_clearance ) );
+    m_bitmapEdgeClearance->SetBitmap( getBitmap( BITMAPS::edge_to_copper_clearance ) );
 
     m_stCircleToPolyWarning->SetFont( KIUI::GetInfoFont( this ) );
 
