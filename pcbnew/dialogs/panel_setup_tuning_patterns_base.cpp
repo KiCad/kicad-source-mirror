@@ -386,6 +386,15 @@ PANEL_SETUP_TUNING_PATTERNS_BASE::PANEL_SETUP_TUNING_PATTERNS_BASE( wxWindow* pa
 	fgSizer31->Add( m_skew_rUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
+	fgSizer31->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_skew_singleSided = new wxCheckBox( this, wxID_ANY, _("Single-sided"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer31->Add( m_skew_singleSided, 0, wxALL, 5 );
+
+
+	fgSizer31->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
 	skewSizer->Add( fgSizer31, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
