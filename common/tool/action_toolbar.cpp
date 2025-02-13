@@ -39,6 +39,7 @@
 #include <tool/tool_event.h>
 #include <tool/tool_interactive.h>
 #include <tool/tool_manager.h>
+#include <tool/ui/toolbar_configuration.h>
 #include <widgets/bitmap_button.h>
 #include <widgets/wx_aui_art_providers.h>
 #include <wx/popupwin.h>
@@ -234,6 +235,69 @@ ACTION_TOOLBAR::~ACTION_TOOLBAR()
     m_toolCancellable.clear();
     m_toolKinds.clear();
     m_toolActions.clear();
+}
+
+
+void ACTION_TOOLBAR::ApplyConfiguration( const TOOLBAR_CONFIGURATION& aConfig )
+{
+    // Remove existing tools
+    Clear();
+
+    std::vector<std::string> items = aConfig.GetToolbarItems();
+
+    for( auto& toolName : items )
+    {
+        if( toolName == "separator" )
+        {
+            // Add a separator
+            AddScaledSeparator();
+        }
+        else if( toolName.starts_with( "group" ) )
+        {
+            // Add a group of items to the toolbar
+            std::optional<TOOLBAR_GROUP_CONFIG&> groupConfigOpt = aConfig.GetGroup( toolName );
+
+            if( !groupConfigOpt.has_value() )
+            {
+                wxASSERT_MSG( false, wxString::Format( "Unable to find group %s", toolName ) );
+                continue;
+            }
+
+            TOOLBAR_GROUP_CONFIG& groupConfig = groupConfigOpt.value();
+
+            std::vector<const TOOL_ACTION*> tools;
+
+            for( auto& groupItem : groupConfig.GetGroupItems() )
+            {
+                TOOL_ACTION* action = m_toolManager->GetActionManager()->FindTool( toolName );
+
+                if( !tool )
+                {
+                    wxASSERT_MSG( false, wxString::Format( "Unable to find group tool %s", toolName ) );
+                    continue;
+                }
+
+                tools.push_back( action );
+            }
+
+            ACTION_GROUP* group = new ACTION_GROUP( groupConfig.GetName(), tools );
+
+            AddGroup( group );
+        }
+        else
+        {
+            // Assume anything else is a tool
+            TOOL_ACTION* action = m_toolManager->GetActionManager()->FindTool( toolName );
+
+            if( !tool )
+            {
+                wxASSERT_MSG( false, wxString::Format( "Unable to find toolbar tool %s", toolName ) );
+                continue;
+            }
+
+            Add( action );
+        }
+    }
 }
 
 

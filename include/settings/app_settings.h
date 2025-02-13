@@ -166,6 +166,13 @@ public:
         std::vector<std::pair<wxString, bool>> actions;
     };
 
+    struct TOOLBARS
+    {
+        TOOLBAR_CONFIGURATION m_HToolbarConfig;
+        TOOLBAR_CONFIGURATION m_VToolbarConfig;
+        TOOLBAR_CONFIGURATION m_optToolbarConfig;
+    }
+
     APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaVersion );
 
     virtual ~APP_SETTINGS_BASE() {}
@@ -194,6 +201,8 @@ public:
     PLUGINS m_Plugins;
 
     WINDOW_SETTINGS m_Window;
+
+    TOOLBARS m_Toolbars;
 
     /// Active color theme name.
     wxString m_ColorTheme;

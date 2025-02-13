@@ -39,6 +39,7 @@ class BITMAP_BUTTON;
 class EDA_BASE_FRAME;
 class TOOL_ACTION;
 class TOOL_MANAGER;
+class TOOLBAR_CONFIGURATION;
 
 /**
  * A group of actions that will be displayed together on a toolbar palette.
@@ -264,6 +265,14 @@ public:
      * @param aAction is the action inside the group
      */
     void SelectAction( ACTION_GROUP* aGroup, const TOOL_ACTION& aAction );
+
+    /**
+     * Replace the contents of this toolbar with the configuration given in
+     * @c aConfig.
+     *
+     * @param aConfig is the configuration to apply to the toolbar
+     */
+    void ApplyConfiguration( const TOOLBAR_CONFIGURATION& aConfig );
 
     /**
      * Update the toolbar item width of a control using its best size.
