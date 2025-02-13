@@ -112,7 +112,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-07 01:15+0300\n"
-"PO-Revision-Date: 2025-02-10 02:01+0000\n"
+"PO-Revision-Date: 2025-02-13 13:58+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v8/it/>\n"
 "Language: it\n"
@@ -25961,7 +25961,7 @@ msgstr "Mostra riquadro iscrizioni in modalità anteprima"
 
 #: pagelayout_editor/tools/pl_actions.cpp:120
 msgid "Text placeholders will be replaced with preview data"
-msgstr "I segnaposto dei testi verranno rimpiazzati dalle anteprime dei dati"
+msgstr "I segnaposto dei testi verranno rimpiazzati dalle anteprime dati"
 
 #: pagelayout_editor/tools/pl_actions.cpp:126
 msgid "Show Title Block in Edit Mode"
@@ -25969,8 +25969,7 @@ msgstr "Mostra riquadro iscrizioni in modalità modifica"
 
 #: pagelayout_editor/tools/pl_actions.cpp:127
 msgid "Text placeholders are shown as ${keyword} tokens"
-msgstr ""
-"I segnaposto dei testi vengono visualizzati come elementi ${parolachiave}"
+msgstr "I segnaposto dei testi vengono visualizzati come token ${parolachiave}"
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:530
 msgid "Error writing objects to clipboard"
@@ -31678,7 +31677,6 @@ msgid "Restart Search"
 msgstr "Ricomincia la ricerca"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:48
-#, fuzzy
 msgid "Footprint: "
 msgstr "Impronta: "
 
@@ -32721,8 +32719,8 @@ msgid ""
 "Allows a teardrop to extend over the first 2 connected track segments if the "
 "first track segment is too short to accommodate the best length."
 msgstr ""
-"Consenti a una lacrima di estendersi sui primi 2 segmenti di piste collegati "
-"se il primo segmento è troppo corto."
+"Permetti alle lacrime di estendersi su 2 tratti di pista connessi se il "
+"primo segmento di pista è troppo corto per una lunghezza ottimale."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:163
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:637
@@ -32754,7 +32752,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:181
 msgid "(as a percentage of pad/via minor dimension)"
-msgstr "(come percentuale dimensione minore di piazzola/via)"
+msgstr "(come percentuale della dimensione minore piazzola/via)"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:224
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:706
