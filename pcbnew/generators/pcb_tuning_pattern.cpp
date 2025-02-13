@@ -2312,8 +2312,10 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                 delete m_tuningPattern;
                 m_tuningPattern = nullptr;
             }
-
-            break;
+            else
+            {
+                break;
+            }
         }
         else if( evt->IsMotion() )
         {
