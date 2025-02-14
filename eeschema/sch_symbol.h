@@ -522,21 +522,37 @@ public:
         SetValueFieldText( aRef );
     }
 
-    int GetUnitProp() const
+    wxString GetUnitProp() const
     {
-        return GetUnitSelection( &Schematic()->CurrentSheet() );
+        int unit = GetUnitSelection( &Schematic()->CurrentSheet() );
+
+        if( HasUnitDisplayName( unit ) )
+            return GetUnitDisplayName( unit );
+        else
+            return SubReference( unit, false );
     }
 
-    void SetUnitProp( int aUnit )
+    void SetUnitProp( const wxString& aUnit )
     {
-        if( aUnit < 1 )
-            return;
+        for( int unit = 1; unit <= GetUnitCount(); unit++ )
+        {
+            if( HasUnitDisplayName( unit ) && GetUnitDisplayName( unit ) == aUnit )
+            {
+                SetUnitSelection( &Schematic()->CurrentSheet(), unit );
+                SetUnit( unit );
+                return;
+            }
+        }
 
-        if( aUnit > GetUnitCount() )
-            aUnit = GetUnitCount();
-
-        SetUnitSelection( &Schematic()->CurrentSheet(), aUnit );
-        SetUnit( aUnit );
+        for( int unit = 1; unit <= GetUnitCount(); unit++ )
+        {
+            if( SubReference( unit, false ) == aUnit )
+            {
+                SetUnitSelection( &Schematic()->CurrentSheet(), unit );
+                SetUnit( unit );
+                return;
+            }
+        }
     }
 
     int GetBodyStyleProp() const

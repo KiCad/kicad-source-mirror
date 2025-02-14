@@ -602,7 +602,8 @@ int SCH_DRAWING_TOOLS::PlaceNextSymbolUnit( const TOOL_EVENT& aEvent )
     std::unique_ptr<SCH_SYMBOL> newSymbol = std::make_unique<SCH_SYMBOL>( *symbol );
     const SCH_SHEET_PATH&       sheetPath = m_frame->GetCurrentSheet();
 
-    newSymbol->SetUnitProp( nextMissing );
+    newSymbol->SetUnitSelection( &sheetPath, nextMissing );
+    newSymbol->SetUnit( nextMissing );
     newSymbol->SetRefProp( symbol->GetRef( &sheetPath, false ) );
 
     // Post the new symbol - don't reannotate it - we set the reference ourselves

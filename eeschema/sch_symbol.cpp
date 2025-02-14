@@ -3032,7 +3032,7 @@ static struct SCH_SYMBOL_DESC
                     return false;
                 };
 
-        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, int>( _HKI( "Unit" ),
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, wxString>( _HKI( "Unit" ),
                     &SCH_SYMBOL::SetUnitProp, &SCH_SYMBOL::GetUnitProp ) )
                 .SetAvailableFunc( multiUnit );
 
