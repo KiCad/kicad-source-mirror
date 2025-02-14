@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -37,7 +37,6 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_BOARD_REANNOTATE_BASE
@@ -80,12 +79,12 @@ class DIALOG_BOARD_REANNOTATE_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_FrontRefDesStart;
 		wxStaticText* m_BottomRefDesStartText;
 		wxTextCtrl* m_BackRefDesStart;
-		wxCheckBox* m_RemoveFrontPrefix;
-		wxCheckBox* m_RemoveBackPrefix;
 		wxStaticText* m_FrontPrefixText;
 		wxTextCtrl* m_FrontPrefix;
 		wxStaticText* m_BackPrefixText;
 		wxTextCtrl* m_BackPrefix;
+		wxCheckBox* m_RemoveFrontPrefix;
+		wxCheckBox* m_RemoveBackPrefix;
 		wxCheckBox* m_ExcludeLocked;
 		wxStaticText* m_ExcludeListText;
 		wxTextCtrl* m_ExcludeList;
