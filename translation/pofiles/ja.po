@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-10 15:21-0800\n"
-"PO-Revision-Date: 2025-02-13 09:01+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"PO-Revision-Date: 2025-02-14 13:57+0000\n"
+"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.10\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -43802,12 +43802,9 @@ msgid "PTH pad %s"
 msgstr "PTH パッド%s"
 
 #: pcbnew/pad.cpp:2179
-#, fuzzy
 msgid ""
 "(plated through holes normally have a copper pad on at least one outer layer)"
-msgstr ""
-"（メッキされたスルーホールには通常、少なくとも 1 つの層に導体パッドがありま"
-"す）"
+msgstr "（通常メッキスルーホールには、少なくとも 1 つの外層に導体パッドがあります）"
 
 #: pcbnew/pad.cpp:2187
 msgid "('fiducial' property makes no sense on NPTH pads)"
@@ -46287,19 +46284,19 @@ msgid "Successfully created genCAD file\n"
 msgstr "genCADファイルの作成に成功しました\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1424 pcbnew/pcbnew_jobs_handler.cpp:1497
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote front position data to '%s'.\n"
-msgstr "位置データとしてエクスポート"
+msgstr "フロント位置情報を '%s' に書き込みました。\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1442 pcbnew/pcbnew_jobs_handler.cpp:1521
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote back position data to '%s'.\n"
-msgstr "'%s' にBOMを出力しました"
+msgstr "バック位置情報を '%s' に書き込みました。\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1471
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote position data to '%s'.\n"
-msgstr "位置データとしてエクスポート"
+msgstr "位置情報を '%s' に書き込みました。\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1572
 msgid "Footprint library path does not exist or is not accessible\n"
