@@ -53,6 +53,7 @@ namespace CLI
 #define ARG_EXCLUDE_VALUE "--exclude-value"
 #define ARG_THEME "--theme"
 #define ARG_INCLUDE_BORDER_TITLE "--include-border-title"
+#define ARG_SUBTRACT_SOLDERMASK "--subtract-soldermask"
 #define ARG_MIRROR "--mirror"
 
 #define ARG_FLIP_BOTTOM_PADS "--flip-bottom-pads"

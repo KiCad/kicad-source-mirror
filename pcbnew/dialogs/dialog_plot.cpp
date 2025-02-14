@@ -361,7 +361,6 @@ void DIALOG_PLOT::init_Dialog()
     // SVG precision and units for coordinates
     m_svgPrecsision->SetValue( m_plotOpts.GetSvgPrecision() );
 
-    // Option to exclude pads from silkscreen layers
     m_sketchPadsOnFabLayers->SetValue( m_plotOpts.GetSketchPadsOnFabLayers() );
     m_plotPadNumbers->SetValue( m_plotOpts.GetPlotPadNumbers() );
     m_plotPadNumbers->Enable( m_plotOpts.GetSketchPadsOnFabLayers() );
@@ -381,13 +380,10 @@ void DIALOG_PLOT::init_Dialog()
     m_hideDNP->Enable( m_plotDNP->GetValue() );
     m_crossoutDNP->Enable( m_plotDNP->GetValue() );
 
-    // Option to tent vias
     m_subtractMaskFromSilk->SetValue( m_plotOpts.GetSubtractMaskFromSilk() );
 
-    // Option to use aux origin
     m_useAuxOriginCheckBox->SetValue( m_plotOpts.GetUseAuxOrigin() );
 
-    // Option to plot page references:
     m_plotSheetRef->SetValue( m_plotOpts.GetPlotFrameRef() );
 
     // Options to plot pads and vias holes
@@ -442,7 +438,6 @@ void DIALOG_PLOT::transferPlotParamsToJob()
         gJob->m_includeNetlistAttributes = m_plotOpts.GetIncludeGerberNetlistInfo();
         gJob->m_createJobsFile = m_plotOpts.GetCreateGerberJobFile();
         gJob->m_precision = m_plotOpts.GetGerberPrecision();
-        gJob->m_subtractSolderMaskFromSilk = m_plotOpts.GetSubtractMaskFromSilk();
         gJob->m_useBoardPlotParams = false;
     }
 
@@ -483,6 +478,7 @@ void DIALOG_PLOT::transferPlotParamsToJob()
         }
     }
 
+    m_job->m_subtractSolderMaskFromSilk = m_plotOpts.GetSubtractMaskFromSilk();
     m_job->m_useDrillOrigin = m_plotOpts.GetUseAuxOrigin();
     m_job->m_crossoutDNPFPsOnFabLayers = m_plotOpts.GetCrossoutDNPFPsOnFabLayers();
     m_job->m_hideDNPFPsOnFabLayers = m_plotOpts.GetHideDNPFPsOnFabLayers();

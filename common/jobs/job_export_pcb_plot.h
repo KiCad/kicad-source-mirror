@@ -63,6 +63,7 @@ public:
     bool m_plotFootprintValues;
     bool m_plotRefDes;
     bool m_plotDrawingSheet;
+    bool m_subtractSolderMaskFromSilk;
     bool m_plotPadNumbers;
 
     LSEQ m_printMaskLayer;

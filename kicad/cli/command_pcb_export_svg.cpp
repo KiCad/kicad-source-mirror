@@ -43,6 +43,10 @@ CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND(
     addDrawingSheetArg();
     addDefineArg();
 
+    m_argParser.add_argument( ARG_SUBTRACT_SOLDERMASK )
+            .help( UTF8STDSTR( _( "Subtract soldermask from silkscreen" ) ) )
+            .flag();
+
     m_argParser.add_argument( "-m", ARG_MIRROR )
             .help( UTF8STDSTR( _( "Mirror the board (useful for trying to show bottom layers)" ) ) )
             .flag();
@@ -136,6 +140,7 @@ int CLI::PCB_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
     int drillShape = m_argParser.get<int>( ARG_DRILL_SHAPE_OPTION );
     svgJob->m_drillShapeOption = static_cast<JOB_EXPORT_PCB_SVG::DRILL_MARKS>( drillShape );
     svgJob->m_drawingSheet = m_argDrawingSheet;
+    svgJob->m_subtractSolderMaskFromSilk = m_argParser.get<bool>( ARG_SUBTRACT_SOLDERMASK );
 
     svgJob->m_filename = m_argInput;
     svgJob->SetConfiguredOutputPath( m_argOutput );
