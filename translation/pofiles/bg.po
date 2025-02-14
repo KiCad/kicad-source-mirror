@@ -6,17 +6,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-10 15:21-0800\n"
-"PO-Revision-Date: 2025-02-01 17:11+0000\n"
-"Last-Translator: 109247019824 <109247019824@users.noreply.hosted.weblate."
-"org>\n"
-"Language-Team: Bulgarian <https://hosted.weblate.org/projects/kicad/master-"
-"source/bg/>\n"
+"PO-Revision-Date: 2025-02-14 13:57+0000\n"
+"Last-Translator: 109247019824 <109247019824@users.noreply.hosted.weblate.org>"
+"\n"
+"Language-Team: Bulgarian <https://hosted.weblate.org/projects/kicad/"
+"master-source/bg/>\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.10\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: C:\\kicad\\trunk\n"
 "X-Poedit-Language: Bulgarian\n"
@@ -510,21 +510,19 @@ msgstr "Изчертаване с плътни цевтове"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:263
 msgid "Use only the diffuse color property from 3D model file"
-msgstr ""
+msgstr "Използване само на разсейката на цвета от модела"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:270
-#, fuzzy
 msgid "Render CAD Colors"
-msgstr "Определени отвори"
+msgstr "Показване цветовете на CAD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:271
 msgid "Use a CAD color style based on the diffuse color of the material"
-msgstr ""
+msgstr "Използване на цветовете на CAD с разсейването на използвания материал"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:279
-#, fuzzy
 msgid "Show Through Hole 3D Models"
-msgstr "Покажи проходните връзки"
+msgstr "Показване на модели за конвенционален монтаж"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:280
 #, fuzzy
