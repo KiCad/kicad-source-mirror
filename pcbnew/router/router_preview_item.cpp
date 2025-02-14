@@ -69,7 +69,7 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, PNS::ROUTER_IF
         // TODO(JE) padstacks -- need to know the layer here
         m_shape = aItem->Shape( -1 )->Clone();
 
-        if( aItem->Hole() )
+        if( aItem->HasHole() )
             m_hole = aItem->Hole()->Shape( -1 )->Clone();
     }
 
@@ -187,7 +187,7 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::ITEM* aItem )
         delete m_hole;
         m_hole = nullptr;
 
-        if( aItem->Hole() )
+        if( aItem->HasHole() )
             m_hole = aItem->Hole()->Shape( -1 )->Clone();
 
         break;

@@ -150,12 +150,12 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode, int aLayer,
     }
 
     // And a special case for the "head" via's hole.
-    if( holeH && shouldWeConsiderHoleCollisions( this, holeH ) )
+    if( aHead->HasHole() && shouldWeConsiderHoleCollisions( this, holeH ) )
     {
         if( Net() != holeH->Net() && collideSimple( holeH, aNode, aLayer, aCtx ) )
             collisionsFound = true;
     }
-    if( holeI && shouldWeConsiderHoleCollisions( holeI, aHead ) )
+    if( HasHole() && shouldWeConsiderHoleCollisions( holeI, aHead ) )
     {
         collisionsFound |= holeI->collideSimple( aHead, aNode, aLayer, aCtx );
     }
