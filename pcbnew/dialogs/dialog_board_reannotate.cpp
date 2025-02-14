@@ -685,10 +685,10 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<REFDES_INFO>& aBad
         }
         else
             exclude += thischar;
-
-        if( !exclude.empty() )
-            m_excludeArray.push_back( exclude );
     }
+
+    if( !exclude.empty() )      // last item to exclude
+        m_excludeArray.push_back( exclude );
 
     REFDES_INFO fpData;
     bool       useModuleLocation = m_locationChoice->GetSelection() == 0;

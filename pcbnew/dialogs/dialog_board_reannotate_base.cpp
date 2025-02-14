@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -161,9 +161,6 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 
 	bSizerOpts->Add( fgSizerLocations, 0, wxEXPAND|wxALL, 10 );
 
-
-	bSizerOpts->Add( 0, 15, 0, wxEXPAND, 5 );
-
 	wxStaticText* stScopeLabel;
 	stScopeLabel = new wxStaticText( m_StandardOptions, wxID_ANY, _("Reannotation Scope"), wxDefaultPosition, wxDefaultSize, 0 );
 	stScopeLabel->Wrap( -1 );
@@ -232,16 +229,6 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 
 	gbSizer1->Add( m_BackRefDesStart, wxGBPosition( 0, 4 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
 
-	m_RemoveFrontPrefix = new wxCheckBox( m_Advanced, wxID_ANY, _("Remove front prefix"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_RemoveFrontPrefix->SetToolTip( _("If checked will remove the front side prefix\nin the front prefix box if present") );
-
-	gbSizer1->Add( m_RemoveFrontPrefix, wxGBPosition( 2, 0 ), wxGBSpan( 1, 2 ), wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
-
-	m_RemoveBackPrefix = new wxCheckBox( m_Advanced, wxID_ANY, _("Remove back prefix"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_RemoveBackPrefix->SetToolTip( _("If checked will remove the Back side prefix\nin the back prefix box if present") );
-
-	gbSizer1->Add( m_RemoveBackPrefix, wxGBPosition( 2, 3 ), wxGBSpan( 1, 2 ), wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
-
 	m_FrontPrefixText = new wxStaticText( m_Advanced, wxID_ANY, _("Front prefix:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_FrontPrefixText->Wrap( -1 );
 	m_FrontPrefixText->SetToolTip( _("Optional prefix for component side reference designations (e.g. F_)") );
@@ -263,6 +250,16 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 	m_BackPrefix->SetToolTip( _("Optional prefix for solder side reference designations (e.g. B_)") );
 
 	gbSizer1->Add( m_BackPrefix, wxGBPosition( 1, 4 ), wxGBSpan( 1, 1 ), wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_RemoveFrontPrefix = new wxCheckBox( m_Advanced, wxID_ANY, _("Remove front prefix"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_RemoveFrontPrefix->SetToolTip( _("If checked will remove the front side prefix\nin the front prefix box if present") );
+
+	gbSizer1->Add( m_RemoveFrontPrefix, wxGBPosition( 2, 0 ), wxGBSpan( 1, 2 ), wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+
+	m_RemoveBackPrefix = new wxCheckBox( m_Advanced, wxID_ANY, _("Remove back prefix"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_RemoveBackPrefix->SetToolTip( _("If checked will remove the Back side prefix\nin the back prefix box if present") );
+
+	gbSizer1->Add( m_RemoveBackPrefix, wxGBPosition( 2, 3 ), wxGBSpan( 1, 2 ), wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_ExcludeLocked = new wxCheckBox( m_Advanced, wxID_ANY, _("Exclude locked footprints"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ExcludeLocked->SetToolTip( _("Locked footprints will not be reannotated") );
