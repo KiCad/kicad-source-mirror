@@ -192,7 +192,7 @@ void PlotInteractiveLayer( BOARD* aBoard, PLOTTER* aPlotter, const PCB_PLOT_PARA
  * @param aPlotOpt is the plot options (files, sketch). Has meaning for some formats only.
  */
 void PlotOneBoardLayer( BOARD* aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
-                        const PCB_PLOT_PARAMS& aPlotOpt );
+                        const PCB_PLOT_PARAMS& aPlotOpt, bool isPrimaryLayer );
 
 /**
  * Plot copper or technical layers.

@@ -484,7 +484,7 @@ bool PLOT_CONTROLLER::PlotLayer()
         return false;
 
     // Fully delegated to the parent
-    PlotOneBoardLayer( m_board, m_plotter, ToLAYER_ID( GetLayer() ), GetPlotOptions() );
+    PlotOneBoardLayer( m_board, m_plotter, ToLAYER_ID( GetLayer() ), GetPlotOptions(), true );
     PlotInteractiveLayer( m_board, m_plotter, GetPlotOptions() );
     return true;
 }
