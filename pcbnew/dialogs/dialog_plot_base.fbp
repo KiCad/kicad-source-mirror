@@ -1029,7 +1029,7 @@
                           <property name="colspan">1</property>
                           <property name="column">0</property>
                           <property name="flag">wxLEFT</property>
-                          <property name="row">5</property>
+                          <property name="row">6</property>
                           <property name="rowspan">1</property>
                           <object class="wxCheckBox" expanded="true">
                             <property name="BottomDockable">1</property>
@@ -1095,8 +1095,8 @@
                         <object class="gbsizeritem" expanded="false">
                           <property name="border">30</property>
                           <property name="colspan">2</property>
-                          <property name="column">0</property>
-                          <property name="flag">wxALIGN_CENTER_VERTICAL</property>
+                          <property name="column">1</property>
+                          <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
                           <property name="row">6</property>
                           <property name="rowspan">1</property>
                           <object class="wxCheckBox" expanded="false">
