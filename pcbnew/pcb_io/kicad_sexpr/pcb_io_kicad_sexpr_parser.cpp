@@ -626,8 +626,13 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
             break;
 
         case T_hide:
-            aText->SetVisible( !parseMaybeAbsentBool( true ) );
+        {
+            // In older files, the hide token appears bare, and indicates hide==true.
+            // In newer files, it will be an explicit bool in a list like (hide yes)
+            bool hide = parseMaybeAbsentBool( true );
+            aText->SetVisible( !hide );
             break;
+        }
 
         default:
             Expecting( "font, justify, or hide" );
@@ -736,6 +741,8 @@ FP_3DMODEL* PCB_IO_KICAD_SEXPR_PARSER::parse3DModel()
 
         case T_hide:
         {
+            // In older files, the hide token appears bare, and indicates hide==true.
+            // In newer files, it will be an explicit bool in a list like (hide yes)
             bool hide = parseMaybeAbsentBool( true );
             n3D->m_Show = !hide;
             break;
