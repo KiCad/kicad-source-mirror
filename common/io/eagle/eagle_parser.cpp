@@ -228,10 +228,10 @@ ECOORD::ECOORD( const wxString& aValue, enum ECOORD::EAGLE_UNIT aUnit )
 {
     // This array is used to adjust the fraction part value basing on the number of digits
     // in the fraction.
-    constexpr int DIVIDERS[] = { 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000 };
-    constexpr unsigned int DIVIDERS_MAX_IDX = sizeof( DIVIDERS ) / sizeof( DIVIDERS[0] ) - 1;
+    static std::array<int, 9> DIVIDERS = { 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000 };
 
-    int integer, fraction, pre_fraction, post_fraction;
+    int integer, pre_fraction, post_fraction;
+    long long unsigned fraction;
 
     // The following check is needed to handle correctly negative fractions where the integer
     // part == 0.
@@ -239,7 +239,7 @@ ECOORD::ECOORD( const wxString& aValue, enum ECOORD::EAGLE_UNIT aUnit )
 
     // %n is used to find out how many digits contains the fraction part, e.g. 0.001 contains 3
     // digits.
-    int ret = sscanf( aValue.c_str(), "%d.%n%d%n", &integer, &pre_fraction, &fraction,
+    int ret = sscanf( aValue.c_str(), "%d.%n%llu%n", &integer, &pre_fraction, &fraction,
                       &post_fraction );
 
     if( ret == 0 )
@@ -255,11 +255,11 @@ ECOORD::ECOORD( const wxString& aValue, enum ECOORD::EAGLE_UNIT aUnit )
 
         // adjust the number of digits if necessary as we cannot handle anything smaller than
         // nanometers (rounding).
-        if( (unsigned) digits > DIVIDERS_MAX_IDX )
+        if( digits >= static_cast<int>( DIVIDERS.size() ) )
         {
-            int diff = digits - DIVIDERS_MAX_IDX;
-            digits = DIVIDERS_MAX_IDX;
-            fraction /= DIVIDERS[diff];
+            long long unsigned denom = pow( 10, digits - DIVIDERS.size() + 1 );
+            digits = DIVIDERS.size() - 1;
+            fraction /= denom;
         }
 
         int frac_value = ConvertToNm( fraction, aUnit ) / DIVIDERS[digits];
