@@ -64,6 +64,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckListBox* m_layerCheckListBox;
 		wxBoxSizer* m_PlotOptionsSizer;
 		wxCheckBox* m_plotSheetRef;
+		wxCheckBox* m_subtractMaskFromSilk;
 		wxCheckBox* m_plotDNP;
 		wxRadioButton* m_hideDNP;
 		wxRadioButton* m_crossoutDNP;
@@ -87,7 +88,6 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxStaticBoxSizer* m_GerberOptionsSizer;
 		wxCheckBox* m_useGerberExtensions;
 		wxCheckBox* m_generateGerberJobFile;
-		wxCheckBox* m_subtractMaskFromSilk;
 		wxStaticText* coordFormatLabel;
 		wxChoice* m_coordFormatCtrl;
 		wxCheckBox* m_useGerberX2Format;

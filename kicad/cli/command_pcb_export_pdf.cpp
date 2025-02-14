@@ -56,6 +56,10 @@ CLI::PCB_EXPORT_PDF_COMMAND::PCB_EXPORT_PDF_COMMAND() : PCB_EXPORT_BASE_COMMAND(
             .help( UTF8STDSTR( _( "Include the border and title block" ) ) )
             .flag();
 
+    m_argParser.add_argument( ARG_SUBTRACT_SOLDERMASK )
+            .help( UTF8STDSTR( _( "Subtract soldermask from silkscreen" ) ) )
+            .flag();
+
     m_argParser.add_argument( "--sp", ARG_SKETCH_PADS_ON_FAB_LAYERS )
             .help( UTF8STDSTR( _( ARG_SKETCH_PADS_ON_FAB_LAYERS_DESC ) ) )
             .flag();
@@ -139,6 +143,7 @@ int CLI::PCB_EXPORT_PDF_COMMAND::doPerform( KIWAY& aKiway )
     pdfJob->m_plotRefDes = !m_argParser.get<bool>( ARG_EXCLUDE_REFDES );
 
     pdfJob->m_plotDrawingSheet = m_argParser.get<bool>( ARG_INCLUDE_BORDER_TITLE );
+    pdfJob->m_subtractSolderMaskFromSilk = m_argParser.get<bool>( ARG_SUBTRACT_SOLDERMASK );
 
     pdfJob->m_mirror = m_argParser.get<bool>( ARG_MIRROR );
     pdfJob->m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );

@@ -82,29 +82,34 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	gbSizer1->Add( m_plotSheetRef, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
+	m_subtractMaskFromSilk = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Subtract soldermask from silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_subtractMaskFromSilk->SetToolTip( _("Remove silkscreen from areas without soldermask") );
+
+	gbSizer1->Add( m_subtractMaskFromSilk, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
 	m_plotDNP = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Indicate DNP on fabrication layers"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_plotDNP->SetToolTip( _("Hide or cross-out DNP footprints on fabrication layers") );
 
-	gbSizer1->Add( m_plotDNP, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_plotDNP, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_hideDNP = new wxRadioButton( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Hide"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	m_hideDNP->SetToolTip( _("Hide the footprint text and graphics") );
 
-	gbSizer1->Add( m_hideDNP, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxLEFT, 25 );
+	gbSizer1->Add( m_hideDNP, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxLEFT, 25 );
 
 	m_crossoutDNP = new wxRadioButton( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Cross-out"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_crossoutDNP, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxLEFT, 25 );
+	gbSizer1->Add( m_crossoutDNP, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxLEFT, 25 );
 
 	m_sketchPadsOnFabLayers = new wxCheckBox( sbOptionsSizer->GetStaticBox(), ID_ALLOW_PRINT_PAD_ON_SILKSCREEN, _("Sketch pads on fabrication layers"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_sketchPadsOnFabLayers->SetToolTip( _("Include pad outlines on F.Fab and B.Fab layers when plotting") );
 
-	gbSizer1->Add( m_sketchPadsOnFabLayers, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_sketchPadsOnFabLayers, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_plotPadNumbers = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Include pad numbers"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_plotPadNumbers, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxLEFT, 25 );
+	gbSizer1->Add( m_plotPadNumbers, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxLEFT, 25 );
 
 	m_zoneFillCheck = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Check zone fills before plotting"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_zoneFillCheck, wxGBPosition( 6, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL, 30 );
+	gbSizer1->Add( m_zoneFillCheck, wxGBPosition( 6, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 
 	drillMarksLabel = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Drill marks:"), wxDefaultPosition, wxDefaultSize, 0 );
 	drillMarksLabel->Wrap( -1 );
@@ -207,11 +212,6 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_generateGerberJobFile->SetToolTip( _("Generate a Gerber job file that contains info about the board,\nand the list of generated Gerber plot files") );
 
 	gbSizer2->Add( m_generateGerberJobFile, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_subtractMaskFromSilk = new wxCheckBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Subtract soldermask from silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_subtractMaskFromSilk->SetToolTip( _("Remove silkscreen from areas without soldermask") );
-
-	gbSizer2->Add( m_subtractMaskFromSilk, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	coordFormatLabel = new wxStaticText( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Coordinate format:"), wxDefaultPosition, wxDefaultSize, 0 );
 	coordFormatLabel->Wrap( -1 );

@@ -25,7 +25,6 @@
 
 JOB_EXPORT_PCB_GERBER::JOB_EXPORT_PCB_GERBER( const std::string& aType ) :
     JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::GERBER, aType, false ),
-    m_subtractSolderMaskFromSilk( false ),
     m_includeNetlistAttributes( true ),
     m_useX2Format( true ),
     m_disableApertureMacros( false ),
@@ -40,11 +39,6 @@ JOB_EXPORT_PCB_GERBER::JOB_EXPORT_PCB_GERBER( const std::string& aType ) :
     m_params.emplace_back( new JOB_PARAM<bool>( "plot_footprint_values",
                                                 &m_plotFootprintValues,
                                                 m_plotFootprintValues ) );
-
-
-    m_params.emplace_back( new JOB_PARAM<bool>( "subtract_solder_mask_from_silk",
-                                                &m_subtractSolderMaskFromSilk,
-                                                m_subtractSolderMaskFromSilk ) );
 
     m_params.emplace_back( new JOB_PARAM<bool>( "include_netlist_attributes",
                                                 &m_includeNetlistAttributes,

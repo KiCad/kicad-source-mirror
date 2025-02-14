@@ -20,27 +20,28 @@
 #include <jobs/job_export_pcb_plot.h>
 
 JOB_EXPORT_PCB_PLOT::JOB_EXPORT_PCB_PLOT( PLOT_FORMAT aFormat, const std::string& aType,
-                                          bool aOutputIsDirectory )
-    : JOB( aType, aOutputIsDirectory ),
-    m_plotFormat( aFormat ),
-    m_filename(),
-    m_colorTheme(),
-    m_drawingSheet(),
-    m_mirror( false ),
-    m_blackAndWhite( false ),
-    m_negative( false ),
-    m_sketchPadsOnFabLayers( false ),
-    m_hideDNPFPsOnFabLayers( false ),
-    m_sketchDNPFPsOnFabLayers( true ),
-    m_crossoutDNPFPsOnFabLayers( true ),
-    m_plotFootprintValues( true ),
-    m_plotRefDes( true ),
-    m_plotDrawingSheet( true ),
-    m_plotPadNumbers( false ),
-    m_printMaskLayer(),
-    m_printMaskLayersToIncludeOnAllLayers(),
-    m_drillShapeOption( DRILL_MARKS::FULL_DRILL_SHAPE ),
-    m_useDrillOrigin( false )
+                                          bool aOutputIsDirectory ) :
+        JOB( aType, aOutputIsDirectory ),
+        m_plotFormat( aFormat ),
+        m_filename(),
+        m_colorTheme(),
+        m_drawingSheet(),
+        m_mirror( false ),
+        m_blackAndWhite( false ),
+        m_negative( false ),
+        m_sketchPadsOnFabLayers( false ),
+        m_hideDNPFPsOnFabLayers( false ),
+        m_sketchDNPFPsOnFabLayers( true ),
+        m_crossoutDNPFPsOnFabLayers( true ),
+        m_plotFootprintValues( true ),
+        m_plotRefDes( true ),
+        m_plotDrawingSheet( true ),
+        m_subtractSolderMaskFromSilk( false ),
+        m_plotPadNumbers( false ),
+        m_printMaskLayer(),
+        m_printMaskLayersToIncludeOnAllLayers(),
+        m_drillShapeOption( DRILL_MARKS::FULL_DRILL_SHAPE ),
+        m_useDrillOrigin( false )
 {
     m_params.emplace_back( new JOB_PARAM_LSEQ( "layers", &m_printMaskLayer, m_printMaskLayer ) );
 
@@ -53,6 +54,10 @@ JOB_EXPORT_PCB_PLOT::JOB_EXPORT_PCB_PLOT( PLOT_FORMAT aFormat, const std::string
 
     m_params.emplace_back( new JOB_PARAM<bool>( "plot_drawing_sheet",
                                                 &m_plotDrawingSheet, m_plotDrawingSheet ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "subtract_solder_mask_from_silk",
+                                                &m_subtractSolderMaskFromSilk,
+                                                m_subtractSolderMaskFromSilk ) );
 
     m_params.emplace_back( new JOB_PARAM<bool>( "plot_ref_des", &m_plotRefDes, m_plotRefDes ) );
 

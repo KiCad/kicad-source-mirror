@@ -337,7 +337,6 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT
         aOpts.SetIncludeGerberNetlistInfo( gJob->m_includeNetlistAttributes );
         aOpts.SetCreateGerberJobFile( gJob->m_createJobsFile );
         aOpts.SetGerberPrecision( gJob->m_precision );
-        aOpts.SetSubtractMaskFromSilk( gJob->m_subtractSolderMaskFromSilk );
     }
 
     if( aJob->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::SVG )
@@ -370,6 +369,7 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT
 
     aOpts.SetUseAuxOrigin( aJob->m_useDrillOrigin );
     aOpts.SetPlotFrameRef( aJob->m_plotDrawingSheet );
+    aOpts.SetSubtractMaskFromSilk( aJob->m_subtractSolderMaskFromSilk );
     aOpts.SetPlotReference( aJob->m_plotRefDes );
     aOpts.SetPlotValue( aJob->m_plotFootprintValues );
     aOpts.SetSketchPadsOnFabLayers( aJob->m_sketchPadsOnFabLayers );

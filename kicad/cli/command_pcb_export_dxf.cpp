@@ -53,6 +53,10 @@ CLI::PCB_EXPORT_DXF_COMMAND::PCB_EXPORT_DXF_COMMAND() : PCB_EXPORT_BASE_COMMAND(
             .help( UTF8STDSTR( _( "Exclude the value text" ) ) )
             .flag();
 
+    m_argParser.add_argument( ARG_SUBTRACT_SOLDERMASK )
+            .help( UTF8STDSTR( _( "Subtract soldermask from silkscreen" ) ) )
+            .flag();
+
     m_argParser.add_argument( "--uc", ARG_USE_CONTOURS )
             .help( UTF8STDSTR( _( "Plot graphic items using their contours" ) ) )
             .flag();
@@ -123,6 +127,7 @@ int CLI::PCB_EXPORT_DXF_COMMAND::doPerform( KIWAY& aKiway )
     dxfJob->m_polygonMode = m_argParser.get<bool>( ARG_USE_CONTOURS );
     dxfJob->m_useDrillOrigin = m_argParser.get<bool>( ARG_USE_DRILL_ORIGIN );
     dxfJob->m_plotDrawingSheet = m_argParser.get<bool>( ARG_INCLUDE_BORDER_TITLE );
+    dxfJob->m_subtractSolderMaskFromSilk = m_argParser.get<bool>( ARG_SUBTRACT_SOLDERMASK );
 
     int drillShape = m_argParser.get<int>( ARG_DRILL_SHAPE_OPTION );
     dxfJob->m_drillShapeOption = static_cast<JOB_EXPORT_PCB_DXF::DRILL_MARKS>( drillShape );
