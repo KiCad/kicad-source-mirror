@@ -74,6 +74,16 @@ SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
 
                 wxString newValue = aItem->Get<wxString>( aProperty );
 
+                if( field->GetId() == REFERENCE_FIELD )
+                {
+                    symbol->SetRef( &sheetPath, newValue );
+
+                    // The user might want to change all the units to the new ref.  Or they
+                    // might not.  Since we have no way of knowing, we default to the most
+                    // concrete action (change only the selected reference).
+                    return;
+                }
+
                 wxString ref = symbol->GetRef( &sheetPath );
                 int      unit = symbol->GetUnit();
                 LIB_ID   libId = symbol->GetLibId();
