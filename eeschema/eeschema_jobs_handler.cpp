@@ -655,7 +655,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
             struct BOM_FIELD field;
 
             field.name = fieldName;
-            field.show = true;
+            field.show = !fieldName.StartsWith( wxT( "__" ), &field.name );
             field.groupBy = std::find( aBomJob->m_fieldsGroupBy.begin(),
                                        aBomJob->m_fieldsGroupBy.end(), field.name )
                             != aBomJob->m_fieldsGroupBy.end();
@@ -714,13 +714,13 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     if( !aBomJob->m_bomFmtPresetName.IsEmpty() )
     {
         // Find the preset
-        const BOM_FMT_PRESET* schFmtPreset = nullptr;
+        std::optional<BOM_FMT_PRESET> schFmtPreset;
 
         for( const BOM_FMT_PRESET& p : BOM_FMT_PRESET::BuiltInPresets() )
         {
             if( p.name == aBomJob->m_bomFmtPresetName )
             {
-                schFmtPreset = &p;
+                schFmtPreset = p;
                 break;
             }
         }
@@ -729,7 +729,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
         {
             if( p.name == aBomJob->m_bomFmtPresetName )
             {
-                schFmtPreset = &p;
+                schFmtPreset = p;
                 break;
             }
         }
