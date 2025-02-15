@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-10 15:21-0800\n"
+"POT-Creation-Date: 2025-02-15 06:04+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -4125,8 +4125,8 @@ msgid "* [new] %s %s"
 msgstr "* [new] %s %s"
 
 #, c-format
-msgid "Writing objects: %d%% (%d/%d), %d bytes"
-msgstr "Writing objects: %d%% (%d/%d), %d bytes"
+msgid "Writing objects: %lld%% (%u/%u), %zu bytes"
+msgstr "Writing objects: %lld%% (%u/%u), %zu bytes"
 
 #, c-format
 msgid "* [rejected] %s (%s)"
@@ -9992,6 +9992,30 @@ msgstr "Color Preview"
 msgid "/path/to/sheet"
 msgstr "/path/to/sheet"
 
+msgid "Cross-probing"
+msgstr "Cross-probing"
+
+msgid "Select/highlight objects corresponding to PCB selection"
+msgstr "Select/highlight objects corresponding to PCB selection"
+
+msgid "Highlight symbols corresponding to selected footprints"
+msgstr "Highlight symbols corresponding to selected footprints"
+
+msgid "Center view on cross-probed items"
+msgstr "Center view on cross-probed items"
+
+msgid "Ensures that cross-probed symbols are visible in the current view"
+msgstr "Ensures that cross-probed symbols are visible in the current view"
+
+msgid "Zoom to fit cross-probed items"
+msgstr "Zoom to fit cross-probed items"
+
+msgid "Highlight cross-probed nets"
+msgstr "Highlight cross-probed nets"
+
+msgid "Highlight nets when they are highlighted in the PCB editor"
+msgstr "Highlight nets when they are highlighted in the PCB editor"
+
 msgid "Default font:"
 msgstr "Default font:"
 
@@ -10051,30 +10075,6 @@ msgstr "Color highlight thickness:"
 
 msgid "Color highlight opacity:"
 msgstr "Color highlight opacity:"
-
-msgid "Cross-probing"
-msgstr "Cross-probing"
-
-msgid "Select/highlight objects corresponding to PCB selection"
-msgstr "Select/highlight objects corresponding to PCB selection"
-
-msgid "Highlight symbols corresponding to selected footprints"
-msgstr "Highlight symbols corresponding to selected footprints"
-
-msgid "Center view on cross-probed items"
-msgstr "Center view on cross-probed items"
-
-msgid "Ensures that cross-probed symbols are visible in the current view"
-msgstr "Ensures that cross-probed symbols are visible in the current view"
-
-msgid "Zoom to fit cross-probed items"
-msgstr "Zoom to fit cross-probed items"
-
-msgid "Highlight cross-probed nets"
-msgstr "Highlight cross-probed nets"
-
-msgid "Highlight nets when they are highlighted in the PCB editor"
-msgstr "Highlight nets when they are highlighted in the PCB editor"
 
 msgid "Line drawing mode:"
 msgstr "Line drawing mode:"
@@ -15352,35 +15352,11 @@ msgstr "Exclude from Bill of Materials"
 msgid "Set the exclude from bill of materials attribute"
 msgstr "Set the exclude from bill of materials attribute"
 
-msgid "Include in Bill of Materials"
-msgstr "Include in Bill of Materials"
-
-msgid "Clear the exclude from bill of materials attribute"
-msgstr "Clear the exclude from bill of materials attribute"
-
-msgid "Toggle Exclude from Bill of Materials"
-msgstr "Toggle Exclude from Bill of Materials"
-
-msgid "Toggle the exclude from bill of materials attribute"
-msgstr "Toggle the exclude from bill of materials attribute"
-
 msgid "Exclude from Simulation"
 msgstr "Exclude from Simulation"
 
 msgid "Set the exclude from simulation attribute"
 msgstr "Set the exclude from simulation attribute"
-
-msgid "Include in Simulation"
-msgstr "Include in Simulation"
-
-msgid "Clear the exclude from simulation attribute"
-msgstr "Clear the exclude from simulation attribute"
-
-msgid "Toggle Exclude from Simulation"
-msgstr "Toggle Exclude from Simulation"
-
-msgid "Toggle the exclude from simulation attribute"
-msgstr "Toggle the exclude from simulation attribute"
 
 msgid "Exclude from Board"
 msgstr "Exclude from Board"
@@ -15388,35 +15364,8 @@ msgstr "Exclude from Board"
 msgid "Set the exclude from board attribute"
 msgstr "Set the exclude from board attribute"
 
-msgid "Include on Board"
-msgstr "Include on Board"
-
-msgid "Clear the exclude from board attribute"
-msgstr "Clear the exclude from board attribute"
-
-msgid "Toggle Exclude from Board"
-msgstr "Toggle Exclude from Board"
-
-msgid "Toggle the exclude from board attribute"
-msgstr "Toggle the exclude from board attribute"
-
-msgid "Set Do Not Populate"
-msgstr "Set Do Not Populate"
-
 msgid "Set the do not populate attribute"
 msgstr "Set the do not populate attribute"
-
-msgid "Unset Do Not Populate"
-msgstr "Unset Do Not Populate"
-
-msgid "Clear the do not populate attribute"
-msgstr "Clear the do not populate attribute"
-
-msgid "Toggle Do Not Populate"
-msgstr "Toggle Do Not Populate"
-
-msgid "Toggle the do not populate attribute"
-msgstr "Toggle the do not populate attribute"
 
 msgid "Open the library symbol in the Symbol Editor"
 msgstr "Open the library symbol in the Symbol Editor"
@@ -16066,12 +16015,6 @@ msgstr "Enter page number for sheet path%s"
 
 msgid "Edit Sheet Page Number"
 msgstr "Edit Sheet Page Number"
-
-msgid "Set Attribute"
-msgstr "Set Attribute"
-
-msgid "Clear Attribute"
-msgstr "Clear Attribute"
 
 msgid "Toggle Attribute"
 msgstr "Toggle Attribute"
@@ -18604,9 +18547,6 @@ msgstr "Download is too large."
 
 msgid "Fetching repository"
 msgstr "Fetching repository"
-
-msgid "Unable to load repository url"
-msgstr "Unable to load repository url"
 
 #, c-format
 msgid "Unable to parse repository: %s"
@@ -22024,6 +21964,18 @@ msgstr ""
 "Leave blank or zero, or enter a number greater than the highest reference "
 "designation on the front."
 
+msgid "Front prefix:"
+msgstr "Front prefix:"
+
+msgid "Optional prefix for component side reference designations (e.g. F_)"
+msgstr "Optional prefix for component side reference designations (e.g. F_)"
+
+msgid "Back prefix:"
+msgstr "Back prefix:"
+
+msgid "Optional prefix for solder side reference designations (e.g. B_)"
+msgstr "Optional prefix for solder side reference designations (e.g. B_)"
+
 msgid "Remove front prefix"
 msgstr "Remove front prefix"
 
@@ -22043,18 +21995,6 @@ msgid ""
 msgstr ""
 "If checked will remove the Back side prefix\n"
 "in the back prefix box if present"
-
-msgid "Front prefix:"
-msgstr "Front prefix:"
-
-msgid "Optional prefix for component side reference designations (e.g. F_)"
-msgstr "Optional prefix for component side reference designations (e.g. F_)"
-
-msgid "Back prefix:"
-msgstr "Back prefix:"
-
-msgid "Optional prefix for solder side reference designations (e.g. B_)"
-msgstr "Optional prefix for solder side reference designations (e.g. B_)"
 
 msgid "Exclude locked footprints"
 msgstr "Exclude locked footprints"
@@ -36742,12 +36682,6 @@ msgstr "Standalone circuit board editor for KiCad boards"
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "An EDA suite for schematic and circuit board design"
 
-msgid "EDA"
-msgstr "EDA"
-
-msgid "Circuit board"
-msgstr "Circuit board"
-
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
 "It features schematic capture, integrated circuit simulation, printed "
@@ -36792,6 +36726,76 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#, c-format
+#~ msgid "Writing objects: %d%% (%d/%d), %d bytes"
+#~ msgstr "Writing objects: %d%% (%d/%d), %d bytes"
+
+#~ msgid "Include in Bill of Materials"
+#~ msgstr "Include in Bill of Materials"
+
+#~ msgid "Clear the exclude from bill of materials attribute"
+#~ msgstr "Clear the exclude from bill of materials attribute"
+
+#~ msgid "Toggle Exclude from Bill of Materials"
+#~ msgstr "Toggle Exclude from Bill of Materials"
+
+#~ msgid "Toggle the exclude from bill of materials attribute"
+#~ msgstr "Toggle the exclude from bill of materials attribute"
+
+#~ msgid "Include in Simulation"
+#~ msgstr "Include in Simulation"
+
+#~ msgid "Clear the exclude from simulation attribute"
+#~ msgstr "Clear the exclude from simulation attribute"
+
+#~ msgid "Toggle Exclude from Simulation"
+#~ msgstr "Toggle Exclude from Simulation"
+
+#~ msgid "Toggle the exclude from simulation attribute"
+#~ msgstr "Toggle the exclude from simulation attribute"
+
+#~ msgid "Include on Board"
+#~ msgstr "Include on Board"
+
+#~ msgid "Clear the exclude from board attribute"
+#~ msgstr "Clear the exclude from board attribute"
+
+#~ msgid "Toggle Exclude from Board"
+#~ msgstr "Toggle Exclude from Board"
+
+#~ msgid "Toggle the exclude from board attribute"
+#~ msgstr "Toggle the exclude from board attribute"
+
+#~ msgid "Set Do Not Populate"
+#~ msgstr "Set Do Not Populate"
+
+#~ msgid "Unset Do Not Populate"
+#~ msgstr "Unset Do Not Populate"
+
+#~ msgid "Clear the do not populate attribute"
+#~ msgstr "Clear the do not populate attribute"
+
+#~ msgid "Toggle Do Not Populate"
+#~ msgstr "Toggle Do Not Populate"
+
+#~ msgid "Toggle the do not populate attribute"
+#~ msgstr "Toggle the do not populate attribute"
+
+#~ msgid "Set Attribute"
+#~ msgstr "Set Attribute"
+
+#~ msgid "Clear Attribute"
+#~ msgstr "Clear Attribute"
+
+#~ msgid "Unable to load repository url"
+#~ msgstr "Unable to load repository url"
+
+#~ msgid "EDA"
+#~ msgstr "EDA"
+
+#~ msgid "Circuit board"
+#~ msgstr "Circuit board"
 
 #~ msgid ""
 #~ "There are hierarchical sheets in the loaded schematic file from an older "
