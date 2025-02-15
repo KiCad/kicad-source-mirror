@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-15 06:04+0300\n"
-"PO-Revision-Date: 2025-02-13 13:57+0000\n"
+"PO-Revision-Date: 2025-02-15 08:12+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -50,7 +50,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.10\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -6893,9 +6893,9 @@ msgid "* [new] %s %s"
 msgstr "* [新增] %s %s"
 
 #: common/git/kicad_git_common.cpp:702
-#, fuzzy, c-format
+#, c-format
 msgid "Writing objects: %lld%% (%u/%u), %zu bytes"
-msgstr "正在写入对象: %d%% (%d/%d), %d 字节"
+msgstr "正在写入对象: %lld%% (%u/%u), %zu 字节"
 
 #: common/git/kicad_git_common.cpp:717
 #, c-format
