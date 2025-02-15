@@ -300,7 +300,6 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	bMainSizer->Fit( this );
 
 	// Connect Events
-	m_filledCtrl->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SHAPE_PROPERTIES_BASE::onFilledCheckbox ), NULL, this );
 	m_LayerSelectionCtrl->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SHAPE_PROPERTIES_BASE::onLayerSelection ), NULL, this );
 	m_hasSolderMask->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SHAPE_PROPERTIES_BASE::onTechLayersChanged ), NULL, this );
 }
@@ -308,7 +307,6 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 DIALOG_SHAPE_PROPERTIES_BASE::~DIALOG_SHAPE_PROPERTIES_BASE()
 {
 	// Disconnect Events
-	m_filledCtrl->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SHAPE_PROPERTIES_BASE::onFilledCheckbox ), NULL, this );
 	m_LayerSelectionCtrl->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SHAPE_PROPERTIES_BASE::onLayerSelection ), NULL, this );
 	m_hasSolderMask->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SHAPE_PROPERTIES_BASE::onTechLayersChanged ), NULL, this );
 

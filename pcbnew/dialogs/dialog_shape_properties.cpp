@@ -710,8 +710,6 @@ private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    void onFilledCheckbox( wxCommandEvent& event ) override;
-
     void onLayerSelection( wxCommandEvent& event ) override;
 
     void onTechLayersChanged( wxCommandEvent& event ) override;
@@ -875,13 +873,13 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
     case SHAPE_T::RECTANGLE:
         // For all these functions, it's very important that the fields are added in the same order
         // as the CTRL_IDX enums in the GEOM_SYNCER classes.
-        AddXYPointToSizer( *aParent, *m_gbsRectangleByCorners, 0, 0, _( "Start Point" ), false, m_boundCtrls);
+        AddXYPointToSizer( *aParent, *m_gbsRectangleByCorners, 0, 0, _( "Start Point" ), false, m_boundCtrls );
         AddXYPointToSizer( *aParent, *m_gbsRectangleByCorners, 0, 3, _( "End Point" ), false, m_boundCtrls );
 
-        AddXYPointToSizer( *aParent, *m_gbsRectangleByCornerSize, 0, 0, _( "Start Point" ), false, m_boundCtrls);
+        AddXYPointToSizer( *aParent, *m_gbsRectangleByCornerSize, 0, 0, _( "Start Point" ), false, m_boundCtrls );
         AddXYPointToSizer( *aParent, *m_gbsRectangleByCornerSize, 0, 3, _( "Size" ), true, m_boundCtrls );
 
-        AddXYPointToSizer( *aParent, *m_gbsRectangleByCenterSize, 0, 0, _( "Center" ), false, m_boundCtrls);
+        AddXYPointToSizer( *aParent, *m_gbsRectangleByCenterSize, 0, 0, _( "Center" ), false, m_boundCtrls );
         AddXYPointToSizer( *aParent, *m_gbsRectangleByCenterSize, 0, 3, _( "Size" ), true, m_boundCtrls );
 
         m_geomSync = std::make_unique<RECTANGLE_GEOM_SYNCER>( m_workingCopy, m_boundCtrls );
@@ -893,8 +891,8 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
 
     case SHAPE_T::SEGMENT:
 
-        AddXYPointToSizer( *aParent, *m_gbsLineByEnds, 0, 0, _( "Start Point" ), false, m_boundCtrls);
-        AddXYPointToSizer( *aParent, *m_gbsLineByEnds, 0, 3, _( "End Point" ), false, m_boundCtrls);
+        AddXYPointToSizer( *aParent, *m_gbsLineByEnds, 0, 0, _( "Start Point" ), false, m_boundCtrls );
+        AddXYPointToSizer( *aParent, *m_gbsLineByEnds, 0, 3, _( "End Point" ), false, m_boundCtrls );
 
         AddXYPointToSizer( *aParent, *m_gbsLineByLengthAngle, 0, 0, _( "Start Point" ), false, m_boundCtrls);
         AddFieldToSizer( *aParent, *m_gbsLineByLengthAngle, 1, 3, _( "Length" ), ORIGIN_TRANSFORMS::NOT_A_COORD, false, m_boundCtrls );
@@ -915,9 +913,9 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
         AddXYPointToSizer( *aParent, *m_gbsArcByCSA, 0, 3, _( "Start Point" ), false, m_boundCtrls);
         AddFieldToSizer( *aParent, *m_gbsArcByCSA, 3, 0, _( "Start Angle" ), ORIGIN_TRANSFORMS::NOT_A_COORD, true, m_boundCtrls );
 
-        AddXYPointToSizer( *aParent, *m_gbsArcBySME, 0, 0, _( "Start Point" ), false, m_boundCtrls);
-        AddXYPointToSizer( *aParent, *m_gbsArcBySME, 0, 3, _( "Mid Point" ), false, m_boundCtrls);
-        AddXYPointToSizer( *aParent, *m_gbsArcBySME, 3, 0, _( "End Point" ), false, m_boundCtrls);
+        AddXYPointToSizer( *aParent, *m_gbsArcBySME, 0, 0, _( "Start Point" ), false, m_boundCtrls );
+        AddXYPointToSizer( *aParent, *m_gbsArcBySME, 0, 3, _( "Mid Point" ), false, m_boundCtrls );
+        AddXYPointToSizer( *aParent, *m_gbsArcBySME, 3, 0, _( "End Point" ), false, m_boundCtrls );
 
         m_geomSync = std::make_unique<ARC_GEOM_SYNCER>( m_workingCopy, m_boundCtrls );
 
@@ -929,8 +927,8 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
         AddXYPointToSizer( *aParent, *m_gbsCircleCenterRadius, 0, 0, _( "Center" ), false, m_boundCtrls);
         AddFieldToSizer( *aParent, *m_gbsCircleCenterRadius, 3, 0, _( "Radius" ), ORIGIN_TRANSFORMS::NOT_A_COORD, false, m_boundCtrls );
 
-        AddXYPointToSizer( *aParent, *m_gbsCircleCenterPoint, 0, 0, _( "Center" ), false, m_boundCtrls);
-        AddXYPointToSizer( *aParent, *m_gbsCircleCenterPoint, 0, 3, _( "Point on Circle" ), false, m_boundCtrls);
+        AddXYPointToSizer( *aParent, *m_gbsCircleCenterPoint, 0, 0, _( "Center" ), false, m_boundCtrls );
+        AddXYPointToSizer( *aParent, *m_gbsCircleCenterPoint, 0, 3, _( "Point on Circle" ), false, m_boundCtrls );
 
         m_geomSync = std::make_unique<CIRCLE_GEOM_SYNCER>( m_workingCopy, m_boundCtrls );
 
@@ -939,10 +937,10 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
         break;
 
     case SHAPE_T::BEZIER:
-        AddXYPointToSizer( *aParent, *m_gbsBezier, 0, 0, _( "Start Point" ), false, m_boundCtrls);
-        AddXYPointToSizer( *aParent, *m_gbsBezier, 0, 3, _( "End Point" ), false, m_boundCtrls);
-        AddXYPointToSizer( *aParent, *m_gbsBezier, 3, 0, _( "Control Point 1" ), false, m_boundCtrls);
-        AddXYPointToSizer( *aParent, *m_gbsBezier, 3, 3, _( "Control Point 2" ), false, m_boundCtrls);
+        AddXYPointToSizer( *aParent, *m_gbsBezier, 0, 0, _( "Start Point" ), false, m_boundCtrls );
+        AddXYPointToSizer( *aParent, *m_gbsBezier, 0, 3, _( "End Point" ), false, m_boundCtrls );
+        AddXYPointToSizer( *aParent, *m_gbsBezier, 3, 0, _( "Control Point 1" ), false, m_boundCtrls );
+        AddXYPointToSizer( *aParent, *m_gbsBezier, 3, 3, _( "Control Point 2" ), false, m_boundCtrls );
 
         m_geomSync = std::make_unique<BEZIER_GEOM_SYNCER>( m_workingCopy, m_boundCtrls );
 
@@ -960,20 +958,22 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
     }
 
     // Remove any tabs not used (Hide() doesn't work on Windows)
-    for( int i = m_notebookShapeDefs->GetPageCount() - 1; i >= 0; --i )
+    for( int i = (int) m_notebookShapeDefs->GetPageCount() - 1; i >= 0; --i )
     {
         if( shownPages.count( i ) == 0 )
             m_notebookShapeDefs->RemovePage( i );
     }
 
     // Used the last saved tab if any
-    if( s_lastTabForShape.count( m_item->GetShape() ) > 0 )
+    if( s_lastTabForShape.count( m_item->GetShape() ) > 0
+            && s_lastTabForShape[m_item->GetShape()] < (int) m_notebookShapeDefs->GetPageCount() )
     {
         m_notebookShapeDefs->SetSelection( s_lastTabForShape[m_item->GetShape()] );
     }
 
     // Find the first control in the shown tab
     wxWindow* tabPanel = m_notebookShapeDefs->GetCurrentPage();
+
     for( size_t i = 0; i < m_boundCtrls.size(); ++i )
     {
         if( m_boundCtrls[i].m_Ctrl->IsDescendant( tabPanel ) )
@@ -1061,30 +1061,6 @@ void DIALOG_SHAPE_PROPERTIES::onLayerSelection( wxCommandEvent& event )
         enableNetInfo();
 
     enableTechLayers();
-}
-
-
-void DIALOG_SHAPE_PROPERTIES::onFilledCheckbox( wxCommandEvent& event )
-{
-    if( m_filledCtrl->GetValue() )
-    {
-        m_lineStyleCombo->SetSelection( 0 );
-        m_lineStyleLabel->Enable( false );
-        m_lineStyleCombo->Enable( false );
-    }
-    else
-    {
-        LINE_STYLE style = m_item->GetStroke().GetLineStyle();
-
-        if( style == LINE_STYLE::DEFAULT )
-            style = LINE_STYLE::SOLID;
-
-        if( (int) style < (int) lineTypeNames.size() )
-            m_lineStyleCombo->SetSelection( (int) style );
-
-        m_lineStyleLabel->Enable( true );
-        m_lineStyleCombo->Enable( true );
-    }
 }
 
 

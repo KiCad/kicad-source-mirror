@@ -88,7 +88,6 @@ class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_StandardButtonsSizerCancel;
 
 		// Virtual event handlers, override them in your derived class
-		virtual void onFilledCheckbox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onLayerSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onTechLayersChanged( wxCommandEvent& event ) { event.Skip(); }
 

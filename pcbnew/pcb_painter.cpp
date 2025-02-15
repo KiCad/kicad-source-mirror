@@ -1799,10 +1799,14 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
     int        thickness = getLineThickness( aShape->GetWidth() );
     LINE_STYLE lineStyle = aShape->GetStroke().GetLineStyle();
 
+    if( lineStyle == LINE_STYLE::DEFAULT )
+        lineStyle = LINE_STYLE::SOLID;
+
     if( IsSolderMaskLayer( aLayer )
-        && aShape->HasSolderMask()
-        && IsExternalCopperLayer( aShape->GetLayer() ) )
+            && aShape->HasSolderMask()
+            && IsExternalCopperLayer( aShape->GetLayer() ) )
     {
+        lineStyle = LINE_STYLE::SOLID;
         thickness += aShape->GetSolderMaskExpansion() * 2;
     }
 
@@ -1818,7 +1822,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
         if( aShape->GetNetCode() <= NETINFO_LIST::UNCONNECTED )
             return;
 
-        wxString netname = aShape->GetDisplayNetname();
+        const wxString& netname = aShape->GetDisplayNetname();
 
         if( netname.IsEmpty() )
             return;
@@ -1839,6 +1843,10 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
     {
         color = m_pcbSettings.GetColor( aShape, aLayer );
         thickness = thickness + m_lockedShadowMargin;
+
+        // Note: on LAYER_LOCKED_ITEM_SHADOW always draw shadow shapes as continuous lines
+        // otherwise the look is very strange and ugly
+        lineStyle = LINE_STYLE::SOLID;
     }
 
     if( outline_mode )
@@ -1851,9 +1859,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
     m_gal->SetFillColor( color );
     m_gal->SetStrokeColor( color );
 
-    // Note: on LAYER_LOCKED_ITEM_SHADOW always draw shadow shapes as continuous lines
-    // otherwise the look is very strange and ugly
-    if( lineStyle <= LINE_STYLE::FIRST_TYPE || aLayer == LAYER_LOCKED_ITEM_SHADOW )
+    if( lineStyle == LINE_STYLE::SOLID || aShape->IsFilled() )
     {
         switch( aShape->GetShape() )
         {
@@ -1883,7 +1889,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
             {
                 m_gal->DrawSegment( aShape->GetStart(), aShape->GetEnd(), thickness );
             }
-            else
+            else if( lineStyle == LINE_STYLE::SOLID )
             {
                 m_gal->SetIsFill( true );
                 m_gal->SetIsStroke( false );
@@ -1919,7 +1925,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                 m_gal->SetIsFill( true );
                 m_gal->SetIsStroke( false );
 
-                if( thickness > 0 )
+                if( lineStyle == LINE_STYLE::SOLID && thickness > 0 )
                 {
                     m_gal->DrawSegment( pts[0], pts[1], thickness );
                     m_gal->DrawSegment( pts[1], pts[2], thickness );
@@ -1959,7 +1965,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                 m_gal->DrawArcSegment( aShape->GetCenter(), aShape->GetRadius(), startAngle,
                                        endAngle - startAngle, thickness, m_maxError );
             }
-            else
+            else if( lineStyle == LINE_STYLE::SOLID )
             {
                 m_gal->SetIsFill( true );
                 m_gal->SetIsStroke( false );
@@ -1979,18 +1985,25 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
             else
             {
                 m_gal->SetIsFill( aShape->IsFilled() );
-                m_gal->SetIsStroke( thickness > 0 );
+                m_gal->SetIsStroke( lineStyle == LINE_STYLE::SOLID && thickness > 0 );
                 m_gal->SetLineWidth( thickness );
 
                 int radius = aShape->GetRadius();
 
-                if( thickness < 0 )
+                if( lineStyle == LINE_STYLE::SOLID && thickness > 0 )
                 {
-                    radius += thickness / 2;
-                    radius = std::max( radius, 0 );
+                    m_gal->DrawCircle( aShape->GetStart(), radius );
                 }
+                else if( aShape->IsFilled() )
+                {
+                    if( thickness < 0 )
+                    {
+                        radius += thickness / 2;
+                        radius = std::max( radius, 0 );
+                    }
 
-                m_gal->DrawCircle( aShape->GetStart(), radius );
+                    m_gal->DrawCircle( aShape->GetStart(), radius );
+                }
             }
             break;
 
@@ -2011,7 +2024,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                 m_gal->SetIsFill( true );
                 m_gal->SetIsStroke( false );
 
-                if( thickness > 0 )
+                if( lineStyle == LINE_STYLE::SOLID && thickness > 0 )
                 {
                     for( int ii = 0; ii < shape.OutlineCount(); ++ii )
                         m_gal->DrawSegmentChain( shape.Outline( ii ), thickness );
@@ -2019,24 +2032,23 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 
                 if( aShape->IsFilled() )
                 {
-                    // On Opengl, a not convex filled polygon is usually drawn by using triangles
-                    // as primitives. CacheTriangulation() can create basic triangle primitives to
-                    // draw the polygon solid shape on Opengl.  GLU tessellation is much slower,
-                    // so currently we are using our tessellation.
-                    if( m_gal->IsOpenGlEngine() && !shape.IsTriangulationUpToDate() )
-                        shape.CacheTriangulation( true, true );
-
-
-                    if( thickness >= 0 )
-                    {
-                        m_gal->DrawPolygon( shape );
-                    }
-                    else
+                    if( thickness < 0 )
                     {
                         SHAPE_POLY_SET deflated_shape = shape;
                         deflated_shape.Inflate( thickness / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
                                                 m_maxError );
                         m_gal->DrawPolygon( deflated_shape );
+                    }
+                    else
+                    {
+                        // On Opengl, a not convex filled polygon is usually drawn by using
+                        // triangles as primitives. CacheTriangulation() can create basic triangle
+                        // primitives to draw the polygon solid shape on Opengl.  GLU tessellation
+                        // is much slower, so currently we are using our tessellation.
+                        if( m_gal->IsOpenGlEngine() && !shape.IsTriangulationUpToDate() )
+                            shape.CacheTriangulation( true, true );
+
+                        m_gal->DrawPolygon( shape );
                     }
                 }
             }
@@ -2063,7 +2075,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
             else
             {
                 m_gal->SetIsFill( aShape->IsFilled() );
-                m_gal->SetIsStroke( thickness > 0 );
+                m_gal->SetIsStroke( lineStyle == LINE_STYLE::SOLID && thickness > 0 );
                 m_gal->SetLineWidth( thickness );
 
                 if( aShape->GetBezierPoints().size() > 2 )
@@ -2085,7 +2097,8 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
             break;
         }
     }
-    else
+
+    if( lineStyle != LINE_STYLE::SOLID )
     {
         if( !outline_mode )
         {
