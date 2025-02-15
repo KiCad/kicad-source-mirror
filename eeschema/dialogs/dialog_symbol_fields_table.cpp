@@ -38,7 +38,6 @@
 #include <sch_commit.h>
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
-#include <schematic.h>
 #include <tools/sch_editor_control.h>
 #include <kiplatform/ui.h>
 #include <widgets/grid_text_button_helpers.h>
@@ -628,13 +627,7 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataFromWindow()
     SCH_COMMIT     commit( m_parent );
     SCH_SHEET_PATH currentSheet = m_parent->GetCurrentSheet();
 
-    std::function<void( SCH_SYMBOL&, SCH_SHEET_PATH & aPath )> changeHandler =
-            [&commit]( SCH_SYMBOL& aSymbol, SCH_SHEET_PATH& aPath ) -> void
-            {
-                commit.Modify( &aSymbol, aPath.LastScreen() );
-            };
-
-    m_dataModel->ApplyData( changeHandler );
+    m_dataModel->ApplyData( commit );
 
     commit.Push( wxS( "Symbol Fields Table Edit" ) );
 
