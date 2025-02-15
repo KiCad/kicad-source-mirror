@@ -746,7 +746,7 @@ void PCB_IO_KICAD_SEXPR::formatTeardropParameters( const TEARDROP_PARAMETERS& td
 
     KICAD_FORMAT::FormatBool( m_out, "curved_edges", tdParams.m_CurvedEdges );
 
-    m_out->Print( "filter_ratio %s )",
+    m_out->Print( "(filter_ratio %s)",
                   FormatDouble2Str( tdParams.m_WidthtoSizeFilterRatio ).c_str() );
 
     KICAD_FORMAT::FormatBool( m_out, "enabled", tdParams.m_Enabled );
