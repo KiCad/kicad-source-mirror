@@ -216,7 +216,7 @@ public:
     void CollapseForSort();
     void ExpandAfterSort();
 
-    void ApplyData( std::function<void( SCH_SYMBOL&, SCH_SHEET_PATH& )> symbolChangeHandler );
+    void ApplyData( SCH_COMMIT& aCommit );
 
     bool IsEdited() { return m_edited; }
 

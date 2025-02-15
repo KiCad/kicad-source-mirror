@@ -23,7 +23,8 @@
 #include <common.h>
 #include <widgets/wx_grid.h>
 #include <sch_reference_list.h>
-#include <schematic_settings.h>
+#include <sch_commit.h>
+#include <sch_screen.h>
 #include "string_utils.h"
 
 #include "fields_data_model.h"
@@ -60,9 +61,13 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::updateDataStoreSymbolField( const SCH_SYMBOL
     else if( const SCH_FIELD* field = aSymbol.GetFieldByName( aFieldName ) )
     {
         if( field->IsPrivate() )
+        {
             m_dataStore[aSymbol.m_Uuid][aFieldName] = wxEmptyString;
-        else
-            m_dataStore[aSymbol.m_Uuid][aFieldName] = field->GetText();
+            return;
+        }
+
+        wxString value = aSymbol.Schematic()->ConvertKIIDsToRefs( field->GetText() );
+        m_dataStore[aSymbol.m_Uuid][aFieldName] = value;
     }
     else if( IsTextVar( aFieldName ) )
     {
@@ -780,22 +785,18 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ExpandAfterSort()
 }
 
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData(
-        std::function<void( SCH_SYMBOL&, SCH_SHEET_PATH& )> symbolChangeHandler )
+void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit )
 {
     for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
     {
         SCH_SYMBOL& symbol = *m_symbolsList[i].GetSymbol();
 
-        symbolChangeHandler( symbol, m_symbolsList[i].GetSheetPath() );
+        aCommit.Modify( &symbol, m_symbolsList[i].GetSheetPath().LastScreen() );
 
         const std::map<wxString, wxString>& fieldStore = m_dataStore[symbol.m_Uuid];
 
-        for( const std::pair<wxString, wxString> srcData : fieldStore )
+        for( const auto& [srcName, srcValue] : fieldStore )
         {
-            const wxString& srcName = srcData.first;
-            const wxString& srcValue = srcData.second;
-
             // Attributes bypass the field logic, so handle them first
             if( isAttribute( srcName ) )
             {
@@ -836,24 +837,19 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData(
             if( destField->GetId() == REFERENCE_FIELD )
             {
                 // Reference is not editable from this dialog
+                continue;
             }
             else if( destField->GetId() == VALUE_FIELD )
             {
                 // Value field cannot be empty
-                if( !srcValue.IsEmpty() )
-                    symbol.SetValueFieldText( srcValue );
+                if( srcValue.IsEmpty() )
+                    continue;
             }
-            else if( destField->GetId() == FOOTPRINT_FIELD )
-            {
-                symbol.SetFootprintFieldText( srcValue );
-            }
-            else
-            {
-                destField->SetText( srcValue );
-            }
+
+            destField->SetText( symbol.Schematic()->ConvertRefsToKIIDs( srcValue ) );
         }
 
-        for( int ii = symbol.GetFields().size() - 1; ii >= 0; ii-- )
+        for( int ii = (int) symbol.GetFields().size() - 1; ii >= 0; ii-- )
         {
             if( symbol.GetFields()[ii].IsMandatory() || symbol.GetFields()[ii].IsPrivate() )
                 continue;
@@ -1001,8 +997,10 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::Export( const BOM_FMT_PRESET& settings )
                 }
 
                 if( !settings.stringDelimiter.IsEmpty() )
+                {
                     field.Replace( settings.stringDelimiter,
                                    settings.stringDelimiter + settings.stringDelimiter );
+                }
 
                 return settings.stringDelimiter + field + settings.stringDelimiter
                        + ( last ? wxString( wxS( "\n" ) ) : settings.fieldDelimiter );
@@ -1046,13 +1044,20 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::AddReferences( const SCH_REFERENCE_LIST& aRe
     {
         if( !m_symbolsList.Contains( ref ) )
         {
+            SCH_SYMBOL* symbol = ref.GetSymbol();
+
             m_symbolsList.AddItem( ref );
 
             // Update the fields of every reference
-            for( const SCH_FIELD& field : ref.GetSymbol()->GetFields() )
+            for( const SCH_FIELD& field : symbol->GetFields() )
             {
                 if( !field.IsPrivate() )
-                    m_dataStore[ref.GetSymbol()->m_Uuid][field.GetCanonicalName()] = field.GetText();
+                {
+                    wxString name = field.GetCanonicalName();
+                    wxString value = symbol->Schematic()->ConvertKIIDsToRefs( field.GetText() );
+
+                    m_dataStore[symbol->m_Uuid][name] = value;
+                }
             }
         }
     }
