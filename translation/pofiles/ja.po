@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-15 06:04+0300\n"
-"PO-Revision-Date: 2025-02-14 13:57+0000\n"
+"PO-Revision-Date: 2025-02-16 13:37+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6973,9 +6973,9 @@ msgid "* [new] %s %s"
 msgstr "* [新規] %s %s"
 
 #: common/git/kicad_git_common.cpp:702
-#, fuzzy, c-format
+#, c-format
 msgid "Writing objects: %lld%% (%u/%u), %zu bytes"
-msgstr "オブジェクトを書き込み: %d%% (%d/%d), %d バイト"
+msgstr "オブジェクトを書き込み: %lld%% (%u/%u), %zu バイト"
 
 #: common/git/kicad_git_common.cpp:717
 #, c-format
