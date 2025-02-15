@@ -353,10 +353,12 @@ void DESIGN_BLOCK_IO::DesignBlockSave( const wxString&                    aLibra
         THROW_IO_ERROR( _( "Design block does not have a valid library ID." ) );
     }
 
-    if( !wxFileExists( aDesignBlock->GetSchematicFile() ) )
+    wxFileName schematicFile( aDesignBlock->GetSchematicFile() );
+
+    if( !schematicFile.FileExists() )
     {
         THROW_IO_ERROR( wxString::Format( _( "Schematic source file '%s' does not exist." ),
-                                          aDesignBlock->GetSchematicFile() ) );
+                                          schematicFile.GetFullPath() ) );
     }
 
     // Create the design block folder
@@ -380,14 +382,14 @@ void DESIGN_BLOCK_IO::DesignBlockSave( const wxString&                    aLibra
 
     // If the source and destination files are the same, then we don't need to copy the file
     // as we are just updating the metadata
-    if( aDesignBlock->GetSchematicFile() != dbSchematicFile )
+    if( schematicFile.GetFullPath() != dbSchematicFile )
     {
         // Copy the source sheet file to the design block folder, under the design block name
-        if( !wxCopyFile( aDesignBlock->GetSchematicFile(), dbSchematicFile ) )
+        if( !wxCopyFile( schematicFile.GetFullPath(), dbSchematicFile ) )
         {
             THROW_IO_ERROR( wxString::Format(
                     _( "Schematic file '%s' could not be saved as design block at '%s'." ),
-                    aDesignBlock->GetSchematicFile().GetData(), dbSchematicFile ) );
+                    schematicFile.GetFullPath(), dbSchematicFile ) );
         }
     }
 
