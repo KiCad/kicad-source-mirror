@@ -84,6 +84,9 @@ static std::unique_ptr<SCHEMATIC> readSchematicFromFile( const std::string& aFil
 
     SETTINGS_MANAGER& manager = Pgm().GetSettingsManager();
 
+    // TODO: this must load the schematic's project, not a default project.  At the very minimum
+    // variable resolution won't work without the project, but there might also be issues with
+    // netclasses, etc.
     manager.LoadProject( "" );
     schematic->Reset();
     schematic->SetProject( &manager.Prj() );
@@ -115,8 +118,11 @@ static std::unique_ptr<SCHEMATIC> readSchematicFromFile( const std::string& aFil
     for( SCH_SHEET_PATH& sheet : sheets )
         sheet.UpdateAllScreenReferences();
 
-    // NOTE: SchematicCleanUp is not called; QA schematics must already be clean or else
-    // SchematicCleanUp must be freed from its UI dependencies.
+    // TODO: this must handle SchematicCleanup somehow.  The original version didn't because
+    // it knew that QA test cases were saved in a clean state.
+
+    // TODO: does this need to handle PruneOrphanedSymbolInstances() and
+    // PruneOrphanedSheetInstances()?
 
     schematic->ConnectionGraph()->Recalculate( sheets, true );
 
