@@ -76,6 +76,68 @@ SCH_SHEET*  g_RootSheet = nullptr;
 namespace SCH {
 
 
+// TODO: This should move out of this file
+static std::unique_ptr<SCHEMATIC> readSchematicFromFile( const std::string& aFilename )
+{
+    SCH_IO* pi = SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD );
+    std::unique_ptr<SCHEMATIC> schematic = std::make_unique<SCHEMATIC>( nullptr );
+
+    SETTINGS_MANAGER& manager = Pgm().GetSettingsManager();
+
+    manager.LoadProject( "" );
+    schematic->Reset();
+    schematic->SetProject( &manager.Prj() );
+    schematic->SetRoot( pi->LoadSchematicFile( aFilename, schematic.get() ) );
+    schematic->CurrentSheet().push_back( &schematic->Root() );
+
+    SCH_SCREENS screens( schematic->Root() );
+
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+        screen->UpdateLocalLibSymbolLinks();
+
+    SCH_SHEET_LIST sheets = schematic->Hierarchy();
+
+    // Restore all of the loaded symbol instances from the root sheet screen.
+    sheets.UpdateSymbolInstanceData( schematic->RootScreen()->GetSymbolInstances() );
+
+    if( schematic->RootScreen()->GetFileFormatVersionAtLoad() < 20230221 )
+    {
+        for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+            screen->FixLegacyPowerSymbolMismatches();
+    }
+
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+        screen->MigrateSimModels();
+
+    sheets.AnnotatePowerSymbols();
+
+    // NOTE: This is required for multi-unit symbols to be correct
+    for( SCH_SHEET_PATH& sheet : sheets )
+        sheet.UpdateAllScreenReferences();
+
+    // NOTE: SchematicCleanUp is not called; QA schematics must already be clean or else
+    // SchematicCleanUp must be freed from its UI dependencies.
+
+    schematic->ConnectionGraph()->Recalculate( sheets, true );
+
+    return schematic;
+}
+
+
+// TODO: This should move out of this file
+bool generateSchematicNetlist( const wxString& aFilename, std::string& aNetlist )
+{
+    std::unique_ptr<SCHEMATIC> schematic = readSchematicFromFile( aFilename.ToStdString() );
+    NETLIST_EXPORTER_KICAD exporter( schematic.get() );
+    STRING_FORMATTER formatter;
+
+    exporter.Format( &formatter, GNL_ALL | GNL_OPT_KICAD );
+    aNetlist = formatter.GetString();
+
+    return true;
+}
+
+
 static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 {
     // Of course all are virtual overloads, implementations of the KIFACE.
@@ -265,6 +327,12 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
      */
     void* IfaceOrAddress( int aDataId ) override
     {
+        switch( aDataId )
+        {
+            case KIFACE_NETLIST_SCHEMATIC:
+                return (void*) generateSchematicNetlist;
+        }
+
         return nullptr;
     }
 

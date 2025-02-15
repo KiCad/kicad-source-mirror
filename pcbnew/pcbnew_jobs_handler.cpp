@@ -1820,7 +1820,37 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
         wxString annotateMsg = _( "Schematic parity tests require a fully annotated schematic." );
         netlist_str = annotateMsg;
 
-        m_kiway->ExpressMail( FRAME_SCH, MAIL_SCH_GET_NETLIST, netlist_str );
+        // The KIFACE_NETLIST_SCHEMATIC function has some broken-ness that the schematic
+        // frame's version does not, but it is the only one that works in CLI, so we use it
+        // if we don't have the sch frame open.
+        // TODO: clean this up, see https://gitlab.com/kicad/code/kicad/-/issues/19929
+        if( m_kiway->Player( FRAME_SCH, false ) )
+        {
+            m_kiway->ExpressMail( FRAME_SCH, MAIL_SCH_GET_NETLIST, netlist_str );
+        }
+        else
+        {
+            wxFileName schematicPath( drcJob->m_filename );
+            schematicPath.SetExt( FILEEXT::KiCadSchematicFileExtension );
+
+            if( !schematicPath.Exists() )
+                schematicPath.SetExt( FILEEXT::LegacySchematicFileExtension );
+
+            if( !schematicPath.Exists() )
+            {
+                m_reporter->Report( _( "Failed to fetch schematic netlist for parity tests.\n" ),
+                                    RPT_SEVERITY_ERROR );
+                checkParity = false;
+            }
+            else
+            {
+                typedef bool ( *NETLIST_FN_PTR )( const wxString&, std::string& );
+                KIFACE* eeschema = m_kiway->KiFACE( KIWAY::FACE_SCH );
+                NETLIST_FN_PTR netlister =
+                        (NETLIST_FN_PTR) eeschema->IfaceOrAddress( KIFACE_NETLIST_SCHEMATIC );
+                ( *netlister )( schematicPath.GetFullPath(), netlist_str );
+            }
+        }
 
         if( netlist_str == annotateMsg )
         {
