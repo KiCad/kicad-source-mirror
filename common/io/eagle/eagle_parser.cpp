@@ -34,6 +34,7 @@
 
 #include <functional>
 #include <cstdio>
+#include <array>
 
 constexpr auto DEFAULT_ALIGNMENT = ETEXT::BOTTOM_LEFT;
 
