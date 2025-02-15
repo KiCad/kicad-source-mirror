@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-07 01:15+0300\n"
+"POT-Creation-Date: 2025-02-15 06:07+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -11160,10 +11160,6 @@ msgid "httplib plugin missing library table handle!"
 msgstr "httplib plugin missing library table handle!"
 
 #, c-format
-msgid "Error retriving data from HTTP library %s: %s"
-msgstr "Error retriving data from HTTP library %s: %s"
-
-#, c-format
 msgid "HTTP library settings file %s missing or invalid"
 msgstr "HTTP library settings file %s missing or invalid"
 
@@ -11190,6 +11186,10 @@ msgstr "HTTP library settings file %s has an invalid library type"
 #, c-format
 msgid "Could not connect to %s. Errors: %s"
 msgstr "Could not connect to %s. Errors: %s"
+
+#, c-format
+msgid "Error retriving data from HTTP library %s: %s"
+msgstr "Error retriving data from HTTP library %s: %s"
 
 msgid "KiCad HTTP library files"
 msgstr "KiCad HTTP library files"
@@ -16816,9 +16816,6 @@ msgstr "Download is too large."
 msgid "Fetching repository"
 msgstr "Fetching repository"
 
-msgid "Unable to load repository url"
-msgstr "Unable to load repository url"
-
 #, c-format
 msgid "Unable to parse repository: %s"
 msgstr "Unable to parse repository: %s"
@@ -20220,6 +20217,18 @@ msgstr ""
 "Leave blank or zero, or enter a number greater than the highest reference "
 "designation on the front."
 
+msgid "Front prefix:"
+msgstr "Front prefix:"
+
+msgid "Optional prefix for component side reference designations (e.g. F_)"
+msgstr "Optional prefix for component side reference designations (e.g. F_)"
+
+msgid "Back prefix:"
+msgstr "Back prefix:"
+
+msgid "Optional prefix for solder side reference designations (e.g. B_)"
+msgstr "Optional prefix for solder side reference designations (e.g. B_)"
+
 msgid "Remove front prefix"
 msgstr "Remove front prefix"
 
@@ -20239,18 +20248,6 @@ msgid ""
 msgstr ""
 "If checked will remove the Back side prefix\n"
 "in the back prefix box if present"
-
-msgid "Front prefix:"
-msgstr "Front prefix:"
-
-msgid "Optional prefix for component side reference designations (e.g. F_)"
-msgstr "Optional prefix for component side reference designations (e.g. F_)"
-
-msgid "Back prefix:"
-msgstr "Back prefix:"
-
-msgid "Optional prefix for solder side reference designations (e.g. B_)"
-msgstr "Optional prefix for solder side reference designations (e.g. B_)"
 
 msgid "Exclude locked footprints"
 msgstr "Exclude locked footprints"
@@ -34116,6 +34113,9 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Unable to load repository url"
+#~ msgstr "Unable to load repository url"
 
 #~ msgid "Align"
 #~ msgstr "Align"
