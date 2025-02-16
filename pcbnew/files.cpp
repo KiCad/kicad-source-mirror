@@ -1395,6 +1395,7 @@ void PCB_EDIT_FRAME::GenIPC2581File( wxCommandEvent& event )
         fnin.Read( zip );
         zip.Close();
         fnout.Close();
+        fnin.GetFile()->Close();
 
         wxRemoveFile( tempFile );
         tempFile = zipfn.GetFullPath();
