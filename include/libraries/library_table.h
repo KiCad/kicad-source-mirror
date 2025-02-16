@@ -47,6 +47,7 @@ enum class LIBRARY_TABLE_SCOPE
 struct LIBRARY_TABLE_IR;
 struct LIBRARY_TABLE_ROW_IR;
 struct LIBRARY_TABLE_INTERNALS;
+class OUTPUTFORMATTER;
 
 
 class KICOMMON_API LIBRARY_TABLE_ROW
@@ -123,6 +124,8 @@ public:
     std::vector<LIBRARY_TABLE_ROW>& Rows() { return m_rows; }
 
     const std::map<wxString, std::unique_ptr<LIBRARY_TABLE>>& Children() { return m_children; }
+
+    void Format( OUTPUTFORMATTER* aOutput ) const;
 
 private:
     bool initFromIR( const LIBRARY_TABLE_IR& aIR );

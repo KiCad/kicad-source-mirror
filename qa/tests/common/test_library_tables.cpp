@@ -18,6 +18,11 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <filesystem>
+#include <fstream>
+
+#include <richio.h>
+#include <io/kicad/kicad_io_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <pegtl/contrib/analyze.hpp>
 
@@ -100,6 +105,33 @@ BOOST_AUTO_TEST_CASE( ParseAndConstruct )
 
             // TODO this should move to manager test suite
             table.LoadNestedTables();
+
+            // Non-parsed tables can't be formatted
+            if( !table.IsOk() )
+                continue;
+
+            std::ifstream inFp;
+            inFp.open( fn.GetFullPath() );
+            BOOST_REQUIRE( inFp.is_open() );
+
+            std::stringstream inBuf;
+            inBuf << inFp.rdbuf();
+            std::string inData = inBuf.str();
+
+            STRING_FORMATTER formatter;
+            table.Format( &formatter );
+            KICAD_FORMAT::Prettify( formatter.MutableString(),
+                                    KICAD_FORMAT::FORMAT_MODE::LIBRARY_TABLE );
+
+            if( formatter.GetString().compare( inData ) != 0 )
+            {
+                BOOST_TEST_MESSAGE( "--- original ---" );
+                BOOST_TEST_MESSAGE( inData );
+                BOOST_TEST_MESSAGE( "--- formatted ---" );
+                BOOST_TEST_MESSAGE( formatter.GetString() );
+            }
+
+            BOOST_REQUIRE( formatter.GetString().compare( inData ) == 0 );
         }
     }
 }

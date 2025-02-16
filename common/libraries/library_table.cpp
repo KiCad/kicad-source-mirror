@@ -28,6 +28,7 @@
 #include <string_utils.h>
 #include <trace_helpers.h>
 #include <wx_filename.h>
+#include <xnode.h>
 
 
 std::map<std::string, UTF8> LIBRARY_TABLE_ROW::GetOptionsMap() const
@@ -150,4 +151,50 @@ void LIBRARY_TABLE::LoadNestedTables()
         };
 
     processOneTable( *this );
+}
+
+
+void LIBRARY_TABLE::Format( OUTPUTFORMATTER* aOutput ) const
+{
+    if( !IsOk() )
+        return;
+
+    static const std::map<LIBRARY_TABLE_TYPE, wxString> types = {
+        { LIBRARY_TABLE_TYPE::SYMBOL, "sym_lib_table" },
+        { LIBRARY_TABLE_TYPE::FOOTPRINT, "fp_lib_table" },
+        { LIBRARY_TABLE_TYPE::DESIGN_BLOCK, "design_block_lib_table" }
+    };
+
+    wxCHECK( types.contains( Type() ), /* void */ );
+
+    XNODE self( wxXML_ELEMENT_NODE, types.at( Type() ) );
+
+    // TODO(JE) library tables - version management?
+    self.AddAttribute( "version", 7 );
+
+    for( const LIBRARY_TABLE_ROW& row : Rows() )
+    {
+        if( !row.IsOk() )
+            continue;
+
+        wxString uri = row.URI();
+        uri.Replace( '\\', '/' );
+
+        XNODE* rowNode = new XNODE( wxXML_ELEMENT_NODE, "lib" );
+        rowNode->AddAttribute( "name", row.Nickname() );
+        rowNode->AddAttribute( "type", row.Type() );
+        rowNode->AddAttribute( "uri", uri );
+        rowNode->AddAttribute( "options", row.Options() );
+        rowNode->AddAttribute( "descr", row.Description() );
+
+        if( row.Disabled() )
+            rowNode->AddChild( new XNODE( wxXML_ELEMENT_NODE, "disabled" ) );
+
+        if( row.Hidden() )
+            rowNode->AddChild( new XNODE( wxXML_ELEMENT_NODE, "hidden" ) );
+
+        self.AddChild( rowNode );
+    }
+
+    self.Format( aOutput );
 }
