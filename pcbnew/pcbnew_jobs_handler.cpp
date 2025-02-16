@@ -2025,14 +2025,14 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
         wxFileName zipfn = tempFile;
         zipfn.SetExt( "zip" );
 
-        wxFFileOutputStream fnout( zipfn.GetFullPath() );
-        wxZipOutputStream   zip( fnout );
-        wxFFileInputStream  fnin( tempFile );
+        {
+            wxFFileOutputStream fnout( zipfn.GetFullPath() );
+            wxZipOutputStream   zip( fnout );
+            wxFFileInputStream  fnin( tempFile );
 
-        zip.PutNextEntry( tempfn.GetFullName() );
-        fnin.Read( zip );
-        zip.Close();
-        fnout.Close();
+            zip.PutNextEntry( tempfn.GetFullName() );
+            fnin.Read( zip );
+        }
 
         wxRemoveFile( tempFile );
         tempFile = zipfn.GetFullPath();

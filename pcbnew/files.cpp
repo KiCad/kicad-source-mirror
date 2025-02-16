@@ -1387,15 +1387,14 @@ void PCB_EDIT_FRAME::GenIPC2581File( wxCommandEvent& event )
         wxFileName zipfn = tempFile;
         zipfn.SetExt( "zip" );
 
-        wxFFileOutputStream fnout( zipfn.GetFullPath() );
-        wxZipOutputStream zip( fnout );
-        wxFFileInputStream fnin( tempFile );
+        {
+            wxFFileOutputStream fnout( zipfn.GetFullPath() );
+            wxZipOutputStream   zip( fnout );
+            wxFFileInputStream  fnin( tempFile );
 
-        zip.PutNextEntry( tempfn.GetFullName() );
-        fnin.Read( zip );
-        zip.Close();
-        fnout.Close();
-        fnin.GetFile()->Close();
+            zip.PutNextEntry( tempfn.GetFullName() );
+            fnin.Read( zip );
+        }
 
         wxRemoveFile( tempFile );
         tempFile = zipfn.GetFullPath();
