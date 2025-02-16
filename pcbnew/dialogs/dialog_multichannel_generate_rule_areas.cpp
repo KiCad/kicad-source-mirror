@@ -57,9 +57,9 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
     m_sheetGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
     m_sheetGrid->EnableEditing( true );
     m_sheetGrid->HideRowLabels();
-    m_sheetGrid->SetColLabelValue( 0, wxT( "Generate" ) );
-    m_sheetGrid->SetColLabelValue( 1, wxT( "Sheet Path" ) );
-    m_sheetGrid->SetColLabelValue( 2, wxT( "Sheet Name" ) );
+    m_sheetGrid->SetColLabelValue( 0, _( "Generate" ) );
+    m_sheetGrid->SetColLabelValue( 1, _( "Sheet Path" ) );
+    m_sheetGrid->SetColLabelValue( 2, _( "Sheet Name" ) );
     m_sheetGrid->AutoSizeColumn( 1 );
     m_sourceNotebook->AddPage( m_sheetGrid, _( "Sheets" ) );
 
@@ -84,8 +84,8 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
     m_componentClassGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
     m_componentClassGrid->EnableEditing( true );
     m_componentClassGrid->HideRowLabels();
-    m_componentClassGrid->SetColLabelValue( 0, wxT( "Generate" ) );
-    m_componentClassGrid->SetColLabelValue( 1, wxT( "Component Class" ) );
+    m_componentClassGrid->SetColLabelValue( 0, _( "Generate" ) );
+    m_componentClassGrid->SetColLabelValue( 1, _( "Component Class" ) );
     m_componentClassGrid->AutoSizeColumn( 1 );
     m_sourceNotebook->AddPage( m_componentClassGrid, _( "Component Classes" ) );
 
