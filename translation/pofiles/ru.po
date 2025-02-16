@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-15 06:04+0300\n"
-"PO-Revision-Date: 2025-02-16 13:37+0000\n"
+"PO-Revision-Date: 2025-02-16 14:27+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -304,7 +304,7 @@ msgstr "Копировать 3D изображение в буфер обмен�
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:69
 msgid "Render current view using Raytracing"
-msgstr "Визуализация текущего вида используя трассировку лучей"
+msgstr "Визуализация текущего вида с трассировкой лучей"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:102
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:68
@@ -803,7 +803,7 @@ msgstr "Исп. цвета из структуры платы"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:143
 msgid "Use board editor copper colors"
-msgstr "Используйте редактор платы медных цветов"
+msgstr "Исп. цвета меди из редактора плат"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:146
 msgid "Use the board editor copper colors (openGL only)"
@@ -7816,7 +7816,7 @@ msgstr "Классы цепей"
 
 #: common/layer_id.cpp:85
 msgid "Rule areas"
-msgstr "Области запрета"
+msgstr "Области правил"
 
 #: common/layer_id.cpp:86
 msgid "Symbol body outlines"
@@ -23749,7 +23749,7 @@ msgstr "Править свойства листа"
 #: eeschema/tools/sch_edit_tool.cpp:2345
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:65
 msgid "Rule Area Properties"
-msgstr "Свойства области запрета"
+msgstr "Свойства области правил"
 
 #: eeschema/tools/sch_edit_tool.cpp:2467 eeschema/tools/sch_edit_tool.cpp:2558
 msgid "<empty>"
@@ -24021,7 +24021,7 @@ msgstr "Разместить как лист"
 
 #: eeschema/widgets/design_block_pane.cpp:41
 msgid "Keep annotations"
-msgstr "Сохранить аннотации"
+msgstr "Сохранять обозначения"
 
 #: eeschema/widgets/design_block_pane.cpp:116
 msgid "Place copies of the design block on subsequent clicks."
@@ -24036,8 +24036,8 @@ msgid ""
 "Preserve reference designators in the source schematic. Otherwise, clear "
 "then reannotate according to settings."
 msgstr ""
-"Сохраните ссылочные обозначения в исходной схеме. В противном случае "
-"очистите, а затем заново проранжируйте в соответствии с настройками."
+"Сохранить позиционные обозначения в исходной схеме. Иначе — очистить и "
+"переназначить согласно настройкам."
 
 #: eeschema/widgets/filedlg_hook_save_project.h:32
 msgid "Create a new project for this schematic"
@@ -37542,7 +37542,7 @@ msgstr "Параметры задания рендера PCB"
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:126
 #: pcbnew/tools/board_inspection_tool.cpp:1467
 msgid "Keepouts"
-msgstr "Области запрета"
+msgstr "Ограничения"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:177
 msgid "Convert to Rule Area"
@@ -37569,7 +37569,7 @@ msgstr "Имя области:"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:86
 msgid "A unique name for this rule area for use in DRC rules"
 msgstr ""
-"Уникальное имя области запрета для её определения при проверке правил DRC"
+"Уникальное имя области правил для её определения при проверке правил DRC"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:66
 msgid "Reset this value to zero."
@@ -38271,11 +38271,11 @@ msgstr "Захватывать курсор при его размещении �
 #: pcbnew/dialogs/panel_edit_options_base.cpp:329
 #: pcbnew/dialogs/panel_edit_options_base.cpp:343
 msgid "When routing tracks"
-msgstr "При маршрутизации дорожек"
+msgstr "При трассировке"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:337
 msgid "Snap to tracks and vias:"
-msgstr "Закрепляются на дорожках и виалах:"
+msgstr "Дорожки и перех. отв.:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:339
 #: pcbnew/dialogs/panel_edit_options_base.cpp:347
@@ -38643,11 +38643,11 @@ msgstr "Без размещения"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:24
 msgid "Place items from sheet:"
-msgstr "Поместите предметы с листа:"
+msgstr "Разместить элементы с листа:"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:33
 msgid "Place items matching component class:"
-msgstr "Разместите элементы, соответствующие классу компонента:"
+msgstr "Разместить элементы по классу компонентов:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:46
 msgid "Minimum clearance:"
@@ -43241,7 +43241,7 @@ msgstr "Авторазмещение посад. мест"
 
 #: pcbnew/menubar_pcb_editor.cpp:440
 msgid "Multi-Channel"
-msgstr "Многоканальный"
+msgstr "Многоканальность"
 
 #: pcbnew/menubar_pcb_editor.cpp:448
 msgid "External Plugins"
@@ -44117,7 +44117,7 @@ msgstr "Параметр производства"
 
 #: pcbnew/pad.cpp:2696 pcbnew/pcb_shape.cpp:1001 pcbnew/pcb_track.cpp:2097
 msgid "Soldermask Margin Override"
-msgstr "Установка зазора паяльной маски"
+msgstr "Расширение паяльной маски"
 
 #: pcbnew/pad.cpp:2718 pcbnew/zone.cpp:2099
 msgid "Thermal Relief Spoke Width"
@@ -51003,7 +51003,7 @@ msgstr "Посад. место не выбрано"
 #: pcbnew/widgets/panel_selection_filter.cpp:201
 #: pcbnew/widgets/panel_selection_filter_base.cpp:57
 msgid "Rule Areas"
-msgstr "Области запрета"
+msgstr "Области правил"
 
 #: pcbnew/widgets/panel_selection_filter.cpp:202
 #: pcbnew/widgets/panel_selection_filter_base.cpp:61
@@ -51260,7 +51260,7 @@ msgstr "на %s, %s и еще %zu"
 #: pcbnew/zone.cpp:1088
 #, c-format
 msgid "Rule Area Cutout %s"
-msgstr "Вырез в области запрета %s"
+msgstr "Вырез в области правил %s"
 
 #: pcbnew/zone.cpp:1090
 #, c-format
