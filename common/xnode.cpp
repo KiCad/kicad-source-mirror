@@ -180,7 +180,7 @@ wxString XNODE::Format() const
 {
     STRING_FORMATTER formatter;
     Format( &formatter );
-    KICAD_FORMAT::Prettify( formatter.MutableString(), false );
+    KICAD_FORMAT::Prettify( formatter.MutableString() );
     return formatter.GetString();
 }
 

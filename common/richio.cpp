@@ -636,7 +636,9 @@ bool PRETTIFIED_FILE_OUTPUTFORMATTER::Finish()
     if( !m_fp )
         return false;
 
-    KICAD_FORMAT::Prettify( m_buf, ADVANCED_CFG::GetCfg().m_CompactSave );
+    KICAD_FORMAT::Prettify( m_buf, ADVANCED_CFG::GetCfg().m_CompactSave
+                                       ? KICAD_FORMAT::FORMAT_MODE::COMPACT_TEXT_PROPERTIES
+                                       : KICAD_FORMAT::FORMAT_MODE::NORMAL );
 
     if( fwrite( m_buf.c_str(), m_buf.length(), 1, m_fp ) != 1 )
         THROW_IO_ERROR( strerror( errno ) );

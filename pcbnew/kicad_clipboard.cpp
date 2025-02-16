@@ -453,7 +453,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
     }
 
     std::string prettyData = m_formatter.GetString();
-    KICAD_FORMAT::Prettify( prettyData, true );
+    KICAD_FORMAT::Prettify( prettyData, KICAD_FORMAT::FORMAT_MODE::COMPACT_TEXT_PROPERTIES );
 
     // These are placed at the end to minimize the open time of the clipboard
     m_writer( wxString( prettyData.c_str(), wxConvUTF8 ) );
@@ -497,7 +497,7 @@ void CLIPBOARD_IO::SaveBoard( const wxString& aFileName, BOARD* aBoard,
     m_formatter.Print( ")" );
 
     std::string prettyData = m_formatter.GetString();
-    KICAD_FORMAT::Prettify( prettyData, true );
+    KICAD_FORMAT::Prettify( prettyData, KICAD_FORMAT::FORMAT_MODE::COMPACT_TEXT_PROPERTIES );
 
     m_writer( wxString( prettyData.c_str(), wxConvUTF8 ) );
 }
