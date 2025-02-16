@@ -53,6 +53,8 @@
 #include <widgets/wx_grid.h>
 
 #include <fp_lib_table.h>
+#include <project_pcb.h>
+#include <kidialog.h>
 
 PRIVATE_LAYERS_GRID_TABLE::PRIVATE_LAYERS_GRID_TABLE( PCB_BASE_FRAME* aFrame ) :
         m_frame( aFrame )
@@ -381,7 +383,8 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
 }
 
 
-bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::checkFootprintName( const wxString& aFootprintName )
+bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::checkFootprintName( const wxString& aFootprintName,
+                                                                LIB_ID* doOverwrite )
 {
     if( aFootprintName.IsEmpty() )
     {
@@ -393,6 +396,27 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::checkFootprintName( const wxString& 
         m_delayedErrorMessage.Printf( _( "Footprint name may not contain '%s'." ),
                                       FOOTPRINT::StringLibNameInvalidChars( true ) );
         return false;
+    }
+
+    LIB_ID        fpID = m_footprint->GetFPID();
+    wxString      libraryName = fpID.GetLibNickname();
+    wxString      originalFPName = fpID.GetLibItemName();
+    FP_LIB_TABLE* tbl = PROJECT_PCB::PcbFootprintLibs( &m_frame->Prj() );
+
+    if( aFootprintName != originalFPName && tbl->FootprintExists( libraryName, aFootprintName ) )
+    {
+        wxString msg = wxString::Format( _( "Footprint '%s' already exists in library '%s'." ),
+                                         aFootprintName, libraryName );
+
+        KIDIALOG errorDlg( m_frame, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+        errorDlg.SetOKLabel( _( "Overwrite" ) );
+
+        if( errorDlg.ShowModal() == wxID_OK )
+        {
+            doOverwrite->SetLibNickname( libraryName );
+            doOverwrite->SetLibItemName( aFootprintName );
+            return true;
+        }
     }
 
     return true;
@@ -409,8 +433,9 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::Validate()
 
     // First, test for invalid chars in footprint name
     wxString footprintName = m_FootprintNameCtrl->GetValue();
+    LIB_ID   overwrite;
 
-    if( !checkFootprintName( footprintName ) )
+    if( !checkFootprintName( footprintName, &overwrite ) )
     {
         if( m_NoteBook->GetSelection() != 0 )
             m_NoteBook->SetSelection( 0 );
@@ -422,7 +447,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::Validate()
     }
 
     // Check for valid field text properties
-    for( size_t i = 0; i < m_fields->size(); ++i )
+    for( int i = 0; i < (int) m_fields->size(); ++i )
     {
         PCB_FIELD& field = m_fields->at( i );
 
@@ -485,15 +510,18 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::Validate()
     if( !m_netClearance.Validate( 0, INT_MAX ) )
         return false;
 
+    if( overwrite.IsValid() )
+    {
+        if( m_frame->DeleteFootprintFromLibrary( overwrite, false /* already confirmed */ ) )
+            m_frame->SyncLibraryTree( true );
+    }
+
     return true;
 }
 
 
 bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
 {
-    if( !Validate() )
-        return false;
-
     if( !m_itemsGrid->CommitPendingChanges()
             || !m_privateLayersGrid->CommitPendingChanges()
             || !m_padGroupsGrid->CommitPendingChanges() )
@@ -516,9 +544,9 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
     std::set<wxString> files_to_delete;
 
     // Get the new files from the footprint fields
-    for( size_t ii = 0; ii < m_fields->size(); ++ii )
+    for( PCB_FIELD& m_field : *m_fields)
     {
-        const wxString& name = m_fields->at( ii ).GetText();
+        const wxString& name = m_field.GetText();
 
         if( name.StartsWith( FILEEXT::KiCadUriPrefix ) )
             files.insert( name );
@@ -690,8 +718,8 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddField( wxCommandEvent& event )
     m_itemsGrid->ProcessTableMessage( msg );
 
     m_itemsGrid->SetFocus();
-    m_itemsGrid->MakeCellVisible( m_fields->size() - 1, 0 );
-    m_itemsGrid->SetGridCursor( m_fields->size() - 1, 0 );
+    m_itemsGrid->MakeCellVisible( (int) m_fields->size() - 1, 0 );
+    m_itemsGrid->SetGridCursor( (int) m_fields->size() - 1, 0 );
 
     m_itemsGrid->EnableCellEditControl( true );
     m_itemsGrid->ShowCellEditControl();
@@ -768,8 +796,8 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddLayer( wxCommandEvent& event )
     m_privateLayersGrid->ProcessTableMessage( msg );
 
     m_privateLayersGrid->SetFocus();
-    m_privateLayersGrid->MakeCellVisible( m_privateLayers->size() - 1, 0 );
-    m_privateLayersGrid->SetGridCursor( m_privateLayers->size() - 1, 0 );
+    m_privateLayersGrid->MakeCellVisible( (int) m_privateLayers->size() - 1, 0 );
+    m_privateLayersGrid->SetGridCursor( (int) m_privateLayers->size() - 1, 0 );
 
     OnModify();
 }
@@ -832,7 +860,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnRemovePadGroup( wxCommandEvent& ev
     if( selectedRows.empty() && curRow >= 0 && curRow < m_padGroupsGrid->GetNumberRows() )
         selectedRows.Add( curRow );
 
-    for( int ii = selectedRows.Count() - 1; ii >= 0; --ii )
+    for( int ii = (int) selectedRows.Count() - 1; ii >= 0; --ii )
     {
         int row = selectedRows.Item( ii );
         m_padGroupsGrid->DeleteRows( row, 1 );
