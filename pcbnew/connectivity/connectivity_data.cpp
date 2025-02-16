@@ -857,6 +857,10 @@ bool CONNECTIVITY_DATA::TestTrackEndpointDangling( PCB_TRACK* aTrack, bool aIgno
 
         if( connected.empty() )
         {
+            // No connections AND no-net is not an error
+            if( aTrack->GetNetCode() <= 0 )
+                return false;
+
             if( aPos )
                 *aPos = aTrack->GetPosition();
 
