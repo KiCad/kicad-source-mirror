@@ -83,11 +83,7 @@ public:
         return GetShownText( sheetPath, aAllowExtraText, aDepth );
     }
 
-    bool IsHypertext() const override
-    {
-        return HasHyperlink();
-    }
-
+    bool IsHypertext() const override;
     void DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const override;
 
     void SetExcludedFromSim( bool aExclude ) override { m_excludedFromSim = aExclude; }

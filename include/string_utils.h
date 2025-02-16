@@ -143,6 +143,11 @@ KICOMMON_API wxString RemoveHTMLTags( const wxString& aInput );
 KICOMMON_API wxString LinkifyHTML( wxString aStr );
 
 /**
+ * Performs a URL sniff-test on a string.
+ */
+KICOMMON_API bool IsURL( wxString aStr );
+
+/**
  * Read one line line from \a aFile.
  *
  * @return a pointer the first useful line read by eliminating blank lines and comments.
