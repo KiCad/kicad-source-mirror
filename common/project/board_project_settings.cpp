@@ -47,7 +47,8 @@ nlohmann::json PARAM_LAYER_PRESET::presetsToJson()
     {
         nlohmann::json js = {
                 { "name", preset.name },
-                { "activeLayer", preset.activeLayer }
+                { "activeLayer", preset.activeLayer },
+                { "flipBoard", preset.flipBoard }
         };
 
         nlohmann::json layers = nlohmann::json::array();
@@ -87,8 +88,12 @@ void PARAM_LAYER_PRESET::jsonToPresets( const nlohmann::json& aJson )
         {
             LAYER_PRESET p( preset.at( "name" ).get<wxString>() );
 
-            if( preset.contains( "activeLayer" ) &&
-                preset.at( "activeLayer" ).is_number_integer() )
+            if( preset.contains( "flipBoard" ) && preset.at( "flipBoard" ).is_boolean() )
+            {
+                p.flipBoard = preset.at( "flipBoard" ).get<bool>();
+            }
+
+            if( preset.contains( "activeLayer" ) && preset.at( "activeLayer" ).is_number_integer() )
             {
                 int active = preset.at( "activeLayer" ).get<int>();
 
@@ -112,8 +117,7 @@ void PARAM_LAYER_PRESET::jsonToPresets( const nlohmann::json& aJson )
                 }
             }
 
-            if( preset.contains( "renderLayers" )
-                && preset.at( "renderLayers" ).is_array() )
+            if( preset.contains( "renderLayers" ) && preset.at( "renderLayers" ).is_array() )
             {
                 p.renderLayers.reset();
 
