@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-15 06:07+0300\n"
-"PO-Revision-Date: 2025-02-06 22:01+0000\n"
+"PO-Revision-Date: 2025-02-16 14:27+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v8/ru/>\n"
 "Language: ru\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.10\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -294,7 +294,7 @@ msgstr "Копировать 3D изображение в буфер обмен�
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:67
 msgid "Render current view using Raytracing"
-msgstr "Визуализация текущего вида используя трассировку лучей"
+msgstr "Визуализация текущего вида с трассировкой лучей"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:102
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:68
@@ -34523,7 +34523,7 @@ msgstr "Имя области:"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:131
 msgid "A unique name for this rule area for use in DRC rules"
 msgstr ""
-"Уникальное имя области запрета для её определения при проверке правил DRC"
+"Уникальное имя области правил для её определения при проверке правил DRC"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:69
 msgid "Basic rules:"
@@ -34573,7 +34573,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:68
 msgid "Rule Area Properties"
-msgstr "Свойства области запрета"
+msgstr "Свойства области правил"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:211
 msgid "Center Point"
@@ -40916,7 +40916,7 @@ msgstr "Параметр производства"
 
 #: pcbnew/pad.cpp:2492
 msgid "Soldermask Margin Override"
-msgstr "Установка зазора паяльной маски"
+msgstr "Расширение паяльной маски"
 
 #: pcbnew/pad.cpp:2510 pcbnew/zone.cpp:1781
 msgid "Thermal Relief Spoke Width"
@@ -44230,7 +44230,7 @@ msgstr "Разрешенные ограничения толщины: мин. %s
 
 #: pcbnew/tools/board_inspection_tool.cpp:1373
 msgid "Keepouts"
-msgstr "Области запрета"
+msgstr "Ограничения"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1374
 msgid "Keepout resolution for:"
@@ -47456,7 +47456,7 @@ msgstr "Разрешить выделение заблокированных э�
 #: pcbnew/widgets/panel_selection_filter.cpp:193
 #: pcbnew/widgets/panel_selection_filter_base.cpp:57
 msgid "Rule Areas"
-msgstr "Области запрета"
+msgstr "Области правил"
 
 #: pcbnew/widgets/panel_selection_filter.cpp:194
 #: pcbnew/widgets/panel_selection_filter_base.cpp:61
@@ -47581,7 +47581,7 @@ msgstr "на %s, %s и еще %zu"
 #: pcbnew/zone.cpp:898
 #, c-format
 msgid "Rule Area Cutout %s"
-msgstr "Вырез в области запрета %s"
+msgstr "Вырез в области правил %s"
 
 #: pcbnew/zone.cpp:900
 #, c-format
