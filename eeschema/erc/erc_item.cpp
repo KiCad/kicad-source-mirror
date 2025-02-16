@@ -28,208 +28,205 @@
 #include <eda_draw_frame.h>
 #include <marker_base.h>
 #include <sch_edit_frame.h>
+#include <i18n_utility.h>
 
 
-// These, being statically-defined, require specialized I18N handling.  We continue to
-// use the _() macro so that string harvesting by the I18N framework doesn't have to be
-// specialized, but we don't translate on initialization and instead do it in the getters.
-
-#undef _
-#define _(s) s
+// These, being statically-defined, require specialized I18N handling.
+// We don't translate on initialization and instead do it in the getters.
 
 // NOTE: Avoid changing the settings key for an ERC item after it has been created
 
-ERC_ITEM ERC_ITEM::heading_connections( 0, _( "Connections" ), "" );
-ERC_ITEM ERC_ITEM::heading_conflicts( 0, _( "Conflicts" ), "" );
-ERC_ITEM ERC_ITEM::heading_misc( 0, _( "Miscellaneous" ), "" );
+ERC_ITEM ERC_ITEM::heading_connections( 0, _HKI( "Connections" ), "" );
+ERC_ITEM ERC_ITEM::heading_conflicts( 0, _HKI( "Conflicts" ), "" );
+ERC_ITEM ERC_ITEM::heading_misc( 0, _HKI( "Miscellaneous" ), "" );
 ERC_ITEM ERC_ITEM::heading_internal( 0, "", "" );
 
 ERC_ITEM ERC_ITEM::duplicateSheetName( ERCE_DUPLICATE_SHEET_NAME,
-        _( "Duplicate sheet names within a given sheet" ),
+        _HKI( "Duplicate sheet names within a given sheet" ),
         wxT( "duplicate_sheet_names" ) );
 
 ERC_ITEM ERC_ITEM::endpointOffGrid( ERCE_ENDPOINT_OFF_GRID,
-        _( "Symbol pin or wire end off connection grid" ),
+        _HKI( "Symbol pin or wire end off connection grid" ),
         wxT( "endpoint_off_grid" ) );
 
 ERC_ITEM ERC_ITEM::pinNotConnected( ERCE_PIN_NOT_CONNECTED,
-        _( "Pin not connected" ),
+        _HKI( "Pin not connected" ),
         wxT( "pin_not_connected" ) );
 
 ERC_ITEM ERC_ITEM::pinNotDriven( ERCE_PIN_NOT_DRIVEN,
-        _( "Input pin not driven by any Output pins" ),
+        _HKI( "Input pin not driven by any Output pins" ),
         wxT( "pin_not_driven" ) );
 
 ERC_ITEM ERC_ITEM::powerpinNotDriven( ERCE_POWERPIN_NOT_DRIVEN,
-        _( "Input Power pin not driven by any Output Power pins" ),
+        _HKI( "Input Power pin not driven by any Output Power pins" ),
         wxT( "power_pin_not_driven" ) );
 
 ERC_ITEM ERC_ITEM::duplicatePinError( ERCE_DUPLICATE_PIN_ERROR,
-        _( "Multiple pins with the same pin number" ),
+        _HKI( "Multiple pins with the same pin number" ),
         wxT( "duplicate_pins" ) );
 
 ERC_ITEM ERC_ITEM::pinTableWarning( ERCE_PIN_TO_PIN_WARNING,
-        _( "Conflict problem between pins" ),
+        _HKI( "Conflict problem between pins" ),
         wxT( "pin_to_pin" ) );
 
 ERC_ITEM ERC_ITEM::pinTableError( ERCE_PIN_TO_PIN_ERROR,
-        _( "Conflict problem between pins" ),
+        _HKI( "Conflict problem between pins" ),
         wxT( "pin_to_pin" ) );
 
 ERC_ITEM ERC_ITEM::genericWarning( ERCE_GENERIC_WARNING,
-        _( "Warning" ),
+        _HKI( "Warning" ),
         wxT( "generic-warning" ) );
 
 ERC_ITEM ERC_ITEM::genericError( ERCE_GENERIC_ERROR,
-        _( "Error" ),
+        _HKI( "Error" ),
         wxT( "generic-error" ) );
 
 ERC_ITEM ERC_ITEM::hierLabelMismatch( ERCE_HIERACHICAL_LABEL,
-        _( "Mismatch between hierarchical labels and sheet pins" ),
+        _HKI( "Mismatch between hierarchical labels and sheet pins" ),
         wxT( "hier_label_mismatch" ) );
 
 ERC_ITEM ERC_ITEM::fourWayJunction( ERCE_FOUR_WAY_JUNCTION,
-        _( "Four connection points are joined together" ),
+        _HKI( "Four connection points are joined together" ),
         wxT( "four_way_junction" ) );
 
 ERC_ITEM ERC_ITEM::labelMultipleWires( ERCE_LABEL_MULTIPLE_WIRES,
-        _( "Label connects more than one wire" ),
+        _HKI( "Label connects more than one wire" ),
         wxT( "label_multiple_wires" ) );
 
 ERC_ITEM ERC_ITEM::noConnectConnected( ERCE_NOCONNECT_CONNECTED,
-        _( "A pin with a \"no connection\" flag is connected" ),
+        _HKI( "A pin with a \"no connection\" flag is connected" ),
         wxT( "no_connect_connected" ) );
 
 ERC_ITEM ERC_ITEM::noConnectDangling( ERCE_NOCONNECT_NOT_CONNECTED,
-        _( "Unconnected \"no connection\" flag" ),
+        _HKI( "Unconnected \"no connection\" flag" ),
         wxT( "no_connect_dangling" ) );
 
 ERC_ITEM ERC_ITEM::labelDangling( ERCE_LABEL_NOT_CONNECTED,
-        _( "Label not connected to anything" ),
+        _HKI( "Label not connected to anything" ),
         wxT( "label_dangling" ) );
 
 ERC_ITEM ERC_ITEM::globalLabelDangling( ERCE_GLOBLABEL_DANGLING,
-        _( "Global label not connected anywhere else in the schematic" ),
+        _HKI( "Global label not connected anywhere else in the schematic" ),
         wxT( "global_label_dangling" ) );
 
 ERC_ITEM ERC_ITEM::similarLabels( ERCE_SIMILAR_LABELS,
-        _( "Labels are similar (lower/upper case difference only)"),
+        _HKI( "Labels are similar (lower/upper case difference only)"),
         wxT( "similar_labels" ) );
 
 ERC_ITEM ERC_ITEM::similarPower( ERCE_SIMILAR_POWER,
-        _( "Power pins are similar (lower/upper case difference only)"),
+        _HKI( "Power pins are similar (lower/upper case difference only)"),
         wxT( "similar_power" ) );
 
 ERC_ITEM ERC_ITEM::similarLabelAndPower( ERCE_SIMILAR_LABEL_AND_POWER,
-        _( "Power pin and label are similar (lower/upper case difference only)"),
+        _HKI( "Power pin and label are similar (lower/upper case difference only)"),
         wxT( "similar_label_and_power" ) );
 
 ERC_ITEM ERC_ITEM::singleGlobalLabel( ERCE_SINGLE_GLOBAL_LABEL,
-        _( "Global label only appears once in the schematic"),
+        _HKI( "Global label only appears once in the schematic"),
         wxT( "single_global_label" ) );
 
 ERC_ITEM ERC_ITEM::sameLocalGlobalLabel( ERCE_SAME_LOCAL_GLOBAL_LABEL,
-        _( "Local and global labels have same name" ),
+        _HKI( "Local and global labels have same name" ),
         wxT( "same_local_global_label" ) );
 
 ERC_ITEM ERC_ITEM::differentUnitFootprint( ERCE_DIFFERENT_UNIT_FP,
-        _( "Different footprint assigned in another unit of the symbol" ),
+        _HKI( "Different footprint assigned in another unit of the symbol" ),
         wxT( "different_unit_footprint" ) );
 
 ERC_ITEM ERC_ITEM::differentUnitNet( ERCE_DIFFERENT_UNIT_NET,
-        _( "Different net assigned to a shared pin in another unit of the symbol" ),
+        _HKI( "Different net assigned to a shared pin in another unit of the symbol" ),
         wxT( "different_unit_net" ) );
 
 ERC_ITEM ERC_ITEM::busDefinitionConflict( ERCE_BUS_ALIAS_CONFLICT,
-        _( "Conflict between bus alias definitions across schematic sheets" ),
+        _HKI( "Conflict between bus alias definitions across schematic sheets" ),
         wxT( "bus_definition_conflict" ) );
 
 ERC_ITEM ERC_ITEM::multipleNetNames( ERCE_DRIVER_CONFLICT,
-        _( "More than one name given to this bus or net" ),
+        _HKI( "More than one name given to this bus or net" ),
         wxT( "multiple_net_names" ) );
 
 ERC_ITEM ERC_ITEM::netNotBusMember( ERCE_BUS_ENTRY_CONFLICT,
-        _( "Net is graphically connected to a bus but not a bus member" ),
+        _HKI( "Net is graphically connected to a bus but not a bus member" ),
         wxT( "net_not_bus_member" ) );
 
 ERC_ITEM ERC_ITEM::busToBusConflict( ERCE_BUS_TO_BUS_CONFLICT,
-        _( "Buses are graphically connected but share no bus members" ),
+        _HKI( "Buses are graphically connected but share no bus members" ),
         wxT( "bus_to_bus_conflict" ) );
 
 ERC_ITEM ERC_ITEM::busToNetConflict( ERCE_BUS_TO_NET_CONFLICT,
-        _( "Invalid connection between bus and net items" ),
+        _HKI( "Invalid connection between bus and net items" ),
         wxT( "bus_to_net_conflict" ) );
 
 ERC_ITEM ERC_ITEM::unresolvedVariable( ERCE_UNRESOLVED_VARIABLE,
-        _( "Unresolved text variable" ),
+        _HKI( "Unresolved text variable" ),
         wxT( "unresolved_variable" ) );
 
 ERC_ITEM ERC_ITEM::undefinedNetclass( ERCE_UNDEFINED_NETCLASS,
-        _( "Undefined netclass" ),
+        _HKI( "Undefined netclass" ),
         wxT( "undefined_netclass" ) );
 
 ERC_ITEM ERC_ITEM::simulationModelIssues( ERCE_SIMULATION_MODEL,
-        _( "SPICE model issue" ),
+        _HKI( "SPICE model issue" ),
         wxT( "simulation_model_issue" ) );
 
 ERC_ITEM ERC_ITEM::wireDangling( ERCE_WIRE_DANGLING,
-        _( "Wires not connected to anything" ),
+        _HKI( "Wires not connected to anything" ),
         wxT( "wire_dangling" ) );
 
 ERC_ITEM ERC_ITEM::libSymbolIssues( ERCE_LIB_SYMBOL_ISSUES,
-        _( "Library symbol issue" ),
+        _HKI( "Library symbol issue" ),
         wxT( "lib_symbol_issues" ) );
 
 ERC_ITEM ERC_ITEM::libSymbolMismatch( ERCE_LIB_SYMBOL_MISMATCH,
-        _( "Symbol doesn't match copy in library" ),
+        _HKI( "Symbol doesn't match copy in library" ),
         wxT( "lib_symbol_mismatch" ) );
 
 ERC_ITEM ERC_ITEM::footprintLinkIssues( ERCE_FOOTPRINT_LINK_ISSUES,
-        _( "Footprint link issue" ),
+        _HKI( "Footprint link issue" ),
         wxT( "footprint_link_issues" ) );
 
 ERC_ITEM ERC_ITEM::footprintFilters( ERCE_FOOTPRINT_FILTERS,
-        _( "Assigned footprint doesn't match footprint filters" ),
+        _HKI( "Assigned footprint doesn't match footprint filters" ),
         wxT( "footprint_filter" ) );
 
 ERC_ITEM ERC_ITEM::unannotated( ERCE_UNANNOTATED,
-        _( "Symbol is not annotated" ),
+        _HKI( "Symbol is not annotated" ),
         wxT( "unannotated" ) );
 
 ERC_ITEM ERC_ITEM::extraUnits( ERCE_EXTRA_UNITS,
-        _( "Symbol has more units than are defined" ),
+        _HKI( "Symbol has more units than are defined" ),
         wxT( "extra_units" ) );
 
 ERC_ITEM ERC_ITEM::missingUnits( ERCE_MISSING_UNIT,
-        _( "Symbol has units that are not placed" ),
+        _HKI( "Symbol has units that are not placed" ),
         wxT( "missing_unit" ) );
 
 ERC_ITEM ERC_ITEM::missingInputPin( ERCE_MISSING_INPUT_PIN,
-        _( "Symbol has input pins that are not placed" ),
+        _HKI( "Symbol has input pins that are not placed" ),
         wxT( "missing_input_pin" ) );
 
 ERC_ITEM ERC_ITEM::missingBidiPin( ERCE_MISSING_BIDI_PIN,
-        _( "Symbol has bidirectional pins that are not placed" ),
+        _HKI( "Symbol has bidirectional pins that are not placed" ),
         wxT( "missing_bidi_pin" ) );
 
 ERC_ITEM ERC_ITEM::missingPowerInputPin( ERCE_MISSING_POWER_INPUT_PIN,
-        _( "Symbol has power input pins that are not placed" ),
+        _HKI( "Symbol has power input pins that are not placed" ),
         wxT( "missing_power_pin" ) );
 
 ERC_ITEM ERC_ITEM::differentUnitValue( ERCE_DIFFERENT_UNIT_VALUE,
-        _( "Units of same symbol have different values" ),
+        _HKI( "Units of same symbol have different values" ),
         wxT( "unit_value_mismatch" ) );
 
 ERC_ITEM ERC_ITEM::duplicateReference( ERCE_DUPLICATE_REFERENCE,
-        _( "Duplicate reference designators" ),
+        _HKI( "Duplicate reference designators" ),
         wxT( "duplicate_reference" ) );
 
 ERC_ITEM ERC_ITEM::busEntryNeeded( ERCE_BUS_ENTRY_NEEDED,
-        _( "Bus Entry needed" ),
+        _HKI( "Bus Entry needed" ),
         wxT( "bus_entry_needed" ) );
 
 ERC_ITEM ERC_ITEM::unconnectedWireEndpoint( ERCE_UNCONNECTED_WIRE_ENDPOINT,
-        _( "Unconnected wire endpoint" ),
+        _HKI( "Unconnected wire endpoint" ),
         wxT( "unconnected_wire_endpoint" ) );
 
 std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes(
