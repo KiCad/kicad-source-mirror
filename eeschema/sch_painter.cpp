@@ -1757,7 +1757,7 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
     }
     else
     {
-        if( aText->IsHypertext() && aText->IsRollover() )
+        if( aText->IsHypertext() && aText->IsRollover() && !aText->IsMoving() )
         {
             m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_HOVERED ) );
             m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_HOVERED ) );
@@ -1876,7 +1876,7 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
                 attrs.m_Angle = aTextBox->GetDrawRotation();
                 attrs.m_StrokeWidth = KiROUND( getTextThickness( aTextBox ) );
 
-                if( aTextBox->IsHypertext() && aTextBox->IsRollover() )
+                if( aTextBox->IsHypertext() && aTextBox->IsRollover() && !aTextBox->IsMoving() )
                 {
                     m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_HOVERED ) );
                     m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_HOVERED ) );
@@ -2390,7 +2390,7 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
         if( drawingShadows )
             attributes.m_StrokeWidth += getShadowWidth( !aField->IsSelected() );
 
-        if( aField->IsHypertext() && aField->IsRollover() )
+        if( aField->IsHypertext() && aField->IsRollover() && !aField->IsMoving() )
         {
             m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_HOVERED ) );
             m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_HOVERED ) );

@@ -1000,14 +1000,15 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             evt->SetPassEvent();
         }
 
-        if( rolloverItem != lastRolloverItem )
+        if( lastRolloverItem != niluuid && lastRolloverItem != rolloverItem )
         {
-            if( EDA_ITEM* item = m_frame->GetItem( lastRolloverItem ) )
-            {
-                item->ClearFlags( IS_ROLLOVER );
-                lastRolloverItem = niluuid;
+            EDA_ITEM* item = m_frame->GetItem( lastRolloverItem );
 
-                if( item->Type() == SCH_FIELD_T )
+            if( item->IsRollover() )
+            {
+                item->SetIsRollover( false );
+
+                if( item->Type() == SCH_FIELD_T || item->Type() == SCH_TABLECELL_T )
                     m_frame->GetCanvas()->GetView()->Update( item->GetParent() );
                 else
                     m_frame->GetCanvas()->GetView()->Update( item );
@@ -1018,17 +1019,18 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             EDA_ITEM* item = m_frame->GetItem( rolloverItem );
 
-            if( item && !( item->GetFlags() & IS_ROLLOVER ) )
+            if( !item->IsRollover() )
             {
-                item->SetFlags( IS_ROLLOVER );
-                lastRolloverItem = rolloverItem;
+                item->SetIsRollover( true );
 
-                if( item->Type() == SCH_FIELD_T )
+                if( item->Type() == SCH_FIELD_T || item->Type() == SCH_TABLECELL_T )
                     m_frame->GetCanvas()->GetView()->Update( item->GetParent() );
                 else
                     m_frame->GetCanvas()->GetView()->Update( item );
             }
         }
+
+        lastRolloverItem = rolloverItem;
 
         if( m_frame->ToolStackIsEmpty() )
         {
