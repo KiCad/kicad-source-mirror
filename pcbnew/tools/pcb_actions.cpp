@@ -2226,7 +2226,7 @@ TOOL_ACTION PCB_ACTIONS::generatePlacementRuleAreas( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Multichannel.generatePlacementRuleAreas" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Generate Placement Rule Areas..." ) )
-        .Tooltip( _( "Generates Placement Areas in easy way" ) )
+        .Tooltip( _( "Creates best-fit placement rule areas" ) )
         .Icon( BITMAPS::add_keepout_area )
         .Flags( AF_ACTIVATE ) );
 
