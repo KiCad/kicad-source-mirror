@@ -27,18 +27,16 @@
 
 #include <richio.h>
 #include <string_utils.h>
+#include <io/kicad/kicad_io_utils.h>
 
 
-typedef wxXmlAttribute   XATTR;
-
-
-void XNODE::Format( OUTPUTFORMATTER* out, int nestLevel )
+void XNODE::Format( OUTPUTFORMATTER* out ) const
 {
     switch( GetType() )
     {
     case wxXML_ELEMENT_NODE:
-        out->Print( nestLevel, "(%s", TO_UTF8( GetName() ) );
-        FormatContents( out, nestLevel );
+        out->Print( "(%s", TO_UTF8( GetName() ) );
+        FormatContents( out );
 
         if( GetNext() )
             out->Print( 0, ")\n" );
@@ -48,15 +46,15 @@ void XNODE::Format( OUTPUTFORMATTER* out, int nestLevel )
         break;
 
     default:
-        FormatContents( out, nestLevel );
+        FormatContents( out );
     }
 }
 
 
-void XNODE::FormatContents( OUTPUTFORMATTER* out, int nestLevel )
+void XNODE::FormatContents( OUTPUTFORMATTER* out ) const
 {
     // output attributes first if they exist
-    for( XATTR* attr = (XATTR*) GetAttributes();  attr;  attr = (XATTR*) attr->GetNext() )
+    for( wxXmlAttribute* attr = GetAttributes(); attr; attr = attr->GetNext() )
     {
         out->Print( 0, " (%s %s)",
                     TO_UTF8( attr->GetName() ),
@@ -67,20 +65,18 @@ void XNODE::FormatContents( OUTPUTFORMATTER* out, int nestLevel )
     switch( GetType() )
     {
     case wxXML_ELEMENT_NODE:
-
-        // output children if they exist.
-        for( XNODE* kid = (XNODE*) GetChildren();  kid;  kid = (XNODE*) kid->GetNext() )
+        for( XNODE* child = GetChildren(); child; child = child->GetNext() )
         {
-            if( kid->GetType() != wxXML_TEXT_NODE )
+            if( child->GetType() != wxXML_TEXT_NODE )
             {
-                if( kid == GetChildren() )
+                if( child == GetChildren() )
                     out->Print( 0, "\n" );
 
-                kid->Format( out, nestLevel+1 );
+                child->Format( out );
             }
             else
             {
-                kid->Format( out, 0 );
+                child->Format( out );
             }
         }
 
@@ -93,6 +89,15 @@ void XNODE::FormatContents( OUTPUTFORMATTER* out, int nestLevel )
     default:
         ;   // not supported
     }
+}
+
+
+wxString XNODE::Format() const
+{
+    STRING_FORMATTER formatter;
+    Format( &formatter );
+    KICAD_FORMAT::Prettify( formatter.MutableString(), false );
+    return formatter.GetString();
 }
 
 // EOF

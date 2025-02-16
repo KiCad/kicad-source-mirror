@@ -31,15 +31,14 @@
 #define wxDEPRECATED(x) x
 
 #include <wx/xml/xml.h>
+#include <kicommon.h>
 
 class OUTPUTFORMATTER;
 
 /**
- * Hold an XML or S-expression element.
- *
- * It is used for exporting a document tree in either XML or S-expression.
+ * An extension of wxXmlNode that can format its contents as KiCad-style s-expressions
  */
-class XNODE : public wxXmlNode
+class KICOMMON_API XNODE : public wxXmlNode
 {
 public:
     XNODE() :
@@ -60,27 +59,26 @@ public:
 
     XNODE* GetChildren() const
     {
-        return (XNODE* )wxXmlNode::GetChildren();
+        return static_cast<XNODE *>( wxXmlNode::GetChildren() );
     }
 
     XNODE* GetNext() const
     {
-        return (XNODE* )wxXmlNode::GetNext();
+        return static_cast<XNODE *>( wxXmlNode::GetNext() );
     }
 
     XNODE* GetParent() const
     {
-        return (XNODE* )wxXmlNode::GetParent();
+        return static_cast<XNODE *>( wxXmlNode::GetParent() );
     }
 
     /**
      * Write this object as #UTF8 out to an #OUTPUTFORMATTER as an S-expression.
      *
      * @param out The formatter to write to.
-     * @param nestLevel A multiple of the number of spaces to precede the output with.
      * @throw IO_ERROR if a system error writing the output, such as a full disk.
      */
-    virtual void Format( OUTPUTFORMATTER* out, int nestLevel );
+    void Format( OUTPUTFORMATTER* out ) const;
 
     /**
      * Write the contents of object as #UTF8 out to an #OUTPUTFORMATTER as an S-expression.
@@ -88,10 +86,15 @@ public:
      * This is the same as Format() except that the outer wrapper is not included.
      *
      * @param out The formatter to write to.
-     * @param nestLevel A multiple of the number of spaces to precede the output with.
      * @throw IO_ERROR if a system error writing the output, such as a full disk.
      */
-    virtual void FormatContents( OUTPUTFORMATTER* out, int nestLevel );
+    void FormatContents( OUTPUTFORMATTER* out ) const;
+
+    /**
+     * 
+     * @return the contents of the object as a UTF-8 string, pretty-printed
+     */
+    wxString Format() const;
 
 };
 

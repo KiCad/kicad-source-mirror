@@ -38,7 +38,7 @@ bool NETLIST_EXPORTER_KICAD::WriteNetlist( const wxString& aOutFileName, unsigne
 {
     try
     {
-        FILE_OUTPUTFORMATTER formatter( aOutFileName );
+        PRETTIFIED_FILE_OUTPUTFORMATTER formatter( aOutFileName );
         Format( &formatter, GNL_ALL | GNL_OPT_KICAD );
     }
 
@@ -56,5 +56,5 @@ void NETLIST_EXPORTER_KICAD::Format( OUTPUTFORMATTER* aOut, int aCtl )
 {
     std::unique_ptr<XNODE> xroot( makeRoot( aCtl ) );
 
-    xroot->Format( aOut, 0 );
+    xroot->Format( aOut );
 }

@@ -474,6 +474,11 @@ public:
         return m_mystring;
     }
 
+    std::string& MutableString()
+    {
+        return m_mystring;
+    }
+
 protected:
     void write( const char* aOutBuf, int aCount ) override;
 
