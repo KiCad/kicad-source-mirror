@@ -25,6 +25,8 @@
 #ifndef XNODE_H_
 #define XNODE_H_
 
+#include <variant>
+
 // quiet the deprecated warnings with 3 lines:
 #include <wx/defs.h>
 #undef wxDEPRECATED
@@ -34,6 +36,29 @@
 #include <kicommon.h>
 
 class OUTPUTFORMATTER;
+class KIID;
+
+class KICOMMON_API XATTR : public wxXmlAttribute
+{
+public:
+    typedef std::variant<wxString, int, double> VALUE_TYPE;
+
+    XATTR()
+    {}
+
+    XATTR( const wxString& aName, const VALUE_TYPE& aValue ) :
+        wxXmlAttribute( aName, wxEmptyString ),
+        m_originalValue( aValue )
+    {
+    }
+
+    void SetValue( const VALUE_TYPE& aValue ) { m_originalValue = aValue; }
+
+    VALUE_TYPE GetValue() const { return m_originalValue; }
+
+private:
+    VALUE_TYPE m_originalValue;
+};
 
 /**
  * An extension of wxXmlNode that can format its contents as KiCad-style s-expressions
@@ -52,25 +77,39 @@ public:
     }
 
     XNODE( XNODE* aParent, wxXmlNodeType aType, const wxString& aName,
-           const wxString& aContent = wxEmptyString, wxXmlAttribute* aProperties = nullptr ) :
+           const wxString& aContent = wxEmptyString, XATTR* aProperties = nullptr ) :
         wxXmlNode( aParent, aType, aName, aContent, aProperties )
     {
     }
 
+    void AddAttribute( const wxString& aName, const wxString& aValue ) override;
+
+    void AddAttribute( const wxString& aName, int aValue );
+
+    void AddAttribute( const wxString& aName, double aValue );
+
+    void AddAttribute( wxXmlAttribute* aAttr ) override
+    {
+        wxASSERT_MSG( dynamic_cast<XATTR*>( aAttr ), "use XATTR instead of wxXmlAttribute!" );
+        return wxXmlNode::AddAttribute( aAttr );
+    }
+
     XNODE* GetChildren() const
     {
-        return static_cast<XNODE *>( wxXmlNode::GetChildren() );
+        return static_cast<XNODE*>( wxXmlNode::GetChildren() );
     }
 
     XNODE* GetNext() const
     {
-        return static_cast<XNODE *>( wxXmlNode::GetNext() );
+        return static_cast<XNODE*>( wxXmlNode::GetNext() );
     }
 
     XNODE* GetParent() const
     {
-        return static_cast<XNODE *>( wxXmlNode::GetParent() );
+        return static_cast<XNODE*>( wxXmlNode::GetParent() );
     }
+
+    void AddBool( const wxString& aKey, bool aValue );
 
     /**
      * Write this object as #UTF8 out to an #OUTPUTFORMATTER as an S-expression.
