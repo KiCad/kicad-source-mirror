@@ -9,6 +9,7 @@
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
+#include <wx/intl.h>
 class STD_BITMAP_BUTTON;
 class WX_GRID;
 
@@ -66,7 +67,7 @@ class DIALOG_DESIGN_BLOCK_PROPERTIES_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_DESIGN_BLOCK_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Design Block Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_DESIGN_BLOCK_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Design Block Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_DESIGN_BLOCK_PROPERTIES_BASE();
 
