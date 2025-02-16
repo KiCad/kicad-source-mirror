@@ -22,17 +22,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-15 06:04+0300\n"
-"PO-Revision-Date: 2025-02-12 01:02+0000\n"
+"PO-Revision-Date: 2025-02-16 13:37+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.10\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -7016,9 +7016,9 @@ msgid "* [new] %s %s"
 msgstr "* [новое] %s %s"
 
 #: common/git/kicad_git_common.cpp:702
-#, fuzzy, c-format
+#, c-format
 msgid "Writing objects: %lld%% (%u/%u), %zu bytes"
-msgstr "Запись объектов: %d%% (%d/%d), %d байт"
+msgstr "Запись объектов: %lld%% (%u/%u), %zu байт"
 
 #: common/git/kicad_git_common.cpp:717
 #, c-format
@@ -10594,7 +10594,7 @@ msgstr "Сохранить в схеме"
 
 #: cvpcb/tools/cvpcb_actions.cpp:73
 msgid "Save footprint assignments in 'footprint' fields of schematic symbols"
-msgstr "Сохранение назначений отпечатков в полях \"отпечаток\" символов схемы"
+msgstr "Сохранить назначения посад. мест в полях 'Посад. место' символов схемы"
 
 #: cvpcb/tools/cvpcb_actions.cpp:81
 msgid "Save to Schematic and File"
@@ -10605,8 +10605,8 @@ msgid ""
 "Save footprint assignments in 'footprint' fields of schematic symbols and "
 "then save schematic files"
 msgstr ""
-"Сохранение назначений отпечатков в полях ''отпечаток'' символов схемы и "
-"последующее сохранение файлов схемы"
+"Сохранить назначения посад. мест в полях 'Посад. место' символов схемы, а "
+"затем сохранить файлы схемы"
 
 #: cvpcb/tools/cvpcb_actions.cpp:105
 msgid "Select Next Unassigned Symbol"
@@ -10626,7 +10626,7 @@ msgstr "Выбрать предыдущий символ без назначен
 
 #: cvpcb/tools/cvpcb_actions.cpp:126
 msgid "Assign Footprint"
-msgstr "Назначить отпечаток"
+msgstr "Назначить посад. место"
 
 #: cvpcb/tools/cvpcb_actions.cpp:132
 msgid "Automatically Assign Footprints"
@@ -16836,7 +16836,8 @@ msgstr "Посад. место '%s' не найдено в библиотеке 
 #: eeschema/erc/erc.cpp:1619
 #, c-format
 msgid "Assigned footprint (%s) doesn't match footprint filters (%s)."
-msgstr "Назначенный отпечаток (%s) не соответствует фильтрам отпечатков (%s)."
+msgstr ""
+"Назначенное посад. место (%s) не соответствует фильтрам посад. мест (%s)."
 
 #: eeschema/erc/erc.cpp:1781
 msgid "Checking sheet names..."
@@ -17055,7 +17056,7 @@ msgstr "Проблема связи с посадочным местом"
 
 #: eeschema/erc/erc_item.cpp:192
 msgid "Assigned footprint doesn't match footprint filters"
-msgstr "Назначенный отпечаток не соответствует фильтрам отпечатков"
+msgstr "Назначенное посад. место не соответствует фильтрам посад. мест"
 
 #: eeschema/erc/erc_item.cpp:196
 msgid "Symbol is not annotated"
@@ -24016,7 +24017,7 @@ msgstr "Повторить вывод"
 
 #: eeschema/widgets/design_block_pane.cpp:40
 msgid "Place as sheet"
-msgstr "Место в виде листа"
+msgstr "Разместить как лист"
 
 #: eeschema/widgets/design_block_pane.cpp:41
 msgid "Keep annotations"
@@ -41043,7 +41044,7 @@ msgstr "Атрибуты посад. места не совпадают с си�
 
 #: pcbnew/drc/drc_item.cpp:207
 msgid "Footprint doesn't match symbol's footprint filters"
-msgstr "Отпечаток не соответствует фильтрам отпечатков символов"
+msgstr "Посад. место не соответствует фильтрам посад. мест символа"
 
 #: pcbnew/drc/drc_item.cpp:211
 msgid "Footprint not found in libraries"
@@ -41894,7 +41895,7 @@ msgstr "Значение (%s) не совпадает со значением с
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:147
 #, c-format
 msgid "%s doesn't match footprint given by symbol (%s)."
-msgstr "%s не совпадает с отпечатком, заданным символом (%s)."
+msgstr "%s не соответствует посад. месту, заданному в символе (%s)."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:169
 #, c-format
@@ -47898,8 +47899,8 @@ msgid ""
 "The footprint could not be added to the selected library ('%s'). This "
 "library is read-only."
 msgstr ""
-"Отпечаток не удалось добавить в выбранную библиотеку ('%s'). Эта библиотека "
-"доступна только для чтения."
+"Посад. место не удалось добавить в выбранную библиотеку ('%s'). Эта "
+"библиотека доступна только для чтения."
 
 #: pcbnew/tools/footprint_editor_control.cpp:405
 msgid "_copy"
