@@ -1,0 +1,8 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "LordsBoards-Graphic")(type "KiCad")(uri "${KIPRJMOD}/lib/symbols/LordsBoards-Graphic.kicad_sym")(options "")(descr ""))
+  (lib (name "nordic-lib-kicad-nrf54-modules")(type "KiCad")(uri "${KIPRJMOD}/lib/nordic-lib-kicad/symbols/nordic-lib-kicad-nrf54-modules.kicad_sym")(options "")(descr ""))
+  (lib (name "nordic-lib-kicad-nrf52")(type "KiCad")(uri "${KIPRJMOD}/lib/nordic-lib-kicad/symbols/nordic-lib-kicad-nrf52.kicad_sym")(options "")(descr ""))
+  (lib (name "nordic-lib-kicad-npm")(type "KiCad")(uri "${KIPRJMOD}/lib/nordic-lib-kicad/symbols/nordic-lib-kicad-npm.kicad_sym")(options "")(descr ""))
+  (lib (name "hlord2000-Device")(type "KiCad")(uri "${KIPRJMOD}/lib/hlord2000-kicad-libraries/symbols/hlord2000-Device.kicad_sym")(options "")(descr ""))
+)

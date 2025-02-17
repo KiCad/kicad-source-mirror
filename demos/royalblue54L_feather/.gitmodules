@@ -1,0 +1,6 @@
+[submodule "lib/lib/marbastlib"]
+	path = lib/lib/marbastlib
+	url = https://github.com/ebastler/marbastlib
+[submodule "lib/lib/nordic-lib-kicad"]
+	path = lib/lib/nordic-lib-kicad
+	url = https://github.com/hlord2000/nordic-lib-kicad

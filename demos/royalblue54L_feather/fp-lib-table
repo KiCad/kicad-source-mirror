@@ -1,0 +1,12 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "RoyalBlue54L-Feather-Connector_PinHeader_2.54mm")(type "KiCad")(uri "${KIPRJMOD}/lib/footprints/RoyalBlue54L-Feather-Connector_PinHeader_2.54mm.pretty")(options "")(descr ""))
+  (lib (name "RoyalBlue54L-Feather-MountingHole")(type "KiCad")(uri "${KIPRJMOD}/lib/footprints/RoyalBlue54L-Feather-MountingHole.pretty")(options "")(descr ""))
+  (lib (name "RoyalBlue54L-Feather-Connector_USB")(type "KiCad")(uri "${KIPRJMOD}/lib/footprints/RoyalBlue54L-Feather-Connector_USB.pretty")(options "")(descr ""))
+  (lib (name "RoyalBlue54L-Feather-Symbol")(type "KiCad")(uri "${KIPRJMOD}/lib/footprints/RoyalBlue54L-Feather-Symbol.pretty")(options "")(descr ""))
+  (lib (name "RoyalBlue54L-Feather-Connector_FFC-FPC")(type "KiCad")(uri "${KIPRJMOD}/lib/footprints/RoyalBlue54L-Feather-Connector_FFC-FPC.pretty")(options "")(descr ""))
+  (lib (name "marbastlib-various")(type "KiCad")(uri "${KIPRJMOD}/lib/marbastlib/footprints/marbastlib-various.pretty")(options "")(descr ""))
+  (lib (name "nordic-lib-kicad-nrf54-modules")(type "KiCad")(uri "${KIPRJMOD}/lib/nordic-lib-kicad/footprints/nordic-lib-kicad-nrf54-modules.pretty")(options "")(descr ""))
+  (lib (name "LordsBoards-Symbol")(type "KiCad")(uri "${KIPRJMOD}/lib/footprints/LordsBoards-Symbol.pretty")(options "")(descr ""))
+  (lib (name "RoyalBlue54L-Module")(type "KiCad")(uri "${KIPRJMOD}/lib/footprints/RoyalBlue54L-Module.pretty")(options "")(descr ""))
+)
