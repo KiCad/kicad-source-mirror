@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 08:10+0300\n"
-"PO-Revision-Date: 2025-02-16 14:27+0000\n"
+"PO-Revision-Date: 2025-02-17 17:18+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v8/ru/>\n"
 "Language: ru\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.10.1-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -10197,7 +10197,7 @@ msgstr "Изменить игнорируемые проверки"
 #: pcbnew/dialogs/dialog_drc_base.cpp:158
 #, c-format
 msgid "Ignored Tests (%s)"
-msgstr "Игнорируемые тесты (%s)"
+msgstr "Игнорированные проверки (%s)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:148
 #: pcbnew/dialogs/dialog_drc_base.cpp:198
@@ -23308,7 +23308,7 @@ msgstr "Выходной формат файла, варианты: json, report
 
 #: kicad/cli/command_pcb_drc.cpp:56 pcbnew/dialogs/dialog_drc_base.cpp:30
 msgid "Report all errors for each track"
-msgstr "Сообщать обо всех ошибках каждой дорожки"
+msgstr "Сообщать о всех ошибках для каждой дорожки"
 
 #: kicad/cli/command_pcb_drc.cpp:60 pcbnew/dialogs/dialog_drc_base.cpp:41
 msgid "Test for parity between PCB and schematic"
@@ -23610,7 +23610,7 @@ msgstr "Отключить макросы апертуры"
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:87
 #: pcbnew/dialogs/dialog_plot_base.cpp:140
 msgid "Use drill/place file origin"
-msgstr "Использовать начало координат сверловки/размещения"
+msgstr "Исп. начало координат сверловки/размещения"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:77
 msgid "Precision of Gerber coordinates, valid options: 5 or 6"
@@ -33860,7 +33860,7 @@ msgstr "Принудительно чертить скрытые значени�
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:97
 msgid "Sketch pads on fabrication layers"
-msgstr "Конт. пл. в контурном режиме на произв. слоях"
+msgstr "Конт. пл. в контурном режиме на Fab слоях"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
@@ -34001,7 +34001,7 @@ msgstr "4.6, ед.изм. мм"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:227
 msgid "Use extended X2 format (recommended)"
-msgstr "Использовать расширенный формат X2 (рекомендуется)"
+msgstr "Исп. расширенный формат X2 (рекомендуется)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:228
 msgid ""
@@ -37912,7 +37912,7 @@ msgstr "Неполное подключение терморазгрузки к 
 
 #: pcbnew/drc/drc_item.cpp:93
 msgid "Via is not connected or connected on only one layer"
-msgstr "Перех. отв. не подключено или подключено только к одному слою"
+msgstr "Перех. отв. не подключено или подключено к одному слою"
 
 #: pcbnew/drc/drc_item.cpp:97
 msgid "Track has unconnected end"
@@ -38024,7 +38024,7 @@ msgstr "Тонкий участок меди"
 
 #: pcbnew/drc/drc_item.cpp:213
 msgid "Solder mask aperture bridges items with different nets"
-msgstr "Апертура паяльной маски объединяет элементы с различ. цепями"
+msgstr "Апертура паяльной маски объединяет элем. с различ. цепями"
 
 #: pcbnew/drc/drc_item.cpp:217
 msgid "Silkscreen clipped by solder mask"
