@@ -175,6 +175,29 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
 }
 
 
+wxGridCellAttr* FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol,
+                                                        wxGridCellAttr::wxAttrKind aKind )
+{
+    if( GetColFieldName( aCol ) == GetCanonicalFieldName( DATASHEET_FIELD )
+            || IsURL( GetValue( m_rows[aRow], aCol ) ) )
+    {
+        if( m_urlEditor )
+        {
+            m_urlEditor->IncRef();
+            return enhanceAttr( m_urlEditor, aRow, aCol, aKind );
+        }
+    }
+
+    if( m_colAttrs[aCol] )
+    {
+        m_colAttrs[aCol]->IncRef();
+        return enhanceAttr( m_colAttrs[aCol], aRow, aCol, aKind );
+    }
+
+    return nullptr;
+}
+
+
 wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, int aCol,
                                                   const wxString& refDelimiter,
                                                   const wxString& refRangeDelimiter,

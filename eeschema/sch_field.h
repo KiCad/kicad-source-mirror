@@ -31,6 +31,7 @@
 #include <sch_item.h>
 #include <template_fieldnames.h>
 #include <general.h>
+#include <string_utils.h>
 #include "scintilla_tricks.h"
 
 class SCH_EDIT_FRAME;
@@ -103,7 +104,10 @@ public:
 
     bool IsHypertext() const override
     {
-        return GetCanonicalName() == wxT( "Intersheetrefs" );
+        if( GetCanonicalName() == wxT( "Intersheetrefs" ) )
+            return true;
+
+        return IsURL( GetShownText( false ) );
     }
 
     void DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const override;

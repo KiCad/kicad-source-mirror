@@ -221,7 +221,11 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
     m_fieldsCtrl->SetIndent( 0 );
 
     m_filter->SetDescriptiveText( _( "Filter" ) );
-    m_dataModel = new FIELDS_EDITOR_GRID_DATA_MODEL( m_symbolsList );
+
+    wxGridCellAttr* attr = new wxGridCellAttr;
+    attr->SetEditor( new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ),
+                                               &m_parent->Schematic() ) );
+    m_dataModel = new FIELDS_EDITOR_GRID_DATA_MODEL( m_symbolsList, attr );
 
     LoadFieldNames();   // loads rows into m_fieldsCtrl and columns into m_dataModel
 
@@ -294,9 +298,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
             BOM_FIELD field;
             field.name = fieldName;
             field.show = !fieldName.StartsWith( wxT( "__" ), &field.name );
-            field.groupBy = std::find( m_job->m_fieldsGroupBy.begin(), m_job->m_fieldsGroupBy.end(),
-                                       field.name )
-                            != m_job->m_fieldsGroupBy.end();
+            field.groupBy = alg::contains( m_job->m_fieldsGroupBy, field.name );
 
             if( ( m_job->m_fieldsLabels.size() > i ) && !m_job->m_fieldsLabels[i].IsEmpty() )
                 field.label = m_job->m_fieldsLabels[i];
@@ -413,43 +415,43 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties( int aCol )
     if( m_dataModel->ColIsReference( aCol ) )
     {
         attr->SetReadOnly();
-        m_grid->SetColAttr( aCol, attr );
+        m_dataModel->SetColAttr( attr, aCol );
     }
     else if( m_dataModel->GetColFieldName( aCol ) == GetCanonicalFieldName( FOOTPRINT_FIELD ) )
     {
         attr->SetEditor( new GRID_CELL_FPID_EDITOR( this, wxEmptyString ) );
-        m_grid->SetColAttr( aCol, attr );
+        m_dataModel->SetColAttr( attr, aCol );
     }
     else if( m_dataModel->GetColFieldName( aCol ) == GetCanonicalFieldName( DATASHEET_FIELD ) )
     {
         // set datasheet column viewer button
         attr->SetEditor( new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ),
                                                    &m_parent->Schematic() ) );
-        m_grid->SetColAttr( aCol, attr );
+        m_dataModel->SetColAttr( attr, aCol );
     }
     else if( m_dataModel->ColIsQuantity( aCol ) || m_dataModel->ColIsItemNumber( aCol ) )
     {
         attr->SetReadOnly();
-        m_grid->SetColAttr( aCol, attr );
         attr->SetAlignment( wxALIGN_RIGHT, wxALIGN_CENTER );
         attr->SetRenderer( new wxGridCellNumberRenderer() );
+        m_dataModel->SetColAttr( attr, aCol );
     }
     else if( m_dataModel->ColIsAttribute( aCol ) )
     {
         attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
         attr->SetRenderer( new wxGridCellBoolRenderer() );
         attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
-        m_grid->SetColAttr( aCol, attr );
+        m_dataModel->SetColAttr( attr, aCol );
     }
     else if( IsTextVar( m_dataModel->GetColFieldName( aCol ) ) )
     {
         attr->SetReadOnly();
-        m_grid->SetColAttr( aCol, attr );
+        m_dataModel->SetColAttr( attr, aCol );
     }
     else
     {
         attr->SetEditor( m_grid->GetDefaultEditor() );
-        m_grid->SetColAttr( aCol, attr );
+        m_dataModel->SetColAttr( attr, aCol );
     }
 }
 

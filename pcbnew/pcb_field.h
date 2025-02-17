@@ -72,6 +72,8 @@ public:
 
     bool IsMandatory() const;
 
+    bool IsHypertext() const;
+
     wxString GetTextTypeDescription() const override;
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;

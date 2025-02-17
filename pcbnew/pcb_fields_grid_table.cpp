@@ -223,7 +223,7 @@ wxGridCellAttr* PCB_FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol,
             m_valueAttr->IncRef();
             return enhanceAttr( m_valueAttr, aRow, aCol, aKind );
         }
-        else if( field.GetId() == DATASHEET_FIELD )
+        else if( field.GetId() == DATASHEET_FIELD || field.IsHypertext() )
         {
             m_urlAttr->IncRef();
             return enhanceAttr( m_urlAttr, aRow, aCol, aKind );

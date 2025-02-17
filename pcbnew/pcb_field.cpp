@@ -28,6 +28,7 @@
 #include <i18n_utility.h>
 #include <pcb_painter.h>
 #include <api/board/board_types.pb.h>
+#include <string_utils.h>
 
 
 PCB_FIELD::PCB_FIELD( FOOTPRINT* aParent, int aFieldId, const wxString& aName ) :
@@ -139,6 +140,12 @@ bool PCB_FIELD::IsMandatory() const
         || m_id == VALUE_FIELD
         || m_id == DATASHEET_FIELD
         || m_id == DESCRIPTION_FIELD;
+}
+
+
+bool PCB_FIELD::IsHypertext() const
+{
+    return IsURL( GetShownText( false ) );
 }
 
 

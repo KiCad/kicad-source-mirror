@@ -87,11 +87,6 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
     SYMBOL_EDITOR_SETTINGS* cfg = m_Parent->GetSettings();
     m_grid->ShowHideColumns( cfg->m_EditSymbolVisibleColumns );
 
-    wxGridCellAttr* attr = new wxGridCellAttr;
-    attr->SetEditor( new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ),
-                                               m_embeddedFiles->GetLocalFiles() ) );
-    m_grid->SetAttr( DATASHEET_FIELD, FDC_VALUE, attr );
-
     m_SymbolNameCtrl->SetValidator( FIELD_VALIDATOR( VALUE_FIELD ) );
 
     // Configure button logos
