@@ -1,7 +1,6 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2023 <author>
  * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -19,6 +18,7 @@
  */
 #include <sch_reference_list.h>
 #include <wx/grid.h>
+#include <widgets/wx_grid.h>
 
 // The field name in the data model (translated)
 #define DISPLAY_NAME_COLUMN   0
@@ -70,7 +70,7 @@ struct DATA_MODEL_COL
 };
 
 
-class FIELDS_EDITOR_GRID_DATA_MODEL : public wxGridTableBase
+class FIELDS_EDITOR_GRID_DATA_MODEL : public WX_GRID_TABLE_BASE
 {
 public:
     enum SCOPE : int
@@ -80,7 +80,7 @@ public:
         SCOPE_SHEET_RECURSIVE = 2
     };
 
-    FIELDS_EDITOR_GRID_DATA_MODEL( SCH_REFERENCE_LIST& aSymbolsList ) :
+    FIELDS_EDITOR_GRID_DATA_MODEL( SCH_REFERENCE_LIST& aSymbolsList, wxGridCellAttr* aURLEditor ) :
             m_symbolsList( aSymbolsList ),
             m_edited( false ),
             m_sortColumn( 0 ),
@@ -89,9 +89,19 @@ public:
             m_groupingEnabled( false ),
             m_excludeDNP( false ),
             m_includeExcluded( false ),
-            m_rebuildsEnabled( true )
+            m_rebuildsEnabled( true ),
+            m_urlEditor( aURLEditor )
     {
         m_symbolsList.SplitReferences();
+    }
+
+    ~FIELDS_EDITOR_GRID_DATA_MODEL() override
+    {
+        if( m_urlEditor )
+            m_urlEditor->DecRef();
+
+        for( const auto& [col, attr] : m_colAttrs )
+            wxSafeDecRef( attr );
     }
 
     static const wxString QUANTITY_VARIABLE;
@@ -154,6 +164,8 @@ public:
     }
 
     wxString GetValue( int aRow, int aCol ) override;
+    wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind ) override;
+
     wxString GetValue( const DATA_MODEL_ROW& group, int aCol,
                        const wxString& refDelimiter = wxT( ", " ),
                        const wxString& refRangDelimiter = wxT( "-" ),
@@ -265,6 +277,11 @@ public:
     void RemoveSymbol( const SCH_SYMBOL& aSymbol );
     void UpdateReferences( const SCH_REFERENCE_LIST& aRefs );
 
+    void SetColAttr( wxGridCellAttr* aAttr, int aCol ) override
+    {
+        wxSafeDecRef( m_colAttrs[aCol] );
+        m_colAttrs[aCol] = aAttr;
+    }
 
 private:
     static bool cmp( const DATA_MODEL_ROW& lhGroup, const DATA_MODEL_ROW& rhGroup,
@@ -303,6 +320,9 @@ protected:
     bool               m_excludeDNP;
     bool               m_includeExcluded;
     bool               m_rebuildsEnabled;
+
+    wxGridCellAttr*                m_urlEditor;
+    std::map<int, wxGridCellAttr*> m_colAttrs;
 
     std::vector<DATA_MODEL_COL> m_cols;
     std::vector<DATA_MODEL_ROW> m_rows;

@@ -604,7 +604,7 @@ wxGridCellAttr* FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::
             const TEMPLATE_FIELDNAME* templateFn =
                     settings ? settings->m_TemplateFieldNames.GetFieldName( fn ) : nullptr;
 
-            if( templateFn && templateFn->m_URL )
+            if( ( templateFn && templateFn->m_URL ) || field.IsHypertext() )
             {
                 m_urlAttr->IncRef();
                 return enhanceAttr( m_urlAttr, aRow, aCol, aKind );

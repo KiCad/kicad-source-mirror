@@ -530,7 +530,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
         m_reporter->Report( _( "Warning: duplicate sheet names.\n" ), RPT_SEVERITY_WARNING );
 
     // Build our data model
-    FIELDS_EDITOR_GRID_DATA_MODEL dataModel( referenceList );
+    FIELDS_EDITOR_GRID_DATA_MODEL dataModel( referenceList, nullptr );
 
     // Mandatory fields + quantity virtual field first
     for( int fieldId : MANDATORY_FIELDS )
