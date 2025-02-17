@@ -212,6 +212,9 @@ void EDA_DATA::AddPackage( const FOOTPRINT* aFp )
     size_t   pkg_index = packages_map.size();
     wxString fp_name = fp->GetFPID().GetLibItemName().wx_str();
     ODB::RemoveWhitespace( fp_name );
+    
+    if( fp_name.IsEmpty() )
+        fp_name = wxS( "__" );
 
     auto [iter, success] = packages_map.emplace( hash, PACKAGE( pkg_index, fp_name ) );
 
