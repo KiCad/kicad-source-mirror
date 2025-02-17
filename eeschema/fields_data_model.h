@@ -97,8 +97,7 @@ public:
 
     ~FIELDS_EDITOR_GRID_DATA_MODEL() override
     {
-        if( m_urlEditor )
-            m_urlEditor->DecRef();
+        wxSafeDecRef( m_urlEditor );
 
         for( const auto& [col, attr] : m_colAttrs )
             wxSafeDecRef( attr );
