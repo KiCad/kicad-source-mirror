@@ -115,11 +115,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-15 06:04+0300\n"
+"POT-Creation-Date: 2025-02-17 08:10+0300\n"
 "PO-Revision-Date: 2025-02-16 17:56+0000\n"
 "Last-Translator: Luca Mattii <luca@glgprograms.it>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
-"master-source/it/>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
+"source/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -457,7 +457,7 @@ msgstr "Permessi insufficienti per salvare il file '%s'."
 #: eeschema/dialogs/dialog_erc.cpp:878
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1813
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2215
-#: eeschema/erc/erc_item.cpp:84 eeschema/files-io.cpp:943
+#: eeschema/erc/erc_item.cpp:81 eeschema/files-io.cpp:943
 #: eeschema/files-io.cpp:1011 eeschema/sch_marker.cpp:376
 #: kicad/import_proj.cpp:79 kicad/import_project.cpp:123 kicad/kicad.cpp:318
 #: kicad/tools/kicad_manager_control.cpp:269
@@ -476,7 +476,7 @@ msgstr "Permessi insufficienti per salvare il file '%s'."
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:203
 #: pcbnew/dialogs/dialog_drc.cpp:984
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:392
-#: pcbnew/drc/drc_item.cpp:231 pcbnew/pcb_marker.cpp:211
+#: pcbnew/drc/drc_item.cpp:228 pcbnew/pcb_marker.cpp:211
 #: pcbnew/widgets/appearance_controls.cpp:2765
 msgid "Error"
 msgstr "Errore"
@@ -1977,7 +1977,7 @@ msgstr "&OK"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:593
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:154
 #: eeschema/dialogs/panel_template_fieldnames.cpp:212
-#: eeschema/erc/erc_item.cpp:80 eeschema/files-io.cpp:452
+#: eeschema/erc/erc_item.cpp:77 eeschema/files-io.cpp:452
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:261
 #: eeschema/sch_marker.cpp:373 eeschema/sheet.cpp:780
 #: eeschema/symbol_editor/symbol_editor.cpp:134
@@ -1985,7 +1985,7 @@ msgstr "&OK"
 #: eeschema/symbol_editor/symbol_editor.cpp:1156
 #: eeschema/symbol_editor/symbol_editor.cpp:1554
 #: pcbnew/dialogs/dialog_drc.cpp:985 pcbnew/dialogs/dialog_export_vrml.cpp:128
-#: pcbnew/drc/drc_item.cpp:227 pcbnew/import_gfx/dialog_import_graphics.cpp:293
+#: pcbnew/drc/drc_item.cpp:224 pcbnew/import_gfx/dialog_import_graphics.cpp:293
 #: pcbnew/pcb_marker.cpp:208
 msgid "Warning"
 msgstr "Attenzione"
@@ -2092,33 +2092,33 @@ msgstr "Il file metadati blocchi progetto '%s' non può essere letto."
 msgid "Design block does not have a valid library ID."
 msgstr "Il blocco progetto non ha un ID libreria valido."
 
-#: common/design_block_io.cpp:358
+#: common/design_block_io.cpp:360
 #, c-format
 msgid "Schematic source file '%s' does not exist."
 msgstr "Il file schema sorgente '%s' non esiste."
 
-#: common/design_block_io.cpp:372
+#: common/design_block_io.cpp:374
 #, c-format
 msgid "Design block folder '%s' could not be created."
 msgstr "La cartella blocco progetto '%s' non può essere creata."
 
-#: common/design_block_io.cpp:389
+#: common/design_block_io.cpp:391
 #, c-format
 msgid "Schematic file '%s' could not be saved as design block at '%s'."
 msgstr ""
 "Il file schema \"%s\" non può essere salvato come blocco progetto su '%s'."
 
-#: common/design_block_io.cpp:423
+#: common/design_block_io.cpp:425
 #, c-format
 msgid "Design block metadata file '%s' could not be saved."
 msgstr "Il file metadati blocco progetto '%s' non può essere salvato."
 
-#: common/design_block_io.cpp:437
+#: common/design_block_io.cpp:439
 #, c-format
 msgid "Design block '%s' does not exist."
 msgstr "Il blocco progetto '%s' non esiste."
 
-#: common/design_block_io.cpp:443
+#: common/design_block_io.cpp:445
 #, c-format
 msgid "Design block folder '%s' could not be deleted."
 msgstr "La cartella blocco progetto '%s' non può essere eliminata."
@@ -2541,6 +2541,7 @@ msgstr "Variabili ambiente"
 #: common/dialogs/panel_design_block_lib_table.cpp:410
 #: common/dialogs/panel_setup_netclasses_base.cpp:51
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:88
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:42
 #: eeschema/dialogs/dialog_label_properties_base.cpp:87
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:121
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:89
@@ -2765,6 +2766,7 @@ msgid "Grid size Y out of range."
 msgstr "Dimensione griglia Y fuori portata."
 
 #: common/dialogs/dialog_grid_settings_base.cpp:25
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:97
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:109
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:32
 #: eeschema/symbol_editor/symbol_editor.cpp:860
@@ -3097,7 +3099,7 @@ msgstr "Riquadro iscrizioni"
 #: common/dialogs/dialog_page_settings.cpp:487
 #: eeschema/eeschema_jobs_handler.cpp:230 pagelayout_editor/files.cpp:243
 #: pagelayout_editor/pl_editor_frame.cpp:359
-#: pcbnew/pcbnew_jobs_handler.cpp:2113
+#: pcbnew/pcbnew_jobs_handler.cpp:2143
 #, c-format
 msgid "Error loading drawing sheet '%s'."
 msgstr "Errore caricando il foglio di disegno '%s'."
@@ -3196,7 +3198,7 @@ msgid "Export to other sheets"
 msgstr "Esporta su altri fogli"
 
 #: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:444
-#: eeschema/erc/erc_item.cpp:427 eeschema/sch_marker.cpp:384
+#: eeschema/erc/erc_item.cpp:424 eeschema/sch_marker.cpp:384
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:105
 #: gerbview/widgets/gerbview_layer_widget.cpp:137 pcbnew/pcb_marker.cpp:219
 #: pcbnew/widgets/appearance_controls.cpp:350
@@ -3355,6 +3357,7 @@ msgstr "Opzione"
 #: common/dialogs/dialog_plugin_options_base.cpp:44
 #: common/dialogs/panel_design_block_lib_table.cpp:411
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:89
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:43
 #: eeschema/dialogs/dialog_label_properties_base.cpp:88
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:60
 #: eeschema/dialogs/dialog_rescue_each.cpp:135
@@ -6974,7 +6977,7 @@ msgstr "Visualizzatore PDF non trovato per '%s'."
 msgid "Problem while running the PDF viewer '%s'."
 msgstr "Problema eseguendo il visualizzare PDF '%s'."
 
-#: common/gestfich.cpp:299 eeschema/eeschema.cpp:576 eeschema/eeschema.cpp:611
+#: common/gestfich.cpp:299 eeschema/eeschema.cpp:650 eeschema/eeschema.cpp:685
 #: gerbview/gerbview.cpp:243 kicad/project_template.cpp:309
 #: pcbnew/pcbnew.cpp:577
 #, c-format
@@ -7503,12 +7506,12 @@ msgstr "Parametro \"%s\" sconosciuto in \"%s\""
 msgid "Unable to parse '%s' in '%s'"
 msgstr "Impossibile analizzare \"%s\" in \"%s\""
 
-#: common/io/eagle/eagle_parser.cpp:287
+#: common/io/eagle/eagle_parser.cpp:288
 #, c-format
 msgid "Invalid size %lld: too large"
 msgstr "Dimensione non valida %lld: troppo larga"
 
-#: common/io/eagle/eagle_parser.cpp:506
+#: common/io/eagle/eagle_parser.cpp:507
 #, c-format
 msgid "Invalid Arc with radius %f and angle %f"
 msgstr "Arco non valido con raggio %f e angolo %f"
@@ -8499,20 +8502,20 @@ msgstr "Archivio zip \"%s\" creato (%s non compressi, %s compressi)."
 msgid "Error: '%s'."
 msgstr "Errore: '%s'."
 
-#: common/rc_item.cpp:425 eeschema/erc/erc_item.cpp:407
+#: common/rc_item.cpp:425 eeschema/erc/erc_item.cpp:404
 msgid "Excluded warning: "
 msgstr "Avviso esclusione: "
 
-#: common/rc_item.cpp:427 eeschema/erc/erc_item.cpp:409
+#: common/rc_item.cpp:427 eeschema/erc/erc_item.cpp:406
 msgid "Excluded error: "
 msgstr "Errore esclusione: "
 
-#: common/rc_item.cpp:431 eeschema/erc/erc_item.cpp:413
+#: common/rc_item.cpp:431 eeschema/erc/erc_item.cpp:410
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1422
 msgid "Warning: "
 msgstr "Attenzione: "
 
-#: common/rc_item.cpp:435 eeschema/erc/erc_item.cpp:417
+#: common/rc_item.cpp:435 eeschema/erc/erc_item.cpp:414
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1420
 msgid "Error: "
 msgstr "Errore: "
@@ -10853,7 +10856,7 @@ msgstr ""
 "La connessione %s è collegata graficamente al bus %s ma non è membro di quel "
 "bus"
 
-#: eeschema/connection_graph.cpp:3807 eeschema/erc/erc_item.cpp:232
+#: eeschema/connection_graph.cpp:3807 eeschema/erc/erc_item.cpp:229
 msgid "Unconnected wire endpoint"
 msgstr "Capo filo non connesso"
 
@@ -11113,6 +11116,8 @@ msgstr "Annota schema"
 
 #: eeschema/dialogs/dialog_bom.cpp:85 kicad/dialogs/panel_jobset_base.cpp:199
 #: pcbnew/dialogs/dialog_gendrill.cpp:93
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:60
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:87
 msgid "Generate"
 msgstr "Genera"
 
@@ -11683,6 +11688,28 @@ msgstr "Campo senza titolo"
 #: eeschema/dialogs/dialog_design_block_properties.cpp:234
 msgid "Duplicate fields are not allowed."
 msgstr "Campi duplicati non permessi."
+
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:26
+#, fuzzy
+msgid "Default Fields"
+msgstr "La preimpostazione è 1"
+
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:104
+#: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:137
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:122
+msgid "Keywords:"
+msgstr "Parole chiave:"
+
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:111
+#: kicad/dialogs/dialog_jobset_output_options_base.cpp:28
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:115
+msgid "Description:"
+msgstr "Descrizione:"
+
+#: eeschema/dialogs/dialog_design_block_properties_base.h:70
+#, fuzzy
+msgid "Design Block Properties"
+msgstr "Librerie blocchi progetto"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:550
 #, c-format
@@ -13135,11 +13162,6 @@ msgstr "Aggiungi filtro impronta"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:832
 msgid "Edit Footprint Filter"
 msgstr "Modifica filtro impronte"
-
-#: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:137
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:122
-msgid "Keywords:"
-msgstr "Parole chiave:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:144
 msgid "Derive from symbol:"
@@ -16200,7 +16222,7 @@ msgid "Pin symbol size:"
 msgstr "Dimensione simbolo del pin:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:151
-#: eeschema/erc/erc_item.cpp:42
+#: eeschema/erc/erc_item.cpp:39
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:934
 msgid "Connections"
 msgstr "Connessioni"
@@ -16654,7 +16676,7 @@ msgstr "Mantieni spazi bianchi"
 msgid "URL"
 msgstr "URL"
 
-#: eeschema/eeschema.cpp:387
+#: eeschema/eeschema.cpp:461
 msgid ""
 "An error occurred attempting to load the global symbol library table.\n"
 "Please edit this global symbol library table in Preferences menu."
@@ -16662,7 +16684,7 @@ msgstr ""
 "Errore durante il caricamento della tabella librerie simboli globale.\n"
 "Modificare la tabella globale librerie di simboli nel menu delle preferenze."
 
-#: eeschema/eeschema.cpp:423
+#: eeschema/eeschema.cpp:497
 msgid ""
 "An error occurred attempting to load the global design block library table.\n"
 "Please edit this global design block library table in Preferences menu."
@@ -16672,7 +16694,7 @@ msgstr ""
 "Modificare la tabella globale librerie blocchi progetto nel menu delle "
 "preferenze."
 
-#: eeschema/eeschema.cpp:482
+#: eeschema/eeschema.cpp:556
 #, c-format
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
@@ -16693,7 +16715,7 @@ msgstr "Fallito caricamento schema\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:811 pcbnew/pcbnew_jobs_handler.cpp:892
 #: pcbnew/pcbnew_jobs_handler.cpp:945 pcbnew/pcbnew_jobs_handler.cpp:1106
 #: pcbnew/pcbnew_jobs_handler.cpp:1246 pcbnew/pcbnew_jobs_handler.cpp:1381
-#: pcbnew/pcbnew_jobs_handler.cpp:1791 pcbnew/pcbnew_jobs_handler.cpp:1957
+#: pcbnew/pcbnew_jobs_handler.cpp:1791 pcbnew/pcbnew_jobs_handler.cpp:1987
 msgid "Failed to create output directory\n"
 msgstr "Fallita creazione cartella risultati\n"
 
@@ -16775,7 +16797,7 @@ msgstr "Salvataggio libreria di simboli in formato aggiornato\n"
 msgid "Symbol library was not updated\n"
 msgstr "Libreria di simboli non aggiornata\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1179 pcbnew/pcbnew_jobs_handler.cpp:1884
+#: eeschema/eeschema_jobs_handler.cpp:1179 pcbnew/pcbnew_jobs_handler.cpp:1914
 #, c-format
 msgid "Found %d violations\n"
 msgstr "Trovate %d violazioni\n"
@@ -17053,194 +17075,194 @@ msgstr "Controllo esistenza etichette a più di un filo..."
 msgid "Checking for undefined netclasses..."
 msgstr "Controllo netclass non definite..."
 
-#: eeschema/erc/erc_item.cpp:43
+#: eeschema/erc/erc_item.cpp:40
 msgid "Conflicts"
 msgstr "Conflitti"
 
-#: eeschema/erc/erc_item.cpp:44 pcbnew/dialogs/panel_edit_options_base.cpp:404
-#: pcbnew/drc/drc_item.cpp:50
+#: eeschema/erc/erc_item.cpp:41 pcbnew/dialogs/panel_edit_options_base.cpp:404
+#: pcbnew/drc/drc_item.cpp:47
 msgid "Miscellaneous"
 msgstr "Varie"
 
-#: eeschema/erc/erc_item.cpp:48
+#: eeschema/erc/erc_item.cpp:45
 msgid "Duplicate sheet names within a given sheet"
 msgstr "Duplica il nome del foglio all'interno di un determinato foglio"
 
-#: eeschema/erc/erc_item.cpp:52
+#: eeschema/erc/erc_item.cpp:49
 msgid "Symbol pin or wire end off connection grid"
 msgstr "Pin simbolo o capo filo fuori griglia connessioni"
 
-#: eeschema/erc/erc_item.cpp:56
+#: eeschema/erc/erc_item.cpp:53
 msgid "Pin not connected"
 msgstr "Pin non connesso"
 
-#: eeschema/erc/erc_item.cpp:60
+#: eeschema/erc/erc_item.cpp:57
 msgid "Input pin not driven by any Output pins"
 msgstr "Pin d'ingresso non pilotato da nessun pin d'uscita"
 
-#: eeschema/erc/erc_item.cpp:64
+#: eeschema/erc/erc_item.cpp:61
 msgid "Input Power pin not driven by any Output Power pins"
 msgstr ""
 "Pin di potenza d'ingresso non pilotato da nessun pin di potenza d'uscita"
 
-#: eeschema/erc/erc_item.cpp:68
+#: eeschema/erc/erc_item.cpp:65
 msgid "Multiple pins with the same pin number"
 msgstr "Più pin con lo stesso numero di pin"
 
-#: eeschema/erc/erc_item.cpp:72 eeschema/erc/erc_item.cpp:76
+#: eeschema/erc/erc_item.cpp:69 eeschema/erc/erc_item.cpp:73
 msgid "Conflict problem between pins"
 msgstr "Problema di conflitto tra piedini"
 
-#: eeschema/erc/erc_item.cpp:88
+#: eeschema/erc/erc_item.cpp:85
 msgid "Mismatch between hierarchical labels and sheet pins"
 msgstr "Mancata corrispondenza tra etichette gerarchiche e piedini dei fogli"
 
-#: eeschema/erc/erc_item.cpp:92
+#: eeschema/erc/erc_item.cpp:89
 msgid "Four connection points are joined together"
 msgstr "Quattro punti di collegamento uniti insieme"
 
-#: eeschema/erc/erc_item.cpp:96
+#: eeschema/erc/erc_item.cpp:93
 msgid "Label connects more than one wire"
 msgstr "L'etichetta collega più di un filo"
 
-#: eeschema/erc/erc_item.cpp:100
+#: eeschema/erc/erc_item.cpp:97
 msgid "A pin with a \"no connection\" flag is connected"
 msgstr "Un pin con un flag di \"non connesso\" è connesso"
 
-#: eeschema/erc/erc_item.cpp:104
+#: eeschema/erc/erc_item.cpp:101
 msgid "Unconnected \"no connection\" flag"
 msgstr "Indicatore di \"non connesso\" sconnesso"
 
-#: eeschema/erc/erc_item.cpp:108
+#: eeschema/erc/erc_item.cpp:105
 msgid "Label not connected to anything"
 msgstr "Etichetta non connessa a nulla"
 
-#: eeschema/erc/erc_item.cpp:112
+#: eeschema/erc/erc_item.cpp:109
 msgid "Global label not connected anywhere else in the schematic"
 msgstr "Etichetta globale non connessa da nessun'altra parte nello schema"
 
-#: eeschema/erc/erc_item.cpp:116
+#: eeschema/erc/erc_item.cpp:113
 msgid "Labels are similar (lower/upper case difference only)"
 msgstr ""
 "Le etichette sono simili (differenze solo nei caratteri maiuscoli/minuscoli)"
 
-#: eeschema/erc/erc_item.cpp:120
+#: eeschema/erc/erc_item.cpp:117
 msgid "Power pins are similar (lower/upper case difference only)"
 msgstr ""
 "I pin di potenza sono simili (differenze solo nei caratteri maiuscoli/"
 "minuscoli)"
 
-#: eeschema/erc/erc_item.cpp:124
+#: eeschema/erc/erc_item.cpp:121
 msgid "Power pin and label are similar (lower/upper case difference only)"
 msgstr ""
 "I pin di potenza e le etichette sono simili (differenze solo nei caratteri "
 "maiuscoli/minuscoli)"
 
-#: eeschema/erc/erc_item.cpp:128
+#: eeschema/erc/erc_item.cpp:125
 msgid "Global label only appears once in the schematic"
 msgstr "Etichetta globale che appare solo una volta nello schema"
 
-#: eeschema/erc/erc_item.cpp:132
+#: eeschema/erc/erc_item.cpp:129
 msgid "Local and global labels have same name"
 msgstr "Le etichette locali e globali hanno lo stesso nome"
 
-#: eeschema/erc/erc_item.cpp:136
+#: eeschema/erc/erc_item.cpp:133
 msgid "Different footprint assigned in another unit of the symbol"
 msgstr "Impronta diversa assegnata in un'altra unità del simbolo"
 
-#: eeschema/erc/erc_item.cpp:140
+#: eeschema/erc/erc_item.cpp:137
 msgid "Different net assigned to a shared pin in another unit of the symbol"
 msgstr ""
 "Connessione diversa assegnato ad un pin condiviso in un'altra unità del "
 "simbolo"
 
-#: eeschema/erc/erc_item.cpp:144
+#: eeschema/erc/erc_item.cpp:141
 msgid "Conflict between bus alias definitions across schematic sheets"
 msgstr ""
 "Conflitto tra le definizioni di alias di bus attraverso i fogli dello schema"
 
-#: eeschema/erc/erc_item.cpp:148
+#: eeschema/erc/erc_item.cpp:145
 msgid "More than one name given to this bus or net"
 msgstr "Più di un nome dato a questo bus o connessione"
 
-#: eeschema/erc/erc_item.cpp:152
+#: eeschema/erc/erc_item.cpp:149
 msgid "Net is graphically connected to a bus but not a bus member"
 msgstr ""
 "La connessione è collegata graficamente ad un bus ma non è membro del bus"
 
-#: eeschema/erc/erc_item.cpp:156
+#: eeschema/erc/erc_item.cpp:153
 msgid "Buses are graphically connected but share no bus members"
 msgstr "I bus sono graficamente connessi ma non condividono nessun membro bus"
 
-#: eeschema/erc/erc_item.cpp:160
+#: eeschema/erc/erc_item.cpp:157
 msgid "Invalid connection between bus and net items"
 msgstr "Connessione non valida tra gli elementi bus e connessione"
 
-#: eeschema/erc/erc_item.cpp:164 pcbnew/drc/drc_item.cpp:219
+#: eeschema/erc/erc_item.cpp:161 pcbnew/drc/drc_item.cpp:216
 msgid "Unresolved text variable"
 msgstr "Variabile testo non risolta"
 
-#: eeschema/erc/erc_item.cpp:168
+#: eeschema/erc/erc_item.cpp:165
 msgid "Undefined netclass"
 msgstr "Netclass non definita"
 
-#: eeschema/erc/erc_item.cpp:172
+#: eeschema/erc/erc_item.cpp:169
 msgid "SPICE model issue"
 msgstr "Problema modello SPICE"
 
-#: eeschema/erc/erc_item.cpp:176
+#: eeschema/erc/erc_item.cpp:173
 msgid "Wires not connected to anything"
 msgstr "Fili non connessi a nulla"
 
-#: eeschema/erc/erc_item.cpp:180
+#: eeschema/erc/erc_item.cpp:177
 msgid "Library symbol issue"
 msgstr "Problema simbolo di libreria"
 
-#: eeschema/erc/erc_item.cpp:184
+#: eeschema/erc/erc_item.cpp:181
 msgid "Symbol doesn't match copy in library"
 msgstr "Il simbolo non corrisponde alla copia in libreria"
 
-#: eeschema/erc/erc_item.cpp:188
+#: eeschema/erc/erc_item.cpp:185
 msgid "Footprint link issue"
 msgstr "Problema di collegamento impronta"
 
-#: eeschema/erc/erc_item.cpp:192
+#: eeschema/erc/erc_item.cpp:189
 msgid "Assigned footprint doesn't match footprint filters"
 msgstr "L'impronta assegnata non corrisponde ai filtri impronte"
 
-#: eeschema/erc/erc_item.cpp:196
+#: eeschema/erc/erc_item.cpp:193
 msgid "Symbol is not annotated"
 msgstr "Simbolo non annotato"
 
-#: eeschema/erc/erc_item.cpp:200
+#: eeschema/erc/erc_item.cpp:197
 msgid "Symbol has more units than are defined"
 msgstr "Il simbolo ha più unità di quelle definite"
 
-#: eeschema/erc/erc_item.cpp:204
+#: eeschema/erc/erc_item.cpp:201
 msgid "Symbol has units that are not placed"
 msgstr "Il simbolo ha unità non piazzate"
 
-#: eeschema/erc/erc_item.cpp:208
+#: eeschema/erc/erc_item.cpp:205
 msgid "Symbol has input pins that are not placed"
 msgstr "Il simbolo ha pin di ingresso non piazzati"
 
-#: eeschema/erc/erc_item.cpp:212
+#: eeschema/erc/erc_item.cpp:209
 msgid "Symbol has bidirectional pins that are not placed"
 msgstr "Il simbolo ha pin bidirezionali non piazzati"
 
-#: eeschema/erc/erc_item.cpp:216
+#: eeschema/erc/erc_item.cpp:213
 msgid "Symbol has power input pins that are not placed"
 msgstr "Il simbolo ha pin di potenza non piazzati"
 
-#: eeschema/erc/erc_item.cpp:220
+#: eeschema/erc/erc_item.cpp:217
 msgid "Units of same symbol have different values"
 msgstr "Unità dello stesso simbolo hanno valori diversi"
 
-#: eeschema/erc/erc_item.cpp:224
+#: eeschema/erc/erc_item.cpp:221
 msgid "Duplicate reference designators"
 msgstr "Riferimenti duplicati"
 
-#: eeschema/erc/erc_item.cpp:228
+#: eeschema/erc/erc_item.cpp:225
 msgid "Bus Entry needed"
 msgstr "Serve voce bus"
 
@@ -17983,7 +18005,7 @@ msgstr "Tipo elemento non gestito %d"
 
 #: eeschema/net_navigator.cpp:314 pcbnew/board.cpp:1821
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2124
-#: pcbnew/pcb_draw_panel_gal.cpp:717
+#: pcbnew/pcb_draw_panel_gal.cpp:718
 #: pcbnew/widgets/appearance_controls.cpp:1029
 #: pcbnew/widgets/appearance_controls.cpp:2455
 #: pcbnew/widgets/appearance_controls_base.cpp:61
@@ -19697,7 +19719,9 @@ msgstr "Colore sfondo corpo"
 msgid "Fill color"
 msgstr "Colore riempimento"
 
-#: eeschema/sch_sheet.cpp:853 eeschema/sch_sheet.cpp:1714 pcbnew/zone.cpp:1861
+#: eeschema/sch_sheet.cpp:853 eeschema/sch_sheet.cpp:1714
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:62
+#: pcbnew/zone.cpp:1861
 msgid "Sheet Name"
 msgstr "Nome foglio"
 
@@ -25818,7 +25842,7 @@ msgstr "Restituisci un codice d'uscita non zero se esistono violazioni DRC"
 
 #: kicad/cli/command_pcb_drc.cpp:146 kicad/cli/command_pcb_export_3d.cpp:293
 #: kicad/cli/command_pcb_export_drill.cpp:150
-#: kicad/cli/command_pcb_export_dxf.cpp:146
+#: kicad/cli/command_pcb_export_dxf.cpp:147
 #: kicad/cli/command_pcb_export_pos.cpp:151 kicad/cli/command_sch_erc.cpp:133
 msgid "Invalid units specified\n"
 msgstr "Unità specificate non valide\n"
@@ -26140,7 +26164,7 @@ msgstr ""
 "file possono venire emessi."
 
 #: kicad/cli/command_pcb_export_dxf.cpp:120
-#: kicad/cli/command_pcb_export_gencad.cpp:90
+#: kicad/cli/command_pcb_export_gencad.cpp:91
 #: kicad/cli/command_pcb_export_gerber.cpp:121
 #: kicad/cli/command_pcb_export_ipc2581.cpp:119
 #: kicad/cli/command_pcb_export_odb.cpp:77
@@ -26150,7 +26174,7 @@ msgstr ""
 msgid "Board file does not exist or is not accessible\n"
 msgstr "Il file scheda non esiste o non è accessibile\n"
 
-#: kicad/cli/command_pcb_export_dxf.cpp:163
+#: kicad/cli/command_pcb_export_dxf.cpp:164
 #: kicad/cli/command_pcb_export_svg.cpp:172
 msgid ""
 "This command has deprecated behavior as of KiCad 9.0, the default behavior "
@@ -26159,7 +26183,7 @@ msgstr ""
 "Questo comando ha un comportamento sconsigliato a partire da KiCad 9.0; il "
 "comportamento predefinito di questo comando cambierà in una versione futura."
 
-#: kicad/cli/command_pcb_export_dxf.cpp:167
+#: kicad/cli/command_pcb_export_dxf.cpp:168
 #: kicad/cli/command_pcb_export_svg.cpp:176
 msgid "The new behavior will match --mode-multi"
 msgstr "Il nuovo comportamento corrisponderà a --mode-multi"
@@ -26717,11 +26741,6 @@ msgstr "Il percorso d'uscita non può essere vuoto"
 #: kicad/dialogs/dialog_jobset_output_options.cpp:194
 msgid "Zip"
 msgstr "Zip"
-
-#: kicad/dialogs/dialog_jobset_output_options_base.cpp:28
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:115
-msgid "Description:"
-msgstr "Descrizione:"
 
 #: kicad/dialogs/dialog_jobset_output_options_base.cpp:64
 msgid "Include jobs:"
@@ -31131,7 +31150,7 @@ msgstr "Tassellazione zone in rame..."
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:78
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:27
 #: pcbnew/footprint.cpp:1669 pcbnew/netinfo_item.cpp:108
-#: pcbnew/pcb_draw_panel_gal.cpp:714 pcbnew/widgets/appearance_controls.cpp:331
+#: pcbnew/pcb_draw_panel_gal.cpp:715 pcbnew/widgets/appearance_controls.cpp:331
 #: pcbnew/widgets/panel_selection_filter.cpp:198
 #: pcbnew/widgets/panel_selection_filter_base.cpp:45
 msgid "Pads"
@@ -31145,18 +31164,18 @@ msgstr "Piazzole"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:222
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:24
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:88
-#: pcbnew/netinfo_item.cpp:123 pcbnew/pcb_draw_panel_gal.cpp:715
+#: pcbnew/netinfo_item.cpp:123 pcbnew/pcb_draw_panel_gal.cpp:716
 #: pcbnew/widgets/appearance_controls.cpp:330
 #: pcbnew/widgets/panel_selection_filter.cpp:197
 #: pcbnew/widgets/panel_selection_filter_base.cpp:41
 msgid "Vias"
 msgstr "Via"
 
-#: pcbnew/board.cpp:1820 pcbnew/pcb_draw_panel_gal.cpp:716
+#: pcbnew/board.cpp:1820 pcbnew/pcb_draw_panel_gal.cpp:717
 msgid "Track Segments"
 msgstr "Segmenti di pista"
 
-#: pcbnew/board.cpp:1822 pcbnew/pcb_draw_panel_gal.cpp:718
+#: pcbnew/board.cpp:1822 pcbnew/pcb_draw_panel_gal.cpp:719
 msgid "Unrouted"
 msgstr "Non sbrogliato"
 
@@ -36204,10 +36223,21 @@ msgstr "Usa coordinate polari"
 msgid "Move Item"
 msgstr "Sposta elemento"
 
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:61
+#, fuzzy
+msgid "Sheet Path"
+msgstr "Seleziona percorso"
+
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:64
 #, fuzzy
 msgid "Sheets"
 msgstr "Foglio"
+
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:88
+#: pcbnew/footprint.cpp:1722 pcbnew/footprint.cpp:4114 pcbnew/zone.cpp:1863
+#, fuzzy
+msgid "Component Class"
+msgstr "Componenti"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:90
 #, fuzzy
@@ -41516,284 +41546,284 @@ msgstr "%s larghezza raggio termico: %s."
 msgid "Checking rule assertion \"%s\"."
 msgstr "Controllo asserzione regola \"%s\"."
 
-#: pcbnew/drc/drc_item.cpp:45 pcbnew/zone.cpp:2072
+#: pcbnew/drc/drc_item.cpp:42 pcbnew/zone.cpp:2072
 msgid "Electrical"
 msgstr "Elettrico"
 
-#: pcbnew/drc/drc_item.cpp:46
+#: pcbnew/drc/drc_item.cpp:43
 msgid "Design for Manufacturing"
 msgstr "Progetto per produzione"
 
-#: pcbnew/drc/drc_item.cpp:47
+#: pcbnew/drc/drc_item.cpp:44
 msgid "Schematic Parity"
 msgstr "Parità schema"
 
-#: pcbnew/drc/drc_item.cpp:48
+#: pcbnew/drc/drc_item.cpp:45
 msgid "Signal Integrity"
 msgstr "Integrità segnale"
 
-#: pcbnew/drc/drc_item.cpp:49
+#: pcbnew/drc/drc_item.cpp:46
 msgid "Readability"
 msgstr "Leggibilità"
 
-#: pcbnew/drc/drc_item.cpp:55
+#: pcbnew/drc/drc_item.cpp:52
 msgid "Missing connection between items"
 msgstr "Connessione mancante tra elementi"
 
-#: pcbnew/drc/drc_item.cpp:59
+#: pcbnew/drc/drc_item.cpp:56
 msgid "Items shorting two nets"
 msgstr "Elementi che cortocircuitano"
 
-#: pcbnew/drc/drc_item.cpp:63
+#: pcbnew/drc/drc_item.cpp:60
 msgid "Items not allowed"
 msgstr "Elementi non permessi"
 
-#: pcbnew/drc/drc_item.cpp:67
+#: pcbnew/drc/drc_item.cpp:64
 msgid "Text (or dimension) on Edge.Cuts layer"
 msgstr "Testo (o dimensione) sullo strato Edge.Cuts"
 
-#: pcbnew/drc/drc_item.cpp:71
+#: pcbnew/drc/drc_item.cpp:68
 msgid "Clearance violation"
 msgstr "Violazione distanza"
 
-#: pcbnew/drc/drc_item.cpp:75
+#: pcbnew/drc/drc_item.cpp:72
 #, fuzzy
 msgid "Creepage violation"
 msgstr "Violazione distanza"
 
-#: pcbnew/drc/drc_item.cpp:79
+#: pcbnew/drc/drc_item.cpp:76
 msgid "Tracks crossing"
 msgstr "Incrocio di piste"
 
-#: pcbnew/drc/drc_item.cpp:83
+#: pcbnew/drc/drc_item.cpp:80
 msgid "Board edge clearance violation"
 msgstr "Violazione distanza bordo scheda"
 
-#: pcbnew/drc/drc_item.cpp:87
+#: pcbnew/drc/drc_item.cpp:84
 msgid "Copper zones intersect"
 msgstr "Intersezione zone rame"
 
-#: pcbnew/drc/drc_item.cpp:91
+#: pcbnew/drc/drc_item.cpp:88
 msgid "Isolated copper fill"
 msgstr "Riempimenti rame isolati"
 
-#: pcbnew/drc/drc_item.cpp:95
+#: pcbnew/drc/drc_item.cpp:92
 msgid "Thermal relief connection to zone incomplete"
 msgstr "Raccordo termico alla zona incompleto"
 
-#: pcbnew/drc/drc_item.cpp:99
+#: pcbnew/drc/drc_item.cpp:96
 msgid "Via is not connected or connected on only one layer"
 msgstr "Via non connesso o connesso ad un unico strato"
 
-#: pcbnew/drc/drc_item.cpp:103
+#: pcbnew/drc/drc_item.cpp:100
 msgid "Track has unconnected end"
 msgstr "La pista ha un capo non connesso"
 
-#: pcbnew/drc/drc_item.cpp:107
+#: pcbnew/drc/drc_item.cpp:104
 msgid "Hole clearance violation"
 msgstr "Violazione distanza foro"
 
-#: pcbnew/drc/drc_item.cpp:111
+#: pcbnew/drc/drc_item.cpp:108
 #, fuzzy
 msgid "Drilled hole too close to other hole"
 msgstr "Fori troppo vicini tra loro"
 
-#: pcbnew/drc/drc_item.cpp:115
+#: pcbnew/drc/drc_item.cpp:112
 msgid "Drilled holes co-located"
 msgstr "Fori troppo vicini tra loro"
 
-#: pcbnew/drc/drc_item.cpp:119
+#: pcbnew/drc/drc_item.cpp:116
 msgid "Copper connection too narrow"
 msgstr "Connessione rame troppo stretta"
 
-#: pcbnew/drc/drc_item.cpp:123
+#: pcbnew/drc/drc_item.cpp:120
 msgid "Track width"
 msgstr "Larghezza pista"
 
-#: pcbnew/drc/drc_item.cpp:127
+#: pcbnew/drc/drc_item.cpp:124
 #, fuzzy
 msgid "Track angle"
 msgstr "Angolo dell'arco:"
 
-#: pcbnew/drc/drc_item.cpp:131
+#: pcbnew/drc/drc_item.cpp:128
 #, fuzzy
 msgid "Track segment length"
 msgstr "Segmenti di pista"
 
-#: pcbnew/drc/drc_item.cpp:135
+#: pcbnew/drc/drc_item.cpp:132
 msgid "Annular width"
 msgstr "Larghezza anello"
 
-#: pcbnew/drc/drc_item.cpp:139
+#: pcbnew/drc/drc_item.cpp:136
 msgid "Hole size out of range"
 msgstr "Dimensione foro fuori campo"
 
-#: pcbnew/drc/drc_item.cpp:143
+#: pcbnew/drc/drc_item.cpp:140
 msgid "Via diameter"
 msgstr "Diametro via"
 
-#: pcbnew/drc/drc_item.cpp:147
+#: pcbnew/drc/drc_item.cpp:144
 #, fuzzy
 msgid "Padstack is questionable"
 msgstr "Padstack non valido"
 
-#: pcbnew/drc/drc_item.cpp:151
+#: pcbnew/drc/drc_item.cpp:148
 msgid "Padstack is not valid"
 msgstr "Padstack non valido"
 
-#: pcbnew/drc/drc_item.cpp:155
+#: pcbnew/drc/drc_item.cpp:152
 msgid "Micro via hole size out of range"
 msgstr "Dimensione foro microvia fuori campo"
 
-#: pcbnew/drc/drc_item.cpp:159
+#: pcbnew/drc/drc_item.cpp:156
 msgid "Courtyards overlap"
 msgstr "Gli ingombri si sovrappongono"
 
-#: pcbnew/drc/drc_item.cpp:163
+#: pcbnew/drc/drc_item.cpp:160
 msgid "Footprint has no courtyard defined"
 msgstr "L'impronta non ha un ingombro definito"
 
-#: pcbnew/drc/drc_item.cpp:167
+#: pcbnew/drc/drc_item.cpp:164
 msgid "Footprint has malformed courtyard"
 msgstr "L'impronta ha un ingombro maldefinito"
 
-#: pcbnew/drc/drc_item.cpp:171
+#: pcbnew/drc/drc_item.cpp:168
 msgid "PTH inside courtyard"
 msgstr "Foro metallizzato dentro un ingombro"
 
-#: pcbnew/drc/drc_item.cpp:175
+#: pcbnew/drc/drc_item.cpp:172
 msgid "NPTH inside courtyard"
 msgstr "Foro non metallizzato dentro un ingombro"
 
-#: pcbnew/drc/drc_item.cpp:179
+#: pcbnew/drc/drc_item.cpp:176
 msgid "Item on a disabled copper layer"
 msgstr "Elemento su strato rame disabilitato"
 
-#: pcbnew/drc/drc_item.cpp:183
+#: pcbnew/drc/drc_item.cpp:180
 msgid "Board has malformed outline"
 msgstr "La scheda ha il bordo malformato"
 
-#: pcbnew/drc/drc_item.cpp:187
+#: pcbnew/drc/drc_item.cpp:184
 msgid "Duplicate footprints"
 msgstr "Impronte duplicate"
 
-#: pcbnew/drc/drc_item.cpp:191
+#: pcbnew/drc/drc_item.cpp:188
 msgid "Missing footprint"
 msgstr "Impronta mancante"
 
-#: pcbnew/drc/drc_item.cpp:195
+#: pcbnew/drc/drc_item.cpp:192
 msgid "Extra footprint"
 msgstr "Impronta extra"
 
-#: pcbnew/drc/drc_item.cpp:199
+#: pcbnew/drc/drc_item.cpp:196
 msgid "Pad net doesn't match schematic"
 msgstr "La piazzola non corrisponde allo schema"
 
-#: pcbnew/drc/drc_item.cpp:203
+#: pcbnew/drc/drc_item.cpp:200
 msgid "Footprint attributes don't match symbol"
 msgstr "Attributi impronta non corrispondenti al simbolo"
 
-#: pcbnew/drc/drc_item.cpp:207
+#: pcbnew/drc/drc_item.cpp:204
 #, fuzzy
 msgid "Footprint doesn't match symbol's footprint filters"
 msgstr "I'impronta non corrisponde alla copia in libreria"
 
-#: pcbnew/drc/drc_item.cpp:211
+#: pcbnew/drc/drc_item.cpp:208
 msgid "Footprint not found in libraries"
 msgstr "Impronta non trovata nelle librerie"
 
-#: pcbnew/drc/drc_item.cpp:215
+#: pcbnew/drc/drc_item.cpp:212
 msgid "Footprint doesn't match copy in library"
 msgstr "I'impronta non corrisponde alla copia in libreria"
 
-#: pcbnew/drc/drc_item.cpp:223
+#: pcbnew/drc/drc_item.cpp:220
 msgid "Assertion failure"
 msgstr "Fallimento asserzione"
 
-#: pcbnew/drc/drc_item.cpp:235
+#: pcbnew/drc/drc_item.cpp:232
 msgid "Copper sliver"
 msgstr "Schegge di rame"
 
-#: pcbnew/drc/drc_item.cpp:239
+#: pcbnew/drc/drc_item.cpp:236
 msgid "Solder mask aperture bridges items with different nets"
 msgstr ""
 "L'apertura della maschera di saldatura fa ponte tra elementi di collegamenti "
 "diversi"
 
-#: pcbnew/drc/drc_item.cpp:243
+#: pcbnew/drc/drc_item.cpp:240
 msgid "Silkscreen clipped by solder mask"
 msgstr "Serigrafia ritagliata dalla maschera di saldatura"
 
-#: pcbnew/drc/drc_item.cpp:247
+#: pcbnew/drc/drc_item.cpp:244
 msgid "Silkscreen clipped by board edge"
 msgstr "Serigrafia ritagliata dal bordo scheda"
 
-#: pcbnew/drc/drc_item.cpp:251
+#: pcbnew/drc/drc_item.cpp:248
 msgid "Silkscreen overlap"
 msgstr "Serigrafia sovrapposta"
 
-#: pcbnew/drc/drc_item.cpp:255
+#: pcbnew/drc/drc_item.cpp:252
 msgid "Text height out of range"
 msgstr "Altezza testo fuori campo"
 
-#: pcbnew/drc/drc_item.cpp:259
+#: pcbnew/drc/drc_item.cpp:256
 msgid "Text thickness out of range"
 msgstr "Spessore testo fuori campo"
 
-#: pcbnew/drc/drc_item.cpp:263
+#: pcbnew/drc/drc_item.cpp:260
 #, fuzzy
 msgid "Track length out of range"
 msgstr "Lunghezza pista fuori campo"
 
-#: pcbnew/drc/drc_item.cpp:267
+#: pcbnew/drc/drc_item.cpp:264
 #, fuzzy
 msgid "Skew between tracks out of range"
 msgstr "Skew tra piste fuori campo"
 
-#: pcbnew/drc/drc_item.cpp:272
+#: pcbnew/drc/drc_item.cpp:269
 #, fuzzy
 msgid "Too many or too few vias on a connection"
 msgstr "Troppi via su una connessione"
 
-#: pcbnew/drc/drc_item.cpp:276
+#: pcbnew/drc/drc_item.cpp:273
 msgid "Differential pair gap out of range"
 msgstr "Spazio coppia differenziale fuori campo"
 
-#: pcbnew/drc/drc_item.cpp:280
+#: pcbnew/drc/drc_item.cpp:277
 msgid "Differential uncoupled length too long"
 msgstr "Lunghezza coppia differenziale non accoppiata troppo lunga"
 
-#: pcbnew/drc/drc_item.cpp:284
+#: pcbnew/drc/drc_item.cpp:281
 msgid "Footprint is not valid"
 msgstr "L'impronta non è valida"
 
-#: pcbnew/drc/drc_item.cpp:288
+#: pcbnew/drc/drc_item.cpp:285
 msgid "Footprint component type doesn't match footprint pads"
 msgstr "Tipo impronta non corrispondente con le sue piazzole"
 
-#: pcbnew/drc/drc_item.cpp:292
+#: pcbnew/drc/drc_item.cpp:289
 msgid "Through hole pad has no hole"
 msgstr "Piazzola passante senza foro"
 
-#: pcbnew/drc/drc_item.cpp:296
+#: pcbnew/drc/drc_item.cpp:293
 msgid "Mirrored text on front layer"
 msgstr "Testo specchiato sullo strato fronte"
 
-#: pcbnew/drc/drc_item.cpp:300
+#: pcbnew/drc/drc_item.cpp:297
 msgid "Non-Mirrored text on back layer"
 msgstr "Testo non specchiato sullo strato retro"
 
-#: pcbnew/drc/drc_item.cpp:307
+#: pcbnew/drc/drc_item.cpp:304
 #, fuzzy
 msgid "Drilled hole too close to other hole - deprecated"
 msgstr "Fori troppo vicini tra loro"
 
-#: pcbnew/drc/drc_item.cpp:508
+#: pcbnew/drc/drc_item.cpp:505
 #, c-format
 msgid "Rule: %s"
 msgstr "Regola: %s"
 
-#: pcbnew/drc/drc_item.cpp:510
+#: pcbnew/drc/drc_item.cpp:507
 msgid "Local override"
 msgstr "Superamento locale"
 
@@ -43090,7 +43120,7 @@ msgstr "La scheda deve essere salvata prima di generare il file IPC2581."
 msgid "Generating IPC2581 file"
 msgstr "Generazione file IPC2581"
 
-#: pcbnew/files.cpp:1342 pcbnew/pcbnew_jobs_handler.cpp:1981
+#: pcbnew/files.cpp:1342 pcbnew/pcbnew_jobs_handler.cpp:2011
 #, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
@@ -43099,7 +43129,7 @@ msgstr ""
 "Errore nel generare il file IPC2581 '%s'.\n"
 "%s"
 
-#: pcbnew/files.cpp:1406 pcbnew/pcbnew_jobs_handler.cpp:2014
+#: pcbnew/files.cpp:1406 pcbnew/pcbnew_jobs_handler.cpp:2044
 #, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
@@ -43162,11 +43192,6 @@ msgstr "Stato: "
 #: pcbnew/footprint.cpp:1715
 msgid "Attributes:"
 msgstr "Attributi:"
-
-#: pcbnew/footprint.cpp:1722 pcbnew/footprint.cpp:4114 pcbnew/zone.cpp:1863
-#, fuzzy
-msgid "Component Class"
-msgstr "Componenti"
 
 #: pcbnew/footprint.cpp:1726
 #, c-format
@@ -44940,7 +44965,7 @@ msgstr ""
 "Per creare/aggiornare un C.S. da uno schema elettrico, è necessario eseguire "
 "il gestore di progetti KiCad e creare un progetto."
 
-#: pcbnew/pcb_edit_frame.cpp:2026 pcbnew/pcbnew_jobs_handler.cpp:1837
+#: pcbnew/pcb_edit_frame.cpp:2026 pcbnew/pcbnew_jobs_handler.cpp:1867
 msgid "Eeschema netlist"
 msgstr "Netlist Eeschema"
 
@@ -47158,30 +47183,30 @@ msgstr "Errore nel creare il file svg"
 msgid "Schematic parity tests require a fully annotated schematic."
 msgstr "I test parità schema richiedono uno schema completamente annotato."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1844
+#: pcbnew/pcbnew_jobs_handler.cpp:1841 pcbnew/pcbnew_jobs_handler.cpp:1874
 msgid "Failed to fetch schematic netlist for parity tests.\n"
 msgstr "Fallito recupero netlist schema di test di parità.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1866 pcbnew/tools/drc_tool.cpp:200
+#: pcbnew/pcbnew_jobs_handler.cpp:1896 pcbnew/tools/drc_tool.cpp:200
 msgid "DRC"
 msgstr "DRC"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1887
+#: pcbnew/pcbnew_jobs_handler.cpp:1917
 #, c-format
 msgid "Found %d unconnected items\n"
 msgstr "Trovati %d elementi non connessi\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1893
+#: pcbnew/pcbnew_jobs_handler.cpp:1923
 #, c-format
 msgid "Found %d schematic parity issues\n"
 msgstr "Rilevati %d problemi di parità schematica\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1909
+#: pcbnew/pcbnew_jobs_handler.cpp:1939
 #, c-format
 msgid "Unable to save DRC report to %s\n"
 msgstr "Impossibile salvare il rapporto DRC su %s\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1914
+#: pcbnew/pcbnew_jobs_handler.cpp:1944
 #, c-format
 msgid "Saved DRC Report to %s\n"
 msgstr "Salvato rapporto DRC su %s\n"
@@ -50609,10 +50634,19 @@ msgstr ""
 msgid "Generate Placement Rule Areas..."
 msgstr "Genera file di piazzamento"
 
+#: pcbnew/tools/pcb_actions.cpp:2229
+#, fuzzy
+msgid "Creates best-fit placement rule areas"
+msgstr "Sostituisci le aree delle regole di posizionamento esistenti"
+
 #: pcbnew/tools/pcb_actions.cpp:2236
 #, fuzzy
 msgid "Repeat Layout..."
 msgstr "Conteggio ripetizione"
+
+#: pcbnew/tools/pcb_actions.cpp:2237
+msgid "Clones placement & routing across multiple identical channels"
+msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:2248
 msgid "Route Single Track"

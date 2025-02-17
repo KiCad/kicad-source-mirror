@@ -21,11 +21,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-15 06:04+0300\n"
+"POT-Creation-Date: 2025-02-17 08:10+0300\n"
 "PO-Revision-Date: 2025-02-16 14:27+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
-"master-source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
+"source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -362,7 +362,7 @@ msgstr "Недостаточно прав для сохранения файла
 #: eeschema/dialogs/dialog_erc.cpp:878
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1813
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2215
-#: eeschema/erc/erc_item.cpp:84 eeschema/files-io.cpp:943
+#: eeschema/erc/erc_item.cpp:81 eeschema/files-io.cpp:943
 #: eeschema/files-io.cpp:1011 eeschema/sch_marker.cpp:376
 #: kicad/import_proj.cpp:79 kicad/import_project.cpp:123 kicad/kicad.cpp:318
 #: kicad/tools/kicad_manager_control.cpp:269
@@ -381,7 +381,7 @@ msgstr "Недостаточно прав для сохранения файла
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:203
 #: pcbnew/dialogs/dialog_drc.cpp:984
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:392
-#: pcbnew/drc/drc_item.cpp:231 pcbnew/pcb_marker.cpp:211
+#: pcbnew/drc/drc_item.cpp:228 pcbnew/pcb_marker.cpp:211
 #: pcbnew/widgets/appearance_controls.cpp:2765
 msgid "Error"
 msgstr "Ошибка"
@@ -1885,7 +1885,7 @@ msgstr "&OK"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:593
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:154
 #: eeschema/dialogs/panel_template_fieldnames.cpp:212
-#: eeschema/erc/erc_item.cpp:80 eeschema/files-io.cpp:452
+#: eeschema/erc/erc_item.cpp:77 eeschema/files-io.cpp:452
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:261
 #: eeschema/sch_marker.cpp:373 eeschema/sheet.cpp:780
 #: eeschema/symbol_editor/symbol_editor.cpp:134
@@ -1893,7 +1893,7 @@ msgstr "&OK"
 #: eeschema/symbol_editor/symbol_editor.cpp:1156
 #: eeschema/symbol_editor/symbol_editor.cpp:1554
 #: pcbnew/dialogs/dialog_drc.cpp:985 pcbnew/dialogs/dialog_export_vrml.cpp:128
-#: pcbnew/drc/drc_item.cpp:227 pcbnew/import_gfx/dialog_import_graphics.cpp:293
+#: pcbnew/drc/drc_item.cpp:224 pcbnew/import_gfx/dialog_import_graphics.cpp:293
 #: pcbnew/pcb_marker.cpp:208
 msgid "Warning"
 msgstr "Предупреждение"
@@ -2000,32 +2000,32 @@ msgstr "Файл метаданных дизайн-блока '%s' не може
 msgid "Design block does not have a valid library ID."
 msgstr "Дизайн-блок не имеет действительного идентификатора библиотеки."
 
-#: common/design_block_io.cpp:358
+#: common/design_block_io.cpp:360
 #, c-format
 msgid "Schematic source file '%s' does not exist."
 msgstr "Исходный файл схемы '%s' не существует."
 
-#: common/design_block_io.cpp:372
+#: common/design_block_io.cpp:374
 #, c-format
 msgid "Design block folder '%s' could not be created."
 msgstr "Не удалось создать папку дизайн-блока '%s'."
 
-#: common/design_block_io.cpp:389
+#: common/design_block_io.cpp:391
 #, c-format
 msgid "Schematic file '%s' could not be saved as design block at '%s'."
 msgstr "Файл схемы '%s' не может быть сохранен как дизайн-блок в '%s'."
 
-#: common/design_block_io.cpp:423
+#: common/design_block_io.cpp:425
 #, c-format
 msgid "Design block metadata file '%s' could not be saved."
 msgstr "Не удалось сохранить файл метаданных дизайн-блока '%s'."
 
-#: common/design_block_io.cpp:437
+#: common/design_block_io.cpp:439
 #, c-format
 msgid "Design block '%s' does not exist."
 msgstr "Дизайн-блок '%s' не существует."
 
-#: common/design_block_io.cpp:443
+#: common/design_block_io.cpp:445
 #, c-format
 msgid "Design block folder '%s' could not be deleted."
 msgstr "Не удалось удалить папку дизайн-блока '%s'."
@@ -2449,6 +2449,7 @@ msgstr "Переменные окружения"
 #: common/dialogs/panel_design_block_lib_table.cpp:410
 #: common/dialogs/panel_setup_netclasses_base.cpp:51
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:88
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:42
 #: eeschema/dialogs/dialog_label_properties_base.cpp:87
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:121
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:89
@@ -2667,6 +2668,7 @@ msgid "Grid size Y out of range."
 msgstr "Размер сетки Y вне диапазона."
 
 #: common/dialogs/dialog_grid_settings_base.cpp:25
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:97
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:109
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:32
 #: eeschema/symbol_editor/symbol_editor.cpp:860
@@ -2999,7 +3001,7 @@ msgstr "Основная надпись"
 #: common/dialogs/dialog_page_settings.cpp:487
 #: eeschema/eeschema_jobs_handler.cpp:230 pagelayout_editor/files.cpp:243
 #: pagelayout_editor/pl_editor_frame.cpp:359
-#: pcbnew/pcbnew_jobs_handler.cpp:2113
+#: pcbnew/pcbnew_jobs_handler.cpp:2143
 #, c-format
 msgid "Error loading drawing sheet '%s'."
 msgstr "Ошибка загрузки форматной рамки '%s'."
@@ -3098,7 +3100,7 @@ msgid "Export to other sheets"
 msgstr "Для всех листов"
 
 #: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:444
-#: eeschema/erc/erc_item.cpp:427 eeschema/sch_marker.cpp:384
+#: eeschema/erc/erc_item.cpp:424 eeschema/sch_marker.cpp:384
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:105
 #: gerbview/widgets/gerbview_layer_widget.cpp:137 pcbnew/pcb_marker.cpp:219
 #: pcbnew/widgets/appearance_controls.cpp:350
@@ -3266,6 +3268,7 @@ msgstr "Параметр"
 #: common/dialogs/dialog_plugin_options_base.cpp:44
 #: common/dialogs/panel_design_block_lib_table.cpp:411
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:89
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:43
 #: eeschema/dialogs/dialog_label_properties_base.cpp:88
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:60
 #: eeschema/dialogs/dialog_rescue_each.cpp:135
@@ -6862,7 +6865,7 @@ msgstr "Не удалось найти PDF-просмотрщик для '%s'."
 msgid "Problem while running the PDF viewer '%s'."
 msgstr "Проблемы при запуске PDF-просмотрщика '%s'."
 
-#: common/gestfich.cpp:299 eeschema/eeschema.cpp:576 eeschema/eeschema.cpp:611
+#: common/gestfich.cpp:299 eeschema/eeschema.cpp:650 eeschema/eeschema.cpp:685
 #: gerbview/gerbview.cpp:243 kicad/project_template.cpp:309
 #: pcbnew/pcbnew.cpp:577
 #, c-format
@@ -7393,12 +7396,12 @@ msgstr "Неизвестный параметр '%s' в '%s'"
 msgid "Unable to parse '%s' in '%s'"
 msgstr "Не удалось разобрать '%s' в '%s'"
 
-#: common/io/eagle/eagle_parser.cpp:287
+#: common/io/eagle/eagle_parser.cpp:288
 #, c-format
 msgid "Invalid size %lld: too large"
 msgstr "Неверный размер %lld: слишком большой"
 
-#: common/io/eagle/eagle_parser.cpp:506
+#: common/io/eagle/eagle_parser.cpp:507
 #, c-format
 msgid "Invalid Arc with radius %f and angle %f"
 msgstr "Неверная дуга с радиусом %f и углом %f"
@@ -8388,20 +8391,20 @@ msgstr "Zip архив '%s' создан (%s несжатым, %s сжатым).
 msgid "Error: '%s'."
 msgstr "Ошибка: '%s'."
 
-#: common/rc_item.cpp:425 eeschema/erc/erc_item.cpp:407
+#: common/rc_item.cpp:425 eeschema/erc/erc_item.cpp:404
 msgid "Excluded warning: "
 msgstr "Исключённое предупреждение: "
 
-#: common/rc_item.cpp:427 eeschema/erc/erc_item.cpp:409
+#: common/rc_item.cpp:427 eeschema/erc/erc_item.cpp:406
 msgid "Excluded error: "
 msgstr "Исключённая ошибка: "
 
-#: common/rc_item.cpp:431 eeschema/erc/erc_item.cpp:413
+#: common/rc_item.cpp:431 eeschema/erc/erc_item.cpp:410
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1422
 msgid "Warning: "
 msgstr "Предупреждение: "
 
-#: common/rc_item.cpp:435 eeschema/erc/erc_item.cpp:417
+#: common/rc_item.cpp:435 eeschema/erc/erc_item.cpp:414
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1420
 msgid "Error: "
 msgstr "Ошибка: "
@@ -10750,7 +10753,7 @@ msgid ""
 msgstr ""
 "Цепь %s графически подключена к шине %s, но она не является членом этой шины"
 
-#: eeschema/connection_graph.cpp:3807 eeschema/erc/erc_item.cpp:232
+#: eeschema/connection_graph.cpp:3807 eeschema/erc/erc_item.cpp:229
 msgid "Unconnected wire endpoint"
 msgstr "Неподключенная оконечная точка провода"
 
@@ -11008,6 +11011,8 @@ msgstr "Обозначить компоненты схемы"
 
 #: eeschema/dialogs/dialog_bom.cpp:85 kicad/dialogs/panel_jobset_base.cpp:199
 #: pcbnew/dialogs/dialog_gendrill.cpp:93
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:60
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:87
 msgid "Generate"
 msgstr "Сформировать"
 
@@ -11566,6 +11571,28 @@ msgstr "Безымённое поле"
 #: eeschema/dialogs/dialog_design_block_properties.cpp:234
 msgid "Duplicate fields are not allowed."
 msgstr "Дублирование полей не допускается."
+
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:26
+#, fuzzy
+msgid "Default Fields"
+msgstr "По умолчанию 1"
+
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:104
+#: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:137
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:122
+msgid "Keywords:"
+msgstr "Ключевые слова:"
+
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:111
+#: kicad/dialogs/dialog_jobset_output_options_base.cpp:28
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:115
+msgid "Description:"
+msgstr "Описание:"
+
+#: eeschema/dialogs/dialog_design_block_properties_base.h:70
+#, fuzzy
+msgid "Design Block Properties"
+msgstr "Библиотеки дизайн-блоков"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:550
 #, c-format
@@ -13011,11 +13038,6 @@ msgstr "Добавить фильтр посад. мест"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:832
 msgid "Edit Footprint Filter"
 msgstr "Правка фильтра посад. мест"
-
-#: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:137
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:122
-msgid "Keywords:"
-msgstr "Ключевые слова:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:144
 msgid "Derive from symbol:"
@@ -16059,7 +16081,7 @@ msgid "Pin symbol size:"
 msgstr "Размер вывода:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:151
-#: eeschema/erc/erc_item.cpp:42
+#: eeschema/erc/erc_item.cpp:39
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:934
 msgid "Connections"
 msgstr "Соединения"
@@ -16513,7 +16535,7 @@ msgstr "Сохранить белое пространство"
 msgid "URL"
 msgstr "URL"
 
-#: eeschema/eeschema.cpp:387
+#: eeschema/eeschema.cpp:461
 msgid ""
 "An error occurred attempting to load the global symbol library table.\n"
 "Please edit this global symbol library table in Preferences menu."
@@ -16523,7 +16545,7 @@ msgstr ""
 "Пожалуйста измените глобальную таблицу библиотек символов через меню "
 "Настройки."
 
-#: eeschema/eeschema.cpp:423
+#: eeschema/eeschema.cpp:497
 msgid ""
 "An error occurred attempting to load the global design block library table.\n"
 "Please edit this global design block library table in Preferences menu."
@@ -16533,7 +16555,7 @@ msgstr ""
 "Пожалуйста, отредактируйте эту глобальную таблицу библиотек дизайн-блоков в "
 "меню Настройки."
 
-#: eeschema/eeschema.cpp:482
+#: eeschema/eeschema.cpp:556
 #, c-format
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
@@ -16554,7 +16576,7 @@ msgstr "Не удалось загрузить схему\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:811 pcbnew/pcbnew_jobs_handler.cpp:892
 #: pcbnew/pcbnew_jobs_handler.cpp:945 pcbnew/pcbnew_jobs_handler.cpp:1106
 #: pcbnew/pcbnew_jobs_handler.cpp:1246 pcbnew/pcbnew_jobs_handler.cpp:1381
-#: pcbnew/pcbnew_jobs_handler.cpp:1791 pcbnew/pcbnew_jobs_handler.cpp:1957
+#: pcbnew/pcbnew_jobs_handler.cpp:1791 pcbnew/pcbnew_jobs_handler.cpp:1987
 msgid "Failed to create output directory\n"
 msgstr "Не удалось создать выходной каталог\n"
 
@@ -16634,7 +16656,7 @@ msgstr "Сохранение библиотеки символов в обнов
 msgid "Symbol library was not updated\n"
 msgstr "Библиотека символов не была обновлена\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1179 pcbnew/pcbnew_jobs_handler.cpp:1884
+#: eeschema/eeschema_jobs_handler.cpp:1179 pcbnew/pcbnew_jobs_handler.cpp:1914
 #, c-format
 msgid "Found %d violations\n"
 msgstr "Найдено %d нарушений\n"
@@ -16912,185 +16934,185 @@ msgstr "Проверка наличия меток более чем на одн
 msgid "Checking for undefined netclasses..."
 msgstr "Проверка неопределенных классов цепей..."
 
-#: eeschema/erc/erc_item.cpp:43
+#: eeschema/erc/erc_item.cpp:40
 msgid "Conflicts"
 msgstr "Конфликты"
 
-#: eeschema/erc/erc_item.cpp:44 pcbnew/dialogs/panel_edit_options_base.cpp:404
-#: pcbnew/drc/drc_item.cpp:50
+#: eeschema/erc/erc_item.cpp:41 pcbnew/dialogs/panel_edit_options_base.cpp:404
+#: pcbnew/drc/drc_item.cpp:47
 msgid "Miscellaneous"
 msgstr "Прочие"
 
-#: eeschema/erc/erc_item.cpp:48
+#: eeschema/erc/erc_item.cpp:45
 msgid "Duplicate sheet names within a given sheet"
 msgstr "Лист имеет дочерние листы с одинаковыми именами"
 
-#: eeschema/erc/erc_item.cpp:52
+#: eeschema/erc/erc_item.cpp:49
 msgid "Symbol pin or wire end off connection grid"
 msgstr "Вывод символа или конец проводника не на сетке"
 
-#: eeschema/erc/erc_item.cpp:56
+#: eeschema/erc/erc_item.cpp:53
 msgid "Pin not connected"
 msgstr "Вывод не подсоединён"
 
-#: eeschema/erc/erc_item.cpp:60
+#: eeschema/erc/erc_item.cpp:57
 msgid "Input pin not driven by any Output pins"
 msgstr "Вход не подключён ни к одному из выходов"
 
-#: eeschema/erc/erc_item.cpp:64
+#: eeschema/erc/erc_item.cpp:61
 msgid "Input Power pin not driven by any Output Power pins"
 msgstr "Вход питания не подключён ни к одному выходу питания"
 
-#: eeschema/erc/erc_item.cpp:68
+#: eeschema/erc/erc_item.cpp:65
 msgid "Multiple pins with the same pin number"
 msgstr "Несколько выводов с одинаковым номером"
 
-#: eeschema/erc/erc_item.cpp:72 eeschema/erc/erc_item.cpp:76
+#: eeschema/erc/erc_item.cpp:69 eeschema/erc/erc_item.cpp:73
 msgid "Conflict problem between pins"
 msgstr "Конфликт между выводами"
 
-#: eeschema/erc/erc_item.cpp:88
+#: eeschema/erc/erc_item.cpp:85
 msgid "Mismatch between hierarchical labels and sheet pins"
 msgstr "Различие между иерархическими метками и выводами листа"
 
-#: eeschema/erc/erc_item.cpp:92
+#: eeschema/erc/erc_item.cpp:89
 msgid "Four connection points are joined together"
 msgstr "Четыре точки соединения соединены вместе"
 
-#: eeschema/erc/erc_item.cpp:96
+#: eeschema/erc/erc_item.cpp:93
 msgid "Label connects more than one wire"
 msgstr "Наклейка соединяет более одного провода"
 
-#: eeschema/erc/erc_item.cpp:100
+#: eeschema/erc/erc_item.cpp:97
 msgid "A pin with a \"no connection\" flag is connected"
 msgstr "Вывод с флагом \"Не подключено\" имеет подключение"
 
-#: eeschema/erc/erc_item.cpp:104
+#: eeschema/erc/erc_item.cpp:101
 msgid "Unconnected \"no connection\" flag"
 msgstr "Флаг \"Не подключено\" не подключён"
 
-#: eeschema/erc/erc_item.cpp:108
+#: eeschema/erc/erc_item.cpp:105
 msgid "Label not connected to anything"
 msgstr "Метка ни к чему не подключена"
 
-#: eeschema/erc/erc_item.cpp:112
+#: eeschema/erc/erc_item.cpp:109
 msgid "Global label not connected anywhere else in the schematic"
 msgstr "Глобальная метка ни к чему не подключена"
 
-#: eeschema/erc/erc_item.cpp:116
+#: eeschema/erc/erc_item.cpp:113
 msgid "Labels are similar (lower/upper case difference only)"
 msgstr "Метки похожи (разница только в нижнем/верхнем регистре)"
 
-#: eeschema/erc/erc_item.cpp:120
+#: eeschema/erc/erc_item.cpp:117
 msgid "Power pins are similar (lower/upper case difference only)"
 msgstr "Силовые контакты одинаковы (разница только в нижнем/верхнем корпусе)"
 
-#: eeschema/erc/erc_item.cpp:124
+#: eeschema/erc/erc_item.cpp:121
 msgid "Power pin and label are similar (lower/upper case difference only)"
 msgstr ""
 "Штырь питания и этикетка похожи (разница только в нижнем/верхнем корпусе)"
 
-#: eeschema/erc/erc_item.cpp:128
+#: eeschema/erc/erc_item.cpp:125
 msgid "Global label only appears once in the schematic"
 msgstr "Глобальная метка появляется в схеме только один раз"
 
-#: eeschema/erc/erc_item.cpp:132
+#: eeschema/erc/erc_item.cpp:129
 msgid "Local and global labels have same name"
 msgstr "Локальные и глобальные метки имеют одинаковые имена"
 
-#: eeschema/erc/erc_item.cpp:136
+#: eeschema/erc/erc_item.cpp:133
 msgid "Different footprint assigned in another unit of the symbol"
 msgstr "Частям одного компонента назначены разные посадочные места"
 
-#: eeschema/erc/erc_item.cpp:140
+#: eeschema/erc/erc_item.cpp:137
 msgid "Different net assigned to a shared pin in another unit of the symbol"
 msgstr "Разные цепи подключены к общим выводам разных частей одного компонента"
 
-#: eeschema/erc/erc_item.cpp:144
+#: eeschema/erc/erc_item.cpp:141
 msgid "Conflict between bus alias definitions across schematic sheets"
 msgstr "Конфликт псевдонимов шин среди листов схемы"
 
-#: eeschema/erc/erc_item.cpp:148
+#: eeschema/erc/erc_item.cpp:145
 msgid "More than one name given to this bus or net"
 msgstr "Более одного имени присвоено шине или проводнику"
 
-#: eeschema/erc/erc_item.cpp:152
+#: eeschema/erc/erc_item.cpp:149
 msgid "Net is graphically connected to a bus but not a bus member"
 msgstr "Цепь графически подключена к шине, но не является её сигналом"
 
-#: eeschema/erc/erc_item.cpp:156
+#: eeschema/erc/erc_item.cpp:153
 msgid "Buses are graphically connected but share no bus members"
 msgstr "Шины графически соединены, но не имеют общих сигналов"
 
-#: eeschema/erc/erc_item.cpp:160
+#: eeschema/erc/erc_item.cpp:157
 msgid "Invalid connection between bus and net items"
 msgstr "Некорректное соединение шины и проводника"
 
-#: eeschema/erc/erc_item.cpp:164 pcbnew/drc/drc_item.cpp:219
+#: eeschema/erc/erc_item.cpp:161 pcbnew/drc/drc_item.cpp:216
 msgid "Unresolved text variable"
 msgstr "Неопределённая текстовая переменная"
 
-#: eeschema/erc/erc_item.cpp:168
+#: eeschema/erc/erc_item.cpp:165
 msgid "Undefined netclass"
 msgstr "Не определенный класс цепи"
 
-#: eeschema/erc/erc_item.cpp:172
+#: eeschema/erc/erc_item.cpp:169
 msgid "SPICE model issue"
 msgstr "Проблема со SPICE моделью"
 
-#: eeschema/erc/erc_item.cpp:176
+#: eeschema/erc/erc_item.cpp:173
 msgid "Wires not connected to anything"
 msgstr "Проводники ни к чему не подключены"
 
-#: eeschema/erc/erc_item.cpp:180
+#: eeschema/erc/erc_item.cpp:177
 msgid "Library symbol issue"
 msgstr "Проблема с библиотекой символов"
 
-#: eeschema/erc/erc_item.cpp:184
+#: eeschema/erc/erc_item.cpp:181
 msgid "Symbol doesn't match copy in library"
 msgstr "Символ не совпадает с копией в библиотеке"
 
-#: eeschema/erc/erc_item.cpp:188
+#: eeschema/erc/erc_item.cpp:185
 msgid "Footprint link issue"
 msgstr "Проблема связи с посадочным местом"
 
-#: eeschema/erc/erc_item.cpp:192
+#: eeschema/erc/erc_item.cpp:189
 msgid "Assigned footprint doesn't match footprint filters"
 msgstr "Назначенное посад. место не соответствует фильтрам посад. мест"
 
-#: eeschema/erc/erc_item.cpp:196
+#: eeschema/erc/erc_item.cpp:193
 msgid "Symbol is not annotated"
 msgstr "Символ не обозначен"
 
-#: eeschema/erc/erc_item.cpp:200
+#: eeschema/erc/erc_item.cpp:197
 msgid "Symbol has more units than are defined"
 msgstr "Символ содержит больше частей, чем указано"
 
-#: eeschema/erc/erc_item.cpp:204
+#: eeschema/erc/erc_item.cpp:201
 msgid "Symbol has units that are not placed"
 msgstr "Некоторые части символа не размещены"
 
-#: eeschema/erc/erc_item.cpp:208
+#: eeschema/erc/erc_item.cpp:205
 msgid "Symbol has input pins that are not placed"
 msgstr "Некоторые входные выводы символа не размещены"
 
-#: eeschema/erc/erc_item.cpp:212
+#: eeschema/erc/erc_item.cpp:209
 msgid "Symbol has bidirectional pins that are not placed"
 msgstr "Некоторые двунаправленные выводы символа не размещены"
 
-#: eeschema/erc/erc_item.cpp:216
+#: eeschema/erc/erc_item.cpp:213
 msgid "Symbol has power input pins that are not placed"
 msgstr "Некоторые входные выводы питания символа не размещены"
 
-#: eeschema/erc/erc_item.cpp:220
+#: eeschema/erc/erc_item.cpp:217
 msgid "Units of same symbol have different values"
 msgstr "Части одного и того же символа имеют разные значения"
 
-#: eeschema/erc/erc_item.cpp:224
+#: eeschema/erc/erc_item.cpp:221
 msgid "Duplicate reference designators"
 msgstr "Дублирование обозначения"
 
-#: eeschema/erc/erc_item.cpp:228
+#: eeschema/erc/erc_item.cpp:225
 msgid "Bus Entry needed"
 msgstr "Нужен отвод шины"
 
@@ -17831,7 +17853,7 @@ msgstr "Необработанный тип элемента %d"
 
 #: eeschema/net_navigator.cpp:314 pcbnew/board.cpp:1821
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2124
-#: pcbnew/pcb_draw_panel_gal.cpp:717
+#: pcbnew/pcb_draw_panel_gal.cpp:718
 #: pcbnew/widgets/appearance_controls.cpp:1029
 #: pcbnew/widgets/appearance_controls.cpp:2455
 #: pcbnew/widgets/appearance_controls_base.cpp:61
@@ -19530,7 +19552,9 @@ msgstr "Цвет фона"
 msgid "Fill color"
 msgstr "Цвет заливки"
 
-#: eeschema/sch_sheet.cpp:853 eeschema/sch_sheet.cpp:1714 pcbnew/zone.cpp:1861
+#: eeschema/sch_sheet.cpp:853 eeschema/sch_sheet.cpp:1714
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:62
+#: pcbnew/zone.cpp:1861
 msgid "Sheet Name"
 msgstr "Имя листа"
 
@@ -25638,7 +25662,7 @@ msgstr "Вернуть ненулевой код выхода при налич�
 
 #: kicad/cli/command_pcb_drc.cpp:146 kicad/cli/command_pcb_export_3d.cpp:293
 #: kicad/cli/command_pcb_export_drill.cpp:150
-#: kicad/cli/command_pcb_export_dxf.cpp:146
+#: kicad/cli/command_pcb_export_dxf.cpp:147
 #: kicad/cli/command_pcb_export_pos.cpp:151 kicad/cli/command_sch_erc.cpp:133
 msgid "Invalid units specified\n"
 msgstr "Указаны недопустимые единицы измерения\n"
@@ -25956,7 +25980,7 @@ msgstr ""
 "которую могут быть сохранены файлы."
 
 #: kicad/cli/command_pcb_export_dxf.cpp:120
-#: kicad/cli/command_pcb_export_gencad.cpp:90
+#: kicad/cli/command_pcb_export_gencad.cpp:91
 #: kicad/cli/command_pcb_export_gerber.cpp:121
 #: kicad/cli/command_pcb_export_ipc2581.cpp:119
 #: kicad/cli/command_pcb_export_odb.cpp:77
@@ -25966,7 +25990,7 @@ msgstr ""
 msgid "Board file does not exist or is not accessible\n"
 msgstr "Файл платы не существует или недоступен\n"
 
-#: kicad/cli/command_pcb_export_dxf.cpp:163
+#: kicad/cli/command_pcb_export_dxf.cpp:164
 #: kicad/cli/command_pcb_export_svg.cpp:172
 msgid ""
 "This command has deprecated behavior as of KiCad 9.0, the default behavior "
@@ -25975,7 +25999,7 @@ msgstr ""
 "Эта команда устарела с версии KiCad 9.0, в будущем ее поведение по умолчанию "
 "изменится."
 
-#: kicad/cli/command_pcb_export_dxf.cpp:167
+#: kicad/cli/command_pcb_export_dxf.cpp:168
 #: kicad/cli/command_pcb_export_svg.cpp:176
 msgid "The new behavior will match --mode-multi"
 msgstr "Новое поведение будет соответствовать --mode-multi"
@@ -26530,11 +26554,6 @@ msgstr "Выходной путь не может быть пустым"
 #: kicad/dialogs/dialog_jobset_output_options.cpp:194
 msgid "Zip"
 msgstr "Zip"
-
-#: kicad/dialogs/dialog_jobset_output_options_base.cpp:28
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:115
-msgid "Description:"
-msgstr "Описание:"
 
 #: kicad/dialogs/dialog_jobset_output_options_base.cpp:64
 msgid "Include jobs:"
@@ -30922,7 +30941,7 @@ msgstr "Тесселяция зон меди..."
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:78
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:27
 #: pcbnew/footprint.cpp:1669 pcbnew/netinfo_item.cpp:108
-#: pcbnew/pcb_draw_panel_gal.cpp:714 pcbnew/widgets/appearance_controls.cpp:331
+#: pcbnew/pcb_draw_panel_gal.cpp:715 pcbnew/widgets/appearance_controls.cpp:331
 #: pcbnew/widgets/panel_selection_filter.cpp:198
 #: pcbnew/widgets/panel_selection_filter_base.cpp:45
 msgid "Pads"
@@ -30936,18 +30955,18 @@ msgstr "Конт. пл."
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:222
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:24
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:88
-#: pcbnew/netinfo_item.cpp:123 pcbnew/pcb_draw_panel_gal.cpp:715
+#: pcbnew/netinfo_item.cpp:123 pcbnew/pcb_draw_panel_gal.cpp:716
 #: pcbnew/widgets/appearance_controls.cpp:330
 #: pcbnew/widgets/panel_selection_filter.cpp:197
 #: pcbnew/widgets/panel_selection_filter_base.cpp:41
 msgid "Vias"
 msgstr "Перех. отв."
 
-#: pcbnew/board.cpp:1820 pcbnew/pcb_draw_panel_gal.cpp:716
+#: pcbnew/board.cpp:1820 pcbnew/pcb_draw_panel_gal.cpp:717
 msgid "Track Segments"
 msgstr "Сегменты дорожек"
 
-#: pcbnew/board.cpp:1822 pcbnew/pcb_draw_panel_gal.cpp:718
+#: pcbnew/board.cpp:1822 pcbnew/pcb_draw_panel_gal.cpp:719
 msgid "Unrouted"
 msgstr "Не разведено"
 
@@ -35994,9 +36013,19 @@ msgstr "Использовать полярные координаты"
 msgid "Move Item"
 msgstr "Переместить элемент"
 
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:61
+#, fuzzy
+msgid "Sheet Path"
+msgstr "Выбор каталога"
+
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:64
 msgid "Sheets"
 msgstr "Листы"
+
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:88
+#: pcbnew/footprint.cpp:1722 pcbnew/footprint.cpp:4114 pcbnew/zone.cpp:1863
+msgid "Component Class"
+msgstr "Класс компонентов"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:90
 msgid "Component Classes"
@@ -40870,272 +40899,272 @@ msgstr "Ширина мостика терморазгрузки %s: %s."
 msgid "Checking rule assertion \"%s\"."
 msgstr "Проверка утверждения правила \"%s\"."
 
-#: pcbnew/drc/drc_item.cpp:45 pcbnew/zone.cpp:2072
+#: pcbnew/drc/drc_item.cpp:42 pcbnew/zone.cpp:2072
 msgid "Electrical"
 msgstr "Электрические"
 
-#: pcbnew/drc/drc_item.cpp:46
+#: pcbnew/drc/drc_item.cpp:43
 msgid "Design for Manufacturing"
 msgstr "Проектирование для производства"
 
-#: pcbnew/drc/drc_item.cpp:47
+#: pcbnew/drc/drc_item.cpp:44
 msgid "Schematic Parity"
 msgstr "Соответствие схеме"
 
-#: pcbnew/drc/drc_item.cpp:48
+#: pcbnew/drc/drc_item.cpp:45
 msgid "Signal Integrity"
 msgstr "Целостность сигналов"
 
-#: pcbnew/drc/drc_item.cpp:49
+#: pcbnew/drc/drc_item.cpp:46
 msgid "Readability"
 msgstr "Читабельность"
 
-#: pcbnew/drc/drc_item.cpp:55
+#: pcbnew/drc/drc_item.cpp:52
 msgid "Missing connection between items"
 msgstr "Отсутствует соединение между элементами"
 
-#: pcbnew/drc/drc_item.cpp:59
+#: pcbnew/drc/drc_item.cpp:56
 msgid "Items shorting two nets"
 msgstr "Элементы замыкают две цепи"
 
-#: pcbnew/drc/drc_item.cpp:63
+#: pcbnew/drc/drc_item.cpp:60
 msgid "Items not allowed"
 msgstr "Элементы запрещены"
 
-#: pcbnew/drc/drc_item.cpp:67
+#: pcbnew/drc/drc_item.cpp:64
 msgid "Text (or dimension) on Edge.Cuts layer"
 msgstr "Текст (или размеры) на слое Edge.Cuts"
 
-#: pcbnew/drc/drc_item.cpp:71
+#: pcbnew/drc/drc_item.cpp:68
 msgid "Clearance violation"
 msgstr "Нарушение зазора"
 
-#: pcbnew/drc/drc_item.cpp:75
+#: pcbnew/drc/drc_item.cpp:72
 msgid "Creepage violation"
 msgstr "Нарушение ползучести"
 
-#: pcbnew/drc/drc_item.cpp:79
+#: pcbnew/drc/drc_item.cpp:76
 msgid "Tracks crossing"
 msgstr "Пересечение дорожек"
 
-#: pcbnew/drc/drc_item.cpp:83
+#: pcbnew/drc/drc_item.cpp:80
 msgid "Board edge clearance violation"
 msgstr "Нарушение отступа от контура платы"
 
-#: pcbnew/drc/drc_item.cpp:87
+#: pcbnew/drc/drc_item.cpp:84
 msgid "Copper zones intersect"
 msgstr "Медные зоны пересекаются"
 
-#: pcbnew/drc/drc_item.cpp:91
+#: pcbnew/drc/drc_item.cpp:88
 msgid "Isolated copper fill"
 msgstr "Изолированная область заливки меди"
 
-#: pcbnew/drc/drc_item.cpp:95
+#: pcbnew/drc/drc_item.cpp:92
 msgid "Thermal relief connection to zone incomplete"
 msgstr "Неполное подключение терморазгрузки к зоне"
 
-#: pcbnew/drc/drc_item.cpp:99
+#: pcbnew/drc/drc_item.cpp:96
 msgid "Via is not connected or connected on only one layer"
 msgstr "Перех. отв. не подключено или подключено только к одному слою"
 
-#: pcbnew/drc/drc_item.cpp:103
+#: pcbnew/drc/drc_item.cpp:100
 msgid "Track has unconnected end"
 msgstr "Дорожка имеет не подключённый край"
 
-#: pcbnew/drc/drc_item.cpp:107
+#: pcbnew/drc/drc_item.cpp:104
 msgid "Hole clearance violation"
 msgstr "Нарушение зазора между отв."
 
-#: pcbnew/drc/drc_item.cpp:111
+#: pcbnew/drc/drc_item.cpp:108
 msgid "Drilled hole too close to other hole"
 msgstr "Сверленое отверстие слишком близко к другому отверстию"
 
-#: pcbnew/drc/drc_item.cpp:115
+#: pcbnew/drc/drc_item.cpp:112
 msgid "Drilled holes co-located"
 msgstr "Сквозные отверстия пересекаются"
 
-#: pcbnew/drc/drc_item.cpp:119
+#: pcbnew/drc/drc_item.cpp:116
 msgid "Copper connection too narrow"
 msgstr "Медное соединение слишком узкое"
 
-#: pcbnew/drc/drc_item.cpp:123
+#: pcbnew/drc/drc_item.cpp:120
 msgid "Track width"
 msgstr "Ширина дорожки"
 
-#: pcbnew/drc/drc_item.cpp:127
+#: pcbnew/drc/drc_item.cpp:124
 msgid "Track angle"
 msgstr "Угол наклона"
 
-#: pcbnew/drc/drc_item.cpp:131
+#: pcbnew/drc/drc_item.cpp:128
 msgid "Track segment length"
 msgstr "Длина сегмента пути"
 
-#: pcbnew/drc/drc_item.cpp:135
+#: pcbnew/drc/drc_item.cpp:132
 msgid "Annular width"
 msgstr "Ширина пояска"
 
-#: pcbnew/drc/drc_item.cpp:139
+#: pcbnew/drc/drc_item.cpp:136
 msgid "Hole size out of range"
 msgstr "Размер отверстия вне диапазона"
 
-#: pcbnew/drc/drc_item.cpp:143
+#: pcbnew/drc/drc_item.cpp:140
 msgid "Via diameter"
 msgstr "Диаметр перех. отв."
 
-#: pcbnew/drc/drc_item.cpp:147
+#: pcbnew/drc/drc_item.cpp:144
 msgid "Padstack is questionable"
 msgstr "Сомнительный стек конт. пл."
 
-#: pcbnew/drc/drc_item.cpp:151
+#: pcbnew/drc/drc_item.cpp:148
 msgid "Padstack is not valid"
 msgstr "Неверный стек конт. пл."
 
-#: pcbnew/drc/drc_item.cpp:155
+#: pcbnew/drc/drc_item.cpp:152
 msgid "Micro via hole size out of range"
 msgstr "Размер перех.микроотв. вне диапазона"
 
-#: pcbnew/drc/drc_item.cpp:159
+#: pcbnew/drc/drc_item.cpp:156
 msgid "Courtyards overlap"
 msgstr "Перекрытие областей установки посад. мест"
 
-#: pcbnew/drc/drc_item.cpp:163
+#: pcbnew/drc/drc_item.cpp:160
 msgid "Footprint has no courtyard defined"
 msgstr "У посад. места не определена область установки"
 
-#: pcbnew/drc/drc_item.cpp:167
+#: pcbnew/drc/drc_item.cpp:164
 msgid "Footprint has malformed courtyard"
 msgstr "Некорректная область установки для посад. места"
 
-#: pcbnew/drc/drc_item.cpp:171
+#: pcbnew/drc/drc_item.cpp:168
 msgid "PTH inside courtyard"
 msgstr "Метал. отверстие в области установки"
 
-#: pcbnew/drc/drc_item.cpp:175
+#: pcbnew/drc/drc_item.cpp:172
 msgid "NPTH inside courtyard"
 msgstr "Не метал. отверстие в области установки"
 
-#: pcbnew/drc/drc_item.cpp:179
+#: pcbnew/drc/drc_item.cpp:176
 msgid "Item on a disabled copper layer"
 msgstr "Элемент на отключенном медном слое"
 
-#: pcbnew/drc/drc_item.cpp:183
+#: pcbnew/drc/drc_item.cpp:180
 msgid "Board has malformed outline"
 msgstr "Деформированный контур платы"
 
-#: pcbnew/drc/drc_item.cpp:187
+#: pcbnew/drc/drc_item.cpp:184
 msgid "Duplicate footprints"
 msgstr "Дубликат посад. места"
 
-#: pcbnew/drc/drc_item.cpp:191
+#: pcbnew/drc/drc_item.cpp:188
 msgid "Missing footprint"
 msgstr "Отсутствует посад. место"
 
-#: pcbnew/drc/drc_item.cpp:195
+#: pcbnew/drc/drc_item.cpp:192
 msgid "Extra footprint"
 msgstr "Лишнее посад. место"
 
-#: pcbnew/drc/drc_item.cpp:199
+#: pcbnew/drc/drc_item.cpp:196
 msgid "Pad net doesn't match schematic"
 msgstr "Цепь конт. пл. не соответствует схеме"
 
-#: pcbnew/drc/drc_item.cpp:203
+#: pcbnew/drc/drc_item.cpp:200
 msgid "Footprint attributes don't match symbol"
 msgstr "Атрибуты посад. места не совпадают с символом"
 
-#: pcbnew/drc/drc_item.cpp:207
+#: pcbnew/drc/drc_item.cpp:204
 msgid "Footprint doesn't match symbol's footprint filters"
 msgstr "Посад. место не соответствует фильтрам посад. мест символа"
 
-#: pcbnew/drc/drc_item.cpp:211
+#: pcbnew/drc/drc_item.cpp:208
 msgid "Footprint not found in libraries"
 msgstr "Посад. место не найдено в библиотеках"
 
-#: pcbnew/drc/drc_item.cpp:215
+#: pcbnew/drc/drc_item.cpp:212
 msgid "Footprint doesn't match copy in library"
 msgstr "Посад. место не совпадает с копией в библиотеке"
 
-#: pcbnew/drc/drc_item.cpp:223
+#: pcbnew/drc/drc_item.cpp:220
 msgid "Assertion failure"
 msgstr "Утверждение неверно"
 
-#: pcbnew/drc/drc_item.cpp:235
+#: pcbnew/drc/drc_item.cpp:232
 msgid "Copper sliver"
 msgstr "Тонкий участок меди"
 
-#: pcbnew/drc/drc_item.cpp:239
+#: pcbnew/drc/drc_item.cpp:236
 msgid "Solder mask aperture bridges items with different nets"
 msgstr "Апертура паяльной маски объединяет элементы с различ. цепями"
 
-#: pcbnew/drc/drc_item.cpp:243
+#: pcbnew/drc/drc_item.cpp:240
 msgid "Silkscreen clipped by solder mask"
 msgstr "Шелкография обрезана паяльной маской"
 
-#: pcbnew/drc/drc_item.cpp:247
+#: pcbnew/drc/drc_item.cpp:244
 msgid "Silkscreen clipped by board edge"
 msgstr "Шелкография обрезана контуром платы"
 
-#: pcbnew/drc/drc_item.cpp:251
+#: pcbnew/drc/drc_item.cpp:248
 msgid "Silkscreen overlap"
 msgstr "Перекрытие шелкографии"
 
-#: pcbnew/drc/drc_item.cpp:255
+#: pcbnew/drc/drc_item.cpp:252
 msgid "Text height out of range"
 msgstr "Высота текста вне допустимого диапазона"
 
-#: pcbnew/drc/drc_item.cpp:259
+#: pcbnew/drc/drc_item.cpp:256
 msgid "Text thickness out of range"
 msgstr "Толщина текста вне допустимого диапазона"
 
-#: pcbnew/drc/drc_item.cpp:263
+#: pcbnew/drc/drc_item.cpp:260
 msgid "Track length out of range"
 msgstr "Длина дорожки вне допустимого диапазона"
 
-#: pcbnew/drc/drc_item.cpp:267
+#: pcbnew/drc/drc_item.cpp:264
 msgid "Skew between tracks out of range"
 msgstr "Перекос между дорожками вне допустимого диапазона"
 
-#: pcbnew/drc/drc_item.cpp:272
+#: pcbnew/drc/drc_item.cpp:269
 msgid "Too many or too few vias on a connection"
 msgstr "Слишком много или мало перех. отв. на соединении"
 
-#: pcbnew/drc/drc_item.cpp:276
+#: pcbnew/drc/drc_item.cpp:273
 msgid "Differential pair gap out of range"
 msgstr "Зазор диф.пары превышает предел"
 
-#: pcbnew/drc/drc_item.cpp:280
+#: pcbnew/drc/drc_item.cpp:277
 msgid "Differential uncoupled length too long"
 msgstr "Длина участка диф.пары без взаимной связи слишком велика"
 
-#: pcbnew/drc/drc_item.cpp:284
+#: pcbnew/drc/drc_item.cpp:281
 msgid "Footprint is not valid"
 msgstr "Неверное посад. место"
 
-#: pcbnew/drc/drc_item.cpp:288
+#: pcbnew/drc/drc_item.cpp:285
 msgid "Footprint component type doesn't match footprint pads"
 msgstr "Тип посад. места не соответствует типам его конт. площадок"
 
-#: pcbnew/drc/drc_item.cpp:292
+#: pcbnew/drc/drc_item.cpp:289
 msgid "Through hole pad has no hole"
 msgstr "Конт. пл. со сквозным отв. не имеет отв."
 
-#: pcbnew/drc/drc_item.cpp:296
+#: pcbnew/drc/drc_item.cpp:293
 msgid "Mirrored text on front layer"
 msgstr "Зеркальный текст на лицевом слое"
 
-#: pcbnew/drc/drc_item.cpp:300
+#: pcbnew/drc/drc_item.cpp:297
 msgid "Non-Mirrored text on back layer"
 msgstr "Незеркальный текст на заднем слое"
 
-#: pcbnew/drc/drc_item.cpp:307
+#: pcbnew/drc/drc_item.cpp:304
 msgid "Drilled hole too close to other hole - deprecated"
 msgstr "Сверленое отверстие слишком близко к другому отверстию (устаревшее)"
 
-#: pcbnew/drc/drc_item.cpp:508
+#: pcbnew/drc/drc_item.cpp:505
 #, c-format
 msgid "Rule: %s"
 msgstr "Правило: %s"
 
-#: pcbnew/drc/drc_item.cpp:510
+#: pcbnew/drc/drc_item.cpp:507
 msgid "Local override"
 msgstr "Переопределено локально"
 
@@ -42413,7 +42442,7 @@ msgstr "Перед генерацией файла IPC2581 необходимо 
 msgid "Generating IPC2581 file"
 msgstr "Генерация файла IPC2581"
 
-#: pcbnew/files.cpp:1342 pcbnew/pcbnew_jobs_handler.cpp:1981
+#: pcbnew/files.cpp:1342 pcbnew/pcbnew_jobs_handler.cpp:2011
 #, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
@@ -42422,7 +42451,7 @@ msgstr ""
 "Ошибка генерации файла IPC2581 '%s'.\n"
 "%s"
 
-#: pcbnew/files.cpp:1406 pcbnew/pcbnew_jobs_handler.cpp:2014
+#: pcbnew/files.cpp:1406 pcbnew/pcbnew_jobs_handler.cpp:2044
 #, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
@@ -42484,10 +42513,6 @@ msgstr "Статус: "
 #: pcbnew/footprint.cpp:1715
 msgid "Attributes:"
 msgstr "Атрибуты:"
-
-#: pcbnew/footprint.cpp:1722 pcbnew/footprint.cpp:4114 pcbnew/zone.cpp:1863
-msgid "Component Class"
-msgstr "Класс компонентов"
 
 #: pcbnew/footprint.cpp:1726
 #, c-format
@@ -44234,7 +44259,7 @@ msgstr ""
 "проектов. Для того чтобы создать или обновить плату из редактора схем, нужно "
 "запустить менеджер проектов KiCad и создать проект."
 
-#: pcbnew/pcb_edit_frame.cpp:2026 pcbnew/pcbnew_jobs_handler.cpp:1837
+#: pcbnew/pcb_edit_frame.cpp:2026 pcbnew/pcbnew_jobs_handler.cpp:1867
 msgid "Eeschema netlist"
 msgstr "Список цепей Eeschema"
 
@@ -46443,30 +46468,30 @@ msgid "Schematic parity tests require a fully annotated schematic."
 msgstr ""
 "Для проверки на соответствие схеме требуется полностью обозначенная схема."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1844
+#: pcbnew/pcbnew_jobs_handler.cpp:1841 pcbnew/pcbnew_jobs_handler.cpp:1874
 msgid "Failed to fetch schematic netlist for parity tests.\n"
 msgstr "Не удалось получить схему для проверок на соответствие.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1866 pcbnew/tools/drc_tool.cpp:200
+#: pcbnew/pcbnew_jobs_handler.cpp:1896 pcbnew/tools/drc_tool.cpp:200
 msgid "DRC"
 msgstr "DRC"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1887
+#: pcbnew/pcbnew_jobs_handler.cpp:1917
 #, c-format
 msgid "Found %d unconnected items\n"
 msgstr "Найдено %d неподключенных элементов\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1893
+#: pcbnew/pcbnew_jobs_handler.cpp:1923
 #, c-format
 msgid "Found %d schematic parity issues\n"
 msgstr "Найдено %d проблем с соответствием схеме\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1909
+#: pcbnew/pcbnew_jobs_handler.cpp:1939
 #, c-format
 msgid "Unable to save DRC report to %s\n"
 msgstr "Не удалось сохранить отчет DRC в %s\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1914
+#: pcbnew/pcbnew_jobs_handler.cpp:1944
 #, c-format
 msgid "Saved DRC Report to %s\n"
 msgstr "Отчет DRC сохранен в %s\n"
@@ -49786,9 +49811,18 @@ msgstr "Выполнить размещение компонентов, кото
 msgid "Generate Placement Rule Areas..."
 msgstr "Создать области правил размещения..."
 
+#: pcbnew/tools/pcb_actions.cpp:2229
+#, fuzzy
+msgid "Creates best-fit placement rule areas"
+msgstr "Заменить существующие зоны правил размещения"
+
 #: pcbnew/tools/pcb_actions.cpp:2236
 msgid "Repeat Layout..."
 msgstr "Повторить разводку..."
+
+#: pcbnew/tools/pcb_actions.cpp:2237
+msgid "Clones placement & routing across multiple identical channels"
+msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:2248
 msgid "Route Single Track"

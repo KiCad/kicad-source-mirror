@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-15 06:04+0300\n"
+"POT-Creation-Date: 2025-02-17 08:10+0300\n"
 "PO-Revision-Date: 2025-02-03 18:48+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/master-"
@@ -336,7 +336,7 @@ msgstr "Permisiuni insuficiente pentru a salva fișierul '%s'."
 #: eeschema/dialogs/dialog_erc.cpp:878
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1813
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2215
-#: eeschema/erc/erc_item.cpp:84 eeschema/files-io.cpp:943
+#: eeschema/erc/erc_item.cpp:81 eeschema/files-io.cpp:943
 #: eeschema/files-io.cpp:1011 eeschema/sch_marker.cpp:376
 #: kicad/import_proj.cpp:79 kicad/import_project.cpp:123 kicad/kicad.cpp:318
 #: kicad/tools/kicad_manager_control.cpp:269
@@ -355,7 +355,7 @@ msgstr "Permisiuni insuficiente pentru a salva fișierul '%s'."
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:203
 #: pcbnew/dialogs/dialog_drc.cpp:984
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:392
-#: pcbnew/drc/drc_item.cpp:231 pcbnew/pcb_marker.cpp:211
+#: pcbnew/drc/drc_item.cpp:228 pcbnew/pcb_marker.cpp:211
 #: pcbnew/widgets/appearance_controls.cpp:2765
 msgid "Error"
 msgstr "Eroare"
@@ -1944,7 +1944,7 @@ msgstr "&BINE"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:593
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:154
 #: eeschema/dialogs/panel_template_fieldnames.cpp:212
-#: eeschema/erc/erc_item.cpp:80 eeschema/files-io.cpp:452
+#: eeschema/erc/erc_item.cpp:77 eeschema/files-io.cpp:452
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:261
 #: eeschema/sch_marker.cpp:373 eeschema/sheet.cpp:780
 #: eeschema/symbol_editor/symbol_editor.cpp:134
@@ -1952,7 +1952,7 @@ msgstr "&BINE"
 #: eeschema/symbol_editor/symbol_editor.cpp:1156
 #: eeschema/symbol_editor/symbol_editor.cpp:1554
 #: pcbnew/dialogs/dialog_drc.cpp:985 pcbnew/dialogs/dialog_export_vrml.cpp:128
-#: pcbnew/drc/drc_item.cpp:227 pcbnew/import_gfx/dialog_import_graphics.cpp:293
+#: pcbnew/drc/drc_item.cpp:224 pcbnew/import_gfx/dialog_import_graphics.cpp:293
 #: pcbnew/pcb_marker.cpp:208
 msgid "Warning"
 msgstr "Atenție"
@@ -2064,32 +2064,32 @@ msgstr "Fișierul '%s' nu a putut fi creat."
 msgid "Design block does not have a valid library ID."
 msgstr ""
 
-#: common/design_block_io.cpp:358
+#: common/design_block_io.cpp:360
 #, fuzzy, c-format
 msgid "Schematic source file '%s' does not exist."
 msgstr "Calea de acces `%s` este numai pentru citire."
 
-#: common/design_block_io.cpp:372
+#: common/design_block_io.cpp:374
 #, fuzzy, c-format
 msgid "Design block folder '%s' could not be created."
 msgstr "Fișierul '%s' nu a putut fi creat."
 
-#: common/design_block_io.cpp:389
+#: common/design_block_io.cpp:391
 #, fuzzy, c-format
 msgid "Schematic file '%s' could not be saved as design block at '%s'."
 msgstr "Calea de acces `%s` este numai pentru citire."
 
-#: common/design_block_io.cpp:423
+#: common/design_block_io.cpp:425
 #, fuzzy, c-format
 msgid "Design block metadata file '%s' could not be saved."
 msgstr "Fișierul '%s' nu a putut fi creat."
 
-#: common/design_block_io.cpp:437
+#: common/design_block_io.cpp:439
 #, fuzzy, c-format
 msgid "Design block '%s' does not exist."
 msgstr "Directorul '%s' nu există"
 
-#: common/design_block_io.cpp:443
+#: common/design_block_io.cpp:445
 #, fuzzy, c-format
 msgid "Design block folder '%s' could not be deleted."
 msgstr "Fișierul '%s' nu a putut fi creat."
@@ -2518,6 +2518,7 @@ msgstr "Variabile de mediu"
 #: common/dialogs/panel_design_block_lib_table.cpp:410
 #: common/dialogs/panel_setup_netclasses_base.cpp:51
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:88
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:42
 #: eeschema/dialogs/dialog_label_properties_base.cpp:87
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:121
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:89
@@ -2741,6 +2742,7 @@ msgid "Grid size Y out of range."
 msgstr "Dimensiunea grilă Y este în afara intervalului."
 
 #: common/dialogs/dialog_grid_settings_base.cpp:25
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:97
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:109
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:32
 #: eeschema/symbol_editor/symbol_editor.cpp:860
@@ -3076,7 +3078,7 @@ msgstr "Titlu"
 #: common/dialogs/dialog_page_settings.cpp:487
 #: eeschema/eeschema_jobs_handler.cpp:230 pagelayout_editor/files.cpp:243
 #: pagelayout_editor/pl_editor_frame.cpp:359
-#: pcbnew/pcbnew_jobs_handler.cpp:2113
+#: pcbnew/pcbnew_jobs_handler.cpp:2143
 #, c-format
 msgid "Error loading drawing sheet '%s'."
 msgstr "Eroare la încărcarea foii de desen \"%s\"."
@@ -3174,7 +3176,7 @@ msgid "Export to other sheets"
 msgstr "Exportați în alte foii"
 
 #: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:444
-#: eeschema/erc/erc_item.cpp:427 eeschema/sch_marker.cpp:384
+#: eeschema/erc/erc_item.cpp:424 eeschema/sch_marker.cpp:384
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:105
 #: gerbview/widgets/gerbview_layer_widget.cpp:137 pcbnew/pcb_marker.cpp:219
 #: pcbnew/widgets/appearance_controls.cpp:350
@@ -3333,6 +3335,7 @@ msgstr "Opțiune"
 #: common/dialogs/dialog_plugin_options_base.cpp:44
 #: common/dialogs/panel_design_block_lib_table.cpp:411
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:89
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:43
 #: eeschema/dialogs/dialog_label_properties_base.cpp:88
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:60
 #: eeschema/dialogs/dialog_rescue_each.cpp:135
@@ -7031,7 +7034,7 @@ msgstr "Nu se poate găsi un program de vizualizare PDF pentru \"%s\"."
 msgid "Problem while running the PDF viewer '%s'."
 msgstr "Problemă în timpul rulării vizualizatorului PDF \"%s\"."
 
-#: common/gestfich.cpp:299 eeschema/eeschema.cpp:576 eeschema/eeschema.cpp:611
+#: common/gestfich.cpp:299 eeschema/eeschema.cpp:650 eeschema/eeschema.cpp:685
 #: gerbview/gerbview.cpp:243 kicad/project_template.cpp:309
 #: pcbnew/pcbnew.cpp:577
 #, c-format
@@ -7599,12 +7602,12 @@ msgstr "Parametru necunoscut '%s' în '%s'"
 msgid "Unable to parse '%s' in '%s'"
 msgstr "Imposibil de analizat \"%s\" în '%s'"
 
-#: common/io/eagle/eagle_parser.cpp:287
+#: common/io/eagle/eagle_parser.cpp:288
 #, c-format
 msgid "Invalid size %lld: too large"
 msgstr "Dimensiune nevalabilă %lld: prea mare"
 
-#: common/io/eagle/eagle_parser.cpp:506
+#: common/io/eagle/eagle_parser.cpp:507
 #, c-format
 msgid "Invalid Arc with radius %f and angle %f"
 msgstr "Arc nevalabil cu raza %f și unghiul %f"
@@ -8671,20 +8674,20 @@ msgstr "Arhiva Zip \"%s\" creată (%s necomprimată, %s comprimată)."
 msgid "Error: '%s'."
 msgstr "Eroare: "
 
-#: common/rc_item.cpp:425 eeschema/erc/erc_item.cpp:407
+#: common/rc_item.cpp:425 eeschema/erc/erc_item.cpp:404
 msgid "Excluded warning: "
 msgstr "Avertisment exclus "
 
-#: common/rc_item.cpp:427 eeschema/erc/erc_item.cpp:409
+#: common/rc_item.cpp:427 eeschema/erc/erc_item.cpp:406
 msgid "Excluded error: "
 msgstr "Eroare exclusă: "
 
-#: common/rc_item.cpp:431 eeschema/erc/erc_item.cpp:413
+#: common/rc_item.cpp:431 eeschema/erc/erc_item.cpp:410
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1422
 msgid "Warning: "
 msgstr "Atenție: "
 
-#: common/rc_item.cpp:435 eeschema/erc/erc_item.cpp:417
+#: common/rc_item.cpp:435 eeschema/erc/erc_item.cpp:414
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1420
 msgid "Error: "
 msgstr "Eroare: "
@@ -11188,7 +11191,7 @@ msgstr ""
 "Rețeaua %s este conectată grafic la magistrală %s, dar nu este membră a "
 "acestei magistrale"
 
-#: eeschema/connection_graph.cpp:3807 eeschema/erc/erc_item.cpp:232
+#: eeschema/connection_graph.cpp:3807 eeschema/erc/erc_item.cpp:229
 #, fuzzy
 msgid "Unconnected wire endpoint"
 msgstr "Deconectat"
@@ -11459,6 +11462,8 @@ msgstr "Adnotați schema"
 
 #: eeschema/dialogs/dialog_bom.cpp:85 kicad/dialogs/panel_jobset_base.cpp:199
 #: pcbnew/dialogs/dialog_gendrill.cpp:93
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:60
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:87
 msgid "Generate"
 msgstr "Generează"
 
@@ -11960,6 +11965,28 @@ msgstr "Actualizați câmpurile"
 #, fuzzy
 msgid "Duplicate fields are not allowed."
 msgstr "Elementul nu este adnotat: %s%s\n"
+
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:26
+#, fuzzy
+msgid "Default Fields"
+msgstr "Valoarea predefinită este 1"
+
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:104
+#: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:137
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:122
+msgid "Keywords:"
+msgstr "Cuvinte cheie:"
+
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:111
+#: kicad/dialogs/dialog_jobset_output_options_base.cpp:28
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:115
+msgid "Description:"
+msgstr "Descriere:"
+
+#: eeschema/dialogs/dialog_design_block_properties_base.h:70
+#, fuzzy
+msgid "Design Block Properties"
+msgstr "Bibioteci"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:550
 #, c-format
@@ -13518,11 +13545,6 @@ msgstr "Adăugați un filtru de amprente"
 #, fuzzy
 msgid "Edit Footprint Filter"
 msgstr "Adăugați un filtru de amprente"
-
-#: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:137
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:122
-msgid "Keywords:"
-msgstr "Cuvinte cheie:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:144
 msgid "Derive from symbol:"
@@ -16801,7 +16823,7 @@ msgid "Pin symbol size:"
 msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:151
-#: eeschema/erc/erc_item.cpp:42
+#: eeschema/erc/erc_item.cpp:39
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:934
 msgid "Connections"
 msgstr "Conexiuni"
@@ -17302,7 +17324,7 @@ msgstr ""
 msgid "URL"
 msgstr "URL"
 
-#: eeschema/eeschema.cpp:387
+#: eeschema/eeschema.cpp:461
 #, fuzzy
 msgid ""
 "An error occurred attempting to load the global symbol library table.\n"
@@ -17311,7 +17333,7 @@ msgstr ""
 "S-a produs o eroare la încercarea de a încărca tabelul bibliotecii globale "
 "de amprentă."
 
-#: eeschema/eeschema.cpp:423
+#: eeschema/eeschema.cpp:497
 #, fuzzy
 msgid ""
 "An error occurred attempting to load the global design block library table.\n"
@@ -17320,7 +17342,7 @@ msgstr ""
 "S-a produs o eroare la încercarea de a încărca tabelul bibliotecii globale "
 "de amprentă."
 
-#: eeschema/eeschema.cpp:482
+#: eeschema/eeschema.cpp:556
 #, c-format
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
@@ -17340,7 +17362,7 @@ msgstr "Salvarea copiei de rezervă în \"%s\" nu a reușit"
 #: pcbnew/pcbnew_jobs_handler.cpp:811 pcbnew/pcbnew_jobs_handler.cpp:892
 #: pcbnew/pcbnew_jobs_handler.cpp:945 pcbnew/pcbnew_jobs_handler.cpp:1106
 #: pcbnew/pcbnew_jobs_handler.cpp:1246 pcbnew/pcbnew_jobs_handler.cpp:1381
-#: pcbnew/pcbnew_jobs_handler.cpp:1791 pcbnew/pcbnew_jobs_handler.cpp:1957
+#: pcbnew/pcbnew_jobs_handler.cpp:1791 pcbnew/pcbnew_jobs_handler.cpp:1987
 #, fuzzy
 msgid "Failed to create output directory\n"
 msgstr "Nu s-a reușit eliminarea directorului %s"
@@ -17422,7 +17444,7 @@ msgstr "Identificator nevalabil al bibliotecii de simboluri"
 msgid "Symbol library was not updated\n"
 msgstr "Identificatorul bibliotecii de simboluri %s nu este valid."
 
-#: eeschema/eeschema_jobs_handler.cpp:1179 pcbnew/pcbnew_jobs_handler.cpp:1884
+#: eeschema/eeschema_jobs_handler.cpp:1179 pcbnew/pcbnew_jobs_handler.cpp:1914
 #, fuzzy, c-format
 msgid "Found %d violations\n"
 msgstr "Ignorați toate încălcările „%s”"
@@ -17726,210 +17748,210 @@ msgstr "Se verifică amprentele ..."
 msgid "Checking for undefined netclasses..."
 msgstr "Se verifică variabilele nerezolvate..."
 
-#: eeschema/erc/erc_item.cpp:43
+#: eeschema/erc/erc_item.cpp:40
 msgid "Conflicts"
 msgstr "Conflicte"
 
-#: eeschema/erc/erc_item.cpp:44 pcbnew/dialogs/panel_edit_options_base.cpp:404
-#: pcbnew/drc/drc_item.cpp:50
+#: eeschema/erc/erc_item.cpp:41 pcbnew/dialogs/panel_edit_options_base.cpp:404
+#: pcbnew/drc/drc_item.cpp:47
 msgid "Miscellaneous"
 msgstr "Diverse"
 
-#: eeschema/erc/erc_item.cpp:48
+#: eeschema/erc/erc_item.cpp:45
 msgid "Duplicate sheet names within a given sheet"
 msgstr ""
 
-#: eeschema/erc/erc_item.cpp:52
+#: eeschema/erc/erc_item.cpp:49
 msgid "Symbol pin or wire end off connection grid"
 msgstr ""
 
-#: eeschema/erc/erc_item.cpp:56
+#: eeschema/erc/erc_item.cpp:53
 #, fuzzy
 msgid "Pin not connected"
 msgstr "Fără conexiuni"
 
-#: eeschema/erc/erc_item.cpp:60
+#: eeschema/erc/erc_item.cpp:57
 msgid "Input pin not driven by any Output pins"
 msgstr ""
 
-#: eeschema/erc/erc_item.cpp:64
+#: eeschema/erc/erc_item.cpp:61
 msgid "Input Power pin not driven by any Output Power pins"
 msgstr ""
 
-#: eeschema/erc/erc_item.cpp:68
+#: eeschema/erc/erc_item.cpp:65
 #, fuzzy
 msgid "Multiple pins with the same pin number"
 msgstr "Modificările simbolului la amprentă sunt nesalvate"
 
-#: eeschema/erc/erc_item.cpp:72 eeschema/erc/erc_item.cpp:76
+#: eeschema/erc/erc_item.cpp:69 eeschema/erc/erc_item.cpp:73
 msgid "Conflict problem between pins"
 msgstr ""
 
-#: eeschema/erc/erc_item.cpp:88
+#: eeschema/erc/erc_item.cpp:85
 #, fuzzy
 msgid "Mismatch between hierarchical labels and sheet pins"
 msgstr "Schimbaţi între unitățile imperiale și metrice"
 
-#: eeschema/erc/erc_item.cpp:92
+#: eeschema/erc/erc_item.cpp:89
 msgid "Four connection points are joined together"
 msgstr ""
 
-#: eeschema/erc/erc_item.cpp:96
+#: eeschema/erc/erc_item.cpp:93
 msgid "Label connects more than one wire"
 msgstr ""
 
-#: eeschema/erc/erc_item.cpp:100
+#: eeschema/erc/erc_item.cpp:97
 #, fuzzy
 msgid "A pin with a \"no connection\" flag is connected"
 msgstr "Adăugați un indicator de neconectare"
 
-#: eeschema/erc/erc_item.cpp:104
+#: eeschema/erc/erc_item.cpp:101
 #, fuzzy
 msgid "Unconnected \"no connection\" flag"
 msgstr "Adăugați un indicator de neconectare"
 
-#: eeschema/erc/erc_item.cpp:108
+#: eeschema/erc/erc_item.cpp:105
 #, fuzzy
 msgid "Label not connected to anything"
 msgstr "Firele nu sunt conectate la nimic"
 
-#: eeschema/erc/erc_item.cpp:112
+#: eeschema/erc/erc_item.cpp:109
 msgid "Global label not connected anywhere else in the schematic"
 msgstr ""
 
-#: eeschema/erc/erc_item.cpp:116
+#: eeschema/erc/erc_item.cpp:113
 msgid "Labels are similar (lower/upper case difference only)"
 msgstr ""
 
-#: eeschema/erc/erc_item.cpp:120
+#: eeschema/erc/erc_item.cpp:117
 msgid "Power pins are similar (lower/upper case difference only)"
 msgstr ""
 
-#: eeschema/erc/erc_item.cpp:124
+#: eeschema/erc/erc_item.cpp:121
 msgid "Power pin and label are similar (lower/upper case difference only)"
 msgstr ""
 
-#: eeschema/erc/erc_item.cpp:128
+#: eeschema/erc/erc_item.cpp:125
 #, fuzzy
 msgid "Global label only appears once in the schematic"
 msgstr "Nu în schematică"
 
-#: eeschema/erc/erc_item.cpp:132
+#: eeschema/erc/erc_item.cpp:129
 msgid "Local and global labels have same name"
 msgstr ""
 
-#: eeschema/erc/erc_item.cpp:136
+#: eeschema/erc/erc_item.cpp:133
 msgid "Different footprint assigned in another unit of the symbol"
 msgstr ""
 
-#: eeschema/erc/erc_item.cpp:140
+#: eeschema/erc/erc_item.cpp:137
 msgid "Different net assigned to a shared pin in another unit of the symbol"
 msgstr ""
 
-#: eeschema/erc/erc_item.cpp:144
+#: eeschema/erc/erc_item.cpp:141
 msgid "Conflict between bus alias definitions across schematic sheets"
 msgstr ""
 "Conflict între definițiile aliasurilor de magistrală între foile schematice"
 
-#: eeschema/erc/erc_item.cpp:148
+#: eeschema/erc/erc_item.cpp:145
 msgid "More than one name given to this bus or net"
 msgstr "Mai multe denumiri date acestei magistrale sau acestei rețele"
 
-#: eeschema/erc/erc_item.cpp:152
+#: eeschema/erc/erc_item.cpp:149
 msgid "Net is graphically connected to a bus but not a bus member"
 msgstr ""
 "Rețeaua este conectată grafic la o magistrală, dar nu este un membru al "
 "magistralei"
 
-#: eeschema/erc/erc_item.cpp:156
+#: eeschema/erc/erc_item.cpp:153
 msgid "Buses are graphically connected but share no bus members"
 msgstr ""
 "Magistralele sunt conectate grafic, dar nu împart niciun membru al "
 "magistralei"
 
-#: eeschema/erc/erc_item.cpp:160
+#: eeschema/erc/erc_item.cpp:157
 msgid "Invalid connection between bus and net items"
 msgstr "Conexiune nevalabilă între magistrală și elementele rețelei"
 
-#: eeschema/erc/erc_item.cpp:164 pcbnew/drc/drc_item.cpp:219
+#: eeschema/erc/erc_item.cpp:161 pcbnew/drc/drc_item.cpp:216
 #, fuzzy
 msgid "Unresolved text variable"
 msgstr "Trasarea foii de desen"
 
-#: eeschema/erc/erc_item.cpp:168
+#: eeschema/erc/erc_item.cpp:165
 #, fuzzy
 msgid "Undefined netclass"
 msgstr "Netclass alocat"
 
-#: eeschema/erc/erc_item.cpp:172
+#: eeschema/erc/erc_item.cpp:169
 #, fuzzy
 msgid "SPICE model issue"
 msgstr "Fișier SPICE netlist"
 
-#: eeschema/erc/erc_item.cpp:176
+#: eeschema/erc/erc_item.cpp:173
 msgid "Wires not connected to anything"
 msgstr "Firele nu sunt conectate la nimic"
 
-#: eeschema/erc/erc_item.cpp:180
+#: eeschema/erc/erc_item.cpp:177
 #, fuzzy
 msgid "Library symbol issue"
 msgstr "Verificarea problemelor legate de simbolurile bibliotecii..."
 
-#: eeschema/erc/erc_item.cpp:184
+#: eeschema/erc/erc_item.cpp:181
 #, fuzzy
 msgid "Symbol doesn't match copy in library"
 msgstr "Amprente în bibliotecă..."
 
-#: eeschema/erc/erc_item.cpp:188
+#: eeschema/erc/erc_item.cpp:185
 #, fuzzy
 msgid "Footprint link issue"
 msgstr "Amprenta: %s"
 
-#: eeschema/erc/erc_item.cpp:192
+#: eeschema/erc/erc_item.cpp:189
 #, fuzzy
 msgid "Assigned footprint doesn't match footprint filters"
 msgstr "Amprente în bibliotecă..."
 
-#: eeschema/erc/erc_item.cpp:196
+#: eeschema/erc/erc_item.cpp:193
 #, fuzzy
 msgid "Symbol is not annotated"
 msgstr "Identificatorul bibliotecii de simboluri %s nu este valid."
 
-#: eeschema/erc/erc_item.cpp:200
+#: eeschema/erc/erc_item.cpp:197
 #, fuzzy
 msgid "Symbol has more units than are defined"
 msgstr "Modificările simbolului la amprentă sunt nesalvate"
 
-#: eeschema/erc/erc_item.cpp:204
+#: eeschema/erc/erc_item.cpp:201
 #, fuzzy
 msgid "Symbol has units that are not placed"
 msgstr "Modificările simbolului la amprentă sunt nesalvate"
 
-#: eeschema/erc/erc_item.cpp:208
+#: eeschema/erc/erc_item.cpp:205
 #, fuzzy
 msgid "Symbol has input pins that are not placed"
 msgstr "Modificările simbolului la amprentă sunt nesalvate"
 
-#: eeschema/erc/erc_item.cpp:212
+#: eeschema/erc/erc_item.cpp:209
 #, fuzzy
 msgid "Symbol has bidirectional pins that are not placed"
 msgstr "Modificările simbolului la amprentă sunt nesalvate"
 
-#: eeschema/erc/erc_item.cpp:216
+#: eeschema/erc/erc_item.cpp:213
 #, fuzzy
 msgid "Symbol has power input pins that are not placed"
 msgstr "Modificările simbolului la amprentă sunt nesalvate"
 
-#: eeschema/erc/erc_item.cpp:220
+#: eeschema/erc/erc_item.cpp:217
 msgid "Units of same symbol have different values"
 msgstr ""
 
-#: eeschema/erc/erc_item.cpp:224
+#: eeschema/erc/erc_item.cpp:221
 #, fuzzy
 msgid "Duplicate reference designators"
 msgstr "Trasați desemnatori de referință"
 
-#: eeschema/erc/erc_item.cpp:228
+#: eeschema/erc/erc_item.cpp:225
 msgid "Bus Entry needed"
 msgstr "Intrare în magistrală necesară"
 
@@ -18684,7 +18706,7 @@ msgstr "Nu se poate crea biblioteca de amprente '%s'."
 
 #: eeschema/net_navigator.cpp:314 pcbnew/board.cpp:1821
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2124
-#: pcbnew/pcb_draw_panel_gal.cpp:717
+#: pcbnew/pcb_draw_panel_gal.cpp:718
 #: pcbnew/widgets/appearance_controls.cpp:1029
 #: pcbnew/widgets/appearance_controls.cpp:2455
 #: pcbnew/widgets/appearance_controls_base.cpp:61
@@ -20382,7 +20404,9 @@ msgstr "Trasați culoarea fundalului"
 msgid "Fill color"
 msgstr "Lipiți culoarea"
 
-#: eeschema/sch_sheet.cpp:853 eeschema/sch_sheet.cpp:1714 pcbnew/zone.cpp:1861
+#: eeschema/sch_sheet.cpp:853 eeschema/sch_sheet.cpp:1714
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:62
+#: pcbnew/zone.cpp:1861
 #, fuzzy
 msgid "Sheet Name"
 msgstr "Numele foilor"
@@ -26948,7 +26972,7 @@ msgstr ""
 
 #: kicad/cli/command_pcb_drc.cpp:146 kicad/cli/command_pcb_export_3d.cpp:293
 #: kicad/cli/command_pcb_export_drill.cpp:150
-#: kicad/cli/command_pcb_export_dxf.cpp:146
+#: kicad/cli/command_pcb_export_dxf.cpp:147
 #: kicad/cli/command_pcb_export_pos.cpp:151 kicad/cli/command_sch_erc.cpp:133
 #, fuzzy
 msgid "Invalid units specified\n"
@@ -27268,7 +27292,7 @@ msgid ""
 msgstr ""
 
 #: kicad/cli/command_pcb_export_dxf.cpp:120
-#: kicad/cli/command_pcb_export_gencad.cpp:90
+#: kicad/cli/command_pcb_export_gencad.cpp:91
 #: kicad/cli/command_pcb_export_gerber.cpp:121
 #: kicad/cli/command_pcb_export_ipc2581.cpp:119
 #: kicad/cli/command_pcb_export_odb.cpp:77
@@ -27279,14 +27303,14 @@ msgstr ""
 msgid "Board file does not exist or is not accessible\n"
 msgstr "Amprenta \"%s\" nu a fost găsită."
 
-#: kicad/cli/command_pcb_export_dxf.cpp:163
+#: kicad/cli/command_pcb_export_dxf.cpp:164
 #: kicad/cli/command_pcb_export_svg.cpp:172
 msgid ""
 "This command has deprecated behavior as of KiCad 9.0, the default behavior "
 "of this command will change in a future release."
 msgstr ""
 
-#: kicad/cli/command_pcb_export_dxf.cpp:167
+#: kicad/cli/command_pcb_export_dxf.cpp:168
 #: kicad/cli/command_pcb_export_svg.cpp:176
 msgid "The new behavior will match --mode-multi"
 msgstr ""
@@ -27852,11 +27876,6 @@ msgstr "Numele variabilei nu poate fi gol."
 #: kicad/dialogs/dialog_jobset_output_options.cpp:194
 msgid "Zip"
 msgstr ""
-
-#: kicad/dialogs/dialog_jobset_output_options_base.cpp:28
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:115
-msgid "Description:"
-msgstr "Descriere:"
 
 #: kicad/dialogs/dialog_jobset_output_options_base.cpp:64
 #, fuzzy
@@ -32403,7 +32422,7 @@ msgstr "Se încarcă..."
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:78
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:27
 #: pcbnew/footprint.cpp:1669 pcbnew/netinfo_item.cpp:108
-#: pcbnew/pcb_draw_panel_gal.cpp:714 pcbnew/widgets/appearance_controls.cpp:331
+#: pcbnew/pcb_draw_panel_gal.cpp:715 pcbnew/widgets/appearance_controls.cpp:331
 #: pcbnew/widgets/panel_selection_filter.cpp:198
 #: pcbnew/widgets/panel_selection_filter_base.cpp:45
 msgid "Pads"
@@ -32417,19 +32436,19 @@ msgstr "Pad-uri"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:222
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:24
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:88
-#: pcbnew/netinfo_item.cpp:123 pcbnew/pcb_draw_panel_gal.cpp:715
+#: pcbnew/netinfo_item.cpp:123 pcbnew/pcb_draw_panel_gal.cpp:716
 #: pcbnew/widgets/appearance_controls.cpp:330
 #: pcbnew/widgets/panel_selection_filter.cpp:197
 #: pcbnew/widgets/panel_selection_filter_base.cpp:41
 msgid "Vias"
 msgstr "Via-uri"
 
-#: pcbnew/board.cpp:1820 pcbnew/pcb_draw_panel_gal.cpp:716
+#: pcbnew/board.cpp:1820 pcbnew/pcb_draw_panel_gal.cpp:717
 #, fuzzy
 msgid "Track Segments"
 msgstr "Segment"
 
-#: pcbnew/board.cpp:1822 pcbnew/pcb_draw_panel_gal.cpp:718
+#: pcbnew/board.cpp:1822 pcbnew/pcb_draw_panel_gal.cpp:719
 #, fuzzy
 msgid "Unrouted"
 msgstr "Nicio magistrală selectată"
@@ -37740,10 +37759,21 @@ msgstr "Coordonate polare"
 msgid "Move Item"
 msgstr "Elemente blocate"
 
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:61
+#, fuzzy
+msgid "Sheet Path"
+msgstr "Alege Calea"
+
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:64
 #, fuzzy
 msgid "Sheets"
 msgstr "Foaie"
+
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:88
+#: pcbnew/footprint.cpp:1722 pcbnew/footprint.cpp:4114 pcbnew/zone.cpp:1863
+#, fuzzy
+msgid "Component Class"
+msgstr "Componente"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:90
 #, fuzzy
@@ -42200,316 +42230,316 @@ msgstr "Lățimea reliefului termic"
 msgid "Checking rule assertion \"%s\"."
 msgstr "Verificarea condiției regulii \"%s\"."
 
-#: pcbnew/drc/drc_item.cpp:45 pcbnew/zone.cpp:2072
+#: pcbnew/drc/drc_item.cpp:42 pcbnew/zone.cpp:2072
 msgid "Electrical"
 msgstr "Electric"
 
-#: pcbnew/drc/drc_item.cpp:46
+#: pcbnew/drc/drc_item.cpp:43
 msgid "Design for Manufacturing"
 msgstr ""
 
-#: pcbnew/drc/drc_item.cpp:47
+#: pcbnew/drc/drc_item.cpp:44
 #, fuzzy
 msgid "Schematic Parity"
 msgstr "Editor de schemă"
 
-#: pcbnew/drc/drc_item.cpp:48
+#: pcbnew/drc/drc_item.cpp:45
 msgid "Signal Integrity"
 msgstr ""
 
-#: pcbnew/drc/drc_item.cpp:49
+#: pcbnew/drc/drc_item.cpp:46
 msgid "Readability"
 msgstr ""
 
-#: pcbnew/drc/drc_item.cpp:55
+#: pcbnew/drc/drc_item.cpp:52
 #, fuzzy
 msgid "Missing connection between items"
 msgstr "Conexiune nevalabilă între magistrală și elementele rețelei"
 
-#: pcbnew/drc/drc_item.cpp:59
+#: pcbnew/drc/drc_item.cpp:56
 msgid "Items shorting two nets"
 msgstr ""
 
-#: pcbnew/drc/drc_item.cpp:63
+#: pcbnew/drc/drc_item.cpp:60
 #, fuzzy
 msgid "Items not allowed"
 msgstr "Elementul nu este adnotat: %s%s\n"
 
-#: pcbnew/drc/drc_item.cpp:67
+#: pcbnew/drc/drc_item.cpp:64
 msgid "Text (or dimension) on Edge.Cuts layer"
 msgstr ""
 
-#: pcbnew/drc/drc_item.cpp:71
+#: pcbnew/drc/drc_item.cpp:68
 msgid "Clearance violation"
 msgstr "Încălcarea regulilor de spațiere"
 
-#: pcbnew/drc/drc_item.cpp:75
+#: pcbnew/drc/drc_item.cpp:72
 #, fuzzy
 msgid "Creepage violation"
 msgstr "Încălcarea regulilor de spațiere"
 
-#: pcbnew/drc/drc_item.cpp:79
+#: pcbnew/drc/drc_item.cpp:76
 msgid "Tracks crossing"
 msgstr ""
 
-#: pcbnew/drc/drc_item.cpp:83
+#: pcbnew/drc/drc_item.cpp:80
 #, fuzzy
 msgid "Board edge clearance violation"
 msgstr "Încălcarea regulilor de spațiere"
 
-#: pcbnew/drc/drc_item.cpp:87
+#: pcbnew/drc/drc_item.cpp:84
 #, fuzzy
 msgid "Copper zones intersect"
 msgstr "Culoare cupru"
 
-#: pcbnew/drc/drc_item.cpp:91
+#: pcbnew/drc/drc_item.cpp:88
 msgid "Isolated copper fill"
 msgstr ""
 
-#: pcbnew/drc/drc_item.cpp:95
+#: pcbnew/drc/drc_item.cpp:92
 msgid "Thermal relief connection to zone incomplete"
 msgstr ""
 
-#: pcbnew/drc/drc_item.cpp:99
+#: pcbnew/drc/drc_item.cpp:96
 msgid "Via is not connected or connected on only one layer"
 msgstr ""
 
-#: pcbnew/drc/drc_item.cpp:103
+#: pcbnew/drc/drc_item.cpp:100
 #, fuzzy
 msgid "Track has unconnected end"
 msgstr "Ștergeți traseele neconectate la un capăt"
 
-#: pcbnew/drc/drc_item.cpp:107
+#: pcbnew/drc/drc_item.cpp:104
 #, fuzzy
 msgid "Hole clearance violation"
 msgstr "Încălcarea regulilor de spațiere"
 
-#: pcbnew/drc/drc_item.cpp:111
+#: pcbnew/drc/drc_item.cpp:108
 #, fuzzy
 msgid "Drilled hole too close to other hole"
 msgstr "Găuri prea aproape una de alta"
 
-#: pcbnew/drc/drc_item.cpp:115
+#: pcbnew/drc/drc_item.cpp:112
 #, fuzzy
 msgid "Drilled holes co-located"
 msgstr "Găuri prea aproape una de alta"
 
-#: pcbnew/drc/drc_item.cpp:119
+#: pcbnew/drc/drc_item.cpp:116
 msgid "Copper connection too narrow"
 msgstr ""
 
-#: pcbnew/drc/drc_item.cpp:123
+#: pcbnew/drc/drc_item.cpp:120
 msgid "Track width"
 msgstr "Grosime traseu"
 
-#: pcbnew/drc/drc_item.cpp:127
+#: pcbnew/drc/drc_item.cpp:124
 #, fuzzy
 msgid "Track angle"
 msgstr "Unghi:"
 
-#: pcbnew/drc/drc_item.cpp:131
+#: pcbnew/drc/drc_item.cpp:128
 #, fuzzy
 msgid "Track segment length"
 msgstr "Segment"
 
-#: pcbnew/drc/drc_item.cpp:135
+#: pcbnew/drc/drc_item.cpp:132
 #, fuzzy
 msgid "Annular width"
 msgstr "Grosimea liniei"
 
-#: pcbnew/drc/drc_item.cpp:139
+#: pcbnew/drc/drc_item.cpp:136
 #, fuzzy
 msgid "Hole size out of range"
 msgstr "Foraj în afara razei de acțiune"
 
-#: pcbnew/drc/drc_item.cpp:143
+#: pcbnew/drc/drc_item.cpp:140
 msgid "Via diameter"
 msgstr "Diametru via"
 
-#: pcbnew/drc/drc_item.cpp:147
+#: pcbnew/drc/drc_item.cpp:144
 #, fuzzy
 msgid "Padstack is questionable"
 msgstr "ID-ul amprentei \"%s\" nu este valid."
 
-#: pcbnew/drc/drc_item.cpp:151
+#: pcbnew/drc/drc_item.cpp:148
 #, fuzzy
 msgid "Padstack is not valid"
 msgstr "ID-ul amprentei \"%s\" nu este valid."
 
-#: pcbnew/drc/drc_item.cpp:155
+#: pcbnew/drc/drc_item.cpp:152
 #, fuzzy
 msgid "Micro via hole size out of range"
 msgstr "Foraj μVia în afara razei de acțiune"
 
-#: pcbnew/drc/drc_item.cpp:159
+#: pcbnew/drc/drc_item.cpp:156
 #, fuzzy
 msgid "Courtyards overlap"
 msgstr "F.Courtyard"
 
-#: pcbnew/drc/drc_item.cpp:163
+#: pcbnew/drc/drc_item.cpp:160
 #, fuzzy
 msgid "Footprint has no courtyard defined"
 msgstr "Amprenta \"%s\" nu a fost găsită."
 
-#: pcbnew/drc/drc_item.cpp:167
+#: pcbnew/drc/drc_item.cpp:164
 #, fuzzy
 msgid "Footprint has malformed courtyard"
 msgstr "Fața amprentelor"
 
-#: pcbnew/drc/drc_item.cpp:171
+#: pcbnew/drc/drc_item.cpp:168
 msgid "PTH inside courtyard"
 msgstr ""
 
-#: pcbnew/drc/drc_item.cpp:175
+#: pcbnew/drc/drc_item.cpp:172
 msgid "NPTH inside courtyard"
 msgstr ""
 
-#: pcbnew/drc/drc_item.cpp:179
+#: pcbnew/drc/drc_item.cpp:176
 msgid "Item on a disabled copper layer"
 msgstr ""
 
-#: pcbnew/drc/drc_item.cpp:183
+#: pcbnew/drc/drc_item.cpp:180
 #, fuzzy
 msgid "Board has malformed outline"
 msgstr "Straturi ale plăci pentru contur"
 
-#: pcbnew/drc/drc_item.cpp:187
+#: pcbnew/drc/drc_item.cpp:184
 #, fuzzy
 msgid "Duplicate footprints"
 msgstr "Lipiți amprenta"
 
-#: pcbnew/drc/drc_item.cpp:191
+#: pcbnew/drc/drc_item.cpp:188
 #, fuzzy
 msgid "Missing footprint"
 msgstr "Atribuiți amprentă"
 
-#: pcbnew/drc/drc_item.cpp:195
+#: pcbnew/drc/drc_item.cpp:192
 #, fuzzy
 msgid "Extra footprint"
 msgstr "amprentă"
 
-#: pcbnew/drc/drc_item.cpp:199
+#: pcbnew/drc/drc_item.cpp:196
 #, fuzzy
 msgid "Pad net doesn't match schematic"
 msgstr "Creați un nou document în editor"
 
-#: pcbnew/drc/drc_item.cpp:203
+#: pcbnew/drc/drc_item.cpp:200
 #, fuzzy
 msgid "Footprint attributes don't match symbol"
 msgstr "Amprente în bibliotecă..."
 
-#: pcbnew/drc/drc_item.cpp:207
+#: pcbnew/drc/drc_item.cpp:204
 #, fuzzy
 msgid "Footprint doesn't match symbol's footprint filters"
 msgstr "Amprente în bibliotecă..."
 
-#: pcbnew/drc/drc_item.cpp:211
+#: pcbnew/drc/drc_item.cpp:208
 #, fuzzy
 msgid "Footprint not found in libraries"
 msgstr "Amprenta nu a fost găsită."
 
-#: pcbnew/drc/drc_item.cpp:215
+#: pcbnew/drc/drc_item.cpp:212
 #, fuzzy
 msgid "Footprint doesn't match copy in library"
 msgstr "Amprente în bibliotecă..."
 
-#: pcbnew/drc/drc_item.cpp:223
+#: pcbnew/drc/drc_item.cpp:220
 #, fuzzy
 msgid "Assertion failure"
 msgstr "Acțiuni"
 
-#: pcbnew/drc/drc_item.cpp:235
+#: pcbnew/drc/drc_item.cpp:232
 #, fuzzy
 msgid "Copper sliver"
 msgstr "Reziduu cupru"
 
-#: pcbnew/drc/drc_item.cpp:239
+#: pcbnew/drc/drc_item.cpp:236
 msgid "Solder mask aperture bridges items with different nets"
 msgstr ""
 
-#: pcbnew/drc/drc_item.cpp:243
+#: pcbnew/drc/drc_item.cpp:240
 #, fuzzy
 msgid "Silkscreen clipped by solder mask"
 msgstr "Decupați desenul serigrafic la marginile măștii serigrafice"
 
-#: pcbnew/drc/drc_item.cpp:247
+#: pcbnew/drc/drc_item.cpp:244
 msgid "Silkscreen clipped by board edge"
 msgstr ""
 
-#: pcbnew/drc/drc_item.cpp:251
+#: pcbnew/drc/drc_item.cpp:248
 #, fuzzy
 msgid "Silkscreen overlap"
 msgstr "Partea superioară a serigrafiei:"
 
-#: pcbnew/drc/drc_item.cpp:255
+#: pcbnew/drc/drc_item.cpp:252
 #, fuzzy
 msgid "Text height out of range"
 msgstr "Foraj în afara razei de acțiune"
 
-#: pcbnew/drc/drc_item.cpp:259
+#: pcbnew/drc/drc_item.cpp:256
 #, fuzzy
 msgid "Text thickness out of range"
 msgstr "Foraj în afara razei de acțiune"
 
-#: pcbnew/drc/drc_item.cpp:263
+#: pcbnew/drc/drc_item.cpp:260
 #, fuzzy
 msgid "Track length out of range"
 msgstr "Foraj în afara razei de acțiune"
 
-#: pcbnew/drc/drc_item.cpp:267
+#: pcbnew/drc/drc_item.cpp:264
 #, fuzzy
 msgid "Skew between tracks out of range"
 msgstr "Foraj în afara razei de acțiune"
 
-#: pcbnew/drc/drc_item.cpp:272
+#: pcbnew/drc/drc_item.cpp:269
 #, fuzzy
 msgid "Too many or too few vias on a connection"
 msgstr "Numele amprentei nu poate conține \"%s\"."
 
-#: pcbnew/drc/drc_item.cpp:276
+#: pcbnew/drc/drc_item.cpp:273
 #, fuzzy
 msgid "Differential pair gap out of range"
 msgstr "Decalajul perechii diferențiale"
 
-#: pcbnew/drc/drc_item.cpp:280
+#: pcbnew/drc/drc_item.cpp:277
 #, fuzzy
 msgid "Differential uncoupled length too long"
 msgstr "Etichete ierarhice"
 
-#: pcbnew/drc/drc_item.cpp:284
+#: pcbnew/drc/drc_item.cpp:281
 #, fuzzy
 msgid "Footprint is not valid"
 msgstr "ID-ul amprentei \"%s\" nu este valid."
 
-#: pcbnew/drc/drc_item.cpp:288
+#: pcbnew/drc/drc_item.cpp:285
 #, fuzzy
 msgid "Footprint component type doesn't match footprint pads"
 msgstr "Amprente în bibliotecă..."
 
-#: pcbnew/drc/drc_item.cpp:292
+#: pcbnew/drc/drc_item.cpp:289
 #, fuzzy
 msgid "Through hole pad has no hole"
 msgstr "Pad-uri prin gaură"
 
-#: pcbnew/drc/drc_item.cpp:296
+#: pcbnew/drc/drc_item.cpp:293
 msgid "Mirrored text on front layer"
 msgstr ""
 
-#: pcbnew/drc/drc_item.cpp:300
+#: pcbnew/drc/drc_item.cpp:297
 msgid "Non-Mirrored text on back layer"
 msgstr ""
 
-#: pcbnew/drc/drc_item.cpp:307
+#: pcbnew/drc/drc_item.cpp:304
 #, fuzzy
 msgid "Drilled hole too close to other hole - deprecated"
 msgstr "Găuri prea aproape una de alta"
 
-#: pcbnew/drc/drc_item.cpp:508
+#: pcbnew/drc/drc_item.cpp:505
 #, fuzzy, c-format
 msgid "Rule: %s"
 msgstr "Reguli"
 
-#: pcbnew/drc/drc_item.cpp:510
+#: pcbnew/drc/drc_item.cpp:507
 #, fuzzy
 msgid "Local override"
 msgstr "Fișiere executabile ("
@@ -43852,7 +43882,7 @@ msgstr ""
 msgid "Generating IPC2581 file"
 msgstr "Fișiere de testare IPC-D-356"
 
-#: pcbnew/files.cpp:1342 pcbnew/pcbnew_jobs_handler.cpp:1981
+#: pcbnew/files.cpp:1342 pcbnew/pcbnew_jobs_handler.cpp:2011
 #, fuzzy, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
@@ -43861,7 +43891,7 @@ msgstr ""
 "Eroare la salvarea fișierului schematic '%s'.\n"
 "%s"
 
-#: pcbnew/files.cpp:1406 pcbnew/pcbnew_jobs_handler.cpp:2014
+#: pcbnew/files.cpp:1406 pcbnew/pcbnew_jobs_handler.cpp:2044
 #, fuzzy, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
@@ -43929,11 +43959,6 @@ msgstr "Stare: "
 #: pcbnew/footprint.cpp:1715
 msgid "Attributes:"
 msgstr "Atribute:"
-
-#: pcbnew/footprint.cpp:1722 pcbnew/footprint.cpp:4114 pcbnew/zone.cpp:1863
-#, fuzzy
-msgid "Component Class"
-msgstr "Componente"
 
 #: pcbnew/footprint.cpp:1726
 #, fuzzy, c-format
@@ -45793,7 +45818,7 @@ msgid ""
 "project manager and create a project."
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:2026 pcbnew/pcbnew_jobs_handler.cpp:1837
+#: pcbnew/pcb_edit_frame.cpp:2026 pcbnew/pcbnew_jobs_handler.cpp:1867
 #, fuzzy
 msgid "Eeschema netlist"
 msgstr "Întreaga schemă"
@@ -47917,26 +47942,26 @@ msgstr "Eroare la citirea fișierului."
 msgid "Schematic parity tests require a fully annotated schematic."
 msgstr "Simulatorul necesită o schemă complet adnotată."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1844
+#: pcbnew/pcbnew_jobs_handler.cpp:1841 pcbnew/pcbnew_jobs_handler.cpp:1874
 #, fuzzy
 msgid "Failed to fetch schematic netlist for parity tests.\n"
 msgstr "Salvarea copiei de rezervă în \"%s\" nu a reușit"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1866 pcbnew/tools/drc_tool.cpp:200
+#: pcbnew/pcbnew_jobs_handler.cpp:1896 pcbnew/tools/drc_tool.cpp:200
 msgid "DRC"
 msgstr "DRC"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1887
+#: pcbnew/pcbnew_jobs_handler.cpp:1917
 #, fuzzy, c-format
 msgid "Found %d unconnected items\n"
 msgstr "Elemente neconectate (%s)"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1893
+#: pcbnew/pcbnew_jobs_handler.cpp:1923
 #, c-format
 msgid "Found %d schematic parity issues\n"
 msgstr ""
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1909
+#: pcbnew/pcbnew_jobs_handler.cpp:1939
 #, fuzzy, c-format
 msgid "Unable to save DRC report to %s\n"
 msgstr ""
@@ -47944,7 +47969,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1914
+#: pcbnew/pcbnew_jobs_handler.cpp:1944
 #, fuzzy, c-format
 msgid "Saved DRC Report to %s\n"
 msgstr "Salvați raportul în fișier"
@@ -51645,10 +51670,19 @@ msgstr ""
 msgid "Generate Placement Rule Areas..."
 msgstr "Generarea fișierelor de foraj"
 
+#: pcbnew/tools/pcb_actions.cpp:2229
+#, fuzzy
+msgid "Creates best-fit placement rule areas"
+msgstr "Generarea fișierelor de foraj"
+
 #: pcbnew/tools/pcb_actions.cpp:2236
 #, fuzzy
 msgid "Repeat Layout..."
 msgstr "Repetați numărul"
+
+#: pcbnew/tools/pcb_actions.cpp:2237
+msgid "Clones placement & routing across multiple identical channels"
+msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:2248
 #, fuzzy

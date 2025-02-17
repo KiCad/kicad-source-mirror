@@ -40,7 +40,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-15 06:04+0300\n"
+"POT-Creation-Date: 2025-02-17 08:10+0300\n"
 "PO-Revision-Date: 2025-02-15 08:12+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
@@ -367,7 +367,7 @@ msgstr "保存文件 '%s' 的权限不足。"
 #: eeschema/dialogs/dialog_erc.cpp:878
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1813
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2215
-#: eeschema/erc/erc_item.cpp:84 eeschema/files-io.cpp:943
+#: eeschema/erc/erc_item.cpp:81 eeschema/files-io.cpp:943
 #: eeschema/files-io.cpp:1011 eeschema/sch_marker.cpp:376
 #: kicad/import_proj.cpp:79 kicad/import_project.cpp:123 kicad/kicad.cpp:318
 #: kicad/tools/kicad_manager_control.cpp:269
@@ -386,7 +386,7 @@ msgstr "保存文件 '%s' 的权限不足。"
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:203
 #: pcbnew/dialogs/dialog_drc.cpp:984
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:392
-#: pcbnew/drc/drc_item.cpp:231 pcbnew/pcb_marker.cpp:211
+#: pcbnew/drc/drc_item.cpp:228 pcbnew/pcb_marker.cpp:211
 #: pcbnew/widgets/appearance_controls.cpp:2765
 msgid "Error"
 msgstr "错误"
@@ -1865,7 +1865,7 @@ msgstr "确定 (&O)"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:593
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:154
 #: eeschema/dialogs/panel_template_fieldnames.cpp:212
-#: eeschema/erc/erc_item.cpp:80 eeschema/files-io.cpp:452
+#: eeschema/erc/erc_item.cpp:77 eeschema/files-io.cpp:452
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:261
 #: eeschema/sch_marker.cpp:373 eeschema/sheet.cpp:780
 #: eeschema/symbol_editor/symbol_editor.cpp:134
@@ -1873,7 +1873,7 @@ msgstr "确定 (&O)"
 #: eeschema/symbol_editor/symbol_editor.cpp:1156
 #: eeschema/symbol_editor/symbol_editor.cpp:1554
 #: pcbnew/dialogs/dialog_drc.cpp:985 pcbnew/dialogs/dialog_export_vrml.cpp:128
-#: pcbnew/drc/drc_item.cpp:227 pcbnew/import_gfx/dialog_import_graphics.cpp:293
+#: pcbnew/drc/drc_item.cpp:224 pcbnew/import_gfx/dialog_import_graphics.cpp:293
 #: pcbnew/pcb_marker.cpp:208
 msgid "Warning"
 msgstr "警告"
@@ -1980,32 +1980,32 @@ msgstr "无法读取设计图块元数据文件 '%s'。"
 msgid "Design block does not have a valid library ID."
 msgstr "设计图块缺少有效的库标识。"
 
-#: common/design_block_io.cpp:358
+#: common/design_block_io.cpp:360
 #, c-format
 msgid "Schematic source file '%s' does not exist."
 msgstr "原理图源文件 '%s' 不存在。"
 
-#: common/design_block_io.cpp:372
+#: common/design_block_io.cpp:374
 #, c-format
 msgid "Design block folder '%s' could not be created."
 msgstr "无法创建设计图块文件夹 '%s'。"
 
-#: common/design_block_io.cpp:389
+#: common/design_block_io.cpp:391
 #, c-format
 msgid "Schematic file '%s' could not be saved as design block at '%s'."
 msgstr "无法将原理图文件 '%s' 作为设计图块保存到 '%s'。"
 
-#: common/design_block_io.cpp:423
+#: common/design_block_io.cpp:425
 #, c-format
 msgid "Design block metadata file '%s' could not be saved."
 msgstr "无法保存设计图块元数据文件 '%s'。"
 
-#: common/design_block_io.cpp:437
+#: common/design_block_io.cpp:439
 #, c-format
 msgid "Design block '%s' does not exist."
 msgstr "设计图块 '%s' 不存在。"
 
-#: common/design_block_io.cpp:443
+#: common/design_block_io.cpp:445
 #, c-format
 msgid "Design block folder '%s' could not be deleted."
 msgstr "无法删除设计图块文件夹 '%s'。"
@@ -2419,6 +2419,7 @@ msgstr "环境变量"
 #: common/dialogs/panel_design_block_lib_table.cpp:410
 #: common/dialogs/panel_setup_netclasses_base.cpp:51
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:88
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:42
 #: eeschema/dialogs/dialog_label_properties_base.cpp:87
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:121
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:89
@@ -2630,6 +2631,7 @@ msgid "Grid size Y out of range."
 msgstr "栅格 Y 大小超出范围。"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:25
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:97
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:109
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:32
 #: eeschema/symbol_editor/symbol_editor.cpp:860
@@ -2957,7 +2959,7 @@ msgstr "工程明细表"
 #: common/dialogs/dialog_page_settings.cpp:487
 #: eeschema/eeschema_jobs_handler.cpp:230 pagelayout_editor/files.cpp:243
 #: pagelayout_editor/pl_editor_frame.cpp:359
-#: pcbnew/pcbnew_jobs_handler.cpp:2113
+#: pcbnew/pcbnew_jobs_handler.cpp:2143
 #, c-format
 msgid "Error loading drawing sheet '%s'."
 msgstr "加载图框 '%s' 时出错。"
@@ -3056,7 +3058,7 @@ msgid "Export to other sheets"
 msgstr "导出到其他图纸"
 
 #: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:444
-#: eeschema/erc/erc_item.cpp:427 eeschema/sch_marker.cpp:384
+#: eeschema/erc/erc_item.cpp:424 eeschema/sch_marker.cpp:384
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:105
 #: gerbview/widgets/gerbview_layer_widget.cpp:137 pcbnew/pcb_marker.cpp:219
 #: pcbnew/widgets/appearance_controls.cpp:350
@@ -3210,6 +3212,7 @@ msgstr "选项"
 #: common/dialogs/dialog_plugin_options_base.cpp:44
 #: common/dialogs/panel_design_block_lib_table.cpp:411
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:89
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:43
 #: eeschema/dialogs/dialog_label_properties_base.cpp:88
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:60
 #: eeschema/dialogs/dialog_rescue_each.cpp:135
@@ -6739,7 +6742,7 @@ msgstr "无法为文件 '%s' 找到可用的 PDF 阅读器。"
 msgid "Problem while running the PDF viewer '%s'."
 msgstr "运行 PDF 阅读器 '%s' 时出现问题。"
 
-#: common/gestfich.cpp:299 eeschema/eeschema.cpp:576 eeschema/eeschema.cpp:611
+#: common/gestfich.cpp:299 eeschema/eeschema.cpp:650 eeschema/eeschema.cpp:685
 #: gerbview/gerbview.cpp:243 kicad/project_template.cpp:309
 #: pcbnew/pcbnew.cpp:577
 #, c-format
@@ -7264,12 +7267,12 @@ msgstr "在 '%2$s' 出现未知参数 '%1$s'"
 msgid "Unable to parse '%s' in '%s'"
 msgstr "无法解析 '%2$s' 中的 '%1$s'"
 
-#: common/io/eagle/eagle_parser.cpp:287
+#: common/io/eagle/eagle_parser.cpp:288
 #, c-format
 msgid "Invalid size %lld: too large"
 msgstr "无效的大小 %lld: 过大"
 
-#: common/io/eagle/eagle_parser.cpp:506
+#: common/io/eagle/eagle_parser.cpp:507
 #, c-format
 msgid "Invalid Arc with radius %f and angle %f"
 msgstr "半径为 %f 且度数为 %f 的无效弧线"
@@ -8256,20 +8259,20 @@ msgstr "已创建 Zip 文件 '%s'(%s 未压缩, %s 已压缩)。"
 msgid "Error: '%s'."
 msgstr "错误: '%s'。"
 
-#: common/rc_item.cpp:425 eeschema/erc/erc_item.cpp:407
+#: common/rc_item.cpp:425 eeschema/erc/erc_item.cpp:404
 msgid "Excluded warning: "
 msgstr "已排除的警告: "
 
-#: common/rc_item.cpp:427 eeschema/erc/erc_item.cpp:409
+#: common/rc_item.cpp:427 eeschema/erc/erc_item.cpp:406
 msgid "Excluded error: "
 msgstr "已排除的错误: "
 
-#: common/rc_item.cpp:431 eeschema/erc/erc_item.cpp:413
+#: common/rc_item.cpp:431 eeschema/erc/erc_item.cpp:410
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1422
 msgid "Warning: "
 msgstr "警告: "
 
-#: common/rc_item.cpp:435 eeschema/erc/erc_item.cpp:417
+#: common/rc_item.cpp:435 eeschema/erc/erc_item.cpp:414
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1420
 msgid "Error: "
 msgstr "错误: "
@@ -10581,7 +10584,7 @@ msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr "网络 %s 以图形方式连接到总线 %s, 但不是总线的成员"
 
-#: eeschema/connection_graph.cpp:3807 eeschema/erc/erc_item.cpp:232
+#: eeschema/connection_graph.cpp:3807 eeschema/erc/erc_item.cpp:229
 msgid "Unconnected wire endpoint"
 msgstr "未连接的连线端点"
 
@@ -10835,6 +10838,8 @@ msgstr "批注原理图"
 
 #: eeschema/dialogs/dialog_bom.cpp:85 kicad/dialogs/panel_jobset_base.cpp:199
 #: pcbnew/dialogs/dialog_gendrill.cpp:93
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:60
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:87
 msgid "Generate"
 msgstr "生成"
 
@@ -11375,6 +11380,28 @@ msgstr "无标题字段"
 #: eeschema/dialogs/dialog_design_block_properties.cpp:234
 msgid "Duplicate fields are not allowed."
 msgstr "不允许重复的字段。"
+
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:26
+#, fuzzy
+msgid "Default Fields"
+msgstr "默认是 1"
+
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:104
+#: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:137
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:122
+msgid "Keywords:"
+msgstr "关键字:"
+
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:111
+#: kicad/dialogs/dialog_jobset_output_options_base.cpp:28
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:115
+msgid "Description:"
+msgstr "描述:"
+
+#: eeschema/dialogs/dialog_design_block_properties_base.h:70
+#, fuzzy
+msgid "Design Block Properties"
+msgstr "设计图块库"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:550
 #, c-format
@@ -12809,11 +12836,6 @@ msgstr "添加封装筛选规则"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:832
 msgid "Edit Footprint Filter"
 msgstr "编辑封装筛选规则"
-
-#: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:137
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:122
-msgid "Keywords:"
-msgstr "关键字:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:144
 msgid "Derive from symbol:"
@@ -15813,7 +15835,7 @@ msgid "Pin symbol size:"
 msgstr "引脚符号大小:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:151
-#: eeschema/erc/erc_item.cpp:42
+#: eeschema/erc/erc_item.cpp:39
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:934
 msgid "Connections"
 msgstr "连接"
@@ -16254,7 +16276,7 @@ msgstr "保留空白字符"
 msgid "URL"
 msgstr "URL"
 
-#: eeschema/eeschema.cpp:387
+#: eeschema/eeschema.cpp:461
 msgid ""
 "An error occurred attempting to load the global symbol library table.\n"
 "Please edit this global symbol library table in Preferences menu."
@@ -16262,7 +16284,7 @@ msgstr ""
 "加载全局符号库表时出错。\n"
 "请在偏好设置菜单中编辑此全局符号库表。"
 
-#: eeschema/eeschema.cpp:423
+#: eeschema/eeschema.cpp:497
 msgid ""
 "An error occurred attempting to load the global design block library table.\n"
 "Please edit this global design block library table in Preferences menu."
@@ -16270,7 +16292,7 @@ msgstr ""
 "加载全局设计图块库表时出错。\n"
 "请在偏好设置菜单中编辑此全局设计图块库表。"
 
-#: eeschema/eeschema.cpp:482
+#: eeschema/eeschema.cpp:556
 #, c-format
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
@@ -16289,7 +16311,7 @@ msgstr "加载原理图失败\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:811 pcbnew/pcbnew_jobs_handler.cpp:892
 #: pcbnew/pcbnew_jobs_handler.cpp:945 pcbnew/pcbnew_jobs_handler.cpp:1106
 #: pcbnew/pcbnew_jobs_handler.cpp:1246 pcbnew/pcbnew_jobs_handler.cpp:1381
-#: pcbnew/pcbnew_jobs_handler.cpp:1791 pcbnew/pcbnew_jobs_handler.cpp:1957
+#: pcbnew/pcbnew_jobs_handler.cpp:1791 pcbnew/pcbnew_jobs_handler.cpp:1987
 msgid "Failed to create output directory\n"
 msgstr "无法创建输出目录 %s\n"
 
@@ -16365,7 +16387,7 @@ msgstr "用更新的格式保存符号库\n"
 msgid "Symbol library was not updated\n"
 msgstr "符号库未更新\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1179 pcbnew/pcbnew_jobs_handler.cpp:1884
+#: eeschema/eeschema_jobs_handler.cpp:1179 pcbnew/pcbnew_jobs_handler.cpp:1914
 #, c-format
 msgid "Found %d violations\n"
 msgstr "发现 %d 条违规项\n"
@@ -16641,184 +16663,184 @@ msgstr "检查标签是否连接了不止一条连线..."
 msgid "Checking for undefined netclasses..."
 msgstr "正在检查未定义的网络类..."
 
-#: eeschema/erc/erc_item.cpp:43
+#: eeschema/erc/erc_item.cpp:40
 msgid "Conflicts"
 msgstr "冲突"
 
-#: eeschema/erc/erc_item.cpp:44 pcbnew/dialogs/panel_edit_options_base.cpp:404
-#: pcbnew/drc/drc_item.cpp:50
+#: eeschema/erc/erc_item.cpp:41 pcbnew/dialogs/panel_edit_options_base.cpp:404
+#: pcbnew/drc/drc_item.cpp:47
 msgid "Miscellaneous"
 msgstr "其他"
 
-#: eeschema/erc/erc_item.cpp:48
+#: eeschema/erc/erc_item.cpp:45
 msgid "Duplicate sheet names within a given sheet"
 msgstr "给定的图纸中重复图纸名称"
 
-#: eeschema/erc/erc_item.cpp:52
+#: eeschema/erc/erc_item.cpp:49
 msgid "Symbol pin or wire end off connection grid"
 msgstr "符号引脚或连线没有与栅格对齐"
 
-#: eeschema/erc/erc_item.cpp:56
+#: eeschema/erc/erc_item.cpp:53
 msgid "Pin not connected"
 msgstr "引脚未连接"
 
-#: eeschema/erc/erc_item.cpp:60
+#: eeschema/erc/erc_item.cpp:57
 msgid "Input pin not driven by any Output pins"
 msgstr "输入引脚不受任何输出引脚驱动"
 
-#: eeschema/erc/erc_item.cpp:64
+#: eeschema/erc/erc_item.cpp:61
 msgid "Input Power pin not driven by any Output Power pins"
 msgstr "输入电源引脚不受任何输出电源引脚驱动"
 
-#: eeschema/erc/erc_item.cpp:68
+#: eeschema/erc/erc_item.cpp:65
 msgid "Multiple pins with the same pin number"
 msgstr "多个引脚使用了相同的引脚编号"
 
-#: eeschema/erc/erc_item.cpp:72 eeschema/erc/erc_item.cpp:76
+#: eeschema/erc/erc_item.cpp:69 eeschema/erc/erc_item.cpp:73
 msgid "Conflict problem between pins"
 msgstr "引脚之间的冲突问题"
 
-#: eeschema/erc/erc_item.cpp:88
+#: eeschema/erc/erc_item.cpp:85
 msgid "Mismatch between hierarchical labels and sheet pins"
 msgstr "层次标签和图纸引脚不匹配"
 
-#: eeschema/erc/erc_item.cpp:92
+#: eeschema/erc/erc_item.cpp:89
 msgid "Four connection points are joined together"
 msgstr "四个连接点被连接在一起"
 
-#: eeschema/erc/erc_item.cpp:96
+#: eeschema/erc/erc_item.cpp:93
 msgid "Label connects more than one wire"
 msgstr "标签连接了不止一条连线"
 
-#: eeschema/erc/erc_item.cpp:100
+#: eeschema/erc/erc_item.cpp:97
 msgid "A pin with a \"no connection\" flag is connected"
 msgstr "带有 '无连接' 标志的引脚具有外部连接"
 
-#: eeschema/erc/erc_item.cpp:104
+#: eeschema/erc/erc_item.cpp:101
 msgid "Unconnected \"no connection\" flag"
 msgstr "未连接的 '无连接' 标志"
 
-#: eeschema/erc/erc_item.cpp:108
+#: eeschema/erc/erc_item.cpp:105
 msgid "Label not connected to anything"
 msgstr "标签未连接到任何对象"
 
-#: eeschema/erc/erc_item.cpp:112
+#: eeschema/erc/erc_item.cpp:109
 msgid "Global label not connected anywhere else in the schematic"
 msgstr "在原理图中的任何其他位置都未连接全局标签"
 
-#: eeschema/erc/erc_item.cpp:116
+#: eeschema/erc/erc_item.cpp:113
 msgid "Labels are similar (lower/upper case difference only)"
 msgstr "标签名相似 (仅大小写区别)"
 
-#: eeschema/erc/erc_item.cpp:120
+#: eeschema/erc/erc_item.cpp:117
 msgid "Power pins are similar (lower/upper case difference only)"
 msgstr "电源引脚名相似 (仅大小写区别)"
 
-#: eeschema/erc/erc_item.cpp:124
+#: eeschema/erc/erc_item.cpp:121
 msgid "Power pin and label are similar (lower/upper case difference only)"
 msgstr "电源引脚名与标签名相似 (仅大小写区别)"
 
-#: eeschema/erc/erc_item.cpp:128
+#: eeschema/erc/erc_item.cpp:125
 msgid "Global label only appears once in the schematic"
 msgstr "在原理图中只出现一次的全局标签"
 
-#: eeschema/erc/erc_item.cpp:132
+#: eeschema/erc/erc_item.cpp:129
 msgid "Local and global labels have same name"
 msgstr "局部标签和全局标签使用了相同名称"
 
-#: eeschema/erc/erc_item.cpp:136
+#: eeschema/erc/erc_item.cpp:133
 msgid "Different footprint assigned in another unit of the symbol"
 msgstr "符号的另一个单元中分配了一个不同的封装"
 
-#: eeschema/erc/erc_item.cpp:140
+#: eeschema/erc/erc_item.cpp:137
 msgid "Different net assigned to a shared pin in another unit of the symbol"
 msgstr "不同的网络被分配到符号另一单元中的一个共用引脚"
 
-#: eeschema/erc/erc_item.cpp:144
+#: eeschema/erc/erc_item.cpp:141
 msgid "Conflict between bus alias definitions across schematic sheets"
 msgstr "原理图图纸中总线别名定义之间的冲突"
 
-#: eeschema/erc/erc_item.cpp:148
+#: eeschema/erc/erc_item.cpp:145
 msgid "More than one name given to this bus or net"
 msgstr "这个总线或网络的名称不止一个"
 
-#: eeschema/erc/erc_item.cpp:152
+#: eeschema/erc/erc_item.cpp:149
 msgid "Net is graphically connected to a bus but not a bus member"
 msgstr "网络以图形方式连接到总线, 但不是总线成员"
 
-#: eeschema/erc/erc_item.cpp:156
+#: eeschema/erc/erc_item.cpp:153
 msgid "Buses are graphically connected but share no bus members"
 msgstr "总线以图形方式连接, 但不共享总线成员"
 
-#: eeschema/erc/erc_item.cpp:160
+#: eeschema/erc/erc_item.cpp:157
 msgid "Invalid connection between bus and net items"
 msgstr "总线和网络项目之间的连接无效"
 
-#: eeschema/erc/erc_item.cpp:164 pcbnew/drc/drc_item.cpp:219
+#: eeschema/erc/erc_item.cpp:161 pcbnew/drc/drc_item.cpp:216
 msgid "Unresolved text variable"
 msgstr "未解析的文本变量"
 
-#: eeschema/erc/erc_item.cpp:168
+#: eeschema/erc/erc_item.cpp:165
 msgid "Undefined netclass"
 msgstr "未定义的网络类"
 
-#: eeschema/erc/erc_item.cpp:172
+#: eeschema/erc/erc_item.cpp:169
 msgid "SPICE model issue"
 msgstr "SPICE 模型问题"
 
-#: eeschema/erc/erc_item.cpp:176
+#: eeschema/erc/erc_item.cpp:173
 msgid "Wires not connected to anything"
 msgstr "未连接到任何对象的连线"
 
-#: eeschema/erc/erc_item.cpp:180
+#: eeschema/erc/erc_item.cpp:177
 msgid "Library symbol issue"
 msgstr "库符号问题"
 
-#: eeschema/erc/erc_item.cpp:184
+#: eeschema/erc/erc_item.cpp:181
 msgid "Symbol doesn't match copy in library"
 msgstr "符号与来源库中的符号存在差异"
 
-#: eeschema/erc/erc_item.cpp:188
+#: eeschema/erc/erc_item.cpp:185
 msgid "Footprint link issue"
 msgstr "封装链接问题"
 
-#: eeschema/erc/erc_item.cpp:192
+#: eeschema/erc/erc_item.cpp:189
 msgid "Assigned footprint doesn't match footprint filters"
 msgstr "分配的封装不匹配封装筛选规则"
 
-#: eeschema/erc/erc_item.cpp:196
+#: eeschema/erc/erc_item.cpp:193
 msgid "Symbol is not annotated"
 msgstr "符号没有批注"
 
-#: eeschema/erc/erc_item.cpp:200
+#: eeschema/erc/erc_item.cpp:197
 msgid "Symbol has more units than are defined"
 msgstr "符号的单元比定义的要多"
 
-#: eeschema/erc/erc_item.cpp:204
+#: eeschema/erc/erc_item.cpp:201
 msgid "Symbol has units that are not placed"
 msgstr "符号有未放置的单元"
 
-#: eeschema/erc/erc_item.cpp:208
+#: eeschema/erc/erc_item.cpp:205
 msgid "Symbol has input pins that are not placed"
 msgstr "符号有未放置的输入引脚"
 
-#: eeschema/erc/erc_item.cpp:212
+#: eeschema/erc/erc_item.cpp:209
 msgid "Symbol has bidirectional pins that are not placed"
 msgstr "符号有未放置的双向引脚"
 
-#: eeschema/erc/erc_item.cpp:216
+#: eeschema/erc/erc_item.cpp:213
 msgid "Symbol has power input pins that are not placed"
 msgstr "符号有未放置的电源输入引脚"
 
-#: eeschema/erc/erc_item.cpp:220
+#: eeschema/erc/erc_item.cpp:217
 msgid "Units of same symbol have different values"
 msgstr "同一符号的单元的值不同"
 
-#: eeschema/erc/erc_item.cpp:224
+#: eeschema/erc/erc_item.cpp:221
 msgid "Duplicate reference designators"
 msgstr "重复的位号"
 
-#: eeschema/erc/erc_item.cpp:228
+#: eeschema/erc/erc_item.cpp:225
 msgid "Bus Entry needed"
 msgstr "需要总线入口"
 
@@ -17545,7 +17567,7 @@ msgstr "未处理的项目类型 %d"
 
 #: eeschema/net_navigator.cpp:314 pcbnew/board.cpp:1821
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2124
-#: pcbnew/pcb_draw_panel_gal.cpp:717
+#: pcbnew/pcb_draw_panel_gal.cpp:718
 #: pcbnew/widgets/appearance_controls.cpp:1029
 #: pcbnew/widgets/appearance_controls.cpp:2455
 #: pcbnew/widgets/appearance_controls_base.cpp:61
@@ -19188,7 +19210,9 @@ msgstr "主体背景颜色"
 msgid "Fill color"
 msgstr "填充颜色"
 
-#: eeschema/sch_sheet.cpp:853 eeschema/sch_sheet.cpp:1714 pcbnew/zone.cpp:1861
+#: eeschema/sch_sheet.cpp:853 eeschema/sch_sheet.cpp:1714
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:62
+#: pcbnew/zone.cpp:1861
 msgid "Sheet Name"
 msgstr "图纸名称"
 
@@ -25171,7 +25195,7 @@ msgstr "如果存在 DRC 违规, 返回非零退出代码"
 
 #: kicad/cli/command_pcb_drc.cpp:146 kicad/cli/command_pcb_export_3d.cpp:293
 #: kicad/cli/command_pcb_export_drill.cpp:150
-#: kicad/cli/command_pcb_export_dxf.cpp:146
+#: kicad/cli/command_pcb_export_dxf.cpp:147
 #: kicad/cli/command_pcb_export_pos.cpp:151 kicad/cli/command_sch_erc.cpp:133
 msgid "Invalid units specified\n"
 msgstr "指定的单位无效\n"
@@ -25471,7 +25495,7 @@ msgstr ""
 "用于指定文件输出的目录。"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:120
-#: kicad/cli/command_pcb_export_gencad.cpp:90
+#: kicad/cli/command_pcb_export_gencad.cpp:91
 #: kicad/cli/command_pcb_export_gerber.cpp:121
 #: kicad/cli/command_pcb_export_ipc2581.cpp:119
 #: kicad/cli/command_pcb_export_odb.cpp:77
@@ -25481,7 +25505,7 @@ msgstr ""
 msgid "Board file does not exist or is not accessible\n"
 msgstr "电路板文件不存在或无法访问\n"
 
-#: kicad/cli/command_pcb_export_dxf.cpp:163
+#: kicad/cli/command_pcb_export_dxf.cpp:164
 #: kicad/cli/command_pcb_export_svg.cpp:172
 msgid ""
 "This command has deprecated behavior as of KiCad 9.0, the default behavior "
@@ -25489,7 +25513,7 @@ msgid ""
 msgstr ""
 "此命令的行为在 KiCad 9.0 中已被弃用, 未来版本中此命令的默认行为将发生更改。"
 
-#: kicad/cli/command_pcb_export_dxf.cpp:167
+#: kicad/cli/command_pcb_export_dxf.cpp:168
 #: kicad/cli/command_pcb_export_svg.cpp:176
 msgid "The new behavior will match --mode-multi"
 msgstr "新行为将与 --mode-multi 相匹配"
@@ -26006,11 +26030,6 @@ msgstr "输出路径不能为空"
 #: kicad/dialogs/dialog_jobset_output_options.cpp:194
 msgid "Zip"
 msgstr "Zip"
-
-#: kicad/dialogs/dialog_jobset_output_options_base.cpp:28
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:115
-msgid "Description:"
-msgstr "描述:"
 
 #: kicad/dialogs/dialog_jobset_output_options_base.cpp:64
 msgid "Include jobs:"
@@ -30327,7 +30346,7 @@ msgstr "铺排覆铜区..."
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:78
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:27
 #: pcbnew/footprint.cpp:1669 pcbnew/netinfo_item.cpp:108
-#: pcbnew/pcb_draw_panel_gal.cpp:714 pcbnew/widgets/appearance_controls.cpp:331
+#: pcbnew/pcb_draw_panel_gal.cpp:715 pcbnew/widgets/appearance_controls.cpp:331
 #: pcbnew/widgets/panel_selection_filter.cpp:198
 #: pcbnew/widgets/panel_selection_filter_base.cpp:45
 msgid "Pads"
@@ -30341,18 +30360,18 @@ msgstr "焊盘"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:222
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:24
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:88
-#: pcbnew/netinfo_item.cpp:123 pcbnew/pcb_draw_panel_gal.cpp:715
+#: pcbnew/netinfo_item.cpp:123 pcbnew/pcb_draw_panel_gal.cpp:716
 #: pcbnew/widgets/appearance_controls.cpp:330
 #: pcbnew/widgets/panel_selection_filter.cpp:197
 #: pcbnew/widgets/panel_selection_filter_base.cpp:41
 msgid "Vias"
 msgstr "过孔"
 
-#: pcbnew/board.cpp:1820 pcbnew/pcb_draw_panel_gal.cpp:716
+#: pcbnew/board.cpp:1820 pcbnew/pcb_draw_panel_gal.cpp:717
 msgid "Track Segments"
 msgstr "走线段"
 
-#: pcbnew/board.cpp:1822 pcbnew/pcb_draw_panel_gal.cpp:718
+#: pcbnew/board.cpp:1822 pcbnew/pcb_draw_panel_gal.cpp:719
 msgid "Unrouted"
 msgstr "未布线"
 
@@ -35275,9 +35294,19 @@ msgstr "使用极坐标"
 msgid "Move Item"
 msgstr "移动项目"
 
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:61
+#, fuzzy
+msgid "Sheet Path"
+msgstr "选择路径"
+
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:64
 msgid "Sheets"
 msgstr "图纸"
+
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:88
+#: pcbnew/footprint.cpp:1722 pcbnew/footprint.cpp:4114 pcbnew/zone.cpp:1863
+msgid "Component Class"
+msgstr "元件类"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:90
 msgid "Component Classes"
@@ -39996,274 +40025,274 @@ msgstr "%s 散热引线宽度: %s。"
 msgid "Checking rule assertion \"%s\"."
 msgstr "检查规则断言 \"%s\"。"
 
-#: pcbnew/drc/drc_item.cpp:45 pcbnew/zone.cpp:2072
+#: pcbnew/drc/drc_item.cpp:42 pcbnew/zone.cpp:2072
 msgid "Electrical"
 msgstr "电气"
 
-#: pcbnew/drc/drc_item.cpp:46
+#: pcbnew/drc/drc_item.cpp:43
 msgid "Design for Manufacturing"
 msgstr "可制造性设计(DFM)"
 
-#: pcbnew/drc/drc_item.cpp:47
+#: pcbnew/drc/drc_item.cpp:44
 msgid "Schematic Parity"
 msgstr "原理图一致性检验"
 
-#: pcbnew/drc/drc_item.cpp:48
+#: pcbnew/drc/drc_item.cpp:45
 msgid "Signal Integrity"
 msgstr "信号完整性"
 
-#: pcbnew/drc/drc_item.cpp:49
+#: pcbnew/drc/drc_item.cpp:46
 msgid "Readability"
 msgstr "可读性"
 
-#: pcbnew/drc/drc_item.cpp:55
+#: pcbnew/drc/drc_item.cpp:52
 msgid "Missing connection between items"
 msgstr "项目之间的连接缺失"
 
-#: pcbnew/drc/drc_item.cpp:59
+#: pcbnew/drc/drc_item.cpp:56
 msgid "Items shorting two nets"
 msgstr "短路两个网络的项目"
 
-#: pcbnew/drc/drc_item.cpp:63
+#: pcbnew/drc/drc_item.cpp:60
 msgid "Items not allowed"
 msgstr "不允许的项目"
 
-#: pcbnew/drc/drc_item.cpp:67
+#: pcbnew/drc/drc_item.cpp:64
 msgid "Text (or dimension) on Edge.Cuts layer"
 msgstr "Edge.Cuts 层上的文本 (或标注)"
 
-#: pcbnew/drc/drc_item.cpp:71
+#: pcbnew/drc/drc_item.cpp:68
 msgid "Clearance violation"
 msgstr "间距违规"
 
-#: pcbnew/drc/drc_item.cpp:75
+#: pcbnew/drc/drc_item.cpp:72
 msgid "Creepage violation"
 msgstr "爬电距离违规"
 
-#: pcbnew/drc/drc_item.cpp:79
+#: pcbnew/drc/drc_item.cpp:76
 msgid "Tracks crossing"
 msgstr "走线交叉"
 
-#: pcbnew/drc/drc_item.cpp:83
+#: pcbnew/drc/drc_item.cpp:80
 msgid "Board edge clearance violation"
 msgstr "电路板边缘间距违规"
 
-#: pcbnew/drc/drc_item.cpp:87
+#: pcbnew/drc/drc_item.cpp:84
 msgid "Copper zones intersect"
 msgstr "覆铜区相交"
 
-#: pcbnew/drc/drc_item.cpp:91
+#: pcbnew/drc/drc_item.cpp:88
 msgid "Isolated copper fill"
 msgstr "死铜"
 
-#: pcbnew/drc/drc_item.cpp:95
+#: pcbnew/drc/drc_item.cpp:92
 msgid "Thermal relief connection to zone incomplete"
 msgstr "缓释热焊盘 (花焊盘) 与填充区的连接不完整"
 
-#: pcbnew/drc/drc_item.cpp:99
+#: pcbnew/drc/drc_item.cpp:96
 msgid "Via is not connected or connected on only one layer"
 msgstr "通孔未连接或仅连接了一层"
 
-#: pcbnew/drc/drc_item.cpp:103
+#: pcbnew/drc/drc_item.cpp:100
 msgid "Track has unconnected end"
 msgstr "走线末端悬空"
 
-#: pcbnew/drc/drc_item.cpp:107
+#: pcbnew/drc/drc_item.cpp:104
 msgid "Hole clearance violation"
 msgstr "孔间距违规"
 
-#: pcbnew/drc/drc_item.cpp:111
+#: pcbnew/drc/drc_item.cpp:108
 msgid "Drilled hole too close to other hole"
 msgstr "钻孔太靠近其他孔"
 
-#: pcbnew/drc/drc_item.cpp:115
+#: pcbnew/drc/drc_item.cpp:112
 msgid "Drilled holes co-located"
 msgstr "钻孔的位置相同"
 
-#: pcbnew/drc/drc_item.cpp:119
+#: pcbnew/drc/drc_item.cpp:116
 msgid "Copper connection too narrow"
 msgstr "铜连接过窄"
 
-#: pcbnew/drc/drc_item.cpp:123
+#: pcbnew/drc/drc_item.cpp:120
 msgid "Track width"
 msgstr "走线宽度"
 
-#: pcbnew/drc/drc_item.cpp:127
+#: pcbnew/drc/drc_item.cpp:124
 msgid "Track angle"
 msgstr "走线角度"
 
-#: pcbnew/drc/drc_item.cpp:131
+#: pcbnew/drc/drc_item.cpp:128
 msgid "Track segment length"
 msgstr "走线段长度"
 
-#: pcbnew/drc/drc_item.cpp:135
+#: pcbnew/drc/drc_item.cpp:132
 msgid "Annular width"
 msgstr "孔环宽度"
 
-#: pcbnew/drc/drc_item.cpp:139
+#: pcbnew/drc/drc_item.cpp:136
 msgid "Hole size out of range"
 msgstr "孔径超出范围"
 
-#: pcbnew/drc/drc_item.cpp:143
+#: pcbnew/drc/drc_item.cpp:140
 msgid "Via diameter"
 msgstr "过孔直径"
 
 # Padstack 焊盘槽/孔
-#: pcbnew/drc/drc_item.cpp:147
+#: pcbnew/drc/drc_item.cpp:144
 msgid "Padstack is questionable"
 msgstr "Padstack 存在问题"
 
 # Padstack 焊盘槽/孔
-#: pcbnew/drc/drc_item.cpp:151
+#: pcbnew/drc/drc_item.cpp:148
 msgid "Padstack is not valid"
 msgstr "Padstack 无效"
 
-#: pcbnew/drc/drc_item.cpp:155
+#: pcbnew/drc/drc_item.cpp:152
 msgid "Micro via hole size out of range"
 msgstr "微孔孔径超出范围"
 
-#: pcbnew/drc/drc_item.cpp:159
+#: pcbnew/drc/drc_item.cpp:156
 msgid "Courtyards overlap"
 msgstr "元件外框重叠"
 
-#: pcbnew/drc/drc_item.cpp:163
+#: pcbnew/drc/drc_item.cpp:160
 msgid "Footprint has no courtyard defined"
 msgstr "封装没有定义外框"
 
-#: pcbnew/drc/drc_item.cpp:167
+#: pcbnew/drc/drc_item.cpp:164
 msgid "Footprint has malformed courtyard"
 msgstr "封装的外框有错误"
 
-#: pcbnew/drc/drc_item.cpp:171
+#: pcbnew/drc/drc_item.cpp:168
 msgid "PTH inside courtyard"
 msgstr "PTH 在元件外框内"
 
-#: pcbnew/drc/drc_item.cpp:175
+#: pcbnew/drc/drc_item.cpp:172
 msgid "NPTH inside courtyard"
 msgstr "NPTH 在元件外框内"
 
-#: pcbnew/drc/drc_item.cpp:179
+#: pcbnew/drc/drc_item.cpp:176
 msgid "Item on a disabled copper layer"
 msgstr "已禁用铜层上的项目"
 
-#: pcbnew/drc/drc_item.cpp:183
+#: pcbnew/drc/drc_item.cpp:180
 msgid "Board has malformed outline"
 msgstr "电路板的外框形状有问题"
 
-#: pcbnew/drc/drc_item.cpp:187
+#: pcbnew/drc/drc_item.cpp:184
 msgid "Duplicate footprints"
 msgstr "重复的封装"
 
-#: pcbnew/drc/drc_item.cpp:191
+#: pcbnew/drc/drc_item.cpp:188
 msgid "Missing footprint"
 msgstr "缺少封装"
 
-#: pcbnew/drc/drc_item.cpp:195
+#: pcbnew/drc/drc_item.cpp:192
 msgid "Extra footprint"
 msgstr "多余的封装"
 
-#: pcbnew/drc/drc_item.cpp:199
+#: pcbnew/drc/drc_item.cpp:196
 msgid "Pad net doesn't match schematic"
 msgstr "焊盘网络与原理图不匹配"
 
-#: pcbnew/drc/drc_item.cpp:203
+#: pcbnew/drc/drc_item.cpp:200
 msgid "Footprint attributes don't match symbol"
 msgstr "封装特性与符号不匹配"
 
-#: pcbnew/drc/drc_item.cpp:207
+#: pcbnew/drc/drc_item.cpp:204
 msgid "Footprint doesn't match symbol's footprint filters"
 msgstr "封装与符号的封装过滤规则不匹配"
 
-#: pcbnew/drc/drc_item.cpp:211
+#: pcbnew/drc/drc_item.cpp:208
 msgid "Footprint not found in libraries"
 msgstr "在库中找不到封装"
 
-#: pcbnew/drc/drc_item.cpp:215
+#: pcbnew/drc/drc_item.cpp:212
 msgid "Footprint doesn't match copy in library"
 msgstr "封装与来源库中的封装存在差异"
 
-#: pcbnew/drc/drc_item.cpp:223
+#: pcbnew/drc/drc_item.cpp:220
 msgid "Assertion failure"
 msgstr "断言失败"
 
-#: pcbnew/drc/drc_item.cpp:235
+#: pcbnew/drc/drc_item.cpp:232
 msgid "Copper sliver"
 msgstr "铜箔毛刺"
 
-#: pcbnew/drc/drc_item.cpp:239
+#: pcbnew/drc/drc_item.cpp:236
 msgid "Solder mask aperture bridges items with different nets"
 msgstr "阻焊开窗与不同网络的项目相连"
 
-#: pcbnew/drc/drc_item.cpp:243
+#: pcbnew/drc/drc_item.cpp:240
 msgid "Silkscreen clipped by solder mask"
 msgstr "被阻焊层截断的丝印"
 
-#: pcbnew/drc/drc_item.cpp:247
+#: pcbnew/drc/drc_item.cpp:244
 msgid "Silkscreen clipped by board edge"
 msgstr "被板边截断的丝印"
 
-#: pcbnew/drc/drc_item.cpp:251
+#: pcbnew/drc/drc_item.cpp:248
 msgid "Silkscreen overlap"
 msgstr "丝印重叠"
 
-#: pcbnew/drc/drc_item.cpp:255
+#: pcbnew/drc/drc_item.cpp:252
 msgid "Text height out of range"
 msgstr "文字高度超出范围"
 
-#: pcbnew/drc/drc_item.cpp:259
+#: pcbnew/drc/drc_item.cpp:256
 msgid "Text thickness out of range"
 msgstr "文本线宽超出范围"
 
-#: pcbnew/drc/drc_item.cpp:263
+#: pcbnew/drc/drc_item.cpp:260
 msgid "Track length out of range"
 msgstr "走线长度超出范围"
 
-#: pcbnew/drc/drc_item.cpp:267
+#: pcbnew/drc/drc_item.cpp:264
 msgid "Skew between tracks out of range"
 msgstr "走线之间的 skew 超出范围"
 
-#: pcbnew/drc/drc_item.cpp:272
+#: pcbnew/drc/drc_item.cpp:269
 msgid "Too many or too few vias on a connection"
 msgstr "连接上的过孔过多或过少"
 
-#: pcbnew/drc/drc_item.cpp:276
+#: pcbnew/drc/drc_item.cpp:273
 msgid "Differential pair gap out of range"
 msgstr "差分对间隙超出范围"
 
-#: pcbnew/drc/drc_item.cpp:280
+#: pcbnew/drc/drc_item.cpp:277
 msgid "Differential uncoupled length too long"
 msgstr "差分未耦合长度太长"
 
-#: pcbnew/drc/drc_item.cpp:284
+#: pcbnew/drc/drc_item.cpp:281
 msgid "Footprint is not valid"
 msgstr "封装无效"
 
-#: pcbnew/drc/drc_item.cpp:288
+#: pcbnew/drc/drc_item.cpp:285
 msgid "Footprint component type doesn't match footprint pads"
 msgstr "封装元件类型与封装焊盘不匹配"
 
-#: pcbnew/drc/drc_item.cpp:292
+#: pcbnew/drc/drc_item.cpp:289
 msgid "Through hole pad has no hole"
 msgstr "通孔焊盘没有孔"
 
-#: pcbnew/drc/drc_item.cpp:296
+#: pcbnew/drc/drc_item.cpp:293
 msgid "Mirrored text on front layer"
 msgstr "顶层上的镜像文本"
 
-#: pcbnew/drc/drc_item.cpp:300
+#: pcbnew/drc/drc_item.cpp:297
 msgid "Non-Mirrored text on back layer"
 msgstr "底层上的非镜像文本"
 
-#: pcbnew/drc/drc_item.cpp:307
+#: pcbnew/drc/drc_item.cpp:304
 msgid "Drilled hole too close to other hole - deprecated"
 msgstr "钻孔太靠近其他孔 (已弃用)"
 
-#: pcbnew/drc/drc_item.cpp:508
+#: pcbnew/drc/drc_item.cpp:505
 #, c-format
 msgid "Rule: %s"
 msgstr "规则: %s"
 
-#: pcbnew/drc/drc_item.cpp:510
+#: pcbnew/drc/drc_item.cpp:507
 msgid "Local override"
 msgstr "局部覆盖"
 
@@ -41536,7 +41565,7 @@ msgstr "生成 IPC2581 文件前必须保存电路板。"
 msgid "Generating IPC2581 file"
 msgstr "生成 IPC2581 文件"
 
-#: pcbnew/files.cpp:1342 pcbnew/pcbnew_jobs_handler.cpp:1981
+#: pcbnew/files.cpp:1342 pcbnew/pcbnew_jobs_handler.cpp:2011
 #, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
@@ -41545,7 +41574,7 @@ msgstr ""
 "生成 IPC2581 文件 '%s' 时出错。\n"
 "%s"
 
-#: pcbnew/files.cpp:1406 pcbnew/pcbnew_jobs_handler.cpp:2014
+#: pcbnew/files.cpp:1406 pcbnew/pcbnew_jobs_handler.cpp:2044
 #, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
@@ -41607,10 +41636,6 @@ msgstr "状态: "
 #: pcbnew/footprint.cpp:1715
 msgid "Attributes:"
 msgstr "特性:"
-
-#: pcbnew/footprint.cpp:1722 pcbnew/footprint.cpp:4114 pcbnew/zone.cpp:1863
-msgid "Component Class"
-msgstr "元件类"
 
 #: pcbnew/footprint.cpp:1726
 #, c-format
@@ -43311,7 +43336,7 @@ msgstr ""
 "无法更新 PCB, 因为 PCB 编辑器是在独立模式下打开的。为了从原理图创建或更新 "
 "PCB, 你必须启动 KiCad 工程管理器并创建一个工程。"
 
-#: pcbnew/pcb_edit_frame.cpp:2026 pcbnew/pcbnew_jobs_handler.cpp:1837
+#: pcbnew/pcb_edit_frame.cpp:2026 pcbnew/pcbnew_jobs_handler.cpp:1867
 msgid "Eeschema netlist"
 msgstr "Eeschema 网表"
 
@@ -45426,30 +45451,30 @@ msgstr "创建 svg 文件出错"
 msgid "Schematic parity tests require a fully annotated schematic."
 msgstr "请先将原理图批注完整, 然后才能检查一致性。"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1844
+#: pcbnew/pcbnew_jobs_handler.cpp:1841 pcbnew/pcbnew_jobs_handler.cpp:1874
 msgid "Failed to fetch schematic netlist for parity tests.\n"
 msgstr "无法获取用于校验测试的原理图网表。\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1866 pcbnew/tools/drc_tool.cpp:200
+#: pcbnew/pcbnew_jobs_handler.cpp:1896 pcbnew/tools/drc_tool.cpp:200
 msgid "DRC"
 msgstr "DRC"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1887
+#: pcbnew/pcbnew_jobs_handler.cpp:1917
 #, c-format
 msgid "Found %d unconnected items\n"
 msgstr "发现 %d 个未连接的项目\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1893
+#: pcbnew/pcbnew_jobs_handler.cpp:1923
 #, c-format
 msgid "Found %d schematic parity issues\n"
 msgstr "发现 %d 个原理图一致性问题\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1909
+#: pcbnew/pcbnew_jobs_handler.cpp:1939
 #, c-format
 msgid "Unable to save DRC report to %s\n"
 msgstr "无法将 DRC 报告保存到 %s\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1914
+#: pcbnew/pcbnew_jobs_handler.cpp:1944
 #, c-format
 msgid "Saved DRC Report to %s\n"
 msgstr "保存 DRC 报告到 %s\n"
@@ -48683,9 +48708,18 @@ msgstr "自动布置板外元件"
 msgid "Generate Placement Rule Areas..."
 msgstr "生成布置规则域..."
 
+#: pcbnew/tools/pcb_actions.cpp:2229
+#, fuzzy
+msgid "Creates best-fit placement rule areas"
+msgstr "替换现有的布置规则域"
+
 #: pcbnew/tools/pcb_actions.cpp:2236
 msgid "Repeat Layout..."
 msgstr "复刻布局..."
+
+#: pcbnew/tools/pcb_actions.cpp:2237
+msgid "Clones placement & routing across multiple identical channels"
+msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:2248
 msgid "Route Single Track"

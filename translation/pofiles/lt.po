@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-15 06:04+0300\n"
+"POT-Creation-Date: 2025-02-17 08:10+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/master-"
@@ -364,7 +364,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_erc.cpp:878
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1813
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2215
-#: eeschema/erc/erc_item.cpp:84 eeschema/files-io.cpp:943
+#: eeschema/erc/erc_item.cpp:81 eeschema/files-io.cpp:943
 #: eeschema/files-io.cpp:1011 eeschema/sch_marker.cpp:376
 #: kicad/import_proj.cpp:79 kicad/import_project.cpp:123 kicad/kicad.cpp:318
 #: kicad/tools/kicad_manager_control.cpp:269
@@ -383,7 +383,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:203
 #: pcbnew/dialogs/dialog_drc.cpp:984
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:392
-#: pcbnew/drc/drc_item.cpp:231 pcbnew/pcb_marker.cpp:211
+#: pcbnew/drc/drc_item.cpp:228 pcbnew/pcb_marker.cpp:211
 #: pcbnew/widgets/appearance_controls.cpp:2765
 msgid "Error"
 msgstr "Klaida"
@@ -1995,7 +1995,7 @@ msgstr "Gerai"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:593
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:154
 #: eeschema/dialogs/panel_template_fieldnames.cpp:212
-#: eeschema/erc/erc_item.cpp:80 eeschema/files-io.cpp:452
+#: eeschema/erc/erc_item.cpp:77 eeschema/files-io.cpp:452
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:261
 #: eeschema/sch_marker.cpp:373 eeschema/sheet.cpp:780
 #: eeschema/symbol_editor/symbol_editor.cpp:134
@@ -2003,7 +2003,7 @@ msgstr "Gerai"
 #: eeschema/symbol_editor/symbol_editor.cpp:1156
 #: eeschema/symbol_editor/symbol_editor.cpp:1554
 #: pcbnew/dialogs/dialog_drc.cpp:985 pcbnew/dialogs/dialog_export_vrml.cpp:128
-#: pcbnew/drc/drc_item.cpp:227 pcbnew/import_gfx/dialog_import_graphics.cpp:293
+#: pcbnew/drc/drc_item.cpp:224 pcbnew/import_gfx/dialog_import_graphics.cpp:293
 #: pcbnew/pcb_marker.cpp:208
 msgid "Warning"
 msgstr "Įspėjimas"
@@ -2117,32 +2117,32 @@ msgstr "Nepavyko sukurti failo „%s“."
 msgid "Design block does not have a valid library ID."
 msgstr ""
 
-#: common/design_block_io.cpp:358
+#: common/design_block_io.cpp:360
 #, fuzzy, c-format
 msgid "Schematic source file '%s' does not exist."
 msgstr "Scheminis failas „%s“ jau yra."
 
-#: common/design_block_io.cpp:372
+#: common/design_block_io.cpp:374
 #, fuzzy, c-format
 msgid "Design block folder '%s' could not be created."
 msgstr "Nepavyko sukurti failo „%s“."
 
-#: common/design_block_io.cpp:389
+#: common/design_block_io.cpp:391
 #, fuzzy, c-format
 msgid "Schematic file '%s' could not be saved as design block at '%s'."
 msgstr "Scheminis failas „%s“ jau yra."
 
-#: common/design_block_io.cpp:423
+#: common/design_block_io.cpp:425
 #, fuzzy, c-format
 msgid "Design block metadata file '%s' could not be saved."
 msgstr "Nepavyko sukurti failo „%s“."
 
-#: common/design_block_io.cpp:437
+#: common/design_block_io.cpp:439
 #, fuzzy, c-format
 msgid "Design block '%s' does not exist."
 msgstr "Katalogas „%s“ nėra rašomas."
 
-#: common/design_block_io.cpp:443
+#: common/design_block_io.cpp:445
 #, fuzzy, c-format
 msgid "Design block folder '%s' could not be deleted."
 msgstr "Nepavyko sukurti failo „%s“."
@@ -2575,6 +2575,7 @@ msgstr "aplinkos įvairovė"
 #: common/dialogs/panel_design_block_lib_table.cpp:410
 #: common/dialogs/panel_setup_netclasses_base.cpp:51
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:88
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:42
 #: eeschema/dialogs/dialog_label_properties_base.cpp:87
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:121
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:89
@@ -2800,6 +2801,7 @@ msgid "Grid size Y out of range."
 msgstr "Pėdsakų ilgis už diapazono ribų"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:25
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:97
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:109
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:32
 #: eeschema/symbol_editor/symbol_editor.cpp:860
@@ -3132,7 +3134,7 @@ msgstr "Pavadinimo blokas"
 #: common/dialogs/dialog_page_settings.cpp:487
 #: eeschema/eeschema_jobs_handler.cpp:230 pagelayout_editor/files.cpp:243
 #: pagelayout_editor/pl_editor_frame.cpp:359
-#: pcbnew/pcbnew_jobs_handler.cpp:2113
+#: pcbnew/pcbnew_jobs_handler.cpp:2143
 #, fuzzy, c-format
 msgid "Error loading drawing sheet '%s'."
 msgstr "Įkeliant redaktorių įvyko klaida"
@@ -3230,7 +3232,7 @@ msgid "Export to other sheets"
 msgstr "Eksportuoti į kitus lapus"
 
 #: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:444
-#: eeschema/erc/erc_item.cpp:427 eeschema/sch_marker.cpp:384
+#: eeschema/erc/erc_item.cpp:424 eeschema/sch_marker.cpp:384
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:105
 #: gerbview/widgets/gerbview_layer_widget.cpp:137 pcbnew/pcb_marker.cpp:219
 #: pcbnew/widgets/appearance_controls.cpp:350
@@ -3390,6 +3392,7 @@ msgstr "Parinktis"
 #: common/dialogs/dialog_plugin_options_base.cpp:44
 #: common/dialogs/panel_design_block_lib_table.cpp:411
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:89
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:43
 #: eeschema/dialogs/dialog_label_properties_base.cpp:88
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:60
 #: eeschema/dialogs/dialog_rescue_each.cpp:135
@@ -7137,7 +7140,7 @@ msgstr ""
 "Problema paleidus PDF peržiūros priemonę\n"
 "Komanda yra „%s“"
 
-#: common/gestfich.cpp:299 eeschema/eeschema.cpp:576 eeschema/eeschema.cpp:611
+#: common/gestfich.cpp:299 eeschema/eeschema.cpp:650 eeschema/eeschema.cpp:685
 #: gerbview/gerbview.cpp:243 kicad/project_template.cpp:309
 #: pcbnew/pcbnew.cpp:577
 #, fuzzy, c-format
@@ -7710,12 +7713,12 @@ msgstr "Nežinomas parametras „%s“ „%s“"
 msgid "Unable to parse '%s' in '%s'"
 msgstr "Nepavyko išanalizuoti „%s“ „%s“"
 
-#: common/io/eagle/eagle_parser.cpp:287
+#: common/io/eagle/eagle_parser.cpp:288
 #, c-format
 msgid "Invalid size %lld: too large"
 msgstr "Neteisingas dydis %ll d: per didelis"
 
-#: common/io/eagle/eagle_parser.cpp:506
+#: common/io/eagle/eagle_parser.cpp:507
 #, c-format
 msgid "Invalid Arc with radius %f and angle %f"
 msgstr "Netinkamas lankas su spinduliu %f ir kampu %f"
@@ -8798,22 +8801,22 @@ msgstr "Sukurtas pašto archyvas „%s“ (%s nesuspaustas, %s suglaudintas)\n"
 msgid "Error: '%s'."
 msgstr "Klaida: "
 
-#: common/rc_item.cpp:425 eeschema/erc/erc_item.cpp:407
+#: common/rc_item.cpp:425 eeschema/erc/erc_item.cpp:404
 #, fuzzy
 msgid "Excluded warning: "
 msgstr "Mastelis:"
 
-#: common/rc_item.cpp:427 eeschema/erc/erc_item.cpp:409
+#: common/rc_item.cpp:427 eeschema/erc/erc_item.cpp:406
 #, fuzzy
 msgid "Excluded error: "
 msgstr "Neįtraukta "
 
-#: common/rc_item.cpp:431 eeschema/erc/erc_item.cpp:413
+#: common/rc_item.cpp:431 eeschema/erc/erc_item.cpp:410
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1422
 msgid "Warning: "
 msgstr "Įspėjimas: "
 
-#: common/rc_item.cpp:435 eeschema/erc/erc_item.cpp:417
+#: common/rc_item.cpp:435 eeschema/erc/erc_item.cpp:414
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1420
 msgid "Error: "
 msgstr "Klaida: "
@@ -11309,7 +11312,7 @@ msgstr ""
 "Tinklas %s yra grafiškai prijungtas prie magistralės %s, tačiau nėra tos "
 "magistralės narys"
 
-#: eeschema/connection_graph.cpp:3807 eeschema/erc/erc_item.cpp:232
+#: eeschema/connection_graph.cpp:3807 eeschema/erc/erc_item.cpp:229
 #, fuzzy
 msgid "Unconnected wire endpoint"
 msgstr "Nesujungta"
@@ -11576,6 +11579,8 @@ msgstr "Anotuoti schemą"
 
 #: eeschema/dialogs/dialog_bom.cpp:85 kicad/dialogs/panel_jobset_base.cpp:199
 #: pcbnew/dialogs/dialog_gendrill.cpp:93
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:60
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:87
 msgid "Generate"
 msgstr "Kurti grandinių sąrašą"
 
@@ -12084,6 +12089,27 @@ msgstr "Be pavadinimo laukas"
 #, fuzzy
 msgid "Duplicate fields are not allowed."
 msgstr "Дублирование имен класса цепей не допустимо."
+
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:26
+msgid "Default Fields"
+msgstr "Laukai pagal nutylėjimą"
+
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:104
+#: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:137
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:122
+msgid "Keywords:"
+msgstr "Raktiniai žodžiai:"
+
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:111
+#: kicad/dialogs/dialog_jobset_output_options_base.cpp:28
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:115
+msgid "Description:"
+msgstr "Aprašymas:"
+
+#: eeschema/dialogs/dialog_design_block_properties_base.h:70
+#, fuzzy
+msgid "Design Block Properties"
+msgstr "Išsaugoti biblioteką"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:550
 #, fuzzy, c-format
@@ -13604,11 +13630,6 @@ msgstr "Korpusų filtras"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:832
 msgid "Edit Footprint Filter"
 msgstr "Redaguoti pėdsakų filtrą"
-
-#: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:137
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:122
-msgid "Keywords:"
-msgstr "Raktiniai žodžiai:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:144
 msgid "Derive from symbol:"
@@ -16845,7 +16866,7 @@ msgid "Pin symbol size:"
 msgstr "Smeigtuko simbolio dydis:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:151
-#: eeschema/erc/erc_item.cpp:42
+#: eeschema/erc/erc_item.cpp:39
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:934
 msgid "Connections"
 msgstr "Sujungimai"
@@ -17348,7 +17369,7 @@ msgstr "Laikykite nuo trinkelių"
 msgid "URL"
 msgstr "Nuoroda"
 
-#: eeschema/eeschema.cpp:387
+#: eeschema/eeschema.cpp:461
 msgid ""
 "An error occurred attempting to load the global symbol library table.\n"
 "Please edit this global symbol library table in Preferences menu."
@@ -17356,7 +17377,7 @@ msgstr ""
 "Bandant įkelti visuotinę simbolių bibliotekos lentelę įvyko klaida.\n"
 "Redaguokite šią visuotinę simbolių bibliotekos lentelę meniu „Nuostatos“."
 
-#: eeschema/eeschema.cpp:423
+#: eeschema/eeschema.cpp:497
 #, fuzzy
 msgid ""
 "An error occurred attempting to load the global design block library table.\n"
@@ -17365,7 +17386,7 @@ msgstr ""
 "Bandant įkelti visuotinę simbolių bibliotekos lentelę įvyko klaida.\n"
 "Redaguokite šią visuotinę simbolių bibliotekos lentelę meniu „Nuostatos“."
 
-#: eeschema/eeschema.cpp:482
+#: eeschema/eeschema.cpp:556
 #, c-format
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
@@ -17385,7 +17406,7 @@ msgstr "Nepavyko įkelti schemos „%s“"
 #: pcbnew/pcbnew_jobs_handler.cpp:811 pcbnew/pcbnew_jobs_handler.cpp:892
 #: pcbnew/pcbnew_jobs_handler.cpp:945 pcbnew/pcbnew_jobs_handler.cpp:1106
 #: pcbnew/pcbnew_jobs_handler.cpp:1246 pcbnew/pcbnew_jobs_handler.cpp:1381
-#: pcbnew/pcbnew_jobs_handler.cpp:1791 pcbnew/pcbnew_jobs_handler.cpp:1957
+#: pcbnew/pcbnew_jobs_handler.cpp:1791 pcbnew/pcbnew_jobs_handler.cpp:1987
 #, fuzzy
 msgid "Failed to create output directory\n"
 msgstr "Nepavyko sukurti katalogo „%s“"
@@ -17467,7 +17488,7 @@ msgstr "Neteisingas simbolių bibliotekos identifikatorius"
 msgid "Symbol library was not updated\n"
 msgstr "Simbolių biblioteka neįgalinta."
 
-#: eeschema/eeschema_jobs_handler.cpp:1179 pcbnew/pcbnew_jobs_handler.cpp:1884
+#: eeschema/eeschema_jobs_handler.cpp:1179 pcbnew/pcbnew_jobs_handler.cpp:1914
 #, fuzzy, c-format
 msgid "Found %d violations\n"
 msgstr "Nepaisyti DRC"
@@ -17761,206 +17782,206 @@ msgstr "Tikrinami pėdsakai ..."
 msgid "Checking for undefined netclasses..."
 msgstr "Tikrinama, ar nėra neišspręstų kintamųjų ..."
 
-#: eeschema/erc/erc_item.cpp:43
+#: eeschema/erc/erc_item.cpp:40
 msgid "Conflicts"
 msgstr "Konfliktai"
 
-#: eeschema/erc/erc_item.cpp:44 pcbnew/dialogs/panel_edit_options_base.cpp:404
-#: pcbnew/drc/drc_item.cpp:50
+#: eeschema/erc/erc_item.cpp:41 pcbnew/dialogs/panel_edit_options_base.cpp:404
+#: pcbnew/drc/drc_item.cpp:47
 msgid "Miscellaneous"
 msgstr "Kita"
 
-#: eeschema/erc/erc_item.cpp:48
+#: eeschema/erc/erc_item.cpp:45
 msgid "Duplicate sheet names within a given sheet"
 msgstr "Pateikto lapo lapų pavadinimų kopijos"
 
-#: eeschema/erc/erc_item.cpp:52
+#: eeschema/erc/erc_item.cpp:49
 msgid "Symbol pin or wire end off connection grid"
 msgstr ""
 
-#: eeschema/erc/erc_item.cpp:56
+#: eeschema/erc/erc_item.cpp:53
 msgid "Pin not connected"
 msgstr "Kaištis neprijungtas"
 
-#: eeschema/erc/erc_item.cpp:60
+#: eeschema/erc/erc_item.cpp:57
 msgid "Input pin not driven by any Output pins"
 msgstr "Įvesties kaištis nėra valdomas jokių išvesties kaiščių"
 
-#: eeschema/erc/erc_item.cpp:64
+#: eeschema/erc/erc_item.cpp:61
 msgid "Input Power pin not driven by any Output Power pins"
 msgstr ""
 "Įvesties maitinimo kaištis nėra valdomas jokių išvesties maitinimo kaiščių"
 
-#: eeschema/erc/erc_item.cpp:68
+#: eeschema/erc/erc_item.cpp:65
 #, fuzzy
 msgid "Multiple pins with the same pin number"
 msgstr "Pažymėkite kaiščius su jų elektriniais tipais"
 
-#: eeschema/erc/erc_item.cpp:72 eeschema/erc/erc_item.cpp:76
+#: eeschema/erc/erc_item.cpp:69 eeschema/erc/erc_item.cpp:73
 msgid "Conflict problem between pins"
 msgstr "Konflikto problema tarp kaiščių"
 
-#: eeschema/erc/erc_item.cpp:88
+#: eeschema/erc/erc_item.cpp:85
 msgid "Mismatch between hierarchical labels and sheet pins"
 msgstr "Neatitikimas tarp hierarchinių etikečių ir lapų kaiščių"
 
-#: eeschema/erc/erc_item.cpp:92
+#: eeschema/erc/erc_item.cpp:89
 msgid "Four connection points are joined together"
 msgstr ""
 
-#: eeschema/erc/erc_item.cpp:96
+#: eeschema/erc/erc_item.cpp:93
 msgid "Label connects more than one wire"
 msgstr ""
 
-#: eeschema/erc/erc_item.cpp:100
+#: eeschema/erc/erc_item.cpp:97
 msgid "A pin with a \"no connection\" flag is connected"
 msgstr "Prijungtas kaištis su „be ryšio“ vėliava"
 
-#: eeschema/erc/erc_item.cpp:104
+#: eeschema/erc/erc_item.cpp:101
 msgid "Unconnected \"no connection\" flag"
 msgstr "Neprijungta vėliava „nėra ryšio“"
 
-#: eeschema/erc/erc_item.cpp:108
+#: eeschema/erc/erc_item.cpp:105
 msgid "Label not connected to anything"
 msgstr "Etiketė neprijungta prie nieko"
 
-#: eeschema/erc/erc_item.cpp:112
+#: eeschema/erc/erc_item.cpp:109
 msgid "Global label not connected anywhere else in the schematic"
 msgstr "Visuotinė etiketė neprijungta niekur kitur schemoje"
 
-#: eeschema/erc/erc_item.cpp:116
+#: eeschema/erc/erc_item.cpp:113
 msgid "Labels are similar (lower/upper case difference only)"
 msgstr "Žymos panašios (skiriasi tik didžiosios ir mažosios raidės)"
 
-#: eeschema/erc/erc_item.cpp:120
+#: eeschema/erc/erc_item.cpp:117
 #, fuzzy
 msgid "Power pins are similar (lower/upper case difference only)"
 msgstr "Žymos panašios (skiriasi tik didžiosios ir mažosios raidės)"
 
-#: eeschema/erc/erc_item.cpp:124
+#: eeschema/erc/erc_item.cpp:121
 #, fuzzy
 msgid "Power pin and label are similar (lower/upper case difference only)"
 msgstr "Globalios žymos panašios (skiriasi tik didžiosios ir mažosios raidės)"
 
-#: eeschema/erc/erc_item.cpp:128
+#: eeschema/erc/erc_item.cpp:125
 #, fuzzy
 msgid "Global label only appears once in the schematic"
 msgstr "Visuotinė etiketė neprijungta niekur kitur schemoje"
 
-#: eeschema/erc/erc_item.cpp:132
+#: eeschema/erc/erc_item.cpp:129
 msgid "Local and global labels have same name"
 msgstr ""
 
-#: eeschema/erc/erc_item.cpp:136
+#: eeschema/erc/erc_item.cpp:133
 msgid "Different footprint assigned in another unit of the symbol"
 msgstr "Kitame simbolio vienete priskiriamas skirtingas pėdsakas"
 
-#: eeschema/erc/erc_item.cpp:140
+#: eeschema/erc/erc_item.cpp:137
 msgid "Different net assigned to a shared pin in another unit of the symbol"
 msgstr ""
 "Skirtingas tinklas, priskirtas bendram kaiščiui kitame simbolio vienete"
 
-#: eeschema/erc/erc_item.cpp:144
+#: eeschema/erc/erc_item.cpp:141
 msgid "Conflict between bus alias definitions across schematic sheets"
 msgstr "Konfliktas tarp magistralinių slapyvardžių apibrėžimų visose schemose"
 
-#: eeschema/erc/erc_item.cpp:148
+#: eeschema/erc/erc_item.cpp:145
 msgid "More than one name given to this bus or net"
 msgstr "Šiam autobusui ar tinklui suteikta daugiau nei vienas vardas"
 
-#: eeschema/erc/erc_item.cpp:152
+#: eeschema/erc/erc_item.cpp:149
 msgid "Net is graphically connected to a bus but not a bus member"
 msgstr ""
 "Tinklas yra grafiškai prijungtas prie magistralės, bet ne su magistralės "
 "nariu"
 
-#: eeschema/erc/erc_item.cpp:156
+#: eeschema/erc/erc_item.cpp:153
 msgid "Buses are graphically connected but share no bus members"
 msgstr ""
 "Autobusai yra grafiškai sujungti, tačiau juose nėra jokių autobusų narių"
 
-#: eeschema/erc/erc_item.cpp:160
+#: eeschema/erc/erc_item.cpp:157
 msgid "Invalid connection between bus and net items"
 msgstr "Neteisingas ryšys tarp magistralės ir tinklo elementų"
 
-#: eeschema/erc/erc_item.cpp:164 pcbnew/drc/drc_item.cpp:219
+#: eeschema/erc/erc_item.cpp:161 pcbnew/drc/drc_item.cpp:216
 msgid "Unresolved text variable"
 msgstr "Neišspręstas teksto kintamasis"
 
-#: eeschema/erc/erc_item.cpp:168
+#: eeschema/erc/erc_item.cpp:165
 #, fuzzy
 msgid "Undefined netclass"
 msgstr "Priskirtas „Netclass“"
 
-#: eeschema/erc/erc_item.cpp:172
+#: eeschema/erc/erc_item.cpp:169
 #, fuzzy
 msgid "SPICE model issue"
 msgstr "„SPICE netlist“ failas"
 
-#: eeschema/erc/erc_item.cpp:176
+#: eeschema/erc/erc_item.cpp:173
 msgid "Wires not connected to anything"
 msgstr "Su niekuo neprijungti laidai"
 
-#: eeschema/erc/erc_item.cpp:180
+#: eeschema/erc/erc_item.cpp:177
 msgid "Library symbol issue"
 msgstr "Bibliotekos simbolių klausimas"
 
-#: eeschema/erc/erc_item.cpp:184
+#: eeschema/erc/erc_item.cpp:181
 #, fuzzy
 msgid "Symbol doesn't match copy in library"
 msgstr "Редактор библиотек - создание/редактирование компонентов"
 
-#: eeschema/erc/erc_item.cpp:188
+#: eeschema/erc/erc_item.cpp:185
 #, fuzzy
 msgid "Footprint link issue"
 msgstr "Чертить значения посад.мест"
 
-#: eeschema/erc/erc_item.cpp:192
+#: eeschema/erc/erc_item.cpp:189
 #, fuzzy
 msgid "Assigned footprint doesn't match footprint filters"
 msgstr "Редактор библиотек - создание/редактирование компонентов"
 
-#: eeschema/erc/erc_item.cpp:196
+#: eeschema/erc/erc_item.cpp:193
 #, fuzzy
 msgid "Symbol is not annotated"
 msgstr "Simbolio vieneto žymėjimas:"
 
-#: eeschema/erc/erc_item.cpp:200
+#: eeschema/erc/erc_item.cpp:197
 #, fuzzy
 msgid "Symbol has more units than are defined"
 msgstr "Pėdsako pokyčio simbolis neišsaugotas"
 
-#: eeschema/erc/erc_item.cpp:204
+#: eeschema/erc/erc_item.cpp:201
 #, fuzzy
 msgid "Symbol has units that are not placed"
 msgstr "Pėdsako pokyčio simbolis neišsaugotas"
 
-#: eeschema/erc/erc_item.cpp:208
+#: eeschema/erc/erc_item.cpp:205
 #, fuzzy
 msgid "Symbol has input pins that are not placed"
 msgstr "Pėdsako pokyčio simbolis neišsaugotas"
 
-#: eeschema/erc/erc_item.cpp:212
+#: eeschema/erc/erc_item.cpp:209
 #, fuzzy
 msgid "Symbol has bidirectional pins that are not placed"
 msgstr "Pėdsako pokyčio simbolis neišsaugotas"
 
-#: eeschema/erc/erc_item.cpp:216
+#: eeschema/erc/erc_item.cpp:213
 #, fuzzy
 msgid "Symbol has power input pins that are not placed"
 msgstr "Pėdsako pokyčio simbolis neišsaugotas"
 
-#: eeschema/erc/erc_item.cpp:220
+#: eeschema/erc/erc_item.cpp:217
 #, fuzzy
 msgid "Units of same symbol have different values"
 msgstr "Nekeiskite skirtingų sluoksnių trinkelių"
 
-#: eeschema/erc/erc_item.cpp:224
+#: eeschema/erc/erc_item.cpp:221
 #, fuzzy
 msgid "Duplicate reference designators"
 msgstr "Sklypo nuorodų žymėtojai"
 
-#: eeschema/erc/erc_item.cpp:228
+#: eeschema/erc/erc_item.cpp:225
 msgid "Bus Entry needed"
 msgstr "Reikia įvesti autobusą"
 
@@ -18734,7 +18755,7 @@ msgstr "Negalima tvarkyti pėdsako teksto tipo %s"
 
 #: eeschema/net_navigator.cpp:314 pcbnew/board.cpp:1821
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2124
-#: pcbnew/pcb_draw_panel_gal.cpp:717
+#: pcbnew/pcb_draw_panel_gal.cpp:718
 #: pcbnew/widgets/appearance_controls.cpp:1029
 #: pcbnew/widgets/appearance_controls.cpp:2455
 #: pcbnew/widgets/appearance_controls_base.cpp:61
@@ -20483,7 +20504,9 @@ msgstr "Sklypo fono spalva"
 msgid "Fill color"
 msgstr "Linijos spalva:"
 
-#: eeschema/sch_sheet.cpp:853 eeschema/sch_sheet.cpp:1714 pcbnew/zone.cpp:1861
+#: eeschema/sch_sheet.cpp:853 eeschema/sch_sheet.cpp:1714
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:62
+#: pcbnew/zone.cpp:1861
 msgid "Sheet Name"
 msgstr "Lapo pavadinimas"
 
@@ -27075,7 +27098,7 @@ msgstr ""
 
 #: kicad/cli/command_pcb_drc.cpp:146 kicad/cli/command_pcb_export_3d.cpp:293
 #: kicad/cli/command_pcb_export_drill.cpp:150
-#: kicad/cli/command_pcb_export_dxf.cpp:146
+#: kicad/cli/command_pcb_export_dxf.cpp:147
 #: kicad/cli/command_pcb_export_pos.cpp:151 kicad/cli/command_sch_erc.cpp:133
 #, fuzzy
 msgid "Invalid units specified\n"
@@ -27397,7 +27420,7 @@ msgid ""
 msgstr ""
 
 #: kicad/cli/command_pcb_export_dxf.cpp:120
-#: kicad/cli/command_pcb_export_gencad.cpp:90
+#: kicad/cli/command_pcb_export_gencad.cpp:91
 #: kicad/cli/command_pcb_export_gerber.cpp:121
 #: kicad/cli/command_pcb_export_ipc2581.cpp:119
 #: kicad/cli/command_pcb_export_odb.cpp:77
@@ -27408,14 +27431,14 @@ msgstr ""
 msgid "Board file does not exist or is not accessible\n"
 msgstr "Schemos „%s“ nėra. Ar norite jį sukurti?"
 
-#: kicad/cli/command_pcb_export_dxf.cpp:163
+#: kicad/cli/command_pcb_export_dxf.cpp:164
 #: kicad/cli/command_pcb_export_svg.cpp:172
 msgid ""
 "This command has deprecated behavior as of KiCad 9.0, the default behavior "
 "of this command will change in a future release."
 msgstr ""
 
-#: kicad/cli/command_pcb_export_dxf.cpp:167
+#: kicad/cli/command_pcb_export_dxf.cpp:168
 #: kicad/cli/command_pcb_export_svg.cpp:176
 msgid "The new behavior will match --mode-multi"
 msgstr ""
@@ -27982,11 +28005,6 @@ msgstr "Grynasis vardas negali būti tuščias."
 #, fuzzy
 msgid "Zip"
 msgstr "Zin"
-
-#: kicad/dialogs/dialog_jobset_output_options_base.cpp:28
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:115
-msgid "Description:"
-msgstr "Aprašymas:"
 
 #: kicad/dialogs/dialog_jobset_output_options_base.cpp:64
 #, fuzzy
@@ -32604,7 +32622,7 @@ msgstr "Vario zonų išardymas ..."
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:78
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:27
 #: pcbnew/footprint.cpp:1669 pcbnew/netinfo_item.cpp:108
-#: pcbnew/pcb_draw_panel_gal.cpp:714 pcbnew/widgets/appearance_controls.cpp:331
+#: pcbnew/pcb_draw_panel_gal.cpp:715 pcbnew/widgets/appearance_controls.cpp:331
 #: pcbnew/widgets/panel_selection_filter.cpp:198
 #: pcbnew/widgets/panel_selection_filter_base.cpp:45
 msgid "Pads"
@@ -32618,18 +32636,18 @@ msgstr "Aikštelės"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:222
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:24
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:88
-#: pcbnew/netinfo_item.cpp:123 pcbnew/pcb_draw_panel_gal.cpp:715
+#: pcbnew/netinfo_item.cpp:123 pcbnew/pcb_draw_panel_gal.cpp:716
 #: pcbnew/widgets/appearance_controls.cpp:330
 #: pcbnew/widgets/panel_selection_filter.cpp:197
 #: pcbnew/widgets/panel_selection_filter_base.cpp:41
 msgid "Vias"
 msgstr "Perėjimai"
 
-#: pcbnew/board.cpp:1820 pcbnew/pcb_draw_panel_gal.cpp:716
+#: pcbnew/board.cpp:1820 pcbnew/pcb_draw_panel_gal.cpp:717
 msgid "Track Segments"
 msgstr "Takelio segmentai"
 
-#: pcbnew/board.cpp:1822 pcbnew/pcb_draw_panel_gal.cpp:718
+#: pcbnew/board.cpp:1822 pcbnew/pcb_draw_panel_gal.cpp:719
 msgid "Unrouted"
 msgstr "Nepakirta"
 
@@ -37885,10 +37903,21 @@ msgstr "Naudoti polines koordinates"
 msgid "Move Item"
 msgstr "Perkelti elementą"
 
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:61
+#, fuzzy
+msgid "Sheet Path"
+msgstr "Pasirinkite kelią"
+
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:64
 #, fuzzy
 msgid "Sheets"
 msgstr "Lapas"
+
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:88
+#: pcbnew/footprint.cpp:1722 pcbnew/footprint.cpp:4114 pcbnew/zone.cpp:1863
+#, fuzzy
+msgid "Component Class"
+msgstr "Псевдоним компонента"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:90
 #, fuzzy
@@ -42415,305 +42444,305 @@ msgstr "Terminio stipino plotis:"
 msgid "Checking rule assertion \"%s\"."
 msgstr "Tikrinama taisyklės sąlyga \"%s\"."
 
-#: pcbnew/drc/drc_item.cpp:45 pcbnew/zone.cpp:2072
+#: pcbnew/drc/drc_item.cpp:42 pcbnew/zone.cpp:2072
 msgid "Electrical"
 msgstr "Elektros"
 
-#: pcbnew/drc/drc_item.cpp:46
+#: pcbnew/drc/drc_item.cpp:43
 #, fuzzy
 msgid "Design for Manufacturing"
 msgstr "Gamybos dizainas"
 
-#: pcbnew/drc/drc_item.cpp:47
+#: pcbnew/drc/drc_item.cpp:44
 msgid "Schematic Parity"
 msgstr "Scheminis paritetas"
 
-#: pcbnew/drc/drc_item.cpp:48
+#: pcbnew/drc/drc_item.cpp:45
 msgid "Signal Integrity"
 msgstr "Signalo vientisumas"
 
-#: pcbnew/drc/drc_item.cpp:49
+#: pcbnew/drc/drc_item.cpp:46
 #, fuzzy
 msgid "Readability"
 msgstr "Tik skaitymui"
 
-#: pcbnew/drc/drc_item.cpp:55
+#: pcbnew/drc/drc_item.cpp:52
 #, fuzzy
 msgid "Missing connection between items"
 msgstr "Neteisingas ryšys tarp magistralės ir tinklo elementų"
 
-#: pcbnew/drc/drc_item.cpp:59
+#: pcbnew/drc/drc_item.cpp:56
 msgid "Items shorting two nets"
 msgstr "Daiktai, trumpinantys du tinklus"
 
-#: pcbnew/drc/drc_item.cpp:63
+#: pcbnew/drc/drc_item.cpp:60
 msgid "Items not allowed"
 msgstr "Daiktai neleidžiami"
 
-#: pcbnew/drc/drc_item.cpp:67
+#: pcbnew/drc/drc_item.cpp:64
 #, fuzzy
 msgid "Text (or dimension) on Edge.Cuts layer"
 msgstr "(„Edge.Cuts“ sluoksnyje nerasta kraštų)"
 
-#: pcbnew/drc/drc_item.cpp:71
+#: pcbnew/drc/drc_item.cpp:68
 msgid "Clearance violation"
 msgstr "Šalinimo pažeidimas"
 
-#: pcbnew/drc/drc_item.cpp:75
+#: pcbnew/drc/drc_item.cpp:72
 #, fuzzy
 msgid "Creepage violation"
 msgstr "Šalinimo pažeidimas"
 
-#: pcbnew/drc/drc_item.cpp:79
+#: pcbnew/drc/drc_item.cpp:76
 msgid "Tracks crossing"
 msgstr "Takeliai susikerta"
 
-#: pcbnew/drc/drc_item.cpp:83
+#: pcbnew/drc/drc_item.cpp:80
 msgid "Board edge clearance violation"
 msgstr "Borto krašto klirenso pažeidimas"
 
-#: pcbnew/drc/drc_item.cpp:87
+#: pcbnew/drc/drc_item.cpp:84
 #, fuzzy
 msgid "Copper zones intersect"
 msgstr "Vario plotai susikerta"
 
-#: pcbnew/drc/drc_item.cpp:91
+#: pcbnew/drc/drc_item.cpp:88
 #, fuzzy
 msgid "Isolated copper fill"
 msgstr "Saugokitės vario liejimo"
 
-#: pcbnew/drc/drc_item.cpp:95
+#: pcbnew/drc/drc_item.cpp:92
 msgid "Thermal relief connection to zone incomplete"
 msgstr ""
 
-#: pcbnew/drc/drc_item.cpp:99
+#: pcbnew/drc/drc_item.cpp:96
 #, fuzzy
 msgid "Via is not connected or connected on only one layer"
 msgstr "Ištrinkite tik viename sluoksnyje sujungtas viešuosius ryšius"
 
-#: pcbnew/drc/drc_item.cpp:103
+#: pcbnew/drc/drc_item.cpp:100
 msgid "Track has unconnected end"
 msgstr "Takelio pabaiga nesusieta"
 
-#: pcbnew/drc/drc_item.cpp:107
+#: pcbnew/drc/drc_item.cpp:104
 msgid "Hole clearance violation"
 msgstr "Skylės išvalymo pažeidimas"
 
-#: pcbnew/drc/drc_item.cpp:111
+#: pcbnew/drc/drc_item.cpp:108
 #, fuzzy
 msgid "Drilled hole too close to other hole"
 msgstr "Išgręžtos skylės per arti viena kitos"
 
-#: pcbnew/drc/drc_item.cpp:115
+#: pcbnew/drc/drc_item.cpp:112
 #, fuzzy
 msgid "Drilled holes co-located"
 msgstr "Išgręžtos skylės per arti viena kitos"
 
-#: pcbnew/drc/drc_item.cpp:119
+#: pcbnew/drc/drc_item.cpp:116
 #, fuzzy
 msgid "Copper connection too narrow"
 msgstr "медное соединение"
 
-#: pcbnew/drc/drc_item.cpp:123
+#: pcbnew/drc/drc_item.cpp:120
 msgid "Track width"
 msgstr "Takelio plotis"
 
-#: pcbnew/drc/drc_item.cpp:127
+#: pcbnew/drc/drc_item.cpp:124
 #, fuzzy
 msgid "Track angle"
 msgstr "Lanko kampas:"
 
-#: pcbnew/drc/drc_item.cpp:131
+#: pcbnew/drc/drc_item.cpp:128
 #, fuzzy
 msgid "Track segment length"
 msgstr "Takelio segmentai"
 
-#: pcbnew/drc/drc_item.cpp:135
+#: pcbnew/drc/drc_item.cpp:132
 msgid "Annular width"
 msgstr "Žiedinis plotis"
 
-#: pcbnew/drc/drc_item.cpp:139
+#: pcbnew/drc/drc_item.cpp:136
 #, fuzzy
 msgid "Hole size out of range"
 msgstr "Pėdsakų ilgis už diapazono ribų"
 
-#: pcbnew/drc/drc_item.cpp:143
+#: pcbnew/drc/drc_item.cpp:140
 msgid "Via diameter"
 msgstr "Perėjimo diametras"
 
-#: pcbnew/drc/drc_item.cpp:147
+#: pcbnew/drc/drc_item.cpp:144
 #, fuzzy
 msgid "Padstack is questionable"
 msgstr "Padstack negalioja"
 
-#: pcbnew/drc/drc_item.cpp:151
+#: pcbnew/drc/drc_item.cpp:148
 msgid "Padstack is not valid"
 msgstr "Padstack negalioja"
 
-#: pcbnew/drc/drc_item.cpp:155
+#: pcbnew/drc/drc_item.cpp:152
 #, fuzzy
 msgid "Micro via hole size out of range"
 msgstr "Per mažas mikro gręžtuvas"
 
-#: pcbnew/drc/drc_item.cpp:159
+#: pcbnew/drc/drc_item.cpp:156
 msgid "Courtyards overlap"
 msgstr "Kiemai sutampa"
 
-#: pcbnew/drc/drc_item.cpp:163
+#: pcbnew/drc/drc_item.cpp:160
 msgid "Footprint has no courtyard defined"
 msgstr "Pėdsakas neapibrėžtas kiemo"
 
-#: pcbnew/drc/drc_item.cpp:167
+#: pcbnew/drc/drc_item.cpp:164
 msgid "Footprint has malformed courtyard"
 msgstr "Pėdsakas netinkamai suformuotas kiemas"
 
-#: pcbnew/drc/drc_item.cpp:171
+#: pcbnew/drc/drc_item.cpp:168
 msgid "PTH inside courtyard"
 msgstr "PTH vidiniame kieme"
 
-#: pcbnew/drc/drc_item.cpp:175
+#: pcbnew/drc/drc_item.cpp:172
 msgid "NPTH inside courtyard"
 msgstr "NPTH vidiniame kieme"
 
-#: pcbnew/drc/drc_item.cpp:179
+#: pcbnew/drc/drc_item.cpp:176
 #, fuzzy
 msgid "Item on a disabled copper layer"
 msgstr "Elementas išjungtame sluoksnyje"
 
-#: pcbnew/drc/drc_item.cpp:183
+#: pcbnew/drc/drc_item.cpp:180
 msgid "Board has malformed outline"
 msgstr "Lentoje yra netinkamai suformuotas kontūras"
 
-#: pcbnew/drc/drc_item.cpp:187
+#: pcbnew/drc/drc_item.cpp:184
 msgid "Duplicate footprints"
 msgstr "Pasikartojantys pėdsakai"
 
-#: pcbnew/drc/drc_item.cpp:191
+#: pcbnew/drc/drc_item.cpp:188
 msgid "Missing footprint"
 msgstr "Trūksta pėdsako"
 
-#: pcbnew/drc/drc_item.cpp:195
+#: pcbnew/drc/drc_item.cpp:192
 msgid "Extra footprint"
 msgstr "Papildomas pėdsakas"
 
-#: pcbnew/drc/drc_item.cpp:199
+#: pcbnew/drc/drc_item.cpp:196
 msgid "Pad net doesn't match schematic"
 msgstr "„Pad“ tinklas neatitinka schemos"
 
-#: pcbnew/drc/drc_item.cpp:203
+#: pcbnew/drc/drc_item.cpp:200
 #, fuzzy
 msgid "Footprint attributes don't match symbol"
 msgstr "Редактор библиотек - создание/редактирование компонентов"
 
-#: pcbnew/drc/drc_item.cpp:207
+#: pcbnew/drc/drc_item.cpp:204
 #, fuzzy
 msgid "Footprint doesn't match symbol's footprint filters"
 msgstr "Редактор библиотек - создание/редактирование компонентов"
 
-#: pcbnew/drc/drc_item.cpp:211
+#: pcbnew/drc/drc_item.cpp:208
 #, fuzzy
 msgid "Footprint not found in libraries"
 msgstr "Pėdsakas nerastas keitiklių sąraše"
 
-#: pcbnew/drc/drc_item.cpp:215
+#: pcbnew/drc/drc_item.cpp:212
 #, fuzzy
 msgid "Footprint doesn't match copy in library"
 msgstr "Редактор библиотек - создание/редактирование компонентов"
 
-#: pcbnew/drc/drc_item.cpp:223
+#: pcbnew/drc/drc_item.cpp:220
 #, fuzzy
 msgid "Assertion failure"
 msgstr "Skerspjūvio plotas:"
 
-#: pcbnew/drc/drc_item.cpp:235
+#: pcbnew/drc/drc_item.cpp:232
 #, fuzzy
 msgid "Copper sliver"
 msgstr "Vario sluoksniai:"
 
-#: pcbnew/drc/drc_item.cpp:239
+#: pcbnew/drc/drc_item.cpp:236
 msgid "Solder mask aperture bridges items with different nets"
 msgstr ""
 
-#: pcbnew/drc/drc_item.cpp:243
+#: pcbnew/drc/drc_item.cpp:240
 msgid "Silkscreen clipped by solder mask"
 msgstr "Šilkografija, apkarpyta litavimo kauke"
 
-#: pcbnew/drc/drc_item.cpp:247
+#: pcbnew/drc/drc_item.cpp:244
 #, fuzzy
 msgid "Silkscreen clipped by board edge"
 msgstr "Šilkografija, apkarpyta litavimo kauke"
 
-#: pcbnew/drc/drc_item.cpp:251
+#: pcbnew/drc/drc_item.cpp:248
 msgid "Silkscreen overlap"
 msgstr "Šilkografija sutampa"
 
-#: pcbnew/drc/drc_item.cpp:255
+#: pcbnew/drc/drc_item.cpp:252
 #, fuzzy
 msgid "Text height out of range"
 msgstr "Pėdsakų ilgis už diapazono ribų"
 
-#: pcbnew/drc/drc_item.cpp:259
+#: pcbnew/drc/drc_item.cpp:256
 #, fuzzy
 msgid "Text thickness out of range"
 msgstr "Pėdsakų ilgis už diapazono ribų"
 
-#: pcbnew/drc/drc_item.cpp:263
+#: pcbnew/drc/drc_item.cpp:260
 #, fuzzy
 msgid "Track length out of range"
 msgstr "Pėdsakų ilgis už diapazono ribų"
 
-#: pcbnew/drc/drc_item.cpp:267
+#: pcbnew/drc/drc_item.cpp:264
 #, fuzzy
 msgid "Skew between tracks out of range"
 msgstr "Iškreipkite tarp pėdsakų už diapazono ribų"
 
-#: pcbnew/drc/drc_item.cpp:272
+#: pcbnew/drc/drc_item.cpp:269
 #, fuzzy
 msgid "Too many or too few vias on a connection"
 msgstr "Per daug sujungimo vijų"
 
-#: pcbnew/drc/drc_item.cpp:276
+#: pcbnew/drc/drc_item.cpp:273
 msgid "Differential pair gap out of range"
 msgstr "Diferencialinių porų tarpas už diapazono ribų"
 
-#: pcbnew/drc/drc_item.cpp:280
+#: pcbnew/drc/drc_item.cpp:277
 msgid "Differential uncoupled length too long"
 msgstr "Per ilgas diferencijinis nesusietas ilgis"
 
-#: pcbnew/drc/drc_item.cpp:284
+#: pcbnew/drc/drc_item.cpp:281
 #, fuzzy
 msgid "Footprint is not valid"
 msgstr "Netinkamas pėdsako ID „%s“."
 
-#: pcbnew/drc/drc_item.cpp:288
+#: pcbnew/drc/drc_item.cpp:285
 #, fuzzy
 msgid "Footprint component type doesn't match footprint pads"
 msgstr "Редактор библиотек - создание/редактирование компонентов"
 
-#: pcbnew/drc/drc_item.cpp:292
+#: pcbnew/drc/drc_item.cpp:289
 #, fuzzy
 msgid "Through hole pad has no hole"
 msgstr "Klaida: per skylės padėkliuką: grąžto skersmuo nustatytas į 0"
 
-#: pcbnew/drc/drc_item.cpp:296
+#: pcbnew/drc/drc_item.cpp:293
 msgid "Mirrored text on front layer"
 msgstr ""
 
-#: pcbnew/drc/drc_item.cpp:300
+#: pcbnew/drc/drc_item.cpp:297
 msgid "Non-Mirrored text on back layer"
 msgstr ""
 
-#: pcbnew/drc/drc_item.cpp:307
+#: pcbnew/drc/drc_item.cpp:304
 #, fuzzy
 msgid "Drilled hole too close to other hole - deprecated"
 msgstr "Išgręžtos skylės per arti viena kitos"
 
-#: pcbnew/drc/drc_item.cpp:508
+#: pcbnew/drc/drc_item.cpp:505
 #, fuzzy, c-format
 msgid "Rule: %s"
 msgstr "Taisyklės"
 
-#: pcbnew/drc/drc_item.cpp:510
+#: pcbnew/drc/drc_item.cpp:507
 #, fuzzy
 msgid "Local override"
 msgstr "Vietinis klirensas"
@@ -44048,7 +44077,7 @@ msgstr ""
 msgid "Generating IPC2581 file"
 msgstr "Kurti IPC-D-356 grandinių sąrašo failą"
 
-#: pcbnew/files.cpp:1342 pcbnew/pcbnew_jobs_handler.cpp:1981
+#: pcbnew/files.cpp:1342 pcbnew/pcbnew_jobs_handler.cpp:2011
 #, fuzzy, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
@@ -44057,7 +44086,7 @@ msgstr ""
 "Klaida išsaugant plokštės failą „%s“.\n"
 "%s"
 
-#: pcbnew/files.cpp:1406 pcbnew/pcbnew_jobs_handler.cpp:2014
+#: pcbnew/files.cpp:1406 pcbnew/pcbnew_jobs_handler.cpp:2044
 #, fuzzy, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
@@ -44120,11 +44149,6 @@ msgstr "Būsena: "
 #: pcbnew/footprint.cpp:1715
 msgid "Attributes:"
 msgstr "Atributai:"
-
-#: pcbnew/footprint.cpp:1722 pcbnew/footprint.cpp:4114 pcbnew/zone.cpp:1863
-#, fuzzy
-msgid "Component Class"
-msgstr "Псевдоним компонента"
 
 #: pcbnew/footprint.cpp:1726
 #, c-format
@@ -45978,7 +46002,7 @@ msgstr ""
 "Norėdami sukurti ar atnaujinti PCB iš schemų, turite paleisti „KiCad“ "
 "projektų valdytoją ir sukurti projektą."
 
-#: pcbnew/pcb_edit_frame.cpp:2026 pcbnew/pcbnew_jobs_handler.cpp:1837
+#: pcbnew/pcb_edit_frame.cpp:2026 pcbnew/pcbnew_jobs_handler.cpp:1867
 msgid "Eeschema netlist"
 msgstr "„Eeschema“ tinklaraštis"
 
@@ -48230,33 +48254,33 @@ msgstr "Gaunant failą įvyko klaida!\n"
 msgid "Schematic parity tests require a fully annotated schematic."
 msgstr "Norint eksportuoti netlistą, reikalinga visiškai anotuota schema."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1844
+#: pcbnew/pcbnew_jobs_handler.cpp:1841 pcbnew/pcbnew_jobs_handler.cpp:1874
 #, fuzzy
 msgid "Failed to fetch schematic netlist for parity tests.\n"
 msgstr "Nepavyko įkelti schemos „%s“"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1866 pcbnew/tools/drc_tool.cpp:200
+#: pcbnew/pcbnew_jobs_handler.cpp:1896 pcbnew/tools/drc_tool.cpp:200
 msgid "DRC"
 msgstr "KDR"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1887
+#: pcbnew/pcbnew_jobs_handler.cpp:1917
 #, fuzzy, c-format
 msgid "Found %d unconnected items\n"
 msgstr "Neprijungti elementai (%d)"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1893
+#: pcbnew/pcbnew_jobs_handler.cpp:1923
 #, c-format
 msgid "Found %d schematic parity issues\n"
 msgstr ""
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1909
+#: pcbnew/pcbnew_jobs_handler.cpp:1939
 #, fuzzy, c-format
 msgid "Unable to save DRC report to %s\n"
 msgstr ""
 "Не удается разобрать URL:\n"
 "'%s'"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1914
+#: pcbnew/pcbnew_jobs_handler.cpp:1944
 #, fuzzy, c-format
 msgid "Saved DRC Report to %s\n"
 msgstr "Сохранить отчет DRC"
@@ -51884,10 +51908,19 @@ msgstr "Atlieka komponentų automatinį išdėstymą už lentos zonos ribų"
 msgid "Generate Placement Rule Areas..."
 msgstr "Generuoti žemėlapio failą"
 
+#: pcbnew/tools/pcb_actions.cpp:2229
+#, fuzzy
+msgid "Creates best-fit placement rule areas"
+msgstr "Generuoti žemėlapio failą"
+
 #: pcbnew/tools/pcb_actions.cpp:2236
 #, fuzzy
 msgid "Repeat Layout..."
 msgstr "Pakartokite grafą"
+
+#: pcbnew/tools/pcb_actions.cpp:2237
+msgid "Clones placement & routing across multiple identical channels"
+msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:2248
 msgid "Route Single Track"
@@ -68472,9 +68505,6 @@ msgstr "Lapo formatų redaktorius"
 
 #~ msgid "Default Value"
 #~ msgstr "Reikšmė pagal nutylėjimą"
-
-#~ msgid "Default Fields"
-#~ msgstr "Laukai pagal nutylėjimą"
 
 #~ msgid "problems encountered writing file"
 #~ msgstr "įrašant failą kilo problemų"

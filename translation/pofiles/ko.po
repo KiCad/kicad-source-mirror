@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-15 06:04+0300\n"
+"POT-Creation-Date: 2025-02-17 08:10+0300\n"
 "PO-Revision-Date: 2025-02-10 23:20+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
@@ -369,7 +369,7 @@ msgstr "파일 '%s'을(를) 저장할 수 있는 권한이 없습니다."
 #: eeschema/dialogs/dialog_erc.cpp:878
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1813
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2215
-#: eeschema/erc/erc_item.cpp:84 eeschema/files-io.cpp:943
+#: eeschema/erc/erc_item.cpp:81 eeschema/files-io.cpp:943
 #: eeschema/files-io.cpp:1011 eeschema/sch_marker.cpp:376
 #: kicad/import_proj.cpp:79 kicad/import_project.cpp:123 kicad/kicad.cpp:318
 #: kicad/tools/kicad_manager_control.cpp:269
@@ -388,7 +388,7 @@ msgstr "파일 '%s'을(를) 저장할 수 있는 권한이 없습니다."
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:203
 #: pcbnew/dialogs/dialog_drc.cpp:984
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:392
-#: pcbnew/drc/drc_item.cpp:231 pcbnew/pcb_marker.cpp:211
+#: pcbnew/drc/drc_item.cpp:228 pcbnew/pcb_marker.cpp:211
 #: pcbnew/widgets/appearance_controls.cpp:2765
 msgid "Error"
 msgstr "오류"
@@ -1868,7 +1868,7 @@ msgstr "확인 (&O)"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:593
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:154
 #: eeschema/dialogs/panel_template_fieldnames.cpp:212
-#: eeschema/erc/erc_item.cpp:80 eeschema/files-io.cpp:452
+#: eeschema/erc/erc_item.cpp:77 eeschema/files-io.cpp:452
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:261
 #: eeschema/sch_marker.cpp:373 eeschema/sheet.cpp:780
 #: eeschema/symbol_editor/symbol_editor.cpp:134
@@ -1876,7 +1876,7 @@ msgstr "확인 (&O)"
 #: eeschema/symbol_editor/symbol_editor.cpp:1156
 #: eeschema/symbol_editor/symbol_editor.cpp:1554
 #: pcbnew/dialogs/dialog_drc.cpp:985 pcbnew/dialogs/dialog_export_vrml.cpp:128
-#: pcbnew/drc/drc_item.cpp:227 pcbnew/import_gfx/dialog_import_graphics.cpp:293
+#: pcbnew/drc/drc_item.cpp:224 pcbnew/import_gfx/dialog_import_graphics.cpp:293
 #: pcbnew/pcb_marker.cpp:208
 msgid "Warning"
 msgstr "경고"
@@ -1983,32 +1983,32 @@ msgstr "디자인 블록 메타데이터 파일 '%s'을 읽을 수 없습니다.
 msgid "Design block does not have a valid library ID."
 msgstr "풋프린트에 유효한 라이브러리 ID가 없습니다."
 
-#: common/design_block_io.cpp:358
+#: common/design_block_io.cpp:360
 #, c-format
 msgid "Schematic source file '%s' does not exist."
 msgstr "회로도 소스 파일 '%s'이 없습니다."
 
-#: common/design_block_io.cpp:372
+#: common/design_block_io.cpp:374
 #, c-format
 msgid "Design block folder '%s' could not be created."
 msgstr "디자인 블록 폴더 '%s'를 만들 수 없습니다."
 
-#: common/design_block_io.cpp:389
+#: common/design_block_io.cpp:391
 #, c-format
 msgid "Schematic file '%s' could not be saved as design block at '%s'."
 msgstr "회로도 파일 '%s'을(를) 디자인 블록 '%s'에 저장할 수 없습니다."
 
-#: common/design_block_io.cpp:423
+#: common/design_block_io.cpp:425
 #, c-format
 msgid "Design block metadata file '%s' could not be saved."
 msgstr "디자인 블록 메타데이터 파일 '%s'를 저장할 수 없음."
 
-#: common/design_block_io.cpp:437
+#: common/design_block_io.cpp:439
 #, c-format
 msgid "Design block '%s' does not exist."
 msgstr "디렉토리 '%s'가 없음."
 
-#: common/design_block_io.cpp:443
+#: common/design_block_io.cpp:445
 #, c-format
 msgid "Design block folder '%s' could not be deleted."
 msgstr "디자인 블록 폴더 '%s'를 삭제할 수 없습니다."
@@ -2426,6 +2426,7 @@ msgstr "환경 변수"
 #: common/dialogs/panel_design_block_lib_table.cpp:410
 #: common/dialogs/panel_setup_netclasses_base.cpp:51
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:88
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:42
 #: eeschema/dialogs/dialog_label_properties_base.cpp:87
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:121
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:89
@@ -2643,6 +2644,7 @@ msgid "Grid size Y out of range."
 msgstr "그리드 크기 Y가 범위를 벗어남."
 
 #: common/dialogs/dialog_grid_settings_base.cpp:25
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:97
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:109
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:32
 #: eeschema/symbol_editor/symbol_editor.cpp:860
@@ -2974,7 +2976,7 @@ msgstr "제목 칸"
 #: common/dialogs/dialog_page_settings.cpp:487
 #: eeschema/eeschema_jobs_handler.cpp:230 pagelayout_editor/files.cpp:243
 #: pagelayout_editor/pl_editor_frame.cpp:359
-#: pcbnew/pcbnew_jobs_handler.cpp:2113
+#: pcbnew/pcbnew_jobs_handler.cpp:2143
 #, c-format
 msgid "Error loading drawing sheet '%s'."
 msgstr "도면 시트 '%s'을(를) 불러오는 중에 오류가 발생했습니다."
@@ -3073,7 +3075,7 @@ msgid "Export to other sheets"
 msgstr "다른 시트로 내보내기"
 
 #: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:444
-#: eeschema/erc/erc_item.cpp:427 eeschema/sch_marker.cpp:384
+#: eeschema/erc/erc_item.cpp:424 eeschema/sch_marker.cpp:384
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:105
 #: gerbview/widgets/gerbview_layer_widget.cpp:137 pcbnew/pcb_marker.cpp:219
 #: pcbnew/widgets/appearance_controls.cpp:350
@@ -3230,6 +3232,7 @@ msgstr "옵션"
 #: common/dialogs/dialog_plugin_options_base.cpp:44
 #: common/dialogs/panel_design_block_lib_table.cpp:411
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:89
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:43
 #: eeschema/dialogs/dialog_label_properties_base.cpp:88
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:60
 #: eeschema/dialogs/dialog_rescue_each.cpp:135
@@ -6781,7 +6784,7 @@ msgstr "'%s'에 대한 PDF 뷰어를 찾을 수 없음."
 msgid "Problem while running the PDF viewer '%s'."
 msgstr "PDF 뷰어 '%s'를 실행하는 중에 문제가 발생했습니다."
 
-#: common/gestfich.cpp:299 eeschema/eeschema.cpp:576 eeschema/eeschema.cpp:611
+#: common/gestfich.cpp:299 eeschema/eeschema.cpp:650 eeschema/eeschema.cpp:685
 #: gerbview/gerbview.cpp:243 kicad/project_template.cpp:309
 #: pcbnew/pcbnew.cpp:577
 #, c-format
@@ -7309,12 +7312,12 @@ msgstr "알 수 없는 매개변수 '%s'이(가) '%s' 에 있음"
 msgid "Unable to parse '%s' in '%s'"
 msgstr "구문 분석 할 수 없는 '%s'이(가) '%s'에 있음"
 
-#: common/io/eagle/eagle_parser.cpp:287
+#: common/io/eagle/eagle_parser.cpp:288
 #, c-format
 msgid "Invalid size %lld: too large"
 msgstr "잘못된 크기 %lld: 너무 큼"
 
-#: common/io/eagle/eagle_parser.cpp:506
+#: common/io/eagle/eagle_parser.cpp:507
 #, c-format
 msgid "Invalid Arc with radius %f and angle %f"
 msgstr "반경이 %f이고 각도가 %f인 잘못된 호"
@@ -8302,20 +8305,20 @@ msgstr "Zip 보관 '%s'이 생성됨 (%s 비압축, %s 압축)."
 msgid "Error: '%s'."
 msgstr "오류: %s."
 
-#: common/rc_item.cpp:425 eeschema/erc/erc_item.cpp:407
+#: common/rc_item.cpp:425 eeschema/erc/erc_item.cpp:404
 msgid "Excluded warning: "
 msgstr "제외된 경고: "
 
-#: common/rc_item.cpp:427 eeschema/erc/erc_item.cpp:409
+#: common/rc_item.cpp:427 eeschema/erc/erc_item.cpp:406
 msgid "Excluded error: "
 msgstr "제외된 오류: "
 
-#: common/rc_item.cpp:431 eeschema/erc/erc_item.cpp:413
+#: common/rc_item.cpp:431 eeschema/erc/erc_item.cpp:410
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1422
 msgid "Warning: "
 msgstr "경고: "
 
-#: common/rc_item.cpp:435 eeschema/erc/erc_item.cpp:417
+#: common/rc_item.cpp:435 eeschema/erc/erc_item.cpp:414
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1420
 msgid "Error: "
 msgstr "오류: "
@@ -10649,7 +10652,7 @@ msgstr ""
 "네트 %s은(는) 버스 %s에 시각적으로 연결되어 있지만 해당 버스의 멤버가 아닙니"
 "다"
 
-#: eeschema/connection_graph.cpp:3807 eeschema/erc/erc_item.cpp:232
+#: eeschema/connection_graph.cpp:3807 eeschema/erc/erc_item.cpp:229
 msgid "Unconnected wire endpoint"
 msgstr "연결되지 않은 와이어 종단점"
 
@@ -10905,6 +10908,8 @@ msgstr "회로도에 주석 달기"
 
 #: eeschema/dialogs/dialog_bom.cpp:85 kicad/dialogs/panel_jobset_base.cpp:199
 #: pcbnew/dialogs/dialog_gendrill.cpp:93
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:60
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:87
 msgid "Generate"
 msgstr "생성"
 
@@ -11454,6 +11459,28 @@ msgstr "제목 없는 필드"
 #: eeschema/dialogs/dialog_design_block_properties.cpp:234
 msgid "Duplicate fields are not allowed."
 msgstr "중복 필드는 허용되지 않음."
+
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:26
+#, fuzzy
+msgid "Default Fields"
+msgstr "필드 삭제"
+
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:104
+#: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:137
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:122
+msgid "Keywords:"
+msgstr "키워드:"
+
+#: eeschema/dialogs/dialog_design_block_properties_base.cpp:111
+#: kicad/dialogs/dialog_jobset_output_options_base.cpp:28
+#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:115
+msgid "Description:"
+msgstr "설명:"
+
+#: eeschema/dialogs/dialog_design_block_properties_base.h:70
+#, fuzzy
+msgid "Design Block Properties"
+msgstr "디자인 블록 라이브러리"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:550
 #, c-format
@@ -12893,11 +12920,6 @@ msgstr "풋프린트 필터 추가"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:832
 msgid "Edit Footprint Filter"
 msgstr "풋프린트 필터 편집"
-
-#: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:137
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:122
-msgid "Keywords:"
-msgstr "키워드:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:144
 msgid "Derive from symbol:"
@@ -15923,7 +15945,7 @@ msgid "Pin symbol size:"
 msgstr "핀 심볼 크기:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:151
-#: eeschema/erc/erc_item.cpp:42
+#: eeschema/erc/erc_item.cpp:39
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:934
 msgid "Connections"
 msgstr "연결"
@@ -16376,7 +16398,7 @@ msgstr "공백 유지"
 msgid "URL"
 msgstr "URL"
 
-#: eeschema/eeschema.cpp:387
+#: eeschema/eeschema.cpp:461
 msgid ""
 "An error occurred attempting to load the global symbol library table.\n"
 "Please edit this global symbol library table in Preferences menu."
@@ -16384,7 +16406,7 @@ msgstr ""
 "전역 기호 라이브러리 테이블을 불러오는 중에 오류가 발생하였습니다.\n"
 "설정 메뉴에서 이 전역 심볼 라이브러리 테이블을 편집하세요."
 
-#: eeschema/eeschema.cpp:423
+#: eeschema/eeschema.cpp:497
 msgid ""
 "An error occurred attempting to load the global design block library table.\n"
 "Please edit this global design block library table in Preferences menu."
@@ -16392,7 +16414,7 @@ msgstr ""
 "전역 디자인 블록 라이브러리 테이블을 로드하는 중 오류가 발생했습니다.\n"
 "환경설정 메뉴에서 이 전역 디자인 블록 라이브러리 테이블을 편집하세요."
 
-#: eeschema/eeschema.cpp:482
+#: eeschema/eeschema.cpp:556
 #, c-format
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
@@ -16411,7 +16433,7 @@ msgstr "회로도 로드 실패\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:811 pcbnew/pcbnew_jobs_handler.cpp:892
 #: pcbnew/pcbnew_jobs_handler.cpp:945 pcbnew/pcbnew_jobs_handler.cpp:1106
 #: pcbnew/pcbnew_jobs_handler.cpp:1246 pcbnew/pcbnew_jobs_handler.cpp:1381
-#: pcbnew/pcbnew_jobs_handler.cpp:1791 pcbnew/pcbnew_jobs_handler.cpp:1957
+#: pcbnew/pcbnew_jobs_handler.cpp:1791 pcbnew/pcbnew_jobs_handler.cpp:1987
 msgid "Failed to create output directory\n"
 msgstr "출력 디렉토리 생성 실패\n"
 
@@ -16489,7 +16511,7 @@ msgstr "심볼 라이브러리를 업데이트된 형식으로 저장\n"
 msgid "Symbol library was not updated\n"
 msgstr "심볼 라이브러리가 업데이트되지 않음\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1179 pcbnew/pcbnew_jobs_handler.cpp:1884
+#: eeschema/eeschema_jobs_handler.cpp:1179 pcbnew/pcbnew_jobs_handler.cpp:1914
 #, c-format
 msgid "Found %d violations\n"
 msgstr "%d 개의 위반 발견\n"
@@ -16765,186 +16787,186 @@ msgstr "두 개 이상의 전선에 라벨이 있는지 확인..."
 msgid "Checking for undefined netclasses..."
 msgstr "정의되지 않은 네트클래스 확인 중..."
 
-#: eeschema/erc/erc_item.cpp:43
+#: eeschema/erc/erc_item.cpp:40
 msgid "Conflicts"
 msgstr "충돌"
 
-#: eeschema/erc/erc_item.cpp:44 pcbnew/dialogs/panel_edit_options_base.cpp:404
-#: pcbnew/drc/drc_item.cpp:50
+#: eeschema/erc/erc_item.cpp:41 pcbnew/dialogs/panel_edit_options_base.cpp:404
+#: pcbnew/drc/drc_item.cpp:47
 msgid "Miscellaneous"
 msgstr "기타"
 
-#: eeschema/erc/erc_item.cpp:48
+#: eeschema/erc/erc_item.cpp:45
 msgid "Duplicate sheet names within a given sheet"
 msgstr "지정된 시트 내에서 시트 이름 복제"
 
-#: eeschema/erc/erc_item.cpp:52
+#: eeschema/erc/erc_item.cpp:49
 msgid "Symbol pin or wire end off connection grid"
 msgstr "심볼 핀 또는 와이어 끝 연결 그리드 끄기"
 
-#: eeschema/erc/erc_item.cpp:56
+#: eeschema/erc/erc_item.cpp:53
 msgid "Pin not connected"
 msgstr "핀이 연결되지 않음"
 
-#: eeschema/erc/erc_item.cpp:60
+#: eeschema/erc/erc_item.cpp:57
 msgid "Input pin not driven by any Output pins"
 msgstr "입력 핀이 출력 핀에 의해 구동되지 않음"
 
-#: eeschema/erc/erc_item.cpp:64
+#: eeschema/erc/erc_item.cpp:61
 msgid "Input Power pin not driven by any Output Power pins"
 msgstr "입력 전력 핀이 출력 전력 핀에 의해 구동되지 않음"
 
-#: eeschema/erc/erc_item.cpp:68
+#: eeschema/erc/erc_item.cpp:65
 msgid "Multiple pins with the same pin number"
 msgstr "동일한 핀 번호를 가진 여러 핀"
 
-#: eeschema/erc/erc_item.cpp:72 eeschema/erc/erc_item.cpp:76
+#: eeschema/erc/erc_item.cpp:69 eeschema/erc/erc_item.cpp:73
 msgid "Conflict problem between pins"
 msgstr "핀 간 충돌 문제"
 
-#: eeschema/erc/erc_item.cpp:88
+#: eeschema/erc/erc_item.cpp:85
 msgid "Mismatch between hierarchical labels and sheet pins"
 msgstr "계층 라벨과 시트 핀 간의 불일치"
 
-#: eeschema/erc/erc_item.cpp:92
+#: eeschema/erc/erc_item.cpp:89
 msgid "Four connection points are joined together"
 msgstr "4개의 연결 지점이 함께 연결됨"
 
-#: eeschema/erc/erc_item.cpp:96
+#: eeschema/erc/erc_item.cpp:93
 msgid "Label connects more than one wire"
 msgstr "라벨은 두 개 이상의 와이어를 연결함"
 
-#: eeschema/erc/erc_item.cpp:100
+#: eeschema/erc/erc_item.cpp:97
 msgid "A pin with a \"no connection\" flag is connected"
 msgstr "\"연결 없음\" 플래그가 있는 핀이 연결됨"
 
-#: eeschema/erc/erc_item.cpp:104
+#: eeschema/erc/erc_item.cpp:101
 msgid "Unconnected \"no connection\" flag"
 msgstr "연결되지 않은 \"연결 없음\" 플래그"
 
-#: eeschema/erc/erc_item.cpp:108
+#: eeschema/erc/erc_item.cpp:105
 msgid "Label not connected to anything"
 msgstr "아무것도 연결되지 않은 라벨"
 
-#: eeschema/erc/erc_item.cpp:112
+#: eeschema/erc/erc_item.cpp:109
 msgid "Global label not connected anywhere else in the schematic"
 msgstr "회로도의 다른 곳에서는 연결되지 않은 전역 라벨"
 
-#: eeschema/erc/erc_item.cpp:116
+#: eeschema/erc/erc_item.cpp:113
 msgid "Labels are similar (lower/upper case difference only)"
 msgstr "라벨이 비슷함 (소문자/대문자만 다름)"
 
-#: eeschema/erc/erc_item.cpp:120
+#: eeschema/erc/erc_item.cpp:117
 msgid "Power pins are similar (lower/upper case difference only)"
 msgstr "전원 핀은 유사함(소문자/대문자만 다름)"
 
-#: eeschema/erc/erc_item.cpp:124
+#: eeschema/erc/erc_item.cpp:121
 msgid "Power pin and label are similar (lower/upper case difference only)"
 msgstr "전원 핀과 라벨은 유사함(소문자/대문자만 다름)"
 
-#: eeschema/erc/erc_item.cpp:128
+#: eeschema/erc/erc_item.cpp:125
 msgid "Global label only appears once in the schematic"
 msgstr "전역 레이블은 회로도에 한 번만 표시됨"
 
-#: eeschema/erc/erc_item.cpp:132
+#: eeschema/erc/erc_item.cpp:129
 msgid "Local and global labels have same name"
 msgstr "로컬 및 글로벌 레이블의 이름이 동일함"
 
-#: eeschema/erc/erc_item.cpp:136
+#: eeschema/erc/erc_item.cpp:133
 msgid "Different footprint assigned in another unit of the symbol"
 msgstr "심볼의 다른 유닛에 다른 풋프린트가 할당됨"
 
-#: eeschema/erc/erc_item.cpp:140
+#: eeschema/erc/erc_item.cpp:137
 msgid "Different net assigned to a shared pin in another unit of the symbol"
 msgstr "서로 다른 네트가 심볼의 또다른 유닛에 있는 공유 핀에 할당됨"
 
-#: eeschema/erc/erc_item.cpp:144
+#: eeschema/erc/erc_item.cpp:141
 msgid "Conflict between bus alias definitions across schematic sheets"
 msgstr "호로도 시트의 버스 별칭 정의 간 충돌"
 
-#: eeschema/erc/erc_item.cpp:148
+#: eeschema/erc/erc_item.cpp:145
 msgid "More than one name given to this bus or net"
 msgstr "버스 또는 네트에 둘 이상의 이름이 지정됨"
 
-#: eeschema/erc/erc_item.cpp:152
+#: eeschema/erc/erc_item.cpp:149
 msgid "Net is graphically connected to a bus but not a bus member"
 msgstr ""
 "네트는 버스에 그래픽적으로 연결되어 있지만 버스 구성원은 연결되어 있지 않습니"
 "다"
 
-#: eeschema/erc/erc_item.cpp:156
+#: eeschema/erc/erc_item.cpp:153
 msgid "Buses are graphically connected but share no bus members"
 msgstr "버스는 그래픽으로 연결돼 있지만 버스 멤버를 공유하지 않음"
 
-#: eeschema/erc/erc_item.cpp:160
+#: eeschema/erc/erc_item.cpp:157
 msgid "Invalid connection between bus and net items"
 msgstr "잘못된 버스와 네트 항목 간의 연결"
 
-#: eeschema/erc/erc_item.cpp:164 pcbnew/drc/drc_item.cpp:219
+#: eeschema/erc/erc_item.cpp:161 pcbnew/drc/drc_item.cpp:216
 msgid "Unresolved text variable"
 msgstr "미확인 텍스트 변수"
 
-#: eeschema/erc/erc_item.cpp:168
+#: eeschema/erc/erc_item.cpp:165
 msgid "Undefined netclass"
 msgstr "미정의 네트 클래스"
 
-#: eeschema/erc/erc_item.cpp:172
+#: eeschema/erc/erc_item.cpp:169
 msgid "SPICE model issue"
 msgstr "SPICE 모델 문제"
 
-#: eeschema/erc/erc_item.cpp:176
+#: eeschema/erc/erc_item.cpp:173
 msgid "Wires not connected to anything"
 msgstr "아무것도 연결되지 않은 전선"
 
-#: eeschema/erc/erc_item.cpp:180
+#: eeschema/erc/erc_item.cpp:177
 msgid "Library symbol issue"
 msgstr "라이브러리 심볼 문제"
 
-#: eeschema/erc/erc_item.cpp:184
+#: eeschema/erc/erc_item.cpp:181
 msgid "Symbol doesn't match copy in library"
 msgstr "심볼이 라이브러리의 복사본과 일치하지 않음"
 
-#: eeschema/erc/erc_item.cpp:188
+#: eeschema/erc/erc_item.cpp:185
 msgid "Footprint link issue"
 msgstr "풋프린트 연결 문제"
 
-#: eeschema/erc/erc_item.cpp:192
+#: eeschema/erc/erc_item.cpp:189
 msgid "Assigned footprint doesn't match footprint filters"
 msgstr "할당된 풋프린트가 풋프린트 필터와 일치하지 않음"
 
-#: eeschema/erc/erc_item.cpp:196
+#: eeschema/erc/erc_item.cpp:193
 msgid "Symbol is not annotated"
 msgstr "심볼이 주석 처리되지 않음"
 
-#: eeschema/erc/erc_item.cpp:200
+#: eeschema/erc/erc_item.cpp:197
 msgid "Symbol has more units than are defined"
 msgstr "심볼에 정의된 것보다 더 많은 유닛이 있음"
 
-#: eeschema/erc/erc_item.cpp:204
+#: eeschema/erc/erc_item.cpp:201
 msgid "Symbol has units that are not placed"
 msgstr "심볼에 배치되지 않은 장치가 있음"
 
-#: eeschema/erc/erc_item.cpp:208
+#: eeschema/erc/erc_item.cpp:205
 msgid "Symbol has input pins that are not placed"
 msgstr "심볼에 배치되지 않은 입력 핀이 있음"
 
-#: eeschema/erc/erc_item.cpp:212
+#: eeschema/erc/erc_item.cpp:209
 msgid "Symbol has bidirectional pins that are not placed"
 msgstr "심볼에 배치되지 않은 양방향 핀이 있음"
 
-#: eeschema/erc/erc_item.cpp:216
+#: eeschema/erc/erc_item.cpp:213
 msgid "Symbol has power input pins that are not placed"
 msgstr "심볼에 배치되지 않은 전원 입력 핀이 있음"
 
-#: eeschema/erc/erc_item.cpp:220
+#: eeschema/erc/erc_item.cpp:217
 msgid "Units of same symbol have different values"
 msgstr "동일한 심볼의 유닛이 다른 값을 가짐"
 
-#: eeschema/erc/erc_item.cpp:224
+#: eeschema/erc/erc_item.cpp:221
 msgid "Duplicate reference designators"
 msgstr "중복 참조 지정자"
 
-#: eeschema/erc/erc_item.cpp:228
+#: eeschema/erc/erc_item.cpp:225
 msgid "Bus Entry needed"
 msgstr "버스 항목 필요"
 
@@ -17679,7 +17701,7 @@ msgstr "처리되지 않은 항목 유형 %d"
 
 #: eeschema/net_navigator.cpp:314 pcbnew/board.cpp:1821
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2124
-#: pcbnew/pcb_draw_panel_gal.cpp:717
+#: pcbnew/pcb_draw_panel_gal.cpp:718
 #: pcbnew/widgets/appearance_controls.cpp:1029
 #: pcbnew/widgets/appearance_controls.cpp:2455
 #: pcbnew/widgets/appearance_controls_base.cpp:61
@@ -19368,7 +19390,9 @@ msgstr "몸체 배경색"
 msgid "Fill color"
 msgstr "색상 채우기"
 
-#: eeschema/sch_sheet.cpp:853 eeschema/sch_sheet.cpp:1714 pcbnew/zone.cpp:1861
+#: eeschema/sch_sheet.cpp:853 eeschema/sch_sheet.cpp:1714
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:62
+#: pcbnew/zone.cpp:1861
 msgid "Sheet Name"
 msgstr "시트 이름"
 
@@ -25417,7 +25441,7 @@ msgstr "DRC 위반이 있는 경우 0이 아닌 종료 코드 반환"
 
 #: kicad/cli/command_pcb_drc.cpp:146 kicad/cli/command_pcb_export_3d.cpp:293
 #: kicad/cli/command_pcb_export_drill.cpp:150
-#: kicad/cli/command_pcb_export_dxf.cpp:146
+#: kicad/cli/command_pcb_export_dxf.cpp:147
 #: kicad/cli/command_pcb_export_pos.cpp:151 kicad/cli/command_sch_erc.cpp:133
 msgid "Invalid units specified\n"
 msgstr "단위가 잘못 지정됨\n"
@@ -25721,7 +25745,7 @@ msgstr ""
 "경로는 파일이 출력될 수 있는 디렉터리를 지정합니다."
 
 #: kicad/cli/command_pcb_export_dxf.cpp:120
-#: kicad/cli/command_pcb_export_gencad.cpp:90
+#: kicad/cli/command_pcb_export_gencad.cpp:91
 #: kicad/cli/command_pcb_export_gerber.cpp:121
 #: kicad/cli/command_pcb_export_ipc2581.cpp:119
 #: kicad/cli/command_pcb_export_odb.cpp:77
@@ -25731,7 +25755,7 @@ msgstr ""
 msgid "Board file does not exist or is not accessible\n"
 msgstr "보드 파일이 존재하지 않거나 액세스할 수 없습니다.\n"
 
-#: kicad/cli/command_pcb_export_dxf.cpp:163
+#: kicad/cli/command_pcb_export_dxf.cpp:164
 #: kicad/cli/command_pcb_export_svg.cpp:172
 msgid ""
 "This command has deprecated behavior as of KiCad 9.0, the default behavior "
@@ -25740,7 +25764,7 @@ msgstr ""
 "이 명령은 KiCad 9.0부터 더 이상 사용되지 않으며, 향후 릴리스에서 이 명령의 기"
 "본 동작이 변경될 예정입니다."
 
-#: kicad/cli/command_pcb_export_dxf.cpp:167
+#: kicad/cli/command_pcb_export_dxf.cpp:168
 #: kicad/cli/command_pcb_export_svg.cpp:176
 msgid "The new behavior will match --mode-multi"
 msgstr "새로운 동작은 --mode-multi와 일치함"
@@ -26270,11 +26294,6 @@ msgstr "출력 경로는 비워둘 수 없음"
 #: kicad/dialogs/dialog_jobset_output_options.cpp:194
 msgid "Zip"
 msgstr "Zip"
-
-#: kicad/dialogs/dialog_jobset_output_options_base.cpp:28
-#: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:115
-msgid "Description:"
-msgstr "설명:"
 
 #: kicad/dialogs/dialog_jobset_output_options_base.cpp:64
 msgid "Include jobs:"
@@ -30628,7 +30647,7 @@ msgstr "구리 영역 테셀레이션 중..."
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:78
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:27
 #: pcbnew/footprint.cpp:1669 pcbnew/netinfo_item.cpp:108
-#: pcbnew/pcb_draw_panel_gal.cpp:714 pcbnew/widgets/appearance_controls.cpp:331
+#: pcbnew/pcb_draw_panel_gal.cpp:715 pcbnew/widgets/appearance_controls.cpp:331
 #: pcbnew/widgets/panel_selection_filter.cpp:198
 #: pcbnew/widgets/panel_selection_filter_base.cpp:45
 msgid "Pads"
@@ -30642,18 +30661,18 @@ msgstr "패드"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:222
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:24
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:88
-#: pcbnew/netinfo_item.cpp:123 pcbnew/pcb_draw_panel_gal.cpp:715
+#: pcbnew/netinfo_item.cpp:123 pcbnew/pcb_draw_panel_gal.cpp:716
 #: pcbnew/widgets/appearance_controls.cpp:330
 #: pcbnew/widgets/panel_selection_filter.cpp:197
 #: pcbnew/widgets/panel_selection_filter_base.cpp:41
 msgid "Vias"
 msgstr "비아"
 
-#: pcbnew/board.cpp:1820 pcbnew/pcb_draw_panel_gal.cpp:716
+#: pcbnew/board.cpp:1820 pcbnew/pcb_draw_panel_gal.cpp:717
 msgid "Track Segments"
 msgstr "배선 세그먼트"
 
-#: pcbnew/board.cpp:1822 pcbnew/pcb_draw_panel_gal.cpp:718
+#: pcbnew/board.cpp:1822 pcbnew/pcb_draw_panel_gal.cpp:719
 msgid "Unrouted"
 msgstr "라우팅되지 않음"
 
@@ -35625,9 +35644,19 @@ msgstr "극 좌표계 사용"
 msgid "Move Item"
 msgstr "항목 이동"
 
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:61
+#, fuzzy
+msgid "Sheet Path"
+msgstr "경로 선택"
+
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:64
 msgid "Sheets"
 msgstr "시트"
+
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:88
+#: pcbnew/footprint.cpp:1722 pcbnew/footprint.cpp:4114 pcbnew/zone.cpp:1863
+msgid "Component Class"
+msgstr "컴포넌트 유형"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:90
 msgid "Component Classes"
@@ -40422,273 +40451,273 @@ msgstr "%s 단열 스포크 폭: %s."
 msgid "Checking rule assertion \"%s\"."
 msgstr "규칙 조건 \"%s\" 확인 중."
 
-#: pcbnew/drc/drc_item.cpp:45 pcbnew/zone.cpp:2072
+#: pcbnew/drc/drc_item.cpp:42 pcbnew/zone.cpp:2072
 msgid "Electrical"
 msgstr "전기"
 
-#: pcbnew/drc/drc_item.cpp:46
+#: pcbnew/drc/drc_item.cpp:43
 msgid "Design for Manufacturing"
 msgstr "제조용 설계"
 
-#: pcbnew/drc/drc_item.cpp:47
+#: pcbnew/drc/drc_item.cpp:44
 msgid "Schematic Parity"
 msgstr "회로도 동일성"
 
-#: pcbnew/drc/drc_item.cpp:48
+#: pcbnew/drc/drc_item.cpp:45
 msgid "Signal Integrity"
 msgstr "신호 무결성"
 
-#: pcbnew/drc/drc_item.cpp:49
+#: pcbnew/drc/drc_item.cpp:46
 msgid "Readability"
 msgstr "가독성"
 
-#: pcbnew/drc/drc_item.cpp:55
+#: pcbnew/drc/drc_item.cpp:52
 msgid "Missing connection between items"
 msgstr "개체 간의 연결 누락"
 
-#: pcbnew/drc/drc_item.cpp:59
+#: pcbnew/drc/drc_item.cpp:56
 msgid "Items shorting two nets"
 msgstr "두 개의 네트를 단락시키는 개체"
 
-#: pcbnew/drc/drc_item.cpp:63
+#: pcbnew/drc/drc_item.cpp:60
 msgid "Items not allowed"
 msgstr "허용되지 않은 개체"
 
-#: pcbnew/drc/drc_item.cpp:67
+#: pcbnew/drc/drc_item.cpp:64
 msgid "Text (or dimension) on Edge.Cuts layer"
 msgstr "Edge.Cuts 레이어의 텍스트 (또는 치수)"
 
-#: pcbnew/drc/drc_item.cpp:71
+#: pcbnew/drc/drc_item.cpp:68
 msgid "Clearance violation"
 msgstr "공간거리 위반"
 
-#: pcbnew/drc/drc_item.cpp:75
+#: pcbnew/drc/drc_item.cpp:72
 msgid "Creepage violation"
 msgstr "연면거리 위반"
 
-#: pcbnew/drc/drc_item.cpp:79
+#: pcbnew/drc/drc_item.cpp:76
 msgid "Tracks crossing"
 msgstr "배선 교차"
 
-#: pcbnew/drc/drc_item.cpp:83
+#: pcbnew/drc/drc_item.cpp:80
 msgid "Board edge clearance violation"
 msgstr "기판 모서리 공간거리 위반"
 
-#: pcbnew/drc/drc_item.cpp:87
+#: pcbnew/drc/drc_item.cpp:84
 msgid "Copper zones intersect"
 msgstr "구리 영역 교차"
 
-#: pcbnew/drc/drc_item.cpp:91
+#: pcbnew/drc/drc_item.cpp:88
 msgid "Isolated copper fill"
 msgstr "격리된 구리 채움"
 
-#: pcbnew/drc/drc_item.cpp:95
+#: pcbnew/drc/drc_item.cpp:92
 msgid "Thermal relief connection to zone incomplete"
 msgstr "불완전한 영역에 대한 열 방출 연결"
 
-#: pcbnew/drc/drc_item.cpp:99
+#: pcbnew/drc/drc_item.cpp:96
 msgid "Via is not connected or connected on only one layer"
 msgstr "비아가 연결되지 않았거나 단 하나의 레이어에만 연결됨"
 
-#: pcbnew/drc/drc_item.cpp:103
+#: pcbnew/drc/drc_item.cpp:100
 msgid "Track has unconnected end"
 msgstr "배선에 연결되지 않은 끝이 존재"
 
-#: pcbnew/drc/drc_item.cpp:107
+#: pcbnew/drc/drc_item.cpp:104
 msgid "Hole clearance violation"
 msgstr "홀 공간거리 위반"
 
-#: pcbnew/drc/drc_item.cpp:111
+#: pcbnew/drc/drc_item.cpp:108
 msgid "Drilled hole too close to other hole"
 msgstr "드릴홀이 서로 너무 가깝게 뚫음"
 
-#: pcbnew/drc/drc_item.cpp:115
+#: pcbnew/drc/drc_item.cpp:112
 msgid "Drilled holes co-located"
 msgstr "드릴 홀이 함께 배치됨"
 
-#: pcbnew/drc/drc_item.cpp:119
+#: pcbnew/drc/drc_item.cpp:116
 msgid "Copper connection too narrow"
 msgstr "구리 도선 연결이 너무 좁습니다"
 
-#: pcbnew/drc/drc_item.cpp:123
+#: pcbnew/drc/drc_item.cpp:120
 msgid "Track width"
 msgstr "배선 두께"
 
-#: pcbnew/drc/drc_item.cpp:127
+#: pcbnew/drc/drc_item.cpp:124
 msgid "Track angle"
 msgstr "트랙 각도"
 
-#: pcbnew/drc/drc_item.cpp:131
+#: pcbnew/drc/drc_item.cpp:128
 msgid "Track segment length"
 msgstr "트랙 세그먼트 길이"
 
-#: pcbnew/drc/drc_item.cpp:135
+#: pcbnew/drc/drc_item.cpp:132
 msgid "Annular width"
 msgstr "환형 폭"
 
-#: pcbnew/drc/drc_item.cpp:139
+#: pcbnew/drc/drc_item.cpp:136
 msgid "Hole size out of range"
 msgstr "홀 크기 범위를 벗어남"
 
-#: pcbnew/drc/drc_item.cpp:143
+#: pcbnew/drc/drc_item.cpp:140
 msgid "Via diameter"
 msgstr "비아 지름"
 
-#: pcbnew/drc/drc_item.cpp:147
+#: pcbnew/drc/drc_item.cpp:144
 #, fuzzy
 msgid "Padstack is questionable"
 msgstr "패드스택이 유효하지 않음"
 
-#: pcbnew/drc/drc_item.cpp:151
+#: pcbnew/drc/drc_item.cpp:148
 msgid "Padstack is not valid"
 msgstr "패드스택이 유효하지 않음"
 
-#: pcbnew/drc/drc_item.cpp:155
+#: pcbnew/drc/drc_item.cpp:152
 msgid "Micro via hole size out of range"
 msgstr "마이크로 비아 홀 크기가 범위를 벗어남"
 
-#: pcbnew/drc/drc_item.cpp:159
+#: pcbnew/drc/drc_item.cpp:156
 msgid "Courtyards overlap"
 msgstr "부품자리 겹침"
 
-#: pcbnew/drc/drc_item.cpp:163
+#: pcbnew/drc/drc_item.cpp:160
 msgid "Footprint has no courtyard defined"
 msgstr "풋프린트에 부품자리가 정의되지 않음"
 
-#: pcbnew/drc/drc_item.cpp:167
+#: pcbnew/drc/drc_item.cpp:164
 msgid "Footprint has malformed courtyard"
 msgstr "풋프린트에 잘못된 부품자리가 있음"
 
-#: pcbnew/drc/drc_item.cpp:171
+#: pcbnew/drc/drc_item.cpp:168
 msgid "PTH inside courtyard"
 msgstr "부품자리 내부에 PTH 있음"
 
-#: pcbnew/drc/drc_item.cpp:175
+#: pcbnew/drc/drc_item.cpp:172
 msgid "NPTH inside courtyard"
 msgstr "부품자리 내부에 NPTH 있음"
 
-#: pcbnew/drc/drc_item.cpp:179
+#: pcbnew/drc/drc_item.cpp:176
 msgid "Item on a disabled copper layer"
 msgstr "비활성화된 구리 레이어의 항목"
 
-#: pcbnew/drc/drc_item.cpp:183
+#: pcbnew/drc/drc_item.cpp:180
 msgid "Board has malformed outline"
 msgstr "보드에 잘못된 외곽선 존재"
 
-#: pcbnew/drc/drc_item.cpp:187
+#: pcbnew/drc/drc_item.cpp:184
 msgid "Duplicate footprints"
 msgstr "중복된 풋프린트"
 
-#: pcbnew/drc/drc_item.cpp:191
+#: pcbnew/drc/drc_item.cpp:188
 msgid "Missing footprint"
 msgstr "풋프린트 누락됨"
 
-#: pcbnew/drc/drc_item.cpp:195
+#: pcbnew/drc/drc_item.cpp:192
 msgid "Extra footprint"
 msgstr "여분의 풋프린트 존재"
 
-#: pcbnew/drc/drc_item.cpp:199
+#: pcbnew/drc/drc_item.cpp:196
 msgid "Pad net doesn't match schematic"
 msgstr "패드 네트와 회로도가 불일치"
 
-#: pcbnew/drc/drc_item.cpp:203
+#: pcbnew/drc/drc_item.cpp:200
 msgid "Footprint attributes don't match symbol"
 msgstr "풋프린트 속성이 심볼과 일치하지 않음"
 
-#: pcbnew/drc/drc_item.cpp:207
+#: pcbnew/drc/drc_item.cpp:204
 msgid "Footprint doesn't match symbol's footprint filters"
 msgstr "풋프린트가 심볼의 풋프린트 필터와 일치하지 않음"
 
-#: pcbnew/drc/drc_item.cpp:211
+#: pcbnew/drc/drc_item.cpp:208
 msgid "Footprint not found in libraries"
 msgstr "라이브러리에서 풋프린트를 찾을 수 없음"
 
-#: pcbnew/drc/drc_item.cpp:215
+#: pcbnew/drc/drc_item.cpp:212
 msgid "Footprint doesn't match copy in library"
 msgstr "풋프린트 라이브러리의 사본과 일치하지 않음"
 
-#: pcbnew/drc/drc_item.cpp:223
+#: pcbnew/drc/drc_item.cpp:220
 msgid "Assertion failure"
 msgstr "규칙 실패"
 
-#: pcbnew/drc/drc_item.cpp:235
+#: pcbnew/drc/drc_item.cpp:232
 msgid "Copper sliver"
 msgstr "구리 슬리버"
 
-#: pcbnew/drc/drc_item.cpp:239
+#: pcbnew/drc/drc_item.cpp:236
 msgid "Solder mask aperture bridges items with different nets"
 msgstr "다른 네트를 가진 솔더 마스크 조리개 브리지 항목"
 
-#: pcbnew/drc/drc_item.cpp:243
+#: pcbnew/drc/drc_item.cpp:240
 msgid "Silkscreen clipped by solder mask"
 msgstr "실크스크린 영역이 솔더 마스크 영역에 의해 잘림"
 
-#: pcbnew/drc/drc_item.cpp:247
+#: pcbnew/drc/drc_item.cpp:244
 msgid "Silkscreen clipped by board edge"
 msgstr "보드 가장자리로 클리핑 된 실크 스크린"
 
-#: pcbnew/drc/drc_item.cpp:251
+#: pcbnew/drc/drc_item.cpp:248
 msgid "Silkscreen overlap"
 msgstr "실크스크린 겹침"
 
-#: pcbnew/drc/drc_item.cpp:255
+#: pcbnew/drc/drc_item.cpp:252
 msgid "Text height out of range"
 msgstr "텍스트 높이가 범위를 벗어남"
 
-#: pcbnew/drc/drc_item.cpp:259
+#: pcbnew/drc/drc_item.cpp:256
 msgid "Text thickness out of range"
 msgstr "텍스트 두께가 범위를 벗어남"
 
-#: pcbnew/drc/drc_item.cpp:263
+#: pcbnew/drc/drc_item.cpp:260
 msgid "Track length out of range"
 msgstr "트랙 길이가 범위를 벗어남"
 
-#: pcbnew/drc/drc_item.cpp:267
+#: pcbnew/drc/drc_item.cpp:264
 msgid "Skew between tracks out of range"
 msgstr "범위를 벗어난 트랙 간 왜곡"
 
-#: pcbnew/drc/drc_item.cpp:272
+#: pcbnew/drc/drc_item.cpp:269
 msgid "Too many or too few vias on a connection"
 msgstr "연결된 비아가 너무 많거나 적음"
 
-#: pcbnew/drc/drc_item.cpp:276
+#: pcbnew/drc/drc_item.cpp:273
 msgid "Differential pair gap out of range"
 msgstr "차동 쌍 간격이 허용 범위 벗어남"
 
-#: pcbnew/drc/drc_item.cpp:280
+#: pcbnew/drc/drc_item.cpp:277
 msgid "Differential uncoupled length too long"
 msgstr "차동 비결합 길이 너무 긺"
 
-#: pcbnew/drc/drc_item.cpp:284
+#: pcbnew/drc/drc_item.cpp:281
 msgid "Footprint is not valid"
 msgstr "Footprint는 유효하지 않습니다"
 
-#: pcbnew/drc/drc_item.cpp:288
+#: pcbnew/drc/drc_item.cpp:285
 msgid "Footprint component type doesn't match footprint pads"
 msgstr "풋프린트 컴포넌트 유형이 풋프린트 패드와 일치하지 않습니다"
 
-#: pcbnew/drc/drc_item.cpp:292
+#: pcbnew/drc/drc_item.cpp:289
 msgid "Through hole pad has no hole"
 msgstr "스루홀 패드에 구멍이 없음"
 
-#: pcbnew/drc/drc_item.cpp:296
+#: pcbnew/drc/drc_item.cpp:293
 msgid "Mirrored text on front layer"
 msgstr "전면 레이어에 미러링된 텍스트"
 
-#: pcbnew/drc/drc_item.cpp:300
+#: pcbnew/drc/drc_item.cpp:297
 msgid "Non-Mirrored text on back layer"
 msgstr "후면 레이어에 미러링되지 않은 텍스트"
 
-#: pcbnew/drc/drc_item.cpp:307
+#: pcbnew/drc/drc_item.cpp:304
 msgid "Drilled hole too close to other hole - deprecated"
 msgstr "드릴홀이 서로 너무 가깝게 뚫음 - 사용 중단됨"
 
-#: pcbnew/drc/drc_item.cpp:508
+#: pcbnew/drc/drc_item.cpp:505
 #, c-format
 msgid "Rule: %s"
 msgstr "규칙: %s"
 
-#: pcbnew/drc/drc_item.cpp:510
+#: pcbnew/drc/drc_item.cpp:507
 msgid "Local override"
 msgstr "지역 재정의"
 
@@ -41962,7 +41991,7 @@ msgstr "IPC2581 파일을 생성하기 전에 보드를 저장해야 합니다."
 msgid "Generating IPC2581 file"
 msgstr "IPC2581 파일 생성"
 
-#: pcbnew/files.cpp:1342 pcbnew/pcbnew_jobs_handler.cpp:1981
+#: pcbnew/files.cpp:1342 pcbnew/pcbnew_jobs_handler.cpp:2011
 #, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
@@ -41971,7 +42000,7 @@ msgstr ""
 "IPC2581 파일 '%s' 생성 오류.\n"
 "%s"
 
-#: pcbnew/files.cpp:1406 pcbnew/pcbnew_jobs_handler.cpp:2014
+#: pcbnew/files.cpp:1406 pcbnew/pcbnew_jobs_handler.cpp:2044
 #, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
@@ -42033,10 +42062,6 @@ msgstr "상태: "
 #: pcbnew/footprint.cpp:1715
 msgid "Attributes:"
 msgstr "속성:"
-
-#: pcbnew/footprint.cpp:1722 pcbnew/footprint.cpp:4114 pcbnew/zone.cpp:1863
-msgid "Component Class"
-msgstr "컴포넌트 유형"
 
 #: pcbnew/footprint.cpp:1726
 #, c-format
@@ -43753,7 +43778,7 @@ msgstr ""
 "다. 회로도로부터 PCB를 생성하거나 업데이트하려면, KiCad 프로젝트 매니저를 실"
 "행하여 프로젝트를 생성하세요."
 
-#: pcbnew/pcb_edit_frame.cpp:2026 pcbnew/pcbnew_jobs_handler.cpp:1837
+#: pcbnew/pcb_edit_frame.cpp:2026 pcbnew/pcbnew_jobs_handler.cpp:1867
 msgid "Eeschema netlist"
 msgstr "Eeschema 네트리스트"
 
@@ -45940,30 +45965,30 @@ msgstr "svg 파일 생성 오류"
 msgid "Schematic parity tests require a fully annotated schematic."
 msgstr "회로도 동일성 테스트에는 완전한 주석이 달린 회로도가 필요합니다."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1844
+#: pcbnew/pcbnew_jobs_handler.cpp:1841 pcbnew/pcbnew_jobs_handler.cpp:1874
 msgid "Failed to fetch schematic netlist for parity tests.\n"
 msgstr "패리티 테스트를 위한 회로도 네트리스트를 가져오지 못함.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1866 pcbnew/tools/drc_tool.cpp:200
+#: pcbnew/pcbnew_jobs_handler.cpp:1896 pcbnew/tools/drc_tool.cpp:200
 msgid "DRC"
 msgstr "DRC"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1887
+#: pcbnew/pcbnew_jobs_handler.cpp:1917
 #, c-format
 msgid "Found %d unconnected items\n"
 msgstr "%d개의 미연결 항목 발견\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1893
+#: pcbnew/pcbnew_jobs_handler.cpp:1923
 #, c-format
 msgid "Found %d schematic parity issues\n"
 msgstr "%d 회로도 패리티 문제 발견\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1909
+#: pcbnew/pcbnew_jobs_handler.cpp:1939
 #, c-format
 msgid "Unable to save DRC report to %s\n"
 msgstr "ERC 보고서를 %s에 저장할 수 없음\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1914
+#: pcbnew/pcbnew_jobs_handler.cpp:1944
 #, c-format
 msgid "Saved DRC Report to %s\n"
 msgstr "DRC 보고서를 %s에 저장함\n"
@@ -49222,9 +49247,18 @@ msgstr "기판 영역 밖에 있는 부품에 대해 자동 배치를 수행"
 msgid "Generate Placement Rule Areas..."
 msgstr "배치 규칙 영역 생성..."
 
+#: pcbnew/tools/pcb_actions.cpp:2229
+#, fuzzy
+msgid "Creates best-fit placement rule areas"
+msgstr "기존 배치 규칙 영역 교체"
+
 #: pcbnew/tools/pcb_actions.cpp:2236
 msgid "Repeat Layout..."
 msgstr "반복 배치..."
+
+#: pcbnew/tools/pcb_actions.cpp:2237
+msgid "Clones placement & routing across multiple identical channels"
+msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:2248
 msgid "Route Single Track"
@@ -62193,10 +62227,6 @@ msgstr "KiCad 도면 시트"
 #, fuzzy
 #~ msgid "Default Value"
 #~ msgstr "기본 비아 드릴"
-
-#, fuzzy
-#~ msgid "Default Fields"
-#~ msgstr "필드 삭제"
 
 #~ msgid "Delete Zones ?"
 #~ msgstr "영역을 삭제하시겠습니까?"

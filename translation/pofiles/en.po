@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-15 06:04+0300\n"
+"POT-Creation-Date: 2025-02-17 08:10+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -7357,6 +7357,18 @@ msgstr "Untitled Field"
 msgid "Duplicate fields are not allowed."
 msgstr "Duplicate fields are not allowed."
 
+msgid "Default Fields"
+msgstr "Default Fields"
+
+msgid "Keywords:"
+msgstr "Keywords:"
+
+msgid "Description:"
+msgstr "Description:"
+
+msgid "Design Block Properties"
+msgstr "Design Block Properties"
+
 #, c-format
 msgid "Symbol library identifier %s is not valid."
 msgstr "Symbol library identifier %s is not valid."
@@ -8185,9 +8197,6 @@ msgstr "Add Footprint Filter"
 
 msgid "Edit Footprint Filter"
 msgstr "Edit Footprint Filter"
-
-msgid "Keywords:"
-msgstr "Keywords:"
 
 msgid "Derive from symbol:"
 msgstr "Derive from symbol:"
@@ -17944,9 +17953,6 @@ msgstr "Output path cannot be empty"
 msgid "Zip"
 msgstr "Zip"
 
-msgid "Description:"
-msgstr "Description:"
-
 msgid "Include jobs:"
 msgstr "Include jobs:"
 
@@ -24735,8 +24741,14 @@ msgstr "Use polar coordinates"
 msgid "Move Item"
 msgstr "Move Item"
 
+msgid "Sheet Path"
+msgstr "Sheet Path"
+
 msgid "Sheets"
 msgstr "Sheets"
+
+msgid "Component Class"
+msgstr "Component Class"
 
 msgid "Component Classes"
 msgstr "Component Classes"
@@ -29820,9 +29832,6 @@ msgstr "Status: "
 
 msgid "Attributes:"
 msgstr "Attributes:"
-
-msgid "Component Class"
-msgstr "Component Class"
 
 #, c-format
 msgid "3D-Shape: %s"
@@ -35397,8 +35406,14 @@ msgstr "Performs automatic placement of components outside board area"
 msgid "Generate Placement Rule Areas..."
 msgstr "Generate Placement Rule Areas..."
 
+msgid "Creates best-fit placement rule areas"
+msgstr "Creates best-fit placement rule areas"
+
 msgid "Repeat Layout..."
 msgstr "Repeat Layout..."
+
+msgid "Clones placement & routing across multiple identical channels"
+msgstr "Clones placement & routing across multiple identical channels"
 
 msgid "Route Single Track"
 msgstr "Route Single Track"
