@@ -30,16 +30,16 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 08:10+0300\n"
-"PO-Revision-Date: 2025-02-15 08:12+0000\n"
+"PO-Revision-Date: 2025-02-17 17:18+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.10.1-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -11665,9 +11665,8 @@ msgid "Duplicate fields are not allowed."
 msgstr "Doppelte Felder sind nicht erlaubt."
 
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:26
-#, fuzzy
 msgid "Default Fields"
-msgstr "Standard ist 1"
+msgstr "Standardfelder"
 
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:104
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:137
@@ -11682,9 +11681,8 @@ msgid "Description:"
 msgstr "Bezeichnung:"
 
 #: eeschema/dialogs/dialog_design_block_properties_base.h:70
-#, fuzzy
 msgid "Design Block Properties"
-msgstr "Designblock-Bibliotheken"
+msgstr "Designblockeigenschaften"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:550
 #, c-format
@@ -36340,9 +36338,8 @@ msgid "Move Item"
 msgstr "Element verschieben"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:61
-#, fuzzy
 msgid "Sheet Path"
-msgstr "Pfad auswählen"
+msgstr "Blattpfad"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:64
 msgid "Sheets"
@@ -50303,9 +50300,8 @@ msgid "Generate Placement Rule Areas..."
 msgstr "Platzierungregelflächen erzeugen ..."
 
 #: pcbnew/tools/pcb_actions.cpp:2229
-#, fuzzy
 msgid "Creates best-fit placement rule areas"
-msgstr "Bestehender Platzierungs-Regelbereiche ersetzen"
+msgstr "Erstellt passgenaue Platzierungs-Regelbereiche"
 
 #: pcbnew/tools/pcb_actions.cpp:2236
 msgid "Repeat Layout..."
@@ -50313,7 +50309,7 @@ msgstr "Layout wiederholen ..."
 
 #: pcbnew/tools/pcb_actions.cpp:2237
 msgid "Clones placement & routing across multiple identical channels"
-msgstr ""
+msgstr "Klont Platzierung & Routing zu anderen identischen Kanälen"
 
 #: pcbnew/tools/pcb_actions.cpp:2248
 msgid "Route Single Track"
