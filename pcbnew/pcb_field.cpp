@@ -279,6 +279,11 @@ static struct PCB_FIELD_DESC
         propMgr.InheritsAfter( TYPE_HASH( PCB_FIELD ), TYPE_HASH( PCB_TEXT ) );
         propMgr.InheritsAfter( TYPE_HASH( PCB_FIELD ), TYPE_HASH( EDA_TEXT ) );
 
+        propMgr.AddProperty( new PROPERTY<PCB_FIELD, wxString>( _HKI( "Name" ),
+                     NO_SETTER( PCB_FIELD, wxString ), &PCB_FIELD::GetCanonicalName ) )
+                .SetIsHiddenFromLibraryEditors()
+                .SetIsHiddenFromPropertiesManager();
+
         // These properties, inherited from EDA_TEXT, have no sense for the board editor
         propMgr.Mask( TYPE_HASH( PCB_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Hyperlink" ) );
         propMgr.Mask( TYPE_HASH( PCB_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Color" ) );
