@@ -1656,8 +1656,9 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     SCH_SHEET   tempSheet;
     SCH_SCREEN* tempScreen = new SCH_SCREEN( &m_frame->Schematic() );
+    std::unique_ptr<wxImage> clipImg = GetImageFromClipboard();
 
-    if( std::unique_ptr<wxImage> clipImg = GetImageFromClipboard() )
+    if( !aEvent.IsAction( &ACTIONS::duplicate ) && clipImg )
     {
         // Just image data
         auto bitmap = std::make_unique<SCH_BITMAP>();
