@@ -148,6 +148,9 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( const int* aLayerLookUpTable, int aCopperLa
 
 void GBR_TO_PCB_EXPORTER::export_non_copper_item( const GERBER_DRAW_ITEM* aGbrItem, int aLayer )
 {
+    if( aGbrItem->GetLayerPolarity() )
+        return;
+
     // used when a D_CODE is not found. default D_CODE to draw a flashed item
     static D_CODE  dummyD_CODE( 0 );
 
