@@ -345,6 +345,19 @@ LIB_TREE_NODE* LIB_TREE::GetCurrentTreeNode() const
     return m_adapter->GetTreeNodeFor( sel );
 }
 
+int LIB_TREE::GetSelectedTreeNodes( std::vector<LIB_TREE_NODE*>& aSelection ) const
+{
+    wxDataViewItemArray selection;
+    int                 count = m_tree_ctrl->GetSelections( selection );
+
+    for( const wxDataViewItem& item : selection )
+    {
+        aSelection.push_back( m_adapter->GetTreeNodeFor( item ) );
+    }
+
+    return count;
+}
+
 
 void LIB_TREE::SelectLibId( const LIB_ID& aLibId )
 {

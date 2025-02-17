@@ -46,6 +46,8 @@ public:
                         std::function<bool( const wxString& aNewName )> aValidator );
 
 private:
+    void changeSelectedPinStatus( const bool aPin );
+
     /// Set up handlers for various events.
     void setTransitions() override;
 
