@@ -218,6 +218,10 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     CreateInfoBar();
 
+    // Fetch COPY of config as a lot of these initializations are going to overwrite our data.
+    EESCHEMA_SETTINGS::AUI_PANELS aui_cfg = eeconfig()->m_AuiPanels;
+    EESCHEMA_SETTINGS::APPEARANCE appearance_cfg = eeconfig()->m_Appearance;
+
     // Rows; layers 4 - 6
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( wxS( "MainToolbar" ) )
                       .Top().Layer( 6 ) );
@@ -269,101 +273,89 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     FinishAUIInitialization();
 
-    resolveCanvasType();
-    SwitchCanvas( m_canvasType );
-
-    GetCanvas()->GetGAL()->SetAxesEnabled( false );
-
-    KIGFX::SCH_VIEW* view = GetCanvas()->GetView();
-    static_cast<KIGFX::SCH_PAINTER*>( view->GetPainter() )->SetSchematic( m_schematic );
-
     wxAuiPaneInfo& hierarchy_pane = m_auimgr.GetPane( SchematicHierarchyPaneName() );
     wxAuiPaneInfo& netNavigatorPane = m_auimgr.GetPane( NetNavigatorPaneName() );
     wxAuiPaneInfo& propertiesPane = m_auimgr.GetPane( PropertiesPaneName() );
     wxAuiPaneInfo& selectionFilterPane = m_auimgr.GetPane( wxS( "SelectionFilter" ) );
     wxAuiPaneInfo& designBlocksPane = m_auimgr.GetPane( DesignBlocksPaneName() );
-    EESCHEMA_SETTINGS* cfg = eeconfig();
 
-    hierarchy_pane.Show( cfg->m_AuiPanels.show_schematic_hierarchy );
-    netNavigatorPane.Show( cfg->m_AuiPanels.show_net_nav_panel );
-    propertiesPane.Show( cfg->m_AuiPanels.show_properties );
-    designBlocksPane.Show( cfg->m_AuiPanels.design_blocks_show );
+    hierarchy_pane.Show( aui_cfg.show_schematic_hierarchy );
+    netNavigatorPane.Show( aui_cfg.show_net_nav_panel );
+    propertiesPane.Show( aui_cfg.show_properties );
+    designBlocksPane.Show( aui_cfg.design_blocks_show );
     updateSelectionFilterVisbility();
 
     // The selection filter doesn't need to grow in the vertical direction when docked
     selectionFilterPane.dock_proportion = 0;
 
-    if( cfg->m_AuiPanels.hierarchy_panel_float_width > 0
-            && cfg->m_AuiPanels.hierarchy_panel_float_height > 0 )
+    if( aui_cfg.hierarchy_panel_float_width > 0 && aui_cfg.hierarchy_panel_float_height > 0 )
     {
         // Show at end, after positioning
-        hierarchy_pane.FloatingSize( cfg->m_AuiPanels.hierarchy_panel_float_width,
-                                     cfg->m_AuiPanels.hierarchy_panel_float_height );
+        hierarchy_pane.FloatingSize( aui_cfg.hierarchy_panel_float_width,
+                                     aui_cfg.hierarchy_panel_float_height );
     }
 
-    if( cfg->m_AuiPanels.net_nav_panel_float_size.GetWidth() > 0
-      && cfg->m_AuiPanels.net_nav_panel_float_size.GetHeight() > 0 )
+    if( aui_cfg.net_nav_panel_float_size.GetWidth() > 0
+      && aui_cfg.net_nav_panel_float_size.GetHeight() > 0 )
     {
-        netNavigatorPane.FloatingSize( cfg->m_AuiPanels.net_nav_panel_float_size );
-        netNavigatorPane.FloatingPosition( cfg->m_AuiPanels.net_nav_panel_float_pos );
+        netNavigatorPane.FloatingSize( aui_cfg.net_nav_panel_float_size );
+        netNavigatorPane.FloatingPosition( aui_cfg.net_nav_panel_float_pos );
     }
 
-    if( cfg->m_AuiPanels.properties_panel_width > 0 )
-        SetAuiPaneSize( m_auimgr, propertiesPane, cfg->m_AuiPanels.properties_panel_width, -1 );
+    if( aui_cfg.properties_panel_width > 0 )
+        SetAuiPaneSize( m_auimgr, propertiesPane, aui_cfg.properties_panel_width, -1 );
 
-    if( cfg->m_AuiPanels.schematic_hierarchy_float )
+    if( aui_cfg.schematic_hierarchy_float )
         hierarchy_pane.Float();
 
-    if( cfg->m_AuiPanels.search_panel_height > 0
-        && ( cfg->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_TOP
-            || cfg->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_BOTTOM ) )
+    if( aui_cfg.search_panel_height > 0
+        && ( aui_cfg.search_panel_dock_direction == wxAUI_DOCK_TOP
+            || aui_cfg.search_panel_dock_direction == wxAUI_DOCK_BOTTOM ) )
     {
         wxAuiPaneInfo& searchPane = m_auimgr.GetPane( SearchPaneName() );
-        searchPane.Direction( cfg->m_AuiPanels.search_panel_dock_direction );
-        SetAuiPaneSize( m_auimgr, searchPane, -1, cfg->m_AuiPanels.search_panel_height );
+        searchPane.Direction( aui_cfg.search_panel_dock_direction );
+        SetAuiPaneSize( m_auimgr, searchPane, -1, aui_cfg.search_panel_height );
     }
 
-    else if( cfg->m_AuiPanels.search_panel_width > 0
-            && ( cfg->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_LEFT
-                || cfg->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_RIGHT ) )
+    else if( aui_cfg.search_panel_width > 0
+            && ( aui_cfg.search_panel_dock_direction == wxAUI_DOCK_LEFT
+                || aui_cfg.search_panel_dock_direction == wxAUI_DOCK_RIGHT ) )
     {
         wxAuiPaneInfo& searchPane = m_auimgr.GetPane( SearchPaneName() );
-        searchPane.Direction( cfg->m_AuiPanels.search_panel_dock_direction );
-        SetAuiPaneSize( m_auimgr, searchPane, cfg->m_AuiPanels.search_panel_width, -1 );
+        searchPane.Direction( aui_cfg.search_panel_dock_direction );
+        SetAuiPaneSize( m_auimgr, searchPane, aui_cfg.search_panel_width, -1 );
     }
 
-    if( cfg->m_AuiPanels.float_net_nav_panel )
+    if( aui_cfg.float_net_nav_panel )
         netNavigatorPane.Float();
 
-    if( cfg->m_AuiPanels.design_blocks_show )
-        SetAuiPaneSize( m_auimgr, designBlocksPane,
-                        cfg->m_AuiPanels.design_blocks_panel_docked_width, -1 );
+    if( aui_cfg.design_blocks_show )
+        SetAuiPaneSize( m_auimgr, designBlocksPane, aui_cfg.design_blocks_panel_docked_width, -1 );
 
-    if( cfg->m_AuiPanels.hierarchy_panel_docked_width > 0 )
+    if( aui_cfg.hierarchy_panel_docked_width > 0 )
     {
         // If the net navigator is not show, let the hierarchy navigator take all of the vertical
         // space.
-        if( !cfg->m_AuiPanels.show_net_nav_panel )
+        if( !aui_cfg.show_net_nav_panel )
         {
-            SetAuiPaneSize( m_auimgr, hierarchy_pane,
-                            cfg->m_AuiPanels.hierarchy_panel_docked_width, -1 );
+            SetAuiPaneSize( m_auimgr, hierarchy_pane, aui_cfg.hierarchy_panel_docked_width, -1 );
         }
         else
         {
             SetAuiPaneSize( m_auimgr, hierarchy_pane,
-                            cfg->m_AuiPanels.hierarchy_panel_docked_width,
-                            cfg->m_AuiPanels.hierarchy_panel_docked_height );
+                            aui_cfg.hierarchy_panel_docked_width,
+                            aui_cfg.hierarchy_panel_docked_height );
 
             SetAuiPaneSize( m_auimgr, netNavigatorPane,
-                            cfg->m_AuiPanels.net_nav_panel_docked_size.GetWidth(),
-                            cfg->m_AuiPanels.net_nav_panel_docked_size.GetHeight() );
+                            aui_cfg.net_nav_panel_docked_size.GetWidth(),
+                            aui_cfg.net_nav_panel_docked_size.GetHeight() );
         }
 
         // wxAUI hack: force width by setting MinSize() and then Fixed()
         // thanks to ZenJu https://github.com/wxWidgets/wxWidgets/issues/13180
-        hierarchy_pane.MinSize( cfg->m_AuiPanels.hierarchy_panel_docked_width, 60 );
+        hierarchy_pane.MinSize( aui_cfg.hierarchy_panel_docked_width, 60 );
         hierarchy_pane.Fixed();
-        netNavigatorPane.MinSize( cfg->m_AuiPanels.net_nav_panel_docked_size.GetWidth(), 60 );
+        netNavigatorPane.MinSize( aui_cfg.net_nav_panel_docked_size.GetWidth(), 60 );
         netNavigatorPane.Fixed();
         m_auimgr.Update();
 
@@ -382,14 +374,22 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_auimgr.Update();
     }
 
+    resolveCanvasType();
+    SwitchCanvas( m_canvasType );
+
+    GetCanvas()->GetGAL()->SetAxesEnabled( false );
+
+    KIGFX::SCH_VIEW* view = GetCanvas()->GetView();
+    static_cast<KIGFX::SCH_PAINTER*>( view->GetPainter() )->SetSchematic( m_schematic );
+
     LoadProjectSettings();
     LoadDrawingSheet();
 
-    view->SetLayerVisible( LAYER_ERC_ERR, cfg->m_Appearance.show_erc_errors );
-    view->SetLayerVisible( LAYER_ERC_WARN, cfg->m_Appearance.show_erc_warnings );
-    view->SetLayerVisible( LAYER_ERC_EXCLUSION, cfg->m_Appearance.show_erc_exclusions );
-    view->SetLayerVisible( LAYER_OP_VOLTAGES, cfg->m_Appearance.show_op_voltages );
-    view->SetLayerVisible( LAYER_OP_CURRENTS, cfg->m_Appearance.show_op_currents );
+    view->SetLayerVisible( LAYER_ERC_ERR, appearance_cfg.show_erc_errors );
+    view->SetLayerVisible( LAYER_ERC_WARN, appearance_cfg.show_erc_warnings );
+    view->SetLayerVisible( LAYER_ERC_EXCLUSION, appearance_cfg.show_erc_exclusions );
+    view->SetLayerVisible( LAYER_OP_VOLTAGES, appearance_cfg.show_op_voltages );
+    view->SetLayerVisible( LAYER_OP_CURRENTS, appearance_cfg.show_op_currents );
 
     initScreenZoom();
 
