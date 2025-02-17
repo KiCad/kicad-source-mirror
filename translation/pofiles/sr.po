@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-15 06:07+0300\n"
+"POT-Creation-Date: 2025-02-17 08:10+0300\n"
 "PO-Revision-Date: 2025-01-06 10:25+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v8/sr/>\n"
@@ -6824,12 +6824,12 @@ msgstr "Непознат параметар '%s' у '%s'"
 msgid "Unable to parse '%s' in '%s'"
 msgstr "Попуњавање зона"
 
-#: common/io/eagle/eagle_parser.cpp:249
+#: common/io/eagle/eagle_parser.cpp:250
 #, fuzzy, c-format
 msgid "Invalid size %lld: too large"
 msgstr "Учитавање  "
 
-#: common/io/eagle/eagle_parser.cpp:410
+#: common/io/eagle/eagle_parser.cpp:411
 #, c-format
 msgid "Invalid Arc with radius %f and angle %f"
 msgstr ""
@@ -29674,7 +29674,7 @@ msgstr "Креирање зона"
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:78
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:27
 #: pcbnew/footprint.cpp:1281 pcbnew/netinfo_item.cpp:108
-#: pcbnew/pcb_draw_panel_gal.cpp:556 pcbnew/widgets/appearance_controls.cpp:330
+#: pcbnew/pcb_draw_panel_gal.cpp:557 pcbnew/widgets/appearance_controls.cpp:330
 #: pcbnew/widgets/panel_selection_filter.cpp:190
 #: pcbnew/widgets/panel_selection_filter_base.cpp:45
 msgid "Pads"
@@ -29687,7 +29687,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:31
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:178
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:24
-#: pcbnew/netinfo_item.cpp:123 pcbnew/pcb_draw_panel_gal.cpp:557
+#: pcbnew/netinfo_item.cpp:123 pcbnew/pcb_draw_panel_gal.cpp:558
 #: pcbnew/widgets/appearance_controls.cpp:329
 #: pcbnew/widgets/panel_selection_filter.cpp:189
 #: pcbnew/widgets/panel_selection_filter_base.cpp:41
@@ -29695,13 +29695,13 @@ msgstr ""
 msgid "Vias"
 msgstr "Додај"
 
-#: pcbnew/board.cpp:1497 pcbnew/pcb_draw_panel_gal.cpp:558
+#: pcbnew/board.cpp:1497 pcbnew/pcb_draw_panel_gal.cpp:559
 #, fuzzy
 msgid "Track Segments"
 msgstr "Избриши"
 
 #: pcbnew/board.cpp:1498 pcbnew/generators/pcb_tuning_pattern.cpp:2065
-#: pcbnew/pcb_draw_panel_gal.cpp:559
+#: pcbnew/pcb_draw_panel_gal.cpp:560
 #: pcbnew/widgets/appearance_controls.cpp:1030
 #: pcbnew/widgets/appearance_controls.cpp:2363
 #: pcbnew/widgets/appearance_controls_base.cpp:61
@@ -29710,7 +29710,7 @@ msgstr "Избриши"
 msgid "Nets"
 msgstr ""
 
-#: pcbnew/board.cpp:1499 pcbnew/pcb_draw_panel_gal.cpp:560
+#: pcbnew/board.cpp:1499 pcbnew/pcb_draw_panel_gal.cpp:561
 #, fuzzy
 msgid "Unrouted"
 msgstr "Ниједан облик није изабран"

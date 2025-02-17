@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-15 06:07+0300\n"
+"POT-Creation-Date: 2025-02-17 08:10+0300\n"
 "PO-Revision-Date: 2025-02-03 17:07+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/v8/ta/>\n"
@@ -6430,12 +6430,12 @@ msgstr "அறியப்படாத அளவுரு '%s' இல் '%s'"
 msgid "Unable to parse '%s' in '%s'"
 msgstr "'%s' இல் '%s' ஐ பாகுபடுத்த முடியவில்லை"
 
-#: common/io/eagle/eagle_parser.cpp:249
+#: common/io/eagle/eagle_parser.cpp:250
 #, c-format
 msgid "Invalid size %lld: too large"
 msgstr "தவறான அளவு %எல்.எல்.டி: மிகப் பெரியது"
 
-#: common/io/eagle/eagle_parser.cpp:410
+#: common/io/eagle/eagle_parser.cpp:411
 #, c-format
 msgid "Invalid Arc with radius %f and angle %f"
 msgstr "ஆரம் %f மற்றும் கோணம் %f உடன் தவறான வளைவு"
@@ -28014,7 +28014,7 @@ msgstr "செப்பு மண்டலங்களை டெசெலட்�
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:78
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:27
 #: pcbnew/footprint.cpp:1281 pcbnew/netinfo_item.cpp:108
-#: pcbnew/pcb_draw_panel_gal.cpp:556 pcbnew/widgets/appearance_controls.cpp:330
+#: pcbnew/pcb_draw_panel_gal.cpp:557 pcbnew/widgets/appearance_controls.cpp:330
 #: pcbnew/widgets/panel_selection_filter.cpp:190
 #: pcbnew/widgets/panel_selection_filter_base.cpp:45
 msgid "Pads"
@@ -28027,19 +28027,19 @@ msgstr "நிரப்பிடங்கள்"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:31
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:178
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:24
-#: pcbnew/netinfo_item.cpp:123 pcbnew/pcb_draw_panel_gal.cpp:557
+#: pcbnew/netinfo_item.cpp:123 pcbnew/pcb_draw_panel_gal.cpp:558
 #: pcbnew/widgets/appearance_controls.cpp:329
 #: pcbnew/widgets/panel_selection_filter.cpp:189
 #: pcbnew/widgets/panel_selection_filter_base.cpp:41
 msgid "Vias"
 msgstr "துளைகள்"
 
-#: pcbnew/board.cpp:1497 pcbnew/pcb_draw_panel_gal.cpp:558
+#: pcbnew/board.cpp:1497 pcbnew/pcb_draw_panel_gal.cpp:559
 msgid "Track Segments"
 msgstr "டிராக் பிரிவுகள்"
 
 #: pcbnew/board.cpp:1498 pcbnew/generators/pcb_tuning_pattern.cpp:2065
-#: pcbnew/pcb_draw_panel_gal.cpp:559
+#: pcbnew/pcb_draw_panel_gal.cpp:560
 #: pcbnew/widgets/appearance_controls.cpp:1030
 #: pcbnew/widgets/appearance_controls.cpp:2363
 #: pcbnew/widgets/appearance_controls_base.cpp:61
@@ -28048,7 +28048,7 @@ msgstr "டிராக் பிரிவுகள்"
 msgid "Nets"
 msgstr "வலைகள்"
 
-#: pcbnew/board.cpp:1499 pcbnew/pcb_draw_panel_gal.cpp:560
+#: pcbnew/board.cpp:1499 pcbnew/pcb_draw_panel_gal.cpp:561
 msgid "Unrouted"
 msgstr "அவிழ்க்கப்படாதது"
 

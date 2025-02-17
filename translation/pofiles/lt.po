@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-15 06:07+0300\n"
+"POT-Creation-Date: 2025-02-17 08:10+0300\n"
 "PO-Revision-Date: 2025-01-29 16:58+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/v8/lt/"
@@ -6800,12 +6800,12 @@ msgstr "Nežinomas parametras „%s“ „%s“"
 msgid "Unable to parse '%s' in '%s'"
 msgstr "Nepavyko išanalizuoti „%s“ „%s“"
 
-#: common/io/eagle/eagle_parser.cpp:249
+#: common/io/eagle/eagle_parser.cpp:250
 #, c-format
 msgid "Invalid size %lld: too large"
 msgstr "Neteisingas dydis %ll d: per didelis"
 
-#: common/io/eagle/eagle_parser.cpp:410
+#: common/io/eagle/eagle_parser.cpp:411
 #, c-format
 msgid "Invalid Arc with radius %f and angle %f"
 msgstr "Netinkamas lankas su spinduliu %f ir kampu %f"
@@ -29509,7 +29509,7 @@ msgstr "Vario zonų išardymas ..."
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:78
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:27
 #: pcbnew/footprint.cpp:1281 pcbnew/netinfo_item.cpp:108
-#: pcbnew/pcb_draw_panel_gal.cpp:556 pcbnew/widgets/appearance_controls.cpp:330
+#: pcbnew/pcb_draw_panel_gal.cpp:557 pcbnew/widgets/appearance_controls.cpp:330
 #: pcbnew/widgets/panel_selection_filter.cpp:190
 #: pcbnew/widgets/panel_selection_filter_base.cpp:45
 msgid "Pads"
@@ -29522,19 +29522,19 @@ msgstr "Aikštelės"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:31
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:178
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:24
-#: pcbnew/netinfo_item.cpp:123 pcbnew/pcb_draw_panel_gal.cpp:557
+#: pcbnew/netinfo_item.cpp:123 pcbnew/pcb_draw_panel_gal.cpp:558
 #: pcbnew/widgets/appearance_controls.cpp:329
 #: pcbnew/widgets/panel_selection_filter.cpp:189
 #: pcbnew/widgets/panel_selection_filter_base.cpp:41
 msgid "Vias"
 msgstr "Perėjimai"
 
-#: pcbnew/board.cpp:1497 pcbnew/pcb_draw_panel_gal.cpp:558
+#: pcbnew/board.cpp:1497 pcbnew/pcb_draw_panel_gal.cpp:559
 msgid "Track Segments"
 msgstr "Takelio segmentai"
 
 #: pcbnew/board.cpp:1498 pcbnew/generators/pcb_tuning_pattern.cpp:2065
-#: pcbnew/pcb_draw_panel_gal.cpp:559
+#: pcbnew/pcb_draw_panel_gal.cpp:560
 #: pcbnew/widgets/appearance_controls.cpp:1030
 #: pcbnew/widgets/appearance_controls.cpp:2363
 #: pcbnew/widgets/appearance_controls_base.cpp:61
@@ -29543,7 +29543,7 @@ msgstr "Takelio segmentai"
 msgid "Nets"
 msgstr "Grandinės"
 
-#: pcbnew/board.cpp:1499 pcbnew/pcb_draw_panel_gal.cpp:560
+#: pcbnew/board.cpp:1499 pcbnew/pcb_draw_panel_gal.cpp:561
 msgid "Unrouted"
 msgstr "Nepakirta"
 

@@ -29,7 +29,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-15 06:07+0300\n"
+"POT-Creation-Date: 2025-02-17 08:10+0300\n"
 "PO-Revision-Date: 2025-02-03 16:58+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v8/ko/>\n"
@@ -6439,12 +6439,12 @@ msgstr "알 수 없는 매개변수 '%s'이(가) '%s' 에 있음"
 msgid "Unable to parse '%s' in '%s'"
 msgstr "구문 분석 할 수 없는 '%s'이(가) '%s'에 있음"
 
-#: common/io/eagle/eagle_parser.cpp:249
+#: common/io/eagle/eagle_parser.cpp:250
 #, c-format
 msgid "Invalid size %lld: too large"
 msgstr "잘못된 크기 %lld: 너무 큼"
 
-#: common/io/eagle/eagle_parser.cpp:410
+#: common/io/eagle/eagle_parser.cpp:411
 #, c-format
 msgid "Invalid Arc with radius %f and angle %f"
 msgstr "반경이 %f이고 각도가 %f인 잘못된 호"
@@ -27927,7 +27927,7 @@ msgstr "구리 영역 테셀레이션 중..."
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:78
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:27
 #: pcbnew/footprint.cpp:1281 pcbnew/netinfo_item.cpp:108
-#: pcbnew/pcb_draw_panel_gal.cpp:556 pcbnew/widgets/appearance_controls.cpp:330
+#: pcbnew/pcb_draw_panel_gal.cpp:557 pcbnew/widgets/appearance_controls.cpp:330
 #: pcbnew/widgets/panel_selection_filter.cpp:190
 #: pcbnew/widgets/panel_selection_filter_base.cpp:45
 msgid "Pads"
@@ -27940,19 +27940,19 @@ msgstr "패드"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:31
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:178
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:24
-#: pcbnew/netinfo_item.cpp:123 pcbnew/pcb_draw_panel_gal.cpp:557
+#: pcbnew/netinfo_item.cpp:123 pcbnew/pcb_draw_panel_gal.cpp:558
 #: pcbnew/widgets/appearance_controls.cpp:329
 #: pcbnew/widgets/panel_selection_filter.cpp:189
 #: pcbnew/widgets/panel_selection_filter_base.cpp:41
 msgid "Vias"
 msgstr "비아"
 
-#: pcbnew/board.cpp:1497 pcbnew/pcb_draw_panel_gal.cpp:558
+#: pcbnew/board.cpp:1497 pcbnew/pcb_draw_panel_gal.cpp:559
 msgid "Track Segments"
 msgstr "배선 세그먼트"
 
 #: pcbnew/board.cpp:1498 pcbnew/generators/pcb_tuning_pattern.cpp:2065
-#: pcbnew/pcb_draw_panel_gal.cpp:559
+#: pcbnew/pcb_draw_panel_gal.cpp:560
 #: pcbnew/widgets/appearance_controls.cpp:1030
 #: pcbnew/widgets/appearance_controls.cpp:2363
 #: pcbnew/widgets/appearance_controls_base.cpp:61
@@ -27961,7 +27961,7 @@ msgstr "배선 세그먼트"
 msgid "Nets"
 msgstr "네트"
 
-#: pcbnew/board.cpp:1499 pcbnew/pcb_draw_panel_gal.cpp:560
+#: pcbnew/board.cpp:1499 pcbnew/pcb_draw_panel_gal.cpp:561
 msgid "Unrouted"
 msgstr "라우팅되지 않음"
 
