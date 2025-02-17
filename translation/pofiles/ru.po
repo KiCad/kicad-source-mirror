@@ -22,17 +22,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 08:10+0300\n"
-"PO-Revision-Date: 2025-02-16 14:27+0000\n"
+"PO-Revision-Date: 2025-02-17 17:18+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.10.1-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -3506,7 +3506,7 @@ msgstr "Сообщать о сбоях задания при наличии на
 #: common/dialogs/dialog_rc_job_base.cpp:74 kicad/cli/command_pcb_drc.cpp:56
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
 msgid "Report all errors for each track"
-msgstr "Сообщать обо всех ошибках каждой дорожки"
+msgstr "Сообщать о всех ошибках для каждой дорожки"
 
 #: common/dialogs/dialog_rc_job_base.cpp:80 kicad/cli/command_pcb_drc.cpp:60
 #: pcbnew/dialogs/dialog_drc_base.cpp:41
@@ -11573,9 +11573,8 @@ msgid "Duplicate fields are not allowed."
 msgstr "Дублирование полей не допускается."
 
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:26
-#, fuzzy
 msgid "Default Fields"
-msgstr "По умолчанию 1"
+msgstr "Поля по умолчанию"
 
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:104
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:137
@@ -11590,9 +11589,8 @@ msgid "Description:"
 msgstr "Описание:"
 
 #: eeschema/dialogs/dialog_design_block_properties_base.h:70
-#, fuzzy
 msgid "Design Block Properties"
-msgstr "Библиотеки дизайн-блоков"
+msgstr "Свойства дизайн-блока"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:550
 #, c-format
@@ -11897,7 +11895,7 @@ msgstr "Изменить игнорируемые проверки"
 #: pcbnew/dialogs/dialog_drc_base.cpp:158
 #, c-format
 msgid "Ignored Tests (%s)"
-msgstr "Игнорируемые тесты (%s)"
+msgstr "Игнорированные проверки (%s)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:148
 #: pcbnew/dialogs/dialog_drc_base.cpp:198
@@ -26060,7 +26058,7 @@ msgstr "Отключить макросы апертуры"
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:105
 #: pcbnew/dialogs/dialog_plot_base.cpp:144
 msgid "Use drill/place file origin"
-msgstr "Использовать начало координат сверловки/размещения"
+msgstr "Исп. начало координат сверловки/размещения"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:78
 msgid "Precision of Gerber coordinates, valid options: 5 or 6"
@@ -35078,7 +35076,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:75
 msgid "Use alternate drill mode for oval holes"
-msgstr "Использовать альтернативный режим сверловки для овальных отверстий"
+msgstr "Альтернативный режим сверловки для овальных отв."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:84
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
@@ -35087,7 +35085,7 @@ msgstr "Gerber X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:93
 msgid "Generate map:"
-msgstr "Создание карты:"
+msgstr "Создать карту:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:130
 msgid "Origin:"
@@ -36014,9 +36012,8 @@ msgid "Move Item"
 msgstr "Переместить элемент"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:61
-#, fuzzy
 msgid "Sheet Path"
-msgstr "Выбор каталога"
+msgstr "Путь листа"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:64
 msgid "Sheets"
@@ -36778,7 +36775,7 @@ msgstr "Открыть выходной каталог"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:85
 msgid "Indicate DNP on fabrication layers"
-msgstr "Указать DNP на тканевых слоях"
+msgstr "Индикация DNP на Fab слоях"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:86
 msgid "Hide or cross-out DNP footprints on fabrication layers"
@@ -36792,11 +36789,11 @@ msgstr "Скрыть"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:91
 msgid "Hide the footprint text and graphics"
-msgstr "Скрыть текст и графику следа"
+msgstr "Скрыть текст и графику посад. места"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:95
 msgid "Cross-out"
-msgstr "Вычеркнуть"
+msgstr "Крест"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
 msgid "Force plotting of invisible values / refs"
@@ -36808,7 +36805,7 @@ msgstr "Принудительно чертить скрытые значени�
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:103
 msgid "Sketch pads on fabrication layers"
-msgstr "Конт. пл. в контурном режиме на произв. слоях"
+msgstr "Конт. пл. в контурном режиме на Fab слоях"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:104
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
@@ -36937,7 +36934,7 @@ msgstr "4.6, ед.изм. мм"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:231
 msgid "Use extended X2 format (recommended)"
-msgstr "Использовать расширенный формат X2 (рекомендуется)"
+msgstr "Исп. расширенный формат X2 (рекомендуется)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:232
 msgid ""
@@ -40467,7 +40464,7 @@ msgstr "По умолчанию для прямоугольных фигур"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:341
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:506
 msgid "Allow teardrop to span track segments"
-msgstr "Разрешить каплев. переходам охватывать сегменты дорожек"
+msgstr "Разрешить каплев. перех. охватывать сегменты дорожек"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:359
 msgid "Properties for Track-to-Track Teardrops"
@@ -40965,7 +40962,7 @@ msgstr "Неполное подключение терморазгрузки к 
 
 #: pcbnew/drc/drc_item.cpp:96
 msgid "Via is not connected or connected on only one layer"
-msgstr "Перех. отв. не подключено или подключено только к одному слою"
+msgstr "Перех. отв. не подключено или подключено к одному слою"
 
 #: pcbnew/drc/drc_item.cpp:100
 msgid "Track has unconnected end"
@@ -41093,7 +41090,7 @@ msgstr "Тонкий участок меди"
 
 #: pcbnew/drc/drc_item.cpp:236
 msgid "Solder mask aperture bridges items with different nets"
-msgstr "Апертура паяльной маски объединяет элементы с различ. цепями"
+msgstr "Апертура паяльной маски объединяет элем. с различ. цепями"
 
 #: pcbnew/drc/drc_item.cpp:240
 msgid "Silkscreen clipped by solder mask"
@@ -49812,9 +49809,8 @@ msgid "Generate Placement Rule Areas..."
 msgstr "Создать области правил размещения..."
 
 #: pcbnew/tools/pcb_actions.cpp:2229
-#, fuzzy
 msgid "Creates best-fit placement rule areas"
-msgstr "Заменить существующие зоны правил размещения"
+msgstr "Создает оптимальные области правил размещения"
 
 #: pcbnew/tools/pcb_actions.cpp:2236
 msgid "Repeat Layout..."
@@ -49822,7 +49818,7 @@ msgstr "Повторить разводку..."
 
 #: pcbnew/tools/pcb_actions.cpp:2237
 msgid "Clones placement & routing across multiple identical channels"
-msgstr ""
+msgstr "Копирует размещение и разводку в несколько идентичных каналов"
 
 #: pcbnew/tools/pcb_actions.cpp:2248
 msgid "Route Single Track"
