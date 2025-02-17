@@ -13,16 +13,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 08:10+0300\n"
-"PO-Revision-Date: 2025-02-16 13:37+0000\n"
+"PO-Revision-Date: 2025-02-17 17:18+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.10.1-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -11543,9 +11543,8 @@ msgid "Duplicate fields are not allowed."
 msgstr "Dubbletter av fält är inte tillåtna."
 
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:26
-#, fuzzy
 msgid "Default Fields"
-msgstr "Standard är 1"
+msgstr "Förinställda fält"
 
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:104
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:137
@@ -11560,9 +11559,8 @@ msgid "Description:"
 msgstr "Beskrivning:"
 
 #: eeschema/dialogs/dialog_design_block_properties_base.h:70
-#, fuzzy
 msgid "Design Block Properties"
-msgstr "Designblocksbibliotek"
+msgstr "Designblocks egenskaper"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:550
 #, c-format
@@ -36016,9 +36014,8 @@ msgid "Move Item"
 msgstr "Flytta objekt"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:61
-#, fuzzy
 msgid "Sheet Path"
-msgstr "Välj sökväg"
+msgstr "Arksökväg"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:64
 msgid "Sheets"
@@ -50064,9 +50061,8 @@ msgid "Generate Placement Rule Areas..."
 msgstr "Generera regelytor för placering..."
 
 #: pcbnew/tools/pcb_actions.cpp:2229
-#, fuzzy
 msgid "Creates best-fit placement rule areas"
-msgstr "Ersätt befintliga placeringsregelområden"
+msgstr "Skapar placeringsregelområden med bästa passning"
 
 #: pcbnew/tools/pcb_actions.cpp:2236
 msgid "Repeat Layout..."
@@ -50074,7 +50070,7 @@ msgstr "Upprepa layout..."
 
 #: pcbnew/tools/pcb_actions.cpp:2237
 msgid "Clones placement & routing across multiple identical channels"
-msgstr ""
+msgstr "Duplicerar placering och ledningsdragning för flera identiska kanaler"
 
 #: pcbnew/tools/pcb_actions.cpp:2248
 msgid "Route Single Track"
