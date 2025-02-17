@@ -135,6 +135,77 @@ void ARRAY_TOOL::onDialogClosed( wxCloseEvent& aEvent )
     EDA_ITEMS all_added_items;
 
     int arraySize = m_array_opts->GetArraySize();
+
+    if( m_array_opts->ShouldArrangeSelection() )
+    {
+        std::set<FOOTPRINT*> fpDeDupe;
+
+        EDA_ITEMS sortedSelection = selection.GetItemsSortedBySelectionOrder();
+        int       selectionIndex = 0;
+
+        BOARD_ITEM* firstItem = nullptr;
+
+        for( int arrayIndex = 0; arrayIndex < arraySize; ++arrayIndex )
+        {
+            BOARD_ITEM* item = nullptr;
+
+            // Get the next valid item to arrange
+            for( ; selectionIndex < (int) sortedSelection.size(); selectionIndex++ )
+            {
+                item = nullptr;
+
+                if( !sortedSelection[selectionIndex]->IsBOARD_ITEM() )
+                    continue;
+
+                item = static_cast<BOARD_ITEM*>( sortedSelection[selectionIndex] );
+
+                FOOTPRINT* parentFootprint = item->GetParentFootprint();
+
+                // If it is not the footprint editor, then move the parent footprint instead.
+                if( !m_isFootprintEditor && parentFootprint )
+                {
+                    // It is possible to select multiple footprint child objects in the board editor.
+                    // Do not create multiple copies of the same footprint when this occurs.
+                    if( fpDeDupe.count( parentFootprint ) == 0 )
+                    {
+                        fpDeDupe.emplace( parentFootprint );
+                        item = parentFootprint;
+                    }
+                    else
+                    {
+                        item = nullptr;
+                        continue;
+                    }
+                }
+
+                // Found a valid item
+                selectionIndex++;
+                break;
+            }
+
+            // Must be out of items to arrange, we're done
+            if( item == nullptr )
+                break;
+
+            commit.Modify( item );
+
+            // Transform is a relative move, so when arranging the transform needs to start from
+            // the same point for each item, e.g. the first item's position
+            if( firstItem == nullptr )
+                firstItem = item;
+            else
+                item->SetPosition( firstItem->GetPosition() );
+
+            TransformItem( *m_array_opts, arrayIndex, *item );
+        }
+
+        // Make sure we did something...
+        if( firstItem != nullptr )
+            commit.Push( _( "Arrange selection" ) );
+
+        return;
+    }
+
     // Iterate in reverse so the original items go last, and we can
     // use them for the positions of the clones.
     for( int ptN = arraySize - 1; ptN >= 0; --ptN )

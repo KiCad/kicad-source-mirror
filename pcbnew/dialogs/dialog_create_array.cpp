@@ -78,6 +78,8 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
     long      m_CircNumberingStep        = 1;
     bool      m_CircRotatationStep       = false;
     long      m_ArrayTypeTab             = 0;       // start on grid view
+    bool      m_SelectionArrange         = false;
+    bool      m_SelectionDuplicate       = true;    // Duplicate by default
     bool      m_FootprintKeepAnnotations = false;
     bool      m_FootprintReannotate      = true;    // Assign unique by default
 };
@@ -200,6 +202,9 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME*                 aParen
     m_cfg_persister.Add( *m_entryCircNumberingStep, s_arrayOptions.m_CircNumberingStep );
 
     m_cfg_persister.Add( *m_gridTypeNotebook, s_arrayOptions.m_ArrayTypeTab );
+
+    m_cfg_persister.Add( *m_radioBtnArrangeSelection, s_arrayOptions.m_SelectionArrange );
+    m_cfg_persister.Add( *m_radioBtnDuplicateSelection, s_arrayOptions.m_SelectionDuplicate );
 
     m_cfg_persister.Add( *m_radioBtnKeepRefs, s_arrayOptions.m_FootprintKeepAnnotations );
     m_cfg_persister.Add( *m_radioBtnUniqueRefs, s_arrayOptions.m_FootprintReannotate );
@@ -511,6 +516,7 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
         // assign pointer and ownership here
         m_settings = std::move( newSettings );
 
+        m_settings->SetShouldArrangeSelection( m_radioBtnArrangeSelection->GetValue() );
         m_settings->SetSShouldReannotateFootprints( m_radioBtnUniqueRefs->GetValue() );
 
         // persist the control state for next time
@@ -607,6 +613,11 @@ void DIALOG_CREATE_ARRAY::setControlEnablement()
         m_circularPadNumberingPanel->Show( false );
 
         m_footprintReannotatePanel->Show( true );
+    }
+
+    if( m_radioBtnArrangeSelection->GetValue() )
+    {
+        m_footprintReannotatePanel->Show( false );
     }
 }
 

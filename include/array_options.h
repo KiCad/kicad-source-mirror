@@ -47,6 +47,7 @@ public:
     ARRAY_OPTIONS( ARRAY_TYPE_T aType ) :
         m_type( aType ),
         m_shouldNumber( false ),
+        m_arrangeSelection( false ),
         m_reannotateFootprints( false ),
         m_numberingStartIsSpecified( false )
     {
@@ -99,6 +100,19 @@ public:
     }
 
     /**
+     * @return true if arranging selection, false if creating an array of copies
+     */
+    bool ShouldArrangeSelection() const
+    {
+        return m_arrangeSelection;
+    }
+
+    void SetShouldArrangeSelection( bool aShouldArrange )
+    {
+        m_arrangeSelection = aShouldArrange;
+    }
+
+    /**
      * @return are the footprints in this array reannotated to be unique (true), or do they
      * keep the original annotation (false)?
      */
@@ -133,6 +147,10 @@ protected:
 
     /// True if this array numbers the new items
     bool m_shouldNumber;
+
+    /// True if this array should arrange the selected items instead of creating
+    /// an array of copies of the selection
+    bool m_arrangeSelection;
 
     /// True if this array will rename any footprints to be unique
     bool m_reannotateFootprints;

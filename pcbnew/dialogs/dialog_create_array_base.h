@@ -111,6 +111,10 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_entryCircNumberingStart;
 		wxStaticText* m_labelCircNumStep;
 		wxTextCtrl* m_entryCircNumberingStep;
+		wxPanel* m_optionsPanel;
+		wxPanel* m_itemSourcePanel;
+		wxRadioButton* m_radioBtnDuplicateSelection;
+		wxRadioButton* m_radioBtnArrangeSelection;
 		wxPanel* m_footprintReannotatePanel;
 		wxRadioButton* m_radioBtnKeepRefs;
 		wxRadioButton* m_radioBtnUniqueRefs;
