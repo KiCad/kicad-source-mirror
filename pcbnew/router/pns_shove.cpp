@@ -98,15 +98,18 @@ SHOVE::ROOT_LINE_ENTRY* SHOVE::replaceLine( LINE& aOld, LINE& aNew, bool aInclud
 
     if( aOld.EndsWithVia() )
     {
+        LINKED_ITEM* viaLink = nullptr;
         for( LINKED_ITEM* lnk : aOld.Links() )
         {
             if( lnk->OfKind( ITEM::VIA_T ) )
             {
-                aOld.Unlink( lnk );
+                viaLink = lnk;
+                break;
             }
         }
+        if( viaLink )
+            aOld.Unlink( viaLink );
     }
-
 
     bool  foundPredecessor = false;
     ROOT_LINE_ENTRY *rootEntry = nullptr;
@@ -320,7 +323,7 @@ bool SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
         LINE l( aObstacleLine );
         SHAPE_LINE_CHAIN path( l.CLine() );
 
-        if( aPermitAdjustingEndpoints )
+        if( aPermitAdjustingEndpoints && l.SegmentCount() >= 1 )
         {
             auto minDistP = [&]( VECTOR2I pref, int& mdist, int& minhull ) -> VECTOR2I
             {
@@ -1358,6 +1361,7 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
     PNS_DBGN( Dbg(), EndGroup );
 
     int currentRank = aCurrent.Rank();
+    unwindLineStack( &aCurrent );
     replaceLine( aCurrent, shoved, true, false );
 
     if( !pushLineStack( shoved ) )
@@ -1395,6 +1399,7 @@ void SHOVE::unwindLineStack( const LINKED_ITEM* aSeg )
                 if( via )
                 {
                     i->ClearLinks();
+                    i->Line().Clear();
                     i->LinkVia( via );
                 }
                 i++;
@@ -1582,6 +1587,37 @@ bool SHOVE::fixupViaCollisions( const LINE* aCurrent, OBSTACLE& obs )
     return false;
 }
 
+bool SHOVE::patchTadpoleVia( ITEM* nearest, LINE& current )
+{
+    if (current.CLine().PointCount() < 1 )
+        return false;
+
+//    PNS_DBG(Dbg(), Message, wxString::Format( "cp %d %d", current.CLine().CPoint(-1).x, current.CLine().CPoint(-1).y ) );
+
+    auto jtViaEnd = m_currentNode->FindJoint( current.CLine().CPoint(-1), &current );
+
+//    PNS_DBG(Dbg(), Message, wxString::Format( "jt %p",  jtViaEnd ) );
+
+    if ( !jtViaEnd )
+        return false;
+
+    auto viaEnd = jtViaEnd->Via();
+
+    if (! viaEnd )
+        return false;
+
+    bool colliding = m_currentNode->CheckColliding( viaEnd ).has_value();
+
+//    PNS_DBG(Dbg(), Message, wxString::Format( "patch-tadpole viaEnd %p colliding %d", viaEnd, colliding?1:0 ) );
+
+    if( viaEnd && !current.EndsWithVia() && colliding )
+    {
+        current.LinkVia( viaEnd );
+    }
+
+    return false;
+}
+
 /*
  * Resolve the next collision.
  */
@@ -1679,6 +1715,8 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
         {
             PNS_DBG( Dbg(), BeginGroup, wxString::Format( wxT( "iter %d: reverse-collide-via" ), aIter ), 0 );
 
+            patchTadpoleVia( ni, currentLine );
+
             // TODO(JE) viastacks -- via-via collisions here?
             if( currentLine.EndsWithVia()
                 && nearest->m_item->Collide( &currentLine.Via(), m_currentNode,
@@ -1711,6 +1749,8 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
             LINE revLine = assembleLine( static_cast<SEGMENT*>( ni ) );
 
             popLineStack();
+            unwindLineStack( &revLine );
+            patchTadpoleVia( ni, currentLine );
 
             if( currentLine.EndsWithVia()
                 && currentLine.Via().Collide( (SEGMENT*) ni, m_currentNode, currentLine.Layer() ) )
@@ -2223,33 +2263,16 @@ void SHOVE::removeHeads()
 {
     auto iface = Router()->GetInterface();
 
-    for( auto& headEntry : m_headLines )
+    NODE::ITEM_VECTOR removed, added;
+
+    m_currentNode->GetUpdatedItems( removed, added );
+
+    for( auto& item : added )
     {
-        if( headEntry.newHead )
+        auto rootEntry = findRootLine( static_cast<LINKED_ITEM*>( item ) );
+        if( rootEntry && rootEntry->isHead )
         {
-            //nodeStats( Dbg(), m_currentNode, "pre-remove-new" );
-            int n_lc = headEntry.newHead->LinkCount();
-            removeHead(m_currentNode, *headEntry.newHead );
-            //nodeStats( Dbg(), m_currentNode, "post-remove-new" );
-
-
-            wxString msg = wxString::Format(
-                    "remove newhead [net %-20s]: sc %d lc %d\n",
-                    iface->GetNetName( headEntry.newHead->Net() ).c_str().AsChar(),
-                    headEntry.newHead->SegmentCount(), n_lc );
-            PNS_DBG( Dbg(), Message, msg );
-        }
-        else if( headEntry.origHead )
-        {
-            wxString msg = wxString::Format(
-                    "remove orighead [net %-20s]: sc %d lc %d node %p depth %d\n",
-                    iface->GetNetName( headEntry.origHead->Net() ).c_str().AsChar(),
-                    headEntry.origHead->SegmentCount(), headEntry.origHead->LinkCount(),
-                    headEntry.origHead->OwningNode(), m_currentNode->Depth() );
-            PNS_DBG( Dbg(), Message, msg );
-
-            removeHead( m_currentNode, *headEntry.origHead );
-
+            m_currentNode->Remove( item );
         }
     }
 }
@@ -2487,6 +2510,10 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
             headRoot->isHead = true;
             headRoot->rootLine = new PNS::LINE( *headLineEntry.origHead );
             headRoot->policy = headLineEntry.policy;
+            if( head.EndsWithVia() )
+            {
+                m_rootLineHistory[ headLineEntry.origHead->Via().Uid() ] = headRoot;
+            }
 
 
             PNS_DBG( Dbg(), Message,

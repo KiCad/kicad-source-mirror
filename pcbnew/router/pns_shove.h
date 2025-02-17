@@ -175,6 +175,8 @@ private:
 
     NODE* reduceSpringback( const ITEM_SET& aHeadSet );
 
+    bool patchTadpoleVia( ITEM* nearest, LINE& current );
+
     bool pushSpringback( NODE* aNode, const OPT_BOX2I& aAffectedArea );
 
     bool shoveLineFromLoneVia( const LINE& aCurLine, const LINE& aObstacleLine,
