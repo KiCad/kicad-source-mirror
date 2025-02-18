@@ -15,16 +15,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-18 19:16+0300\n"
-"PO-Revision-Date: 2025-02-10 23:20+0000\n"
+"PO-Revision-Date: 2025-02-19 03:14+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/master-"
-"source/pt/>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/"
+"master-source/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.10.1-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -7043,9 +7043,9 @@ msgid "* [new] %s %s"
 msgstr "* [novo] %s %s"
 
 #: common/git/kicad_git_common.cpp:702
-#, fuzzy, c-format
+#, c-format
 msgid "Writing objects: %lld%% (%u/%u), %zu bytes"
-msgstr "A escrever objetos: %d%% (%d/%d), %d bytes"
+msgstr "A escrever objetos: %lld%% (%u/%u), %zu bytes"
 
 #: common/git/kicad_git_common.cpp:717
 #, c-format
