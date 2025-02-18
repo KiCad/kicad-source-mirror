@@ -2246,7 +2246,10 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
         }
 
         // Do not commit files outside the project directory
-        if( !fn.GetPath().StartsWith( Prj().GetProjectPath() ) )
+        wxString projectPath = Prj().GetProjectPath();
+        wxString fileName = fn.GetFullPath();
+
+        if( !fileName.StartsWith( projectPath ) )
             continue;
 
         // Skip lock files
