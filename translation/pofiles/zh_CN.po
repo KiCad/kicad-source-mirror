@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 08:10+0300\n"
-"PO-Revision-Date: 2025-02-15 08:12+0000\n"
+"PO-Revision-Date: 2025-02-18 12:29+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -50,7 +50,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.10.1-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -11382,9 +11382,8 @@ msgid "Duplicate fields are not allowed."
 msgstr "不允许重复的字段。"
 
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:26
-#, fuzzy
 msgid "Default Fields"
-msgstr "默认是 1"
+msgstr "默认字段"
 
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:104
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:137
@@ -11399,9 +11398,8 @@ msgid "Description:"
 msgstr "描述:"
 
 #: eeschema/dialogs/dialog_design_block_properties_base.h:70
-#, fuzzy
 msgid "Design Block Properties"
-msgstr "设计图块库"
+msgstr "设计图块属性"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:550
 #, c-format
@@ -35295,9 +35293,8 @@ msgid "Move Item"
 msgstr "移动项目"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:61
-#, fuzzy
 msgid "Sheet Path"
-msgstr "选择路径"
+msgstr "图纸路径"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:64
 msgid "Sheets"
@@ -48709,9 +48706,8 @@ msgid "Generate Placement Rule Areas..."
 msgstr "生成布置规则域..."
 
 #: pcbnew/tools/pcb_actions.cpp:2229
-#, fuzzy
 msgid "Creates best-fit placement rule areas"
-msgstr "替换现有的布置规则域"
+msgstr "创建最合适的布置规则域"
 
 #: pcbnew/tools/pcb_actions.cpp:2236
 msgid "Repeat Layout..."
@@ -48719,7 +48715,7 @@ msgstr "复刻布局..."
 
 #: pcbnew/tools/pcb_actions.cpp:2237
 msgid "Clones placement & routing across multiple identical channels"
-msgstr ""
+msgstr "克隆多个相同通道的布局和走线"
 
 #: pcbnew/tools/pcb_actions.cpp:2248
 msgid "Route Single Track"
