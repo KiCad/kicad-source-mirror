@@ -22,16 +22,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-18 19:16+0300\n"
-"PO-Revision-Date: 2025-02-05 21:30+0000\n"
+"PO-Revision-Date: 2025-02-19 03:13+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.10.1-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -6963,9 +6963,9 @@ msgid "* [new] %s %s"
 msgstr "* [nový] %s %s"
 
 #: common/git/kicad_git_common.cpp:702
-#, fuzzy, c-format
+#, c-format
 msgid "Writing objects: %lld%% (%u/%u), %zu bytes"
-msgstr "Zapisují se objekty: %d%% (%d/%d), %d bajtů"
+msgstr "Zapisuji objekty: %lld%% (%u/%u), %zu bajtů"
 
 #: common/git/kicad_git_common.cpp:717
 #, c-format
@@ -7420,36 +7420,32 @@ msgstr "Export DXF"
 
 #: common/jobs/job_export_pcb_dxf.cpp:64
 #: common/jobs/job_export_sch_plot.cpp:166
-#, fuzzy
 msgid "Export DXF Job Settings"
-msgstr "Upravit možnosti..."
+msgstr "Export nastavení úlohy DXF"
 
 #: common/jobs/job_export_pcb_dxf.cpp:68
 msgid "PCB: Export DXF"
 msgstr "DPS: Export DXF"
 
 #: common/jobs/job_export_pcb_gencad.cpp:38
-#, fuzzy
 msgid "Export GenCAD Job Settings"
-msgstr "Export do nastavení GenCADu"
+msgstr "Export nastavení úlohy GenCAD"
 
 #: common/jobs/job_export_pcb_gerber.cpp:71
 msgid "Export single Gerber"
 msgstr "Export jednoho souboru Gerber"
 
 #: common/jobs/job_export_pcb_gerber.cpp:77
-#, fuzzy
 msgid "Export Single Gerber Job Settings"
-msgstr "Export do nastavení GenCADu"
+msgstr "Export nastavení úlohy jednoho Gerber souboru"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:42
 msgid "Export Gerbers"
 msgstr "Export souborů Gerber"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:48
-#, fuzzy
 msgid "Export Gerbers Job Settings"
-msgstr "Export do nastavení GenCADu"
+msgstr "Export nastavení úloh Gerber"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:52
 msgid "PCB: Export Gerbers"
@@ -7460,9 +7456,8 @@ msgid "Export IPC2581"
 msgstr "Export IPC2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
-#, fuzzy
 msgid "Export IPC2581 Job Settings"
-msgstr "Export do souboru"
+msgstr "Export nastavení úloh IPC2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
 msgid "PCB: Export IPC2581"
@@ -7474,9 +7469,8 @@ msgid "Export ODB++"
 msgstr "Export ODB++"
 
 #: common/jobs/job_export_pcb_odb.cpp:63
-#, fuzzy
 msgid "Export ODB++ Job Settings"
-msgstr "Upravit možnosti..."
+msgstr "Export nastavení úloh ODB++"
 
 #: common/jobs/job_export_pcb_odb.cpp:76
 msgid "PCB: Export ODB++"
@@ -7489,9 +7483,8 @@ msgstr "Export PDF"
 
 #: common/jobs/job_export_pcb_pdf.cpp:80
 #: common/jobs/job_export_sch_plot.cpp:147
-#, fuzzy
 msgid "Export PDF Job Settings"
-msgstr "Upravit možnosti..."
+msgstr "Export nastavení úloh PDF"
 
 #: common/jobs/job_export_pcb_pdf.cpp:84
 msgid "PCB: Export PDF"
@@ -7502,9 +7495,8 @@ msgid "Export position data"
 msgstr "Export dat umístění"
 
 #: common/jobs/job_export_pcb_pos.cpp:103
-#, fuzzy
 msgid "Export Position Data Job Settings"
-msgstr "Export do nastavení GenCADu"
+msgstr "Nastavení úlohy exportu dat pozic"
 
 #: common/jobs/job_export_pcb_pos.cpp:121
 msgid "PCB: Export Position Data"
@@ -7517,9 +7509,8 @@ msgstr "Export SVG"
 
 #: common/jobs/job_export_pcb_svg.cpp:63
 #: common/jobs/job_export_sch_plot.cpp:185
-#, fuzzy
 msgid "Export SVG Job Settings"
-msgstr "Upravit možnosti..."
+msgstr "Export nastavení úloh SVG"
 
 #: common/jobs/job_export_pcb_svg.cpp:67
 msgid "PCB: Export SVG"
@@ -7530,9 +7521,8 @@ msgid "Generate bill of materials"
 msgstr "Generovat rozpisku materiálů"
 
 #: common/jobs/job_export_sch_bom.cpp:98
-#, fuzzy
 msgid "Generate Bill of Materials Job Settings"
-msgstr "Generovat rozpisku materiálů..."
+msgstr "Nastavení úloh generování rozpisky materiálu"
 
 #: common/jobs/job_export_sch_bom.cpp:102
 msgid "Schematic: Generate Bill of Materials"
@@ -7544,14 +7534,12 @@ msgid "Export %s netlist"
 msgstr "Exportovat %s netlist"
 
 #: common/jobs/job_export_sch_netlist.cpp:86
-#, fuzzy
 msgid "Export Netlist Job Settings"
-msgstr "Exportovat Netlist"
+msgstr "Export nastavení úloh Netlistu"
 
 #: common/jobs/job_export_sch_netlist.cpp:90
-#, fuzzy
 msgid "Schematic: Export Netlist"
-msgstr "Exportovat Netlist"
+msgstr "Schéma: Export Netlistu"
 
 #: common/jobs/job_export_sch_plot.cpp:198
 msgid "Export Postscript"
@@ -7572,29 +7560,24 @@ msgid "Export HPGL Job Settings"
 msgstr "Upravit možnosti..."
 
 #: common/jobs/job_export_sch_plot.cpp:227
-#, fuzzy
 msgid "Schematic: Export SVG"
-msgstr "Editor schémat"
+msgstr "Schéma: Export SVG"
 
 #: common/jobs/job_export_sch_plot.cpp:229
-#, fuzzy
 msgid "Schematic: Export HPGL"
-msgstr "Eeschama kreslit HPGL"
+msgstr "Schéma: Export HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:231
-#, fuzzy
 msgid "Schematic: Export Postscript"
-msgstr "Exportovat Netlist"
+msgstr "Schéma: Export Postscript"
 
 #: common/jobs/job_export_sch_plot.cpp:233
-#, fuzzy
 msgid "Schematic: Export DXF"
-msgstr "Editor schémat"
+msgstr "Schéma: Export DXF"
 
 #: common/jobs/job_export_sch_plot.cpp:235
-#, fuzzy
 msgid "Schematic: Export PDF"
-msgstr "Editor schémat"
+msgstr "Schéma: Export PDF"
 
 #: common/jobs/job_export_sch_pythonbom.cpp:35
 #, fuzzy
@@ -26488,9 +26471,8 @@ msgid ""
 msgstr ""
 
 #: kicad/cli/command_sch_export_plot.cpp:119
-#, fuzzy
 msgid "Pen size [mm]"
-msgstr "Velikost pera:"
+msgstr "Velikost pera [mm]"
 
 #: kicad/cli/command_sch_export_plot.cpp:125
 msgid "Origin and scale: 0 bottom left, 1 centered, 2 page fit, 3 content fit"
@@ -26614,9 +26596,8 @@ msgid "Output path cannot be empty"
 msgstr "Název sítě nemůže být prázdný."
 
 #: kicad/dialogs/dialog_jobset_output_options.cpp:194
-#, fuzzy
 msgid "Zip"
-msgstr "Zin"
+msgstr "Zip"
 
 #: kicad/dialogs/dialog_jobset_output_options_base.cpp:64
 #, fuzzy
@@ -26702,14 +26683,13 @@ msgid "Update Available"
 msgstr "Aktualizace k dispozici"
 
 #: kicad/dialogs/panel_jobset.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid "Output: %s"
-msgstr "Výstup:"
+msgstr "Výstup: %s"
 
 #: kicad/dialogs/panel_jobset.cpp:64
-#, fuzzy
 msgid "No."
-msgstr "Ne"
+msgstr "Ne."
 
 #: kicad/dialogs/panel_jobset.cpp:65
 #, fuzzy
@@ -33631,9 +33611,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:310
-#, fuzzy
 msgid "Change Footprint"
-msgstr "Změnit pouzdra"
+msgstr "Změnit pouzdro"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:363
 #, c-format
@@ -33720,9 +33699,8 @@ msgid "IPC-2581 Compressed Files (*.zip)|*.zip"
 msgstr "Soubory pro testování IPC-D-356 (.d356)|*."
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:104
-#, fuzzy
 msgid "Export IPC-2581 File"
-msgstr "Export do souboru"
+msgstr "Export IPC-2581 souboru"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:165
 msgid "manufacturer"
@@ -33801,9 +33779,8 @@ msgid "Omit"
 msgstr "Vynechat sítě"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:148
-#, fuzzy
 msgid "Manufacturer:"
-msgstr "Vybrat výrobce"
+msgstr "Výrobce:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:160
 msgid "Distributor P/N:"
@@ -34003,23 +33980,20 @@ msgid "Binary glTF files"
 msgstr "Binární soubory glTF"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:449
-#, fuzzy
 msgid "XAO files"
-msgstr "Všechny soubory"
+msgstr "XAO soubory"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:451
 msgid "BREP (OCCT) files"
 msgstr "BREP (OCCT) soubory"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:453
-#, fuzzy
 msgid "PLY files"
-msgstr "HTML soubory"
+msgstr "PLY soubory"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:455
-#, fuzzy
 msgid "STL files"
-msgstr "HTML soubory"
+msgstr "STL soubory"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:463
 #, fuzzy
@@ -34041,14 +34015,12 @@ msgstr ""
 "Spusťte DRC pro úplnou analýzu."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:604
-#, fuzzy
 msgid "STEP/GLTF Export"
-msgstr "Export STEP/GLTF"
+msgstr "STEP/GLTF Export"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
-#, fuzzy
 msgid "STEP"
-msgstr "STEP..."
+msgstr "STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 #, fuzzy
@@ -34756,7 +34728,7 @@ msgstr ""
 "Hodnota 10 znamená, že hodnota mezera je 10% velikosti plošky\n"
 "Tuto hodnotu lze nahradit lokální hodnotou plošky.\n"
 "Konečná hodnota mezery je součtem této hodnoty a velikosti mezery\n"
-"Záporná hodnota znamená menší velikost masky než velikost plošky."
+"Záporná hodnota znamená menší velikost masky než velikost plošky. % o % o."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:345
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:314
@@ -34930,7 +34902,7 @@ msgstr ""
 "mezery.\n"
 "Záporná hodnota znamená, že maska je menší než velikost plošky.\n"
 "Tuto hodnotu lze přepsat na základě ploška po plošce v Místní izolační "
-"mezera na kartě Nastavení, Vlastnosti plošky."
+"mezera na kartě Nastavení, Vlastnosti plošky. % o % o."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:342
 msgid "Net Ties"
@@ -37638,7 +37610,7 @@ msgstr "Nastavit pivot"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:183
 msgid "Pan:"
-msgstr ""
+msgstr "Otočení:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:219
 #: pcbnew/dialogs/dialog_render_job_base.cpp:297
@@ -42742,9 +42714,8 @@ msgid "Used when the DXF items in file have no line thickness set"
 msgstr ""
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:72
-#, fuzzy
 msgid "DXF default units:"
-msgstr "Výchozí jednotky:"
+msgstr "Výchozí jednotky DXF:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:74
 msgid "Used when the DXF file has no unit set"
@@ -42910,14 +42881,12 @@ msgid "Export IDF 3D board representation"
 msgstr "IDF 3D export prezentace desky"
 
 #: pcbnew/menubar_pcb_editor.cpp:136
-#, fuzzy
 msgid "STEP / GLB / BREP / XAO / PLY / STL..."
-msgstr "STEP / GLB / BREP / XAO..."
+msgstr "STEP / GLB / BREP / XAO / PLY / STL..."
 
 #: pcbnew/menubar_pcb_editor.cpp:137
-#, fuzzy
 msgid "Export STEP / GLB / BREP / XAO / PLY / STL 3D board representation"
-msgstr "STEP 3D export prezentace desky"
+msgstr "STEP / GLB / BREP / XAO / PLY / STL 3D export prezentace desky"
 
 #: pcbnew/menubar_pcb_editor.cpp:139
 msgid "Footprint Association (.cmp) File..."
@@ -43011,12 +42980,10 @@ msgid "Incorrect number, abort"
 msgstr "Nesprávné číslo, konec"
 
 #: pcbnew/microwave/microwave_inductor.cpp:316
-#, fuzzy
 msgid "Add Microwave Inductor"
-msgstr "Přidat mikrovlnné cívku"
+msgstr "Přidat mikrovlnnou cívku"
 
 #: pcbnew/microwave/microwave_inductor.cpp:366
-#, fuzzy
 msgid "Length of Track:"
 msgstr "Délka spoje:"
 
@@ -43601,9 +43568,8 @@ msgid "NPTH pad of %s"
 msgstr "NPTH ploška z %s"
 
 #: pcbnew/pad.cpp:1559
-#, fuzzy
 msgid "NPTH pad"
-msgstr "NPTH plošky"
+msgstr "NPTH ploška"
 
 #: pcbnew/pad.cpp:1568
 #, c-format
@@ -43611,9 +43577,9 @@ msgid "Pad %s of %s on %s"
 msgstr "Ploška %s na %s z %s"
 
 #: pcbnew/pad.cpp:1575
-#, fuzzy, c-format
+#, c-format
 msgid "Pad on %s"
-msgstr "Ploška %s"
+msgstr "Ploška na %s"
 
 #: pcbnew/pad.cpp:1583
 #, c-format
@@ -43621,9 +43587,8 @@ msgid "PTH pad %s of %s"
 msgstr "PTH ploška %s z %s"
 
 #: pcbnew/pad.cpp:1589
-#, fuzzy
 msgid "PTH pad"
-msgstr "NPTH plošky"
+msgstr "PTH plošky"
 
 #: pcbnew/pad.cpp:1599
 #, c-format
@@ -43631,19 +43596,19 @@ msgid "Pad %s %s of %s on %s"
 msgstr "Ploška %s %s z %s na %s"
 
 #: pcbnew/pad.cpp:1607
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s on %s"
-msgstr "Prokov %s na %s"
+msgstr "Ploška %s na %s"
 
 #: pcbnew/pad.cpp:1616
-#, fuzzy, c-format
+#, c-format
 msgid "PTH pad %s %s of %s"
-msgstr "Ploška %s na %s pouzdra %s"
+msgstr "PTH ploška %s %s na %s"
 
 #: pcbnew/pad.cpp:1623
-#, fuzzy, c-format
+#, c-format
 msgid "PTH pad %s"
-msgstr "NPTH plošky"
+msgstr "PTH ploška %s"
 
 #: pcbnew/pad.cpp:2179
 #, fuzzy
@@ -43919,19 +43884,16 @@ msgid "Dimension '%s' on %s"
 msgstr "Rozměr '%s' na %s"
 
 #: pcbnew/pcb_dimension.cpp:1733
-#, fuzzy
 msgid "1234.0"
-msgstr "1234"
+msgstr "1234.0"
 
 #: pcbnew/pcb_dimension.cpp:1734
-#, fuzzy
 msgid "1234.0 mm"
-msgstr "1234 mm"
+msgstr "1234.0 mm"
 
 #: pcbnew/pcb_dimension.cpp:1735
-#, fuzzy
 msgid "1234.0 (mm)"
-msgstr "1234 (mm)"
+msgstr "1234.0 (mm)"
 
 #: pcbnew/pcb_dimension.cpp:1800
 msgid "Units Format"
@@ -44056,9 +44018,8 @@ msgid "Compare Footprint with Library"
 msgstr "Pouzdra do knihovny..."
 
 #: pcbnew/pcb_field.cpp:147
-#, fuzzy
 msgid "User Field"
-msgstr "Uživatelská pole"
+msgstr "Uživatelské pole"
 
 #: pcbnew/pcb_field.cpp:159
 #, fuzzy, c-format
@@ -48188,9 +48149,8 @@ msgid "Draw Filled Zones"
 msgstr "Přidat vyplněné zóny"
 
 #: pcbnew/tools/pcb_actions.cpp:296
-#, fuzzy
 msgid "Place Vias"
-msgstr "Umístit prokov"
+msgstr "Umístit prokovy"
 
 #: pcbnew/tools/pcb_actions.cpp:297
 #, fuzzy
