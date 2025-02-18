@@ -156,41 +156,53 @@ LIBRARY_TABLE_PARSER::LIBRARY_TABLE_PARSER()
 tl::expected<LIBRARY_TABLE_IR, LIBRARY_PARSE_ERROR> LIBRARY_TABLE_PARSER::Parse(
         const std::filesystem::path& aPath )
 {
-    file_input in( aPath );
-    LIBRARY_TABLE_PARSER_STATE state;
-    wxLogTrace( traceLibraries, "LIBRARY_TABLE_PARSER::Parse %s", aPath.string().c_str() );
-
     try
     {
-        if( !parse<LIB_TABLE_FILE, LIBRARY_TABLE_PARSER_ACTION>( in, state ) )
+        file_input in( aPath );
+
+        LIBRARY_TABLE_PARSER_STATE state;
+        wxLogTrace( traceLibraries, "LIBRARY_TABLE_PARSER::Parse %s", aPath.string().c_str() );
+
+        try
         {
-            wxLogTrace( traceLibraries, "Parsing failed without throwing" );
-            wxString msg =
-                wxString::Format( _( "An unexpected error occurred while reading library table %s "),
-                                  aPath.string().c_str() );
-            return tl::unexpected( LIBRARY_PARSE_ERROR( { .description = msg } ) );
+            if( !parse<LIB_TABLE_FILE, LIBRARY_TABLE_PARSER_ACTION>( in, state ) )
+            {
+                wxLogTrace( traceLibraries, "Parsing failed without throwing" );
+                wxString msg =
+                    wxString::Format( _( "An unexpected error occurred while reading library table %s "),
+                                      aPath.string().c_str() );
+                return tl::unexpected( LIBRARY_PARSE_ERROR( { .description = msg } ) );
+            }
         }
+        catch( const parse_error& e )
+        {
+            const auto& p = e.positions().front();
+            std::string msg = fmt::format( "Error at line {}, column {}:\n{}\n{:>{}}\n{}",
+                                           p.line, p.column, in.line_at( p ), "^", p.column,
+                                           e.message() );
+
+            wxLogTrace( traceLibraries, "%s", msg.c_str() );
+
+            wxString description = wxString::Format( _( "Syntax error at line %zu, column %zu" ),
+                                                     p.line, p.column );
+
+            return tl::unexpected( LIBRARY_PARSE_ERROR( {
+                .description = description,
+                .line = p.line,
+                .column = p.column
+            } ) );
+        }
+
+        return state.model;
     }
-    catch( const parse_error& e )
+    catch( std::filesystem::filesystem_error& e )
     {
-        const auto& p = e.positions().front();
-        std::string msg = fmt::format( "Error at line {}, column {}:\n{}\n{:>{}}\n{}",
-                                       p.line, p.column, in.line_at( p ), "^", p.column,
-                                       e.message() );
-
-        wxLogTrace( traceLibraries, "%s", msg.c_str() );
-
-        wxString description = wxString::Format( _( "Syntax error at line %zu, column %zu" ),
-                                                 p.line, p.column );
-
+        wxLogTrace( traceLibraries, "LIBRARY_TABLE_PARSER::Parse loading '%s' error: %s",
+                    std::string( aPath ), e.what() );
         return tl::unexpected( LIBRARY_PARSE_ERROR( {
-            .description = description,
-            .line = p.line,
-            .column = p.column
+            .description = e.what()
         } ) );
     }
-
-    return state.model;
 }
 
 

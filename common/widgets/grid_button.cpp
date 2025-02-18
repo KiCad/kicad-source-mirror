@@ -51,3 +51,41 @@ wxSize GRID_BUTTON_RENDERER::GetBestSize( wxGrid& aGrid, wxGridCellAttr& aAttr, 
 {
     return m_button.GetSize();
 }
+
+
+GRID_BITMAP_BUTTON_RENDERER::GRID_BITMAP_BUTTON_RENDERER( const wxBitmapBundle& aBitmap ) :
+        m_bitmap( aBitmap )
+{
+}
+
+static const wxSize BUTTON_PADDING( 2, 2 );
+
+
+GRID_BITMAP_BUTTON_RENDERER* GRID_BITMAP_BUTTON_RENDERER::Clone() const
+{
+    auto clone = new GRID_BITMAP_BUTTON_RENDERER( m_bitmap );
+    return clone;
+}
+
+
+void GRID_BITMAP_BUTTON_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDc,
+                                        const wxRect& aRect, int aRow, int aCol, bool aIsSelected )
+{
+    // erase background
+    wxGridCellRenderer::Draw( aGrid, aAttr, aDc, aRect, aRow, aCol, aIsSelected );
+
+
+    wxBitmap bmp = m_bitmap.GetBitmapFor( &aGrid );
+    wxRect bmpRect( wxPoint( 0, 0 ), m_bitmap.GetPreferredLogicalSizeFor( &aGrid ) );
+    bmpRect = bmpRect.CenterIn( aRect );
+
+    wxRendererNative::Get().DrawPushButton( &aGrid, aDc, bmpRect.Inflate( BUTTON_PADDING ) );
+    aDc.DrawBitmap( bmp, bmpRect.CenterIn( aRect ).GetTopLeft() + BUTTON_PADDING );
+}
+
+
+wxSize GRID_BITMAP_BUTTON_RENDERER::GetBestSize( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDc,
+                                                 int aRow, int aCol)
+{
+    return m_bitmap.GetPreferredBitmapSizeFor( &aGrid ) + BUTTON_PADDING;
+}

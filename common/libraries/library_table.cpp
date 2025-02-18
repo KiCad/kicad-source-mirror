@@ -57,6 +57,14 @@ LIBRARY_TABLE::LIBRARY_TABLE( const wxFileName &aPath, LIBRARY_TABLE_SCOPE aScop
     WX_FILENAME::ResolvePossibleSymlinks( file );
     m_path = file.GetAbsolutePath();
 
+    if( !file.FileExists() )
+    {
+        m_ok = false;
+        m_errorDescription = wxString::Format( _( "The library table path '%s' does not exist" ),
+                                               file.GetFullPath() );
+        return;
+    }
+
     tl::expected<LIBRARY_TABLE_IR, LIBRARY_PARSE_ERROR> ir = parser.Parse( m_path.ToStdString() );
 
     if( ir.has_value() )

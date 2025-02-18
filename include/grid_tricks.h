@@ -98,7 +98,7 @@ protected:
     /// Puts the selected area into a sensible rectangle of m_sel_{row,col}_{start,count} above.
     void getSelectedArea();
 
-    void onGridCellLeftClick( wxGridEvent& event );
+    virtual void onGridCellLeftClick( wxGridEvent& event );
     void onGridCellLeftDClick( wxGridEvent& event );
     void onGridCellRightClick( wxGridEvent& event );
     void onGridLabelLeftClick( wxGridEvent& event );

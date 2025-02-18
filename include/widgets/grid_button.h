@@ -20,6 +20,7 @@
 #ifndef KICAD_GRID_BUTTON_H
 #define KICAD_GRID_BUTTON_H
 
+#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/grid.h>
 
@@ -41,6 +42,26 @@ public:
 
 private:
     wxButton m_button;
+};
+
+
+class GRID_BITMAP_BUTTON_RENDERER : public wxGridCellRenderer
+{
+public:
+    GRID_BITMAP_BUTTON_RENDERER( const wxBitmapBundle& aBitmap );
+
+    virtual ~GRID_BITMAP_BUTTON_RENDERER() = default;
+
+    GRID_BITMAP_BUTTON_RENDERER* Clone() const override;
+
+    void Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDc, const wxRect& aRect,
+               int aRow, int aCol, bool aIsSelected ) override;
+
+    wxSize GetBestSize( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDc,
+                        int aRow, int aCol ) override;
+
+private:
+    wxBitmapBundle m_bitmap;
 };
 
 #endif //KICAD_GRID_BUTTON_H

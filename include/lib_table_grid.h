@@ -32,6 +32,7 @@ const wxColour COLOUR_ROW_DISABLED( 100, 100, 100 );
 /// The library table grid column order is established by this sequence.
 enum COL_ORDER
 {
+    COL_STATUS,
     COL_ENABLED,
     COL_VISIBLE,
     COL_NICKNAME,
@@ -77,6 +78,7 @@ public:
             case COL_DESCR:    return r.Description();
             case COL_ENABLED:  return r.Disabled() ? wxT( "0" ) : wxT( "1" );
             case COL_VISIBLE:  return r.Hidden() ? wxT( "0" ) : wxT( "1" );
+            case COL_STATUS:   return r.ErrorDescription();
             default:           return wxEmptyString;
             }
         }
@@ -133,6 +135,7 @@ public:
             case COL_DESCR:    r.SetDescription( aValue );                          break;
             case COL_ENABLED:  r.SetDisabled( aValue == wxT( "0" ) );               break;
             case COL_VISIBLE:  r.SetHidden( aValue == wxT( "0" ) );                 break;
+            case COL_STATUS: break;
             }
         }
     }
@@ -226,8 +229,9 @@ public:
         case COL_TYPE:      return _( "Library Format" );
         case COL_OPTIONS:   return _( "Options" );
         case COL_DESCR:     return _( "Description" );
-        case COL_ENABLED:   return _( "Active" );
-        case COL_VISIBLE:   return _( "Visible" );
+        case COL_ENABLED:   return _( "Enable" );
+        case COL_VISIBLE:   return _( "Show" );
+        case COL_STATUS:    return wxEmptyString;
 
         default:            return wxEmptyString;
         }

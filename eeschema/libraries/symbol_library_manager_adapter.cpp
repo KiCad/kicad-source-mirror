@@ -103,7 +103,7 @@ LIBRARY_RESULT<LIB_DATA*> SYMBOL_LIBRARY_MANAGER_ADAPTER::loadIfNeeded( const wx
                     aTarget[ row->Nickname() ].row = row;
                     aTarget[ row->Nickname() ].plugin.reset( plugin );
 
-                    wxLogTrace( traceLibraries, "Library %s (%s) loaded",
+                    wxLogTrace( traceLibraries, "Library %s (%s) plugin created",
                                 aNickname, magic_enum::enum_name( aScope ) );
 
                     return &aTarget.at( aNickname );
@@ -134,8 +134,11 @@ LIBRARY_RESULT<LIB_DATA*> SYMBOL_LIBRARY_MANAGER_ADAPTER::loadIfNeeded( const wx
 std::optional<const LIB_DATA*> SYMBOL_LIBRARY_MANAGER_ADAPTER::fetchIfLoaded(
         const wxString& aNickname ) const
 {
-    if( m_libraries.contains( aNickname ) && m_libraries.at( aNickname ).status.load_status == LOAD_STATUS::LOADED )
+    if( m_libraries.contains( aNickname )
+        && m_libraries.at( aNickname ).status.load_status == LOAD_STATUS::LOADED )
+    {
         return &m_libraries.at( aNickname );
+    }
 
     if( GlobalLibraries.contains( aNickname )
         && GlobalLibraries.at( aNickname ).status.load_status == LOAD_STATUS::LOADED )
@@ -364,14 +367,14 @@ void SYMBOL_LIBRARY_MANAGER_ADAPTER::AsyncLoad()
                     try
                     {
                         lib->plugin->EnumerateSymbolLib( dummyList, getUri( lib->row ), &options );
-                        // TODO(JE) remove testing delay
-                        //std::this_thread::sleep_for( std::chrono::milliseconds( 500 ) );
+                        wxLogTrace( traceLibraries, "%s: library enumerated %zu items", nickname, dummyList.size() );
                         lib->status.load_status = LOAD_STATUS::LOADED;
                     }
                     catch( IO_ERROR& e )
                     {
                         lib->status.load_status = LOAD_STATUS::ERROR;
                         lib->status.error = LIBRARY_ERROR( { e.What() } );
+                        wxLogTrace( traceLibraries, "%s: plugin threw exception: %s", nickname, e.What() );
                     }
                 }
                 else
@@ -452,12 +455,14 @@ void SYMBOL_LIBRARY_MANAGER_ADAPTER::BlockUntilLoaded()
 std::optional<LIBRARY_ERROR> SYMBOL_LIBRARY_MANAGER_ADAPTER::LibraryError(
         const wxString& aNickname ) const
 {
-    if( std::optional<const LIB_DATA*> result = fetchIfLoaded( aNickname ) )
+    if( m_libraries.contains( aNickname ) )
     {
-        const LIB_DATA* row = *result;
+        return m_libraries.at( aNickname ).status.error;
+    }
 
-        if( row->status.error )
-            return row->status.error;
+    if( GlobalLibraries.contains( aNickname ) )
+    {
+        return GlobalLibraries.at( aNickname ).status.error;
     }
 
     return std::nullopt;

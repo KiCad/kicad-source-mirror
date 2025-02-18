@@ -57,6 +57,8 @@
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
 #include <project_sch.h>
+#include <libraries/symbol_library_manager_adapter.h>
+#include <widgets/grid_button.h>
 
 
 // clang-format off
@@ -155,25 +157,67 @@ private:
 class SYMBOL_GRID_TRICKS : public LIB_TABLE_GRID_TRICKS
 {
 public:
-    SYMBOL_GRID_TRICKS( DIALOG_EDIT_LIBRARY_TABLES* aParent, WX_GRID* aGrid ) :
+    SYMBOL_GRID_TRICKS( DIALOG_EDIT_LIBRARY_TABLES* aParent, WX_GRID* aGrid, PROJECT& aProject ) :
         LIB_TABLE_GRID_TRICKS( aGrid ),
-        m_dialog( aParent )
+        m_dialog( aParent ),
+        m_project( aProject )
     {
+        SetTooltipEnable( COL_STATUS );
     }
 
-    SYMBOL_GRID_TRICKS( DIALOG_EDIT_LIBRARY_TABLES* aParent, WX_GRID* aGrid,
+    SYMBOL_GRID_TRICKS( DIALOG_EDIT_LIBRARY_TABLES* aParent, WX_GRID* aGrid, PROJECT& aProject,
                         std::function<void( wxCommandEvent& )> aAddHandler ) :
         LIB_TABLE_GRID_TRICKS( aGrid, aAddHandler ),
-        m_dialog( aParent )
+        m_dialog( aParent ),
+        m_project( aProject )
     {
     }
 
 protected:
     DIALOG_EDIT_LIBRARY_TABLES* m_dialog;
 
+    void onGridCellLeftClick( wxGridEvent& aEvent ) override
+    {
+        if( aEvent.GetCol() == COL_STATUS )
+        {
+            // Status column button action depends on row:
+            // Normal rows should have no button, so they are a no-op
+            // Errored rows should have the warning button, so we show their error
+            // Configurable libraries will have the options button, so we launch the config
+            // Chained tables will have the open button, so we request the table be opened
+            SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_project );
+
+            auto libTable = static_cast<SYMBOL_LIB_TABLE_GRID*>( m_grid->GetTable() );
+            const LIBRARY_TABLE_ROW& row = libTable->at( aEvent.GetRow() );
+
+            wxString title = row.Type() == "Table"
+                    ? wxString::Format( _( "Error loading library table '%s'" ), row.Nickname() )
+                    : wxString::Format( _( "Error loading library '%s'" ), row.Nickname() );
+
+            if( !row.IsOk() )
+            {
+                DisplayErrorMessage( m_grid, title, row.ErrorDescription() );
+            }
+            else if( std::optional<LIBRARY_ERROR> e = adapter->LibraryError( row.Nickname() ) )
+            {
+                DisplayErrorMessage( m_grid, title, e->message );
+            }
+            else if( adapter->SupportsSettingsDialog( row.Nickname() ) )
+            {
+
+            }
+
+            aEvent.Skip();
+        }
+        else
+        {
+            GRID_TRICKS::onGridCellLeftClick( aEvent );
+        }
+    }
+
     void optionsEditor( int aRow ) override
     {
-        SYMBOL_LIB_TABLE_GRID* tbl = (SYMBOL_LIB_TABLE_GRID*) m_grid->GetTable();
+        auto tbl = static_cast<SYMBOL_LIB_TABLE_GRID*>( m_grid->GetTable() );
 
         if( tbl->GetNumberRows() > aRow )
         {
@@ -253,6 +297,9 @@ protected:
     {
         return true;
     }
+
+private:
+    PROJECT& m_project;
 };
 
 
@@ -267,8 +314,44 @@ void PANEL_SYM_LIB_TABLE::setupGrid( WX_GRID* aGrid )
                 aCurrGrid->SetColSize( aCol, std::max( prevWidth, aCurrGrid->GetColSize( aCol ) ) );
             };
 
+    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( m_project );
+
+    for( int ii = 0; ii < aGrid->GetNumberRows(); ++ii )
+    {
+        // Give a bit more room for combobox editors
+        aGrid->SetRowSize( ii, aGrid->GetDefaultRowSize() + 4 );
+
+        auto libTable = static_cast<SYMBOL_LIB_TABLE_GRID*>( aGrid->GetTable() );
+
+        if( LIBRARY_TABLE_ROW& tableRow = libTable->at( ii ); tableRow.IsOk() )
+        {
+            if( std::optional<LIBRARY_ERROR> error = adapter->LibraryError( tableRow.Nickname() ) )
+            {
+                aGrid->SetCellValue( ii, COL_STATUS, error->message );
+                aGrid->SetCellRenderer( ii, COL_STATUS,
+                                        new GRID_BITMAP_BUTTON_RENDERER( KiBitmapBundle( BITMAPS::small_warning ) ) );
+            }
+            else if( adapter->SupportsSettingsDialog( tableRow.Nickname() ) )
+            {
+                aGrid->SetCellValue( ii, COL_STATUS,
+                                     wxString::Format( _( "Library settings for %s..." ),
+                                                       tableRow.Nickname() ) );
+                aGrid->SetCellRenderer( ii, COL_STATUS,
+                                        new GRID_BITMAP_BUTTON_RENDERER( KiBitmapBundle( BITMAPS::config ) ) );
+            }
+        }
+        else
+        {
+            aGrid->SetCellValue( ii, COL_STATUS, tableRow.ErrorDescription() );
+            aGrid->SetCellRenderer( ii, COL_STATUS,
+                                    new GRID_BITMAP_BUTTON_RENDERER( KiBitmapBundle( BITMAPS::small_warning ) ) );
+        }
+    }
+
     // add Cut, Copy, and Paste to wxGrids
-    aGrid->PushEventHandler( new SYMBOL_GRID_TRICKS( m_parent, aGrid,
+    aGrid->PushEventHandler( new SYMBOL_GRID_TRICKS( m_parent, aGrid, m_parent->Kiway().Prj(),
             [this]( wxCommandEvent& event ) { appendRowHandler( event ); } ) );
 
     aGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
@@ -310,21 +393,34 @@ void PANEL_SYM_LIB_TABLE::setupGrid( WX_GRID* aGrid )
     aGrid->SetColAttr( COL_TYPE, attr );
 
     attr = new wxGridCellAttr;
+    attr->SetReadOnly();
+    aGrid->SetColAttr( COL_STATUS, attr );
+
+    attr = new wxGridCellAttr;
     attr->SetRenderer( new wxGridCellBoolRenderer() );
     attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
+    attr->SetAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
     aGrid->SetColAttr( COL_ENABLED, attr );
 
     attr = new wxGridCellAttr;
     attr->SetRenderer( new wxGridCellBoolRenderer() );
     attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
+    attr->SetAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
     aGrid->SetColAttr( COL_VISIBLE, attr );
+
+    aGrid->DisableColResize( COL_STATUS );
+    aGrid->DisableColResize( COL_VISIBLE );
+    aGrid->DisableColResize( COL_ENABLED );
+
+    aGrid->AutoSizeColumn( COL_STATUS, true );
+    aGrid->AutoSizeColumn( COL_VISIBLE, true );
+    aGrid->AutoSizeColumn( COL_ENABLED, true );
 
     // all but COL_OPTIONS, which is edited with Option Editor anyways.
     autoSizeCol( aGrid, COL_NICKNAME );
     autoSizeCol( aGrid, COL_TYPE );
     autoSizeCol( aGrid, COL_URI );
     autoSizeCol( aGrid, COL_DESCR );
-    autoSizeCol( aGrid, COL_ENABLED );
 
     // Gives a selection to each grid, mainly for delete button.  wxGrid's wake up with
     // a currentCell which is sometimes not highlighted.

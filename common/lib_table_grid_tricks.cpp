@@ -99,7 +99,6 @@ void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
                                        tbl->GetValue( m_sel_row_start, 2 ) ) );
     }
 #endif
-
     if( showActivate || showDeactivate || showSetVisible || showUnsetVisible || showSettings )
         menu.AppendSeparator();
 

@@ -20,6 +20,7 @@
 
 #include <common.h>
 #include <list>
+#include <magic_enum.hpp>
 #include <unordered_set>
 
 #include <paths.h>
@@ -99,6 +100,9 @@ void LIBRARY_MANAGER::loadNestedTables( LIBRARY_TABLE& aRootTable )
         {
             seenTables.insert( aTable.Path() );
 
+            if( !aTable.IsOk() )
+                return;
+
             for( LIBRARY_TABLE_ROW& row : aTable.Rows() )
             {
                 if( row.Type() == wxT( "Table" ) )
@@ -124,6 +128,12 @@ void LIBRARY_MANAGER::loadNestedTables( LIBRARY_TABLE& aRootTable )
                     auto child = std::make_unique<LIBRARY_TABLE>( file, aRootTable.Scope() );
 
                     processOneTable( *child );
+
+                    if( !child->IsOk() )
+                    {
+                        row.SetOk( false );
+                        row.SetErrorDescription( child->ErrorDescription() );
+                    }
 
                     m_childTables.insert( { row.URI(), std::move( child ) } );
                 }
@@ -177,13 +187,25 @@ std::optional<LIBRARY_TABLE*> LIBRARY_MANAGER::Table( LIBRARY_TABLE_TYPE aType,
         wxCHECK_MSG( false, std::nullopt, "Table() requires a single scope" );
 
     case LIBRARY_TABLE_SCOPE::GLOBAL:
-        wxCHECK( m_tables.contains( aType ), std::nullopt );
+    {
+        if( !m_tables.contains( aType ) )
+        {
+            wxLogTrace( traceLibraries, "WARNING: missing global table (%s)",
+                        magic_enum::enum_name( aType ) );
+            return std::nullopt;
+        }
+
         return m_tables.at( aType ).get();
+    }
 
     case LIBRARY_TABLE_SCOPE::PROJECT:
+    {
         // TODO: handle multiple projects
-        wxCHECK( m_projectTables.contains( aType ), std::nullopt );
+        if( !m_projectTables.contains( aType ) )
+            return std::nullopt;
+
         return m_projectTables.at( aType ).get();
+    }
     }
 
     return std::nullopt;
@@ -233,7 +255,9 @@ std::vector<const LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::Rows( LIBRARY_TABLE_TYPE 
                         {
                             if( row.Type() == "Table" )
                             {
-                                wxCHECK2( m_childTables.contains( row.URI() ), continue );
+                                if( !m_childTables.contains( row.URI() ) )
+                                    continue;
+
                                 processTable( m_childTables.at( row.URI() ) );
                             }
                             else
