@@ -546,16 +546,29 @@ void SCH_TABLE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
     if( GetBorderStroke().GetWidth() >= 0 )
     {
         setupStroke( GetBorderStroke() );
+        SCH_TABLECELL* cell = GetCell( 0, 0 );
 
         if( StrokeHeader() )
         {
-            SCH_TABLECELL* cell = GetCell( 0, 0 );
-            aPlotter->MoveTo( VECTOR2I( pos.x, cell->GetEndY() ) );
-            aPlotter->FinishTo( VECTOR2I( end.x, cell->GetEndY() ) );
-        }
+            if( !cell->GetTextAngle().IsHorizontal() )
+            {
+                aPlotter->MoveTo( VECTOR2I( cell->GetEndX(), pos.y ) );
+                aPlotter->FinishTo( VECTOR2I( cell->GetEndX(), cell->GetEndY() ) );
+            }
+            else
+            {
+                aPlotter->MoveTo( VECTOR2I( pos.x, cell->GetEndY() ) );
+                aPlotter->FinishTo( VECTOR2I( end.x, cell->GetEndY() ) );
+            }
+         }
 
         if( StrokeExternal() )
+        {
+            RotatePoint( pos, GetPosition(), cell->GetTextAngle() );
+            RotatePoint( end, GetPosition(), cell->GetTextAngle() );
+
             aPlotter->Rect( pos, end, FILL_T::NO_FILL, lineWidth );
+        }
     }
 }
 
