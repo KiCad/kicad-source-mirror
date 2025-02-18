@@ -1229,14 +1229,15 @@ bool PCB_VIA::FlashLayer( int aLayer ) const
         return true;
 
     const BOARD* board = GetBoard();
+    PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( aLayer );
 
     if( !board )
         return true;
 
-    if( !IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) ) )
+    if( !IsOnLayer( layer ) )
         return false;
 
-    if( !IsCopperLayer( aLayer ) )
+    if( !IsCopperLayer( layer ) )
         return true;
 
     switch( Padstack().UnconnectedLayerMode() )
@@ -1246,7 +1247,7 @@ bool PCB_VIA::FlashLayer( int aLayer ) const
 
     case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END:
     {
-        if( aLayer == Padstack().Drill().start || aLayer == Padstack().Drill().end )
+        if( layer == Padstack().Drill().start || layer == Padstack().Drill().end )
             return true;
 
         // Check for removal below
@@ -1258,14 +1259,18 @@ bool PCB_VIA::FlashLayer( int aLayer ) const
         break;
     }
 
-    // Must be static to keep from raising its ugly head in performance profiles
-    static std::initializer_list<KICAD_T> connectedTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T,
-                                                             PCB_PAD_T };
-
-    if( GetZoneLayerOverride( static_cast<PCB_LAYER_ID>( aLayer ) ) == ZLO_FORCE_FLASHED )
+    if( GetZoneLayerOverride( layer ) == ZLO_FORCE_FLASHED )
+    {
         return true;
+    }
     else
-        return board->GetConnectivity()->IsConnectedOnLayer( this, static_cast<PCB_LAYER_ID>( aLayer ), connectedTypes );
+    {
+        // Must be static to keep from raising its ugly head in performance profiles
+        static std::initializer_list<KICAD_T> nonZoneTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T,
+                                                               PCB_PAD_T };
+
+        return board->GetConnectivity()->IsConnectedOnLayer( this, layer, nonZoneTypes );
+    }
 }
 
 
@@ -1299,17 +1304,21 @@ void PCB_VIA::GetOutermostConnectedLayers( PCB_LAYER_ID* aTopmost,
     *aTopmost = UNDEFINED_LAYER;
     *aBottommost = UNDEFINED_LAYER;
 
-    static std::initializer_list<KICAD_T> connectedTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T,
-                                                             PCB_PAD_T };
+    static std::initializer_list<KICAD_T> nonZoneTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T,
+                                                           PCB_PAD_T };
 
     for( int layer = TopLayer(); layer <= BottomLayer(); ++layer )
     {
         bool connected = false;
 
         if( GetZoneLayerOverride( static_cast<PCB_LAYER_ID>( layer ) ) == ZLO_FORCE_FLASHED )
+        {
             connected = true;
-        else if( GetBoard()->GetConnectivity()->IsConnectedOnLayer( this, layer, connectedTypes ) )
+        }
+        else if( GetBoard()->GetConnectivity()->IsConnectedOnLayer( this, layer, nonZoneTypes ) )
+        {
             connected = true;
+        }
 
         if( connected )
         {

@@ -393,12 +393,7 @@ bool PAD::FlashLayer( int aLayer, bool aOnlyCheckIfPermitted ) const
 
         if( const BOARD* board = GetBoard() )
         {
-            // Must be static to keep from raising its ugly head in performance profiles
-            static std::initializer_list<KICAD_T> types = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T,
-                                                            PCB_PAD_T };
-
-            if( auto it = m_zoneLayerOverrides.find( static_cast<PCB_LAYER_ID>( aLayer ) );
-                it != m_zoneLayerOverrides.end() && it->second == ZLO_FORCE_FLASHED )
+            if( GetZoneLayerOverride( layer ) == ZLO_FORCE_FLASHED )
             {
                 return true;
             }
@@ -408,7 +403,11 @@ bool PAD::FlashLayer( int aLayer, bool aOnlyCheckIfPermitted ) const
             }
             else
             {
-                return board->GetConnectivity()->IsConnectedOnLayer( this, aLayer, types );
+                // Must be static to keep from raising its ugly head in performance profiles
+                static std::initializer_list<KICAD_T> nonZoneTypes = { PCB_TRACE_T, PCB_ARC_T,
+                                                                       PCB_VIA_T, PCB_PAD_T };
+
+                return board->GetConnectivity()->IsConnectedOnLayer( this, aLayer, nonZoneTypes );
             }
         }
     }

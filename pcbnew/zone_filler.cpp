@@ -358,6 +358,8 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
             };
 
     // Determine state of conditional via flashing
+    // This is now done completely deterministically prior to filling due to the pathological
+    // case presented in https://gitlab.com/kicad/code/kicad/-/issues/12964.
     for( PCB_TRACK* track : m_board->Tracks() )
     {
         if( track->Type() == PCB_VIA_T )
@@ -371,15 +373,15 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
 
             BOX2I    bbox = via->GetBoundingBox();
             VECTOR2I center = via->GetPosition();
-            int      testRadius = via->GetDrillValue() / 2 + 1;
-            unsigned netcode = via->GetNetCode();
+            int      holeRadius = via->GetDrillValue() / 2 + 1;
+            int      netcode = via->GetNetCode();
             LSET     layers = via->GetLayerSet() & boardCuMask;
 
             // Checking if the via hole touches the zone outline
             auto viaTestFn =
                     [&]( const ZONE* aZone ) -> bool
                     {
-                        return aZone->Outline()->Contains( center, -1, testRadius );
+                        return aZone->Outline()->Contains( center, -1, holeRadius );
                     };
 
             for( PCB_LAYER_ID layer : layers.Seq() )
@@ -416,13 +418,14 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
 
             BOX2I    bbox = pad->GetBoundingBox();
             VECTOR2I center = pad->GetPosition();
-            unsigned netcode = pad->GetNetCode();
+            int      netcode = pad->GetNetCode();
             LSET     layers = pad->GetLayerSet() & boardCuMask;
 
-            auto padTestFn = [&]( const ZONE* aZone ) -> bool
-            {
-                return aZone->Outline()->Contains( center );
-            };
+            auto padTestFn =
+                    [&]( const ZONE* aZone ) -> bool
+                    {
+                        return aZone->Outline()->Contains( center );
+                    };
 
             for( PCB_LAYER_ID layer : layers.Seq() )
             {
