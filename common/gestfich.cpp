@@ -425,7 +425,8 @@ bool CopyFilesOrDirectory( const wxString& aSourcePath, const wxString& aDestDir
             return true;
         }
 
-        aErrors += wxString::Format( _( "Could not copy file: %s to %s\n" ), src, dest );
+        aErrors += wxString::Format( _( "Could not copy file: %s to %s" ), src, dest );
+        aErrors += wxT( "\n" );
         return false;
     };
 
@@ -473,8 +474,10 @@ bool CopyFilesOrDirectory( const wxString& aSourcePath, const wxString& aDestDir
                     if( !CopyFilesOrDirectory( entrySrc, destDir, aErrors, aFileCopiedCount,
                                                aExclusions ) )
                     {
-                        aErrors += wxString::Format( _( "Could not copy directory: %s to %s\n" ),
+                        aErrors += wxString::Format( _( "Could not copy directory: %s to %s" ),
                                                      entrySrc, entryDest );
+                        aErrors += wxT( "\n" );
+
                         success = false;
                     }
                 }
