@@ -18,17 +18,20 @@ DIALOG_EXECUTECOMMAND_JOB_SETTINGS_BASE::DIALOG_EXECUTECOMMAND_JOB_SETTINGS_BASE
 
 	wxFlexGridSizer* fgSizer1;
 	fgSizer1 = new wxFlexGridSizer( 0, 2, 5, 5 );
+	fgSizer1->AddGrowableCol( 1 );
+	fgSizer1->AddGrowableRow( 0 );
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_textCommand = new wxStaticText( this, wxID_ANY, _("Command:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textCommand->Wrap( -1 );
-	fgSizer1->Add( m_textCommand, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( m_textCommand, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_textCtrlCommand = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textCtrlCommand->SetMinSize( wxSize( 350,-1 ) );
+	m_textCtrlCommand = new wxTextCtrl( this, wxID_ANY, _("Enter the command line to run SPICE\nUsually '<path to SPICE binary> \"%I\"'\n%I will be replaced by the netlist filepath"), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+	m_textCtrlCommand->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_textCtrlCommand->SetMinSize( wxSize( 400,-1 ) );
 
-	fgSizer1->Add( m_textCtrlCommand, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizer1->Add( m_textCtrlCommand, 1, wxEXPAND|wxRIGHT, 5 );
 
 	m_textOutputPath = new wxStaticText( this, wxID_ANY, _("Output path:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textOutputPath->Wrap( -1 );
@@ -37,7 +40,7 @@ DIALOG_EXECUTECOMMAND_JOB_SETTINGS_BASE::DIALOG_EXECUTECOMMAND_JOB_SETTINGS_BASE
 	m_textCtrlOutputPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_textCtrlOutputPath->SetMinSize( wxSize( 350,-1 ) );
 
-	fgSizer1->Add( m_textCtrlOutputPath, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizer1->Add( m_textCtrlOutputPath, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
 
 	bSizerMain->Add( fgSizer1, 1, wxALL|wxEXPAND, 5 );

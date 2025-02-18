@@ -27,6 +27,8 @@ DIALOG_EXECUTECOMMAND_JOB_SETTINGS::DIALOG_EXECUTECOMMAND_JOB_SETTINGS( wxWindow
         m_job( aJob )
 {
     SetupStandardButtons();
+
+    finishDialogSettings();
 }
 
 

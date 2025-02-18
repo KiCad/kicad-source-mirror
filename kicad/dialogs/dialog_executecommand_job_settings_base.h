@@ -49,7 +49,7 @@ class DIALOG_EXECUTECOMMAND_JOB_SETTINGS_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_EXECUTECOMMAND_JOB_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Execute Command Job Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+		DIALOG_EXECUTECOMMAND_JOB_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Execute Command Job Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_EXECUTECOMMAND_JOB_SETTINGS_BASE();
 
