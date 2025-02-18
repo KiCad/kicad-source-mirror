@@ -1663,10 +1663,11 @@ int PCBNEW_JOBS_HANDLER::JobExportFpSvg( JOB* aJob )
     FP_CACHE_FOOTPRINT_MAP& footprintMap = fpLib.GetFootprints();
 
     bool singleFpPlotted = false;
-    for( FP_CACHE_FOOTPRINT_MAP::iterator it = footprintMap.begin(); it != footprintMap.end();
-         ++it )
+
+    for( auto it = footprintMap.begin(); it != footprintMap.end(); ++it )
     {
-        const FOOTPRINT* fp = it->second->GetFootprint();
+        const std::unique_ptr<FOOTPRINT>& fp = it->second->GetFootprint();
+
         if( !svgJob->m_footprint.IsEmpty() )
         {
             if( fp->GetFPID().GetLibItemName().wx_str() != svgJob->m_footprint )
@@ -1680,7 +1681,7 @@ int PCBNEW_JOBS_HANDLER::JobExportFpSvg( JOB* aJob )
             }
         }
 
-        exitCode = doFpExportSvg( svgJob, fp );
+        exitCode = doFpExportSvg( svgJob, fp.get() );
         if( exitCode != CLI::EXIT_CODES::OK )
             break;
     }

@@ -88,7 +88,7 @@ FP_CACHE::FP_CACHE( PCB_IO_KICAD_SEXPR* aOwner, const wxString& aLibraryPath )
 }
 
 
-void FP_CACHE::Save( FOOTPRINT* aFootprint )
+void FP_CACHE::Save( FOOTPRINT* aFootprintFilter )
 {
     m_cache_timestamp = 0;
 
@@ -104,37 +104,41 @@ void FP_CACHE::Save( FOOTPRINT* aFootprint )
                                           m_lib_raw_path ) );
     }
 
-    for( FP_CACHE_FOOTPRINT_MAP::iterator it = m_footprints.begin(); it != m_footprints.end(); ++it )
+    for( auto it = m_footprints.begin(); it != m_footprints.end(); ++it )
     {
-        if( aFootprint && aFootprint != it->second->GetFootprint() )
+        FP_CACHE_ITEM*              fpCacheEntry = it->second;
+        std::unique_ptr<FOOTPRINT>& footprint = fpCacheEntry->GetFootprint();
+
+        if( aFootprintFilter && footprint.get() != aFootprintFilter )
             continue;
 
-        // If we've requested to embed the fonts in the footprint, do so.
-        // Otherwise, clear the embedded fonts from the footprint.  Embedded
-        // fonts will be used if available
-        if( aFootprint->GetAreFontsEmbedded() )
-            aFootprint->EmbedFonts();
+        // If we've requested to embed the fonts in the footprint, do so.  Otherwise, clear the
+        // embedded fonts from the footprint.  Embedded fonts will be used if available.
+        if( footprint->GetAreFontsEmbedded() )
+            footprint->EmbedFonts();
         else
-            aFootprint->GetEmbeddedFiles()->ClearEmbeddedFonts();
+            footprint->GetEmbeddedFiles()->ClearEmbeddedFonts();
 
-        WX_FILENAME fn = it->second->GetFileName();
+        WX_FILENAME fn = fpCacheEntry->GetFileName();
+        wxString    fileName = fn.GetFullPath();
 
-        wxString tempFileName =
-#ifdef USE_TMP_FILE
-        wxFileName::CreateTempFileName( fn.GetPath() );
-#else
-        fn.GetFullPath();
-#endif
         // Allow file output stream to go out of scope to close the file stream before
         // renaming the file.
         {
-            wxLogTrace( traceKicadPcbPlugin, wxT( "Creating temporary library file '%s'." ),
-                    tempFileName );
+#ifdef USE_TMP_FILE
+            fileName = wxFileName::CreateTempFileName( fn.GetPath() );
 
-            PRETTIFIED_FILE_OUTPUTFORMATTER formatter( tempFileName );
+            wxLogTrace( traceKicadPcbPlugin, wxT( "Creating temporary library file '%s'." ),
+                        fileName );
+#else
+            wxLogTrace( traceKicadPcbPlugin, wxT( "Writing library file '%s'." ),
+                        fileName );
+#endif
+
+            PRETTIFIED_FILE_OUTPUTFORMATTER formatter( fileName );
 
             m_owner->SetOutputFormatter( &formatter );
-            m_owner->Format( (BOARD_ITEM*) it->second->GetFootprint() );
+            m_owner->Format( footprint.get() );
         }
 
 #ifdef USE_TMP_FILE
@@ -145,12 +149,12 @@ void FP_CACHE::Save( FOOTPRINT* aFootprint )
         wxMilliSleep( 250L );
 
         // Preserve the permissions of the current file
-        KIPLATFORM::IO::DuplicatePermissions( fn.GetFullPath(), tempFileName );
+        KIPLATFORM::IO::DuplicatePermissions( fn.GetFullPath(), fileName );
 
-        if( !wxRenameFile( tempFileName, fn.GetFullPath() ) )
+        if( !wxRenameFile( fileName, fn.GetFullPath() ) )
         {
             wxString msg = wxString::Format( _( "Cannot rename temporary file '%s' to '%s'" ),
-                                             tempFileName,
+                                             fileName,
                                              fn.GetFullPath() );
             THROW_IO_ERROR( msg );
         }
@@ -161,7 +165,7 @@ void FP_CACHE::Save( FOOTPRINT* aFootprint )
     m_cache_timestamp += m_lib_path.GetModificationTime().GetValue().GetValue();
 
     // If we've saved the full cache, we clear the dirty flag.
-    if( !aFootprint )
+    if( !aFootprintFilter )
         m_cache_dirty = false;
 }
 
@@ -2817,13 +2821,13 @@ const FOOTPRINT* PCB_IO_KICAD_SEXPR::getFootprint( const wxString& aLibraryPath,
         // do nothing with the error
     }
 
-    FP_CACHE_FOOTPRINT_MAP&       footprints = m_cache->GetFootprints();
-    FP_CACHE_FOOTPRINT_MAP::const_iterator it = footprints.find( aFootprintName );
+    FP_CACHE_FOOTPRINT_MAP& footprints = m_cache->GetFootprints();
+    auto                    it = footprints.find( aFootprintName );
 
     if( it == footprints.end() )
         return nullptr;
 
-    return it->second->GetFootprint();
+    return it->second->GetFootprint().get();
 }
 
 

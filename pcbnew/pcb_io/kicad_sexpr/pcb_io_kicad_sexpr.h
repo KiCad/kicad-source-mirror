@@ -212,8 +212,8 @@ public:
     FP_CACHE_ITEM( FOOTPRINT* aFootprint, const WX_FILENAME& aFileName );
 
     const WX_FILENAME& GetFileName() const { return m_filename; }
-    void               SetFilePath( const wxString& aFilePath ) { m_filename.SetPath( aFilePath ); }
-    const FOOTPRINT*   GetFootprint() const { return m_footprint.get(); }
+    void SetFilePath( const wxString& aFilePath ) { m_filename.SetPath( aFilePath ); }
+    std::unique_ptr<FOOTPRINT>& GetFootprint() { return m_footprint; }
 };
 
 typedef boost::ptr_map<wxString, FP_CACHE_ITEM> FP_CACHE_FOOTPRINT_MAP;
@@ -248,9 +248,9 @@ public:
     /**
      * Save the footprint cache or a single footprint from it to disk
      *
-     * @param aFootprint if set, save only this footprint, otherwise, save the full library
+     * @param aFootprintFilter if set, save only this footprint, otherwise, save the full library
      */
-    void Save( FOOTPRINT* aFootprint = nullptr );
+    void Save( FOOTPRINT* aFootprintFilter = nullptr );
 
     void Load();
 
