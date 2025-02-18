@@ -1321,7 +1321,7 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolArc()
         arc->CalcArcAngles( arc_start, arc_end );
         arc_angle = arc_end - arc_start;
 
-        // The arc angle should be <= 180 deg.
+        // The arc angle should be <= 180 deg in old libraries.
         // If > 180 we need to swap arc ends (the first choice was not good)
         if( arc_angle > ANGLE_180 )
         {
@@ -1330,11 +1330,17 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolArc()
         }
         else if( arc_angle == ANGLE_180 )
         {
-            arc->SetStart( startPoint );
-            arc->SetEnd( endPoint );
+            // Disabled (since the Y axis was reversed in library editor
+            // and arcs having a 180 deg arc do not create issues
+            // However keep it for info, just in case
+            #if 0
+            arc->SetStart( startPoint );    // not working with Y axis reversed
+            arc->SetEnd( endPoint );        // not working with Y axis reversed
+            // Useless now arcs >= 180 deg are well handled
             VECTOR2I new_center = CalcArcCenter( arc->GetStart(), arc->GetEnd(),
                                   EDA_ANGLE( 179.5, DEGREES_T ) );
             arc->SetCenter( new_center );
+           #endif
         }
     }
     else
