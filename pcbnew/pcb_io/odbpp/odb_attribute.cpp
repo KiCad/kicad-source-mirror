@@ -58,6 +58,8 @@ void ATTR_RECORD_WRITER::WriteAttributes( std::ostream& ost ) const
 {
     ODB::CHECK_ONCE once;
 
+    ost << " ";
+
     for( const auto& attr : m_ODBattributes )
     {
         if( once() )
@@ -68,8 +70,6 @@ void ATTR_RECORD_WRITER::WriteAttributes( std::ostream& ost ) const
         if( attr.second.size() )
             ost << "=" << attr.second;
     }
-
-    ost << ";";
 }
 
 
