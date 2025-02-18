@@ -108,7 +108,7 @@ int JOBS_RUNNER::runSpecialCopyFiles( const JOBSET_JOB* aJob, PROJECT* aProject 
 {
     JOB_SPECIAL_COPYFILES* job = static_cast<JOB_SPECIAL_COPYFILES*>( aJob->m_job.get() );
 
-    wxString source = ExpandTextVars( job->m_source, aProject );
+    wxString source = ExpandEnvVarSubstitutions( job->m_source, aProject );
 
     if( source.IsEmpty() )
         return CLI::EXIT_CODES::ERR_ARGS;
