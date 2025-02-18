@@ -1,0 +1,132 @@
+(footprint "1pin"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "module 1 pin (ou trou mecanique de percage)")
+	(tags "DEV")
+	(property "Reference" "REF**"
+		(at -13.619 -1.567 0)
+		(layer "F.SilkS")
+		(uuid "b81bf039-53f7-4f20-8d99-132cec935ec4")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "Antenna"
+		(at -2.2 2.7 0)
+		(layer "F.Fab")
+		(uuid "cb8efd62-7d48-4586-87ba-5612001f433e")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "5fbb73fb-360e-4247-9d9c-2c2aa3a0bed5")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "eb1ec9f1-21b4-4c33-844f-fd5f93e2ee59")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(fp_line
+		(start -20 -10)
+		(end 1.499999 -10)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "823ca2db-ed69-4792-ba39-224674a50578")
+	)
+	(fp_line
+		(start -20 1)
+		(end -20 -10)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "5cd67bed-a89c-4ed3-ab5e-5fdb25a99643")
+	)
+	(fp_line
+		(start 1.499999 -10)
+		(end 1.5 1)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "a27fefb3-aa70-4750-837c-ffd9efbf91f7")
+	)
+	(fp_line
+		(start 1.5 1)
+		(end -20 1)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "a0e3c5b2-827c-4ced-bd42-a7e77d86c7ef")
+	)
+	(pad "1" connect custom
+		(at 0 0)
+		(size 1 1)
+		(layers "F.Cu" "F.Mask")
+		(zone_connect 0)
+		(options
+			(clearance outline)
+			(anchor circle)
+		)
+		(primitives
+			(gr_poly
+				(pts
+					(xy -15.5 -5.6) (xy -14.5 -5.6) (xy -14.5 -9.6) (xy -11.5 -9.6) (xy -11.5 -5.6) (xy -10.5 -5.6)
+					(xy -10.5 -9.6) (xy 0.5 -9.6) (xy 0.5 0.4) (xy -0.5 0.4) (xy -0.5 -8.6) (xy -6.5 -8.6) (xy -6.5 0.4)
+					(xy -7.5 0.4) (xy -7.5 -8.6) (xy -9.5 -8.6) (xy -9.5 -4.6) (xy -12.5 -4.6) (xy -12.5 -8.6) (xy -13.5 -8.6)
+					(xy -13.5 -4.6) (xy -16.5 -4.6) (xy -16.5 -8.6) (xy -17.5 -8.6) (xy -17.5 -4.6) (xy -19.5 -4.6)
+					(xy -19.5 -9.6) (xy -15.5 -9.6)
+				)
+				(width 0)
+				(fill yes)
+			)
+		)
+		(teardrops
+			(best_length_ratio 0.5)
+			(max_length 1)
+			(best_width_ratio 1)
+			(max_width 2)
+			(curved_edges yes)
+			(filter_ratio 0.9)
+			(enabled yes)
+			(allow_two_segments yes)
+			(prefer_zone_connections yes)
+		)
+		(uuid "47215921-8d34-4806-9f8d-1910013cd226")
+	)
+	(embedded_fonts no)
+)

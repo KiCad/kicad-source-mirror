@@ -1,5 +1,5 @@
 (kicad_pcb
-	(version 20241228)
+	(version 20241229)
 	(generator "pcbnew")
 	(generator_version "9.0")
 	(general
@@ -83,8 +83,8 @@
 		(tenting front back)
 		(aux_axis_origin 74.93 140.97)
 		(pcbplotparams
-			(layerselection 0x000010f0_ffffffff)
-			(plot_on_all_layers_selection 0x00000000_00000000)
+			(layerselection 0x00000000_00000000_000010f0_ffffffff)
+			(plot_on_all_layers_selection 0x00000000_00000000_00000000_00000000)
 			(disableapertmacros no)
 			(usegerberextensions no)
 			(usegerberattributes yes)
@@ -102,11 +102,13 @@
 			(pdf_front_fp_property_popups yes)
 			(pdf_back_fp_property_popups yes)
 			(pdf_metadata yes)
+			(pdf_single_document no)
 			(dxfpolygonmode yes)
 			(dxfimperialunits yes)
 			(dxfusepcbnewfont yes)
 			(psnegative no)
 			(psa4output no)
+			(plot_black_and_white yes)
 			(plotinvisibletext no)
 			(sketchpadsonfab no)
 			(plotpadnumbers no)
@@ -295,7 +297,7 @@
 	(net 171 "unconnected-(U9-P{slash}RCLK{slash}BSY{slash}RDY-PadN3)")
 	(net 172 "unconnected-(U9-P-PadN5)")
 	(net 173 "unconnected-(U9-NC-PadN12)")
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+	(footprint "interf_u:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-0000322d32a0")
 		(at 171.958 42.037)
@@ -556,7 +558,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_THT:CP_Axial_L10.0mm_D4.5mm_P15.00mm_Horizontal"
+	(footprint "interf_u:CP_Axial_L10.0mm_D4.5mm_P15.00mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000032307dc0")
 		(at 159.385 111.76)
@@ -977,14 +979,14 @@
 			)
 		)
 	)
-	(footprint "Capacitor_THT:CP_Axial_L10.0mm_D4.5mm_P15.00mm_Horizontal"
+	(footprint "interf_u:CP_Axial_L10.0mm_D4.5mm_P15.00mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000032307dca")
 		(at 86.995 113.03 -90)
 		(descr "CP, Axial series, Axial, Horizontal, pin pitch=15mm, , length*diameter=10*4.5mm^2, Electrolytic Capacitor, , http://www.vishay.com/docs/28325/021asm.pdf")
 		(tags "CP Axial series Axial Horizontal pin pitch 15mm  length 10mm diameter 4.5mm Electrolytic Capacitor")
 		(property "Reference" "C5"
-			(at 7.5 -3.31 -90)
+			(at 7.5 -3.31 270)
 			(layer "F.SilkS")
 			(uuid "b374eb15-9065-45e8-955f-e5d23688a8fc")
 			(effects
@@ -995,7 +997,7 @@
 			)
 		)
 		(property "Value" "47uF"
-			(at 7.5 3.31 -90)
+			(at 7.5 3.31 270)
 			(layer "F.Fab")
 			(uuid "78cf0470-05f4-40f9-90d3-4a5d34a28fc4")
 			(effects
@@ -1006,7 +1008,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -1019,7 +1021,7 @@
 			)
 		)
 		(property "Description" "Polarised capacitor"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -1355,7 +1357,7 @@
 			(uuid "f836e27e-5dd2-447a-ac1c-f403f0eaa6c7")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 7.5 0 -90)
+			(at 7.5 0 270)
 			(layer "F.Fab")
 			(uuid "4779aa44-397e-48e9-b3ae-f832c880af91")
 			(effects
@@ -1398,7 +1400,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_THT:CP_Axial_L10.0mm_D4.5mm_P15.00mm_Horizontal"
+	(footprint "interf_u:CP_Axial_L10.0mm_D4.5mm_P15.00mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000032307dcf")
 		(at 170.688 52.197 180)
@@ -1819,7 +1821,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_THT:CP_Axial_L10.0mm_D4.5mm_P15.00mm_Horizontal"
+	(footprint "interf_u:CP_Axial_L10.0mm_D4.5mm_P15.00mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000032307de2")
 		(at 83.185 83.82)
@@ -2240,7 +2242,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_THT:C_Disc_D3.0mm_W2.0mm_P2.50mm"
+	(footprint "interf_u:C_Disc_D3.0mm_W2.0mm_P2.50mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000032307ecf")
 		(at 121.305 91.44)
@@ -2481,7 +2483,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_THT:C_Disc_D3.0mm_W2.0mm_P2.50mm"
+	(footprint "interf_u:C_Disc_D3.0mm_W2.0mm_P2.50mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000032307ed4")
 		(at 121.305 99.06)
@@ -2722,14 +2724,14 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_2x08_P2.54mm_Vertical"
+	(footprint "interf_u:PinHeader_2x08_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000032568d1e")
 		(at 116.205 105.41 -90)
 		(descr "Through hole straight pin header, 2x08, 2.54mm pitch, double rows")
 		(tags "Through hole pin header THT 2x08 2.54mm double row")
 		(property "Reference" "JP1"
-			(at 0 -5.1 -90)
+			(at 0 -5.1 270)
 			(layer "F.SilkS")
 			(uuid "7c7f7693-c934-437e-b3ae-94daf1eef741")
 			(effects
@@ -2740,7 +2742,7 @@
 			)
 		)
 		(property "Value" "CONN_8X2"
-			(at 0 -3.1 -90)
+			(at 0 -3.1 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "ce559ae8-1cd1-4536-ba22-01c4a8e0b556")
@@ -2752,7 +2754,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -2765,7 +2767,7 @@
 			)
 		)
 		(property "Description" "Generic connector, double row, 02x08, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers)"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -3150,7 +3152,7 @@
 			)
 		)
 	)
-	(footprint "Package_DIP:DIP-20_W7.62mm"
+	(footprint "interf_u:DIP-20_W7.62mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005214e8d1")
 		(at 151.765 124.46 90)
@@ -3602,7 +3604,7 @@
 			)
 		)
 	)
-	(footprint "Package_DIP:DIP-20_W7.62mm"
+	(footprint "interf_u:DIP-20_W7.62mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005214e8ef")
 		(at 95.885 124.46 90)
@@ -4054,7 +4056,7 @@
 			)
 		)
 	)
-	(footprint "Package_DIP:DIP-20_W7.62mm"
+	(footprint "interf_u:DIP-20_W7.62mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005214e90d")
 		(at 123.825 124.46 90)
@@ -4506,7 +4508,7 @@
 			)
 		)
 	)
-	(footprint "Package_DIP:DIP-32_W15.24mm"
+	(footprint "interf_u:DIP-32_W15.24mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a0cae55")
 		(at 86.995 76.2 90)
@@ -5087,7 +5089,7 @@
 			)
 		)
 	)
-	(footprint "Package_DIP:DIP-24_W7.62mm"
+	(footprint "interf_u:DIP-24_W7.62mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a0cae87")
 		(at 123.825 112.903 90)
@@ -5583,7 +5585,7 @@
 			)
 		)
 	)
-	(footprint "Crystal:Crystal_HC18-U_Horizontal"
+	(footprint "interf_u:Crystal_HC18-U_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a0caeb1")
 		(at 113.665 92.71 -90)
@@ -5612,7 +5614,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -5625,7 +5627,7 @@
 			)
 		)
 		(property "Description" "Two pin crystal"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -5921,7 +5923,7 @@
 			(uuid "b596c152-a145-4279-987b-4a2784e73007")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 2.25 5 -90)
+			(at 2.25 5 270)
 			(layer "F.Fab")
 			(uuid "8392b6a8-5bff-422c-93bc-77bde37f82af")
 			(effects
@@ -5966,7 +5968,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+	(footprint "interf_u:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a43d0ce")
 		(at 151.765 41.91 180)
@@ -6227,7 +6229,7 @@
 			)
 		)
 	)
-	(footprint "LED_THT:LED_D5.0mm"
+	(footprint "interf_u:LED_D5.0mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a43d2ea")
 		(at 155.58 38.06)
@@ -6445,7 +6447,7 @@
 			)
 		)
 	)
-	(footprint "LED_THT:LED_D5.0mm"
+	(footprint "interf_u:LED_D5.0mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a43d2fb")
 		(at 165.71 38.08)
@@ -6663,7 +6665,7 @@
 			)
 		)
 	)
-	(footprint "Connector_Dsub:DSUB-25_Female_Horizontal_P2.77x2.84mm_EdgePinOffset9.90mm_Housed_MountingHolesOffset11.32mm"
+	(footprint "interf_u:DSUB-25_Female_Horizontal_P2.77x2.84mm_EdgePinOffset9.90mm_Housed_MountingHolesOffset11.32mm"
 		(locked yes)
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a4472d7")
@@ -7108,7 +7110,7 @@
 			(drill 3.2)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(uuid "cbd961e3-6f6a-49ea-9166-d141b78a343e")
+			(uuid "ca9b31fa-c59c-4416-9da0-333c415de825")
 		)
 		(pad "1" thru_hole rect
 			(at 0 0 90)
@@ -7398,7 +7400,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Array_SIP10"
+	(footprint "interf_u:R_Array_SIP10"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a44c66d")
 		(at 95.885 113.03)
@@ -9937,7 +9939,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+	(footprint "interf_u:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a59c08c")
 		(at 92.075 57.15 180)
@@ -10198,14 +10200,14 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+	(footprint "interf_u:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a59c0a2")
 		(at 127.635 91.44 -90)
 		(descr "Resistor, Axial_DIN0207 series, Axial, Horizontal, pin pitch=7.62mm, 0.25W = 1/4W, length*diameter=6.3*2.5mm^2, http://cdn-reichelt.de/documents/datenblatt/B400/1_4W%23YAG.pdf")
 		(tags "Resistor Axial_DIN0207 series Axial Horizontal pin pitch 7.62mm 0.25W = 1/4W length 6.3mm diameter 2.5mm")
 		(property "Reference" "R2"
-			(at 3.81 -2.31 -90)
+			(at 3.81 -2.31 270)
 			(layer "F.SilkS")
 			(uuid "40bd7a71-2bcb-4a64-ba19-57ccc34b7168")
 			(effects
@@ -10216,7 +10218,7 @@
 			)
 		)
 		(property "Value" "1K"
-			(at 3.81 2.31 -90)
+			(at 3.81 2.31 270)
 			(layer "F.Fab")
 			(uuid "4bf11c84-0e0f-46c3-bd95-968c632f7dc5")
 			(effects
@@ -10227,7 +10229,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -10240,7 +10242,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -10416,7 +10418,7 @@
 			(uuid "4cd3e337-63a7-4d28-af97-b98f45f98771")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 3.81 0 -90)
+			(at 3.81 0 270)
 			(layer "F.Fab")
 			(uuid "eacc1e12-74f2-45f2-a0b5-489760d1e1cd")
 			(effects
@@ -10459,7 +10461,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+	(footprint "interf_u:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a59c0b8")
 		(at 117.475 99.06 90)

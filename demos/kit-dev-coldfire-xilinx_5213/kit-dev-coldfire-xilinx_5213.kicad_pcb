@@ -1,5 +1,5 @@
 (kicad_pcb
-	(version 20241129)
+	(version 20241229)
 	(generator "pcbnew")
 	(generator_version "9.0")
 	(general
@@ -17,20 +17,20 @@
 		(4 "In1.Cu" signal)
 		(6 "In2.Cu" signal)
 		(2 "B.Cu" signal)
-		(9 "F.Adhes" user)
-		(11 "B.Adhes" user)
+		(9 "F.Adhes" user "F.Adhesive")
+		(11 "B.Adhes" user "B.Adhesive")
 		(13 "F.Paste" user)
 		(15 "B.Paste" user)
-		(5 "F.SilkS" user)
-		(7 "B.SilkS" user)
+		(5 "F.SilkS" user "F.Silkscreen")
+		(7 "B.SilkS" user "B.Silkscreen")
 		(1 "F.Mask" user)
 		(3 "B.Mask" user)
-		(17 "Dwgs.User" user)
-		(19 "Cmts.User" user)
+		(17 "Dwgs.User" user "User.Drawings")
+		(19 "Cmts.User" user "User.Comments")
 		(25 "Edge.Cuts" user)
 		(27 "Margin" user)
-		(31 "F.CrtYd" user)
-		(29 "B.CrtYd" user)
+		(31 "F.CrtYd" user "F.Courtyard")
+		(29 "B.CrtYd" user "B.Courtyard")
 		(35 "F.Fab" user)
 		(33 "B.Fab" user)
 	)
@@ -113,8 +113,8 @@
 		(tenting front back)
 		(aux_axis_origin 65.151 148.4122)
 		(pcbplotparams
-			(layerselection 0x000010fc_ffffffff)
-			(plot_on_all_layers_selection 0x00001000_00000000)
+			(layerselection 0x00000000_00000000_000010fc_ffffffff)
+			(plot_on_all_layers_selection 0x00000000_00000000_00001000_00000000)
 			(disableapertmacros no)
 			(usegerberextensions no)
 			(usegerberattributes yes)
@@ -132,11 +132,13 @@
 			(pdf_front_fp_property_popups yes)
 			(pdf_back_fp_property_popups yes)
 			(pdf_metadata yes)
+			(pdf_single_document no)
 			(dxfpolygonmode yes)
 			(dxfimperialunits yes)
 			(dxfusepcbnewfont yes)
 			(psnegative no)
 			(psa4output no)
+			(plot_black_and_white yes)
 			(plotinvisibletext no)
 			(sketchpadsonfab no)
 			(plotpadnumbers no)
@@ -456,18 +458,6 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "9c37c3f4-ed5c-40f7-a5c2-fb713159ee7c")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 0 0 0)
 			(unlocked yes)
@@ -646,14 +636,14 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical"
+	(footprint "kit-dev-coldfire:PinHeader_1x01_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dc1f")
 		(at 152.019 102.489 -90)
 		(descr "Through hole straight pin header, 1x01, 2.54mm pitch, single row")
 		(tags "Through hole pin header THT 1x01 2.54mm single row")
 		(property "Reference" "ALLPST101"
-			(at 0 -2.33 -90)
+			(at 0 -2.33 270)
 			(layer "F.SilkS")
 			(uuid "335da0d2-619b-4b10-8bf6-afed39c73e75")
 			(effects
@@ -664,7 +654,7 @@
 			)
 		)
 		(property "Value" "CONN_1"
-			(at 0 2.33 -90)
+			(at 0 2.33 270)
 			(layer "F.Fab")
 			(uuid "f88e6185-e00e-4c39-9605-2f35d89866df")
 			(effects
@@ -674,20 +664,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "fd823e15-2d05-4920-8614-961632e17fe5")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -700,7 +678,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -901,7 +879,7 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_2x13_P2.54mm_Vertical"
+	(footprint "kit-dev-coldfire:PinHeader_2x13_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dc2d")
 		(at 76.327 106.299)
@@ -925,18 +903,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "31951c4a-219c-48e9-a317-67ea4863cea7")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -1451,7 +1417,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dc4e")
 		(at 136.652 117.729 -90)
@@ -1479,20 +1445,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "dd3b0fb6-b36b-4d41-a9d2-12cfa0d2431c")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -1505,7 +1459,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -1664,7 +1618,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dc5a")
 		(at 136.652 123.063 90)
@@ -1688,18 +1642,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "a3bad490-a2f0-4d8c-8876-d223c2c7a3cd")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -1877,7 +1819,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dc66")
 		(at 164.846 94.361 90)
@@ -1901,18 +1843,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "73007401-ba2a-4ca1-8bed-da89e414aa40")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -2090,7 +2020,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dc72")
 		(at 141.605 91.059 180)
@@ -2114,18 +2044,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "cc61310b-c733-4ca4-b096-0a68fc879640")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -2303,7 +2221,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dc7e")
 		(at 134.493 91.44 180)
@@ -2327,18 +2245,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "b9537c11-7433-4926-b353-13dedf908dc6")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -2516,7 +2422,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dc96")
 		(at 125.349 99.822 -90)
@@ -2544,20 +2450,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "f5da9687-94b1-42ec-9979-d7a542b7d1d4")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -2570,7 +2464,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -2729,7 +2623,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dca2")
 		(at 124.587 103.505 180)
@@ -2753,18 +2647,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "b551cd71-4082-4413-a633-365393062b25")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -2942,7 +2824,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dcae")
 		(at 131.953 112.268 180)
@@ -2966,18 +2848,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "79b196a2-9f2e-4709-a227-a12e60a19433")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -3155,7 +3025,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dcba")
 		(at 137.668 111.76 180)
@@ -3179,18 +3049,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "d5e1457b-a2a0-494b-bb48-f778e56e2de5")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -3368,7 +3226,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dcde")
 		(at 160.401 105.537)
@@ -3392,18 +3250,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "38813735-2cfc-4e0b-ade6-e6ff61c1307a")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -3581,7 +3427,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dcea")
 		(at 160.401 111.252 180)
@@ -3605,18 +3451,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "8416e372-b091-4763-9c49-4d0b60d4e7b0")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -3817,18 +3651,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "6e3a9629-7f45-48a1-8574-1e4512fc46b3")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -4050,18 +3872,6 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "c8a082bb-8df7-4f5f-a126-53182ddbeff1")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 0 0 0)
 			(unlocked yes)
@@ -4252,7 +4062,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dd12")
 		(at 123.825 108.712)
@@ -4276,18 +4086,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "d0154390-e741-4512-927c-5657cd8b2c5b")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -4465,7 +4263,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dd1e")
 		(at 141.732 112.395 -90)
@@ -4493,20 +4291,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "45e0a907-5ba7-4296-a5b4-55ccd89b2acd")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -4519,7 +4305,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -4678,7 +4464,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dd2a")
 		(at 143.891 112.395 -90)
@@ -4706,20 +4492,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "00fd13a5-2681-4772-a0d9-149f217072c3")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -4732,7 +4506,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -4891,7 +4665,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dd36")
 		(at 192.532 74.168 -90)
@@ -4919,20 +4693,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "aa1bb0fc-407a-4a00-a7be-16f77dab58a4")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -4945,7 +4707,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -5104,7 +4866,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dd42")
 		(at 189.23 71.247 180)
@@ -5128,18 +4890,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "8c59a200-ed3d-4497-9356-4d9365a2aa20")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -5317,7 +5067,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dd4e")
 		(at 181.102 73.914 -90)
@@ -5345,20 +5095,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "8ec1757a-a94c-4338-a209-0c00d97e8183")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -5371,7 +5109,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -5530,7 +5268,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dd5a")
 		(at 181.102 78.232 -90)
@@ -5558,20 +5296,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "4943d45c-ab38-42ba-9d19-b8521839b6ba")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -5584,7 +5310,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -5743,7 +5469,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dd66")
 		(at 102.616 111.252)
@@ -5767,18 +5493,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "52dfc6d4-00fa-4a3e-8d3e-4ef940439e2c")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -5956,7 +5670,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dd72")
 		(at 178.562 78.105 90)
@@ -5980,18 +5694,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "5206d504-74f4-4a32-a5d2-9236aeb921cf")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -6169,7 +5871,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dd7e")
 		(at 164.592 74.168 -90)
@@ -6197,20 +5899,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "87e0e499-7798-4b06-8ec8-f1b1c456fb9c")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -6223,7 +5913,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -6382,7 +6072,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dd8a")
 		(at 161.29 71.247 180)
@@ -6406,18 +6096,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "f65093b5-7d15-4b40-afa8-c517e5c55e6a")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -6595,7 +6273,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dd96")
 		(at 153.162 73.787 -90)
@@ -6623,20 +6301,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "f11e05ed-6aca-484b-8167-a0345844b377")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -6649,7 +6315,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -6808,7 +6474,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dda2")
 		(at 153.035 78.105 -90)
@@ -6836,20 +6502,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "56c2d805-6566-4aea-aaa1-0ccc9557a196")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -6862,7 +6516,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -7021,7 +6675,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8ddae")
 		(at 150.876 78.105 90)
@@ -7045,18 +6699,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "abccf9f6-bed7-426f-8486-9f032bb82f23")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -7234,7 +6876,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8ddba")
 		(at 108.458 84.328)
@@ -7258,18 +6900,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "f826e5e6-b6a1-4092-8772-57931aeac3ad")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -7447,7 +7077,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8ddc6")
 		(at 128.27 71.247 180)
@@ -7471,18 +7101,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "d4708ca4-a890-4159-91e6-a9a45a31eb6c")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -7660,7 +7278,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8ddd2")
 		(at 120.142 78.105 -90)
@@ -7688,20 +7306,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "d5d756f7-eed0-4f22-ba5c-5e7de5647fc4")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -7714,7 +7320,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -7873,7 +7479,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_THT:CP_Radial_D8.0mm_P5.00mm"
+	(footprint "kit-dev-coldfire:CP_Radial_D8.0mm_P5.00mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8ddde")
 		(at 88.9 87.63 90)
@@ -7897,18 +7503,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "9ae8c900-7e55-4e5f-b515-2c6c33bc9af4")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -9611,7 +9205,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_THT:CP_Radial_D8.0mm_P5.00mm"
+	(footprint "kit-dev-coldfire:CP_Radial_D8.0mm_P5.00mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dde4")
 		(at 88.9 100.33 90)
@@ -9635,18 +9229,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "d8b20866-7323-4ff1-880d-92200d7f902f")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -11349,7 +10931,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8ddea")
 		(at 104 77.5 90)
@@ -11373,18 +10955,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "bf4bc216-2d48-4111-ac6a-1a53b221409a")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -11562,7 +11132,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8ddf6")
 		(at 183.769 125.73)
@@ -11586,18 +11156,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "05bfaa42-3c07-4053-9c24-dcba6104ca22")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -11775,7 +11333,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8de02")
 		(at 120.142 73.787 -90)
@@ -11803,20 +11361,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "30a89d7b-96c2-4cd2-8d0d-79a2fbfe5b85")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -11829,7 +11375,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -11988,7 +11534,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8de0e")
 		(at 117.602 78.105 90)
@@ -12012,18 +11558,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "1c1b023f-3805-48bd-aa22-ac24276fd2a1")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -12201,7 +11735,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8de1a")
 		(at 130.937 74.549 -90)
@@ -12229,20 +11763,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "4e1b2ec7-f35a-4587-b7c8-98b7bcdb7114")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -12255,7 +11777,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -12414,14 +11936,14 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
+	(footprint "kit-dev-coldfire:PinHeader_1x02_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8deb5")
 		(at 96.647 95.758 180)
 		(descr "Through hole straight pin header, 1x02, 2.54mm pitch, single row")
 		(tags "Through hole pin header THT 1x02 2.54mm single row")
 		(property "Reference" "CAN_TERM201"
-			(at 2.667 1.143 -90)
+			(at 2.667 1.143 270)
 			(layer "F.SilkS")
 			(uuid "2de0159b-5161-40b5-a805-c6f0e6e225a4")
 			(effects
@@ -12438,18 +11960,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "0ed35ece-d881-44b6-b378-450d8c255a4b")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -12635,7 +12145,7 @@
 			(uuid "54c5083d-dd1a-4347-8a32-a1b1d9385f47")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 1.27 -90)
+			(at 0 1.27 270)
 			(layer "F.Fab")
 			(uuid "de974e35-b9c8-415d-8fbb-daa2786bc0ab")
 			(effects
@@ -12680,14 +12190,14 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical"
+	(footprint "kit-dev-coldfire:PinHeader_1x01_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8ded0")
 		(at 83.439 134.239 -90)
 		(descr "Through hole straight pin header, 1x01, 2.54mm pitch, single row")
 		(tags "Through hole pin header THT 1x01 2.54mm single row")
 		(property "Reference" "CLKOUT101"
-			(at 0 -2.33 -90)
+			(at 0 -2.33 270)
 			(layer "F.SilkS")
 			(uuid "dc8b463c-93f4-4d1e-93fd-58ffd0e65ac3")
 			(effects
@@ -12698,7 +12208,7 @@
 			)
 		)
 		(property "Value" "CONN_1"
-			(at 0 2.33 -90)
+			(at 0 2.33 270)
 			(layer "F.Fab")
 			(uuid "a26835ce-6e7b-4390-997c-7f743ec4c81a")
 			(effects
@@ -12708,20 +12218,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "086d435c-f6a3-4208-82e9-4cd4a8711efb")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -12734,7 +12232,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -12935,7 +12433,7 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
+	(footprint "kit-dev-coldfire:PinHeader_1x03_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8ded5")
 		(at 114.5 78.613 180)
@@ -12959,18 +12457,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "6a556a13-a0e2-43d6-8b9a-837af1a198fb")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -13156,7 +12642,7 @@
 			(uuid "50bea08d-14b3-4afb-9e65-6e9b6a029643")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 2.54 -90)
+			(at 0 2.54 270)
 			(layer "F.Fab")
 			(uuid "2b87bd21-127e-432c-9bb6-aa20a98eb606")
 			(effects
@@ -13212,14 +12698,14 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
+	(footprint "kit-dev-coldfire:PinHeader_1x03_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dee0")
 		(at 110.744 78.613 180)
 		(descr "Through hole straight pin header, 1x03, 2.54mm pitch, single row")
 		(tags "Through hole pin header THT 1x03 2.54mm single row")
 		(property "Reference" "COM_SEL202"
-			(at 0.254 9.525 -90)
+			(at 0.254 9.525 270)
 			(layer "F.SilkS")
 			(uuid "4abc9a9f-f688-430e-a8d8-63191d8de517")
 			(effects
@@ -13236,18 +12722,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "2ac2876a-43b3-4c86-a7d9-867e72241112")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -13433,7 +12907,7 @@
 			(uuid "6e2625fb-0d24-4f4e-8ad0-5ee5b1af1b95")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 2.54 -90)
+			(at 0 2.54 270)
 			(layer "F.Fab")
 			(uuid "5751adf3-f509-4bb1-b417-4511528bba18")
 			(effects
@@ -13489,14 +12963,14 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
+	(footprint "kit-dev-coldfire:PinHeader_1x02_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8def6")
 		(at 91.44 134.62 -90)
 		(descr "Through hole straight pin header, 1x02, 2.54mm pitch, single row")
 		(tags "Through hole pin header THT 1x02 2.54mm single row")
 		(property "Reference" "CT101"
-			(at 0 -2.33 -90)
+			(at 0 -2.33 270)
 			(layer "F.SilkS")
 			(uuid "8c59b19c-0333-4dcb-8b02-0025c6af31f4")
 			(effects
@@ -13507,7 +12981,7 @@
 			)
 		)
 		(property "Value" "JUMPER"
-			(at 0 4.87 -90)
+			(at 0 4.87 270)
 			(layer "F.Fab")
 			(uuid "8d92bd06-fe89-4f11-8db5-b2a347bda6f5")
 			(effects
@@ -13517,20 +12991,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "e8a8b45c-a645-473a-9376-7e981b8a2932")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -13543,7 +13005,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -13779,18 +13241,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "22d0a7c5-a999-4d65-bc80-c23b18b0b54c")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -14079,18 +13529,6 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "7a380bef-e516-4334-ad68-3be237c609df")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 0 0 0)
 			(unlocked yes)
@@ -14347,7 +13785,7 @@
 			)
 		)
 	)
-	(footprint "Diode_THT:D_DO-15_P12.70mm_Horizontal"
+	(footprint "kit-dev-coldfire:D_DO-15_P12.70mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8df19")
 		(at 95 77 180)
@@ -14371,18 +13809,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "db003bb5-e364-43c8-8209-d0cd1f4cbd24")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -14684,7 +14110,7 @@
 			)
 		)
 	)
-	(footprint "LED_SMD:LED_1206_3216Metric"
+	(footprint "kit-dev-coldfire:LED_1206_3216Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8df28")
 		(at 212.09 76.835 180)
@@ -14708,18 +14134,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "2efbcd6a-9a6a-4514-8087-e5d5c0f73e3b")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -14919,7 +14333,7 @@
 			)
 		)
 	)
-	(footprint "LED_SMD:LED_1206_3216Metric"
+	(footprint "kit-dev-coldfire:LED_1206_3216Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8df36")
 		(at 212.09 80.645 180)
@@ -14943,18 +14357,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "babbf632-cf14-41ad-879c-60c2be6a7dfd")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -15180,20 +14582,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "1bcbd5d9-6c7a-43d9-9040-bda14422a0af")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -15206,7 +14596,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -15411,7 +14801,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+	(footprint "kit-dev-coldfire:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8df55")
 		(at 119.634 101.346 180)
@@ -15435,18 +14825,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "4f745712-e8a4-4b92-b3d4-44e2eee424c5")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -15625,14 +15003,14 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical"
+	(footprint "kit-dev-coldfire:PinHeader_1x01_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8df60")
 		(at 89.535 140.97 -90)
 		(descr "Through hole straight pin header, 1x01, 2.54mm pitch, single row")
 		(tags "Through hole pin header THT 1x01 2.54mm single row")
 		(property "Reference" "GND101"
-			(at 0 -2.33 -90)
+			(at 0 -2.33 270)
 			(layer "F.SilkS")
 			(uuid "82727c05-8a9a-4712-8756-07974af105e3")
 			(effects
@@ -15643,7 +15021,7 @@
 			)
 		)
 		(property "Value" "CONN_1"
-			(at 0 2.33 -90)
+			(at 0 2.33 270)
 			(layer "F.Fab")
 			(uuid "159ad00c-0910-4b85-8621-03b523a56da7")
 			(effects
@@ -15653,20 +15031,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "cdd8297e-e942-4fde-a9d2-c90019f63d9d")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -15679,7 +15045,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -15908,20 +15274,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "a13c2d3a-45cb-4057-b06f-cf114b622517")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -15934,7 +15288,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -16141,7 +15495,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+	(footprint "kit-dev-coldfire:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8df72")
 		(at 118.999 110.236)
@@ -16165,18 +15519,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "3c91e21e-a700-4301-abc3-298e369aea2f")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -16355,7 +15697,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+	(footprint "kit-dev-coldfire:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8df7d")
 		(at 151.892 109.22 180)
@@ -16379,18 +15721,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "616b486b-8b5b-4ac3-8772-17290984238b")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -16569,7 +15899,7 @@
 			)
 		)
 	)
-	(footprint "LED_SMD:LED_1206_3216Metric"
+	(footprint "kit-dev-coldfire:LED_1206_3216Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8df88")
 		(at 88.392 117.094)
@@ -16593,18 +15923,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "3f45a63e-98d3-4f0d-951a-2df682e00d3c")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -16804,7 +16122,7 @@
 			)
 		)
 	)
-	(footprint "LED_SMD:LED_1206_3216Metric"
+	(footprint "kit-dev-coldfire:LED_1206_3216Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8df96")
 		(at 88.392 121.158)
@@ -16828,18 +16146,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "628f8f6f-de89-401a-a7ba-c39ee20dd39e")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -17039,7 +16345,7 @@
 			)
 		)
 	)
-	(footprint "LED_SMD:LED_1206_3216Metric"
+	(footprint "kit-dev-coldfire:LED_1206_3216Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dfa4")
 		(at 88.392 125.349)
@@ -17063,18 +16369,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "a67f1283-0e91-4d18-ac73-e7a1ed6bc8df")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -17274,7 +16568,7 @@
 			)
 		)
 	)
-	(footprint "LED_SMD:LED_1206_3216Metric"
+	(footprint "kit-dev-coldfire:LED_1206_3216Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dfb2")
 		(at 88.392 129.54)
@@ -17298,18 +16592,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "ac048d6a-a828-4e56-84fe-23352db254bd")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -17509,14 +16791,14 @@
 			)
 		)
 	)
-	(footprint "LED_SMD:LED_1206_3216Metric"
+	(footprint "kit-dev-coldfire:LED_1206_3216Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dfc0")
 		(at 104.14 138.176 90)
 		(descr "LED SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator")
 		(tags "LED")
 		(property "Reference" "LED205"
-			(at 0 -2.05 -90)
+			(at 0 -2.05 270)
 			(layer "F.SilkS")
 			(uuid "879aa763-5f42-44f1-8aae-bac2e0a446d7")
 			(effects
@@ -17527,24 +16809,12 @@
 			)
 		)
 		(property "Value" "LED"
-			(at 0 2.05 -90)
+			(at 0 2.05 270)
 			(layer "F.Fab")
 			(uuid "d5a6fa94-850a-4c2c-9d38-0c5fb7286a23")
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "bbf22b45-453b-4db8-92af-b1f7830f2f19")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -17701,7 +16971,7 @@
 			(uuid "976b3513-f326-4d68-946c-6fb419732717")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(uuid "41453bfc-b4ce-4e40-b025-958dbb5c1bc4")
 			(effects
@@ -17744,7 +17014,7 @@
 			)
 		)
 	)
-	(footprint "LED_SMD:LED_1206_3216Metric"
+	(footprint "kit-dev-coldfire:LED_1206_3216Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dfce")
 		(at 164.846 100.457 90)
@@ -17768,18 +17038,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "a6a991cd-153e-44f4-8cbf-40fb9fdcd423")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -17979,7 +17237,7 @@
 			)
 		)
 	)
-	(footprint "Package_TO_SOT_THT:TO-92"
+	(footprint "kit-dev-coldfire:TO-92"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dfe5")
 		(at 186.69 89.408)
@@ -18003,18 +17261,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "f7693672-5128-4a96-a2eb-7df6e5fc4740")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -18210,14 +17456,14 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_2x30_P2.54mm_Vertical"
+	(footprint "kit-dev-coldfire:PinHeader_2x30_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dff3")
 		(at 184.404 136.906 -90)
 		(descr "Through hole straight pin header, 2x30, 2.54mm pitch, double rows")
 		(tags "Through hole pin header THT 2x30 2.54mm double row")
 		(property "Reference" "MCU_PORT201"
-			(at 1.27 -2.33 -90)
+			(at 1.27 -2.33 270)
 			(layer "F.SilkS")
 			(uuid "524a67f8-df31-437b-883d-47d0978b3ca3")
 			(effects
@@ -18228,7 +17474,7 @@
 			)
 		)
 		(property "Value" "CONN_30X2"
-			(at 1.27 75.99 -90)
+			(at 1.27 75.99 270)
 			(layer "F.Fab")
 			(uuid "0597cbfa-2244-4cfc-a99d-9fb2bea8c400")
 			(effects
@@ -18238,20 +17484,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "77115c46-bcd8-4dc5-84d6-18e435c486d7")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -18264,7 +17498,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -19133,7 +18367,7 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical"
+	(footprint "kit-dev-coldfire:PinHeader_1x06_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e038")
 		(at 223.52 63.5)
@@ -19157,18 +18391,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "7badd4ba-6f95-42d2-9912-385cb594b239")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -19443,7 +18665,7 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_2x20_P2.54mm_Vertical"
+	(footprint "kit-dev-coldfire:PinHeader_2x20_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e051")
 		(at 222.25 88.9)
@@ -19467,18 +18689,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "7e3fe718-cd91-4a43-a458-f328205c50f4")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -20146,14 +19356,14 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_2x04_P2.54mm_Vertical"
+	(footprint "kit-dev-coldfire:PinHeader_2x04_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e080")
 		(at 165.227 117.983 -90)
 		(descr "Through hole straight pin header, 2x04, 2.54mm pitch, double rows")
 		(tags "Through hole pin header THT 2x04 2.54mm double row")
 		(property "Reference" "PULUPEN201"
-			(at 1.651 -2.032 -90)
+			(at 1.651 -2.032 270)
 			(layer "F.SilkS")
 			(uuid "672099f3-325e-4383-b47f-22424c296d22")
 			(effects
@@ -20164,7 +19374,7 @@
 			)
 		)
 		(property "Value" "CONN_4X2"
-			(at 1.27 9.95 -90)
+			(at 1.27 9.95 270)
 			(layer "F.Fab")
 			(uuid "72844a02-690e-49fa-a17f-79f8c30c06ed")
 			(effects
@@ -20174,20 +19384,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "9ad4e996-53f6-489d-a763-e5ce2bd426c2")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -20200,7 +19398,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -20527,18 +19725,6 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "0d4596ef-e061-40a5-afaf-e8373948f560")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 0 0 90)
 			(unlocked yes)
@@ -20689,7 +19875,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e099")
 		(at 128.27 121.285 90)
@@ -20713,18 +19899,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "c9cca96d-4178-4806-9686-8e309185367b")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -20902,7 +20076,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e0a5")
 		(at 104.267 96.647)
@@ -20926,18 +20100,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "34f8eb1a-99ce-4868-92b6-9f797e25a07e")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -21115,7 +20277,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e0b1")
 		(at 183.769 121.158 180)
@@ -21139,18 +20301,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "d330d8da-934f-41ff-8aad-e2bf4852fe2f")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -21328,7 +20478,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e0bd")
 		(at 183.769 123.444 180)
@@ -21352,18 +20502,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "8f71d501-a326-4b2b-b28c-e8bfe71d4129")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -21541,7 +20679,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e0c9")
 		(at 153.035 93.853)
@@ -21565,18 +20703,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "4c3eaffe-9a7c-4669-9e63-9ca1f80e10d2")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -21754,14 +20880,14 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e0d5")
 		(at 163.957 112.268 -90)
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "resistor")
 		(property "Reference" "R104"
-			(at 0 -1.85 -90)
+			(at 0 -1.85 270)
 			(layer "F.SilkS")
 			(uuid "cea83243-d519-4030-8a83-f55ebe882352")
 			(effects
@@ -21772,7 +20898,7 @@
 			)
 		)
 		(property "Value" "1K"
-			(at 0 1.85 -90)
+			(at 0 1.85 270)
 			(layer "F.Fab")
 			(uuid "32f8a025-4e62-4e3d-9892-84bca2918be1")
 			(effects
@@ -21782,20 +20908,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "dd0135c6-fc49-4f32-870a-4b274443fbfc")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -21808,7 +20922,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -21926,7 +21040,7 @@
 			(uuid "2de77692-5254-4f05-a450-892ac7e2dd92")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(uuid "f52223c0-1e70-4214-ab6c-3b76eefd9a3c")
 			(effects
@@ -21967,7 +21081,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e0e1")
 		(at 169.672 117.094)
@@ -21991,18 +21105,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "b791ab2f-b44a-433d-9045-9a708b0c252b")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -22180,7 +21282,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e0ed")
 		(at 141.478 85.852 90)
@@ -22204,18 +21306,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "f8af88a1-a95f-406a-995d-45cf019a25f8")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -22393,7 +21483,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e0f9")
 		(at 173.863 117.094 180)
@@ -22417,18 +21507,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "dbdcad6e-ccc7-4f28-8f17-63a9db7f8ce4")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -22606,7 +21684,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e105")
 		(at 153.035 98.298)
@@ -22630,18 +21708,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "004f11cf-ab48-42c0-be9d-a4a68fe93ae9")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -22819,7 +21885,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e111")
 		(at 160.401 114.046 180)
@@ -22843,18 +21909,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "ad014428-6d26-47ca-8f95-25a70503010e")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -23032,7 +22086,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e11d")
 		(at 153.035 96.012)
@@ -23056,18 +22110,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "95042a85-3925-4640-9150-1a327cc04405")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -23245,14 +22287,14 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e129")
 		(at 164.846 105.41 -90)
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "resistor")
 		(property "Reference" "R103"
-			(at 0 -1.85 -90)
+			(at 0 -1.85 270)
 			(layer "F.SilkS")
 			(uuid "3d895f2b-ed7f-42c9-9b9e-8efe3f253cd7")
 			(effects
@@ -23263,7 +22305,7 @@
 			)
 		)
 		(property "Value" "270"
-			(at 0 1.85 -90)
+			(at 0 1.85 270)
 			(layer "F.Fab")
 			(uuid "ae7a87ed-bdd0-4e7b-af53-01903e63604a")
 			(effects
@@ -23273,20 +22315,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "d9250f01-acf5-440a-999e-3a8c44504d2a")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -23299,7 +22329,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -23417,7 +22447,7 @@
 			(uuid "fcf4cab9-5d77-45a1-84ae-d33af85fa49c")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(uuid "a12e38e6-defb-46d1-a24b-0dfbedb79718")
 			(effects
@@ -23458,7 +22488,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e135")
 		(at 158.623 94.869 90)
@@ -23482,18 +22512,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "ad80eb28-d36a-4ac9-a3c8-6f47ca6dcf27")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -23671,7 +22689,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e141")
 		(at 120.142 97.282 180)
@@ -23695,18 +22713,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "a115884c-317e-4607-92b1-7444241a8f7f")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -23884,7 +22890,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e14d")
 		(at 83.312 104.267 180)
@@ -23908,18 +22914,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "483bbac3-9d5b-40b6-a940-ddb4edc5895d")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -24097,7 +23091,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e159")
 		(at 83.312 106.553 180)
@@ -24121,18 +23115,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "7a9e05fd-4f0f-4d70-9677-5f967475e1df")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -24310,7 +23292,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e165")
 		(at 83.312 119.126 180)
@@ -24334,18 +23316,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "6d8c721d-1258-4ef5-8b58-78003700025b")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -24523,7 +23493,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e171")
 		(at 83.312 121.412 180)
@@ -24547,18 +23517,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "8fbc98ee-0ba6-4e9f-b3d1-4fb5bd0af667")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -24736,7 +23694,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e17d")
 		(at 158.623 90.297 90)
@@ -24760,18 +23718,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "39233c11-649d-4afa-8275-c3b004efc30e")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -24949,7 +23895,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e189")
 		(at 161.544 86.995)
@@ -24973,18 +23919,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "d5148f86-b9f3-4175-9f84-16c4b1fcc6d5")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -25162,7 +24096,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e195")
 		(at 127.889 84.455 180)
@@ -25186,18 +24120,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "ea88dc64-342e-404e-8ae7-ad73441c31b8")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -25375,7 +24297,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e1a1")
 		(at 104.267 98.933)
@@ -25399,18 +24321,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "b1f72f3b-e3c1-49ac-b7d1-7d25a929c15b")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -25588,14 +24498,14 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e1ad")
 		(at 84.836 113.792 -90)
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "resistor")
 		(property "Reference" "R117"
-			(at 0.127 -1.524 -90)
+			(at 0.127 -1.524 270)
 			(layer "F.SilkS")
 			(uuid "4d2ad7df-a3c9-4b3e-a655-20882f457ed9")
 			(effects
@@ -25606,7 +24516,7 @@
 			)
 		)
 		(property "Value" "10K"
-			(at 0 1.85 -90)
+			(at 0 1.85 270)
 			(layer "F.Fab")
 			(uuid "b082dd8d-dc06-43f7-ab7b-30f8453eb018")
 			(effects
@@ -25616,20 +24526,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "1ba9b5a9-b162-441f-88f4-14d95e2dded7")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -25642,7 +24540,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -25760,7 +24658,7 @@
 			(uuid "50ac1e66-8ed6-4b38-a097-da01c00c1245")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(uuid "06986a4f-2cc2-4b46-bd7a-90e1a1463ac8")
 			(effects
@@ -25801,7 +24699,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e1b9")
 		(at 93.218 117.094)
@@ -25825,18 +24723,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "7a58310e-9482-442b-ae38-8a79da69128d")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -26014,7 +24900,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e1c5")
 		(at 192.532 82.296 90)
@@ -26038,18 +24924,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "96db8461-d216-4e7e-a77f-898fd4adb2b8")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -26227,7 +25101,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e1d1")
 		(at 93.218 121.158)
@@ -26251,18 +25125,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "ea89412b-99a8-436d-a81a-2838a29ffdf9")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -26440,7 +25302,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e1dd")
 		(at 93.218 125.349)
@@ -26464,18 +25326,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "f258f925-4017-49ab-8625-8b90488f693f")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -26653,7 +25503,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e1e9")
 		(at 93.218 129.413)
@@ -26677,18 +25527,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "4397e5b3-b311-4f72-8969-0abc0e4fcea1")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -26866,7 +25704,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e1f5")
 		(at 96.52 109.728 180)
@@ -26890,18 +25728,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "54fefda8-0ef0-4f9c-89b6-70f6d2f7518d")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -27079,7 +25905,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e201")
 		(at 164.592 82.296 90)
@@ -27103,18 +25929,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "4964484c-ff28-4821-99cb-355cf8aca436")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -27292,7 +26106,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e20d")
 		(at 101.854 92.837)
@@ -27316,18 +26130,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "ab83e8b7-fcc2-4691-8ab5-2f3ffb853dee")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -27505,14 +26307,14 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e219")
 		(at 99.695 85.471 180)
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "resistor")
 		(property "Reference" "R209"
-			(at -2.159 0.254 -90)
+			(at -2.159 0.254 270)
 			(layer "F.SilkS")
 			(uuid "0c144423-e91d-47ac-a636-93cab5106bba")
 			(effects
@@ -27529,18 +26331,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "39cc2c1d-bfc5-48ae-ad67-2a27cb4b4ce1")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -27718,7 +26508,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e225")
 		(at 100.584 101.473 90)
@@ -27742,18 +26532,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "33c01f6b-70e5-40b2-9e39-0146df37a38a")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -27931,7 +26709,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e231")
 		(at 134.874 113.411 -90)
@@ -27949,7 +26727,7 @@
 			)
 		)
 		(property "Value" "22"
-			(at 0 1.85 -90)
+			(at 0 1.85 270)
 			(layer "F.Fab")
 			(uuid "826634d0-8d3e-43a2-b49d-3b0bc7be4de6")
 			(effects
@@ -27959,20 +26737,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "0871fd8f-1732-41d0-84cb-86a85bd2b31c")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -27985,7 +26751,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -28103,7 +26869,7 @@
 			(uuid "cbaef3cf-0567-422d-988c-0317bd7ee371")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(uuid "80632345-a1dd-47ed-a0f8-8aca22c55c27")
 			(effects
@@ -28144,7 +26910,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e23d")
 		(at 157.734 125.476 90)
@@ -28168,18 +26934,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "cb06bdcd-c2e8-459a-8fb3-74a65f4e7979")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -28357,7 +27111,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e249")
 		(at 160.274 125.476 90)
@@ -28381,18 +27135,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "97faa1b6-c91f-4508-b78a-9c08917bfdcc")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -28570,7 +27312,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e255")
 		(at 162.814 125.476 90)
@@ -28594,18 +27336,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "d745ff15-051d-4d01-a9d5-982a6ac2ea83")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -28783,7 +27513,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e261")
 		(at 165.354 125.476 90)
@@ -28807,18 +27537,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "6bc7408c-d58a-44ae-8d4c-04d8e7e2b4b9")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -28996,7 +27714,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e26d")
 		(at 105.41 133.858)
@@ -29020,18 +27738,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "f4ebd9ec-20b2-4b48-a3e9-144500ddf763")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -29209,14 +27915,14 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e279")
 		(at 218.25 73 -90)
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "resistor")
 		(property "Reference" "R301"
-			(at 0 -1.85 -90)
+			(at 0 -1.85 270)
 			(layer "F.SilkS")
 			(uuid "2a62ff51-77f4-44eb-8442-255a8a165a6f")
 			(effects
@@ -29227,7 +27933,7 @@
 			)
 		)
 		(property "Value" "4K7"
-			(at 0 1.85 -90)
+			(at 0 1.85 270)
 			(layer "F.Fab")
 			(uuid "a4800fa5-898b-46cb-8c9d-1c98654f3237")
 			(effects
@@ -29237,20 +27943,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "b3702ab0-9c1d-436d-aa2d-856b5d1d4332")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -29263,7 +27957,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -29381,7 +28075,7 @@
 			(uuid "e8cf9fe0-1619-4bd2-a59b-84cc2c8a9ab5")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(uuid "467c3ce2-2087-4a7c-9241-132f7043acec")
 			(effects
@@ -29422,7 +28116,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e285")
 		(at 206.375 76.835)
@@ -29446,18 +28140,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "6af981a7-134c-4870-bc99-eb457e293fd6")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -29635,7 +28317,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e291")
 		(at 206.375 80.645)
@@ -29659,18 +28341,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "064706d5-3632-4f50-9f12-8fa76d9c5a25")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -29848,7 +28518,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "kit-dev-coldfire:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e29d")
 		(at 207.01 134.62)
@@ -29872,18 +28542,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "bfcee8db-a78b-4821-bdf6-4f8efc7f155c")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -30123,7 +28781,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e2aa")
 		(at 99.695 87.757)
@@ -30147,18 +28805,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "e4240eb9-4b2c-42df-af0c-659242e0af46")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -30336,7 +28982,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_0805_2012Metric"
+	(footprint "kit-dev-coldfire:R_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e2b6")
 		(at 99.695 90.043)
@@ -30360,18 +29006,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "9438d302-6a6a-449e-9413-2d6fbbd7ac69")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -30549,7 +29183,7 @@
 			)
 		)
 	)
-	(footprint "LED_SMD:LED_1206_3216Metric"
+	(footprint "kit-dev-coldfire:LED_1206_3216Metric"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e2c2")
 		(at 164.846 89.281 90)
@@ -30573,18 +29207,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "402d57d4-0a49-4e3b-a0e8-83102dafc20e")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -30784,7 +29406,7 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical"
+	(footprint "kit-dev-coldfire:PinHeader_1x01_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e2d0")
 		(at 100.457 95.758 -90)
@@ -30802,7 +29424,7 @@
 			)
 		)
 		(property "Value" "CONN_1"
-			(at 0 2.33 -90)
+			(at 0 2.33 270)
 			(layer "F.Fab")
 			(uuid "f0fc1742-a45f-48c2-bd8f-a8b6900e0847")
 			(effects
@@ -30812,20 +29434,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "ba2f1958-e847-4fc2-adc3-28199f20d6da")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -30838,7 +29448,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -31065,18 +29675,6 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "0aa0007b-d800-441d-a519-52d30712cfe9")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 0 0 180)
 			(unlocked yes)
@@ -31277,18 +29875,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "88905d13-0109-4ef2-ad81-cda0dd245e95")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -31497,18 +30083,6 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "e96880f7-5206-41c5-b928-e17f842e272e")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 0 0 0)
 			(unlocked yes)
@@ -31694,7 +30268,7 @@
 		(descr "Switch inverseur")
 		(tags "SWITCH DEV")
 		(property "Reference" "SW_ONOFF201"
-			(at 9.017 2.413 -90)
+			(at 9.017 2.413 270)
 			(layer "F.SilkS")
 			(uuid "9a71ba7a-5828-40a0-8935-1d4226291ea3")
 			(effects
@@ -31705,24 +30279,12 @@
 			)
 		)
 		(property "Value" "SWITCH_INV"
-			(at 8.89 -2.286 -90)
+			(at 8.89 -2.286 270)
 			(layer "F.SilkS")
 			(uuid "6955f418-7ea2-4bf4-b3aa-75882db38052")
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "c74f2653-8111-4c1c-bdc0-1e0af249a87d")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -31983,14 +30545,14 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical"
+	(footprint "kit-dev-coldfire:PinHeader_1x01_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e319")
 		(at 83.439 138.557 -90)
 		(descr "Through hole straight pin header, 1x01, 2.54mm pitch, single row")
 		(tags "Through hole pin header THT 1x01 2.54mm single row")
 		(property "Reference" "TA-101"
-			(at 0 -2.33 -90)
+			(at 0 -2.33 270)
 			(layer "F.SilkS")
 			(uuid "7e0c0a1b-783b-4823-a759-be50da3d48cd")
 			(effects
@@ -32001,7 +30563,7 @@
 			)
 		)
 		(property "Value" "CONN_1"
-			(at 0 2.33 -90)
+			(at 0 2.33 270)
 			(layer "F.Fab")
 			(uuid "8e450927-7968-4bbf-940d-2d087c5a2a86")
 			(effects
@@ -32011,20 +30573,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "29aa487c-e317-45ce-8709-c025bcf15342")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -32037,7 +30587,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -32238,7 +30788,7 @@
 			)
 		)
 	)
-	(footprint "TerminalBlock_Altech:Altech_AK300_1x02_P5.00mm_45-Degree"
+	(footprint "kit-dev-coldfire:Altech_AK300_1x02_P5.00mm_45-Degree"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e31e")
 		(at 76 65.5 -90)
@@ -32266,20 +30816,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "aacfead5-cee8-4fec-8c9c-bee4d1c30311")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -32292,7 +30830,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -32544,14 +31082,14 @@
 			)
 		)
 	)
-	(footprint "Package_QFP:LQFP-100_14x14mm_P0.5mm"
+	(footprint "kit-dev-coldfire:LQFP-100_14x14mm_P0.5mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e328")
 		(at 135.382 101.473 -90)
 		(descr "LQFP, 100 Pin (https://www.nxp.com/docs/en/package-information/SOT407-1.pdf), generated with kicad-footprint-generator ipc_gullwing_generator.py")
 		(tags "LQFP QFP")
 		(property "Reference" "U102"
-			(at 0 -9.65 -90)
+			(at 0 -9.65 270)
 			(layer "F.SilkS")
 			(uuid "a8f82e2a-99ae-4ac1-96d3-8abe06f10b93")
 			(effects
@@ -32562,7 +31100,7 @@
 			)
 		)
 		(property "Value" "MCF5213-LQFP100"
-			(at 0 9.65 -90)
+			(at 0 9.65 270)
 			(layer "F.Fab")
 			(uuid "0a3fadfc-d88a-4c07-bc56-0f51231368d0")
 			(effects
@@ -32572,20 +31110,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "45432db0-b513-433c-81ac-0f24680f39c6")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -32598,7 +31124,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -32997,7 +31523,7 @@
 			(uuid "2be18044-078d-4a08-9973-77bfb47409d7")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(uuid "d3686697-8ff9-4827-85a4-22d687006dc7")
 			(effects
@@ -34048,18 +32574,6 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "d71ae173-b402-458c-906c-5311840395d6")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 0 0 0)
 			(unlocked yes)
@@ -34223,7 +32737,7 @@
 			)
 		)
 	)
-	(footprint "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm"
+	(footprint "kit-dev-coldfire:SOIC-16_3.9x9.9mm_P1.27mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e3a4")
 		(at 186.69 77.851)
@@ -34247,18 +32761,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "d4fedec6-167a-4587-ac99-54b61bc46a25")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -34619,7 +33121,7 @@
 			)
 		)
 	)
-	(footprint "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm"
+	(footprint "kit-dev-coldfire:SOIC-16_3.9x9.9mm_P1.27mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e3d6")
 		(at 158.75 77.851)
@@ -34643,18 +33145,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "ed2d5749-dec5-4f8d-bf6d-1a2b15d47def")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -35015,7 +33505,7 @@
 			)
 		)
 	)
-	(footprint "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
+	(footprint "kit-dev-coldfire:SOIC-8_3.9x4.9mm_P1.27mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e3f0")
 		(at 105.918 88.392 180)
@@ -35039,18 +33529,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "d2705f66-3c71-4bf5-85dd-42e1e556a638")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -35331,7 +33809,7 @@
 			)
 		)
 	)
-	(footprint "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm"
+	(footprint "kit-dev-coldfire:SOIC-16_3.9x9.9mm_P1.27mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e403")
 		(at 125.73 77.851)
@@ -35355,18 +33833,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "f3c96514-51f1-4c45-b9b5-cb1a8f0f7259")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -35727,7 +34193,7 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_2x04_P2.54mm_Vertical"
+	(footprint "kit-dev-coldfire:PinHeader_2x04_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e504")
 		(at 197.485 74.549)
@@ -35751,18 +34217,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "3c0b6f17-95ce-4519-8251-ea26ae68e8f2")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -36079,7 +34533,7 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_2x04_P2.54mm_Vertical"
+	(footprint "kit-dev-coldfire:PinHeader_2x04_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e513")
 		(at 169.545 74.549)
@@ -36103,18 +34557,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "8e2f75e2-988d-4738-8271-953836b0f3b3")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -36431,7 +34873,7 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_2x04_P2.54mm_Vertical"
+	(footprint "kit-dev-coldfire:PinHeader_2x04_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e522")
 		(at 135.763 74.549)
@@ -36455,18 +34897,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "cd0e214e-be02-41c1-929a-c714e3b5c95e")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -36783,7 +35213,7 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
+	(footprint "kit-dev-coldfire:PinHeader_1x02_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e531")
 		(at 112.014 108.458 90)
@@ -36807,18 +35237,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "19811fb9-6952-4340-9ca4-a15c7f25a9a8")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -37049,7 +35467,7 @@
 			)
 		)
 	)
-	(footprint "Package_TO_SOT_SMD:TO-263-5_TabPin3"
+	(footprint "kit-dev-coldfire:TO-263-5_TabPin3"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e53a")
 		(at 78.105 88.265 90)
@@ -37073,18 +35491,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "48eb3899-e010-4480-a514-4e6f996f52de")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -37490,7 +35896,7 @@
 			(net 91 "GND")
 			(pinfunction "GND")
 			(pintype "power_in")
-			(uuid "cd9a1878-dd66-4bbe-af1b-b0aaa2bf0535")
+			(uuid "0e37bea3-e787-4aab-b8ad-11e8bd7b1ead")
 		)
 		(pad "3" smd roundrect
 			(at -0.925 2.775 90)
@@ -37500,7 +35906,7 @@
 			(net 91 "GND")
 			(pinfunction "GND")
 			(pintype "power_in")
-			(uuid "cd9a1878-dd66-4bbe-af1b-b0aaa2bf0535")
+			(uuid "c7f3c761-fa6f-4245-8fa2-8cb82c1658c8")
 		)
 		(pad "3" smd roundrect
 			(at 1.5 0 90)
@@ -37510,7 +35916,7 @@
 			(net 91 "GND")
 			(pinfunction "GND")
 			(pintype "power_in")
-			(uuid "cd9a1878-dd66-4bbe-af1b-b0aaa2bf0535")
+			(uuid "a8ec9059-788a-4793-8a94-17b8661e597b")
 		)
 		(pad "3" smd roundrect
 			(at 3.925 -2.775 90)
@@ -37520,7 +35926,7 @@
 			(net 91 "GND")
 			(pinfunction "GND")
 			(pintype "power_in")
-			(uuid "cd9a1878-dd66-4bbe-af1b-b0aaa2bf0535")
+			(uuid "47651810-21c3-4c7b-ab10-a278d2e77d99")
 		)
 		(pad "3" smd roundrect
 			(at 3.925 2.775 90)
@@ -37530,7 +35936,7 @@
 			(net 91 "GND")
 			(pinfunction "GND")
 			(pintype "power_in")
-			(uuid "cd9a1878-dd66-4bbe-af1b-b0aaa2bf0535")
+			(uuid "04cf2be3-05fa-4a3a-bb22-02dbbaf61b3e")
 		)
 		(pad "4" smd roundrect
 			(at -7.65 1.7 90)
@@ -37565,7 +35971,7 @@
 			)
 		)
 	)
-	(footprint "Crystal:Crystal_HC18-U_Horizontal"
+	(footprint "kit-dev-coldfire:Crystal_HC18-U_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8e565")
 		(at 123.444 120.777 -90)
@@ -37593,20 +35999,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "a06ddeb0-c7f2-41d8-a496-951bc7b31e46")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -37619,7 +36013,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -37916,7 +36310,7 @@
 			(uuid "92b037dd-a8ec-4c99-a760-942bc753f2c7")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 2.25 5 -90)
+			(at 2.25 5 270)
 			(layer "F.Fab")
 			(uuid "1f1f74d1-1bbe-4433-9f3b-bf9061ff6cfc")
 			(effects
@@ -37961,14 +36355,14 @@
 			)
 		)
 	)
-	(footprint "Package_QFP:TQFP-144_20x20mm_P0.5mm"
+	(footprint "kit-dev-coldfire:TQFP-144_20x20mm_P0.5mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005aedcb76")
 		(at 201.93 111.76 -90)
 		(descr "TQFP, 144 Pin (http://www.microsemi.com/index.php?option=com_docman&task=doc_download&gid=131095), generated with kicad-footprint-generator ipc_gullwing_generator.py")
 		(tags "TQFP QFP")
 		(property "Reference" "U301"
-			(at 0 -12.275 -90)
+			(at 0 -12.275 270)
 			(layer "F.SilkS")
 			(uuid "ee638682-7ade-4b6d-a33b-af2dd62dc7b3")
 			(effects
@@ -37979,7 +36373,7 @@
 			)
 		)
 		(property "Value" "XCR3256-TQ144"
-			(at 0 12.275 -90)
+			(at 0 12.275 270)
 			(layer "F.Fab")
 			(uuid "2788412c-11ca-4e41-8b86-50e1f904d31f")
 			(effects
@@ -37989,20 +36383,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "138364fc-6319-4a30-962a-a9900d950979")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -38015,7 +36397,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -38414,7 +36796,7 @@
 			(uuid "8a45e315-a481-4402-9727-e16dab43bbef")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(layer "F.Fab")
 			(uuid "1d149892-6ea1-4d02-9e66-530a467c4a20")
 			(effects
@@ -39877,7 +38259,7 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_2x02_P2.54mm_Vertical"
+	(footprint "kit-dev-coldfire:PinHeader_2x02_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005aede1a7")
 		(at 112.522 86.233)
@@ -39901,18 +38283,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "661af0d3-5471-4559-86c6-bc8c8ce46c71")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -40185,7 +38555,7 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
+	(footprint "kit-dev-coldfire:PinHeader_1x02_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005aedec26")
 		(at 181.864 130.302 90)
@@ -40209,18 +38579,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "8b45e77e-32e4-4a94-97c3-84e8c94beef1")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -40451,7 +38809,7 @@
 			)
 		)
 	)
-	(footprint "Package_SO:SOIC-14_3.9x8.7mm_P1.27mm"
+	(footprint "kit-dev-coldfire:SOIC-14_3.9x8.7mm_P1.27mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005aee2d42")
 		(at 100.203 117.602)
@@ -40475,18 +38833,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "b0593117-a722-4942-ad4b-1e6fd8cfe511")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -40827,7 +39173,7 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Vertical"
+	(footprint "kit-dev-coldfire:PinHeader_2x03_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005d7fd466")
 		(at 112.522 93.345)
@@ -40851,18 +39197,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "df74b9a0-9528-4e99-982e-ba06af091ffb")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -41157,7 +39491,7 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_2x02_P2.54mm_Vertical"
+	(footprint "kit-dev-coldfire:PinHeader_2x02_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005d801577")
 		(at 197.5 87)
@@ -41181,18 +39515,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "6ae5b8e3-d52e-42b4-ade2-5118162e776e")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -41465,7 +39787,7 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
+	(footprint "kit-dev-coldfire:PinHeader_1x03_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005d802076")
 		(at 107 78.613 180)
@@ -41489,18 +39811,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "e77d9289-aa8e-492d-9451-4cb7ecdfe377")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -41686,7 +39996,7 @@
 			(uuid "168e06e0-1cb2-429e-bc81-bfd100458e03")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 2.54 -90)
+			(at 0 2.54 270)
 			(layer "F.Fab")
 			(uuid "0ce3c3ff-8575-4542-89cb-fdd357d62729")
 			(effects
@@ -41742,7 +40052,7 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
+	(footprint "kit-dev-coldfire:PinHeader_1x02_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005d806009")
 		(at 90.5 113 90)
@@ -41766,18 +40076,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "2fddbb0a-f364-4ee8-bf2e-8a340e71b518")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -42008,7 +40306,7 @@
 			)
 		)
 	)
-	(footprint "Connector_Dsub:DSUB-9_Female_Horizontal_P2.77x2.84mm_EdgePinOffset7.70mm_Housed_MountingHolesOffset9.12mm"
+	(footprint "kit-dev-coldfire:DSUB-9_Female_Horizontal_P2.77x2.84mm_EdgePinOffset7.70mm_Housed_MountingHolesOffset9.12mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005d80d3af")
 		(at 192.5 66.5 180)
@@ -42032,18 +40330,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "75cee991-edd5-4ea3-b678-c003149a54d8")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -42466,7 +40752,7 @@
 			(drill 3.2)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(uuid "d3288117-d331-4450-8b6a-b68dcaa69d8f")
+			(uuid "a0fb0cde-4c02-4f3a-8776-b5bb4fdb144c")
 		)
 		(pad "1" thru_hole rect
 			(at 0 0 180)
@@ -42580,7 +40866,7 @@
 			)
 		)
 	)
-	(footprint "Connector_Dsub:DSUB-9_Female_Horizontal_P2.77x2.84mm_EdgePinOffset7.70mm_Housed_MountingHolesOffset9.12mm"
+	(footprint "kit-dev-coldfire:DSUB-9_Female_Horizontal_P2.77x2.84mm_EdgePinOffset7.70mm_Housed_MountingHolesOffset9.12mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005d80d406")
 		(at 156.5 66.5 180)
@@ -42604,18 +40890,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "815bc2e8-dd2a-496b-8f6e-bd30cc41d651")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -43038,7 +41312,7 @@
 			(drill 3.2)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(uuid "a4418401-7d54-4d3b-8da0-254602e6fdfd")
+			(uuid "f2aa4104-1fa2-4c8e-9028-4537048e3731")
 		)
 		(pad "1" thru_hole rect
 			(at 0 0 180)
@@ -43152,7 +41426,7 @@
 			)
 		)
 	)
-	(footprint "Connector_Dsub:DSUB-9_Female_Horizontal_P2.77x2.84mm_EdgePinOffset7.70mm_Housed_MountingHolesOffset9.12mm"
+	(footprint "kit-dev-coldfire:DSUB-9_Female_Horizontal_P2.77x2.84mm_EdgePinOffset7.70mm_Housed_MountingHolesOffset9.12mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005d80d45d")
 		(at 121.5 66.5 180)
@@ -43176,18 +41450,6 @@
 			(effects
 				(font
 					(size 0.6 0.6)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "9439c3b1-8ebe-45bd-9e8d-2216b7f4222a")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -43610,7 +41872,7 @@
 			(drill 3.2)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(uuid "e22564b4-26ca-4d48-a399-5d121cb25cc2")
+			(uuid "0352925f-a4a5-49d5-b822-6a7d2e861518")
 		)
 		(pad "1" thru_hole rect
 			(at 0 0 180)
@@ -43724,7 +41986,7 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical"
+	(footprint "kit-dev-coldfire:PinHeader_1x01_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005d80e8f9")
 		(at 95 86.5 -90)
@@ -43742,7 +42004,7 @@
 			)
 		)
 		(property "Value" "CONN_1"
-			(at 0 2.33 -90)
+			(at 0 2.33 270)
 			(layer "F.Fab")
 			(uuid "5378d31f-864b-4820-bf5b-4521f18ff422")
 			(effects
@@ -43752,20 +42014,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "5c31b578-2b14-441d-850f-430808f0b25e")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -43778,7 +42028,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -43979,7 +42229,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "B.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dc8a")
 		(at 129.921 91.44 180)
@@ -44007,18 +42257,6 @@
 					(thickness 0.15)
 				)
 				(justify mirror)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "28fe95d1-4a7a-42ff-812f-2cd6bcc7a377")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
 			)
 		)
 		(property "Datasheet" ""
@@ -44195,7 +42433,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "B.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dcc6")
 		(at 145.288 104.775 90)
@@ -44223,18 +42461,6 @@
 					(thickness 0.15)
 				)
 				(justify mirror)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "96439e19-aa8f-4624-8452-f82b0c4280bd")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
 			)
 		)
 		(property "Datasheet" ""
@@ -44411,7 +42637,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "B.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8dcd2")
 		(at 145.415 99.314 -90)
@@ -44441,20 +42667,8 @@
 				(justify mirror)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "716bb5cd-13a1-4a04-a437-6b4fd75024e9")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -44467,7 +42681,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -44627,7 +42841,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "B.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8de26")
 		(at 209.296 100.838 90)
@@ -44655,18 +42869,6 @@
 					(thickness 0.15)
 				)
 				(justify mirror)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "e2d06524-84d7-4924-9ebe-1807f954ab36")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
 			)
 		)
 		(property "Datasheet" ""
@@ -44843,7 +43045,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "B.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8de32")
 		(at 191.008 107.315 180)
@@ -44871,18 +43073,6 @@
 					(thickness 0.15)
 				)
 				(justify mirror)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "bcb6cebb-181b-40f6-92fa-8d4562208211")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
 			)
 		)
 		(property "Datasheet" ""
@@ -45059,7 +43249,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "B.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8de3e")
 		(at 203.454 100.838 90)
@@ -45087,18 +43277,6 @@
 					(thickness 0.15)
 				)
 				(justify mirror)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "5497736c-a41b-4dc5-9272-ac772eb8d296")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
 			)
 		)
 		(property "Datasheet" ""
@@ -45275,7 +43453,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "B.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8de4a")
 		(at 208.28 110.49 -90)
@@ -45305,20 +43483,8 @@
 				(justify mirror)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "fe123edd-9790-4bfe-8cd7-a1b0164c76de")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -45331,7 +43497,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -45491,7 +43657,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "B.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8de56")
 		(at 201.422 123.444 -90)
@@ -45521,20 +43687,8 @@
 				(justify mirror)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "cd5218bc-507c-42a4-a125-929529263519")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -45547,7 +43701,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -45707,7 +43861,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "B.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8de62")
 		(at 208.28 119.38 -90)
@@ -45737,20 +43891,8 @@
 				(justify mirror)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "d7360da2-4362-4c9e-83b3-080c4e4f97a2")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -45763,7 +43905,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -45923,7 +44065,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "B.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8de6e")
 		(at 190.5 99.06 -90)
@@ -45953,20 +44095,8 @@
 				(justify mirror)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "e7a351c7-4d68-4241-8895-76050d64cd91")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -45979,7 +44109,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -46139,7 +44269,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "B.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8de7a")
 		(at 199.009 100.838 90)
@@ -46167,18 +44297,6 @@
 					(thickness 0.15)
 				)
 				(justify mirror)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "c2c67f41-f49b-4e22-9cb5-6c4133bd592c")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
 			)
 		)
 		(property "Datasheet" ""
@@ -46355,7 +44473,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "B.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8de86")
 		(at 205.359 123.444 -90)
@@ -46385,20 +44503,8 @@
 				(justify mirror)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "cbeb36c9-ac78-420d-9e06-08a4da62e87c")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -46411,7 +44517,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -46571,7 +44677,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "B.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8de92")
 		(at 197.485 123.444 -90)
@@ -46601,20 +44707,8 @@
 				(justify mirror)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "69b719c2-4513-4a2c-a0d7-def499da67cb")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -46627,7 +44721,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -46787,7 +44881,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_0805_2012Metric"
+	(footprint "kit-dev-coldfire:C_0805_2012Metric"
 		(layer "B.Cu")
 		(uuid "00000000-0000-0000-0000-000053d8de9e")
 		(at 191.008 115.189 180)
@@ -46815,18 +44909,6 @@
 					(thickness 0.15)
 				)
 				(justify mirror)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "ea0c6b9e-58ea-4574-b017-a49179ea1d0a")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
 			)
 		)
 		(property "Datasheet" ""

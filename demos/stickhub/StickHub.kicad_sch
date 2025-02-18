@@ -1,7 +1,7 @@
 (kicad_sch
-	(version 20241004)
+	(version 20250114)
 	(generator "eeschema")
-	(generator_version "8.99")
+	(generator_version "9.0")
 	(uuid "468c1611-b068-4724-babd-2f440b5886f5")
 	(paper "A3" portrait)
 	(title_block
@@ -194,6 +194,372 @@
 					)
 					(fill
 						(type none)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "RobotProtos:+1V8"
+			(power)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "+1V8"
+				(at 0 3.556 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"+1V8\""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "+1V8_0_1"
+				(polyline
+					(pts
+						(xy -0.762 1.27) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54) (xy 0.762 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "+1V8_1_1"
+				(pin power_in line
+					(at 0 0 90)
+					(length 0)
+					(hide yes)
+					(name "+1V8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "RobotProtos:+3.3V"
+			(power)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "+3.3V"
+				(at 0 3.556 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"+3.3V\""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "+3.3V_0_1"
+				(polyline
+					(pts
+						(xy -0.762 1.27) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54) (xy 0.762 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "+3.3V_1_1"
+				(pin power_in line
+					(at 0 0 90)
+					(length 0)
+					(hide yes)
+					(name "+3.3V"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "RobotProtos:+5V"
+			(power)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "+5V"
+				(at 0 3.556 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"+5V\""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "+5V_0_1"
+				(polyline
+					(pts
+						(xy -0.762 1.27) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54) (xy 0.762 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "+5V_1_1"
+				(pin power_in line
+					(at 0 0 90)
+					(length 0)
+					(hide yes)
+					(name "+5V"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
 					)
 				)
 			)
@@ -1612,6 +1978,104 @@
 						)
 					)
 					(number "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "RobotProtos:GND"
+			(power)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "GND"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "GND_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "GND_1_1"
+				(pin power_in line
+					(at 0 0 270)
+					(length 0)
+					(hide yes)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -3202,6 +3666,107 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "RobotProtos:PWR_FLAG"
+			(power)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#FLG"
+				(at 0 1.905 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "PWR_FLAG"
+				(at 0 3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Special symbol for telling ERC where power comes from"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "flag power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "PWR_FLAG_0_0"
+				(pin power_out line
+					(at 0 0 90)
+					(length 0)
+					(name "pwr"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "PWR_FLAG_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 1.27) (xy -1.016 1.905) (xy 0 2.54) (xy 1.016 1.905) (xy 0 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "RobotProtos:RSMALL"
 			(pin_numbers
 				(hide yes)
@@ -3299,8 +3864,7 @@
 				)
 				(polyline
 					(pts
-						(xy -0.508 -1.524) (xy 0.508 -1.016) (xy -0.508 -0.508) (xy 0.508 0) (xy -0.508 0.508) (xy 0.508 1.016)
-						(xy -0.508 1.524)
+						(xy -0.508 -1.524) (xy 0 -1.778) (xy 0 -2.032)
 					)
 					(stroke
 						(width 0)
@@ -3312,7 +3876,8 @@
 				)
 				(polyline
 					(pts
-						(xy -0.508 -1.524) (xy 0 -1.778) (xy 0 -2.032)
+						(xy -0.508 -1.524) (xy 0.508 -1.016) (xy -0.508 -0.508) (xy 0.508 0) (xy -0.508 0.508) (xy 0.508 1.016)
+						(xy -0.508 1.524)
 					)
 					(stroke
 						(width 0)
@@ -3456,571 +4021,6 @@
 								(size 1.27 1.27)
 							)
 						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "power:+1V8"
-			(power)
-			(pin_names
-				(offset 0)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#PWR"
-				(at 0 -3.81 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Value" "+1V8"
-				(at 0 3.556 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Power symbol creates a global label with name \"+1V8\""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "global power"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "+1V8_0_1"
-				(polyline
-					(pts
-						(xy -0.762 1.27) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 2.54) (xy 0.762 1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "+1V8_1_1"
-				(pin power_in line
-					(at 0 0 90)
-					(length 0)
-					(hide yes)
-					(name "+1V8"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "power:+3.3V"
-			(power)
-			(pin_names
-				(offset 0)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#PWR"
-				(at 0 -3.81 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Value" "+3.3V"
-				(at 0 3.556 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Power symbol creates a global label with name \"+3.3V\""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "global power"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "+3.3V_0_1"
-				(polyline
-					(pts
-						(xy -0.762 1.27) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 2.54) (xy 0.762 1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "+3.3V_1_1"
-				(pin power_in line
-					(at 0 0 90)
-					(length 0)
-					(hide yes)
-					(name "+3.3V"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "power:+5V"
-			(power)
-			(pin_names
-				(offset 0)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#PWR"
-				(at 0 -3.81 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Value" "+5V"
-				(at 0 3.556 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Power symbol creates a global label with name \"+5V\""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "global power"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "+5V_0_1"
-				(polyline
-					(pts
-						(xy -0.762 1.27) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 2.54) (xy 0.762 1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "+5V_1_1"
-				(pin power_in line
-					(at 0 0 90)
-					(length 0)
-					(hide yes)
-					(name "+5V"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "power:GND"
-			(power)
-			(pin_names
-				(offset 0)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#PWR"
-				(at 0 -6.35 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Value" "GND"
-				(at 0 -3.81 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "global power"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "GND_0_1"
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "GND_1_1"
-				(pin power_in line
-					(at 0 0 270)
-					(length 0)
-					(hide yes)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "power:PWR_FLAG"
-			(power)
-			(pin_numbers
-				(hide yes)
-			)
-			(pin_names
-				(offset 0)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#FLG"
-				(at 0 1.905 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Value" "PWR_FLAG"
-				(at 0 3.81 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "~"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Special symbol for telling ERC where power comes from"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "flag power"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "PWR_FLAG_0_0"
-				(pin power_out line
-					(at 0 0 90)
-					(length 0)
-					(name "pwr"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(symbol "PWR_FLAG_0_1"
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 1.27) (xy -1.016 1.905) (xy 0 2.54) (xy 1.016 1.905) (xy 0 1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
 					)
 				)
 			)
@@ -9645,7 +9645,6 @@
 	)
 	(label "LED1"
 		(at 132.08 132.08 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9656,7 +9655,6 @@
 	)
 	(label "LED5"
 		(at 132.08 152.4 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9667,7 +9665,6 @@
 	)
 	(label "U1D-"
 		(at 132.08 38.1 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9678,7 +9675,6 @@
 	)
 	(label "U5D-"
 		(at 132.08 88.9 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9689,7 +9685,6 @@
 	)
 	(label "U3D-"
 		(at 132.08 63.5 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9700,7 +9695,6 @@
 	)
 	(label "D-"
 		(at 93.98 38.1 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9711,7 +9705,6 @@
 	)
 	(label "LED4"
 		(at 132.08 147.32 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9722,7 +9715,6 @@
 	)
 	(label "U4D-"
 		(at 132.08 76.2 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9733,7 +9725,6 @@
 	)
 	(label "U4D+"
 		(at 132.08 78.74 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9744,7 +9735,6 @@
 	)
 	(label "LED3"
 		(at 132.08 142.24 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9755,7 +9745,6 @@
 	)
 	(label "XI"
 		(at 97.79 132.08 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9766,7 +9755,6 @@
 	)
 	(label "D+"
 		(at 93.98 40.64 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9777,7 +9765,6 @@
 	)
 	(label "U1D+"
 		(at 132.08 40.64 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9788,7 +9775,6 @@
 	)
 	(label "U2D+"
 		(at 132.08 53.34 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9799,7 +9785,6 @@
 	)
 	(label "U2D-"
 		(at 132.08 50.8 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9810,7 +9795,6 @@
 	)
 	(label "LED7"
 		(at 132.08 162.56 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9821,7 +9805,6 @@
 	)
 	(label "LED2"
 		(at 132.08 137.16 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9832,7 +9815,6 @@
 	)
 	(label "U6D-"
 		(at 132.08 101.6 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9843,7 +9825,6 @@
 	)
 	(label "U7D-"
 		(at 132.08 114.3 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9854,7 +9835,6 @@
 	)
 	(label "U7D+"
 		(at 132.08 116.84 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9865,7 +9845,6 @@
 	)
 	(label "LED6"
 		(at 132.08 157.48 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9876,7 +9855,6 @@
 	)
 	(label "U3D+"
 		(at 132.08 66.04 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9887,7 +9865,6 @@
 	)
 	(label "U5D+"
 		(at 132.08 91.44 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9898,7 +9875,6 @@
 	)
 	(label "LC"
 		(at 132.08 167.64 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9909,7 +9885,6 @@
 	)
 	(label "XO"
 		(at 97.79 147.32 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9920,7 +9895,6 @@
 	)
 	(label "U6D+"
 		(at 132.08 104.14 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -10090,7 +10064,7 @@
 	)
 	(symbol
 		(lib_name "Logo_3")
-		(lib_id "RobotProtos:Logo")
+		(lib_id "RobotProtos:Logo_3")
 		(at 215.9 332.74 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10153,7 +10127,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:PWR_FLAG")
+		(lib_id "RobotProtos:PWR_FLAG")
 		(at 67.31 33.02 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10218,7 +10192,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "RobotProtos:GND")
 		(at 80.01 83.82 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10283,7 +10257,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "RobotProtos:GND")
 		(at 241.3 72.39 90)
 		(mirror x)
 		(unit 1)
@@ -10426,7 +10400,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+1V8")
+		(lib_id "RobotProtos:+1V8")
 		(at 90.17 116.84 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10920,7 +10894,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+5V")
+		(lib_id "RobotProtos:+5V")
 		(at 234.95 165.1 90)
 		(mirror x)
 		(unit 1)
@@ -11066,7 +11040,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+5V")
+		(lib_id "RobotProtos:+5V")
 		(at 49.53 326.39 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11211,7 +11185,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+5V")
+		(lib_id "RobotProtos:+5V")
 		(at 234.95 78.74 90)
 		(mirror x)
 		(unit 1)
@@ -11421,7 +11395,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "RobotProtos:GND")
 		(at 199.39 226.06 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11918,7 +11892,7 @@
 	)
 	(symbol
 		(lib_name "Logo_2")
-		(lib_id "RobotProtos:Logo")
+		(lib_id "RobotProtos:Logo_2")
 		(at 215.9 328.93 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12508,7 +12482,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "RobotProtos:GND")
 		(at 81.28 334.01 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12733,7 +12707,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "RobotProtos:GND")
 		(at 241.3 137.16 90)
 		(mirror x)
 		(unit 1)
@@ -12799,7 +12773,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+5V")
+		(lib_id "RobotProtos:+5V")
 		(at 73.66 280.67 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -13085,7 +13059,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "RobotProtos:GND")
 		(at 241.3 180.34 90)
 		(mirror x)
 		(unit 1)
@@ -13588,7 +13562,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "RobotProtos:GND")
 		(at 241.3 93.98 90)
 		(mirror x)
 		(unit 1)
@@ -13654,7 +13628,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "RobotProtos:GND")
 		(at 91.44 68.58 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -14180,7 +14154,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "RobotProtos:GND")
 		(at 241.3 158.75 90)
 		(mirror x)
 		(unit 1)
@@ -14463,7 +14437,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "RobotProtos:GND")
 		(at 87.63 290.83 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -14682,7 +14656,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+5V")
+		(lib_id "RobotProtos:+5V")
 		(at 234.95 121.92 90)
 		(mirror x)
 		(unit 1)
@@ -14748,7 +14722,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:PWR_FLAG")
+		(lib_id "RobotProtos:PWR_FLAG")
 		(at 60.96 54.61 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -14813,7 +14787,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "RobotProtos:GND")
 		(at 50.8 54.61 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -14878,7 +14852,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+3.3V")
+		(lib_id "RobotProtos:+3.3V")
 		(at 80.01 73.66 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -14943,7 +14917,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+5V")
+		(lib_id "RobotProtos:+5V")
 		(at 234.95 143.51 90)
 		(mirror x)
 		(unit 1)
@@ -15009,7 +14983,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "RobotProtos:GND")
 		(at 241.3 50.8 90)
 		(mirror x)
 		(unit 1)
@@ -15536,7 +15510,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+5V")
+		(lib_id "RobotProtos:+5V")
 		(at 87.63 48.26 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -15601,7 +15575,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "RobotProtos:GND")
 		(at 73.66 300.99 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -15666,7 +15640,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "RobotProtos:GND")
 		(at 95.25 335.28 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -15875,7 +15849,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "RobotProtos:GND")
 		(at 96.52 68.58 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -15940,7 +15914,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "RobotProtos:GND")
 		(at 199.39 248.92 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -16149,7 +16123,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "RobotProtos:GND")
 		(at 62.23 334.01 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -16595,7 +16569,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "RobotProtos:GND")
 		(at 49.53 334.01 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -16804,7 +16778,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "RobotProtos:GND")
 		(at 92.71 142.24 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -16946,7 +16920,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "RobotProtos:GND")
 		(at 241.3 115.57 90)
 		(mirror x)
 		(unit 1)
@@ -18221,7 +18195,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "RobotProtos:GND")
 		(at 92.71 137.16 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -19161,7 +19135,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+5V")
+		(lib_id "RobotProtos:+5V")
 		(at 95.25 325.12 0)
 		(mirror y)
 		(unit 1)
@@ -19323,7 +19297,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "RobotProtos:GND")
 		(at 90.17 127 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -19597,7 +19571,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+5V")
+		(lib_id "RobotProtos:+5V")
 		(at 87.63 280.67 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -20627,7 +20601,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+3.3V")
+		(lib_id "RobotProtos:+3.3V")
 		(at 199.39 215.9 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -20836,7 +20810,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+5V")
+		(lib_id "RobotProtos:+5V")
 		(at 234.95 35.56 90)
 		(mirror x)
 		(unit 1)
@@ -21142,7 +21116,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "RobotProtos:GND")
 		(at 96.52 170.18 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -21287,7 +21261,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "RobotProtos:GND")
 		(at 87.63 58.42 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -21803,7 +21777,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+1V8")
+		(lib_id "RobotProtos:+1V8")
 		(at 199.39 238.76 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -22075,7 +22049,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+5V")
+		(lib_id "RobotProtos:+5V")
 		(at 234.95 100.33 90)
 		(mirror x)
 		(unit 1)
@@ -22564,7 +22538,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+5V")
+		(lib_id "RobotProtos:+5V")
 		(at 234.95 57.15 90)
 		(mirror x)
 		(unit 1)

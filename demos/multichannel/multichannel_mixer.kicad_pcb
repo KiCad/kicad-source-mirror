@@ -1,7 +1,7 @@
 (kicad_pcb
-	(version 20241030)
+	(version 20241229)
 	(generator "pcbnew")
-	(generator_version "8.99")
+	(generator_version "9.0")
 	(general
 		(thickness 1.6)
 		(legacy_teardrops no)
@@ -10,41 +10,41 @@
 	(layers
 		(0 "F.Cu" signal)
 		(2 "B.Cu" signal)
-		(9 "F.Adhes" user)
-		(11 "B.Adhes" user)
+		(9 "F.Adhes" user "F.Adhesive")
+		(11 "B.Adhes" user "B.Adhesive")
 		(13 "F.Paste" user)
 		(15 "B.Paste" user)
-		(5 "F.SilkS" user)
-		(7 "B.SilkS" user)
+		(5 "F.SilkS" user "F.Silkscreen")
+		(7 "B.SilkS" user "B.Silkscreen")
 		(1 "F.Mask" user)
 		(3 "B.Mask" user)
-		(17 "Dwgs.User" user)
-		(19 "Cmts.User" user)
-		(21 "Eco1.User" user)
-		(23 "Eco2.User" user)
+		(17 "Dwgs.User" user "User.Drawings")
+		(19 "Cmts.User" user "User.Comments")
+		(21 "Eco1.User" user "User.Eco1")
+		(23 "Eco2.User" user "User.Eco2")
 		(25 "Edge.Cuts" user)
 		(27 "Margin" user)
-		(31 "F.CrtYd" user)
-		(29 "B.CrtYd" user)
+		(31 "F.CrtYd" user "F.Courtyard")
+		(29 "B.CrtYd" user "B.Courtyard")
 		(35 "F.Fab" user)
 		(33 "B.Fab" user)
-		(39 "User.1" signal)
-		(41 "User.2" signal)
-		(43 "User.3" signal)
-		(45 "User.4" signal)
-		(47 "User.5" signal)
-		(49 "User.6" signal)
-		(51 "User.7" signal)
-		(53 "User.8" signal)
-		(55 "User.9" signal)
+		(39 "User.1" user)
+		(41 "User.2" user)
+		(43 "User.3" user)
+		(45 "User.4" user)
+		(47 "User.5" user)
+		(49 "User.6" user)
+		(51 "User.7" user)
+		(53 "User.8" user)
+		(55 "User.9" user)
 	)
 	(setup
 		(pad_to_mask_clearance 0)
 		(allow_soldermask_bridges_in_footprints no)
 		(tenting front back)
 		(pcbplotparams
-			(layerselection 0x000010fc_ffffffff)
-			(plot_on_all_layers_selection 0x00000000_00000000)
+			(layerselection 0x00000000_00000000_000010fc_ffffffff)
+			(plot_on_all_layers_selection 0x00000000_00000000_00000000_00000000)
 			(disableapertmacros no)
 			(usegerberextensions no)
 			(usegerberattributes yes)
@@ -62,11 +62,13 @@
 			(pdf_front_fp_property_popups yes)
 			(pdf_back_fp_property_popups yes)
 			(pdf_metadata yes)
+			(pdf_single_document no)
 			(dxfpolygonmode yes)
 			(dxfimperialunits yes)
 			(dxfusepcbnewfont yes)
 			(psnegative no)
 			(psa4output no)
+			(plot_black_and_white yes)
 			(plotinvisibletext no)
 			(sketchpadsonfab no)
 			(plotpadnumbers no)
@@ -162,13 +164,13 @@
 	(net 78 "Net-(R45-Pad2)")
 	(net 79 "Net-(R47-Pad1)")
 	(net 80 "unconnected-(J6-PadR)")
-	(footprint "Miscellaneous THD:CLIFF_FC68148(DC-10A)"
+	(footprint "multichannel_mixer:CLIFF_FC68148(DC-10A)"
 		(layer "F.Cu")
 		(uuid "2604d701-45e1-40f6-8515-62646733a8ee")
 		(at 191.285 87.385 90)
 		(descr "12V /  5A, 2.1mm Diameter Pin, DC Power Socket With  Switch. DC10A Type")
 		(property "Reference" "J5"
-			(at 0 -8.209 -90)
+			(at 0 -8.209 270)
 			(layer "F.SilkS")
 			(uuid "1982d368-2925-4129-9f32-b2da9befd478")
 			(effects
@@ -179,26 +181,13 @@
 			)
 		)
 		(property "Value" "Power"
-			(at 0 8.701 -90)
+			(at 0 8.701 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "709c823f-cab6-4994-9bd2-c7fb6e3ddad4")
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Miscellaneous THD:CLIFF_FC68148(DC-10A)"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "2a73ce4a-91d2-41b4-8cbe-b09dce6bea87")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -1423,7 +1412,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
+	(footprint "multichannel_mixer:Potentiometer_Alps_RK09K_Single_Vertical"
 		(layer "F.Cu")
 		(uuid "2605270b-f919-4a39-82dc-fd6a4b8689ed")
 		(at 120.5 115.4 90)
@@ -1447,19 +1436,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "4844154c-4f5c-4fa6-a58d-18b2657b6ed9")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -1672,7 +1648,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "61cdb6e6-3456-4992-bf79-d6cd54794479")
 		)
@@ -1751,7 +1727,7 @@
 			)
 		)
 	)
-	(footprint "Capacitors THD:CAPPRB254-500X840"
+	(footprint "multichannel_mixer:CAPPRB254-500X840"
 		(layer "F.Cu")
 		(uuid "268f47ec-f328-488d-92f8-10298dc00c1a")
 		(at 181.73 110.06 180)
@@ -1775,19 +1751,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Capacitors THD:CAPPRB254-500X840"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "1a1837a0-34a7-488b-8157-02e70b78801a")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -2330,7 +2293,7 @@
 				(width 0.2)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.SilkS")
 			(uuid "899f87cd-4f90-4017-bf75-611311448791")
 		)
@@ -2361,7 +2324,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "cce77919-6891-4036-a014-65764a405041")
 		)
@@ -2389,14 +2352,14 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Connector_Audio:Jack_6.35mm_Neutrik_NMJ6HCD2_Horizontal"
+	(footprint "multichannel_mixer:Jack_6.35mm_Neutrik_NMJ6HCD2_Horizontal"
 		(layer "F.Cu")
 		(uuid "276d3e64-7117-4581-81f0-197871ad4d6d")
 		(at 92.785 65.635 90)
 		(descr "M Series, 6.35mm (1/4in) stereo jack, switched, with chrome ferrule and straight PCB pins, https://www.neutrik.com/en/product/nmj6hcd2")
 		(tags "neutrik jack m")
 		(property "Reference" "J9"
-			(at 6.35 -3 -90)
+			(at 6.35 -3 270)
 			(layer "F.SilkS")
 			(uuid "ab7ba046-f239-4f75-b208-08d8f747ca88")
 			(effects
@@ -2407,25 +2370,12 @@
 			)
 		)
 		(property "Value" "CH1"
-			(at 6.35 19 -90)
+			(at 6.35 19 270)
 			(layer "F.Fab")
 			(uuid "7d5ae7a3-ce28-494c-93ea-4753e73a4b66")
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Connector_Audio:Jack_6.35mm_Neutrik_NMJ6HCD2_Horizontal"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "b8d77ff7-5aca-4d65-a3d2-cf4436e221c8")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -2781,7 +2731,7 @@
 			(uuid "4c400f58-610a-43a3-97ef-cafa7d734add")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 6.35 8.115 -90)
+			(at 6.35 8.115 270)
 			(layer "F.Fab")
 			(uuid "2a934fa6-7acd-45c0-a46e-63d093a062eb")
 			(effects
@@ -2858,14 +2808,14 @@
 			)
 		)
 	)
-	(footprint "Connector_Audio:Jack_6.35mm_Neutrik_NMJ6HCD2_Horizontal"
+	(footprint "multichannel_mixer:Jack_6.35mm_Neutrik_NMJ6HCD2_Horizontal"
 		(layer "F.Cu")
 		(uuid "2d500594-2939-405a-9372-47ea3966a4da")
 		(at 180.585 65.585 90)
 		(descr "M Series, 6.35mm (1/4in) stereo jack, switched, with chrome ferrule and straight PCB pins, https://www.neutrik.com/en/product/nmj6hcd2")
 		(tags "neutrik jack m")
 		(property "Reference" "J6"
-			(at 6.35 -3 -90)
+			(at 6.35 -3 270)
 			(layer "F.SilkS")
 			(uuid "76fc342d-83e5-4602-a904-0e3b0466efe7")
 			(effects
@@ -2876,25 +2826,12 @@
 			)
 		)
 		(property "Value" "CH1"
-			(at 6.35 19 -90)
+			(at 6.35 19 270)
 			(layer "F.Fab")
 			(uuid "c9b3084c-6aee-4ded-8489-8442d572a768")
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Connector_Audio:Jack_6.35mm_Neutrik_NMJ6HCD2_Horizontal"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "448e017f-ac63-4299-a74f-c614b853c740")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -3250,7 +3187,7 @@
 			(uuid "e48cb5cb-c40a-4a31-9316-8afe186d5feb")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 6.35 8.115 -90)
+			(at 6.35 8.115 270)
 			(layer "F.Fab")
 			(uuid "144ce332-4518-4902-a8bc-b2c6508f6700")
 			(effects
@@ -3327,7 +3264,7 @@
 			)
 		)
 	)
-	(footprint "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
+	(footprint "multichannel_mixer:Potentiometer_Alps_RK09K_Single_Vertical"
 		(layer "F.Cu")
 		(uuid "2ef7f323-c4e3-4aaa-991c-dab856fd6fd2")
 		(at 98.5 115.4 90)
@@ -3351,19 +3288,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "1af2f5f0-a672-4f01-8be1-bef28c2f9484")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -3576,7 +3500,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "a1e762e2-e578-4682-b486-9c3956607648")
 		)
@@ -3644,7 +3568,7 @@
 			)
 		)
 	)
-	(footprint "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
+	(footprint "multichannel_mixer:Potentiometer_Alps_RK09K_Single_Vertical"
 		(layer "F.Cu")
 		(uuid "2f692e5b-b5a8-45a4-aee4-323d133a0791")
 		(at 98.5 97.4 90)
@@ -3668,19 +3592,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "e0ef1abb-7aac-4983-8f9c-b890971f3899")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -3893,7 +3804,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "aff4f775-5717-4c48-8544-c487a550343c")
 		)
@@ -3961,7 +3872,7 @@
 			)
 		)
 	)
-	(footprint "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
+	(footprint "multichannel_mixer:Potentiometer_Alps_RK09K_Single_Vertical"
 		(layer "F.Cu")
 		(uuid "38fc87ae-45bf-4b9b-928e-5b55fbc2d137")
 		(at 164.5 97.4 90)
@@ -3985,19 +3896,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "0678d85b-9919-4224-8bde-b08722ccfc0c")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -4210,7 +4108,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "82b5cd63-a039-4d30-b8ca-1fc41ba2c15b")
 		)
@@ -4289,7 +4187,7 @@
 			)
 		)
 	)
-	(footprint "Capacitors THD:CAPPRB254-500X840"
+	(footprint "multichannel_mixer:CAPPRB254-500X840"
 		(layer "F.Cu")
 		(uuid "446b5a82-e240-4857-a65b-429a472b0b1d")
 		(at 186.46 101.73 180)
@@ -4313,19 +4211,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Capacitors THD:CAPPRB254-500X840"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "c5732a85-6277-4e8f-9a62-e014679a0ec0")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -4868,7 +4753,7 @@
 				(width 0.2)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.SilkS")
 			(uuid "03298366-a80d-458d-811e-b88568ff1146")
 		)
@@ -4899,7 +4784,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "153e8a8a-5403-45af-8f05-b616a4bad1ba")
 		)
@@ -4927,14 +4812,14 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Connector_Audio:Jack_6.35mm_Neutrik_NMJ6HCD2_Horizontal"
+	(footprint "multichannel_mixer:Jack_6.35mm_Neutrik_NMJ6HCD2_Horizontal"
 		(layer "F.Cu")
 		(uuid "56b99062-3dad-4ab1-8e65-2ebe153a12fb")
 		(at 114.785 65.635 90)
 		(descr "M Series, 6.35mm (1/4in) stereo jack, switched, with chrome ferrule and straight PCB pins, https://www.neutrik.com/en/product/nmj6hcd2")
 		(tags "neutrik jack m")
 		(property "Reference" "J7"
-			(at 6.35 -3 -90)
+			(at 6.35 -3 270)
 			(layer "F.SilkS")
 			(uuid "73103ff7-42a4-4394-be1c-ed69160269b0")
 			(effects
@@ -4945,25 +4830,12 @@
 			)
 		)
 		(property "Value" "CH1"
-			(at 6.35 19 -90)
+			(at 6.35 19 270)
 			(layer "F.Fab")
 			(uuid "bc6b6866-f255-4683-acf1-629758f738da")
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Connector_Audio:Jack_6.35mm_Neutrik_NMJ6HCD2_Horizontal"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "8d924e86-3b17-4b09-889c-d66c6b58c10e")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -5396,7 +5268,7 @@
 			)
 		)
 	)
-	(footprint "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
+	(footprint "multichannel_mixer:Potentiometer_Alps_RK09K_Single_Vertical"
 		(layer "F.Cu")
 		(uuid "577c4297-5c04-41f4-b4c8-8ea993d77cc1")
 		(at 98.5 151.45 90)
@@ -5420,19 +5292,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "25885d3d-c529-4ad7-bbb6-6d3fb12ddf93")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -5645,7 +5504,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "354f2176-4e81-4b3e-95a8-dc94dde0f899")
 		)
@@ -5713,7 +5572,7 @@
 			)
 		)
 	)
-	(footprint "Capacitors THD:CAPPRB254-500X840"
+	(footprint "multichannel_mixer:CAPPRB254-500X840"
 		(layer "F.Cu")
 		(uuid "5a7bb254-1f81-4794-82fb-437a1cb5e825")
 		(at 162 79.9 180)
@@ -5737,19 +5596,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Capacitors THD:CAPPRB254-500X840"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "e9cad6cd-9ae6-48c4-993a-6715c1ca66b8")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -6292,7 +6138,7 @@
 				(width 0.2)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.SilkS")
 			(uuid "044b31b7-6bb7-418d-98b8-8d71a53ee8b9")
 		)
@@ -6323,7 +6169,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "c7cdd3f3-4613-418b-b813-70810b9ae2e8")
 		)
@@ -6351,13 +6197,13 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors THD:CAPPRB254-500X840"
+	(footprint "multichannel_mixer:CAPPRB254-500X840"
 		(layer "F.Cu")
 		(uuid "613f7576-72b6-4faf-9dbb-beb7ddaf18df")
 		(at 106.5 76.4 90)
 		(descr "Capacitor, Polarized Radial Bead, Pin spacing 2.54mm - Body Diameter 5.5mm X Body Height 8.4mm")
 		(property "Reference" "C40"
-			(at 0 -3.601 -90)
+			(at 0 -3.601 270)
 			(layer "F.SilkS")
 			(uuid "ea71bb93-7aee-4b02-b014-3b723175062d")
 			(effects
@@ -6368,26 +6214,13 @@
 			)
 		)
 		(property "Value" "CTEB_2.2UF_35V_10%_254-500X840"
-			(at 0 3.601 -90)
+			(at 0 3.601 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "6c4893c0-1507-4f56-a01b-341441c0d103")
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Capacitors THD:CAPPRB254-500X840"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "5563641c-0e71-4428-a624-1a52f43c0186")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -6930,7 +6763,7 @@
 				(width 0.2)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.SilkS")
 			(uuid "c1bc672b-4b98-45be-9de1-91f57b08b41e")
 		)
@@ -6961,7 +6794,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "f39fea2a-33c8-4fdf-8f2f-b178cc41514b")
 		)
@@ -6989,13 +6822,13 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors THD:CAPPRB254-500X840"
+	(footprint "multichannel_mixer:CAPPRB254-500X840"
 		(layer "F.Cu")
 		(uuid "638c7ecf-bec1-41ee-9945-88559e1f990e")
 		(at 150.5 76.4 90)
 		(descr "Capacitor, Polarized Radial Bead, Pin spacing 2.54mm - Body Diameter 5.5mm X Body Height 8.4mm")
 		(property "Reference" "C13"
-			(at 0 -3.601 -90)
+			(at 0 -3.601 270)
 			(layer "F.SilkS")
 			(uuid "cdf1e8ac-8144-4a0b-96ff-4476e073ed86")
 			(effects
@@ -7006,26 +6839,13 @@
 			)
 		)
 		(property "Value" "CTEB_2.2UF_35V_10%_254-500X840"
-			(at 0 3.601 -90)
+			(at 0 3.601 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "eda06be2-731a-4721-9c27-37feec0e7551")
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Capacitors THD:CAPPRB254-500X840"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "9c31d11f-7abe-41f4-a701-40176896e8b7")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -7568,7 +7388,7 @@
 				(width 0.2)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.SilkS")
 			(uuid "60e632c9-938b-4cc3-8edb-cfd20b368531")
 		)
@@ -7599,7 +7419,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "7dd81091-65b3-445d-9ff5-9ff267ac3de1")
 		)
@@ -7627,13 +7447,13 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors THD:CAPPRB254-500X840"
+	(footprint "multichannel_mixer:CAPPRB254-500X840"
 		(layer "F.Cu")
 		(uuid "6adedbaa-c814-4fe6-abaa-f6d542921e2c")
 		(at 128.5 76.4 90)
 		(descr "Capacitor, Polarized Radial Bead, Pin spacing 2.54mm - Body Diameter 5.5mm X Body Height 8.4mm")
 		(property "Reference" "C22"
-			(at 0 -3.601 -90)
+			(at 0 -3.601 270)
 			(layer "F.SilkS")
 			(uuid "2600402d-5b97-4e79-b068-672f11ea26b5")
 			(effects
@@ -7644,26 +7464,13 @@
 			)
 		)
 		(property "Value" "CTEB_2.2UF_35V_10%_254-500X840"
-			(at 0 3.601 -90)
+			(at 0 3.601 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "c286012b-9424-4159-bf3f-2a27efd8c832")
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Capacitors THD:CAPPRB254-500X840"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "80bf11a0-e57d-4b80-9220-b385ae2806ae")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -8206,7 +8013,7 @@
 				(width 0.2)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.SilkS")
 			(uuid "4fef2900-026d-47f7-87c5-0beba8d9b356")
 		)
@@ -8237,7 +8044,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "503e8914-2073-4d3d-8416-e0aba916bcae")
 		)
@@ -8265,7 +8072,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors THD:CAPPRB254-500X840"
+	(footprint "multichannel_mixer:CAPPRB254-500X840"
 		(layer "F.Cu")
 		(uuid "77c2c9ee-6481-423c-b3d0-3ee2f901750b")
 		(at 140 79.9 180)
@@ -8289,19 +8096,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Capacitors THD:CAPPRB254-500X840"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "8b86e39c-1cb7-440c-968e-68c02cd16a7d")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -8844,7 +8638,7 @@
 				(width 0.2)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.SilkS")
 			(uuid "9bb9ef48-df66-40b6-a306-87285913475e")
 		)
@@ -8875,7 +8669,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "ee752916-cf82-4dc7-af99-7b1fcbc5be28")
 		)
@@ -8903,7 +8697,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
+	(footprint "multichannel_mixer:Potentiometer_Alps_RK09K_Single_Vertical"
 		(layer "F.Cu")
 		(uuid "7994b2ed-5eac-4384-a632-6161ed5b2ce1")
 		(at 142.5 115.4 90)
@@ -8927,19 +8721,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "efaa73a0-ad89-4b70-9ba7-6782e3541281")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -9152,7 +8933,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "6eaa9660-50cd-49ee-bb95-e60953b42885")
 		)
@@ -9231,7 +9012,7 @@
 			)
 		)
 	)
-	(footprint "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
+	(footprint "multichannel_mixer:Potentiometer_Alps_RK09K_Single_Vertical"
 		(layer "F.Cu")
 		(uuid "7abcbc4c-fbb7-489d-8918-df18b17009f8")
 		(at 142.5 133.4 90)
@@ -9255,19 +9036,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "b966f8cc-a87d-41c7-a640-8d044a740556")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -9480,7 +9248,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "5446c0ac-3a97-478b-b345-40b85bca657d")
 		)
@@ -9559,7 +9327,7 @@
 			)
 		)
 	)
-	(footprint "Capacitors THD:CAPPRB254-500X840"
+	(footprint "multichannel_mixer:CAPPRB254-500X840"
 		(layer "F.Cu")
 		(uuid "7d83d536-ed93-44ac-917a-de67b485b0db")
 		(at 193.87 101.91 90)
@@ -9576,26 +9344,13 @@
 			)
 		)
 		(property "Value" "CTEB_2.2UF_35V_10%_254-500X840"
-			(at 0 3.601 -90)
+			(at 0 3.601 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "d543ce5b-6a28-436a-a40f-bd2ddc003008")
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Capacitors THD:CAPPRB254-500X840"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "f8985870-529c-4d6c-a0ba-fa67cbc92e31")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -10138,7 +9893,7 @@
 				(width 0.2)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.SilkS")
 			(uuid "d9dd6b7e-655b-4f91-9a51-cf98b933fa24")
 		)
@@ -10169,7 +9924,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "4c49fe51-003b-4db0-98e4-8de18229cc46")
 		)
@@ -10197,7 +9952,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
+	(footprint "multichannel_mixer:Potentiometer_Alps_RK09K_Single_Vertical"
 		(layer "F.Cu")
 		(uuid "8d1700e7-4bbf-4cd2-a111-87da1b5ceb20")
 		(at 142.5 97.4 90)
@@ -10221,19 +9976,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "ef5de602-6cab-4a93-8097-3bc9107e196f")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -10446,7 +10188,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "fe4ac91f-dae8-4cb6-b2bd-db174861bb5c")
 		)
@@ -10525,7 +10267,7 @@
 			)
 		)
 	)
-	(footprint "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
+	(footprint "multichannel_mixer:Potentiometer_Alps_RK09K_Single_Vertical"
 		(layer "F.Cu")
 		(uuid "93692c49-0185-4e47-bfb4-b874f6be6089")
 		(at 120.5 97.4 90)
@@ -10549,19 +10291,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "2c6250d9-507f-4391-8010-7c26f53bf3d5")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -10774,7 +10503,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "6f9fb773-6885-4f19-97cd-a205e219ea6d")
 		)
@@ -10853,7 +10582,7 @@
 			)
 		)
 	)
-	(footprint "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
+	(footprint "multichannel_mixer:Potentiometer_Alps_RK09K_Single_Vertical"
 		(layer "F.Cu")
 		(uuid "991fa92b-0413-4fbe-9fa3-54b8bf71a784")
 		(at 98.5 133.4 90)
@@ -10877,19 +10606,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "966c9ef5-131e-4c44-ac24-afe48684d0ec")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -11102,7 +10818,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "feebf4d1-a703-4b80-8c70-24a82b0a7194")
 		)
@@ -11170,14 +10886,14 @@
 			)
 		)
 	)
-	(footprint "Connector_Audio:Jack_6.35mm_Neutrik_NMJ6HCD2_Horizontal"
+	(footprint "multichannel_mixer:Jack_6.35mm_Neutrik_NMJ6HCD2_Horizontal"
 		(layer "F.Cu")
 		(uuid "a55422d7-3520-4236-a5eb-2f6a6912210e")
 		(at 158.785 65.635 90)
 		(descr "M Series, 6.35mm (1/4in) stereo jack, switched, with chrome ferrule and straight PCB pins, https://www.neutrik.com/en/product/nmj6hcd2")
 		(tags "neutrik jack m")
 		(property "Reference" "J8"
-			(at 6.35 -3 -90)
+			(at 6.35 -3 270)
 			(layer "F.SilkS")
 			(uuid "4e282748-01a0-4a99-8df0-4d3ba87da138")
 			(effects
@@ -11188,25 +10904,12 @@
 			)
 		)
 		(property "Value" "CH1"
-			(at 6.35 19 -90)
+			(at 6.35 19 270)
 			(layer "F.Fab")
 			(uuid "32c932b6-83cf-498e-8eda-dee7c1d3760f")
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Connector_Audio:Jack_6.35mm_Neutrik_NMJ6HCD2_Horizontal"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "105a5eba-b3f9-492f-8a12-37615ef4d183")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -11639,7 +11342,7 @@
 			)
 		)
 	)
-	(footprint "Capacitors THD:CAPPRB254-500X840"
+	(footprint "multichannel_mixer:CAPPRB254-500X840"
 		(layer "F.Cu")
 		(uuid "a68aea77-4b34-4f23-b5d2-09d879718b5f")
 		(at 118 79.9 180)
@@ -11663,19 +11366,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Capacitors THD:CAPPRB254-500X840"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "22b17ec4-2c1e-4a49-ad19-31c12214c787")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -12218,7 +11908,7 @@
 				(width 0.2)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.SilkS")
 			(uuid "e985b235-d3dd-42f9-b83f-995a9fa777c2")
 		)
@@ -12249,7 +11939,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "04a5fede-df91-44c4-a881-46b6f1489676")
 		)
@@ -12277,14 +11967,14 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Connector_Audio:Jack_6.35mm_Neutrik_NMJ6HCD2_Horizontal"
+	(footprint "multichannel_mixer:Jack_6.35mm_Neutrik_NMJ6HCD2_Horizontal"
 		(layer "F.Cu")
 		(uuid "adeeb496-2ef3-4042-96c7-ce7371d9685d")
 		(at 136.785 65.635 90)
 		(descr "M Series, 6.35mm (1/4in) stereo jack, switched, with chrome ferrule and straight PCB pins, https://www.neutrik.com/en/product/nmj6hcd2")
 		(tags "neutrik jack m")
 		(property "Reference" "J1"
-			(at 6.35 -3 -90)
+			(at 6.35 -3 270)
 			(layer "F.SilkS")
 			(uuid "35216cab-b6a6-451e-a776-3bb473841972")
 			(effects
@@ -12295,25 +11985,12 @@
 			)
 		)
 		(property "Value" "CH1"
-			(at 6.35 19 -90)
+			(at 6.35 19 270)
 			(layer "F.Fab")
 			(uuid "1a39a7de-c464-4ad9-a27b-cd4b348ba953")
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Connector_Audio:Jack_6.35mm_Neutrik_NMJ6HCD2_Horizontal"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "8cd75350-0157-445a-9b59-7cce5359071d")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -12669,7 +12346,7 @@
 			(uuid "a2046b50-ba99-421a-b8cd-ce518697e0de")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 6.35 8.115 -90)
+			(at 6.35 8.115 270)
 			(layer "F.Fab")
 			(uuid "9c8744dc-7cf2-487b-901c-d19f4a1ca2de")
 			(effects
@@ -12746,7 +12423,7 @@
 			)
 		)
 	)
-	(footprint "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
+	(footprint "multichannel_mixer:Potentiometer_Alps_RK09K_Single_Vertical"
 		(layer "F.Cu")
 		(uuid "aed38abc-e172-470d-b59b-e31e99da4698")
 		(at 164.5 115.4 90)
@@ -12770,19 +12447,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "14b15b3c-1434-45ff-86b6-eef41ad7b51c")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -12995,7 +12659,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "a0e7edd8-4241-41ff-9cf2-6a435cb22b36")
 		)
@@ -13074,7 +12738,7 @@
 			)
 		)
 	)
-	(footprint "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
+	(footprint "multichannel_mixer:Potentiometer_Alps_RK09K_Single_Vertical"
 		(layer "F.Cu")
 		(uuid "affb903f-24b8-435c-a361-df9d7bfb9623")
 		(at 142.5 151.45 90)
@@ -13098,19 +12762,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "ec955ec0-597a-444d-8834-55bf157e430d")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -13323,7 +12974,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "fcc25ccb-68a9-4a01-b44c-b181eb009fa3")
 		)
@@ -13402,7 +13053,7 @@
 			)
 		)
 	)
-	(footprint "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
+	(footprint "multichannel_mixer:Potentiometer_Alps_RK09K_Single_Vertical"
 		(layer "F.Cu")
 		(uuid "b5a9cc03-df07-41d7-99ae-a32d4bb9f2e6")
 		(at 164.5 133.4 90)
@@ -13426,19 +13077,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "51dcba62-53a7-4ea5-a6b9-09b1f879eabb")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -13651,7 +13289,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "564deedc-f25f-49a6-8833-9e56db1f2a76")
 		)
@@ -13730,7 +13368,7 @@
 			)
 		)
 	)
-	(footprint "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
+	(footprint "multichannel_mixer:Potentiometer_Alps_RK09K_Single_Vertical"
 		(layer "F.Cu")
 		(uuid "bcd1e172-dde6-495c-809b-ca18f4bda6b8")
 		(at 120.5 151.45 90)
@@ -13754,19 +13392,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "c32e70e4-3c99-4d13-9b86-7c7c8bae40d6")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -13979,7 +13604,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "fcc0e7d1-65ef-4367-8b52-7131cdea04ca")
 		)
@@ -14058,7 +13683,7 @@
 			)
 		)
 	)
-	(footprint "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
+	(footprint "multichannel_mixer:Potentiometer_Alps_RK09K_Single_Vertical"
 		(layer "F.Cu")
 		(uuid "d30a26fc-21bd-4dd5-ae6c-6b73c5d46caa")
 		(at 120.5 133.4 90)
@@ -14082,19 +13707,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "8668eead-0358-47e7-b42d-73e65f92a5b2")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -14307,7 +13919,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "a73b284b-661c-45c2-8c98-94f2f4462b69")
 		)
@@ -14386,7 +13998,7 @@
 			)
 		)
 	)
-	(footprint "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
+	(footprint "multichannel_mixer:Potentiometer_Alps_RK09K_Single_Vertical"
 		(layer "F.Cu")
 		(uuid "e9b5c9c8-57ea-4ae3-ba2f-12b93a679ea9")
 		(at 164.5 151.45 90)
@@ -14410,19 +14022,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "e8c1f4b2-227a-4507-a0fb-87fd33a665d1")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -14635,7 +14234,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "9d003408-5798-4766-b99d-54c62d1dca5a")
 		)
@@ -14714,13 +14313,13 @@
 			)
 		)
 	)
-	(footprint "Capacitors THD:CAPPRB254-500X840"
+	(footprint "multichannel_mixer:CAPPRB254-500X840"
 		(layer "F.Cu")
 		(uuid "ea589ae6-bd74-4220-8e3b-a7779d6f7b38")
 		(at 172.5 76.4 90)
 		(descr "Capacitor, Polarized Radial Bead, Pin spacing 2.54mm - Body Diameter 5.5mm X Body Height 8.4mm")
 		(property "Reference" "C31"
-			(at 0 -3.601 -90)
+			(at 0 -3.601 270)
 			(layer "F.SilkS")
 			(uuid "c5416fe1-f9b2-4245-9dcc-77e2e9e01040")
 			(effects
@@ -14731,26 +14330,13 @@
 			)
 		)
 		(property "Value" "CTEB_2.2UF_35V_10%_254-500X840"
-			(at 0 3.601 -90)
+			(at 0 3.601 270)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "f9c45229-b3e5-4807-8958-e7c56f943ec8")
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Capacitors THD:CAPPRB254-500X840"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "0ac81d91-8986-42c9-b36e-44db45615297")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -15293,7 +14879,7 @@
 				(width 0.2)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.SilkS")
 			(uuid "601bab98-5285-4855-915c-044506c9905b")
 		)
@@ -15324,7 +14910,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "040bee9b-e027-4ad7-9cd8-26071e50b21d")
 		)
@@ -15352,7 +14938,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors THD:CAPPRB254-500X840"
+	(footprint "multichannel_mixer:CAPPRB254-500X840"
 		(layer "F.Cu")
 		(uuid "fc85c7dd-8337-4981-b2a0-06e71a6f6f21")
 		(at 96 79.9 180)
@@ -15376,19 +14962,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" "Capacitors THD:CAPPRB254-500X840"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "c3fcdefc-1e56-4225-b29c-95e3a8754a04")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -15931,7 +15504,7 @@
 				(width 0.2)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.SilkS")
 			(uuid "dfc82526-c31d-4560-a563-c9784485e4fb")
 		)
@@ -15962,7 +15535,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.Fab")
 			(uuid "6c13bb8e-d646-422b-9672-2562d79665d1")
 		)
@@ -15990,7 +15563,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "01af1621-bf1e-4866-9afb-fc0ad9d5bbc6")
 		(at 104.4 102.8 180)
@@ -16015,20 +15588,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "e796c1bf-58d6-4930-ae71-dac797a95484")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -16732,7 +16291,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "052aaf5b-83a5-4049-a08f-c2580eef5f42")
 		(at 163 135.9)
@@ -16757,20 +16316,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "19955a5a-de1f-4df2-8a05-a137d645c3f7")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -17474,7 +17019,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "06560235-829d-4551-8d65-a6fb4eccef39")
 		(at 144.95 147.4 90)
@@ -17492,7 +17037,7 @@
 			)
 		)
 		(property "Value" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 -2.176 -90)
+			(at 0 -2.176 270)
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "21ac79a0-44d3-4ccd-b400-14214adaffb4")
@@ -17504,22 +17049,8 @@
 				(justify mirror)
 			)
 		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 -90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "db47573b-0fd8-46f7-87d1-c60cff52e097")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
 		(property "Datasheet" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\R1206_NIC_NRC.pdf"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17533,7 +17064,7 @@
 			)
 		)
 		(property "Description" "±1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17547,7 +17078,7 @@
 			)
 		)
 		(property "Val" "10k"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17561,7 +17092,7 @@
 			)
 		)
 		(property "Part Number" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17575,7 +17106,7 @@
 			)
 		)
 		(property "Library Ref" "Resistor - 1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17589,7 +17120,7 @@
 			)
 		)
 		(property "Library Path" "SchLib\\Resistors.SchLib"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17603,7 +17134,7 @@
 			)
 		)
 		(property "Comment" "10k"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17617,7 +17148,7 @@
 			)
 		)
 		(property "Component Kind" "Standard"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17631,7 +17162,7 @@
 			)
 		)
 		(property "Component Type" "Standard"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17645,7 +17176,7 @@
 			)
 		)
 		(property "PackageDescription" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17659,7 +17190,7 @@
 			)
 		)
 		(property "Pin Count" "2"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17673,7 +17204,7 @@
 			)
 		)
 		(property "Footprint Path" "PcbLib\\Resistors SMD.PcbLib"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17687,7 +17218,7 @@
 			)
 		)
 		(property "Footprint Ref" "RESC3216X65N"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17701,7 +17232,7 @@
 			)
 		)
 		(property "Status" "Preferred"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17715,7 +17246,7 @@
 			)
 		)
 		(property "Power" "0.25W"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17729,7 +17260,7 @@
 			)
 		)
 		(property "TC" "±100ppm/°C"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17743,7 +17274,7 @@
 			)
 		)
 		(property "Voltage" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17757,7 +17288,7 @@
 			)
 		)
 		(property "Tolerance" "±1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17771,7 +17302,7 @@
 			)
 		)
 		(property "Part Description" "General Purpose Thick Film Chip Resistor"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17785,7 +17316,7 @@
 			)
 		)
 		(property "Manufacturer" "GENERIC"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17799,7 +17330,7 @@
 			)
 		)
 		(property "Manufacturer Part Number" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17813,7 +17344,7 @@
 			)
 		)
 		(property "Case" "1206"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17827,7 +17358,7 @@
 			)
 		)
 		(property "PressFit" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17841,7 +17372,7 @@
 			)
 		)
 		(property "Mounted" "Yes"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17855,7 +17386,7 @@
 			)
 		)
 		(property "Sense Comment" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17869,7 +17400,7 @@
 			)
 		)
 		(property "Sense" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17883,7 +17414,7 @@
 			)
 		)
 		(property "Status Comment" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17897,7 +17428,7 @@
 			)
 		)
 		(property "Socket" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17911,7 +17442,7 @@
 			)
 		)
 		(property "SMD" "Yes"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17925,7 +17456,7 @@
 			)
 		)
 		(property "ComponentHeight" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17939,7 +17470,7 @@
 			)
 		)
 		(property "Manufacturer1 Example" "NIC COMPONENT"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17953,7 +17484,7 @@
 			)
 		)
 		(property "Manufacturer1 Part Number" "NRC12F1002TRF"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17967,7 +17498,7 @@
 			)
 		)
 		(property "Manufacturer1 ComponentHeight" "0.65mm"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17981,7 +17512,7 @@
 			)
 		)
 		(property "HelpURL" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\R1206_NIC_NRC.pdf"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -17995,7 +17526,7 @@
 			)
 		)
 		(property "Author" "CERN DEM JLC"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -18009,7 +17540,7 @@
 			)
 		)
 		(property "CreateDate" "12/03/07 00:00:00"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -18023,7 +17554,7 @@
 			)
 		)
 		(property "LatestRevisionDate" "03/13/08 00:00:00"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -18037,7 +17568,7 @@
 			)
 		)
 		(property "Database Table Name" "Resistors"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -18051,7 +17582,7 @@
 			)
 		)
 		(property "Library Name" "Resistors SMD"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -18065,7 +17596,7 @@
 			)
 		)
 		(property "Footprint Library" "Resistors SMD"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -18079,7 +17610,7 @@
 			)
 		)
 		(property "License" "This work is licensed under the Creative Commons CC-BY-SA 4.0 License. To the extent that circuit schematics that use Licensed Material can be considered to be ‘Adapted Material’, then the copyright holder waives article 3.b of the license with respect to these schematics."
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -18216,7 +17747,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "14210547-155e-4bb1-b0ad-9e53eb8cae03")
 		(at 123 76.4 180)
@@ -18241,20 +17772,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "dadccba5-1978-4fc9-886d-6d10cf69c24d")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -18958,7 +18475,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "14954005-cbed-4d75-bda3-5270d2adf816")
 		(at 105 135.9)
@@ -18983,20 +18500,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "6bfd658d-202d-4cd9-8a12-4bd572d75af4")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -19700,7 +19203,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "ICs And Semiconductors SMD:SOIC127P600X175-8N"
+	(footprint "multichannel_mixer:SOIC127P600X175-8N"
 		(layer "B.Cu")
 		(uuid "14dcd6b7-28de-486c-87e1-37a918938e53")
 		(at 190.335 108.24 180)
@@ -19725,20 +19228,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "ICs And Semiconductors SMD:SOIC127P600X175-8N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "78d18223-8e8c-4cb2-b43d-2cadeff796ab")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -20369,7 +19858,7 @@
 				(width 0.25)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "B.SilkS")
 			(uuid "4f76a083-9617-4edf-a9b6-87dc1e91929f")
 		)
@@ -20460,7 +19949,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "B.Fab")
 			(uuid "ab5fc838-a216-43a0-a299-9a7cab541029")
 		)
@@ -20538,7 +20027,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "16c6edfe-2bb5-4c5e-a1ca-6907c3836866")
 		(at 171 121 180)
@@ -20563,20 +20052,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "52a069e5-c7ed-415e-ad4a-8d738ba11fee")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -21280,7 +20755,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "184d662a-7a4c-47db-8ef1-95394cf32e2e")
 		(at 101 93 90)
@@ -21298,7 +20773,7 @@
 			)
 		)
 		(property "Value" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 -2.176 -90)
+			(at 0 -2.176 270)
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "304ae338-12bf-41b3-a499-48372fe3ab86")
@@ -21310,22 +20785,8 @@
 				(justify mirror)
 			)
 		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 -90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "5a8f52bb-715d-4f05-84f2-49a09072278f")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
 		(property "Datasheet" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\R1206_NIC_NRC.pdf"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21339,7 +20800,7 @@
 			)
 		)
 		(property "Description" "±1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21353,7 +20814,7 @@
 			)
 		)
 		(property "Val" "10k"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21367,7 +20828,7 @@
 			)
 		)
 		(property "Part Number" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21381,7 +20842,7 @@
 			)
 		)
 		(property "Library Ref" "Resistor - 1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21395,7 +20856,7 @@
 			)
 		)
 		(property "Library Path" "SchLib\\Resistors.SchLib"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21409,7 +20870,7 @@
 			)
 		)
 		(property "Comment" "10k"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21423,7 +20884,7 @@
 			)
 		)
 		(property "Component Kind" "Standard"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21437,7 +20898,7 @@
 			)
 		)
 		(property "Component Type" "Standard"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21451,7 +20912,7 @@
 			)
 		)
 		(property "PackageDescription" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21465,7 +20926,7 @@
 			)
 		)
 		(property "Pin Count" "2"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21479,7 +20940,7 @@
 			)
 		)
 		(property "Footprint Path" "PcbLib\\Resistors SMD.PcbLib"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21493,7 +20954,7 @@
 			)
 		)
 		(property "Footprint Ref" "RESC3216X65N"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21507,7 +20968,7 @@
 			)
 		)
 		(property "Status" "Preferred"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21521,7 +20982,7 @@
 			)
 		)
 		(property "Power" "0.25W"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21535,7 +20996,7 @@
 			)
 		)
 		(property "TC" "±100ppm/°C"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21549,7 +21010,7 @@
 			)
 		)
 		(property "Voltage" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21563,7 +21024,7 @@
 			)
 		)
 		(property "Tolerance" "±1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21577,7 +21038,7 @@
 			)
 		)
 		(property "Part Description" "General Purpose Thick Film Chip Resistor"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21591,7 +21052,7 @@
 			)
 		)
 		(property "Manufacturer" "GENERIC"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21605,7 +21066,7 @@
 			)
 		)
 		(property "Manufacturer Part Number" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21619,7 +21080,7 @@
 			)
 		)
 		(property "Case" "1206"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21633,7 +21094,7 @@
 			)
 		)
 		(property "PressFit" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21647,7 +21108,7 @@
 			)
 		)
 		(property "Mounted" "Yes"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21661,7 +21122,7 @@
 			)
 		)
 		(property "Sense Comment" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21675,7 +21136,7 @@
 			)
 		)
 		(property "Sense" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21689,7 +21150,7 @@
 			)
 		)
 		(property "Status Comment" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21703,7 +21164,7 @@
 			)
 		)
 		(property "Socket" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21717,7 +21178,7 @@
 			)
 		)
 		(property "SMD" "Yes"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21731,7 +21192,7 @@
 			)
 		)
 		(property "ComponentHeight" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21745,7 +21206,7 @@
 			)
 		)
 		(property "Manufacturer1 Example" "NIC COMPONENT"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21759,7 +21220,7 @@
 			)
 		)
 		(property "Manufacturer1 Part Number" "NRC12F1002TRF"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21773,7 +21234,7 @@
 			)
 		)
 		(property "Manufacturer1 ComponentHeight" "0.65mm"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21787,7 +21248,7 @@
 			)
 		)
 		(property "HelpURL" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\R1206_NIC_NRC.pdf"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21801,7 +21262,7 @@
 			)
 		)
 		(property "Author" "CERN DEM JLC"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21815,7 +21276,7 @@
 			)
 		)
 		(property "CreateDate" "12/03/07 00:00:00"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21829,7 +21290,7 @@
 			)
 		)
 		(property "LatestRevisionDate" "03/13/08 00:00:00"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21843,7 +21304,7 @@
 			)
 		)
 		(property "Database Table Name" "Resistors"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21857,7 +21318,7 @@
 			)
 		)
 		(property "Library Name" "Resistors SMD"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21871,7 +21332,7 @@
 			)
 		)
 		(property "Footprint Library" "Resistors SMD"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -21885,7 +21346,7 @@
 			)
 		)
 		(property "License" "This work is licensed under the Creative Commons CC-BY-SA 4.0 License. To the extent that circuit schematics that use Licensed Material can be considered to be ‘Adapted Material’, then the copyright holder waives article 3.b of the license with respect to these schematics."
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -22022,7 +21483,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "ICs And Semiconductors SMD:SOIC127P600X175-8N"
+	(footprint "multichannel_mixer:SOIC127P600X175-8N"
 		(layer "B.Cu")
 		(uuid "19c0567c-0a4a-44fa-b8ec-1ed930890b86")
 		(at 102.365 84.1 -90)
@@ -22047,20 +21508,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "ICs And Semiconductors SMD:SOIC127P600X175-8N"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "ed4505e4-f767-4c60-b423-83c8ff391fdf")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -22691,7 +22138,7 @@
 				(width 0.25)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "B.SilkS")
 			(uuid "c128a132-d662-488d-bb03-b9e29350cf0d")
 		)
@@ -22782,7 +22229,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "B.Fab")
 			(uuid "35e978b7-a4c0-4cb6-b401-cdd1fe679f0d")
 		)
@@ -22860,7 +22307,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "1b59920a-24f6-41d9-a64a-3553f3bcda5f")
 		(at 166.95 147.4 90)
@@ -22878,7 +22325,7 @@
 			)
 		)
 		(property "Value" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 -2.176 -90)
+			(at 0 -2.176 270)
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "1740c498-2c3f-43ac-b80f-c765dca058ca")
@@ -22890,22 +22337,8 @@
 				(justify mirror)
 			)
 		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 -90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "2dba6a11-a015-4249-a232-b77637ebddd1")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
 		(property "Datasheet" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\R1206_NIC_NRC.pdf"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -22919,7 +22352,7 @@
 			)
 		)
 		(property "Description" "±1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -22933,7 +22366,7 @@
 			)
 		)
 		(property "Val" "10k"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -22947,7 +22380,7 @@
 			)
 		)
 		(property "Part Number" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -22961,7 +22394,7 @@
 			)
 		)
 		(property "Library Ref" "Resistor - 1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -22975,7 +22408,7 @@
 			)
 		)
 		(property "Library Path" "SchLib\\Resistors.SchLib"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -22989,7 +22422,7 @@
 			)
 		)
 		(property "Comment" "10k"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23003,7 +22436,7 @@
 			)
 		)
 		(property "Component Kind" "Standard"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23017,7 +22450,7 @@
 			)
 		)
 		(property "Component Type" "Standard"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23031,7 +22464,7 @@
 			)
 		)
 		(property "PackageDescription" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23045,7 +22478,7 @@
 			)
 		)
 		(property "Pin Count" "2"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23059,7 +22492,7 @@
 			)
 		)
 		(property "Footprint Path" "PcbLib\\Resistors SMD.PcbLib"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23073,7 +22506,7 @@
 			)
 		)
 		(property "Footprint Ref" "RESC3216X65N"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23087,7 +22520,7 @@
 			)
 		)
 		(property "Status" "Preferred"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23101,7 +22534,7 @@
 			)
 		)
 		(property "Power" "0.25W"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23115,7 +22548,7 @@
 			)
 		)
 		(property "TC" "±100ppm/°C"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23129,7 +22562,7 @@
 			)
 		)
 		(property "Voltage" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23143,7 +22576,7 @@
 			)
 		)
 		(property "Tolerance" "±1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23157,7 +22590,7 @@
 			)
 		)
 		(property "Part Description" "General Purpose Thick Film Chip Resistor"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23171,7 +22604,7 @@
 			)
 		)
 		(property "Manufacturer" "GENERIC"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23185,7 +22618,7 @@
 			)
 		)
 		(property "Manufacturer Part Number" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23199,7 +22632,7 @@
 			)
 		)
 		(property "Case" "1206"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23213,7 +22646,7 @@
 			)
 		)
 		(property "PressFit" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23227,7 +22660,7 @@
 			)
 		)
 		(property "Mounted" "Yes"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23241,7 +22674,7 @@
 			)
 		)
 		(property "Sense Comment" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23255,7 +22688,7 @@
 			)
 		)
 		(property "Sense" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23269,7 +22702,7 @@
 			)
 		)
 		(property "Status Comment" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23283,7 +22716,7 @@
 			)
 		)
 		(property "Socket" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23297,7 +22730,7 @@
 			)
 		)
 		(property "SMD" "Yes"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23311,7 +22744,7 @@
 			)
 		)
 		(property "ComponentHeight" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23325,7 +22758,7 @@
 			)
 		)
 		(property "Manufacturer1 Example" "NIC COMPONENT"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23339,7 +22772,7 @@
 			)
 		)
 		(property "Manufacturer1 Part Number" "NRC12F1002TRF"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23353,7 +22786,7 @@
 			)
 		)
 		(property "Manufacturer1 ComponentHeight" "0.65mm"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23367,7 +22800,7 @@
 			)
 		)
 		(property "HelpURL" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\R1206_NIC_NRC.pdf"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23381,7 +22814,7 @@
 			)
 		)
 		(property "Author" "CERN DEM JLC"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23395,7 +22828,7 @@
 			)
 		)
 		(property "CreateDate" "12/03/07 00:00:00"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23409,7 +22842,7 @@
 			)
 		)
 		(property "LatestRevisionDate" "03/13/08 00:00:00"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23423,7 +22856,7 @@
 			)
 		)
 		(property "Database Table Name" "Resistors"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23437,7 +22870,7 @@
 			)
 		)
 		(property "Library Name" "Resistors SMD"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23451,7 +22884,7 @@
 			)
 		)
 		(property "Footprint Library" "Resistors SMD"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23465,7 +22898,7 @@
 			)
 		)
 		(property "License" "This work is licensed under the Creative Commons CC-BY-SA 4.0 License. To the extent that circuit schematics that use Licensed Material can be considered to be ‘Adapted Material’, then the copyright holder waives article 3.b of the license with respect to these schematics."
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -23602,7 +23035,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "1c4af49e-f4b0-46ac-bd9b-d35dc19c5dcf")
 		(at 170.4 100.2 180)
@@ -23627,20 +23060,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "100bbc4f-a561-4b34-8a77-3e19f9f9f9b4")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -24344,7 +23763,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "1f2d6bd6-a730-422e-8cc9-f140d9f88335")
 		(at 139.6 113.6 -90)
@@ -24369,20 +23788,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "5a64e7ee-bbf8-47c3-9b73-e7cb4c82b547")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -25086,7 +24491,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "24169333-428e-49c7-b66f-35c4efa52831")
 		(at 167 76.4 180)
@@ -25111,20 +24516,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "56d01141-a741-4c1f-8cb5-b8743aaa13ff")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -25828,7 +25219,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "2aafd3a4-f8da-4ff9-878d-9b4d8096f30e")
 		(at 119 135.9)
@@ -25853,20 +25244,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "7ef363b5-efbe-4177-9370-6e89e82f2d1f")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -26570,7 +25947,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "2c799000-eefd-4892-ab1f-19a5b5305211")
 		(at 170.4 102.8 180)
@@ -26595,20 +25972,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "37076764-5d3b-4279-bc5d-6ea6e212bcb6")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -27312,7 +26675,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "32154c45-272a-4f1b-bb92-5e3e80b3ad79")
 		(at 101 76.4 180)
@@ -27337,20 +26700,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "1b5707eb-fc08-4f6c-bba1-62a33a39ffc6")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -28054,7 +27403,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "323df3d5-bae3-4268-91ba-132d89edcbb4")
 		(at 145 123.7 -90)
@@ -28079,20 +27428,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "f401c919-0284-47cc-9d68-bad062240c3a")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -28768,7 +28103,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "34dfb910-53b0-4b9a-a13a-e54ff3969e90")
 		(at 105 121 180)
@@ -28793,20 +28128,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "1a903379-596c-48e0-a3c8-2ebb7eacac6e")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -29510,7 +28831,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "373aed5c-d84d-4434-a21a-a1fd37990ce1")
 		(at 140 76.4)
@@ -29535,20 +28856,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "9f7e28de-d4cc-472d-b08c-11e5eb169eeb")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -30252,7 +29559,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "3dbbb966-237a-4622-aa02-da08cfc81215")
 		(at 195.5 107.79 90)
@@ -30269,7 +29576,7 @@
 			)
 		)
 		(property "Value" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 -2.176 -90)
+			(at 0 -2.176 270)
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "faf6c37f-493f-4080-97de-f68330530900")
@@ -30281,22 +29588,8 @@
 				(justify mirror)
 			)
 		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 -90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "51a9eb73-a45e-4496-ad9c-17c850ed3bea")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
 		(property "Datasheet" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\R1206_NIC_NRC.pdf"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30310,7 +29603,7 @@
 			)
 		)
 		(property "Description" "±1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30324,7 +29617,7 @@
 			)
 		)
 		(property "Val" "10k"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30338,7 +29631,7 @@
 			)
 		)
 		(property "Part Number" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30352,7 +29645,7 @@
 			)
 		)
 		(property "Library Ref" "Resistor - 1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30366,7 +29659,7 @@
 			)
 		)
 		(property "Library Path" "SchLib\\Resistors.SchLib"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30380,7 +29673,7 @@
 			)
 		)
 		(property "Comment" "10k"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30394,7 +29687,7 @@
 			)
 		)
 		(property "Component Kind" "Standard"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30408,7 +29701,7 @@
 			)
 		)
 		(property "Component Type" "Standard"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30422,7 +29715,7 @@
 			)
 		)
 		(property "PackageDescription" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30436,7 +29729,7 @@
 			)
 		)
 		(property "Pin Count" "2"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30450,7 +29743,7 @@
 			)
 		)
 		(property "Footprint Path" "PcbLib\\Resistors SMD.PcbLib"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30464,7 +29757,7 @@
 			)
 		)
 		(property "Footprint Ref" "RESC3216X65N"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30478,7 +29771,7 @@
 			)
 		)
 		(property "Status" "Preferred"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30492,7 +29785,7 @@
 			)
 		)
 		(property "Power" "0.25W"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30506,7 +29799,7 @@
 			)
 		)
 		(property "TC" "±100ppm/°C"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30520,7 +29813,7 @@
 			)
 		)
 		(property "Voltage" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30534,7 +29827,7 @@
 			)
 		)
 		(property "Tolerance" "±1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30548,7 +29841,7 @@
 			)
 		)
 		(property "Part Description" "General Purpose Thick Film Chip Resistor"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30562,7 +29855,7 @@
 			)
 		)
 		(property "Manufacturer" "GENERIC"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30576,7 +29869,7 @@
 			)
 		)
 		(property "Manufacturer Part Number" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30590,7 +29883,7 @@
 			)
 		)
 		(property "Case" "1206"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30604,7 +29897,7 @@
 			)
 		)
 		(property "PressFit" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30618,7 +29911,7 @@
 			)
 		)
 		(property "Mounted" "Yes"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30632,7 +29925,7 @@
 			)
 		)
 		(property "Sense Comment" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30646,7 +29939,7 @@
 			)
 		)
 		(property "Sense" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30660,7 +29953,7 @@
 			)
 		)
 		(property "Status Comment" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30674,7 +29967,7 @@
 			)
 		)
 		(property "Socket" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30688,7 +29981,7 @@
 			)
 		)
 		(property "SMD" "Yes"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30702,7 +29995,7 @@
 			)
 		)
 		(property "ComponentHeight" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30716,7 +30009,7 @@
 			)
 		)
 		(property "Manufacturer1 Example" "NIC COMPONENT"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30730,7 +30023,7 @@
 			)
 		)
 		(property "Manufacturer1 Part Number" "NRC12F1002TRF"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30744,7 +30037,7 @@
 			)
 		)
 		(property "Manufacturer1 ComponentHeight" "0.65mm"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30758,7 +30051,7 @@
 			)
 		)
 		(property "HelpURL" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\R1206_NIC_NRC.pdf"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30772,7 +30065,7 @@
 			)
 		)
 		(property "Author" "CERN DEM JLC"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30786,7 +30079,7 @@
 			)
 		)
 		(property "CreateDate" "12/03/07 00:00:00"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30800,7 +30093,7 @@
 			)
 		)
 		(property "LatestRevisionDate" "03/13/08 00:00:00"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30814,7 +30107,7 @@
 			)
 		)
 		(property "Database Table Name" "Resistors"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30828,7 +30121,7 @@
 			)
 		)
 		(property "Library Name" "Resistors SMD"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30842,7 +30135,7 @@
 			)
 		)
 		(property "Footprint Library" "Resistors SMD"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30856,7 +30149,7 @@
 			)
 		)
 		(property "License" "This work is licensed under the Creative Commons CC-BY-SA 4.0 License. To the extent that circuit schematics that use Licensed Material can be considered to be ‘Adapted Material’, then the copyright holder waives article 3.b of the license with respect to these schematics."
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -30993,7 +30286,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "407e97d0-28fd-4a9b-a8ae-14a9da7a54dd")
 		(at 146.5 117.9 180)
@@ -31018,20 +30311,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "4c876264-537a-4673-8da0-fb089c217966")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -31707,7 +30986,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "45b0fdb3-54ad-4dbf-9fdd-67ac6feb56a4")
 		(at 106.4 115.8 -90)
@@ -31732,20 +31011,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "f5d8f1c7-8a84-4d4f-b61a-9cbd27843c88")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -32421,7 +31686,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "49ef3be0-4ece-4a5f-ab9a-708944544e48")
 		(at 190.22 112.76 180)
@@ -32446,20 +31711,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "0a50e9e1-4421-4269-9184-73d2c251cccf")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -33163,7 +32414,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "4e148dbd-8a41-4f56-98ac-558d5f41e56c")
 		(at 128.4 115.8 -90)
@@ -33188,20 +32439,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "007eeca0-e23d-4cfd-8211-ed0f4557324c")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -33877,7 +33114,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "500921ea-2bff-4724-9bc7-ca47fb4047b0")
 		(at 123 93 90)
@@ -33895,7 +33132,7 @@
 			)
 		)
 		(property "Value" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 -2.176 -90)
+			(at 0 -2.176 270)
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "8c09447f-b206-4346-9bcf-a0794cf6c2a1")
@@ -33907,22 +33144,8 @@
 				(justify mirror)
 			)
 		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 -90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "9e4a7bf3-5f3a-47dc-9665-35a75792e3ab")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
 		(property "Datasheet" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\R1206_NIC_NRC.pdf"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -33936,7 +33159,7 @@
 			)
 		)
 		(property "Description" "±1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -33950,7 +33173,7 @@
 			)
 		)
 		(property "Val" "10k"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -33964,7 +33187,7 @@
 			)
 		)
 		(property "Part Number" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -33978,7 +33201,7 @@
 			)
 		)
 		(property "Library Ref" "Resistor - 1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -33992,7 +33215,7 @@
 			)
 		)
 		(property "Library Path" "SchLib\\Resistors.SchLib"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34006,7 +33229,7 @@
 			)
 		)
 		(property "Comment" "10k"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34020,7 +33243,7 @@
 			)
 		)
 		(property "Component Kind" "Standard"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34034,7 +33257,7 @@
 			)
 		)
 		(property "Component Type" "Standard"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34048,7 +33271,7 @@
 			)
 		)
 		(property "PackageDescription" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34062,7 +33285,7 @@
 			)
 		)
 		(property "Pin Count" "2"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34076,7 +33299,7 @@
 			)
 		)
 		(property "Footprint Path" "PcbLib\\Resistors SMD.PcbLib"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34090,7 +33313,7 @@
 			)
 		)
 		(property "Footprint Ref" "RESC3216X65N"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34104,7 +33327,7 @@
 			)
 		)
 		(property "Status" "Preferred"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34118,7 +33341,7 @@
 			)
 		)
 		(property "Power" "0.25W"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34132,7 +33355,7 @@
 			)
 		)
 		(property "TC" "±100ppm/°C"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34146,7 +33369,7 @@
 			)
 		)
 		(property "Voltage" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34160,7 +33383,7 @@
 			)
 		)
 		(property "Tolerance" "±1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34174,7 +33397,7 @@
 			)
 		)
 		(property "Part Description" "General Purpose Thick Film Chip Resistor"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34188,7 +33411,7 @@
 			)
 		)
 		(property "Manufacturer" "GENERIC"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34202,7 +33425,7 @@
 			)
 		)
 		(property "Manufacturer Part Number" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34216,7 +33439,7 @@
 			)
 		)
 		(property "Case" "1206"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34230,7 +33453,7 @@
 			)
 		)
 		(property "PressFit" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34244,7 +33467,7 @@
 			)
 		)
 		(property "Mounted" "Yes"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34258,7 +33481,7 @@
 			)
 		)
 		(property "Sense Comment" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34272,7 +33495,7 @@
 			)
 		)
 		(property "Sense" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34286,7 +33509,7 @@
 			)
 		)
 		(property "Status Comment" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34300,7 +33523,7 @@
 			)
 		)
 		(property "Socket" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34314,7 +33537,7 @@
 			)
 		)
 		(property "SMD" "Yes"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34328,7 +33551,7 @@
 			)
 		)
 		(property "ComponentHeight" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34342,7 +33565,7 @@
 			)
 		)
 		(property "Manufacturer1 Example" "NIC COMPONENT"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34356,7 +33579,7 @@
 			)
 		)
 		(property "Manufacturer1 Part Number" "NRC12F1002TRF"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34370,7 +33593,7 @@
 			)
 		)
 		(property "Manufacturer1 ComponentHeight" "0.65mm"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34384,7 +33607,7 @@
 			)
 		)
 		(property "HelpURL" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\R1206_NIC_NRC.pdf"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34398,7 +33621,7 @@
 			)
 		)
 		(property "Author" "CERN DEM JLC"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34412,7 +33635,7 @@
 			)
 		)
 		(property "CreateDate" "12/03/07 00:00:00"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34426,7 +33649,7 @@
 			)
 		)
 		(property "LatestRevisionDate" "03/13/08 00:00:00"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34440,7 +33663,7 @@
 			)
 		)
 		(property "Database Table Name" "Resistors"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34454,7 +33677,7 @@
 			)
 		)
 		(property "Library Name" "Resistors SMD"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34468,7 +33691,7 @@
 			)
 		)
 		(property "Footprint Library" "Resistors SMD"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34482,7 +33705,7 @@
 			)
 		)
 		(property "License" "This work is licensed under the Creative Commons CC-BY-SA 4.0 License. To the extent that circuit schematics that use Licensed Material can be considered to be ‘Adapted Material’, then the copyright holder waives article 3.b of the license with respect to these schematics."
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34619,7 +33842,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "504a579e-12c6-44fb-9a6d-1bd3435da07a")
 		(at 101 129 90)
@@ -34637,7 +33860,7 @@
 			)
 		)
 		(property "Value" "CC1206_100NF_50V_10%_X7R"
-			(at 0 -2.176 -90)
+			(at 0 -2.176 270)
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "c1432d28-3774-455b-b0d4-eb13e76b4ccc")
@@ -34649,22 +33872,8 @@
 				(justify mirror)
 			)
 		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 -90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "fd8ab72b-e092-4ddd-8018-0678fba6b83f")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
 		(property "Datasheet" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\CC1206_X7R_VISHAY_VJ.pdf"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34678,7 +33887,7 @@
 			)
 		)
 		(property "Description" "100nF"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34692,7 +33901,7 @@
 			)
 		)
 		(property "Part Number" "CC1206_100NF_50V_10%_X7R"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34706,7 +33915,7 @@
 			)
 		)
 		(property "Library Ref" "Capacitor - non polarized"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34720,7 +33929,7 @@
 			)
 		)
 		(property "Library Path" "SchLib\\Capacitors.SchLib"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34734,7 +33943,7 @@
 			)
 		)
 		(property "Comment" "100nF"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34748,7 +33957,7 @@
 			)
 		)
 		(property "Component Kind" "Standard"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34762,7 +33971,7 @@
 			)
 		)
 		(property "Component Type" "Standard"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34776,7 +33985,7 @@
 			)
 		)
 		(property "Pin Count" "2"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34790,7 +33999,7 @@
 			)
 		)
 		(property "Footprint Path" "PcbLib\\Capacitors SMD.PcbLib"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34804,7 +34013,7 @@
 			)
 		)
 		(property "Footprint Ref" "CAPC3216X140N"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34818,7 +34027,7 @@
 			)
 		)
 		(property "PackageDescription" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34832,7 +34041,7 @@
 			)
 		)
 		(property "Status" "Preferred"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34846,7 +34055,7 @@
 			)
 		)
 		(property "Status Comment" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34860,7 +34069,7 @@
 			)
 		)
 		(property "Voltage" "50V"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34874,7 +34083,7 @@
 			)
 		)
 		(property "TC" "X7R"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34888,7 +34097,7 @@
 			)
 		)
 		(property "Tolerance" "±10%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34902,7 +34111,7 @@
 			)
 		)
 		(property "Part Description" "SMD Multilayer Chip Ceramic Capacitor"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34916,7 +34125,7 @@
 			)
 		)
 		(property "Manufacturer" "GENERIC"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34930,7 +34139,7 @@
 			)
 		)
 		(property "Manufacturer Part Number" "CC1206_100NF_50V_10%_X7R"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34944,7 +34153,7 @@
 			)
 		)
 		(property "Case" "1206"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34958,7 +34167,7 @@
 			)
 		)
 		(property "Mounted" "Yes"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34972,7 +34181,7 @@
 			)
 		)
 		(property "Socket" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -34986,7 +34195,7 @@
 			)
 		)
 		(property "SMD" "Yes"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -35000,7 +34209,7 @@
 			)
 		)
 		(property "PressFit" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -35014,7 +34223,7 @@
 			)
 		)
 		(property "Sense" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -35028,7 +34237,7 @@
 			)
 		)
 		(property "Sense Comment" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -35042,7 +34251,7 @@
 			)
 		)
 		(property "ComponentHeight" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -35056,7 +34265,7 @@
 			)
 		)
 		(property "Manufacturer1 Example" "VISHAY VITRAMON"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -35070,7 +34279,7 @@
 			)
 		)
 		(property "Manufacturer1 Part Number" "VJ1206Y104KXAAT"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -35084,7 +34293,7 @@
 			)
 		)
 		(property "Manufacturer1 ComponentHeight" "1.7mm"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -35098,7 +34307,7 @@
 			)
 		)
 		(property "HelpURL" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\CC1206_X7R_VISHAY_VJ.pdf"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -35112,7 +34321,7 @@
 			)
 		)
 		(property "Author" "CERN DEM JLC"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -35126,7 +34335,7 @@
 			)
 		)
 		(property "CreateDate" "12/03/07 00:00:00"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -35140,7 +34349,7 @@
 			)
 		)
 		(property "LatestRevisionDate" "12/03/07 00:00:00"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -35154,7 +34363,7 @@
 			)
 		)
 		(property "Database Table Name" "Capacitors"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -35168,7 +34377,7 @@
 			)
 		)
 		(property "Library Name" "Capacitors SMD"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -35182,7 +34391,7 @@
 			)
 		)
 		(property "Footprint Library" "Capacitors SMD"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -35196,7 +34405,7 @@
 			)
 		)
 		(property "License" "This work is licensed under the Creative Commons CC-BY-SA 4.0 License. To the extent that circuit schematics that use Licensed Material can be considered to be ‘Adapted Material’, then the copyright holder waives article 3.b of the license with respect to these schematics."
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -35333,7 +34542,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "53c253d1-ba54-4756-96f0-3977856483b2")
 		(at 149 121 180)
@@ -35358,20 +34567,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "1b761061-5050-4ab2-b249-dc0602901be9")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -36075,7 +35270,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "5c9a6157-411f-4814-a840-f45db3bd67a1")
 		(at 118 84.4)
@@ -36100,20 +35295,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "29edce11-4faf-4521-80f6-3bae99743228")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -36789,7 +35970,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "5f2f2e72-b4f0-48f8-9600-a26e5b1810e7")
 		(at 126.4 100.2 180)
@@ -36814,20 +35995,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "564d0e5c-45ad-44ac-9b83-a9a74d91a51d")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -37531,7 +36698,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "601131b5-abed-4c31-b81b-129a70b9609a")
 		(at 123 129 90)
@@ -37549,7 +36716,7 @@
 			)
 		)
 		(property "Value" "CC1206_100NF_50V_10%_X7R"
-			(at 0 -2.176 -90)
+			(at 0 -2.176 270)
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "351ad7fd-9ff8-4920-be52-fd7bfda5f9df")
@@ -37561,22 +36728,8 @@
 				(justify mirror)
 			)
 		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 -90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "43131acf-99e4-470a-b60a-646b84dd2595")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
 		(property "Datasheet" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\CC1206_X7R_VISHAY_VJ.pdf"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37590,7 +36743,7 @@
 			)
 		)
 		(property "Description" "100nF"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37604,7 +36757,7 @@
 			)
 		)
 		(property "Part Number" "CC1206_100NF_50V_10%_X7R"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37618,7 +36771,7 @@
 			)
 		)
 		(property "Library Ref" "Capacitor - non polarized"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37632,7 +36785,7 @@
 			)
 		)
 		(property "Library Path" "SchLib\\Capacitors.SchLib"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37646,7 +36799,7 @@
 			)
 		)
 		(property "Comment" "100nF"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37660,7 +36813,7 @@
 			)
 		)
 		(property "Component Kind" "Standard"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37674,7 +36827,7 @@
 			)
 		)
 		(property "Component Type" "Standard"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37688,7 +36841,7 @@
 			)
 		)
 		(property "Pin Count" "2"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37702,7 +36855,7 @@
 			)
 		)
 		(property "Footprint Path" "PcbLib\\Capacitors SMD.PcbLib"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37716,7 +36869,7 @@
 			)
 		)
 		(property "Footprint Ref" "CAPC3216X140N"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37730,7 +36883,7 @@
 			)
 		)
 		(property "PackageDescription" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37744,7 +36897,7 @@
 			)
 		)
 		(property "Status" "Preferred"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37758,7 +36911,7 @@
 			)
 		)
 		(property "Status Comment" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37772,7 +36925,7 @@
 			)
 		)
 		(property "Voltage" "50V"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37786,7 +36939,7 @@
 			)
 		)
 		(property "TC" "X7R"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37800,7 +36953,7 @@
 			)
 		)
 		(property "Tolerance" "±10%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37814,7 +36967,7 @@
 			)
 		)
 		(property "Part Description" "SMD Multilayer Chip Ceramic Capacitor"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37828,7 +36981,7 @@
 			)
 		)
 		(property "Manufacturer" "GENERIC"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37842,7 +36995,7 @@
 			)
 		)
 		(property "Manufacturer Part Number" "CC1206_100NF_50V_10%_X7R"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37856,7 +37009,7 @@
 			)
 		)
 		(property "Case" "1206"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37870,7 +37023,7 @@
 			)
 		)
 		(property "Mounted" "Yes"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37884,7 +37037,7 @@
 			)
 		)
 		(property "Socket" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37898,7 +37051,7 @@
 			)
 		)
 		(property "SMD" "Yes"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37912,7 +37065,7 @@
 			)
 		)
 		(property "PressFit" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37926,7 +37079,7 @@
 			)
 		)
 		(property "Sense" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37940,7 +37093,7 @@
 			)
 		)
 		(property "Sense Comment" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37954,7 +37107,7 @@
 			)
 		)
 		(property "ComponentHeight" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37968,7 +37121,7 @@
 			)
 		)
 		(property "Manufacturer1 Example" "VISHAY VITRAMON"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37982,7 +37135,7 @@
 			)
 		)
 		(property "Manufacturer1 Part Number" "VJ1206Y104KXAAT"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -37996,7 +37149,7 @@
 			)
 		)
 		(property "Manufacturer1 ComponentHeight" "1.7mm"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -38010,7 +37163,7 @@
 			)
 		)
 		(property "HelpURL" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\CC1206_X7R_VISHAY_VJ.pdf"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -38024,7 +37177,7 @@
 			)
 		)
 		(property "Author" "CERN DEM JLC"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -38038,7 +37191,7 @@
 			)
 		)
 		(property "CreateDate" "12/03/07 00:00:00"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -38052,7 +37205,7 @@
 			)
 		)
 		(property "LatestRevisionDate" "12/03/07 00:00:00"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -38066,7 +37219,7 @@
 			)
 		)
 		(property "Database Table Name" "Capacitors"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -38080,7 +37233,7 @@
 			)
 		)
 		(property "Library Name" "Capacitors SMD"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -38094,7 +37247,7 @@
 			)
 		)
 		(property "Footprint Library" "Capacitors SMD"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -38108,7 +37261,7 @@
 			)
 		)
 		(property "License" "This work is licensed under the Creative Commons CC-BY-SA 4.0 License. To the extent that circuit schematics that use Licensed Material can be considered to be ‘Adapted Material’, then the copyright holder waives article 3.b of the license with respect to these schematics."
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -38245,7 +37398,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "60930032-b855-46a3-bbc6-e08bad17aaa8")
 		(at 126.4 102.8 180)
@@ -38270,20 +37423,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "7888d76f-fda1-4227-88ba-485220223f03")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -38987,7 +38126,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "73ded116-ec17-44a3-8540-726f02056f23")
 		(at 182.46 106.335)
@@ -39012,20 +38151,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "1ce6f8b5-2dce-48d6-b51d-641ad79192e8")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -39729,7 +38854,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "7ba1f967-07c6-4ba1-b086-ea38f646e227")
 		(at 102.5 117.9 180)
@@ -39754,20 +38879,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "301183dc-6d41-4d19-9e7e-e08c6fb16aa3")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -40443,7 +39554,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "7e861515-7263-490e-80d3-09de0c031d69")
 		(at 162 76.4)
@@ -40468,20 +39579,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "582afc5c-1f28-4b1b-85d7-95cf92df4277")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -41185,7 +40282,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "831ecff1-007e-425c-ab59-74bb54693f8a")
 		(at 104.4 100.2 180)
@@ -41210,20 +40307,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "e8e30d40-3b8d-4cb5-bf31-87426f54fd5c")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -41927,7 +41010,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "86f0878d-e211-42c9-8f28-3f34e637d9f0")
 		(at 101 78.9 180)
@@ -41952,20 +41035,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "187840e0-ac8a-473d-a57e-d39c0cc35bb4")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -42641,7 +41710,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "8b3be304-674f-4346-9088-f2824a10b575")
 		(at 123 78.9 180)
@@ -42666,20 +41735,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "b74e8ea3-e9ed-46fc-802f-d0383ae193a2")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -43355,7 +42410,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "8bc7d5b0-5523-4d7b-a9b5-b4289cd3ac97")
 		(at 149 135.9)
@@ -43380,20 +42435,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "2205d5da-e803-4f8e-af6e-699b60c0121e")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -44097,7 +43138,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "91b2213f-b9ab-4ad2-a0fd-8fd5f88b473d")
 		(at 145 78.9 180)
@@ -44122,20 +43163,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "8f3e0dbd-13e4-4b2c-9000-33b44b0344a8")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -44811,7 +43838,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "9726dbb5-e10d-4266-af77-5a8834882080")
 		(at 168.5 117.9 180)
@@ -44836,20 +43863,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "74084e75-61cb-49ea-86ca-d94852fef68f")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -45525,7 +44538,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "9c8c7ed3-8ed5-4b7c-ba47-a3864f8719c9")
 		(at 117.6 113.6 -90)
@@ -45550,20 +44563,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "172f7fae-02fa-41ea-84da-bb59f36f9c7c")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -46267,7 +45266,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "9fbf0ea0-a68a-4477-875d-3f2cfebca404")
 		(at 98 102.8 180)
@@ -46292,20 +45291,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "d6178d18-3725-4579-8fc8-8c866e227759")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -46981,7 +45966,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "a1e19e00-ec1e-4e62-a79a-d5d8bc7c51ef")
 		(at 122.95 147.4 90)
@@ -46999,7 +45984,7 @@
 			)
 		)
 		(property "Value" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 -2.176 -90)
+			(at 0 -2.176 270)
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "ddc2d8ce-4e05-4b87-a669-bb5908ffa338")
@@ -47011,22 +45996,8 @@
 				(justify mirror)
 			)
 		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 -90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "2d41407e-7de0-4c86-9bcf-fd0e284a90a2")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
 		(property "Datasheet" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\R1206_NIC_NRC.pdf"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47040,7 +46011,7 @@
 			)
 		)
 		(property "Description" "±1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47054,7 +46025,7 @@
 			)
 		)
 		(property "Val" "10k"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47068,7 +46039,7 @@
 			)
 		)
 		(property "Part Number" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47082,7 +46053,7 @@
 			)
 		)
 		(property "Library Ref" "Resistor - 1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47096,7 +46067,7 @@
 			)
 		)
 		(property "Library Path" "SchLib\\Resistors.SchLib"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47110,7 +46081,7 @@
 			)
 		)
 		(property "Comment" "10k"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47124,7 +46095,7 @@
 			)
 		)
 		(property "Component Kind" "Standard"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47138,7 +46109,7 @@
 			)
 		)
 		(property "Component Type" "Standard"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47152,7 +46123,7 @@
 			)
 		)
 		(property "PackageDescription" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47166,7 +46137,7 @@
 			)
 		)
 		(property "Pin Count" "2"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47180,7 +46151,7 @@
 			)
 		)
 		(property "Footprint Path" "PcbLib\\Resistors SMD.PcbLib"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47194,7 +46165,7 @@
 			)
 		)
 		(property "Footprint Ref" "RESC3216X65N"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47208,7 +46179,7 @@
 			)
 		)
 		(property "Status" "Preferred"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47222,7 +46193,7 @@
 			)
 		)
 		(property "Power" "0.25W"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47236,7 +46207,7 @@
 			)
 		)
 		(property "TC" "±100ppm/°C"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47250,7 +46221,7 @@
 			)
 		)
 		(property "Voltage" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47264,7 +46235,7 @@
 			)
 		)
 		(property "Tolerance" "±1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47278,7 +46249,7 @@
 			)
 		)
 		(property "Part Description" "General Purpose Thick Film Chip Resistor"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47292,7 +46263,7 @@
 			)
 		)
 		(property "Manufacturer" "GENERIC"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47306,7 +46277,7 @@
 			)
 		)
 		(property "Manufacturer Part Number" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47320,7 +46291,7 @@
 			)
 		)
 		(property "Case" "1206"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47334,7 +46305,7 @@
 			)
 		)
 		(property "PressFit" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47348,7 +46319,7 @@
 			)
 		)
 		(property "Mounted" "Yes"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47362,7 +46333,7 @@
 			)
 		)
 		(property "Sense Comment" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47376,7 +46347,7 @@
 			)
 		)
 		(property "Sense" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47390,7 +46361,7 @@
 			)
 		)
 		(property "Status Comment" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47404,7 +46375,7 @@
 			)
 		)
 		(property "Socket" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47418,7 +46389,7 @@
 			)
 		)
 		(property "SMD" "Yes"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47432,7 +46403,7 @@
 			)
 		)
 		(property "ComponentHeight" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47446,7 +46417,7 @@
 			)
 		)
 		(property "Manufacturer1 Example" "NIC COMPONENT"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47460,7 +46431,7 @@
 			)
 		)
 		(property "Manufacturer1 Part Number" "NRC12F1002TRF"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47474,7 +46445,7 @@
 			)
 		)
 		(property "Manufacturer1 ComponentHeight" "0.65mm"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47488,7 +46459,7 @@
 			)
 		)
 		(property "HelpURL" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\R1206_NIC_NRC.pdf"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47502,7 +46473,7 @@
 			)
 		)
 		(property "Author" "CERN DEM JLC"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47516,7 +46487,7 @@
 			)
 		)
 		(property "CreateDate" "12/03/07 00:00:00"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47530,7 +46501,7 @@
 			)
 		)
 		(property "LatestRevisionDate" "03/13/08 00:00:00"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47544,7 +46515,7 @@
 			)
 		)
 		(property "Database Table Name" "Resistors"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47558,7 +46529,7 @@
 			)
 		)
 		(property "Library Name" "Resistors SMD"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47572,7 +46543,7 @@
 			)
 		)
 		(property "Footprint Library" "Resistors SMD"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47586,7 +46557,7 @@
 			)
 		)
 		(property "License" "This work is licensed under the Creative Commons CC-BY-SA 4.0 License. To the extent that circuit schematics that use Licensed Material can be considered to be ‘Adapted Material’, then the copyright holder waives article 3.b of the license with respect to these schematics."
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -47723,7 +46694,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "a89efda9-2b5b-4faa-bb6b-71e4bfde1edb")
 		(at 172.4 115.8 -90)
@@ -47748,20 +46719,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "6eb92931-284c-43c5-8b18-cca74ea74130")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -48437,7 +47394,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "a96f0531-d384-43e4-a10d-516be57cf599")
 		(at 148.4 100.2 180)
@@ -48462,20 +47419,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "bdee77e2-de3b-42d7-97c9-239a1d3b9c56")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -49179,7 +48122,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "a98be734-604b-4016-ba6d-3ec80d0370b2")
 		(at 100.95 147.4 90)
@@ -49197,7 +48140,7 @@
 			)
 		)
 		(property "Value" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 -2.176 -90)
+			(at 0 -2.176 270)
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "2a72b737-f60d-4ba7-ae03-7d8a99765015")
@@ -49209,22 +48152,8 @@
 				(justify mirror)
 			)
 		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 -90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "033ccb6e-94cb-401c-bca0-b79f0cae3361")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
 		(property "Datasheet" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\R1206_NIC_NRC.pdf"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49238,7 +48167,7 @@
 			)
 		)
 		(property "Description" "±1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49252,7 +48181,7 @@
 			)
 		)
 		(property "Val" "10k"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49266,7 +48195,7 @@
 			)
 		)
 		(property "Part Number" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49280,7 +48209,7 @@
 			)
 		)
 		(property "Library Ref" "Resistor - 1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49294,7 +48223,7 @@
 			)
 		)
 		(property "Library Path" "SchLib\\Resistors.SchLib"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49308,7 +48237,7 @@
 			)
 		)
 		(property "Comment" "10k"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49322,7 +48251,7 @@
 			)
 		)
 		(property "Component Kind" "Standard"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49336,7 +48265,7 @@
 			)
 		)
 		(property "Component Type" "Standard"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49350,7 +48279,7 @@
 			)
 		)
 		(property "PackageDescription" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49364,7 +48293,7 @@
 			)
 		)
 		(property "Pin Count" "2"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49378,7 +48307,7 @@
 			)
 		)
 		(property "Footprint Path" "PcbLib\\Resistors SMD.PcbLib"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49392,7 +48321,7 @@
 			)
 		)
 		(property "Footprint Ref" "RESC3216X65N"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49406,7 +48335,7 @@
 			)
 		)
 		(property "Status" "Preferred"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49420,7 +48349,7 @@
 			)
 		)
 		(property "Power" "0.25W"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49434,7 +48363,7 @@
 			)
 		)
 		(property "TC" "±100ppm/°C"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49448,7 +48377,7 @@
 			)
 		)
 		(property "Voltage" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49462,7 +48391,7 @@
 			)
 		)
 		(property "Tolerance" "±1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49476,7 +48405,7 @@
 			)
 		)
 		(property "Part Description" "General Purpose Thick Film Chip Resistor"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49490,7 +48419,7 @@
 			)
 		)
 		(property "Manufacturer" "GENERIC"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49504,7 +48433,7 @@
 			)
 		)
 		(property "Manufacturer Part Number" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49518,7 +48447,7 @@
 			)
 		)
 		(property "Case" "1206"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49532,7 +48461,7 @@
 			)
 		)
 		(property "PressFit" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49546,7 +48475,7 @@
 			)
 		)
 		(property "Mounted" "Yes"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49560,7 +48489,7 @@
 			)
 		)
 		(property "Sense Comment" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49574,7 +48503,7 @@
 			)
 		)
 		(property "Sense" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49588,7 +48517,7 @@
 			)
 		)
 		(property "Status Comment" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49602,7 +48531,7 @@
 			)
 		)
 		(property "Socket" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49616,7 +48545,7 @@
 			)
 		)
 		(property "SMD" "Yes"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49630,7 +48559,7 @@
 			)
 		)
 		(property "ComponentHeight" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49644,7 +48573,7 @@
 			)
 		)
 		(property "Manufacturer1 Example" "NIC COMPONENT"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49658,7 +48587,7 @@
 			)
 		)
 		(property "Manufacturer1 Part Number" "NRC12F1002TRF"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49672,7 +48601,7 @@
 			)
 		)
 		(property "Manufacturer1 ComponentHeight" "0.65mm"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49686,7 +48615,7 @@
 			)
 		)
 		(property "HelpURL" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\R1206_NIC_NRC.pdf"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49700,7 +48629,7 @@
 			)
 		)
 		(property "Author" "CERN DEM JLC"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49714,7 +48643,7 @@
 			)
 		)
 		(property "CreateDate" "12/03/07 00:00:00"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49728,7 +48657,7 @@
 			)
 		)
 		(property "LatestRevisionDate" "03/13/08 00:00:00"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49742,7 +48671,7 @@
 			)
 		)
 		(property "Database Table Name" "Resistors"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49756,7 +48685,7 @@
 			)
 		)
 		(property "Library Name" "Resistors SMD"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49770,7 +48699,7 @@
 			)
 		)
 		(property "Footprint Library" "Resistors SMD"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49784,7 +48713,7 @@
 			)
 		)
 		(property "License" "This work is licensed under the Creative Commons CC-BY-SA 4.0 License. To the extent that circuit schematics that use Licensed Material can be considered to be ‘Adapted Material’, then the copyright holder waives article 3.b of the license with respect to these schematics."
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -49921,7 +48850,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "aed8d622-4e79-4a2a-aa55-3a1f84aa1ab9")
 		(at 140 84.4)
@@ -49946,20 +48875,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "5cb2f168-f308-4eae-b25d-be8986096579")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -50635,7 +49550,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "b22a69da-8e03-4c59-8458-318c54a251c6")
 		(at 123 123.7 -90)
@@ -50660,20 +49575,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "7ecae0e1-323b-49e6-ab9c-9074d2959f01")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -51349,7 +50250,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "b53efe89-5319-4d1d-ae79-0a838c5684ba")
 		(at 124.5 117.9 180)
@@ -51374,20 +50275,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "4dcb8b17-3f1d-4518-8ae8-eb551ee01466")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -52063,7 +50950,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "ICs And Semiconductors SMD:SOIC127P600X175-8N"
+	(footprint "multichannel_mixer:SOIC127P600X175-8N"
 		(layer "B.Cu")
 		(uuid "b76db4e3-0b5e-4bd5-97b2-ed27e324688d")
 		(at 168.365 84.1 -90)
@@ -52088,20 +50975,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "ICs And Semiconductors SMD:SOIC127P600X175-8N"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "ae831436-f16a-4430-a87a-897c42a48f65")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -52732,7 +51605,7 @@
 				(width 0.25)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "B.SilkS")
 			(uuid "49c43598-ec29-4131-87ff-c255fe9d540a")
 		)
@@ -52823,7 +51696,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "B.Fab")
 			(uuid "a9f850f3-a254-4587-b983-41576a0fde51")
 		)
@@ -52901,7 +51774,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "c298078b-eebd-4431-b51d-d2ff259a82ff")
 		(at 162 84.4)
@@ -52926,20 +51799,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "01578f67-4a4c-4d6c-a56c-f686de925b16")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -53615,7 +52474,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "ICs And Semiconductors SMD:SOIC127P600X175-8N"
+	(footprint "multichannel_mixer:SOIC127P600X175-8N"
 		(layer "B.Cu")
 		(uuid "c2d7b7c0-b75c-42d7-8bae-8ad2a9730652")
 		(at 146.365 84.1 -90)
@@ -53640,20 +52499,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "ICs And Semiconductors SMD:SOIC127P600X175-8N"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "f61fe32b-9676-4f8a-b060-975291907e4a")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -54284,7 +53129,7 @@
 				(width 0.25)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "B.SilkS")
 			(uuid "004a8c6f-52cf-47d9-b92d-253bf31afed7")
 		)
@@ -54375,7 +53220,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "B.Fab")
 			(uuid "c188ecd0-c383-4b74-ba25-a1c89594911b")
 		)
@@ -54453,7 +53298,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "c4cce067-aec1-4f2e-bc78-a28b95346b98")
 		(at 167 123.7 -90)
@@ -54478,20 +53323,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "cba432c5-3be8-4f8a-99dc-acdbaf54e4e7")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -55167,7 +53998,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "c5206f3a-84cd-461f-ba85-ad00cf3aa6b6")
 		(at 163 117.9 180)
@@ -55192,20 +54023,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "86b180f7-6f81-41f9-9450-7e443d2800db")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -55909,7 +54726,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "c6d9f255-50ea-4406-aebd-70af7d9ad596")
 		(at 164 102.8 180)
@@ -55934,20 +54751,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "cfbf5043-570b-4d3c-a689-5bc4dac2e7df")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -56623,7 +55426,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "c77d10ae-eeba-4fb9-8018-538f333ccaaa")
 		(at 119 117.9 180)
@@ -56648,20 +55451,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "76616070-549e-467f-bbb3-e57be257aa9b")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -57365,7 +56154,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "c87fd0b6-5316-4467-9ea3-3099c8685480")
 		(at 167 93 90)
@@ -57383,7 +56172,7 @@
 			)
 		)
 		(property "Value" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 -2.176 -90)
+			(at 0 -2.176 270)
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "8ebafbf8-93bc-4e30-a855-abc86dd707ce")
@@ -57395,22 +56184,8 @@
 				(justify mirror)
 			)
 		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 -90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "c09e015f-783c-4163-ac50-87819f29fa1e")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
 		(property "Datasheet" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\R1206_NIC_NRC.pdf"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57424,7 +56199,7 @@
 			)
 		)
 		(property "Description" "±1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57438,7 +56213,7 @@
 			)
 		)
 		(property "Val" "10k"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57452,7 +56227,7 @@
 			)
 		)
 		(property "Part Number" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57466,7 +56241,7 @@
 			)
 		)
 		(property "Library Ref" "Resistor - 1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57480,7 +56255,7 @@
 			)
 		)
 		(property "Library Path" "SchLib\\Resistors.SchLib"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57494,7 +56269,7 @@
 			)
 		)
 		(property "Comment" "10k"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57508,7 +56283,7 @@
 			)
 		)
 		(property "Component Kind" "Standard"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57522,7 +56297,7 @@
 			)
 		)
 		(property "Component Type" "Standard"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57536,7 +56311,7 @@
 			)
 		)
 		(property "PackageDescription" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57550,7 +56325,7 @@
 			)
 		)
 		(property "Pin Count" "2"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57564,7 +56339,7 @@
 			)
 		)
 		(property "Footprint Path" "PcbLib\\Resistors SMD.PcbLib"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57578,7 +56353,7 @@
 			)
 		)
 		(property "Footprint Ref" "RESC3216X65N"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57592,7 +56367,7 @@
 			)
 		)
 		(property "Status" "Preferred"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57606,7 +56381,7 @@
 			)
 		)
 		(property "Power" "0.25W"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57620,7 +56395,7 @@
 			)
 		)
 		(property "TC" "±100ppm/°C"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57634,7 +56409,7 @@
 			)
 		)
 		(property "Voltage" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57648,7 +56423,7 @@
 			)
 		)
 		(property "Tolerance" "±1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57662,7 +56437,7 @@
 			)
 		)
 		(property "Part Description" "General Purpose Thick Film Chip Resistor"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57676,7 +56451,7 @@
 			)
 		)
 		(property "Manufacturer" "GENERIC"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57690,7 +56465,7 @@
 			)
 		)
 		(property "Manufacturer Part Number" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57704,7 +56479,7 @@
 			)
 		)
 		(property "Case" "1206"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57718,7 +56493,7 @@
 			)
 		)
 		(property "PressFit" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57732,7 +56507,7 @@
 			)
 		)
 		(property "Mounted" "Yes"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57746,7 +56521,7 @@
 			)
 		)
 		(property "Sense Comment" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57760,7 +56535,7 @@
 			)
 		)
 		(property "Sense" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57774,7 +56549,7 @@
 			)
 		)
 		(property "Status Comment" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57788,7 +56563,7 @@
 			)
 		)
 		(property "Socket" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57802,7 +56577,7 @@
 			)
 		)
 		(property "SMD" "Yes"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57816,7 +56591,7 @@
 			)
 		)
 		(property "ComponentHeight" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57830,7 +56605,7 @@
 			)
 		)
 		(property "Manufacturer1 Example" "NIC COMPONENT"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57844,7 +56619,7 @@
 			)
 		)
 		(property "Manufacturer1 Part Number" "NRC12F1002TRF"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57858,7 +56633,7 @@
 			)
 		)
 		(property "Manufacturer1 ComponentHeight" "0.65mm"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57872,7 +56647,7 @@
 			)
 		)
 		(property "HelpURL" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\R1206_NIC_NRC.pdf"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57886,7 +56661,7 @@
 			)
 		)
 		(property "Author" "CERN DEM JLC"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57900,7 +56675,7 @@
 			)
 		)
 		(property "CreateDate" "12/03/07 00:00:00"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57914,7 +56689,7 @@
 			)
 		)
 		(property "LatestRevisionDate" "03/13/08 00:00:00"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57928,7 +56703,7 @@
 			)
 		)
 		(property "Database Table Name" "Resistors"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57942,7 +56717,7 @@
 			)
 		)
 		(property "Library Name" "Resistors SMD"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57956,7 +56731,7 @@
 			)
 		)
 		(property "Footprint Library" "Resistors SMD"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -57970,7 +56745,7 @@
 			)
 		)
 		(property "License" "This work is licensed under the Creative Commons CC-BY-SA 4.0 License. To the extent that circuit schematics that use Licensed Material can be considered to be ‘Adapted Material’, then the copyright holder waives article 3.b of the license with respect to these schematics."
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58107,7 +56882,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "cbbbcd7a-efd2-4a07-9733-697b8590dfdb")
 		(at 167 129 90)
@@ -58125,7 +56900,7 @@
 			)
 		)
 		(property "Value" "CC1206_100NF_50V_10%_X7R"
-			(at 0 -2.176 -90)
+			(at 0 -2.176 270)
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "b1d3b117-c978-486a-9aac-2faebe392304")
@@ -58137,22 +56912,8 @@
 				(justify mirror)
 			)
 		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 -90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "14a45603-e7d6-479a-97ed-16e8dcd2a1b0")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
 		(property "Datasheet" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\CC1206_X7R_VISHAY_VJ.pdf"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58166,7 +56927,7 @@
 			)
 		)
 		(property "Description" "100nF"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58180,7 +56941,7 @@
 			)
 		)
 		(property "Part Number" "CC1206_100NF_50V_10%_X7R"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58194,7 +56955,7 @@
 			)
 		)
 		(property "Library Ref" "Capacitor - non polarized"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58208,7 +56969,7 @@
 			)
 		)
 		(property "Library Path" "SchLib\\Capacitors.SchLib"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58222,7 +56983,7 @@
 			)
 		)
 		(property "Comment" "100nF"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58236,7 +56997,7 @@
 			)
 		)
 		(property "Component Kind" "Standard"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58250,7 +57011,7 @@
 			)
 		)
 		(property "Component Type" "Standard"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58264,7 +57025,7 @@
 			)
 		)
 		(property "Pin Count" "2"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58278,7 +57039,7 @@
 			)
 		)
 		(property "Footprint Path" "PcbLib\\Capacitors SMD.PcbLib"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58292,7 +57053,7 @@
 			)
 		)
 		(property "Footprint Ref" "CAPC3216X140N"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58306,7 +57067,7 @@
 			)
 		)
 		(property "PackageDescription" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58320,7 +57081,7 @@
 			)
 		)
 		(property "Status" "Preferred"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58334,7 +57095,7 @@
 			)
 		)
 		(property "Status Comment" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58348,7 +57109,7 @@
 			)
 		)
 		(property "Voltage" "50V"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58362,7 +57123,7 @@
 			)
 		)
 		(property "TC" "X7R"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58376,7 +57137,7 @@
 			)
 		)
 		(property "Tolerance" "±10%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58390,7 +57151,7 @@
 			)
 		)
 		(property "Part Description" "SMD Multilayer Chip Ceramic Capacitor"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58404,7 +57165,7 @@
 			)
 		)
 		(property "Manufacturer" "GENERIC"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58418,7 +57179,7 @@
 			)
 		)
 		(property "Manufacturer Part Number" "CC1206_100NF_50V_10%_X7R"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58432,7 +57193,7 @@
 			)
 		)
 		(property "Case" "1206"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58446,7 +57207,7 @@
 			)
 		)
 		(property "Mounted" "Yes"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58460,7 +57221,7 @@
 			)
 		)
 		(property "Socket" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58474,7 +57235,7 @@
 			)
 		)
 		(property "SMD" "Yes"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58488,7 +57249,7 @@
 			)
 		)
 		(property "PressFit" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58502,7 +57263,7 @@
 			)
 		)
 		(property "Sense" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58516,7 +57277,7 @@
 			)
 		)
 		(property "Sense Comment" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58530,7 +57291,7 @@
 			)
 		)
 		(property "ComponentHeight" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58544,7 +57305,7 @@
 			)
 		)
 		(property "Manufacturer1 Example" "VISHAY VITRAMON"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58558,7 +57319,7 @@
 			)
 		)
 		(property "Manufacturer1 Part Number" "VJ1206Y104KXAAT"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58572,7 +57333,7 @@
 			)
 		)
 		(property "Manufacturer1 ComponentHeight" "1.7mm"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58586,7 +57347,7 @@
 			)
 		)
 		(property "HelpURL" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\CC1206_X7R_VISHAY_VJ.pdf"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58600,7 +57361,7 @@
 			)
 		)
 		(property "Author" "CERN DEM JLC"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58614,7 +57375,7 @@
 			)
 		)
 		(property "CreateDate" "12/03/07 00:00:00"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58628,7 +57389,7 @@
 			)
 		)
 		(property "LatestRevisionDate" "12/03/07 00:00:00"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58642,7 +57403,7 @@
 			)
 		)
 		(property "Database Table Name" "Capacitors"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58656,7 +57417,7 @@
 			)
 		)
 		(property "Library Name" "Capacitors SMD"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58670,7 +57431,7 @@
 			)
 		)
 		(property "Footprint Library" "Capacitors SMD"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58684,7 +57445,7 @@
 			)
 		)
 		(property "License" "This work is licensed under the Creative Commons CC-BY-SA 4.0 License. To the extent that circuit schematics that use Licensed Material can be considered to be ‘Adapted Material’, then the copyright holder waives article 3.b of the license with respect to these schematics."
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -58821,7 +57582,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "cbcf2fa9-147f-432b-9e68-d36fe9192d5c")
 		(at 120 102.8 180)
@@ -58846,20 +57607,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "4902e377-fc55-498b-9c42-b6704ad224e7")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -59535,7 +58282,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "d1a4e9b8-ed4c-46fa-812e-5cfbf1c4a965")
 		(at 171 135.9)
@@ -59560,20 +58307,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "af29865f-997c-434f-a1a0-7dcbe7d0e052")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -60277,7 +59010,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "d1f8f3cd-2232-4231-a37b-801cb6df863e")
 		(at 95.6 113.6 -90)
@@ -60302,20 +59035,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "f88a3d6a-1f8d-4cd2-b3ae-e5fab2b258a8")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -61019,7 +59738,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "d2b6fd9e-e685-45fe-87eb-93a1f78a9e94")
 		(at 148.4 102.8 180)
@@ -61044,20 +59763,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "3eec7a60-cc5c-4b3e-a488-c09a30ffe5ff")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -61761,7 +60466,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "d62eeed1-79c0-475b-9db5-39b9d834045c")
 		(at 142 102.8 180)
@@ -61786,20 +60491,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "a9ad8144-fa69-4ca6-8796-edc6a57a160d")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -62475,7 +61166,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "da18d72f-d1b5-4ba8-8e23-370d3a50dd48")
 		(at 141 135.9)
@@ -62500,20 +61191,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "7e07b932-f143-4f10-a87f-0cbe099a59ab")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -63217,7 +61894,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "df393e4b-9b26-4afd-a377-45f0094a7810")
 		(at 97 135.9)
@@ -63242,20 +61919,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "dae00c75-f3d5-437b-a65e-8cf900f278c5")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -63959,7 +62622,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "ICs And Semiconductors SMD:SOIC127P600X175-8N"
+	(footprint "multichannel_mixer:SOIC127P600X175-8N"
 		(layer "B.Cu")
 		(uuid "e628fff6-80a6-47ed-ab0e-3925977b0887")
 		(at 124.365 84.1 -90)
@@ -63984,20 +62647,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "ICs And Semiconductors SMD:SOIC127P600X175-8N"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "fd0dc0d4-bcc3-43bf-be5d-76d0eb094d1e")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -64628,7 +63277,7 @@
 				(width 0.25)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "B.SilkS")
 			(uuid "e1c7b894-e401-42c3-b24d-97431c3d2a70")
 		)
@@ -64719,7 +63368,7 @@
 				(width 0.1)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "B.Fab")
 			(uuid "679d0f3c-b943-4d96-a297-d74fce68b9e7")
 		)
@@ -64797,7 +63446,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "e86477a3-efba-49cb-b9fb-7a08d3eaa169")
 		(at 118 76.4)
@@ -64822,20 +63471,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "31997d96-084d-44b9-b194-ba27fa37be1c")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -65539,7 +64174,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "e8754587-612f-4049-adbd-9c5371fbbc63")
 		(at 161.6 113.6 -90)
@@ -65564,20 +64199,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "5d2bd37e-60a1-45ee-bb7f-2c260b4e88d6")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -66281,7 +64902,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "e919e84d-7781-4c35-9210-924c7ec4eb31")
 		(at 96 84.4)
@@ -66306,20 +64927,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "62563a7c-b7f7-4f41-85d2-75fe54f271bd")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -66995,7 +65602,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "eaa30fac-44f8-48e1-9e0d-f03bf0f99174")
 		(at 145 93 90)
@@ -67013,7 +65620,7 @@
 			)
 		)
 		(property "Value" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 -2.176 -90)
+			(at 0 -2.176 270)
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "7e1eaa63-e85c-42b9-8994-a7cd9d6ad48f")
@@ -67025,22 +65632,8 @@
 				(justify mirror)
 			)
 		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 -90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "b4f7681d-9761-440b-8f8c-68c8b5442e17")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
 		(property "Datasheet" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\R1206_NIC_NRC.pdf"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67054,7 +65647,7 @@
 			)
 		)
 		(property "Description" "±1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67068,7 +65661,7 @@
 			)
 		)
 		(property "Val" "10k"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67082,7 +65675,7 @@
 			)
 		)
 		(property "Part Number" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67096,7 +65689,7 @@
 			)
 		)
 		(property "Library Ref" "Resistor - 1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67110,7 +65703,7 @@
 			)
 		)
 		(property "Library Path" "SchLib\\Resistors.SchLib"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67124,7 +65717,7 @@
 			)
 		)
 		(property "Comment" "10k"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67138,7 +65731,7 @@
 			)
 		)
 		(property "Component Kind" "Standard"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67152,7 +65745,7 @@
 			)
 		)
 		(property "Component Type" "Standard"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67166,7 +65759,7 @@
 			)
 		)
 		(property "PackageDescription" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67180,7 +65773,7 @@
 			)
 		)
 		(property "Pin Count" "2"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67194,7 +65787,7 @@
 			)
 		)
 		(property "Footprint Path" "PcbLib\\Resistors SMD.PcbLib"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67208,7 +65801,7 @@
 			)
 		)
 		(property "Footprint Ref" "RESC3216X65N"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67222,7 +65815,7 @@
 			)
 		)
 		(property "Status" "Preferred"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67236,7 +65829,7 @@
 			)
 		)
 		(property "Power" "0.25W"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67250,7 +65843,7 @@
 			)
 		)
 		(property "TC" "±100ppm/°C"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67264,7 +65857,7 @@
 			)
 		)
 		(property "Voltage" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67278,7 +65871,7 @@
 			)
 		)
 		(property "Tolerance" "±1%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67292,7 +65885,7 @@
 			)
 		)
 		(property "Part Description" "General Purpose Thick Film Chip Resistor"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67306,7 +65899,7 @@
 			)
 		)
 		(property "Manufacturer" "GENERIC"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67320,7 +65913,7 @@
 			)
 		)
 		(property "Manufacturer Part Number" "R1206_10K_1%_0.25W_100PPM"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67334,7 +65927,7 @@
 			)
 		)
 		(property "Case" "1206"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67348,7 +65941,7 @@
 			)
 		)
 		(property "PressFit" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67362,7 +65955,7 @@
 			)
 		)
 		(property "Mounted" "Yes"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67376,7 +65969,7 @@
 			)
 		)
 		(property "Sense Comment" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67390,7 +65983,7 @@
 			)
 		)
 		(property "Sense" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67404,7 +65997,7 @@
 			)
 		)
 		(property "Status Comment" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67418,7 +66011,7 @@
 			)
 		)
 		(property "Socket" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67432,7 +66025,7 @@
 			)
 		)
 		(property "SMD" "Yes"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67446,7 +66039,7 @@
 			)
 		)
 		(property "ComponentHeight" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67460,7 +66053,7 @@
 			)
 		)
 		(property "Manufacturer1 Example" "NIC COMPONENT"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67474,7 +66067,7 @@
 			)
 		)
 		(property "Manufacturer1 Part Number" "NRC12F1002TRF"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67488,7 +66081,7 @@
 			)
 		)
 		(property "Manufacturer1 ComponentHeight" "0.65mm"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67502,7 +66095,7 @@
 			)
 		)
 		(property "HelpURL" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\R1206_NIC_NRC.pdf"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67516,7 +66109,7 @@
 			)
 		)
 		(property "Author" "CERN DEM JLC"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67530,7 +66123,7 @@
 			)
 		)
 		(property "CreateDate" "12/03/07 00:00:00"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67544,7 +66137,7 @@
 			)
 		)
 		(property "LatestRevisionDate" "03/13/08 00:00:00"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67558,7 +66151,7 @@
 			)
 		)
 		(property "Database Table Name" "Resistors"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67572,7 +66165,7 @@
 			)
 		)
 		(property "Library Name" "Resistors SMD"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67586,7 +66179,7 @@
 			)
 		)
 		(property "Footprint Library" "Resistors SMD"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67600,7 +66193,7 @@
 			)
 		)
 		(property "License" "This work is licensed under the Creative Commons CC-BY-SA 4.0 License. To the extent that circuit schematics that use Licensed Material can be considered to be ‘Adapted Material’, then the copyright holder waives article 3.b of the license with respect to these schematics."
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67737,7 +66330,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "eb1637a1-b503-4ac6-8dc6-42896ccf5fed")
 		(at 145 129 90)
@@ -67755,7 +66348,7 @@
 			)
 		)
 		(property "Value" "CC1206_100NF_50V_10%_X7R"
-			(at 0 -2.176 -90)
+			(at 0 -2.176 270)
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "a11fcbe9-d420-46da-8320-f8e5b1442677")
@@ -67767,22 +66360,8 @@
 				(justify mirror)
 			)
 		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 -90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "e0288395-7d62-4c5d-bc97-57289720785d")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
 		(property "Datasheet" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\CC1206_X7R_VISHAY_VJ.pdf"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67796,7 +66375,7 @@
 			)
 		)
 		(property "Description" "100nF"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67810,7 +66389,7 @@
 			)
 		)
 		(property "Part Number" "CC1206_100NF_50V_10%_X7R"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67824,7 +66403,7 @@
 			)
 		)
 		(property "Library Ref" "Capacitor - non polarized"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67838,7 +66417,7 @@
 			)
 		)
 		(property "Library Path" "SchLib\\Capacitors.SchLib"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67852,7 +66431,7 @@
 			)
 		)
 		(property "Comment" "100nF"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67866,7 +66445,7 @@
 			)
 		)
 		(property "Component Kind" "Standard"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67880,7 +66459,7 @@
 			)
 		)
 		(property "Component Type" "Standard"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67894,7 +66473,7 @@
 			)
 		)
 		(property "Pin Count" "2"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67908,7 +66487,7 @@
 			)
 		)
 		(property "Footprint Path" "PcbLib\\Capacitors SMD.PcbLib"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67922,7 +66501,7 @@
 			)
 		)
 		(property "Footprint Ref" "CAPC3216X140N"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67936,7 +66515,7 @@
 			)
 		)
 		(property "PackageDescription" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67950,7 +66529,7 @@
 			)
 		)
 		(property "Status" "Preferred"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67964,7 +66543,7 @@
 			)
 		)
 		(property "Status Comment" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67978,7 +66557,7 @@
 			)
 		)
 		(property "Voltage" "50V"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -67992,7 +66571,7 @@
 			)
 		)
 		(property "TC" "X7R"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -68006,7 +66585,7 @@
 			)
 		)
 		(property "Tolerance" "±10%"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -68020,7 +66599,7 @@
 			)
 		)
 		(property "Part Description" "SMD Multilayer Chip Ceramic Capacitor"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -68034,7 +66613,7 @@
 			)
 		)
 		(property "Manufacturer" "GENERIC"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -68048,7 +66627,7 @@
 			)
 		)
 		(property "Manufacturer Part Number" "CC1206_100NF_50V_10%_X7R"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -68062,7 +66641,7 @@
 			)
 		)
 		(property "Case" "1206"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -68076,7 +66655,7 @@
 			)
 		)
 		(property "Mounted" "Yes"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -68090,7 +66669,7 @@
 			)
 		)
 		(property "Socket" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -68104,7 +66683,7 @@
 			)
 		)
 		(property "SMD" "Yes"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -68118,7 +66697,7 @@
 			)
 		)
 		(property "PressFit" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -68132,7 +66711,7 @@
 			)
 		)
 		(property "Sense" "No"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -68146,7 +66725,7 @@
 			)
 		)
 		(property "Sense Comment" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -68160,7 +66739,7 @@
 			)
 		)
 		(property "ComponentHeight" " "
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -68174,7 +66753,7 @@
 			)
 		)
 		(property "Manufacturer1 Example" "VISHAY VITRAMON"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -68188,7 +66767,7 @@
 			)
 		)
 		(property "Manufacturer1 Part Number" "VJ1206Y104KXAAT"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -68202,7 +66781,7 @@
 			)
 		)
 		(property "Manufacturer1 ComponentHeight" "1.7mm"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -68216,7 +66795,7 @@
 			)
 		)
 		(property "HelpURL" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\CC1206_X7R_VISHAY_VJ.pdf"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -68230,7 +66809,7 @@
 			)
 		)
 		(property "Author" "CERN DEM JLC"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -68244,7 +66823,7 @@
 			)
 		)
 		(property "CreateDate" "12/03/07 00:00:00"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -68258,7 +66837,7 @@
 			)
 		)
 		(property "LatestRevisionDate" "12/03/07 00:00:00"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -68272,7 +66851,7 @@
 			)
 		)
 		(property "Database Table Name" "Capacitors"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -68286,7 +66865,7 @@
 			)
 		)
 		(property "Library Name" "Capacitors SMD"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -68300,7 +66879,7 @@
 			)
 		)
 		(property "Footprint Library" "Capacitors SMD"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -68314,7 +66893,7 @@
 			)
 		)
 		(property "License" "This work is licensed under the Creative Commons CC-BY-SA 4.0 License. To the extent that circuit schematics that use Licensed Material can be considered to be ‘Adapted Material’, then the copyright holder waives article 3.b of the license with respect to these schematics."
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
@@ -68451,7 +67030,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "eb7eb4e8-7776-407c-b60d-6a6ce43af179")
 		(at 145 76.4 180)
@@ -68476,20 +67055,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "48e2544b-3a73-4b93-ac24-e7e6b2765703")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -69193,7 +67758,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "ecd09680-5cf2-4350-8777-b9085bf57aef")
 		(at 101 123.7 -90)
@@ -69218,20 +67783,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "81e0f82f-4fb8-4dc2-8897-37539c7561e4")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -69907,7 +68458,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "ed3bec5e-6e30-4fdf-8415-430e8581317d")
 		(at 97 117.9 180)
@@ -69932,20 +68483,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "7a17eb40-e8fb-4e40-9e7c-82754b0217b7")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -70649,7 +69186,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "f12e5e8b-309a-4ae0-a86f-459de24ef66d")
 		(at 96 76.4)
@@ -70674,20 +69211,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "3be9c596-b597-4838-acd6-ffd87a23f533")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -71391,7 +69914,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "f158b91e-6011-4932-8b6b-d38f8c0fc551")
 		(at 167 78.9 180)
@@ -71416,20 +69939,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "a034a03c-9144-464a-8273-87de15008308")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -72105,7 +70614,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "f3688754-2453-4531-8697-d0a6bed0b864")
 		(at 182.46 103.66)
@@ -72130,20 +70639,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "7b932fb4-cdb1-4816-b1e7-70240ac8402b")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -72819,7 +71314,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "f53a583a-1ca1-47d0-800b-57082d95913d")
 		(at 141 117.9 180)
@@ -72844,20 +71339,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "16d03b53-e3cc-4cef-96ab-0064bb9da428")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -73561,7 +72042,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "f58ffe04-f661-4e6f-b71b-c1365cb73e72")
 		(at 127 121 180)
@@ -73586,20 +72067,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "7774ec85-ba44-43ab-991e-858b0d9379d1")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -74303,7 +72770,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Capacitors SMD:CAPC3216X140N"
+	(footprint "multichannel_mixer:CAPC3216X140N"
 		(layer "B.Cu")
 		(uuid "f8a20521-1aea-49a9-8c0f-07837604b964")
 		(at 150.4 115.8 -90)
@@ -74328,20 +72795,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Capacitors SMD:CAPC3216X140N"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "aac62541-56c5-4706-a075-f7ccbfa4302b")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -75017,7 +73470,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistors SMD:RESC3216X65N"
+	(footprint "multichannel_mixer:RESC3216X65N"
 		(layer "B.Cu")
 		(uuid "fb5a45a9-c146-4e09-970a-1a3be949a1e8")
 		(at 127 135.9)
@@ -75042,20 +73495,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Footprint" "Resistors SMD:RESC3216X65N"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "9ed78eaf-34d5-4757-a8a4-51265320d721")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -80915,7 +79354,7 @@
 	(zone
 		(net 1)
 		(net_name "GND")
-		(layers "F&B.Cu")
+		(layers "F.Cu" "B.Cu")
 		(uuid "2a2e83ed-a77d-476f-8432-6de9bc7f83ed")
 		(hatch edge 0.5)
 		(priority 1)
@@ -85382,7 +83821,7 @@
 	(zone
 		(net 0)
 		(net_name "")
-		(layers "F&B.Cu")
+		(layers "F.Cu" "B.Cu")
 		(uuid "32086486-28c1-4603-b6f4-950dd93ad020")
 		(name "auto-placement-area-/CH4/")
 		(hatch none 0.5)
@@ -85416,7 +83855,7 @@
 	(zone
 		(net 0)
 		(net_name "")
-		(layers "F&B.Cu")
+		(layers "F.Cu" "B.Cu")
 		(uuid "a4b45835-7b94-49de-8b40-b19da997fccb")
 		(name "auto-placement-area-/CH2/")
 		(hatch none 0.5)
@@ -85450,7 +83889,7 @@
 	(zone
 		(net 0)
 		(net_name "")
-		(layers "F&B.Cu")
+		(layers "F.Cu" "B.Cu")
 		(uuid "c7ba2d0f-75c7-428f-a5ed-32da84cbaffb")
 		(name "auto-placement-area-/CH1/")
 		(hatch none 0.5)
@@ -85484,7 +83923,7 @@
 	(zone
 		(net 0)
 		(net_name "")
-		(layers "F&B.Cu")
+		(layers "F.Cu" "B.Cu")
 		(uuid "e687035f-b291-47be-b675-5afa1d8b9283")
 		(name "auto-placement-area-/CH3/")
 		(hatch none 0.5)

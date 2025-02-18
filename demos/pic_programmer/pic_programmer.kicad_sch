@@ -1,5 +1,5 @@
 (kicad_sch
-	(version 20241209)
+	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
 	(uuid "2e45d1d2-c73f-46e5-98d6-3a9dc360bff5")
@@ -11,7 +11,7 @@
 		(company "KiCad")
 	)
 	(lib_symbols
-		(symbol "pic_programmer_schlib:74LS125"
+		(symbol "pic_programmer:74LS125"
 			(pin_names
 				(offset 0.254)
 			)
@@ -382,7 +382,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:7805"
+		(symbol "pic_programmer:7805"
 			(pin_names
 				(offset 0.762)
 			)
@@ -501,7 +501,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:BC237"
+		(symbol "pic_programmer:BC237"
 			(pin_names
 				(offset 0)
 			)
@@ -601,18 +601,6 @@
 				)
 				(polyline
 					(pts
-						(xy 2.286 -2.286) (xy 1.778 -0.762) (xy 0.762 -1.778) (xy 2.286 -2.286) (xy 2.286 -2.286)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(polyline
-					(pts
 						(xy 2.286 -2.286) (xy 2.54 -2.54) (xy 2.54 -2.54)
 					)
 					(stroke
@@ -621,6 +609,18 @@
 					)
 					(fill
 						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.286 -2.286) (xy 1.778 -0.762) (xy 0.762 -1.778) (xy 2.286 -2.286) (xy 2.286 -2.286)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
 					)
 				)
 			)
@@ -682,7 +682,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:BC307"
+		(symbol "pic_programmer:BC307"
 			(pin_names
 				(offset 0)
 			)
@@ -759,18 +759,6 @@
 				)
 				(polyline
 					(pts
-						(xy 0.635 -0.635) (xy 1.27 -1.905) (xy 1.905 -1.27) (xy 0.635 -0.635) (xy 0.635 -0.635)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(polyline
-					(pts
 						(xy 0.635 -0.635) (xy 0 0) (xy 0 0)
 					)
 					(stroke
@@ -779,6 +767,18 @@
 					)
 					(fill
 						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.635 -0.635) (xy 1.27 -1.905) (xy 1.905 -1.27) (xy 0.635 -0.635) (xy 0.635 -0.635)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
 					)
 				)
 				(circle
@@ -863,7 +863,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:C"
+		(symbol "pic_programmer:C"
 			(pin_numbers
 				(hide yes)
 			)
@@ -991,7 +991,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:CONN_2"
+		(symbol "pic_programmer:CONN_2"
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -1093,7 +1093,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:CP"
+		(symbol "pic_programmer:CP"
 			(pin_numbers
 				(hide yes)
 			)
@@ -1241,7 +1241,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:D"
+		(symbol "pic_programmer:D"
 			(pin_names
 				(offset 0)
 			)
@@ -1364,7 +1364,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:DB9"
+		(symbol "pic_programmer:DB9"
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -1716,7 +1716,7 @@
 				)
 				(polyline
 					(pts
-						(xy 3.2766 9.906) (xy 3.81 9.398)
+						(xy 3.2766 9.906) (xy -1.778 12.446)
 					)
 					(stroke
 						(width 0.2032)
@@ -1728,7 +1728,7 @@
 				)
 				(polyline
 					(pts
-						(xy 3.2766 9.906) (xy -1.778 12.446)
+						(xy 3.2766 9.906) (xy 3.81 9.398)
 					)
 					(stroke
 						(width 0.2032)
@@ -1941,7 +1941,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:D_Schottky"
+		(symbol "pic_programmer:D_Schottky"
 			(pin_names
 				(offset 0)
 			)
@@ -2064,7 +2064,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:GND"
+		(symbol "pic_programmer:GND"
 			(power)
 			(pin_names
 				(offset 0)
@@ -2152,7 +2152,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:INDUCTOR"
+		(symbol "pic_programmer:INDUCTOR"
 			(pin_numbers
 				(hide yes)
 			)
@@ -2294,7 +2294,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:JUMPER"
+		(symbol "pic_programmer:JUMPER"
 			(pin_names
 				(offset 0.762)
 				(hide yes)
@@ -2417,7 +2417,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:LED"
+		(symbol "pic_programmer:LED"
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -2565,7 +2565,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:LT1373"
+		(symbol "pic_programmer:LT1373"
 			(pin_names
 				(offset 0.762)
 			)
@@ -2774,7 +2774,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:MOUNTING_HOLE"
+		(symbol "pic_programmer:MOUNTING_HOLE"
 			(pin_numbers
 				(hide yes)
 			)
@@ -2852,7 +2852,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:POT"
+		(symbol "pic_programmer:POT"
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -2984,7 +2984,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:PWR_FLAG"
+		(symbol "pic_programmer:PWR_FLAG"
 			(power)
 			(pin_numbers
 				(hide yes)
@@ -3074,7 +3074,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:R"
+		(symbol "pic_programmer:R"
 			(pin_numbers
 				(hide yes)
 			)
@@ -3187,7 +3187,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:VCC"
+		(symbol "pic_programmer:VCC"
 			(power)
 			(pin_names
 				(offset 0)
@@ -3285,7 +3285,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:VPP"
+		(symbol "pic_programmer:VPP"
 			(pin_names
 				(offset 0)
 			)
@@ -5146,7 +5146,7 @@
 		(uuid "dd3b7494-aebc-4607-b02a-df441adf890f")
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:DB9")
+		(lib_id "pic_programmer:DB9")
 		(at 31.75 91.44 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5233,7 +5233,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:74LS125")
+		(lib_id "pic_programmer:74LS125")
 		(at 100.33 43.18 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5337,7 +5337,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:R")
+		(lib_id "pic_programmer:R")
 		(at 78.74 43.18 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5403,7 +5403,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:R")
+		(lib_id "pic_programmer:R")
 		(at 71.12 50.8 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5469,7 +5469,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:D_Schottky")
+		(lib_id "pic_programmer:D_Schottky")
 		(at 87.63 36.83 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5535,7 +5535,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:D_Schottky")
+		(lib_id "pic_programmer:D_Schottky")
 		(at 87.63 50.8 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5601,7 +5601,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 102.87 48.26 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5667,7 +5667,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 87.63 55.88 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5733,7 +5733,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:VCC")
+		(lib_id "pic_programmer:VCC")
 		(at 87.63 31.75 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5798,7 +5798,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:74LS125")
+		(lib_id "pic_programmer:74LS125")
 		(at 110.49 80.01 0)
 		(unit 2)
 		(exclude_from_sim no)
@@ -5902,7 +5902,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:R")
+		(lib_id "pic_programmer:R")
 		(at 88.9 80.01 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5968,7 +5968,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:R")
+		(lib_id "pic_programmer:R")
 		(at 81.28 87.63 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6034,7 +6034,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:D_Schottky")
+		(lib_id "pic_programmer:D_Schottky")
 		(at 97.79 73.66 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6100,7 +6100,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:D_Schottky")
+		(lib_id "pic_programmer:D_Schottky")
 		(at 97.79 87.63 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6166,7 +6166,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 113.03 85.09 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6232,7 +6232,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 97.79 91.44 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6298,7 +6298,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:VCC")
+		(lib_id "pic_programmer:VCC")
 		(at 97.79 68.58 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6363,7 +6363,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:74LS125")
+		(lib_id "pic_programmer:74LS125")
 		(at 110.49 129.54 0)
 		(unit 3)
 		(exclude_from_sim no)
@@ -6467,7 +6467,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:R")
+		(lib_id "pic_programmer:R")
 		(at 88.9 129.54 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6533,7 +6533,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:R")
+		(lib_id "pic_programmer:R")
 		(at 81.28 137.16 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6599,7 +6599,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:D_Schottky")
+		(lib_id "pic_programmer:D_Schottky")
 		(at 97.79 123.19 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6665,7 +6665,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:D_Schottky")
+		(lib_id "pic_programmer:D_Schottky")
 		(at 97.79 137.16 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6731,7 +6731,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 113.03 134.62 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6797,7 +6797,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 97.79 142.24 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6863,7 +6863,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:VCC")
+		(lib_id "pic_programmer:VCC")
 		(at 97.79 118.11 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6928,7 +6928,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:74LS125")
+		(lib_id "pic_programmer:74LS125")
 		(at 110.49 106.68 0)
 		(mirror y)
 		(unit 4)
@@ -7033,7 +7033,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 107.95 111.76 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7099,7 +7099,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:R")
+		(lib_id "pic_programmer:R")
 		(at 129.54 80.01 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7165,7 +7165,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:R")
+		(lib_id "pic_programmer:R")
 		(at 129.54 129.54 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7231,7 +7231,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:R")
+		(lib_id "pic_programmer:R")
 		(at 119.38 43.18 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7297,7 +7297,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 81.28 91.44 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7363,7 +7363,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 81.28 140.97 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7429,7 +7429,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 71.12 54.61 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7495,7 +7495,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 43.18 101.6 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7561,7 +7561,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:BC237")
+		(lib_id "pic_programmer:BC237")
 		(at 135.89 43.18 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7634,7 +7634,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 138.43 48.26 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7700,7 +7700,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:R")
+		(lib_id "pic_programmer:R")
 		(at 146.05 35.56 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7766,7 +7766,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:R")
+		(lib_id "pic_programmer:R")
 		(at 154.94 25.4 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7832,7 +7832,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:BC307")
+		(lib_id "pic_programmer:BC307")
 		(at 163.83 35.56 0)
 		(mirror x)
 		(unit 1)
@@ -7906,7 +7906,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:VPP")
+		(lib_id "pic_programmer:VPP")
 		(at 154.94 17.78 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7971,7 +7971,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:VPP")
+		(lib_id "pic_programmer:VPP")
 		(at 166.37 27.94 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8036,7 +8036,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:R")
+		(lib_id "pic_programmer:R")
 		(at 166.37 48.26 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8102,7 +8102,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:LED")
+		(lib_id "pic_programmer:LED")
 		(at 166.37 60.96 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8176,7 +8176,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:CONN_2")
+		(lib_id "pic_programmer:CONN_2")
 		(at 25.4 171.45 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8242,7 +8242,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:D")
+		(lib_id "pic_programmer:D")
 		(at 41.91 168.91 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8308,7 +8308,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 35.56 175.26 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8374,7 +8374,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:CP")
+		(lib_id "pic_programmer:CP")
 		(at 49.53 175.26 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8442,7 +8442,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 49.53 179.07 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8508,7 +8508,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 68.58 176.53 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8574,7 +8574,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:CP")
+		(lib_id "pic_programmer:CP")
 		(at 81.28 175.26 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8642,7 +8642,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 81.28 179.07 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8708,7 +8708,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:R")
+		(lib_id "pic_programmer:R")
 		(at 97.79 168.91 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8774,7 +8774,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:LED")
+		(lib_id "pic_programmer:LED")
 		(at 105.41 176.53 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8848,7 +8848,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 105.41 181.61 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8914,7 +8914,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:VCC")
+		(lib_id "pic_programmer:VCC")
 		(at 86.36 167.64 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8979,7 +8979,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:R")
+		(lib_id "pic_programmer:R")
 		(at 179.07 50.8 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9045,7 +9045,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 179.07 54.61 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9111,7 +9111,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:INDUCTOR")
+		(lib_id "pic_programmer:INDUCTOR")
 		(at 231.14 130.81 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9177,7 +9177,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:VCC")
+		(lib_id "pic_programmer:VCC")
 		(at 196.85 118.11 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9242,7 +9242,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 189.23 156.21 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9308,7 +9308,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:VPP")
+		(lib_id "pic_programmer:VPP")
 		(at 260.35 135.89 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9373,7 +9373,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:CP")
+		(lib_id "pic_programmer:CP")
 		(at 267.97 137.16 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9441,7 +9441,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 274.32 138.43 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9507,7 +9507,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:VCC")
+		(lib_id "pic_programmer:VCC")
 		(at 238.76 128.27 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9572,7 +9572,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:PWR_FLAG")
+		(lib_id "pic_programmer:PWR_FLAG")
 		(at 255.27 135.89 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9637,7 +9637,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:C")
+		(lib_id "pic_programmer:C")
 		(at 228.6 152.4 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9705,7 +9705,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 234.95 152.4 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9771,7 +9771,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:R")
+		(lib_id "pic_programmer:R")
 		(at 254 156.21 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9837,7 +9837,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:R")
+		(lib_id "pic_programmer:R")
 		(at 254 143.51 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9903,7 +9903,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 260.35 157.48 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9969,7 +9969,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:LT1373")
+		(lib_id "pic_programmer:LT1373")
 		(at 196.85 137.16 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10053,7 +10053,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:C")
+		(lib_id "pic_programmer:C")
 		(at 224.79 160.02 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10121,7 +10121,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:R")
+		(lib_id "pic_programmer:R")
 		(at 212.09 154.94 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10187,7 +10187,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:D_Schottky")
+		(lib_id "pic_programmer:D_Schottky")
 		(at 238.76 137.16 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10253,7 +10253,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:PWR_FLAG")
+		(lib_id "pic_programmer:PWR_FLAG")
 		(at 40.64 175.26 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10318,7 +10318,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 166.37 67.31 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10384,7 +10384,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:R")
+		(lib_id "pic_programmer:R")
 		(at 186.69 40.64 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10450,7 +10450,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:POT")
+		(lib_id "pic_programmer:POT")
 		(at 243.84 149.86 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10519,7 +10519,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:VCC")
+		(lib_id "pic_programmer:VCC")
 		(at 187.96 67.31 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10584,7 +10584,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:BC307")
+		(lib_id "pic_programmer:BC307")
 		(at 208.28 73.66 0)
 		(mirror x)
 		(unit 1)
@@ -10654,7 +10654,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:R")
+		(lib_id "pic_programmer:R")
 		(at 194.31 73.66 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10720,7 +10720,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:R")
+		(lib_id "pic_programmer:R")
 		(at 194.31 67.31 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10786,7 +10786,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:R")
+		(lib_id "pic_programmer:R")
 		(at 200.66 81.28 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10852,7 +10852,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:LED")
+		(lib_id "pic_programmer:LED")
 		(at 194.31 88.9 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10918,7 +10918,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 194.31 93.98 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10984,7 +10984,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:VCC")
+		(lib_id "pic_programmer:VCC")
 		(at 210.82 68.58 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11049,7 +11049,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:D_Schottky")
+		(lib_id "pic_programmer:D_Schottky")
 		(at 181.61 73.66 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11115,7 +11115,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:JUMPER")
+		(lib_id "pic_programmer:JUMPER")
 		(at 219.71 72.39 270)
 		(unit 1)
 		(exclude_from_sim yes)
@@ -11181,7 +11181,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:VCC")
+		(lib_id "pic_programmer:VCC")
 		(at 219.71 64.77 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11246,7 +11246,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:C")
+		(lib_id "pic_programmer:C")
 		(at 144.78 25.4 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11314,7 +11314,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:MOUNTING_HOLE")
+		(lib_id "pic_programmer:MOUNTING_HOLE")
 		(at 162.56 172.72 0)
 		(unit 1)
 		(exclude_from_sim yes)
@@ -11376,7 +11376,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:MOUNTING_HOLE")
+		(lib_id "pic_programmer:MOUNTING_HOLE")
 		(at 162.56 176.53 0)
 		(unit 1)
 		(exclude_from_sim yes)
@@ -11438,7 +11438,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:MOUNTING_HOLE")
+		(lib_id "pic_programmer:MOUNTING_HOLE")
 		(at 162.56 180.34 0)
 		(unit 1)
 		(exclude_from_sim yes)
@@ -11500,7 +11500,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:MOUNTING_HOLE")
+		(lib_id "pic_programmer:MOUNTING_HOLE")
 		(at 162.56 184.15 0)
 		(unit 1)
 		(exclude_from_sim yes)
@@ -11562,7 +11562,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:MOUNTING_HOLE")
+		(lib_id "pic_programmer:MOUNTING_HOLE")
 		(at 162.56 187.96 0)
 		(unit 1)
 		(exclude_from_sim yes)
@@ -11624,7 +11624,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:MOUNTING_HOLE")
+		(lib_id "pic_programmer:MOUNTING_HOLE")
 		(at 162.56 191.77 0)
 		(unit 1)
 		(exclude_from_sim yes)
@@ -11686,7 +11686,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 109.22 85.09 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11752,7 +11752,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 111.76 111.76 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11818,7 +11818,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 109.22 134.62 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11884,7 +11884,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:VCC")
+		(lib_id "pic_programmer:VCC")
 		(at 109.22 124.46 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11949,7 +11949,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:VCC")
+		(lib_id "pic_programmer:VCC")
 		(at 111.76 101.6 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12014,7 +12014,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:VCC")
+		(lib_id "pic_programmer:VCC")
 		(at 109.22 74.93 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12079,7 +12079,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 99.06 48.26 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12145,7 +12145,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:VCC")
+		(lib_id "pic_programmer:VCC")
 		(at 99.06 38.1 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12210,7 +12210,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:7805")
+		(lib_id "pic_programmer:7805")
 		(at 68.58 170.18 0)
 		(unit 1)
 		(exclude_from_sim no)

@@ -1,5 +1,5 @@
 (kicad_sch
-	(version 20241209)
+	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
 	(uuid "6ef8dcea-e7e0-41da-b420-77ba9c5e63ff")
@@ -11,7 +11,7 @@
 		(company "KiCad")
 	)
 	(lib_symbols
-		(symbol "flat_hierarchy_schlib:74LS125"
+		(symbol "flat_hierarchy:74LS125"
 			(pin_names
 				(offset 0.254)
 			)
@@ -382,7 +382,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "flat_hierarchy_schlib:7805"
+		(symbol "flat_hierarchy:7805"
 			(pin_names
 				(offset 0.762)
 			)
@@ -501,7 +501,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "flat_hierarchy_schlib:BC237"
+		(symbol "flat_hierarchy:BC237"
 			(pin_names
 				(offset 0)
 			)
@@ -601,18 +601,6 @@
 				)
 				(polyline
 					(pts
-						(xy 2.286 -2.286) (xy 1.778 -0.762) (xy 0.762 -1.778) (xy 2.286 -2.286) (xy 2.286 -2.286)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(polyline
-					(pts
 						(xy 2.286 -2.286) (xy 2.54 -2.54) (xy 2.54 -2.54)
 					)
 					(stroke
@@ -621,6 +609,18 @@
 					)
 					(fill
 						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.286 -2.286) (xy 1.778 -0.762) (xy 0.762 -1.778) (xy 2.286 -2.286) (xy 2.286 -2.286)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
 					)
 				)
 			)
@@ -682,7 +682,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "flat_hierarchy_schlib:BC307"
+		(symbol "flat_hierarchy:BC307"
 			(pin_names
 				(offset 0)
 			)
@@ -863,7 +863,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "flat_hierarchy_schlib:C"
+		(symbol "flat_hierarchy:C"
 			(pin_numbers
 				(hide yes)
 			)
@@ -991,7 +991,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "flat_hierarchy_schlib:CONN_1"
+		(symbol "flat_hierarchy:CONN_1"
 			(pin_numbers
 				(hide yes)
 			)
@@ -1092,7 +1092,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "flat_hierarchy_schlib:CONN_2"
+		(symbol "flat_hierarchy:CONN_2"
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -1194,7 +1194,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "flat_hierarchy_schlib:CP"
+		(symbol "flat_hierarchy:CP"
 			(pin_numbers
 				(hide yes)
 			)
@@ -1259,7 +1259,7 @@
 			(symbol "CP_0_1"
 				(rectangle
 					(start -2.286 0.508)
-					(end 2.286 0.508)
+					(end -2.286 1.016)
 					(stroke
 						(width 0)
 						(type default)
@@ -1270,7 +1270,7 @@
 				)
 				(rectangle
 					(start -2.286 0.508)
-					(end -2.286 1.016)
+					(end 2.286 0.508)
 					(stroke
 						(width 0)
 						(type default)
@@ -1303,7 +1303,7 @@
 				)
 				(rectangle
 					(start 2.286 1.016)
-					(end 2.286 0.508)
+					(end -2.286 1.016)
 					(stroke
 						(width 0)
 						(type default)
@@ -1314,7 +1314,7 @@
 				)
 				(rectangle
 					(start 2.286 1.016)
-					(end -2.286 1.016)
+					(end 2.286 0.508)
 					(stroke
 						(width 0)
 						(type default)
@@ -1375,7 +1375,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "flat_hierarchy_schlib:D"
+		(symbol "flat_hierarchy:D"
 			(pin_names
 				(offset 0)
 			)
@@ -1498,7 +1498,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "flat_hierarchy_schlib:DB9"
+		(symbol "flat_hierarchy:DB9"
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -2075,7 +2075,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "flat_hierarchy_schlib:D_Schottky"
+		(symbol "flat_hierarchy:D_Schottky"
 			(pin_names
 				(offset 0)
 			)
@@ -2198,7 +2198,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "flat_hierarchy_schlib:GND"
+		(symbol "flat_hierarchy:GND"
 			(power)
 			(pin_names
 				(offset 0)
@@ -2286,7 +2286,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "flat_hierarchy_schlib:INDUCTOR"
+		(symbol "flat_hierarchy:INDUCTOR"
 			(pin_numbers
 				(hide yes)
 			)
@@ -2428,7 +2428,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "flat_hierarchy_schlib:JUMPER"
+		(symbol "flat_hierarchy:JUMPER"
 			(pin_names
 				(offset 0.762)
 				(hide yes)
@@ -2551,7 +2551,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "flat_hierarchy_schlib:LED"
+		(symbol "flat_hierarchy:LED"
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -2699,7 +2699,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "flat_hierarchy_schlib:LT1373"
+		(symbol "flat_hierarchy:LT1373"
 			(pin_names
 				(offset 0.762)
 			)
@@ -2908,7 +2908,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "flat_hierarchy_schlib:POT"
+		(symbol "flat_hierarchy:POT"
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -3040,7 +3040,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "flat_hierarchy_schlib:PWR_FLAG"
+		(symbol "flat_hierarchy:PWR_FLAG"
 			(power)
 			(pin_numbers
 				(hide yes)
@@ -3130,7 +3130,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "flat_hierarchy_schlib:R"
+		(symbol "flat_hierarchy:R"
 			(pin_numbers
 				(hide yes)
 			)
@@ -3243,7 +3243,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "flat_hierarchy_schlib:VCC"
+		(symbol "flat_hierarchy:VCC"
 			(power)
 			(pin_names
 				(offset 0)
@@ -3341,7 +3341,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "flat_hierarchy_schlib:VPP"
+		(symbol "flat_hierarchy:VPP"
 			(pin_names
 				(offset 0)
 			)
@@ -5491,7 +5491,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:DB9")
+		(lib_id "flat_hierarchy:DB9")
 		(at 31.75 91.44 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5579,7 +5579,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:74LS125")
+		(lib_id "flat_hierarchy:74LS125")
 		(at 105.41 30.48 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5684,7 +5684,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:R")
+		(lib_id "flat_hierarchy:R")
 		(at 86.36 33.02 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5751,7 +5751,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:R")
+		(lib_id "flat_hierarchy:R")
 		(at 73.66 39.37 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5818,7 +5818,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:D_Schottky")
+		(lib_id "flat_hierarchy:D_Schottky")
 		(at 95.25 24.13 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5885,7 +5885,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:D_Schottky")
+		(lib_id "flat_hierarchy:D_Schottky")
 		(at 95.25 39.37 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5952,7 +5952,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:GND")
+		(lib_id "flat_hierarchy:GND")
 		(at 104.14 36.83 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6018,7 +6018,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:GND")
+		(lib_id "flat_hierarchy:GND")
 		(at 95.25 43.18 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6084,7 +6084,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:VCC")
+		(lib_id "flat_hierarchy:VCC")
 		(at 95.25 20.32 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6149,7 +6149,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:74LS125")
+		(lib_id "flat_hierarchy:74LS125")
 		(at 106.68 80.01 0)
 		(unit 2)
 		(exclude_from_sim no)
@@ -6254,7 +6254,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:R")
+		(lib_id "flat_hierarchy:R")
 		(at 85.09 82.55 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6321,7 +6321,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:R")
+		(lib_id "flat_hierarchy:R")
 		(at 76.2 88.9 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6388,7 +6388,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:D_Schottky")
+		(lib_id "flat_hierarchy:D_Schottky")
 		(at 93.98 73.66 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6455,7 +6455,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:D_Schottky")
+		(lib_id "flat_hierarchy:D_Schottky")
 		(at 93.98 88.9 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6522,7 +6522,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:GND")
+		(lib_id "flat_hierarchy:GND")
 		(at 105.41 86.36 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6588,7 +6588,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:GND")
+		(lib_id "flat_hierarchy:GND")
 		(at 93.98 93.98 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6654,7 +6654,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:VCC")
+		(lib_id "flat_hierarchy:VCC")
 		(at 93.98 69.85 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6719,7 +6719,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:74LS125")
+		(lib_id "flat_hierarchy:74LS125")
 		(at 111.76 114.3 0)
 		(unit 3)
 		(exclude_from_sim no)
@@ -6824,7 +6824,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:R")
+		(lib_id "flat_hierarchy:R")
 		(at 90.17 111.76 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6891,7 +6891,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:R")
+		(lib_id "flat_hierarchy:R")
 		(at 81.28 118.11 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6958,7 +6958,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:D_Schottky")
+		(lib_id "flat_hierarchy:D_Schottky")
 		(at 99.06 105.41 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7025,7 +7025,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:D_Schottky")
+		(lib_id "flat_hierarchy:D_Schottky")
 		(at 99.06 120.65 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7092,7 +7092,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:GND")
+		(lib_id "flat_hierarchy:GND")
 		(at 110.49 120.65 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7158,7 +7158,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:GND")
+		(lib_id "flat_hierarchy:GND")
 		(at 99.06 125.73 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7224,7 +7224,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:VCC")
+		(lib_id "flat_hierarchy:VCC")
 		(at 99.06 101.6 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7289,7 +7289,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:74LS125")
+		(lib_id "flat_hierarchy:74LS125")
 		(at 105.41 55.88 0)
 		(mirror y)
 		(unit 4)
@@ -7395,7 +7395,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:GND")
+		(lib_id "flat_hierarchy:GND")
 		(at 106.68 62.23 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7461,7 +7461,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:R")
+		(lib_id "flat_hierarchy:R")
 		(at 124.46 80.01 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7528,7 +7528,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:R")
+		(lib_id "flat_hierarchy:R")
 		(at 133.35 114.3 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7595,7 +7595,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:R")
+		(lib_id "flat_hierarchy:R")
 		(at 123.19 30.48 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7662,7 +7662,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:GND")
+		(lib_id "flat_hierarchy:GND")
 		(at 76.2 93.98 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7728,7 +7728,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:GND")
+		(lib_id "flat_hierarchy:GND")
 		(at 81.28 123.19 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7794,7 +7794,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:GND")
+		(lib_id "flat_hierarchy:GND")
 		(at 73.66 45.72 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7860,7 +7860,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:GND")
+		(lib_id "flat_hierarchy:GND")
 		(at 43.18 102.87 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7926,7 +7926,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:BC237")
+		(lib_id "flat_hierarchy:BC237")
 		(at 167.64 66.04 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7999,7 +7999,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:GND")
+		(lib_id "flat_hierarchy:GND")
 		(at 170.18 72.39 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8065,7 +8065,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:R")
+		(lib_id "flat_hierarchy:R")
 		(at 170.18 49.53 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8132,7 +8132,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:R")
+		(lib_id "flat_hierarchy:R")
 		(at 170.18 26.67 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8199,7 +8199,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:BC307")
+		(lib_id "flat_hierarchy:BC307")
 		(at 198.12 30.48 0)
 		(mirror x)
 		(unit 1)
@@ -8273,7 +8273,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:VPP")
+		(lib_id "flat_hierarchy:VPP")
 		(at 170.18 19.05 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8338,7 +8338,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:VPP")
+		(lib_id "flat_hierarchy:VPP")
 		(at 200.66 22.86 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8403,7 +8403,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:R")
+		(lib_id "flat_hierarchy:R")
 		(at 200.66 46.99 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8470,7 +8470,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:LED")
+		(lib_id "flat_hierarchy:LED")
 		(at 200.66 59.69 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8540,7 +8540,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:CONN_2")
+		(lib_id "flat_hierarchy:CONN_2")
 		(at 189.23 137.16 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8607,7 +8607,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:D")
+		(lib_id "flat_hierarchy:D")
 		(at 205.74 134.62 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8674,7 +8674,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:GND")
+		(lib_id "flat_hierarchy:GND")
 		(at 200.66 142.24 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8740,7 +8740,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:CP")
+		(lib_id "flat_hierarchy:CP")
 		(at 213.36 140.97 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8809,7 +8809,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:GND")
+		(lib_id "flat_hierarchy:GND")
 		(at 213.36 147.32 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8875,7 +8875,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:7805")
+		(lib_id "flat_hierarchy:7805")
 		(at 232.41 135.89 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8945,7 +8945,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:GND")
+		(lib_id "flat_hierarchy:GND")
 		(at 232.41 143.51 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9011,7 +9011,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:CP")
+		(lib_id "flat_hierarchy:CP")
 		(at 245.11 140.97 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9080,7 +9080,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:GND")
+		(lib_id "flat_hierarchy:GND")
 		(at 245.11 147.32 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9146,7 +9146,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:R")
+		(lib_id "flat_hierarchy:R")
 		(at 259.08 142.24 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9213,7 +9213,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:LED")
+		(lib_id "flat_hierarchy:LED")
 		(at 259.08 156.21 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9283,7 +9283,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:GND")
+		(lib_id "flat_hierarchy:GND")
 		(at 259.08 161.29 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9349,7 +9349,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:VCC")
+		(lib_id "flat_hierarchy:VCC")
 		(at 259.08 133.35 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9414,7 +9414,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:R")
+		(lib_id "flat_hierarchy:R")
 		(at 210.82 49.53 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9481,7 +9481,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:GND")
+		(lib_id "flat_hierarchy:GND")
 		(at 210.82 53.34 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9547,7 +9547,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:INDUCTOR")
+		(lib_id "flat_hierarchy:INDUCTOR")
 		(at 64.77 135.89 270)
 		(mirror x)
 		(unit 1)
@@ -9615,7 +9615,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:VCC")
+		(lib_id "flat_hierarchy:VCC")
 		(at 48.26 134.62 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9680,7 +9680,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:VPP")
+		(lib_id "flat_hierarchy:VPP")
 		(at 100.33 147.32 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9745,7 +9745,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:CP")
+		(lib_id "flat_hierarchy:CP")
 		(at 100.33 156.21 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9814,7 +9814,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:PWR_FLAG")
+		(lib_id "flat_hierarchy:PWR_FLAG")
 		(at 93.98 147.32 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9879,7 +9879,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:C")
+		(lib_id "flat_hierarchy:C")
 		(at 41.91 182.88 270)
 		(mirror x)
 		(unit 1)
@@ -9947,7 +9947,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:R")
+		(lib_id "flat_hierarchy:R")
 		(at 91.44 182.88 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10014,7 +10014,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:R")
+		(lib_id "flat_hierarchy:R")
 		(at 91.44 157.48 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10081,7 +10081,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:LT1373")
+		(lib_id "flat_hierarchy:LT1373")
 		(at 48.26 154.94 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10166,7 +10166,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:C")
+		(lib_id "flat_hierarchy:C")
 		(at 48.26 189.23 270)
 		(mirror x)
 		(unit 1)
@@ -10234,7 +10234,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:R")
+		(lib_id "flat_hierarchy:R")
 		(at 54.61 182.88 270)
 		(mirror x)
 		(unit 1)
@@ -10302,7 +10302,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:D_Schottky")
+		(lib_id "flat_hierarchy:D_Schottky")
 		(at 83.82 148.59 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10370,7 +10370,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:PWR_FLAG")
+		(lib_id "flat_hierarchy:PWR_FLAG")
 		(at 205.74 140.97 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10435,7 +10435,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:GND")
+		(lib_id "flat_hierarchy:GND")
 		(at 200.66 66.04 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10501,7 +10501,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:R")
+		(lib_id "flat_hierarchy:R")
 		(at 217.17 38.1 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10568,7 +10568,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:POT")
+		(lib_id "flat_hierarchy:POT")
 		(at 91.44 171.45 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10638,7 +10638,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:VCC")
+		(lib_id "flat_hierarchy:VCC")
 		(at 187.96 69.85 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10703,7 +10703,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:BC307")
+		(lib_id "flat_hierarchy:BC307")
 		(at 198.12 86.36 0)
 		(mirror x)
 		(unit 1)
@@ -10774,7 +10774,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:R")
+		(lib_id "flat_hierarchy:R")
 		(at 187.96 96.52 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10841,7 +10841,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:R")
+		(lib_id "flat_hierarchy:R")
 		(at 187.96 77.47 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10908,7 +10908,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:R")
+		(lib_id "flat_hierarchy:R")
 		(at 200.66 105.41 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10975,7 +10975,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:LED")
+		(lib_id "flat_hierarchy:LED")
 		(at 200.66 119.38 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11042,7 +11042,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:GND")
+		(lib_id "flat_hierarchy:GND")
 		(at 200.66 125.73 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11108,7 +11108,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:VCC")
+		(lib_id "flat_hierarchy:VCC")
 		(at 200.66 81.28 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11173,7 +11173,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:D_Schottky")
+		(lib_id "flat_hierarchy:D_Schottky")
 		(at 187.96 107.95 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11240,7 +11240,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:JUMPER")
+		(lib_id "flat_hierarchy:JUMPER")
 		(at 210.82 86.36 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11307,7 +11307,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:VCC")
+		(lib_id "flat_hierarchy:VCC")
 		(at 210.82 78.74 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11372,7 +11372,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:C")
+		(lib_id "flat_hierarchy:C")
 		(at 157.48 29.21 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11441,7 +11441,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:PWR_FLAG")
+		(lib_id "flat_hierarchy:PWR_FLAG")
 		(at 223.52 35.56 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11506,7 +11506,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:PWR_FLAG")
+		(lib_id "flat_hierarchy:PWR_FLAG")
 		(at 220.98 91.44 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11571,7 +11571,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:GND")
+		(lib_id "flat_hierarchy:GND")
 		(at 40.64 173.99 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11635,7 +11635,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:GND")
+		(lib_id "flat_hierarchy:GND")
 		(at 35.56 190.5 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11699,7 +11699,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:GND")
+		(lib_id "flat_hierarchy:GND")
 		(at 91.44 187.96 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11765,7 +11765,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:GND")
+		(lib_id "flat_hierarchy:GND")
 		(at 100.33 161.29 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11829,7 +11829,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:CONN_1")
+		(lib_id "flat_hierarchy:CONN_1")
 		(at 156.21 168.91 0)
 		(unit 1)
 		(exclude_from_sim yes)
@@ -11894,7 +11894,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:VCC")
+		(lib_id "flat_hierarchy:VCC")
 		(at 106.68 50.8 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11959,7 +11959,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:VCC")
+		(lib_id "flat_hierarchy:VCC")
 		(at 104.14 25.4 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12024,7 +12024,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:CONN_1")
+		(lib_id "flat_hierarchy:CONN_1")
 		(at 156.21 184.15 0)
 		(unit 1)
 		(exclude_from_sim yes)
@@ -12089,7 +12089,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:VCC")
+		(lib_id "flat_hierarchy:VCC")
 		(at 110.49 109.22 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12154,7 +12154,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:VCC")
+		(lib_id "flat_hierarchy:VCC")
 		(at 105.41 74.93 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12219,7 +12219,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:CONN_1")
+		(lib_id "flat_hierarchy:CONN_1")
 		(at 156.21 180.34 0)
 		(unit 1)
 		(exclude_from_sim yes)
@@ -12284,7 +12284,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:CONN_1")
+		(lib_id "flat_hierarchy:CONN_1")
 		(at 156.21 187.96 0)
 		(unit 1)
 		(exclude_from_sim yes)
@@ -12349,7 +12349,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:CONN_1")
+		(lib_id "flat_hierarchy:CONN_1")
 		(at 156.21 172.72 0)
 		(unit 1)
 		(exclude_from_sim yes)
@@ -12414,7 +12414,7 @@
 		)
 	)
 	(symbol
-		(lib_id "flat_hierarchy_schlib:CONN_1")
+		(lib_id "flat_hierarchy:CONN_1")
 		(at 156.21 176.53 0)
 		(unit 1)
 		(exclude_from_sim yes)

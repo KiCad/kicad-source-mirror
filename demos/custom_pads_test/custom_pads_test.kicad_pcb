@@ -1,7 +1,7 @@
 (kicad_pcb
-	(version 20240703)
+	(version 20241229)
 	(generator "pcbnew")
-	(generator_version "8.99")
+	(generator_version "9.0")
 	(general
 		(thickness 1.6)
 		(legacy_teardrops no)
@@ -9,25 +9,25 @@
 	(paper "A4")
 	(layers
 		(0 "F.Cu" signal)
-		(31 "B.Cu" signal)
-		(32 "B.Adhes" user "B.Adhesive")
-		(33 "F.Adhes" user "F.Adhesive")
-		(34 "B.Paste" user)
-		(35 "F.Paste" user)
-		(36 "B.SilkS" user "B.Silkscreen")
-		(37 "F.SilkS" user "F.Silkscreen")
-		(38 "B.Mask" user)
-		(39 "F.Mask" user)
-		(40 "Dwgs.User" user "User.Drawings")
-		(41 "Cmts.User" user "User.Comments")
-		(42 "Eco1.User" user "User.Eco1")
-		(43 "Eco2.User" user "User.Eco2")
-		(44 "Edge.Cuts" user)
-		(45 "Margin" user)
-		(46 "B.CrtYd" user "B.Courtyard")
-		(47 "F.CrtYd" user "F.Courtyard")
-		(48 "B.Fab" user)
-		(49 "F.Fab" user)
+		(2 "B.Cu" signal)
+		(9 "F.Adhes" user "F.Adhesive")
+		(11 "B.Adhes" user "B.Adhesive")
+		(13 "F.Paste" user)
+		(15 "B.Paste" user)
+		(5 "F.SilkS" user "F.Silkscreen")
+		(7 "B.SilkS" user "B.Silkscreen")
+		(1 "F.Mask" user)
+		(3 "B.Mask" user)
+		(17 "Dwgs.User" user "User.Drawings")
+		(19 "Cmts.User" user "User.Comments")
+		(21 "Eco1.User" user "User.Eco1")
+		(23 "Eco2.User" user "User.Eco2")
+		(25 "Edge.Cuts" user)
+		(27 "Margin" user)
+		(31 "F.CrtYd" user "F.Courtyard")
+		(29 "B.CrtYd" user "B.Courtyard")
+		(35 "F.Fab" user)
+		(33 "B.Fab" user)
 	)
 	(setup
 		(stackup
@@ -75,8 +75,8 @@
 		(allow_soldermask_bridges_in_footprints no)
 		(tenting front back)
 		(pcbplotparams
-			(layerselection 0x00000fc_ffffffff)
-			(plot_on_all_layers_selection 0x0000000_00000000)
+			(layerselection 0x00000000_00000000_55555555_5555f5ff)
+			(plot_on_all_layers_selection 0x00000000_00000000_00000000_00000000)
 			(disableapertmacros no)
 			(usegerberextensions no)
 			(usegerberattributes yes)
@@ -94,17 +94,19 @@
 			(pdf_front_fp_property_popups yes)
 			(pdf_back_fp_property_popups yes)
 			(pdf_metadata yes)
+			(pdf_single_document no)
 			(dxfpolygonmode yes)
 			(dxfimperialunits yes)
 			(dxfusepcbnewfont yes)
 			(psnegative no)
 			(psa4output no)
-			(plotreference yes)
-			(plotvalue yes)
-			(plotfptext yes)
+			(plot_black_and_white yes)
 			(plotinvisibletext no)
 			(sketchpadsonfab no)
 			(plotpadnumbers no)
+			(hidednponfab no)
+			(sketchdnponfab yes)
+			(crossoutdnponfab yes)
 			(subtractmaskfromsilk no)
 			(outputformat 1)
 			(mirror no)
@@ -117,7 +119,7 @@
 	(net 1 "/PAD2")
 	(net 2 "/PAD1")
 	(net 3 "GND")
-	(footprint "Diodes_SMD:DO-214AB"
+	(footprint "custom_pads_test:DO-214AB"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000056a72d3c")
 		(at 136.9 101.5)
@@ -141,19 +143,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "cfcf2bba-2d47-41cf-bb37-a6f7e59ac692")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -250,7 +239,7 @@
 		(pad "1" smd roundrect
 			(at -3.6 0)
 			(size 2.6 3.2)
-			(layers "F.Cu" "F.Paste" "F.Mask")
+			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.1)
 			(net 2 "/PAD1")
 			(pintype "passive")
@@ -259,7 +248,7 @@
 				(max_length 1)
 				(best_width_ratio 1)
 				(max_width 2)
-				(curve_points 5)
+				(curved_edges yes)
 				(filter_ratio 0.9)
 				(enabled yes)
 				(allow_two_segments yes)
@@ -270,7 +259,7 @@
 		(pad "2" smd circle
 			(at 3.048 -1.524)
 			(size 2.6 2.6)
-			(layers "F.Cu" "F.Paste" "F.Mask")
+			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net 1 "/PAD2")
 			(pintype "passive")
 			(teardrops
@@ -278,7 +267,7 @@
 				(max_length 1)
 				(best_width_ratio 1)
 				(max_width 2)
-				(curve_points 5)
+				(curved_edges yes)
 				(filter_ratio 0.9)
 				(enabled yes)
 				(allow_two_segments yes)
@@ -286,6 +275,7 @@
 			)
 			(uuid "fe3cd681-ffb7-42aa-801e-149ba3d2cb73")
 		)
+		(embedded_fonts no)
 		(model "Diodes_SMD.3dshapes/DO-214AB.wrl"
 			(offset
 				(xyz 0 0 0)
@@ -298,7 +288,7 @@
 			)
 		)
 	)
-	(footprint "Connect:1pin"
+	(footprint "custom_pads_test:1pin"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000056aa30dc")
 		(at 166.3 72.5)
@@ -322,19 +312,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "698ef4c2-4ed5-4824-8b6d-5eb7fa101f48")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -411,7 +388,7 @@
 		(pad "1" smd custom
 			(at 0 0)
 			(size 1 1)
-			(layers "F.Cu" "F.Paste" "F.Mask")
+			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net 3 "GND")
 			(pinfunction "A")
 			(pintype "input")
@@ -567,7 +544,7 @@
 				(max_length 1)
 				(best_width_ratio 1)
 				(max_width 2)
-				(curve_points 5)
+				(curved_edges yes)
 				(filter_ratio 0.9)
 				(enabled yes)
 				(allow_two_segments yes)
@@ -575,8 +552,9 @@
 			)
 			(uuid "bcc6f2dd-80bf-4722-940f-80c7a7b6c1a5")
 		)
+		(embedded_fonts no)
 	)
-	(footprint "Connect:1pin"
+	(footprint "custom_pads_test:1pin"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000056aa42fe")
 		(at 100.15 65.86 20)
@@ -600,19 +578,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 20)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "b6ce722f-9849-47c9-b6bd-1bc2fba7be75")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -715,7 +680,7 @@
 				(max_length 1)
 				(best_width_ratio 1)
 				(max_width 2)
-				(curve_points 5)
+				(curved_edges yes)
 				(filter_ratio 0.9)
 				(enabled yes)
 				(allow_two_segments yes)
@@ -723,8 +688,9 @@
 			)
 			(uuid "5150cb9a-4460-48a1-86c8-d0e0ab2d9fb8")
 		)
+		(embedded_fonts no)
 	)
-	(footprint "Dip_sockets:DIP-14__300_ELL"
+	(footprint "custom_pads_test:DIP-14__300_ELL"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000056ae982a")
 		(at 165.9 123.6 180)
@@ -749,19 +715,6 @@
 				(font
 					(size 1.524 1.143)
 					(thickness 0.3048)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "531b191e-e340-44c2-a02b-f8144506b8d5")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -953,7 +906,7 @@
 				(max_length 1)
 				(best_width_ratio 1)
 				(max_width 2)
-				(curve_points 5)
+				(curved_edges yes)
 				(filter_ratio 0.9)
 				(enabled yes)
 				(allow_two_segments yes)
@@ -972,7 +925,7 @@
 				(max_length 1)
 				(best_width_ratio 1)
 				(max_width 2)
-				(curve_points 5)
+				(curved_edges yes)
 				(filter_ratio 0.9)
 				(enabled yes)
 				(allow_two_segments yes)
@@ -992,7 +945,7 @@
 				(max_length 1)
 				(best_width_ratio 1)
 				(max_width 2)
-				(curve_points 5)
+				(curved_edges yes)
 				(filter_ratio 0.9)
 				(enabled yes)
 				(allow_two_segments yes)
@@ -1011,7 +964,7 @@
 				(max_length 1)
 				(best_width_ratio 1)
 				(max_width 2)
-				(curve_points 5)
+				(curved_edges yes)
 				(filter_ratio 0.9)
 				(enabled yes)
 				(allow_two_segments yes)
@@ -1064,7 +1017,7 @@
 				(max_length 1)
 				(best_width_ratio 1)
 				(max_width 2)
-				(curve_points 5)
+				(curved_edges yes)
 				(filter_ratio 0.9)
 				(enabled yes)
 				(allow_two_segments yes)
@@ -1072,6 +1025,7 @@
 			)
 			(uuid "64ca7b2a-82c2-44ce-8527-915fc72118c5")
 		)
+		(embedded_fonts no)
 		(model "dil/dil_14.wrl"
 			(offset
 				(xyz 0 0 0)
@@ -1084,7 +1038,7 @@
 			)
 		)
 	)
-	(footprint "Discret:C2"
+	(footprint "custom_pads_test:C2"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a34c6d0")
 		(at 104.299 99.72)
@@ -1110,19 +1064,6 @@
 				(font
 					(size 1.016 1.016)
 					(thickness 0.2032)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "c10cac9a-d737-46d2-85d7-ca9d7c452c66")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -1161,7 +1102,7 @@
 				(width 0.15)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.SilkS")
 			(uuid "52c9dc8b-6eb8-44d3-a510-e3324e0b255c")
 		)
@@ -1172,7 +1113,7 @@
 				(width 0.05)
 				(type solid)
 			)
-			(fill none)
+			(fill no)
 			(layer "F.CrtYd")
 			(uuid "1248037b-11d3-4c38-8376-e53640d036fe")
 		)
@@ -1218,7 +1159,7 @@
 				(max_length 1)
 				(best_width_ratio 1)
 				(max_width 2)
-				(curve_points 5)
+				(curved_edges yes)
 				(filter_ratio 0.9)
 				(enabled yes)
 				(allow_two_segments yes)
@@ -1272,7 +1213,7 @@
 				(max_length 1)
 				(best_width_ratio 1)
 				(max_width 2)
-				(curve_points 5)
+				(curved_edges yes)
 				(filter_ratio 0.9)
 				(enabled yes)
 				(allow_two_segments yes)
@@ -1280,6 +1221,7 @@
 			)
 			(uuid "31428916-6fae-4042-b09c-498b9cbc46b9")
 		)
+		(embedded_fonts no)
 		(model "discret/capa_2pas_5x5mm.wrl"
 			(offset
 				(xyz 0 0 0)
@@ -2596,4 +2538,5 @@
 			)
 		)
 	)
+	(embedded_fonts no)
 )

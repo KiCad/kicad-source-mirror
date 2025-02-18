@@ -1,3 +1,4 @@
 (sym_lib_table
-  (lib (name "pic_programmer_schlib")(type "KiCad")(uri "${KIPRJMOD}/libs/pic_programmer_schlib.kicad_sym")(options "")(descr ""))
+  (version 7)
+  (lib (name "pic_programmer")(type "KiCad")(uri "${KIPRJMOD}/pic_programmer.kicad_sym")(options "")(descr ""))
 )

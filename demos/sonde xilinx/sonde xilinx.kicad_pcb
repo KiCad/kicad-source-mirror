@@ -1,5 +1,5 @@
 (kicad_pcb
-	(version 20241129)
+	(version 20241229)
 	(generator "pcbnew")
 	(generator_version "9.0")
 	(general
@@ -81,8 +81,8 @@
 		(allow_soldermask_bridges_in_footprints no)
 		(tenting front back)
 		(pcbplotparams
-			(layerselection 0x00001030_ffffffff)
-			(plot_on_all_layers_selection 0x00000000_00000000)
+			(layerselection 0x00000000_00000000_00001030_ffffffff)
+			(plot_on_all_layers_selection 0x00000000_00000000_00000000_00000000)
 			(disableapertmacros no)
 			(usegerberextensions no)
 			(usegerberattributes yes)
@@ -100,11 +100,13 @@
 			(pdf_front_fp_property_popups yes)
 			(pdf_back_fp_property_popups yes)
 			(pdf_metadata yes)
+			(pdf_single_document no)
 			(dxfpolygonmode yes)
 			(dxfimperialunits yes)
 			(dxfusepcbnewfont yes)
 			(psnegative no)
 			(psa4output no)
+			(plot_black_and_white yes)
 			(plotinvisibletext no)
 			(sketchpadsonfab no)
 			(plotpadnumbers no)
@@ -162,7 +164,7 @@
 	(net 40 "unconnected-(U2B-O-Pad6)")
 	(net 41 "unconnected-(U2D-O-Pad11)")
 	(net 42 "unconnected-(U2C-O-Pad8)")
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "sonde-xilinx:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a56ced6")
 		(at 162.56 88.9 180)
@@ -186,18 +188,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "650cac10-1d7e-42c0-8d0d-9a2aeacc21e2")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -437,7 +427,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "sonde-xilinx:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a56ceec")
 		(at 121.92 80.518 180)
@@ -461,18 +451,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "f76df808-1867-44f1-8570-9876e3cd9796")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -712,7 +690,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "sonde-xilinx:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a56cf02")
 		(at 121.92 104.14 180)
@@ -736,18 +714,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "849ffff1-9ba1-4ed5-8d33-a1afb2998e0e")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -987,7 +953,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "sonde-xilinx:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a56cf18")
 		(at 162.56 105.41 180)
@@ -1011,18 +977,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "6d2c565d-c42a-4775-a25e-0fd8fdfb5890")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -1262,7 +1216,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "sonde-xilinx:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a56cf2e")
 		(at 162.56 99.06 180)
@@ -1286,18 +1240,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "65a6c885-60b6-4d48-bae8-4951ff33076c")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -1537,7 +1479,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "sonde-xilinx:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a56cf44")
 		(at 162.56 93.98 180)
@@ -1561,18 +1503,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "154eb906-b515-4dbc-94a0-09492669edd3")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -1812,7 +1742,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "sonde-xilinx:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a56cf5a")
 		(at 121.92 87.63 180)
@@ -1836,18 +1766,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "bf2e20b9-0113-4ea9-89b6-1d22b7623a20")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -2087,7 +2005,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "sonde-xilinx:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a56cf70")
 		(at 121.92 92.71 180)
@@ -2111,18 +2029,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "bb25749f-8f21-4f86-80d3-345ccf8690e4")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -2362,7 +2268,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "sonde-xilinx:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a56cf86")
 		(at 121.9327 83.82 180)
@@ -2386,18 +2292,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "330d75fe-5be9-4d1d-8995-8df85b4472c5")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -2637,7 +2531,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "sonde-xilinx:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a56cf9c")
 		(at 137.16 72.39)
@@ -2661,18 +2555,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "845524e4-43a3-4bf3-a098-8e1d71673202")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -2912,7 +2794,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "sonde-xilinx:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a56cfc8")
 		(at 151.13 73.66)
@@ -2936,18 +2818,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "a5146a2d-94d2-4b3e-a8a5-7c90f4a3656f")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -3187,7 +3057,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "sonde-xilinx:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a56cfde")
 		(at 121.92 77.216 180)
@@ -3211,18 +3081,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "aa02cb66-ee31-4138-b47b-7db796b04f13")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -3462,7 +3320,7 @@
 			)
 		)
 	)
-	(footprint "Diode_THT:D_A-405_P7.62mm_Horizontal"
+	(footprint "sonde-xilinx:D_A-405_P7.62mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a56d036")
 		(at 160.02 78.74 180)
@@ -3486,18 +3344,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "69e796b5-26a7-4dbe-b3ea-ba80545bfffe")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -3821,7 +3667,7 @@
 			)
 		)
 	)
-	(footprint "Diode_THT:D_A-405_P7.62mm_Horizontal"
+	(footprint "sonde-xilinx:D_A-405_P7.62mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a56d054")
 		(at 134.62 72.39 180)
@@ -3845,18 +3691,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "b077459e-3960-45b8-9820-3eb8aa3e47ec")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -4180,7 +4014,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "sonde-xilinx:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a56d255")
 		(at 121.92 73.8632 180)
@@ -4204,18 +4038,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "b1f5221c-046b-404d-9f03-e981ba62ffe7")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -4455,7 +4277,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_THT:C_Axial_L5.1mm_D3.1mm_P12.50mm_Horizontal"
+	(footprint "sonde-xilinx:C_Axial_L5.1mm_D3.1mm_P12.50mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a5834a9")
 		(at 134.62 76.2)
@@ -4479,18 +4301,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "69b61824-9636-4906-ae93-549be1486695")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -4730,7 +4540,7 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical"
+	(footprint "sonde-xilinx:PinHeader_1x06_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a583d55")
 		(at 169.672 80.137)
@@ -4754,18 +4564,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "eb55f043-0c33-4d0a-9628-e722c095e30c")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -5040,7 +4838,7 @@
 			)
 		)
 	)
-	(footprint "Package_DIP:DIP-14_W7.62mm_LongPads"
+	(footprint "sonde-xilinx:DIP-14_W7.62mm_LongPads"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a58f58c")
 		(at 140.97 82.55)
@@ -5064,18 +4862,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "cb9107dc-0095-4bea-81cc-4b200afa9e9b")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -5439,7 +5225,7 @@
 			)
 		)
 	)
-	(footprint "Package_DIP:DIP-14_W7.62mm_LongPads"
+	(footprint "sonde-xilinx:DIP-14_W7.62mm_LongPads"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a58f5ad")
 		(at 127 82.55)
@@ -5463,18 +5249,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "890453a9-ff81-4b34-8651-4693bf658521")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -5838,14 +5612,14 @@
 			)
 		)
 	)
-	(footprint "Capacitor_THT:C_Disc_D5.1mm_W3.2mm_P5.00mm"
+	(footprint "sonde-xilinx:C_Disc_D5.1mm_W3.2mm_P5.00mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a59b977")
 		(at 145 102.87 -90)
 		(descr "C, Disc series, Radial, pin pitch=5.00mm, , diameter*width=5.1*3.2mm^2, Capacitor, http://www.vishay.com/docs/45233/krseries.pdf")
 		(tags "C Disc series Radial pin pitch 5.00mm  diameter 5.1mm width 3.2mm Capacitor")
 		(property "Reference" "C5"
-			(at 2.93 -3.3 -90)
+			(at 2.93 -3.3 270)
 			(layer "F.SilkS")
 			(uuid "254c9678-dbac-4428-ac24-ea8c9201fde0")
 			(effects
@@ -5856,7 +5630,7 @@
 			)
 		)
 		(property "Value" "100pF"
-			(at 2.5 2.91 -90)
+			(at 2.5 2.91 270)
 			(layer "F.Fab")
 			(uuid "4162f139-eb1a-4a14-b4e2-6ea44c495b69")
 			(effects
@@ -5866,20 +5640,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "be9de00c-855a-47f8-bf94-26ac88bdfcf5")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -5892,7 +5654,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -6050,7 +5812,7 @@
 			(uuid "9b6d0f7a-7a25-46b1-85f0-0104e8c4bcda")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 2.5 0 -90)
+			(at 2.5 0 270)
 			(layer "F.Fab")
 			(uuid "ec393c42-2de1-4641-b53a-02545abc1806")
 			(effects
@@ -6093,14 +5855,14 @@
 			)
 		)
 	)
-	(footprint "Capacitor_THT:C_Disc_D5.1mm_W3.2mm_P5.00mm"
+	(footprint "sonde-xilinx:C_Disc_D5.1mm_W3.2mm_P5.00mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a59b98b")
 		(at 149 102.87 -90)
 		(descr "C, Disc series, Radial, pin pitch=5.00mm, , diameter*width=5.1*3.2mm^2, Capacitor, http://www.vishay.com/docs/45233/krseries.pdf")
 		(tags "C Disc series Radial pin pitch 5.00mm  diameter 5.1mm width 3.2mm Capacitor")
 		(property "Reference" "C4"
-			(at 5.43 -2.7 -90)
+			(at 5.43 -2.7 270)
 			(layer "F.SilkS")
 			(uuid "d539385a-b1cc-45b3-b4db-00d4cd6246ee")
 			(effects
@@ -6111,7 +5873,7 @@
 			)
 		)
 		(property "Value" "100pF"
-			(at 2.5 2.91 -90)
+			(at 2.5 2.91 270)
 			(layer "F.Fab")
 			(uuid "c9f82409-6301-4ef7-8052-bc0de8258e1e")
 			(effects
@@ -6121,20 +5883,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "ad2b6873-b404-4c4c-b032-004d39c9e4ac")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -6147,7 +5897,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -6305,7 +6055,7 @@
 			(uuid "df9b9aed-783e-4cf4-8754-ef5dc1092c3d")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 2.5 0 -90)
+			(at 2.5 0 270)
 			(layer "F.Fab")
 			(uuid "17926472-c07a-4888-91e9-c99e5f0d204a")
 			(effects
@@ -6348,7 +6098,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_THT:C_Disc_D5.1mm_W3.2mm_P5.00mm"
+	(footprint "sonde-xilinx:C_Disc_D5.1mm_W3.2mm_P5.00mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a59b99f")
 		(at 151.13 69.85)
@@ -6372,18 +6122,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "1ebe3372-5068-4a90-9b1b-5fd34809bb11")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -6603,14 +6341,14 @@
 			)
 		)
 	)
-	(footprint "Capacitor_THT:C_Disc_D5.1mm_W3.2mm_P5.00mm"
+	(footprint "sonde-xilinx:C_Disc_D5.1mm_W3.2mm_P5.00mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a59b9b3")
 		(at 140.97 102.87 -90)
 		(descr "C, Disc series, Radial, pin pitch=5.00mm, , diameter*width=5.1*3.2mm^2, Capacitor, http://www.vishay.com/docs/45233/krseries.pdf")
 		(tags "C Disc series Radial pin pitch 5.00mm  diameter 5.1mm width 3.2mm Capacitor")
 		(property "Reference" "C2"
-			(at 2.83 -3.23 -90)
+			(at 2.83 -3.23 270)
 			(layer "F.SilkS")
 			(uuid "1ef27b9f-86a6-4be9-afec-483b1d505d7e")
 			(effects
@@ -6621,7 +6359,7 @@
 			)
 		)
 		(property "Value" "100pF"
-			(at 2.5 2.91 -90)
+			(at 2.5 2.91 270)
 			(layer "F.Fab")
 			(uuid "ec64310d-5c2d-443c-a56a-08131828c27a")
 			(effects
@@ -6631,20 +6369,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "c7b4dfc1-2226-4908-ae77-cafe102d3377")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -6657,7 +6383,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -6815,7 +6541,7 @@
 			(uuid "7a2424df-731e-427f-84ff-7c2a54c59764")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 2.5 0 -90)
+			(at 2.5 0 270)
 			(layer "F.Fab")
 			(uuid "07b8b30b-94ac-47e8-acb4-da65e6a353a5")
 			(effects
@@ -6858,7 +6584,7 @@
 			)
 		)
 	)
-	(footprint "Connector_Dsub:DSUB-25_Male_EdgeMount_P2.77mm"
+	(footprint "sonde-xilinx:DSUB-25_Male_EdgeMount_P2.77mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a73ac29")
 		(at 105.5116 89.1032 -90)
@@ -6886,20 +6612,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "fd359ba4-a9db-42be-b9bb-aead16459ede")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -6912,7 +6626,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -8609,7 +8323,7 @@
 			)
 		)
 	)
-	(footprint "Connector_Dsub:DSUB-9_Male_EdgeMount_P2.77mm"
+	(footprint "sonde-xilinx:DSUB-9_Male_EdgeMount_P2.77mm"
 		(layer "B.Cu")
 		(uuid "00000000-0000-0000-0000-00005a73b143")
 		(at 181.61 90.1192 -90)
@@ -8639,20 +8353,8 @@
 				(justify mirror)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "e4487b83-63e3-4d45-a1bd-4cb03bed4fc7")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -8665,7 +8367,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)

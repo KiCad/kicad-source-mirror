@@ -1,0 +1,140 @@
+(footprint "L_Radial_D7.8mm_P5.00mm_Fastron_07HCP"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "Inductor, Radial series, Radial, pin pitch=5.00mm, , diameter=7.8mm, Fastron, 07HCP, http://www.abracon.com/Magnetics/radial/AISR875.pdf")
+	(tags "Inductor Radial series Radial pin pitch 5.00mm  diameter 7.8mm Fastron 07HCP")
+	(property "Reference" "REF**"
+		(at 2.5 -4.96 0)
+		(layer "F.SilkS")
+		(uuid "ffa15b87-e97d-4c30-81e3-f8820394c44c")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "22uH"
+		(at 2.5 4.96 0)
+		(layer "F.Fab")
+		(uuid "9531d17a-7f52-4586-bfe0-bb5cbb1285ec")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "5b62072a-1382-42d8-9f25-6050811fb61c")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "b1fa73f0-bb69-4479-8efc-7a9431fcca7b")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr through_hole)
+	(fp_arc
+		(start -1.20497 -1.56)
+		(mid 2.5 -4.02)
+		(end 6.20497 -1.56)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "e3e4f6c2-fc8b-4716-a38c-c45c61143a6c")
+	)
+	(fp_arc
+		(start 6.20497 1.56)
+		(mid 2.5 4.02)
+		(end -1.20497 1.56)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "52ec021b-78ed-41e5-9f63-5311bb3ba2fb")
+	)
+	(fp_circle
+		(center 2.5 0)
+		(end 6.85 0)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "fb480470-57e5-4ed1-ab6f-3a9019468d59")
+	)
+	(fp_circle
+		(center 2.5 0)
+		(end 6.4 0)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "e243ba19-5f9e-480f-87fe-18d1e9061106")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 2.5 0 0)
+		(layer "F.Fab")
+		(uuid "e9cbad89-b8b9-4e23-8efb-d96a7618767b")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" thru_hole circle
+		(at 0 0)
+		(size 2.6 2.6)
+		(drill 1.3)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "4e29115d-2c9c-4916-9ed7-bd59e121e6c8")
+	)
+	(pad "2" thru_hole circle
+		(at 5 0)
+		(size 2.6 2.6)
+		(drill 1.3)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "8ca97277-750a-4509-ad10-1790205cddfd")
+	)
+	(embedded_fonts no)
+	(model "${KICAD6_3DMODEL_DIR}/Inductor_THT.3dshapes/L_Radial_D7.8mm_P5.00mm_Fastron_07HCP.wrl"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)

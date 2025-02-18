@@ -1,0 +1,236 @@
+(footprint "C_Disc_D5.1mm_W3.2mm_P5.00mm"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "C, Disc series, Radial, pin pitch=5.00mm, , diameter*width=5.1*3.2mm^2, Capacitor, http://www.vishay.com/docs/45233/krseries.pdf")
+	(tags "C Disc series Radial pin pitch 5.00mm  diameter 5.1mm width 3.2mm Capacitor")
+	(property "Reference" "REF**"
+		(at 2.5 -2.91 0)
+		(layer "F.SilkS")
+		(uuid "a1e9b915-0947-492e-96dc-3c0b70c85e99")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "100nF"
+		(at 2.5 2.91 0)
+		(layer "F.Fab")
+		(uuid "8be0095a-2092-4764-8c47-a18340287315")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "b668f48d-6ee8-4504-9245-b6ad4887956a")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "e4ff032e-d11a-4ca7-8061-739e8035cb3a")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr through_hole)
+	(fp_line
+		(start -0.17 -1.721)
+		(end -0.17 -1.055)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "2a6e821f-ffc4-4635-bce0-ce67e3209fc7")
+	)
+	(fp_line
+		(start -0.17 -1.721)
+		(end 5.17 -1.721)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "f0ba84ce-88de-4979-a9c0-da1b7d40e435")
+	)
+	(fp_line
+		(start -0.17 1.055)
+		(end -0.17 1.721)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "c4a917c5-3bfa-4bcb-8cd1-632d9077526b")
+	)
+	(fp_line
+		(start -0.17 1.721)
+		(end 5.17 1.721)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "075ec7cf-9fd5-4eea-adf7-52bb2e11a547")
+	)
+	(fp_line
+		(start 5.17 -1.721)
+		(end 5.17 -1.055)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "4b474885-3392-4b0d-b372-e73daa30814c")
+	)
+	(fp_line
+		(start 5.17 1.055)
+		(end 5.17 1.721)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "e7e18599-3544-4cf6-a97f-ba23a7cac214")
+	)
+	(fp_line
+		(start -1.05 -1.85)
+		(end -1.05 1.85)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "734f5bda-7bb8-4e30-96b7-ed50d949f67b")
+	)
+	(fp_line
+		(start -1.05 1.85)
+		(end 6.05 1.85)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "f3615055-6271-41d0-9355-25fa7d25a727")
+	)
+	(fp_line
+		(start 6.05 -1.85)
+		(end -1.05 -1.85)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "f04f6e34-72e4-4ac4-8676-6abbb7d14f7e")
+	)
+	(fp_line
+		(start 6.05 1.85)
+		(end 6.05 -1.85)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "e67e01be-ba0e-404f-b414-ae7e12b6dec3")
+	)
+	(fp_line
+		(start -0.05 -1.6)
+		(end -0.05 1.6)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "eb9164e7-501b-4c7a-973b-e83417a59151")
+	)
+	(fp_line
+		(start -0.05 1.6)
+		(end 5.05 1.6)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "57b258d4-006e-4be1-9981-7ce2dd383280")
+	)
+	(fp_line
+		(start 5.05 -1.6)
+		(end -0.05 -1.6)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "0f049825-a113-48e7-9ad5-7cae8b5e9342")
+	)
+	(fp_line
+		(start 5.05 1.6)
+		(end 5.05 -1.6)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "854e7e2f-1f95-4e3f-9f1f-c3d4eeda2c75")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 2.5 0 0)
+		(layer "F.Fab")
+		(uuid "f69df218-ed1c-417a-927c-89b6002f9cdf")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" thru_hole circle
+		(at 0 0)
+		(size 1.6 1.6)
+		(drill 0.8)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "2d9f75bb-42da-4555-ba8d-3a2f6e3fbfc8")
+	)
+	(pad "2" thru_hole circle
+		(at 5 0)
+		(size 1.6 1.6)
+		(drill 0.8)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "15b0e33c-3f2e-4480-b23e-c3c2a44a7ac5")
+	)
+	(embedded_fonts no)
+	(model "${KICAD6_3DMODEL_DIR}/Capacitor_THT.3dshapes/C_Disc_D5.1mm_W3.2mm_P5.00mm.wrl"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)

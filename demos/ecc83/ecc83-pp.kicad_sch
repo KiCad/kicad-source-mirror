@@ -1,7 +1,7 @@
 (kicad_sch
-	(version 20231120)
+	(version 20250114)
 	(generator "eeschema")
-	(generator_version "8.0")
+	(generator_version "9.0")
 	(uuid "28f865a0-4433-4a53-bbd7-b62f276848e4")
 	(paper "A4")
 	(title_block
@@ -10,8 +10,10 @@
 		(rev "0.1")
 	)
 	(lib_symbols
-		(symbol "ecc83_schlib:C"
-			(pin_numbers hide)
+		(symbol "ecc83-pp:C"
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 0.254)
 			)
@@ -73,7 +75,7 @@
 			(symbol "C_0_1"
 				(polyline
 					(pts
-						(xy -2.032 -0.762) (xy 2.032 -0.762)
+						(xy -2.032 0.762) (xy 2.032 0.762)
 					)
 					(stroke
 						(width 0.508)
@@ -85,7 +87,7 @@
 				)
 				(polyline
 					(pts
-						(xy -2.032 0.762) (xy 2.032 0.762)
+						(xy -2.032 -0.762) (xy 2.032 -0.762)
 					)
 					(stroke
 						(width 0.508)
@@ -134,11 +136,16 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
-		(symbol "ecc83_schlib:CONN_1"
-			(pin_numbers hide)
+		(symbol "ecc83-pp:CONN_1"
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
-				(offset 0.762) hide)
+				(offset 0.762)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -230,10 +237,13 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
-		(symbol "ecc83_schlib:CONN_2"
+		(symbol "ecc83-pp:CONN_2"
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -329,9 +339,12 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
-		(symbol "ecc83_schlib:CP"
-			(pin_numbers hide)
+		(symbol "ecc83-pp:CP"
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 0.254)
 			)
@@ -449,17 +462,6 @@
 					)
 				)
 				(rectangle
-					(start 2.286 -0.508)
-					(end -2.286 -1.016)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(rectangle
 					(start 2.286 1.016)
 					(end -2.286 1.016)
 					(stroke
@@ -479,6 +481,17 @@
 					)
 					(fill
 						(type none)
+					)
+				)
+				(rectangle
+					(start 2.286 -0.508)
+					(end -2.286 -1.016)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
 					)
 				)
 			)
@@ -520,8 +533,9 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
-		(symbol "ecc83_schlib:ECC83"
+		(symbol "ecc83-pp:ECC83"
 			(pin_names
 				(offset 0)
 			)
@@ -579,30 +593,6 @@
 				)
 			)
 			(symbol "ECC83_0_1"
-				(arc
-					(start -5.08 -2.54)
-					(mid 0 -7.5979)
-					(end 5.08 -2.54)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 5.08 2.54) (xy 5.08 -2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
 				(polyline
 					(pts
 						(xy -5.08 2.54) (xy -5.08 -2.54) (xy -5.08 -2.54)
@@ -616,9 +606,33 @@
 					)
 				)
 				(arc
-					(start 5.08 2.54)
+					(start -5.08 2.54)
 					(mid 0 7.5979)
-					(end -5.08 2.54)
+					(end 5.08 2.54)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 5.08 -2.54)
+					(mid 0 -7.5979)
+					(end -5.08 -2.54)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 5.08 2.54) (xy 5.08 -2.54)
+					)
 					(stroke
 						(width 0)
 						(type default)
@@ -669,6 +683,18 @@
 				)
 				(polyline
 					(pts
+						(xy -2.54 5.08) (xy 2.794 5.08) (xy 2.794 5.08)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
 						(xy -1.905 0) (xy -3.175 0)
 					)
 					(stroke
@@ -691,6 +717,18 @@
 						(type none)
 					)
 				)
+				(arc
+					(start -2.54 -5.08)
+					(mid 0 -3.0968)
+					(end 2.54 -5.08)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
 				(polyline
 					(pts
 						(xy 1.905 0) (xy 3.175 0)
@@ -701,48 +739,6 @@
 					)
 					(fill
 						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -2.54 5.08) (xy 2.794 5.08) (xy 2.794 5.08)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start 2.54 -5.08)
-					(mid 0 -3.0968)
-					(end -2.54 -5.08)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(pin passive line
-					(at 0 10.16 270)
-					(length 2.54)
-					(name "A"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "6"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
 					)
 				)
 				(pin input line
@@ -774,6 +770,24 @@
 						)
 					)
 					(number "8"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 10.16 270)
+					(length 2.54)
+					(name "A"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "6"
 						(effects
 							(font
 								(size 1.016 1.016)
@@ -823,6 +837,18 @@
 				)
 				(polyline
 					(pts
+						(xy -2.54 5.08) (xy 2.794 5.08) (xy 2.794 5.08)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
 						(xy -1.905 0) (xy -3.175 0)
 					)
 					(stroke
@@ -845,6 +871,18 @@
 						(type none)
 					)
 				)
+				(arc
+					(start -2.54 -5.08)
+					(mid 0 -3.0968)
+					(end 2.54 -5.08)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
 				(polyline
 					(pts
 						(xy 1.905 0) (xy 3.175 0)
@@ -855,48 +893,6 @@
 					)
 					(fill
 						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -2.54 5.08) (xy 2.794 5.08) (xy 2.794 5.08)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start 2.54 -5.08)
-					(mid 0 -3.0968)
-					(end -2.54 -5.08)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(pin passive line
-					(at 0 10.16 270)
-					(length 2.54)
-					(name "A"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
 					)
 				)
 				(pin input line
@@ -935,12 +931,30 @@
 						)
 					)
 				)
+				(pin passive line
+					(at 0 10.16 270)
+					(length 2.54)
+					(name "A"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
 			)
 			(symbol "ECC83_3_1"
 				(arc
-					(start 0 -6.35)
+					(start -2.54 -6.35)
 					(mid -1.27 -5.5651)
-					(end -2.54 -6.35)
+					(end 0 -6.35)
 					(stroke
 						(width 0)
 						(type default)
@@ -950,9 +964,9 @@
 					)
 				)
 				(arc
-					(start 2.54 -6.35)
+					(start 0 -6.35)
 					(mid 1.27 -5.5651)
-					(end 0 -6.35)
+					(end 2.54 -6.35)
 					(stroke
 						(width 0)
 						(type default)
@@ -980,24 +994,6 @@
 					)
 				)
 				(pin input line
-					(at 2.54 -11.43 90)
-					(length 5.08)
-					(name "F1"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin input line
 					(at 0 -11.43 90)
 					(length 5.08)
 					(name "F2"
@@ -1015,9 +1011,28 @@
 						)
 					)
 				)
+				(pin input line
+					(at 2.54 -11.43 90)
+					(length 5.08)
+					(name "F1"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
 			)
+			(embedded_fonts no)
 		)
-		(symbol "ecc83_schlib:GND"
+		(symbol "ecc83-pp:GND"
 			(power)
 			(pin_names
 				(offset 0)
@@ -1084,7 +1099,8 @@
 			(symbol "GND_1_1"
 				(pin power_in line
 					(at 0 0 270)
-					(length 0) hide
+					(length 0)
+					(hide yes)
 					(name "GND"
 						(effects
 							(font
@@ -1101,12 +1117,17 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
-		(symbol "ecc83_schlib:PWR_FLAG"
+		(symbol "ecc83-pp:PWR_FLAG"
 			(power)
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
-				(offset 0) hide)
+				(offset 0)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -1186,9 +1207,12 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
-		(symbol "ecc83_schlib:R"
-			(pin_numbers hide)
+		(symbol "ecc83-pp:R"
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 0)
 			)
@@ -1296,6 +1320,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 	)
 	(junction
@@ -1733,7 +1758,7 @@
 		(uuid "eb6832ef-d0fe-479d-8f32-b253c6621b1a")
 	)
 	(symbol
-		(lib_id "ecc83_schlib:R")
+		(lib_id "ecc83-pp:R")
 		(at 157.48 85.09 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -1799,7 +1824,7 @@
 		)
 	)
 	(symbol
-		(lib_id "ecc83_schlib:R")
+		(lib_id "ecc83-pp:R")
 		(at 154.94 127 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -1865,7 +1890,7 @@
 		)
 	)
 	(symbol
-		(lib_id "ecc83_schlib:R")
+		(lib_id "ecc83-pp:R")
 		(at 144.78 127 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -1931,7 +1956,7 @@
 		)
 	)
 	(symbol
-		(lib_id "ecc83_schlib:R")
+		(lib_id "ecc83-pp:R")
 		(at 185.42 85.09 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -1997,7 +2022,7 @@
 		)
 	)
 	(symbol
-		(lib_id "ecc83_schlib:C")
+		(lib_id "ecc83-pp:C")
 		(at 175.26 76.2 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2063,7 +2088,7 @@
 		)
 	)
 	(symbol
-		(lib_id "ecc83_schlib:CONN_2")
+		(lib_id "ecc83-pp:CONN_2")
 		(at 127 110.49 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2129,7 +2154,7 @@
 		)
 	)
 	(symbol
-		(lib_id "ecc83_schlib:CONN_2")
+		(lib_id "ecc83-pp:CONN_2")
 		(at 207.01 78.74 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2195,7 +2220,7 @@
 		)
 	)
 	(symbol
-		(lib_id "ecc83_schlib:CONN_2")
+		(lib_id "ecc83-pp:CONN_2")
 		(at 41.91 53.34 0)
 		(mirror y)
 		(unit 1)
@@ -2262,7 +2287,7 @@
 		)
 	)
 	(symbol
-		(lib_id "ecc83_schlib:CP")
+		(lib_id "ecc83-pp:CP")
 		(at 86.36 57.15 0)
 		(mirror y)
 		(unit 1)
@@ -2331,7 +2356,7 @@
 		)
 	)
 	(symbol
-		(lib_id "ecc83_schlib:CONN_2")
+		(lib_id "ecc83-pp:CONN_2")
 		(at 41.91 91.44 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2397,7 +2422,7 @@
 		)
 	)
 	(symbol
-		(lib_id "ecc83_schlib:PWR_FLAG")
+		(lib_id "ecc83-pp:PWR_FLAG")
 		(at 53.34 55.88 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2462,7 +2487,7 @@
 		)
 	)
 	(symbol
-		(lib_id "ecc83_schlib:GND")
+		(lib_id "ecc83-pp:GND")
 		(at 144.78 132.08 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2528,7 +2553,7 @@
 		)
 	)
 	(symbol
-		(lib_id "ecc83_schlib:GND")
+		(lib_id "ecc83-pp:GND")
 		(at 154.94 132.08 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2594,7 +2619,7 @@
 		)
 	)
 	(symbol
-		(lib_id "ecc83_schlib:GND")
+		(lib_id "ecc83-pp:GND")
 		(at 185.42 90.17 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2660,7 +2685,7 @@
 		)
 	)
 	(symbol
-		(lib_id "ecc83_schlib:GND")
+		(lib_id "ecc83-pp:GND")
 		(at 195.58 83.82 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2726,7 +2751,7 @@
 		)
 	)
 	(symbol
-		(lib_id "ecc83_schlib:ECC83")
+		(lib_id "ecc83-pp:ECC83")
 		(at 160.02 64.77 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2813,7 +2838,7 @@
 		)
 	)
 	(symbol
-		(lib_id "ecc83_schlib:ECC83")
+		(lib_id "ecc83-pp:ECC83")
 		(at 157.48 107.95 0)
 		(unit 2)
 		(exclude_from_sim no)
@@ -2901,7 +2926,7 @@
 		)
 	)
 	(symbol
-		(lib_id "ecc83_schlib:ECC83")
+		(lib_id "ecc83-pp:ECC83")
 		(at 63.5 74.93 0)
 		(unit 3)
 		(exclude_from_sim no)
@@ -2989,7 +3014,7 @@
 		)
 	)
 	(symbol
-		(lib_id "ecc83_schlib:GND")
+		(lib_id "ecc83-pp:GND")
 		(at 86.36 62.23 0)
 		(mirror y)
 		(unit 1)
@@ -3056,7 +3081,7 @@
 		)
 	)
 	(symbol
-		(lib_id "ecc83_schlib:CONN_1")
+		(lib_id "ecc83-pp:CONN_1")
 		(at 158.75 177.8 0)
 		(unit 1)
 		(exclude_from_sim yes)
@@ -3121,7 +3146,7 @@
 		)
 	)
 	(symbol
-		(lib_id "ecc83_schlib:CONN_1")
+		(lib_id "ecc83-pp:CONN_1")
 		(at 158.75 180.34 0)
 		(unit 1)
 		(exclude_from_sim yes)
@@ -3186,7 +3211,7 @@
 		)
 	)
 	(symbol
-		(lib_id "ecc83_schlib:CONN_1")
+		(lib_id "ecc83-pp:CONN_1")
 		(at 158.75 182.88 0)
 		(unit 1)
 		(exclude_from_sim yes)
@@ -3251,7 +3276,7 @@
 		)
 	)
 	(symbol
-		(lib_id "ecc83_schlib:CONN_1")
+		(lib_id "ecc83-pp:CONN_1")
 		(at 158.75 185.42 0)
 		(unit 1)
 		(exclude_from_sim yes)
@@ -3316,7 +3341,7 @@
 		)
 	)
 	(symbol
-		(lib_id "ecc83_schlib:PWR_FLAG")
+		(lib_id "ecc83-pp:PWR_FLAG")
 		(at 76.2 49.53 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3381,7 +3406,7 @@
 		)
 	)
 	(symbol
-		(lib_id "ecc83_schlib:GND")
+		(lib_id "ecc83-pp:GND")
 		(at 50.8 57.15 0)
 		(mirror y)
 		(unit 1)
@@ -3448,7 +3473,7 @@
 		)
 	)
 	(symbol
-		(lib_id "ecc83_schlib:GND")
+		(lib_id "ecc83-pp:GND")
 		(at 138.43 116.84 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3516,4 +3541,5 @@
 			(page "1")
 		)
 	)
+	(embedded_fonts no)
 )

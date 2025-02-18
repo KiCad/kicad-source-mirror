@@ -1,3 +1,4 @@
 (sym_lib_table
-  (lib (name "flat_hierarchy_schlib")(type "KiCad")(uri "${KIPRJMOD}/libs/flat_hierarchy_schlib.kicad_sym")(options "")(descr ""))
+  (version 7)
+  (lib (name "flat_hierarchy")(type "KiCad")(uri "${KIPRJMOD}/flat_hierarchy.kicad_sym")(options "")(descr ""))
 )

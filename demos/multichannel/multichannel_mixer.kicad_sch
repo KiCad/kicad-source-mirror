@@ -1,7 +1,7 @@
 (kicad_sch
-	(version 20231120)
+	(version 20250114)
 	(generator "eeschema")
-	(generator_version "7.99")
+	(generator_version "9.0")
 	(uuid "203cc2bf-f6fc-43f5-9a16-6804dfef98e8")
 	(paper "A4")
 	(lib_symbols
@@ -111,18 +111,6 @@
 				)
 				(polyline
 					(pts
-						(xy 2.54 0) (xy -0.635 0) (xy -0.635 2.413) (xy -1.016 1.651)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
 						(xy 2.54 2.54) (xy -1.905 2.54) (xy -2.54 1.905) (xy -3.175 2.54)
 					)
 					(stroke
@@ -133,26 +121,20 @@
 						(type none)
 					)
 				)
-			)
-			(symbol "Audio-Jack-2_Switch_1_1_1"
-				(pin passive line
-					(at 5.08 0 180)
-					(length 2.54)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
+				(polyline
+					(pts
+						(xy 2.54 0) (xy -0.635 0) (xy -0.635 2.413) (xy -1.016 1.651)
 					)
-					(number "R"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
 					)
 				)
+			)
+			(symbol "Audio-Jack-2_Switch_1_1_1"
 				(pin passive line
 					(at -5.08 -2.54 90)
 					(length 2.54)
@@ -189,9 +171,272 @@
 						)
 					)
 				)
+				(pin passive line
+					(at 5.08 0 180)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "R"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
 			)
+			(embedded_fonts no)
 		)
-		(symbol "Capacitors SMD:CC1206_100NF_50V_10%_X7R"
+		(symbol "multichannel_mixer:+12V"
+			(power)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "+12V"
+				(at 0 3.556 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "power-flag symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "Power Flag Symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "+12V_0_1"
+				(polyline
+					(pts
+						(xy -0.762 1.27) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54) (xy 0.762 1.27)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "+12V_1_1"
+				(pin power_in line
+					(at 0 0 90)
+					(length 0)
+					(hide yes)
+					(name "+12V"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "multichannel_mixer:+1V1"
+			(power)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "+1V1"
+				(at 0 3.556 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "power-flag symbol +1.1V"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "Power Flag Symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "+1V1_0_1"
+				(polyline
+					(pts
+						(xy -0.762 1.27) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54) (xy 0.762 1.27)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "+1V1_1_1"
+				(pin power_in line
+					(at 0 0 90)
+					(length 0)
+					(hide yes)
+					(name "+1V1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "multichannel_mixer:CC1206_100NF_50V_10%_X7R"
 			(pin_names
 				(offset 1.27)
 			)
@@ -708,8 +953,628 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
-		(symbol "Capacitors THD:CTEB_2.2UF_35V_10%_254-500X840"
+		(symbol "multichannel_mixer:CLIFF_FC68148(DC-10A)"
+			(pin_names
+				(offset 1.27)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 3.81 1.27 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "CLIFF_FC68148(DC-10A)"
+				(at 0 -12.065 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Footprint" "Miscellaneous THD:CLIFF_FC68148(DC-10A)"
+				(at 0 -13.97 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\CLIFF_FC68148(DC-10A).pdf"
+				(at 0 -15.875 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Description" "Jack"
+				(at 3.81 -0.762 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Part Number" "CLIFF_FC68148(DC-10A)"
+				(at 0 -17.78 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Library Ref" "CLIFF_FC68148(DC-10A)"
+				(at 0 -19.685 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Library Path" "SchLib\\Connectors.SchLib"
+				(at 0 -21.59 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Comment" " "
+				(at 0 -23.495 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Component Kind" "Standard"
+				(at 0 -25.4 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Component Type" "Standard"
+				(at 0 -27.305 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Device" " "
+				(at 0 -29.21 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "PackageDescription" " "
+				(at 0 -31.115 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Pin Count" "3"
+				(at 0 -33.02 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Case" " "
+				(at 0 -34.925 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Footprint Path" "PcbLib\\Miscellaneous THD.PcbLib"
+				(at 0 -36.83 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Footprint Ref" "CLIFF_FC68148(DC-10A)"
+				(at 0 -38.735 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Family" "Jack"
+				(at 0 -40.64 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Mounted" "Yes"
+				(at 0 -42.545 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Socket" "No"
+				(at 0 -44.45 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "PressFit" "No"
+				(at 0 -46.355 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "SMD" "No"
+				(at 0 -48.26 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Sense" "No"
+				(at 0 -50.165 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Sense Comment" " "
+				(at 0 -52.07 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Status Comment" " "
+				(at 0 -53.975 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Status" "None"
+				(at 0 -55.88 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "SCEM" " "
+				(at 0 -57.785 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Part Description" "12V/5A, 2.1mm Diameter Pin, DC Power Socket with  Switch (DC10A Type)"
+				(at 0 -59.69 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer" "CLIFF ELECTRONIC COMPONENTS"
+				(at 0 -61.595 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer Part Number" "FC68148 (DC-10A)"
+				(at 0 -63.5 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "ComponentHeight" "11mm"
+				(at 0 -65.405 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "HelpURL" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\CLIFF_FC68148(DC-10A).pdf"
+				(at 0 -67.31 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "ComponentLink1URL" " "
+				(at 0 -69.215 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "ComponentLink1Description" " "
+				(at 0 -71.12 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "ComponentLink2URL" " "
+				(at 0 -73.025 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "ComponentLink2Description" " "
+				(at 0 -74.93 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Author" "CERN DEM JLC"
+				(at 0 -76.835 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "CreateDate" "11/23/10 00:00:00"
+				(at 0 -78.74 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "LatestRevisionDate" "11/23/10 00:00:00"
+				(at 0 -80.645 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Database Table Name" "Connectors"
+				(at 0 -82.55 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Library Name" "Miscellaneous"
+				(at 0 -84.455 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Footprint Library" "Miscellaneous THD"
+				(at 0 -86.36 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "License" "This work is licensed under the Creative Commons CC-BY-SA 4.0 License. To the extent that circuit schematics that use Licensed Material can be considered to be ‘Adapted Material’, then the copyright holder waives article 3.b of the license with respect to these schematics."
+				(at 0 -88.265 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "CLIFF_FC68148(DC-10A)_0_1"
+				(polyline
+					(pts
+						(xy 0 -2.54) (xy 2.54 -2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -5.08) (xy 3.81 -5.08)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -7.62) (xy 6.35 -7.62)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 0 -10.16)
+					(end 10.16 0)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.54 -1.27) (xy 2.54 -3.81)
+					)
+					(stroke
+						(width 0.762)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 3.81 -7.112) (xy 3.81 -5.08)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 3.81 -7.62) (xy 3.302 -6.604) (xy 4.318 -6.604) (xy 3.81 -7.62)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy 6.35 -7.62) (xy 7.62 -6.35)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 7.62 -2.54) (xy 2.54 -2.54)
+					)
+					(stroke
+						(width 0.762)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 8.89 -7.62) (xy 7.62 -6.35)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -2.54 0)
+					(length 5.08)
+					(name "1"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -5.08 0)
+					(length 5.08)
+					(name "2"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -7.62 0)
+					(length 5.08)
+					(name "3"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "multichannel_mixer:CTEB_2.2UF_35V_10%_254-500X840"
 			(pin_names
 				(offset 1.27)
 			)
@@ -1178,9 +2043,9 @@
 					)
 				)
 				(arc
-					(start 4.064 0)
-					(mid 4.2034 -1.0553)
-					(end 4.6228 -2.032)
+					(start 4.6228 -2.032)
+					(mid 4.2033 -1.0545)
+					(end 4.064 0)
 					(stroke
 						(width 0.254)
 						(type solid)
@@ -1190,9 +2055,9 @@
 					)
 				)
 				(arc
-					(start 4.5974 2.032)
-					(mid 4.1925 1.0516)
-					(end 4.064 0)
+					(start 4.064 0)
+					(mid 4.1926 1.0523)
+					(end 4.5974 2.032)
 					(stroke
 						(width 0.254)
 						(type solid)
@@ -1248,34 +2113,123 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
-		(symbol "Miscellaneous:CLIFF_FC68148(DC-10A)"
+		(symbol "multichannel_mixer:GND"
+			(power)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "GND"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "GROUND power-flag symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "Power Flag Symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "GND_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "GND_1_1"
+				(pin power_in line
+					(at 0 0 270)
+					(length 0)
+					(hide yes)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "multichannel_mixer:R1206_10K_1%_0.25W_100PPM"
 			(pin_names
 				(offset 1.27)
 			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "J"
-				(at 3.81 1.27 0)
+			(property "Reference" "R"
+				(at 3.81 1.778 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
 				)
 			)
-			(property "Value" "CLIFF_FC68148(DC-10A)"
-				(at 0 -12.065 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Footprint" "Miscellaneous THD:CLIFF_FC68148(DC-10A)"
-				(at 0 -13.97 0)
+			(property "Value" "R1206_10K_1%_0.25W_100PPM"
+				(at 0 -4.953 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1284,8 +2238,8 @@
 					(hide yes)
 				)
 			)
-			(property "Datasheet" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\CLIFF_FC68148(DC-10A).pdf"
-				(at 0 -15.875 0)
+			(property "Footprint" "Resistors SMD:RESC3216X65N"
+				(at 0 -6.858 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1294,17 +2248,8 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "Jack"
-				(at 3.81 -0.762 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Part Number" "CLIFF_FC68148(DC-10A)"
-				(at 0 -17.78 0)
+			(property "Datasheet" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\R1206_NIC_NRC.pdf"
+				(at 0 -8.763 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1313,8 +2258,24 @@
 					(hide yes)
 				)
 			)
-			(property "Library Ref" "CLIFF_FC68148(DC-10A)"
-				(at 0 -19.685 0)
+			(property "Description" "±1%"
+				(at 3.81 0 0)
+				(effects
+					(font
+						(size 0.635 0.635)
+					)
+				)
+			)
+			(property "Val" "10k"
+				(at 3.81 -1.778 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Part Number" "R1206_10K_1%_0.25W_100PPM"
+				(at 0 -10.668 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1323,8 +2284,8 @@
 					(hide yes)
 				)
 			)
-			(property "Library Path" "SchLib\\Connectors.SchLib"
-				(at 0 -21.59 0)
+			(property "Library Ref" "Resistor - 1%"
+				(at 0 -12.573 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1333,8 +2294,18 @@
 					(hide yes)
 				)
 			)
-			(property "Comment" " "
-				(at 0 -23.495 0)
+			(property "Library Path" "SchLib\\Resistors.SchLib"
+				(at 0 -14.478 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Comment" "10k"
+				(at 0 -16.383 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1344,7 +2315,7 @@
 				)
 			)
 			(property "Component Kind" "Standard"
-				(at 0 -25.4 0)
+				(at 0 -18.288 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1354,17 +2325,7 @@
 				)
 			)
 			(property "Component Type" "Standard"
-				(at 0 -27.305 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Device" " "
-				(at 0 -29.21 0)
+				(at 0 -20.193 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1374,7 +2335,7 @@
 				)
 			)
 			(property "PackageDescription" " "
-				(at 0 -31.115 0)
+				(at 0 -22.098 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1383,8 +2344,8 @@
 					(hide yes)
 				)
 			)
-			(property "Pin Count" "3"
-				(at 0 -33.02 0)
+			(property "Pin Count" "2"
+				(at 0 -24.003 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1393,8 +2354,8 @@
 					(hide yes)
 				)
 			)
-			(property "Case" " "
-				(at 0 -34.925 0)
+			(property "Footprint Path" "PcbLib\\Resistors SMD.PcbLib"
+				(at 0 -25.908 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1403,8 +2364,8 @@
 					(hide yes)
 				)
 			)
-			(property "Footprint Path" "PcbLib\\Miscellaneous THD.PcbLib"
-				(at 0 -36.83 0)
+			(property "Footprint Ref" "RESC3216X65N"
+				(at 0 -27.813 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1413,8 +2374,8 @@
 					(hide yes)
 				)
 			)
-			(property "Footprint Ref" "CLIFF_FC68148(DC-10A)"
-				(at 0 -38.735 0)
+			(property "Status" "Preferred"
+				(at 0 -29.718 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1423,8 +2384,8 @@
 					(hide yes)
 				)
 			)
-			(property "Family" "Jack"
-				(at 0 -40.64 0)
+			(property "Power" "0.25W"
+				(at 0 -31.623 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1433,8 +2394,8 @@
 					(hide yes)
 				)
 			)
-			(property "Mounted" "Yes"
-				(at 0 -42.545 0)
+			(property "TC" "±100ppm/°C"
+				(at 0 -33.528 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1443,8 +2404,58 @@
 					(hide yes)
 				)
 			)
-			(property "Socket" "No"
-				(at 0 -44.45 0)
+			(property "Voltage" " "
+				(at 0 -35.433 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Tolerance" "±1%"
+				(at 0 -37.338 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Part Description" "General Purpose Thick Film Chip Resistor"
+				(at 0 -39.243 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer" "GENERIC"
+				(at 0 -41.148 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer Part Number" "R1206_10K_1%_0.25W_100PPM"
+				(at 0 -43.053 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Case" "1206"
+				(at 0 -44.958 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1454,7 +2465,7 @@
 				)
 			)
 			(property "PressFit" "No"
-				(at 0 -46.355 0)
+				(at 0 -46.863 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1463,18 +2474,8 @@
 					(hide yes)
 				)
 			)
-			(property "SMD" "No"
-				(at 0 -48.26 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Sense" "No"
-				(at 0 -50.165 0)
+			(property "Mounted" "Yes"
+				(at 0 -48.768 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1484,7 +2485,17 @@
 				)
 			)
 			(property "Sense Comment" " "
-				(at 0 -52.07 0)
+				(at 0 -50.673 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Sense" "No"
+				(at 0 -52.578 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1494,7 +2505,7 @@
 				)
 			)
 			(property "Status Comment" " "
-				(at 0 -53.975 0)
+				(at 0 -54.483 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1503,8 +2514,8 @@
 					(hide yes)
 				)
 			)
-			(property "Status" "None"
-				(at 0 -55.88 0)
+			(property "Socket" "No"
+				(at 0 -56.388 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1513,8 +2524,8 @@
 					(hide yes)
 				)
 			)
-			(property "SCEM" " "
-				(at 0 -57.785 0)
+			(property "SMD" "Yes"
+				(at 0 -58.293 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1523,8 +2534,8 @@
 					(hide yes)
 				)
 			)
-			(property "Part Description" "12V/5A, 2.1mm Diameter Pin, DC Power Socket with  Switch (DC10A Type)"
-				(at 0 -59.69 0)
+			(property "ComponentHeight" " "
+				(at 0 -60.198 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1533,8 +2544,8 @@
 					(hide yes)
 				)
 			)
-			(property "Manufacturer" "CLIFF ELECTRONIC COMPONENTS"
-				(at 0 -61.595 0)
+			(property "Manufacturer1 Example" "NIC COMPONENT"
+				(at 0 -62.103 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1543,8 +2554,8 @@
 					(hide yes)
 				)
 			)
-			(property "Manufacturer Part Number" "FC68148 (DC-10A)"
-				(at 0 -63.5 0)
+			(property "Manufacturer1 Part Number" "NRC12F1002TRF"
+				(at 0 -64.008 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1553,8 +2564,8 @@
 					(hide yes)
 				)
 			)
-			(property "ComponentHeight" "11mm"
-				(at 0 -65.405 0)
+			(property "Manufacturer1 ComponentHeight" "0.65mm"
+				(at 0 -65.913 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1563,48 +2574,8 @@
 					(hide yes)
 				)
 			)
-			(property "HelpURL" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\CLIFF_FC68148(DC-10A).pdf"
-				(at 0 -67.31 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "ComponentLink1URL" " "
-				(at 0 -69.215 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "ComponentLink1Description" " "
-				(at 0 -71.12 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "ComponentLink2URL" " "
-				(at 0 -73.025 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "ComponentLink2Description" " "
-				(at 0 -74.93 0)
+			(property "HelpURL" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\R1206_NIC_NRC.pdf"
+				(at 0 -67.818 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1614,7 +2585,7 @@
 				)
 			)
 			(property "Author" "CERN DEM JLC"
-				(at 0 -76.835 0)
+				(at 0 -69.723 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1623,8 +2594,8 @@
 					(hide yes)
 				)
 			)
-			(property "CreateDate" "11/23/10 00:00:00"
-				(at 0 -78.74 0)
+			(property "CreateDate" "12/03/07 00:00:00"
+				(at 0 -71.628 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1633,8 +2604,8 @@
 					(hide yes)
 				)
 			)
-			(property "LatestRevisionDate" "11/23/10 00:00:00"
-				(at 0 -80.645 0)
+			(property "LatestRevisionDate" "03/13/08 00:00:00"
+				(at 0 -73.533 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1643,8 +2614,8 @@
 					(hide yes)
 				)
 			)
-			(property "Database Table Name" "Connectors"
-				(at 0 -82.55 0)
+			(property "Database Table Name" "Resistors"
+				(at 0 -75.438 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1653,8 +2624,8 @@
 					(hide yes)
 				)
 			)
-			(property "Library Name" "Miscellaneous"
-				(at 0 -84.455 0)
+			(property "Library Name" "Resistors SMD"
+				(at 0 -77.343 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1663,8 +2634,8 @@
 					(hide yes)
 				)
 			)
-			(property "Footprint Library" "Miscellaneous THD"
-				(at 0 -86.36 0)
+			(property "Footprint Library" "Resistors SMD"
+				(at 0 -79.248 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1674,7 +2645,7 @@
 				)
 			)
 			(property "License" "This work is licensed under the Creative Commons CC-BY-SA 4.0 License. To the extent that circuit schematics that use Licensed Material can be considered to be ‘Adapted Material’, then the copyright holder waives article 3.b of the license with respect to these schematics."
-				(at 0 -88.265 0)
+				(at 0 -81.153 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1691,21 +2662,10 @@
 					)
 				)
 			)
-			(symbol "CLIFF_FC68148(DC-10A)_0_1"
-				(rectangle
-					(start 0 -10.16)
-					(end 10.16 0)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type background)
-					)
-				)
+			(symbol "R1206_10K_1%_0.25W_100PPM_0_1"
 				(polyline
 					(pts
-						(xy 0 -7.62) (xy 6.35 -7.62)
+						(xy 1.524 0.762) (xy 1.524 -0.762)
 					)
 					(stroke
 						(width 0.254)
@@ -1717,7 +2677,7 @@
 				)
 				(polyline
 					(pts
-						(xy 0 -5.08) (xy 3.81 -5.08)
+						(xy 1.524 -0.762) (xy 6.096 -0.762)
 					)
 					(stroke
 						(width 0.254)
@@ -1729,7 +2689,7 @@
 				)
 				(polyline
 					(pts
-						(xy 0 -2.54) (xy 2.54 -2.54)
+						(xy 6.096 0.762) (xy 1.524 0.762)
 					)
 					(stroke
 						(width 0.254)
@@ -1741,19 +2701,7 @@
 				)
 				(polyline
 					(pts
-						(xy 2.54 -1.27) (xy 2.54 -3.81)
-					)
-					(stroke
-						(width 0.762)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 3.81 -7.112) (xy 3.81 -5.08)
+						(xy 6.096 -0.762) (xy 6.096 0.762)
 					)
 					(stroke
 						(width 0.254)
@@ -1763,57 +2711,9 @@
 						(type none)
 					)
 				)
-				(polyline
-					(pts
-						(xy 6.35 -7.62) (xy 7.62 -6.35)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 7.62 -2.54) (xy 2.54 -2.54)
-					)
-					(stroke
-						(width 0.762)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 8.89 -7.62) (xy 7.62 -6.35)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 3.81 -7.62) (xy 3.302 -6.604) (xy 4.318 -6.604) (xy 3.81 -7.62)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(pin bidirectional line
-					(at -5.08 -2.54 0)
-					(length 5.08)
+				(pin passive line
+					(at 0 0 0)
+					(length 1.524)
 					(name "1"
 						(effects
 							(font
@@ -1824,14 +2724,14 @@
 					(number "1"
 						(effects
 							(font
-								(size 1.524 1.524)
+								(size 0.0254 0.0254)
 							)
 						)
 					)
 				)
-				(pin bidirectional line
-					(at -5.08 -5.08 0)
-					(length 5.08)
+				(pin passive line
+					(at 7.62 0 180)
+					(length 1.524)
 					(name "2"
 						(effects
 							(font
@@ -1842,32 +2742,15 @@
 					(number "2"
 						(effects
 							(font
-								(size 1.524 1.524)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at -5.08 -7.62 0)
-					(length 5.08)
-					(name "3"
-						(effects
-							(font
 								(size 0.0254 0.0254)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.524 1.524)
 							)
 						)
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
-		(symbol "Operational Amplifiers:TL072CD"
+		(symbol "multichannel_mixer:TL072CD"
 			(pin_names
 				(offset 1.27)
 			)
@@ -2323,24 +3206,6 @@
 			)
 			(symbol "TL072CD_0_1"
 				(pin power_in line
-					(at 5.08 -15.24 90)
-					(length 5.08)
-					(name "V-"
-						(effects
-							(font
-								(size 0.0254 0.0254)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.524 1.524)
-							)
-						)
-					)
-				)
-				(pin power_in line
 					(at 5.08 5.08 270)
 					(length 5.08)
 					(name "V+"
@@ -2351,6 +3216,24 @@
 						)
 					)
 					(number "8"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 5.08 -15.24 90)
+					(length 5.08)
+					(name "V-"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "4"
 						(effects
 							(font
 								(size 1.524 1.524)
@@ -2361,24 +3244,6 @@
 			)
 			(symbol "TL072CD_0_2"
 				(pin power_in line
-					(at 5.08 -15.24 90)
-					(length 5.08)
-					(name "V-"
-						(effects
-							(font
-								(size 0.0254 0.0254)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.524 1.524)
-							)
-						)
-					)
-				)
-				(pin power_in line
 					(at 5.08 5.08 270)
 					(length 5.08)
 					(name "V+"
@@ -2396,20 +3261,26 @@
 						)
 					)
 				)
-			)
-			(symbol "TL072CD_1_1"
-				(polyline
-					(pts
-						(xy 0 -10.16) (xy 10.16 -5.08)
+				(pin power_in line
+					(at 5.08 -15.24 90)
+					(length 5.08)
+					(name "V-"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
 					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
+					(number "4"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
 					)
 				)
+			)
+			(symbol "TL072CD_1_1"
 				(polyline
 					(pts
 						(xy 0 0) (xy 0 -10.16)
@@ -2436,7 +3307,7 @@
 				)
 				(polyline
 					(pts
-						(xy 1.016 -7.62) (xy 2.54 -7.62)
+						(xy 0 -10.16) (xy 10.16 -5.08)
 					)
 					(stroke
 						(width 0.254)
@@ -2460,6 +3331,18 @@
 				)
 				(polyline
 					(pts
+						(xy 1.016 -7.62) (xy 2.54 -7.62)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
 						(xy 1.778 -6.858) (xy 1.778 -8.382)
 					)
 					(stroke
@@ -2472,7 +3355,7 @@
 				)
 				(polyline
 					(pts
-						(xy 5.08 -7.62) (xy 5.08 -10.16)
+						(xy 5.08 0) (xy 5.08 -2.54)
 					)
 					(stroke
 						(width 0.254)
@@ -2484,7 +3367,7 @@
 				)
 				(polyline
 					(pts
-						(xy 5.08 0) (xy 5.08 -2.54)
+						(xy 5.08 -7.62) (xy 5.08 -10.16)
 					)
 					(stroke
 						(width 0.254)
@@ -2512,24 +3395,6 @@
 						)
 						(justify right bottom)
 						(hide yes)
-					)
-				)
-				(pin output line
-					(at 15.24 -5.08 180)
-					(length 5.08)
-					(name "OUT"
-						(effects
-							(font
-								(size 0.0254 0.0254)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.524 1.524)
-							)
-						)
 					)
 				)
 				(pin input line
@@ -2568,20 +3433,26 @@
 						)
 					)
 				)
-			)
-			(symbol "TL072CD_1_2"
-				(polyline
-					(pts
-						(xy 0 -10.16) (xy 10.16 -5.08)
+				(pin output line
+					(at 15.24 -5.08 180)
+					(length 5.08)
+					(name "OUT"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
 					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
+					(number "1"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
 					)
 				)
+			)
+			(symbol "TL072CD_1_2"
 				(polyline
 					(pts
 						(xy 0 0) (xy 0 -10.16)
@@ -2608,7 +3479,7 @@
 				)
 				(polyline
 					(pts
-						(xy 1.016 -7.62) (xy 2.54 -7.62)
+						(xy 0 -10.16) (xy 10.16 -5.08)
 					)
 					(stroke
 						(width 0.254)
@@ -2621,6 +3492,18 @@
 				(polyline
 					(pts
 						(xy 1.016 -2.54) (xy 2.54 -2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.016 -7.62) (xy 2.54 -7.62)
 					)
 					(stroke
 						(width 0.254)
@@ -2644,7 +3527,7 @@
 				)
 				(polyline
 					(pts
-						(xy 5.08 -7.62) (xy 5.08 -10.16)
+						(xy 5.08 0) (xy 5.08 -2.54)
 					)
 					(stroke
 						(width 0.254)
@@ -2656,7 +3539,7 @@
 				)
 				(polyline
 					(pts
-						(xy 5.08 0) (xy 5.08 -2.54)
+						(xy 5.08 -7.62) (xy 5.08 -10.16)
 					)
 					(stroke
 						(width 0.254)
@@ -2686,17 +3569,17 @@
 						(hide yes)
 					)
 				)
-				(pin output line
-					(at 15.24 -5.08 180)
+				(pin input line
+					(at -5.08 -2.54 0)
 					(length 5.08)
-					(name "OUT"
+					(name "IN+"
 						(effects
 							(font
 								(size 0.0254 0.0254)
 							)
 						)
 					)
-					(number "1"
+					(number "3"
 						(effects
 							(font
 								(size 1.524 1.524)
@@ -2722,17 +3605,17 @@
 						)
 					)
 				)
-				(pin input line
-					(at -5.08 -2.54 0)
+				(pin output line
+					(at 15.24 -5.08 180)
 					(length 5.08)
-					(name "IN+"
+					(name "OUT"
 						(effects
 							(font
 								(size 0.0254 0.0254)
 							)
 						)
 					)
-					(number "3"
+					(number "1"
 						(effects
 							(font
 								(size 1.524 1.524)
@@ -2742,18 +3625,6 @@
 				)
 			)
 			(symbol "TL072CD_2_1"
-				(polyline
-					(pts
-						(xy 0 -10.16) (xy 10.16 -5.08)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
 				(polyline
 					(pts
 						(xy 0 0) (xy 0 -10.16)
@@ -2780,7 +3651,7 @@
 				)
 				(polyline
 					(pts
-						(xy 1.016 -7.62) (xy 2.54 -7.62)
+						(xy 0 -10.16) (xy 10.16 -5.08)
 					)
 					(stroke
 						(width 0.254)
@@ -2804,6 +3675,18 @@
 				)
 				(polyline
 					(pts
+						(xy 1.016 -7.62) (xy 2.54 -7.62)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
 						(xy 1.778 -6.858) (xy 1.778 -8.382)
 					)
 					(stroke
@@ -2816,7 +3699,7 @@
 				)
 				(polyline
 					(pts
-						(xy 5.08 -7.62) (xy 5.08 -10.16)
+						(xy 5.08 0) (xy 5.08 -2.54)
 					)
 					(stroke
 						(width 0.254)
@@ -2828,7 +3711,7 @@
 				)
 				(polyline
 					(pts
-						(xy 5.08 0) (xy 5.08 -2.54)
+						(xy 5.08 -7.62) (xy 5.08 -10.16)
 					)
 					(stroke
 						(width 0.254)
@@ -2859,24 +3742,6 @@
 					)
 				)
 				(pin input line
-					(at -5.08 -7.62 0)
-					(length 5.08)
-					(name "IN+"
-						(effects
-							(font
-								(size 0.0254 0.0254)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.524 1.524)
-							)
-						)
-					)
-				)
-				(pin input line
 					(at -5.08 -2.54 0)
 					(length 5.08)
 					(name "IN-"
@@ -2887,6 +3752,24 @@
 						)
 					)
 					(number "6"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -5.08 -7.62 0)
+					(length 5.08)
+					(name "IN+"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "5"
 						(effects
 							(font
 								(size 1.524 1.524)
@@ -2916,18 +3799,6 @@
 			(symbol "TL072CD_2_2"
 				(polyline
 					(pts
-						(xy 0 -10.16) (xy 10.16 -5.08)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
 						(xy 0 0) (xy 0 -10.16)
 					)
 					(stroke
@@ -2952,7 +3823,7 @@
 				)
 				(polyline
 					(pts
-						(xy 1.016 -7.62) (xy 2.54 -7.62)
+						(xy 0 -10.16) (xy 10.16 -5.08)
 					)
 					(stroke
 						(width 0.254)
@@ -2976,6 +3847,18 @@
 				)
 				(polyline
 					(pts
+						(xy 1.016 -7.62) (xy 2.54 -7.62)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
 						(xy 1.778 -1.778) (xy 1.778 -3.302)
 					)
 					(stroke
@@ -2988,7 +3871,7 @@
 				)
 				(polyline
 					(pts
-						(xy 5.08 -7.62) (xy 5.08 -10.16)
+						(xy 5.08 0) (xy 5.08 -2.54)
 					)
 					(stroke
 						(width 0.254)
@@ -3000,7 +3883,7 @@
 				)
 				(polyline
 					(pts
-						(xy 5.08 0) (xy 5.08 -2.54)
+						(xy 5.08 -7.62) (xy 5.08 -10.16)
 					)
 					(stroke
 						(width 0.254)
@@ -3085,879 +3968,29 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
-		(symbol "Resistors SMD:R1206_10K_1%_0.25W_100PPM"
-			(pin_names
-				(offset 1.27)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "R"
-				(at 3.81 1.778 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "R1206_10K_1%_0.25W_100PPM"
-				(at 0 -4.953 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Footprint" "Resistors SMD:RESC3216X65N"
-				(at 0 -6.858 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\R1206_NIC_NRC.pdf"
-				(at 0 -8.763 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Description" "±1%"
-				(at 3.81 0 0)
-				(effects
-					(font
-						(size 0.635 0.635)
-					)
-				)
-			)
-			(property "Val" "10k"
-				(at 3.81 -1.778 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Part Number" "R1206_10K_1%_0.25W_100PPM"
-				(at 0 -10.668 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Library Ref" "Resistor - 1%"
-				(at 0 -12.573 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Library Path" "SchLib\\Resistors.SchLib"
-				(at 0 -14.478 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Comment" "10k"
-				(at 0 -16.383 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Component Kind" "Standard"
-				(at 0 -18.288 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Component Type" "Standard"
-				(at 0 -20.193 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "PackageDescription" " "
-				(at 0 -22.098 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Pin Count" "2"
-				(at 0 -24.003 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Footprint Path" "PcbLib\\Resistors SMD.PcbLib"
-				(at 0 -25.908 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Footprint Ref" "RESC3216X65N"
-				(at 0 -27.813 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Status" "Preferred"
-				(at 0 -29.718 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Power" "0.25W"
-				(at 0 -31.623 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "TC" "±100ppm/°C"
-				(at 0 -33.528 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Voltage" " "
-				(at 0 -35.433 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Tolerance" "±1%"
-				(at 0 -37.338 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Part Description" "General Purpose Thick Film Chip Resistor"
-				(at 0 -39.243 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Manufacturer" "GENERIC"
-				(at 0 -41.148 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Manufacturer Part Number" "R1206_10K_1%_0.25W_100PPM"
-				(at 0 -43.053 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Case" "1206"
-				(at 0 -44.958 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "PressFit" "No"
-				(at 0 -46.863 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Mounted" "Yes"
-				(at 0 -48.768 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Sense Comment" " "
-				(at 0 -50.673 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Sense" "No"
-				(at 0 -52.578 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Status Comment" " "
-				(at 0 -54.483 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Socket" "No"
-				(at 0 -56.388 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "SMD" "Yes"
-				(at 0 -58.293 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "ComponentHeight" " "
-				(at 0 -60.198 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Manufacturer1 Example" "NIC COMPONENT"
-				(at 0 -62.103 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Manufacturer1 Part Number" "NRC12F1002TRF"
-				(at 0 -64.008 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Manufacturer1 ComponentHeight" "0.65mm"
-				(at 0 -65.913 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "HelpURL" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\R1206_NIC_NRC.pdf"
-				(at 0 -67.818 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Author" "CERN DEM JLC"
-				(at 0 -69.723 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "CreateDate" "12/03/07 00:00:00"
-				(at 0 -71.628 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "LatestRevisionDate" "03/13/08 00:00:00"
-				(at 0 -73.533 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Database Table Name" "Resistors"
-				(at 0 -75.438 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Library Name" "Resistors SMD"
-				(at 0 -77.343 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Footprint Library" "Resistors SMD"
-				(at 0 -79.248 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "License" "This work is licensed under the Creative Commons CC-BY-SA 4.0 License. To the extent that circuit schematics that use Licensed Material can be considered to be ‘Adapted Material’, then the copyright holder waives article 3.b of the license with respect to these schematics."
-				(at 0 -81.153 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "ki_locked" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "R1206_10K_1%_0.25W_100PPM_0_1"
-				(polyline
-					(pts
-						(xy 1.524 -0.762) (xy 6.096 -0.762)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 1.524 0.762) (xy 1.524 -0.762)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 6.096 -0.762) (xy 6.096 0.762)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 6.096 0.762) (xy 1.524 0.762)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(pin passive line
-					(at 0 0 0)
-					(length 1.524)
-					(name "1"
-						(effects
-							(font
-								(size 0.0254 0.0254)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 0.0254 0.0254)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 7.62 0 180)
-					(length 1.524)
-					(name "2"
-						(effects
-							(font
-								(size 0.0254 0.0254)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 0.0254 0.0254)
-							)
-						)
-					)
-				)
+	)
+	(text "WARNING, this is just a demo board, not a working audio mixer. If you'll make one, it won't work :-)"
+		(exclude_from_sim no)
+		(at 127.508 19.812 0)
+		(effects
+			(font
+				(size 2 2)
+				(color 194 0 0 1)
 			)
 		)
-		(symbol "power:+12V"
-			(power)
-			(pin_names
-				(offset 0)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#PWR"
-				(at 0 -3.81 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Value" "+12V"
-				(at 0 3.556 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "power-flag symbol"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "Power Flag Symbol"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "+12V_0_1"
-				(polyline
-					(pts
-						(xy -0.762 1.27) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 2.54) (xy 0.762 1.27)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "+12V_1_1"
-				(pin power_in line
-					(at 0 0 90)
-					(length 0) hide
-					(name "+12V"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
+		(uuid "7a1204f2-6377-4d90-b301-42e19a80a973")
+	)
+	(text "KiCad V9 Multichannel Tool demo design"
+		(exclude_from_sim no)
+		(at 231.14 173.99 0)
+		(effects
+			(font
+				(size 2 2)
 			)
 		)
-		(symbol "power:+1V1"
-			(power)
-			(pin_names
-				(offset 0)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#PWR"
-				(at 0 -3.81 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Value" "+1V1"
-				(at 0 3.556 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "power-flag symbol +1.1V"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "Power Flag Symbol"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "+1V1_0_1"
-				(polyline
-					(pts
-						(xy -0.762 1.27) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 2.54) (xy 0.762 1.27)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "+1V1_1_1"
-				(pin power_in line
-					(at 0 0 90)
-					(length 0) hide
-					(name "+1V1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
-		(symbol "power:GND"
-			(power)
-			(pin_names
-				(offset 0)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#PWR"
-				(at 0 -6.35 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Value" "GND"
-				(at 0 -3.81 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "GROUND power-flag symbol"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "Power Flag Symbol"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "GND_0_1"
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "GND_1_1"
-				(pin power_in line
-					(at 0 0 270)
-					(length 0) hide
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
+		(uuid "fdd0a080-44f5-467e-8b25-1ae4c1590a2a")
 	)
 	(junction
 		(at 184.15 44.45)
@@ -4489,29 +4522,8 @@
 		)
 		(uuid "fee67172-6104-4f26-8caf-7e28f59c106f")
 	)
-	(text "WARNING, this is just a demo board, not a working audio mixer. If you'll make one, it won't work :-)"
-		(exclude_from_sim no)
-		(at 127.508 19.812 0)
-		(effects
-			(font
-				(size 2 2)
-				(color 194 0 0 1)
-			)
-		)
-		(uuid "7a1204f2-6377-4d90-b301-42e19a80a973")
-	)
-	(text "KiCad V9 Multichannel Tool demo design"
-		(exclude_from_sim no)
-		(at 231.14 173.99 0)
-		(effects
-			(font
-				(size 2 2)
-			)
-		)
-		(uuid "fdd0a080-44f5-467e-8b25-1ae4c1590a2a")
-	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "multichannel_mixer:GND")
 		(at 86.36 146.05 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4577,7 +4589,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+12V")
+		(lib_id "multichannel_mixer:+12V")
 		(at 86.36 115.57 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4643,7 +4655,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Capacitors THD:CTEB_2.2UF_35V_10%_254-500X840")
+		(lib_id "multichannel_mixer:CTEB_2.2UF_35V_10%_254-500X840")
 		(at 143.51 138.43 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5086,7 +5098,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "multichannel_mixer:GND")
 		(at 97.79 146.05 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5152,7 +5164,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "multichannel_mixer:GND")
 		(at 203.2 81.28 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5218,7 +5230,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Capacitors SMD:CC1206_100NF_50V_10%_X7R")
+		(lib_id "multichannel_mixer:CC1206_100NF_50V_10%_X7R")
 		(at 144.78 50.8 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5659,7 +5671,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "multichannel_mixer:GND")
 		(at 143.51 146.05 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5725,7 +5737,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Miscellaneous:CLIFF_FC68148(DC-10A)")
+		(lib_id "multichannel_mixer:CLIFF_FC68148(DC-10A)")
 		(at 194.31 36.83 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6181,7 +6193,7 @@
 	)
 	(symbol
 		(lib_name "Audio-Jack-2_Switch_1")
-		(lib_id "Connector:Audio-Jack-2_Switch")
+		(lib_id "multichannel_mixer:Audio-Jack-2_Switch_1")
 		(at 198.12 76.2 0)
 		(mirror y)
 		(unit 1)
@@ -6252,7 +6264,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Resistors SMD:R1206_10K_1%_0.25W_100PPM")
+		(lib_id "multichannel_mixer:R1206_10K_1%_0.25W_100PPM")
 		(at 86.36 130.81 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6714,7 +6726,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "multichannel_mixer:GND")
 		(at 115.57 146.05 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6780,7 +6792,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Operational Amplifiers:TL072CD")
+		(lib_id "multichannel_mixer:TL072CD")
 		(at 110.49 127 0)
 		(unit 2)
 		(exclude_from_sim no)
@@ -7262,7 +7274,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+12V")
+		(lib_id "multichannel_mixer:+12V")
 		(at 154.94 48.26 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7328,7 +7340,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+1V1")
+		(lib_id "multichannel_mixer:+1V1")
 		(at 143.51 83.82 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7394,7 +7406,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Resistors SMD:R1206_10K_1%_0.25W_100PPM")
+		(lib_id "multichannel_mixer:R1206_10K_1%_0.25W_100PPM")
 		(at 86.36 143.51 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7856,7 +7868,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "multichannel_mixer:GND")
 		(at 154.94 83.82 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7922,7 +7934,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Resistors SMD:R1206_10K_1%_0.25W_100PPM")
+		(lib_id "multichannel_mixer:R1206_10K_1%_0.25W_100PPM")
 		(at 162.56 62.23 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8381,7 +8393,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Operational Amplifiers:TL072CD")
+		(lib_id "multichannel_mixer:TL072CD")
 		(at 149.86 68.58 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8862,7 +8874,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+12V")
+		(lib_id "multichannel_mixer:+12V")
 		(at 184.15 33.02 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8928,7 +8940,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "multichannel_mixer:GND")
 		(at 184.15 49.53 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8994,7 +9006,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "multichannel_mixer:GND")
 		(at 140.97 52.07 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9060,7 +9072,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Capacitors THD:CTEB_2.2UF_35V_10%_254-500X840")
+		(lib_id "multichannel_mixer:CTEB_2.2UF_35V_10%_254-500X840")
 		(at 97.79 138.43 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9503,7 +9515,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+1V1")
+		(lib_id "multichannel_mixer:+1V1")
 		(at 143.51 128.27 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9569,7 +9581,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Capacitors THD:CTEB_2.2UF_35V_10%_254-500X840")
+		(lib_id "multichannel_mixer:CTEB_2.2UF_35V_10%_254-500X840")
 		(at 177.8 73.66 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10010,7 +10022,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+12V")
+		(lib_id "multichannel_mixer:+12V")
 		(at 115.57 114.3 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10078,6 +10090,10 @@
 	(sheet
 		(at 74.93 68.58)
 		(size 40.64 5.08)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(fields_autoplaced yes)
 		(stroke
 			(width 0.1524)
@@ -10116,13 +10132,13 @@
 		)
 		(pin "OUT" output
 			(at 115.57 71.12 0)
+			(uuid "349b666d-19ba-4c99-bb32-98775a5942a9")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify right)
 			)
-			(uuid "349b666d-19ba-4c99-bb32-98775a5942a9")
 		)
 		(instances
 			(project "multichannel_mixer"
@@ -10135,6 +10151,10 @@
 	(sheet
 		(at 74.93 55.88)
 		(size 40.64 5.08)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(fields_autoplaced yes)
 		(stroke
 			(width 0.1524)
@@ -10173,13 +10193,13 @@
 		)
 		(pin "OUT" output
 			(at 115.57 58.42 0)
+			(uuid "19647850-bafb-4fca-80bc-3d4a14386ddc")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify right)
 			)
-			(uuid "19647850-bafb-4fca-80bc-3d4a14386ddc")
 		)
 		(instances
 			(project "multichannel_mixer"
@@ -10192,6 +10212,10 @@
 	(sheet
 		(at 74.93 81.28)
 		(size 40.64 5.08)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(fields_autoplaced yes)
 		(stroke
 			(width 0.1524)
@@ -10230,13 +10254,13 @@
 		)
 		(pin "OUT" output
 			(at 115.57 83.82 0)
+			(uuid "7a9f097b-d7a3-48a5-8b77-62dd0f7d2f3f")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify right)
 			)
-			(uuid "7a9f097b-d7a3-48a5-8b77-62dd0f7d2f3f")
 		)
 		(instances
 			(project "multichannel_mixer"
@@ -10249,6 +10273,10 @@
 	(sheet
 		(at 74.93 93.98)
 		(size 40.64 5.08)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(fields_autoplaced yes)
 		(stroke
 			(width 0.1524)
@@ -10287,13 +10315,13 @@
 		)
 		(pin "OUT" output
 			(at 115.57 96.52 0)
+			(uuid "f2bce227-dac1-49b0-8923-02041255e484")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify right)
 			)
-			(uuid "f2bce227-dac1-49b0-8923-02041255e484")
 		)
 		(instances
 			(project "multichannel_mixer"
@@ -10308,4 +10336,5 @@
 			(page "1")
 		)
 	)
+	(embedded_fonts no)
 )

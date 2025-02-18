@@ -1,28 +1,109 @@
-(footprint "Creative_Commons_CC_Mask" (version 20210126) (generator pcbnew) (layer "F.Cu")
-  (tedit 5F8D6046)
-  (property "Description" "Not Populated")
-  (property "Sheetfile" "StickHub.kicad_sch")
-  (property "Sheetname" "")
-  (attr exclude_from_pos_files)
-  (fp_text reference "REF**" (at 0 -0.5 unlocked) (layer "F.SilkS") hide
-    (effects (font (size 1 1) (thickness 0.15)))
-    (tstamp 7163a838-52f5-43e7-8011-5ba2c9bdee37)
-  )
-  (fp_text value "Logo" (at 0 1 unlocked) (layer "F.Fab") hide
-    (effects (font (size 1 1) (thickness 0.15)))
-    (tstamp b0d87e71-bd15-4d9b-b7c8-c1110d2a6346)
-  )
-  (fp_text user "C" (at -0.3 0 unlocked) (layer "F.Mask")
-    (effects (font (size 0.6 0.6) (thickness 0.15)))
-    (tstamp 5a73f92a-ec3f-4cb0-859b-fd5473036cca)
-  )
-  (fp_text user "C" (at 0.25 0 unlocked) (layer "F.Mask")
-    (effects (font (size 0.6 0.6) (thickness 0.15)))
-    (tstamp c3f2f530-e927-4a28-84bf-0a669032a0da)
-  )
-  (fp_text user "${REFERENCE}" (at 0 2.5 unlocked) (layer "F.Fab") hide
-    (effects (font (size 1 1) (thickness 0.15)))
-    (tstamp c3299428-414c-4dd6-9135-566254f06a05)
-  )
-  (fp_circle (center 0 0) (end 0.75 0) (layer "F.Mask") (width 0.15) (fill none) (tstamp e38d3cc2-309f-4540-84f8-dda199ff4dbb))
+(footprint "Creative_Commons_CC_Mask"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at 0 -0.5 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "ce38aa3c-77a9-4279-a2ba-0e0a355da19e")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "Logo"
+		(at 0 1 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2f4a420f-4af1-4cc2-961c-f79857456432")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "B.Fab")
+		(hide yes)
+		(uuid "499c878e-c67c-4575-8ea6-9917b618d414")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+			(justify mirror)
+		)
+	)
+	(property "Description" "Not Populated"
+		(at 149.4 -98.6 0)
+		(layer "B.Fab")
+		(hide yes)
+		(uuid "b309b7f5-382e-45e4-9aec-0818eecf99b5")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+			(justify mirror)
+		)
+	)
+	(attr exclude_from_pos_files)
+	(fp_circle
+		(center 0 0)
+		(end 0.75 0)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Mask")
+		(uuid "c0cbbfa0-fac3-4461-8969-447b5f20c62d")
+	)
+	(fp_text user "C"
+		(at 0.25 0 180)
+		(unlocked yes)
+		(layer "F.Mask")
+		(uuid "58db0fc2-18df-46e4-899b-1273ae4bbe39")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(fp_text user "C"
+		(at 0.25 0 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "4f039957-820e-44cc-875c-88512b9ba34b")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 2.5 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "635a6dc0-e966-4672-a089-bfc7ae472676")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(embedded_fonts no)
 )

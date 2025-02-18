@@ -473,7 +473,7 @@
   },
   "meta": {
     "filename": "complex_hierarchy.kicad_pro",
-    "version": 2
+    "version": 3
   },
   "net_settings": {
     "classes": [

@@ -1,5 +1,5 @@
 (kicad_sch
-	(version 20241209)
+	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
 	(uuid "092cfb52-b6f1-4355-8e6c-0f835c9fcaf7")
@@ -15,7 +15,7 @@
 		(comment 4 "Comment 4")
 	)
 	(lib_symbols
-		(symbol "interf_u_schlib:4003APG120"
+		(symbol "interf_u:4003APG120"
 			(pin_names
 				(offset 1.016)
 			)
@@ -2200,7 +2200,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "interf_u_schlib:628128"
+		(symbol "interf_u:628128"
 			(pin_names
 				(offset 1.016)
 			)
@@ -2827,7 +2827,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "interf_u_schlib:74LS245"
+		(symbol "interf_u:74LS245"
 			(pin_names
 				(offset 1.016)
 			)
@@ -3295,7 +3295,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "interf_u_schlib:74LS541"
+		(symbol "interf_u:74LS541"
 			(pin_names
 				(offset 1.016)
 			)
@@ -3775,7 +3775,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "interf_u_schlib:74LS688"
+		(symbol "interf_u:74LS688"
 			(pin_names
 				(offset 1.016)
 			)
@@ -4219,7 +4219,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "interf_u_schlib:Bus_ISA_8bit"
+		(symbol "interf_u:Bus_ISA_8bit"
 			(pin_names
 				(offset 1.016)
 			)
@@ -5411,7 +5411,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "interf_u_schlib:C"
+		(symbol "interf_u:C"
 			(pin_numbers
 				(hide yes)
 			)
@@ -5550,7 +5550,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "interf_u_schlib:CP"
+		(symbol "interf_u:CP"
 			(pin_numbers
 				(hide yes)
 			)
@@ -5744,7 +5744,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "interf_u_schlib:Conn_02x08_Odd_Even"
+		(symbol "interf_u:Conn_02x08_Odd_Even"
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -6292,7 +6292,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "interf_u_schlib:Crystal"
+		(symbol "interf_u:Crystal"
 			(pin_numbers
 				(hide yes)
 			)
@@ -6465,7 +6465,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "interf_u_schlib:DB25_Female"
+		(symbol "interf_u:DB25_Female"
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -7577,7 +7577,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "interf_u_schlib:EP600"
+		(symbol "interf_u:EP600"
 			(pin_names
 				(offset 1.016)
 			)
@@ -8079,7 +8079,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "interf_u_schlib:GND"
+		(symbol "interf_u:GND"
 			(power)
 			(pin_names
 				(offset 0)
@@ -8168,7 +8168,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "interf_u_schlib:LED"
+		(symbol "interf_u:LED"
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -8339,7 +8339,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "interf_u_schlib:PWR_FLAG"
+		(symbol "interf_u:PWR_FLAG"
 			(power)
 			(pin_numbers
 				(hide yes)
@@ -8431,7 +8431,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "interf_u_schlib:R"
+		(symbol "interf_u:R"
 			(pin_numbers
 				(hide yes)
 			)
@@ -8546,7 +8546,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "interf_u_schlib:RR9"
+		(symbol "interf_u:RR9"
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -8793,7 +8793,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "interf_u_schlib:VCC"
+		(symbol "interf_u:VCC"
 			(power)
 			(pin_names
 				(offset 0)
@@ -14047,7 +14047,25 @@
 			"JgDa1M8de4+orp3YctkVV/mQRpeMXXPde8/m2Eif9YIzxJve+q5m8bO9e173xkcMs6gSSFUu3rBl"
 			"+cpXw6P/ZLBVdd27/wjAz/bu2TX5yDFJ+cQ0SSll1ZqJNes39uMCT5VXib8eY9nK1ct+Zbzz/+HV"
 			"eh/OopSOeeZ5Seb9dZ65xLy/zjOXmPfXeeYS8/46z1zi5+IDk5OT/bqOeeY5GY7769wVC+b51WF+"
-			"PzDPXGLeX+eZS/wflL1i0+6li2sAAAAASUVORK5CYII="
+			"PzDPXGLeX+eZS/wflL1i0+6li2sAAAAASUVORK5CYIIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+			"ABADAAAAAAAAMAAAAAAAAABzrEXMUFUAAEYAAABQAAAAIAAAAFEAAABGAAAAUAAAAAAAAAAAAAAA"
+			"MQAAAAAAAADg8h2ZVVUAAFDrGZlVVQAAAAAAADVtbQBkAAAAAAAAAHADAAAAAAAAMAAAAAAAAAAz"
+			"TUDMUFUAAES/hP8ABZf/hB+P/wAFl/9k74n/8DCe/6ADAAAAAAAAcAAAAAAAAACDPkPMUFUAAAAA"
+			"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+			"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOEDAAAAAAAAQMwSWFVVAADgvRuZ"
+			"VVUAAAAAAAAAAPA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+			"AAAAAAAAAAAA8D8A6BmZVVUAAEYAAAAAAAAARgAAAAAAAABjAAAAYQAAAAAAAAAAAAAAAAAAAAAA"
+			"AAABAAAAAAAAAJEAAAAAAAAAwC8dmVVVAADAzxuZVVUAAMA9HJlVVQAA4D0cmVVVAADgPRyZVVUA"
+			"ADDPG5lVVQAAcM8bmVVVAABwzxuZVVUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAA"
+			"RL+E/wAFl/9AYAoAAAAAAPArBwAAAAAAAQAAAG8AAAAgAQAAAAAAABACAAAAAAAAwMQbmVVVAAAw"
+			"xxuZVVUAAAAAAAAAAAAAoMkbmVVVAAAQzBuZVVUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+			"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+			"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+			"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+			"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+			"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+			"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+			"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
 		)
 	)
 	(label "PC-DB0"
@@ -16095,7 +16113,7 @@
 		(uuid "ffa447a5-eb17-4806-8882-5cfb435643bf")
 	)
 	(symbol
-		(lib_id "interf_u_schlib:Bus_ISA_8bit")
+		(lib_id "interf_u:Bus_ISA_8bit")
 		(at 57.15 74.93 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -16341,7 +16359,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:74LS245")
+		(lib_id "interf_u:74LS245")
 		(at 132.08 99.06 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -16461,7 +16479,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:EP600")
+		(lib_id "interf_u:EP600")
 		(at 189.23 44.45 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -16593,7 +16611,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:R")
+		(lib_id "interf_u:R")
 		(at 350.52 26.67 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -16659,7 +16677,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:R")
+		(lib_id "interf_u:R")
 		(at 350.52 38.1 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -16725,7 +16743,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:LED")
+		(lib_id "interf_u:LED")
 		(at 372.11 38.1 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -16794,7 +16812,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:LED")
+		(lib_id "interf_u:LED")
 		(at 361.95 49.53 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -16863,7 +16881,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:4003APG120")
+		(lib_id "interf_u:4003APG120")
 		(at 284.48 144.78 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -17274,7 +17292,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:74LS688")
+		(lib_id "interf_u:74LS688")
 		(at 111.76 175.26 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -17396,7 +17414,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:CP")
+		(lib_id "interf_u:CP")
 		(at 25.4 243.84 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -17464,7 +17482,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:CP")
+		(lib_id "interf_u:CP")
 		(at 41.91 243.84 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -17532,7 +17550,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:CP")
+		(lib_id "interf_u:CP")
 		(at 55.88 243.84 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -17600,7 +17618,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:CP")
+		(lib_id "interf_u:CP")
 		(at 72.39 243.84 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -17669,7 +17687,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:R")
+		(lib_id "interf_u:R")
 		(at 354.33 93.98 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -17735,7 +17753,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:R")
+		(lib_id "interf_u:R")
 		(at 375.92 93.98 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -17801,7 +17819,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:Crystal")
+		(lib_id "interf_u:Crystal")
 		(at 354.33 105.41 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -17867,7 +17885,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:C")
+		(lib_id "interf_u:C")
 		(at 342.9 115.57 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -17933,7 +17951,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:C")
+		(lib_id "interf_u:C")
 		(at 365.76 115.57 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -17999,7 +18017,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:GND")
+		(lib_id "interf_u:GND")
 		(at 33.02 36.83 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -18065,7 +18083,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:GND")
+		(lib_id "interf_u:GND")
 		(at 33.02 113.03 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -18131,7 +18149,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:GND")
+		(lib_id "interf_u:GND")
 		(at 361.95 53.34 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -18197,7 +18215,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:GND")
+		(lib_id "interf_u:GND")
 		(at 372.11 41.91 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -18263,7 +18281,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:GND")
+		(lib_id "interf_u:GND")
 		(at 172.72 26.67 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -18329,7 +18347,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:VCC")
+		(lib_id "interf_u:VCC")
 		(at 205.74 26.67 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -18394,7 +18412,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:628128")
+		(lib_id "interf_u:628128")
 		(at 195.58 229.87 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -18547,7 +18565,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:R")
+		(lib_id "interf_u:R")
 		(at 163.83 251.46 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -18613,7 +18631,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:DB25_Female")
+		(lib_id "interf_u:DB25_Female")
 		(at 382.27 182.88 0)
 		(mirror x)
 		(unit 1)
@@ -18749,7 +18767,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:GND")
+		(lib_id "interf_u:GND")
 		(at 372.11 154.94 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -18815,7 +18833,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:RR9")
+		(lib_id "interf_u:RR9")
 		(at 69.85 210.82 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -18905,7 +18923,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:VCC")
+		(lib_id "interf_u:VCC")
 		(at 83.82 201.93 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -18970,7 +18988,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:Conn_02x08_Odd_Even")
+		(lib_id "interf_u:Conn_02x08_Odd_Even")
 		(at 43.18 184.15 0)
 		(mirror x)
 		(unit 1)
@@ -19079,7 +19097,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:GND")
+		(lib_id "interf_u:GND")
 		(at 189.23 67.31 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -19145,7 +19163,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:VCC")
+		(lib_id "interf_u:VCC")
 		(at 25.4 237.49 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -19210,7 +19228,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:VCC")
+		(lib_id "interf_u:VCC")
 		(at 189.23 19.05 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -19275,7 +19293,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:PWR_FLAG")
+		(lib_id "interf_u:PWR_FLAG")
 		(at 72.39 237.49 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -19340,7 +19358,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:PWR_FLAG")
+		(lib_id "interf_u:PWR_FLAG")
 		(at 72.39 250.19 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -19405,7 +19423,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:GND")
+		(lib_id "interf_u:GND")
 		(at 25.4 250.19 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -19471,7 +19489,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:GND")
+		(lib_id "interf_u:GND")
 		(at 34.29 195.58 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -19537,7 +19555,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:GND")
+		(lib_id "interf_u:GND")
 		(at 120.65 64.77 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -19603,7 +19621,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:GND")
+		(lib_id "interf_u:GND")
 		(at 342.9 119.38 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -19669,7 +19687,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:GND")
+		(lib_id "interf_u:GND")
 		(at 365.76 119.38 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -19735,7 +19753,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:74LS541")
+		(lib_id "interf_u:74LS541")
 		(at 133.35 49.53 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -19857,7 +19875,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:VCC")
+		(lib_id "interf_u:VCC")
 		(at 33.02 107.95 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -19922,7 +19940,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:VCC")
+		(lib_id "interf_u:VCC")
 		(at 33.02 41.91 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -19987,7 +20005,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:VCC")
+		(lib_id "interf_u:VCC")
 		(at 255.27 76.2 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -20052,7 +20070,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:VCC")
+		(lib_id "interf_u:VCC")
 		(at 158.75 251.46 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -20117,7 +20135,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:GND")
+		(lib_id "interf_u:GND")
 		(at 133.35 69.85 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -20183,7 +20201,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:VCC")
+		(lib_id "interf_u:VCC")
 		(at 133.35 29.21 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -20248,7 +20266,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:VCC")
+		(lib_id "interf_u:VCC")
 		(at 132.08 78.74 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -20313,7 +20331,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:VCC")
+		(lib_id "interf_u:VCC")
 		(at 111.76 144.78 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -20378,7 +20396,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:GND")
+		(lib_id "interf_u:GND")
 		(at 132.08 119.38 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -20444,7 +20462,7 @@
 		)
 	)
 	(symbol
-		(lib_id "interf_u_schlib:GND")
+		(lib_id "interf_u:GND")
 		(at 111.76 205.74 0)
 		(unit 1)
 		(exclude_from_sim no)

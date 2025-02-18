@@ -1,3 +1,4 @@
 (sym_lib_table
-  (lib (name "ecc83_schlib")(type "KiCad")(uri "${KIPRJMOD}/ecc83_schlib.kicad_sym")(options "")(descr ""))
+  (version 7)
+  (lib (name "ecc83-pp")(type "KiCad")(uri "${KIPRJMOD}/ecc83-pp.kicad_sym")(options "")(descr ""))
 )

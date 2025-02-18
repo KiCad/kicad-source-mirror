@@ -1,5 +1,5 @@
 (kicad_sch
-	(version 20241209)
+	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
 	(uuid "07104395-590a-4ebf-a72b-dad9fa47c291")
@@ -11,7 +11,7 @@
 		(company "KiCad")
 	)
 	(lib_symbols
-		(symbol "pic_programmer_schlib:24C16"
+		(symbol "pic_programmer:24C16"
 			(pin_names
 				(offset 0.762)
 			)
@@ -220,7 +220,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:C"
+		(symbol "pic_programmer:C"
 			(pin_numbers
 				(hide yes)
 			)
@@ -348,7 +348,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:GND"
+		(symbol "pic_programmer:GND"
 			(power)
 			(pin_names
 				(offset 0)
@@ -436,7 +436,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:PIC12C508A"
+		(symbol "pic_programmer:PIC12C508A"
 			(pin_names
 				(offset 1.016)
 			)
@@ -645,7 +645,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:PIC16F54"
+		(symbol "pic_programmer:PIC16F54"
 			(pin_names
 				(offset 1.016)
 			)
@@ -1360,7 +1360,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:PWR_FLAG"
+		(symbol "pic_programmer:PWR_FLAG"
 			(power)
 			(pin_numbers
 				(hide yes)
@@ -1450,7 +1450,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:SUPP28"
+		(symbol "pic_programmer:SUPP28"
 			(pin_names
 				(offset 1.016)
 			)
@@ -2019,7 +2019,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "pic_programmer_schlib:SUPP40"
+		(symbol "pic_programmer:SUPP40"
 			(pin_names
 				(offset 1.016)
 			)
@@ -4130,7 +4130,7 @@
 		(uuid "f570bc42-d2f8-4582-b9d9-9df96ce97770")
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:PIC12C508A")
+		(lib_id "pic_programmer:PIC12C508A")
 		(at 95.25 73.66 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4214,7 +4214,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:PIC16F54")
+		(lib_id "pic_programmer:PIC16F54")
 		(at 95.25 116.84 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4328,7 +4328,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 113.03 60.96 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4394,7 +4394,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 69.85 118.11 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4460,7 +4460,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 203.2 127 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4526,7 +4526,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:24C16")
+		(lib_id "pic_programmer:24C16")
 		(at 93.98 33.02 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4610,7 +4610,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 71.12 34.29 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4676,7 +4676,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:SUPP40")
+		(lib_id "pic_programmer:SUPP40")
 		(at 218.44 123.19 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4856,7 +4856,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 233.68 121.92 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4922,7 +4922,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:C")
+		(lib_id "pic_programmer:C")
 		(at 60.96 171.45 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4990,7 +4990,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 60.96 176.53 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5056,7 +5056,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:C")
+		(lib_id "pic_programmer:C")
 		(at 83.82 171.45 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5124,7 +5124,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 83.82 176.53 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5190,7 +5190,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:SUPP28")
+		(lib_id "pic_programmer:SUPP28")
 		(at 218.44 64.77 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5334,7 +5334,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 203.2 66.04 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5400,7 +5400,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 233.68 71.12 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5466,7 +5466,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 203.2 116.84 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5532,7 +5532,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:GND")
+		(lib_id "pic_programmer:GND")
 		(at 93.98 46.99 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5598,7 +5598,7 @@
 		)
 	)
 	(symbol
-		(lib_id "pic_programmer_schlib:PWR_FLAG")
+		(lib_id "pic_programmer:PWR_FLAG")
 		(at 83.82 165.1 270)
 		(unit 1)
 		(exclude_from_sim no)

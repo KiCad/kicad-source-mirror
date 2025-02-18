@@ -1,3 +1,4 @@
 (sym_lib_table
-  (lib (name "custom_pads_schlib")(type "KiCad")(uri "${KIPRJMOD}/custom_pads_schlib.kicad_sym")(options "")(descr ""))
+  (version 7)
+  (lib (name "custom_pads_test")(type "KiCad")(uri "${KIPRJMOD}/custom_pads_test.kicad_sym")(options "")(descr ""))
 )

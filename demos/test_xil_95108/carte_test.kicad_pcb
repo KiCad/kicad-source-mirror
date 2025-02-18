@@ -1,5 +1,5 @@
 (kicad_pcb
-	(version 20241228)
+	(version 20241229)
 	(generator "pcbnew")
 	(generator_version "9.0")
 	(general
@@ -81,8 +81,8 @@
 		(allow_soldermask_bridges_in_footprints no)
 		(tenting front back)
 		(pcbplotparams
-			(layerselection 0x000010f0_ffffffff)
-			(plot_on_all_layers_selection 0x00000000_00000000)
+			(layerselection 0x00000000_00000000_000010f0_ffffffff)
+			(plot_on_all_layers_selection 0x00000000_00000000_00000000_00000000)
 			(disableapertmacros no)
 			(usegerberextensions no)
 			(usegerberattributes yes)
@@ -100,11 +100,13 @@
 			(pdf_front_fp_property_popups yes)
 			(pdf_back_fp_property_popups yes)
 			(pdf_metadata yes)
+			(pdf_single_document no)
 			(dxfpolygonmode yes)
 			(dxfimperialunits yes)
 			(dxfusepcbnewfont yes)
 			(psnegative no)
 			(psa4output no)
+			(plot_black_and_white yes)
 			(plotinvisibletext no)
 			(sketchpadsonfab no)
 			(plotpadnumbers no)
@@ -220,14 +222,14 @@
 	(net 98 "unconnected-(U6-FIN2-Pad1)")
 	(net 99 "unconnected-(U6-FOUT-Pad5)")
 	(net 100 "unconnected-(U6-FIN1-Pad8)")
-	(footprint "Diode_THT:D_DO-35_SOD27_P12.70mm_Horizontal"
+	(footprint "footprints:D_DO-35_SOD27_P12.70mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000056332708")
 		(at 181.102 115.57 -90)
 		(descr "Diode, DO-35_SOD27 series, Axial, Horizontal, pin pitch=12.7mm, , length*diameter=4*2mm^2, , http://www.diodes.com/_files/packages/DO-35.pdf")
 		(tags "Diode DO-35_SOD27 series Axial Horizontal pin pitch 12.7mm  length 4mm diameter 2mm")
 		(property "Reference" "D1"
-			(at 6.35 -2.12 -90)
+			(at 6.35 -2.12 270)
 			(layer "F.SilkS")
 			(uuid "235560d8-f1b0-4dc8-962a-fa0f59052c71")
 			(effects
@@ -238,7 +240,7 @@
 			)
 		)
 		(property "Value" "1N4004"
-			(at 6.35 2.12 -90)
+			(at 6.35 2.12 270)
 			(layer "F.Fab")
 			(uuid "216b989c-f1d0-4ce2-967a-99f91190eddf")
 			(effects
@@ -249,7 +251,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -262,7 +264,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -500,7 +502,7 @@
 			(uuid "8e7e5c7b-4bb0-4ddb-8a1b-cda4d3d6668f")
 		)
 		(fp_text user "K"
-			(at 0 -1.8 -90)
+			(at 0 -1.8 270)
 			(layer "F.SilkS")
 			(uuid "fdd94fa8-010c-444a-baf5-98e5d367d58f")
 			(effects
@@ -511,7 +513,7 @@
 			)
 		)
 		(fp_text user "K"
-			(at 0 -1.8 -90)
+			(at 0 -1.8 270)
 			(layer "F.Fab")
 			(uuid "15b60a92-217a-4b95-8532-a6281fdf6204")
 			(effects
@@ -522,7 +524,7 @@
 			)
 		)
 		(fp_text user "${REFERENCE}"
-			(at 6.65 0 -90)
+			(at 6.65 0 270)
 			(layer "F.Fab")
 			(uuid "9b39740f-34fc-43a5-9c22-f4f87f80b413")
 			(effects
@@ -567,7 +569,7 @@
 			)
 		)
 	)
-	(footprint "Diode_THT:D_DO-35_SOD27_P12.70mm_Horizontal"
+	(footprint "footprints:D_DO-35_SOD27_P12.70mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000056332717")
 		(at 194.31 107.315 90)
@@ -914,7 +916,7 @@
 			)
 		)
 	)
-	(footprint "Button_Switch_THT:SW_PUSH_6mm_H4.3mm"
+	(footprint "footprints:SW_PUSH_6mm_H4.3mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000056332790")
 		(at 158.242 53.721)
@@ -2357,7 +2359,7 @@
 			)
 		)
 	)
-	(footprint "Package_DIP:DIP-14_W7.62mm_LongPads"
+	(footprint "footprints:DIP-14_W7.62mm_LongPads"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005633280b")
 		(at 123.825 117.475 90)
@@ -2732,7 +2734,7 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_2x02_P2.54mm_Vertical"
+	(footprint "footprints:PinHeader_2x02_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000056348915")
 		(at 111.125 86.36)
@@ -3028,7 +3030,7 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
+	(footprint "footprints:PinHeader_1x03_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000056348b1e")
 		(at 170.8 66.675 -90)
@@ -3046,7 +3048,7 @@
 			)
 		)
 		(property "Value" "CONN_3"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(layer "F.SilkS")
 			(hide yes)
 			(uuid "0dd9aa4c-598e-4a65-bf73-e72063475419")
@@ -3058,7 +3060,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -3071,7 +3073,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -3294,14 +3296,14 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a5cfe48")
 		(at 114.935 52.705 -90)
 		(descr "Resistor, Axial_DIN0207 series, Axial, Horizontal, pin pitch=10.16mm, 0.25W = 1/4W, length*diameter=6.3*2.5mm^2, http://cdn-reichelt.de/documents/datenblatt/B400/1_4W%23YAG.pdf")
 		(tags "Resistor Axial_DIN0207 series Axial Horizontal pin pitch 10.16mm 0.25W = 1/4W length 6.3mm diameter 2.5mm")
 		(property "Reference" "R2"
-			(at -2.286 -0.381 -90)
+			(at -2.286 -0.381 270)
 			(layer "F.SilkS")
 			(uuid "ecd3459f-e156-4e1d-8d08-a77f64bd1a00")
 			(effects
@@ -3312,7 +3314,7 @@
 			)
 		)
 		(property "Value" "330"
-			(at 5.08 2.31 -90)
+			(at 5.08 2.31 270)
 			(layer "F.Fab")
 			(uuid "7f6691ae-46cf-4f93-aa29-04375fc1883b")
 			(effects
@@ -3323,7 +3325,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -3336,7 +3338,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -3514,7 +3516,7 @@
 			(uuid "cdb757f0-0a94-4277-bea2-15529ca80e14")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 5.08 0 -90)
+			(at 5.08 0 270)
 			(layer "F.Fab")
 			(uuid "3bc8a0c9-cacd-4772-a462-bb21f3b94c83")
 			(effects
@@ -3557,7 +3559,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a5cfe5e")
 		(at 134.874 39.878)
@@ -3820,7 +3822,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a5cfe74")
 		(at 187.325 52.07 90)
@@ -4083,7 +4085,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a5cfe8a")
 		(at 135.001 43.561)
@@ -4346,7 +4348,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a5cfea0")
 		(at 125.095 126.365)
@@ -4609,7 +4611,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a5cfecc")
 		(at 147.955 64.135 90)
@@ -4872,7 +4874,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a5cfee2")
 		(at 115.57 43.561 180)
@@ -5135,14 +5137,14 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a5cff0e")
 		(at 118.2 52.7 -90)
 		(descr "Resistor, Axial_DIN0207 series, Axial, Horizontal, pin pitch=10.16mm, 0.25W = 1/4W, length*diameter=6.3*2.5mm^2, http://cdn-reichelt.de/documents/datenblatt/B400/1_4W%23YAG.pdf")
 		(tags "Resistor Axial_DIN0207 series Axial Horizontal pin pitch 10.16mm 0.25W = 1/4W length 6.3mm diameter 2.5mm")
 		(property "Reference" "R3"
-			(at 5.08 -2.31 -90)
+			(at 5.08 -2.31 270)
 			(layer "F.SilkS")
 			(uuid "aa03462b-9a83-49f6-8038-f28a754cb5af")
 			(effects
@@ -5153,7 +5155,7 @@
 			)
 		)
 		(property "Value" "330"
-			(at 5.08 2.31 -90)
+			(at 5.08 2.31 270)
 			(layer "F.Fab")
 			(uuid "7395871c-c08c-4b95-9421-09ebd736b551")
 			(effects
@@ -5164,7 +5166,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -5177,7 +5179,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -5355,7 +5357,7 @@
 			(uuid "819af2b9-4093-440a-9c74-74c38d04fd3b")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 5.08 0 -90)
+			(at 5.08 0 270)
 			(layer "F.Fab")
 			(uuid "ec712b9f-c135-4ee7-8285-9ccbedd51f12")
 			(effects
@@ -5398,7 +5400,7 @@
 			)
 		)
 	)
-	(footprint "Package_DIP:DIP-16_W7.62mm_Socket_LongPads"
+	(footprint "footprints:DIP-16_W7.62mm_Socket_LongPads"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a5cff4a")
 		(at 123.825 65.405 90)
@@ -5887,7 +5889,7 @@
 			)
 		)
 	)
-	(footprint "Crystal:Crystal_HC18-U_Horizontal"
+	(footprint "footprints:Crystal_HC18-U_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a5d00c9")
 		(at 120.65 121.539 -90)
@@ -5916,7 +5918,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -5929,7 +5931,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -6226,7 +6228,7 @@
 			(uuid "5536820a-4b07-443c-a7d3-5f5374ecc0ea")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 2.25 5 -90)
+			(at 2.25 5 270)
 			(layer "F.Fab")
 			(uuid "f56d810b-ba82-4449-951b-7cad1d1a588d")
 			(effects
@@ -6271,7 +6273,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a5d033b")
 		(at 152.781 64.135 90)
@@ -6534,7 +6536,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a5d0394")
 		(at 115.57 40.132 180)
@@ -6797,7 +6799,7 @@
 			)
 		)
 	)
-	(footprint "LED_THT:LED_D5.0mm"
+	(footprint "footprints:LED_D5.0mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a60a7bc")
 		(at 108.585 52.705)
@@ -7017,7 +7019,7 @@
 			)
 		)
 	)
-	(footprint "LED_THT:LED_D5.0mm"
+	(footprint "footprints:LED_D5.0mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a60a7cd")
 		(at 108.585 60.325)
@@ -7237,7 +7239,7 @@
 			)
 		)
 	)
-	(footprint "Package_DIP:DIP-8_W7.62mm_LongPads"
+	(footprint "footprints:DIP-8_W7.62mm_LongPads"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a60ebb1")
 		(at 118.872 47.371 90)
@@ -7558,7 +7560,7 @@
 			)
 		)
 	)
-	(footprint "Connector_Dsub:DSUB-25_Female_Horizontal_P2.77x2.84mm_EdgePinOffset9.90mm_Housed_MountingHolesOffset11.32mm"
+	(footprint "footprints:DSUB-25_Female_Horizontal_P2.77x2.84mm_EdgePinOffset9.90mm_Housed_MountingHolesOffset11.32mm"
 		(locked yes)
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a613abf")
@@ -7566,7 +7568,7 @@
 		(descr "25-pin D-Sub connector, horizontal/angled (90 deg), THT-mount, female, pitch 2.77x2.84mm, pin-PCB-offset 9.9mm, distance of mounting holes 47.1mm, distance of mounting holes to PCB edge 11.32mm, see https://disti-assets.s3.amazonaws.com/tonar/files/datasheets/16730.pdf")
 		(tags "25-pin D-Sub connector horizontal angled 90deg THT female pitch 2.77x2.84mm pin-PCB-offset 9.9mm mounting-holes-distance 47.1mm mounting-hole-offset 11.32mm")
 		(property "Reference" "J1"
-			(at -16.62 -2.8 -90)
+			(at -16.62 -2.8 270)
 			(layer "F.SilkS")
 			(uuid "034ddbad-bc04-486f-a7b2-3466dc92f1a0")
 			(effects
@@ -7577,7 +7579,7 @@
 			)
 		)
 		(property "Value" "DB25"
-			(at -4.826 5.715 -90)
+			(at -4.826 5.715 270)
 			(layer "F.Fab")
 			(uuid "327b3831-09ef-4dbe-adbf-7d49ea5a273d")
 			(effects
@@ -7588,7 +7590,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -7601,7 +7603,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -7980,7 +7982,7 @@
 			(uuid "5eef452b-86d5-4373-a4f0-e850b92e28c7")
 		)
 		(fp_text user "${REFERENCE}"
-			(at -13.97 5.715 -90)
+			(at -13.97 5.715 270)
 			(layer "F.Fab")
 			(uuid "21a4f162-8c6a-43ba-9d12-e334b7e3d6f8")
 			(effects
@@ -8004,7 +8006,7 @@
 			(drill 3.2)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(uuid "0381a7a8-f4aa-438c-93ae-67cb485bf1c5")
+			(uuid "f1669cde-fc95-47fb-9c95-7cfbca194696")
 		)
 		(pad "1" thru_hole rect
 			(at 0 0 270)
@@ -8294,7 +8296,7 @@
 			)
 		)
 	)
-	(footprint "Package_TO_SOT_THT:TO-220-3_Horizontal_TabDown"
+	(footprint "footprints:TO-220-3_Horizontal_TabDown"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a61c72a")
 		(at 155.575 117.475 -90)
@@ -8312,7 +8314,7 @@
 			)
 		)
 		(property "Value" "LM7805"
-			(at 2.54 2 -90)
+			(at 2.54 2 270)
 			(layer "F.Fab")
 			(uuid "6ef64561-81aa-45fa-a312-b08fc8c7661e")
 			(effects
@@ -8323,7 +8325,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -8336,7 +8338,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -8647,7 +8649,7 @@
 			)
 		)
 	)
-	(footprint "Connector_Dsub:DSUB-9_Female_Horizontal_P2.77x2.84mm_EdgePinOffset7.70mm_Housed_MountingHolesOffset9.12mm"
+	(footprint "footprints:DSUB-9_Female_Horizontal_P2.77x2.84mm_EdgePinOffset7.70mm_Housed_MountingHolesOffset9.12mm"
 		(locked yes)
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a61ccd7")
@@ -9091,7 +9093,7 @@
 			(drill 3.2)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(uuid "786b8938-c815-4e3b-9b99-e1a366d2c0a0")
+			(uuid "bb9f11cd-273a-43dc-9b95-4a2518df1e68")
 		)
 		(pad "1" thru_hole rect
 			(at 0 0)
@@ -9205,7 +9207,7 @@
 			)
 		)
 	)
-	(footprint "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-3-5.08_1x03_P5.08mm_Horizontal"
+	(footprint "footprints:TerminalBlock_Phoenix_MKDS-1,5-3-5.08_1x03_P5.08mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a61f6e6")
 		(at 189.738 130.556 90)
@@ -9780,7 +9782,7 @@
 			)
 		)
 	)
-	(footprint "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal"
+	(footprint "footprints:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a61f71a")
 		(at 190.5 64.135 90)
@@ -10262,7 +10264,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_THT:CP_Axial_L10.0mm_D4.5mm_P15.00mm_Horizontal"
+	(footprint "footprints:CP_Axial_L10.0mm_D4.5mm_P15.00mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a640e11")
 		(at 167.005 43.942 180)
@@ -10685,7 +10687,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_THT:CP_Axial_L10.0mm_D4.5mm_P15.00mm_Horizontal"
+	(footprint "footprints:CP_Axial_L10.0mm_D4.5mm_P15.00mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a640e37")
 		(at 163.957 108.331 180)
@@ -11108,14 +11110,14 @@
 			)
 		)
 	)
-	(footprint "Capacitor_THT:CP_Axial_L10.0mm_D4.5mm_P15.00mm_Horizontal"
+	(footprint "footprints:CP_Axial_L10.0mm_D4.5mm_P15.00mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a640e5d")
 		(at 188.595 81.28 -90)
 		(descr "CP, Axial series, Axial, Horizontal, pin pitch=15mm, , length*diameter=10*4.5mm^2, Electrolytic Capacitor, , http://www.vishay.com/docs/28325/021asm.pdf")
 		(tags "CP Axial series Axial Horizontal pin pitch 15mm  length 10mm diameter 4.5mm Electrolytic Capacitor")
 		(property "Reference" "C3"
-			(at 7.5 -3.31 -90)
+			(at 7.5 -3.31 270)
 			(layer "F.SilkS")
 			(uuid "7f294b77-ea58-4657-bdd5-11ec5ccaf1ad")
 			(effects
@@ -11126,7 +11128,7 @@
 			)
 		)
 		(property "Value" "10uF"
-			(at 7.5 3.31 -90)
+			(at 7.5 3.31 270)
 			(layer "F.Fab")
 			(uuid "234fae87-6a5a-4f3a-97aa-6e7560b3a4fa")
 			(effects
@@ -11137,7 +11139,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -11150,7 +11152,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -11488,7 +11490,7 @@
 			(uuid "14f21ff8-c7cb-4c77-a79b-e9ed57cb9c58")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 7.5 0 -90)
+			(at 7.5 0 270)
 			(layer "F.Fab")
 			(uuid "20a3ec2c-1a66-4ba9-8d38-6b14e1f5a7e7")
 			(effects
@@ -11531,7 +11533,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_THT:CP_Axial_L10.0mm_D4.5mm_P15.00mm_Horizontal"
+	(footprint "footprints:CP_Axial_L10.0mm_D4.5mm_P15.00mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a640e83")
 		(at 129.6 53.4)
@@ -11954,7 +11956,7 @@
 			)
 		)
 	)
-	(footprint "Button_Switch_THT:SW_PUSH_6mm_H4.3mm"
+	(footprint "footprints:SW_PUSH_6mm_H4.3mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005af24d1a")
 		(at 171.831 53.721)
@@ -12976,7 +12978,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_THT:CP_Axial_L10.0mm_D4.5mm_P15.00mm_Horizontal"
+	(footprint "footprints:CP_Axial_L10.0mm_D4.5mm_P15.00mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005af25939")
 		(at 130.6 47.9)
@@ -13399,14 +13401,14 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+	(footprint "footprints:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
 		(layer "B.Cu")
 		(uuid "00000000-0000-0000-0000-0000563326c7")
 		(at 121.285 62.865 90)
 		(descr "Capacitor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "capacitor handsolder")
 		(property "Reference" "C1"
-			(at 0 1.85 -90)
+			(at 0 1.85 270)
 			(layer "B.SilkS")
 			(uuid "c588bc60-74d0-49bf-b240-5eb0bfb2ac31")
 			(effects
@@ -13418,7 +13420,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 0 -1.85 -90)
+			(at 0 -1.85 270)
 			(layer "B.Fab")
 			(uuid "8e85b9b8-ef92-4def-b31f-b091dbf4447a")
 			(effects
@@ -13561,7 +13563,7 @@
 			(uuid "1ad817d8-4f94-4d3d-a1da-fcc11ba997fa")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(layer "B.Fab")
 			(uuid "0f5f80de-3bd3-471e-b33a-98f2e499be67")
 			(effects
@@ -13603,7 +13605,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+	(footprint "footprints:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
 		(layer "B.Cu")
 		(uuid "00000000-0000-0000-0000-0000563326d6")
 		(at 130.175 126.365)
@@ -13807,7 +13809,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+	(footprint "footprints:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
 		(layer "B.Cu")
 		(uuid "00000000-0000-0000-0000-0000563326db")
 		(at 130.175 121.285)
@@ -14011,7 +14013,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+	(footprint "footprints:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
 		(layer "B.Cu")
 		(uuid "00000000-0000-0000-0000-0000563326f9")
 		(at 118.745 113.665 -90)
@@ -14042,7 +14044,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -14055,7 +14057,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -14215,7 +14217,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+	(footprint "footprints:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
 		(layer "B.Cu")
 		(uuid "00000000-0000-0000-0000-00005a60aa56")
 		(at 127.635 85.725 -90)
@@ -14246,7 +14248,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -14259,7 +14261,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -14419,14 +14421,14 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+	(footprint "footprints:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
 		(layer "B.Cu")
 		(uuid "00000000-0000-0000-0000-00005a60aa66")
 		(at 141.605 92.075 90)
 		(descr "Capacitor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "capacitor handsolder")
 		(property "Reference" "C10"
-			(at 0 1.85 -90)
+			(at 0 1.85 270)
 			(layer "B.SilkS")
 			(uuid "97662199-dd8a-4eb5-a501-fd264a5a8603")
 			(effects
@@ -14438,7 +14440,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 0 -1.85 -90)
+			(at 0 -1.85 270)
 			(layer "B.Fab")
 			(uuid "aa76e958-1d9e-4ccb-939a-a541049ff188")
 			(effects
@@ -14581,7 +14583,7 @@
 			(uuid "ad7f3fcd-b1bb-4a12-9d38-6bc442e4e355")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 -90)
+			(at 0 0 270)
 			(layer "B.Fab")
 			(uuid "c8a7e462-c207-459c-b19d-4da77d2afba0")
 			(effects
@@ -14623,7 +14625,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+	(footprint "footprints:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
 		(layer "B.Cu")
 		(uuid "00000000-0000-0000-0000-00005a60aa76")
 		(at 137.795 79.375)
@@ -14827,7 +14829,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+	(footprint "footprints:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
 		(layer "B.Cu")
 		(uuid "00000000-0000-0000-0000-00005a60aa86")
 		(at 176.53 69.85 180)

@@ -1,5 +1,5 @@
 (kicad_sch
-	(version 20241209)
+	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
 	(uuid "5ade2176-b41a-41ec-91fe-ba9644669489")
@@ -2376,7 +2376,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "sonde_xilinx_schlib:74LS125"
+		(symbol "sonde_xilinx:74LS125"
 			(pin_names
 				(offset 0.762)
 			)
@@ -2714,7 +2714,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "sonde_xilinx_schlib:C"
+		(symbol "sonde_xilinx:C"
 			(pin_numbers
 				(hide yes)
 			)
@@ -2842,7 +2842,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "sonde_xilinx_schlib:CONN_6"
+		(symbol "sonde_xilinx:CONN_6"
 			(pin_names
 				(offset 0.762)
 				(hide yes)
@@ -3016,7 +3016,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "sonde_xilinx_schlib:CP"
+		(symbol "sonde_xilinx:CP"
 			(pin_numbers
 				(hide yes)
 			)
@@ -3145,7 +3145,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "sonde_xilinx_schlib:DB25"
+		(symbol "sonde_xilinx:DB25"
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -4330,7 +4330,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "sonde_xilinx_schlib:DB9"
+		(symbol "sonde_xilinx:DB9"
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -4523,7 +4523,7 @@
 				)
 				(polyline
 					(pts
-						(xy -3.556 11.938) (xy -2.54 12.446)
+						(xy -3.556 11.938) (xy -3.81 11.684)
 					)
 					(stroke
 						(width 0.2032)
@@ -4535,7 +4535,7 @@
 				)
 				(polyline
 					(pts
-						(xy -3.556 11.938) (xy -3.81 11.684)
+						(xy -3.556 11.938) (xy -2.54 12.446)
 					)
 					(stroke
 						(width 0.2032)
@@ -4907,7 +4907,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "sonde_xilinx_schlib:DIODESCH"
+		(symbol "sonde_xilinx:DIODESCH"
 			(pin_numbers
 				(hide yes)
 			)
@@ -5034,7 +5034,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "sonde_xilinx_schlib:GND"
+		(symbol "sonde_xilinx:GND"
 			(power)
 			(pin_names
 				(offset 0)
@@ -5122,7 +5122,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "sonde_xilinx_schlib:PWR_FLAG"
+		(symbol "sonde_xilinx:PWR_FLAG"
 			(power)
 			(pin_numbers
 				(hide yes)
@@ -5212,7 +5212,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "sonde_xilinx_schlib:R"
+		(symbol "sonde_xilinx:R"
 			(pin_numbers
 				(hide yes)
 			)
@@ -5325,7 +5325,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "sonde_xilinx_schlib:VCC"
+		(symbol "sonde_xilinx:VCC"
 			(power)
 			(pin_names
 				(offset 0)
@@ -7061,7 +7061,7 @@
 		(uuid "ed0256ea-68f3-4268-a307-5564380719da")
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:DB25")
+		(lib_id "sonde_xilinx:DB25")
 		(at 44.45 71.12 0)
 		(mirror y)
 		(unit 1)
@@ -7198,7 +7198,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:R")
+		(lib_id "sonde_xilinx:R")
 		(at 100.33 25.4 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7265,7 +7265,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:R")
+		(lib_id "sonde_xilinx:R")
 		(at 100.33 40.64 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7332,7 +7332,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:R")
+		(lib_id "sonde_xilinx:R")
 		(at 100.33 57.15 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7399,7 +7399,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:R")
+		(lib_id "sonde_xilinx:R")
 		(at 100.33 83.82 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7466,7 +7466,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:R")
+		(lib_id "sonde_xilinx:R")
 		(at 100.33 106.68 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7534,7 +7534,7 @@
 	)
 	(symbol
 		(lib_name "74LS125_2")
-		(lib_id "sonde_xilinx_schlib:74LS125")
+		(lib_id "sonde_xilinx:74LS125_2")
 		(at 118.11 40.64 0)
 		(mirror y)
 		(unit 1)
@@ -7641,7 +7641,7 @@
 	)
 	(symbol
 		(lib_name "74LS125_1")
-		(lib_id "sonde_xilinx_schlib:74LS125")
+		(lib_id "sonde_xilinx:74LS125_1")
 		(at 137.16 48.26 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7747,7 +7747,7 @@
 	)
 	(symbol
 		(lib_name "74LS125_6")
-		(lib_id "sonde_xilinx_schlib:74LS125")
+		(lib_id "sonde_xilinx:74LS125_6")
 		(at 138.43 66.04 0)
 		(unit 2)
 		(exclude_from_sim no)
@@ -7853,7 +7853,7 @@
 	)
 	(symbol
 		(lib_name "74LS125_7")
-		(lib_id "sonde_xilinx_schlib:74LS125")
+		(lib_id "sonde_xilinx:74LS125_7")
 		(at 138.43 83.82 0)
 		(unit 3)
 		(exclude_from_sim no)
@@ -7958,7 +7958,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:74LS125")
+		(lib_id "sonde_xilinx:74LS125")
 		(at 138.43 106.68 0)
 		(unit 4)
 		(exclude_from_sim no)
@@ -8064,7 +8064,7 @@
 	)
 	(symbol
 		(lib_name "74LS125_3")
-		(lib_id "sonde_xilinx_schlib:74LS125")
+		(lib_id "sonde_xilinx:74LS125_3")
 		(at 43.18 175.26 0)
 		(unit 2)
 		(exclude_from_sim no)
@@ -8170,7 +8170,7 @@
 	)
 	(symbol
 		(lib_name "74LS125_4")
-		(lib_id "sonde_xilinx_schlib:74LS125")
+		(lib_id "sonde_xilinx:74LS125_4")
 		(at 43.18 158.75 0)
 		(unit 3)
 		(exclude_from_sim no)
@@ -8276,7 +8276,7 @@
 	)
 	(symbol
 		(lib_name "74LS125_5")
-		(lib_id "sonde_xilinx_schlib:74LS125")
+		(lib_id "sonde_xilinx:74LS125_5")
 		(at 43.18 142.24 0)
 		(unit 4)
 		(exclude_from_sim no)
@@ -8381,7 +8381,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:GND")
+		(lib_id "sonde_xilinx:GND")
 		(at 29.21 185.42 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8447,7 +8447,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:GND")
+		(lib_id "sonde_xilinx:GND")
 		(at 118.11 50.8 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8513,7 +8513,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:GND")
+		(lib_id "sonde_xilinx:GND")
 		(at 63.5 44.45 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8579,7 +8579,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:DIODESCH")
+		(lib_id "sonde_xilinx:DIODESCH")
 		(at 114.3 25.4 0)
 		(mirror y)
 		(unit 1)
@@ -8647,7 +8647,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:DIODESCH")
+		(lib_id "sonde_xilinx:DIODESCH")
 		(at 180.34 25.4 0)
 		(mirror y)
 		(unit 1)
@@ -8715,7 +8715,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:R")
+		(lib_id "sonde_xilinx:R")
 		(at 149.86 33.02 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8782,7 +8782,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:R")
+		(lib_id "sonde_xilinx:R")
 		(at 157.48 33.02 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8849,7 +8849,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:R")
+		(lib_id "sonde_xilinx:R")
 		(at 168.91 48.26 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8916,7 +8916,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:C")
+		(lib_id "sonde_xilinx:C")
 		(at 160.02 113.03 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8985,7 +8985,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:GND")
+		(lib_id "sonde_xilinx:GND")
 		(at 160.02 119.38 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9051,7 +9051,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:GND")
+		(lib_id "sonde_xilinx:GND")
 		(at 157.48 40.64 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9117,7 +9117,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:CP")
+		(lib_id "sonde_xilinx:CP")
 		(at 165.1 31.75 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9186,7 +9186,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:GND")
+		(lib_id "sonde_xilinx:GND")
 		(at 165.1 38.1 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9252,7 +9252,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:CONN_6")
+		(lib_id "sonde_xilinx:CONN_6")
 		(at 224.79 71.12 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9331,7 +9331,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:GND")
+		(lib_id "sonde_xilinx:GND")
 		(at 214.63 67.31 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9397,7 +9397,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:PWR_FLAG")
+		(lib_id "sonde_xilinx:PWR_FLAG")
 		(at 259.08 121.92 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9462,7 +9462,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:GND")
+		(lib_id "sonde_xilinx:GND")
 		(at 259.08 123.19 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9528,7 +9528,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:VCC")
+		(lib_id "sonde_xilinx:VCC")
 		(at 147.32 24.13 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9593,7 +9593,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:PWR_FLAG")
+		(lib_id "sonde_xilinx:PWR_FLAG")
 		(at 154.94 24.13 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9658,7 +9658,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:DB9")
+		(lib_id "sonde_xilinx:DB9")
 		(at 271.78 99.06 0)
 		(mirror x)
 		(unit 1)
@@ -9747,7 +9747,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:R")
+		(lib_id "sonde_xilinx:R")
 		(at 168.91 66.04 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9814,7 +9814,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:R")
+		(lib_id "sonde_xilinx:R")
 		(at 100.33 66.04 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9881,7 +9881,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:R")
+		(lib_id "sonde_xilinx:R")
 		(at 100.33 73.66 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9948,7 +9948,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:GND")
+		(lib_id "sonde_xilinx:GND")
 		(at 63.5 69.85 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10014,7 +10014,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:R")
+		(lib_id "sonde_xilinx:R")
 		(at 168.91 106.68 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10081,7 +10081,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:R")
+		(lib_id "sonde_xilinx:R")
 		(at 168.91 83.82 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10148,7 +10148,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:C")
+		(lib_id "sonde_xilinx:C")
 		(at 160.02 54.61 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10217,7 +10217,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:C")
+		(lib_id "sonde_xilinx:C")
 		(at 160.02 72.39 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10286,7 +10286,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:C")
+		(lib_id "sonde_xilinx:C")
 		(at 160.02 90.17 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10355,7 +10355,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:GND")
+		(lib_id "sonde_xilinx:GND")
 		(at 160.02 60.96 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10421,7 +10421,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:GND")
+		(lib_id "sonde_xilinx:GND")
 		(at 160.02 78.74 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10487,7 +10487,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:GND")
+		(lib_id "sonde_xilinx:GND")
 		(at 160.02 96.52 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10553,7 +10553,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:GND")
+		(lib_id "sonde_xilinx:GND")
 		(at 255.27 91.44 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10619,7 +10619,7 @@
 		)
 	)
 	(symbol
-		(lib_id "sonde_xilinx_schlib:GND")
+		(lib_id "sonde_xilinx:GND")
 		(at 125.73 50.8 0)
 		(unit 1)
 		(exclude_from_sim no)

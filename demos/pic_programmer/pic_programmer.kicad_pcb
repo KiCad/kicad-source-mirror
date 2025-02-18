@@ -1,5 +1,5 @@
 (kicad_pcb
-	(version 20241129)
+	(version 20241229)
 	(generator "pcbnew")
 	(generator_version "9.0")
 	(general
@@ -81,8 +81,8 @@
 		(tenting front back)
 		(aux_axis_origin 62.23 153.67)
 		(pcbplotparams
-			(layerselection 0x00000030_80000001)
-			(plot_on_all_layers_selection 0x00000000_00000000)
+			(layerselection 0x00000000_00000000_00000030_80000001)
+			(plot_on_all_layers_selection 0x00000000_00000000_00000000_00000000)
 			(disableapertmacros no)
 			(usegerberextensions yes)
 			(usegerberattributes yes)
@@ -100,11 +100,13 @@
 			(pdf_front_fp_property_popups yes)
 			(pdf_back_fp_property_popups yes)
 			(pdf_metadata yes)
+			(pdf_single_document no)
 			(dxfpolygonmode yes)
 			(dxfimperialunits yes)
 			(dxfusepcbnewfont yes)
 			(psnegative no)
 			(psa4output no)
+			(plot_black_and_white yes)
 			(plotinvisibletext no)
 			(sketchpadsonfab no)
 			(plotpadnumbers no)
@@ -231,7 +233,7 @@
 	(net 109 "unconnected-(U6-GP5{slash}OSC1-Pad2)")
 	(net 110 "unconnected-(U6-GP4{slash}OSC2-Pad3)")
 	(net 111 "unconnected-(U6-GP2-Pad5)")
-	(footprint "Capacitor_THT:CP_Axial_L18.0mm_D6.5mm_P25.00mm_Horizontal"
+	(footprint "footprints:CP_Axial_L18.0mm_D6.5mm_P25.00mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000054032b86")
 		(at 110.49 78.867 180)
@@ -255,18 +257,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "27570fc4-5dda-4a18-a1f8-194f86185d2c")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -666,7 +656,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_THT:CP_Axial_L18.0mm_D6.5mm_P25.00mm_Horizontal"
+	(footprint "footprints:CP_Axial_L18.0mm_D6.5mm_P25.00mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000054032b95")
 		(at 84.582 90.17)
@@ -690,18 +680,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "c5576070-007a-4305-b957-fd70d39f7918")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -1101,7 +1079,7 @@
 			)
 		)
 	)
-	(footprint "MountingHole:MountingHole_4.3mm_M4"
+	(footprint "footprints:MountingHole_4.3mm_M4"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000054033012")
 		(at 77.47 135.89)
@@ -1125,18 +1103,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "92329471-e3c7-4d65-a330-f393b073e799")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -1211,7 +1177,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "MountingHole:MountingHole_4.3mm_M4"
+	(footprint "footprints:MountingHole_4.3mm_M4"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000054033017")
 		(at 158.75 135.89)
@@ -1235,18 +1201,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "0ce41ec4-8924-44a7-a1d4-2237f5c78e35")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -1321,7 +1275,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "MountingHole:MountingHole_4.3mm_M4"
+	(footprint "footprints:MountingHole_4.3mm_M4"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005403301c")
 		(at 229.87 135.89)
@@ -1345,18 +1299,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "3b275aa2-a5cf-42b2-9380-d16567005179")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -1431,7 +1373,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "MountingHole:MountingHole_4.3mm_M4"
+	(footprint "footprints:MountingHole_4.3mm_M4"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000054033021")
 		(at 229.87 44.45)
@@ -1455,18 +1397,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "33f55b48-ea72-46ce-b345-de5e866eca25")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -1541,7 +1471,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "MountingHole:MountingHole_4.3mm_M4"
+	(footprint "footprints:MountingHole_4.3mm_M4"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-000054033026")
 		(at 158.75 44.45)
@@ -1565,18 +1495,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "3a17b14c-2705-47dd-932b-458f36617e19")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -1651,7 +1569,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "MountingHole:MountingHole_4.3mm_M4"
+	(footprint "footprints:MountingHole_4.3mm_M4"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005403302b")
 		(at 77.47 44.45)
@@ -1675,18 +1593,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "dc8cdac5-6b99-4c4d-8120-5bf04c1aef4b")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -1786,18 +1692,6 @@
 				(font
 					(size 2.032 1.27)
 					(thickness 0.3048)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "d2060fb3-a3af-4997-ad4c-49bf293c6475")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
 				)
 			)
 		)
@@ -2714,7 +2608,7 @@
 			)
 		)
 	)
-	(footprint "Package_DIP:DIP-8_W7.62mm_Socket_LongPads"
+	(footprint "footprints:DIP-8_W7.62mm_Socket_LongPads"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a212a0f")
 		(at 179.07 120.65)
@@ -2738,18 +2632,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "2e859d8c-e601-4e1a-8330-22e5f5282b3f")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -3127,7 +3009,7 @@
 			)
 		)
 	)
-	(footprint "Package_DIP:DIP-8_W7.62mm_Socket_LongPads"
+	(footprint "footprints:DIP-8_W7.62mm_Socket_LongPads"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a212a32")
 		(at 179.07 109.22)
@@ -3151,18 +3033,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "369a1bd8-5a7e-4796-810f-7073aa6475d8")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -3540,7 +3410,7 @@
 			)
 		)
 	)
-	(footprint "Package_DIP:DIP-8_W7.62mm_LongPads"
+	(footprint "footprints:DIP-8_W7.62mm_LongPads"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a212a55")
 		(at 110.49 57.15)
@@ -3564,18 +3434,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "00a5f54e-6b59-4925-ab87-2e0910d630cb")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -3873,7 +3731,7 @@
 			)
 		)
 	)
-	(footprint "Package_DIP:DIP-28_W7.62mm_Socket_LongPads"
+	(footprint "footprints:DIP-28_W7.62mm_Socket_LongPads"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a212a70")
 		(at 207.645 50.8)
@@ -3897,18 +3755,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "df26f6a6-56f8-437d-a917-6a75ebd06492")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -4506,7 +4352,7 @@
 			)
 		)
 	)
-	(footprint "Package_DIP:DIP-18_W7.62mm_Socket_LongPads"
+	(footprint "footprints:DIP-18_W7.62mm_Socket_LongPads"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a212aa7")
 		(at 207.899 107.95)
@@ -4530,18 +4376,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "e2bc9ee7-c19f-421f-b1f0-40054bdd8a1b")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -5029,7 +4863,7 @@
 			)
 		)
 	)
-	(footprint "Package_DIP:DIP-14_W7.62mm_LongPads"
+	(footprint "footprints:DIP-14_W7.62mm_LongPads"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a212ad4")
 		(at 115.57 119.38 90)
@@ -5053,18 +4887,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "fa60792f-98ef-49cd-b167-2261c132566f")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -5417,7 +5239,7 @@
 			)
 		)
 	)
-	(footprint "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal"
+	(footprint "footprints:D_DO-35_SOD27_P7.62mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a217a2e")
 		(at 107.95 118.237 180)
@@ -5441,18 +5263,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "7d9d123a-242d-4bbb-bd8c-f8ef0666e3fe")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -5776,7 +5586,7 @@
 			)
 		)
 	)
-	(footprint "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal"
+	(footprint "footprints:D_DO-35_SOD27_P7.62mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a217a4c")
 		(at 107.95 121.92 180)
@@ -5800,18 +5610,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "84aead31-3bee-45d8-9f5d-8af4e2b2f708")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -6135,7 +5933,7 @@
 			)
 		)
 	)
-	(footprint "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal"
+	(footprint "footprints:D_DO-35_SOD27_P7.62mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a217a6a")
 		(at 107.95 111.887 180)
@@ -6159,18 +5957,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "321206aa-e0ca-45b8-83e1-44542b18bdfe")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -6494,7 +6280,7 @@
 			)
 		)
 	)
-	(footprint "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal"
+	(footprint "footprints:D_DO-35_SOD27_P7.62mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a217a88")
 		(at 107.95 108.585 180)
@@ -6518,18 +6304,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "044b2b23-bc05-4258-bf88-7a8fb19263ca")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -6853,7 +6627,7 @@
 			)
 		)
 	)
-	(footprint "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal"
+	(footprint "footprints:D_DO-35_SOD27_P7.62mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a217aa6")
 		(at 139.065 80.645)
@@ -6877,18 +6651,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "31edb5d6-9994-46eb-bf5b-37db3ce516ad")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -7212,7 +6974,7 @@
 			)
 		)
 	)
-	(footprint "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal"
+	(footprint "footprints:D_DO-35_SOD27_P7.62mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a217ac4")
 		(at 107.95 115.316 180)
@@ -7236,18 +6998,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "4ea61a2a-74ed-4592-afa2-1cf59c313173")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -7571,7 +7321,7 @@
 			)
 		)
 	)
-	(footprint "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal"
+	(footprint "footprints:D_DO-35_SOD27_P7.62mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a217ae2")
 		(at 107.95 125.095 180)
@@ -7595,18 +7345,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "2059a106-1960-4ffa-afc8-1bb2d3713206")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -7930,14 +7668,14 @@
 			)
 		)
 	)
-	(footprint "Connector_Dsub:DSUB-9_Female_Horizontal_P2.77x2.84mm_EdgePinOffset7.70mm_Housed_MountingHolesOffset9.12mm"
+	(footprint "footprints:DSUB-9_Female_Horizontal_P2.77x2.84mm_EdgePinOffset7.70mm_Housed_MountingHolesOffset9.12mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a222dbd")
 		(at 82.6 120.2 -90)
 		(descr "9-pin D-Sub connector, horizontal/angled (90 deg), THT-mount, female, pitch 2.77x2.84mm, pin-PCB-offset 7.7mm, distance of mounting holes 25mm, distance of mounting holes to PCB edge 9.12mm, see https://disti-assets.s3.amazonaws.com/tonar/files/datasheets/16730.pdf")
 		(tags "9-pin D-Sub connector horizontal angled 90deg THT female pitch 2.77x2.84mm pin-PCB-offset 7.7mm mounting-holes-distance 25mm mounting-hole-offset 9.12mm")
 		(property "Reference" "J1"
-			(at -5.54 -2.8 -90)
+			(at -5.54 -2.8 270)
 			(layer "F.SilkS")
 			(uuid "9117978e-db17-4027-91e0-418f7dc01b64")
 			(effects
@@ -7948,7 +7686,7 @@
 			)
 		)
 		(property "Value" "DB9-FEMAL"
-			(at -5.54 18.61 -90)
+			(at -5.54 18.61 270)
 			(layer "F.Fab")
 			(uuid "a8b536aa-f34b-4964-9073-ad954f4702cb")
 			(effects
@@ -7958,20 +7696,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "c51e2c3e-327f-4996-af2c-25e37ff668c7")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -7984,7 +7710,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -8364,7 +8090,7 @@
 			(uuid "eb5ec24f-deb2-40c7-9f16-ccbfea3f56cf")
 		)
 		(fp_text user "${REFERENCE}"
-			(at -5.54 14.025 -90)
+			(at -5.54 14.025 270)
 			(layer "F.Fab")
 			(uuid "f9e50acd-7941-4a47-9f9d-25b4b942791d")
 			(effects
@@ -8388,7 +8114,7 @@
 			(drill 3.2)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(uuid "50353a42-2906-419a-8091-ac552158a5bd")
+			(uuid "b5e85fc1-2c47-41b4-974e-94cda93a20d4")
 		)
 		(pad "1" thru_hole rect
 			(at 0 0 270)
@@ -8502,7 +8228,7 @@
 			)
 		)
 	)
-	(footprint "Package_TO_SOT_THT:TO-92"
+	(footprint "footprints:TO-92"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a228a27")
 		(at 142.24 97.79)
@@ -8526,18 +8252,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "5d737209-3bef-4fa1-8ef0-f0a23370f9cc")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -8734,7 +8448,7 @@
 			)
 		)
 	)
-	(footprint "Package_TO_SOT_THT:TO-92"
+	(footprint "footprints:TO-92"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a228a38")
 		(at 148.082 60.706 180)
@@ -8758,18 +8472,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "48a51363-7803-4aad-8c9e-eae73cb45ee0")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -8966,7 +8668,7 @@
 			)
 		)
 	)
-	(footprint "Package_TO_SOT_THT:TO-92"
+	(footprint "footprints:TO-92"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a228a49")
 		(at 146.05 69.85)
@@ -8990,18 +8692,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "e7100737-9e4d-4603-8f97-86db16fdbe8a")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -9198,7 +8888,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a22abe1")
 		(at 152.4 68.58 90)
@@ -9222,18 +8912,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "8667c7a9-5519-48e6-a161-b2005ddf15fa")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -9473,7 +9151,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a22abf7")
 		(at 114.3 48.26)
@@ -9497,18 +9175,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "fdcb77bc-1ba6-4c5c-bf0f-ace20cceea14")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -9748,7 +9414,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a22ac0d")
 		(at 139.065 77.47)
@@ -9772,18 +9438,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "dc475886-120c-4325-8e3e-f9ec5c89c2ad")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -10023,7 +9677,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a22ac23")
 		(at 87.63 118.11)
@@ -10047,18 +9701,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "0f22cc36-60d9-4d8f-ac56-bedec6e52b7e")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -10298,7 +9940,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a22ac39")
 		(at 87.63 114.554)
@@ -10322,18 +9964,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "8fe45af5-07e7-4ed0-995e-e56bc719ff5f")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -10573,7 +10203,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a22ac4f")
 		(at 87.63 111.125)
@@ -10597,18 +10227,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "6f0479ae-a1fe-4b26-aa9d-a8becb3f4da8")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -10848,7 +10466,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a22ac65")
 		(at 87.63 107.823)
@@ -10872,18 +10490,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "6e664a78-35ef-4542-a325-2a78ec57e4e1")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -11123,7 +10729,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a22ac7b")
 		(at 87.757 125.476)
@@ -11147,18 +10753,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "6aab70e7-4d62-4ef1-ac1f-5dca8489bb98")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -11398,7 +10992,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a22ac91")
 		(at 139.7 54.61)
@@ -11422,18 +11016,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "ef217f60-cf09-42f6-ab61-16d9f81078e3")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -11673,7 +11255,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a22aca7")
 		(at 87.757 121.92)
@@ -11697,18 +11279,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "56876672-4e0d-4a7e-b90e-ec52b4639bb1")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -11948,7 +11518,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a22acbd")
 		(at 158.115 102.235 180)
@@ -11972,18 +11542,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "b2b8d217-158b-41f3-ac55-dc251d53c26c")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -12223,7 +11781,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a22acd3")
 		(at 144.78 102.235 180)
@@ -12247,18 +11805,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "7954f84b-31ce-4e87-be7e-66ad55bff8a3")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -12498,7 +12044,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a22ace9")
 		(at 149.225 83.82 180)
@@ -12522,18 +12068,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "265f11b2-4dd9-458e-bce5-76d660efdebd")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -12773,7 +12307,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a22acff")
 		(at 156.21 68.58 90)
@@ -12797,18 +12331,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "b43ee0b4-1d57-4a12-9b93-4755a1e038c2")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -13048,7 +12570,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a22ad15")
 		(at 118.11 75.184)
@@ -13072,18 +12594,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "58828da8-6476-4b10-88e2-a344235f151e")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -13323,7 +12833,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a22ad2b")
 		(at 118.11 78.74)
@@ -13347,18 +12857,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "344b3419-17c1-4000-b185-4697cca057d6")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -13598,7 +13096,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a22ad41")
 		(at 139.065 87.63)
@@ -13622,18 +13120,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "fd38fdae-0970-47a9-82d4-7b39bc00e5cc")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -13873,14 +13359,14 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a22ad57")
 		(at 140.335 111.76 -90)
 		(descr "Resistor, Axial_DIN0207 series, Axial, Horizontal, pin pitch=10.16mm, 0.25W = 1/4W, length*diameter=6.3*2.5mm^2, http://cdn-reichelt.de/documents/datenblatt/B400/1_4W%23YAG.pdf")
 		(tags "Resistor Axial_DIN0207 series Axial Horizontal pin pitch 10.16mm 0.25W = 1/4W length 6.3mm diameter 2.5mm")
 		(property "Reference" "R13"
-			(at 13.54 -0.165 -90)
+			(at 13.54 -0.165 270)
 			(layer "F.SilkS")
 			(uuid "a978fe3a-222b-4f6d-b57f-276f4a6b0a65")
 			(effects
@@ -13891,7 +13377,7 @@
 			)
 		)
 		(property "Value" "470"
-			(at 5.44 -2.565 -90)
+			(at 5.44 -2.565 270)
 			(layer "F.Fab")
 			(uuid "1c94e6cf-617c-4a63-8027-6a05d1e8eccd")
 			(effects
@@ -13901,20 +13387,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "1ad888ed-d7ec-417c-8eb4-3eab7fa3ac79")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -13927,7 +13401,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -14105,7 +13579,7 @@
 			(uuid "b39e24f3-4a10-4e7d-a60b-6bf9901ef99b")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 5.08 0 -90)
+			(at 5.08 0 270)
 			(layer "F.Fab")
 			(uuid "3b2419ea-cb54-4bc1-b3c7-4a1e94506767")
 			(effects
@@ -14148,7 +13622,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a22ad6d")
 		(at 139.065 91.059)
@@ -14172,18 +13646,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "00649dd1-7b4d-4bf5-8b13-ad8e8ef71970")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -14423,7 +13885,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a22ad83")
 		(at 135.255 121.92 90)
@@ -14447,18 +13909,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "389f963f-d040-46eb-83d3-8d41d14761da")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -14698,7 +14148,7 @@
 			)
 		)
 	)
-	(footprint "LED_THT:LED_D5.0mm"
+	(footprint "footprints:LED_D5.0mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a22f49f")
 		(at 156.21 77.47 180)
@@ -14722,18 +14172,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "29c5a5b1-b37b-41de-89c0-f967c3f8834d")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -14942,7 +14380,7 @@
 			)
 		)
 	)
-	(footprint "LED_THT:LED_D5.0mm"
+	(footprint "footprints:LED_D5.0mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a22f4ad")
 		(at 156.21 87.63 180)
@@ -14966,18 +14404,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "ff9de1a6-4bd6-4451-b802-0bf67720bf7f")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -15186,7 +14612,7 @@
 			)
 		)
 	)
-	(footprint "LED_THT:LED_D5.0mm"
+	(footprint "footprints:LED_D5.0mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a22f4bb")
 		(at 156.21 97.155 180)
@@ -15210,18 +14636,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "a67196f1-742c-4cdd-91f3-27ab9503c407")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -15418,7 +14832,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_THT:C_Disc_D5.1mm_W3.2mm_P5.00mm"
+	(footprint "footprints:C_Disc_D5.1mm_W3.2mm_P5.00mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a250be4")
 		(at 114.3 52.07)
@@ -15442,18 +14856,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "7917a05e-2bc9-49f3-93c6-ac6cea4dc9a3")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -15673,7 +15075,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_THT:C_Disc_D5.1mm_W3.2mm_P5.00mm"
+	(footprint "footprints:C_Disc_D5.1mm_W3.2mm_P5.00mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a250bf8")
 		(at 129.54 49.53)
@@ -15697,18 +15099,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "ed4d4baa-de88-449c-85d8-0cee7e786146")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -15928,14 +15318,14 @@
 			)
 		)
 	)
-	(footprint "Capacitor_THT:C_Disc_D5.1mm_W3.2mm_P5.00mm"
+	(footprint "footprints:C_Disc_D5.1mm_W3.2mm_P5.00mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a250c20")
 		(at 198.755 71.12 -90)
 		(descr "C, Disc series, Radial, pin pitch=5.00mm, , diameter*width=5.1*3.2mm^2, Capacitor, http://www.vishay.com/docs/45233/krseries.pdf")
 		(tags "C Disc series Radial pin pitch 5.00mm  diameter 5.1mm width 3.2mm Capacitor")
 		(property "Reference" "C7"
-			(at 2.5 -2.91 -90)
+			(at 2.5 -2.91 270)
 			(layer "F.SilkS")
 			(uuid "dd65390a-1196-420d-b194-e4b808e7d8fe")
 			(effects
@@ -15946,7 +15336,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 2.5 2.91 -90)
+			(at 2.5 2.91 270)
 			(layer "F.Fab")
 			(uuid "41073074-bd71-4577-9746-2d2aaa860927")
 			(effects
@@ -15956,20 +15346,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "cab35a08-aaa0-4b3e-ac84-0d6bc229a778")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -15982,7 +15360,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -16140,7 +15518,7 @@
 			(uuid "0248e99c-a51a-46c3-8b20-be4036358912")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 2.5 0 -90)
+			(at 2.5 0 270)
 			(layer "F.Fab")
 			(uuid "941b543f-75ea-40a5-8135-d10bc04e5822")
 			(effects
@@ -16183,7 +15561,7 @@
 			)
 		)
 	)
-	(footprint "Capacitor_THT:C_Disc_D5.1mm_W3.2mm_P5.00mm"
+	(footprint "footprints:C_Disc_D5.1mm_W3.2mm_P5.00mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a250c34")
 		(at 143.002 49.784)
@@ -16207,18 +15585,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "453a0b1b-cb72-4d71-b191-01ea48ba64d5")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -16438,14 +15804,14 @@
 			)
 		)
 	)
-	(footprint "Capacitor_THT:C_Disc_D5.1mm_W3.2mm_P5.00mm"
+	(footprint "footprints:C_Disc_D5.1mm_W3.2mm_P5.00mm"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a250cc6")
 		(at 196.85 112.395 -90)
 		(descr "C, Disc series, Radial, pin pitch=5.00mm, , diameter*width=5.1*3.2mm^2, Capacitor, http://www.vishay.com/docs/45233/krseries.pdf")
 		(tags "C Disc series Radial pin pitch 5.00mm  diameter 5.1mm width 3.2mm Capacitor")
 		(property "Reference" "C6"
-			(at 2.5 -2.91 -90)
+			(at 2.5 -2.91 270)
 			(layer "F.SilkS")
 			(uuid "2f3da496-7d11-4472-9b88-23c5e217a8f5")
 			(effects
@@ -16456,7 +15822,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 2.5 2.91 -90)
+			(at 2.5 2.91 270)
 			(layer "F.Fab")
 			(uuid "4d667fbf-2b01-4e40-a472-47ea331fd6b8")
 			(effects
@@ -16466,20 +15832,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "e7e13eb5-2d4c-4a13-a23e-977076a9e894")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -16492,7 +15846,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -16650,7 +16004,7 @@
 			(uuid "51157de9-aee8-4909-a0f2-acf7ff215e4a")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 2.5 0 -90)
+			(at 2.5 0 270)
 			(layer "F.Fab")
 			(uuid "ab466514-77ee-4d4d-92f9-3b9877c36165")
 			(effects
@@ -16693,7 +16047,7 @@
 			)
 		)
 	)
-	(footprint "Diode_THT:D_DO-35_SOD27_P12.70mm_Horizontal"
+	(footprint "footprints:D_DO-35_SOD27_P12.70mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a286264")
 		(at 137.16 57.15 180)
@@ -16717,18 +16071,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "b186a0fe-680c-48fd-83c6-4df53b6ef492")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -17080,18 +16422,6 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 180)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "dccb997e-16a6-4624-981c-a138e2b359fd")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 0 0 180)
 			(unlocked yes)
@@ -17339,14 +16669,14 @@
 			)
 		)
 	)
-	(footprint "TerminalBlock_Altech:Altech_AK300_1x02_P5.00mm_45-Degree"
+	(footprint "footprints:Altech_AK300_1x02_P5.00mm_45-Degree"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a29e47a")
 		(at 81.8 60 -90)
 		(descr "Altech AK300 serie terminal block (Script generated with StandardBox.py) (http://www.altechcorp.com/PDFS/PCBMETRC.PDF)")
 		(tags "Altech AK300 serie connector")
 		(property "Reference" "P1"
-			(at 1.9 -7.9 -90)
+			(at 1.9 -7.9 270)
 			(layer "F.SilkS")
 			(uuid "027aef5c-70a4-4d21-bf50-e10901d4d513")
 			(effects
@@ -17357,7 +16687,7 @@
 			)
 		)
 		(property "Value" "CONN_2"
-			(at 2.5 5.66 -90)
+			(at 2.5 5.66 270)
 			(layer "F.Fab")
 			(uuid "e1024009-558c-4bef-b31d-d2a9f6a18b32")
 			(effects
@@ -17367,20 +16697,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "cc3a1f79-6f56-42c6-881b-3c3e1e343f48")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -17393,7 +16711,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -17600,7 +16918,7 @@
 			(uuid "d0b0fedc-f9ea-4d19-8b8e-88ea522229a3")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 2.5 3.2 -90)
+			(at 2.5 3.2 270)
 			(layer "F.Fab")
 			(uuid "d0a09875-5114-482e-a1b5-0a39d89294d5")
 			(effects
@@ -17645,7 +16963,7 @@
 			)
 		)
 	)
-	(footprint "Package_TO_SOT_THT:TO-220-3_Horizontal_TabDown"
+	(footprint "footprints:TO-220-3_Horizontal_TabDown"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a2a01d8")
 		(at 96.52 71.12)
@@ -17669,18 +16987,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "e7b3361b-ef74-4432-a7c0-23f184b485db")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -18010,7 +17316,7 @@
 			)
 		)
 	)
-	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+	(footprint "footprints:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a2a0231")
 		(at 140.081 70.993 90)
@@ -18034,18 +17340,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "0054a640-8518-456f-9e2f-d1582ac11bc4")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -18285,14 +17579,14 @@
 			)
 		)
 	)
-	(footprint "Capacitor_THT:C_Axial_L12.0mm_D6.5mm_P20.00mm_Horizontal"
+	(footprint "footprints:C_Axial_L12.0mm_D6.5mm_P20.00mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005a2a02a0")
 		(at 134.112 62.23 -90)
 		(descr "C, Axial series, Axial, Horizontal, pin pitch=20mm, , length*diameter=12*6.5mm^2, http://cdn-reichelt.de/documents/datenblatt/B300/STYROFLEX.pdf")
 		(tags "C Axial series Axial Horizontal pin pitch 20mm  length 12mm diameter 6.5mm")
 		(property "Reference" "C3"
-			(at 10 -4.37 -90)
+			(at 10 -4.37 270)
 			(layer "F.SilkS")
 			(uuid "407508ff-4f21-4f32-9203-a50b6ef6a521")
 			(effects
@@ -18303,7 +17597,7 @@
 			)
 		)
 		(property "Value" "22uF/25V"
-			(at 10 4.37 -90)
+			(at 10 4.37 270)
 			(layer "F.Fab")
 			(uuid "ceb2ec3d-b750-42cb-9211-9ee5f1f7ca52")
 			(effects
@@ -18313,20 +17607,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "1f573540-8a37-429f-9f86-3f8473d08c3f")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -18339,7 +17621,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -18517,7 +17799,7 @@
 			(uuid "c5b3362a-f19e-42d5-ae86-2d727d942d74")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 10 0 -90)
+			(at 10 0 270)
 			(layer "F.Fab")
 			(uuid "17c13a59-584f-4dc1-81c5-14d8c0ba8ad7")
 			(effects
@@ -18560,14 +17842,14 @@
 			)
 		)
 	)
-	(footprint "Inductor_THT:L_Radial_D7.8mm_P5.00mm_Fastron_07HCP"
+	(footprint "footprints:L_Radial_D7.8mm_P5.00mm_Fastron_07HCP"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005af1d586")
 		(at 125.73 62.23 -90)
 		(descr "Inductor, Radial series, Radial, pin pitch=5.00mm, , diameter=7.8mm, Fastron, 07HCP, http://www.abracon.com/Magnetics/radial/AISR875.pdf")
 		(tags "Inductor Radial series Radial pin pitch 5.00mm  diameter 7.8mm Fastron 07HCP")
 		(property "Reference" "L1"
-			(at 2.5 -4.96 -90)
+			(at 2.5 -4.96 270)
 			(layer "F.SilkS")
 			(uuid "d992559f-5768-421c-a123-43c3533d1189")
 			(effects
@@ -18578,7 +17860,7 @@
 			)
 		)
 		(property "Value" "22uH"
-			(at 2.5 4.96 -90)
+			(at 2.5 4.96 270)
 			(layer "F.Fab")
 			(uuid "006cb498-a33a-49ab-adcb-2dc7b7e4df4f")
 			(effects
@@ -18588,20 +17870,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 -90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "d8636465-4d00-4f57-b81b-97144ef35ea6")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
 		(property "Datasheet" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -18614,7 +17884,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 -90)
+			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -18675,7 +17945,7 @@
 			(uuid "dc1cd916-3ea8-4003-a14d-f5c8fa85322a")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 2.5 0 -90)
+			(at 2.5 0 270)
 			(layer "F.Fab")
 			(uuid "f46fb739-3a72-47c2-b741-104c730505b2")
 			(effects
@@ -18720,7 +17990,7 @@
 			)
 		)
 	)
-	(footprint "Diode_THT:D_DO-35_SOD27_P12.70mm_Horizontal"
+	(footprint "footprints:D_DO-35_SOD27_P12.70mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "00000000-0000-0000-0000-00005ca9c655")
 		(at 78.3 89.7 90)
@@ -18744,18 +18014,6 @@
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "dd8cc97c-f324-4a1d-946a-1e9f1f626eef")
-			(effects
-				(font
-					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -19079,7 +18337,7 @@
 			)
 		)
 	)
-	(footprint "Jumper:SolderJumper-2_P1.3mm_Open_TrianglePad1.0x1.5mm"
+	(footprint "footprints:SolderJumper-2_P1.3mm_Open_TrianglePad1.0x1.5mm"
 		(layer "B.Cu")
 		(uuid "00000000-0000-0000-0000-00005a295fb8")
 		(at 148.082 97.79)
@@ -19107,18 +18365,6 @@
 					(thickness 0.15)
 				)
 				(justify mirror)
-			)
-		)
-		(property "Footprint" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "641a4322-d594-4fd6-9fdf-2386edd1d498")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
 			)
 		)
 		(property "Datasheet" ""

@@ -82,7 +82,7 @@
         "footprint_type_mismatch": "error",
         "hole_clearance": "error",
         "hole_near_hole": "error",
-        "hole_to_hole": "warning",
+        "hole_to_hole": "error",
         "holes_co_located": "warning",
         "invalid_outline": "error",
         "isolated_copper": "warning",
@@ -475,7 +475,7 @@
   },
   "meta": {
     "filename": "kit-dev-coldfire-xilinx_5213.kicad_pro",
-    "version": 2
+    "version": 3
   },
   "net_settings": {
     "classes": [

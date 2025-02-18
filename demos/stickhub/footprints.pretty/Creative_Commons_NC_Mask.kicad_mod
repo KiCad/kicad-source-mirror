@@ -1,27 +1,157 @@
-(footprint "Creative_Commons_NC_Mask" (version 20210126) (generator pcbnew) (layer "F.Cu")
-  (tedit 5F8D6465)
-  (property "Description" "Not Populated")
-  (property "Sheetfile" "StickHub.kicad_sch")
-  (property "Sheetname" "")
-  (attr exclude_from_pos_files)
-  (fp_text reference "REF**" (at 0 -1.55 unlocked) (layer "F.SilkS") hide
-    (effects (font (size 1 1) (thickness 0.15)))
-    (tstamp 6b1c1d0a-95f5-41f6-8da2-9188ac805806)
-  )
-  (fp_text value "Logo" (at 0 2 unlocked) (layer "F.Fab") hide
-    (effects (font (size 1 1) (thickness 0.15)))
-    (tstamp 1c926b77-22b9-436e-b7b6-8a4db675e51b)
-  )
-  (fp_text user "${REFERENCE}" (at 0 2.5 unlocked) (layer "F.Fab") hide
-    (effects (font (size 1 1) (thickness 0.15)))
-    (tstamp b93ad88e-eaff-4972-be9b-70ffec982ee5)
-  )
-  (fp_line (start -0.075 0.425) (end -0.225 0.375) (layer "F.Mask") (width 0.15) (tstamp 2aa5d0c6-419c-4944-9014-9803ded68271))
-  (fp_line (start 0 0) (end 0.675 0.3) (layer "F.Mask") (width 0.15) (tstamp 57a657ed-c60c-4d42-9690-db1714a22e26))
-  (fp_line (start 0.075 -0.425) (end 0.225 -0.375) (layer "F.Mask") (width 0.15) (tstamp 942558d0-530f-41b0-9645-f56e94835aab))
-  (fp_line (start -0.675 -0.3) (end 0 0) (layer "F.Mask") (width 0.15) (tstamp b8344e5a-7f54-4e97-ae67-09456a8fc05f))
-  (fp_line (start 0 -0.5) (end 0 0.5) (layer "F.Mask") (width 0.15) (tstamp c6379e64-bd10-462a-a524-11a769e57521))
-  (fp_arc (start 0.008 0.2354) (end 0.1 0.05) (angle 177.3) (layer "F.Mask") (width 0.15) (tstamp 346fdc7d-f95c-430f-9de8-305897478ae4))
-  (fp_arc (start -0.008 -0.2354) (end -0.1 -0.05) (angle 177.3) (layer "F.Mask") (width 0.15) (tstamp e7553aec-75df-469c-8f12-fbe5350302bd))
-  (fp_circle (center 0 0) (end 0.75 0) (layer "F.Mask") (width 0.15) (fill none) (tstamp 8dd65997-f71a-4837-86cd-9c15951d5cbf))
+(footprint "Creative_Commons_NC_Mask"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at 0 -1.55 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "aa6178fc-1512-4a43-90cc-018fe934805c")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "Logo"
+		(at 0 2 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "9725207c-36a1-4a51-a5e2-5508afabfa89")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "B.Fab")
+		(hide yes)
+		(uuid "05732a8c-70a4-4f6f-a8b7-270cd86721cc")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+			(justify mirror)
+		)
+	)
+	(property "Description" "Not Populated"
+		(at 149.4 -97.1 0)
+		(layer "B.Fab")
+		(hide yes)
+		(uuid "c932384b-8386-44df-9611-9b5c4772d5be")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+			(justify mirror)
+		)
+	)
+	(attr exclude_from_pos_files)
+	(fp_line
+		(start 0.675 0.3)
+		(end 0 0)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.Mask")
+		(uuid "e3fe042f-09c8-4928-82e3-59516ba87252")
+	)
+	(fp_line
+		(start 0.225 -0.375)
+		(end 0.075 -0.425)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.Mask")
+		(uuid "80803674-8be7-4344-87a2-0035b8a820d8")
+	)
+	(fp_line
+		(start 0 0.5)
+		(end 0 -0.5)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.Mask")
+		(uuid "5566b302-731f-42d8-944a-4c40b20a4216")
+	)
+	(fp_line
+		(start 0 0)
+		(end -0.675 -0.3)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.Mask")
+		(uuid "735ad2aa-109f-444c-a55b-ec3ed4b473f5")
+	)
+	(fp_line
+		(start -0.225 0.375)
+		(end -0.075 0.425)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.Mask")
+		(uuid "343be6b1-a306-410d-87a2-99f3ec1e01a8")
+	)
+	(fp_arc
+		(start 0.1 0.05)
+		(mid 0.195516 0.323006)
+		(end -0.075164 0.424928)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.Mask")
+		(uuid "6755e855-ecf6-4600-b205-bcfb26abb600")
+	)
+	(fp_arc
+		(start -0.1 -0.05)
+		(mid -0.195516 -0.323006)
+		(end 0.075164 -0.424928)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.Mask")
+		(uuid "89771cc5-4df4-4621-9a03-c96ecd074eaf")
+	)
+	(fp_circle
+		(center 0 0)
+		(end 0.75 0)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Mask")
+		(uuid "c42cf786-1187-4880-9e3b-321d45c65d01")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 2.5 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "7bc4e248-4573-4c1d-b1e3-f3b3367a1ca6")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(embedded_fonts no)
 )

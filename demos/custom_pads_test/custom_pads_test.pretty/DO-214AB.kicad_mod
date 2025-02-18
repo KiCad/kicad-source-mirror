@@ -1,0 +1,164 @@
+(footprint "DO-214AB"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "Jedec DO-214AB diode package. Designed according to Fairchild SS32 datasheet.")
+	(tags "DO-214AB diode")
+	(property "Reference" "REF**"
+		(at 0 -4.2 0)
+		(layer "F.SilkS")
+		(uuid "15ca22b9-fb15-445f-aabd-07d65a70732c")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "R"
+		(at 0 4.6 0)
+		(layer "F.Fab")
+		(uuid "8731b146-7b99-4df0-bad7-f1280f1c9120")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "042b0677-6ead-4e39-ba10-c9f4ac7178c2")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "01cf8795-7b9c-4d76-90b3-750c378fa3bf")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start -4.8 -3.2)
+		(end 3.5 -3.2)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "98ee4eb4-2a96-427f-86af-6590bda73985")
+	)
+	(fp_line
+		(start 3.5 3.2)
+		(end -4.8 3.2)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "70e3a385-0347-44c0-81f1-3acb71af8d48")
+	)
+	(fp_line
+		(start -5.15 -3.45)
+		(end 5.15 -3.45)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "08710bed-b51c-4767-b3de-8ef1bb0fabae")
+	)
+	(fp_line
+		(start -5.15 3.45)
+		(end -5.15 -3.45)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "1e5de1db-fd73-4617-a2cb-c99b7d895b4e")
+	)
+	(fp_line
+		(start 5.15 -3.45)
+		(end 5.15 3.45)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "16fa0d09-b6e0-4e73-9e6d-e7b755da6f92")
+	)
+	(fp_line
+		(start 5.15 3.45)
+		(end -5.15 3.45)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "1fcd6268-b6ac-4dee-9d00-fbd0cf1bbe00")
+	)
+	(pad "1" smd roundrect
+		(at -3.6 0)
+		(size 2.6 3.2)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.1)
+		(teardrops
+			(best_length_ratio 0.5)
+			(max_length 1)
+			(best_width_ratio 1)
+			(max_width 2)
+			(curved_edges yes)
+			(filter_ratio 0.9)
+			(enabled yes)
+			(allow_two_segments yes)
+			(prefer_zone_connections yes)
+		)
+		(uuid "bcc3c200-ccf2-4002-b6e8-a1b01f6f399f")
+	)
+	(pad "2" smd circle
+		(at 3.048 -1.524)
+		(size 2.6 2.6)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(teardrops
+			(best_length_ratio 0.5)
+			(max_length 1)
+			(best_width_ratio 1)
+			(max_width 2)
+			(curved_edges yes)
+			(filter_ratio 0.9)
+			(enabled yes)
+			(allow_two_segments yes)
+			(prefer_zone_connections yes)
+		)
+		(uuid "ab75b0c0-03ac-419f-aab7-ff005c59950b")
+	)
+	(embedded_fonts no)
+	(model "Diodes_SMD.3dshapes/DO-214AB.wrl"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 0.39 0.39 0.39)
+		)
+		(rotate
+			(xyz 0 0 180)
+		)
+	)
+)

@@ -1,3 +1,4 @@
 (sym_lib_table
-  (lib (name "sonde_xilinx_schlib")(type "KiCad")(uri "${KIPRJMOD}/sonde_xilinx_schlib.kicad_sym")(options "")(descr ""))
+  (version 7)
+  (lib (name "sonde_xilinx")(type "KiCad")(uri "${KIPRJMOD}/sonde_xilinx.kicad_sym")(options "")(descr ""))
 )

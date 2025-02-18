@@ -470,7 +470,7 @@
   },
   "meta": {
     "filename": "test_pads_inside_pads.kicad_pro",
-    "version": 2
+    "version": 3
   },
   "net_settings": {
     "classes": [

@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "custom_pads_test")(type "KiCad")(uri "${KIPRJMOD}/custom_pads_test.pretty")(options "")(descr ""))
+)

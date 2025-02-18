@@ -1,5 +1,5 @@
 (kicad_sch
-	(version 20241209)
+	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
 	(uuid "f461a5d8-fc6d-4642-8e2f-877b228249af")
@@ -10,7 +10,7 @@
 		(rev "0")
 	)
 	(lib_symbols
-		(symbol "kit-coldfire_schlib:+3,3V"
+		(symbol "kit-dev-coldfire-xilinx_5213:+3,3V"
 			(power)
 			(pin_names
 				(offset 0)
@@ -108,7 +108,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "kit-coldfire_schlib:C"
+		(symbol "kit-dev-coldfire-xilinx_5213:C"
 			(pin_numbers
 				(hide yes)
 			)
@@ -234,9 +234,9 @@
 					)
 				)
 			)
-			(embedded_fonts no)
+			(embedded_fonts yes)
 		)
-		(symbol "kit-coldfire_schlib:CONN_20X2"
+		(symbol "kit-dev-coldfire-xilinx_5213:CONN_20X2"
 			(pin_names
 				(offset 0.254)
 				(hide yes)
@@ -1022,7 +1022,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "kit-coldfire_schlib:CONN_2X2"
+		(symbol "kit-dev-coldfire-xilinx_5213:CONN_2X2"
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -1160,7 +1160,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "kit-coldfire_schlib:CONN_6"
+		(symbol "kit-dev-coldfire-xilinx_5213:CONN_6"
 			(pin_names
 				(offset 0.762)
 				(hide yes)
@@ -1334,7 +1334,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "kit-coldfire_schlib:GND"
+		(symbol "kit-dev-coldfire-xilinx_5213:GND"
 			(power)
 			(pin_names
 				(offset 0)
@@ -1422,7 +1422,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "kit-coldfire_schlib:LED"
+		(symbol "kit-dev-coldfire-xilinx_5213:LED"
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -1568,9 +1568,9 @@
 					)
 				)
 			)
-			(embedded_fonts no)
+			(embedded_fonts yes)
 		)
-		(symbol "kit-coldfire_schlib:R"
+		(symbol "kit-dev-coldfire-xilinx_5213:R"
 			(pin_numbers
 				(hide yes)
 			)
@@ -1683,7 +1683,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "kit-coldfire_schlib:XCR3256-TQ144"
+		(symbol "kit-dev-coldfire-xilinx_5213:XCR3256-TQ144"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -7635,7 +7635,7 @@
 		(uuid "e749b7d3-d14f-40b3-abee-ff67c52b6e48")
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:GND")
+		(lib_id "kit-dev-coldfire-xilinx_5213:GND")
 		(at 69.85 30.48 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7701,7 +7701,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:CONN_6")
+		(lib_id "kit-dev-coldfire-xilinx_5213:CONN_6")
 		(at 59.69 26.67 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7780,7 +7780,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:R")
+		(lib_id "kit-dev-coldfire-xilinx_5213:R")
 		(at 234.95 137.16 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7847,7 +7847,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:LED")
+		(lib_id "kit-dev-coldfire-xilinx_5213:LED")
 		(at 248.92 137.16 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7914,7 +7914,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:GND")
+		(lib_id "kit-dev-coldfire-xilinx_5213:GND")
 		(at 255.27 137.16 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7980,7 +7980,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:C")
+		(lib_id "kit-dev-coldfire-xilinx_5213:C")
 		(at 223.52 156.21 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8049,7 +8049,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:C")
+		(lib_id "kit-dev-coldfire-xilinx_5213:C")
 		(at 231.14 156.21 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8118,7 +8118,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:C")
+		(lib_id "kit-dev-coldfire-xilinx_5213:C")
 		(at 238.76 156.21 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8187,7 +8187,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:C")
+		(lib_id "kit-dev-coldfire-xilinx_5213:C")
 		(at 246.38 156.21 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8256,7 +8256,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:C")
+		(lib_id "kit-dev-coldfire-xilinx_5213:C")
 		(at 193.04 156.21 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8325,7 +8325,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:C")
+		(lib_id "kit-dev-coldfire-xilinx_5213:C")
 		(at 200.66 156.21 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8394,7 +8394,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:C")
+		(lib_id "kit-dev-coldfire-xilinx_5213:C")
 		(at 208.28 156.21 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8463,7 +8463,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:C")
+		(lib_id "kit-dev-coldfire-xilinx_5213:C")
 		(at 215.9 156.21 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8532,7 +8532,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:C")
+		(lib_id "kit-dev-coldfire-xilinx_5213:C")
 		(at 254 156.21 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8601,7 +8601,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:C")
+		(lib_id "kit-dev-coldfire-xilinx_5213:C")
 		(at 261.62 156.21 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8670,7 +8670,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:C")
+		(lib_id "kit-dev-coldfire-xilinx_5213:C")
 		(at 269.24 156.21 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8739,7 +8739,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:+3,3V")
+		(lib_id "kit-dev-coldfire-xilinx_5213:+3,3V")
 		(at 193.04 148.59 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8804,7 +8804,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:GND")
+		(lib_id "kit-dev-coldfire-xilinx_5213:GND")
 		(at 193.04 163.83 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8870,7 +8870,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:R")
+		(lib_id "kit-dev-coldfire-xilinx_5213:R")
 		(at 234.95 129.54 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8937,7 +8937,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:LED")
+		(lib_id "kit-dev-coldfire-xilinx_5213:LED")
 		(at 248.92 129.54 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9004,7 +9004,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:GND")
+		(lib_id "kit-dev-coldfire-xilinx_5213:GND")
 		(at 255.27 129.54 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9070,7 +9070,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:R")
+		(lib_id "kit-dev-coldfire-xilinx_5213:R")
 		(at 83.82 16.51 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9137,7 +9137,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:+3,3V")
+		(lib_id "kit-dev-coldfire-xilinx_5213:+3,3V")
 		(at 91.44 16.51 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9202,7 +9202,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:+3,3V")
+		(lib_id "kit-dev-coldfire-xilinx_5213:+3,3V")
 		(at 69.85 33.02 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9267,7 +9267,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:CONN_2X2")
+		(lib_id "kit-dev-coldfire-xilinx_5213:CONN_2X2")
 		(at 167.64 31.75 0)
 		(mirror y)
 		(unit 1)
@@ -9341,7 +9341,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:CONN_20X2")
+		(lib_id "kit-dev-coldfire-xilinx_5213:CONN_20X2")
 		(at 233.68 77.47 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9522,7 +9522,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:GND")
+		(lib_id "kit-dev-coldfire-xilinx_5213:GND")
 		(at 245.11 53.34 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9588,7 +9588,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:GND")
+		(lib_id "kit-dev-coldfire-xilinx_5213:GND")
 		(at 245.11 101.6 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9654,7 +9654,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:XCR3256-TQ144")
+		(lib_id "kit-dev-coldfire-xilinx_5213:XCR3256-TQ144")
 		(at 115.57 104.14 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10147,7 +10147,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:GND")
+		(lib_id "kit-dev-coldfire-xilinx_5213:GND")
 		(at 87.63 31.75 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10213,7 +10213,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:R")
+		(lib_id "kit-dev-coldfire-xilinx_5213:R")
 		(at 265.43 99.06 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10280,7 +10280,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:+3,3V")
+		(lib_id "kit-dev-coldfire-xilinx_5213:+3,3V")
 		(at 275.59 99.06 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10345,7 +10345,7 @@
 		)
 	)
 	(symbol
-		(lib_id "kit-coldfire_schlib:GND")
+		(lib_id "kit-dev-coldfire-xilinx_5213:GND")
 		(at 88.9 104.14 270)
 		(unit 1)
 		(exclude_from_sim no)

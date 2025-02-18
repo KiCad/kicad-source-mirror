@@ -1,7 +1,7 @@
 (kicad_sch
-	(version 20231120)
+	(version 20250114)
 	(generator "eeschema")
-	(generator_version "7.99")
+	(generator_version "9.0")
 	(uuid "5a73122b-848b-428e-af45-cd70deba9234")
 	(paper "A4")
 	(lib_symbols
@@ -111,18 +111,6 @@
 				)
 				(polyline
 					(pts
-						(xy 2.54 0) (xy -0.635 0) (xy -0.635 2.413) (xy -1.016 1.651)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
 						(xy 2.54 2.54) (xy -1.905 2.54) (xy -2.54 1.905) (xy -3.175 2.54)
 					)
 					(stroke
@@ -133,26 +121,20 @@
 						(type none)
 					)
 				)
-			)
-			(symbol "Audio-Jack-2_Switch_1_1_1"
-				(pin passive line
-					(at 5.08 0 180)
-					(length 2.54)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
+				(polyline
+					(pts
+						(xy 2.54 0) (xy -0.635 0) (xy -0.635 2.413) (xy -1.016 1.651)
 					)
-					(number "R"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
 					)
 				)
+			)
+			(symbol "Audio-Jack-2_Switch_1_1_1"
 				(pin passive line
 					(at -5.08 -2.54 90)
 					(length 2.54)
@@ -189,9 +171,272 @@
 						)
 					)
 				)
+				(pin passive line
+					(at 5.08 0 180)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "R"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
 			)
+			(embedded_fonts no)
 		)
-		(symbol "Capacitors SMD:CC1206_100NF_50V_10%_X7R"
+		(symbol "multichannel_mixer:+12V"
+			(power)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "+12V"
+				(at 0 3.556 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "power-flag symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "Power Flag Symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "+12V_0_1"
+				(polyline
+					(pts
+						(xy -0.762 1.27) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54) (xy 0.762 1.27)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "+12V_1_1"
+				(pin power_in line
+					(at 0 0 90)
+					(length 0)
+					(hide yes)
+					(name "+12V"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "multichannel_mixer:+1V1"
+			(power)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "+1V1"
+				(at 0 3.556 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "power-flag symbol +1.1V"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "Power Flag Symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "+1V1_0_1"
+				(polyline
+					(pts
+						(xy -0.762 1.27) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54) (xy 0.762 1.27)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "+1V1_1_1"
+				(pin power_in line
+					(at 0 0 90)
+					(length 0)
+					(hide yes)
+					(name "+1V1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "multichannel_mixer:CC1206_100NF_50V_10%_X7R"
 			(pin_names
 				(offset 1.27)
 			)
@@ -708,8 +953,9 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
-		(symbol "Capacitors THD:CTEB_2.2UF_35V_10%_254-500X840"
+		(symbol "multichannel_mixer:CTEB_2.2UF_35V_10%_254-500X840"
 			(pin_names
 				(offset 1.27)
 			)
@@ -1178,9 +1424,9 @@
 					)
 				)
 				(arc
-					(start 4.064 0)
-					(mid 4.2034 -1.0553)
-					(end 4.6228 -2.032)
+					(start 4.6228 -2.032)
+					(mid 4.2033 -1.0545)
+					(end 4.064 0)
 					(stroke
 						(width 0.254)
 						(type solid)
@@ -1190,9 +1436,9 @@
 					)
 				)
 				(arc
-					(start 4.5974 2.032)
-					(mid 4.1925 1.0516)
-					(end 4.064 0)
+					(start 4.064 0)
+					(mid 4.1926 1.0523)
+					(end 4.5974 2.032)
 					(stroke
 						(width 0.254)
 						(type solid)
@@ -1248,8 +1494,808 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
-		(symbol "Operational Amplifiers:TL072CD"
+		(symbol "multichannel_mixer:GND"
+			(power)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "GND"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "GROUND power-flag symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "Power Flag Symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "GND_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "GND_1_1"
+				(pin power_in line
+					(at 0 0 270)
+					(length 0)
+					(hide yes)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "multichannel_mixer:POT"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "RV"
+				(at -4.445 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "POT"
+				(at -2.54 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Potentiometer"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "resistor variable"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Potentiometer*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "POT_0_1"
+				(rectangle
+					(start 1.016 2.54)
+					(end -1.016 -2.54)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.143 0) (xy 2.286 0.508) (xy 2.286 -0.508)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.54 0) (xy 1.524 0)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "POT_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 1.27)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 1.27)
+					(name "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 3.81 0 180)
+					(length 1.27)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "multichannel_mixer:R1206_10K_1%_0.25W_100PPM"
+			(pin_names
+				(offset 1.27)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "R"
+				(at 3.81 1.778 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "R1206_10K_1%_0.25W_100PPM"
+				(at 0 -4.953 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Footprint" "Resistors SMD:RESC3216X65N"
+				(at 0 -6.858 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\R1206_NIC_NRC.pdf"
+				(at 0 -8.763 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Description" "±1%"
+				(at 3.81 0 0)
+				(effects
+					(font
+						(size 0.635 0.635)
+					)
+				)
+			)
+			(property "Val" "10k"
+				(at 3.81 -1.778 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Part Number" "R1206_10K_1%_0.25W_100PPM"
+				(at 0 -10.668 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Library Ref" "Resistor - 1%"
+				(at 0 -12.573 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Library Path" "SchLib\\Resistors.SchLib"
+				(at 0 -14.478 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Comment" "10k"
+				(at 0 -16.383 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Component Kind" "Standard"
+				(at 0 -18.288 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Component Type" "Standard"
+				(at 0 -20.193 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "PackageDescription" " "
+				(at 0 -22.098 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Pin Count" "2"
+				(at 0 -24.003 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Footprint Path" "PcbLib\\Resistors SMD.PcbLib"
+				(at 0 -25.908 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Footprint Ref" "RESC3216X65N"
+				(at 0 -27.813 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Status" "Preferred"
+				(at 0 -29.718 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Power" "0.25W"
+				(at 0 -31.623 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "TC" "±100ppm/°C"
+				(at 0 -33.528 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Voltage" " "
+				(at 0 -35.433 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Tolerance" "±1%"
+				(at 0 -37.338 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Part Description" "General Purpose Thick Film Chip Resistor"
+				(at 0 -39.243 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer" "GENERIC"
+				(at 0 -41.148 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer Part Number" "R1206_10K_1%_0.25W_100PPM"
+				(at 0 -43.053 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Case" "1206"
+				(at 0 -44.958 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "PressFit" "No"
+				(at 0 -46.863 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Mounted" "Yes"
+				(at 0 -48.768 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Sense Comment" " "
+				(at 0 -50.673 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Sense" "No"
+				(at 0 -52.578 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Status Comment" " "
+				(at 0 -54.483 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Socket" "No"
+				(at 0 -56.388 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "SMD" "Yes"
+				(at 0 -58.293 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "ComponentHeight" " "
+				(at 0 -60.198 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer1 Example" "NIC COMPONENT"
+				(at 0 -62.103 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer1 Part Number" "NRC12F1002TRF"
+				(at 0 -64.008 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer1 ComponentHeight" "0.65mm"
+				(at 0 -65.913 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "HelpURL" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\R1206_NIC_NRC.pdf"
+				(at 0 -67.818 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Author" "CERN DEM JLC"
+				(at 0 -69.723 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "CreateDate" "12/03/07 00:00:00"
+				(at 0 -71.628 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "LatestRevisionDate" "03/13/08 00:00:00"
+				(at 0 -73.533 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Database Table Name" "Resistors"
+				(at 0 -75.438 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Library Name" "Resistors SMD"
+				(at 0 -77.343 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Footprint Library" "Resistors SMD"
+				(at 0 -79.248 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "License" "This work is licensed under the Creative Commons CC-BY-SA 4.0 License. To the extent that circuit schematics that use Licensed Material can be considered to be ‘Adapted Material’, then the copyright holder waives article 3.b of the license with respect to these schematics."
+				(at 0 -81.153 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "R1206_10K_1%_0.25W_100PPM_0_1"
+				(polyline
+					(pts
+						(xy 1.524 0.762) (xy 1.524 -0.762)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.524 -0.762) (xy 6.096 -0.762)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 6.096 0.762) (xy 1.524 0.762)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 6.096 -0.762) (xy 6.096 0.762)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at 0 0 0)
+					(length 1.524)
+					(name "1"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 0 180)
+					(length 1.524)
+					(name "2"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "multichannel_mixer:TL072CD"
 			(pin_names
 				(offset 1.27)
 			)
@@ -1705,24 +2751,6 @@
 			)
 			(symbol "TL072CD_0_1"
 				(pin power_in line
-					(at 5.08 -15.24 90)
-					(length 5.08)
-					(name "V-"
-						(effects
-							(font
-								(size 0.0254 0.0254)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.524 1.524)
-							)
-						)
-					)
-				)
-				(pin power_in line
 					(at 5.08 5.08 270)
 					(length 5.08)
 					(name "V+"
@@ -1733,6 +2761,24 @@
 						)
 					)
 					(number "8"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 5.08 -15.24 90)
+					(length 5.08)
+					(name "V-"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "4"
 						(effects
 							(font
 								(size 1.524 1.524)
@@ -1743,24 +2789,6 @@
 			)
 			(symbol "TL072CD_0_2"
 				(pin power_in line
-					(at 5.08 -15.24 90)
-					(length 5.08)
-					(name "V-"
-						(effects
-							(font
-								(size 0.0254 0.0254)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.524 1.524)
-							)
-						)
-					)
-				)
-				(pin power_in line
 					(at 5.08 5.08 270)
 					(length 5.08)
 					(name "V+"
@@ -1778,20 +2806,26 @@
 						)
 					)
 				)
-			)
-			(symbol "TL072CD_1_1"
-				(polyline
-					(pts
-						(xy 0 -10.16) (xy 10.16 -5.08)
+				(pin power_in line
+					(at 5.08 -15.24 90)
+					(length 5.08)
+					(name "V-"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
 					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
+					(number "4"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
 					)
 				)
+			)
+			(symbol "TL072CD_1_1"
 				(polyline
 					(pts
 						(xy 0 0) (xy 0 -10.16)
@@ -1818,7 +2852,7 @@
 				)
 				(polyline
 					(pts
-						(xy 1.016 -7.62) (xy 2.54 -7.62)
+						(xy 0 -10.16) (xy 10.16 -5.08)
 					)
 					(stroke
 						(width 0.254)
@@ -1842,6 +2876,18 @@
 				)
 				(polyline
 					(pts
+						(xy 1.016 -7.62) (xy 2.54 -7.62)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
 						(xy 1.778 -6.858) (xy 1.778 -8.382)
 					)
 					(stroke
@@ -1854,7 +2900,7 @@
 				)
 				(polyline
 					(pts
-						(xy 5.08 -7.62) (xy 5.08 -10.16)
+						(xy 5.08 0) (xy 5.08 -2.54)
 					)
 					(stroke
 						(width 0.254)
@@ -1866,7 +2912,7 @@
 				)
 				(polyline
 					(pts
-						(xy 5.08 0) (xy 5.08 -2.54)
+						(xy 5.08 -7.62) (xy 5.08 -10.16)
 					)
 					(stroke
 						(width 0.254)
@@ -1894,24 +2940,6 @@
 						)
 						(justify right bottom)
 						(hide yes)
-					)
-				)
-				(pin output line
-					(at 15.24 -5.08 180)
-					(length 5.08)
-					(name "OUT"
-						(effects
-							(font
-								(size 0.0254 0.0254)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.524 1.524)
-							)
-						)
 					)
 				)
 				(pin input line
@@ -1950,20 +2978,26 @@
 						)
 					)
 				)
-			)
-			(symbol "TL072CD_1_2"
-				(polyline
-					(pts
-						(xy 0 -10.16) (xy 10.16 -5.08)
+				(pin output line
+					(at 15.24 -5.08 180)
+					(length 5.08)
+					(name "OUT"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
 					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
+					(number "1"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
 					)
 				)
+			)
+			(symbol "TL072CD_1_2"
 				(polyline
 					(pts
 						(xy 0 0) (xy 0 -10.16)
@@ -1990,7 +3024,7 @@
 				)
 				(polyline
 					(pts
-						(xy 1.016 -7.62) (xy 2.54 -7.62)
+						(xy 0 -10.16) (xy 10.16 -5.08)
 					)
 					(stroke
 						(width 0.254)
@@ -2003,6 +3037,18 @@
 				(polyline
 					(pts
 						(xy 1.016 -2.54) (xy 2.54 -2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.016 -7.62) (xy 2.54 -7.62)
 					)
 					(stroke
 						(width 0.254)
@@ -2026,7 +3072,7 @@
 				)
 				(polyline
 					(pts
-						(xy 5.08 -7.62) (xy 5.08 -10.16)
+						(xy 5.08 0) (xy 5.08 -2.54)
 					)
 					(stroke
 						(width 0.254)
@@ -2038,7 +3084,7 @@
 				)
 				(polyline
 					(pts
-						(xy 5.08 0) (xy 5.08 -2.54)
+						(xy 5.08 -7.62) (xy 5.08 -10.16)
 					)
 					(stroke
 						(width 0.254)
@@ -2068,17 +3114,17 @@
 						(hide yes)
 					)
 				)
-				(pin output line
-					(at 15.24 -5.08 180)
+				(pin input line
+					(at -5.08 -2.54 0)
 					(length 5.08)
-					(name "OUT"
+					(name "IN+"
 						(effects
 							(font
 								(size 0.0254 0.0254)
 							)
 						)
 					)
-					(number "1"
+					(number "3"
 						(effects
 							(font
 								(size 1.524 1.524)
@@ -2104,17 +3150,17 @@
 						)
 					)
 				)
-				(pin input line
-					(at -5.08 -2.54 0)
+				(pin output line
+					(at 15.24 -5.08 180)
 					(length 5.08)
-					(name "IN+"
+					(name "OUT"
 						(effects
 							(font
 								(size 0.0254 0.0254)
 							)
 						)
 					)
-					(number "3"
+					(number "1"
 						(effects
 							(font
 								(size 1.524 1.524)
@@ -2124,18 +3170,6 @@
 				)
 			)
 			(symbol "TL072CD_2_1"
-				(polyline
-					(pts
-						(xy 0 -10.16) (xy 10.16 -5.08)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
 				(polyline
 					(pts
 						(xy 0 0) (xy 0 -10.16)
@@ -2162,7 +3196,7 @@
 				)
 				(polyline
 					(pts
-						(xy 1.016 -7.62) (xy 2.54 -7.62)
+						(xy 0 -10.16) (xy 10.16 -5.08)
 					)
 					(stroke
 						(width 0.254)
@@ -2186,6 +3220,18 @@
 				)
 				(polyline
 					(pts
+						(xy 1.016 -7.62) (xy 2.54 -7.62)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
 						(xy 1.778 -6.858) (xy 1.778 -8.382)
 					)
 					(stroke
@@ -2198,7 +3244,7 @@
 				)
 				(polyline
 					(pts
-						(xy 5.08 -7.62) (xy 5.08 -10.16)
+						(xy 5.08 0) (xy 5.08 -2.54)
 					)
 					(stroke
 						(width 0.254)
@@ -2210,7 +3256,7 @@
 				)
 				(polyline
 					(pts
-						(xy 5.08 0) (xy 5.08 -2.54)
+						(xy 5.08 -7.62) (xy 5.08 -10.16)
 					)
 					(stroke
 						(width 0.254)
@@ -2241,24 +3287,6 @@
 					)
 				)
 				(pin input line
-					(at -5.08 -7.62 0)
-					(length 5.08)
-					(name "IN+"
-						(effects
-							(font
-								(size 0.0254 0.0254)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.524 1.524)
-							)
-						)
-					)
-				)
-				(pin input line
 					(at -5.08 -2.54 0)
 					(length 5.08)
 					(name "IN-"
@@ -2269,6 +3297,24 @@
 						)
 					)
 					(number "6"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -5.08 -7.62 0)
+					(length 5.08)
+					(name "IN+"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "5"
 						(effects
 							(font
 								(size 1.524 1.524)
@@ -2298,18 +3344,6 @@
 			(symbol "TL072CD_2_2"
 				(polyline
 					(pts
-						(xy 0 -10.16) (xy 10.16 -5.08)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
 						(xy 0 0) (xy 0 -10.16)
 					)
 					(stroke
@@ -2334,7 +3368,7 @@
 				)
 				(polyline
 					(pts
-						(xy 1.016 -7.62) (xy 2.54 -7.62)
+						(xy 0 -10.16) (xy 10.16 -5.08)
 					)
 					(stroke
 						(width 0.254)
@@ -2358,6 +3392,18 @@
 				)
 				(polyline
 					(pts
+						(xy 1.016 -7.62) (xy 2.54 -7.62)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
 						(xy 1.778 -1.778) (xy 1.778 -3.302)
 					)
 					(stroke
@@ -2370,7 +3416,7 @@
 				)
 				(polyline
 					(pts
-						(xy 5.08 -7.62) (xy 5.08 -10.16)
+						(xy 5.08 0) (xy 5.08 -2.54)
 					)
 					(stroke
 						(width 0.254)
@@ -2382,7 +3428,7 @@
 				)
 				(polyline
 					(pts
-						(xy 5.08 0) (xy 5.08 -2.54)
+						(xy 5.08 -7.62) (xy 5.08 -10.16)
 					)
 					(stroke
 						(width 0.254)
@@ -2467,1039 +3513,7 @@
 					)
 				)
 			)
-		)
-		(symbol "Resistors SMD:R1206_10K_1%_0.25W_100PPM"
-			(pin_names
-				(offset 1.27)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "R"
-				(at 3.81 1.778 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "R1206_10K_1%_0.25W_100PPM"
-				(at 0 -4.953 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Footprint" "Resistors SMD:RESC3216X65N"
-				(at 0 -6.858 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\R1206_NIC_NRC.pdf"
-				(at 0 -8.763 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Description" "±1%"
-				(at 3.81 0 0)
-				(effects
-					(font
-						(size 0.635 0.635)
-					)
-				)
-			)
-			(property "Val" "10k"
-				(at 3.81 -1.778 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Part Number" "R1206_10K_1%_0.25W_100PPM"
-				(at 0 -10.668 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Library Ref" "Resistor - 1%"
-				(at 0 -12.573 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Library Path" "SchLib\\Resistors.SchLib"
-				(at 0 -14.478 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Comment" "10k"
-				(at 0 -16.383 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Component Kind" "Standard"
-				(at 0 -18.288 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Component Type" "Standard"
-				(at 0 -20.193 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "PackageDescription" " "
-				(at 0 -22.098 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Pin Count" "2"
-				(at 0 -24.003 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Footprint Path" "PcbLib\\Resistors SMD.PcbLib"
-				(at 0 -25.908 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Footprint Ref" "RESC3216X65N"
-				(at 0 -27.813 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Status" "Preferred"
-				(at 0 -29.718 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Power" "0.25W"
-				(at 0 -31.623 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "TC" "±100ppm/°C"
-				(at 0 -33.528 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Voltage" " "
-				(at 0 -35.433 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Tolerance" "±1%"
-				(at 0 -37.338 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Part Description" "General Purpose Thick Film Chip Resistor"
-				(at 0 -39.243 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Manufacturer" "GENERIC"
-				(at 0 -41.148 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Manufacturer Part Number" "R1206_10K_1%_0.25W_100PPM"
-				(at 0 -43.053 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Case" "1206"
-				(at 0 -44.958 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "PressFit" "No"
-				(at 0 -46.863 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Mounted" "Yes"
-				(at 0 -48.768 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Sense Comment" " "
-				(at 0 -50.673 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Sense" "No"
-				(at 0 -52.578 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Status Comment" " "
-				(at 0 -54.483 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Socket" "No"
-				(at 0 -56.388 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "SMD" "Yes"
-				(at 0 -58.293 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "ComponentHeight" " "
-				(at 0 -60.198 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Manufacturer1 Example" "NIC COMPONENT"
-				(at 0 -62.103 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Manufacturer1 Part Number" "NRC12F1002TRF"
-				(at 0 -64.008 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Manufacturer1 ComponentHeight" "0.65mm"
-				(at 0 -65.913 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "HelpURL" "\\\\cern.ch\\dfs\\Applications\\Altium\\Datasheets\\R1206_NIC_NRC.pdf"
-				(at 0 -67.818 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Author" "CERN DEM JLC"
-				(at 0 -69.723 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "CreateDate" "12/03/07 00:00:00"
-				(at 0 -71.628 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "LatestRevisionDate" "03/13/08 00:00:00"
-				(at 0 -73.533 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Database Table Name" "Resistors"
-				(at 0 -75.438 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Library Name" "Resistors SMD"
-				(at 0 -77.343 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Footprint Library" "Resistors SMD"
-				(at 0 -79.248 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "License" "This work is licensed under the Creative Commons CC-BY-SA 4.0 License. To the extent that circuit schematics that use Licensed Material can be considered to be ‘Adapted Material’, then the copyright holder waives article 3.b of the license with respect to these schematics."
-				(at 0 -81.153 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "ki_locked" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "R1206_10K_1%_0.25W_100PPM_0_1"
-				(polyline
-					(pts
-						(xy 1.524 -0.762) (xy 6.096 -0.762)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 1.524 0.762) (xy 1.524 -0.762)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 6.096 -0.762) (xy 6.096 0.762)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 6.096 0.762) (xy 1.524 0.762)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(pin passive line
-					(at 0 0 0)
-					(length 1.524)
-					(name "1"
-						(effects
-							(font
-								(size 0.0254 0.0254)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 0.0254 0.0254)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 7.62 0 180)
-					(length 1.524)
-					(name "2"
-						(effects
-							(font
-								(size 0.0254 0.0254)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 0.0254 0.0254)
-							)
-						)
-					)
-				)
-			)
-		)
-		(symbol "device:POT"
-			(pin_names
-				(offset 1.016) hide)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "RV"
-				(at -4.445 0 90)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "POT"
-				(at -2.54 0 90)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Potentiometer"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "resistor variable"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "Potentiometer*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "POT_0_1"
-				(polyline
-					(pts
-						(xy 2.54 0) (xy 1.524 0)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 1.143 0) (xy 2.286 0.508) (xy 2.286 -0.508)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(rectangle
-					(start 1.016 2.54)
-					(end -1.016 -2.54)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "POT_1_1"
-				(pin passive line
-					(at 0 3.81 270)
-					(length 1.27)
-					(name "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 3.81 0 180)
-					(length 1.27)
-					(name "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -3.81 90)
-					(length 1.27)
-					(name "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
-		(symbol "power:+12V"
-			(power)
-			(pin_names
-				(offset 0)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#PWR"
-				(at 0 -3.81 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Value" "+12V"
-				(at 0 3.556 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "power-flag symbol"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "Power Flag Symbol"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "+12V_0_1"
-				(polyline
-					(pts
-						(xy -0.762 1.27) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 2.54) (xy 0.762 1.27)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "+12V_1_1"
-				(pin power_in line
-					(at 0 0 90)
-					(length 0) hide
-					(name "+12V"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
-		(symbol "power:+1V1"
-			(power)
-			(pin_names
-				(offset 0)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#PWR"
-				(at 0 -3.81 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Value" "+1V1"
-				(at 0 3.556 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "power-flag symbol +1.1V"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "Power Flag Symbol"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "+1V1_0_1"
-				(polyline
-					(pts
-						(xy -0.762 1.27) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 2.54) (xy 0.762 1.27)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "+1V1_1_1"
-				(pin power_in line
-					(at 0 0 90)
-					(length 0) hide
-					(name "+1V1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
-		(symbol "power:GND"
-			(power)
-			(pin_names
-				(offset 0)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#PWR"
-				(at 0 -6.35 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Value" "GND"
-				(at 0 -3.81 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "GROUND power-flag symbol"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "Power Flag Symbol"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "GND_0_1"
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "GND_1_1"
-				(pin power_in line
-					(at 0 0 270)
-					(length 0) hide
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
+			(embedded_fonts no)
 		)
 	)
 	(junction
@@ -4441,7 +4455,6 @@
 	(hierarchical_label "OUT"
 		(shape output)
 		(at 270.51 78.74 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4451,7 +4464,7 @@
 		(uuid "d7d48f5f-591e-445c-9a98-618d2d65dfcc")
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "multichannel_mixer:GND")
 		(at 132.08 102.87 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4509,12 +4522,12 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "#PWR016")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "#PWR024")
+					(unit 1)
+				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "#PWR016")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
@@ -4529,7 +4542,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Resistors SMD:R1206_10K_1%_0.25W_100PPM")
+		(lib_id "multichannel_mixer:R1206_10K_1%_0.25W_100PPM")
 		(at 161.29 105.41 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4980,27 +4993,27 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "R8")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "R19")
 					(unit 1)
 				)
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
-					(reference "R41")
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "R8")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
 					(reference "R30")
 					(unit 1)
 				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
+					(reference "R41")
+					(unit 1)
+				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "power:+12V")
+		(lib_id "multichannel_mixer:+12V")
 		(at 132.08 80.01 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5058,12 +5071,12 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "#PWR015")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "#PWR023")
+					(unit 1)
+				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "#PWR015")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
@@ -5078,7 +5091,7 @@
 		)
 	)
 	(symbol
-		(lib_id "device:POT")
+		(lib_id "multichannel_mixer:POT")
 		(at 167.64 52.07 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5087,7 +5100,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "1d0c295f-eb7a-47a0-8024-1b6f2243c198")
-		(property "Reference" "RV6"
+		(property "Reference" "RV2"
 			(at 167.64 45.72 90)
 			(effects
 				(font
@@ -5145,10 +5158,6 @@
 					(reference "RV6")
 					(unit 1)
 				)
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
-					(reference "RV14")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
 					(reference "RV2")
 					(unit 1)
@@ -5157,11 +5166,15 @@
 					(reference "RV10")
 					(unit 1)
 				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
+					(reference "RV14")
+					(unit 1)
+				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Resistors SMD:R1206_10K_1%_0.25W_100PPM")
+		(lib_id "multichannel_mixer:R1206_10K_1%_0.25W_100PPM")
 		(at 254 78.74 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5612,27 +5625,27 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "R14")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "R25")
 					(unit 1)
 				)
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
-					(reference "R47")
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "R14")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
 					(reference "R36")
 					(unit 1)
 				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
+					(reference "R47")
+					(unit 1)
+				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "power:+1V1")
+		(lib_id "multichannel_mixer:+1V1")
 		(at 120.65 102.87 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5690,12 +5703,12 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "#PWR014")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "#PWR022")
+					(unit 1)
+				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "#PWR014")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
@@ -5710,7 +5723,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Capacitors THD:CTEB_2.2UF_35V_10%_254-500X840")
+		(lib_id "multichannel_mixer:CTEB_2.2UF_35V_10%_254-500X840")
 		(at 262.89 78.74 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6143,27 +6156,27 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "C13")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "C22")
 					(unit 1)
 				)
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
-					(reference "C40")
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "C13")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
 					(reference "C31")
 					(unit 1)
 				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
+					(reference "C40")
+					(unit 1)
+				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Resistors SMD:R1206_10K_1%_0.25W_100PPM")
+		(lib_id "multichannel_mixer:R1206_10K_1%_0.25W_100PPM")
 		(at 151.13 81.28 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6614,27 +6627,27 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "R6")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "R17")
 					(unit 1)
 				)
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
-					(reference "R39")
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "R6")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
 					(reference "R28")
 					(unit 1)
 				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
+					(reference "R39")
+					(unit 1)
+				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "multichannel_mixer:GND")
 		(at 218.44 88.9 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6692,12 +6705,12 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "#PWR021")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "#PWR029")
+					(unit 1)
+				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "#PWR021")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
@@ -6712,7 +6725,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Resistors SMD:R1206_10K_1%_0.25W_100PPM")
+		(lib_id "multichannel_mixer:R1206_10K_1%_0.25W_100PPM")
 		(at 185.42 105.41 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7163,27 +7176,27 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "R12")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "R23")
 					(unit 1)
 				)
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
-					(reference "R45")
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "R12")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
 					(reference "R34")
 					(unit 1)
 				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
+					(reference "R45")
+					(unit 1)
+				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Capacitors SMD:CC1206_100NF_50V_10%_X7R")
+		(lib_id "multichannel_mixer:CC1206_100NF_50V_10%_X7R")
 		(at 208.28 67.31 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7616,27 +7629,27 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "C12")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "C21")
 					(unit 1)
 				)
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
-					(reference "C39")
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "C12")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
 					(reference "C30")
 					(unit 1)
 				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
+					(reference "C39")
+					(unit 1)
+				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "device:POT")
+		(lib_id "multichannel_mixer:POT")
 		(at 170.18 105.41 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7699,27 +7712,27 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "RV3")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "RV7")
 					(unit 1)
 				)
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
-					(reference "RV15")
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "RV3")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
 					(reference "RV11")
 					(unit 1)
 				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
+					(reference "RV15")
+					(unit 1)
+				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Resistors SMD:R1206_10K_1%_0.25W_100PPM")
+		(lib_id "multichannel_mixer:R1206_10K_1%_0.25W_100PPM")
 		(at 193.04 106.68 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8173,27 +8186,27 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "R13")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "R24")
 					(unit 1)
 				)
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
-					(reference "R46")
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "R13")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
 					(reference "R35")
 					(unit 1)
 				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
+					(reference "R46")
+					(unit 1)
+				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Resistors SMD:R1206_10K_1%_0.25W_100PPM")
+		(lib_id "multichannel_mixer:R1206_10K_1%_0.25W_100PPM")
 		(at 176.53 60.96 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8644,27 +8657,27 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "R11")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "R22")
 					(unit 1)
 				)
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
-					(reference "R44")
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "R11")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
 					(reference "R33")
 					(unit 1)
 				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
+					(reference "R44")
+					(unit 1)
+				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Resistors SMD:R1206_10K_1%_0.25W_100PPM")
+		(lib_id "multichannel_mixer:R1206_10K_1%_0.25W_100PPM")
 		(at 121.92 81.28 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9115,27 +9128,27 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "R5")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "R16")
 					(unit 1)
 				)
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
-					(reference "R38")
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "R5")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
 					(reference "R27")
 					(unit 1)
 				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
+					(reference "R38")
+					(unit 1)
+				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Capacitors SMD:CC1206_100NF_50V_10%_X7R")
+		(lib_id "multichannel_mixer:CC1206_100NF_50V_10%_X7R")
 		(at 193.04 118.11 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9570,27 +9583,27 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "C11")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "C20")
 					(unit 1)
 				)
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
-					(reference "C38")
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "C11")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
 					(reference "C29")
 					(unit 1)
 				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
+					(reference "C38")
+					(unit 1)
+				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Operational Amplifiers:TL072CD")
+		(lib_id "multichannel_mixer:TL072CD")
 		(at 213.36 73.66 0)
 		(unit 2)
 		(exclude_from_sim no)
@@ -9599,7 +9612,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "5857ce07-a51f-4553-b3df-2f5620627f8f")
-		(property "Reference" "IC3"
+		(property "Reference" "IC2"
 			(at 227.33 77.089 0)
 			(effects
 				(font
@@ -10068,10 +10081,6 @@
 					(reference "IC3")
 					(unit 2)
 				)
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
-					(reference "IC5")
-					(unit 2)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
 					(reference "IC2")
 					(unit 2)
@@ -10080,11 +10089,15 @@
 					(reference "IC4")
 					(unit 2)
 				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
+					(reference "IC5")
+					(unit 2)
+				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Capacitors SMD:CC1206_100NF_50V_10%_X7R")
+		(lib_id "multichannel_mixer:CC1206_100NF_50V_10%_X7R")
 		(at 125.73 68.58 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10093,7 +10106,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "7ea2438c-df3b-4510-8466-fa65d06ebb50")
-		(property "Reference" "C15"
+		(property "Reference" "C6"
 			(at 129.54 60.96 0)
 			(effects
 				(font
@@ -10521,10 +10534,6 @@
 					(reference "C15")
 					(unit 1)
 				)
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
-					(reference "C33")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
 					(reference "C6")
 					(unit 1)
@@ -10533,11 +10542,15 @@
 					(reference "C24")
 					(unit 1)
 				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
+					(reference "C33")
+					(unit 1)
+				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "multichannel_mixer:GND")
 		(at 193.04 118.11 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10595,12 +10608,12 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "#PWR017")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "#PWR025")
+					(unit 1)
+				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "#PWR017")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
@@ -10615,7 +10628,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Capacitors SMD:CC1206_100NF_50V_10%_X7R")
+		(lib_id "multichannel_mixer:CC1206_100NF_50V_10%_X7R")
 		(at 162.56 69.85 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11048,27 +11061,27 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "C7")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "C16")
 					(unit 1)
 				)
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
-					(reference "C34")
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "C7")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
 					(reference "C25")
 					(unit 1)
 				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
+					(reference "C34")
+					(unit 1)
+				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "multichannel_mixer:GND")
 		(at 204.47 68.58 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11126,12 +11139,12 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "#PWR018")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "#PWR026")
+					(unit 1)
+				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "#PWR018")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
@@ -11146,7 +11159,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Capacitors SMD:CC1206_100NF_50V_10%_X7R")
+		(lib_id "multichannel_mixer:CC1206_100NF_50V_10%_X7R")
 		(at 175.26 90.17 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11579,20 +11592,20 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "C9")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "C18")
 					(unit 1)
 				)
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
-					(reference "C36")
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "C9")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
 					(reference "C27")
+					(unit 1)
+				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
+					(reference "C36")
 					(unit 1)
 				)
 			)
@@ -11600,7 +11613,7 @@
 	)
 	(symbol
 		(lib_name "Audio-Jack-2_Switch_1")
-		(lib_id "Connector:Audio-Jack-2_Switch")
+		(lib_id "multichannel_mixer:Audio-Jack-2_Switch_1")
 		(at 83.82 83.82 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11663,12 +11676,12 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "J1")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "J7")
+					(unit 1)
+				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "J1")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
@@ -11683,7 +11696,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+1V1")
+		(lib_id "multichannel_mixer:+1V1")
 		(at 205.74 88.9 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11741,12 +11754,12 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "#PWR019")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "#PWR027")
+					(unit 1)
+				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "#PWR019")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
@@ -11761,7 +11774,7 @@
 		)
 	)
 	(symbol
-		(lib_id "device:POT")
+		(lib_id "multichannel_mixer:POT")
 		(at 243.84 78.74 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11824,27 +11837,27 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "RV4")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "RV8")
 					(unit 1)
 				)
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
-					(reference "RV16")
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "RV4")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
 					(reference "RV12")
 					(unit 1)
 				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
+					(reference "RV16")
+					(unit 1)
+				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Capacitors SMD:CC1206_100NF_50V_10%_X7R")
+		(lib_id "multichannel_mixer:CC1206_100NF_50V_10%_X7R")
 		(at 163.83 40.64 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12277,27 +12290,27 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "C8")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "C17")
 					(unit 1)
 				)
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
-					(reference "C35")
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "C8")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
 					(reference "C26")
 					(unit 1)
 				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
+					(reference "C35")
+					(unit 1)
+				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Capacitors THD:CTEB_2.2UF_35V_10%_254-500X840")
+		(lib_id "multichannel_mixer:CTEB_2.2UF_35V_10%_254-500X840")
 		(at 102.87 81.28 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12306,7 +12319,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "bc4749c7-3dbe-4b06-b4ed-44cb7b70d768")
-		(property "Reference" "C14"
+		(property "Reference" "C5"
 			(at 99.8697 73.66 0)
 			(effects
 				(font
@@ -12734,10 +12747,6 @@
 					(reference "C14")
 					(unit 1)
 				)
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
-					(reference "C32")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
 					(reference "C5")
 					(unit 1)
@@ -12746,11 +12755,15 @@
 					(reference "C23")
 					(unit 1)
 				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
+					(reference "C32")
+					(unit 1)
+				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "power:+12V")
+		(lib_id "multichannel_mixer:+12V")
 		(at 218.44 64.77 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12808,12 +12821,12 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "#PWR020")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "#PWR028")
+					(unit 1)
+				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "#PWR020")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
@@ -12828,7 +12841,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "multichannel_mixer:GND")
 		(at 78.74 93.98 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12886,12 +12899,12 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "#PWR048")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "#PWR049")
+					(unit 1)
+				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "#PWR048")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
@@ -12906,7 +12919,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Capacitors SMD:CC1206_100NF_50V_10%_X7R")
+		(lib_id "multichannel_mixer:CC1206_100NF_50V_10%_X7R")
 		(at 175.26 96.52 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -13339,27 +13352,27 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "C10")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "C19")
 					(unit 1)
 				)
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
-					(reference "C37")
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "C10")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
 					(reference "C28")
 					(unit 1)
 				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
+					(reference "C37")
+					(unit 1)
+				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Operational Amplifiers:TL072CD")
+		(lib_id "multichannel_mixer:TL072CD")
 		(at 127 87.63 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -13368,7 +13381,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "dbb100be-d780-4615-a444-8bcc3628c99d")
-		(property "Reference" "IC3"
+		(property "Reference" "IC2"
 			(at 140.97 91.059 0)
 			(effects
 				(font
@@ -13836,10 +13849,6 @@
 					(reference "IC3")
 					(unit 1)
 				)
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
-					(reference "IC5")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
 					(reference "IC2")
 					(unit 1)
@@ -13848,11 +13857,15 @@
 					(reference "IC4")
 					(unit 1)
 				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
+					(reference "IC5")
+					(unit 1)
+				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Resistors SMD:R1206_10K_1%_0.25W_100PPM")
+		(lib_id "multichannel_mixer:R1206_10K_1%_0.25W_100PPM")
 		(at 152.4 52.07 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -14303,27 +14316,27 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "R7")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "R18")
 					(unit 1)
 				)
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
-					(reference "R40")
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "R7")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
 					(reference "R29")
 					(unit 1)
 				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
+					(reference "R40")
+					(unit 1)
+				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "device:POT")
+		(lib_id "multichannel_mixer:POT")
 		(at 166.37 81.28 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -14386,27 +14399,27 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "RV1")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "RV5")
 					(unit 1)
 				)
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
-					(reference "RV13")
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "RV1")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
 					(reference "RV9")
 					(unit 1)
 				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
+					(reference "RV13")
+					(unit 1)
+				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Resistors SMD:R1206_10K_1%_0.25W_100PPM")
+		(lib_id "multichannel_mixer:R1206_10K_1%_0.25W_100PPM")
 		(at 110.49 81.28 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -14415,7 +14428,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "f28ce32c-3d47-447b-bffd-6e1a94f0a674")
-		(property "Reference" "R15"
+		(property "Reference" "R4"
 			(at 114.3 73.66 0)
 			(effects
 				(font
@@ -14861,10 +14874,6 @@
 					(reference "R15")
 					(unit 1)
 				)
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
-					(reference "R37")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
 					(reference "R4")
 					(unit 1)
@@ -14873,11 +14882,15 @@
 					(reference "R26")
 					(unit 1)
 				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
+					(reference "R37")
+					(unit 1)
+				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Resistors SMD:R1206_10K_1%_0.25W_100PPM")
+		(lib_id "multichannel_mixer:R1206_10K_1%_0.25W_100PPM")
 		(at 176.53 52.07 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -15328,27 +15341,27 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "R10")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "R21")
 					(unit 1)
 				)
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
-					(reference "R43")
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "R10")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
 					(reference "R32")
 					(unit 1)
 				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
+					(reference "R43")
+					(unit 1)
+				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Resistors SMD:R1206_10K_1%_0.25W_100PPM")
+		(lib_id "multichannel_mixer:R1206_10K_1%_0.25W_100PPM")
 		(at 175.26 81.28 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -15799,20 +15812,20 @@
 		)
 		(instances
 			(project "multichannel_mixer"
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
-					(reference "R9")
-					(unit 1)
-				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/28f12a69-adb8-432e-b16f-23450e62f642"
 					(reference "R20")
 					(unit 1)
 				)
-				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
-					(reference "R42")
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/8b945230-5f99-4834-98ec-44a11b86c8e7"
+					(reference "R9")
 					(unit 1)
 				)
 				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/b924e033-d20d-4b7d-8c8a-6be6c11f2802"
 					(reference "R31")
+					(unit 1)
+				)
+				(path "/203cc2bf-f6fc-43f5-9a16-6804dfef98e8/eaae7191-0144-4728-9382-3abf6e7a2d68"
+					(reference "R42")
 					(unit 1)
 				)
 			)

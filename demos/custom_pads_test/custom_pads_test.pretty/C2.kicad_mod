@@ -1,0 +1,189 @@
+(footprint "C2"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "Condensateur = 2 pas")
+	(tags "C")
+	(property "Reference" "REF**"
+		(at -11.5 -15.1 0)
+		(layer "F.SilkS")
+		(uuid "53363dd1-5087-47c8-a306-e6779ad1e6bf")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.2)
+			)
+		)
+	)
+	(property "Value" "R"
+		(at -13.4 14 0)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "68c828ef-99ba-4dd3-a937-672cca5f8582")
+		(effects
+			(font
+				(size 1.016 1.016)
+				(thickness 0.2032)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4c745c78-8bd7-420e-b613-cba84ba8eabd")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "747af484-4315-42c3-86da-daf74d6acc1f")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(fp_circle
+		(center 0 0)
+		(end 12.065 -11.938)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "fadb3a80-bd42-46d5-a578-59c82654b74b")
+	)
+	(fp_circle
+		(center 0 0)
+		(end 17 3)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "56da88f3-c0d6-4a07-bb9d-db848d9fc3a3")
+	)
+	(pad "1" connect custom
+		(at -11.081 -0.025 90)
+		(size 1.397 1.397)
+		(layers "F.Cu" "F.Mask")
+		(solder_mask_margin 0.5)
+		(zone_connect 0)
+		(thermal_bridge_angle 45)
+		(options
+			(clearance convexhull)
+			(anchor rect)
+		)
+		(primitives
+			(gr_line
+				(start 6 1.9)
+				(end 6 13.9)
+				(width 2)
+			)
+			(gr_line
+				(start -6 1.9)
+				(end -6 13.9)
+				(width 2)
+			)
+			(gr_line
+				(start 0 -0.1)
+				(end 0 18)
+				(width 2)
+			)
+			(gr_arc
+				(start -9.9 7.9)
+				(mid -0.049149 -0.19988)
+				(end 9.880067 7.803745)
+				(width 2)
+			)
+		)
+		(teardrops
+			(best_length_ratio 0.5)
+			(max_length 1)
+			(best_width_ratio 1)
+			(max_width 2)
+			(curved_edges yes)
+			(filter_ratio 0.9)
+			(enabled yes)
+			(allow_two_segments yes)
+			(prefer_zone_connections yes)
+		)
+		(uuid "f1cc4ca6-bc2d-452b-a8de-984cacb70ed1")
+	)
+	(pad "2" connect custom
+		(at 10.509 -0.025 270)
+		(size 3 3)
+		(layers "F.Cu" "F.Mask")
+		(zone_connect 0)
+		(options
+			(clearance outline)
+			(anchor circle)
+		)
+		(primitives
+			(gr_line
+				(start 3 0.5)
+				(end 3 17)
+				(width 2)
+			)
+			(gr_line
+				(start -3 0.5)
+				(end -3 17)
+				(width 2)
+			)
+			(gr_arc
+				(start -9.9 7.9)
+				(mid -1.506614 -0.086997)
+				(end 8.869415 5.068492)
+				(width 2)
+			)
+			(gr_arc
+				(start -15 7.9)
+				(mid 0.011791 -5.232741)
+				(end 15.003099 7.923378)
+				(width 2)
+			)
+			(gr_line
+				(start 0 0)
+				(end 0 -5)
+				(width 2)
+			)
+		)
+		(teardrops
+			(best_length_ratio 0.5)
+			(max_length 1)
+			(best_width_ratio 1)
+			(max_width 2)
+			(curved_edges yes)
+			(filter_ratio 0.9)
+			(enabled yes)
+			(allow_two_segments yes)
+			(prefer_zone_connections yes)
+		)
+		(uuid "ee9d8514-5204-48ad-9d95-6ed7007255ca")
+	)
+	(embedded_fonts no)
+	(model "discret/capa_2pas_5x5mm.wrl"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)

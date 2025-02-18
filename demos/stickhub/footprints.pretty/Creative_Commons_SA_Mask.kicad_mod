@@ -1,30 +1,141 @@
-(footprint "Creative_Commons_SA_Mask" (version 20210126) (generator pcbnew) (layer "F.Cu")
-  (tedit 5F8D6615)
-  (property "Description" "Not Populated")
-  (property "Sheetfile" "StickHub.kicad_sch")
-  (property "Sheetname" "")
-  (attr exclude_from_pos_files)
-  (fp_text reference "REF**" (at 0 -1.55 unlocked) (layer "F.SilkS") hide
-    (effects (font (size 1 1) (thickness 0.15)))
-    (tstamp f60b2121-1ee4-4250-bd93-c904c3fdb820)
-  )
-  (fp_text value "Logo" (at 0 2 unlocked) (layer "F.Fab") hide
-    (effects (font (size 1 1) (thickness 0.15)))
-    (tstamp d61ce50d-c4c2-41b6-886f-13ed5588cb0b)
-  )
-  (fp_text user "${REFERENCE}" (at 0 2.5 unlocked) (layer "F.Fab") hide
-    (effects (font (size 1 1) (thickness 0.15)))
-    (tstamp 4410f378-aa5e-4780-9122-2ff8344b13f1)
-  )
-  (fp_line (start 0.35 0.15) (end 0.35 -0.15) (layer "F.Mask") (width 0.15) (tstamp 615972c3-c11f-43b4-b899-1f020ee0103b))
-  (fp_arc (start 0 -0.15) (end 0.35 -0.15) (angle -180) (layer "F.Mask") (width 0.15) (tstamp 04232dec-1ba2-429b-a265-871db390efe4))
-  (fp_arc (start 0 0.15) (end -0.35 0.15) (angle -180) (layer "F.Mask") (width 0.15) (tstamp ff3c2971-73fc-421a-b295-b6024cebf2d9))
-  (fp_circle (center 0 0) (end 0.75 0) (layer "F.Mask") (width 0.15) (fill none) (tstamp 4032e005-8f6c-4367-9316-ca52a2b3d5b1))
-  (fp_poly (pts (xy -0.35 0.025)
-    (xy -0.5 -0.2)
-    (xy -0.2 -0.2)) (layer "F.Mask") (width 0) (fill solid) (tstamp 054c9463-58d4-4103-bb1a-6a6a9fedf79a))
-  (fp_poly (pts (xy -0.275 0.15)
-    (xy -0.425 0.15)
-    (xy -0.425 0.075)
-    (xy -0.275 0.075)) (layer "F.Mask") (width 0) (fill solid) (tstamp dd7927e5-4b3d-4794-81de-45cbe8223c65))
+(footprint "Creative_Commons_SA_Mask"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at 0 -1.55 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "cc28a436-5b39-4f19-92ba-81c7d3d6f044")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "Logo"
+		(at 0 2 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "9c11b373-6448-4295-9403-394dedc8431a")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "B.Fab")
+		(hide yes)
+		(uuid "cc12cbfe-4a7e-4544-bd85-ed51580c5f5c")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+			(justify mirror)
+		)
+	)
+	(property "Description" "Not Populated"
+		(at 150.9 -97.1 0)
+		(layer "B.Fab")
+		(hide yes)
+		(uuid "fe33e75d-3b95-4a61-8c54-16f7f03a4d8d")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+			(justify mirror)
+		)
+	)
+	(attr exclude_from_pos_files)
+	(fp_line
+		(start 0.35 -0.15)
+		(end 0.35 0.15)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.Mask")
+		(uuid "4dffde25-cb02-4921-90b8-a71e2cce6f40")
+	)
+	(fp_arc
+		(start 0.35 0.15)
+		(mid 0 0.5)
+		(end -0.35 0.15)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.Mask")
+		(uuid "b878ab62-8126-489f-be7c-b4a839a50c57")
+	)
+	(fp_arc
+		(start -0.35 -0.15)
+		(mid 0 -0.5)
+		(end 0.35 -0.15)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.Mask")
+		(uuid "a1ae76f1-cc5f-482b-aaf8-e767b0c6918d")
+	)
+	(fp_circle
+		(center 0 0)
+		(end 0.75 0)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Mask")
+		(uuid "32b5e2bc-47e1-44cc-b6ce-5b1d353c7f6c")
+	)
+	(fp_poly
+		(pts
+			(xy -0.35 0.025) (xy -0.5 -0.2) (xy -0.2 -0.2)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill yes)
+		(layer "F.Mask")
+		(uuid "60e9123c-04f1-4d8b-a56a-840111fee39a")
+	)
+	(fp_poly
+		(pts
+			(xy -0.275 0.15) (xy -0.425 0.15) (xy -0.425 0.075) (xy -0.275 0.075)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill yes)
+		(layer "F.Mask")
+		(uuid "ba9ecb7e-4a72-4eb4-baa1-149bdb819bae")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 2.5 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "5accae93-c512-4072-9065-190da2748458")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(embedded_fonts no)
 )

@@ -1,5 +1,5 @@
 (kicad_sch
-	(version 20241209)
+	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
 	(uuid "994297ef-4ddc-40ea-b4d6-64ee58be7864")
@@ -10,7 +10,7 @@
 		(rev "1")
 	)
 	(lib_symbols
-		(symbol "complex_hierarchy_schlib:+12V"
+		(symbol "complex_hierarchy:+12V"
 			(power)
 			(pin_names
 				(offset 0)
@@ -121,7 +121,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "complex_hierarchy_schlib:-VAA"
+		(symbol "complex_hierarchy:-VAA"
 			(power)
 			(pin_names
 				(offset 0)
@@ -220,7 +220,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "complex_hierarchy_schlib:C"
+		(symbol "complex_hierarchy:C"
 			(pin_numbers
 				(hide yes)
 			)
@@ -348,7 +348,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "complex_hierarchy_schlib:CONN_2"
+		(symbol "complex_hierarchy:CONN_2"
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -450,7 +450,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "complex_hierarchy_schlib:D_Small"
+		(symbol "complex_hierarchy:D_Small"
 			(pin_numbers
 				(hide yes)
 			)
@@ -579,7 +579,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "complex_hierarchy_schlib:GND"
+		(symbol "complex_hierarchy:GND"
 			(power)
 			(pin_names
 				(offset 0)
@@ -666,7 +666,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "complex_hierarchy_schlib:HT"
+		(symbol "complex_hierarchy:HT"
 			(power)
 			(pin_names
 				(offset 0)
@@ -765,7 +765,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "complex_hierarchy_schlib:LM358N"
+		(symbol "complex_hierarchy:LM358N"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -976,7 +976,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "complex_hierarchy_schlib:MPSA42"
+		(symbol "complex_hierarchy:MPSA42"
 			(pin_names
 				(offset 0)
 			)
@@ -1167,7 +1167,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "complex_hierarchy_schlib:MPSA92"
+		(symbol "complex_hierarchy:MPSA92"
 			(pin_names
 				(offset 0)
 			)
@@ -1358,7 +1358,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "complex_hierarchy_schlib:POT"
+		(symbol "complex_hierarchy:POT"
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -1490,7 +1490,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "complex_hierarchy_schlib:R"
+		(symbol "complex_hierarchy:R"
 			(pin_numbers
 				(hide yes)
 			)
@@ -2547,7 +2547,7 @@
 		(uuid "f6412f6c-f1d3-410f-a9bc-77daa2b57dfd")
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:POT")
+		(lib_id "complex_hierarchy:POT")
 		(at 148.59 162.56 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2620,7 +2620,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:C")
+		(lib_id "complex_hierarchy:C")
 		(at 110.49 40.64 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2690,7 +2690,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:R")
+		(lib_id "complex_hierarchy:R")
 		(at 100.33 50.8 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2760,7 +2760,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:+12V")
+		(lib_id "complex_hierarchy:+12V")
 		(at 120.65 49.53 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2829,7 +2829,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:LM358N")
+		(lib_id "complex_hierarchy:LM358N")
 		(at 123.19 60.96 0)
 		(unit 2)
 		(exclude_from_sim no)
@@ -2917,7 +2917,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:HT")
+		(lib_id "complex_hierarchy:HT")
 		(at 218.44 83.82 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2986,7 +2986,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:HT")
+		(lib_id "complex_hierarchy:HT")
 		(at 200.66 64.77 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3055,7 +3055,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:HT")
+		(lib_id "complex_hierarchy:HT")
 		(at 185.42 67.31 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3124,7 +3124,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:MPSA92")
+		(lib_id "complex_hierarchy:MPSA92")
 		(at 198.12 83.82 0)
 		(mirror x)
 		(unit 1)
@@ -3200,7 +3200,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:GND")
+		(lib_id "complex_hierarchy:GND")
 		(at 128.27 162.56 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3270,7 +3270,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:R")
+		(lib_id "complex_hierarchy:R")
 		(at 133.35 162.56 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3340,7 +3340,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:GND")
+		(lib_id "complex_hierarchy:GND")
 		(at 260.35 115.57 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3410,7 +3410,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:R")
+		(lib_id "complex_hierarchy:R")
 		(at 240.03 105.41 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3480,7 +3480,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:C")
+		(lib_id "complex_hierarchy:C")
 		(at 205.74 146.05 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3552,7 +3552,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:C")
+		(lib_id "complex_hierarchy:C")
 		(at 101.6 64.77 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3624,7 +3624,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:CONN_2")
+		(lib_id "complex_hierarchy:CONN_2")
 		(at 34.29 53.34 0)
 		(mirror y)
 		(unit 1)
@@ -3695,7 +3695,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:LM358N")
+		(lib_id "complex_hierarchy:LM358N")
 		(at 162.56 137.16 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3783,7 +3783,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:GND")
+		(lib_id "complex_hierarchy:GND")
 		(at 101.6 69.85 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3853,7 +3853,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:GND")
+		(lib_id "complex_hierarchy:GND")
 		(at 45.72 57.15 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3923,7 +3923,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:R")
+		(lib_id "complex_hierarchy:R")
 		(at 82.55 50.8 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3993,7 +3993,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:CONN_2")
+		(lib_id "complex_hierarchy:CONN_2")
 		(at 273.05 111.76 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4063,7 +4063,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:R")
+		(lib_id "complex_hierarchy:R")
 		(at 187.96 137.16 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4133,7 +4133,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:+12V")
+		(lib_id "complex_hierarchy:+12V")
 		(at 160.02 125.73 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4202,7 +4202,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:R")
+		(lib_id "complex_hierarchy:R")
 		(at 226.06 129.54 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4272,7 +4272,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:R")
+		(lib_id "complex_hierarchy:R")
 		(at 184.15 129.54 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4342,7 +4342,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:GND")
+		(lib_id "complex_hierarchy:GND")
 		(at 185.42 97.79 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4412,7 +4412,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:R")
+		(lib_id "complex_hierarchy:R")
 		(at 185.42 91.44 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4482,7 +4482,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:D_Small")
+		(lib_id "complex_hierarchy:D_Small")
 		(at 185.42 71.12 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4552,7 +4552,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:R")
+		(lib_id "complex_hierarchy:R")
 		(at 200.66 69.85 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4622,7 +4622,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:D_Small")
+		(lib_id "complex_hierarchy:D_Small")
 		(at 185.42 78.74 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4692,7 +4692,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:GND")
+		(lib_id "complex_hierarchy:GND")
 		(at 177.8 132.08 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4762,7 +4762,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:MPSA42")
+		(lib_id "complex_hierarchy:MPSA42")
 		(at 198.12 129.54 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4837,7 +4837,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:GND")
+		(lib_id "complex_hierarchy:GND")
 		(at 218.44 134.62 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4907,7 +4907,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:D_Small")
+		(lib_id "complex_hierarchy:D_Small")
 		(at 200.66 114.3 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -4977,7 +4977,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:MPSA92")
+		(lib_id "complex_hierarchy:MPSA92")
 		(at 215.9 121.92 0)
 		(mirror x)
 		(unit 1)
@@ -5053,7 +5053,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:MPSA42")
+		(lib_id "complex_hierarchy:MPSA42")
 		(at 215.9 93.98 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5128,7 +5128,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:-VAA")
+		(lib_id "complex_hierarchy:-VAA")
 		(at 120.65 72.39 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5197,7 +5197,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:-VAA")
+		(lib_id "complex_hierarchy:-VAA")
 		(at 160.02 148.59 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5266,7 +5266,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:R")
+		(lib_id "complex_hierarchy:R")
 		(at 62.23 50.8 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5336,7 +5336,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:C")
+		(lib_id "complex_hierarchy:C")
 		(at 72.39 57.15 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5408,7 +5408,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:GND")
+		(lib_id "complex_hierarchy:GND")
 		(at 72.39 62.23 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5478,7 +5478,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:R")
+		(lib_id "complex_hierarchy:R")
 		(at 205.74 133.35 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5548,7 +5548,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:GND")
+		(lib_id "complex_hierarchy:GND")
 		(at 205.74 151.13 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5618,7 +5618,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:D_Small")
+		(lib_id "complex_hierarchy:D_Small")
 		(at 200.66 101.6 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5688,7 +5688,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:R")
+		(lib_id "complex_hierarchy:R")
 		(at 240.03 113.03 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5758,7 +5758,7 @@
 		)
 	)
 	(symbol
-		(lib_id "complex_hierarchy_schlib:R")
+		(lib_id "complex_hierarchy:R")
 		(at 231.14 129.54 180)
 		(unit 1)
 		(exclude_from_sim no)

@@ -1,5 +1,5 @@
 (kicad_sch
-	(version 20241209)
+	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
 	(uuid "15a5bbab-5625-4b9a-aabf-f67f0843b1a5")
@@ -1361,7 +1361,7 @@
 			(symbol "CP_0_1"
 				(rectangle
 					(start -2.286 0.508)
-					(end 2.286 0.508)
+					(end -2.286 1.016)
 					(stroke
 						(width 0)
 						(type default)
@@ -1372,7 +1372,7 @@
 				)
 				(rectangle
 					(start -2.286 0.508)
-					(end -2.286 1.016)
+					(end 2.286 0.508)
 					(stroke
 						(width 0)
 						(type default)
@@ -3128,7 +3128,7 @@
 				)
 				(polyline
 					(pts
-						(xy 3.2766 9.906) (xy 3.81 9.398)
+						(xy 3.2766 9.906) (xy -1.778 12.446)
 					)
 					(stroke
 						(width 0)
@@ -3140,7 +3140,7 @@
 				)
 				(polyline
 					(pts
-						(xy 3.2766 9.906) (xy -1.778 12.446)
+						(xy 3.2766 9.906) (xy 3.81 9.398)
 					)
 					(stroke
 						(width 0)
