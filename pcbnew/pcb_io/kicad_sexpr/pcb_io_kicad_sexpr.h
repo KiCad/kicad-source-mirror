@@ -203,32 +203,32 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
  * PLUGIN API, and only for the #PCB_PLUGIN plugin.  It is private to this implementation file so
  * it is not placed into a header.
  */
-class FP_CACHE_ITEM
+class FP_CACHE_ENTRY
 {
     WX_FILENAME                m_filename;
     std::unique_ptr<FOOTPRINT> m_footprint;
 
 public:
-    FP_CACHE_ITEM( FOOTPRINT* aFootprint, const WX_FILENAME& aFileName );
+    FP_CACHE_ENTRY( FOOTPRINT* aFootprint, const WX_FILENAME& aFileName );
 
     const WX_FILENAME& GetFileName() const { return m_filename; }
     void SetFilePath( const wxString& aFilePath ) { m_filename.SetPath( aFilePath ); }
     std::unique_ptr<FOOTPRINT>& GetFootprint() { return m_footprint; }
 };
 
-typedef boost::ptr_map<wxString, FP_CACHE_ITEM> FP_CACHE_FOOTPRINT_MAP;
-
 class FP_CACHE
 {
-    PCB_IO_KICAD_SEXPR*   m_owner;        // Plugin object that owns the cache.
-    wxFileName    m_lib_path;     // The path of the library.
-    wxString      m_lib_raw_path; // For quick comparisons.
-    FP_CACHE_FOOTPRINT_MAP m_footprints;   // Map of footprint filename to FOOTPRINT*.
+    PCB_IO_KICAD_SEXPR*   m_owner;          // Plugin object that owns the cache.
+    wxFileName            m_lib_path;       // The path of the library.
+    wxString              m_lib_raw_path;   // For quick comparisons.
 
-    bool m_cache_dirty;          // Stored separately because it's expensive to check
-                                 // m_cache_timestamp against all the files.
-    long long m_cache_timestamp; // A hash of the timestamps for all the footprint
-                                 // files.
+    boost::ptr_map<wxString, FP_CACHE_ENTRY> m_footprints;  // Map of footprint filename to
+                                                            //   cache entry.
+
+    bool      m_cache_dirty;       // Stored separately because it's expensive to check
+                                   // m_cache_timestamp against all the files.
+    long long m_cache_timestamp;   // A hash of the timestamps for all the footprint
+                                   // files.
 
 public:
     FP_CACHE( PCB_IO_KICAD_SEXPR* aOwner, const wxString& aLibraryPath );
@@ -239,7 +239,7 @@ public:
 
     bool Exists() const { return m_lib_path.IsOk() && m_lib_path.DirExists(); }
 
-    FP_CACHE_FOOTPRINT_MAP& GetFootprints() { return m_footprints; }
+    boost::ptr_map<wxString, FP_CACHE_ENTRY>& GetFootprints() { return m_footprints; }
 
     // Most all functions in this class throw IO_ERROR exceptions.  There are no
     // error codes nor user interface calls from here, nor in any PLUGIN.
@@ -324,17 +324,20 @@ public:
                     const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                      const std::map<std::string, UTF8>* aProperties = nullptr, PROJECT* aProject = nullptr ) override;
+                      const std::map<std::string, UTF8>* aProperties = nullptr,
+                      PROJECT* aProject = nullptr ) override;
 
-    BOARD* DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const std::map<std::string, UTF8>* aProperties,
-                     PROGRESS_REPORTER* aProgressReporter, unsigned aLineCount );
+    BOARD* DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const std::map<std::string,
+                   UTF8>* aProperties, PROGRESS_REPORTER* aProgressReporter, unsigned aLineCount );
 
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
-                             bool aBestEfforts, const std::map<std::string, UTF8>* aProperties = nullptr ) override;
+                             bool aBestEfforts, const std::map<std::string,
+                             UTF8>* aProperties = nullptr ) override;
 
     const FOOTPRINT* GetEnumeratedFootprint( const wxString& aLibraryPath,
                                              const wxString& aFootprintName,
-                                             const std::map<std::string, UTF8>* aProperties = nullptr ) override;
+                                             const std::map<std::string,
+                                             UTF8>* aProperties = nullptr ) override;
 
     bool FootprintExists( const wxString& aLibraryPath, const wxString& aFootprintName,
                           const std::map<std::string, UTF8>* aProperties = nullptr ) override;
@@ -392,7 +395,8 @@ protected:
     void validateCache( const wxString& aLibraryPath, bool checkModified = true );
 
     const FOOTPRINT* getFootprint( const wxString& aLibraryPath, const wxString& aFootprintName,
-                                   const std::map<std::string, UTF8>* aProperties, bool checkModified );
+                                   const std::map<std::string, UTF8>* aProperties,
+                                   bool checkModified );
 
     void init( const std::map<std::string, UTF8>* aProperties );
 

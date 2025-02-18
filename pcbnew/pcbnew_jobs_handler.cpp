@@ -1660,7 +1660,7 @@ int PCBNEW_JOBS_HANDLER::JobExportFpSvg( JOB* aJob )
     int exitCode = CLI::EXIT_CODES::OK;
 
     // Just plot all the symbols we can
-    FP_CACHE_FOOTPRINT_MAP& footprintMap = fpLib.GetFootprints();
+    boost::ptr_map<wxString, FP_CACHE_ENTRY>& footprintMap = fpLib.GetFootprints();
 
     bool singleFpPlotted = false;
 
@@ -1682,6 +1682,7 @@ int PCBNEW_JOBS_HANDLER::JobExportFpSvg( JOB* aJob )
         }
 
         exitCode = doFpExportSvg( svgJob, fp.get() );
+
         if( exitCode != CLI::EXIT_CODES::OK )
             break;
     }

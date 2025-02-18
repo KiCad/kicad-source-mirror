@@ -72,7 +72,7 @@
 using namespace PCB_KEYS_T;
 
 
-FP_CACHE_ITEM::FP_CACHE_ITEM( FOOTPRINT* aFootprint, const WX_FILENAME& aFileName ) :
+FP_CACHE_ENTRY::FP_CACHE_ENTRY( FOOTPRINT* aFootprint, const WX_FILENAME& aFileName ) :
         m_filename( aFileName ),
         m_footprint( aFootprint )
 { }
@@ -106,7 +106,7 @@ void FP_CACHE::Save( FOOTPRINT* aFootprintFilter )
 
     for( auto it = m_footprints.begin(); it != m_footprints.end(); ++it )
     {
-        FP_CACHE_ITEM*              fpCacheEntry = it->second;
+        FP_CACHE_ENTRY*             fpCacheEntry = it->second;
         std::unique_ptr<FOOTPRINT>& footprint = fpCacheEntry->GetFootprint();
 
         if( aFootprintFilter && footprint.get() != aFootprintFilter )
@@ -212,7 +212,7 @@ void FP_CACHE::Load()
                     THROW_IO_ERROR( wxEmptyString );   // caught locally, just below...
 
                 footprint->SetFPID( LIB_ID( wxEmptyString, fpName ) );
-                m_footprints.insert( fpName, new FP_CACHE_ITEM( footprint, fn ) );
+                m_footprints.insert( fpName, new FP_CACHE_ENTRY( footprint, fn ) );
             }
             catch( const IO_ERROR& ioe )
             {
@@ -235,7 +235,7 @@ void FP_CACHE::Load()
 
 void FP_CACHE::Remove( const wxString& aFootprintName )
 {
-    FP_CACHE_FOOTPRINT_MAP::const_iterator it = m_footprints.find( aFootprintName );
+    auto it = m_footprints.find( aFootprintName );
 
     if( it == m_footprints.end() )
     {
@@ -265,9 +265,7 @@ void FP_CACHE::SetPath( const wxString& aPath )
 
 
     for( const auto& footprint : GetFootprints() )
-    {
         footprint.second->SetFilePath( aPath );
-    }
 }
 
 
@@ -2801,9 +2799,9 @@ void PCB_IO_KICAD_SEXPR::FootprintEnumerate( wxArrayString& aFootprintNames, con
 
 
 const FOOTPRINT* PCB_IO_KICAD_SEXPR::getFootprint( const wxString& aLibraryPath,
-                                           const wxString& aFootprintName,
-                                           const std::map<std::string, UTF8>* aProperties,
-                                           bool checkModified )
+                                                   const wxString& aFootprintName,
+                                                   const std::map<std::string, UTF8>* aProperties,
+                                                   bool checkModified )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -2818,10 +2816,9 @@ const FOOTPRINT* PCB_IO_KICAD_SEXPR::getFootprint( const wxString& aLibraryPath,
         // do nothing with the error
     }
 
-    FP_CACHE_FOOTPRINT_MAP& footprints = m_cache->GetFootprints();
-    auto                    it = footprints.find( aFootprintName );
+    auto it = m_cache->GetFootprints().find( aFootprintName );
 
-    if( it == footprints.end() )
+    if( it == m_cache->GetFootprints().end() )
         return nullptr;
 
     return it->second->GetFootprint().get();
@@ -2935,7 +2932,6 @@ void PCB_IO_KICAD_SEXPR::FootprintSave( const wxString& aLibraryPath, const FOOT
 
     wxString footprintName = aFootprint->GetFPID().GetLibItemName();
 
-    FP_CACHE_FOOTPRINT_MAP& footprints = m_cache->GetFootprints();
     wxString fpName = aFootprint->GetFPID().GetLibItemName().wx_str();
     ReplaceIllegalFileNameChars( fpName, '_' );
 
@@ -2959,12 +2955,12 @@ void PCB_IO_KICAD_SEXPR::FootprintSave( const wxString& aLibraryPath, const FOOT
 
     wxString fullPath = fn.GetFullPath();
     wxString fullName = fn.GetFullName();
-    FP_CACHE_FOOTPRINT_MAP::const_iterator it = footprints.find( footprintName );
+    auto     it = m_cache->GetFootprints().find( footprintName );
 
-    if( it != footprints.end() )
+    if( it != m_cache->GetFootprints().end() )
     {
         wxLogTrace( traceKicadPcbPlugin, wxT( "Removing footprint file '%s'." ), fullPath );
-        footprints.erase( footprintName );
+        m_cache->GetFootprints().erase( footprintName );
         wxRemoveFile( fullPath );
     }
 
@@ -2989,8 +2985,9 @@ void PCB_IO_KICAD_SEXPR::FootprintSave( const wxString& aLibraryPath, const FOOT
     footprint->SetParentGroup( nullptr );
 
     wxLogTrace( traceKicadPcbPlugin, wxT( "Creating s-expr footprint file '%s'." ), fullPath );
-    footprints.insert( footprintName,
-                       new FP_CACHE_ITEM( footprint, WX_FILENAME( fn.GetPath(), fullName ) ) );
+    m_cache->GetFootprints().insert( footprintName,
+                                     new FP_CACHE_ENTRY( footprint,
+                                                         WX_FILENAME( fn.GetPath(), fullName ) ) );
     m_cache->Save( footprint );
 }
 
