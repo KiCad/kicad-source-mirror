@@ -1547,6 +1547,6 @@ void BOARD_DESIGN_SETTINGS::SetDefaultMasterPad()
     m_Pad_Master->SetDrillSize( VECTOR2I( pcbIUScale.mmToIU( DEFAULT_PAD_DRILL_DIAMETER_MM ), 0 ) );
     m_Pad_Master->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::ROUNDRECT );
 
-    constexpr double RR_RADIUS = DEFAULT_PAD_HEIGTH_MM / DEFAULT_PAD_RR_RADIUS_RATIO;
+    constexpr double RR_RADIUS = DEFAULT_PAD_HEIGTH_MM * DEFAULT_PAD_RR_RADIUS_RATIO;
     m_Pad_Master->SetRoundRectCornerRadius( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( RR_RADIUS ) );
 }
