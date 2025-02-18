@@ -116,16 +116,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 08:10+0300\n"
-"PO-Revision-Date: 2025-02-16 17:56+0000\n"
-"Last-Translator: Luca Mattii <luca@glgprograms.it>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
-"source/it/>\n"
+"PO-Revision-Date: 2025-02-18 15:47+0000\n"
+"Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
+"master-source/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.10.1-dev\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -7131,9 +7131,9 @@ msgid "* [new] %s %s"
 msgstr "* [nuovo] %s %s"
 
 #: common/git/kicad_git_common.cpp:702
-#, fuzzy, c-format
+#, c-format
 msgid "Writing objects: %lld%% (%u/%u), %zu bytes"
-msgstr "Scrittura oggetti: %d%% (%d/%d), %d bytes"
+msgstr "Scrittura oggetti: %lld%% (%u/%u), %zu bytes"
 
 #: common/git/kicad_git_common.cpp:717
 #, c-format
@@ -11690,9 +11690,8 @@ msgid "Duplicate fields are not allowed."
 msgstr "Campi duplicati non permessi."
 
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:26
-#, fuzzy
 msgid "Default Fields"
-msgstr "La preimpostazione è 1"
+msgstr "Campi predefiniti"
 
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:104
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:137
@@ -11707,9 +11706,8 @@ msgid "Description:"
 msgstr "Descrizione:"
 
 #: eeschema/dialogs/dialog_design_block_properties_base.h:70
-#, fuzzy
 msgid "Design Block Properties"
-msgstr "Librerie blocchi progetto"
+msgstr "Proprietà blocco progetto"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:550
 #, c-format
@@ -35779,14 +35777,12 @@ msgid "Set to layer default values:"
 msgstr "Imposta ai valori predefiniti dello strato:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:34
-#, fuzzy
 msgid "Footprint fields"
-msgstr "Campi impronte:"
+msgstr "Campi impronta"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:35
-#, fuzzy
 msgid "Footprint fields that are not the reference designator or value field"
-msgstr "L'impronta di valore '%s' ha il riferimento vuoto."
+msgstr "I campi impronta che non sono valore o designatore di riferimento"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:39
 msgid "Footprint graphic items"
@@ -35797,9 +35793,8 @@ msgid "Footprint dimension items"
 msgstr "Elementi dimensione impronte"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
-#, fuzzy
 msgid "Footprint text items not associated with a field"
-msgstr "File di associazione impronte:"
+msgstr "Elementi di testo dell'impronta non associati a un campo"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:53
 msgid "PCB graphic items"
@@ -35823,9 +35818,8 @@ msgid "Set to specified values:"
 msgstr "Imposta a valori specificati:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:147
-#, fuzzy
 msgid "Visible  (text only)"
-msgstr "(solo editor di simboli)"
+msgstr "Visibile  (solo testo)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:235
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:102
@@ -35837,9 +35831,8 @@ msgid "Center on footprint"
 msgstr "Centra su impronta"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:254
-#, fuzzy
 msgid "Move footprint texts to the center of their parent"
-msgstr "Carica una impronta dalla scheda corrente nell'editor"
+msgstr "Sposta i testi impronte al centro del loro genitore"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:83
 msgid "Filter tracks by width:"
@@ -35850,9 +35843,8 @@ msgid "Filter vias by size:"
 msgstr "Filtra via per dimensione:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:150
-#, fuzzy
 msgid "-- leave unchanged --  "
-msgstr "-- abbandona i cambiamenti --"
+msgstr "-- abbandona i cambiamenti --  "
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:162
 msgid "Via size:"
@@ -35930,9 +35922,8 @@ msgid "Error loading footprint library table."
 msgstr "Errore nel caricamento tabella librerie impronte."
 
 #: pcbnew/dialogs/dialog_group_properties.cpp:114
-#, fuzzy
 msgid "Edit Group Properties"
-msgstr "Proprietà gruppo"
+msgstr "Modifica proprietà gruppo"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:30
 msgid "Group name:"
@@ -36024,9 +36015,8 @@ msgstr "Rimpiazza le impronte con quelle specificate nella netlist"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:59
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:43
-#, fuzzy
 msgid "Delete/replace footprints even if locked"
-msgstr "Cancella filtro impronte"
+msgstr "Elimina/rimpiazza impronte anche se bloccate"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:62
 msgid "Delete tracks shorting multiple nets"
@@ -36128,14 +36118,12 @@ msgid "Bottom/Back layer:"
 msgstr "Strato inferiore/retro:"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:210
-#, fuzzy
 msgid "Copper Layer Pair Presets"
-msgstr "Strati rame:"
+msgstr "Preimpostazioni coppie strati rame"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:229
-#, fuzzy
 msgid "Enabled"
-msgstr "Abilitati:"
+msgstr "Abilitato"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.h:55
 msgid "Select Layer"
@@ -36224,64 +36212,53 @@ msgid "Move Item"
 msgstr "Sposta elemento"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:61
-#, fuzzy
 msgid "Sheet Path"
-msgstr "Seleziona percorso"
+msgstr "Percorso foglio"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:64
-#, fuzzy
 msgid "Sheets"
-msgstr "Foglio"
+msgstr "Fogli"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:88
 #: pcbnew/footprint.cpp:1722 pcbnew/footprint.cpp:4114 pcbnew/zone.cpp:1863
-#, fuzzy
 msgid "Component Class"
-msgstr "Componenti"
+msgstr "Classe componenti"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:90
-#, fuzzy
 msgid "Component Classes"
-msgstr "Componenti"
+msgstr "Classi componenti"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:32
 msgid "Replace existing placement rule areas"
 msgstr "Sostituisci le aree delle regole di posizionamento esistenti"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:35
-#, fuzzy
 msgid "Group footprints with their placement rule areas"
-msgstr "File di piazzamento componenti"
+msgstr "Raggruppa le impronte con le relative aree regole di posizionamento"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.h:50
-#, fuzzy
 msgid "Generate Multichannel Rule Areas"
-msgstr "Converti in area regole"
+msgstr "Genera aree di regole multicanale"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:27
-#, fuzzy
 msgid "Target areas:"
-msgstr "Skew obiettivo:"
+msgstr "Aree obiettivo:"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:61
-#, fuzzy
 msgid "Reference Rule Area:"
-msgstr "Delimitatore riferimento:"
+msgstr "Area regole di riferimento:"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:77
-#, fuzzy
 msgid "Copy footprint placement"
-msgstr "Piazzamento"
+msgstr "Copia piazzamento impronte"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:80
-#, fuzzy
 msgid "Copy routing"
-msgstr "Copia impronta"
+msgstr "Copia sbroglio"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:83
-#, fuzzy
 msgid "Copy other items"
-msgstr "Altri elementi"
+msgstr "Copia altri elementi"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:84
 msgid "Copy text, shapes, zones, and other items inside the source rule area"
@@ -36290,19 +36267,16 @@ msgstr ""
 "di origine"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:88
-#, fuzzy
 msgid "Include footprints outside the reference rule area"
-msgstr "Includi componenti al di fuori dell'area di destinazione"
+msgstr "Includi impronte al di fuori dell'area della regola di riferimento"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:93
-#, fuzzy
 msgid "Group items with their target rule areas"
-msgstr "File di piazzamento componenti"
+msgstr "Raggruppa gli elementi con le relative aree di regola di destinazione"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:96
-#, fuzzy
 msgid "Remove locked items from target rule areas"
-msgstr "Rimuovi elemente da un gruppo"
+msgstr "Rimuovi gli oggetti bloccati dalle aree regole di destinazione"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.h:58
 msgid "Repeat Multichannel Layout"
@@ -36325,15 +36299,13 @@ msgid "Non Copper Zone Properties"
 msgstr "Proprietà zona non rame"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:26
-#, fuzzy
 msgid "Outset:"
-msgstr "Fuori"
+msgstr "Avvio:"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:30
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:79
-#, fuzzy
 msgid "0.1"
-msgstr ".1"
+msgstr "0.1"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:37
 msgid "Round outwards to grid multiples (when possible)"
@@ -36350,23 +36322,20 @@ msgid "Round corners (when possible)"
 msgstr "Angoli arrotondati (se possibile)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:46
-#, fuzzy
 msgid "Grid size:"
-msgstr "Griglie:"
+msgstr "Dimensione griglia:"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:50
 msgid "0.01"
 msgstr "0.01"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:60
-#, fuzzy
 msgid "Copy item layers"
-msgstr "Strati rame:"
+msgstr "Copia strati elemento"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:70
-#, fuzzy
 msgid "Copy item widths (if possible)"
-msgstr "Copia larghezza linea del primo oggetto"
+msgstr "Copia larghezze elemento (se possibile)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:71
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:93
@@ -36378,19 +36347,16 @@ msgstr ""
 "valore riportato di seguito."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:86
-#, fuzzy
 msgid "Layer default"
-msgstr "Predefiniti lacrime"
+msgstr "Predefiniti strato"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:92
-#, fuzzy
 msgid "Delete source items after outset"
-msgstr "Elimina gli oggetti sorgenti dopo la conversione"
+msgstr "Elimina elementi origine dopo l'inizio"
 
 #: pcbnew/dialogs/dialog_outset_items_base.h:77
-#, fuzzy
 msgid "Outset Items"
-msgstr "Elementi di testo"
+msgstr "Elementi inizio"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:179
 #: pcbnew/dialogs/dialog_pad_properties_base.h:288 pcbnew/pad.cpp:2578
@@ -36419,7 +36385,6 @@ msgstr "lato fronte"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:855
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:106
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:1004
-#, fuzzy
 msgid "Inner Layers"
 msgstr "Strati interni"
 
@@ -36441,9 +36406,8 @@ msgid "Pad Properties Warnings"
 msgstr "Avvertenze proprietà piazzole"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1609
-#, fuzzy
 msgid "Edit Pad Properties"
-msgstr "Modifica proprietà piedino"
+msgstr "Modifica proprietà piazzola"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1644
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:446
@@ -36499,9 +36463,8 @@ msgstr "Nome collegamento:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:92
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:279
-#, fuzzy
 msgid "Padstack mode:"
-msgstr "Modalità di tracciatura:"
+msgstr "Modalità padstack:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
 msgid "Front/Inner/Bottom"
@@ -36509,9 +36472,8 @@ msgstr "Anteriore/Interno/Inferiore"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:102
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:289
-#, fuzzy
 msgid "Edit layer:"
-msgstr "Strato finale:"
+msgstr "Modifica strato:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:120
 msgid "Pad shape:"
@@ -36768,9 +36730,8 @@ msgid "Castellated pad (through hole only)"
 msgstr "Piazzola castellata (solo fori passanti)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:583 pcbnew/pad.cpp:1332
-#, fuzzy
 msgid "Mechanical"
-msgstr "NPTH, meccanico"
+msgstr "Meccanico"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:615
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:447
@@ -36852,11 +36813,9 @@ msgid "Clearance Overrides"
 msgstr "Scavalcamento distanze"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:946
-#, fuzzy
 msgid "Leave values blank to use parent footprint or netclass values."
 msgstr ""
-"Imposta i valori a 0 per usare valori delle impronte genitori o della "
-"netclass."
+"Lascia i valori in bianco per usare i valori impronta genitore o netclass."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:950
 msgid ""
@@ -37003,7 +36962,7 @@ msgid "Warning: Scale option set to a very large value"
 msgstr "Attenzione: scala impostata ad un valore molto alto"
 
 #: pcbnew/dialogs/dialog_plot.cpp:1398
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' does not exist."
 msgstr "La cartella '%s' non esiste"
 
@@ -37016,19 +36975,16 @@ msgid "Gerber"
 msgstr "Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:47
-#, fuzzy
 msgid "Open output directory"
-msgstr "Cartella d'uscita"
+msgstr "Apri cartella d'uscita"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:85
-#, fuzzy
 msgid "Indicate DNP on fabrication layers"
-msgstr "Schizza piazzole su strati fab"
+msgstr "Indicare DNP sugli strati di fabbricazione"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:86
-#, fuzzy
 msgid "Hide or cross-out DNP footprints on fabrication layers"
-msgstr "Schizza piazzole su strati fab"
+msgstr "Nascondi o cancella le impronte DNP sugli strati di fabbricazione"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:90
 #: pcbnew/widgets/appearance_controls.cpp:653
@@ -37037,9 +36993,8 @@ msgid "Hide"
 msgstr "Nascondi"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:91
-#, fuzzy
 msgid "Hide the footprint text and graphics"
-msgstr "Altri elementi testo impronte"
+msgstr "Nascondi il testo e la grafica dell'impronta"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:95
 #, fuzzy
@@ -37065,9 +37020,8 @@ msgstr ""
 "tracciatura"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:108
-#, fuzzy
 msgid "Include pad numbers"
-msgstr "Includi strati"
+msgstr "Includi numeri piazzole"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:111
 msgid "Check zone fills before plotting"
@@ -37334,9 +37288,8 @@ msgid "Generate property popups for back footprints"
 msgstr "Genera finestre delle proprietà per le impronte sul retro"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:425
-#, fuzzy
 msgid "Single document"
-msgstr "Apri documento esistente"
+msgstr "Documento singolo"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:453
 msgid "Run DRC..."
@@ -37348,7 +37301,6 @@ msgid "(%d known DRC violations; %d exclusions)"
 msgstr "(%d violazioni DRC conosciute; %d esclusioni)"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:55
-#, fuzzy
 msgid "Track gap must be greater than 0."
 msgstr "Lo spazio piste deve essere maggiore di 0."
 
@@ -37368,7 +37320,6 @@ msgid "Via gap:"
 msgstr "Spazio via:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:67
-#, fuzzy
 msgid "Via gap same as track gap"
 msgstr "Spazio via uguale allo spazio piste"
 
@@ -37424,7 +37375,6 @@ msgid "Jump over obstacles"
 msgstr "Salta sopra gli ostacoli"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:57
-#, fuzzy
 msgid ""
 "When enabled, the router tries to move colliding tracks behind solid "
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
@@ -37455,7 +37405,6 @@ msgid "Optimize pad connections"
 msgstr "Ottimizza le connessioni piazzole"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:88
-#, fuzzy
 msgid ""
 "When enabled, the router tries to break out pads/vias in a clean way, "
 "avoiding acute angles and jagged breakout tracks."
@@ -37545,14 +37494,12 @@ msgid "Reset to the current Y offset from the reference position."
 msgstr "Reimposta allo spostamento Y corrente dalla posizione di riferimento."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:221
-#, fuzzy
 msgid "Select reference item..."
-msgstr "Fare clic su elemento di riferimento..."
+msgstr "Selezionare elemento di riferimento..."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:235
-#, fuzzy
 msgid "Select reference point..."
-msgstr "Selezionare il punto di riferimento per lo spostamento..."
+msgstr "Selezionare punto di riferimento..."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:246
 msgid "Reference location: grid origin"
@@ -49862,7 +49809,7 @@ msgstr "Rimuovi elementi"
 
 #: pcbnew/tools/pcb_actions.cpp:1205
 msgid "Remove items from group"
-msgstr "Rimuovi elemente da un gruppo"
+msgstr "Rimuovi elementi da un gruppo"
 
 #: pcbnew/tools/pcb_actions.cpp:1211
 msgid "Enter Group"
@@ -50646,7 +50593,7 @@ msgstr "Conteggio ripetizione"
 
 #: pcbnew/tools/pcb_actions.cpp:2237
 msgid "Clones placement & routing across multiple identical channels"
-msgstr ""
+msgstr "Posizionamento e sbroglio cloni su più canali identici"
 
 #: pcbnew/tools/pcb_actions.cpp:2248
 msgid "Route Single Track"
@@ -51997,9 +51944,8 @@ msgstr "Elimina gli elementi selezionati"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1262
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1395
-#, fuzzy
 msgid "Remove Selected Custom Group"
-msgstr "Rimuovi elemente da un gruppo"
+msgstr "Rimuovi gruppo personalizzato selezionato"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1287
 #, fuzzy
@@ -52036,9 +51982,8 @@ msgid "Add Custom Group"
 msgstr "Regole personalizzate"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1403
-#, fuzzy
 msgid "Remove All Custom Groups"
-msgstr "Rimuovi elemente da un gruppo"
+msgstr "Rimuovi tutti i gruppi personalizzati"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1411
 #, fuzzy
