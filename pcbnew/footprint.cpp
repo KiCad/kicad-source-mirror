@@ -1618,7 +1618,7 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
     // If there are some graphic items, build the actual hull.
     // However if no items, create a minimal polygon (can happen if a footprint
     // is created with no item: it contains only 2 texts.
-    if( rawPolys.OutlineCount() == 0 )
+    if( rawPolys.OutlineCount() == 0 || rawPolys.FullPointCount() < 3 )
     {
         // generate a small dummy rectangular outline around the anchor
         const int halfsize = pcbIUScale.mmToIU( 1.0 );
