@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-17 08:10+0300\n"
+"POT-Creation-Date: 2025-02-18 19:16+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
@@ -156,7 +156,7 @@ msgstr "เวลาอ่านอีกครั้ง %.3f s"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:116
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:59
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:503
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2694
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2698
 #, c-format
 msgid "Loading %s..."
 msgstr "กำลังอ่าน %s…"
@@ -1959,7 +1959,7 @@ msgid "KiCad Design Block folders"
 msgstr "ไฟล์โครงการ KiCad รุ่นเก่า"
 
 #: common/design_block_io.cpp:172
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3027
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3031
 #, c-format
 msgid "Cannot overwrite library path '%s'."
 msgstr "ไม่สามารถเขียนทับเส้นทางไลบรารี '%s'"
@@ -1976,7 +1976,7 @@ msgstr ""
 "ตรวจสอบให้แน่ใจว่าคุณมีสิทธิ์ในการเขียนแล้วลองอีกครั้ง"
 
 #: common/design_block_io.cpp:201 pcbnew/pcb_io/geda/pcb_io_geda.cpp:977
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3052
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3056
 #, c-format
 msgid "Insufficient permissions to delete folder '%s'."
 msgstr "มีสิทธิ์ไม่เพียงพอที่จะลบโฟลเดอร์ '%s'"
@@ -2999,7 +2999,7 @@ msgstr "บล็อกหัวเรื่อง"
 #: common/dialogs/dialog_page_settings.cpp:487
 #: eeschema/eeschema_jobs_handler.cpp:230 pagelayout_editor/files.cpp:243
 #: pagelayout_editor/pl_editor_frame.cpp:359
-#: pcbnew/pcbnew_jobs_handler.cpp:2143
+#: pcbnew/pcbnew_jobs_handler.cpp:2144
 #, c-format
 msgid "Error loading drawing sheet '%s'."
 msgstr "เกิดข้อผิดพลาดในการโหลดแผ่นเขียนแบบ '%s'"
@@ -5600,7 +5600,7 @@ msgid "Error switching GAL backend"
 msgstr ""
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:558
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3399
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3405
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3263
 #, fuzzy
 msgid "Failed to read image data."
@@ -11098,8 +11098,8 @@ msgstr "กรุณาเลือกไฟล์ตารางไลบรา
 #: eeschema/design_block_utils.cpp:475 eeschema/design_block_utils.cpp:517
 #: eeschema/design_block_utils.cpp:560 pcbnew/footprint_libraries_utils.cpp:552
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:958
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2930
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3008
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2934
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3012
 #, c-format
 msgid "Library '%s' is read only."
 msgstr "ไลบรารี '%s' อ่านได้อย่างเดียวเท่านั้น"
@@ -16927,7 +16927,7 @@ msgstr "โหลดไฟล์แผนผังวงจรไม่สำเ
 #: pcbnew/pcbnew_jobs_handler.cpp:811 pcbnew/pcbnew_jobs_handler.cpp:892
 #: pcbnew/pcbnew_jobs_handler.cpp:945 pcbnew/pcbnew_jobs_handler.cpp:1106
 #: pcbnew/pcbnew_jobs_handler.cpp:1246 pcbnew/pcbnew_jobs_handler.cpp:1381
-#: pcbnew/pcbnew_jobs_handler.cpp:1791 pcbnew/pcbnew_jobs_handler.cpp:1987
+#: pcbnew/pcbnew_jobs_handler.cpp:1792 pcbnew/pcbnew_jobs_handler.cpp:1988
 #, fuzzy
 msgid "Failed to create output directory\n"
 msgstr "ล้มเหลวที่จะนำไดเร็กตอรีออก %s"
@@ -17004,7 +17004,7 @@ msgstr "การบันทึกไลบรารีสัญลักษณ
 msgid "Symbol library was not updated\n"
 msgstr "ไลบรารีสัญลักษณ์ไม่ได้รับการปรับปรุง\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1179 pcbnew/pcbnew_jobs_handler.cpp:1914
+#: eeschema/eeschema_jobs_handler.cpp:1179 pcbnew/pcbnew_jobs_handler.cpp:1915
 #, fuzzy, c-format
 msgid "Found %d violations\n"
 msgstr "อนุญาตให้มีการละเมิด DRC"
@@ -19250,7 +19250,7 @@ msgstr "ไฟล์ไลบรารีสัญลักษณ์ KiCad"
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:62
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:220
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:506
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2697
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2701
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:154
 msgid "Open cancelled by user."
 msgstr "การเปิดถูกยกเลิกโดยผู้ใช้"
@@ -19358,7 +19358,7 @@ msgid "Invalid symbol name"
 msgstr "ชื่อสัญลักษณ์ไม่ถูกต้อง"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:342
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3026
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3032
 #, c-format
 msgid "Symbol %s contains invalid character '%c'"
 msgstr "สัญลักษณ์ %s มีอักขระไม่ถูกต้อง '%c'"
@@ -19406,65 +19406,65 @@ msgid "Invalid hyperlink url '%s'"
 msgstr "URL ไฮเปอร์ลิงก์ไม่ถูกต้อง '%s'"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:976
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2194
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2200
 msgid "Invalid property name"
 msgstr "ชื่อคุณสมบัติไม่ถูกต้อง"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:984
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2202
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2208
 msgid "Empty property name"
 msgstr "ชื่อคุณสมบัติว่างเปล่า"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1005
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2210
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2216
 msgid "Invalid property value"
 msgstr "ค่าคุณสมบัติไม่ถูกต้อง"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1612
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1618
 msgid "Invalid pin name"
 msgstr "ชื่อขาไม่ถูกต้อง"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1650
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1656
 msgid "Invalid pin number"
 msgstr "หมายเลขขาไม่ถูกต้อง"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1687
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1693
 msgid "Invalid alternate pin name"
 msgstr "ชื่อขาสำรองไม่ถูกต้อง"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1863
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1931
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1869
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1937
 msgid "Invalid text string"
 msgstr "ข้อความไม่ถูกต้อง"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2034
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2040
 msgid "Invalid page type"
 msgstr "ชนิดหน้าไม่ถูกต้อง"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2161
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2167
 msgid "Invalid title block comment number"
 msgstr "หมายเลขความคิดเห็นบนบล็อกหัวเรื่องไม่ถูกต้อง"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2328
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2334
 msgid "Invalid sheet pin name"
 msgstr "ชื่อชีตพินไม่ถูกต้อง"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2336
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2342
 msgid "Empty sheet pin name"
 msgstr "ชื่อชีตพินว่างเปล่า"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2883
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2896
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2937
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2889
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2902
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2943
 #, fuzzy
 msgid "No schematic object"
 msgstr "[ไม่มีการโหลดวงจร]"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2991
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2997
 msgid "Invalid symbol library name"
 msgstr "ชื่อไลบรารีสัญลักษณ์ไม่ถูกต้อง"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3032
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3038
 msgid "Invalid symbol library ID"
 msgstr "รหัสไลบรารีสัญลักษณ์ไม่ถูกต้อง"
 
@@ -42789,7 +42789,7 @@ msgstr ""
 msgid "Generating IPC2581 file"
 msgstr "สร้างไฟล์รายชื่อเน็ต IPC-D-356"
 
-#: pcbnew/files.cpp:1342 pcbnew/pcbnew_jobs_handler.cpp:2011
+#: pcbnew/files.cpp:1342 pcbnew/pcbnew_jobs_handler.cpp:2012
 #, fuzzy, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
@@ -42798,7 +42798,7 @@ msgstr ""
 "ข้อผิดพลาดในการบันทึกไฟล์บอร์ด '%s'\n"
 "%s"
 
-#: pcbnew/files.cpp:1406 pcbnew/pcbnew_jobs_handler.cpp:2044
+#: pcbnew/files.cpp:1406 pcbnew/pcbnew_jobs_handler.cpp:2045
 #, fuzzy, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
@@ -44662,7 +44662,7 @@ msgstr ""
 "ไม่สามารถปรับปรุงพีซีบี เนื่องจากตัวแก้ไขพีซีบีถูกเปิดในโหมดโดดเดี่ยว ในการสร้างหรืออัปเดตพีซีบี "
 "จากวงจรคุณต้องเปิดตัวจัดการโครงการ KiCad และสร้างโปรเจ็ก"
 
-#: pcbnew/pcb_edit_frame.cpp:2026 pcbnew/pcbnew_jobs_handler.cpp:1867
+#: pcbnew/pcb_edit_frame.cpp:2026 pcbnew/pcbnew_jobs_handler.cpp:1868
 msgid "Eeschema netlist"
 msgstr "รายชื่อเน็ตของ Eeschema"
 
@@ -45612,7 +45612,7 @@ msgid "CADSTAR PCB Archive files"
 msgstr "ไฟล์หน่วยเก็บถาวรพีซีบี CADSTAR"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:362
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:218
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:222
 #, c-format
 msgid "Unable to read file '%s'"
 msgstr "ไม่สามารถอ่านไฟล์ '%s'"
@@ -45912,13 +45912,13 @@ msgstr "ไม่สามารถแปลง '%s' เป็นจํานว
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:230
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:878
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:178
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:182
 #, c-format
 msgid "Footprint library '%s' not found."
 msgstr "ไม่พบไลบรารีฟุ้ทพรินท์ '%s'"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:284
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:238
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:242
 #, c-format
 msgid "Library '%s' has no footprint '%s'."
 msgstr "ไลบรารี '%s' ไม่มีฟุ้ทพรินท์ '%s'"
@@ -45936,7 +45936,7 @@ msgid "Element token contains %d parameters."
 msgstr "โทเค็นองค์ประกอบมีพารามิเตอร์ %d"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:985
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3060
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3064
 #, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
 msgstr "โฟลเดอร์ไลบรารี '%s' มีโฟลเดอร์ย่อยที่ไม่คาดคิด"
@@ -45948,7 +45948,7 @@ msgstr "พบไฟล์ที่ไม่คาดคิด '%s' ในไล
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:1023
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3263
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3097
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3101
 #, c-format
 msgid "Footprint library '%s' cannot be deleted."
 msgstr "ไม่สามารถลบไลบรารีฟุ้ทพรินท์ '%s'"
@@ -46103,17 +46103,17 @@ msgstr "ไม่สามารถสร้างไลบรารีฟุ้
 msgid "Footprint library '%s' is read only."
 msgstr "ไลบรารีฟุ้ทพรินท์ '%s' เป็นแบบอ่านอย่างเดียว"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:152
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:156
 #, c-format
 msgid "Cannot rename temporary file '%s' to '%s'"
 msgstr "ไม่สามารถเปลี่ยนชื่อไฟล์ชั่วคราว '%s' เป็น '%s'"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:316
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:320
 #, fuzzy
 msgid "Internal Group Data Error"
 msgstr "โครงสร้างข้อมูลกลุ่มภายในเสียหาย"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:317
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:321
 #, c-format
 msgid ""
 "Please report this bug.  Error validating group structure: %s\n"
@@ -46124,30 +46124,30 @@ msgstr ""
 "\n"
 "บันทึกหรือไม่?"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:319
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:323
 msgid "Save Anyway"
 msgstr "บันทึกต่อไป"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1453
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1457
 #, c-format
 msgid "unknown pad type: %d"
 msgstr "แพ็ดที่ไม่รู้จัก: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2302
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2306
 #, c-format
 msgid "unknown via type %d"
 msgstr "เวียที่ไม่รู้จัก %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2594
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2598
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "ประเภทการปรับมุมโซนที่ไม่รู้จัก %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2743
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2747
 msgid "This file does not contain a PCB."
 msgstr "ไฟล์นี้ไม่มีพีซีบอร์ด"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2916
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2920
 #, c-format
 msgid ""
 "Library '%s' does not exist.\n"
@@ -46156,21 +46156,21 @@ msgstr ""
 "ไลบรารี '%s' ไม่มีอยู่\n"
 "คุณต้องการสร้างหรือไม่?"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2921
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2925
 msgid "Library Not Found"
 msgstr "ไม่พบไลบรารี"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2949
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2953
 #, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "ชื่อไฟล์ฟุ้ทพรินท์ '%s' ไม่ถูกต้อง"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2955
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2959
 #, c-format
 msgid "Insufficient permissions to delete '%s'."
 msgstr "ไม่มีสิทธิเพียงพอสำหรับการลบ '%s'"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3079
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3083
 #, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
 msgstr "ไฟล์ที่ไม่คาดคิด '%s' พบในเส้นทางไลบรารี '%s'"
@@ -46784,50 +46784,50 @@ msgstr "ไม่สามารถบันทึกไลบรารี\n"
 msgid "Footprint library was not updated\n"
 msgstr "ไลบรารีฟุ้ทพรินท์ไม่ถูกปรับปรุง\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1690
+#: pcbnew/pcbnew_jobs_handler.cpp:1691
 #, fuzzy
 msgid "The given footprint could not be found to export."
 msgstr "ไฟล์เสมอเหมือน '%s' ค้นหาไม่พบ"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1732
+#: pcbnew/pcbnew_jobs_handler.cpp:1733
 #, c-format
 msgid "Plotting footprint '%s' to '%s'\n"
 msgstr "พล็อตฟุ้ทพรินท์ '%s' เป็น '%s'\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1752
+#: pcbnew/pcbnew_jobs_handler.cpp:1753
 #, fuzzy
 msgid "Error creating svg file"
 msgstr "เกิดข้อผิดพลาดในการอ่านไฟล์"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1820 pcbnew/tools/drc_tool.cpp:160
+#: pcbnew/pcbnew_jobs_handler.cpp:1821 pcbnew/tools/drc_tool.cpp:160
 msgid "Schematic parity tests require a fully annotated schematic."
 msgstr "การทดสอบความเท่าเทียมวงจร จำเป็นต้องมีคำอธิบายประกอบวงจรครบถ้วน"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1841 pcbnew/pcbnew_jobs_handler.cpp:1874
+#: pcbnew/pcbnew_jobs_handler.cpp:1842 pcbnew/pcbnew_jobs_handler.cpp:1875
 #, fuzzy
 msgid "Failed to fetch schematic netlist for parity tests.\n"
 msgstr "โหลดไฟล์แผนผังวงจรไม่สำเร็จ\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1896 pcbnew/tools/drc_tool.cpp:200
+#: pcbnew/pcbnew_jobs_handler.cpp:1897 pcbnew/tools/drc_tool.cpp:200
 msgid "DRC"
 msgstr "DRC"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1917
+#: pcbnew/pcbnew_jobs_handler.cpp:1918
 #, fuzzy, c-format
 msgid "Found %d unconnected items\n"
 msgstr "ชิ้นส่วนที่ไม่เชื่อมต่อ (%s)"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1923
+#: pcbnew/pcbnew_jobs_handler.cpp:1924
 #, c-format
 msgid "Found %d schematic parity issues\n"
 msgstr ""
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1939
+#: pcbnew/pcbnew_jobs_handler.cpp:1940
 #, fuzzy, c-format
 msgid "Unable to save DRC report to %s\n"
 msgstr "ไม่สามารถตีความคลังเก็บข้อมูล:%s"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1944
+#: pcbnew/pcbnew_jobs_handler.cpp:1945
 #, fuzzy, c-format
 msgid "Saved DRC Report to %s\n"
 msgstr "บันทึกรายงานลงไฟล์"

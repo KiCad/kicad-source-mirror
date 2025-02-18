@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-17 08:10+0300\n"
+"POT-Creation-Date: 2025-02-18 19:16+0300\n"
 "PO-Revision-Date: 2025-02-03 18:48+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
@@ -166,7 +166,7 @@ msgstr "Lastetid %.3f s"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:116
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:59
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:503
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2694
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2698
 #, fuzzy, c-format
 msgid "Loading %s..."
 msgstr "Laster %s"
@@ -2045,7 +2045,7 @@ msgid "KiCad Design Block folders"
 msgstr "KiCad eldre prosjektfiler"
 
 #: common/design_block_io.cpp:172
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3027
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3031
 #, fuzzy, c-format
 msgid "Cannot overwrite library path '%s'."
 msgstr "Kan ikke overskrive bibliotekstien \"%s\"."
@@ -2062,7 +2062,7 @@ msgstr ""
 "Forsikre deg om at du har skrivetillatelser, og prøv på nytt."
 
 #: common/design_block_io.cpp:201 pcbnew/pcb_io/geda/pcb_io_geda.cpp:977
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3052
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3056
 #, fuzzy, c-format
 msgid "Insufficient permissions to delete folder '%s'."
 msgstr ""
@@ -3107,7 +3107,7 @@ msgstr "Tittelblokk"
 #: common/dialogs/dialog_page_settings.cpp:487
 #: eeschema/eeschema_jobs_handler.cpp:230 pagelayout_editor/files.cpp:243
 #: pagelayout_editor/pl_editor_frame.cpp:359
-#: pcbnew/pcbnew_jobs_handler.cpp:2143
+#: pcbnew/pcbnew_jobs_handler.cpp:2144
 #, fuzzy, c-format
 msgid "Error loading drawing sheet '%s'."
 msgstr "Feil ved lasting av redigeringsprogram"
@@ -5797,7 +5797,7 @@ msgid "Error switching GAL backend"
 msgstr ""
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:558
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3399
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3405
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3263
 #, fuzzy
 msgid "Failed to read image data."
@@ -11460,8 +11460,8 @@ msgstr "Velg en symbolbibliotekstabellfil."
 #: eeschema/design_block_utils.cpp:475 eeschema/design_block_utils.cpp:517
 #: eeschema/design_block_utils.cpp:560 pcbnew/footprint_libraries_utils.cpp:552
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:958
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2930
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3008
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2934
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3012
 #, c-format
 msgid "Library '%s' is read only."
 msgstr "Biblioteket '%s' er skrivebeskyttet."
@@ -17410,7 +17410,7 @@ msgstr "Kunne ikke laste inn skjematisk \"%s\""
 #: pcbnew/pcbnew_jobs_handler.cpp:811 pcbnew/pcbnew_jobs_handler.cpp:892
 #: pcbnew/pcbnew_jobs_handler.cpp:945 pcbnew/pcbnew_jobs_handler.cpp:1106
 #: pcbnew/pcbnew_jobs_handler.cpp:1246 pcbnew/pcbnew_jobs_handler.cpp:1381
-#: pcbnew/pcbnew_jobs_handler.cpp:1791 pcbnew/pcbnew_jobs_handler.cpp:1987
+#: pcbnew/pcbnew_jobs_handler.cpp:1792 pcbnew/pcbnew_jobs_handler.cpp:1988
 #, fuzzy
 msgid "Failed to create output directory\n"
 msgstr "Kan ikke opprette katalogen \"%s\""
@@ -17492,7 +17492,7 @@ msgstr "Ugyldig symbolbibliotekidentifikator"
 msgid "Symbol library was not updated\n"
 msgstr "Symbolbiblioteket ikke aktivert."
 
-#: eeschema/eeschema_jobs_handler.cpp:1179 pcbnew/pcbnew_jobs_handler.cpp:1914
+#: eeschema/eeschema_jobs_handler.cpp:1179 pcbnew/pcbnew_jobs_handler.cpp:1915
 #, fuzzy, c-format
 msgid "Found %d violations\n"
 msgstr "Tillat DRC-brudd"
@@ -19806,7 +19806,7 @@ msgstr "KiCad-symbolbibliotekfiler"
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:62
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:220
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:506
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2697
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2701
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:154
 #, fuzzy
 msgid "Open cancelled by user."
@@ -19920,7 +19920,7 @@ msgid "Invalid symbol name"
 msgstr "Ugyldig signalnavn"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:342
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3026
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3032
 #, fuzzy, c-format
 msgid "Symbol %s contains invalid character '%c'"
 msgstr "Symbolnavn \"%s\" ble ikke funnet i biblioteket \"%s\""
@@ -19983,50 +19983,50 @@ msgid "Invalid hyperlink url '%s'"
 msgstr "Ugyldig signalnavn"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:976
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2194
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2200
 #, fuzzy
 msgid "Invalid property name"
 msgstr "Ugyldig signalnavn"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:984
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2202
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2208
 #, fuzzy
 msgid "Empty property name"
 msgstr "Skriv inn fotavtrykk navn:"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1005
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2210
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2216
 #, fuzzy
 msgid "Invalid property value"
 msgstr "Ugyldig krydderverdistreng"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1612
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1618
 #, fuzzy
 msgid "Invalid pin name"
 msgstr "Ugyldig signalnavn"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1650
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1656
 #, fuzzy
 msgid "Invalid pin number"
 msgstr "Ugyldig signalnavn"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1687
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1693
 #, fuzzy
 msgid "Invalid alternate pin name"
 msgstr "Alternativt pinnavn"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1863
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1931
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1869
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1937
 #, fuzzy
 msgid "Invalid text string"
 msgstr "Ugyldig krydderverdistreng"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2034
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2040
 #, fuzzy
 msgid "Invalid page type"
 msgstr "Ugyldig signalnavn"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2161
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2167
 #, fuzzy
 msgid "Invalid title block comment number"
 msgstr ""
@@ -20035,29 +20035,29 @@ msgstr ""
 "linje: %d\n"
 "forskyvning: %d"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2328
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2334
 #, fuzzy
 msgid "Invalid sheet pin name"
 msgstr "Ugyldig signalnavn"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2336
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2342
 #, fuzzy
 msgid "Empty sheet pin name"
 msgstr "Arkets filnavn"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2883
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2896
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2937
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2889
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2902
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2943
 #, fuzzy
 msgid "No schematic object"
 msgstr "Skjematisk lagret"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2991
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2997
 #, fuzzy
 msgid "Invalid symbol library name"
 msgstr "Ugyldig symbolbibliotekidentifikator"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3032
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3038
 #, fuzzy
 msgid "Invalid symbol library ID"
 msgstr "Ugyldig symbolbibliotekidentifikator"
@@ -44026,7 +44026,7 @@ msgstr ""
 msgid "Generating IPC2581 file"
 msgstr "Generer IPC-D-356 netlist-filen"
 
-#: pcbnew/files.cpp:1342 pcbnew/pcbnew_jobs_handler.cpp:2011
+#: pcbnew/files.cpp:1342 pcbnew/pcbnew_jobs_handler.cpp:2012
 #, fuzzy, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
@@ -44035,7 +44035,7 @@ msgstr ""
 "Feil ved lagring av tavlefilen \"%s\".\n"
 "%s"
 
-#: pcbnew/files.cpp:1406 pcbnew/pcbnew_jobs_handler.cpp:2044
+#: pcbnew/files.cpp:1406 pcbnew/pcbnew_jobs_handler.cpp:2045
 #, fuzzy, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
@@ -45953,7 +45953,7 @@ msgstr ""
 "opprette eller oppdatere PCB fra skjemaer, må du starte KiCad-prosjektleder "
 "og opprette et prosjekt."
 
-#: pcbnew/pcb_edit_frame.cpp:2026 pcbnew/pcbnew_jobs_handler.cpp:1867
+#: pcbnew/pcb_edit_frame.cpp:2026 pcbnew/pcbnew_jobs_handler.cpp:1868
 msgid "Eeschema netlist"
 msgstr "Eeschema netlist"
 
@@ -46974,7 +46974,7 @@ msgid "CADSTAR PCB Archive files"
 msgstr "CADSTAR PCB-arkivfiler"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:362
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:218
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:222
 #, fuzzy, c-format
 msgid "Unable to read file '%s'"
 msgstr "Kan ikke lese filen \"%s\""
@@ -47284,13 +47284,13 @@ msgstr "Kan ikke konvertere \"%s\" til et helt tall"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:230
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:878
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:178
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:182
 #, fuzzy, c-format
 msgid "Footprint library '%s' not found."
 msgstr "Fotavtrykksbibliotek ble ikke funnet."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:284
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:238
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:242
 #, fuzzy, c-format
 msgid "Library '%s' has no footprint '%s'."
 msgstr "biblioteket \"%s\" har ikke noe fotavtrykk \"%s\" å slette"
@@ -47308,7 +47308,7 @@ msgid "Element token contains %d parameters."
 msgstr "Elementtoken inneholder %d parametere."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:985
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3060
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3064
 #, fuzzy, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
 msgstr "Bibliotekkatalogen \"%s\" har uventede underkataloger."
@@ -47320,7 +47320,7 @@ msgstr "Uventet fil \"%s\" ble funnet i biblioteksti \"%s\"."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:1023
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3263
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3097
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3101
 #, fuzzy, c-format
 msgid "Footprint library '%s' cannot be deleted."
 msgstr "Fotavtrykksbiblioteket \"%s\" kan ikke slettes."
@@ -47480,19 +47480,19 @@ msgstr "Kan ikke opprette fotavtrykk-biblioteksti \"%s\""
 msgid "Footprint library '%s' is read only."
 msgstr "Fotavtrykk-biblioteksti \"%s\" er skrivebeskyttet"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:152
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:156
 #, fuzzy, c-format
 msgid "Cannot rename temporary file '%s' to '%s'"
 msgstr ""
 "Kan ikke gi nytt navn til den midlertidige filen \"%s\" til filavtrykk-"
 "biblioteksfilen \"%s\""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:316
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:320
 #, fuzzy
 msgid "Internal Group Data Error"
 msgstr "Intern datastruktur for gruppen er ødelagt"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:317
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:321
 #, c-format
 msgid ""
 "Please report this bug.  Error validating group structure: %s\n"
@@ -47503,31 +47503,31 @@ msgstr ""
 "\n"
 "Lagre uansett?"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:319
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:323
 msgid "Save Anyway"
 msgstr "Lagre uansett"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1453
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1457
 #, c-format
 msgid "unknown pad type: %d"
 msgstr "ukjent putetype: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2302
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2306
 #, c-format
 msgid "unknown via type %d"
 msgstr "ukjent via type %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2594
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2598
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "ukjent sonehjørneutjevningstype %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2743
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2747
 #, fuzzy
 msgid "This file does not contain a PCB."
 msgstr "denne filen inneholder ikke et PCB"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2916
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2920
 #, fuzzy, c-format
 msgid ""
 "Library '%s' does not exist.\n"
@@ -47536,23 +47536,23 @@ msgstr ""
 "Biblioteket \"%s\" eksisterer ikke.\n"
 "Vil du lage den?"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2921
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2925
 msgid "Library Not Found"
 msgstr "Biblioteket ble ikke funnet"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2949
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2953
 #, fuzzy, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "Footprint-filnavnet \"%s\" er ikke gyldig."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2955
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2959
 #, fuzzy, c-format
 msgid "Insufficient permissions to delete '%s'."
 msgstr ""
 "Utilstrekkelige tillatelser kreves for å lagre filen\n"
 "%s"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3079
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3083
 #, fuzzy, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
 msgstr "Uventet fil \"%s\" ble funnet i biblioteksti \"%s\"."
@@ -48184,51 +48184,51 @@ msgstr "Kunne ikke lagre redningsbiblioteket %s."
 msgid "Footprint library was not updated\n"
 msgstr "Fotavtrykksbiblioteket er ikke aktivert."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1690
+#: pcbnew/pcbnew_jobs_handler.cpp:1691
 #, fuzzy
 msgid "The given footprint could not be found to export."
 msgstr "Ekvivalensfilen \"%s\" ble ikke funnet i standardsøkestiene."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1732
+#: pcbnew/pcbnew_jobs_handler.cpp:1733
 #, fuzzy, c-format
 msgid "Plotting footprint '%s' to '%s'\n"
 msgstr "Bytt tildeling av %s fotavtrykk fra '%s' til '%s'."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1752
+#: pcbnew/pcbnew_jobs_handler.cpp:1753
 #, fuzzy
 msgid "Error creating svg file"
 msgstr "Feil ved utpakking av fil!\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1820 pcbnew/tools/drc_tool.cpp:160
+#: pcbnew/pcbnew_jobs_handler.cpp:1821 pcbnew/tools/drc_tool.cpp:160
 #, fuzzy
 msgid "Schematic parity tests require a fully annotated schematic."
 msgstr "Eksportering av nettlisten krever et fullstendig kommentert skjema."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1841 pcbnew/pcbnew_jobs_handler.cpp:1874
+#: pcbnew/pcbnew_jobs_handler.cpp:1842 pcbnew/pcbnew_jobs_handler.cpp:1875
 #, fuzzy
 msgid "Failed to fetch schematic netlist for parity tests.\n"
 msgstr "Kunne ikke laste inn skjematisk \"%s\""
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1896 pcbnew/tools/drc_tool.cpp:200
+#: pcbnew/pcbnew_jobs_handler.cpp:1897 pcbnew/tools/drc_tool.cpp:200
 msgid "DRC"
 msgstr "DRC"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1917
+#: pcbnew/pcbnew_jobs_handler.cpp:1918
 #, fuzzy, c-format
 msgid "Found %d unconnected items\n"
 msgstr "Ikke-tilkoblede gjenstander (%d)"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1923
+#: pcbnew/pcbnew_jobs_handler.cpp:1924
 #, c-format
 msgid "Found %d schematic parity issues\n"
 msgstr ""
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1939
+#: pcbnew/pcbnew_jobs_handler.cpp:1940
 #, fuzzy, c-format
 msgid "Unable to save DRC report to %s\n"
 msgstr "Kan ikke analysere '%s' i '%s'"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1944
+#: pcbnew/pcbnew_jobs_handler.cpp:1945
 #, fuzzy, c-format
 msgid "Saved DRC Report to %s\n"
 msgstr "Lagre rapporten i filen"
