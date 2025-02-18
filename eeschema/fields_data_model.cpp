@@ -839,12 +839,6 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit )
                 // Reference is not editable from this dialog
                 continue;
             }
-            else if( destField->GetId() == VALUE_FIELD )
-            {
-                // Value field cannot be empty
-                if( srcValue.IsEmpty() )
-                    continue;
-            }
 
             destField->SetText( symbol.Schematic()->ConvertRefsToKIIDs( srcValue ) );
         }
