@@ -2281,6 +2281,13 @@ void CREEPAGE_GRAPH::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer, bool
                              && ( gn->m_type != GRAPH_NODE::TYPE::VIRTUAL );
                   } );
 
+    std::sort( nodes.begin(), nodes.end(),
+              []( std::shared_ptr<GRAPH_NODE> gn1, std::shared_ptr<GRAPH_NODE> gn2 )
+              {
+                  return ( gn1->m_parent < gn2->m_parent ) || ( gn1->m_parent == gn2->m_parent
+                                                                && gn1->m_net < gn2->m_net );
+              } );
+
     auto processNodes = [&]( size_t i, size_t j ) -> bool
     {
             for( size_t ii = i; ii < j; ii++ )
