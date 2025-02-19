@@ -21,11 +21,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-18 19:16+0300\n"
+"POT-Creation-Date: 2025-02-19 17:09+0300\n"
 "PO-Revision-Date: 2025-02-19 03:13+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
-"master-source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
+"source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6091,7 +6091,7 @@ msgstr "Generátor"
 msgid "Text Box"
 msgstr "Text"
 
-#: common/eda_item.cpp:355 common/eda_item.cpp:383 eeschema/sch_table.cpp:566
+#: common/eda_item.cpp:355 common/eda_item.cpp:383 eeschema/sch_table.cpp:579
 #: pcbnew/pcb_table.cpp:387
 msgid "Table"
 msgstr "Tabulka"
@@ -6362,14 +6362,14 @@ msgstr "Bezierova křivka"
 msgid "Shape Properties"
 msgstr "Vlastnosti tvaru"
 
-#: common/eda_shape.cpp:2256 eeschema/sch_table.cpp:625
+#: common/eda_shape.cpp:2256 eeschema/sch_table.cpp:638
 #: eeschema/sch_tablecell.cpp:191 pcbnew/pcb_table.cpp:548
 #: pcbnew/pcb_tablecell.cpp:192 pcbnew/pcb_textbox.cpp:810
 #: pcbnew/pcb_track.cpp:2069
 msgid "Start X"
 msgstr "Začátek X"
 
-#: common/eda_shape.cpp:2261 eeschema/sch_table.cpp:628
+#: common/eda_shape.cpp:2261 eeschema/sch_table.cpp:641
 #: eeschema/sch_tablecell.cpp:192 pcbnew/pcb_table.cpp:551
 #: pcbnew/pcb_tablecell.cpp:193 pcbnew/pcb_textbox.cpp:811
 #: pcbnew/pcb_track.cpp:2073
@@ -6835,22 +6835,32 @@ msgstr "'%s' není adresář"
 msgid "Error removing directory '%s': %s"
 msgstr "Chyba při odstraňování složky '%s': %s"
 
-#: common/gestfich.cpp:366 common/gestfich.cpp:420 common/gestfich.cpp:491
+#: common/gestfich.cpp:366 common/gestfich.cpp:440 common/gestfich.cpp:554
 #, c-format
 msgid "Could not open source directory: %s"
 msgstr "Nelze otevřít zdrojový adresář: %s"
 
-#: common/gestfich.cpp:373 common/gestfich.cpp:428
+#: common/gestfich.cpp:373 common/gestfich.cpp:511
 #, c-format
 msgid "Could not create destination directory: %s"
 msgstr "Nelze vytvořit cílový adresář: %s"
 
-#: common/gestfich.cpp:397 common/gestfich.cpp:470
+#: common/gestfich.cpp:397 common/gestfich.cpp:428
 #, c-format
 msgid "Could not copy file: %s to %s"
 msgstr "Nelze zkopírovat soubor: %s do %s"
 
-#: common/gestfich.cpp:521
+#: common/gestfich.cpp:477
+#, fuzzy, c-format
+msgid "Could not copy directory: %s to %s"
+msgstr "Nelze zkopírovat soubor: %s do %s"
+
+#: common/gestfich.cpp:529
+#, fuzzy, c-format
+msgid "Source directory does not exist: %s"
+msgstr "Adresář '%s' neexistuje"
+
+#: common/gestfich.cpp:584
 #, c-format
 msgid "Could not read file: %s"
 msgstr "Nelze přečíst soubor: %s"
@@ -9850,7 +9860,7 @@ msgid "Press a new hotkey, or press Esc to cancel..."
 msgstr "Stiskněte novou klávesovou zkratku nebo Esc pro zrušení ..."
 
 #: common/widgets/widget_hotkey_list.cpp:116
-#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:24
+#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:26
 msgid "Command:"
 msgstr "Příkaz:"
 
@@ -11979,6 +11989,7 @@ msgid "Run external simulator command:"
 msgstr "Spustit příkaz externího simulátoru:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:344
+#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:30
 msgid ""
 "Enter the command line to run SPICE\n"
 "Usually '<path to SPICE binary> \"%I\"'\n"
@@ -12042,7 +12053,7 @@ msgid "You must provide a netlist generator title"
 msgstr "Musíte poskytnout název generátoru netlistu"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:27
-#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:33
+#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:36
 #: kicad/dialogs/dialog_jobset_output_options_base.cpp:46
 msgid "Output path:"
 msgstr "Výstupní cesta:"
@@ -15417,7 +15428,7 @@ msgid "Column lines"
 msgstr "Sloupce"
 
 #: eeschema/dialogs/dialog_table_properties_base.h:76
-#: eeschema/sch_table.cpp:632 pcbnew/dialogs/dialog_table_properties_base.h:72
+#: eeschema/sch_table.cpp:645 pcbnew/dialogs/dialog_table_properties_base.h:72
 #: pcbnew/pcb_table.cpp:555
 #, fuzzy
 msgid "Table Properties"
@@ -19582,13 +19593,13 @@ msgstr "Vyloučit z"
 msgid "Hierarchical Sheet %s"
 msgstr "Hierarchický list %s"
 
-#: eeschema/sch_sheet.cpp:1717 eeschema/sch_table.cpp:642
+#: eeschema/sch_sheet.cpp:1717 eeschema/sch_table.cpp:655
 #: pcbnew/pcb_table.cpp:565 pcbnew/pcb_tablecell.cpp:190
 #: pcbnew/pcb_textbox.cpp:835
 msgid "Border Width"
 msgstr "Šířka okraje"
 
-#: eeschema/sch_sheet.cpp:1721 eeschema/sch_table.cpp:651
+#: eeschema/sch_sheet.cpp:1721 eeschema/sch_table.cpp:664
 #: pcbnew/pcb_table.cpp:574
 msgid "Border Color"
 msgstr "Barva okraje"
@@ -19677,46 +19688,46 @@ msgstr "Propojení knihovny"
 msgid "%d Column Table"
 msgstr "%d sloupec tabulky"
 
-#: eeschema/sch_table.cpp:566 pcbnew/pcb_table.cpp:387
+#: eeschema/sch_table.cpp:579 pcbnew/pcb_table.cpp:387
 #, c-format
 msgid "%d Columns"
 msgstr "%d sloupce"
 
-#: eeschema/sch_table.cpp:634 pcbnew/pcb_table.cpp:557
+#: eeschema/sch_table.cpp:647 pcbnew/pcb_table.cpp:557
 #, fuzzy
 msgid "External Border"
 msgstr "Externí data"
 
-#: eeschema/sch_table.cpp:638 pcbnew/pcb_table.cpp:561
+#: eeschema/sch_table.cpp:651 pcbnew/pcb_table.cpp:561
 #, fuzzy
 msgid "Header Border"
 msgstr "Ohraničení stránky"
 
-#: eeschema/sch_table.cpp:647 pcbnew/pcb_table.cpp:570
+#: eeschema/sch_table.cpp:660 pcbnew/pcb_table.cpp:570
 #: pcbnew/pcb_tablecell.cpp:189 pcbnew/pcb_textbox.cpp:831
 msgid "Border Style"
 msgstr "Styl ohraničení"
 
-#: eeschema/sch_table.cpp:655 pcbnew/pcb_table.cpp:578
+#: eeschema/sch_table.cpp:668 pcbnew/pcb_table.cpp:578
 #, fuzzy
 msgid "Row Separators"
 msgstr "Smazat generátor"
 
-#: eeschema/sch_table.cpp:659 pcbnew/pcb_table.cpp:582
+#: eeschema/sch_table.cpp:672 pcbnew/pcb_table.cpp:582
 msgid "Cell Separators"
 msgstr ""
 
-#: eeschema/sch_table.cpp:663 pcbnew/pcb_table.cpp:586
+#: eeschema/sch_table.cpp:676 pcbnew/pcb_table.cpp:586
 #, fuzzy
 msgid "Separators Width"
 msgstr "Šířka spoje"
 
-#: eeschema/sch_table.cpp:668 pcbnew/pcb_table.cpp:591
+#: eeschema/sch_table.cpp:681 pcbnew/pcb_table.cpp:591
 #, fuzzy
 msgid "Separators Style"
 msgstr "Soubory generátoru"
 
-#: eeschema/sch_table.cpp:672 pcbnew/pcb_table.cpp:595
+#: eeschema/sch_table.cpp:685 pcbnew/pcb_table.cpp:595
 #, fuzzy
 msgid "Separators Color"
 msgstr "Vyčistit barvu"
@@ -26560,12 +26571,12 @@ msgstr "Přepsat existující přednastavení?"
 msgid "Copy Files Job Settings"
 msgstr "Kopírovat nastavení plošky"
 
-#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:48
+#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:51
 #, fuzzy
 msgid "Record output messages"
 msgstr "Zprávy:"
 
-#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:51
+#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:54
 msgid "Ignore non-zero exit code"
 msgstr ""
 
@@ -27896,55 +27907,55 @@ msgstr "Opravdu chcete odstranit pole '%s'?"
 msgid "Failed to remove git directory"
 msgstr "Nepodařilo se odstranit adresář %s"
 
-#: kicad/project_tree_pane.cpp:2297
+#: kicad/project_tree_pane.cpp:2300
 msgid "Discarding commit due to empty commit message."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2303
+#: kicad/project_tree_pane.cpp:2306
 msgid "Discarding commit due to empty file selection."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2309
+#: kicad/project_tree_pane.cpp:2312
 #, fuzzy, c-format
 msgid "Failed to get repository index: %s"
 msgstr "Nelze analyzovat repozitář: %s"
 
-#: kicad/project_tree_pane.cpp:2318
+#: kicad/project_tree_pane.cpp:2321
 #, fuzzy, c-format
 msgid "Failed to add file to index: %s"
 msgstr "Nepodařilo se smazat '%s'"
 
-#: kicad/project_tree_pane.cpp:2327
+#: kicad/project_tree_pane.cpp:2330
 #, fuzzy, c-format
 msgid "Failed to write index: %s"
 msgstr "Selhalo vytvoření souboru '%s'."
 
-#: kicad/project_tree_pane.cpp:2335
+#: kicad/project_tree_pane.cpp:2338
 #, fuzzy, c-format
 msgid "Failed to write tree: %s"
 msgstr "Chyba vytvoření \"%s\""
 
-#: kicad/project_tree_pane.cpp:2345
+#: kicad/project_tree_pane.cpp:2348
 #, fuzzy, c-format
 msgid "Failed to lookup tree: %s"
 msgstr "Nepodařilo se smazat '%s'"
 
-#: kicad/project_tree_pane.cpp:2356
+#: kicad/project_tree_pane.cpp:2359
 #, fuzzy, c-format
 msgid "Failed to get HEAD reference: %s"
 msgstr "Nepodařilo se odstranit adresář %s"
 
-#: kicad/project_tree_pane.cpp:2364
+#: kicad/project_tree_pane.cpp:2367
 #, fuzzy, c-format
 msgid "Failed to get commit: %s"
 msgstr "Selhalo uložení schématu '%s'"
 
-#: kicad/project_tree_pane.cpp:2382
+#: kicad/project_tree_pane.cpp:2385
 #, fuzzy, c-format
 msgid "Failed to create author signature: %s"
 msgstr "Nepodařilo se vytvořit dočasný soubor \"%s\""
 
-#: kicad/project_tree_pane.cpp:2418
+#: kicad/project_tree_pane.cpp:2421
 #, fuzzy, c-format
 msgid "Failed to create commit: %s"
 msgstr "Chyba vytvoření \"%s\""

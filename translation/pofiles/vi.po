@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-18 19:16+0300\n"
+"POT-Creation-Date: 2025-02-19 17:09+0300\n"
 "PO-Revision-Date: 2025-02-10 23:20+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
@@ -6101,7 +6101,7 @@ msgstr "Trình khởi tạo"
 msgid "Text Box"
 msgstr "Hộp Văn bản chữ"
 
-#: common/eda_item.cpp:355 common/eda_item.cpp:383 eeschema/sch_table.cpp:566
+#: common/eda_item.cpp:355 common/eda_item.cpp:383 eeschema/sch_table.cpp:579
 #: pcbnew/pcb_table.cpp:387
 msgid "Table"
 msgstr "Bảng"
@@ -6372,14 +6372,14 @@ msgstr "Đường cong Bezier"
 msgid "Shape Properties"
 msgstr "Thuộc tính hình dạng"
 
-#: common/eda_shape.cpp:2256 eeschema/sch_table.cpp:625
+#: common/eda_shape.cpp:2256 eeschema/sch_table.cpp:638
 #: eeschema/sch_tablecell.cpp:191 pcbnew/pcb_table.cpp:548
 #: pcbnew/pcb_tablecell.cpp:192 pcbnew/pcb_textbox.cpp:810
 #: pcbnew/pcb_track.cpp:2069
 msgid "Start X"
 msgstr "Bắt đầu X"
 
-#: common/eda_shape.cpp:2261 eeschema/sch_table.cpp:628
+#: common/eda_shape.cpp:2261 eeschema/sch_table.cpp:641
 #: eeschema/sch_tablecell.cpp:192 pcbnew/pcb_table.cpp:551
 #: pcbnew/pcb_tablecell.cpp:193 pcbnew/pcb_textbox.cpp:811
 #: pcbnew/pcb_track.cpp:2073
@@ -6849,22 +6849,32 @@ msgstr "'%s' không phải là thư mục"
 msgid "Error removing directory '%s': %s"
 msgstr "Lỗi xóa thư mục '%s': %s"
 
-#: common/gestfich.cpp:366 common/gestfich.cpp:420 common/gestfich.cpp:491
+#: common/gestfich.cpp:366 common/gestfich.cpp:440 common/gestfich.cpp:554
 #, fuzzy, c-format
 msgid "Could not open source directory: %s"
 msgstr "Không thể tạo thư mục đầu ra '%s'"
 
-#: common/gestfich.cpp:373 common/gestfich.cpp:428
+#: common/gestfich.cpp:373 common/gestfich.cpp:511
 #, fuzzy, c-format
 msgid "Could not create destination directory: %s"
 msgstr "Không thể tạo thư mục đầu ra '%s'"
 
-#: common/gestfich.cpp:397 common/gestfich.cpp:470
+#: common/gestfich.cpp:397 common/gestfich.cpp:428
 #, fuzzy, c-format
 msgid "Could not copy file: %s to %s"
 msgstr "Không thể kết nối với '%s' "
 
-#: common/gestfich.cpp:521
+#: common/gestfich.cpp:477
+#, fuzzy, c-format
+msgid "Could not copy directory: %s to %s"
+msgstr "Không thể kết nối với '%s' "
+
+#: common/gestfich.cpp:529
+#, fuzzy, c-format
+msgid "Source directory does not exist: %s"
+msgstr "Thư mục '%s' không tồn tại"
+
+#: common/gestfich.cpp:584
 #, fuzzy, c-format
 msgid "Could not read file: %s"
 msgstr "Không thể đọc tệp "
@@ -10123,7 +10133,7 @@ msgid "Press a new hotkey, or press Esc to cancel..."
 msgstr "Nhấn phím nóng mới hoặc nhấn Esc để hủy bỏ..."
 
 #: common/widgets/widget_hotkey_list.cpp:116
-#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:24
+#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:26
 msgid "Command:"
 msgstr "Lệnh:"
 
@@ -12291,6 +12301,7 @@ msgid "Run external simulator command:"
 msgstr "Lệnh mô phỏng bên ngoài:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:344
+#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:30
 #, fuzzy
 msgid ""
 "Enter the command line to run SPICE\n"
@@ -12354,7 +12365,7 @@ msgid "You must provide a netlist generator title"
 msgstr "Bạn phải cung cấp một tiêu đề để tạo netlist"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:27
-#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:33
+#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:36
 #: kicad/dialogs/dialog_jobset_output_options_base.cpp:46
 #, fuzzy
 msgid "Output path:"
@@ -15928,7 +15939,7 @@ msgid "Column lines"
 msgstr "Chọn Không có"
 
 #: eeschema/dialogs/dialog_table_properties_base.h:76
-#: eeschema/sch_table.cpp:632 pcbnew/dialogs/dialog_table_properties_base.h:72
+#: eeschema/sch_table.cpp:645 pcbnew/dialogs/dialog_table_properties_base.h:72
 #: pcbnew/pcb_table.cpp:555
 #, fuzzy
 msgid "Table Properties"
@@ -20241,14 +20252,14 @@ msgstr "Loại trừ khỏi bo mạch"
 msgid "Hierarchical Sheet %s"
 msgstr "Trang phân cấp %s"
 
-#: eeschema/sch_sheet.cpp:1717 eeschema/sch_table.cpp:642
+#: eeschema/sch_sheet.cpp:1717 eeschema/sch_table.cpp:655
 #: pcbnew/pcb_table.cpp:565 pcbnew/pcb_tablecell.cpp:190
 #: pcbnew/pcb_textbox.cpp:835
 #, fuzzy
 msgid "Border Width"
 msgstr "Chiều rộng viền:"
 
-#: eeschema/sch_sheet.cpp:1721 eeschema/sch_table.cpp:651
+#: eeschema/sch_sheet.cpp:1721 eeschema/sch_table.cpp:664
 #: pcbnew/pcb_table.cpp:574
 #, fuzzy
 msgid "Border Color"
@@ -20350,47 +20361,47 @@ msgstr "Thư Viện"
 msgid "%d Column Table"
 msgstr ""
 
-#: eeschema/sch_table.cpp:566 pcbnew/pcb_table.cpp:387
+#: eeschema/sch_table.cpp:579 pcbnew/pcb_table.cpp:387
 #, c-format
 msgid "%d Columns"
 msgstr "%d Cột"
 
-#: eeschema/sch_table.cpp:634 pcbnew/pcb_table.cpp:557
+#: eeschema/sch_table.cpp:647 pcbnew/pcb_table.cpp:557
 #, fuzzy
 msgid "External Border"
 msgstr "Tạo các lớp"
 
-#: eeschema/sch_table.cpp:638 pcbnew/pcb_table.cpp:561
+#: eeschema/sch_table.cpp:651 pcbnew/pcb_table.cpp:561
 #, fuzzy
 msgid "Header Border"
 msgstr "Tải lại bo mạch"
 
-#: eeschema/sch_table.cpp:647 pcbnew/pcb_table.cpp:570
+#: eeschema/sch_table.cpp:660 pcbnew/pcb_table.cpp:570
 #: pcbnew/pcb_tablecell.cpp:189 pcbnew/pcb_textbox.cpp:831
 #, fuzzy
 msgid "Border Style"
 msgstr "Kiểu cách Đường thẳng"
 
-#: eeschema/sch_table.cpp:655 pcbnew/pcb_table.cpp:578
+#: eeschema/sch_table.cpp:668 pcbnew/pcb_table.cpp:578
 #, fuzzy
 msgid "Row Separators"
 msgstr "Xóa Trình tạo"
 
-#: eeschema/sch_table.cpp:659 pcbnew/pcb_table.cpp:582
+#: eeschema/sch_table.cpp:672 pcbnew/pcb_table.cpp:582
 msgid "Cell Separators"
 msgstr ""
 
-#: eeschema/sch_table.cpp:663 pcbnew/pcb_table.cpp:586
+#: eeschema/sch_table.cpp:676 pcbnew/pcb_table.cpp:586
 #, fuzzy
 msgid "Separators Width"
 msgstr "Chiều rộng:"
 
-#: eeschema/sch_table.cpp:668 pcbnew/pcb_table.cpp:591
+#: eeschema/sch_table.cpp:681 pcbnew/pcb_table.cpp:591
 #, fuzzy
 msgid "Separators Style"
 msgstr "Trình tạo tệp tin:"
 
-#: eeschema/sch_table.cpp:672 pcbnew/pcb_table.cpp:595
+#: eeschema/sch_table.cpp:685 pcbnew/pcb_table.cpp:595
 #, fuzzy
 msgid "Separators Color"
 msgstr "Xóa Màu sắc"
@@ -27496,12 +27507,12 @@ msgstr "Ghi đè giá trị đặt sẵn hiện có?"
 msgid "Copy Files Job Settings"
 msgstr "Bộc Lọc Nets"
 
-#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:48
+#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:51
 #, fuzzy
 msgid "Record output messages"
 msgstr "Thông báo đầu ra"
 
-#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:51
+#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:54
 msgid "Ignore non-zero exit code"
 msgstr ""
 
@@ -28899,55 +28910,55 @@ msgstr ""
 msgid "Failed to remove git directory"
 msgstr "Không thể mở tệp '%s'"
 
-#: kicad/project_tree_pane.cpp:2297
+#: kicad/project_tree_pane.cpp:2300
 msgid "Discarding commit due to empty commit message."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2303
+#: kicad/project_tree_pane.cpp:2306
 msgid "Discarding commit due to empty file selection."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2309
+#: kicad/project_tree_pane.cpp:2312
 #, fuzzy, c-format
 msgid "Failed to get repository index: %s"
 msgstr "Không lấy được chỉ mục kho lưu trữ: %s"
 
-#: kicad/project_tree_pane.cpp:2318
+#: kicad/project_tree_pane.cpp:2321
 #, fuzzy, c-format
 msgid "Failed to add file to index: %s"
 msgstr "Không thể ghi báo cáo vào tệp \"%s\"."
 
-#: kicad/project_tree_pane.cpp:2327
+#: kicad/project_tree_pane.cpp:2330
 #, fuzzy, c-format
 msgid "Failed to write index: %s"
 msgstr "Không tải được thư viện kiface \"%s\"."
 
-#: kicad/project_tree_pane.cpp:2335
+#: kicad/project_tree_pane.cpp:2338
 #, fuzzy, c-format
 msgid "Failed to write tree: %s"
 msgstr "Không tải được thư viện kiface \"%s\"."
 
-#: kicad/project_tree_pane.cpp:2345
+#: kicad/project_tree_pane.cpp:2348
 #, fuzzy, c-format
 msgid "Failed to lookup tree: %s"
 msgstr "Không tải được thư viện kiface \"%s\"."
 
-#: kicad/project_tree_pane.cpp:2356
+#: kicad/project_tree_pane.cpp:2359
 #, fuzzy, c-format
 msgid "Failed to get HEAD reference: %s"
 msgstr "Không thể mở tệp '%s'"
 
-#: kicad/project_tree_pane.cpp:2364
+#: kicad/project_tree_pane.cpp:2367
 #, fuzzy, c-format
 msgid "Failed to get commit: %s"
 msgstr "Không tải được thư viện kiface \"%s\"."
 
-#: kicad/project_tree_pane.cpp:2382
+#: kicad/project_tree_pane.cpp:2385
 #, fuzzy, c-format
 msgid "Failed to create author signature: %s"
 msgstr "Không tải được thư viện kiface \"%s\"."
 
-#: kicad/project_tree_pane.cpp:2418
+#: kicad/project_tree_pane.cpp:2421
 #, fuzzy, c-format
 msgid "Failed to create commit: %s"
 msgstr "Không tải được thư viện kiface \"%s\"."

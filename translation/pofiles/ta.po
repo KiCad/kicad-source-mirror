@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-18 19:16+0300\n"
+"POT-Creation-Date: 2025-02-19 17:09+0300\n"
 "PO-Revision-Date: 2025-02-10 23:20+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/master-"
@@ -5954,7 +5954,7 @@ msgstr ""
 msgid "Text Box"
 msgstr ""
 
-#: common/eda_item.cpp:355 common/eda_item.cpp:383 eeschema/sch_table.cpp:566
+#: common/eda_item.cpp:355 common/eda_item.cpp:383 eeschema/sch_table.cpp:579
 #: pcbnew/pcb_table.cpp:387
 msgid "Table"
 msgstr "அட்டவணை"
@@ -6225,14 +6225,14 @@ msgstr ""
 msgid "Shape Properties"
 msgstr ""
 
-#: common/eda_shape.cpp:2256 eeschema/sch_table.cpp:625
+#: common/eda_shape.cpp:2256 eeschema/sch_table.cpp:638
 #: eeschema/sch_tablecell.cpp:191 pcbnew/pcb_table.cpp:548
 #: pcbnew/pcb_tablecell.cpp:192 pcbnew/pcb_textbox.cpp:810
 #: pcbnew/pcb_track.cpp:2069
 msgid "Start X"
 msgstr ""
 
-#: common/eda_shape.cpp:2261 eeschema/sch_table.cpp:628
+#: common/eda_shape.cpp:2261 eeschema/sch_table.cpp:641
 #: eeschema/sch_tablecell.cpp:192 pcbnew/pcb_table.cpp:551
 #: pcbnew/pcb_tablecell.cpp:193 pcbnew/pcb_textbox.cpp:811
 #: pcbnew/pcb_track.cpp:2073
@@ -6676,22 +6676,32 @@ msgstr ""
 msgid "Error removing directory '%s': %s"
 msgstr ""
 
-#: common/gestfich.cpp:366 common/gestfich.cpp:420 common/gestfich.cpp:491
+#: common/gestfich.cpp:366 common/gestfich.cpp:440 common/gestfich.cpp:554
 #, c-format
 msgid "Could not open source directory: %s"
 msgstr "மூல கோப்பகத்தைத் திறக்க முடியவில்லை: %s"
 
-#: common/gestfich.cpp:373 common/gestfich.cpp:428
+#: common/gestfich.cpp:373 common/gestfich.cpp:511
 #, c-format
 msgid "Could not create destination directory: %s"
 msgstr "இலக்கு கோப்பகத்தை உருவாக்க முடியவில்லை: %s"
 
-#: common/gestfich.cpp:397 common/gestfich.cpp:470
+#: common/gestfich.cpp:397 common/gestfich.cpp:428
 #, c-format
 msgid "Could not copy file: %s to %s"
 msgstr "கோப்பை நகலெடுக்க முடியவில்லை: %s முதல் %s வரை"
 
-#: common/gestfich.cpp:521
+#: common/gestfich.cpp:477
+#, fuzzy, c-format
+msgid "Could not copy directory: %s to %s"
+msgstr "கோப்பை நகலெடுக்க முடியவில்லை: %s முதல் %s வரை"
+
+#: common/gestfich.cpp:529
+#, fuzzy, c-format
+msgid "Source directory does not exist: %s"
+msgstr "அடைவு '%s' இல்லை."
+
+#: common/gestfich.cpp:584
 #, c-format
 msgid "Could not read file: %s"
 msgstr "கோப்பைப் படிக்க முடியவில்லை: %s"
@@ -9644,7 +9654,7 @@ msgid "Press a new hotkey, or press Esc to cancel..."
 msgstr ""
 
 #: common/widgets/widget_hotkey_list.cpp:116
-#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:24
+#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:26
 msgid "Command:"
 msgstr ""
 
@@ -11629,6 +11639,7 @@ msgid "Run external simulator command:"
 msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:344
+#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:30
 msgid ""
 "Enter the command line to run SPICE\n"
 "Usually '<path to SPICE binary> \"%I\"'\n"
@@ -11687,7 +11698,7 @@ msgid "You must provide a netlist generator title"
 msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:27
-#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:33
+#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:36
 #: kicad/dialogs/dialog_jobset_output_options_base.cpp:46
 #, fuzzy
 msgid "Output path:"
@@ -14940,7 +14951,7 @@ msgid "Column lines"
 msgstr "நெடுவரிசை கோடுகள்"
 
 #: eeschema/dialogs/dialog_table_properties_base.h:76
-#: eeschema/sch_table.cpp:632 pcbnew/dialogs/dialog_table_properties_base.h:72
+#: eeschema/sch_table.cpp:645 pcbnew/dialogs/dialog_table_properties_base.h:72
 #: pcbnew/pcb_table.cpp:555
 msgid "Table Properties"
 msgstr "அட்டவணை பண்புகள்"
@@ -18904,13 +18915,13 @@ msgstr ""
 msgid "Hierarchical Sheet %s"
 msgstr ""
 
-#: eeschema/sch_sheet.cpp:1717 eeschema/sch_table.cpp:642
+#: eeschema/sch_sheet.cpp:1717 eeschema/sch_table.cpp:655
 #: pcbnew/pcb_table.cpp:565 pcbnew/pcb_tablecell.cpp:190
 #: pcbnew/pcb_textbox.cpp:835
 msgid "Border Width"
 msgstr ""
 
-#: eeschema/sch_sheet.cpp:1721 eeschema/sch_table.cpp:651
+#: eeschema/sch_sheet.cpp:1721 eeschema/sch_table.cpp:664
 #: pcbnew/pcb_table.cpp:574
 msgid "Border Color"
 msgstr ""
@@ -18999,41 +19010,41 @@ msgstr ""
 msgid "%d Column Table"
 msgstr "%d நெடுவரிசை அட்டவணை"
 
-#: eeschema/sch_table.cpp:566 pcbnew/pcb_table.cpp:387
+#: eeschema/sch_table.cpp:579 pcbnew/pcb_table.cpp:387
 #, c-format
 msgid "%d Columns"
 msgstr "%d நெடுவரிசைகள்"
 
-#: eeschema/sch_table.cpp:634 pcbnew/pcb_table.cpp:557
+#: eeschema/sch_table.cpp:647 pcbnew/pcb_table.cpp:557
 msgid "External Border"
 msgstr "வெளிப்புற எல்லை"
 
-#: eeschema/sch_table.cpp:638 pcbnew/pcb_table.cpp:561
+#: eeschema/sch_table.cpp:651 pcbnew/pcb_table.cpp:561
 msgid "Header Border"
 msgstr "தலைப்பு எல்லை"
 
-#: eeschema/sch_table.cpp:647 pcbnew/pcb_table.cpp:570
+#: eeschema/sch_table.cpp:660 pcbnew/pcb_table.cpp:570
 #: pcbnew/pcb_tablecell.cpp:189 pcbnew/pcb_textbox.cpp:831
 msgid "Border Style"
 msgstr ""
 
-#: eeschema/sch_table.cpp:655 pcbnew/pcb_table.cpp:578
+#: eeschema/sch_table.cpp:668 pcbnew/pcb_table.cpp:578
 msgid "Row Separators"
 msgstr "வரிசை பிரிப்பான்கள்"
 
-#: eeschema/sch_table.cpp:659 pcbnew/pcb_table.cpp:582
+#: eeschema/sch_table.cpp:672 pcbnew/pcb_table.cpp:582
 msgid "Cell Separators"
 msgstr "செல் பிரிப்பான்கள்"
 
-#: eeschema/sch_table.cpp:663 pcbnew/pcb_table.cpp:586
+#: eeschema/sch_table.cpp:676 pcbnew/pcb_table.cpp:586
 msgid "Separators Width"
 msgstr "பிரிப்பான்கள் அகலம்"
 
-#: eeschema/sch_table.cpp:668 pcbnew/pcb_table.cpp:591
+#: eeschema/sch_table.cpp:681 pcbnew/pcb_table.cpp:591
 msgid "Separators Style"
 msgstr "பிரிப்பான் பாணி"
 
-#: eeschema/sch_table.cpp:672 pcbnew/pcb_table.cpp:595
+#: eeschema/sch_table.cpp:685 pcbnew/pcb_table.cpp:595
 msgid "Separators Color"
 msgstr "பிரிப்பான் நிறம்"
 
@@ -25453,11 +25464,11 @@ msgstr "இருக்கும் முன்னமைவை மேலெழ�
 msgid "Copy Files Job Settings"
 msgstr ""
 
-#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:48
+#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:51
 msgid "Record output messages"
 msgstr ""
 
-#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:51
+#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:54
 msgid "Ignore non-zero exit code"
 msgstr "பூச்சியமற்ற வெளியேறும் குறியீட்டை புறக்கணிக்கவும்"
 
@@ -26697,55 +26708,55 @@ msgstr ""
 msgid "Failed to remove git directory"
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2297
+#: kicad/project_tree_pane.cpp:2300
 msgid "Discarding commit due to empty commit message."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2303
+#: kicad/project_tree_pane.cpp:2306
 msgid "Discarding commit due to empty file selection."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2309
+#: kicad/project_tree_pane.cpp:2312
 #, c-format
 msgid "Failed to get repository index: %s"
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2318
+#: kicad/project_tree_pane.cpp:2321
 #, c-format
 msgid "Failed to add file to index: %s"
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2327
+#: kicad/project_tree_pane.cpp:2330
 #, c-format
 msgid "Failed to write index: %s"
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2335
+#: kicad/project_tree_pane.cpp:2338
 #, c-format
 msgid "Failed to write tree: %s"
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2345
+#: kicad/project_tree_pane.cpp:2348
 #, c-format
 msgid "Failed to lookup tree: %s"
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2356
+#: kicad/project_tree_pane.cpp:2359
 #, c-format
 msgid "Failed to get HEAD reference: %s"
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2364
+#: kicad/project_tree_pane.cpp:2367
 #, c-format
 msgid "Failed to get commit: %s"
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2382
+#: kicad/project_tree_pane.cpp:2385
 #, c-format
 msgid "Failed to create author signature: %s"
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2418
+#: kicad/project_tree_pane.cpp:2421
 #, c-format
 msgid "Failed to create commit: %s"
 msgstr ""

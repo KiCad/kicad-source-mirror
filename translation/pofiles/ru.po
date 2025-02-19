@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-18 19:16+0300\n"
+"POT-Creation-Date: 2025-02-19 17:09+0300\n"
 "PO-Revision-Date: 2025-02-17 17:18+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
@@ -6146,7 +6146,7 @@ msgstr "Генератор"
 msgid "Text Box"
 msgstr "Надпись"
 
-#: common/eda_item.cpp:355 common/eda_item.cpp:383 eeschema/sch_table.cpp:566
+#: common/eda_item.cpp:355 common/eda_item.cpp:383 eeschema/sch_table.cpp:579
 #: pcbnew/pcb_table.cpp:387
 msgid "Table"
 msgstr "Таблица"
@@ -6417,14 +6417,14 @@ msgstr "Кривая Безье"
 msgid "Shape Properties"
 msgstr "Свойства формы"
 
-#: common/eda_shape.cpp:2256 eeschema/sch_table.cpp:625
+#: common/eda_shape.cpp:2256 eeschema/sch_table.cpp:638
 #: eeschema/sch_tablecell.cpp:191 pcbnew/pcb_table.cpp:548
 #: pcbnew/pcb_tablecell.cpp:192 pcbnew/pcb_textbox.cpp:810
 #: pcbnew/pcb_track.cpp:2069
 msgid "Start X"
 msgstr "Начало X"
 
-#: common/eda_shape.cpp:2261 eeschema/sch_table.cpp:628
+#: common/eda_shape.cpp:2261 eeschema/sch_table.cpp:641
 #: eeschema/sch_tablecell.cpp:192 pcbnew/pcb_table.cpp:551
 #: pcbnew/pcb_tablecell.cpp:193 pcbnew/pcb_textbox.cpp:811
 #: pcbnew/pcb_track.cpp:2073
@@ -6891,22 +6891,32 @@ msgstr "'%s' не является каталогом"
 msgid "Error removing directory '%s': %s"
 msgstr "Ошибка удаления каталога '%s': %s"
 
-#: common/gestfich.cpp:366 common/gestfich.cpp:420 common/gestfich.cpp:491
+#: common/gestfich.cpp:366 common/gestfich.cpp:440 common/gestfich.cpp:554
 #, c-format
 msgid "Could not open source directory: %s"
 msgstr "Не удалось открыть каталог исходных текстов: %s"
 
-#: common/gestfich.cpp:373 common/gestfich.cpp:428
+#: common/gestfich.cpp:373 common/gestfich.cpp:511
 #, c-format
 msgid "Could not create destination directory: %s"
 msgstr "Не удалось создать каталог назначения: %s"
 
-#: common/gestfich.cpp:397 common/gestfich.cpp:470
+#: common/gestfich.cpp:397 common/gestfich.cpp:428
 #, c-format
 msgid "Could not copy file: %s to %s"
 msgstr "Не удалось скопировать файл: %s в %s"
 
-#: common/gestfich.cpp:521
+#: common/gestfich.cpp:477
+#, fuzzy, c-format
+msgid "Could not copy directory: %s to %s"
+msgstr "Не удалось скопировать файл: %s в %s"
+
+#: common/gestfich.cpp:529
+#, fuzzy, c-format
+msgid "Source directory does not exist: %s"
+msgstr "Каталог '%s' не существует"
+
+#: common/gestfich.cpp:584
 #, c-format
 msgid "Could not read file: %s"
 msgstr "Не удалось прочитать файл %s"
@@ -9885,7 +9895,7 @@ msgid "Press a new hotkey, or press Esc to cancel..."
 msgstr "Нажмите новую горячую клавишу или Esc для отмены..."
 
 #: common/widgets/widget_hotkey_list.cpp:116
-#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:24
+#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:26
 msgid "Command:"
 msgstr "Команда:"
 
@@ -12004,6 +12014,7 @@ msgid "Run external simulator command:"
 msgstr "Выполнить команду внешнего симулятора:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:344
+#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:30
 msgid ""
 "Enter the command line to run SPICE\n"
 "Usually '<path to SPICE binary> \"%I\"'\n"
@@ -12067,7 +12078,7 @@ msgid "You must provide a netlist generator title"
 msgstr "Нужно указать наименование"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:27
-#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:33
+#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:36
 #: kicad/dialogs/dialog_jobset_output_options_base.cpp:46
 msgid "Output path:"
 msgstr "Выходной путь:"
@@ -15424,7 +15435,7 @@ msgid "Column lines"
 msgstr "Линии столбцов"
 
 #: eeschema/dialogs/dialog_table_properties_base.h:76
-#: eeschema/sch_table.cpp:632 pcbnew/dialogs/dialog_table_properties_base.h:72
+#: eeschema/sch_table.cpp:645 pcbnew/dialogs/dialog_table_properties_base.h:72
 #: pcbnew/pcb_table.cpp:555
 msgid "Table Properties"
 msgstr "Свойства таблицы"
@@ -19583,13 +19594,13 @@ msgstr "Исключить из"
 msgid "Hierarchical Sheet %s"
 msgstr "Иерархический лист %s"
 
-#: eeschema/sch_sheet.cpp:1717 eeschema/sch_table.cpp:642
+#: eeschema/sch_sheet.cpp:1717 eeschema/sch_table.cpp:655
 #: pcbnew/pcb_table.cpp:565 pcbnew/pcb_tablecell.cpp:190
 #: pcbnew/pcb_textbox.cpp:835
 msgid "Border Width"
 msgstr "Ширина контура"
 
-#: eeschema/sch_sheet.cpp:1721 eeschema/sch_table.cpp:651
+#: eeschema/sch_sheet.cpp:1721 eeschema/sch_table.cpp:664
 #: pcbnew/pcb_table.cpp:574
 msgid "Border Color"
 msgstr "Цвет контура"
@@ -19678,41 +19689,41 @@ msgstr "Ссылка библиотеки"
 msgid "%d Column Table"
 msgstr "Таблица с %d столб."
 
-#: eeschema/sch_table.cpp:566 pcbnew/pcb_table.cpp:387
+#: eeschema/sch_table.cpp:579 pcbnew/pcb_table.cpp:387
 #, c-format
 msgid "%d Columns"
 msgstr "%d столбцов"
 
-#: eeschema/sch_table.cpp:634 pcbnew/pcb_table.cpp:557
+#: eeschema/sch_table.cpp:647 pcbnew/pcb_table.cpp:557
 msgid "External Border"
 msgstr "Внешний контур"
 
-#: eeschema/sch_table.cpp:638 pcbnew/pcb_table.cpp:561
+#: eeschema/sch_table.cpp:651 pcbnew/pcb_table.cpp:561
 msgid "Header Border"
 msgstr "Контур заголовка"
 
-#: eeschema/sch_table.cpp:647 pcbnew/pcb_table.cpp:570
+#: eeschema/sch_table.cpp:660 pcbnew/pcb_table.cpp:570
 #: pcbnew/pcb_tablecell.cpp:189 pcbnew/pcb_textbox.cpp:831
 msgid "Border Style"
 msgstr "Стиль контура"
 
-#: eeschema/sch_table.cpp:655 pcbnew/pcb_table.cpp:578
+#: eeschema/sch_table.cpp:668 pcbnew/pcb_table.cpp:578
 msgid "Row Separators"
 msgstr "Разделители строк"
 
-#: eeschema/sch_table.cpp:659 pcbnew/pcb_table.cpp:582
+#: eeschema/sch_table.cpp:672 pcbnew/pcb_table.cpp:582
 msgid "Cell Separators"
 msgstr "Разделители ячеек"
 
-#: eeschema/sch_table.cpp:663 pcbnew/pcb_table.cpp:586
+#: eeschema/sch_table.cpp:676 pcbnew/pcb_table.cpp:586
 msgid "Separators Width"
 msgstr "Ширина разделителей"
 
-#: eeschema/sch_table.cpp:668 pcbnew/pcb_table.cpp:591
+#: eeschema/sch_table.cpp:681 pcbnew/pcb_table.cpp:591
 msgid "Separators Style"
 msgstr "Стиль разделителей"
 
-#: eeschema/sch_table.cpp:672 pcbnew/pcb_table.cpp:595
+#: eeschema/sch_table.cpp:685 pcbnew/pcb_table.cpp:595
 msgid "Separators Color"
 msgstr "Цвет разделителей"
 
@@ -26519,11 +26530,11 @@ msgstr "Перезаписывать файлы в целевом пути"
 msgid "Copy Files Job Settings"
 msgstr "Параметры задания копирования файлов"
 
-#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:48
+#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:51
 msgid "Record output messages"
 msgstr "Записывать выходные сообщения"
 
-#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:51
+#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:54
 msgid "Ignore non-zero exit code"
 msgstr "Игнорировать ненулевой код выхода"
 
@@ -27805,55 +27816,55 @@ msgstr "Вы уверены, что хотите удалить отслежив
 msgid "Failed to remove git directory"
 msgstr "Не удалось удалить каталог git"
 
-#: kicad/project_tree_pane.cpp:2297
+#: kicad/project_tree_pane.cpp:2300
 msgid "Discarding commit due to empty commit message."
 msgstr "Отмена коммита из-за пустого сообщения."
 
-#: kicad/project_tree_pane.cpp:2303
+#: kicad/project_tree_pane.cpp:2306
 msgid "Discarding commit due to empty file selection."
 msgstr "Отмена коммита из-за пустого выбора файлов."
 
-#: kicad/project_tree_pane.cpp:2309
+#: kicad/project_tree_pane.cpp:2312
 #, c-format
 msgid "Failed to get repository index: %s"
 msgstr "Не удалось получить индекс репозитория: %s"
 
-#: kicad/project_tree_pane.cpp:2318
+#: kicad/project_tree_pane.cpp:2321
 #, c-format
 msgid "Failed to add file to index: %s"
 msgstr "Не удалось добавить файл в индекс: %s"
 
-#: kicad/project_tree_pane.cpp:2327
+#: kicad/project_tree_pane.cpp:2330
 #, c-format
 msgid "Failed to write index: %s"
 msgstr "Не удалось записать индекс: %s"
 
-#: kicad/project_tree_pane.cpp:2335
+#: kicad/project_tree_pane.cpp:2338
 #, c-format
 msgid "Failed to write tree: %s"
 msgstr "Не удалось записать дерево: %s"
 
-#: kicad/project_tree_pane.cpp:2345
+#: kicad/project_tree_pane.cpp:2348
 #, c-format
 msgid "Failed to lookup tree: %s"
 msgstr "Не удалось найти дерево: %s"
 
-#: kicad/project_tree_pane.cpp:2356
+#: kicad/project_tree_pane.cpp:2359
 #, c-format
 msgid "Failed to get HEAD reference: %s"
 msgstr "Не удалось получить ссылку на HEAD: %s"
 
-#: kicad/project_tree_pane.cpp:2364
+#: kicad/project_tree_pane.cpp:2367
 #, c-format
 msgid "Failed to get commit: %s"
 msgstr "Не удалось получить коммит: %s"
 
-#: kicad/project_tree_pane.cpp:2382
+#: kicad/project_tree_pane.cpp:2385
 #, c-format
 msgid "Failed to create author signature: %s"
 msgstr "Не удалось создать подпись автора: %s"
 
-#: kicad/project_tree_pane.cpp:2418
+#: kicad/project_tree_pane.cpp:2421
 #, c-format
 msgid "Failed to create commit: %s"
 msgstr "Не удалось создать коммит: %s"

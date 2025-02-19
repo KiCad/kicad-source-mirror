@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-18 19:16+0300\n"
+"POT-Creation-Date: 2025-02-19 17:09+0300\n"
 "PO-Revision-Date: 2025-02-03 18:48+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
@@ -6369,7 +6369,7 @@ msgstr "Generer"
 msgid "Text Box"
 msgstr "Tekst pos X"
 
-#: common/eda_item.cpp:355 common/eda_item.cpp:383 eeschema/sch_table.cpp:566
+#: common/eda_item.cpp:355 common/eda_item.cpp:383 eeschema/sch_table.cpp:579
 #: pcbnew/pcb_table.cpp:387
 #, fuzzy
 msgid "Table"
@@ -6651,7 +6651,7 @@ msgstr "Bézier-kurve"
 msgid "Shape Properties"
 msgstr "Arkegenskaper"
 
-#: common/eda_shape.cpp:2256 eeschema/sch_table.cpp:625
+#: common/eda_shape.cpp:2256 eeschema/sch_table.cpp:638
 #: eeschema/sch_tablecell.cpp:191 pcbnew/pcb_table.cpp:548
 #: pcbnew/pcb_tablecell.cpp:192 pcbnew/pcb_textbox.cpp:810
 #: pcbnew/pcb_track.cpp:2069
@@ -6659,7 +6659,7 @@ msgstr "Arkegenskaper"
 msgid "Start X"
 msgstr "Start laget"
 
-#: common/eda_shape.cpp:2261 eeschema/sch_table.cpp:628
+#: common/eda_shape.cpp:2261 eeschema/sch_table.cpp:641
 #: eeschema/sch_tablecell.cpp:192 pcbnew/pcb_table.cpp:551
 #: pcbnew/pcb_tablecell.cpp:193 pcbnew/pcb_textbox.cpp:811
 #: pcbnew/pcb_track.cpp:2073
@@ -7145,22 +7145,32 @@ msgstr "Kobbersone (%s) har ingen puter tilkoblet."
 msgid "Error removing directory '%s': %s"
 msgstr "Fjern enkeltnett %s."
 
-#: common/gestfich.cpp:366 common/gestfich.cpp:420 common/gestfich.cpp:491
+#: common/gestfich.cpp:366 common/gestfich.cpp:440 common/gestfich.cpp:554
 #, fuzzy, c-format
 msgid "Could not open source directory: %s"
 msgstr "Kan ikke opprette utdatakatalogen \"%s\".\n"
 
-#: common/gestfich.cpp:373 common/gestfich.cpp:428
+#: common/gestfich.cpp:373 common/gestfich.cpp:511
 #, fuzzy, c-format
 msgid "Could not create destination directory: %s"
 msgstr "Kan ikke opprette utdatakatalogen \"%s\".\n"
 
-#: common/gestfich.cpp:397 common/gestfich.cpp:470
+#: common/gestfich.cpp:397 common/gestfich.cpp:428
 #, fuzzy, c-format
 msgid "Could not copy file: %s to %s"
 msgstr "Kunne ikke åpne arkivfilen\n"
 
-#: common/gestfich.cpp:521
+#: common/gestfich.cpp:477
+#, fuzzy, c-format
+msgid "Could not copy directory: %s to %s"
+msgstr "Kunne ikke åpne arkivfilen\n"
+
+#: common/gestfich.cpp:529
+#, fuzzy, c-format
+msgid "Source directory does not exist: %s"
+msgstr "Den gitte veien eksisterer ikke"
+
+#: common/gestfich.cpp:584
 #, fuzzy, c-format
 msgid "Could not read file: %s"
 msgstr "Kunne ikke opprette filen \"%s\"."
@@ -10401,7 +10411,7 @@ msgid "Press a new hotkey, or press Esc to cancel..."
 msgstr "Trykk på en ny hurtigtast, eller trykk på Esc for å avbryte ..."
 
 #: common/widgets/widget_hotkey_list.cpp:116
-#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:24
+#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:26
 msgid "Command:"
 msgstr "Kommando:"
 
@@ -12539,6 +12549,7 @@ msgid "Run external simulator command:"
 msgstr "Ekstern simulatorkommando:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:344
+#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:30
 #, fuzzy
 msgid ""
 "Enter the command line to run SPICE\n"
@@ -12605,7 +12616,7 @@ msgid "You must provide a netlist generator title"
 msgstr "Feil. Du må oppgi en tittel"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:27
-#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:33
+#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:36
 #: kicad/dialogs/dialog_jobset_output_options_base.cpp:46
 #, fuzzy
 msgid "Output path:"
@@ -16153,7 +16164,7 @@ msgid "Column lines"
 msgstr "Kolonner"
 
 #: eeschema/dialogs/dialog_table_properties_base.h:76
-#: eeschema/sch_table.cpp:632 pcbnew/dialogs/dialog_table_properties_base.h:72
+#: eeschema/sch_table.cpp:645 pcbnew/dialogs/dialog_table_properties_base.h:72
 #: pcbnew/pcb_table.cpp:555
 #, fuzzy
 msgid "Table Properties"
@@ -20533,14 +20544,14 @@ msgstr "Ekskluder fra BOM"
 msgid "Hierarchical Sheet %s"
 msgstr "Hierarkisk ark %s"
 
-#: eeschema/sch_sheet.cpp:1717 eeschema/sch_table.cpp:642
+#: eeschema/sch_sheet.cpp:1717 eeschema/sch_table.cpp:655
 #: pcbnew/pcb_table.cpp:565 pcbnew/pcb_tablecell.cpp:190
 #: pcbnew/pcb_textbox.cpp:835
 #, fuzzy
 msgid "Border Width"
 msgstr "Kantbredde:"
 
-#: eeschema/sch_sheet.cpp:1721 eeschema/sch_table.cpp:651
+#: eeschema/sch_sheet.cpp:1721 eeschema/sch_table.cpp:664
 #: pcbnew/pcb_table.cpp:574
 #, fuzzy
 msgid "Border Color"
@@ -20638,47 +20649,47 @@ msgstr "Bibliotek lenke:"
 msgid "%d Column Table"
 msgstr ""
 
-#: eeschema/sch_table.cpp:566 pcbnew/pcb_table.cpp:387
+#: eeschema/sch_table.cpp:579 pcbnew/pcb_table.cpp:387
 #, fuzzy, c-format
 msgid "%d Columns"
 msgstr "Kolonner"
 
-#: eeschema/sch_table.cpp:634 pcbnew/pcb_table.cpp:557
+#: eeschema/sch_table.cpp:647 pcbnew/pcb_table.cpp:557
 #, fuzzy
 msgid "External Border"
 msgstr "Ekstern data"
 
-#: eeschema/sch_table.cpp:638 pcbnew/pcb_table.cpp:561
+#: eeschema/sch_table.cpp:651 pcbnew/pcb_table.cpp:561
 #, fuzzy
 msgid "Header Border"
 msgstr "Reparasjonstavle"
 
-#: eeschema/sch_table.cpp:647 pcbnew/pcb_table.cpp:570
+#: eeschema/sch_table.cpp:660 pcbnew/pcb_table.cpp:570
 #: pcbnew/pcb_tablecell.cpp:189 pcbnew/pcb_textbox.cpp:831
 #, fuzzy
 msgid "Border Style"
 msgstr "Geringsstil:"
 
-#: eeschema/sch_table.cpp:655 pcbnew/pcb_table.cpp:578
+#: eeschema/sch_table.cpp:668 pcbnew/pcb_table.cpp:578
 #, fuzzy
 msgid "Row Separators"
 msgstr "Fjern generatoren"
 
-#: eeschema/sch_table.cpp:659 pcbnew/pcb_table.cpp:582
+#: eeschema/sch_table.cpp:672 pcbnew/pcb_table.cpp:582
 msgid "Cell Separators"
 msgstr ""
 
-#: eeschema/sch_table.cpp:663 pcbnew/pcb_table.cpp:586
+#: eeschema/sch_table.cpp:676 pcbnew/pcb_table.cpp:586
 #, fuzzy
 msgid "Separators Width"
 msgstr "Termisk bredde"
 
-#: eeschema/sch_table.cpp:668 pcbnew/pcb_table.cpp:591
+#: eeschema/sch_table.cpp:681 pcbnew/pcb_table.cpp:591
 #, fuzzy
 msgid "Separators Style"
 msgstr "Generatorfiler:"
 
-#: eeschema/sch_table.cpp:672 pcbnew/pcb_table.cpp:595
+#: eeschema/sch_table.cpp:685 pcbnew/pcb_table.cpp:595
 #, fuzzy
 msgid "Separators Color"
 msgstr "Klar farge"
@@ -27942,12 +27953,12 @@ msgstr "Åpne et eksisterende prosjekt"
 msgid "Copy Files Job Settings"
 msgstr "Filterinnstillinger"
 
-#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:48
+#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:51
 #, fuzzy
 msgid "Record output messages"
 msgstr "Output Meldinger"
 
-#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:51
+#: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:54
 msgid "Ignore non-zero exit code"
 msgstr ""
 
@@ -29327,55 +29338,55 @@ msgstr "Vil du virkelig slette «%s»?"
 msgid "Failed to remove git directory"
 msgstr "Kan ikke opprette katalogen \"%s\""
 
-#: kicad/project_tree_pane.cpp:2297
+#: kicad/project_tree_pane.cpp:2300
 msgid "Discarding commit due to empty commit message."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2303
+#: kicad/project_tree_pane.cpp:2306
 msgid "Discarding commit due to empty file selection."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2309
+#: kicad/project_tree_pane.cpp:2312
 #, fuzzy, c-format
 msgid "Failed to get repository index: %s"
 msgstr "Kan ikke analysere '%s' i '%s'"
 
-#: kicad/project_tree_pane.cpp:2318
+#: kicad/project_tree_pane.cpp:2321
 #, fuzzy, c-format
 msgid "Failed to add file to index: %s"
 msgstr "Kunne ikke slette '%s'"
 
-#: kicad/project_tree_pane.cpp:2327
+#: kicad/project_tree_pane.cpp:2330
 #, fuzzy, c-format
 msgid "Failed to write index: %s"
 msgstr "Kunne ikke opprette filen \"%s\""
 
-#: kicad/project_tree_pane.cpp:2335
+#: kicad/project_tree_pane.cpp:2338
 #, fuzzy, c-format
 msgid "Failed to write tree: %s"
 msgstr "Kunne ikke slette '%s'"
 
-#: kicad/project_tree_pane.cpp:2345
+#: kicad/project_tree_pane.cpp:2348
 #, fuzzy, c-format
 msgid "Failed to lookup tree: %s"
 msgstr "Kunne ikke slette '%s'"
 
-#: kicad/project_tree_pane.cpp:2356
+#: kicad/project_tree_pane.cpp:2359
 #, fuzzy, c-format
 msgid "Failed to get HEAD reference: %s"
 msgstr "Kan ikke opprette katalogen \"%s\""
 
-#: kicad/project_tree_pane.cpp:2364
+#: kicad/project_tree_pane.cpp:2367
 #, fuzzy, c-format
 msgid "Failed to get commit: %s"
 msgstr "Kunne ikke lagre skjematisk \"%s\""
 
-#: kicad/project_tree_pane.cpp:2382
+#: kicad/project_tree_pane.cpp:2385
 #, fuzzy, c-format
 msgid "Failed to create author signature: %s"
 msgstr "Kunne ikke opprette midlertidig fil \"%s\""
 
-#: kicad/project_tree_pane.cpp:2418
+#: kicad/project_tree_pane.cpp:2421
 #, fuzzy, c-format
 msgid "Failed to create commit: %s"
 msgstr "Kunne ikke opprette filen \"%s\""

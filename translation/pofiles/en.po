@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-18 19:16+0300\n"
+"POT-Creation-Date: 2025-02-19 17:09+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -4036,6 +4036,14 @@ msgstr "Could not create destination directory: %s"
 #, c-format
 msgid "Could not copy file: %s to %s"
 msgstr "Could not copy file: %s to %s"
+
+#, c-format
+msgid "Could not copy directory: %s to %s"
+msgstr "Could not copy directory: %s to %s"
+
+#, c-format
+msgid "Source directory does not exist: %s"
+msgstr "Source directory does not exist: %s"
 
 #, c-format
 msgid "Could not read file: %s"
