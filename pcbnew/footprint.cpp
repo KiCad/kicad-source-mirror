@@ -3741,6 +3741,21 @@ double FOOTPRINT::Similarity( const BOARD_ITEM& aOther ) const
 }
 
 
+/**
+ * Compare two points, returning std::nullopt if they are identical.
+ */
+static constexpr std::optional<bool> cmp_points_opt( const VECTOR2I& aPtA, const VECTOR2I& aPtB )
+{
+    if( aPtA.x != aPtB.x )
+        return aPtA.x < aPtB.x;
+
+    if( aPtA.y != aPtB.y )
+        return aPtA.y < aPtB.y;
+
+    return std::nullopt;
+}
+
+
 bool FOOTPRINT::cmp_drawings::operator()( const BOARD_ITEM* itemA, const BOARD_ITEM* itemB ) const
 {
     if( itemA->Type() != itemB->Type() )
@@ -3749,7 +3764,9 @@ bool FOOTPRINT::cmp_drawings::operator()( const BOARD_ITEM* itemA, const BOARD_I
     if( itemA->GetLayer() != itemB->GetLayer() )
         return itemA->GetLayer() < itemB->GetLayer();
 
-    if( itemA->Type() == PCB_SHAPE_T )
+    switch( itemA->Type() )
+    {
+    case PCB_SHAPE_T:
     {
         const PCB_SHAPE* dwgA = static_cast<const PCB_SHAPE*>( itemA );
         const PCB_SHAPE* dwgB = static_cast<const PCB_SHAPE*>( itemB );
@@ -3761,35 +3778,25 @@ bool FOOTPRINT::cmp_drawings::operator()( const BOARD_ITEM* itemA, const BOARD_I
         // We cannot use them for sorting polygons
         if( dwgA->GetShape() != SHAPE_T::POLY )
         {
-            if( dwgA->GetStart().x != dwgB->GetStart().x )
-                return dwgA->GetStart().x < dwgB->GetStart().x;
-            if( dwgA->GetStart().y != dwgB->GetStart().y )
-                return dwgA->GetStart().y < dwgB->GetStart().y;
+            if( std::optional<bool> cmp = cmp_points_opt( dwgA->GetStart(), dwgB->GetStart() ) )
+                return *cmp;
 
-            if( dwgA->GetEnd().x != dwgB->GetEnd().x )
-                return dwgA->GetEnd().x < dwgB->GetEnd().x;
-            if( dwgA->GetEnd().y != dwgB->GetEnd().y )
-                return dwgA->GetEnd().y < dwgB->GetEnd().y;
+            if( std::optional<bool> cmp = cmp_points_opt( dwgA->GetEnd(), dwgB->GetEnd() ) )
+                return *cmp;
         }
 
         if( dwgA->GetShape() == SHAPE_T::ARC )
         {
-            if( dwgA->GetCenter().x != dwgB->GetCenter().x )
-                return dwgA->GetCenter().x < dwgB->GetCenter().x;
-            if( dwgA->GetCenter().y != dwgB->GetCenter().y )
-                return dwgA->GetCenter().y < dwgB->GetCenter().y;
+            if( std::optional<bool> cmp = cmp_points_opt( dwgA->GetCenter(), dwgB->GetCenter() ) )
+                return *cmp;
         }
         else if( dwgA->GetShape() == SHAPE_T::BEZIER )
         {
-            if( dwgA->GetBezierC1().x != dwgB->GetBezierC1().x )
-                return dwgA->GetBezierC1().x < dwgB->GetBezierC1().x;
-            if( dwgA->GetBezierC1().y != dwgB->GetBezierC1().y )
-                return dwgA->GetBezierC1().y < dwgB->GetBezierC1().y;
+            if( std::optional<bool> cmp = cmp_points_opt( dwgA->GetBezierC1(), dwgB->GetBezierC1() ) )
+                return *cmp;
 
-            if( dwgA->GetBezierC2().x != dwgB->GetBezierC2().x )
-                return dwgA->GetBezierC2().x < dwgB->GetBezierC2().x;
-            if( dwgA->GetBezierC2().y != dwgB->GetBezierC2().y )
-                return dwgA->GetBezierC2().y < dwgB->GetBezierC2().y;
+            if( std::optional<bool> cmp = cmp_points_opt( dwgA->GetBezierC2(), dwgB->GetBezierC2() ) )
+                return *cmp;
         }
         else if( dwgA->GetShape() == SHAPE_T::POLY )
         {
@@ -3798,17 +3805,58 @@ bool FOOTPRINT::cmp_drawings::operator()( const BOARD_ITEM* itemA, const BOARD_I
 
             for( int ii = 0; ii < dwgA->GetPolyShape().TotalVertices(); ++ii )
             {
-                if( dwgA->GetPolyShape().CVertex( ii ).x != dwgB->GetPolyShape().CVertex( ii ).x )
-                    return dwgA->GetPolyShape().CVertex( ii ).x
-                           < dwgB->GetPolyShape().CVertex( ii ).x;
-                if( dwgA->GetPolyShape().CVertex( ii ).y != dwgB->GetPolyShape().CVertex( ii ).y )
-                    return dwgA->GetPolyShape().CVertex( ii ).y
-                           < dwgB->GetPolyShape().CVertex( ii ).y;
+                if( std::optional<bool> cmp =
+                            cmp_points_opt( dwgA->GetPolyShape().CVertex( ii ), dwgB->GetPolyShape().CVertex( ii ) ) )
+                {
+                    return *cmp;
+                }
             }
         }
 
         if( dwgA->GetWidth() != dwgB->GetWidth() )
             return dwgA->GetWidth() < dwgB->GetWidth();
+
+        break;
+    }
+    case PCB_TEXT_T:
+    {
+        const PCB_TEXT& textA = static_cast<const PCB_TEXT&>( *itemA );
+        const PCB_TEXT& textB = static_cast<const PCB_TEXT&>( *itemB );
+
+        if( std::optional<bool> cmp = cmp_points_opt( textA.GetPosition(), textB.GetPosition() ) )
+            return *cmp;
+
+        if( textA.GetTextAngle() != textB.GetTextAngle() )
+            return textA.GetTextAngle() < textB.GetTextAngle();
+
+        if( std::optional<bool> cmp = cmp_points_opt( textA.GetTextSize(), textB.GetTextSize() ) )
+            return *cmp;
+
+        if( textA.GetTextThickness() != textB.GetTextThickness() )
+            return textA.GetTextThickness() < textB.GetTextThickness();
+
+        if( textA.IsBold() != textB.IsBold() )
+            return textA.IsBold() < textB.IsBold();
+
+        if( textA.IsItalic() != textB.IsItalic() )
+            return textA.IsItalic() < (int) textB.IsItalic();
+
+        if( textA.IsMirrored() != textB.IsMirrored() )
+            return textA.IsMirrored() < textB.IsMirrored();
+
+        if( textA.GetLineSpacing() != textB.GetLineSpacing() )
+            return textA.GetLineSpacing() < textB.GetLineSpacing();
+
+        if( textA.GetText() != textB.GetText() )
+            return textA.GetText().Cmp( textB.GetText() ) < 0;
+
+        break;
+    }
+    default:
+    {
+        // These items don't have their own specific sorting criteria.
+        break;
+    }
     }
 
     if( itemA->m_Uuid != itemB->m_Uuid )
@@ -3823,10 +3871,8 @@ bool FOOTPRINT::cmp_pads::operator()( const PAD* aFirst, const PAD* aSecond ) co
     if( aFirst->GetNumber() != aSecond->GetNumber() )
         return StrNumCmp( aFirst->GetNumber(), aSecond->GetNumber() ) < 0;
 
-    if( aFirst->GetFPRelativePosition().x != aSecond->GetFPRelativePosition().x )
-        return aFirst->GetFPRelativePosition().x < aSecond->GetFPRelativePosition().x;
-    if( aFirst->GetFPRelativePosition().y != aSecond->GetFPRelativePosition().y )
-        return aFirst->GetFPRelativePosition().y < aSecond->GetFPRelativePosition().y;
+    if( std::optional<bool> cmp = cmp_points_opt( aFirst->GetFPRelativePosition(), aSecond->GetFPRelativePosition() ) )
+        return *cmp;
 
     std::optional<bool> padCopperMatches;
 
@@ -3910,10 +3956,10 @@ bool FOOTPRINT::cmp_padstack::operator()( const PAD* aFirst, const PAD* aSecond 
 
     for( int ii = 0; ii < firstShape->VertexCount(); ++ii )
     {
-        if( firstShape->CVertex( ii ).x != secondShape->CVertex( ii ).x )
-            return firstShape->CVertex( ii ).x < secondShape->CVertex( ii ).x;
-        if( firstShape->CVertex( ii ).y != secondShape->CVertex( ii ).y )
-            return firstShape->CVertex( ii ).y < secondShape->CVertex( ii ).y;
+        if( std::optional<bool> cmp = cmp_points_opt( firstShape->CVertex( ii ), secondShape->CVertex( ii ) ) )
+        {
+            return *cmp;
+        }
     }
 
     return false;
@@ -3934,10 +3980,11 @@ bool FOOTPRINT::cmp_zones::operator()( const ZONE* aFirst, const ZONE* aSecond )
 
     for( int ii = 0; ii < aFirst->Outline()->TotalVertices(); ++ii )
     {
-        if( aFirst->Outline()->CVertex( ii ).x != aSecond->Outline()->CVertex( ii ).x )
-            return aFirst->Outline()->CVertex( ii ).x < aSecond->Outline()->CVertex( ii ).x;
-        if( aFirst->Outline()->CVertex( ii ).y != aSecond->Outline()->CVertex( ii ).y )
-            return aFirst->Outline()->CVertex( ii ).y < aSecond->Outline()->CVertex( ii ).y;
+        if( std::optional<bool> cmp =
+                    cmp_points_opt( aFirst->Outline()->CVertex( ii ), aSecond->Outline()->CVertex( ii ) ) )
+        {
+            return *cmp;
+        }
     }
 
     if( aFirst->m_Uuid != aSecond->m_Uuid )
