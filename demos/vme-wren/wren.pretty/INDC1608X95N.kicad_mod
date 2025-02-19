@@ -1,0 +1,572 @@
+(footprint "INDC1608X95N"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "Chip Inductor, 2-Leads, EIA 0603, Metric 1608, Body 1.6x0.8mm, IPC Medium Density")
+	(property "Reference" "REF**"
+		(at 0 -1.776 0)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "505d8a80-e2c3-4b90-b001-bf55ab2dbf95")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "IND0603_MURATA_BLM18PG121SN1D"
+		(at 0 1.776 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "457ac83b-407e-4050-9bde-1d62ebe21797")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "B.Fab")
+		(hide yes)
+		(uuid "8b517192-40bf-466d-aca3-c119668fffae")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+			(justify mirror)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "B.Fab")
+		(hide yes)
+		(uuid "8d0eeefd-5753-483e-9b3a-a75b02e2a387")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+			(justify mirror)
+		)
+	)
+	(property "Author" "CERN DEM BC"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "fc3c6ad0-1fc5-4e1e-838c-b4e74e32272f")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Case" "0603"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "10a42955-3404-4172-b045-9bb46884f4b6")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Comment" "120R@100MHz"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "68cbf7fb-9001-4f46-94b9-345087e62249")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Component Kind" "Standard"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "10c9e3de-8cc1-4825-bd7a-19375e3fc833")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Component Type" "Standard"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d69f1485-94c9-4422-953c-9df2e0238cb1")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "ComponentHeight" "0.95mm"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "e5cbd360-92f3-47d9-9e84-a64352a3bb61")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "CreateDate" "07/27/15 00:00:00"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "bd2542e7-ccaa-4357-92f1-df174c1e4895")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Database Table Name" "Inductors & Transformers"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d1d5f5f5-c906-40ff-bfe5-e4d9cbed5a5a")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint Library" "Inductors SMD"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "42cf144a-7782-41aa-abcf-5e60704b5074")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint Path" "PcbLib\\Inductors SMD.PcbLib"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a5739378-5b57-4b97-87c8-3240b9cf951c")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint Ref" "INDC1608X95N"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "8f4cb6dc-0344-4262-b63d-ea6936b47929")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "HelpURL" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "1ad309e9-6e50-4bf4-9c96-d63c4397811c")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "LatestRevisionDate" "10/25/18 00:00:00"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "74cb6f9b-7860-43a8-8143-26208e4b1b08")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Library Name" "Inductors SMD"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "cd933662-ada3-4de8-b974-0c9cdf8a0755")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Library Path" "SchLib\\Inductors & Transformers.SchLib"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "18e8a960-f6e1-4878-abeb-da195603a200")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Library Ref" "Ferrite Bead"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "171b130b-d596-42e1-bf04-2c482cec1a34")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "License" "CC-BY-SA 4.0"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f9b39e97-efde-448f-a999-f80aa6021046")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer" "MURATA"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "fae289dd-18e9-4676-8dbb-5f5869c83570")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer Part Number" "BLM18PG121SN1D"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c9773cb5-55ae-44bd-b456-e66c595fe763")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Mounted" "Yes"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "90f6866a-68e7-4bd6-abe5-c034582d38dd")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "PackageDescription" " "
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "8a092fe6-a6c6-4e0a-8063-924ffd7a6c02")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Part Description" "SMD EMIFIL Chip Ferrite Bead"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "74f98a0e-2dc8-44f8-919a-1503fc4c47aa")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Part Number" "IND0603_MURATA_BLM18PG121SN1D"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "36cebbbe-6e03-4d1a-8842-c730e20dd126")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Pin Count" "2"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ded54d39-5ed5-487c-8867-4765b7feb823")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Power" "2A"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "263ab78f-cecc-4e38-953b-94413c96beb1")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Resistance" "0.05R"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "71b05824-a58d-4163-a4d7-9ad397024ce1")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "SMD" "Yes"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ecb3440d-6b40-4dbb-9137-6e50e709904c")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Sense" "No"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "70c27144-8a7b-42ab-815b-328647f4d40a")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Sense Comment" " "
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ce215072-f68e-4845-b25c-6ba6288e6b1f")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Socket" "No"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "0ef5a2b9-15da-4275-912b-98b4efe687e1")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Status" " "
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ad7d5487-74cd-4170-bd60-216c242d9f28")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Status Comment" " "
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "cc21a625-c6ba-460d-a4fd-b28b67019147")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Tolerance" " "
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "1496785c-6a13-43f0-b3ee-dde0e675e23f")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Val" "120R@100MHz"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "0cb3e3b3-1710-43e4-a66f-c75f79e1ebae")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start -1.55 -0.75)
+		(end 1.55 -0.75)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "be5ae551-f782-4a6d-b65a-58b8cc7e8312")
+	)
+	(fp_line
+		(start -1.55 0.75)
+		(end -1.55 -0.75)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "85560d9a-b6fc-4969-972c-00ee451e0b28")
+	)
+	(fp_line
+		(start -1.55 0.75)
+		(end 1.55 0.75)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "c5716f4f-625b-44a7-b2f1-5af86db1d1b7")
+	)
+	(fp_line
+		(start 1.55 0.75)
+		(end 1.55 -0.75)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "13a205e3-c784-4da3-9cda-9c557fbff374")
+	)
+	(fp_line
+		(start -0.875 -0.475)
+		(end 0.875 -0.475)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "39303925-1938-4ade-bdde-25e3c285880b")
+	)
+	(fp_line
+		(start -0.875 0.475)
+		(end -0.875 -0.475)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "2e317fb6-3ec8-4fb3-b46b-26c1fa73d695")
+	)
+	(fp_line
+		(start -0.875 0.475)
+		(end 0.875 0.475)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "cde97cb0-7ab0-4db5-9ecc-4e380750641f")
+	)
+	(fp_line
+		(start 0.875 0.475)
+		(end 0.875 -0.475)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "f380316a-2ca7-4594-ac9e-2546483f166a")
+	)
+	(pad "1" smd rect
+		(at -0.8 0 270)
+		(size 1 0.95)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "ce42d44e-f460-4bfa-9dfa-dbcaf2afed4d")
+	)
+	(pad "2" smd rect
+		(at 0.8 0 270)
+		(size 1 0.95)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "a445c98d-4afa-47b3-80cc-5ebea5281121")
+	)
+	(embedded_fonts no)
+	(model "${KICAD9_3DMODEL_DIR}/Inductor_SMD.3dshapes/L_0603_1608Metric.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)

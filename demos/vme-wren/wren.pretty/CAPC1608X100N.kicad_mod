@@ -1,0 +1,630 @@
+(footprint "CAPC1608X100N"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "Capacitor, non-Polarized, Chip; 1.60mm L X 0.80mm W X 1.00mm H, IPC Medium Density")
+	(property "Reference" "REF**"
+		(at 0 -1.776 0)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "182f4a40-d0c2-4038-915c-80ee4213aef5")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "CC0603_47UF_6.3V_20%_X5R"
+		(at 0 1.776 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "6327ed98-604a-4e38-98a5-c3db2d149fab")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "B.Fab")
+		(hide yes)
+		(uuid "4318d412-2110-47f5-abaa-2e81975830e0")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+			(justify mirror)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "B.Fab")
+		(hide yes)
+		(uuid "d967209c-ede2-4dcc-b0df-dde03e5035d7")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+			(justify mirror)
+		)
+	)
+	(property "Author" "CERN DEM JLC"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "962143c4-986d-438c-8bdb-6dae0ff5edb6")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Case" "0603"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ab986794-23ba-4f3a-aa74-c5583e552e14")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Comment" "47uF"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "45516d3d-b127-456d-b53e-aebbb91f92c6")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Component Kind" "Standard"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "969ae76d-a5b4-4718-9409-28c16f7e0335")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Component Type" "Standard"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "abd18ec5-143a-4cde-b6a4-cc9c8d901666")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "ComponentHeight" " "
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "fb398b4c-1f49-43f3-964b-510a4051d384")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "CreateDate" "02/01/18 00:00:00"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "0952a4c7-f052-46c4-82c1-ffbbd7ee4495")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Database Table Name" "Capacitors"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d07015f8-8a26-43e8-81e5-c2e90ce81ad6")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint Library" "Capacitors SMD"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "12a6ecc4-515a-46b1-bcc5-70a8da7d43d6")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint Path" "PcbLib\\Capacitors SMD.PcbLib"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d75abeaa-3434-4af4-874c-6eefb721e017")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint Ref" "CAPC1608X100N"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "bb588cf5-30de-4946-93ae-6fb1c1a8851d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "HelpURL" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4f17f931-2e65-44f0-9278-06fae2dc19aa")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "LatestRevisionDate" "02/01/18 00:00:00"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c5f653e4-2c3b-466d-a02d-6e82794181d0")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Library Name" "Capacitors SMD"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f75d0707-645d-41d4-9326-a2fa55ed5f9d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Library Path" "SchLib\\Capacitors.SchLib"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "15d3a8cc-9ba3-4e1b-afb5-ae8894b6aad4")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Library Ref" "Capacitor - non polarized"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "bb05330a-f590-4927-9374-188bc3162919")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "License" "CC-BY-SA 4.0"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "9ffb7e51-9bc4-409b-a487-ca73ff6d2b8c")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer" "GENERIC"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a82ece35-358e-44b1-98be-b28e4cca5531")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer Part Number" "CC0603_47UF_6.3V_20%_X5R"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2e4bb37a-49a7-48b4-b378-a76729952d56")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer1 ComponentHeight" "1mm"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "9fbbab32-7be6-4e82-9f2b-e6f830d0135d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer1 Example" "MURATA"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "26832335-a26d-4abe-bd51-a486a0e8504a")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer1 Part Number" "GRM188R60J476ME15D"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "299f6b8a-45b6-43b5-ac00-538af12f5a97")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Mounted" "Yes"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "57210594-5d0f-4d97-ac96-187da3a54f2e")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "PackageDescription" " "
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "54a51c01-8f5b-43ce-be34-0b82b5071fd3")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Part Description" "SMD Multilayer Chip Ceramic Capacitor"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "b9d90eb5-f360-491a-b8d9-a2915b8f9f62")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Part Number" "CC0603_47UF_6.3V_20%_X5R"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "671b53c1-4e68-4bca-8db7-8c2b7ed7da1e")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Pin Count" "2"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "3db67c95-cb0d-4e6b-923b-8fb81554e471")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "PressFit" " "
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "1f62daaa-f9f3-4234-b79d-1acee8f176cb")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "SMD" "Yes"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4ff73e41-823a-40a9-a1d5-b4f860de6656")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Sense" "No"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "b8e84b77-1f13-4c16-a927-371f1d5fb5da")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Sense Comment" " "
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "6c32be1e-a716-4216-bfec-4aac77ff5f8d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Socket" "No"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "abd03ae8-f0eb-448b-8b88-6d2a8b54bb05")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Status" "None"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2505f822-1f82-4326-926a-59e8bf4f0996")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Status Comment" " "
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "540bc349-2a77-46da-aa27-288e6328c50a")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "TC" "X5R"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "49cdd76c-6368-490e-9a6d-4d077d706366")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Tolerance" "±20%"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "64c396dc-0a12-4761-a3ea-7fc3471ead57")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Val" "47uF"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "924dcdc4-60ff-45bc-881a-fb8b378c6c68")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Voltage" "6.3V"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d882fe13-174d-42de-831e-73bba316097a")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start 0 0.3)
+		(end 0 -0.3)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "5e94fcdb-5d2a-4ac8-ac2a-ec905694c022")
+	)
+	(fp_line
+		(start -1.45 -0.75)
+		(end 1.45 -0.75)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "585446d2-6a8b-4be8-a9b6-2b770ffdab9e")
+	)
+	(fp_line
+		(start -1.45 0.75)
+		(end -1.45 -0.75)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "e0d64a61-e242-4032-8bc1-a803cd01a745")
+	)
+	(fp_line
+		(start -1.45 0.75)
+		(end 1.45 0.75)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "f17d4ea3-9cb7-4553-8d22-09811372c825")
+	)
+	(fp_line
+		(start 1.45 0.75)
+		(end 1.45 -0.75)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "0f2e83d2-cb52-47e6-a4a1-cabc29da9ee1")
+	)
+	(fp_line
+		(start -0.85 -0.45)
+		(end 0.85 -0.45)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "54728d3e-7c7c-4ff9-9baa-00713439631f")
+	)
+	(fp_line
+		(start -0.85 0.45)
+		(end -0.85 -0.45)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "731af10b-e322-4af8-a258-16cee55d2b24")
+	)
+	(fp_line
+		(start -0.85 0.45)
+		(end 0.85 0.45)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "0a0ec95e-9cbd-4d34-9b9e-8f054cd8d400")
+	)
+	(fp_line
+		(start 0.85 0.45)
+		(end 0.85 -0.45)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "2a494f73-f7e1-44f5-a97f-7079a3153c74")
+	)
+	(pad "1" smd rect
+		(at -0.8 0 270)
+		(size 0.95 0.8)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "399a73cd-6000-4cee-9467-f315e98b1b95")
+	)
+	(pad "2" smd rect
+		(at 0.8 0 270)
+		(size 0.95 0.8)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "900a1c08-3de3-4921-8942-70b70ec83f79")
+	)
+	(embedded_fonts no)
+	(model "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)

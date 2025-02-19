@@ -1,0 +1,886 @@
+(footprint "LED_KINGBRIGHT_KPH-1608CGCK"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "SMT Green LED, Case 0603, Body L 1.6 x W 0.8mm H 0.65mm")
+	(property "Reference" "REF**"
+		(at 1.277826 3.691126 90)
+		(layer "F.SilkS")
+		(uuid "4d4ffd24-bedd-49b0-a1b6-9a48f2fc7243")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "LED_KINGBRIGHT_KPH-1608CGCK"
+		(at 0 1.676 180)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "446bf9a4-ab95-40f3-91dd-474563cefd65")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "dc9845c9-bf8b-4d68-905a-32e63627c6eb")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" "Green"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4df13306-597f-4298-8e9b-2c4154205053")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "SMD" "Yes"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "da9a137a-3244-4176-a52c-c1ffa8a91d90")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Color" "Green"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "32453417-1238-4302-98ad-1e070916e6d3")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Part Number" "LED_KINGBRIGHT_KPH-1608CGCK"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "31cbdcb6-2714-44b9-99b3-8a00c1b873f7")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Library Ref" "LED Green 1C 2A"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "676fd05e-c156-43c6-9505-c9c01d0714ff")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Library Path" "SchLib\\LEDs & Displays.SchLib"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "140e8812-04b3-40d4-992f-086016be1917")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Comment" " "
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "dbe1b916-642e-4828-baa5-d6102b53c04e")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Component Kind" "Standard"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "9675fc0e-5ce9-4845-ad78-531f9993d984")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Component Type" "Standard"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "8d5d9520-26d4-488f-b627-be7054e22c04")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Device" " "
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2fb1496c-3699-4e26-bbe7-18e0782f16bf")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "PackageDescription" "SMT Green LED, Case 0603, Body L 1.6 x W 0.8mm H 0.65mm"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "b9c50462-3a03-4641-af1e-0641f5e43ac9")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Status" " "
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a9c9052a-008f-44a2-8146-dfc77eca621d")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Part Description" "SMD Green LED, Case 1.6mmX0.8mm(0603), 0.65mm Thickness"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4c0abb94-8ebf-4346-b909-0e5f093d5b48")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer" "KINGBRIGHT"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2201792a-1a2e-4c40-a137-df0315578ea4")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer Part Number" "KPH-1608CGCK"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f27ea98a-39c6-43fe-9bb5-38d00c7d7bc6")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Pin Count" "2"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a849e815-9756-448b-97e9-e49f66fcb4cf")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Case" "0603"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d3f77ceb-ca55-4a95-a4ff-c94778ceae92")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Mounted" "Yes"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "e1777289-8632-4d83-ba40-aaf59a82155a")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Socket" "No"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d277ce5b-2c0a-4b09-a18f-b8fdbbb52314")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "PressFit" "No"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2ec78b76-dbc8-48a8-83c8-bec09464e31e")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Sense Comment" " "
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "7a6de496-ddd1-46da-8b17-360cd6a72888")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Sense" "No"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "43a0e25a-26db-47d4-bb69-372367ad7242")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Bonding" "No"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "76883321-2b3c-41c5-bad1-f0b90bdee9bb")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Status Comment" " "
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "cab38115-1716-4bef-b918-46a9826906eb")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "ComponentHeight" "0.65mm"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "3c8f6856-71f5-4627-932f-76fb635c04aa")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint Path" "PcbLib\\ICs And Semiconductors SMD.PcbLib"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f5375f30-b68b-4159-aa9e-a0f5087bcbb3")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint Ref" "LED_KINGBRIGHT_KPH-1608CGCK"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ade65b3f-d843-4bfa-acdb-67aff2c399f2")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "HelpURL" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "8cc249b6-4aeb-435b-b9fb-95a0aa260683")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "ComponentLink1URL" " "
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "39f1722d-0505-41af-a2af-8d40a2321f32")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "ComponentLink1Description" " "
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "aa084050-a167-41c1-a4d6-7fbb7af78a96")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "ComponentLink2URL" " "
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "aa47765e-0d30-4fa9-ba42-8eff02bad812")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "ComponentLink2Description" " "
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "e97c2da9-e1f5-4d8b-9a02-b6448d953391")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Author" "CERN DEM JLC"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c824ca19-e971-47c7-b669-16e3306b1640")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "CreateDate" "07/03/17 00:00:00"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "1bfc605a-391a-4eaf-819f-2a202fd9e263")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "LatestRevisionDate" "07/03/17 00:00:00"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "265495c1-2e85-4a5b-9963-89676f195b8d")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Database Table Name" "ICs And Semiconductors"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a6f45321-9341-4615-a368-526036fd0b24")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Library Name" "LEDs & Displays"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "194e05ad-ed0a-426a-be71-caf2c1e587cc")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint Library" "ICs And Semiconductors SMD"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4f30f3d6-4f9c-424d-9ab1-369b928b3a6e")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "License" "CC-BY-SA 4.0"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f76284a8-aec0-4acb-9ee7-b947dbb91886")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start -0.075 -0.4)
+		(end 0.075 -0.4)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "2f99d329-3628-41f4-a6a9-260f8e93c591")
+	)
+	(fp_line
+		(start -0.075 0.4)
+		(end 0.075 0.4)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "770aaf63-bd4e-403c-b274-c55265ec26b8")
+	)
+	(fp_circle
+		(center -1.7 0)
+		(end -1.575 0)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "cf393062-41cc-4861-aaf2-3f2d6e699db9")
+	)
+	(fp_line
+		(start -1.225 -0.4)
+		(end -0.425 -0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "b6bb8e5a-ab80-46a1-84b8-1e1bea160906")
+	)
+	(fp_line
+		(start -1.225 0.4)
+		(end -1.225 -0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "c38808e4-6756-46db-a9ca-1bb19ab75086")
+	)
+	(fp_line
+		(start -1.225 0.4)
+		(end -0.425 0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "1f0475da-2bd3-41e3-8f9b-19e491bf87ec")
+	)
+	(fp_line
+		(start -0.825 0)
+		(end -0.425 -0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "9501daec-44f3-4157-a4ff-1dccea62244b")
+	)
+	(fp_line
+		(start -0.825 0)
+		(end -0.425 0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "9533c27c-4977-4daf-9ee3-d75817758578")
+	)
+	(fp_line
+		(start -0.5 0)
+		(end 0 0)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "962b3cca-6b59-4b6e-bc81-2f1795c8da9a")
+	)
+	(fp_line
+		(start -0.425 0)
+		(end 0.425 0)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "7a3fdd94-4537-4049-93bb-757d6b05bef3")
+	)
+	(fp_line
+		(start -0.425 0.4)
+		(end -0.425 -0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "12db1d99-9a2f-43ad-bdea-964726e4e9bb")
+	)
+	(fp_line
+		(start 0 0)
+		(end 0 -0.5)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "f7047e55-ce3c-4167-a046-4ba6728a5429")
+	)
+	(fp_line
+		(start 0 0)
+		(end 0.5 0)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "5c4e84d1-dbe1-4614-b27c-270406c7e4d9")
+	)
+	(fp_line
+		(start 0 0.5)
+		(end 0 0)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "b80d9c00-6a01-4428-b2d4-a59e49463058")
+	)
+	(fp_line
+		(start 0.425 -0.4)
+		(end 1.225 -0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "e5803da3-520a-4640-8ebf-431dbf1b5106")
+	)
+	(fp_line
+		(start 0.425 0.4)
+		(end 0.425 -0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "215fef06-e985-406b-b43f-c476fd421238")
+	)
+	(fp_line
+		(start 0.425 0.4)
+		(end 1.225 0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "988a3221-c74a-41c0-8a44-124248792b23")
+	)
+	(fp_line
+		(start 0.825 0)
+		(end 1.225 -0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "140b9ac3-b861-425e-81dc-ec4a1c398d50")
+	)
+	(fp_line
+		(start 0.825 0)
+		(end 1.225 0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "7ff237ae-1667-4ef5-ad40-fa3ddfa0d15b")
+	)
+	(fp_line
+		(start 1.225 0.4)
+		(end 1.225 -0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "90434c32-2908-438e-9953-1ecef063ae8e")
+	)
+	(fp_line
+		(start -1.475 -0.65)
+		(end 1.475 -0.65)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "de2aa5e8-4870-4ccd-a2a2-f12831829bcd")
+	)
+	(fp_line
+		(start -1.475 0.65)
+		(end -1.475 -0.65)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "0de35802-23c0-4b37-b9b7-69d58d6578d0")
+	)
+	(fp_line
+		(start -1.475 0.65)
+		(end 1.475 0.65)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "b8db7e8a-0dc8-4693-9e98-ff96d18fb009")
+	)
+	(fp_line
+		(start 1.475 0.65)
+		(end 1.475 -0.65)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "dc1ced40-0d6a-4b4b-a268-f1f6b72e7ec2")
+	)
+	(fp_line
+		(start -0.8 -0.4)
+		(end 0.8 -0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "fff31bd0-58d0-47b9-a8a1-b703e65f7f93")
+	)
+	(fp_line
+		(start -0.8 0.4)
+		(end -0.8 -0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "a7fd0521-d678-425e-9297-1f3d521375a5")
+	)
+	(fp_line
+		(start -0.8 0.4)
+		(end 0.8 0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "6dea9acc-6830-4ae0-be1a-010cda070a88")
+	)
+	(fp_line
+		(start -0.425 0)
+		(end 0.425 -0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "667582f1-2601-482b-880d-180a5554e13c")
+	)
+	(fp_line
+		(start -0.425 0)
+		(end 0.425 0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "e83b9a63-f2b2-4131-aaf6-e3d05c074d8b")
+	)
+	(fp_line
+		(start 0.425 0.4)
+		(end 0.425 -0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "0840b760-3b4c-440a-b961-0d6c0992de6c")
+	)
+	(fp_line
+		(start 0.8 0.4)
+		(end 0.8 -0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "09a5c728-87f6-4521-8f54-14ae8ce8d2fa")
+	)
+	(pad "1" smd rect
+		(at -0.825 0)
+		(size 0.8 0.8)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "33308170-4d97-4264-a030-7ccd25ae561c")
+	)
+	(pad "2" smd rect
+		(at 0.825 0)
+		(size 0.8 0.8)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "be709f75-8361-4d46-9bec-02e860564715")
+	)
+	(embedded_fonts no)
+	(model "${KICAD9_3DMODEL_DIR}/LED_SMD.3dshapes/LED_0603_1608Metric_Castellated.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)

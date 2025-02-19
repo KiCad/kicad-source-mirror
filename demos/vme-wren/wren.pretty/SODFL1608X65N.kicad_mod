@@ -1,0 +1,847 @@
+(footprint "SODFL1608X65N"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "Ultra Small Outline Diode Flat Lead (SOD-523), Body; 1.2mm L X 0.8mm W X 0.65mm H, IPC Medium Density")
+	(property "Reference" "REF**"
+		(at 18.16565 -10.59875 0)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "b0e32d3f-4afa-4f29-81e6-803d73d352ac")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "PESD3V3S1UB"
+		(at 18.16565 -6.97175 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "591650c3-435c-40a8-901a-84c5b7657b56")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2c2e3eec-a7c0-4902-b52e-527ca526b8f0")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "b67c3a1f-a7d3-4dff-9ef2-a5ef0048c8cf")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "SMD" "Yes"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f9e9ba26-3c06-4333-b6e7-688073a89c41")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Part Number" "PESD3V3S1UB"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "b65510d1-721b-469c-aec8-58967049128e")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Library Ref" "Diode ESD"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "e238543d-1259-46ec-bafa-5a3dd1f35de5")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Library Path" "SchLib\\Diodes.SchLib"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a56a28c2-6eb8-49db-855c-264d9650cada")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Comment" "PESD3V3S1UB"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "cf564aa6-3a8c-47be-83a0-92254b3aed12")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Component Kind" "Standard"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ccc5de21-2e11-452e-8f69-f95525138b2f")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Component Type" "Standard"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "5623b815-e68c-4e69-8626-94210429b495")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Device" "PESD3V3S1UB"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "0d3fb1bf-725b-4a64-8e97-378d75730a52")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "PackageDescription" "Ultra Small Outline Diode Flat Lead (SOD-523), Body; 1.2mm L X 0.8mm W X 0.65mm H, IPC Medium Density"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f7ef91bd-17e8-4e1f-8573-648f9086d177")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Voltage" "3V3"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "5f698a59-474e-4d3e-81b9-8653c066734c")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Power" "330W"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ce9ecf3b-3360-4b0e-bf72-b2af0ea21e8e")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Status" " "
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "93202798-39b2-440c-bde3-80c74f6b3238")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Part Description" "ESD protection diode (23kV)"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "10fba933-3b94-4b5b-aa61-a779bbfa96fb")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer" "NXP SEMICONDUCTORS"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "e16faca6-0b5d-4998-af29-84e8382a5180")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer Part Number" "PESD3V3S1UB"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2ae66124-3509-49e6-8c3a-1c3b0d300753")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Pin Count" "2"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ba3ead2d-2fa9-416b-bdf1-078f2d6d6cd7")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Case" "SOD523"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a17ba9e6-2b96-4d5e-af87-bde9dc919b01")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Mounted" "Yes"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "04a17638-59d5-4588-8afa-eb6577c1514c")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Socket" "No"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "59fb46dc-e0f3-4a94-82a3-0e67568dfa46")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "PressFit" "No"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2639b8d7-5d12-4739-8fd6-3089a5e759f0")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Sense" "No"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "8e9afc1a-e5e8-45d0-a883-8fbc6f67a76a")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Sense Comment" " "
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c8a5f2a8-eac9-4ebb-8f44-004093b0b225")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Bonding" "No"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a1138b4e-1742-4d4b-8fab-eb4d4f8518b6")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Status Comment" " "
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "8d2a6991-626a-4ab7-b1a0-af7dfc2fb96a")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "ComponentHeight" "0.65mm"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f5664ab0-9f38-40af-8332-7472e9a0b903")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint Path" "PcbLib\\ICs And Semiconductors SMD.PcbLib"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "b116ae45-447c-4718-90f2-c19e241e8d23")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint Ref" "SODFL1608X65N"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2785e927-ed10-4674-abc7-dc264cac0e17")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "HelpURL" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "56536aa1-6fe0-4960-be31-4e393683cfff")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "ComponentLink1URL" " "
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "8313d0bd-a6f8-4491-adeb-1d2811678972")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "ComponentLink1Description" " "
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f5548a13-b400-401e-ae7c-2a43fdae99c2")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "ComponentLink2URL" " "
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a2ce2e46-5dae-4ca9-bb6a-cfb81430b1f5")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "ComponentLink2Description" " "
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "bfb19460-9bb8-44fd-9c8c-b3a76b9f75ce")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Author" "CERN DEM JLC"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f46144e6-6c2a-4878-b67e-2a657425dfde")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "CreateDate" "11/29/12 00:00:00"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f8c19de9-48fb-49db-b53f-4b9f055a0b40")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "LatestRevisionDate" "11/29/12 00:00:00"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "cac38a0d-6f23-4f9b-a741-68712c2028b5")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Database Table Name" "ICs And Semiconductors"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f17e25b6-1eef-4c45-846d-f9abd17b75ca")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Library Name" "Diodes"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d104c2bb-6253-493a-9989-34bf83c6db79")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint Library" "ICs And Semiconductors SMD"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "60de6756-2b0f-4c50-a68c-9bd1e690bdc8")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "License" "CC-BY-SA 4.0"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2e6ec22d-ad50-4a98-af8e-eaaeaf73ef15")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_circle
+		(center -1.1 -0.75)
+		(end -0.975 -0.75)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "24891f87-df14-477c-a4ac-8e596b19e571")
+	)
+	(fp_line
+		(start -1.25 -0.6)
+		(end 1.25 -0.6)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "37175269-4bfe-4f49-b5be-b7a02c526cc8")
+	)
+	(fp_line
+		(start -1.25 0.6)
+		(end -1.25 -0.6)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "60b0bd3b-f753-4e5b-b1f0-20fdafbe8784")
+	)
+	(fp_line
+		(start -1.25 0.6)
+		(end 1.25 0.6)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "dc946b44-1e9e-4e64-b3e7-c43c682d075a")
+	)
+	(fp_line
+		(start 1.25 0.6)
+		(end 1.25 -0.6)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "8c29d421-ce83-4a78-88b1-f3c9e40fa33f")
+	)
+	(fp_line
+		(start -0.6 -0.4)
+		(end 0.6 -0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "5a7ecd4b-21ba-44eb-be14-c4c86ac651b0")
+	)
+	(fp_line
+		(start -0.6 0.4)
+		(end -0.6 -0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "3f8a6d5c-0513-431f-96c6-d7c544952bba")
+	)
+	(fp_line
+		(start -0.6 0.4)
+		(end 0.6 0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "4b3e5bc9-4658-41e4-9a05-b34123a956e7")
+	)
+	(fp_line
+		(start -0.5 0.4)
+		(end -0.5 -0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "fb759132-74e0-4e2d-b561-04c22cb012af")
+	)
+	(fp_line
+		(start -0.425 0.4)
+		(end -0.425 -0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "2ddc4888-387f-46c1-9d5f-6b0538645eb7")
+	)
+	(fp_line
+		(start -0.35 0.4)
+		(end -0.35 -0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "de16be06-cbc0-4fa7-a6b4-158b0709e165")
+	)
+	(fp_line
+		(start -0.275 0.4)
+		(end -0.275 -0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "d771c4b6-7dda-45b7-bd2d-1d0a375d31ba")
+	)
+	(fp_line
+		(start -0.2 0.4)
+		(end -0.2 -0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "c941f88f-3486-4dcc-91cf-f3cecb5b7738")
+	)
+	(fp_line
+		(start -0.2 0.4)
+		(end -0.175 0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "3f23e361-5d6a-4db7-b08a-86c4fd37f2d7")
+	)
+	(fp_line
+		(start -0.125 0.4)
+		(end -0.125 -0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "051b63e6-7a73-4b1c-b46e-81ea41aa26fb")
+	)
+	(fp_line
+		(start 0.6 0.4)
+		(end 0.6 -0.4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "90f53888-782f-490d-b209-c3dba6d55a4d")
+	)
+	(pad "1" smd rect
+		(at -0.7 0)
+		(size 0.75 0.5)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "0b3524a2-59b1-4cdb-958f-3939f4faefb6")
+	)
+	(pad "2" smd rect
+		(at 0.7 0)
+		(size 0.75 0.5)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "8c703b59-516b-4f01-944f-b5712e948e59")
+	)
+	(embedded_fonts no)
+	(embedded_files
+		(file
+			(name "SODFL1608X65N.step")
+			(type model)
+			(data |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
+				l5AKNfGES6h1JUxC9JHwhCY0wiMktCXCItwlQt1c3O+udU1zF3d3zfvXb19729PW/v/xqk9dO+qv
+				aDU9LfXL9GQv/eZJr7mJmJmZl5RoeVlpW/7qladUXExcKx7tiT8e8cYfb7wNDwsNCfP2dOGeUG/2
+				93f9/++P9Hf/XrfT13b96LpqdPq2zejyzy6by3tkvT2t3+/3O923fnc+O1faXR2a3euWTnPtZGpo
+				aWj7ldleP/tumZGV1V7t9Tq6Xr/68dbFn+iuXq/X60UNTl5eWsMaGN+sF13pSz+60o2e9KQjHemn
+				n2666Ud/rtGJnkXfXc2sm+m2u7u7u871+mufvSb0rW1NW0urXnWqVY23qrMKKZ+2mp6Wkk1d5FKT
+				WnNTUxEz84npvLSsfJYvbUvKRGs6yYtOtKIREwl9IyJioT6PZYaEhfsj3Dvo8fk/D0++377tvtvu
+				YKbX13T1Tf5tKtKZc6uM9s/mtA/PZXN5yZq2S3WKief73QWHBajDUiTWaGZERJIkKSwHc/gYiAKS
+				HOgpbAdTkqFUDodMBDkIYTAOIxmKkl4SIQlEREQ0aQOKZVcMuRgm+6D336Qwzpsow2H5ikuAtDvL
+				11yHdKmzcB1K/rtM9vgyC7XZ7drjegYEcPHEcNXwKaC/K0WjKbOgB2Ugm+20YQOqpb05gkhDQ5sT
+				Os8xbqXfHtOWAnX3/+89ipRlm+gJ4MzeE9HFQClZJpZA9xPXjH3fiU8LDwk/AA+bz1qHPwKdMdXL
+				aQK4IijoQM4vxbQUQte8FVQtNBkXN2iWQiJgTBMW6gI8ai6BhzNkO20Eq9ykazD/ENpJ6hsK+W9E
+				nUKq6LSOg4wjoaBM7AV8MU487L4YIdvJjToMcIcN8r6b1KujLZDfIpMhZ9h1Evk8Oj2IgRIpiopQ
+				ij0ycVhJrKcRox9S4/CjUgPbiSpUMjXMMlsNkyTak+SdsOh4RHdVG5agwP7Res8J5QNOfxf+4B5k
+				eYJyZSLHrGDd4164ul3Oq69qROms+mROAp2ueieaSWUyNGsB1VP4SD5ANk5TdxPhlljAXxotZoFW
+				+kSp0j40eXhiFbXSIwRuHLGWgF7/89mcbCB+B6x4Nr2DQuUx0Y7Ctno2A6rpTv1cWMYtO9DgJcgF
+				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
+				dx3GuslMcuZ7IoyuhKeerg==|
+			)
+			(checksum "21F92103AC7749FA3BDA3DF43559BDAE")
+		)
+	)
+	(model "kicad-embed://SODFL1608X65N.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)

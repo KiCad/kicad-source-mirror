@@ -1,0 +1,812 @@
+(footprint "EATON_0402ESDA-MLP"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "0402, 2-Leads, Body 1.1mm L X 0.53mm W X 0.44mm H body, IPC Medium Density")
+	(property "Reference" "REF**"
+		(at 0 -1.626 180)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "3f3e595d-5b83-450a-8d0c-d6fbcd7da172")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "0402ESDA-MLP"
+		(at 0 1.626 180)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "0ac6e34b-1cab-4e67-a8f1-41985c2cfb19")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" "https://www.eaton.com/content/dam/eaton/products/electronic-components/resources/data-sheet/eaton-0402esda-mlp-esd-suppressor-data-sheet.pdf"
+		(at 0 0 180)
+		(unlocked yes)
+		(layer "B.Fab")
+		(hide yes)
+		(uuid "18b76d42-3cf6-437a-98c8-48fc2f21241d")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+			(justify mirror)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 180)
+		(unlocked yes)
+		(layer "B.Fab")
+		(hide yes)
+		(uuid "13f7d8a5-c2d3-43b9-bb3f-303af68586ac")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+			(justify mirror)
+		)
+	)
+	(property "Author" "CERN DEM MR"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "dc1ab5a1-9150-4247-9f3e-d4a4d0d911ce")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Bonding" "No"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "1868588d-5899-46b2-bfde-2148fae389d3")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Case" "0402"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a4218779-3748-4130-bdd0-c5996480b3df")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Comment" "0402ESDA-MLP"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "22daaf74-8197-4c3a-8ebe-fc71ec41d1e1")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Component Kind" "Standard"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "92854af4-390b-4007-bb1d-6bc18880ab2f")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Component Type" "Standard"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "23ffee12-9ecd-4eac-a818-571579ce8db1")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "ComponentHeight" "0.44mm"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "b1d6fa13-e986-497e-a725-d90e8fc81280")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "ComponentLink1Description" " "
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "32600150-f9f1-4e33-a3ba-bff5faf26275")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "ComponentLink1URL" " "
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "78cdfe58-2067-460b-8cd5-1498aa4c6d38")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "ComponentLink2Description" " "
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "cb4ee7a0-d66e-4c50-9eb8-9f0c24639984")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "ComponentLink2URL" " "
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "5b533c81-186a-4593-b3df-33e9c68f6652")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "CreateDate" "11/22/19 00:00:00"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "701c3e64-59c3-41fa-a846-4fab244ed3d3")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Database Table Name" "ICs And Semiconductors"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d4a71e6f-9e32-47ed-af04-7244db1cbbdd")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Device" "0402ESDA-MLP"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f3aba05b-dea5-4fc0-a16b-27f9006e6c2a")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint Library" "ICs And Semiconductors SMD"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "edc83cdc-281b-4a68-8d23-6492c19b2b09")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint Path" "PcbLib\\ICs And Semiconductors SMD.PcbLib"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "1770e38f-ae81-4e80-9131-ca19314ca9ff")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint Ref" "EATON_0402ESDA-MLP"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f3f4d543-027d-4bcb-aa17-9e7076f5636a")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "HelpURL" ""
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a6d00f3d-4fb2-456f-80ce-0d75cdc4584a")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "LatestRevisionDate" "11/22/19 00:00:00"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2acf7b8a-7c3c-4871-98b3-2fdc97277a59")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Library Name" "Diodes"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "58bb5fae-ace7-4f3c-98a1-abebbd9f0ce8")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Library Path" "SchLib\\Diodes.SchLib"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4eb6dbbc-e068-4a6e-957b-e5878e9c3a79")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Library Ref" "Diode TVS Bi-Directional"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "35440f6f-a92f-441f-9d0c-7ec2d3f2bfca")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "License" "CC-BY-SA 4.0"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ff481668-b8aa-4293-8383-42d25662751c")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer" "EATON"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c14f19f1-7d67-46f9-9cc4-2b926b5ed506")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer Part Number" "0402ESDA-MLP"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c9f2a005-d489-4e5a-8290-44b3585edd8b")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Mounted" "Yes"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "3f7f1ba5-311e-4c1c-a5a8-0d1716f1f412")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "PackageDescription" "0402, 2-Leads, Body 1.1mm L X 0.53mm W X 0.44mm H body, IPC Medium Density"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "59e29580-28bf-4f49-8baa-fac20dacd70d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Part Description" "0.05pF 8kV Bidirectional ESD Voltage Suppressor"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "7f2f7a7b-0fa1-453a-a661-8fb16a43e9a5")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Part Number" "0402ESDA-MLP"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "535fff8a-af30-4fa8-ada9-21a4774ace1d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Pin Count" "2"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a44d7b0a-9167-47a8-9c0a-e5b5981f6008")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Power" " "
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4765f75a-a913-4505-996f-25361dccba69")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "PressFit" "No"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "78e99327-3f94-4778-a088-2dd2c6d79e7f")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "SMD" "Yes"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2f71bc19-914e-4e93-bf6d-93d8eb5b6331")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Sense" "No"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "5ccbf789-a498-40f2-b7df-49313e6782af")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Sense Comment" " "
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "9a35c2d4-5668-457c-aa10-8c7770423d39")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Socket" "No"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2e167799-9605-491c-bba5-8a1d2bb9f8a9")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Status" " "
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d293677f-0e9a-485b-9665-13873a2067dd")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Status Comment" " "
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2e6c90aa-ea17-46c8-9699-c04e922d1013")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Voltage" "8kV"
+		(at 0 0 270)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "65efb131-e6df-406a-9c03-4e8de920d192")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start -1.1 -0.35)
+		(end -0.65 0)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "23749081-f80a-4fe3-af6a-fb2326948273")
+	)
+	(fp_line
+		(start -1.1 -0.35)
+		(end -0.2 -0.35)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "a13101b3-9770-4c77-884f-53e864c832c2")
+	)
+	(fp_line
+		(start -1.1 0.35)
+		(end -1.1 -0.35)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "ddac132a-1f06-47cb-a874-1791cc94f9ba")
+	)
+	(fp_line
+		(start -1.1 0.35)
+		(end -0.65 0)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "766d6801-fcec-4cba-9d2f-34f9694b1c81")
+	)
+	(fp_line
+		(start -1.1 0.35)
+		(end -0.2 0.35)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "0199be6f-6afd-4356-9ee9-8ff1a0cc6ce7")
+	)
+	(fp_line
+		(start -0.5 0)
+		(end 0 0)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "dc142e4a-3eef-422f-8915-3dffb1cda21d")
+	)
+	(fp_line
+		(start -0.2 0.35)
+		(end -0.2 -0.35)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "661ed335-2eac-444f-93e3-f3bd2ab23b06")
+	)
+	(fp_line
+		(start 0 0)
+		(end 0 -0.5)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "446a75fc-af15-4b87-a3fb-232a47ee3531")
+	)
+	(fp_line
+		(start 0 0)
+		(end 0.5 0)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "a0b298ca-d342-4069-a208-6c14b190e94f")
+	)
+	(fp_line
+		(start 0 0.5)
+		(end 0 0)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "2a1233ae-cba4-45b6-b32e-4d079f21989a")
+	)
+	(fp_line
+		(start 0.2 -0.35)
+		(end 1.1 -0.35)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "806bf345-be4d-4576-ae02-81d153915d88")
+	)
+	(fp_line
+		(start 0.2 0.35)
+		(end 0.2 -0.35)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "b4c58279-2a7b-4b1f-95f0-320a5515f451")
+	)
+	(fp_line
+		(start 0.2 0.35)
+		(end 1.1 0.35)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "cb8c9813-390c-49d7-bcb3-88a11dcde070")
+	)
+	(fp_line
+		(start 0.65 0)
+		(end 1.1 -0.35)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "f4778e6e-9bfe-4cae-a109-f1fba000a3e9")
+	)
+	(fp_line
+		(start 0.65 0)
+		(end 1.1 0.35)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "2a802fd4-be7d-4793-ae72-6a1b28c0158e")
+	)
+	(fp_line
+		(start 1.1 0.35)
+		(end 1.1 -0.35)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "074fda3a-d5f2-4105-91e8-1553ebad37d0")
+	)
+	(fp_line
+		(start -1.35 -0.6)
+		(end 1.35 -0.6)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "f4a12344-98e4-4bd0-845f-584fc1afa5ed")
+	)
+	(fp_line
+		(start -1.35 0.6)
+		(end -1.35 -0.6)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "d77ce1ee-d11f-47b9-aa43-a808839d2c5f")
+	)
+	(fp_line
+		(start -1.35 0.6)
+		(end 1.35 0.6)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "901e70d4-bd27-4480-a04e-f3dc40b2c562")
+	)
+	(fp_line
+		(start 1.35 0.6)
+		(end 1.35 -0.6)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "3f96f9e1-c5fd-4365-a117-89ed23b7f543")
+	)
+	(fp_line
+		(start -0.6 -0.303)
+		(end 0.6 -0.303)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "0add21f3-eef0-4146-8723-7298550fb358")
+	)
+	(fp_line
+		(start -0.6 0.303)
+		(end -0.6 -0.303)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "c4ffea7d-03db-4a47-b66b-a06cf4ab7d00")
+	)
+	(fp_line
+		(start -0.6 0.303)
+		(end 0.6 0.303)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "a802fb82-718a-49ab-b689-052c1747b6b4")
+	)
+	(fp_line
+		(start -0.25 0.303)
+		(end -0.25 -0.303)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "189fa394-efe3-452f-b2a3-047ed4cd38ad")
+	)
+	(fp_line
+		(start 0.25 0.303)
+		(end 0.25 -0.303)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "a1e2295f-bec1-4cdf-a2cb-0c20b26c4846")
+	)
+	(fp_line
+		(start 0.6 0.303)
+		(end 0.6 -0.303)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "8a3cc711-3ba5-4cda-92a6-7accd6921270")
+	)
+	(pad "1" smd rect
+		(at -0.65 0)
+		(size 0.9 0.7)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "95a18a5e-6649-454b-bef5-9fefa0166beb")
+	)
+	(pad "2" smd rect
+		(at 0.65 0)
+		(size 0.9 0.7)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "9a9e98df-6921-438e-9ebf-001ce0b0e4c0")
+	)
+	(embedded_fonts no)
+	(model "${KICAD9_3DMODEL_DIR}/Inductor_SMD.3dshapes/L_0402_1005Metric.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)

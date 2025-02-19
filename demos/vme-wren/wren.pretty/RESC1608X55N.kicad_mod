@@ -1,0 +1,630 @@
+(footprint "RESC1608X55N"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "Chip Resistor, EIA 0603, Metric 1608, Body 1.6x0.8mm, IPC Medium Density")
+	(property "Reference" "REF**"
+		(at 0 -1.776 0)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "cc41a689-fe18-4278-8937-e4fdce8ce2ec")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "R0603_523R_0.1%_0.063W_10PPM"
+		(at 0 1.776 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "53a18a35-f7c5-42db-b6d6-e7e15d00704f")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f2512321-1f7c-4c00-8612-5964eba2e0ed")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d52b1c5f-6add-46ca-8455-2cc6dabad587")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Author" "CERN DEM JLC"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "5b49c1f5-e96a-4206-8337-6016d83a7803")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Case" "0603"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "87ef4326-97aa-494d-bfc7-f4b198d3edab")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Comment" "523"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "5f90891b-767d-4d75-b95c-dd4da39d08b6")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Component Kind" "Standard"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "95a2e22a-101a-4828-839d-be6b11880751")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Component Type" "Standard"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "85ece1bf-da50-4b1c-bc9f-f4b78caedb04")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "ComponentHeight" " "
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "74828842-7de6-4ef1-8949-14ba6e7b3b64")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "CreateDate" "12/03/07 00:00:00"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "23706c87-6417-46de-af3c-fbfc970c0614")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Database Table Name" "Resistors"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "acd68f02-f6a0-4955-bd14-1d141c0dba66")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint Library" "Resistors SMD"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "b2fde8cb-996d-44ef-95e1-66da20bb1125")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint Path" "PcbLib\\Resistors SMD.PcbLib"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "25b46c79-02e4-484b-8344-7da07e9ca9ae")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint Ref" "RESC1608X55N"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "100c7527-645b-4a00-94c6-6faf53dd0f88")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "HelpURL" ""
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a8463eb3-45e0-4d01-958c-369549f220f0")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "LatestRevisionDate" "03/13/08 00:00:00"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "e9ce77dc-3c0d-45b1-a15e-79879ad204ce")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Library Name" "Resistors SMD"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4a997289-fc64-4080-92d4-566d2686d3d8")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Library Path" "SchLib\\Resistors.SchLib"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4b2428d8-c36c-4436-ad49-dbf3dd1195c3")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Library Ref" "Resistor - 0.1%"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "fe8dcc4c-9d90-4531-be3a-830885047504")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "License" "CC-BY-SA 4.0"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2ff93b3d-2535-413c-a774-d523aa8065b5")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer" "GENERIC"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "0fb8a2ca-b479-40d2-ae6b-44f869177fbb")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer Part Number" "R0603_523R_0.1%_0.063W_10PPM"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "b21c48da-5b8b-4c78-937c-02ee07cf8c67")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer1 ComponentHeight" "0.5mm"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "bb0c4823-7032-4f3c-99e0-0247d66dfdef")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer1 Example" "TYCO HOLSWORTHY"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d32ad59a-4428-4267-898e-ad117ebb42b4")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer1 Part Number" "RN73C1J523RBTDF"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a1d5dcca-a9eb-4468-bc4f-4df085cafd60")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Mounted" "Yes"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "6e8bf801-8880-4451-bdf3-2c2186df7423")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "PackageDescription" " "
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a8707b6f-f8bd-4d82-ac4d-fc475788cca2")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Part Description" "Thin Film Chip Resistor"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "1ada6232-ec7a-44a7-85fb-836785d1248d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Part Number" "R0603_523R_0.1%_0.063W_10PPM"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "45483a11-0175-4bb4-a323-020dee34d761")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Pin Count" "2"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "5a8667b0-47a2-4b38-9eb5-7e7c968887b0")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Power" "0.063W"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "cce7d0aa-2c06-4bac-91b3-1d8b234b5a6f")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "PressFit" "No"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "75e3aede-73d9-46c8-904b-9fad1d3f092f")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "SMD" "Yes"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "7e121db7-f115-4b78-9d2a-b97347f64f73")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Sense" "No"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "e9ec04e1-842d-4161-b429-afc79fa74ed8")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Sense Comment" " "
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "0e5b0aff-5b04-4159-96f8-35fdb4576407")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Socket" "No"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "8fc3a679-e8b3-43b8-95fa-3ea0204fb400")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Status" "Not Recommended"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "0255a7fc-bc5c-4758-92a2-5d5153e1b50c")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Status Comment" " "
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "fb50771c-c3f7-401e-96cc-da80e1e11978")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "TC" "±10ppm"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "76586a28-d796-4866-807b-177ccc5a26e4")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Tolerance" "±0.1%"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f8875491-d1f4-470e-9e54-e83f0c402220")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Val" "523"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "70ef6519-744f-4ec5-b3f6-68a75694294c")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Voltage" " "
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ef7d6900-61e8-4a4d-b8e3-93326ef1acec")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start -1.5 -0.75)
+		(end 1.5 -0.75)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "51a9099c-4ae2-41d5-9f74-4a0fbe6b0b19")
+	)
+	(fp_line
+		(start -1.5 0.75)
+		(end -1.5 -0.75)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "f928926b-d36c-4f53-a169-ee2cb81bde1a")
+	)
+	(fp_line
+		(start -1.5 0.75)
+		(end 1.5 0.75)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "f3a5e611-1b83-42f5-b72b-e0512355d3bf")
+	)
+	(fp_line
+		(start 1.5 0.75)
+		(end 1.5 -0.75)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "61ca776a-2b3a-4012-9e80-aa0804a9d444")
+	)
+	(fp_line
+		(start -0.8 -0.405)
+		(end 0.8 -0.405)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "385acb36-1202-46e9-95ed-4d89890df244")
+	)
+	(fp_line
+		(start -0.8 0.405)
+		(end -0.8 -0.405)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "af21b7be-fa1a-462c-8ddd-bbac838b7902")
+	)
+	(fp_line
+		(start -0.8 0.405)
+		(end 0.8 0.405)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "ccc2eb70-dd35-4582-ab78-da452dce8978")
+	)
+	(fp_line
+		(start 0.8 0.405)
+		(end 0.8 -0.405)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "0d0cb115-4be0-4003-81a3-d885c7d55985")
+	)
+	(pad "1" smd rect
+		(at -0.8 0)
+		(size 0.9 1)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "a38a2338-ec0a-471d-ac30-e4869e715b2a")
+	)
+	(pad "2" smd rect
+		(at 0.8 0)
+		(size 0.9 1)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "ada3d7be-d1fc-4da7-bd0a-23682468de2c")
+	)
+	(embedded_fonts no)
+	(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)

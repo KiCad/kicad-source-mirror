@@ -1,0 +1,580 @@
+(footprint "INDC2012X110N"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "Chip Inductor, EIA 0805, Metric 2012, Body 2.0x1.2mm, IPC Medium Density")
+	(property "Reference" "REF**"
+		(at 0 -1.976 0)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "06c5b7f1-7659-44ae-8f1a-b2cf43a82933")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "IND0805_WURTH_742792040"
+		(at 0 1.976 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "020007a9-0226-4450-8cb0-6fa8b650fc9b")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "5998941b-a50a-4a84-9bfe-dc6db32420cf")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ad6ded80-fe84-4282-b8e2-e9ce2ed62619")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Author" "CERN DEM JLC"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "87f21b25-08df-4808-9d58-24446170f812")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Case" "0805"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "82d3c9d3-5141-4d38-8948-3dcda80044ef")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Comment" "600R@100MHz"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f2382480-856f-4896-bbfa-0e0bcbad646a")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Component Kind" "Standard"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4e351765-9391-4489-ab87-24b8076a63ca")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Component Type" "Standard"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "0881f66a-ac34-4e74-ab45-fd1908eb86b0")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "ComponentHeight" "1.1mm"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d7548d36-a0f0-4394-9f88-d35f0074a7b3")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "CreateDate" "05/10/10 00:00:00"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "0be24e53-017d-4f89-8523-4690f474403f")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Database Table Name" "Inductors & Transformers"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "5f7caec3-20f9-4c35-83fa-3d8d2883857b")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint Library" "Inductors SMD"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2ce74361-9a4d-4412-9c57-27d856babed2")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint Path" "PcbLib\\Inductors SMD.PcbLib"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d4fc28e6-9832-4d38-9865-97bcb71b3fd0")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint Ref" "INDC2012X110N"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "07a66fce-5b31-43bd-bb53-a8240fe65632")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "HelpURL" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "8c3bb6a1-9daf-4e92-885d-2fc601e64ece")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "LatestRevisionDate" "10/25/18 00:00:00"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "8e4a1d54-f9c9-4cd0-a5a5-178aa477264d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Library Name" "Inductors SMD"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "e99b6149-1023-4fa8-a4d3-074d39eb00ed")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Library Path" "SchLib\\Inductors & Transformers.SchLib"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "b45b3d80-75fe-45b6-bf76-14563b5ba530")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Library Ref" "Ferrite Bead"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a099773f-a38b-4c23-989f-94d5e94565a1")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "License" "CC-BY-SA 4.0"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "3c0f4c70-caed-470c-9e61-a4eb6f624131")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer" "WURTH ELEKTRONIK"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "8707cba2-81f8-40bb-87c4-4c65640519af")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer Part Number" "742792040"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "e7ba517e-e466-47ce-8e0d-9e4bedf18412")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Mounted" "Yes"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f9bef144-49b0-4852-ab29-a48671316658")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "PackageDescription" " "
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "33c961f8-efc9-4ac0-b4c1-1f5ce0a179af")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Part Description" "SMD EMI Suppression Chip Ferrite Bead (WE-CBF Series)"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "04173c12-f195-4fb0-887c-1b8bcd2f9791")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Part Number" "IND0805_WURTH_742792040"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "1bc757f7-bff2-4be6-ab81-5d1973c981f7")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Pin Count" "2"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "bd2e3887-10f8-4e7a-aaf1-6757a2e550cf")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Power" "2A"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "568b149f-01d3-41bc-8123-99cf0dac4492")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Resistance" "0.150R"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d03a5cd8-b895-43f3-868b-8ba8351cd828")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "SMD" "Yes"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "8b6f0b6d-2cca-4ce8-a952-44736fb812e4")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Sense" "No"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "0f39cb8c-b882-4a98-8a50-a1c7e746b1c3")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Sense Comment" " "
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c2ffe4ec-64d3-4da3-b1d7-96d6861ee128")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Socket" "No"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "5a035b2b-72d9-4212-8504-afad8fec0d73")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Status" " "
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ee1f5464-102a-4664-819b-42e34f1a95b7")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Status Comment" " "
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f796ff18-3961-4442-b850-eb6e2e0cc32a")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Tolerance" "±25%"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "06d11ce4-d8f7-4acd-add6-8acfba92f7f6")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Val" "600R@100MHz"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "15e77389-aeb3-4fbb-a9a1-0f529d89638c")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start 0 0.525)
+		(end 0 -0.525)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "411d66b6-86c9-4b18-994d-6bb2bb459d9e")
+	)
+	(fp_line
+		(start -1.7 -0.95)
+		(end 1.7 -0.95)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "00026c7d-e838-4a1c-8741-a774a8b16bd2")
+	)
+	(fp_line
+		(start -1.7 0.95)
+		(end -1.7 -0.95)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "5abb74f5-2a73-4504-8f84-94a8587e3a11")
+	)
+	(fp_line
+		(start -1.7 0.95)
+		(end 1.7 0.95)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "4d729c54-8ad8-4258-8c18-a7ce9857e216")
+	)
+	(fp_line
+		(start 1.7 0.95)
+		(end 1.7 -0.95)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "dadb8ffd-3a22-4580-8218-9e0ede3f7dd1")
+	)
+	(fp_line
+		(start -1 -0.625)
+		(end 1 -0.625)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "61309c4c-5845-4a03-b54f-e1f7e3729733")
+	)
+	(fp_line
+		(start -1 0.625)
+		(end -1 -0.625)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "9a8aea5e-62de-4799-8626-447882c6642b")
+	)
+	(fp_line
+		(start -1 0.625)
+		(end 1 0.625)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "5cddfcec-9054-44fa-8149-61db5959de1e")
+	)
+	(fp_line
+		(start 1 0.625)
+		(end 1 -0.625)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "4ae7e0d8-ff9d-4ad1-b0b4-e9e8139cbecc")
+	)
+	(pad "1" smd rect
+		(at -0.95 0 90)
+		(size 1.4 1.05)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "de6c132a-d3f8-4ef9-9913-5936ecb501ac")
+	)
+	(pad "2" smd rect
+		(at 0.95 0 90)
+		(size 1.4 1.05)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "a96e2812-0fee-418b-9eba-dd7119af6d46")
+	)
+	(embedded_fonts no)
+	(model "${KICAD9_3DMODEL_DIR}/Inductor_SMD.3dshapes/L_0805_2012Metric.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)

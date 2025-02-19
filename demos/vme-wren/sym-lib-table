@@ -1,0 +1,5 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "vme-wren")(type "KiCad")(uri "${KIPRJMOD}/vme-wren.kicad_sym")(options "")(descr ""))
+  (lib (name "syms-export")(type "KiCad")(uri "${KIPRJMOD}/syms-export.kicad_sym")(options "")(descr ""))
+)

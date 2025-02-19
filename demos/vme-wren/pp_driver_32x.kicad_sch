@@ -1,0 +1,1861 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "67606325-598e-4f9f-9f4c-1f0052bfbc18")
+	(paper "A4")
+	(lib_symbols
+		(symbol "Resistors SMD:R0402_10K_1%_0.0625W_100PPM"
+			(pin_names
+				(offset 1.27)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "R"
+				(at 3.81 1.778 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "R0402_10K_1%_0.0625W_100PPM"
+				(at 0 -4.953 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Footprint" "Resistors SMD:RESC1005X40N"
+				(at 0 -6.858 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 -8.763 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Description" "±1%"
+				(at 3.81 0 0)
+				(effects
+					(font
+						(size 0.635 0.635)
+					)
+				)
+			)
+			(property "Val" "10k"
+				(at 3.81 -1.778 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Part Number" "R0402_10K_1%_0.0625W_100PPM"
+				(at 0 -10.668 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Library Ref" "Resistor - 1%"
+				(at 0 -12.573 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Library Path" "SchLib\\Resistors.SchLib"
+				(at 0 -14.478 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Comment" "10k"
+				(at 0 -16.383 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Component Kind" "Standard"
+				(at 0 -18.288 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Component Type" "Standard"
+				(at 0 -20.193 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "PackageDescription" " "
+				(at 0 -22.098 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Pin Count" "2"
+				(at 0 -24.003 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Footprint Path" "PcbLib\\Resistors SMD.PcbLib"
+				(at 0 -25.908 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Footprint Ref" "RESC1005X40N"
+				(at 0 -27.813 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Status" "Not Recommended"
+				(at 0 -29.718 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Power" "0.0625W"
+				(at 0 -31.623 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "TC" "±100ppm/°C"
+				(at 0 -33.528 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Voltage" " "
+				(at 0 -35.433 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Tolerance" "±1%"
+				(at 0 -37.338 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Part Description" "General Purpose Thick Film Chip Resistor"
+				(at 0 -39.243 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer" "GENERIC"
+				(at 0 -41.148 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer Part Number" "R0402_10K_1%_0.0625W_100PPM"
+				(at 0 -43.053 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Case" "0402"
+				(at 0 -44.958 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "PressFit" "No"
+				(at 0 -46.863 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Mounted" "Yes"
+				(at 0 -48.768 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Sense Comment" " "
+				(at 0 -50.673 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Sense" "No"
+				(at 0 -52.578 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Status Comment" " "
+				(at 0 -54.483 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Socket" "No"
+				(at 0 -56.388 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "SMD" "Yes"
+				(at 0 -58.293 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "ComponentHeight" " "
+				(at 0 -60.198 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer1 Example" "YAGEO PHYCOMP"
+				(at 0 -62.103 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer1 Part Number" "232270671003L"
+				(at 0 -64.008 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer1 ComponentHeight" "0.4mm"
+				(at 0 -65.913 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "HelpURL" ""
+				(at 0 -67.818 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Author" "CERN DEM JLC"
+				(at 0 -69.723 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "CreateDate" "12/03/07 00:00:00"
+				(at 0 -71.628 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "LatestRevisionDate" "10/17/12 00:00:00"
+				(at 0 -73.533 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Database Table Name" "Resistors"
+				(at 0 -75.438 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Library Name" "Resistors SMD"
+				(at 0 -77.343 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Footprint Library" "Resistors SMD"
+				(at 0 -79.248 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "License" "CC-BY-SA 4.0"
+				(at 0 -81.153 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "R0402_10K_1%_0.0625W_100PPM_0_1"
+				(polyline
+					(pts
+						(xy 1.524 0.762) (xy 1.524 -0.762)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.524 -0.762) (xy 6.096 -0.762)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 6.096 0.762) (xy 1.524 0.762)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 6.096 -0.762) (xy 6.096 0.762)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at 0 0 0)
+					(length 1.524)
+					(name "1"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 0 180)
+					(length 1.524)
+					(name "2"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "vme-wren:P3V3"
+			(power)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR0202"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "P3V3"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "power-flag"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "P3V3_0_0"
+				(polyline
+					(pts
+						(xy -1.27 -2.54) (xy 1.27 -2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 -2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin power_in line
+					(at 0 0 0)
+					(length 0)
+					(hide yes)
+					(name "P3V3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+	)
+	(junction
+		(at 123.19 92.71)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "24b53676-e656-4479-9720-94478258a71c")
+	)
+	(junction
+		(at 123.19 118.11)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "44025b9e-0078-46f8-aa33-44370b738377")
+	)
+	(junction
+		(at 123.19 82.55)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "55c2c650-3637-40f7-97a1-e6d80dced19c")
+	)
+	(junction
+		(at 123.19 105.41)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "9011fa31-8195-43e5-99c0-89f657d8cde1")
+	)
+	(wire
+		(pts
+			(xy 123.19 92.71) (xy 125.73 92.71)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "03bbd6fc-e13f-4e27-8ee7-301b19b45f8d")
+	)
+	(bus
+		(pts
+			(xy 167.64 128.27) (xy 182.88 128.27)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1456bfb7-71d2-478d-b7b2-81ae182e508c")
+	)
+	(bus
+		(pts
+			(xy 167.64 90.17) (xy 182.88 90.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2088dc27-49c3-4f9e-8db6-4264a1942990")
+	)
+	(wire
+		(pts
+			(xy 123.19 118.11) (xy 125.73 118.11)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "33c2e4e4-74ac-4cac-b24c-9d04c9fab535")
+	)
+	(bus
+		(pts
+			(xy 101.6 128.27) (xy 125.73 128.27)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3bc6d3ed-f425-4aac-a1d6-c9873b577acd")
+	)
+	(wire
+		(pts
+			(xy 123.19 130.81) (xy 123.19 118.11)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "517c25d3-c494-419a-aad8-d643b044462a")
+	)
+	(bus
+		(pts
+			(xy 167.64 115.57) (xy 182.88 115.57)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "56600258-df67-479f-a0cc-6c0a38518e50")
+	)
+	(wire
+		(pts
+			(xy 123.19 105.41) (xy 123.19 92.71)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5a978100-8a41-4719-8d9c-3b6ef44de5c2")
+	)
+	(wire
+		(pts
+			(xy 123.19 118.11) (xy 123.19 105.41)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5f130305-85b7-439b-a669-bbcc278df06b")
+	)
+	(bus
+		(pts
+			(xy 101.6 102.87) (xy 125.73 102.87)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "82afca72-db7b-43aa-92ba-6bc722b0bd56")
+	)
+	(bus
+		(pts
+			(xy 101.6 90.17) (xy 125.73 90.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9960aea5-6acf-4fd5-8632-008d4739aef7")
+	)
+	(wire
+		(pts
+			(xy 123.19 71.12) (xy 123.19 72.39)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "99e6a633-b282-42f9-8685-102749196937")
+	)
+	(bus
+		(pts
+			(xy 101.6 115.57) (xy 125.73 115.57)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9d986b24-fcae-433d-93d4-f4c94d0ec540")
+	)
+	(wire
+		(pts
+			(xy 123.19 105.41) (xy 125.73 105.41)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b673fd45-7c05-4a75-b06a-cbc4f487e872")
+	)
+	(wire
+		(pts
+			(xy 123.19 82.55) (xy 123.19 92.71)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cdb62246-5eb6-4843-95ef-078f71d62604")
+	)
+	(wire
+		(pts
+			(xy 125.73 130.81) (xy 123.19 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e03a7d04-be55-42e9-8536-df4abac5a41e")
+	)
+	(bus
+		(pts
+			(xy 88.9 62.23) (xy 101.6 62.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e6d5ce07-3847-4553-9961-0c0b87083678")
+	)
+	(bus
+		(pts
+			(xy 185.42 62.23) (xy 172.72 62.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f29c3487-03ee-4520-b336-1127e54340cd")
+	)
+	(wire
+		(pts
+			(xy 101.6 82.55) (xy 123.19 82.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f4b6584f-9b14-4ae4-aa8e-12e77842405b")
+	)
+	(wire
+		(pts
+			(xy 123.19 80.01) (xy 123.19 82.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f83126a3-d4df-4d51-a637-be400e231761")
+	)
+	(bus
+		(pts
+			(xy 167.64 102.87) (xy 182.88 102.87)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fc6fa7cb-6eff-49d4-8543-11a0b6771f01")
+	)
+	(label "USERIO_A.IO[16..23]"
+		(at 101.6 115.57 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "023193a9-8c9d-43cc-8208-d5c8f0d8e4b6")
+	)
+	(label "USERIO_A.IO[0..7]"
+		(at 101.6 90.17 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "0cf146d3-37d6-4b70-85a2-0a95ef057e5a")
+	)
+	(label "PP_OUT[0..31]"
+		(at 184.15 62.23 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "15dc7281-025b-4ddf-be82-27f996f73416")
+	)
+	(label "PP_OUT[16..23]"
+		(at 171.45 115.57 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "40e5ff71-7e1a-4fd7-87de-984694d18d5f")
+	)
+	(label "PP_OUT[24..31]"
+		(at 171.45 128.27 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "541aed14-63a7-427e-b264-2bd22f3c142c")
+	)
+	(label "{USERIO_A}"
+		(at 90.17 62.23 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "8611c2c8-669c-4fc3-a9c6-55e26602fa84")
+	)
+	(label "USERIO_A.IO[8..15]"
+		(at 101.6 102.87 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "9ee65b7c-769e-46f3-a188-2086c97f9d31")
+	)
+	(label "PP_OUT[8..15]"
+		(at 171.45 102.87 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a724126a-3642-467f-b612-6ba7232d6148")
+	)
+	(label "PP_OUT[0..7]"
+		(at 171.45 90.17 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "ae83ec62-70b8-498b-a5a2-1533367ca3d3")
+	)
+	(label "USERIO_A.IO[24..31]"
+		(at 101.6 128.27 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "e38a895e-b2d0-4ffa-b856-536c4c6fd76b")
+	)
+	(hierarchical_label "PP_OE_N"
+		(shape input)
+		(at 101.6 82.55 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "6d3ffe41-ceea-4da0-9dd2-05ddc14f03a2")
+	)
+	(hierarchical_label "{USERIO_A}"
+		(shape input)
+		(at 88.9 62.23 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "e12dbb51-c4bf-4ad3-ab4e-971eb5399d0c")
+	)
+	(hierarchical_label "PP_OUT[0..31]"
+		(shape output)
+		(at 185.42 62.23 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "f122759e-222b-4cf1-ba6c-b48dc92aa624")
+	)
+	(symbol
+		(lib_id "vme-wren:P3V3")
+		(at 123.19 71.12 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "0b8dc573-0213-4a3c-91ad-53a4c666a8b6")
+		(property "Reference" "#PWR01254"
+			(at 123.19 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "P3V3"
+			(at 123.19 67.31 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 123.19 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 123.19 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 123.19 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin ""
+			(uuid "abc4e0ff-d1e9-4559-b0d5-b9b02de80b2c")
+		)
+		(instances
+			(project "vme-wren"
+				(path "/80fa765c-41e7-4a3d-b539-36e81bba11f8/05b4f68e-cbc5-4436-8bea-ed01b2f82991"
+					(reference "#PWR01254")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Resistors SMD:R0402_10K_1%_0.0625W_100PPM")
+		(at 123.19 80.01 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "680dc3f3-b728-413a-a459-9a4fdcfbb9f2")
+		(property "Reference" "R316"
+			(at 125.73 74.9299 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "R0402_10K_1%_0.0625W_100PPM"
+			(at 128.143 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "Resistors SMD:RESC1005X40N"
+			(at 130.048 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 131.953 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "±1%"
+			(at 118.11 76.2 0)
+			(effects
+				(font
+					(size 0.635 0.635)
+				)
+				(hide yes)
+			)
+		)
+		(property "Val" "10k"
+			(at 125.73 77.4699 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Part Number" "R0402_10K_1%_0.0625W_100PPM"
+			(at 133.858 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Ref" "Resistor - 1%"
+			(at 135.763 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Path" "SchLib\\Resistors.SchLib"
+			(at 137.668 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Comment" "10k"
+			(at 139.573 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Component Kind" "Standard"
+			(at 141.478 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Component Type" "Standard"
+			(at 143.383 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "PackageDescription" " "
+			(at 145.288 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Pin Count" "2"
+			(at 147.193 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Path" "PcbLib\\Resistors SMD.PcbLib"
+			(at 149.098 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Ref" "RESC1005X40N"
+			(at 151.003 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Status" "Not Recommended"
+			(at 152.908 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Power" "0.0625W"
+			(at 154.813 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Voltage" " "
+			(at 158.623 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 160.528 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Part Description" "General Purpose Thick Film Chip Resistor"
+			(at 162.433 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "GENERIC"
+			(at 164.338 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "R0402_10K_1%_0.0625W_100PPM"
+			(at 166.243 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Case" "0402"
+			(at 168.148 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "PressFit" "No"
+			(at 170.053 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Mounted" "Yes"
+			(at 171.958 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Sense Comment" " "
+			(at 173.863 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Sense" "No"
+			(at 175.768 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Status Comment" " "
+			(at 177.673 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Socket" "No"
+			(at 179.578 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "SMD" "Yes"
+			(at 181.483 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "ComponentHeight" " "
+			(at 183.388 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer1 Example" "YAGEO PHYCOMP"
+			(at 185.293 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer1 Part Number" "232270671003L"
+			(at 187.198 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer1 ComponentHeight" "0.4mm"
+			(at 189.103 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "HelpURL" ""
+			(at 191.008 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Author" "CERN DEM JLC"
+			(at 192.913 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "CreateDate" "12/03/07 00:00:00"
+			(at 194.818 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "LatestRevisionDate" "10/17/12 00:00:00"
+			(at 196.723 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Database Table Name" "Resistors"
+			(at 198.628 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Name" "Resistors SMD"
+			(at 200.533 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Library" "Resistors SMD"
+			(at 202.438 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "License" "CC-BY-SA 4.0"
+			(at 204.343 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "c8e9eea7-fcfd-4d50-a4f2-d981dd463d72")
+		)
+		(pin "1"
+			(uuid "d2bb1ac5-85b7-482a-b7f7-8ff334983d19")
+		)
+		(instances
+			(project "vme-wren"
+				(path "/80fa765c-41e7-4a3d-b539-36e81bba11f8/05b4f68e-cbc5-4436-8bea-ed01b2f82991"
+					(reference "R316")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(sheet
+		(at 125.73 87.63)
+		(size 41.91 7.62)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 255 1.0000)
+		)
+		(uuid "224fb95c-7c05-4487-94e5-4c1c6d95a687")
+		(property "Sheetname" "bank0"
+			(at 125.73 86.9184 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "pp_driver_8x.kicad_sch"
+			(at 125.73 95.8346 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Field2" ""
+			(at 125.73 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "PP_OE_N" input
+			(at 125.73 92.71 180)
+			(uuid "5f0c2681-f2a4-4169-8480-4d618d4806ef")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "F_PP_OUT[0..7]" bidirectional
+			(at 125.73 90.17 180)
+			(uuid "2eb70d0b-c056-4aca-acda-ee7234df6bfc")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "PP_OUT[0..7]" bidirectional
+			(at 167.64 90.17 0)
+			(uuid "0e140dbb-0647-4f42-bf22-af8323085e65")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "vme-wren"
+				(path "/80fa765c-41e7-4a3d-b539-36e81bba11f8/05b4f68e-cbc5-4436-8bea-ed01b2f82991"
+					(page "54")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 125.73 100.33)
+		(size 41.91 7.62)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 255 1.0000)
+		)
+		(uuid "2fa39d31-97e1-4c4b-a159-cc0629816fbc")
+		(property "Sheetname" "bank1"
+			(at 125.73 99.6184 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "pp_driver_8x.kicad_sch"
+			(at 125.73 108.5346 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Field2" ""
+			(at 125.73 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "PP_OE_N" input
+			(at 125.73 105.41 180)
+			(uuid "f25e58ac-4135-485f-9350-370e17c785f7")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "F_PP_OUT[0..7]" bidirectional
+			(at 125.73 102.87 180)
+			(uuid "acacdbfe-6c2b-44dc-ac3d-318fb6e66cd8")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "PP_OUT[0..7]" bidirectional
+			(at 167.64 102.87 0)
+			(uuid "bf03f482-be97-492d-aa15-75958ee743d7")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "vme-wren"
+				(path "/80fa765c-41e7-4a3d-b539-36e81bba11f8/05b4f68e-cbc5-4436-8bea-ed01b2f82991"
+					(page "53")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 125.73 113.03)
+		(size 41.91 7.62)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 255 1.0000)
+		)
+		(uuid "782abeac-5a08-43a5-bb19-a56d7562c95d")
+		(property "Sheetname" "bank2"
+			(at 125.73 112.3184 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "pp_driver_8x.kicad_sch"
+			(at 125.73 121.2346 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Field2" ""
+			(at 125.73 113.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "PP_OE_N" input
+			(at 125.73 118.11 180)
+			(uuid "2038f907-8e79-447d-b8dc-07a58fc8f190")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "F_PP_OUT[0..7]" bidirectional
+			(at 125.73 115.57 180)
+			(uuid "99ca77e8-0db9-4a8a-9d47-72428797c134")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "PP_OUT[0..7]" bidirectional
+			(at 167.64 115.57 0)
+			(uuid "03871386-7ebd-4340-aa8e-437bd67c894d")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "vme-wren"
+				(path "/80fa765c-41e7-4a3d-b539-36e81bba11f8/05b4f68e-cbc5-4436-8bea-ed01b2f82991"
+					(page "61")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 125.73 125.73)
+		(size 41.91 7.62)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 255 255 255 1.0000)
+		)
+		(uuid "89445f9b-777c-4be0-8993-d723b78d78cb")
+		(property "Sheetname" "bank3"
+			(at 125.73 125.0184 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "pp_driver_8x.kicad_sch"
+			(at 125.73 133.9346 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Field2" ""
+			(at 125.73 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "PP_OE_N" input
+			(at 125.73 130.81 180)
+			(uuid "9dada77d-b562-4db5-9d06-23e025953764")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "F_PP_OUT[0..7]" bidirectional
+			(at 125.73 128.27 180)
+			(uuid "bc2a6e40-b4f3-4981-8748-3c94ff5f9221")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "PP_OUT[0..7]" bidirectional
+			(at 167.64 128.27 0)
+			(uuid "f616628c-a5b3-424d-92c6-92c6c3060e56")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "vme-wren"
+				(path "/80fa765c-41e7-4a3d-b539-36e81bba11f8/05b4f68e-cbc5-4436-8bea-ed01b2f82991"
+					(page "66")
+				)
+			)
+		)
+	)
+)

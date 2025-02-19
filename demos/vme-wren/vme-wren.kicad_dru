@@ -1,0 +1,72 @@
+(version 1)
+
+(rule "clearance_under_fpga"
+	(constraint clearance (min 0.1mm) )
+	(constraint hole_size (min 0.2mm) )
+	(constraint via_diameter (min 0.4mm) )
+	(condition "A.intersectsArea('underFPGA') || A.intersectsArea('underDDR')" )
+)
+
+
+(rule "zdiff_100R_outer"
+	(layer outer)
+	(constraint track_width (min 0.115mm) (max 0.115mm) (opt 0.115mm) )
+	(constraint diff_pair_gap (min 0.1mm) ( max 1mm) (opt 0.1mm) )
+	(constraint diff_pair_uncoupled (max 5mm) )
+	(condition "A.inDiffPair('*')" )
+)
+
+(rule "zdiff_100R_inner"
+	(layer inner)
+	(constraint track_width (min 0.1mm) (max 0.1mm) (opt 0.1mm) )
+	(constraint diff_pair_gap (min 0.1mm) ( max 1mm) (opt 0.16mm) )
+	(constraint diff_pair_uncoupled (max 5mm) )
+	(condition  "A.inDiffPair('*')")
+)
+
+(rule "zse_50R_outer"
+	(layer outer)
+	(constraint track_width (min 0.1mm) (max 1mm) (opt 0.2mm) )
+	(condition "A.NetClass == 'zse_50r' " )
+)
+
+(rule "zse_50R_inner"
+	(layer inner)
+	(constraint track_width (min 0.1mm) (max 1mm) (opt 0.11mm) )
+	(condition "A.NetClass == 'zse_50r' " )
+)
+
+(rule "length_DDR_CMD_FPGA_To_IC13"
+	(constraint length (min 42.5mm) (max 43.5mm) (opt 43mm) )
+	(condition "A.NetClass == 'DDR4_CMD' && A.fromTo('IC14-*','IC13-*' )" )
+)
+
+(rule "length_DDR_CMD_IC13_To_IC5"
+	(constraint length (min 16.5mm) (max 17.5mm) (opt 17mm ) )
+	(condition "A.NetClass == 'DDR4_CMD' && A.fromTo('IC13-*','IC5-*')" )
+)
+
+(rule "length_DDR_Byte0"
+	(constraint length (min 29.5mm) (max 30.5mm) (opt 30mm))
+	(condition "A.NetClass == 'DDR4_BYTE0' && A.fromTo('IC14-*','IC13-*' )")
+)
+
+(rule "length_DDR_Byte1"
+	(constraint length (min 31mm) (max 32mm) (opt 31.5mm))
+	(condition "A.NetClass == 'DDR4_BYTE1' && A.fromTo('IC14-*','IC13-*' )")
+)
+
+(rule "length_DDR_Byte2"
+	(constraint length (min 39mm) (max 40mm) (opt 40.5mm))
+	(condition "A.NetClass == 'DDR4_BYTE2' && A.fromTo('IC14-*','IC5-*' )")
+)
+
+(rule "length_DDR_Byte3"
+	(constraint length (min 33mm) (max 34mm) (opt 33.5mm))
+	(condition "A.NetClass == 'DDR4_BYTE3' && A.fromTo('IC14-*','IC5-*' )")
+)
+
+
+
+
+

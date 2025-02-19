@@ -1,0 +1,147 @@
+(footprint "BIVAR_VLP-350-F"
+	(version 20240108)
+	(generator "pcbnew")
+	(generator_version "8.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at 0.05 9.75 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "117edd2b-d037-42aa-af01-4bf08a4209e6")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.1)
+			)
+		)
+	)
+	(property "Value" "BIVAR_VLP-350-F"
+		(at 0.05 11.25 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "dc3b1cfc-d11c-4b29-abb9-2fe9957f908d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint" ""
+		(at 0.05 10.25 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "9e4ae8a7-1901-4079-a752-790cf30a3a1d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0.05 10.25 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "6be9041b-8c82-4f3e-a771-140f6e8c35e1")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0.05 10.25 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4c67f141-469f-436e-a3cb-bdef269ce91e")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start -2.35 -2.35)
+		(end 1.7 -2.35)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "b707a4dc-2390-4e9e-a498-7e2d84d989dc")
+	)
+	(fp_line
+		(start -2.35 1.75)
+		(end -2.35 -2.35)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "bec61aff-1d1a-4735-8fde-bdeba4b1e48a")
+	)
+	(fp_line
+		(start 2.35 -1.75)
+		(end 2.35 2.35)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "4a56e8bc-1345-4678-9c00-251bfd478ddd")
+	)
+	(fp_line
+		(start 2.35 2.35)
+		(end -1.7 2.35)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "d83eface-f96f-497a-917d-bbfbabb9e8b8")
+	)
+	(fp_circle
+		(center 0 0)
+		(end 1.75 0)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(fill none)
+		(layer "F.SilkS")
+		(uuid "286df717-2a82-41a3-b8e7-1af9a9e1d150")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0.05 12.75 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "7b4ae438-4d0c-4dec-90a3-4f1c4bf85bb8")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "" np_thru_hole circle
+		(at -2.05 2.05)
+		(size 0.6096 0.6096)
+		(drill 0.6096)
+		(layers "*.Mask")
+		(uuid "7438f8ad-d0ff-4b69-b942-aa0703c416a9")
+	)
+	(pad "" np_thru_hole circle
+		(at 2.05 -2.05)
+		(size 0.6096 0.6096)
+		(drill 0.6096)
+		(layers "*.Mask")
+		(uuid "b3353fb4-b9d7-4b4a-b410-14f4be275995")
+	)
+)

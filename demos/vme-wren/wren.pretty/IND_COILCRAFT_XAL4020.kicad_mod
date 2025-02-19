@@ -1,0 +1,769 @@
+(footprint "IND_COILCRAFT_XAL4020"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "SMD Inductor, Width 4.3mm X Lenght 4.3mm X Height 2.1mm Body, XAL4020 Series")
+	(property "Reference" "REF**"
+		(at 5.11123 -1.20893 0)
+		(layer "F.SilkS")
+		(uuid "6264f759-b148-4115-9a9a-d8dc5aaec2f4")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "IND_1.5UH_20%_COILCRAFT_XAL4020"
+		(at 0 3.426 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "87e7fc73-ceb6-4255-abd5-ddc969d92e8d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ceb50fd4-2125-4c66-b1da-9f60e2c120b7")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "37b5448f-4226-4763-847b-c44bf887678a")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Author" "CERN DEM BC"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "bd2c755f-0d5e-4c62-b6db-c2d8a1cbd01d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Case" " "
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ebf95ce6-536b-434c-88eb-4f25d5ef468f")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Comment" "1.5uH"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d7f3fedf-ad0f-46ba-bd05-114a9b625939")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Component Kind" "Standard"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ae9ec89d-6f67-47e0-b647-252ceb685039")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Component Type" "Standard"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "3b800bfe-60b0-4021-a27f-8905f52c6273")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "ComponentHeight" "2.1mm"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "892e29b9-2657-49e0-81ed-fa5015f718a1")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "CreateDate" "08/07/19 00:00:00"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4468030d-3123-493f-8c5a-e9287c88580f")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Database Table Name" "Inductors & Transformers"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "eed55da2-9597-4167-bfc6-b5155c3cb381")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint Library" "Inductors SMD"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "60dbb46b-a980-485c-9f2f-cadbfb89c60d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint Path" "PcbLib\\Inductors SMD.PcbLib"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "544a99df-bcb1-4685-9281-67494adf923c")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint Ref" "IND_COILCRAFT_XAL4020"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "0faa8f99-8b6f-4814-a70f-7b32c7fef895")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "HelpURL" ""
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "3ad1604b-db51-4313-974f-d01377038f08")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "LatestRevisionDate" "08/07/19 00:00:00"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "33fcd8ef-06cb-4e65-b95f-e1ecda6640b0")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Library Name" "Inductors SMD"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f0ff835a-de9b-4b9b-a65f-4eb8cbf652df")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Library Path" "SchLib\\Inductors & Transformers.SchLib"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "9600b21f-a18a-483b-ac12-5bc991db0ab2")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Library Ref" "Inductor With Magnetic core"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "855fae66-f741-4fc1-9c80-2d5fd32fc2c3")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "License" "CC-BY-SA 4.0"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "51af573a-e142-427a-b8da-3c5104e7a829")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer" "COILCRAFT"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a6b74cd1-0b2c-4bb7-b085-4267dde54179")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer Part Number" "XAL4030-152ME"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "b53167a4-0e9c-4aa2-9f8f-1223f518c003")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Mounted" "Yes"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c4b7b1e2-6538-4b5d-9812-ed75e033e008")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "PackageDescription" " "
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "719462aa-42fd-4808-935c-0befde2b883d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Part Description" "SMD Shielded Power Inductor"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "e8eca5d5-3114-4b57-8e51-3701c1b93f65")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Part Number" "IND_1.5UH_20%_COILCRAFT_XAL4020"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "7e883b99-b66f-4e4e-a8e6-e07aa9b534f1")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Pin Count" "2"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "1df1d107-82b7-4d98-8e3e-7d43067951b8")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Power" "5.2A"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f6ce7d83-6b43-456c-bbbc-b1eea9c06c8f")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Resistance" "0.02145R"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4db80d10-3c5e-4da9-a647-e82251d3d079")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "SMD" "Yes"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "128fe778-b436-4405-8d94-c42ccb67b2e3")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Sense" "No"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4824ceec-cd7b-4353-a749-ae8f60aaab19")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Sense Comment" " "
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "1321b6e8-b9e2-4d26-a975-a462f8cdf3b8")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Socket" "No"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d3d3cf3b-27b8-4d87-bd46-ec89d8175d8a")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Status" " "
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "0a030574-db44-4c17-bf28-2241c88a7df2")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Status Comment" " "
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d92c2ec8-fc30-4d80-8526-0d1521aece0d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Tolerance" "±20%"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2e499b51-0b5f-4325-bb4a-3629e1a2f11a")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Val" "1.5uH"
+		(at 0 0 90)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "6e1a3389-bd33-495b-9400-49eb8e53a919")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start -2.15 -2.15)
+		(end 2.15 -2.15)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "3f5306fd-c129-451b-804e-1f3b0f30d05a")
+	)
+	(fp_line
+		(start -2.15 2.15)
+		(end -2.15 -2.15)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "3c87a117-f02a-411a-bffc-db447b036b5b")
+	)
+	(fp_line
+		(start -2.15 2.15)
+		(end 2.15 2.15)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "9fb4eca9-1388-487d-b3a5-fc4c7bef13a3")
+	)
+	(fp_line
+		(start 2.15 2.15)
+		(end 2.15 -2.15)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "8a9e63bc-69a5-4b0f-9ca6-5791e494e9b7")
+	)
+	(fp_line
+		(start -1.675 -1.7)
+		(end -1.185 0)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "ac87706c-c50b-40a0-a6ee-f61326b7e24a")
+	)
+	(fp_line
+		(start -1.675 -1.7)
+		(end -0.695 -1.7)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "8af578dd-a2f1-4bf7-afe5-e99bd4ebf28e")
+	)
+	(fp_line
+		(start -1.675 1.7)
+		(end -1.675 -1.7)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "86b363ee-1af2-4e8d-9f4c-a0715d7737a9")
+	)
+	(fp_line
+		(start -1.675 1.7)
+		(end -1.185 0)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "57c921aa-bb33-469c-ad29-215c6b5ef26d")
+	)
+	(fp_line
+		(start -1.675 1.7)
+		(end -0.695 1.7)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "8e64f328-2b8c-42e6-bae0-0c0432f1dd75")
+	)
+	(fp_line
+		(start -0.695 1.7)
+		(end -0.695 -1.7)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "6f0312e3-9b41-4950-8085-24d3b6304f3d")
+	)
+	(fp_line
+		(start -0.5 0)
+		(end 0 0)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "f73f5215-55b6-4454-857b-225b5879b2c1")
+	)
+	(fp_line
+		(start 0 0)
+		(end 0 -0.5)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "0e580442-7b55-4c40-9a04-69050ab29eda")
+	)
+	(fp_line
+		(start 0 0)
+		(end 0.5 0)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "f6eadbee-ddad-41e2-aa0a-3f4b3f71616e")
+	)
+	(fp_line
+		(start 0 0.5)
+		(end 0 0)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "5476a169-d4c9-48b6-85c1-da8a196a5473")
+	)
+	(fp_line
+		(start 0.695 -1.7)
+		(end 1.675 -1.7)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "c45b3f42-1ddf-4e6b-b335-f4d03a02f11b")
+	)
+	(fp_line
+		(start 0.695 1.7)
+		(end 0.695 -1.7)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "cd8a9403-e08b-4e2b-acc1-0ae79d1754c3")
+	)
+	(fp_line
+		(start 0.695 1.7)
+		(end 1.675 1.7)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "d03db571-238e-4e53-9181-f3c3d9804c2d")
+	)
+	(fp_line
+		(start 1.185 0)
+		(end 1.675 -1.7)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "fc3d5566-9944-45e0-a5a1-9f106a1844ad")
+	)
+	(fp_line
+		(start 1.185 0)
+		(end 1.675 1.7)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "d324d148-5ff0-4589-a95c-fae402a053db")
+	)
+	(fp_line
+		(start 1.675 1.7)
+		(end 1.675 -1.7)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Cmts.User")
+		(uuid "1c059077-f907-4215-8878-bbd3861cbe62")
+	)
+	(fp_line
+		(start -2.4 -2.4)
+		(end 2.4 -2.4)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "00a973e3-fb24-48f8-93b5-55d3cf6587e6")
+	)
+	(fp_line
+		(start -2.4 2.4)
+		(end -2.4 -2.4)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "298adde5-3fe9-436f-b062-047910f20b61")
+	)
+	(fp_line
+		(start -2.4 2.4)
+		(end 2.4 2.4)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "74b135df-1ed1-4072-9cbe-eee567a64854")
+	)
+	(fp_line
+		(start 2.4 2.4)
+		(end 2.4 -2.4)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "b5dcf058-9860-41c7-94de-7261a8bde3e0")
+	)
+	(fp_line
+		(start -2.15 -2.15)
+		(end 2.15 -2.15)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "bfbd6759-d443-4d05-bf18-6d49ad45b4c5")
+	)
+	(fp_line
+		(start -2.15 2.15)
+		(end -2.15 -2.15)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "f58f7980-336f-4a4a-8660-bd31af1b5b45")
+	)
+	(fp_line
+		(start -2.15 2.15)
+		(end 2.15 2.15)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "611f16fd-81c0-4b80-b1ac-418c1f0b83f2")
+	)
+	(fp_line
+		(start 2.15 2.15)
+		(end 2.15 -2.15)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "31894f23-1d95-4a10-9d88-dc70989cbbaf")
+	)
+	(pad "1" smd rect
+		(at -1.185 0)
+		(size 0.98 3.4)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "b9a1e88d-7a75-4935-87c4-117d4732da22")
+	)
+	(pad "2" smd rect
+		(at 1.185 0)
+		(size 0.98 3.4)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "7e3c2ffc-c924-42e1-a0e7-dbe4dec6e6f1")
+	)
+	(embedded_fonts no)
+	(model "${KICAD9_3DMODEL_DIR}/Inductor_SMD.3dshapes/L_Coilcraft_XAL4020-XXX.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)

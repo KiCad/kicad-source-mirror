@@ -1,0 +1,9386 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "88f1875e-d754-41bf-b4c4-c0b9d70aa760")
+	(paper "A4")
+	(title_block
+		(title "PCI Express Port (SFF-8466)")
+	)
+	(lib_symbols
+		(symbol "Capacitors SMD:CC0402_100NF_16V_10%_X7R"
+			(pin_names
+				(offset 1.27)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "C"
+				(at 3.81 3.048 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "CC0402_100NF_16V_10%_X7R"
+				(at 0 -6.223 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Footprint" "Capacitors SMD:CAPC1005X55N"
+				(at 0 -8.128 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 -10.033 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Description" "100nF"
+				(at 3.81 -3.048 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Part Number" "CC0402_100NF_16V_10%_X7R"
+				(at 0 -11.938 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Library Ref" "Capacitor - non polarized"
+				(at 0 -13.843 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Library Path" "SchLib\\Capacitors.SchLib"
+				(at 0 -15.748 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Comment" "100nF"
+				(at 0 -17.653 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Component Kind" "Standard"
+				(at 0 -19.558 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Component Type" "Standard"
+				(at 0 -21.463 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Pin Count" "2"
+				(at 0 -23.368 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Footprint Path" "PcbLib\\Capacitors SMD.PcbLib"
+				(at 0 -25.273 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Footprint Ref" "CAPC1005X55N"
+				(at 0 -27.178 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "PackageDescription" " "
+				(at 0 -29.083 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Status" "Not Recommended"
+				(at 0 -30.988 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Status Comment" " "
+				(at 0 -32.893 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Voltage" "16V"
+				(at 0 -34.798 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "TC" "X7R"
+				(at 0 -36.703 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Tolerance" "±10%"
+				(at 0 -38.608 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Part Description" "SMD Multilayer Chip Ceramic Capacitor"
+				(at 0 -40.513 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer" "GENERIC"
+				(at 0 -42.418 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer Part Number" "CC0402_100NF_16V_10%_X7R"
+				(at 0 -44.323 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Case" "0402"
+				(at 0 -46.228 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Mounted" "Yes"
+				(at 0 -48.133 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Socket" "No"
+				(at 0 -50.038 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "SMD" "Yes"
+				(at 0 -51.943 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "PressFit" " "
+				(at 0 -53.848 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Sense" "No"
+				(at 0 -55.753 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Sense Comment" " "
+				(at 0 -57.658 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "ComponentHeight" " "
+				(at 0 -59.563 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer1 Example" "MURATA"
+				(at 0 -61.468 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer1 Part Number" "GRM155R71C104KA88D"
+				(at 0 -63.373 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer1 ComponentHeight" "0.55mm"
+				(at 0 -65.278 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "HelpURL" ""
+				(at 0 -67.183 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Author" "CERN DEM JLC"
+				(at 0 -69.088 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "CreateDate" "12/05/13 00:00:00"
+				(at 0 -70.993 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "LatestRevisionDate" "12/03/07 00:00:00"
+				(at 0 -72.898 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Database Table Name" "Capacitors"
+				(at 0 -74.803 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Library Name" "Capacitors SMD"
+				(at 0 -76.708 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Footprint Library" "Capacitors SMD"
+				(at 0 -78.613 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "License" "CC-BY-SA 4.0"
+				(at 0 -80.518 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "CC0402_100NF_16V_10%_X7R_0_1"
+				(polyline
+					(pts
+						(xy 2.54 0) (xy 3.302 0)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 3.302 -2.032) (xy 3.302 2.032)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 4.318 2.032) (xy 4.318 -2.032)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 5.08 0) (xy 4.318 0)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at 0 0 0)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 0 180)
+					(length 2.54)
+					(name "2"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "R0402_4K7_1%_0.0625W_100PPM_1"
+			(pin_names
+				(offset 1.27)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "R"
+				(at 3.81 1.778 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "R0402_4K7_1%_0.0625W_100PPM"
+				(at 0 -4.953 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Footprint" "Resistors SMD:RESC1005X40N"
+				(at 0 -6.858 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 -8.763 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Tolerance" "±1%"
+				(at 3.81 0 0)
+				(effects
+					(font
+						(size 0.635 0.635)
+					)
+				)
+			)
+			(property "Val" "4k7"
+				(at 3.81 -1.778 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Part Number" "R0402_4K7_1%_0.0625W_100PPM"
+				(at 0 -10.668 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Library Ref" "Resistor - 1%"
+				(at 0 -12.573 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Library Path" "SchLib\\Resistors.SchLib"
+				(at 0 -14.478 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Comment" "4k7"
+				(at 0 -16.383 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Component Kind" "Standard"
+				(at 0 -18.288 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Component Type" "Standard"
+				(at 0 -20.193 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "PackageDescription" " "
+				(at 0 -22.098 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Pin Count" "2"
+				(at 0 -24.003 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Footprint Path" "PcbLib\\Resistors SMD.PcbLib"
+				(at 0 -25.908 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Footprint Ref" "RESC1005X40N"
+				(at 0 -27.813 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Status" "Not Recommended"
+				(at 0 -29.718 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Power" "0.0625W"
+				(at 0 -31.623 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "TC" "±100ppm/°C"
+				(at 0 -33.528 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Voltage" " "
+				(at 0 -35.433 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Tolerance_1" "±1%"
+				(at 0 -37.338 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Part Description" "General Purpose Thick Film Chip Resistor"
+				(at 0 -39.243 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer" "GENERIC"
+				(at 0 -41.148 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer Part Number" "R0402_4K7_1%_0.0625W_100PPM"
+				(at 0 -43.053 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Case" "0402"
+				(at 0 -44.958 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "PressFit" "No"
+				(at 0 -46.863 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Mounted" "Yes"
+				(at 0 -48.768 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Sense Comment" " "
+				(at 0 -50.673 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Sense" "No"
+				(at 0 -52.578 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Status Comment" " "
+				(at 0 -54.483 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Socket" "No"
+				(at 0 -56.388 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "SMD" "Yes"
+				(at 0 -58.293 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "ComponentHeight" " "
+				(at 0 -60.198 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer1 Example" "YAGEO PHYCOMP"
+				(at 0 -62.103 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer1 Part Number" "232270674702L"
+				(at 0 -64.008 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer1 ComponentHeight" "0.4mm"
+				(at 0 -65.913 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "HelpURL" ""
+				(at 0 -67.818 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Author" "CERN DEM JLC"
+				(at 0 -69.723 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "CreateDate" "12/03/07 00:00:00"
+				(at 0 -71.628 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "LatestRevisionDate" "10/17/12 00:00:00"
+				(at 0 -73.533 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Database Table Name" "Resistors"
+				(at 0 -75.438 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Library Name" "Resistors SMD"
+				(at 0 -77.343 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Footprint Library" "Resistors SMD"
+				(at 0 -79.248 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "License" "CC-BY-SA 4.0"
+				(at 0 -81.153 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "R0402_4K7_1%_0.0625W_100PPM_1_0_1"
+				(polyline
+					(pts
+						(xy 1.524 0.762) (xy 1.524 -0.762)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.524 -0.762) (xy 6.096 -0.762)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 6.096 0.762) (xy 1.524 0.762)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 6.096 -0.762) (xy 6.096 0.762)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at 0 0 0)
+					(length 1.524)
+					(name "1"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 0 180)
+					(length 1.524)
+					(name "2"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "TYCO:TYCO_2149027-1"
+			(pin_names
+				(offset 1.27)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 0 3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "TYCO_2149027-1"
+				(at 0 -30.099 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Footprint" "TYCO THD:TYCO_2149027-1"
+				(at 0 -32.004 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 -33.909 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Description" "Mini-SAS HD"
+				(at 0 1.27 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Part Number" "TYCO_2149027-1"
+				(at 0 -35.814 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Library Ref" "Mini-SAS HD"
+				(at 0 -37.719 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Library Path" "SchLib\\Connectors.SchLib"
+				(at 0 -39.624 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Comment" " "
+				(at 0 -41.529 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Component Kind" "Standard"
+				(at 0 -43.434 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Component Type" "Standard"
+				(at 0 -45.339 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "PackageDescription" " "
+				(at 0 -47.244 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Pin Count" "36"
+				(at 0 -49.149 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Case" " "
+				(at 0 -51.054 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Footprint Path" "PcbLib\\TYCO THD.PcbLib"
+				(at 0 -52.959 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Footprint Ref" "TYCO_2149027-1"
+				(at 0 -54.864 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Family" "Mini-SAS HD"
+				(at 0 -56.769 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Mounted" "Yes"
+				(at 0 -58.674 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Socket" "No"
+				(at 0 -60.579 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "SMD" "No"
+				(at 0 -62.484 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "PressFit" "Yes"
+				(at 0 -64.389 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Sense" "No"
+				(at 0 -66.294 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Sense Comment" " "
+				(at 0 -68.199 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Status" "None"
+				(at 0 -70.104 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Status Comment" " "
+				(at 0 -72.009 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "SCEM" " "
+				(at 0 -73.914 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Device" " "
+				(at 0 -75.819 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Part Description" "36 Contacts, Through Hole, Right Angle, Mini-SAS High Density"
+				(at 0 -77.724 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer" "TYCO ELECTRONICS"
+				(at 0 -79.629 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer Part Number" "2149027-1"
+				(at 0 -81.534 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "ComponentHeight" "12.32mm"
+				(at 0 -83.439 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "ComponentLink1URL" " "
+				(at 0 -85.344 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "ComponentLink1Description" " "
+				(at 0 -87.249 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "ComponentLink2URL" " "
+				(at 0 -89.154 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "ComponentLink2Description" " "
+				(at 0 -91.059 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "HelpURL" ""
+				(at 0 -92.964 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Author" "CERN DEM HF"
+				(at 0 -94.869 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "CreateDate" "08/21/23 00:00:00"
+				(at 0 -96.774 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "LatestRevisionDate" "08/21/23 00:00:00"
+				(at 0 -98.679 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Database Table Name" "Connectors"
+				(at 0 -100.584 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Library Name" "TYCO"
+				(at 0 -102.489 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Footprint Library" "TYCO THD"
+				(at 0 -104.394 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "License" "CC-BY-SA 4.0"
+				(at 0 -106.299 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "TYCO_2149027-1_1_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 -27.94)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 10.16 0) (xy 10.16 -27.94) (xy 0 -27.94)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -2.54) (xy 2.54 -2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -5.08) (xy 2.54 -5.08)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -7.62) (xy 2.54 -7.62)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -10.16) (xy 2.54 -10.16)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -12.7) (xy 2.54 -12.7)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -15.24) (xy 2.54 -15.24)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -17.78) (xy 2.54 -17.78)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -20.32) (xy 2.54 -20.32)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -22.86) (xy 2.54 -22.86)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 0 -25.4)
+					(radius 0.508)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 0 -27.94)
+					(end 10.16 0)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -2.54) (xy 2.54 -2.9464) (xy 3.1242 -3.302) (xy 3.81 -3.302)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -5.08) (xy 2.54 -5.4864) (xy 3.1242 -5.842) (xy 3.81 -5.842)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -7.62) (xy 2.54 -8.0264) (xy 3.1242 -8.382) (xy 3.81 -8.382)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -10.16) (xy 2.54 -10.5664) (xy 3.1242 -10.922) (xy 3.81 -10.922)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -12.7) (xy 2.54 -13.1064) (xy 3.1242 -13.462) (xy 3.81 -13.462)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -15.24) (xy 2.54 -15.6464) (xy 3.1242 -16.002) (xy 3.81 -16.002)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -17.78) (xy 2.54 -18.1864) (xy 3.1242 -18.542) (xy 3.81 -18.542)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -20.32) (xy 2.54 -20.7264) (xy 3.1242 -21.082) (xy 3.81 -21.082)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -22.86) (xy 2.54 -23.2664) (xy 3.1242 -23.622) (xy 3.81 -23.622)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -1.778) (xy 3.1242 -1.778) (xy 2.54 -2.1336) (xy 2.54 -2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -4.318) (xy 3.1242 -4.318) (xy 2.54 -4.6736) (xy 2.54 -5.08)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -6.858) (xy 3.1242 -6.858) (xy 2.54 -7.2136) (xy 2.54 -7.62)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -9.398) (xy 3.1242 -9.398) (xy 2.54 -9.7536) (xy 2.54 -10.16)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -11.938) (xy 3.1242 -11.938) (xy 2.54 -12.2936) (xy 2.54 -12.7)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -14.478) (xy 3.1242 -14.478) (xy 2.54 -14.8336) (xy 2.54 -15.24)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -17.018) (xy 3.1242 -17.018) (xy 2.54 -17.3736) (xy 2.54 -17.78)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -19.558) (xy 3.1242 -19.558) (xy 2.54 -19.9136) (xy 2.54 -20.32)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -22.098) (xy 3.1242 -22.098) (xy 2.54 -22.4536) (xy 2.54 -22.86)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(text "SHIELD"
+					(at 4.572 -25.4 0)
+					(effects
+						(font
+							(size 1.016 1.016)
+						)
+						(hide yes)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -2.54 0)
+					(length 5.08)
+					(name "a1"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "A1"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -5.08 0)
+					(length 5.08)
+					(name "a2"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "A2"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -7.62 0)
+					(length 5.08)
+					(name "a3"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "A3"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -10.16 0)
+					(length 5.08)
+					(name "a4"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "A4"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -12.7 0)
+					(length 5.08)
+					(name "a5"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "A5"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -15.24 0)
+					(length 5.08)
+					(name "a6"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "A6"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -17.78 0)
+					(length 5.08)
+					(name "a7"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "A7"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -20.32 0)
+					(length 5.08)
+					(name "a8"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "A8"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -22.86 0)
+					(length 5.08)
+					(name "a9"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "A9"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -25.4 0)
+					(length 5.08)
+					(name "SHIELD"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "SHIELD"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+				)
+			)
+			(symbol "TYCO_2149027-1_2_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 -27.94)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 10.16 0) (xy 10.16 -27.94) (xy 0 -27.94)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -2.54) (xy 2.54 -2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -5.08) (xy 2.54 -5.08)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -7.62) (xy 2.54 -7.62)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -10.16) (xy 2.54 -10.16)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -12.7) (xy 2.54 -12.7)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -15.24) (xy 2.54 -15.24)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -17.78) (xy 2.54 -17.78)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -20.32) (xy 2.54 -20.32)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -22.86) (xy 2.54 -22.86)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 0 -25.4)
+					(radius 0.508)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 0 -27.94)
+					(end 10.16 0)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -2.54) (xy 2.54 -2.9464) (xy 3.1242 -3.302) (xy 3.81 -3.302)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -5.08) (xy 2.54 -5.4864) (xy 3.1242 -5.842) (xy 3.81 -5.842)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -7.62) (xy 2.54 -8.0264) (xy 3.1242 -8.382) (xy 3.81 -8.382)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -10.16) (xy 2.54 -10.5664) (xy 3.1242 -10.922) (xy 3.81 -10.922)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -12.7) (xy 2.54 -13.1064) (xy 3.1242 -13.462) (xy 3.81 -13.462)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -15.24) (xy 2.54 -15.6464) (xy 3.1242 -16.002) (xy 3.81 -16.002)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -17.78) (xy 2.54 -18.1864) (xy 3.1242 -18.542) (xy 3.81 -18.542)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -20.32) (xy 2.54 -20.7264) (xy 3.1242 -21.082) (xy 3.81 -21.082)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -22.86) (xy 2.54 -23.2664) (xy 3.1242 -23.622) (xy 3.81 -23.622)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -1.778) (xy 3.1242 -1.778) (xy 2.54 -2.1336) (xy 2.54 -2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -4.318) (xy 3.1242 -4.318) (xy 2.54 -4.6736) (xy 2.54 -5.08)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -6.858) (xy 3.1242 -6.858) (xy 2.54 -7.2136) (xy 2.54 -7.62)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -9.398) (xy 3.1242 -9.398) (xy 2.54 -9.7536) (xy 2.54 -10.16)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -11.938) (xy 3.1242 -11.938) (xy 2.54 -12.2936) (xy 2.54 -12.7)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -14.478) (xy 3.1242 -14.478) (xy 2.54 -14.8336) (xy 2.54 -15.24)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -17.018) (xy 3.1242 -17.018) (xy 2.54 -17.3736) (xy 2.54 -17.78)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -19.558) (xy 3.1242 -19.558) (xy 2.54 -19.9136) (xy 2.54 -20.32)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -22.098) (xy 3.1242 -22.098) (xy 2.54 -22.4536) (xy 2.54 -22.86)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(text "SHIELD"
+					(at 4.572 -25.4 0)
+					(effects
+						(font
+							(size 1.016 1.016)
+						)
+						(hide yes)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -2.54 0)
+					(length 5.08)
+					(name "b1"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "B1"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -5.08 0)
+					(length 5.08)
+					(name "b2"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "B2"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -7.62 0)
+					(length 5.08)
+					(name "b3"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "B3"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -10.16 0)
+					(length 5.08)
+					(name "b4"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "B4"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -12.7 0)
+					(length 5.08)
+					(name "b5"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "B5"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -15.24 0)
+					(length 5.08)
+					(name "b6"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "B6"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -17.78 0)
+					(length 5.08)
+					(name "b7"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "B7"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -20.32 0)
+					(length 5.08)
+					(name "b8"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "B8"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -22.86 0)
+					(length 5.08)
+					(name "b9"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "B9"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -25.4 0)
+					(length 5.08)
+					(name "SHIELD"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "SHIELD"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+				)
+			)
+			(symbol "TYCO_2149027-1_3_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 -27.94)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 10.16 0) (xy 10.16 -27.94) (xy 0 -27.94)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -2.54) (xy 2.54 -2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -5.08) (xy 2.54 -5.08)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -7.62) (xy 2.54 -7.62)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -10.16) (xy 2.54 -10.16)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -12.7) (xy 2.54 -12.7)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -15.24) (xy 2.54 -15.24)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -17.78) (xy 2.54 -17.78)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -20.32) (xy 2.54 -20.32)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -22.86) (xy 2.54 -22.86)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 0 -25.4)
+					(radius 0.508)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 0 -27.94)
+					(end 10.16 0)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -2.54) (xy 2.54 -2.9464) (xy 3.1242 -3.302) (xy 3.81 -3.302)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -5.08) (xy 2.54 -5.4864) (xy 3.1242 -5.842) (xy 3.81 -5.842)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -7.62) (xy 2.54 -8.0264) (xy 3.1242 -8.382) (xy 3.81 -8.382)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -10.16) (xy 2.54 -10.5664) (xy 3.1242 -10.922) (xy 3.81 -10.922)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -12.7) (xy 2.54 -13.1064) (xy 3.1242 -13.462) (xy 3.81 -13.462)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -15.24) (xy 2.54 -15.6464) (xy 3.1242 -16.002) (xy 3.81 -16.002)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -17.78) (xy 2.54 -18.1864) (xy 3.1242 -18.542) (xy 3.81 -18.542)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -20.32) (xy 2.54 -20.7264) (xy 3.1242 -21.082) (xy 3.81 -21.082)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -22.86) (xy 2.54 -23.2664) (xy 3.1242 -23.622) (xy 3.81 -23.622)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -1.778) (xy 3.1242 -1.778) (xy 2.54 -2.1336) (xy 2.54 -2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -4.318) (xy 3.1242 -4.318) (xy 2.54 -4.6736) (xy 2.54 -5.08)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -6.858) (xy 3.1242 -6.858) (xy 2.54 -7.2136) (xy 2.54 -7.62)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -9.398) (xy 3.1242 -9.398) (xy 2.54 -9.7536) (xy 2.54 -10.16)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -11.938) (xy 3.1242 -11.938) (xy 2.54 -12.2936) (xy 2.54 -12.7)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -14.478) (xy 3.1242 -14.478) (xy 2.54 -14.8336) (xy 2.54 -15.24)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -17.018) (xy 3.1242 -17.018) (xy 2.54 -17.3736) (xy 2.54 -17.78)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -19.558) (xy 3.1242 -19.558) (xy 2.54 -19.9136) (xy 2.54 -20.32)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -22.098) (xy 3.1242 -22.098) (xy 2.54 -22.4536) (xy 2.54 -22.86)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(text "SHIELD"
+					(at 4.572 -25.4 0)
+					(effects
+						(font
+							(size 1.016 1.016)
+						)
+						(hide yes)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -2.54 0)
+					(length 5.08)
+					(name "c1"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "C1"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -5.08 0)
+					(length 5.08)
+					(name "c2"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "C2"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -7.62 0)
+					(length 5.08)
+					(name "c3"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "C3"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -10.16 0)
+					(length 5.08)
+					(name "c4"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "C4"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -12.7 0)
+					(length 5.08)
+					(name "c5"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "C5"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -15.24 0)
+					(length 5.08)
+					(name "c6"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "C6"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -17.78 0)
+					(length 5.08)
+					(name "c7"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "C7"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -20.32 0)
+					(length 5.08)
+					(name "c8"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "C8"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -22.86 0)
+					(length 5.08)
+					(name "c9"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "C9"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -25.4 0)
+					(length 5.08)
+					(name "SHIELD"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "SHIELD"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+				)
+			)
+			(symbol "TYCO_2149027-1_4_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 -27.94)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 10.16 0) (xy 10.16 -27.94) (xy 0 -27.94)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -2.54) (xy 2.54 -2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -5.08) (xy 2.54 -5.08)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -7.62) (xy 2.54 -7.62)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -10.16) (xy 2.54 -10.16)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -12.7) (xy 2.54 -12.7)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -15.24) (xy 2.54 -15.24)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -17.78) (xy 2.54 -17.78)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -20.32) (xy 2.54 -20.32)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -22.86) (xy 2.54 -22.86)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 0 -25.4)
+					(radius 0.508)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 0 -27.94)
+					(end 10.16 0)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -2.54) (xy 2.54 -2.9464) (xy 3.1242 -3.302) (xy 3.81 -3.302)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -5.08) (xy 2.54 -5.4864) (xy 3.1242 -5.842) (xy 3.81 -5.842)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -7.62) (xy 2.54 -8.0264) (xy 3.1242 -8.382) (xy 3.81 -8.382)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -10.16) (xy 2.54 -10.5664) (xy 3.1242 -10.922) (xy 3.81 -10.922)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -12.7) (xy 2.54 -13.1064) (xy 3.1242 -13.462) (xy 3.81 -13.462)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -15.24) (xy 2.54 -15.6464) (xy 3.1242 -16.002) (xy 3.81 -16.002)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -17.78) (xy 2.54 -18.1864) (xy 3.1242 -18.542) (xy 3.81 -18.542)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -20.32) (xy 2.54 -20.7264) (xy 3.1242 -21.082) (xy 3.81 -21.082)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -22.86) (xy 2.54 -23.2664) (xy 3.1242 -23.622) (xy 3.81 -23.622)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -1.778) (xy 3.1242 -1.778) (xy 2.54 -2.1336) (xy 2.54 -2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -4.318) (xy 3.1242 -4.318) (xy 2.54 -4.6736) (xy 2.54 -5.08)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -6.858) (xy 3.1242 -6.858) (xy 2.54 -7.2136) (xy 2.54 -7.62)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -9.398) (xy 3.1242 -9.398) (xy 2.54 -9.7536) (xy 2.54 -10.16)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -11.938) (xy 3.1242 -11.938) (xy 2.54 -12.2936) (xy 2.54 -12.7)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -14.478) (xy 3.1242 -14.478) (xy 2.54 -14.8336) (xy 2.54 -15.24)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -17.018) (xy 3.1242 -17.018) (xy 2.54 -17.3736) (xy 2.54 -17.78)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -19.558) (xy 3.1242 -19.558) (xy 2.54 -19.9136) (xy 2.54 -20.32)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 3.81 -22.098) (xy 3.1242 -22.098) (xy 2.54 -22.4536) (xy 2.54 -22.86)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(text "SHIELD"
+					(at 4.572 -25.4 0)
+					(effects
+						(font
+							(size 1.016 1.016)
+						)
+						(hide yes)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -2.54 0)
+					(length 5.08)
+					(name "d1"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "D1"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -5.08 0)
+					(length 5.08)
+					(name "d2"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "D2"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -7.62 0)
+					(length 5.08)
+					(name "d3"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "D3"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -10.16 0)
+					(length 5.08)
+					(name "d4"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "D4"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -12.7 0)
+					(length 5.08)
+					(name "d5"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "D5"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -15.24 0)
+					(length 5.08)
+					(name "d6"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "D6"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -17.78 0)
+					(length 5.08)
+					(name "d7"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "D7"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -20.32 0)
+					(length 5.08)
+					(name "d8"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "D8"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -22.86 0)
+					(length 5.08)
+					(name "d9"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "D9"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -25.4 0)
+					(length 5.08)
+					(name "SHIELD"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "SHIELD"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "power:GND"
+			(power)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "GND"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "GROUND power-flag symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "Power Flag Symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "GND_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "GND_1_1"
+				(pin power_in line
+					(at 0 0 270)
+					(length 0)
+					(hide yes)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+	)
+	(text_box "Mini-SAS HD connector (wired as per SFF-8644):\n- PCIe uplink to host PC (useful for testing)\n- The device can be easily turned into a VME CPU (or a combo of a VME CPU and a timing receiver in a single board).\n- Place the connector on top of one of the SPFs (will not be mounted by default)\n\nYours, Tom & Fede"
+		(exclude_from_sim no)
+		(at 149.86 88.9 0)
+		(size 55.88 20.32)
+		(margins 0.9525 0.9525 0.9525 0.9525)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type color)
+			(color 255 255 194 1)
+		)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "88bf6367-5ad8-4892-9b29-926ccca44687")
+	)
+	(junction
+		(at 105.41 87.63)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "609ed0a1-48e1-48f7-bb94-6121b6095341")
+	)
+	(no_connect
+		(at 189.23 127)
+		(uuid "04debc5c-0fc5-4d40-9845-7bb36169cbae")
+	)
+	(no_connect
+		(at 110.49 121.92)
+		(uuid "0a1fbda9-8103-4391-a181-c99d0eaa535a")
+	)
+	(no_connect
+		(at 148.59 124.46)
+		(uuid "10dfd245-b9ef-4783-a1e8-942c97db1647")
+	)
+	(no_connect
+		(at 148.59 137.16)
+		(uuid "1edeeda6-e5ad-472b-b9a3-62204ee3206a")
+	)
+	(no_connect
+		(at 72.39 137.16)
+		(uuid "1f25ea0a-e18d-47f5-8292-2b0e3d4a3384")
+	)
+	(no_connect
+		(at 110.49 137.16)
+		(uuid "2c1a4a03-3471-45c4-a849-a4a346d9f7bf")
+	)
+	(no_connect
+		(at 110.49 127)
+		(uuid "2e69555f-cf48-48cd-a6e5-25f09b0bfbe2")
+	)
+	(no_connect
+		(at 110.49 124.46)
+		(uuid "46024376-555f-423f-909a-3978891741e5")
+	)
+	(no_connect
+		(at 110.49 132.08)
+		(uuid "48f93551-7e74-4964-a440-08786ee2715e")
+	)
+	(no_connect
+		(at 72.39 132.08)
+		(uuid "4c17e3f1-f900-4df7-9f80-885146e306e8")
+	)
+	(no_connect
+		(at 148.59 119.38)
+		(uuid "53fa94fe-0b66-421b-a02d-319a5ecb5f01")
+	)
+	(no_connect
+		(at 110.49 134.62)
+		(uuid "57738e02-478f-4c9e-bc65-92d5ca4de508")
+	)
+	(no_connect
+		(at 189.23 124.46)
+		(uuid "6e36ae49-f502-4ccd-8c03-86ff7ea09ac3")
+	)
+	(no_connect
+		(at 110.49 129.54)
+		(uuid "706e0834-9828-43d0-a2a3-72cc7e36ca69")
+	)
+	(no_connect
+		(at 189.23 132.08)
+		(uuid "81579cba-c212-4343-9f53-211cf023dc5a")
+	)
+	(no_connect
+		(at 72.39 134.62)
+		(uuid "888c8fef-4063-4749-83d7-9438e84cb5a1")
+	)
+	(no_connect
+		(at 148.59 139.7)
+		(uuid "9591f2f9-082f-414d-8f9f-f1299ce2803b")
+	)
+	(no_connect
+		(at 148.59 132.08)
+		(uuid "960e8495-e497-4152-939e-ec685c383faa")
+	)
+	(no_connect
+		(at 148.59 134.62)
+		(uuid "ade056ff-1d0f-428f-9df5-43fd2448833b")
+	)
+	(no_connect
+		(at 72.39 121.92)
+		(uuid "b56b4fac-0559-47fa-8089-c9a8451b6bd3")
+	)
+	(no_connect
+		(at 72.39 124.46)
+		(uuid "b8b33493-d16d-4eef-8c92-ab45c4a6c727")
+	)
+	(no_connect
+		(at 110.49 139.7)
+		(uuid "b9f23df2-55c8-4f1d-ac09-3136211376d0")
+	)
+	(no_connect
+		(at 72.39 119.38)
+		(uuid "cc3823c4-c7cc-458a-9136-d0d00e16304c")
+	)
+	(no_connect
+		(at 72.39 139.7)
+		(uuid "d0786124-5d71-498b-8973-7637d1327e0a")
+	)
+	(no_connect
+		(at 189.23 134.62)
+		(uuid "d8d88c80-0169-4e7c-a4a1-e027e200fe1b")
+	)
+	(no_connect
+		(at 189.23 129.54)
+		(uuid "dcfea65e-9134-4199-a728-96b116145c87")
+	)
+	(no_connect
+		(at 189.23 137.16)
+		(uuid "e2e25c16-16e9-48a7-9347-8de774052e0e")
+	)
+	(no_connect
+		(at 148.59 121.92)
+		(uuid "e531b69c-532e-4edf-91e3-e7e32b44576e")
+	)
+	(no_connect
+		(at 189.23 139.7)
+		(uuid "fe930967-c573-4c1d-a339-6e923d4f98a2")
+	)
+	(bus_entry
+		(at 87.63 82.55)
+		(size -2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0a71709f-5467-46ce-bf6c-d9dae5b680d4")
+	)
+	(bus_entry
+		(at 87.63 74.93)
+		(size -2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b1aa9021-aefc-4755-8950-c001833c37d7")
+	)
+	(bus_entry
+		(at 87.63 87.63)
+		(size -2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e57f6367-6a88-46f1-b616-6bd664e2719a")
+	)
+	(bus_entry
+		(at 87.63 80.01)
+		(size -2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "eccdba4a-875f-46c3-b358-138b505acd08")
+	)
+	(bus_entry
+		(at 87.63 64.77)
+		(size -2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ecfb7cab-6847-43f5-853e-07da18c1f4ec")
+	)
+	(bus_entry
+		(at 87.63 59.69)
+		(size -2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f18bb466-b93d-41db-bd98-8a2a9972abbd")
+	)
+	(bus_entry
+		(at 87.63 69.85)
+		(size -2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f58c99fa-4fb2-4600-8684-d0fd62fd308a")
+	)
+	(wire
+		(pts
+			(xy 116.84 69.85) (xy 138.43 69.85)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "18e47f64-8f03-41ea-a332-a86b8e432b1f")
+	)
+	(wire
+		(pts
+			(xy 55.88 129.54) (xy 72.39 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1c5c7731-3ae4-49f2-b119-aedc30ffdef8")
+	)
+	(wire
+		(pts
+			(xy 109.22 74.93) (xy 87.63 74.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1cccba10-99e8-4d62-bc15-eb6b8ccbf64a")
+	)
+	(bus
+		(pts
+			(xy 85.09 67.31) (xy 85.09 72.39)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1f3b543e-9f0b-412b-a611-e69964a55105")
+	)
+	(wire
+		(pts
+			(xy 105.41 87.63) (xy 87.63 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "26eec778-8612-416e-80af-35c1bc9e83b3")
+	)
+	(bus
+		(pts
+			(xy 85.09 80.01) (xy 85.09 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "27cd0008-1d01-4ed0-ba3a-49c8acc4e085")
+	)
+	(wire
+		(pts
+			(xy 172.72 121.92) (xy 189.23 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2a4a8873-a111-464e-9f66-fbdd882a7f68")
+	)
+	(bus
+		(pts
+			(xy 85.09 62.23) (xy 85.09 67.31)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2cfcdd18-e1df-4bcb-aeb9-a4f63b7bfd2a")
+	)
+	(wire
+		(pts
+			(xy 109.22 64.77) (xy 87.63 64.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3aa3400b-9078-455c-8a5b-69a238546756")
+	)
+	(wire
+		(pts
+			(xy 116.84 64.77) (xy 138.43 64.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3de5371e-5054-4523-87d5-bcd19eb2a000")
+	)
+	(wire
+		(pts
+			(xy 132.08 129.54) (xy 148.59 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4fed8a81-d5c7-45f0-8534-01a4b20e9947")
+	)
+	(wire
+		(pts
+			(xy 109.22 87.63) (xy 105.41 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6124e37d-f21e-474d-9e8a-1e30f44d2811")
+	)
+	(bus
+		(pts
+			(xy 48.26 57.15) (xy 85.09 57.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "665cf00d-9561-477b-bef2-ef7c0d5d4b9c")
+	)
+	(wire
+		(pts
+			(xy 172.72 119.38) (xy 189.23 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6cb6872b-a5f3-4c60-8ce4-766e805083ca")
+	)
+	(wire
+		(pts
+			(xy 132.08 127) (xy 148.59 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7b45fb65-ad37-47d4-ac47-c63f8c494a55")
+	)
+	(bus
+		(pts
+			(xy 85.09 77.47) (xy 85.09 80.01)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "81041bc9-db4a-4b2e-a501-789ce04dda61")
+	)
+	(wire
+		(pts
+			(xy 105.41 87.63) (xy 105.41 90.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "824be2c2-fab7-4927-9f4f-1a487ba62ec8")
+	)
+	(wire
+		(pts
+			(xy 189.23 142.24) (xy 186.69 142.24)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8414c25c-01b4-4de9-96d3-04e07b48f6c6")
+	)
+	(wire
+		(pts
+			(xy 107.95 142.24) (xy 107.95 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "943d1c6a-46d9-4fa8-8c29-bbd9c312c219")
+	)
+	(wire
+		(pts
+			(xy 72.39 142.24) (xy 69.85 142.24)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "95f1330a-bf90-43fc-aab2-b5452ba2447b")
+	)
+	(wire
+		(pts
+			(xy 109.22 82.55) (xy 87.63 82.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b2d01867-5056-4632-98c6-982783f32221")
+	)
+	(wire
+		(pts
+			(xy 69.85 142.24) (xy 69.85 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b2e9927c-71dc-4e2a-a8c6-f26ea8578a8d")
+	)
+	(wire
+		(pts
+			(xy 93.98 119.38) (xy 110.49 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "be4fdf88-3df6-4f6a-9d04-bab774a4f5a3")
+	)
+	(bus
+		(pts
+			(xy 85.09 72.39) (xy 85.09 77.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bec426ec-f40f-4c9c-ab46-2b2043c89bba")
+	)
+	(wire
+		(pts
+			(xy 110.49 142.24) (xy 107.95 142.24)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c0b0ec5c-1837-45d9-a2ce-ff2e0d981c29")
+	)
+	(wire
+		(pts
+			(xy 148.59 142.24) (xy 146.05 142.24)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c6a6f859-5d0b-42dc-88f3-98085bbcb711")
+	)
+	(wire
+		(pts
+			(xy 116.84 74.93) (xy 138.43 74.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cbb30d00-6bb6-4ebd-8f84-0b0dd7374297")
+	)
+	(wire
+		(pts
+			(xy 116.84 59.69) (xy 138.43 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cc25be25-5746-4e4b-a719-f084b5cf9d07")
+	)
+	(wire
+		(pts
+			(xy 186.69 142.24) (xy 186.69 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d11b1162-6677-4356-a3db-5104998bc7b8")
+	)
+	(wire
+		(pts
+			(xy 109.22 59.69) (xy 87.63 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e30423dd-eba1-4917-8f2c-2c2b29afc1fe")
+	)
+	(wire
+		(pts
+			(xy 109.22 80.01) (xy 87.63 80.01)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e70c462a-10b5-4961-b8eb-6713ea6c6d78")
+	)
+	(wire
+		(pts
+			(xy 55.88 127) (xy 72.39 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e82bf29e-6bce-4381-a150-fd05d2d3802a")
+	)
+	(bus
+		(pts
+			(xy 85.09 57.15) (xy 85.09 62.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e8b85577-21c4-4e62-929d-da5af3efbc57")
+	)
+	(wire
+		(pts
+			(xy 109.22 69.85) (xy 87.63 69.85)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f07d1eb6-34f9-45d8-adcc-7ae6a1b0b6b6")
+	)
+	(wire
+		(pts
+			(xy 146.05 142.24) (xy 146.05 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fb3f4497-113d-4e45-8174-31c8c9e4340d")
+	)
+	(label "PCIE_PER_AC_P"
+		(at 132.08 127 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "0b5ff1c4-e5ef-42e2-8df9-f7a0eddab210")
+	)
+	(label "PCIE_PET_AC_P"
+		(at 124.46 69.85 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "198f9e44-bbab-483d-b99f-ad2b0a6fd48e")
+	)
+	(label "PCIE.PER_P"
+		(at 100.33 59.69 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "1d2aef33-36bf-4bd9-8891-c3a9b6a0ee36")
+	)
+	(label "PCIE_PET_AC_P"
+		(at 55.88 127 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "283c6590-8d77-4952-aa8b-7f1d7f183626")
+	)
+	(label "PCIE.PERST_N"
+		(at 102.87 87.63 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "410e4992-2918-407d-95ec-7e2958365e7e")
+	)
+	(label "PCIE_PER_AC_N"
+		(at 124.46 64.77 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "5252bfd0-0f15-4241-ac73-3c1636d1124a")
+	)
+	(label "PCIE_PER_AC_N"
+		(at 132.08 129.54 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "6905b127-7c37-4760-bb5d-a2227269cdd2")
+	)
+	(label "PCIE.PER_N"
+		(at 100.33 64.77 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "70f8b3e0-a7a9-43a0-881c-bf05dc20d2d2")
+	)
+	(label "PCIE_PET_AC_N"
+		(at 124.46 74.93 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "7cfffaef-2954-486e-8fb7-e77fec7acc08")
+	)
+	(label "PCIE.REFCLK_P"
+		(at 187.96 119.38 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "8e566ee7-2585-40a4-9296-eee25aa63d37")
+	)
+	(label "PCIE.REFCLK_P"
+		(at 104.14 80.01 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "8e9dd277-4f2b-430c-84f0-002f4d736ea2")
+	)
+	(label "PCIE.REFCLK_N"
+		(at 104.14 82.55 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "91dbd72b-3e28-4561-8e12-b347473a2da3")
+	)
+	(label "PCIE.PET_N"
+		(at 100.33 74.93 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "b0b97441-2737-4557-b7f8-49081079e4b7")
+	)
+	(label "PCIE_PER_AC_P"
+		(at 124.46 59.69 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "ca0c9880-17ac-4c0d-9157-2caaa2efe007")
+	)
+	(label "PCIE_PET_AC_N"
+		(at 55.88 129.54 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d951d12e-b055-4da5-ba1b-883d484dea97")
+	)
+	(label "PCIE.PET_P"
+		(at 100.33 69.85 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "e38d461b-8058-459f-a55f-040fcb04c637")
+	)
+	(label "PCIE.REFCLK_N"
+		(at 187.96 121.92 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "f82cb36b-9cf3-4ae7-986d-1ddc982e7558")
+	)
+	(label "PCIE.PERST_N"
+		(at 107.95 119.38 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "fdc52b13-8359-4e5f-9931-b88e1ab50245")
+	)
+	(hierarchical_label "{PCIE}"
+		(shape bidirectional)
+		(at 48.26 57.15 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "a35d3700-f5de-4cc2-adec-f0a9fb213adf")
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 186.69 144.78 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "03e2e2b4-cf2b-44a6-b944-d10fb05c09c3")
+		(property "Reference" "#PWR01131"
+			(at 186.69 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 186.69 149.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 186.69 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 186.69 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "GROUND power-flag symbol"
+			(at 186.69 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "60e91dfa-b78a-46dc-8fc0-5eba7f447341")
+		)
+		(instances
+			(project "vme-wren"
+				(path "/80fa765c-41e7-4a3d-b539-36e81bba11f8/42fdace9-fc8c-4f8c-918f-f7a394beb474"
+					(reference "#PWR01131")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 107.95 144.78 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "054daf3e-7d63-4334-9679-214a155dd91b")
+		(property "Reference" "#PWR01129"
+			(at 107.95 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 107.95 149.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 107.95 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 107.95 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "GROUND power-flag symbol"
+			(at 107.95 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d7bd5e9d-b102-49c4-9f9f-7d77ecd299f2")
+		)
+		(instances
+			(project "vme-wren"
+				(path "/80fa765c-41e7-4a3d-b539-36e81bba11f8/42fdace9-fc8c-4f8c-918f-f7a394beb474"
+					(reference "#PWR01129")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Capacitors SMD:CC0402_100NF_16V_10%_X7R")
+		(at 116.84 69.85 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "108462ab-bef3-441c-a56e-30e1d2b3b497")
+		(property "Reference" "C515"
+			(at 116.84 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "CC0402_100NF_16V_10%_X7R"
+			(at 116.84 76.073 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "Capacitors SMD:CAPC1005X55N"
+			(at 116.84 77.978 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 116.84 79.883 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "100nF"
+			(at 116.84 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "SMD" "Yes"
+			(at 116.84 121.793 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Part Number" "CC0402_100NF_16V_10%_X7R"
+			(at 116.84 81.788 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Ref" "Capacitor - non polarized"
+			(at 116.84 83.693 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Path" "SchLib\\Capacitors.SchLib"
+			(at 116.84 85.598 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Comment" "100nF"
+			(at 116.84 87.503 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Component Kind" "Standard"
+			(at 116.84 89.408 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Component Type" "Standard"
+			(at 116.84 91.313 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Pin Count" "2"
+			(at 116.84 93.218 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Path" "PcbLib\\Capacitors SMD.PcbLib"
+			(at 116.84 95.123 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Ref" "CAPC1005X55N"
+			(at 116.84 97.028 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "PackageDescription" " "
+			(at 116.84 98.933 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Status" "Not Recommended"
+			(at 116.84 100.838 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Status Comment" " "
+			(at 116.84 102.743 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Voltage" "16V"
+			(at 116.84 104.648 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 116.84 108.458 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Part Description" "SMD Multilayer Chip Ceramic Capacitor"
+			(at 116.84 110.363 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "GENERIC"
+			(at 116.84 112.268 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0402_100NF_16V_10%_X7R"
+			(at 116.84 114.173 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Case" "0402"
+			(at 116.84 116.078 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Mounted" "Yes"
+			(at 116.84 117.983 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Socket" "No"
+			(at 116.84 119.888 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "PressFit" " "
+			(at 116.84 123.698 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Sense" "No"
+			(at 116.84 125.603 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Sense Comment" " "
+			(at 116.84 127.508 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "ComponentHeight" " "
+			(at 116.84 129.413 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer1 Example" "MURATA"
+			(at 116.84 131.318 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer1 Part Number" "GRM155R71C104KA88D"
+			(at 116.84 133.223 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer1 ComponentHeight" "0.55mm"
+			(at 116.84 135.128 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "HelpURL" ""
+			(at 116.84 137.033 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Author" "CERN DEM JLC"
+			(at 116.84 138.938 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "CreateDate" "12/05/13 00:00:00"
+			(at 116.84 140.843 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "LatestRevisionDate" "12/03/07 00:00:00"
+			(at 116.84 142.748 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Database Table Name" "Capacitors"
+			(at 116.84 144.653 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Name" "Capacitors SMD"
+			(at 116.84 146.558 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Library" "Capacitors SMD"
+			(at 116.84 148.463 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "License" "CC-BY-SA 4.0"
+			(at 116.84 150.368 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "8b4a7127-544e-40ce-beaf-76153c7405b8")
+		)
+		(pin "2"
+			(uuid "a2249cde-cede-4482-ad00-3e770a5bc1ef")
+		)
+		(instances
+			(project "vme-wren"
+				(path "/80fa765c-41e7-4a3d-b539-36e81bba11f8/42fdace9-fc8c-4f8c-918f-f7a394beb474"
+					(reference "C515")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 69.85 144.78 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "43706379-80fe-4b86-af61-716de79d1aac")
+		(property "Reference" "#PWR01128"
+			(at 69.85 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 69.85 149.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 69.85 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 69.85 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "GROUND power-flag symbol"
+			(at 69.85 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "9394d3ae-5e1c-42da-83bd-f04f14116995")
+		)
+		(instances
+			(project "vme-wren"
+				(path "/80fa765c-41e7-4a3d-b539-36e81bba11f8/42fdace9-fc8c-4f8c-918f-f7a394beb474"
+					(reference "#PWR01128")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Capacitors SMD:CC0402_100NF_16V_10%_X7R")
+		(at 116.84 59.69 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "4d81fba1-2b2c-4ed2-aa1d-34fa6b82d4ec")
+		(property "Reference" "C513"
+			(at 116.84 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "CC0402_100NF_16V_10%_X7R"
+			(at 116.84 65.913 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "Capacitors SMD:CAPC1005X55N"
+			(at 116.84 67.818 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 116.84 69.723 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "100nF"
+			(at 116.84 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "SMD" "Yes"
+			(at 116.84 111.633 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Part Number" "CC0402_100NF_16V_10%_X7R"
+			(at 116.84 71.628 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Ref" "Capacitor - non polarized"
+			(at 116.84 73.533 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Path" "SchLib\\Capacitors.SchLib"
+			(at 116.84 75.438 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Comment" "100nF"
+			(at 116.84 77.343 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Component Kind" "Standard"
+			(at 116.84 79.248 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Component Type" "Standard"
+			(at 116.84 81.153 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Pin Count" "2"
+			(at 116.84 83.058 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Path" "PcbLib\\Capacitors SMD.PcbLib"
+			(at 116.84 84.963 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Ref" "CAPC1005X55N"
+			(at 116.84 86.868 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "PackageDescription" " "
+			(at 116.84 88.773 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Status" "Not Recommended"
+			(at 116.84 90.678 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Status Comment" " "
+			(at 116.84 92.583 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Voltage" "16V"
+			(at 116.84 94.488 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 116.84 98.298 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Part Description" "SMD Multilayer Chip Ceramic Capacitor"
+			(at 116.84 100.203 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "GENERIC"
+			(at 116.84 102.108 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0402_100NF_16V_10%_X7R"
+			(at 116.84 104.013 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Case" "0402"
+			(at 116.84 105.918 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Mounted" "Yes"
+			(at 116.84 107.823 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Socket" "No"
+			(at 116.84 109.728 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "PressFit" " "
+			(at 116.84 113.538 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Sense" "No"
+			(at 116.84 115.443 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Sense Comment" " "
+			(at 116.84 117.348 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "ComponentHeight" " "
+			(at 116.84 119.253 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer1 Example" "MURATA"
+			(at 116.84 121.158 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer1 Part Number" "GRM155R71C104KA88D"
+			(at 116.84 123.063 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer1 ComponentHeight" "0.55mm"
+			(at 116.84 124.968 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "HelpURL" ""
+			(at 116.84 126.873 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Author" "CERN DEM JLC"
+			(at 116.84 128.778 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "CreateDate" "12/05/13 00:00:00"
+			(at 116.84 130.683 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "LatestRevisionDate" "12/03/07 00:00:00"
+			(at 116.84 132.588 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Database Table Name" "Capacitors"
+			(at 116.84 134.493 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Name" "Capacitors SMD"
+			(at 116.84 136.398 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Library" "Capacitors SMD"
+			(at 116.84 138.303 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "License" "CC-BY-SA 4.0"
+			(at 116.84 140.208 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "fc235481-8ac7-410f-acfc-dc38212aa22d")
+		)
+		(pin "2"
+			(uuid "bfa4e4a7-1263-4561-9730-00c12ec29e7d")
+		)
+		(instances
+			(project "vme-wren"
+				(path "/80fa765c-41e7-4a3d-b539-36e81bba11f8/42fdace9-fc8c-4f8c-918f-f7a394beb474"
+					(reference "C513")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_name "R0402_4K7_1%_0.0625W_100PPM_1")
+		(lib_id "Resistors SMD:R0402_4K7_1%_0.0625W_100PPM")
+		(at 105.41 97.79 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "72682b10-f970-40ad-97f5-79c6c53cdfc6")
+		(property "Reference" "R446"
+			(at 107.95 93.5989 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "R0402_4K7_1%_0.0625W_100PPM"
+			(at 110.363 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "Resistors SMD:RESC1005X40N"
+			(at 112.268 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 114.173 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 105.41 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "SMD" "Yes"
+			(at 163.703 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 107.95 93.98 90)
+			(effects
+				(font
+					(size 0.635 0.635)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+		(property "Val" "4k7"
+			(at 107.95 95.8849 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Part Number" "R0402_4K7_1%_0.0625W_100PPM"
+			(at 116.078 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Ref" "Resistor - 1%"
+			(at 117.983 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Path" "SchLib\\Resistors.SchLib"
+			(at 119.888 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Comment" "4k7"
+			(at 121.793 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Component Kind" "Standard"
+			(at 123.698 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Component Type" "Standard"
+			(at 125.603 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "PackageDescription" " "
+			(at 127.508 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Pin Count" "2"
+			(at 129.413 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Path" "PcbLib\\Resistors SMD.PcbLib"
+			(at 131.318 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Ref" "RESC1005X40N"
+			(at 133.223 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Status" "Not Recommended"
+			(at 135.128 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Power" "0.0625W"
+			(at 137.033 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Voltage" " "
+			(at 140.843 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Part Description" "General Purpose Thick Film Chip Resistor"
+			(at 144.653 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "GENERIC"
+			(at 146.558 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "R0402_4K7_1%_0.0625W_100PPM"
+			(at 148.463 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Case" "0402"
+			(at 150.368 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "PressFit" "No"
+			(at 152.273 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Mounted" "Yes"
+			(at 154.178 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Sense Comment" " "
+			(at 156.083 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Sense" "No"
+			(at 157.988 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Status Comment" " "
+			(at 159.893 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Socket" "No"
+			(at 161.798 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "ComponentHeight" " "
+			(at 165.608 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer1 Example" "YAGEO PHYCOMP"
+			(at 167.513 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer1 Part Number" "232270674702L"
+			(at 169.418 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer1 ComponentHeight" "0.4mm"
+			(at 171.323 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "HelpURL" ""
+			(at 173.228 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Author" "CERN DEM JLC"
+			(at 175.133 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "CreateDate" "12/03/07 00:00:00"
+			(at 177.038 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "LatestRevisionDate" "10/17/12 00:00:00"
+			(at 178.943 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Database Table Name" "Resistors"
+			(at 180.848 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Name" "Resistors SMD"
+			(at 182.753 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Library" "Resistors SMD"
+			(at 184.658 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "License" "CC-BY-SA 4.0"
+			(at 186.563 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b6733450-2de6-473b-b3fe-75ae012a5579")
+		)
+		(pin "2"
+			(uuid "eb9b9d6e-e32d-488e-addb-3791a70a98b1")
+		)
+		(instances
+			(project "vme-wren"
+				(path "/80fa765c-41e7-4a3d-b539-36e81bba11f8/42fdace9-fc8c-4f8c-918f-f7a394beb474"
+					(reference "R446")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Capacitors SMD:CC0402_100NF_16V_10%_X7R")
+		(at 116.84 64.77 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "81d4df74-2ddf-46c1-8a4e-f38726bed2df")
+		(property "Reference" "C514"
+			(at 116.84 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "CC0402_100NF_16V_10%_X7R"
+			(at 116.84 70.993 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "Capacitors SMD:CAPC1005X55N"
+			(at 116.84 72.898 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 116.84 74.803 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "100nF"
+			(at 116.84 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "SMD" "Yes"
+			(at 116.84 116.713 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Part Number" "CC0402_100NF_16V_10%_X7R"
+			(at 116.84 76.708 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Ref" "Capacitor - non polarized"
+			(at 116.84 78.613 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Path" "SchLib\\Capacitors.SchLib"
+			(at 116.84 80.518 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Comment" "100nF"
+			(at 116.84 82.423 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Component Kind" "Standard"
+			(at 116.84 84.328 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Component Type" "Standard"
+			(at 116.84 86.233 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Pin Count" "2"
+			(at 116.84 88.138 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Path" "PcbLib\\Capacitors SMD.PcbLib"
+			(at 116.84 90.043 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Ref" "CAPC1005X55N"
+			(at 116.84 91.948 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "PackageDescription" " "
+			(at 116.84 93.853 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Status" "Not Recommended"
+			(at 116.84 95.758 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Status Comment" " "
+			(at 116.84 97.663 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Voltage" "16V"
+			(at 116.84 99.568 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 116.84 103.378 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Part Description" "SMD Multilayer Chip Ceramic Capacitor"
+			(at 116.84 105.283 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "GENERIC"
+			(at 116.84 107.188 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0402_100NF_16V_10%_X7R"
+			(at 116.84 109.093 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Case" "0402"
+			(at 116.84 110.998 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Mounted" "Yes"
+			(at 116.84 112.903 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Socket" "No"
+			(at 116.84 114.808 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "PressFit" " "
+			(at 116.84 118.618 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Sense" "No"
+			(at 116.84 120.523 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Sense Comment" " "
+			(at 116.84 122.428 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "ComponentHeight" " "
+			(at 116.84 124.333 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer1 Example" "MURATA"
+			(at 116.84 126.238 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer1 Part Number" "GRM155R71C104KA88D"
+			(at 116.84 128.143 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer1 ComponentHeight" "0.55mm"
+			(at 116.84 130.048 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "HelpURL" ""
+			(at 116.84 131.953 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Author" "CERN DEM JLC"
+			(at 116.84 133.858 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "CreateDate" "12/05/13 00:00:00"
+			(at 116.84 135.763 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "LatestRevisionDate" "12/03/07 00:00:00"
+			(at 116.84 137.668 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Database Table Name" "Capacitors"
+			(at 116.84 139.573 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Name" "Capacitors SMD"
+			(at 116.84 141.478 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Library" "Capacitors SMD"
+			(at 116.84 143.383 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "License" "CC-BY-SA 4.0"
+			(at 116.84 145.288 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b5e59756-21b0-4bed-b7fb-cb2e03f9bcbf")
+		)
+		(pin "2"
+			(uuid "3b40f511-2c91-4852-89a4-c5567b7df800")
+		)
+		(instances
+			(project "vme-wren"
+				(path "/80fa765c-41e7-4a3d-b539-36e81bba11f8/42fdace9-fc8c-4f8c-918f-f7a394beb474"
+					(reference "C514")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "TYCO:TYCO_2149027-1")
+		(at 153.67 116.84 0)
+		(unit 2)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "8de07d82-d597-41b2-9735-a2cee035c21a")
+		(property "Reference" "J13"
+			(at 165.1 129.5399 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TYCO_2149027-1"
+			(at 153.67 146.939 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "TYCO THD:TYCO_2149027-1"
+			(at 153.67 148.844 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 153.67 150.749 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mini-SAS HD"
+			(at 165.1 132.0799 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Part Number" "TYCO_2149027-1"
+			(at 153.67 152.654 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Ref" "Mini-SAS HD"
+			(at 153.67 154.559 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Path" "SchLib\\Connectors.SchLib"
+			(at 153.67 156.464 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Comment" " "
+			(at 153.67 158.369 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Component Kind" "Standard"
+			(at 153.67 160.274 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Component Type" "Standard"
+			(at 153.67 162.179 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "PackageDescription" " "
+			(at 153.67 164.084 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Pin Count" "36"
+			(at 153.67 165.989 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Case" " "
+			(at 153.67 167.894 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Path" "PcbLib\\TYCO THD.PcbLib"
+			(at 153.67 169.799 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Ref" "TYCO_2149027-1"
+			(at 153.67 171.704 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Family" "Mini-SAS HD"
+			(at 153.67 173.609 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Mounted" "No"
+			(at 165.608 134.366 0)
+			(show_name yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Socket" "No"
+			(at 153.67 177.419 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "SMD" "No"
+			(at 153.67 179.324 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "PressFit" "Yes"
+			(at 153.67 181.229 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Sense" "No"
+			(at 153.67 183.134 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Sense Comment" " "
+			(at 153.67 185.039 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Status" "None"
+			(at 153.67 186.944 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Status Comment" " "
+			(at 153.67 188.849 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "SCEM" " "
+			(at 153.67 190.754 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Device" " "
+			(at 153.67 192.659 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Part Description" "36 Contacts, Through Hole, Right Angle, Mini-SAS High Density"
+			(at 153.67 194.564 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "TYCO ELECTRONICS"
+			(at 153.67 196.469 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "2149027-1"
+			(at 153.67 198.374 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "ComponentHeight" "12.32mm"
+			(at 153.67 200.279 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "ComponentLink1URL" " "
+			(at 153.67 202.184 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "ComponentLink1Description" " "
+			(at 153.67 204.089 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "ComponentLink2URL" " "
+			(at 153.67 205.994 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "ComponentLink2Description" " "
+			(at 153.67 207.899 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "HelpURL" ""
+			(at 153.67 209.804 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Author" "CERN DEM HF"
+			(at 153.67 211.709 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "CreateDate" "08/21/23 00:00:00"
+			(at 153.67 213.614 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "LatestRevisionDate" "08/21/23 00:00:00"
+			(at 153.67 215.519 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Database Table Name" "Connectors"
+			(at 153.67 217.424 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Name" "TYCO"
+			(at 153.67 219.329 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Library" "TYCO THD"
+			(at 153.67 221.234 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "License" "CC-BY-SA 4.0"
+			(at 153.67 223.139 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(pin "D2"
+			(uuid "694e0eae-c9c2-4a1c-b3f4-fbba2179c4cf")
+		)
+		(pin "SHIELD"
+			(uuid "130b25ee-436f-4687-88f4-a1471b02d617")
+		)
+		(pin "C3"
+			(uuid "5ee1c694-7a30-47d6-a77d-063200d6e92c")
+		)
+		(pin "C4"
+			(uuid "07085622-e33c-4645-b636-d0d9e976f19e")
+		)
+		(pin "A8"
+			(uuid "b41405ba-abd4-440a-8335-8231c5f9434d")
+		)
+		(pin "A2"
+			(uuid "9a480c2c-500a-4309-a2e2-5a2596c1c5e7")
+		)
+		(pin "C6"
+			(uuid "ee895bee-6e1c-4800-97f5-37f1f0f2b96c")
+		)
+		(pin "D3"
+			(uuid "2c79c95d-b85f-4ea4-9ef9-d2c8f36ed5bf")
+		)
+		(pin "A6"
+			(uuid "791d3d14-4ec6-4cc4-a611-d8528f1113e9")
+		)
+		(pin "SHIELD"
+			(uuid "6608d4d7-ae20-4813-b9fe-04ca81365044")
+		)
+		(pin "A5"
+			(uuid "872701c8-3443-41f0-a316-1caf8c8d0f82")
+		)
+		(pin "B9"
+			(uuid "9d48e52d-e2c2-4774-a208-5e50a44e5c98")
+		)
+		(pin "A7"
+			(uuid "86b7d95d-2273-47cb-a70f-3d8cb6078332")
+		)
+		(pin "B8"
+			(uuid "1236c457-423b-4413-8f03-5ba6504e58f8")
+		)
+		(pin "D4"
+			(uuid "4b996923-cdd5-4a4a-ae18-8c0c81e3498f")
+		)
+		(pin "C5"
+			(uuid "e285c200-7a80-4ad4-ae7a-a4b37b08464c")
+		)
+		(pin "D6"
+			(uuid "03fb4a5c-7eba-4e6c-b247-3136b1e3fcf8")
+		)
+		(pin "D7"
+			(uuid "17feed47-e9d5-4869-9450-ea0407afefac")
+		)
+		(pin "C9"
+			(uuid "26bd05f2-1770-4ba9-b624-c9caf1dca836")
+		)
+		(pin "SHIELD"
+			(uuid "b4be8d68-d8af-4a74-8e28-17225e6bc2f2")
+		)
+		(pin "A4"
+			(uuid "39ad4ace-39a9-4c0f-b009-885df197c2d5")
+		)
+		(pin "B4"
+			(uuid "62408b35-1cd2-4823-bb49-59d4b246d51c")
+		)
+		(pin "C1"
+			(uuid "4469dad5-a472-4964-9e4a-901f966c2743")
+		)
+		(pin "D1"
+			(uuid "6c5fc095-8410-494b-b3af-21d7583cbc7a")
+		)
+		(pin "B5"
+			(uuid "dc1bb2aa-4ad7-474a-b7ed-7837ee9fbc8e")
+		)
+		(pin "B6"
+			(uuid "ec2668d9-219c-4cbb-ae14-deb879f751bd")
+		)
+		(pin "C7"
+			(uuid "e43f312c-06cb-4aac-b5fa-d115c575690f")
+		)
+		(pin "B1"
+			(uuid "5612d99c-c25d-4f4d-8a74-3f620dfe690b")
+		)
+		(pin "A3"
+			(uuid "2f6796a5-12c3-45a1-8155-5c39005378ea")
+		)
+		(pin "SHIELD"
+			(uuid "5807e235-d8c7-4c17-a6d5-9dfa660a1f49")
+		)
+		(pin "D5"
+			(uuid "e24a377d-9778-447f-b0dd-08982cd7133f")
+		)
+		(pin "B3"
+			(uuid "5b1624b9-7525-4643-a84a-3c16c896008a")
+		)
+		(pin "A9"
+			(uuid "59cc6287-d864-49e7-976e-c7a0b58fe3c8")
+		)
+		(pin "A1"
+			(uuid "3c6ece98-546c-4240-b9ff-b077897dfb6e")
+		)
+		(pin "B7"
+			(uuid "5f95c23c-d8fc-47c1-997f-089408cd7025")
+		)
+		(pin "B2"
+			(uuid "a517594b-621f-45bb-bb6f-dcf5c1a86cad")
+		)
+		(pin "D8"
+			(uuid "a36c5740-5edf-4de9-9853-c7a0ef0451df")
+		)
+		(pin "C2"
+			(uuid "63958778-62e6-46f9-bb93-fe67dfd19e0a")
+		)
+		(pin "C8"
+			(uuid "f04d51c4-07bb-4d8d-9e32-25e36f5680cd")
+		)
+		(pin "D9"
+			(uuid "4a3c9d10-9cfe-4c27-9613-817c0ce9a57b")
+		)
+		(instances
+			(project "vme-wren"
+				(path "/80fa765c-41e7-4a3d-b539-36e81bba11f8/42fdace9-fc8c-4f8c-918f-f7a394beb474"
+					(reference "J13")
+					(unit 2)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "TYCO:TYCO_2149027-1")
+		(at 115.57 116.84 0)
+		(unit 3)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ca3c9517-6438-48ee-aaed-9840949c52b2")
+		(property "Reference" "J13"
+			(at 120.4595 111.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TYCO_2149027-1"
+			(at 115.57 146.939 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "TYCO THD:TYCO_2149027-1"
+			(at 115.57 148.844 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 115.57 150.749 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mini-SAS HD"
+			(at 120.4595 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Part Number" "TYCO_2149027-1"
+			(at 115.57 152.654 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Ref" "Mini-SAS HD"
+			(at 115.57 154.559 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Path" "SchLib\\Connectors.SchLib"
+			(at 115.57 156.464 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Comment" " "
+			(at 115.57 158.369 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Component Kind" "Standard"
+			(at 115.57 160.274 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Component Type" "Standard"
+			(at 115.57 162.179 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "PackageDescription" " "
+			(at 115.57 164.084 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Pin Count" "36"
+			(at 115.57 165.989 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Case" " "
+			(at 115.57 167.894 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Path" "PcbLib\\TYCO THD.PcbLib"
+			(at 115.57 169.799 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Ref" "TYCO_2149027-1"
+			(at 115.57 171.704 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Family" "Mini-SAS HD"
+			(at 115.57 173.609 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Mounted" "No"
+			(at 115.57 175.514 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Socket" "No"
+			(at 115.57 177.419 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "SMD" "No"
+			(at 115.57 179.324 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "PressFit" "Yes"
+			(at 115.57 181.229 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Sense" "No"
+			(at 115.57 183.134 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Sense Comment" " "
+			(at 115.57 185.039 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Status" "None"
+			(at 115.57 186.944 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Status Comment" " "
+			(at 115.57 188.849 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "SCEM" " "
+			(at 115.57 190.754 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Device" " "
+			(at 115.57 192.659 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Part Description" "36 Contacts, Through Hole, Right Angle, Mini-SAS High Density"
+			(at 115.57 194.564 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "TYCO ELECTRONICS"
+			(at 115.57 196.469 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "2149027-1"
+			(at 115.57 198.374 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "ComponentHeight" "12.32mm"
+			(at 115.57 200.279 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "ComponentLink1URL" " "
+			(at 115.57 202.184 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "ComponentLink1Description" " "
+			(at 115.57 204.089 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "ComponentLink2URL" " "
+			(at 115.57 205.994 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "ComponentLink2Description" " "
+			(at 115.57 207.899 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "HelpURL" ""
+			(at 115.57 209.804 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Author" "CERN DEM HF"
+			(at 115.57 211.709 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "CreateDate" "08/21/23 00:00:00"
+			(at 115.57 213.614 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "LatestRevisionDate" "08/21/23 00:00:00"
+			(at 115.57 215.519 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Database Table Name" "Connectors"
+			(at 115.57 217.424 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Name" "TYCO"
+			(at 115.57 219.329 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Library" "TYCO THD"
+			(at 115.57 221.234 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "License" "CC-BY-SA 4.0"
+			(at 115.57 223.139 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(pin "D2"
+			(uuid "694e0eae-c9c2-4a1c-b3f4-fbba2179c4d0")
+		)
+		(pin "SHIELD"
+			(uuid "130b25ee-436f-4687-88f4-a1471b02d618")
+		)
+		(pin "C3"
+			(uuid "5ee1c694-7a30-47d6-a77d-063200d6e92d")
+		)
+		(pin "C4"
+			(uuid "07085622-e33c-4645-b636-d0d9e976f19f")
+		)
+		(pin "A8"
+			(uuid "b41405ba-abd4-440a-8335-8231c5f9434e")
+		)
+		(pin "A2"
+			(uuid "9a480c2c-500a-4309-a2e2-5a2596c1c5e8")
+		)
+		(pin "C6"
+			(uuid "ee895bee-6e1c-4800-97f5-37f1f0f2b96d")
+		)
+		(pin "D3"
+			(uuid "2c79c95d-b85f-4ea4-9ef9-d2c8f36ed5c0")
+		)
+		(pin "A6"
+			(uuid "791d3d14-4ec6-4cc4-a611-d8528f1113ea")
+		)
+		(pin "SHIELD"
+			(uuid "6608d4d7-ae20-4813-b9fe-04ca81365045")
+		)
+		(pin "A5"
+			(uuid "872701c8-3443-41f0-a316-1caf8c8d0f83")
+		)
+		(pin "B9"
+			(uuid "9d48e52d-e2c2-4774-a208-5e50a44e5c99")
+		)
+		(pin "A7"
+			(uuid "86b7d95d-2273-47cb-a70f-3d8cb6078333")
+		)
+		(pin "B8"
+			(uuid "1236c457-423b-4413-8f03-5ba6504e58f9")
+		)
+		(pin "D4"
+			(uuid "4b996923-cdd5-4a4a-ae18-8c0c81e34990")
+		)
+		(pin "C5"
+			(uuid "e285c200-7a80-4ad4-ae7a-a4b37b08464d")
+		)
+		(pin "D6"
+			(uuid "03fb4a5c-7eba-4e6c-b247-3136b1e3fcf9")
+		)
+		(pin "D7"
+			(uuid "17feed47-e9d5-4869-9450-ea0407afefad")
+		)
+		(pin "C9"
+			(uuid "26bd05f2-1770-4ba9-b624-c9caf1dca837")
+		)
+		(pin "SHIELD"
+			(uuid "b4be8d68-d8af-4a74-8e28-17225e6bc2f3")
+		)
+		(pin "A4"
+			(uuid "39ad4ace-39a9-4c0f-b009-885df197c2d6")
+		)
+		(pin "B4"
+			(uuid "62408b35-1cd2-4823-bb49-59d4b246d51d")
+		)
+		(pin "C1"
+			(uuid "4469dad5-a472-4964-9e4a-901f966c2744")
+		)
+		(pin "D1"
+			(uuid "6c5fc095-8410-494b-b3af-21d7583cbc7b")
+		)
+		(pin "B5"
+			(uuid "dc1bb2aa-4ad7-474a-b7ed-7837ee9fbc8f")
+		)
+		(pin "B6"
+			(uuid "ec2668d9-219c-4cbb-ae14-deb879f751be")
+		)
+		(pin "C7"
+			(uuid "e43f312c-06cb-4aac-b5fa-d115c5756910")
+		)
+		(pin "B1"
+			(uuid "5612d99c-c25d-4f4d-8a74-3f620dfe690c")
+		)
+		(pin "A3"
+			(uuid "2f6796a5-12c3-45a1-8155-5c39005378eb")
+		)
+		(pin "SHIELD"
+			(uuid "5807e235-d8c7-4c17-a6d5-9dfa660a1f4a")
+		)
+		(pin "D5"
+			(uuid "e24a377d-9778-447f-b0dd-08982cd71340")
+		)
+		(pin "B3"
+			(uuid "5b1624b9-7525-4643-a84a-3c16c896008b")
+		)
+		(pin "A9"
+			(uuid "59cc6287-d864-49e7-976e-c7a0b58fe3c9")
+		)
+		(pin "A1"
+			(uuid "3c6ece98-546c-4240-b9ff-b077897dfb6f")
+		)
+		(pin "B7"
+			(uuid "5f95c23c-d8fc-47c1-997f-089408cd7026")
+		)
+		(pin "B2"
+			(uuid "a517594b-621f-45bb-bb6f-dcf5c1a86cae")
+		)
+		(pin "D8"
+			(uuid "a36c5740-5edf-4de9-9853-c7a0ef0451e0")
+		)
+		(pin "C2"
+			(uuid "63958778-62e6-46f9-bb93-fe67dfd19e0b")
+		)
+		(pin "C8"
+			(uuid "f04d51c4-07bb-4d8d-9e32-25e36f5680ce")
+		)
+		(pin "D9"
+			(uuid "4a3c9d10-9cfe-4c27-9613-817c0ce9a57c")
+		)
+		(instances
+			(project "vme-wren"
+				(path "/80fa765c-41e7-4a3d-b539-36e81bba11f8/42fdace9-fc8c-4f8c-918f-f7a394beb474"
+					(reference "J13")
+					(unit 3)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Capacitors SMD:CC0402_100NF_16V_10%_X7R")
+		(at 116.84 74.93 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "d2fc4be0-6544-4cd6-b52b-bf81d838b989")
+		(property "Reference" "C516"
+			(at 116.84 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "CC0402_100NF_16V_10%_X7R"
+			(at 116.84 81.153 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "Capacitors SMD:CAPC1005X55N"
+			(at 116.84 83.058 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 116.84 84.963 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "100nF"
+			(at 116.84 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "SMD" "Yes"
+			(at 116.84 126.873 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Part Number" "CC0402_100NF_16V_10%_X7R"
+			(at 116.84 86.868 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Ref" "Capacitor - non polarized"
+			(at 116.84 88.773 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Path" "SchLib\\Capacitors.SchLib"
+			(at 116.84 90.678 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Comment" "100nF"
+			(at 116.84 92.583 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Component Kind" "Standard"
+			(at 116.84 94.488 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Component Type" "Standard"
+			(at 116.84 96.393 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Pin Count" "2"
+			(at 116.84 98.298 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Path" "PcbLib\\Capacitors SMD.PcbLib"
+			(at 116.84 100.203 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Ref" "CAPC1005X55N"
+			(at 116.84 102.108 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "PackageDescription" " "
+			(at 116.84 104.013 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Status" "Not Recommended"
+			(at 116.84 105.918 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Status Comment" " "
+			(at 116.84 107.823 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Voltage" "16V"
+			(at 116.84 109.728 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 116.84 113.538 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Part Description" "SMD Multilayer Chip Ceramic Capacitor"
+			(at 116.84 115.443 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "GENERIC"
+			(at 116.84 117.348 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0402_100NF_16V_10%_X7R"
+			(at 116.84 119.253 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Case" "0402"
+			(at 116.84 121.158 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Mounted" "Yes"
+			(at 116.84 123.063 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Socket" "No"
+			(at 116.84 124.968 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "PressFit" " "
+			(at 116.84 128.778 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Sense" "No"
+			(at 116.84 130.683 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Sense Comment" " "
+			(at 116.84 132.588 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "ComponentHeight" " "
+			(at 116.84 134.493 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer1 Example" "MURATA"
+			(at 116.84 136.398 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer1 Part Number" "GRM155R71C104KA88D"
+			(at 116.84 138.303 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer1 ComponentHeight" "0.55mm"
+			(at 116.84 140.208 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "HelpURL" ""
+			(at 116.84 142.113 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Author" "CERN DEM JLC"
+			(at 116.84 144.018 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "CreateDate" "12/05/13 00:00:00"
+			(at 116.84 145.923 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "LatestRevisionDate" "12/03/07 00:00:00"
+			(at 116.84 147.828 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Database Table Name" "Capacitors"
+			(at 116.84 149.733 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Name" "Capacitors SMD"
+			(at 116.84 151.638 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Library" "Capacitors SMD"
+			(at 116.84 153.543 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "License" "CC-BY-SA 4.0"
+			(at 116.84 155.448 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "3bc81e90-d57e-4052-996f-7d0927385c13")
+		)
+		(pin "2"
+			(uuid "4eaa16ea-c7f9-4f97-ab1a-e7235bb4e2b6")
+		)
+		(instances
+			(project "vme-wren"
+				(path "/80fa765c-41e7-4a3d-b539-36e81bba11f8/42fdace9-fc8c-4f8c-918f-f7a394beb474"
+					(reference "C516")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 105.41 97.79 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "e085b0cf-c15d-4b19-8f1e-88aa324f1f9d")
+		(property "Reference" "#PWR01132"
+			(at 105.41 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 103.632 102.1079 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 105.41 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 105.41 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "GROUND power-flag symbol"
+			(at 105.41 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "8f86106b-7cac-416b-b9f9-ba356321766d")
+		)
+		(instances
+			(project "vme-wren"
+				(path "/80fa765c-41e7-4a3d-b539-36e81bba11f8/42fdace9-fc8c-4f8c-918f-f7a394beb474"
+					(reference "#PWR01132")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "TYCO:TYCO_2149027-1")
+		(at 194.31 116.84 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ea490052-62a8-4a37-9293-a07f57da38f5")
+		(property "Reference" "J13"
+			(at 205.74 129.5399 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TYCO_2149027-1"
+			(at 194.31 146.939 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "TYCO THD:TYCO_2149027-1"
+			(at 194.31 148.844 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 194.31 150.749 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mini-SAS HD"
+			(at 205.74 132.0799 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Part Number" "TYCO_2149027-1"
+			(at 194.31 152.654 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Ref" "Mini-SAS HD"
+			(at 194.31 154.559 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Path" "SchLib\\Connectors.SchLib"
+			(at 194.31 156.464 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Comment" " "
+			(at 194.31 158.369 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Component Kind" "Standard"
+			(at 194.31 160.274 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Component Type" "Standard"
+			(at 194.31 162.179 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "PackageDescription" " "
+			(at 194.31 164.084 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Pin Count" "36"
+			(at 194.31 165.989 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Case" " "
+			(at 194.31 167.894 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Path" "PcbLib\\TYCO THD.PcbLib"
+			(at 194.31 169.799 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Ref" "TYCO_2149027-1"
+			(at 194.31 171.704 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Family" "Mini-SAS HD"
+			(at 194.31 173.609 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Mounted" "No"
+			(at 194.31 175.514 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Socket" "No"
+			(at 194.31 177.419 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "SMD" "No"
+			(at 194.31 179.324 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "PressFit" "Yes"
+			(at 194.31 181.229 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Sense" "No"
+			(at 194.31 183.134 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Sense Comment" " "
+			(at 194.31 185.039 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Status" "None"
+			(at 194.31 186.944 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Status Comment" " "
+			(at 194.31 188.849 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "SCEM" " "
+			(at 194.31 190.754 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Device" " "
+			(at 194.31 192.659 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Part Description" "36 Contacts, Through Hole, Right Angle, Mini-SAS High Density"
+			(at 194.31 194.564 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "TYCO ELECTRONICS"
+			(at 194.31 196.469 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "2149027-1"
+			(at 194.31 198.374 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "ComponentHeight" "12.32mm"
+			(at 194.31 200.279 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "ComponentLink1URL" " "
+			(at 194.31 202.184 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "ComponentLink1Description" " "
+			(at 194.31 204.089 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "ComponentLink2URL" " "
+			(at 194.31 205.994 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "ComponentLink2Description" " "
+			(at 194.31 207.899 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "HelpURL" ""
+			(at 194.31 209.804 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Author" "CERN DEM HF"
+			(at 194.31 211.709 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "CreateDate" "08/21/23 00:00:00"
+			(at 194.31 213.614 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "LatestRevisionDate" "08/21/23 00:00:00"
+			(at 194.31 215.519 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Database Table Name" "Connectors"
+			(at 194.31 217.424 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Name" "TYCO"
+			(at 194.31 219.329 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Library" "TYCO THD"
+			(at 194.31 221.234 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "License" "CC-BY-SA 4.0"
+			(at 194.31 223.139 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(pin "D2"
+			(uuid "694e0eae-c9c2-4a1c-b3f4-fbba2179c4d1")
+		)
+		(pin "SHIELD"
+			(uuid "130b25ee-436f-4687-88f4-a1471b02d619")
+		)
+		(pin "C3"
+			(uuid "5ee1c694-7a30-47d6-a77d-063200d6e92e")
+		)
+		(pin "C4"
+			(uuid "07085622-e33c-4645-b636-d0d9e976f1a0")
+		)
+		(pin "A8"
+			(uuid "b41405ba-abd4-440a-8335-8231c5f9434f")
+		)
+		(pin "A2"
+			(uuid "9a480c2c-500a-4309-a2e2-5a2596c1c5e9")
+		)
+		(pin "C6"
+			(uuid "ee895bee-6e1c-4800-97f5-37f1f0f2b96e")
+		)
+		(pin "D3"
+			(uuid "2c79c95d-b85f-4ea4-9ef9-d2c8f36ed5c1")
+		)
+		(pin "A6"
+			(uuid "791d3d14-4ec6-4cc4-a611-d8528f1113eb")
+		)
+		(pin "SHIELD"
+			(uuid "6608d4d7-ae20-4813-b9fe-04ca81365046")
+		)
+		(pin "A5"
+			(uuid "872701c8-3443-41f0-a316-1caf8c8d0f84")
+		)
+		(pin "B9"
+			(uuid "9d48e52d-e2c2-4774-a208-5e50a44e5c9a")
+		)
+		(pin "A7"
+			(uuid "86b7d95d-2273-47cb-a70f-3d8cb6078334")
+		)
+		(pin "B8"
+			(uuid "1236c457-423b-4413-8f03-5ba6504e58fa")
+		)
+		(pin "D4"
+			(uuid "4b996923-cdd5-4a4a-ae18-8c0c81e34991")
+		)
+		(pin "C5"
+			(uuid "e285c200-7a80-4ad4-ae7a-a4b37b08464e")
+		)
+		(pin "D6"
+			(uuid "03fb4a5c-7eba-4e6c-b247-3136b1e3fcfa")
+		)
+		(pin "D7"
+			(uuid "17feed47-e9d5-4869-9450-ea0407afefae")
+		)
+		(pin "C9"
+			(uuid "26bd05f2-1770-4ba9-b624-c9caf1dca838")
+		)
+		(pin "SHIELD"
+			(uuid "b4be8d68-d8af-4a74-8e28-17225e6bc2f4")
+		)
+		(pin "A4"
+			(uuid "39ad4ace-39a9-4c0f-b009-885df197c2d7")
+		)
+		(pin "B4"
+			(uuid "62408b35-1cd2-4823-bb49-59d4b246d51e")
+		)
+		(pin "C1"
+			(uuid "4469dad5-a472-4964-9e4a-901f966c2745")
+		)
+		(pin "D1"
+			(uuid "6c5fc095-8410-494b-b3af-21d7583cbc7c")
+		)
+		(pin "B5"
+			(uuid "dc1bb2aa-4ad7-474a-b7ed-7837ee9fbc90")
+		)
+		(pin "B6"
+			(uuid "ec2668d9-219c-4cbb-ae14-deb879f751bf")
+		)
+		(pin "C7"
+			(uuid "e43f312c-06cb-4aac-b5fa-d115c5756911")
+		)
+		(pin "B1"
+			(uuid "5612d99c-c25d-4f4d-8a74-3f620dfe690d")
+		)
+		(pin "A3"
+			(uuid "2f6796a5-12c3-45a1-8155-5c39005378ec")
+		)
+		(pin "SHIELD"
+			(uuid "5807e235-d8c7-4c17-a6d5-9dfa660a1f4b")
+		)
+		(pin "D5"
+			(uuid "e24a377d-9778-447f-b0dd-08982cd71341")
+		)
+		(pin "B3"
+			(uuid "5b1624b9-7525-4643-a84a-3c16c896008c")
+		)
+		(pin "A9"
+			(uuid "59cc6287-d864-49e7-976e-c7a0b58fe3ca")
+		)
+		(pin "A1"
+			(uuid "3c6ece98-546c-4240-b9ff-b077897dfb70")
+		)
+		(pin "B7"
+			(uuid "5f95c23c-d8fc-47c1-997f-089408cd7027")
+		)
+		(pin "B2"
+			(uuid "a517594b-621f-45bb-bb6f-dcf5c1a86caf")
+		)
+		(pin "D8"
+			(uuid "a36c5740-5edf-4de9-9853-c7a0ef0451e1")
+		)
+		(pin "C2"
+			(uuid "63958778-62e6-46f9-bb93-fe67dfd19e0c")
+		)
+		(pin "C8"
+			(uuid "f04d51c4-07bb-4d8d-9e32-25e36f5680cf")
+		)
+		(pin "D9"
+			(uuid "4a3c9d10-9cfe-4c27-9613-817c0ce9a57d")
+		)
+		(instances
+			(project "vme-wren"
+				(path "/80fa765c-41e7-4a3d-b539-36e81bba11f8/42fdace9-fc8c-4f8c-918f-f7a394beb474"
+					(reference "J13")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 146.05 144.78 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "fcf3a9ab-27e9-4534-9b7e-b3a8a71ed4a0")
+		(property "Reference" "#PWR01130"
+			(at 146.05 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 146.05 149.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 146.05 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 146.05 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "GROUND power-flag symbol"
+			(at 146.05 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c6d5b223-49b2-48f3-840d-adbca9a28106")
+		)
+		(instances
+			(project "vme-wren"
+				(path "/80fa765c-41e7-4a3d-b539-36e81bba11f8/42fdace9-fc8c-4f8c-918f-f7a394beb474"
+					(reference "#PWR01130")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "TYCO:TYCO_2149027-1")
+		(at 77.47 116.84 0)
+		(unit 4)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ff998a25-2e00-4816-bb4b-ffa58f752147")
+		(property "Reference" "J13"
+			(at 88.9 129.5399 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TYCO_2149027-1"
+			(at 77.47 146.939 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "TYCO THD:TYCO_2149027-1"
+			(at 77.47 148.844 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 77.47 150.749 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mini-SAS HD"
+			(at 88.9 132.0799 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Part Number" "TYCO_2149027-1"
+			(at 77.47 152.654 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Ref" "Mini-SAS HD"
+			(at 77.47 154.559 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Path" "SchLib\\Connectors.SchLib"
+			(at 77.47 156.464 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Comment" " "
+			(at 77.47 158.369 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Component Kind" "Standard"
+			(at 77.47 160.274 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Component Type" "Standard"
+			(at 77.47 162.179 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "PackageDescription" " "
+			(at 77.47 164.084 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Pin Count" "36"
+			(at 77.47 165.989 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Case" " "
+			(at 77.47 167.894 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Path" "PcbLib\\TYCO THD.PcbLib"
+			(at 77.47 169.799 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Ref" "TYCO_2149027-1"
+			(at 77.47 171.704 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Family" "Mini-SAS HD"
+			(at 77.47 173.609 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Mounted" "No"
+			(at 77.47 175.514 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Socket" "No"
+			(at 77.47 177.419 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "SMD" "No"
+			(at 77.47 179.324 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "PressFit" "Yes"
+			(at 77.47 181.229 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Sense" "No"
+			(at 77.47 183.134 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Sense Comment" " "
+			(at 77.47 185.039 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Status" "None"
+			(at 77.47 186.944 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Status Comment" " "
+			(at 77.47 188.849 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "SCEM" " "
+			(at 77.47 190.754 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Device" " "
+			(at 77.47 192.659 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Part Description" "36 Contacts, Through Hole, Right Angle, Mini-SAS High Density"
+			(at 77.47 194.564 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "TYCO ELECTRONICS"
+			(at 77.47 196.469 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "2149027-1"
+			(at 77.47 198.374 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "ComponentHeight" "12.32mm"
+			(at 77.47 200.279 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "ComponentLink1URL" " "
+			(at 77.47 202.184 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "ComponentLink1Description" " "
+			(at 77.47 204.089 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "ComponentLink2URL" " "
+			(at 77.47 205.994 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "ComponentLink2Description" " "
+			(at 77.47 207.899 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "HelpURL" ""
+			(at 77.47 209.804 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Author" "CERN DEM HF"
+			(at 77.47 211.709 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "CreateDate" "08/21/23 00:00:00"
+			(at 77.47 213.614 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "LatestRevisionDate" "08/21/23 00:00:00"
+			(at 77.47 215.519 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Database Table Name" "Connectors"
+			(at 77.47 217.424 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Library Name" "TYCO"
+			(at 77.47 219.329 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint Library" "TYCO THD"
+			(at 77.47 221.234 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "License" "CC-BY-SA 4.0"
+			(at 77.47 223.139 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(pin "D2"
+			(uuid "694e0eae-c9c2-4a1c-b3f4-fbba2179c4d2")
+		)
+		(pin "SHIELD"
+			(uuid "130b25ee-436f-4687-88f4-a1471b02d61a")
+		)
+		(pin "C3"
+			(uuid "5ee1c694-7a30-47d6-a77d-063200d6e92f")
+		)
+		(pin "C4"
+			(uuid "07085622-e33c-4645-b636-d0d9e976f1a1")
+		)
+		(pin "A8"
+			(uuid "b41405ba-abd4-440a-8335-8231c5f94350")
+		)
+		(pin "A2"
+			(uuid "9a480c2c-500a-4309-a2e2-5a2596c1c5ea")
+		)
+		(pin "C6"
+			(uuid "ee895bee-6e1c-4800-97f5-37f1f0f2b96f")
+		)
+		(pin "D3"
+			(uuid "2c79c95d-b85f-4ea4-9ef9-d2c8f36ed5c2")
+		)
+		(pin "A6"
+			(uuid "791d3d14-4ec6-4cc4-a611-d8528f1113ec")
+		)
+		(pin "SHIELD"
+			(uuid "6608d4d7-ae20-4813-b9fe-04ca81365047")
+		)
+		(pin "A5"
+			(uuid "872701c8-3443-41f0-a316-1caf8c8d0f85")
+		)
+		(pin "B9"
+			(uuid "9d48e52d-e2c2-4774-a208-5e50a44e5c9b")
+		)
+		(pin "A7"
+			(uuid "86b7d95d-2273-47cb-a70f-3d8cb6078335")
+		)
+		(pin "B8"
+			(uuid "1236c457-423b-4413-8f03-5ba6504e58fb")
+		)
+		(pin "D4"
+			(uuid "4b996923-cdd5-4a4a-ae18-8c0c81e34992")
+		)
+		(pin "C5"
+			(uuid "e285c200-7a80-4ad4-ae7a-a4b37b08464f")
+		)
+		(pin "D6"
+			(uuid "03fb4a5c-7eba-4e6c-b247-3136b1e3fcfb")
+		)
+		(pin "D7"
+			(uuid "17feed47-e9d5-4869-9450-ea0407afefaf")
+		)
+		(pin "C9"
+			(uuid "26bd05f2-1770-4ba9-b624-c9caf1dca839")
+		)
+		(pin "SHIELD"
+			(uuid "b4be8d68-d8af-4a74-8e28-17225e6bc2f5")
+		)
+		(pin "A4"
+			(uuid "39ad4ace-39a9-4c0f-b009-885df197c2d8")
+		)
+		(pin "B4"
+			(uuid "62408b35-1cd2-4823-bb49-59d4b246d51f")
+		)
+		(pin "C1"
+			(uuid "4469dad5-a472-4964-9e4a-901f966c2746")
+		)
+		(pin "D1"
+			(uuid "6c5fc095-8410-494b-b3af-21d7583cbc7d")
+		)
+		(pin "B5"
+			(uuid "dc1bb2aa-4ad7-474a-b7ed-7837ee9fbc91")
+		)
+		(pin "B6"
+			(uuid "ec2668d9-219c-4cbb-ae14-deb879f751c0")
+		)
+		(pin "C7"
+			(uuid "e43f312c-06cb-4aac-b5fa-d115c5756912")
+		)
+		(pin "B1"
+			(uuid "5612d99c-c25d-4f4d-8a74-3f620dfe690e")
+		)
+		(pin "A3"
+			(uuid "2f6796a5-12c3-45a1-8155-5c39005378ed")
+		)
+		(pin "SHIELD"
+			(uuid "5807e235-d8c7-4c17-a6d5-9dfa660a1f4c")
+		)
+		(pin "D5"
+			(uuid "e24a377d-9778-447f-b0dd-08982cd71342")
+		)
+		(pin "B3"
+			(uuid "5b1624b9-7525-4643-a84a-3c16c896008d")
+		)
+		(pin "A9"
+			(uuid "59cc6287-d864-49e7-976e-c7a0b58fe3cb")
+		)
+		(pin "A1"
+			(uuid "3c6ece98-546c-4240-b9ff-b077897dfb71")
+		)
+		(pin "B7"
+			(uuid "5f95c23c-d8fc-47c1-997f-089408cd7028")
+		)
+		(pin "B2"
+			(uuid "a517594b-621f-45bb-bb6f-dcf5c1a86cb0")
+		)
+		(pin "D8"
+			(uuid "a36c5740-5edf-4de9-9853-c7a0ef0451e2")
+		)
+		(pin "C2"
+			(uuid "63958778-62e6-46f9-bb93-fe67dfd19e0d")
+		)
+		(pin "C8"
+			(uuid "f04d51c4-07bb-4d8d-9e32-25e36f5680d0")
+		)
+		(pin "D9"
+			(uuid "4a3c9d10-9cfe-4c27-9613-817c0ce9a57e")
+		)
+		(instances
+			(project "vme-wren"
+				(path "/80fa765c-41e7-4a3d-b539-36e81bba11f8/42fdace9-fc8c-4f8c-918f-f7a394beb474"
+					(reference "J13")
+					(unit 4)
+				)
+			)
+		)
+	)
+)
