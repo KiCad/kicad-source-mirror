@@ -285,76 +285,77 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
 
     LSET boardCuMask = m_board->GetEnabledLayers() & LSET::AllCuMask();
 
-    auto findHighestPriorityZone = [&]( const BOX2I& aBBox, const PCB_LAYER_ID aItemLayer,
-                                        const int                                aNetcode,
-                                        const std::function<bool( const ZONE* )> aTestFn ) -> ZONE*
-    {
-        unsigned highestPriority = 0;
-        ZONE*    highestPriorityZone = nullptr;
-
-        for( ZONE* zone : m_board->Zones() )
-        {
-            // Rule areas are not filled
-            if( zone->GetIsRuleArea() )
-                continue;
-
-            if( zone->GetAssignedPriority() < highestPriority )
-                continue;
-
-            if( !zone->IsOnLayer( aItemLayer ) )
-                continue;
-
-            // Degenerate zones will cause trouble; skip them
-            if( zone->GetNumCorners() <= 2 )
-                continue;
-
-            if( !zone->GetBoundingBox().Intersects( aBBox ) )
-                continue;
-
-            if( !aTestFn( zone ) )
-                continue;
-
-            // Prefer highest priority and matching netcode
-            if( zone->GetAssignedPriority() > highestPriority || zone->GetNetCode() == aNetcode )
+    auto findHighestPriorityZone =
+            [&]( const BOX2I& bbox, PCB_LAYER_ID itemLayer, int netcode,
+                 const std::function<bool( const ZONE* )>& testFn ) -> ZONE*
             {
-                highestPriority = zone->GetAssignedPriority();
-                highestPriorityZone = zone;
-            }
-        }
+                unsigned highestPriority = 0;
+                ZONE*    highestPriorityZone = nullptr;
 
-        return highestPriorityZone;
-    };
+                for( ZONE* zone : m_board->Zones() )
+                {
+                    // Rule areas are not filled
+                    if( zone->GetIsRuleArea() )
+                        continue;
 
-    auto isInPourKeepoutArea = [&]( const BOX2I& aBBox, const PCB_LAYER_ID aItemLayer,
-                                    const VECTOR2I aTestPoint ) -> bool
-    {
-        for( ZONE* zone : m_board->Zones() )
-        {
-            if( !zone->GetIsRuleArea() )
-                continue;
+                    if( zone->GetAssignedPriority() < highestPriority )
+                        continue;
 
-            if( !zone->HasKeepoutParametersSet() )
-                continue;
+                    if( !zone->IsOnLayer( itemLayer ) )
+                        continue;
 
-            if( !zone->GetDoNotAllowCopperPour() )
-                continue;
+                    // Degenerate zones will cause trouble; skip them
+                    if( zone->GetNumCorners() <= 2 )
+                        continue;
 
-            if( !zone->IsOnLayer( aItemLayer ) )
-                continue;
+                    if( !zone->GetBoundingBox().Intersects( bbox ) )
+                        continue;
 
-            // Degenerate zones will cause trouble; skip them
-            if( zone->GetNumCorners() <= 2 )
-                continue;
+                    if( !testFn( zone ) )
+                        continue;
 
-            if( !zone->GetBoundingBox().Intersects( aBBox ) )
-                continue;
+                    // Prefer highest priority and matching netcode
+                    if( zone->GetAssignedPriority() > highestPriority
+                            || zone->GetNetCode() == netcode )
+                    {
+                        highestPriority = zone->GetAssignedPriority();
+                        highestPriorityZone = zone;
+                    }
+                }
 
-            if( zone->Outline()->Contains( aTestPoint ) )
-                return true;
-        }
+                return highestPriorityZone;
+            };
 
-        return false;
-    };
+    auto isInPourKeepoutArea =
+            [&]( const BOX2I& bbox, PCB_LAYER_ID itemLayer, const VECTOR2I& testPoint ) -> bool
+            {
+                for( ZONE* zone : m_board->Zones() )
+                {
+                    if( !zone->GetIsRuleArea() )
+                        continue;
+
+                    if( !zone->HasKeepoutParametersSet() )
+                        continue;
+
+                    if( !zone->GetDoNotAllowCopperPour() )
+                        continue;
+
+                    if( !zone->IsOnLayer( itemLayer ) )
+                        continue;
+
+                    // Degenerate zones will cause trouble; skip them
+                    if( zone->GetNumCorners() <= 2 )
+                        continue;
+
+                    if( !zone->GetBoundingBox().Intersects( bbox ) )
+                        continue;
+
+                    if( zone->Outline()->Contains( testPoint ) )
+                        return true;
+                }
+
+                return false;
+            };
 
     // Determine state of conditional via flashing
     for( PCB_TRACK* track : m_board->Tracks() )
@@ -375,10 +376,11 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
             LSET     layers = via->GetLayerSet() & boardCuMask;
 
             // Checking if the via hole touches the zone outline
-            auto viaTestFn = [&]( const ZONE* aZone ) -> bool
-            {
-                return aZone->Outline()->Contains( center, -1, testRadius );
-            };
+            auto viaTestFn =
+                    [&]( const ZONE* aZone ) -> bool
+                    {
+                        return aZone->Outline()->Contains( center, -1, testRadius );
+                    };
 
             for( PCB_LAYER_ID layer : layers.Seq() )
             {
