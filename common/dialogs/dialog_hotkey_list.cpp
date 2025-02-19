@@ -21,11 +21,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "kicad_manager_frame.h"
 #include <dialogs/dialog_hotkey_list.h>
 #include <kiface_base.h>
 #include <eda_base_frame.h>
 #include <panel_hotkeys_editor.h>
 #include <widgets/ui_common.h>
+#include <tool/tool_manager.h>
 
 #include <wx/sizer.h>
 #include <wx/button.h>
@@ -39,7 +41,15 @@ DIALOG_LIST_HOTKEYS::DIALOG_LIST_HOTKEYS( EDA_BASE_FRAME* aParent ):
 
     m_hk_list = new PANEL_HOTKEYS_EDITOR( aParent, this, true );
 
-    Kiway().GetActions( m_hk_list->ActionsList() );
+    wxWindow* kicadMgr_window = wxWindow::FindWindowByName( KICAD_MANAGER_FRAME_NAME );
+
+    if( KICAD_MANAGER_FRAME* kicadMgr = static_cast<KICAD_MANAGER_FRAME*>( kicadMgr_window ) )
+    {
+        ACTION_MANAGER* actionMgr = kicadMgr->GetToolManager()->GetActionManager();
+
+        for( const auto& [name, action] : actionMgr->GetActions() )
+            m_hk_list->ActionsList().push_back( action );
+    }
 
     kiface = Kiway().KiFACE( KIWAY::FACE_SCH );
     kiface->GetActions( m_hk_list->ActionsList() );
