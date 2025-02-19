@@ -36,10 +36,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-18 19:16+0300\n"
-"PO-Revision-Date: 2025-02-18 12:29+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"PO-Revision-Date: 2025-02-19 11:35+0000\n"
+"Last-Translator: 김랑기 <korearf@gmail.com>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -11461,9 +11461,8 @@ msgid "Duplicate fields are not allowed."
 msgstr "중복 필드는 허용되지 않음."
 
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:26
-#, fuzzy
 msgid "Default Fields"
-msgstr "필드 삭제"
+msgstr "기본 필드"
 
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:104
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:137
@@ -11478,9 +11477,8 @@ msgid "Description:"
 msgstr "설명:"
 
 #: eeschema/dialogs/dialog_design_block_properties_base.h:70
-#, fuzzy
 msgid "Design Block Properties"
-msgstr "디자인 블록 라이브러리"
+msgstr "디자인 블록 속성"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:550
 #, c-format
@@ -27820,11 +27818,11 @@ msgstr "프로젝트에 새로운 폴더 생성"
 
 #: libs/kimath/src/geometry/roundrect.cpp:60
 msgid "Roundrect radius is larger than the rectangle's major dimension"
-msgstr ""
+msgstr "원형 반경이 직사각형의 주요 치수보다 큼"
 
 #: libs/kimath/src/geometry/roundrect.cpp:65
 msgid "Roundrect radius must be non-negative"
-msgstr ""
+msgstr "원형 반경은 음수가 아니어야 함"
 
 #: libs/kiplatform/os/windows/environment.cpp:72
 #, c-format
@@ -35645,9 +35643,8 @@ msgid "Move Item"
 msgstr "항목 이동"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:61
-#, fuzzy
 msgid "Sheet Path"
-msgstr "경로 선택"
+msgstr "시트 경로"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:64
 msgid "Sheets"
@@ -40564,9 +40561,8 @@ msgid "Via diameter"
 msgstr "비아 지름"
 
 #: pcbnew/drc/drc_item.cpp:144
-#, fuzzy
 msgid "Padstack is questionable"
-msgstr "패드스택이 유효하지 않음"
+msgstr "패드스택이 이상함"
 
 #: pcbnew/drc/drc_item.cpp:148
 msgid "Padstack is not valid"
@@ -49248,9 +49244,8 @@ msgid "Generate Placement Rule Areas..."
 msgstr "배치 규칙 영역 생성..."
 
 #: pcbnew/tools/pcb_actions.cpp:2229
-#, fuzzy
 msgid "Creates best-fit placement rule areas"
-msgstr "기존 배치 규칙 영역 교체"
+msgstr "최적의 배치 규칙 영역 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:2236
 msgid "Repeat Layout..."
@@ -49258,7 +49253,7 @@ msgstr "반복 배치..."
 
 #: pcbnew/tools/pcb_actions.cpp:2237
 msgid "Clones placement & routing across multiple identical channels"
-msgstr ""
+msgstr "여러 동일한 채널에 걸쳐 클론 배치 및 라우팅"
 
 #: pcbnew/tools/pcb_actions.cpp:2248
 msgid "Route Single Track"
