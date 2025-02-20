@@ -52,12 +52,6 @@
 using namespace std::placeholders;
 
 
-void FOOTPRINT_EDIT_FRAME::OnLoadFootprintFromBoard( wxCommandEvent& event )
-{
-    LoadFootprintFromBoard( nullptr );
-}
-
-
 void FOOTPRINT_EDIT_FRAME::LoadFootprintFromLibrary( LIB_ID aFPID )
 {
     bool is_last_fp_from_brd = IsCurrentFPFromBoard();
@@ -112,12 +106,6 @@ void FOOTPRINT_EDIT_FRAME::centerItemIdleHandler( wxIdleEvent& aEvent )
 {
     m_treePane->GetLibTree()->CenterLibId( m_centerItemOnIdle );
     Unbind( wxEVT_IDLE, &FOOTPRINT_EDIT_FRAME::centerItemIdleHandler, this );
-}
-
-
-void FOOTPRINT_EDIT_FRAME::OnSaveFootprintToBoard( wxCommandEvent& event )
-{
-    SaveFootprintToBoard( true );
 }
 
 

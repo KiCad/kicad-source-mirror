@@ -74,13 +74,6 @@
 
 using namespace std::placeholders;
 
-
-#define NEW_PART        0
-#define NEXT_PART       1
-#define PREVIOUS_PART   2
-#define RELOAD_PART     3
-
-
 BEGIN_EVENT_TABLE( FOOTPRINT_VIEWER_FRAME, PCB_BASE_FRAME )
     // Window events
     EVT_SIZE( FOOTPRINT_VIEWER_FRAME::OnSize )
@@ -90,13 +83,8 @@ BEGIN_EVENT_TABLE( FOOTPRINT_VIEWER_FRAME, PCB_BASE_FRAME )
     EVT_MENU( wxID_CLOSE, FOOTPRINT_VIEWER_FRAME::CloseFootprintViewer )
 
     // Toolbar events
-    EVT_TOOL( ID_MODVIEW_NEXT, FOOTPRINT_VIEWER_FRAME::OnIterateFootprintList )
-    EVT_TOOL( ID_MODVIEW_PREVIOUS, FOOTPRINT_VIEWER_FRAME::OnIterateFootprintList )
-    EVT_TOOL( ID_ADD_FOOTPRINT_TO_BOARD, FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB )
     EVT_CHOICE( ID_ON_ZOOM_SELECT, FOOTPRINT_VIEWER_FRAME::OnSelectZoom )
     EVT_CHOICE( ID_ON_GRID_SELECT, FOOTPRINT_VIEWER_FRAME::OnSelectGrid )
-
-    EVT_UPDATE_UI( ID_ADD_FOOTPRINT_TO_BOARD, FOOTPRINT_VIEWER_FRAME::OnUpdateFootprintButton )
 
     EVT_TEXT( ID_MODVIEW_LIB_FILTER, FOOTPRINT_VIEWER_FRAME::OnLibFilter )
     EVT_TEXT( ID_MODVIEW_FOOTPRINT_FILTER, FOOTPRINT_VIEWER_FRAME::OnFPFilter )
@@ -347,6 +335,12 @@ void FOOTPRINT_VIEWER_FRAME::setupUIConditions()
 
     wxASSERT( mgr );
 
+    auto addToBoardCond =
+            [this]( const SELECTION& )
+            {
+                return ( GetBoard()->GetFirstFootprint() != nullptr );
+            };
+
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
 
@@ -356,6 +350,7 @@ void FOOTPRINT_VIEWER_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::inchesUnits,       CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
     mgr->SetConditions( ACTIONS::milsUnits,         CHECK( cond.Units( EDA_UNITS::MILS ) ) );
 
+    mgr->SetConditions( PCB_ACTIONS::saveFpToBoard, ENABLE( addToBoardCond ) );
 
     mgr->SetConditions( ACTIONS::zoomTool,
                         CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
@@ -611,8 +606,7 @@ void FOOTPRINT_VIEWER_FRAME::OnCharHook( wxKeyEvent& aEvent )
     else if( ( aEvent.GetKeyCode() == WXK_RETURN || aEvent.GetKeyCode() == WXK_NUMPAD_ENTER )
              && m_fpList->GetSelection() >= 0 )
     {
-        wxCommandEvent dummy;
-        AddFootprintToPCB( dummy );
+        AddFootprintToPCB();
     }
     else
     {
@@ -696,7 +690,7 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& aEvent )
     if( getCurFootprintName().CmpNoCase( name ) != 0 )
     {
         setCurFootprintName( name );
-        SelectAndViewFootprint( NEW_PART );
+        SelectAndViewFootprint( FPVIEWER_CONSTANTS::NEW_PART );
     }
 }
 
@@ -722,12 +716,11 @@ void FOOTPRINT_VIEWER_FRAME::displayFootprint( FOOTPRINT* aFootprint )
 
 void FOOTPRINT_VIEWER_FRAME::DClickOnFootprintList( wxMouseEvent& aEvent )
 {
-    wxCommandEvent evt;
-    AddFootprintToPCB( evt );
+    AddFootprintToPCB();
 }
 
 
-void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
+void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB()
 {
     if( GetBoard()->GetFirstFootprint() )
     {
@@ -934,17 +927,11 @@ void FOOTPRINT_VIEWER_FRAME::OnActivate( wxActivateEvent& event )
 }
 
 
-void FOOTPRINT_VIEWER_FRAME::OnUpdateFootprintButton( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Enable( GetBoard()->GetFirstFootprint() != nullptr );
-}
-
-
 void FOOTPRINT_VIEWER_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
 {
     setCurNickname( aFootprint->GetFPID().GetLibNickname() );
     setCurFootprintName( aFootprint->GetFPID().GetLibItemName() );
-    SelectAndViewFootprint( RELOAD_PART );
+    SelectAndViewFootprint( FPVIEWER_CONSTANTS::RELOAD_PART );
 }
 
 
@@ -982,25 +969,6 @@ COLOR4D FOOTPRINT_VIEWER_FRAME::GetGridColor()
 }
 
 
-void FOOTPRINT_VIEWER_FRAME::OnIterateFootprintList( wxCommandEvent& event )
-{
-    switch( event.GetId() )
-    {
-    case ID_MODVIEW_NEXT:
-        SelectAndViewFootprint( NEXT_PART );
-        break;
-
-    case ID_MODVIEW_PREVIOUS:
-        SelectAndViewFootprint( PREVIOUS_PART );
-        break;
-
-    default:
-        wxString id = wxString::Format( wxT( "%i" ), event.GetId() );
-        wxFAIL_MSG( wxT( "FOOTPRINT_VIEWER_FRAME::OnIterateFootprintList error: id = " ) + id );
-    }
-}
-
-
 void FOOTPRINT_VIEWER_FRAME::UpdateTitle()
 {
     wxString title;
@@ -1030,20 +998,20 @@ void FOOTPRINT_VIEWER_FRAME::UpdateTitle()
 }
 
 
-void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
+void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( FPVIEWER_CONSTANTS aMode )
 {
     if( !getCurNickname() )
         return;
 
     int selection = m_fpList->FindString( getCurFootprintName(), true );
 
-    if( aMode == NEXT_PART )
+    if( aMode == FPVIEWER_CONSTANTS::NEXT_PART )
     {
         if( selection != wxNOT_FOUND && selection < (int)m_fpList->GetCount() - 1 )
             selection++;
     }
 
-    if( aMode == PREVIOUS_PART )
+    if( aMode == FPVIEWER_CONSTANTS::PREVIOUS_PART )
     {
         if( selection != wxNOT_FOUND && selection > 0 )
             selection--;
@@ -1069,7 +1037,7 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
         if( footprint )
             displayFootprint( footprint );
 
-        if( aMode != RELOAD_PART )
+        if( aMode != FPVIEWER_CONSTANTS::RELOAD_PART )
             setFPWatcher( footprint );
 
         Update3DView( true, true );

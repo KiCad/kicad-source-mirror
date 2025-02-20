@@ -170,17 +170,9 @@ std::optional<TOOLBAR_CONFIGURATION> FOOTPRINT_EDIT_FRAME::DefaultTopMainToolbar
           .AppendAction( ACTIONS::showDatasheet )
           .AppendAction( PCB_ACTIONS::checkFootprint );
 
-    config.AppendSeparator();
-
-    /* TODO (ISM): Implement these as actions
-    m_tbTopMain->AddTool( ID_LOAD_FOOTPRINT_FROM_BOARD, wxEmptyString,
-                            KiScaledBitmap( BITMAPS::import_brd_file, this ),
-                            _( "Load footprint from current board" ) );
-
-    m_tbTopMain->AddTool( ID_ADD_FOOTPRINT_TO_BOARD, wxEmptyString,
-                            KiScaledBitmap( BITMAPS::insert_module_board, this ),
-                            _( "Insert footprint into current board" ) );
-*/
+    config.AppendSeparator()
+          .AppendAction( PCB_ACTIONS::loadFpFromBoard )
+          .AppendAction( PCB_ACTIONS::saveFpToBoard );
 
     config.AppendSeparator()
           .AppendControl( m_tbGridSelectName );

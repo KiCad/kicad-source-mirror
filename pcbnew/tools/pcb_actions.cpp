@@ -29,6 +29,7 @@
 #include <pcbnew_id.h>
 #include <bitmaps.h>
 #include <layer_ids.h>
+#include <footprint_viewer_frame.h>
 #include <microwave/microwave_tool.h>
 #include <pcb_reference_image.h>
 #include <tool/tool_manager.h>
@@ -797,6 +798,34 @@ TOOL_ACTION PCB_ACTIONS::checkFootprint( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Footprint Checker" ) )
         .Tooltip( _( "Show the footprint checker window" ) )
         .Icon( BITMAPS::erc ) );
+
+TOOL_ACTION PCB_ACTIONS::loadFpFromBoard( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.ModuleEditor.loadFootprintFromBoard" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Load footprint from current PCB" ) )
+        .Tooltip( _( "Load footprint from current board" ) )
+        .Icon( BITMAPS::load_module_board ) );
+
+TOOL_ACTION PCB_ACTIONS::saveFpToBoard( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.ModuleEditor.saveFootprintToBoard" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Insert footprint into PCB" ) )
+        .Tooltip( _( "Insert footprint into current board" ) )
+        .Icon( BITMAPS::insert_module_board) );
+
+TOOL_ACTION PCB_ACTIONS::previousFootprint( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.previousFootprint" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Display previous footprint" ) )
+        .Icon( BITMAPS::lib_previous )
+        .Parameter<FPVIEWER_CONSTANTS>( FPVIEWER_CONSTANTS::PREVIOUS_PART ) );
+
+TOOL_ACTION PCB_ACTIONS::nextFootprint( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.nextFootprint" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Display next footprint" ) )
+        .Icon( BITMAPS::lib_next )
+        .Parameter<FPVIEWER_CONSTANTS>( FPVIEWER_CONSTANTS::NEXT_PART ) );
 
 // GLOBAL_EDIT_TOOL
 //

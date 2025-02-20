@@ -212,15 +212,8 @@ void FOOTPRINT_EDIT_FRAME::doReCreateMenuBar()
     //
     ACTION_MENU* toolsMenu = new ACTION_MENU( false, selTool );
 
-    toolsMenu->Add( _( "&Load Footprint from PCB..." ),
-                    _( "Load a footprint from the current board into the editor" ),
-                    ID_LOAD_FOOTPRINT_FROM_BOARD,
-                    BITMAPS::load_module_board );
-
-    toolsMenu->Add( _( "&Insert Footprint on PCB" ),
-                    _( "Insert footprint onto current board" ),
-                    ID_ADD_FOOTPRINT_TO_BOARD,
-                    BITMAPS::insert_module_board );
+    toolsMenu->Add( PCB_ACTIONS::loadFpFromBoard );
+    toolsMenu->Add( PCB_ACTIONS::saveFpToBoard );
 
     toolsMenu->AppendSeparator();
     toolsMenu->Add( PCB_ACTIONS::cleanupGraphics );

@@ -40,14 +40,8 @@ std::optional<TOOLBAR_CONFIGURATION> FOOTPRINT_VIEWER_FRAME::DefaultTopMainToolb
     TOOLBAR_CONFIGURATION config;
 
     // clang-format off
-    /* TODO (ISM): Convert to actions
-    m_tbTopMain->AddTool( ID_MODVIEW_PREVIOUS, wxEmptyString,
-            KiScaledBitmap( BITMAPS::lib_previous, this ),
-            _( "Display previous footprint" ) );
-    m_tbTopMain->AddTool( ID_MODVIEW_NEXT, wxEmptyString,
-            KiScaledBitmap( BITMAPS::lib_next, this ),
-            _( "Display next footprint" ) );
-*/
+    config.AppendAction( PCB_ACTIONS::previousFootprint )
+          .AppendAction( PCB_ACTIONS::nextFootprint );
 
     config.AppendSeparator()
           .AppendAction( ACTIONS::zoomRedraw )
@@ -57,13 +51,8 @@ std::optional<TOOLBAR_CONFIGURATION> FOOTPRINT_VIEWER_FRAME::DefaultTopMainToolb
           .AppendAction( ACTIONS::zoomTool );
 
     config.AppendSeparator()
-          .AppendAction( ACTIONS::show3DViewer );
-
-    /* TODO (ISM): Convert to action
-    m_tbTopMain->AddTool( ID_ADD_FOOTPRINT_TO_BOARD, wxEmptyString,
-            KiScaledBitmap( BITMAPS::insert_module_board, this ),
-            _( "Insert footprint in board" ) );
-*/
+          .AppendAction( ACTIONS::show3DViewer )
+          .AppendAction( PCB_ACTIONS::saveFpToBoard );
 
     config.AppendSeparator()
           .AppendControl( m_tbGridSelectName );

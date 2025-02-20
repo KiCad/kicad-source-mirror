@@ -90,15 +90,6 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
 
     EVT_TOOL( ID_FPEDIT_SAVE_PNG, FOOTPRINT_EDIT_FRAME::OnSaveFootprintAsPng )
 
-    EVT_TOOL( ID_LOAD_FOOTPRINT_FROM_BOARD, FOOTPRINT_EDIT_FRAME::OnLoadFootprintFromBoard )
-    EVT_TOOL( ID_ADD_FOOTPRINT_TO_BOARD, FOOTPRINT_EDIT_FRAME::OnSaveFootprintToBoard )
-
-    // UI update events.
-    EVT_UPDATE_UI( ID_LOAD_FOOTPRINT_FROM_BOARD,
-                   FOOTPRINT_EDIT_FRAME::OnUpdateLoadFootprintFromBoard )
-    EVT_UPDATE_UI( ID_ADD_FOOTPRINT_TO_BOARD,
-                   FOOTPRINT_EDIT_FRAME::OnUpdateSaveFootprintToBoard )
-
     // Drop files event
     EVT_DROP_FILES( FOOTPRINT_EDIT_FRAME::OnDropFiles )
 
@@ -918,42 +909,6 @@ void FOOTPRINT_EDIT_FRAME::CloseFootprintEditor( wxCommandEvent& Event )
 }
 
 
-void FOOTPRINT_EDIT_FRAME::OnUpdateLoadFootprintFromBoard( wxUpdateUIEvent& aEvent )
-{
-    PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB_EDITOR, false );
-
-    aEvent.Enable( frame != nullptr );
-}
-
-
-void FOOTPRINT_EDIT_FRAME::OnUpdateSaveFootprintToBoard( wxUpdateUIEvent& aEvent )
-{
-    PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB_EDITOR, false );
-
-    FOOTPRINT* editorFootprint = GetBoard()->GetFirstFootprint();
-    bool       canInsert = frame && editorFootprint && editorFootprint->GetLink() == niluuid;
-
-    // If the source was deleted, the footprint can inserted but not updated in the board.
-    if( frame && editorFootprint && editorFootprint->GetLink() != niluuid )
-    {
-        BOARD*  mainpcb = frame->GetBoard();
-        canInsert = true;
-
-        // search if the source footprint was not deleted:
-        for( FOOTPRINT* candidate : mainpcb->Footprints() )
-        {
-            if( editorFootprint->GetLink() == candidate->m_Uuid )
-            {
-                canInsert = false;
-                break;
-            }
-        }
-    }
-
-    aEvent.Enable( canInsert );
-}
-
-
 void FOOTPRINT_EDIT_FRAME::ShowChangedLanguage()
 {
     // call my base class
@@ -1244,11 +1199,50 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
                 return IsCurrentFPFromBoard();
             };
 
+    auto pcbFrameExistsCond =
+            [this]( const SELECTION& )
+            {
+                PCB_EDIT_FRAME* frame = dynamic_cast<PCB_EDIT_FRAME*>( Kiway().Player( FRAME_PCB_EDITOR, false ) );
+
+                return ( frame != nullptr );
+            };
+
+    auto boardFootprintExistsCond =
+            [this]( const SELECTION& )
+            {
+                PCB_EDIT_FRAME* frame = dynamic_cast<PCB_EDIT_FRAME*>( Kiway().Player( FRAME_PCB_EDITOR, false ) );
+
+                FOOTPRINT* editorFootprint = GetBoard()->GetFirstFootprint();
+                bool       canInsert = frame && editorFootprint && editorFootprint->GetLink() == niluuid;
+
+                // If the source was deleted, the footprint can inserted but not updated in the board.
+                if( frame && editorFootprint && editorFootprint->GetLink() != niluuid )
+                {
+                    BOARD*  mainpcb = frame->GetBoard();
+                    canInsert = true;
+
+                    // search if the source footprint was not deleted:
+                    for( FOOTPRINT* candidate : mainpcb->Footprints() )
+                    {
+                        if( editorFootprint->GetLink() == candidate->m_Uuid )
+                        {
+                            canInsert = false;
+                            break;
+                        }
+                    }
+                }
+
+                return canInsert;
+            };
+
     // clang-format off
     mgr->SetConditions( ACTIONS::saveAs,                 ENABLE( footprintTargettedCond ) );
     mgr->SetConditions( ACTIONS::revert,                 ENABLE( cond.ContentModified() ) );
     mgr->SetConditions( ACTIONS::save,                   ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
     mgr->SetConditions( PCB_ACTIONS::editLibFpInFpEditor,ENABLE( footprintFromBoardCond ) );
+
+    mgr->SetConditions( PCB_ACTIONS::saveFpToBoard,      ENABLE( boardFootprintExistsCond ) );
+    mgr->SetConditions( PCB_ACTIONS::loadFpFromBoard,    ENABLE( pcbFrameExistsCond ) );
 
     mgr->SetConditions( ACTIONS::undo,                   ENABLE( cond.UndoAvailable() ) );
     mgr->SetConditions( ACTIONS::redo,                   ENABLE( cond.RedoAvailable() ) );

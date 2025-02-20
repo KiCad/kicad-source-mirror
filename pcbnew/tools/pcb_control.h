@@ -56,6 +56,11 @@ public:
     int Print( const TOOL_EVENT& aEvent );
     int Quit( const TOOL_EVENT& aEvent );
 
+    // Footprint library control actions
+    int LoadFpFromBoard( const TOOL_EVENT& aEvent );
+    int SaveFpToBoard( const TOOL_EVENT& aEvent );
+    int IterateFootprint( const TOOL_EVENT& aEvent );
+
     // Display modes
     int ToggleRatsnest( const TOOL_EVENT& aEvent );
     int ZoneDisplayMode( const TOOL_EVENT& aEvent );

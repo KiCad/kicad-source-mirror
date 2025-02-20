@@ -149,18 +149,8 @@ public:
      */
     bool SaveLibraryAs( const wxString& aLibraryPath );
 
-    void OnUpdateLoadFootprintFromBoard( wxUpdateUIEvent& aEvent );
-    void OnUpdateSaveFootprintToBoard( wxUpdateUIEvent& aEvent );
-
     ///< @copydoc PCB_BASE_EDIT_FRAME::OnEditItemRequest()
     void OnEditItemRequest( BOARD_ITEM* aItem ) override;
-
-    /**
-     * Called from the main toolbar to load a footprint from board mainly to edit it.
-     */
-    void OnLoadFootprintFromBoard( wxCommandEvent& event );
-
-    void OnSaveFootprintToBoard( wxCommandEvent& event );
 
     void LoadFootprintFromLibrary( LIB_ID aFPID );
 

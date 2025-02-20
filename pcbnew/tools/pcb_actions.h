@@ -483,6 +483,12 @@ public:
 
     static TOOL_ACTION checkFootprint;
 
+    static TOOL_ACTION loadFpFromBoard;
+    static TOOL_ACTION saveFpToBoard;
+
+    static TOOL_ACTION previousFootprint;
+    static TOOL_ACTION nextFootprint;
+
     /// Activation of the drawing tool (placing a PAD)
     static TOOL_ACTION placePad;
 

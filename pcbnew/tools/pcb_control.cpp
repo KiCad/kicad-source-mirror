@@ -67,6 +67,7 @@
 #include <tool/tool_manager.h>
 #include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
+#include <footprint_viewer_frame.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/wx_progress_reporters.h>
 #include <widgets/wx_infobar.h>
@@ -122,6 +123,26 @@ int PCB_CONTROL::AddLibrary( const TOOL_EVENT& aEvent )
 }
 
 
+int PCB_CONTROL::LoadFpFromBoard( const TOOL_EVENT& aEvent )
+{
+    if( m_frame->IsType( FRAME_FOOTPRINT_EDITOR ) )
+        static_cast<FOOTPRINT_EDIT_FRAME*>( m_frame )->LoadFootprintFromBoard( nullptr );
+
+    return 0;
+}
+
+
+int PCB_CONTROL::SaveFpToBoard( const TOOL_EVENT& aEvent )
+{
+    if( m_frame->IsType( FRAME_FOOTPRINT_EDITOR ) )
+        static_cast<FOOTPRINT_EDIT_FRAME*>( m_frame )->SaveFootprintToBoard( true );
+    else if( m_frame->IsType( FRAME_FOOTPRINT_VIEWER ) )
+        static_cast<FOOTPRINT_VIEWER_FRAME*>( m_frame )->AddFootprintToPCB();
+
+    return 0;
+}
+
+
 int PCB_CONTROL::DdAddLibrary( const TOOL_EVENT& aEvent )
 {
     const wxString fn = *aEvent.Parameter<wxString*>();
@@ -135,6 +156,15 @@ int PCB_CONTROL::DdImportFootprint( const TOOL_EVENT& aEvent )
     const wxString fn = *aEvent.Parameter<wxString*>();
     static_cast<FOOTPRINT_EDIT_FRAME*>( m_frame )->ImportFootprint( fn );
     m_frame->Zoom_Automatique( false );
+    return 0;
+}
+
+
+int PCB_CONTROL::IterateFootprint( const TOOL_EVENT& aEvent )
+{
+    if( m_frame->IsType( FRAME_FOOTPRINT_VIEWER ) )
+        static_cast<FOOTPRINT_VIEWER_FRAME*>( m_frame )->SelectAndViewFootprint( aEvent.Parameter<FPVIEWER_CONSTANTS>() );
+
     return 0;
 }
 
@@ -1980,6 +2010,12 @@ void PCB_CONTROL::setTransitions()
     Go( &PCB_CONTROL::AddLibrary,           ACTIONS::addLibrary.MakeEvent() );
     Go( &PCB_CONTROL::Print,                ACTIONS::print.MakeEvent() );
     Go( &PCB_CONTROL::Quit,                 ACTIONS::quit.MakeEvent() );
+
+    // Footprint library actions
+    Go( &PCB_CONTROL::SaveFpToBoard,        PCB_ACTIONS::saveFpToBoard.MakeEvent() );
+    Go( &PCB_CONTROL::LoadFpFromBoard,      PCB_ACTIONS::loadFpFromBoard.MakeEvent() );
+    Go( &PCB_CONTROL::IterateFootprint,     PCB_ACTIONS::nextFootprint.MakeEvent() );
+    Go( &PCB_CONTROL::IterateFootprint,     PCB_ACTIONS::previousFootprint.MakeEvent() );
 
     // Display modes
     Go( &PCB_CONTROL::TrackDisplayMode,      PCB_ACTIONS::trackDisplayMode.MakeEvent() );
