@@ -69,15 +69,8 @@ std::optional<TOOLBAR_CONFIGURATION> FOOTPRINT_VIEWER_FRAME::DefaultTopMainToolb
           .AppendControl( m_tbGridSelectName );
 
     config.AppendSeparator()
-          .AppendControl( m_tbZoomSelectName );
-
-    // Option to run Zoom automatique on footprint selection change
-    /* TODO (ISM): Convert to action
-    m_tbTopMain->AddTool( ID_FPVIEWER_AUTOZOOM_TOOL, wxEmptyString,
-            KiScaledBitmap( BITMAPS::zoom_auto_fit_in_page, this ),
-            _( "Automatic Zoom on footprint change" ),
-            wxITEM_CHECK );
-*/
+          .AppendControl( m_tbZoomSelectName )
+          .AppendAction( PCB_ACTIONS::fpAutoZoom);
 
     // clang-format on
     return config;

@@ -404,6 +404,18 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
 }
 
 
+int PCB_VIEWER_TOOLS::FootprintAutoZoom( const TOOL_EVENT& aEvent )
+{
+    PCB_VIEWERS_SETTINGS_BASE* cfg = dynamic_cast<PCB_VIEWERS_SETTINGS_BASE*>( frame()->config() );
+
+    // Toggle the setting
+    if( cfg )
+        cfg->m_FootprintViewerAutoZoomOnSelect = !cfg->m_FootprintViewerAutoZoomOnSelect;
+
+    return 0;
+}
+
+
 void PCB_VIEWER_TOOLS::setTransitions()
 {
     // clang-format off
@@ -414,6 +426,8 @@ void PCB_VIEWER_TOOLS::setTransitions()
     Go( &PCB_VIEWER_TOOLS::PadDisplayMode,    PCB_ACTIONS::padDisplayMode.MakeEvent() );
     Go( &PCB_VIEWER_TOOLS::GraphicOutlines,   PCB_ACTIONS::graphicsOutlines.MakeEvent() );
     Go( &PCB_VIEWER_TOOLS::TextOutlines,      PCB_ACTIONS::textOutlines.MakeEvent() );
+
+    Go( &PCB_VIEWER_TOOLS::FootprintAutoZoom,  PCB_ACTIONS::fpAutoZoom.MakeEvent() );
 
     Go( &PCB_VIEWER_TOOLS::MeasureTool,       ACTIONS::measureTool.MakeEvent() );
     // clang-format on

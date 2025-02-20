@@ -45,6 +45,7 @@
 #include <pcbnew_id.h>
 #include <footprint_editor_settings.h>
 #include <pgm_base.h>
+#include <pcbnew_settings.h>
 #include <project_pcb.h>
 #include <project/project_file.h>
 #include <settings/settings_manager.h>
@@ -292,13 +293,6 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     wxASSERT( cfg );
     GetCanvas()->GetView()->SetScale( cfg->m_FootprintViewerZoom );
 
-    wxAuiToolBarItem* toolOpt = m_tbTopMain->FindTool( ID_FPVIEWER_AUTOZOOM_TOOL );
-
-    if( cfg->m_FootprintViewerAutoZoomOnSelect )
-        toolOpt->SetState( wxAUI_BUTTON_STATE_CHECKED );
-    else
-        toolOpt->SetState( 0 );
-
     updateView();
     setupUnits( config() );
 
@@ -375,6 +369,8 @@ void FOOTPRINT_VIEWER_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::textOutlines,       CHECK( !cond.TextFillDisplay() ) );
     mgr->SetConditions( PCB_ACTIONS::graphicsOutlines,   CHECK( !cond.GraphicsFillDisplay() ) );
     mgr->SetConditions( ACTIONS::toggleBoundingBoxes,    CHECK( cond.BoundingBoxes() ) );
+
+    mgr->SetConditions( PCB_ACTIONS::fpAutoZoom,         CHECK( cond.FootprintViewerAutoZoom() ) );
 
 #undef ENABLE
 #undef CHECK
@@ -843,8 +839,6 @@ void FOOTPRINT_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     if( GetCanvas() && GetCanvas()->GetView() )
         cfg->m_FootprintViewerZoom = GetCanvas()->GetView()->GetScale();
 
-    wxAuiToolBarItem* toolOpt = m_tbTopMain->FindTool( ID_FPVIEWER_AUTOZOOM_TOOL );
-    cfg->m_FootprintViewerAutoZoomOnSelect = ( toolOpt->GetState() & wxAUI_BUTTON_STATE_CHECKED );
     cfg->m_FootprintViewerLibListWidth = m_libList->GetSize().x;
     cfg->m_FootprintViewerFPListWidth = m_fpList->GetSize().x;
 
@@ -1095,12 +1089,14 @@ void FOOTPRINT_VIEWER_FRAME::updateView()
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
-    wxAuiToolBarItem* toolOpt = m_tbTopMain->FindTool( ID_FPVIEWER_AUTOZOOM_TOOL );
+    PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( config() );
+    wxCHECK( cfg, /* void */ );
 
-    if( toolOpt->GetState() & wxAUI_BUTTON_STATE_CHECKED )
+    if( cfg->m_FootprintViewerAutoZoomOnSelect )
         m_toolManager->RunAction( ACTIONS::zoomFitScreen );
     else
         m_toolManager->RunAction( ACTIONS::centerContents );
+
 
     UpdateMsgPanel();
 }

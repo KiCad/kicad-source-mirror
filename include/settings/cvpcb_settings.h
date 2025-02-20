@@ -43,9 +43,6 @@ public:
 
     MAGNETIC_SETTINGS   m_FootprintViewerMagneticSettings;
 
-    double              m_FootprintViewerZoom;
-    bool                m_FootprintViewerAutoZoomOnSelect;
-
     int                 m_FilterFlags;
     wxString            m_FilterString;
     int                 m_LibrariesWidth;

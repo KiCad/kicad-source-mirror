@@ -345,6 +345,7 @@ public:
     static TOOL_ACTION zoneDisplayTriangulated;
     static TOOL_ACTION zoneDisplayToggle;
     static TOOL_ACTION showPadNumbers;
+    static TOOL_ACTION fpAutoZoom;
 
     // Layer control
     static TOOL_ACTION layerTop;

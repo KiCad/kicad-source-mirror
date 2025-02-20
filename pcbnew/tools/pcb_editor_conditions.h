@@ -109,6 +109,13 @@ public:
      */
     SELECTION_CONDITION Get45degMode();
 
+    /**
+     * Create a functor that tests if the footprint viewer should auto zoom on new footprints.
+     *
+     * @return Functor returning true if auto zoom is enabled.
+     */
+    SELECTION_CONDITION FootprintViewerAutoZoom();
+
 protected:
     ///< Helper function used by HasItems()
     static bool hasItemsFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame );
@@ -137,6 +144,9 @@ protected:
 
     ///< Helper function used by Line45degMode()
     static bool get45degModeFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame );
+
+    /// Helper function used by FootprintViewerAutoZoom()
+    static bool footprintViewerAutoZoom( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame );
 };
 
 #endif /* PCB_EDITOR_CONDITIONS_H_ */

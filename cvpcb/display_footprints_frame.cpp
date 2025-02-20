@@ -144,19 +144,8 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     // Restore last zoom.  (If auto-zooming we'll adjust when we load the footprint.)
     CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( config() );
 
-    /* TODO (ISM): Re-enable this once this is turned into an action
     if( cfg )
-    {
         GetCanvas()->GetView()->SetScale( cfg->m_FootprintViewerZoom );
-
-        wxAuiToolBarItem* toolOpt = m_tbTopMain->FindTool( ID_CVPCB_FPVIEWER_AUTOZOOM_TOOL );
-
-        if( cfg->m_FootprintViewerAutoZoomOnSelect )
-            toolOpt->SetState( wxAUI_BUTTON_STATE_CHECKED );
-        else
-            toolOpt->SetState( 0 );
-    }
-    */
 
     updateView();
 
@@ -219,7 +208,7 @@ void DISPLAY_FOOTPRINTS_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::padDisplayMode,   CHECK( !cond.PadFillDisplay() ) );
     mgr->SetConditions( PCB_ACTIONS::textOutlines,     CHECK( !cond.TextFillDisplay() ) );
     mgr->SetConditions( PCB_ACTIONS::graphicsOutlines, CHECK( !cond.GraphicsFillDisplay() ) );
-
+    mgr->SetConditions( PCB_ACTIONS::fpAutoZoom,       CHECK( cond.FootprintViewerAutoZoom() ) );
 #undef CHECK
 }
 
@@ -271,15 +260,9 @@ std::optional<TOOLBAR_CONFIGURATION> DISPLAY_FOOTPRINTS_FRAME::DefaultTopMainToo
     config.AppendSeparator()
           .AppendControl( m_tbZoomSelectName );
 
-    config.AppendSeparator();
+    config.AppendSeparator()
+          .AppendAction( PCB_ACTIONS::fpAutoZoom );
 
-/* TODO (ISM): Turn this into an action
-    // Option to run Zoom automatique on footprint selection change
-    m_tbTopMain->AddTool( ID_CVPCB_FPVIEWER_AUTOZOOM_TOOL, wxEmptyString,
-                            KiScaledBitmap( BITMAPS::zoom_auto_fit_in_page, this ),
-                            _( "Automatic Zoom on footprint change" ),
-                            wxITEM_CHECK );
-*/
     // clang-format on
     return config;
 }
@@ -307,13 +290,7 @@ void DISPLAY_FOOTPRINTS_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     PCB_BASE_FRAME::SaveSettings( cfg );
 
     cfg->m_FootprintViewerDisplayOptions = GetDisplayOptions();
-
     cfg->m_FootprintViewerZoom = GetCanvas()->GetView()->GetScale();
-
-    /* TODO (ISM): Move to action framework
-    wxAuiToolBarItem* toolOpt = m_tbTopMain->FindTool( ID_CVPCB_FPVIEWER_AUTOZOOM_TOOL );
-    cfg->m_FootprintViewerAutoZoomOnSelect = ( toolOpt->GetState() & wxAUI_BUTTON_STATE_CHECKED );
-    */
 }
 
 
@@ -504,14 +481,14 @@ void DISPLAY_FOOTPRINTS_FRAME::updateView()
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
-    /* TODO (ISM): Move to action framework
-    wxAuiToolBarItem* toolOpt = m_tbTopMain->FindTool( ID_CVPCB_FPVIEWER_AUTOZOOM_TOOL );
+    CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( config() );
+    wxCHECK( cfg, /* void */ );
 
-    if( toolOpt->GetState() & wxAUI_BUTTON_STATE_CHECKED )
+    if( cfg->m_FootprintViewerAutoZoomOnSelect )
         m_toolManager->RunAction( ACTIONS::zoomFitScreen );
     else
         m_toolManager->RunAction( ACTIONS::centerContents );
-*/
+
     UpdateMsgPanel();
 }
 

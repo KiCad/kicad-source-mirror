@@ -116,10 +116,15 @@ public:
         bool    m_DisplayPadFill;
     };
 
+    double m_FootprintViewerZoom;               ///< The last zoom level used (0 for auto)
+    bool   m_FootprintViewerAutoZoomOnSelect;   ///< true to use automatic zoom on fp selection
+
     VIEWERS_DISPLAY_OPTIONS m_ViewersDisplay;
 
     PCB_VIEWERS_SETTINGS_BASE( const std::string& aFilename, int aSchemaVersion ):
-        APP_SETTINGS_BASE( aFilename, aSchemaVersion )
+        APP_SETTINGS_BASE( aFilename, aSchemaVersion ),
+        m_FootprintViewerZoom( 1.0 ),
+        m_FootprintViewerAutoZoomOnSelect( true )
     {
         m_ViewersDisplay.m_DisplayGraphicsFill = true;
         m_ViewersDisplay.m_DisplayTextFill = true;
@@ -457,8 +462,6 @@ public:
 
     std::unique_ptr<PNS::ROUTING_SETTINGS> m_PnsSettings;
 
-    double m_FootprintViewerZoom;               ///< The last zoom level used (0 for auto)
-    bool   m_FootprintViewerAutoZoomOnSelect;   ///< true to use automatic zoom on fp selection
     int    m_FootprintViewerLibListWidth;
     int    m_FootprintViewerFPListWidth;
 

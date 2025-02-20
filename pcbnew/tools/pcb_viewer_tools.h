@@ -61,6 +61,9 @@ public:
     int GraphicOutlines( const TOOL_EVENT& aEvent );
     int TextOutlines( const TOOL_EVENT& aEvent );
 
+    /// Automatically zoom to fit on footprints
+    int FootprintAutoZoom( const TOOL_EVENT& aEvent );
+
     /// Show the 3D viewer
     int Show3DViewer( const TOOL_EVENT& aEvent );
 

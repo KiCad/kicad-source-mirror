@@ -31,8 +31,6 @@ const int cvpcbSchemaVersion = 0;
 
 CVPCB_SETTINGS::CVPCB_SETTINGS() :
         PCB_VIEWERS_SETTINGS_BASE( "cvpcb", cvpcbSchemaVersion ),
-        m_FootprintViewerZoom( 1.0 ),
-        m_FootprintViewerAutoZoomOnSelect( true ),
         m_FilterFlags( 0 ),
         m_LibrariesWidth( 0 ),
         m_FootprintsWidth( 0 )

@@ -1508,6 +1508,14 @@ TOOL_ACTION PCB_ACTIONS::zoneDisplayToggle( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::show_zone ) );
 
 
+TOOL_ACTION PCB_ACTIONS::fpAutoZoom( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.fpAutoZoom" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Automatic zoom" ) )
+        .Tooltip( _( "Automatic Zoom on footprint change" ) )
+        .Icon( BITMAPS::zoom_auto_fit_in_page )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE ) );
+
 // Layer control
 
 // Translate aLayer to the action that switches to it

@@ -81,8 +81,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
           m_AutoRefillZones( false ),
           m_AllowFreePads( false ),
           m_PnsSettings( nullptr ),
-          m_FootprintViewerZoom( 1.0 ),
-          m_FootprintViewerAutoZoomOnSelect( true ),
           m_FootprintViewerLibListWidth( 200 ),
           m_FootprintViewerFPListWidth( 300 )
 {
