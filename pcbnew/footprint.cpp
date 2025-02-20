@@ -310,6 +310,13 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
     attrs->set_exempt_from_courtyard_requirement( AllowMissingCourtyard() );
     attrs->set_do_not_populate( IsDNP() );
 
+    if( m_attributes & FP_THROUGH_HOLE )
+        attrs->set_mounting_style( types::FootprintMountingStyle::FMS_THROUGH_HOLE );
+    else if( m_attributes & FP_SMD )
+        attrs->set_mounting_style( types::FootprintMountingStyle::FMS_SMD );
+    else
+        attrs->set_mounting_style( types::FootprintMountingStyle::FMS_UNSPECIFIED );
+
     types::Footprint* def = footprint.mutable_definition();
 
     def->mutable_id()->CopyFrom( kiapi::common::LibIdToProto( GetFPID() ) );
@@ -439,6 +446,22 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
         mandatoryField.mutable_id()->set_id( DESCRIPTION_FIELD );
         buf.PackFrom( mandatoryField );
         GetField( DESCRIPTION_FIELD )->Deserialize( buf );
+    }
+
+    m_attributes = 0;
+
+    switch( footprint.attributes().mounting_style() )
+    {
+    case types::FootprintMountingStyle::FMS_THROUGH_HOLE:
+        m_attributes |= FP_THROUGH_HOLE;
+        break;
+
+    case types::FootprintMountingStyle::FMS_SMD:
+        m_attributes |= FP_SMD;
+        break;
+
+    default:
+        break;
     }
 
     SetBoardOnly( footprint.attributes().not_in_schematic() );
