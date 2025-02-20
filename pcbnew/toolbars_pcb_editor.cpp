@@ -381,7 +381,8 @@ void PCB_EDIT_FRAME::configureToolbars()
     PCB_BASE_FRAME::configureToolbars();
 
     // Box to display and choose track widths
-    auto trackWidthSelectorFactory = [this]( ACTION_TOOLBAR* aToolbar )
+    auto trackWidthSelectorFactory =
+        [this]( ACTION_TOOLBAR* aToolbar )
         {
             if( !m_SelTrackWidthBox )
             {
@@ -405,7 +406,8 @@ void PCB_EDIT_FRAME::configureToolbars()
 
 
     // Box to display and choose vias diameters
-    auto viaDiaSelectorFactory = [this]( ACTION_TOOLBAR* aToolbar )
+    auto viaDiaSelectorFactory =
+        [this]( ACTION_TOOLBAR* aToolbar )
         {
             if( !m_SelViaSizeBox )
             {
@@ -424,7 +426,8 @@ void PCB_EDIT_FRAME::configureToolbars()
     // IPC/Scripting plugin control
     // TODO (ISM): Clean this up to make IPC actions just normal tool actions to get rid of this entire
     // control
-    auto pluginControlFactory = [this]( ACTION_TOOLBAR* aToolbar )
+    auto pluginControlFactory =
+        [this]( ACTION_TOOLBAR* aToolbar )
         {
             // Add scripting console and API plugins
             bool scriptingAvailable = SCRIPTING::IsWxAvailable();

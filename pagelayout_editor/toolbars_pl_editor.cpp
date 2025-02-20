@@ -119,7 +119,8 @@ void PL_EDITOR_FRAME::configureToolbars()
 {
     EDA_DRAW_FRAME::configureToolbars();
 
-    auto originSelectorFactory = [this]( ACTION_TOOLBAR* aToolbar )
+    auto originSelectorFactory =
+        [this]( ACTION_TOOLBAR* aToolbar )
         {
             if( !m_originSelectBox )
             {
@@ -138,7 +139,8 @@ void PL_EDITOR_FRAME::configureToolbars()
                                          originSelectorFactory );
 
 
-    auto pageSelectorFactory = [this]( ACTION_TOOLBAR* aToolbar )
+    auto pageSelectorFactory =
+        [this]( ACTION_TOOLBAR* aToolbar )
         {
             wxString pageList[5] =
             {

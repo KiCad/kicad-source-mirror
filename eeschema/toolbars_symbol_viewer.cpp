@@ -81,7 +81,8 @@ void SYMBOL_VIEWER_FRAME::configureToolbars()
     SCH_BASE_FRAME::configureToolbars();
 
     // Toolbar widget for selecting the unit to show in the symbol viewer
-    auto unitChoiceFactory = [this]( ACTION_TOOLBAR* aToolbar )
+    auto unitChoiceFactory =
+        [this]( ACTION_TOOLBAR* aToolbar )
         {
             if( !m_unitChoice )
             {

@@ -1278,7 +1278,8 @@ void PCB_BASE_FRAME::configureToolbars()
     EDA_DRAW_FRAME::configureToolbars();
 
     // Layer selector
-    auto layerSelectorFactory = [this]( ACTION_TOOLBAR* aToolbar )
+    auto layerSelectorFactory =
+        [this]( ACTION_TOOLBAR* aToolbar )
         {
             if( !m_SelLayerBox )
             {

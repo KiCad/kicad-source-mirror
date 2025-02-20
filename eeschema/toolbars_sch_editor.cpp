@@ -209,7 +209,8 @@ void SCH_EDIT_FRAME::configureToolbars()
     // IPC/Scripting plugin control
     // TODO (ISM): Clean this up to make IPC actions just normal tool actions to get rid of this entire
     // control
-    auto pluginControlFactory = [this]( ACTION_TOOLBAR* aToolbar )
+    auto pluginControlFactory =
+        [this]( ACTION_TOOLBAR* aToolbar )
         {
             // Add scripting console and API plugins
             bool scriptingAvailable = SCRIPTING::IsWxAvailable();

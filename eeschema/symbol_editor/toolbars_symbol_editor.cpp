@@ -165,7 +165,8 @@ void SYMBOL_EDIT_FRAME::configureToolbars()
 {
     SCH_BASE_FRAME::configureToolbars();
 
-    auto unitDisplayFactory = [this]( ACTION_TOOLBAR* aToolbar )
+    auto unitDisplayFactory =
+        [this]( ACTION_TOOLBAR* aToolbar )
         {
             if( !m_unitSelectBox )
             {

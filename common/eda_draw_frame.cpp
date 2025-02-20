@@ -194,7 +194,8 @@ void EDA_DRAW_FRAME::configureToolbars()
     EDA_BASE_FRAME::configureToolbars();
 
     // Grid selection
-    auto gridSelectorFactory = [this]( ACTION_TOOLBAR* aToolbar )
+    auto gridSelectorFactory =
+        [this]( ACTION_TOOLBAR* aToolbar )
         {
             if( !m_gridSelectBox )
             {
@@ -211,7 +212,8 @@ void EDA_DRAW_FRAME::configureToolbars()
                                          _( "Grid Selection box" ), gridSelectorFactory );
 
     // Zoom selection
-    auto zoomSelectorFactory = [this]( ACTION_TOOLBAR* aToolbar )
+    auto zoomSelectorFactory =
+        [this]( ACTION_TOOLBAR* aToolbar )
         {
             if( !m_zoomSelectBox )
             {

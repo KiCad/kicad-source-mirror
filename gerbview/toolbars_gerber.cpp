@@ -131,7 +131,8 @@ void GERBVIEW_FRAME::configureToolbars()
     EDA_DRAW_FRAME::configureToolbars();
 
     // Register factories for the various toolbar controls
-    auto layerBoxFactory = [this]( ACTION_TOOLBAR* aToolbar )
+    auto layerBoxFactory =
+        [this]( ACTION_TOOLBAR* aToolbar )
         {
             if( !m_SelLayerBox )
             {
@@ -160,7 +161,8 @@ void GERBVIEW_FRAME::configureToolbars()
                             _( "Layer selection" ), layerBoxFactory );
 
 
-    auto textInfoFactory = [this]( ACTION_TOOLBAR* aToolbar )
+    auto textInfoFactory =
+        [this]( ACTION_TOOLBAR* aToolbar )
         {
             if( !m_TextInfo )
             {
@@ -178,7 +180,8 @@ void GERBVIEW_FRAME::configureToolbars()
     // Creates box to display and choose components:
     // (note, when the m_tbTopAux is recreated, tools are deleted, but controls
     // are not deleted: they are just no longer managed by the toolbar
-    auto componentBoxFactory = [this]( ACTION_TOOLBAR* aToolbar )
+    auto componentBoxFactory =
+        [this]( ACTION_TOOLBAR* aToolbar )
         {
             if( !m_SelComponentBox )
                 m_SelComponentBox = new wxChoice( aToolbar, ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE );
@@ -202,7 +205,8 @@ void GERBVIEW_FRAME::configureToolbars()
 
 
     // Creates choice box to display net names and highlight selected:
-    auto netBoxFactory = [this]( ACTION_TOOLBAR* aToolbar )
+    auto netBoxFactory =
+        [this]( ACTION_TOOLBAR* aToolbar )
         {
             if( !m_SelNetnameBox )
             m_SelNetnameBox = new wxChoice( aToolbar, ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE );
@@ -224,7 +228,8 @@ void GERBVIEW_FRAME::configureToolbars()
 
 
     // Creates choice box to display aperture attributes and highlight selected:
-    auto appertureBoxFactory = [this]( ACTION_TOOLBAR* aToolbar )
+    auto appertureBoxFactory =
+        [this]( ACTION_TOOLBAR* aToolbar )
         {
             if( !m_SelAperAttributesBox )
             {
@@ -250,25 +255,26 @@ void GERBVIEW_FRAME::configureToolbars()
 
 
     // D-code selection
-    auto dcodeSelectorFactory = [this]( ACTION_TOOLBAR* aToolbar )
-    {
-        if( !m_DCodeSelector )
+    auto dcodeSelectorFactory =
+        [this]( ACTION_TOOLBAR* aToolbar )
         {
-            m_DCodeSelector = new DCODE_SELECTION_BOX( aToolbar,
-                                                    ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE,
-                                                    wxDefaultPosition, wxSize( 150, -1 ) );
-        }
+            if( !m_DCodeSelector )
+            {
+                m_DCodeSelector = new DCODE_SELECTION_BOX( aToolbar,
+                                                        ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE,
+                                                        wxDefaultPosition, wxSize( 150, -1 ) );
+            }
 
-        if( !m_dcodeText )
-            m_dcodeText = new wxStaticText( aToolbar, wxID_ANY, _( "DCode:" ) );
+            if( !m_dcodeText )
+                m_dcodeText = new wxStaticText( aToolbar, wxID_ANY, _( "DCode:" ) );
 
-        m_dcodeText->SetLabel( _( "DCode:" ) );
+            m_dcodeText->SetLabel( _( "DCode:" ) );
 
-        updateDCodeSelectBox();
+            updateDCodeSelectBox();
 
-        aToolbar->Add( m_dcodeText );
-        aToolbar->Add( m_DCodeSelector );
-    };
+            aToolbar->Add( m_dcodeText );
+            aToolbar->Add( m_DCodeSelector );
+        };
 
     RegisterCustomToolbarControlFactory( "control.GerberDcodeSelector", _( "DCode Selector" ),
                                          _( "Select all items with the selected DCode" ),

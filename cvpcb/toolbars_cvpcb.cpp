@@ -65,7 +65,8 @@ void CVPCB_MAINFRAME::configureToolbars()
 {
     EDA_BASE_FRAME::configureToolbars();
 
-    auto footprintFilterFactory = [this]( ACTION_TOOLBAR* aToolbar )
+    auto footprintFilterFactory =
+        [this]( ACTION_TOOLBAR* aToolbar )
         {
 
             // wxGTK with GTK3 has a serious issue with bold texts: strings are incorrectly sized
