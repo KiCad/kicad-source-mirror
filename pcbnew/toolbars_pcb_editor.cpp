@@ -346,15 +346,9 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_FRAME::DefaultTopAuxToolbarConfig(
     TOOLBAR_CONFIGURATION config;
 
     // clang-format off
-    config.AppendControl( "control.PCBTrackWidth" );
+    config.AppendControl( "control.PCBTrackWidth" )
+          .AppendAction( PCB_ACTIONS::autoTrackWidth );
 
-    /* TODO (ISM): Turn this into an action
-    m_tbTopAux->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH, wxEmptyString,
-                                 KiBitmapBundle( BITMAPS::auto_track_width ),
-                                 _( "When routing from an existing track use its width instead "
-                                    "of the current width setting" ),
-                                 wxITEM_CHECK );
-*/
     config.AppendSeparator()
           .AppendControl( "control.PCBViaDia" );
 
@@ -735,12 +729,4 @@ void PCB_EDIT_FRAME::OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent )
         if( m_SelViaSizeBox->GetSelection() != sel )
             m_SelViaSizeBox->SetSelection( sel );
     }
-}
-
-
-void PCB_EDIT_FRAME::OnUpdateSelectAutoWidth( wxUpdateUIEvent& aEvent )
-{
-    BOARD_DESIGN_SETTINGS& bds = GetDesignSettings();
-
-    aEvent.Check( bds.m_UseConnectedTrackWidth );
 }

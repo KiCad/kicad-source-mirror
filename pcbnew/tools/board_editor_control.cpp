@@ -1006,6 +1006,24 @@ int BOARD_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
 }
 
 
+int BOARD_EDITOR_CONTROL::AutoTrackWidth( const TOOL_EVENT& aEvent )
+{
+    BOARD_DESIGN_SETTINGS& bds = getModel<BOARD>()->GetDesignSettings();
+
+    if( bds.UseCustomTrackViaSize() )
+    {
+        bds.UseCustomTrackViaSize( false );
+        bds.m_UseConnectedTrackWidth = true;
+    }
+    else
+    {
+        bds.m_UseConnectedTrackWidth = !bds.m_UseConnectedTrackWidth;
+    }
+
+    return 0;
+}
+
+
 int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
 {
     if( m_inPlaceFootprint )
@@ -1718,6 +1736,7 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     Go( &BOARD_EDITOR_CONTROL::TrackWidthDec,          PCB_ACTIONS::trackWidthDec.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ViaSizeInc,             PCB_ACTIONS::viaSizeInc.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ViaSizeDec,             PCB_ACTIONS::viaSizeDec.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::AutoTrackWidth,         PCB_ACTIONS::autoTrackWidth.MakeEvent() );
 
     // Zone actions
     Go( &BOARD_EDITOR_CONTROL::ZoneMerge,              PCB_ACTIONS::zoneMerge.MakeEvent() );

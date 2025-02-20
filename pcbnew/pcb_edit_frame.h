@@ -164,7 +164,6 @@ public:
 
     void OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent );
-    void OnUpdateSelectAutoWidth( wxUpdateUIEvent& aEvent );
 
     void RunEeschema();
 

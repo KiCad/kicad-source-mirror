@@ -399,6 +399,8 @@ public:
     static TOOL_ACTION viaSizeInc;
     static TOOL_ACTION viaSizeDec;
 
+    static TOOL_ACTION autoTrackWidth;
+
     static TOOL_ACTION trackViaSizeChanged;   // notification
 
     static TOOL_ACTION assignNetClass;

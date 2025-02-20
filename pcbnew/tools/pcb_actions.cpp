@@ -1129,6 +1129,15 @@ TOOL_ACTION PCB_ACTIONS::viaSizeDec( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Decrease Via Size" ) )
         .Tooltip( _( "Change via size to previous pre-defined size" ) ) );
 
+TOOL_ACTION PCB_ACTIONS::autoTrackWidth( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.autoTrackWidth" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Automatically select track width" ) )
+        .Tooltip( _( "When routing from an existing track use its width instead "
+                     "of the current width setting" ) )
+        .Icon( BITMAPS::auto_track_width )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE ) );
+
 TOOL_ACTION PCB_ACTIONS::trackViaSizeChanged( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.trackViaSizeChanged" )
         .Scope( AS_GLOBAL )
