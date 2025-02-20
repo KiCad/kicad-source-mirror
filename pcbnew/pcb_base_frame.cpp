@@ -54,7 +54,6 @@
 #include <project_pcb.h>
 #include <wildcards_and_files_ext.h>
 #include <zoom_defines.h>
-#include <pcb_layer_box_selector.h>
 
 #include <math/vector2d.h>
 #include <math/vector2wx.h>
@@ -84,7 +83,6 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
         m_pcb( nullptr ),
         m_originTransforms( *this )
 {
-    m_SelLayerBox = nullptr;
     m_watcherDebounceTimer.Bind( wxEVT_TIMER, &PCB_BASE_FRAME::OnFpChangeDebounceTimer, this );
 }
 
@@ -1269,60 +1267,4 @@ void PCB_BASE_FRAME::OnFpChangeDebounceTimer( wxTimerEvent& aEvent )
             DisplayError( this, ioe.What() );
         }
     }
-}
-
-
-void PCB_BASE_FRAME::configureToolbars()
-{
-    // Load the toolbar configuration and base controls
-    EDA_DRAW_FRAME::configureToolbars();
-
-    // Layer selector
-    auto layerSelectorFactory =
-        [this]( ACTION_TOOLBAR* aToolbar )
-        {
-            if( !m_SelLayerBox )
-            {
-                m_SelLayerBox = new PCB_LAYER_BOX_SELECTOR( aToolbar, wxID_ANY );
-                m_SelLayerBox->SetBoardFrame( this );
-            }
-
-            // In the footprint editor, some layers cannot be select (they are shown in the layer
-            // manager only to set the color and visibility, but not for selection)
-            // Disable them in layer box
-            if( IsType( FRAME_FOOTPRINT_EDITOR ) )
-                m_SelLayerBox->SetNotAllowedLayerSet( LSET::ForbiddenFootprintLayers() );
-
-            m_SelLayerBox->SetToolTip( _( "+/- to switch" ) );
-            m_SelLayerBox->Resync();
-
-            aToolbar->Add( m_SelLayerBox );
-
-            // UI update handler for the control
-            aToolbar->Bind( wxEVT_UPDATE_UI,
-                            [this]( wxUpdateUIEvent& aEvent )
-                                {
-                                    if( m_SelLayerBox->GetCount()
-                                        && ( m_SelLayerBox->GetLayerSelection() != GetActiveLayer() ) )
-                                    {
-                                        m_SelLayerBox->SetLayerSelection( GetActiveLayer() );
-                                    }
-                                },
-                            m_SelLayerBox->GetId() );
-
-            // Event handler to respond to the user interacting with the control
-            aToolbar->Bind( wxEVT_COMBOBOX,
-                            [this]( wxCommandEvent& aEvent )
-                                {
-                                    SetActiveLayer( ToLAYER_ID( m_SelLayerBox->GetLayerSelection() ) );
-
-                                    if( GetDisplayOptions().m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL )
-                                        GetCanvas()->Refresh();
-                                },
-                            m_SelLayerBox->GetId() );
-        };
-
-    RegisterCustomToolbarControlFactory( m_tbPcbLayerSelectorName, _( "Layer selector" ),
-                                         _( "Control to select the layer" ),
-                                         layerSelectorFactory );
 }

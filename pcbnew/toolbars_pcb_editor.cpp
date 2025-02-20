@@ -372,7 +372,7 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_FRAME::DefaultTopAuxToolbarConfig(
 
 void PCB_EDIT_FRAME::configureToolbars()
 {
-    PCB_BASE_FRAME::configureToolbars();
+    PCB_BASE_EDIT_FRAME::configureToolbars();
 
     // Box to display and choose track widths
     auto trackWidthSelectorFactory =
