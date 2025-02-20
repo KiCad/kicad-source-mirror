@@ -96,6 +96,10 @@ public:
     int ToggleVisibility( const TOOL_EVENT& aEvent );
     int ToggleLayersManager( const TOOL_EVENT& aEvent );
 
+    int ReloadBoard( const TOOL_EVENT& aEvent );
+    int ToggleRaytracing( const TOOL_EVENT& aEvent );
+    int ExportImage( const TOOL_EVENT& aEvent );
+
 private:
     /// Set up handlers for various events.
     void setTransitions() override;

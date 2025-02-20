@@ -42,6 +42,13 @@ class EDA_3D_ACTIONS : public ACTIONS
 public:
     static TOOL_ACTION controlActivate;
 
+    static TOOL_ACTION reloadBoard;
+    static TOOL_ACTION toggleRaytacing;
+
+    static TOOL_ACTION copyToClipboard;
+    static TOOL_ACTION exportAsPNG;
+    static TOOL_ACTION exportAsJPEG;
+
     static TOOL_ACTION pivotCenter;
     static TOOL_ACTION rotateXCW;
     static TOOL_ACTION rotateXCCW;

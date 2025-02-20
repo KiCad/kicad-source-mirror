@@ -40,26 +40,13 @@ std::optional<TOOLBAR_CONFIGURATION> EDA_3D_VIEWER_FRAME::DefaultTopMainToolbarC
     TOOLBAR_CONFIGURATION config;
 
     // clang-format off
-    // Set up toolbar
-    /* TODO (ISM): Move to action
-    m_tbTopMain->AddTool( ID_RELOAD3D_BOARD, wxEmptyString,
-        KiBitmapBundle( BITMAPS::import3d ),
-        _( "Reload board" ) );
-    */
+    config.AppendAction( EDA_3D_ACTIONS::reloadBoard );
 
-    config.AppendSeparator();
-    /* TODO (ISM): Move to action
-    m_tbTopMain->AddTool( ID_TOOL_SCREENCOPY_TOCLIBBOARD, wxEmptyString,
-        KiBitmapBundle( BITMAPS::copy ),
-        _( "Copy 3D image to clipboard" ) );
-*/
+    config.AppendSeparator()
+          .AppendAction( EDA_3D_ACTIONS::copyToClipboard );
 
-    config.AppendSeparator();
-    /* TODO (ISM): Move to action
-    m_tbTopMain->AddTool( ID_RENDER_CURRENT_VIEW, wxEmptyString,
-        KiBitmapBundle( BITMAPS::ray_tracing ),
-        _( "Render current view using Raytracing" ), wxITEM_CHECK );
-*/
+    config.AppendSeparator()
+          .AppendAction( EDA_3D_ACTIONS::toggleRaytacing );
 
     config.AppendSeparator()
           .AppendAction( ACTIONS::zoomRedraw )

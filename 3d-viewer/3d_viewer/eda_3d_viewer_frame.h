@@ -57,6 +57,13 @@ enum EDA_3D_VIEWER_STATUSBAR
     ZOOM_LEVEL,
 };
 
+enum class EDA_3D_VIEWER_EXPORT_FORMAT
+{
+    CLIPBOARD,
+    PNG,
+    JPEG
+};
+
 /**
  * Create and handle a window for the 3d viewer connected to a Kiway and a pcbboard
  */
@@ -125,6 +132,12 @@ public:
 
     std::optional<TOOLBAR_CONFIGURATION> DefaultTopMainToolbarConfig() override;
 
+    /**
+     *  Create a Screenshot of the current 3D view.
+     *  Output file format is png or jpeg, or image is copied to the clipboard
+     */
+    void TakeScreenshot( EDA_3D_VIEWER_EXPORT_FORMAT aFormat );
+
 protected:
     void setupUIConditions() override;
 
@@ -140,19 +153,12 @@ private:
 
     void Process_Special_Functions( wxCommandEvent& event );
 
-    void onRenderEngineSelection( wxCommandEvent& event );
     void onDisableRayTracing( wxCommandEvent& aEvent );
 
     void OnActivate( wxActivateEvent& event );
     void OnSetFocus( wxFocusEvent& event );
 
     void doReCreateMenuBar() override;
-
-    /**
-     *  Create a Screenshot of the current 3D view.
-     *  Output file format is png or jpeg, or image is copied to the clipboard
-     */
-    void takeScreenshot( wxCommandEvent& event );
 
     /**
      * @brief RenderEngineChanged - Update toolbar icon and call canvas RenderEngineChanged

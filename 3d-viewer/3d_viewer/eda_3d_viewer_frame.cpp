@@ -80,7 +80,6 @@ BEGIN_EVENT_TABLE( EDA_3D_VIEWER_FRAME, KIWAY_PLAYER )
                     EDA_3D_VIEWER_FRAME::Process_Special_Functions )
 
     EVT_MENU( wxID_CLOSE, EDA_3D_VIEWER_FRAME::Exit3DFrame )
-    EVT_MENU( ID_RENDER_CURRENT_VIEW, EDA_3D_VIEWER_FRAME::onRenderEngineSelection )
     EVT_MENU( ID_DISABLE_RAY_TRACING, EDA_3D_VIEWER_FRAME::onDisableRayTracing )
 
     EVT_CLOSE( EDA_3D_VIEWER_FRAME::OnCloseWindow )
@@ -272,7 +271,7 @@ void EDA_3D_VIEWER_FRAME::setupUIConditions()
                 return m_boardAdapter.m_Cfg->m_AuiPanels.show_layer_manager;
             };
 
-    RegisterUIUpdateHandler( ID_RENDER_CURRENT_VIEW, ACTION_CONDITIONS().Check( raytracing ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::toggleRaytacing, ACTION_CONDITIONS().Check( raytracing ) );
 
     mgr->SetConditions( EDA_3D_ACTIONS::showTHT, ACTION_CONDITIONS().Check( showTH ) );
     mgr->SetConditions( EDA_3D_ACTIONS::showSMD, ACTION_CONDITIONS().Check( showSMD ) );
@@ -467,16 +466,6 @@ void EDA_3D_VIEWER_FRAME::Process_Special_Functions( wxCommandEvent &event )
 
     switch( id )
     {
-    case ID_RELOAD3D_BOARD:
-        NewDisplay( true );
-        break;
-
-    case ID_TOOL_SCREENCOPY_TOCLIBBOARD:
-    case ID_MENU_SCREENCOPY_PNG:
-    case ID_MENU_SCREENCOPY_JPEG:
-        takeScreenshot( event );
-        return;
-
     case ID_MENU3D_RESET_DEFAULTS:
     {
         SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
@@ -496,24 +485,6 @@ void EDA_3D_VIEWER_FRAME::Process_Special_Functions( wxCommandEvent &event )
         wxFAIL_MSG( wxT( "Invalid event in EDA_3D_VIEWER_FRAME::Process_Special_Functions()" ) );
         return;
     }
-}
-
-
-void EDA_3D_VIEWER_FRAME::onRenderEngineSelection( wxCommandEvent &event )
-{
-    RENDER_ENGINE& engine = m_boardAdapter.m_Cfg->m_Render.engine;
-    RENDER_ENGINE  old_engine = engine;
-
-    if( old_engine == RENDER_ENGINE::OPENGL )
-        engine = RENDER_ENGINE::RAYTRACING;
-    else
-        engine = RENDER_ENGINE::OPENGL;
-
-    wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::OnRenderEngineSelection type %s " ),
-                engine == RENDER_ENGINE::RAYTRACING ? wxT( "raytracing" ) : wxT( "realtime" ) );
-
-    if( old_engine != engine )
-        RenderEngineChanged();
 }
 
 
@@ -701,15 +672,15 @@ void EDA_3D_VIEWER_FRAME::OnDarkModeToggle()
 }
 
 
-void EDA_3D_VIEWER_FRAME::takeScreenshot( wxCommandEvent& event )
+void EDA_3D_VIEWER_FRAME::TakeScreenshot( EDA_3D_VIEWER_EXPORT_FORMAT aFormat )
 {
     wxString   fullFileName;
     bool       fmt_is_jpeg = false;
 
-    if( event.GetId() == ID_MENU_SCREENCOPY_JPEG )
+    if( aFormat == EDA_3D_VIEWER_EXPORT_FORMAT::JPEG )
         fmt_is_jpeg = true;
 
-    if( event.GetId() != ID_TOOL_SCREENCOPY_TOCLIBBOARD )
+    if( aFormat != EDA_3D_VIEWER_EXPORT_FORMAT::CLIPBOARD )
     {
         // Remember path between saves during this session only.
         const wxString wildcard =
@@ -773,7 +744,7 @@ void EDA_3D_VIEWER_FRAME::takeScreenshot( wxCommandEvent& event )
 
     cfg.highlight_on_rollover = allow_highlight;
 
-    if( event.GetId() == ID_TOOL_SCREENCOPY_TOCLIBBOARD )
+    if( aFormat == EDA_3D_VIEWER_EXPORT_FORMAT::CLIPBOARD )
     {
         wxBitmap bitmap( screenshotImage );
 

@@ -334,10 +334,64 @@ int EDA_3D_CONTROLLER::ZoomFitScreen( const TOOL_EVENT& aEvent )
 }
 
 
+int EDA_3D_CONTROLLER::ReloadBoard( const TOOL_EVENT& aEvent )
+{
+    EDA_BASE_FRAME* frame = dynamic_cast<EDA_BASE_FRAME*>( m_toolMgr->GetToolHolder() );
+
+    if( frame && frame->GetFrameType() == FRAME_PCB_DISPLAY3D )
+        static_cast<EDA_3D_VIEWER_FRAME*>( frame )->NewDisplay( true );
+
+    return 0;
+}
+
+
+int EDA_3D_CONTROLLER::ToggleRaytracing( const TOOL_EVENT& aEvent )
+{
+    EDA_BASE_FRAME* frame = dynamic_cast<EDA_BASE_FRAME*>( m_toolMgr->GetToolHolder() );
+
+    if( frame && frame->GetFrameType() == FRAME_PCB_DISPLAY3D )
+    {
+        EDA_3D_VIEWER_FRAME* frame3d = static_cast<EDA_3D_VIEWER_FRAME*>( frame );
+
+        RENDER_ENGINE& engine = frame3d->GetAdapter().m_Cfg->m_Render.engine;
+        RENDER_ENGINE  old_engine = engine;
+
+        if( old_engine == RENDER_ENGINE::OPENGL )
+            engine = RENDER_ENGINE::RAYTRACING;
+        else
+            engine = RENDER_ENGINE::OPENGL;
+
+        // Directly tell the canvas the rendering engine changed
+        if( old_engine != engine )
+            frame3d->GetCanvas()->RenderEngineChanged();
+    }
+
+    return 0;
+}
+
+
+int EDA_3D_CONTROLLER::ExportImage( const TOOL_EVENT& aEvent )
+{
+    EDA_BASE_FRAME* frame = dynamic_cast<EDA_BASE_FRAME*>( m_toolMgr->GetToolHolder() );
+
+    if( frame && frame->GetFrameType() == FRAME_PCB_DISPLAY3D )
+        static_cast<EDA_3D_VIEWER_FRAME*>( frame )->TakeScreenshot( aEvent.Parameter<EDA_3D_VIEWER_EXPORT_FORMAT>() );
+
+    return 0;
+}
+
+
 void EDA_3D_CONTROLLER::setTransitions()
 {
     Go( &EDA_3D_CONTROLLER::Main,               EDA_3D_ACTIONS::controlActivate.MakeEvent() );
     Go( &EDA_3D_CONTROLLER::UpdateMenu,         ACTIONS::updateMenu.MakeEvent() );
+
+    // Miscellaneous control
+    Go( &EDA_3D_CONTROLLER::ReloadBoard,        EDA_3D_ACTIONS::reloadBoard.MakeEvent() );
+    Go( &EDA_3D_CONTROLLER::ToggleRaytracing,   EDA_3D_ACTIONS::toggleRaytacing.MakeEvent() );
+    Go( &EDA_3D_CONTROLLER::ExportImage,        EDA_3D_ACTIONS::copyToClipboard.MakeEvent() );
+    Go( &EDA_3D_CONTROLLER::ExportImage,        EDA_3D_ACTIONS::exportAsPNG.MakeEvent() );
+    Go( &EDA_3D_CONTROLLER::ExportImage,        EDA_3D_ACTIONS::exportAsJPEG.MakeEvent() );
 
     // Pan control
     Go( &EDA_3D_CONTROLLER::PanControl,         ACTIONS::panUp.MakeEvent() );
