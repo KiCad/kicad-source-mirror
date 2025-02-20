@@ -79,7 +79,8 @@ void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
     wxASSERT( aAction->GetName().find( '.', 0 ) != std::string::npos );
 
     // TOOL_ACTIONs must have unique names & ids
-    wxASSERT( m_actionNameIndex.find( aAction->m_name ) == m_actionNameIndex.end() );
+    wxASSERT_MSG( m_actionNameIndex.find( aAction->m_name ) == m_actionNameIndex.end(),
+                  wxString::Format( "Action '%s' already registered", aAction->m_name ) );
 
     m_actionNameIndex[aAction->m_name] = aAction;
 
