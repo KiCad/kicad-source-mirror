@@ -6,8 +6,10 @@ install( DIRECTORY
     interf_u
     kit-dev-coldfire-xilinx_5213
     microwave
+    multichannel
     pic_programmer
     python_scripts_examples
+    royalblue54L_feather
     simulation
     "sonde xilinx"
     stickhub
