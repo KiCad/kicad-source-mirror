@@ -210,6 +210,7 @@ void EDA_TEXT::Serialize( google::protobuf::Any &aContainer ) const
     attrs->set_italic( IsItalic() );
     attrs->set_bold( IsBold() );
     attrs->set_underlined( GetAttributes().m_Underlined );
+    attrs->set_visible( true );
     attrs->set_mirrored( IsMirrored() );
     attrs->set_multiline( IsMultilineAllowed() );
     attrs->set_keep_upright( IsKeepUpright() );

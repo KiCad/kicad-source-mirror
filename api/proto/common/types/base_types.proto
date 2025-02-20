@@ -291,8 +291,10 @@ message TextAttributes
   bool                        italic               = 7;
   bool                        bold                 = 8;
   bool                        underlined           = 9;
-  // Visible now exposed only at the field level
-  // bool                        visible              = 10;
+
+  // Deprecated since 9.0.1 (text items are now always visible, only Fields can be hidden)
+  bool                        visible              = 10;
+
   bool                        mirrored             = 11;
   bool                        multiline            = 12;
   bool                        keep_upright         = 13;

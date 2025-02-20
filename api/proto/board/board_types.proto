@@ -768,6 +768,8 @@ message Field
   FieldId id = 1;
   string name = 2;
   BoardText text = 3;
+
+  // Since 9.0.1
   bool visible = 4;
 }
 
