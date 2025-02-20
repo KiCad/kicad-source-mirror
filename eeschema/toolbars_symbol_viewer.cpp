@@ -33,64 +33,68 @@
 #include <widgets/wx_menubar.h>
 
 
-void SYMBOL_VIEWER_FRAME::ReCreateHToolbar()
+std::optional<TOOLBAR_CONFIGURATION> SYMBOL_VIEWER_FRAME::DefaultTopMainToolbarConfig()
 {
-    if( m_mainToolBar )
-    {
-        m_mainToolBar->ClearToolbar();
-    }
-    else
-    {
-        m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT |
-                                            wxAUI_TB_HORIZONTAL );
-        m_mainToolBar->SetAuiManager( &m_auimgr );
-    }
+    TOOLBAR_CONFIGURATION config;
 
-    m_mainToolBar->AddTool( ID_LIBVIEW_PREVIOUS, wxEmptyString,
-                            KiScaledBitmap( BITMAPS::lib_previous, this ),
-                            _( "Display previous symbol" ) );
+    // clang-format off
+    /* TODO: Move these to actions
+    m_tbTopMain->AddTool( ID_LIBVIEW_PREVIOUS, wxEmptyString,
+        KiScaledBitmap( BITMAPS::lib_previous, this ),
+        _( "Display previous symbol" ) );
 
-    m_mainToolBar->AddTool( ID_LIBVIEW_NEXT, wxEmptyString,
-                            KiScaledBitmap( BITMAPS::lib_next, this ),
-                            _( "Display next symbol" ) );
+    m_tbTopMain->AddTool( ID_LIBVIEW_NEXT, wxEmptyString,
+            KiScaledBitmap( BITMAPS::lib_next, this ),
+            _( "Display next symbol" ) );
+    */
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( ACTIONS::zoomRedraw );
-    m_mainToolBar->Add( ACTIONS::zoomInCenter );
-    m_mainToolBar->Add( ACTIONS::zoomOutCenter );
-    m_mainToolBar->Add( ACTIONS::zoomFitScreen );
+    config.AppendSeparator()
+          .AppendAction( ACTIONS::zoomRedraw )
+          .AppendAction( ACTIONS::zoomInCenter )
+          .AppendAction( ACTIONS::zoomOutCenter )
+          .AppendAction( ACTIONS::zoomFitScreen );
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EE_ACTIONS::showElectricalTypes );
-    m_mainToolBar->Add( EE_ACTIONS::showPinNumbers );
+    config.AppendSeparator()
+          .AppendAction( EE_ACTIONS::showElectricalTypes )
+          .AppendAction( EE_ACTIONS::showPinNumbers );
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EE_ACTIONS::showDeMorganStandard );
-    m_mainToolBar->Add( EE_ACTIONS::showDeMorganAlternate );
+    config.AppendSeparator()
+          .AppendAction( EE_ACTIONS::showDeMorganStandard )
+          .AppendAction( EE_ACTIONS::showDeMorganAlternate );
 
-    m_mainToolBar->AddScaledSeparator( this );
+    config.AppendSeparator()
+          .AppendControl( "control.SymViewUnitSelector" );
 
-    if( m_unitChoice == nullptr )
-        m_unitChoice = new wxChoice( m_mainToolBar, ID_LIBVIEW_SELECT_UNIT_NUMBER,
-                                     wxDefaultPosition, wxSize( 150, -1 ) );
-    m_mainToolBar->AddControl( m_unitChoice );
+    config.AppendSeparator()
+          .AppendAction( ACTIONS::showDatasheet );
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( ACTIONS::showDatasheet );
+    config.AppendSeparator()
+          .AppendAction( EE_ACTIONS::addSymbolToSchematic );
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EE_ACTIONS::addSymbolToSchematic );
-
-    // after adding the buttons to the toolbar, must call Realize() to reflect the changes
-    m_mainToolBar->KiRealize();
-
-    m_mainToolBar->Refresh();
+    // clang-format on
+    return config;
 }
 
 
-void SYMBOL_VIEWER_FRAME::ReCreateVToolbar()
+void SYMBOL_VIEWER_FRAME::configureToolbars()
 {
+    SCH_BASE_FRAME::configureToolbars();
+
+    // Toolbar widget for selecting the unit to show in the symbol viewer
+    auto unitChoiceFactory = [this]( ACTION_TOOLBAR* aToolbar )
+        {
+            if( !m_unitChoice )
+            {
+                m_unitChoice = new wxChoice( m_tbTopMain, ID_LIBVIEW_SELECT_UNIT_NUMBER,
+                    wxDefaultPosition, wxSize( 150, -1 ) );
+            }
+
+            aToolbar->Add( m_unitChoice );
+        };
+
+    RegisterCustomToolbarControlFactory("control.SymViewUnitSelector", _( "Symbol unit selector" ),
+                                        _( "Displays the unit being currently edited" ),
+                                         unitChoiceFactory );
 }
 
 

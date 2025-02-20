@@ -198,9 +198,11 @@ public:
     bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;
     void doCloseWindow() override;
     void OnExitKiCad( wxCommandEvent& event );
-    void ReCreateHToolbar() override;
-    void ReCreateVToolbar() override;
-    void ReCreateOptToolbar() override;
+
+    // Currently no top auxillary toolbar
+    std::optional<TOOLBAR_CONFIGURATION> DefaultLeftToolbarConfig() override;
+    std::optional<TOOLBAR_CONFIGURATION> DefaultRightToolbarConfig() override;
+    std::optional<TOOLBAR_CONFIGURATION> DefaultTopMainToolbarConfig() override;
 
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
@@ -406,6 +408,7 @@ public:
     void emptyScreen();
 
 protected:
+    void configureToolbars() override;
     void setupUIConditions() override;
 
     void doReCreateMenuBar() override;

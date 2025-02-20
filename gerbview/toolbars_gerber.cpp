@@ -36,256 +36,243 @@
 #include "widgets/dcode_selection_box.h"
 
 
-void GERBVIEW_FRAME::ReCreateHToolbar()
+std::optional<TOOLBAR_CONFIGURATION> GERBVIEW_FRAME::DefaultLeftToolbarConfig()
 {
-    // Note:
-    // To rebuild the aui toolbar, the more easy way is to clear ( calling m_mainToolBar.Clear() )
-    // all wxAuiToolBarItems.
-    // However the wxAuiToolBarItems are not the owners of controls managed by
-    // them ( m_TextInfo and m_SelLayerBox ), and therefore do not delete them
-    // So we do not recreate them after clearing the tools.
+    TOOLBAR_CONFIGURATION config;
 
-    if( m_mainToolBar )
-    {
-        m_mainToolBar->ClearToolbar();
-    }
-    else
-    {
-        m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT |
-                                            wxAUI_TB_HORIZONTAL );
-        m_mainToolBar->SetAuiManager( &m_auimgr );
-    }
+    // clang-format off
+    config.AppendAction( ACTIONS::selectionTool )
+          .AppendAction( ACTIONS::measureTool );
 
-    // Set up toolbar
-    m_mainToolBar->Add( GERBVIEW_ACTIONS::clearAllLayers );
-    m_mainToolBar->Add( GERBVIEW_ACTIONS::reloadAllLayers );
-    m_mainToolBar->Add( GERBVIEW_ACTIONS::openAutodetected );
-    m_mainToolBar->Add( GERBVIEW_ACTIONS::openGerber );
-    m_mainToolBar->Add( GERBVIEW_ACTIONS::openDrillFile );
+    config.AppendSeparator()
+          .AppendAction( ACTIONS::toggleGrid )
+          .AppendAction( ACTIONS::togglePolarCoords )
+          .AppendAction( ACTIONS::inchesUnits )
+          .AppendAction( ACTIONS::milsUnits )
+          .AppendAction( ACTIONS::millimetersUnits )
+          .AppendAction( ACTIONS::toggleCursorStyle );
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( ACTIONS::print );
+    config.AppendSeparator()
+          .AppendAction( GERBVIEW_ACTIONS::flashedDisplayOutlines )
+          .AppendAction( GERBVIEW_ACTIONS::linesDisplayOutlines )
+          .AppendAction( GERBVIEW_ACTIONS::polygonsDisplayOutlines )
+          .AppendAction( GERBVIEW_ACTIONS::negativeObjectDisplay )
+          .AppendAction( GERBVIEW_ACTIONS::dcodeDisplay );
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( ACTIONS::zoomRedraw );
-    m_mainToolBar->Add( ACTIONS::zoomInCenter );
-    m_mainToolBar->Add( ACTIONS::zoomOutCenter );
-    m_mainToolBar->Add( ACTIONS::zoomFitScreen );
-    m_mainToolBar->Add( ACTIONS::zoomTool );
+    config.AppendSeparator()
+          .AppendAction( GERBVIEW_ACTIONS::toggleForceOpacityMode )
+          .AppendAction( GERBVIEW_ACTIONS::toggleXORMode )
+          .AppendAction( ACTIONS::highContrastMode )
+          .AppendAction( GERBVIEW_ACTIONS::flipGerberView );
 
+    config.AppendSeparator()
+          .AppendAction( GERBVIEW_ACTIONS::toggleLayerManager );
 
-    m_mainToolBar->AddScaledSeparator( this );
-
-    if( !m_SelLayerBox )
-    {
-        m_SelLayerBox = new GBR_LAYER_BOX_SELECTOR( m_mainToolBar,
-                                                    ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER,
-                                                    wxDefaultPosition, wxDefaultSize, 0, nullptr );
-    }
-
-    m_SelLayerBox->Resync();
-    m_mainToolBar->AddControl( m_SelLayerBox );
-
-    if( !m_TextInfo )
-    {
-        m_TextInfo = new wxTextCtrl( m_mainToolBar, ID_TOOLBARH_GERBER_DATA_TEXT_BOX, wxEmptyString,
-                                     wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-    }
-
-    m_mainToolBar->AddControl( m_TextInfo );
-
-    m_mainToolBar->UpdateControlWidth( ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER );
-    m_mainToolBar->UpdateControlWidth( ID_TOOLBARH_GERBER_DATA_TEXT_BOX );
-
-    // after adding the buttons to the toolbar, must call Realize() to reflect the changes
-    m_mainToolBar->KiRealize();
+    // clang-format on
+    return config;
 }
 
 
-void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
+std::optional<TOOLBAR_CONFIGURATION> GERBVIEW_FRAME::DefaultTopMainToolbarConfig()
 {
-    wxWindowUpdateLocker dummy( this );
+    TOOLBAR_CONFIGURATION config;
 
-    if( m_auxiliaryToolBar )
-    {
-        m_auxiliaryToolBar->ClearToolbar();
-    }
-    else
-    {
-        m_auxiliaryToolBar = new ACTION_TOOLBAR( this, ID_AUX_TOOLBAR, wxDefaultPosition,
-                                                 wxDefaultSize,
-                                                 KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
-        m_auxiliaryToolBar->SetAuiManager( &m_auimgr );
-    }
+    // clang-format off
+    config.AppendAction( GERBVIEW_ACTIONS::clearAllLayers )
+          .AppendAction( GERBVIEW_ACTIONS::reloadAllLayers )
+          .AppendAction( GERBVIEW_ACTIONS::openAutodetected )
+          .AppendAction( GERBVIEW_ACTIONS::openGerber )
+          .AppendAction( GERBVIEW_ACTIONS::openDrillFile );
+
+    config.AppendSeparator()
+          .AppendAction( ACTIONS::print );
+
+    config.AppendSeparator()
+          .AppendAction( ACTIONS::zoomRedraw )
+          .AppendAction( ACTIONS::zoomInCenter )
+          .AppendAction( ACTIONS::zoomOutCenter )
+          .AppendAction( ACTIONS::zoomFitScreen )
+          .AppendAction( ACTIONS::zoomTool );
+
+    config.AppendSeparator()
+          .AppendControl( "control.GerberLayerBox" )
+          .AppendControl( "control.GerberTextInfo" );
+
+    // clang-format on
+    return config;
+}
+
+
+std::optional<TOOLBAR_CONFIGURATION> GERBVIEW_FRAME::DefaultTopAuxToolbarConfig()
+{
+    TOOLBAR_CONFIGURATION config;
+
+    // clang-format off
+    config.AppendControl( "control.GerberComponentHighlight" )
+          .AppendSpacer( 5 )
+          .AppendControl( "control.GerberNetHighlight" )
+          .AppendSpacer( 5 )
+          .AppendControl( "control.GerberAppertureHighlight" )
+          .AppendSpacer( 5 )
+          .AppendControl( "control.GerberDcodeSelector" )
+          .AppendSeparator()
+          .AppendControl( m_tbGridSelectName )
+          .AppendSeparator()
+          .AppendControl( m_tbZoomSelectName );
+
+    // clang-format on
+    return config;
+}
+
+
+void GERBVIEW_FRAME::configureToolbars()
+{
+    // Base class loads the default settings
+    EDA_DRAW_FRAME::configureToolbars();
+
+    // Register factories for the various toolbar controls
+    auto layerBoxFactory = [this]( ACTION_TOOLBAR* aToolbar )
+        {
+            if( !m_SelLayerBox )
+            {
+                m_SelLayerBox = new GBR_LAYER_BOX_SELECTOR( aToolbar,
+                                                            ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER,
+                                                            wxDefaultPosition, wxDefaultSize, 0, nullptr );
+            }
+
+            m_SelLayerBox->Resync();
+            aToolbar->Add( m_SelLayerBox );
+
+            // UI update handler for the control
+            aToolbar->Bind( wxEVT_UPDATE_UI,
+                            [this]( wxUpdateUIEvent& aEvent )
+                                {
+                                    if( m_SelLayerBox->GetCount() )
+                                    {
+                                        if( m_SelLayerBox->GetSelection() != GetActiveLayer() )
+                                            m_SelLayerBox->SetSelection( GetActiveLayer() );
+                                    }
+                                },
+                            m_SelLayerBox->GetId() );
+        };
+
+    RegisterCustomToolbarControlFactory("control.GerberLayerBox", _( "Layer selector widget" ),
+                            _( "Layer selection" ), layerBoxFactory );
+
+
+    auto textInfoFactory = [this]( ACTION_TOOLBAR* aToolbar )
+        {
+            if( !m_TextInfo )
+            {
+                m_TextInfo = new wxTextCtrl( aToolbar, ID_TOOLBARH_GERBER_DATA_TEXT_BOX, wxEmptyString,
+                                            wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+            }
+
+            aToolbar->Add( m_TextInfo );
+        };
+
+    RegisterCustomToolbarControlFactory("control.GerberTextInfo", _( "Text info entry" ),
+                                            _( "Text info entry" ), textInfoFactory );
+
 
     // Creates box to display and choose components:
-    // (note, when the m_auxiliaryToolBar is recreated, tools are deleted, but controls
+    // (note, when the m_tbTopAux is recreated, tools are deleted, but controls
     // are not deleted: they are just no longer managed by the toolbar
-    if( !m_SelComponentBox )
-        m_SelComponentBox = new wxChoice( m_auxiliaryToolBar, ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE );
+    auto componentBoxFactory = [this]( ACTION_TOOLBAR* aToolbar )
+        {
+            if( !m_SelComponentBox )
+                m_SelComponentBox = new wxChoice( aToolbar, ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE );
 
-    if( !m_cmpText )
-        m_cmpText = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "Cmp:" ) + wxS( " " ) );
+            if( !m_cmpText )
+                m_cmpText = new wxStaticText( aToolbar, wxID_ANY, _( "Cmp:" ) + wxS( " " ) );
 
-    m_SelComponentBox->SetToolTip( _("Highlight items belonging to this component") );
-    m_cmpText->SetLabel( _( "Cmp:" ) + wxS( " " ) );     // can change when changing the language
-    m_auxiliaryToolBar->AddControl( m_cmpText );
-    m_auxiliaryToolBar->AddControl( m_SelComponentBox );
-    m_auxiliaryToolBar->AddSpacer( 5 );
+            m_SelComponentBox->SetToolTip( _("Highlight items belonging to this component") );
+            m_cmpText->SetLabel( _( "Cmp:" ) + wxS( " " ) );     // can change when changing the language
+
+            updateComponentListSelectBox();
+
+            aToolbar->Add( m_cmpText );
+            aToolbar->Add( m_SelComponentBox );
+        };
+
+    RegisterCustomToolbarControlFactory( "control.GerberComponentHighlight",
+                                         _( "Component highlight" ),
+                                         _( "Highlight items belonging to this component" ),
+                                         componentBoxFactory );
+
 
     // Creates choice box to display net names and highlight selected:
-    if( !m_SelNetnameBox )
-        m_SelNetnameBox = new wxChoice( m_auxiliaryToolBar, ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE );
+    auto netBoxFactory = [this]( ACTION_TOOLBAR* aToolbar )
+        {
+            if( !m_SelNetnameBox )
+            m_SelNetnameBox = new wxChoice( aToolbar, ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE );
 
-    if( !m_netText )
-        m_netText = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "Net:" ) );
+            if( !m_netText )
+                m_netText = new wxStaticText( aToolbar, wxID_ANY, _( "Net:" ) );
 
-    m_SelNetnameBox->SetToolTip( _("Highlight items belonging to this net") );
-    m_netText->SetLabel( _( "Net:" ) );     // can change when changing the language
-    m_auxiliaryToolBar->AddControl( m_netText );
-    m_auxiliaryToolBar->AddControl( m_SelNetnameBox );
-    m_auxiliaryToolBar->AddSpacer( 5 );
+            m_SelNetnameBox->SetToolTip( _("Highlight items belonging to this net") );
+            m_netText->SetLabel( _( "Net:" ) );     // can change when changing the language
+
+            updateNetnameListSelectBox();
+
+            aToolbar->Add( m_netText );
+            aToolbar->Add( m_SelNetnameBox );
+        };
+
+    RegisterCustomToolbarControlFactory( "control.GerberNetHighlight", _( "Net highlight" ),
+                                         _( "Highlight items belonging to this net" ), netBoxFactory );
+
 
     // Creates choice box to display aperture attributes and highlight selected:
-    if( !m_SelAperAttributesBox )
+    auto appertureBoxFactory = [this]( ACTION_TOOLBAR* aToolbar )
+        {
+            if( !m_SelAperAttributesBox )
+            {
+                m_SelAperAttributesBox = new wxChoice( aToolbar,
+                                                       ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE );
+            }
+
+            if( !m_apertText )
+                m_apertText = new wxStaticText( aToolbar, wxID_ANY, _( "Attr:" ) );
+
+            m_SelAperAttributesBox->SetToolTip( _( "Highlight items with this aperture attribute" ) );
+            m_apertText->SetLabel( _( "Attr:" ) ); // can change when changing the language
+
+            updateAperAttributesSelectBox();
+
+            aToolbar->Add( m_apertText );
+            aToolbar->Add( m_SelAperAttributesBox );
+        };
+
+    RegisterCustomToolbarControlFactory( "control.GerberAppertureHighlight", _( "Aperture highlight" ),
+                                         _( "Highlight items with this aperture attribute" ),
+                                         appertureBoxFactory );
+
+
+    // D-code selection
+    auto dcodeSelectorFactory = [this]( ACTION_TOOLBAR* aToolbar )
     {
-        m_SelAperAttributesBox = new wxChoice( m_auxiliaryToolBar,
-                                               ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE );
-    }
+        if( !m_DCodeSelector )
+        {
+            m_DCodeSelector = new DCODE_SELECTION_BOX( aToolbar,
+                                                    ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE,
+                                                    wxDefaultPosition, wxSize( 150, -1 ) );
+        }
 
-    if( !m_apertText )
-        m_apertText = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "Attr:" ) );
+        if( !m_dcodeText )
+            m_dcodeText = new wxStaticText( aToolbar, wxID_ANY, _( "DCode:" ) );
 
-    m_SelAperAttributesBox->SetToolTip( _( "Highlight items with this aperture attribute" ) );
-    m_apertText->SetLabel( _( "Attr:" ) ); // can change when changing the language
-    m_auxiliaryToolBar->AddControl( m_apertText );
-    m_auxiliaryToolBar->AddControl( m_SelAperAttributesBox );
-    m_auxiliaryToolBar->AddSpacer( 5 );
+        m_dcodeText->SetLabel( _( "DCode:" ) );
 
-    if( !m_DCodeSelector )
-    {
-        m_DCodeSelector = new DCODE_SELECTION_BOX( m_auxiliaryToolBar,
-                                                   ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE,
-                                                   wxDefaultPosition, wxSize( 150, -1 ) );
-    }
+        updateDCodeSelectBox();
 
-    if( !m_dcodeText )
-        m_dcodeText = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "DCode:" ) );
+        aToolbar->Add( m_dcodeText );
+        aToolbar->Add( m_DCodeSelector );
+    };
 
-    m_dcodeText->SetLabel( _( "DCode:" ) );
-    m_auxiliaryToolBar->AddControl( m_dcodeText );
-    m_auxiliaryToolBar->AddControl( m_DCodeSelector );
-
-    if( !m_gridSelectBox )
-    {
-        m_gridSelectBox = new wxChoice( m_auxiliaryToolBar, ID_ON_GRID_SELECT, wxDefaultPosition,
-                                        wxDefaultSize, 0, nullptr );
-    }
-
-    m_auxiliaryToolBar->AddScaledSeparator( this );
-    m_auxiliaryToolBar->AddControl( m_gridSelectBox );
-
-    if( !m_zoomSelectBox )
-    {
-        m_zoomSelectBox = new wxChoice( m_auxiliaryToolBar, ID_ON_ZOOM_SELECT, wxDefaultPosition,
-                                        wxDefaultSize, 0, nullptr );
-    }
-
-    m_auxiliaryToolBar->AddScaledSeparator( this );
-    m_auxiliaryToolBar->AddControl( m_zoomSelectBox );
-
-    updateComponentListSelectBox();
-    updateNetnameListSelectBox();
-    updateAperAttributesSelectBox();
-    updateDCodeSelectBox();
-    UpdateGridSelectBox();
-    UpdateZoomSelectBox();
-
-    // Go through and ensure the comboboxes are the correct size, since the strings in the
-    // box could have changed widths.
-    m_auxiliaryToolBar->UpdateControlWidth( ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE );
-    m_auxiliaryToolBar->UpdateControlWidth( ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE );
-    m_auxiliaryToolBar->UpdateControlWidth( ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE );
-    m_auxiliaryToolBar->UpdateControlWidth( ID_ON_GRID_SELECT );
-    m_auxiliaryToolBar->UpdateControlWidth( ID_ON_ZOOM_SELECT );
-
-    // after adding the buttons to the toolbar, must call Realize()
-    m_auxiliaryToolBar->KiRealize();
-}
-
-
-void GERBVIEW_FRAME::ReCreateVToolbar()
-{
-    // This toolbar isn't used currently
-}
-
-
-void GERBVIEW_FRAME::ReCreateOptToolbar()
-{
-    if( m_optionsToolBar )
-    {
-        m_optionsToolBar->ClearToolbar();
-    }
-    else
-    {
-        m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR, wxDefaultPosition,
-                                               wxDefaultSize,
-                                               KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
-        m_optionsToolBar->SetAuiManager( &m_auimgr );
-    }
-
-    // TODO: these can be moved to the 'proper' vertical toolbar if and when there are
-    // actual tools to put there. That, or I'll get around to implementing configurable
-    // toolbars.
-    m_optionsToolBar->Add( ACTIONS::selectionTool );
-    m_optionsToolBar->Add( ACTIONS::measureTool );
-
-    m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( ACTIONS::toggleGrid );
-    m_optionsToolBar->Add( ACTIONS::togglePolarCoords );
-    m_optionsToolBar->Add( ACTIONS::inchesUnits );
-    m_optionsToolBar->Add( ACTIONS::milsUnits );
-    m_optionsToolBar->Add( ACTIONS::millimetersUnits );
-    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle );
-
-    m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( GERBVIEW_ACTIONS::flashedDisplayOutlines );
-    m_optionsToolBar->Add( GERBVIEW_ACTIONS::linesDisplayOutlines );
-    m_optionsToolBar->Add( GERBVIEW_ACTIONS::polygonsDisplayOutlines );
-    m_optionsToolBar->Add( GERBVIEW_ACTIONS::negativeObjectDisplay );
-    m_optionsToolBar->Add( GERBVIEW_ACTIONS::dcodeDisplay );
-    m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( GERBVIEW_ACTIONS::toggleForceOpacityMode );
-    m_optionsToolBar->Add( GERBVIEW_ACTIONS::toggleXORMode );
-    m_optionsToolBar->Add( ACTIONS::highContrastMode );
-    m_optionsToolBar->Add( GERBVIEW_ACTIONS::flipGerberView );
-
-    m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( GERBVIEW_ACTIONS::toggleLayerManager );
-
-    m_optionsToolBar->KiRealize();
-}
-
-
-void GERBVIEW_FRAME::UpdateToolbarControlSizes()
-{
-    if( m_mainToolBar )
-    {
-        // Update the item widths
-        m_mainToolBar->UpdateControlWidth( ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER );
-        m_mainToolBar->UpdateControlWidth( ID_TOOLBARH_GERBER_DATA_TEXT_BOX );
-    }
-
-    if( m_auxiliaryToolBar )
-    {
-        // Update the item widths
-        m_auxiliaryToolBar->UpdateControlWidth( ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE );
-        m_auxiliaryToolBar->UpdateControlWidth( ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE );
-        m_auxiliaryToolBar->UpdateControlWidth( ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE );
-        m_auxiliaryToolBar->UpdateControlWidth( ID_ON_GRID_SELECT );
-        m_auxiliaryToolBar->UpdateControlWidth( ID_ON_ZOOM_SELECT );
-    }
+    RegisterCustomToolbarControlFactory( "control.GerberDcodeSelector", _( "DCode Selector" ),
+                                         _( "Select all items with the selected DCode" ),
+                                         dcodeSelectorFactory );
 }
 
 
@@ -491,14 +478,3 @@ void GERBVIEW_FRAME::OnUpdateSelectDCode( wxUpdateUIEvent& aEvent )
             gerber->m_Selected_Tool = m_DCodeSelector->GetSelectedDCodeId();
     }
 }
-
-
-void GERBVIEW_FRAME::OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent )
-{
-    if( m_SelLayerBox->GetCount() )
-    {
-        if( m_SelLayerBox->GetSelection() != GetActiveLayer() )
-            m_SelLayerBox->SetSelection( GetActiveLayer() );
-    }
-}
-

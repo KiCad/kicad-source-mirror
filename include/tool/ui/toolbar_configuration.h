@@ -25,7 +25,6 @@
 #ifndef TOOLBAR_CONFIGURATION_H_
 #define TOOLBAR_CONFIGURATION_H_
 
-#include <optional>
 #include <string>
 #include <vector>
 
@@ -35,7 +34,9 @@
 
 class KICOMMON_API TOOLBAR_GROUP_CONFIG
 {
-    TOOLBAR_GROUP_CONFIG( const std::string& aName ) :
+public:
+
+    TOOLBAR_GROUP_CONFIG( std::string aName ) :
         m_groupName( aName )
     {
         wxASSERT_MSG( aName.starts_with( "group" ), "Toolbar group names must start with \"group\"" );
@@ -43,17 +44,19 @@ class KICOMMON_API TOOLBAR_GROUP_CONFIG
 
     const std::string& GetName() const
     {
-        retrun m_groupName;
+        return m_groupName;
     }
 
-    void AddAction( std::string aActionName )
+    TOOLBAR_GROUP_CONFIG& AddAction( std::string aActionName )
     {
-        m_groupItems.append( aActionName );
+        m_groupItems.push_back( aActionName );
+        return *this;
     }
 
-    void AddAction( const TOOL_ACTION& aAction )
+    TOOLBAR_GROUP_CONFIG& AddAction( const TOOL_ACTION& aAction )
     {
-        m_groupItems.append( aAction.GetName() );
+        m_groupItems.push_back( aAction.GetName() );
+        return *this;
     }
 
     std::vector<std::string> GetGroupItems() const
@@ -68,30 +71,46 @@ private:
 
 class KICOMMON_API TOOLBAR_CONFIGURATION
 {
+public:
+
     TOOLBAR_CONFIGURATION() {}
     virtual ~TOOLBAR_CONFIGURATION() {}
 
-    void AppendAction( std::string aActionName )
+    TOOLBAR_CONFIGURATION& AppendAction( std::string aActionName )
     {
-        m_toolbarItems.append( aActionName );
+        m_toolbarItems.push_back( aActionName );
+        return *this;
     }
 
-    void AppendAction( const TOOL_ACTION& aAction )
+    TOOLBAR_CONFIGURATION& AppendAction( const TOOL_ACTION& aAction )
     {
-        m_toolbarItems.append( aAction.GetName() );
+        m_toolbarItems.push_back( aAction.GetName() );
+        return *this;
     }
 
-    void AppendSeparator()
+    TOOLBAR_CONFIGURATION& AppendSeparator()
     {
-        m_toolbarItems.append( "separator" );
+        m_toolbarItems.push_back( "separator" );
+        return *this;
     }
 
-    void AppendGroup( const TOOLBAR_GROUP_CONFIG& aGroup )
+    TOOLBAR_CONFIGURATION& AppendSpacer( int aSize )
     {
-        std::string& name = aGroup.GetName();
+        m_toolbarItems.push_back( "spacer:" + std::to_string( aSize )  );
+        return *this;
+    }
 
-        m_toolbarGroups[name] = aGroup;
-        m_toolbarItems.append( name );
+    TOOLBAR_CONFIGURATION& AppendGroup( const TOOLBAR_GROUP_CONFIG& aGroup )
+    {
+        m_toolbarGroups.push_back( aGroup );
+        m_toolbarItems.push_back( aGroup.GetName() );
+        return *this;
+    }
+
+    TOOLBAR_CONFIGURATION& AppendControl( std::string aControlName )
+    {
+        m_toolbarItems.push_back( aControlName );
+        return *this;
     }
 
     std::vector<std::string> GetToolbarItems() const
@@ -99,15 +118,15 @@ class KICOMMON_API TOOLBAR_CONFIGURATION
         return m_toolbarItems;
     }
 
-    std::optional<TOOLBAR_GROUP_CONFIG&> GetGroup( const std::string& aGroupName )
+    const TOOLBAR_GROUP_CONFIG* GetGroup( const std::string& aGroupName ) const
     {
-        for( auto& group : m_toolbarGroups )
+        for( const TOOLBAR_GROUP_CONFIG& group : m_toolbarGroups )
         {
             if( group.GetName() == aGroupName )
-                return group;
+                return &group;
         }
 
-        return std::nullopt;
+        return nullptr;
     }
 
     void Clear()

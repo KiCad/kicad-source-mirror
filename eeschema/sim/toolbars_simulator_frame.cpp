@@ -27,55 +27,41 @@
 #include <widgets/wx_menubar.h>
 
 
-void SIMULATOR_FRAME::ReCreateHToolbar()
+std::optional<TOOLBAR_CONFIGURATION> SIMULATOR_FRAME::DefaultTopMainToolbarConfig()
 {
-    if( m_toolBar )
-    {
-        m_toolBar->ClearToolbar();
-        m_toolBar->SetToolManager( GetToolManager() );
-    }
-    else
-    {
-        EDA_BASE_FRAME* parent = dynamic_cast<EDA_BASE_FRAME*>( this );
+    TOOLBAR_CONFIGURATION config;
 
-        wxCHECK( parent, /* void */ );
+    // clang-format off
+    config.AppendAction( EE_ACTIONS::openWorkbook )
+          .AppendAction( EE_ACTIONS::saveWorkbook );
 
-        m_toolBar = new ACTION_TOOLBAR( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                        KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
-    }
+    config.AppendSeparator()
+          .AppendAction( EE_ACTIONS::newAnalysisTab )
+          .AppendAction( EE_ACTIONS::simAnalysisProperties );
 
-    m_toolBar->Add( EE_ACTIONS::openWorkbook );
-    m_toolBar->Add( EE_ACTIONS::saveWorkbook );
+    config.AppendSeparator()
+          .AppendAction( EE_ACTIONS::runSimulation )
+          .AppendAction( EE_ACTIONS::stopSimulation );
 
-    m_toolBar->AddScaledSeparator( this );
-    m_toolBar->Add( EE_ACTIONS::newAnalysisTab );
-    m_toolBar->Add( EE_ACTIONS::simAnalysisProperties );
+    config.AppendSeparator()
+          .AppendAction( ACTIONS::zoomInCenter )
+          .AppendAction( ACTIONS::zoomOutCenter )
+          .AppendAction( ACTIONS::zoomInHorizontally )
+          .AppendAction( ACTIONS::zoomOutHorizontally )
+          .AppendAction( ACTIONS::zoomInVertically )
+          .AppendAction( ACTIONS::zoomOutVertically )
+          .AppendAction( ACTIONS::zoomFitScreen );
 
-    m_toolBar->AddScaledSeparator( this );
-    m_toolBar->Add( EE_ACTIONS::runSimulation );
-    m_toolBar->Add( EE_ACTIONS::stopSimulation );
+    config.AppendSeparator()
+          .AppendAction( EE_ACTIONS::simProbe )
+          .AppendAction( EE_ACTIONS::simTune );
 
-    m_toolBar->AddScaledSeparator( this );
-    m_toolBar->Add( ACTIONS::zoomInCenter );
-    m_toolBar->Add( ACTIONS::zoomOutCenter );
-    m_toolBar->Add( ACTIONS::zoomInHorizontally );
-    m_toolBar->Add( ACTIONS::zoomOutHorizontally );
-    m_toolBar->Add( ACTIONS::zoomInVertically );
-    m_toolBar->Add( ACTIONS::zoomOutVertically );
-    m_toolBar->Add( ACTIONS::zoomFitScreen );
+    config.AppendSeparator()
+          .AppendAction( EE_ACTIONS::editUserDefinedSignals )
+          .AppendAction( EE_ACTIONS::showNetlist );
 
-    m_toolBar->AddScaledSeparator( this );
-    m_toolBar->Add( EE_ACTIONS::simProbe );
-    m_toolBar->Add( EE_ACTIONS::simTune );
-
-    m_toolBar->AddScaledSeparator( this );
-    m_toolBar->Add( EE_ACTIONS::editUserDefinedSignals );
-    m_toolBar->Add( EE_ACTIONS::showNetlist );
-
-    // after adding the buttons to the toolbar, must call Realize() to reflect the changes
-    m_toolBar->KiRealize();
-
-    m_toolBar->Refresh();
+    // clang-format on
+    return config;
 }
 
 

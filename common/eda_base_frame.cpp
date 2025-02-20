@@ -70,6 +70,7 @@
 #include <wx/stdpaths.h>
 #include <wx/string.h>
 #include <wx/msgdlg.h>
+#include <wx/wupdlock.h>
 #include <kiplatform/app.h>
 #include <kiplatform/io.h>
 #include <kiplatform/ui.h>
@@ -176,6 +177,11 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType, const wxS
         KIWAY_HOLDER( aKiway, KIWAY_HOLDER::FRAME ),
         UNITS_PROVIDER( aIuScale, EDA_UNITS::MILLIMETRES )
 {
+    m_tbTopMain      = nullptr;
+    m_tbTopAux = nullptr;
+    m_tbRight      = nullptr;
+    m_tbLeft   = nullptr;
+
     commonInit( aFrameType );
 }
 
@@ -483,6 +489,132 @@ void EDA_BASE_FRAME::setupUIConditions()
 
         RegisterUIUpdateHandler( LanguagesList[ii].m_KI_Lang_Identifier, cond );
     }
+}
+
+
+void EDA_BASE_FRAME::RegisterCustomToolbarControlFactory( const std::string& aName, const wxString& aUiName,
+                                                          const wxString& aDescription,
+                                                          const ACTION_TOOLBAR_CONTROL_FACTORY& aControlFactory )
+{
+    wxASSERT_MSG( aName.starts_with( "control" ),
+                  wxString::Format( "Control name \"%s\" must start with \"control\"", aName ) );
+
+    m_toolbarControlFactories.emplace_back( aName, aUiName, aDescription, aControlFactory );
+}
+
+
+ACTION_TOOLBAR_CONTROL_FACTORY* EDA_BASE_FRAME::GetCustomToolbarControlFactory( const std::string& aName )
+{
+    for( auto& control : m_toolbarControlFactories )
+    {
+        if( control.name == aName )
+            return &control.factory;
+    }
+
+    return nullptr;
+}
+
+
+void EDA_BASE_FRAME::configureToolbars()
+{
+    // Get the default toolbar config for the frame
+    m_tbConfigLeft    = DefaultLeftToolbarConfig();
+    m_tbConfigRight   = DefaultRightToolbarConfig();
+    m_tbConfigTopAux  = DefaultTopAuxToolbarConfig();
+    m_tbConfigTopMain = DefaultTopMainToolbarConfig();
+}
+
+
+void EDA_BASE_FRAME::RecreateToolbars()
+{
+    wxWindowUpdateLocker dummy( this );
+
+    // Drawing tools (typically on right edge of window)
+    if( m_tbConfigRight.has_value() )
+    {
+        if( !m_tbRight )
+        {
+            m_tbRight = new ACTION_TOOLBAR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                                KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
+            m_tbRight->SetAuiManager( &m_auimgr );
+        }
+
+        m_tbRight->ApplyConfiguration( m_tbConfigRight.value() );
+    }
+
+    // Options (typically on left edge of window)
+    if( m_tbConfigLeft.has_value() )
+    {
+        if( !m_tbLeft )
+        {
+            m_tbLeft = new ACTION_TOOLBAR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                                   KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
+            m_tbLeft->SetAuiManager( &m_auimgr );
+        }
+
+        m_tbLeft->ApplyConfiguration( m_tbConfigLeft.value() );
+    }
+
+    // Top main toolbar (the top one)
+    if( m_tbConfigTopMain.has_value() )
+    {
+        if( !m_tbTopMain )
+        {
+            m_tbTopMain = new ACTION_TOOLBAR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                                KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_HORIZONTAL );
+            m_tbTopMain->SetAuiManager( &m_auimgr );
+        }
+
+        m_tbTopMain->ApplyConfiguration( m_tbConfigTopMain.value() );
+    }
+
+    // Top aux toolbar (the bottom one)
+    if( m_tbConfigTopAux.has_value() )
+    {
+        if( !m_tbTopAux )
+        {
+            m_tbTopAux = new ACTION_TOOLBAR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                                     KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_HORIZONTAL );
+            m_tbTopAux->SetAuiManager( &m_auimgr );
+        }
+
+        m_tbTopAux->ApplyConfiguration( m_tbConfigTopAux.value() );
+    }
+}
+
+
+void EDA_BASE_FRAME::UpdateToolbarControlSizes()
+{
+    if( m_tbTopMain )
+        m_tbTopMain->UpdateControlWidths();
+
+    if( m_tbRight )
+        m_tbRight->UpdateControlWidths();
+
+    if( m_tbLeft )
+        m_tbLeft->UpdateControlWidths();
+
+    if( m_tbTopAux )
+        m_tbTopAux->UpdateControlWidths();
+
+}
+
+
+void EDA_BASE_FRAME::OnToolbarSizeChanged()
+{
+    if( m_tbTopMain )
+        m_auimgr.GetPane( m_tbTopMain ).MaxSize( m_tbTopMain->GetSize() );
+
+    if( m_tbRight )
+        m_auimgr.GetPane( m_tbRight ).MaxSize( m_tbRight->GetSize() );
+
+    if( m_tbLeft )
+        m_auimgr.GetPane( m_tbLeft ).MaxSize( m_tbLeft->GetSize() );
+
+    if( m_tbTopAux )
+        m_auimgr.GetPane( m_tbTopAux ).MaxSize( m_tbTopAux->GetSize() );
+
+    m_auimgr.Update();
 }
 
 

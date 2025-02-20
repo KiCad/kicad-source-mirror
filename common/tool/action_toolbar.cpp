@@ -33,6 +33,7 @@
 #include <memory>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
+#include <trace_helpers.h>
 #include <tool/action_toolbar.h>
 #include <tool/actions.h>
 #include <tool/tool_action.h>
@@ -42,26 +43,45 @@
 #include <tool/ui/toolbar_configuration.h>
 #include <widgets/bitmap_button.h>
 #include <widgets/wx_aui_art_providers.h>
+
+#include <wx/log.h>
 #include <wx/popupwin.h>
 #include <wx/renderer.h>
 #include <wx/sizer.h>
 #include <wx/dcclient.h>
 #include <wx/settings.h>
 
+// Needed to handle adding the plugins to the toolbar
+// TODO (ISM): This should be better abstracted away from the toolbars
+#include <python_scripting.h>
+#include <api/api_plugin_manager.h>
 
-ACTION_GROUP::ACTION_GROUP( const std::string& aName,
+
+ACTION_GROUP::ACTION_GROUP( const std::string_view& aName )
+{
+    m_name = aName;
+    m_id   = ACTION_MANAGER::MakeActionId( m_name );
+}
+
+
+ACTION_GROUP::ACTION_GROUP( const std::string_view& aName,
                             const std::vector<const TOOL_ACTION*>& aActions )
+{
+    m_name = aName;
+    m_id   = ACTION_MANAGER::MakeActionId( m_name );
+
+    SetActions( aActions );
+}
+
+
+void ACTION_GROUP::SetActions( const std::vector<const TOOL_ACTION*>& aActions )
 {
     wxASSERT_MSG( aActions.size() > 0, wxS( "Action groups must have at least one action" ) );
 
     // The default action is just the first action in the vector
     m_actions       = aActions;
     m_defaultAction = m_actions[0];
-
-    m_name = aName;
-    m_id   = ACTION_MANAGER::MakeActionId( m_name );
 }
-
 
 int ACTION_GROUP::GetUIId() const
 {
@@ -240,64 +260,89 @@ ACTION_TOOLBAR::~ACTION_TOOLBAR()
 
 void ACTION_TOOLBAR::ApplyConfiguration( const TOOLBAR_CONFIGURATION& aConfig )
 {
+    wxASSERT( GetParent() );
+
     // Remove existing tools
-    Clear();
+    ClearToolbar();
 
     std::vector<std::string> items = aConfig.GetToolbarItems();
 
-    for( auto& toolName : items )
+    // Add all the items to the toolbar
+    for( auto& actionName : items )
     {
-        if( toolName == "separator" )
+        if( actionName == "separator" )
         {
             // Add a separator
-            AddScaledSeparator();
+            AddScaledSeparator( GetParent() );
         }
-        else if( toolName.starts_with( "group" ) )
+        else if( actionName.starts_with( "group" ) )
         {
             // Add a group of items to the toolbar
-            std::optional<TOOLBAR_GROUP_CONFIG&> groupConfigOpt = aConfig.GetGroup( toolName );
+            const TOOLBAR_GROUP_CONFIG* groupConfig = aConfig.GetGroup( actionName );
 
-            if( !groupConfigOpt.has_value() )
+            if( !groupConfig )
             {
-                wxASSERT_MSG( false, wxString::Format( "Unable to find group %s", toolName ) );
+                wxASSERT_MSG( false, wxString::Format( "Unable to find group %s", actionName ) );
                 continue;
             }
 
-            TOOLBAR_GROUP_CONFIG& groupConfig = groupConfigOpt.value();
-
             std::vector<const TOOL_ACTION*> tools;
 
-            for( auto& groupItem : groupConfig.GetGroupItems() )
+            for( auto& groupItem : groupConfig->GetGroupItems() )
             {
-                TOOL_ACTION* action = m_toolManager->GetActionManager()->FindTool( toolName );
+                TOOL_ACTION* action = m_toolManager->GetActionManager()->FindAction( groupItem );
 
-                if( !tool )
+                if( !action )
                 {
-                    wxASSERT_MSG( false, wxString::Format( "Unable to find group tool %s", toolName ) );
+                    wxASSERT_MSG( false, wxString::Format( "Unable to find group tool %s", actionName ) );
                     continue;
                 }
 
                 tools.push_back( action );
             }
 
-            ACTION_GROUP* group = new ACTION_GROUP( groupConfig.GetName(), tools );
-
-            AddGroup( group );
+            AddGroup( std::make_unique<ACTION_GROUP>( groupConfig->GetName(), tools ) );
         }
-        else
+        else if( actionName.starts_with( "control" ) )
         {
-            // Assume anything else is a tool
-            TOOL_ACTION* action = m_toolManager->GetActionManager()->FindTool( toolName );
+            // Add a custom control to the toolbar
+            EDA_BASE_FRAME* frame = static_cast<EDA_BASE_FRAME*>( GetParent() );
+            ACTION_TOOLBAR_CONTROL_FACTORY* factory = frame->GetCustomToolbarControlFactory( actionName );
 
-            if( !tool )
+            if( !factory )
             {
-                wxASSERT_MSG( false, wxString::Format( "Unable to find toolbar tool %s", toolName ) );
+                wxASSERT_MSG( false, wxString::Format( "Unable to find control factory for %s", actionName ) );
                 continue;
             }
 
-            Add( action );
+            // The factory functions are responsible for adding the controls to the toolbar themselves
+            (*factory)( this );
+        }
+        else if( actionName.starts_with( "spacer" ) )
+        {
+            // Extract the spacer size from the text, it is the form "spacer:x", with "x" being the size
+            int sep = actionName.find_last_of( ":" );
+            int spacerSize = std::stoi( actionName.substr( sep+1 ) );
+
+            AddSpacer( spacerSize );
+        }
+        else
+        {
+            // Assume anything else is an action
+            TOOL_ACTION* action = m_toolManager->GetActionManager()->FindAction( actionName );
+
+            if( !action )
+            {
+                wxASSERT_MSG( false, wxString::Format( "Unable to find toolbar tool %s", actionName ) );
+                continue;
+            }
+
+            Add( *action );
         }
     }
+
+    // Apply the configuration
+    KiRealize();
 }
 
 
@@ -363,6 +408,14 @@ void ACTION_TOOLBAR::AddScaledSeparator( wxWindow* aWindow )
 }
 
 
+void ACTION_TOOLBAR::Add( wxControl* aControl, const wxString& aLabel )
+{
+    wxASSERT( aControl );
+    m_controlIDs.push_back( aControl->GetId() );
+    AddControl( aControl, aLabel );
+}
+
+
 void ACTION_TOOLBAR::AddToolContextMenu( const TOOL_ACTION& aAction,
                                          std::unique_ptr<ACTION_MENU> aMenu )
 {
@@ -372,7 +425,7 @@ void ACTION_TOOLBAR::AddToolContextMenu( const TOOL_ACTION& aAction,
 }
 
 
-void ACTION_TOOLBAR::AddGroup( ACTION_GROUP* aGroup, bool aIsToggleEntry )
+void ACTION_TOOLBAR::AddGroup( std::unique_ptr<ACTION_GROUP> aGroup )
 {
     int                groupId       = aGroup->GetUIId();
     const TOOL_ACTION* defaultAction = aGroup->GetDefaultAction();
@@ -380,20 +433,27 @@ void ACTION_TOOLBAR::AddGroup( ACTION_GROUP* aGroup, bool aIsToggleEntry )
     wxASSERT( GetParent() );
     wxASSERT( defaultAction );
 
-    m_toolKinds[ groupId ]    = aIsToggleEntry;
+    // Turn this into a toggle entry if any one of the actions is a toggle entry
+    bool isToggleEntry = false;
+
+    for( const auto& act : aGroup->GetActions() )
+        isToggleEntry |= act->CheckToolbarState( TOOLBAR_STATE::TOGGLE );
+
+
+    m_toolKinds[ groupId ]    = isToggleEntry;
     m_toolActions[ groupId ]  = defaultAction;
-    m_actionGroups[ groupId ] = aGroup;
+    m_actionGroups[ groupId ] = std::move( aGroup );
 
     // Add the main toolbar item representing the group
     AddTool( groupId, wxEmptyString,
              KiBitmapBundle( defaultAction->GetIcon(),
                              Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size ),
              KiDisabledBitmapBundle( defaultAction->GetIcon() ),
-             aIsToggleEntry ? wxITEM_CHECK : wxITEM_NORMAL,
+             isToggleEntry ? wxITEM_CHECK : wxITEM_NORMAL,
              wxEmptyString, wxEmptyString, nullptr );
 
     // Select the default action
-    doSelectAction( aGroup, *defaultAction );
+    doSelectAction( m_actionGroups[ groupId ].get(), *defaultAction );
 }
 
 
@@ -431,19 +491,33 @@ void ACTION_TOOLBAR::doSelectAction( ACTION_GROUP* aGroup, const TOOL_ACTION& aA
     // Register a new handler with the new UI conditions
     if( m_toolManager )
     {
+        m_toolManager->GetToolHolder()->UnregisterUIUpdateHandler( groupId );
+
         const ACTION_CONDITIONS* cond = m_toolManager->GetActionManager()->GetCondition( aAction );
 
-        wxASSERT_MSG( cond, wxString::Format( "Missing UI condition for action %s",
-                                              aAction.GetName() ) );
-
-        m_toolManager->GetToolHolder()->UnregisterUIUpdateHandler( groupId );
-        m_toolManager->GetToolHolder()->RegisterUIUpdateHandler( groupId, *cond );
+        // Register the new UI condition to control this entry
+        if( cond )
+        {
+            m_toolManager->GetToolHolder()->RegisterUIUpdateHandler( groupId, *cond );
+        }
+        else
+        {
+            wxLogTrace( kicadTraceToolStack, wxString::Format( "No UI condition for action %s",
+                                                               aAction.GetName() ) );
+        }
     }
 
     // Update the currently selected action
     m_toolActions[ groupId ] = &aAction;
 
     Refresh();
+}
+
+
+void ACTION_TOOLBAR::UpdateControlWidths()
+{
+    for( int id : m_controlIDs )
+        UpdateControlWidth( id );
 }
 
 
@@ -729,7 +803,7 @@ void ACTION_TOOLBAR::popupPalette( wxAuiToolBarItem* aItem )
     if( it == m_actionGroups.end() )
         return;
 
-    ACTION_GROUP* group = it->second;
+    ACTION_GROUP* group = it->second.get();
 
     wxAuiPaneInfo& pane = m_auiManager->GetPane( this );
 

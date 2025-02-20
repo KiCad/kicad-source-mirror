@@ -28,71 +28,79 @@
 #include <wx/stattext.h>
 
 
-void CVPCB_MAINFRAME::ReCreateHToolbar()
+std::optional<TOOLBAR_CONFIGURATION> CVPCB_MAINFRAME::DefaultTopMainToolbarConfig()
 {
-    if( m_mainToolBar )
-    {
-        m_mainToolBar->ClearToolbar();
-    }
-    else
-    {
-        m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
-        m_mainToolBar->SetAuiManager( &m_auimgr );
-    }
+    TOOLBAR_CONFIGURATION config;
 
-    m_mainToolBar->Add( CVPCB_ACTIONS::saveAssociationsToSchematic );
+    // clang-format off
+    config.AppendAction( CVPCB_ACTIONS::saveAssociationsToSchematic );
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( ACTIONS::showFootprintLibTable );
+    config.AppendSeparator()
+          .AppendAction( ACTIONS::showFootprintLibTable );
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( CVPCB_ACTIONS::showFootprintViewer );
+    config.AppendSeparator()
+          .AppendAction( CVPCB_ACTIONS::showFootprintViewer );
 
+    config.AppendSeparator()
+          .AppendAction( CVPCB_ACTIONS::gotoPreviousNA )
+          .AppendAction( CVPCB_ACTIONS::gotoNextNA );
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( CVPCB_ACTIONS::gotoPreviousNA );
-    m_mainToolBar->Add( CVPCB_ACTIONS::gotoNextNA );
-
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( ACTIONS::undo );
-    m_mainToolBar->Add( ACTIONS::redo );
-    m_mainToolBar->Add( CVPCB_ACTIONS::autoAssociate );
-    m_mainToolBar->Add( CVPCB_ACTIONS::deleteAll );
+    config.AppendSeparator()
+          .AppendAction( ACTIONS::undo )
+          .AppendAction( ACTIONS::redo )
+          .AppendAction( CVPCB_ACTIONS::autoAssociate )
+          .AppendAction( CVPCB_ACTIONS::deleteAll );
 
     // Add tools for footprint names filtering:
-    m_mainToolBar->AddScaledSeparator( this );
+    config.AppendSeparator()
+          .AppendSpacer( 15 )
+          .AppendControl( "control.CVPCBFilters" );
 
-    // wxGTK with GTK3 has a serious issue with bold texts: strings are incorrectly sized
-    // and truncated after the first space.
-    // so use SetLabelMarkup is a trick to fix this issue.
-    m_mainToolBar->AddSpacer( 15 );
-    wxString msg_bold = _( "Footprint Filters:" );
-    wxStaticText* text = new wxStaticText( m_mainToolBar, wxID_ANY, msg_bold );
-	text->SetFont( m_mainToolBar->GetFont().Bold() );
+    // clang-format on
+    return config;
+}
 
-#ifdef __WXGTK3__
-    text->SetLabelMarkup( "<b>" + msg_bold + "</b>" );
-#endif
 
-    m_mainToolBar->AddControl( text );
+void CVPCB_MAINFRAME::configureToolbars()
+{
+    EDA_BASE_FRAME::configureToolbars();
 
-    m_mainToolBar->Add( CVPCB_ACTIONS::FilterFPbyFPFilters, ACTION_TOOLBAR::TOGGLE );
-    m_mainToolBar->Add( CVPCB_ACTIONS::filterFPbyPin,       ACTION_TOOLBAR::TOGGLE );
-    m_mainToolBar->Add( CVPCB_ACTIONS::FilterFPbyLibrary,   ACTION_TOOLBAR::TOGGLE );
+    auto footprintFilterFactory = [this]( ACTION_TOOLBAR* aToolbar )
+        {
 
-    m_mainToolBar->AddScaledSeparator( this );
+            // wxGTK with GTK3 has a serious issue with bold texts: strings are incorrectly sized
+            // and truncated after the first space.
+            // so use SetLabelMarkup is a trick to fix this issue.
+            wxString msg_bold = _( "Footprint Filters:" );
+            wxStaticText* text = new wxStaticText( m_tbTopMain, wxID_ANY, msg_bold );
+            text->SetFont( m_tbTopMain->GetFont().Bold() );
 
-    m_tcFilterString = new wxTextCtrl( m_mainToolBar, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                       wxDefaultSize, wxTE_PROCESS_ENTER );
+            #ifdef __WXGTK3__
+            text->SetLabelMarkup( "<b>" + msg_bold + "</b>" );
+            #endif
 
-    // Min size on Mac is (a not very useful) single character
-    m_tcFilterString->SetMinSize( wxSize( 150, -1 ) );
+            aToolbar->AddControl( text );
 
-    m_tcFilterString->Bind( wxEVT_TEXT_ENTER, &CVPCB_MAINFRAME::onTextFilterChanged, this );
+            aToolbar->Add( CVPCB_ACTIONS::FilterFPbyFPFilters );
+            aToolbar->Add( CVPCB_ACTIONS::filterFPbyPin );
+            aToolbar->Add( CVPCB_ACTIONS::FilterFPbyLibrary );
 
-    m_mainToolBar->AddControl( m_tcFilterString );
+            aToolbar->AddScaledSeparator( this );
 
-    // after adding the buttons to the toolbar, must call Realize() to reflect the changes
-    m_mainToolBar->Realize();
+            if( !m_tcFilterString )
+            {
+                m_tcFilterString = new wxTextCtrl( aToolbar, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                                   wxDefaultSize, wxTE_PROCESS_ENTER );
+            }
+
+            // Min size on Mac is (a not very useful) single character
+            m_tcFilterString->SetMinSize( wxSize( 150, -1 ) );
+            m_tcFilterString->Bind( wxEVT_TEXT_ENTER, &CVPCB_MAINFRAME::onTextFilterChanged, this );
+
+            aToolbar->AddControl( m_tcFilterString );
+        };
+
+    RegisterCustomToolbarControlFactory( "control.CVPCBFilters", _( "Footprint filters" ),
+                                         _( "Footprint filtering controls" ),
+                                         footprintFilterFactory );
 }

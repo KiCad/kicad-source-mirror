@@ -35,127 +35,82 @@
 #include <wx/choice.h>
 
 
-void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
+std::optional<TOOLBAR_CONFIGURATION> FOOTPRINT_VIEWER_FRAME::DefaultTopMainToolbarConfig()
 {
-    // Note:
-    // To rebuild the aui toolbar, the more easy way is to clear ( calling m_mainToolBar.Clear() )
-    // all wxAuiToolBarItems.
-    // However the wxAuiToolBarItems are not the owners of controls managed by
-    // them ( m_zoomSelectBox and m_gridSelectBox ), and therefore do not delete them
-    // So we do not recreate them after clearing the tools.
+    TOOLBAR_CONFIGURATION config;
 
-    if( m_mainToolBar )
-    {
-        m_mainToolBar->ClearToolbar();
-    }
-    else
-    {
-        m_mainToolBar = new ACTION_TOOLBAR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT |
-                                            wxAUI_TB_HORIZONTAL );
-        m_mainToolBar->SetAuiManager( &m_auimgr );
-    }
+    // clang-format off
+    /* TODO (ISM): Convert to actions
+    m_tbTopMain->AddTool( ID_MODVIEW_PREVIOUS, wxEmptyString,
+            KiScaledBitmap( BITMAPS::lib_previous, this ),
+            _( "Display previous footprint" ) );
+    m_tbTopMain->AddTool( ID_MODVIEW_NEXT, wxEmptyString,
+            KiScaledBitmap( BITMAPS::lib_next, this ),
+            _( "Display next footprint" ) );
+*/
 
-    // Set up toolbar
-    m_mainToolBar->AddTool( ID_MODVIEW_PREVIOUS, wxEmptyString,
-                            KiScaledBitmap( BITMAPS::lib_previous, this ),
-                            _( "Display previous footprint" ) );
-    m_mainToolBar->AddTool( ID_MODVIEW_NEXT, wxEmptyString,
-                            KiScaledBitmap( BITMAPS::lib_next, this ),
-                            _( "Display next footprint" ) );
+    config.AppendSeparator()
+          .AppendAction( ACTIONS::zoomRedraw )
+          .AppendAction( ACTIONS::zoomInCenter )
+          .AppendAction( ACTIONS::zoomOutCenter )
+          .AppendAction( ACTIONS::zoomFitScreen )
+          .AppendAction( ACTIONS::zoomTool );
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( ACTIONS::zoomRedraw );
-    m_mainToolBar->Add( ACTIONS::zoomInCenter );
-    m_mainToolBar->Add( ACTIONS::zoomOutCenter );
-    m_mainToolBar->Add( ACTIONS::zoomFitScreen );
-    m_mainToolBar->Add( ACTIONS::zoomTool );
+    config.AppendSeparator()
+          .AppendAction( ACTIONS::show3DViewer );
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( ACTIONS::show3DViewer );
-    m_mainToolBar->AddTool( ID_ADD_FOOTPRINT_TO_BOARD, wxEmptyString,
-                            KiScaledBitmap( BITMAPS::insert_module_board, this ),
-                            _( "Insert footprint in board" ) );
+    /* TODO (ISM): Convert to action
+    m_tbTopMain->AddTool( ID_ADD_FOOTPRINT_TO_BOARD, wxEmptyString,
+            KiScaledBitmap( BITMAPS::insert_module_board, this ),
+            _( "Insert footprint in board" ) );
+*/
 
-    m_mainToolBar->AddScaledSeparator( this );
+    config.AppendSeparator()
+          .AppendControl( m_tbGridSelectName );
 
-    // Grid selection choice box.
-    if( m_gridSelectBox == nullptr )
-    {
-        m_gridSelectBox = new wxChoice( m_mainToolBar, ID_ON_GRID_SELECT, wxDefaultPosition,
-                                        wxDefaultSize, 0, nullptr );
-    }
-
-    UpdateGridSelectBox();
-    m_mainToolBar->AddControl( m_gridSelectBox );
-
-    m_mainToolBar->AddScaledSeparator( this );
-
-    // Zoom selection choice box.
-    if( m_zoomSelectBox == nullptr )
-    {
-        m_zoomSelectBox = new wxChoice( m_mainToolBar, ID_ON_ZOOM_SELECT, wxDefaultPosition,
-                                        wxDefaultSize, 0, nullptr );
-    }
-
-    UpdateZoomSelectBox();
-    m_mainToolBar->AddControl( m_zoomSelectBox );
+    config.AppendSeparator()
+          .AppendControl( m_tbZoomSelectName );
 
     // Option to run Zoom automatique on footprint selection change
-    m_mainToolBar->AddTool( ID_FPVIEWER_AUTOZOOM_TOOL, wxEmptyString,
-                            KiScaledBitmap( BITMAPS::zoom_auto_fit_in_page, this ),
-                            _( "Automatic Zoom on footprint change" ),
-                            wxITEM_CHECK );
+    /* TODO (ISM): Convert to action
+    m_tbTopMain->AddTool( ID_FPVIEWER_AUTOZOOM_TOOL, wxEmptyString,
+            KiScaledBitmap( BITMAPS::zoom_auto_fit_in_page, this ),
+            _( "Automatic Zoom on footprint change" ),
+            wxITEM_CHECK );
+*/
 
-    m_mainToolBar->AddScaledSeparator( this );
-
-    // after adding the buttons to the toolbar, must call Realize() to
-    // reflect the changes
-    m_mainToolBar->KiRealize();
+    // clang-format on
+    return config;
 }
 
 
-void FOOTPRINT_VIEWER_FRAME::ReCreateOptToolbar()
+std::optional<TOOLBAR_CONFIGURATION> FOOTPRINT_VIEWER_FRAME::DefaultLeftToolbarConfig()
 {
-    if( m_optionsToolBar )
-    {
-        m_optionsToolBar->ClearToolbar();
-    }
-    else
-    {
-        m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR, wxDefaultPosition,
-                                               wxDefaultSize,
-                                               KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
-        m_optionsToolBar->SetAuiManager( &m_auimgr );
-    }
+    TOOLBAR_CONFIGURATION config;
 
-    m_optionsToolBar->Add( ACTIONS::selectionTool );
-    m_optionsToolBar->Add( ACTIONS::measureTool );
+    // clang-format off
+    config.AppendAction( ACTIONS::selectionTool )
+          .AppendAction( ACTIONS::measureTool );
 
-    m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( ACTIONS::toggleGrid );
-    m_optionsToolBar->Add( ACTIONS::togglePolarCoords );
-    m_optionsToolBar->Add( ACTIONS::inchesUnits );
-    m_optionsToolBar->Add( ACTIONS::milsUnits );
-    m_optionsToolBar->Add( ACTIONS::millimetersUnits );
-    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle );
+    config.AppendSeparator()
+          .AppendAction( ACTIONS::toggleGrid )
+          .AppendAction( ACTIONS::togglePolarCoords )
+          .AppendAction( ACTIONS::inchesUnits )
+          .AppendAction( ACTIONS::milsUnits )
+          .AppendAction( ACTIONS::millimetersUnits )
+          .AppendAction( ACTIONS::toggleCursorStyle );
 
-    m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( PCB_ACTIONS::showPadNumbers );
-    m_optionsToolBar->Add( PCB_ACTIONS::padDisplayMode );
-    m_optionsToolBar->Add( PCB_ACTIONS::textOutlines );
-    m_optionsToolBar->Add( PCB_ACTIONS::graphicsOutlines );
+    config.AppendSeparator()
+          .AppendAction( PCB_ACTIONS::showPadNumbers )
+          .AppendAction( PCB_ACTIONS::padDisplayMode )
+          .AppendAction( PCB_ACTIONS::textOutlines )
+          .AppendAction( PCB_ACTIONS::graphicsOutlines );
 
     if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
-        m_optionsToolBar->Add( ACTIONS::toggleBoundingBoxes );
+        config.AppendAction( ACTIONS::toggleBoundingBoxes );
 
-    m_optionsToolBar->KiRealize();
-}
-
-
-void FOOTPRINT_VIEWER_FRAME::ReCreateVToolbar()
-{
-    // This toolbar is not currently used
+    // clang-format on
+    return config;
 }
 
 

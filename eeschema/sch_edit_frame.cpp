@@ -189,9 +189,9 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     setupTools();
     setupUIConditions();
     ReCreateMenuBar();
-    ReCreateHToolbar();
-    ReCreateVToolbar();
-    ReCreateOptToolbar();
+
+    configureToolbars();
+    RecreateToolbars();
 
 #ifdef KICAD_IPC_API
     wxTheApp->Bind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED,
@@ -224,7 +224,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     EESCHEMA_SETTINGS::APPEARANCE appearance_cfg = eeconfig()->m_Appearance;
 
     // Rows; layers 4 - 6
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( wxS( "MainToolbar" ) )
+    m_auimgr.AddPane( m_tbTopMain, EDA_PANE().HToolbar().Name( wxS( "TopMainToolbar" ) )
                       .Top().Layer( 6 ) );
 
     m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( wxS( "MsgPanel" ) )
@@ -250,10 +250,10 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.AddPane( createHighlightedNetNavigator(), defaultNetNavigatorPaneInfo() );
 
-    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( wxS( "OptToolbar" ) )
+    m_auimgr.AddPane( m_tbLeft, EDA_PANE().VToolbar().Name( wxS( "LeftToolbar" ) )
                       .Left().Layer( 2 ) );
 
-    m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( wxS( "ToolsToolbar" ) )
+    m_auimgr.AddPane( m_tbRight, EDA_PANE().VToolbar().Name( wxS( "RightToolbar" ) )
                       .Right().Layer( 2 ) );
 
     // Center
@@ -2652,7 +2652,159 @@ void SCH_EDIT_FRAME::updateSelectionFilterVisbility()
 void SCH_EDIT_FRAME::onPluginAvailabilityChanged( wxCommandEvent& aEvt )
 {
     wxLogTrace( traceApi, "SCH frame: EDA_EVT_PLUGIN_AVAILABILITY_CHANGED" );
-    ReCreateHToolbar();
+    RecreateToolbars();
     aEvt.Skip();
 }
 #endif
+
+
+void SCH_EDIT_FRAME::ToggleSearch()
+{
+    EESCHEMA_SETTINGS* cfg = eeconfig();
+
+    // Ensure m_show_search is up to date (the pane can be closed outside the menu)
+    m_show_search = m_auimgr.GetPane( SearchPaneName() ).IsShown();
+
+    m_show_search = !m_show_search;
+
+    wxAuiPaneInfo& searchPaneInfo = m_auimgr.GetPane( SearchPaneName() );
+    searchPaneInfo.Show( m_show_search );
+
+    if( m_show_search )
+    {
+        searchPaneInfo.Direction( cfg->m_AuiPanels.search_panel_dock_direction );
+
+        if( cfg->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_TOP
+            || cfg->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_BOTTOM )
+        {
+            SetAuiPaneSize( m_auimgr, searchPaneInfo, -1, cfg->m_AuiPanels.search_panel_height );
+        }
+        else if( cfg->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_LEFT
+                 || cfg->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_RIGHT )
+        {
+            SetAuiPaneSize( m_auimgr, searchPaneInfo, cfg->m_AuiPanels.search_panel_width, -1 );
+        }
+
+        m_searchPane->FocusSearch();
+    }
+    else
+    {
+        cfg->m_AuiPanels.search_panel_height = m_searchPane->GetSize().y;
+        cfg->m_AuiPanels.search_panel_width = m_searchPane->GetSize().x;
+        cfg->m_AuiPanels.search_panel_dock_direction = searchPaneInfo.dock_direction;
+        m_auimgr.Update();
+    }
+}
+
+
+void SCH_EDIT_FRAME::ToggleProperties()
+{
+    if( !m_propertiesPanel )
+        return;
+
+    bool show = !m_propertiesPanel->IsShownOnScreen();
+
+    wxAuiPaneInfo& propertiesPaneInfo = m_auimgr.GetPane( PropertiesPaneName() );
+    propertiesPaneInfo.Show( show );
+
+    updateSelectionFilterVisbility();
+
+    EESCHEMA_SETTINGS* settings = eeconfig();
+
+    if( show )
+    {
+        SetAuiPaneSize( m_auimgr, propertiesPaneInfo,
+                        settings->m_AuiPanels.properties_panel_width, -1 );
+    }
+    else
+    {
+        settings->m_AuiPanels.properties_panel_width = m_propertiesPanel->GetSize().x;
+        m_auimgr.Update();
+    }
+}
+
+
+void SCH_EDIT_FRAME::ToggleSchematicHierarchy()
+{
+    EESCHEMA_SETTINGS* cfg = eeconfig();
+
+    wxCHECK( cfg, /* void */ );
+
+    wxAuiPaneInfo&     hierarchy_pane = m_auimgr.GetPane( SchematicHierarchyPaneName() );
+
+    hierarchy_pane.Show( !hierarchy_pane.IsShown() );
+
+    updateSelectionFilterVisbility();
+
+    if( hierarchy_pane.IsShown() )
+    {
+        if( hierarchy_pane.IsFloating() )
+        {
+            hierarchy_pane.FloatingSize( cfg->m_AuiPanels.hierarchy_panel_float_width,
+                                         cfg->m_AuiPanels.hierarchy_panel_float_height );
+            m_auimgr.Update();
+        }
+        else if( cfg->m_AuiPanels.hierarchy_panel_docked_width > 0 )
+        {
+            // SetAuiPaneSize also updates m_auimgr
+            SetAuiPaneSize( m_auimgr, hierarchy_pane,
+                            cfg->m_AuiPanels.hierarchy_panel_docked_width, -1 );
+        }
+    }
+    else
+    {
+        if( hierarchy_pane.IsFloating() )
+        {
+            cfg->m_AuiPanels.hierarchy_panel_float_width  = hierarchy_pane.floating_size.x;
+            cfg->m_AuiPanels.hierarchy_panel_float_height = hierarchy_pane.floating_size.y;
+        }
+        else
+        {
+            cfg->m_AuiPanels.hierarchy_panel_docked_width = m_hierarchy->GetSize().x;
+        }
+
+        m_auimgr.Update();
+    }
+}
+
+
+void SCH_EDIT_FRAME::ToggleLibraryTree()
+{
+    EESCHEMA_SETTINGS* cfg = eeconfig();
+
+    wxCHECK( cfg, /* void */ );
+
+    wxAuiPaneInfo& db_library_pane = m_auimgr.GetPane( DesignBlocksPaneName() );
+
+    db_library_pane.Show( !db_library_pane.IsShown() );
+
+    if( db_library_pane.IsShown() )
+    {
+        if( db_library_pane.IsFloating() )
+        {
+            db_library_pane.FloatingSize( cfg->m_AuiPanels.design_blocks_panel_float_width,
+                                          cfg->m_AuiPanels.design_blocks_panel_float_height );
+            m_auimgr.Update();
+        }
+        else if( cfg->m_AuiPanels.design_blocks_panel_docked_width > 0 )
+        {
+            // SetAuiPaneSize also updates m_auimgr
+            SetAuiPaneSize( m_auimgr, db_library_pane,
+                            cfg->m_AuiPanels.design_blocks_panel_docked_width, -1 );
+        }
+    }
+    else
+    {
+        if( db_library_pane.IsFloating() )
+        {
+            cfg->m_AuiPanels.design_blocks_panel_float_width  = db_library_pane.floating_size.x;
+            cfg->m_AuiPanels.design_blocks_panel_float_height = db_library_pane.floating_size.y;
+        }
+        else
+        {
+            cfg->m_AuiPanels.design_blocks_panel_docked_width = m_designBlocksPane->GetSize().x;
+        }
+
+        m_auimgr.Update();
+    }
+}

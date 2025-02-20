@@ -114,14 +114,10 @@ public:
      */
     void HardRedraw() override;
 
-    /**
-     * Create the main horizontal toolbar for the footprint editor.
-     */
-    void ReCreateHToolbar() override;
-
-    void ReCreateVToolbar() override;
-    void ReCreateOptToolbar() override;
-    void UpdateToolbarControlSizes() override;
+    // Default toolbar configuration
+    std::optional<TOOLBAR_CONFIGURATION> DefaultLeftToolbarConfig() override;
+    std::optional<TOOLBAR_CONFIGURATION> DefaultRightToolbarConfig() override;
+    std::optional<TOOLBAR_CONFIGURATION> DefaultTopMainToolbarConfig() override;
 
     /**
      * Re create the layer Box by clearing the old list, and building a new one from the new
@@ -132,8 +128,6 @@ public:
      *                            are not modified).
      */
     void ReCreateLayerBox( bool aForceResizeToolbar = true );
-
-    void OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
 
     void SelectLayer( wxCommandEvent& event );
 
@@ -360,7 +354,6 @@ protected:
     void centerItemIdleHandler( wxIdleEvent& aEvent );
 
 protected:
-    PCB_LAYER_BOX_SELECTOR*     m_selLayerBox;  // a combo box to display and select active layer
     FOOTPRINT_EDITOR_SETTINGS*  m_editorSettings;
 
 private:

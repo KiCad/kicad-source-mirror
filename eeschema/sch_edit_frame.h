@@ -175,9 +175,11 @@ public:
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     void CreateScreens();
-    void ReCreateHToolbar() override;
-    void ReCreateVToolbar() override;
-    void ReCreateOptToolbar() override;
+
+    // Currently no top auxillary toolbar
+    std::optional<TOOLBAR_CONFIGURATION> DefaultLeftToolbarConfig() override;
+    std::optional<TOOLBAR_CONFIGURATION> DefaultRightToolbarConfig() override;
+    std::optional<TOOLBAR_CONFIGURATION> DefaultTopMainToolbarConfig() override;
 
     void setupUIConditions() override;
 
@@ -974,6 +976,8 @@ protected:
      * @return true if the auto save was successful otherwise false.
      */
     bool doAutoSave() override;
+
+    void configureToolbars() override;
 
     void doReCreateMenuBar() override;
 

@@ -134,10 +134,10 @@ SIMULATOR_FRAME::SIMULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_infoBar = new WX_INFOBAR( this );
     mainSizer->Add( m_infoBar, 0, wxEXPAND, 0 );
 
-    m_toolBar = new ACTION_TOOLBAR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                    wxAUI_TB_DEFAULT_STYLE|wxAUI_TB_HORZ_LAYOUT|wxAUI_TB_PLAIN_BACKGROUND );
-   	m_toolBar->Realize();
-    mainSizer->Add( m_toolBar, 0, wxEXPAND, 5 );
+    m_tbTopMain = new ACTION_TOOLBAR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                        wxAUI_TB_DEFAULT_STYLE|wxAUI_TB_HORZ_LAYOUT|wxAUI_TB_PLAIN_BACKGROUND );
+    m_tbTopMain->Realize();
+    mainSizer->Add( m_tbTopMain, 0, wxEXPAND, 5 );
 
     m_ui = new SIMULATOR_FRAME_UI( this, m_schematicFrame );
     mainSizer->Add( m_ui, 1, wxEXPAND, 5 );
@@ -164,7 +164,11 @@ SIMULATOR_FRAME::SIMULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     setupTools();
     setupUIConditions();
 
-    ReCreateHToolbar();
+    // Set the tool manager for the toolbar here, since the tool manager didn't exist when the toolbar
+    // was created.
+    m_tbTopMain->SetToolManager( m_toolManager );
+
+    RecreateToolbars();
     ReCreateMenuBar();
 
     Bind( wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIMULATOR_FRAME::onExit ), this,

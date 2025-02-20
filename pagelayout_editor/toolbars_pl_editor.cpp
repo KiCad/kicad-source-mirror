@@ -29,168 +29,155 @@
 #include "pl_editor_id.h"
 #include "pl_editor_frame.h"
 
-void PL_EDITOR_FRAME::ReCreateHToolbar()
+
+std::optional<TOOLBAR_CONFIGURATION> PL_EDITOR_FRAME::DefaultLeftToolbarConfig()
 {
-    if( m_mainToolBar )
-    {
-        m_mainToolBar->ClearToolbar();
-    }
-    else
-    {
-        m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_HORIZONTAL );
-        m_mainToolBar->SetAuiManager( &m_auimgr );
-    }
+    TOOLBAR_CONFIGURATION config;
 
-    m_mainToolBar->Add( ACTIONS::doNew );
-    m_mainToolBar->Add( ACTIONS::open );
-    m_mainToolBar->Add( ACTIONS::save );
+    // clang-format off
+    config.AppendAction( ACTIONS::toggleGrid )
+          .AppendAction( ACTIONS::inchesUnits )
+          .AppendAction( ACTIONS::milsUnits )
+          .AppendAction( ACTIONS::millimetersUnits );
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( ACTIONS::print );
-
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( ACTIONS::undo );
-    m_mainToolBar->Add( ACTIONS::redo );
-
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( ACTIONS::zoomRedraw );
-    m_mainToolBar->Add( ACTIONS::zoomInCenter );
-    m_mainToolBar->Add( ACTIONS::zoomOutCenter );
-    m_mainToolBar->Add( ACTIONS::zoomFitScreen );
-    m_mainToolBar->Add( ACTIONS::zoomTool );
-
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( PL_ACTIONS::showInspector );
-    m_mainToolBar->Add( PL_ACTIONS::previewSettings );
-
-    // Display mode switch
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( PL_ACTIONS::layoutNormalMode );
-    m_mainToolBar->Add( PL_ACTIONS::layoutEditMode );
-    m_mainToolBar->AddScaledSeparator( this );
-
-    wxString choiceList[5] =
-    {
-        _("Left Top paper corner"),
-        _("Right Bottom page corner"),
-        _("Left Bottom page corner"),
-        _("Right Top page corner"),
-        _("Left Top page corner")
-    };
-
-    if( !m_originSelectBox )
-    {
-        m_originSelectBox = new wxChoice( m_mainToolBar, ID_SELECT_COORDINATE_ORIGIN,
-                                          wxDefaultPosition, wxDefaultSize, 5, choiceList );
-    }
-
-
-    m_mainToolBar->AddControl( m_originSelectBox );
-    m_originSelectBox->SetToolTip( _("Origin of coordinates displayed to the status bar") );
-
-    int minwidth = 0;
-
-    for( int ii = 0; ii < 5; ii++ )
-    {
-        int width = KIUI::GetTextSize( choiceList[ii], m_originSelectBox ).x;
-        minwidth = std::max( minwidth, width );
-    }
-
-    m_originSelectBox->SetMinSize( wxSize( minwidth, -1 ) );
-    m_originSelectBox->SetSelection( m_originSelectChoice );
-
-    wxString pageList[5] =
-    {
-        _("Page 1"),
-        _("Other pages")
-    };
-
-    if( !m_pageSelectBox )
-    {
-        m_pageSelectBox = new wxChoice( m_mainToolBar, ID_SELECT_PAGE_NUMBER,
-                                        wxDefaultPosition, wxDefaultSize, 2, pageList );
-    }
-
-    m_mainToolBar->AddControl( m_pageSelectBox );
-    m_pageSelectBox->SetToolTip( _("Simulate page 1 or other pages to show how items\n"\
-                                 "which are not on all page are displayed") );
-    m_pageSelectBox->SetSelection( 0 );
-
-
-    // Go through and ensure the comboboxes are the correct size, since the strings in the
-    // box could have changed widths.
-    m_mainToolBar->UpdateControlWidth( ID_SELECT_COORDINATE_ORIGIN );
-    m_mainToolBar->UpdateControlWidth( ID_SELECT_PAGE_NUMBER );
-
-    // after adding the buttons to the toolbar, must call Realize() to reflect the changes
-    m_mainToolBar->KiRealize();
-}
-
-
-void PL_EDITOR_FRAME::ReCreateVToolbar()
-{
-    if( m_drawToolBar )
-    {
-        m_drawToolBar->ClearToolbar();
-    }
-    else
-    {
-        m_drawToolBar = new ACTION_TOOLBAR( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                            KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
-        m_drawToolBar->SetAuiManager( &m_auimgr );
-    }
-
-    m_drawToolBar->Add( ACTIONS::selectionTool );
-
-    m_drawToolBar->AddScaledSeparator( this );
-    m_drawToolBar->Add( PL_ACTIONS::drawLine );
-    m_drawToolBar->Add( PL_ACTIONS::drawRectangle );
-    m_drawToolBar->Add( PL_ACTIONS::placeText );
-    m_drawToolBar->Add( PL_ACTIONS::placeImage );
-    m_drawToolBar->Add( PL_ACTIONS::appendImportedDrawingSheet );
-
-    m_drawToolBar->AddScaledSeparator( this );
-    m_drawToolBar->Add( ACTIONS::deleteTool );
-
-    m_drawToolBar->KiRealize();
-}
-
-
-void PL_EDITOR_FRAME::ReCreateOptToolbar()
-{
-    if( m_optionsToolBar )
-    {
-        m_optionsToolBar->ClearToolbar();
-    }
-    else
-    {
-        m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR,
-                                               wxDefaultPosition, wxDefaultSize,
-                                               KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
-        m_optionsToolBar->SetAuiManager( &m_auimgr );
-    }
-
+    /* TODO: Implement context menus
     PL_SELECTION_TOOL*           selTool = m_toolManager->GetTool<PL_SELECTION_TOOL>();
     std::unique_ptr<ACTION_MENU> gridMenu = std::make_unique<ACTION_MENU>( false, selTool );
     gridMenu->Add( ACTIONS::gridProperties );
-    m_optionsToolBar->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
+    m_tbLeft->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
+    */
 
-    m_optionsToolBar->Add( ACTIONS::toggleGrid );
-    m_optionsToolBar->Add( ACTIONS::inchesUnits );
-    m_optionsToolBar->Add( ACTIONS::milsUnits );
-    m_optionsToolBar->Add( ACTIONS::millimetersUnits );
+    // clang-format on
+    return config;
+}
 
-    m_optionsToolBar->KiRealize();
+
+std::optional<TOOLBAR_CONFIGURATION> PL_EDITOR_FRAME::DefaultRightToolbarConfig()
+{
+    TOOLBAR_CONFIGURATION config;
+
+    // clang-format off
+    config.AppendAction( ACTIONS::selectionTool );
+
+    config.AppendSeparator()
+          .AppendAction( PL_ACTIONS::drawLine )
+          .AppendAction( PL_ACTIONS::drawRectangle )
+          .AppendAction( PL_ACTIONS::placeText )
+          .AppendAction( PL_ACTIONS::placeImage )
+          .AppendAction( PL_ACTIONS::appendImportedDrawingSheet );
+
+    config.AppendSeparator()
+          .AppendAction( ACTIONS::deleteTool );
+
+    // clang-format on
+    return config;
+}
+
+
+std::optional<TOOLBAR_CONFIGURATION> PL_EDITOR_FRAME::DefaultTopMainToolbarConfig()
+{
+    TOOLBAR_CONFIGURATION config;
+
+    // clang-format off
+    config.AppendAction( ACTIONS::doNew )
+          .AppendAction( ACTIONS::open )
+          .AppendAction( ACTIONS::save );
+
+    config.AppendSeparator()
+          .AppendAction( ACTIONS::print );
+
+    config.AppendSeparator()
+          .AppendAction( ACTIONS::undo )
+          .AppendAction( ACTIONS::redo );
+
+    config.AppendSeparator()
+          .AppendAction( ACTIONS::zoomRedraw )
+          .AppendAction( ACTIONS::zoomInCenter )
+          .AppendAction( ACTIONS::zoomOutCenter )
+          .AppendAction( ACTIONS::zoomFitScreen )
+          .AppendAction( ACTIONS::zoomTool );
+
+    config.AppendSeparator()
+          .AppendAction( PL_ACTIONS::showInspector )
+          .AppendAction( PL_ACTIONS::previewSettings );
+
+    // Display mode switch
+    config.AppendSeparator()
+          .AppendAction( PL_ACTIONS::layoutNormalMode )
+          .AppendAction( PL_ACTIONS::layoutEditMode );
+
+    config.AppendSeparator()
+          .AppendControl( "control.PLEditorOrigin" )
+          .AppendControl( "control.PLEditorPageSelect" );
+
+    // clang-format on
+    return config;
+}
+
+
+void PL_EDITOR_FRAME::configureToolbars()
+{
+    EDA_DRAW_FRAME::configureToolbars();
+
+    auto originSelectorFactory = [this]( ACTION_TOOLBAR* aToolbar )
+        {
+            if( !m_originSelectBox )
+            {
+                m_originSelectBox = new wxChoice( aToolbar, ID_SELECT_COORDINATE_ORIGIN,
+                                                  wxDefaultPosition, wxDefaultSize, 5, m_originChoiceList );
+            }
+
+            m_originSelectBox->SetToolTip( _("Origin of coordinates displayed to the status bar") );
+            m_originSelectBox->SetSelection( m_originSelectChoice );
+
+            aToolbar->Add(  m_originSelectBox );
+        };
+
+    RegisterCustomToolbarControlFactory( "control.PLEditorOrigin", _( "Origin Selector" ),
+                                         _( "Select the origin of the status bar coordinates" ),
+                                         originSelectorFactory );
+
+
+    auto pageSelectorFactory = [this]( ACTION_TOOLBAR* aToolbar )
+        {
+            wxString pageList[5] =
+            {
+                _("Page 1"),
+                _("Other pages")
+            };
+
+            if( !m_pageSelectBox )
+            {
+                m_pageSelectBox = new wxChoice( aToolbar, ID_SELECT_PAGE_NUMBER,
+                                                wxDefaultPosition, wxDefaultSize, 2, pageList );
+            }
+
+            m_pageSelectBox->SetToolTip( _("Simulate page 1 or other pages to show how items\n"\
+                                           "which are not on all page are displayed") );
+            m_pageSelectBox->SetSelection( 0 );
+
+            aToolbar->Add( m_pageSelectBox );
+        };
+
+    RegisterCustomToolbarControlFactory( "control.PLEditorPageSelect", _( "Page Selector" ),
+                                         _( "Select the page to simulate item displays" ),
+                                         pageSelectorFactory );
 }
 
 
 void PL_EDITOR_FRAME::UpdateToolbarControlSizes()
 {
-    if( m_mainToolBar )
+    // Ensure the origin selector is a minimum size
+    int minwidth = 0;
+
+    for( int ii = 0; ii < 5; ii++ )
     {
-        // Update the item widths
-        m_mainToolBar->UpdateControlWidth( ID_SELECT_COORDINATE_ORIGIN );
-        m_mainToolBar->UpdateControlWidth( ID_SELECT_PAGE_NUMBER );
+        int width = KIUI::GetTextSize( m_originChoiceList[ii], m_originSelectBox ).x;
+        minwidth = std::max( minwidth, width );
     }
+
+    m_originSelectBox->SetMinSize( wxSize( minwidth, -1 ) );
+
+    // Base class actually will go through and update the sizes of the controls
+    EDA_DRAW_FRAME::UpdateToolbarControlSizes();
 }

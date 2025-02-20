@@ -179,9 +179,8 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     setupUIConditions();
 
     ReCreateMenuBar();
-    ReCreateHToolbar();
-    ReCreateVToolbar();
-    ReCreateOptToolbar();
+    configureToolbars();
+    RecreateToolbars();
 
     UpdateTitle();
     UpdateSymbolMsgPanelInfo();
@@ -197,7 +196,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     CreateInfoBar();
 
     // Rows; layers 4 - 6
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" )
+    m_auimgr.AddPane( m_tbTopMain, EDA_PANE().HToolbar().Name( "TopMainToolbar" )
                       .Top().Layer( 6 ) );
 
     m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" )
@@ -223,10 +222,10 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     propertiesPaneInfo.Show( m_settings->m_AuiPanels.show_properties );
     updateSelectionFilterVisbility();
 
-    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" )
+    m_auimgr.AddPane( m_tbLeft, EDA_PANE().VToolbar().Name( "LeftToolbar" )
                       .Left().Layer( 2 ) );
 
-    m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" )
+    m_auimgr.AddPane( m_tbRight, EDA_PANE().VToolbar().Name( "RightToolbar" )
                       .Right().Layer( 2 ) );
 
     // Center
@@ -722,6 +721,32 @@ void SYMBOL_EDIT_FRAME::RebuildSymbolUnitsList()
         m_unit = 1;
 
     m_unitSelectBox->SetSelection(( m_unit > 0 ) ? m_unit - 1 : 0 );
+}
+
+
+void SYMBOL_EDIT_FRAME::ToggleProperties()
+{
+    if( !m_propertiesPanel )
+        return;
+
+    bool show = !m_propertiesPanel->IsShownOnScreen();
+
+    wxAuiPaneInfo& propertiesPaneInfo = m_auimgr.GetPane( PropertiesPaneName() );
+    propertiesPaneInfo.Show( show );
+    updateSelectionFilterVisbility();
+
+    if( show )
+    {
+        SetAuiPaneSize( m_auimgr, propertiesPaneInfo,
+                        m_settings->m_AuiPanels.properties_panel_width, -1 );
+    }
+    else
+    {
+        m_settings->m_AuiPanels.properties_panel_width = m_propertiesPanel->GetSize().x;
+    }
+
+    m_auimgr.Update();
+    Refresh();
 }
 
 
@@ -1800,7 +1825,7 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
     setSymWatcher( nullptr );
 
     ReCreateMenuBar();
-    ReCreateHToolbar();
+    RecreateToolbars();
 
     if( IsLibraryTreeShown() )
         ToggleLibraryTree();

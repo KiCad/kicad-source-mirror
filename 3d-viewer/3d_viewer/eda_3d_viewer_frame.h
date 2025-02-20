@@ -123,6 +123,8 @@ public:
 
     void OnDarkModeToggle();
 
+    std::optional<TOOLBAR_CONFIGURATION> DefaultTopMainToolbarConfig() override;
+
 protected:
     void setupUIConditions() override;
 
@@ -145,7 +147,6 @@ private:
     void OnSetFocus( wxFocusEvent& event );
 
     void doReCreateMenuBar() override;
-    void ReCreateMainToolbar();
 
     /**
      *  Create a Screenshot of the current 3D view.
@@ -172,7 +173,6 @@ private:
 private:
     wxFileName                     m_defaultSaveScreenshotFileName;
 
-    ACTION_TOOLBAR*                m_mainToolBar;
     EDA_3D_CANVAS*                 m_canvas;
     BOARD_ADAPTER                  m_boardAdapter;
     CAMERA&                        m_currentCamera;

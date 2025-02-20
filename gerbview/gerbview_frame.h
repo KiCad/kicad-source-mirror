@@ -76,22 +76,12 @@ public:
     bool LoadListOfGerberAndDrillFiles( const wxString& aPath, const wxArrayString& aFilenameList,
                                         std::vector<int>* aFileType );
 
-    // Virtual basic functions:
-    void ReCreateHToolbar() override;
-    void ReCreateAuxiliaryToolbar() override;
-
-    /**
-     * Create or update the right vertical toolbar.
-     */
-    void ReCreateVToolbar() override;
-
-    /**
-     * Create or update the left vertical toolbar (option toolbar)
-     */
-    void ReCreateOptToolbar() override;
+    // No right toolbar in gerbview
+    std::optional<TOOLBAR_CONFIGURATION> DefaultLeftToolbarConfig() override;
+    std::optional<TOOLBAR_CONFIGURATION> DefaultTopMainToolbarConfig() override;
+    std::optional<TOOLBAR_CONFIGURATION> DefaultTopAuxToolbarConfig() override;
 
     void UpdateStatusBar() override;
-    void UpdateToolbarControlSizes() override;
 
     GERBVIEW_SETTINGS* gvconfig() const;
 
@@ -239,7 +229,6 @@ public:
     void OnQuit( wxCommandEvent& event );
 
     void OnUpdateSelectDCode( wxUpdateUIEvent& aEvent );
-    void OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
 
     /**
      * Delete the current data and loads a Gerber file selected from history list on current layer.
@@ -456,6 +445,7 @@ public:
     DECLARE_EVENT_TABLE()
 
 protected:
+    void configureToolbars() override;
     void setupUIConditions() override;
     void doReCreateMenuBar() override;
 

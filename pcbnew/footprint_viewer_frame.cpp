@@ -229,10 +229,9 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
 
     setupUIConditions();
+    configureToolbars();
+    RecreateToolbars();
     ReCreateMenuBar();
-    ReCreateHToolbar();
-    ReCreateVToolbar();
-    ReCreateOptToolbar();
 
     ReCreateLibraryList();
     UpdateTitle();
@@ -262,8 +261,8 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_auimgr.SetManagedWindow( this );
 
     // Horizontal items; layers 4 - 6
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().VToolbar().Name( "MainToolbar" ).Top().Layer(6) );
-    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
+    m_auimgr.AddPane( m_tbTopMain, EDA_PANE().VToolbar().Name( "TopMainToolbar" ).Top().Layer(6) );
+    m_auimgr.AddPane( m_tbLeft, EDA_PANE().VToolbar().Name( "LeftToolbar" ).Left().Layer(3) );
     m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
 
     // Vertical items; layers 1 - 3
@@ -293,7 +292,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     wxASSERT( cfg );
     GetCanvas()->GetView()->SetScale( cfg->m_FootprintViewerZoom );
 
-    wxAuiToolBarItem* toolOpt = m_mainToolBar->FindTool( ID_FPVIEWER_AUTOZOOM_TOOL );
+    wxAuiToolBarItem* toolOpt = m_tbTopMain->FindTool( ID_FPVIEWER_AUTOZOOM_TOOL );
 
     if( cfg->m_FootprintViewerAutoZoomOnSelect )
         toolOpt->SetState( wxAUI_BUTTON_STATE_CHECKED );
@@ -387,7 +386,7 @@ void FOOTPRINT_VIEWER_FRAME::doCloseWindow()
     // A workaround to avoid flicker, in modal mode when modview frame is destroyed,
     // when the aui toolbar is not docked (i.e. shown in a miniframe)
     // (useful on windows only)
-    m_mainToolBar->SetFocus();
+    m_tbTopMain->SetFocus();
 
     GetCanvas()->StopDrawing();
 
@@ -844,7 +843,7 @@ void FOOTPRINT_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     if( GetCanvas() && GetCanvas()->GetView() )
         cfg->m_FootprintViewerZoom = GetCanvas()->GetView()->GetScale();
 
-    wxAuiToolBarItem* toolOpt = m_mainToolBar->FindTool( ID_FPVIEWER_AUTOZOOM_TOOL );
+    wxAuiToolBarItem* toolOpt = m_tbTopMain->FindTool( ID_FPVIEWER_AUTOZOOM_TOOL );
     cfg->m_FootprintViewerAutoZoomOnSelect = ( toolOpt->GetState() & wxAUI_BUTTON_STATE_CHECKED );
     cfg->m_FootprintViewerLibListWidth = m_libList->GetSize().x;
     cfg->m_FootprintViewerFPListWidth = m_fpList->GetSize().x;
@@ -1096,7 +1095,7 @@ void FOOTPRINT_VIEWER_FRAME::updateView()
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
-    wxAuiToolBarItem* toolOpt = m_mainToolBar->FindTool( ID_FPVIEWER_AUTOZOOM_TOOL );
+    wxAuiToolBarItem* toolOpt = m_tbTopMain->FindTool( ID_FPVIEWER_AUTOZOOM_TOOL );
 
     if( toolOpt->GetState() & wxAUI_BUTTON_STATE_CHECKED )
         m_toolManager->RunAction( ACTIONS::zoomFitScreen );

@@ -76,8 +76,9 @@ public:
     void DisplayLibInfos();
     void doCloseWindow() override;
     void CloseLibraryViewer( wxCommandEvent& event );
-    void ReCreateHToolbar() override;
-    void ReCreateVToolbar() override;
+
+    // Only top main toolbar
+    std::optional<TOOLBAR_CONFIGURATION> DefaultTopMainToolbarConfig() override;
 
     void ClickOnLibList( wxCommandEvent& event );
     void ClickOnSymbolList( wxCommandEvent& event );
@@ -120,6 +121,8 @@ public:
     void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
 
 protected:
+    void configureToolbars() override;
+
     void setupUIConditions() override;
 
     void doReCreateMenuBar() override;

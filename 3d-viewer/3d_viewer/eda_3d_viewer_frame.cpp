@@ -91,7 +91,6 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
                                           const wxString& aTitle, long style ) :
         KIWAY_PLAYER( aKiway, aParent, FRAME_PCB_DISPLAY3D, aTitle, wxDefaultPosition,
                       wxDefaultSize, style, QUALIFIED_VIEWER3D_FRAMENAME( aParent ), unityScale ),
-        m_mainToolBar( nullptr ),
         m_canvas( nullptr ),
         m_currentCamera( m_trackBallCamera ),
         m_trackBallCamera( 2 * RANGE_SCALE_3D )
@@ -149,13 +148,14 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
     m_toolManager->InvokeTool( "3DViewer.Control" );
 
     ReCreateMenuBar();
-    ReCreateMainToolbar();
+    configureToolbars();
+    RecreateToolbars();
 
     m_infoBar = new WX_INFOBAR( this, &m_auimgr );
 
     m_auimgr.SetManagedWindow( this );
 
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( wxS( "MainToolbar" ) )
+    m_auimgr.AddPane( m_tbTopMain, EDA_PANE().HToolbar().Name( wxS( "TopMainToolbar" ) )
                       .Top().Layer( 6 ) );
     m_auimgr.AddPane( m_infoBar, EDA_PANE().InfoBar().Name( wxS( "InfoBar" ) )
                       .Top().Layer( 1 ) );
@@ -641,8 +641,7 @@ void EDA_3D_VIEWER_FRAME::CommonSettingsChanged( int aFlags )
     // Regen menu bars, etc
     EDA_BASE_FRAME::CommonSettingsChanged( aFlags );
 
-    // There is no base class that handles toolbars for this frame
-    ReCreateMainToolbar();
+    RecreateToolbars();
 
     loadCommonSettings();
     applySettings(
@@ -659,7 +658,7 @@ void EDA_3D_VIEWER_FRAME::ShowChangedLanguage()
     EDA_BASE_FRAME::ShowChangedLanguage();
 
     SetTitle( _( "3D Viewer" ) );
-    ReCreateMainToolbar();
+    RecreateToolbars();
 
     if( m_appearancePanel )
     {

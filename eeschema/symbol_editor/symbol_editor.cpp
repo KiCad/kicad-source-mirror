@@ -303,7 +303,7 @@ bool SYMBOL_EDIT_FRAME::LoadOneLibrarySymbolAux( LIB_SYMBOL* aEntry, const wxStr
     if( rebuildMenuAndToolbar )
     {
         ReCreateMenuBar();
-        ReCreateHToolbar();
+        RecreateToolbars();
         GetInfoBar()->Dismiss();
     }
 

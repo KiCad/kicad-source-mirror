@@ -33,15 +33,18 @@
 #define  EDA_BASE_FRAME_H_
 
 
-#include <vector>
 #include <map>
+#include <optional>
+#include <vector>
 
 #include <wx/aui/aui.h>
 #include <layer_ids.h>
 #include <frame_type.h>
 #include <hotkeys_basic.h>
 #include <kiway_holder.h>
+#include <tool/action_toolbar.h>
 #include <tool/tools_holder.h>
+#include <tool/ui/toolbar_configuration.h>
 #include <widgets/ui_common.h>
 #include <widgets/wx_infobar.h>
 #include <undo_redo_container.h>
@@ -434,6 +437,65 @@ public:
     virtual wxString GetCurrentFileName() const { return wxEmptyString; }
 
     /**
+     * Get the default actions to show on the left canvas toolbar.
+     *
+     * @return default config, or nullopt if the toolbar isn't used.
+     */
+    virtual std::optional<TOOLBAR_CONFIGURATION> DefaultLeftToolbarConfig() { return std::nullopt; };
+
+    /**
+     * Get the default actions to show on the right canvas toolbar.
+     *
+     * @return default config, or nullopt if the toolbar isn't used.
+     */
+    virtual std::optional<TOOLBAR_CONFIGURATION> DefaultRightToolbarConfig() { return std::nullopt; };
+
+    /**
+     * Get the default actions to show on the top main canvas toolbar.
+     *
+     * @return default config, or nullopt if the toolbar isn't used.
+     */
+    virtual std::optional<TOOLBAR_CONFIGURATION> DefaultTopMainToolbarConfig() { return std::nullopt; };
+
+    /**
+     * Get the default actions to show on the top aux canvas toolbar.
+     *
+     * @return default config, or nullopt if the toolbar isn't used.
+     */
+    virtual std::optional<TOOLBAR_CONFIGURATION> DefaultTopAuxToolbarConfig() { return std::nullopt; };
+
+    virtual void RecreateToolbars();
+
+    /**
+     * Update toolbars if desired toolbar icon changed.
+     */
+    void OnToolbarSizeChanged();
+
+    /**
+     * Update the sizes of any controls in the toolbars of the frame.
+     */
+    virtual void UpdateToolbarControlSizes();
+
+    /**
+     * Register a creation factory for toolbar controls that are present in this frame.
+     *
+     * The factory function takes a single argument of type `ACTION_TOOLBAR*`, which is the toolbar
+     * to add the controls to.
+     *
+     * @param aName is the unique name for this control - must be prefixed with "control."
+     * @param aDescription is a short user-facing description for the
+     * @param aControlFactory A functor that creates the custom controls and then adds them to the toolbar
+     */
+    void RegisterCustomToolbarControlFactory( const std::string& aName, const wxString& aUiName,
+                                              const wxString& aDescription,
+                                              const ACTION_TOOLBAR_CONTROL_FACTORY& aControlFactory );
+
+    /**
+     *
+     */
+    ACTION_TOOLBAR_CONTROL_FACTORY* GetCustomToolbarControlFactory( const std::string& aName );
+
+    /**
      * Recreate the menu bar.
      *
      * Needed when the language or icons are changed
@@ -616,6 +678,8 @@ protected:
 
     virtual void doReCreateMenuBar() {}
 
+    virtual void configureToolbars();
+
     /**
      * Handle the auto save timer event.
      */
@@ -795,6 +859,21 @@ private:
      * Associate file extensions with action to execute.
      */
     std::map<const wxString, TOOL_ACTION*> m_acceptedExts;
+
+    // Current toolbar configuration
+    std::optional<TOOLBAR_CONFIGURATION> m_tbConfigLeft;
+    std::optional<TOOLBAR_CONFIGURATION> m_tbConfigRight;
+    std::optional<TOOLBAR_CONFIGURATION> m_tbConfigTopAux;
+    std::optional<TOOLBAR_CONFIGURATION> m_tbConfigTopMain;
+
+    // Toolbar UI elements
+    ACTION_TOOLBAR*      m_tbTopMain;
+    ACTION_TOOLBAR*      m_tbTopAux;  // Additional tools under main toolbar
+    ACTION_TOOLBAR*      m_tbRight;       // Drawing tools (typically on right edge of window)
+    ACTION_TOOLBAR*      m_tbLeft;    // Options (typically on left edge of window)
+
+    std::vector<ACTION_TOOLBAR_CONTROL> m_toolbarControlFactories;
+
 };
 
 

@@ -139,10 +139,7 @@ public:
      */
     void OnSelectComponent( wxListEvent& event );
 
-    /*
-     * Functions to rebuild the toolbars and menubars
-     */
-    void ReCreateHToolbar();
+    std::optional<TOOLBAR_CONFIGURATION> DefaultTopMainToolbarConfig() override;
 
     void ShowChangedLanguage() override;
 
@@ -313,6 +310,8 @@ public:
 protected:
     CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent );
 
+    void configureToolbars() override;
+
     void doReCreateMenuBar() override;
 
     void setupUIConditions() override;
@@ -388,7 +387,6 @@ private:
 
     NETLIST                   m_netlist;
     int                       m_filteringOptions;
-    ACTION_TOOLBAR*           m_mainToolBar;
     FOOTPRINTS_LISTBOX*       m_footprintListBox;
     LIBRARY_LISTBOX*          m_librariesListBox;
     SYMBOLS_LISTBOX*          m_symbolsListBox;

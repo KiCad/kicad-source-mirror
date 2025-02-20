@@ -157,7 +157,8 @@ TOOL_ACTION EDA_3D_ACTIONS::toggleOrtho( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Toggle Orthographic Projection" ) )
         .Tooltip( _( "Enable/disable orthographic projection" ) )
-        .Icon( BITMAPS::ortho ) );
+        .Icon( BITMAPS::ortho )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE ) );
 
 TOOL_ACTION EDA_3D_ACTIONS::viewFront( TOOL_ACTION_ARGS()
         .Name( "3DViewer.Control.viewFront" )
@@ -337,5 +338,6 @@ TOOL_ACTION EDA_3D_ACTIONS::showLayersManager( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Show Appearance Manager" ) )
         .Tooltip( _( "Show/hide the appearance manager" ) )
-        .Icon( BITMAPS::layers_manager ) );
+        .Icon( BITMAPS::layers_manager )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE ) );
 

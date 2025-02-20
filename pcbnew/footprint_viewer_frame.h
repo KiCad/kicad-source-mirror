@@ -87,6 +87,10 @@ public:
 
     void HardRedraw() override;
 
+    // Toolbar defaults
+    std::optional<TOOLBAR_CONFIGURATION> DefaultLeftToolbarConfig() override;
+    std::optional<TOOLBAR_CONFIGURATION> DefaultTopMainToolbarConfig() override;
+
 protected:
     FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
@@ -118,10 +122,6 @@ private:
     void doCloseWindow() override;
     void CloseFootprintViewer( wxCommandEvent& event );
     void OnExitKiCad( wxCommandEvent& event );
-
-    void ReCreateHToolbar() override;
-    void ReCreateVToolbar() override;
-    void ReCreateOptToolbar() override;
 
     void OnLibFilter( wxCommandEvent& aEvent );
     void OnFPFilter( wxCommandEvent& aEvent );

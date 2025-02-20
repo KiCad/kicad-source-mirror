@@ -25,6 +25,7 @@
  */
 
 #include <memory>
+#include <string>
 
 #include <advanced_config.h>
 #include <api/api_plugin_manager.h>
@@ -108,286 +109,124 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
         LayerPairBitmap = LAYER_PRESENTATION::CreateLayerPairIcon( background_color, top_color,
                                                                    bottom_color, scale );
 
-        if( m_auxiliaryToolBar )
+        if( m_tbTopAux )
         {
-            m_auxiliaryToolBar->SetToolBitmap( PCB_ACTIONS::selectLayerPair, *LayerPairBitmap );
-            m_auxiliaryToolBar->Refresh();
+            m_tbTopAux->SetToolBitmap( PCB_ACTIONS::selectLayerPair, *LayerPairBitmap );
+            m_tbTopAux->Refresh();
         }
     }
 }
 
 
-void PCB_EDIT_FRAME::ReCreateHToolbar()
+std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_FRAME::DefaultLeftToolbarConfig()
 {
-    // Note:
-    // To rebuild the aui toolbar, the more easy way is to clear ( calling m_mainToolBar.Clear() )
-    // all wxAuiToolBarItems.
-    // However the wxAuiToolBarItems are not the owners of controls managed by
-    // them and therefore do not delete them
-    // So we do not recreate them after clearing the tools.
+    TOOLBAR_CONFIGURATION config;
 
-    wxWindowUpdateLocker dummy( this );
+    // clang-format off
+    config.AppendAction( ACTIONS::toggleGrid )
+          .AppendAction( ACTIONS::toggleGridOverrides )
+          .AppendAction( PCB_ACTIONS::togglePolarCoords )
+          .AppendAction( ACTIONS::inchesUnits )
+          .AppendAction( ACTIONS::milsUnits )
+          .AppendAction( ACTIONS::millimetersUnits )
+          .AppendAction( ACTIONS::toggleCursorStyle );
 
-    if( m_mainToolBar )
-    {
-        m_mainToolBar->ClearToolbar();
-    }
-    else
-    {
-        m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT |
-                                            wxAUI_TB_HORIZONTAL );
-        m_mainToolBar->SetAuiManager( &m_auimgr );
-    }
+    config.AppendSeparator()
+          .AppendAction( PCB_ACTIONS::toggleHV45Mode );
 
-    // Set up toolbar
-    if( Kiface().IsSingle() )
-    {
-        m_mainToolBar->Add( ACTIONS::doNew );
-        m_mainToolBar->Add( ACTIONS::open );
-    }
+    config.AppendSeparator()
+          .AppendAction( PCB_ACTIONS::showRatsnest )
+          .AppendAction( PCB_ACTIONS::ratsnestLineMode );
 
-    m_mainToolBar->Add( ACTIONS::save );
+    config.AppendSeparator()
+          .AppendAction( ACTIONS::highContrastMode )
+          .AppendAction( PCB_ACTIONS::toggleNetHighlight );
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( PCB_ACTIONS::boardSetup );
-
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( ACTIONS::pageSettings );
-    m_mainToolBar->Add( ACTIONS::print );
-    m_mainToolBar->Add( ACTIONS::plot );
-
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( ACTIONS::undo );
-    m_mainToolBar->Add( ACTIONS::redo );
-
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( ACTIONS::find );
-
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( ACTIONS::zoomRedraw );
-    m_mainToolBar->Add( ACTIONS::zoomInCenter );
-    m_mainToolBar->Add( ACTIONS::zoomOutCenter );
-    m_mainToolBar->Add( ACTIONS::zoomFitScreen );
-    m_mainToolBar->Add( ACTIONS::zoomFitObjects );
-    m_mainToolBar->Add( ACTIONS::zoomTool );
-
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( PCB_ACTIONS::rotateCcw );
-    m_mainToolBar->Add( PCB_ACTIONS::rotateCw );
-    m_mainToolBar->Add( PCB_ACTIONS::mirrorV );
-    m_mainToolBar->Add( PCB_ACTIONS::mirrorH );
-    m_mainToolBar->Add( PCB_ACTIONS::group );
-    m_mainToolBar->Add( PCB_ACTIONS::ungroup );
-    m_mainToolBar->Add( PCB_ACTIONS::lock );
-    m_mainToolBar->Add( PCB_ACTIONS::unlock );
-
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( ACTIONS::showFootprintEditor );
-    m_mainToolBar->Add( ACTIONS::showFootprintBrowser );
-    m_mainToolBar->Add( ACTIONS::show3DViewer );
-
-    m_mainToolBar->AddScaledSeparator( this );
-
-    if( !Kiface().IsSingle() )
-        m_mainToolBar->Add( ACTIONS::updatePcbFromSchematic );
-    else
-        m_mainToolBar->Add( PCB_ACTIONS::importNetlist );
-
-    m_mainToolBar->Add( PCB_ACTIONS::runDRC );
-
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( PCB_ACTIONS::showEeschema );
-
-    // Add SWIG and API plugins
-    bool scriptingAvailable = SCRIPTING::IsWxAvailable();
-#ifdef KICAD_IPC_API
-    bool haveApiPlugins = Pgm().GetCommonSettings()->m_Api.enable_server &&
-            !Pgm().GetPluginManager().GetActionsForScope( PLUGIN_ACTION_SCOPE::PCB ).empty();
-#else
-    bool haveApiPlugins = false;
-#endif
-
-    if( scriptingAvailable || haveApiPlugins )
-    {
-        m_mainToolBar->AddScaledSeparator( this );
-
-        if( scriptingAvailable )
-        {
-            m_mainToolBar->Add( PCB_ACTIONS::showPythonConsole, ACTION_TOOLBAR::TOGGLE );
-            AddActionPluginTools();
-        }
-
-        if( haveApiPlugins )
-            addApiPluginTools();
-    }
-
-    // after adding the buttons to the toolbar, must call Realize() to reflect the changes
-    m_mainToolBar->KiRealize();
-}
-
-
-void PCB_EDIT_FRAME::ReCreateOptToolbar()
-{
-    // Note:
-    // To rebuild the aui toolbar, the more easy way is to clear ( calling m_mainToolBar.Clear() )
-    // all wxAuiToolBarItems.
-    // However the wxAuiToolBarItems are not the owners of controls managed by
-    // them and therefore do not delete them
-    // So we do not recreate them after clearing the tools.
-
-    wxWindowUpdateLocker dummy( this );
-
-    if( m_optionsToolBar )
-    {
-        m_optionsToolBar->ClearToolbar();
-    }
-    else
-    {
-        m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR,
-                                               wxDefaultPosition, wxDefaultSize,
-                                               KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
-        m_optionsToolBar->SetAuiManager( &m_auimgr );
-    }
-
-    m_optionsToolBar->Add( ACTIONS::toggleGrid );
-    m_optionsToolBar->Add( ACTIONS::toggleGridOverrides );
-
-    m_optionsToolBar->Add( PCB_ACTIONS::togglePolarCoords );
-    m_optionsToolBar->Add( ACTIONS::inchesUnits );
-    m_optionsToolBar->Add( ACTIONS::milsUnits );
-    m_optionsToolBar->Add( ACTIONS::millimetersUnits );
-    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle );
-
-    m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( PCB_ACTIONS::toggleHV45Mode );
-
-    m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( PCB_ACTIONS::showRatsnest );
-    m_optionsToolBar->Add( PCB_ACTIONS::ratsnestLineMode );
-
-    m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( ACTIONS::highContrastMode );
-    m_optionsToolBar->Add( PCB_ACTIONS::toggleNetHighlight );
-
-    m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( PCB_ACTIONS::zoneDisplayFilled );
-    m_optionsToolBar->Add( PCB_ACTIONS::zoneDisplayOutline );
+    config.AppendSeparator()
+          .AppendAction( PCB_ACTIONS::zoneDisplayFilled )
+          .AppendAction( PCB_ACTIONS::zoneDisplayOutline );
 
     if( ADVANCED_CFG::GetCfg().m_ExtraZoneDisplayModes )
     {
-        m_optionsToolBar->Add( PCB_ACTIONS::zoneDisplayFractured );
-        m_optionsToolBar->Add( PCB_ACTIONS::zoneDisplayTriangulated );
+        config.AppendAction( PCB_ACTIONS::zoneDisplayFractured );
+        config.AppendAction( PCB_ACTIONS::zoneDisplayTriangulated );
     }
 
-    m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( PCB_ACTIONS::padDisplayMode );
-    m_optionsToolBar->Add( PCB_ACTIONS::viaDisplayMode );
-    m_optionsToolBar->Add( PCB_ACTIONS::trackDisplayMode );
+    config.AppendSeparator()
+          .AppendAction( PCB_ACTIONS::padDisplayMode )
+          .AppendAction( PCB_ACTIONS::viaDisplayMode )
+          .AppendAction( PCB_ACTIONS::trackDisplayMode );
 
     if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
-        m_optionsToolBar->Add( ACTIONS::toggleBoundingBoxes );
+        config.AppendAction( ACTIONS::toggleBoundingBoxes );
 
     // Tools to show/hide toolbars:
-    m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( PCB_ACTIONS::showLayersManager );
-    m_optionsToolBar->Add( ACTIONS::showProperties );
+    config.AppendSeparator()
+          .AppendAction( PCB_ACTIONS::showLayersManager )
+          .AppendAction( ACTIONS::showProperties );
 
+    /* TODO (ISM): Support context menus in toolbars
     PCB_SELECTION_TOOL*          selTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
     std::unique_ptr<ACTION_MENU> gridMenu = std::make_unique<ACTION_MENU>( false, selTool );
     gridMenu->Add( ACTIONS::gridProperties );
     gridMenu->Add( ACTIONS::gridOrigin );
-    m_optionsToolBar->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
+    m_tbLeft->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
+    */
 
-    m_optionsToolBar->KiRealize();
+    // clang-format on
+    return config;
 }
 
 
-void PCB_EDIT_FRAME::ReCreateVToolbar()
+std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_FRAME::DefaultRightToolbarConfig()
 {
-    wxWindowUpdateLocker dummy( this );
-
-    if( m_drawToolBar )
-    {
-        m_drawToolBar->ClearToolbar();
-    }
-    else
-    {
-        m_drawToolBar = new ACTION_TOOLBAR( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                            KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
-        m_drawToolBar->SetAuiManager( &m_auimgr );
-    }
-
-    // Groups contained on this toolbar
-    static ACTION_GROUP* dimensionGroup = nullptr;
-    static ACTION_GROUP* originGroup    = nullptr;
-    static ACTION_GROUP* routingGroup   = nullptr;
-    static ACTION_GROUP* tuneGroup      = nullptr;
-
-    if( !dimensionGroup )
-    {
-        dimensionGroup = new ACTION_GROUP( "group.pcbDimensions",
-                                           { &PCB_ACTIONS::drawOrthogonalDimension,
-                                             &PCB_ACTIONS::drawAlignedDimension,
-                                             &PCB_ACTIONS::drawCenterDimension,
-                                             &PCB_ACTIONS::drawRadialDimension,
-                                             &PCB_ACTIONS::drawLeader } );
-    }
-
-    if( !originGroup )
-    {
-        originGroup = new ACTION_GROUP( "group.pcbOrigins",
-                                        { &ACTIONS::gridSetOrigin,
-                                          &PCB_ACTIONS::drillOrigin } );
-    }
-
-    if( !routingGroup )
-    {
-        routingGroup = new ACTION_GROUP( "group.pcbRouting",
-                                        { &PCB_ACTIONS::routeSingleTrack,
-                                          &PCB_ACTIONS::routeDiffPair } );
-    }
-
-    if( !tuneGroup )
-    {
-        tuneGroup = new ACTION_GROUP( "group.pcbTune",
-                                      { &PCB_ACTIONS::tuneSingleTrack,
-                                        &PCB_ACTIONS::tuneDiffPair,
-                                        &PCB_ACTIONS::tuneSkew } );
-    }
+    TOOLBAR_CONFIGURATION config;
 
     // clang-format off
-    m_drawToolBar->Add( ACTIONS::selectionTool );
-    m_drawToolBar->Add( PCB_ACTIONS::localRatsnestTool );
+    config.AppendAction( ACTIONS::selectionTool )
+          .AppendAction( PCB_ACTIONS::localRatsnestTool );
 
-    m_drawToolBar->AddScaledSeparator( this );
-    m_drawToolBar->Add( PCB_ACTIONS::placeFootprint );
-    m_drawToolBar->AddGroup( routingGroup,                 ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->AddGroup( tuneGroup,                    ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::drawVia );
-    m_drawToolBar->Add( PCB_ACTIONS::drawZone );
-    m_drawToolBar->Add( PCB_ACTIONS::drawRuleArea );
+    config.AppendSeparator()
+          .AppendAction( PCB_ACTIONS::placeFootprint )
+          .AppendGroup( TOOLBAR_GROUP_CONFIG( "group.pcbRouting" )
+                        .AddAction( PCB_ACTIONS::routeSingleTrack )
+                        .AddAction( PCB_ACTIONS::routeDiffPair ) )
+          .AppendGroup( TOOLBAR_GROUP_CONFIG( "group.pcbTune" )
+                        .AddAction( PCB_ACTIONS::tuneSingleTrack )
+                        .AddAction( PCB_ACTIONS::tuneDiffPair )
+                        .AddAction( PCB_ACTIONS::tuneSkew ) )
+          .AppendAction( PCB_ACTIONS::drawVia )
+          .AppendAction( PCB_ACTIONS::drawZone )
+          .AppendAction( PCB_ACTIONS::drawRuleArea );
 
-    m_drawToolBar->AddScaledSeparator( this );
-    m_drawToolBar->Add( PCB_ACTIONS::drawLine );
-    m_drawToolBar->Add( PCB_ACTIONS::drawArc );
-    m_drawToolBar->Add( PCB_ACTIONS::drawRectangle );
-    m_drawToolBar->Add( PCB_ACTIONS::drawCircle );
-    m_drawToolBar->Add( PCB_ACTIONS::drawPolygon );
-    m_drawToolBar->Add( PCB_ACTIONS::drawBezier );
-    m_drawToolBar->Add( PCB_ACTIONS::placeReferenceImage );
-    m_drawToolBar->Add( PCB_ACTIONS::placeText );
-    m_drawToolBar->Add( PCB_ACTIONS::drawTextBox );
-    m_drawToolBar->Add( PCB_ACTIONS::drawTable );
-    m_drawToolBar->AddGroup( dimensionGroup,               ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( ACTIONS::deleteTool );
+    config.AppendSeparator()
+          .AppendAction( PCB_ACTIONS::drawLine )
+          .AppendAction( PCB_ACTIONS::drawArc )
+          .AppendAction( PCB_ACTIONS::drawRectangle )
+          .AppendAction( PCB_ACTIONS::drawCircle )
+          .AppendAction( PCB_ACTIONS::drawPolygon )
+          .AppendAction( PCB_ACTIONS::drawBezier )
+          .AppendAction( PCB_ACTIONS::placeReferenceImage )
+          .AppendAction( PCB_ACTIONS::placeText )
+          .AppendAction( PCB_ACTIONS::drawTextBox )
+          .AppendAction( PCB_ACTIONS::drawTable )
+          .AppendGroup( TOOLBAR_GROUP_CONFIG( "group.pcbDimensions" )
+                        .AddAction( PCB_ACTIONS::drawOrthogonalDimension )
+                        .AddAction( PCB_ACTIONS::drawAlignedDimension )
+                        .AddAction( PCB_ACTIONS::drawCenterDimension )
+                        .AddAction( PCB_ACTIONS::drawRadialDimension )
+                        .AddAction( PCB_ACTIONS::drawLeader ) )
+          .AppendAction( ACTIONS::deleteTool );
 
-    m_drawToolBar->AddScaledSeparator( this );
-    m_drawToolBar->AddGroup( originGroup,                  ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( ACTIONS::measureTool );
-    // clang-format on
+    config.AppendSeparator()
+          .AppendGroup( TOOLBAR_GROUP_CONFIG( "group.pcbOrigins" )
+                        .AddAction( ACTIONS::gridSetOrigin )
+                        .AddAction( PCB_ACTIONS::tuneDiffPair )
+                        .AddAction( PCB_ACTIONS::drillOrigin ) )
+          .AppendAction( ACTIONS::measureTool );
 
-    PCB_SELECTION_TOOL* selTool   = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
+    /* TODO (ISM): Support context menus
+    PCB_SELECTION_TOOL* selTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
 
     auto makeArcMenu = [&]()
     {
@@ -399,7 +238,7 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
         return arcMenu;
     };
 
-    m_drawToolBar->AddToolContextMenu( PCB_ACTIONS::drawArc, makeArcMenu() );
+    m_tbRight->AddToolContextMenu( PCB_ACTIONS::drawArc, makeArcMenu() );
 
     auto makeRouteMenu = [&]()
     {
@@ -415,132 +254,206 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
         return routeMenu;
     };
 
-    m_drawToolBar->AddToolContextMenu( PCB_ACTIONS::routeSingleTrack, makeRouteMenu() );
-    m_drawToolBar->AddToolContextMenu( PCB_ACTIONS::routeDiffPair, makeRouteMenu() );
+    m_tbRight->AddToolContextMenu( PCB_ACTIONS::routeSingleTrack, makeRouteMenu() );
+    m_tbRight->AddToolContextMenu( PCB_ACTIONS::routeDiffPair, makeRouteMenu() );
 
     std::unique_ptr<ACTION_MENU> zoneMenu = std::make_unique<ACTION_MENU>( false, selTool );
     zoneMenu->Add( PCB_ACTIONS::zoneFillAll );
     zoneMenu->Add( PCB_ACTIONS::zoneUnfillAll );
-    m_drawToolBar->AddToolContextMenu( PCB_ACTIONS::drawZone, std::move( zoneMenu ) );
+    m_tbRight->AddToolContextMenu( PCB_ACTIONS::drawZone, std::move( zoneMenu ) );
 
     std::unique_ptr<ACTION_MENU> lineMenu = std::make_unique<ACTION_MENU>( false, selTool );
-    m_drawToolBar->AddToolContextMenu( PCB_ACTIONS::drawLine, std::move( lineMenu ) );
+    m_tbRight->AddToolContextMenu( PCB_ACTIONS::drawLine, std::move( lineMenu ) );
+*/
 
-    m_drawToolBar->KiRealize();
+    // clang-format on
+    return config;
 }
 
 
-void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
+std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_FRAME::DefaultTopMainToolbarConfig()
 {
-    wxWindowUpdateLocker dummy( this );
+    TOOLBAR_CONFIGURATION config;
 
-    if( m_auxiliaryToolBar )
+    // clang-format off
+    if( Kiface().IsSingle() )
     {
-        m_auxiliaryToolBar->ClearToolbar();
+        config.AppendAction( ACTIONS::doNew );
+        config.AppendAction( ACTIONS::open );
     }
+
+    config.AppendAction( ACTIONS::save );
+
+    config.AppendSeparator()
+          .AppendAction( PCB_ACTIONS::boardSetup );
+
+    config.AppendSeparator()
+          .AppendAction( ACTIONS::pageSettings )
+          .AppendAction( ACTIONS::print )
+          .AppendAction( ACTIONS::plot );
+
+    config.AppendSeparator()
+          .AppendAction( ACTIONS::undo )
+          .AppendAction( ACTIONS::redo );
+
+    config.AppendSeparator()
+          .AppendAction( ACTIONS::find );
+
+    config.AppendSeparator()
+          .AppendAction( ACTIONS::zoomRedraw )
+          .AppendAction( ACTIONS::zoomInCenter )
+          .AppendAction( ACTIONS::zoomOutCenter )
+          .AppendAction( ACTIONS::zoomFitScreen )
+          .AppendAction( ACTIONS::zoomFitObjects )
+          .AppendAction( ACTIONS::zoomTool );
+
+    config.AppendSeparator()
+          .AppendAction( PCB_ACTIONS::rotateCcw )
+          .AppendAction( PCB_ACTIONS::rotateCw )
+          .AppendAction( PCB_ACTIONS::mirrorV )
+          .AppendAction( PCB_ACTIONS::mirrorH )
+          .AppendAction( PCB_ACTIONS::group )
+          .AppendAction( PCB_ACTIONS::ungroup )
+          .AppendAction( PCB_ACTIONS::lock )
+          .AppendAction( PCB_ACTIONS::unlock );
+
+    config.AppendSeparator()
+          .AppendAction( ACTIONS::showFootprintEditor )
+          .AppendAction( ACTIONS::showFootprintBrowser )
+          .AppendAction( ACTIONS::show3DViewer );
+
+    config.AppendSeparator();
+
+    if( !Kiface().IsSingle() )
+        config.AppendAction( ACTIONS::updatePcbFromSchematic );
     else
-    {
-        m_auxiliaryToolBar = new ACTION_TOOLBAR( this, ID_AUX_TOOLBAR, wxDefaultPosition,
-                                                 wxDefaultSize,
-                                                 KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
-        m_auxiliaryToolBar->SetAuiManager( &m_auimgr );
-    }
+        config.AppendAction( PCB_ACTIONS::importNetlist );
 
-    /* Set up toolbar items */
+    config.AppendAction( PCB_ACTIONS::runDRC );
 
-    // Creates box to display and choose tracks widths:
-    if( m_SelTrackWidthBox == nullptr )
-        m_SelTrackWidthBox = new wxChoice( m_auxiliaryToolBar, ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
-                                           wxDefaultPosition, wxDefaultSize, 0, nullptr );
+    config.AppendSeparator()
+          .AppendAction( PCB_ACTIONS::showEeschema );
 
-    UpdateTrackWidthSelectBox( m_SelTrackWidthBox, true, true );
-    m_auxiliaryToolBar->AddControl( m_SelTrackWidthBox );
-    m_SelTrackWidthBox->SetToolTip( _( "Select the default width for new tracks. Note that this "
-                                       "width can be overridden by the board minimum width, or by "
-                                       "the width of an existing track if the 'Use Existing Track "
-                                       "Width' feature is enabled." ) );
+    config.AppendControl( "control.PCBPlugin" );
 
-    m_auxiliaryToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH, wxEmptyString,
+    // clang-format on
+    return config;
+}
+
+
+std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_FRAME::DefaultTopAuxToolbarConfig()
+{
+    TOOLBAR_CONFIGURATION config;
+
+    // clang-format off
+    config.AppendControl( "control.PCBTrackWidth" );
+
+    /* TODO (ISM): Turn this into an action
+    m_tbTopAux->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH, wxEmptyString,
                                  KiBitmapBundle( BITMAPS::auto_track_width ),
                                  _( "When routing from an existing track use its width instead "
                                     "of the current width setting" ),
                                  wxITEM_CHECK );
+*/
+    config.AppendSeparator()
+          .AppendControl( "control.PCBViaDia" );
 
-    m_auxiliaryToolBar->AddScaledSeparator( this );
+    config.AppendSeparator()
+          .AppendControl( m_tbPcbLayerSelectorName )
+          .AppendAction( PCB_ACTIONS::selectLayerPair );
 
-    // Creates box to display and choose vias diameters:
-
-    if( m_SelViaSizeBox == nullptr )
-        m_SelViaSizeBox = new wxChoice( m_auxiliaryToolBar, ID_AUX_TOOLBAR_PCB_VIA_SIZE,
-                                        wxDefaultPosition, wxDefaultSize, 0, nullptr );
-
-    UpdateViaSizeSelectBox( m_SelViaSizeBox, true, true );
-    m_auxiliaryToolBar->AddControl( m_SelViaSizeBox );
-
-    m_auxiliaryToolBar->AddScaledSeparator( this );
-
-    if( m_SelLayerBox == nullptr )
-    {
-        m_SelLayerBox = new PCB_LAYER_BOX_SELECTOR( m_auxiliaryToolBar, ID_TOOLBARH_PCB_SELECT_LAYER );
-        m_SelLayerBox->SetBoardFrame( this );
-    }
-
-    ReCreateLayerBox( false );
-    m_auxiliaryToolBar->AddControl( m_SelLayerBox );
-
-    m_auxiliaryToolBar->Add( PCB_ACTIONS::selectLayerPair );
+    // TODO (ISM): Figure out this part
     PrepareLayerIndicator( true );    // Force rebuild of the bitmap with the active layer colors
 
-    // Add the box to display and select the current grid size:
-    m_auxiliaryToolBar->AddScaledSeparator( this );
+    config.AppendSeparator()
+          .AppendControl( m_tbGridSelectName );
 
-    if( m_gridSelectBox == nullptr )
-        m_gridSelectBox = new wxChoice( m_auxiliaryToolBar, ID_ON_GRID_SELECT,
-                                        wxDefaultPosition, wxDefaultSize, 0, nullptr );
+    config.AppendSeparator()
+          .AppendControl( m_tbZoomSelectName );
 
-    UpdateGridSelectBox();
-
-    m_auxiliaryToolBar->AddControl( m_gridSelectBox );
-
-    //  Add the box to display and select the current Zoom
-    m_auxiliaryToolBar->AddScaledSeparator( this );
-
-    if( m_zoomSelectBox == nullptr )
-        m_zoomSelectBox = new wxChoice( m_auxiliaryToolBar, ID_ON_ZOOM_SELECT,
-                                        wxDefaultPosition, wxDefaultSize, 0, nullptr );
-
-    UpdateZoomSelectBox();
-    m_auxiliaryToolBar->AddControl( m_zoomSelectBox );
-
-    // Go through and ensure the comboboxes are the correct size, since the strings in the
-    // box could have changed widths.
-    m_auxiliaryToolBar->UpdateControlWidth( ID_AUX_TOOLBAR_PCB_TRACK_WIDTH );
-    m_auxiliaryToolBar->UpdateControlWidth( ID_AUX_TOOLBAR_PCB_VIA_SIZE );
-    m_auxiliaryToolBar->UpdateControlWidth( ID_ON_ZOOM_SELECT );
-    m_auxiliaryToolBar->UpdateControlWidth( ID_ON_GRID_SELECT );
-    m_auxiliaryToolBar->UpdateControlWidth( ID_TOOLBARH_PCB_SELECT_LAYER );
-
-    // after adding the buttons to the toolbar, must call Realize()
-    m_auxiliaryToolBar->KiRealize();
+    // clang-format on
+    return config;
 }
 
 
-void PCB_EDIT_FRAME::UpdateToolbarControlSizes()
+void PCB_EDIT_FRAME::configureToolbars()
 {
-    if( m_mainToolBar )
-    {
-        // Update the item widths
-    }
+    PCB_BASE_FRAME::configureToolbars();
 
-    if( m_auxiliaryToolBar )
-    {
-        // Update the item widths
-        m_auxiliaryToolBar->UpdateControlWidth( ID_AUX_TOOLBAR_PCB_TRACK_WIDTH );
-        m_auxiliaryToolBar->UpdateControlWidth( ID_AUX_TOOLBAR_PCB_VIA_SIZE );
-        m_auxiliaryToolBar->UpdateControlWidth( ID_ON_ZOOM_SELECT );
-        m_auxiliaryToolBar->UpdateControlWidth( ID_ON_GRID_SELECT );
-        m_auxiliaryToolBar->UpdateControlWidth( ID_TOOLBARH_PCB_SELECT_LAYER );
-    }
+    // Box to display and choose track widths
+    auto trackWidthSelectorFactory = [this]( ACTION_TOOLBAR* aToolbar )
+        {
+            if( !m_SelTrackWidthBox )
+            {
+                m_SelTrackWidthBox = new wxChoice( aToolbar, ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
+                                                   wxDefaultPosition, wxDefaultSize, 0, nullptr );
+            }
+
+            m_SelTrackWidthBox->SetToolTip( _( "Select the default width for new tracks. Note that this "
+                                               "width can be overridden by the board minimum width, or by "
+                                               "the width of an existing track if the 'Use Existing Track "
+                                               "Width' feature is enabled." ) );
+
+            UpdateTrackWidthSelectBox( m_SelTrackWidthBox, true, true );
+
+            aToolbar->Add( m_SelTrackWidthBox );
+        };
+
+    RegisterCustomToolbarControlFactory( "control.PCBTrackWidth", _( "Track width selector" ),
+                                         _( "Control to select the track width" ),
+                                         trackWidthSelectorFactory );
+
+
+    // Box to display and choose vias diameters
+    auto viaDiaSelectorFactory = [this]( ACTION_TOOLBAR* aToolbar )
+        {
+            if( !m_SelViaSizeBox )
+            {
+                m_SelViaSizeBox = new wxChoice( aToolbar, ID_AUX_TOOLBAR_PCB_VIA_SIZE,
+                                                wxDefaultPosition, wxDefaultSize, 0, nullptr );
+            }
+
+            UpdateViaSizeSelectBox( m_SelViaSizeBox, true, true );
+            aToolbar->Add( m_SelViaSizeBox );
+        };
+
+    RegisterCustomToolbarControlFactory( "control.PCBViaDia", _( "Via diameter selector" ),
+                                         _( "Control to select the via diameter" ),
+                                         viaDiaSelectorFactory );
+
+    // IPC/Scripting plugin control
+    // TODO (ISM): Clean this up to make IPC actions just normal tool actions to get rid of this entire
+    // control
+    auto pluginControlFactory = [this]( ACTION_TOOLBAR* aToolbar )
+        {
+            // Add scripting console and API plugins
+            bool scriptingAvailable = SCRIPTING::IsWxAvailable();
+
+            #ifdef KICAD_IPC_API
+            bool haveApiPlugins = Pgm().GetCommonSettings()->m_Api.enable_server &&
+                    !Pgm().GetPluginManager().GetActionsForScope( PluginActionScope() ).empty();
+            #else
+            bool haveApiPlugins = false;
+            #endif
+
+            if( scriptingAvailable || haveApiPlugins )
+            {
+                aToolbar->AddScaledSeparator( aToolbar->GetParent() );
+
+                if( scriptingAvailable )
+                {
+                    aToolbar->Add( PCB_ACTIONS::showPythonConsole );
+                    addActionPluginTools( aToolbar );
+                }
+
+                if( haveApiPlugins )
+                    AddApiPluginTools( aToolbar );
+            }
+        };
+
+    RegisterCustomToolbarControlFactory( "control.PCBPlugin", _( "IPC/Scripting plugins" ),
+                                         _( "Region to hold the IPC/Scripting action buttons" ),
+                                         pluginControlFactory );
 }
 
 
@@ -682,7 +595,7 @@ void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool a
 
 void PCB_EDIT_FRAME::ReCreateLayerBox( bool aForceResizeToolbar )
 {
-    if( m_SelLayerBox == nullptr || m_auxiliaryToolBar == nullptr )
+    if( m_SelLayerBox == nullptr || m_tbTopAux == nullptr )
         return;
 
     m_SelLayerBox->SetToolTip( _( "+/- to switch" ) );
@@ -827,11 +740,4 @@ void PCB_EDIT_FRAME::OnUpdateSelectAutoWidth( wxUpdateUIEvent& aEvent )
     BOARD_DESIGN_SETTINGS& bds = GetDesignSettings();
 
     aEvent.Check( bds.m_UseConnectedTrackWidth );
-}
-
-
-void PCB_EDIT_FRAME::OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent )
-{
-    if( m_SelLayerBox->GetLayerSelection() != GetActiveLayer() )
-        m_SelLayerBox->SetLayerSelection( GetActiveLayer() );
 }

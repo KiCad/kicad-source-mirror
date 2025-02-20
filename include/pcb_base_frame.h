@@ -62,6 +62,7 @@ class FOOTPRINT_EDITOR_SETTINGS;
 struct MAGNETIC_SETTINGS;
 class NL_PCBNEW_PLUGIN;
 class PROGRESS_REPORTER;
+class PCB_LAYER_BOX_SELECTOR;
 
 #ifdef wxHAS_INOTIFY
 #define wxFileSystemWatcher wxInotifyFileSystemWatcher
@@ -397,6 +398,8 @@ public:
     void OnFpChangeDebounceTimer( wxTimerEvent& aEvent );
 
 protected:
+    void configureToolbars() override;
+
     bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;
 
     void handleActivateEvent( wxActivateEvent& aEvent ) override;
@@ -431,6 +434,10 @@ protected:
     BOARD*                  m_pcb;
     PCB_DISPLAY_OPTIONS     m_displayOptions;
     PCB_ORIGIN_TRANSFORMS   m_originTransforms;
+
+    PCB_LAYER_BOX_SELECTOR* m_SelLayerBox; // a combo box to display and select active layer
+
+    const std::string       m_tbPcbLayerSelectorName = "control.PCBLayerSelector";
 
 private:
     std::unique_ptr<NL_PCBNEW_PLUGIN>       m_spaceMouse;

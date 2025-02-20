@@ -47,10 +47,9 @@ public:
     DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~DISPLAY_FOOTPRINTS_FRAME() override;
 
-    void    ReCreateHToolbar() override;
-    void    ReCreateVToolbar() override;
-    void    ReCreateOptToolbar() override;
-    void    UpdateToolbarControlSizes() override;
+    // Currently, no top aux or right toolbars
+    std::optional<TOOLBAR_CONFIGURATION> DefaultLeftToolbarConfig() override;
+    std::optional<TOOLBAR_CONFIGURATION> DefaultTopMainToolbarConfig() override;
 
     /**
      * Refresh the full display for this frame.

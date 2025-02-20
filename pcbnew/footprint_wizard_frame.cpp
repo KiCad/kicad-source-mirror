@@ -151,8 +151,8 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
 
     // Create the toolbars
-    ReCreateHToolbar();
-    ReCreateVToolbar();
+    configureToolbars();
+    RecreateToolbars();
 
     // Create the parameters panel
     m_parametersPanel = new wxPanel( this, wxID_ANY );
@@ -186,7 +186,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     m_auimgr.SetManagedWindow( this );
 
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
+    m_auimgr.AddPane( m_tbTopMain, EDA_PANE().HToolbar().Name( "TopMainToolbar" ).Top().Layer(6) );
     m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6)
                       .BestSize( -1, m_msgFrameHeight ) );
 
@@ -569,57 +569,49 @@ void FOOTPRINT_WIZARD_FRAME::Update3DView( bool aMarkDirty, bool aRefresh, const
 }
 
 
-void FOOTPRINT_WIZARD_FRAME::ReCreateHToolbar()
+std::optional<TOOLBAR_CONFIGURATION> FOOTPRINT_WIZARD_FRAME::DefaultTopMainToolbarConfig()
 {
-    if( m_mainToolBar )
-    {
-        m_mainToolBar->ClearToolbar();
-    }
-    else
-    {
-        m_mainToolBar = new ACTION_TOOLBAR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
-        m_mainToolBar->SetAuiManager( &m_auimgr );
-    }
+    TOOLBAR_CONFIGURATION config;
 
-    // Set up toolbar
-    m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_SELECT_WIZARD, wxEmptyString,
-                            KiBitmap( BITMAPS::module_wizard ),
-                            _( "Select wizard script to run" ) );
+    // clang-format off
+    /* TODO (ISM): Convert to action
+    m_tbTopMain->AddTool( ID_FOOTPRINT_WIZARD_SELECT_WIZARD, wxEmptyString,
+        KiBitmap( BITMAPS::module_wizard ),
+        _( "Select wizard script to run" ) );
+*/
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_RESET_TO_DEFAULT, wxEmptyString,
-                            KiBitmap( BITMAPS::reload ),
-                            _( "Reset wizard parameters to default") );
+    config.AppendSeparator();
+    /* TODO (ISM): Convert to action
+    m_tbTopMain->AddTool( ID_FOOTPRINT_WIZARD_RESET_TO_DEFAULT, wxEmptyString,
+            KiBitmap( BITMAPS::reload ),
+            _( "Reset wizard parameters to default") );
+*/
+    config.AppendSeparator();
+    /* TODO (ISM): Convert to action
+    m_tbTopMain->AddTool( ID_FOOTPRINT_WIZARD_PREVIOUS, wxEmptyString,
+            KiBitmap( BITMAPS::lib_previous ),
+            _( "Select previous parameters page" ) );
+    m_tbTopMain->AddTool( ID_FOOTPRINT_WIZARD_NEXT, wxEmptyString,
+            KiBitmap( BITMAPS::lib_next ),
+            _( "Select next parameters page" ) );
+*/
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_PREVIOUS, wxEmptyString,
-                            KiBitmap( BITMAPS::lib_previous ),
-                            _( "Select previous parameters page" ) );
-    m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_NEXT, wxEmptyString,
-                            KiBitmap( BITMAPS::lib_next ),
-                            _( "Select next parameters page" ) );
-
-#if 0   // Currently: the 3D viewer is not useful
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( ACTIONS::show3DViewer );
-#endif
-
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( ACTIONS::zoomRedraw );
-    m_mainToolBar->Add( ACTIONS::zoomInCenter );
-    m_mainToolBar->Add( ACTIONS::zoomOutCenter );
-    m_mainToolBar->Add( ACTIONS::zoomFitScreen );
+    config.AppendSeparator()
+          .AppendAction( ACTIONS::zoomRedraw )
+          .AppendAction( ACTIONS::zoomInCenter )
+          .AppendAction( ACTIONS::zoomOutCenter )
+          .AppendAction( ACTIONS::zoomFitScreen );
 
     // The footprint wizard always can export the current footprint
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_DONE,
-                            wxEmptyString, KiBitmap( BITMAPS::export_footprint_names ),
-                            _( "Export footprint to editor" ) );
+    config.AppendSeparator();
+    /* TODO (ISM): Convert to action
+    m_tbTopMain->AddTool( ID_FOOTPRINT_WIZARD_DONE,
+            wxEmptyString, KiBitmap( BITMAPS::export_footprint_names ),
+            _( "Export footprint to editor" ) );
+*/
 
-    // after adding the buttons to the toolbar, must call Realize() to
-    // reflect the changes
-    m_mainToolBar->Realize();
+    // clang-format on
+    return config;
 }
 
 
@@ -628,11 +620,6 @@ BOARD_ITEM_CONTAINER* FOOTPRINT_WIZARD_FRAME::GetModel() const
     return GetBoard()->GetFirstFootprint();
 }
 
-
-void FOOTPRINT_WIZARD_FRAME::ReCreateVToolbar()
-{
-    // Currently, there is no vertical toolbar
-}
 
 void FOOTPRINT_WIZARD_FRAME::PythonPluginsReload()
 {

@@ -50,7 +50,9 @@ public:
     // Make the toolbar a friend so it can easily access everything inside here
     friend class ACTION_TOOLBAR;
 
-    ACTION_GROUP( const std::string& aName, const std::vector<const TOOL_ACTION*>& aActions );
+    ACTION_GROUP(const std::string_view& aName );
+
+    ACTION_GROUP( const std::string_view& aName, const std::vector<const TOOL_ACTION*>& aActions );
 
     /**
      * Set the default action to use when first creating the toolbar palette icon.
@@ -76,6 +78,15 @@ public:
      * Get the ID used in the UI to reference this group
      */
     int GetUIId() const;
+
+    /**
+     * Set the actions contained in this group.
+     *
+     * The first action in the list will be the new default action.
+     *
+     * @param aActions is the new set of actions.
+     */
+    void SetActions( const std::vector<const TOOL_ACTION*>& aActions );
 
     /**
      * Get a vector of all the actions contained inside this group.
@@ -238,6 +249,11 @@ public:
     void AddScaledSeparator( wxWindow* aWindow );
 
     /**
+     * Add a control to the toolbar.
+     */
+    void Add( wxControl* aControl, const wxString& aLabel = wxEmptyString );
+
+    /**
      * Add a context menu to a specific tool item on the toolbar.
      *
      * This toolbar gets ownership of the menu object, and will delete it when the
@@ -252,11 +268,13 @@ public:
      * Add a set of actions to a toolbar as a group. One action from the group will be displayed
      * at a time.
      *
+     * This toolbar gets ownership of the group object, and will delete it when the
+     * ClearToolbar() function is called.
+     *
      * @param aGroup is the group to add. The first action in the group will be the first shown
      *               on the toolbar.
-     * @param aIsToggleEntry makes the toolbar item a toggle entry when true
      */
-    void AddGroup( ACTION_GROUP* aGroup, bool aIsToggleEntry = false );
+    void AddGroup( std::unique_ptr<ACTION_GROUP> aGroup );
 
     /**
      * Select an action inside a group
@@ -273,6 +291,11 @@ public:
      * @param aConfig is the configuration to apply to the toolbar
      */
     void ApplyConfiguration( const TOOLBAR_CONFIGURATION& aConfig );
+
+    /**
+     * Update the width of all wxControl tools on thsi toolbar
+     */
+    void UpdateControlWidths();
 
     /**
      * Update the toolbar item width of a control using its best size.
@@ -369,9 +392,44 @@ protected:
     std::map<int, bool>                m_toolKinds;
     std::map<int, bool>                m_toolCancellable;
     std::map<int, const TOOL_ACTION*>  m_toolActions;
-    std::map<int, ACTION_GROUP*>       m_actionGroups;
 
-    std::map<int, std::unique_ptr<ACTION_MENU>> m_toolMenus;
+    /// IDs for all the control items in this toolbar
+    std::vector<int> m_controlIDs;
+
+    std::map<int, std::unique_ptr<ACTION_GROUP>> m_actionGroups;
+    std::map<int, std::unique_ptr<ACTION_MENU>>  m_toolMenus;
+};
+
+/**
+ * Type for the function signature that is used to add custom controls to the toolbar.
+ *
+ * Note, these functions SHOULD NOT use the wxWidgets-provided `AddControl` function to
+ * add the controls to the toolbar, instead they should use the `ACTION_TOOLBAR::Add` functions
+ * to ensure proper registration of the control.
+ */
+typedef std::function<void ( ACTION_TOOLBAR* )> ACTION_TOOLBAR_CONTROL_FACTORY;
+
+struct ACTION_TOOLBAR_CONTROL
+{
+    /**
+     * Name of the control - must start with "control."
+     */
+    std::string name;
+
+    /**
+     * Short description to show for the control
+     */
+    wxString uiname;
+
+    /**
+     * User-visible tooltip for the control
+     */
+    wxString description;
+
+    /**
+     * Factory function to create the control when required
+     */
+    ACTION_TOOLBAR_CONTROL_FACTORY factory;
 };
 
 #endif

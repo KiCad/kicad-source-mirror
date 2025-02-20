@@ -76,11 +76,6 @@ public:
      */
     void HideTabsIfNeeded();
 
-    /**
-     * (Re)Create the left vertical toolbar
-     */
-    void RecreateBaseLeftToolbar();
-
     wxString GetCurrentFileName() const override
     {
         return GetProjectFileName();
@@ -201,6 +196,9 @@ public:
     // Used only on Windows: stores the info message about file watcher
     wxString m_FileWatcherInfo;
 
+    // Toolbar defaults
+    std::optional<TOOLBAR_CONFIGURATION> DefaultLeftToolbarConfig() override;
+
     DECLARE_EVENT_TABLE()
 
 protected:
@@ -239,7 +237,6 @@ private:
     PROJECT_TREE_PANE*    m_leftWin;
     wxAuiNotebook*        m_notebook;
     PANEL_KICAD_LAUNCHER* m_launcher;
-    ACTION_TOOLBAR*       m_mainToolBar;
     int                   m_lastToolbarIconSize;
 
     std::shared_ptr<PLUGIN_CONTENT_MANAGER> m_pcm;

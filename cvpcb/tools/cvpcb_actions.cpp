@@ -153,6 +153,7 @@ TOOL_ACTION CVPCB_ACTIONS::FilterFPbyFPFilters( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Use symbol footprint filters" ) )
         .Tooltip( _( "Filter footprint list by footprint filters defined in the symbol" ) )
         .Icon( BITMAPS::module_filtered_list )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Flags( AF_NONE )
         .Parameter( FOOTPRINTS_LISTBOX::FILTERING_BY_COMPONENT_FP_FILTERS ) );
 
@@ -162,6 +163,7 @@ TOOL_ACTION CVPCB_ACTIONS::filterFPbyPin( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Filter by pin count" ) )
         .Tooltip( _( "Filter footprint list by pin count" ) )
         .Icon( BITMAPS::module_pin_filtered_list )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Flags( AF_NONE )
         .Parameter( FOOTPRINTS_LISTBOX::FILTERING_BY_PIN_COUNT ) );
 
@@ -171,5 +173,6 @@ TOOL_ACTION CVPCB_ACTIONS::FilterFPbyLibrary( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Filter by library" ) )
         .Tooltip( _( "Filter footprint list by library" ) )
         .Icon( BITMAPS::module_library_list )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Flags( AF_NONE )
         .Parameter( FOOTPRINTS_LISTBOX::FILTERING_BY_LIBRARY ) );

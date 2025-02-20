@@ -133,7 +133,6 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
                         KICAD_MANAGER_FRAME_NAME, &::Kiway, unityScale ),
         m_leftWin( nullptr ),
         m_launcher( nullptr ),
-        m_mainToolBar( nullptr ),
         m_lastToolbarIconSize( 0 )
 {
     const int defaultLeftWinWidth = FromDIP( 250 );
@@ -205,14 +204,15 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     setupTools();
     setupUIConditions();
 
-    RecreateBaseLeftToolbar();
+    configureToolbars();
+    RecreateToolbars();
     ReCreateMenuBar();
 
     m_auimgr.SetManagedWindow( this );
     m_auimgr.SetFlags( wxAUI_MGR_LIVE_RESIZE );
 
-    m_auimgr.AddPane( m_mainToolBar,
-                      EDA_PANE().VToolbar().Name( "MainToolbar" ).Left().Layer( 2 ) );
+    m_auimgr.AddPane( m_tbLeft,
+                      EDA_PANE().VToolbar().Name( "TopMainToolbar" ).Left().Layer( 2 ) );
 
     // BestSize() does not always set the actual pane size of m_leftWin to the required value.
     // It happens when m_leftWin is too large (roughly > 1/3 of the kicad manager frame width.
@@ -984,7 +984,7 @@ void KICAD_MANAGER_FRAME::ShowChangedLanguage()
     EDA_BASE_FRAME::ShowChangedLanguage();
 
     // tooltips in toolbars
-    RecreateBaseLeftToolbar();
+    RecreateToolbars();
     m_launcher->CreateLaunchers();
 
     // update captions
@@ -1213,11 +1213,11 @@ void KICAD_MANAGER_FRAME::onToolbarSizeChanged()
 {
     // No idea why, but the same mechanism used in EDA_DRAW_FRAME doesn't work here
     // the only thing that seems to work is to blow it all up and start from scratch.
-    m_auimgr.DetachPane( m_mainToolBar );
-    delete m_mainToolBar;
-    m_mainToolBar = nullptr;
-    RecreateBaseLeftToolbar();
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Left()
+    m_auimgr.DetachPane( m_tbLeft );
+    delete m_tbLeft;
+    m_tbLeft = nullptr;
+    RecreateToolbars();
+    m_auimgr.AddPane( m_tbLeft, EDA_PANE().HToolbar().Name( "TopMainToolbar" ).Left()
                       .Layer( 2 ) );
 
     m_auimgr.Update();

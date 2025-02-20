@@ -35,73 +35,66 @@
 #include <tools/eda_3d_actions.h>
 #include <3d_viewer_id.h>
 
-void EDA_3D_VIEWER_FRAME::ReCreateMainToolbar()
+std::optional<TOOLBAR_CONFIGURATION> EDA_3D_VIEWER_FRAME::DefaultTopMainToolbarConfig()
 {
-    wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::ReCreateMainToolbar" ) );
+    TOOLBAR_CONFIGURATION config;
 
-    wxWindowUpdateLocker dummy( this );
-
-    if( m_mainToolBar )
-    {
-        m_mainToolBar->ClearToolbar();
-    }
-    else
-    {
-        m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT |
-                                            wxAUI_TB_HORIZONTAL );
-        m_mainToolBar->SetAuiManager( &m_auimgr );
-    }
-
+    // clang-format off
     // Set up toolbar
-    m_mainToolBar->AddTool( ID_RELOAD3D_BOARD, wxEmptyString,
-                            KiBitmapBundle( BITMAPS::import3d ),
-                            _( "Reload board" ) );
+    /* TODO (ISM): Move to action
+    m_tbTopMain->AddTool( ID_RELOAD3D_BOARD, wxEmptyString,
+        KiBitmapBundle( BITMAPS::import3d ),
+        _( "Reload board" ) );
+    */
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->AddTool( ID_TOOL_SCREENCOPY_TOCLIBBOARD, wxEmptyString,
-                            KiBitmapBundle( BITMAPS::copy ),
-                            _( "Copy 3D image to clipboard" ) );
+    config.AppendSeparator();
+    /* TODO (ISM): Move to action
+    m_tbTopMain->AddTool( ID_TOOL_SCREENCOPY_TOCLIBBOARD, wxEmptyString,
+        KiBitmapBundle( BITMAPS::copy ),
+        _( "Copy 3D image to clipboard" ) );
+*/
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->AddTool( ID_RENDER_CURRENT_VIEW, wxEmptyString,
-                            KiBitmapBundle( BITMAPS::ray_tracing ),
-                            _( "Render current view using Raytracing" ), wxITEM_CHECK );
+    config.AppendSeparator();
+    /* TODO (ISM): Move to action
+    m_tbTopMain->AddTool( ID_RENDER_CURRENT_VIEW, wxEmptyString,
+        KiBitmapBundle( BITMAPS::ray_tracing ),
+        _( "Render current view using Raytracing" ), wxITEM_CHECK );
+*/
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( ACTIONS::zoomRedraw );
-    m_mainToolBar->Add( ACTIONS::zoomInCenter );
-    m_mainToolBar->Add( ACTIONS::zoomOutCenter );
-    m_mainToolBar->Add( ACTIONS::zoomFitScreen );
+    config.AppendSeparator()
+          .AppendAction( ACTIONS::zoomRedraw )
+          .AppendAction( ACTIONS::zoomInCenter )
+          .AppendAction( ACTIONS::zoomOutCenter )
+          .AppendAction( ACTIONS::zoomFitScreen );
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EDA_3D_ACTIONS::rotateXCW );
-    m_mainToolBar->Add( EDA_3D_ACTIONS::rotateXCCW );
+    config.AppendSeparator()
+          .AppendAction( EDA_3D_ACTIONS::rotateXCW )
+          .AppendAction( EDA_3D_ACTIONS::rotateXCCW );
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EDA_3D_ACTIONS::rotateYCW );
-    m_mainToolBar->Add( EDA_3D_ACTIONS::rotateYCCW );
+    config.AppendSeparator()
+          .AppendAction( EDA_3D_ACTIONS::rotateYCW )
+          .AppendAction( EDA_3D_ACTIONS::rotateYCCW );
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EDA_3D_ACTIONS::rotateZCW );
-    m_mainToolBar->Add( EDA_3D_ACTIONS::rotateZCCW );
+    config.AppendSeparator()
+          .AppendAction( EDA_3D_ACTIONS::rotateZCW )
+          .AppendAction( EDA_3D_ACTIONS::rotateZCCW );
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EDA_3D_ACTIONS::flipView );
+    config.AppendSeparator()
+          .AppendAction( EDA_3D_ACTIONS::flipView );
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EDA_3D_ACTIONS::moveLeft );
-    m_mainToolBar->Add( EDA_3D_ACTIONS::moveRight );
-    m_mainToolBar->Add( EDA_3D_ACTIONS::moveUp );
-    m_mainToolBar->Add( EDA_3D_ACTIONS::moveDown );
+    config.AppendSeparator()
+          .AppendAction( EDA_3D_ACTIONS::moveLeft )
+          .AppendAction( EDA_3D_ACTIONS::moveRight )
+          .AppendAction( EDA_3D_ACTIONS::moveUp )
+          .AppendAction( EDA_3D_ACTIONS::moveDown );
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EDA_3D_ACTIONS::toggleOrtho, ACTION_TOOLBAR::TOGGLE );
+    config.AppendSeparator()
+          .AppendAction( EDA_3D_ACTIONS::toggleOrtho );
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EDA_3D_ACTIONS::showLayersManager, ACTION_TOOLBAR::TOGGLE );
+    config.AppendSeparator()
+          .AppendAction( EDA_3D_ACTIONS::showLayersManager );
 
-    m_mainToolBar->KiRealize();
+    // clang-format on
+
+    return config;
 }
-
-

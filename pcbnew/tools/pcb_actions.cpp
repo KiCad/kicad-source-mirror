@@ -1351,7 +1351,8 @@ TOOL_ACTION PCB_ACTIONS::showPythonConsole( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Scripting Console" ) )
         .Tooltip( _( "Show the Python scripting console" ) )
-        .Icon( BITMAPS::py_script ) );
+        .Icon( BITMAPS::py_script )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE) );
 
 TOOL_ACTION PCB_ACTIONS::showLayersManager( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Control.showLayersManager" )
@@ -2294,6 +2295,7 @@ TOOL_ACTION PCB_ACTIONS::routeSingleTrack( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Route Single Track" ) )
         .Tooltip( _( "Route tracks" ) )
         .Icon( BITMAPS::add_tracks )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Flags( AF_ACTIVATE )
         .Parameter( PNS::PNS_MODE_ROUTE_SINGLE ) );
 
@@ -2306,6 +2308,7 @@ TOOL_ACTION PCB_ACTIONS::routeDiffPair( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Route Differential Pair" ) )
         .Tooltip( _( "Route differential pairs" ) )
         .Icon( BITMAPS::ps_diff_pair )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Flags( AF_ACTIVATE )
         .Parameter( PNS::PNS_MODE_ROUTE_DIFF_PAIR ) );
 
@@ -2371,6 +2374,7 @@ TOOL_ACTION PCB_ACTIONS::tuneSingleTrack( TOOL_ACTION_ARGS()
         .LegacyHotkeyName( "Tune Single Track (Modern Toolset only)" )
         .FriendlyName( _( "Tune Length of a Single Track" ) )
         .Icon( BITMAPS::ps_tune_length )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Flags( AF_ACTIVATE )
         .Parameter( PNS::PNS_MODE_TUNE_SINGLE ) );
 
@@ -2382,6 +2386,7 @@ TOOL_ACTION PCB_ACTIONS::tuneDiffPair( TOOL_ACTION_ARGS()
         .LegacyHotkeyName( "Tune Differential Pair Length (Modern Toolset only)" )
         .FriendlyName( _( "Tune Length of a Differential Pair" ) )
         .Icon( BITMAPS::ps_diff_pair_tune_length )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Flags( AF_ACTIVATE )
         .Parameter( PNS::PNS_MODE_TUNE_DIFF_PAIR ) );
 
@@ -2393,6 +2398,7 @@ TOOL_ACTION PCB_ACTIONS::tuneSkew( TOOL_ACTION_ARGS()
         .LegacyHotkeyName( "Tune Differential Pair Skew (Modern Toolset only)" )
         .FriendlyName( _( "Tune Skew of a Differential Pair" ) )
         .Icon( BITMAPS::ps_diff_pair_tune_phase )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Flags( AF_ACTIVATE )
         .Parameter( PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW ) );
 

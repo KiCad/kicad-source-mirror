@@ -49,7 +49,6 @@ class GENERAL_COLLECTORS_GUIDE;
 class SELECTION;
 class PCB_MARKER;
 class BOARD_ITEM;
-class PCB_LAYER_BOX_SELECTOR;
 class NETLIST;
 class REPORTER;
 struct PARSE_ERROR;
@@ -159,9 +158,6 @@ public:
      */
     void ToPlotter( int aID );
 
-    // User interface update command event handlers.
-    void OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
-
     bool LayerManagerShown();
     bool PropertiesShown();
     bool NetInspectorShown();
@@ -251,11 +247,7 @@ public:
     void Process_Special_Functions( wxCommandEvent& event );
     void Tracks_and_Vias_Size_Event( wxCommandEvent& event );
 
-    void ReCreateHToolbar() override;
-    void ReCreateAuxiliaryToolbar() override;
-    void ReCreateVToolbar() override;
-    void ReCreateOptToolbar() override;
-    void UpdateToolbarControlSizes() override;
+
 
     /**
      * Recreate the layer box by clearing the old list and building a new one from the new
@@ -734,6 +726,11 @@ public:
 
     DIALOG_BOOK_REPORTER* GetFootprintDiffDialog();
 
+    std::optional<TOOLBAR_CONFIGURATION> DefaultLeftToolbarConfig() override;
+    std::optional<TOOLBAR_CONFIGURATION> DefaultRightToolbarConfig() override;
+    std::optional<TOOLBAR_CONFIGURATION> DefaultTopMainToolbarConfig() override;
+    std::optional<TOOLBAR_CONFIGURATION> DefaultTopAuxToolbarConfig() override;
+
     DECLARE_EVENT_TABLE()
 
 protected:
@@ -760,6 +757,8 @@ protected:
 
     void doReCreateMenuBar() override;
 
+    void configureToolbars() override;
+
     // The Tool Framework initialization
     void setupTools();
     void setupUIConditions() override;
@@ -777,9 +776,9 @@ protected:
     void buildActionPluginMenus( ACTION_MENU* aActionMenu );
 
     /**
-     * Append action plugin buttons to main toolbar
+     * Append action plugin buttons to given toolbar
      */
-    void AddActionPluginTools();
+    void addActionPluginTools( ACTION_TOOLBAR* aToolbar );
 
     /**
      * Execute action plugin's Run() method and updates undo buffer.
@@ -847,8 +846,6 @@ protected:
 #endif
 
 public:
-    PCB_LAYER_BOX_SELECTOR* m_SelLayerBox; // a combo box to display and select active layer
-
     wxChoice* m_SelTrackWidthBox;        // a choice box to display and select current track width
     wxChoice* m_SelViaSizeBox;           // a choice box to display and select current via diameter
 

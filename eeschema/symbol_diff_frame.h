@@ -61,7 +61,7 @@ public:
     void doCloseWindow() override;
     void ReCreateHToolbar() override;
     void ReCreateVToolbar() override;
-    void ReCreateOptToolbar() override {}
+    void ReCreateLeftToolbar() override {}
 
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;

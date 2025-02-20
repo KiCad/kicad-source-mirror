@@ -501,7 +501,7 @@ void PCB_EDIT_FRAME::buildActionPluginMenus( ACTION_MENU* actionMenu )
 }
 
 
-void PCB_EDIT_FRAME::AddActionPluginTools()
+void PCB_EDIT_FRAME::addActionPluginTools( ACTION_TOOLBAR* aToolbar )
 {
     bool need_separator = true;
     const std::vector<LEGACY_OR_API_PLUGIN>& orderedPlugins = GetOrderedActionPlugins();
@@ -518,7 +518,7 @@ void PCB_EDIT_FRAME::AddActionPluginTools()
         {
             if( need_separator )
             {
-                m_mainToolBar->AddScaledSeparator( this );
+                aToolbar->AddScaledSeparator( this );
                 need_separator = false;
             }
 
@@ -530,7 +530,7 @@ void PCB_EDIT_FRAME::AddActionPluginTools()
             else
                 bitmap = KiScaledBitmap( BITMAPS::puzzle_piece, this );
 
-            wxAuiToolBarItem* button = m_mainToolBar->AddTool( wxID_ANY, wxEmptyString,
+            wxAuiToolBarItem* button = aToolbar->AddTool( wxID_ANY, wxEmptyString,
                                                                bitmap, ap->GetName() );
 
             Connect( button->GetId(), wxEVT_COMMAND_MENU_SELECTED,

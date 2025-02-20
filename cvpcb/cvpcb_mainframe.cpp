@@ -66,7 +66,6 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
         KIWAY_PLAYER( aKiway, aParent, FRAME_CVPCB, _( "Assign Footprints" ), wxDefaultPosition,
                       wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, wxT( "CvpcbFrame" ),
                       unityScale ),
-        m_mainToolBar( nullptr ),
         m_footprintListBox( nullptr ),
         m_librariesListBox( nullptr ),
         m_symbolsListBox( nullptr ),
@@ -92,8 +91,9 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     setupTools();
     setupUIConditions();
+    configureToolbars();
+    RecreateToolbars();
     ReCreateMenuBar();
-    ReCreateHToolbar();
 
     m_footprintListBox = new FOOTPRINTS_LISTBOX( this, ID_CVPCB_FOOTPRINT_LIST );
     m_footprintListBox->SetFont( KIUI::GetMonospacedUIFont() );
@@ -108,7 +108,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.SetManagedWindow( this );
 
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
+    m_auimgr.AddPane( m_tbTopMain, EDA_PANE().HToolbar().Name( "TopMainToolbar" ).Top().Layer(6) );
 
     m_auimgr.AddPane( m_librariesListBox, EDA_PANE().Palette().Name( "Libraries" ).Left().Layer(1)
                       .Caption( _( "Footprint Libraries" ) )
@@ -1190,7 +1190,7 @@ void CVPCB_MAINFRAME::SetStatusText( const wxString& aText, int aNumber )
 void CVPCB_MAINFRAME::ShowChangedLanguage()
 {
     EDA_BASE_FRAME::ShowChangedLanguage();
-    ReCreateHToolbar();
+    RecreateToolbars();
     DisplayStatus();
 }
 

@@ -100,10 +100,6 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_socketServer( nullptr ),
     m_lastToolbarIconSize( 0 )
 {
-    m_mainToolBar         = nullptr;
-    m_drawToolBar         = nullptr;
-    m_optionsToolBar      = nullptr;
-    m_auxiliaryToolBar    = nullptr;
     m_gridSelectBox       = nullptr;
     m_zoomSelectBox       = nullptr;
     m_searchPane          = nullptr;
@@ -190,6 +186,45 @@ EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
     m_auimgr.UnInit();
 
     ReleaseFile();
+}
+
+
+void EDA_DRAW_FRAME::configureToolbars()
+{
+    EDA_BASE_FRAME::configureToolbars();
+
+    // Grid selection
+    auto gridSelectorFactory = [this]( ACTION_TOOLBAR* aToolbar )
+        {
+            if( !m_gridSelectBox )
+            {
+                m_gridSelectBox = new wxChoice( aToolbar, ID_ON_GRID_SELECT, wxDefaultPosition,
+                                                wxDefaultSize, 0, nullptr );
+            }
+
+            UpdateGridSelectBox();
+
+            aToolbar->Add( m_gridSelectBox );
+        };
+
+    RegisterCustomToolbarControlFactory( m_tbGridSelectName, _( "Grid Selector" ),
+                                         _( "Grid Selection box" ), gridSelectorFactory );
+
+    // Zoom selection
+    auto zoomSelectorFactory = [this]( ACTION_TOOLBAR* aToolbar )
+        {
+            if( !m_zoomSelectBox )
+            {
+                m_zoomSelectBox = new wxChoice( aToolbar, ID_ON_ZOOM_SELECT, wxDefaultPosition,
+                                                wxDefaultSize, 0, nullptr );
+            }
+
+            UpdateZoomSelectBox();
+            aToolbar->Add( m_zoomSelectBox );
+        };
+
+    RegisterCustomToolbarControlFactory( m_tbZoomSelectName, _( "Zoom Selector" ),
+                                         _( "Zoom selection box" ), zoomSelectorFactory );
 }
 
 
@@ -1167,43 +1202,6 @@ bool EDA_DRAW_FRAME::LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
 }
 
 
-void EDA_DRAW_FRAME::RecreateToolbars()
-{
-    // Rebuild all toolbars, and update the checked state of check tools
-    if( m_mainToolBar )
-        ReCreateHToolbar();
-
-    if( m_drawToolBar )         // Drawing tools (typically on right edge of window)
-        ReCreateVToolbar();
-
-    if( m_optionsToolBar )      // Options (typically on left edge of window)
-        ReCreateOptToolbar();
-
-    if( m_auxiliaryToolBar )    // Additional tools under main toolbar
-       ReCreateAuxiliaryToolbar();
-
-
-}
-
-
-void EDA_DRAW_FRAME::OnToolbarSizeChanged()
-{
-    if( m_mainToolBar )
-        m_auimgr.GetPane( m_mainToolBar ).MaxSize( m_mainToolBar->GetSize() );
-
-    if( m_drawToolBar )
-        m_auimgr.GetPane( m_drawToolBar ).MaxSize( m_drawToolBar->GetSize() );
-
-    if( m_optionsToolBar )
-        m_auimgr.GetPane( m_optionsToolBar ).MaxSize( m_optionsToolBar->GetSize() );
-
-    if( m_auxiliaryToolBar )
-        m_auimgr.GetPane( m_auxiliaryToolBar ).MaxSize( m_auxiliaryToolBar->GetSize() );
-
-    m_auimgr.Update();
-}
-
-
 void EDA_DRAW_FRAME::ShowChangedLanguage()
 {
     EDA_BASE_FRAME::ShowChangedLanguage();
@@ -1418,7 +1416,7 @@ std::vector<const PLUGIN_ACTION*> EDA_DRAW_FRAME::GetOrderedPluginActions(
 }
 
 
-void EDA_DRAW_FRAME::addApiPluginTools()
+void EDA_DRAW_FRAME::AddApiPluginTools( ACTION_TOOLBAR* aToolbar )
 {
 #ifdef KICAD_IPC_API
     API_PLUGIN_MANAGER& mgr = Pgm().GetPluginManager();
@@ -1437,7 +1435,7 @@ void EDA_DRAW_FRAME::addApiPluginTools()
                                              ? action->icon_dark
                                              : action->icon_light;
 
-        wxAuiToolBarItem* button = m_mainToolBar->AddTool( wxID_ANY, wxEmptyString, icon,
+        wxAuiToolBarItem* button = aToolbar->AddTool( wxID_ANY, wxEmptyString, icon,
                                                            action->name );
 
         Connect( button->GetId(), wxEVT_COMMAND_MENU_SELECTED,

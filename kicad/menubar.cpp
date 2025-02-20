@@ -240,53 +240,44 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
 }
 
 
-/**
- * @brief (Re)Create the left vertical toolbar
- */
-void KICAD_MANAGER_FRAME::RecreateBaseLeftToolbar()
+std::optional<TOOLBAR_CONFIGURATION> KICAD_MANAGER_FRAME::DefaultLeftToolbarConfig()
 {
-    if( m_mainToolBar )
-    {
-        m_mainToolBar->ClearToolbar();
-    }
-    else
-    {
-        m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                            KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
-        m_mainToolBar->SetAuiManager( &m_auimgr );
-    }
+    TOOLBAR_CONFIGURATION config;
 
-    // New
-    m_mainToolBar->Add( KICAD_MANAGER_ACTIONS::newProject );
-    m_mainToolBar->Add( KICAD_MANAGER_ACTIONS::openProject );
+    // clang-format off
+    config.AppendAction( KICAD_MANAGER_ACTIONS::newProject )
+          .AppendAction( KICAD_MANAGER_ACTIONS::openProject );
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->AddTool( ID_SAVE_AND_ZIP_FILES, wxEmptyString,
+    config.AppendSeparator();
+/* TODO (ISM): Toolize this:
+    m_tbTopMain->AddTool( ID_SAVE_AND_ZIP_FILES, wxEmptyString,
                             KiBitmapBundle( BITMAPS::zip ),
                             KiDisabledBitmapBundle( BITMAPS::zip ),
                             wxITEM_NORMAL,
                             _( "Archive all project files" ),
                             wxEmptyString, nullptr );
 
-    m_mainToolBar->AddTool( ID_READ_ZIP_ARCHIVE, wxEmptyString,
+    m_tbTopMain->AddTool( ID_READ_ZIP_ARCHIVE, wxEmptyString,
                             KiBitmapBundle( BITMAPS::unzip ),
                             KiDisabledBitmapBundle( BITMAPS::unzip ),
                             wxITEM_NORMAL,
                             _( "Unarchive project files from zip archive" ),
                             wxEmptyString, nullptr );
+*/
+    config.AppendSeparator()
+          .AppendAction( ACTIONS::zoomRedraw );
 
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( ACTIONS::zoomRedraw );
-
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->AddTool( ID_BROWSE_IN_FILE_EXPLORER, wxEmptyString,
+    config.AppendSeparator();
+/* TODO (ISM): Toolize this:
+    m_tbTopMain->AddTool( ID_BROWSE_IN_FILE_EXPLORER, wxEmptyString,
                             KiBitmapBundle( BITMAPS::directory_browser ),
 #ifdef __APPLE__
                             _( "Reveal project folder in Finder" ) );
 #else
                             _( "Open project directory in file explorer" ) );
 #endif
+*/
 
-    // Create m_mainToolBar
-    m_mainToolBar->KiRealize();
+    // clang-format on
+    return config;
 }
