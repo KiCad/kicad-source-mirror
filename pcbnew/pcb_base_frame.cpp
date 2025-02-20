@@ -1282,8 +1282,7 @@ void PCB_BASE_FRAME::configureToolbars()
         {
             if( !m_SelLayerBox )
             {
-                m_SelLayerBox = new PCB_LAYER_BOX_SELECTOR( aToolbar,
-                                                            ID_TOOLBARH_PCB_SELECT_LAYER );
+                m_SelLayerBox = new PCB_LAYER_BOX_SELECTOR( aToolbar, wxID_ANY );
                 m_SelLayerBox->SetBoardFrame( this );
             }
 
@@ -1293,6 +1292,7 @@ void PCB_BASE_FRAME::configureToolbars()
             if( IsType( FRAME_FOOTPRINT_EDITOR ) )
                 m_SelLayerBox->SetNotAllowedLayerSet( LSET::ForbiddenFootprintLayers() );
 
+            m_SelLayerBox->SetToolTip( _( "+/- to switch" ) );
             m_SelLayerBox->Resync();
 
             aToolbar->Add( m_SelLayerBox );
@@ -1301,11 +1301,22 @@ void PCB_BASE_FRAME::configureToolbars()
             aToolbar->Bind( wxEVT_UPDATE_UI,
                             [this]( wxUpdateUIEvent& aEvent )
                                 {
-                                    if( m_SelLayerBox->GetCount() )
+                                    if( m_SelLayerBox->GetCount()
+                                        && ( m_SelLayerBox->GetLayerSelection() != GetActiveLayer() ) )
                                     {
-                                        if( m_SelLayerBox->GetSelection() != GetActiveLayer() )
-                                            m_SelLayerBox->SetSelection( GetActiveLayer() );
+                                        m_SelLayerBox->SetLayerSelection( GetActiveLayer() );
                                     }
+                                },
+                            m_SelLayerBox->GetId() );
+
+            // Event handler to respond to the user interacting with the control
+            aToolbar->Bind( wxEVT_COMBOBOX,
+                            [this]( wxCommandEvent& aEvent )
+                                {
+                                    SetActiveLayer( ToLAYER_ID( m_SelLayerBox->GetLayerSelection() ) );
+
+                                    if( GetDisplayOptions().m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL )
+                                        GetCanvas()->Refresh();
                                 },
                             m_SelLayerBox->GetId() );
         };

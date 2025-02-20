@@ -115,16 +115,6 @@ void FOOTPRINT_EDIT_FRAME::centerItemIdleHandler( wxIdleEvent& aEvent )
 }
 
 
-
-void FOOTPRINT_EDIT_FRAME::SelectLayer( wxCommandEvent& event )
-{
-    SetActiveLayer( ToLAYER_ID( m_SelLayerBox->GetLayerSelection() ) );
-
-    if( GetDisplayOptions().m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL )
-        GetCanvas()->Refresh();
-}
-
-
 void FOOTPRINT_EDIT_FRAME::OnSaveFootprintToBoard( wxCommandEvent& event )
 {
     SaveFootprintToBoard( true );

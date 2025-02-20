@@ -129,8 +129,6 @@ public:
      */
     void ReCreateLayerBox( bool aForceResizeToolbar = true );
 
-    void SelectLayer( wxCommandEvent& event );
-
     // The Tool Framework initialization, for GAL mode
     void setupTools();
 
