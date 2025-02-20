@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-62-g497c85bd-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -49,7 +49,7 @@ PANEL_JOBSET_BASE::PANEL_JOBSET_BASE( wxWindow* parent, wxWindowID id, const wxP
 	// Label Appearance
 
 	// Cell Defaults
-	m_jobsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_jobsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	sbJobs->Add( m_jobsGrid, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 3 );
 
 	wxBoxSizer* bJobsButtons;
