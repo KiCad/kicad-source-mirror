@@ -1889,7 +1889,7 @@
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="true">
                   <property name="border">2</property>
-                  <property name="flag">wxRIGHT|wxLEFT</property>
+                  <property name="flag">wxRIGHT|wxLEFT|wxEXPAND</property>
                   <property name="proportion">0</property>
                   <object class="wxSlider" expanded="true">
                     <property name="BottomDockable">1</property>
