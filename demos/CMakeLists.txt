@@ -15,6 +15,7 @@ install( DIRECTORY
     test_xil_95108
     tiny_tapeout
     video
+    vme-wren
     DESTINATION ${KICAD_DEMOS}
     COMPONENT resources
     )
