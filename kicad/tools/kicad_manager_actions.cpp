@@ -214,3 +214,26 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::editOtherPCB( TOOL_ACTION_ARGS()
         .Name( "kicad.Control.editOtherPCB" )
         .Scope( AS_GLOBAL )
         .Parameter<wxString*>( nullptr ) );      // Default to no filename
+
+TOOL_ACTION KICAD_MANAGER_ACTIONS::archiveProject( TOOL_ACTION_ARGS()
+        .Name( "kicad.Control.archiveProject" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Archive all project files" ) )
+        .Icon( BITMAPS::zip ) );
+
+TOOL_ACTION KICAD_MANAGER_ACTIONS::unarchiveProject( TOOL_ACTION_ARGS()
+        .Name( "kicad.Control.unarchiveProject" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Unarchive project files from zip archive" ) )
+        .Icon( BITMAPS::unzip ) );
+
+TOOL_ACTION KICAD_MANAGER_ACTIONS::openProjectDirectory( TOOL_ACTION_ARGS()
+        .Name( "kicad.Control.OpenProjectDirectory" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Browse Project Files" ) )
+#ifdef __APPLE__
+        .Tooltip( _( "Reveal project folder in Finder" ) )
+#else
+        .Tooltip( _( "Open project directory in file explorer" ) )
+#endif
+        .Icon( BITMAPS::directory_browser ) );

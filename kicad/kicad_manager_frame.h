@@ -54,11 +54,9 @@ public:
     void doCloseWindow() override;
     void OnSize( wxSizeEvent& event ) override;
 
-    void OnArchiveFiles( wxCommandEvent& event );
-    void OnUnarchiveFiles( wxCommandEvent& event );
+    void UnarchiveFiles();
 
     void OnOpenFileInTextEditor( wxCommandEvent& event );
-    void OnBrowseInFileExplorer( wxCommandEvent& event );
 
     void OnFileHistory( wxCommandEvent& event );
     void OnClearFileHistory( wxCommandEvent& aEvent );

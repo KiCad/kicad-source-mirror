@@ -138,15 +138,8 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
     fileMenu->Add( importMenu );
 
     fileMenu->AppendSeparator();
-    fileMenu->Add( _( "&Archive Project..." ),
-                   _( "Archive all needed project files into zip archive" ),
-                   ID_SAVE_AND_ZIP_FILES,
-                   BITMAPS::zip );
-
-    fileMenu->Add( _( "&Unarchive Project..." ),
-                   _( "Unarchive project files from zip archive" ),
-                   ID_READ_ZIP_ARCHIVE,
-                   BITMAPS::unzip );
+    fileMenu->Add( KICAD_MANAGER_ACTIONS::archiveProject );
+    fileMenu->Add( KICAD_MANAGER_ACTIONS::unarchiveProject );
 
     fileMenu->AppendSeparator();
     fileMenu->AddQuitOrClose( nullptr, wxS( "KiCad" ) );
@@ -172,10 +165,7 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
 
     viewMenu->AppendSeparator();
     viewMenu->Add( KICAD_MANAGER_ACTIONS::openTextEditor );
-    viewMenu->Add( _( "Browse Project Files" ),
-                   _( "Open project directory in file browser" ),
-                   ID_BROWSE_IN_FILE_EXPLORER,
-                   BITMAPS::directory_browser );
+    viewMenu->Add( KICAD_MANAGER_ACTIONS::openProjectDirectory );
 
 #ifdef __APPLE__
     // Add a separator only on macOS because the OS adds menu items to the view menu after ours
@@ -248,35 +238,15 @@ std::optional<TOOLBAR_CONFIGURATION> KICAD_MANAGER_FRAME::DefaultLeftToolbarConf
     config.AppendAction( KICAD_MANAGER_ACTIONS::newProject )
           .AppendAction( KICAD_MANAGER_ACTIONS::openProject );
 
-    config.AppendSeparator();
-/* TODO (ISM): Toolize this:
-    m_tbTopMain->AddTool( ID_SAVE_AND_ZIP_FILES, wxEmptyString,
-                            KiBitmapBundle( BITMAPS::zip ),
-                            KiDisabledBitmapBundle( BITMAPS::zip ),
-                            wxITEM_NORMAL,
-                            _( "Archive all project files" ),
-                            wxEmptyString, nullptr );
+    config.AppendSeparator()
+          .AppendAction( KICAD_MANAGER_ACTIONS::archiveProject )
+          .AppendAction( KICAD_MANAGER_ACTIONS::unarchiveProject );
 
-    m_tbTopMain->AddTool( ID_READ_ZIP_ARCHIVE, wxEmptyString,
-                            KiBitmapBundle( BITMAPS::unzip ),
-                            KiDisabledBitmapBundle( BITMAPS::unzip ),
-                            wxITEM_NORMAL,
-                            _( "Unarchive project files from zip archive" ),
-                            wxEmptyString, nullptr );
-*/
     config.AppendSeparator()
           .AppendAction( ACTIONS::zoomRedraw );
 
-    config.AppendSeparator();
-/* TODO (ISM): Toolize this:
-    m_tbTopMain->AddTool( ID_BROWSE_IN_FILE_EXPLORER, wxEmptyString,
-                            KiBitmapBundle( BITMAPS::directory_browser ),
-#ifdef __APPLE__
-                            _( "Reveal project folder in Finder" ) );
-#else
-                            _( "Open project directory in file explorer" ) );
-#endif
-*/
+    config.AppendSeparator()
+          .AppendAction( KICAD_MANAGER_ACTIONS::openProjectDirectory );
 
     // clang-format on
     return config;

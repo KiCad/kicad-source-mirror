@@ -55,6 +55,10 @@ public:
 
     static TOOL_ACTION editOtherSch;
     static TOOL_ACTION editOtherPCB;
+
+    static TOOL_ACTION archiveProject;
+    static TOOL_ACTION unarchiveProject;
+    static TOOL_ACTION openProjectDirectory;
 };
 
 

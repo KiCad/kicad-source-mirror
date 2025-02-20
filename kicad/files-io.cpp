@@ -57,7 +57,7 @@ void KICAD_MANAGER_FRAME::OnClearFileHistory( wxCommandEvent& aEvent )
 }
 
 
-void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
+void KICAD_MANAGER_FRAME::UnarchiveFiles()
 {
     wxFileName fn = Prj().GetProjectFullName();
 
@@ -103,32 +103,4 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
 
         RefreshProjectTree();
     }
-}
-
-
-void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
-{
-    wxFileName  fileName = GetProjectFileName();
-
-    fileName.SetExt( FILEEXT::ArchiveFileExtension );
-
-    wxFileDialog dlg( this, _( "Archive Project Files" ),
-                      fileName.GetPath(), fileName.GetFullName(),
-                      FILEEXT::ZipFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    wxFileName zipFile = dlg.GetPath();
-
-    wxString currdirname = fileName.GetPathWithSep();
-    wxDir dir( currdirname );
-
-    if( !dir.IsOpened() )   // wxWidgets display a error message on issue.
-        return;
-
-    STATUSBAR_REPORTER reporter( GetStatusBar(), 1 );
-    PROJECT_ARCHIVER archiver;
-
-    archiver.Archive( currdirname, zipFile.GetFullPath(), reporter, true, true );
 }

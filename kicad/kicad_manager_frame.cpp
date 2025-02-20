@@ -100,9 +100,6 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
     // Menu events
     EVT_MENU( wxID_EXIT, KICAD_MANAGER_FRAME::OnExit )
     EVT_MENU( ID_EDIT_LOCAL_FILE_IN_TEXT_EDITOR, KICAD_MANAGER_FRAME::OnOpenFileInTextEditor )
-    EVT_MENU( ID_BROWSE_IN_FILE_EXPLORER, KICAD_MANAGER_FRAME::OnBrowseInFileExplorer )
-    EVT_MENU( ID_SAVE_AND_ZIP_FILES, KICAD_MANAGER_FRAME::OnArchiveFiles )
-    EVT_MENU( ID_READ_ZIP_ARCHIVE, KICAD_MANAGER_FRAME::OnUnarchiveFiles )
     EVT_MENU( ID_IMPORT_CADSTAR_ARCHIVE_PROJECT, KICAD_MANAGER_FRAME::OnImportCadstarArchiveFiles )
     EVT_MENU( ID_IMPORT_EAGLE_PROJECT, KICAD_MANAGER_FRAME::OnImportEagleFiles )
     EVT_MENU( ID_IMPORT_EASYEDA_PROJECT, KICAD_MANAGER_FRAME::OnImportEasyEdaFiles )
@@ -437,6 +434,7 @@ void KICAD_MANAGER_FRAME::setupUIConditions()
 
     manager->SetConditions( ACTIONS::saveAs,                       activeProjectCond );
     manager->SetConditions( KICAD_MANAGER_ACTIONS::closeProject,   activeProjectCond );
+    manager->SetConditions( KICAD_MANAGER_ACTIONS::archiveProject, activeProjectCond );
     manager->SetConditions( KICAD_MANAGER_ACTIONS::newJobsetFile,  activeProjectCond );
     manager->SetConditions( KICAD_MANAGER_ACTIONS::openJobsetFile, activeProjectCond );
 
@@ -445,9 +443,6 @@ void KICAD_MANAGER_FRAME::setupUIConditions()
     manager->SetConditions( ACTIONS::cut,     ENABLE( SELECTION_CONDITIONS::ShowNever ) );
     manager->SetConditions( ACTIONS::copy,    ENABLE( SELECTION_CONDITIONS::ShowNever ) );
     manager->SetConditions( ACTIONS::paste,   ENABLE( SELECTION_CONDITIONS::ShowNever ) );
-
-    // TODO: Switch this to an action
-    RegisterUIUpdateHandler( ID_SAVE_AND_ZIP_FILES, activeProjectCond );
 
 #undef ENABLE
 }
@@ -955,13 +950,6 @@ void KICAD_MANAGER_FRAME::OnOpenFileInTextEditor( wxCommandEvent& event )
 
     if( !dlg.GetPath().IsEmpty() && !Pgm().GetTextEditor().IsEmpty() )
         m_toolManager->RunAction<wxString*>( KICAD_MANAGER_ACTIONS::openTextEditor, &filename );
-}
-
-
-void KICAD_MANAGER_FRAME::OnBrowseInFileExplorer( wxCommandEvent& event )
-{
-    // open project directory in host OS's file explorer
-    LaunchExternal( Prj().GetProjectPath() );
 }
 
 

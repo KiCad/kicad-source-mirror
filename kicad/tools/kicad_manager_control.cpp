@@ -48,6 +48,8 @@
 #include <wx/filedlg.h>
 #include <design_block_lib_table.h>
 #include "dialog_pcm.h"
+#include <project/project_archiver.h>
+#include <launch_ext.h>
 
 #include "widgets/filedlg_new_project.h"
 
@@ -453,6 +455,51 @@ int KICAD_MANAGER_CONTROL::LoadProject( const TOOL_EVENT& aEvent )
         m_frame->LoadProject( wxFileName( *aEvent.Parameter<wxString*>() ) );
     return 0;
 }
+
+
+int KICAD_MANAGER_CONTROL::ArchiveProject( const TOOL_EVENT& aEvent )
+{
+    wxFileName fileName = m_frame->GetProjectFileName();
+
+    fileName.SetExt( FILEEXT::ArchiveFileExtension );
+
+    wxFileDialog dlg( m_frame, _( "Archive Project Files" ),
+                      fileName.GetPath(), fileName.GetFullName(),
+                      FILEEXT::ZipFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return 0;
+
+    wxFileName zipFile = dlg.GetPath();
+
+    wxString currdirname = fileName.GetPathWithSep();
+    wxDir dir( currdirname );
+
+    if( !dir.IsOpened() )   // wxWidgets display a error message on issue.
+        return 0;
+
+    STATUSBAR_REPORTER reporter( m_frame->GetStatusBar(), 1 );
+    PROJECT_ARCHIVER archiver;
+
+    archiver.Archive( currdirname, zipFile.GetFullPath(), reporter, true, true );
+    return 0;
+}
+
+
+int KICAD_MANAGER_CONTROL::UnarchiveProject( const TOOL_EVENT& aEvent )
+{
+    m_frame->UnarchiveFiles();
+    return 0;
+}
+
+
+int KICAD_MANAGER_CONTROL::ExploreProject( const TOOL_EVENT& aEvent )
+{
+    // Open project directory in host OS's file explorer
+    LaunchExternal( Prj().GetProjectPath() );
+    return 0;
+}
+
 
 int KICAD_MANAGER_CONTROL::ViewDroppedViewers( const TOOL_EVENT& aEvent )
 {
@@ -1016,6 +1063,10 @@ void KICAD_MANAGER_CONTROL::setTransitions()
     Go( &KICAD_MANAGER_CONTROL::SaveProjectAs,      ACTIONS::saveAs.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::LoadProject,        KICAD_MANAGER_ACTIONS::loadProject.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::ViewDroppedViewers, KICAD_MANAGER_ACTIONS::viewDroppedGerbers.MakeEvent() );
+
+    Go( &KICAD_MANAGER_CONTROL::ArchiveProject,                 KICAD_MANAGER_ACTIONS::archiveProject.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::UnarchiveProject,               KICAD_MANAGER_ACTIONS::unarchiveProject.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::ExploreProject,                 KICAD_MANAGER_ACTIONS::openProjectDirectory.MakeEvent() );
 
     Go( &KICAD_MANAGER_CONTROL::Refresh,         ACTIONS::zoomRedraw.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::UpdateMenu,      ACTIONS::updateMenu.MakeEvent() );
