@@ -32,6 +32,7 @@
 #include <sch_io/sch_io_mgr.h>
 #include <wx/filename.h>
 #include <wx/gdicmn.h>
+#include <case_insensitive_map.h>
 
 #include "altium_parser_sch.h"
 
@@ -69,6 +70,7 @@ struct HARNESS
     std::vector<HARNESS_PORT> m_ports;
     HARNESS_PORT              m_entry;
 };
+
 
 class SCH_IO_ALTIUM : public SCH_IO
 {
@@ -199,7 +201,7 @@ private:
     void ParseImplementation( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym );
 
     void ParseLibHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile, std::vector<int>& aFontSizes );
-    std::map<wxString,LIB_SYMBOL*> ParseLibFile( const ALTIUM_COMPOUND_FILE& aAltiumSchFile );
+    CASE_INSENSITIVE_MAP<LIB_SYMBOL*> ParseLibFile( const ALTIUM_COMPOUND_FILE& aAltiumSchFile );
     std::vector<LIB_SYMBOL*> ParseLibComponent( const std::map<wxString, wxString>& aProperties );
 
     void doEnumerateSymbolLib( const wxString& aLibraryPath, const std::map<std::string, UTF8>* aProperties,
@@ -252,7 +254,7 @@ private:
     static bool checkFileHeader( const wxString& aFileName );
 
     std::map<wxString, long long> m_timestamps;
-    std::map<wxString, std::map<wxString, LIB_SYMBOL*>> m_libCache;
+    std::map<wxString, CASE_INSENSITIVE_MAP<LIB_SYMBOL*>> m_libCache;
 
     // List of available fonts with font name and font size in pt
     std::vector<std::pair<wxString, int>> m_fonts;
