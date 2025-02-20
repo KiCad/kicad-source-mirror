@@ -168,9 +168,9 @@
  Thomas Gambier
  Ashutosh Gangwar
  Alessandro Gatti
+ Zenn Geeraerts
  Alex Gellen
  Robert Antoni Buj Gelonch
- Robert Antoni Buj Genlonch
  Hal Gentz
  Lucas Gerads
  Davide Gerhard
@@ -228,6 +228,7 @@
  Mario Hros
  Hubert Hu
  Josue Huaroto
+ Eli Hughes
  Huibean
  Matt Huszagh
  José Ignacio
@@ -621,7 +622,7 @@
  欠陥電気
  木 王
  郝弘毅
- Eli Hughes
+
 
 See git repo on GitLab for contributors at
 https://gitlab.com/kicad/code/kicad/-/graphs/master

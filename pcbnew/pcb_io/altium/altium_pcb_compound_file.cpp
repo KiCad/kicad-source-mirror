@@ -39,7 +39,7 @@ ALTIUM_PCB_COMPOUND_FILE::~ALTIUM_PCB_COMPOUND_FILE()
 {
 }
 
-std::map<wxString, wxString> ALTIUM_PCB_COMPOUND_FILE::ListLibFootprints()
+CASE_INSENSITIVE_MAP<wxString> ALTIUM_PCB_COMPOUND_FILE::ListLibFootprints()
 {
     if( m_libFootprintDirNameCache.empty() )
         cacheLibFootprintNames();

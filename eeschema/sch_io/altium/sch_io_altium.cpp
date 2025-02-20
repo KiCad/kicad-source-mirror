@@ -4580,9 +4580,10 @@ std::vector<LIB_SYMBOL*> SCH_IO_ALTIUM::ParseLibComponent( const std::map<wxStri
 }
 
 
-std::map<wxString,LIB_SYMBOL*> SCH_IO_ALTIUM::ParseLibFile( const ALTIUM_COMPOUND_FILE& aAltiumLibFile )
+CASE_INSENSITIVE_MAP<LIB_SYMBOL*>
+SCH_IO_ALTIUM::ParseLibFile( const ALTIUM_COMPOUND_FILE& aAltiumLibFile )
 {
-    std::map<wxString,LIB_SYMBOL*> ret;
+    CASE_INSENSITIVE_MAP<LIB_SYMBOL*> ret;
     std::vector<int> fontSizes;
     struct SYMBOL_PIN_FRAC
     {
@@ -4858,11 +4859,11 @@ void SCH_IO_ALTIUM::ensureLoadedLibrary( const wxString&        aLibraryPath,
             }
         }
 
-        std::map<wxString, LIB_SYMBOL*>& cacheMapRef = m_libCache[aLibraryPath];
+        CASE_INSENSITIVE_MAP<LIB_SYMBOL*>& cacheMapRef = m_libCache[aLibraryPath];
 
         for( auto& altiumSchFilePtr : compoundFiles )
         {
-            std::map<wxString, LIB_SYMBOL*> parsed = ParseLibFile( *altiumSchFilePtr );
+            CASE_INSENSITIVE_MAP<LIB_SYMBOL*> parsed = ParseLibFile( *altiumSchFilePtr );
             cacheMapRef.insert( parsed.begin(), parsed.end() );
         }
 

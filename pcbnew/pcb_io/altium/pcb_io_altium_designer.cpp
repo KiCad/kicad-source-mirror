@@ -230,7 +230,7 @@ void PCB_IO_ALTIUM_DESIGNER::FootprintEnumerate( wxArrayString&  aFootprintNames
         for( auto& altiumLibFile : it->second )
         {
             // Map code-page-dependent names to unicode names
-            std::map<wxString, wxString> patternMap = altiumLibFile->ListLibFootprints();
+            CASE_INSENSITIVE_MAP<wxString> patternMap = altiumLibFile->ListLibFootprints();
 
             const std::vector<std::string>  streamName = { "Library", "Data" };
             const CFB::COMPOUND_FILE_ENTRY* libraryData = altiumLibFile->FindStream( streamName );

@@ -27,6 +27,7 @@
 #include <memory>
 #include <altium_parser_pcb.h>
 #include <io/altium/altium_binary_parser.h>
+#include <case_insensitive_map.h>
 
 
 class ALTIUM_PCB_COMPOUND_FILE : public ALTIUM_COMPOUND_FILE
@@ -38,7 +39,7 @@ public:
     ALTIUM_PCB_COMPOUND_FILE( const void* aBuffer, size_t aLen );
     ~ALTIUM_PCB_COMPOUND_FILE();
 
-    std::map<wxString, wxString> ListLibFootprints();
+    CASE_INSENSITIVE_MAP<wxString> ListLibFootprints();
 
     std::tuple<wxString, const CFB::COMPOUND_FILE_ENTRY*> FindLibFootprintDirName( const wxString& aFpUnicodeName );
 
@@ -49,9 +50,9 @@ private:
 
     void cacheLibFootprintNames();
 
-    std::map<wxString, const CFB::COMPOUND_FILE_ENTRY*>      m_libFootprintNameCache;
-    std::map<wxString, wxString>                             m_libFootprintDirNameCache;
-    std::map<wxString, std::pair<AMODEL, std::vector<char>>> m_libModelsCache;
+    CASE_INSENSITIVE_MAP<const CFB::COMPOUND_FILE_ENTRY*>      m_libFootprintNameCache;
+    CASE_INSENSITIVE_MAP<wxString>                             m_libFootprintDirNameCache;
+    CASE_INSENSITIVE_MAP<std::pair<AMODEL, std::vector<char>>> m_libModelsCache;
 };
 
 #endif // ALTIUM_PCB_COMPOUND_FILE_H
