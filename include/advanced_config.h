@@ -750,6 +750,14 @@ public:
      */
     int m_NetInspectorBulkUpdateOptimisationThreshold;
 
+    /**
+     * The line width in mils for the exclude from simulation outline.
+     *
+     * Setting name: "ExcludeFromSimulationLineWidth"
+     * Default value: 25
+     */
+    int m_ExcludeFromSimulationLineWidth;
+
     ///@}
 
 private:
