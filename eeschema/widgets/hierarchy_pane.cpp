@@ -209,7 +209,7 @@ void HIERARCHY_PANE::UpdateHierarchySelection()
 }
 
 
-void HIERARCHY_PANE::UpdateHierarchyTree()
+void HIERARCHY_PANE::UpdateHierarchyTree( bool aClear )
 {
     Freeze();
 
@@ -248,7 +248,9 @@ void HIERARCHY_PANE::UpdateHierarchyTree()
                 }
             };
 
-    if( !m_tree->IsEmpty() )
+    // If we are clearing the tree, don't try to get expanded nodes as they
+    // might be deleted
+    if( !aClear && !m_tree->IsEmpty() )
         getExpandedNodes( m_tree->GetRootItem() );
 
     m_list.clear();
