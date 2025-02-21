@@ -825,7 +825,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOve
 
         case T_hide:
         {
-            bool hide = parseMaybeAbsentBool( false );
+            bool hide = parseMaybeAbsentBool( true );
             aText->SetVisible( !hide );
             break;
         }
