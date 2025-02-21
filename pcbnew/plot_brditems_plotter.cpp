@@ -1164,6 +1164,9 @@ void BRDITEMS_PLOTTER::PlotTableBorders( const PCB_TABLE* aTable )
                     PCB_TABLECELL* cell = aTable->GetCell( row, col );
                     VECTOR2I       topRight( cell->GetEndX(), cell->GetStartY() );
 
+                    if( !cell->GetTextAngle().IsHorizontal() )
+                        topRight = VECTOR2I( cell->GetStartX(), cell->GetEndY() );
+
                     if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
                         strokeLine( topRight, cell->GetEnd() );
                 }
@@ -1178,6 +1181,9 @@ void BRDITEMS_PLOTTER::PlotTableBorders( const PCB_TABLE* aTable )
                 {
                     PCB_TABLECELL* cell = aTable->GetCell( row, col );
                     VECTOR2I       botLeft( cell->GetStartX(), cell->GetEndY() );
+
+                    if( !cell->GetTextAngle().IsHorizontal() )
+                        botLeft = VECTOR2I( cell->GetEndX(), cell->GetStartY() );
 
                     if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
                         strokeLine( botLeft, cell->GetEnd() );
