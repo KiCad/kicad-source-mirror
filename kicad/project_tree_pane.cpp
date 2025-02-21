@@ -1610,7 +1610,7 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
         wxWindow* topLevelParent = wxGetTopLevelParent( this );
 
         DisplayInfoMessage( topLevelParent,
-                            _( "The selected directory is already a git project." ) );
+                            _( "The selected directory is already a Git project." ) );
         git_repository_free( repo );
         return;
     }
@@ -1632,7 +1632,7 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
         if( m_gitLastError != git_error_last()->klass )
         {
             m_gitLastError = git_error_last()->klass;
-            DisplayErrorMessage( m_parent, _( "Failed to initialize git project." ),
+            DisplayErrorMessage( m_parent, _( "Failed to initialize Git project." ),
                                     git_error_last()->message );
         }
 
@@ -1898,7 +1898,7 @@ void PROJECT_TREE_PANE::onGitRemoveVCS( wxCommandEvent& aEvent )
 
     if( !repo
       || !IsOK( wxGetTopLevelParent( this ),
-                _( "Are you sure you want to remove git tracking from this project?" ) ) )
+                _( "Are you sure you want to remove Git tracking from this project?" ) ) )
     {
         return;
     }
@@ -1915,7 +1915,7 @@ void PROJECT_TREE_PANE::onGitRemoveVCS( wxCommandEvent& aEvent )
 
     if( !RmDirRecursive( fn.GetPath(), &errors ) )
     {
-        DisplayErrorMessage( m_parent, _( "Failed to remove git directory" ), errors );
+        DisplayErrorMessage( m_parent, _( "Failed to remove Git directory" ), errors );
     }
 
     // Clear all item states
@@ -2148,7 +2148,7 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
 
     if( repo == nullptr )
     {
-        wxMessageBox( "The selected directory is not a git project." );
+        wxMessageBox( _( "The selected directory is not a Git project." ) );
         return;
     }
 
