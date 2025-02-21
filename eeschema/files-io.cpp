@@ -578,7 +578,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     TestDanglingEnds();
 
-    UpdateHierarchyNavigator( false );
+    UpdateHierarchyNavigator( false, true );
 
     wxCommandEvent changedEvt( EDA_EVT_SCHEMATIC_CHANGED );
     ProcessEventLocally( changedEvt );
@@ -1424,7 +1424,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
         SetSheetNumberAndCount();
         SyncView();
 
-        UpdateHierarchyNavigator();
+        UpdateHierarchyNavigator( false, true );
 
         wxCommandEvent e( EDA_EVT_SCHEMATIC_CHANGED );
         ProcessEventLocally( e );

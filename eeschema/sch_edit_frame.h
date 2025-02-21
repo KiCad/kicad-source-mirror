@@ -244,7 +244,7 @@ public:
     /**
      * Update the hierarchy navigation tree and history
      */
-    void UpdateHierarchyNavigator( bool aRefreshNetNavigator = true );
+    void UpdateHierarchyNavigator( bool aRefreshNetNavigator = true, bool aClear = false );
 
     /**
      * Update the hierarchy navigation tree labels.

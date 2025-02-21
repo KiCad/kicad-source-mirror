@@ -1229,10 +1229,10 @@ void SCH_EDIT_FRAME::OnUpdatePCB()
 }
 
 
-void SCH_EDIT_FRAME::UpdateHierarchyNavigator( bool aRefreshNetNavigator )
+void SCH_EDIT_FRAME::UpdateHierarchyNavigator( bool aRefreshNetNavigator, bool aClear )
 {
     m_toolManager->GetTool<SCH_NAVIGATE_TOOL>()->CleanHistory();
-    m_hierarchy->UpdateHierarchyTree();
+    m_hierarchy->UpdateHierarchyTree( aClear );
 
     if( aRefreshNetNavigator )
         RefreshNetNavigator();
