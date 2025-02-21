@@ -29,6 +29,7 @@
 #include <vector>
 
 #include <settings/json_settings.h>
+#include <settings/parameters.h>
 #include <tool/tool_action.h>
 
 
@@ -64,7 +65,9 @@ public:
         return m_groupItems;
     }
 
-private:
+public:
+    // These are public to write the JSON, but are lower-cased to encourage people not to directly
+    // access them and treat them as private.
     std::string              m_groupName;
     std::vector<std::string> m_groupItems;
 };
@@ -135,9 +138,24 @@ public:
         m_toolbarGroups.clear();
     }
 
-private:
+public:
+    // These are public to write the JSON, but are lower-cased to encourage people not to directly
+    // access them and treat them as private.
     std::vector<std::string>            m_toolbarItems;
     std::vector<TOOLBAR_GROUP_CONFIG>   m_toolbarGroups;
+};
+
+
+class KICOMMON_API TOOLBAR_SETTINGS : public JSON_SETTINGS
+{
+public:
+    TOOLBAR_SETTINGS( const wxString& aFilename );
+
+    virtual ~TOOLBAR_SETTINGS() {}
+
+public:
+    // The toolbars
+    std::map<std::string,TOOLBAR_CONFIGURATION> m_Toolbars;
 };
 
 #endif /* TOOLBAR_CONFIGURATION_H_ */

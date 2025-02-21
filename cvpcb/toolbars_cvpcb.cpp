@@ -27,6 +27,8 @@
 #include <tools/cvpcb_actions.h>
 #include <wx/stattext.h>
 
+#include <settings/settings_manager.h>
+
 
 std::optional<TOOLBAR_CONFIGURATION> CVPCB_MAINFRAME::DefaultTopMainToolbarConfig()
 {
@@ -104,4 +106,20 @@ void CVPCB_MAINFRAME::configureToolbars()
     RegisterCustomToolbarControlFactory( "control.CVPCBFilters", _( "Footprint filters" ),
                                          _( "Footprint filtering controls" ),
                                          footprintFilterFactory );
+
+    TOOLBAR_SETTINGS tb( "cvpcb-toolbars" );
+
+    if( m_tbConfigLeft.has_value() )
+        tb.m_Toolbars.emplace( "left", m_tbConfigLeft.value() );
+
+    if( m_tbConfigRight.has_value() )
+        tb.m_Toolbars.emplace( "right", m_tbConfigRight.value() );
+
+    if( m_tbConfigTopAux.has_value() )
+        tb.m_Toolbars.emplace( "top_aux", m_tbConfigTopAux.value() );
+
+    if( m_tbConfigTopMain.has_value() )
+        tb.m_Toolbars.emplace( "top_main", m_tbConfigTopMain.value() );
+
+    tb.SaveToFile( SETTINGS_MANAGER::GetToolbarSettingsPath(), true );
 }

@@ -59,6 +59,8 @@
 #include <wx/wupdlock.h>
 #include <wx/combobox.h>
 
+#include <settings/settings_manager.h>
+
 #include "../scripting/python_scripting.h"
 
 
@@ -451,6 +453,22 @@ void PCB_EDIT_FRAME::configureToolbars()
     RegisterCustomToolbarControlFactory( "control.PCBPlugin", _( "IPC/Scripting plugins" ),
                                          _( "Region to hold the IPC/Scripting action buttons" ),
                                          pluginControlFactory );
+
+    TOOLBAR_SETTINGS tb( "pcbnew-toolbars" );
+
+    if( m_tbConfigLeft.has_value() )
+        tb.m_Toolbars.emplace( "left", m_tbConfigLeft.value() );
+
+    if( m_tbConfigRight.has_value() )
+        tb.m_Toolbars.emplace( "right", m_tbConfigRight.value() );
+
+    if( m_tbConfigTopAux.has_value() )
+        tb.m_Toolbars.emplace( "top_aux", m_tbConfigTopAux.value() );
+
+    if( m_tbConfigTopMain.has_value() )
+        tb.m_Toolbars.emplace( "top_main", m_tbConfigTopMain.value() );
+
+    tb.SaveToFile( SETTINGS_MANAGER::GetToolbarSettingsPath(), true );
 }
 
 

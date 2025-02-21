@@ -822,6 +822,27 @@ wxString SETTINGS_MANAGER::GetColorSettingsPath()
 }
 
 
+wxString SETTINGS_MANAGER::GetToolbarSettingsPath()
+{
+    wxFileName path;
+
+    path.AssignDir( PATHS::GetUserSettingsPath() );
+    path.AppendDir( wxS( "toolbars" ) );
+
+    if( !path.DirExists() )
+    {
+        if( !wxMkdir( path.GetPath() ) )
+        {
+            wxLogTrace( traceSettings,
+                        wxT( "GetToolbarSettingsPath(): Path %s missing and could not be created!" ),
+                        path.GetPath() );
+        }
+    }
+
+    return path.GetPath();
+}
+
+
 std::string SETTINGS_MANAGER::GetSettingsVersion()
 {
     // CMake computes the major.minor string for us.

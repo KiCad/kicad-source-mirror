@@ -379,6 +379,12 @@ public:
     static wxString GetColorSettingsPath();
 
     /**
+     * Return the path where toolbar configuration files are stored; creating it if missing
+     * (normally ./toolbars/ under the user settings path).
+     */
+    static wxString GetToolbarSettingsPath();
+
+    /**
      * Parse the current KiCad build version and extracts the major and minor revision to use
      * as the name of the settings directory for this KiCad version.
      *

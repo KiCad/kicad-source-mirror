@@ -118,6 +118,9 @@ set( KICOMMON_SRCS
     project/project_file.cpp
     project/project_local_settings.cpp
 
+    # This is basically a settings object, but for the toolbar
+    tool/ui/toolbar_configuration.cpp
+
     dialogs/dialog_migrate_settings.cpp
     dialogs/dialog_migrate_settings_base.cpp
     dialogs/dialog_rc_job.cpp

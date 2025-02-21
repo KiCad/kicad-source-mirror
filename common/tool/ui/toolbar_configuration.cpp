@@ -24,8 +24,126 @@
 
 #include <nlohmann/json.hpp>
 
-#include <action_toolbar.h>
-#include <tools/ui/toolbar_configuration.h>
+#include <tool/action_toolbar.h>
+#include <tool/ui/toolbar_configuration.h>
 
 ///! Update the schema version whenever a migration is required
 const int toolbarSchemaVersion = 1;
+
+
+void to_json( nlohmann::json& aJson, const TOOLBAR_CONFIGURATION& aConfig )
+{
+    nlohmann::json groups = nlohmann::json::array();
+
+    // Serialize the group object
+    for( const TOOLBAR_GROUP_CONFIG& grp : aConfig.m_toolbarGroups )
+    {
+        nlohmann::json jsGrp = {
+            { "name", grp.m_groupName }
+        };
+
+        nlohmann::json grpItems = nlohmann::json::array();
+
+        for( const auto& it : grp.m_groupItems )
+            grpItems.push_back( it );
+
+        jsGrp["items"] = grpItems;
+
+        groups.push_back( jsGrp );
+    }
+
+    // Serialize the items
+    nlohmann::json tbItems = nlohmann::json::array();
+
+    for( const auto& it : aConfig.m_toolbarItems )
+        tbItems.push_back( it );
+
+    aJson = {
+        { "groups", groups },
+        { "items",  tbItems }
+    };
+}
+
+
+void from_json( const nlohmann::json& aJson, TOOLBAR_CONFIGURATION& aConfig )
+{
+    if( aJson.empty() )
+        return;
+
+    aConfig.m_toolbarItems.clear();
+    aConfig.m_toolbarGroups.clear();
+
+    // Deserialize the groups
+    if( aJson.contains( "groups" ) && aJson.at( "groups" ).is_array())
+    {
+        for( const nlohmann::json& grp : aJson.at( "groups" ) )
+        {
+            std::string name = "";
+
+            if( grp.contains( "name" ) )
+                name = grp.at( "name" ).get<std::string>();
+
+            TOOLBAR_GROUP_CONFIG cfg( name );
+
+            // Deserialize the items
+            if( grp.contains( "items" ) )
+            {
+                for( const nlohmann::json& it : grp.at( "items" ) )
+                {
+                    if( it.is_string() )
+                        cfg.m_groupItems.push_back( it.get<std::string>() );
+                }
+            }
+            aConfig.m_toolbarGroups.push_back( cfg );
+        }
+    }
+
+    // Deserialize the items
+    if( aJson.contains( "items" ) )
+    {
+        for( const nlohmann::json& it : aJson.at( "items" ) )
+        {
+            if( it.is_string() )
+            aConfig.m_toolbarItems.push_back( it.get<std::string>() );
+        }
+    }
+}
+
+
+TOOLBAR_SETTINGS::TOOLBAR_SETTINGS( const wxString& aFullPath ) :
+        JSON_SETTINGS( aFullPath, SETTINGS_LOC::NONE, toolbarSchemaVersion )
+{
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "toolbars",
+        [&]() -> nlohmann::json
+        {
+            // Serialize the toolbars
+            nlohmann::json js = nlohmann::json::array();
+
+            for( const auto& [name, tb] : m_Toolbars )
+            {
+                js.push_back( nlohmann::json( { { "name", name },
+                                                  { "contents", tb } } ) );
+            }
+
+            return js;
+        },
+        [&]( const nlohmann::json& aObj )
+        {
+            // Deserialize the toolbars
+            m_Toolbars.clear();
+
+            if( !aObj.is_array() )
+                return;
+
+            for( const auto& entry : aObj )
+            {
+                if( entry.empty() || !entry.is_object() )
+                    continue;
+
+                m_Toolbars.emplace(
+                    std::make_pair( entry["name"].get<std::string>(),
+                                    entry["contents"].get<TOOLBAR_CONFIGURATION>() ) );
+            }
+        },
+        nlohmann::json::array() ) );
+}
