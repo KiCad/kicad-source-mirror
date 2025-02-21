@@ -169,7 +169,7 @@ public:
             switch( aCol )
             {
             case 0: return _( "Text Items" );
-            case 1: return _( "Layer " );
+            case 1: return _( "Layer" );
             default: return wxEmptyString;
             }
         }
@@ -349,8 +349,13 @@ void PANEL_FP_EDITOR_FIELD_DEFAULTS::loadFPSettings( const FOOTPRINT_EDITOR_SETT
     }
 
     m_textItemsGrid->GetTable()->DeleteRows( 0, m_textItemsGrid->GetNumberRows() );
-    m_textItemsGrid->GetTable()->AppendRows( aCfg->m_DesignSettings.m_DefaultFPTextItems.size()
-                                             - 2 );
+
+    // if aCfg->m_DesignSettings.m_DefaultFPTextItems.size() is > 2 (0 and 1 are ref and value),
+    // some extra texts must be added to the list of default texts
+    int extra_texts_cnt = aCfg->m_DesignSettings.m_DefaultFPTextItems.size() - 2;
+
+    if( extra_texts_cnt > 0 )
+        m_textItemsGrid->GetTable()->AppendRows( extra_texts_cnt );
 
     for( int i = 2; i < (int) aCfg->m_DesignSettings.m_DefaultFPTextItems.size(); ++i )
     {
