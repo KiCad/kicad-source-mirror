@@ -35,7 +35,7 @@ PANEL_EMBEDDED_FILES_BASE::PANEL_EMBEDDED_FILES_BASE( wxWindow* parent, wxWindow
 	m_files_grid->EnableDragColMove( false );
 	m_files_grid->EnableDragColSize( true );
 	m_files_grid->SetColLabelValue( 0, _("Filename") );
-	m_files_grid->SetColLabelValue( 1, _("Internal Reference") );
+	m_files_grid->SetColLabelValue( 1, _("Embedded Reference") );
 	m_files_grid->SetColLabelSize( 22 );
 	m_files_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
