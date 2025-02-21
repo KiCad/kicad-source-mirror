@@ -2170,7 +2170,7 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
     if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children )
     {
         for( const SCH_FIELD& field : aSymbol->GetFields() )
-            draw( &field, aLayer, DNP || markExclusion );
+            draw( &field, aLayer, DNP );
     }
 
     if( isFieldsLayer( aLayer ) )
@@ -2242,7 +2242,7 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
     }
 
     draw( &tempSymbol, aLayer, false, aSymbol->GetUnit(), aSymbol->GetBodyStyle(),
-          DNP || markExclusion );
+          DNP );
 
     for( unsigned i = 0; i < tempPins.size(); ++i )
     {
@@ -2255,9 +2255,9 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
                                                         // IS_SHOWN_AS_BITMAP
     }
 
-    if( DNP || markExclusion )
+    if( DNP )
     {
-        int      layer = DNP ? LAYER_DNP_MARKER : LAYER_EXCLUDED_FROM_SIM;
+        int      layer = LAYER_DNP_MARKER;
         BOX2I    bbox = aSymbol->GetBodyBoundingBox();
         BOX2I    pins = aSymbol->GetBodyAndPinsBoundingBox();
         VECTOR2D margins( std::max( bbox.GetX() - pins.GetX(), pins.GetEnd().x - bbox.GetEnd().x ),
@@ -2282,6 +2282,40 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
         m_gal->DrawSegment( pt1, pt2, strokeWidth );
         std::swap( pt1.x, pt2.x );
         m_gal->DrawSegment( pt1, pt2, strokeWidth );
+    }
+
+    if( markExclusion )
+    {
+        int   layer = LAYER_EXCLUDED_FROM_SIM;
+        BOX2I bbox = aSymbol->GetBodyBoundingBox();
+        int   strokeWidth = schIUScale.MilsToIU( ADVANCED_CFG::GetCfg().m_ExcludeFromSimulationLineWidth );
+
+        bbox.Inflate( KiROUND( strokeWidth * 0.5 ) );
+
+        GAL_SCOPED_ATTRS scopedAttrs( *m_gal, GAL_SCOPED_ATTRS::ALL_ATTRS );
+        m_gal->AdvanceDepth();
+        m_gal->SetIsStroke( true );
+        m_gal->SetIsFill( true );
+        m_gal->SetStrokeColor( m_schSettings.GetLayerColor( layer ).WithAlpha( 0.5 ) );
+        m_gal->SetFillColor( m_schSettings.GetLayerColor( layer ).WithAlpha( 0.5 ) );
+
+        m_gal->DrawSegment( bbox.GetPosition(), VECTOR2D( bbox.GetEnd().x, bbox.GetY() ), strokeWidth );
+        m_gal->DrawSegment( VECTOR2D( bbox.GetEnd().x, bbox.GetY() ), bbox.GetEnd(), strokeWidth );
+        m_gal->DrawSegment( bbox.GetEnd(), VECTOR2D( bbox.GetX(), bbox.GetEnd().y ), strokeWidth );
+        m_gal->DrawSegment( VECTOR2D( bbox.GetX(), bbox.GetEnd().y ), bbox.GetPosition(), strokeWidth );
+
+        int offset = 2 * strokeWidth;
+        VECTOR2D center = bbox.GetEnd() + VECTOR2D( offset + strokeWidth, -offset );
+        VECTOR2D left = center + VECTOR2D( -offset, 0 );
+        VECTOR2D right = center + VECTOR2D( offset, 0 );
+        VECTOR2D top = center + VECTOR2D( 0, offset );
+        VECTOR2D bottom = center + VECTOR2D( 0, -offset );
+
+        m_gal->SetFillColor( m_schSettings.GetLayerColor( layer ).WithAlpha( 0.1 ) );
+        m_gal->DrawCircle( center, offset );
+        m_gal->AdvanceDepth();
+        m_gal->SetFillColor( m_schSettings.GetLayerColor( layer ).WithAlpha( 0.5 ) );
+        m_gal->DrawCurve( left, top, bottom, right, 1 );
     }
 }
 
@@ -2676,10 +2710,10 @@ void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
     if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children )
     {
         for( const SCH_FIELD& field : aSheet->GetFields() )
-            draw( &field, aLayer, DNP || markExclusion );
+            draw( &field, aLayer, DNP );
 
         for( SCH_SHEET_PIN* sheetPin : aSheet->GetPins() )
-            draw( static_cast<SCH_HIERLABEL*>( sheetPin ), aLayer, DNP || markExclusion );
+            draw( static_cast<SCH_HIERLABEL*>( sheetPin ), aLayer, DNP );
     }
 
     if( isFieldsLayer( aLayer ) )
@@ -2712,9 +2746,9 @@ void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
         m_gal->DrawRectangle( pos, pos + size );
     }
 
-    if( DNP || markExclusion )
+    if( DNP )
     {
-        int      layer = DNP ? LAYER_DNP_MARKER : LAYER_EXCLUDED_FROM_SIM;
+        int      layer = LAYER_DNP_MARKER;
         BOX2I    bbox = aSheet->GetBodyBoundingBox();
         BOX2I    pins = aSheet->GetBoundingBox();
         VECTOR2D margins( std::max( bbox.GetX() - pins.GetX(), pins.GetEnd().x - bbox.GetEnd().x ),
@@ -2738,6 +2772,40 @@ void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
         m_gal->DrawSegment( pt1, pt2, strokeWidth );
         std::swap( pt1.x, pt2.x );
         m_gal->DrawSegment( pt1, pt2, strokeWidth );
+    }
+
+    if( markExclusion )
+    {
+        int   layer = LAYER_EXCLUDED_FROM_SIM;
+        BOX2I bbox = aSheet->GetBodyBoundingBox();
+        int   strokeWidth = schIUScale.MilsToIU( ADVANCED_CFG::GetCfg().m_ExcludeFromSimulationLineWidth );
+
+        bbox.Inflate( KiROUND( strokeWidth * 0.5 ) );
+
+        GAL_SCOPED_ATTRS scopedAttrs( *m_gal, GAL_SCOPED_ATTRS::ALL_ATTRS );
+        m_gal->AdvanceDepth();
+        m_gal->SetIsStroke( true );
+        m_gal->SetIsFill( true );
+        m_gal->SetStrokeColor( m_schSettings.GetLayerColor( layer ).WithAlpha( 0.5 ) );
+        m_gal->SetFillColor( m_schSettings.GetLayerColor( layer ).WithAlpha( 0.5 ) );
+
+        m_gal->DrawSegment( bbox.GetPosition(), VECTOR2D( bbox.GetEnd().x, bbox.GetY() ), strokeWidth );
+        m_gal->DrawSegment( VECTOR2D( bbox.GetEnd().x, bbox.GetY() ), bbox.GetEnd(), strokeWidth );
+        m_gal->DrawSegment( bbox.GetEnd(), VECTOR2D( bbox.GetX(), bbox.GetEnd().y ), strokeWidth );
+        m_gal->DrawSegment( VECTOR2D( bbox.GetX(), bbox.GetEnd().y ), bbox.GetPosition(), strokeWidth );
+
+        int offset = 2 * strokeWidth;
+        VECTOR2D center = bbox.GetEnd() + VECTOR2D( offset + strokeWidth, -offset );
+        VECTOR2D left = center + VECTOR2D( -offset, 0 );
+        VECTOR2D right = center + VECTOR2D( offset, 0 );
+        VECTOR2D top = center + VECTOR2D( 0, offset );
+        VECTOR2D bottom = center + VECTOR2D( 0, -offset );
+
+        m_gal->SetFillColor( m_schSettings.GetLayerColor( layer ).WithAlpha( 0.1 ) );
+        m_gal->DrawCircle( center, offset );
+        m_gal->AdvanceDepth();
+        m_gal->SetFillColor( m_schSettings.GetLayerColor( layer ).WithAlpha( 0.5 ) );
+        m_gal->DrawCurve( left, top, bottom, right, 1 );
     }
 }
 
