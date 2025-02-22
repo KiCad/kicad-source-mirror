@@ -22,12 +22,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <filename_resolver.h>
 #include <pgm_base.h>
 #include <string>
 #include <string_utils.h>
 #include <common.h>
 #include <functional>
 #include <sch_symbol.h>
+#include <schematic.h>
 
 // Include simulator headers after wxWidgets headers to avoid conflicts with Windows headers
 // (especially on msys2 + wxWidgets 3.0.x)
@@ -39,7 +41,8 @@
 using namespace std::placeholders;
 
 
-SIM_LIB_MGR::SIM_LIB_MGR( const PROJECT* aPrj ) :
+SIM_LIB_MGR::SIM_LIB_MGR( const PROJECT* aPrj, EMBEDDED_FILES* aFiles ) :
+        m_files( aFiles ),
         m_project( aPrj ),
         m_forceFullParse( false )
 {
@@ -53,20 +56,20 @@ void SIM_LIB_MGR::Clear()
 }
 
 
-wxString SIM_LIB_MGR::ResolveLibraryPath( const wxString& aLibraryPath, const PROJECT* aProject,
-                                          REPORTER& aReporter )
+wxString SIM_LIB_MGR::ResolveLibraryPath( const wxString& aLibraryPath, REPORTER& aReporter )
 {
-    wxString expandedPath = ExpandEnvVarSubstitutions( aLibraryPath, aProject );
+    FILENAME_RESOLVER resolver;
 
-    // Convert it to UNIX format
-    expandedPath.Replace( '\\', '/' );
+    resolver.SetProject( m_project );
+
+    wxString expandedPath = resolver.ResolvePath( aLibraryPath, wxEmptyString, m_files );
 
     wxFileName fn( expandedPath );
 
     if( fn.IsAbsolute() )
         return fn.GetFullPath();
 
-    wxFileName projectFn( aProject ? aProject->AbsolutePath( expandedPath ) : expandedPath );
+    wxFileName projectFn( m_project ? m_project->AbsolutePath( expandedPath ) : expandedPath );
 
     if( projectFn.Exists() )
         return projectFn.GetFullPath();
@@ -106,7 +109,7 @@ wxString SIM_LIB_MGR::ResolveEmbeddedLibraryPath( const wxString& aLibPath,
     {
         wxString relLib( aRelativeLib );
 
-        relLib = ResolveLibraryPath( relLib, m_project, aReporter );
+        relLib = ResolveLibraryPath( relLib, aReporter );
 
         wxFileName fn( relLib );
 
@@ -119,7 +122,7 @@ wxString SIM_LIB_MGR::ResolveEmbeddedLibraryPath( const wxString& aLibPath,
     if( !fn.Exists() )
         fullPath = aLibPath;
 
-    fullPath = ResolveLibraryPath( fullPath, m_project, aReporter );
+    fullPath = ResolveLibraryPath( fullPath, aReporter );
 
     return fullPath;
 }
@@ -127,7 +130,7 @@ wxString SIM_LIB_MGR::ResolveEmbeddedLibraryPath( const wxString& aLibPath,
 
 void SIM_LIB_MGR::SetLibrary( const wxString& aLibraryPath, REPORTER& aReporter )
 {
-    wxString path = ResolveLibraryPath( aLibraryPath, m_project, aReporter );
+    wxString path = ResolveLibraryPath( aLibraryPath, aReporter );
 
     if( aReporter.HasMessageOfSeverity( RPT_SEVERITY_UNDEFINED | RPT_SEVERITY_ERROR ) )
         return;
@@ -280,7 +283,7 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const wxString& aLibraryPath,
     SIM_LIBRARY* library = nullptr;
     SIM_MODEL*   baseModel = nullptr;
     std::string  modelName;
-    wxString     path = ResolveLibraryPath( aLibraryPath, m_project, aReporter );
+    wxString     path = ResolveLibraryPath( aLibraryPath, aReporter );
 
     auto it = m_libraries.find( path );
 

@@ -67,7 +67,7 @@ public:
                                | OPTION_SAVE_ALL_EVENTS
     };
 
-    NETLIST_EXPORTER_SPICE( SCHEMATIC_IFACE* aSchematic );
+    NETLIST_EXPORTER_SPICE( SCHEMATIC* aSchematic );
 
     /**
      * Write to specified output file.

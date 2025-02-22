@@ -31,7 +31,7 @@
 
 class SIM_LIBRARY_IBIS;
 class REPORTER;
-
+class SCHEMATIC;
 
 class SPICE_GENERATOR_IBIS : public SPICE_GENERATOR
 {
@@ -42,7 +42,7 @@ public:
     std::string ModelLine( const SPICE_ITEM& aItem ) const override;
     std::vector<std::string> CurrentNames( const SPICE_ITEM& aItem ) const override;
 
-    std::string IbisDevice( const SPICE_ITEM& aItem, const PROJECT& aProject,
+    std::string IbisDevice( const SPICE_ITEM& aItem, SCHEMATIC* aSchematic,
                             const wxString& aCacheDir, REPORTER& aReporter ) const;
 };
 

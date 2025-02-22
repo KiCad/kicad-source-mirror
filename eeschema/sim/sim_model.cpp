@@ -1736,8 +1736,13 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
     if( !lib.IsEmpty() )
     {
         WX_STRING_REPORTER     reporter;
-        SIM_LIB_MGR            libMgr( aProject );
+        SIM_LIB_MGR            libMgr( aProject, nullptr );
         std::vector<SCH_FIELD> emptyFields;
+
+        if constexpr (std::is_same_v<T, SCH_SYMBOL>)
+            libMgr.SetFiles( aSymbol.Schematic() );
+        else
+            libMgr.SetFiles( &aSymbol );
 
         // Pull out any following parameters from model name
         model = model.BeforeFirst( ' ', &modelLineParams );

@@ -78,7 +78,7 @@ bool FILENAME_RESOLVER::Set3DConfigDir( const wxString& aConfigDir )
 }
 
 
-bool FILENAME_RESOLVER::SetProject( PROJECT* aProject, bool* flgChanged )
+bool FILENAME_RESOLVER::SetProject( const PROJECT* aProject, bool* flgChanged )
 {
     m_project = aProject;
 
