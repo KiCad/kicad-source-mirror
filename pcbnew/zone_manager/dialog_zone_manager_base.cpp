@@ -30,7 +30,7 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 	m_filterCtrl->ShowSearchButton( true );
 	#endif
 	m_filterCtrl->ShowCancelButton( true );
-	searchSizer->Add( m_filterCtrl, 1, wxEXPAND|wxBOTTOM, 1 );
+	searchSizer->Add( m_filterCtrl, 1, wxALIGN_CENTER_VERTICAL, 1 );
 
 
 	searchSizer->Add( 10, 0, 0, wxEXPAND, 5 );
@@ -44,12 +44,12 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 	searchSizer->Add( m_checkNet, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	leftColumn->Add( searchSizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 3 );
+	leftColumn->Add( searchSizer, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 	m_viewZonesOverview = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxSize( -1,240 ), wxDV_HORIZ_RULES|wxDV_SINGLE|wxDV_VERT_RULES );
 	m_viewZonesOverview->SetMinSize( wxSize( -1,240 ) );
 
-	leftColumn->Add( m_viewZonesOverview, 1, wxEXPAND, 0 );
+	leftColumn->Add( m_viewZonesOverview, 1, wxEXPAND, 5 );
 
 	m_sizerZoneOP = new wxBoxSizer( wxHORIZONTAL );
 
@@ -67,10 +67,10 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 	leftColumn->Add( m_sizerZoneOP, 0, wxEXPAND|wxTOP, 5 );
 
 
-	m_sizerTop->Add( leftColumn, 1, wxEXPAND|wxTOP|wxRIGHT, 5 );
+	m_sizerTop->Add( leftColumn, 1, wxEXPAND|wxLEFT, 5 );
 
 
-	m_MainBoxSizer->Add( m_sizerTop, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	m_MainBoxSizer->Add( m_sizerTop, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_sizerProperties = new wxBoxSizer( wxVERTICAL );
 
@@ -82,7 +82,7 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 	m_checkRepour = new wxCheckBox( this, wxID_ANY, _("Refill zones"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkRepour->SetToolTip( _("Refill zones after changes made on board") );
 
-	m_sizerBottom->Add( m_checkRepour, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
+	m_sizerBottom->Add( m_checkRepour, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
 	m_sizerBottom->Add( 25, 0, 1, wxEXPAND, 5 );
@@ -90,7 +90,7 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 	m_updateDisplayedZones = new wxButton( this, wxID_ANY, _("Update Displayed Zones"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateDisplayedZones->SetToolTip( _("Update filled areas shown in dialog, according to the new current settings") );
 
-	m_sizerBottom->Add( m_updateDisplayedZones, 0, wxALL, 5 );
+	m_sizerBottom->Add( m_updateDisplayedZones, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -99,14 +99,15 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	m_sizerBottom->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 5 );
+	m_sizerBottom->Add( m_sdbSizer, 0, wxEXPAND, 5 );
 
 
-	m_MainBoxSizer->Add( m_sizerBottom, 0, wxEXPAND, 5 );
+	m_MainBoxSizer->Add( m_sizerBottom, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	this->SetSizer( m_MainBoxSizer );
 	this->Layout();
+	m_MainBoxSizer->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_ZONE_MANAGER_BASE::onDialogResize ) );

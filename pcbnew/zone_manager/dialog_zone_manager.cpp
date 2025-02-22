@@ -76,7 +76,7 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent, ZONE_SETTINGS
     m_sizerProperties->Add( m_panelZoneProperties, 1, wxTOP | wxEXPAND, 5 );
 
     m_zoneViewer = new PANE_ZONE_VIEWER( this, aParent );
-    m_sizerTop->Add( m_zoneViewer, 1, wxBOTTOM | wxLEFT | wxEXPAND, 10 );
+    m_sizerTop->Add( m_zoneViewer, 1, wxBOTTOM | wxLEFT | wxRIGHT | wxEXPAND, 5 );
 
     m_checkRepour->SetValue( ZONE_MANAGER_PREFERENCE::GetRepourOnClose() );
     //m_zoneViewer->SetId( ZONE_VIEWER );
