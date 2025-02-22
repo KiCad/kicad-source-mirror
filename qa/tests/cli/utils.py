@@ -63,13 +63,12 @@ def run_and_capture( command: list ) -> Tuple[ str, str, int ]:
                 pass
 
         if base_path is not None:
+            logger.info("Using QA data base path '%s'", str(base_path))
             env['KICAD_CONFIG_HOME'] = str(base_path / 'config')
             env['KICAD9_SYMBOL_DIR'] = str(base_path / 'libraries')
             env['KICAD9_FOOTPRINT_DIR'] = str(base_path / 'libraries')
         else:
             logger.warning("Unexpected cwd '%s', tests will likely fail", cwd)
-
-    logger.info("Using environment \"%s\"", json.dumps(env, indent=2))
 
     proc = subprocess.Popen( command,
         stdout = subprocess.PIPE,
