@@ -426,7 +426,7 @@ bool JOBS_GRID_TRICKS::handleDoubleClick( wxGridEvent& aEvent )
     int curr_col = aEvent.GetCol();
     int curr_row = aEvent.GetRow();
 
-    if( ( curr_col == 0 || curr_col == 1 || curr_col == 2 )
+    if( ( curr_col == COL_NUMBER || curr_col == COL_SOURCE || curr_col == COL_DESCR )
         && curr_row >= 0 && curr_row < (int) m_parent->GetJobsFile()->GetJobs().size() )
     {
         m_doubleClickRow = curr_row;
@@ -466,8 +466,8 @@ PANEL_JOBSET::PANEL_JOBSET( wxAuiNotebook* aParent, KICAD_MANAGER_FRAME* aFrame,
     m_jobsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     // 'm' for margins
-    m_jobsGrid->SetColSize( 0, GetTextExtent( wxT( "99m" ) ).x );
-    m_jobsGrid->SetColSize( 1, GetTextExtent( wxT( "PCBm" ) ).x );
+    m_jobsGrid->SetColSize( COL_NUMBER, GetTextExtent( wxT( "99m" ) ).x );
+    m_jobsGrid->SetColSize( COL_SOURCE, GetTextExtent( wxT( "PCBm" ) ).x );
 
     m_buttonAddJob->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_buttonUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
@@ -518,13 +518,13 @@ void PANEL_JOBSET::rebuildJobList()
 
     for( JOBSET_JOB& job : m_jobsFile->GetJobs() )
     {
-        m_jobsGrid->SetCellValue( num - 1, 0, wxString::Format( "%d", num ) );
-        m_jobsGrid->SetReadOnly( num - 1, 0 );
+        m_jobsGrid->SetCellValue( num - 1, COL_NUMBER, wxString::Format( "%d", num ) );
+        m_jobsGrid->SetReadOnly( num - 1, COL_NUMBER );
 
-        m_jobsGrid->SetCellValue( num - 1, 2, job.GetDescription() );
+        m_jobsGrid->SetCellValue( num - 1, COL_DESCR, job.GetDescription() );
 
-        m_jobsGrid->SetReadOnly( num - 1, 1 );
-        
+        m_jobsGrid->SetReadOnly( num - 1, COL_SOURCE );
+
         KIWAY::FACE_T iface = JOB_REGISTRY::GetKifaceType( job.m_type );
         wxString      source = wxEmptyString;
         if( iface < KIWAY::KIWAY_FACE_COUNT )
@@ -539,7 +539,7 @@ void PANEL_JOBSET::rebuildJobList()
             }
         }
 
-        m_jobsGrid->SetCellValue( num - 1, 1, source );
+        m_jobsGrid->SetCellValue( num - 1, COL_SOURCE, source );
 
         num++;
     }
@@ -658,7 +658,7 @@ void PANEL_JOBSET::OnGridCellChange( wxGridEvent& aEvent )
     int row = aEvent.GetRow();
     int col = aEvent.GetCol();
 
-    if( col == 2 )
+    if( col == COL_DESCR )
         m_jobsFile->GetJobs()[row].SetDescription( m_jobsGrid->GetCellValue( row, col ) );
 }
 
@@ -986,8 +986,9 @@ void PANEL_JOBSET::OnGenerateAllOutputsClick( wxCommandEvent& event )
 
 void PANEL_JOBSET::OnSizeGrid( wxSizeEvent& aEvent )
 {
-    m_jobsGrid->SetColSize( 2, m_jobsGrid->GetSize().x - m_jobsGrid->GetColSize( 1 )
-                                       - m_jobsGrid->GetColSize( 0 ) );
+    m_jobsGrid->SetColSize( COL_DESCR, m_jobsGrid->GetSize().x
+                                               - m_jobsGrid->GetColSize( COL_SOURCE )
+                                               - m_jobsGrid->GetColSize( COL_NUMBER ) );
 
     // Always propagate for a grid repaint (needed if the height changes, as well as width)
     aEvent.Skip();

@@ -31,6 +31,15 @@ class PANEL_JOBSET;
 class PANEL_JOBSET_OUTPUT;
 struct JOBSET_OUTPUT;
 
+enum COL_ORDER
+{
+    COL_NUMBER,
+    COL_SOURCE,
+    COL_DESCR,
+
+    COL_COUNT // keep as last
+};
+
 class JOBS_GRID_TRICKS : public GRID_TRICKS
 {
     enum
