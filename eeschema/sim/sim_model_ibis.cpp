@@ -27,6 +27,7 @@
 #include <fmt/core.h>
 #include <wx/filename.h>
 #include <kiway.h>
+#include <schematic.h>
 #include "sim_lib_mgr.h"
 
 std::string SPICE_GENERATOR_IBIS::ModelName( const SPICE_ITEM& aItem ) const
@@ -51,7 +52,7 @@ std::vector<std::string> SPICE_GENERATOR_IBIS::CurrentNames( const SPICE_ITEM& a
 }
 
 
-std::string SPICE_GENERATOR_IBIS::IbisDevice( const SPICE_ITEM& aItem, const PROJECT& aProject,
+std::string SPICE_GENERATOR_IBIS::IbisDevice( const SPICE_ITEM& aItem, SCHEMATIC* aSchematic,
                                               const wxString& aCacheDir,
                                               REPORTER&       aReporter ) const
 {
@@ -62,7 +63,8 @@ std::string SPICE_GENERATOR_IBIS::IbisDevice( const SPICE_ITEM& aItem, const PRO
     bool        diffMode        = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_LIBRARY_IBIS::DIFF_FIELD ) == "1";
 
     WX_STRING_REPORTER reporter;
-    wxString           path = SIM_LIB_MGR::ResolveLibraryPath( ibisLibFilename, &aProject, reporter );
+    SIM_LIB_MGR        mgr( &aSchematic->Prj(), aSchematic );
+    wxString           path = mgr.ResolveLibraryPath( ibisLibFilename, reporter );
 
     if( reporter.HasMessage() )
         THROW_IO_ERROR( reporter.GetMessages() );

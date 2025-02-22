@@ -35,6 +35,7 @@
 #include <sim/sim_library_ibis.h>
 #include <sch_symbol.h>
 
+class EMBEDDED_FILES;
 
 // Some probable wxWidgets bugs encountered when writing this class:
 // 1. There are rendering problems with wxPropertyGrid on Linux, GTK, Xorg when
@@ -128,6 +129,7 @@ private:
     T&                      m_symbol;
     std::vector<SCH_FIELD>& m_fields;
 
+    EMBEDDED_FILES*         m_files;
     SIM_LIB_MGR             m_libraryModelsMgr;
     SIM_LIB_MGR             m_builtinModelsMgr;
     wxString                m_prevLibrary;

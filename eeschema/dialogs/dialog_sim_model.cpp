@@ -44,6 +44,8 @@
 #include <sch_edit_frame.h>
 #include <sim/sim_model_l_mutual.h>
 #include <sim/spice_circuit_model.h>
+#include <widgets/filedlg_open_embed_file.h>
+#include <wx/filedlg.h>
 #include <wx/log.h>
 
 using CATEGORY = SIM_MODEL::PARAM::CATEGORY;
@@ -67,8 +69,8 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame
         m_frame( aFrame ),
         m_symbol( aSymbol ),
         m_fields( aFields ),
-        m_libraryModelsMgr( &Prj() ),
-        m_builtinModelsMgr( &Prj() ),
+        m_libraryModelsMgr( &Prj(), nullptr ),
+        m_builtinModelsMgr( &Prj(), nullptr ),
         m_prevModel( nullptr ),
         m_curModelType( SIM_MODEL::TYPE::NONE ),
         m_scintillaTricksCode( nullptr ),
@@ -79,6 +81,14 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame
 {
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
     m_infoBar->AddCloseButton();
+
+    if constexpr (std::is_same_v<T, SCH_SYMBOL>)
+        m_files = aSymbol.Schematic();
+    else
+        m_files = &aSymbol;
+
+    m_libraryModelsMgr.SetFiles( m_files );
+    m_builtinModelsMgr.SetFiles( m_files );
 
     for( SCH_PIN* pin : aSymbol.GetPins() )
     {
@@ -104,10 +114,7 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame
     m_paramGridMgr->Bind( wxEVT_PG_SELECTED, &DIALOG_SIM_MODEL::onParamGridSelectionChange, this );
 
     wxPropertyGrid* grid = m_paramGrid->GetGrid();
-
-    // In wx 3.0 the color will be wrong sometimes.
     grid->SetCellDisabledTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
-
     grid->Bind( wxEVT_SET_FOCUS, &DIALOG_SIM_MODEL::onParamGridSetFocus, this );
     grid->Bind( wxEVT_UPDATE_UI, &DIALOG_SIM_MODEL::onUpdateUI, this );
 
@@ -132,8 +139,6 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame
     m_pinAssignmentsGrid->PushEventHandler( new GRID_TRICKS( m_pinAssignmentsGrid ) );
 
     m_subcktLabel->SetFont( KIUI::GetInfoFont( m_subcktLabel ) );
-
-    // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
 }
 
@@ -368,8 +373,11 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
         path = m_libraryPathText->GetValue();
         wxFileName fn( path );
 
-        if( fn.MakeRelativeTo( Prj().GetProjectPath() ) && !fn.GetFullPath().StartsWith( ".." ) )
+        if( !path.starts_with( FILEEXT::KiCadUriPrefix ) && fn.MakeRelativeTo( Prj().GetProjectPath() )
+            && !fn.GetFullPath().StartsWith( ".." ) )
+        {
             path = fn.GetFullPath();
+        }
 
         if( m_modelListBox->GetSelection() >= 0 )
             name = m_modelListBox->GetStringSelection().ToStdString();
@@ -1249,8 +1257,11 @@ void DIALOG_SIM_MODEL<T>::onBrowseButtonClick( wxCommandEvent& aEvent )
 {
     static wxString s_mruPath;
 
-    wxString     path = s_mruPath.IsEmpty() ? Prj().GetProjectPath() : s_mruPath;
-    wxFileDialog dlg( this, _( "Browse Models" ), path );
+    wxString                path = s_mruPath.IsEmpty() ? Prj().GetProjectPath() : s_mruPath;
+    wxFileDialog            dlg( this, _( "Browse Models" ), path );
+    FILEDLG_OPEN_EMBED_FILE customize( false );
+
+    dlg.SetCustomizeHook( customize );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
@@ -1259,10 +1270,14 @@ void DIALOG_SIM_MODEL<T>::onBrowseButtonClick( wxCommandEvent& aEvent )
 
     path = dlg.GetPath();
     wxFileName fn( path );
-
     s_mruPath = fn.GetPath();
 
-    if( fn.MakeRelativeTo( Prj().GetProjectPath() ) && !fn.GetFullPath().StartsWith( wxS( ".." ) ) )
+    if( customize.GetEmbed() )
+    {
+        EMBEDDED_FILES::EMBEDDED_FILE* result = m_files->AddFile( fn, false );
+        path = result->GetLink();
+    }
+    else if( fn.MakeRelativeTo( Prj().GetProjectPath() ) && !fn.GetFullPath().StartsWith( wxS( ".." ) ) )
         path = fn.GetFullPath();
 
     WX_STRING_REPORTER reporter;

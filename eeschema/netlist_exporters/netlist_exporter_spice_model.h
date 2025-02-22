@@ -33,7 +33,7 @@ enum LABEL_FLAG_SHAPE : unsigned int;
 class NETLIST_EXPORTER_SPICE_MODEL : public NETLIST_EXPORTER_SPICE
 {
 public:
-    NETLIST_EXPORTER_SPICE_MODEL( SCHEMATIC_IFACE* aSchematic )
+    NETLIST_EXPORTER_SPICE_MODEL( SCHEMATIC* aSchematic )
         : NETLIST_EXPORTER_SPICE( aSchematic )
     {
     }

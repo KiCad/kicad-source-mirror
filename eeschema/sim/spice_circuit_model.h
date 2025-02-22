@@ -54,7 +54,7 @@ struct SPICE_PZ_ANALYSES
 class SPICE_CIRCUIT_MODEL : public NETLIST_EXPORTER_SPICE, public SIMULATION_MODEL
 {
 public:
-    SPICE_CIRCUIT_MODEL( SCHEMATIC_IFACE* aSchematic ) :
+    SPICE_CIRCUIT_MODEL( SCHEMATIC* aSchematic ) :
             NETLIST_EXPORTER_SPICE( aSchematic )
     {}
 

@@ -42,21 +42,6 @@ class OUTLINE_FONT;
 }
 
 
-class SCHEMATIC_IFACE
-{
-public:
-    SCHEMATIC_IFACE() {};
-    virtual ~SCHEMATIC_IFACE() {};
-
-    virtual CONNECTION_GRAPH* ConnectionGraph() const = 0;
-    virtual SCH_SHEET_LIST BuildSheetListSortedByPageNumbers() const = 0;
-    virtual void SetCurrentSheet( const SCH_SHEET_PATH& aPath ) = 0;
-    virtual SCH_SHEET_PATH& CurrentSheet() const = 0;
-    virtual wxString GetFileName() const = 0;
-    virtual PROJECT& Prj() const = 0;
-    virtual SCH_SHEET_LIST Hierarchy() const = 0;
-};
-
 class SCHEMATIC;
 
 class SCHEMATIC_LISTENER
@@ -79,7 +64,7 @@ public:
  * Right now, Eeschema can have only one schematic open at a time, but this could change.
  * Please keep this possibility in mind when adding to this object.
  */
-class SCHEMATIC : public SCHEMATIC_IFACE, public EDA_ITEM, public EMBEDDED_FILES
+class SCHEMATIC : public EDA_ITEM, public EMBEDDED_FILES
 {
 public:
     SCHEMATIC( PROJECT* aPrj );
@@ -95,12 +80,12 @@ public:
     void Reset();
 
     /// Return a reference to the project this schematic is part of
-    PROJECT& Prj() const override { return *m_project; }
+    PROJECT& Prj() const { return *m_project; }
     void SetProject( PROJECT* aPrj );
 
     const std::map<wxString, wxString>* GetProperties() { return &m_properties; }
 
-    SCH_SHEET_LIST BuildSheetListSortedByPageNumbers() const override
+    SCH_SHEET_LIST BuildSheetListSortedByPageNumbers() const
     {
         SCH_SHEET_LIST hierarchy( m_rootSheet );
 
@@ -119,7 +104,7 @@ public:
     /**
      * Return the full schematic flattened hierarchical sheet list.
      */
-    SCH_SHEET_LIST Hierarchy() const override;
+    SCH_SHEET_LIST Hierarchy() const;
 
     void RefreshHierarchy();
 
@@ -157,19 +142,19 @@ public:
     bool ResolveTextVar( const SCH_SHEET_PATH* aSheetPath, wxString* token, int aDepth ) const;
 
     /// Helper to retrieve the filename from the root sheet screen
-    wxString GetFileName() const override;
+    wxString GetFileName() const;
 
-    SCH_SHEET_PATH& CurrentSheet() const override
+    SCH_SHEET_PATH& CurrentSheet() const
     {
         return *m_currentSheet;
     }
 
-    void SetCurrentSheet( const SCH_SHEET_PATH& aPath ) override
+    void SetCurrentSheet( const SCH_SHEET_PATH& aPath )
     {
         *m_currentSheet = aPath;
     }
 
-    CONNECTION_GRAPH* ConnectionGraph() const override
+    CONNECTION_GRAPH* ConnectionGraph() const
     {
         return m_connectionGraph;
     }

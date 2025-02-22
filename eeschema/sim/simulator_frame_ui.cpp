@@ -1478,7 +1478,7 @@ void SIMULATOR_FRAME_UI::UpdateTunerValue( const SCH_SHEET_PATH& aSheetPath, con
     }
 
     NULL_REPORTER devnull;
-    SIM_LIB_MGR   mgr( &m_schematicFrame->Prj() );
+    SIM_LIB_MGR   mgr( &m_schematicFrame->Prj(), &m_schematicFrame->Schematic() );
     SIM_MODEL&    model = mgr.CreateModel( &aSheetPath, *symbol, devnull ).model;
 
     const SIM_MODEL::PARAM* tunerParam = model.GetTunerParam();

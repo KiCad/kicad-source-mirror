@@ -1421,7 +1421,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
         if( range.IsEmpty() )
             range = wxS( "~A" );
 
-        SIM_LIB_MGR   simLibMgr( &schematic->Prj() );
+        SIM_LIB_MGR   simLibMgr( &schematic->Prj(), schematic );
         NULL_REPORTER devnull;
         SIM_MODEL&    model = simLibMgr.CreateModel( aPath, const_cast<SCH_SYMBOL&>( *this ),
                                                      devnull ).model;

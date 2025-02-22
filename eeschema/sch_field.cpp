@@ -858,7 +858,7 @@ void SCH_FIELD::OnScintillaCharAdded( SCINTILLA_TRICKS* aScintillaTricks,
                 {
                     NULL_REPORTER   devnull;
                     SCH_SHEET_PATH& sheet = schematic->CurrentSheet();
-                    SIM_LIB_MGR     mgr( &schematic->Prj() );
+                    SIM_LIB_MGR     mgr( &schematic->Prj(), schematic );
                     SIM_MODEL&      model = mgr.CreateModel( &sheet, *symbol, devnull ).model;
 
                     for( wxString pin : model.GetPinNames() )

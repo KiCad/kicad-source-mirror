@@ -1735,7 +1735,7 @@ int ERC_TESTER::TestSimModelIssues()
 {
     WX_STRING_REPORTER reporter;
     int                err_count = 0;
-    SIM_LIB_MGR        libMgr( &m_schematic->Prj() );
+    SIM_LIB_MGR        libMgr( &m_schematic->Prj(), m_schematic );
 
     for( SCH_SHEET_PATH& sheet : m_sheetList )
     {
