@@ -621,7 +621,7 @@
  欠陥電気
  木 王
  郝弘毅
-
+ Eli Hughes
 
 See git repo on GitLab for contributors at
 https://gitlab.com/kicad/code/kicad/-/graphs/master
