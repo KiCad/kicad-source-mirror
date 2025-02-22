@@ -1168,9 +1168,9 @@ struct EPOLYGON : public EAGLE_BASE
     static const int    max_priority = 6;
 
     enum {      // for pour
-        SOLID,
-        HATCH,
-        CUTOUT,
+        ESOLID,
+        EHATCH,
+        ECUTOUT,
     };
 
     int        pour;
