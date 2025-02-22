@@ -22,7 +22,7 @@
 
 import difflib
 import os
-import platform
+import json
 
 import cairosvg
 import logging
@@ -57,6 +57,8 @@ def run_and_capture( command: list ) -> Tuple[ str, str, int ]:
         env['KICAD_CONFIG_HOME'] = os.path.join(base_path, 'config')
         env['KICAD9_SYMBOL_DIR'] = os.path.join(base_path, 'libraries')
         env['KICAD9_FOOTPRINT_DIR'] = os.path.join(base_path, 'libraries')
+
+    logger.info("Using environment \"%s\"", json.dumps(env, indent=2))
 
     proc = subprocess.Popen( command,
         stdout = subprocess.PIPE,
