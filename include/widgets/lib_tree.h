@@ -104,7 +104,20 @@ public:
     int GetSelectedLibIds( std::vector<LIB_ID>& aSelection,
                            std::vector<int>* aUnit = nullptr ) const;
 
+    /**
+     * Retrieve the tree node for the first selected item.
+     *
+     * @return the tree node for the first selected item.
+     */
     LIB_TREE_NODE* GetCurrentTreeNode() const;
+
+    /**
+     * Retrieve a list of pointers to selected tree nodes for trees that allow multi-selection.
+     * 
+     * @param aSelection will be filled with a list of pointers of selected tree nodes.
+     * @return the number of selected items.
+     */
+    int GetSelectedTreeNodes( std::vector<LIB_TREE_NODE*>& aSelection ) const;
 
     /**
      * Select an item in the tree widget.
