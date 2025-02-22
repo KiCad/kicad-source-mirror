@@ -342,16 +342,9 @@ bool CN_ANCHOR::IsDangling() const
         return connected_count < minimal_count;
 
     if( Parent()->Type() == PCB_TRACE_T || Parent()->Type() == PCB_ARC_T )
-    {
         accuracy = KiROUND( static_cast<const PCB_TRACK*>( Parent() )->GetWidth() / 2 );
-    }
     else if( Parent()->Type() == PCB_SHAPE_T )
-    {
-        auto shape = static_cast<const PCB_SHAPE*>( Parent() );
-
-        if( !shape->IsFilled() )
-            accuracy = KiROUND( shape->GetWidth() / 2 );
-    }
+        accuracy = KiROUND( static_cast<const PCB_SHAPE*>( Parent() )->GetWidth() / 2 );
 
     // Items with multiple anchors have usually items connected to each anchor.
     // We want only the item count of this anchor point
