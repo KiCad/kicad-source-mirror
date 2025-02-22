@@ -75,7 +75,7 @@ class DIALOG_ZONE_MANAGER_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Zone Manager"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 556,369 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Zone Manager"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_ZONE_MANAGER_BASE();
 
