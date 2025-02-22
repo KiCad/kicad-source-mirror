@@ -1,0 +1,15 @@
+{
+    "meta": {
+        "version": 1.0
+    },
+    "name": "Test HTTP Library",
+    "description": "A KiCad library sourced from a REST API",
+    "source": {
+        "type": "REST_API",
+        "api_version": "v1",
+        "root_url": "http://localhost:8000/",
+        "token": "",
+        "timeout_parts_seconds": 60,
+        "timeout_categories_seconds": 600
+    }
+}
