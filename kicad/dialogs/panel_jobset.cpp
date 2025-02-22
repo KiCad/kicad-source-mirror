@@ -658,7 +658,7 @@ void PANEL_JOBSET::OnGridCellChange( wxGridEvent& aEvent )
     int row = aEvent.GetRow();
     int col = aEvent.GetCol();
 
-    if( col == 1 )
+    if( col == 2 )
         m_jobsFile->GetJobs()[row].SetDescription( m_jobsGrid->GetCellValue( row, col ) );
 }
 
