@@ -35,15 +35,28 @@ import numpy as np
 logger = logging.getLogger("cli_util")
 Image.MAX_IMAGE_PIXELS = 800 * 1024 * 1024 // 4 # Increase limit to ~800MB uncompressed RGBA, 4bpp (~600MB RGB, 3bpp)
 
+def kicad_cli() -> str:
+    if 'KICAD_CLI' in os.environ:
+        return os.environ.get('KICAD_CLI')
+
+    return "kicad-cli"
+
 def run_and_capture( command: list ) -> Tuple[ str, str, int ]:
     logger.info("Executing command \"%s\"", " ".join( command ))
 
-    # MacOS qa_cli uses the installed kicad-cli
     env = {}
     env.update(os.environ)
 
-    if platform.system() == "Darwin":
-        env.pop('KICAD_RUN_FROM_BUILD_DIR')
+    if 'KICAD_CONFIG_HOME' not in env:
+        if 'QA_DATA_ROOT' in env:
+            base_path = env.get('QA_DATA_ROOT')
+        else:
+            # cwd ./qa/tests/cli/
+            base_path = os.path.join(os.getcwd(), '../../data')
+
+        env['KICAD_CONFIG_HOME'] = os.path.join(base_path, 'config')
+        env['KICAD9_SYMBOL_DIR'] = os.path.join(base_path, 'libraries')
+        env['KICAD9_FOOTPRINT_DIR'] = os.path.join(base_path, 'libraries')
 
     proc = subprocess.Popen( command,
         stdout = subprocess.PIPE,
