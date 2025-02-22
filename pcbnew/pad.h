@@ -955,6 +955,6 @@ private:
 
     int         m_lengthPadToDie;   // Length net from pad to die, inside the package
 
-    std::mutex                                  m_zoneLayerOverridesMutex;
+    mutable std::mutex                          m_zoneLayerOverridesMutex;
     std::map<PCB_LAYER_ID, ZONE_LAYER_OVERRIDE> m_zoneLayerOverrides;
 };

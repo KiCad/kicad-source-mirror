@@ -201,6 +201,8 @@ void PAD::ClearZoneLayerOverrides()
 
 const ZONE_LAYER_OVERRIDE& PAD::GetZoneLayerOverride( PCB_LAYER_ID aLayer ) const
 {
+    std::unique_lock<std::mutex> cacheLock( m_zoneLayerOverridesMutex );
+
     static const ZONE_LAYER_OVERRIDE defaultOverride = ZLO_NONE;
     auto it = m_zoneLayerOverrides.find( aLayer );
     return it != m_zoneLayerOverrides.end() ? it->second : defaultOverride;
