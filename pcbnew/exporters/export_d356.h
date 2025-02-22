@@ -67,8 +67,9 @@ public:
     /**
      * Generates and writes the netlist to a given path
      * @param aFilename is the full path and name of the output file
+     * @return true on success
      */
-    void Write( const wxString& aFilename );
+    bool Write( const wxString& aFilename );
 
 private:
     BOARD*    m_pcb;

@@ -47,7 +47,7 @@
 #include <math/util.h>      // for KiROUND
 #include <export_d356.h>
 #include <wx/filedlg.h>
-
+#include <wx/msgdlg.h>
 
 
 // Compute the access code for a pad. Returns -1 if there is no copper
@@ -347,17 +347,14 @@ void IPC356D_WRITER::write_D356_records( std::vector <D356_RECORD> &aRecords, FI
 }
 
 
-void IPC356D_WRITER::Write( const wxString& aFilename )
+bool IPC356D_WRITER::Write( const wxString& aFilename )
 {
     FILE*     file = nullptr;
     LOCALE_IO toggle; // Switch the locale to standard C
 
     if( ( file = wxFopen( aFilename, wxT( "wt" ) ) ) == nullptr )
     {
-        wxString details;
-        details.Printf( wxT( "The file %s could not be opened for writing." ), aFilename );
-        DisplayErrorMessage( m_parent, wxT( "Could not write IPC-356D file!" ), details );
-        return;
+        return false;
     }
 
     // This will contain everything needed for the 356 file
@@ -376,13 +373,15 @@ void IPC356D_WRITER::Write( const wxString& aFilename )
     fprintf( file, "999\n" );
 
     fclose( file );
+
+    return true;
 }
 
 
 void PCB_EDIT_FRAME::GenD356File( wxCommandEvent& aEvent )
 {
     wxFileName  fn = GetBoard()->GetFileName();
-    wxString    ext, wildcard;
+    wxString    ext, wildcard, msg;
 
     ext = FILEEXT::IpcD356FileExtension;
     wildcard = FILEEXT::IpcD356FileWildcard();
@@ -390,14 +389,24 @@ void PCB_EDIT_FRAME::GenD356File( wxCommandEvent& aEvent )
 
     wxString pro_dir = wxPathOnly( Prj().GetProjectFullName() );
 
-    wxFileDialog dlg( this, _( "Export D-356 Test File" ), pro_dir,
-                      fn.GetFullName(), wildcard,
-                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    wxFileDialog dlg( this, _( "Generate IPC-D-356 netlist file" ), pro_dir, fn.GetFullName(),
+                      wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
     IPC356D_WRITER writer( GetBoard(), this );
 
-    writer.Write( dlg.GetPath() );
+    bool success = writer.Write( dlg.GetPath() );
+
+    if( success )
+    {
+        msg.Printf( _( "IPC-D-356 netlist file created:\n'%s'." ), dlg.GetPath() );
+        wxMessageBox( msg, _( "IPC-D-356 Netlist File" ), wxICON_INFORMATION );
+    }
+    else
+    {
+        msg.Printf( _( "Failed to create file '%s'." ), dlg.GetPath() );
+        DisplayError( this, msg );
+    }
 }
