@@ -1337,7 +1337,7 @@ TOOL_ACTION PCB_ACTIONS::showNetInspector( TOOL_ACTION_ARGS()
 
 TOOL_ACTION PCB_ACTIONS::zonesManager( "pcbnew.Control.zonesManager",
         AS_GLOBAL, 0, "",
-        _( "Zone Manager" ),
+        _( "Zone Manager..." ),
         _( "Show the zone manager dialog" ),
         BITMAPS::show_zone );
 
