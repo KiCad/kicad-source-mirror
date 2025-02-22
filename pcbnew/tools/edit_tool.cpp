@@ -2580,8 +2580,6 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
                     zone->RemoveCutout( outlineIdx, holeIdx );
                     zone->UnFill();
 
-                    // TODO Refill zone when KiCad supports auto re-fill
-
                     // Update the display
                     zone->HatchBorder();
                     canvas()->Refresh();
