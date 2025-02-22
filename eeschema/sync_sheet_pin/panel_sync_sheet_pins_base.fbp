@@ -908,7 +908,7 @@
                         <property name="style"></property>
                         <property name="subclass">; ; forward_declare</property>
                         <property name="toolbar_pane">0</property>
-                        <property name="tooltip">Change sheet pin to hierarchical label</property>
+                        <property name="tooltip">Associate selected sheet pin and hierarchical label using the label name</property>
                         <property name="validator_data_type"></property>
                         <property name="validator_style">wxFILTER_NONE</property>
                         <property name="validator_type">wxDefaultValidator</property>
@@ -983,7 +983,7 @@
                         <property name="style"></property>
                         <property name="subclass">; ; forward_declare</property>
                         <property name="toolbar_pane">0</property>
-                        <property name="tooltip">Change hierarchical label to sheet pin</property>
+                        <property name="tooltip">Associate selected sheet pin and hierarchical label using the pin name</property>
                         <property name="validator_data_type"></property>
                         <property name="validator_style">wxFILTER_NONE</property>
                         <property name="validator_type">wxDefaultValidator</property>
