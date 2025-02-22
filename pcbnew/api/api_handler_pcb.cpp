@@ -718,6 +718,7 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleClearSelection(
 
     TOOL_MANAGER* mgr = frame()->GetToolManager();
     mgr->RunAction( PCB_ACTIONS::selectionClear );
+    frame()->Refresh();
 
     return Empty();
 }
@@ -749,6 +750,7 @@ HANDLER_RESULT<SelectionResponse> API_HANDLER_PCB::handleAddToSelection(
     }
 
     selectionTool->AddItemsToSel( &toAdd );
+    frame()->Refresh();
 
     SelectionResponse response;
 
@@ -785,6 +787,7 @@ HANDLER_RESULT<SelectionResponse> API_HANDLER_PCB::handleRemoveFromSelection(
     }
 
     selectionTool->RemoveItemsFromSel( &toRemove );
+    frame()->Refresh();
 
     SelectionResponse response;
 
