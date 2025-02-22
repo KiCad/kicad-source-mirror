@@ -347,20 +347,17 @@ void ODB_MATRIX_ENTITY::AddDrillMatrixLayer()
                 std::make_pair( PCB_LAYER_ID::UNDEFINED_LAYER, matrix.m_layerName ) );
     };
 
-    if( drill_layers.find( std::make_pair( F_Cu, B_Cu ) ) != drill_layers.end()
-        || !slot_holes.empty() )
-    {
-        // for pad has hole
-        if( has_pth_layer )
-            InitDrillMatrix( "plated", std::make_pair( F_Cu, B_Cu ) );
-        if( has_npth_layer )
-            InitDrillMatrix( "non-plated", std::make_pair( F_Cu, B_Cu ) );
-    }
+    if( has_npth_layer )
+        InitDrillMatrix( "non-plated", std::make_pair( F_Cu, B_Cu ) );
+        // at least one non plated hole is present.
+
+    if( has_pth_layer && drill_layers.find( std::make_pair( F_Cu, B_Cu ) ) == drill_layers.end() )
+        InitDrillMatrix( "plated", std::make_pair( F_Cu, B_Cu ) );
+        // there is no circular plated dril hole present.
 
     for( const auto& [layer_pair, vec] : drill_layers )
     {
-        if( layer_pair != std::make_pair( F_Cu, B_Cu ) ) // pad has initialized above
-            InitDrillMatrix( "plated", layer_pair );     // for via
+        InitDrillMatrix( "plated", layer_pair );
     }
 }
 
