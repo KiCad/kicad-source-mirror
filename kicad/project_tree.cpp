@@ -106,14 +106,14 @@ void PROJECT_TREE::LoadIcons()
     SetImages( images );
 
     wxVector<wxBitmapBundle> stateImages;
-    stateImages.push_back( wxBitmapBundle() );                          // GIT_STATUS_UNTRACKED
-    stateImages.push_back( KiBitmapBundle( BITMAPS::git_good_check ) ); // GIT_STATUS_CURRENT
-    stateImages.push_back( KiBitmapBundle( BITMAPS::git_modified ) ); // GIT_STATUS_MODIFIED
-    stateImages.push_back( KiBitmapBundle( BITMAPS::git_add ) );    // GIT_STATUS_ADDED
-    stateImages.push_back( KiBitmapBundle( BITMAPS::git_delete ) ); // GIT_STATUS_DELETED
+    stateImages.push_back( wxBitmapBundle( wxBitmap( 16, 16 ) ) );         // GIT_STATUS_UNTRACKED
+    stateImages.push_back( KiBitmapBundle( BITMAPS::git_good_check ) );    // GIT_STATUS_CURRENT
+    stateImages.push_back( KiBitmapBundle( BITMAPS::git_modified ) );      // GIT_STATUS_MODIFIED
+    stateImages.push_back( KiBitmapBundle( BITMAPS::git_add ) );           // GIT_STATUS_ADDED
+    stateImages.push_back( KiBitmapBundle( BITMAPS::git_delete ) );        // GIT_STATUS_DELETED
     stateImages.push_back( KiBitmapBundle( BITMAPS::git_out_of_date ) );   // GIT_STATUS_BEHIND
     stateImages.push_back( KiBitmapBundle( BITMAPS::git_changed_ahead ) ); // GIT_STATUS_AHEAD
-    stateImages.push_back( KiBitmapBundle( BITMAPS::git_conflict ) ); // GIT_STATUS_CONFLICTED
+    stateImages.push_back( KiBitmapBundle( BITMAPS::git_conflict ) );      // GIT_STATUS_CONFLICTED
 
     SetStateImages( stateImages );
 #else
