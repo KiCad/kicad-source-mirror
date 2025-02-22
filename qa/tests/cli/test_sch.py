@@ -41,7 +41,7 @@ def test_sch_export_svg( kitest,
 
     output_path =  kitest.get_output_path( "cli/{}/".format( output_dir ) )
 
-    command = ["kicad-cli", "sch", "export", "svg"]
+    command = [utils.kicad_cli(), "sch", "export", "svg"]
     command.extend( cli_args )
     command.append( "-o" )
     command.append( str( output_path ) )
@@ -89,7 +89,7 @@ def test_sch_export_netlist( kitest,
 
     output_filepath =  kitest.get_output_path( "cli/" ).joinpath( output_fn )
 
-    command = ["kicad-cli", "sch", "export", "netlist"]
+    command = [utils.kicad_cli(), "sch", "export", "netlist"]
     command.extend( cli_args )
     command.append( "-o" )
     command.append( str( output_filepath ) )
@@ -120,7 +120,7 @@ def test_sch_export_pdf( kitest,
 
     output_filepath =  kitest.get_output_path( "cli/" ).joinpath( output_fn )
 
-    command = ["kicad-cli", "sch", "export", "pdf"]
+    command = [utils.kicad_cli(), "sch", "export", "pdf"]
     command.extend( cli_args )
     command.append( "-o" )
     command.append( str( output_filepath ) )
@@ -147,7 +147,7 @@ def test_sch_export_pythonbom( kitest,
 
     output_filepath =  kitest.get_output_path( "cli/" ).joinpath( output_fn )
 
-    command = ["kicad-cli", "sch", "export", "python-bom"]
+    command = [utils.kicad_cli(), "sch", "export", "python-bom"]
     command.extend( cli_args )
     command.append( "-o" )
     command.append( str( output_filepath ) )
@@ -167,7 +167,7 @@ def test_sch_export_pythonbom( kitest,
 @pytest.mark.parametrize("test_file,output_fn,line_skip_count,skip_compare,expected_exit_code,cli_args",
                             [("cli/basic_test/basic_test.kicad_sch", "basic_test.erc.rpt", 1, False, 0, []),
                              ("cli/basic_test/basic_test.kicad_sch", "basic_test.erc.rpt", 1, False, 0, ["--format=report"]),
-                             ("cli/basic_test/basic_test.kicad_sch", "basic_test.erc.json", 4, False,0, ["--format=json"]),
+                             ("cli/basic_test/basic_test.kicad_sch", "basic_test.erc.json", 5, False,0, ["--format=json"]),
                              ("cli/basic_test/basic_test.kicad_sch", "basic_test.erc.unitsin.rpt", 1, False, 0, ["--format=report", "--units=in"]),
                              ])
 def test_sch_export_erc( kitest,
@@ -182,7 +182,7 @@ def test_sch_export_erc( kitest,
 
     output_filepath =  kitest.get_output_path( "cli/" ).joinpath( output_fn )
 
-    command = ["kicad-cli", "sch", "erc"]
+    command = [utils.kicad_cli(), "sch", "erc"]
     command.extend( cli_args )
     command.append( "-o" )
     command.append( str( output_filepath ) )

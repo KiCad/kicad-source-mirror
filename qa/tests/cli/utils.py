@@ -22,7 +22,8 @@
 
 import difflib
 import os
-import platform
+import pathlib
+import json
 
 import cairosvg
 import logging
@@ -35,15 +36,39 @@ import numpy as np
 logger = logging.getLogger("cli_util")
 Image.MAX_IMAGE_PIXELS = 800 * 1024 * 1024 // 4 # Increase limit to ~800MB uncompressed RGBA, 4bpp (~600MB RGB, 3bpp)
 
+def kicad_cli() -> str:
+    if 'KICAD_CLI' in os.environ:
+        return os.environ.get('KICAD_CLI')
+
+    return "kicad-cli"
+
 def run_and_capture( command: list ) -> Tuple[ str, str, int ]:
     logger.info("Executing command \"%s\"", " ".join( command ))
 
-    # MacOS qa_cli uses the installed kicad-cli
     env = {}
     env.update(os.environ)
 
-    if platform.system() == "Darwin":
-        env.pop('KICAD_RUN_FROM_BUILD_DIR')
+    if 'KICAD_CONFIG_HOME' not in env:
+        if 'QA_DATA_ROOT' in env:
+            base_path = env.get('QA_DATA_ROOT')
+        else:
+            cwd = Path.cwd()
+            base_path = None
+
+            try:
+                if 'qa' in cwd.parts:
+                    idx = cwd.parts.index('qa')
+                    base_path = cwd.parents[len(cwd.parents) - idx - 1] / 'data'
+            except ValueError:
+                pass
+
+        if base_path is not None:
+            logger.info("Using QA data base path '%s'", str(base_path))
+            env['KICAD_CONFIG_HOME'] = str(base_path / 'config')
+            env['KICAD9_SYMBOL_DIR'] = str(base_path / 'libraries')
+            env['KICAD9_FOOTPRINT_DIR'] = str(base_path / 'libraries')
+        else:
+            logger.warning("Unexpected cwd '%s', tests will likely fail", cwd)
 
     proc = subprocess.Popen( command,
         stdout = subprocess.PIPE,

@@ -82,7 +82,7 @@ def test_pcb_export_svg( kitest: KiTestFixture,
                                                                    "export_svg",
                                                                    layer_name )
 
-        command = ["kicad-cli", "pcb", "export", "svg", "--page-size-mode", "1",  # 1=Current page size
+        command = [utils.kicad_cli(), "pcb", "export", "svg", "--page-size-mode", "1",  # 1=Current page size
                    "--exclude-drawing-sheet", "--black-and-white", "--layers", layer_name,
                    "-o", str(generated_svg_path), input_file]
 
@@ -127,7 +127,7 @@ def test_pcb_export_gerber( kitest: KiTestFixture,
                                                                       "export_gerber",
                                                                       layer_name )
 
-        command = ["kicad-cli", "pcb", "export", "gerber", "--no-x2", "--use-drill-file-origin",
+        command = [utils.kicad_cli(), "pcb", "export", "gerber", "--no-x2", "--use-drill-file-origin",
                    "--layers", layer_name,
                    "-o", str(generated_gerber_path), input_file]
 
