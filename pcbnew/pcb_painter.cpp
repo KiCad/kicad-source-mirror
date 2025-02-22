@@ -1436,6 +1436,13 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         m_gal->SetIsStroke( false );
         double widthFactor = ADVANCED_CFG::GetCfg().m_HoleWallPaintingMultiplier;
         double lineWidth = widthFactor * m_holePlatingThickness;
+
+        // Prevent the hole wall from being drawn too thin (at least two pixels)
+        // or too thick (cap at the size of the pad )
+        lineWidth = std::max( lineWidth, 2.0 / m_gal->GetWorldScale() );
+        lineWidth = std::min( lineWidth, aPad->GetSizeX() / 2.0 );
+        lineWidth = std::min( lineWidth, aPad->GetSizeY() / 2.0 );
+
         m_gal->SetFillColor( color );
 
         std::shared_ptr<SHAPE_SEGMENT> slot = aPad->GetEffectiveHoleShape();
