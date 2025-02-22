@@ -61,6 +61,10 @@ inline double atanh( double x )
 #define C0   299792458.0              // speed of light in vacuum
 #define ZF0  376.730313668           // wave resistance in vacuum
 
+// const to convert a attenuation / loss from log (Neper) to decibel
+// (1 Np = 8.68589 dB)
+const double LOG2DB = 20.0 / log( 10.0 );
+
 // ZF0 value update:
 // https://physics.nist.gov/cgi-bin/cuu/Value?z0
 
