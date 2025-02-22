@@ -1226,7 +1226,7 @@ void PCB_NET_INSPECTOR_PANEL::OnNetsListContextMenu( wxDataViewEvent& event )
 
     menu.AppendSeparator();
 
-    wxMenuItem* renameNet = new wxMenuItem( &menu, ID_RENAME_NET, _( "Rename Selected Net" ),
+    wxMenuItem* renameNet = new wxMenuItem( &menu, ID_RENAME_NET, _( "Rename Selected Net..." ),
                                             wxEmptyString, wxITEM_NORMAL );
     menu.Append( renameNet );
 
@@ -1236,7 +1236,7 @@ void PCB_NET_INSPECTOR_PANEL::OnNetsListContextMenu( wxDataViewEvent& event )
 
     menu.AppendSeparator();
 
-    wxMenuItem* addNet = new wxMenuItem( &menu, ID_ADD_NET, _( "Add Net" ),
+    wxMenuItem* addNet = new wxMenuItem( &menu, ID_ADD_NET, _( "Add Net..." ),
                                          wxEmptyString, wxITEM_NORMAL );
     menu.Append( addNet );
 
@@ -1387,7 +1387,7 @@ void PCB_NET_INSPECTOR_PANEL::OnConfigButton( wxCommandEvent& event )
 
     menu.AppendSeparator();
 
-    wxMenuItem* addGroup = new wxMenuItem( &menu, ID_ADD_GROUP, _( "Add Custom Group" ),
+    wxMenuItem* addGroup = new wxMenuItem( &menu, ID_ADD_GROUP, _( "Add Custom Group..." ),
                                            wxEmptyString, wxITEM_NORMAL );
     menu.Append( addGroup );
 
@@ -1423,7 +1423,7 @@ void PCB_NET_INSPECTOR_PANEL::OnConfigButton( wxCommandEvent& event )
 
     // Report generation
     wxMenuItem* generateReport = new wxMenuItem( &menu, ID_GENERATE_REPORT,
-                                                 _( "Save Net Inspector Report" ),
+                                                 _( "Save Net Inspector Report..." ),
                                                  wxEmptyString, wxITEM_NORMAL );
     menu.Append( generateReport );
 
