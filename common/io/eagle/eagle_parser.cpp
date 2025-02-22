@@ -1262,13 +1262,13 @@ EPOLYGON::EPOLYGON( wxXmlNode* aPolygon, IO_BASE* aIo ) :
     opt_wxString s = parseOptionalAttribute<wxString>( aPolygon, "pour" );
 
     // default pour to solid fill
-    pour = EPOLYGON::SOLID;
+    pour = EPOLYGON::ESOLID;
 
     // (solid | hatch | cutout)
     if( s == "hatch" )
-        pour = EPOLYGON::HATCH;
+        pour = EPOLYGON::EHATCH;
     else if( s == "cutout" )
-        pour = EPOLYGON::CUTOUT;
+        pour = EPOLYGON::ECUTOUT;
 
     orphans  = parseOptionalAttribute<bool>( aPolygon, "orphans" );
     thermals = parseOptionalAttribute<bool>( aPolygon, "thermals" );
