@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-19 17:09+0300\n"
-"PO-Revision-Date: 2025-02-16 13:37+0000\n"
+"PO-Revision-Date: 2025-02-23 19:06+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.10.1-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -6938,14 +6938,14 @@ msgid "Could not copy file: %s to %s"
 msgstr "Não foi possível copiar o arquivo: %s para %s"
 
 #: common/gestfich.cpp:477
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy directory: %s to %s"
-msgstr "Não foi possível copiar o arquivo: %s para %s"
+msgstr "Não foi possível copiar o diretório: %s para %s"
 
 #: common/gestfich.cpp:529
-#, fuzzy, c-format
+#, c-format
 msgid "Source directory does not exist: %s"
-msgstr "O diretório '%s' não existe"
+msgstr "O diretório de origem não existe: %s"
 
 #: common/gestfich.cpp:584
 #, c-format
@@ -11643,9 +11643,8 @@ msgid "Duplicate fields are not allowed."
 msgstr "Não são permitidos campos duplicados."
 
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:26
-#, fuzzy
 msgid "Default Fields"
-msgstr "O padrão é 1"
+msgstr "Campos padrão"
 
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:104
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:137
@@ -11660,9 +11659,8 @@ msgid "Description:"
 msgstr "Descrição:"
 
 #: eeschema/dialogs/dialog_design_block_properties_base.h:70
-#, fuzzy
 msgid "Design Block Properties"
-msgstr "Bibliotecas do bloco de desenho"
+msgstr "Propriedades do bloco de desenho"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:550
 #, c-format
@@ -36290,9 +36288,8 @@ msgid "Move Item"
 msgstr "Move o Item"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:61
-#, fuzzy
 msgid "Sheet Path"
-msgstr "Selecione o caminho"
+msgstr "Caminho da folha"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:64
 msgid "Sheets"
@@ -50194,9 +50191,8 @@ msgid "Generate Placement Rule Areas..."
 msgstr "Gerar regras da região de posicionamento..."
 
 #: pcbnew/tools/pcb_actions.cpp:2229
-#, fuzzy
 msgid "Creates best-fit placement rule areas"
-msgstr "Substituir as regras de posicionamento já existentes"
+msgstr "Cria áreas de regras de posicionamento mais adequadas"
 
 #: pcbnew/tools/pcb_actions.cpp:2236
 msgid "Repeat Layout..."
@@ -50204,7 +50200,7 @@ msgstr "Repetir a disposição..."
 
 #: pcbnew/tools/pcb_actions.cpp:2237
 msgid "Clones placement & routing across multiple identical channels"
-msgstr ""
+msgstr "Clona o posicionamento e o roteamento em vários canais idênticos"
 
 #: pcbnew/tools/pcb_actions.cpp:2248
 msgid "Route Single Track"
