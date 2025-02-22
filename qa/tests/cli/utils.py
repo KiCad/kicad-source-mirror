@@ -22,6 +22,7 @@
 
 import difflib
 import os
+import pathlib
 import json
 
 import cairosvg
@@ -51,12 +52,22 @@ def run_and_capture( command: list ) -> Tuple[ str, str, int ]:
         if 'QA_DATA_ROOT' in env:
             base_path = env.get('QA_DATA_ROOT')
         else:
-            # cwd ./qa/tests/cli/
-            base_path = os.path.join(os.getcwd(), '../../data')
+            cwd = Path.cwd()
+            base_path = None
 
-        env['KICAD_CONFIG_HOME'] = os.path.join(base_path, 'config')
-        env['KICAD9_SYMBOL_DIR'] = os.path.join(base_path, 'libraries')
-        env['KICAD9_FOOTPRINT_DIR'] = os.path.join(base_path, 'libraries')
+            try:
+                if 'qa' in cwd.parts:
+                    idx = cwd.parts.index('qa')
+                    base_path = cwd.parents[len(cwd.parents) - idx - 1] / 'data'
+            except ValueError:
+                pass
+
+        if base_path is not None:
+            env['KICAD_CONFIG_HOME'] = str(base_path / 'config')
+            env['KICAD9_SYMBOL_DIR'] = str(base_path / 'libraries')
+            env['KICAD9_FOOTPRINT_DIR'] = str(base_path / 'libraries')
+        else:
+            logger.warning("Unexpected cwd '%s', tests will likely fail", cwd)
 
     logger.info("Using environment \"%s\"", json.dumps(env, indent=2))
 
