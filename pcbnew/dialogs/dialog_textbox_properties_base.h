@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -38,7 +38,6 @@ class PCB_LAYER_BOX_SELECTOR;
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_TEXTBOX_PROPERTIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -58,12 +57,16 @@ class DIALOG_TEXTBOX_PROPERTIES_BASE : public DIALOG_SHIM
 		BITMAP_BUTTON* m_bold;
 		BITMAP_BUTTON* m_italic;
 		BITMAP_BUTTON* m_separator1;
-		BITMAP_BUTTON* m_alignLeft;
-		BITMAP_BUTTON* m_alignCenter;
-		BITMAP_BUTTON* m_alignRight;
+		BITMAP_BUTTON* m_hAlignLeft;
+		BITMAP_BUTTON* m_hAlignCenter;
+		BITMAP_BUTTON* m_hAlignRight;
 		BITMAP_BUTTON* m_separator2;
-		BITMAP_BUTTON* m_mirrored;
+		BITMAP_BUTTON* m_vAlignTop;
+		BITMAP_BUTTON* m_vAlignCenter;
+		BITMAP_BUTTON* m_vAlignBottom;
 		BITMAP_BUTTON* m_separator3;
+		BITMAP_BUTTON* m_mirrored;
+		BITMAP_BUTTON* m_separator4;
 		wxStaticText* m_SizeXLabel;
 		wxTextCtrl* m_SizeXCtrl;
 		wxStaticText* m_SizeXUnits;
@@ -90,7 +93,8 @@ class DIALOG_TEXTBOX_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void onMultiLineTCLostFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void onFontSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBoldToggle( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onAlignButton( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onHalignButton( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onValignButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBorderChecked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onThickness( wxCommandEvent& event ) { event.Skip(); }

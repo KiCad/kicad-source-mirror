@@ -94,12 +94,12 @@ DIALOG_TEXTBOX_PROPERTIES::DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aPare
 
     m_separator1->SetIsSeparator();
 
-    m_alignLeft->SetIsRadioButton();
-    m_alignLeft->SetBitmap( KiBitmapBundle( BITMAPS::text_align_left ) );
-    m_alignCenter->SetIsRadioButton();
-    m_alignCenter->SetBitmap( KiBitmapBundle( BITMAPS::text_align_center ) );
-    m_alignRight->SetIsRadioButton();
-    m_alignRight->SetBitmap( KiBitmapBundle( BITMAPS::text_align_right ) );
+    m_hAlignLeft->SetIsRadioButton();
+    m_hAlignLeft->SetBitmap( KiBitmapBundle( BITMAPS::text_align_left ) );
+    m_hAlignCenter->SetIsRadioButton();
+    m_hAlignCenter->SetBitmap( KiBitmapBundle( BITMAPS::text_align_center ) );
+    m_hAlignRight->SetIsRadioButton();
+    m_hAlignRight->SetBitmap( KiBitmapBundle( BITMAPS::text_align_right ) );
 
     m_separator2->SetIsSeparator();
 
@@ -107,6 +107,15 @@ DIALOG_TEXTBOX_PROPERTIES::DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aPare
     m_mirrored->SetBitmap( KiBitmapBundle( BITMAPS::text_mirrored ) );
 
     m_separator3->SetIsSeparator();
+
+    m_vAlignTop->SetIsRadioButton();
+    m_vAlignTop->SetBitmap( KiBitmapBundle( BITMAPS::text_valign_top ) );
+    m_vAlignCenter->SetIsRadioButton();
+    m_vAlignCenter->SetBitmap( KiBitmapBundle( BITMAPS::text_valign_center ) );
+    m_vAlignBottom->SetIsRadioButton();
+    m_vAlignBottom->SetBitmap( KiBitmapBundle( BITMAPS::text_valign_bottom ) );
+
+    m_separator4->SetIsSeparator();
 
     // Configure the layers list selector.  Note that footprints are built outside the current
     // board and so we may need to show all layers if the text is on an unactivated layer.
@@ -182,12 +191,20 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataToWindow()
     m_bold->Check( m_textBox->IsBold() );
     m_italic->Check( m_textBox->IsItalic() );
 
-    switch ( m_textBox->GetHorizJustify() )
+    switch( m_textBox->GetHorizJustify() )
     {
-    case GR_TEXT_H_ALIGN_LEFT:          m_alignLeft->Check( true );   break;
-    case GR_TEXT_H_ALIGN_CENTER:        m_alignCenter->Check( true ); break;
-    case GR_TEXT_H_ALIGN_RIGHT:         m_alignRight->Check( true );  break;
-    case GR_TEXT_H_ALIGN_INDETERMINATE:                               break;
+    case GR_TEXT_H_ALIGN_LEFT: m_hAlignLeft->Check( true ); break;
+    case GR_TEXT_H_ALIGN_CENTER: m_hAlignCenter->Check( true ); break;
+    case GR_TEXT_H_ALIGN_RIGHT: m_hAlignRight->Check( true ); break;
+    case GR_TEXT_H_ALIGN_INDETERMINATE: break;
+    }
+
+    switch( m_textBox->GetVertJustify() )
+    {
+    case GR_TEXT_V_ALIGN_TOP: m_vAlignTop->Check( true ); break;
+    case GR_TEXT_V_ALIGN_CENTER: m_vAlignCenter->Check( true ); break;
+    case GR_TEXT_V_ALIGN_BOTTOM: m_vAlignBottom->Check( true ); break;
+    case GR_TEXT_V_ALIGN_INDETERMINATE: break;
     }
 
     m_mirrored->Check( m_textBox->IsMirrored() );
@@ -216,6 +233,14 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataToWindow()
     return DIALOG_TEXTBOX_PROPERTIES_BASE::TransferDataToWindow();
 }
 
+void DIALOG_TEXTBOX_PROPERTIES::onValignButton( wxCommandEvent& aEvent )
+{
+    for( BITMAP_BUTTON* btn : { m_vAlignTop, m_vAlignCenter, m_vAlignBottom } )
+    {
+        if( btn->IsChecked() && btn != aEvent.GetEventObject() )
+            btn->Check( false );
+    }
+}
 
 void DIALOG_TEXTBOX_PROPERTIES::onFontSelected( wxCommandEvent & aEvent )
 {
@@ -249,9 +274,9 @@ void DIALOG_TEXTBOX_PROPERTIES::onBoldToggle( wxCommandEvent & aEvent )
 }
 
 
-void DIALOG_TEXTBOX_PROPERTIES::onAlignButton( wxCommandEvent& aEvent )
+void DIALOG_TEXTBOX_PROPERTIES::onHalignButton( wxCommandEvent& aEvent )
 {
-    for( BITMAP_BUTTON* btn : { m_alignLeft, m_alignCenter, m_alignRight } )
+    for( BITMAP_BUTTON* btn : { m_hAlignLeft, m_hAlignCenter, m_hAlignRight } )
     {
         if( btn->IsChecked() && btn != aEvent.GetEventObject() )
             btn->Check( false );
@@ -348,12 +373,19 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataFromWindow()
     m_textBox->SetBoldFlag( m_bold->IsChecked() );
     m_textBox->SetItalicFlag( m_italic->IsChecked() );
 
-    if( m_alignLeft->IsChecked() )
+    if( m_hAlignLeft->IsChecked() )
         m_textBox->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-    else if( m_alignCenter->IsChecked() )
+    else if( m_hAlignCenter->IsChecked() )
         m_textBox->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
     else
         m_textBox->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+
+    if( m_vAlignTop->IsChecked() )
+        m_textBox->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+    else if( m_vAlignCenter->IsChecked() )
+        m_textBox->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+    else
+        m_textBox->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
 
     m_textBox->SetMirrored( m_mirrored->IsChecked() );
 

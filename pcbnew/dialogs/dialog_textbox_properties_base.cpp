@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -111,27 +111,41 @@ DIALOG_TEXTBOX_PROPERTIES_BASE::DIALOG_TEXTBOX_PROPERTIES_BASE( wxWindow* parent
 
 	bSizerButtonBar->Add( m_separator1, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_alignLeft = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
-	bSizerButtonBar->Add( m_alignLeft, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_hAlignLeft = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
+	bSizerButtonBar->Add( m_hAlignLeft, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_alignCenter = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
-	bSizerButtonBar->Add( m_alignCenter, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_hAlignCenter = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
+	bSizerButtonBar->Add( m_hAlignCenter, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_alignRight = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
-	bSizerButtonBar->Add( m_alignRight, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_hAlignRight = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
+	bSizerButtonBar->Add( m_hAlignRight, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_separator2 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
 	m_separator2->Enable( false );
 
 	bSizerButtonBar->Add( m_separator2, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_mirrored = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
-	bSizerButtonBar->Add( m_mirrored, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_vAlignTop = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
+	bSizerButtonBar->Add( m_vAlignTop, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_vAlignCenter = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
+	bSizerButtonBar->Add( m_vAlignCenter, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_vAlignBottom = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
+	bSizerButtonBar->Add( m_vAlignBottom, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_separator3 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
 	m_separator3->Enable( false );
 
 	bSizerButtonBar->Add( m_separator3, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_mirrored = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
+	bSizerButtonBar->Add( m_mirrored, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_separator4 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
+	m_separator4->Enable( false );
+
+	bSizerButtonBar->Add( m_separator4, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	gbSizer1->Add( bSizerButtonBar, wxGBPosition( 3, 4 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 8 );
@@ -237,9 +251,12 @@ DIALOG_TEXTBOX_PROPERTIES_BASE::DIALOG_TEXTBOX_PROPERTIES_BASE( wxWindow* parent
 	m_MultiLineText->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onMultiLineTCLostFocus ), NULL, this );
 	m_fontCtrl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onFontSelected ), NULL, this );
 	m_bold->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onBoldToggle ), NULL, this );
-	m_alignLeft->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onAlignButton ), NULL, this );
-	m_alignCenter->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onAlignButton ), NULL, this );
-	m_alignRight->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onAlignButton ), NULL, this );
+	m_hAlignLeft->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onHalignButton ), NULL, this );
+	m_hAlignCenter->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onHalignButton ), NULL, this );
+	m_hAlignRight->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onHalignButton ), NULL, this );
+	m_vAlignTop->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onValignButton ), NULL, this );
+	m_vAlignCenter->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onValignButton ), NULL, this );
+	m_vAlignBottom->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onValignButton ), NULL, this );
 	m_SizeXCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_borderCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onBorderChecked ), NULL, this );
 	m_SizeYCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::OnOkClick ), NULL, this );
@@ -255,9 +272,12 @@ DIALOG_TEXTBOX_PROPERTIES_BASE::~DIALOG_TEXTBOX_PROPERTIES_BASE()
 	m_MultiLineText->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onMultiLineTCLostFocus ), NULL, this );
 	m_fontCtrl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onFontSelected ), NULL, this );
 	m_bold->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onBoldToggle ), NULL, this );
-	m_alignLeft->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onAlignButton ), NULL, this );
-	m_alignCenter->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onAlignButton ), NULL, this );
-	m_alignRight->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onAlignButton ), NULL, this );
+	m_hAlignLeft->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onHalignButton ), NULL, this );
+	m_hAlignCenter->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onHalignButton ), NULL, this );
+	m_hAlignRight->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onHalignButton ), NULL, this );
+	m_vAlignTop->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onValignButton ), NULL, this );
+	m_vAlignCenter->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onValignButton ), NULL, this );
+	m_vAlignBottom->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onValignButton ), NULL, this );
 	m_SizeXCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_borderCheckbox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onBorderChecked ), NULL, this );
 	m_SizeYCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::OnOkClick ), NULL, this );
