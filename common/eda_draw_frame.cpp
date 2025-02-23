@@ -176,7 +176,8 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
 EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
 {
-    saveCanvasTypeSetting( m_canvasType );
+    if( !m_openGLFailureOccured )
+        saveCanvasTypeSetting( m_canvasType );
 
     delete m_actions;
     delete m_toolManager;
