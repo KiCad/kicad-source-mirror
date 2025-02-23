@@ -98,7 +98,7 @@ public:
 
     bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override;
 
-    std::vector<VECTOR2I> GetAnchorAndOppositeCorner() const;
+    std::vector<VECTOR2I> GetCornersInSequence() const;
 
     void Move( const VECTOR2I& aMoveVector ) override;
 

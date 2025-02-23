@@ -42,10 +42,11 @@ public:
     ~DIALOG_TEXTBOX_PROPERTIES();
 
 private:
-    void onFontSelected( wxCommandEvent &aEvent ) override;
-    void onBoldToggle( wxCommandEvent &aEvent ) override;
-    void onAlignButton( wxCommandEvent &aEvent ) override;
-    void onThickness( wxCommandEvent &aEvent ) override;
+    void onFontSelected( wxCommandEvent& aEvent ) override;
+    void onBoldToggle( wxCommandEvent& aEvent ) override;
+    void onHalignButton( wxCommandEvent& aEvent ) override;
+    void onValignButton( wxCommandEvent& aEvent ) override;
+    void onThickness( wxCommandEvent& aEvent ) override;
     void onBorderChecked( wxCommandEvent& event ) override;
 
     bool TransferDataToWindow() override;
