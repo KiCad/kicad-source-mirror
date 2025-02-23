@@ -183,7 +183,10 @@ void PANEL_SETUP_BUSES::OnAddAlias( wxCommandEvent& aEvent )
 
     // Associate the respective members with the previous alias. This ensures that the association
     // starts correctly when adding more than one row.
-    if( row > 0 )
+    // But in order to avoid overwriting the members of the last (row - 1) alias with
+    // those of the selected alias (since the user may choose a different alias),
+    // the alias member update here should only happen if the current alias (m_lastAlias) is the last one (row - 1).
+    if( ( row > 0 ) && ( m_lastAlias == ( row - 1 ) ) )
         updateAliasMembers( row - 1 );
 
     m_aliasesGrid->AppendRows();
