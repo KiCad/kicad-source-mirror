@@ -84,6 +84,8 @@ int SCH_TEXTBOX::GetLegacyTextMargin() const
 
 void SCH_TEXTBOX::MirrorHorizontally( int aCenter )
 {
+    SCH_SHAPE::MirrorHorizontally( aCenter );
+
     // Text is NOT really mirrored; it just has its justification flipped
     if( GetTextAngle() == ANGLE_HORIZONTAL )
     {
@@ -97,6 +99,8 @@ void SCH_TEXTBOX::MirrorHorizontally( int aCenter )
 
 void SCH_TEXTBOX::MirrorVertically( int aCenter )
 {
+    SCH_SHAPE::MirrorVertically( aCenter );
+
     // Text is NOT really mirrored; it just has its justification flipped
     if( GetTextAngle() == ANGLE_VERTICAL )
     {
