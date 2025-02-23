@@ -116,10 +116,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-19 17:09+0300\n"
-"PO-Revision-Date: 2025-02-18 15:47+0000\n"
+"PO-Revision-Date: 2025-02-23 19:06+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
-"source/it/>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
+"master-source/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -7019,14 +7019,14 @@ msgid "Could not copy file: %s to %s"
 msgstr "Impossibile copiare il file: %s su %s"
 
 #: common/gestfich.cpp:477
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy directory: %s to %s"
-msgstr "Impossibile copiare il file: %s su %s"
+msgstr "Impossibile copiare la cartella: %s a %s"
 
 #: common/gestfich.cpp:529
-#, fuzzy, c-format
+#, c-format
 msgid "Source directory does not exist: %s"
-msgstr "La cartella '%s' non esiste"
+msgstr "La cartella sorgente non esiste: %s"
 
 #: common/gestfich.cpp:584
 #, c-format
@@ -37530,9 +37530,9 @@ msgid "Reference item: %s"
 msgstr "Elemento riferimento: %s"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:267
-#, fuzzy, c-format
+#, c-format
 msgid "Reference location: selected point (%s, %s)"
-msgstr "Posizione riferimento: origine griglia"
+msgstr "Posizione di riferimento: punto selezionato (%s, %s)"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 msgid "Reference item: <none selected>"
@@ -37683,9 +37683,8 @@ msgid "Opaque"
 msgstr "Opaco"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:29
-#, fuzzy
 msgid "Transparent"
-msgstr "Traduttori"
+msgstr "Trasparente"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:34
 #, fuzzy
