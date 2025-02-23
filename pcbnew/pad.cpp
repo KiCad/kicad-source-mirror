@@ -1770,6 +1770,10 @@ double PAD::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
         return lodScaleForThreshold( minSize, pcbIUScale.mmToIU( 0.5 ) );
     }
 
+    // Hole walls always need a repaint when zoom changes
+    if( aLayer == LAYER_PAD_HOLEWALLS )
+        aView->Update( this, KIGFX::REPAINT );
+
     VECTOR2L padSize = GetShape( pcbLayer ) != PAD_SHAPE::CUSTOM
                        ? VECTOR2L( GetSize( pcbLayer ) ) : GetBoundingBox().GetSize();
 
