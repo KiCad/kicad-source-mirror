@@ -79,10 +79,10 @@ std::vector<SHAPE*> SCH_RULE_AREA::MakeEffectiveShapes( bool aEdgeOnly ) const
         {
             const SHAPE_LINE_CHAIN& l = GetPolyShape().COutline( ii );
 
-            if( IsFilled() && !aEdgeOnly )
+            if( IsSolidFill() && !aEdgeOnly )
                 effectiveShapes.emplace_back( new SHAPE_SIMPLE( l ) );
 
-            if( width > 0 || !IsFilled() || aEdgeOnly )
+            if( width > 0 || !IsSolidFill() || aEdgeOnly )
             {
                 int segCount = l.SegmentCount();
 
@@ -95,7 +95,6 @@ std::vector<SHAPE*> SCH_RULE_AREA::MakeEffectiveShapes( bool aEdgeOnly ) const
 
     default:
         return SCH_SHAPE::MakeEffectiveShapes( aEdgeOnly );
-        break;
     }
 
     return effectiveShapes;

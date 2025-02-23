@@ -23,12 +23,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "thread_pool.h"
 #include <macros.h>
 #include <board.h>
 #include <footprint.h>
 #include <lset.h>
 #include <pcb_group.h>
 #include <pcb_track.h>
+#include <pcb_shape.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/zone_filler_tool.h>
@@ -125,27 +127,30 @@ COMMIT& BOARD_COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO aModFlag
 }
 
 
-void BOARD_COMMIT::dirtyIntersectingZones( BOARD_ITEM* item, int aChangeType )
+void BOARD_COMMIT::propagateDamage( BOARD_ITEM* aItem, std::vector<ZONE*>* aStaleZones,
+                                    std::vector<PCB_SHAPE*>* aStaleHatchedShapes )
 {
-    wxCHECK( item, /* void */ );
+    wxCHECK( aItem, /* void */ );
 
-    ZONE_FILLER_TOOL* zoneFillerTool = m_toolMgr->GetTool<ZONE_FILLER_TOOL>();
+    if( aStaleZones && aItem->Type() == PCB_ZONE_T )
+        aStaleZones->push_back( static_cast<ZONE*>( aItem ) );
 
-    if( item->Type() == PCB_ZONE_T )
-        zoneFillerTool->DirtyZone( static_cast<ZONE*>( item ) );
-
-    item->RunOnChildren( std::bind( &BOARD_COMMIT::dirtyIntersectingZones, this, _1, aChangeType ) );
+    aItem->RunOnChildren( std::bind( &BOARD_COMMIT::propagateDamage, this, _1, aStaleZones,
+                                     aStaleHatchedShapes ) );
 
     BOARD* board = static_cast<BOARD*>( m_toolMgr->GetModel() );
-    BOX2I  bbox = item->GetBoundingBox();
-    LSET   layers = item->GetLayerSet();
+    BOX2I  bbox = aItem->GetBoundingBox();
+    LSET   layers = aItem->GetLayerSet();
 
     if( layers.test( Edge_Cuts ) || layers.test( Margin ) )
         layers = LSET::PhysicalLayersMask();
     else
         layers &= LSET::AllCuMask();
 
-    if( layers.any() )
+    if( layers.empty() )
+        return;
+
+    if( aStaleZones )
     {
         for( ZONE* zone : board->Zones() )
         {
@@ -155,7 +160,29 @@ void BOARD_COMMIT::dirtyIntersectingZones( BOARD_ITEM* item, int aChangeType )
             if( ( zone->GetLayerSet() & layers ).any()
                     && zone->GetBoundingBox().Intersects( bbox ) )
             {
-                zoneFillerTool->DirtyZone( zone );
+                aStaleZones->push_back( zone );
+            }
+        }
+    }
+
+    if( aStaleHatchedShapes && (    aItem->Type() == PCB_TEXT_T
+                                 || aItem->Type() == PCB_TEXTBOX_T
+                                 || aItem->Type() == PCB_SHAPE_T ) )
+    {
+        for( BOARD_ITEM* item : board->Drawings() )
+        {
+            if( item->Type() != PCB_SHAPE_T )
+                continue;
+
+            PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+
+            if( !shape->IsHatchedFill() )
+                continue;
+
+            if( ( shape->GetLayerSet() & layers ).any()
+                    && shape->GetBoundingBox().Intersects( bbox ) )
+            {
+                aStaleHatchedShapes->push_back( shape );
             }
         }
     }
@@ -180,6 +207,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
     std::vector<BOARD_ITEM*> staleTeardropPadsAndVias;
     std::set<PCB_TRACK*>     staleTeardropTracks;
     PCB_GROUP*               addedGroup = nullptr;
+    std::vector<ZONE*>       staleZonesStorage;
+    std::vector<ZONE*>*      staleZones = nullptr;
+    std::vector<PCB_SHAPE*>  staleHatchedShapes;
 
     if( Empty() )
         return;
@@ -200,6 +230,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             && ( frame && frame->GetPcbNewSettings()->m_AutoRefillZones ) )
     {
         autofillZones = true;
+        staleZones = &staleZonesStorage;
 
         for( ZONE* zone : board->Zones() )
             zone->CacheBoundingBox();
@@ -303,8 +334,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             if( boardItem->Type() == PCB_GROUP_T || boardItem->Type() == PCB_GENERATOR_T )
                 addedGroup = static_cast<PCB_GROUP*>( boardItem );
 
-            if( m_isBoardEditor && autofillZones && boardItem->Type() != PCB_MARKER_T )
-                dirtyIntersectingZones( boardItem, changeType );
+            if( boardItem->Type() != PCB_MARKER_T )
+                propagateDamage( boardItem, staleZones, &staleHatchedShapes );
 
             if( view && boardItem->Type() != PCB_NETINFO_T )
                 view->Add( boardItem );
@@ -333,8 +364,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             if( parentFP && !( parentFP->GetFlags() & STRUCT_DELETED ) )
                 ent.m_parent = parentFP->m_Uuid;
 
-            if( m_isBoardEditor && autofillZones && boardItem->Type() != PCB_MARKER_T )
-                dirtyIntersectingZones( boardItem, changeType );
+            if( boardItem->Type() != PCB_MARKER_T )
+                propagateDamage( boardItem, staleZones, &staleHatchedShapes );
 
             switch( boardItem->Type() )
             {
@@ -446,10 +477,10 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 connectivity->Update( boardItem );
             }
 
-            if( m_isBoardEditor && autofillZones && boardItem->Type() != PCB_MARKER_T )
+            if( boardItem->Type() != PCB_MARKER_T )
             {
-                dirtyIntersectingZones( boardItemCopy, changeType );   // before
-                dirtyIntersectingZones( boardItem, changeType );       // after
+                propagateDamage( boardItemCopy, staleZones, &staleHatchedShapes );   // before
+                propagateDamage( boardItem, staleZones, &staleHatchedShapes );       // after
             }
 
             if( view )
@@ -570,7 +601,22 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         m_toolMgr->PostEvent( EVENTS::UnselectedEvent );
 
     if( autofillZones )
+    {
+        ZONE_FILLER_TOOL* zoneFillerTool = m_toolMgr->GetTool<ZONE_FILLER_TOOL>();
+
+        for( ZONE* zone : *staleZones )
+            zoneFillerTool->DirtyZone( zone );
+
         m_toolMgr->PostAction( PCB_ACTIONS::zoneFillDirty );
+    }
+
+    for( PCB_SHAPE* shape : staleHatchedShapes )
+    {
+        shape->SetHatchingDirty();
+
+        if( view )
+            view->Update( shape );
+    }
 
     if( selectedModified )
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );

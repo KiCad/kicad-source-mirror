@@ -332,11 +332,11 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
         m_borderStyleLabel->Enable( textBox->GetWidth() >= 0 );
         m_borderStyleCombo->Enable( textBox->GetWidth() >= 0 );
 
-        m_filledCtrl->SetValue( textBox->IsFilled() );
+        m_filledCtrl->SetValue( textBox->IsSolidFill() );
         m_fillColorSwatch->SetSwatchColor( textBox->GetFillColor(), false );
 
-        m_fillColorLabel->Enable( textBox->IsFilled() );
-        m_fillColorSwatch->Enable( textBox->IsFilled() );
+        m_fillColorLabel->Enable( textBox->IsSolidFill() );
+        m_fillColorSwatch->Enable( textBox->IsSolidFill() );
     }
 
     if( m_isSymbolEditor )

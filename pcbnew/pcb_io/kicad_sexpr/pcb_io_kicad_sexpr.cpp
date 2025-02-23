@@ -1016,7 +1016,28 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_SHAPE* aShape ) const
         || ( aShape->GetShape() == SHAPE_T::RECTANGLE )
         || ( aShape->GetShape() == SHAPE_T::CIRCLE ) )
     {
-        KICAD_FORMAT::FormatBool( m_out, "fill", aShape->IsFilled() );
+        switch( aShape->GetFillMode() )
+        {
+        case FILL_T::HATCH:
+            m_out->Print( "(fill hatch)" );
+            break;
+
+        case FILL_T::REVERSE_HATCH:
+            m_out->Print( "(fill reverse_hatch)" );
+            break;
+
+        case FILL_T::CROSS_HATCH:
+            m_out->Print( "(fill cross_hatch)" );
+            break;
+
+        case FILL_T::FILLED_SHAPE:
+            KICAD_FORMAT::FormatBool( m_out, "fill", true );
+            break;
+
+        default:
+            KICAD_FORMAT::FormatBool( m_out, "fill", false );
+            break;
+        }
     }
 
     if( aShape->IsLocked() )
@@ -1785,7 +1806,7 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
                     || ( primitive->GetShape() == SHAPE_T::RECTANGLE )
                     || ( primitive->GetShape() == SHAPE_T::CIRCLE ) )
                 {
-                    KICAD_FORMAT::FormatBool( m_out, "fill", primitive->IsFilled() );
+                    KICAD_FORMAT::FormatBool( m_out, "fill", primitive->IsSolidFill() );
                 }
 
                 m_out->Print( ")" );

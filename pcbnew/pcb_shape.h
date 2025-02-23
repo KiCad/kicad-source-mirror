@@ -194,11 +194,14 @@ public:
 protected:
     void swapData( BOARD_ITEM* aImage ) override;
 
+    void updateHatching() const override;
+
     struct cmp_drawings
     {
         bool operator()( const BOARD_ITEM* aFirst, const BOARD_ITEM* aSecond ) const;
     };
 
+protected:
     bool               m_hasSolderMask;
     std::optional<int> m_solderMaskMargin;
 };

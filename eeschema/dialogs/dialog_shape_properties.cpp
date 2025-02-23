@@ -201,7 +201,7 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataToWindow()
     }
     else
     {
-        m_filledCtrl->SetValue( m_shape->IsFilled() );
+        m_fillCtrl->SetSelection( m_shape->GetFillModeProp() );
         m_fillColorSwatch->SetSwatchColor( m_shape->GetFillColor(), false );
     }
 
@@ -233,12 +233,10 @@ void DIALOG_SHAPE_PROPERTIES::onBorderChecked( wxCommandEvent& event )
 }
 
 
-void DIALOG_SHAPE_PROPERTIES::onFillChecked( wxCommandEvent& aEvent )
+void DIALOG_SHAPE_PROPERTIES::onFillChoice( wxCommandEvent& event )
 {
-    bool fill = m_filledCtrl->GetValue();
-
-    m_fillColorLabel->Enable( fill );
-    m_fillColorSwatch->Enable( fill );
+    m_fillColorLabel->Enable( m_fillCtrl->GetSelection() == UI_FILL_MODE::SOLID );
+    m_fillColorSwatch->Enable( m_fillCtrl->GetSelection() == UI_FILL_MODE::SOLID );
 }
 
 
@@ -362,11 +360,7 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
     }
     else
     {
-        if( m_filledCtrl->GetValue() )
-            m_shape->SetFillMode( FILL_T::FILLED_WITH_COLOR );
-        else
-            m_shape->SetFillMode( FILL_T::NO_FILL );
-
+        m_shape->SetFillModeProp( (UI_FILL_MODE) m_fillCtrl->GetSelection() );
         m_shape->SetFillColor( m_fillColorSwatch->GetSwatchColor() );
     }
 

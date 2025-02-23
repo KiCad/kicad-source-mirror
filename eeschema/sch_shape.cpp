@@ -170,19 +170,34 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
 
     if( aBackground )
     {
-        if( !aPlotter->GetColorMode() )
-            return;
-
         switch( m_fill )
         {
         case FILL_T::FILLED_SHAPE:
+            // Fill in the foreground layer
             return;
 
+        case FILL_T::HATCH:
+        case FILL_T::REVERSE_HATCH:
+        case FILL_T::CROSS_HATCH:
+            if( !aPlotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
+                color = renderSettings->GetLayerColor( m_layer );
+
+            color.a = color.a * 0.4;
+            break;
+
         case FILL_T::FILLED_WITH_COLOR:
+            // drop fill in B&W mode
+            if( !aPlotter->GetColorMode() )
+                return;
+
             color = GetFillColor();
             break;
 
         case FILL_T::FILLED_WITH_BG_BODYCOLOR:
+            // drop fill in B&W mode
+            if( !aPlotter->GetColorMode() )
+                return;
+
             color = renderSettings->GetLayerColor( LAYER_DEVICE_BACKGROUND );
             break;
 
@@ -219,6 +234,15 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
     }
 
     aPlotter->SetColor( color );
+
+    if( aBackground && IsHatchedFill() )
+    {
+        for( int ii = 0; ii < GetHatching().OutlineCount(); ++ii )
+            aPlotter->PlotPoly( GetHatching().COutline( ii ), FILL_T::FILLED_SHAPE, 0 );
+
+        return;
+    }
+
     aPlotter->SetCurrentLineWidth( pen_size );
     aPlotter->SetDash( pen_size, lineStyle );
 
@@ -505,7 +529,7 @@ static struct SCH_SHAPE_DESC
                         if( shape->GetParentSymbol() )
                             return shape->GetFillMode() == FILL_T::FILLED_WITH_COLOR;
                         else
-                            return shape->IsFilled();
+                            return shape->IsSolidFill();
                     }
 
                     return true;
@@ -525,7 +549,7 @@ static struct SCH_SHAPE_DESC
         void ( SCH_SHAPE::*fillModeSetter )( FILL_T ) = &SCH_SHAPE::SetFillMode;
         FILL_T ( SCH_SHAPE::*fillModeGetter )() const = &SCH_SHAPE::GetFillMode;
 
-        propMgr.AddProperty( new PROPERTY_ENUM<SCH_SHAPE, FILL_T>( _HKI( "Fill" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<SCH_SHAPE, FILL_T>( _HKI( "Fill Mode" ),
                         fillModeSetter, fillModeGetter ),
                         _HKI( "Shape Properties" ) )
                 .SetAvailableFunc( isSymbolItem );

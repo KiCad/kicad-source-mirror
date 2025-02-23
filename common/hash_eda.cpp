@@ -214,7 +214,7 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
         ret = hash_board_item( shape, aFlags );
         hash_combine( ret, shape->GetShape() );
         hash_combine( ret, shape->GetWidth() );
-        hash_combine( ret, shape->IsFilled() );
+        hash_combine( ret, shape->GetFillMode() );
         hash_combine( ret, shape->GetLineStyle() );
 
         if( shape->GetShape() == SHAPE_T::ARC || shape->GetShape() == SHAPE_T::CIRCLE )

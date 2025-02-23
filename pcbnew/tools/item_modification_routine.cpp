@@ -495,7 +495,7 @@ void POLYGON_BOOLEAN_ROUTINE::ProcessShape( PCB_SHAPE& aPcbShape )
     {
         m_width = aPcbShape.GetWidth();
         m_layer = aPcbShape.GetLayer();
-        m_filled = aPcbShape.IsFilled();
+        m_fillMode = aPcbShape.GetFillMode();
         m_workingPolygons = std::move( *poly );
         m_firstPolygon = false;
 
@@ -544,7 +544,7 @@ void POLYGON_BOOLEAN_ROUTINE::Finalize()
         // Copy properties from the source polygon
         new_poly_shape->SetWidth( m_width );
         new_poly_shape->SetLayer( m_layer );
-        new_poly_shape->SetFilled( m_filled );
+        new_poly_shape->SetFillMode( m_fillMode );
 
         handler.AddNewItem( std::move( new_poly_shape ) );
     }

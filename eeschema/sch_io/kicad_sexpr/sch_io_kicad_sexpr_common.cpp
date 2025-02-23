@@ -37,10 +37,13 @@ void formatFill( OUTPUTFORMATTER* aFormatter, FILL_T aFillMode, const COLOR4D& a
     switch( aFillMode )
     {
     default:
-    case FILL_T::NO_FILL:                  fillType = "none";       break;
-    case FILL_T::FILLED_SHAPE:             fillType = "outline";    break;
-    case FILL_T::FILLED_WITH_BG_BODYCOLOR: fillType = "background"; break;
-    case FILL_T::FILLED_WITH_COLOR:        fillType = "color";      break;
+    case FILL_T::NO_FILL:                  fillType = "none";          break;
+    case FILL_T::FILLED_SHAPE:             fillType = "outline";       break;
+    case FILL_T::FILLED_WITH_BG_BODYCOLOR: fillType = "background";    break;
+    case FILL_T::FILLED_WITH_COLOR:        fillType = "color";         break;
+    case FILL_T::HATCH:                    fillType = "hatch";         break;
+    case FILL_T::REVERSE_HATCH:            fillType = "reverse_hatch"; break;
+    case FILL_T::CROSS_HATCH:              fillType = "cross_hatch";   break;
     }
 
     if( aFillMode == FILL_T::FILLED_WITH_COLOR )

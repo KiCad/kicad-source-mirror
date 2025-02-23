@@ -1631,7 +1631,7 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
                 }
 
                 // Filled shapes win hit tests anywhere inside them
-                dominating = shape->IsFilled();
+                dominating = shape->IsFilledForHitTesting();
             }
             else if( symbol )
             {

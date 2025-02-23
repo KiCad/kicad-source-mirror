@@ -1368,6 +1368,8 @@ int EE_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
         poly.Remove( idx );
     }
 
+    shape->SetHatchingDirty();
+
     setEditedPoint( nullptr );
 
     updateItem( shape, true );

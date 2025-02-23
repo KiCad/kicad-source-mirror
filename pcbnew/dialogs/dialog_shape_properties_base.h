@@ -29,6 +29,7 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/bmpcbox.h>
+#include <wx/choice.h>
 #include <widgets/net_selector.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -68,12 +69,13 @@ class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxGridBagSizer* m_gbsBezier;
 		wxBoxSizer* m_upperSizer;
 		wxCheckBox* m_locked;
-		wxCheckBox* m_filledCtrl;
 		wxStaticText* m_thicknessLabel;
 		wxTextCtrl* m_thicknessCtrl;
 		wxStaticText* m_thicknessUnits;
 		wxStaticText* m_lineStyleLabel;
 		wxBitmapComboBox* m_lineStyleCombo;
+		wxStaticText* m_fillLabel;
+		wxChoice* m_fillCtrl;
 		wxStaticText* m_LayerLabel;
 		PCB_LAYER_BOX_SELECTOR* m_LayerSelectionCtrl;
 		wxStaticText* m_techLayersLabel;

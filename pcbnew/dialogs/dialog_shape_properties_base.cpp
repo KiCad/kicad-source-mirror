@@ -209,9 +209,6 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	m_locked = new wxCheckBox( this, wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer2->Add( m_locked, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxLEFT, 5 );
 
-	m_filledCtrl = new wxCheckBox( this, wxID_ANY, _("Filled shape"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_filledCtrl, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxLEFT, 5 );
-
 	m_thicknessLabel = new wxStaticText( this, wxID_ANY, _("Line width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_thicknessLabel->Wrap( -1 );
 	gbSizer2->Add( m_thicknessLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -234,16 +231,26 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 
 	gbSizer2->Add( m_lineStyleCombo, wxGBPosition( 4, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
+	m_fillLabel = new wxStaticText( this, wxID_ANY, _("Fill:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_fillLabel->Wrap( -1 );
+	gbSizer2->Add( m_fillLabel, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxString m_fillCtrlChoices[] = { _("None"), _("Solid"), _("Hatch"), _("Reverse Hatch"), _("Cross-hatch") };
+	int m_fillCtrlNChoices = sizeof( m_fillCtrlChoices ) / sizeof( wxString );
+	m_fillCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_fillCtrlNChoices, m_fillCtrlChoices, 0 );
+	m_fillCtrl->SetSelection( 0 );
+	gbSizer2->Add( m_fillCtrl, wxGBPosition( 5, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+
 	m_LayerLabel = new wxStaticText( this, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerLabel->Wrap( -1 );
-	gbSizer2->Add( m_LayerLabel, wxGBPosition( 8, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	gbSizer2->Add( m_LayerLabel, wxGBPosition( 9, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_LayerSelectionCtrl = new PCB_LAYER_BOX_SELECTOR( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	gbSizer2->Add( m_LayerSelectionCtrl, wxGBPosition( 8, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+	gbSizer2->Add( m_LayerSelectionCtrl, wxGBPosition( 9, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
 	m_techLayersLabel = new wxStaticText( this, wxID_ANY, _("Technical Layers:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_techLayersLabel->Wrap( -1 );
-	gbSizer2->Add( m_techLayersLabel, wxGBPosition( 9, 0 ), wxGBSpan( 1, 1 ), wxALIGN_BOTTOM|wxTOP|wxLEFT, 5 );
+	gbSizer2->Add( m_techLayersLabel, wxGBPosition( 10, 0 ), wxGBSpan( 1, 1 ), wxALIGN_BOTTOM|wxTOP|wxLEFT, 5 );
 
 	wxFlexGridSizer* fgSizer2;
 	fgSizer2 = new wxFlexGridSizer( 0, 4, 0, 0 );
@@ -268,14 +275,14 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	fgSizer2->Add( m_solderMaskMarginUnit, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	gbSizer2->Add( fgSizer2, wxGBPosition( 10, 0 ), wxGBSpan( 1, 3 ), wxEXPAND, 5 );
+	gbSizer2->Add( fgSizer2, wxGBPosition( 11, 0 ), wxGBSpan( 1, 3 ), wxEXPAND, 5 );
 
 	m_netLabel = new wxStaticText( this, wxID_ANY, _("Net:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_netLabel->Wrap( -1 );
-	gbSizer2->Add( m_netLabel, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	gbSizer2->Add( m_netLabel, wxGBPosition( 7, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_netSelector = new NET_SELECTOR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_netSelector, wxGBPosition( 6, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+	gbSizer2->Add( m_netSelector, wxGBPosition( 7, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
 
 	gbSizer2->AddGrowableCol( 1 );

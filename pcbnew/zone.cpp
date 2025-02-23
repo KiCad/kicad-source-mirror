@@ -36,7 +36,6 @@
 #include <zone.h>
 #include <footprint.h>
 #include <string_utils.h>
-#include <math_for_graphics.h>
 #include <properties/property_validators.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
@@ -1134,14 +1133,6 @@ void ZONE::UnHatchBorder()
 }
 
 
-// Creates hatch lines inside the outline of the complex polygon
-// sort function used in ::HatchBorder to sort points by descending VECTOR2I.x values
-bool sortEndsByDescendingX( const VECTOR2I& ref, const VECTOR2I& tst )
-{
-    return tst.x < ref.x;
-}
-
-
 void ZONE::HatchBorder()
 {
     UnHatchBorder();
@@ -1151,27 +1142,6 @@ void ZONE::HatchBorder()
             || m_Poly->IsEmpty() )
     {
         return;
-    }
-
-    // define range for hatch lines
-    int min_x = m_Poly->CVertex( 0 ).x;
-    int max_x = m_Poly->CVertex( 0 ).x;
-    int min_y = m_Poly->CVertex( 0 ).y;
-    int max_y = m_Poly->CVertex( 0 ).y;
-
-    for( auto iterator = m_Poly->IterateWithHoles(); iterator; iterator++ )
-    {
-        if( iterator->x < min_x )
-            min_x = iterator->x;
-
-        if( iterator->x > max_x )
-            max_x = iterator->x;
-
-        if( iterator->y < min_y )
-            min_y = iterator->y;
-
-        if( iterator->y > max_y )
-            max_y = iterator->y;
     }
 
     // Calculate spacing between 2 hatch lines
@@ -1186,100 +1156,17 @@ void ZONE::HatchBorder()
     int  hatch_line_len = m_borderHatchPitch;
 
     // To have a better look, give a slope depending on the layer
-    int              layer = GetFirstLayer();
-    std::vector<int> slope_flags;
+    int                 layer = GetFirstLayer();
+    std::vector<double> slopes;
 
     if( IsTeardropArea() )
-        slope_flags = { 1, -1 };
+        slopes = { 0.7, -0.7 };
     else if( layer & 1 )
-        slope_flags = { 1 };
+        slopes = { 1 };
     else
-        slope_flags = { -1 };
+        slopes = { -1 };
 
-    for( int slope_flag : slope_flags )
-    {
-        double  slope = 0.707106 * slope_flag;      // 45 degrees slope
-        int64_t max_a, min_a;
-
-        if( slope_flag == 1 )
-        {
-            max_a = KiROUND<double, int64_t>( max_y - slope * min_x );
-            min_a = KiROUND<double, int64_t>( min_y - slope * max_x );
-        }
-        else
-        {
-            max_a = KiROUND<double, int64_t>( max_y - slope * max_x );
-            min_a = KiROUND<double, int64_t>( min_y - slope * min_x );
-        }
-
-        min_a = (min_a / spacing) * spacing;
-
-        // calculate an offset depending on layer number,
-        // for a better look of hatches on a multilayer board
-        int offset = (layer * 7) / 8;
-        min_a += offset;
-
-        // loop through hatch lines
-        std::vector<VECTOR2I> pointbuffer;
-        pointbuffer.reserve( 256 );
-
-        for( int64_t a = min_a; a < max_a; a += spacing )
-        {
-            pointbuffer.clear();
-
-            // Iterate through all vertices
-            for( auto iterator = m_Poly->IterateSegmentsWithHoles(); iterator; iterator++ )
-            {
-                const SEG seg = *iterator;
-                double    x, y;
-
-                if( FindLineSegmentIntersection( a, slope, seg.A.x, seg.A.y, seg.B.x, seg.B.y, x, y ) )
-                    pointbuffer.emplace_back( KiROUND( x ), KiROUND( y ) );
-            }
-
-            // sort points in order of descending x (if more than 2) to
-            // ensure the starting point and the ending point of the same segment
-            // are stored one just after the other.
-            if( pointbuffer.size() > 2 )
-                sort( pointbuffer.begin(), pointbuffer.end(), sortEndsByDescendingX );
-
-            // creates lines or short segments inside the complex polygon
-            for( size_t ip = 0; ip + 1 < pointbuffer.size(); ip += 2 )
-            {
-                int dx = pointbuffer[ip + 1].x - pointbuffer[ip].x;
-
-                // Push only one line for diagonal hatch,
-                // or for small lines < twice the line length
-                // else push 2 small lines
-                if( m_borderStyle == ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL
-                    || std::abs( dx ) < 2 * hatch_line_len )
-                {
-                    m_borderHatchLines.emplace_back( SEG( pointbuffer[ip], pointbuffer[ ip + 1] ) );
-                }
-                else
-                {
-                    double dy = pointbuffer[ip + 1].y - pointbuffer[ip].y;
-                    slope = dy / dx;
-
-                    if( dx > 0 )
-                        dx = hatch_line_len;
-                    else
-                        dx = -hatch_line_len;
-
-                    int x1 = KiROUND( pointbuffer[ip].x + dx );
-                    int x2 = KiROUND( pointbuffer[ip + 1].x - dx );
-                    int y1 = KiROUND( pointbuffer[ip].y + dx * slope );
-                    int y2 = KiROUND( pointbuffer[ip + 1].y - dx * slope );
-
-                    m_borderHatchLines.emplace_back( SEG( pointbuffer[ip].x, pointbuffer[ip].y,
-                                                          x1, y1 ) );
-
-                    m_borderHatchLines.emplace_back( SEG( pointbuffer[ip+1].x, pointbuffer[ip+1].y,
-                                                          x2, y2 ) );
-                }
-            }
-        }
-    }
+    m_borderHatchLines = m_Poly->GenerateHatchLines( slopes, spacing, hatch_line_len );
 }
 
 
@@ -1588,9 +1475,7 @@ void ZONE::TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aBuffer, int aClea
 
 std::shared_ptr<SHAPE> ZONE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
 {
-    if( GetIsRuleArea() )
-        return std::make_shared<SHAPE_POLY_SET>( *Outline() );
-    else if( m_FilledPolysList.find( aLayer ) == m_FilledPolysList.end() )
+    if( m_FilledPolysList.find( aLayer ) == m_FilledPolysList.end() )
         return std::make_shared<SHAPE_NULL>();
     else
         return m_FilledPolysList.at( aLayer );

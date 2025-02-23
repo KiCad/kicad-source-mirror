@@ -1503,7 +1503,7 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
             // Consider a NAND gate.  We have no idea which side of the arc is "inside"
             // so we can't reliably fill.
             if( aShape->GetShape() == SHAPE_T::ARC )
-                m_gal->SetIsFill( aShape->IsFilled() );
+                m_gal->SetIsFill( aShape->IsSolidFill() );
             else
                 m_gal->SetIsFill( true );
 
@@ -1534,6 +1534,20 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
             // Fill in the foreground layer
             break;
 
+        case FILL_T::HATCH:
+        case FILL_T::REVERSE_HATCH:
+        case FILL_T::CROSS_HATCH:
+            if( aShape->IsSelected() )
+                color.a = color.a * 0.8;  // selected items already have reduced-alpha backgrounds
+            else
+                color.a = color.a * 0.4;
+
+            m_gal->SetIsFill( true );
+            m_gal->SetIsStroke( false );
+            m_gal->SetFillColor( color );
+            m_gal->DrawPolygon( aShape->GetHatching() );
+            break;
+
         case FILL_T::FILLED_WITH_COLOR:
         case FILL_T::FILLED_WITH_BG_BODYCOLOR:
             // Do not fill the shape in B&W print mode, to avoid to visible items inside the shape
@@ -1546,6 +1560,9 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
                 drawShape( aShape );
             }
             break;
+
+        default:
+            wxFAIL_MSG( wxT( "Unsupported fill type" ) );
         }
     }
     else if( aLayer == LAYER_DEVICE || aLayer == LAYER_NOTES || aLayer == LAYER_PRIVATE_NOTES
@@ -1919,7 +1936,7 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
     {
         // Do not fill the shape in B&W print mode, to avoid to visible items
         // inside the shape
-        if( aTextBox->IsFilled() && !m_schSettings.PrintBlackAndWhiteReq() )
+        if( aTextBox->IsSolidFill() && !m_schSettings.PrintBlackAndWhiteReq() )
         {
             m_gal->SetIsFill( true );
             m_gal->SetIsStroke( false );

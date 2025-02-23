@@ -124,6 +124,8 @@ bool PCB_SHAPE::Deserialize( const google::protobuf::Any &aContainer )
 
     // TODO m_hasSolderMask and m_solderMaskMargin
 
+    m_hatchingDirty = true;
+
     return true;
 }
 
@@ -190,7 +192,7 @@ int PCB_SHAPE::GetSolderMaskExpansion() const
     }
 
     // Ensure the resulting mask opening has a non-negative size
-    if( margin < 0 && !IsFilled() )
+    if( margin < 0 && !IsSolidFill() )
         margin = std::max( margin, -GetWidth() / 2 );
 
     return margin;
@@ -250,7 +252,7 @@ std::vector<VECTOR2I> PCB_SHAPE::GetConnectionPoints() const
     std::vector<VECTOR2I> ret;
 
     // For filled shapes, we may as well use a centroid
-    if( IsFilled() )
+    if( IsSolidFill() )
     {
         ret.emplace_back( GetCenter() );
         return ret;
@@ -261,16 +263,16 @@ std::vector<VECTOR2I> PCB_SHAPE::GetConnectionPoints() const
     case SHAPE_T::CIRCLE:
     {
         const CIRCLE circle( GetCenter(), GetRadius() );
+
         for( const TYPED_POINT2I& pt : KIGEOM::GetCircleKeyPoints( circle, false ) )
-        {
             ret.emplace_back( pt.m_point );
-        }
+
         break;
     }
+
     case SHAPE_T::ARC:
         ret.emplace_back( GetArcMid() );
         KI_FALLTHROUGH;
-
     case SHAPE_T::SEGMENT:
     case SHAPE_T::BEZIER:
         ret.emplace_back( GetStart() );
@@ -290,11 +292,36 @@ std::vector<VECTOR2I> PCB_SHAPE::GetConnectionPoints() const
         break;
 
     case SHAPE_T::UNDEFINED:
-        // No default - handle all cases, even if just break
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         break;
     }
 
     return ret;
+}
+
+
+void PCB_SHAPE::updateHatching() const
+{
+    EDA_SHAPE::updateHatching();
+
+    if( !m_hatching.IsEmpty() )
+    {
+        PCB_LAYER_ID   layer = GetLayer();
+        BOX2I          bbox = GetBoundingBox();
+        SHAPE_POLY_SET holes;
+
+        for( BOARD_ITEM* item : GetBoard()->Drawings() )
+        {
+            if( ( item->Type() == PCB_TEXT_T || item->Type() == PCB_TEXTBOX_T )
+                && item->GetLayer() == layer
+                && item->GetBoundingBox().Intersects( bbox ) )
+            {
+                item->TransformShapeToPolygon( holes, layer, 0, ARC_LOW_DEF, ERROR_OUTSIDE, true );
+            }
+        }
+
+        m_hatching.BooleanSubtract( holes );
+    }
 }
 
 
@@ -322,19 +349,19 @@ const VECTOR2I PCB_SHAPE::GetFocusPosition() const
     switch( m_shape )
     {
     case SHAPE_T::CIRCLE:
-        if( !IsFilled() )
+        if( !IsAnyFill() )
             return VECTOR2I( GetCenter().x + GetRadius(), GetCenter().y );
         else
             return GetCenter();
 
     case SHAPE_T::RECTANGLE:
-        if( !IsFilled() )
+        if( !IsAnyFill() )
             return GetStart();
         else
             return GetCenter();
 
     case SHAPE_T::POLY:
-        if( !IsFilled() )
+        if( !IsAnyFill() )
         {
             VECTOR2I pos = GetPolyShape().Outline(0).CPoint(0);
             return VECTOR2I( pos.x, pos.y );
@@ -524,6 +551,8 @@ void PCB_SHAPE::Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
+
+    m_hatchingDirty = true;
 }
 
 

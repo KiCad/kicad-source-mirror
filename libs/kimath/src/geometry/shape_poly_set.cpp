@@ -43,6 +43,7 @@
 #include <vector>
 
 #include <clipper2/clipper.h>
+#include <math_for_graphics.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/polygon_triangulation.h>
 #include <geometry/seg.h>                    // for SEG, OPT_VECTOR2I
@@ -3140,3 +3141,114 @@ bool SHAPE_POLY_SET::PointInside( const VECTOR2I& aPt, int aAccuracy, bool aUseB
     return false;
 }
 
+
+const std::vector<SEG> SHAPE_POLY_SET::GenerateHatchLines( const std::vector<double>& aSlopes,
+                                                           int aSpacing, int aLineLength ) const
+{
+    std::vector<SEG> hatchLines;
+
+    // define range for hatch lines
+    int min_x = CVertex( 0 ).x;
+    int max_x = CVertex( 0 ).x;
+    int min_y = CVertex( 0 ).y;
+    int max_y = CVertex( 0 ).y;
+
+    for( auto iterator = CIterateWithHoles(); iterator; iterator++ )
+    {
+        if( iterator->x < min_x )
+            min_x = iterator->x;
+
+        if( iterator->x > max_x )
+            max_x = iterator->x;
+
+        if( iterator->y < min_y )
+            min_y = iterator->y;
+
+        if( iterator->y > max_y )
+            max_y = iterator->y;
+    }
+
+    auto sortEndsByDescendingX =
+            []( const VECTOR2I& ref, const VECTOR2I& tst )
+            {
+                return tst.x < ref.x;
+            };
+
+    for( double slope : aSlopes )
+    {
+        int64_t max_a, min_a;
+
+        if( slope > 0 )
+        {
+            max_a = KiROUND<double, int64_t>( max_y - slope * min_x );
+            min_a = KiROUND<double, int64_t>( min_y - slope * max_x );
+        }
+        else
+        {
+            max_a = KiROUND<double, int64_t>( max_y - slope * max_x );
+            min_a = KiROUND<double, int64_t>( min_y - slope * min_x );
+        }
+
+        min_a = ( min_a / aSpacing ) * aSpacing;
+
+        // loop through hatch lines
+        std::vector<VECTOR2I> pointbuffer;
+        pointbuffer.reserve( 256 );
+
+        for( int64_t a = min_a; a < max_a; a += aSpacing )
+        {
+            pointbuffer.clear();
+
+            // Iterate through all vertices
+            for( auto iterator = CIterateSegmentsWithHoles(); iterator; iterator++ )
+            {
+                const SEG seg = *iterator;
+                double    x, y;
+
+                if( FindLineSegmentIntersection( a, slope, seg.A.x, seg.A.y, seg.B.x, seg.B.y, x, y ) )
+                    pointbuffer.emplace_back( KiROUND( x ), KiROUND( y ) );
+            }
+
+            // sort points in order of descending x (if more than 2) to
+            // ensure the starting point and the ending point of the same segment
+            // are stored one just after the other.
+            if( pointbuffer.size() > 2 )
+                sort( pointbuffer.begin(), pointbuffer.end(), sortEndsByDescendingX );
+
+            // creates lines or short segments inside the complex polygon
+            for( size_t ip = 0; ip + 1 < pointbuffer.size(); ip += 2 )
+            {
+                int dx = pointbuffer[ip + 1].x - pointbuffer[ip].x;
+
+                // Push only one line for diagonal hatch or for small lines < twice the line
+                // length; else push 2 small lines
+                if( aLineLength == -1 || std::abs( dx ) < 2 * aLineLength )
+                {
+                    hatchLines.emplace_back( SEG( pointbuffer[ip], pointbuffer[ ip + 1] ) );
+                }
+                else
+                {
+                    double dy = pointbuffer[ip + 1].y - pointbuffer[ip].y;
+                    slope = dy / dx;
+
+                    if( dx > 0 )
+                        dx = aLineLength;
+                    else
+                        dx = -aLineLength;
+
+                    int x1 = KiROUND( pointbuffer[ip].x + dx );
+                    int x2 = KiROUND( pointbuffer[ip + 1].x - dx );
+                    int y1 = KiROUND( pointbuffer[ip].y + dx * slope );
+                    int y2 = KiROUND( pointbuffer[ip + 1].y - dx * slope );
+
+                    hatchLines.emplace_back( SEG( pointbuffer[ip].x, pointbuffer[ip].y, x1, y1 ) );
+
+                    hatchLines.emplace_back( SEG( pointbuffer[ip+1].x, pointbuffer[ip+1].y, x2,
+                                                  y2 ) );
+                }
+            }
+        }
+    }
+
+    return hatchLines;
+}

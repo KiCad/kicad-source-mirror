@@ -1029,7 +1029,10 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
     }
 
     if( m_item->GetShape() == SHAPE_T::ARC || m_item->GetShape() == SHAPE_T::SEGMENT )
-        m_filledCtrl->Show( false );
+    {
+        m_fillLabel->Show( false );
+        m_fillCtrl->Show( false );
+    }
 
     SetupStandardButtons();
 
@@ -1079,7 +1082,7 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataToWindow()
     if( m_geomSync )
         m_geomSync->SetShape( *m_item );
 
-    m_filledCtrl->SetValue( m_item->IsFilled() );
+    m_fillCtrl->SetSelection( m_item->GetFillModeProp() );
     m_locked->SetValue( m_item->IsLocked() );
 
     m_thickness.SetValue( m_item->GetStroke().GetWidth() );
@@ -1131,22 +1134,18 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
 
     bool wasLocked = m_item->IsLocked();
 
-    m_item->SetFilled( m_filledCtrl->GetValue() );
+    m_item->SetFillModeProp( (UI_FILL_MODE) m_fillCtrl->GetSelection() );
     m_item->SetLocked( m_locked->GetValue() );
 
-    STROKE_PARAMS stroke = m_item->GetStroke();
-
-    stroke.SetWidth( m_thickness.GetIntValue() );
+    m_item->SetWidth( m_thickness.GetIntValue() );
 
     auto it = lineTypeNames.begin();
     std::advance( it, m_lineStyleCombo->GetSelection() );
 
     if( it == lineTypeNames.end() )
-        stroke.SetLineStyle( LINE_STYLE::SOLID );
+        m_item->SetLineStyle( LINE_STYLE::SOLID );
     else
-        stroke.SetLineStyle( it->first );
-
-    m_item->SetStroke( stroke );
+        m_item->SetLineStyle( it->first );
 
     m_item->SetLayer( ToLAYER_ID( layer ) );
 
@@ -1197,19 +1196,19 @@ bool DIALOG_SHAPE_PROPERTIES::Validate()
         break;
 
     case SHAPE_T::CIRCLE:
-        if( !m_filledCtrl->GetValue() && m_thickness.GetValue() <= 0 )
+        if( m_fillCtrl->GetSelection() != UI_FILL_MODE::SOLID && m_thickness.GetValue() <= 0 )
             errors.Add( _( "Line width must be greater than zero for an unfilled circle." ) );
 
         break;
 
     case SHAPE_T::RECTANGLE:
-        if( !m_filledCtrl->GetValue() && m_thickness.GetValue() <= 0 )
+        if( m_fillCtrl->GetSelection() != UI_FILL_MODE::SOLID && m_thickness.GetValue() <= 0 )
             errors.Add( _( "Line width must be greater than zero for an unfilled rectangle." ) );
 
         break;
 
     case SHAPE_T::POLY:
-        if( !m_filledCtrl->GetValue() && m_thickness.GetValue() <= 0 )
+        if( m_fillCtrl->GetSelection() != UI_FILL_MODE::SOLID && m_thickness.GetValue() <= 0 )
             errors.Add( _( "Line width must be greater than zero for an unfilled polygon." ) );
 
         break;
@@ -1221,7 +1220,7 @@ bool DIALOG_SHAPE_PROPERTIES::Validate()
         break;
 
     case SHAPE_T::BEZIER:
-        if( !m_filledCtrl->GetValue() && m_thickness.GetValue() <= 0 )
+        if( m_fillCtrl->GetSelection() != UI_FILL_MODE::SOLID && m_thickness.GetValue() <= 0 )
             errors.Add( _( "Line width must be greater than zero for an unfilled curve." ) );
 
         break;

@@ -82,6 +82,7 @@ connect_pads
 copperpour
 copper_finish
 crossbar
+cross_hatch
 curve_points
 curved_edges
 custom
@@ -288,6 +289,7 @@ rect_delta
 reference
 remove_unused_layers
 render_cache
+reverse_hatch
 right
 rotate
 roundrect

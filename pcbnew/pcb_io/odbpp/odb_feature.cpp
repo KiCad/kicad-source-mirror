@@ -78,49 +78,45 @@ bool FEATURES_MANAGER::AddContour( const SHAPE_POLY_SET& aPolySet, int aOutline 
 
 void FEATURES_MANAGER::AddShape( const PCB_SHAPE& aShape, PCB_LAYER_ID aLayer )
 {
+    int stroke_width = aShape.GetWidth();
+
     switch( aShape.GetShape() )
     {
     case SHAPE_T::CIRCLE:
     {
         int      diameter = aShape.GetRadius() * 2;
-        int      width = aShape.GetWidth();
         VECTOR2I center = ODB::GetShapePosition( aShape );
-        wxString innerDim = ODB::SymDouble2String( ( diameter - width / 2 ) );
-        wxString outerDim = ODB::SymDouble2String( ( width + diameter ) );
+        wxString innerDim = ODB::SymDouble2String( ( diameter - stroke_width / 2 ) );
+        wxString outerDim = ODB::SymDouble2String( ( stroke_width + diameter ) );
 
-        if( aShape.GetFillMode() == FILL_T::NO_FILL )
-        {
-            AddFeature<ODB_PAD>( ODB::AddXY( center ), AddRoundDonutSymbol( outerDim, innerDim ) );
-        }
-        else
-        {
+        if( aShape.IsSolidFill() )
             AddFeature<ODB_PAD>( ODB::AddXY( center ), AddCircleSymbol( outerDim ) );
-        }
+        else
+            AddFeature<ODB_PAD>( ODB::AddXY( center ), AddRoundDonutSymbol( outerDim, innerDim ) );
 
         break;
     }
 
     case SHAPE_T::RECTANGLE:
     {
-        int      stroke_width = aShape.GetWidth();
         int      width = std::abs( aShape.GetRectangleWidth() ) + stroke_width;
         int      height = std::abs( aShape.GetRectangleHeight() ) + stroke_width;
         wxString rad = ODB::SymDouble2String( ( stroke_width / 2.0 ) );
         VECTOR2I center = ODB::GetShapePosition( aShape );
 
-        if( aShape.GetFillMode() == FILL_T::NO_FILL )
+        if( aShape.IsSolidFill() )
+        {
+            AddFeature<ODB_PAD>( ODB::AddXY( center ),
+                                 AddRoundRectSymbol( ODB::SymDouble2String( width ),
+                                                     ODB::SymDouble2String( height ), rad ) );
+        }
+        else
         {
             AddFeature<ODB_PAD>( ODB::AddXY( center ),
                                  AddRoundRectDonutSymbol( ODB::SymDouble2String( width ),
                                                           ODB::SymDouble2String( height ),
                                                           ODB::SymDouble2String( stroke_width ),
                                                           rad ) );
-        }
-        else
-        {
-            AddFeature<ODB_PAD>( ODB::AddXY( center ),
-                                 AddRoundRectSymbol( ODB::SymDouble2String( width ),
-                                                     ODB::SymDouble2String( height ), rad ) );
         }
 
         break;
@@ -133,7 +129,7 @@ void FEATURES_MANAGER::AddShape( const PCB_SHAPE& aShape, PCB_LAYER_ID aLayer )
         // TODO: check if soldermask_min_thickness should be Stroke width
 
         if( aLayer != UNDEFINED_LAYER && LSET( { F_Mask, B_Mask } ).Contains( aLayer ) )
-            soldermask_min_thickness = aShape.GetWidth();
+            soldermask_min_thickness = stroke_width;
 
         int            maxError = m_board->GetDesignSettings().m_MaxError;
         SHAPE_POLY_SET poly_set;
@@ -159,22 +155,20 @@ void FEATURES_MANAGER::AddShape( const PCB_SHAPE& aShape, PCB_LAYER_ID aLayer )
             poly_set.Fracture();
         }
 
-        int strokeWidth = aShape.GetStroke().GetWidth();
-
         // ODB++ surface features can only represent closed polygons.  We add a surface for
         // the fill of the shape, if present, and add line segments for the outline, if present.
-        if( aShape.IsFilled() )
+        if( aShape.IsSolidFill() )
         {
             for( int ii = 0; ii < poly_set.OutlineCount(); ++ii )
             {
                 AddContour( poly_set, ii, FILL_T::FILLED_SHAPE );
 
-                if( strokeWidth != 0 )
+                if( stroke_width != 0 )
                 {
                     for( int jj = 0; jj < poly_set.COutline( ii ).SegmentCount(); ++jj )
                     {
                         const SEG& seg = poly_set.COutline( ii ).CSegment( jj );
-                        AddFeatureLine( seg.A, seg.B, strokeWidth );
+                        AddFeatureLine( seg.A, seg.B, stroke_width );
                     }
                 }
             }
@@ -186,7 +180,7 @@ void FEATURES_MANAGER::AddShape( const PCB_SHAPE& aShape, PCB_LAYER_ID aLayer )
                 for( int jj = 0; jj < poly_set.COutline( ii ).SegmentCount(); ++jj )
                 {
                     const SEG& seg = poly_set.COutline( ii ).CSegment( jj );
-                    AddFeatureLine( seg.A, seg.B, strokeWidth );
+                    AddFeatureLine( seg.A, seg.B, stroke_width );
                 }
             }
         }
@@ -198,9 +192,7 @@ void FEATURES_MANAGER::AddShape( const PCB_SHAPE& aShape, PCB_LAYER_ID aLayer )
     {
         ODB_DIRECTION dir = !aShape.IsClockwiseArc() ? ODB_DIRECTION::CW : ODB_DIRECTION::CCW;
 
-        AddFeatureArc( aShape.GetStart(), aShape.GetEnd(), aShape.GetCenter(),
-                       aShape.GetStroke().GetWidth(), dir );
-
+        AddFeatureArc( aShape.GetStart(), aShape.GetEnd(), aShape.GetCenter(), stroke_width, dir );
         break;
     }
 
@@ -209,25 +201,24 @@ void FEATURES_MANAGER::AddShape( const PCB_SHAPE& aShape, PCB_LAYER_ID aLayer )
         const std::vector<VECTOR2I>& points = aShape.GetBezierPoints();
 
         for( size_t i = 0; i < points.size() - 1; i++ )
-        {
-            AddFeatureLine( points[i], points[i + 1], aShape.GetStroke().GetWidth() );
-        }
+            AddFeatureLine( points[i], points[i + 1], stroke_width );
 
         break;
     }
 
     case SHAPE_T::SEGMENT:
-    {
-        AddFeatureLine( aShape.GetStart(), aShape.GetEnd(), aShape.GetStroke().GetWidth() );
-
+        AddFeatureLine( aShape.GetStart(), aShape.GetEnd(), stroke_width );
         break;
-    }
 
     default:
-    {
         wxLogError( wxT( "Unknown shape when adding ODB++ layer feature" ) );
         break;
     }
+
+    if( aShape.IsHatchedFill() )
+    {
+        for( int ii = 0; ii < aShape.GetHatching().OutlineCount(); ++ii )
+            AddContour( aShape.GetHatching(), ii, FILL_T::FILLED_SHAPE );
     }
 }
 

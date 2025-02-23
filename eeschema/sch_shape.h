@@ -66,6 +66,16 @@ public:
             return m_stroke.GetLineStyle();
     }
 
+    int GetHatchLineWidth() const override
+    {
+        return GetEffectiveWidth() / 2;
+    }
+
+    int GetHatchLineSpacing() const override
+    {
+        return GetHatchLineWidth() * 40;
+    }
+
     void SetFilled( bool aFilled ) override;
 
     const BOX2I GetBoundingBox() const override;

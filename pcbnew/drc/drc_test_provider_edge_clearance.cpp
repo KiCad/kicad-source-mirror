@@ -186,7 +186,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                 if( item->IsOnLayer( Edge_Cuts ) )
                     stroke.SetWidth( 0 );
 
-                if( shape->GetShape() == SHAPE_T::RECTANGLE && !shape->IsFilled() )
+                if( shape->GetShape() == SHAPE_T::RECTANGLE && !shape->IsSolidFill() )
                 {
                     // A single rectangle for the board would make the RTree useless, so convert
                     // to 4 edges
@@ -211,7 +211,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                     edges.back()->SetStroke( stroke );
                     edges.back()->SetParentGroup( nullptr );
                 }
-                else if( shape->GetShape() == SHAPE_T::POLY && !shape->IsFilled() )
+                else if( shape->GetShape() == SHAPE_T::POLY && !shape->IsSolidFill() )
                 {
                     // A single polygon for the board would make the RTree useless, so convert
                     // to n edges.

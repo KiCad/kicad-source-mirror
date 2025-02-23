@@ -933,7 +933,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
             break;
 
         case SHAPE_T::CIRCLE:
-            if( aShape->IsFilled() )
+            if( aShape->IsSolidFill() )
             {
                 int diameter = aShape->GetRadius() * 2 + thickness;
 
@@ -1004,7 +1004,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                                          m_board->GetDesignSettings().m_MaxError );
                     }
 
-                    FILL_T fill = aShape->IsFilled() ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL;
+                    FILL_T fill = aShape->IsSolidFill() ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL;
 
                     for( int jj = 0; jj < tmpPoly.OutlineCount(); ++jj )
                     {
@@ -1055,7 +1055,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                                   m_board->GetDesignSettings().m_MaxError );
                 }
 
-                FILL_T fill_mode = aShape->IsFilled() ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL;
+                FILL_T fill_mode = aShape->IsSolidFill() ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL;
 
                 if( poly.OutlineCount() > 0 )
                 {
@@ -1097,6 +1097,24 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
 
         for( SHAPE* shape : shapes )
             delete shape;
+    }
+
+    if( aShape->IsHatchedFill() )
+    {
+        for( int ii = 0; ii < aShape->GetHatching().OutlineCount(); ++ii )
+        {
+            if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
+            {
+                GERBER_PLOTTER* gbr_plotter = static_cast<GERBER_PLOTTER*>( m_plotter );
+                gbr_plotter->PlotPolyAsRegion( aShape->GetHatching().Outline( ii ),
+                                               FILL_T::FILLED_SHAPE, 0, &gbr_metadata );
+            }
+            else
+            {
+                m_plotter->PlotPoly( aShape->GetHatching().Outline( ii ), FILL_T::FILLED_SHAPE,
+                                     0, &gbr_metadata );
+            }
+        }
     }
 }
 

@@ -605,6 +605,9 @@ void SVG_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
     switch( aFill )
     {
     case FILL_T::NO_FILL:
+    case FILL_T::HATCH:
+    case FILL_T::REVERSE_HATCH:
+    case FILL_T::CROSS_HATCH:
         setSVGPlotStyle( aWidth, false, "fill:none" );
         break;
 

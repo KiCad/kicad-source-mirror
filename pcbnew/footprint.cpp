@@ -2782,7 +2782,7 @@ double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLEC
         case SHAPE_T::CIRCLE:
         case SHAPE_T::POLY:
         {
-            if( !shape->IsFilled() )
+            if( !shape->IsAnyFill() )
                 return shape->GetWidth() * shape->GetWidth();
 
             KI_FALLTHROUGH;

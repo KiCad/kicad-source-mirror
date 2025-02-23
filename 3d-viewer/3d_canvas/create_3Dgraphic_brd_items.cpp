@@ -645,7 +645,7 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
             float   innerR3DU = TO_3DU( aShape->GetRadius() ) - linewidth3DU / 2.0;
             float   outerR3DU = TO_3DU( aShape->GetRadius() ) + linewidth3DU / 2.0;
 
-            if( aShape->IsFilled() || innerR3DU <= 0.0 )
+            if( aShape->IsSolidFill() || innerR3DU <= 0.0 )
                 addFILLED_CIRCLE_2D( aContainer, center3DU, outerR3DU, *aOwner );
             else
                 addRING_2D( aContainer, center3DU, innerR3DU, outerR3DU, *aOwner );
@@ -654,7 +654,7 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
         }
 
         case SHAPE_T::RECTANGLE:
-            if( aShape->IsFilled() )
+            if( aShape->IsSolidFill() )
             {
                 SHAPE_POLY_SET polyList;
 
@@ -759,6 +759,9 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
         for( SHAPE* shape : shapes )
             delete shape;
     }
+
+    if( aShape->IsHatchedFill() )
+        ConvertPolygonToTriangles( aShape->GetHatching(), *aContainer, m_biuTo3Dunits, *aOwner );
 }
 
 

@@ -3935,7 +3935,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             {
                 if( PCB_SHAPE* shape = findGraphic( via ) )
                 {
-                    if( shape->IsFilled() )
+                    if( shape->IsAnyFill() )
                     {
                         aItem->SetPosition( shape->GetPosition() );
                     }

@@ -29,6 +29,8 @@
 #include <commit.h>
 
 class BOARD_ITEM;
+class PCB_SHAPE;
+class ZONE;
 class BOARD;
 class PICKED_ITEMS_LIST;
 class PCB_TOOL_BASE;
@@ -73,7 +75,8 @@ private:
 
     EDA_ITEM* makeImage( EDA_ITEM* aItem ) const override;
 
-    void dirtyIntersectingZones( BOARD_ITEM* item, int aChangeType );
+    void propagateDamage( BOARD_ITEM* aItem, std::vector<ZONE*>* aStaleZones,
+                          std::vector<PCB_SHAPE*>* aStaleHatchedShapes );
 
 private:
     TOOL_MANAGER*  m_toolMgr;

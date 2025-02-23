@@ -85,20 +85,21 @@ const std::vector<GRAPHICS_LOAD_BOARD_TEST_CASE> GraphicsLoad_testCases{
 BOOST_DATA_TEST_CASE( GraphicsLoad, boost::unit_test::data::make( GraphicsLoad_testCases ),
                       testCase )
 {
-    const auto doBoardTest = [&]( const BOARD& aBoard )
-    {
-            for( const GRAPHICS_LOAD_TEST_CASE& testCase : testCase.m_generatorCases )
+    const auto doBoardTest =
+            [&]( const BOARD& aBoard )
             {
-            BOOST_TEST_MESSAGE(
-                    "Checking for graphic with UUID: " << testCase.m_searchUuid.AsString() );
+                for( const GRAPHICS_LOAD_TEST_CASE& testCase : testCase.m_generatorCases )
+                {
+                    BOOST_TEST_MESSAGE( "Checking for graphic with UUID: "
+                                            << testCase.m_searchUuid.AsString() );
 
-            const auto& graphic =
-                    static_cast<PCB_SHAPE&>( KI_TEST::RequireBoardItemWithTypeAndId(
-                            aBoard, PCB_SHAPE_T, testCase.m_searchUuid ) );
+                    const auto& graphic =
+                            static_cast<PCB_SHAPE&>( KI_TEST::RequireBoardItemWithTypeAndId(
+                                    aBoard, PCB_SHAPE_T, testCase.m_searchUuid ) );
 
-            BOOST_CHECK_EQUAL( graphic.IsFilled(), testCase.m_expectedFilled );
-            }
-    };
+                    BOOST_CHECK_EQUAL( graphic.IsSolidFill(), testCase.m_expectedFilled );
+                }
+            };
 
     KI_TEST::LoadAndTestBoardFile( testCase.m_BoardFileRelativePath, true, doBoardTest,
                                    testCase.m_ExpectedBoardVersion );

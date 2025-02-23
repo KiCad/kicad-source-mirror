@@ -525,7 +525,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
         color.a *= m_zoneOpacity;
     else if( aItem->Type() == PCB_REFERENCE_IMAGE_T )
         color.a *= m_imageOpacity;
-    else if( aItem->Type() == PCB_SHAPE_T && static_cast<const PCB_SHAPE*>( aItem )->IsFilled() )
+    else if( aItem->Type() == PCB_SHAPE_T && static_cast<const PCB_SHAPE*>( aItem )->IsAnyFill() )
         color.a *= m_filledShapeOpacity;
     else if( aItem->Type() == PCB_SHAPE_T && aItem->IsOnCopperLayer() )
         color.a *= m_trackOpacity;
@@ -1866,7 +1866,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
     m_gal->SetFillColor( color );
     m_gal->SetStrokeColor( color );
 
-    if( lineStyle == LINE_STYLE::SOLID || aShape->IsFilled() )
+    if( lineStyle == LINE_STYLE::SOLID || aShape->IsSolidFill() )
     {
         switch( aShape->GetShape() )
         {
@@ -1940,7 +1940,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                     m_gal->DrawSegment( pts[3], pts[0], thickness );
                 }
 
-                if( aShape->IsFilled() )
+                if( aShape->IsSolidFill() )
                 {
                     SHAPE_POLY_SET poly;
                     poly.NewOutline();
@@ -1991,7 +1991,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
             }
             else
             {
-                m_gal->SetIsFill( aShape->IsFilled() );
+                m_gal->SetIsFill( aShape->IsSolidFill() );
                 m_gal->SetIsStroke( lineStyle == LINE_STYLE::SOLID && thickness > 0 );
                 m_gal->SetLineWidth( thickness );
 
@@ -2001,7 +2001,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                 {
                     m_gal->DrawCircle( aShape->GetStart(), radius );
                 }
-                else if( aShape->IsFilled() )
+                else if( aShape->IsSolidFill() )
                 {
                     if( thickness < 0 )
                     {
@@ -2037,7 +2037,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                         m_gal->DrawSegmentChain( shape.Outline( ii ), thickness );
                 }
 
-                if( aShape->IsFilled() )
+                if( aShape->IsSolidFill() )
                 {
                     if( thickness < 0 )
                     {
@@ -2081,7 +2081,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
             }
             else
             {
-                m_gal->SetIsFill( aShape->IsFilled() );
+                m_gal->SetIsFill( aShape->IsSolidFill() );
                 m_gal->SetIsStroke( lineStyle == LINE_STYLE::SOLID && thickness > 0 );
                 m_gal->SetLineWidth( thickness );
 
@@ -2128,6 +2128,9 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
         for( SHAPE* shape : shapes )
             delete shape;
     }
+
+    if( aShape->IsHatchedFill() )
+        m_gal->DrawPolygon( aShape->GetHatching() );
 }
 
 
@@ -3027,7 +3030,7 @@ void PCB_PAINTER::draw( const PCB_MARKER* aMarker, int aLayer )
         for( auto& shape :
              aLayer == LAYER_DRC_SHAPE1 ? aMarker->GetShapes1() : aMarker->GetShapes2() )
         {
-            m_gal->SetIsFill( shape.IsFilled() );
+            m_gal->SetIsFill( shape.IsSolidFill() );
             m_gal->SetIsStroke( aLayer == LAYER_DRC_SHAPE1 ? true : false );
             m_gal->SetStrokeColor( shape.GetLineColor() );
             m_gal->SetFillColor( shape.GetFillColor() );

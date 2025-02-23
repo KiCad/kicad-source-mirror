@@ -196,7 +196,7 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
 
             m_fillColorBook->SetSelection( 1 );
 
-            if( cell->IsFilled() )
+            if( cell->IsSolidFill() )
                 m_fillColorSwatch->SetSwatchColor( cell->GetFillColor(), false );
             else
                 m_fillColorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
@@ -241,7 +241,7 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
                 m_textColorPopup->SetSelection( 0 );
             }
 
-            COLOR4D fillColor = cell->IsFilled() ? cell->GetFillColor() : COLOR4D::UNSPECIFIED;
+            COLOR4D fillColor = cell->IsSolidFill() ? cell->GetFillColor() : COLOR4D::UNSPECIFIED;
 
             if( fillColor != m_fillColorSwatch->GetSwatchColor() )
             {

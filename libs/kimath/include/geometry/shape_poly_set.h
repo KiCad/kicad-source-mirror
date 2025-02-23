@@ -1433,16 +1433,21 @@ public:
     /**
      * Build a SHAPE_POLY_SET from a bunch of outlines in provided in random order.
      *
-     * @param aPath set of closed outlines forming the polygon. Positive orientation = outline, negative = hole
+     * @param aPath set of closed outlines forming the polygon.
+     *              Positive orientation = outline, negative = hole
      * @param aEvenOdd forces the even-off fill rule (default is non zero)
      */
-    void BuildPolysetFromOrientedPaths( const std::vector<SHAPE_LINE_CHAIN>& aPaths, bool aEvenOdd = false );
+    void BuildPolysetFromOrientedPaths( const std::vector<SHAPE_LINE_CHAIN>& aPaths,
+                                        bool aEvenOdd = false );
 
     void TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
                              ERROR_LOC aErrorLoc ) const override
     {
         aBuffer.Append( *this );
     }
+
+    const std::vector<SEG> GenerateHatchLines( const std::vector<double>& aSlopes, int aSpacing,
+                                               int aLineLength ) const;
 
 protected:
     void cacheTriangulation( bool aPartition, bool aSimplify,

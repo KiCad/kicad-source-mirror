@@ -3121,17 +3121,16 @@ PCB_SHAPE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
                 // T_yes was used to indicate filling when first introduced,
                 // so treat it like a solid fill since that was the only fill available
                 case T_yes:
-                case T_solid:
-                    shape->SetFilled( true );
-                    break;
+                case T_solid:         shape->SetFillMode( FILL_T::FILLED_SHAPE );  break;
 
                 case T_none:
-                case T_no:
-                    shape->SetFilled( false );
-                    break;
+                case T_no:            shape->SetFillMode( FILL_T::NO_FILL );       break;
 
-                default:
-                    Expecting( "yes, no, solid, none" );
+                case T_hatch:         shape->SetFillMode( FILL_T::HATCH );         break;
+                case T_reverse_hatch: shape->SetFillMode( FILL_T::REVERSE_HATCH ); break;
+                case T_cross_hatch:   shape->SetFillMode( FILL_T::CROSS_HATCH );   break;
+
+                default: Expecting( "yes, no, solid, none, hatch, reverse_hatch or cross_hatch" );
                 }
             }
 
@@ -3184,7 +3183,7 @@ PCB_SHAPE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
 
     // Only filled shapes may have a zero line-width.  This is not permitted in KiCad but some
     // external tools can generate invalid files.
-    if( stroke.GetWidth() <= 0 && !shape->IsFilled() )
+    if( stroke.GetWidth() <= 0 && !shape->IsAnyFill() )
     {
         stroke.SetWidth( pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ) );
     }

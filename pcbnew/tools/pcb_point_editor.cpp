@@ -2796,9 +2796,10 @@ int PCB_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
 
         zoneOutline->InsertVertex( nextNearestIdx, nearestPoint );
 
-        // We re-hatch the filled zones but not polygons
         if( item->Type() == PCB_ZONE_T )
             static_cast<ZONE*>( item )->HatchBorder();
+        else
+            graphicItem->SetHatchingDirty();
 
         commit.Push( _( "Add Zone Corner" ) );
     }
@@ -2927,9 +2928,10 @@ int PCB_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
         else
             commit.Push( _( "Remove Polygon Corner" ) );
 
-        // Refresh zone hatching
         if( item->Type() == PCB_ZONE_T )
             static_cast<ZONE*>( item )->HatchBorder();
+        else if( item->Type() == PCB_SHAPE_T )
+            static_cast<PCB_SHAPE*>( item )->SetHatchingDirty();
 
         updatePoints();
     }
@@ -3027,9 +3029,10 @@ int PCB_POINT_EDITOR::chamferCorner( const TOOL_EVENT& aEvent )
     else
         commit.Push( _( "Break Polygon Corner" ) );
 
-    // Refresh zone hatching
     if( item->Type() == PCB_ZONE_T )
         static_cast<ZONE*>( item )->HatchBorder();
+    else if( item->Type() == PCB_SHAPE_T )
+        static_cast<PCB_SHAPE*>( item )->SetHatchingDirty();
 
     updatePoints();
 

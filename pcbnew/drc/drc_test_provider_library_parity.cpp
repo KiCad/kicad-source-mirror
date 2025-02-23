@@ -186,7 +186,7 @@ bool primitiveNeedsUpdate( const std::shared_ptr<PCB_SHAPE>& a,
     }
 
     TEST( a->GetStroke(), b->GetStroke(), "" );
-    TEST( a->IsFilled(), b->IsFilled(), "" );
+    TEST( a->GetFillMode(), b->GetFillMode(), "" );
 
     return diff;
 }
@@ -475,7 +475,7 @@ bool shapeNeedsUpdate( const PCB_SHAPE& curr_shape, const PCB_SHAPE& ref_shape )
     if( curr_shape.IsOnCopperLayer() )
         TEST( curr_shape.GetStroke(), ref_shape.GetStroke(), "" );
 
-    TEST( curr_shape.IsFilled(), ref_shape.IsFilled(), "" );
+    TEST( curr_shape.GetFillMode(), ref_shape.GetFillMode(), "" );
 
     TEST( curr_shape.GetLayer(), ref_shape.GetLayer(), "" );
 

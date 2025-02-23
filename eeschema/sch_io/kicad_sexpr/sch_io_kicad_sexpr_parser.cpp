@@ -660,11 +660,15 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseFill( FILL_PARAMS& aFill )
 
             switch( token )
             {
-            case T_none:       aFill.m_FillType = FILL_T::NO_FILL;                  break;
-            case T_outline:    aFill.m_FillType = FILL_T::FILLED_SHAPE;             break;
-            case T_background: aFill.m_FillType = FILL_T::FILLED_WITH_BG_BODYCOLOR; break;
-            case T_color:      aFill.m_FillType = FILL_T::FILLED_WITH_COLOR;        break;
-            default:           Expecting( "none, outline, color or background" );
+            case T_none:          aFill.m_FillType = FILL_T::NO_FILL;                  break;
+            case T_outline:       aFill.m_FillType = FILL_T::FILLED_SHAPE;             break;
+            case T_background:    aFill.m_FillType = FILL_T::FILLED_WITH_BG_BODYCOLOR; break;
+            case T_color:         aFill.m_FillType = FILL_T::FILLED_WITH_COLOR;        break;
+            case T_hatch:         aFill.m_FillType = FILL_T::HATCH;                    break;
+            case T_reverse_hatch: aFill.m_FillType = FILL_T::REVERSE_HATCH;            break;
+            case T_cross_hatch:   aFill.m_FillType = FILL_T::CROSS_HATCH;              break;
+            default:              Expecting( "none, outline, hatch, reverse_hatch, "
+                                             "cross_hatch, color or background" );
             }
 
             NeedRIGHT();

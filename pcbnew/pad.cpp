@@ -2137,6 +2137,11 @@ std::vector<PCB_SHAPE*> PAD::Recombine( bool aIsDryRun, int maxError )
             PCB_SHAPE* primitive = static_cast<PCB_SHAPE*>( fpShape->Duplicate() );
 
             primitive->SetParent( nullptr );
+
+            // Convert any hatched fills to solid
+            if( primitive->IsAnyFill() )
+                primitive->SetFillMode( FILL_T::FILLED_SHAPE );
+
             primitive->Move( - ShapePos( layer ) );
             primitive->Rotate( VECTOR2I( 0, 0 ), - GetOrientation() );
 
