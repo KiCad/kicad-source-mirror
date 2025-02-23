@@ -191,6 +191,14 @@
                     "minItems": 1,
                     "uniqueItems": true
                 },
+                "runtime": {
+                    "type": "string",
+                    "enum": [
+                        "swig",
+                        "ipc"
+                    ],
+                    "description": "What runtime a plugin requires.  Assumed to be swig if absent.  Not used for non-plugin packages."
+                },
                 "kicad_version": {
                     "type": "string",
                     "description": "Minimum supported KiCad version",

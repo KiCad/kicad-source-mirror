@@ -25,6 +25,7 @@
 #include "bitmaps.h"
 #include "dialog_manage_repositories.h"
 #include "dialog_pcm.h"
+#include <eda_base_frame.h>
 #include "grid_tricks.h"
 #include "ki_exception.h"
 #include "pcm_task_manager.h"
@@ -54,8 +55,9 @@ static std::vector<std::pair<PCM_PACKAGE_TYPE, wxString>> PACKAGE_TYPE_LIST = {
 };
 
 
-DIALOG_PCM::DIALOG_PCM( wxWindow* parent, std::shared_ptr<PLUGIN_CONTENT_MANAGER> pcm ) :
+DIALOG_PCM::DIALOG_PCM( EDA_BASE_FRAME* parent, std::shared_ptr<PLUGIN_CONTENT_MANAGER> pcm ) :
         DIALOG_PCM_BASE( parent ),
+        m_parentFrame( parent ),
         m_pcm( pcm )
 {
     // correct the min size from wxfb with fromdip
