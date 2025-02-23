@@ -174,7 +174,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	sbSizer4->Add( m_plotPDFMetadata, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bOptionsRight->Add( sbSizer4, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bOptionsRight->Add( sbSizer4, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_otherOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Other Options") ), wxVERTICAL );
 
