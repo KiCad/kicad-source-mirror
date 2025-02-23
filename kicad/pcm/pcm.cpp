@@ -30,10 +30,14 @@
 #include "build_version.h"
 #include "paths.h"
 #include "pcm.h"
+#include <eda_base_frame.h>
+#include "dialogs/dialog_pcm.h"
 #include "pgm_base.h"
 #include "picosha2.h"
 #include "settings/settings_manager.h"
 #include <wx_filename.h>
+#include <settings/common_settings.h>
+#include <kiway.h>
 
 #include <fstream>
 #include <iomanip>
@@ -766,6 +770,21 @@ void PLUGIN_CONTENT_MANAGER::MarkInstalled( const PCM_PACKAGE& aPackage, const w
     entry.pinned = pinned;
 
     m_installed.emplace( aPackage.identifier, entry );
+
+    if( m_dialog
+        && ( aPackage.versions[0].runtime.value_or( PCM_PACKAGE_RUNTIME::PPR_SWIG )
+             == PCM_PACKAGE_RUNTIME::PPR_IPC )
+        && !Pgm().GetCommonSettings()->m_Api.enable_server )
+    {
+        if( wxMessageBox( _( "This plugin requires the KiCad API, which is currently "
+                             "disabled in preferences. Would you like to enable it?" ),
+                         _( "Enable KiCad API" ), wxICON_QUESTION | wxYES_NO, m_dialog )
+                   == wxYES )
+        {
+            Pgm().GetCommonSettings()->m_Api.enable_server = true;
+            m_dialog->ParentFrame()->Kiway().CommonSettingsChanged();
+        }
+    }
 }
 
 

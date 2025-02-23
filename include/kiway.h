@@ -401,7 +401,7 @@ public:
      *
      * Use after changing suite-wide options such as panning, autosave interval, etc.
      */
-    virtual void CommonSettingsChanged( int aFlags );
+    virtual void CommonSettingsChanged( int aFlags = 0 );
 
     /**
      * Calls ProjectChanged() on all KIWAY_PLAYERs.

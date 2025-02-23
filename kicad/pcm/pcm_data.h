@@ -66,6 +66,13 @@ enum PCM_PACKAGE_VERSION_STATUS
     PVS_DEPRECATED
 };
 
+///< The runtime a plugin package uses
+enum class PCM_PACKAGE_RUNTIME
+{
+    PPR_SWIG,
+    PPR_IPC
+};
+
 
 ///< Describes a person's name and contact information
 struct PCM_CONTACT
@@ -93,6 +100,7 @@ struct PACKAGE_VERSION
     wxString                   kicad_version;
     std::optional<wxString>    kicad_version_max;
     std::vector<std::string>   keep_on_update;
+    std::optional<PCM_PACKAGE_RUNTIME> runtime;
 
     // Not serialized fields
     std::tuple<int, int, int, int> parsed_version; // Full version tuple for sorting
@@ -181,6 +189,12 @@ NLOHMANN_JSON_SERIALIZE_ENUM( PCM_PACKAGE_VERSION_STATUS,
                                       { PVS_TESTING, "testing" },
                                       { PVS_DEVELOPMENT, "development" },
                                       { PVS_DEPRECATED, "deprecated" },
+                              } )
+
+NLOHMANN_JSON_SERIALIZE_ENUM( PCM_PACKAGE_RUNTIME,
+                              {
+                                      { PCM_PACKAGE_RUNTIME::PPR_SWIG, "swig" },
+                                      { PCM_PACKAGE_RUNTIME::PPR_IPC, "ipc" },
                               } )
 
 
