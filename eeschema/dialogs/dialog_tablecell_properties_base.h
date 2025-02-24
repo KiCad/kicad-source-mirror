@@ -36,7 +36,6 @@ class WX_INFOBAR;
 #include <wx/gbsizer.h>
 #include <wx/panel.h>
 #include <wx/simplebook.h>
-#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -84,7 +83,6 @@ class DIALOG_TABLECELL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_marginLeftCtrl;
 		wxTextCtrl* m_marginRightCtrl;
 		wxTextCtrl* m_marginBottomCtrl;
-		wxStaticLine* m_staticline1;
 		wxButton* m_editTable;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
