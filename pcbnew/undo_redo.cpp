@@ -31,6 +31,7 @@ using namespace std::placeholders;
 #include <pcb_edit_frame.h>
 #include <pcb_track.h>
 #include <pcb_group.h>
+#include <pcb_shape.h>
 #include <pcb_generator.h>
 #include <pcb_target.h>
 #include <footprint.h>
@@ -610,6 +611,33 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             changed_items.push_back( static_cast<BOARD_ITEM*>( item ) );
             break;
         }
+    }
+
+    auto checkHatching =
+            [&]( BOARD_ITEM* item )
+            {
+                if( item->Type() == PCB_SHAPE_T )
+                {
+                    PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+
+                    if( shape->IsHatchedFill() )
+                    {
+                        shape->SetHatchingDirty();
+                        view->Update( shape );
+                    }
+                }
+            };
+
+    for( BOARD_ITEM* item : GetBoard()->Drawings() )
+        checkHatching( item );
+
+    for( FOOTPRINT* footprint : GetBoard()->Footprints() )
+    {
+        footprint->RunOnDescendants(
+                [&]( BOARD_ITEM* item )
+                {
+                    checkHatching( item );
+                } );
     }
 
     if( added_items.size() > 0 || deleted_items.size() > 0 || changed_items.size() > 0 )

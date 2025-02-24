@@ -1513,7 +1513,6 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
     }
 
     SHAPE_POLY_SET rawPolys;
-    SHAPE_POLY_SET hull;
 
     for( BOARD_ITEM* item : m_drawings )
     {
@@ -1585,6 +1584,58 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
         m_hullCacheTimeStamp = board->GetTimeStamp();
 
     return m_cachedHull;
+}
+
+
+SHAPE_POLY_SET FOOTPRINT::GetBoundingHull( PCB_LAYER_ID aLayer ) const
+{
+    const BOARD* board = GetBoard();
+    bool         isFPEdit = board && board->IsFootprintHolder();
+
+    SHAPE_POLY_SET rawPolys;
+    SHAPE_POLY_SET hull;
+
+    for( BOARD_ITEM* item : m_drawings )
+    {
+        if( !isFPEdit && m_privateLayers.test( item->GetLayer() ) )
+            continue;
+
+        if( item->IsOnLayer( aLayer ) )
+        {
+            if( item->Type() != PCB_FIELD_T && item->Type() != PCB_REFERENCE_IMAGE_T )
+            {
+                item->TransformShapeToPolygon( rawPolys, UNDEFINED_LAYER, 0, ARC_LOW_DEF,
+                                               ERROR_OUTSIDE );
+            }
+
+            // We intentionally exclude footprint fields from the bounding hull.
+        }
+    }
+
+    for( PAD* pad : m_pads )
+    {
+        if( pad->IsOnLayer( aLayer ) )
+            pad->TransformShapeToPolygon( rawPolys, aLayer, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
+    }
+
+    for( ZONE* zone : m_zones )
+    {
+        if( const std::shared_ptr<SHAPE_POLY_SET>& layerPoly = zone->GetFilledPolysList( aLayer ) )
+        {
+            for( int ii = 0; ii < layerPoly->OutlineCount(); ii++ )
+                rawPolys.AddOutline( layerPoly->COutline( ii ) );
+        }
+    }
+
+    std::vector<VECTOR2I> convex_hull;
+    BuildConvexHull( convex_hull, rawPolys );
+
+    hull.NewOutline();
+
+    for( const VECTOR2I& pt : convex_hull )
+        hull.Append( pt );
+
+    return hull;
 }
 
 

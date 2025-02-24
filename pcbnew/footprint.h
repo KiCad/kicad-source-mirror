@@ -187,6 +187,7 @@ public:
      * This operation is slower but more accurate than calculating a bounding box.
      */
     SHAPE_POLY_SET GetBoundingHull() const;
+    SHAPE_POLY_SET GetBoundingHull( PCB_LAYER_ID aLayer ) const;
 
     bool TextOnly() const;
 

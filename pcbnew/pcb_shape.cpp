@@ -304,44 +304,58 @@ void PCB_SHAPE::updateHatching() const
 {
     EDA_SHAPE::updateHatching();
 
-    static std::initializer_list<KICAD_T> knockoutTypes = { PCB_TEXT_T, PCB_TEXTBOX_T,
-                                                            PCB_SHAPE_T };
-
     if( !m_hatching.IsEmpty() )
     {
         PCB_LAYER_ID   layer = GetLayer();
         BOX2I          bbox = GetBoundingBox();
         SHAPE_POLY_SET holes;
+        int            maxError = ARC_LOW_DEF;
+
+        auto knockoutItem =
+                [&]( BOARD_ITEM* item )
+                {
+                    int margin = GetHatchLineSpacing() / 2;
+
+                    if( item->Type() == PCB_TEXTBOX_T )
+                        margin = 0;
+
+                    item->TransformShapeToPolygon( holes, layer, margin, maxError, ERROR_OUTSIDE );
+                };
 
         for( BOARD_ITEM* item : GetBoard()->Drawings() )
         {
             if( item == this )
                 continue;
 
-            if( item->IsType( knockoutTypes )
-                    && item->GetLayer() == layer
-                    && item->GetBoundingBox().Intersects( bbox ) )
+            if( item->Type() == PCB_FIELD_T
+                    || item->Type() == PCB_TEXT_T
+                    || item->Type() == PCB_TEXTBOX_T
+                    || item->Type() == PCB_SHAPE_T )
             {
-                item->TransformShapeToPolygon( holes, layer, 0, ARC_LOW_DEF, ERROR_OUTSIDE, true );
+                if( item->GetLayer() == layer && item->GetBoundingBox().Intersects( bbox ) )
+                    knockoutItem( item );
             }
 
-            if( item->Type() == PCB_FOOTPRINT_T )
-            {
-                static_cast<FOOTPRINT*>( item )->RunOnDescendants(
-                        [&]( BOARD_ITEM* descendant )
+        }
+
+        for( FOOTPRINT* footprint : GetBoard()->Footprints() )
+        {
+            int            margin = GetHatchLineSpacing() / 2;
+            SHAPE_POLY_SET hull = footprint->GetBoundingHull( layer );
+
+            hull.Inflate( margin, CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS, maxError );
+            holes.Append( hull );
+
+            footprint->RunOnDescendants(
+                    [&]( BOARD_ITEM* item )
+                    {
+                        if( item->Type() == PCB_FIELD_T
+                                && item->GetLayer() == layer
+                                && item->GetBoundingBox().Intersects( bbox ) )
                         {
-                            if( descendant == this )
-                                return;
-
-                            if( descendant->IsType( knockoutTypes )
-                                   && descendant->GetLayer() == layer
-                                   && descendant->GetBoundingBox().Intersects( bbox ) )
-                            {
-                                descendant->TransformShapeToPolygon( holes, layer, 0, ARC_LOW_DEF,
-                                                                     ERROR_OUTSIDE, true );
-                            }
-                        } );
-            }
+                            knockoutItem( item );
+                        }
+                    } );
         }
 
         m_hatching.BooleanSubtract( holes );

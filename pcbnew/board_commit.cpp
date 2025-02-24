@@ -149,23 +149,24 @@ void BOARD_COMMIT::propagateDamage( BOARD_ITEM* aItem, std::vector<ZONE*>* aStal
         else
             layers &= LSET::AllCuMask();
 
-        if( layers.empty() )
-            return;
-
-        for( ZONE* zone : board->Zones() )
+        if( layers.any() )
         {
-            if( zone->GetIsRuleArea() )
-                continue;
-
-            if( ( zone->GetLayerSet() & layers ).any()
-                    && zone->GetBoundingBox().Intersects( bbox ) )
+            for( ZONE* zone : board->Zones() )
             {
-                aStaleZones->push_back( zone );
+                if( zone->GetIsRuleArea() )
+                    continue;
+
+                if( ( zone->GetLayerSet() & layers ).any()
+                        && zone->GetBoundingBox().Intersects( bbox ) )
+                {
+                    aStaleZones->push_back( zone );
+                }
             }
         }
     }
 
-    if( aStaleHatchedShapes && (    aItem->Type() == PCB_TEXT_T
+    if( aStaleHatchedShapes && (    aItem->Type() == PCB_FIELD_T
+                                 || aItem->Type() == PCB_TEXT_T
                                  || aItem->Type() == PCB_TEXTBOX_T
                                  || aItem->Type() == PCB_SHAPE_T ) )
     {
