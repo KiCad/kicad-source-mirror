@@ -22,12 +22,13 @@ class WX_INFOBAR;
 #include <wx/settings.h>
 #include <wx/string.h>
 #include <wx/stattext.h>
+#include <wx/stc/stc.h>
+#include <wx/sizer.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
-#include <wx/sizer.h>
 #include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/gbsizer.h>
@@ -46,6 +47,8 @@ class DIALOG_TABLECELL_PROPERTIES_BASE : public DIALOG_SHIM
 
 	protected:
 		WX_INFOBAR* m_infoBar;
+		wxStaticText* m_cellTextLabel;
+		wxStyledTextCtrl* m_cellTextCtrl;
 		BITMAP_BUTTON* m_hAlignLeft;
 		BITMAP_BUTTON* m_hAlignCenter;
 		BITMAP_BUTTON* m_hAlignRight;

@@ -33,21 +33,49 @@
 #include <tool/tool_manager.h>
 #include <dialog_tablecell_properties.h>
 
-
-DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( SCH_EDIT_FRAME* aFrame,
+DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( SCH_EDIT_FRAME*             aFrame,
                                                           std::vector<SCH_TABLECELL*> aCells ) :
-        DIALOG_TABLECELL_PROPERTIES_BASE( aFrame ),
-        m_frame( aFrame ),
-        m_table( nullptr ),
+        DIALOG_TABLECELL_PROPERTIES_BASE( aFrame ), m_frame( aFrame ), m_table( nullptr ),
         m_cells( std::move( aCells ) ),
         m_textSize( aFrame, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits ),
         m_marginLeft( aFrame, nullptr, m_marginLeftCtrl, nullptr ),
         m_marginTop( aFrame, nullptr, m_marginTopCtrl, m_marginTopUnits ),
         m_marginRight( aFrame, nullptr, m_marginRightCtrl, nullptr ),
         m_marginBottom( aFrame, nullptr, m_marginBottomCtrl, nullptr ),
+        m_scintillaTricks( nullptr ), m_cellText( m_cellTextCtrl ),
         m_returnValue( TABLECELL_PROPS_CANCEL )
 {
     wxASSERT( m_cells.size() > 0 && m_cells[0] );
+
+    m_cellText->SetEOLMode( wxSTC_EOL_LF );
+
+#ifdef _WIN32
+    // Without this setting, on Windows, some esoteric unicode chars create display issue
+    // in a wxStyledTextCtrl.
+    // for SetTechnology() info, see https://www.scintilla.org/ScintillaDoc.html#SCI_SETTECHNOLOGY
+    m_cellText->SetTechnology( wxSTC_TECHNOLOGY_DIRECTWRITE );
+#endif
+
+    m_scintillaTricks = new SCINTILLA_TRICKS(
+            m_cellText, wxT( "{}" ), false,
+            // onAcceptFn
+            [this]( wxKeyEvent& aEvent )
+            {
+                wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
+            },
+
+            // onCharFn
+            [this]( wxStyledTextEvent& aEvent )
+            {
+                m_scintillaTricks->DoTextVarAutocomplete(
+                        // getTokensFn
+                        [this]( const wxString& xRef, wxArrayString* tokens )
+                        {
+                            getContextualTextVars( xRef, tokens );
+                        } );
+            } );
+
+    SetInitialFocus( m_cellText );
 
     m_table = static_cast<SCH_TABLE*>( m_cells[0]->GetParent() );
 
@@ -86,6 +114,54 @@ DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( SCH_EDIT_FRAME* aFrame
     finishDialogSettings();
 }
 
+DIALOG_TABLECELL_PROPERTIES::~DIALOG_TABLECELL_PROPERTIES()
+{
+    delete m_scintillaTricks;
+}
+
+void DIALOG_TABLECELL_PROPERTIES::getContextualTextVars( const wxString& aCrossRef,
+                                                         wxArrayString*  aTokens )
+{
+    SCHEMATIC* schematic = m_table->Schematic();
+
+    if( !aCrossRef.IsEmpty() )
+    {
+        SCH_SYMBOL* refSymbol = nullptr;
+
+        if( schematic )
+        {
+            SCH_REFERENCE_LIST refs;
+            schematic->Hierarchy().GetSymbols( refs );
+
+            for( int jj = 0; jj < (int) refs.GetCount(); jj++ )
+            {
+                SCH_REFERENCE& ref = refs[jj];
+
+                if( ref.GetSymbol()->GetRef( &ref.GetSheetPath(), true ) == aCrossRef )
+                {
+                    refSymbol = ref.GetSymbol();
+                    break;
+                }
+            }
+        }
+
+        if( refSymbol )
+            refSymbol->GetContextualTextVars( aTokens );
+    }
+    else
+    {
+        if( schematic && schematic->CurrentSheet().Last() )
+        {
+            schematic->CurrentSheet().Last()->GetContextualTextVars( aTokens );
+        }
+        else
+        {
+            for( std::pair<wxString, wxString> entry : Prj().GetTextVars() )
+                aTokens->push_back( entry.first );
+        }
+    }
+}
+
 
 bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
 {
@@ -98,6 +174,11 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
 
     for( SCH_TABLECELL* cell : m_cells )
     {
+        wxString text = cell->GetText();
+
+        m_cellText->SetValue( text );
+        m_cellText->EmptyUndoBuffer();
+
         if( firstCell )
         {
             m_fontCtrl->SetFontSelection( cell->GetFont() );
@@ -258,6 +339,19 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataFromWindow()
 
     for( SCH_TABLECELL* cell : m_cells )
     {
+        wxString text = m_cellTextCtrl->GetValue();
+
+#ifdef __WXMAC__
+        // On macOS CTRL+Enter produces '\r' instead of '\n' regardless of EOL setting
+        text.Replace( "\r", "\n" );
+#elif defined( __WINDOWS__ )
+        // On Windows, a new line is coded as \r\n.  We use only \n in KiCad files and in
+        // drawing routines so strip the \r char.
+        text.Replace( "\r", "" );
+#endif
+
+        cell->SetText( text );
+
         if( m_bold->Get3StateValue() == wxCHK_CHECKED )
             cell->SetBold( true );
         else if( m_bold->Get3StateValue() == wxCHK_UNCHECKED )
@@ -334,4 +428,12 @@ void DIALOG_TABLECELL_PROPERTIES::onEditTable( wxCommandEvent& aEvent )
         m_returnValue = TABLECELL_PROPS_EDIT_TABLE;
         Close();
     }
+}
+
+void DIALOG_TABLECELL_PROPERTIES::onMultiLineTCLostFocus( wxFocusEvent& event )
+{
+    if( m_scintillaTricks )
+        m_scintillaTricks->CancelAutocomplete();
+
+    event.Skip();
 }

@@ -33,7 +33,7 @@
 class PCB_BASE_EDIT_FRAME;
 class PCB_TABLE;
 class PCB_TABLECELL;
-
+class SCINTILLA_TRICKS;
 
 class DIALOG_TABLECELL_PROPERTIES : public DIALOG_TABLECELL_PROPERTIES_BASE
 {
@@ -48,7 +48,7 @@ public:
 
     DIALOG_TABLECELL_PROPERTIES( PCB_BASE_EDIT_FRAME* aParentFrame,
                                  std::vector<PCB_TABLECELL*> aCells );
-
+    ~DIALOG_TABLECELL_PROPERTIES();
     ///< @return the value depending on the way the dialog was closed.
     enum TABLECELL_PROPS_RETVALUE GetReturnValue() { return m_returnValue; }
 
@@ -60,6 +60,11 @@ private:
     void onVAlignButton( wxCommandEvent& aEvent );
 
     void onEditTable( wxCommandEvent& aEvent ) override;
+
+    virtual void onMultiLineTCLostFocus( wxFocusEvent& event ) { event.Skip(); }
+
+    void OnSystemColourChanged( wxSysColourChangedEvent& event );
+    void UpdateTheme( void );
 
 private:
     PCB_BASE_EDIT_FRAME*          m_frame;
@@ -73,6 +78,9 @@ private:
     UNIT_BINDER                   m_marginTop;
     UNIT_BINDER                   m_marginRight;
     UNIT_BINDER                   m_marginBottom;
+    
+    wxStyledTextCtrl*             m_cellText;
+    SCINTILLA_TRICKS*             m_scintillaTricks;
 
     enum TABLECELL_PROPS_RETVALUE m_returnValue; // the option that closed the dialog
 };

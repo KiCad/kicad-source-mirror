@@ -52,9 +52,43 @@ DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         m_marginTop( aFrame, nullptr, m_marginTopCtrl, m_marginTopUnits ),
         m_marginRight( aFrame, nullptr, m_marginRightCtrl, nullptr ),
         m_marginBottom( aFrame, nullptr, m_marginBottomCtrl, nullptr ),
+        m_cellText( m_cellTextCtrl ),
         m_returnValue( TABLECELL_PROPS_CANCEL )
 {
     wxASSERT( m_cells.size() > 0 && m_cells[0] );
+
+    m_cellText->SetEOLMode( wxSTC_EOL_LF );
+
+#ifdef _WIN32
+    // Without this setting, on Windows, some esoteric unicode chars create display issue
+    // in a wxStyledTextCtrl.
+    // for SetTechnology() info, see https://www.scintilla.org/ScintillaDoc.html#SCI_SETTECHNOLOGY
+    m_cellText->SetTechnology(wxSTC_TECHNOLOGY_DIRECTWRITE);
+#endif
+
+    m_scintillaTricks = new SCINTILLA_TRICKS( m_cellText, wxT( "{}" ), false,
+            // onAcceptFn
+            [this]( wxKeyEvent& aEvent )
+            {
+                wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
+            },
+            // onCharFn
+            [this]( wxStyledTextEvent& aEvent )
+            {
+                m_scintillaTricks->DoTextVarAutocomplete(
+                        // getTokensFn
+                        [this]( const wxString& xRef, wxArrayString* tokens )
+                        {
+                            m_frame->GetContextualTextVars( m_table, xRef, tokens );
+                        } );
+            } );
+
+    // A hack which causes Scintilla to auto-size the text editor canvas
+    // See: https://github.com/jacobslusser/ScintillaNET/issues/216
+    m_cellText->SetScrollWidth( 1 );
+    m_cellText->SetScrollWidthTracking( true );
+
+    SetInitialFocus( m_cellText );
 
     m_table = static_cast<PCB_TABLE*>( m_cells[0]->GetParent() );
 
@@ -75,6 +109,9 @@ DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( PCB_BASE_EDIT_FRAME* a
     SetupStandardButtons();
     Layout();
 
+    Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TABLECELL_PROPERTIES::OnCharHook ),
+             nullptr, this );
+
     m_hAlignLeft->Bind( wxEVT_BUTTON, &DIALOG_TABLECELL_PROPERTIES::onHAlignButton, this );
     m_hAlignCenter->Bind( wxEVT_BUTTON, &DIALOG_TABLECELL_PROPERTIES::onHAlignButton, this );
     m_hAlignRight->Bind( wxEVT_BUTTON, &DIALOG_TABLECELL_PROPERTIES::onHAlignButton, this );
@@ -84,6 +121,14 @@ DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( PCB_BASE_EDIT_FRAME* a
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
+}
+
+DIALOG_TABLECELL_PROPERTIES::~DIALOG_TABLECELL_PROPERTIES()
+{
+    Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TABLECELL_PROPERTIES::OnCharHook ),
+                nullptr, this );
+
+    delete m_scintillaTricks;
 }
 
 
@@ -98,6 +143,7 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
 
     for( PCB_TABLECELL* cell : m_cells )
     {
+        m_cellTextCtrl->SetValue( cell->GetText() );
         if( firstCell )
         {
             m_fontCtrl->SetFontSelection( cell->GetFont() );
@@ -221,6 +267,20 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataFromWindow()
 
     for( PCB_TABLECELL* cell : m_cells )
     {
+        wxString txt = m_cellTextCtrl->GetValue();
+
+#ifdef __WXMAC__
+        // On macOS CTRL+Enter produces '\r' instead of '\n' regardless of EOL setting.
+        // Replace it now.
+        txt.Replace( "\r", "\n" );
+#elif defined( __WINDOWS__ )
+        // On Windows, a new line is coded as \r\n.  We use only \n in kicad files and in
+        // drawing routines so strip the \r char.
+        txt.Replace( "\r", "" );
+#endif
+
+        cell->SetText( txt );
+
         if( m_bold->Get3StateValue() == wxCHK_CHECKED )
             cell->SetBold( true );
         else if( m_bold->Get3StateValue() == wxCHK_UNCHECKED )
