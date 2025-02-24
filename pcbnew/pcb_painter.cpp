@@ -2455,7 +2455,6 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
     }
 }
 
-
 void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
 {
     if( aTable->GetCells().empty() )
@@ -2531,6 +2530,7 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
     {
         setupStroke( aTable->GetSeparatorsStroke() );
 
+        // Stroke column edges
         if( aTable->StrokeColumns() )
         {
             for( int col = 0; col < aTable->GetColCount() - 1; ++col )
@@ -2538,17 +2538,18 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
                 for( int row = 0; row < aTable->GetRowCount(); ++row )
                 {
                     PCB_TABLECELL* cell = aTable->GetCell( row, col );
-                    VECTOR2I       topRight( cell->GetEndX(), cell->GetStartY() );
+                    std::vector<VECTOR2I> corners = cell->GetCornersInSequence();
 
-                    if( !cell->GetTextAngle().IsHorizontal() )
-                        topRight = VECTOR2I( cell->GetStartX(), cell->GetEndY() );
-
-                    if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
-                        strokeLine( topRight, cell->GetEnd() );
+                    if( corners.size() == 4 )
+                    {
+                        // Draw right edge (between adjacent cells)
+                        strokeLine( corners[1], corners[2] );
+                    }
                 }
             }
         }
 
+        // Stroke row edges
         if( aTable->StrokeRows() )
         {
             for( int row = 0; row < aTable->GetRowCount() - 1; ++row )
@@ -2556,13 +2557,13 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
                 for( int col = 0; col < aTable->GetColCount(); ++col )
                 {
                     PCB_TABLECELL* cell = aTable->GetCell( row, col );
-                    VECTOR2I       botLeft( cell->GetStartX(), cell->GetEndY() );
+                    std::vector<VECTOR2I> corners = cell->GetCornersInSequence();
 
-                    if( !cell->GetTextAngle().IsHorizontal() )
-                        botLeft = VECTOR2I( cell->GetEndX(), cell->GetStartY() );
-
-                    if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
-                        strokeLine( botLeft, cell->GetEnd() );
+                    if( corners.size() == 4 )
+                    {
+                        // Draw bottom edge (between adjacent cells)
+                        strokeLine( corners[2], corners[3] );
+                    }
                 }
             }
         }
@@ -2570,25 +2571,20 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
 
     if( aTable->GetBorderStroke().GetWidth() >= 0 )
     {
-        PCB_TABLECELL* first = aTable->GetCell( 0, 0 );
-
         setupStroke( aTable->GetBorderStroke() );
 
-        if( aTable->StrokeHeader() )
-        {
-            if( !first->GetTextAngle().IsHorizontal() )
-                strokeLine( VECTOR2I( first->GetEndX(), pos.y ), VECTOR2I( first->GetEndX(), first->GetEndY() ) );
-            else
-                strokeLine( VECTOR2I( pos.x, first->GetEndY() ), VECTOR2I( end.x, first->GetEndY() ) );
-        }
-
-        if( aTable->StrokeExternal() )
-        {
-            RotatePoint( pos, aTable->GetPosition(), first->GetTextAngle() );
-            RotatePoint( end, aTable->GetPosition(), first->GetTextAngle() );
-
-            strokeRect( pos, end );
-        }
+        std::vector<VECTOR2I> topLeft = aTable->GetCell( 0, 0 )->GetCornersInSequence();
+        std::vector<VECTOR2I> bottomLeft =
+                aTable->GetCell( aTable->GetRowCount() - 1, 0 )->GetCornersInSequence();
+        std::vector<VECTOR2I> topRight =
+                aTable->GetCell( 0, aTable->GetColCount() - 1 )->GetCornersInSequence();
+        std::vector<VECTOR2I> bottomRight =
+                aTable->GetCell( aTable->GetRowCount() - 1, aTable->GetColCount() - 1 )
+                        ->GetCornersInSequence();
+        strokeLine( topLeft[0], topRight[1] );
+        strokeLine( topRight[1], bottomRight[2] );
+        strokeLine( bottomRight[2], bottomLeft[3] );
+        strokeLine( bottomLeft[3], topLeft[0] );
     }
 
     // Highlight selected tablecells with a background wash.
