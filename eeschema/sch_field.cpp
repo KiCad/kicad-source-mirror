@@ -657,8 +657,13 @@ bool SCH_FIELD::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) co
         if( searchAndReplace && !replaceReferences )
             return false;
 
-        SCH_SYMBOL* parentSymbol = static_cast<SCH_SYMBOL*>( m_parent );
-        wxASSERT( parentSymbol );
+        SCH_SYMBOL* parentSymbol = dyn_cast<SCH_SYMBOL*>( m_parent );
+
+        // The parent might be a LIB_SYMBOL, in which case, we don't
+        // have a sheet path to resolve the reference.
+        if( !parentSymbol )
+            return false;
+
         wxASSERT( aAuxData );
 
         // Take sheet path into account which effects the reference field and the unit for
