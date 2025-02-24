@@ -99,7 +99,7 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	m_sizerBottom->Add( m_sdbSizer, 0, wxEXPAND, 5 );
+	m_sizerBottom->Add( m_sdbSizer, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	m_MainBoxSizer->Add( m_sizerBottom, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
