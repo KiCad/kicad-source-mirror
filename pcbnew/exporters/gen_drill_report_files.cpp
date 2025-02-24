@@ -434,7 +434,7 @@ bool GENDRILL_WRITER_BASE::GenDrillReportFile( const wxString& aFullFileName )
     for( PCB_LAYER_ID layer : cu.Seq() )
     {
         out.Print( 0, "    L%-2d:  %-25s %s\n",
-                   conventional_layer_num,
+                   conventional_layer_num++,
                    TO_UTF8( m_pcb->GetLayerName( layer ) ),
                    layerName( layer ).c_str() );             // generic layer name
     }
