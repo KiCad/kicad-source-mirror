@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -38,7 +38,7 @@ DIALOG_TABLE_PROPERTIES_BASE::DIALOG_TABLE_PROPERTIES_BASE( wxWindow* parent, wx
 	m_gridSizer->Add( cellContentsLabel, 0, wxTOP|wxBOTTOM, 3 );
 
 
-	bColumns->Add( m_gridSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bColumns->Add( m_gridSizer, 1, wxEXPAND|wxTOP|wxRIGHT, 5 );
 
 
 	bColumns->Add( 15, 0, 0, wxEXPAND, 5 );
@@ -131,10 +131,10 @@ DIALOG_TABLE_PROPERTIES_BASE::DIALOG_TABLE_PROPERTIES_BASE( wxWindow* parent, wx
 
 	bPropertiesSizer->AddGrowableCol( 1 );
 
-	bColumns->Add( bPropertiesSizer, 0, wxEXPAND|wxALL, 5 );
+	bColumns->Add( bPropertiesSizer, 0, wxEXPAND|wxALL, 10 );
 
 
-	bMainSizer->Add( bColumns, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	bMainSizer->Add( bColumns, 1, wxEXPAND|wxLEFT, 10 );
 
 	wxBoxSizer* bButtons;
 	bButtons = new wxBoxSizer( wxHORIZONTAL );

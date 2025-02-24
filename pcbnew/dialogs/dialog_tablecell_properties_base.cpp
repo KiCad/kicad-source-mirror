@@ -35,7 +35,7 @@ DIALOG_TABLECELL_PROPERTIES_BASE::DIALOG_TABLECELL_PROPERTIES_BASE( wxWindow* pa
 
 	m_cellTextLabel = new wxStaticText( this, wxID_ANY, _("Cell contents:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cellTextLabel->Wrap( -1 );
-	bSizer8->Add( m_cellTextLabel, 0, wxALL, 5 );
+	bSizer8->Add( m_cellTextLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_cellTextCtrl = new wxStyledTextCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SUNKEN, wxEmptyString );
 	m_cellTextCtrl->SetUseTabs( false );
@@ -67,19 +67,16 @@ DIALOG_TABLECELL_PROPERTIES_BASE::DIALOG_TABLECELL_PROPERTIES_BASE( wxWindow* pa
 	m_cellTextCtrl->MarkerDefine( wxSTC_MARKNUM_FOLDERTAIL, wxSTC_MARK_EMPTY );
 	m_cellTextCtrl->SetSelBackground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
 	m_cellTextCtrl->SetSelForeground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
-	bSizer8->Add( m_cellTextCtrl, 1, wxEXPAND | wxALL, 5 );
+	bSizer8->Add( m_cellTextCtrl, 1, wxEXPAND | wxALL, 2 );
 
 
-	bSizer7->Add( bSizer8, 1, wxEXPAND, 5 );
+	bSizer7->Add( bSizer8, 1, wxEXPAND|wxTOP|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizer9;
 	bSizer9 = new wxBoxSizer( wxVERTICAL );
 
 	wxBoxSizer* bMargins;
 	bMargins = new wxBoxSizer( wxVERTICAL );
-
-
-	bMargins->Add( 0, 15, 0, wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgTextStyleSizer;
 	fgTextStyleSizer = new wxFlexGridSizer( 0, 2, 5, 5 );
@@ -112,7 +109,7 @@ DIALOG_TABLECELL_PROPERTIES_BASE::DIALOG_TABLECELL_PROPERTIES_BASE( wxWindow* pa
 	hAlignButtons->Add( m_hAlignRight, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	fgTextStyleSizer->Add( hAlignButtons, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgTextStyleSizer->Add( hAlignButtons, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	vAlignLabel = new wxStaticText( this, wxID_ANY, _("Vertical alignment:"), wxDefaultPosition, wxDefaultSize, 0 );
 	vAlignLabel->Wrap( -1 );
@@ -139,16 +136,13 @@ DIALOG_TABLECELL_PROPERTIES_BASE::DIALOG_TABLECELL_PROPERTIES_BASE( wxWindow* pa
 	vAlignButtons->Add( m_vAlignBottom, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	fgTextStyleSizer->Add( vAlignButtons, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgTextStyleSizer->Add( vAlignButtons, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bMargins->Add( fgTextStyleSizer, 0, wxEXPAND, 5 );
 
-
-	bMargins->Add( 0, 20, 0, wxEXPAND, 5 );
-
 	wxGridBagSizer* gbFontSizer;
-	gbFontSizer = new wxGridBagSizer( 7, 5 );
+	gbFontSizer = new wxGridBagSizer( 3, 5 );
 	gbFontSizer->SetFlexibleDirection( wxBOTH );
 	gbFontSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	gbFontSizer->SetEmptyCellSize( wxSize( -1,5 ) );
@@ -165,7 +159,7 @@ DIALOG_TABLECELL_PROPERTIES_BASE::DIALOG_TABLECELL_PROPERTIES_BASE( wxWindow* pa
 
 	m_styleLabel = new wxStaticText( this, wxID_ANY, _("Style:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_styleLabel->Wrap( -1 );
-	gbFontSizer->Add( m_styleLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbFontSizer->Add( m_styleLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP, 6 );
 
 	wxBoxSizer* bSizer14;
 	bSizer14 = new wxBoxSizer( wxHORIZONTAL );
@@ -177,15 +171,15 @@ DIALOG_TABLECELL_PROPERTIES_BASE::DIALOG_TABLECELL_PROPERTIES_BASE( wxWindow* pa
 	bSizer14->Add( m_italic, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 45 );
 
 
-	gbFontSizer->Add( bSizer14, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	gbFontSizer->Add( bSizer14, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxTOP, 6 );
 
 
 	gbFontSizer->AddGrowableCol( 1 );
 
-	bMargins->Add( gbFontSizer, 0, wxEXPAND|wxBOTTOM, 1 );
+	bMargins->Add( gbFontSizer, 0, wxEXPAND|wxBOTTOM, 5 );
 
 	wxGridBagSizer* gbSizer1;
-	gbSizer1 = new wxGridBagSizer( 4, 5 );
+	gbSizer1 = new wxGridBagSizer( 3, 5 );
 	gbSizer1->SetFlexibleDirection( wxBOTH );
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	gbSizer1->SetEmptyCellSize( wxSize( -1,8 ) );
@@ -275,10 +269,7 @@ DIALOG_TABLECELL_PROPERTIES_BASE::DIALOG_TABLECELL_PROPERTIES_BASE( wxWindow* pa
 	bSizer7->Add( bSizer9, 1, wxEXPAND, 5 );
 
 
-	bMainSizer->Add( bSizer7, 1, wxEXPAND, 5 );
-
-	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMainSizer->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bMainSizer->Add( bSizer7, 1, wxEXPAND|wxLEFT, 5 );
 
 	wxBoxSizer* bButtons;
 	bButtons = new wxBoxSizer( wxHORIZONTAL );
