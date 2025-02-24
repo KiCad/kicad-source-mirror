@@ -146,8 +146,8 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
         SCH_FIELD field_copy( field );
 
 #ifdef __WINDOWS__
-        // Filenames are stored using unix notation
-        if( field_copy.GetId() == SHEETFILENAME )
+        // Filenames are stored using unix notation, so convert to Windows notation
+        if( field_copy.GetId() == FIELD_T::SHEET_FILENAME )
         {
             wxString filename = field_copy.GetText();
             filename.Replace( wxT( "/" ), wxT( "\\" ) );

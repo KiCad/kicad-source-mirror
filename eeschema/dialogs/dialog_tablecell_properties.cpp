@@ -37,12 +37,13 @@ DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( SCH_EDIT_FRAME*       
                                                           std::vector<SCH_TABLECELL*> aCells ) :
         DIALOG_TABLECELL_PROPERTIES_BASE( aFrame ), m_frame( aFrame ), m_table( nullptr ),
         m_cells( std::move( aCells ) ),
+        m_scintillaTricks( nullptr ),
         m_textSize( aFrame, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits ),
         m_marginLeft( aFrame, nullptr, m_marginLeftCtrl, nullptr ),
         m_marginTop( aFrame, nullptr, m_marginTopCtrl, m_marginTopUnits ),
         m_marginRight( aFrame, nullptr, m_marginRightCtrl, nullptr ),
         m_marginBottom( aFrame, nullptr, m_marginBottomCtrl, nullptr ),
-        m_scintillaTricks( nullptr ), m_cellText( m_cellTextCtrl ),
+        m_cellText( m_cellTextCtrl ),
         m_returnValue( TABLECELL_PROPS_CANCEL )
 {
     wxASSERT( m_cells.size() > 0 && m_cells[0] );
