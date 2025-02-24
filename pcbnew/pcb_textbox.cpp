@@ -57,11 +57,9 @@ PCB_TEXTBOX::PCB_TEXTBOX( BOARD_ITEM* aParent, KICAD_T aType ) :
     m_marginBottom = defaultMargin;
 }
 
-
 PCB_TEXTBOX::~PCB_TEXTBOX()
 {
 }
-
 
 void PCB_TEXTBOX::Serialize( google::protobuf::Any &aContainer ) const
 {
@@ -589,7 +587,7 @@ void PCB_TEXTBOX::Move( const VECTOR2I& aMoveVector )
 void PCB_TEXTBOX::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
     PCB_SHAPE::Rotate( aRotCentre, aAngle );
-    EDA_TEXT::SetTextAngle( ( GetTextAngle() + aAngle ).Normalize90() );
+    EDA_TEXT::SetTextAngle( ( GetTextAngle() + aAngle ).Normalize() );
 
     if( GetTextAngle().IsCardinal() && GetShape() != SHAPE_T::RECTANGLE )
     {
@@ -599,8 +597,6 @@ void PCB_TEXTBOX::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 
         SetShape( SHAPE_T::RECTANGLE );
         SetStart( corners[0] );
-
-        angle.Normalize();
 
         if( angle == ANGLE_90 )
             SetEnd( VECTOR2I( corners[0].x + abs( diag.x ), corners[0].y - abs( diag.y ) ) );
@@ -752,6 +748,7 @@ void PCB_TEXTBOX::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID
 {
     // Don't use PCB_SHAPE::TransformShapeToPolygon.  We want to treat the textbox as filled even
     // if there's no background colour.
+
     int width = GetWidth() + ( 2 * aClearance );
 
     if( GetShape() == SHAPE_T::RECTANGLE )
