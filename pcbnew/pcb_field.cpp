@@ -34,13 +34,11 @@
 PCB_FIELD::PCB_FIELD( FOOTPRINT* aParent, FIELD_T aFieldId, const wxString& aName ) :
         PCB_TEXT( aParent, PCB_FIELD_T ),
         m_id( aFieldId ),
-        m_ordinal( static_cast<int>( aFieldId ) ),
+        m_ordinal( 0 ),
         m_name( aName )
 {
     if( m_id == FIELD_T::USER )
         m_ordinal = aParent->GetNextFieldOrdinal();
-    else
-        m_ordinal = 0;
 }
 
 
@@ -220,10 +218,21 @@ bool PCB_FIELD::operator==( const BOARD_ITEM& aOther ) const
 
 bool PCB_FIELD::operator==( const PCB_FIELD& aOther ) const
 {
-    return m_id == aOther.m_id
-            && m_ordinal == aOther.m_ordinal
-            && m_name == aOther.m_name
-            && EDA_TEXT::operator==( aOther );
+    if( IsMandatory() != aOther.IsMandatory() )
+        return false;
+
+    if( IsMandatory() )
+    {
+        if( m_id != aOther.m_id )
+            return false;
+    }
+    else
+    {
+        if( m_ordinal != aOther.m_ordinal )
+            return false;
+    }
+
+    return m_name == aOther.m_name && EDA_TEXT::operator==( aOther );
 }
 
 

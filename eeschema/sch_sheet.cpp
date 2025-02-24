@@ -386,6 +386,12 @@ const SCH_FIELD* SCH_SHEET::GetField( FIELD_T aFieldType ) const
 }
 
 
+int SCH_SHEET::GetNextFieldOrdinal() const
+{
+    return NextFieldOrdinal( m_fields );
+}
+
+
 void SCH_SHEET::SetFields( const std::vector<SCH_FIELD>& aFields )
 {
     m_fields = aFields;

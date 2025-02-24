@@ -859,6 +859,12 @@ void SCH_SYMBOL::GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOnly 
 }
 
 
+int SCH_SYMBOL::GetNextFieldOrdinal() const
+{
+    return NextFieldOrdinal( m_fields );
+}
+
+
 SCH_FIELD* SCH_SYMBOL::AddField( const SCH_FIELD& aField )
 {
     m_fields.push_back( aField );
@@ -1823,7 +1829,7 @@ void SCH_SYMBOL::Show( int nestLevel, std::ostream& os ) const
                                  << '"' << ">\n";
 
     // skip the reference, it's been output already.
-    for( int i = 1; i < GetFieldCount();  ++i )
+    for( int i = 1; i < (int) GetFields().size();  ++i )
     {
         const wxString& value = GetFields()[i].GetText();
 
@@ -2364,15 +2370,15 @@ bool SCH_SYMBOL::operator <( const SCH_ITEM& aItem ) const
 
 bool SCH_SYMBOL::operator==( const SCH_SYMBOL& aSymbol ) const
 {
-    if( GetFieldCount() !=  aSymbol.GetFieldCount() )
-        return false;
-
     std::vector<SCH_FIELD*> fields, otherFields;
 
     GetFields( fields, false );
     aSymbol.GetFields( otherFields, false );
 
-    for( int ii = 0; ii < GetFieldCount(); ii++ )
+    if( fields.size() != otherFields.size() )
+        return false;
+
+    for( int ii = 0; ii < (int) fields.size(); ii++ )
     {
         if( fields[ii]->GetId() == FIELD_T::REFERENCE )
             continue;

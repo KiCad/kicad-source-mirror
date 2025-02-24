@@ -212,6 +212,12 @@ const wxString SCH_LABEL_BASE::GetDefaultFieldName( const wxString& aName, bool 
 }
 
 
+int SCH_LABEL_BASE::GetNextFieldOrdinal() const
+{
+    return NextFieldOrdinal( m_fields );
+}
+
+
 bool SCH_LABEL_BASE::IsType( const std::vector<KICAD_T>& aScanTypes ) const
 {
     static const std::vector<KICAD_T> wireAndPinTypes = { SCH_ITEM_LOCATE_WIRE_T, SCH_PIN_T };

@@ -404,8 +404,6 @@ public:
 
     void RemoveField( SCH_FIELD* aField ) { RemoveDrawItem( aField ); }
 
-    size_t GetFieldCount() const { return m_drawings.size( SCH_FIELD_T ); }
-
     /**
      * Return a list of pin object pointers from the draw item list.
      *

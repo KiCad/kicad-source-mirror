@@ -197,6 +197,11 @@ public:
 
     static const wxString GetDefaultFieldName( const wxString& aName, bool aUseDefaultName );
 
+    /**
+     * Return the next ordinal for a user field for this label
+     */
+    int GetNextFieldOrdinal() const;
+
     virtual int GetMandatoryFieldCount()              { return 0; }
 
     std::vector<SCH_FIELD>& GetFields()               { return m_fields; }

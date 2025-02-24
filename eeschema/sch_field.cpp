@@ -48,6 +48,7 @@ SCH_FIELD::SCH_FIELD() :
         SCH_ITEM( nullptr, SCH_FIELD_T ),
         EDA_TEXT( schIUScale, wxEmptyString ),
         m_id( FIELD_T::USER ),
+        m_ordinal( 0 ),
         m_showName( false ),
         m_allowAutoPlace( true ),
         m_isNamedVariable( false ),
@@ -79,6 +80,15 @@ SCH_FIELD::SCH_FIELD( const VECTOR2I& aPos, FIELD_T aFieldId, SCH_ITEM* aParent,
 SCH_FIELD::SCH_FIELD( SCH_ITEM* aParent, FIELD_T aFieldId, const wxString& aName ) :
         SCH_FIELD( VECTOR2I(), aFieldId, aParent, aName )
 {
+    if( aFieldId == FIELD_T::USER && aParent )
+    {
+        if( aParent->Type() == SCH_SYMBOL_T )
+            m_ordinal = static_cast<SCH_SYMBOL*>( aParent )->GetNextFieldOrdinal();
+        else if( aParent->Type() == SCH_SHEET_T )
+            m_ordinal = static_cast<SCH_SHEET*>( aParent )->GetNextFieldOrdinal();
+        else if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( aParent ) )
+            m_ordinal = label->GetNextFieldOrdinal();
+    }
 }
 
 
@@ -1372,8 +1382,19 @@ bool SCH_FIELD::operator==( const SCH_FIELD& aOther ) const
         return false;
     }
 
-    if( GetId() != aOther.GetId() )
+    if( IsMandatory() != aOther.IsMandatory() )
         return false;
+
+    if( IsMandatory() )
+    {
+        if( GetId() != aOther.GetId() )
+            return false;
+    }
+    else
+    {
+        if( GetOrdinal() != aOther.GetOrdinal() )
+            return false;
+    }
 
     if( GetPosition() != aOther.GetPosition() )
         return false;

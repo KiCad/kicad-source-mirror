@@ -696,7 +696,7 @@ public:
     std::deque<PCB_FIELD*>& GetFields() { return m_fields; }
 
     /**
-     * Return the next ID for a field for this footprint
+     * Return the next ordinal for a user field for this footprint
      */
     int GetNextFieldOrdinal() const;
 

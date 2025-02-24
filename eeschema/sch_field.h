@@ -353,6 +353,17 @@ private:
 };
 
 
+inline int NextFieldOrdinal( const std::vector<SCH_FIELD>& aFields )
+{
+    int ordinal = 42;     // Arbitrarily larger than any mandatory FIELD_T id
+
+    for( const SCH_FIELD& field : aFields )
+        ordinal = std::max( ordinal, field.GetOrdinal() + 1 );
+
+    return ordinal;
+}
+
+
 inline const SCH_FIELD* FindField( const std::vector<SCH_FIELD>& aFields, FIELD_T aFieldId )
 {
     for( const SCH_FIELD& field : aFields )

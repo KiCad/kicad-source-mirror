@@ -570,11 +570,9 @@ public:
                          PROPERTY_BASE* aProperty );
 
     /**
-     * Return the number of fields in this symbol.
+     * Return the next ordinal for a user field for this symbol
      */
-    int GetFieldCount() const { return (int )m_fields.size(); }
-
-    int GetNextFieldId() const { return (int) m_fields.size(); }
+    int GetNextFieldOrdinal() const;
 
     /**
      * Automatically orient all the fields in the symbol.

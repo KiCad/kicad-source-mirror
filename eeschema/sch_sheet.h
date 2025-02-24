@@ -95,6 +95,11 @@ public:
     const SCH_FIELD* GetField( FIELD_T aFieldNdx ) const;
 
     /**
+     * Return the next ordinal for a user field for this sheet
+     */
+    int GetNextFieldOrdinal() const;
+
+    /**
      * Set multiple schematic fields.
      *
      * @param aFields are the fields to set in this symbol.
