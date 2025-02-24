@@ -304,6 +304,9 @@ void PCB_SHAPE::updateHatching() const
 {
     EDA_SHAPE::updateHatching();
 
+    static std::initializer_list<KICAD_T> knockoutTypes = { PCB_TEXT_T, PCB_TEXTBOX_T,
+                                                            PCB_SHAPE_T };
+
     if( !m_hatching.IsEmpty() )
     {
         PCB_LAYER_ID   layer = GetLayer();
@@ -312,11 +315,32 @@ void PCB_SHAPE::updateHatching() const
 
         for( BOARD_ITEM* item : GetBoard()->Drawings() )
         {
-            if( ( item->Type() == PCB_TEXT_T || item->Type() == PCB_TEXTBOX_T )
-                && item->GetLayer() == layer
-                && item->GetBoundingBox().Intersects( bbox ) )
+            if( item == this )
+                continue;
+
+            if( item->IsType( knockoutTypes )
+                    && item->GetLayer() == layer
+                    && item->GetBoundingBox().Intersects( bbox ) )
             {
                 item->TransformShapeToPolygon( holes, layer, 0, ARC_LOW_DEF, ERROR_OUTSIDE, true );
+            }
+
+            if( item->Type() == PCB_FOOTPRINT_T )
+            {
+                static_cast<FOOTPRINT*>( item )->RunOnDescendants(
+                        [&]( BOARD_ITEM* descendant )
+                        {
+                            if( descendant == this )
+                                return;
+
+                            if( descendant->IsType( knockoutTypes )
+                                   && descendant->GetLayer() == layer
+                                   && descendant->GetBoundingBox().Intersects( bbox ) )
+                            {
+                                descendant->TransformShapeToPolygon( holes, layer, 0, ARC_LOW_DEF,
+                                                                     ERROR_OUTSIDE, true );
+                            }
+                        } );
             }
         }
 

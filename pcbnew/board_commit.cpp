@@ -142,16 +142,16 @@ void BOARD_COMMIT::propagateDamage( BOARD_ITEM* aItem, std::vector<ZONE*>* aStal
     BOX2I  bbox = aItem->GetBoundingBox();
     LSET   layers = aItem->GetLayerSet();
 
-    if( layers.test( Edge_Cuts ) || layers.test( Margin ) )
-        layers = LSET::PhysicalLayersMask();
-    else
-        layers &= LSET::AllCuMask();
-
-    if( layers.empty() )
-        return;
-
     if( aStaleZones )
     {
+        if( layers.test( Edge_Cuts ) || layers.test( Margin ) )
+            layers = LSET::PhysicalLayersMask();
+        else
+            layers &= LSET::AllCuMask();
+
+        if( layers.empty() )
+            return;
+
         for( ZONE* zone : board->Zones() )
         {
             if( zone->GetIsRuleArea() )
