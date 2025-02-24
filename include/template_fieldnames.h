@@ -40,7 +40,8 @@ class TEMPLATE_FIELDNAMES_LEXER;
  * NOTE: this must stay a enum class to prevent developers from trying to use it as an array
  * index.
  */
-enum class FIELD_T {
+enum class FIELD_T : int
+{
     USER,                   ///< The field ID hasn't been set yet; field is invalid
     REFERENCE,              ///< Field Reference of part, i.e. "IC21"
     VALUE,                  ///< Field Value of part, i.e. "3.3K"
