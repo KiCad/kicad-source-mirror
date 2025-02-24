@@ -144,6 +144,7 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
             PCB_FIELD* existingField = GetField( field->GetId() );
             ptrMap[field] = existingField;
             *existingField = *field;
+            existingField->SetParent( this );
         }
         else
         {
