@@ -1432,7 +1432,7 @@ void SHOVE::unwindLineStack( const LINKED_ITEM* aSeg )
 
     for( std::vector<LINE>::iterator i = m_optimizerQueue.begin(); i != m_optimizerQueue.end() ; )
     {
-        if( i->ContainsLink( aSeg ) )
+        if( i->ContainsLink( aSeg ) && !aSeg->OfKind( ITEM::VIA_T ) )
             i = m_optimizerQueue.erase( i );
         else
             i++;
