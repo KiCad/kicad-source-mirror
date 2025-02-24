@@ -38,6 +38,8 @@ PCB_FIELD::PCB_FIELD( FOOTPRINT* aParent, FIELD_T aFieldId, const wxString& aNam
 {
     if( m_id == FIELD_T::USER )
         m_ordinal = aParent->GetNextFieldOrdinal();
+    else
+        m_ordinal = 0;
 }
 
 
