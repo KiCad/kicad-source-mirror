@@ -510,6 +510,20 @@ bool SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& aObstacleLine,
     const int cHullFailureExpansionFactor = 1000;
     int extraHullExpansion = 0;
 
+    bool voeA = true, voeB = true;
+    const JOINT* ja = nullptr;
+    const JOINT* jb = nullptr;
+
+    if( aObstacleLine.PointCount() >= 2 )
+    {
+        ja = m_currentNode->FindJoint( aObstacleLine.CPoint(0), &aObstacleLine );
+        jb = m_currentNode->FindJoint( aObstacleLine.CPoint(-1), &aObstacleLine );
+    }
+
+    if( ja )
+        voeA = !ja->Via();
+    if( jb )
+        voeB = !jb->Via();
 
     aResultLine.ClearLinks();
     bool viaOnEnd = aCurLine.EndsWithVia();
@@ -586,7 +600,7 @@ bool SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& aObstacleLine,
                 hulls.push_back( aCurLine.Via().Hull( viaClearance, obstacleLineWidth, layer ) );
             }
 
-            bool permitMovingEndpoints = (attempt >= 2);
+            bool permitMovingEndpoints = (attempt >= 2) && !voeA && !voeB;
 
             if (shoveLineToHullSet( aCurLine, obstacleLine, aResultLine, hulls, permitMovingEndpoints ) )
             {
