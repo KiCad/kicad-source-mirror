@@ -58,6 +58,30 @@ message GraphicsDefaultsResponse
   kiapi.board.GraphicsDefaults defaults = 1;
 }
 
+enum BoardOriginType
+{
+  BOT_UNKNOWN = 0;
+  BOT_GRID = 1;
+  BOT_DRILL = 2;
+}
+
+// Returns a Vector2 with the specified origin point
+message GetBoardOrigin
+{
+  kiapi.common.types.DocumentSpecifier board = 1;
+
+  BoardOriginType type = 2;
+}
+
+message SetBoardOrigin
+{
+  kiapi.common.types.DocumentSpecifier board = 1;
+
+  BoardOriginType type = 2;
+
+  kiapi.common.types.Vector2 origin = 3;
+}
+
 /*
  * Net management
  */

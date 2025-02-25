@@ -1153,6 +1153,11 @@ TOOL_ACTION PCB_ACTIONS::drillResetOrigin( TOOL_ACTION_ARGS()
         .LegacyHotkeyName( "Reset Drill Origin" )
         .FriendlyName( _( "Reset Drill Origin" ) ) );
 
+TOOL_ACTION PCB_ACTIONS::drillSetOrigin( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.drillSetOrigin" )
+        .Scope( AS_CONTEXT )
+        .Parameter( VECTOR2I() ) );
+
 TOOL_ACTION PCB_ACTIONS::toggleLock( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.toggleLock" )
         .Scope( AS_GLOBAL )

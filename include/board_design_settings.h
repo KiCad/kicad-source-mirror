@@ -670,10 +670,10 @@ public:
     int GetLayerClass( PCB_LAYER_ID aLayer ) const;
 
     void            SetAuxOrigin( const VECTOR2I& aOrigin ) { m_auxOrigin = aOrigin; }
-    const VECTOR2I& GetAuxOrigin() { return m_auxOrigin; }
+    const VECTOR2I& GetAuxOrigin() const { return m_auxOrigin; }
 
     void            SetGridOrigin( const VECTOR2I& aOrigin ) { m_gridOrigin = aOrigin; }
-    const VECTOR2I& GetGridOrigin() { return m_gridOrigin; }
+    const VECTOR2I& GetGridOrigin() const { return m_gridOrigin; }
 
     void SetDefaultMasterPad();
 

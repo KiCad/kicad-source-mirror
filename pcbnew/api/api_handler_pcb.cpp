@@ -82,6 +82,8 @@ API_HANDLER_PCB::API_HANDLER_PCB( PCB_EDIT_FRAME* aFrame ) :
             &API_HANDLER_PCB::handleGetTitleBlockInfo );
     registerHandler<ExpandTextVariables, ExpandTextVariablesResponse>(
             &API_HANDLER_PCB::handleExpandTextVariables );
+    registerHandler<GetBoardOrigin, types::Vector2>( &API_HANDLER_PCB::handleGetBoardOrigin );
+    registerHandler<SetBoardOrigin, Empty>( &API_HANDLER_PCB::handleSetBoardOrigin );
 
     registerHandler<InteractiveMoveItems, Empty>( &API_HANDLER_PCB::handleInteractiveMoveItems );
     registerHandler<GetNets, NetsResponse>( &API_HANDLER_PCB::handleGetNets );
@@ -869,6 +871,92 @@ HANDLER_RESULT<GraphicsDefaultsResponse> API_HANDLER_PCB::handleGetGraphicsDefau
 }
 
 
+HANDLER_RESULT<types::Vector2> API_HANDLER_PCB::handleGetBoardOrigin(
+        const HANDLER_CONTEXT<GetBoardOrigin>& aCtx )
+{
+    if( HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.board() );
+        !documentValidation )
+    {
+        return tl::unexpected( documentValidation.error() );
+    }
+
+    VECTOR2I origin;
+    const BOARD_DESIGN_SETTINGS& settings = frame()->GetBoard()->GetDesignSettings();
+
+    switch( aCtx.Request.type() )
+    {
+    case BOT_GRID:
+        origin = settings.GetGridOrigin();
+        break;
+
+    case BOT_DRILL:
+        origin = settings.GetAuxOrigin();
+        break;
+
+    default:
+    case BOT_UNKNOWN:
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "Unexpected origin type" );
+        return tl::unexpected( e );
+    }
+    }
+
+    types::Vector2 reply;
+    PackVector2( reply, origin );
+    return reply;
+}
+
+HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSetBoardOrigin(
+        const HANDLER_CONTEXT<SetBoardOrigin>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    if( HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.board() );
+        !documentValidation )
+    {
+        return tl::unexpected( documentValidation.error() );
+    }
+
+    BOARD_DESIGN_SETTINGS& settings = frame()->GetBoard()->GetDesignSettings();
+    VECTOR2I origin = UnpackVector2( aCtx.Request.origin() );
+
+    switch( aCtx.Request.type() )
+    {
+    case BOT_GRID:
+        settings.SetGridOrigin( origin );
+        frame()->Refresh();
+        break;
+
+    case BOT_DRILL:
+    {
+        PCB_EDIT_FRAME* f = frame();
+
+        frame()->CallAfter( [f, origin]()
+                            {
+                                TOOL_MANAGER* mgr = f->GetToolManager();
+                                mgr->RunAction( PCB_ACTIONS::drillSetOrigin, origin );
+                                f->Refresh();
+                            } );
+        break;
+    }
+
+    default:
+    case BOT_UNKNOWN:
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "Unexpected origin type" );
+        return tl::unexpected( e );
+    }
+    }
+
+    return Empty();
+}
+
+
 HANDLER_RESULT<GetBoundingBoxResponse> API_HANDLER_PCB::handleGetBoundingBox(
         const HANDLER_CONTEXT<GetBoundingBox>& aCtx )
 {
@@ -913,10 +1001,11 @@ HANDLER_RESULT<GetBoundingBoxResponse> API_HANDLER_PCB::handleGetBoundingBox(
 HANDLER_RESULT<PadShapeAsPolygonResponse> API_HANDLER_PCB::handleGetPadShapeAsPolygon(
         const HANDLER_CONTEXT<GetPadShapeAsPolygon>& aCtx )
 {
-    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.board() );
-
-    if( !documentValidation )
+    if( HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.board() );
+        !documentValidation )
+    {
         return tl::unexpected( documentValidation.error() );
+    }
 
     PadShapeAsPolygonResponse response;
     PCB_LAYER_ID layer = FromProtoEnum<PCB_LAYER_ID, board::types::BoardLayer>( aCtx.Request.layer() );
