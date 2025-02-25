@@ -1823,7 +1823,7 @@ void APPEARANCE_CONTROLS::rebuildLayers()
 
     m_layersOuterSizer->AddSpacer( 10 );
     m_windowLayers->SetBackgroundColour( m_layerPanelColour );
-    m_windowLayers->Layout();
+    m_windowLayers->FitInside(); // Updates virtual size to fit subwindows, also auto-layouts.
 
     m_paneLayerDisplayOptions->SetLabel( _( "Layer Display Options" ) );
 
