@@ -22,7 +22,7 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #
 
-cmake_minimum_required( VERSION 3.21 FATAL_ERROR )
+cmake_minimum_required( VERSION 3.22 FATAL_ERROR )
 
 # Generate DEPFILES without transforming relative paths
 cmake_policy( SET CMP0116 OLD )
