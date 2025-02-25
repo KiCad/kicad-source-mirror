@@ -57,6 +57,7 @@
 #include <tool/common_control.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
+#include <tool/ui/toolbar_configuration.h>
 #include <trace_helpers.h>
 #include <widgets/paged_dialog.h>
 #include <widgets/wx_busy_indicator.h>
@@ -517,11 +518,37 @@ ACTION_TOOLBAR_CONTROL_FACTORY* EDA_BASE_FRAME::GetCustomToolbarControlFactory( 
 
 void EDA_BASE_FRAME::configureToolbars()
 {
-    // Get the default toolbar config for the frame
-    m_tbConfigLeft    = DefaultLeftToolbarConfig();
-    m_tbConfigRight   = DefaultRightToolbarConfig();
-    m_tbConfigTopAux  = DefaultTopAuxToolbarConfig();
-    m_tbConfigTopMain = DefaultTopMainToolbarConfig();
+    APP_SETTINGS_BASE* cfg = config();
+
+    if( cfg && cfg->m_CustomToolbars )
+    {
+        // Get the custom toolbar config
+        TOOLBAR_SETTINGS tb( cfg->GetFilename() + "-toolbars" );
+
+        tb.LoadFromFile( SETTINGS_MANAGER::GetToolbarSettingsPath() );
+
+        for( auto t : tb.m_Toolbars )
+        {
+            if( t.first == "left" )
+                m_tbConfigLeft = t.second;
+            else if( t.first == "right" )
+                m_tbConfigRight = t.second;
+            else if( t.first == "top_aux" )
+                m_tbConfigTopAux = t.second;
+            else if( t.first == "top_main" )
+                m_tbConfigTopMain = t.second;
+            else
+                wxASSERT_MSG( false, wxString::Format( "Unknown toolbar: '%s'", t.first ) );
+        }
+    }
+    else
+    {
+         // Get the default toolbar config for the frame
+        m_tbConfigLeft    = DefaultLeftToolbarConfig();
+        m_tbConfigRight   = DefaultRightToolbarConfig();
+        m_tbConfigTopAux  = DefaultTopAuxToolbarConfig();
+        m_tbConfigTopMain = DefaultTopMainToolbarConfig();
+    }
 }
 
 

@@ -454,6 +454,7 @@ void PCB_EDIT_FRAME::configureToolbars()
                                          _( "Region to hold the IPC/Scripting action buttons" ),
                                          pluginControlFactory );
 
+/*
     TOOLBAR_SETTINGS tb( "pcbnew-toolbars" );
 
     if( m_tbConfigLeft.has_value() )
@@ -469,6 +470,7 @@ void PCB_EDIT_FRAME::configureToolbars()
         tb.m_Toolbars.emplace( "top_main", m_tbConfigTopMain.value() );
 
     tb.SaveToFile( SETTINGS_MANAGER::GetToolbarSettingsPath(), true );
+    */
 }
 
 

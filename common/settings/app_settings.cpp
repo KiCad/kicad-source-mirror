@@ -43,6 +43,7 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
         m_System(),
         m_Plugins(),
         m_Window(),
+        m_CustomToolbars( false ),
         m_appSettingsSchemaVersion( aSchemaVersion )
 {
     // Make Coverity happy:
@@ -204,6 +205,9 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
 
     m_params.emplace_back( new PARAM<wxString>( "appearance.color_theme",
             &m_ColorTheme, COLOR_SETTINGS::COLOR_BUILTIN_DEFAULT ) );
+
+    m_params.emplace_back( new PARAM<bool>( "appearance.custom_toolbars",
+                &m_CustomToolbars, false ) );
 
     addParamsForWindow( &m_Window, "window" );
 
