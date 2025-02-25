@@ -29,14 +29,14 @@
 #include <layer_ids.h>
 
 class PCB_SELECTION;
-class PCB_BASE_FRAME;
+class PCB_BASE_EDIT_FRAME;
 class PAD;
 class PADSTACK;
 
 class DIALOG_TRACK_VIA_PROPERTIES : public DIALOG_TRACK_VIA_PROPERTIES_BASE
 {
 public:
-    DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParent, const PCB_SELECTION& aItems );
+    DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, const PCB_SELECTION& aItems );
 
     ~DIALOG_TRACK_VIA_PROPERTIES();
 
@@ -58,13 +58,13 @@ private:
     void onUnitsChanged( wxCommandEvent& aEvent );
     void onTeardropsUpdateUi( wxUpdateUIEvent& event ) override;
 
-    bool confirmPadChange( const std::vector<PAD*>& connectedPads );
+    bool confirmPadChange( const std::set<PAD*>& connectedPads );
 
     int getLayerDepth();
     void afterPadstackModeChanged();
 
 private:
-    PCB_BASE_FRAME*      m_frame;
+    PCB_BASE_EDIT_FRAME* m_frame;
     const PCB_SELECTION& m_items;      // List of items to be modified.
 
     UNIT_BINDER          m_trackStartX, m_trackStartY;
