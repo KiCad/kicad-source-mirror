@@ -89,6 +89,42 @@ enum BoardLayer
   BL_User_8 = 60;
   BL_User_9 = 61;
   BL_Rescue = 62;
+  BL_User_10 = 63;
+  BL_User_11 = 64;
+  BL_User_12 = 65;
+  BL_User_13 = 66;
+  BL_User_14 = 67;
+  BL_User_15 = 68;
+  BL_User_16 = 69;
+  BL_User_17 = 70;
+  BL_User_18 = 71;
+  BL_User_19 = 72;
+  BL_User_20 = 73;
+  BL_User_21 = 74;
+  BL_User_22 = 75;
+  BL_User_23 = 76;
+  BL_User_24 = 77;
+  BL_User_25 = 78;
+  BL_User_26 = 79;
+  BL_User_27 = 80;
+  BL_User_28 = 81;
+  BL_User_29 = 82;
+  BL_User_30 = 83;
+  BL_User_31 = 84;
+  BL_User_32 = 85;
+  BL_User_33 = 86;
+  BL_User_34 = 87;
+  BL_User_35 = 88;
+  BL_User_36 = 89;
+  BL_User_37 = 90;
+  BL_User_38 = 91;
+  BL_User_39 = 92;
+  BL_User_40 = 93;
+  BL_User_41 = 94;
+  BL_User_42 = 95;
+  BL_User_43 = 96;
+  BL_User_44 = 97;
+  BL_User_45 = 98;
 }
 
 message NetCode
