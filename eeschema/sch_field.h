@@ -418,7 +418,7 @@ inline wxString GetFieldValue( const std::vector<SCH_FIELD>* aFields, FIELD_T aF
 inline std::string GetFieldValue( const std::vector<SCH_FIELD>* aFields,
                                   const wxString& aFieldName, bool aResolve = false )
 {
-    if( aFields )
+    if( !aFields )
         return "";
 
     if( const SCH_FIELD* field = FindField( *aFields, aFieldName ) )
