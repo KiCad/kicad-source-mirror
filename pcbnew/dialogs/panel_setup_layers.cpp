@@ -462,6 +462,8 @@ void PANEL_SETUP_LAYERS::initialize_layers_controls()
     }
 
     Thaw();
+
+    m_LayersSizer->FitInside( m_LayersListPanel );
     m_LayersListPanel->Layout();
 }
 
