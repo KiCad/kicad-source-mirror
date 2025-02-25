@@ -53,7 +53,7 @@ PROJECT::PROJECT() :
 }
 
 
-void PROJECT::ElemsClear()
+void PROJECT::elemsClear()
 {
     // careful here, this should work, but the virtual destructor may not
     // be in the same link image as PROJECT.
@@ -66,7 +66,7 @@ void PROJECT::ElemsClear()
 
 PROJECT::~PROJECT()
 {
-    ElemsClear();
+    elemsClear();
 }
 
 
