@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-19 17:09+0300\n"
-"PO-Revision-Date: 2025-02-18 12:29+0000\n"
+"PO-Revision-Date: 2025-02-25 08:05+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -50,7 +50,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10.1-dev\n"
+"X-Generator: Weblate 5.10.2-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4308,18 +4308,18 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are never shared in this process."
 msgstr ""
-"允许 KiCad 匿名地向开发者报告崩溃和特殊事件数据, 从而更有效地识别用户群体中存"
-"在的关键问题, 并帮助分析功能以指导改进工作。\n"
+"允许 KiCad 匿名地向开发者报告崩溃和特殊事件数据, "
+"从而更有效地识别用户群体中存在的关键问题, 并帮助分析功能以指导改进工作。\n"
 "\n"
-"为了将来自同一 KiCad 安装的自动报告关联起来, 系统会生成一个完全随机的唯一标识"
-"符, 仅用于崩溃报告的目的, 不会存储或关联任何个人可识别信息 (PII), 包括 IP 地"
-"址。\n"
+"为了将来自同一 KiCad 安装的自动报告关联起来, "
+"系统会生成一个完全随机的唯一标识符, 仅用于崩溃报告的目的, "
+"不会存储或关联任何个人可识别信息 (PII), 包括 IP 地址。\n"
 "您可以随时通过提供的按钮重置该标识符。\n"
 "\n"
-"如果您选择自愿参与, 那么在发生崩溃或特殊事件时, KiCad 会自动处理并发送这些报"
-"告。\n"
+"如果您选择自愿参与, 那么在发生崩溃或特殊事件时, KiCad "
+"会自动处理并向开发者发送这些报告。\n"
 "\n"
-"在此过程中, 您的设计文件 (如原理图或PCB) 绝不会被共享。"
+"在此过程中, 您的设计文件 (如原理图或PCB) 绝不会被上传。"
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
@@ -6784,14 +6784,14 @@ msgid "Could not copy file: %s to %s"
 msgstr "无法将文件 %s 复制到 %s"
 
 #: common/gestfich.cpp:477
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy directory: %s to %s"
-msgstr "无法将文件 %s 复制到 %s"
+msgstr "无法将目录 %s 复制到 %s"
 
 #: common/gestfich.cpp:529
-#, fuzzy, c-format
+#, c-format
 msgid "Source directory does not exist: %s"
-msgstr "目录 '%s' 不存在"
+msgstr "源目录 '%s' 不存在"
 
 #: common/gestfich.cpp:584
 #, c-format
@@ -8140,16 +8140,15 @@ msgid ""
 "sending said reports when crashes or events occur. \n"
 "Your design files such as schematic or PCB are not shared in this process."
 msgstr ""
-"为了更有效地帮助开发人员识别在用户群体中出现的重点程序问题并改进功能, KiCad "
-"可以匿名地向开发人员\n"
-"报告崩溃和特殊事件数据, 并协助进行分析。如果您选择自愿参与, KiCad 将在发生崩"
-"溃或特殊事件时\n"
-"自动处理并发送这些报告。在此过程中, 您的设计文件, 如原理图或 PCB 文件, 不会被"
-"上传。"
+"为了更有效地帮助开发人员识别软件在用户群体中存在的关键问题, "
+"并帮助分析功能以指导改进工作, 开发者报告崩溃和特殊事件数据。\n"
+"如果您选择自愿参与, 那么在发生崩溃或特殊事件时, KiCad "
+"会自动处理并向开发者发送这些报告。\n"
+"在此过程中, 您的设计文件 (如原理图或PCB) 绝不会被上传。"
 
 #: common/pgm_base.cpp:392
 msgid "Data collection opt in request"
-msgstr "匿名数据收集"
+msgstr "数据收集请求"
 
 #: common/pgm_base.cpp:500
 msgid "Environment variable HOME is empty.  Unable to continue."
