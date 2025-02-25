@@ -24,6 +24,7 @@
 #include <embedded_files.h>
 #include <sch_sheet_path.h>
 #include <schematic_settings.h>
+#include <project.h>
 
 
 class BUS_ALIAS;
@@ -64,7 +65,7 @@ public:
  * Right now, Eeschema can have only one schematic open at a time, but this could change.
  * Please keep this possibility in mind when adding to this object.
  */
-class SCHEMATIC : public EDA_ITEM, public EMBEDDED_FILES
+class SCHEMATIC : public EDA_ITEM, public EMBEDDED_FILES, public PROJECT::_ELEM
 {
 public:
     SCHEMATIC( PROJECT* aPrj );
@@ -353,6 +354,8 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override {}
 #endif
+
+    PROJECT::ELEM ProjectElementType() override { return PROJECT::ELEM::SCHEMATIC; }
 
 private:
     friend class SCH_EDIT_FRAME;

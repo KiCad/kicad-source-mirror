@@ -78,6 +78,9 @@ public:
 
         DESIGN_BLOCK_LIB_TABLE,
 
+        SCHEMATIC,
+        BOARD,
+
         COUNT
     };
 

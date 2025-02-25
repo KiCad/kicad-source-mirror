@@ -40,6 +40,7 @@
 #include <title_block.h>
 #include <tools/pcb_selection.h>
 #include <shared_mutex>
+#include <project.h>
 #include <list>
 
 class BOARD_DESIGN_SETTINGS;
@@ -291,7 +292,7 @@ enum class BOARD_USE
 /**
  * Information pertinent to a Pcbnew printed circuit board.
  */
-class BOARD : public BOARD_ITEM_CONTAINER, public EMBEDDED_FILES
+class BOARD : public BOARD_ITEM_CONTAINER, public EMBEDDED_FILES, public PROJECT::_ELEM
 {
 public:
     static inline bool ClassOf( const EDA_ITEM* aItem )
@@ -1300,6 +1301,8 @@ public:
      * Gets the component class manager
      */
     COMPONENT_CLASS_MANAGER& GetComponentClassManager() { return m_componentClassManager; }
+
+    PROJECT::ELEM ProjectElementType() override { return PROJECT::ELEM::BOARD; }
 
     // --------- Item order comparators ---------
 
