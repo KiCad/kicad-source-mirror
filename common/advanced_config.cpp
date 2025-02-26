@@ -312,7 +312,7 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_ExcludeFromSimulationLineWidth = 25;
 
-    m_GitIconRefreshInterval = 1000;
+    m_GitIconRefreshInterval = 10000;
     m_GitProjectStatusRefreshInterval = 60000;
 
     loadFromConfigFile();

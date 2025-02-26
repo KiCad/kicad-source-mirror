@@ -317,7 +317,7 @@ private:
                                                 // (during an idle time for instance) after
                                                 // the main loop event handler is started
     int                     m_gitLastError;
-
+    wxString                m_gitCurrentBranchName;
     wxTimer                 m_gitSyncTimer;
     wxTimer                 m_gitStatusTimer;
 

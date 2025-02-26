@@ -215,13 +215,6 @@ PROJECT_TREE_PANE::PROJECT_TREE_PANE( KICAD_MANAGER_FRAME* parent ) :
     m_filters.emplace_back( wxT( "^no KiCad files found" ) );
 
     ReCreateTreePrj();
-
-    // If we are asking for refresh, run one right at the beginning
-    if( ADVANCED_CFG::GetCfg().m_GitProjectStatusRefreshInterval > 0 )
-        m_gitSyncTimer.Start( 100, wxTIMER_ONE_SHOT );
-
-    if( ADVANCED_CFG::GetCfg().m_GitIconRefreshInterval > 0 )
-        m_gitStatusTimer.Start( 150, wxTIMER_ONE_SHOT );
 }
 
 
@@ -1338,6 +1331,12 @@ void PROJECT_TREE_PANE::onFileSystemEvent( wxFileSystemWatcherEvent& event )
     if( !root_id.IsOk() )
         return;
 
+    CallAfter( [this] ()
+    {
+        updateTreeCache();
+        m_gitStatusTimer.Start( 150, wxTIMER_ONE_SHOT );
+    } );
+
     wxTreeItemIdValue  cookie;  // dummy variable needed by GetFirstChild()
     wxTreeItemId kid = m_TreeProject->GetFirstChild( root_id, cookie );
 
@@ -1962,59 +1961,25 @@ void PROJECT_TREE_PANE::onGitRemoveVCS( wxCommandEvent& aEvent )
 
 void PROJECT_TREE_PANE::updateGitStatusIcons()
 {
-    if( ADVANCED_CFG::GetCfg().m_EnableGit == false || !m_TreeProject )
-        return;
-
     std::unique_lock<std::mutex> lock( m_gitStatusMutex, std::try_to_lock );
-
-    CallAfter(
-            [this]()
-            {
-                m_gitStatusTimer.Start( ADVANCED_CFG::GetCfg().m_GitIconRefreshInterval,
-                                        wxTIMER_ONE_SHOT );
-            } );
 
     if( !lock.owns_lock() )
         return;
+
+    if( ADVANCED_CFG::GetCfg().m_EnableGit == false || !m_TreeProject )
+    return;
 
     // Note that this function is called from the idle event, so we need to be careful about
     // accessing the tree control from a different thread.
     for( auto&[ item, status ] : m_gitStatusIcons )
         m_TreeProject->SetItemState( item, static_cast<int>( status ) );
 
-    wxTreeItemId    kid = m_TreeProject->GetRootItem();
-    git_repository* repo = m_TreeProject->GetGitRepo();
-
-    if( !repo )
-        return;
-
-    git_reference* currentBranchReference = nullptr;
-    int rc = git_repository_head( &currentBranchReference, repo );
-
-    PROJECT_TREE_ITEM* rootItem = GetItemIdData( kid );
-    wxFileName         rootFilename( rootItem->GetFileName() );
-    wxString           repoWorkDir( git_repository_workdir( repo ) );
-
-    // Get the current branch name
-    if( currentBranchReference )
+    if( !m_gitCurrentBranchName.empty() )
     {
+        wxTreeItemId kid = m_TreeProject->GetRootItem();
+        PROJECT_TREE_ITEM* rootItem = GetItemIdData( kid );
         wxString filename = wxFileNameFromPath( rootItem->GetFileName() );
-        wxString branchName = git_reference_shorthand( currentBranchReference );
-
-        m_TreeProject->SetItemText( kid, filename + " [" + branchName + "]" );
-        git_reference_free( currentBranchReference );
-    }
-    else if( rc == GIT_EUNBORNBRANCH )
-    {
-        // TODO: couldn't immediately figure out if libgit2 can return the name of an unborn branch
-        // For now, just do nothing
-    }
-    else
-    {
-        if( giterr_last()->klass != m_gitLastError )
-            wxLogTrace( "git", "Failed to lookup current branch: %s", giterr_last()->message );
-
-        m_gitLastError = giterr_last()->klass;
+        m_TreeProject->SetItemText( kid, filename + " [" + m_gitCurrentBranchName + "]" );
     }
 }
 
@@ -2062,18 +2027,25 @@ void PROJECT_TREE_PANE::updateTreeCache()
 
 void PROJECT_TREE_PANE::updateGitStatusIconMap()
 {
-    if( ADVANCED_CFG::GetCfg().m_EnableGit == false || !m_TreeProject )
-        return;
+#if defined( _WIN32 )
     int refresh = ADVANCED_CFG::GetCfg().m_GitIconRefreshInterval;
 
-    if( refresh != 0 )
+    if( refresh != 0
+        && KIPLATFORM::ENV::IsNetworkPath( wxPathOnly( m_Parent->GetProjectFileName() ) ) )
     {
+        // Need to treat windows network paths special here until we get the samba bug fixed
+        // https://github.com/wxWidgets/wxWidgets/issues/18953
         CallAfter(
-                [this, refresh]()
+                [this]()
                 {
                     m_gitStatusTimer.Start( refresh, wxTIMER_ONE_SHOT );
                 } );
     }
+
+#endif
+
+    if( ADVANCED_CFG::GetCfg().m_EnableGit == false || !m_TreeProject )
+        return;
 
     std::unique_lock<std::mutex> lock1( m_gitStatusMutex );
     std::unique_lock<std::mutex> lock2( m_gitTreeCacheMutex );
@@ -2219,23 +2191,35 @@ void PROJECT_TREE_PANE::updateGitStatusIconMap()
     git_status_list_free( status_list );
     git_index_free( index );
 
-    // If the icons are current, don't bother refreshing the tree because it flickers on Windows
+    git_reference* currentBranchReference = nullptr;
+    int rc = git_repository_head( &currentBranchReference, repo );
+
+    // Get the current branch name
+    if( currentBranchReference )
+    {
+        m_gitCurrentBranchName = git_reference_shorthand( currentBranchReference );
+        git_reference_free( currentBranchReference );
+    }
+    else if( rc == GIT_EUNBORNBRANCH )
+    {
+        // TODO: couldn't immediately figure out if libgit2 can return the name of an unborn branch
+        // For now, just do nothing
+    }
+    else
+    {
+        if( giterr_last()->klass != m_gitLastError )
+            wxLogTrace( "git", "Failed to lookup current branch: %s", giterr_last()->message );
+
+        m_gitLastError = giterr_last()->klass;
+    }
+
+    // If the icons are not changed, queue an event to update in the main thread
     if( updated )
     {
         CallAfter(
                 [this]()
                 {
                     updateGitStatusIcons();
-                } );
-    }
-    else
-    {
-        // Need to callAfter so that it is started in the main thread
-        CallAfter(
-                [this]()
-                {
-                    m_gitStatusTimer.Start( ADVANCED_CFG::GetCfg().m_GitIconRefreshInterval,
-                                            wxTIMER_ONE_SHOT );
                 } );
     }
 }
@@ -2639,7 +2623,7 @@ void PROJECT_TREE_PANE::onGitSyncTimer( wxTimerEvent& aEvent )
     {
         KIGIT_COMMON* gitCommon = m_TreeProject->GitCommon();
 
-        if( !gitCommon )
+        if( !gitCommon || !gitCommon->GetRepo() )
             return;
 
         GIT_PULL_HANDLER handler( gitCommon );
