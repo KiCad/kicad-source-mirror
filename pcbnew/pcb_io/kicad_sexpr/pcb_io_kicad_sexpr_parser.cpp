@@ -2124,7 +2124,9 @@ LSET PCB_IO_KICAD_SEXPR_PARSER::parseLayersForCuItemWithSoldermask()
 
     if( ( ( layerMask & LSET::InternalCuMask() ).any()
               && ( layerMask & LSET( { F_Mask, B_Mask } ) ).any() ) )
-                   Expecting( "no mask layer when track is on internal layer" );
+    {
+        Expecting( "no mask layer when track is on internal layer" );
+    }
 
     if( ( layerMask & LSET( { F_Cu, B_Mask } ) ).count() > 1 )
           Expecting( "copper and mask on the same side" );
