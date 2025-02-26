@@ -70,6 +70,9 @@ class ALTIUM_COMPOUND_FILE
     friend class ALTIUM_PCB_COMPOUND_FILE;
 
 public:
+    /// Create an uninitialized file for two-step initialization (e.g. with InitFromBuffer)
+    ALTIUM_COMPOUND_FILE();
+
     /**
      * Open a CFB file. Constructor might throw an IO_ERROR.
      *
@@ -90,9 +93,18 @@ public:
     ALTIUM_COMPOUND_FILE& operator=( const ALTIUM_COMPOUND_FILE& temp_obj ) = delete;
     ~ALTIUM_COMPOUND_FILE() = default;
 
+    /**
+     * Load a CFB file from memory; may throw an IO_ERROR.
+     * Data is copied.
+     *
+     * @param aBuffer data buffer
+     * @param aLen data length
+     */
+    void InitFromBuffer( const void* aBuffer, size_t aLen );
+
     const CFB::CompoundFileReader& GetCompoundFileReader() const { return *m_reader; }
 
-    std::unique_ptr<ALTIUM_COMPOUND_FILE> DecodeIntLibStream( const CFB::COMPOUND_FILE_ENTRY& cfe );
+    bool DecodeIntLibStream( const CFB::COMPOUND_FILE_ENTRY& cfe, ALTIUM_COMPOUND_FILE* aOutput );
 
     const CFB::COMPOUND_FILE_ENTRY* FindStream( const std::vector<std::string>& aStreamPath ) const;
 

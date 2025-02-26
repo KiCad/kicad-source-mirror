@@ -197,14 +197,13 @@ void PCB_IO_ALTIUM_DESIGNER::loadAltiumLibrary( const wxString& aLibraryPath )
 
             std::map<wxString, const CFB::COMPOUND_FILE_ENTRY*> pcbLibFiles =
                     intCom->EnumDir( L"PCBLib" );
+
             for( const auto& [pcbLibName, pcbCfe] : pcbLibFiles )
             {
-                auto decodedStream = intCom->DecodeIntLibStream( *pcbCfe );
-                m_fplibFiles[aLibraryPath].push_back(
-                    std::unique_ptr<ALTIUM_PCB_COMPOUND_FILE>(
-                        static_cast<ALTIUM_PCB_COMPOUND_FILE*>(decodedStream.release())
-                    )
-                );
+                auto decodedStream = std::make_unique<ALTIUM_PCB_COMPOUND_FILE>();
+
+                if( intCom->DecodeIntLibStream( *pcbCfe, decodedStream.get() ) )
+                    m_fplibFiles[aLibraryPath].emplace_back( std::move( decodedStream ) );
             }
         }
     }
