@@ -92,6 +92,11 @@ private:
     HANDLER_RESULT<GraphicsDefaultsResponse> handleGetGraphicsDefaults(
             const HANDLER_CONTEXT<GetGraphicsDefaults>& aCtx );
 
+    HANDLER_RESULT<types::Vector2> handleGetBoardOrigin(
+            const HANDLER_CONTEXT<GetBoardOrigin>& aCtx );
+
+    HANDLER_RESULT<Empty> handleSetBoardOrigin( const HANDLER_CONTEXT<SetBoardOrigin>& aCtx );
+
     HANDLER_RESULT<commands::GetBoundingBoxResponse> handleGetBoundingBox(
             const HANDLER_CONTEXT<commands::GetBoundingBox>& aCtx );
 
