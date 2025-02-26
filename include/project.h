@@ -272,7 +272,7 @@ public:
      */
     void Clear()        // inline not virtual
     {
-        ElemsClear();
+        elemsClear();
 
         for( unsigned i = 0; i<RSTRING_COUNT;  ++i )
             SetRString( RSTRING_T( i ), wxEmptyString );
