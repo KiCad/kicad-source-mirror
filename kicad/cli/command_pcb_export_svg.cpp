@@ -162,11 +162,11 @@ int CLI::PCB_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
 
     if( m_argParser.get<bool>( ARG_MODE_MULTI ) )
         svgJob->m_genMode = JOB_EXPORT_PCB_SVG::GEN_MODE::MULTI;
-    else
+    else if( m_argParser.get<bool>( ARG_MODE_SINGLE ) )
         svgJob->m_genMode = JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE;
-
-    if( svgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE )
+    else if( svgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE )
     {
+        // TODO remove this block when changing the default for JOB_EXPORT_PCB_SVG::m_genMode
         wxFprintf( stdout, wxT( "\033[33;1m%s\033[0m\n" ),
                    _( "This command has deprecated behavior as of KiCad 9.0, the default behavior "
                       "of this command will change in a future release." ) );
