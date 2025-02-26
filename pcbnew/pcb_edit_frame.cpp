@@ -283,10 +283,12 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                     &PCB_EDIT_FRAME::onPluginAvailabilityChanged, this );
 #endif
 
-    m_propertiesPanel = new PCB_PROPERTIES_PANEL( this, this );
+    // Fetch a COPY of the config as a lot of these initializations are going to overwrite our
+    // data.
+    PCBNEW_SETTINGS::AUI_PANELS aui_cfg = GetPcbNewSettings()->m_AuiPanels;
 
-    float proportion = GetPcbNewSettings()->m_AuiPanels.properties_splitter;
-    m_propertiesPanel->SetSplitterProportion( proportion );
+    m_propertiesPanel = new PCB_PROPERTIES_PANEL( this, this );
+    m_propertiesPanel->SetSplitterProportion( aui_cfg.properties_splitter );
 
     m_selectionFilterPanel = new PANEL_SELECTION_FILTER( this );
 
@@ -380,40 +382,36 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     FinishAUIInitialization();
 
-    if( PCBNEW_SETTINGS* settings = dynamic_cast<PCBNEW_SETTINGS*>( config() ) )
+    if( aui_cfg.right_panel_width > 0 )
     {
-        if( settings->m_AuiPanels.right_panel_width > 0 )
-        {
-            wxAuiPaneInfo& layersManager = m_auimgr.GetPane( wxS( "LayersManager" ) );
-            SetAuiPaneSize( m_auimgr, layersManager, settings->m_AuiPanels.right_panel_width, -1 );
-        }
-
-        if( settings->m_AuiPanels.properties_panel_width > 0 && m_propertiesPanel )
-        {
-            wxAuiPaneInfo& propertiesPanel = m_auimgr.GetPane( PropertiesPaneName() );
-            SetAuiPaneSize( m_auimgr, propertiesPanel,
-                            settings->m_AuiPanels.properties_panel_width, -1 );
-        }
-
-        if( settings->m_AuiPanels.search_panel_height > 0
-            && ( settings->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_TOP
-                || settings->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_BOTTOM ) )
-        {
-            wxAuiPaneInfo& searchPane = m_auimgr.GetPane( SearchPaneName() );
-            searchPane.Direction( settings->m_AuiPanels.search_panel_dock_direction );
-            SetAuiPaneSize( m_auimgr, searchPane, -1, settings->m_AuiPanels.search_panel_height );
-        }
-        else if( settings->m_AuiPanels.search_panel_width > 0
-                && ( settings->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_LEFT
-                    || settings->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_RIGHT ) )
-        {
-            wxAuiPaneInfo& searchPane = m_auimgr.GetPane( SearchPaneName() );
-            searchPane.Direction( settings->m_AuiPanels.search_panel_dock_direction );
-            SetAuiPaneSize( m_auimgr, searchPane, settings->m_AuiPanels.search_panel_width, -1 );
-        }
-
-        m_appearancePanel->SetTabIndex( settings->m_AuiPanels.appearance_panel_tab );
+        wxAuiPaneInfo& layersManager = m_auimgr.GetPane( wxS( "LayersManager" ) );
+        SetAuiPaneSize( m_auimgr, layersManager, aui_cfg.right_panel_width, -1 );
     }
+
+    if( aui_cfg.properties_panel_width > 0 && m_propertiesPanel )
+    {
+        wxAuiPaneInfo& propertiesPanel = m_auimgr.GetPane( PropertiesPaneName() );
+        SetAuiPaneSize( m_auimgr, propertiesPanel, aui_cfg.properties_panel_width, -1 );
+    }
+
+    if( aui_cfg.search_panel_height > 0
+        && ( aui_cfg.search_panel_dock_direction == wxAUI_DOCK_TOP
+            || aui_cfg.search_panel_dock_direction == wxAUI_DOCK_BOTTOM ) )
+    {
+        wxAuiPaneInfo& searchPane = m_auimgr.GetPane( SearchPaneName() );
+        searchPane.Direction( aui_cfg.search_panel_dock_direction );
+        SetAuiPaneSize( m_auimgr, searchPane, -1, aui_cfg.search_panel_height );
+    }
+    else if( aui_cfg.search_panel_width > 0
+            && ( aui_cfg.search_panel_dock_direction == wxAUI_DOCK_LEFT
+                || aui_cfg.search_panel_dock_direction == wxAUI_DOCK_RIGHT ) )
+    {
+        wxAuiPaneInfo& searchPane = m_auimgr.GetPane( SearchPaneName() );
+        searchPane.Direction( aui_cfg.search_panel_dock_direction );
+        SetAuiPaneSize( m_auimgr, searchPane, aui_cfg.search_panel_width, -1 );
+    }
+
+    m_appearancePanel->SetTabIndex( aui_cfg.appearance_panel_tab );
 
     {
         m_layerPairSettings = std::make_unique<LAYER_PAIR_SETTINGS>();

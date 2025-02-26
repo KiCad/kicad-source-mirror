@@ -218,7 +218,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     CreateInfoBar();
 
-    // Fetch COPY of config as a lot of these initializations are going to overwrite our data.
+    // Fetch a COPY of the config as a lot of these initializations are going to overwrite our
+    // data.
     EESCHEMA_SETTINGS::AUI_PANELS aui_cfg = eeconfig()->m_AuiPanels;
     EESCHEMA_SETTINGS::APPEARANCE appearance_cfg = eeconfig()->m_Appearance;
 

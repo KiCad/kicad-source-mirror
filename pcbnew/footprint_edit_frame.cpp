@@ -206,6 +206,17 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     SetActiveLayer( F_SilkS );
 
+    // Fetch a COPY of the config as a lot of these initializations are going to overwrite our
+    // data.
+    int libWidth = 0;
+    FOOTPRINT_EDITOR_SETTINGS::AUI_PANELS aui_cfg;
+
+    if( FOOTPRINT_EDITOR_SETTINGS* cfg = dynamic_cast<FOOTPRINT_EDITOR_SETTINGS*>( GetSettings() ) )
+    {
+        libWidth = cfg->m_LibWidth;
+        aui_cfg = cfg->m_AuiPanels;
+    }
+
     m_auimgr.SetManagedWindow( this );
 
     unsigned int auiFlags = wxAUI_MGR_DEFAULT;
@@ -264,20 +275,21 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     FinishAUIInitialization();
 
     // Apply saved visibility stuff at the end
+    wxAuiPaneInfo& treePane = m_auimgr.GetPane( "Footprints" );
+    wxAuiPaneInfo& layersManager = m_auimgr.GetPane( "LayersManager" );
+
+    if( libWidth > 0 )
+        SetAuiPaneSize( m_auimgr, treePane, libWidth, -1 );
+
+    if( aui_cfg.right_panel_width > 0 )
+        SetAuiPaneSize( m_auimgr, layersManager, aui_cfg.right_panel_width, -1 );
+
+    m_appearancePanel->SetTabIndex( aui_cfg.appearance_panel_tab );
+
     if( FOOTPRINT_EDITOR_SETTINGS* cfg = dynamic_cast<FOOTPRINT_EDITOR_SETTINGS*>( GetSettings() ) )
     {
-        wxAuiPaneInfo& treePane = m_auimgr.GetPane( "Footprints" );
-        wxAuiPaneInfo& layersManager = m_auimgr.GetPane( "LayersManager" );
-
-        if( cfg->m_LibWidth > 0 )
-            SetAuiPaneSize( m_auimgr, treePane, cfg->m_LibWidth, -1 );
-
-        if( cfg->m_AuiPanels.right_panel_width > 0 )
-            SetAuiPaneSize( m_auimgr, layersManager, cfg->m_AuiPanels.right_panel_width, -1 );
-
         m_appearancePanel->SetUserLayerPresets( cfg->m_LayerPresets );
         m_appearancePanel->ApplyLayerPreset( cfg->m_ActiveLayerPreset );
-        m_appearancePanel->SetTabIndex( cfg->m_AuiPanels.appearance_panel_tab );
     }
 
     // restore the last footprint from the project, if any, after the library has been init'ed
