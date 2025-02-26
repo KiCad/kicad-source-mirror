@@ -1284,6 +1284,9 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                 if( m_replaceFootprints && component->GetFPID() != footprint->GetFPID() )
                     tmp = replaceFootprint( aNetlist, footprint, component );
 
+                if( !tmp )
+                    tmp = footprint;
+
                 if( tmp )
                 {
                     footprintMap[ component ] = tmp;
