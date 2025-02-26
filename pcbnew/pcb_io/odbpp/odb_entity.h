@@ -125,7 +125,7 @@ public:
     virtual void GenerateFiles( ODB_TREE_WRITER& writer ) override;
 
 private:
-    std::map<wxString, wxString> m_info;
+    std::vector<std::pair<wxString, wxString>> m_info;
     // ODB_ATTRLIST m_attrlist;
 };
 
