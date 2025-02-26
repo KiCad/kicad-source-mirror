@@ -376,6 +376,9 @@ protected:
     std::vector<std::shared_ptr<SHAPE>> m_shapes;
 
     bool       m_inClearRenderCache;      ///< re-entrancy guard
+
+    // a flag to protect against reentrance
+    bool m_busy;
 };
 
 
