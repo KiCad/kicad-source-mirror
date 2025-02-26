@@ -537,6 +537,30 @@ void DIALOG_TRACK_VIA_PROPERTIES::onUnitsChanged( wxCommandEvent& aEvent )
 }
 
 
+bool DIALOG_TRACK_VIA_PROPERTIES::confirmShortingNets( int aNet, const std::set<int>& shortingNets )
+{
+    wxString msg;
+
+    if( shortingNets.size() == 1 )
+    {
+        msg.Printf( _( "Applying these changes will short net %s with %s." ),
+                    m_netSelector->GetValue(),
+                    m_frame->GetBoard()->FindNet( *shortingNets.begin() )->GetNetname() );
+    }
+    else
+    {
+        msg.Printf( _( "Applying these changes will short net %s with other nets." ),
+                    m_netSelector->GetValue() );
+    }
+
+    KIDIALOG dlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+    dlg.SetOKCancelLabels( _( "Apply Anyway" ), _( "Cancel Changes" ) );
+    dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
+
+    return dlg.ShowModal() == wxID_OK;
+}
+
+
 bool DIALOG_TRACK_VIA_PROPERTIES::confirmPadChange( const std::set<PAD*>& changingPads )
 {
     wxString msg;
@@ -577,12 +601,12 @@ bool DIALOG_TRACK_VIA_PROPERTIES::confirmPadChange( const std::set<PAD*>& changi
 
 bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 {
-    std::vector<PCB_TRACK*> tracks;
+    std::vector<PCB_TRACK*> selected_tracks;
 
     for( EDA_ITEM* item : m_items )
     {
         if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item ) )
-            tracks.push_back( track );
+            selected_tracks.push_back( track );
     }
 
     // Check for malformed data ONLY; design rules and constraints are the business of DRC.
@@ -636,7 +660,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
     bool         changeLock = m_lockedCbox->Get3StateValue() != wxCHK_UNDETERMINED;
     bool         setLock = m_lockedCbox->Get3StateValue() == wxCHK_CHECKED;
 
-    for( PCB_TRACK* track : tracks )
+    for( PCB_TRACK* track : selected_tracks )
     {
         commit.Modify( track );
 
@@ -809,74 +833,76 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
         }
     }
 
-    commit.Push( _( "Edit Track/Via Properties" ) );
-
-    // Pushing the commit will have updated the connectivity so we can now test to see if we
-    // need to update any pad nets.
-
-    auto           connectivity = m_frame->GetBoard()->GetConnectivity();
+    std::set<int>  shortingNets;
     int            newNetCode = m_netSelector->GetSelectedNetcode();
-    bool           updateNets = false;
     std::set<PAD*> changingPads;
 
-    if ( !m_netSelector->IsIndeterminate() )
-    {
-        updateNets = true;
-
-        for( PCB_TRACK* track : tracks )
-        {
-            BOARD_CONNECTED_ITEM* boardItem = static_cast<BOARD_CONNECTED_ITEM*>( track );
-            auto connectedItems = connectivity->GetConnectedItems( boardItem,
-                    { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T, PCB_FOOTPRINT_T }, true );
-
-            for ( BOARD_CONNECTED_ITEM* citem : connectedItems )
+    // Do NOT use the connectivity code here.  It will propagate through zones, and we haven't
+    // refilled those yet so it's going to pick up a whole bunch of other nets any time the track
+    // width was increased.
+    auto collide =
+            [&]( BOARD_CONNECTED_ITEM* a, BOARD_CONNECTED_ITEM* b )
             {
-                if( citem->Type() == PCB_PAD_T )
+                for( PCB_LAYER_ID layer : LSET( a->GetLayerSet() & b->GetLayerSet() ).Seq() )
                 {
-                    PAD* pad = static_cast<PAD*>( citem );
+                    if( a->GetEffectiveShape( layer )->Collide( b->GetEffectiveShape( layer ).get() ) )
+                        return true;
+                }
 
-                    if( pad->GetNetCode() != newNetCode )
+                return false;
+            };
+
+    for( PCB_TRACK* track : selected_tracks )
+    {
+        for( PCB_TRACK* other : m_frame->GetBoard()->Tracks() )
+        {
+            if( other->GetNetCode() == track->GetNetCode() || other->GetNetCode() == newNetCode )
+                continue;
+
+            if( collide( track, other ) )
+                shortingNets.insert( other->GetNetCode() );
+        }
+
+        for( FOOTPRINT* footprint : m_frame->GetBoard()->Footprints() )
+        {
+            for( PAD* pad : footprint->Pads() )
+            {
+                if( pad->GetNetCode() == newNetCode )
+                    continue;
+
+                if( collide( track, pad ) )
+                {
+                    if( pad->GetNetCode() == track->GetNetCode() )
                         changingPads.insert( pad );
+                    else
+                        shortingNets.insert( pad->GetNetCode() );
                 }
             }
         }
     }
 
-    if( changingPads.size() && !confirmPadChange( changingPads ) )
-        updateNets = false;
-
-    if( updateNets )
+    if( shortingNets.size() && !confirmShortingNets( newNetCode, shortingNets ) )
     {
-        for( EDA_ITEM* item : m_items )
-        {
-            commit.Modify( item );
-
-            switch( item->Type() )
-            {
-                case PCB_TRACE_T:
-                case PCB_ARC_T:
-                    static_cast<PCB_TRACK*>( item )->SetNetCode( newNetCode );
-                    break;
-
-                case PCB_VIA_T:
-                    static_cast<PCB_VIA*>( item )->SetNetCode( newNetCode );
-                    break;
-
-                default:
-                    wxASSERT( false );
-                    break;
-            }
-        }
-
-        for( PAD* pad : changingPads )
-        {
-            commit.Modify( pad );
-            pad->SetNetCode( newNetCode );
-        }
-
-        commit.Push( _( "Update Nets" ) );
+        commit.Revert();
+        return true;
     }
 
+    if( !m_netSelector->IsIndeterminate() )
+    {
+        if( changingPads.empty() || confirmPadChange( changingPads ) )
+        {
+            for( PCB_TRACK* track : selected_tracks )
+                track->SetNetCode( newNetCode );
+
+            for( PAD* pad : changingPads )
+            {
+                commit.Modify( pad );
+                pad->SetNetCode( newNetCode );
+            }
+        }
+    }
+
+    commit.Push( _( "Edit Track/Via Properties" ) );
     return true;
 }
 
