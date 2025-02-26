@@ -116,10 +116,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-26 20:12+0300\n"
-"PO-Revision-Date: 2025-02-24 19:44+0000\n"
+"PO-Revision-Date: 2025-02-27 07:25+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
-"source/it/>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
+"master-source/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4900,9 +4900,8 @@ msgid "Failed to write file '%s'."
 msgstr "Fallita scrittura file '%s'."
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
-#, fuzzy
 msgid "Embedded Reference"
-msgstr "Copia riferimento incorporato"
+msgstr "Riferimento incorporato"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
@@ -5414,14 +5413,12 @@ msgstr "Stato dell'interprete Python"
 
 #: common/dialogs/panel_printer_list.cpp:154
 #: common/dialogs/panel_printer_list.cpp:175
-#, fuzzy
 msgid "Default printer"
-msgstr "Font predefinito"
+msgstr "Stampante predefinita"
 
 #: common/dialogs/panel_printer_list_base.cpp:17
-#, fuzzy
 msgid "Printers"
-msgstr "Stampante"
+msgstr "Stampanti"
 
 #: common/dialogs/panel_printer_list_base.cpp:27
 #: common/widgets/wx_html_report_panel.cpp:246
@@ -6543,23 +6540,20 @@ msgstr "Bezier"
 #: common/eda_shape.cpp:2388
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:119
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:238
-#, fuzzy
 msgid "Hatch"
-msgstr "Tratteggiato"
+msgstr "Tratteggio"
 
 #: common/eda_shape.cpp:2389
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:119
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:238
-#, fuzzy
 msgid "Reverse Hatch"
-msgstr "Inverti"
+msgstr "Tratteggio inverso"
 
 #: common/eda_shape.cpp:2390
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:119
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:238
-#, fuzzy
 msgid "Cross-hatch"
-msgstr "Analisi-incrociata"
+msgstr "Tratteggio incrociato"
 
 #: common/eda_shape.cpp:2423 eeschema/sch_shape.cpp:554
 msgid "Shape Properties"
@@ -7633,7 +7627,6 @@ msgid "Export Drill Data Job Settings"
 msgstr "Impostazioni lavoro Esporta dati di perforazione"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
-#, fuzzy
 msgid "PCB: Export Drill Data"
 msgstr "C.S.: Esporta dati forature"
 
@@ -7653,18 +7646,16 @@ msgstr "C.S: esporta DXF"
 
 #: common/jobs/job_export_pcb_gencad.cpp:49
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:128
-#, fuzzy
 msgid "Export GenCAD File"
-msgstr "Esporta file SVG"
+msgstr "Esporta file GenCAD"
 
 #: common/jobs/job_export_pcb_gencad.cpp:55
 msgid "Export GenCAD Job Settings"
 msgstr "Impostazioni lavoro Esporta GenCAD"
 
 #: common/jobs/job_export_pcb_gencad.cpp:59
-#, fuzzy
 msgid "PCB: Export GenCAD"
-msgstr "C.S: esporta DXF"
+msgstr "C.S: esporta GenCAD"
 
 #: common/jobs/job_export_pcb_gerber.cpp:65
 msgid "Export single Gerber"
@@ -7692,29 +7683,24 @@ msgid "Export IPC-2581"
 msgstr "Esporta IPC-2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
-#, fuzzy
 msgid "Export IPC-2581 Job Settings"
-msgstr "Impostazioni lavoro Esporta IPC2581"
+msgstr "Esporta impostazioni lavoro IPC-2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
-#, fuzzy
 msgid "PCB: Export IPC-2581"
-msgstr "C.S.: Esporta IPC2581"
+msgstr "C.S.: Esporta IPC-2581"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:33
-#, fuzzy
 msgid "Export IPC-D-356"
-msgstr "Esporta IPC-2581"
+msgstr "Esporta IPC-D-356"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:39
-#, fuzzy
 msgid "Export IPC-D-356 Job Settings"
-msgstr "Impostazioni lavoro Esporta IPC2581"
+msgstr "Esporta impostazioni lavoro IPC-D-356"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:52
-#, fuzzy
 msgid "PCB: Export IPC-D-356"
-msgstr "C.S.: Esporta IPC2581"
+msgstr "C.S.: Esporta IPC-D-356"
 
 #: common/jobs/job_export_pcb_odb.cpp:57
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
@@ -7872,7 +7858,6 @@ msgid "Schematic: Perform ERC"
 msgstr "Schema: Esegui CRE"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy Files"
 msgstr "Speciale: Copia file"
 
@@ -10413,7 +10398,7 @@ msgstr "File sessione Specctra"
 
 #: common/wildcards_and_files_ext.cpp:536
 msgid "IPC-D-356 Test Files"
-msgstr "File di test IPC-D-356"
+msgstr "File di prova IPC-D-356"
 
 #: common/wildcards_and_files_ext.cpp:543
 msgid "Workbook file"
@@ -14119,7 +14104,6 @@ msgstr "Rimpiazza"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:149
 #: pcbnew/dialogs/dialog_find_base.cpp:125
-#, fuzzy
 msgid "Show search panel"
 msgstr "Mostra pannello ricerca"
 
@@ -14223,9 +14207,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:115
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:234
-#, fuzzy
 msgid "Fill:"
-msgstr "Riempi"
+msgstr "Riempi:"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:142
 msgid "Clear colors to use Schematic Editor colors."
@@ -17024,15 +17007,15 @@ msgid "The current configuration does not include the symbol library '%s'"
 msgstr "La configurazione corrente non include la libreria di simboli '%s'"
 
 #: eeschema/erc/erc.cpp:1414
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration"
 msgstr ""
-"La libreria di simboli '%s' non è abilitata nella configurazione corrente."
+"La libreria di simboli '%s' non è abilitata nella configurazione corrente"
 
 #: eeschema/erc/erc.cpp:1429
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' was not found at '%s'."
-msgstr "Libreria impronte '%s' non trovata."
+msgstr "Libreria di simboli '%s' non trovata in '%s'."
 
 #: eeschema/erc/erc.cpp:1449
 #, c-format
@@ -22257,16 +22240,17 @@ msgid "Delete Hierarchical Labels"
 msgstr "Elimina etichette gerarchiche"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:99
-#, fuzzy
 msgid ""
 "Associate selected sheet pin and hierarchical label using the label name"
-msgstr "Sincronizza pin foglio ed etichette gerarchiche"
+msgstr ""
+"Associa il pin del foglio selezionato e l'etichetta gerarchica utilizzando "
+"il nome dell'etichetta"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
-#, fuzzy
 msgid "Associate selected sheet pin and hierarchical label using the pin name"
 msgstr ""
-"Associazione(i) di pin di interruzione foglio e di etichette gerarchiche"
+"Associa il pin del foglio selezionato e l'etichetta gerarchica usando il "
+"nome del pin"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
@@ -22803,14 +22787,12 @@ msgid "Place Sheet Pins"
 msgstr "Piazza pin fogli"
 
 #: eeschema/tools/ee_actions.cpp:552 eeschema/tools/ee_actions.cpp:560
-#, fuzzy
 msgid "Sync Sheet Pins..."
-msgstr "Sincronizza pin fogli"
+msgstr "Sincronizza pin fogli..."
 
 #: eeschema/tools/ee_actions.cpp:568
-#, fuzzy
 msgid "Import Sheet..."
-msgstr "Importa foglio"
+msgstr "Importa foglio..."
 
 #: eeschema/tools/ee_actions.cpp:569
 msgid "Import sheet into project"
@@ -27683,6 +27665,8 @@ msgid ""
 "This plugin requires the KiCad API, which is currently disabled in "
 "preferences. Would you like to enable it?"
 msgstr ""
+"Questo plugin richiede l'API KiCad, attualmente disabilitata nelle "
+"preferenze. Abilitarla?"
 
 #: kicad/pcm/pcm.cpp:1121
 msgid "PCM Update"
@@ -28034,18 +28018,16 @@ msgid "Local path: monitoring folder changes"
 msgstr "Percorso locale: monitora i cambiamenti cartelle"
 
 #: kicad/project_tree_pane.cpp:1631
-#, fuzzy
 msgid "The selected directory is already a Git project."
-msgstr "La cartella selezionata è già un progetto git."
+msgstr "La cartella selezionata è già un progetto Git."
 
 #: kicad/project_tree_pane.cpp:1638
 msgid "Set default remote"
 msgstr "Imposta remoto predefinito"
 
 #: kicad/project_tree_pane.cpp:1653
-#, fuzzy
 msgid "Failed to initialize Git project."
-msgstr "Fallita inizializzazione progetto git."
+msgstr "Fallita inizializzazione progetto Git."
 
 #: kicad/project_tree_pane.cpp:1713
 msgid "Failed to set default remote."
@@ -28085,19 +28067,16 @@ msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "Fallito aggiornamento riferimento HEAD per la diramazione '%s'"
 
 #: kicad/project_tree_pane.cpp:1919
-#, fuzzy
 msgid "Are you sure you want to remove Git tracking from this project?"
-msgstr "Sicuri di voler rimuovere il versionamento git da questo progetto?"
+msgstr "Sicuri di voler rimuovere il versionamento Git da questo progetto?"
 
 #: kicad/project_tree_pane.cpp:1936
-#, fuzzy
 msgid "Failed to remove Git directory"
-msgstr "Fallita rimozione cartella git"
+msgstr "Fallita rimozione cartella Git"
 
 #: kicad/project_tree_pane.cpp:2252
-#, fuzzy
 msgid "The selected directory is not a Git project."
-msgstr "La cartella selezionata è già un progetto git."
+msgstr "La cartella selezionata non è un progetto Git."
 
 #: kicad/project_tree_pane.cpp:2401
 msgid "Discarding commit due to empty commit message."
@@ -34971,7 +34950,7 @@ msgid "Solder paste relative clearance:"
 msgstr "Distanza relativa pasta salda:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:322
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -34990,8 +34969,8 @@ msgstr ""
 "Questo valore può essere superato da un valore locale della piazzola.\n"
 "La distanza finale sarà data dalla somma di questo valore e il valore di "
 "distanza assoluto.\n"
-"Un valore negativo indica una dimensione di apertura dalla maschera "
-"(stencil) minore rispetto alla dimensione della piazzola."
+"Un valore negativo indica una dimensione di apertura dalla maschera (stencil)"
+" minore rispetto alla dimensione della piazzola."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:345
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:314
@@ -35156,7 +35135,7 @@ msgstr ""
 "scheda Distanza e Impostazioni nelle Proprietà di ogni piazzola."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:291
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -35168,11 +35147,11 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local Clearance "
 "and Settings tab of Pad Properties."
 msgstr ""
-"Questo è il locale rapporto di distanza in percentuale della larghezza e "
+"Questo è il rapporto di distanza locale in percentuale della larghezza e "
 "altezza per questa impronta.\n"
 "Un valore di 10 indica che la distanza orizzontale sarà pari al 10% della "
-"larghezza della piazzola, e il valore di distanza verticale al "
-"10% dell'altezza della piazzola.\n"
+"larghezza della piazzola, e il valore di distanza verticale al 10% "
+"dell'altezza della piazzola.\n"
 "La distanza finale sarà data dalla somma di questo valore e il valore di "
 "distanza assoluto.\n"
 "Un valore negativo indica un valore di apertura dalla maschera (stencil) "
@@ -35324,16 +35303,12 @@ msgid "Export to GenCAD settings"
 msgstr "Esporta sulle impostazioni GenCAD"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:55
-#, fuzzy
 msgid "Output File:"
 msgstr "File d'uscita:"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:61
-#, fuzzy
 msgid "Enter a filename if you do not want to use default file names"
-msgstr ""
-"Inserisci il nome del file se non si vuole usare il nome predefinito\n"
-"Può essere usato soltanto stampando il foglio corrente"
+msgstr "Inserire il nome del file se non si vuole usare il nome predefinito"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:436
 #, c-format
@@ -35921,9 +35896,8 @@ msgid "Set to specified values:"
 msgstr "Imposta a valori specificati:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:147
-#, fuzzy
 msgid "Visible  (fields only)"
-msgstr "Visibile  (solo testo)"
+msgstr "Visibile  (solo campi)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:235
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:99
@@ -36786,7 +36760,6 @@ msgid "Fabrication property:"
 msgstr "Proprietà fabbricazione:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:576
-#, fuzzy
 msgid ""
 "Optional property to specify a special purpose or constraint in fabrication "
 "files:\n"
@@ -36803,11 +36776,11 @@ msgstr ""
 "L'attributo BGA è per le piazzole nelle impronte BGA (Ball Grid Array)\n"
 "Allineatore locale è un allineatore (fiducial) per le impronte genitori\n"
 "Allineatore globale è un allineatore (fiducial) per l'intera scheda\n"
-"Piazzola di test è utile per i specificare punti di test nei file Gerber\n"
-"Piazzola dissipatore specifica una piazzola termica\n"
-"Dentellata specifica piazzole di fori passanti sul bordo della scheda "
+"Punto di test è utile per i specificare un punto di test\n"
+"Dissipatore specifica una piazzola termica\n"
+"Dentellato specifica piazzole di fori passanti sul bordo della scheda "
 "(castellated)\n"
-"Questa proprietà vengono specificate nei file Gerber X2."
+"Meccanico specifica un foro passante usato come supporto meccanico"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:583 pcbnew/pad.cpp:2510
 msgid "BGA pad"
@@ -37105,9 +37078,8 @@ msgid "Hide the footprint text and graphics"
 msgstr "Nascondi il testo e la grafica dell'impronta"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:100
-#, fuzzy
 msgid "Cross-out"
-msgstr "Analisi-incrociata"
+msgstr "Barrato"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:103
 msgid "Sketch pads on fabrication layers"
@@ -37772,30 +37744,25 @@ msgid "Transparent"
 msgstr "Trasparente"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:34
-#, fuzzy
 msgid "High"
-msgstr "Evidenzia"
+msgstr "Alto"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:35
-#, fuzzy
 msgid "User"
-msgstr "User1"
+msgstr "Utente"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:42
-#, fuzzy
 msgid "Dimensions:"
-msgstr "Dimensioni"
+msgstr "Dimensioni:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:52
 #: pcbnew/dialogs/dialog_render_job_base.cpp:63
-#, fuzzy
 msgid "px"
-msgstr "p"
+msgstr "px"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:56
-#, fuzzy
 msgid "x"
-msgstr "2x"
+msgstr "x"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:70
 msgid "Quality preset:"
@@ -38073,14 +38040,13 @@ msgid "Expansion:"
 msgstr "Espansione:"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:269
-#, fuzzy
 msgid ""
 "This is the local clearance between the shape and the solder mask opening.\n"
 "Leave blank to use the value defined in the Board Setup."
 msgstr ""
-"Questo è il valore locale di distanza tra questa piazzola e la maschera di "
+"Questa è la distanza locale tra forma e l'apertura della maschera di "
 "saldatura.\n"
-"Se a 0, verrà usato il valore locale dell'impronta o il valore globale."
+"Lasciare vuoto per usare il valore definito nell'impostazione scheda."
 
 #: pcbnew/dialogs/dialog_swap_layers.cpp:48
 msgid "Move items on:"
@@ -38096,9 +38062,8 @@ msgid "Swap Layers"
 msgstr "Scambia strati"
 
 #: pcbnew/dialogs/dialog_target_properties.cpp:109
-#, fuzzy
 msgid "Edit Alignment Target"
-msgstr "Obiettivo di allineamento modificato"
+msgstr "Modifica obiettivo di allineamento"
 
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:50
 msgid "Shape:"
@@ -38154,7 +38119,6 @@ msgid "Parent footprint description"
 msgstr "Descrizione impronta genitore"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:265
-#, fuzzy
 msgid "Update Thickness According to Text Size"
 msgstr "Aggiorna lo spessore in base alla dimensione del testo"
 
@@ -38170,9 +38134,8 @@ msgstr ""
 "Testo in grassetto: lo spessore è dimensione/5"
 
 #: pcbnew/dialogs/dialog_textbox_properties.cpp:412
-#, fuzzy
 msgid "Edit Text Box Properties"
-msgstr "Proprietà riquadro di testo"
+msgstr "Modifica proprietà riquadro di testo"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:208
 msgid "Border width:"
@@ -38186,21 +38149,22 @@ msgstr "Stile bordo:"
 #, c-format
 msgid "Applying these changes will short net %s with %s."
 msgstr ""
+"Applicando queste modifiche la connessione %s verrà messa in corto con %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:552
 #, c-format
 msgid "Applying these changes will short net %s with other nets."
 msgstr ""
+"L'applicazione di queste modifiche metterà in corto il collegamento %s con "
+"altri collegamenti."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Apply Anyway"
-msgstr "Aggiungi comunque"
+msgstr "Applica comunque"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Cancel Changes"
-msgstr "Annullare i cambiamenti?"
+msgstr "Annulla i cambiamenti"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:571
 #, c-format
@@ -38235,9 +38199,8 @@ msgid "Via start layer and end layer cannot be the same"
 msgstr "Gli strati di inizio e di fine via non possono essere uguali"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:905
-#, fuzzy
 msgid "Edit Track/Via Properties"
-msgstr "Modifica le proprietà pista/via"
+msgstr "Modifica proprietà pista/via"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:41
 msgid "Automatically update via nets"
@@ -38265,19 +38228,17 @@ msgid "Pre-defined sizes:"
 msgstr "Dimensioni predefinite:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:202
-#, fuzzy
 msgid ""
 "This is the local clearance between the track and the solder mask opening.\n"
 "Leave blank to use the value defined in the Board Setup."
 msgstr ""
-"Questo è il valore locale di distanza tra questa piazzola e la maschera di "
+"Questa è la distanza locale tra la pista e l'apertura della maschera di "
 "saldatura.\n"
-"Se a 0, verrà usato il valore locale dell'impronta o il valore globale."
+"Lasciare vuoto per usare il valore definito nell'impostazione scheda."
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:283
-#, fuzzy
 msgid "Front/Inner/Back"
-msgstr "Anteriore/Interno/Inferiore"
+msgstr "Fronte/Interno/Retro"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:301
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
@@ -38317,30 +38278,26 @@ msgid "End layer:"
 msgstr "Strato finale:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:394
-#, fuzzy
 msgid "Front tenting:"
-msgstr "Prefisso fronte:"
+msgstr "Tenting fronte:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:398
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:419
 #: pcbnew/pcb_track.cpp:2052
-#, fuzzy
 msgid "From design rules"
-msgstr "Mostra regole di progettazione."
+msgstr "Dalle regole di progettazione"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:398
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:419
 #: pcbnew/pcb_track.cpp:2053
-#, fuzzy
 msgid "Tented"
-msgstr "Centra"
+msgstr "Coperto"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:398
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:419
 #: pcbnew/pcb_track.cpp:2054
-#, fuzzy
 msgid "Not tented"
-msgstr "Non connesso"
+msgstr "Non coperto"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:402
 msgid "Whether to tent (cover with soldermask) this via on the front side"
@@ -38351,9 +38308,8 @@ msgid "Link front and back tenting settings"
 msgstr "Impostazioni di collegamento del tenting fronte e retro"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:415
-#, fuzzy
 msgid "Back tenting:"
-msgstr "Prefisso retro:"
+msgstr "Tenting retro:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:423
 msgid "Whether to tent (cover with soldermask) this via on the back side"
@@ -38384,7 +38340,6 @@ msgid "Track and Via Dimensions"
 msgstr "Dimensioni piste e via"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:55
-#, fuzzy
 msgid "Target skew: "
 msgstr "Skew obiettivo: "
 
@@ -38481,9 +38436,8 @@ msgid "Restore All Layers"
 msgstr "Ripristina tutti gli strati"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:205
-#, fuzzy
 msgid "Remove Unused Pads"
-msgstr "Rimuovi piazzole inutilizzate..."
+msgstr "Rimuovi piazzole inutilizzate"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:33
 msgid "&Selected only"
@@ -38567,19 +38521,16 @@ msgid "Drag (free angle)"
 msgstr "Trascina (angoli liberi)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:90
-#, fuzzy
 msgid "Flip board items:"
-msgstr "Capovolgi vista scheda"
+msgstr "Capovolgi elementi scheda:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:94
-#, fuzzy
 msgid "Left/right"
-msgstr "Pan sinistra/destra:"
+msgstr "Sinistra/destra"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:97
-#, fuzzy
 msgid "Top/bottom"
-msgstr "Basso"
+msgstr "Sopra/sotto"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:103
 msgid "Allow free pads"
@@ -38638,14 +38589,12 @@ msgstr "Cattura il mouse quando entra nell'area di una piazzola"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:329
 #: pcbnew/dialogs/panel_edit_options_base.cpp:343
-#, fuzzy
 msgid "When routing tracks"
-msgstr "Creando piste"
+msgstr "Sbrogliando piste"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:337
-#, fuzzy
 msgid "Snap to tracks and vias:"
-msgstr "Crea piste e via"
+msgstr "Piste e via magnetici:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:339
 #: pcbnew/dialogs/panel_edit_options_base.cpp:347
@@ -38696,19 +38645,17 @@ msgid "Internal Layers"
 msgstr "Strati interni"
 
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:521
-#, fuzzy, c-format
+#, c-format
 msgid "Layer name %s already in use."
-msgstr "Il nome strato '%s' è già in uso."
+msgstr "Nome strato %s già in uso."
 
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:23
-#, fuzzy
 msgid "Default Field Properties for New Footprints"
-msgstr "Proprietà campo predefinite per nuove impronte:"
+msgstr "Proprietà campo predefinite per nuove impronte"
 
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:73
-#, fuzzy
 msgid "Default Text Items for New Footprints"
-msgstr "Elementi di testo predefiniti per le nuove impronte:"
+msgstr "Elementi di testo predefiniti per le nuove impronte"
 
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults.cpp:210
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:217
@@ -38756,14 +38703,12 @@ msgid "Parameter error"
 msgstr "Errore parametro"
 
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:26
-#, fuzzy
 msgid "Default Properties for New Graphic Items"
-msgstr "Valori predefiniti per i nuovi elementi grafici:"
+msgstr "Proprietà predefinite per i nuovi elementi grafici"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:309
-#, fuzzy
 msgid "Hidden footprint libraries are not yet supported."
-msgstr "Libreria impronte non aggiornata\n"
+msgstr "Librerie impronte nascoste non ancora supportate."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:885
 #, c-format
@@ -38778,9 +38723,8 @@ msgid "Failed to save footprint library file '%s'."
 msgstr "Fallito salvataggio file libreria impronte '%s'."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:391
-#, fuzzy
 msgid "Error adding 3D model"
-msgstr "Caricamento modelli 3D..."
+msgstr "Errore aggiunta modello 3D"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:475
 msgid "No filename entered"
@@ -38895,18 +38839,16 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins.cpp:70
 #: pcbnew/dialogs/panel_pcbnew_action_plugins.cpp:71
-#, fuzzy
 msgid "Recreate Plugin Environment"
-msgstr "Incremento posizione di ripetizione"
+msgstr "Ricrea ambiente plugin"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:40
 msgid "Show Button"
 msgstr "Mostra pulsante"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:41
-#, fuzzy
 msgid "Plugin"
-msgstr "Plugin (%d)"
+msgstr "Plugin"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:65
 msgid "Move Up"
@@ -39014,19 +38956,16 @@ msgid "Raise a DRC error if a footprint courtyard overlaps this area"
 msgstr "Solleva un errore DRC se l'ingombro di un'impronta tocca quest'area"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:20
-#, fuzzy
 msgid "No placement"
-msgstr "Piazzamento"
+msgstr "No piazzamento"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:24
-#, fuzzy
 msgid "Place items from sheet:"
-msgstr "Piazza su:"
+msgstr "Piazza elementi dal foglio:"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:33
-#, fuzzy
 msgid "Place items matching component class:"
-msgstr "Filtra elementi per netclass:"
+msgstr "Piazza elementi corrispondenti alla classe componenti:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:46
 msgid "Minimum clearance:"
@@ -39209,7 +39148,6 @@ msgid "Minimum text thickness:"
 msgstr "Spessore minimo testo:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:371
-#, fuzzy
 msgid "Arc/Circle Approximated by Segments"
 msgstr "Arco/cerchio approssimato a segmenti"
 
@@ -39243,7 +39181,6 @@ msgid "Note: zone filling can be slow when < %s."
 msgstr "Nota: lo riempimento zone può essere lento se < %s."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:414
-#, fuzzy
 msgid "Zone Fill Strategy"
 msgstr "Strategia riempimento zona"
 
@@ -39257,7 +39194,6 @@ msgid "Minimum thermal relief spoke count:"
 msgstr "Numero minimo raggi raccordi termici:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:455
-#, fuzzy
 msgid "Length Tuning"
 msgstr "Regolazione lunghezza"
 
@@ -39276,9 +39212,8 @@ msgstr ""
 "via viene ignorata."
 
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:17
-#, fuzzy
 msgid "Default Properties for New Dimension Objects"
-msgstr "Proprietà predefinite per i nuovi oggetti dimensione:"
+msgstr "Proprietà predefinite per i nuovi oggetti dimensione"
 
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:37
 msgid ""
@@ -39336,9 +39271,8 @@ msgstr ""
 "Applica impostazioni predefinite scheda alle forme impronta non in rame"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:58
-#, fuzzy
 msgid "This layer is required and cannot be disabled"
-msgstr "Il nome %s è riservato, e non può essere usato."
+msgstr "Questo strato è necessario e non può essere disabilitato"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:88
 #: pcbnew/dialogs/panel_setup_layers.cpp:294
@@ -39467,14 +39401,12 @@ msgstr ""
 "Gli strati di potenza verranno rimossi dal menù degli strati di Freeroute."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:483
-#, fuzzy
 msgid "Off-board, front"
-msgstr "Fuori scheda, di prova"
+msgstr "Fuori scheda, fronte"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:484
-#, fuzzy
 msgid "Off-board, back"
-msgstr "Fuori scheda, di prova"
+msgstr "Fuori scheda, retro"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:490
 msgid ""
@@ -39538,7 +39470,6 @@ msgstr ""
 "Continuare e cancellare le coppie di strati rame extra dalla scheda corrente?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:1111
-#, fuzzy
 msgid "Inner Layers to Be Deleted"
 msgstr "Strati interni da cancellare"
 
@@ -39568,9 +39499,8 @@ msgstr ""
 "Se non ne viene fornito nessuno, si suggerisce di impostare i valori a zero."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:49
-#, fuzzy
 msgid "Solder Mask Settings"
-msgstr "Espansioni maschera di saldatura:"
+msgstr "Impostazioni maschera di saldatura"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:62
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:67
