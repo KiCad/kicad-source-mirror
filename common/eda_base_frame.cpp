@@ -24,6 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "kicad_manager_frame.h"
 #include <eda_base_frame.h>
 
 #include <advanced_config.h>
@@ -1088,7 +1089,15 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
         KIFACE*                 kiface = nullptr;
         std::vector<int>        expand;
 
-        Kiway().GetActions( hotkeysPanel->ActionsList() );
+        wxWindow* kicadMgr_window = wxWindow::FindWindowByName( KICAD_MANAGER_FRAME_NAME );
+
+        if( KICAD_MANAGER_FRAME* kicadMgr = static_cast<KICAD_MANAGER_FRAME*>( kicadMgr_window ) )
+        {
+            ACTION_MANAGER* actionMgr = kicadMgr->GetToolManager()->GetActionManager();
+
+            for( const auto& [name, action] : actionMgr->GetActions() )
+                hotkeysPanel->ActionsList().push_back( action );
+        }
 
         book->AddLazyPage(
                 []( wxWindow* aParent ) -> wxWindow*
