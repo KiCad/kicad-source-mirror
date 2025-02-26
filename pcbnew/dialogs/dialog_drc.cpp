@@ -1329,7 +1329,7 @@ void DIALOG_DRC::updateDisplayedCounts()
     bool unconnectedOverflowed = false;
     bool footprintsOverflowed = false;
 
-    for( int ii = DRCE_FIRST; ii < DRCE_LAST; ++ii )
+    for( int ii = DRCE_FIRST; ii <= DRCE_LAST; ++ii )
     {
         const SEVERITY severity = bds().GetSeverity( ii );
 

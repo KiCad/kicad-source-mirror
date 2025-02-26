@@ -595,7 +595,7 @@ void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
         throw original_parse_error;
     }
 
-    for( int ii = DRCE_FIRST; ii < DRCE_LAST; ++ii )
+    for( int ii = DRCE_FIRST; ii <= DRCE_LAST; ++ii )
         m_errorLimits[ ii ] = ERROR_LIMIT;
 
     m_rulesValid = true;
@@ -612,7 +612,7 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
     m_reportAllTrackErrors = aReportAllTrackErrors;
     m_testFootprints = aTestFootprints;
 
-    for( int ii = DRCE_FIRST; ii < DRCE_LAST; ++ii )
+    for( int ii = DRCE_FIRST; ii <= DRCE_LAST; ++ii )
     {
         if( m_designSettings->Ignore( ii ) )
             m_errorLimits[ ii ] = 0;
