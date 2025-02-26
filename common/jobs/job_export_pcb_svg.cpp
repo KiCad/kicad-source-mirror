@@ -32,7 +32,7 @@ JOB_EXPORT_PCB_SVG::JOB_EXPORT_PCB_SVG() :
     JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::SVG, "svg", false ),
     m_pageSizeMode( 0 ),
     m_precision( 4 ),
-    m_genMode( GEN_MODE::SINGLE )
+    m_genMode( GEN_MODE::SINGLE )   // TODO change to MULTI for V10
 {
     m_plotDrawingSheet = true;
 
