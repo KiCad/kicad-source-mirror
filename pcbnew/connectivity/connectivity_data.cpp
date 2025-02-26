@@ -547,20 +547,18 @@ void CONNECTIVITY_DATA::ClearRatsnest()
 
 
 const std::vector<BOARD_CONNECTED_ITEM*>
-CONNECTIVITY_DATA::GetConnectedItems( const BOARD_CONNECTED_ITEM *aItem,
-                                      const std::vector<KICAD_T>& aTypes,
-                                      bool aIgnoreNetcodes ) const
+CONNECTIVITY_DATA::GetConnectedItems( const BOARD_CONNECTED_ITEM *aItem, int aFlags ) const
 {
+    using CN_CONNECTIVITY_ALGO::CSM_PROPAGATE;
+    using CN_CONNECTIVITY_ALGO::CSM_CONNECTIVITY_CHECK;
+
     std::vector<BOARD_CONNECTED_ITEM*> rv;
-    CN_CONNECTIVITY_ALGO::CLUSTER_SEARCH_MODE searchMode;
 
-    if( aIgnoreNetcodes )
-        searchMode = CN_CONNECTIVITY_ALGO::CSM_PROPAGATE;
-    else
-        searchMode = CN_CONNECTIVITY_ALGO::CSM_CONNECTIVITY_CHECK;
-
-    const auto clusters = m_connAlgo->SearchClusters( searchMode, aTypes,
-                                                      aIgnoreNetcodes ? -1 : aItem->GetNetCode() );
+    auto clusters = m_connAlgo->SearchClusters( ( aFlags & IGNORE_NETS ) ? CSM_PROPAGATE
+                                                                         : CSM_CONNECTIVITY_CHECK,
+                                                ( aFlags & EXCLUDE_ZONES ),
+                                                ( aFlags & IGNORE_NETS ) ? -1
+                                                                         : aItem->GetNetCode() );
 
     for( const std::shared_ptr<CN_CLUSTER>& cl : clusters )
     {

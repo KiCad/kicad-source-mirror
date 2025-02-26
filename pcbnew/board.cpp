@@ -2392,12 +2392,7 @@ std::tuple<int, double, double> BOARD::GetTrackLength( const PCB_TRACK& aTrack )
     BOARD_STACKUP&    stackup      = GetDesignSettings().GetStackupDescriptor();
     bool              useHeight    = GetDesignSettings().m_UseHeightForLengthCalcs;
 
-    static const std::vector<KICAD_T> baseConnectedTypes = { PCB_TRACE_T,
-                                                             PCB_ARC_T,
-                                                             PCB_VIA_T,
-                                                             PCB_PAD_T };
-
-    for( BOARD_CONNECTED_ITEM* item : connectivity->GetConnectedItems( &aTrack, baseConnectedTypes ) )
+    for( BOARD_CONNECTED_ITEM* item : connectivity->GetConnectedItems( &aTrack, EXCLUDE_ZONES ) )
     {
         count++;
 

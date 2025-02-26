@@ -1509,7 +1509,7 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
             continue;
 
         auto connectedItems = connectivity->GetConnectedItems( startItem,
-                { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, PCB_SHAPE_T }, true );
+                                                               EXCLUDE_ZONES | IGNORE_NETS );
 
         // Build maps of connected items
         for( BOARD_CONNECTED_ITEM* item : connectedItems )
