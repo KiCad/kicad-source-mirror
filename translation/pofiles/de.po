@@ -30,16 +30,15 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-26 20:15+0300\n"
-"PO-Revision-Date: 2025-02-17 17:18+0000\n"
+"PO-Revision-Date: 2025-02-27 07:25+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.1-dev\n"
+"X-Generator: Weblate 5.10.2-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4837,9 +4836,8 @@ msgid "Failed to write file '%s'."
 msgstr "Konnte Datei \"%s\" nicht schreiben."
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
-#, fuzzy
 msgid "Embedded Reference"
-msgstr "Eingebettete Referenz kopieren"
+msgstr "Eingebettete Referenz"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
@@ -7534,7 +7532,6 @@ msgid "Export Drill Data Job Settings"
 msgstr "Bohrdaten-Auftragseinstellungen exportieren"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
-#, fuzzy
 msgid "PCB: Export Drill Data"
 msgstr "PCB: Bohrdaten exportieren"
 
@@ -7582,29 +7579,24 @@ msgid "Export IPC-2581"
 msgstr "IPC-2581 exportieren"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
-#, fuzzy
 msgid "Export IPC-2581 Job Settings"
-msgstr "IPC-2581-Export-Auftragseinstellungen"
+msgstr "IPC-2581-Auftragseinstellungen exportieren"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
-#, fuzzy
 msgid "PCB: Export IPC-2581"
 msgstr "PCB: IPC-2581 exportieren"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:33
-#, fuzzy
 msgid "Export IPC-D-356"
-msgstr "IPC-2581 exportieren"
+msgstr "IPC-D-356 exportieren"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:39
-#, fuzzy
 msgid "Export IPC-D-356 Job Settings"
-msgstr "IPC-2581-Export-Auftragseinstellungen"
+msgstr "IPC-D-356-Auftragseinstellungen exportieren"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:52
-#, fuzzy
 msgid "PCB: Export IPC-D-356"
-msgstr "PCB: IPC-2581 exportieren"
+msgstr "PCB: IPC-D-356 exportieren"
 
 #: common/jobs/job_export_pcb_odb.cpp:57
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
@@ -7762,7 +7754,6 @@ msgid "Schematic: Perform ERC"
 msgstr "Schaltplan: ERC ausführen"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy Files"
 msgstr "Spezial: Dateien kopieren"
 
@@ -16970,16 +16961,16 @@ msgid "The current configuration does not include the symbol library '%s'"
 msgstr "Die aktuelle Konfiguration enthält nicht die Symbolbibliothek \"%s\""
 
 #: eeschema/erc/erc.cpp:1414
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration"
 msgstr ""
 "Die Symbolbibliothek \"%s\" ist in der aktuellen Konfiguration nicht "
-"aktiviert."
+"aktiviert"
 
 #: eeschema/erc/erc.cpp:1429
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' was not found at '%s'."
-msgstr "Die Footprintbibliothek \"%s\" würde nicht gefunden."
+msgstr "Die Symbolbibliothek \"%s\" würde nicht unter \"%s\" gefunden."
 
 #: eeschema/erc/erc.cpp:1449
 #, c-format
@@ -27710,6 +27701,8 @@ msgid ""
 "This plugin requires the KiCad API, which is currently disabled in "
 "preferences. Would you like to enable it?"
 msgstr ""
+"Dieses Plugin verwendet die KiCad API, die aktuell deaktiviert ist. Möchten "
+"Sie sie aktivieren?"
 
 #: kicad/pcm/pcm.cpp:1121
 msgid "PCM Update"
@@ -42198,9 +42191,9 @@ msgid "Checking board footprints against library..."
 msgstr "Prüfe Platinen-Footprints gegen Bibliothek ..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:892
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' was not found at '%s'."
-msgstr "Die Footprintbibliothek \"%s\" würde nicht gefunden."
+msgstr "Die Footprintbibliothek \"%s\" wurde nicht unter \"%s\" gefunden."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:942
 #, c-format
@@ -42483,16 +42476,17 @@ msgid "Generate IPC-D-356 netlist file"
 msgstr "Eine Datei einer IPC-D-356-Netzliste erstellen"
 
 #: pcbnew/exporters/export_d356.cpp:404
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "IPC-D-356 netlist file created:\n"
 "'%s'."
-msgstr "IPC-D-356-Netzliste..."
+msgstr ""
+"IPC-D-356-Netzliste erstellt:\n"
+"\"%s\"."
 
 #: pcbnew/exporters/export_d356.cpp:405
-#, fuzzy
 msgid "IPC-D-356 Netlist File"
-msgstr "IPC-D-356-Netzliste..."
+msgstr "IPC-D-356-Netzlistendatei"
 
 #: pcbnew/exporters/export_footprint_associations.cpp:73
 msgid "Save Footprint Association File"
@@ -46948,9 +46942,8 @@ msgid "Successfully created IPC-D-356 file\n"
 msgstr "genCAD-Datei erfolgreich erstellt\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2108
-#, fuzzy
 msgid "Failed to create IPC-D-356 file\n"
-msgstr "Konnte Datei nicht erstellen."
+msgstr "Konnte IPC-D-356-Datei nicht erstellen.\n"
 
 #: pcbnew/pcbnew_printout.cpp:124
 msgid "Multiple Layers"
