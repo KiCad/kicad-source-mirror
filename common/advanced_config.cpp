@@ -128,6 +128,7 @@ static const wxChar NetInspectorBulkUpdateOptimisationThreshold[] =
 static const wxChar ExcludeFromSimulationLineWidth[] = wxT( "ExcludeFromSimulationLineWidth" );
 static const wxChar GitIconRefreshInterval[] = wxT( "GitIconRefreshInterval" );
 static const wxChar GitProjectStatusRefreshInterval[] = wxT( "GitProjectStatusRefreshInterval" );
+static const wxChar ConfigurableToolbars[] = wxT( "ConfigurableToolbars" );
 
 } // namespace KEYS
 
@@ -309,6 +310,8 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_GitIconRefreshInterval = 10000;
     m_GitProjectStatusRefreshInterval = 60000;
+
+    m_ConfigurableToolbars = false;
 
     loadFromConfigFile();
 }
@@ -598,6 +601,10 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::GitProjectStatusRefreshInterval,
                                                 &m_GitProjectStatusRefreshInterval,
                                                 m_GitProjectStatusRefreshInterval, 0, 100000 ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ConfigurableToolbars,
+                                                    &m_ConfigurableToolbars,
+                                                    m_ConfigurableToolbars ) );
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config

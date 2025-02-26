@@ -66,6 +66,10 @@
 #include <wildcards_and_files_ext.h>
 #include "pcbnew_jobs_handler.h"
 
+#include <dialogs/panel_toolbar_customization.h>
+#include <toolbars_pcb_editor.h>
+#include <toolbars_footprint_editor.h>
+
 #include <wx/crt.h>
 
 /* init functions defined by swig */
@@ -291,6 +295,24 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
                 board = static_cast<PCB_EDIT_FRAME*>( boardProvider )->GetBoard();
 
             return new PANEL_PCBNEW_COLOR_SETTINGS( aParent, board );
+        }
+
+        case PANEL_PCB_TOOLBARS:
+        {
+            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+            PCBNEW_SETTINGS*   cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
+            TOOLBAR_SETTINGS*   tb = new PCB_EDIT_TOOLBAR_SETTINGS();
+
+            std::vector<TOOL_ACTION*>            actions;
+            std::vector<ACTION_TOOLBAR_CONTROL*> controls;
+
+            for( TOOL_ACTION* action : ACTION_MANAGER::GetActionList() )
+                actions.push_back( action );
+
+            for( ACTION_TOOLBAR_CONTROL* control : ACTION_TOOLBAR::GetCustomControlList() )
+                controls.push_back( control );
+
+            return new PANEL_TOOLBAR_CUSTOMIZATION( aParent, cfg, tb, actions, controls );
         }
 
         case PANEL_PCB_ACTION_PLUGINS:

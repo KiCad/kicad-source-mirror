@@ -757,6 +757,14 @@ public:
      */
     int m_GitProjectStatusRefreshInterval;
 
+    /**
+     * Enable the UI to configure toolbars.
+     *
+     * Setting name: "ConfigurableToolbars"
+     * Default value: false
+     */
+    bool m_ConfigurableToolbars;
+
     ///@}
 
 private:

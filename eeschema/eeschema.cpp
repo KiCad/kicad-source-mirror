@@ -67,6 +67,10 @@
 #include <panel_sym_display_options.h>
 #include <sim/simulator_frame.h>
 
+#include <dialogs/panel_toolbar_customization.h>
+#include <toolbars_sch_editor.h>
+#include <toolbars_symbol_editor.h>
+
 #include <wx/crt.h>
 
 // The main sheet of the project
@@ -306,15 +310,25 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
             return new PANEL_EESCHEMA_ANNOTATION_OPTIONS( aParent, schSettingsProvider );
         }
-/*
+
         case PANEL_SCH_TOOLBARS:
         {
             SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
             EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+            TOOLBAR_SETTINGS*   tb = new SCH_EDIT_TOOLBAR_SETTINGS();
 
-            return new PANEL_TOOLBAR_CUSTOMIZATION( aParent, cfg );
+            std::vector<TOOL_ACTION*>            actions;
+            std::vector<ACTION_TOOLBAR_CONTROL*> controls;
+
+            for( TOOL_ACTION* action : ACTION_MANAGER::GetActionList() )
+                actions.push_back( action );
+
+            for( ACTION_TOOLBAR_CONTROL* control : ACTION_TOOLBAR::GetCustomControlList() )
+                controls.push_back( control );
+
+            return new PANEL_TOOLBAR_CUSTOMIZATION( aParent, cfg, tb, actions, controls );
         }
-*/
+
         case PANEL_SCH_COLORS:
             return new PANEL_EESCHEMA_COLOR_SETTINGS( aParent );
 
