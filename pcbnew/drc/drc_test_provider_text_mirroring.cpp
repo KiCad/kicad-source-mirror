@@ -25,6 +25,7 @@
 #include <pcb_field.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
+#include <pcb_tablecell.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
@@ -75,20 +76,19 @@ bool DRC_TEST_PROVIDER_TEXT_MIRRORING::Run()
     }
 
     if( !reportPhase( _( "Checking text mirroring..." ) ) )
-        return false; // DRC cancelled
+        return false;       // DRC cancelled
 
     LSET topLayers( { F_Cu, F_SilkS, F_Mask, F_Fab } );
     LSET bottomLayers( { B_Cu, B_SilkS, B_Mask, B_Fab } );
 
     auto checkTextMirroring =
-            [&]( BOARD_ITEM* item, EDA_TEXT* text, PCB_LAYER_ID layerId, bool isMirrored,
-                 int errorCode ) -> bool
+            [&]( BOARD_ITEM* item, EDA_TEXT* text, bool isMirrored, int errorCode )
             {
                 if( m_drcEngine->IsErrorLimitExceeded( errorCode ) )
-                    return false;
+                    return;
 
-                bool layerMatch = ( isMirrored && topLayers.Contains( layerId ) )
-                                  || ( !isMirrored && bottomLayers.Contains( layerId ) );
+                bool layerMatch = ( isMirrored && topLayers.Contains( item->GetLayer() ) )
+                                  || ( !isMirrored && bottomLayers.Contains( item->GetLayer() ) );
 
                 if( layerMatch && text->IsMirrored() == isMirrored )
                 {
@@ -97,16 +97,15 @@ bool DRC_TEST_PROVIDER_TEXT_MIRRORING::Run()
                     drcItem->SetErrorMessage( drcItem->GetErrorText() );
                     drcItem->SetItems( item );
 
-                    reportViolation( drcItem, item->GetPosition(), layerId );
+                    reportViolation( drcItem, item->GetPosition(), item->GetLayer() );
                 }
-
-                return true;
             };
 
-    const int                         progressDelta = 250;
+    const int                         progressDelta = 500;
     int                               count = 0;
     int                               progressIndex = 0;
-    static const std::vector<KICAD_T> itemTypes = { PCB_FIELD_T, PCB_TEXT_T, PCB_TEXTBOX_T };
+    static const std::vector<KICAD_T> itemTypes = { PCB_FIELD_T, PCB_TEXT_T, PCB_TEXTBOX_T,
+                                                    PCB_TABLECELL_T };
 
     forEachGeometryItem( itemTypes, topLayers | bottomLayers,
             [&]( BOARD_ITEM* item ) -> bool
@@ -125,10 +124,11 @@ bool DRC_TEST_PROVIDER_TEXT_MIRRORING::Run()
 
                 switch( item->Type() )
                 {
-                case PCB_FIELD_T:   text = static_cast<PCB_FIELD*>( item );   break;
-                case PCB_TEXT_T:    text = static_cast<PCB_TEXT*>( item );    break;
-                case PCB_TEXTBOX_T: text = static_cast<PCB_TEXTBOX*>( item ); break;
-                default:            UNIMPLEMENTED_FOR( item->GetClass() );    break;
+                case PCB_FIELD_T:     text = static_cast<PCB_FIELD*>( item );     break;
+                case PCB_TEXT_T:      text = static_cast<PCB_TEXT*>( item );      break;
+                case PCB_TEXTBOX_T:   text = static_cast<PCB_TEXTBOX*>( item );   break;
+                case PCB_TABLECELL_T: text = static_cast<PCB_TABLECELL*>( item ); break;
+                default:              UNIMPLEMENTED_FOR( item->GetClass() );      break;
                 }
 
                 if( !text || !text->IsVisible()
@@ -138,12 +138,8 @@ bool DRC_TEST_PROVIDER_TEXT_MIRRORING::Run()
                     return true;
                 }
 
-                if( !checkTextMirroring( item, text, item->GetLayer(), true, DRCE_MIRRORED_TEXT_ON_FRONT_LAYER )
-                 || !checkTextMirroring( item, text, item->GetLayer(), false, DRCE_NONMIRRORED_TEXT_ON_BACK_LAYER ) )
-                {
-                    return false;
-                }
-
+                checkTextMirroring( item, text, true, DRCE_MIRRORED_TEXT_ON_FRONT_LAYER );
+                checkTextMirroring( item, text, false, DRCE_NONMIRRORED_TEXT_ON_BACK_LAYER );
                 return true;
             } );
 
