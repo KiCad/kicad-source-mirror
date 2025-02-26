@@ -314,9 +314,12 @@ private:
 
 protected:
     PnsKind         m_kind;
-
-    BOARD_ITEM*     m_parent;
-    BOARD_ITEM*     m_sourceItem;
+    BOARD_ITEM*     m_parent;       // The parent BOARD_ITEM, used when there is a 1:1 map
+                                    //   between the PNS::ITEM and the BOARD_ITEM.
+    BOARD_ITEM*     m_sourceItem;   // The progenator BOARD_ITEM for when there is NOT a 1:1 map.
+                                    //   For instance, dragging a track might produce multiple
+                                    //   segments, none of which can be directly mapped to the
+                                    //   track.
     PNS_LAYER_RANGE m_layers;
 
     bool            m_movable;
