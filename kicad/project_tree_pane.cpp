@@ -24,6 +24,7 @@
  */
 
 #include <stack>
+#include <thread>
 #include <git2.h>
 
 #include <wx/regex.h>
@@ -31,6 +32,7 @@
 #include <wx/string.h>
 #include <wx/msgdlg.h>
 #include <wx/textdlg.h>
+#include <wx/timer.h>
 
 #include <advanced_config.h>
 #include <bitmaps.h>
@@ -48,6 +50,7 @@
 #include <project/project_local_settings.h>
 #include <scoped_set_reset.h>
 #include <string_utils.h>
+#include <thread_pool.h>
 #include <launch_ext.h>
 #include <wx/dcclient.h>
 #include <wx/settings.h>
@@ -187,16 +190,19 @@ PROJECT_TREE_PANE::PROJECT_TREE_PANE( KICAD_MANAGER_FRAME* parent ) :
     m_isRenaming = false;
     m_selectedItem = nullptr;
     m_watcherNeedReset = false;
-    m_lastGitStatusUpdate = wxDateTime::Now();
     m_gitLastError = GIT_ERROR_NONE;
 
     m_watcher = nullptr;
-    Connect( wxEVT_FSWATCHER,
-             wxFileSystemWatcherEventHandler( PROJECT_TREE_PANE::onFileSystemEvent ) );
+    Bind( wxEVT_FSWATCHER,
+             wxFileSystemWatcherEventHandler( PROJECT_TREE_PANE::onFileSystemEvent ), this );
 
     Bind( wxEVT_SYS_COLOUR_CHANGED,
           wxSysColourChangedEventHandler( PROJECT_TREE_PANE::onThemeChanged ), this );
 
+    m_gitSyncTimer.SetOwner( this );
+    m_gitStatusTimer.SetOwner( this );
+    Bind( wxEVT_TIMER, wxTimerEventHandler( PROJECT_TREE_PANE::onGitSyncTimer ), this, m_gitSyncTimer.GetId() );
+    Bind( wxEVT_TIMER, wxTimerEventHandler( PROJECT_TREE_PANE::onGitStatusTimer ), this, m_gitStatusTimer.GetId() );
     /*
      * Filtering is now inverted: the filters are actually used to _enable_ support
      * for a given file type.
@@ -208,15 +214,28 @@ PROJECT_TREE_PANE::PROJECT_TREE_PANE( KICAD_MANAGER_FRAME* parent ) :
 
     ReCreateTreePrj();
 
+    // If we are asking for refresh, run one right at the beginning
+    if( ADVANCED_CFG::GetCfg().m_GitProjectStatusRefreshInterval > 0 )
+        m_gitSyncTimer.Start( 100, wxTIMER_ONE_SHOT );
+
+    if( ADVANCED_CFG::GetCfg().m_GitIconRefreshInterval > 0 )
+        m_gitStatusTimer.Start( 150, wxTIMER_ONE_SHOT );
 }
 
 
 PROJECT_TREE_PANE::~PROJECT_TREE_PANE()
 {
-    Disconnect( wxEVT_FSWATCHER,
-             wxFileSystemWatcherEventHandler( PROJECT_TREE_PANE::onFileSystemEvent ) );
+    Unbind( wxEVT_FSWATCHER,
+            wxFileSystemWatcherEventHandler( PROJECT_TREE_PANE::onFileSystemEvent ), this );
     Unbind( wxEVT_SYS_COLOUR_CHANGED,
-          wxSysColourChangedEventHandler( PROJECT_TREE_PANE::onThemeChanged ), this );
+            wxSysColourChangedEventHandler( PROJECT_TREE_PANE::onThemeChanged ), this );
+
+    m_gitSyncTimer.Stop();
+    m_gitStatusTimer.Stop();
+    Unbind( wxEVT_TIMER, wxTimerEventHandler( PROJECT_TREE_PANE::onGitSyncTimer ), this,
+            m_gitSyncTimer.GetId() );
+    Unbind( wxEVT_TIMER, wxTimerEventHandler( PROJECT_TREE_PANE::onGitStatusTimer ), this,
+            m_gitStatusTimer.GetId() );
     shutdownFileWatcher();
 }
 
@@ -605,6 +624,16 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
 
 void PROJECT_TREE_PANE::ReCreateTreePrj()
 {
+    std::lock_guard<std::mutex> lock1( m_gitStatusMutex );
+    std::lock_guard<std::mutex> lock2( m_gitTreeCacheMutex );
+    thread_pool& tp = GetKiCadThreadPool();
+
+    tp.wait_for_tasks();
+    m_gitStatusTimer.Stop();
+    m_gitSyncTimer.Stop();
+    m_gitTreeCache.clear();
+    m_gitStatusIcons.clear();
+
     wxString pro_dir = m_Parent->GetProjectFileName();
 
     if( !m_TreeProject )
@@ -706,7 +735,13 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
 
     // Sort filenames by alphabetic order
     m_TreeProject->SortChildren( m_root );
-    updateGitStatusIcons();
+
+    CallAfter( [this] ()
+    {
+        updateTreeCache();
+        m_gitSyncTimer.Start( 100, wxTIMER_ONE_SHOT );
+        m_gitStatusTimer.Start( 150, wxTIMER_ONE_SHOT );
+    } );
 }
 
 
@@ -1123,7 +1158,6 @@ void PROJECT_TREE_PANE::onIdle( wxIdleEvent& aEvent )
         item->Activate( this );
     }
 
-    // Inside this routine, we rate limit to once per 2 seconds
     updateGitStatusIcons();
 }
 
@@ -1297,22 +1331,6 @@ void PROJECT_TREE_PANE::onFileSystemEvent( wxFileSystemWatcherEvent& event )
     {
         subdir = subdir.BeforeLast( '/' );
         fn = fn.BeforeLast( '/' );
-    }
-
-    switch( event.GetChangeType() )
-    {
-    case wxFSW_EVENT_DELETE:
-    case wxFSW_EVENT_CREATE:
-    case wxFSW_EVENT_RENAME:
-        CallAfter( &PROJECT_TREE_PANE::updateGitStatusIcons );
-        break;
-
-    case wxFSW_EVENT_MODIFY:
-        CallAfter( &PROJECT_TREE_PANE::updateGitStatusIcons );
-        KI_FALLTHROUGH;
-    case wxFSW_EVENT_ACCESS:
-    default:
-        return;
     }
 
     wxTreeItemId root_id = findSubdirTreeItem( subdir );
@@ -1944,30 +1962,24 @@ void PROJECT_TREE_PANE::onGitRemoveVCS( wxCommandEvent& aEvent )
 
 void PROJECT_TREE_PANE::updateGitStatusIcons()
 {
-    if( ADVANCED_CFG::GetCfg().m_EnableGit == false )
+    if( ADVANCED_CFG::GetCfg().m_EnableGit == false || !m_TreeProject )
         return;
 
-    if( !m_TreeProject )
+    std::unique_lock<std::mutex> lock( m_gitStatusMutex, std::try_to_lock );
+
+    if( !lock.owns_lock() )
         return;
 
-    wxTimeSpan timeSinceLastUpdate = wxDateTime::Now() - m_lastGitStatusUpdate;
+    // Note that this function is called from the idle event, so we need to be careful about
+    // accessing the tree control from a different thread.
+    for( auto&[ item, status ] : m_gitStatusIcons )
+        m_TreeProject->SetItemState( item, static_cast<int>( status ) );
 
-    if( timeSinceLastUpdate.Abs() < wxTimeSpan::Seconds( 2 ) )
-        return;
-
-    m_lastGitStatusUpdate = wxDateTime::Now();
-
-    wxTreeItemId      kid = m_TreeProject->GetRootItem();
-
-    if( !kid.IsOk() )
-        return;
-
+    wxTreeItemId    kid = m_TreeProject->GetRootItem();
     git_repository* repo = m_TreeProject->GetGitRepo();
 
     if( !repo )
         return;
-
-    // Get Current Branch
 
     git_reference* currentBranchReference = nullptr;
     int rc = git_repository_head( &currentBranchReference, repo );
@@ -1993,40 +2005,81 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
     else
     {
         if( giterr_last()->klass != m_gitLastError )
-            wxLogError( "Failed to lookup current branch: %s", giterr_last()->message );
+            wxLogTrace( "git", "Failed to lookup current branch: %s", giterr_last()->message );
 
         m_gitLastError = giterr_last()->klass;
     }
+}
+
+
+void PROJECT_TREE_PANE::updateTreeCache()
+{
+    std::unique_lock<std::mutex> lock( m_gitTreeCacheMutex, std::try_to_lock );
+
+    if( !lock.owns_lock() || !m_TreeProject )
+        return;
+
+    wxTreeItemId kid = m_TreeProject->GetRootItem();
+
+    if( !kid.IsOk() )
+        return;
 
     // Collect a map to easily set the state of each item
-    std::map<wxString, wxTreeItemId> branchMap;
+    std::stack<wxTreeItemId> items;
+    items.push( kid );
+
+    while( !items.empty() )
     {
-        std::stack<wxTreeItemId> items;
-        items.push( kid );
+        kid = items.top();
+        items.pop();
 
-        while( !items.empty() )
-        {
-            kid = items.top();
-            items.pop();
+        PROJECT_TREE_ITEM* nextItem = GetItemIdData( kid );
 
-            PROJECT_TREE_ITEM* nextItem = GetItemIdData( kid );
-
-            wxString gitAbsPath = nextItem->GetFileName();
+        wxString gitAbsPath = nextItem->GetFileName();
 #ifdef _WIN32
-            gitAbsPath.Replace( wxS( "\\" ), wxS( "/" ) );
+        gitAbsPath.Replace( wxS( "\\" ), wxS( "/" ) );
 #endif
-            branchMap[gitAbsPath] = kid;
+        m_gitTreeCache[gitAbsPath] = kid;
 
-            wxTreeItemIdValue cookie;
-            wxTreeItemId      child = m_TreeProject->GetFirstChild( kid, cookie );
+        wxTreeItemIdValue cookie;
+        wxTreeItemId      child = m_TreeProject->GetFirstChild( kid, cookie );
 
-            while( child.IsOk() )
-            {
-                items.push( child );
-                child = m_TreeProject->GetNextChild( kid, cookie );
-            }
+        while( child.IsOk() )
+        {
+            items.push( child );
+            child = m_TreeProject->GetNextChild( kid, cookie );
         }
     }
+}
+
+
+void PROJECT_TREE_PANE::updateGitStatusIconMap()
+{
+    if( ADVANCED_CFG::GetCfg().m_EnableGit == false || !m_TreeProject )
+        return;
+    int refresh = ADVANCED_CFG::GetCfg().m_GitIconRefreshInterval;
+
+    if( refresh != 0 )
+    {
+        CallAfter(
+                [this, refresh]()
+                {
+                    m_gitStatusTimer.Start( refresh, wxTIMER_ONE_SHOT );
+                } );
+    }
+
+    std::unique_lock<std::mutex> lock1( m_gitStatusMutex );
+    std::unique_lock<std::mutex> lock2( m_gitTreeCacheMutex );
+
+    git_repository* repo = m_TreeProject->GetGitRepo();
+
+    if( !repo )
+        return;
+
+    // Get Current Branch
+    PROJECT_TREE_ITEM* rootItem = GetItemIdData( m_TreeProject->GetRootItem() );
+    wxFileName         rootFilename( rootItem->GetFileName() );
+    wxString           repoWorkDir( git_repository_workdir( repo ) );
 
     wxFileName relative = rootFilename;
     relative.MakeRelativeTo( repoWorkDir );
@@ -2075,63 +2128,41 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
         wxString absPath = repoWorkDir;
         absPath << path;
 
-        auto iter = branchMap.find( absPath );
+        auto iter = m_gitTreeCache.find( absPath );
 
-        if( iter == branchMap.end() )
+        if( iter == m_gitTreeCache.end() )
             continue;
 
         // If we are current, don't continue because we still need to check to see if the
         // current commit is ahead/behind the remote.  If the file is modified/added/deleted,
         // that is the main status we want to show.
-        if( entry->status == GIT_STATUS_CURRENT )
+        if( entry->status & GIT_STATUS_IGNORED )
         {
-            m_TreeProject->SetItemState(
-                    iter->second,
-                    static_cast<int>( KIGIT_COMMON::GIT_STATUS::GIT_STATUS_CURRENT ) );
+            m_gitStatusIcons[iter->second] = KIGIT_COMMON::GIT_STATUS::GIT_STATUS_IGNORED;
         }
         else if( entry->status & ( GIT_STATUS_INDEX_MODIFIED | GIT_STATUS_WT_MODIFIED ) )
         {
-            m_TreeProject->SetItemState(
-                    iter->second,
-                    static_cast<int>( KIGIT_COMMON::GIT_STATUS::GIT_STATUS_MODIFIED ) );
-            continue;
+            m_gitStatusIcons[iter->second] = KIGIT_COMMON::GIT_STATUS::GIT_STATUS_MODIFIED;
         }
         else if( entry->status & ( GIT_STATUS_INDEX_NEW | GIT_STATUS_WT_NEW ) )
         {
-            m_TreeProject->SetItemState(
-                    iter->second,
-                    static_cast<int>( KIGIT_COMMON::GIT_STATUS::GIT_STATUS_ADDED ) );
-            continue;
+            m_gitStatusIcons[iter->second] = KIGIT_COMMON::GIT_STATUS::GIT_STATUS_ADDED;
         }
         else if( entry->status & ( GIT_STATUS_INDEX_DELETED | GIT_STATUS_WT_DELETED ) )
         {
-            m_TreeProject->SetItemState(
-                    iter->second,
-                    static_cast<int>( KIGIT_COMMON::GIT_STATUS::GIT_STATUS_DELETED ) );
-            continue;
+            m_gitStatusIcons[iter->second] = KIGIT_COMMON::GIT_STATUS::GIT_STATUS_DELETED;
         }
-
-        // Check if file is up to date with the remote
-        if( localChanges.count( path ) )
+        else if( localChanges.count( path ) )
         {
-            m_TreeProject->SetItemState(
-                    iter->second,
-                    static_cast<int>( KIGIT_COMMON::GIT_STATUS::GIT_STATUS_AHEAD ) );
-            continue;
+            m_gitStatusIcons[iter->second] = KIGIT_COMMON::GIT_STATUS::GIT_STATUS_AHEAD;
         }
         else if( remoteChanges.count( path ) )
         {
-            m_TreeProject->SetItemState(
-                    iter->second,
-                    static_cast<int>( KIGIT_COMMON::GIT_STATUS::GIT_STATUS_BEHIND ) );
-            continue;
+            m_gitStatusIcons[iter->second] = KIGIT_COMMON::GIT_STATUS::GIT_STATUS_BEHIND;
         }
         else
         {
-            m_TreeProject->SetItemState(
-                    iter->second,
-                    static_cast<int>( KIGIT_COMMON::GIT_STATUS::GIT_STATUS_CURRENT ) );
-            continue;
+            m_gitStatusIcons[iter->second] = KIGIT_COMMON::GIT_STATUS::GIT_STATUS_CURRENT;
         }
     }
 
@@ -2524,4 +2555,43 @@ void PROJECT_TREE_PANE::onGitRemoveFromIndex( wxCommandEvent& aEvent )
 void PROJECT_TREE_PANE::onRunSelectedJobsFile(wxCommandEvent& event)
 {
 
+}
+
+
+void PROJECT_TREE_PANE::onGitSyncTimer( wxTimerEvent& aEvent )
+{
+    if( ADVANCED_CFG::GetCfg().m_EnableGit == false || !m_TreeProject )
+        return;
+
+    thread_pool& tp = GetKiCadThreadPool();
+
+    tp.push_task( [this]()
+    {
+        KIGIT_COMMON* gitCommon = m_TreeProject->GitCommon();
+
+        if( !gitCommon )
+            return;
+
+        GIT_PULL_HANDLER handler( gitCommon );
+        handler.PerformFetch();
+    } );
+
+    if( ADVANCED_CFG::GetCfg().m_GitProjectStatusRefreshInterval > 0 )
+    {
+        m_gitSyncTimer.Start( ADVANCED_CFG::GetCfg().m_GitProjectStatusRefreshInterval,
+                              wxTIMER_ONE_SHOT );
+    }
+}
+
+void PROJECT_TREE_PANE::onGitStatusTimer( wxTimerEvent& aEvent )
+{
+    if( ADVANCED_CFG::GetCfg().m_EnableGit == false || !m_TreeProject )
+        return;
+
+    thread_pool& tp = GetKiCadThreadPool();
+
+    tp.push_task( [this]()
+    {
+        updateGitStatusIconMap();
+    } );
 }

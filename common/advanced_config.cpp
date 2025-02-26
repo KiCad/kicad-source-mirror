@@ -126,6 +126,8 @@ static const wxChar MaximumThreads[] = wxT( "MaximumThreads" );
 static const wxChar NetInspectorBulkUpdateOptimisationThreshold[] =
         wxT( "NetInspectorBulkUpdateOptimisationThreshold" );
 static const wxChar ExcludeFromSimulationLineWidth[] = wxT( "ExcludeFromSimulationLineWidth" );
+static const wxChar GitIconRefreshInterval[] = wxT( "GitIconRefreshInterval" );
+static const wxChar GitProjectStatusRefreshInterval[] = wxT( "GitProjectStatusRefreshInterval" );
 
 } // namespace KEYS
 
@@ -304,6 +306,9 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_NetInspectorBulkUpdateOptimisationThreshold = 25;
 
     m_ExcludeFromSimulationLineWidth = 25;
+
+    m_GitIconRefreshInterval = 1000;
+    m_GitProjectStatusRefreshInterval = 60000;
 
     loadFromConfigFile();
 }
@@ -585,6 +590,14 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::ExcludeFromSimulationLineWidth,
                                                &m_ExcludeFromSimulationLineWidth,
                                                m_ExcludeFromSimulationLineWidth, 1, 100 ) );
+
+    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::GitIconRefreshInterval,
+                                               &m_GitIconRefreshInterval,
+                                               m_GitIconRefreshInterval, 0, 100000 ) );
+
+    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::GitProjectStatusRefreshInterval,
+                                                &m_GitProjectStatusRefreshInterval,
+                                                m_GitProjectStatusRefreshInterval, 0, 100000 ) );
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config

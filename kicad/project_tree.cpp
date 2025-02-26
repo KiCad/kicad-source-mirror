@@ -114,6 +114,7 @@ void PROJECT_TREE::LoadIcons()
     stateImages.push_back( KiBitmapBundle( BITMAPS::git_out_of_date ) );   // GIT_STATUS_BEHIND
     stateImages.push_back( KiBitmapBundle( BITMAPS::git_changed_ahead ) ); // GIT_STATUS_AHEAD
     stateImages.push_back( KiBitmapBundle( BITMAPS::git_conflict ) );      // GIT_STATUS_CONFLICTED
+    stateImages.push_back( wxBitmapBundle( wxBitmap( 16, 16 ) ) );         // GIT_STATUS_IGNORED
 
     SetStateImages( stateImages );
 #else
@@ -190,14 +191,15 @@ void PROJECT_TREE::LoadIcons()
     m_statusImageList = new wxImageList( size, size, true,
                                          static_cast<int>( KIGIT_COMMON::GIT_STATUS::GIT_STATUS_LAST ) );
 
-    m_statusImageList->Add( blank_bitmap );                          // GIT_STATUS_UNTRACKED
-    m_statusImageList->Add( KiBitmap( BITMAPS::git_good_check, size ) ); // GIT_STATUS_CURRENT
-    m_statusImageList->Add( KiBitmap( BITMAPS::git_modified, size ) ); // GIT_STATUS_MODIFIED
-    m_statusImageList->Add( KiBitmap( BITMAPS::git_add, size ) );    // GIT_STATUS_ADDED
-    m_statusImageList->Add( KiBitmap( BITMAPS::git_delete, size ) ); // GIT_STATUS_DELETED
+    m_statusImageList->Add( blank_bitmap );                                 // GIT_STATUS_UNTRACKED
+    m_statusImageList->Add( KiBitmap( BITMAPS::git_good_check, size ) );    // GIT_STATUS_CURRENT
+    m_statusImageList->Add( KiBitmap( BITMAPS::git_modified, size ) );      // GIT_STATUS_MODIFIED
+    m_statusImageList->Add( KiBitmap( BITMAPS::git_add, size ) );           // GIT_STATUS_ADDED
+    m_statusImageList->Add( KiBitmap( BITMAPS::git_delete, size ) );        // GIT_STATUS_DELETED
     m_statusImageList->Add( KiBitmap( BITMAPS::git_out_of_date, size ) );   // GIT_STATUS_BEHIND
     m_statusImageList->Add( KiBitmap( BITMAPS::git_changed_ahead, size ) ); // GIT_STATUS_AHEAD
-    m_statusImageList->Add( KiBitmap( BITMAPS::git_conflict, size ) ); // GIT_STATUS_CONFLICTED
+    m_statusImageList->Add( KiBitmap( BITMAPS::git_conflict, size ) );      // GIT_STATUS_CONFLICTED
+    m_statusImageList->Add( blank_bitmap );                                 // GIT_STATUS_IGNORED
 
     SetStateImageList( m_statusImageList );
 #endif

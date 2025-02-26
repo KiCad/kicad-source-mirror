@@ -740,6 +740,23 @@ public:
      */
     int m_ExcludeFromSimulationLineWidth;
 
+    /**
+     * The interval in milliseconds to refresh the git icons in the project tree.
+     *
+     * Setting name: "GitIconRefreshInterval"
+     * Default value: 2000
+     */
+    int m_GitIconRefreshInterval;
+
+    /**
+     * The interval in milliseconds to refresh the project status by performing
+     * a git fetch on the remote project.  Set to 0 to disable.
+     *
+     * Setting name: "GitProjectStatusRefreshInterval"
+     * Default value: 60000
+     */
+    int m_GitProjectStatusRefreshInterval;
+
     ///@}
 
 private:

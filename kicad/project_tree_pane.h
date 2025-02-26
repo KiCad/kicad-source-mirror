@@ -30,12 +30,17 @@
 #ifndef TREEPRJ_FRAME_H
 #define TREEPRJ_FRAME_H
 
+#include <map>
+#include <mutex>
+#include <unordered_map>
 #include <vector>
 #include <wx/datetime.h>
 #include <wx/fswatcher.h>
 #include <wx/laywin.h>
+#include <wx/timer.h>
 #include <wx/treebase.h>
 
+#include <git/kicad_git_common.h>
 #include "tree_file_type.h"
 
 
@@ -231,6 +236,17 @@ private:
     void updateGitStatusIcons();
 
     /**
+     * This is a threaded call that will change the map of git status icons for use in
+     *  the main thread
+     */
+    void updateGitStatusIconMap();
+
+    /**
+     * Updates the map of the wxtreeitemid to the name of each file for use in the thread
+     */
+    void updateTreeCache();
+
+    /**
      * Returns true if the current project has any uncommitted changes
     */
     bool hasChangedFiles();
@@ -283,6 +299,10 @@ private:
     */
     bool canFileBeAddedToVCS( const wxString& aFilePath );
 
+    void onGitSyncTimer( wxTimerEvent& event );
+
+    void onGitStatusTimer( wxTimerEvent& event );
+
 public:
     KICAD_MANAGER_FRAME*    m_Parent;
     PROJECT_TREE*           m_TreeProject;
@@ -296,8 +316,15 @@ private:
     bool                    m_watcherNeedReset; // true if FileWatcherReset() must be called
                                                 // (during an idle time for instance) after
                                                 // the main loop event handler is started
-    wxDateTime              m_lastGitStatusUpdate;
     int                     m_gitLastError;
+
+    wxTimer                 m_gitSyncTimer;
+    wxTimer                 m_gitStatusTimer;
+
+    std::mutex                                       m_gitTreeCacheMutex;
+    std::unordered_map<wxString, wxTreeItemId>       m_gitTreeCache;
+    std::mutex                                       m_gitStatusMutex;
+    std::map<wxTreeItemId, KIGIT_COMMON::GIT_STATUS> m_gitStatusIcons;
 
     DECLARE_EVENT_TABLE()
 };
