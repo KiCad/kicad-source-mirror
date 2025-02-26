@@ -1502,10 +1502,7 @@ double PCB_VIA::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
         else if( LSET::BackTechMask().Contains( highContrastLayer ) )
             highContrastLayer = B_Cu;
 
-        if( !IsCopperLayer( highContrastLayer ) )
-            return LOD_HIDE;
-
-        if( GetViaType() != VIATYPE::THROUGH )
+        if( IsCopperLayer( highContrastLayer ) && GetViaType() != VIATYPE::THROUGH )
         {
             if( IsCopperLayerLowerThan( Padstack().Drill().start, highContrastLayer  )
                 || IsCopperLayerLowerThan( highContrastLayer, Padstack().Drill().end ) )
