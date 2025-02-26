@@ -43,6 +43,7 @@
 #include <api/api_utils.h>
 #include <api/board/board_types.pb.h>
 
+
 static const int INWARD_ARROW_LENGTH_TO_HEAD_RATIO = 2;
 
 static const EDA_ANGLE s_arrowAngle( 27.5, DEGREES_T );
@@ -124,7 +125,19 @@ static void CollectKnockedOutSegments( const SHAPE_POLY_SET& aPoly, const SEG& a
         aSegmentsAfterKnockout.emplace_back( new SHAPE_SEGMENT( aSeg.A, *endpointA ) );
 
     if( endpointB )
-        aSegmentsAfterKnockout.emplace_back( new SHAPE_SEGMENT( *endpointB, aSeg.B ) );
+    {
+        bool can_add = true;
+
+        if( endpointA )
+        {
+            if( ( *endpointB == aSeg.A && *endpointA == aSeg.B )
+                || ( *endpointA == *endpointB && aSeg.A == aSeg.B ) )
+                can_add = false;
+        }
+
+        if( can_add )
+            aSegmentsAfterKnockout.emplace_back( new SHAPE_SEGMENT( *endpointB, aSeg.B ) );
+    }
 
     if( !containsA && !containsB && !endpointA && !endpointB )
         aSegmentsAfterKnockout.emplace_back( new SHAPE_SEGMENT( aSeg ) );
@@ -149,6 +162,7 @@ PCB_DIMENSION_BASE::PCB_DIMENSION_BASE( BOARD_ITEM* aParent, KICAD_T aType ) :
         m_inClearRenderCache( false )
 {
     m_layer = Dwgs_User;
+    m_busy = false;
 }
 
 
@@ -892,6 +906,11 @@ void PCB_DIM_ALIGNED::UpdateHeight( const VECTOR2I& aCrossbarStart, const VECTOR
 
 void PCB_DIM_ALIGNED::updateGeometry()
 {
+    if( m_busy )    // Skeep reentrance that happens sometimes after calling updateText()
+        return;
+
+    m_busy = true;
+
     m_shapes.clear();
 
     VECTOR2I dimension( m_end - m_start );
@@ -955,6 +974,8 @@ void PCB_DIM_ALIGNED::updateGeometry()
         drawAnArrow( m_crossBarStart, EDA_ANGLE( dimension ), 0 );
         drawAnArrow( m_crossBarEnd, EDA_ANGLE( dimension ) + EDA_ANGLE( 180 ), 0 );
     }
+
+    m_busy = false;
 }
 
 
@@ -1110,6 +1131,10 @@ BITMAPS PCB_DIM_ORTHOGONAL::GetMenuImage() const
 
 void PCB_DIM_ORTHOGONAL::updateGeometry()
 {
+    if( m_busy )    // Skeep reentrance that happens sometimes after calling updateText()
+        return;
+
+    m_busy = true;
     m_shapes.clear();
 
     int measurement = ( m_orientation == DIR::HORIZONTAL ? m_end.x - m_start.x :
@@ -1187,6 +1212,8 @@ void PCB_DIM_ORTHOGONAL::updateGeometry()
         drawAnArrow( m_crossBarStart, crossBarAngle, 0 );
         drawAnArrow( m_crossBarEnd, crossBarAngle + EDA_ANGLE( 180 ), 0 );
     }
+
+    m_busy = false;
 }
 
 
@@ -1362,6 +1389,11 @@ void PCB_DIM_LEADER::updateText()
 
 void PCB_DIM_LEADER::updateGeometry()
 {
+    if( m_busy )    // Skeep reentrance that happens sometimes after calling updateText()
+        return;
+
+    m_busy = true;
+
     m_shapes.clear();
 
     PCB_DIMENSION_BASE::updateText();
@@ -1437,6 +1469,8 @@ void PCB_DIM_LEADER::updateGeometry()
 
     if( textSegEnd && *arrowSegEnd == m_end )
         m_shapes.emplace_back( new SHAPE_SEGMENT( m_end, *textSegEnd ) );
+
+    m_busy = false;
 }
 
 
@@ -1565,6 +1599,11 @@ void PCB_DIM_RADIAL::updateText()
 
 void PCB_DIM_RADIAL::updateGeometry()
 {
+    if( m_busy )    // Skeep reentrance that happens sometimes after calling updateText()
+        return;
+
+    m_busy = true;
+
     m_shapes.clear();
 
     VECTOR2I center( m_start );
@@ -1604,6 +1643,8 @@ void PCB_DIM_RADIAL::updateGeometry()
     CollectKnockedOutSegments( polyBox, textSeg, m_shapes );
 
     drawAnArrow( m_end, EDA_ANGLE( radial ), 0 );
+
+    m_busy = false;
 }
 
 
@@ -1698,6 +1739,11 @@ const BOX2I PCB_DIM_CENTER::ViewBBox() const
 
 void PCB_DIM_CENTER::updateGeometry()
 {
+    if( m_busy )    // Skeep reentrance that happens sometimes after calling updateText()
+        return;
+
+    m_busy = true;
+
     m_shapes.clear();
 
     VECTOR2I center( m_start );
@@ -1710,6 +1756,8 @@ void PCB_DIM_CENTER::updateGeometry()
     m_shapes.emplace_back( new SHAPE_SEGMENT( center - arm, center + arm ) );
 
     updateText();
+
+    m_busy = false;
 }
 
 
