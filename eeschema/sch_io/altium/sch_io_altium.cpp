@@ -4743,7 +4743,12 @@ void SCH_IO_ALTIUM::ensureLoadedLibrary( const wxString&        aLibraryPath,
                     intCom->EnumDir( L"SchLib" );
 
             for( const auto& [schLibName, cfe] : schLibFiles )
-                compoundFiles.push_back( intCom->DecodeIntLibStream( *cfe ) );
+            {
+                auto decodedStream = std::make_unique<ALTIUM_COMPOUND_FILE>();
+
+                if( intCom->DecodeIntLibStream( *cfe, decodedStream.get() ) )
+                    compoundFiles.emplace_back( std::move( decodedStream ) );
+            }
         }
 
         std::map<wxString, LIB_SYMBOL*>& cacheMapRef = m_libCache[aLibraryPath];
