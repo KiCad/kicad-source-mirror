@@ -744,7 +744,7 @@ public:
      * The interval in milliseconds to refresh the git icons in the project tree.
      *
      * Setting name: "GitIconRefreshInterval"
-     * Default value: 2000
+     * Default value: 10000
      */
     int m_GitIconRefreshInterval;
 
