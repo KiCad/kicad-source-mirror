@@ -306,7 +306,15 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
             return new PANEL_EESCHEMA_ANNOTATION_OPTIONS( aParent, schSettingsProvider );
         }
+/*
+        case PANEL_SCH_TOOLBARS:
+        {
+            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+            EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
+            return new PANEL_TOOLBAR_CUSTOMIZATION( aParent, cfg );
+        }
+*/
         case PANEL_SCH_COLORS:
             return new PANEL_EESCHEMA_COLOR_SETTINGS( aParent );
 

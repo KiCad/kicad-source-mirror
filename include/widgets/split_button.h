@@ -44,6 +44,7 @@ public:
     void    SetMinSize( const wxSize& aSize ) override;
     void    SetWidthPadding( int aPadding );
     void    SetLabel( const wxString& aLabel ) override;
+    bool    Enable( bool aEnable = true ) override;
 
 protected:
     void OnKillFocus( wxFocusEvent& aEvent );
@@ -53,8 +54,6 @@ protected:
     void OnLeftButtonDown( wxMouseEvent& aEvent );
     void OnPaint( wxPaintEvent& WXUNUSED( aEvent ) );
     void onThemeChanged( wxSysColourChangedEvent &aEvent );
-
-    bool Enable( bool aEnable = true ) override;
 
 private:
     int       m_stateButton = 0;

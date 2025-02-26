@@ -415,6 +415,8 @@ set( COMMON_DLG_SRCS
     dialogs/panel_setup_severities.cpp
     dialogs/panel_text_variables.cpp
     dialogs/panel_text_variables_base.cpp
+    dialogs/panel_toolbar_customization.cpp
+    dialogs/panel_toolbar_customization_base.cpp
     )
 
 if( KICAD_USE_SENTRY )
