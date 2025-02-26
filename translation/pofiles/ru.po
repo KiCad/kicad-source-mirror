@@ -22,17 +22,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-26 20:12+0300\n"
-"PO-Revision-Date: 2025-02-20 15:02+0000\n"
+"PO-Revision-Date: 2025-02-27 07:25+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.10.1-dev\n"
+"X-Generator: Weblate 5.10.2-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4796,9 +4796,8 @@ msgid "Failed to write file '%s'."
 msgstr "Не удалось записать файл '%s'."
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
-#, fuzzy
 msgid "Embedded Reference"
-msgstr "Копировать внутреннюю ссылку"
+msgstr "Встроенная ссылка"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
@@ -6955,7 +6954,7 @@ msgstr "Не удалось скопировать каталог: %s в %s"
 #: common/gestfich.cpp:529
 #, c-format
 msgid "Source directory does not exist: %s"
-msgstr "Исходный каталог не существует: %s"
+msgstr "Исходный каталог '%s' не существует"
 
 #: common/gestfich.cpp:584
 #, c-format
@@ -7523,7 +7522,6 @@ msgid "Export Drill Data Job Settings"
 msgstr "Параметры задания экспорта данных сверловки"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
-#, fuzzy
 msgid "PCB: Export Drill Data"
 msgstr "PCB: Экспорт данных сверловки"
 
@@ -7582,29 +7580,24 @@ msgid "Export IPC-2581"
 msgstr "Экспорт IPC-2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
-#, fuzzy
 msgid "Export IPC-2581 Job Settings"
 msgstr "Параметры задания экспорта IPC-2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
-#, fuzzy
 msgid "PCB: Export IPC-2581"
-msgstr "PCB: Экспорт IPC2581"
+msgstr "PCB: Экспорт IPC-2581"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:33
-#, fuzzy
 msgid "Export IPC-D-356"
-msgstr "Экспорт IPC-2581"
+msgstr "Экспорт IPC-D-356"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:39
-#, fuzzy
 msgid "Export IPC-D-356 Job Settings"
-msgstr "Параметры задания экспорта IPC-2581"
+msgstr "Параметры задания экспорта IPC-D-356"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:52
-#, fuzzy
 msgid "PCB: Export IPC-D-356"
-msgstr "PCB: Экспорт IPC2581"
+msgstr "PCB: Экспорт IPC-D-356"
 
 #: common/jobs/job_export_pcb_odb.cpp:57
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
@@ -7762,7 +7755,6 @@ msgid "Schematic: Perform ERC"
 msgstr "Схема: Выполнить ERC"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy Files"
 msgstr "Особое: Скопировать файлы"
 
@@ -16882,14 +16874,14 @@ msgid "The current configuration does not include the symbol library '%s'"
 msgstr "Текущая конфигурация не содержит библиотеку символов '%s'"
 
 #: eeschema/erc/erc.cpp:1414
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration"
-msgstr "Библиотека символов '%s' не задействована в текущей конфигурации."
+msgstr "Библиотека символов '%s' не включена в текущей конфигурации"
 
 #: eeschema/erc/erc.cpp:1429
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' was not found at '%s'."
-msgstr "Библиотека посад. мест '%s' не найдена."
+msgstr "Библиотека символов '%s' не найдена в %s."
 
 #: eeschema/erc/erc.cpp:1449
 #, c-format
@@ -27488,6 +27480,8 @@ msgid ""
 "This plugin requires the KiCad API, which is currently disabled in "
 "preferences. Would you like to enable it?"
 msgstr ""
+"Для работы этого плагина требуется KiCad API, который в данный момент "
+"отключен в настройках. Хотите включить его?"
 
 #: kicad/pcm/pcm.cpp:1121
 msgid "PCM Update"
@@ -35714,9 +35708,8 @@ msgid "Set to specified values:"
 msgstr "Установить указанные значения:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:147
-#, fuzzy
 msgid "Visible  (fields only)"
-msgstr "Видимые (только текст)"
+msgstr "Видимые (только поля)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:235
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:99
@@ -41917,9 +41910,9 @@ msgid "Checking board footprints against library..."
 msgstr "Проверка посад. мест платы по библиотеке..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:892
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' was not found at '%s'."
-msgstr "Библиотека посад. мест '%s' не найдена."
+msgstr "Библиотека посад. мест '%s' не найдена в '%s'."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:942
 #, c-format
@@ -42200,16 +42193,17 @@ msgid "Generate IPC-D-356 netlist file"
 msgstr "Сформировать список цепей IPC-D-356"
 
 #: pcbnew/exporters/export_d356.cpp:404
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "IPC-D-356 netlist file created:\n"
 "'%s'."
-msgstr "Файл списка цепей IPC-D-356..."
+msgstr ""
+"Создан файл списка цепей IPC-D-356:\n"
+"'%s'"
 
 #: pcbnew/exporters/export_d356.cpp:405
-#, fuzzy
 msgid "IPC-D-356 Netlist File"
-msgstr "Файл списка цепей IPC-D-356..."
+msgstr "Файл списка цепей IPC-D-356"
 
 #: pcbnew/exporters/export_footprint_associations.cpp:73
 msgid "Save Footprint Association File"
@@ -42558,31 +42552,29 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1302
-#, fuzzy
 msgid "The board must be saved before generating IPC-2581 file."
-msgstr "Перед генерацией файла IPC2581 необходимо сохранить плату."
+msgstr "Перед генерацией файла IPC-2581 необходимо сохранить плату."
 
 #: pcbnew/files.cpp:1318
-#, fuzzy
 msgid "Generating IPC-2581 file"
-msgstr "Генерация файла IPC2581"
+msgstr "Генерация файла IPC-2581"
 
 #: pcbnew/files.cpp:1343 pcbnew/pcbnew_jobs_handler.cpp:2031
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "%s"
 msgstr ""
-"Ошибка генерации файла IPC2581 '%s'.\n"
+"Ошибка генерации файла IPC-2581 '%s'.\n"
 "%s"
 
 #: pcbnew/files.cpp:1408 pcbnew/pcbnew_jobs_handler.cpp:2064
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "Failed to rename temporary file '%s."
 msgstr ""
-"Ошибка генерации файла IPC2581 '%s'.\n"
+"Ошибка генерации файла IPC-2581 '%s'.\n"
 "Не удалось переименовать временный файл '%s'."
 
 #: pcbnew/files.cpp:1440
@@ -46618,14 +46610,12 @@ msgid "Saved DRC Report to %s\n"
 msgstr "Отчет DRC сохранен в %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2112
-#, fuzzy
 msgid "Successfully created IPC-D-356 file\n"
-msgstr "Успешно создан файл genCAD\n"
+msgstr "Успешно создан файл IPC-D-356\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2117
-#, fuzzy
 msgid "Failed to create IPC-D-356 file\n"
-msgstr "Не удалось создать файл."
+msgstr "Не удалось создать файл IPC-D-356.\n"
 
 #: pcbnew/pcbnew_printout.cpp:124
 msgid "Multiple Layers"
