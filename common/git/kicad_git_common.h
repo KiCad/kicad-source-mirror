@@ -76,6 +76,7 @@ public:
         GIT_STATUS_BEHIND,          // File changed in remote repository but not in local
         GIT_STATUS_AHEAD,           // File changed in local repository but not in remote
         GIT_STATUS_CONFLICTED,
+        GIT_STATUS_IGNORED,
         GIT_STATUS_LAST
     };
 
