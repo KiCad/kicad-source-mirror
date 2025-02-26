@@ -94,6 +94,7 @@ public:
     static TOOL_ACTION drawSheetFromFile;
     static TOOL_ACTION drawSheetFromDesignBlock;
     static TOOL_ACTION placeSheetPin;
+    static TOOL_ACTION autoplaceAllSheetPins;
     static TOOL_ACTION importSheet;
     // Sync sheet pins for selected sheet symbol
     static TOOL_ACTION syncSheetPins;

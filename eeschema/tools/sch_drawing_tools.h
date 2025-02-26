@@ -65,6 +65,7 @@ public:
     int ImportGraphics( const TOOL_EVENT& aEvent );
     int SyncSheetsPins( const TOOL_EVENT& aEvent );
     int SyncAllSheetsPins( const TOOL_EVENT& aEvent );
+    int AutoPlaceAllSheetPins( const TOOL_EVENT& aEvent );
 
 private:
     SCH_LINE* findWire( const VECTOR2I& aPosition );
@@ -88,6 +89,8 @@ private:
 
     ///< Try finding any hierlabel that does not have a sheet pin associated with it
     SCH_HIERLABEL* importHierLabel( SCH_SHEET* aSheet );
+
+    std::vector<SCH_HIERLABEL*> importHierLabels( SCH_SHEET* aSheet );
 
     std::vector<PICKED_SYMBOL> m_symbolHistoryList;
     std::vector<PICKED_SYMBOL> m_powerHistoryList;

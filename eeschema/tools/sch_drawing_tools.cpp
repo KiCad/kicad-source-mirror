@@ -3296,6 +3296,110 @@ int SCH_DRAWING_TOOLS::SyncSheetsPins( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_DRAWING_TOOLS::AutoPlaceAllSheetPins( const TOOL_EVENT& aEvent )
+{
+    if( m_inDrawingTool )
+        return 0;
+
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
+
+    SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( m_selectionTool->GetSelection().Front() );
+    std::vector<SCH_HIERLABEL*> labels = importHierLabels( sheet );
+
+    if( labels.empty() )
+    {
+        m_frame->PushTool( aEvent );
+        m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( m_frame );
+        m_statusPopup->SetText( _( "No new hierarchical labels found." ) );
+        m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
+        m_statusPopup->PopupFor( 2000 );
+        m_frame->PopTool( aEvent );
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+        m_view->ClearPreview(); 
+        return 0;
+    }
+
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+
+    SCH_COMMIT commit( m_toolMgr );
+    BOX2I      boundingBox = sheet->GetBoundingBox();
+    VECTOR2I   cursorPos = boundingBox.GetPosition();
+    SCH_ITEM*  lastPlacedLabel = nullptr;
+
+    auto calculatePositionForLabel = [&]( const SCH_ITEM* lastLabel,
+                                          const SCH_HIERLABEL* currentLabel ) -> VECTOR2I
+    {
+        if( !lastLabel )
+            return cursorPos;
+
+        int lastX = lastLabel->GetPosition().x;
+        int lastY = lastLabel->GetPosition().y;
+        int lastWidth = lastLabel->GetBoundingBox().GetWidth();
+        int lastHeight = lastLabel->GetBoundingBox().GetHeight();
+
+        int currentWidth = currentLabel->GetBoundingBox().GetWidth();
+        int currentHeight = currentLabel->GetBoundingBox().GetHeight();
+
+        // If there is enough space, place the label to the right of the last placed label
+        if( ( lastX + lastWidth + currentWidth )
+            <= ( boundingBox.GetPosition().x + boundingBox.GetSize().x ) )
+            return { lastX + lastWidth, lastY };
+
+        // If not enough space to the right, move to the next row if vertical space allows
+        if( ( lastY + lastHeight + currentHeight )
+            <= ( boundingBox.GetPosition().y + boundingBox.GetSize().y ) )
+            return { boundingBox.GetPosition().x, lastY + lastHeight };
+
+        return cursorPos;
+    };
+
+    for( SCH_HIERLABEL* label : labels )
+    {
+        if( !lastPlacedLabel )
+        {
+            std::vector<SCH_SHEET_PIN*> existingPins = sheet->GetPins();
+
+            if( !existingPins.empty() )
+            {
+                std::sort( existingPins.begin(), existingPins.end(),
+                           []( const SCH_ITEM* a, const SCH_ITEM* b )
+                           {
+                               return ( a->GetPosition().x < b->GetPosition().x )
+                                      || ( a->GetPosition().x == b->GetPosition().x
+                                           && a->GetPosition().y < b->GetPosition().y );
+                           } );
+
+                lastPlacedLabel = existingPins.back();
+            }
+        }
+
+        cursorPos = calculatePositionForLabel( lastPlacedLabel, label );
+        SCH_ITEM* item = createNewSheetPinFromLabel( sheet, cursorPos, label );
+
+        if( item )
+        {
+            item->SetFlags( IS_NEW | IS_MOVING );
+            item->AutoplaceFields( nullptr, AUTOPLACE_AUTO );
+            item->ClearFlags( IS_MOVING );
+
+            if( item->IsConnectable() )
+                m_frame->AutoRotateItem( m_frame->GetScreen(), item );
+
+            commit.Modify( sheet, m_frame->GetScreen() );
+
+            sheet->AddPin( static_cast<SCH_SHEET_PIN*>( item ) );
+            item->AutoplaceFields( m_frame->GetScreen(), AUTOPLACE_AUTO );
+
+            commit.Push( _( "Add Sheet Pin" ) );
+
+            lastPlacedLabel = item;
+        }
+    }
+
+    return 0;
+}
+
+
 int SCH_DRAWING_TOOLS::SyncAllSheetsPins( const TOOL_EVENT& aEvent )
 {
     static const std::function<void( std::list<SCH_SHEET_PATH>&, SCH_SCREEN*,
@@ -3364,6 +3468,27 @@ SCH_HIERLABEL* SCH_DRAWING_TOOLS::importHierLabel( SCH_SHEET* aSheet )
 }
 
 
+std::vector<SCH_HIERLABEL*> SCH_DRAWING_TOOLS::importHierLabels( SCH_SHEET* aSheet )
+{
+    if( !aSheet->GetScreen() )
+        return {};
+
+    std::vector<SCH_HIERLABEL*> labels;
+
+    for( EDA_ITEM* item : aSheet->GetScreen()->Items().OfType( SCH_HIER_LABEL_T ) )
+    {
+        SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( item );
+
+        if( !aSheet->HasPin( label->GetText() ) )
+        {
+            labels.push_back( label );
+        }
+    }
+
+    return labels;
+}
+
+
 void SCH_DRAWING_TOOLS::setTransitions()
 {
     // clang-format off
@@ -3395,5 +3520,6 @@ void SCH_DRAWING_TOOLS::setTransitions()
     Go( &SCH_DRAWING_TOOLS::ImportGraphics,      EE_ACTIONS::importGraphics.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::SyncSheetsPins,      EE_ACTIONS::syncSheetPins.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::SyncAllSheetsPins,   EE_ACTIONS::syncAllSheetsPins.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::AutoPlaceAllSheetPins,   EE_ACTIONS::autoplaceAllSheetPins.MakeEvent() );
     // clang-format on
 }

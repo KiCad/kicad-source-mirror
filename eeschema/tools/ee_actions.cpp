@@ -546,6 +546,12 @@ TOOL_ACTION EE_ACTIONS::placeSheetPin( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::add_hierar_pin )
         .Flags( AF_ACTIVATE ) );
 
+TOOL_ACTION EE_ACTIONS::autoplaceAllSheetPins( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.autoplaceAllSheetPins" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Autoplace All Sheet Pins" ) )
+        .Tooltip( _( "Imports and auto places all sheet pins" ) ) );
+
 TOOL_ACTION EE_ACTIONS::syncSheetPins( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.syncSheetPins" )
         .Scope( AS_GLOBAL )
