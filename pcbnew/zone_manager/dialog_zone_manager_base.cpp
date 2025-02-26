@@ -67,10 +67,10 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 	leftColumn->Add( m_sizerZoneOP, 0, wxEXPAND|wxTOP, 5 );
 
 
-	m_sizerTop->Add( leftColumn, 1, wxEXPAND|wxLEFT, 5 );
+	m_sizerTop->Add( leftColumn, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 
-	m_MainBoxSizer->Add( m_sizerTop, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_MainBoxSizer->Add( m_sizerTop, 1, wxEXPAND|wxRIGHT, 5 );
 
 	m_sizerProperties = new wxBoxSizer( wxVERTICAL );
 
@@ -99,7 +99,7 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	m_sizerBottom->Add( m_sdbSizer, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	m_sizerBottom->Add( m_sdbSizer, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	m_MainBoxSizer->Add( m_sizerBottom, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );

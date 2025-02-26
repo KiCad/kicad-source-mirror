@@ -67,7 +67,7 @@
         <property name="permission">protected</property>
         <object class="sizeritem" expanded="true">
           <property name="border">5</property>
-          <property name="flag">wxEXPAND|wxLEFT|wxRIGHT</property>
+          <property name="flag">wxEXPAND|wxRIGHT</property>
           <property name="proportion">1</property>
           <object class="wxBoxSizer" expanded="true">
             <property name="minimum_size"></property>
@@ -75,8 +75,8 @@
             <property name="orient">wxHORIZONTAL</property>
             <property name="permission">protected</property>
             <object class="sizeritem" expanded="true">
-              <property name="border">5</property>
-              <property name="flag">wxEXPAND|wxLEFT</property>
+              <property name="border">10</property>
+              <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
               <property name="proportion">1</property>
               <object class="wxBoxSizer" expanded="true">
                 <property name="minimum_size"></property>
@@ -674,7 +674,7 @@
             </object>
             <object class="sizeritem" expanded="false">
               <property name="border">5</property>
-              <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL</property>
+              <property name="flag">wxALIGN_CENTER_VERTICAL</property>
               <property name="proportion">0</property>
               <object class="wxStdDialogButtonSizer" expanded="false">
                 <property name="Apply">0</property>
