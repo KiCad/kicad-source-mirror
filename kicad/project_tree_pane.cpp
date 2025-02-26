@@ -181,6 +181,8 @@ BEGIN_EVENT_TABLE( PROJECT_TREE_PANE, wxSashLayoutWindow )
 END_EVENT_TABLE()
 
 
+wxDECLARE_EVENT( UPDATE_ICONS, wxCommandEvent );
+
 PROJECT_TREE_PANE::PROJECT_TREE_PANE( KICAD_MANAGER_FRAME* parent ) :
         wxSashLayoutWindow( parent, ID_LEFT_FRAME, wxDefaultPosition, wxDefaultSize,
                             wxNO_BORDER | wxTAB_TRAVERSAL )
@@ -1157,8 +1159,6 @@ void PROJECT_TREE_PANE::onIdle( wxIdleEvent& aEvent )
 
         item->Activate( this );
     }
-
-    updateGitStatusIcons();
 }
 
 
@@ -1967,6 +1967,13 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
 
     std::unique_lock<std::mutex> lock( m_gitStatusMutex, std::try_to_lock );
 
+    CallAfter(
+            [this]()
+            {
+                m_gitStatusTimer.Start( ADVANCED_CFG::GetCfg().m_GitIconRefreshInterval,
+                                        wxTIMER_ONE_SHOT );
+            } );
+
     if( !lock.owns_lock() )
         return;
 
@@ -2118,6 +2125,7 @@ void PROJECT_TREE_PANE::updateGitStatusIconMap()
     auto [ localChanges, remoteChanges ] = m_TreeProject->GitCommon()->GetDifferentFiles();
 
     size_t count = git_status_list_entrycount( status_list );
+    bool   updated = false;
 
     for( size_t ii = 0; ii < count; ++ii )
     {
@@ -2138,36 +2146,98 @@ void PROJECT_TREE_PANE::updateGitStatusIconMap()
         // that is the main status we want to show.
         if( entry->status & GIT_STATUS_IGNORED )
         {
-            m_gitStatusIcons[iter->second] = KIGIT_COMMON::GIT_STATUS::GIT_STATUS_IGNORED;
+            auto [it, inserted] = m_gitStatusIcons.try_emplace( iter->second,
+                                        KIGIT_COMMON::GIT_STATUS::GIT_STATUS_IGNORED );
+
+            if( inserted || it->second != KIGIT_COMMON::GIT_STATUS::GIT_STATUS_IGNORED )
+                updated = true;
+
+            it->second = KIGIT_COMMON::GIT_STATUS::GIT_STATUS_IGNORED;
         }
         else if( entry->status & ( GIT_STATUS_INDEX_MODIFIED | GIT_STATUS_WT_MODIFIED ) )
         {
-            m_gitStatusIcons[iter->second] = KIGIT_COMMON::GIT_STATUS::GIT_STATUS_MODIFIED;
+            auto [it, inserted] = m_gitStatusIcons.try_emplace( iter->second,
+                                        KIGIT_COMMON::GIT_STATUS::GIT_STATUS_MODIFIED );
+
+            if( inserted || it->second != KIGIT_COMMON::GIT_STATUS::GIT_STATUS_MODIFIED )
+                updated = true;
+
+            it->second = KIGIT_COMMON::GIT_STATUS::GIT_STATUS_MODIFIED;
         }
         else if( entry->status & ( GIT_STATUS_INDEX_NEW | GIT_STATUS_WT_NEW ) )
         {
-            m_gitStatusIcons[iter->second] = KIGIT_COMMON::GIT_STATUS::GIT_STATUS_ADDED;
+            auto [it, inserted] = m_gitStatusIcons.try_emplace( iter->second,
+                                        KIGIT_COMMON::GIT_STATUS::GIT_STATUS_ADDED );
+
+            if( inserted || it->second != KIGIT_COMMON::GIT_STATUS::GIT_STATUS_ADDED )
+                updated = true;
+
+            it->second = KIGIT_COMMON::GIT_STATUS::GIT_STATUS_ADDED;
         }
         else if( entry->status & ( GIT_STATUS_INDEX_DELETED | GIT_STATUS_WT_DELETED ) )
         {
-            m_gitStatusIcons[iter->second] = KIGIT_COMMON::GIT_STATUS::GIT_STATUS_DELETED;
+            auto [it, inserted] = m_gitStatusIcons.try_emplace( iter->second,
+                                        KIGIT_COMMON::GIT_STATUS::GIT_STATUS_DELETED );
+
+            if( inserted || it->second != KIGIT_COMMON::GIT_STATUS::GIT_STATUS_DELETED )
+                updated = true;
+
+            it->second = KIGIT_COMMON::GIT_STATUS::GIT_STATUS_DELETED;
         }
         else if( localChanges.count( path ) )
         {
-            m_gitStatusIcons[iter->second] = KIGIT_COMMON::GIT_STATUS::GIT_STATUS_AHEAD;
+            auto [it, inserted] = m_gitStatusIcons.try_emplace( iter->second,
+                                        KIGIT_COMMON::GIT_STATUS::GIT_STATUS_MODIFIED );
+
+            if( inserted || it->second != KIGIT_COMMON::GIT_STATUS::GIT_STATUS_MODIFIED )
+                updated = true;
+
+            it->second = KIGIT_COMMON::GIT_STATUS::GIT_STATUS_MODIFIED;
         }
         else if( remoteChanges.count( path ) )
         {
-            m_gitStatusIcons[iter->second] = KIGIT_COMMON::GIT_STATUS::GIT_STATUS_BEHIND;
+            auto [it, inserted] = m_gitStatusIcons.try_emplace( iter->second,
+                                        KIGIT_COMMON::GIT_STATUS::GIT_STATUS_MODIFIED );
+
+            if( inserted || it->second != KIGIT_COMMON::GIT_STATUS::GIT_STATUS_MODIFIED )
+                updated = true;
+
+            it->second = KIGIT_COMMON::GIT_STATUS::GIT_STATUS_MODIFIED;
         }
         else
         {
-            m_gitStatusIcons[iter->second] = KIGIT_COMMON::GIT_STATUS::GIT_STATUS_CURRENT;
+            auto [it, inserted] = m_gitStatusIcons.try_emplace( iter->second,
+                                        KIGIT_COMMON::GIT_STATUS::GIT_STATUS_CURRENT );
+
+            if( inserted || it->second != KIGIT_COMMON::GIT_STATUS::GIT_STATUS_CURRENT )
+                updated = true;
+
+            it->second = KIGIT_COMMON::GIT_STATUS::GIT_STATUS_CURRENT;
         }
     }
 
     git_status_list_free( status_list );
     git_index_free( index );
+
+    // If the icons are current, don't bother refreshing the tree because it flickers on Windows
+    if( updated )
+    {
+        CallAfter(
+                [this]()
+                {
+                    updateGitStatusIcons();
+                } );
+    }
+    else
+    {
+        // Need to callAfter so that it is started in the main thread
+        CallAfter(
+                [this]()
+                {
+                    m_gitStatusTimer.Start( ADVANCED_CFG::GetCfg().m_GitIconRefreshInterval,
+                                            wxTIMER_ONE_SHOT );
+                } );
+    }
 }
 
 
