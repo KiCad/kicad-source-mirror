@@ -26,36 +26,56 @@
 
 #include "dialog_gencad_export_options.h"
 
+#include <jobs/job_export_pcb_gencad.h>
+
 #include <pcb_edit_frame.h>
 #include <kidialog.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/checkbox.h>
 #include <wx/filepicker.h>
 #include <wx/sizer.h>
+#include <wx/stattext.h>
+#include <wx/textctrl.h>
+#include "widgets/std_bitmap_button.h"
+#include <board.h>
+
 
 
 DIALOG_GENCAD_EXPORT_OPTIONS::DIALOG_GENCAD_EXPORT_OPTIONS( PCB_EDIT_FRAME* aParent,
-                                                            const wxString& aPath )
-    : DIALOG_SHIM( aParent, wxID_ANY, _( "Export to GenCAD settings" ), wxDefaultPosition,
-                   wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
+                                                            const wxString& aPath ) :
+        DIALOG_SHIM( aParent, wxID_ANY, _( "Export to GenCAD settings" ), wxDefaultPosition,
+                     wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
+        m_frame( aParent ),
+        m_job( nullptr )
 {
-    wxBoxSizer* m_mainSizer= new wxBoxSizer( wxVERTICAL );
+    wxBoxSizer* m_mainSizer = new wxBoxSizer( wxVERTICAL );
 
-    // Ctreate the file picker. The path will be set later, when the widget size
-    // is set to.
-    m_filePicker = new wxFilePickerCtrl( this, wxID_ANY, "",
-                                         _("Select a GenCAD export filename"),
-                                         FILEEXT::GencadFileWildcard(),
-                                         wxDefaultPosition, wxSize( -1,-1 ),
-                                         wxFLP_SAVE|wxFLP_USE_TEXTCTRL );
-    m_mainSizer->Add( m_filePicker, 0, wxEXPAND | wxTOP | wxLEFT | wxRIGHT, 5 );
+    m_fileSizer = new wxBoxSizer( wxHORIZONTAL );
+
+    m_textFile = new wxStaticText( this, wxID_ANY, _( "Output File:" ), wxDefaultPosition, wxDefaultSize, 0 );
+    m_textFile->Wrap( -1 );
+    m_fileSizer->Add( m_textFile, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 5 );
+
+	m_outputFileName =
+            new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+    m_outputFileName->SetToolTip( _( "Enter a filename if you do not want to use default file names" ) );
+    m_outputFileName->SetMinSize( wxSize( 350, -1 ) );
+    m_fileSizer->Add( m_outputFileName, 1, wxALL | wxEXPAND, 5 );
+
+
+    m_browseButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition,
+                                            wxSize( -1, -1 ), wxBU_AUTODRAW | 0 );
+    m_fileSizer->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5 );
+
+    m_mainSizer->Add( m_fileSizer, 0, wxEXPAND | wxALL, 5 );
+
 
     m_optsSizer = new wxGridSizer( 0, 1, 3, 3 );
     createOptCheckboxes();
-    m_mainSizer->Add( m_optsSizer, 1, wxEXPAND | wxALL, 10 );
+    m_mainSizer->Add( m_optsSizer, 1, wxEXPAND | wxALL, 5 );
 
     wxSizer* stdButtons = CreateSeparatedButtonSizer( wxOK | wxCANCEL );
-    m_mainSizer->Add( stdButtons, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
+    m_mainSizer->Add( stdButtons, 0, wxALL | wxEXPAND, 5 );
 
     SetSizer( m_mainSizer );
 
@@ -64,14 +84,51 @@ DIALOG_GENCAD_EXPORT_OPTIONS::DIALOG_GENCAD_EXPORT_OPTIONS( PCB_EDIT_FRAME* aPar
 
     // Set the path in m_filePicker, now the size is set
     // (otherwise the text is truncated)
-    m_filePicker->SetPath( aPath );
+    m_outputFileName->SetValue( aPath );
 
-    Centre( wxBOTH );
+    Layout();
+    Fit();
+
+    m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
+	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
+                             wxCommandEventHandler( DIALOG_GENCAD_EXPORT_OPTIONS::onBrowseClicked ),
+                             NULL, this );
+}
+
+
+DIALOG_GENCAD_EXPORT_OPTIONS::DIALOG_GENCAD_EXPORT_OPTIONS( PCB_EDIT_FRAME*        aParent,
+                                                            JOB_EXPORT_PCB_GENCAD* aJob ) :
+        DIALOG_GENCAD_EXPORT_OPTIONS( aParent, aJob->GetConfiguredOutputPath() )
+{
+    m_job = aJob;
+
+    m_browseButton->Hide();
+
+    // Set the title
+    SetTitle( aJob->GetSettingsDialogTitle() );
 }
 
 
 DIALOG_GENCAD_EXPORT_OPTIONS::~DIALOG_GENCAD_EXPORT_OPTIONS()
 {
+    m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED,
+            wxCommandEventHandler( DIALOG_GENCAD_EXPORT_OPTIONS::onBrowseClicked ),
+                                NULL, this );
+}
+
+
+void DIALOG_GENCAD_EXPORT_OPTIONS::onBrowseClicked( wxCommandEvent& aEvent )
+{
+    wxFileName brdFile( m_frame->GetBoard()->GetFileName() );
+    wxString   fileDialogName( wxString::Format( wxS( "%s-gencad" ), brdFile.GetName() ) );
+
+    wxString   path = ExpandEnvVarSubstitutions( m_outputFileName->GetValue(), &Prj() );
+    wxFileName fn( Prj().AbsolutePath( path ) );
+
+    wxFileDialog dlg( this, _( "Export GenCAD File" ), fn.GetPath(), fileDialogName,
+                      FILEEXT::GencadFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    if( dlg.ShowModal() == wxID_OK )
+        m_outputFileName->SetValue( dlg.GetPath() );
 }
 
 
@@ -102,7 +159,24 @@ std::map<GENCAD_EXPORT_OPT, bool> DIALOG_GENCAD_EXPORT_OPTIONS::GetAllOptions() 
 
 wxString DIALOG_GENCAD_EXPORT_OPTIONS::GetFileName() const
 {
-    return m_filePicker->GetPath();
+    return m_outputFileName->GetValue();
+}
+
+
+bool DIALOG_GENCAD_EXPORT_OPTIONS::TransferDataToWindow()
+{
+    if( !wxDialog::TransferDataToWindow() )
+        return false;
+
+    if( m_job )
+    {
+        m_options[FLIP_BOTTOM_PADS]->SetValue( m_job->m_flipBottomPads );
+        m_options[UNIQUE_PIN_NAMES]->SetValue( m_job->m_useUniquePins );
+        m_options[INDIVIDUAL_SHAPES]->SetValue( m_job->m_useIndividualShapes );
+        m_options[USE_AUX_ORIGIN]->SetValue( m_job->m_useDrillOrigin );
+        m_options[STORE_ORIGIN_COORDS]->SetValue( m_job->m_storeOriginCoords );
+    }
+    return true;
 }
 
 
@@ -111,16 +185,28 @@ bool DIALOG_GENCAD_EXPORT_OPTIONS::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
-    wxString fn = GetFileName();
-
-    if( wxFile::Exists( fn ) )
+    if( m_job )
     {
-        wxString msg = wxString::Format( _( "File %s already exists." ), fn );
-        KIDIALOG dlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
-        dlg.SetOKLabel( _( "Overwrite" ) );
-        dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
+        m_job->SetConfiguredOutputPath( GetFileName() );
+        m_job->m_flipBottomPads = GetOption( FLIP_BOTTOM_PADS );
+        m_job->m_useUniquePins = GetOption( UNIQUE_PIN_NAMES );
+        m_job->m_useIndividualShapes = GetOption( INDIVIDUAL_SHAPES );
+        m_job->m_useDrillOrigin = GetOption( USE_AUX_ORIGIN );
+        m_job->m_storeOriginCoords = GetOption( STORE_ORIGIN_COORDS );
+    }
+    else
+    {
+        wxString fn = GetFileName();
 
-        return ( dlg.ShowModal() == wxID_OK );
+        if( wxFile::Exists( fn ) )
+        {
+            wxString msg = wxString::Format( _( "File %s already exists." ), fn );
+            KIDIALOG dlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+            dlg.SetOKLabel( _( "Overwrite" ) );
+            dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
+
+            return ( dlg.ShowModal() == wxID_OK );
+        }
     }
 
     return true;

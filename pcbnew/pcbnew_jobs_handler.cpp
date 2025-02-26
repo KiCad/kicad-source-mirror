@@ -89,6 +89,7 @@
 #include <dialogs/dialog_plot.h>
 #include <dialogs/dialog_drc_job_config.h>
 #include <dialogs/dialog_render_job.h>
+#include <dialogs/dialog_gencad_export_options.h>
 #include <paths.h>
 
 #include "pcbnew_scripting_helpers.h"
@@ -141,9 +142,17 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
               } );
     Register( "gencad",
               std::bind( &PCBNEW_JOBS_HANDLER::JobExportGencad, this, std::placeholders::_1 ),
-              []( JOB* job, wxWindow* aParent ) -> bool
+              [aKiway]( JOB* job, wxWindow* aParent ) -> bool
               {
-                  return true;
+                  JOB_EXPORT_PCB_GENCAD* gencadJob = dynamic_cast<JOB_EXPORT_PCB_GENCAD*>( job );
+
+                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>(
+                          aKiway->Player( FRAME_PCB_EDITOR, false ) );
+
+                  wxCHECK( gencadJob && editFrame, false );
+
+                  DIALOG_GENCAD_EXPORT_OPTIONS dlg( editFrame, gencadJob );
+                  return dlg.ShowModal() == wxID_OK;
               } );
     Register( "dxf", std::bind( &PCBNEW_JOBS_HANDLER::JobExportDxf, this, std::placeholders::_1 ),
               [aKiway]( JOB* job, wxWindow* aParent ) -> bool

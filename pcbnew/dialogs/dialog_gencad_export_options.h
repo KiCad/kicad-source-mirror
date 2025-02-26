@@ -33,6 +33,11 @@ class PCB_EDIT_FRAME;
 class wxFilePickerCtrl;
 class wxCheckBox;
 class wxGridSizer;
+class wxFlexGridSizer;
+class wxStaticText;
+class wxTextCtrl;
+class STD_BITMAP_BUTTON;
+class PCB_EDIT_FRAME;
 
 ///< Settings for GenCAD exporter
 enum GENCAD_EXPORT_OPT
@@ -44,11 +49,14 @@ enum GENCAD_EXPORT_OPT
     STORE_ORIGIN_COORDS     // saves the origin point coordinates or (0, 0)
 };
 
+class JOB_EXPORT_PCB_GENCAD;
+
 
 class DIALOG_GENCAD_EXPORT_OPTIONS : public DIALOG_SHIM
 {
 public:
     DIALOG_GENCAD_EXPORT_OPTIONS( PCB_EDIT_FRAME* aParent, const wxString& aPath );
+    DIALOG_GENCAD_EXPORT_OPTIONS( PCB_EDIT_FRAME* aParent, JOB_EXPORT_PCB_GENCAD* aJob );
     ~DIALOG_GENCAD_EXPORT_OPTIONS();
 
     ///< Check whether an option has been selected.
@@ -62,15 +70,24 @@ public:
 
 protected:
     bool TransferDataFromWindow() override;
+    bool TransferDataToWindow() override;
+
+    virtual void onBrowseClicked( wxCommandEvent& aEvent );
 
     ///< Create checkboxes for GenCAD export options.
     void createOptCheckboxes();
 
     std::map<GENCAD_EXPORT_OPT, wxCheckBox*> m_options;
 
+    PCB_EDIT_FRAME* m_frame;
+
     // Widgets
-    wxGridSizer*      m_optsSizer;
-    wxFilePickerCtrl* m_filePicker;
+    wxGridSizer*           m_optsSizer;
+    wxBoxSizer*            m_fileSizer;
+    wxTextCtrl*            m_outputFileName;
+    wxStaticText*          m_textFile;
+    STD_BITMAP_BUTTON*     m_browseButton;
+    JOB_EXPORT_PCB_GENCAD* m_job;
 };
 
 #endif //__DIALOG_GENCAD_EXPORT_OPTIONS_H__
