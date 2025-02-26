@@ -41,16 +41,16 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-26 20:15+0300\n"
-"PO-Revision-Date: 2025-02-18 12:29+0000\n"
+"PO-Revision-Date: 2025-02-27 07:25+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
-"projects/kicad/master-source/zh_Hans/>\n"
+"projects/kicad/v9/zh_Hans/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10.1-dev\n"
+"X-Generator: Weblate 5.10.2-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -7347,9 +7347,8 @@ msgid "Export Drill Data Job Settings"
 msgstr "导出钻孔数据作业设置"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
-#, fuzzy
 msgid "PCB: Export Drill Data"
-msgstr "PCB: 导出钻孔数据文件"
+msgstr "PCB: 导出钻孔数据"
 
 #: common/jobs/job_export_pcb_dxf.cpp:58
 #: common/jobs/job_export_sch_plot.cpp:160 kicad/kicad_cli.cpp:143
@@ -7395,29 +7394,24 @@ msgid "Export IPC-2581"
 msgstr "导出 IPC-2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
-#, fuzzy
 msgid "Export IPC-2581 Job Settings"
-msgstr "导出 IPC2581 作业设置"
+msgstr "导出 IPC-2581 作业设置"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
-#, fuzzy
 msgid "PCB: Export IPC-2581"
-msgstr "PCB: 导出 IPC2581"
+msgstr "PCB: 导出 IPC-2581"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:33
-#, fuzzy
 msgid "Export IPC-D-356"
-msgstr "导出 IPC-2581"
+msgstr "导出 IPC-D-356"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:39
-#, fuzzy
 msgid "Export IPC-D-356 Job Settings"
-msgstr "导出 IPC2581 作业设置"
+msgstr "导出 IPC-D-356 作业设置"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:52
-#, fuzzy
 msgid "PCB: Export IPC-D-356"
-msgstr "PCB: 导出 IPC2581"
+msgstr "PCB: 导出 IPC-D-356"
 
 #: common/jobs/job_export_pcb_odb.cpp:57
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
@@ -7575,7 +7569,6 @@ msgid "Schematic: Perform ERC"
 msgstr "原理图: 执行 ERC"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy Files"
 msgstr "特殊: 复制文件"
 
@@ -16564,14 +16557,14 @@ msgid "The current configuration does not include the symbol library '%s'"
 msgstr "当前配置不包含符号库 '%s'"
 
 #: eeschema/erc/erc.cpp:1414
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration"
-msgstr "当前配置中未启用封装库 '%s'。"
+msgstr "当前配置中未启用符号库 '%s'。"
 
 #: eeschema/erc/erc.cpp:1429
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' was not found at '%s'."
-msgstr "找不到封装库 '%s'。"
+msgstr "找不到符号库 '%s'。"
 
 #: eeschema/erc/erc.cpp:1449
 #, c-format
@@ -34936,9 +34929,8 @@ msgid "Set to specified values:"
 msgstr "设置为指定值:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:147
-#, fuzzy
 msgid "Visible  (fields only)"
-msgstr "可视 (仅文本)"
+msgstr "可视 (仅字段)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:235
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:99
@@ -40953,9 +40945,9 @@ msgid "Checking board footprints against library..."
 msgstr "正在对照库内容检查电路板封装..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:892
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' was not found at '%s'."
-msgstr "找不到封装库 '%s'。"
+msgstr "在 '%2$s' 中找不到封装库 '%1$s'。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:942
 #, c-format
@@ -41238,16 +41230,17 @@ msgid "Generate IPC-D-356 netlist file"
 msgstr "创建 IPC-D-356 网络文件"
 
 #: pcbnew/exporters/export_d356.cpp:404
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "IPC-D-356 netlist file created:\n"
 "'%s'."
-msgstr "IPC-D-356 网络列表文件..."
+msgstr ""
+"IPC-D-356 网表文件已创建:\n"
+"'%s'。"
 
 #: pcbnew/exporters/export_d356.cpp:405
-#, fuzzy
 msgid "IPC-D-356 Netlist File"
-msgstr "IPC-D-356 网络列表文件..."
+msgstr "IPC-D-356 网表文件"
 
 #: pcbnew/exporters/export_footprint_associations.cpp:73
 msgid "Save Footprint Association File"
@@ -41589,31 +41582,29 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1302
-#, fuzzy
 msgid "The board must be saved before generating IPC-2581 file."
-msgstr "生成 IPC2581 文件前必须保存电路板。"
+msgstr "生成 IPC-2581 文件前必须保存电路板。"
 
 #: pcbnew/files.cpp:1318
-#, fuzzy
 msgid "Generating IPC-2581 file"
-msgstr "生成 IPC2581 文件"
+msgstr "生成 IPC-2581 文件"
 
 #: pcbnew/files.cpp:1343 pcbnew/pcbnew_jobs_handler.cpp:2022
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "%s"
 msgstr ""
-"生成 IPC2581 文件 '%s' 时出错。\n"
+"生成 IPC-2581 文件 '%s' 时出错。\n"
 "%s"
 
 #: pcbnew/files.cpp:1408 pcbnew/pcbnew_jobs_handler.cpp:2055
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "Failed to rename temporary file '%s."
 msgstr ""
-"生成 IPC2581 文件 '%s' 时出错。\n"
+"生成 IPC-2581 文件 '%s' 时出错。\n"
 "重命名临时文件 '%s' 失败。"
 
 #: pcbnew/files.cpp:1440
@@ -42882,19 +42873,19 @@ msgstr "无法解析网表的元件部分的封装名称。"
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:138
 msgid "Cannot parse reference designator in symbol section of netlist."
-msgstr "无法解析网络列表的元件部分的位号。"
+msgstr "无法解析网表的符号部分的位号。"
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:148
 msgid "Cannot parse value in symbol section of netlist."
-msgstr "无法解析网络列表的符号部分的值。"
+msgstr "无法解析网表的符号部分的值。"
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:185
 msgid "Cannot parse pin name in symbol net section of netlist."
-msgstr "无法解析网络列表的元件部分的引脚名称。"
+msgstr "无法解析网表的符号网络部分的引脚名称。"
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:194
 msgid "Cannot parse net name in symbol net section of netlist."
-msgstr "无法解析网络列表的元件部分的网络名称。"
+msgstr "无法解析网表的符号网络部分的网络名称。"
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:242
 #, c-format
@@ -45509,14 +45500,12 @@ msgid "Saved DRC Report to %s\n"
 msgstr "保存 DRC 报告到 %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2103
-#, fuzzy
 msgid "Successfully created IPC-D-356 file\n"
-msgstr "成功创建 genCAD 文件\n"
+msgstr "成功创建 IPC-D-356 文件\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2108
-#, fuzzy
 msgid "Failed to create IPC-D-356 file\n"
-msgstr "创建文件失败。"
+msgstr "创建 IPC-D-356 文件失败\n"
 
 #: pcbnew/pcbnew_printout.cpp:124
 msgid "Multiple Layers"
@@ -47928,7 +47917,7 @@ msgstr "生成 ODB++ 文件"
 
 #: pcbnew/tools/pcb_actions.cpp:1065
 msgid "IPC-D-356 Netlist File..."
-msgstr "IPC-D-356 网络列表文件..."
+msgstr "IPC-D-356 网表文件..."
 
 #: pcbnew/tools/pcb_actions.cpp:1072
 msgid "Bill of Materials..."
