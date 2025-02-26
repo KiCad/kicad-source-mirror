@@ -129,6 +129,7 @@ i18n_status.csv
 
 # QA dataoutput
 qa/data/**/*.csv
+qa/data/**/*.spice
 
 # Don't actually ignore any of these files, since we need them in the tree
 !resources/linux/icons/hicolor/**/**/*
