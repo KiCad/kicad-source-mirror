@@ -80,8 +80,9 @@ bool DRC_TEST_PROVIDER_TEXT_MIRRORING::Run()
     LSET topLayers( { F_Cu, F_SilkS, F_Mask, F_Fab } );
     LSET bottomLayers( { B_Cu, B_SilkS, B_Mask, B_Fab } );
 
-    auto checkTextMirroring = [&]( BOARD_ITEM* item, EDA_TEXT* text, PCB_LAYER_ID layerId,
-                                   bool isMirrored, int errorCode ) -> bool
+    auto checkTextMirroring =
+            [&]( BOARD_ITEM* item, EDA_TEXT* text, PCB_LAYER_ID layerId, bool isMirrored,
+                 int errorCode ) -> bool
             {
                 if( m_drcEngine->IsErrorLimitExceeded( errorCode ) )
                     return false;
@@ -108,41 +109,43 @@ bool DRC_TEST_PROVIDER_TEXT_MIRRORING::Run()
     static const std::vector<KICAD_T> itemTypes = { PCB_FIELD_T, PCB_TEXT_T, PCB_TEXTBOX_T };
 
     forEachGeometryItem( itemTypes, topLayers | bottomLayers,
-                         [&]( BOARD_ITEM* item ) -> bool
-                         {
-                             ++count;
-                             return true;
-                         } );
+            [&]( BOARD_ITEM* item ) -> bool
+            {
+                ++count;
+                return true;
+            } );
 
     forEachGeometryItem( itemTypes, topLayers | bottomLayers,
-                         [&]( BOARD_ITEM* item ) -> bool
-                         {
-                             if( !reportProgress( progressIndex++, count, progressDelta ) )
-                                 return false;
+            [&]( BOARD_ITEM* item ) -> bool
+            {
+                if( !reportProgress( progressIndex++, count, progressDelta ) )
+                    return false;
 
-                             EDA_TEXT* text = nullptr;
+                EDA_TEXT* text = nullptr;
 
-                             switch( item->Type() )
-                             {
-                             case PCB_FIELD_T: text = static_cast<PCB_FIELD*>( item ); break;
-                             case PCB_TEXT_T: text = static_cast<PCB_TEXT*>( item ); break;
-                             case PCB_TEXTBOX_T: text = static_cast<PCB_TEXTBOX*>( item ); break;
-                             default: UNIMPLEMENTED_FOR( item->GetClass() ); break;
-                             }
+                switch( item->Type() )
+                {
+                case PCB_FIELD_T:   text = static_cast<PCB_FIELD*>( item );   break;
+                case PCB_TEXT_T:    text = static_cast<PCB_TEXT*>( item );    break;
+                case PCB_TEXTBOX_T: text = static_cast<PCB_TEXTBOX*>( item ); break;
+                default:            UNIMPLEMENTED_FOR( item->GetClass() );    break;
+                }
 
-                             if( !text || !text->IsVisible()
-                                 || !m_drcEngine->GetBoard()->IsLayerEnabled( item->GetLayer() )
-                                 || !m_drcEngine->GetBoard()->IsLayerVisible( item->GetLayer() ) )
-                                 return true;
+                if( !text || !text->IsVisible()
+                        || !m_drcEngine->GetBoard()->IsLayerEnabled( item->GetLayer() )
+                        || !m_drcEngine->GetBoard()->IsLayerVisible( item->GetLayer() ) )
+                {
+                    return true;
+                }
 
-                             if( !checkTextMirroring( item, text, item->GetLayer(), true, DRCE_MIRRORED_TEXT_ON_FRONT_LAYER ) ||
-                                 !checkTextMirroring( item, text, item->GetLayer(), false, DRCE_NONMIRRORED_TEXT_ON_BACK_LAYER ) )
-                             {
-                                 return false;
-                             }
+                if( !checkTextMirroring( item, text, item->GetLayer(), true, DRCE_MIRRORED_TEXT_ON_FRONT_LAYER )
+                 || !checkTextMirroring( item, text, item->GetLayer(), false, DRCE_NONMIRRORED_TEXT_ON_BACK_LAYER ) )
+                {
+                    return false;
+                }
 
-                             return true;
-                         } );
+                return true;
+            } );
 
     reportRuleStatistics();
 
