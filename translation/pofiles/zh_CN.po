@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-26 20:12+0300\n"
-"PO-Revision-Date: 2025-02-25 08:05+0000\n"
+"PO-Revision-Date: 2025-02-27 07:25+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -7394,9 +7394,8 @@ msgid "Export Drill Data Job Settings"
 msgstr "导出钻孔数据作业设置"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
-#, fuzzy
 msgid "PCB: Export Drill Data"
-msgstr "PCB: 导出钻孔数据文件"
+msgstr "PCB: 导出钻孔数据"
 
 #: common/jobs/job_export_pcb_dxf.cpp:58
 #: common/jobs/job_export_sch_plot.cpp:160 kicad/kicad_cli.cpp:143
@@ -7414,18 +7413,16 @@ msgstr "PCB: 导出 DXF"
 
 #: common/jobs/job_export_pcb_gencad.cpp:49
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:128
-#, fuzzy
 msgid "Export GenCAD File"
-msgstr "导出 SVG 文件"
+msgstr "导出 GenCAD 文件"
 
 #: common/jobs/job_export_pcb_gencad.cpp:55
 msgid "Export GenCAD Job Settings"
 msgstr "导出 GenCAD 作业设置"
 
 #: common/jobs/job_export_pcb_gencad.cpp:59
-#, fuzzy
 msgid "PCB: Export GenCAD"
-msgstr "PCB: 导出 DXF"
+msgstr "PCB: 导出 GenCAD"
 
 #: common/jobs/job_export_pcb_gerber.cpp:65
 msgid "Export single Gerber"
@@ -7453,29 +7450,24 @@ msgid "Export IPC-2581"
 msgstr "导出 IPC-2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
-#, fuzzy
 msgid "Export IPC-2581 Job Settings"
-msgstr "导出 IPC2581 作业设置"
+msgstr "导出 IPC-2581 作业设置"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
-#, fuzzy
 msgid "PCB: Export IPC-2581"
-msgstr "PCB: 导出 IPC2581"
+msgstr "PCB: 导出 IPC-2581"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:33
-#, fuzzy
 msgid "Export IPC-D-356"
-msgstr "导出 IPC-2581"
+msgstr "导出 IPC-D-356"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:39
-#, fuzzy
 msgid "Export IPC-D-356 Job Settings"
-msgstr "导出 IPC2581 作业设置"
+msgstr "导出 IPC-D-356 作业设置"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:52
-#, fuzzy
 msgid "PCB: Export IPC-D-356"
-msgstr "PCB: 导出 IPC2581"
+msgstr "PCB: 导出 IPC-D-356"
 
 #: common/jobs/job_export_pcb_odb.cpp:57
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
@@ -7633,7 +7625,6 @@ msgid "Schematic: Perform ERC"
 msgstr "原理图: 执行 ERC"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy Files"
 msgstr "特殊: 复制文件"
 
@@ -13771,7 +13762,6 @@ msgstr "替换"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:149
 #: pcbnew/dialogs/dialog_find_base.cpp:125
-#, fuzzy
 msgid "Show search panel"
 msgstr "显示搜索面板"
 
@@ -13870,9 +13860,8 @@ msgstr "将描边宽度设置为 0 以使用原理图默认线宽。"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:115
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:234
-#, fuzzy
 msgid "Fill:"
-msgstr "填充"
+msgstr "填充:"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:142
 msgid "Clear colors to use Schematic Editor colors."
@@ -16612,14 +16601,14 @@ msgid "The current configuration does not include the symbol library '%s'"
 msgstr "当前配置不包含符号库 '%s'"
 
 #: eeschema/erc/erc.cpp:1414
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration"
-msgstr "当前配置中未启用封装库 '%s'。"
+msgstr "当前配置中未启用符号库 '%s'。"
 
 #: eeschema/erc/erc.cpp:1429
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' was not found at '%s'."
-msgstr "找不到封装库 '%s'。"
+msgstr "找不到符号库 '%s'。"
 
 #: eeschema/erc/erc.cpp:1449
 #, c-format
@@ -22218,14 +22207,12 @@ msgid "Place Sheet Pins"
 msgstr "放置图纸引脚"
 
 #: eeschema/tools/ee_actions.cpp:552 eeschema/tools/ee_actions.cpp:560
-#, fuzzy
 msgid "Sync Sheet Pins..."
-msgstr "同步图纸引脚"
+msgstr "同步图纸引脚..."
 
 #: eeschema/tools/ee_actions.cpp:568
-#, fuzzy
 msgid "Import Sheet..."
-msgstr "导入图纸"
+msgstr "导入图纸..."
 
 #: eeschema/tools/ee_actions.cpp:569
 msgid "Import sheet into project"
@@ -27291,18 +27278,16 @@ msgid "Local path: monitoring folder changes"
 msgstr "本地路径: 监视文件夹变更"
 
 #: kicad/project_tree_pane.cpp:1631
-#, fuzzy
 msgid "The selected directory is already a Git project."
-msgstr "所选目录已存在 git 工程。"
+msgstr "所选目录已存在 Git 工程。"
 
 #: kicad/project_tree_pane.cpp:1638
 msgid "Set default remote"
 msgstr "设置默认远程"
 
 #: kicad/project_tree_pane.cpp:1653
-#, fuzzy
 msgid "Failed to initialize Git project."
-msgstr "git 工程初始化失败。"
+msgstr "Git 工程初始化失败。"
 
 #: kicad/project_tree_pane.cpp:1713
 msgid "Failed to set default remote."
@@ -27342,19 +27327,16 @@ msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "更新分支 '%s' 的 HEAD 引用失败"
 
 #: kicad/project_tree_pane.cpp:1919
-#, fuzzy
 msgid "Are you sure you want to remove Git tracking from this project?"
-msgstr "确定要从工程中移除 git 版本控制?"
+msgstr "确定要从工程中移除 Git 版本控制?"
 
 #: kicad/project_tree_pane.cpp:1936
-#, fuzzy
 msgid "Failed to remove Git directory"
-msgstr "移除 git 目录失败"
+msgstr "移除 Git 目录失败"
 
 #: kicad/project_tree_pane.cpp:2252
-#, fuzzy
 msgid "The selected directory is not a Git project."
-msgstr "所选目录已存在 git 工程。"
+msgstr "所选目录已存在 Git 工程。"
 
 #: kicad/project_tree_pane.cpp:2401
 msgid "Discarding commit due to empty commit message."
@@ -34427,11 +34409,8 @@ msgid "Output File:"
 msgstr "输出文件:"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:61
-#, fuzzy
 msgid "Enter a filename if you do not want to use default file names"
-msgstr ""
-"如果你不想使用默认文件名,请输入新的文件名\n"
-"仅可在打印当前图纸时可用"
+msgstr "如果你不想使用默认文件名, 请输入新的文件名"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:436
 #, c-format
@@ -35010,9 +34989,8 @@ msgid "Set to specified values:"
 msgstr "设置为指定值:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:147
-#, fuzzy
 msgid "Visible  (fields only)"
-msgstr "可视 (仅文本)"
+msgstr "可视 (仅字段)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:235
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:99
@@ -37200,14 +37178,12 @@ msgid "Applying these changes will short net %s with other nets."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Apply Anyway"
 msgstr "仍然添加"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Cancel Changes"
-msgstr "取消变更?"
+msgstr "取消变更"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:571
 #, c-format
@@ -41048,9 +41024,9 @@ msgid "Checking board footprints against library..."
 msgstr "正在对照库内容检查电路板封装..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:892
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' was not found at '%s'."
-msgstr "找不到封装库 '%s'。"
+msgstr "在 '%2$s' 中找不到封装库 '%1$s'。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:942
 #, c-format
@@ -41333,16 +41309,17 @@ msgid "Generate IPC-D-356 netlist file"
 msgstr "创建 IPC-D-356 网络文件"
 
 #: pcbnew/exporters/export_d356.cpp:404
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "IPC-D-356 netlist file created:\n"
 "'%s'."
-msgstr "IPC-D-356 网络列表文件..."
+msgstr ""
+"IPC-D-356 网表文件已创建:\n"
+"'%s'。"
 
 #: pcbnew/exporters/export_d356.cpp:405
-#, fuzzy
 msgid "IPC-D-356 Netlist File"
-msgstr "IPC-D-356 网络列表文件..."
+msgstr "IPC-D-356 网表文件"
 
 #: pcbnew/exporters/export_footprint_associations.cpp:73
 msgid "Save Footprint Association File"
@@ -41684,31 +41661,29 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1302
-#, fuzzy
 msgid "The board must be saved before generating IPC-2581 file."
-msgstr "生成 IPC2581 文件前必须保存电路板。"
+msgstr "生成 IPC-2581 文件前必须保存电路板。"
 
 #: pcbnew/files.cpp:1318
-#, fuzzy
 msgid "Generating IPC-2581 file"
-msgstr "生成 IPC2581 文件"
+msgstr "生成 IPC-2581 文件"
 
 #: pcbnew/files.cpp:1343 pcbnew/pcbnew_jobs_handler.cpp:2031
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "%s"
 msgstr ""
-"生成 IPC2581 文件 '%s' 时出错。\n"
+"生成 IPC-2581 文件 '%s' 时出错。\n"
 "%s"
 
 #: pcbnew/files.cpp:1408 pcbnew/pcbnew_jobs_handler.cpp:2064
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "Failed to rename temporary file '%s."
 msgstr ""
-"生成 IPC2581 文件 '%s' 时出错。\n"
+"生成 IPC-2581 文件 '%s' 时出错。\n"
 "重命名临时文件 '%s' 失败。"
 
 #: pcbnew/files.cpp:1440
@@ -42977,19 +42952,19 @@ msgstr "无法解析网表的元件部分的封装名称。"
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:138
 msgid "Cannot parse reference designator in symbol section of netlist."
-msgstr "无法解析网络列表的元件部分的位号。"
+msgstr "无法解析网表的符号部分的位号。"
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:148
 msgid "Cannot parse value in symbol section of netlist."
-msgstr "无法解析网络列表的符号部分的值。"
+msgstr "无法解析网表的符号部分的值。"
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:185
 msgid "Cannot parse pin name in symbol net section of netlist."
-msgstr "无法解析网络列表的元件部分的引脚名称。"
+msgstr "无法解析网表的符号网络部分的引脚名称。"
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:194
 msgid "Cannot parse net name in symbol net section of netlist."
-msgstr "无法解析网络列表的元件部分的网络名称。"
+msgstr "无法解析网表的符号网络部分的网络名称。"
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:242
 #, c-format
@@ -45604,14 +45579,12 @@ msgid "Saved DRC Report to %s\n"
 msgstr "保存 DRC 报告到 %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2112
-#, fuzzy
 msgid "Successfully created IPC-D-356 file\n"
-msgstr "成功创建 genCAD 文件\n"
+msgstr "成功创建 IPC-D-356 文件\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2117
-#, fuzzy
 msgid "Failed to create IPC-D-356 file\n"
-msgstr "创建文件失败。"
+msgstr "创建 IPC-D-356 文件失败\n"
 
 #: pcbnew/pcbnew_printout.cpp:124
 msgid "Multiple Layers"
@@ -48023,7 +47996,7 @@ msgstr "生成 ODB++ 文件"
 
 #: pcbnew/tools/pcb_actions.cpp:1065
 msgid "IPC-D-356 Netlist File..."
-msgstr "IPC-D-356 网络列表文件..."
+msgstr "IPC-D-356 网表文件..."
 
 #: pcbnew/tools/pcb_actions.cpp:1072
 msgid "Bill of Materials..."
@@ -48203,9 +48176,8 @@ msgid "Show/hide the net inspector"
 msgstr "显示/隐藏 网络检查器"
 
 #: pcbnew/tools/pcb_actions.cpp:1345
-#, fuzzy
 msgid "Zone Manager..."
-msgstr "填充区管理器"
+msgstr "填充区管理器..."
 
 #: pcbnew/tools/pcb_actions.cpp:1346
 msgid "Show the zone manager dialog"
@@ -50084,18 +50056,16 @@ msgid "Highlight Selected Net"
 msgstr "高亮所选的网络"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1229
-#, fuzzy
 msgid "Rename Selected Net..."
-msgstr "重命名选中网络"
+msgstr "Rename Selected Networks"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1233
 msgid "Delete Selected Net"
 msgstr "删除选中网络"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1239
-#, fuzzy
 msgid "Add Net..."
-msgstr "添加文本..."
+msgstr "添加网络..."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1253
 msgid "Highlight Selected Nets"
@@ -50135,9 +50105,8 @@ msgid "Group by Netclass"
 msgstr "按网络类分组"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1390
-#, fuzzy
 msgid "Add Custom Group..."
-msgstr "添加自定义分组"
+msgstr "添加自定义分组..."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1403
 msgid "Remove All Custom Groups"
@@ -50152,9 +50121,8 @@ msgid "Show Unconnected Nets"
 msgstr "显示未连接网络"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1426
-#, fuzzy
 msgid "Save Net Inspector Report..."
-msgstr "保持网络检查器报告"
+msgstr "保持网络检查器报告..."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1435
 msgid "Show / Hide Columns"
