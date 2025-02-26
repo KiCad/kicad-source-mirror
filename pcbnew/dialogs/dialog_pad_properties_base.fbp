@@ -1,34 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wxFormBuilder_Project>
-  <FileVersion major="1" minor="17"/>
+  <FileVersion major="1" minor="18"/>
   <object class="Project" expanded="true">
-    <property name="class_decoration">; </property>
     <property name="code_generation">C++</property>
-    <property name="disconnect_events">1</property>
-    <property name="disconnect_mode">source_name</property>
-    <property name="disconnect_php_events">0</property>
-    <property name="disconnect_python_events">0</property>
+    <property name="cpp_class_decoration">; </property>
+    <property name="cpp_disconnect_events">1</property>
+    <property name="cpp_event_generation">connect</property>
+    <property name="cpp_help_provider">none</property>
+    <property name="cpp_namespace"></property>
+    <property name="cpp_precompiled_header"></property>
+    <property name="cpp_use_array_enum">0</property>
+    <property name="cpp_use_enum">0</property>
     <property name="embedded_files_path">res</property>
     <property name="encoding">UTF-8</property>
-    <property name="event_generation">connect</property>
     <property name="file">dialog_pad_properties_base</property>
     <property name="first_id">1000</property>
-    <property name="help_provider">none</property>
-    <property name="image_path_wrapper_function_name"></property>
-    <property name="indent_with_spaces"></property>
     <property name="internationalize">1</property>
+    <property name="lua_skip_events">1</property>
+    <property name="lua_ui_table">UI</property>
     <property name="name">dialog_pad_properties_base</property>
-    <property name="namespace"></property>
     <property name="path">.</property>
-    <property name="precompiled_header"></property>
+    <property name="php_disconnect_events">0</property>
+    <property name="php_disconnect_mode">source_name</property>
+    <property name="php_skip_events">1</property>
+    <property name="python_disconnect_events">0</property>
+    <property name="python_disconnect_mode">source_name</property>
+    <property name="python_image_path_wrapper_function_name"></property>
+    <property name="python_indent_with_spaces"></property>
+    <property name="python_skip_events">1</property>
     <property name="relative_path">1</property>
-    <property name="skip_lua_events">1</property>
-    <property name="skip_php_events">1</property>
-    <property name="skip_python_events">1</property>
-    <property name="ui_table">UI</property>
-    <property name="use_array_enum">0</property>
-    <property name="use_enum">0</property>
     <property name="use_microsoft_bom">0</property>
+    <property name="use_native_eol">0</property>
     <object class="Dialog" expanded="true">
       <property name="aui_managed">0</property>
       <property name="aui_manager_style">wxAUI_MGR_DEFAULT</property>
@@ -133,7 +135,7 @@
                 <object class="notebookpage" expanded="true">
                   <property name="bitmap"></property>
                   <property name="label">General</property>
-                  <property name="select">0</property>
+                  <property name="select">1</property>
                   <object class="wxPanel" expanded="true">
                     <property name="BottomDockable">1</property>
                     <property name="LeftDockable">1</property>
@@ -1074,7 +1076,7 @@
                           </object>
                           <object class="sizeritem" expanded="true">
                             <property name="border">5</property>
-                            <property name="flag"></property>
+                            <property name="flag">wxEXPAND</property>
                             <property name="proportion">0</property>
                             <object class="wxBoxSizer" expanded="true">
                               <property name="minimum_size"></property>
@@ -1211,7 +1213,17 @@
                               </object>
                               <object class="sizeritem" expanded="true">
                                 <property name="border">5</property>
-                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
+                                <property name="flag">wxEXPAND</property>
+                                <property name="proportion">1</property>
+                                <object class="spacer" expanded="true">
+                                  <property name="height">0</property>
+                                  <property name="permission">protected</property>
+                                  <property name="width">0</property>
+                                </object>
+                              </object>
+                              <object class="sizeritem" expanded="true">
+                                <property name="border">10</property>
+                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
                                 <property name="proportion">0</property>
                                 <object class="wxStaticText" expanded="true">
                                   <property name="BottomDockable">1</property>
@@ -1346,9 +1358,9 @@
                             <object class="wxGridBagSizer" expanded="true">
                               <property name="empty_cell_size"></property>
                               <property name="flexible_direction">wxBOTH</property>
-                              <property name="growablecols">0</property>
+                              <property name="growablecols">1,4</property>
                               <property name="growablerows"></property>
-                              <property name="hgap">0</property>
+                              <property name="hgap">5</property>
                               <property name="minimum_size"></property>
                               <property name="name">gbSizerPadOrientation</property>
                               <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
@@ -1358,7 +1370,7 @@
                                 <property name="border">5</property>
                                 <property name="colspan">1</property>
                                 <property name="column">0</property>
-                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
                                 <property name="row">0</property>
                                 <property name="rowspan">1</property>
                                 <object class="wxStaticText" expanded="false">
@@ -1423,7 +1435,7 @@
                                 <property name="border">5</property>
                                 <property name="colspan">5</property>
                                 <property name="column">1</property>
-                                <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                                <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
                                 <property name="row">0</property>
                                 <property name="rowspan">1</property>
                                 <object class="wxChoice" expanded="false">
@@ -1488,14 +1500,14 @@
                                   <event name="OnChoice">OnPadShapeSelection</event>
                                 </object>
                               </object>
-                              <object class="gbsizeritem" expanded="false">
+                              <object class="gbsizeritem" expanded="true">
                                 <property name="border">25</property>
                                 <property name="colspan">6</property>
                                 <property name="column">0</property>
                                 <property name="flag">wxEXPAND|wxLEFT</property>
                                 <property name="row">1</property>
                                 <property name="rowspan">1</property>
-                                <object class="wxSimplebook" expanded="false">
+                                <object class="wxSimplebook" expanded="true">
                                   <property name="BottomDockable">1</property>
                                   <property name="LeftDockable">1</property>
                                   <property name="RightDockable">1</property>
@@ -3871,7 +3883,7 @@
                                 <property name="border">5</property>
                                 <property name="colspan">1</property>
                                 <property name="column">0</property>
-                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
                                 <property name="row">2</property>
                                 <property name="rowspan">1</property>
                                 <object class="wxStaticText" expanded="false">
@@ -4005,7 +4017,7 @@
                                 <property name="border">5</property>
                                 <property name="colspan">1</property>
                                 <property name="column">2</property>
-                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
                                 <property name="row">2</property>
                                 <property name="rowspan">1</property>
                                 <object class="wxStaticText" expanded="false">
@@ -4070,7 +4082,7 @@
                                 <property name="border">5</property>
                                 <property name="colspan">1</property>
                                 <property name="column">3</property>
-                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
                                 <property name="row">2</property>
                                 <property name="rowspan">1</property>
                                 <object class="wxStaticText" expanded="false">
@@ -4204,7 +4216,7 @@
                                 <property name="border">5</property>
                                 <property name="colspan">1</property>
                                 <property name="column">5</property>
-                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
                                 <property name="row">2</property>
                                 <property name="rowspan">1</property>
                                 <object class="wxStaticText" expanded="false">
@@ -4405,7 +4417,7 @@
                                 <property name="border">5</property>
                                 <property name="colspan">1</property>
                                 <property name="column">2</property>
-                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
                                 <property name="row">3</property>
                                 <property name="rowspan">1</property>
                                 <object class="wxStaticText" expanded="false">
@@ -4685,7 +4697,7 @@
                               <property name="flexible_direction">wxBOTH</property>
                               <property name="growablecols">1,4</property>
                               <property name="growablerows"></property>
-                              <property name="hgap">0</property>
+                              <property name="hgap">5</property>
                               <property name="minimum_size"></property>
                               <property name="name">m_offsetCtrls</property>
                               <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
@@ -4694,7 +4706,7 @@
                               <property name="vgap">0</property>
                               <object class="sizeritem" expanded="false">
                                 <property name="border">5</property>
-                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxRIGHT|wxLEFT</property>
+                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxLEFT</property>
                                 <property name="proportion">0</property>
                                 <object class="wxStaticText" expanded="false">
                                   <property name="BottomDockable">1</property>
@@ -4822,7 +4834,7 @@
                               </object>
                               <object class="sizeritem" expanded="false">
                                 <property name="border">5</property>
-                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxRIGHT|wxLEFT</property>
+                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxRIGHT</property>
                                 <property name="proportion">0</property>
                                 <object class="wxStaticText" expanded="false">
                                   <property name="BottomDockable">1</property>
@@ -4883,8 +4895,8 @@
                                 </object>
                               </object>
                               <object class="sizeritem" expanded="false">
-                                <property name="border">5</property>
-                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                                <property name="border">10</property>
+                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
                                 <property name="proportion">0</property>
                                 <object class="wxStaticText" expanded="false">
                                   <property name="BottomDockable">1</property>
@@ -5012,7 +5024,7 @@
                               </object>
                               <object class="sizeritem" expanded="false">
                                 <property name="border">5</property>
-                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxRIGHT|wxLEFT</property>
+                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxRIGHT</property>
                                 <property name="proportion">0</property>
                                 <object class="wxStaticText" expanded="false">
                                   <property name="BottomDockable">1</property>
@@ -5140,9 +5152,9 @@
                             <object class="wxGridBagSizer" expanded="false">
                               <property name="empty_cell_size"></property>
                               <property name="flexible_direction">wxBOTH</property>
-                              <property name="growablecols"></property>
+                              <property name="growablecols">1,4</property>
                               <property name="growablerows"></property>
-                              <property name="hgap">0</property>
+                              <property name="hgap">5</property>
                               <property name="minimum_size"></property>
                               <property name="name">m_gbSizerHole</property>
                               <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
@@ -5152,7 +5164,7 @@
                                 <property name="border">5</property>
                                 <property name="colspan">1</property>
                                 <property name="column">0</property>
-                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
+                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
                                 <property name="row">0</property>
                                 <property name="rowspan">1</property>
                                 <object class="wxStaticText" expanded="false">
@@ -5351,7 +5363,7 @@
                                 <property name="border">5</property>
                                 <property name="colspan">1</property>
                                 <property name="column">1</property>
-                                <property name="flag">wxALIGN_CENTER_VERTICAL</property>
+                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND</property>
                                 <property name="row">1</property>
                                 <property name="rowspan">1</property>
                                 <object class="wxTextCtrl" expanded="false">
@@ -5420,7 +5432,7 @@
                                 <property name="border">5</property>
                                 <property name="colspan">1</property>
                                 <property name="column">2</property>
-                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
                                 <property name="row">1</property>
                                 <property name="rowspan">1</property>
                                 <object class="wxStaticText" expanded="false">
@@ -5482,10 +5494,10 @@
                                 </object>
                               </object>
                               <object class="gbsizeritem" expanded="false">
-                                <property name="border">5</property>
+                                <property name="border">10</property>
                                 <property name="colspan">1</property>
                                 <property name="column">3</property>
-                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
                                 <property name="row">1</property>
                                 <property name="rowspan">1</property>
                                 <object class="wxStaticText" expanded="false">
@@ -5550,7 +5562,7 @@
                                 <property name="border">5</property>
                                 <property name="colspan">1</property>
                                 <property name="column">4</property>
-                                <property name="flag">wxALIGN_CENTER_VERTICAL</property>
+                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND</property>
                                 <property name="row">1</property>
                                 <property name="rowspan">1</property>
                                 <object class="wxTextCtrl" expanded="false">
@@ -5619,7 +5631,7 @@
                                 <property name="border">5</property>
                                 <property name="colspan">1</property>
                                 <property name="column">5</property>
-                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
                                 <property name="row">1</property>
                                 <property name="rowspan">1</property>
                                 <object class="wxStaticText" expanded="false">
@@ -5834,7 +5846,7 @@
                                   </object>
                                   <object class="sizeritem" expanded="false">
                                     <property name="border">5</property>
-                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxRIGHT</property>
+                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN</property>
                                     <property name="proportion">0</property>
                                     <object class="wxStaticText" expanded="false">
                                       <property name="BottomDockable">1</property>
@@ -7243,7 +7255,7 @@
                 <object class="notebookpage" expanded="true">
                   <property name="bitmap"></property>
                   <property name="label">Connections</property>
-                  <property name="select">1</property>
+                  <property name="select">0</property>
                   <object class="wxPanel" expanded="true">
                     <property name="BottomDockable">1</property>
                     <property name="LeftDockable">1</property>
