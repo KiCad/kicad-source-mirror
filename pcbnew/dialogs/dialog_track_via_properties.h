@@ -58,6 +58,7 @@ private:
     void onUnitsChanged( wxCommandEvent& aEvent );
     void onTeardropsUpdateUi( wxUpdateUIEvent& event ) override;
 
+    bool confirmShortingNets( int aNet, const std::set<int>& shortingNets );
     bool confirmPadChange( const std::set<PAD*>& connectedPads );
 
     int getLayerDepth();
