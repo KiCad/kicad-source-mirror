@@ -81,8 +81,8 @@ ODB_MISC_ENTITY::ODB_MISC_ENTITY()
                { wxS( "ODB_VERSION_MAJOR" ), wxS( "8" ) },
                { wxS( "ODB_VERSION_MINOR" ), wxS( "1" ) },
                { wxS( "ODB_SOURCE" ), wxS( "KiCad EDA" ) },
-               { wxS( "CREATION_DATE" ), wxDateTime::Now().FormatISOCombined() },
-               { wxS( "SAVE_DATE" ), wxDateTime::Now().FormatISOCombined() },
+               { wxS( "CREATION_DATE" ), wxDateTime::Now().Format( "%Y%m%d.%H%M%S" ) },
+               { wxS( "SAVE_DATE" ), wxDateTime::Now().Format( "%Y%m%d.%H%M%S" ) },
                { wxS( "SAVE_APP" ), wxString::Format( wxS( "KiCad EDA %s" ), GetBuildVersion() ) } };
 }
 
