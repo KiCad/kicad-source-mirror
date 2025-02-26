@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-19 17:09+0300\n"
+"POT-Creation-Date: 2025-02-26 20:15+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2796,8 +2796,8 @@ msgstr "Failed to open file '%s'."
 msgid "Failed to write file '%s'."
 msgstr "Failed to write file '%s'."
 
-msgid "Internal Reference"
-msgstr "Internal Reference"
+msgid "Embedded Reference"
+msgstr "Embedded Reference"
 
 msgid "Add embedded file"
 msgstr "Add embedded file"
@@ -4440,8 +4440,8 @@ msgstr "Export drill data"
 msgid "Export Drill Data Job Settings"
 msgstr "Export Drill Data Job Settings"
 
-msgid "PCB: Export drill data"
-msgstr "PCB: Export drill data"
+msgid "PCB: Export Drill Data"
+msgstr "PCB: Export Drill Data"
 
 msgid "Export DXF"
 msgstr "Export DXF"
@@ -4470,14 +4470,23 @@ msgstr "Export Gerbers Job Settings"
 msgid "PCB: Export Gerbers"
 msgstr "PCB: Export Gerbers"
 
-msgid "Export IPC2581"
-msgstr "Export IPC2581"
+msgid "Export IPC-2581"
+msgstr "Export IPC-2581"
 
-msgid "Export IPC2581 Job Settings"
-msgstr "Export IPC2581 Job Settings"
+msgid "Export IPC-2581 Job Settings"
+msgstr "Export IPC-2581 Job Settings"
 
-msgid "PCB: Export IPC2581"
-msgstr "PCB: Export IPC2581"
+msgid "PCB: Export IPC-2581"
+msgstr "PCB: Export IPC-2581"
+
+msgid "Export IPC-D-356"
+msgstr "Export IPC-D-356"
+
+msgid "Export IPC-D-356 Job Settings"
+msgstr "Export IPC-D-356 Job Settings"
+
+msgid "PCB: Export IPC-D-356"
+msgstr "PCB: Export IPC-D-356"
 
 msgid "Export ODB++"
 msgstr "Export ODB++"
@@ -4592,8 +4601,8 @@ msgstr "Schematic ERC Job Settings"
 msgid "Schematic: Perform ERC"
 msgstr "Schematic: Perform ERC"
 
-msgid "Special: Copy files"
-msgstr "Special: Copy files"
+msgid "Special: Copy Files"
+msgstr "Special: Copy Files"
 
 msgid "Special: Execute Command"
 msgstr "Special: Execute Command"
@@ -10802,8 +10811,12 @@ msgid "The current configuration does not include the symbol library '%s'"
 msgstr "The current configuration does not include the symbol library '%s'"
 
 #, c-format
-msgid "The library '%s' is not enabled in the current configuration"
-msgstr "The library '%s' is not enabled in the current configuration"
+msgid "The symbol library '%s' is not enabled in the current configuration"
+msgstr "The symbol library '%s' is not enabled in the current configuration"
+
+#, c-format
+msgid "The symbol library '%s' was not found at '%s'."
+msgstr "The symbol library '%s' was not found at '%s'."
 
 #, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
@@ -11960,28 +11973,12 @@ msgstr "Pin has unexpected inner edge type."
 msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "Bezier has %d control points. At least 2 are expected."
 
-#, c-format
-msgid ""
-"Altium's harness connector (%s) was imported as a hierarchical sheet. Please "
-"review the imported schematic."
-msgstr ""
-"Altium's harness connector (%s) was imported as a hierarchical sheet. Please "
-"review the imported schematic."
-
 msgid "Power Port with unknown style imported as 'Bar' type."
 msgstr "Power Port with unknown style imported as 'Bar' type."
 
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
 msgstr "Power symbol creates a global label with name '%s'"
-
-#, c-format
-msgid ""
-"Altium's harness port (%s) was imported as a text box. Please review the "
-"imported schematic."
-msgstr ""
-"Altium's harness port (%s) was imported as a text box. Please review the "
-"imported schematic."
 
 #, c-format
 msgid "Port %s has no connections."
@@ -17508,6 +17505,9 @@ msgstr "Exclude the reference designator text"
 msgid "Exclude the value text"
 msgstr "Exclude the value text"
 
+msgid "Subtract soldermask from silkscreen"
+msgstr "Subtract soldermask from silkscreen"
+
 msgid "Plot graphic items using their contours"
 msgstr "Plot graphic items using their contours"
 
@@ -17582,9 +17582,6 @@ msgstr "Do not use the extended X2 format"
 
 msgid "Do not generate netlist attributes"
 msgstr "Do not generate netlist attributes"
-
-msgid "Subtract soldermask from silkscreen"
-msgstr "Subtract soldermask from silkscreen"
 
 msgid "Disable aperture macros"
 msgstr "Disable aperture macros"
@@ -18612,6 +18609,13 @@ msgstr ""
 
 msgid "Local file"
 msgstr "Local file"
+
+msgid ""
+"This plugin requires the KiCad API, which is currently disabled in "
+"preferences. Would you like to enable it?"
+msgstr ""
+"This plugin requires the KiCad API, which is currently disabled in "
+"preferences. Would you like to enable it?"
 
 msgid "PCM Update"
 msgstr "PCM Update"
@@ -23222,9 +23226,6 @@ msgstr "Column containing the distributor part number"
 msgid "Distributor:"
 msgstr "Distributor:"
 
-msgid "Export IPC-2581"
-msgstr "Export IPC-2581"
-
 #, c-format
 msgid "File %s already exists."
 msgstr "File %s already exists."
@@ -23924,6 +23925,10 @@ msgid "Footprint name may not contain '%s'."
 msgstr "Footprint name may not contain '%s'."
 
 #, c-format
+msgid "Footprint '%s' already exists in library '%s'."
+msgstr "Footprint '%s' already exists in library '%s'."
+
+#, c-format
 msgid "The text width must be between %s and %s."
 msgstr "The text width must be between %s and %s."
 
@@ -24467,8 +24472,8 @@ msgstr "Filter items by parent footprint library id:"
 msgid "Set to specified values:"
 msgstr "Set to specified values:"
 
-msgid "Visible  (text only)"
-msgstr "Visible  (text only)"
+msgid "Visible  (fields only)"
+msgstr "Visible  (fields only)"
 
 msgid "Keep upright"
 msgstr "Keep upright"
@@ -25307,6 +25312,9 @@ msgstr "Gerber"
 msgid "Open output directory"
 msgstr "Open output directory"
 
+msgid "Remove silkscreen from areas without soldermask"
+msgstr "Remove silkscreen from areas without soldermask"
+
 msgid "Indicate DNP on fabrication layers"
 msgstr "Indicate DNP on fabrication layers"
 
@@ -25321,12 +25329,6 @@ msgstr "Hide the footprint text and graphics"
 
 msgid "Cross-out"
 msgstr "Cross-out"
-
-msgid "Force plotting of invisible values / refs"
-msgstr "Force plotting of invisible values / refs"
-
-msgid "Force plot invisible footprint values and reference designators"
-msgstr "Force plot invisible footprint values and reference designators"
 
 msgid "Sketch pads on fabrication layers"
 msgstr "Sketch pads on fabrication layers"
@@ -25413,9 +25415,6 @@ msgid ""
 msgstr ""
 "Generate a Gerber job file that contains info about the board,\n"
 "and the list of generated Gerber plot files"
-
-msgid "Remove silkscreen from areas without soldermask"
-msgstr "Remove silkscreen from areas without soldermask"
 
 msgid "Coordinate format:"
 msgstr "Coordinate format:"
@@ -29297,8 +29296,8 @@ msgid "Checking board footprints against library..."
 msgstr "Checking board footprints against library..."
 
 #, c-format
-msgid "The footprint library '%s' was not found."
-msgstr "The footprint library '%s' was not found."
+msgid "The footprint library '%s' was not found at '%s'."
+msgstr "The footprint library '%s' was not found at '%s'."
 
 #, c-format
 msgid "Footprint '%s' does not match copy in library '%s'."
@@ -29508,8 +29507,19 @@ msgstr "Checking thermal reliefs..."
 msgid "Edit Zone Properties"
 msgstr "Edit Zone Properties"
 
-msgid "Export D-356 Test File"
-msgstr "Export D-356 Test File"
+msgid "Generate IPC-D-356 netlist file"
+msgstr "Generate IPC-D-356 netlist file"
+
+#, c-format
+msgid ""
+"IPC-D-356 netlist file created:\n"
+"'%s'."
+msgstr ""
+"IPC-D-356 netlist file created:\n"
+"'%s'."
+
+msgid "IPC-D-356 Netlist File"
+msgstr "IPC-D-356 Netlist File"
 
 msgid "Save Footprint Association File"
 msgstr "Save Footprint Association File"
@@ -29778,26 +29788,26 @@ msgstr ""
 "Board copied to:\n"
 "%s"
 
-msgid "The board must be saved before generating IPC2581 file."
-msgstr "The board must be saved before generating IPC2581 file."
+msgid "The board must be saved before generating IPC-2581 file."
+msgstr "The board must be saved before generating IPC-2581 file."
 
-msgid "Generating IPC2581 file"
-msgstr "Generating IPC2581 file"
+msgid "Generating IPC-2581 file"
+msgstr "Generating IPC-2581 file"
 
 #, c-format
 msgid ""
-"Error generating IPC2581 file '%s'.\n"
+"Error generating IPC-2581 file '%s'.\n"
 "%s"
 msgstr ""
-"Error generating IPC2581 file '%s'.\n"
+"Error generating IPC-2581 file '%s'.\n"
 "%s"
 
 #, c-format
 msgid ""
-"Error generating IPC2581 file '%s'.\n"
+"Error generating IPC-2581 file '%s'.\n"
 "Failed to rename temporary file '%s."
 msgstr ""
-"Error generating IPC2581 file '%s'.\n"
+"Error generating IPC-2581 file '%s'.\n"
 "Failed to rename temporary file '%s."
 
 msgid "Generating ODB++ output files"
@@ -32710,9 +32720,6 @@ msgstr "PCB Target"
 msgid "PCB Text"
 msgstr "PCB Text"
 
-msgid "Display"
-msgstr "Display"
-
 #, c-format
 msgid "Footprint text of %s (%s)"
 msgstr "Footprint text of %s (%s)"
@@ -32940,6 +32947,12 @@ msgstr "Unable to save DRC report to %s\n"
 #, c-format
 msgid "Saved DRC Report to %s\n"
 msgstr "Saved DRC Report to %s\n"
+
+msgid "Successfully created IPC-D-356 file\n"
+msgstr "Successfully created IPC-D-356 file\n"
+
+msgid "Failed to create IPC-D-356 file\n"
+msgstr "Failed to create IPC-D-356 file\n"
 
 msgid "Multiple Layers"
 msgstr "Multiple Layers"
@@ -34005,10 +34018,6 @@ msgstr "_copy"
 msgid "Change Footprint Name"
 msgstr "Change Footprint Name"
 
-#, c-format
-msgid "Footprint '%s' already exists in library '%s'."
-msgstr "Footprint '%s' already exists in library '%s'."
-
 msgid "Error renaming footprint"
 msgstr "Error renaming footprint"
 
@@ -34775,9 +34784,6 @@ msgstr "Generate ODB++ output files"
 
 msgid "IPC-D-356 Netlist File..."
 msgstr "IPC-D-356 Netlist File…"
-
-msgid "Generate IPC-D-356 netlist file"
-msgstr "Generate IPC-D-356 netlist file"
 
 msgid "Bill of Materials..."
 msgstr "Bill of Materials..."
@@ -36749,6 +36755,85 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Internal Reference"
+#~ msgstr "Internal Reference"
+
+#~ msgid "PCB: Export drill data"
+#~ msgstr "PCB: Export drill data"
+
+#~ msgid "Export IPC2581"
+#~ msgstr "Export IPC2581"
+
+#~ msgid "Export IPC2581 Job Settings"
+#~ msgstr "Export IPC2581 Job Settings"
+
+#~ msgid "PCB: Export IPC2581"
+#~ msgstr "PCB: Export IPC2581"
+
+#~ msgid "Special: Copy files"
+#~ msgstr "Special: Copy files"
+
+#, c-format
+#~ msgid "The library '%s' is not enabled in the current configuration"
+#~ msgstr "The library '%s' is not enabled in the current configuration"
+
+#, c-format
+#~ msgid ""
+#~ "Altium's harness connector (%s) was imported as a hierarchical sheet. "
+#~ "Please review the imported schematic."
+#~ msgstr ""
+#~ "Altium's harness connector (%s) was imported as a hierarchical sheet. "
+#~ "Please review the imported schematic."
+
+#, c-format
+#~ msgid ""
+#~ "Altium's harness port (%s) was imported as a text box. Please review the "
+#~ "imported schematic."
+#~ msgstr ""
+#~ "Altium's harness port (%s) was imported as a text box. Please review the "
+#~ "imported schematic."
+
+#~ msgid "Visible  (text only)"
+#~ msgstr "Visible  (text only)"
+
+#~ msgid "Force plotting of invisible values / refs"
+#~ msgstr "Force plotting of invisible values / refs"
+
+#~ msgid "Force plot invisible footprint values and reference designators"
+#~ msgstr "Force plot invisible footprint values and reference designators"
+
+#, c-format
+#~ msgid "The footprint library '%s' was not found."
+#~ msgstr "The footprint library '%s' was not found."
+
+#~ msgid "Export D-356 Test File"
+#~ msgstr "Export D-356 Test File"
+
+#~ msgid "The board must be saved before generating IPC2581 file."
+#~ msgstr "The board must be saved before generating IPC2581 file."
+
+#~ msgid "Generating IPC2581 file"
+#~ msgstr "Generating IPC2581 file"
+
+#, c-format
+#~ msgid ""
+#~ "Error generating IPC2581 file '%s'.\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Error generating IPC2581 file '%s'.\n"
+#~ "%s"
+
+#, c-format
+#~ msgid ""
+#~ "Error generating IPC2581 file '%s'.\n"
+#~ "Failed to rename temporary file '%s."
+#~ msgstr ""
+#~ "Error generating IPC2581 file '%s'.\n"
+#~ "Failed to rename temporary file '%s."
+
+#~ msgid "Display"
+#~ msgstr "Display"
 
 #, c-format
 #~ msgid "Writing objects: %d%% (%d/%d), %d bytes"
