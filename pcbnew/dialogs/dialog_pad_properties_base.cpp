@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -99,9 +99,12 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_cbPadstackMode->SetSelection( 1 );
 	m_padstackControls->Add( m_cbPadstackMode, 0, wxALL, 5 );
 
+
+	m_padstackControls->Add( 0, 0, 1, wxEXPAND, 5 );
+
 	m_staticText90 = new wxStaticText( m_panelGeneral, wxID_ANY, _("Edit layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText90->Wrap( -1 );
-	m_padstackControls->Add( m_staticText90, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	m_padstackControls->Add( m_staticText90, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
 	wxString m_cbEditLayerChoices[] = { _("Inner Layers") };
 	int m_cbEditLayerNChoices = sizeof( m_cbEditLayerChoices ) / sizeof( wxString );
@@ -110,22 +113,22 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_padstackControls->Add( m_cbEditLayer, 0, wxALL, 5 );
 
 
-	m_LeftBoxSizer->Add( m_padstackControls, 0, 0, 5 );
+	m_LeftBoxSizer->Add( m_padstackControls, 0, wxEXPAND, 5 );
 
 	wxGridBagSizer* gbSizerPadOrientation;
-	gbSizerPadOrientation = new wxGridBagSizer( 4, 0 );
+	gbSizerPadOrientation = new wxGridBagSizer( 4, 5 );
 	gbSizerPadOrientation->SetFlexibleDirection( wxBOTH );
 	gbSizerPadOrientation->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_shapeLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _("Pad shape:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_shapeLabel->Wrap( -1 );
-	gbSizerPadOrientation->Add( m_shapeLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	gbSizerPadOrientation->Add( m_shapeLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	wxString m_PadShapeSelectorChoices[] = { _("Circular"), _("Oval"), _("Rectangular"), _("Trapezoidal"), _("Rounded rectangle"), _("Chamfered rectangle"), _("Chamfered with other corners rounded"), _("Custom (circular base)"), _("Custom (rectangular base)") };
 	int m_PadShapeSelectorNChoices = sizeof( m_PadShapeSelectorChoices ) / sizeof( wxString );
 	m_PadShapeSelector = new wxChoice( m_panelGeneral, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_PadShapeSelectorNChoices, m_PadShapeSelectorChoices, 0 );
 	m_PadShapeSelector->SetSelection( 4 );
-	gbSizerPadOrientation->Add( m_PadShapeSelector, wxGBPosition( 0, 1 ), wxGBSpan( 1, 5 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	gbSizerPadOrientation->Add( m_PadShapeSelector, wxGBPosition( 0, 1 ), wxGBSpan( 1, 5 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_shapePropsBook = new wxSimplebook( m_panelGeneral, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_emptyProps = new wxPanel( m_shapePropsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -335,25 +338,25 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_sizeXLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _("Pad size X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_sizeXLabel->Wrap( -1 );
-	gbSizerPadOrientation->Add( m_sizeXLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	gbSizerPadOrientation->Add( m_sizeXLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_sizeXCtrl = new wxTextCtrl( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	gbSizerPadOrientation->Add( m_sizeXCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_sizeXUnits = new wxStaticText( m_panelGeneral, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_sizeXUnits->Wrap( -1 );
-	gbSizerPadOrientation->Add( m_sizeXUnits, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	gbSizerPadOrientation->Add( m_sizeXUnits, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_sizeYLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_sizeYLabel->Wrap( -1 );
-	gbSizerPadOrientation->Add( m_sizeYLabel, wxGBPosition( 2, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	gbSizerPadOrientation->Add( m_sizeYLabel, wxGBPosition( 2, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_sizeYCtrl = new wxTextCtrl( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizerPadOrientation->Add( m_sizeYCtrl, wxGBPosition( 2, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_sizeYUnits = new wxStaticText( m_panelGeneral, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_sizeYUnits->Wrap( -1 );
-	gbSizerPadOrientation->Add( m_sizeYUnits, wxGBPosition( 2, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	gbSizerPadOrientation->Add( m_sizeYUnits, wxGBPosition( 2, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_PadOrientText = new wxStaticText( m_panelGeneral, wxID_ANY, _("Angle:"), wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_PadOrientText->Wrap( -1 );
@@ -369,10 +372,11 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_orientationUnits = new wxStaticText( m_panelGeneral, wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_orientationUnits->Wrap( -1 );
-	gbSizerPadOrientation->Add( m_orientationUnits, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	gbSizerPadOrientation->Add( m_orientationUnits, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	gbSizerPadOrientation->AddGrowableCol( 0 );
+	gbSizerPadOrientation->AddGrowableCol( 1 );
+	gbSizerPadOrientation->AddGrowableCol( 4 );
 
 	m_LeftBoxSizer->Add( gbSizerPadOrientation, 0, wxEXPAND, 5 );
 
@@ -395,7 +399,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_LeftBoxSizer->Add( 0, 2, 0, wxEXPAND, 5 );
 
-	m_offsetCtrls = new wxFlexGridSizer( 0, 6, 0, 0 );
+	m_offsetCtrls = new wxFlexGridSizer( 0, 6, 0, 5 );
 	m_offsetCtrls->AddGrowableCol( 1 );
 	m_offsetCtrls->AddGrowableCol( 4 );
 	m_offsetCtrls->SetFlexibleDirection( wxBOTH );
@@ -403,25 +407,25 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_offsetXLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_offsetXLabel->Wrap( -1 );
-	m_offsetCtrls->Add( m_offsetXLabel, 0, wxALIGN_CENTER_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxRIGHT|wxLEFT, 5 );
+	m_offsetCtrls->Add( m_offsetXLabel, 0, wxALIGN_CENTER_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxLEFT, 5 );
 
 	m_offsetXCtrl = new wxTextCtrl( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_offsetCtrls->Add( m_offsetXCtrl, 0, wxEXPAND|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_offsetXUnits = new wxStaticText( m_panelGeneral, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_offsetXUnits->Wrap( -1 );
-	m_offsetCtrls->Add( m_offsetXUnits, 0, wxALIGN_CENTER_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxRIGHT|wxLEFT, 5 );
+	m_offsetCtrls->Add( m_offsetXUnits, 0, wxALIGN_CENTER_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxRIGHT, 5 );
 
 	m_offsetYLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_offsetYLabel->Wrap( -1 );
-	m_offsetCtrls->Add( m_offsetYLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	m_offsetCtrls->Add( m_offsetYLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
 	m_offsetYCtrl = new wxTextCtrl( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_offsetCtrls->Add( m_offsetYCtrl, 0, wxEXPAND|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_offsetYUnits = new wxStaticText( m_panelGeneral, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_offsetYUnits->Wrap( -1 );
-	m_offsetCtrls->Add( m_offsetYUnits, 0, wxALIGN_CENTER_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxRIGHT|wxLEFT, 5 );
+	m_offsetCtrls->Add( m_offsetYUnits, 0, wxALIGN_CENTER_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxRIGHT, 5 );
 
 
 	m_LeftBoxSizer->Add( m_offsetCtrls, 0, wxEXPAND|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 25 );
@@ -429,13 +433,13 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_staticline7 = new wxStaticLine( m_panelGeneral, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	m_LeftBoxSizer->Add( m_staticline7, 0, wxEXPAND|wxTOP|wxBOTTOM, 12 );
 
-	m_gbSizerHole = new wxGridBagSizer( 4, 0 );
+	m_gbSizerHole = new wxGridBagSizer( 4, 5 );
 	m_gbSizerHole->SetFlexibleDirection( wxBOTH );
 	m_gbSizerHole->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_holeShapeLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _("Hole shape:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_holeShapeLabel->Wrap( -1 );
-	m_gbSizerHole->Add( m_holeShapeLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	m_gbSizerHole->Add( m_holeShapeLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	wxString m_holeShapeCtrlChoices[] = { _("Round"), _("Oblong") };
 	int m_holeShapeCtrlNChoices = sizeof( m_holeShapeCtrlChoices ) / sizeof( wxString );
@@ -448,23 +452,26 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_gbSizerHole->Add( m_holeXLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_holeXCtrl = new wxTextCtrl( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_gbSizerHole->Add( m_holeXCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	m_gbSizerHole->Add( m_holeXCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_holeXUnits = new wxStaticText( m_panelGeneral, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_holeXUnits->Wrap( -1 );
-	m_gbSizerHole->Add( m_holeXUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	m_gbSizerHole->Add( m_holeXUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_holeYLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_holeYLabel->Wrap( -1 );
-	m_gbSizerHole->Add( m_holeYLabel, wxGBPosition( 1, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	m_gbSizerHole->Add( m_holeYLabel, wxGBPosition( 1, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
 	m_holeYCtrl = new wxTextCtrl( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_gbSizerHole->Add( m_holeYCtrl, wxGBPosition( 1, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	m_gbSizerHole->Add( m_holeYCtrl, wxGBPosition( 1, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_holeYUnits = new wxStaticText( m_panelGeneral, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_holeYUnits->Wrap( -1 );
-	m_gbSizerHole->Add( m_holeYUnits, wxGBPosition( 1, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	m_gbSizerHole->Add( m_holeYUnits, wxGBPosition( 1, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
+
+	m_gbSizerHole->AddGrowableCol( 1 );
+	m_gbSizerHole->AddGrowableCol( 4 );
 
 	m_LeftBoxSizer->Add( m_gbSizerHole, 0, wxEXPAND, 5 );
 
@@ -485,7 +492,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_padToDieLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _(":"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_padToDieLabel->Wrap( -1 );
-	bSizer34->Add( m_padToDieLabel, 0, wxALIGN_CENTER_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxRIGHT, 5 );
+	bSizer34->Add( m_padToDieLabel, 0, wxALIGN_CENTER_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
 
 
 	fgSizerPadToDie->Add( bSizer34, 0, wxEXPAND|wxRIGHT, 5 );
@@ -593,7 +600,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_panelGeneral->SetSizer( bGeneralSizer );
 	m_panelGeneral->Layout();
 	bGeneralSizer->Fit( m_panelGeneral );
-	m_notebook->AddPage( m_panelGeneral, _("General"), false );
+	m_notebook->AddPage( m_panelGeneral, _("General"), true );
 	m_connectionsPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerPanelConnections;
 	bSizerPanelConnections = new wxBoxSizer( wxVERTICAL );
@@ -931,7 +938,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_connectionsPanel->SetSizer( bSizerPanelConnections );
 	m_connectionsPanel->Layout();
 	bSizerPanelConnections->Fit( m_connectionsPanel );
-	m_notebook->AddPage( m_connectionsPanel, _("Connections"), true );
+	m_notebook->AddPage( m_connectionsPanel, _("Connections"), false );
 	m_localSettingsPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerPanelClearance;
 	bSizerPanelClearance = new wxBoxSizer( wxVERTICAL );
