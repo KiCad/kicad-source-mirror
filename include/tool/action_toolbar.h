@@ -188,6 +188,8 @@ protected:
     std::map<int, BITMAP_BUTTON*> m_buttons;
 };
 
+// Forward declare this because the toolbar wants it
+class ACTION_TOOLBAR_CONTROL;
 
 /**
  * Define the structure of a toolbar with buttons that invoke ACTIONs.
@@ -340,6 +342,15 @@ public:
      */
     void RefreshBitmaps();
 
+    /**
+     * Get the list of custom controls that could be used on toolbars.
+     */
+    static std::list<ACTION_TOOLBAR_CONTROL*>& GetCustomControlList()
+    {
+        static std::list<ACTION_TOOLBAR_CONTROL*> m_controls;
+        return m_controls;
+    }
+
     static constexpr bool TOGGLE = true;
     static constexpr bool CANCEL = true;
 
@@ -409,27 +420,53 @@ protected:
  */
 typedef std::function<void ( ACTION_TOOLBAR* )> ACTION_TOOLBAR_CONTROL_FACTORY;
 
-struct ACTION_TOOLBAR_CONTROL
+
+/**
+ * Class to hold basic information about controls that can be added to the toolbars.
+ */
+class ACTION_TOOLBAR_CONTROL
 {
+public:
+    ACTION_TOOLBAR_CONTROL( std::string aName, wxString aUiName, wxString aDescription ) :
+        m_name( aName ),
+        m_uiname( aUiName ),
+        m_description( aDescription )
+    {
+        wxASSERT_MSG( aName.starts_with( "control" ),
+                      wxString::Format( "Control name \"%s\" must start with \"control\"", aName ) );
+
+        ACTION_TOOLBAR::GetCustomControlList().push_back( this );
+    }
+
+    const std::string& GetName() const { return m_name; }
+    const wxString& GetUiName() const { return m_uiname; }
+    const wxString& GetDescription() const { return m_description; }
+
+protected:
     /**
      * Name of the control - must start with "control."
      */
-    std::string name;
+    std::string m_name;
 
     /**
      * Short description to show for the control
      */
-    wxString uiname;
+    wxString m_uiname;
 
     /**
      * User-visible tooltip for the control
      */
-    wxString description;
+    wxString m_description;
+};
 
-    /**
-     * Factory function to create the control when required
-     */
-    ACTION_TOOLBAR_CONTROL_FACTORY factory;
+class ACTION_TOOLBAR_CONTROLS
+{
+public:
+    static ACTION_TOOLBAR_CONTROL gridSelect;
+    static ACTION_TOOLBAR_CONTROL zoomSelect;
+    static ACTION_TOOLBAR_CONTROL ipcScripting;
+    static ACTION_TOOLBAR_CONTROL unitSelector;
+    static ACTION_TOOLBAR_CONTROL layerSelector;
 };
 
 #endif

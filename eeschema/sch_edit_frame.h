@@ -176,11 +176,6 @@ public:
 
     void CreateScreens();
 
-    // Currently no top auxillary toolbar
-    std::optional<TOOLBAR_CONFIGURATION> DefaultLeftToolbarConfig() override;
-    std::optional<TOOLBAR_CONFIGURATION> DefaultRightToolbarConfig() override;
-    std::optional<TOOLBAR_CONFIGURATION> DefaultTopMainToolbarConfig() override;
-
     void setupUIConditions() override;
 
     /**

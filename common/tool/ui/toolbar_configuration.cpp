@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <magic_enum.hpp>
 #include <nlohmann/json.hpp>
 
 #include <tool/action_toolbar.h>
@@ -119,9 +120,9 @@ TOOLBAR_SETTINGS::TOOLBAR_SETTINGS( const wxString& aFullPath ) :
             // Serialize the toolbars
             nlohmann::json js = nlohmann::json::array();
 
-            for( const auto& [name, tb] : m_Toolbars )
+            for( const auto& [loc, tb] : m_toolbars )
             {
-                js.push_back( nlohmann::json( { { "name", name },
+                js.push_back( nlohmann::json( { { "name", magic_enum::enum_name( loc ) },
                                                   { "contents", tb } } ) );
             }
 
@@ -130,7 +131,7 @@ TOOLBAR_SETTINGS::TOOLBAR_SETTINGS( const wxString& aFullPath ) :
         [&]( const nlohmann::json& aObj )
         {
             // Deserialize the toolbars
-            m_Toolbars.clear();
+            m_toolbars.clear();
 
             if( !aObj.is_array() )
                 return;
@@ -140,10 +141,31 @@ TOOLBAR_SETTINGS::TOOLBAR_SETTINGS( const wxString& aFullPath ) :
                 if( entry.empty() || !entry.is_object() )
                     continue;
 
-                m_Toolbars.emplace(
-                    std::make_pair( entry["name"].get<std::string>(),
-                                    entry["contents"].get<TOOLBAR_CONFIGURATION>() ) );
+                auto loc = magic_enum::enum_cast<TOOLBAR_LOC>( entry["name"].get<std::string>(),
+                                                               magic_enum::case_insensitive );
+
+                if( loc.has_value() )
+                {
+                    m_toolbars.emplace(
+                        std::make_pair( loc.value(),
+                                        entry["contents"].get<TOOLBAR_CONFIGURATION>() ) );
+                }
             }
         },
         nlohmann::json::array() ) );
+}
+
+
+std::optional<TOOLBAR_CONFIGURATION> TOOLBAR_SETTINGS::GetToolbarConfig( TOOLBAR_LOC aToolbar, bool aAllowCustom )
+{
+    // If custom is allowed, look for if a toolbar exists
+    if( aAllowCustom )
+    {
+        auto tb = m_toolbars.find( aToolbar );
+
+        if( tb != m_toolbars.end() )
+            return tb->second;
+    }
+
+    return DefaultToolbarConfig( aToolbar );
 }

@@ -139,8 +139,6 @@ public:
      */
     void OnSelectComponent( wxListEvent& event );
 
-    std::optional<TOOLBAR_CONFIGURATION> DefaultTopMainToolbarConfig() override;
-
     void ShowChangedLanguage() override;
 
     /**

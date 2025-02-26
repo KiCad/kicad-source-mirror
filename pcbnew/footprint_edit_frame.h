@@ -114,11 +114,6 @@ public:
      */
     void HardRedraw() override;
 
-    // Default toolbar configuration
-    std::optional<TOOLBAR_CONFIGURATION> DefaultLeftToolbarConfig() override;
-    std::optional<TOOLBAR_CONFIGURATION> DefaultRightToolbarConfig() override;
-    std::optional<TOOLBAR_CONFIGURATION> DefaultTopMainToolbarConfig() override;
-
     /**
      * Re create the layer Box by clearing the old list, and building a new one from the new
      * layers names and layer colors..

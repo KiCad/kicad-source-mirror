@@ -725,11 +725,6 @@ public:
 
     DIALOG_BOOK_REPORTER* GetFootprintDiffDialog();
 
-    std::optional<TOOLBAR_CONFIGURATION> DefaultLeftToolbarConfig() override;
-    std::optional<TOOLBAR_CONFIGURATION> DefaultRightToolbarConfig() override;
-    std::optional<TOOLBAR_CONFIGURATION> DefaultTopMainToolbarConfig() override;
-    std::optional<TOOLBAR_CONFIGURATION> DefaultTopAuxToolbarConfig() override;
-
     DECLARE_EVENT_TABLE()
 
 protected:

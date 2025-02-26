@@ -55,6 +55,7 @@
 #include <tools/cvpcb_association_tool.h>
 #include <tools/cvpcb_control.h>
 #include <project_pcb.h>
+#include <toolbars_cvpcb.h>
 
 #include <wx/statline.h>
 #include <wx/stattext.h>
@@ -91,6 +92,8 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     setupTools();
     setupUIConditions();
+
+    m_toolbarSettings = std::make_unique<CVPCB_TOOLBAR_SETTINGS>();
     configureToolbars();
     RecreateToolbars();
     ReCreateMenuBar();

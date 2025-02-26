@@ -60,6 +60,7 @@
 #include <tool/tool_manager.h>
 #include <tools/kicad_manager_actions.h>
 #include <tools/kicad_manager_control.h>
+#include <toolbars_kicad_manager.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/app_progress_dialog.h>
 #include <widgets/kistatusbar.h>
@@ -201,6 +202,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     setupTools();
     setupUIConditions();
 
+    m_toolbarSettings = std::make_unique<KICAD_MANAGER_TOOLBAR_SETTINGS>();
     configureToolbars();
     RecreateToolbars();
     ReCreateMenuBar();

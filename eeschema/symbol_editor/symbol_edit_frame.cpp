@@ -47,6 +47,7 @@
 #include <sch_view.h>
 #include <settings/settings_manager.h>
 #include <symbol_lib_table.h>
+#include <toolbars_symbol_editor.h>
 #include <tool/action_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
@@ -179,6 +180,8 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     setupUIConditions();
 
     ReCreateMenuBar();
+
+    m_toolbarSettings = std::make_unique<SYMBOL_EDIT_TOOLBAR_SETTINGS>();
     configureToolbars();
     RecreateToolbars();
 

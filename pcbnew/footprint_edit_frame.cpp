@@ -75,6 +75,7 @@
 #include <widgets/wx_progress_reporters.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/wx_aui_utils.h>
+#include <toolbars_footprint_editor.h>
 
 #include <wx/filedlg.h>
 #include <wx/hyperlink.h>
@@ -164,8 +165,11 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     initLibraryTree();
     m_treePane = new FOOTPRINT_TREE_PANE( this );
 
+    m_toolbarSettings = std::make_unique<FOOTPRINT_EDIT_TOOLBAR_SETTINGS>();
     configureToolbars();
     RecreateToolbars();
+    ReCreateLayerBox( false );
+
     ReCreateMenuBar();
 
     m_selectionFilterPanel = new PANEL_SELECTION_FILTER( this );

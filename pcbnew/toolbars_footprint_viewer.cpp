@@ -34,62 +34,65 @@
 #include <widgets/wx_menubar.h>
 #include <wx/choice.h>
 
+#include <toolbars_footprint_viewer.h>
 
-std::optional<TOOLBAR_CONFIGURATION> FOOTPRINT_VIEWER_FRAME::DefaultTopMainToolbarConfig()
+std::optional<TOOLBAR_CONFIGURATION> FOOTPRINT_VIEWER_TOOLBAR_SETTINGS::DefaultToolbarConfig( TOOLBAR_LOC aToolbar )
 {
     TOOLBAR_CONFIGURATION config;
 
     // clang-format off
-    config.AppendAction( PCB_ACTIONS::previousFootprint )
-          .AppendAction( PCB_ACTIONS::nextFootprint );
+    switch( aToolbar )
+    {
+    case TOOLBAR_LOC::RIGHT:
+    case TOOLBAR_LOC::TOP_AUX:
+        return std::nullopt;
 
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::zoomRedraw )
-          .AppendAction( ACTIONS::zoomInCenter )
-          .AppendAction( ACTIONS::zoomOutCenter )
-          .AppendAction( ACTIONS::zoomFitScreen )
-          .AppendAction( ACTIONS::zoomTool );
+    case TOOLBAR_LOC::TOP_MAIN:
+        config.AppendAction( PCB_ACTIONS::previousFootprint )
+              .AppendAction( PCB_ACTIONS::nextFootprint );
 
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::show3DViewer )
-          .AppendAction( PCB_ACTIONS::saveFpToBoard );
+        config.AppendSeparator()
+              .AppendAction( ACTIONS::zoomRedraw )
+              .AppendAction( ACTIONS::zoomInCenter )
+              .AppendAction( ACTIONS::zoomOutCenter )
+              .AppendAction( ACTIONS::zoomFitScreen )
+              .AppendAction( ACTIONS::zoomTool );
 
-    config.AppendSeparator()
-          .AppendControl( m_tbGridSelectName );
+        config.AppendSeparator()
+              .AppendAction( ACTIONS::show3DViewer )
+              .AppendAction( PCB_ACTIONS::saveFpToBoard );
 
-    config.AppendSeparator()
-          .AppendControl( m_tbZoomSelectName )
-          .AppendAction( PCB_ACTIONS::fpAutoZoom);
+        config.AppendSeparator()
+              .AppendControl( ACTION_TOOLBAR_CONTROLS::gridSelect );
 
-    // clang-format on
-    return config;
-}
+        config.AppendSeparator()
+              .AppendControl( ACTION_TOOLBAR_CONTROLS::zoomSelect )
+              .AppendAction( PCB_ACTIONS::fpAutoZoom);
+        break;
 
+    case TOOLBAR_LOC::LEFT:
+        config.AppendAction( ACTIONS::selectionTool )
+              .AppendAction( ACTIONS::measureTool );
 
-std::optional<TOOLBAR_CONFIGURATION> FOOTPRINT_VIEWER_FRAME::DefaultLeftToolbarConfig()
-{
-    TOOLBAR_CONFIGURATION config;
+        config.AppendSeparator()
+              .AppendAction( ACTIONS::toggleGrid )
+              .AppendAction( ACTIONS::togglePolarCoords )
+              .AppendAction( ACTIONS::inchesUnits )
+              .AppendAction( ACTIONS::milsUnits )
+              .AppendAction( ACTIONS::millimetersUnits )
+              .AppendAction( ACTIONS::toggleCursorStyle );
 
-    // clang-format off
-    config.AppendAction( ACTIONS::selectionTool )
-          .AppendAction( ACTIONS::measureTool );
+        config.AppendSeparator()
+              .AppendAction( PCB_ACTIONS::showPadNumbers )
+              .AppendAction( PCB_ACTIONS::padDisplayMode )
+              .AppendAction( PCB_ACTIONS::textOutlines )
+              .AppendAction( PCB_ACTIONS::graphicsOutlines );
 
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::toggleGrid )
-          .AppendAction( ACTIONS::togglePolarCoords )
-          .AppendAction( ACTIONS::inchesUnits )
-          .AppendAction( ACTIONS::milsUnits )
-          .AppendAction( ACTIONS::millimetersUnits )
-          .AppendAction( ACTIONS::toggleCursorStyle );
+        if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
+            config.AppendAction( ACTIONS::toggleBoundingBoxes );
 
-    config.AppendSeparator()
-          .AppendAction( PCB_ACTIONS::showPadNumbers )
-          .AppendAction( PCB_ACTIONS::padDisplayMode )
-          .AppendAction( PCB_ACTIONS::textOutlines )
-          .AppendAction( PCB_ACTIONS::graphicsOutlines );
-
-    if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
-        config.AppendAction( ACTIONS::toggleBoundingBoxes );
+        break;
+    }
 
     // clang-format on
     return config;

@@ -208,8 +208,7 @@ void EDA_DRAW_FRAME::configureToolbars()
             aToolbar->Add( m_gridSelectBox );
         };
 
-    RegisterCustomToolbarControlFactory( m_tbGridSelectName, _( "Grid Selector" ),
-                                         _( "Grid Selection box" ), gridSelectorFactory );
+    RegisterCustomToolbarControlFactory( ACTION_TOOLBAR_CONTROLS::gridSelect, gridSelectorFactory );
 
     // Zoom selection
     auto zoomSelectorFactory =
@@ -225,8 +224,7 @@ void EDA_DRAW_FRAME::configureToolbars()
             aToolbar->Add( m_zoomSelectBox );
         };
 
-    RegisterCustomToolbarControlFactory( m_tbZoomSelectName, _( "Zoom Selector" ),
-                                         _( "Zoom selection box" ), zoomSelectorFactory );
+    RegisterCustomToolbarControlFactory( ACTION_TOOLBAR_CONTROLS::zoomSelect, zoomSelectorFactory );
 }
 
 

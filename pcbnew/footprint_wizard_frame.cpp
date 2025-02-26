@@ -53,6 +53,7 @@
 #include "tools/pcb_selection_tool.h"
 #include "tools/pcb_control.h"
 #include "tools/pcb_actions.h"
+#include <toolbars_footprint_wizard.h>
 #include <python/scripting/pcb_scripting_tool.h>
 
 
@@ -151,6 +152,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
 
     // Create the toolbars
+    m_toolbarSettings = std::make_unique<FOOTPRINT_WIZARD_TOOLBAR_SETTINGS>();
     configureToolbars();
     RecreateToolbars();
 
@@ -566,52 +568,6 @@ void FOOTPRINT_WIZARD_FRAME::Update3DView( bool aMarkDirty, bool aRefresh, const
     wxString frm3Dtitle;
     frm3Dtitle.Printf( _( "ModView: 3D Viewer [%s]" ), m_wizardName );
     PCB_BASE_FRAME::Update3DView( aMarkDirty, aRefresh, &frm3Dtitle );
-}
-
-
-std::optional<TOOLBAR_CONFIGURATION> FOOTPRINT_WIZARD_FRAME::DefaultTopMainToolbarConfig()
-{
-    TOOLBAR_CONFIGURATION config;
-
-    // clang-format off
-    /* TODO (ISM): Convert to action
-    m_tbTopMain->AddTool( ID_FOOTPRINT_WIZARD_SELECT_WIZARD, wxEmptyString,
-        KiBitmap( BITMAPS::module_wizard ),
-        _( "Select wizard script to run" ) );
-*/
-
-    config.AppendSeparator();
-    /* TODO (ISM): Convert to action
-    m_tbTopMain->AddTool( ID_FOOTPRINT_WIZARD_RESET_TO_DEFAULT, wxEmptyString,
-            KiBitmap( BITMAPS::reload ),
-            _( "Reset wizard parameters to default") );
-*/
-    config.AppendSeparator();
-    /* TODO (ISM): Convert to action
-    m_tbTopMain->AddTool( ID_FOOTPRINT_WIZARD_PREVIOUS, wxEmptyString,
-            KiBitmap( BITMAPS::lib_previous ),
-            _( "Select previous parameters page" ) );
-    m_tbTopMain->AddTool( ID_FOOTPRINT_WIZARD_NEXT, wxEmptyString,
-            KiBitmap( BITMAPS::lib_next ),
-            _( "Select next parameters page" ) );
-*/
-
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::zoomRedraw )
-          .AppendAction( ACTIONS::zoomInCenter )
-          .AppendAction( ACTIONS::zoomOutCenter )
-          .AppendAction( ACTIONS::zoomFitScreen );
-
-    // The footprint wizard always can export the current footprint
-    config.AppendSeparator();
-    /* TODO (ISM): Convert to action
-    m_tbTopMain->AddTool( ID_FOOTPRINT_WIZARD_DONE,
-            wxEmptyString, KiBitmap( BITMAPS::export_footprint_names ),
-            _( "Export footprint to editor" ) );
-*/
-
-    // clang-format on
-    return config;
 }
 
 

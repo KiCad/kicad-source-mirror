@@ -228,26 +228,3 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
     SetMenuBar( menuBar );
     delete oldMenuBar;
 }
-
-
-std::optional<TOOLBAR_CONFIGURATION> KICAD_MANAGER_FRAME::DefaultLeftToolbarConfig()
-{
-    TOOLBAR_CONFIGURATION config;
-
-    // clang-format off
-    config.AppendAction( KICAD_MANAGER_ACTIONS::newProject )
-          .AppendAction( KICAD_MANAGER_ACTIONS::openProject );
-
-    config.AppendSeparator()
-          .AppendAction( KICAD_MANAGER_ACTIONS::archiveProject )
-          .AppendAction( KICAD_MANAGER_ACTIONS::unarchiveProject );
-
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::zoomRedraw );
-
-    config.AppendSeparator()
-          .AppendAction( KICAD_MANAGER_ACTIONS::openProjectDirectory );
-
-    // clang-format on
-    return config;
-}

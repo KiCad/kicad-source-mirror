@@ -18,6 +18,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <sim/toolbars_simulator_frame.h>
+
 #include <sim/simulator_frame.h>
 #include <tool/action_menu.h>
 #include <tool/action_toolbar.h>
@@ -27,38 +29,48 @@
 #include <widgets/wx_menubar.h>
 
 
-std::optional<TOOLBAR_CONFIGURATION> SIMULATOR_FRAME::DefaultTopMainToolbarConfig()
+std::optional<TOOLBAR_CONFIGURATION> SIMULATOR_TOOLBAR_SETTINGS::DefaultToolbarConfig( TOOLBAR_LOC aToolbar )
 {
     TOOLBAR_CONFIGURATION config;
 
     // clang-format off
-    config.AppendAction( EE_ACTIONS::openWorkbook )
-          .AppendAction( EE_ACTIONS::saveWorkbook );
+    switch( aToolbar )
+    {
+    case TOOLBAR_LOC::LEFT:
+    case TOOLBAR_LOC::RIGHT:
+    case TOOLBAR_LOC::TOP_AUX:
+        return std::nullopt;
 
-    config.AppendSeparator()
-          .AppendAction( EE_ACTIONS::newAnalysisTab )
-          .AppendAction( EE_ACTIONS::simAnalysisProperties );
+    case TOOLBAR_LOC::TOP_MAIN:
+        config.AppendAction( EE_ACTIONS::openWorkbook )
+              .AppendAction( EE_ACTIONS::saveWorkbook );
 
-    config.AppendSeparator()
-          .AppendAction( EE_ACTIONS::runSimulation )
-          .AppendAction( EE_ACTIONS::stopSimulation );
+        config.AppendSeparator()
+              .AppendAction( EE_ACTIONS::newAnalysisTab )
+              .AppendAction( EE_ACTIONS::simAnalysisProperties );
 
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::zoomInCenter )
-          .AppendAction( ACTIONS::zoomOutCenter )
-          .AppendAction( ACTIONS::zoomInHorizontally )
-          .AppendAction( ACTIONS::zoomOutHorizontally )
-          .AppendAction( ACTIONS::zoomInVertically )
-          .AppendAction( ACTIONS::zoomOutVertically )
-          .AppendAction( ACTIONS::zoomFitScreen );
+        config.AppendSeparator()
+              .AppendAction( EE_ACTIONS::runSimulation )
+              .AppendAction( EE_ACTIONS::stopSimulation );
 
-    config.AppendSeparator()
-          .AppendAction( EE_ACTIONS::simProbe )
-          .AppendAction( EE_ACTIONS::simTune );
+        config.AppendSeparator()
+              .AppendAction( ACTIONS::zoomInCenter )
+              .AppendAction( ACTIONS::zoomOutCenter )
+              .AppendAction( ACTIONS::zoomInHorizontally )
+              .AppendAction( ACTIONS::zoomOutHorizontally )
+              .AppendAction( ACTIONS::zoomInVertically )
+              .AppendAction( ACTIONS::zoomOutVertically )
+              .AppendAction( ACTIONS::zoomFitScreen );
 
-    config.AppendSeparator()
-          .AppendAction( EE_ACTIONS::editUserDefinedSignals )
-          .AppendAction( EE_ACTIONS::showNetlist );
+        config.AppendSeparator()
+              .AppendAction( EE_ACTIONS::simProbe )
+              .AppendAction( EE_ACTIONS::simTune );
+
+        config.AppendSeparator()
+              .AppendAction( EE_ACTIONS::editUserDefinedSignals )
+              .AppendAction( EE_ACTIONS::showNetlist );
+        break;
+    }
 
     // clang-format on
     return config;

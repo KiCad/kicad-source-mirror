@@ -493,14 +493,10 @@ void EDA_BASE_FRAME::setupUIConditions()
 }
 
 
-void EDA_BASE_FRAME::RegisterCustomToolbarControlFactory( const std::string& aName, const wxString& aUiName,
-                                                          const wxString& aDescription,
+void EDA_BASE_FRAME::RegisterCustomToolbarControlFactory( const ACTION_TOOLBAR_CONTROL& aControlDesc,
                                                           const ACTION_TOOLBAR_CONTROL_FACTORY& aControlFactory )
 {
-    wxASSERT_MSG( aName.starts_with( "control" ),
-                  wxString::Format( "Control name \"%s\" must start with \"control\"", aName ) );
-
-    m_toolbarControlFactories.emplace_back( aName, aUiName, aDescription, aControlFactory );
+    m_toolbarControlFactories.emplace( aControlDesc.GetName(), aControlFactory );
 }
 
 
@@ -508,8 +504,8 @@ ACTION_TOOLBAR_CONTROL_FACTORY* EDA_BASE_FRAME::GetCustomToolbarControlFactory( 
 {
     for( auto& control : m_toolbarControlFactories )
     {
-        if( control.name == aName )
-            return &control.factory;
+        if( control.first == aName )
+            return &control.second;
     }
 
     return nullptr;
@@ -518,37 +514,7 @@ ACTION_TOOLBAR_CONTROL_FACTORY* EDA_BASE_FRAME::GetCustomToolbarControlFactory( 
 
 void EDA_BASE_FRAME::configureToolbars()
 {
-    APP_SETTINGS_BASE* cfg = config();
-
-    if( cfg && cfg->m_CustomToolbars )
-    {
-        // Get the custom toolbar config
-        TOOLBAR_SETTINGS tb( cfg->GetFilename() + "-toolbars" );
-
-        tb.LoadFromFile( SETTINGS_MANAGER::GetToolbarSettingsPath() );
-
-        for( auto t : tb.m_Toolbars )
-        {
-            if( t.first == "left" )
-                m_tbConfigLeft = t.second;
-            else if( t.first == "right" )
-                m_tbConfigRight = t.second;
-            else if( t.first == "top_aux" )
-                m_tbConfigTopAux = t.second;
-            else if( t.first == "top_main" )
-                m_tbConfigTopMain = t.second;
-            else
-                wxASSERT_MSG( false, wxString::Format( "Unknown toolbar: '%s'", t.first ) );
-        }
-    }
-    else
-    {
-         // Get the default toolbar config for the frame
-        m_tbConfigLeft    = DefaultLeftToolbarConfig();
-        m_tbConfigRight   = DefaultRightToolbarConfig();
-        m_tbConfigTopAux  = DefaultTopAuxToolbarConfig();
-        m_tbConfigTopMain = DefaultTopMainToolbarConfig();
-    }
+    m_toolbarSettings->LoadFromFile( Pgm().GetSettingsManager().GetToolbarSettingsPath() );
 }
 
 
@@ -556,8 +522,14 @@ void EDA_BASE_FRAME::RecreateToolbars()
 {
     wxWindowUpdateLocker dummy( this );
 
+    wxASSERT( m_toolbarSettings.get() );
+
+    std::optional<TOOLBAR_CONFIGURATION> tbConfig;
+
     // Drawing tools (typically on right edge of window)
-    if( m_tbConfigRight.has_value() )
+    tbConfig = m_toolbarSettings->GetToolbarConfig( TOOLBAR_LOC::RIGHT, config()->m_CustomToolbars );
+
+    if( tbConfig.has_value() )
     {
         if( !m_tbRight )
         {
@@ -566,11 +538,13 @@ void EDA_BASE_FRAME::RecreateToolbars()
             m_tbRight->SetAuiManager( &m_auimgr );
         }
 
-        m_tbRight->ApplyConfiguration( m_tbConfigRight.value() );
+        m_tbRight->ApplyConfiguration( tbConfig.value() );
     }
 
     // Options (typically on left edge of window)
-    if( m_tbConfigLeft.has_value() )
+    tbConfig = m_toolbarSettings->GetToolbarConfig( TOOLBAR_LOC::LEFT, config()->m_CustomToolbars );
+
+    if( tbConfig.has_value() )
     {
         if( !m_tbLeft )
         {
@@ -579,11 +553,13 @@ void EDA_BASE_FRAME::RecreateToolbars()
             m_tbLeft->SetAuiManager( &m_auimgr );
         }
 
-        m_tbLeft->ApplyConfiguration( m_tbConfigLeft.value() );
+        m_tbLeft->ApplyConfiguration( tbConfig.value() );
     }
 
     // Top main toolbar (the top one)
-    if( m_tbConfigTopMain.has_value() )
+    tbConfig = m_toolbarSettings->GetToolbarConfig( TOOLBAR_LOC::TOP_MAIN, config()->m_CustomToolbars );
+
+    if( tbConfig.has_value() )
     {
         if( !m_tbTopMain )
         {
@@ -592,11 +568,13 @@ void EDA_BASE_FRAME::RecreateToolbars()
             m_tbTopMain->SetAuiManager( &m_auimgr );
         }
 
-        m_tbTopMain->ApplyConfiguration( m_tbConfigTopMain.value() );
+        m_tbTopMain->ApplyConfiguration( tbConfig.value() );
     }
 
     // Top aux toolbar (the bottom one)
-    if( m_tbConfigTopAux.has_value() )
+    tbConfig = m_toolbarSettings->GetToolbarConfig( TOOLBAR_LOC::TOP_AUX, config()->m_CustomToolbars );
+
+    if( tbConfig.has_value() )
     {
         if( !m_tbTopAux )
         {
@@ -605,7 +583,7 @@ void EDA_BASE_FRAME::RecreateToolbars()
             m_tbTopAux->SetAuiManager( &m_auimgr );
         }
 
-        m_tbTopAux->ApplyConfiguration( m_tbConfigTopAux.value() );
+        m_tbTopAux->ApplyConfiguration( tbConfig.value() );
     }
 }
 
@@ -745,6 +723,10 @@ void EDA_BASE_FRAME::CommonSettingsChanged( int aFlags )
         ReCreateMenuBar();
         GetMenuBar()->Refresh();
     }
+
+    // Update the toolbars by loading the settings from disk
+    m_toolbarSettings->LoadFromFile( Pgm().GetSettingsManager().GetToolbarSettingsPath() );
+    RecreateToolbars();
 }
 
 

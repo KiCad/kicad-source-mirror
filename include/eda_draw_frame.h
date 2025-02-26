@@ -594,9 +594,6 @@ protected:
     static bool m_openGLFailureOccured; ///< Has any failure occurred when switching to OpenGL in
                                         ///< any EDA_DRAW_FRAME?
 
-    const std::string m_tbGridSelectName = "control.GridSelector";
-    const std::string m_tbZoomSelectName = "control.ZoomSelector";
-
 private:
     BASE_SCREEN*                m_currentScreen;      ///< current used SCREEN
     EDA_DRAW_PANEL_GAL*         m_canvas;

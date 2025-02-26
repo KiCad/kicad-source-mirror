@@ -30,6 +30,7 @@
 
 #include <settings/json_settings.h>
 #include <settings/parameters.h>
+#include <tool/action_toolbar.h>
 #include <tool/tool_action.h>
 
 
@@ -110,9 +111,16 @@ public:
         return *this;
     }
 
+
     TOOLBAR_CONFIGURATION& AppendControl( std::string aControlName )
     {
         m_toolbarItems.push_back( aControlName );
+        return *this;
+    }
+
+    TOOLBAR_CONFIGURATION& AppendControl( const ACTION_TOOLBAR_CONTROL& aControl )
+    {
+        m_toolbarItems.push_back( aControl.GetName() );
         return *this;
     }
 
@@ -146,6 +154,14 @@ public:
 };
 
 
+enum class TOOLBAR_LOC
+{
+    LEFT,           ///< Toolbar on the left side of the canvas
+    RIGHT,          ///< Toolbar on the right side of the canvas
+    TOP_MAIN,       ///< Toolbar on the top of the canvas
+    TOP_AUX         ///< Toolbar on the top of the canvas
+};
+
 class KICOMMON_API TOOLBAR_SETTINGS : public JSON_SETTINGS
 {
 public:
@@ -153,9 +169,24 @@ public:
 
     virtual ~TOOLBAR_SETTINGS() {}
 
-public:
-    // The toolbars
-    std::map<std::string,TOOLBAR_CONFIGURATION> m_Toolbars;
+    /**
+     * Get the default tools to show on the specified canvas toolbar.
+     */
+    virtual std::optional<TOOLBAR_CONFIGURATION> DefaultToolbarConfig( TOOLBAR_LOC aToolbar )
+    {
+        return std::nullopt;
+    }
+
+    /**
+     * Get the tools to show on the specified canvas toolbar.
+     *
+     * Returns the user-configured tools, and if not customized, the default tools.
+     */
+    std::optional<TOOLBAR_CONFIGURATION> GetToolbarConfig( TOOLBAR_LOC aToolbar, bool aForceDefault );
+
+protected:
+    // The toolbars - only public to aid in JSON serialization/deserialization
+    std::map<TOOLBAR_LOC, TOOLBAR_CONFIGURATION> m_toolbars;
 };
 
 #endif /* TOOLBAR_CONFIGURATION_H_ */

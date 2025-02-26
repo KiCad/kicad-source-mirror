@@ -49,6 +49,7 @@
 #include "pl_editor_id.h"
 #include "pl_editor_settings.h"
 #include "properties_frame.h"
+#include <toolbars_pl_editor.h>
 #include "tools/pl_actions.h"
 #include "tools/pl_selection_tool.h"
 #include "tools/pl_drawing_tools.h"
@@ -135,6 +136,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     setupUIConditions();
     ReCreateMenuBar();
 
+    m_toolbarSettings = std::make_unique<PL_EDITOR_TOOLBAR_SETTINGS>();
     configureToolbars();
     RecreateToolbars();
 

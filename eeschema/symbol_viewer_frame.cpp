@@ -62,6 +62,7 @@
 #include <view/view_controls.h>
 #include <wx/srchctrl.h>
 #include <wx/log.h>
+#include <toolbars_symbol_viewer.h>
 
 #include <default_values.h>
 #include <string_utils.h>
@@ -142,6 +143,7 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     setupTools();
     setupUIConditions();
 
+    m_toolbarSettings = std::make_unique<SYMBOL_VIEWER_TOOLBAR_SETTINGS>();
     configureToolbars();
     RecreateToolbars();
 

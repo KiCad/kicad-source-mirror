@@ -77,9 +77,6 @@ public:
     void doCloseWindow() override;
     void CloseLibraryViewer( wxCommandEvent& event );
 
-    // Only top main toolbar
-    std::optional<TOOLBAR_CONFIGURATION> DefaultTopMainToolbarConfig() override;
-
     void ClickOnLibList( wxCommandEvent& event );
     void ClickOnSymbolList( wxCommandEvent& event );
 

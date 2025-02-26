@@ -29,6 +29,7 @@
 #include <sch_painter.h>
 #include <symbol_editor_settings.h>
 #include <symbol_library_manager.h>
+#include <toolbars_symbol_editor.h>
 #include <tool/action_toolbar.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
@@ -44,117 +45,111 @@
 #endif
 
 
-std::optional<TOOLBAR_CONFIGURATION> SYMBOL_EDIT_FRAME::DefaultLeftToolbarConfig()
+std::optional<TOOLBAR_CONFIGURATION> SYMBOL_EDIT_TOOLBAR_SETTINGS::DefaultToolbarConfig( TOOLBAR_LOC aToolbar )
 {
     TOOLBAR_CONFIGURATION config;
 
     // clang-format off
-    config.AppendAction( ACTIONS::toggleGrid )
-          .AppendAction( ACTIONS::toggleGridOverrides )
-          .AppendAction( ACTIONS::inchesUnits )
-          .AppendAction( ACTIONS::milsUnits )
-          .AppendAction( ACTIONS::millimetersUnits )
-          .AppendAction( ACTIONS::toggleCursorStyle );
+    switch( aToolbar )
+    {
+    case TOOLBAR_LOC::TOP_AUX:
+        return std::nullopt;
 
-    config.AppendSeparator()
-          .AppendAction( EE_ACTIONS::showElectricalTypes )
-          .AppendAction( EE_ACTIONS::showHiddenPins )
-          .AppendAction( EE_ACTIONS::showHiddenFields );
-    //    .AppendAction( EE_ACTIONS::togglePinAltIcons );
+    case TOOLBAR_LOC::LEFT:
+        config.AppendAction( ACTIONS::toggleGrid )
+              .AppendAction( ACTIONS::toggleGridOverrides )
+              .AppendAction( ACTIONS::inchesUnits )
+              .AppendAction( ACTIONS::milsUnits )
+              .AppendAction( ACTIONS::millimetersUnits )
+              .AppendAction( ACTIONS::toggleCursorStyle );
 
-    if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
-        config.AppendAction( ACTIONS::toggleBoundingBoxes );
+        config.AppendSeparator()
+              .AppendAction( EE_ACTIONS::showElectricalTypes )
+              .AppendAction( EE_ACTIONS::showHiddenPins )
+              .AppendAction( EE_ACTIONS::showHiddenFields );
+        //    .AppendAction( EE_ACTIONS::togglePinAltIcons );
 
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::showLibraryTree )
-          .AppendAction( ACTIONS::showProperties );
+        if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
+            config.AppendAction( ACTIONS::toggleBoundingBoxes );
 
-    /* TODO: Implement context menus
-    EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
-    std::unique_ptr<ACTION_MENU> gridMenu = std::make_unique<ACTION_MENU>( false, selTool );
-    gridMenu->Add( ACTIONS::gridProperties );
-    m_tbLeft->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
-    */
+        config.AppendSeparator()
+              .AppendAction( ACTIONS::showLibraryTree )
+              .AppendAction( ACTIONS::showProperties );
 
-    // clang-format on
-    return config;
-}
+        /* TODO: Implement context menus
+        EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
+        std::unique_ptr<ACTION_MENU> gridMenu = std::make_unique<ACTION_MENU>( false, selTool );
+        gridMenu->Add( ACTIONS::gridProperties );
+        m_tbLeft->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
+        */
+        break;
 
+    case TOOLBAR_LOC::RIGHT:
+        config.AppendAction( ACTIONS::selectionTool );
 
-std::optional<TOOLBAR_CONFIGURATION> SYMBOL_EDIT_FRAME::DefaultRightToolbarConfig()
-{
-    TOOLBAR_CONFIGURATION config;
+        config.AppendSeparator()
+              .AppendAction( EE_ACTIONS::placeSymbolPin )
+              .AppendAction( EE_ACTIONS::placeSymbolText )
+              .AppendAction( EE_ACTIONS::drawSymbolTextBox )
+              .AppendAction( EE_ACTIONS::drawRectangle )
+              .AppendAction( EE_ACTIONS::drawCircle )
+              .AppendAction( EE_ACTIONS::drawArc )
+              .AppendAction( EE_ACTIONS::drawBezier )
+              .AppendAction( EE_ACTIONS::drawSymbolLines )
+              .AppendAction( EE_ACTIONS::drawSymbolPolygon )
+              .AppendAction( EE_ACTIONS::placeSymbolAnchor )
+              .AppendAction( ACTIONS::deleteTool);
+        break;
 
-    // clang-format off
-    config.AppendAction( ACTIONS::selectionTool );
+    case TOOLBAR_LOC::TOP_MAIN:
+        config.AppendAction( EE_ACTIONS::newSymbol );
 
-    config.AppendSeparator()
-          .AppendAction( EE_ACTIONS::placeSymbolPin )
-          .AppendAction( EE_ACTIONS::placeSymbolText )
-          .AppendAction( EE_ACTIONS::drawSymbolTextBox )
-          .AppendAction( EE_ACTIONS::drawRectangle )
-          .AppendAction( EE_ACTIONS::drawCircle )
-          .AppendAction( EE_ACTIONS::drawArc )
-          .AppendAction( EE_ACTIONS::drawBezier )
-          .AppendAction( EE_ACTIONS::drawSymbolLines )
-          .AppendAction( EE_ACTIONS::drawSymbolPolygon )
-          .AppendAction( EE_ACTIONS::placeSymbolAnchor )
-          .AppendAction( ACTIONS::deleteTool);
+/* TODO (ISM): Handle visibility changes
+        if( !IsSymbolFromSchematic() )
+            config.AppendAction( ACTIONS::saveAll );
+        else
+            config.AppendAction( ACTIONS::save );
+*/
 
-    // clang-format on
-    return config;
-}
+        config.AppendSeparator()
+              .AppendAction( ACTIONS::undo )
+              .AppendAction( ACTIONS::redo );
 
+        config.AppendSeparator()
+              .AppendAction( ACTIONS::zoomRedraw )
+              .AppendAction( ACTIONS::zoomInCenter )
+              .AppendAction( ACTIONS::zoomOutCenter )
+              .AppendAction( ACTIONS::zoomFitScreen )
+              .AppendAction( ACTIONS::zoomTool );
 
-std::optional<TOOLBAR_CONFIGURATION> SYMBOL_EDIT_FRAME::DefaultTopMainToolbarConfig()
-{
-    TOOLBAR_CONFIGURATION config;
+        config.AppendSeparator()
+              .AppendAction( EE_ACTIONS::rotateCCW )
+              .AppendAction( EE_ACTIONS::rotateCW )
+              .AppendAction( EE_ACTIONS::mirrorV )
+              .AppendAction( EE_ACTIONS::mirrorH );
 
-    // clang-format off
-    config.AppendAction( EE_ACTIONS::newSymbol );
+        config.AppendSeparator()
+              .AppendAction( EE_ACTIONS::symbolProperties )
+              .AppendAction( EE_ACTIONS::pinTable );
 
-    if( !IsSymbolFromSchematic() )
-        config.AppendAction( ACTIONS::saveAll );
-    else
-        config.AppendAction( ACTIONS::save );
+        config.AppendSeparator()
+              .AppendAction( ACTIONS::showDatasheet )
+              .AppendAction( EE_ACTIONS::checkSymbol );
 
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::undo )
-          .AppendAction( ACTIONS::redo );
+        config.AppendSeparator()
+              .AppendAction( EE_ACTIONS::showDeMorganStandard )
+              .AppendAction( EE_ACTIONS::showDeMorganAlternate );
 
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::zoomRedraw )
-          .AppendAction( ACTIONS::zoomInCenter )
-          .AppendAction( ACTIONS::zoomOutCenter )
-          .AppendAction( ACTIONS::zoomFitScreen )
-          .AppendAction( ACTIONS::zoomTool );
+        config.AppendSeparator()
+              .AppendControl( ACTION_TOOLBAR_CONTROLS::unitSelector );
 
-    config.AppendSeparator()
-          .AppendAction( EE_ACTIONS::rotateCCW )
-          .AppendAction( EE_ACTIONS::rotateCW )
-          .AppendAction( EE_ACTIONS::mirrorV )
-          .AppendAction( EE_ACTIONS::mirrorH );
+        config.AppendSeparator()
+              .AppendAction( EE_ACTIONS::toggleSyncedPinsMode );
 
-    config.AppendSeparator()
-          .AppendAction( EE_ACTIONS::symbolProperties )
-          .AppendAction( EE_ACTIONS::pinTable );
-
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::showDatasheet )
-          .AppendAction( EE_ACTIONS::checkSymbol );
-
-    config.AppendSeparator()
-          .AppendAction( EE_ACTIONS::showDeMorganStandard )
-          .AppendAction( EE_ACTIONS::showDeMorganAlternate );
-
-    config.AppendSeparator()
-          .AppendControl( "control.SymEditUnitSelector" );
-
-    config.AppendSeparator()
-          .AppendAction( EE_ACTIONS::toggleSyncedPinsMode );
-
-    config.AppendSeparator()
-          .AppendAction( EE_ACTIONS::addSymbolToSchematic );
+        config.AppendSeparator()
+              .AppendAction( EE_ACTIONS::addSymbolToSchematic );
+        break;
+    }
 
     // clang-format on
     return config;
@@ -179,7 +174,6 @@ void SYMBOL_EDIT_FRAME::configureToolbars()
             aToolbar->Add( m_unitSelectBox );
         };
 
-    RegisterCustomToolbarControlFactory("control.SymEditUnitSelector", _( "Unit number display" ),
-                            _( "Displays the unit being currently edited" ),
-                                         unitDisplayFactory );
+    RegisterCustomToolbarControlFactory( ACTION_TOOLBAR_CONTROLS::unitSelector, unitDisplayFactory );
 }
+

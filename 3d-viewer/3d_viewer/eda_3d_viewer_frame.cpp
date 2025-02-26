@@ -58,6 +58,7 @@
 #include <widgets/wx_aui_utils.h>
 #include <wildcards_and_files_ext.h>
 #include <project_pcb.h>
+#include <toolbars_3d.h>
 
 #include <3d_navlib/nl_3d_viewer_plugin.h>
 
@@ -147,6 +148,8 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
     m_toolManager->InvokeTool( "3DViewer.Control" );
 
     ReCreateMenuBar();
+
+    m_toolbarSettings = std::make_unique<EDA_3D_VIEWER_TOOLBAR_SETTINGS>();
     configureToolbars();
     RecreateToolbars();
 
@@ -611,8 +614,6 @@ void EDA_3D_VIEWER_FRAME::CommonSettingsChanged( int aFlags )
 
     // Regen menu bars, etc
     EDA_BASE_FRAME::CommonSettingsChanged( aFlags );
-
-    RecreateToolbars();
 
     loadCommonSettings();
     applySettings(

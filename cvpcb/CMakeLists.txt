@@ -38,6 +38,7 @@ set( CVPCB_SRCS
     menubar.cpp
     readwrite_dlgs.cpp
     toolbars_cvpcb.cpp
+    toolbars_display_footprints.cpp
     tools/cvpcb_actions.cpp
     tools/cvpcb_association_tool.cpp
     tools/cvpcb_control.cpp

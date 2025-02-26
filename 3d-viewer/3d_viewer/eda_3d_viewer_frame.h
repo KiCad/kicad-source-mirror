@@ -130,8 +130,6 @@ public:
 
     void OnDarkModeToggle();
 
-    std::optional<TOOLBAR_CONFIGURATION> DefaultTopMainToolbarConfig() override;
-
     /**
      *  Create a Screenshot of the current 3D view.
      *  Output file format is png or jpeg, or image is copied to the clipboard

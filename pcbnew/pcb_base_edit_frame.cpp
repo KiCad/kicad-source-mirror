@@ -405,7 +405,5 @@ void PCB_BASE_EDIT_FRAME::configureToolbars()
                             m_SelLayerBox->GetId() );
         };
 
-    RegisterCustomToolbarControlFactory( m_tbPcbLayerSelectorName, _( "Layer selector" ),
-                                         _( "Control to select the layer" ),
-                                         layerSelectorFactory );
+    RegisterCustomToolbarControlFactory( ACTION_TOOLBAR_CONTROLS::layerSelector, layerSelectorFactory );
 }

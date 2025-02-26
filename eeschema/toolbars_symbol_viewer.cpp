@@ -31,45 +31,55 @@
 #include <tools/ee_actions.h>
 #include <tools/symbol_editor_control.h>
 #include <widgets/wx_menubar.h>
+#include <toolbars_symbol_viewer.h>
 
-
-std::optional<TOOLBAR_CONFIGURATION> SYMBOL_VIEWER_FRAME::DefaultTopMainToolbarConfig()
+std::optional<TOOLBAR_CONFIGURATION> SYMBOL_VIEWER_TOOLBAR_SETTINGS::DefaultToolbarConfig( TOOLBAR_LOC aToolbar )
 {
     TOOLBAR_CONFIGURATION config;
 
     // clang-format off
-    /* TODO: Move these to actions
-    m_tbTopMain->AddTool( ID_LIBVIEW_PREVIOUS, wxEmptyString,
-        KiScaledBitmap( BITMAPS::lib_previous, this ),
-        _( "Display previous symbol" ) );
+    switch( aToolbar )
+    {
+    case TOOLBAR_LOC::LEFT:
+    case TOOLBAR_LOC::RIGHT:
+    case TOOLBAR_LOC::TOP_AUX:
+        return std::nullopt;
 
-    m_tbTopMain->AddTool( ID_LIBVIEW_NEXT, wxEmptyString,
-            KiScaledBitmap( BITMAPS::lib_next, this ),
-            _( "Display next symbol" ) );
-    */
+    case TOOLBAR_LOC::TOP_MAIN:
+        /* TODO (ISM): Move these to actions
+        m_tbTopMain->AddTool( ID_LIBVIEW_PREVIOUS, wxEmptyString,
+            KiScaledBitmap( BITMAPS::lib_previous, this ),
+            _( "Display previous symbol" ) );
 
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::zoomRedraw )
-          .AppendAction( ACTIONS::zoomInCenter )
-          .AppendAction( ACTIONS::zoomOutCenter )
-          .AppendAction( ACTIONS::zoomFitScreen );
+        m_tbTopMain->AddTool( ID_LIBVIEW_NEXT, wxEmptyString,
+                KiScaledBitmap( BITMAPS::lib_next, this ),
+                _( "Display next symbol" ) );
+        */
 
-    config.AppendSeparator()
-          .AppendAction( EE_ACTIONS::showElectricalTypes )
-          .AppendAction( EE_ACTIONS::showPinNumbers );
+        config.AppendSeparator()
+              .AppendAction( ACTIONS::zoomRedraw )
+              .AppendAction( ACTIONS::zoomInCenter )
+              .AppendAction( ACTIONS::zoomOutCenter )
+              .AppendAction( ACTIONS::zoomFitScreen );
 
-    config.AppendSeparator()
-          .AppendAction( EE_ACTIONS::showDeMorganStandard )
-          .AppendAction( EE_ACTIONS::showDeMorganAlternate );
+        config.AppendSeparator()
+              .AppendAction( EE_ACTIONS::showElectricalTypes )
+              .AppendAction( EE_ACTIONS::showPinNumbers );
 
-    config.AppendSeparator()
-          .AppendControl( "control.SymViewUnitSelector" );
+        config.AppendSeparator()
+              .AppendAction( EE_ACTIONS::showDeMorganStandard )
+              .AppendAction( EE_ACTIONS::showDeMorganAlternate );
 
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::showDatasheet );
+        config.AppendSeparator()
+              .AppendControl( ACTION_TOOLBAR_CONTROLS::unitSelector );
 
-    config.AppendSeparator()
-          .AppendAction( EE_ACTIONS::addSymbolToSchematic );
+        config.AppendSeparator()
+              .AppendAction( ACTIONS::showDatasheet );
+
+        config.AppendSeparator()
+              .AppendAction( EE_ACTIONS::addSymbolToSchematic );
+        break;
+    }
 
     // clang-format on
     return config;
@@ -93,9 +103,7 @@ void SYMBOL_VIEWER_FRAME::configureToolbars()
             aToolbar->Add( m_unitChoice );
         };
 
-    RegisterCustomToolbarControlFactory("control.SymViewUnitSelector", _( "Symbol unit selector" ),
-                                        _( "Displays the unit being currently edited" ),
-                                         unitChoiceFactory );
+    RegisterCustomToolbarControlFactory( ACTION_TOOLBAR_CONTROLS::unitSelector, unitChoiceFactory );
 }
 
 

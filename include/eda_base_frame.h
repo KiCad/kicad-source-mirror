@@ -436,34 +436,6 @@ public:
      */
     virtual wxString GetCurrentFileName() const { return wxEmptyString; }
 
-    /**
-     * Get the default actions to show on the left canvas toolbar.
-     *
-     * @return default config, or nullopt if the toolbar isn't used.
-     */
-    virtual std::optional<TOOLBAR_CONFIGURATION> DefaultLeftToolbarConfig() { return std::nullopt; };
-
-    /**
-     * Get the default actions to show on the right canvas toolbar.
-     *
-     * @return default config, or nullopt if the toolbar isn't used.
-     */
-    virtual std::optional<TOOLBAR_CONFIGURATION> DefaultRightToolbarConfig() { return std::nullopt; };
-
-    /**
-     * Get the default actions to show on the top main canvas toolbar.
-     *
-     * @return default config, or nullopt if the toolbar isn't used.
-     */
-    virtual std::optional<TOOLBAR_CONFIGURATION> DefaultTopMainToolbarConfig() { return std::nullopt; };
-
-    /**
-     * Get the default actions to show on the top aux canvas toolbar.
-     *
-     * @return default config, or nullopt if the toolbar isn't used.
-     */
-    virtual std::optional<TOOLBAR_CONFIGURATION> DefaultTopAuxToolbarConfig() { return std::nullopt; };
-
     virtual void RecreateToolbars();
 
     /**
@@ -482,12 +454,10 @@ public:
      * The factory function takes a single argument of type `ACTION_TOOLBAR*`, which is the toolbar
      * to add the controls to.
      *
-     * @param aName is the unique name for this control - must be prefixed with "control."
-     * @param aDescription is a short user-facing description for the
+     * @param aControlDesc is the control descriptor
      * @param aControlFactory A functor that creates the custom controls and then adds them to the toolbar
      */
-    void RegisterCustomToolbarControlFactory( const std::string& aName, const wxString& aUiName,
-                                              const wxString& aDescription,
+    void RegisterCustomToolbarControlFactory( const ACTION_TOOLBAR_CONTROL& aControlDesc,
                                               const ACTION_TOOLBAR_CONTROL_FACTORY& aControlFactory );
 
     /**
@@ -860,11 +830,8 @@ private:
      */
     std::map<const wxString, TOOL_ACTION*> m_acceptedExts;
 
-    // Current toolbar configuration
-    std::optional<TOOLBAR_CONFIGURATION> m_tbConfigLeft;
-    std::optional<TOOLBAR_CONFIGURATION> m_tbConfigRight;
-    std::optional<TOOLBAR_CONFIGURATION> m_tbConfigTopAux;
-    std::optional<TOOLBAR_CONFIGURATION> m_tbConfigTopMain;
+    // Toolbar Settings
+    std::unique_ptr<TOOLBAR_SETTINGS> m_toolbarSettings;
 
     // Toolbar UI elements
     ACTION_TOOLBAR*      m_tbTopMain;
@@ -872,8 +839,7 @@ private:
     ACTION_TOOLBAR*      m_tbRight;       // Drawing tools (typically on right edge of window)
     ACTION_TOOLBAR*      m_tbLeft;    // Options (typically on left edge of window)
 
-    std::vector<ACTION_TOOLBAR_CONTROL> m_toolbarControlFactories;
-
+    std::map<std::string, ACTION_TOOLBAR_CONTROL_FACTORY> m_toolbarControlFactories;
 };
 
 

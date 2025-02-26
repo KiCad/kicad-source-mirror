@@ -98,11 +98,6 @@ public:
     // The Tool Framework initialization
     void setupTools();
 
-    // Currently no top auxillary toolbar
-    std::optional<TOOLBAR_CONFIGURATION> DefaultLeftToolbarConfig() override;
-    std::optional<TOOLBAR_CONFIGURATION> DefaultRightToolbarConfig() override;
-    std::optional<TOOLBAR_CONFIGURATION> DefaultTopMainToolbarConfig() override;
-
     void UpdateToolbarControlSizes() override;
 
     void SetPageSettings(const PAGE_INFO&) override;

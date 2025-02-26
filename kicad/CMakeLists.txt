@@ -44,6 +44,7 @@ set( KICAD_SRCS
     project_tree.cpp
     project_tree_item.cpp
     update_manager.cpp
+    toolbars_kicad_manager.cpp
     tools/kicad_manager_actions.cpp
     tools/kicad_manager_control.cpp
     )

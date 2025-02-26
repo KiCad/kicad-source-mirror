@@ -54,6 +54,7 @@
 #include <tools/pcb_editor_conditions.h>  // Shared conditions with other Pcbnew frames
 #include <tools/pcb_viewer_tools.h>       // shared tools with other Pcbnew frames
 #include <tools/cvpcb_fpviewer_selection_tool.h>
+#include <toolbars_display_footprints.h>
 #include <wx/choice.h>
 #include <wx/debug.h>
 #include <cvpcb_id.h>
@@ -114,6 +115,8 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     m_toolManager->InitTools();
 
     setupUIConditions();
+
+    m_toolbarSettings = std::make_unique<DISPLAY_FOOTPRINTS_TOOLBAR_SETTINGS>();
     configureToolbars();
     RecreateToolbars();
 
@@ -210,61 +213,6 @@ void DISPLAY_FOOTPRINTS_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::graphicsOutlines, CHECK( !cond.GraphicsFillDisplay() ) );
     mgr->SetConditions( PCB_ACTIONS::fpAutoZoom,       CHECK( cond.FootprintViewerAutoZoom() ) );
 #undef CHECK
-}
-
-
-std::optional<TOOLBAR_CONFIGURATION> DISPLAY_FOOTPRINTS_FRAME::DefaultLeftToolbarConfig()
-{
-    TOOLBAR_CONFIGURATION config;
-
-    // clang-format off
-    config.AppendAction( ACTIONS::selectionTool )
-          .AppendAction( ACTIONS::measureTool );
-
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::toggleGrid )
-          .AppendAction( ACTIONS::togglePolarCoords )
-          .AppendAction( ACTIONS::inchesUnits )
-          .AppendAction( ACTIONS::milsUnits )
-          .AppendAction( ACTIONS::millimetersUnits )
-          .AppendAction( ACTIONS::toggleCursorStyle );
-
-    config.AppendSeparator()
-          .AppendAction( PCB_ACTIONS::showPadNumbers )
-          .AppendAction( PCB_ACTIONS::padDisplayMode )
-          .AppendAction( PCB_ACTIONS::textOutlines )
-          .AppendAction( PCB_ACTIONS::graphicsOutlines );
-
-    // clang-format on
-    return config;
-}
-
-
-std::optional<TOOLBAR_CONFIGURATION> DISPLAY_FOOTPRINTS_FRAME::DefaultTopMainToolbarConfig()
-{
-    TOOLBAR_CONFIGURATION config;
-
-    // clang-format off
-    config.AppendAction( ACTIONS::zoomRedraw )
-          .AppendAction( ACTIONS::zoomInCenter )
-          .AppendAction( ACTIONS::zoomOutCenter )
-          .AppendAction( ACTIONS::zoomFitScreen )
-          .AppendAction( ACTIONS::zoomTool );
-
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::show3DViewer );
-
-    config.AppendSeparator()
-          .AppendControl( m_tbGridSelectName );
-
-    config.AppendSeparator()
-          .AppendControl( m_tbZoomSelectName );
-
-    config.AppendSeparator()
-          .AppendAction( PCB_ACTIONS::fpAutoZoom );
-
-    // clang-format on
-    return config;
 }
 
 

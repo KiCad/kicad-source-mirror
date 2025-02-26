@@ -104,6 +104,7 @@
 #include <widgets/wx_aui_utils.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <project/project_local_settings.h>
+#include <toolbars_sch_editor.h>
 
 #ifdef KICAD_IPC_API
 #include <api/api_plugin_manager.h>
@@ -190,6 +191,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     setupUIConditions();
     ReCreateMenuBar();
 
+    m_toolbarSettings = std::make_unique<SCH_EDIT_TOOLBAR_SETTINGS>();
     configureToolbars();
     RecreateToolbars();
 

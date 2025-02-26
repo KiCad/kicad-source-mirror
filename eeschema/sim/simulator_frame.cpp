@@ -57,6 +57,7 @@
 #include <sim/simulator_reporter.h>
 #include <eeschema_settings.h>
 #include <advanced_config.h>
+#include <sim/toolbars_simulator_frame.h>
 
 #include <memory>
 
@@ -168,6 +169,8 @@ SIMULATOR_FRAME::SIMULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // was created.
     m_tbTopMain->SetToolManager( m_toolManager );
 
+    m_toolbarSettings = std::make_unique<SIMULATOR_TOOLBAR_SETTINGS>();
+    configureToolbars();
     RecreateToolbars();
     ReCreateMenuBar();
 

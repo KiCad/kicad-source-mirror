@@ -116,6 +116,7 @@
 #include <view/wx_view_controls.h>
 #include <footprint_viewer_frame.h>
 #include <footprint_chooser_frame.h>
+#include <toolbars_pcb_editor.h>
 
 #ifdef KICAD_IPC_API
 #include <api/api_server.h>
@@ -266,8 +267,12 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     setupTools();
     setupUIConditions();
+
+    m_toolbarSettings = std::make_unique<PCB_EDIT_TOOLBAR_SETTINGS>();
     configureToolbars();
     RecreateToolbars();
+    PrepareLayerIndicator( true );
+
     ReCreateMenuBar();
 
 #ifdef KICAD_IPC_API

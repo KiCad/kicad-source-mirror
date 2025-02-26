@@ -58,7 +58,7 @@
 #include <widgets/wx_aui_utils.h>
 #include <wx/wupdlock.h>
 #include <wx/combobox.h>
-
+#include <toolbars_pcb_editor.h>
 #include <settings/settings_manager.h>
 
 #include "../scripting/python_scripting.h"
@@ -120,252 +120,238 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
 }
 
 
-std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_FRAME::DefaultLeftToolbarConfig()
+ACTION_TOOLBAR_CONTROL PCB_ACTION_TOOLBAR_CONTROLS::trackWidth( "control.PCBTrackWidth", _( "Track width selector" ),
+                                                                _( "Control to select the track width" ) );
+ACTION_TOOLBAR_CONTROL PCB_ACTION_TOOLBAR_CONTROLS::viaDiameter( "control.PCBViaDia", _( "Via diameter selector" ),
+                                                                 _( "Control to select the via diameter" ) );
+
+
+std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarConfig( TOOLBAR_LOC aToolbar )
 {
     TOOLBAR_CONFIGURATION config;
 
     // clang-format off
-    config.AppendAction( ACTIONS::toggleGrid )
-          .AppendAction( ACTIONS::toggleGridOverrides )
-          .AppendAction( PCB_ACTIONS::togglePolarCoords )
-          .AppendAction( ACTIONS::inchesUnits )
-          .AppendAction( ACTIONS::milsUnits )
-          .AppendAction( ACTIONS::millimetersUnits )
-          .AppendAction( ACTIONS::toggleCursorStyle );
-
-    config.AppendSeparator()
-          .AppendAction( PCB_ACTIONS::toggleHV45Mode );
-
-    config.AppendSeparator()
-          .AppendAction( PCB_ACTIONS::showRatsnest )
-          .AppendAction( PCB_ACTIONS::ratsnestLineMode );
-
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::highContrastMode )
-          .AppendAction( PCB_ACTIONS::toggleNetHighlight );
-
-    config.AppendSeparator()
-          .AppendAction( PCB_ACTIONS::zoneDisplayFilled )
-          .AppendAction( PCB_ACTIONS::zoneDisplayOutline );
-
-    if( ADVANCED_CFG::GetCfg().m_ExtraZoneDisplayModes )
+    switch( aToolbar )
     {
-        config.AppendAction( PCB_ACTIONS::zoneDisplayFractured );
-        config.AppendAction( PCB_ACTIONS::zoneDisplayTriangulated );
-    }
+    case TOOLBAR_LOC::LEFT:
+        config.AppendAction( ACTIONS::toggleGrid )
+              .AppendAction( ACTIONS::toggleGridOverrides )
+              .AppendAction( PCB_ACTIONS::togglePolarCoords )
+              .AppendAction( ACTIONS::inchesUnits )
+              .AppendAction( ACTIONS::milsUnits )
+              .AppendAction( ACTIONS::millimetersUnits )
+              .AppendAction( ACTIONS::toggleCursorStyle );
 
-    config.AppendSeparator()
-          .AppendAction( PCB_ACTIONS::padDisplayMode )
-          .AppendAction( PCB_ACTIONS::viaDisplayMode )
-          .AppendAction( PCB_ACTIONS::trackDisplayMode );
+        config.AppendSeparator()
+              .AppendAction( PCB_ACTIONS::toggleHV45Mode );
 
-    if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
-        config.AppendAction( ACTIONS::toggleBoundingBoxes );
+        config.AppendSeparator()
+              .AppendAction( PCB_ACTIONS::showRatsnest )
+              .AppendAction( PCB_ACTIONS::ratsnestLineMode );
 
-    // Tools to show/hide toolbars:
-    config.AppendSeparator()
-          .AppendAction( PCB_ACTIONS::showLayersManager )
-          .AppendAction( ACTIONS::showProperties );
+        config.AppendSeparator()
+              .AppendAction( ACTIONS::highContrastMode )
+              .AppendAction( PCB_ACTIONS::toggleNetHighlight );
 
-    /* TODO (ISM): Support context menus in toolbars
-    PCB_SELECTION_TOOL*          selTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
-    std::unique_ptr<ACTION_MENU> gridMenu = std::make_unique<ACTION_MENU>( false, selTool );
-    gridMenu->Add( ACTIONS::gridProperties );
-    gridMenu->Add( ACTIONS::gridOrigin );
-    m_tbLeft->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
+        config.AppendSeparator()
+              .AppendAction( PCB_ACTIONS::zoneDisplayFilled )
+              .AppendAction( PCB_ACTIONS::zoneDisplayOutline );
+
+        if( ADVANCED_CFG::GetCfg().m_ExtraZoneDisplayModes )
+        {
+            config.AppendAction( PCB_ACTIONS::zoneDisplayFractured );
+            config.AppendAction( PCB_ACTIONS::zoneDisplayTriangulated );
+        }
+
+        config.AppendSeparator()
+              .AppendAction( PCB_ACTIONS::padDisplayMode )
+              .AppendAction( PCB_ACTIONS::viaDisplayMode )
+              .AppendAction( PCB_ACTIONS::trackDisplayMode );
+
+        if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
+            config.AppendAction( ACTIONS::toggleBoundingBoxes );
+
+        // Tools to show/hide toolbars:
+        config.AppendSeparator()
+              .AppendAction( PCB_ACTIONS::showLayersManager )
+              .AppendAction( ACTIONS::showProperties );
+
+        /* TODO (ISM): Support context menus in toolbars
+        PCB_SELECTION_TOOL*          selTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
+        std::unique_ptr<ACTION_MENU> gridMenu = std::make_unique<ACTION_MENU>( false, selTool );
+        gridMenu->Add( ACTIONS::gridProperties );
+        gridMenu->Add( ACTIONS::gridOrigin );
+        m_tbLeft->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
+        */
+        break;
+
+    case TOOLBAR_LOC::RIGHT:
+        config.AppendAction( ACTIONS::selectionTool )
+              .AppendAction( PCB_ACTIONS::localRatsnestTool );
+
+        config.AppendSeparator()
+              .AppendAction( PCB_ACTIONS::placeFootprint )
+              .AppendGroup( TOOLBAR_GROUP_CONFIG( "group.pcbRouting" )
+                            .AddAction( PCB_ACTIONS::routeSingleTrack )
+                            .AddAction( PCB_ACTIONS::routeDiffPair ) )
+              .AppendGroup( TOOLBAR_GROUP_CONFIG( "group.pcbTune" )
+                            .AddAction( PCB_ACTIONS::tuneSingleTrack )
+                            .AddAction( PCB_ACTIONS::tuneDiffPair )
+                            .AddAction( PCB_ACTIONS::tuneSkew ) )
+              .AppendAction( PCB_ACTIONS::drawVia )
+              .AppendAction( PCB_ACTIONS::drawZone )
+              .AppendAction( PCB_ACTIONS::drawRuleArea );
+
+        config.AppendSeparator()
+              .AppendAction( PCB_ACTIONS::drawLine )
+              .AppendAction( PCB_ACTIONS::drawArc )
+              .AppendAction( PCB_ACTIONS::drawRectangle )
+              .AppendAction( PCB_ACTIONS::drawCircle )
+              .AppendAction( PCB_ACTIONS::drawPolygon )
+              .AppendAction( PCB_ACTIONS::drawBezier )
+              .AppendAction( PCB_ACTIONS::placeReferenceImage )
+              .AppendAction( PCB_ACTIONS::placeText )
+              .AppendAction( PCB_ACTIONS::drawTextBox )
+              .AppendAction( PCB_ACTIONS::drawTable )
+              .AppendGroup( TOOLBAR_GROUP_CONFIG( "group.pcbDimensions" )
+                            .AddAction( PCB_ACTIONS::drawOrthogonalDimension )
+                            .AddAction( PCB_ACTIONS::drawAlignedDimension )
+                            .AddAction( PCB_ACTIONS::drawCenterDimension )
+                            .AddAction( PCB_ACTIONS::drawRadialDimension )
+                            .AddAction( PCB_ACTIONS::drawLeader ) )
+              .AppendAction( ACTIONS::deleteTool );
+
+        config.AppendSeparator()
+              .AppendGroup( TOOLBAR_GROUP_CONFIG( "group.pcbOrigins" )
+                            .AddAction( ACTIONS::gridSetOrigin )
+                            .AddAction( PCB_ACTIONS::tuneDiffPair )
+                            .AddAction( PCB_ACTIONS::drillOrigin ) )
+              .AppendAction( ACTIONS::measureTool );
+
+        /* TODO (ISM): Support context menus
+        PCB_SELECTION_TOOL* selTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
+
+        auto makeArcMenu = [&]()
+        {
+            std::unique_ptr<ACTION_MENU> arcMenu = std::make_unique<ACTION_MENU>( false, selTool );
+
+            arcMenu->Add( PCB_ACTIONS::pointEditorArcKeepCenter, ACTION_MENU::CHECK );
+            arcMenu->Add( PCB_ACTIONS::pointEditorArcKeepEndpoint, ACTION_MENU::CHECK );
+
+            return arcMenu;
+        };
+
+        m_tbRight->AddToolContextMenu( PCB_ACTIONS::drawArc, makeArcMenu() );
+
+        auto makeRouteMenu = [&]()
+        {
+            std::unique_ptr<ACTION_MENU> routeMenu = std::make_unique<ACTION_MENU>( false, selTool );
+
+            routeMenu->Add( PCB_ACTIONS::routerHighlightMode, ACTION_MENU::CHECK );
+            routeMenu->Add( PCB_ACTIONS::routerShoveMode, ACTION_MENU::CHECK );
+            routeMenu->Add( PCB_ACTIONS::routerWalkaroundMode, ACTION_MENU::CHECK );
+
+            routeMenu->AppendSeparator();
+            routeMenu->Add( PCB_ACTIONS::routerSettingsDialog );
+
+            return routeMenu;
+        };
+
+        m_tbRight->AddToolContextMenu( PCB_ACTIONS::routeSingleTrack, makeRouteMenu() );
+        m_tbRight->AddToolContextMenu( PCB_ACTIONS::routeDiffPair, makeRouteMenu() );
+
+        std::unique_ptr<ACTION_MENU> zoneMenu = std::make_unique<ACTION_MENU>( false, selTool );
+        zoneMenu->Add( PCB_ACTIONS::zoneFillAll );
+        zoneMenu->Add( PCB_ACTIONS::zoneUnfillAll );
+        m_tbRight->AddToolContextMenu( PCB_ACTIONS::drawZone, std::move( zoneMenu ) );
+
+        std::unique_ptr<ACTION_MENU> lineMenu = std::make_unique<ACTION_MENU>( false, selTool );
+        m_tbRight->AddToolContextMenu( PCB_ACTIONS::drawLine, std::move( lineMenu ) );
     */
+        break;
 
-    // clang-format on
-    return config;
-}
+    case TOOLBAR_LOC::TOP_MAIN:
+        if( Kiface().IsSingle() )
+        {
+            config.AppendAction( ACTIONS::doNew );
+            config.AppendAction( ACTIONS::open );
+        }
 
+        config.AppendAction( ACTIONS::save );
 
-std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_FRAME::DefaultRightToolbarConfig()
-{
-    TOOLBAR_CONFIGURATION config;
+        config.AppendSeparator()
+              .AppendAction( PCB_ACTIONS::boardSetup );
 
-    // clang-format off
-    config.AppendAction( ACTIONS::selectionTool )
-          .AppendAction( PCB_ACTIONS::localRatsnestTool );
+        config.AppendSeparator()
+              .AppendAction( ACTIONS::pageSettings )
+              .AppendAction( ACTIONS::print )
+              .AppendAction( ACTIONS::plot );
 
-    config.AppendSeparator()
-          .AppendAction( PCB_ACTIONS::placeFootprint )
-          .AppendGroup( TOOLBAR_GROUP_CONFIG( "group.pcbRouting" )
-                        .AddAction( PCB_ACTIONS::routeSingleTrack )
-                        .AddAction( PCB_ACTIONS::routeDiffPair ) )
-          .AppendGroup( TOOLBAR_GROUP_CONFIG( "group.pcbTune" )
-                        .AddAction( PCB_ACTIONS::tuneSingleTrack )
-                        .AddAction( PCB_ACTIONS::tuneDiffPair )
-                        .AddAction( PCB_ACTIONS::tuneSkew ) )
-          .AppendAction( PCB_ACTIONS::drawVia )
-          .AppendAction( PCB_ACTIONS::drawZone )
-          .AppendAction( PCB_ACTIONS::drawRuleArea );
+        config.AppendSeparator()
+              .AppendAction( ACTIONS::undo )
+              .AppendAction( ACTIONS::redo );
 
-    config.AppendSeparator()
-          .AppendAction( PCB_ACTIONS::drawLine )
-          .AppendAction( PCB_ACTIONS::drawArc )
-          .AppendAction( PCB_ACTIONS::drawRectangle )
-          .AppendAction( PCB_ACTIONS::drawCircle )
-          .AppendAction( PCB_ACTIONS::drawPolygon )
-          .AppendAction( PCB_ACTIONS::drawBezier )
-          .AppendAction( PCB_ACTIONS::placeReferenceImage )
-          .AppendAction( PCB_ACTIONS::placeText )
-          .AppendAction( PCB_ACTIONS::drawTextBox )
-          .AppendAction( PCB_ACTIONS::drawTable )
-          .AppendGroup( TOOLBAR_GROUP_CONFIG( "group.pcbDimensions" )
-                        .AddAction( PCB_ACTIONS::drawOrthogonalDimension )
-                        .AddAction( PCB_ACTIONS::drawAlignedDimension )
-                        .AddAction( PCB_ACTIONS::drawCenterDimension )
-                        .AddAction( PCB_ACTIONS::drawRadialDimension )
-                        .AddAction( PCB_ACTIONS::drawLeader ) )
-          .AppendAction( ACTIONS::deleteTool );
+        config.AppendSeparator()
+              .AppendAction( ACTIONS::find );
 
-    config.AppendSeparator()
-          .AppendGroup( TOOLBAR_GROUP_CONFIG( "group.pcbOrigins" )
-                        .AddAction( ACTIONS::gridSetOrigin )
-                        .AddAction( PCB_ACTIONS::tuneDiffPair )
-                        .AddAction( PCB_ACTIONS::drillOrigin ) )
-          .AppendAction( ACTIONS::measureTool );
+        config.AppendSeparator()
+              .AppendAction( ACTIONS::zoomRedraw )
+              .AppendAction( ACTIONS::zoomInCenter )
+              .AppendAction( ACTIONS::zoomOutCenter )
+              .AppendAction( ACTIONS::zoomFitScreen )
+              .AppendAction( ACTIONS::zoomFitObjects )
+              .AppendAction( ACTIONS::zoomTool );
 
-    /* TODO (ISM): Support context menus
-    PCB_SELECTION_TOOL* selTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
+        config.AppendSeparator()
+              .AppendAction( PCB_ACTIONS::rotateCcw )
+              .AppendAction( PCB_ACTIONS::rotateCw )
+              .AppendAction( PCB_ACTIONS::mirrorV )
+              .AppendAction( PCB_ACTIONS::mirrorH )
+              .AppendAction( PCB_ACTIONS::group )
+              .AppendAction( PCB_ACTIONS::ungroup )
+              .AppendAction( PCB_ACTIONS::lock )
+              .AppendAction( PCB_ACTIONS::unlock );
 
-    auto makeArcMenu = [&]()
-    {
-        std::unique_ptr<ACTION_MENU> arcMenu = std::make_unique<ACTION_MENU>( false, selTool );
+        config.AppendSeparator()
+              .AppendAction( ACTIONS::showFootprintEditor )
+              .AppendAction( ACTIONS::showFootprintBrowser )
+              .AppendAction( ACTIONS::show3DViewer );
 
-        arcMenu->Add( PCB_ACTIONS::pointEditorArcKeepCenter, ACTION_MENU::CHECK );
-        arcMenu->Add( PCB_ACTIONS::pointEditorArcKeepEndpoint, ACTION_MENU::CHECK );
+        config.AppendSeparator();
 
-        return arcMenu;
-    };
+        if( !Kiface().IsSingle() )
+            config.AppendAction( ACTIONS::updatePcbFromSchematic );
+        else
+            config.AppendAction( PCB_ACTIONS::importNetlist );
 
-    m_tbRight->AddToolContextMenu( PCB_ACTIONS::drawArc, makeArcMenu() );
+        config.AppendAction( PCB_ACTIONS::runDRC );
 
-    auto makeRouteMenu = [&]()
-    {
-        std::unique_ptr<ACTION_MENU> routeMenu = std::make_unique<ACTION_MENU>( false, selTool );
+        config.AppendSeparator()
+              .AppendAction( PCB_ACTIONS::showEeschema );
 
-        routeMenu->Add( PCB_ACTIONS::routerHighlightMode, ACTION_MENU::CHECK );
-        routeMenu->Add( PCB_ACTIONS::routerShoveMode, ACTION_MENU::CHECK );
-        routeMenu->Add( PCB_ACTIONS::routerWalkaroundMode, ACTION_MENU::CHECK );
+        config.AppendControl( ACTION_TOOLBAR_CONTROLS::ipcScripting );
 
-        routeMenu->AppendSeparator();
-        routeMenu->Add( PCB_ACTIONS::routerSettingsDialog );
+        break;
 
-        return routeMenu;
-    };
+    case TOOLBAR_LOC::TOP_AUX:
+        config.AppendControl( PCB_ACTION_TOOLBAR_CONTROLS::trackWidth )
+              .AppendAction( PCB_ACTIONS::autoTrackWidth );
 
-    m_tbRight->AddToolContextMenu( PCB_ACTIONS::routeSingleTrack, makeRouteMenu() );
-    m_tbRight->AddToolContextMenu( PCB_ACTIONS::routeDiffPair, makeRouteMenu() );
+        config.AppendSeparator()
+              .AppendControl( PCB_ACTION_TOOLBAR_CONTROLS::viaDiameter );
 
-    std::unique_ptr<ACTION_MENU> zoneMenu = std::make_unique<ACTION_MENU>( false, selTool );
-    zoneMenu->Add( PCB_ACTIONS::zoneFillAll );
-    zoneMenu->Add( PCB_ACTIONS::zoneUnfillAll );
-    m_tbRight->AddToolContextMenu( PCB_ACTIONS::drawZone, std::move( zoneMenu ) );
+        config.AppendSeparator()
+              .AppendControl( ACTION_TOOLBAR_CONTROLS::layerSelector )
+              .AppendAction( PCB_ACTIONS::selectLayerPair );
 
-    std::unique_ptr<ACTION_MENU> lineMenu = std::make_unique<ACTION_MENU>( false, selTool );
-    m_tbRight->AddToolContextMenu( PCB_ACTIONS::drawLine, std::move( lineMenu ) );
-*/
+        config.AppendSeparator()
+              .AppendControl( ACTION_TOOLBAR_CONTROLS::gridSelect );
 
-    // clang-format on
-    return config;
-}
+        config.AppendSeparator()
+              .AppendControl( ACTION_TOOLBAR_CONTROLS::zoomSelect );
 
-
-std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_FRAME::DefaultTopMainToolbarConfig()
-{
-    TOOLBAR_CONFIGURATION config;
-
-    // clang-format off
-    if( Kiface().IsSingle() )
-    {
-        config.AppendAction( ACTIONS::doNew );
-        config.AppendAction( ACTIONS::open );
+        break;
     }
-
-    config.AppendAction( ACTIONS::save );
-
-    config.AppendSeparator()
-          .AppendAction( PCB_ACTIONS::boardSetup );
-
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::pageSettings )
-          .AppendAction( ACTIONS::print )
-          .AppendAction( ACTIONS::plot );
-
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::undo )
-          .AppendAction( ACTIONS::redo );
-
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::find );
-
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::zoomRedraw )
-          .AppendAction( ACTIONS::zoomInCenter )
-          .AppendAction( ACTIONS::zoomOutCenter )
-          .AppendAction( ACTIONS::zoomFitScreen )
-          .AppendAction( ACTIONS::zoomFitObjects )
-          .AppendAction( ACTIONS::zoomTool );
-
-    config.AppendSeparator()
-          .AppendAction( PCB_ACTIONS::rotateCcw )
-          .AppendAction( PCB_ACTIONS::rotateCw )
-          .AppendAction( PCB_ACTIONS::mirrorV )
-          .AppendAction( PCB_ACTIONS::mirrorH )
-          .AppendAction( PCB_ACTIONS::group )
-          .AppendAction( PCB_ACTIONS::ungroup )
-          .AppendAction( PCB_ACTIONS::lock )
-          .AppendAction( PCB_ACTIONS::unlock );
-
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::showFootprintEditor )
-          .AppendAction( ACTIONS::showFootprintBrowser )
-          .AppendAction( ACTIONS::show3DViewer );
-
-    config.AppendSeparator();
-
-    if( !Kiface().IsSingle() )
-        config.AppendAction( ACTIONS::updatePcbFromSchematic );
-    else
-        config.AppendAction( PCB_ACTIONS::importNetlist );
-
-    config.AppendAction( PCB_ACTIONS::runDRC );
-
-    config.AppendSeparator()
-          .AppendAction( PCB_ACTIONS::showEeschema );
-
-    config.AppendControl( "control.PCBPlugin" );
-
-    // clang-format on
-    return config;
-}
-
-
-std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_FRAME::DefaultTopAuxToolbarConfig()
-{
-    TOOLBAR_CONFIGURATION config;
-
-    // clang-format off
-    config.AppendControl( "control.PCBTrackWidth" )
-          .AppendAction( PCB_ACTIONS::autoTrackWidth );
-
-    config.AppendSeparator()
-          .AppendControl( "control.PCBViaDia" );
-
-    config.AppendSeparator()
-          .AppendControl( m_tbPcbLayerSelectorName )
-          .AppendAction( PCB_ACTIONS::selectLayerPair );
-
-    // TODO (ISM): Figure out this part
-    PrepareLayerIndicator( true );    // Force rebuild of the bitmap with the active layer colors
-
-    config.AppendSeparator()
-          .AppendControl( m_tbGridSelectName );
-
-    config.AppendSeparator()
-          .AppendControl( m_tbZoomSelectName );
 
     // clang-format on
     return config;
@@ -396,9 +382,7 @@ void PCB_EDIT_FRAME::configureToolbars()
             aToolbar->Add( m_SelTrackWidthBox );
         };
 
-    RegisterCustomToolbarControlFactory( "control.PCBTrackWidth", _( "Track width selector" ),
-                                         _( "Control to select the track width" ),
-                                         trackWidthSelectorFactory );
+    RegisterCustomToolbarControlFactory( PCB_ACTION_TOOLBAR_CONTROLS::trackWidth, trackWidthSelectorFactory );
 
 
     // Box to display and choose vias diameters
@@ -415,9 +399,7 @@ void PCB_EDIT_FRAME::configureToolbars()
             aToolbar->Add( m_SelViaSizeBox );
         };
 
-    RegisterCustomToolbarControlFactory( "control.PCBViaDia", _( "Via diameter selector" ),
-                                         _( "Control to select the via diameter" ),
-                                         viaDiaSelectorFactory );
+    RegisterCustomToolbarControlFactory( PCB_ACTION_TOOLBAR_CONTROLS::viaDiameter, viaDiaSelectorFactory );
 
     // IPC/Scripting plugin control
     // TODO (ISM): Clean this up to make IPC actions just normal tool actions to get rid of this entire
@@ -450,9 +432,7 @@ void PCB_EDIT_FRAME::configureToolbars()
             }
         };
 
-    RegisterCustomToolbarControlFactory( "control.PCBPlugin", _( "IPC/Scripting plugins" ),
-                                         _( "Region to hold the IPC/Scripting action buttons" ),
-                                         pluginControlFactory );
+    RegisterCustomToolbarControlFactory( ACTION_TOOLBAR_CONTROLS::ipcScripting, pluginControlFactory );
 
 /*
     TOOLBAR_SETTINGS tb( "pcbnew-toolbars" );

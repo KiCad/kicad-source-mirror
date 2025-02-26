@@ -199,11 +199,6 @@ public:
     void doCloseWindow() override;
     void OnExitKiCad( wxCommandEvent& event );
 
-    // Currently no top auxillary toolbar
-    std::optional<TOOLBAR_CONFIGURATION> DefaultLeftToolbarConfig() override;
-    std::optional<TOOLBAR_CONFIGURATION> DefaultRightToolbarConfig() override;
-    std::optional<TOOLBAR_CONFIGURATION> DefaultTopMainToolbarConfig() override;
-
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 

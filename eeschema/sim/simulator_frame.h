@@ -150,8 +150,6 @@ public:
 
     void ShowChangedLanguage() override;
 
-    std::optional<TOOLBAR_CONFIGURATION> DefaultTopMainToolbarConfig() override;
-
     /**
      * Load plot, signal, cursor, measurement, etc. settings from a file.
      */

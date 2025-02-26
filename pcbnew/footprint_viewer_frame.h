@@ -105,10 +105,6 @@ public:
 
     void HardRedraw() override;
 
-    // Toolbar defaults
-    std::optional<TOOLBAR_CONFIGURATION> DefaultLeftToolbarConfig() override;
-    std::optional<TOOLBAR_CONFIGURATION> DefaultTopMainToolbarConfig() override;
-
 protected:
     FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent );
 

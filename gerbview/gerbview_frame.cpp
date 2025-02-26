@@ -34,6 +34,7 @@
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <lset.h>
 #include <settings/settings_manager.h>
+#include <toolbars_gerber.h>
 #include <tool/tool_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/tool_dispatcher.h>
@@ -149,6 +150,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     setupUIConditions();
     ReCreateMenuBar();
 
+    m_toolbarSettings = std::make_unique<GERBVIEW_TOOLBAR_SETTINGS>();
     configureToolbars();
     RecreateToolbars();
 

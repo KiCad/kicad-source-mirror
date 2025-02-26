@@ -81,7 +81,7 @@ set(3D-VIEWER_SRCS
     3d_rendering/test_cases.cpp
     3d_rendering/trackball.cpp
     3d_viewer/3d_menubar.cpp
-    3d_viewer/3d_toolbar.cpp
+    3d_viewer/toolbars_3d.cpp
     3d_viewer/tools/eda_3d_actions.cpp
     3d_viewer/tools/eda_3d_conditions.cpp
     3d_viewer/tools/eda_3d_controller.cpp

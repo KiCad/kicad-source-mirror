@@ -34,91 +34,85 @@
 #include <tools/gerbview_actions.h>
 #include "widgets/gbr_layer_box_selector.h"
 #include "widgets/dcode_selection_box.h"
+#include <toolbars_gerber.h>
 
 
-std::optional<TOOLBAR_CONFIGURATION> GERBVIEW_FRAME::DefaultLeftToolbarConfig()
+std::optional<TOOLBAR_CONFIGURATION> GERBVIEW_TOOLBAR_SETTINGS::DefaultToolbarConfig( TOOLBAR_LOC aToolbar )
 {
     TOOLBAR_CONFIGURATION config;
 
     // clang-format off
-    config.AppendAction( ACTIONS::selectionTool )
-          .AppendAction( ACTIONS::measureTool );
+    switch( aToolbar )
+    {
+    // No right toolbar
+    case TOOLBAR_LOC::RIGHT:
+        return std::nullopt;
 
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::toggleGrid )
-          .AppendAction( ACTIONS::togglePolarCoords )
-          .AppendAction( ACTIONS::inchesUnits )
-          .AppendAction( ACTIONS::milsUnits )
-          .AppendAction( ACTIONS::millimetersUnits )
-          .AppendAction( ACTIONS::toggleCursorStyle );
+    case TOOLBAR_LOC::LEFT:
+        config.AppendAction( ACTIONS::selectionTool )
+              .AppendAction( ACTIONS::measureTool );
 
-    config.AppendSeparator()
-          .AppendAction( GERBVIEW_ACTIONS::flashedDisplayOutlines )
-          .AppendAction( GERBVIEW_ACTIONS::linesDisplayOutlines )
-          .AppendAction( GERBVIEW_ACTIONS::polygonsDisplayOutlines )
-          .AppendAction( GERBVIEW_ACTIONS::negativeObjectDisplay )
-          .AppendAction( GERBVIEW_ACTIONS::dcodeDisplay );
+        config.AppendSeparator()
+              .AppendAction( ACTIONS::toggleGrid )
+              .AppendAction( ACTIONS::togglePolarCoords )
+              .AppendAction( ACTIONS::inchesUnits )
+              .AppendAction( ACTIONS::milsUnits )
+              .AppendAction( ACTIONS::millimetersUnits )
+              .AppendAction( ACTIONS::toggleCursorStyle );
 
-    config.AppendSeparator()
-          .AppendAction( GERBVIEW_ACTIONS::toggleForceOpacityMode )
-          .AppendAction( GERBVIEW_ACTIONS::toggleXORMode )
-          .AppendAction( ACTIONS::highContrastMode )
-          .AppendAction( GERBVIEW_ACTIONS::flipGerberView );
+        config.AppendSeparator()
+              .AppendAction( GERBVIEW_ACTIONS::flashedDisplayOutlines )
+              .AppendAction( GERBVIEW_ACTIONS::linesDisplayOutlines )
+              .AppendAction( GERBVIEW_ACTIONS::polygonsDisplayOutlines )
+              .AppendAction( GERBVIEW_ACTIONS::negativeObjectDisplay )
+              .AppendAction( GERBVIEW_ACTIONS::dcodeDisplay );
 
-    config.AppendSeparator()
-          .AppendAction( GERBVIEW_ACTIONS::toggleLayerManager );
+        config.AppendSeparator()
+              .AppendAction( GERBVIEW_ACTIONS::toggleForceOpacityMode )
+              .AppendAction( GERBVIEW_ACTIONS::toggleXORMode )
+              .AppendAction( ACTIONS::highContrastMode )
+              .AppendAction( GERBVIEW_ACTIONS::flipGerberView );
 
-    // clang-format on
-    return config;
-}
+        config.AppendSeparator()
+              .AppendAction( GERBVIEW_ACTIONS::toggleLayerManager );
+        break;
 
+    case TOOLBAR_LOC::TOP_MAIN:
+        config.AppendAction( GERBVIEW_ACTIONS::clearAllLayers )
+              .AppendAction( GERBVIEW_ACTIONS::reloadAllLayers )
+              .AppendAction( GERBVIEW_ACTIONS::openAutodetected )
+              .AppendAction( GERBVIEW_ACTIONS::openGerber )
+              .AppendAction( GERBVIEW_ACTIONS::openDrillFile );
 
-std::optional<TOOLBAR_CONFIGURATION> GERBVIEW_FRAME::DefaultTopMainToolbarConfig()
-{
-    TOOLBAR_CONFIGURATION config;
+        config.AppendSeparator()
+              .AppendAction( ACTIONS::print );
 
-    // clang-format off
-    config.AppendAction( GERBVIEW_ACTIONS::clearAllLayers )
-          .AppendAction( GERBVIEW_ACTIONS::reloadAllLayers )
-          .AppendAction( GERBVIEW_ACTIONS::openAutodetected )
-          .AppendAction( GERBVIEW_ACTIONS::openGerber )
-          .AppendAction( GERBVIEW_ACTIONS::openDrillFile );
+        config.AppendSeparator()
+              .AppendAction( ACTIONS::zoomRedraw )
+              .AppendAction( ACTIONS::zoomInCenter )
+              .AppendAction( ACTIONS::zoomOutCenter )
+              .AppendAction( ACTIONS::zoomFitScreen )
+              .AppendAction( ACTIONS::zoomTool );
 
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::print );
+        config.AppendSeparator()
+              .AppendControl( ACTION_TOOLBAR_CONTROLS::layerSelector )
+              .AppendControl( GERBVIEW_ACTION_TOOLBAR_CONTROLS::textInfo );
+        break;
 
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::zoomRedraw )
-          .AppendAction( ACTIONS::zoomInCenter )
-          .AppendAction( ACTIONS::zoomOutCenter )
-          .AppendAction( ACTIONS::zoomFitScreen )
-          .AppendAction( ACTIONS::zoomTool );
-
-    config.AppendSeparator()
-          .AppendControl( "control.GerberLayerBox" )
-          .AppendControl( "control.GerberTextInfo" );
-
-    // clang-format on
-    return config;
-}
-
-
-std::optional<TOOLBAR_CONFIGURATION> GERBVIEW_FRAME::DefaultTopAuxToolbarConfig()
-{
-    TOOLBAR_CONFIGURATION config;
-
-    // clang-format off
-    config.AppendControl( "control.GerberComponentHighlight" )
-          .AppendSpacer( 5 )
-          .AppendControl( "control.GerberNetHighlight" )
-          .AppendSpacer( 5 )
-          .AppendControl( "control.GerberAppertureHighlight" )
-          .AppendSpacer( 5 )
-          .AppendControl( "control.GerberDcodeSelector" )
-          .AppendSeparator()
-          .AppendControl( m_tbGridSelectName )
-          .AppendSeparator()
-          .AppendControl( m_tbZoomSelectName );
+    case TOOLBAR_LOC::TOP_AUX:
+        config.AppendControl( GERBVIEW_ACTION_TOOLBAR_CONTROLS::componentHighlight )
+              .AppendSpacer( 5 )
+              .AppendControl( GERBVIEW_ACTION_TOOLBAR_CONTROLS::netHighlight )
+              .AppendSpacer( 5 )
+              .AppendControl( GERBVIEW_ACTION_TOOLBAR_CONTROLS::appertureHighlight )
+              .AppendSpacer( 5 )
+              .AppendControl( GERBVIEW_ACTION_TOOLBAR_CONTROLS::dcodeSelector )
+              .AppendSeparator()
+              .AppendControl( ACTION_TOOLBAR_CONTROLS::gridSelect )
+              .AppendSeparator()
+              .AppendControl( ACTION_TOOLBAR_CONTROLS::zoomSelect );
+        break;
+    }
 
     // clang-format on
     return config;
@@ -157,8 +151,7 @@ void GERBVIEW_FRAME::configureToolbars()
                             m_SelLayerBox->GetId() );
         };
 
-    RegisterCustomToolbarControlFactory("control.GerberLayerBox", _( "Layer selector widget" ),
-                            _( "Layer selection" ), layerBoxFactory );
+    RegisterCustomToolbarControlFactory( ACTION_TOOLBAR_CONTROLS::layerSelector, layerBoxFactory );
 
 
     auto textInfoFactory =
@@ -173,8 +166,7 @@ void GERBVIEW_FRAME::configureToolbars()
             aToolbar->Add( m_TextInfo );
         };
 
-    RegisterCustomToolbarControlFactory("control.GerberTextInfo", _( "Text info entry" ),
-                                            _( "Text info entry" ), textInfoFactory );
+    RegisterCustomToolbarControlFactory( GERBVIEW_ACTION_TOOLBAR_CONTROLS::textInfo, textInfoFactory );
 
 
     // Creates box to display and choose components:
@@ -198,10 +190,7 @@ void GERBVIEW_FRAME::configureToolbars()
             aToolbar->Add( m_SelComponentBox );
         };
 
-    RegisterCustomToolbarControlFactory( "control.GerberComponentHighlight",
-                                         _( "Component highlight" ),
-                                         _( "Highlight items belonging to this component" ),
-                                         componentBoxFactory );
+    RegisterCustomToolbarControlFactory( GERBVIEW_ACTION_TOOLBAR_CONTROLS::componentHighlight, componentBoxFactory );
 
 
     // Creates choice box to display net names and highlight selected:
@@ -223,8 +212,7 @@ void GERBVIEW_FRAME::configureToolbars()
             aToolbar->Add( m_SelNetnameBox );
         };
 
-    RegisterCustomToolbarControlFactory( "control.GerberNetHighlight", _( "Net highlight" ),
-                                         _( "Highlight items belonging to this net" ), netBoxFactory );
+    RegisterCustomToolbarControlFactory( GERBVIEW_ACTION_TOOLBAR_CONTROLS::netHighlight, netBoxFactory );
 
 
     // Creates choice box to display aperture attributes and highlight selected:
@@ -249,9 +237,7 @@ void GERBVIEW_FRAME::configureToolbars()
             aToolbar->Add( m_SelAperAttributesBox );
         };
 
-    RegisterCustomToolbarControlFactory( "control.GerberAppertureHighlight", _( "Aperture highlight" ),
-                                         _( "Highlight items with this aperture attribute" ),
-                                         appertureBoxFactory );
+    RegisterCustomToolbarControlFactory( GERBVIEW_ACTION_TOOLBAR_CONTROLS::appertureHighlight, appertureBoxFactory );
 
 
     // D-code selection
@@ -276,10 +262,20 @@ void GERBVIEW_FRAME::configureToolbars()
             aToolbar->Add( m_DCodeSelector );
         };
 
-    RegisterCustomToolbarControlFactory( "control.GerberDcodeSelector", _( "DCode Selector" ),
-                                         _( "Select all items with the selected DCode" ),
-                                         dcodeSelectorFactory );
+    RegisterCustomToolbarControlFactory( GERBVIEW_ACTION_TOOLBAR_CONTROLS::dcodeSelector, dcodeSelectorFactory );
 }
+
+ACTION_TOOLBAR_CONTROL GERBVIEW_ACTION_TOOLBAR_CONTROLS::textInfo( "control.TextInfo", _( "Text info entry" ),
+                                                                   _( "Text info entry" ) );
+ACTION_TOOLBAR_CONTROL GERBVIEW_ACTION_TOOLBAR_CONTROLS::componentHighlight( "control.ComponentHighlight",
+                                                                             _( "Component highlight" ),
+                                                                             _( "Highlight items belonging to this component" ) );
+ACTION_TOOLBAR_CONTROL GERBVIEW_ACTION_TOOLBAR_CONTROLS::netHighlight( "control.NetHighlight", _( "Net highlight" ),
+                                                                       _( "Highlight items belonging to this net" ) );
+ACTION_TOOLBAR_CONTROL GERBVIEW_ACTION_TOOLBAR_CONTROLS::appertureHighlight( "control.AppertureHighlight", _( "Aperture highlight" ),
+                                                                             _( "Highlight items with this aperture attribute" ));
+ACTION_TOOLBAR_CONTROL GERBVIEW_ACTION_TOOLBAR_CONTROLS::dcodeSelector( "control.GerberDcodeSelector", _( "DCode Selector" ),
+                                                                        _( "Select all items with the selected DCode" ) );
 
 
 #define NO_SELECTION_STRING _("<No selection>")

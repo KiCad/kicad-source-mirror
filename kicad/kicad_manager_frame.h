@@ -194,9 +194,6 @@ public:
     // Used only on Windows: stores the info message about file watcher
     wxString m_FileWatcherInfo;
 
-    // Toolbar defaults
-    std::optional<TOOLBAR_CONFIGURATION> DefaultLeftToolbarConfig() override;
-
     DECLARE_EVENT_TABLE()
 
 protected:

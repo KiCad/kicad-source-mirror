@@ -28,87 +28,81 @@
 
 #include "pl_editor_id.h"
 #include "pl_editor_frame.h"
+#include <toolbars_pl_editor.h>
 
 
-std::optional<TOOLBAR_CONFIGURATION> PL_EDITOR_FRAME::DefaultLeftToolbarConfig()
+std::optional<TOOLBAR_CONFIGURATION> PL_EDITOR_TOOLBAR_SETTINGS::DefaultToolbarConfig( TOOLBAR_LOC aToolbar )
 {
     TOOLBAR_CONFIGURATION config;
 
     // clang-format off
-    config.AppendAction( ACTIONS::toggleGrid )
-          .AppendAction( ACTIONS::inchesUnits )
-          .AppendAction( ACTIONS::milsUnits )
-          .AppendAction( ACTIONS::millimetersUnits );
+    switch( aToolbar )
+    {
+    // No aux toolbar
+    case TOOLBAR_LOC::TOP_AUX:
+        return std::nullopt;
 
-    /* TODO: Implement context menus
-    PL_SELECTION_TOOL*           selTool = m_toolManager->GetTool<PL_SELECTION_TOOL>();
-    std::unique_ptr<ACTION_MENU> gridMenu = std::make_unique<ACTION_MENU>( false, selTool );
-    gridMenu->Add( ACTIONS::gridProperties );
-    m_tbLeft->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
-    */
+    case TOOLBAR_LOC::LEFT:
+        config.AppendAction( ACTIONS::toggleGrid )
+              .AppendAction( ACTIONS::inchesUnits )
+              .AppendAction( ACTIONS::milsUnits )
+              .AppendAction( ACTIONS::millimetersUnits );
 
-    // clang-format on
-    return config;
-}
+        /* TODO: Implement context menus
+        PL_SELECTION_TOOL*           selTool = m_toolManager->GetTool<PL_SELECTION_TOOL>();
+        std::unique_ptr<ACTION_MENU> gridMenu = std::make_unique<ACTION_MENU>( false, selTool );
+        gridMenu->Add( ACTIONS::gridProperties );
+        m_tbLeft->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
+        */
+        break;
 
+    case TOOLBAR_LOC::RIGHT:
+        config.AppendAction( ACTIONS::selectionTool );
 
-std::optional<TOOLBAR_CONFIGURATION> PL_EDITOR_FRAME::DefaultRightToolbarConfig()
-{
-    TOOLBAR_CONFIGURATION config;
+        config.AppendSeparator()
+              .AppendAction( PL_ACTIONS::drawLine )
+              .AppendAction( PL_ACTIONS::drawRectangle )
+              .AppendAction( PL_ACTIONS::placeText )
+              .AppendAction( PL_ACTIONS::placeImage )
+              .AppendAction( PL_ACTIONS::appendImportedDrawingSheet );
 
-    // clang-format off
-    config.AppendAction( ACTIONS::selectionTool );
+        config.AppendSeparator()
+              .AppendAction( ACTIONS::deleteTool );
+        break;
 
-    config.AppendSeparator()
-          .AppendAction( PL_ACTIONS::drawLine )
-          .AppendAction( PL_ACTIONS::drawRectangle )
-          .AppendAction( PL_ACTIONS::placeText )
-          .AppendAction( PL_ACTIONS::placeImage )
-          .AppendAction( PL_ACTIONS::appendImportedDrawingSheet );
+    case TOOLBAR_LOC::TOP_MAIN:
+        config.AppendAction( ACTIONS::doNew )
+              .AppendAction( ACTIONS::open )
+              .AppendAction( ACTIONS::save );
 
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::deleteTool );
+        config.AppendSeparator()
+              .AppendAction( ACTIONS::print );
 
-    // clang-format on
-    return config;
-}
+        config.AppendSeparator()
+              .AppendAction( ACTIONS::undo )
+              .AppendAction( ACTIONS::redo );
 
+        config.AppendSeparator()
+              .AppendAction( ACTIONS::zoomRedraw )
+              .AppendAction( ACTIONS::zoomInCenter )
+              .AppendAction( ACTIONS::zoomOutCenter )
+              .AppendAction( ACTIONS::zoomFitScreen )
+              .AppendAction( ACTIONS::zoomTool );
 
-std::optional<TOOLBAR_CONFIGURATION> PL_EDITOR_FRAME::DefaultTopMainToolbarConfig()
-{
-    TOOLBAR_CONFIGURATION config;
+        config.AppendSeparator()
+              .AppendAction( PL_ACTIONS::showInspector )
+              .AppendAction( PL_ACTIONS::previewSettings );
 
-    // clang-format off
-    config.AppendAction( ACTIONS::doNew )
-          .AppendAction( ACTIONS::open )
-          .AppendAction( ACTIONS::save );
+        // Display mode switch
+        config.AppendSeparator()
+              .AppendAction( PL_ACTIONS::layoutNormalMode )
+              .AppendAction( PL_ACTIONS::layoutEditMode );
 
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::print );
-
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::undo )
-          .AppendAction( ACTIONS::redo );
-
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::zoomRedraw )
-          .AppendAction( ACTIONS::zoomInCenter )
-          .AppendAction( ACTIONS::zoomOutCenter )
-          .AppendAction( ACTIONS::zoomFitScreen )
-          .AppendAction( ACTIONS::zoomTool );
-
-    config.AppendSeparator()
-          .AppendAction( PL_ACTIONS::showInspector )
-          .AppendAction( PL_ACTIONS::previewSettings );
-
-    // Display mode switch
-    config.AppendSeparator()
-          .AppendAction( PL_ACTIONS::layoutNormalMode )
-          .AppendAction( PL_ACTIONS::layoutEditMode );
-
-    config.AppendSeparator()
-          .AppendControl( "control.PLEditorOrigin" )
-          .AppendControl( "control.PLEditorPageSelect" );
+        config.AppendSeparator()
+              .AppendControl( PL_EDITOR_ACTION_TOOLBAR_CONTROLS::originSelector )
+              .AppendControl( PL_EDITOR_ACTION_TOOLBAR_CONTROLS::pageSelect );
+        break;
+    }
 
     // clang-format on
     return config;
@@ -134,9 +128,7 @@ void PL_EDITOR_FRAME::configureToolbars()
             aToolbar->Add(  m_originSelectBox );
         };
 
-    RegisterCustomToolbarControlFactory( "control.PLEditorOrigin", _( "Origin Selector" ),
-                                         _( "Select the origin of the status bar coordinates" ),
-                                         originSelectorFactory );
+    RegisterCustomToolbarControlFactory( PL_EDITOR_ACTION_TOOLBAR_CONTROLS::originSelector, originSelectorFactory );
 
 
     auto pageSelectorFactory =
@@ -161,10 +153,15 @@ void PL_EDITOR_FRAME::configureToolbars()
             aToolbar->Add( m_pageSelectBox );
         };
 
-    RegisterCustomToolbarControlFactory( "control.PLEditorPageSelect", _( "Page Selector" ),
-                                         _( "Select the page to simulate item displays" ),
-                                         pageSelectorFactory );
+    RegisterCustomToolbarControlFactory( PL_EDITOR_ACTION_TOOLBAR_CONTROLS::pageSelect, pageSelectorFactory );
 }
+
+
+ACTION_TOOLBAR_CONTROL PL_EDITOR_ACTION_TOOLBAR_CONTROLS::originSelector( "control.OriginSelector", _( "Origin Selector" ),
+                                                                          _( "Select the origin of the status bar coordinates" ) );
+ACTION_TOOLBAR_CONTROL PL_EDITOR_ACTION_TOOLBAR_CONTROLS::pageSelect( "control.PageSelect", _( "Page Selector" ),
+                                                                      _( "Select the page to simulate item displays" ));
+
 
 
 void PL_EDITOR_FRAME::UpdateToolbarControlSizes()

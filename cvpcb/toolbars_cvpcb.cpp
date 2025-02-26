@@ -19,6 +19,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <toolbars_cvpcb.h>
+
 #include <tool/action_toolbar.h>
 #include <tool/actions.h>
 
@@ -30,33 +32,43 @@
 #include <settings/settings_manager.h>
 
 
-std::optional<TOOLBAR_CONFIGURATION> CVPCB_MAINFRAME::DefaultTopMainToolbarConfig()
+std::optional<TOOLBAR_CONFIGURATION> CVPCB_TOOLBAR_SETTINGS::DefaultToolbarConfig( TOOLBAR_LOC aToolbar )
 {
     TOOLBAR_CONFIGURATION config;
 
     // clang-format off
-    config.AppendAction( CVPCB_ACTIONS::saveAssociationsToSchematic );
+    switch( aToolbar )
+    {
+    case TOOLBAR_LOC::LEFT:
+    case TOOLBAR_LOC::RIGHT:
+    case TOOLBAR_LOC::TOP_AUX:
+        return std::nullopt;
 
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::showFootprintLibTable );
+    case TOOLBAR_LOC::TOP_MAIN:
+        config.AppendAction( CVPCB_ACTIONS::saveAssociationsToSchematic );
 
-    config.AppendSeparator()
-          .AppendAction( CVPCB_ACTIONS::showFootprintViewer );
+        config.AppendSeparator()
+              .AppendAction( ACTIONS::showFootprintLibTable );
 
-    config.AppendSeparator()
-          .AppendAction( CVPCB_ACTIONS::gotoPreviousNA )
-          .AppendAction( CVPCB_ACTIONS::gotoNextNA );
+        config.AppendSeparator()
+              .AppendAction( CVPCB_ACTIONS::showFootprintViewer );
 
-    config.AppendSeparator()
-          .AppendAction( ACTIONS::undo )
-          .AppendAction( ACTIONS::redo )
-          .AppendAction( CVPCB_ACTIONS::autoAssociate )
-          .AppendAction( CVPCB_ACTIONS::deleteAll );
+        config.AppendSeparator()
+              .AppendAction( CVPCB_ACTIONS::gotoPreviousNA )
+              .AppendAction( CVPCB_ACTIONS::gotoNextNA );
 
-    // Add tools for footprint names filtering:
-    config.AppendSeparator()
-          .AppendSpacer( 15 )
-          .AppendControl( "control.CVPCBFilters" );
+        config.AppendSeparator()
+              .AppendAction( ACTIONS::undo )
+              .AppendAction( ACTIONS::redo )
+              .AppendAction( CVPCB_ACTIONS::autoAssociate )
+              .AppendAction( CVPCB_ACTIONS::deleteAll );
+
+        // Add tools for footprint names filtering:
+        config.AppendSeparator()
+              .AppendSpacer( 15 )
+              .AppendControl( CVPCB_ACTION_TOOLBAR_CONTROLS::footprintFilter );
+        break;
+    }
 
     // clang-format on
     return config;
@@ -103,23 +115,9 @@ void CVPCB_MAINFRAME::configureToolbars()
             aToolbar->AddControl( m_tcFilterString );
         };
 
-    RegisterCustomToolbarControlFactory( "control.CVPCBFilters", _( "Footprint filters" ),
-                                         _( "Footprint filtering controls" ),
-                                         footprintFilterFactory );
-
-    TOOLBAR_SETTINGS tb( "cvpcb-toolbars" );
-
-    if( m_tbConfigLeft.has_value() )
-        tb.m_Toolbars.emplace( "left", m_tbConfigLeft.value() );
-
-    if( m_tbConfigRight.has_value() )
-        tb.m_Toolbars.emplace( "right", m_tbConfigRight.value() );
-
-    if( m_tbConfigTopAux.has_value() )
-        tb.m_Toolbars.emplace( "top_aux", m_tbConfigTopAux.value() );
-
-    if( m_tbConfigTopMain.has_value() )
-        tb.m_Toolbars.emplace( "top_main", m_tbConfigTopMain.value() );
-
-    tb.SaveToFile( SETTINGS_MANAGER::GetToolbarSettingsPath(), true );
+    RegisterCustomToolbarControlFactory( CVPCB_ACTION_TOOLBAR_CONTROLS::footprintFilter, footprintFilterFactory );
 }
+
+
+ACTION_TOOLBAR_CONTROL CVPCB_ACTION_TOOLBAR_CONTROLS::footprintFilter( "control.FootprintFilters", _( "Footprint filters" ),
+                                                                       _( "Footprint filtering controls" ) );

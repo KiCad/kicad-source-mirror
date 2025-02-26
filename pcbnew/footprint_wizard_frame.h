@@ -147,9 +147,6 @@ private:
      */
     void DisplayWizardInfos();
 
-    // Toolbar defaults
-    std::optional<TOOLBAR_CONFIGURATION> DefaultTopMainToolbarConfig() override;
-
     void doCloseWindow() override;
     void ClickOnPageList( wxCommandEvent& event );
 

@@ -76,11 +76,6 @@ public:
     bool LoadListOfGerberAndDrillFiles( const wxString& aPath, const wxArrayString& aFilenameList,
                                         std::vector<int>* aFileType );
 
-    // No right toolbar in gerbview
-    std::optional<TOOLBAR_CONFIGURATION> DefaultLeftToolbarConfig() override;
-    std::optional<TOOLBAR_CONFIGURATION> DefaultTopMainToolbarConfig() override;
-    std::optional<TOOLBAR_CONFIGURATION> DefaultTopAuxToolbarConfig() override;
-
     void UpdateStatusBar() override;
 
     GERBVIEW_SETTINGS* gvconfig() const;

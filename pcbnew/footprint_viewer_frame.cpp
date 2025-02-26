@@ -49,6 +49,7 @@
 #include <project_pcb.h>
 #include <project/project_file.h>
 #include <settings/settings_manager.h>
+#include <toolbars_footprint_viewer.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
 #include <tool/common_tools.h>
@@ -218,6 +219,8 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
 
     setupUIConditions();
+
+    m_toolbarSettings = std::make_unique<FOOTPRINT_VIEWER_TOOLBAR_SETTINGS>();
     configureToolbars();
     RecreateToolbars();
     ReCreateMenuBar();
