@@ -153,6 +153,10 @@ public:
     static TOOL_ACTION unpinLibrary;
     static TOOL_ACTION showLibraryTree;
     static TOOL_ACTION hideLibraryTree;
+
+    static TOOL_ACTION toggleConsole;
+    static TOOL_ACTION toggleSimulationSidePanel;
+
     static TOOL_ACTION libraryTreeSearch;
 
     /// Cursor control with keyboard

@@ -399,6 +399,24 @@ int SIMULATOR_CONTROL::RedoZoom( const TOOL_EVENT& aEvent )
 }
 
 
+int SIMULATOR_CONTROL::ToggleConsolePanel( const TOOL_EVENT& aEvent )
+{
+    if( m_simulatorFrame )
+        m_simulatorFrame->ToggleConsole();
+
+    return 0;
+}
+
+
+int SIMULATOR_CONTROL::ToggleSimulationSidePanel( const TOOL_EVENT& aEvent )
+{
+    if( m_simulatorFrame )
+        m_simulatorFrame->ToggleSimulationSidePanel();
+
+    return 0;
+}
+
+
 int SIMULATOR_CONTROL::ToggleGrid( const TOOL_EVENT& aEvent )
 {
     if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( getCurrentSimTab() ) )
@@ -633,6 +651,10 @@ void SIMULATOR_CONTROL::setTransitions()
     Go( &SIMULATOR_CONTROL::ExportPlotToSchematic,  EE_ACTIONS::exportPlotToSchematic.MakeEvent() );
 
     Go( &SIMULATOR_CONTROL::Close,                  ACTIONS::quit.MakeEvent() );
+
+    Go( &SIMULATOR_CONTROL::ToggleConsolePanel,             ACTIONS::toggleConsole.MakeEvent() );
+
+    Go( &SIMULATOR_CONTROL::ToggleSimulationSidePanel,             ACTIONS::toggleSimulationSidePanel.MakeEvent() );
 
     Go( &SIMULATOR_CONTROL::Zoom,                   ACTIONS::zoomInCenter.MakeEvent() );
     Go( &SIMULATOR_CONTROL::Zoom,                   ACTIONS::zoomOutCenter.MakeEvent() );

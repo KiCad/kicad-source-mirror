@@ -139,6 +139,10 @@ public:
      */
     SIM_TAB* GetCurrentSimTab() const;
 
+    void ToggleConsole();
+
+    void ToggleSimulationSidePanel();
+
     /**
      * Toggle dark-mode of the plot tabs.
      */

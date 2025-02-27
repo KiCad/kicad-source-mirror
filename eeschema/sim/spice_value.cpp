@@ -49,7 +49,7 @@ void SPICE_VALUE_FORMAT::FromString( const wxString& aString )
     {
         long val;
         aString.Left( 1 ).ToLong( &val );
-        Precision = (int) val;
+        Precision = static_cast<int>( val );
         Range = aString.Right( aString.Length() - 1 );
     }
 }
@@ -272,7 +272,7 @@ wxString SPICE_VALUE::ToString( const SPICE_VALUE_FORMAT& aFormat )
     wxString res = wxString::FromCDouble( mantissa, std::max( 0, aFormat.Precision - scale - 1 ) );
 
     // If we have an excessively long number, switch to scientific notation
-    if( ssize_t( res.length() ) > aFormat.Precision + scale + 1 )
+    if( ssize_t( res.length() ) > aFormat.Precision + static_cast<long long>( scale ) + 1 )
         res = wxString::FromCDouble( mantissa );
 
     return res + range;

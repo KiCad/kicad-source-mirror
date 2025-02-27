@@ -25,7 +25,9 @@
  */
 
 #include <memory>
+#include <type_traits>
 
+#include <wx/event.h>
 #include <fmt/format.h>
 #include <wx/wfstream.h>
 #include <wx/stdstream.h>
@@ -51,14 +53,13 @@
 #include <dialogs/dialog_text_entry.h>
 #include <dialogs/dialog_sim_format_value.h>
 #include <eeschema_settings.h>
-#include "kiplatform/app.h"
 
 
 SIM_TRACE_TYPE operator|( SIM_TRACE_TYPE aFirst, SIM_TRACE_TYPE aSecond )
 {
-    int res = (int) aFirst | (int) aSecond;
+    int res = static_cast<int>( aFirst ) | static_cast<int>( aSecond);
 
-    return (SIM_TRACE_TYPE) res;
+    return static_cast<SIM_TRACE_TYPE>( res );
 }
 
 
@@ -129,6 +130,11 @@ protected:
 
 void SIGNALS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 {
+    SIM_TAB* panel = m_parent->GetCurrentSimTab();
+
+    if( !panel )
+        return;
+
     m_menuRow = aEvent.GetRow();
     m_menuCol = aEvent.GetCol();
 
@@ -139,42 +145,61 @@ void SIGNALS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 
         m_grid->SetGridCursor( m_menuRow, m_menuCol );
 
-        if( SIM_TAB* panel = m_parent->GetCurrentSimTab() )
+        if( panel->GetSimType() == ST_TRAN || panel->GetSimType() == ST_AC
+            || panel->GetSimType() == ST_DC || panel->GetSimType() == ST_SP )
         {
-            if( panel->GetSimType() == ST_TRAN || panel->GetSimType() == ST_AC
-                || panel->GetSimType() == ST_DC || panel->GetSimType() == ST_SP )
+            menu.Append( MYID_MEASURE_MIN, _( "Measure Min" ) );
+            menu.Append( MYID_MEASURE_MAX, _( "Measure Max" ) );
+            menu.Append( MYID_MEASURE_AVG, _( "Measure Average" ) );
+            menu.Append( MYID_MEASURE_RMS, _( "Measure RMS" ) );
+            menu.Append( MYID_MEASURE_PP, _( "Measure Peak-to-peak" ) );
+
+            if( panel->GetSimType() == ST_AC || panel->GetSimType() == ST_SP )
             {
-                menu.Append( MYID_MEASURE_MIN, _( "Measure Min" ) );
-                menu.Append( MYID_MEASURE_MAX, _( "Measure Max" ) );
-                menu.Append( MYID_MEASURE_AVG, _( "Measure Average" ) );
-                menu.Append( MYID_MEASURE_RMS, _( "Measure RMS" ) );
-                menu.Append( MYID_MEASURE_PP, _( "Measure Peak-to-peak" ) );
-
-                if( panel->GetSimType() == ST_AC || panel->GetSimType() == ST_SP )
-                {
-                    menu.Append( MYID_MEASURE_MIN_AT, _( "Measure Frequency of Min" ) );
-                    menu.Append( MYID_MEASURE_MAX_AT, _( "Measure Frequency of Max" ) );
-                }
-                else
-                {
-                    menu.Append( MYID_MEASURE_MIN_AT, _( "Measure Time of Min" ) );
-                    menu.Append( MYID_MEASURE_MAX_AT, _( "Measure Time of Max" ) );
-                }
-
-                menu.Append( MYID_MEASURE_INTEGRAL, _( "Measure Integral" ) );
-
-                if( panel->GetSimType() == ST_TRAN )
-                {
-                    menu.AppendSeparator();
-                    menu.Append( MYID_FOURIER, _( "Perform Fourier Analysis..." ) );
-                }
-
-                menu.AppendSeparator();
-                menu.Append( GRIDTRICKS_ID_COPY, _( "Copy Signal Name" ) + "\tCtrl+C" );
-
-                m_grid->PopupMenu( &menu );
+                menu.Append( MYID_MEASURE_MIN_AT, _( "Measure Frequency of Min" ) );
+                menu.Append( MYID_MEASURE_MAX_AT, _( "Measure Frequency of Max" ) );
             }
+            else
+            {
+                menu.Append( MYID_MEASURE_MIN_AT, _( "Measure Time of Min" ) );
+                menu.Append( MYID_MEASURE_MAX_AT, _( "Measure Time of Max" ) );
+            }
+
+            menu.Append( MYID_MEASURE_INTEGRAL, _( "Measure Integral" ) );
+
+            if( panel->GetSimType() == ST_TRAN )
+            {
+                menu.AppendSeparator();
+                menu.Append( MYID_FOURIER, _( "Perform Fourier Analysis..." ) );
+            }
+
+            menu.AppendSeparator();
+            menu.Append( GRIDTRICKS_ID_COPY, _( "Copy Signal Name" ) + "\tCtrl+C" );
+
+            menu.AppendSeparator();
+            menu.Append( GRIDTRICKS_ID_SELECT, _( "Create new cursor..." ) );
+
+            m_grid->PopupMenu( &menu );
         }
+    }
+    else if( m_menuCol > static_cast<int>( COL_CURSOR_2 ) )
+    {
+        menu.Append( GRIDTRICKS_ID_SELECT, _( "Create new cursor..." ) );
+
+        menu.AppendSeparator();
+
+        wxString msg = m_grid->GetColLabelValue( m_grid->GetNumberCols() - 1 );
+
+        menu.AppendSeparator();
+        menu.Append( GRIDTRICKS_ID_DELETE, wxString::Format( _( "Delete %s..." ), msg ) );
+
+        m_grid->PopupMenu( &menu );
+    }
+    else
+    {
+        menu.Append( GRIDTRICKS_ID_SELECT, _( "Create new cursor..." ) );
+
+        m_grid->PopupMenu( &menu );
     }
 }
 
@@ -305,6 +330,14 @@ void SIGNALS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
             wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
             wxTheClipboard->Close();
         }
+    }
+    else if( event.GetId() == GRIDTRICKS_ID_SELECT )
+    {
+        m_parent->CreateNewCursor();
+    }
+    else if( event.GetId() == GRIDTRICKS_ID_DELETE )
+    {
+        m_parent->DeleteCursor();
     }
 }
 
@@ -546,11 +579,7 @@ SIMULATOR_FRAME_UI::SIMULATOR_FRAME_UI( SIMULATOR_FRAME* aSimulatorFrame,
     attr->SetReadOnly();
     m_cursorsGrid->SetColAttr( COL_CURSOR_Y, attr );
 
-    for( int cursorId = 0; cursorId < 3; ++cursorId )
-    {
-        m_cursorFormats[ cursorId ][ 0 ] = { 3, wxS( "~s" ) };
-        m_cursorFormats[ cursorId ][ 1 ] = { 3, wxS( "~V" ) };
-    }
+    CustomCursorsInit();
 
     attr = new wxGridCellAttr;
     attr->SetReadOnly();
@@ -587,9 +616,110 @@ SIMULATOR_FRAME_UI::~SIMULATOR_FRAME_UI()
 }
 
 
+void SIMULATOR_FRAME_UI::CustomCursorsInit()
+{
+    for( auto& m_cursorFormat : m_cursorFormats )
+    {
+        m_cursorFormat[0] = { 3, wxS( "~s" ) };
+        m_cursorFormat[1] = { 3, wxS( "~V" ) };
+    }
+
+    // proper init and transfer/copy m_cursorFormats
+    // we work on m_cursorFormatsDyn from now on.
+    // TODO: rework +- LOC when m_cursorFormatsDyn and m_cursorFormats get merged.
+    m_cursorFormatsDyn.clear();
+    m_cursorFormatsDyn.resize( std::size( m_cursorFormats ) );
+
+    for( size_t index = 0; index < std::size( m_cursorFormats ); index++ )
+    {
+        for( size_t index2 = 0; index2 < std::size( m_cursorFormats[0] ); index2++ )
+        {
+            m_cursorFormatsDyn[index].push_back( m_cursorFormats[index][index2] );
+        }
+    }
+
+    // Dump string helper, tries to get the current higher cursor name to form the next one.
+    // Based on the column labeling
+    // TODO: "Cursor n" may translate as "n Cursor" in other languages
+    //       TBD how to handle; just forbid for now.
+    int nameMax = 0;
+
+    for( int i = 0; i < m_signalsGrid->GetNumberCols(); i++ )
+    {
+        wxString maxCursor = m_signalsGrid->GetColLabelValue( i );
+
+        maxCursor.Replace( _( "Cursor " ), "" );
+
+        int tmpMax = wxAtoi( maxCursor );
+
+        if( nameMax < tmpMax )
+            nameMax = tmpMax;
+    }
+
+    m_customCursorsCnt = nameMax + 1; // Init with a +1 on top of current cursor 2, defaults to 3
+}
+
+
+void SIMULATOR_FRAME_UI::CreateNewCursor()
+{
+    std::vector<SPICE_VALUE_FORMAT> tmp;
+    // m_cursorFormatsDyn should be equal with m_cursorFormats on first entry here.
+    m_cursorFormatsDyn.emplace_back( tmp );
+
+    m_cursorFormatsDyn[m_customCursorsCnt].push_back( { 3, wxS( "~s" ) } );
+    m_cursorFormatsDyn[m_customCursorsCnt].push_back( { 3, wxS( "~V" ) } );
+
+    wxString cursor_name = wxString( _( "Cursor " ) ) << m_customCursorsCnt;
+
+    m_signalsGrid->InsertCols( m_signalsGrid->GetNumberCols() , 1, true );
+    m_signalsGrid->SetColLabelValue( m_signalsGrid->GetNumberCols() - 1, cursor_name );
+
+    wxGridCellAttr* attr = new wxGridCellAttr;
+    m_signalsGrid->SetColAttr( COL_CURSOR_2 + m_customCursorsCnt, attr );
+
+    m_customCursorsCnt++;
+
+    updateSignalsGrid();
+    updatePlotCursors();
+    OnModify();
+}
+
+
+void SIMULATOR_FRAME_UI::DeleteCursor()
+{
+    int col = m_signalsGrid->GetNumberCols();
+    int rows = m_signalsGrid->GetNumberRows();
+
+    if( col > COL_CURSOR_2 )
+    {
+        // Now we need to find the active cursor and deactivate before removing the column,
+        // Send the dummy event to update the UI
+        for( int i = 0; i < rows; i++ )
+        {
+            if( m_signalsGrid->GetCellValue( i, col - 1 ) == wxS( "1" ) )
+            {
+                m_signalsGrid->SetCellValue( i, col - 1, wxEmptyString );
+                wxGridEvent aDummy( wxID_ANY, wxEVT_GRID_CELL_CHANGED, m_signalsGrid, i, col - 1 );
+                onSignalsGridCellChanged( aDummy );
+                break;
+            }
+
+        }
+
+        m_signalsGrid->DeleteCols( col - 1, 1, false );
+        m_cursorFormatsDyn.pop_back();
+        m_customCursorsCnt--;
+        m_plotNotebook->Refresh();
+        updateSignalsGrid();
+        updatePlotCursors();
+        OnModify();
+    }
+}
+
+
 void SIMULATOR_FRAME_UI::ShowChangedLanguage()
 {
-    for( int ii = 0; ii < (int) m_plotNotebook->GetPageCount(); ++ii )
+    for( int ii = 0; ii < static_cast<int>( m_plotNotebook->GetPageCount() ); ++ii )
     {
         if( SIM_TAB* simTab = dynamic_cast<SIM_TAB*>( m_plotNotebook->GetPage( ii ) ) )
         {
@@ -816,6 +946,16 @@ void SIMULATOR_FRAME_UI::rebuildSignalsGrid( wxString aFilter )
                 attr = new wxGridCellAttr;
                 attr->SetReadOnly();
                 m_signalsGrid->SetAttr( row, COL_CURSOR_2, attr );
+
+                if( m_customCursorsCnt > 3 )
+                {
+                    for( int i = 1; i <= m_customCursorsCnt - 3; i++ )
+                    {
+                        attr = new wxGridCellAttr;
+                        attr->SetReadOnly();
+                        m_signalsGrid->SetAttr( row, COL_CURSOR_2 + i, attr );
+                    }
+                }
             }
             else
             {
@@ -842,8 +982,21 @@ void SIMULATOR_FRAME_UI::rebuildSignalsGrid( wxString aFilter )
                 attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
                 m_signalsGrid->SetAttr( row, COL_CURSOR_2, attr );
                 m_signalsGrid->SetCellValue( row, COL_CURSOR_2, trace->GetCursor( 2 ) ? "1" : "0" );
-            }
 
+                if( m_customCursorsCnt > 3 )
+                {
+                    for( int i = 1; i <= m_customCursorsCnt - 3; i++ )
+                    {
+                        attr = new wxGridCellAttr;
+                        attr->SetRenderer( new wxGridCellBoolRenderer() );
+                        attr->SetReadOnly(); // not really; we delegate interactivity to GRID_TRICKS
+                        attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+                        m_signalsGrid->SetAttr( row, COL_CURSOR_2 + i, attr );
+                        m_signalsGrid->SetCellValue( row, COL_CURSOR_2 + i,
+                                                     trace->GetCursor( i ) ? "1" : "0" );
+                    }
+                }
+            }
             row++;
         }
     }
@@ -999,7 +1152,7 @@ SIM_TAB* SIMULATOR_FRAME_UI::NewSimTab( const wxString& aSimCommand )
     }
 
     wxString pageTitle( simulator()->TypeToName( simType, true ) );
-    pageTitle.Prepend( wxString::Format( _( "Analysis %u - " ), (unsigned int) ++m_plotNumber ) );
+    pageTitle.Prepend( wxString::Format( _( "Analysis %u - " ), static_cast<unsigned int>( ++m_plotNumber ) ) );
 
     m_plotNotebook->AddPage( simTab, pageTitle, true );
 
@@ -1139,9 +1292,17 @@ void SIMULATOR_FRAME_UI::onSignalsGridCellChanged( wxGridEvent& aEvent )
             OnModify();
         }
     }
-    else if( col == COL_CURSOR_1 || col == COL_CURSOR_2 )
+    else if( col == COL_CURSOR_1 || col == COL_CURSOR_2
+             || ( ( std::size( m_cursorFormatsDyn ) > std::size( m_cursorFormats ) )
+                  && col > COL_CURSOR_2 ) )
     {
         int    id = col == COL_CURSOR_1 ? 1 : 2;
+
+        if( col > COL_CURSOR_2 ) // TODO: clean up logic
+        {
+            id = col - 2; // enum SIGNALS_GRID_COLUMNS offset for Cursor n
+        }
+
         TRACE* activeTrace = nullptr;
 
         if( text == wxS( "1" ) )
@@ -1187,10 +1348,15 @@ void SIMULATOR_FRAME_UI::onCursorsGridCellChanged( wxGridEvent& aEvent )
     wxString text = m_cursorsGrid->GetCellValue( row, col );
     wxString cursorName = m_cursorsGrid->GetCellValue( row, COL_CURSOR_NAME );
 
+    double value = SPICE_VALUE( text ).ToDouble();
+
     if( col == COL_CURSOR_X )
     {
         CURSOR* cursor1 = nullptr;
         CURSOR* cursor2 = nullptr;
+
+        std::vector<CURSOR*> cursorsVec;
+        cursorsVec.clear();
 
         for( const auto& [name, trace] : plotTab->GetTraces() )
         {
@@ -1199,9 +1365,27 @@ void SIMULATOR_FRAME_UI::onCursorsGridCellChanged( wxGridEvent& aEvent )
 
             if( CURSOR* cursor = trace->GetCursor( 2 ) )
                 cursor2 = cursor;
+
+            int tmp = 3;
+
+            if( !cursor1 )
+                tmp--;
+            if( !cursor2 )
+                tmp--;
+
+            for( int i = tmp; i < m_customCursorsCnt; i++ )
+            {
+                if( CURSOR* cursor = trace->GetCursor( i ) )
+                {
+                    cursorsVec.emplace_back( cursor );
+
+                    if( cursorName == ( wxString( "" ) << i ) && cursor )
+                        cursor->SetCoordX( value );
+                }
+            }
         }
 
-        double value = SPICE_VALUE( text ).ToDouble();
+        //double value = SPICE_VALUE( text ).ToDouble();
 
         if( cursorName == wxS( "1" ) && cursor1 )
             cursor1->SetCoordX( value );
@@ -1265,7 +1449,7 @@ void SIMULATOR_FRAME_UI::onMeasurementsGridCellChanged( wxGridEvent& aEvent )
 
     // Always leave a single empty row for type-in
 
-    int rowCount = (int) m_measurementsGrid->GetNumberRows();
+    int rowCount = static_cast<int>( m_measurementsGrid->GetNumberRows() );
     int emptyRows = 0;
 
     for( row = rowCount - 1; row >= 0; row-- )
@@ -1790,83 +1974,110 @@ void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceTyp
 }
 
 
-void SIMULATOR_FRAME_UI::updateSignalsGrid()
+// TODO make sure where to instantiate and how to style correct
+// Better ask someone..
+template void SIMULATOR_FRAME_UI::signalsGridCursorUpdate<SIGNALS_GRID_COLUMNS, int, int>(
+        SIGNALS_GRID_COLUMNS, int, int );
+
+template <typename T, typename U, typename R>
+void SIMULATOR_FRAME_UI::signalsGridCursorUpdate( T t, U u, R r ) // t=cursor type/signals' grid col, u=cursor number/cursor "id", r=table's row
 {
     SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
 
-    for( int row = 0; row < m_signalsGrid->GetNumberRows(); ++row )
+    wxString          signalName = m_signalsGrid->GetCellValue( r, COL_SIGNAL_NAME );
+    int               traceType = SPT_UNKNOWN;
+    wxString          vectorName = vectorNameFromSignalName( plotTab, signalName, &traceType );
+
+    wxGridCellAttrPtr attr = m_signalsGrid->GetOrCreateCellAttrPtr( r, static_cast<int>( t ) );
+
+    if( TRACE* trace = plotTab ? plotTab->GetTrace( vectorName, traceType ) : nullptr )
     {
-        wxString signalName = m_signalsGrid->GetCellValue( row, COL_SIGNAL_NAME );
-        int      traceType = SPT_UNKNOWN;
-        wxString vectorName = vectorNameFromSignalName( plotTab, signalName, &traceType );
+        attr->SetReadOnly(); // not really; we delegate interactivity to GRID_TRICKS
 
-        if( TRACE* trace = plotTab ? plotTab->GetTrace( vectorName, traceType ) : nullptr )
+        if( t >= SIGNALS_GRID_COLUMNS::COL_SIGNAL_SHOW )
         {
-            m_signalsGrid->SetCellValue( row, COL_SIGNAL_SHOW, wxS( "1" ) );
-
-            wxGridCellAttrPtr attr = m_signalsGrid->GetOrCreateCellAttrPtr( row, COL_SIGNAL_COLOR );
-
-            if( !attr->HasRenderer() )
-                attr->SetRenderer( new GRID_CELL_COLOR_RENDERER( this ) );
-
-            if( !attr->HasEditor() )
-                attr->SetEditor( new GRID_CELL_COLOR_SELECTOR( this, m_signalsGrid ) );
-
             attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-            attr->SetReadOnly( false );
-
-            KIGFX::COLOR4D color( trace->GetPen().GetColour() );
-            m_signalsGrid->SetCellValue( row, COL_SIGNAL_COLOR, color.ToCSSString() );
-
-            attr = m_signalsGrid->GetOrCreateCellAttrPtr( row, COL_CURSOR_1 );
-
-            if( !attr->HasRenderer() )
-                attr->SetRenderer( new wxGridCellBoolRenderer() );
-
-            attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
-            attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-
-            attr = m_signalsGrid->GetOrCreateCellAttrPtr( row, COL_CURSOR_2 );
-
-            if( !attr->HasRenderer() )
-                attr->SetRenderer( new wxGridCellBoolRenderer() );
-
-            attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
-            attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-
-            if( trace->HasCursor( 1 ) )
-                m_signalsGrid->SetCellValue( row, COL_CURSOR_1, wxS( "1" ) );
-            else
-                m_signalsGrid->SetCellValue( row, COL_CURSOR_1, wxEmptyString );
-
-            if( trace->HasCursor( 2 ) )
-                m_signalsGrid->SetCellValue( row, COL_CURSOR_2, wxS( "1" ) );
-            else
-                m_signalsGrid->SetCellValue( row, COL_CURSOR_2, wxEmptyString );
         }
-        else
+
+        if constexpr ( std::is_enum<T>::value )
         {
-            m_signalsGrid->SetCellValue( row, COL_SIGNAL_SHOW, wxEmptyString );
+            if( t == SIGNALS_GRID_COLUMNS::COL_SIGNAL_SHOW )
+            {
+                m_signalsGrid->SetCellValue( r, static_cast<int>( t ), wxS( "1" ) );
+            }
+            else if( t == SIGNALS_GRID_COLUMNS::COL_SIGNAL_COLOR )
+            {
+                if( !attr->HasRenderer() )
+                    attr->SetRenderer( new GRID_CELL_COLOR_RENDERER( this ) );
 
-            wxGridCellAttrPtr attr = m_signalsGrid->GetOrCreateCellAttrPtr( row, COL_SIGNAL_COLOR );
-            attr->SetEditor( nullptr );
-            attr->SetRenderer( nullptr );
-            attr->SetReadOnly();
-            m_signalsGrid->SetCellValue( row, COL_SIGNAL_COLOR, wxEmptyString );
+                if( !attr->HasEditor() )
+                    attr->SetEditor( new GRID_CELL_COLOR_SELECTOR( this, m_signalsGrid ) );
 
-            attr = m_signalsGrid->GetOrCreateCellAttrPtr( row, COL_CURSOR_1 );
-            attr->SetEditor( nullptr );
-            attr->SetRenderer( nullptr );
-            attr->SetReadOnly();
-            m_signalsGrid->SetCellValue( row, COL_CURSOR_1, wxEmptyString );
+                attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+                attr->SetReadOnly( false );
 
-            attr = m_signalsGrid->GetOrCreateCellAttrPtr( row, COL_CURSOR_2 );
-            attr->SetEditor( nullptr );
-            attr->SetRenderer( nullptr );
-            attr->SetReadOnly();
-            m_signalsGrid->SetCellValue( row, COL_CURSOR_2, wxEmptyString );
+                KIGFX::COLOR4D color( trace->GetPen().GetColour() );
+                m_signalsGrid->SetCellValue( r, COL_SIGNAL_COLOR, color.ToCSSString() );
+            }
+            else if( t == SIGNALS_GRID_COLUMNS::COL_CURSOR_1
+                     || t == SIGNALS_GRID_COLUMNS::COL_CURSOR_2
+                     || t > SIGNALS_GRID_COLUMNS::COL_CURSOR_2 )
+            {
+                if( !attr->HasRenderer() )
+                    attr->SetRenderer( new wxGridCellBoolRenderer() );
+
+                if( u > 0 && trace->HasCursor( u ) )
+                    m_signalsGrid->SetCellValue( r, static_cast<int>( t ), wxS( "1" ) );
+                else
+                    m_signalsGrid->SetCellValue( r, static_cast<int>( t ), wxEmptyString );
+            }
         }
     }
+    else
+    {
+        if constexpr ( std::is_enum<T>::value )
+        {
+            if( t == SIGNALS_GRID_COLUMNS::COL_SIGNAL_SHOW )
+            {
+                m_signalsGrid->SetCellValue( r, static_cast<int>( t ), wxEmptyString );
+            }
+            else if( t == SIGNALS_GRID_COLUMNS::COL_SIGNAL_COLOR
+                     || t == SIGNALS_GRID_COLUMNS::COL_CURSOR_1
+                     || t == SIGNALS_GRID_COLUMNS::COL_CURSOR_2
+                     || t > SIGNALS_GRID_COLUMNS::COL_CURSOR_2 )
+            {
+                attr->SetEditor( nullptr );
+                attr->SetRenderer( nullptr );
+                attr->SetReadOnly();
+                m_signalsGrid->SetCellValue( r, static_cast<int>( t ), wxEmptyString );
+            }
+        }
+    }
+}
+
+
+void SIMULATOR_FRAME_UI::updateSignalsGrid()
+{
+    for( int row = 0; row < m_signalsGrid->GetNumberRows(); ++row )
+    {
+        signalsGridCursorUpdate( COL_SIGNAL_SHOW, 0, row );
+        signalsGridCursorUpdate( COL_SIGNAL_COLOR, 0, row );
+        signalsGridCursorUpdate( COL_CURSOR_1, 1, row );
+        signalsGridCursorUpdate( COL_CURSOR_2, 2, row );
+
+        if( ( m_signalsGrid->GetNumberCols() - 1 ) > COL_CURSOR_2 )
+        {
+            for( int i = 3; i < m_customCursorsCnt; i++ )
+            {
+                int tm = i + 2;
+                signalsGridCursorUpdate(
+                        static_cast<SIGNALS_GRID_COLUMNS>( tm ),
+                        i,
+                        row );
+            }
+        }
+    }
+    m_signalsGrid->Refresh();
 }
 
 
@@ -1962,7 +2173,6 @@ void SIMULATOR_FRAME_UI::applyTuners()
         DisplayErrorMessage( this, _( "Could not apply tuned value(s):" ) + wxS( "\n" )
                                            + reporter.GetMessages() );
 }
-
 
 bool SIMULATOR_FRAME_UI::LoadWorkbook( const wxString& aPath )
 {
@@ -2111,11 +2321,32 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
                 m_userDefinedSignals[ii++] = wxString( signal_js.get<wxString>() );
         }
 
+        if( SIM_TAB* simTab = GetCurrentSimTab() )
+        {
+            m_simulatorFrame->LoadSimulator( simTab->GetSimCommand(), simTab->GetSimOptions() );
+
+            if( SIM_TAB* firstTab = dynamic_cast<SIM_TAB*>( m_plotNotebook->GetPage( 0 ) ) )
+                firstTab->SetLastSchTextSimCommand( js["last_sch_text_sim_command"] );
+        }
+
+        int tempCustomCursorsCnt = 0;
+
+        if( js.contains( "custom_cursors" ) )
+            tempCustomCursorsCnt = js["custom_cursors"];
+        else
+            tempCustomCursorsCnt = 2; // Kind of virtual, for the initial loading of the new setting
+
+        if( ( tempCustomCursorsCnt > m_customCursorsCnt ) && m_customCursorsCnt > 2 )
+            tempCustomCursorsCnt = 2 * tempCustomCursorsCnt - m_customCursorsCnt;
+
+        for( int yy = 0; yy <= ( tempCustomCursorsCnt - m_customCursorsCnt ); yy++ )
+            CreateNewCursor();
+
         auto addCursor =
-                [this]( SIM_PLOT_TAB* aPlotTab, TRACE* aTrace, const wxString& aSignalName,
+                [=,this]( SIM_PLOT_TAB* aPlotTab, TRACE* aTrace, const wxString& aSignalName,
                         int aCursorId, const nlohmann::json& aCursor_js )
                 {
-                    if( aCursorId == 1 || aCursorId == 2 )
+                    if( aCursorId >= 1 )
                     {
                         CURSOR* cursor = new CURSOR( aTrace, aPlotTab );
 
@@ -2126,8 +2357,27 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
                         aPlotTab->GetPlotWin()->AddLayer( cursor );
                     }
 
-                    m_cursorFormats[aCursorId-1][0].FromString( aCursor_js[ "x_format" ] );
-                    m_cursorFormats[aCursorId-1][1].FromString( aCursor_js[ "y_format" ] );
+                    if( aCursorId == -1 )
+                    {
+                        // We are a "cursorD"
+                        m_cursorFormatsDyn[2][0].FromString( aCursor_js["x_format"] );
+                        m_cursorFormatsDyn[2][1].FromString( aCursor_js["y_format"] );
+                    }
+                    else
+                    {
+                        if( aCursorId < 3 )
+                        {
+                            m_cursorFormatsDyn[aCursorId - 1][0].FromString(
+                                    aCursor_js["x_format"] );
+                            m_cursorFormatsDyn[aCursorId - 1][1].FromString(
+                                    aCursor_js["y_format"] );
+                        }
+                        else
+                        {
+                            m_cursorFormatsDyn[aCursorId][0].FromString( aCursor_js["x_format"] );
+                            m_cursorFormatsDyn[aCursorId][1].FromString( aCursor_js["y_format"] );
+                        }
+                    }
                 };
 
         for( const auto& [ plotTab, traces_js ] : traceInfo )
@@ -2140,14 +2390,20 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
 
                 if( trace )
                 {
-                    if( trace_js.contains( "cursor1" ) )
-                        addCursor( plotTab, trace, signalName, 1, trace_js[ "cursor1" ] );
-
-                    if( trace_js.contains( "cursor2" ) )
-                        addCursor( plotTab, trace, signalName, 2, trace_js[ "cursor2" ] );
-
                     if( trace_js.contains( "cursorD" ) )
-                        addCursor( plotTab, trace, signalName, 3, trace_js[ "cursorD" ] );
+                        addCursor( plotTab, trace, signalName, -1, trace_js[ "cursorD" ] );
+
+                    std::vector<const char*> aVec;
+                    aVec.clear();
+
+                    for( int i = 1; i <= tempCustomCursorsCnt; i++ )
+                    {
+                        wxString str = "cursor" + std::to_string( i );
+                        aVec.emplace_back( str.c_str() );
+
+                        if( trace_js.contains( aVec[i - 1] ) )
+                            addCursor( plotTab, trace, signalName, i, trace_js[aVec[i - 1]] );
+                    }
 
                     if( trace_js.contains( "color" ) )
                     {
@@ -2160,14 +2416,6 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
             }
 
             plotTab->UpdatePlotColors();
-        }
-
-        if( SIM_TAB* simTab = GetCurrentSimTab() )
-        {
-            m_simulatorFrame->LoadSimulator( simTab->GetSimCommand(), simTab->GetSimOptions() );
-
-            if( SIM_TAB* firstTab = dynamic_cast<SIM_TAB*>( m_plotNotebook->GetPage( 0 ) ) )
-                firstTab->SetLastSchTextSimCommand( js[ "last_sch_text_sim_command" ] );
         }
     }
     catch( nlohmann::json::parse_error& error )
@@ -2201,6 +2449,30 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
     }
 
     return true;
+}
+
+void SIMULATOR_FRAME_UI::SaveCursorToWorkbook( nlohmann::json& aTraceJs, TRACE* aTrace, int aCursorId )
+{
+    int cursorIdAfterD = aCursorId;
+
+    if( aCursorId > 3 )
+        cursorIdAfterD = cursorIdAfterD - 1;
+
+
+    if( CURSOR* cursor = aTrace->GetCursor( aCursorId ) )
+    {
+        aTraceJs["cursor" + wxString( "" ) << aCursorId] =
+                nlohmann::json( { { "position", cursor->GetCoords().x },
+                                  { "x_format", m_cursorFormatsDyn[cursorIdAfterD][0].ToString() },
+                                  { "y_format", m_cursorFormatsDyn[cursorIdAfterD][1].ToString() } } );
+    }
+
+    if( cursorIdAfterD < 3 && ( aTrace->GetCursor( 1 ) || aTrace->GetCursor( 2 ) ) )
+    {
+        aTraceJs["cursorD"] =
+                nlohmann::json( { { "x_format", m_cursorFormatsDyn[2][0].ToString() },
+                                  { "y_format", m_cursorFormatsDyn[2][1].ToString() } } );
+    }
 }
 
 
@@ -2287,27 +2559,14 @@ bool SIMULATOR_FRAME_UI::SaveWorkbook( const wxString& aPath )
                               { "signal",     findSignalName( trace->GetDisplayName() ) },
                               { "color",      COLOR4D( trace->GetTraceColour() ).ToCSSString() } } );
 
-                if( CURSOR* cursor = trace->GetCursor( 1 ) )
-                {
-                    trace_js["cursor1"] = nlohmann::json(
-                                            { { "position", cursor->GetCoords().x },
-                                              { "x_format", m_cursorFormats[0][0].ToString() },
-                                              { "y_format", m_cursorFormats[0][1].ToString() } } );
-                }
-
-                if( CURSOR* cursor = trace->GetCursor( 2 ) )
-                {
-                    trace_js["cursor2"] = nlohmann::json(
-                                            { { "position", cursor->GetCoords().x },
-                                              { "x_format", m_cursorFormats[1][0].ToString() },
-                                              { "y_format", m_cursorFormats[1][1].ToString() } } );
-                }
+                for( int ii = 1; ii <= m_customCursorsCnt; ii++ )
+                    SaveCursorToWorkbook( trace_js, trace, ii );
 
                 if( trace->GetCursor( 1 ) || trace->GetCursor( 2 ) )
                 {
                     trace_js["cursorD"] = nlohmann::json(
-                                            { { "x_format", m_cursorFormats[2][0].ToString() },
-                                              { "y_format", m_cursorFormats[2][1].ToString() } } );
+                                            { { "x_format", m_cursorFormatsDyn[2][0].ToString() },
+                                              { "y_format", m_cursorFormatsDyn[2][1].ToString() } } );
                 }
 
                 traces_js.push_back( trace_js );
@@ -2359,9 +2618,12 @@ bool SIMULATOR_FRAME_UI::SaveWorkbook( const wxString& aPath )
     for( const auto& [ id, signal ] : m_userDefinedSignals )
         userDefinedSignals_js.push_back( signal );
 
-    nlohmann::json js = nlohmann::json( { { "version",              6 },
+    // clang-format off
+    nlohmann::json js = nlohmann::json( { { "version",              7 },
                                           { "tabs",                 tabs_js },
-                                          { "user_defined_signals", userDefinedSignals_js } } );
+                                          { "user_defined_signals", userDefinedSignals_js },
+                                          { "custom_cursors",        m_customCursorsCnt - 1 } } ); // Since we start +1 on init
+    // clang-format on
 
     // Store the value of any simulation command found on the schematic sheet in a SCH_TEXT
     // object.  If this changes we want to warn the user and ask them if they want to update
@@ -2423,6 +2685,49 @@ wxString SIMULATOR_FRAME_UI::getNoiseSource() const
     }
 
     return source;
+}
+
+
+void SIMULATOR_FRAME_UI::TogglePanel( wxPanel* aPanel, wxSplitterWindow* aSplitterWindow,
+                                      int& aSashPosition )
+{
+    bool isShown = aPanel->IsShown();
+
+    if( isShown )
+        aSashPosition = aSplitterWindow->GetSashPosition();
+
+    aPanel->Show( !isShown );
+
+    aSplitterWindow->SetSashInvisible( isShown );
+    aSplitterWindow->SetSashPosition( isShown ? -1 : aSashPosition, true );
+
+    aSplitterWindow->UpdateSize();
+    m_parent->Refresh();
+    m_parent->Layout();
+}
+
+
+bool SIMULATOR_FRAME_UI::IsConsoleShown()
+{
+    return m_panelConsole->IsShown();
+}
+
+
+void SIMULATOR_FRAME_UI::ToggleConsole()
+{
+    TogglePanel( m_panelConsole, m_splitterPlotAndConsole, m_splitterPlotAndConsoleSashPosition );
+}
+
+
+bool SIMULATOR_FRAME_UI::IsSidePanelShown()
+{
+    return m_sidePanel->IsShown();
+}
+
+
+void SIMULATOR_FRAME_UI::ToggleSimulationSidePanel()
+{
+    TogglePanel( m_sidePanel, m_splitterLeftRight, m_splitterLeftRightSashPosition );
 }
 
 
@@ -2634,7 +2939,7 @@ void SIMULATOR_FRAME_UI::updatePlotCursors()
                 if( ( !m_simulatorFrame->SimFinished() && aCol == 1 ) || std::isnan( aValue ) )
                     return wxS( "--" );
                 else
-                    return SPICE_VALUE( aValue ).ToString( m_cursorFormats[ aCursorId ][ aCol ] );
+                    return SPICE_VALUE( aValue ).ToString( m_cursorFormatsDyn[ aCursorId ][ aCol ] );
             };
 
     for( const auto& [name, trace] : plotTab->GetTraces() )
@@ -2648,8 +2953,8 @@ void SIMULATOR_FRAME_UI::updatePlotCursors()
             wxRealPoint coords = cursor->GetCoords();
             int         row = m_cursorsGrid->GetNumberRows();
 
-            m_cursorFormats[0][0].UpdateUnits( plotTab->GetUnitsX() );
-            m_cursorFormats[0][1].UpdateUnits( cursor1Units );
+            m_cursorFormatsDyn[0][0].UpdateUnits( plotTab->GetUnitsX() );
+            m_cursorFormatsDyn[0][1].UpdateUnits( cursor1Units );
 
             m_cursorsGrid->AppendRows( 1 );
             m_cursorsGrid->SetCellValue( row, COL_CURSOR_NAME, wxS( "1" ) );
@@ -2671,8 +2976,8 @@ void SIMULATOR_FRAME_UI::updatePlotCursors()
             wxRealPoint coords = cursor->GetCoords();
             int         row = m_cursorsGrid->GetNumberRows();
 
-            m_cursorFormats[1][0].UpdateUnits( plotTab->GetUnitsX() );
-            m_cursorFormats[1][1].UpdateUnits( cursor2Units );
+            m_cursorFormatsDyn[1][0].UpdateUnits( plotTab->GetUnitsX() );
+            m_cursorFormatsDyn[1][1].UpdateUnits( cursor2Units );
 
             m_cursorsGrid->AppendRows( 1 );
             m_cursorsGrid->SetCellValue( row, COL_CURSOR_NAME, wxS( "2" ) );
@@ -2688,8 +2993,8 @@ void SIMULATOR_FRAME_UI::updatePlotCursors()
         wxRealPoint coords = cursor2->GetCoords() - cursor1->GetCoords();
         wxString    signal;
 
-        m_cursorFormats[2][0].UpdateUnits( plotTab->GetUnitsX() );
-        m_cursorFormats[2][1].UpdateUnits( cursor1Units );
+        m_cursorFormatsDyn[2][0].UpdateUnits( plotTab->GetUnitsX() );
+        m_cursorFormatsDyn[2][1].UpdateUnits( cursor1Units );
 
         if( cursor1->GetName() == cursor2->GetName() )
             signal = wxString::Format( wxS( "%s[2 - 1]" ), cursor2->GetName() );
@@ -2702,7 +3007,6 @@ void SIMULATOR_FRAME_UI::updatePlotCursors()
         m_cursorsGrid->SetCellValue( 2, COL_CURSOR_X, formatValue( coords.x, 2, 0 ) );
         m_cursorsGrid->SetCellValue( 2, COL_CURSOR_Y, formatValue( coords.y, 2, 1 ) );
     }
-
     // Set up the labels
     m_cursorsGrid->SetColLabelValue( COL_CURSOR_X, plotTab->GetLabelX() );
 
@@ -2719,6 +3023,47 @@ void SIMULATOR_FRAME_UI::updatePlotCursors()
     }
 
     m_cursorsGrid->SetColLabelValue( COL_CURSOR_Y, valColName );
+
+    if( m_customCursorsCnt > 3 ) // 2 for the default hardocded cursors plus the initial + 1
+    {
+        for( int i = 3; i < m_customCursorsCnt; i++ )
+        {
+            for( const auto& [name, trace] : plotTab->GetTraces() )
+            {
+                if( CURSOR* cursor = trace->GetCursor( i ) )
+                {
+                    CURSOR* curs = cursor;
+                    wxString cursName = getNameY( trace );
+                    wxString cursUnits = getUnitsY( trace );
+
+                    wxRealPoint coords = cursor->GetCoords();
+                    int         row = m_cursorsGrid->GetNumberRows();
+
+                    m_cursorFormatsDyn[i][0].UpdateUnits( plotTab->GetUnitsX() );
+                    m_cursorFormatsDyn[i][1].UpdateUnits( cursUnits );
+
+                    m_cursorsGrid->AppendRows( 1 );
+                    m_cursorsGrid->SetCellValue( row, COL_CURSOR_NAME, wxS( "" ) + wxString( "" ) << i );
+                    m_cursorsGrid->SetCellValue( row, COL_CURSOR_SIGNAL, curs->GetName() );
+                    m_cursorsGrid->SetCellValue( row, COL_CURSOR_X, formatValue( coords.x, i, 0 ) );
+                    m_cursorsGrid->SetCellValue( row, COL_CURSOR_Y, formatValue( coords.y, i, 1 ) );
+
+                    // Set up the labels
+                    m_cursorsGrid->SetColLabelValue( COL_CURSOR_X, plotTab->GetLabelX() );
+
+                    valColName = _( "Value" );
+
+                    if( !cursName.IsEmpty()
+                        && ( m_cursorsGrid->GetColLabelValue( COL_CURSOR_Y ) == cursName ) )
+                    {
+                        valColName = cursName;
+                    }
+                    m_cursorsGrid->SetColLabelValue( COL_CURSOR_Y, valColName );
+                    break;
+                }
+            }
+        }
+    }
 }
 
 

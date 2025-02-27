@@ -580,6 +580,18 @@ bool SIMULATOR_FRAME::SaveWorkbook( const wxString& aPath )
 }
 
 
+void SIMULATOR_FRAME::ToggleConsole()
+{
+    m_ui->ToggleConsole();
+}
+
+
+void SIMULATOR_FRAME::ToggleSimulationSidePanel()
+{
+    m_ui->ToggleSimulationSidePanel();
+}
+
+
 void SIMULATOR_FRAME::ToggleDarkModePlots()
 {
     m_ui->ToggleDarkModePlots();
@@ -728,10 +740,32 @@ void SIMULATOR_FRAME::setupUIConditions()
             };
 
     auto haveZoomRedo =
-    [this]( const SELECTION& aSel )
+            [this]( const SELECTION& aSel )
             {
                 SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
                 return plotTab && plotTab->GetPlotWin()->RedoZoomStackSize() > 0;
+            };
+
+    auto isConsoleShown =
+            [this]( const SELECTION& aSel )
+            {
+                bool aBool = false;
+
+                if( m_simulator )
+                    return m_ui->IsConsoleShown();
+
+                return aBool;
+            };
+
+    auto isSidePanelShown =
+            [this]( const SELECTION& aSel )
+            {
+                bool aBool = false;
+
+                if( m_simulator )
+                    return m_ui->IsSidePanelShown();
+
+                return aBool;
             };
 
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
@@ -745,6 +779,9 @@ void SIMULATOR_FRAME::setupUIConditions()
     mgr->SetConditions( EE_ACTIONS::exportPlotAsCSV,       ENABLE( havePlot ) );
     mgr->SetConditions( EE_ACTIONS::exportPlotToClipboard, ENABLE( havePlot ) );
     mgr->SetConditions( EE_ACTIONS::exportPlotToSchematic, ENABLE( havePlot ) );
+
+    mgr->SetConditions( ACTIONS::toggleSimulationSidePanel,   CHECK( isSidePanelShown ) );
+    mgr->SetConditions( ACTIONS::toggleConsole,   CHECK( isConsoleShown ) );
 
     mgr->SetConditions( ACTIONS::zoomUndo,                 ENABLE( haveZoomUndo ) );
     mgr->SetConditions( ACTIONS::zoomRedo,                 ENABLE( haveZoomRedo ) );
