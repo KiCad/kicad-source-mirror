@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-26 20:15+0300\n"
-"PO-Revision-Date: 2025-02-27 07:25+0000\n"
+"PO-Revision-Date: 2025-02-28 04:19+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -38,7 +38,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.2-dev\n"
+"X-Generator: Weblate 5.10.2-rc\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -35954,9 +35954,8 @@ msgid "Set to specified values:"
 msgstr "Auf eingestellte Werte setzen:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:147
-#, fuzzy
 msgid "Visible  (fields only)"
-msgstr "Sichtbar  (nur Text)"
+msgstr "Sichtbar  (nur Felder)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:235
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:99
@@ -42839,31 +42838,29 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1302
-#, fuzzy
 msgid "The board must be saved before generating IPC-2581 file."
-msgstr "Vor dem Erzeugen der IPC2581 muss die Platine gespeichert werden."
+msgstr "Vor dem Erzeugen der IPC2581-Datei muss die Platine gespeichert werden."
 
 #: pcbnew/files.cpp:1318
-#, fuzzy
 msgid "Generating IPC-2581 file"
-msgstr "Erzeuge IPC2581-Datei"
+msgstr "Erzeuge IPC-2581-Datei"
 
 #: pcbnew/files.cpp:1343 pcbnew/pcbnew_jobs_handler.cpp:2022
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "%s"
 msgstr ""
-"Fehler beim Erzeugen der IPC2581-Datei \"%s\".\n"
+"Fehler beim Erzeugen der IPC-2581-Datei \"%s\".\n"
 "%s"
 
 #: pcbnew/files.cpp:1408 pcbnew/pcbnew_jobs_handler.cpp:2055
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "Failed to rename temporary file '%s."
 msgstr ""
-"Fehler beim Erzeugen der IPC2581-Datei \"%s\".\n"
+"Fehler beim Erzeugen der IPC-2581-Datei \"%s\".\n"
 "Konnte temporäre Datei \"%s\" nicht umbenennen."
 
 #: pcbnew/files.cpp:1440
@@ -46937,9 +46934,8 @@ msgid "Saved DRC Report to %s\n"
 msgstr "DRC-Bericht wurde gespeichert in %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2103
-#, fuzzy
 msgid "Successfully created IPC-D-356 file\n"
-msgstr "genCAD-Datei erfolgreich erstellt\n"
+msgstr "IPC-D-356-Datei erfolgreich erstellt\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2108
 msgid "Failed to create IPC-D-356 file\n"
