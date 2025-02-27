@@ -391,10 +391,10 @@ BOOST_AUTO_TEST_CASE( Compare )
     m_part_no_data.SetUnitCount( 1 );
 
     // Options flag comparison tests.
-    testPart.SetPower();
+    testPart.SetGlobalPower();
     BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
     testPart.SetNormal();
-    m_part_no_data.SetPower();
+    m_part_no_data.SetGlobalPower();
     BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
     m_part_no_data.SetNormal();
 
@@ -678,7 +678,7 @@ BOOST_AUTO_TEST_CASE( IsPowerTest )
     BOOST_CHECK( !symbol->IsPower() );
     BOOST_CHECK( symbol->IsNormal() );
 
-    symbol->SetPower();
+    symbol->SetGlobalPower();
     BOOST_CHECK( symbol->IsPower() );
     BOOST_CHECK( !symbol->IsNormal() );
 

@@ -3673,7 +3673,7 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
     else
     {
         libSymbol = new LIB_SYMBOL( wxEmptyString );
-        libSymbol->SetPower();
+        libSymbol->SetGlobalPower();
         libSymbol->SetName( elem.text );
         libSymbol->GetReferenceField().SetText( "#PWR" );
         libSymbol->GetReferenceField().SetVisible( false );

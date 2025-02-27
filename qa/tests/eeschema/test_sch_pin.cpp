@@ -91,6 +91,7 @@ BOOST_AUTO_TEST_CASE( DefaultProperties )
     BOOST_CHECK( ( m_sch_pin->GetType() == m_lib_pin->GetType() ) );
 
     BOOST_CHECK_EQUAL( m_sch_pin->IsGlobalPower(), m_lib_pin->IsGlobalPower() );
+    BOOST_CHECK_EQUAL( m_sch_pin->IsLocalPower(), m_lib_pin->IsLocalPower() );
 }
 
 /**
@@ -162,7 +163,7 @@ BOOST_AUTO_TEST_CASE( PinNumberingPower )
 {
     // but if we set isPower...
     m_lib_pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
-    m_parent_part->SetPower();
+    m_parent_part->SetGlobalPower();
     BOOST_CHECK_EQUAL( m_lib_pin->IsGlobalPower(), true );
 
     // and update symbol from library...

@@ -392,6 +392,36 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                                             GRID_HELPER_GRIDS::GRID_CONNECTABLE );
                 }
 
+                EESCHEMA_SETTINGS*    cfg = m_frame->eeconfig();
+
+                if( !libSymbol->IsLocalPower() && cfg->m_Drawing.new_power_symbols == POWER_SYMBOLS::LOCAL )
+                {
+                    libSymbol->SetLocalPower();
+                    wxString keywords = libSymbol->GetKeyWords();
+
+                    // Adjust the KiCad library default fields to match the new power symbol type
+                    if( keywords.Contains( wxT( "global power" ) ) )
+                    {
+                        keywords.Replace( wxT( "global power" ), wxT( "local power" ) );
+                        libSymbol->SetKeyWords( keywords );
+                    }
+
+                    wxString desc = libSymbol->GetDescription();
+
+                    if( desc.Contains( wxT( "global label" ) ) )
+                    {
+                        desc.Replace( wxT( "global label" ), wxT( "local label" ) );
+                        libSymbol->SetDescription( desc );
+                    }
+                }
+                else if( !libSymbol->IsGlobalPower()
+                         && cfg->m_Drawing.new_power_symbols == POWER_SYMBOLS::GLOBAL )
+                {
+                    // We do not currently have local power symbols in the KiCad library, so
+                    // don't update any fields
+                    libSymbol->SetGlobalPower();
+                }
+
                 symbol = new SCH_SYMBOL( *libSymbol, &m_frame->GetCurrentSheet(), sel, cursorPos,
                                          &m_frame->Schematic() );
                 addSymbol( symbol );

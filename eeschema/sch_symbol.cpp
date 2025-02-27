@@ -2277,8 +2277,7 @@ INSPECT_RESULT SCH_SYMBOL::Visit( INSPECTOR aInspector, void* aTestData,
 {
     for( KICAD_T scanType : aScanTypes )
     {
-        if( scanType == SCH_LOCATE_ANY_T
-            || ( scanType == SCH_SYMBOL_T )
+        if( scanType == SCH_LOCATE_ANY_T || ( scanType == SCH_SYMBOL_T )
             || ( scanType == SCH_SYMBOL_LOCATE_POWER_T && m_part && m_part->IsPower() ) )
         {
             if( INSPECT_RESULT::QUIT == aInspector( this, aTestData ) )
@@ -2726,7 +2725,7 @@ bool SCH_SYMBOL::IsSymbolLikePowerGlobalLabel() const
     // It is a Power symbol
     // It has only one pin type Power input
 
-    if( !GetLibSymbolRef() || !GetLibSymbolRef()->IsPower() )
+    if( !GetLibSymbolRef() || !GetLibSymbolRef()->IsGlobalPower() )
         return false;
 
     std::vector<SCH_PIN*> pin_list = GetAllLibPins();
@@ -2738,12 +2737,45 @@ bool SCH_SYMBOL::IsSymbolLikePowerGlobalLabel() const
 }
 
 
-bool SCH_SYMBOL::IsPower() const
+bool SCH_SYMBOL::IsSymbolLikePowerLocalLabel() const
+{
+    // return true if the symbol is equivalent to a local label:
+    // It is a Power symbol
+    // It has only one pin type Power input
+
+    if( !GetLibSymbolRef() || !GetLibSymbolRef()->IsLocalPower() )
+        return false;
+
+    std::vector<SCH_PIN*> pin_list = GetAllLibPins();
+
+    if( pin_list.size() != 1 )
+        return false;
+
+    return pin_list[0]->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN;
+}
+
+
+bool SCH_SYMBOL::IsLocalPower() const
 {
     if( !m_part )
         return false;
 
-    return m_part->IsPower();
+    return m_part->IsLocalPower();
+}
+
+
+bool SCH_SYMBOL::IsGlobalPower() const
+{
+    if( !m_part )
+        return false;
+
+    return m_part->IsGlobalPower();
+}
+
+
+bool SCH_SYMBOL::IsPower() const
+{
+    return IsLocalPower() || IsGlobalPower();
 }
 
 

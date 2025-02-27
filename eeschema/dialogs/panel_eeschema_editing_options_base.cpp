@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -71,26 +71,54 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	m_staticline4 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bLeftColumn->Add( m_staticline4, 0, wxEXPAND|wxBOTTOM, 5 );
 
-	wxBoxSizer* bSizer6;
-	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
+	wxGridBagSizer* gbSizer1;
+	gbSizer1 = new wxGridBagSizer( 0, 0 );
+	gbSizer1->SetFlexibleDirection( wxBOTH );
+	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_borderColorLabel = new wxStaticText( this, wxID_ANY, _("Sheet border:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderColorLabel->Wrap( -1 );
-	bSizer6->Add( m_borderColorLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	gbSizer1->Add( m_borderColorLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
 	m_borderColorSwatch = new COLOR_SWATCH( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderColorSwatch->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 
-	bSizer6->Add( m_borderColorSwatch, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_borderColorSwatch, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
 	m_backgroundColorLabel = new wxStaticText( this, wxID_ANY, _("Sheet background:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_backgroundColorLabel->Wrap( -1 );
-	bSizer6->Add( m_backgroundColorLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gbSizer1->Add( m_backgroundColorLabel, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
 	m_backgroundColorSwatch = new COLOR_SWATCH( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_backgroundColorSwatch->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 
-	bSizer6->Add( m_backgroundColorSwatch, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_backgroundColorSwatch, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+
+	m_powerSymbolLabel = new wxStaticText( this, wxID_ANY, _("Power Symbols:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_powerSymbolLabel->Wrap( -1 );
+	gbSizer1->Add( m_powerSymbolLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	wxString m_choicePowerChoices[] = { _("Default"), _("Global"), _("Local") };
+	int m_choicePowerNChoices = sizeof( m_choicePowerChoices ) / sizeof( wxString );
+	m_choicePower = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choicePowerNChoices, m_choicePowerChoices, 0 );
+	m_choicePower->SetSelection( 0 );
+	m_choicePower->SetToolTip( _("Select the assigned type of new power symbol.\nDefault will follow the symbol definition.\nGlobal will convert new power symbols to global power symbols.\nLocal will convert new power symbols to a local power symbols.") );
+
+	gbSizer1->Add( m_choicePower, wxGBPosition( 1, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+
+
+	bLeftColumn->Add( gbSizer1, 0, wxEXPAND|wxLEFT|wxTOP, 10 );
+
+	wxFlexGridSizer* fgSizer4;
+	fgSizer4 = new wxFlexGridSizer( 2, 4, 0, 0 );
+	fgSizer4->SetFlexibleDirection( wxBOTH );
+	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+
+	bLeftColumn->Add( fgSizer4, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer6;
+	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
 
 
 	bLeftColumn->Add( bSizer6, 0, wxEXPAND|wxTOP|wxLEFT, 10 );

@@ -710,7 +710,7 @@ void BACK_ANNOTATE::processNetNameChange( SCH_COMMIT* aCommit, const wxString& a
         SCH_PIN*   schPin = static_cast<SCH_PIN*>( driver );
         SPIN_STYLE spin   = orientLabel( schPin );
 
-        if( schPin->IsGlobalPower() )
+        if( schPin->IsPower() )
         {
             msg.Printf( _( "Net %s cannot be changed to %s because it is driven by a power pin." ),
                         EscapeHTML( aOldName ),

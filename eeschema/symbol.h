@@ -110,6 +110,8 @@ public:
     virtual wxString GetDescription() const = 0;
     virtual wxString GetKeyWords() const = 0;
 
+    virtual bool IsGlobalPower() const = 0;
+    virtual bool IsLocalPower() const = 0;
     virtual bool IsPower() const = 0;
     virtual bool IsNormal() const = 0;
 

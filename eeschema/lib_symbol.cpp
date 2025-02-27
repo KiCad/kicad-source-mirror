@@ -411,33 +411,69 @@ const wxString LIB_SYMBOL::GetLibraryName() const
 }
 
 
-bool LIB_SYMBOL::IsPower() const
+bool LIB_SYMBOL::IsLocalPower() const
 {
     std::shared_ptr<LIB_SYMBOL> parent;
 
     if( !m_parent.expired() && ( parent = m_parent.lock() ) )
     {
         if( parent->IsRoot() )
-            return parent->m_options == ENTRY_POWER;
+            return parent->m_options == ENTRY_LOCAL_POWER;
         else
-            return parent->IsPower();
+            return parent->IsLocalPower();
     }
 
-    return m_options == ENTRY_POWER;
+    return m_options == ENTRY_LOCAL_POWER;
 }
 
 
-void LIB_SYMBOL::SetPower()
+void LIB_SYMBOL::SetLocalPower()
 {
     if( LIB_SYMBOL_SPTR parent = m_parent.lock() )
     {
         if( parent->IsRoot() )
-            parent->m_options = ENTRY_POWER;
+            parent->m_options = ENTRY_LOCAL_POWER;
         else
-            parent->SetPower();
+            parent->SetLocalPower();
     }
 
-    m_options = ENTRY_POWER;
+    m_options = ENTRY_LOCAL_POWER;
+}
+
+
+bool LIB_SYMBOL::IsGlobalPower() const
+{
+    std::shared_ptr<LIB_SYMBOL> parent;
+
+    if( !m_parent.expired() && ( parent = m_parent.lock() ) )
+    {
+        if( parent->IsRoot() )
+            return parent->m_options == ENTRY_GLOBAL_POWER;
+        else
+            return parent->IsGlobalPower();
+    }
+
+    return m_options == ENTRY_GLOBAL_POWER;
+}
+
+
+bool LIB_SYMBOL::IsPower() const
+{
+    return IsLocalPower() || IsGlobalPower();
+}
+
+
+void LIB_SYMBOL::SetGlobalPower()
+{
+    if( LIB_SYMBOL_SPTR parent = m_parent.lock() )
+    {
+        if( parent->IsRoot() )
+            parent->m_options = ENTRY_GLOBAL_POWER;
+        else
+            parent->SetGlobalPower();
+    }
+
+    m_options = ENTRY_GLOBAL_POWER;
 }
 
 

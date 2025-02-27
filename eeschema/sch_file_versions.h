@@ -115,4 +115,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20241004  // Use booleans for 'hide' in symbols
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20241209  // Private flags for SCH_FIELDs
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20250114  // Full paths for text variable cross references
-#define SEXPR_SCHEMATIC_FILE_VERSION 20250222    // Hatched fills for shapes
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20250222  // Hatched fills for shapes
+#define   SEXPR_SCHEMATIC_FILE_VERSION 20250227  // Support for local power symbols

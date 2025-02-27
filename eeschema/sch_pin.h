@@ -193,6 +193,18 @@ public:
      */
     bool IsGlobalPower() const;
 
+    /**
+     * Local power pin is the same except that it is sheet-local and it does not support the legacy
+     * hidden pin mode
+     */
+    bool IsLocalPower() const;
+
+    /**
+     * Check if the pin is _either_ a global or local power pin.
+     * @see IsGlobalPower() and IsLocalPower()
+     */
+    bool IsPower() const;
+
     int GetPenWidth() const override { return 0; }
 
     void Move( const VECTOR2I& aOffset ) override;

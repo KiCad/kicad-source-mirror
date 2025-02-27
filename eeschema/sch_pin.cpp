@@ -363,7 +363,20 @@ wxString SCH_PIN::GetElectricalTypeName() const
 bool SCH_PIN::IsGlobalPower() const
 {
     return GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN
-           && ( !IsVisible() || GetParentSymbol()->IsPower() );
+           && ( !IsVisible() || GetParentSymbol()->IsGlobalPower() );
+}
+
+
+bool SCH_PIN::IsLocalPower() const
+{
+    return GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN
+           && GetParentSymbol()->IsLocalPower();
+}
+
+
+bool SCH_PIN::IsPower() const
+{
+    return IsLocalPower() || IsGlobalPower();
 }
 
 
@@ -1220,9 +1233,11 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
 
     // Need to check for parent as power symbol to make sure we aren't dealing
     // with legacy global power pins on non-power symbols
-    if( IsGlobalPower() )
+    if( IsGlobalPower() || IsLocalPower() )
     {
-        if( GetLibPin()->GetParentSymbol()->IsPower() )
+        SYMBOL* parent = GetLibPin()->GetParentSymbol();
+
+        if( parent->IsGlobalPower() || parent->IsLocalPower() )
         {
             return EscapeString( symbol->GetValue( true, &aPath, false ), CTX_NETNAME );
         }

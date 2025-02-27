@@ -1333,7 +1333,7 @@ int ERC_TESTER::TestSimilarLabels()
                 {
                     SCH_PIN* pin = static_cast<SCH_PIN*>( item );
 
-                    if( !pin->IsGlobalPower() )
+                    if( !pin->IsPower() )
                     {
                         continue;
                     }

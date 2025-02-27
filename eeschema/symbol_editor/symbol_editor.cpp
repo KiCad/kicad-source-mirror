@@ -420,7 +420,7 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& aInheritFrom )
             new_symbol.SetPinNameOffset( 0 );
         }
 
-        ( dlg.GetPowerSymbol() ) ? new_symbol.SetPower() : new_symbol.SetNormal();
+        ( dlg.GetPowerSymbol() ) ? new_symbol.SetGlobalPower() : new_symbol.SetNormal();
         new_symbol.SetShowPinNumbers( dlg.GetShowPinNumber() );
         new_symbol.SetShowPinNames( dlg.GetShowPinName() );
         new_symbol.LockUnits( !dlg.GetUnitsInterchangeable() );
@@ -1757,8 +1757,10 @@ void SYMBOL_EDIT_FRAME::UpdateSymbolMsgPanelInfo()
 
     AppendMsgPanel( _( "Body" ), msg, 8 );
 
-    if( m_symbol->IsPower() )
+    if( m_symbol->IsGlobalPower() )
         msg = _( "Power Symbol" );
+    else if( m_symbol->IsLocalPower() )
+        msg = _( "Power Symbol (Local)" );
     else
         msg = _( "Symbol" );
 

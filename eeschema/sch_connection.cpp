@@ -336,7 +336,7 @@ bool SCH_CONNECTION::IsDriver() const
         if( const SCH_SYMBOL* symbol = dynamic_cast<const SCH_SYMBOL*>( pin->GetParentSymbol() ) )
         {
             // Only annotated symbols should drive nets.
-            return pin->IsGlobalPower() || symbol->IsAnnotated( &m_sheet );
+            return pin->IsPower() || symbol->IsAnnotated( &m_sheet );
         }
 
         return true;
@@ -399,11 +399,16 @@ void SCH_CONNECTION::recacheName()
         switch( m_driver->Type() )
         {
         case SCH_GLOBAL_LABEL_T:
-        case SCH_PIN_T:
-            // Pins are either power connections or belong to a uniquely-annotated
-            // symbol, so they don't need a path if they are driving the subgraph.
             prepend_path = false;
             break;
+
+        case SCH_PIN_T:
+        { // Normal pins and global power pins do not need a path.  But local power pins do
+            SCH_PIN* pin = static_cast<SCH_PIN*>( m_driver );
+
+            prepend_path = pin->IsLocalPower();
+            break;
+        }
 
         default:
             break;

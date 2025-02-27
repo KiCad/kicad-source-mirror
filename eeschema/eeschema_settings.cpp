@@ -371,6 +371,10 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<COLOR4D>( "drawing.default_sheet_background_color",
             &m_Drawing.default_sheet_background_color, COLOR4D::UNSPECIFIED ) );
 
+    m_params.emplace_back( new PARAM_ENUM<POWER_SYMBOLS>(
+            "drawing.new_power_symbols", &m_Drawing.new_power_symbols, POWER_SYMBOLS::DEFAULT,
+            POWER_SYMBOLS::DEFAULT, POWER_SYMBOLS::LOCAL ) );
+
     m_params.emplace_back( new PARAM_LIST<double>( "drawing.junction_size_mult_list",
             &m_Drawing.junction_size_mult_list, { 0.0, 1.7, 4.0, 6.0, 9.0, 12.0 } ) );
 

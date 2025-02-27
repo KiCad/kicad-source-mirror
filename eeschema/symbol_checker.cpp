@@ -249,7 +249,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
         else
             pinName = "'" + pinName + "'";
 
-        if( !aSymbol->IsPower()
+        if( !aSymbol->IsGlobalPower()
                 && pin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN
                 && !pin->IsVisible() )
         {

@@ -1424,7 +1424,7 @@ void SCH_SCREEN::FixLegacyPowerSymbolMismatches()
         // Fix pre-8.0 legacy power symbols with invisible pins
         // that have mismatched pin names and value fields
         if( symbol->GetLibSymbolRef()
-            && symbol->GetLibSymbolRef()->IsPower()
+            && symbol->GetLibSymbolRef()->IsGlobalPower()
             && symbol->GetAllLibPins().size() > 0
             && symbol->GetAllLibPins()[0]->IsGlobalPower()
             && !symbol->GetAllLibPins()[0]->IsVisible() )

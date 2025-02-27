@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -22,6 +22,7 @@
 #include <wx/choice.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
+#include <wx/gbsizer.h>
 #include <wx/panel.h>
 #include <wx/simplebook.h>
 #include <wx/textctrl.h>
@@ -50,6 +51,8 @@ class PANEL_EESCHEMA_EDITING_OPTIONS_BASE : public RESETTABLE_PANEL
 		COLOR_SWATCH* m_borderColorSwatch;
 		wxStaticText* m_backgroundColorLabel;
 		COLOR_SWATCH* m_backgroundColorSwatch;
+		wxStaticText* m_powerSymbolLabel;
+		wxChoice* m_choicePower;
 		wxSimplebook* m_leftClickCmdsBook;
 		wxPanel* m_pageWinLin;
 		wxStaticText* m_leftClickLabel;

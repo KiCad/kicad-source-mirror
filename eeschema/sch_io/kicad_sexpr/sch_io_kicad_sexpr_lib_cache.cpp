@@ -168,8 +168,10 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
     {
         aFormatter.Print( "(symbol %s", name.c_str() );
 
-        if( aSymbol->IsPower() )
-            aFormatter.Print( "(power)" );
+        if( aSymbol->IsGlobalPower() )
+            aFormatter.Print( "(power global)" );
+        else if( aSymbol->IsLocalPower() )
+            aFormatter.Print( "(power local)" );
 
         // TODO: add uuid token here.
 

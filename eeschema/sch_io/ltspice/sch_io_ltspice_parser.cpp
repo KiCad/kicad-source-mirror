@@ -825,7 +825,7 @@ SCH_SYMBOL* SCH_IO_LTSPICE_PARSER::CreatePowerSymbol( const VECTOR2I& aOffset,
                                      LINE_STYLE::SOLID ) );
 
     lib_symbol->AddDrawItem( shape );
-    lib_symbol->SetPower();
+    lib_symbol->SetGlobalPower();
 
     SCH_PIN* pin = new SCH_PIN( lib_symbol );
 

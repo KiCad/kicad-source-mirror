@@ -235,9 +235,17 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_hasAlternateBodyStyles->SetValue( m_Parent->GetShowDeMorgan() );
 
     m_OptionPower->SetValue( m_libEntry->IsPower() );
+    m_OptionLocalPower->SetValue( m_libEntry->IsLocalPower() );
 
     if( m_libEntry->IsPower() )
+    {
         m_spiceFieldsButton->Hide();
+        m_OptionLocalPower->Enable();
+    }
+    else
+    {
+        m_OptionLocalPower->Enable( false );
+    }
 
     m_excludeFromSimCheckBox->SetValue( m_libEntry->GetExcludedFromSim() );
     m_excludeFromBomCheckBox->SetValue( m_libEntry->GetExcludedFromBOM() );
@@ -483,7 +491,11 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     if( m_OptionPower->GetValue() )
     {
-        m_libEntry->SetPower();
+        if( m_OptionLocalPower->GetValue() )
+            m_libEntry->SetLocalPower();
+        else
+            m_libEntry->SetGlobalPower();
+
         // Power symbols must have value matching name for now
         m_libEntry->GetValueField().SetText( newName );
     }
@@ -979,6 +991,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::onPowerCheckBox( wxCommandEvent& aEvent )
         m_excludeFromBoardCheckBox->Enable( false );
         m_excludeFromSimCheckBox->Enable( false );
         m_spiceFieldsButton->Show( false );
+        m_OptionLocalPower->Enable( true );
     }
     else
     {
@@ -986,6 +999,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::onPowerCheckBox( wxCommandEvent& aEvent )
         m_excludeFromBoardCheckBox->Enable( true );
         m_excludeFromSimCheckBox->Enable( true );
         m_spiceFieldsButton->Show( true );
+        m_OptionLocalPower->Enable( false );
     }
 
     OnModify();

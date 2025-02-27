@@ -58,8 +58,9 @@ typedef LIB_ITEMS_CONTAINER::ITEM_PTR_VECTOR LIB_ITEMS;
 /* values for member .m_options */
 enum LIBRENTRYOPTIONS
 {
-    ENTRY_NORMAL,   // Libentry is a standard symbol (real or alias)
-    ENTRY_POWER     // Libentry is a power symbol
+    ENTRY_NORMAL,     // Libentry is a standard symbol (real or alias)
+    ENTRY_GLOBAL_POWER,      // Libentry is a power symbol
+    ENTRY_LOCAL_POWER // Libentry is a local power symbol
 };
 
 
@@ -266,10 +267,13 @@ public:
         return GetBodyBoundingBox( m_previewUnit, m_previewBodyStyle, true, false );
     }
 
+    bool IsGlobalPower() const override;
+    bool IsLocalPower() const override;
     bool IsPower() const override;
     bool IsNormal() const override;
 
-    void SetPower();
+    void SetGlobalPower();
+    void SetLocalPower();
     void SetNormal();
 
     /**

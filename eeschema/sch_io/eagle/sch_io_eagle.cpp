@@ -1999,7 +1999,7 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
     for( const SCH_PIN* pin : symbol->GetLibPins() )
         m_connPoints[symbol->GetPinPhysicalPosition( pin )].emplace( pin );
 
-    if( part->IsPower() )
+    if( part->IsGlobalPower() )
         m_powerPorts[ reference ] = symbol->GetField( FIELD_T::VALUE )->GetText();
 
     symbol->ClearFlags();
@@ -2082,7 +2082,7 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
             libSymbol->SetUnitCount( gate_count );
 
             if( gate_count == 1 && ispower )
-                libSymbol->SetPower();
+                libSymbol->SetGlobalPower();
 
             // Don't set the footprint field if no package is defined in the Eagle schematic.
             if( edevice->package )
@@ -3346,7 +3346,7 @@ void SCH_IO_EAGLE::addImplicitConnections( SCH_SYMBOL* aSymbol, SCH_SCREEN* aScr
 
     // Normally power parts also have power input pins,
     // but they already force net names on the attached wires
-    if( aSymbol->GetLibSymbolRef()->IsPower() )
+    if( aSymbol->GetLibSymbolRef()->IsGlobalPower() )
         return;
 
     int                   unit      = aSymbol->GetUnit();

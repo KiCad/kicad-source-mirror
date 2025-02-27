@@ -990,7 +990,7 @@ std::pair<LIB_SYMBOL*, bool> SCH_EASYEDA_PARSER::MakePowerSymbol( const wxString
 
     LIB_ID libId = EasyEdaToKiCadLibID( wxEmptyString, aNetname );
 
-    ksymbol->SetPower();
+    ksymbol->SetGlobalPower();
     ksymbol->SetLibId( libId );
     ksymbol->SetName( aNetname );
     ksymbol->GetReferenceField().SetText( wxS( "#PWR" ) );

@@ -357,7 +357,17 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
         switch( token )
         {
         case T_power:
-            symbol->SetPower();
+            symbol->SetGlobalPower();
+            token = NextTok();
+
+            if( token == T_RIGHT )
+                break;
+
+            if( token == T_local )
+                symbol->SetLocalPower();
+            else if( token != T_global )
+                Expecting( "global or local" );
+
             NeedRIGHT();
             break;
 

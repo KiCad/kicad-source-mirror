@@ -893,7 +893,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                     wxCHECK( templatePart, /*void*/ );
 
                     kiPart = new LIB_SYMBOL( *templatePart );
-                    kiPart->SetPower();
+                    kiPart->SetGlobalPower();
                     kiPart->SetName( libPartName );
                     kiPart->GetValueField().SetText( symbolInstanceNetName );
                     kiPart->SetShowPinNames( false );

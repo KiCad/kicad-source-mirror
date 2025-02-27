@@ -678,7 +678,7 @@ SCH_EASYEDAPRO_PARSER::ParseSymbol( const std::vector<nlohmann::json>&  aLines,
     if( symInfo.head.symbolType == EASYEDAPRO::SYMBOL_TYPE::POWER_PORT
         || symInfo.head.symbolType == EASYEDAPRO::SYMBOL_TYPE::NETPORT )
     {
-        ksymbol->SetPower();
+        ksymbol->SetGlobalPower();
         ksymbol->GetReferenceField().SetText( wxS( "#PWR" ) );
         ksymbol->GetReferenceField().SetVisible( false );
         ksymbol->SetKeyWords( wxS( "power-flag" ) );

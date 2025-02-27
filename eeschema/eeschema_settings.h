@@ -49,6 +49,13 @@ enum LINE_MODE
 };
 
 
+enum class POWER_SYMBOLS
+{
+    DEFAULT = 0,
+    GLOBAL,
+    LOCAL
+};
+
 class EESCHEMA_SETTINGS : public APP_SETTINGS_BASE
 {
 public:
@@ -147,26 +154,27 @@ public:
 
     struct DRAWING
     {
-        int      default_bus_thickness;
-        int      default_junction_size;
-        int      default_line_thickness;
-        int      default_repeat_offset_x;
-        int      default_repeat_offset_y;
-        int      default_wire_thickness;
-        int      default_text_size;
-        int      pin_symbol_size;
-        double   text_offset_ratio;
-        COLOR4D  default_sheet_border_color;
-        COLOR4D  default_sheet_background_color;
-        wxString field_names;
-        int      line_mode;
-        int      repeat_label_increment;
-        bool     intersheets_ref_show;
-        bool     intersheets_ref_own_page;
-        bool     intersheets_ref_short;
-        wxString intersheets_ref_prefix;
-        wxString intersheets_ref_suffix;
-        bool     auto_start_wires;
+        int                 default_bus_thickness;
+        int                 default_junction_size;
+        int                 default_line_thickness;
+        int                 default_repeat_offset_x;
+        int                 default_repeat_offset_y;
+        int                 default_wire_thickness;
+        int                 default_text_size;
+        int                 pin_symbol_size;
+        double              text_offset_ratio;
+        COLOR4D             default_sheet_border_color;
+        COLOR4D             default_sheet_background_color;
+        POWER_SYMBOLS       new_power_symbols;
+        wxString            field_names;
+        int                 line_mode;
+        int                 repeat_label_increment;
+        bool                intersheets_ref_show;
+        bool                intersheets_ref_own_page;
+        bool                intersheets_ref_short;
+        wxString            intersheets_ref_prefix;
+        wxString            intersheets_ref_suffix;
+        bool                auto_start_wires;
         std::vector<double> junction_size_mult_list;
 
         // Pulldown index for user default junction dot size (e.g. smallest = 0, small = 1, etc)

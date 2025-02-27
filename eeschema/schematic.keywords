@@ -55,6 +55,7 @@ footprint
 free
 generator
 generator_version
+global
 global_label
 hatch
 header
@@ -86,6 +87,7 @@ lib_name
 lib_symbols
 line
 line_spacing
+local
 margins
 members
 mid

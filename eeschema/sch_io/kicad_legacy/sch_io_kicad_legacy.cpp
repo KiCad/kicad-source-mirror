@@ -2135,7 +2135,7 @@ void SCH_IO_KICAD_LEGACY::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
 
     for( LIB_SYMBOL_MAP::const_iterator it = symbols.begin();  it != symbols.end();  ++it )
     {
-        if( !powerSymbolsOnly || it->second->IsPower() )
+        if( !powerSymbolsOnly || it->second->IsGlobalPower() )
             aSymbolNameList.Add( it->first );
     }
 }
@@ -2156,7 +2156,7 @@ void SCH_IO_KICAD_LEGACY::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolL
 
     for( LIB_SYMBOL_MAP::const_iterator it = symbols.begin();  it != symbols.end();  ++it )
     {
-        if( !powerSymbolsOnly || it->second->IsPower() )
+        if( !powerSymbolsOnly || it->second->IsGlobalPower() )
             aSymbolList.push_back( it->second );
     }
 }

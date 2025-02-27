@@ -776,6 +776,51 @@ void SCH_PAINTER::drawPinDanglingIndicator( const SCH_PIN& aPin, const COLOR4D& 
 
 
 /**
+ * Draw an local power pin indicator icon.
+ */
+static void drawLocalPowerIcon( GAL& aGal, const VECTOR2D& aPos, double aSize, bool aRotate,
+                                const COLOR4D& aColor )
+{
+    aGal.Save();
+
+    aGal.Translate( aPos );
+
+    if( aRotate )
+    {
+        aGal.Rotate( ANGLE_270.AsRadians() );
+    }
+
+    aGal.SetIsFill( false );
+    aGal.SetIsStroke( true );
+    aGal.SetLineWidth( KiROUND( aSize / 10.0 ) );
+    aGal.SetStrokeColor( aColor );
+
+    double x_right = aSize / 1.6180339887;
+    double x_middle = x_right / 2.0;
+
+    VECTOR2D bottomPt = VECTOR2D{ x_middle, 0 };
+    VECTOR2D leftPt = VECTOR2D{ 0, 2.0 * -aSize / 3.0 };
+    VECTOR2D rightPt = VECTOR2D{ x_right, 2.0 * -aSize / 3.0 };
+
+    VECTOR2D bottomAnchorPt = VECTOR2D{ x_middle, -aSize / 4.0 };
+    VECTOR2D leftSideAnchorPt1 = VECTOR2D{ 0, -aSize / 2.5 };
+    VECTOR2D leftSideAnchorPt2 = VECTOR2D{ 0, -aSize * 1.15 };
+    VECTOR2D rightSideAnchorPt1 = VECTOR2D{ x_right, -aSize / 2.5 };
+    VECTOR2D rightSideAnchorPt2 = VECTOR2D{ x_right, -aSize * 1.15 };
+
+    aGal.DrawCurve( bottomPt, bottomAnchorPt, leftSideAnchorPt1, leftPt );
+    aGal.DrawCurve( leftPt, leftSideAnchorPt2, rightSideAnchorPt2, rightPt );
+    aGal.DrawCurve( rightPt, rightSideAnchorPt1, bottomAnchorPt, bottomPt );
+
+    aGal.SetIsFill( true );
+    aGal.SetFillColor( aColor );
+    aGal.DrawCircle( ( leftPt + rightPt ) / 2.0, aSize / 15.0 );
+
+    aGal.Restore();
+};
+
+
+/**
  * Draw an alternate pin mode indicator icon.
  */
 static void drawAltPinModesIcon( GAL& aGal, const VECTOR2D& aPos, double aSize, bool aBaseSelected,
@@ -2487,6 +2532,30 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
             }
 
             const_cast<SCH_FIELD*>( aField )->ClearFlags( IS_SHOWN_AS_BITMAP );
+        }
+
+        if( aField->GetParent() && aField->GetParent()->Type() == SCH_SYMBOL_T )
+        {
+            SCH_SYMBOL* parent = static_cast<SCH_SYMBOL*>( aField->GetParent() );
+            bool rotated = !orient.IsHorizontal() && !aField->CanAutoplace();
+
+            VECTOR2D    pos;
+            double      size = bbox.GetHeight() / 1.5;
+
+            if( rotated )
+            {
+                pos = VECTOR2D( bbox.GetRight() - bbox.GetWidth() / 6.0,
+                                bbox.GetBottom() + bbox.GetWidth() / 2.0 );
+                size = bbox.GetWidth() / 1.5;
+            }
+            else
+            {
+                pos = VECTOR2D( bbox.GetLeft() - bbox.GetHeight() / 2.0,
+                                bbox.GetBottom() - bbox.GetHeight() / 6.0 );
+            }
+
+            if( parent->IsSymbolLikePowerLocalLabel() )
+                drawLocalPowerIcon( *m_gal, pos, size, rotated, m_gal->GetStrokeColor() );
         }
     }
 

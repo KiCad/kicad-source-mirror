@@ -822,7 +822,10 @@ public:
      * It has only one pin type Power input
      */
     bool IsSymbolLikePowerGlobalLabel() const;
+    bool IsSymbolLikePowerLocalLabel() const;
 
+    bool IsGlobalPower() const override;
+    bool IsLocalPower() const override;
     bool IsPower() const override;
     bool IsNormal() const override;
 

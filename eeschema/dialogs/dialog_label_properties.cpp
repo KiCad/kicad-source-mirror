@@ -339,6 +339,24 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
                 }
             }
 
+            // Add local power labels from power symbols
+            if( m_currentLabel->Type() == SCH_LABEL_T )
+            {
+                for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_LOCATE_POWER_T ) )
+                {
+                    const SCH_SYMBOL* power = static_cast<const SCH_SYMBOL*>( item );
+
+                    // Ensure the symbol has the Power (i.e. equivalent to a local label
+                    // before adding its value in list
+                    if( power->IsSymbolLikePowerLocalLabel() )
+                    {
+                        const SCH_FIELD* valueField = power->GetField( FIELD_T::VALUE );
+                        existingLabels.insert( UnescapeString( valueField->GetText() ) );
+                    }
+                }
+            }
+            // Add bus aliases from the current screen
+
             auto& sheetAliases = screen->GetBusAliases();
             busAliases.insert( busAliases.end(), sheetAliases.begin(), sheetAliases.end() );
         }

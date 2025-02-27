@@ -447,7 +447,7 @@ LIB_SYMBOL* SCH_IO_KICAD_LEGACY_LIB_CACHE::LoadPart( LINE_READER& aReader, int a
         tmp = tokens.GetNextToken();
 
         if( tmp == "P" )
-            symbol->SetPower();
+            symbol->SetGlobalPower();
         else if( tmp == "N" )
             symbol->SetNormal();
         else
@@ -1520,7 +1520,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMA
                       aSymbol->GetShowPinNumbers() ? 'Y' : 'N',
                       aSymbol->GetShowPinNames() ? 'Y' : 'N',
                       aSymbol->GetUnitCount(), aSymbol->UnitsLocked() ? 'L' : 'F',
-                      aSymbol->IsPower() ? 'P' : 'N' );
+                      aSymbol->IsGlobalPower() ? 'P' : 'N' );
 
     timestamp_t dateModified = aSymbol->GetLastModDate();
 

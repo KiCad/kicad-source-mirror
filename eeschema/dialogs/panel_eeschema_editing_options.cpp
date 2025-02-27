@@ -88,6 +88,8 @@ void PANEL_EESCHEMA_EDITING_OPTIONS::loadEEschemaSettings( EESCHEMA_SETTINGS* aC
 
     m_cbAutoStartWires->SetValue( aCfg->m_Drawing.auto_start_wires );
     m_escClearsNetHighlight->SetValue( aCfg->m_Input.esc_clears_net_highlight );
+
+    m_choicePower->SetSelection( static_cast<int>( aCfg->m_Drawing.new_power_symbols ) );
 }
 
 
@@ -106,6 +108,8 @@ bool PANEL_EESCHEMA_EDITING_OPTIONS::TransferDataFromWindow()
 {
     SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
     EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
+
+    cfg->m_Drawing.new_power_symbols = static_cast<POWER_SYMBOLS>( m_choicePower->GetSelection() );
 
     cfg->m_Drawing.default_sheet_border_color = m_borderColorSwatch->GetSwatchColor();
     cfg->m_Drawing.default_sheet_background_color = m_backgroundColorSwatch->GetSwatchColor();
