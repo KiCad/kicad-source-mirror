@@ -1633,7 +1633,7 @@ int ERC_TESTER::TestFootprintFilters()
             {
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_FOOTPRINT_LINK_ISSUES );
                 msg.Printf( _( "Assigned footprint (%s) doesn't match footprint filters (%s)." ),
-                            lowerItemName,
+                            footprint.GetUniStringLibItemName(),
                             wxJoin( filters, ' ' ) );
                 ercItem->SetErrorMessage( msg );
                 ercItem->SetItems( sch_symbol );
