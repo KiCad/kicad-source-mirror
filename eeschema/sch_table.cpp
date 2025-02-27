@@ -515,10 +515,14 @@ void SCH_TABLE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
                 for( int row = 0; row < GetRowCount(); ++row )
                 {
                     SCH_TABLECELL* cell = GetCell( row, col );
+                    VECTOR2I       topRight( cell->GetEndX(), cell->GetStartY() );
+
+                    if( !cell->GetTextAngle().IsHorizontal() )
+                        topRight = VECTOR2I( cell->GetStartX(), cell->GetEndY() );
 
                     if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
                     {
-                        aPlotter->MoveTo( VECTOR2I( cell->GetEndX(), cell->GetStartY() ) );
+                        aPlotter->MoveTo( topRight );
                         aPlotter->FinishTo( VECTOR2I( cell->GetEndX(), cell->GetEndY() ) );
                     }
                 }
@@ -531,11 +535,15 @@ void SCH_TABLE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
             {
                 for( int col = 0; col < GetColCount(); ++col )
                 {
-                    SCH_TABLECELL* cell = GetCell( row, 0 );
+                    SCH_TABLECELL* cell = GetCell( row, col );
+                    VECTOR2I       botLeft( cell->GetStartX(), cell->GetEndY() );
+
+                    if( !cell->GetTextAngle().IsHorizontal() )
+                        botLeft = VECTOR2I( cell->GetEndX(), cell->GetStartY() );
 
                     if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
                     {
-                        aPlotter->MoveTo( VECTOR2I( cell->GetStartX(), cell->GetEndY() ) );
+                        aPlotter->MoveTo( botLeft );
                         aPlotter->FinishTo( VECTOR2I( cell->GetEndX(), cell->GetEndY() ) );
                     }
                 }

@@ -464,7 +464,8 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS
     COLOR4D              bg = renderSettings->GetBackgroundColor();
     LINE_STYLE           lineStyle = GetStroke().GetLineStyle();
 
-    if( penWidth > 0 )
+    // Do not plot border for SCH_TABLECELL_T: borders are plotted separately.
+    if( penWidth > 0 && Type() != SCH_TABLECELL_T )
     {
         if( !aPlotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
             color = renderSettings->GetLayerColor( m_layer );
