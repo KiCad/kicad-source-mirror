@@ -360,7 +360,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_cbRemoveIslands->SetSelection( 0 );
 	gbSizer3->Add( m_cbRemoveIslands, wxGBPosition( 7, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_islandThresholdLabel = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("Minimum island size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_islandThresholdLabel = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("Area limit:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_islandThresholdLabel->Wrap( -1 );
 	m_islandThresholdLabel->Enable( false );
 	m_islandThresholdLabel->SetToolTip( _("Isolated islands smaller than this will be removed") );

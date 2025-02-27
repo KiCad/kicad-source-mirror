@@ -66,11 +66,11 @@
         <property name="name">m_MainBoxSizer</property>
         <property name="orient">wxVERTICAL</property>
         <property name="permission">protected</property>
-        <object class="sizeritem" expanded="true">
+        <object class="sizeritem" expanded="false">
           <property name="border">5</property>
           <property name="flag">wxBOTTOM|wxEXPAND</property>
           <property name="proportion">0</property>
-          <object class="wxInfoBar" expanded="true">
+          <object class="wxInfoBar" expanded="false">
             <property name="BottomDockable">1</property>
             <property name="LeftDockable">1</property>
             <property name="RightDockable">1</property>
@@ -127,16 +127,16 @@
             <property name="window_style"></property>
           </object>
         </object>
-        <object class="sizeritem" expanded="true">
+        <object class="sizeritem" expanded="false">
           <property name="border">5</property>
           <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
           <property name="proportion">1</property>
-          <object class="wxBoxSizer" expanded="true">
+          <object class="wxBoxSizer" expanded="false">
             <property name="minimum_size"></property>
             <property name="name">m_OptionsBoxSizer</property>
             <property name="orient">wxHORIZONTAL</property>
             <property name="permission">none</property>
-            <object class="sizeritem" expanded="true">
+            <object class="sizeritem" expanded="false">
               <property name="border">5</property>
               <property name="flag">wxEXPAND|wxTOP|wxRIGHT|wxLEFT</property>
               <property name="proportion">0</property>
@@ -179,11 +179,11 @@
                 </object>
               </object>
             </object>
-            <object class="sizeritem" expanded="true">
+            <object class="sizeritem" expanded="false">
               <property name="border">5</property>
               <property name="flag">wxEXPAND|wxTOP|wxRIGHT|wxLEFT</property>
               <property name="proportion">1</property>
-              <object class="wxStaticBoxSizer" expanded="true">
+              <object class="wxStaticBoxSizer" expanded="false">
                 <property name="id">wxID_ANY</property>
                 <property name="label">Net</property>
                 <property name="minimum_size"></property>
@@ -191,20 +191,20 @@
                 <property name="orient">wxVERTICAL</property>
                 <property name="parent">1</property>
                 <property name="permission">none</property>
-                <object class="sizeritem" expanded="true">
+                <object class="sizeritem" expanded="false">
                   <property name="border">5</property>
                   <property name="flag">wxEXPAND</property>
                   <property name="proportion">1</property>
-                  <object class="wxBoxSizer" expanded="true">
+                  <object class="wxBoxSizer" expanded="false">
                     <property name="minimum_size"></property>
                     <property name="name">bSizer8</property>
                     <property name="orient">wxHORIZONTAL</property>
                     <property name="permission">none</property>
-                    <object class="sizeritem" expanded="true">
+                    <object class="sizeritem" expanded="false">
                       <property name="border">20</property>
                       <property name="flag">wxEXPAND</property>
                       <property name="proportion">1</property>
-                      <object class="wxBoxSizer" expanded="true">
+                      <object class="wxBoxSizer" expanded="false">
                         <property name="minimum_size"></property>
                         <property name="name">bFilteringSizer</property>
                         <property name="orient">wxHORIZONTAL</property>
@@ -510,11 +510,11 @@
             <property name="name">bSizerMiddle</property>
             <property name="orient">wxHORIZONTAL</property>
             <property name="permission">none</property>
-            <object class="sizeritem" expanded="true">
+            <object class="sizeritem" expanded="false">
               <property name="border">5</property>
               <property name="flag">wxEXPAND</property>
               <property name="proportion">0</property>
-              <object class="wxBoxSizer" expanded="true">
+              <object class="wxBoxSizer" expanded="false">
                 <property name="minimum_size"></property>
                 <property name="name">bLeftColumn</property>
                 <property name="orient">wxVERTICAL</property>
@@ -803,7 +803,7 @@
                     </object>
                   </object>
                 </object>
-                <object class="sizeritem" expanded="true">
+                <object class="sizeritem" expanded="false">
                   <property name="border">10</property>
                   <property name="flag">wxEXPAND|wxLEFT|wxRIGHT|wxTOP</property>
                   <property name="proportion">1</property>
@@ -1641,7 +1641,7 @@
                   <property name="border">10</property>
                   <property name="flag">wxEXPAND|wxRIGHT|wxTOP</property>
                   <property name="proportion">1</property>
-                  <object class="wxStaticBoxSizer" expanded="false">
+                  <object class="wxStaticBoxSizer" expanded="true">
                     <property name="id">wxID_ANY</property>
                     <property name="label">Electrical Properties</property>
                     <property name="minimum_size"></property>
@@ -1649,11 +1649,11 @@
                     <property name="orient">wxVERTICAL</property>
                     <property name="parent">1</property>
                     <property name="permission">none</property>
-                    <object class="sizeritem" expanded="false">
+                    <object class="sizeritem" expanded="true">
                       <property name="border">5</property>
                       <property name="flag">wxEXPAND</property>
                       <property name="proportion">0</property>
-                      <object class="wxGridBagSizer" expanded="false">
+                      <object class="wxGridBagSizer" expanded="true">
                         <property name="empty_cell_size"></property>
                         <property name="flexible_direction">wxBOTH</property>
                         <property name="growablecols">1</property>
@@ -2662,7 +2662,7 @@
               <property name="border">10</property>
               <property name="flag">wxEXPAND|wxTOP|wxRIGHT</property>
               <property name="proportion">0</property>
-              <object class="wxStaticBoxSizer" expanded="false">
+              <object class="wxStaticBoxSizer" expanded="true">
                 <property name="id">wxID_ANY</property>
                 <property name="label">Fill</property>
                 <property name="minimum_size"></property>
@@ -2670,11 +2670,11 @@
                 <property name="orient">wxVERTICAL</property>
                 <property name="parent">1</property>
                 <property name="permission">none</property>
-                <object class="sizeritem" expanded="false">
+                <object class="sizeritem" expanded="true">
                   <property name="border">5</property>
                   <property name="flag">wxEXPAND|wxBOTTOM</property>
                   <property name="proportion">1</property>
-                  <object class="wxGridBagSizer" expanded="false">
+                  <object class="wxGridBagSizer" expanded="true">
                     <property name="empty_cell_size">-1,10</property>
                     <property name="flexible_direction">wxBOTH</property>
                     <property name="growablecols">0</property>
@@ -3909,7 +3909,7 @@
                         <property name="gripper">0</property>
                         <property name="hidden">0</property>
                         <property name="id">wxID_ANY</property>
-                        <property name="label">Minimum island size:</property>
+                        <property name="label">Area limit:</property>
                         <property name="markup">0</property>
                         <property name="max_size"></property>
                         <property name="maximize_button">0</property>
@@ -4077,11 +4077,11 @@
             </object>
           </object>
         </object>
-        <object class="sizeritem" expanded="false">
+        <object class="sizeritem" expanded="true">
           <property name="border">5</property>
           <property name="flag">wxEXPAND|wxLEFT</property>
           <property name="proportion">0</property>
-          <object class="wxBoxSizer" expanded="false">
+          <object class="wxBoxSizer" expanded="true">
             <property name="minimum_size"></property>
             <property name="name">bSizerbottom</property>
             <property name="orient">wxHORIZONTAL</property>

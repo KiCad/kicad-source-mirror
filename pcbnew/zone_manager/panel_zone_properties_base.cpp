@@ -285,7 +285,7 @@ PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_cbRemoveIslands->SetSelection( 0 );
 	gbSizer3->Add( m_cbRemoveIslands, wxGBPosition( 7, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 
-	m_islandThresholdLabel = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("Minimum island size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_islandThresholdLabel = new wxStaticText( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, _("Area limit:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_islandThresholdLabel->Wrap( -1 );
 	m_islandThresholdLabel->Enable( false );
 	m_islandThresholdLabel->SetToolTip( _("Isolated islands smaller than this will be removed") );
