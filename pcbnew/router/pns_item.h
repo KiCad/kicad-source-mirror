@@ -20,8 +20,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __PNS_ITEM_H
-#define __PNS_ITEM_H
+#ifndef PNS_ITEM_H
+#define PNS_ITEM_H
 
 #include <memory>
 #include <set>
@@ -301,19 +301,19 @@ private:
                         COLLISION_SEARCH_CONTEXT* aCtx ) const;
 
 protected:
-    PnsKind       m_kind;
+    PnsKind         m_kind;
 
-    BOARD_ITEM*   m_parent;
-    PNS_LAYER_RANGE   m_layers;
+    BOARD_ITEM*     m_parent;
+    PNS_LAYER_RANGE m_layers;
 
-    bool          m_movable;
-    NET_HANDLE    m_net;
-    mutable int   m_marker;
-    int           m_rank;
-    bool          m_routable;
-    bool          m_isVirtual;
-    bool          m_isFreePad;
-    bool          m_isCompoundShapePrimitive;
+    bool            m_movable;
+    NET_HANDLE      m_net;
+    mutable int     m_marker;
+    int             m_rank;
+    bool            m_routable;
+    bool            m_isVirtual;
+    bool            m_isFreePad;
+    bool            m_isCompoundShapePrimitive;
 };
 
 template<typename T, typename S>
@@ -333,4 +333,4 @@ std::unique_ptr< typename std::remove_const<T>::type > Clone( const T& aItem )
 
 }
 
-#endif    // __PNS_ITEM_H
+#endif    // PNS_ITEM_H

@@ -19,8 +19,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __PNS_SEGMENT_H
-#define __PNS_SEGMENT_H
+#ifndef PNS_SEGMENT_H
+#define PNS_SEGMENT_H
 
 #include <math/vector2d.h>
 
@@ -108,7 +108,8 @@ public:
         m_seg.SetSeg( SEG (tmp.B , tmp.A ) );
     }
 
-    const SHAPE_LINE_CHAIN Hull( int aClearance, int aWalkaroundThickness, int aLayer = -1 ) const override;
+    const SHAPE_LINE_CHAIN Hull( int aClearance, int aWalkaroundThickness,
+                                 int aLayer = -1 ) const override;
 
     virtual VECTOR2I Anchor( int n ) const override
     {

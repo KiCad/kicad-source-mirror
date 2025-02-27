@@ -75,8 +75,10 @@ const VIA LINE_PLACER::makeVia( const VECTOR2I& aP )
     // fixme: should belong to KICAD_IFACE
     auto iface = Router()->GetInterface();
 
-    int start = m_sizes.ViaType() == VIATYPE::THROUGH ?iface->GetPNSLayerFromBoardLayer( F_Cu ) : m_sizes.GetLayerTop();
-    int end = m_sizes.ViaType() == VIATYPE::THROUGH ? iface->GetPNSLayerFromBoardLayer( B_Cu ) : m_sizes.GetLayerBottom();
+    int start = m_sizes.ViaType() == VIATYPE::THROUGH ? iface->GetPNSLayerFromBoardLayer( F_Cu )
+                                                      : m_sizes.GetLayerTop();
+    int end = m_sizes.ViaType() == VIATYPE::THROUGH ? iface->GetPNSLayerFromBoardLayer( B_Cu )
+                                                    : m_sizes.GetLayerBottom();
 
     const PNS_LAYER_RANGE layers(
         start ,
@@ -553,8 +555,8 @@ bool LINE_PLACER::cursorDistMinimum( const SHAPE_LINE_CHAIN& aL, const VECTOR2I&
 }
 
 
-bool LINE_PLACER::rhWalkBase( const VECTOR2I& aP, LINE& aWalkLine, int aCollisionMask, PNS::PNS_MODE aMode,
-                              bool& aViaOk )
+bool LINE_PLACER::rhWalkBase( const VECTOR2I& aP, LINE& aWalkLine, int aCollisionMask,
+                              PNS::PNS_MODE aMode, bool& aViaOk )
 {
     LINE walkFull( m_head );
     LINE l1( m_head );
