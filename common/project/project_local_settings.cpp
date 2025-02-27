@@ -74,8 +74,8 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                 }
 
                 // Explicit marker to tell apart a wiped-out array from the user hiding everything
-                // if( ret.empty() )
-                //     ret.push_back( "none" );
+                if( ret.empty() )
+                    ret.push_back( "none" );
 
                 return ret;
             },
