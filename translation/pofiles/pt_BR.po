@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-26 20:12+0300\n"
-"PO-Revision-Date: 2025-02-23 19:06+0000\n"
+"PO-Revision-Date: 2025-02-27 10:55+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10.1-dev\n"
+"X-Generator: Weblate 5.10.2-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -131,7 +131,7 @@ msgstr "Último tempo de renderização %.0f ms"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:743
 #, c-format
 msgid "Net %s\tNet class %s"
-msgstr "Net %s\tNet class %s"
+msgstr "Net %s\tclasse net %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:766
 #, c-format
@@ -2303,7 +2303,7 @@ msgstr "Padrão:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:33
 msgid "Net class:"
-msgstr "Net class:"
+msgstr "Classe net:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:51
 msgid ""
@@ -4816,9 +4816,8 @@ msgid "Failed to write file '%s'."
 msgstr "Houve uma falha ao gravar no arquivo '%s'."
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
-#, fuzzy
 msgid "Embedded Reference"
-msgstr "Copiar a referência incorporada"
+msgstr "Referência incorporada"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
@@ -5329,14 +5328,12 @@ msgstr "Condição do interpretador Python"
 
 #: common/dialogs/panel_printer_list.cpp:154
 #: common/dialogs/panel_printer_list.cpp:175
-#, fuzzy
 msgid "Default printer"
-msgstr "Fonte padrão"
+msgstr "Impressora padrão"
 
 #: common/dialogs/panel_printer_list_base.cpp:17
-#, fuzzy
 msgid "Printers"
-msgstr "Imprima"
+msgstr "Impressoras"
 
 #: common/dialogs/panel_printer_list_base.cpp:27
 #: common/widgets/wx_html_report_panel.cpp:246
@@ -6457,23 +6454,20 @@ msgstr "Bézier"
 #: common/eda_shape.cpp:2388
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:119
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:238
-#, fuzzy
 msgid "Hatch"
-msgstr "Hachurado"
+msgstr "Escotilha"
 
 #: common/eda_shape.cpp:2389
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:119
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:238
-#, fuzzy
 msgid "Reverse Hatch"
-msgstr "Inverter"
+msgstr "Escotilha inversa"
 
 #: common/eda_shape.cpp:2390
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:119
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:238
-#, fuzzy
 msgid "Cross-hatch"
-msgstr "Cruzado"
+msgstr "Escotilha cruzada"
 
 #: common/eda_shape.cpp:2423 eeschema/sch_shape.cpp:554
 msgid "Shape Properties"
@@ -7555,7 +7549,6 @@ msgid "Export Drill Data Job Settings"
 msgstr "Exportar configurações de tarefa dos dados de perfuração"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
-#, fuzzy
 msgid "PCB: Export Drill Data"
 msgstr "PCI: Exportar dados de perfuração"
 
@@ -7575,18 +7568,16 @@ msgstr "PCI: Exportar DXF"
 
 #: common/jobs/job_export_pcb_gencad.cpp:49
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:128
-#, fuzzy
 msgid "Export GenCAD File"
-msgstr "Exportar o arquivo SVG"
+msgstr "Exportar o arquivo GenCAD"
 
 #: common/jobs/job_export_pcb_gencad.cpp:55
 msgid "Export GenCAD Job Settings"
 msgstr "Exportar configurações de tarefa GenCAD"
 
 #: common/jobs/job_export_pcb_gencad.cpp:59
-#, fuzzy
 msgid "PCB: Export GenCAD"
-msgstr "PCI: Exportar DXF"
+msgstr "PCI: Exportar GenCAD"
 
 #: common/jobs/job_export_pcb_gerber.cpp:65
 msgid "Export single Gerber"
@@ -7614,29 +7605,24 @@ msgid "Export IPC-2581"
 msgstr "Exportar IPC-2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
-#, fuzzy
 msgid "Export IPC-2581 Job Settings"
-msgstr "Exportar configurações de tarefa IPC2581"
+msgstr "Exportar configurações IPC2581 da tarefa"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
-#, fuzzy
 msgid "PCB: Export IPC-2581"
 msgstr "PCI: Exportar IPC-2581"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:33
-#, fuzzy
 msgid "Export IPC-D-356"
-msgstr "Exportar IPC-2581"
+msgstr "Exportar IPC-D-356"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:39
-#, fuzzy
 msgid "Export IPC-D-356 Job Settings"
-msgstr "Exportar configurações de tarefa IPC2581"
+msgstr "Exportar configurações IPC-D-356 da tarefa"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:52
-#, fuzzy
 msgid "PCB: Export IPC-D-356"
-msgstr "PCI: Exportar IPC-2581"
+msgstr "PCI: Exportar IPC-D-356"
 
 #: common/jobs/job_export_pcb_odb.cpp:57
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
@@ -7794,7 +7780,6 @@ msgid "Schematic: Perform ERC"
 msgstr "Esquemático: Realizar o ERC"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy Files"
 msgstr "Especial: copiar arquivos"
 
@@ -14073,9 +14058,8 @@ msgstr "Substituir"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:149
 #: pcbnew/dialogs/dialog_find_base.cpp:125
-#, fuzzy
 msgid "Show search panel"
-msgstr "Mostra painel de busca"
+msgstr "Mostrar painel de busca"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:44
 msgid "Schematic Setup"
@@ -14177,9 +14161,8 @@ msgstr "Defina a largura da borda para 0 para usar a linha padrão no esquema."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:115
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:234
-#, fuzzy
 msgid "Fill:"
-msgstr "Preencha"
+msgstr "Preencher:"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:142
 msgid "Clear colors to use Schematic Editor colors."
@@ -16987,14 +16970,14 @@ msgid "The current configuration does not include the symbol library '%s'"
 msgstr "A configuração atual não inclui os símbolos da biblioteca '%s'"
 
 #: eeschema/erc/erc.cpp:1414
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration"
-msgstr "Os símbolos da biblioteca '%s' não está ativada na configuração atual."
+msgstr "Os símbolos da biblioteca '%s' não está ativada na configuração atual"
 
 #: eeschema/erc/erc.cpp:1429
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' was not found at '%s'."
-msgstr "A biblioteca do footprint '%s' não foi encontrado."
+msgstr "O símbolo da biblioteca '%s' não foi encontrado em '%s'."
 
 #: eeschema/erc/erc.cpp:1449
 #, c-format
@@ -22278,16 +22261,17 @@ msgid "Delete Hierarchical Labels"
 msgstr "Excluir a hierarquia da(s) etiqueta(s)"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:99
-#, fuzzy
 msgid ""
 "Associate selected sheet pin and hierarchical label using the label name"
-msgstr "Sincronizar a folha de pinos e a hierarquia das etiquetas"
+msgstr ""
+"Associar o pino da planilha selecionada e a hierarquia da etiqueta usando o "
+"nome da etiqueta"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
-#, fuzzy
 msgid "Associate selected sheet pin and hierarchical label using the pin name"
 msgstr ""
-"Quebra a associação da planilha de pinos e das etiqueta(s) hierárquica(s)"
+"Associar o pino da planilha selecionada e a hierarquia da etiqueta usando o "
+"nome do pino"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
@@ -22825,14 +22809,12 @@ msgid "Place Sheet Pins"
 msgstr "Posicionar planilha de pinos"
 
 #: eeschema/tools/ee_actions.cpp:552 eeschema/tools/ee_actions.cpp:560
-#, fuzzy
 msgid "Sync Sheet Pins..."
-msgstr "Sincronizar planilha de pinos"
+msgstr "Sincronizar a folha de pinos..."
 
 #: eeschema/tools/ee_actions.cpp:568
-#, fuzzy
 msgid "Import Sheet..."
-msgstr "Importar folha"
+msgstr "Importar folha..."
 
 #: eeschema/tools/ee_actions.cpp:569
 msgid "Import sheet into project"
@@ -27728,6 +27710,8 @@ msgid ""
 "This plugin requires the KiCad API, which is currently disabled in "
 "preferences. Would you like to enable it?"
 msgstr ""
+"Este plug-in requer a API do KiCad, que está desativada nas preferências "
+"atualmente. Gostaria de ativá-la?"
 
 #: kicad/pcm/pcm.cpp:1121
 msgid "PCM Update"
@@ -28077,7 +28061,6 @@ msgid "Local path: monitoring folder changes"
 msgstr "Caminho local: monitorando das alterações na pasta"
 
 #: kicad/project_tree_pane.cpp:1631
-#, fuzzy
 msgid "The selected directory is already a Git project."
 msgstr "O diretório selecionado já é um projeto Git."
 
@@ -28086,7 +28069,6 @@ msgid "Set default remote"
 msgstr "Definir o ramo remoto padrão"
 
 #: kicad/project_tree_pane.cpp:1653
-#, fuzzy
 msgid "Failed to initialize Git project."
 msgstr "Houve uma falha ao inicializar o projeto Git."
 
@@ -28128,19 +28110,16 @@ msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "Houve uma falha atualizar a referência do HEAD para o ramo '%s'"
 
 #: kicad/project_tree_pane.cpp:1919
-#, fuzzy
 msgid "Are you sure you want to remove Git tracking from this project?"
-msgstr "Tem certeza de que deseja remover o rastreamento do git deste projeto?"
+msgstr "Tem certeza de que deseja remover o rastreamento git deste projeto?"
 
 #: kicad/project_tree_pane.cpp:1936
-#, fuzzy
 msgid "Failed to remove Git directory"
 msgstr "Houve uma falha ao remover o diretório git"
 
 #: kicad/project_tree_pane.cpp:2252
-#, fuzzy
 msgid "The selected directory is not a Git project."
-msgstr "O diretório selecionado já é um projeto Git."
+msgstr "O diretório selecionado não é um projeto git."
 
 #: kicad/project_tree_pane.cpp:2401
 msgid "Discarding commit due to empty commit message."
@@ -35382,11 +35361,8 @@ msgid "Output File:"
 msgstr "Arquivo de saída:"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:61
-#, fuzzy
 msgid "Enter a filename if you do not want to use default file names"
-msgstr ""
-"Entre um nome para o arquivo caso não queira usar os nomes predefinidos\n"
-"Pode ser utilizado somente ao imprimir a folha atual"
+msgstr "Digite um nome de arquivo se não quiser usar os nomes de arquivo padrão"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:436
 #, c-format
@@ -35982,9 +35958,8 @@ msgid "Set to specified values:"
 msgstr "Ajuste para os valores informados:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:147
-#, fuzzy
 msgid "Visible  (fields only)"
-msgstr "Visível  (apenas texto)"
+msgstr "Visível  (campos apenas)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:235
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:99
@@ -38240,22 +38215,20 @@ msgstr "Estilo da borda:"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:546
 #, c-format
 msgid "Applying these changes will short net %s with %s."
-msgstr ""
+msgstr "A aplicação dessas alterações reduzirá a net %s com %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:552
 #, c-format
 msgid "Applying these changes will short net %s with other nets."
-msgstr ""
+msgstr "A aplicação dessas alterações encurtará a net %s com outras nets."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Apply Anyway"
-msgstr "Adicione mesmo assim"
+msgstr "Aplicar mesmo assim"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Cancel Changes"
-msgstr "Cancela as alterações?"
+msgstr "Cancelar as alterações"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:571
 #, c-format
@@ -39367,9 +39340,8 @@ msgid "Apply board defaults to non-copper footprint shapes"
 msgstr "Aplicar as predefinições da placa as formas do footprint sem cobre"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:58
-#, fuzzy
 msgid "This layer is required and cannot be disabled"
-msgstr "O nome %s está reservado e não pode ser usado."
+msgstr "Essa camada é obrigatória e não pode ser desativada"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:88
 #: pcbnew/dialogs/panel_setup_layers.cpp:294
@@ -42207,9 +42179,9 @@ msgid "Checking board footprints against library..."
 msgstr "Verificando os footprints da placa com a biblioteca..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:892
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' was not found at '%s'."
-msgstr "A biblioteca do footprint '%s' não foi encontrado."
+msgstr "A biblioteca de footprint '%s' não foi encontrada em '%s'."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:942
 #, c-format
@@ -42495,16 +42467,17 @@ msgid "Generate IPC-D-356 netlist file"
 msgstr "Gera um arquivo netlist IPC-D-356"
 
 #: pcbnew/exporters/export_d356.cpp:404
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "IPC-D-356 netlist file created:\n"
 "'%s'."
-msgstr "Arquivo netlist IPC-D-356..."
+msgstr ""
+"Arquivo netlist IPC-D-356 foi criado:\n"
+"'%s'."
 
 #: pcbnew/exporters/export_d356.cpp:405
-#, fuzzy
 msgid "IPC-D-356 Netlist File"
-msgstr "Arquivo netlist IPC-D-356..."
+msgstr "Arquivo netlist IPC-D-356"
 
 #: pcbnew/exporters/export_footprint_associations.cpp:73
 msgid "Save Footprint Association File"
@@ -42857,31 +42830,29 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1302
-#, fuzzy
 msgid "The board must be saved before generating IPC-2581 file."
-msgstr "A placa deve ser salva antes de gerar o arquivo IPC2581."
+msgstr "A placa deve ser salva antes de gerar o arquivo IPC-2581."
 
 #: pcbnew/files.cpp:1318
-#, fuzzy
 msgid "Generating IPC-2581 file"
-msgstr "Gerando o arquivo IPC2581"
+msgstr "Gerando o arquivo IPC-2581"
 
 #: pcbnew/files.cpp:1343 pcbnew/pcbnew_jobs_handler.cpp:2031
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "%s"
 msgstr ""
-"Houve um erro ao gerar o arquivo IPC2581 '%s'.\n"
+"Houve um erro ao gerar o arquivo IPC-2581 '%s'.\n"
 "%s"
 
 #: pcbnew/files.cpp:1408 pcbnew/pcbnew_jobs_handler.cpp:2064
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "Failed to rename temporary file '%s."
 msgstr ""
-"Houve um erro ao gerar o arquivo IPC2581 '%s'.\n"
+"Houve um erro ao gerar o arquivo IPC-2581 '%s'.\n"
 "Houve uma falha ao renomear o arquivo temporário '%s."
 
 #: pcbnew/files.cpp:1440
@@ -46951,14 +46922,12 @@ msgid "Saved DRC Report to %s\n"
 msgstr "O relatório DRC foi salvo em %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2112
-#, fuzzy
 msgid "Successfully created IPC-D-356 file\n"
-msgstr "O arquivo genCAD foi criado com sucesso\n"
+msgstr "O arquivo IPC-D-356 foi criado com sucesso\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2117
-#, fuzzy
 msgid "Failed to create IPC-D-356 file\n"
-msgstr "Houve uma falha ao criar o arquivo."
+msgstr "Houve uma falha ao criar o arquivo IPC-D-356\n"
 
 #: pcbnew/pcbnew_printout.cpp:124
 msgid "Multiple Layers"
@@ -49635,9 +49604,8 @@ msgid "Show/hide the net inspector"
 msgstr "Mostrar/ocultar o inspetor net"
 
 #: pcbnew/tools/pcb_actions.cpp:1345
-#, fuzzy
 msgid "Zone Manager..."
-msgstr "Gerenciador de Zonas"
+msgstr "Gerenciador de regiões..."
 
 #: pcbnew/tools/pcb_actions.cpp:1346
 msgid "Show the zone manager dialog"
@@ -50305,7 +50273,7 @@ msgstr "Gerar regras da região de posicionamento..."
 
 #: pcbnew/tools/pcb_actions.cpp:2234
 msgid "Creates best-fit placement rule areas"
-msgstr "Cria áreas de regras de posicionamento mais adequadas"
+msgstr "Cria regras regionais de posicionamento mais adequadas"
 
 #: pcbnew/tools/pcb_actions.cpp:2241
 msgid "Repeat Layout..."
@@ -50313,7 +50281,7 @@ msgstr "Repetir a disposição..."
 
 #: pcbnew/tools/pcb_actions.cpp:2242
 msgid "Clones placement & routing across multiple identical channels"
-msgstr "Clona o posicionamento e o roteamento em vários canais idênticos"
+msgstr "Clonar o posicionamento e o roteamento em vários canais idênticos"
 
 #: pcbnew/tools/pcb_actions.cpp:2253
 msgid "Route Single Track"
@@ -51577,18 +51545,16 @@ msgid "Highlight Selected Net"
 msgstr "Realce a net selecionada"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1229
-#, fuzzy
 msgid "Rename Selected Net..."
-msgstr "Renomear a(s) net(s) selecionada(s)"
+msgstr "Renomear a(s) net(s) selecionada(s)..."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1233
 msgid "Delete Selected Net"
 msgstr "Excluir o(s) item(s) selecionado(s)"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1239
-#, fuzzy
 msgid "Add Net..."
-msgstr "Adicionar Texto…"
+msgstr "Adicionar net…"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1253
 msgid "Highlight Selected Nets"
@@ -51628,9 +51594,8 @@ msgid "Group by Netclass"
 msgstr "Agrupar por netclass"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1390
-#, fuzzy
 msgid "Add Custom Group..."
-msgstr "Adicionar grupo personalizado"
+msgstr "Adicionar grupo personalizado..."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1403
 msgid "Remove All Custom Groups"
@@ -51645,9 +51610,8 @@ msgid "Show Unconnected Nets"
 msgstr "Exibir as nets sem conexão"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1426
-#, fuzzy
 msgid "Save Net Inspector Report..."
-msgstr "Salvar o relatório do inspetor net"
+msgstr "Salvar o relatório do inspetor net..."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1435
 msgid "Show / Hide Columns"
