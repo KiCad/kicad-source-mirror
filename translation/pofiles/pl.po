@@ -18,17 +18,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-26 20:15+0300\n"
-"PO-Revision-Date: 2025-02-17 17:18+0000\n"
+"PO-Revision-Date: 2025-02-28 04:19+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.10.1-dev\n"
+"X-Generator: Weblate 5.10.2-rc\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -4791,9 +4790,8 @@ msgid "Failed to write file '%s'."
 msgstr "Nie można zapisywać do pliku '%s'."
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
-#, fuzzy
 msgid "Embedded Reference"
-msgstr "Skopiuj osadzone odniesienie"
+msgstr "Odniesienie osadzone"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
@@ -7475,7 +7473,6 @@ msgid "Export Drill Data Job Settings"
 msgstr "Ustawienia zadania eksportu danych wierceń"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
-#, fuzzy
 msgid "PCB: Export Drill Data"
 msgstr "PCB: Eksport danych o wierceniach"
 
@@ -7523,29 +7520,24 @@ msgid "Export IPC-2581"
 msgstr "Eksportuj IPC-2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
-#, fuzzy
 msgid "Export IPC-2581 Job Settings"
 msgstr "Ustawienia zadania eksportu IPC-2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
-#, fuzzy
 msgid "PCB: Export IPC-2581"
 msgstr "PCB: Eksport IPC-2581"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:33
-#, fuzzy
 msgid "Export IPC-D-356"
-msgstr "Eksportuj IPC-2581"
+msgstr "Eksportuj IPC-D-356"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:39
-#, fuzzy
 msgid "Export IPC-D-356 Job Settings"
-msgstr "Ustawienia zadania eksportu IPC-2581"
+msgstr "Ustawienia zadania eksportu IPC-D-356"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:52
-#, fuzzy
 msgid "PCB: Export IPC-D-356"
-msgstr "PCB: Eksport IPC-2581"
+msgstr "PCB: Eksport IPC-D-356"
 
 #: common/jobs/job_export_pcb_odb.cpp:57
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
@@ -7703,9 +7695,8 @@ msgid "Schematic: Perform ERC"
 msgstr "Schemat: Przeprowadź kontrolę ERC"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy Files"
-msgstr "Narzędzia specjalne: kopiuj pliki"
+msgstr "Narzędzia specjalne: Kopiuj pliki"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
@@ -9934,7 +9925,7 @@ msgstr "Edycja alternatywy..."
 
 #: common/widgets/widget_hotkey_list.cpp:452
 msgid "Undo Changes"
-msgstr "Anuluj zmiany"
+msgstr "Cofnij zmiany"
 
 #: common/widgets/widget_hotkey_list.cpp:453
 msgid "Clear Assigned Hotkey"
@@ -16890,14 +16881,14 @@ msgid "The current configuration does not include the symbol library '%s'"
 msgstr "Obecna konfiguracja nie zawiera biblioteki symboli '%s'"
 
 #: eeschema/erc/erc.cpp:1414
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration"
-msgstr "Biblioteka symboli '%s' nie jest włączona w bieżącej konfiguracji."
+msgstr "Biblioteka symboli '%s' nie jest włączona w bieżącej konfiguracji"
 
 #: eeschema/erc/erc.cpp:1429
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' was not found at '%s'."
-msgstr "Biblioteka footprintów '%s' nie została znaleziona."
+msgstr "Biblioteka symboli '%s' nie została znaleziona w '%s'."
 
 #: eeschema/erc/erc.cpp:1449
 #, c-format
@@ -27561,6 +27552,8 @@ msgid ""
 "This plugin requires the KiCad API, which is currently disabled in "
 "preferences. Would you like to enable it?"
 msgstr ""
+"Ta wtyczka wymaga KiCad API, które zgodnie z ustawieniami jest obecnie "
+"wyłączone. Czy chcesz je włączyć?"
 
 #: kicad/pcm/pcm.cpp:1121
 msgid "PCM Update"
@@ -32868,7 +32861,7 @@ msgstr "Pełny"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:129
 #: pcbnew/zone.cpp:1842 pcbnew/zone_manager/panel_zone_properties_base.cpp:215
 msgid "Hatch pattern"
-msgstr "Kreskowany"
+msgstr "Wzór kreskowany"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:307
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:149
@@ -35781,9 +35774,8 @@ msgid "Set to specified values:"
 msgstr "Ustaw na wartość:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:147
-#, fuzzy
 msgid "Visible  (fields only)"
-msgstr "Widoczność  (tylko tekst)"
+msgstr "Widoczność  (tylko pola)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:235
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:99
@@ -41994,9 +41986,9 @@ msgid "Checking board footprints against library..."
 msgstr "Porównywanie footprintów na płytce z ich źródłami w bibliotece..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:892
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' was not found at '%s'."
-msgstr "Biblioteka footprintów '%s' nie została znaleziona."
+msgstr "Biblioteka footprintów '%s' nie została znaleziona w '%s'."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:942
 #, c-format
@@ -42279,16 +42271,17 @@ msgid "Generate IPC-D-356 netlist file"
 msgstr "Generuj listę sieci formatu IPC-D-356"
 
 #: pcbnew/exporters/export_d356.cpp:404
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "IPC-D-356 netlist file created:\n"
 "'%s'."
-msgstr "Plik listy sieci IPC-D-356..."
+msgstr ""
+"Plik listy sieci IPC-D-356 został utworzony:\n"
+"'%s'."
 
 #: pcbnew/exporters/export_d356.cpp:405
-#, fuzzy
 msgid "IPC-D-356 Netlist File"
-msgstr "Plik listy sieci IPC-D-356..."
+msgstr "Plik listy sieci IPC-D-356"
 
 #: pcbnew/exporters/export_footprint_associations.cpp:73
 msgid "Save Footprint Association File"
@@ -42638,17 +42631,15 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1302
-#, fuzzy
 msgid "The board must be saved before generating IPC-2581 file."
 msgstr "Płytka musi zostać zapisana przed tworzeniem pliku IPC-2581."
 
 #: pcbnew/files.cpp:1318
-#, fuzzy
 msgid "Generating IPC-2581 file"
 msgstr "Generuj plik IPC-2581"
 
 #: pcbnew/files.cpp:1343 pcbnew/pcbnew_jobs_handler.cpp:2022
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "%s"
@@ -42657,7 +42648,7 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1408 pcbnew/pcbnew_jobs_handler.cpp:2055
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "Failed to rename temporary file '%s."
@@ -46722,14 +46713,12 @@ msgid "Saved DRC Report to %s\n"
 msgstr "Zapisano plik raportu DRC do %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2103
-#, fuzzy
 msgid "Successfully created IPC-D-356 file\n"
-msgstr "Plik genCAD wygenerowany poprawnie\n"
+msgstr "Plik IPC-D-356 wygenerowany poprawnie\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2108
-#, fuzzy
 msgid "Failed to create IPC-D-356 file\n"
-msgstr "Nie można utworzyć pliku."
+msgstr "Nie można utworzyć pliku IPC-D-356\n"
 
 #: pcbnew/pcbnew_printout.cpp:124
 msgid "Multiple Layers"
