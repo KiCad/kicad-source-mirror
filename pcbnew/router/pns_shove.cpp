@@ -222,6 +222,7 @@ LINE SHOVE::assembleLine( const LINKED_ITEM* aSeg, int* aIndex, bool aPreCleanup
     if( aPreCleanup )
     {
         LINE cleaned;
+
         if (preShoveCleanup( &cur, &cleaned ) )
             return cleaned;
     }
@@ -955,21 +956,21 @@ NODE* SHOVE::reduceSpringback( const ITEM_SET& aHeadSet )
     SPRINGBACK_TAG& spTag = m_nodeStack.back();
 
     for( int i = 0; i < spTag.m_draggedVias.size(); i++ )
-            {
-                if (spTag.m_draggedVias[i].valid)
-                {
-                    m_headLines[i].prevVia = m_headLines[i].theVia = spTag.m_draggedVias[i];
-                    m_headLines[i].geometryModified = true;
-                    PNS_DBG( Dbg(), Message,
-                             wxString::Format( "restore-springback-via depth=%d %d %d %d %d ",
-                                               spTag.m_node->Depth(),
-                                               (int) m_nodeStack.size(),
-                                               m_headLines[i].theVia->pos.x,
-                                               m_headLines[i].theVia->pos.y,
-                                               m_headLines[i].theVia->layers.Start(),
-                                               m_headLines[i].theVia->layers.End() ) );
-                }
-            }
+    {
+        if (spTag.m_draggedVias[i].valid)
+        {
+            m_headLines[i].prevVia = m_headLines[i].theVia = spTag.m_draggedVias[i];
+            m_headLines[i].geometryModified = true;
+            PNS_DBG( Dbg(), Message,
+                     wxString::Format( "restore-springback-via depth=%d %d %d %d %d ",
+                                       spTag.m_node->Depth(),
+                                       (int) m_nodeStack.size(),
+                                       m_headLines[i].theVia->pos.x,
+                                       m_headLines[i].theVia->pos.y,
+                                       m_headLines[i].theVia->layers.Start(),
+                                       m_headLines[i].theVia->layers.End() ) );
+        }
+    }
 
     return m_nodeStack.back().m_node;
 }

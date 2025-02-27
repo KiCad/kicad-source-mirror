@@ -35,11 +35,11 @@
 
 namespace PNS {
 
-LINE::LINE( const LINE& aOther )
-        : LINK_HOLDER( aOther ),
-          m_line( aOther.m_line ),
-          m_width( aOther.m_width ),
-          m_snapThreshhold( aOther.m_snapThreshhold )
+LINE::LINE( const LINE& aOther ) :
+        LINK_HOLDER( aOther ),
+        m_line( aOther.m_line ),
+        m_width( aOther.m_width ),
+        m_snapThreshhold( aOther.m_snapThreshhold )
 {
     m_net = aOther.m_net;
     m_movable = aOther.m_movable;
