@@ -119,6 +119,7 @@ public:
         m_movable = true;
         m_kind = aKind;
         m_parent = nullptr;
+        m_sourceItem = nullptr;
         m_owner = nullptr;
         m_marker = 0;
         m_rank = -1;
@@ -135,6 +136,7 @@ public:
         m_movable = aOther.m_movable;
         m_kind = aOther.m_kind;
         m_parent = aOther.m_parent;
+        m_sourceItem = aOther.m_sourceItem;
         m_owner = nullptr;
         m_marker = aOther.m_marker;
         m_rank = aOther.m_rank;
@@ -186,8 +188,18 @@ public:
      */
     std::string KindStr() const;
 
-    void SetParent( BOARD_ITEM* aParent ) { m_parent = aParent; }
+    void SetParent( BOARD_ITEM* aParent )
+    {
+        m_parent = aParent;
+
+        if( m_parent )
+            m_sourceItem = m_parent;
+    }
+
     BOARD_ITEM* Parent() const { return m_parent; }
+
+    void SetSourceItem( BOARD_ITEM* aSourceItem ) { m_sourceItem = aSourceItem; }
+    BOARD_ITEM* GetSourceItem() const { return m_sourceItem; }
 
     /**
      * @return the BOARD_ITEM, even if it's not the direct parent.
@@ -304,6 +316,7 @@ protected:
     PnsKind         m_kind;
 
     BOARD_ITEM*     m_parent;
+    BOARD_ITEM*     m_sourceItem;
     PNS_LAYER_RANGE m_layers;
 
     bool            m_movable;

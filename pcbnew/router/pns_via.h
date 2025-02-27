@@ -137,8 +137,12 @@ public:
 
     VIA& operator=( const VIA& aB )
     {
+        SetParent( aB.Parent() );
+        SetSourceItem( aB.GetSourceItem() );
+
         SetNet( aB.Net() );
         SetLayers( aB.Layers() );
+        m_movable = aB.m_movable;
         m_pos = aB.m_pos;
         m_stackMode = aB.m_stackMode;
         m_diameters = aB.m_diameters;
@@ -150,6 +154,7 @@ public:
         SetHole( HOLE::MakeCircularHole( m_pos, m_drill / 2, PNS_LAYER_RANGE() ) );
         m_marker = aB.m_marker;
         m_rank = aB.m_rank;
+        m_routable = aB.m_routable;
         m_viaType = aB.m_viaType;
         m_isFree = aB.m_isFree;
         m_isVirtual = aB.m_isVirtual;

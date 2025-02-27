@@ -2062,6 +2062,14 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
         new_arc->SetWidth( arc->Width() );
         new_arc->SetLayer( GetBoardLayerFromPNSLayer( arc->Layers().Start() ) );
         new_arc->SetNet( net );
+
+        if( aItem->GetSourceItem() && aItem->GetSourceItem()->IsType( { PCB_TRACE_T, PCB_ARC_T } ) )
+        {
+            PCB_TRACK* sourceTrack = static_cast<PCB_TRACK*>( aItem->GetSourceItem() );
+            new_arc->SetHasSolderMask( sourceTrack->HasSolderMask() );
+            new_arc->SetLocalSolderMaskMargin( sourceTrack->GetLocalSolderMaskMargin() );
+        }
+
         newBoardItem = new_arc;
         break;
     }
@@ -2076,6 +2084,14 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
         track->SetWidth( seg->Width() );
         track->SetLayer( GetBoardLayerFromPNSLayer( seg->Layers().Start() ) );
         track->SetNet( net );
+
+        if( aItem->GetSourceItem() && aItem->GetSourceItem()->IsType( { PCB_TRACE_T, PCB_ARC_T } ) )
+        {
+            PCB_TRACK* sourceTrack = static_cast<PCB_TRACK*>( aItem->GetSourceItem() );
+            track->SetHasSolderMask( sourceTrack->HasSolderMask() );
+            track->SetLocalSolderMaskMargin( sourceTrack->GetLocalSolderMaskMargin() );
+        }
+
         newBoardItem = track;
         break;
     }
@@ -2092,6 +2108,14 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
         via_board->SetIsFree( via->IsFree() );
         via_board->SetLayerPair( GetBoardLayerFromPNSLayer( via->Layers().Start() ),
                                  GetBoardLayerFromPNSLayer( via->Layers().End() ) );
+
+        if( aItem->GetSourceItem() && aItem->GetSourceItem()->Type() == PCB_VIA_T )
+        {
+            PCB_VIA* sourceVia = static_cast<PCB_VIA*>( aItem->GetSourceItem() );
+            via_board->SetFrontTentingMode( sourceVia->GetFrontTentingMode() );
+            via_board->SetBackTentingMode( sourceVia->GetBackTentingMode() );
+        }
+
         newBoardItem = via_board;
         break;
     }

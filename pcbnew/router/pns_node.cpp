@@ -1062,6 +1062,8 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
     pl.SetWidth( aSeg->Width() );
     pl.SetLayers( aSeg->Layers() );
     pl.SetNet( aSeg->Net() );
+    pl.SetParent( nullptr );
+    pl.SetSourceItem( aSeg->GetSourceItem() );
     pl.SetOwner( this );
 
     followLine( aSeg, false, i_start, MaxVerts, corners.data(), segs.data(), arcReversed.data(),
@@ -1183,11 +1185,15 @@ void NODE::FixupVirtualVias()
         if( joint.Layers().IsMultilayer() )
             continue;
 
-        int  n_seg = 0, n_solid = 0, n_vias = 0;
-        int  prev_w          = -1;
-        int  max_w           = -1;
-        bool is_width_change = false;
-        bool is_locked       = false;
+        int                n_seg   = 0;
+        int                n_solid = 0;
+        int                n_vias  = 0;
+        int                prev_w    = -1;
+        bool               prev_mask = false;
+        std::optional<int> prev_mask_margin;
+        int                max_w           = -1;
+        bool               is_width_change = false;
+        bool               is_locked       = false;
 
         for( const ITEM* item : joint.LinkList() )
         {
@@ -1201,9 +1207,23 @@ void NODE::FixupVirtualVias()
             }
             else if( const auto t = dyn_cast<const PNS::SEGMENT*>( item ) )
             {
-                int w = t->Width();
+                int                w    = t->Width();
+                bool               mask = false;
+                std::optional<int> mask_margin;
 
-                if( prev_w >= 0 && w != prev_w )
+                if( PCB_TRACK* track = static_cast<PCB_TRACK*>( t->Parent() ) )
+                {
+                    mask = track->HasSolderMask();
+                    mask_margin = track->GetLocalSolderMaskMargin();
+                }
+
+                if( prev_w < 0 )
+                {
+                    prev_w = w;
+                    prev_mask = mask;
+                    prev_mask_margin = mask_margin;
+                }
+                else if( w != prev_w || mask != prev_mask || mask_margin != prev_mask_margin )
                 {
                     is_width_change = true;
                 }
