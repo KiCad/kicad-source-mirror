@@ -626,7 +626,7 @@ void EDA_SHAPE::updateHatching() const
         break;
 
     case SHAPE_T::CIRCLE:
-        TransformShapeToPolygon( shapeBuffer, 0, ARC_HIGH_DEF, ERROR_INSIDE, true );
+        TransformCircleToPolygon( shapeBuffer, getCenter(), GetRadius(), ARC_HIGH_DEF, ERROR_INSIDE );
         addHatchLines( shapeBuffer.GenerateHatchLines( slopes, spacing, -1 ) );
         break;
 
