@@ -237,8 +237,12 @@ VIA* VIA::Clone() const
     VIA* v = new VIA();
 
     v->m_uid = m_uid; // fixme: oop
+    v->m_parent = m_parent;
+    v->m_sourceItem = m_sourceItem;
+
     v->SetNet( Net() );
     v->SetLayers( Layers() );
+    v->m_movable = m_movable;
     v->m_pos = m_pos;
     v->m_stackMode = m_stackMode;
     v->m_diameters = m_diameters;
@@ -250,6 +254,7 @@ VIA* VIA::Clone() const
     v->SetHole( HOLE::MakeCircularHole( m_pos, m_drill / 2, m_layers ) );
     v->m_rank = m_rank;
     v->m_marker = m_marker;
+    v->m_routable = m_routable;
     v->m_viaType = m_viaType;
     v->m_parent = m_parent;
     v->m_isFree = m_isFree;

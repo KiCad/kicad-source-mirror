@@ -53,6 +53,9 @@ public:
         LINKED_ITEM( SEGMENT_T ),
         m_seg( aSeg, aParentLine.Width() )
     {
+        m_parent = nullptr;
+        m_sourceItem = aParentLine.GetSourceItem();
+
         m_net = aParentLine.Net();
         m_layers = aParentLine.Layers();
         m_marker = aParentLine.Marker();

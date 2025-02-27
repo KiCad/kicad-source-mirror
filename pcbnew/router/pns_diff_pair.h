@@ -496,6 +496,8 @@ private:
         aLine.SetWidth( m_width );
         aLine.SetNet( aNet );
         aLine.SetLayer( Layers().Start() );
+        aLine.SetParent( m_parent );
+        aLine.SetSourceItem( m_sourceItem );
 
         if( m_hasVias )
             aLine.AppendVia( aVia );

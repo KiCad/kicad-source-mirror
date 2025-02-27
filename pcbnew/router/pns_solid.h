@@ -69,6 +69,9 @@ public:
 
     SOLID& operator=( const SOLID& aB )
     {
+        m_parent = aB.m_parent;
+        m_sourceItem = aB.m_sourceItem;
+
         if( aB.m_shape )
             SetShape( aB.m_shape->Clone() );
 
@@ -79,6 +82,12 @@ public:
         m_padToDie = aB.m_padToDie;
         m_orientation = aB.m_orientation;
         m_anchorPoints = aB.m_anchorPoints;
+
+        m_movable = aB.m_movable;
+        m_marker = aB.m_marker;
+        m_rank = aB.m_rank;
+        m_routable = aB.m_routable;
+
         return *this;
     }
 

@@ -35,9 +35,14 @@ ARC* ARC::Clone() const
 {
     ARC* a = new ARC( m_arc, m_net );
 
+    a->m_parent = m_parent;
+    a->m_sourceItem = m_sourceItem;
+
+    a->m_movable = m_movable;
     a->m_layers = m_layers;
     a->m_marker = m_marker;
     a->m_rank = m_rank;
+    a->m_routable = m_routable;
 
     return a;
 }
