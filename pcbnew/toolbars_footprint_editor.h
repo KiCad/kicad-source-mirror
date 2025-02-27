@@ -29,7 +29,7 @@ class FOOTPRINT_EDIT_TOOLBAR_SETTINGS : public TOOLBAR_SETTINGS
 {
 public:
     FOOTPRINT_EDIT_TOOLBAR_SETTINGS() :
-            TOOLBAR_SETTINGS( "fpedit" )
+            TOOLBAR_SETTINGS( "fpedit-toolbars" )
     {}
 
     ~FOOTPRINT_EDIT_TOOLBAR_SETTINGS() {}

@@ -30,7 +30,7 @@ class SYMBOL_VIEWER_TOOLBAR_SETTINGS : public TOOLBAR_SETTINGS
 {
 public:
     SYMBOL_VIEWER_TOOLBAR_SETTINGS() :
-            TOOLBAR_SETTINGS( "symbol_viewer" )
+            TOOLBAR_SETTINGS( "symbol_viewer-toolbars" )
     {}
 
     ~SYMBOL_VIEWER_TOOLBAR_SETTINGS() {}

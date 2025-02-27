@@ -143,7 +143,7 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     setupTools();
     setupUIConditions();
 
-    m_toolbarSettings = std::make_unique<SYMBOL_VIEWER_TOOLBAR_SETTINGS>();
+    m_toolbarSettings = Pgm().GetSettingsManager().GetToolbarSettings<SYMBOL_VIEWER_TOOLBAR_SETTINGS>( "symbol_viewer-toolbars" );
     configureToolbars();
     RecreateToolbars();
 

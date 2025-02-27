@@ -41,27 +41,15 @@ enum
 };
 
 
-enum class TOOLBAR_TREE_ITEM_TYPE
-{
-    TOOL,
-    GROUP,
-    SPACER,
-    SEPARATOR
-};
-
 class TOOLBAR_TREE_ITEM_DATA : public wxTreeItemData
 {
 public:
-    TOOLBAR_TREE_ITEM_DATA( TOOLBAR_TREE_ITEM_TYPE aType ) :
+    TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE aType ) :
         wxTreeItemData(),
         m_name( "" ),
         m_action( nullptr ),
         m_type( aType )
-    {
-        // Hard-code the name for the separator
-        if( aType == TOOLBAR_TREE_ITEM_TYPE::SEPARATOR )
-            m_name = "separator";
-    }
+    {}
 
     void SetAction( TOOL_ACTION* aAction ) { m_action = aAction; }
     TOOL_ACTION* GetAction() const         { return m_action; }
@@ -69,13 +57,17 @@ public:
     void SetName( std::string aName )  { m_name = aName; }
     std::string GetName() const        { return m_name; }
 
-    TOOLBAR_TREE_ITEM_TYPE GetType() const { return m_type; }
+    void SetToolbarItem( TOOLBAR_ITEM& aItem ) { m_item = aItem; }
+    TOOLBAR_ITEM GetToolbarItem() const        { return m_item; }
+
+    TOOLBAR_ITEM_TYPE GetType() const { return m_type; }
 
 private:
     std::string  m_name;
     TOOL_ACTION* m_action;
+    TOOLBAR_ITEM m_item;
 
-    TOOLBAR_TREE_ITEM_TYPE m_type;
+    TOOLBAR_ITEM_TYPE m_type;
 };
 
 
@@ -154,6 +146,8 @@ bool PANEL_TOOLBAR_CUSTOMIZATION::TransferDataToWindow()
 
 bool PANEL_TOOLBAR_CUSTOMIZATION::TransferDataFromWindow()
 {
+    m_appSettings->m_CustomToolbars = m_customToolbars->GetValue();
+
     return true;
 }
 
@@ -167,30 +161,67 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateToolbarTree( const TOOLBAR_CONFIGURATI
 
     for( auto& item : aToolbar.GetToolbarItems() )
     {
-        if( item == "separator" )
+        switch( item.m_Type )
         {
-            // Add a separator
-            TOOLBAR_TREE_ITEM_DATA* sepTreeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_TREE_ITEM_TYPE::SEPARATOR );
-            m_toolbarTree->AppendItem( root, "Separator", -1, -1, sepTreeItem );
-        }
-        else if( item.starts_with( "group" ) )
-        {
-            // Add a group of items to the toolbar
-            const TOOLBAR_GROUP_CONFIG* groupConfig = aToolbar.GetGroup( item );
-
-            if( !groupConfig )
+        case TOOLBAR_ITEM_TYPE::SEPARATOR:
             {
-                wxASSERT_MSG( false, wxString::Format( "Unable to find group %s", item ) );
+            // Add a separator
+            TOOLBAR_TREE_ITEM_DATA* sepTreeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE::SEPARATOR );
+            sepTreeItem->SetToolbarItem( item );
+            m_toolbarTree->AppendItem( root, "Separator", -1, -1, sepTreeItem );
+            break;
+            }
+
+        case TOOLBAR_ITEM_TYPE::SPACER:
+            {
+            // Add a spacer
+            TOOLBAR_TREE_ITEM_DATA* spacerTreeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE::SPACER );
+            spacerTreeItem->SetToolbarItem( item );
+            m_toolbarTree->AppendItem( root, wxString::Format( "Spacer: %s", item.m_Size ), -1, -1, spacerTreeItem );
+            break;
+            }
+
+        case TOOLBAR_ITEM_TYPE::CONTROL:
+            // TODO
+            break;
+
+        case TOOLBAR_ITEM_TYPE::TOOL:
+            {
+            // Add a tool
+            auto toolMap = m_availableTools.find( item.m_ActionName );
+
+            if( toolMap == m_availableTools.end() )
+            {
+                wxASSERT_MSG( false, wxString::Format( "Unable to find tool %s", item.m_ActionName ) );
                 continue;
             }
 
-            TOOLBAR_TREE_ITEM_DATA* groupTreeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_TREE_ITEM_TYPE::GROUP );
-            groupTreeItem->SetName( item );
+            TOOLBAR_TREE_ITEM_DATA* toolTreeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE::TOOL );
+            toolTreeItem->SetName( item.m_ActionName );
+            toolTreeItem->SetAction( toolMap->second );
+            toolTreeItem->SetToolbarItem( item );
 
-            wxTreeItemId groupId = m_toolbarTree->AppendItem( root, item, -1, -1, groupTreeItem );
+            int  imgIdx = -1;
+            auto imgMap = m_actionImageListMap.find( item.m_ActionName );
+
+            if( imgMap != m_actionImageListMap.end() )
+                imgIdx = imgMap->second;
+
+            m_toolbarTree->AppendItem( root, toolMap->second->GetFriendlyName(),
+                                       imgIdx, -1, toolTreeItem );
+            break;
+            }
+
+        case TOOLBAR_ITEM_TYPE::GROUP:
+            {
+            // Add a group of items to the toolbar
+            TOOLBAR_TREE_ITEM_DATA* groupTreeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE::GROUP );
+            groupTreeItem->SetToolbarItem( item );
+
+            wxTreeItemId groupId = m_toolbarTree->AppendItem( root, item.m_GroupName, -1, -1, groupTreeItem );
 
             // Add the elements below the group
-            for( auto& groupItem : groupConfig->GetGroupItems() )
+            for( auto& groupItem : item.m_GroupItems )
             {
                 auto toolMap = m_availableTools.find( groupItem );
 
@@ -200,7 +231,7 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateToolbarTree( const TOOLBAR_CONFIGURATI
                     continue;
                 }
 
-                TOOLBAR_TREE_ITEM_DATA* toolTreeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_TREE_ITEM_TYPE::TOOL );
+                TOOLBAR_TREE_ITEM_DATA* toolTreeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE::TOOL );
                 toolTreeItem->SetName( groupItem );
                 toolTreeItem->SetAction( toolMap->second );
 
@@ -213,39 +244,8 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateToolbarTree( const TOOLBAR_CONFIGURATI
                 m_toolbarTree->AppendItem( groupId, toolMap->second->GetFriendlyName(),
                                            imgIdx, -1, toolTreeItem );
             }
-        }
-        else if( item.starts_with( "control" ) )
-        {
-            // Add a custom control to the toolbar
-
-        }
-        else if( item.starts_with( "spacer" ) )
-        {
-
-        }
-        else
-        {
-            // Add a tool
-            auto toolMap = m_availableTools.find( item );
-
-            if( toolMap == m_availableTools.end() )
-            {
-                wxASSERT_MSG( false, wxString::Format( "Unable to find tool %s", item ) );
-                continue;
+            break;
             }
-
-            TOOLBAR_TREE_ITEM_DATA* toolTreeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_TREE_ITEM_TYPE::TOOL );
-            toolTreeItem->SetName( item );
-            toolTreeItem->SetAction( toolMap->second );
-
-            int  imgIdx = -1;
-            auto imgMap = m_actionImageListMap.find( item );
-
-            if( imgMap != m_actionImageListMap.end() )
-                imgIdx = imgMap->second;
-
-            m_toolbarTree->AppendItem( root, toolMap->second->GetFriendlyName(),
-                                       imgIdx, -1, toolTreeItem );
         }
     }
 

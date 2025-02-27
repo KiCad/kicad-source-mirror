@@ -36,7 +36,7 @@ class CVPCB_TOOLBAR_SETTINGS : public TOOLBAR_SETTINGS
 {
 public:
     CVPCB_TOOLBAR_SETTINGS() :
-            TOOLBAR_SETTINGS( "cvpcb" )
+            TOOLBAR_SETTINGS( "cvpcb-toolbars" )
     {}
 
     ~CVPCB_TOOLBAR_SETTINGS() {}

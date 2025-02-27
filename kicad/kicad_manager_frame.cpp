@@ -202,7 +202,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     setupTools();
     setupUIConditions();
 
-    m_toolbarSettings = std::make_unique<KICAD_MANAGER_TOOLBAR_SETTINGS>();
+    m_toolbarSettings = Pgm().GetSettingsManager().GetToolbarSettings<KICAD_MANAGER_TOOLBAR_SETTINGS>( "kicad-toolbars" );
     configureToolbars();
     RecreateToolbars();
     ReCreateMenuBar();

@@ -181,7 +181,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     ReCreateMenuBar();
 
-    m_toolbarSettings = std::make_unique<SYMBOL_EDIT_TOOLBAR_SETTINGS>();
+    m_toolbarSettings = Pgm().GetSettingsManager().GetToolbarSettings<SYMBOL_EDIT_TOOLBAR_SETTINGS>( "symbol_editor-toolbars" );
     configureToolbars();
     RecreateToolbars();
 

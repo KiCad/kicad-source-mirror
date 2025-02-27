@@ -265,79 +265,73 @@ void ACTION_TOOLBAR::ApplyConfiguration( const TOOLBAR_CONFIGURATION& aConfig )
     // Remove existing tools
     ClearToolbar();
 
-    std::vector<std::string> items = aConfig.GetToolbarItems();
+    std::vector<TOOLBAR_ITEM> items = aConfig.GetToolbarItems();
 
     // Add all the items to the toolbar
-    for( auto& actionName : items )
+    for( auto& item : items )
     {
-        if( actionName == "separator" )
+        switch( item.m_Type )
         {
-            // Add a separator
+        case TOOLBAR_ITEM_TYPE::SEPARATOR:
             AddScaledSeparator( GetParent() );
-        }
-        else if( actionName.starts_with( "group" ) )
-        {
-            // Add a group of items to the toolbar
-            const TOOLBAR_GROUP_CONFIG* groupConfig = aConfig.GetGroup( actionName );
+            break;
 
-            if( !groupConfig )
+        case TOOLBAR_ITEM_TYPE::SPACER:
+            AddSpacer( item.m_Size );
+            break;
+
+        case TOOLBAR_ITEM_TYPE::GROUP:
             {
-                wxASSERT_MSG( false, wxString::Format( "Unable to find group %s", actionName ) );
-                continue;
-            }
-
+            // Add a group of items to the toolbar
             std::vector<const TOOL_ACTION*> tools;
 
-            for( auto& groupItem : groupConfig->GetGroupItems() )
+            for( auto& groupItem : item.m_GroupItems )
             {
                 TOOL_ACTION* action = m_toolManager->GetActionManager()->FindAction( groupItem );
 
                 if( !action )
                 {
-                    wxASSERT_MSG( false, wxString::Format( "Unable to find group tool %s", actionName ) );
+                    wxASSERT_MSG( false, wxString::Format( "Unable to find group tool %s", groupItem ) );
                     continue;
                 }
 
                 tools.push_back( action );
             }
 
-            AddGroup( std::make_unique<ACTION_GROUP>( groupConfig->GetName(), tools ) );
-        }
-        else if( actionName.starts_with( "control" ) )
-        {
+            AddGroup( std::make_unique<ACTION_GROUP>( item.m_GroupName.ToStdString(), tools ) );
+            break;
+            }
+
+        case TOOLBAR_ITEM_TYPE::CONTROL:
+            {
             // Add a custom control to the toolbar
             EDA_BASE_FRAME* frame = static_cast<EDA_BASE_FRAME*>( GetParent() );
-            ACTION_TOOLBAR_CONTROL_FACTORY* factory = frame->GetCustomToolbarControlFactory( actionName );
+            ACTION_TOOLBAR_CONTROL_FACTORY* factory = frame->GetCustomToolbarControlFactory( item.m_ControlName );
 
             if( !factory )
             {
-                wxASSERT_MSG( false, wxString::Format( "Unable to find control factory for %s", actionName ) );
+                wxASSERT_MSG( false, wxString::Format( "Unable to find control factory for %s", item.m_ControlName ) );
                 continue;
             }
 
             // The factory functions are responsible for adding the controls to the toolbar themselves
             (*factory)( this );
-        }
-        else if( actionName.starts_with( "spacer" ) )
-        {
-            // Extract the spacer size from the text, it is the form "spacer:x", with "x" being the size
-            int sep = actionName.find_last_of( ":" );
-            int spacerSize = std::stoi( actionName.substr( sep+1 ) );
+            break;
+            }
 
-            AddSpacer( spacerSize );
-        }
-        else
-        {
-            // Assume anything else is an action
-            TOOL_ACTION* action = m_toolManager->GetActionManager()->FindAction( actionName );
+        case TOOLBAR_ITEM_TYPE::TOOL:
+            {
+            TOOL_ACTION* action = m_toolManager->GetActionManager()->FindAction( item.m_ActionName );
 
             if( !action )
             {
-                wxASSERT_MSG( false, wxString::Format( "Unable to find toolbar tool %s", actionName ) );
+                wxASSERT_MSG( false, wxString::Format( "Unable to find toolbar tool %s", item.m_ActionName ) );
                 continue;
             }
 
             Add( *action );
+            break;
+            }
         }
     }
 

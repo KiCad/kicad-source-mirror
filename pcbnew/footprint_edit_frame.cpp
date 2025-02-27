@@ -165,7 +165,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     initLibraryTree();
     m_treePane = new FOOTPRINT_TREE_PANE( this );
 
-    m_toolbarSettings = std::make_unique<FOOTPRINT_EDIT_TOOLBAR_SETTINGS>();
+    m_toolbarSettings = Pgm().GetSettingsManager().GetToolbarSettings<FOOTPRINT_EDIT_TOOLBAR_SETTINGS>( "fpedit-toolbars" );
     configureToolbars();
     RecreateToolbars();
     ReCreateLayerBox( false );

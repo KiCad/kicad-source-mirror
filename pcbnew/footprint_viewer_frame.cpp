@@ -220,7 +220,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     setupUIConditions();
 
-    m_toolbarSettings = std::make_unique<FOOTPRINT_VIEWER_TOOLBAR_SETTINGS>();
+    m_toolbarSettings = Pgm().GetSettingsManager().GetToolbarSettings<FOOTPRINT_VIEWER_TOOLBAR_SETTINGS>( "fpviewer-toolbars" );
     configureToolbars();
     RecreateToolbars();
     ReCreateMenuBar();

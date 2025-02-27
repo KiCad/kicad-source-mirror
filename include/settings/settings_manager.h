@@ -145,6 +145,51 @@ public:
     }
 
     /**
+     * Return a handle to the given toolbar settings
+     *
+     * If the settings have already been loaded, returns the existing pointer.
+     * If the settings have not been loaded, creates a new object owned by the
+     * settings manager and returns a pointer to it.
+     *
+     * @tparam T is a type derived from TOOLBAR_SETTINGS.
+     * @param aFilename is used to find the correct settings under clang (where
+     *                  RTTI doesn't work across compile boundaries).
+     * @return a pointer to a loaded settings object.
+     */
+    template<typename T>
+    T* GetToolbarSettings( const wxString& aFilename )
+    {
+        T* ret = nullptr;
+
+#if defined(__clang__)
+        auto it = std::find_if( m_settings.begin(), m_settings.end(),
+                                [&]( const std::unique_ptr<JSON_SETTINGS>& aSettings )
+                                {
+                                    return aSettings->GetFilename() == aFilename;
+                                } );
+#else
+        auto it = std::find_if( m_settings.begin(), m_settings.end(),
+                                []( const std::unique_ptr<JSON_SETTINGS>& aSettings )
+                                {
+                                    return dynamic_cast<T*>( aSettings.get() );
+                                } );
+#endif
+
+        if( it != m_settings.end() )
+        {
+            // Do NOT use dynamic_cast here.  CLang will think it's the wrong class across
+            // compile boundaries and return nullptr.
+            ret = static_cast<T*>( it->get() );
+        }
+        else
+        {
+            ret = RegisterSettings( new T );
+        }
+
+        return ret;
+    }
+
+    /**
      * Retrieve a color settings object that applications can read colors from.
      *
      * If the given settings file cannot be found, returns the default settings.

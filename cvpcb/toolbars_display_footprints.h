@@ -29,7 +29,7 @@ class DISPLAY_FOOTPRINTS_TOOLBAR_SETTINGS : public TOOLBAR_SETTINGS
 {
 public:
     DISPLAY_FOOTPRINTS_TOOLBAR_SETTINGS() :
-            TOOLBAR_SETTINGS( "display-footprints" )
+            TOOLBAR_SETTINGS( "display_footprints-toolbars" )
     {}
 
     ~DISPLAY_FOOTPRINTS_TOOLBAR_SETTINGS() {}

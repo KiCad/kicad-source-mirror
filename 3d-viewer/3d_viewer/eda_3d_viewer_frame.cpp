@@ -149,7 +149,7 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
 
     ReCreateMenuBar();
 
-    m_toolbarSettings = std::make_unique<EDA_3D_VIEWER_TOOLBAR_SETTINGS>();
+    m_toolbarSettings = Pgm().GetSettingsManager().GetToolbarSettings<EDA_3D_VIEWER_TOOLBAR_SETTINGS>( "3d_viewer-toolbars" );
     configureToolbars();
     RecreateToolbars();
 

@@ -40,7 +40,7 @@ class GERBVIEW_TOOLBAR_SETTINGS : public TOOLBAR_SETTINGS
 {
 public:
     GERBVIEW_TOOLBAR_SETTINGS() :
-            TOOLBAR_SETTINGS( "gerbview" )
+            TOOLBAR_SETTINGS( "gerbview-toolbars" )
     {}
 
     ~GERBVIEW_TOOLBAR_SETTINGS() {}

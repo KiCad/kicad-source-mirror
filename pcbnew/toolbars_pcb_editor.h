@@ -37,7 +37,7 @@ class PCB_EDIT_TOOLBAR_SETTINGS : public TOOLBAR_SETTINGS
 {
 public:
     PCB_EDIT_TOOLBAR_SETTINGS() :
-            TOOLBAR_SETTINGS( "pcbnew" )
+            TOOLBAR_SETTINGS( "pcbnew-toolbars" )
     {}
 
     ~PCB_EDIT_TOOLBAR_SETTINGS() {}

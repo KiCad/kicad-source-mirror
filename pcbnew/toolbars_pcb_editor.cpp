@@ -191,10 +191,10 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
 
         config.AppendSeparator()
               .AppendAction( PCB_ACTIONS::placeFootprint )
-              .AppendGroup( TOOLBAR_GROUP_CONFIG( "group.pcbRouting" )
+              .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Track routing tools" ) )
                             .AddAction( PCB_ACTIONS::routeSingleTrack )
                             .AddAction( PCB_ACTIONS::routeDiffPair ) )
-              .AppendGroup( TOOLBAR_GROUP_CONFIG( "group.pcbTune" )
+              .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Track tuning tools" ) )
                             .AddAction( PCB_ACTIONS::tuneSingleTrack )
                             .AddAction( PCB_ACTIONS::tuneDiffPair )
                             .AddAction( PCB_ACTIONS::tuneSkew ) )
@@ -213,7 +213,7 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
               .AppendAction( PCB_ACTIONS::placeText )
               .AppendAction( PCB_ACTIONS::drawTextBox )
               .AppendAction( PCB_ACTIONS::drawTable )
-              .AppendGroup( TOOLBAR_GROUP_CONFIG( "group.pcbDimensions" )
+              .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Dimension objects" ) )
                             .AddAction( PCB_ACTIONS::drawOrthogonalDimension )
                             .AddAction( PCB_ACTIONS::drawAlignedDimension )
                             .AddAction( PCB_ACTIONS::drawCenterDimension )
@@ -222,9 +222,8 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
               .AppendAction( ACTIONS::deleteTool );
 
         config.AppendSeparator()
-              .AppendGroup( TOOLBAR_GROUP_CONFIG( "group.pcbOrigins" )
+              .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "PCB origins" ) )
                             .AddAction( ACTIONS::gridSetOrigin )
-                            .AddAction( PCB_ACTIONS::tuneDiffPair )
                             .AddAction( PCB_ACTIONS::drillOrigin ) )
               .AppendAction( ACTIONS::measureTool );
 
@@ -433,24 +432,6 @@ void PCB_EDIT_FRAME::configureToolbars()
         };
 
     RegisterCustomToolbarControlFactory( ACTION_TOOLBAR_CONTROLS::ipcScripting, pluginControlFactory );
-
-/*
-    TOOLBAR_SETTINGS tb( "pcbnew-toolbars" );
-
-    if( m_tbConfigLeft.has_value() )
-        tb.m_Toolbars.emplace( "left", m_tbConfigLeft.value() );
-
-    if( m_tbConfigRight.has_value() )
-        tb.m_Toolbars.emplace( "right", m_tbConfigRight.value() );
-
-    if( m_tbConfigTopAux.has_value() )
-        tb.m_Toolbars.emplace( "top_aux", m_tbConfigTopAux.value() );
-
-    if( m_tbConfigTopMain.has_value() )
-        tb.m_Toolbars.emplace( "top_main", m_tbConfigTopMain.value() );
-
-    tb.SaveToFile( SETTINGS_MANAGER::GetToolbarSettingsPath(), true );
-    */
 }
 
 

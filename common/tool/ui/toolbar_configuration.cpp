@@ -34,35 +34,47 @@ const int toolbarSchemaVersion = 1;
 
 void to_json( nlohmann::json& aJson, const TOOLBAR_CONFIGURATION& aConfig )
 {
-    nlohmann::json groups = nlohmann::json::array();
+    aJson = nlohmann::json::array();
 
-    // Serialize the group object
-    for( const TOOLBAR_GROUP_CONFIG& grp : aConfig.m_toolbarGroups )
+    for( const TOOLBAR_ITEM& item : aConfig.m_toolbarItems )
     {
-        nlohmann::json jsGrp = {
-            { "name", grp.m_groupName }
+        nlohmann::json jsItem = {
+            { "type", magic_enum::enum_name( item.m_Type ) }
         };
 
-        nlohmann::json grpItems = nlohmann::json::array();
+        switch( item.m_Type )
+        {
+        case TOOLBAR_ITEM_TYPE::SEPARATOR:
+            // Nothing to add for a separator
+            break;
 
-        for( const auto& it : grp.m_groupItems )
-            grpItems.push_back( it );
+        case TOOLBAR_ITEM_TYPE::SPACER:
+            jsItem["size"] = item.m_Size;
+            break;
 
-        jsGrp["items"] = grpItems;
+        case TOOLBAR_ITEM_TYPE::CONTROL:
+            jsItem["name"] = item.m_ControlName;
+            break;
 
-        groups.push_back( jsGrp );
+        case TOOLBAR_ITEM_TYPE::TOOL:
+            jsItem["name"] = item.m_ActionName;
+            break;
+
+        case TOOLBAR_ITEM_TYPE::GROUP:
+            jsItem["group_name"] = item.m_GroupName;
+
+            nlohmann::json grpItems = nlohmann::json::array();
+
+            for( const auto& it : item.m_GroupItems )
+                grpItems.push_back( it );
+
+            jsItem["group_items"] = grpItems;
+
+            break;
+        }
+
+        aJson.push_back( jsItem );
     }
-
-    // Serialize the items
-    nlohmann::json tbItems = nlohmann::json::array();
-
-    for( const auto& it : aConfig.m_toolbarItems )
-        tbItems.push_back( it );
-
-    aJson = {
-        { "groups", groups },
-        { "items",  tbItems }
-    };
 }
 
 
@@ -72,47 +84,70 @@ void from_json( const nlohmann::json& aJson, TOOLBAR_CONFIGURATION& aConfig )
         return;
 
     aConfig.m_toolbarItems.clear();
-    aConfig.m_toolbarGroups.clear();
 
-    // Deserialize the groups
-    if( aJson.contains( "groups" ) && aJson.at( "groups" ).is_array())
+    if( aJson.is_array() )
     {
-        for( const nlohmann::json& grp : aJson.at( "groups" ) )
+        for( const nlohmann::json& item : aJson )
         {
-            std::string name = "";
+            TOOLBAR_ITEM tbItem;
 
-            if( grp.contains( "name" ) )
-                name = grp.at( "name" ).get<std::string>();
-
-            TOOLBAR_GROUP_CONFIG cfg( name );
-
-            // Deserialize the items
-            if( grp.contains( "items" ) )
+            if( item.contains( "type" ) )
             {
-                for( const nlohmann::json& it : grp.at( "items" ) )
-                {
-                    if( it.is_string() )
-                        cfg.m_groupItems.push_back( it.get<std::string>() );
-                }
-            }
-            aConfig.m_toolbarGroups.push_back( cfg );
-        }
-    }
+                auto type = magic_enum::enum_cast<TOOLBAR_ITEM_TYPE>( item["type"].get<std::string>(),
+                                                                    magic_enum::case_insensitive );
 
-    // Deserialize the items
-    if( aJson.contains( "items" ) )
-    {
-        for( const nlohmann::json& it : aJson.at( "items" ) )
-        {
-            if( it.is_string() )
-            aConfig.m_toolbarItems.push_back( it.get<std::string>() );
+                if( type.has_value() )
+                    tbItem.m_Type = type.value();
+            }
+
+            switch( tbItem.m_Type )
+            {
+            case TOOLBAR_ITEM_TYPE::SEPARATOR:
+                // Nothing to read for a separator
+                break;
+
+            case TOOLBAR_ITEM_TYPE::SPACER:
+                if( item.contains( "size" ) )
+                    tbItem.m_Size = item["size"].get<int>();
+
+                break;
+
+            case TOOLBAR_ITEM_TYPE::CONTROL:
+                if( item.contains( "name" ) )
+                    tbItem.m_ControlName = item["name"].get<std::string>();
+
+                break;
+
+            case TOOLBAR_ITEM_TYPE::TOOL:
+                if( item.contains( "name" ) )
+                    tbItem.m_ActionName = item["name"].get<std::string>();
+
+                break;
+
+            case TOOLBAR_ITEM_TYPE::GROUP:
+                if( item.contains( "group_name" ) )
+                    tbItem.m_GroupName = item["group_name"].get<wxString>();
+
+                if( item.contains( "group_items" ) )
+                {
+                    for( const nlohmann::json& it : item["group_items"].at( "group_items" ) )
+                    {
+                        if( it.is_string() )
+                            tbItem.m_GroupItems.push_back( it.get<std::string>() );
+                    }
+                }
+                break;
+            }
+
+            // We just directly add the item to the config
+            aConfig.m_toolbarItems.push_back( tbItem );
         }
     }
 }
 
 
 TOOLBAR_SETTINGS::TOOLBAR_SETTINGS( const wxString& aFullPath ) :
-        JSON_SETTINGS( aFullPath, SETTINGS_LOC::NONE, toolbarSchemaVersion )
+        JSON_SETTINGS( aFullPath, SETTINGS_LOC::TOOLBARS, toolbarSchemaVersion )
 {
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "toolbars",
         [&]() -> nlohmann::json

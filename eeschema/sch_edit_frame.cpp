@@ -191,7 +191,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     setupUIConditions();
     ReCreateMenuBar();
 
-    m_toolbarSettings = std::make_unique<SCH_EDIT_TOOLBAR_SETTINGS>();
+    m_toolbarSettings = Pgm().GetSettingsManager().GetToolbarSettings<SCH_EDIT_TOOLBAR_SETTINGS>( "eeschema-toolbars" );
     configureToolbars();
     RecreateToolbars();
 

@@ -47,6 +47,7 @@
 #include <cvpcb_association.h>
 #include <cvpcb_id.h>
 #include <cvpcb_mainframe.h>
+#include <settings/settings_manager.h>
 #include <settings/cvpcb_settings.h>
 #include <display_footprints_frame.h>
 #include <kiplatform/ui.h>
@@ -93,7 +94,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     setupTools();
     setupUIConditions();
 
-    m_toolbarSettings = std::make_unique<CVPCB_TOOLBAR_SETTINGS>();
+    m_toolbarSettings = Pgm().GetSettingsManager().GetToolbarSettings<CVPCB_TOOLBAR_SETTINGS>( "cvpcb-toolbars" );
     configureToolbars();
     RecreateToolbars();
     ReCreateMenuBar();

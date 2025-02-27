@@ -116,7 +116,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
 
     setupUIConditions();
 
-    m_toolbarSettings = std::make_unique<DISPLAY_FOOTPRINTS_TOOLBAR_SETTINGS>();
+    m_toolbarSettings = Pgm().GetSettingsManager().GetToolbarSettings<DISPLAY_FOOTPRINTS_TOOLBAR_SETTINGS>( "display_footprints-toolbars" );
     configureToolbars();
     RecreateToolbars();
 

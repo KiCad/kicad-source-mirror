@@ -29,7 +29,7 @@ class KICAD_MANAGER_TOOLBAR_SETTINGS : public TOOLBAR_SETTINGS
 {
 public:
     KICAD_MANAGER_TOOLBAR_SETTINGS() :
-            TOOLBAR_SETTINGS( "kicad" )
+            TOOLBAR_SETTINGS( "kicad-toolbars" )
     {}
 
     ~KICAD_MANAGER_TOOLBAR_SETTINGS() {}

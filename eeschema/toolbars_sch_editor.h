@@ -29,7 +29,7 @@ class SCH_EDIT_TOOLBAR_SETTINGS : public TOOLBAR_SETTINGS
 {
 public:
     SCH_EDIT_TOOLBAR_SETTINGS() :
-            TOOLBAR_SETTINGS( "eeschema" )
+            TOOLBAR_SETTINGS( "eeschema-toolbars" )
     {}
 
     ~SCH_EDIT_TOOLBAR_SETTINGS

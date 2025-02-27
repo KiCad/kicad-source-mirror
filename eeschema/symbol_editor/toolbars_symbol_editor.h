@@ -29,7 +29,7 @@ class SYMBOL_EDIT_TOOLBAR_SETTINGS : public TOOLBAR_SETTINGS
 {
 public:
     SYMBOL_EDIT_TOOLBAR_SETTINGS() :
-            TOOLBAR_SETTINGS( "symbol_editor" )
+            TOOLBAR_SETTINGS( "symbol_editor-toolbars" )
     {}
 
     ~SYMBOL_EDIT_TOOLBAR_SETTINGS() {}

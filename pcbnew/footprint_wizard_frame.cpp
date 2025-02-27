@@ -152,7 +152,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
 
     // Create the toolbars
-    m_toolbarSettings = std::make_unique<FOOTPRINT_WIZARD_TOOLBAR_SETTINGS>();
+    m_toolbarSettings = Pgm().GetSettingsManager().GetToolbarSettings<FOOTPRINT_WIZARD_TOOLBAR_SETTINGS>( "fpwizard-toolbars" );
     configureToolbars();
     RecreateToolbars();
 

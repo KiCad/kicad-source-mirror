@@ -55,6 +55,7 @@ enum class SETTINGS_LOC {
     USER,       ///< The main config directory (e.g. ~/.config/kicad/)
     PROJECT,    ///< The settings directory inside a project folder
     COLORS,     ///< The color scheme directory (e.g. ~/.config/kicad/colors/)
+    TOOLBARS,   ///< The toolbar directory (e.g. ~/.config/kicad/toolbars/)
     NESTED,     ///< Not stored in a file, but inside another JSON_SETTINGS
     NONE,       ///< No directory prepended, full path in filename (used for PROJECT_FILE)
 };

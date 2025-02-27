@@ -514,7 +514,6 @@ ACTION_TOOLBAR_CONTROL_FACTORY* EDA_BASE_FRAME::GetCustomToolbarControlFactory( 
 
 void EDA_BASE_FRAME::configureToolbars()
 {
-    m_toolbarSettings->LoadFromFile( Pgm().GetSettingsManager().GetToolbarSettingsPath() );
 }
 
 
@@ -522,7 +521,7 @@ void EDA_BASE_FRAME::RecreateToolbars()
 {
     wxWindowUpdateLocker dummy( this );
 
-    wxASSERT( m_toolbarSettings.get() );
+    wxASSERT( m_toolbarSettings );
 
     std::optional<TOOLBAR_CONFIGURATION> tbConfig;
 
@@ -1300,6 +1299,9 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
             book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_EDIT_OPTIONS ), _( "Editing Options" ) );
             book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_COLORS ), _( "Colors" ) );
 
+            if( ADVANCED_CFG::GetCfg().m_ConfigurableToolbars )
+                book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_TOOLBARS ), _( "Toolbars" ) );
+
             if( GetFrameType() == FRAME_SCH )
                 expand.push_back( (int) book->GetPageCount() );
 
@@ -1339,6 +1341,10 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
             book->AddLazySubPage( LAZY_CTOR( PANEL_FP_ORIGINS_AXES ), _( "Origins & Axes" ) );
             book->AddLazySubPage( LAZY_CTOR( PANEL_FP_EDIT_OPTIONS ), _( "Editing Options" ) );
             book->AddLazySubPage( LAZY_CTOR( PANEL_FP_COLORS ), _( "Colors" ) );
+
+            if( ADVANCED_CFG::GetCfg().m_ConfigurableToolbars )
+                book->AddLazySubPage( LAZY_CTOR( PANEL_FP_TOOLBARS ), _( "Toolbars" ) );
+
             book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DEFAULT_FIELDS ), _( "Footprint Defaults" ) );
             book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DEFAULT_GRAPHICS_VALUES ),
                                   _( "Graphics Defaults" ) );
@@ -1363,6 +1369,10 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
 
             book->AddPage( new wxPanel( book ), _( "3D Viewer" ) );
             book->AddLazySubPage( LAZY_CTOR( PANEL_3DV_DISPLAY_OPTIONS ), _( "General" ) );
+
+            if( ADVANCED_CFG::GetCfg().m_ConfigurableToolbars )
+                book->AddLazySubPage( LAZY_CTOR( PANEL_3DV_TOOLBARS ), _( "Toolbars" ) );
+
             book->AddLazySubPage( LAZY_CTOR( PANEL_3DV_OPENGL ), _( "Realtime Renderer" ) );
             book->AddLazySubPage( LAZY_CTOR( PANEL_3DV_RAYTRACING ), _( "Raytracing Renderer" ) );
         }
@@ -1385,6 +1395,10 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
             book->AddPage( new wxPanel( book ), _( "Gerber Viewer" ) );
             book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_DISPLAY_OPTIONS ), _( "Display Options" ) );
             book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_COLORS ), _( "Colors" ) );
+
+            if( ADVANCED_CFG::GetCfg().m_ConfigurableToolbars )
+                book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_TOOLBARS ), _( "Toolbars" ) );
+
             book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_GRIDS ), _( "Grids" ) );
             book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_EXCELLON_OPTIONS ),
                                   _( "Excellon Options" ) );
@@ -1409,6 +1423,9 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
             book->AddLazySubPage( LAZY_CTOR( PANEL_DS_DISPLAY_OPTIONS ), _( "Display Options" ) );
             book->AddLazySubPage( LAZY_CTOR( PANEL_DS_GRIDS ), _( "Grids" ) );
             book->AddLazySubPage( LAZY_CTOR( PANEL_DS_COLORS ), _( "Colors" ) );
+
+            if( ADVANCED_CFG::GetCfg().m_ConfigurableToolbars )
+                book->AddLazySubPage( LAZY_CTOR( PANEL_DS_TOOLBARS ), _( "Toolbars" ) );
 
             book->AddLazyPage(
                     []( wxWindow* aParent ) -> wxWindow*

@@ -29,7 +29,7 @@ class FOOTPRINT_WIZARD_TOOLBAR_SETTINGS : public TOOLBAR_SETTINGS
 {
 public:
     FOOTPRINT_WIZARD_TOOLBAR_SETTINGS() :
-            TOOLBAR_SETTINGS( "fpwizard" )
+            TOOLBAR_SETTINGS( "fpwizard-toolbars" )
     {}
 
     ~FOOTPRINT_WIZARD_TOOLBAR_SETTINGS() {}

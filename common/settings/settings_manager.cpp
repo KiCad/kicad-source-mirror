@@ -458,6 +458,9 @@ wxString SETTINGS_MANAGER::GetPathForSettingsFile( JSON_SETTINGS* aSettings )
     case SETTINGS_LOC::COLORS:
         return GetColorSettingsPath();
 
+    case SETTINGS_LOC::TOOLBARS:
+        return GetToolbarSettingsPath();
+
     case SETTINGS_LOC::NONE:
         return "";
 

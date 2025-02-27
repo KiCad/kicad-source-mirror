@@ -830,8 +830,8 @@ private:
      */
     std::map<const wxString, TOOL_ACTION*> m_acceptedExts;
 
-    // Toolbar Settings
-    std::unique_ptr<TOOLBAR_SETTINGS> m_toolbarSettings;
+    // Toolbar Settings - this is not owned by the frame
+    TOOLBAR_SETTINGS*    m_toolbarSettings;
 
     // Toolbar UI elements
     ACTION_TOOLBAR*      m_tbTopMain;

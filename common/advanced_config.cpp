@@ -603,8 +603,8 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
                                                 m_GitProjectStatusRefreshInterval, 0, 100000 ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ConfigurableToolbars,
-                                                    &m_ConfigurableToolbars,
-                                                    m_ConfigurableToolbars ) );
+                                                   &m_ConfigurableToolbars,
+                                                   m_ConfigurableToolbars ) );
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config

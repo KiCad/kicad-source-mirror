@@ -29,7 +29,7 @@ class FOOTPRINT_VIEWER_TOOLBAR_SETTINGS : public TOOLBAR_SETTINGS
 {
 public:
     FOOTPRINT_VIEWER_TOOLBAR_SETTINGS() :
-            TOOLBAR_SETTINGS( "fpviewer" )
+            TOOLBAR_SETTINGS( "fpviewer-toolbars" )
     {}
 
     ~FOOTPRINT_VIEWER_TOOLBAR_SETTINGS() {}

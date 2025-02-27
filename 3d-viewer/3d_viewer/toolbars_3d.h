@@ -29,7 +29,7 @@ class EDA_3D_VIEWER_TOOLBAR_SETTINGS : public TOOLBAR_SETTINGS
 {
 public:
     EDA_3D_VIEWER_TOOLBAR_SETTINGS() :
-            TOOLBAR_SETTINGS( "3d_viewer" )
+            TOOLBAR_SETTINGS( "3d_viewer-toolbars" )
     {}
 
     ~EDA_3D_VIEWER_TOOLBAR_SETTINGS() {}

@@ -36,7 +36,7 @@ public:
 class PL_EDITOR_TOOLBAR_SETTINGS : public TOOLBAR_SETTINGS
 {
 public:
-    PL_EDITOR_TOOLBAR_SETTINGS() : TOOLBAR_SETTINGS( "pl_editor" )
+    PL_EDITOR_TOOLBAR_SETTINGS() : TOOLBAR_SETTINGS( "pl_editor-toolbars" )
     {}
 
     ~PL_EDITOR_TOOLBAR_SETTINGS() {}

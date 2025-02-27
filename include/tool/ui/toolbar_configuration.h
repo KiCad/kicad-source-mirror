@@ -33,18 +33,67 @@
 #include <tool/action_toolbar.h>
 #include <tool/tool_action.h>
 
+enum class TOOLBAR_ITEM_TYPE
+{
+    TOOL,
+    GROUP,
+    SPACER,
+    CONTROL,
+    SEPARATOR
+};
+
+class KICOMMON_API TOOLBAR_ITEM
+{
+public:
+    TOOLBAR_ITEM()
+    { }
+
+    TOOLBAR_ITEM( TOOLBAR_ITEM_TYPE aType ) :
+        m_Type( aType )
+    { }
+
+    TOOLBAR_ITEM( TOOLBAR_ITEM_TYPE aType, int aSize ) :
+        m_Type( aType ),
+        m_Size( aSize )
+    {
+        wxASSERT( aType == TOOLBAR_ITEM_TYPE::SPACER );
+    }
+
+    TOOLBAR_ITEM( TOOLBAR_ITEM_TYPE aType, std::string aName ) :
+        m_Type( aType )
+    {
+        if( aType == TOOLBAR_ITEM_TYPE::CONTROL )
+            m_ControlName = aName;
+        else if( aType == TOOLBAR_ITEM_TYPE::TOOL )
+            m_ActionName = aName;
+    }
+
+public:
+    TOOLBAR_ITEM_TYPE m_Type;
+
+    // Control properties
+    std::string m_ControlName;
+
+    // Tool properties
+    std::string m_ActionName;
+
+    // Spacer properties
+    int m_Size;
+
+    // Group properties
+    wxString                 m_GroupName;
+    std::vector<std::string> m_GroupItems;
+};
 
 class KICOMMON_API TOOLBAR_GROUP_CONFIG
 {
 public:
-
-    TOOLBAR_GROUP_CONFIG( std::string aName ) :
+    TOOLBAR_GROUP_CONFIG( wxString aName ) :
         m_groupName( aName )
     {
-        wxASSERT_MSG( aName.starts_with( "group" ), "Toolbar group names must start with \"group\"" );
     }
 
-    const std::string& GetName() const
+    const wxString& GetName() const
     {
         return m_groupName;
     }
@@ -69,7 +118,7 @@ public:
 public:
     // These are public to write the JSON, but are lower-cased to encourage people not to directly
     // access them and treat them as private.
-    std::string              m_groupName;
+    wxString                 m_groupName;
     std::vector<std::string> m_groupItems;
 };
 
@@ -82,75 +131,64 @@ public:
 
     TOOLBAR_CONFIGURATION& AppendAction( std::string aActionName )
     {
-        m_toolbarItems.push_back( aActionName );
+        m_toolbarItems.emplace_back( TOOLBAR_ITEM_TYPE::TOOL, aActionName );
         return *this;
     }
 
     TOOLBAR_CONFIGURATION& AppendAction( const TOOL_ACTION& aAction )
     {
-        m_toolbarItems.push_back( aAction.GetName() );
+        m_toolbarItems.emplace_back( TOOLBAR_ITEM_TYPE::TOOL, aAction.GetName() );
         return *this;
     }
 
     TOOLBAR_CONFIGURATION& AppendSeparator()
     {
-        m_toolbarItems.push_back( "separator" );
+        m_toolbarItems.emplace_back( TOOLBAR_ITEM_TYPE::SEPARATOR );
         return *this;
     }
 
     TOOLBAR_CONFIGURATION& AppendSpacer( int aSize )
     {
-        m_toolbarItems.push_back( "spacer:" + std::to_string( aSize )  );
+        m_toolbarItems.emplace_back( TOOLBAR_ITEM_TYPE::SPACER, aSize );
         return *this;
     }
 
     TOOLBAR_CONFIGURATION& AppendGroup( const TOOLBAR_GROUP_CONFIG& aGroup )
     {
-        m_toolbarGroups.push_back( aGroup );
-        m_toolbarItems.push_back( aGroup.GetName() );
+        TOOLBAR_ITEM item( TOOLBAR_ITEM_TYPE::GROUP );
+        item.m_GroupName = aGroup.GetName();
+        item.m_GroupItems = aGroup.GetGroupItems();
+
+        m_toolbarItems.push_back( item );
         return *this;
     }
 
-
     TOOLBAR_CONFIGURATION& AppendControl( std::string aControlName )
     {
-        m_toolbarItems.push_back( aControlName );
+        m_toolbarItems.emplace_back( TOOLBAR_ITEM_TYPE::CONTROL, aControlName );
         return *this;
     }
 
     TOOLBAR_CONFIGURATION& AppendControl( const ACTION_TOOLBAR_CONTROL& aControl )
     {
-        m_toolbarItems.push_back( aControl.GetName() );
+        m_toolbarItems.emplace_back( TOOLBAR_ITEM_TYPE::CONTROL, aControl.GetName() );
         return *this;
     }
 
-    std::vector<std::string> GetToolbarItems() const
+    std::vector<TOOLBAR_ITEM> GetToolbarItems() const
     {
         return m_toolbarItems;
-    }
-
-    const TOOLBAR_GROUP_CONFIG* GetGroup( const std::string& aGroupName ) const
-    {
-        for( const TOOLBAR_GROUP_CONFIG& group : m_toolbarGroups )
-        {
-            if( group.GetName() == aGroupName )
-                return &group;
-        }
-
-        return nullptr;
     }
 
     void Clear()
     {
         m_toolbarItems.clear();
-        m_toolbarGroups.clear();
     }
 
 public:
     // These are public to write the JSON, but are lower-cased to encourage people not to directly
     // access them and treat them as private.
-    std::vector<std::string>            m_toolbarItems;
-    std::vector<TOOLBAR_GROUP_CONFIG>   m_toolbarGroups;
+    std::vector<TOOLBAR_ITEM> m_toolbarItems;
 };
 
 
@@ -183,6 +221,14 @@ public:
      * Returns the user-configured tools, and if not customized, the default tools.
      */
     std::optional<TOOLBAR_CONFIGURATION> GetToolbarConfig( TOOLBAR_LOC aToolbar, bool aForceDefault );
+
+    /**
+     * Set a configuration for the toolbar.
+     */
+    void SetToolbarConfig( TOOLBAR_LOC aToolbar, TOOLBAR_CONFIGURATION& aConfig )
+    {
+        m_toolbars[aToolbar] = aConfig;
+    }
 
 protected:
     // The toolbars - only public to aid in JSON serialization/deserialization

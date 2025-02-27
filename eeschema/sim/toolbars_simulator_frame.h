@@ -29,7 +29,7 @@ class SIMULATOR_TOOLBAR_SETTINGS : public TOOLBAR_SETTINGS
 {
 public:
     SIMULATOR_TOOLBAR_SETTINGS() :
-            TOOLBAR_SETTINGS( "sim" )
+            TOOLBAR_SETTINGS( "sim-toolbars" )
     {}
 
     ~SIMULATOR_TOOLBAR_SETTINGS() {}

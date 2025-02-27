@@ -100,7 +100,7 @@ std::optional<TOOLBAR_CONFIGURATION> FOOTPRINT_EDIT_TOOLBAR_SETTINGS::DefaultToo
               .AppendAction( PCB_ACTIONS::placeText )
               .AppendAction( PCB_ACTIONS::drawTextBox )
               .AppendAction( PCB_ACTIONS::drawTable )
-              .AppendGroup( TOOLBAR_GROUP_CONFIG( "group.pcbDimensions" )
+              .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Dimension objects" ) )
                             .AddAction( PCB_ACTIONS::drawOrthogonalDimension )
                             .AddAction( PCB_ACTIONS::drawAlignedDimension )
                             .AddAction( PCB_ACTIONS::drawCenterDimension )

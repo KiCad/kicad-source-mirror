@@ -136,7 +136,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     setupUIConditions();
     ReCreateMenuBar();
 
-    m_toolbarSettings = std::make_unique<PL_EDITOR_TOOLBAR_SETTINGS>();
+    m_toolbarSettings = Pgm().GetSettingsManager().GetToolbarSettings<PL_EDITOR_TOOLBAR_SETTINGS>( "pl_editor-toolbars" );
     configureToolbars();
     RecreateToolbars();
 
