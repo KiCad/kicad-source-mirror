@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-26 20:12+0300\n"
-"PO-Revision-Date: 2025-02-27 07:25+0000\n"
+"PO-Revision-Date: 2025-02-27 16:59+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -22299,15 +22299,17 @@ msgid "Delete Hierarchical Labels"
 msgstr "Hierarchische Bezeichner löschen"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:99
-#, fuzzy
 msgid ""
 "Associate selected sheet pin and hierarchical label using the label name"
-msgstr "Schaltplanpins und hierarchische Bezeichner synchronisieren"
+msgstr ""
+"Gewählten Schaltplanpin und hierarchischen Bezeichner mittels "
+"Bezeichnernamen synchronisieren"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
-#, fuzzy
 msgid "Associate selected sheet pin and hierarchical label using the pin name"
-msgstr "Verbindung von Schaltplanpin und hierarchischem Bezeichner auflösen"
+msgstr ""
+"Gewählten Schaltplanpin und hierarchischen Bezeichner mittels Pinnamen "
+"synchronisieren"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
@@ -28104,16 +28106,14 @@ msgid "Local path: monitoring folder changes"
 msgstr "Lokaler Pfad: Ordneränderungen überwachen"
 
 #: kicad/project_tree_pane.cpp:1631
-#, fuzzy
 msgid "The selected directory is already a Git project."
-msgstr "Der ausgewählte Ordner ist schon ein git-Projekt."
+msgstr "Das ausgewählte Vereichnis ist bereits ein Git-Projekt."
 
 #: kicad/project_tree_pane.cpp:1638
 msgid "Set default remote"
 msgstr "Standard-Remote setzen"
 
 #: kicad/project_tree_pane.cpp:1653
-#, fuzzy
 msgid "Failed to initialize Git project."
 msgstr "Initialisieren des Git-Projekts fehlgeschlagen."
 
@@ -28155,21 +28155,18 @@ msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "Konnte HEAD-Referenz für Branch \"%s\" nicht aktualisieren"
 
 #: kicad/project_tree_pane.cpp:1919
-#, fuzzy
 msgid "Are you sure you want to remove Git tracking from this project?"
 msgstr ""
-"Sind Sie sicher, dass Sie die git-Versionsverwaltung aus diesem Projekt "
+"Sind Sie sicher, dass Sie die Git-Versionsverwaltung aus diesem Projekt "
 "entfernen möchten?"
 
 #: kicad/project_tree_pane.cpp:1936
-#, fuzzy
 msgid "Failed to remove Git directory"
-msgstr "Konnte git-Verzeichnis nicht entfernen"
+msgstr "Konnte Git-Verzeichnis nicht entfernen"
 
 #: kicad/project_tree_pane.cpp:2252
-#, fuzzy
 msgid "The selected directory is not a Git project."
-msgstr "Der ausgewählte Ordner ist schon ein git-Projekt."
+msgstr "Das ausgewählt Verzeichnis ist kein git-Projekt."
 
 #: kicad/project_tree_pane.cpp:2401
 msgid "Discarding commit due to empty commit message."
@@ -36018,9 +36015,8 @@ msgid "Set to specified values:"
 msgstr "Auf eingestellte Werte setzen:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:147
-#, fuzzy
 msgid "Visible  (fields only)"
-msgstr "Sichtbar  (nur Text)"
+msgstr "Sichtbar  (nur Felder)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:235
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:99
@@ -38289,9 +38285,8 @@ msgstr ""
 "verbunden."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Apply Anyway"
-msgstr "Trotzdem hinzufügen"
+msgstr "Trotzdem anwenden"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
 msgid "Cancel Changes"
@@ -42924,31 +42919,29 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1302
-#, fuzzy
 msgid "The board must be saved before generating IPC-2581 file."
-msgstr "Vor dem Erzeugen der IPC2581 muss die Platine gespeichert werden."
+msgstr "Vor dem Erzeugen der IPC2581-Datei muss die Platine gespeichert werden."
 
 #: pcbnew/files.cpp:1318
-#, fuzzy
 msgid "Generating IPC-2581 file"
-msgstr "Erzeuge IPC2581-Datei"
+msgstr "Erzeuge IPC-2581-Datei"
 
 #: pcbnew/files.cpp:1343 pcbnew/pcbnew_jobs_handler.cpp:2031
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "%s"
 msgstr ""
-"Fehler beim Erzeugen der IPC2581-Datei \"%s\".\n"
+"Fehler beim Erzeugen der IPC-2581-Datei \"%s\".\n"
 "%s"
 
 #: pcbnew/files.cpp:1408 pcbnew/pcbnew_jobs_handler.cpp:2064
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "Failed to rename temporary file '%s."
 msgstr ""
-"Fehler beim Erzeugen der IPC2581-Datei \"%s\".\n"
+"Fehler beim Erzeugen der IPC-2581-Datei \"%s\".\n"
 "Konnte temporäre Datei \"%s\" nicht umbenennen."
 
 #: pcbnew/files.cpp:1440
@@ -47022,9 +47015,8 @@ msgid "Saved DRC Report to %s\n"
 msgstr "DRC-Bericht wurde gespeichert in %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2112
-#, fuzzy
 msgid "Successfully created IPC-D-356 file\n"
-msgstr "genCAD-Datei erfolgreich erstellt\n"
+msgstr "IPC-D-356-Datei erfolgreich erstellt\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2117
 msgid "Failed to create IPC-D-356 file\n"
