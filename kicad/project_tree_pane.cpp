@@ -2036,7 +2036,7 @@ void PROJECT_TREE_PANE::updateGitStatusIconMap()
         // Need to treat windows network paths special here until we get the samba bug fixed
         // https://github.com/wxWidgets/wxWidgets/issues/18953
         CallAfter(
-                [this]()
+                [this, refresh]()
                 {
                     m_gitStatusTimer.Start( refresh, wxTIMER_ONE_SHOT );
                 } );
