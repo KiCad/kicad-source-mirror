@@ -44,30 +44,58 @@ enum
 class TOOLBAR_TREE_ITEM_DATA : public wxTreeItemData
 {
 public:
+    TOOLBAR_TREE_ITEM_DATA()
+    { }
+
     TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE aType ) :
-        wxTreeItemData(),
-        m_name( "" ),
-        m_action( nullptr ),
         m_type( aType )
-    {}
+    { }
+
+    TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE aType, int aSize ) :
+        m_type( aType ),
+        m_size( aSize )
+    {
+        wxASSERT( aType == TOOLBAR_ITEM_TYPE::SPACER );
+    }
+
+    TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE aType, wxString aName ) :
+        m_type( aType ),
+        m_name( aName )
+    {
+        wxASSERT( aType == TOOLBAR_ITEM_TYPE::CONTROL
+                  || aType == TOOLBAR_ITEM_TYPE::GROUP );
+    }
+
+    TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE aType, TOOL_ACTION* aAction ) :
+        m_type( aType ),
+        m_action( aAction )
+    {
+        wxASSERT( aType == TOOLBAR_ITEM_TYPE::TOOL );
+    }
 
     void SetAction( TOOL_ACTION* aAction ) { m_action = aAction; }
     TOOL_ACTION* GetAction() const         { return m_action; }
 
-    void SetName( std::string aName )  { m_name = aName; }
-    std::string GetName() const        { return m_name; }
+    void SetName( wxString& aName )  { m_name = aName; }
+    const wxString& GetName() const    { return m_name; }
 
-    void SetToolbarItem( TOOLBAR_ITEM& aItem ) { m_item = aItem; }
-    TOOLBAR_ITEM GetToolbarItem() const        { return m_item; }
+    void SetSize( int aSize )  { m_size = aSize; }
+    int GetSize() const        { return m_size; }
 
     TOOLBAR_ITEM_TYPE GetType() const { return m_type; }
 
 private:
-    std::string  m_name;
-    TOOL_ACTION* m_action;
-    TOOLBAR_ITEM m_item;
-
+    // Item type
     TOOLBAR_ITEM_TYPE m_type;
+
+    // Tool properties
+    TOOL_ACTION* m_action;
+
+    // Spacer properties
+    int m_size;
+
+    // Group/control properties
+    wxString m_name;
 };
 
 
@@ -109,6 +137,10 @@ PANEL_TOOLBAR_CUSTOMIZATION::PANEL_TOOLBAR_CUSTOMIZATION( wxWindow* aParent, APP
 
     // This is the button only press for the browse button instead of the menu
     m_insertButton->Bind( wxEVT_BUTTON, &PANEL_TOOLBAR_CUSTOMIZATION::onSeparatorPress, this );
+
+    // TODO (ISM): Enable moving up/down and draging
+    m_btnToolMoveDown->Enable( false );
+    m_btnToolMoveUp->Enable( false );
 }
 
 
@@ -152,6 +184,81 @@ bool PANEL_TOOLBAR_CUSTOMIZATION::TransferDataFromWindow()
 }
 
 
+void PANEL_TOOLBAR_CUSTOMIZATION::parseToolbarTree( TOOLBAR_CONFIGURATION& aToolbar )
+{
+    wxTreeItemId      mainId;
+    wxTreeItemId      rootId = m_toolbarTree->GetRootItem();
+    wxTreeItemIdValue mainCookie;
+
+    mainId = m_toolbarTree->GetFirstChild( rootId, mainCookie );
+
+    while( mainId.IsOk() )
+    {
+        wxTreeItemData* treeData = m_toolbarTree->GetItemData( mainId );
+
+        TOOLBAR_TREE_ITEM_DATA* tbData = dynamic_cast<TOOLBAR_TREE_ITEM_DATA*>( treeData );
+
+        wxASSERT( tbData );
+
+        switch( tbData->GetType() )
+        {
+        case TOOLBAR_ITEM_TYPE::SPACER:
+            aToolbar.AppendSpacer( tbData->GetSize() );
+            break;
+
+        case TOOLBAR_ITEM_TYPE::SEPARATOR:
+            aToolbar.AppendSeparator();
+            break;
+
+        case TOOLBAR_ITEM_TYPE::CONTROL:
+            break;
+
+        case TOOLBAR_ITEM_TYPE::TOOL:
+            aToolbar.AppendAction( *( tbData->GetAction() ) );
+            break;
+
+        case TOOLBAR_ITEM_TYPE::GROUP:
+            TOOLBAR_GROUP_CONFIG grpConfig( tbData->GetName() );
+
+            if( m_toolbarTree->ItemHasChildren( mainId ) )
+            {
+                wxTreeItemIdValue childCookie;
+                wxTreeItemId      childId = m_toolbarTree->GetFirstChild( mainId, childCookie );
+
+                while( childId.IsOk() )
+                {
+                    wxTreeItemData* childTreeData = m_toolbarTree->GetItemData( childId );
+
+                    TOOLBAR_TREE_ITEM_DATA* childTbData = dynamic_cast<TOOLBAR_TREE_ITEM_DATA*>( childTreeData );
+
+                    wxASSERT( childTbData );
+
+                    switch( childTbData->GetType() )
+                    {
+                    case TOOLBAR_ITEM_TYPE::GROUP:
+                    case TOOLBAR_ITEM_TYPE::SPACER:
+                    case TOOLBAR_ITEM_TYPE::SEPARATOR:
+                    case TOOLBAR_ITEM_TYPE::CONTROL:
+                        wxASSERT_MSG( false, "Invalid entry in a group" );
+                        break;
+
+                    case TOOLBAR_ITEM_TYPE::TOOL:
+                        grpConfig.AddAction( *( childTbData->GetAction() ) );
+                        break;
+                    }
+
+                    childId = m_toolbarTree->GetNextChild( mainId, childCookie );
+                }
+            }
+
+            aToolbar.AppendGroup( grpConfig );
+        }
+
+        mainId = m_toolbarTree->GetNextChild( rootId, mainCookie );
+    }
+}
+
+
 void PANEL_TOOLBAR_CUSTOMIZATION::populateToolbarTree( const TOOLBAR_CONFIGURATION& aToolbar )
 {
     m_toolbarTree->DeleteAllItems();
@@ -167,7 +274,6 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateToolbarTree( const TOOLBAR_CONFIGURATI
             {
             // Add a separator
             TOOLBAR_TREE_ITEM_DATA* sepTreeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE::SEPARATOR );
-            sepTreeItem->SetToolbarItem( item );
             m_toolbarTree->AppendItem( root, "Separator", -1, -1, sepTreeItem );
             break;
             }
@@ -176,8 +282,9 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateToolbarTree( const TOOLBAR_CONFIGURATI
             {
             // Add a spacer
             TOOLBAR_TREE_ITEM_DATA* spacerTreeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE::SPACER );
-            spacerTreeItem->SetToolbarItem( item );
-            m_toolbarTree->AppendItem( root, wxString::Format( "Spacer: %s", item.m_Size ), -1, -1, spacerTreeItem );
+            spacerTreeItem->SetSize( item.m_Size );
+            m_toolbarTree->AppendItem( root, wxString::Format( "Spacer: %i", item.m_Size ), -1, -1,
+                                       spacerTreeItem );
             break;
             }
 
@@ -197,9 +304,7 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateToolbarTree( const TOOLBAR_CONFIGURATI
             }
 
             TOOLBAR_TREE_ITEM_DATA* toolTreeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE::TOOL );
-            toolTreeItem->SetName( item.m_ActionName );
             toolTreeItem->SetAction( toolMap->second );
-            toolTreeItem->SetToolbarItem( item );
 
             int  imgIdx = -1;
             auto imgMap = m_actionImageListMap.find( item.m_ActionName );
@@ -216,9 +321,10 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateToolbarTree( const TOOLBAR_CONFIGURATI
             {
             // Add a group of items to the toolbar
             TOOLBAR_TREE_ITEM_DATA* groupTreeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE::GROUP );
-            groupTreeItem->SetToolbarItem( item );
+            groupTreeItem->SetName( item.m_GroupName );
 
-            wxTreeItemId groupId = m_toolbarTree->AppendItem( root, item.m_GroupName, -1, -1, groupTreeItem );
+            wxTreeItemId groupId = m_toolbarTree->AppendItem( root, item.m_GroupName, -1, -1,
+                                                              groupTreeItem );
 
             // Add the elements below the group
             for( auto& groupItem : item.m_GroupItems )
@@ -232,7 +338,6 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateToolbarTree( const TOOLBAR_CONFIGURATI
                 }
 
                 TOOLBAR_TREE_ITEM_DATA* toolTreeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE::TOOL );
-                toolTreeItem->SetName( groupItem );
                 toolTreeItem->SetAction( toolMap->second );
 
                 int  imgIdx = -1;
@@ -250,6 +355,15 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateToolbarTree( const TOOLBAR_CONFIGURATI
     }
 
     m_toolbarTree->ExpandAll();
+
+    wxTreeItemIdValue temp;
+    wxTreeItemId firstItem = m_toolbarTree->GetFirstChild( root, temp );
+
+    if( firstItem.IsOk()  )
+    {
+        m_toolbarTree->SelectItem( firstItem );
+        m_toolbarTree->EnsureVisible( firstItem );
+    }
 }
 
 
@@ -335,19 +449,121 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateActions( const std::map<std::string, T
 
 void PANEL_TOOLBAR_CUSTOMIZATION::onGroupPress( wxCommandEvent& aEvent )
 {
+    TOOLBAR_TREE_ITEM_DATA* treeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE::GROUP,
+                                                                   _( "Group" ) );
 
+    wxTreeItemId newItem;
+    wxTreeItemId selItem = m_toolbarTree->GetSelection();
+
+    if( selItem.IsOk() )
+    {
+        // Can't add a group onto a group
+        wxTreeItemId parent = m_toolbarTree->GetItemParent( selItem );
+
+        if( parent.IsOk() )
+        {
+            wxTreeItemId secondParent = m_toolbarTree->GetItemParent( parent );
+
+            if( secondParent.IsOk() )
+            {
+                delete treeItem;
+                return;
+            }
+        }
+
+        newItem = m_toolbarTree->InsertItem( m_toolbarTree->GetRootItem(), selItem, treeItem->GetName(),
+                                             -1, -1, treeItem );
+    }
+    else
+    {
+        newItem = m_toolbarTree->AppendItem( m_toolbarTree->GetRootItem(), treeItem->GetName(), -1, -1,
+                                             treeItem );
+    }
+
+    if( newItem.IsOk() )
+    {
+        m_toolbarTree->SelectItem( newItem );
+        m_toolbarTree->EnsureVisible( newItem );
+    }
 }
 
 
 void PANEL_TOOLBAR_CUSTOMIZATION::onSpacerPress( wxCommandEvent& aEvent )
 {
+    TOOLBAR_TREE_ITEM_DATA* treeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE::SPACER, 5 );
 
+    wxString label = wxString::Format( "Spacer: %i", treeItem->GetSize() );
+
+    wxTreeItemId newItem;
+    wxTreeItemId selItem = m_toolbarTree->GetSelection();
+
+    if( selItem.IsOk() )
+    {
+        // Insert after the current selection at the same level
+        wxTreeItemId parent = m_toolbarTree->GetItemParent( selItem );
+
+        // Can't insert a spacer in a group yet
+        if( parent.IsOk() )
+        {
+            wxTreeItemId secondParent = m_toolbarTree->GetItemParent( parent );
+
+            if( secondParent.IsOk() )
+            {
+                delete treeItem;
+                return;
+            }
+        }
+
+        newItem = m_toolbarTree->InsertItem( parent, selItem, label, -1, -1, treeItem );
+    }
+    else
+        newItem = m_toolbarTree->AppendItem( m_toolbarTree->GetRootItem(), label, -1, -1, treeItem );
+
+    if( newItem.IsOk() )
+    {
+        m_toolbarTree->SelectItem( newItem );
+        m_toolbarTree->EnsureVisible( newItem );
+    }
 }
 
 
 void PANEL_TOOLBAR_CUSTOMIZATION::onSeparatorPress( wxCommandEvent& aEvent )
 {
+    TOOLBAR_TREE_ITEM_DATA* treeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE::SEPARATOR );
 
+    wxTreeItemId newItem;
+    wxTreeItemId selItem = m_toolbarTree->GetSelection();
+
+    if( selItem.IsOk() )
+    {
+        // Insert after the current selection at the same level
+        wxTreeItemId parent = m_toolbarTree->GetItemParent( selItem );
+
+        // Can't insert a separator in a group yet
+        if( parent.IsOk() )
+        {
+            wxTreeItemId secondParent = m_toolbarTree->GetItemParent( parent );
+
+            if( secondParent.IsOk() )
+            {
+                delete treeItem;
+                return;
+            }
+        }
+
+        newItem = m_toolbarTree->InsertItem( parent, selItem, "Separator", -1, -1, treeItem );
+    }
+    else
+    {
+        newItem = m_toolbarTree->AppendItem( m_toolbarTree->GetRootItem(), "Separator", -1, -1,
+                                             treeItem );
+    }
+
+    if( newItem.IsOk() )
+    {
+        m_toolbarTree->SelectItem( newItem );
+        m_toolbarTree->EnsureVisible( newItem );
+    }
 }
 
 
@@ -363,26 +579,143 @@ void PANEL_TOOLBAR_CUSTOMIZATION::enableCustomControls( bool enable )
     m_toolbarTree->Enable( enable );
     m_btnAddTool->Enable( enable );
     m_btnToolDelete->Enable( enable );
-    m_btnToolMoveDown->Enable( enable );
-    m_btnToolMoveUp->Enable( enable );
+
+    // TODO (ISM): Enable moving up/down
+    //m_btnToolMoveDown->Enable( enable );
+    //m_btnToolMoveUp->Enable( enable );
     m_actionsList->Enable( enable );
     m_insertButton->Enable( enable );
 }
 
 
-void PANEL_TOOLBAR_CUSTOMIZATION::OnToolDelete( wxCommandEvent& event )
+void PANEL_TOOLBAR_CUSTOMIZATION::onToolDelete( wxCommandEvent& event )
+{
+    wxTreeItemId item = m_toolbarTree->GetSelection();
+
+    if( !item.IsOk() )
+        return;
+
+    // The tree control defaults to nothing selected if you delete the item
+    // at the last place, so we have to manually get the itme immediately before
+    // the one we will delete, and then select it if nothing is selected.
+    wxTreeItemId prev = m_toolbarTree->GetPrevSibling( item );
+
+    m_toolbarTree->Delete( item );
+
+    item = m_toolbarTree->GetSelection();
+
+    if( !item.IsOk() && prev.IsOk() )
+    {
+        m_toolbarTree->SelectItem( prev );
+        m_toolbarTree->EnsureVisible( prev );
+    }
+}
+
+
+void PANEL_TOOLBAR_CUSTOMIZATION::onToolMoveUp( wxCommandEvent& event )
 {
 
 }
 
 
-void PANEL_TOOLBAR_CUSTOMIZATION::OnToolMoveUp( wxCommandEvent& event )
+void PANEL_TOOLBAR_CUSTOMIZATION::onToolMoveDown( wxCommandEvent& event )
 {
 
 }
 
+void PANEL_TOOLBAR_CUSTOMIZATION::onBtnAddAction( wxCommandEvent& event )
+{
+    // Get the selected item
+    long actionIdx = m_actionsList->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
 
-void PANEL_TOOLBAR_CUSTOMIZATION::OnToolMoveDown( wxCommandEvent& event )
+    // Nothing is selected, bail out
+    if( actionIdx < 0 )
+        return;
+
+    // This is needed because GetItemData returns a wxUIntPtr, which is actually size_t...
+    void*        v      = ( void* ) m_actionsList->GetItemData( actionIdx );
+    TOOL_ACTION* action = static_cast<TOOL_ACTION*>( v );
+
+    // Build the item to add
+    TOOLBAR_TREE_ITEM_DATA* toolTreeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE::TOOL );
+    toolTreeItem->SetAction( action );
+
+    int  imgIdx = -1;
+    auto imgMap = m_actionImageListMap.find( action->GetName() );
+
+    if( imgMap != m_actionImageListMap.end() )
+        imgIdx = imgMap->second;
+
+    // Actually add the item
+    wxString     label   = action->GetFriendlyName();
+    wxTreeItemId selItem = m_toolbarTree->GetSelection();
+    wxTreeItemId newItem;
+
+    if( selItem.IsOk() )
+    {
+
+        TOOLBAR_TREE_ITEM_DATA* data =
+                dynamic_cast<TOOLBAR_TREE_ITEM_DATA*>( m_toolbarTree->GetItemData( selItem ) );
+
+        if( data && data->GetType() == TOOLBAR_ITEM_TYPE::GROUP )
+        {
+            // Insert into the end of the group
+            newItem = m_toolbarTree->AppendItem( selItem, label, imgIdx, -1, toolTreeItem );
+        }
+        else
+        {
+            // Insert after the current selection at the same level
+            wxTreeItemId parent = m_toolbarTree->GetItemParent( selItem );
+            newItem = m_toolbarTree->InsertItem( parent, selItem, label, imgIdx, -1, toolTreeItem );
+        }
+    }
+    else
+    {
+        // Insert at the root level if there is no selection
+        newItem = m_toolbarTree->AppendItem( m_toolbarTree->GetRootItem(), label, imgIdx, -1,
+                                             toolTreeItem );
+    }
+
+    if( newItem.IsOk() )
+    {
+        m_toolbarTree->SelectItem( newItem );
+        m_toolbarTree->EnsureVisible( newItem );
+
+        // Move the action to the next available one, to be nice
+        if( ++actionIdx < m_actionsList->GetItemCount() )
+            m_actionsList->SetItemState( actionIdx, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+    }
+}
+
+
+void PANEL_TOOLBAR_CUSTOMIZATION::onTreeBeginLabelEdit( wxTreeEvent& event )
+{
+    wxTreeItemId id = event.GetItem();
+
+    if( id.IsOk() )
+    {
+        wxTreeItemData*         treeData = m_toolbarTree->GetItemData( id );
+        TOOLBAR_TREE_ITEM_DATA* tbData   = dynamic_cast<TOOLBAR_TREE_ITEM_DATA*>( treeData );
+
+        switch( tbData->GetType() )
+        {
+        case TOOLBAR_ITEM_TYPE::TOOL:
+        case TOOLBAR_ITEM_TYPE::CONTROL:
+        case TOOLBAR_ITEM_TYPE::SEPARATOR:
+            // Don't let these be edited
+            event.Veto();
+            break;
+
+        case TOOLBAR_ITEM_TYPE::GROUP:
+        case TOOLBAR_ITEM_TYPE::SPACER:
+            // Do nothing here
+            break;
+        }
+    }
+}
+
+
+void PANEL_TOOLBAR_CUSTOMIZATION::onTreeEndLabelEdit( wxTreeEvent& event )
 {
 
 }

@@ -51,6 +51,8 @@ public:
     bool TransferDataToWindow() override;
 
 protected:
+    void parseToolbarTree( TOOLBAR_CONFIGURATION& aToolbar );
+
     void populateToolbarTree( const TOOLBAR_CONFIGURATION& aToolbar );
 
     void populateActions( const std::map<std::string, TOOL_ACTION*>& aTools,
@@ -64,9 +66,12 @@ protected:
 
     // From the base class
     void onCustomizeTbCb( wxCommandEvent& event ) override;
-    void OnToolDelete( wxCommandEvent& event ) override;
-    void OnToolMoveUp( wxCommandEvent& event ) override;
-    void OnToolMoveDown( wxCommandEvent& event ) override;
+    void onToolDelete( wxCommandEvent& event ) override;
+    void onToolMoveUp( wxCommandEvent& event ) override;
+    void onToolMoveDown( wxCommandEvent& event ) override;
+    void onBtnAddAction( wxCommandEvent& event ) override;
+    void onTreeBeginLabelEdit( wxTreeEvent& event ) override;
+    void onTreeEndLabelEdit( wxTreeEvent& event ) override;
 
 protected:
     wxImageList*               m_actionImageList;
