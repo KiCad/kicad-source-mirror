@@ -73,6 +73,10 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                         ret.push_back( VisibilityLayerToString( *vl ) );
                 }
 
+                // Explicit marker to tell apart a wiped-out array from the user hiding everything
+                // if( ret.empty() )
+                //     ret.push_back( "none" );
+
                 return ret;
             },
             [&]( const nlohmann::json& aVal )
@@ -85,6 +89,7 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
 
                 m_VisibleItems &= ~UserVisbilityLayers();
                 GAL_SET visible;
+                bool none = false;
 
                 for( const nlohmann::json& entry : aVal )
                 {
@@ -94,14 +99,21 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
 
                         if( std::optional<GAL_LAYER_ID> l = RenderLayerFromVisbilityString( vs ) )
                             visible.set( *l );
+                        else if( vs == "none" )
+                            none = true;
                     }
                     catch( ... )
                     {
-                        // Non-integer or out of range entry in the array; ignore
+                        // Unknown entry (possibly the settings file was re-saved by an old version
+                        // of kicad that used numeric entries, or is a future format)
                     }
                 }
 
-                m_VisibleItems |= UserVisbilityLayers() & visible;
+                // Restore corrupted state
+                if( !visible.any() && !none )
+                    m_VisibleItems |= UserVisbilityLayers();
+                else
+                    m_VisibleItems |= UserVisbilityLayers() & visible;
             },
             {} ) );
 
