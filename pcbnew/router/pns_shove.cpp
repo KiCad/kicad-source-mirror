@@ -306,12 +306,14 @@ bool SHOVE::shoveLineFromLoneVia( const LINE& aCurLine, const LINE& aObstacleLin
 /*
  * Re-walk aObstacleLine around the given set of hulls, returning the result in aResultLine.
  */
-bool SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
-                                               LINE& aResultLine, const HULL_SET& aHulls, bool aPermitAdjustingEndpoints )
+bool SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine, LINE& aResultLine,
+                                const HULL_SET& aHulls, bool aPermitAdjustingStart,
+                                bool aPermitAdjustingEnd )
 {
-    const int c_ENDPOINT_ON_HULL_THRESHOLD = 10000;
+    const int c_ENDPOINT_ON_HULL_THRESHOLD = 1000;
     int attempt;
-    
+    bool permitAdjustingEndpoints = aPermitAdjustingStart || aPermitAdjustingEnd;
+
     PNS_DBG( Dbg(), BeginGroup, "shove-details", 1 );
 
     for( attempt = 0; attempt < 4; attempt++ )
@@ -323,7 +325,7 @@ bool SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
         LINE l( aObstacleLine );
         SHAPE_LINE_CHAIN path( l.CLine() );
 
-        if( aPermitAdjustingEndpoints && l.SegmentCount() >= 1 )
+        if( permitAdjustingEndpoints && l.SegmentCount() >= 1 )
         {
             auto minDistP = [&]( VECTOR2I pref, int& mdist, int& minhull ) -> VECTOR2I
             {
@@ -346,15 +348,6 @@ bool SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
                     {
                         bool reject = false;
 
-                        /*for( int j = 0; j < (int) aHulls.size(); j++ )
-                        {
-                            if ( i != j && aHulls[j].PointInside( p ) )
-                            {
-                                reject = true;
-                                break;
-                            }
-                        }*/
-                        
                         if( !reject )
                         {
                             min_dist = dist;
@@ -373,14 +366,14 @@ bool SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
 
             PNS_DBG( Dbg(), Message, wxString::Format( "mindists : %d %d hulls %d %d\n", minDist0, minDist1, minhull0, minhull1 ) );
 
-            if( minDist1 < c_ENDPOINT_ON_HULL_THRESHOLD )
+            if( minDist1 < c_ENDPOINT_ON_HULL_THRESHOLD && aPermitAdjustingEnd )
             {
                 l.Line().Append( p1 );
                 obs = l.CLine();
                 path = l.CLine();
             }
 
-            if( minDist0 < c_ENDPOINT_ON_HULL_THRESHOLD )
+            if( minDist0 < c_ENDPOINT_ON_HULL_THRESHOLD && aPermitAdjustingStart )
             {
                 l.Line().Insert( 0, p0 );
                 obs = l.CLine();
@@ -511,20 +504,20 @@ bool SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& aObstacleLine,
     const int cHullFailureExpansionFactor = 1000;
     int extraHullExpansion = 0;
 
-    bool voeA = true, voeB = true;
-    const JOINT* ja = nullptr;
-    const JOINT* jb = nullptr;
+    bool voeStart = false, voeEnd = false;
+    const JOINT* jtStart = nullptr;
+    const JOINT* jtEnd = nullptr;
 
     if( aObstacleLine.PointCount() >= 2 )
     {
-        ja = m_currentNode->FindJoint( aObstacleLine.CPoint(0), &aObstacleLine );
-        jb = m_currentNode->FindJoint( aObstacleLine.CPoint(-1), &aObstacleLine );
+        jtStart = m_currentNode->FindJoint( aObstacleLine.CPoint(0), &aObstacleLine );
+        jtEnd = m_currentNode->FindJoint( aObstacleLine.CPoint(-1), &aObstacleLine );
     }
 
-    if( ja )
-        voeA = !ja->Via();
-    if( jb )
-        voeB = !jb->Via();
+    if( jtStart )
+        voeStart = jtStart->Via() != nullptr;
+    if( jtEnd )
+        voeEnd = jtEnd->Via() != nullptr;
 
     aResultLine.ClearLinks();
     bool viaOnEnd = aCurLine.EndsWithVia();
@@ -601,9 +594,10 @@ bool SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& aObstacleLine,
                 hulls.push_back( aCurLine.Via().Hull( viaClearance, obstacleLineWidth, layer ) );
             }
 
-            bool permitMovingEndpoints = (attempt >= 2) && !voeA && !voeB;
+            bool permitMovingStart = (attempt >= 2) && !voeStart;
+            bool permitMovingEnd = (attempt >= 2) && !voeEnd;
 
-            if (shoveLineToHullSet( aCurLine, obstacleLine, aResultLine, hulls, permitMovingEndpoints ) )
+            if (shoveLineToHullSet( aCurLine, obstacleLine, aResultLine, hulls, permitMovingStart, permitMovingEnd ) )
             {
                 if( obsVia )
                     aResultLine.AppendVia( *obsVia );
