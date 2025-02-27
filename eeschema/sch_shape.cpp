@@ -143,6 +143,9 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
     if( IsPrivate() )
         return;
 
+    // note: if aBodyStyle == -1 the outline shape is not plotted. Only the filled area
+    // is plotted (used to plot cells for SCH_TABLE items
+
     SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
     int                  pen_size = GetEffectivePenWidth( renderSettings );
 
@@ -221,7 +224,7 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
         else
             fill = FILL_T::NO_FILL;
 
-        pen_size = GetEffectivePenWidth( renderSettings );
+        pen_size = aBodyStyle == -1 ? 0 : GetEffectivePenWidth( renderSettings );
     }
 
     if( bg == COLOR4D::UNSPECIFIED || !aPlotter->GetColorMode() )
