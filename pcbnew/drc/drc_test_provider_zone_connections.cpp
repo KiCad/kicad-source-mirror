@@ -155,25 +155,86 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
 
                 zoneFill->Outline( jj ).Intersect( padOutline, intersections, true, &padBBox );
 
+                std::vector<SHAPE_LINE_CHAIN::INTERSECTION> unique_intersections;
+
+                for( const auto& i : intersections )
+                {
+                    const auto found = std::find_if(
+                            std::begin( unique_intersections ), std::end( unique_intersections ),
+                            [&]( const SHAPE_LINE_CHAIN::INTERSECTION& j ) -> bool
+                            {
+                                return ( j.p == i.p );
+                            } );
+
+                    if( found == std::end( unique_intersections ) )
+                        unique_intersections.emplace_back( i );
+                }
+
                 // If we connect to an island that only connects to a single item then we *are*
                 // that item.  Thermal spokes to this (otherwise isolated) island don't provide
                 // electrical connectivity to anything, so we don't count them.
-                if( intersections.size() >= 2 )
+                if( unique_intersections.size() >= 2 )
                 {
                     if( alg::contains( isolatedIslands.m_SingleConnectionOutlines, jj ) )
                     {
-                        ignoredSpokes += (int) intersections.size() / 2;
-                        ignoredSpokePos = ( intersections[0].p + intersections[1].p ) / 2;
+                        ignoredSpokes += (int) unique_intersections.size() / 2;
+                        ignoredSpokePos =
+                                ( unique_intersections[0].p + unique_intersections[1].p ) / 2;
                     }
                     else
                     {
-                        spokes += (int) intersections.size() / 2;
+                        spokes += (int) unique_intersections.size() / 2;
                     }
                 }
             }
 
             if( spokes == 0 && ignoredSpokes == 0 )     // Not connected at all
                 continue;
+
+            int customSpokes = 0;
+
+            if( pad->GetShape( aLayer ) == PAD_SHAPE::CUSTOM )
+            {
+                for( const std::shared_ptr<PCB_SHAPE>& primitive : pad->GetPrimitives( aLayer ) )
+                {
+                    if( primitive->IsProxyItem() && primitive->GetShape() == SHAPE_T::SEGMENT )
+                    {
+                        customSpokes++;
+                    }
+                }
+            }
+
+            if( customSpokes > 0 )
+            {
+                if( spokes < customSpokes )
+                {
+                    std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_STARVED_THERMAL );
+                    VECTOR2I                  pos;
+
+                    if( ignoredSpokes )
+                    {
+                        msg = wxString::Format(
+                                _( "(layer %s; %d spokes connected to isolated island)" ),
+                                board->GetLayerName( aLayer ), ignoredSpokes );
+                        pos = ignoredSpokePos;
+                    }
+                    else
+                    {
+                        msg = wxString::Format(
+                                _( "(layer %s; %s custom spoke count %d; actual %d)" ),
+                                board->GetLayerName( aLayer ), constraint.GetName(), customSpokes,
+                                spokes );
+                        pos = pad->GetPosition();
+                    }
+
+                    drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
+                    drce->SetItems( aZone, pad );
+                    drce->SetViolatingRule( constraint.GetParentRule() );
+
+                    reportViolation( drce, pos, aLayer );
+                }
+                continue;
+            }
 
             if( spokes >= minCount )                    // We already have enough
                 continue;
