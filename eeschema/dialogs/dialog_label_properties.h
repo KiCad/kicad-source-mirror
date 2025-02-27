@@ -60,6 +60,28 @@ private:
     void OnSizeGrid( wxSizeEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
 
+    /**
+     * Handles the filtering of items in the wxComboBox based on user input.
+     *
+     * This function is triggered by the wxEVT_TEXT event when the user modifies 
+     * the text in the combo box. It filters the dropdown list to display only 
+     * the items that match the input text.
+     *
+     * @param event The wxCommandEvent associated with the wxEVT_TEXT event.
+     */
+    void OnLabelFilter( wxCommandEvent& event );
+
+    /**
+     * Handles the selection of an item from the wxComboBox dropdown.
+     *
+     * This function is triggered by the wxEVT_COMBOBOX event when the user selects 
+     * an item. It ensures that the selected value is correctly processed and 
+     * prevents unnecessary re-filtering based on the selection.
+     *
+     * @param event The wxCommandEvent associated with the wxEVT_COMBOBOX event.
+     */
+    void OnLabelItemSelected( wxCommandEvent& event );
+    
     void AdjustGridColumns( int aWidth );
 
     bool TransferDataToWindow() override;
@@ -81,6 +103,9 @@ private:
     UNIT_BINDER           m_textSize;
 
     HTML_MESSAGE_BOX*     m_helpWindow;
+    wxArrayString         m_existingLabelArray;
+    // To store the previous value of the text typed in label combo
+    wxString              m_previousLabelText; 
 };
 
 
