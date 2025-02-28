@@ -775,6 +775,13 @@ void KICAD_MANAGER_FRAME::OpenJobsFile( const wxFileName& aFileName, bool aCreat
 
         jobsFile->LoadFromFile();
 
+        if( aCreate && !aFileName.FileExists() )
+        {
+            JOBSET_OUTPUT* output = jobsFile->AddNewJobOutput( JOBSET_OUTPUT_TYPE::FOLDER );
+            output->m_outputHandler->SetOutputPath( aFileName.GetName() );
+            jobsFile->SaveToFile( wxEmptyString, true );
+        }
+
         PANEL_JOBSET* jobPanel = new PANEL_JOBSET( m_notebook, this, std::move( jobsFile ) );
         jobPanel->SetProjectTied( true );
         jobPanel->SetClosable( true );
