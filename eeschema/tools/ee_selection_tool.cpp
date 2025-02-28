@@ -606,8 +606,12 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 schframe->FocusOnItem( nullptr );
 
             EE_COLLECTOR collector;
-
-            if( CollectHits( collector, evt->DragOrigin(), { SCH_TABLECELL_T } ) )
+            
+            if( m_selection.GetSize() == 1 && dynamic_cast<SCH_TABLE*>( m_selection.GetItem( 0 ) ) )
+            {
+                m_toolMgr->RunAction( EE_ACTIONS::move );
+            }
+            else if( CollectHits( collector, evt->DragOrigin(), { SCH_TABLECELL_T } ) )
             {
                 selectTableCells( static_cast<SCH_TABLE*>( collector[0]->GetParent() ) );
             }
