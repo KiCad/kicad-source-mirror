@@ -372,7 +372,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
     }
 
     const PCB_TEXT* value  = &aFootprint->Value();
-    PCB_LAYER_ID    valueLayer = reference->GetLayer();
+    PCB_LAYER_ID    valueLayer = value->GetLayer();
 
     if( GetPlotValue()
             && m_layerMask[valueLayer]
