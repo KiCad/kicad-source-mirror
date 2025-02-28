@@ -39,7 +39,10 @@ GIT_PULL_HANDLER::~GIT_PULL_HANDLER()
 
 bool GIT_PULL_HANDLER::PerformFetch()
 {
-      // Fetch updates from remote repository
+    if( !m_repo )
+        return false;
+
+    // Fetch updates from remote repository
     git_remote* remote = nullptr;
 
     if( git_remote_lookup( &remote, m_repo, "origin" ) != 0 )

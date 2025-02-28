@@ -2623,7 +2623,7 @@ void PROJECT_TREE_PANE::onGitSyncTimer( wxTimerEvent& aEvent )
     {
         KIGIT_COMMON* gitCommon = m_TreeProject->GitCommon();
 
-        if( !gitCommon || !gitCommon->GetRepo() )
+        if( !gitCommon )
             return;
 
         GIT_PULL_HANDLER handler( gitCommon );
