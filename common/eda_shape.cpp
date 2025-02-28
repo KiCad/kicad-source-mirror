@@ -641,7 +641,7 @@ void EDA_SHAPE::updateHatching() const
         break;
     }
 
-    m_hatching.Simplify();
+    m_hatching.Fracture();
 }
 
 
