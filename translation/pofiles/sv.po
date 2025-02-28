@@ -13,16 +13,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-26 20:12+0300\n"
-"PO-Revision-Date: 2025-02-20 15:02+0000\n"
+"PO-Revision-Date: 2025-03-01 03:31+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.1-dev\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -4763,9 +4763,8 @@ msgid "Failed to write file '%s'."
 msgstr "Det gick inte att skriva filen '%s'."
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
-#, fuzzy
 msgid "Embedded Reference"
-msgstr "Kopiera inbäddad referens"
+msgstr "Inbäddad referens"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
@@ -5272,14 +5271,12 @@ msgstr "Status för Python-tolk"
 
 #: common/dialogs/panel_printer_list.cpp:154
 #: common/dialogs/panel_printer_list.cpp:175
-#, fuzzy
 msgid "Default printer"
-msgstr "Standardtypsnitt"
+msgstr "Standardskrivare"
 
 #: common/dialogs/panel_printer_list_base.cpp:17
-#, fuzzy
 msgid "Printers"
-msgstr "Skriv ut"
+msgstr "Skrivare"
 
 #: common/dialogs/panel_printer_list_base.cpp:27
 #: common/widgets/wx_html_report_panel.cpp:246
@@ -6397,23 +6394,20 @@ msgstr "Bézier"
 #: common/eda_shape.cpp:2388
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:119
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:238
-#, fuzzy
 msgid "Hatch"
-msgstr "Skrafferad kant"
+msgstr "Skraffering"
 
 #: common/eda_shape.cpp:2389
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:119
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:238
-#, fuzzy
 msgid "Reverse Hatch"
-msgstr "Omvänd"
+msgstr "Omvänd skraffering"
 
 #: common/eda_shape.cpp:2390
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:119
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:238
-#, fuzzy
 msgid "Cross-hatch"
-msgstr "Kryssa över"
+msgstr "Korsvis skraffering"
 
 #: common/eda_shape.cpp:2423 eeschema/sch_shape.cpp:554
 msgid "Shape Properties"
@@ -7485,7 +7479,6 @@ msgid "Export Drill Data Job Settings"
 msgstr "Inställningar för åtgärden exportera borrdata"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
-#, fuzzy
 msgid "PCB: Export Drill Data"
 msgstr "Mönsterkort: Exportera borrdata"
 
@@ -7505,18 +7498,16 @@ msgstr "Mönsterkort: Exportera DXF"
 
 #: common/jobs/job_export_pcb_gencad.cpp:49
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:128
-#, fuzzy
 msgid "Export GenCAD File"
-msgstr "Exportera SVG-fil"
+msgstr "Exportera GenCAD-fil"
 
 #: common/jobs/job_export_pcb_gencad.cpp:55
 msgid "Export GenCAD Job Settings"
 msgstr "Inställningar för åtgärden exportera GenCAD"
 
 #: common/jobs/job_export_pcb_gencad.cpp:59
-#, fuzzy
 msgid "PCB: Export GenCAD"
-msgstr "Mönsterkort: Exportera DXF"
+msgstr "Mönsterkort: Exportera GenCAD"
 
 #: common/jobs/job_export_pcb_gerber.cpp:65
 msgid "Export single Gerber"
@@ -7544,29 +7535,24 @@ msgid "Export IPC-2581"
 msgstr "Exportera IPC-2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
-#, fuzzy
 msgid "Export IPC-2581 Job Settings"
 msgstr "Inställningar för åtgärden exportera IPC-2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
-#, fuzzy
 msgid "PCB: Export IPC-2581"
-msgstr "Mönsterkort: Exportera IPC2581"
+msgstr "Mönsterkort: Exportera IPC-2581"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:33
-#, fuzzy
 msgid "Export IPC-D-356"
-msgstr "Exportera IPC-2581"
+msgstr "Exportera IPC D-356"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:39
-#, fuzzy
 msgid "Export IPC-D-356 Job Settings"
-msgstr "Inställningar för åtgärden exportera IPC-2581"
+msgstr "Inställningar för åtgärden exportera IPC D-356"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:52
-#, fuzzy
 msgid "PCB: Export IPC-D-356"
-msgstr "Mönsterkort: Exportera IPC2581"
+msgstr "Mönsterkort: Exportera IPC-D-356"
 
 #: common/jobs/job_export_pcb_odb.cpp:57
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
@@ -7725,7 +7711,6 @@ msgid "Schematic: Perform ERC"
 msgstr "Kretsschema: Utför elektrisk regelkontroll"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy Files"
 msgstr "Special: Kopiera filer"
 
@@ -13967,9 +13952,8 @@ msgstr "Ersätt"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:149
 #: pcbnew/dialogs/dialog_find_base.cpp:125
-#, fuzzy
 msgid "Show search panel"
-msgstr "Visa dialogruta för sökning"
+msgstr "Visa fält för sökning"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:44
 msgid "Schematic Setup"
@@ -14070,9 +14054,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:115
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:234
-#, fuzzy
 msgid "Fill:"
-msgstr "Fyll"
+msgstr "Fyllning:"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:142
 msgid "Clear colors to use Schematic Editor colors."
@@ -16866,15 +16849,15 @@ msgid "The current configuration does not include the symbol library '%s'"
 msgstr "Den aktuella konfigurationen inkluderar inte symbolbiblioteket '%s'"
 
 #: eeschema/erc/erc.cpp:1414
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration"
 msgstr ""
-"Symbolbiblioteket '%s' är inte aktiverat i den nuvarande konfigurationen."
+"Symbolbiblioteket '%s' är inte aktiverat i den nuvarande konfigurationen"
 
 #: eeschema/erc/erc.cpp:1429
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' was not found at '%s'."
-msgstr "Fotavtrycksbiblioteket '%s' hittades inte."
+msgstr "Fotavtrycksbiblioteket '%s' hittades inte på '%s'."
 
 #: eeschema/erc/erc.cpp:1449
 #, c-format
@@ -22086,12 +22069,14 @@ msgstr "Radera hierarkiska etiketter"
 #, fuzzy
 msgid ""
 "Associate selected sheet pin and hierarchical label using the label name"
-msgstr "Synkronisera arkstift och hierarkiska etiketter"
+msgstr ""
+"Synkronisera arkstift och hierarkiska etiketter med hjälp av etikettnamnet"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
 #, fuzzy
 msgid "Associate selected sheet pin and hierarchical label using the pin name"
-msgstr "Bryt association(er) för arkstift och hierarkisk(a) etikett(er)"
+msgstr ""
+"Associera valda arkstift och hierarkisk etikett med hjälp av stiftnamnet"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
@@ -22634,9 +22619,8 @@ msgid "Sync Sheet Pins..."
 msgstr "Synkronisera arkstift"
 
 #: eeschema/tools/ee_actions.cpp:568
-#, fuzzy
 msgid "Import Sheet..."
-msgstr "Importera ark"
+msgstr "Importera kretsschemaark..."
 
 #: eeschema/tools/ee_actions.cpp:569
 msgid "Import sheet into project"
@@ -27505,6 +27489,8 @@ msgid ""
 "This plugin requires the KiCad API, which is currently disabled in "
 "preferences. Would you like to enable it?"
 msgstr ""
+"Detta insticksprogram behöver KiCad API:et, som för närvarande är "
+"deaktiverat i inställningarna. Vill du aktivera det?"
 
 #: kicad/pcm/pcm.cpp:1121
 msgid "PCM Update"
@@ -27853,18 +27839,16 @@ msgid "Local path: monitoring folder changes"
 msgstr "Lokal sökväg: övervakning av mappändringar"
 
 #: kicad/project_tree_pane.cpp:1631
-#, fuzzy
 msgid "The selected directory is already a Git project."
-msgstr "Den valda katalogen är redan ett git-projekt."
+msgstr "Den valda katalogen är redan ett Git-projekt."
 
 #: kicad/project_tree_pane.cpp:1638
 msgid "Set default remote"
 msgstr "Ställ in standardfjärrförvar"
 
 #: kicad/project_tree_pane.cpp:1653
-#, fuzzy
 msgid "Failed to initialize Git project."
-msgstr "Lyckades inte initialisera git-projekt."
+msgstr "Lyckades inte initialisera Git-projekt."
 
 #: kicad/project_tree_pane.cpp:1713
 msgid "Failed to set default remote."
@@ -27904,19 +27888,17 @@ msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "Lyckades inte uppdatera HEAD-referens för gren '%s'"
 
 #: kicad/project_tree_pane.cpp:1919
-#, fuzzy
 msgid "Are you sure you want to remove Git tracking from this project?"
-msgstr "Är du säker på att du vill ta bort git-övervakning från detta projekt?"
+msgstr ""
+"Är du säker på att du vill ta bort Git-versionshantering från detta projekt?"
 
 #: kicad/project_tree_pane.cpp:1936
-#, fuzzy
 msgid "Failed to remove Git directory"
-msgstr "Kunde inte ta bort git-katalog"
+msgstr "Lyckades inte ta bort Git-katalog"
 
 #: kicad/project_tree_pane.cpp:2252
-#, fuzzy
 msgid "The selected directory is not a Git project."
-msgstr "Den valda katalogen är redan ett git-projekt."
+msgstr "Den valda katalogen är inte ett Git-projekt."
 
 #: kicad/project_tree_pane.cpp:2401
 msgid "Discarding commit due to empty commit message."
@@ -35130,11 +35112,8 @@ msgid "Output File:"
 msgstr "Fil för utdata:"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:61
-#, fuzzy
 msgid "Enter a filename if you do not want to use default file names"
-msgstr ""
-"Ange ett filnamn om du inte vill använda standardfilnamn\n"
-"Kan endast användas vid utskrift av det aktuella arket"
+msgstr "Ange ett filnamn om du inte vill använda standardfilnamn"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:436
 #, c-format
@@ -35723,9 +35702,8 @@ msgid "Set to specified values:"
 msgstr "Ställ in till angivna värden:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:147
-#, fuzzy
 msgid "Visible  (fields only)"
-msgstr "Synlig  (endast text)"
+msgstr "Synlig  (endast fält)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:235
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:99
@@ -37955,22 +37933,21 @@ msgstr "Kantstil:"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:546
 #, c-format
 msgid "Applying these changes will short net %s with %s."
-msgstr ""
+msgstr "Om dessa ändringar verkställs, kommer nät %s att kortslutas med %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:552
 #, c-format
 msgid "Applying these changes will short net %s with other nets."
 msgstr ""
+"Om dessa ändringar verkställs, kommer att kortsluta nät %s med andra nät."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Apply Anyway"
-msgstr "Lägg till ändå"
+msgstr "Verkställ ändå"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Cancel Changes"
-msgstr "Vill du förkasta ändringarna?"
+msgstr "Förkasta ändringarna"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:571
 #, c-format
@@ -39071,9 +39048,8 @@ msgstr ""
 "Tillämpa mönsterkortsförinställningar på icke-koppar-former i fotavtryck"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:58
-#, fuzzy
 msgid "This layer is required and cannot be disabled"
-msgstr "Namnet %s är reserverat och kan inte användas."
+msgstr "Detta lager behövs och kan inte deaktiveras."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:88
 #: pcbnew/dialogs/panel_setup_layers.cpp:294
@@ -42189,9 +42165,9 @@ msgid "Checking board footprints against library..."
 msgstr "Kontrollerar kortets fotavtryck mot bibliotek..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:892
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' was not found at '%s'."
-msgstr "Fotavtrycksbiblioteket '%s' hittades inte."
+msgstr "Fotavtrycksbiblioteket '%s' hittades inte på '%s'."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:942
 #, c-format
@@ -42473,16 +42449,17 @@ msgid "Generate IPC-D-356 netlist file"
 msgstr "Skapa IPC-D-356 nätlistefil"
 
 #: pcbnew/exporters/export_d356.cpp:404
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "IPC-D-356 netlist file created:\n"
 "'%s'."
-msgstr "IPC-D-356 nätlistefil ..."
+msgstr ""
+"IPC-D-356 nätlistefil skapad:\n"
+"'%s'."
 
 #: pcbnew/exporters/export_d356.cpp:405
-#, fuzzy
 msgid "IPC-D-356 Netlist File"
-msgstr "IPC-D-356 nätlistefil ..."
+msgstr "IPC-D-356 nätlistefil"
 
 #: pcbnew/exporters/export_footprint_associations.cpp:73
 msgid "Save Footprint Association File"
@@ -42833,17 +42810,15 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1302
-#, fuzzy
 msgid "The board must be saved before generating IPC-2581 file."
 msgstr "Mönsterkortet måste sparas innan IPC2581-fil skapas."
 
 #: pcbnew/files.cpp:1318
-#, fuzzy
 msgid "Generating IPC-2581 file"
 msgstr "Skapar IPC-2581-fil"
 
 #: pcbnew/files.cpp:1343 pcbnew/pcbnew_jobs_handler.cpp:2031
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "%s"
@@ -42852,7 +42827,7 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1408 pcbnew/pcbnew_jobs_handler.cpp:2064
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "Failed to rename temporary file '%s."
@@ -46870,14 +46845,12 @@ msgid "Saved DRC Report to %s\n"
 msgstr "Sparade designregelkontrollrapport till %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2112
-#, fuzzy
 msgid "Successfully created IPC-D-356 file\n"
-msgstr "Lyckades skapa genCAD-fil\n"
+msgstr "Lyckades skapa IPC-D-356-fil\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2117
-#, fuzzy
 msgid "Failed to create IPC-D-356 file\n"
-msgstr "Det gick inte att skapa filen."
+msgstr "Det gick inte att skapa IPC-D-356-fil\n"
 
 #: pcbnew/pcbnew_printout.cpp:124
 msgid "Multiple Layers"
@@ -49528,9 +49501,8 @@ msgid "Show/hide the net inspector"
 msgstr "Visa/dölj nätinspektören"
 
 #: pcbnew/tools/pcb_actions.cpp:1345
-#, fuzzy
 msgid "Zone Manager..."
-msgstr "Zonhanterare"
+msgstr "Zonhanterare..."
 
 #: pcbnew/tools/pcb_actions.cpp:1346
 msgid "Show the zone manager dialog"
@@ -51450,18 +51422,16 @@ msgid "Highlight Selected Net"
 msgstr "Framhäv det valda nätet"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1229
-#, fuzzy
 msgid "Rename Selected Net..."
-msgstr "Byt namn på valda nät"
+msgstr "Byt namn på valt nät..."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1233
 msgid "Delete Selected Net"
 msgstr "Radera valt nät"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1239
-#, fuzzy
 msgid "Add Net..."
-msgstr "Lägg till text"
+msgstr "Lägg till nät..."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1253
 msgid "Highlight Selected Nets"
@@ -51501,9 +51471,8 @@ msgid "Group by Netclass"
 msgstr "Gruppera efter nätklass"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1390
-#, fuzzy
 msgid "Add Custom Group..."
-msgstr "Lägg till användardefinierad grupp"
+msgstr "Lägg till användardefinierad grupp..."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1403
 msgid "Remove All Custom Groups"
@@ -51518,9 +51487,8 @@ msgid "Show Unconnected Nets"
 msgstr "Visa icke anslutna nät"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1426
-#, fuzzy
 msgid "Save Net Inspector Report..."
-msgstr "Spara rapport från nätinspektör"
+msgstr "Spara rapport från nätinspektör..."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1435
 msgid "Show / Hide Columns"
