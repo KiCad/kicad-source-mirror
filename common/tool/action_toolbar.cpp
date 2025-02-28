@@ -287,15 +287,26 @@ void ACTION_TOOLBAR::ApplyConfiguration( const TOOLBAR_CONFIGURATION& aConfig )
 
             for( auto& groupItem : item.m_GroupItems )
             {
-                TOOL_ACTION* action = m_toolManager->GetActionManager()->FindAction( groupItem );
-
-                if( !action )
+                switch( groupItem.m_Type )
                 {
-                    wxASSERT_MSG( false, wxString::Format( "Unable to find group tool %s", groupItem ) );
+                case TOOLBAR_ITEM_TYPE::SEPARATOR:
+                case TOOLBAR_ITEM_TYPE::SPACER:
+                case TOOLBAR_ITEM_TYPE::GROUP:
+                case TOOLBAR_ITEM_TYPE::CONTROL:
+                    wxASSERT_MSG( false, "Unsupported group item type" );
                     continue;
-                }
 
-                tools.push_back( action );
+                case TOOLBAR_ITEM_TYPE::TOOL:
+                    TOOL_ACTION* grpAction = m_toolManager->GetActionManager()->FindAction( groupItem.m_ActionName );
+
+                    if( !grpAction )
+                    {
+                        wxASSERT_MSG( false, wxString::Format( "Unable to find group tool %s", groupItem.m_ActionName ) );
+                        continue;
+                    }
+
+                    tools.push_back( grpAction );
+                }
             }
 
             AddGroup( std::make_unique<ACTION_GROUP>( item.m_GroupName.ToStdString(), tools ) );

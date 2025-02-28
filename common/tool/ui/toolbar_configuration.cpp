@@ -31,50 +31,101 @@
 ///! Update the schema version whenever a migration is required
 const int toolbarSchemaVersion = 1;
 
+void to_json( nlohmann::json& aJson, const TOOLBAR_ITEM& aItem )
+{
+    aJson = { { "type", magic_enum::enum_name( aItem.m_Type ) } };
+
+    switch( aItem.m_Type )
+    {
+    case TOOLBAR_ITEM_TYPE::SEPARATOR:
+        // Nothing to add for a separator
+        break;
+
+    case TOOLBAR_ITEM_TYPE::SPACER:
+        aJson["size"] = aItem.m_Size;
+        break;
+
+    case TOOLBAR_ITEM_TYPE::CONTROL:
+        aJson["name"] = aItem.m_ControlName;
+        break;
+
+    case TOOLBAR_ITEM_TYPE::TOOL:
+        aJson["name"] = aItem.m_ActionName;
+        break;
+
+    case TOOLBAR_ITEM_TYPE::GROUP:
+        aJson["group_name"] = aItem.m_GroupName;
+
+        nlohmann::json grpItems = nlohmann::json::array();
+
+        for( const auto& it : aItem.m_GroupItems )
+            grpItems.push_back( it );
+
+        aJson["group_items"] = grpItems;
+
+        break;
+    }
+}
+
+
+void from_json( const nlohmann::json& aJson, TOOLBAR_ITEM& aItem )
+{
+    if( aJson.empty() )
+        return;
+
+    if( aJson.contains( "type" ) )
+    {
+        auto type = magic_enum::enum_cast<TOOLBAR_ITEM_TYPE>( aJson["type"].get<std::string>(),
+                                                            magic_enum::case_insensitive );
+
+        if( type.has_value() )
+            aItem.m_Type = type.value();
+    }
+
+    switch( aItem.m_Type )
+    {
+    case TOOLBAR_ITEM_TYPE::SEPARATOR:
+        // Nothing to read for a separator
+        break;
+
+    case TOOLBAR_ITEM_TYPE::SPACER:
+        if( aJson.contains( "size" ) )
+            aItem.m_Size = aJson["size"].get<int>();
+
+        break;
+
+    case TOOLBAR_ITEM_TYPE::CONTROL:
+        if( aJson.contains( "name" ) )
+            aItem.m_ControlName = aJson["name"].get<std::string>();
+
+        break;
+
+    case TOOLBAR_ITEM_TYPE::TOOL:
+        if( aJson.contains( "name" ) )
+            aItem.m_ActionName = aJson["name"].get<std::string>();
+
+        break;
+
+    case TOOLBAR_ITEM_TYPE::GROUP:
+        if( aJson.contains( "group_name" ) )
+            aItem.m_GroupName = aJson["group_name"].get<wxString>();
+
+        if( aJson.contains( "group_items" ) )
+        {
+            for( const nlohmann::json& it : aJson.at( "group_items" ) )
+                aItem.m_GroupItems.push_back( it.get<TOOLBAR_ITEM>() );
+        }
+        break;
+    }
+}
+
 
 void to_json( nlohmann::json& aJson, const TOOLBAR_CONFIGURATION& aConfig )
 {
     aJson = nlohmann::json::array();
 
     for( const TOOLBAR_ITEM& item : aConfig.m_toolbarItems )
-    {
-        nlohmann::json jsItem = {
-            { "type", magic_enum::enum_name( item.m_Type ) }
-        };
-
-        switch( item.m_Type )
-        {
-        case TOOLBAR_ITEM_TYPE::SEPARATOR:
-            // Nothing to add for a separator
-            break;
-
-        case TOOLBAR_ITEM_TYPE::SPACER:
-            jsItem["size"] = item.m_Size;
-            break;
-
-        case TOOLBAR_ITEM_TYPE::CONTROL:
-            jsItem["name"] = item.m_ControlName;
-            break;
-
-        case TOOLBAR_ITEM_TYPE::TOOL:
-            jsItem["name"] = item.m_ActionName;
-            break;
-
-        case TOOLBAR_ITEM_TYPE::GROUP:
-            jsItem["group_name"] = item.m_GroupName;
-
-            nlohmann::json grpItems = nlohmann::json::array();
-
-            for( const auto& it : item.m_GroupItems )
-                grpItems.push_back( it );
-
-            jsItem["group_items"] = grpItems;
-
-            break;
-        }
-
-        aJson.push_back( jsItem );
-    }
+        aJson.push_back( item );
 }
 
 
@@ -88,60 +139,7 @@ void from_json( const nlohmann::json& aJson, TOOLBAR_CONFIGURATION& aConfig )
     if( aJson.is_array() )
     {
         for( const nlohmann::json& item : aJson )
-        {
-            TOOLBAR_ITEM tbItem;
-
-            if( item.contains( "type" ) )
-            {
-                auto type = magic_enum::enum_cast<TOOLBAR_ITEM_TYPE>( item["type"].get<std::string>(),
-                                                                    magic_enum::case_insensitive );
-
-                if( type.has_value() )
-                    tbItem.m_Type = type.value();
-            }
-
-            switch( tbItem.m_Type )
-            {
-            case TOOLBAR_ITEM_TYPE::SEPARATOR:
-                // Nothing to read for a separator
-                break;
-
-            case TOOLBAR_ITEM_TYPE::SPACER:
-                if( item.contains( "size" ) )
-                    tbItem.m_Size = item["size"].get<int>();
-
-                break;
-
-            case TOOLBAR_ITEM_TYPE::CONTROL:
-                if( item.contains( "name" ) )
-                    tbItem.m_ControlName = item["name"].get<std::string>();
-
-                break;
-
-            case TOOLBAR_ITEM_TYPE::TOOL:
-                if( item.contains( "name" ) )
-                    tbItem.m_ActionName = item["name"].get<std::string>();
-
-                break;
-
-            case TOOLBAR_ITEM_TYPE::GROUP:
-                if( item.contains( "group_name" ) )
-                    tbItem.m_GroupName = item["group_name"].get<wxString>();
-
-                if( item.contains( "group_items" ) )
-                {
-                    for( const nlohmann::json& it : item["group_items"].at( "group_items" ) )
-                    {
-                        if( it.is_string() )
-                            tbItem.m_GroupItems.push_back( it.get<std::string>() );
-                    }
-                }
-                break;
-            }
-
-            // We just directly add the item to the config
-            aConfig.m_toolbarItems.push_back( tbItem );
-        }
+            aConfig.m_toolbarItems.push_back( item.get<TOOLBAR_ITEM>() );
     }
 }
 
@@ -203,4 +201,16 @@ std::optional<TOOLBAR_CONFIGURATION> TOOLBAR_SETTINGS::GetToolbarConfig( TOOLBAR
     }
 
     return DefaultToolbarConfig( aToolbar );
+}
+
+
+std::optional<TOOLBAR_CONFIGURATION> TOOLBAR_SETTINGS::GetStoredToolbarConfig( TOOLBAR_LOC aToolbar )
+{
+    auto tb = m_toolbars.find( aToolbar );
+
+    if( tb != m_toolbars.end() )
+        return tb->second;
+
+    // Return a nullopt if no toolbar is configured
+    return std::nullopt;
 }

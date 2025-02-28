@@ -56,6 +56,7 @@ class PANEL_TOOLBAR_CUSTOMIZATION_BASE : public RESETTABLE_PANEL
 		// Virtual event handlers, override them in your derived class
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onCustomizeTbCb( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onTbChoiceSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onTreeBeginLabelEdit( wxTreeEvent& event ) { event.Skip(); }
 		virtual void onTreeEndLabelEdit( wxTreeEvent& event ) { event.Skip(); }
 		virtual void onToolDelete( wxCommandEvent& event ) { event.Skip(); }

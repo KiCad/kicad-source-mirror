@@ -723,8 +723,7 @@ void EDA_BASE_FRAME::CommonSettingsChanged( int aFlags )
         GetMenuBar()->Refresh();
     }
 
-    // Update the toolbars by loading the settings from disk
-    m_toolbarSettings->LoadFromFile( Pgm().GetSettingsManager().GetToolbarSettingsPath() );
+    // Update the toolbars
     RecreateToolbars();
 }
 

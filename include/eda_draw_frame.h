@@ -36,7 +36,6 @@
 #include <class_draw_panel_gal.h>
 #include <kiid.h>
 #include <hotkeys_basic.h>
-#include <tool/ui/toolbar_configuration.h>
 #include <widgets/lib_tree.h>
 
 class EDA_ITEM;

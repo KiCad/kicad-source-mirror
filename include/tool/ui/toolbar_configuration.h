@@ -81,8 +81,8 @@ public:
     int m_Size;
 
     // Group properties
-    wxString                 m_GroupName;
-    std::vector<std::string> m_GroupItems;
+    wxString                  m_GroupName;
+    std::vector<TOOLBAR_ITEM> m_GroupItems;
 };
 
 class KICOMMON_API TOOLBAR_GROUP_CONFIG
@@ -100,17 +100,18 @@ public:
 
     TOOLBAR_GROUP_CONFIG& AddAction( std::string aActionName )
     {
-        m_groupItems.push_back( aActionName );
+
+        m_groupItems.emplace_back( TOOLBAR_ITEM_TYPE::TOOL, aActionName );
         return *this;
     }
 
     TOOLBAR_GROUP_CONFIG& AddAction( const TOOL_ACTION& aAction )
     {
-        m_groupItems.push_back( aAction.GetName() );
+        m_groupItems.emplace_back( TOOLBAR_ITEM_TYPE::TOOL, aAction.GetName() );
         return *this;
     }
 
-    std::vector<std::string> GetGroupItems() const
+    std::vector<TOOLBAR_ITEM> GetGroupItems() const
     {
         return m_groupItems;
     }
@@ -118,8 +119,8 @@ public:
 public:
     // These are public to write the JSON, but are lower-cased to encourage people not to directly
     // access them and treat them as private.
-    wxString                 m_groupName;
-    std::vector<std::string> m_groupItems;
+    wxString                  m_groupName;
+    std::vector<TOOLBAR_ITEM> m_groupItems;
 };
 
 class KICOMMON_API TOOLBAR_CONFIGURATION
@@ -194,7 +195,7 @@ public:
 
 enum class TOOLBAR_LOC
 {
-    LEFT,           ///< Toolbar on the left side of the canvas
+    LEFT = 0,       ///< Toolbar on the left side of the canvas
     RIGHT,          ///< Toolbar on the right side of the canvas
     TOP_MAIN,       ///< Toolbar on the top of the canvas
     TOP_AUX         ///< Toolbar on the top of the canvas
@@ -220,18 +221,23 @@ public:
      *
      * Returns the user-configured tools, and if not customized, the default tools.
      */
-    std::optional<TOOLBAR_CONFIGURATION> GetToolbarConfig( TOOLBAR_LOC aToolbar, bool aForceDefault );
+    std::optional<TOOLBAR_CONFIGURATION> GetToolbarConfig( TOOLBAR_LOC aToolbar, bool aAllowCustom = true );
 
     /**
-     * Set a configuration for the toolbar.
+     * Get the stored configuration for the given toolbar.
      */
-    void SetToolbarConfig( TOOLBAR_LOC aToolbar, TOOLBAR_CONFIGURATION& aConfig )
+    std::optional<TOOLBAR_CONFIGURATION> GetStoredToolbarConfig( TOOLBAR_LOC aToolbar );
+
+    /**
+     * Set the stored configuration for the given toolbar.
+     */
+    void SetStoredToolbarConfig( TOOLBAR_LOC aToolbar, TOOLBAR_CONFIGURATION& aConfig )
     {
         m_toolbars[aToolbar] = aConfig;
     }
 
 protected:
-    // The toolbars - only public to aid in JSON serialization/deserialization
+    // The toolbars
     std::map<TOOLBAR_LOC, TOOLBAR_CONFIGURATION> m_toolbars;
 };
 

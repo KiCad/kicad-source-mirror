@@ -109,6 +109,7 @@ PANEL_TOOLBAR_CUSTOMIZATION_BASE::PANEL_TOOLBAR_CUSTOMIZATION_BASE( wxWindow* pa
 	// Connect Events
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::OnUpdateUI ) );
 	m_customToolbars->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onCustomizeTbCb ), NULL, this );
+	m_tbChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onTbChoiceSelect ), NULL, this );
 	m_toolbarTree->Connect( wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, wxTreeEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onTreeBeginLabelEdit ), NULL, this );
 	m_toolbarTree->Connect( wxEVT_COMMAND_TREE_END_LABEL_EDIT, wxTreeEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onTreeEndLabelEdit ), NULL, this );
 	m_btnToolDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onToolDelete ), NULL, this );
@@ -122,6 +123,7 @@ PANEL_TOOLBAR_CUSTOMIZATION_BASE::~PANEL_TOOLBAR_CUSTOMIZATION_BASE()
 	// Disconnect Events
 	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::OnUpdateUI ) );
 	m_customToolbars->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onCustomizeTbCb ), NULL, this );
+	m_tbChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onTbChoiceSelect ), NULL, this );
 	m_toolbarTree->Disconnect( wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, wxTreeEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onTreeBeginLabelEdit ), NULL, this );
 	m_toolbarTree->Disconnect( wxEVT_COMMAND_TREE_END_LABEL_EDIT, wxTreeEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onTreeEndLabelEdit ), NULL, this );
 	m_btnToolDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::onToolDelete ), NULL, this );

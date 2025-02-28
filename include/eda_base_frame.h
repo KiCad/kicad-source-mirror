@@ -44,7 +44,6 @@
 #include <kiway_holder.h>
 #include <tool/action_toolbar.h>
 #include <tool/tools_holder.h>
-#include <tool/ui/toolbar_configuration.h>
 #include <widgets/ui_common.h>
 #include <widgets/wx_infobar.h>
 #include <undo_redo_container.h>
@@ -89,6 +88,7 @@ struct WINDOW_SETTINGS;
 struct WINDOW_STATE;
 class ACTION_MENU;
 class TOOL_INTERACTIVE;
+class TOOLBAR_SETTINGS;
 
 #define DEFAULT_MAX_UNDO_ITEMS 0
 #define ABS_MAX_UNDO_ITEMS (INT_MAX / 2)

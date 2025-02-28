@@ -27,6 +27,7 @@
 #include <dialogs/panel_toolbar_customization_base.h>
 
 #include <tool/action_toolbar.h>
+#include <tool/ui/toolbar_configuration.h>
 
 #include <wx/bmpbndl.h>
 
@@ -34,7 +35,6 @@ class wxImageList;
 
 class APP_SETTINGS_BASE;
 class TOOL_ACTION;
-class TOOLBAR_SETTINGS;
 
 class PANEL_TOOLBAR_CUSTOMIZATION : public PANEL_TOOLBAR_CUSTOMIZATION_BASE
 {
@@ -51,14 +51,14 @@ public:
     bool TransferDataToWindow() override;
 
 protected:
-    void parseToolbarTree( TOOLBAR_CONFIGURATION& aToolbar );
+    std::optional<TOOLBAR_CONFIGURATION> parseToolbarTree();
 
-    void populateToolbarTree( const TOOLBAR_CONFIGURATION& aToolbar );
+    void populateToolbarTree();
 
-    void populateActions( const std::map<std::string, TOOL_ACTION*>& aTools,
-                          const std::map<std::string, ACTION_TOOLBAR_CONTROL*>& aControls );
+    void populateActions();
 
     void enableCustomControls( bool enable );
+    void enableToolbarControls( bool enable );
 
     void onGroupPress( wxCommandEvent& aEvent );
     void onSpacerPress( wxCommandEvent& aEvent );
@@ -72,17 +72,25 @@ protected:
     void onBtnAddAction( wxCommandEvent& event ) override;
     void onTreeBeginLabelEdit( wxTreeEvent& event ) override;
     void onTreeEndLabelEdit( wxTreeEvent& event ) override;
+    void onTbChoiceSelect( wxCommandEvent& event ) override;
 
 protected:
     wxImageList*               m_actionImageList;
     wxVector<wxBitmapBundle>   m_actionImageBundleVector;
     std::map<std::string, int> m_actionImageListMap;
 
+    // Actual settings for the frame
     APP_SETTINGS_BASE* m_appSettings;
-    TOOLBAR_SETTINGS*  m_tbSettings;
+    TOOLBAR_SETTINGS*  m_appTbSettings;
 
-    std::map<std::string, TOOL_ACTION*>               m_availableTools;
-    std::map<std::string, ACTION_TOOLBAR_CONTROL*>    m_availableControls;
+    // The toolbar currently being viewed
+    TOOLBAR_LOC  m_currentToolbar;
+
+    // Shadow copy of the toolbar configurations used to store the changes in the dialog
+    std::map<TOOLBAR_LOC, TOOLBAR_CONFIGURATION>   m_toolbars;
+
+    std::map<std::string, TOOL_ACTION*>            m_availableTools;
+    std::map<std::string, ACTION_TOOLBAR_CONTROL*> m_availableControls;
 };
 
  #endif /* PANEL_TOOLBAR_CUSTOMIZATION_H_ */
