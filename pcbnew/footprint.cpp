@@ -1620,8 +1620,13 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull( PCB_LAYER_ID aLayer ) const
 
     for( ZONE* zone : m_zones )
     {
-        if( const std::shared_ptr<SHAPE_POLY_SET>& layerPoly = zone->GetFilledPolysList( aLayer ) )
+        if( zone->GetIsRuleArea() )
+            continue;
+
+        if( zone->IsOnLayer( aLayer ) )
         {
+            const std::shared_ptr<SHAPE_POLY_SET>& layerPoly = zone->GetFilledPolysList( aLayer );
+
             for( int ii = 0; ii < layerPoly->OutlineCount(); ii++ )
                 rawPolys.AddOutline( layerPoly->COutline( ii ) );
         }
