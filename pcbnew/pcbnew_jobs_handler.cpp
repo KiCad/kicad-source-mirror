@@ -1074,11 +1074,14 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
         delete plotter;
     }
 
-    wxFileName fn( brd->GetFileName() );
+    if( aGerberJob->m_createJobsFile )
+    {
+        wxFileName fn( brd->GetFileName() );
 
-    // Build gerber job file from basename
-    BuildPlotFileName( &fn, outPath, wxT( "job" ), FILEEXT::GerberJobFileExtension );
-    jobfile_writer.CreateJobFile( fn.GetFullPath() );
+        // Build gerber job file from basename
+        BuildPlotFileName( &fn, outPath, wxT( "job" ), FILEEXT::GerberJobFileExtension );
+        jobfile_writer.CreateJobFile( fn.GetFullPath() );
+    }
 
     return exitCode;
 }
@@ -1159,6 +1162,15 @@ void PCBNEW_JOBS_HANDLER::populateGerberPlotOptionsFromJob( PCB_PLOT_PARAMS& aPl
     aPlotOpts.SetUseAuxOrigin( aJob->m_useDrillOrigin );
     aPlotOpts.SetUseGerberProtelExtensions( aJob->m_useProtelFileExtension );
     aPlotOpts.SetGerberPrecision( aJob->m_precision );
+}
+
+
+void PCBNEW_JOBS_HANDLER::populateGerberPlotOptionsFromJob( PCB_PLOT_PARAMS& aPlotOpts,
+                                                            JOB_EXPORT_PCB_GERBERS* aJob )
+{
+    populateGerberPlotOptionsFromJob( aPlotOpts, static_cast<JOB_EXPORT_PCB_GERBER*>( aJob ) );
+
+    aPlotOpts.SetCreateGerberJobFile( aJob->m_createJobsFile );
 }
 
 

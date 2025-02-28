@@ -29,6 +29,7 @@ class BOARD;
 class DS_PROXY_VIEW_ITEM;
 class FOOTPRINT;
 class JOB_EXPORT_PCB_GERBER;
+class JOB_EXPORT_PCB_GERBERS;
 class JOB_FP_EXPORT_SVG;
 
 class PCBNEW_JOBS_HANDLER : public JOB_DISPATCHER
@@ -54,8 +55,10 @@ public:
 
 private:
     BOARD* getBoard( const wxString& aPath = wxEmptyString );
-    void populateGerberPlotOptionsFromJob( PCB_PLOT_PARAMS&       aPlotOpts,
+    void populateGerberPlotOptionsFromJob( PCB_PLOT_PARAMS&  aPlotOpts,
                                            JOB_EXPORT_PCB_GERBER* aJob );
+    void populateGerberPlotOptionsFromJob( PCB_PLOT_PARAMS& aPlotOpts,
+                                           JOB_EXPORT_PCB_GERBERS* aJob );
     int  doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPRINT* aFootprint );
     void loadOverrideDrawingSheet( BOARD* brd, const wxString& aSheetPath );
 
