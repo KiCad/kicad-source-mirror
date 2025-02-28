@@ -13,16 +13,15 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-26 20:15+0300\n"
-"PO-Revision-Date: 2025-02-17 17:18+0000\n"
+"PO-Revision-Date: 2025-03-01 03:31+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.1-dev\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -4761,9 +4760,8 @@ msgid "Failed to write file '%s'."
 msgstr "Det gick inte att skriva filen '%s'."
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
-#, fuzzy
 msgid "Embedded Reference"
-msgstr "Kopiera inbäddad referens"
+msgstr "Inbäddad referens"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
@@ -7438,7 +7436,6 @@ msgid "Export Drill Data Job Settings"
 msgstr "Inställningar för åtgärden exportera borrdata"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
-#, fuzzy
 msgid "PCB: Export Drill Data"
 msgstr "Mönsterkort: Exportera borrdata"
 
@@ -7486,29 +7483,24 @@ msgid "Export IPC-2581"
 msgstr "Exportera IPC-2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
-#, fuzzy
 msgid "Export IPC-2581 Job Settings"
 msgstr "Inställningar för åtgärden exportera IPC-2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
-#, fuzzy
 msgid "PCB: Export IPC-2581"
-msgstr "Mönsterkort: Exportera IPC2581"
+msgstr "Mönsterkort: Exportera IPC-2581"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:33
-#, fuzzy
 msgid "Export IPC-D-356"
-msgstr "Exportera IPC-2581"
+msgstr "Exportera IPC D-356"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:39
-#, fuzzy
 msgid "Export IPC-D-356 Job Settings"
-msgstr "Inställningar för åtgärden exportera IPC-2581"
+msgstr "Inställningar för åtgärden exportera IPC D-356"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:52
-#, fuzzy
 msgid "PCB: Export IPC-D-356"
-msgstr "Mönsterkort: Exportera IPC2581"
+msgstr "Mönsterkort: Exportera IPC-D-356"
 
 #: common/jobs/job_export_pcb_odb.cpp:57
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
@@ -7667,7 +7659,6 @@ msgid "Schematic: Perform ERC"
 msgstr "Kretsschema: Utför elektrisk regelkontroll"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy Files"
 msgstr "Special: Kopiera filer"
 
@@ -16817,15 +16808,15 @@ msgid "The current configuration does not include the symbol library '%s'"
 msgstr "Den aktuella konfigurationen inkluderar inte symbolbiblioteket '%s'"
 
 #: eeschema/erc/erc.cpp:1414
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration"
 msgstr ""
-"Symbolbiblioteket '%s' är inte aktiverat i den nuvarande konfigurationen."
+"Symbolbiblioteket '%s' är inte aktiverat i den nuvarande konfigurationen"
 
 #: eeschema/erc/erc.cpp:1429
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' was not found at '%s'."
-msgstr "Fotavtrycksbiblioteket '%s' hittades inte."
+msgstr "Fotavtrycksbiblioteket '%s' hittades inte på '%s'."
 
 #: eeschema/erc/erc.cpp:1449
 #, c-format
@@ -27442,6 +27433,8 @@ msgid ""
 "This plugin requires the KiCad API, which is currently disabled in "
 "preferences. Would you like to enable it?"
 msgstr ""
+"Detta insticksprogram behöver KiCad API:et, som för närvarande är "
+"deaktiverat i inställningarna. Vill du aktivera det?"
 
 #: kicad/pcm/pcm.cpp:1121
 msgid "PCM Update"
@@ -35648,9 +35641,8 @@ msgid "Set to specified values:"
 msgstr "Ställ in till angivna värden:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:147
-#, fuzzy
 msgid "Visible  (fields only)"
-msgstr "Synlig  (endast text)"
+msgstr "Synlig  (endast fält)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:235
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:99
@@ -42093,9 +42085,9 @@ msgid "Checking board footprints against library..."
 msgstr "Kontrollerar kortets fotavtryck mot bibliotek..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:892
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' was not found at '%s'."
-msgstr "Fotavtrycksbiblioteket '%s' hittades inte."
+msgstr "Fotavtrycksbiblioteket '%s' hittades inte på '%s'."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:942
 #, c-format
@@ -42377,16 +42369,17 @@ msgid "Generate IPC-D-356 netlist file"
 msgstr "Skapa IPC-D-356 nätlistefil"
 
 #: pcbnew/exporters/export_d356.cpp:404
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "IPC-D-356 netlist file created:\n"
 "'%s'."
-msgstr "IPC-D-356 nätlistefil ..."
+msgstr ""
+"IPC-D-356 nätlistefil skapad:\n"
+"'%s'."
 
 #: pcbnew/exporters/export_d356.cpp:405
-#, fuzzy
 msgid "IPC-D-356 Netlist File"
-msgstr "IPC-D-356 nätlistefil ..."
+msgstr "IPC-D-356 nätlistefil"
 
 #: pcbnew/exporters/export_footprint_associations.cpp:73
 msgid "Save Footprint Association File"
@@ -42737,17 +42730,15 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1302
-#, fuzzy
 msgid "The board must be saved before generating IPC-2581 file."
 msgstr "Mönsterkortet måste sparas innan IPC2581-fil skapas."
 
 #: pcbnew/files.cpp:1318
-#, fuzzy
 msgid "Generating IPC-2581 file"
 msgstr "Skapar IPC-2581-fil"
 
 #: pcbnew/files.cpp:1343 pcbnew/pcbnew_jobs_handler.cpp:2022
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "%s"
@@ -42756,7 +42747,7 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1408 pcbnew/pcbnew_jobs_handler.cpp:2055
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "Failed to rename temporary file '%s."
@@ -46774,14 +46765,12 @@ msgid "Saved DRC Report to %s\n"
 msgstr "Sparade designregelkontrollrapport till %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2103
-#, fuzzy
 msgid "Successfully created IPC-D-356 file\n"
-msgstr "Lyckades skapa genCAD-fil\n"
+msgstr "Lyckades skapa IPC-D-356-fil\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2108
-#, fuzzy
 msgid "Failed to create IPC-D-356 file\n"
-msgstr "Det gick inte att skapa filen."
+msgstr "Det gick inte att skapa IPC-D-356-fil\n"
 
 #: pcbnew/pcbnew_printout.cpp:124
 msgid "Multiple Layers"
