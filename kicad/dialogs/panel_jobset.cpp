@@ -797,6 +797,7 @@ void PANEL_JOBSET::OnAddOutputClick( wxCommandEvent& aEvent )
                 JOBSET_OUTPUT* output = m_jobsFile->AddNewJobOutput( jobType.first );
 
                 DIALOG_JOBSET_OUTPUT_OPTIONS dialog( m_frame, m_jobsFile.get(), output );
+
                 if (dialog.ShowModal() == wxID_OK)
                 {
                     Freeze();
