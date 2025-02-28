@@ -34,6 +34,9 @@ JOB_EXPORT_PCB_GERBERS::JOB_EXPORT_PCB_GERBERS() :
 
     m_params.emplace_back( new JOB_PARAM_LSEQ( "layers_include_on_all", &m_layersIncludeOnAll,
                                                 m_layersIncludeOnAll ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "create_gerber_job_file", &m_createJobsFile,
+                                                m_createJobsFile ) );
 }
 
 
