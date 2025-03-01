@@ -33,16 +33,19 @@
 /common/database/ @craftyjon
 
 /eeschema/api/ @craftyjon
+/eeschema/erc/ @jeffyoung
 /eeschema/connection_graph.* @craftyjon @sethhillbrand
 /eeschema/sch_io/database/ @craftyjon
 
 /libs/kinng/ @craftyjon
 
 /pcbnew/api/ @craftyjon
+/pcbnew/drc/ @jeffyoung
 /pcbnew/pcb_io/easyeda* @dsa-t
 /pcbnew/pcb_io/ipc2581/ @sethhillbrand
 /pcbnew/pcb_io/odbpp/ @SYSUeric66 @sethhillbrand @craftyjon
 /pcbnew/router/ @twlostow @craftyjon @sethhillbrand
+/pcbnew/zone_filler* @jeffyoung
 
 /scripting/ @craftyjon @sethhillbrand
 
