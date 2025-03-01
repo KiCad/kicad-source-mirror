@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-26 20:15+0300\n"
+"POT-Creation-Date: 2025-03-01 18:34+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2105,8 +2105,8 @@ msgstr "Commit message cannot be empty"
 msgid "Enter the password for the SSH key"
 msgstr "Enter the password for the SSH key"
 
-msgid "Test connection"
-msgstr "Test connection"
+msgid "Test Connection"
+msgstr "Test Connection"
 
 msgid "Connection successful"
 msgstr "Connection successful"
@@ -2138,14 +2138,17 @@ msgstr "Please enter a name for the repository"
 msgid "Please enter a URL for the repository"
 msgstr "Please enter a URL for the repository"
 
-msgid "SSH Key Password"
-msgstr "SSH Key Password"
+msgid "SSH key password:"
+msgstr "SSH key password:"
 
-msgid "Location"
-msgstr "Location"
+msgid "Password:"
+msgstr "Password:"
 
-msgid "Connection Type"
-msgstr "Connection Type"
+msgid "Location:"
+msgstr "Location:"
+
+msgid "Connection type:"
+msgstr "Connection type:"
 
 msgid "HTTPS"
 msgstr "HTTPS"
@@ -2153,8 +2156,8 @@ msgstr "HTTPS"
 msgid "Local"
 msgstr "Local"
 
-msgid "SSH Private Key"
-msgstr "SSH Private Key"
+msgid "SSH private key:     "
+msgstr "SSH private key:     "
 
 msgid "Select SSH private key file"
 msgstr "Select SSH private key file"
@@ -2162,8 +2165,8 @@ msgstr "Select SSH private key file"
 msgid "*"
 msgstr "*"
 
-msgid "Username"
-msgstr "Username"
+msgid "User name:"
+msgstr "User name:"
 
 msgid "Git Repository"
 msgstr "Git Repository"
@@ -7334,9 +7337,6 @@ msgstr "DSN:"
 
 msgid "Username:"
 msgstr "Username:"
-
-msgid "Password:"
-msgstr "Password:"
 
 msgid "Connection String:"
 msgstr "Connection String:"
@@ -26116,6 +26116,20 @@ msgid "Border style:"
 msgstr "Border style:"
 
 #, c-format
+msgid "Applying these changes will short net %s with %s."
+msgstr "Applying these changes will short net %s with %s."
+
+#, c-format
+msgid "Applying these changes will short net %s with other nets."
+msgstr "Applying these changes will short net %s with other nets."
+
+msgid "Apply Anyway"
+msgstr "Apply Anyway"
+
+msgid "Cancel Changes"
+msgstr "Cancel Changes"
+
+#, c-format
 msgid "Changing the net will also update %s pad %s to %s."
 msgstr "Changing the net will also update %s pad %s to %s."
 
@@ -26141,9 +26155,6 @@ msgstr "Via start layer and end layer cannot be the same"
 
 msgid "Edit Track/Via Properties"
 msgstr "Edit Track/Via Properties"
-
-msgid "Update Nets"
-msgstr "Update Nets"
 
 msgid "Automatically update via nets"
 msgstr "Automatically update via nets"
@@ -36755,6 +36766,27 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Test connection"
+#~ msgstr "Test connection"
+
+#~ msgid "SSH Key Password"
+#~ msgstr "SSH Key Password"
+
+#~ msgid "Location"
+#~ msgstr "Location"
+
+#~ msgid "Connection Type"
+#~ msgstr "Connection Type"
+
+#~ msgid "SSH Private Key"
+#~ msgstr "SSH Private Key"
+
+#~ msgid "Username"
+#~ msgstr "Username"
+
+#~ msgid "Update Nets"
+#~ msgstr "Update Nets"
 
 #~ msgid "Internal Reference"
 #~ msgstr "Internal Reference"
@@ -60935,9 +60967,6 @@ msgstr "KiCad Drawing Sheet"
 #~ "Equivalence file '%s' could not be found in the default search paths."
 #~ msgstr ""
 #~ "Equivalence file '%s' could not be found in the default search paths."
-
-#~ msgid "Connection type:"
-#~ msgstr "Connection type:"
 
 #~ msgid "Constrain buses and wires to H or V"
 #~ msgstr "Constrain buses and wires to H or V"

@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-26 20:15+0300\n"
+"POT-Creation-Date: 2025-03-01 18:34+0300\n"
 "PO-Revision-Date: 2025-02-27 07:25+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v9/ru/>\n"
@@ -234,7 +234,7 @@ msgstr "Экспорт в JPEG-файл..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:62
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:661
-#: common/eda_base_frame.cpp:1206 common/hotkey_store.cpp:80
+#: common/eda_base_frame.cpp:1215 common/hotkey_store.cpp:80
 #: common/tool/actions.cpp:1073 pcbnew/footprint_chooser_frame.cpp:282
 #: pcbnew/footprint_viewer_frame.cpp:981 pcbnew/pcb_base_frame.cpp:682
 msgid "3D Viewer"
@@ -314,8 +314,8 @@ msgstr "Просмотрщик 3D"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:667
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:77
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:25
-#: pcbnew/footprint_edit_frame.cpp:242 pcbnew/footprint_edit_frame.cpp:965
-#: pcbnew/pcb_edit_frame.cpp:326 pcbnew/pcb_edit_frame.cpp:1708
+#: pcbnew/footprint_edit_frame.cpp:253 pcbnew/footprint_edit_frame.cpp:977
+#: pcbnew/pcb_edit_frame.cpp:328 pcbnew/pcb_edit_frame.cpp:1706
 #: pcbnew/tools/pcb_actions.cpp:1332
 msgid "Appearance"
 msgstr "Внешний вид"
@@ -343,7 +343,7 @@ msgid "3D Image File Name"
 msgstr "Имя файла 3D-изображения"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:747
-#: common/eda_base_frame.cpp:1353 common/eda_base_frame.cpp:1357
+#: common/eda_base_frame.cpp:1362 common/eda_base_frame.cpp:1366
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:328
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:332
 #, c-format
@@ -1044,8 +1044,8 @@ msgstr "Инкремент вращения:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:303
 #: pcbnew/dialogs/dialog_create_array_base.cpp:372
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:59
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:370
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:914
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:373
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:921
 #: pcbnew/dialogs/panel_edit_options_base.cpp:49
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:228
 msgid "deg"
@@ -1284,7 +1284,7 @@ msgstr "Масштаб"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:301
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:73
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:114
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:404
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:408
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:102
 #: pcbnew/microwave/microwave_polygon.cpp:144
 #: pcbnew/tools/pcb_point_editor.cpp:2460
@@ -1303,9 +1303,9 @@ msgstr "X:"
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:88
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:125
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:70
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:347
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:415
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:457
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:350
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:419
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:461
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:83
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:101
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:244
@@ -1501,22 +1501,22 @@ msgstr "Создать библиотеку посад. мест"
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:82
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:66
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:77
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:146
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:193
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:343
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:354
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:411
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:422
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:453
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:464
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:496
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:766
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:814
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:892
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:903
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:973
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:986
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:999
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:149
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:196
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:346
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:357
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:415
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:426
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:457
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:468
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:503
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:773
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:821
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:899
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:910
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:980
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:993
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1006
 #: pcbnew/dialogs/dialog_plot_base.cpp:258
 #: pcbnew/dialogs/dialog_plot_base.cpp:311
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:76
@@ -1917,7 +1917,8 @@ msgstr "Информация"
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:409
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:411
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:119
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:570
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:556
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:594
 #: pcbnew/footprint_libraries_utils.cpp:375
 #: pcbnew/footprint_libraries_utils.cpp:1157 pcbnew/router/router_tool.cpp:1851
 #: pcbnew/router/router_tool.cpp:2605
@@ -2273,8 +2274,8 @@ msgid "&Apply"
 msgstr "Применить"
 
 #: common/dialog_shim.cpp:799 common/dialog_shim.cpp:800
-#: common/eda_base_frame.cpp:511 common/eda_base_frame.cpp:516
-#: common/eda_base_frame.cpp:537 common/eda_base_frame.cpp:541
+#: common/eda_base_frame.cpp:512 common/eda_base_frame.cpp:517
+#: common/eda_base_frame.cpp:538 common/eda_base_frame.cpp:542
 msgid "&Help"
 msgstr "Справка"
 
@@ -2444,7 +2445,6 @@ msgstr "Переменные окружения"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:39
 #: common/dialogs/git/dialog_git_auth.cpp:56
-#: common/dialogs/git/dialog_git_repository_base.cpp:32
 #: common/dialogs/git/panel_git_repos_base.cpp:98
 #: common/dialogs/panel_design_block_lib_table.cpp:410
 #: common/dialogs/panel_setup_netclasses_base.cpp:51
@@ -2668,6 +2668,7 @@ msgid "Grid size Y out of range."
 msgstr "Размер сетки Y вне диапазона."
 
 #: common/dialogs/dialog_grid_settings_base.cpp:25
+#: common/dialogs/git/dialog_git_repository_base.cpp:31
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:97
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:109
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:32
@@ -2781,7 +2782,7 @@ msgid "PCB"
 msgstr "Печатная плата"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
-#: eeschema/sch_edit_frame.cpp:1342 eeschema/sch_plotter.cpp:1041
+#: eeschema/sch_edit_frame.cpp:1343 eeschema/sch_plotter.cpp:1041
 #: eeschema/widgets/symbol_diff_widget.cpp:44
 msgid "Schematic"
 msgstr "Схема"
@@ -3110,7 +3111,7 @@ msgstr "Форматная рамка"
 #: common/dialogs/dialog_page_settings_base.cpp:164
 #: eeschema/dialogs/dialog_sim_model_base.cpp:46
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:24
-#: eeschema/sch_field.cpp:318 pcbnew/dialogs/dialog_export_2581_base.cpp:23
+#: eeschema/sch_field.cpp:321 pcbnew/dialogs/dialog_export_2581_base.cpp:23
 #: pcbnew/dialogs/dialog_export_step_base.cpp:33
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:25
 msgid "File:"
@@ -3292,7 +3293,7 @@ msgstr "Параметр"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:48
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:57
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:439 pcbnew/footprint.cpp:4123
-#: pcbnew/footprint_wizard_frame.cpp:326 pcbnew/pcb_dimension.cpp:605
+#: pcbnew/footprint_wizard_frame.cpp:326 pcbnew/pcb_dimension.cpp:619
 #: pcbnew/pcb_fields_grid_table.cpp:144 pcbnew/plot_board_layers.cpp:171
 #: pcbnew/widgets/search_handlers.cpp:119
 msgid "Value"
@@ -3604,7 +3605,7 @@ msgid "View Preset Switcher"
 msgstr "Переключение набора слоёв"
 
 #: common/dialogs/git/dialog_git_auth.cpp:27
-#: common/dialogs/git/dialog_git_repository_base.cpp:19
+#: common/dialogs/git/dialog_git_repository_base.cpp:18
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:32
 msgid "Connection"
 msgstr "Соединение"
@@ -3616,12 +3617,12 @@ msgid "Basic"
 msgstr "Простое"
 
 #: common/dialogs/git/dialog_git_auth.cpp:46
-#: common/dialogs/git/dialog_git_repository_base.cpp:53
+#: common/dialogs/git/dialog_git_repository_base.cpp:52
 msgid "SSH"
 msgstr "SSH"
 
 #: common/dialogs/git/dialog_git_auth.cpp:52
-#: common/dialogs/git/dialog_git_repository_base.cpp:107
+#: common/dialogs/git/dialog_git_repository_base.cpp:95
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:85
 msgid "Test"
 msgstr "Тест"
@@ -3655,7 +3656,7 @@ msgid "Url"
 msgstr "Url"
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
-#: common/dialogs/git/dialog_git_repository_base.cpp:78
+#: common/dialogs/git/dialog_git_repository_base.cpp:71
 msgid "Authentication"
 msgstr "Аутентификация"
 
@@ -3664,7 +3665,6 @@ msgid "User Name"
 msgstr "Имя пользователя"
 
 #: common/dialogs/git/dialog_git_auth.cpp:64
-#: common/dialogs/git/dialog_git_repository.cpp:454
 msgid "Password"
 msgstr "Пароль"
 
@@ -3682,7 +3682,7 @@ msgstr "Имя файла"
 #: eeschema/dialogs/dialog_migrate_buses.cpp:117
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:94
 #: pcbnew/dialogs/dialog_find_base.cpp:118 pcbnew/pad.cpp:1300
-#: pcbnew/pcb_dimension.cpp:659 pcbnew/pcb_group.cpp:396
+#: pcbnew/pcb_dimension.cpp:673 pcbnew/pcb_group.cpp:396
 #: pcbnew/pcb_shape.cpp:642 pcbnew/pcb_tablecell.cpp:106
 #: pcbnew/pcb_text.cpp:279 pcbnew/pcb_textbox.cpp:559 pcbnew/pcb_track.cpp:1691
 #: pcbnew/zone.cpp:819
@@ -3717,92 +3717,103 @@ msgstr "Закоммитить"
 msgid "Commit message cannot be empty"
 msgstr "Сообщение коммита не может быть пустым"
 
-#: common/dialogs/git/dialog_git_repository.cpp:154
-#: common/dialogs/git/dialog_git_repository.cpp:383
+#: common/dialogs/git/dialog_git_repository.cpp:156
+#: common/dialogs/git/dialog_git_repository.cpp:388
 msgid "Enter the password for the SSH key"
 msgstr "Введите пароль для ключа SSH"
 
-#: common/dialogs/git/dialog_git_repository.cpp:334
-msgid "Test connection"
+#: common/dialogs/git/dialog_git_repository.cpp:337
+#, fuzzy
+msgid "Test Connection"
 msgstr "Тест соединения"
 
-#: common/dialogs/git/dialog_git_repository.cpp:338
+#: common/dialogs/git/dialog_git_repository.cpp:342
 msgid "Connection successful"
 msgstr "Соединение успешно"
 
-#: common/dialogs/git/dialog_git_repository.cpp:342
+#: common/dialogs/git/dialog_git_repository.cpp:346
 #, c-format
 msgid "Could not connect to '%s' "
 msgstr "Не удалось подключиться к '%s' "
 
-#: common/dialogs/git/dialog_git_repository.cpp:361
+#: common/dialogs/git/dialog_git_repository.cpp:366
 #, c-format
 msgid "Could not open private key '%s'"
 msgstr "Не удалось открыть приватный ключ '%s'"
 
-#: common/dialogs/git/dialog_git_repository.cpp:374
+#: common/dialogs/git/dialog_git_repository.cpp:379
 msgid "Invalid SSH Key"
 msgstr "Неверный ключ SSH"
 
-#: common/dialogs/git/dialog_git_repository.cpp:375
+#: common/dialogs/git/dialog_git_repository.cpp:380
 msgid "The selected file is not a valid SSH private key"
 msgstr "Выбранный файл не является ключом SSH"
 
-#: common/dialogs/git/dialog_git_repository.cpp:399
+#: common/dialogs/git/dialog_git_repository.cpp:404
 #, c-format
 msgid "Could not open public key '%s'"
 msgstr "Не удалось открыть публичный ключ '%s'"
 
-#: common/dialogs/git/dialog_git_repository.cpp:418
-#: common/dialogs/git/dialog_git_repository.cpp:425
+#: common/dialogs/git/dialog_git_repository.cpp:423
+#: common/dialogs/git/dialog_git_repository.cpp:430
 msgid "Missing information"
 msgstr "Отсутствует информация"
 
-#: common/dialogs/git/dialog_git_repository.cpp:419
+#: common/dialogs/git/dialog_git_repository.cpp:424
 msgid "Please enter a name for the repository"
 msgstr "Требуется ввести имя репозитория"
 
-#: common/dialogs/git/dialog_git_repository.cpp:426
+#: common/dialogs/git/dialog_git_repository.cpp:431
 msgid "Please enter a URL for the repository"
 msgstr "Требуется ввести URL репозитория"
 
-#: common/dialogs/git/dialog_git_repository.cpp:448
-#: common/dialogs/git/dialog_git_repository_base.cpp:120
-msgid "SSH Key Password"
+#: common/dialogs/git/dialog_git_repository.cpp:453
+#: common/dialogs/git/dialog_git_repository_base.cpp:108
+#, fuzzy
+msgid "SSH key password:"
 msgstr "Пароль ключа SSH"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:39
-msgid "Location"
+#: common/dialogs/git/dialog_git_repository.cpp:459
+#: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
+msgid "Password:"
+msgstr "Пароль:"
+
+#: common/dialogs/git/dialog_git_repository_base.cpp:38
+#, fuzzy
+msgid "Location:"
 msgstr "Расположение"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:46
-msgid "Connection Type"
+#: common/dialogs/git/dialog_git_repository_base.cpp:45
+#, fuzzy
+msgid "Connection type:"
 msgstr "Тип соединения"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:53
+#: common/dialogs/git/dialog_git_repository_base.cpp:52
 msgid "HTTPS"
 msgstr "HTTPS"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:53
+#: common/dialogs/git/dialog_git_repository_base.cpp:52
 #: eeschema/widgets/search_handlers.cpp:452
 msgid "Local"
 msgstr "Локально"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:97
-msgid "SSH Private Key"
+#: common/dialogs/git/dialog_git_repository_base.cpp:83
+#, fuzzy
+msgid "SSH private key:     "
 msgstr "Приватный ключ SSH"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:104
+#: common/dialogs/git/dialog_git_repository_base.cpp:90
 msgid "Select SSH private key file"
 msgstr "Выберите файл приватного ключа SSH"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:104
+#: common/dialogs/git/dialog_git_repository_base.cpp:90
 msgid "*"
 msgstr "*"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:113
-msgid "Username"
-msgstr "Имя пользователя"
+#: common/dialogs/git/dialog_git_repository_base.cpp:101
+#, fuzzy
+msgid "User name:"
+msgstr "Имя пользователя:"
 
 #: common/dialogs/git/dialog_git_repository_base.h:77
 msgid "Git Repository"
@@ -4130,7 +4141,7 @@ msgstr "Использовать иконки для окон с тёмным ф
 #: common/dialogs/panel_mouse_settings_base.cpp:66
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:122
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:33
-#: pcbnew/pcb_dimension.cpp:1741
+#: pcbnew/pcb_dimension.cpp:1789
 msgid "Automatic"
 msgstr "Автоматически"
 
@@ -4156,8 +4167,8 @@ msgid "Use compact icons in the toolbars"
 msgstr "Компактные иконки в панели инструментов"
 
 #: common/dialogs/panel_common_settings_base.cpp:220 common/eda_text.cpp:976
-#: eeschema/sch_label.cpp:1199 eeschema/sch_tablecell.cpp:128
-#: eeschema/sch_text.cpp:648 eeschema/sch_textbox.cpp:560
+#: eeschema/sch_label.cpp:1199 eeschema/sch_tablecell.cpp:129
+#: eeschema/sch_text.cpp:648 eeschema/sch_textbox.cpp:561
 #: gerbview/gerber_file_image.cpp:357 gerbview/gerber_file_image.cpp:361
 #: gerbview/gerber_file_image.cpp:364
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
@@ -4209,11 +4220,11 @@ msgstr "Уровень затенения высоко-контрастного 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:329
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:298
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:181
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:180
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:221
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:277
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:321
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1012
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:183
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:224
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:280
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:324
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1019
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:504
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:101
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:173
@@ -4627,8 +4638,8 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:45
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:95
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:43
-#: eeschema/sch_field.cpp:1133 eeschema/sch_pin.cpp:1583
-#: eeschema/sch_pin.cpp:2182 eeschema/sch_tablecell.cpp:206
+#: eeschema/sch_field.cpp:1218 eeschema/sch_pin.cpp:1583
+#: eeschema/sch_pin.cpp:2182 eeschema/sch_tablecell.cpp:207
 #: include/lib_table_grid.h:216 pcbnew/dialogs/panel_fp_lib_table_base.cpp:45
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:94
 msgid "Visible"
@@ -4837,9 +4848,9 @@ msgid "Grid size '%s' already exists."
 msgstr "Размер сетки '%s' уже существует."
 
 #: common/dialogs/panel_grid_settings_base.cpp:25
-#: common/eda_base_frame.cpp:1149 common/eda_base_frame.cpp:1158
-#: common/eda_base_frame.cpp:1184 common/eda_base_frame.cpp:1197
-#: common/eda_base_frame.cpp:1230 common/eda_base_frame.cpp:1252
+#: common/eda_base_frame.cpp:1158 common/eda_base_frame.cpp:1167
+#: common/eda_base_frame.cpp:1193 common/eda_base_frame.cpp:1206
+#: common/eda_base_frame.cpp:1239 common/eda_base_frame.cpp:1261
 #: common/tool/common_tools.cpp:608
 msgid "Grids"
 msgstr "Сетки"
@@ -5060,7 +5071,7 @@ msgstr "Масштаб"
 #: common/dialogs/panel_mouse_settings_base.cpp:152
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:186
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
-#: eeschema/sch_shape.cpp:686
+#: eeschema/sch_shape.cpp:689
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:49
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:158
@@ -5073,10 +5084,10 @@ msgstr "Масштаб"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1080
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1089
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1099
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:583
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:854
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:590
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:861
 #: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4082
-#: pcbnew/pad.cpp:2504 pcbnew/pad.cpp:2523 pcbnew/pcb_dimension.cpp:1964
+#: pcbnew/pad.cpp:2504 pcbnew/pad.cpp:2523 pcbnew/pcb_dimension.cpp:2012
 #: pcbnew/widgets/appearance_controls.cpp:729
 #: pcbnew/widgets/appearance_controls.cpp:771
 #: pcbnew/widgets/appearance_controls.cpp:2576
@@ -5164,7 +5175,7 @@ msgid "Reset to Trackpad Defaults"
 msgstr "По умолчанию для сенс.панели"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:17
-#: common/eda_base_frame.cpp:1207
+#: common/eda_base_frame.cpp:1216
 #: eeschema/dialogs/dialog_image_properties_base.cpp:66
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:165
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:295
@@ -5175,7 +5186,7 @@ msgstr "По умолчанию для сенс.панели"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:87
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:260
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:229
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:596
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:603
 #: pcbnew/dialogs/dialog_reference_image_properties_base.cpp:74
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:21
 msgid "General"
@@ -5309,7 +5320,7 @@ msgstr "<Не определено>"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:854 pcbnew/footprint.cpp:4084
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:861 pcbnew/footprint.cpp:4084
 #: pcbnew/pad.cpp:2525 pcbnew/pcb_table.cpp:533 pcbnew/pcb_textbox.cpp:867
 #: pcbnew/zone.cpp:857 pcbnew/zone.cpp:1832
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
@@ -5490,7 +5501,7 @@ msgstr "Толщина шины"
 #: common/dialogs/panel_setup_netclasses_base.cpp:64 common/eda_shape.cpp:2313
 #: common/stroke_params.cpp:272 eeschema/sch_bus_entry.cpp:669
 #: eeschema/sch_line.cpp:936 eeschema/sch_line.cpp:1088
-#: eeschema/sch_line.cpp:1092 eeschema/sch_tablecell.cpp:198
+#: eeschema/sch_line.cpp:1092 eeschema/sch_tablecell.cpp:199
 #: pcbnew/pcb_tablecell.cpp:200 pcbnew/pcb_textbox.cpp:889
 msgid "Line Style"
 msgstr "Стиль линии"
@@ -5504,12 +5515,12 @@ msgstr "Стиль линии"
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:265
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:60
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
-#: eeschema/sch_bus_entry.cpp:660 eeschema/sch_field.cpp:1135
+#: eeschema/sch_bus_entry.cpp:660 eeschema/sch_field.cpp:1220
 #: eeschema/sch_label.cpp:1197 eeschema/sch_line.cpp:1058
-#: eeschema/sch_tablecell.cpp:126 eeschema/sch_text.cpp:646
-#: eeschema/sch_textbox.cpp:558 include/stroke_params.h:86
+#: eeschema/sch_tablecell.cpp:127 eeschema/sch_text.cpp:646
+#: eeschema/sch_textbox.cpp:559 include/stroke_params.h:86
 #: pcbnew/dialogs/dialog_render_job.cpp:27
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2608 pcbnew/pcb_dimension.cpp:628
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2608 pcbnew/pcb_dimension.cpp:642
 #: pcbnew/pcb_tablecell.cpp:116 pcbnew/pcb_text.cpp:287
 #: pcbnew/pcb_textbox.cpp:565
 msgid "Default"
@@ -5532,7 +5543,7 @@ msgid "Pattern"
 msgstr "Шаблон"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:153
-#: eeschema/sch_field.cpp:1269 eeschema/sch_label.cpp:207
+#: eeschema/sch_field.cpp:1354 eeschema/sch_label.cpp:207
 #: pcbnew/board_connected_item.cpp:200 pcbnew/pad.cpp:2579 pcbnew/zone.cpp:1933
 msgid "Net Class"
 msgstr "Класс цепей"
@@ -5597,7 +5608,7 @@ msgstr "Ошибка переключения GAL бэкенда"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:558
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3419
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3270
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3272
 msgid "Failed to read image data."
 msgstr "Не удалось прочитать данные изображения."
 
@@ -5623,8 +5634,8 @@ msgstr "Недостаточно памяти."
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:352
 #: common/eda_item.cpp:353 common/eda_item.cpp:381 common/eda_text.cpp:1349
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:47
-#: eeschema/sch_field.cpp:1131 eeschema/sch_field.cpp:1795
-#: eeschema/sch_label.cpp:2272 eeschema/sch_tablecell.cpp:119
+#: eeschema/sch_field.cpp:1216 eeschema/sch_field.cpp:1880
+#: eeschema/sch_label.cpp:2272 eeschema/sch_tablecell.cpp:120
 #: eeschema/sch_text.cpp:641 eeschema/sch_text.h:59 eeschema/schematic.cpp:69
 #: eeschema/widgets/panel_sch_selection_filter.cpp:203
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:55
@@ -5634,9 +5645,9 @@ msgstr "Недостаточно памяти."
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:39
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:142
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:28
-#: pcbnew/pcb_dimension.cpp:1791 pcbnew/pcb_dimension.cpp:1873
-#: pcbnew/pcb_dimension.cpp:1906 pcbnew/pcb_dimension.cpp:1944
-#: pcbnew/pcb_dimension.cpp:1986 pcbnew/pcb_dimension.cpp:2020
+#: pcbnew/pcb_dimension.cpp:1839 pcbnew/pcb_dimension.cpp:1921
+#: pcbnew/pcb_dimension.cpp:1954 pcbnew/pcb_dimension.cpp:1992
+#: pcbnew/pcb_dimension.cpp:2034 pcbnew/pcb_dimension.cpp:2068
 #: pcbnew/pcb_tablecell.cpp:103 pcbnew/pcb_text.cpp:271 pcbnew/pcb_text.cpp:425
 #: pcbnew/widgets/panel_selection_filter.cpp:195
 #: pcbnew/widgets/panel_selection_filter_base.cpp:33
@@ -5663,7 +5674,7 @@ msgstr "Линия"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:178
 #: eeschema/sch_label.cpp:2253
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2496
-#: pcbnew/pcb_dimension.cpp:1965
+#: pcbnew/pcb_dimension.cpp:2013
 msgid "Rectangle"
 msgstr "Прямоугольник"
 
@@ -5727,7 +5738,7 @@ msgstr "Комментарий"
 msgid "Text '%s'"
 msgstr "Текст '%s'"
 
-#: common/drawing_sheet/ds_draw_item.cpp:439 eeschema/sch_shape.cpp:534
+#: common/drawing_sheet/ds_draw_item.cpp:439 eeschema/sch_shape.cpp:537
 #, c-format
 msgid "Rectangle, width %s height %s"
 msgstr "Прямоугольник, ширина %s высота %s"
@@ -5815,158 +5826,158 @@ msgstr ""
 msgid "Invalid floating point number"
 msgstr "Неверное число с плавающей точкой"
 
-#: common/eda_base_frame.cpp:428 common/tool/actions.cpp:190
+#: common/eda_base_frame.cpp:429 common/tool/actions.cpp:190
 #: pcbnew/dialogs/panel_setup_rules.cpp:125
 msgid "Undo"
 msgstr "Отменить"
 
-#: common/eda_base_frame.cpp:437 common/tool/actions.cpp:202
+#: common/eda_base_frame.cpp:438 common/tool/actions.cpp:202
 #: pcbnew/dialogs/panel_setup_rules.cpp:126
 msgid "Redo"
 msgstr "Повторить"
 
-#: common/eda_base_frame.cpp:1029
+#: common/eda_base_frame.cpp:1030
 #, c-format
 msgid "File '%s' was not found."
 msgstr "Файл '%s' не найден."
 
-#: common/eda_base_frame.cpp:1078
+#: common/eda_base_frame.cpp:1079
 msgid "Preferences"
 msgstr "Настройки"
 
-#: common/eda_base_frame.cpp:1098 common/hotkey_store.cpp:75
+#: common/eda_base_frame.cpp:1107 common/hotkey_store.cpp:75
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:20
 msgid "Common"
 msgstr "Общие"
 
-#: common/eda_base_frame.cpp:1104
+#: common/eda_base_frame.cpp:1113
 msgid "Mouse and Touchpad"
 msgstr "Мышь и сенсорная панель"
 
-#: common/eda_base_frame.cpp:1106
+#: common/eda_base_frame.cpp:1115
 msgid "Hotkeys"
 msgstr "Горячие клавиши"
 
-#: common/eda_base_frame.cpp:1116 kicad/project_tree_pane.cpp:1057
+#: common/eda_base_frame.cpp:1125 kicad/project_tree_pane.cpp:1052
 msgid "Version Control"
 msgstr "Контроль версий"
 
-#: common/eda_base_frame.cpp:1124
+#: common/eda_base_frame.cpp:1133
 msgid "Data Collection"
 msgstr "Сбор данных"
 
-#: common/eda_base_frame.cpp:1147 common/tool/actions.cpp:1088
+#: common/eda_base_frame.cpp:1156 common/tool/actions.cpp:1088
 #: common/tool/common_tools.cpp:615 eeschema/symbol_editor/symbol_editor.cpp:85
 #: kicad/tools/kicad_manager_actions.cpp:125
 msgid "Symbol Editor"
 msgstr "Редактор символов"
 
-#: common/eda_base_frame.cpp:1148 common/eda_base_frame.cpp:1157
-#: common/eda_base_frame.cpp:1183 common/eda_base_frame.cpp:1196
-#: common/eda_base_frame.cpp:1228 common/eda_base_frame.cpp:1251
+#: common/eda_base_frame.cpp:1157 common/eda_base_frame.cpp:1166
+#: common/eda_base_frame.cpp:1192 common/eda_base_frame.cpp:1205
+#: common/eda_base_frame.cpp:1237 common/eda_base_frame.cpp:1260
 msgid "Display Options"
 msgstr "Параметры отображения"
 
-#: common/eda_base_frame.cpp:1150 common/eda_base_frame.cpp:1159
-#: common/eda_base_frame.cpp:1186 common/eda_base_frame.cpp:1199
+#: common/eda_base_frame.cpp:1159 common/eda_base_frame.cpp:1168
+#: common/eda_base_frame.cpp:1195 common/eda_base_frame.cpp:1208
 #: pcbnew/dialogs/panel_edit_options_base.cpp:23
 #: pcbnew/tools/zone_filler_tool.cpp:283
 msgid "Editing Options"
 msgstr "Параметры редактирования"
 
-#: common/eda_base_frame.cpp:1151 common/eda_base_frame.cpp:1161
-#: common/eda_base_frame.cpp:1187 common/eda_base_frame.cpp:1200
-#: common/eda_base_frame.cpp:1229 common/eda_base_frame.cpp:1253
+#: common/eda_base_frame.cpp:1160 common/eda_base_frame.cpp:1170
+#: common/eda_base_frame.cpp:1196 common/eda_base_frame.cpp:1209
+#: common/eda_base_frame.cpp:1238 common/eda_base_frame.cpp:1262
 msgid "Colors"
 msgstr "Цвета"
 
-#: common/eda_base_frame.cpp:1156 common/hotkey_store.cpp:77
+#: common/eda_base_frame.cpp:1165 common/hotkey_store.cpp:77
 #: common/tool/common_tools.cpp:614 eeschema/menubar.cpp:137
-#: eeschema/sch_edit_frame.cpp:1756 kicad/tools/kicad_manager_actions.cpp:114
+#: eeschema/sch_edit_frame.cpp:1757 kicad/tools/kicad_manager_actions.cpp:114
 msgid "Schematic Editor"
 msgstr "Редактор схем"
 
-#: common/eda_base_frame.cpp:1160
+#: common/eda_base_frame.cpp:1169
 msgid "Annotation Options"
 msgstr "Параметры обозначения"
 
-#: common/eda_base_frame.cpp:1163
+#: common/eda_base_frame.cpp:1172
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:20
 msgid "Field Name Templates"
 msgstr "Шаблоны имён полей"
 
-#: common/eda_base_frame.cpp:1164 eeschema/sim/simulator_frame.cpp:115
+#: common/eda_base_frame.cpp:1173 eeschema/sim/simulator_frame.cpp:115
 #: eeschema/sim/toolbars_simulator_frame.cpp:114
 #: eeschema/tools/ee_actions.cpp:74
 msgid "Simulator"
 msgstr "Симулятор"
 
-#: common/eda_base_frame.cpp:1182 common/tool/actions.cpp:1105
+#: common/eda_base_frame.cpp:1191 common/tool/actions.cpp:1105
 #: common/tool/common_tools.cpp:617 kicad/tools/kicad_manager_actions.cpp:147
-#: pcbnew/footprint_edit_frame.cpp:1045 pcbnew/menubar_footprint_editor.cpp:92
+#: pcbnew/footprint_edit_frame.cpp:1057 pcbnew/menubar_footprint_editor.cpp:92
 msgid "Footprint Editor"
 msgstr "Редактор посад. мест"
 
-#: common/eda_base_frame.cpp:1185 common/eda_base_frame.cpp:1198
+#: common/eda_base_frame.cpp:1194 common/eda_base_frame.cpp:1207
 msgid "Origins & Axes"
 msgstr "Начало координат и оси"
 
-#: common/eda_base_frame.cpp:1188
+#: common/eda_base_frame.cpp:1197
 msgid "Footprint Defaults"
 msgstr "По умолчанию для посад. мест"
 
-#: common/eda_base_frame.cpp:1190
+#: common/eda_base_frame.cpp:1199
 msgid "Graphics Defaults"
 msgstr "По умолчанию для графики"
 
-#: common/eda_base_frame.cpp:1195 common/hotkey_store.cpp:78
+#: common/eda_base_frame.cpp:1204 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:616 kicad/tools/kicad_manager_actions.cpp:136
 #: pcbnew/menubar_pcb_editor.cpp:186 pcbnew/pcb_edit_frame.cpp:201
-#: pcbnew/pcb_edit_frame.cpp:1801 pcbnew/tools/zone_filler_tool.cpp:284
+#: pcbnew/pcb_edit_frame.cpp:1799 pcbnew/tools/zone_filler_tool.cpp:284
 msgid "PCB Editor"
 msgstr "Редактор печатных плат"
 
-#: common/eda_base_frame.cpp:1201 common/eda_base_frame.cpp:1266
+#: common/eda_base_frame.cpp:1210 common/eda_base_frame.cpp:1275
 msgid "Plugins"
 msgstr "Модули"
 
-#: common/eda_base_frame.cpp:1208
+#: common/eda_base_frame.cpp:1217
 msgid "Realtime Renderer"
 msgstr "Быстрый рендерер"
 
-#: common/eda_base_frame.cpp:1209
+#: common/eda_base_frame.cpp:1218
 msgid "Raytracing Renderer"
 msgstr "Трассировка лучей"
 
-#: common/eda_base_frame.cpp:1227 common/hotkey_store.cpp:81
+#: common/eda_base_frame.cpp:1236 common/hotkey_store.cpp:81
 #: common/tool/common_tools.cpp:619 gerbview/gerbview_frame.cpp:687
 #: gerbview/gerbview_frame.cpp:711 gerbview/menubar.cpp:159
 #: kicad/tools/kicad_manager_actions.cpp:158
 msgid "Gerber Viewer"
 msgstr "Просмотр Gerber-файлов"
 
-#: common/eda_base_frame.cpp:1232
+#: common/eda_base_frame.cpp:1241
 msgid "Excellon Options"
 msgstr "Параметры Excellon"
 
-#: common/eda_base_frame.cpp:1250 common/hotkey_store.cpp:79
+#: common/eda_base_frame.cpp:1259 common/hotkey_store.cpp:79
 #: common/tool/common_tools.cpp:618 kicad/tools/kicad_manager_actions.cpp:187
 #: pagelayout_editor/menubar.cpp:88 pagelayout_editor/menubar.cpp:89
 #: pagelayout_editor/pl_editor_frame.cpp:583
 msgid "Drawing Sheet Editor"
 msgstr "Редактор форматных рамок"
 
-#: common/eda_base_frame.cpp:1259
+#: common/eda_base_frame.cpp:1268
 msgid "Packages and Updates"
 msgstr "Пакеты и обновления"
 
-#: common/eda_base_frame.cpp:1349 pcbnew/dialogs/dialog_export_odbpp.cpp:324
+#: common/eda_base_frame.cpp:1358 pcbnew/dialogs/dialog_export_odbpp.cpp:324
 #, c-format
 msgid "Insufficient permissions to folder '%s'."
 msgstr "Недостаточно прав для каталога '%s'."
 
-#: common/eda_base_frame.cpp:1390
+#: common/eda_base_frame.cpp:1399
 #, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
@@ -5983,11 +5994,11 @@ msgstr ""
 "\n"
 "Желаете восстановить последние автосохранённые изменения?"
 
-#: common/eda_base_frame.cpp:1411
+#: common/eda_base_frame.cpp:1420
 msgid "The auto save file could not be renamed to the board file name."
 msgstr "Не удалось переименовать файл автосохранения платы."
 
-#: common/eda_base_frame.cpp:1644
+#: common/eda_base_frame.cpp:1653
 msgid "Set Language"
 msgstr "Установить язык"
 
@@ -6047,8 +6058,8 @@ msgid "mils"
 msgstr "мил"
 
 #: common/eda_draw_frame.cpp:655 pcbnew/dialogs/dialog_export_vrml_base.cpp:111
-#: pcbnew/footprint_wizard_frame.cpp:327 pcbnew/pcb_dimension.cpp:626
-#: pcbnew/pcb_dimension.cpp:1796
+#: pcbnew/footprint_wizard_frame.cpp:327 pcbnew/pcb_dimension.cpp:640
+#: pcbnew/pcb_dimension.cpp:1844
 msgid "Units"
 msgstr "Единицы измерения"
 
@@ -6064,7 +6075,7 @@ msgstr "Единицы измерения"
 #: pcbnew/dialogs/dialog_plot_base.cpp:341
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:33
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:53
-#: pcbnew/pcb_dimension.cpp:1738
+#: pcbnew/pcb_dimension.cpp:1786
 msgid "Inches"
 msgstr "Дюймы"
 
@@ -6083,21 +6094,21 @@ msgid "New Library"
 msgstr "Новая библиотека"
 
 #: common/eda_draw_frame.cpp:1220 common/tool/actions.cpp:473
-#: common/widgets/search_pane.cpp:121 eeschema/sch_edit_frame.cpp:265
-#: pcbnew/pcb_edit_frame.cpp:364
+#: common/widgets/search_pane.cpp:121 eeschema/sch_edit_frame.cpp:266
+#: pcbnew/pcb_edit_frame.cpp:366
 msgid "Search"
 msgstr "Поиск"
 
 #: common/eda_draw_frame.cpp:1226 common/tool/actions.cpp:1114
-#: eeschema/eeschema_settings.cpp:93 eeschema/sch_edit_frame.cpp:2213
+#: eeschema/eeschema_settings.cpp:93 eeschema/sch_edit_frame.cpp:2214
 #: pagelayout_editor/pl_editor_frame.cpp:195
-#: pcbnew/footprint_edit_frame.cpp:233 pcbnew/pcb_edit_frame.cpp:342
-#: pcbnew/pcb_edit_frame.cpp:1710
+#: pcbnew/footprint_edit_frame.cpp:244 pcbnew/pcb_edit_frame.cpp:344
+#: pcbnew/pcb_edit_frame.cpp:1708
 msgid "Properties"
 msgstr "Свойства"
 
-#: common/eda_draw_frame.cpp:1232 pcbnew/pcb_edit_frame.cpp:355
-#: pcbnew/pcb_edit_frame.cpp:1711 pcbnew/tools/pcb_actions.cpp:1339
+#: common/eda_draw_frame.cpp:1232 pcbnew/pcb_edit_frame.cpp:357
+#: pcbnew/pcb_edit_frame.cpp:1709 pcbnew/tools/pcb_actions.cpp:1339
 msgid "Net Inspector"
 msgstr "Инспектор цепей"
 
@@ -6133,18 +6144,18 @@ msgid "Generator"
 msgstr "Генератор"
 
 #: common/eda_item.cpp:354 common/eda_item.cpp:382 eeschema/sch_textbox.cpp:439
-#: eeschema/sch_textbox.cpp:553 eeschema/widgets/search_handlers.cpp:382
+#: eeschema/sch_textbox.cpp:554 eeschema/widgets/search_handlers.cpp:382
 #: pcbnew/pcb_textbox.cpp:556 pcbnew/pcb_textbox.h:68
 msgid "Text Box"
 msgstr "Надпись"
 
-#: common/eda_item.cpp:355 common/eda_item.cpp:383 eeschema/sch_table.cpp:579
+#: common/eda_item.cpp:355 common/eda_item.cpp:383 eeschema/sch_table.cpp:587
 #: pcbnew/pcb_table.cpp:387
 msgid "Table"
 msgstr "Таблица"
 
 #: common/eda_item.cpp:356 common/eda_item.cpp:384
-#: eeschema/sch_tablecell.cpp:116 pcbnew/pcb_tablecell.cpp:100
+#: eeschema/sch_tablecell.cpp:117 pcbnew/pcb_tablecell.cpp:100
 #: pcbnew/pcb_tablecell.h:48
 msgid "Table Cell"
 msgstr "Ячейка таблицы"
@@ -6164,13 +6175,13 @@ msgid "Marker"
 msgstr "Маркер"
 
 #: common/eda_item.cpp:361 common/eda_item.cpp:362 common/eda_item.cpp:363
-#: common/eda_item.cpp:364 pcbnew/pcb_dimension.cpp:595
+#: common/eda_item.cpp:364 pcbnew/pcb_dimension.cpp:609
 #: pcbnew/widgets/search_handlers.cpp:284
 msgid "Dimension"
 msgstr "Размер"
 
-#: common/eda_item.cpp:365 pcbnew/pcb_dimension.cpp:1286
-#: pcbnew/pcb_dimension.cpp:1446
+#: common/eda_item.cpp:365 pcbnew/pcb_dimension.cpp:1313
+#: pcbnew/pcb_dimension.cpp:1480
 msgid "Leader"
 msgstr "Линия-выноска"
 
@@ -6295,7 +6306,7 @@ msgstr "Дуга"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:172
 #: eeschema/sch_label.cpp:2251 gerbview/gerber_draw_item.cpp:231
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1516
-#: pcbnew/pad.cpp:2495 pcbnew/pcb_dimension.cpp:1966
+#: pcbnew/pad.cpp:2495 pcbnew/pcb_dimension.cpp:2014
 msgid "Circle"
 msgstr "Окружность"
 
@@ -6331,7 +6342,7 @@ msgstr "Сегмент"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:152
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:53
 #: eeschema/sch_label.cpp:2233 eeschema/sch_label.cpp:2265
-#: eeschema/sch_tablecell.cpp:196 eeschema/sch_textbox.cpp:700
+#: eeschema/sch_tablecell.cpp:197 eeschema/sch_textbox.cpp:701
 #: eeschema/sync_sheet_pin/sheet_synchronization_model.h:67
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:228
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:120
@@ -6368,8 +6379,8 @@ msgstr "Точки"
 
 #: common/eda_shape.cpp:1014 common/eda_shape.cpp:2297 common/eda_text.cpp:1374
 #: eeschema/sch_bitmap.cpp:201 eeschema/sch_bitmap.cpp:340
-#: eeschema/sch_field.cpp:1776 eeschema/sch_tablecell.cpp:201
-#: eeschema/sch_text.cpp:785 eeschema/sch_textbox.cpp:702
+#: eeschema/sch_field.cpp:1861 eeschema/sch_tablecell.cpp:202
+#: eeschema/sch_text.cpp:785 eeschema/sch_textbox.cpp:703
 #: pcbnew/dialogs/dialog_board_statistics.cpp:685
 #: pcbnew/dialogs/dialog_board_statistics.cpp:695
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:54
@@ -6387,13 +6398,13 @@ msgstr "Ширина"
 
 #: common/eda_shape.cpp:1017 common/eda_shape.cpp:2303 common/eda_text.cpp:1379
 #: eeschema/sch_bitmap.cpp:203 eeschema/sch_bitmap.cpp:347
-#: eeschema/sch_field.cpp:1777 eeschema/sch_tablecell.cpp:202
-#: eeschema/sch_text.cpp:786 eeschema/sch_textbox.cpp:703
+#: eeschema/sch_field.cpp:1862 eeschema/sch_tablecell.cpp:203
+#: eeschema/sch_text.cpp:786 eeschema/sch_textbox.cpp:704
 #: pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:56
-#: pcbnew/pad.cpp:1350 pcbnew/pcb_dimension.cpp:1012
+#: pcbnew/pad.cpp:1350 pcbnew/pcb_dimension.cpp:1033
 #: pcbnew/pcb_fields_grid_table.cpp:147 pcbnew/pcb_reference_image.cpp:217
 #: pcbnew/pcb_reference_image.cpp:375 pcbnew/pcb_tablecell.cpp:198
 #: pcbnew/pcb_tablecell.cpp:204 pcbnew/pcb_text.cpp:290
@@ -6405,19 +6416,19 @@ msgstr "Высота"
 msgid "Bezier"
 msgstr "Кривая Безье"
 
-#: common/eda_shape.cpp:2250 eeschema/sch_shape.cpp:758
+#: common/eda_shape.cpp:2250 eeschema/sch_shape.cpp:761
 msgid "Shape Properties"
 msgstr "Свойства формы"
 
-#: common/eda_shape.cpp:2256 eeschema/sch_table.cpp:638
-#: eeschema/sch_tablecell.cpp:191 pcbnew/pcb_table.cpp:548
+#: common/eda_shape.cpp:2256 eeschema/sch_table.cpp:646
+#: eeschema/sch_tablecell.cpp:192 pcbnew/pcb_table.cpp:548
 #: pcbnew/pcb_tablecell.cpp:192 pcbnew/pcb_textbox.cpp:882
 #: pcbnew/pcb_track.cpp:2075
 msgid "Start X"
 msgstr "Начало X"
 
-#: common/eda_shape.cpp:2261 eeschema/sch_table.cpp:641
-#: eeschema/sch_tablecell.cpp:192 pcbnew/pcb_table.cpp:551
+#: common/eda_shape.cpp:2261 eeschema/sch_table.cpp:649
+#: eeschema/sch_tablecell.cpp:193 pcbnew/pcb_table.cpp:551
 #: pcbnew/pcb_tablecell.cpp:193 pcbnew/pcb_textbox.cpp:883
 #: pcbnew/pcb_track.cpp:2079
 msgid "Start Y"
@@ -6431,13 +6442,13 @@ msgstr "Центр X"
 msgid "Center Y"
 msgstr "Центр Y"
 
-#: common/eda_shape.cpp:2285 eeschema/sch_tablecell.cpp:193
+#: common/eda_shape.cpp:2285 eeschema/sch_tablecell.cpp:194
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2620 pcbnew/pcb_tablecell.cpp:194
 #: pcbnew/pcb_textbox.cpp:884 pcbnew/pcb_track.cpp:2082
 msgid "End X"
 msgstr "Конец X"
 
-#: common/eda_shape.cpp:2291 eeschema/sch_tablecell.cpp:194
+#: common/eda_shape.cpp:2291 eeschema/sch_tablecell.cpp:195
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2626 pcbnew/pcb_tablecell.cpp:195
 #: pcbnew/pcb_textbox.cpp:885 pcbnew/pcb_track.cpp:2085
 msgid "End Y"
@@ -6445,22 +6456,22 @@ msgstr "Конец Y"
 
 #: common/eda_shape.cpp:2309 common/stroke_params.cpp:276
 #: eeschema/sch_bus_entry.cpp:673 eeschema/sch_line.cpp:1096
-#: eeschema/sch_tablecell.cpp:197 pcbnew/pcb_tablecell.cpp:199
+#: eeschema/sch_tablecell.cpp:198 pcbnew/pcb_tablecell.cpp:199
 #: pcbnew/pcb_textbox.cpp:888
 msgid "Line Width"
 msgstr "Ширина линии"
 
-#: common/eda_shape.cpp:2317 eeschema/sch_tablecell.cpp:199
+#: common/eda_shape.cpp:2317 eeschema/sch_tablecell.cpp:200
 #: pcbnew/pcb_shape.cpp:908 pcbnew/pcb_tablecell.cpp:201
 msgid "Line Color"
 msgstr "Цвет линии"
 
-#: common/eda_shape.cpp:2364 eeschema/sch_shape.cpp:748
+#: common/eda_shape.cpp:2364 eeschema/sch_shape.cpp:751
 #: pcbnew/dialogs/dialog_plot_base.cpp:138 pcbnew/pcb_textbox.cpp:890
 msgid "Filled"
 msgstr "Заполненный"
 
-#: common/eda_shape.cpp:2369 eeschema/sch_shape.cpp:751
+#: common/eda_shape.cpp:2369 eeschema/sch_shape.cpp:754
 #: pcbnew/pcb_shape.cpp:909
 msgid "Fill Color"
 msgstr "Цвет заливки"
@@ -6477,8 +6488,8 @@ msgstr "Цвет заливки"
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:119
 #: eeschema/dialogs/dialog_text_properties_base.cpp:113
 #: eeschema/fields_grid_table.cpp:476 eeschema/sch_label.cpp:1199
-#: eeschema/sch_label.cpp:2274 eeschema/sch_tablecell.cpp:128
-#: eeschema/sch_text.cpp:648 eeschema/sch_textbox.cpp:560
+#: eeschema/sch_label.cpp:2274 eeschema/sch_tablecell.cpp:129
+#: eeschema/sch_text.cpp:648 eeschema/sch_textbox.cpp:561
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:98
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:57
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:58
@@ -6503,8 +6514,8 @@ msgstr "Курсив"
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:116
 #: eeschema/dialogs/dialog_text_properties_base.cpp:108
 #: eeschema/fields_grid_table.cpp:477 eeschema/sch_label.cpp:1199
-#: eeschema/sch_label.cpp:2275 eeschema/sch_tablecell.cpp:128
-#: eeschema/sch_text.cpp:648 eeschema/sch_textbox.cpp:560
+#: eeschema/sch_label.cpp:2275 eeschema/sch_tablecell.cpp:129
+#: eeschema/sch_text.cpp:648 eeschema/sch_textbox.cpp:561
 #: eeschema/widgets/tuner_slider_base.cpp:48
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:93
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:199
@@ -6521,7 +6532,7 @@ msgstr "Полужирный курсив"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:302 eeschema/fields_grid_table.cpp:717
 #: eeschema/fields_grid_table.cpp:861 eeschema/pin_type.cpp:118
-#: eeschema/sch_field.cpp:1143 eeschema/sch_field.cpp:1730
+#: eeschema/sch_field.cpp:1228 eeschema/sch_field.cpp:1815
 #: eeschema/sch_pin.cpp:2118 pcbnew/dialogs/dialog_render_job.cpp:42
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2606
 msgid "Left"
@@ -6533,8 +6544,8 @@ msgstr "Слева"
 #: eeschema/fields_grid_table.cpp:295 eeschema/fields_grid_table.cpp:303
 #: eeschema/fields_grid_table.cpp:718 eeschema/fields_grid_table.cpp:729
 #: eeschema/fields_grid_table.cpp:863 eeschema/fields_grid_table.cpp:887
-#: eeschema/sch_field.cpp:1144 eeschema/sch_field.cpp:1154
-#: eeschema/sch_field.cpp:1731 eeschema/sch_field.cpp:1740
+#: eeschema/sch_field.cpp:1229 eeschema/sch_field.cpp:1239
+#: eeschema/sch_field.cpp:1816 eeschema/sch_field.cpp:1825
 #: eeschema/sch_text.cpp:669 gerbview/gerber_file_image.cpp:361
 #: gerbview/gerber_file_image.cpp:364
 #: pcbnew/dialogs/dialog_shape_properties.cpp:882
@@ -6549,7 +6560,7 @@ msgstr "Центр"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:304 eeschema/fields_grid_table.cpp:719
 #: eeschema/fields_grid_table.cpp:865 eeschema/pin_type.cpp:117
-#: eeschema/sch_field.cpp:1145 eeschema/sch_field.cpp:1732
+#: eeschema/sch_field.cpp:1230 eeschema/sch_field.cpp:1817
 #: eeschema/sch_pin.cpp:2117 pcbnew/dialogs/dialog_render_job.cpp:43
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2607
 msgid "Right"
@@ -6558,8 +6569,8 @@ msgstr "Справа"
 #: common/eda_text.cpp:1335
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:294 eeschema/fields_grid_table.cpp:728
-#: eeschema/fields_grid_table.cpp:885 eeschema/sch_field.cpp:1153
-#: eeschema/sch_field.cpp:1739 eeschema/sch_text.cpp:668
+#: eeschema/fields_grid_table.cpp:885 eeschema/sch_field.cpp:1238
+#: eeschema/sch_field.cpp:1824 eeschema/sch_text.cpp:668
 #: pcbnew/dialogs/dialog_render_job.cpp:44
 msgid "Top"
 msgstr "Сверху"
@@ -6567,8 +6578,8 @@ msgstr "Сверху"
 #: common/eda_text.cpp:1337
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:296 eeschema/fields_grid_table.cpp:730
-#: eeschema/fields_grid_table.cpp:889 eeschema/sch_field.cpp:1155
-#: eeschema/sch_field.cpp:1741 eeschema/sch_text.cpp:670
+#: eeschema/fields_grid_table.cpp:889 eeschema/sch_field.cpp:1240
+#: eeschema/sch_field.cpp:1826 eeschema/sch_text.cpp:670
 #: pcbnew/dialogs/dialog_render_job.cpp:40
 msgid "Bottom"
 msgstr "Снизу"
@@ -6580,24 +6591,24 @@ msgstr "Снизу"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:68
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
-#: eeschema/fields_grid_table.cpp:479 eeschema/sch_field.cpp:1784
+#: eeschema/fields_grid_table.cpp:479 eeschema/sch_field.cpp:1869
 #: eeschema/sch_pin.cpp:1588 eeschema/sch_pin.cpp:2163
-#: eeschema/sch_symbol.cpp:2975 eeschema/sch_tablecell.cpp:204
-#: eeschema/sch_text.cpp:794 eeschema/sch_textbox.cpp:730
+#: eeschema/sch_symbol.cpp:2975 eeschema/sch_tablecell.cpp:205
+#: eeschema/sch_text.cpp:794 eeschema/sch_textbox.cpp:731
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
-#: pcbnew/footprint.cpp:4114 pcbnew/pad.cpp:2542 pcbnew/pcb_dimension.cpp:1756
-#: pcbnew/pcb_dimension.cpp:1831 pcbnew/pcb_fields_grid_table.cpp:151
+#: pcbnew/footprint.cpp:4114 pcbnew/pad.cpp:2542 pcbnew/pcb_dimension.cpp:1804
+#: pcbnew/pcb_dimension.cpp:1879 pcbnew/pcb_fields_grid_table.cpp:151
 #: pcbnew/pcb_tablecell.cpp:206 pcbnew/zone.cpp:2003
 msgid "Orientation"
 msgstr "Ориентация"
 
 #: common/eda_text.cpp:1347 eeschema/dialogs/dialog_text_properties_base.h:117
-#: eeschema/sch_field.cpp:1751 eeschema/sch_field.cpp:1782
-#: eeschema/sch_text.cpp:791 eeschema/sch_textbox.cpp:728
+#: eeschema/sch_field.cpp:1836 eeschema/sch_field.cpp:1867
+#: eeschema/sch_text.cpp:791 eeschema/sch_textbox.cpp:729
 #: pcbnew/dialogs/dialog_text_properties.cpp:150
 #: pcbnew/dialogs/dialog_text_properties_base.h:111
-#: pcbnew/pcb_dimension.cpp:1818 pcbnew/pcb_text.cpp:625
+#: pcbnew/pcb_dimension.cpp:1866 pcbnew/pcb_text.cpp:625
 #: pcbnew/pcb_text.cpp:629
 msgid "Text Properties"
 msgstr "Свойства текста"
@@ -6607,18 +6618,18 @@ msgstr "Свойства текста"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:71
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:71
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:68
-#: eeschema/fields_grid_table.cpp:482 eeschema/sch_field.cpp:1135
-#: eeschema/sch_label.cpp:1197 eeschema/sch_tablecell.cpp:126
-#: eeschema/sch_text.cpp:646 eeschema/sch_textbox.cpp:558
-#: eeschema/widgets/sch_properties_panel.cpp:258 pcbnew/pcb_dimension.cpp:628
+#: eeschema/fields_grid_table.cpp:482 eeschema/sch_field.cpp:1220
+#: eeschema/sch_label.cpp:1197 eeschema/sch_tablecell.cpp:127
+#: eeschema/sch_text.cpp:646 eeschema/sch_textbox.cpp:559
+#: eeschema/widgets/sch_properties_panel.cpp:258 pcbnew/pcb_dimension.cpp:642
 #: pcbnew/pcb_tablecell.cpp:116 pcbnew/pcb_text.cpp:287
 #: pcbnew/pcb_textbox.cpp:565 pcbnew/widgets/pcb_properties_panel.cpp:286
 msgid "Font"
 msgstr "Шрифт"
 
-#: common/eda_text.cpp:1360 eeschema/sch_field.cpp:1774
-#: eeschema/sch_label.cpp:2273 eeschema/sch_tablecell.cpp:203
-#: eeschema/sch_text.cpp:787 eeschema/sch_textbox.cpp:704
+#: common/eda_text.cpp:1360 eeschema/sch_field.cpp:1859
+#: eeschema/sch_label.cpp:2273 eeschema/sch_tablecell.cpp:204
+#: eeschema/sch_text.cpp:787 eeschema/sch_textbox.cpp:705
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:91
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:56
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:57
@@ -6627,31 +6638,31 @@ msgstr "Шрифт"
 msgid "Thickness"
 msgstr "Толщина"
 
-#: common/eda_text.cpp:1371 eeschema/sch_field.cpp:1775
-#: eeschema/sch_tablecell.cpp:205 eeschema/sch_text.cpp:784
+#: common/eda_text.cpp:1371 eeschema/sch_field.cpp:1860
+#: eeschema/sch_tablecell.cpp:206 eeschema/sch_text.cpp:784
 #: pcbnew/microwave/microwave_polygon.cpp:127
 #: pcbnew/pcb_fields_grid_table.cpp:156
 msgid "Mirrored"
 msgstr "Зеркально"
 
-#: common/eda_text.cpp:1385 eeschema/sch_field.cpp:1754
-#: eeschema/sch_field.cpp:1757 eeschema/sch_label.cpp:2277
+#: common/eda_text.cpp:1385 eeschema/sch_field.cpp:1839
+#: eeschema/sch_field.cpp:1842 eeschema/sch_label.cpp:2277
 msgid "Horizontal Justification"
 msgstr "Выравнивание по гориз."
 
-#: common/eda_text.cpp:1389 eeschema/sch_field.cpp:1761
-#: eeschema/sch_field.cpp:1764 eeschema/sch_label.cpp:2279
-#: pcbnew/pcb_dimension.cpp:1876 pcbnew/pcb_dimension.cpp:1909
-#: pcbnew/pcb_dimension.cpp:1947 pcbnew/pcb_dimension.cpp:1989
-#: pcbnew/pcb_dimension.cpp:2023
+#: common/eda_text.cpp:1389 eeschema/sch_field.cpp:1846
+#: eeschema/sch_field.cpp:1849 eeschema/sch_label.cpp:2279
+#: pcbnew/pcb_dimension.cpp:1924 pcbnew/pcb_dimension.cpp:1957
+#: pcbnew/pcb_dimension.cpp:1995 pcbnew/pcb_dimension.cpp:2037
+#: pcbnew/pcb_dimension.cpp:2071
 msgid "Vertical Justification"
 msgstr "Выравнивание по верт."
 
-#: common/eda_text.cpp:1397 eeschema/sch_field.cpp:1773
-#: eeschema/sch_label.cpp:2237 eeschema/sch_tablecell.cpp:207
-#: pcbnew/pcb_dimension.cpp:1879 pcbnew/pcb_dimension.cpp:1912
-#: pcbnew/pcb_dimension.cpp:1950 pcbnew/pcb_dimension.cpp:1992
-#: pcbnew/pcb_dimension.cpp:2026 pcbnew/pcb_field.cpp:288
+#: common/eda_text.cpp:1397 eeschema/sch_field.cpp:1858
+#: eeschema/sch_label.cpp:2237 eeschema/sch_tablecell.cpp:208
+#: pcbnew/pcb_dimension.cpp:1927 pcbnew/pcb_dimension.cpp:1960
+#: pcbnew/pcb_dimension.cpp:1998 pcbnew/pcb_dimension.cpp:2040
+#: pcbnew/pcb_dimension.cpp:2074 pcbnew/pcb_field.cpp:288
 #: pcbnew/pcb_tablecell.cpp:207 pcbnew/pcb_text.cpp:644
 #: pcbnew/pcb_textbox.cpp:930
 msgid "Hyperlink"
@@ -6923,71 +6934,71 @@ msgstr "Не удалось создать каталог '%s'"
 msgid "Could not clone repository '%s'"
 msgstr "Не удалось склонировать репозиторий '%s'"
 
-#: common/git/git_pull_handler.cpp:47
+#: common/git/git_pull_handler.cpp:50
 #, c-format
 msgid "Could not lookup remote '%s'"
 msgstr "Не удалось найти внешний репозиторий '%s'"
 
-#: common/git/git_pull_handler.cpp:64
+#: common/git/git_pull_handler.cpp:67
 #, c-format
 msgid "Could not connect to remote '%s': %s"
 msgstr "Не удалось подключиться к пульту '%s': %s"
 
-#: common/git/git_pull_handler.cpp:76
+#: common/git/git_pull_handler.cpp:79
 #, c-format
 msgid "Could not fetch data from remote '%s': %s"
 msgstr "Не удалось получить данные с пульта '%s': %s"
 
-#: common/git/git_pull_handler.cpp:98
+#: common/git/git_pull_handler.cpp:101
 msgid "Could not read 'FETCH_HEAD'"
 msgstr "Не удалось прочитать 'FETCH_HEAD'"
 
-#: common/git/git_pull_handler.cpp:106
+#: common/git/git_pull_handler.cpp:109
 msgid "Could not lookup commit"
 msgstr "Не удалось найти коммит"
 
-#: common/git/git_pull_handler.cpp:116
+#: common/git/git_pull_handler.cpp:119
 msgid "Could not analyze merge"
 msgstr "Не удалось проанализировать слияние"
 
-#: common/git/git_pull_handler.cpp:126
+#: common/git/git_pull_handler.cpp:129
 msgid "Invalid HEAD.  Cannot merge."
 msgstr "Неверный HEAD.  Слияние невозможно."
 
-#: common/git/git_pull_handler.cpp:195 common/git/git_push_handler.cpp:79
+#: common/git/git_pull_handler.cpp:198 common/git/git_push_handler.cpp:79
 msgid "Could not get repository head"
 msgstr "Не удалось получить последний коммит репозитория"
 
-#: common/git/git_pull_handler.cpp:209
+#: common/git/git_pull_handler.cpp:212
 #, c-format
 msgid "Could not get reference OID for reference '%s'"
 msgstr "Не удалось получить OID для ссылки '%s'"
 
-#: common/git/git_pull_handler.cpp:220 common/git/kicad_git_errors.cpp:55
+#: common/git/git_pull_handler.cpp:223 common/git/kicad_git_errors.cpp:55
 msgid "Failed to perform checkout operation."
 msgstr "Не удалось выполнить операцию checkout."
 
-#: common/git/git_pull_handler.cpp:238
+#: common/git/git_pull_handler.cpp:241
 msgid "Could not lookup commit '{}'"
 msgstr "Не удалось найти коммит '{}'"
 
-#: common/git/git_pull_handler.cpp:279
+#: common/git/git_pull_handler.cpp:282
 msgid "Could not merge commits"
 msgstr "Не удалось произвести слияние коммитов"
 
-#: common/git/git_pull_handler.cpp:288
+#: common/git/git_pull_handler.cpp:291
 msgid "Could not get repository index"
 msgstr "Не удалось получить индекс репозитория"
 
-#: common/git/git_pull_handler.cpp:297
+#: common/git/git_pull_handler.cpp:300
 msgid "Could not get conflict iterator"
 msgstr "Не удалось получить итератор конфликтов"
 
-#: common/git/git_pull_handler.cpp:317 common/git/git_pull_handler.cpp:318
+#: common/git/git_pull_handler.cpp:320 common/git/git_pull_handler.cpp:321
 msgid "Changed"
 msgstr "Изменено"
 
-#: common/git/git_pull_handler.cpp:332 common/git/git_pull_handler.cpp:333
+#: common/git/git_pull_handler.cpp:335 common/git/git_pull_handler.cpp:336
 msgid "Added"
 msgstr "Добавлено"
 
@@ -7159,7 +7170,7 @@ msgstr "Вставить элементы из буфера обмена в те
 #: common/grid_tricks.cpp:368 common/tool/actions.cpp:291
 #: common/widgets/listbox_tricks.cpp:54 eeschema/tools/sch_edit_tool.cpp:1722
 #: eeschema/tools/symbol_editor_edit_tool.cpp:476
-#: kicad/dialogs/panel_jobset.cpp:380 kicad/project_tree_pane.cpp:990
+#: kicad/dialogs/panel_jobset.cpp:380 kicad/project_tree_pane.cpp:985
 #: pcbnew/dialogs/panel_setup_rules.cpp:133 pcbnew/tools/edit_tool.cpp:2652
 msgid "Delete"
 msgstr "Удалить"
@@ -9187,7 +9198,7 @@ msgstr "Установить начало координат сетки"
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:102
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:33
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:55
-#: pcbnew/pcb_dimension.cpp:1739
+#: pcbnew/pcb_dimension.cpp:1787
 msgid "Mils"
 msgstr "Милы"
 
@@ -9201,7 +9212,7 @@ msgstr "Милы"
 #: pcbnew/dialogs/dialog_plot_base.cpp:341
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:33
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:54
-#: pcbnew/pcb_dimension.cpp:1740
+#: pcbnew/pcb_dimension.cpp:1788
 msgid "Millimeters"
 msgstr "Миллиметры"
 
@@ -9667,7 +9678,7 @@ msgid "Footprint not found."
 msgstr "Посад. место не найдено."
 
 #: common/widgets/footprint_select_widget.cpp:68 cvpcb/cvpcb_mainframe.cpp:899
-#: pcbnew/footprint_edit_frame.cpp:1070
+#: pcbnew/footprint_edit_frame.cpp:1082
 #: pcbnew/widgets/panel_footprint_chooser.cpp:69
 msgid "Loading Footprint Libraries"
 msgstr "Загрузка библиотек посад. мест"
@@ -10432,7 +10443,7 @@ msgstr "Файл проекта: '%s'"
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:94
 #: eeschema/dialogs/dialog_bom.cpp:403
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
-#: kicad/project_tree_pane.cpp:1071
+#: kicad/project_tree_pane.cpp:1066
 msgid "No text editor selected in KiCad.  Please choose one."
 msgstr "Не выбран текстовый редактор для KiCad. Пожалуйста, выберите его."
 
@@ -11529,10 +11540,6 @@ msgstr "DSN:"
 msgid "Username:"
 msgstr "Имя пользователя:"
 
-#: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
-msgid "Password:"
-msgstr "Пароль:"
-
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:71
 msgid "Connection String:"
 msgstr "Строка соединения:"
@@ -11540,7 +11547,7 @@ msgstr "Строка соединения:"
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:99
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:210
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1383
-#: pcbnew/footprint_edit_frame.cpp:229 pcbnew/footprint_edit_frame.cpp:961
+#: pcbnew/footprint_edit_frame.cpp:240 pcbnew/footprint_edit_frame.cpp:973
 msgid "Libraries"
 msgstr "Библиотеки"
 
@@ -11867,21 +11874,21 @@ msgstr "Выполняются проверки..."
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:155
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:171
 #: pcbnew/dialogs/dialog_drc_base.cpp:85 pcbnew/dialogs/dialog_drc_base.cpp:166
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:132
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:164
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:201
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:257
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:332
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1037
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1057
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1094
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1106
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1118
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1127
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1139
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1151
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1163
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1175
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:135
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:167
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:204
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:260
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:335
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1044
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1064
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1101
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1113
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1125
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1134
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1146
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1158
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1170
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1182
 #: pcbnew/dialogs/panel_edit_options_base.cpp:305
 #: pcbnew/dialogs/panel_edit_options_base.cpp:441
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:28
@@ -12679,11 +12686,11 @@ msgstr "Верт. выравн."
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:67
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:64
-#: eeschema/fields_grid_table.cpp:478 eeschema/sch_field.cpp:1139
-#: eeschema/sch_field.cpp:1780 eeschema/sch_label.cpp:1203
-#: eeschema/sch_tablecell.cpp:132 eeschema/sch_text.cpp:652
-#: eeschema/sch_text.cpp:789 eeschema/sch_textbox.cpp:564
-#: eeschema/sch_textbox.cpp:725 pcbnew/tools/board_inspection_tool.cpp:1434
+#: eeschema/fields_grid_table.cpp:478 eeschema/sch_field.cpp:1224
+#: eeschema/sch_field.cpp:1865 eeschema/sch_label.cpp:1203
+#: eeschema/sch_tablecell.cpp:133 eeschema/sch_text.cpp:652
+#: eeschema/sch_text.cpp:789 eeschema/sch_textbox.cpp:565
+#: eeschema/sch_textbox.cpp:726 pcbnew/tools/board_inspection_tool.cpp:1434
 msgid "Text Size"
 msgstr "Разм. текста"
 
@@ -12872,14 +12879,14 @@ msgstr "Номера выводов:"
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:28
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:42
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:56
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:362
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:363
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:365
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:366
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:73
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:90
 #: pcbnew/dialogs/dialog_set_offset_base.cpp:33
 #: pcbnew/dialogs/dialog_set_offset_base.cpp:50
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:75
-#: pcbnew/pcb_dimension.cpp:1721
+#: pcbnew/pcb_dimension.cpp:1769
 msgid "0"
 msgstr "0"
 
@@ -14214,14 +14221,14 @@ msgid "Do not populate"
 msgstr "Не устанавливать (DNP)"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:169
-#: eeschema/sch_field.cpp:1137 eeschema/sch_label.cpp:1201
-#: eeschema/sch_pin.cpp:1581 eeschema/sch_tablecell.cpp:130
-#: eeschema/sch_text.cpp:650 eeschema/sch_textbox.cpp:562
+#: eeschema/sch_field.cpp:1222 eeschema/sch_label.cpp:1201
+#: eeschema/sch_pin.cpp:1581 eeschema/sch_tablecell.cpp:131
+#: eeschema/sch_text.cpp:650 eeschema/sch_textbox.cpp:563
 msgid "Style"
 msgstr "Стиль"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:217
-#: eeschema/sch_shape.cpp:756 pcbnew/dialogs/dialog_copper_zones_base.cpp:278
+#: eeschema/sch_shape.cpp:759 pcbnew/dialogs/dialog_copper_zones_base.cpp:278
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:117
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:203
 msgid "Fill"
@@ -15201,7 +15208,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:149
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:353
 #: pcbnew/dialogs/dialog_move_exact.cpp:208
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:358
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:361
 #: pcbnew/dialogs/dialog_position_relative.cpp:161
 #: pcbnew/dialogs/dialog_set_offset.cpp:204
 msgid "Angle:"
@@ -15213,13 +15220,13 @@ msgstr "+90"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:153
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:143
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:365
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:368
 msgid "-90"
 msgstr "-90"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:153
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:144
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:366
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:369
 msgid "180"
 msgstr "180"
 
@@ -15439,7 +15446,7 @@ msgid "Column lines"
 msgstr "Линии столбцов"
 
 #: eeschema/dialogs/dialog_table_properties_base.h:76
-#: eeschema/sch_table.cpp:645 pcbnew/dialogs/dialog_table_properties_base.h:72
+#: eeschema/sch_table.cpp:653 pcbnew/dialogs/dialog_table_properties_base.h:72
 #: pcbnew/pcb_table.cpp:555
 msgid "Table Properties"
 msgstr "Свойства таблицы"
@@ -16095,7 +16102,7 @@ msgstr "Размер вывода:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:151
 #: eeschema/erc/erc_item.cpp:39
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:934
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:941
 msgid "Connections"
 msgstr "Соединения"
 
@@ -16689,14 +16696,14 @@ msgstr "Отчёт ERC сохранен в %s\n"
 msgid "Net Navigator"
 msgstr "Навигатор по цепям"
 
-#: eeschema/eeschema_settings.cpp:115 eeschema/sch_edit_frame.cpp:2212
-#: pcbnew/footprint_edit_frame.cpp:246 pcbnew/footprint_edit_frame.cpp:967
-#: pcbnew/pcb_edit_frame.cpp:334 pcbnew/pcb_edit_frame.cpp:1709
+#: eeschema/eeschema_settings.cpp:115 eeschema/sch_edit_frame.cpp:2213
+#: pcbnew/footprint_edit_frame.cpp:257 pcbnew/footprint_edit_frame.cpp:979
+#: pcbnew/pcb_edit_frame.cpp:336 pcbnew/pcb_edit_frame.cpp:1707
 msgid "Selection Filter"
 msgstr "Фильтр выделения"
 
 #: eeschema/eeschema_settings.cpp:135 eeschema/menubar.cpp:196
-#: eeschema/sch_edit_frame.cpp:2208 eeschema/sch_edit_frame.cpp:2214
+#: eeschema/sch_edit_frame.cpp:2209 eeschema/sch_edit_frame.cpp:2215
 #: eeschema/tools/ee_actions.cpp:149
 msgid "Design Blocks"
 msgstr "Дизайн-блоки"
@@ -17165,21 +17172,21 @@ msgstr "Файлы схемы"
 
 #: eeschema/fields_grid_table.cpp:310 eeschema/fields_grid_table.cpp:747
 #: eeschema/fields_grid_table.cpp:919
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:154
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:157
 msgid "Horizontal"
 msgstr "Гориз."
 
 #: eeschema/fields_grid_table.cpp:311 eeschema/fields_grid_table.cpp:749
 #: eeschema/fields_grid_table.cpp:921
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:154
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:157
 msgid "Vertical"
 msgstr "Верт."
 
-#: eeschema/fields_grid_table.cpp:484 eeschema/sch_field.cpp:1770
+#: eeschema/fields_grid_table.cpp:484 eeschema/sch_field.cpp:1855
 msgid "Allow Autoplacement"
 msgstr "Разрешить авторазмещение"
 
-#: eeschema/fields_grid_table.cpp:485 eeschema/sch_field.cpp:1809
+#: eeschema/fields_grid_table.cpp:485 eeschema/sch_field.cpp:1894
 #: eeschema/sch_item.cpp:517 eeschema/sch_item.cpp:569
 msgid "Private"
 msgstr "Приватный"
@@ -18159,7 +18166,7 @@ msgstr ""
 "Перезагрузить библиотеку?"
 
 #: eeschema/sch_bitmap.cpp:309 eeschema/sch_pin.cpp:2155
-#: eeschema/sch_shape.cpp:743 eeschema/sch_symbol.cpp:2967
+#: eeschema/sch_shape.cpp:746 eeschema/sch_symbol.cpp:2967
 #: pcbnew/board_item.cpp:405 pcbnew/pcb_group.cpp:501 pcbnew/pcb_shape.cpp:904
 #: pcbnew/pcb_tablecell.cpp:182 pcbnew/pcb_track.cpp:2074 pcbnew/zone.cpp:1871
 #: pcbnew/zone.cpp:1883
@@ -18167,7 +18174,7 @@ msgid "Position X"
 msgstr "Позиция X"
 
 #: eeschema/sch_bitmap.cpp:314 eeschema/sch_pin.cpp:2159
-#: eeschema/sch_shape.cpp:745 eeschema/sch_symbol.cpp:2970
+#: eeschema/sch_shape.cpp:748 eeschema/sch_symbol.cpp:2970
 #: pcbnew/board_item.cpp:408 pcbnew/pcb_group.cpp:502 pcbnew/pcb_shape.cpp:906
 #: pcbnew/pcb_tablecell.cpp:183 pcbnew/pcb_track.cpp:2078 pcbnew/zone.cpp:1877
 #: pcbnew/zone.cpp:1884
@@ -18226,25 +18233,25 @@ msgstr "Сигналы псевдонима шины %s"
 msgid "KiCad Schematic Editor"
 msgstr "Редактор схем KiCad"
 
-#: eeschema/sch_edit_frame.cpp:234 eeschema/sch_edit_frame.cpp:2211
+#: eeschema/sch_edit_frame.cpp:235 eeschema/sch_edit_frame.cpp:2212
 msgid "Schematic Hierarchy"
 msgstr "Иерархия схемы"
 
-#: eeschema/sch_edit_frame.cpp:420
+#: eeschema/sch_edit_frame.cpp:421
 msgid "New schematic file is unsaved"
 msgstr "Новый файл схемы не сохранён"
 
-#: eeschema/sch_edit_frame.cpp:1032
+#: eeschema/sch_edit_frame.cpp:1033
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:640
 #: eeschema/symbol_editor/symbol_editor.cpp:1532
 #: kicad/dialogs/panel_jobset.cpp:823 pagelayout_editor/pl_editor_frame.cpp:411
-#: pcbnew/footprint_edit_frame.cpp:815 pcbnew/footprint_edit_frame.cpp:855
-#: pcbnew/pcb_edit_frame.cpp:1181
+#: pcbnew/footprint_edit_frame.cpp:827 pcbnew/footprint_edit_frame.cpp:867
+#: pcbnew/pcb_edit_frame.cpp:1179
 #, c-format
 msgid "Save changes to '%s' before closing?"
 msgstr "Сохранить изменения в '%s' перед закрытием?"
 
-#: eeschema/sch_edit_frame.cpp:1194
+#: eeschema/sch_edit_frame.cpp:1195
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
@@ -18254,69 +18261,69 @@ msgstr ""
 "менеджера проектов. Для того чтобы создать или обновить плату из редактора "
 "схем, запустите менеджер проектов KiCad и создайте проект."
 
-#: eeschema/sch_edit_frame.cpp:1363
+#: eeschema/sch_edit_frame.cpp:1364
 msgid "New Schematic"
 msgstr "Новая схема"
 
-#: eeschema/sch_edit_frame.cpp:1375
+#: eeschema/sch_edit_frame.cpp:1376
 #, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "Файл схемы '%s' уже существует."
 
-#: eeschema/sch_edit_frame.cpp:1400
+#: eeschema/sch_edit_frame.cpp:1401
 msgid "Open Schematic"
 msgstr "Открыть схему"
 
-#: eeschema/sch_edit_frame.cpp:1470
+#: eeschema/sch_edit_frame.cpp:1471
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr "Для назначения посад. мест требуется полностью обозначенная схема."
 
-#: eeschema/sch_edit_frame.cpp:1497
+#: eeschema/sch_edit_frame.cpp:1498
 msgid "Could not open CvPcb"
 msgstr "Не удалось открыть CvPcb"
 
-#: eeschema/sch_edit_frame.cpp:1746 eeschema/sim/simulator_frame.cpp:341
-#: kicad/kicad_manager_frame.cpp:1034 pcbnew/footprint_edit_frame.cpp:1029
-#: pcbnew/pcb_edit_frame.cpp:1796
+#: eeschema/sch_edit_frame.cpp:1747 eeschema/sim/simulator_frame.cpp:341
+#: kicad/kicad_manager_frame.cpp:1034 pcbnew/footprint_edit_frame.cpp:1041
+#: pcbnew/pcb_edit_frame.cpp:1794
 msgid "[Read Only]"
 msgstr "[Только чтение]"
 
-#: eeschema/sch_edit_frame.cpp:1749 eeschema/sim/simulator_frame.cpp:344
-#: pcbnew/footprint_edit_frame.cpp:1038 pcbnew/pcb_edit_frame.cpp:1799
+#: eeschema/sch_edit_frame.cpp:1750 eeschema/sim/simulator_frame.cpp:344
+#: pcbnew/footprint_edit_frame.cpp:1050 pcbnew/pcb_edit_frame.cpp:1797
 msgid "[Unsaved]"
 msgstr "[Изменено]"
 
-#: eeschema/sch_edit_frame.cpp:1753
+#: eeschema/sch_edit_frame.cpp:1754
 msgid "[no schematic loaded]"
 msgstr "[схема не загружена]"
 
-#: eeschema/sch_edit_frame.cpp:2109
+#: eeschema/sch_edit_frame.cpp:2110
 msgid "Schematic Cleanup"
 msgstr "Очистка схемы"
 
-#: eeschema/sch_edit_frame.cpp:2237
+#: eeschema/sch_edit_frame.cpp:2238
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Подсвечена цепь: %s"
 
-#: eeschema/sch_edit_frame.cpp:2415
+#: eeschema/sch_edit_frame.cpp:2416
 msgid "Save Symbol to Schematic"
 msgstr "Сохранить символ в схему"
 
-#: eeschema/sch_edit_frame.cpp:2521 eeschema/tools/ee_actions.cpp:61
+#: eeschema/sch_edit_frame.cpp:2522 eeschema/tools/ee_actions.cpp:61
 msgid "Compare Symbol with Library"
 msgstr "Сравнить символ с библиотекой"
 
-#: eeschema/sch_field.cpp:1118
+#: eeschema/sch_field.cpp:1203
 #, c-format
 msgid "Field %s '%s'"
 msgstr "Поле %s '%s'"
 
-#: eeschema/sch_field.cpp:1128
+#: eeschema/sch_field.cpp:1213
 msgid "Symbol Field"
 msgstr "Поле символа"
 
-#: eeschema/sch_field.cpp:1133 eeschema/sch_pin.cpp:1583
+#: eeschema/sch_field.cpp:1218 eeschema/sch_pin.cpp:1583
 #: gerbview/gerber_draw_item.cpp:729 gerbview/gerber_draw_item.cpp:730
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
 #: pcbnew/pcb_tablecell.cpp:109 pcbnew/pcb_text.cpp:283
@@ -18327,7 +18334,7 @@ msgstr "Поле символа"
 msgid "Yes"
 msgstr "Да"
 
-#: eeschema/sch_field.cpp:1133 eeschema/sch_pin.cpp:1583
+#: eeschema/sch_field.cpp:1218 eeschema/sch_pin.cpp:1583
 #: gerbview/gerber_draw_item.cpp:729 gerbview/gerber_draw_item.cpp:730
 #: pcbnew/pcb_tablecell.cpp:109 pcbnew/pcb_text.cpp:283
 #: pcbnew/pcb_textbox.cpp:562 pcbnew/tools/drawing_stackup_table_tool.cpp:458
@@ -18337,28 +18344,28 @@ msgstr "Да"
 msgid "No"
 msgstr "Нет"
 
-#: eeschema/sch_field.cpp:1149 eeschema/sch_text.cpp:664
+#: eeschema/sch_field.cpp:1234 eeschema/sch_text.cpp:664
 msgid "H Justification"
 msgstr "Гор. выравнивание"
 
-#: eeschema/sch_field.cpp:1159 eeschema/sch_text.cpp:674
+#: eeschema/sch_field.cpp:1244 eeschema/sch_text.cpp:674
 msgid "V Justification"
 msgstr "Верт. выравнивание"
 
-#: eeschema/sch_field.cpp:1180
+#: eeschema/sch_field.cpp:1265
 #, c-format
 msgid "Go to Page %s (%s)"
 msgstr "Перейти к листу %s (%s)"
 
-#: eeschema/sch_field.cpp:1186
+#: eeschema/sch_field.cpp:1271
 msgid "Back to Previous Selected Sheet"
 msgstr "Назад к предыдущему листу"
 
-#: eeschema/sch_field.cpp:1273 eeschema/sch_label.cpp:205
+#: eeschema/sch_field.cpp:1358 eeschema/sch_label.cpp:205
 msgid "Sheet References"
 msgstr "Обозначения листов"
 
-#: eeschema/sch_field.cpp:1767
+#: eeschema/sch_field.cpp:1852
 msgid "Show Field Name"
 msgstr "Отображать имя поля"
 
@@ -18952,13 +18959,13 @@ msgid "symbol field text attributes must be 3 characters wide"
 msgstr "атрибуты текстового поля символа должны быть длиной в 3 символа"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:2243
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1659
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1651
 #, c-format
 msgid "Symbol library '%s' already exists."
 msgstr "Библиотека '%s' уже существует."
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:2269
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1685
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1677
 #, c-format
 msgid "Symbol library '%s' cannot be deleted."
 msgstr "Библиотеку символов '%s' удалить не удалось."
@@ -18991,7 +18998,7 @@ msgid "symbol document library file is empty"
 msgstr "файл описания символа библиотеки пуст"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_lib_cache.cpp:1963
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:538
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:535
 #, c-format
 msgid "library %s does not contain a symbol named %s"
 msgstr "библиотека %s не содержит символ с именем %s"
@@ -19225,7 +19232,7 @@ msgstr "Стиль корпуса"
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:73
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:58
 #: pcbnew/footprint.cpp:1723 pcbnew/pad.cpp:1300 pcbnew/pad.cpp:2540
-#: pcbnew/pcb_dimension.cpp:659 pcbnew/pcb_group.cpp:396
+#: pcbnew/pcb_dimension.cpp:673 pcbnew/pcb_group.cpp:396
 #: pcbnew/pcb_marker.cpp:381 pcbnew/pcb_shape.cpp:642
 #: pcbnew/pcb_tablecell.cpp:106 pcbnew/pcb_text.cpp:279
 #: pcbnew/pcb_textbox.cpp:559 pcbnew/pcb_track.cpp:1691
@@ -19255,8 +19262,8 @@ msgstr "Трехстабильный"
 msgid "Hierarchical Sheet Pin"
 msgstr "Иерархический вывод листа"
 
-#: eeschema/sch_label.cpp:1199 eeschema/sch_tablecell.cpp:128
-#: eeschema/sch_text.cpp:648 eeschema/sch_textbox.cpp:560
+#: eeschema/sch_label.cpp:1199 eeschema/sch_tablecell.cpp:129
+#: eeschema/sch_text.cpp:648 eeschema/sch_textbox.cpp:561
 msgid "Bold Italic"
 msgstr "Полужирный курсив"
 
@@ -19521,35 +19528,35 @@ msgstr ""
 msgid "No library symbol found for schematic symbol '%s %s'."
 msgstr "Символ схемы '%s %s' не найден в библиотеке."
 
-#: eeschema/sch_shape.cpp:526
+#: eeschema/sch_shape.cpp:529
 #, c-format
 msgid "Arc, radius %s"
 msgstr "Дуга, радиус %s"
 
-#: eeschema/sch_shape.cpp:530
+#: eeschema/sch_shape.cpp:533
 #, c-format
 msgid "Circle, radius %s"
 msgstr "Окружность, радиус %s"
 
-#: eeschema/sch_shape.cpp:539
+#: eeschema/sch_shape.cpp:542
 #, c-format
 msgid "Polyline, %d points"
 msgstr "Ломаная линия, %d точек"
 
-#: eeschema/sch_shape.cpp:543
+#: eeschema/sch_shape.cpp:546
 #, c-format
 msgid "Bezier Curve, %d points"
 msgstr "Кривая Безье, %d точек"
 
-#: eeschema/sch_shape.cpp:687
+#: eeschema/sch_shape.cpp:690
 msgid "Body outline color"
 msgstr "Цвет контура тела"
 
-#: eeschema/sch_shape.cpp:688
+#: eeschema/sch_shape.cpp:691
 msgid "Body background color"
 msgstr "Цвет фона"
 
-#: eeschema/sch_shape.cpp:689
+#: eeschema/sch_shape.cpp:692
 msgid "Fill color"
 msgstr "Цвет заливки"
 
@@ -19568,7 +19575,7 @@ msgid "File Name"
 msgstr "Имя файла"
 
 #: eeschema/sch_sheet.cpp:872 eeschema/sch_symbol.cpp:2028
-#: eeschema/sch_text.cpp:644 eeschema/sch_textbox.cpp:556
+#: eeschema/sch_text.cpp:644 eeschema/sch_textbox.cpp:557
 msgid "Simulation"
 msgstr "Симуляция"
 
@@ -19577,7 +19584,7 @@ msgid "BOM"
 msgstr "BOM"
 
 #: eeschema/sch_sheet.cpp:887 eeschema/sch_symbol.cpp:2043
-#: eeschema/sch_text.cpp:644 eeschema/sch_textbox.cpp:556
+#: eeschema/sch_text.cpp:644 eeschema/sch_textbox.cpp:557
 msgid "Exclude from"
 msgstr "Исключить из"
 
@@ -19586,13 +19593,13 @@ msgstr "Исключить из"
 msgid "Hierarchical Sheet %s"
 msgstr "Иерархический лист %s"
 
-#: eeschema/sch_sheet.cpp:1717 eeschema/sch_table.cpp:655
+#: eeschema/sch_sheet.cpp:1717 eeschema/sch_table.cpp:663
 #: pcbnew/pcb_table.cpp:565 pcbnew/pcb_tablecell.cpp:190
 #: pcbnew/pcb_textbox.cpp:906
 msgid "Border Width"
 msgstr "Ширина контура"
 
-#: eeschema/sch_sheet.cpp:1721 eeschema/sch_table.cpp:664
+#: eeschema/sch_sheet.cpp:1721 eeschema/sch_table.cpp:672
 #: pcbnew/pcb_table.cpp:574
 msgid "Border Color"
 msgstr "Цвет контура"
@@ -19681,41 +19688,41 @@ msgstr "Ссылка библиотеки"
 msgid "%d Column Table"
 msgstr "Таблица с %d столб."
 
-#: eeschema/sch_table.cpp:579 pcbnew/pcb_table.cpp:387
+#: eeschema/sch_table.cpp:587 pcbnew/pcb_table.cpp:387
 #, c-format
 msgid "%d Columns"
 msgstr "%d столбцов"
 
-#: eeschema/sch_table.cpp:647 pcbnew/pcb_table.cpp:557
+#: eeschema/sch_table.cpp:655 pcbnew/pcb_table.cpp:557
 msgid "External Border"
 msgstr "Внешний контур"
 
-#: eeschema/sch_table.cpp:651 pcbnew/pcb_table.cpp:561
+#: eeschema/sch_table.cpp:659 pcbnew/pcb_table.cpp:561
 msgid "Header Border"
 msgstr "Контур заголовка"
 
-#: eeschema/sch_table.cpp:660 pcbnew/pcb_table.cpp:570
+#: eeschema/sch_table.cpp:668 pcbnew/pcb_table.cpp:570
 #: pcbnew/pcb_tablecell.cpp:189 pcbnew/pcb_textbox.cpp:902
 msgid "Border Style"
 msgstr "Стиль контура"
 
-#: eeschema/sch_table.cpp:668 pcbnew/pcb_table.cpp:578
+#: eeschema/sch_table.cpp:676 pcbnew/pcb_table.cpp:578
 msgid "Row Separators"
 msgstr "Разделители строк"
 
-#: eeschema/sch_table.cpp:672 pcbnew/pcb_table.cpp:582
+#: eeschema/sch_table.cpp:680 pcbnew/pcb_table.cpp:582
 msgid "Cell Separators"
 msgstr "Разделители ячеек"
 
-#: eeschema/sch_table.cpp:676 pcbnew/pcb_table.cpp:586
+#: eeschema/sch_table.cpp:684 pcbnew/pcb_table.cpp:586
 msgid "Separators Width"
 msgstr "Ширина разделителей"
 
-#: eeschema/sch_table.cpp:681 pcbnew/pcb_table.cpp:591
+#: eeschema/sch_table.cpp:689 pcbnew/pcb_table.cpp:591
 msgid "Separators Style"
 msgstr "Стиль разделителей"
 
-#: eeschema/sch_table.cpp:685 pcbnew/pcb_table.cpp:595
+#: eeschema/sch_table.cpp:693 pcbnew/pcb_table.cpp:595
 msgid "Separators Color"
 msgstr "Цвет разделителей"
 
@@ -19724,11 +19731,11 @@ msgstr "Цвет разделителей"
 msgid "Table Cell %s"
 msgstr "Ячейка таблицы %s"
 
-#: eeschema/sch_tablecell.cpp:121 pcbnew/pcb_tablecell.cpp:111
+#: eeschema/sch_tablecell.cpp:122 pcbnew/pcb_tablecell.cpp:111
 msgid "Cell Width"
 msgstr "Ширина ячейки"
 
-#: eeschema/sch_tablecell.cpp:123 pcbnew/pcb_tablecell.cpp:113
+#: eeschema/sch_tablecell.cpp:124 pcbnew/pcb_tablecell.cpp:113
 msgid "Cell Height"
 msgstr "Высота ячейки"
 
@@ -20023,31 +20030,31 @@ msgstr ""
 "<i>Примечание: разметка имеет приоритет над определениями шин.</i>\n"
 "\n"
 
-#: eeschema/sch_textbox.cpp:566 pcbnew/pcb_textbox.cpp:570
+#: eeschema/sch_textbox.cpp:567 pcbnew/pcb_textbox.cpp:570
 msgid "Box Width"
 msgstr "Ширина блока"
 
-#: eeschema/sch_textbox.cpp:569 pcbnew/pcb_textbox.cpp:573
+#: eeschema/sch_textbox.cpp:570 pcbnew/pcb_textbox.cpp:573
 msgid "Box Height"
 msgstr "Высота блока"
 
-#: eeschema/sch_textbox.cpp:706 pcbnew/pcb_textbox.cpp:911
+#: eeschema/sch_textbox.cpp:707 pcbnew/pcb_textbox.cpp:911
 msgid "Margins"
 msgstr "Отступы"
 
-#: eeschema/sch_textbox.cpp:708 pcbnew/pcb_textbox.cpp:913
+#: eeschema/sch_textbox.cpp:709 pcbnew/pcb_textbox.cpp:913
 msgid "Margin Left"
 msgstr "Отступ слева"
 
-#: eeschema/sch_textbox.cpp:712 pcbnew/pcb_textbox.cpp:917
+#: eeschema/sch_textbox.cpp:713 pcbnew/pcb_textbox.cpp:917
 msgid "Margin Top"
 msgstr "Отступ сверху"
 
-#: eeschema/sch_textbox.cpp:716 pcbnew/pcb_textbox.cpp:921
+#: eeschema/sch_textbox.cpp:717 pcbnew/pcb_textbox.cpp:921
 msgid "Margin Right"
 msgstr "Отступ справа"
 
-#: eeschema/sch_textbox.cpp:720 pcbnew/pcb_textbox.cpp:925
+#: eeschema/sch_textbox.cpp:721 pcbnew/pcb_textbox.cpp:925
 msgid "Margin Bottom"
 msgstr "Отступ снизу"
 
@@ -23975,7 +23982,7 @@ msgid "No symbol to export"
 msgstr "Нет символа для экспорта"
 
 #: eeschema/tools/symbol_editor_control.cpp:708
-#: pcbnew/footprint_edit_frame.cpp:1447
+#: pcbnew/footprint_edit_frame.cpp:1459
 msgid "Export View as PNG"
 msgstr "Экспорт вида в PNG"
 
@@ -24276,7 +24283,7 @@ msgstr "Активный слой"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:87
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:991
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:1024
 msgid "All layers"
 msgstr "Все слои"
 
@@ -24465,8 +24472,8 @@ msgstr "Выбор слоя: %s"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:167
 #: pcbnew/footprint.cpp:4109 pcbnew/footprint.cpp:4112
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2137 pcbnew/pad.cpp:1304
-#: pcbnew/pad.cpp:2539 pcbnew/pcb_dimension.cpp:661
-#: pcbnew/pcb_dimension.cpp:1457 pcbnew/pcb_fields_grid_table.cpp:150
+#: pcbnew/pad.cpp:2539 pcbnew/pcb_dimension.cpp:675
+#: pcbnew/pcb_dimension.cpp:1491 pcbnew/pcb_fields_grid_table.cpp:150
 #: pcbnew/pcb_group.cpp:503 pcbnew/pcb_marker.cpp:378
 #: pcbnew/pcb_reference_image.cpp:219 pcbnew/pcb_reference_image.cpp:342
 #: pcbnew/pcb_shape.cpp:646 pcbnew/pcb_shape.cpp:888 pcbnew/pcb_shape.cpp:890
@@ -24693,8 +24700,8 @@ msgstr "6"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:87
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:113
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:388
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:486
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:392
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:493
 msgid ":"
 msgstr ":"
 
@@ -27591,285 +27598,285 @@ msgstr "Не удалось поместить '%s' в корзину."
 msgid "Can not move '%s' to trash."
 msgstr "Не удалось поместить '%s' в корзину."
 
-#: kicad/project_tree_pane.cpp:311
+#: kicad/project_tree_pane.cpp:306
 msgid "Directory name:"
 msgstr "Имя каталога:"
 
-#: kicad/project_tree_pane.cpp:311
+#: kicad/project_tree_pane.cpp:306
 msgid "Create New Directory"
 msgstr "Создание нового каталога"
 
-#: kicad/project_tree_pane.cpp:900
+#: kicad/project_tree_pane.cpp:895
 msgid "Switch to this Project"
 msgstr "Переключиться на этот проект"
 
-#: kicad/project_tree_pane.cpp:901
+#: kicad/project_tree_pane.cpp:896
 msgid "Close all editors, and switch to the selected project"
 msgstr "Закрыть все редакторы и переключиться на выбранный проект"
 
-#: kicad/project_tree_pane.cpp:908
+#: kicad/project_tree_pane.cpp:903
 msgid "New Directory..."
 msgstr "Создать каталог..."
 
-#: kicad/project_tree_pane.cpp:909
+#: kicad/project_tree_pane.cpp:904
 msgid "Create a New Directory"
 msgstr "Создать новый каталог"
 
-#: kicad/project_tree_pane.cpp:917 kicad/project_tree_pane.cpp:927
+#: kicad/project_tree_pane.cpp:912 kicad/project_tree_pane.cpp:922
 msgid "Reveal in Finder"
 msgstr "Показать в Finder"
 
-#: kicad/project_tree_pane.cpp:918
+#: kicad/project_tree_pane.cpp:913
 msgid "Reveals the directory in a Finder window"
 msgstr "Показать каталог в окне Finder"
 
-#: kicad/project_tree_pane.cpp:920
+#: kicad/project_tree_pane.cpp:915
 msgid "Open Directory in File Explorer"
 msgstr "Открыть каталог в менеджере файлов"
 
-#: kicad/project_tree_pane.cpp:921 pcbnew/tools/pcb_actions.cpp:986
+#: kicad/project_tree_pane.cpp:916 pcbnew/tools/pcb_actions.cpp:986
 msgid "Opens the directory in the default system file manager"
 msgstr "Открыть каталог в системном менеджере файлов"
 
-#: kicad/project_tree_pane.cpp:928
+#: kicad/project_tree_pane.cpp:923
 msgid "Reveals the directories in a Finder window"
 msgstr "Показать каталоги в окне Finder"
 
-#: kicad/project_tree_pane.cpp:930
+#: kicad/project_tree_pane.cpp:925
 msgid "Open Directories in File Explorer"
 msgstr "Открыть каталоги в менеджере файлов"
 
-#: kicad/project_tree_pane.cpp:931
+#: kicad/project_tree_pane.cpp:926
 msgid "Opens the directories in the default system file manager"
 msgstr "Открыть каталоги в системном менеджере файлов"
 
-#: kicad/project_tree_pane.cpp:942
+#: kicad/project_tree_pane.cpp:937
 msgid "Open the file in a Text Editor"
 msgstr "Открыть файл в текстовом редакторе"
 
-#: kicad/project_tree_pane.cpp:944
+#: kicad/project_tree_pane.cpp:939
 msgid "Open files in a Text Editor"
 msgstr "Открыть файл в текстовом редакторе"
 
-#: kicad/project_tree_pane.cpp:946
+#: kicad/project_tree_pane.cpp:941
 msgid "Edit in a Text Editor"
 msgstr "Править в текстовом редакторе"
 
-#: kicad/project_tree_pane.cpp:952
+#: kicad/project_tree_pane.cpp:947
 msgid "Run Jobs"
 msgstr "Выполнять задания"
 
-#: kicad/project_tree_pane.cpp:960
+#: kicad/project_tree_pane.cpp:955
 msgid "Rename File..."
 msgstr "Переименовать файл..."
 
-#: kicad/project_tree_pane.cpp:961
+#: kicad/project_tree_pane.cpp:956
 msgid "Rename file"
 msgstr "Переименовать файл"
 
-#: kicad/project_tree_pane.cpp:965
+#: kicad/project_tree_pane.cpp:960
 msgid "Rename Files..."
 msgstr "Переименовать файлы..."
 
-#: kicad/project_tree_pane.cpp:966
+#: kicad/project_tree_pane.cpp:961
 msgid "Rename files"
 msgstr "Переименовать файлы"
 
-#: kicad/project_tree_pane.cpp:976
+#: kicad/project_tree_pane.cpp:971
 msgid "Delete the file and its content"
 msgstr "Удалить файл и всё его содержимое"
 
-#: kicad/project_tree_pane.cpp:978
+#: kicad/project_tree_pane.cpp:973
 msgid "Delete the files and their contents"
 msgstr "Удалить файлы и их содержимое"
 
-#: kicad/project_tree_pane.cpp:993
+#: kicad/project_tree_pane.cpp:988
 msgid "Move to Trash"
 msgstr "Поместить в корзину"
 
-#: kicad/project_tree_pane.cpp:1005
+#: kicad/project_tree_pane.cpp:1000
 msgid "Add Project to Version Control..."
 msgstr "Добавить проект в систему контроля версий..."
 
-#: kicad/project_tree_pane.cpp:1006
+#: kicad/project_tree_pane.cpp:1001
 msgid "Initialize a new repository"
 msgstr "Инициализировать новый репозиторий"
 
-#: kicad/project_tree_pane.cpp:1010
+#: kicad/project_tree_pane.cpp:1005
 msgid "Commit Project..."
 msgstr "Закоммитить проект..."
 
-#: kicad/project_tree_pane.cpp:1011 kicad/project_tree_pane.cpp:1025
+#: kicad/project_tree_pane.cpp:1006 kicad/project_tree_pane.cpp:1020
 msgid "Commit changes to the local repository"
 msgstr "Закоммитить изменения в локальный репозиторий"
 
-#: kicad/project_tree_pane.cpp:1014
+#: kicad/project_tree_pane.cpp:1009
 msgid "Push"
 msgstr "Отправить (Push)"
 
-#: kicad/project_tree_pane.cpp:1015
+#: kicad/project_tree_pane.cpp:1010
 msgid "Push committed local changes to remote repository"
 msgstr "Отправить закоммиченные локальные изменения в удаленный репозиторий"
 
-#: kicad/project_tree_pane.cpp:1018
+#: kicad/project_tree_pane.cpp:1013
 msgid "Pull"
 msgstr "Получить (Pull)"
 
-#: kicad/project_tree_pane.cpp:1019
+#: kicad/project_tree_pane.cpp:1014
 msgid "Pull changes from remote repository into local"
 msgstr "Получить изменения из удаленного репозитория в локальный"
 
-#: kicad/project_tree_pane.cpp:1024
+#: kicad/project_tree_pane.cpp:1019
 msgid "Commit File..."
 msgstr "Закоммитить файл..."
 
-#: kicad/project_tree_pane.cpp:1039
+#: kicad/project_tree_pane.cpp:1034
 msgid "Switch to branch "
 msgstr "Переключиться на ветку "
 
-#: kicad/project_tree_pane.cpp:1044
+#: kicad/project_tree_pane.cpp:1039
 msgid "Other..."
 msgstr "Другое..."
 
-#: kicad/project_tree_pane.cpp:1045
+#: kicad/project_tree_pane.cpp:1040
 msgid "Switch to a different branch"
 msgstr "Переключиться на другую ветку"
 
-#: kicad/project_tree_pane.cpp:1048
+#: kicad/project_tree_pane.cpp:1043
 msgid "Switch to Branch"
 msgstr "Переключиться на ветку"
 
-#: kicad/project_tree_pane.cpp:1052
+#: kicad/project_tree_pane.cpp:1047
 msgid "Remove Version Control"
 msgstr "Удалить контроль версий"
 
-#: kicad/project_tree_pane.cpp:1053
+#: kicad/project_tree_pane.cpp:1048
 msgid "Delete all version control files from the project directory."
 msgstr "Удалить все файлы контроля версий из каталога проекта."
 
-#: kicad/project_tree_pane.cpp:1108
+#: kicad/project_tree_pane.cpp:1103
 #, c-format
 msgid "Change filename: '%s'"
 msgstr "Изменить имя файла: '%s'"
 
-#: kicad/project_tree_pane.cpp:1110
+#: kicad/project_tree_pane.cpp:1105
 msgid "Change filename"
 msgstr "Переименование файла"
 
-#: kicad/project_tree_pane.cpp:1438
+#: kicad/project_tree_pane.cpp:1437
 msgid "Network path: not monitoring folder changes"
 msgstr "Сетевой каталог: изменения не отслеживаются"
 
-#: kicad/project_tree_pane.cpp:1444
+#: kicad/project_tree_pane.cpp:1443
 msgid "Local path: monitoring folder changes"
 msgstr "Локальный каталог: изменения отслеживаются"
 
-#: kicad/project_tree_pane.cpp:1631
+#: kicad/project_tree_pane.cpp:1630
 msgid "The selected directory is already a git project."
 msgstr "Выбранный каталог уже является git-проектом."
 
-#: kicad/project_tree_pane.cpp:1638
+#: kicad/project_tree_pane.cpp:1637
 msgid "Set default remote"
 msgstr "Установить внешний репозиторий по умолчанию"
 
-#: kicad/project_tree_pane.cpp:1653
+#: kicad/project_tree_pane.cpp:1652
 msgid "Failed to initialize git project."
 msgstr "Не удалось инициализировать проект git."
 
-#: kicad/project_tree_pane.cpp:1713
+#: kicad/project_tree_pane.cpp:1712
 msgid "Failed to set default remote."
 msgstr "Не удалось задать внешний репозиторий по умолчанию."
 
-#: kicad/project_tree_pane.cpp:1725 kicad/project_tree_pane.cpp:1759
-#: kicad/project_tree_pane.cpp:1781
+#: kicad/project_tree_pane.cpp:1724 kicad/project_tree_pane.cpp:1758
+#: kicad/project_tree_pane.cpp:1780
 msgid "Fetching Remote"
 msgstr "Чтение внешнего репозитория"
 
-#: kicad/project_tree_pane.cpp:1766
+#: kicad/project_tree_pane.cpp:1765
 msgid "Failed to pull project"
 msgstr "Не удалось вытащить проект"
 
-#: kicad/project_tree_pane.cpp:1788
+#: kicad/project_tree_pane.cpp:1787
 msgid "Failed to push project"
 msgstr "Не удалось отправить данные проекта"
 
-#: kicad/project_tree_pane.cpp:1865
+#: kicad/project_tree_pane.cpp:1864
 #, c-format
 msgid "Failed to lookup branch '%s': %s"
 msgstr "Не удалось найти ветку '%s': %s"
 
-#: kicad/project_tree_pane.cpp:1878
+#: kicad/project_tree_pane.cpp:1877
 #, c-format
 msgid "Failed to find branch head for '%s'"
 msgstr "Не удалось найти голову ветки для '%s'"
 
-#: kicad/project_tree_pane.cpp:1889
+#: kicad/project_tree_pane.cpp:1888
 #, c-format
 msgid "Failed to switch to branch '%s'"
 msgstr "Не удалось переключиться на ветку '%s'"
 
-#: kicad/project_tree_pane.cpp:1900
+#: kicad/project_tree_pane.cpp:1899
 #, c-format
 msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "Не удалось обновить ссылку HEAD для ветки '%s'"
 
-#: kicad/project_tree_pane.cpp:1919
+#: kicad/project_tree_pane.cpp:1918
 msgid "Are you sure you want to remove git tracking from this project?"
 msgstr "Вы уверены, что хотите удалить отслеживание git из этого проекта?"
 
-#: kicad/project_tree_pane.cpp:1936
+#: kicad/project_tree_pane.cpp:1935
 msgid "Failed to remove git directory"
 msgstr "Не удалось удалить каталог git"
 
-#: kicad/project_tree_pane.cpp:2331
+#: kicad/project_tree_pane.cpp:2385
 msgid "Discarding commit due to empty commit message."
 msgstr "Отмена коммита из-за пустого сообщения."
 
-#: kicad/project_tree_pane.cpp:2337
+#: kicad/project_tree_pane.cpp:2391
 msgid "Discarding commit due to empty file selection."
 msgstr "Отмена коммита из-за пустого выбора файлов."
 
-#: kicad/project_tree_pane.cpp:2343
+#: kicad/project_tree_pane.cpp:2397
 #, c-format
 msgid "Failed to get repository index: %s"
 msgstr "Не удалось получить индекс репозитория: %s"
 
-#: kicad/project_tree_pane.cpp:2352
+#: kicad/project_tree_pane.cpp:2406
 #, c-format
 msgid "Failed to add file to index: %s"
 msgstr "Не удалось добавить файл в индекс: %s"
 
-#: kicad/project_tree_pane.cpp:2361
+#: kicad/project_tree_pane.cpp:2415
 #, c-format
 msgid "Failed to write index: %s"
 msgstr "Не удалось записать индекс: %s"
 
-#: kicad/project_tree_pane.cpp:2369
+#: kicad/project_tree_pane.cpp:2423
 #, c-format
 msgid "Failed to write tree: %s"
 msgstr "Не удалось записать дерево: %s"
 
-#: kicad/project_tree_pane.cpp:2379
+#: kicad/project_tree_pane.cpp:2433
 #, c-format
 msgid "Failed to lookup tree: %s"
 msgstr "Не удалось найти дерево: %s"
 
-#: kicad/project_tree_pane.cpp:2390
+#: kicad/project_tree_pane.cpp:2444
 #, c-format
 msgid "Failed to get HEAD reference: %s"
 msgstr "Не удалось получить ссылку на HEAD: %s"
 
-#: kicad/project_tree_pane.cpp:2398
+#: kicad/project_tree_pane.cpp:2452
 #, c-format
 msgid "Failed to get commit: %s"
 msgstr "Не удалось получить коммит: %s"
 
-#: kicad/project_tree_pane.cpp:2416
+#: kicad/project_tree_pane.cpp:2470
 #, c-format
 msgid "Failed to create author signature: %s"
 msgstr "Не удалось создать подпись автора: %s"
 
-#: kicad/project_tree_pane.cpp:2452
+#: kicad/project_tree_pane.cpp:2506
 #, c-format
 msgid "Failed to create commit: %s"
 msgstr "Не удалось создать коммит: %s"
@@ -30996,7 +31003,7 @@ msgstr "Имя цепи"
 #: pcbnew/dialogs/dialog_board_setup.cpp:163
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:43
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:132
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:605
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:612
 msgid "Teardrops"
 msgstr "Каплевидные переходы"
 
@@ -31224,7 +31231,7 @@ msgid "Custom..."
 msgstr "Особый..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:22
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:525
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:532
 msgid "Copper layers:"
 msgstr "Слои меди:"
 
@@ -31552,7 +31559,7 @@ msgid "(arc has null or very small size: %d nm)"
 msgstr "(дуга имеет нулевой или очень маленький размер: %d нм)"
 
 #: pcbnew/cross-probing.cpp:105 pcbnew/dialogs/dialog_board_setup.cpp:193
-#: pcbnew/dialogs/dialog_drc.cpp:272 pcbnew/pcb_edit_frame.cpp:2564
+#: pcbnew/dialogs/dialog_drc.cpp:272 pcbnew/pcb_edit_frame.cpp:2562
 msgid "Custom Rules"
 msgstr "Особые правила"
 
@@ -32175,7 +32182,7 @@ msgid "Total:"
 msgstr "Всего:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:491
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:440 pcbnew/pad.cpp:2514
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:444 pcbnew/pad.cpp:2514
 msgid "Round"
 msgstr "Круг"
 
@@ -33051,7 +33058,7 @@ msgstr "Угол между элементами:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:367
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:142
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:364
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:367
 msgid "90"
 msgstr "90"
 
@@ -33249,61 +33256,61 @@ msgstr "Направление стрелки:"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:237
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:202
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:75
-#: pcbnew/pcb_dimension.cpp:1722
+#: pcbnew/pcb_dimension.cpp:1770
 msgid "0.0"
 msgstr "0.0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:75
-#: pcbnew/pcb_dimension.cpp:1723
+#: pcbnew/pcb_dimension.cpp:1771
 msgid "0.00"
 msgstr "0.00"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:75
-#: pcbnew/pcb_dimension.cpp:1724
+#: pcbnew/pcb_dimension.cpp:1772
 msgid "0.000"
 msgstr "0.000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:75
-#: pcbnew/pcb_dimension.cpp:1725
+#: pcbnew/pcb_dimension.cpp:1773
 msgid "0.0000"
 msgstr "0.0000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:75
-#: pcbnew/pcb_dimension.cpp:1726
+#: pcbnew/pcb_dimension.cpp:1774
 msgid "0.00000"
 msgstr "0.00000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
-#: pcbnew/pcb_dimension.cpp:1727
+#: pcbnew/pcb_dimension.cpp:1775
 msgid "0.00 in / 0 mils / 0.0 mm"
 msgstr "0.00 in / 0 mils / 0.0 mm"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
-#: pcbnew/pcb_dimension.cpp:1728
+#: pcbnew/pcb_dimension.cpp:1776
 msgid "0.000 / 0 / 0.00"
 msgstr "0.000 / 0 / 0.00"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
-#: pcbnew/pcb_dimension.cpp:1729
+#: pcbnew/pcb_dimension.cpp:1777
 msgid "0.0000 / 0.0 / 0.000"
 msgstr "0.0000 / 0.0 / 0.000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
-#: pcbnew/pcb_dimension.cpp:1730
+#: pcbnew/pcb_dimension.cpp:1778
 msgid "0.00000 / 0.00 / 0.0000"
 msgstr "0.00000 / 0.00 / 0.0000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:184
-#: pcbnew/pcb_dimension.cpp:1744
+#: pcbnew/pcb_dimension.cpp:1792
 msgid "Inward"
 msgstr "Внутрь"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:184
-#: pcbnew/pcb_dimension.cpp:1745
+#: pcbnew/pcb_dimension.cpp:1793
 msgid "Outward"
 msgstr "Наружу"
 
@@ -33459,8 +33466,8 @@ msgid "Extension line overshoot:"
 msgstr "Удлинение выносной линии:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.h:142
-#: pcbnew/pcb_dimension.cpp:1758 pcbnew/pcb_dimension.cpp:1861
-#: pcbnew/pcb_dimension.cpp:1936 pcbnew/pcb_dimension.cpp:1979
+#: pcbnew/pcb_dimension.cpp:1806 pcbnew/pcb_dimension.cpp:1909
+#: pcbnew/pcb_dimension.cpp:1984 pcbnew/pcb_dimension.cpp:2027
 msgid "Dimension Properties"
 msgstr "Свойства размерной линии"
 
@@ -34616,7 +34623,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:278
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:247
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:964
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:971
 msgid "Pad clearance:"
 msgstr "Зазор конт. пл.:"
 
@@ -34632,7 +34639,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:291
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:260
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:977
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:984
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:60
 msgid "Solder mask expansion:"
 msgstr "Расширение паяльной маски:"
@@ -34657,7 +34664,7 @@ msgstr "Разрешить слияние вырезов в паяльной м�
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:307
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:276
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:990
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:997
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:147
 msgid "Solder paste absolute clearance:"
 msgstr "Абсолютный зазор паяльной пасты:"
@@ -34681,7 +34688,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:320
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:289
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1003
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1010
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:162
 msgid "Solder paste relative clearance:"
 msgstr "Относительный зазор паяльной пасты:"
@@ -34708,8 +34715,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:345
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:314
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1025
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1049
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1032
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1056
 msgid ""
 "Note: solder mask and paste values are used only for pads on copper layers."
 msgstr ""
@@ -34718,7 +34725,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:349
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:318
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1029
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1036
 msgid ""
 "Note: solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
@@ -34728,7 +34735,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:357
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:326
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:842
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:849
 msgid "Connection to Copper Zones"
 msgstr "Подключение к зонам меди"
 
@@ -34744,7 +34751,7 @@ msgstr "Использовать настройки зоны"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:854
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:861
 msgid "Thermal relief"
 msgstr "Терморазгрузка"
 
@@ -35133,8 +35140,8 @@ msgstr "Подавлять завершающие нули"
 msgid "Keep zeros"
 msgstr "Оставлять нули"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:170 pcbnew/pcb_dimension.cpp:616
-#: pcbnew/pcb_dimension.cpp:1804
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:170 pcbnew/pcb_dimension.cpp:630
+#: pcbnew/pcb_dimension.cpp:1852
 msgid "Precision"
 msgstr "Точность"
 
@@ -35328,14 +35335,14 @@ msgid "Edit default values in Board Setup"
 msgstr "Править значения по умолчанию в \"Параметры платы\""
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:148
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:638
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:645
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:131
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:301
 msgid "Prefer zone connection"
 msgstr "Приоритет соединению зоны"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:149
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:640
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:647
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:132
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:302
 msgid ""
@@ -35363,7 +35370,7 @@ msgstr ""
 "сегмент дорожки слишком короткий чтобы выдержать лучшую длину."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:170
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:662
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:669
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:136
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:306
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:471
@@ -35371,7 +35378,7 @@ msgid "Track width limit:"
 msgstr "Лимит ширины дорожки:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:172
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:664
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:671
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:495
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:138
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:308
@@ -35396,7 +35403,7 @@ msgid "(as a percentage of pad/via minor dimension)"
 msgstr "(в процентах от мин. размера конт. пл./перех. отв.)"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:231
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:731
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:738
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:554
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:47
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:217
@@ -35406,9 +35413,9 @@ msgstr "Лучшая длина (L):"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:241
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:288
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:674
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:742
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:790
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:681
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:749
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:797
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:564
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:611
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:59
@@ -35428,9 +35435,9 @@ msgstr "%("
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1660
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1661
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1662
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:678
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:746
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:794
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:685
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:753
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:801
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:568
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:615
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:64
@@ -35441,9 +35448,9 @@ msgstr "d"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:251
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:298
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:684
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:752
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:800
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:691
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:759
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:807
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:574
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:621
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:71
@@ -35459,7 +35466,7 @@ msgid " )"
 msgstr " )"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:258
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:759
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:766
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:581
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:78
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:248
@@ -35468,7 +35475,7 @@ msgid "Maximum length (L):"
 msgstr "Макс. длина (L):"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:278
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:779
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:786
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:601
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:89
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:259
@@ -35477,7 +35484,7 @@ msgid "Best width (W):"
 msgstr "Лучшая ширина (W):"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:305
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:807
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:814
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:628
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:120
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:290
@@ -35486,7 +35493,7 @@ msgid "Maximum width (W):"
 msgstr "Макс. ширина (W):"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:325
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:824
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:831
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:645
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:177
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:347
@@ -35556,7 +35563,7 @@ msgstr "Толщина линий"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:287
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:54
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:49
-#: pcbnew/pcb_dimension.cpp:630 pcbnew/pcb_tablecell.cpp:118
+#: pcbnew/pcb_dimension.cpp:644 pcbnew/pcb_tablecell.cpp:118
 #: pcbnew/pcb_textbox.cpp:567
 msgid "Text Width"
 msgstr "Ширина текста"
@@ -35564,7 +35571,7 @@ msgstr "Ширина текста"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:293
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:55
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:50
-#: pcbnew/pcb_dimension.cpp:631 pcbnew/pcb_tablecell.cpp:119
+#: pcbnew/pcb_dimension.cpp:645 pcbnew/pcb_tablecell.cpp:119
 #: pcbnew/pcb_textbox.cpp:568 pcbnew/tools/board_inspection_tool.cpp:403
 msgid "Text Height"
 msgstr "Высота текста"
@@ -35572,7 +35579,7 @@ msgstr "Высота текста"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:299
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:56
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:51
-#: pcbnew/pcb_dimension.cpp:629 pcbnew/pcb_tablecell.cpp:117
+#: pcbnew/pcb_dimension.cpp:643 pcbnew/pcb_tablecell.cpp:117
 #: pcbnew/pcb_textbox.cpp:566 pcbnew/tools/board_inspection_tool.cpp:418
 msgid "Text Thickness"
 msgstr "Толщина текста"
@@ -36199,8 +36206,8 @@ msgid "front side"
 msgstr "верхняя сторона"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:855
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:106
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:1004
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:1037
 msgid "Inner Layers"
 msgstr "Внутренние Слои"
 
@@ -36226,12 +36233,12 @@ msgid "Edit Pad Properties"
 msgstr "Изменить свойства конт. пл."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1644
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:446
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:450
 msgid "Hole size X:"
 msgstr "Размер X отв.:"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1666
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:336
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:339
 msgid "Pad size X:"
 msgstr "Размер X конт. пл.:"
 
@@ -36286,67 +36293,67 @@ msgstr "Режим стека конт. пл.:"
 msgid "Front/Inner/Bottom"
 msgstr "Верхний/внутренний/нижний"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:102
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:105
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:289
 msgid "Edit layer:"
 msgstr "Правка слоя:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:120
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:123
 msgid "Pad shape:"
 msgstr "Форма конт. пл.:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:124
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127
 msgid "Circular"
 msgstr "Круглая"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:124 pcbnew/pad.cpp:1517
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:1517
 #: pcbnew/pad.cpp:2497
 msgid "Oval"
 msgstr "Овальная"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:124
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127
 msgid "Rectangular"
 msgstr "Прямоугольная"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:124
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127
 msgid "Trapezoidal"
 msgstr "Трапециевидная"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:124 pcbnew/pad.cpp:2499
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2499
 msgid "Rounded rectangle"
 msgstr "Скруглённый прямоугольник"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:124 pcbnew/pad.cpp:2500
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2500
 msgid "Chamfered rectangle"
 msgstr "Прямоугольник с фаской"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:124
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127
 msgid "Chamfered with other corners rounded"
 msgstr "Прямоуг. с фаской или скругленными углами"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:124
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127
 msgid "Custom (circular base)"
 msgstr "Произвольная (на основе круга)"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:124
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127
 msgid "Custom (rectangular base)"
 msgstr "Произвольная (на основе прямоугольника)"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:139
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:142
 msgid "Trapezoid delta:"
 msgstr "Разница оснований трапеции:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:150
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:153
 msgid "Trapezoid axis:"
 msgstr "Оси трапеции:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:171
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:309
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:174
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:312
 msgid "Corner size:"
 msgstr "Размер угла:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:173
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:311
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:176
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:314
 msgid ""
 "Corner radius in percent  of the pad width.\n"
 "The width is the smaller value between size X and size Y.\n"
@@ -36356,11 +36363,11 @@ msgstr ""
 "Ширина — наименьшее значение среди размеров по X и Y.\n"
 "Максимальное значение — 50 процентов."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:184
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:187
 msgid "Corner radius:"
 msgstr "Радиус скругления:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:186
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:189
 msgid ""
 "Corner radius.\n"
 "Can be no more than half pad width.\n"
@@ -36372,13 +36379,13 @@ msgstr ""
 "Ширина — наименьшее значение среди размеров по X и Y.\n"
 "Примечание: требования IPC допускают макс. значение 0.25мм."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:209
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:265
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:212
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:268
 msgid "Chamfer size:"
 msgstr "Размер фаски:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:211
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:267
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:214
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:270
 msgid ""
 "Chamfer size in percent of the pad width.\n"
 "The width is the smaller value between size X and size Y.\n"
@@ -36388,55 +36395,55 @@ msgstr ""
 "Размер конт. пл. — наименьшее значение из ширины и высоты.\n"
 "Максимально допустимое значение 50%."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:228
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:284
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:231
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:287
 msgid "Chamfer corners:"
 msgstr "Скошенные углы:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:230
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:286
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:233
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:289
 msgid ""
 "Chamfered corners. The position is relative to a pad orientation 0 degree."
 msgstr ""
 "Углы с фаской. Положение по отношению к конт. пл. в ориентации 0 градусов."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:237
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:293
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:240
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:296
 msgid "Top left"
 msgstr "Верхний левый"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:241
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:297
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:244
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:300
 msgid "Top right"
 msgstr "Верхний правый"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:244
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:300
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:247
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:303
 msgid "Bottom left"
 msgstr "Нижний левый"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:247
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:303
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:250
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:306
 msgid "Bottom right"
 msgstr "Нижний правый"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:385
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:389
 msgid "Offset shape from hole"
 msgstr "Смещение относительно отв."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:436
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:440
 msgid "Hole shape:"
 msgstr "Форма отв.:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:440 pcbnew/pad.cpp:2515
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:444 pcbnew/pad.cpp:2515
 msgid "Oblong"
 msgstr "Продолговатая"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:483
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:490
 msgid "Specify pad to die length"
 msgstr "Длина от конт. пл. до чипа"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:518
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:525
 msgid ""
 "Parent footprint on board is flipped.\n"
 "Layers will be reversed."
@@ -36444,59 +36451,59 @@ msgstr ""
 "Исходное посад. место отражено на плате.\n"
 "Порядок слоёв будет изменён на обратный."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:534
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:541
 msgid "Technical layers:"
 msgstr "Технические слои:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:538
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:545
 msgid "Front adhesive"
 msgstr "Верхний клеевой"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:541
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:548
 msgid "Back adhesive"
 msgstr "Нижний клеевой"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:544
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:551
 msgid "Front solder paste"
 msgstr "Верхняя паяльная паста"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:547
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:554
 msgid "Back solder paste"
 msgstr "Нижняя паяльная паста"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:550
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:557
 msgid "Front silk screen"
 msgstr "Верхняя шелкография"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:553
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560
 msgid "Back silk screen"
 msgstr "Нижняя шелкография"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:556
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:563
 msgid "Front solder mask"
 msgstr "Верхняя паяльная маска"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:559
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:566
 msgid "Back solder mask"
 msgstr "Нижняя паяльная маска"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:562
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:569
 msgid "Drafting notes"
 msgstr "Пояснительный чертёж"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:565
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:572
 msgid "E.C.O.1"
 msgstr "E.C.O.1"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:568
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:575
 msgid "E.C.O.2"
 msgstr "E.C.O.2"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:574
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:581
 msgid "Fabrication property:"
 msgstr "Параметр производства:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:576
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:583
 msgid ""
 "Optional property to specify a special purpose or constraint in fabrication "
 "files:\n"
@@ -36520,55 +36527,55 @@ msgstr ""
 "Механическая — конт. пл. со сквозным отверстием, которая используется для "
 "механической поддержки"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:583 pcbnew/pad.cpp:2505
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:590 pcbnew/pad.cpp:2505
 msgid "BGA pad"
 msgstr "Конт. пл. BGA"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:583 pcbnew/pad.cpp:2507
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:590 pcbnew/pad.cpp:2507
 msgid "Fiducial, local to footprint"
 msgstr "Локальная реперная метка (для посад. места)"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:583 pcbnew/pad.cpp:2506
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:590 pcbnew/pad.cpp:2506
 msgid "Fiducial, global to board"
 msgstr "Глобальная реперная метка (для платы)"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:583 pcbnew/pad.cpp:2508
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:590 pcbnew/pad.cpp:2508
 msgid "Test point pad"
 msgstr "Тестовая конт. пл."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:583 pcbnew/pad.cpp:2509
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:590 pcbnew/pad.cpp:2509
 msgid "Heatsink pad"
 msgstr "Конт. пл. для отвода тепла"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:583
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:590
 msgid "Castellated pad (through hole only)"
 msgstr "Периферийное полу-отверстие (только сквозное)"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:583 pcbnew/pad.cpp:1333
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:590 pcbnew/pad.cpp:1333
 msgid "Mechanical"
 msgstr "Механический"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:615
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:622
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:447
 msgid "Board contains legacy teardrops."
 msgstr "Плата содержит устаревшие каплевидные переходы."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:619
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:626
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:451
 msgid "Use Edit > Edit Teardrops to apply automatic teardrops."
 msgstr ""
 "Используйте Правка > Править каплевидные переходы, чтобы применить "
 "автоматические каплевидные переходы."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:635
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:642
 msgid "Add teardrops on pad's track connections"
 msgstr "Размещать каплевидные переходы на соединениях конт. пл. с дорожками"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:644
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:651
 msgid "Allow teardrops to span 2 track segments"
 msgstr "Разрешить каплевидным переходам охватывать 2 сегмента дорожек"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:646
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:653
 msgid ""
 "Allows a teardrop to spread over 2 tracks if the first track segment is too "
 "short"
@@ -36576,71 +36583,71 @@ msgstr ""
 "Позволяет каплевидному переходу распространяться на 2 дорожки, если первый "
 "сегмент дорожки слишком короткий"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:670
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:677
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:314
 msgid "Tracks which are similar in size to the pad do not need teardrops."
 msgstr ""
 "Дорожки, схожие по размеру с конт. пл., не нуждаются в каплевидных переходах."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:700
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:707
 msgid "Teardrop Shape"
 msgstr "Форма каплевидного перехода"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:850
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:857
 msgid "Pad connection:"
 msgstr "Соединение конт. пл.:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:854
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:861
 msgid "From parent footprint"
 msgstr "Из родительского посад. места"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:860
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:867
 msgid "Zone knockout:"
 msgstr "Вырез в зоне:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:864
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:871
 msgid "Pad shape"
 msgstr "Форма конт. пл."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:864
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:871
 msgid "Pad convex hull"
 msgstr "Выпуклая обол. конт. пл."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:877
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:884
 msgid "Thermal Relief Overrides"
 msgstr "Переопределение терморазгрузки"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:885
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:892
 msgid "Relief gap:"
 msgstr "Зазор терморазгрузки:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:896
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:903
 msgid "Spoke width:"
 msgstr "Толщина мостиков терморазгр.:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:907
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:914
 msgid "Spoke angle:"
 msgstr "Угол мостиков терморазгр.:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:943
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1071
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:950
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1078
 msgid "Clearance Overrides"
 msgstr "Переопределение зазоров"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:946
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:953
 msgid "Leave values blank to use parent footprint or netclass values."
 msgstr ""
 "Не вводите никаких значений для использования значений посад. мест или "
 "класса цепей."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:950
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:957
 msgid ""
 "Positive clearance means area bigger than the pad (usual for mask clearance)."
 msgstr ""
 "Положительный зазор указывает, что площадь больше конт. пл. (норма для "
 "паяльной маски)."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:954
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:961
 msgid ""
 "Negative clearance means area smaller than the pad (usual for paste "
 "clearance)."
@@ -36648,7 +36655,7 @@ msgstr ""
 "Отрицательный зазор указывает, что площадь меньше конт. пл. (норма для "
 "паяльной пасты)."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:966
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:973
 msgid ""
 "This is the local net clearance for this pad.\n"
 "If 0, the footprint local value or the Netclass value is used."
@@ -36657,7 +36664,7 @@ msgstr ""
 "Если 0, то используется локальный зазор посад. места или значение из класса "
 "цепей."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:979
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:986
 msgid ""
 "This is the local clearance between this pad and the solder mask.\n"
 "If 0, the footprint local value or the global value is used."
@@ -36665,7 +36672,7 @@ msgstr ""
 "Это локальный зазор между данной конт. пл. и паяльной маской.\n"
 "Если 0, то используется локальный зазор посад. места или глобальное значение."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:992
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:999
 msgid ""
 "This is the local clearance between this pad and the solder paste.\n"
 "If 0, the footprint value or the global value is used.\n"
@@ -36680,7 +36687,7 @@ msgstr ""
 "зазора.\n"
 "Отрицательное значение означает, что маска меньше конт. пл."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1005
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1012
 msgid ""
 "This is the local clearance ratio in percent between this pad and the solder "
 "paste.\n"
@@ -36696,7 +36703,7 @@ msgstr ""
 "Конечное значение зазора равно сумме этого значения и обычного зазора.\n"
 "Отрицательное значение означает, что маска меньше конт. пл."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1208
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1215
 msgid "Preview pad in sketch mode"
 msgstr "Просмотр в контурном режиме"
 
@@ -37835,9 +37842,9 @@ msgid "Footprint %s (%s), %s, rotated %.1f deg"
 msgstr "Посад. место %s (%s), %s, повёрнуто на %.1f°"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:96
-#: pcbnew/pcb_dimension.cpp:1882 pcbnew/pcb_dimension.cpp:1915
-#: pcbnew/pcb_dimension.cpp:1953 pcbnew/pcb_dimension.cpp:1995
-#: pcbnew/pcb_dimension.cpp:2029 pcbnew/pcb_fields_grid_table.cpp:155
+#: pcbnew/pcb_dimension.cpp:1930 pcbnew/pcb_dimension.cpp:1963
+#: pcbnew/pcb_dimension.cpp:2001 pcbnew/pcb_dimension.cpp:2043
+#: pcbnew/pcb_dimension.cpp:2077 pcbnew/pcb_fields_grid_table.cpp:155
 #: pcbnew/pcb_text.cpp:623
 msgid "Knockout"
 msgstr "Негативный"
@@ -37876,45 +37883,61 @@ msgstr "Ширина контура:"
 msgid "Border style:"
 msgstr "Стиль границ:"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:547
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:546
+#, c-format
+msgid "Applying these changes will short net %s with %s."
+msgstr ""
+
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:552
+#, c-format
+msgid "Applying these changes will short net %s with other nets."
+msgstr ""
+
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:557
+#, fuzzy
+msgid "Apply Anyway"
+msgstr "Добавить в любом случае"
+
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:557
+#, fuzzy
+msgid "Cancel Changes"
+msgstr "Отменить изменения?"
+
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:571
 #, c-format
 msgid "Changing the net will also update %s pad %s to %s."
 msgstr "У %s на конт. пл. %s цепь изменится на %s."
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:556
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:580
 #, c-format
 msgid "Changing the net will also update %s pad %s and %s pad %s to %s."
 msgstr "У %s на конт. пл. %s и у %s на конт. пл. %s цепь изменится на %s."
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:565
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:589
 #, c-format
 msgid "Changing the net will also update %lu connected pads to %s."
 msgstr "У %lu соединённых конт. пл. цепь изменится на %s."
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:571
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:595
 msgid "Change Nets"
 msgstr "Заменить цепи"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:571
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:595
 msgid "Leave Nets Unchanged"
 msgstr "Не изменять"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:596
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:628
 #: pcbnew/dialogs/dialog_track_via_size.cpp:59
 msgid "Via hole size must be smaller than via diameter"
 msgstr "Сверло должно быть меньше размера перех. отв."
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:605
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:637
 msgid "Via start layer and end layer cannot be the same"
 msgstr "Начальный и конечный слой перех. отв. не может быть одним и тем же"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:805
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:905
 msgid "Edit Track/Via Properties"
 msgstr "Редактировать свойства дорожек/перех. отв."
-
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:870
-msgid "Update Nets"
-msgstr "Обновить список цепей"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:41
 msgid "Automatically update via nets"
@@ -42023,7 +42046,7 @@ msgstr "(%s мин. толщина %s; текущая %s)"
 msgid "(%s max thickness %s; actual %s)"
 msgstr "(%s макс. толщина %s; текущая %s)"
 
-#: pcbnew/drc/drc_test_provider_text_mirroring.cpp:77
+#: pcbnew/drc/drc_test_provider_text_mirroring.cpp:78
 msgid "Checking text mirroring..."
 msgstr "Проверка зеркального отображения текста..."
 
@@ -42641,45 +42664,45 @@ msgstr "Редактор посад. мест KiCad"
 msgid "Inner layers"
 msgstr "Внутренние слои"
 
-#: pcbnew/footprint_edit_frame.cpp:298
+#: pcbnew/footprint_edit_frame.cpp:310
 msgid "Footprint changes are unsaved"
 msgstr "Изменения посад. места не сохранены"
 
-#: pcbnew/footprint_edit_frame.cpp:546
+#: pcbnew/footprint_edit_frame.cpp:558
 #, c-format
 msgid "Editing %s from board.  Saving will update the board only."
 msgstr ""
 "Редактируется посад. место %s из платы. Сохранение коснётся только платы."
 
-#: pcbnew/footprint_edit_frame.cpp:549
+#: pcbnew/footprint_edit_frame.cpp:561
 #, c-format
 msgid "Open in library %s"
 msgstr "Открыть в библиотеке %s"
 
-#: pcbnew/footprint_edit_frame.cpp:573
+#: pcbnew/footprint_edit_frame.cpp:585
 #, c-format
 msgid "Editing footprint from read-only library %s."
 msgstr ""
 "Редактирование отпечатка из библиотеки %s, доступной только для чтения."
 
-#: pcbnew/footprint_edit_frame.cpp:578
+#: pcbnew/footprint_edit_frame.cpp:590
 msgid "Save as editable copy"
 msgstr "Сохранить как редактируемую копию"
 
-#: pcbnew/footprint_edit_frame.cpp:1007
+#: pcbnew/footprint_edit_frame.cpp:1019
 #, c-format
 msgid "[from %s]"
 msgstr "[из %s]"
 
-#: pcbnew/footprint_edit_frame.cpp:1042
+#: pcbnew/footprint_edit_frame.cpp:1054
 msgid "[no footprint loaded]"
 msgstr "[посад. место не загружено]"
 
-#: pcbnew/footprint_edit_frame.cpp:1098
+#: pcbnew/footprint_edit_frame.cpp:1110
 msgid "Updating Footprint Libraries"
 msgstr "Обновление библиотек посад. мест"
 
-#: pcbnew/footprint_edit_frame.cpp:1438
+#: pcbnew/footprint_edit_frame.cpp:1450
 msgid "No footprint selected."
 msgstr "Посад. место не выбрано."
 
@@ -44184,64 +44207,64 @@ msgstr ""
 "Библиотека, содержащая текущее посад. место, изменилась.\n"
 "Перегрузить посад. место?"
 
-#: pcbnew/pcb_dimension.cpp:597 pcbnew/pcb_dimension.cpp:1778
+#: pcbnew/pcb_dimension.cpp:611 pcbnew/pcb_dimension.cpp:1826
 msgid "Prefix"
 msgstr "Префикс"
 
-#: pcbnew/pcb_dimension.cpp:601 pcbnew/pcb_dimension.cpp:1786
+#: pcbnew/pcb_dimension.cpp:615 pcbnew/pcb_dimension.cpp:1834
 msgid "Override Text"
 msgstr "Переопределить текст"
 
-#: pcbnew/pcb_dimension.cpp:619 pcbnew/pcb_dimension.cpp:1782
+#: pcbnew/pcb_dimension.cpp:633 pcbnew/pcb_dimension.cpp:1830
 msgid "Suffix"
 msgstr "Суффикс"
 
-#: pcbnew/pcb_dimension.cpp:749
+#: pcbnew/pcb_dimension.cpp:763
 #, c-format
 msgid "Dimension '%s' on %s"
 msgstr "Размер '%s' на %s"
 
-#: pcbnew/pcb_dimension.cpp:1733
+#: pcbnew/pcb_dimension.cpp:1781
 msgid "1234.0"
 msgstr "1234.0"
 
-#: pcbnew/pcb_dimension.cpp:1734
+#: pcbnew/pcb_dimension.cpp:1782
 msgid "1234.0 mm"
 msgstr "1234.0 мм"
 
-#: pcbnew/pcb_dimension.cpp:1735
+#: pcbnew/pcb_dimension.cpp:1783
 msgid "1234.0 (mm)"
 msgstr "1234 (мм)"
 
-#: pcbnew/pcb_dimension.cpp:1800
+#: pcbnew/pcb_dimension.cpp:1848
 msgid "Units Format"
 msgstr "Формат ед. изм."
 
-#: pcbnew/pcb_dimension.cpp:1808
+#: pcbnew/pcb_dimension.cpp:1856
 msgid "Suppress Trailing Zeroes"
 msgstr "Подавлять завершающие нули"
 
-#: pcbnew/pcb_dimension.cpp:1813
+#: pcbnew/pcb_dimension.cpp:1861
 msgid "Arrow Direction"
 msgstr "Направление стрелки"
 
-#: pcbnew/pcb_dimension.cpp:1826
+#: pcbnew/pcb_dimension.cpp:1874
 msgid "Keep Aligned with Dimension"
 msgstr "Выравнивать по размерной линии"
 
-#: pcbnew/pcb_dimension.cpp:1863
+#: pcbnew/pcb_dimension.cpp:1911
 msgid "Crossbar Height"
 msgstr "Высота размерной линии"
 
-#: pcbnew/pcb_dimension.cpp:1867
+#: pcbnew/pcb_dimension.cpp:1915
 msgid "Extension Line Overshoot"
 msgstr "Удлинение выносной линии"
 
-#: pcbnew/pcb_dimension.cpp:1938
+#: pcbnew/pcb_dimension.cpp:1986
 msgid "Leader Length"
 msgstr "Длина линии выноски"
 
-#: pcbnew/pcb_dimension.cpp:1981
+#: pcbnew/pcb_dimension.cpp:2029
 msgid "Text Frame"
 msgstr "Рамка текста"
 
@@ -44253,23 +44276,23 @@ msgstr "Редактор печатных плат KiCad"
 msgid "Export netlist used to update schematics"
 msgstr "Экспорт списка цепей для обновления схемы"
 
-#: pcbnew/pcb_edit_frame.cpp:499
+#: pcbnew/pcb_edit_frame.cpp:497
 msgid "New PCB file is unsaved"
 msgstr "Файл печатной платы не сохранён"
 
-#: pcbnew/pcb_edit_frame.cpp:1631
+#: pcbnew/pcb_edit_frame.cpp:1629
 msgid "Board file is read only."
 msgstr "Файл платы доступен только для чтения."
 
-#: pcbnew/pcb_edit_frame.cpp:1675
+#: pcbnew/pcb_edit_frame.cpp:1673
 msgid "PCB file changes are unsaved"
 msgstr "Изменения файла платы не сохранены"
 
-#: pcbnew/pcb_edit_frame.cpp:1975
+#: pcbnew/pcb_edit_frame.cpp:1973
 msgid "The schematic for this board cannot be found."
 msgstr "Не удалось найти схему для этой платы."
 
-#: pcbnew/pcb_edit_frame.cpp:2001
+#: pcbnew/pcb_edit_frame.cpp:1999
 msgid ""
 "Cannot update the PCB because PCB editor is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you must launch the KiCad "
@@ -44279,11 +44302,11 @@ msgstr ""
 "проектов. Для того чтобы создать или обновить плату из редактора схем, нужно "
 "запустить менеджер проектов KiCad и создать проект."
 
-#: pcbnew/pcb_edit_frame.cpp:2026 pcbnew/pcbnew_jobs_handler.cpp:1878
+#: pcbnew/pcb_edit_frame.cpp:2024 pcbnew/pcbnew_jobs_handler.cpp:1878
 msgid "Eeschema netlist"
 msgstr "Список цепей Eeschema"
 
-#: pcbnew/pcb_edit_frame.cpp:2037
+#: pcbnew/pcb_edit_frame.cpp:2035
 msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
@@ -44291,40 +44314,40 @@ msgstr ""
 "При считывании списка цепей получена ошибка. Сообщите об этой проблеме "
 "команду KiCad с помощью меню Справка -> Сообщить об ошибке."
 
-#: pcbnew/pcb_edit_frame.cpp:2064
+#: pcbnew/pcb_edit_frame.cpp:2062
 #, c-format
 msgid "Schematic file '%s' not found."
 msgstr "Файл схемы '%s' не найден."
 
-#: pcbnew/pcb_edit_frame.cpp:2095
+#: pcbnew/pcb_edit_frame.cpp:2093
 msgid "Eeschema failed to load."
 msgstr "Не удалось загрузить Eeschema."
 
-#: pcbnew/pcb_edit_frame.cpp:2558
+#: pcbnew/pcb_edit_frame.cpp:2556
 msgid "Edit design rules"
 msgstr "Правила проектирования"
 
-#: pcbnew/pcb_edit_frame.cpp:2570
+#: pcbnew/pcb_edit_frame.cpp:2568
 msgid "Could not compile custom design rules."
 msgstr "Не удалось скомпилировать особые правила проектирования."
 
-#: pcbnew/pcb_edit_frame.cpp:2628
+#: pcbnew/pcb_edit_frame.cpp:2626
 msgid "Export Hyperlynx Layout"
 msgstr "Экспорт макета Hyperlynx"
 
-#: pcbnew/pcb_edit_frame.cpp:2686
+#: pcbnew/pcb_edit_frame.cpp:2684
 msgid "Violation Report"
 msgstr "Отчет о нарушении"
 
-#: pcbnew/pcb_edit_frame.cpp:2696
+#: pcbnew/pcb_edit_frame.cpp:2694
 msgid "Clearance Report"
 msgstr "Отчёт о зазоре"
 
-#: pcbnew/pcb_edit_frame.cpp:2706
+#: pcbnew/pcb_edit_frame.cpp:2704
 msgid "Constraints Report"
 msgstr "Отчёт об ограничениях"
 
-#: pcbnew/pcb_edit_frame.cpp:2716 pcbnew/tools/pcb_actions.cpp:1858
+#: pcbnew/pcb_edit_frame.cpp:2714 pcbnew/tools/pcb_actions.cpp:1858
 msgid "Compare Footprint with Library"
 msgstr "Сравнить посад. места с библиотекой"
 
@@ -45740,7 +45763,7 @@ msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "Плохой ZSmoothing для CZONE_CONTAINER \"%s\""
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2535
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7268
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7270
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
@@ -45919,13 +45942,13 @@ msgstr "Слой '%s' в файле '%s' строка %d, не зафиксир�
 msgid "%d is not a valid layer count"
 msgstr "%d недопустимый номер слоя"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2767
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2769
 #, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
 msgstr "Дубликат имени NETCLASS '%s' в файле '%s' в строке %d, позиция %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3157
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6314
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3159
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6316
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -45938,12 +45961,12 @@ msgstr ""
 "строка: %d\n"
 "позиция: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3334
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3336
 #, c-format
 msgid "Cannot handle footprint text type %s"
 msgstr "Не удалось обработать тип текста посад. места %s"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4388
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4390
 #, c-format
 msgid ""
 "Invalid footprint ID in\n"
@@ -45956,7 +45979,7 @@ msgstr ""
 "строка: %d\n"
 "позиция: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5159
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5161
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -45968,7 +45991,7 @@ msgstr ""
 "строка: %d\n"
 "позиция: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5178
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5180
 #, c-format
 msgid ""
 "Net name doesn't match ID in\n"
@@ -45980,7 +46003,7 @@ msgstr ""
 "строка: %d\n"
 "позиция: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5509
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5511
 #, c-format
 msgid ""
 "Invalid zero-sized pad pinned to %s in\n"
@@ -45993,8 +46016,8 @@ msgstr ""
 "строка: %d\n"
 "позиция: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5631
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6568
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5633
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6570
 #, c-format
 msgid ""
 "Invalid padstack layer in\n"
@@ -46007,13 +46030,13 @@ msgstr ""
 "строка: %d\n"
 "смещение: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5646
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6583
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5648
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6585
 #, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
 msgstr "Недопустимый слой padstack '%s' в файле '%s' в строке %d, смещение %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6219
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6221
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -46026,7 +46049,7 @@ msgstr ""
 "строка: %d\n"
 "позиция: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6419
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6421
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -46039,7 +46062,7 @@ msgstr ""
 "строка: %d\n"
 "позиция: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6674
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6676
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -46052,7 +46075,7 @@ msgstr ""
 "строка: %d\n"
 "позиция: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7238
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7240
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
@@ -46622,7 +46645,7 @@ msgstr ""
 "Эта зона не может быть обработана инструментом трассировки дорожек.\n"
 "Проверьте чтобы полигон не пересекал сам себя."
 
-#: pcbnew/router/pns_kicad_iface.cpp:2161
+#: pcbnew/router/pns_kicad_iface.cpp:2185
 msgid "Routing"
 msgstr "Трассировка"
 
@@ -51623,6 +51646,12 @@ msgstr "Символ схемы KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "Форматная рамка KiCad"
+
+#~ msgid "Username"
+#~ msgstr "Имя пользователя"
+
+#~ msgid "Update Nets"
+#~ msgstr "Обновить список цепей"
 
 #~ msgid "Internal Reference"
 #~ msgstr "Внутренняя ссылка"
