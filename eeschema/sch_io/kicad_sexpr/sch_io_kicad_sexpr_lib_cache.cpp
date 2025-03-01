@@ -427,9 +427,6 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveField( SCH_FIELD* aField, OUTPUTFORMATTER
     if( !aField->CanAutoplace() )
         aFormatter.Print( "(do_not_autoplace)" );
 
-    if( !aField->IsVisible() )
-        KICAD_FORMAT::FormatBool( &aFormatter, "hide", true );
-
     aField->Format( &aFormatter, 0 );
     aFormatter.Print( ")" );
 }

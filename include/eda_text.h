@@ -228,7 +228,7 @@ public:
      */
     bool Replace( const EDA_SEARCH_DATA& aSearchData );
 
-    bool IsDefaultFormatting() const;
+    virtual bool IsDefaultFormatting() const;
 
     void SetFont( KIFONT::FONT* aFont );
     KIFONT::FONT* GetFont() const               { return m_attributes.m_Font; }
@@ -440,12 +440,12 @@ protected:
      */
     wxString m_hyperlink;
 
+    std::reference_wrapper<const EDA_IU_SCALE>          m_IuScale;
+
 private:
     wxString         m_text;
     wxString         m_shown_text;           // Cache of unescaped text for efficient access
     bool             m_shown_text_has_text_var_refs;
-
-    std::reference_wrapper<const EDA_IU_SCALE>          m_IuScale;
 
     mutable wxString                                    m_render_cache_text;
     mutable const KIFONT::FONT*                         m_render_cache_font;

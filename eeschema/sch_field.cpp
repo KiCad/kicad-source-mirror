@@ -28,8 +28,11 @@
 #include <advanced_config.h>
 #include <base_units.h>
 #include <common.h>     // for ExpandTextVars
+#include <ctl_flags.h>
 #include <sch_edit_frame.h>
 #include <plotters/plotter.h>
+#include <richio.h>
+#include <io/kicad/kicad_io_utils.h>
 #include <bitmaps.h>
 #include <kiway.h>
 #include <symbol_library.h>
@@ -504,6 +507,88 @@ void SCH_FIELD::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBod
 
     GRPrintText( DC, textpos, color, text, orient, GetTextSize(), hjustify, vjustify, penWidth,
                  IsItalic(), IsBold(), font, GetFontMetrics() );
+}
+
+
+// The following is taken from EDA_TEXT::Format because after 9.0.0, the `(hide yes)` property
+// was removed from EDA_TEXT but not EDA_FIELD, but to preserve compatibility with 9.0.0, it
+// needs to be written inside the effects block.
+void SCH_FIELD::Format( OUTPUTFORMATTER* aFormatter, int aControlBits ) const
+{
+    aFormatter->Print( "(effects" );
+
+    aFormatter->Print( "(font" );
+
+    if( GetFont() && !GetFont()->GetName().IsEmpty() )
+        aFormatter->Print( "(face %s)", aFormatter->Quotew( GetFont()->NameAsToken() ).c_str() );
+
+    // Text size
+    aFormatter->Print( "(size %s %s)",
+                       EDA_UNIT_UTILS::FormatInternalUnits( m_IuScale, GetTextHeight() ).c_str(),
+                       EDA_UNIT_UTILS::FormatInternalUnits( m_IuScale, GetTextWidth() ).c_str() );
+
+    if( GetLineSpacing() != 1.0 )
+    {
+        aFormatter->Print( "(line_spacing %s)",
+                           FormatDouble2Str( GetLineSpacing() ).c_str() );
+    }
+
+    if( GetTextThickness() )
+    {
+        aFormatter->Print( "(thickness %s)",
+                EDA_UNIT_UTILS::FormatInternalUnits( m_IuScale, GetTextThickness() ).c_str() );
+    }
+
+    if( IsBold() )
+        KICAD_FORMAT::FormatBool( aFormatter, "bold", true );
+
+    if( IsItalic() )
+        KICAD_FORMAT::FormatBool( aFormatter, "italic", true );
+
+    if( !( aControlBits & CTL_OMIT_COLOR ) && GetTextColor() != COLOR4D::UNSPECIFIED )
+    {
+        aFormatter->Print( "(color %d %d %d %s)",
+                           KiROUND( GetTextColor().r * 255.0 ),
+                           KiROUND( GetTextColor().g * 255.0 ),
+                           KiROUND( GetTextColor().b * 255.0 ),
+                           FormatDouble2Str( GetTextColor().a ).c_str() );
+    }
+
+    aFormatter->Print( ")"); // (font
+
+    if( IsMirrored() || GetHorizJustify() != GR_TEXT_H_ALIGN_CENTER
+                     || GetVertJustify() != GR_TEXT_V_ALIGN_CENTER )
+    {
+        aFormatter->Print( "(justify");
+
+        if( GetHorizJustify() != GR_TEXT_H_ALIGN_CENTER )
+            aFormatter->Print( GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT ? " left" : " right" );
+
+        if( GetVertJustify() != GR_TEXT_V_ALIGN_CENTER )
+            aFormatter->Print( GetVertJustify() == GR_TEXT_V_ALIGN_TOP ? " top" : " bottom" );
+
+        if( IsMirrored() )
+            aFormatter->Print( " mirror" );
+
+        aFormatter->Print( ")" ); // (justify
+    }
+
+    // The relevant difference from EDA_TEXT::Format
+    if( !IsVisible() )
+        KICAD_FORMAT::FormatBool( aFormatter, "hide", true );
+
+    if( !( aControlBits & CTL_OMIT_HYPERLINK ) && HasHyperlink() )
+        aFormatter->Print( "(href %s)", aFormatter->Quotew( GetHyperlink() ).c_str() );
+
+    aFormatter->Print( ")" ); // (effects
+}
+
+
+bool SCH_FIELD::IsDefaultFormatting() const
+{
+    return ( IsVisible()
+             && EDA_TEXT::IsDefaultFormatting()
+           );
 }
 
 

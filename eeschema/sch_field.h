@@ -316,6 +316,17 @@ public:
 
     double Similarity( const SCH_ITEM& aItem ) const override;
 
+    /**
+     * Output the object to \a aFormatter in s-expression form.
+     *
+     * @param aFormatter The #OUTPUTFORMATTER object to write to.
+     * @param aControlBits The control bit definition for object specific formatting.
+     * @throw IO_ERROR on write error.
+     */
+    void Format( OUTPUTFORMATTER* aFormatter, int aControlBits ) const override;
+
+    bool IsDefaultFormatting() const override;
+
     bool operator==( const SCH_ITEM& aItem ) const override;
     bool operator==( const SCH_FIELD& aItem ) const;
 
