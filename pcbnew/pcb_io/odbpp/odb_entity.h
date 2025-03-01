@@ -102,6 +102,7 @@ public:
     void AddStep( const wxString& aStepName );
     void AddMatrixLayerField( MATRIX_LAYER& aMLayer, PCB_LAYER_ID aLayer );
     void AddDrillMatrixLayer();
+    void AddAuxilliaryMatrixLayer();
     void AddCOMPMatrixLayer( PCB_LAYER_ID aCompSide );
 
 private:
@@ -185,8 +186,10 @@ public:
     inline virtual std::string GetEntityName() override { return "layers"; }
     virtual void               InitEntityData() override;
     void                       InitFeatureData();
+    void                       InitDrillData();
+    void                       InitAuxilliaryData();
+
     ODB_COMPONENT& InitComponentData( const FOOTPRINT* aFp, const EDA_DATA::PACKAGE& aPkg );
-    void           InitDrillData();
 
     void AddLayerFeatures();
 

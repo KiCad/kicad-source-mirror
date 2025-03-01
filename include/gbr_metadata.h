@@ -91,16 +91,16 @@ class GBR_APERTURE_METADATA
 public:
     enum GBR_APERTURE_ATTRIB
     {
-        GBR_APERTURE_ATTRIB_NONE,           ///< uninitialized attribute.
-        GBR_APERTURE_ATTRIB_ETCHEDCMP,      ///< Aperture used for etched components.
+        GBR_APERTURE_ATTRIB_NONE,      ///< uninitialized attribute.
+        GBR_APERTURE_ATTRIB_ETCHEDCMP, ///< Aperture used for etched components.
 
         /// Aperture used for connected items like tracks (not vias).
         GBR_APERTURE_ATTRIB_CONDUCTOR,
-        GBR_APERTURE_ATTRIB_EDGECUT,        ///< Aperture used for board cutout,
+        GBR_APERTURE_ATTRIB_EDGECUT, ///< Aperture used for board cutout,
 
         /// Aperture used for not connected items (texts, outlines on copper).
         GBR_APERTURE_ATTRIB_NONCONDUCTOR,
-        GBR_APERTURE_ATTRIB_VIAPAD,         ///< Aperture used for vias.
+        GBR_APERTURE_ATTRIB_VIAPAD, ///< Aperture used for vias.
 
         /// Aperture used for through hole component on outer layer.
         GBR_APERTURE_ATTRIB_COMPONENTPAD,
@@ -119,8 +119,8 @@ public:
 
         /// Aperture used for edge connector pad (outer layers).
         GBR_APERTURE_ATTRIB_CONNECTORPAD,
-        GBR_APERTURE_ATTRIB_WASHERPAD,      ///< Aperture used for mechanical pads (NPTH).
-        GBR_APERTURE_ATTRIB_TESTPOINT,      ///< Aperture used for test point pad (outer layers).
+        GBR_APERTURE_ATTRIB_WASHERPAD, ///< Aperture used for mechanical pads (NPTH).
+        GBR_APERTURE_ATTRIB_TESTPOINT, ///< Aperture used for test point pad (outer layers).
 
         /// Aperture used for fiducial pad (outer layers), at board level.
         GBR_APERTURE_ATTRIB_FIDUCIAL_GLBL,
@@ -137,8 +137,8 @@ public:
         /// Aperture used for castellated pads in drill files.
         GBR_APERTURE_ATTRIB_CASTELLATEDDRILL,
 
-        GBR_APERTURE_ATTRIB_VIADRILL,       ///< Aperture used for via holes in drill files.
-        GBR_APERTURE_ATTRIB_CMP_DRILL,      ///< Aperture used for pad holes in drill files.
+        GBR_APERTURE_ATTRIB_VIADRILL,  ///< Aperture used for via holes in drill files.
+        GBR_APERTURE_ATTRIB_CMP_DRILL, ///< Aperture used for pad holes in drill files.
 
         /// Aperture used for pads oblong holes in drill files.
         GBR_APERTURE_ATTRIB_CMP_OBLONG_DRILL,
@@ -163,11 +163,13 @@ public:
 
         /// Aperture used to draw component outline courtyard in placement files.
         GBR_APERTURE_ATTRIB_CMP_COURTYARD,
-        GBR_APERTURE_ATTRIB_END             ///< sentinel: max value
+
+        ///< aperture used for other purposes. Requires a text description of this feature.
+        GBR_APERTURE_ATTRIB_OTHER,
+        GBR_APERTURE_ATTRIB_END ///< sentinel: max value
     };
 
-    GBR_APERTURE_METADATA()
-        :m_ApertAttribute( GBR_APERTURE_ATTRIB_NONE )
+    GBR_APERTURE_METADATA() : m_ApertAttribute( GBR_APERTURE_ATTRIB_NONE ), m_CustomAttribute( "" )
     {}
 
     /**
@@ -187,15 +189,18 @@ public:
      *         like "%TA.AperFunction,<function>*%"
      */
     static std::string FormatAttribute( GBR_APERTURE_ATTRIB aAttribute,
-                                        bool aUseX1StructuredComment );
+                                        bool                aUseX1StructuredComment,
+                                        const std::string&  aCustomAttribute );
 
     std::string FormatAttribute( bool aUseX1StructuredComment )
     {
-        return FormatAttribute( m_ApertAttribute, aUseX1StructuredComment );
+        return FormatAttribute( m_ApertAttribute, aUseX1StructuredComment, m_CustomAttribute );
     }
 
     // The id of the aperture attribute
     GBR_APERTURE_ATTRIB m_ApertAttribute;
+
+    std::string m_CustomAttribute;
 };
 
 
@@ -212,10 +217,18 @@ public:
         m_ApertureMetadata.m_ApertAttribute = aApertAttribute;
     }
 
+    void SetApertureAttrib( std::string aCustomAttribute )
+    {
+        m_ApertureMetadata.m_ApertAttribute = GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_OTHER;
+        m_ApertureMetadata.m_CustomAttribute = aCustomAttribute;
+    }
+
     GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB GetApertureAttrib()
     {
         return m_ApertureMetadata.m_ApertAttribute;
     }
+
+    std::string GetCustomAttribute() { return m_ApertureMetadata.m_CustomAttribute; }
 
     void SetNetAttribType( int aNetAttribType )
     {

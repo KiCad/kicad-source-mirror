@@ -587,16 +587,24 @@ void PCB_IO_KICAD_SEXPR::formatSetup( const BOARD* aBoard ) const
     KICAD_FORMAT::FormatBool( m_out, "allow_soldermask_bridges_in_footprints",
                               dsnSettings.m_AllowSoldermaskBridgesInFPs );
 
-    if( dsnSettings.m_TentViasFront || dsnSettings.m_TentViasBack )
-    {
-        m_out->Print( "(tenting %s %s)",
-                      dsnSettings.m_TentViasFront ? "front" : "",
-                      dsnSettings.m_TentViasBack ? "back" : "" );
-    }
-    else
-    {
-        m_out->Print( "(tenting none)" );
-    }
+    m_out->Print( 0, " (tenting " );
+    KICAD_FORMAT::FormatBool( m_out, "front", dsnSettings.m_TentViasFront );
+    KICAD_FORMAT::FormatBool( m_out, "back", dsnSettings.m_TentViasBack );
+    m_out->Print( 0, ")" );
+
+    m_out->Print( 0, " (covering " );
+    KICAD_FORMAT::FormatBool( m_out, "front", dsnSettings.m_CoverViasFront );
+    KICAD_FORMAT::FormatBool( m_out, "back", dsnSettings.m_CoverViasBack );
+    m_out->Print( 0, ")" );
+
+    m_out->Print( 0, " (plugging " );
+    KICAD_FORMAT::FormatBool( m_out, "front", dsnSettings.m_PlugViasFront );
+    KICAD_FORMAT::FormatBool( m_out, "back", dsnSettings.m_PlugViasBack );
+    m_out->Print( 0, ")" );
+
+    KICAD_FORMAT::FormatBool( m_out, "capping", dsnSettings.m_CapVias );
+
+    KICAD_FORMAT::FormatBool( m_out, "filling", dsnSettings.m_FillVias );
 
     VECTOR2I origin = dsnSettings.GetAuxOrigin();
 
@@ -1836,7 +1844,12 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
     if( !isDefaultTeardropParameters( aPad->GetTeardropParams() ) )
         formatTeardropParameters( aPad->GetTeardropParams() );
 
-    formatTenting( aPad->Padstack() );
+    m_out->Print( 0, " (tenting " );
+    KICAD_FORMAT::FormatOptBool( m_out, "front",
+                                 aPad->Padstack().FrontOuterLayers().has_solder_mask );
+    KICAD_FORMAT::FormatOptBool( m_out, "back",
+                                 aPad->Padstack().BackOuterLayers().has_solder_mask );
+    m_out->Print( 0, ")" );
 
     KICAD_FORMAT::FormatUuid( m_out, aPad->m_Uuid );
 
@@ -1951,27 +1964,6 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
     }
 
     m_out->Print( ")" );
-}
-
-
-void PCB_IO_KICAD_SEXPR::formatTenting( const PADSTACK& aPadstack ) const
-{
-    std::optional<bool> front = aPadstack.FrontOuterLayers().has_solder_mask;
-    std::optional<bool> back = aPadstack.BackOuterLayers().has_solder_mask;
-
-    if( front.has_value() || back.has_value() )
-    {
-        if( front.value_or( false ) || back.value_or( false ) )
-        {
-            m_out->Print( "(tenting %s %s)",
-                          front.value_or( false ) ? "front" : "",
-                          back.value_or( false ) ? "back" : "" );
-        }
-        else
-        {
-            m_out->Print( "(tenting none)" );
-        }
-    }
 }
 
 
@@ -2379,7 +2371,24 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TRACK* aTrack ) const
 
         const PADSTACK& padstack = via->Padstack();
 
-        formatTenting( padstack );
+        m_out->Print( 0, " (tenting " );
+        KICAD_FORMAT::FormatOptBool( m_out, "front", padstack.FrontOuterLayers().has_solder_mask );
+        KICAD_FORMAT::FormatOptBool( m_out, "back", padstack.BackOuterLayers().has_solder_mask );
+        m_out->Print( 0, ")" );
+
+        KICAD_FORMAT::FormatOptBool( m_out, "capping", padstack.Drill().is_capped );
+
+        m_out->Print( 0, " (covering " );
+        KICAD_FORMAT::FormatOptBool( m_out, "front", padstack.FrontOuterLayers().has_covering );
+        KICAD_FORMAT::FormatOptBool( m_out, "back", padstack.BackOuterLayers().has_covering );
+        m_out->Print( 0, ")" );
+
+        m_out->Print( 0, " (plugging " );
+        KICAD_FORMAT::FormatOptBool( m_out, "front", padstack.FrontOuterLayers().has_plugging );
+        KICAD_FORMAT::FormatOptBool( m_out, "back", padstack.BackOuterLayers().has_plugging );
+        m_out->Print( 0, ")" );
+
+        KICAD_FORMAT::FormatOptBool( m_out, "filling", padstack.Drill().is_filled );
 
         if( padstack.Mode() != PADSTACK::MODE::NORMAL )
         {

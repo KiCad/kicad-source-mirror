@@ -347,6 +347,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "gen_drill.generate_map",
             &m_GenDrill.generate_map, false ) );
 
+    m_params.emplace_back( new PARAM<bool>( "gen_drill.generate_tenting",
+            &m_GenDrill.generate_tenting, false ) );
+
     m_params.emplace_back( new PARAM<int>( "export_2581.units",
             &m_Export2581.units, 0 ) );
 

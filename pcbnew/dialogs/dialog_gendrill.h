@@ -84,7 +84,7 @@ private:
      * plated through holes, and one file per layer pair, which have one or more holes, excluding
      * through holes, already in the first file.  One file for all Not Plated through holes.
      */
-    void genDrillAndMapFiles( bool aGenDrill, bool aGenMap );
+    void genDrillAndMapFiles( bool aGenDrill, bool aGenMap, bool aGenTenting );
 
     void updatePrecisionOptions();
     void updateConfig();
@@ -96,6 +96,7 @@ private:
     static bool             g_mirror;
     static bool             g_merge_PTH_NPTH;
     static bool             g_generateMap;
+    static bool             g_generateTenting;
     static DRILL_PRECISION  g_precision;                // Precision for drill files in non-decimal
                                                         //   format
     static VECTOR2I         g_drillFileOffset;          // Drill offset: 0,0 for absolute

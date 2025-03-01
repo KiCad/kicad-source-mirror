@@ -213,6 +213,18 @@ bool PADSTACK::Deserialize( const google::protobuf::Any& aContainer )
     using namespace kiapi::board::types;
     PadStack padstack;
 
+    auto unpackOptional = []<typename ProtoEnum>( const ProtoEnum&     aProto,
+                                                  std::optional<bool>& aDest, ProtoEnum aTrueValue,
+                                                  ProtoEnum aFalseValue )
+    {
+        if( aProto == aTrueValue )
+            aDest = true;
+        else if( aProto == aFalseValue )
+            aDest = false;
+        else
+            aDest = std::nullopt;
+    };
+
     if( !aContainer.UnpackTo( &padstack ) )
         return false;
 
@@ -223,6 +235,8 @@ bool PADSTACK::Deserialize( const google::protobuf::Any& aContainer )
     Drill().size = kiapi::common::UnpackVector2( padstack.drill().diameter() );
     Drill().start = FromProtoEnum<PCB_LAYER_ID>( padstack.drill().start_layer() );
     Drill().end = FromProtoEnum<PCB_LAYER_ID>( padstack.drill().end_layer() );
+    unpackOptional( padstack.drill().capped(), Drill().is_capped, VDCM_CAPPED, VDCM_UNCAPPED );
+    unpackOptional( padstack.drill().filled(), Drill().is_filled, VDFM_FILLED, VDFM_UNFILLED );
 
     for( const PadStackLayer& layer : padstack.copper_layers() )
     {
@@ -260,57 +274,29 @@ bool PADSTACK::Deserialize( const google::protobuf::Any& aContainer )
     SetUnconnectedLayerMode(
         FromProtoEnum<UNCONNECTED_LAYER_MODE>( padstack.unconnected_layer_removal() ) );
 
-    auto unpackMask =
-            []( const SolderMaskMode& aProto, std::optional<bool>& aDest )
-            {
-                switch( aProto )
-                {
-                case kiapi::board::types::SMM_MASKED:
-                    aDest = true;
-                    break;
+    unpackOptional( padstack.front_outer_layers().solder_mask_mode(),
+                    FrontOuterLayers().has_solder_mask, SMM_MASKED, SMM_UNMASKED );
 
-                case kiapi::board::types::SMM_UNMASKED:
-                    aDest = false;
-                    break;
+    unpackOptional( padstack.back_outer_layers().solder_mask_mode(),
+                    BackOuterLayers().has_solder_mask, SMM_MASKED, SMM_UNMASKED );
 
-                default:
-                case kiapi::board::types::SMM_FROM_DESIGN_RULES:
-                    aDest = std::nullopt;
-                    break;
-                }
-            };
+    unpackOptional( padstack.front_outer_layers().covering_mode(), FrontOuterLayers().has_covering,
+                    VCM_COVERED, VCM_UNCOVERED );
 
-    unpackMask( padstack.front_outer_layers().solder_mask_mode(),
-                FrontOuterLayers().has_solder_mask );
+    unpackOptional( padstack.back_outer_layers().covering_mode(), BackOuterLayers().has_covering,
+                    VCM_COVERED, VCM_UNCOVERED );
 
-    unpackMask( padstack.back_outer_layers().solder_mask_mode(),
-                BackOuterLayers().has_solder_mask );
+    unpackOptional( padstack.front_outer_layers().plugging_mode(), FrontOuterLayers().has_plugging,
+                    VPM_PLUGGED, VPM_UNPLUGGED );
 
-    auto unpackPaste =
-            []( const SolderPasteMode& aProto, std::optional<bool>& aDest )
-            {
-                switch( aProto )
-                {
-                case kiapi::board::types::SPM_PASTE:
-                    aDest = true;
-                    break;
+    unpackOptional( padstack.back_outer_layers().plugging_mode(), BackOuterLayers().has_plugging,
+                    VPM_PLUGGED, VPM_UNPLUGGED );
 
-                case kiapi::board::types::SPM_NO_PASTE:
-                    aDest = false;
-                    break;
+    unpackOptional( padstack.front_outer_layers().solder_paste_mode(),
+                    FrontOuterLayers().has_solder_paste, SPM_PASTE, SPM_NO_PASTE );
 
-                default:
-                case kiapi::board::types::SPM_FROM_DESIGN_RULES:
-                    aDest = std::nullopt;
-                    break;
-                }
-            };
-
-    unpackPaste( padstack.front_outer_layers().solder_paste_mode(),
-                 FrontOuterLayers().has_solder_paste );
-
-    unpackPaste( padstack.back_outer_layers().solder_paste_mode(),
-                 BackOuterLayers().has_solder_paste );
+    unpackOptional( padstack.back_outer_layers().solder_paste_mode(),
+                    BackOuterLayers().has_solder_paste, SPM_PASTE, SPM_NO_PASTE );
 
     if( padstack.front_outer_layers().has_solder_mask_settings()
         && padstack.front_outer_layers().solder_mask_settings().has_solder_mask_margin() )
@@ -429,6 +415,16 @@ void PADSTACK::Serialize( google::protobuf::Any& aContainer ) const
     using namespace kiapi::board::types;
     PadStack padstack;
 
+    auto packOptional = []<typename ProtoEnum>( const std::optional<bool>& aVal, ProtoEnum aTrueVal,
+                                                ProtoEnum aFalseVal,
+                                                ProtoEnum aNullVal ) -> ProtoEnum
+    {
+        if( aVal.has_value() )
+            return *aVal ? aTrueVal : aFalseVal;
+
+        return aNullVal;
+    };
+
     padstack.set_type( ToProtoEnum<MODE, PadStackType>( m_mode ) );
     kiapi::board::PackLayerSet( *padstack.mutable_layers(), m_layerSet );
     padstack.mutable_angle()->set_value_degrees( m_orientation.AsDegrees() );
@@ -436,6 +432,12 @@ void PADSTACK::Serialize( google::protobuf::Any& aContainer ) const
     DrillProperties* drill = padstack.mutable_drill();
     drill->set_start_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( StartLayer() ) );
     drill->set_end_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( EndLayer() ) );
+    drill->set_filled(
+            packOptional( Drill().is_filled, VDFM_FILLED, VDFM_UNFILLED, VDFM_FROM_DESIGN_RULES ) );
+
+    drill->set_capped(
+            packOptional( Drill().is_capped, VDCM_CAPPED, VDCM_UNCAPPED, VDCM_FROM_DESIGN_RULES ) );
+
     kiapi::common::PackVector2( *drill->mutable_diameter(), Drill().size );
 
     ForEachUniqueLayer( [&]( PCB_LAYER_ID aLayer )
@@ -463,34 +465,32 @@ void PADSTACK::Serialize( google::protobuf::Any& aContainer ) const
     padstack.set_unconnected_layer_removal(
         ToProtoEnum<UNCONNECTED_LAYER_MODE, UnconnectedLayerRemoval>( m_unconnectedLayerMode ) );
 
-    auto packOptional =
-        []<typename ProtoEnum>( const std::optional<bool>& aVal, ProtoEnum aTrueVal,
-                                ProtoEnum aFalseVal, ProtoEnum aNullVal ) -> ProtoEnum
-        {
-            if( aVal.has_value() )
-                return *aVal ? aTrueVal : aFalseVal;
-
-            return aNullVal;
-        };
-
     PadStackOuterLayer* frontOuter = padstack.mutable_front_outer_layers();
     PadStackOuterLayer* backOuter = padstack.mutable_back_outer_layers();
 
-    frontOuter->set_solder_mask_mode( packOptional( FrontOuterLayers().has_solder_mask,
-                                                    SMM_MASKED, SMM_UNMASKED,
-                                                    SMM_FROM_DESIGN_RULES ) );
+    frontOuter->set_solder_mask_mode( packOptional( FrontOuterLayers().has_solder_mask, SMM_MASKED,
+                                                    SMM_UNMASKED, SMM_FROM_DESIGN_RULES ) );
 
-    backOuter->set_solder_mask_mode( packOptional( BackOuterLayers().has_solder_mask,
-                                                   SMM_MASKED, SMM_UNMASKED,
-                                                   SMM_FROM_DESIGN_RULES ) );
+    backOuter->set_solder_mask_mode( packOptional( BackOuterLayers().has_solder_mask, SMM_MASKED,
+                                                   SMM_UNMASKED, SMM_FROM_DESIGN_RULES ) );
 
-    frontOuter->set_solder_paste_mode( packOptional( FrontOuterLayers().has_solder_paste,
-                                                     SPM_PASTE, SPM_NO_PASTE,
-                                                     SPM_FROM_DESIGN_RULES ) );
+    frontOuter->set_plugging_mode( packOptional( FrontOuterLayers().has_plugging, VPM_PLUGGED,
+                                                 VPM_UNPLUGGED, VPM_FROM_DESIGN_RULES ) );
 
-    backOuter->set_solder_paste_mode( packOptional( BackOuterLayers().has_solder_paste,
-                                                    SPM_PASTE, SPM_NO_PASTE,
-                                                    SPM_FROM_DESIGN_RULES ) );
+    backOuter->set_plugging_mode( packOptional( BackOuterLayers().has_plugging, VPM_PLUGGED,
+                                                VPM_UNPLUGGED, VPM_FROM_DESIGN_RULES ) );
+
+    frontOuter->set_covering_mode( packOptional( FrontOuterLayers().has_covering, VCM_COVERED,
+                                                 VCM_UNCOVERED, VCM_FROM_DESIGN_RULES ) );
+
+    backOuter->set_covering_mode( packOptional( BackOuterLayers().has_covering, VCM_COVERED,
+                                                VCM_UNCOVERED, VCM_FROM_DESIGN_RULES ) );
+
+    frontOuter->set_solder_paste_mode( packOptional( FrontOuterLayers().has_solder_paste, SPM_PASTE,
+                                                     SPM_NO_PASTE, SPM_FROM_DESIGN_RULES ) );
+
+    backOuter->set_solder_paste_mode( packOptional( BackOuterLayers().has_solder_paste, SPM_PASTE,
+                                                    SPM_NO_PASTE, SPM_FROM_DESIGN_RULES ) );
 
     if( FrontOuterLayers().solder_mask_margin.has_value() )
     {
@@ -1344,6 +1344,38 @@ std::optional<bool> PADSTACK::IsTented( PCB_LAYER_ID aSide ) const
         return m_backMaskProps.has_solder_mask;
 
     wxCHECK_MSG( false, std::nullopt, "IsTented expects a front or back layer" );
+}
+
+std::optional<bool> PADSTACK::IsCovered( PCB_LAYER_ID aSide ) const
+{
+    if( IsFrontLayer( aSide ) )
+        return m_frontMaskProps.has_covering;
+
+    if( IsBackLayer( aSide ) )
+        return m_backMaskProps.has_covering;
+
+    wxCHECK_MSG( false, std::nullopt, "IsCovered expects a front or back layer" );
+}
+
+std::optional<bool> PADSTACK::IsPlugged( PCB_LAYER_ID aSide ) const
+{
+    if( IsFrontLayer( aSide ) )
+        return m_frontMaskProps.has_plugging;
+
+    if( IsBackLayer( aSide ) )
+        return m_backMaskProps.has_plugging;
+
+    wxCHECK_MSG( false, std::nullopt, "IsPlugged expects a front or back layer" );
+}
+
+std::optional<bool> PADSTACK::IsCapped() const
+{
+    return m_drill.is_capped;
+}
+
+std::optional<bool> PADSTACK::IsFilled() const
+{
+    return m_drill.is_filled;
 }
 
 

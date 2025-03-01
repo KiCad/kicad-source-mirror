@@ -406,7 +406,37 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
             // add via
             PCB_VIA* via = static_cast<PCB_VIA*>( track );
 
+            bool hole = false;
+
             if( aLayer != PCB_LAYER_ID::UNDEFINED_LAYER )
+            {
+                hole = m_layerName.Contains( "plugging" );
+            }
+            else
+            {
+                hole = m_layerName.Contains( "drill" ) || m_layerName.Contains( "filling" )
+                       || m_layerName.Contains( "capping" );
+            }
+
+            if( hole )
+            {
+                AddViaDrillHole( via, aLayer );
+                subnet->AddFeatureID( EDA_DATA::FEATURE_ID::TYPE::HOLE, m_layerName,
+                                      m_featuresList.size() - 1 );
+
+                // TODO: confirm TOOLING_HOLE
+                // AddSystemAttribute( *m_featuresList.back(), ODB_ATTR::PAD_USAGE::TOOLING_HOLE );
+
+                if( !m_featuresList.empty() )
+                {
+                    AddSystemAttribute( *m_featuresList.back(), ODB_ATTR::DRILL::VIA );
+                    AddSystemAttribute(
+                            *m_featuresList.back(),
+                            ODB_ATTR::GEOMETRY{ "VIA_RoundD"
+                                                + std::to_string( via->GetWidth( aLayer ) ) } );
+                }
+            }
+            else
             {
                 // to draw via copper shape on copper layer
                 AddVia( via, aLayer );
@@ -420,29 +450,6 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
                             *m_featuresList.back(),
                             ODB_ATTR::GEOMETRY{ "VIA_RoundD"
                                                 + std::to_string( via->GetWidth( aLayer ) ) } );
-                }
-            }
-            else
-            {
-                // to draw via drill hole on drill layer
-
-                if( m_layerName.Contains( "drill" ) )
-                {
-                    AddViaDrillHole( via, aLayer );
-                    subnet->AddFeatureID( EDA_DATA::FEATURE_ID::TYPE::HOLE, m_layerName,
-                                          m_featuresList.size() - 1 );
-
-                    // TODO: confirm TOOLING_HOLE
-                    // AddSystemAttribute( *m_featuresList.back(), ODB_ATTR::PAD_USAGE::TOOLING_HOLE );
-
-                    if( !m_featuresList.empty() )
-                    {
-                        AddSystemAttribute( *m_featuresList.back(), ODB_ATTR::DRILL::VIA );
-                        AddSystemAttribute(
-                                *m_featuresList.back(),
-                                ODB_ATTR::GEOMETRY{ "VIA_RoundD"
-                                                    + std::to_string( via->GetWidth( aLayer ) ) } );
-                    }
                 }
             }
         }

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -83,6 +83,19 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_rbGerberX2 = new wxRadioButton( this, wxID_ANY, _("Gerber X2"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerMargins->Add( m_rbGerberX2, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	wxFlexGridSizer* fgSizerGerberX2Options;
+	fgSizerGerberX2Options = new wxFlexGridSizer( 4, 1, 3, 0 );
+	fgSizerGerberX2Options->SetFlexibleDirection( wxBOTH );
+	fgSizerGerberX2Options->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_generateTentingLayers = new wxCheckBox( this, wxID_ANY, _("Generate tenting layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_generateTentingLayers->Enable( false );
+
+	fgSizerGerberX2Options->Add( m_generateTentingLayers, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+
+
+	bSizerMargins->Add( fgSizerGerberX2Options, 1, wxEXPAND|wxLEFT, 20 );
 
 
 	bSizerMargins->Add( 0, 6, 0, wxEXPAND, 5 );
@@ -170,6 +183,9 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	m_staticTextPrecision = new wxStaticText( this, wxID_ANY, _("Precision"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPrecision->Wrap( -1 );
 	fgSizer1->Add( m_staticTextPrecision, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+
+	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
 	bRightCol->Add( fgSizer1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );

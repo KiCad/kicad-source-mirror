@@ -55,6 +55,15 @@ enum class cadPinType
     SURFACE
 };
 
+enum class auxLayerType
+{
+    COVERING,
+    PLUGGING,
+    TENTING,
+    FILLING,
+    CAPPING,
+};
+
 enum class certificationCategoryType
 {
     ASSEMBLYDRAWING,

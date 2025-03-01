@@ -24,6 +24,8 @@
 #include <pcb_io/pcb_io_mgr.h>
 #include <pcb_io/common/plugin_common_layer_mapping.h>
 
+#include "ipc2581_types.h"
+
 #include <eda_shape.h>
 #include <layer_ids.h> // PCB_LAYER_ID
 #include <font/font.h>
@@ -172,6 +174,8 @@ private:
 
     void generateDrillLayers( wxXmlNode* aCadLayerNode );
 
+    void generateAuxilliaryLayers( wxXmlNode* aCadLayerNode );
+
     void generateStepSection( wxXmlNode* aCadNode );
 
     void generateProfile( wxXmlNode* aStepNode );
@@ -185,6 +189,8 @@ private:
     void generateLayerSetDrill( wxXmlNode* aStepNode );
 
     void generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aLayer, std::vector<BOARD_ITEM*>& aItems );
+
+    void generateLayerSetAuxilliary( wxXmlNode* aStepNode );
 
     wxXmlNode* generateContentStackup( wxXmlNode* aContentNode );
 
@@ -325,6 +331,9 @@ private:
 
     std::map<std::pair<PCB_LAYER_ID, PCB_LAYER_ID>, std::vector<PAD*>>
             m_slot_holes; //<! Storage vector of slotted holes that need to be output as cutouts
+
+    std::map<std::tuple<auxLayerType, PCB_LAYER_ID, PCB_LAYER_ID>, std::vector<BOARD_ITEM*>>
+            m_auxilliary_Layers;
 
     PROGRESS_REPORTER*      m_progress_reporter;
 

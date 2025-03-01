@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -334,18 +334,14 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	wxBoxSizer* viaRightColumn;
 	viaRightColumn = new wxBoxSizer( wxVERTICAL );
 
-	wxFlexGridSizer* fgSizer4;
-	fgSizer4 = new wxFlexGridSizer( 0, 2, 0, 5 );
-	fgSizer4->AddGrowableCol( 1 );
-	fgSizer4->AddGrowableRow( 0 );
-	fgSizer4->AddGrowableRow( 1 );
-	fgSizer4->AddGrowableRow( 2 );
-	fgSizer4->SetFlexibleDirection( wxBOTH );
-	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxGridBagSizer* gbSizer4;
+	gbSizer4 = new wxGridBagSizer( 0, 0 );
+	gbSizer4->SetFlexibleDirection( wxBOTH );
+	gbSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_ViaTypeLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Via type:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaTypeLabel->Wrap( -1 );
-	fgSizer4->Add( m_ViaTypeLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	gbSizer4->Add( m_ViaTypeLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
 	wxString m_ViaTypeChoiceChoices[] = { _("Through"), _("Micro"), _("Blind/buried") };
 	int m_ViaTypeChoiceNChoices = sizeof( m_ViaTypeChoiceChoices ) / sizeof( wxString );
@@ -353,79 +349,47 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_ViaTypeChoice->SetSelection( 0 );
 	m_ViaTypeChoice->Enable( false );
 
-	fgSizer4->Add( m_ViaTypeChoice, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
-
-
-	fgSizer4->Add( 0, 3, 1, wxEXPAND, 5 );
-
-
-	fgSizer4->Add( 0, 0, 1, wxEXPAND, 5 );
+	gbSizer4->Add( m_ViaTypeChoice, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxEXPAND, 5 );
 
 	m_ViaStartLayerLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Start layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaStartLayerLabel->Wrap( -1 );
-	fgSizer4->Add( m_ViaStartLayerLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	gbSizer4->Add( m_ViaStartLayerLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_LEFT|wxALL, 5 );
 
 	m_ViaStartLayer = new PCB_LAYER_BOX_SELECTOR( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	fgSizer4->Add( m_ViaStartLayer, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizer4->Add( m_ViaStartLayer, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxEXPAND, 5 );
 
 	m_ViaEndLayerLabel1 = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("End layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaEndLayerLabel1->Wrap( -1 );
-	fgSizer4->Add( m_ViaEndLayerLabel1, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	gbSizer4->Add( m_ViaEndLayerLabel1, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_LEFT|wxALL, 5 );
 
 	m_ViaEndLayer = new PCB_LAYER_BOX_SELECTOR( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	fgSizer4->Add( m_ViaEndLayer, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
-
-
-	fgSizer4->Add( 0, 15, 1, wxEXPAND, 5 );
-
-
-	fgSizer4->Add( 0, 0, 1, wxEXPAND, 5 );
+	gbSizer4->Add( m_ViaEndLayer, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxEXPAND, 5 );
 
 	m_annularRingsLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Annular rings:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_annularRingsLabel->Wrap( -1 );
-	fgSizer4->Add( m_annularRingsLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	gbSizer4->Add( m_annularRingsLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_LEFT|wxALL, 5 );
 
 	wxString m_annularRingsCtrlChoices[] = { _("All copper layers"), _("Start, end, and connected layers"), _("Connected layers only") };
 	int m_annularRingsCtrlNChoices = sizeof( m_annularRingsCtrlChoices ) / sizeof( wxString );
 	m_annularRingsCtrl = new wxChoice( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_annularRingsCtrlNChoices, m_annularRingsCtrlChoices, 0 );
-	m_annularRingsCtrl->SetSelection( 1 );
-	fgSizer4->Add( m_annularRingsCtrl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND, 5 );
+	m_annularRingsCtrl->SetSelection( 0 );
+	gbSizer4->Add( m_annularRingsCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxEXPAND, 5 );
 
-	m_tentingFrontLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Front tenting:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_tentingFrontLabel->Wrap( -1 );
-	fgSizer4->Add( m_tentingFrontLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_protectionPresetsLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Protection features:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_protectionPresetsLabel->Wrap( -1 );
+	gbSizer4->Add( m_protectionPresetsLabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_LEFT|wxALL, 5 );
 
-	wxString m_tentingFrontCtrlChoices[] = { _("From design rules"), _("Tented"), _("Not tented") };
-	int m_tentingFrontCtrlNChoices = sizeof( m_tentingFrontCtrlChoices ) / sizeof( wxString );
-	m_tentingFrontCtrl = new wxChoice( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_tentingFrontCtrlNChoices, m_tentingFrontCtrlChoices, 0 );
-	m_tentingFrontCtrl->SetSelection( 0 );
-	m_tentingFrontCtrl->SetToolTip( _("Whether to tent (cover with soldermask) this via on the front side") );
+	wxArrayString m_protectionFeaturesChoices;
+	m_protectionFeatures = new wxChoice( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_protectionFeaturesChoices, 0 );
+	m_protectionFeatures->SetSelection( 0 );
+	m_protectionFeatures->SetToolTip( _("Select which protection feature according to IPC-4761 the via should have.") );
 
-	fgSizer4->Add( m_tentingFrontCtrl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND, 5 );
-
-	m_btnLinkTenting = new wxBitmapToggleButton( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	m_btnLinkTenting->SetValue( true );
-	m_btnLinkTenting->SetToolTip( _("Link front and back tenting settings") );
-
-	fgSizer4->Add( m_btnLinkTenting, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	gbSizer4->Add( m_protectionFeatures, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxEXPAND, 5 );
 
 
-	fgSizer4->Add( 0, 0, 1, wxEXPAND, 5 );
+	gbSizer4->AddGrowableCol( 1 );
 
-	m_tentingBackLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Back tenting:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_tentingBackLabel->Wrap( -1 );
-	fgSizer4->Add( m_tentingBackLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
-
-	wxString m_tentingBackCtrlChoices[] = { _("From design rules"), _("Tented"), _("Not tented") };
-	int m_tentingBackCtrlNChoices = sizeof( m_tentingBackCtrlChoices ) / sizeof( wxString );
-	m_tentingBackCtrl = new wxChoice( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_tentingBackCtrlNChoices, m_tentingBackCtrlChoices, 0 );
-	m_tentingBackCtrl->SetSelection( 0 );
-	m_tentingBackCtrl->SetToolTip( _("Whether to tent (cover with soldermask) this via on the back side") );
-
-	fgSizer4->Add( m_tentingBackCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
-
-
-	viaRightColumn->Add( fgSizer4, 0, wxEXPAND|wxBOTTOM, 3 );
+	viaRightColumn->Add( gbSizer4, 1, wxEXPAND, 5 );
 
 
 	bSizerViaCols->Add( viaRightColumn, 1, wxEXPAND, 5 );
@@ -692,8 +656,6 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_ViaTypeChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
 	m_ViaStartLayer->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
 	m_ViaEndLayer->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
-	m_tentingFrontCtrl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onFrontTentingChanged ), NULL, this );
-	m_btnLinkTenting->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTentingLinkToggle ), NULL, this );
 	m_cbTeardrops->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
 	m_cbTeardropsUseNextTrack->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
 	m_stHDRatio->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
@@ -735,8 +697,6 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::~DIALOG_TRACK_VIA_PROPERTIES_BASE()
 	m_ViaTypeChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
 	m_ViaStartLayer->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
 	m_ViaEndLayer->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
-	m_tentingFrontCtrl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onFrontTentingChanged ), NULL, this );
-	m_btnLinkTenting->Disconnect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTentingLinkToggle ), NULL, this );
 	m_cbTeardrops->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
 	m_cbTeardropsUseNextTrack->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
 	m_stHDRatio->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );

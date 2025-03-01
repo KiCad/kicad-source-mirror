@@ -235,6 +235,23 @@ bool PCB_IO_KICAD_SEXPR_PARSER::parseBool()
 }
 
 
+std::optional<bool> PCB_IO_KICAD_SEXPR_PARSER::parseOptBool()
+{
+    T token = NextTok();
+
+    if( token == T_yes )
+        return true;
+    else if( token == T_no )
+        return false;
+    else if( token == T_none )
+        return std::nullopt;
+    else
+        Expecting( "yes, no or none" );
+
+    return false;
+}
+
+
 /*
  * e.g. "hide", "hide)", "(hide yes)"
  */
@@ -2423,17 +2440,39 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
 
         case T_tenting:
         {
-            for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
-            {
-                if( token == T_front )
-                    bds.m_TentViasFront = true;
-                else if( token == T_back )
-                    bds.m_TentViasBack = true;
-                else if( token == T_none )
-                    bds.m_TentViasFront = bds.m_TentViasBack = false;
-                else
-                    Expecting( "front, back, or none" );
-            }
+            auto [front, back] = parseFrontBackOptBool( true );
+            bds.m_TentViasFront = front.value_or( false );
+            bds.m_TentViasBack = back.value_or( false );
+            break;
+        }
+
+        case T_covering:
+        {
+            auto [front, back] = parseFrontBackOptBool();
+            bds.m_CoverViasFront = front.value_or( false );
+            bds.m_CoverViasBack = back.value_or( false );
+            break;
+        }
+
+        case T_plugging:
+        {
+            auto [front, back] = parseFrontBackOptBool();
+            bds.m_PlugViasFront = front.value_or( false );
+            bds.m_PlugViasBack = back.value_or( false );
+            break;
+        }
+
+        case T_capping:
+        {
+            bds.m_CapVias = parseBool();
+            NeedRIGHT();
+            break;
+        }
+
+        case T_filling:
+        {
+            bds.m_FillVias = parseBool();
+            NeedRIGHT();
             break;
         }
 
@@ -5437,8 +5476,12 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
         }
 
         case T_tenting:
-            parseTenting( pad->Padstack() );
+        {
+            auto [front, back] = parseFrontBackOptBool( true );
+            pad->Padstack().FrontOuterLayers().has_solder_mask = front;
+            pad->Padstack().BackOuterLayers().has_solder_mask = back;
             break;
+        }
 
         case T_zone_layer_connections:
         {
@@ -5836,8 +5879,12 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePadstack( PAD* aPad )
                     break;
 
                 case T_tenting:
-                    parseTenting( padstack );
+                {
+                    auto [front, back] = parseFrontBackOptBool( true );
+                    padstack.FrontOuterLayers().has_solder_mask = front;
+                    padstack.BackOuterLayers().has_solder_mask = back;
                     break;
+                }
 
                 // TODO: refactor parsePAD_options to work on padstacks too
                 case T_options:
@@ -6488,8 +6535,38 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
             break;
 
         case T_tenting:
-            parseTenting( via->Padstack() );
+        {
+            auto [front, back] = parseFrontBackOptBool( true );
+            via->Padstack().FrontOuterLayers().has_solder_mask = front;
+            via->Padstack().BackOuterLayers().has_solder_mask = back;
             break;
+        }
+        case T_covering:
+        {
+            auto [front, back] = parseFrontBackOptBool();
+            via->Padstack().FrontOuterLayers().has_covering = front;
+            via->Padstack().BackOuterLayers().has_covering = back;
+            break;
+        }
+        case T_plugging:
+        {
+            auto [front, back] = parseFrontBackOptBool();
+            via->Padstack().FrontOuterLayers().has_plugging = front;
+            via->Padstack().BackOuterLayers().has_plugging = back;
+            break;
+        }
+        case T_filling:
+        {
+            via->Padstack().Drill().is_filled = parseOptBool();
+            NeedRIGHT();
+            break;
+        }
+        case T_capping:
+        {
+            via->Padstack().Drill().is_capped = parseOptBool();
+            NeedRIGHT();
+            break;
+        }
 
         case T_tstamp:
         case T_uuid:
@@ -6522,24 +6599,66 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
 }
 
 
-void PCB_IO_KICAD_SEXPR_PARSER::parseTenting( PADSTACK& aPadstack )
+std::pair<std::optional<bool>, std::optional<bool>>
+PCB_IO_KICAD_SEXPR_PARSER::parseFrontBackOptBool( bool aLegacy )
 {
-    bool front = false;
-    bool back = false;
+    T token = NextTok();
 
-    // If there is a tenting token, it means this individual pad/via has a tenting override
-    for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
+    std::optional<bool> front{ std::nullopt };
+    std::optional<bool> back{ std::nullopt };
+
+    if( token != T_LEFT && aLegacy )
     {
-        if( token == T_front )
-            front = true;
-        else if( token == T_back )
-            back = true;
-        else if( token != T_none )
-            Expecting( "front, back, or none" );
+        // legacy format for tenting.
+        if( token == T_front || token == T_back || token == T_none )
+        {
+            while( token != T_RIGHT )
+            {
+                if( token == T_front )
+                {
+                    front = true;
+                }
+                else if( token == T_back )
+                {
+                    back = true;
+                }
+                else if( token == T_none )
+                {
+                    front.reset();
+                    back.reset();
+                }
+                else
+                {
+                    Expecting( "front, back or none" );
+                }
+
+                token = NextTok();
+            }
+
+            return { front, back };
+        }
     }
 
-    aPadstack.FrontOuterLayers().has_solder_mask = front;
-    aPadstack.BackOuterLayers().has_solder_mask = back;
+    while( token != T_RIGHT )
+    {
+        if( token != T_LEFT )
+            Expecting( "(" );
+
+        token = NextTok();
+
+        if( token == T_front )
+            front = parseOptBool();
+        else if( token == T_back )
+            back = parseOptBool();
+        else
+            Expecting( "front or back" );
+
+        NeedRIGHT();
+
+        token = NextTok();
+    }
+
+    return { front, back };
 }
 
 

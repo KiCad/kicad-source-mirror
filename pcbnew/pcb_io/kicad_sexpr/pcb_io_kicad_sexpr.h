@@ -31,6 +31,7 @@
 
 #include <richio.h>
 #include <string>
+#include <optional>
 #include <layer_ids.h>
 #include <lset.h>
 #include <boost/ptr_container/ptr_map.hpp>
@@ -175,7 +176,8 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
 //#define SEXPR_BOARD_FILE_VERSION    20241229  // Expand User layers to arbitrary count
 //----------------- Start of 10.0 development -----------------
 //#define SEXPR_BOARD_FILE_VERSION    20250210  // Knockout for textboxes
-#define SEXPR_BOARD_FILE_VERSION      20250222  // Hatching for PCB shapes
+//#define SEXPR_BOARD_FILE_VERSION      20250222  // Hatching for PCB shapes
+#define SEXPR_BOARD_FILE_VERSION      20250228  // ipc-4761 via protection features
 
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
@@ -459,8 +461,6 @@ private:
     void formatLayer( PCB_LAYER_ID aLayer, bool aIsKnockout = false ) const;
 
     void formatLayers( LSET aLayerMask, bool aEnumerateLayers ) const;
-
-    void formatTenting( const PADSTACK& aPadstack ) const;
 
     friend class FP_CACHE;
 

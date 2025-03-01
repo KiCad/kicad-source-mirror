@@ -89,6 +89,8 @@ public:
     int m_gerberPrecision;
 
     bool m_generateMap;
+
+    bool m_generateTenting;
 };
 
 #endif

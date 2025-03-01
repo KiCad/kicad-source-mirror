@@ -73,13 +73,13 @@ public:
      * @param aPlotDirectory is the output folder.
      * @param aGenDrill set to true to generate the EXCELLON drill file.
      * @param aGenMap set to true to generate a drill map file.
+     * @param aGenTenting set to true to generate tenting layer files.
      * @param aReporter is a #REPORTER to return activity or any message (can be NULL).
      *
      * @return True if successful, false if any error occurred
      */
-    bool CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
-                                    bool aGenDrill, bool aGenMap,
-                                    REPORTER * aReporter = nullptr );
+    bool CreateDrillandMapFilesSet( const wxString& aPlotDirectory, bool aGenDrill, bool aGenMap,
+                                    bool aGenTenting, REPORTER* aReporter = nullptr );
 
 private:
     /**
@@ -92,6 +92,16 @@ private:
      * @return hole count or -1 if the file cannot be created.
      */
     int createDrillFile( wxString& aFullFilename, bool aIsNpth, DRILL_LAYER_PAIR aLayerPair );
+
+    /**
+     * Create a Gerber X2 file for via protection features.
+     *
+     * @param aFullFilename is the full file name
+     * @param aFeature the protection feature this file represents
+     * @param aLayerPair is the first and last layer pair for the via drill. Usually is top and bottom.
+     */
+    int createProtectionFile( const wxString& aFullFilename, IPC4761_FEATURES aFeature,
+                              DRILL_LAYER_PAIR aLayerPair );
 
     /**
      * @param aPair is the layer pair.

@@ -106,6 +106,27 @@ void GENDRILL_WRITER_BASE::buildHolesList( DRILL_LAYER_PAIR aLayerPair,
 
             via->LayerPair( &new_hole.m_Hole_Top_Layer, &new_hole.m_Hole_Bottom_Layer );
 
+            new_hole.m_Hole_Filled = via->Padstack().IsFilled().value_or( false );
+            new_hole.m_Hole_Capped = via->Padstack().IsCapped().value_or( false );
+
+            new_hole.m_Hole_Top_Covered =
+                    via->Padstack().IsCovered( new_hole.m_Hole_Top_Layer ).value_or( false );
+
+            new_hole.m_Hole_Bot_Covered =
+                    via->Padstack().IsCovered( new_hole.m_Hole_Bottom_Layer ).value_or( false );
+
+            new_hole.m_Hole_Top_Plugged =
+                    via->Padstack().IsPlugged( new_hole.m_Hole_Top_Layer ).value_or( false );
+
+            new_hole.m_Hole_Bot_Plugged =
+                    via->Padstack().IsPlugged( new_hole.m_Hole_Bottom_Layer ).value_or( false );
+
+            new_hole.m_Hole_Top_Tented =
+                    via->Padstack().IsTented( new_hole.m_Hole_Top_Layer ).value_or( false );
+
+            new_hole.m_Hole_Bot_Tented =
+                    via->Padstack().IsTented( new_hole.m_Hole_Bottom_Layer ).value_or( false );
+
             // LayerPair() returns params with m_Hole_Bottom_Layer > m_Hole_Top_Layer
             // Remember: top layer = 0 and bottom layer = 31 for through hole vias
             // Any captured via should be from aLayerPair.first to aLayerPair.second exactly.
@@ -301,6 +322,61 @@ const wxString GENDRILL_WRITER_BASE::getDrillFileName( DRILL_LAYER_PAIR aPair, b
 
     return ret;
 }
+
+
+const wxString GENDRILL_WRITER_BASE::getProtectionFileName( DRILL_LAYER_PAIR aPair,
+                                                            IPC4761_FEATURES aFeature ) const
+{
+    wxASSERT( m_pcb );
+
+    wxString extend;
+
+    switch( aFeature )
+    {
+    case IPC4761_FEATURES::FILLED:
+        extend << wxT( "-filling-" );
+        extend << layerPairName( aPair );
+        break;
+    case IPC4761_FEATURES::CAPPED:
+        extend << wxT( "-capping-" );
+        extend << layerPairName( aPair );
+        break;
+    case IPC4761_FEATURES::COVERED_BACK:
+        extend << wxT( "-covering-" );
+        extend << layerName( aPair.second );
+        break;
+    case IPC4761_FEATURES::COVERED_FRONT:
+        extend << wxT( "-covering-" );
+        extend << layerName( aPair.first );
+        break;
+    case IPC4761_FEATURES::PLUGGED_BACK:
+        extend << wxT( "-plugging-" );
+        extend << layerName( aPair.second );
+        break;
+    case IPC4761_FEATURES::PLUGGED_FRONT:
+        extend << wxT( "-plugging-" );
+        extend << layerName( aPair.first );
+        break;
+    case IPC4761_FEATURES::TENTED_BACK:
+        extend << wxT( "-tenting-" );
+        extend << layerName( aPair.second );
+        break;
+    case IPC4761_FEATURES::TENTED_FRONT:
+        extend << wxT( "-tenting-" );
+        extend << layerName( aPair.first );
+        break;
+    }
+
+    wxFileName fn = m_pcb->GetFileName();
+
+    fn.SetName( fn.GetName() + extend );
+    fn.SetExt( m_drillFileExtension );
+
+    wxString ret = fn.GetFullName();
+
+    return ret;
+}
+
 
 bool GENDRILL_WRITER_BASE::CreateMapFilesSet( const wxString& aPlotDirectory,
                                               REPORTER * aReporter )

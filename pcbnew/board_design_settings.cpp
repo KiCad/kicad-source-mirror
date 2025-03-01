@@ -222,6 +222,16 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_TentViasFront = true;
     m_TentViasBack = true;
 
+    m_CoverViasFront = false;
+    m_CoverViasBack = false;
+
+    m_PlugViasFront = false;
+    m_PlugViasBack = false;
+
+    m_CapVias = false;
+
+    m_FillVias = false;
+
     // Layer thickness for 3D viewer
     m_boardThickness = pcbIUScale.mmToIU( DEFAULT_BOARD_THICKNESS_MM );
 

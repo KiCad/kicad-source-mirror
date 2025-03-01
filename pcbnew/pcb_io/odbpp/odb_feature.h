@@ -77,6 +77,8 @@ public:
 
     void AddViaDrillHole( const PCB_VIA* aVia, PCB_LAYER_ID aLayer );
 
+    void AddViaProtection( const PCB_VIA* aVia, bool drill, PCB_LAYER_ID aLayer );
+
     bool AddContour( const SHAPE_POLY_SET& aPolySet, int aOutline = 0,
                      FILL_T aFillType = FILL_T::FILLED_SHAPE );
 

@@ -139,6 +139,8 @@ public:
     // Only one attribute is allowed by aperture
     // 0 = no specific aperture attribute
     int           m_ApertureAttribute;
+
+    std::string m_CustomAttribute;
 };
 
 

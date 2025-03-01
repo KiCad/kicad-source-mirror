@@ -59,6 +59,7 @@ bool DIALOG_GENDRILL::g_minimalHeader    = false;    // Only for Excellon format
 bool DIALOG_GENDRILL::g_mirror           = false;    // Only for Excellon format
 bool DIALOG_GENDRILL::g_merge_PTH_NPTH   = false;    // Only for Excellon format
 bool DIALOG_GENDRILL::g_generateMap      = false;
+bool DIALOG_GENDRILL::g_generateTenting  = false;
 int  DIALOG_GENDRILL::g_mapFileType      = 4;        // The last choice in m_Choice_Drill_Map
 int  DIALOG_GENDRILL::g_drillFileType    = 0;
 
@@ -129,7 +130,8 @@ bool DIALOG_GENDRILL::TransferDataFromWindow()
 {
     if( !m_job )
     {
-        genDrillAndMapFiles( true, m_cbGenerateMap->GetValue() );
+        genDrillAndMapFiles( true, m_cbGenerateMap->GetValue(),
+                             m_generateTentingLayers->GetValue() );
     }
     else
     {
@@ -147,6 +149,7 @@ bool DIALOG_GENDRILL::TransferDataFromWindow()
         m_job->m_mapFormat = static_cast<JOB_EXPORT_PCB_DRILL::MAP_FORMAT>( m_choiceDrillMap->GetSelection() );
         m_job->m_zeroFormat = static_cast<JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT>( m_zeros->GetSelection() );
         m_job->m_generateMap = m_cbGenerateMap->IsChecked();
+        m_job->m_generateTenting = m_generateTentingLayers->IsChecked();
     }
 
     return true;
@@ -171,6 +174,7 @@ bool DIALOG_GENDRILL::TransferDataToWindow()
         m_choiceDrillMap->SetSelection( g_mapFileType );
         m_altDrillMode->SetValue( !g_useRouteModeForOvalHoles );
         m_cbGenerateMap->SetValue( g_generateMap );
+        m_generateTentingLayers->SetValue( g_generateTenting );
 
         // Output directory
         m_outputDirectoryName->SetValue( m_plotOpts.GetOutputDirectory() );
@@ -194,6 +198,7 @@ bool DIALOG_GENDRILL::TransferDataToWindow()
         m_choiceDrillMap->SetSelection( static_cast<int>( m_job->m_mapFormat ) );
         m_altDrillMode->SetValue( !m_job->m_excellonOvalDrillRoute );
         m_cbGenerateMap->SetValue( m_job->m_generateMap );
+        m_generateTentingLayers->SetValue( m_job->m_generateTenting );
     }
 
     wxCommandEvent dummy;
@@ -221,6 +226,7 @@ void DIALOG_GENDRILL::initDialog()
         g_mapFileType = cfg->m_GenDrill.map_file_type;
         g_zerosFormat = cfg->m_GenDrill.zeros_format;
         g_generateMap = cfg->m_GenDrill.generate_map;
+        g_generateTenting = cfg->m_GenDrill.generate_tenting;
 
         // Ensure validity of g_mapFileType
         if( g_mapFileType < 0 || g_mapFileType >= (int) m_choiceDrillMap->GetCount() )
@@ -249,6 +255,7 @@ void DIALOG_GENDRILL::onFileFormatSelection( wxCommandEvent& event )
     m_Check_Minimal->Enable( enbl_Excellon );
     m_Check_Merge_PTH_NPTH->Enable( enbl_Excellon );
     m_altDrillMode->Enable( enbl_Excellon );
+    m_generateTentingLayers->Enable( !enbl_Excellon );
 
     if( enbl_Excellon )
     {
@@ -279,6 +286,7 @@ void DIALOG_GENDRILL::updateConfig()
     cfg->m_GenDrill.map_file_type            = g_mapFileType;
     cfg->m_GenDrill.zeros_format             = g_zerosFormat;
     cfg->m_GenDrill.generate_map             = g_generateMap;
+    cfg->m_GenDrill.generate_tenting         = g_generateTenting;
 }
 
 
@@ -373,6 +381,7 @@ void DIALOG_GENDRILL::UpdateDrillParams()
     g_zerosFormat = m_zeros->GetSelection();
     g_useRouteModeForOvalHoles = !m_altDrillMode->GetValue();
     g_generateMap = m_cbGenerateMap->IsChecked();
+    g_generateTenting = m_generateTentingLayers->IsChecked();
 
     if( m_origin->GetSelection() == 0 )
         g_drillFileOffset = VECTOR2I( 0, 0 );
@@ -392,7 +401,7 @@ void DIALOG_GENDRILL::UpdateDrillParams()
 }
 
 
-void DIALOG_GENDRILL::genDrillAndMapFiles( bool aGenDrill, bool aGenMap )
+void DIALOG_GENDRILL::genDrillAndMapFiles( bool aGenDrill, bool aGenMap, bool aGenTenting )
 {
     updateConfig();     // set params and Save drill options
 
@@ -462,7 +471,7 @@ void DIALOG_GENDRILL::genDrillAndMapFiles( bool aGenDrill, bool aGenMap )
         gerberWriter.SetMapFileFormat( filefmt[choice] );
 
         gerberWriter.CreateDrillandMapFilesSet( outputDir.GetFullPath(), aGenDrill, aGenMap,
-                                                &reporter );
+                                                aGenTenting, &reporter );
     }
 }
 

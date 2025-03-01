@@ -330,8 +330,6 @@ private:
      */
     void parseRenderCache( EDA_TEXT* text );
 
-    void parseTenting( PADSTACK& aPadstack );
-
     FP_3DMODEL* parse3DModel();
 
     /**
@@ -370,6 +368,8 @@ private:
 
     bool parseBool();
 
+    std::optional<bool> parseOptBool();
+
     /**
      * Parses a boolean flag inside a list that existed before boolean normalization.
      *
@@ -381,6 +381,9 @@ private:
      * @return the parsed boolean
      */
     bool parseMaybeAbsentBool( bool aDefaultValue );
+
+    std::pair<std::optional<bool>, std::optional<bool>>
+    parseFrontBackOptBool( bool aLegacy = false );
 
     /*
      * @return if m_appendToExisting, returns new KIID(), otherwise returns CurStr() as KIID.

@@ -78,6 +78,34 @@ enum class TENTING_MODE
     NOT_TENTED = 2
 };
 
+enum class COVERING_MODE
+{
+    FROM_RULES = 0,
+    COVERED = 1,
+    NOT_COVERED = 2
+};
+
+enum class PLUGGING_MODE
+{
+    FROM_RULES = 0,
+    PLUGGED = 1,
+    NOT_PLUGGED = 2
+};
+
+enum class CAPPING_MODE
+{
+    FROM_RULES = 0,
+    CAPPED = 1,
+    NOT_CAPPED = 2
+};
+
+enum class FILLING_MODE
+{
+    FROM_RULES = 0,
+    FILLED = 1,
+    NOT_FILLED = 2
+};
+
 #define UNDEFINED_DRILL_DIAMETER  -1       //< Undefined via drill diameter.
 
 // Used for tracks and vias for algorithmic safety, not to enforce constraints
@@ -440,10 +468,26 @@ public:
     MINOPTMAX<int> GetWidthConstraint( wxString* aSource = nullptr ) const override;
     MINOPTMAX<int> GetDrillConstraint( wxString* aSource = nullptr ) const;
 
-    void SetFrontTentingMode( TENTING_MODE aMode );
+    void         SetFrontTentingMode( TENTING_MODE aMode );
     TENTING_MODE GetFrontTentingMode() const;
-    void SetBackTentingMode( TENTING_MODE aMode );
+    void         SetBackTentingMode( TENTING_MODE aMode );
     TENTING_MODE GetBackTentingMode() const;
+
+    void          SetFrontCoveringMode( COVERING_MODE aMode );
+    COVERING_MODE GetFrontCoveringMode() const;
+    void          SetBackCoveringMode( COVERING_MODE aMode );
+    COVERING_MODE GetBackCoveringMode() const;
+
+    void          SetFrontPluggingMode( PLUGGING_MODE aMode );
+    PLUGGING_MODE GetFrontPluggingMode() const;
+    void          SetBackPluggingMode( PLUGGING_MODE aMode );
+    PLUGGING_MODE GetBackPluggingMode() const;
+
+    void         SetCappingMode( CAPPING_MODE aMode );
+    CAPPING_MODE GetCappingMode() const;
+
+    void         SetFillingMode( FILLING_MODE aMode );
+    FILLING_MODE GetFillingMode() const;
 
     bool IsTented( PCB_LAYER_ID aLayer ) const override;
     int GetSolderMaskExpansion() const;

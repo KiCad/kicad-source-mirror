@@ -37,6 +37,14 @@ void FormatBool( OUTPUTFORMATTER* aOut, const wxString& aKey, bool aValue )
     aOut->Print( "(%ls %s)", aKey.wc_str(), aValue ? "yes" : "no" );
 }
 
+void FormatOptBool( OUTPUTFORMATTER* aOut, const wxString& aKey, std::optional<bool> aValue )
+{
+    if( aValue.has_value() )
+        FormatBool( aOut, aKey, aValue.value() );
+    else
+        aOut->Print( "(%ls none)", aKey.wc_str() );
+}
+
 
 void FormatUuid( OUTPUTFORMATTER* aOut, const KIID& aUuid )
 {

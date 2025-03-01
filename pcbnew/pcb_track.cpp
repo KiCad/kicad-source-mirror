@@ -855,7 +855,7 @@ std::shared_ptr<SHAPE_SEGMENT> PCB_VIA::GetEffectiveHoleShape() const
     return std::make_shared<SHAPE_SEGMENT>( SEG( m_Start, m_Start ), Padstack().Drill().size.x );
 }
 
-
+// clang-format off: the suggestion is slightly less readable
 void PCB_VIA::SetFrontTentingMode( TENTING_MODE aMode )
 {
     switch( aMode )
@@ -872,7 +872,7 @@ TENTING_MODE PCB_VIA::GetFrontTentingMode() const
     if( m_padStack.FrontOuterLayers().has_solder_mask.has_value() )
     {
         return *m_padStack.FrontOuterLayers().has_solder_mask ?
-            TENTING_MODE::TENTED : TENTING_MODE::NOT_TENTED;
+                TENTING_MODE::TENTED : TENTING_MODE::NOT_TENTED;
     }
 
     return TENTING_MODE::FROM_RULES;
@@ -895,11 +895,150 @@ TENTING_MODE PCB_VIA::GetBackTentingMode() const
     if( m_padStack.BackOuterLayers().has_solder_mask.has_value() )
     {
         return *m_padStack.BackOuterLayers().has_solder_mask ?
-            TENTING_MODE::TENTED : TENTING_MODE::NOT_TENTED;
+                TENTING_MODE::TENTED : TENTING_MODE::NOT_TENTED;
     }
 
     return TENTING_MODE::FROM_RULES;
 }
+
+
+void PCB_VIA::SetFrontCoveringMode( COVERING_MODE aMode )
+{
+    switch( aMode )
+    {
+    case COVERING_MODE::FROM_RULES: m_padStack.FrontOuterLayers().has_covering.reset();  break;
+    case COVERING_MODE::COVERED:     m_padStack.FrontOuterLayers().has_covering = true;   break;
+    case COVERING_MODE::NOT_COVERED: m_padStack.FrontOuterLayers().has_covering = false;  break;
+    }
+}
+
+
+COVERING_MODE PCB_VIA::GetFrontCoveringMode() const
+{
+    if( m_padStack.FrontOuterLayers().has_covering.has_value() )
+    {
+        return *m_padStack.FrontOuterLayers().has_covering ?
+                COVERING_MODE::COVERED : COVERING_MODE::NOT_COVERED;
+    }
+
+    return COVERING_MODE::FROM_RULES;
+}
+
+
+void PCB_VIA::SetBackCoveringMode( COVERING_MODE aMode )
+{
+    switch( aMode )
+    {
+    case COVERING_MODE::FROM_RULES: m_padStack.BackOuterLayers().has_covering.reset();  break;
+    case COVERING_MODE::COVERED:     m_padStack.BackOuterLayers().has_covering = true;   break;
+    case COVERING_MODE::NOT_COVERED: m_padStack.BackOuterLayers().has_covering = false;  break;
+    }
+}
+
+
+COVERING_MODE PCB_VIA::GetBackCoveringMode() const
+{
+    if( m_padStack.BackOuterLayers().has_covering.has_value() )
+    {
+        return *m_padStack.BackOuterLayers().has_covering ?
+                COVERING_MODE::COVERED : COVERING_MODE::NOT_COVERED;
+    }
+
+    return COVERING_MODE::FROM_RULES;
+}
+
+
+void PCB_VIA::SetFrontPluggingMode( PLUGGING_MODE aMode )
+{
+    switch( aMode )
+    {
+    case PLUGGING_MODE::FROM_RULES: m_padStack.FrontOuterLayers().has_plugging.reset();  break;
+    case PLUGGING_MODE::PLUGGED:     m_padStack.FrontOuterLayers().has_plugging = true;   break;
+    case PLUGGING_MODE::NOT_PLUGGED: m_padStack.FrontOuterLayers().has_plugging = false;  break;
+    }
+}
+
+
+PLUGGING_MODE PCB_VIA::GetFrontPluggingMode() const
+{
+    if( m_padStack.FrontOuterLayers().has_plugging.has_value() )
+    {
+        return *m_padStack.FrontOuterLayers().has_plugging ?
+                PLUGGING_MODE::PLUGGED : PLUGGING_MODE::NOT_PLUGGED;
+    }
+
+    return PLUGGING_MODE::FROM_RULES;
+}
+
+
+void PCB_VIA::SetBackPluggingMode( PLUGGING_MODE aMode )
+{
+    switch( aMode )
+    {
+    case PLUGGING_MODE::FROM_RULES: m_padStack.BackOuterLayers().has_plugging.reset();  break;
+    case PLUGGING_MODE::PLUGGED:     m_padStack.BackOuterLayers().has_plugging = true;   break;
+    case PLUGGING_MODE::NOT_PLUGGED: m_padStack.BackOuterLayers().has_plugging = false;  break;
+    }
+}
+
+
+PLUGGING_MODE PCB_VIA::GetBackPluggingMode() const
+{
+    if( m_padStack.BackOuterLayers().has_plugging.has_value() )
+    {
+        return *m_padStack.BackOuterLayers().has_plugging ?
+                PLUGGING_MODE::PLUGGED : PLUGGING_MODE::NOT_PLUGGED;
+    }
+
+    return PLUGGING_MODE::FROM_RULES;
+}
+
+
+void PCB_VIA::SetCappingMode( CAPPING_MODE aMode )
+{
+    switch( aMode )
+    {
+    case CAPPING_MODE::FROM_RULES: m_padStack.Drill().is_capped.reset();  break;
+    case CAPPING_MODE::CAPPED:     m_padStack.Drill().is_capped = true;   break;
+    case CAPPING_MODE::NOT_CAPPED: m_padStack.Drill().is_capped = false;  break;
+    }
+}
+
+
+CAPPING_MODE PCB_VIA::GetCappingMode() const
+{
+    if( m_padStack.Drill().is_capped.has_value() )
+    {
+        return *m_padStack.Drill().is_capped ?
+                CAPPING_MODE::CAPPED : CAPPING_MODE::NOT_CAPPED;
+    }
+
+    return CAPPING_MODE::FROM_RULES;
+}
+
+
+void PCB_VIA::SetFillingMode( FILLING_MODE aMode )
+{
+    switch( aMode )
+    {
+    case FILLING_MODE::FROM_RULES: m_padStack.Drill().is_filled.reset();  break;
+    case FILLING_MODE::FILLED:     m_padStack.Drill().is_filled = true;   break;
+    case FILLING_MODE::NOT_FILLED: m_padStack.Drill().is_filled = false;  break;
+    }
+}
+
+
+FILLING_MODE PCB_VIA::GetFillingMode() const
+{
+    if( m_padStack.Drill().is_filled.has_value() )
+    {
+        return *m_padStack.Drill().is_filled ?
+                FILLING_MODE::FILLED : FILLING_MODE::NOT_FILLED;
+    }
+
+    return FILLING_MODE::FROM_RULES;
+}
+// clang-format on: the suggestion is slightly less readable
 
 
 bool PCB_VIA::IsTented( PCB_LAYER_ID aLayer ) const
@@ -2041,17 +2180,43 @@ static struct TRACK_VIA_DESC
 {
     TRACK_VIA_DESC()
     {
+        // clang-format off: the suggestion is less readable
         ENUM_MAP<VIATYPE>::Instance()
-            .Undefined( VIATYPE::NOT_DEFINED )
-            .Map( VIATYPE::THROUGH,      _HKI( "Through" ) )
-            .Map( VIATYPE::BLIND_BURIED, _HKI( "Blind/buried" ) )
-            .Map( VIATYPE::MICROVIA,     _HKI( "Micro" ) );
+                .Undefined( VIATYPE::NOT_DEFINED )
+                .Map( VIATYPE::THROUGH,      _HKI( "Through" ) )
+                .Map( VIATYPE::BLIND_BURIED, _HKI( "Blind/buried" ) )
+                .Map( VIATYPE::MICROVIA,     _HKI( "Micro" ) );
 
         ENUM_MAP<TENTING_MODE>::Instance()
-            .Undefined( TENTING_MODE::FROM_RULES )
-            .Map( TENTING_MODE::FROM_RULES, _HKI( "From design rules" ) )
-            .Map( TENTING_MODE::TENTED,     _HKI( "Tented" ) )
-            .Map( TENTING_MODE::NOT_TENTED, _HKI( "Not tented" ) );
+                .Undefined( TENTING_MODE::FROM_RULES )
+                .Map( TENTING_MODE::FROM_RULES, _HKI( "From design rules" ) )
+                .Map( TENTING_MODE::TENTED,     _HKI( "Tented" ) )
+                .Map( TENTING_MODE::NOT_TENTED, _HKI( "Not tented" ) );
+
+        ENUM_MAP<COVERING_MODE>::Instance()
+                .Undefined( COVERING_MODE::FROM_RULES )
+                .Map( COVERING_MODE::FROM_RULES, _HKI( "From design rules" ) )
+                .Map( COVERING_MODE::COVERED,     _HKI( "Covered" ) )
+                .Map( COVERING_MODE::NOT_COVERED, _HKI( "Not covered" ) );
+
+        ENUM_MAP<PLUGGING_MODE>::Instance()
+                .Undefined( PLUGGING_MODE::FROM_RULES )
+                .Map( PLUGGING_MODE::FROM_RULES, _HKI( "From design rules" ) )
+                .Map( PLUGGING_MODE::PLUGGED,     _HKI( "Plugged" ) )
+                .Map( PLUGGING_MODE::NOT_PLUGGED, _HKI( "Not plugged" ) );
+
+        ENUM_MAP<CAPPING_MODE>::Instance()
+                .Undefined( CAPPING_MODE::FROM_RULES )
+                .Map( CAPPING_MODE::FROM_RULES, _HKI( "From design rules" ) )
+                .Map( CAPPING_MODE::CAPPED,     _HKI( "Capped" ) )
+                .Map( CAPPING_MODE::NOT_CAPPED, _HKI( "Not capped" ) );
+
+        ENUM_MAP<FILLING_MODE>::Instance()
+                .Undefined( FILLING_MODE::FROM_RULES )
+                .Map( FILLING_MODE::FROM_RULES, _HKI( "From design rules" ) )
+                .Map( FILLING_MODE::FILLED,     _HKI( "Filled" ) )
+                .Map( FILLING_MODE::NOT_FILLED, _HKI( "Not filled" ) );
+        // clang-format on: the suggestion is less readable
 
         ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
 
@@ -2118,6 +2283,7 @@ static struct TRACK_VIA_DESC
 
         propMgr.Mask( TYPE_HASH( PCB_VIA ), TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ) );
 
+        // clang-format off: the suggestion is less readable
         propMgr.AddProperty( new PROPERTY<PCB_VIA, int>( _HKI( "Diameter" ),
             &PCB_VIA::SetFrontWidth, &PCB_VIA::GetFrontWidth, PROPERTY_DISPLAY::PT_SIZE ), groupVia );
         propMgr.AddProperty( new PROPERTY<PCB_VIA, int>( _HKI( "Hole" ),
@@ -2132,8 +2298,25 @@ static struct TRACK_VIA_DESC
             &PCB_VIA::SetFrontTentingMode, &PCB_VIA::GetFrontTentingMode ), groupVia );
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, TENTING_MODE>( _HKI( "Back tenting" ),
             &PCB_VIA::SetBackTentingMode, &PCB_VIA::GetBackTentingMode ), groupVia );
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, COVERING_MODE>( _HKI( "Front covering" ),
+            &PCB_VIA::SetFrontCoveringMode, &PCB_VIA::GetFrontCoveringMode ), groupVia );
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, COVERING_MODE>( _HKI( "Back covering" ),
+            &PCB_VIA::SetBackCoveringMode, &PCB_VIA::GetBackCoveringMode ), groupVia );
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, PLUGGING_MODE>( _HKI( "Front plugging" ),
+            &PCB_VIA::SetFrontPluggingMode, &PCB_VIA::GetFrontPluggingMode ), groupVia );
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, PLUGGING_MODE>( _HKI( "Back plugging" ),
+            &PCB_VIA::SetBackPluggingMode, &PCB_VIA::GetBackPluggingMode ), groupVia );
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, CAPPING_MODE>( _HKI( "Capping" ),
+            &PCB_VIA::SetCappingMode, &PCB_VIA::GetCappingMode ), groupVia );
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, FILLING_MODE>( _HKI( "Filling" ),
+            &PCB_VIA::SetFillingMode, &PCB_VIA::GetFillingMode ), groupVia );
+        // clang-format on: the suggestion is less readable
     }
 } _TRACK_VIA_DESC;
 
 ENUM_TO_WXANY( VIATYPE );
 ENUM_TO_WXANY( TENTING_MODE );
+ENUM_TO_WXANY( COVERING_MODE );
+ENUM_TO_WXANY( PLUGGING_MODE );
+ENUM_TO_WXANY( CAPPING_MODE );
+ENUM_TO_WXANY( FILLING_MODE );

@@ -105,6 +105,13 @@ public:
         return m_drill_layers;
     }
 
+    inline std::map<std::tuple<ODB_AUX_LAYER_TYPE, PCB_LAYER_ID, PCB_LAYER_ID>,
+                    std::vector<BOARD_ITEM*>>&
+    GetAuxilliaryLayerItemsMap()
+    {
+        return m_auxilliary_layers;
+    }
+
     inline std::map<std::pair<PCB_LAYER_ID, PCB_LAYER_ID>, std::vector<BOARD_ITEM*>>&
     GetSlotHolesMap()
     {
@@ -163,6 +170,9 @@ private:
 
     std::map<std::pair<PCB_LAYER_ID, PCB_LAYER_ID>, std::vector<BOARD_ITEM*>>
             m_drill_layers; //<! Drill sets are output as layers (to/from pairs)
+
+    std::map<std::tuple<ODB_AUX_LAYER_TYPE, PCB_LAYER_ID, PCB_LAYER_ID>, std::vector<BOARD_ITEM*>>
+            m_auxilliary_layers; //<! Auxilliary layers, from/to pairs or simple (depending on type)
 
     std::map<std::pair<PCB_LAYER_ID, PCB_LAYER_ID>, std::vector<BOARD_ITEM*>>
             m_slot_holes; //<! Storage vector of slotted holes that need to be output as cutouts

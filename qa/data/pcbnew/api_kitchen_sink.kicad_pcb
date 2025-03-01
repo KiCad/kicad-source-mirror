@@ -806,6 +806,72 @@
 			)
 		)
 	)
+	(via
+		(at 120 102)
+		(size 0.6)
+		(drill 0.3)
+		(layers "F.Cu" "B.Cu")
+		(tenting
+			(front yes)
+			(back yes)
+		)
+		(capping no)
+		(covering
+			(front no)
+			(back no)
+		)
+		(plugging
+			(front no)
+			(back no)
+		)
+		(filling no)
+		(net 0)
+		(uuid "1960d56a-6a04-4e66-966f-9a4deaf28ebf")
+	)
+	(via
+		(at 118 102)
+		(size 0.6)
+		(drill 0.3)
+		(layers "F.Cu" "B.Cu")
+		(tenting
+			(front no)
+			(back no)
+		)
+		(capping yes)
+		(covering
+			(front no)
+			(back no)
+		)
+		(plugging
+			(front no)
+			(back no)
+		)
+		(filling yes)
+		(net 0)
+		(uuid "697fcc5c-9cf0-474e-bfab-8afc0fb18c62")
+	)
+	(via
+		(at 120 103.5)
+		(size 0.6)
+		(drill 0.3)
+		(layers "F.Cu" "B.Cu")
+		(tenting
+			(front yes)
+			(back no)
+		)
+		(capping no)
+		(covering
+			(front no)
+			(back no)
+		)
+		(plugging
+			(front yes)
+			(back no)
+		)
+		(filling no)
+		(net 0)
+		(uuid "beec9209-4c19-4ad5-ac29-5a2a547cb37b")
+	)
 	(segment
 		(start 88.3 63.2)
 		(end 90.65 60.85)

@@ -58,7 +58,7 @@ GERBER_WRITER::GERBER_WRITER( BOARD* aPcb )
 
 
 bool GERBER_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory, bool aGenDrill,
-                                               bool aGenMap, REPORTER* aReporter )
+                                               bool aGenMap, bool aGenTenting, REPORTER* aReporter )
 {
     bool success = true;
     // Note: In Gerber drill files, NPTH and PTH are always separate files
@@ -117,7 +117,48 @@ bool GERBER_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory, b
                         aReporter->Report( msg, RPT_SEVERITY_ACTION );
                     }
                 }
+            }
+        }
 
+        if( getHolesCount() > 0 && !doing_npth )
+        {
+            for( IPC4761_FEATURES feature :
+                 { IPC4761_FEATURES::FILLED, IPC4761_FEATURES::CAPPED,
+                   IPC4761_FEATURES::COVERED_BACK, IPC4761_FEATURES::COVERED_FRONT,
+                   IPC4761_FEATURES::PLUGGED_BACK, IPC4761_FEATURES::PLUGGED_FRONT,
+                   IPC4761_FEATURES::TENTED_BACK, IPC4761_FEATURES::TENTED_FRONT } )
+            {
+                if( !aGenTenting )
+                {
+                    if( feature == IPC4761_FEATURES::TENTED_BACK
+                        || feature == IPC4761_FEATURES::TENTED_FRONT )
+                    {
+                        continue;
+                    }
+                }
+
+                fn = getProtectionFileName( pair, feature );
+                fn.SetPath( aPlotDirectory );
+
+                wxString fullFilename = fn.GetFullPath();
+
+                if( createProtectionFile( fullFilename, feature, pair ) < 0 )
+                {
+                    if( aReporter )
+                    {
+                        msg.Printf( _( "Failed to create file '%s'." ), fullFilename );
+                        aReporter->Report( msg, RPT_SEVERITY_ERROR );
+                        success = false;
+                    }
+                }
+                else
+                {
+                    if( aReporter )
+                    {
+                        msg.Printf( _( "Created file '%s'." ), fullFilename );
+                        aReporter->Report( msg, RPT_SEVERITY_ACTION );
+                    }
+                }
             }
         }
     }
@@ -137,6 +178,141 @@ bool GERBER_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory, b
 static void convertOblong2Segment( const VECTOR2I& aSize, const EDA_ANGLE& aOrient, VECTOR2I& aStart, VECTOR2I& aEnd );
 #endif
 
+int GERBER_WRITER::createProtectionFile( const wxString& aFullFilename, IPC4761_FEATURES aFeature,
+                                         DRILL_LAYER_PAIR aLayerPair )
+{
+    GERBER_PLOTTER plotter;
+    // Gerber drill file imply X2 format:
+    plotter.UseX2format( true );
+    plotter.UseX2NetAttributes( true );
+    plotter.DisableApertMacros( false );
+
+    // Add the standard X2 header, without FileFunction
+    AddGerberX2Header( &plotter, m_pcb );
+    plotter.SetViewport( m_offset, pcbIUScale.IU_PER_MILS / 10, /* scale */ 1.0,
+                         /* mirror */ false );
+
+    // has meaning only for gerber plotter. Must be called only after SetViewport
+    plotter.SetGerberCoordinatesFormat( 6 );
+    plotter.SetCreator( wxT( "PCBNEW" ) );
+
+    // Add the standard X2 FileFunction for drill files
+    // %TF.FileFunction,Plated[NonPlated],layer1num,layer2num,PTH[NPTH][Blind][Buried],Drill[Rout][Mixed]*%
+    wxString text = "%TF,FileFunction,Other,";
+
+    std::string attrib;
+    switch( aFeature )
+    {
+    case IPC4761_FEATURES::CAPPED:
+        text << wxT( "Capping" );
+        attrib = "Capping";
+        break;
+    case IPC4761_FEATURES::FILLED:
+        text << wxT( "Filling" );
+        attrib = "Filling";
+        break;
+    case IPC4761_FEATURES::COVERED_BACK:
+        text << wxT( "Covering-Back" );
+        attrib = "Covering";
+        break;
+    case IPC4761_FEATURES::COVERED_FRONT:
+        text << wxT( "Covering-Front" );
+        attrib = "Covering";
+        break;
+    case IPC4761_FEATURES::PLUGGED_BACK:
+        text << wxT( "Plugging-Back" );
+        attrib = "Plugging";
+        break;
+    case IPC4761_FEATURES::PLUGGED_FRONT:
+        text << wxT( "Plugging-Front" );
+        attrib = "Plugging";
+        break;
+    case IPC4761_FEATURES::TENTED_BACK:
+        text << wxT( "Tenting-Back" );
+        attrib = "Tenting";
+        break;
+    case IPC4761_FEATURES::TENTED_FRONT:
+        text << wxT( "Tenting-Front" );
+        attrib = "Tenting";
+        break;
+    default: return -1;
+    }
+    text << wxT( "*%" );
+    plotter.AddLineToHeader( text );
+
+    // Add file polarity (positive)
+    text = wxT( "%TF.FilePolarity,Positive*%" );
+    plotter.AddLineToHeader( text );
+
+
+    if( !plotter.OpenFile( aFullFilename ) )
+        return -1;
+
+    plotter.StartPlot( wxT( "1" ) );
+
+    int holes_count = 0;
+
+    for( auto& hole_descr : m_holeListBuffer )
+    {
+        if( !dyn_cast<const PCB_VIA*>( hole_descr.m_ItemParent ) )
+        {
+            continue;
+        }
+
+        const PCB_VIA* via = dyn_cast<const PCB_VIA*>( hole_descr.m_ItemParent );
+
+        bool cont = false;
+        int  diameter = hole_descr.m_Hole_Diameter;
+        // clang-format off: suggestion is inconsitent
+        switch( aFeature )
+        {
+        case IPC4761_FEATURES::FILLED:
+            cont = ! hole_descr.m_Hole_Filled;
+            break;
+        case IPC4761_FEATURES::CAPPED:
+            cont = ! hole_descr.m_Hole_Capped;
+            break;
+        case IPC4761_FEATURES::COVERED_BACK:
+            cont = !hole_descr.m_Hole_Bot_Covered;
+            diameter = via->GetWidth( via->BottomLayer() );
+            break;
+        case IPC4761_FEATURES::COVERED_FRONT:
+            cont = ! hole_descr.m_Hole_Top_Covered;
+            diameter = via->GetWidth( via->TopLayer() );
+            break;
+        case IPC4761_FEATURES::PLUGGED_BACK:
+            cont = !hole_descr.m_Hole_Bot_Plugged;
+            break;
+        case IPC4761_FEATURES::PLUGGED_FRONT:
+            cont = ! hole_descr.m_Hole_Top_Plugged;
+            break;
+        case IPC4761_FEATURES::TENTED_BACK:
+            cont = ! hole_descr.m_Hole_Bot_Tented;
+            diameter = via->GetWidth( via->BottomLayer() );
+            break;
+        case IPC4761_FEATURES::TENTED_FRONT:
+            cont = ! hole_descr.m_Hole_Top_Tented;
+            diameter = via->GetWidth( via->TopLayer() );
+            break;
+        }
+        // clang-format on: suggestion is inconsitent
+
+        if( cont )
+            continue;
+
+        GBR_METADATA gbr_metadata;
+
+        gbr_metadata.SetApertureAttrib( attrib );
+
+        plotter.FlashPadCircle( hole_descr.m_Hole_Pos, diameter, FILLED, &gbr_metadata );
+
+        holes_count++;
+    }
+
+    plotter.EndPlot();
+
+    return holes_count;
+}
 
 int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
                                     DRILL_LAYER_PAIR aLayerPair )

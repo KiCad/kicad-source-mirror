@@ -294,15 +294,31 @@ message PadStackLayer
 
 enum SolderMaskMode
 {
-  SMM_UNKOWN = 0;
+  SMM_UNKNOWN = 0;
   SMM_MASKED = 1;
   SMM_UNMASKED = 2;
   SMM_FROM_DESIGN_RULES = 3;
 }
 
+enum ViaCoveringMode
+{
+  VCM_UNKNOWN = 0;
+  VCM_COVERED = 1;
+  VCM_UNCOVERED = 2;
+  VCM_FROM_DESIGN_RULES = 3;
+}
+
+enum ViaPluggingMode
+{
+  VPM_UNKNOWN = 0;
+  VPM_PLUGGED = 1;
+  VPM_UNPLUGGED = 2;
+  VPM_FROM_DESIGN_RULES = 3;
+}
+
 enum SolderPasteMode
 {
-  SPM_UNKOWN = 0;
+  SPM_UNKNOWN = 0;
   SPM_PASTE = 1;
   SPM_NO_PASTE = 2;
   SPM_FROM_DESIGN_RULES = 3;
@@ -319,6 +335,9 @@ message PadStackOuterLayer
 
   // NOTE: At present, KiCad does not support different solder paste expansion settings for the top and bottom layers
   SolderPasteOverrides solder_paste_settings = 4;
+
+  ViaPluggingMode plugging_mode = 5;
+  ViaCoveringMode covering_mode = 6;
 }
 
 enum DrillShape
@@ -327,6 +346,22 @@ enum DrillShape
   DS_CIRCLE = 1;
   DS_OBLONG = 2;
   DS_UNDEFINED = 3;
+}
+
+enum ViaDrillCappingMode
+{
+  VDCM_UNKNOWN = 0;
+  VDCM_CAPPED = 1;
+  VDCM_UNCAPPED = 2;
+  VDCM_FROM_DESIGN_RULES = 3;
+}
+
+enum ViaDrillFillingMode
+{
+  VDFM_UNKNOWN = 0;
+  VDFM_FILLED = 1;
+  VDFM_UNFILLED = 2;
+  VDFM_FROM_DESIGN_RULES = 3;
 }
 
 message DrillProperties
@@ -342,6 +377,10 @@ message DrillProperties
   kiapi.common.types.Vector2 diameter = 3;
 
   DrillShape shape = 4;
+
+  ViaDrillCappingMode capped = 5;
+
+  ViaDrillFillingMode filled = 6;
 }
 
 // A pad stack definition for a multilayer pad or via.

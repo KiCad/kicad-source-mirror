@@ -258,6 +258,7 @@ public:
         int  map_file_type;
         int  zeros_format;
         bool generate_map;
+        bool generate_tenting;
     };
 
     struct DIALOG_IMPORT_GRAPHICS

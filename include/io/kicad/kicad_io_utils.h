@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <optional>
+
 #include <wx/stream.h>
 #include <wx/string.h>
 
@@ -37,6 +39,18 @@ namespace KICAD_FORMAT {
  * @param aValue is the value to write
  */
 KICOMMON_API void FormatBool( OUTPUTFORMATTER* aOut, const wxString& aKey, bool aValue );
+
+/**
+ * Writes an optional boolean to the formatter.
+ * If a value is present, calls FormatBool.
+ * If no value is present, Writes (aKey none).
+ * 
+ * @param aOut is the output formatter to write to
+ * @param aKey is the name of the boolean flag
+ * @param aValue is the value to write
+ */
+KICOMMON_API void FormatOptBool( OUTPUTFORMATTER* aOut, const wxString& aKey,
+                                 std::optional<bool> aValue );
 
 KICOMMON_API void FormatUuid( OUTPUTFORMATTER* aOut, const KIID& aUuid );
 

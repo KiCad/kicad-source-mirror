@@ -228,8 +228,11 @@ public:
         std::optional<int> solder_mask_margin;
         std::optional<int> solder_paste_margin;
         std::optional<double> solder_paste_margin_ratio;
+
         std::optional<bool> has_solder_mask;   ///< True if this outer layer has mask (is not tented)
         std::optional<bool> has_solder_paste;  ///< True if this outer layer has solder paste
+        std::optional<bool> has_covering; ///< True if the pad on this side should have covering
+        std::optional<bool> has_plugging; ///< True if the drill hole should be plugged on this side
 
         bool operator==( const MASK_LAYER_PROPS& aOther ) const;
     };
@@ -241,6 +244,9 @@ public:
         PAD_DRILL_SHAPE shape;
         PCB_LAYER_ID start;
         PCB_LAYER_ID end;
+
+        std::optional<bool> is_filled; ///< True if the drill hole should be filled completely
+        std::optional<bool> is_capped; ///< True if the drill hole should be capped
 
         bool operator==( const DRILL_PROPS& aOther ) const;
     };
@@ -322,6 +328,14 @@ public:
      *         std::nullopt if there is no override (meaning design rules should be used)
      */
     std::optional<bool> IsTented( PCB_LAYER_ID aSide ) const;
+
+    std::optional<bool> IsCovered( PCB_LAYER_ID aSide ) const;
+
+    std::optional<bool> IsPlugged( PCB_LAYER_ID aSide ) const;
+
+    std::optional<bool> IsCapped() const;
+
+    std::optional<bool> IsFilled() const;
 
     CUSTOM_SHAPE_ZONE_MODE CustomShapeInZoneMode() const { return m_customShapeInZoneMode; }
     void SetCustomShapeInZoneMode( CUSTOM_SHAPE_ZONE_MODE aM ) { m_customShapeInZoneMode = aM; }

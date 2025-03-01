@@ -50,6 +50,18 @@ enum class HOLE_ATTRIBUTE
     HOLE_MECHANICAL     // a mechanical pad (provided, not used)
 };
 
+// Via Protection features according to IPC-4761.
+enum class IPC4761_FEATURES : int
+{
+    FILLED,
+    CAPPED,
+    PLUGGED_FRONT,
+    PLUGGED_BACK,
+    COVERED_FRONT,
+    COVERED_BACK,
+    TENTED_FRONT,
+    TENTED_BACK
+};
 
 // the DRILL_TOOL class  handles tools used in the excellon drill file:
 class DRILL_TOOL
@@ -95,6 +107,14 @@ public:
         m_Hole_Bottom_Layer = B_Cu;
         m_Hole_Top_Layer = F_Cu;
         m_HoleAttribute = HOLE_ATTRIBUTE::HOLE_UNKNOWN;
+        m_Hole_Filled = false;
+        m_Hole_Capped = false;
+        m_Hole_Top_Covered = false;
+        m_Hole_Bot_Covered = false;
+        m_Hole_Top_Plugged = false;
+        m_Hole_Bot_Plugged = false;
+        m_Hole_Top_Tented = false;
+        m_Hole_Bot_Tented = false;
     }
 
 public:
@@ -114,6 +134,15 @@ public:
                                          // section.
     HOLE_ATTRIBUTE m_HoleAttribute;      // Attribute, used in Excellon drill file and to sort holes
                                          // by type.
+
+    bool m_Hole_Filled;      // hole should be filled
+    bool m_Hole_Capped;      // hole should be capped
+    bool m_Hole_Top_Covered; // hole should be covered on top
+    bool m_Hole_Bot_Covered; // hole should be covered on bottom
+    bool m_Hole_Top_Plugged; // hole should be plugged on top
+    bool m_Hole_Bot_Plugged; // hole should be plugged on bottom
+    bool m_Hole_Top_Tented;  // hole should be tented on top
+    bool m_Hole_Bot_Tented;  // hole should be tented on bottom
 };
 
 
@@ -345,6 +374,16 @@ protected:
      */
     virtual const wxString getDrillFileName( DRILL_LAYER_PAIR aPair, bool aNPTH,
                                              bool aMerge_PTH_NPTH ) const;
+
+
+    /**
+     * @param aPair is the layer pair.
+     * @param aFeature Is the protection feature represented by the file
+     * @return a filename which identifies the specific protection feature.
+     * It is the board file name followed by the feature name and the layer(s) associated with it.
+     */
+    virtual const wxString getProtectionFileName( DRILL_LAYER_PAIR aPair,
+                                                  IPC4761_FEATURES aFeature ) const;
 
 
     /**

@@ -104,14 +104,16 @@ BOOST_FIXTURE_TEST_CASE( BoardTypes, PROTO_TEST_FIXTURE )
             break;
 
         case PCB_ARC_T:
-            testProtoFromKiCadObject<kiapi::board::types::Arc>( track, m_board.get() );
+            testProtoFromKiCadObject<kiapi::board::types::Arc>( static_cast<PCB_ARC*>( track ),
+                                                                m_board.get() );
             break;
 
         case PCB_VIA_T:
             // Vias are not strict-checked at the moment because m_zoneLayerOverrides is not
             // currently exposed to the API
             // TODO(JE) enable strict when fixed
-            testProtoFromKiCadObject<kiapi::board::types::Via>( track, m_board.get(), false );
+            testProtoFromKiCadObject<kiapi::board::types::Via>( static_cast<PCB_VIA*>( track ),
+                                                                m_board.get(), false );
             break;
 
         default:
