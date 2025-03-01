@@ -1272,10 +1272,34 @@ double IEC60664::ComputeClearanceDistance( const POLLUTION_DEGREE aPD, const FIE
         return -1; // Requires 60664-4
 #endif
 
-    double clearance1 = GetClearanceToWithstandTransientVoltage(
-            ( m_insulationType == INSULATION_TYPE::REINFORCED ) ? m_transientVoltage * 1.6
-                                                                : m_transientVoltage,
-            aPD, aField );
+    double transientVoltage = m_transientVoltage;
+
+    // IEC60664-1 : 2020-05 : 5.2.5
+
+    // Preferred series has a specific rule
+    if( m_insulationType == INSULATION_TYPE::REINFORCED )
+    {
+        if( transientVoltage == 0.33 )
+            transientVoltage = 0.5;
+        else if( transientVoltage == 0.5 )
+            transientVoltage = 0.8;
+        else if( transientVoltage == 0.8 )
+            transientVoltage = 1.5;
+        else if( transientVoltage == 1.5 )
+            transientVoltage = 2.5;
+        else if( transientVoltage == 2.5 )
+            transientVoltage = 4;
+        else if( transientVoltage == 4 )
+            transientVoltage = 6;
+        else if( transientVoltage == 6 )
+            transientVoltage = 8;
+        else if( transientVoltage == 8 )
+            transientVoltage = 12;
+        else
+            transientVoltage = transientVoltage * 1.6;
+    }
+
+    double clearance1 = GetClearanceToWithstandTransientVoltage( transientVoltage, aPD, aField );
     double clearance2 = GetClearanceToWithstandPeaks(
             ( m_insulationType == INSULATION_TYPE::REINFORCED ) ? m_peakVoltage * 1.6
                                                                 : m_peakVoltage,
