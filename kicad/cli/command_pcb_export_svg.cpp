@@ -118,6 +118,10 @@ CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND(
                                   "GUI plotting. The given output path specifies a directory in "
                                   "which files may be output." ) ) )
             .flag();
+
+    m_argParser.add_argument( DEPRECATED_ARG_PLOT_INVISIBLE_TEXT )
+            .help( UTF8STDSTR( _( DEPRECATED_ARG_PLOT_INVISIBLE_TEXT_DESC ) ) )
+            .flag();
 }
 
 
@@ -141,6 +145,9 @@ int CLI::PCB_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
     svgJob->m_drillShapeOption = static_cast<JOB_EXPORT_PCB_SVG::DRILL_MARKS>( drillShape );
     svgJob->m_drawingSheet = m_argDrawingSheet;
     svgJob->m_subtractSolderMaskFromSilk = m_argParser.get<bool>( ARG_SUBTRACT_SOLDERMASK );
+
+    if( m_argParser.get<bool>( DEPRECATED_ARG_PLOT_INVISIBLE_TEXT ) )
+        wxFprintf( stdout, DEPRECATED_ARD_PLOT_INVISIBLE_TEXT_WARNING );
 
     svgJob->m_filename = m_argInput;
     svgJob->SetConfiguredOutputPath( m_argOutput );

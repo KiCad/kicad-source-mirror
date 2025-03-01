@@ -83,6 +83,10 @@ CLI::PCB_EXPORT_GERBER_COMMAND::PCB_EXPORT_GERBER_COMMAND( const std::string& aN
     m_argParser.add_argument( ARG_NO_PROTEL_EXTENSION )
             .help( UTF8STDSTR( _( "Use KiCad Gerber file extension" ) ) )
             .flag();
+
+    m_argParser.add_argument( DEPRECATED_ARG_PLOT_INVISIBLE_TEXT )
+            .help( UTF8STDSTR( _( DEPRECATED_ARG_PLOT_INVISIBLE_TEXT_DESC ) ) )
+            .flag();
 }
 
 
@@ -109,6 +113,9 @@ int CLI::PCB_EXPORT_GERBER_COMMAND::populateJob( JOB_EXPORT_PCB_GERBER* aJob )
     aJob->m_useProtelFileExtension = !m_argParser.get<bool>( ARG_NO_PROTEL_EXTENSION );
     aJob->m_precision = m_argParser.get<int>( ARG_PRECISION );
     aJob->m_printMaskLayer = m_selectedLayers;
+
+    if( m_argParser.get<bool>( DEPRECATED_ARG_PLOT_INVISIBLE_TEXT ) )
+        wxFprintf( stdout, DEPRECATED_ARD_PLOT_INVISIBLE_TEXT_WARNING );
 
     if( !wxFile::Exists( aJob->m_filename ) )
     {
