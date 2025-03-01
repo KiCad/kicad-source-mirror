@@ -390,6 +390,9 @@ CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode, bool aExcludeZo
                 if( withinAnyNet && n->Net() != root->Net() )
                     continue;
 
+                if( aExcludeZones && n->Parent()->Type() == PCB_ZONE_T )
+                    continue;
+
                 if( !visited.contains( n ) && n->Valid() )
                 {
                     visited.insert( n );
