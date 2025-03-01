@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-01 18:34+0300\n"
-"PO-Revision-Date: 2025-03-01 03:31+0000\n"
+"PO-Revision-Date: 2025-03-01 20:38+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -3690,7 +3690,6 @@ msgid "Enter the password for the SSH key"
 msgstr "Ange lösenordet för SSH-nyckeln"
 
 #: common/dialogs/git/dialog_git_repository.cpp:337
-#, fuzzy
 msgid "Test Connection"
 msgstr "Testa anslutning"
 
@@ -3736,9 +3735,8 @@ msgstr "Vänligen ange en URL-adress till förvaret"
 
 #: common/dialogs/git/dialog_git_repository.cpp:453
 #: common/dialogs/git/dialog_git_repository_base.cpp:108
-#, fuzzy
 msgid "SSH key password:"
-msgstr "Lösenord för SSH-nyckel"
+msgstr "Lösenord för SSH-nyckel:"
 
 #: common/dialogs/git/dialog_git_repository.cpp:459
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
