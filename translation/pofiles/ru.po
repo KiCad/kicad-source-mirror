@@ -22,17 +22,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-01 18:34+0300\n"
-"PO-Revision-Date: 2025-02-27 07:25+0000\n"
+"PO-Revision-Date: 2025-03-01 20:38+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.10.2-dev\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -3743,7 +3743,6 @@ msgid "Enter the password for the SSH key"
 msgstr "Введите пароль для ключа SSH"
 
 #: common/dialogs/git/dialog_git_repository.cpp:337
-#, fuzzy
 msgid "Test Connection"
 msgstr "Тест соединения"
 
@@ -3789,9 +3788,8 @@ msgstr "Требуется ввести URL репозитория"
 
 #: common/dialogs/git/dialog_git_repository.cpp:453
 #: common/dialogs/git/dialog_git_repository_base.cpp:108
-#, fuzzy
 msgid "SSH key password:"
-msgstr "Пароль ключа SSH"
+msgstr "Пароль ключа SSH:"
 
 #: common/dialogs/git/dialog_git_repository.cpp:459
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
@@ -3799,14 +3797,12 @@ msgid "Password:"
 msgstr "Пароль:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:38
-#, fuzzy
 msgid "Location:"
-msgstr "Расположение"
+msgstr "Расположение:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:45
-#, fuzzy
 msgid "Connection type:"
-msgstr "Тип соединения"
+msgstr "Тип соединения:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:52
 msgid "HTTPS"
@@ -3818,9 +3814,8 @@ msgid "Local"
 msgstr "Локально"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:83
-#, fuzzy
 msgid "SSH private key:     "
-msgstr "Приватный ключ SSH"
+msgstr "Приватный ключ SSH:     "
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:90
 msgid "Select SSH private key file"
@@ -3831,7 +3826,6 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:101
-#, fuzzy
 msgid "User name:"
 msgstr "Имя пользователя:"
 
@@ -38159,22 +38153,20 @@ msgstr "Стиль границ:"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:546
 #, c-format
 msgid "Applying these changes will short net %s with %s."
-msgstr ""
+msgstr "Применение этих изменений создаст замыкание между цепями %s и %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:552
 #, c-format
 msgid "Applying these changes will short net %s with other nets."
-msgstr ""
+msgstr "Применение этих изменений создаст замыкание цепи %s с другими цепями."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Apply Anyway"
-msgstr "Добавить в любом случае"
+msgstr "Применить в любом случае"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Cancel Changes"
-msgstr "Отменить изменения?"
+msgstr "Отменить изменения"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:571
 #, c-format
