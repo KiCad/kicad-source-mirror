@@ -92,18 +92,15 @@ public:
 
             KIWAY::FACE_T iface = JOB_REGISTRY::GetKifaceType( job.m_type );
             wxString source = wxEmptyString;
+
             if( iface < KIWAY::KIWAY_FACE_COUNT )
             {
-                
                 if( iface == KIWAY::FACE_PCB )
-                {
                     source = wxT( "PCB" );
-                }
                 else if( iface == KIWAY::FACE_SCH )
-				{
 					source = wxT( "SCH" );
-				}
             }
+
             m_jobList->SetItem( itemIndex, jobSourceColId, source );
         }
 
@@ -248,8 +245,8 @@ public:
 
                     JOBS_RUNNER jobRunner( &( m_frame->Kiway() ), m_jobsFile, &project );
 
-                    WX_PROGRESS_REPORTER* progressReporter =
-                            new WX_PROGRESS_REPORTER( m_frame, _( "Running jobs" ), 1 );
+                    auto* progressReporter = new WX_PROGRESS_REPORTER( m_frame, _( "Running jobs" ),
+                                                                       1 );
 
                     if( JOBSET_OUTPUT* output = GetOutput() )
                         jobRunner.RunJobsForOutput( output );
@@ -512,7 +509,7 @@ void PANEL_JOBSET::rebuildJobList()
     if( m_jobsGrid->GetNumberRows() )
         m_jobsGrid->DeleteRows( 0, m_jobsGrid->GetNumberRows() );
 
-    m_jobsGrid->AppendRows( m_jobsFile->GetJobs().size() );
+    m_jobsGrid->AppendRows( (int) m_jobsFile->GetJobs().size() );
 
     int num = 1;
 
@@ -527,16 +524,13 @@ void PANEL_JOBSET::rebuildJobList()
 
         KIWAY::FACE_T iface = JOB_REGISTRY::GetKifaceType( job.m_type );
         wxString      source = wxEmptyString;
+
         if( iface < KIWAY::KIWAY_FACE_COUNT )
         {
             if( iface == KIWAY::FACE_PCB )
-            {
                 source = wxT( "PCB" );
-            }
             else if( iface == KIWAY::FACE_SCH )
-            {
                 source = wxT( "SCH" );
-            }
         }
 
         m_jobsGrid->SetCellValue( num - 1, COL_SOURCE, source );
@@ -700,6 +694,7 @@ void PANEL_JOBSET::OnAddJobClick( wxCommandEvent& aEvent )
         wxString selectedString = dlg.GetTextSelection();
 
         wxString jobKey;
+
         if( !selectedString.IsEmpty() )
         {
             for( const std::pair<const wxString, JOB_REGISTRY_ENTRY>& entry : jobMap )
@@ -790,11 +785,11 @@ void PANEL_JOBSET::OnAddOutputClick( wxCommandEvent& aEvent )
     {
         wxString selectedString = dlg.GetTextSelection();
 
-        for( const std::pair<const JOBSET_OUTPUT_TYPE, JOBSET_OUTPUT_TYPE_INFO>& jobType : JobsetOutputTypeInfos )
+        for( const auto& [outputType, outputTypeInfo] : JobsetOutputTypeInfos )
         {
-            if( wxGetTranslation( jobType.second.name ) == selectedString )
+            if( wxGetTranslation( outputTypeInfo.name ) == selectedString )
             {
-                JOBSET_OUTPUT* output = m_jobsFile->AddNewJobOutput( jobType.first );
+                JOBSET_OUTPUT* output = m_jobsFile->AddNewJobOutput( outputType );
 
                 DIALOG_JOBSET_OUTPUT_OPTIONS dialog( m_frame, m_jobsFile.get(), output );
 

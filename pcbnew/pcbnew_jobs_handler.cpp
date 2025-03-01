@@ -1209,6 +1209,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
     wxString     layerName;
     wxString     sheetName;
     wxString     sheetPath;
+    wxString     outPath = aGerberJob->GetFullOutputPath( brd->GetProject() );
 
     // The first layer will be treated as the layer name for the gerber header,
     // the other layers will be treated equivalent to the "Plot on All Layers" option
@@ -1229,9 +1230,8 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
         sheetPath = aJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
 
     // We are feeding it one layer at the start here to silence a logic check
-    GERBER_PLOTTER* plotter = (GERBER_PLOTTER*) StartPlotBoard( brd, &plotOpts, layer, layerName,
-                                                                aGerberJob->GetFullOutputPath( brd->GetProject() ),
-                                                                sheetName, sheetPath );
+    PLOTTER* plotter = StartPlotBoard( brd, &plotOpts, layer, layerName, outPath, sheetName,
+                                       sheetPath );
 
     if( plotter )
     {
@@ -1240,8 +1240,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
     }
     else
     {
-        m_reporter->Report( wxString::Format( _( "Failed to plot to '%s'.\n" ),
-                                              aGerberJob->GetFullOutputPath( brd->GetProject() ) ),
+        m_reporter->Report( wxString::Format( _( "Failed to plot to '%s'.\n" ), outPath ),
                             RPT_SEVERITY_ERROR );
         exitCode = CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
@@ -1514,7 +1513,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
     {
         PLACEFILE_GERBER_WRITER exporter( brd );
         PCB_LAYER_ID            gbrLayer = F_Cu;
-        wxString outPath_base = outPath;
+        wxString                outPath_base = outPath;
 
         if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::FRONT
                 || aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH )
@@ -1563,9 +1562,6 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
 
     return CLI::EXIT_CODES::OK;
 }
-
-extern FOOTPRINT* try_load_footprint( const wxFileName& aFileName, PCB_IO_MGR::PCB_FILE_T aFileType,
-                                      const wxString& aName );
 
 
 int PCBNEW_JOBS_HANDLER::JobExportFpUpgrade( JOB* aJob )
@@ -1687,31 +1683,21 @@ int PCBNEW_JOBS_HANDLER::JobExportFpSvg( JOB* aJob )
         wxFileName::Mkdir( svgJob->m_outputDirectory );
     }
 
-    int exitCode = CLI::EXIT_CODES::OK;
-
-    // Just plot all the symbols we can
-    boost::ptr_map<wxString, FP_CACHE_ENTRY>& footprintMap = fpLib.GetFootprints();
-
+    int  exitCode = CLI::EXIT_CODES::OK;
     bool singleFpPlotted = false;
 
-    for( auto it = footprintMap.begin(); it != footprintMap.end(); ++it )
+    for( const auto& [fpName, fpCacheEntry] : fpLib.GetFootprints() )
     {
-        const std::unique_ptr<FOOTPRINT>& fp = it->second->GetFootprint();
-
         if( !svgJob->m_footprint.IsEmpty() )
         {
-            if( fp->GetFPID().GetLibItemName().wx_str() != svgJob->m_footprint )
-            {
-                // skip until we find the right footprint
+            // skip until we find the right footprint
+            if( fpName != svgJob->m_footprint )
                 continue;
-            }
             else
-            {
                 singleFpPlotted = true;
-            }
         }
 
-        exitCode = doFpExportSvg( svgJob, fp.get() );
+        exitCode = doFpExportSvg( svgJob, fpCacheEntry->GetFootprint().get() );
 
         if( exitCode != CLI::EXIT_CODES::OK )
             break;
@@ -2168,7 +2154,8 @@ int PCBNEW_JOBS_HANDLER::JobExportOdb( JOB* aJob )
             case JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::TGZ:
                 fn.SetExt( "tgz" );
                 break;
-            default: break;
+            default:
+                break;
             };
 
             job->SetWorkingOutputPath( fn.GetFullName() );
@@ -2207,28 +2194,28 @@ void PCBNEW_JOBS_HANDLER::loadOverrideDrawingSheet( BOARD* aBrd, const wxString&
 
     auto loadSheet =
             [&]( const wxString& path ) -> bool
-    {
-        BASE_SCREEN::m_DrawingSheetFileName = path;
-        FILENAME_RESOLVER resolver;
-        resolver.SetProject( aBrd->GetProject() );
-        resolver.SetProgramBase( &Pgm() );
+            {
+                BASE_SCREEN::m_DrawingSheetFileName = path;
+                FILENAME_RESOLVER resolver;
+                resolver.SetProject( aBrd->GetProject() );
+                resolver.SetProgramBase( &Pgm() );
 
-        wxString filename = resolver.ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
-                                                  aBrd->GetProject()->GetProjectPath(),
-                                                  aBrd->GetEmbeddedFiles() );
-        wxString msg;
+                wxString filename = resolver.ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
+                                                          aBrd->GetProject()->GetProjectPath(),
+                                                          aBrd->GetEmbeddedFiles() );
+                wxString msg;
 
-        if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename, &msg ) )
-        {
-            m_reporter->Report( wxString::Format( _( "Error loading drawing sheet '%s'." ),
-                                                    path )
-                                + wxS( "\n" ) + msg + wxS( "\n" ),
-                                RPT_SEVERITY_ERROR );
-            return false;
-        }
+                if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename, &msg ) )
+                {
+                    m_reporter->Report( wxString::Format( _( "Error loading drawing sheet '%s'." ),
+                                                            path )
+                                        + wxS( "\n" ) + msg + wxS( "\n" ),
+                                        RPT_SEVERITY_ERROR );
+                    return false;
+                }
 
-        return true;
-    };
+                return true;
+            };
 
     if( loadSheet( aSheetPath ) )
         return;
