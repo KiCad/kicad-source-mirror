@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-26 20:12+0300\n"
+"POT-Creation-Date: 2025-03-01 18:34+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -133,23 +133,11 @@ msgstr "Rendering: %.0f %%"
 msgid "Rendering: Post processing shader"
 msgstr "Rendering: Post processing shader"
 
-msgid "Export Current View as PNG..."
-msgstr "Export Current View as PNG…"
-
-msgid "Export Current View as JPEG..."
-msgstr "Export Current View as JPEG…"
-
 msgid "3D Viewer"
 msgstr "3D Viewer"
 
-msgid "Copy 3D Image"
-msgstr "Copy 3D Image"
-
 msgid "3D Grid"
 msgstr "3D Grid"
-
-msgid "Raytracing"
-msgstr "Raytracing"
 
 msgid "Reset to Default Settings"
 msgstr "Reset to Default Settings"
@@ -165,15 +153,6 @@ msgstr "&View"
 
 msgid "&Preferences"
 msgstr "&Preferences"
-
-msgid "Reload board"
-msgstr "Reload board"
-
-msgid "Copy 3D image to clipboard"
-msgstr "Copy 3D image to clipboard"
-
-msgid "Render current view using Raytracing"
-msgstr "Render current view using Raytracing"
 
 msgid "KiCad 3D Viewer"
 msgstr "KiCad 3D Viewer"
@@ -205,6 +184,36 @@ msgstr "Failed to copy image to clipboard"
 
 msgid "Can't save file"
 msgstr "Can't save file"
+
+msgid "Reload board"
+msgstr "Reload board"
+
+msgid "Reload board and refresh 3D view"
+msgstr "Reload board and refresh 3D view"
+
+msgid "Use raytracing"
+msgstr "Use raytracing"
+
+msgid "Render current view using Raytracing"
+msgstr "Render current view using Raytracing"
+
+msgid "Copy 3D image to clipboard"
+msgstr "Copy 3D image to clipboard"
+
+msgid "Copy the current 3D image to the clipboard"
+msgstr "Copy the current 3D image to the clipboard"
+
+msgid "Export Current View as PNG..."
+msgstr "Export Current View as PNG…"
+
+msgid "Export the Current View as a PNG image"
+msgstr "Export the Current View as a PNG image"
+
+msgid "Export Current View as JPEG..."
+msgstr "Export Current View as JPEG…"
+
+msgid "Export the Current View as a JPEG image"
+msgstr "Export the Current View as a JPEG image"
 
 msgid "Set Pivot"
 msgstr "Set Pivot"
@@ -2105,8 +2114,8 @@ msgstr "Commit message cannot be empty"
 msgid "Enter the password for the SSH key"
 msgstr "Enter the password for the SSH key"
 
-msgid "Test connection"
-msgstr "Test connection"
+msgid "Test Connection"
+msgstr "Test Connection"
 
 msgid "Connection successful"
 msgstr "Connection successful"
@@ -2138,14 +2147,17 @@ msgstr "Please enter a name for the repository"
 msgid "Please enter a URL for the repository"
 msgstr "Please enter a URL for the repository"
 
-msgid "SSH Key Password"
-msgstr "SSH Key Password"
+msgid "SSH key password:"
+msgstr "SSH key password:"
 
-msgid "Location"
-msgstr "Location"
+msgid "Password:"
+msgstr "Password:"
 
-msgid "Connection Type"
-msgstr "Connection Type"
+msgid "Location:"
+msgstr "Location:"
+
+msgid "Connection type:"
+msgstr "Connection type:"
 
 msgid "HTTPS"
 msgstr "HTTPS"
@@ -2153,8 +2165,8 @@ msgstr "HTTPS"
 msgid "Local"
 msgstr "Local"
 
-msgid "SSH Private Key"
-msgstr "SSH Private Key"
+msgid "SSH private key:     "
+msgstr "SSH private key:     "
 
 msgid "Select SSH private key file"
 msgstr "Select SSH private key file"
@@ -2162,8 +2174,8 @@ msgstr "Select SSH private key file"
 msgid "*"
 msgstr "*"
 
-msgid "Username"
-msgstr "Username"
+msgid "User name:"
+msgstr "User name:"
 
 msgid "Git Repository"
 msgstr "Git Repository"
@@ -3300,6 +3312,33 @@ msgstr "Variable Name"
 msgid "Text Substitution"
 msgstr "Text Substitution"
 
+msgid "Left"
+msgstr "Left"
+
+msgid "Right"
+msgstr "Right"
+
+msgid "Top main"
+msgstr "Top main"
+
+msgid "Top auxillary"
+msgstr "Top auxillary"
+
+msgid "Insert separator"
+msgstr "Insert separator"
+
+msgid "Insert spacer"
+msgstr "Insert spacer"
+
+msgid "Insert group"
+msgstr "Insert group"
+
+msgid "Group"
+msgstr "Group"
+
+msgid "Customize toolbars"
+msgstr "Customize toolbars"
+
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "Could not use OpenGL, falling back to software rendering"
 
@@ -3484,6 +3523,9 @@ msgstr "Editing Options"
 msgid "Colors"
 msgstr "Colors"
 
+msgid "Toolbars"
+msgstr "Toolbars"
+
 msgid "Schematic Editor"
 msgstr "Schematic Editor"
 
@@ -3667,9 +3709,6 @@ msgstr "ItemList"
 msgid "NetInfo"
 msgstr "NetInfo"
 
-msgid "Group"
-msgstr "Group"
-
 msgid "Junction"
 msgstr "Junction"
 
@@ -3835,14 +3874,8 @@ msgstr "Bold"
 msgid "Bold+Italic"
 msgstr "Bold+Italic"
 
-msgid "Left"
-msgstr "Left"
-
 msgid "Center"
 msgstr "Center"
-
-msgid "Right"
-msgstr "Right"
 
 msgid "Top"
 msgstr "Top"
@@ -5168,6 +5201,36 @@ msgstr "Close %s"
 msgid "Quit %s"
 msgstr "Quit %s"
 
+msgid "Grid Selector"
+msgstr "Grid Selector"
+
+msgid "Grid Selection box"
+msgstr "Grid Selection box"
+
+msgid "Zoom Selector"
+msgstr "Zoom Selector"
+
+msgid "Zoom Selection box"
+msgstr "Zoom Selection box"
+
+msgid "IPC/Scripting plugins"
+msgstr "IPC/Scripting plugins"
+
+msgid "Region to hold the IPC/Scripting action buttons"
+msgstr "Region to hold the IPC/Scripting action buttons"
+
+msgid "Layer selector"
+msgstr "Layer selector"
+
+msgid "Control to select the layer"
+msgstr "Control to select the layer"
+
+msgid "Symbol unit selector"
+msgstr "Symbol unit selector"
+
+msgid "Displays the current unit"
+msgstr "Displays the current unit"
+
 msgid "New..."
 msgstr "New..."
 
@@ -5596,6 +5659,12 @@ msgstr "Library Tree"
 
 msgid "Hide Library Tree"
 msgstr "Hide Library Tree"
+
+msgid "Show Side Panel"
+msgstr "Show Side Panel"
+
+msgid "Show Console Panel"
+msgstr "Show Console Panel"
 
 msgid "Focus Library Tree Search Field"
 msgstr "Focus Library Tree Search Field"
@@ -6260,6 +6329,9 @@ msgstr "KiCad legacy schematic files"
 msgid "KiCad s-expression schematic files"
 msgstr "KiCad s-expression schematic files"
 
+msgid "Altium Project files"
+msgstr "Altium Project files"
+
 msgid "CADSTAR Archive files"
 msgstr "CADSTAR Archive files"
 
@@ -6569,9 +6641,6 @@ msgstr "Footprint Assignment Conflicts"
 msgid "Footprint Viewer"
 msgstr "Footprint Viewer"
 
-msgid "Automatic Zoom on footprint change"
-msgstr "Automatic Zoom on footprint change"
-
 #, c-format
 msgid "Footprint ID '%s' is not valid."
 msgstr "Footprint ID '%s' is not valid."
@@ -6644,6 +6713,12 @@ msgstr "Schematic saved"
 
 msgid "Footprint Filters:"
 msgstr "Footprint Filters:"
+
+msgid "Footprint filters"
+msgstr "Footprint filters"
+
+msgid "Footprint filtering controls"
+msgstr "Footprint filtering controls"
 
 msgid "View Selected Footprint"
 msgstr "View Selected Footprint"
@@ -7357,9 +7432,6 @@ msgstr "DSN:"
 
 msgid "Username:"
 msgstr "Username:"
-
-msgid "Password:"
-msgstr "Password:"
 
 msgid "Connection String:"
 msgstr "Connection String:"
@@ -14040,6 +14112,13 @@ msgstr "Perform Fourier Analysis..."
 msgid "Copy Signal Name"
 msgstr "Copy Signal Name"
 
+msgid "Create new cursor..."
+msgstr "Create new cursor..."
+
+#, c-format
+msgid "Delete %s..."
+msgstr "Delete %s..."
+
 msgid " (amplitude)"
 msgstr " (amplitude)"
 
@@ -14062,6 +14141,9 @@ msgstr "Format Value..."
 
 msgid "Delete Measurement"
 msgstr "Delete Measurement"
+
+msgid "Cursor "
+msgstr "Cursor "
 
 #, c-format
 msgid "Analysis %u - "
@@ -14763,12 +14845,6 @@ msgstr "Associate selected sheet pin and hierarchical label using the pin name"
 msgid "Break sheet pin and hierarchical label association(s)"
 msgstr "Break sheet pin and hierarchical label association(s)"
 
-msgid "Display previous symbol"
-msgstr "Display previous symbol"
-
-msgid "Display next symbol"
-msgstr "Display next symbol"
-
 msgid "Symbol Viewer"
 msgstr "Symbol Viewer"
 
@@ -15154,6 +15230,12 @@ msgstr "Copy design block into project as a sheet on current sheet"
 
 msgid "Place Sheet Pins"
 msgstr "Place Sheet Pins"
+
+msgid "Autoplace All Sheet Pins"
+msgstr "Autoplace All Sheet Pins"
+
+msgid "Imports and auto places all sheet pins"
+msgstr "Imports and auto places all sheet pins"
 
 msgid "Sync Sheet Pins..."
 msgstr "Sync Sheet Pins..."
@@ -16941,6 +17023,24 @@ msgstr "Highlight items with this aperture attribute"
 msgid "DCode:"
 msgstr "DCode:"
 
+msgid "Text info entry"
+msgstr "Text info entry"
+
+msgid "Component highlight"
+msgstr "Component highlight"
+
+msgid "Net highlight"
+msgstr "Net highlight"
+
+msgid "Aperture highlight"
+msgstr "Aperture highlight"
+
+msgid "DCode Selector"
+msgstr "DCode Selector"
+
+msgid "Select all items with the selected DCode"
+msgstr "Select all items with the selected DCode"
+
 msgid "<No selection>"
 msgstr "<No selection>"
 
@@ -18179,9 +18279,6 @@ msgstr "Target Directory"
 msgid "Unzipping project in '%s'.\n"
 msgstr "Unzipping project in '%s'.\n"
 
-msgid "Archive Project Files"
-msgstr "Archive Project Files"
-
 #, c-format
 msgid ""
 "Cannot copy file '%s'\n"
@@ -18212,6 +18309,9 @@ msgid ""
 msgstr ""
 "Error creating new directory. Please try a different path. The project "
 "cannot be imported."
+
+msgid "Import Altium Project Files"
+msgstr "Import Altium Project Files"
 
 msgid "Import CADSTAR Archive Project Files"
 msgstr "Import CADSTAR Archive Project Files"
@@ -18305,6 +18405,12 @@ msgstr "Clear Recent Projects"
 msgid "Import Non-KiCad Project..."
 msgstr "Import Non-KiCad Project..."
 
+msgid "Altium Project..."
+msgstr "Altium Project..."
+
+msgid "Import Altium Schematic and PCB (*.PrjPcb)"
+msgstr "Import Altium Schematic and PCB (*.PrjPcb)"
+
 msgid "CADSTAR Project..."
 msgstr "CADSTAR Project..."
 
@@ -18329,38 +18435,11 @@ msgstr "EasyEDA (JLCEDA) Pro Project..."
 msgid "Import EasyEDA (JLCEDA) Professional schematic and board"
 msgstr "Import EasyEDA (JLCEDA) Professional schematic and board"
 
-msgid "&Archive Project..."
-msgstr "&Archive Project…"
-
-msgid "Archive all needed project files into zip archive"
-msgstr "Archive all needed project files into zip archive"
-
-msgid "&Unarchive Project..."
-msgstr "&Unarchive Project…"
-
-msgid "Unarchive project files from zip archive"
-msgstr "Unarchive project files from zip archive"
-
-msgid "Browse Project Files"
-msgstr "Browse Project Files"
-
-msgid "Open project directory in file browser"
-msgstr "Open project directory in file browser"
-
 msgid "Edit Local File..."
 msgstr "Edit Local File..."
 
 msgid "Edit local file in text editor"
 msgstr "Edit local file in text editor"
-
-msgid "Archive all project files"
-msgstr "Archive all project files"
-
-msgid "Reveal project folder in Finder"
-msgstr "Reveal project folder in Finder"
-
-msgid "Open project directory in file explorer"
-msgstr "Open project directory in file explorer"
 
 msgid "Add Default Repository"
 msgstr "Add Default Repository"
@@ -19062,6 +19141,21 @@ msgstr "Open Text Editor"
 msgid "Launch preferred text editor"
 msgstr "Launch preferred text editor"
 
+msgid "Archive all project files"
+msgstr "Archive all project files"
+
+msgid "Unarchive project files from zip archive"
+msgstr "Unarchive project files from zip archive"
+
+msgid "Browse Project Files"
+msgstr "Browse Project Files"
+
+msgid "Reveal project folder in Finder"
+msgstr "Reveal project folder in Finder"
+
+msgid "Open project directory in file explorer"
+msgstr "Open project directory in file explorer"
+
 msgid "Create New Project"
 msgstr "Create New Project"
 
@@ -19118,6 +19212,9 @@ msgstr "Open Existing Project"
 
 msgid "Open Jobset"
 msgstr "Open Jobset"
+
+msgid "Archive Project Files"
+msgstr "Archive Project Files"
 
 #, c-format
 msgid "Cannot copy folder '%s'."
@@ -19424,6 +19521,18 @@ msgid ""
 msgstr ""
 "Simulate page 1 or other pages to show how items\n"
 "which are not on all page are displayed"
+
+msgid "Origin Selector"
+msgstr "Origin Selector"
+
+msgid "Select the origin of the status bar coordinates"
+msgstr "Select the origin of the status bar coordinates"
+
+msgid "Page Selector"
+msgstr "Page Selector"
+
+msgid "Select the page to simulate item displays"
+msgstr "Select the page to simulate item displays"
 
 msgid "Place Bitmaps"
 msgstr "Place Bitmaps"
@@ -22546,8 +22655,8 @@ msgstr "Choose what to do with unconnected copper islands"
 msgid "Below area limit"
 msgstr "Below area limit"
 
-msgid "Minimum island size:"
-msgstr "Minimum island size:"
+msgid "Area limit:"
+msgstr "Area limit:"
 
 msgid "Isolated islands smaller than this will be removed"
 msgstr "Isolated islands smaller than this will be removed"
@@ -29540,6 +29649,10 @@ msgid "(layer %s; %d spokes connected to isolated island)"
 msgstr "(layer %s; %d spokes connected to isolated island)"
 
 #, c-format
+msgid "(layer %s; %s custom spoke count %d; actual %d)"
+msgstr "(layer %s; %s custom spoke count %d; actual %d)"
+
+#, c-format
 msgid "(layer %s; %s min spoke count %d; actual %d)"
 msgstr "(layer %s; %s min spoke count %d; actual %d)"
 
@@ -30130,21 +30243,6 @@ msgstr "Footprint Wizard"
 msgid "ModView: 3D Viewer [%s]"
 msgstr "ModView: 3D Viewer [%s]"
 
-msgid "Select wizard script to run"
-msgstr "Select wizard script to run"
-
-msgid "Reset wizard parameters to default"
-msgstr "Reset wizard parameters to default"
-
-msgid "Select previous parameters page"
-msgstr "Select previous parameters page"
-
-msgid "Select next parameters page"
-msgstr "Select next parameters page"
-
-msgid "Export footprint to editor"
-msgstr "Export footprint to editor"
-
 msgid "no wizard selected"
 msgstr "no wizard selected"
 
@@ -30359,18 +30457,6 @@ msgstr "&Drawing Mode"
 
 msgid "&Contrast Mode"
 msgstr "&Contrast Mode"
-
-msgid "&Load Footprint from PCB..."
-msgstr "&Load Footprint from PCB…"
-
-msgid "Load a footprint from the current board into the editor"
-msgstr "Load a footprint from the current board into the editor"
-
-msgid "&Insert Footprint on PCB"
-msgstr "&Insert Footprint on PCB"
-
-msgid "Insert footprint onto current board"
-msgstr "Insert footprint onto current board"
 
 msgid "Resc&ue"
 msgstr "Resc&ue"
@@ -31137,6 +31223,9 @@ msgstr "Thermal Relief Spoke Angle"
 
 msgid "Thermal Relief Gap"
 msgstr "Thermal Relief Gap"
+
+msgid "+/- to switch"
+msgstr "+/- to switch"
 
 msgid ""
 "The library containing the current footprint has changed.\n"
@@ -33380,23 +33469,29 @@ msgstr "Reference '%s' not found."
 msgid "A wire_via refers to missing padstack '%s'."
 msgstr "A wire_via refers to missing padstack '%s'."
 
-msgid "Load footprint from current board"
-msgstr "Load footprint from current board"
+msgid "Dimension objects"
+msgstr "Dimension objects"
 
-msgid "Insert footprint into current board"
-msgstr "Insert footprint into current board"
+msgid "Track width selector"
+msgstr "Track width selector"
 
-msgid "+/- to switch"
-msgstr "+/- to switch"
+msgid "Control to select the track width"
+msgstr "Control to select the track width"
 
-msgid "Display previous footprint"
-msgstr "Display previous footprint"
+msgid "Via diameter selector"
+msgstr "Via diameter selector"
 
-msgid "Display next footprint"
-msgstr "Display next footprint"
+msgid "Control to select the via diameter"
+msgstr "Control to select the via diameter"
 
-msgid "Insert footprint in board"
-msgstr "Insert footprint in board"
+msgid "Track routing tools"
+msgstr "Track routing tools"
+
+msgid "Track tuning tools"
+msgstr "Track tuning tools"
+
+msgid "PCB origins"
+msgstr "PCB origins"
 
 msgid ""
 "Select the default width for new tracks. Note that this width can be "
@@ -33406,13 +33501,6 @@ msgstr ""
 "Select the default width for new tracks. Note that this width can be "
 "overridden by the board minimum width, or by the width of an existing track "
 "if the 'Use Existing Track Width' feature is enabled."
-
-msgid ""
-"When routing from an existing track use its width instead of the current "
-"width setting"
-msgstr ""
-"When routing from an existing track use its width instead of the current "
-"width setting"
 
 msgid "Track: use netclass width"
 msgstr "Track: use netclass width"
@@ -34612,6 +34700,24 @@ msgstr "Footprint Properties..."
 msgid "Show the footprint checker window"
 msgstr "Show the footprint checker window"
 
+msgid "Load footprint from current PCB"
+msgstr "Load footprint from current PCB"
+
+msgid "Load footprint from current board"
+msgstr "Load footprint from current board"
+
+msgid "Insert footprint into PCB"
+msgstr "Insert footprint into PCB"
+
+msgid "Insert footprint into current board"
+msgstr "Insert footprint into current board"
+
+msgid "Display previous footprint"
+msgstr "Display previous footprint"
+
+msgid "Display next footprint"
+msgstr "Display next footprint"
+
 msgid "Update Footprint..."
 msgstr "Update Footprint…"
 
@@ -34854,6 +34960,16 @@ msgstr "Decrease Via Size"
 msgid "Change via size to previous pre-defined size"
 msgstr "Change via size to previous pre-defined size"
 
+msgid "Automatically select track width"
+msgstr "Automatically select track width"
+
+msgid ""
+"When routing from an existing track use its width instead of the current "
+"width setting"
+msgstr ""
+"When routing from an existing track use its width instead of the current "
+"width setting"
+
 msgid "Duplicate Zone onto Layer..."
 msgstr "Duplicate Zone onto Layer…"
 
@@ -35056,6 +35172,12 @@ msgstr "Toggle Zone Display"
 
 msgid "Cycle between showing zone fills and just their outlines"
 msgstr "Cycle between showing zone fills and just their outlines"
+
+msgid "Automatic zoom"
+msgstr "Automatic zoom"
+
+msgid "Automatic Zoom on footprint change"
+msgstr "Automatic Zoom on footprint change"
 
 msgid "Switch to Component (F.Cu) layer"
 msgstr "Switch to Component (F.Cu) layer"
@@ -36797,6 +36919,81 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Copy 3D Image"
+#~ msgstr "Copy 3D Image"
+
+#~ msgid "Raytracing"
+#~ msgstr "Raytracing"
+
+#~ msgid "Test connection"
+#~ msgstr "Test connection"
+
+#~ msgid "SSH Key Password"
+#~ msgstr "SSH Key Password"
+
+#~ msgid "Location"
+#~ msgstr "Location"
+
+#~ msgid "Connection Type"
+#~ msgstr "Connection Type"
+
+#~ msgid "SSH Private Key"
+#~ msgstr "SSH Private Key"
+
+#~ msgid "Username"
+#~ msgstr "Username"
+
+#~ msgid "Display previous symbol"
+#~ msgstr "Display previous symbol"
+
+#~ msgid "Display next symbol"
+#~ msgstr "Display next symbol"
+
+#~ msgid "&Archive Project..."
+#~ msgstr "&Archive Project…"
+
+#~ msgid "Archive all needed project files into zip archive"
+#~ msgstr "Archive all needed project files into zip archive"
+
+#~ msgid "&Unarchive Project..."
+#~ msgstr "&Unarchive Project…"
+
+#~ msgid "Open project directory in file browser"
+#~ msgstr "Open project directory in file browser"
+
+#~ msgid "Minimum island size:"
+#~ msgstr "Minimum island size:"
+
+#~ msgid "Select wizard script to run"
+#~ msgstr "Select wizard script to run"
+
+#~ msgid "Reset wizard parameters to default"
+#~ msgstr "Reset wizard parameters to default"
+
+#~ msgid "Select previous parameters page"
+#~ msgstr "Select previous parameters page"
+
+#~ msgid "Select next parameters page"
+#~ msgstr "Select next parameters page"
+
+#~ msgid "Export footprint to editor"
+#~ msgstr "Export footprint to editor"
+
+#~ msgid "&Load Footprint from PCB..."
+#~ msgstr "&Load Footprint from PCB…"
+
+#~ msgid "Load a footprint from the current board into the editor"
+#~ msgstr "Load a footprint from the current board into the editor"
+
+#~ msgid "&Insert Footprint on PCB"
+#~ msgstr "&Insert Footprint on PCB"
+
+#~ msgid "Insert footprint onto current board"
+#~ msgstr "Insert footprint onto current board"
+
+#~ msgid "Insert footprint in board"
+#~ msgstr "Insert footprint in board"
 
 #~ msgid "Internal Reference"
 #~ msgstr "Internal Reference"
@@ -61026,9 +61223,6 @@ msgstr "KiCad Drawing Sheet"
 #~ "Equivalence file '%s' could not be found in the default search paths."
 #~ msgstr ""
 #~ "Equivalence file '%s' could not be found in the default search paths."
-
-#~ msgid "Connection type:"
-#~ msgstr "Connection type:"
 
 #~ msgid "Constrain buses and wires to H or V"
 #~ msgstr "Constrain buses and wires to H or V"
