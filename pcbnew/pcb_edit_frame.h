@@ -270,7 +270,17 @@ public:
     /**
      * Change the currently active layer to \a aLayer and also update the #APPEARANCE_CONTROLS.
      */
-    void SetActiveLayer( PCB_LAYER_ID aLayer ) override;
+    void SetActiveLayer( PCB_LAYER_ID aLayer ) override
+    {
+        SetActiveLayer( aLayer, false );
+    }
+
+    /**
+     * @param aLayer is the layer to set active
+     * @param aForceRedraw will repaint things that depend on layer switch even if the new active
+     *                     layer is the same as the previous one
+     */
+    void SetActiveLayer( PCB_LAYER_ID aLayer, bool aForceRedraw );
 
     void OnDisplayOptionsChanged() override;
 
