@@ -58,7 +58,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
     IFACE( const char* aName, KIWAY::FACE_T aType ) :
             KIFACE_BASE( aName, aType ),
-            UNITS_PROVIDER( gerbIUScale, EDA_UNITS::MILLIMETRES )
+            UNITS_PROVIDER( gerbIUScale, EDA_UNITS::MM )
     {}
 
     bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway ) override;

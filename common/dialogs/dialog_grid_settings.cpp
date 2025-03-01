@@ -77,14 +77,14 @@ bool DIALOG_GRID_SETTINGS::TransferDataFromWindow()
 {
     double gridX = m_gridSizeX.GetDoubleValue();
 
-    if( !m_gridSizeX.Validate( 0.001, 1000.0, EDA_UNITS::MILLIMETRES ) )
+    if( !m_gridSizeX.Validate( 0.001, 1000.0, EDA_UNITS::MM ) )
     {
         wxMessageBox( _( "Grid size X out of range." ), _( "Error" ), wxOK | wxICON_ERROR );
         return false;
     }
 
     if( !m_checkLinked->IsChecked()
-        && !m_gridSizeY.Validate( 0.001, 1000.0, EDA_UNITS::MILLIMETRES ) )
+        && !m_gridSizeY.Validate( 0.001, 1000.0, EDA_UNITS::MM ) )
     {
         wxMessageBox( _( "Grid size Y out of range." ), _( "Error" ), wxOK | wxICON_ERROR );
         return false;
@@ -94,10 +94,10 @@ bool DIALOG_GRID_SETTINGS::TransferDataFromWindow()
 
     m_grid.name = m_textName->GetValue();
     // Grid X/Y are always stored in millimeters so we can compare them easily
-    m_grid.x = EDA_UNIT_UTILS::UI::StringFromValue( m_unitsProvider->GetIuScale(),
-                                                    EDA_UNITS::MILLIMETRES, gridX );
-    m_grid.y = EDA_UNIT_UTILS::UI::StringFromValue( m_unitsProvider->GetIuScale(),
-                                                    EDA_UNITS::MILLIMETRES, gridY );
+    m_grid.x = EDA_UNIT_UTILS::UI::StringFromValue( m_unitsProvider->GetIuScale(), EDA_UNITS::MM,
+                                                    gridX );
+    m_grid.y = EDA_UNIT_UTILS::UI::StringFromValue( m_unitsProvider->GetIuScale(), EDA_UNITS::MM,
+                                                    gridY );
 
     return true;
 }

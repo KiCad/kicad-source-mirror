@@ -363,9 +363,9 @@ void EXCELLON_WRITER::SetFormat( bool aMetric, ZEROS_FMT aZerosFmt, int aLeftDig
 
     /* Set conversion scale depending on drill file units */
     if( m_unitsMetric )
-        m_conversionUnits = 1.0 / pcbIUScale.IU_PER_MM; // EXCELLON units = mm
+        m_conversionUnits = 1.0 / pcbIUScale.IU_PER_MM;       // EXCELLON units = mm
     else
-        m_conversionUnits = 0.001 / pcbIUScale.IU_PER_MILS;    // EXCELLON units = INCHES
+        m_conversionUnits = 0.001 / pcbIUScale.IU_PER_MILS;   // EXCELLON units = in
 
     // Set the zero counts. if aZerosFmt == DECIMAL_FORMAT, these values
     // will be set, but not used.

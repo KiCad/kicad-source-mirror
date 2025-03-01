@@ -30,13 +30,13 @@ wxString GRID::MessageText( EDA_IU_SCALE aScale, EDA_UNITS aUnits, bool aDisplay
     EDA_DATA_TYPE type = EDA_DATA_TYPE::DISTANCE;
 
     wxString xStr = EDA_UNIT_UTILS::UI::MessageTextFromValue(
-            aScale, aUnits,
-            EDA_UNIT_UTILS::UI::DoubleValueFromString( aScale, EDA_UNITS::MILLIMETRES, x, type ),
-            aDisplayUnits );
+                        aScale, aUnits,
+                        EDA_UNIT_UTILS::UI::DoubleValueFromString( aScale, EDA_UNITS::MM, x, type ),
+                        aDisplayUnits );
     wxString yStr = EDA_UNIT_UTILS::UI::MessageTextFromValue(
-            aScale, aUnits,
-            EDA_UNIT_UTILS::UI::DoubleValueFromString( aScale, EDA_UNITS::MILLIMETRES, y, type ),
-            aDisplayUnits );
+                        aScale, aUnits,
+                        EDA_UNIT_UTILS::UI::DoubleValueFromString( aScale, EDA_UNITS::MM, y, type ),
+                        aDisplayUnits );
 
     if( xStr == yStr )
         return xStr;
@@ -52,10 +52,8 @@ wxString GRID::UserUnitsMessageText( UNITS_PROVIDER* aProvider, bool aDisplayUni
 
 VECTOR2D GRID::ToDouble( EDA_IU_SCALE aScale ) const
 {
-    return VECTOR2D{
-        EDA_UNIT_UTILS::UI::DoubleValueFromString( aScale, EDA_UNITS::MILLIMETRES, x ),
-        EDA_UNIT_UTILS::UI::DoubleValueFromString( aScale, EDA_UNITS::MILLIMETRES, y ),
-    };
+    return VECTOR2D( EDA_UNIT_UTILS::UI::DoubleValueFromString( aScale, EDA_UNITS::MM, x ),
+                     EDA_UNIT_UTILS::UI::DoubleValueFromString( aScale, EDA_UNITS::MM, y ) );
 }
 
 

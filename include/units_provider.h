@@ -48,12 +48,8 @@ public:
     virtual void GetUnitPair( EDA_UNITS& aPrimaryUnit, EDA_UNITS& aSecondaryUnits )
     {
         aPrimaryUnit    = GetUserUnits();
-        aSecondaryUnits = EDA_UNITS::MILS;
-
-        if( EDA_UNIT_UTILS::IsImperialUnit( aPrimaryUnit ) )
-            aSecondaryUnits = EDA_UNITS::MILLIMETRES;
-        else
-            aSecondaryUnits = EDA_UNITS::MILS;
+        aSecondaryUnits = EDA_UNIT_UTILS::IsImperialUnit( aPrimaryUnit ) ? EDA_UNITS::MM
+                                                                         : EDA_UNITS::MILS;
     }
 
     const EDA_IU_SCALE& GetIuScale() const { return m_iuScale; }

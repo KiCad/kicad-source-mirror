@@ -140,11 +140,11 @@ int CLI::PCB_EXPORT_POS_COMMAND::doPerform( KIWAY& aKiway )
 
     if( units == wxS( "mm" ) )
     {
-        aPosJob->m_units = JOB_EXPORT_PCB_POS::UNITS::MILLIMETERS;
+        aPosJob->m_units = JOB_EXPORT_PCB_POS::UNITS::MM;
     }
     else if( units == wxS( "in" ) )
     {
-        aPosJob->m_units = JOB_EXPORT_PCB_POS::UNITS::INCHES;
+        aPosJob->m_units = JOB_EXPORT_PCB_POS::UNITS::IN;
     }
     else
     {

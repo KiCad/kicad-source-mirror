@@ -118,11 +118,11 @@ int CLI::SCH_ERC_COMMAND::doPerform( KIWAY& aKiway )
 
     if( units == wxS( "mm" ) )
     {
-        ercJob->m_units = JOB_SCH_ERC::UNITS::MILLIMETERS;
+        ercJob->m_units = JOB_SCH_ERC::UNITS::MM;
     }
     else if( units == wxS( "in" ) )
     {
-        ercJob->m_units = JOB_SCH_ERC::UNITS::INCHES;
+        ercJob->m_units = JOB_SCH_ERC::UNITS::IN;
     }
     else if( units == wxS( "mils" ) )
     {

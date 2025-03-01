@@ -136,11 +136,11 @@ int CLI::PCB_EXPORT_DXF_COMMAND::doPerform( KIWAY& aKiway )
 
     if( units == wxS( "mm" ) )
     {
-        dxfJob->m_dxfUnits = JOB_EXPORT_PCB_DXF::DXF_UNITS::MILLIMETERS;
+        dxfJob->m_dxfUnits = JOB_EXPORT_PCB_DXF::DXF_UNITS::MM;
     }
     else if( units == wxS( "in" ) )
     {
-        dxfJob->m_dxfUnits = JOB_EXPORT_PCB_DXF::DXF_UNITS::INCHES;
+        dxfJob->m_dxfUnits = JOB_EXPORT_PCB_DXF::DXF_UNITS::IN;
     }
     else
     {

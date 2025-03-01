@@ -72,7 +72,7 @@ BOOST_FIXTURE_TEST_CASE( DRCCustomRuleSeverityTest, DRC_REGRESSION_TEST_FIXTURE 
                     violations.push_back( *aItem );
             } );
 
-    bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
+    bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
 
     if( violations.size() == 8 )
     {
@@ -83,7 +83,7 @@ BOOST_FIXTURE_TEST_CASE( DRCCustomRuleSeverityTest, DRC_REGRESSION_TEST_FIXTURE 
     {
         BOOST_CHECK_EQUAL( violations.size(), 8 );
 
-        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCHES );
+        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::IN );
 
         std::map<KIID, EDA_ITEM*> itemMap;
         m_board->FillItemMap( itemMap );

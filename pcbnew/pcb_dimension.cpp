@@ -147,7 +147,7 @@ static void CollectKnockedOutSegments( const SHAPE_POLY_SET& aPoly, const SEG& a
 PCB_DIMENSION_BASE::PCB_DIMENSION_BASE( BOARD_ITEM* aParent, KICAD_T aType ) :
         PCB_TEXT( aParent, aType ),
         m_overrideTextEnabled( false ),
-        m_units( EDA_UNITS::INCHES ),
+        m_units( EDA_UNITS::IN ),
         m_autoUnits( false ),
         m_unitsFormat( DIM_UNITS_FORMAT::BARE_SUFFIX ),
         m_arrowDirection( DIM_ARROW_DIRECTION::OUTWARD ),
@@ -429,10 +429,10 @@ wxString PCB_DIMENSION_BASE::GetValueText() const
     {
         switch( m_units )
         {
-        case EDA_UNITS::INCHES:      precision = precision - 4;                break;
-        case EDA_UNITS::MILS:        precision = std::max( 0, precision - 7 ); break;
-        case EDA_UNITS::MILLIMETRES: precision = precision - 5;                break;
-        default:                     precision = precision - 4;                break;
+        case EDA_UNITS::IN:   precision = precision - 4;                break;
+        case EDA_UNITS::MILS: precision = std::max( 0, precision - 7 ); break;
+        case EDA_UNITS::MM:   precision = precision - 5;                break;
+        default:              precision = precision - 4;                break;
         }
     }
 
@@ -487,9 +487,9 @@ DIM_UNITS_MODE PCB_DIMENSION_BASE::GetUnitsMode() const
         switch( m_units )
         {
         default:
-        case EDA_UNITS::INCHES:      return DIM_UNITS_MODE::INCHES;
-        case EDA_UNITS::MILLIMETRES: return DIM_UNITS_MODE::MILLIMETRES;
-        case EDA_UNITS::MILS:        return DIM_UNITS_MODE::MILS;
+        case EDA_UNITS::IN:   return DIM_UNITS_MODE::IN;
+        case EDA_UNITS::MM:   return DIM_UNITS_MODE::MM;
+        case EDA_UNITS::MILS: return DIM_UNITS_MODE::MILS;
         }
     }
 }
@@ -499,9 +499,9 @@ void PCB_DIMENSION_BASE::SetUnitsMode( DIM_UNITS_MODE aMode )
 {
     switch( aMode )
     {
-    case DIM_UNITS_MODE::INCHES:
+    case DIM_UNITS_MODE::IN:
         m_autoUnits = false;
-        m_units = EDA_UNITS::INCHES;
+        m_units = EDA_UNITS::IN;
         break;
 
     case DIM_UNITS_MODE::MILS:
@@ -509,14 +509,14 @@ void PCB_DIMENSION_BASE::SetUnitsMode( DIM_UNITS_MODE aMode )
         m_units = EDA_UNITS::MILS;
         break;
 
-    case DIM_UNITS_MODE::MILLIMETRES:
+    case DIM_UNITS_MODE::MM:
         m_autoUnits = false;
-        m_units = EDA_UNITS::MILLIMETRES;
+        m_units = EDA_UNITS::MM;
         break;
 
     case DIM_UNITS_MODE::AUTOMATIC:
         m_autoUnits = true;
-        m_units = GetBoard() ? GetBoard()->GetUserUnits() : EDA_UNITS::MILLIMETRES;
+        m_units = GetBoard() ? GetBoard()->GetUserUnits() : EDA_UNITS::MM;
         break;
     }
 }
@@ -634,7 +634,7 @@ void PCB_DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 
     // Use our own UNITS_PROVIDER to report dimension info in dimension's units rather than
     // in frame's units.
-    UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::MILLIMETRES );
+    UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::MM );
     unitsProvider.SetUserUnits( GetUnits() );
 
     aList.emplace_back( _( "Units" ), EDA_UNIT_UTILS::GetLabel( GetUnits() ) );
@@ -1027,7 +1027,7 @@ void PCB_DIM_ALIGNED::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_P
 
     // Use our own UNITS_PROVIDER to report dimension info in dimension's units rather than
     // in frame's units.
-    UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::MILLIMETRES );
+    UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::MM );
     unitsProvider.SetUserUnits( GetUnits() );
 
     aList.emplace_back( _( "Height" ), unitsProvider.MessageTextFromValue( m_height ) );
@@ -1783,14 +1783,14 @@ static struct DIMENSION_DESC
                     .Map( DIM_UNITS_FORMAT::PAREN_SUFFIX, _HKI( "1234.0 (mm)" ) );
 
         ENUM_MAP<DIM_UNITS_MODE>::Instance()
-                    .Map( DIM_UNITS_MODE::INCHES,      _HKI( "Inches" ) )
-                    .Map( DIM_UNITS_MODE::MILS,        _HKI( "Mils" ) )
-                    .Map( DIM_UNITS_MODE::MILLIMETRES, _HKI( "Millimeters" ) )
-                    .Map( DIM_UNITS_MODE::AUTOMATIC,   _HKI( "Automatic" ) );
+                    .Map( DIM_UNITS_MODE::IN,        _HKI( "Inches" ) )
+                    .Map( DIM_UNITS_MODE::MILS,      _HKI( "Mils" ) )
+                    .Map( DIM_UNITS_MODE::MM,        _HKI( "Millimeters" ) )
+                    .Map( DIM_UNITS_MODE::AUTOMATIC, _HKI( "Automatic" ) );
 
         ENUM_MAP<DIM_ARROW_DIRECTION>::Instance()
-                    .Map( DIM_ARROW_DIRECTION::INWARD,      _HKI( "Inward" ) )
-                    .Map( DIM_ARROW_DIRECTION::OUTWARD,     _HKI( "Outward" ) );
+                    .Map( DIM_ARROW_DIRECTION::INWARD,  _HKI( "Inward" ) )
+                    .Map( DIM_ARROW_DIRECTION::OUTWARD, _HKI( "Outward" ) );
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( PCB_DIMENSION_BASE );

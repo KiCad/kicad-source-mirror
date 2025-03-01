@@ -81,7 +81,7 @@ BOOST_FIXTURE_TEST_CASE( DRCComponentClasses, DRC_REGRESSION_TEST_FIXTURE )
                         violations.push_back( *aItem );
                 } );
 
-        bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
+        bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
 
         if( violations.size() == test.second )
         {
@@ -90,7 +90,7 @@ BOOST_FIXTURE_TEST_CASE( DRCComponentClasses, DRC_REGRESSION_TEST_FIXTURE )
         }
         else
         {
-            UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCHES );
+            UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::IN );
 
             std::map<KIID, EDA_ITEM*> itemMap;
             m_board->FillItemMap( itemMap );
@@ -101,8 +101,11 @@ BOOST_FIXTURE_TEST_CASE( DRCComponentClasses, DRC_REGRESSION_TEST_FIXTURE )
                                                      itemMap ) );
             }
 
-            BOOST_ERROR( wxString::Format( "DRC component classes: %s, failed (violations found %d expected %d)",
-                                            test.first, (int)violations.size(), test.second ) );
+            BOOST_ERROR( wxString::Format( "DRC component classes: %s, failed (violations found %d "
+                                           "expected %d)",
+                                           test.first,
+                                           (int) violations.size(),
+                                           test.second ) );
         }
     }
 }

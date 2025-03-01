@@ -24,8 +24,8 @@
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_ODB::ODB_UNITS,
                               {
-                                      { JOB_EXPORT_PCB_ODB::ODB_UNITS::INCHES, "in" },
-                                      { JOB_EXPORT_PCB_ODB::ODB_UNITS::MILLIMETERS, "mm" },
+                                      { JOB_EXPORT_PCB_ODB::ODB_UNITS::IN, "in" },
+                                      { JOB_EXPORT_PCB_ODB::ODB_UNITS::MM, "mm" },
                               } )
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_ODB::ODB_COMPRESSION,
@@ -37,12 +37,12 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_ODB::ODB_COMPRESSION,
 
 
 JOB_EXPORT_PCB_ODB::JOB_EXPORT_PCB_ODB() :
-    JOB( "odb", false ),
-    m_filename(),
-    m_drawingSheet(),
-    m_units( ODB_UNITS::MILLIMETERS ),
-    m_precision( 2 ),
-    m_compressionMode( ODB_COMPRESSION::ZIP )
+        JOB( "odb", false ),
+        m_filename(),
+        m_drawingSheet(),
+        m_units( ODB_UNITS::MM ),
+        m_precision( 2 ),
+        m_compressionMode( ODB_COMPRESSION::ZIP )
 {
     m_params.emplace_back( new JOB_PARAM<wxString>( "drawing_sheet", &m_drawingSheet, m_drawingSheet ) );
     m_params.emplace_back( new JOB_PARAM<ODB_UNITS>( "units", &m_units, m_units ) );

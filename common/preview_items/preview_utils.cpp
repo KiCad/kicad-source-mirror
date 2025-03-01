@@ -45,14 +45,14 @@ wxString KIGFX::PREVIEW::DimensionLabel( const wxString& prefix, double aVal,
     // nanometre
     switch( aUnits )
     {
-    case EDA_UNITS::MICROMETRES: fmtStr = wxT( "%.0f" ); break;  // 1um
-    case EDA_UNITS::MILLIMETRES: fmtStr = wxT( "%.3f" ); break;  // 1um
-    case EDA_UNITS::CENTIMETRES: fmtStr = wxT( "%.4f" ); break;  // 1um
-    case EDA_UNITS::MILS:        fmtStr = wxT( "%.1f" ); break;  // 0.1mil
-    case EDA_UNITS::INCHES:      fmtStr = wxT( "%.4f" ); break;  // 0.1mil
-    case EDA_UNITS::DEGREES:     fmtStr = wxT( "%.1f" ); break;  // 0.1deg
-    case EDA_UNITS::PERCENT:     fmtStr = wxT( "%.1f" ); break;  // 0.1%
-    case EDA_UNITS::UNSCALED:    fmtStr = wxT( "%f" );   break;
+    case EDA_UNITS::UM:       fmtStr = wxT( "%.0f" ); break;  // 1um
+    case EDA_UNITS::MM:       fmtStr = wxT( "%.3f" ); break;  // 1um
+    case EDA_UNITS::CM:       fmtStr = wxT( "%.4f" ); break;  // 1um
+    case EDA_UNITS::MILS:     fmtStr = wxT( "%.1f" ); break;  // 0.1mil
+    case EDA_UNITS::IN:       fmtStr = wxT( "%.4f" ); break;  // 0.1mil
+    case EDA_UNITS::DEGREES:  fmtStr = wxT( "%.1f" ); break;  // 0.1deg
+    case EDA_UNITS::PERCENT:  fmtStr = wxT( "%.1f" ); break;  // 0.1%
+    case EDA_UNITS::UNSCALED: fmtStr = wxT( "%f" );   break;
     }
 
     str << wxString::Format( fmtStr, EDA_UNIT_UTILS::UI::ToUserUnit( aIuScale, aUnits, aVal ) );

@@ -104,18 +104,18 @@ BOOST_DATA_TEST_CASE_F( TRACK_CLEANER_TEST_FIXTURE, FailedToCleanRegressionTests
     std::vector< std::shared_ptr<CLEANUP_ITEM> > realRunItems;
 
     cleaner.CleanupBoard( true, &dryRunItems, entry.m_Shorts,
-                                                entry.m_RedundantVias,
-                                                entry.m_RedundantTracks,
-                                                entry.m_DanglingTracks,
-                                                entry.m_TracksInPads,
-                                                entry.m_DanglingVias );
+                                              entry.m_RedundantVias,
+                                              entry.m_RedundantTracks,
+                                              entry.m_DanglingTracks,
+                                              entry.m_TracksInPads,
+                                              entry.m_DanglingVias );
 
     cleaner.CleanupBoard( true, &realRunItems, entry.m_Shorts,
-                                                entry.m_RedundantVias,
-                                                entry.m_RedundantTracks,
-                                                entry.m_DanglingTracks,
-                                                entry.m_TracksInPads,
-                                                entry.m_DanglingVias );
+                                               entry.m_RedundantVias,
+                                               entry.m_RedundantTracks,
+                                               entry.m_DanglingTracks,
+                                               entry.m_TracksInPads,
+                                               entry.m_DanglingVias );
 
     if( dryRunItems.size() == entry.m_Expected && realRunItems.size() == entry.m_Expected )
     {
@@ -128,7 +128,7 @@ BOOST_DATA_TEST_CASE_F( TRACK_CLEANER_TEST_FIXTURE, FailedToCleanRegressionTests
         BOOST_CHECK_EQUAL( dryRunItems.size(), entry.m_Expected );
         BOOST_CHECK_EQUAL( realRunItems.size(), entry.m_Expected );
 
-        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCHES );
+        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::IN );
 
         std::map<KIID, EDA_ITEM*> itemMap;
         m_board->FillItemMap( itemMap );
@@ -179,18 +179,18 @@ BOOST_DATA_TEST_CASE_F( TRACK_CLEANER_TEST_FIXTURE, TrackCleanerRegressionTests,
     std::vector< std::shared_ptr<CLEANUP_ITEM> > realRunItems;
 
     cleaner.CleanupBoard( true, &dryRunItems, true,   // short circuits
-                                                true,   // redundant vias
-                                                true,   // redundant tracks
-                                                true,   // dangling tracks
-                                                true,   // tracks in pads
-                                                true ); // dangling vias
+                                              true,   // redundant vias
+                                              true,   // redundant tracks
+                                              true,   // dangling tracks
+                                              true,   // tracks in pads
+                                              true ); // dangling vias
 
     cleaner.CleanupBoard( true, &realRunItems, true,   // short circuits
-                                                true,   // redundant vias
-                                                true,   // redundant tracks
-                                                true,   // dangling tracks
-                                                true,   // tracks in pads
-                                                true ); // dangling vias
+                                               true,   // redundant vias
+                                               true,   // redundant tracks
+                                               true,   // dangling tracks
+                                               true,   // tracks in pads
+                                               true ); // dangling vias
 
     BOOST_CHECK_EQUAL( dryRunItems.size(), realRunItems.size() );
 
@@ -208,33 +208,28 @@ BOOST_DATA_TEST_CASE_F( TRACK_CLEANER_TEST_FIXTURE, TrackCleanerRegressionTests,
 
     bds.m_DRCEngine->SetViolationHandler(
             [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer,
-                    DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )
+                 DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )
             {
                 if( aItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
                     violations.push_back( *aItem );
             } );
 
-    bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
+    bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
 
     if( violations.empty() )
     {
-        BOOST_TEST_MESSAGE( wxString::Format( "Track cleaner regression: %s, passed",
-                                                relPath ) );
+        BOOST_TEST_MESSAGE( wxString::Format( "Track cleaner regression: %s, passed", relPath ) );
     }
     else
     {
-        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCHES );
+        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::IN );
 
         std::map<KIID, EDA_ITEM*> itemMap;
         m_board->FillItemMap( itemMap );
 
         for( const DRC_ITEM& item : violations )
-        {
-            BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR,
-                                                    itemMap ) );
-        }
+            BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
 
-        BOOST_ERROR( wxString::Format( "Track cleaner regression: %s, failed",
-                                        relPath ) );
+        BOOST_ERROR( wxString::Format( "Track cleaner regression: %s, failed", relPath ) );
     }
 }

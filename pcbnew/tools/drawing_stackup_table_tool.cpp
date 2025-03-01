@@ -259,10 +259,10 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawSpecificationStackup( const VECTOR2I&
 
     switch( m_frame->GetUserUnits() )
     {
-    case EDA_UNITS::MILLIMETRES: t->SetText( _( "Thickness (mm)" ) );     break;
-    case EDA_UNITS::INCHES:      t->SetText( _( "Thickness (inches)" ) ); break;
-    case EDA_UNITS::MILS:        t->SetText( _( "Thickness (mils)" ) );   break;
-    default:                     wxFAIL_MSG( wxT( "Unhandled unit type" ) );
+    case EDA_UNITS::MM:   t->SetText( _( "Thickness (mm)" ) );        break;
+    case EDA_UNITS::IN:   t->SetText( _( "Thickness (inches)" ) );    break;
+    case EDA_UNITS::MILS: t->SetText( _( "Thickness (mils)" ) );      break;
+    default:              wxFAIL_MSG( wxT( "Unhandled unit type" ) );
     }
 
     colThickness.push_back( t );
@@ -400,8 +400,8 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawBoardCharacteristics( const VECTOR2I&
     t->SetPosition( cursorPos );
     objects.push_back( t );
 
-    cursorPos.y = cursorPos.y + t->GetBoundingBox().GetHeight()
-                  + EDA_UNIT_UTILS::UI::FromUserUnit( pcbIUScale, EDA_UNITS::MILLIMETRES, 1.0 );
+    cursorPos.y += t->GetBoundingBox().GetHeight()
+                      + EDA_UNIT_UTILS::UI::FromUserUnit( pcbIUScale, EDA_UNITS::MM, 1.0 );
 
     std::vector<std::vector<PCB_TEXT*>> texts;
     std::vector<PCB_TEXT*>              colLabel1;
@@ -533,7 +533,7 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawBoardCharacteristics( const VECTOR2I&
 
     tableSize->x = tableSize2.x;
     tableSize->y = cursorPos.y + tableSize2.y
-                   + EDA_UNIT_UTILS::UI::FromUserUnit( pcbIUScale, EDA_UNITS::MILLIMETRES, 2.0 );
+                       + EDA_UNIT_UTILS::UI::FromUserUnit( pcbIUScale, EDA_UNITS::MM, 2.0 );
 
     return objects;
 }

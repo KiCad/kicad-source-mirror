@@ -125,23 +125,24 @@ public:
 
     enum class VRML_UNITS
     {
-        INCHES,
-        MILLIMETERS,
+        IN,
+        MM,
         METERS,
         TENTHS // inches
     };
 
+public:
     bool                      m_hasUserOrigin;
     wxString                  m_filename;
 
     JOB_EXPORT_PCB_3D::FORMAT m_format;
 
     /// Despite the name; also used for other formats
-    EXPORTER_STEP_PARAMS m_3dparams;
+    EXPORTER_STEP_PARAMS      m_3dparams;
 
-    VRML_UNITS m_vrmlUnits;
-    wxString   m_vrmlModelDir;
-    bool       m_vrmlRelativePaths;
+    VRML_UNITS                m_vrmlUnits;
+    wxString                  m_vrmlModelDir;
+    bool                      m_vrmlRelativePaths;
 };
 
 #endif

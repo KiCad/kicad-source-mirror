@@ -32,7 +32,8 @@
 
 struct NUM_EVAL_FIXTURE
 {
-    NUM_EVAL_FIXTURE() : m_eval( EDA_UNITS::MILLIMETRES )
+    NUM_EVAL_FIXTURE() :
+            m_eval( EDA_UNITS::MM )
     {
     }
 

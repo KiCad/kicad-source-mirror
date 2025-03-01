@@ -78,12 +78,12 @@ int GERBVIEW_INSPECTION_TOOL::ShowDCodes( const TOOL_EVENT& aEvent )
 
     switch( m_frame->GetUserUnits() )
     {
-    case EDA_UNITS::MILLIMETRES:
+    case EDA_UNITS::MM:
         scale = gerbIUScale.IU_PER_MM;
         units = wxT( "mm" );
         break;
 
-    case EDA_UNITS::INCHES:
+    case EDA_UNITS::IN:
         scale = gerbIUScale.IU_PER_MILS * 1000;
         units = wxT( "in" );
         break;

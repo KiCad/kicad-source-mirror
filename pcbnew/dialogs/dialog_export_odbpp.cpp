@@ -438,7 +438,7 @@ void DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BO
     wxString                    lowerTxt;
     std::map<std::string, UTF8> props;
 
-    props["units"] = aJob.m_units == JOB_EXPORT_PCB_ODB::ODB_UNITS::MILLIMETERS ? "mm" : "inch";
+    props["units"] = aJob.m_units == JOB_EXPORT_PCB_ODB::ODB_UNITS::MM ? "mm" : "inch";
     props["sigfig"] = wxString::Format( "%d", aJob.m_precision );
 
     auto saveFile = [&]() -> bool

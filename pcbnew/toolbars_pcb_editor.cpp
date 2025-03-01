@@ -445,10 +445,10 @@ static wxString ComboBoxUnits( EDA_UNITS aUnits, double aValue, bool aIncludeLab
     default:
         wxASSERT_MSG( false, wxT( "Invalid unit" ) );
         KI_FALLTHROUGH;
-    case EDA_UNITS::UNSCALED:    format = wxT( "%.0f" ); break;
-    case EDA_UNITS::MILLIMETRES: format = wxT( "%.3f" ); break;
-    case EDA_UNITS::MILS:        format = wxT( "%.2f" ); break;
-    case EDA_UNITS::INCHES:      format = wxT( "%.5f" ); break;
+    case EDA_UNITS::UNSCALED: format = wxT( "%.0f" ); break;
+    case EDA_UNITS::MM:       format = wxT( "%.3f" ); break;
+    case EDA_UNITS::MILS:     format = wxT( "%.2f" ); break;
+    case EDA_UNITS::IN:       format = wxT( "%.5f" ); break;
     }
 
     text.Printf( format, EDA_UNIT_UTILS::UI::ToUserUnit( pcbIUScale, aUnits, aValue ) );
@@ -509,25 +509,14 @@ void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool a
 
     aViaSizeSelectBox->Clear();
 
-    COMMON_TOOLS* cmnTool  = m_toolManager->GetTool<COMMON_TOOLS>();
-
+    COMMON_TOOLS* cmnTool   = m_toolManager->GetTool<COMMON_TOOLS>();
     EDA_UNITS primaryUnit   = GetUserUnits();
     EDA_UNITS secondaryUnit = EDA_UNITS::MILS;
 
     if( EDA_UNIT_UTILS::IsImperialUnit( primaryUnit ) )
-    {
-        if( cmnTool )
-            secondaryUnit = cmnTool->GetLastMetricUnits();
-        else
-            secondaryUnit = EDA_UNITS::MILLIMETRES;
-    }
+        secondaryUnit = cmnTool ? cmnTool->GetLastMetricUnits() : EDA_UNITS::MM;
     else
-    {
-        if( cmnTool )
-            secondaryUnit = cmnTool->GetLastImperialUnits();
-        else
-            secondaryUnit = EDA_UNITS::MILS;
-    }
+        secondaryUnit = cmnTool ? cmnTool->GetLastImperialUnits() : EDA_UNITS::MILS;
 
     if( aShowNetclass )
         aViaSizeSelectBox->Append( _( "Via: use netclass sizes" ) );

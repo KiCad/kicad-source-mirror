@@ -2576,14 +2576,11 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
     {
         setupStroke( aTable->GetBorderStroke() );
 
-        std::vector<VECTOR2I> topLeft = aTable->GetCell( 0, 0 )->GetCornersInSequence();
-        std::vector<VECTOR2I> bottomLeft =
-                aTable->GetCell( aTable->GetRowCount() - 1, 0 )->GetCornersInSequence();
-        std::vector<VECTOR2I> topRight =
-                aTable->GetCell( 0, aTable->GetColCount() - 1 )->GetCornersInSequence();
-        std::vector<VECTOR2I> bottomRight =
-                aTable->GetCell( aTable->GetRowCount() - 1, aTable->GetColCount() - 1 )
-                        ->GetCornersInSequence();
+        std::vector<VECTOR2I> topLeft     = aTable->GetCell( 0, 0 )->GetCornersInSequence();
+        std::vector<VECTOR2I> bottomLeft  = aTable->GetCell( aTable->GetRowCount() - 1, 0 )->GetCornersInSequence();
+        std::vector<VECTOR2I> topRight    = aTable->GetCell( 0, aTable->GetColCount() - 1 )->GetCornersInSequence();
+        std::vector<VECTOR2I> bottomRight = aTable->GetCell( aTable->GetRowCount() - 1, aTable->GetColCount() - 1 )->GetCornersInSequence();
+
         strokeLine( topLeft[0], topRight[1] );
         strokeLine( topRight[1], bottomRight[2] );
         strokeLine( bottomRight[2], bottomLeft[3] );

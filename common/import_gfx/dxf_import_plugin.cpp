@@ -1006,10 +1006,10 @@ double DXF_IMPORT_PLUGIN::getCurrentUnitScale()
 
     switch( m_currentUnit )
     {
-    case DXF_IMPORT_UNITS::INCHES:      scale = 25.4;    break;
+    case DXF_IMPORT_UNITS::IN:          scale = 25.4;    break;
     case DXF_IMPORT_UNITS::FEET:        scale = 304.8;   break;
-    case DXF_IMPORT_UNITS::MILLIMETERS: scale = 1.0;     break;
-    case DXF_IMPORT_UNITS::CENTIMETERS: scale = 10.0;    break;
+    case DXF_IMPORT_UNITS::MM:          scale = 1.0;     break;
+    case DXF_IMPORT_UNITS::CM:          scale = 10.0;    break;
     case DXF_IMPORT_UNITS::METERS:      scale = 1000.0;  break;
     case DXF_IMPORT_UNITS::MICROINCHES: scale = 2.54e-5; break;
     case DXF_IMPORT_UNITS::MILS:        scale = 0.0254;  break;
@@ -1065,10 +1065,10 @@ void DXF_IMPORT_PLUGIN::setVariableInt( const std::string& key, int value, int c
 
         switch( value )
         {
-        case 1:  m_currentUnit = DXF_IMPORT_UNITS::INCHES;      break;
+        case 1:  m_currentUnit = DXF_IMPORT_UNITS::IN;          break;
         case 2:  m_currentUnit = DXF_IMPORT_UNITS::FEET;        break;
-        case 4:  m_currentUnit = DXF_IMPORT_UNITS::MILLIMETERS; break;
-        case 5:  m_currentUnit = DXF_IMPORT_UNITS::CENTIMETERS; break;
+        case 4:  m_currentUnit = DXF_IMPORT_UNITS::MM;          break;
+        case 5:  m_currentUnit = DXF_IMPORT_UNITS::CM;          break;
         case 6:  m_currentUnit = DXF_IMPORT_UNITS::METERS;      break;
         case 8:  m_currentUnit = DXF_IMPORT_UNITS::MICROINCHES; break;
         case 9:  m_currentUnit = DXF_IMPORT_UNITS::MILS;        break;

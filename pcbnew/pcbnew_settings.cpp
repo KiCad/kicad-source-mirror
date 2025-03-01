@@ -991,7 +991,7 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     if( aCfg->Read( f + "PcbUserGrid_X", &x ) && aCfg->Read( f + "PcbUserGrid_Y", &y ) )
     {
         EDA_UNITS u = static_cast<EDA_UNITS>( aCfg->ReadLong( f + "PcbUserGrid_Unit",
-                static_cast<long>( EDA_UNITS::INCHES ) ) );
+                                                              static_cast<long>( EDA_UNITS::IN ) ) );
 
         // Convert to internal units
         x = EDA_UNIT_UTILS::UI::FromUserUnit( pcbIUScale, u, x );

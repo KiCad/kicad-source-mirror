@@ -444,10 +444,10 @@ ADIMENSION6::ADIMENSION6( ALTIUM_BINARY_PARSER& aReader )
 
     wxString dimensionunit = ALTIUM_PROPS_UTILS::ReadString( props, wxT( "TEXTDIMENSIONUNIT" ), wxT( "Millimeters" ) );
 
-    if(      dimensionunit == wxT( "Inches" ) )      textunit = ALTIUM_UNIT::INCHES;
+    if(      dimensionunit == wxT( "Inches" ) )      textunit = ALTIUM_UNIT::IN;
     else if( dimensionunit == wxT( "Mils" ) )        textunit = ALTIUM_UNIT::MILS;
-    else if( dimensionunit == wxT( "Millimeters" ) ) textunit = ALTIUM_UNIT::MILLIMETERS;
-    else if( dimensionunit == wxT( "Centimeters" ) ) textunit = ALTIUM_UNIT::CENTIMETER;
+    else if( dimensionunit == wxT( "Millimeters" ) ) textunit = ALTIUM_UNIT::MM;
+    else if( dimensionunit == wxT( "Centimeters" ) ) textunit = ALTIUM_UNIT::CM;
     else                                             textunit = ALTIUM_UNIT::UNKNOWN;
 
     if( aReader.HasParsingError() )

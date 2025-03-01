@@ -83,9 +83,9 @@ int CLI::PCB_EXPORT_ODB_COMMAND::doPerform( KIWAY& aKiway )
     wxString units = From_UTF8( m_argParser.get<std::string>( ARG_UNITS ).c_str() );
 
     if( units == "mm" )
-        job->m_units = JOB_EXPORT_PCB_ODB::ODB_UNITS::MILLIMETERS;
+        job->m_units = JOB_EXPORT_PCB_ODB::ODB_UNITS::MM;
     else if( units == "in" )
-        job->m_units = JOB_EXPORT_PCB_ODB::ODB_UNITS::INCHES;
+        job->m_units = JOB_EXPORT_PCB_ODB::ODB_UNITS::IN;
 
     wxString compression = From_UTF8( m_argParser.get<std::string>( ARG_COMPRESS ).c_str() ).Lower();
 

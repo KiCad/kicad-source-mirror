@@ -67,7 +67,7 @@ BOOST_FIXTURE_TEST_CASE( DRCSolderMaskBridgingTest, DRC_SOLDER_MASK_BRIDGING_TES
                     violations.push_back( *aItem );
             } );
 
-    bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
+    bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
 
     const int expected_err_cnt = 5;
 
@@ -80,7 +80,7 @@ BOOST_FIXTURE_TEST_CASE( DRCSolderMaskBridgingTest, DRC_SOLDER_MASK_BRIDGING_TES
     {
         BOOST_CHECK_EQUAL( violations.size(), expected_err_cnt );
 
-        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCHES );
+        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::IN );
 
         std::map<KIID, EDA_ITEM*> itemMap;
         m_board->FillItemMap( itemMap );

@@ -289,7 +289,7 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
     // Dimension settings
 
     m_params.emplace_back( new PARAM_ENUM<DIM_UNITS_MODE>( "design_settings.dimensions.units",
-            &m_DesignSettings.m_DimensionUnitsMode, DIM_UNITS_MODE::AUTOMATIC, DIM_UNITS_MODE::INCHES,
+            &m_DesignSettings.m_DimensionUnitsMode, DIM_UNITS_MODE::AUTOMATIC, DIM_UNITS_MODE::IN,
             DIM_UNITS_MODE::AUTOMATIC ) );
 
     m_params.emplace_back( new PARAM_ENUM<DIM_PRECISION>( "design_settings.dimensions.precision",
@@ -484,7 +484,7 @@ bool FOOTPRINT_EDITOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     if( aCfg->Read( f + "PcbUserGrid_X", &x ) && aCfg->Read( f + "PcbUserGrid_Y", &y ) )
     {
         EDA_UNITS u = static_cast<EDA_UNITS>( aCfg->ReadLong( f + "PcbUserGrid_Unit",
-                                                              static_cast<long>( EDA_UNITS::INCHES ) ) );
+                                                              static_cast<long>( EDA_UNITS::IN ) ) );
 
         // Convert to internal units
         x = EDA_UNIT_UTILS::UI::FromUserUnit( pcbIUScale, u, x );

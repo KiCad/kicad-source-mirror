@@ -1045,7 +1045,7 @@ void PCB_IO_EAGLE::loadPlain( wxXmlNode* aGraphics )
                     dimension->SetTextSize( textSize );
                     dimension->SetTextThickness( textThickness );
                     dimension->SetLineThickness( designSettings.GetLineThickness( layer ) );
-                    dimension->SetUnits( EDA_UNITS::MILLIMETRES );
+                    dimension->SetUnits( EDA_UNITS::MM );
                 }
                 else if( d.dimensionType == wxT( "leader" ) )
                 {
@@ -1096,7 +1096,7 @@ void PCB_IO_EAGLE::loadPlain( wxXmlNode* aGraphics )
                     dimension->SetTextSize( textSize );
                     dimension->SetTextThickness( textThickness );
                     dimension->SetLineThickness( designSettings.GetLineThickness( layer ) );
-                    dimension->SetUnits( EDA_UNITS::MILLIMETRES );
+                    dimension->SetUnits( EDA_UNITS::MM );
 
                     // check which axis the dimension runs in
                     // because the "height" of the dimension is perpendicular to that axis
@@ -2667,7 +2667,7 @@ void PCB_IO_EAGLE::loadClasses( wxXmlNode* aClasses )
                              entry.first,
                              eClass.name,
                              m_classMap[ entry.first ]->GetName(),
-                             EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, EDA_UNITS::MILLIMETRES, entry.second.ToPcbUnits() ) );
+                             EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, EDA_UNITS::MM, entry.second.ToPcbUnits() ) );
 
                 m_customRules += wxT( "\n" ) + rule;
             }

@@ -1703,9 +1703,8 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
 
     ITEM* ni = nearest->m_item;
 
-    UNITS_PROVIDER up( pcbIUScale, EDA_UNITS::MILLIMETRES );
+    UNITS_PROVIDER up( pcbIUScale, EDA_UNITS::MM );
     PNS_DBG( Dbg(), Message, wxString::Format( wxT( "NI: %s (%s) %p %d" ),
-
                                                ni->Format(),
                                                ni->Parent() ? ni->Parent()->GetItemDescription( &up, false )
                                                             : wxString( wxT( "null" ) ),

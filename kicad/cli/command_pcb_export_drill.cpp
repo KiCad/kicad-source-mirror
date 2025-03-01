@@ -144,11 +144,11 @@ int CLI::PCB_EXPORT_DRILL_COMMAND::doPerform( KIWAY& aKiway )
 
     if( units == wxS( "mm" ) )
     {
-        drillJob->m_drillUnits = JOB_EXPORT_PCB_DRILL::DRILL_UNITS::MILLIMETERS;
+        drillJob->m_drillUnits = JOB_EXPORT_PCB_DRILL::DRILL_UNITS::MM;
     }
     else if( units == wxS( "in" ) )
     {
-        drillJob->m_drillUnits = JOB_EXPORT_PCB_DRILL::DRILL_UNITS::INCHES;
+        drillJob->m_drillUnits = JOB_EXPORT_PCB_DRILL::DRILL_UNITS::IN;
     }
     else
     {

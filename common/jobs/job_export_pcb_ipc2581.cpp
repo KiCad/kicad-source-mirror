@@ -25,8 +25,8 @@
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS,
                               {
-                                      { JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::INCHES, "in" },
-                                      { JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MILLIMETERS, "mm" },
+                                      { JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::IN, "in" },
+                                      { JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MM, "mm" },
                               } )
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION,
@@ -36,18 +36,18 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION,
                               } )
 
 JOB_EXPORT_PCB_IPC2581::JOB_EXPORT_PCB_IPC2581() :
-    JOB( "ipc2581", false ),
-    m_filename(),
-    m_drawingSheet(),
-    m_units( IPC2581_UNITS::MILLIMETERS ),
-    m_version( IPC2581_VERSION::C ),
-    m_precision( 6 ),
-    m_compress( false ),
-    m_colInternalId(),
-    m_colMfgPn(),
-    m_colMfg(),
-    m_colDistPn(),
-    m_colDist()
+        JOB( "ipc2581", false ),
+        m_filename(),
+        m_drawingSheet(),
+        m_units( IPC2581_UNITS::MM ),
+        m_version( IPC2581_VERSION::C ),
+        m_precision( 6 ),
+        m_compress( false ),
+        m_colInternalId(),
+        m_colMfgPn(),
+        m_colMfg(),
+        m_colDistPn(),
+        m_colDist()
 {
     m_params.emplace_back( new JOB_PARAM<wxString>( "drawing_sheet", &m_drawingSheet, m_drawingSheet ) );
     m_params.emplace_back( new JOB_PARAM<IPC2581_UNITS>( "units", &m_units, m_units ) );

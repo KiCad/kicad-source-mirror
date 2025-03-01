@@ -1468,7 +1468,7 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
     }
 
     wxString  result;
-    EDA_UNITS userUnits = EDA_UNITS::MILLIMETRES;
+    EDA_UNITS userUnits = EDA_UNITS::MM;
 
     if( aTool->GetManager()->GetSettings() )
         userUnits = static_cast<EDA_UNITS>( aTool->GetManager()->GetSettings()->m_System.units );

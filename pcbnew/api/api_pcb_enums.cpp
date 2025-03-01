@@ -641,10 +641,10 @@ types::DimensionUnit ToProtoEnum( DIM_UNITS_MODE aValue )
 {
     switch( aValue )
     {
-    case DIM_UNITS_MODE::INCHES:        return types::DimensionUnit::DU_INCHES;
-    case DIM_UNITS_MODE::MILS:          return types::DimensionUnit::DU_MILS;
-    case DIM_UNITS_MODE::MILLIMETRES:   return types::DimensionUnit::DU_MILLIMETERS;
-    case DIM_UNITS_MODE::AUTOMATIC:     return types::DimensionUnit::DU_AUTOMATIC;
+    case DIM_UNITS_MODE::IN:        return types::DimensionUnit::DU_INCHES;
+    case DIM_UNITS_MODE::MILS:      return types::DimensionUnit::DU_MILS;
+    case DIM_UNITS_MODE::MM:        return types::DimensionUnit::DU_MILLIMETERS;
+    case DIM_UNITS_MODE::AUTOMATIC: return types::DimensionUnit::DU_AUTOMATIC;
 
     default:
         wxCHECK_MSG( false, types::DimensionUnit::DU_UNKNOWN,
@@ -658,9 +658,9 @@ DIM_UNITS_MODE FromProtoEnum( types::DimensionUnit aValue )
 {
     switch( aValue )
     {
-    case types::DimensionUnit::DU_INCHES:       return DIM_UNITS_MODE::INCHES;
+    case types::DimensionUnit::DU_INCHES:       return DIM_UNITS_MODE::IN;
     case types::DimensionUnit::DU_MILS:         return DIM_UNITS_MODE::MILS;
-    case types::DimensionUnit::DU_MILLIMETERS:  return DIM_UNITS_MODE::MILLIMETRES;
+    case types::DimensionUnit::DU_MILLIMETERS:  return DIM_UNITS_MODE::MM;
     case types::DimensionUnit::DU_UNKNOWN:
     case types::DimensionUnit::DU_AUTOMATIC:    return DIM_UNITS_MODE::AUTOMATIC;
 

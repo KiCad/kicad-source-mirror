@@ -37,8 +37,8 @@ public:
 
     enum class DXF_UNITS
     {
-        INCHES,
-        MILLIMETERS
+        IN,
+        MM
     };
 
     enum class GEN_MODE
@@ -47,11 +47,12 @@ public:
         MULTI
     };
 
+public:
     bool      m_plotGraphicItemsUsingContours;
     bool      m_polygonMode;
     DXF_UNITS m_dxfUnits;
 
-    GEN_MODE m_genMode;
+    GEN_MODE  m_genMode;
 };
 
 #endif

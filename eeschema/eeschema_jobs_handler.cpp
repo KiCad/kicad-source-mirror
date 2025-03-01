@@ -865,7 +865,6 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*  aSvgJob,
         {
             wxString   filename;
             wxFileName fn;
-            size_t     forbidden_char;
 
             fn.SetPath( aSvgJob->m_outputDirectory );
             fn.SetExt( FILEEXT::SVGFileExtension );
@@ -1147,10 +1146,10 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
 
     switch( ercJob->m_units )
     {
-    case JOB_SCH_ERC::UNITS::INCHES:      units = EDA_UNITS::INCHES;      break;
-    case JOB_SCH_ERC::UNITS::MILS:        units = EDA_UNITS::MILS;        break;
-    case JOB_SCH_ERC::UNITS::MILLIMETERS: units = EDA_UNITS::MILLIMETRES; break;
-    default:                              units = EDA_UNITS::MILLIMETRES; break;
+    case JOB_SCH_ERC::UNITS::IN:   units = EDA_UNITS::IN;   break;
+    case JOB_SCH_ERC::UNITS::MILS: units = EDA_UNITS::MILS; break;
+    case JOB_SCH_ERC::UNITS::MM:   units = EDA_UNITS::MM;   break;
+    default:                       units = EDA_UNITS::MM;   break;
     }
 
     std::shared_ptr<SHEETLIST_ERC_ITEMS_PROVIDER> markersProvider =
