@@ -1,0 +1,49 @@
+# Despite the unfortunate naming convention of this file, KiCad does not have code "owners".
+# All parts of KiCad are worked on by all developers, and we do not require explicit approval
+# from any particular person in order to accept contributions or fixes to sections of KiCad.
+
+# This file is used to generate suggested reviewers for pull requests that touch certain parts
+# of the KiCad codebase based on the development history of those parts.  Most of KiCad does not
+# have a particular set of reviewers defined in this file, and in general, it is a good thing if
+# entries can be removed from this file over time, because it indicates that expertise about
+# parts of the codebase that once were only familiar to one or two developers is now shared among
+# a wider set of the core development team.
+
+# Contributors: despite this file, the KiCad team still primarily matches up new merge requests
+# with reviewers based on developer availability.  If a change you propose touches files that
+# are covered by entries in this file, the relevant developer(s) may or may not be the final
+# reviewer(s) for your merge request.
+
+# Core team developers: consider adding yourself to places where you are commonly asked for
+# review feedback by the rest of the team.  Consider removing yourself if you are stepping back
+# from participating in KiCad code review, or if you notice that an area you were previously
+# listed as a reviewer because not many others were familiar with it is now familiar with the
+# larger team.
+
+[Suggested Reviewers]
+
+/vcpkg*.json @mroszko
+
+/api/ @craftyjon
+
+/cmake/InstallSteps/*MacOS.cmake @craftyjon
+
+/common/api/ @craftyjon
+/common/git/ @sethhillbrand
+/common/database/ @craftyjon
+
+/eeschema/api/ @craftyjon
+/eeschema/connection_graph.* @craftyjon @sethhillbrand
+/eeschema/sch_io/database/ @craftyjon
+
+/libs/kinng/ @craftyjon
+
+/pcbnew/api/ @craftyjon
+/pcbnew/pcb_io/easyeda* @dsa-t
+/pcbnew/pcb_io/ipc2581/ @sethhillbrand
+/pcbnew/pcb_io/odbpp/ @SYSUeric66 @sethhillbrand @craftyjon
+/pcbnew/router/ @twlostow @craftyjon @sethhillbrand
+
+/scripting/ @craftyjon @sethhillbrand
+
+/thirdparty/nanodbc/ @craftyjon
