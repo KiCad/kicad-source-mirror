@@ -158,8 +158,8 @@ SCHEMATIC* EESCHEMA_JOBS_HANDLER::getSchematic( const wxString& aPath )
     if( !Pgm().IsGUI() && Pgm().GetSettingsManager().IsProjectOpenNotDummy() )
     {
         PROJECT& project = Pgm().GetSettingsManager().Prj();
-
         wxString schPath = aPath;
+
         if( schPath.IsEmpty() )
         {
             wxFileName path = project.GetProjectFullName();
@@ -175,8 +175,8 @@ SCHEMATIC* EESCHEMA_JOBS_HANDLER::getSchematic( const wxString& aPath )
     }
     else if( Pgm().IsGUI() && Pgm().GetSettingsManager().IsProjectOpen() )
     {
-        SCH_EDIT_FRAME* editFrame =
-                dynamic_cast<SCH_EDIT_FRAME*>( m_kiway->Player( FRAME_SCH, false ) );
+        SCH_EDIT_FRAME* editFrame = static_cast<SCH_EDIT_FRAME*>( m_kiway->Player( FRAME_SCH,
+                                                                                   false ) );
 
         if( editFrame )
             sch = &editFrame->Schematic();
@@ -221,9 +221,8 @@ void EESCHEMA_JOBS_HANDLER::InitRenderSettings( SCH_RENDER_SETTINGS* aRenderSett
                 resolve.SetProject( &aSch->Prj() );
                 resolve.SetProgramBase( &Pgm() );
 
-                wxString absolutePath = resolve.ResolvePath( path,
-                                                            wxGetCwd(),
-                                                            aSch->GetEmbeddedFiles() );
+                wxString absolutePath = resolve.ResolvePath( path, wxGetCwd(),
+                                                             aSch->GetEmbeddedFiles() );
 
                 if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( absolutePath, &msg ) )
                 {
@@ -326,8 +325,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
 
     wxString outPath = aPlotJob->GetFullOutputPath( &sch->Prj() );
 
-    if( !PATHS::EnsurePathExists( outPath,
-                                  !aPlotJob->GetOutputPathIsDirectory() ) )
+    if( !PATHS::EnsurePathExists( outPath, !aPlotJob->GetOutputPathIsDirectory() ) )
     {
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
@@ -656,9 +654,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
             field.name = fieldName;
             field.show = !fieldName.StartsWith( wxT( "__" ), &field.name );
-            field.groupBy = std::find( aBomJob->m_fieldsGroupBy.begin(),
-                                       aBomJob->m_fieldsGroupBy.end(), field.name )
-                            != aBomJob->m_fieldsGroupBy.end();
+            field.groupBy = alg::contains( aBomJob->m_fieldsGroupBy, field.name );
 
             if( ( aBomJob->m_fieldsLabels.size() > i ) && !aBomJob->m_fieldsLabels[i].IsEmpty() )
                 field.label = aBomJob->m_fieldsLabels[i];
@@ -880,12 +876,8 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*  aSvgJob,
 
             filename = symbol->GetName();
 
-            while( wxString::npos
-                   != ( forbidden_char = filename.find_first_of(
-                                wxFileName::GetForbiddenChars( wxPATH_DOS ) ) ) )
-            {
-                filename = filename.replace( forbidden_char, 1, wxS( '_' ) );
-            }
+            for( wxChar c : wxFileName::GetForbiddenChars( wxPATH_DOS ) )
+                 filename.Replace( c, ' ' );
 
             // Even single units get a unit number in the filename. This simplifies the
             // handling of the files as they have a uniform pattern.
@@ -1016,9 +1008,9 @@ int EESCHEMA_JOBS_HANDLER::JobSymExportSvg( JOB* aJob )
         // Just plot all the symbols we can
         const LIB_SYMBOL_MAP& libSymMap = schLibrary.GetSymbolMap();
 
-        for( const std::pair<const wxString, LIB_SYMBOL*>& entry : libSymMap )
+        for( const auto& [name, libSymbol] : libSymMap )
         {
-            exitCode = doSymExportSvg( svgJob, &renderSettings, entry.second );
+            exitCode = doSymExportSvg( svgJob, &renderSettings, libSymbol );
 
             if( exitCode != CLI::EXIT_CODES::OK )
                 break;
