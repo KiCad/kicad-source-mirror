@@ -96,7 +96,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalsePositiveRegressions, DRC_REGRESSION_TEST_FIXTUR
                         violations.push_back( *aItem );
                 } );
 
-        bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
+        bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
 
         if( violations.empty() )
         {
@@ -105,7 +105,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalsePositiveRegressions, DRC_REGRESSION_TEST_FIXTUR
         }
         else
         {
-            UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCHES );
+            UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::IN );
 
             std::map<KIID, EDA_ITEM*> itemMap;
             m_board->FillItemMap( itemMap );
@@ -187,7 +187,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
                         }
                     } );
 
-            bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
+            bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
 
             if( violations.size() == expectedErrors )
             {
@@ -196,15 +196,15 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
             }
             else
             {
-                UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCHES );
+                UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::IN );
 
                 std::map<KIID, EDA_ITEM*> itemMap;
                 m_board->FillItemMap( itemMap );
 
                 for( const DRC_ITEM& item : violations )
                 {
-                    BOOST_TEST_MESSAGE(
-                            item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
+                    BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR,
+                                                         itemMap ) );
                 }
 
                 BOOST_CHECK_EQUAL( violations.size(), expectedErrors );

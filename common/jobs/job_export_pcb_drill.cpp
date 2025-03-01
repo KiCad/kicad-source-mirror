@@ -36,8 +36,8 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_DRILL::DRILL_ORIGIN,
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_DRILL::DRILL_UNITS,
                               {
-                                    { JOB_EXPORT_PCB_DRILL::DRILL_UNITS::INCHES, "in" },
-                                    { JOB_EXPORT_PCB_DRILL::DRILL_UNITS::MILLIMETERS, "mm" },
+                                    { JOB_EXPORT_PCB_DRILL::DRILL_UNITS::IN, "in" },
+                                    { JOB_EXPORT_PCB_DRILL::DRILL_UNITS::MM, "mm" },
                               } )
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT,
@@ -58,19 +58,19 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_DRILL::MAP_FORMAT,
                               } )
 
 JOB_EXPORT_PCB_DRILL::JOB_EXPORT_PCB_DRILL() :
-    JOB( "drill", true ),
-    m_filename(),
-    m_excellonMirrorY( false ),
-    m_excellonMinimalHeader( false ),
-    m_excellonCombinePTHNPTH( true ),
-    m_excellonOvalDrillRoute( false ),
-    m_format( DRILL_FORMAT::EXCELLON ),
-    m_drillOrigin( DRILL_ORIGIN::ABS ),
-    m_drillUnits( DRILL_UNITS::INCHES ),
-    m_zeroFormat( ZEROS_FORMAT::DECIMAL ),
-    m_mapFormat( MAP_FORMAT::PDF ),
-    m_gerberPrecision( 5 ),
-    m_generateMap( false )
+        JOB( "drill", true ),
+        m_filename(),
+        m_excellonMirrorY( false ),
+        m_excellonMinimalHeader( false ),
+        m_excellonCombinePTHNPTH( true ),
+        m_excellonOvalDrillRoute( false ),
+        m_format( DRILL_FORMAT::EXCELLON ),
+        m_drillOrigin( DRILL_ORIGIN::ABS ),
+        m_drillUnits( DRILL_UNITS::IN ),
+        m_zeroFormat( ZEROS_FORMAT::DECIMAL ),
+        m_mapFormat( MAP_FORMAT::PDF ),
+        m_gerberPrecision( 5 ),
+        m_generateMap( false )
 {
     m_params.emplace_back( new JOB_PARAM<bool>( "excellon.mirror_y",
                                                 &m_excellonMirrorY,

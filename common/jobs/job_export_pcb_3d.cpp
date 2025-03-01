@@ -25,20 +25,20 @@
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_3D::FORMAT,
                               {
                                       { JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN, nullptr },
-                                      { JOB_EXPORT_PCB_3D::FORMAT::STEP, "step" },
-                                      { JOB_EXPORT_PCB_3D::FORMAT::BREP, "brep" },
-                                      { JOB_EXPORT_PCB_3D::FORMAT::GLB, "step" },
-                                      { JOB_EXPORT_PCB_3D::FORMAT::VRML, "vrml" },
-                                      { JOB_EXPORT_PCB_3D::FORMAT::XAO, "xao" },
-                                      { JOB_EXPORT_PCB_3D::FORMAT::PLY, "ply" },
-                                      { JOB_EXPORT_PCB_3D::FORMAT::STL, "stl" },
+                                      { JOB_EXPORT_PCB_3D::FORMAT::STEP,    "step" },
+                                      { JOB_EXPORT_PCB_3D::FORMAT::BREP,    "brep" },
+                                      { JOB_EXPORT_PCB_3D::FORMAT::GLB,     "step" },
+                                      { JOB_EXPORT_PCB_3D::FORMAT::VRML,    "vrml" },
+                                      { JOB_EXPORT_PCB_3D::FORMAT::XAO,     "xao" },
+                                      { JOB_EXPORT_PCB_3D::FORMAT::PLY,     "ply" },
+                                      { JOB_EXPORT_PCB_3D::FORMAT::STL,     "stl" },
                               } )
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_3D::VRML_UNITS,
                               {
-                                      { JOB_EXPORT_PCB_3D::VRML_UNITS::INCHES, "in" },
+                                      { JOB_EXPORT_PCB_3D::VRML_UNITS::IN,     "in" },
                                       { JOB_EXPORT_PCB_3D::VRML_UNITS::METERS, "m" },
-                                      { JOB_EXPORT_PCB_3D::VRML_UNITS::MILLIMETERS, "mm" },
+                                      { JOB_EXPORT_PCB_3D::VRML_UNITS::MM,     "mm" },
                                       { JOB_EXPORT_PCB_3D::VRML_UNITS::TENTHS, "tenths" },
                               } )
 
@@ -74,13 +74,13 @@ wxString EXPORTER_STEP_PARAMS::GetFormatName() const
 
 
 JOB_EXPORT_PCB_3D::JOB_EXPORT_PCB_3D() :
-    JOB( "3d", false ),
-    m_hasUserOrigin( false ),
-    m_filename(),
-    m_format( JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN ),
-    m_vrmlUnits( JOB_EXPORT_PCB_3D::VRML_UNITS::METERS ),
-    m_vrmlModelDir( wxEmptyString ),
-    m_vrmlRelativePaths( false )
+        JOB( "3d", false ),
+        m_hasUserOrigin( false ),
+        m_filename(),
+        m_format( JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN ),
+        m_vrmlUnits( JOB_EXPORT_PCB_3D::VRML_UNITS::METERS ),
+        m_vrmlModelDir( wxEmptyString ),
+        m_vrmlRelativePaths( false )
 {
     m_params.emplace_back(
             new JOB_PARAM<bool>( "overwrite", &m_3dparams.m_Overwrite, m_3dparams.m_Overwrite ) );
@@ -154,14 +154,15 @@ wxString JOB_EXPORT_PCB_3D::GetSettingsDialogTitle() const
 void JOB_EXPORT_PCB_3D::SetStepFormat( EXPORTER_STEP_PARAMS::FORMAT aFormat )
 {
     m_3dparams.m_Format = aFormat;
+
     switch( m_3dparams.m_Format )
     {
     case EXPORTER_STEP_PARAMS::FORMAT::STEP: m_format = JOB_EXPORT_PCB_3D::FORMAT::STEP; break;
-    case EXPORTER_STEP_PARAMS::FORMAT::GLB: m_format = JOB_EXPORT_PCB_3D::FORMAT::GLB; break;
-    case EXPORTER_STEP_PARAMS::FORMAT::XAO: m_format = JOB_EXPORT_PCB_3D::FORMAT::XAO; break;
+    case EXPORTER_STEP_PARAMS::FORMAT::GLB:  m_format = JOB_EXPORT_PCB_3D::FORMAT::GLB;  break;
+    case EXPORTER_STEP_PARAMS::FORMAT::XAO:  m_format = JOB_EXPORT_PCB_3D::FORMAT::XAO;  break;
     case EXPORTER_STEP_PARAMS::FORMAT::BREP: m_format = JOB_EXPORT_PCB_3D::FORMAT::BREP; break;
-    case EXPORTER_STEP_PARAMS::FORMAT::PLY: m_format = JOB_EXPORT_PCB_3D::FORMAT::PLY; break;
-    case EXPORTER_STEP_PARAMS::FORMAT::STL: m_format = JOB_EXPORT_PCB_3D::FORMAT::STL; break;
+    case EXPORTER_STEP_PARAMS::FORMAT::PLY:  m_format = JOB_EXPORT_PCB_3D::FORMAT::PLY;  break;
+    case EXPORTER_STEP_PARAMS::FORMAT::STL:  m_format = JOB_EXPORT_PCB_3D::FORMAT::STL;  break;
     }
 }
 

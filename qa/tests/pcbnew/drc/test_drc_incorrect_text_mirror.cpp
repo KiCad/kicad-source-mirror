@@ -69,7 +69,7 @@ BOOST_FIXTURE_TEST_CASE( DRCIncorrectTextMirror, DRC_INCORRECT_TEXT_MIRROR_TEST_
                         violations.push_back( *aItem );
                 } );
 
-        bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
+        bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
 
         if( violations.size() == test.second )
         {
@@ -78,14 +78,15 @@ BOOST_FIXTURE_TEST_CASE( DRCIncorrectTextMirror, DRC_INCORRECT_TEXT_MIRROR_TEST_
         }
         else
         {
-            UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCHES );
+            UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::IN );
 
             std::map<KIID, EDA_ITEM*> itemMap;
             m_board->FillItemMap( itemMap );
 
             for( const DRC_ITEM& item : violations )
             {
-                BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
+                BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR,
+                                                     itemMap ) );
             }
 
             BOOST_ERROR( wxString::Format( "DRC incorrect text mirror test: %s, failed (violations found %d expected %d)",

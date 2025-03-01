@@ -34,20 +34,11 @@ public:
     wxString GetDefaultDescription() const override;
     wxString GetSettingsDialogTitle() const override;
 
-    wxString m_filename;
-
-    bool m_excellonMirrorY;
-    bool m_excellonMinimalHeader;
-    bool m_excellonCombinePTHNPTH;
-    bool m_excellonOvalDrillRoute;
-
     enum class DRILL_FORMAT
     {
         EXCELLON,
         GERBER
     };
-
-    DRILL_FORMAT m_format;
 
     enum class DRILL_ORIGIN
     {
@@ -55,15 +46,11 @@ public:
         PLOT
     };
 
-    DRILL_ORIGIN m_drillOrigin;
-
     enum class DRILL_UNITS
     {
-        INCHES,
-        MILLIMETERS
+        IN,
+        MM
     };
-
-    DRILL_UNITS m_drillUnits;
 
     enum class ZEROS_FORMAT
     {
@@ -72,8 +59,6 @@ public:
         SUPPRESS_TRAILING,
         KEEP_ZEROS
     };
-
-    ZEROS_FORMAT m_zeroFormat;
 
     enum class MAP_FORMAT
     {
@@ -84,11 +69,22 @@ public:
         PDF
     };
 
-    MAP_FORMAT m_mapFormat;
+public:
+    wxString     m_filename;
 
-    int m_gerberPrecision;
+    bool         m_excellonMirrorY;
+    bool         m_excellonMinimalHeader;
+    bool         m_excellonCombinePTHNPTH;
+    bool         m_excellonOvalDrillRoute;
 
-    bool m_generateMap;
+    DRILL_FORMAT m_format;
+    DRILL_ORIGIN m_drillOrigin;
+    DRILL_UNITS  m_drillUnits;
+    ZEROS_FORMAT m_zeroFormat;
+
+    MAP_FORMAT   m_mapFormat;
+    int          m_gerberPrecision;
+    bool         m_generateMap;
 };
 
 #endif

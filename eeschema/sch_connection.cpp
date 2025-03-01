@@ -471,7 +471,7 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( std::vector<MSG_PANEL_ITEM>& aList ) 
 
     if( SCH_ITEM* driver = Driver() )
     {
-        UNITS_PROVIDER unitsProvider( schIUScale, EDA_UNITS::MILLIMETRES );
+        UNITS_PROVIDER unitsProvider( schIUScale, EDA_UNITS::MM );
 
         msg.Printf( wxS( "%s at %p" ),
                     driver->GetItemDescription( &unitsProvider, false ),

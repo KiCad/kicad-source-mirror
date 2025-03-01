@@ -50,8 +50,8 @@
 COMMON_TOOLS::COMMON_TOOLS() :
     TOOL_INTERACTIVE( "common.Control" ),
     m_frame( nullptr ),
-    m_imperialUnit( EDA_UNITS::INCHES ),
-    m_metricUnit( EDA_UNITS::MILLIMETRES )
+    m_imperialUnit( EDA_UNITS::IN ),
+    m_metricUnit( EDA_UNITS::MM )
 {
 }
 
@@ -69,9 +69,9 @@ void COMMON_TOOLS::Reset( RESET_REASON aReason )
 
     for( GRID& gridDef : settings.grids )
     {
-        double gridSizeX = EDA_UNIT_UTILS::UI::DoubleValueFromString( scale, EDA_UNITS::MILLIMETRES,
+        double gridSizeX = EDA_UNIT_UTILS::UI::DoubleValueFromString( scale, EDA_UNITS::MM,
                                                                       gridDef.x );
-        double gridSizeY = EDA_UNIT_UTILS::UI::DoubleValueFromString( scale, EDA_UNITS::MILLIMETRES,
+        double gridSizeY = EDA_UNIT_UTILS::UI::DoubleValueFromString( scale, EDA_UNITS::MM,
                                                                       gridDef.y );
 
         m_grids.emplace_back( KiROUND<double, int>( gridSizeX ),

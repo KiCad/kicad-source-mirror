@@ -161,19 +161,19 @@ wxSize PROPERTIES_FRAME::GetMinSize() const
 
 double fromMM( double aMMValue )
 {
-    return EDA_UNIT_UTILS::UI::FromUserUnit( drawSheetIUScale, EDA_UNITS::MILLIMETRES, aMMValue );
+    return EDA_UNIT_UTILS::UI::FromUserUnit( drawSheetIUScale, EDA_UNITS::MM, aMMValue );
 }
 
 
 double toMM( double aIUValue )
 {
-    return EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, EDA_UNITS::MILLIMETRES, aIUValue );
+    return EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, EDA_UNITS::MM, aIUValue );
 }
 
 
 bool validateMM( UNIT_BINDER& aUnitBinder, double aMin, double aMax )
 {
-    return aUnitBinder.Validate( aMin, aMax, EDA_UNITS::MILLIMETRES );
+    return aUnitBinder.Validate( aMin, aMax, EDA_UNITS::MM );
 }
 
 

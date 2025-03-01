@@ -3973,7 +3973,7 @@ PCB_DIMENSION_BASE* PCB_IO_KICAD_SEXPR_PARSER::parseDIMENSION( BOARD_ITEM* aPare
 
             if( isLegacyDimension )
             {
-                EDA_UNITS units = EDA_UNITS::MILLIMETRES;
+                EDA_UNITS units = EDA_UNITS::MM;
 
                 if( !EDA_UNIT_UTILS::FetchUnitsFromString( dim->GetText(), units ) )
                     dim->SetAutoUnits( true ); //Not determined => use automatic units

@@ -22,21 +22,21 @@
 
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_RC::UNITS, {
-                                                     { JOB_RC::UNITS::INCHES, "in" },
-                                                     { JOB_RC::UNITS::MILLIMETERS, "mm" },
+                                                     { JOB_RC::UNITS::IN,   "in" },
+                                                     { JOB_RC::UNITS::MM,   "mm" },
                                                      { JOB_RC::UNITS::MILS, "mils" },
                                                   } )
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_RC::OUTPUT_FORMAT,
                               {
                                       { JOB_RC::OUTPUT_FORMAT::REPORT, "report" },
-                                      { JOB_RC::OUTPUT_FORMAT::JSON, "json" },
+                                      { JOB_RC::OUTPUT_FORMAT::JSON,   "json" },
                               } )
 
-JOB_RC::JOB_RC( const std::string& aType )
-    : JOB( aType, false ),
+JOB_RC::JOB_RC( const std::string& aType ) :
+        JOB( aType, false ),
         m_filename(),
-        m_units( JOB_RC::UNITS::MILLIMETERS ),
+        m_units( JOB_RC::UNITS::MM ),
         m_severity( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING ),
         m_format( OUTPUT_FORMAT::REPORT ),
         m_exitCodeViolations( false )

@@ -39,24 +39,24 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_POS::SIDE,
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_POS::UNITS,
                               {
-                                      { JOB_EXPORT_PCB_POS::UNITS::INCHES, "in" },
-                                      { JOB_EXPORT_PCB_POS::UNITS::MILLIMETERS, "mm" },
+                                      { JOB_EXPORT_PCB_POS::UNITS::IN, "in" },
+                                      { JOB_EXPORT_PCB_POS::UNITS::MM, "mm" },
                               } )
 
 JOB_EXPORT_PCB_POS::JOB_EXPORT_PCB_POS() :
-    JOB( "pos", false ),
-    m_filename(),
-    m_useDrillPlaceFileOrigin( true ),
-    m_smdOnly( false ),
-    m_excludeFootprintsWithTh( false ),
-    m_excludeDNP( false ),
-    m_negateBottomX( false ),
-    m_singleFile( false ),
-    m_nakedFilename( false ),
-    m_side( SIDE::BOTH ),
-    m_units( UNITS::MILLIMETERS ),
-    m_format( FORMAT::ASCII ),
-    m_gerberBoardEdge( true )
+        JOB( "pos", false ),
+        m_filename(),
+        m_useDrillPlaceFileOrigin( true ),
+        m_smdOnly( false ),
+        m_excludeFootprintsWithTh( false ),
+        m_excludeDNP( false ),
+        m_negateBottomX( false ),
+        m_singleFile( false ),
+        m_nakedFilename( false ),
+        m_side( SIDE::BOTH ),
+        m_units( UNITS::MM ),
+        m_format( FORMAT::ASCII ),
+        m_gerberBoardEdge( true )
 {
     m_params.emplace_back( new JOB_PARAM<bool>( "use_drill_place_file_origin",
                                                 &m_useDrillPlaceFileOrigin,

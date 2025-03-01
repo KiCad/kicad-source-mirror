@@ -123,7 +123,7 @@ public:
 #define PAD_DESC( pad ) wxString::Format( _( "Pad %s" ), ( pad )->GetNumber() )
 
 
-UNITS_PROVIDER g_unitsProvider( pcbIUScale, EDA_UNITS::MILLIMETRES );
+UNITS_PROVIDER g_unitsProvider( pcbIUScale, EDA_UNITS::MM );
 
 
 bool primitiveNeedsUpdate( const std::shared_ptr<PCB_SHAPE>& a,
@@ -572,8 +572,6 @@ bool zoneNeedsUpdate( const ZONE* a, const ZONE* b, REPORTER* aReporter )
 bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, int aCompareFlags,
                                       REPORTER* aReporter )
 {
-    UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::MILLIMETRES );
-
     wxASSERT( aLibFP );
     bool diff = false;
 

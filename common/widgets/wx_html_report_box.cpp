@@ -31,7 +31,7 @@
 WX_HTML_REPORT_BOX::WX_HTML_REPORT_BOX( wxWindow* parent, wxWindowID id, const wxPoint& pos,
                                         const wxSize& size, long style ) :
         HTML_WINDOW( parent, id, pos, size, style ),
-        m_units( EDA_UNITS::MILLIMETRES ),
+        m_units( EDA_UNITS::MM ),
         m_immediateMode( false )
 {
     Flush();

@@ -1636,18 +1636,11 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
 
     switch( aElem.textunit )
     {
-    case ALTIUM_UNIT::INCHES:
-        dimension->SetUnits( EDA_UNITS::INCHES );
-        break;
-    case ALTIUM_UNIT::MILS:
-        dimension->SetUnits( EDA_UNITS::MILS );
-        break;
-    case ALTIUM_UNIT::MILLIMETERS:
-    case ALTIUM_UNIT::CENTIMETER:
-        dimension->SetUnits( EDA_UNITS::MILLIMETRES );
-        break;
-    default:
-        break;
+    case ALTIUM_UNIT::IN:   dimension->SetUnits( EDA_UNITS::IN );   break;
+    case ALTIUM_UNIT::MILS: dimension->SetUnits( EDA_UNITS::MILS ); break;
+    case ALTIUM_UNIT::MM:   dimension->SetUnits( EDA_UNITS::MM );   break;
+    case ALTIUM_UNIT::CM:   dimension->SetUnits( EDA_UNITS::MM );   break;
+    default:                                                        break;
     }
 
     m_board->Add( dimension.release(), ADD_MODE::APPEND );
@@ -1694,18 +1687,11 @@ void ALTIUM_PCB::HelperParseDimensions6Radial(const ADIMENSION6 &aElem)
 
     switch( aElem.textunit )
     {
-    case ALTIUM_UNIT::INCHES:
-        dimension->SetUnits( EDA_UNITS::INCHES );
-        break;
-    case ALTIUM_UNIT::MILS:
-        dimension->SetUnits( EDA_UNITS::MILS );
-        break;
-    case ALTIUM_UNIT::MILLIMETERS:
-    case ALTIUM_UNIT::CENTIMETER:
-        dimension->SetUnits( EDA_UNITS::MILLIMETRES );
-        break;
-    default:
-        break;
+    case ALTIUM_UNIT::IN:   dimension->SetUnits( EDA_UNITS::IN );   break;
+    case ALTIUM_UNIT::MILS: dimension->SetUnits( EDA_UNITS::MILS ); break;
+    case ALTIUM_UNIT::MM:   dimension->SetUnits( EDA_UNITS::MM );   break;
+    case ALTIUM_UNIT::CM:   dimension->SetUnits( EDA_UNITS::MM );   break;
+    default:                                                        break;
     }
 
     if( aElem.textPoint.empty() )

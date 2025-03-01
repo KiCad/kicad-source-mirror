@@ -35,16 +35,6 @@ public:
 
     void SetDefaultOutputPath( const wxString& aReferenceName );
 
-    wxString m_filename;
-
-    bool m_useDrillPlaceFileOrigin;
-    bool m_smdOnly;
-    bool m_excludeFootprintsWithTh;
-    bool m_excludeDNP;
-    bool m_negateBottomX;
-    bool m_singleFile;
-    bool m_nakedFilename;
-
     enum class SIDE
     {
         FRONT,
@@ -52,16 +42,11 @@ public:
         BOTH
     };
 
-    SIDE m_side;
-
     enum class UNITS
     {
-        INCHES,
-        MILLIMETERS
+        IN,
+        MM
     };
-
-    UNITS m_units;
-
 
     enum class FORMAT
     {
@@ -70,9 +55,20 @@ public:
         GERBER
     };
 
-    FORMAT m_format;
+public:
+    wxString m_filename;
 
-    bool m_gerberBoardEdge;
+    bool     m_useDrillPlaceFileOrigin;
+    bool     m_smdOnly;
+    bool     m_excludeFootprintsWithTh;
+    bool     m_excludeDNP;
+    bool     m_negateBottomX;
+    bool     m_singleFile;
+    bool     m_nakedFilename;
+    SIDE     m_side;
+    UNITS    m_units;
+    FORMAT   m_format;
+    bool     m_gerberBoardEdge;
 };
 
 #endif

@@ -43,7 +43,8 @@ DRC_TEST_PROVIDER_REGISTRY::~DRC_TEST_PROVIDER_REGISTRY()
 
 
 DRC_TEST_PROVIDER::DRC_TEST_PROVIDER() :
-        UNITS_PROVIDER( pcbIUScale, EDA_UNITS::MILLIMETRES ), m_drcEngine( nullptr )
+        UNITS_PROVIDER( pcbIUScale, EDA_UNITS::MM ),
+        m_drcEngine( nullptr )
 {
 }
 

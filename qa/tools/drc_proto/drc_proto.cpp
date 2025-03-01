@@ -134,7 +134,7 @@ int runDRCProto( PROJECT_CONTEXT project, std::shared_ptr<KIGFX::VIEW_OVERLAY> a
 
     try
     {
-        drcEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
+        drcEngine->RunTests( EDA_UNITS::MM, true, false );
     }
     catch( const Clipper2Lib::Clipper2Exception& e )
     {

@@ -174,7 +174,7 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType, const wxS
         wxFrame( aParent, wxID_ANY, aTitle, aPos, aSize, aStyle, aFrameName ),
         TOOLS_HOLDER(),
         KIWAY_HOLDER( aKiway, KIWAY_HOLDER::FRAME ),
-        UNITS_PROVIDER( aIuScale, EDA_UNITS::MILLIMETRES )
+        UNITS_PROVIDER( aIuScale, EDA_UNITS::MM )
 {
     commonInit( aFrameType );
 }

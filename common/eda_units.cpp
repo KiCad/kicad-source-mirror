@@ -48,7 +48,7 @@ bool EDA_UNIT_UTILS::IsImperialUnit( EDA_UNITS aUnit )
 {
     switch( aUnit )
     {
-    case EDA_UNITS::INCHES:
+    case EDA_UNITS::IN:
     case EDA_UNITS::MILS:
         return true;
 
@@ -62,9 +62,9 @@ bool EDA_UNIT_UTILS::IsMetricUnit( EDA_UNITS aUnit )
 {
     switch( aUnit )
     {
-    case EDA_UNITS::MICROMETRES:
-    case EDA_UNITS::MILLIMETRES:
-    case EDA_UNITS::CENTIMETRES:
+    case EDA_UNITS::UM:
+    case EDA_UNITS::MM:
+    case EDA_UNITS::CM:
         return true;
 
     default:
@@ -106,15 +106,15 @@ bool EDA_UNIT_UTILS::FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS
 
     //check for um, μm (µ is MICRO SIGN) and µm (µ is GREEK SMALL LETTER MU) for micrometre
     if( unit == wxT( "um" ) || unit == wxT( "\u00B5m" ) || unit == wxT( "\u03BCm" ) )
-        aUnits = EDA_UNITS::MICROMETRES;
+        aUnits = EDA_UNITS::UM;
     else if( unit == wxT( "mm" ) )
-        aUnits = EDA_UNITS::MILLIMETRES;
+        aUnits = EDA_UNITS::MM;
     if( unit == wxT( "cm" ) )
-        aUnits = EDA_UNITS::CENTIMETRES;
+        aUnits = EDA_UNITS::CM;
     else if( unit == wxT( "mi" ) || unit == wxT( "th" ) ) // "mils" or "thou"
         aUnits = EDA_UNITS::MILS;
     else if( unit == wxT( "in" ) || unit == wxT( "\"" ) )
-        aUnits = EDA_UNITS::INCHES;
+        aUnits = EDA_UNITS::IN;
     else if( unit == wxT( "de" ) || unit == wxT( "ra" ) ) // "deg" or "rad"
         aUnits = EDA_UNITS::DEGREES;
     else
@@ -130,15 +130,15 @@ wxString EDA_UNIT_UTILS::GetText( EDA_UNITS aUnits, EDA_DATA_TYPE aType )
 
     switch( aUnits )
     {
-    case EDA_UNITS::MICROMETRES:  label = wxT( " \u00B5m" ); break; //00B5 for µ
-    case EDA_UNITS::MILLIMETRES:  label = wxT( " mm" );      break;
-    case EDA_UNITS::CENTIMETRES:  label = wxT( " cm" );      break;
-    case EDA_UNITS::DEGREES:      label = wxT( "°" );        break;
-    case EDA_UNITS::MILS:         label = wxT( " mils" );    break;
-    case EDA_UNITS::INCHES:       label = wxT( " in" );      break;
-    case EDA_UNITS::PERCENT:      label = wxT( "%" );        break;
-    case EDA_UNITS::UNSCALED:                                break;
-    default: UNIMPLEMENTED_FOR( wxS( "Unknown units" ) );    break;
+    case EDA_UNITS::UM:       label = wxT( " \u00B5m" );  break; //00B5 for µ
+    case EDA_UNITS::MM:       label = wxT( " mm" );       break;
+    case EDA_UNITS::CM:       label = wxT( " cm" );       break;
+    case EDA_UNITS::DEGREES:  label = wxT( "°" );         break;
+    case EDA_UNITS::MILS:     label = wxT( " mils" );     break;
+    case EDA_UNITS::IN:       label = wxT( " in" );       break;
+    case EDA_UNITS::PERCENT:  label = wxT( "%" );         break;
+    case EDA_UNITS::UNSCALED:                             break;
+    default: UNIMPLEMENTED_FOR( wxS( "Unknown units" ) ); break;
     }
 
     switch( aType )
@@ -263,26 +263,13 @@ double EDA_UNIT_UTILS::UI::ToUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS a
 {
     switch( aUnit )
     {
-    case EDA_UNITS::MICROMETRES:
-        return IU_TO_MM( aValue, aIuScale ) * 1000;
-
-    case EDA_UNITS::MILLIMETRES:
-        return IU_TO_MM( aValue, aIuScale );
-
-    case EDA_UNITS::CENTIMETRES:
-        return IU_TO_MM( aValue, aIuScale ) / 10;
-
-    case EDA_UNITS::MILS:
-        return IU_TO_MILS( aValue, aIuScale );
-
-    case EDA_UNITS::INCHES:
-        return IU_TO_IN( aValue, aIuScale );
-
-    case EDA_UNITS::DEGREES:
-        return aValue;
-
-    default:
-        return aValue;
+    case EDA_UNITS::UM:      return IU_TO_MM( aValue, aIuScale ) * 1000;
+    case EDA_UNITS::MM:      return IU_TO_MM( aValue, aIuScale );
+    case EDA_UNITS::CM:      return IU_TO_MM( aValue, aIuScale ) / 10;
+    case EDA_UNITS::MILS:    return IU_TO_MILS( aValue, aIuScale );
+    case EDA_UNITS::IN:      return IU_TO_IN( aValue, aIuScale );
+    case EDA_UNITS::DEGREES: return aValue;
+    default:                 return aValue;
     }
 }
 
@@ -317,21 +304,10 @@ wxString EDA_UNIT_UTILS::UI::StringFromValue( const EDA_IU_SCALE& aIuScale, EDA_
     switch( aUnits )
     {
 
-    case EDA_UNITS::MILS:
-        format = is_eeschema ? wxT( "%.3f" ) : wxT( "%.5f" );
-        break;
-
-    case EDA_UNITS::INCHES:
-        format = is_eeschema ? wxT( "%.6f" ) : wxT( "%.8f" );
-        break;
-
-    case EDA_UNITS::DEGREES:
-        format = wxT( "%.4f" );
-        break;
-
-    default:
-        format = wxT( "%.10f" );
-        break;
+    case EDA_UNITS::MILS:    format = is_eeschema ? wxT( "%.3f" ) : wxT( "%.5f" ); break;
+    case EDA_UNITS::IN:      format = is_eeschema ? wxT( "%.6f" ) : wxT( "%.8f" ); break;
+    case EDA_UNITS::DEGREES: format = wxT( "%.4f" );                               break;
+    default:                 format = wxT( "%.10f" );                              break;
     }
 
     wxString text;
@@ -414,34 +390,13 @@ wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale,
     switch( aUnits )
     {
     default:
-    case EDA_UNITS::MICROMETRES:
-        format = is_eeschema ? wxT( "%.0f" ) : wxT( "%.1f" );
-        break;
-
-    case EDA_UNITS::MILLIMETRES:
-        format = is_eeschema ? wxT( "%.2f" ) : wxT( "%.4f" );
-        break;
-
-    case EDA_UNITS::CENTIMETRES:
-        format = is_eeschema ? wxT( "%.3f" ) : wxT( "%.5f" );
-        break;
-
-    case EDA_UNITS::MILS:
-        format = is_eeschema ? wxT( "%.0f" ) : wxT( "%.2f" );
-        break;
-
-    case EDA_UNITS::INCHES:
-        format = is_eeschema ? wxT( "%.3f" ) : wxT( "%.4f" );
-        break;
-
-    case EDA_UNITS::DEGREES:
-        // 3 digits in mantissa should be good for rotation in degree
-        format = wxT( "%.3f" );
-        break;
-
-    case EDA_UNITS::UNSCALED:
-        format = wxT( "%.0f" );
-        break;
+    case EDA_UNITS::UM:       format = is_eeschema ? wxT( "%.0f" ) : wxT( "%.1f" ); break;
+    case EDA_UNITS::MM:       format = is_eeschema ? wxT( "%.2f" ) : wxT( "%.4f" ); break;
+    case EDA_UNITS::CM:       format = is_eeschema ? wxT( "%.3f" ) : wxT( "%.5f" ); break;
+    case EDA_UNITS::MILS:     format = is_eeschema ? wxT( "%.0f" ) : wxT( "%.2f" ); break;
+    case EDA_UNITS::IN:       format = is_eeschema ? wxT( "%.3f" ) : wxT( "%.4f" ); break;
+    case EDA_UNITS::DEGREES:  format = wxT( "%.3f" );                               break;
+    case EDA_UNITS::UNSCALED: format = wxT( "%.0f" );                               break;
     }
 
     text.Printf( format, value );
@@ -489,26 +444,15 @@ double EDA_UNIT_UTILS::UI::FromUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS
 {
     switch( aUnits )
     {
-    case EDA_UNITS::MICROMETRES:
-        return MM_TO_IU( aValue / 1000.0, aIuScale );
-
-    case EDA_UNITS::MILLIMETRES:
-        return MM_TO_IU( aValue, aIuScale );
-
-    case EDA_UNITS::CENTIMETRES:
-        return MM_TO_IU( aValue * 10, aIuScale );
-
-    case EDA_UNITS::MILS:
-        return MILS_TO_IU( aValue, aIuScale );
-
-    case EDA_UNITS::INCHES:
-        return IN_TO_IU( aValue, aIuScale );
-
+    case EDA_UNITS::UM:       return MM_TO_IU( aValue / 1000.0, aIuScale );
+    case EDA_UNITS::MM:       return MM_TO_IU( aValue, aIuScale );
+    case EDA_UNITS::CM:       return MM_TO_IU( aValue * 10, aIuScale );
+    case EDA_UNITS::MILS:     return MILS_TO_IU( aValue, aIuScale );
+    case EDA_UNITS::IN:       return IN_TO_IU( aValue, aIuScale );
     default:
     case EDA_UNITS::DEGREES:
     case EDA_UNITS::UNSCALED:
-    case EDA_UNITS::PERCENT:
-        return aValue;
+    case EDA_UNITS::PERCENT:  return aValue;
     }
 }
 
@@ -584,24 +528,24 @@ double EDA_UNIT_UTILS::UI::DoubleValueFromString( const EDA_IU_SCALE& aIuScale, 
     // Check the optional unit designator (2 ch significant)
     wxString unit( buf.Mid( brk_point ).Strip( wxString::leading ).Left( 2 ).Lower() );
 
-    if( aUnits == EDA_UNITS::MICROMETRES
-            || aUnits == EDA_UNITS::MILLIMETRES
-            || aUnits == EDA_UNITS::CENTIMETRES
+    if( aUnits == EDA_UNITS::UM
+            || aUnits == EDA_UNITS::MM
+            || aUnits == EDA_UNITS::CM
             || aUnits == EDA_UNITS::MILS
-            || aUnits == EDA_UNITS::INCHES )
+            || aUnits == EDA_UNITS::IN )
     {
         //check for um, μm (µ is MICRO SIGN) and µm (µ is GREEK SMALL LETTER MU) for micrometre
         if( unit == wxT( "um" ) || unit == wxT( "\u00B5m" ) || unit == wxT( "\u03BCm" ) )
         {
-            aUnits = EDA_UNITS::MICROMETRES;
+            aUnits = EDA_UNITS::UM;
         }
         else if( unit == wxT( "mm" ) )
         {
-            aUnits = EDA_UNITS::MILLIMETRES;
+            aUnits = EDA_UNITS::MM;
         }
         else if( unit == wxT( "cm" ) )
         {
-            aUnits = EDA_UNITS::CENTIMETRES;
+            aUnits = EDA_UNITS::CM;
         }
         else if( unit == wxT( "mi" ) || unit == wxT( "th" ) )
         {
@@ -609,7 +553,7 @@ double EDA_UNIT_UTILS::UI::DoubleValueFromString( const EDA_IU_SCALE& aIuScale, 
         }
         else if( unit == wxT( "in" ) || unit == wxT( "\"" ) )
         {
-            aUnits = EDA_UNITS::INCHES;
+            aUnits = EDA_UNITS::IN;
         }
         else if( unit == wxT( "oz" ) ) // 1 oz = 1.37 mils
         {

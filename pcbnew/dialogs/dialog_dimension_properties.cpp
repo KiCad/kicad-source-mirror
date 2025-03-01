@@ -205,16 +205,16 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
 
     switch( m_dimension->GetUnitsMode() )
     {
-        case DIM_UNITS_MODE::INCHES:        m_cbUnits->SetSelection( 0 ); break;
-        case DIM_UNITS_MODE::MILS:          m_cbUnits->SetSelection( 1 ); break;
-        case DIM_UNITS_MODE::MILLIMETRES:   m_cbUnits->SetSelection( 2 ); break;
-        case DIM_UNITS_MODE::AUTOMATIC:     m_cbUnits->SetSelection( 3 ); break;
+        case DIM_UNITS_MODE::IN:        m_cbUnits->SetSelection( 0 ); break;
+        case DIM_UNITS_MODE::MILS:      m_cbUnits->SetSelection( 1 ); break;
+        case DIM_UNITS_MODE::MM:        m_cbUnits->SetSelection( 2 ); break;
+        case DIM_UNITS_MODE::AUTOMATIC: m_cbUnits->SetSelection( 3 ); break;
     }
 
     switch ( m_dimension->GetArrowDirection() )
     {
-        case DIM_ARROW_DIRECTION::INWARD:       m_cbArrowDirection->SetSelection( 0 ); break;
-        case DIM_ARROW_DIRECTION::OUTWARD:      m_cbArrowDirection->SetSelection( 1 ); break;
+        case DIM_ARROW_DIRECTION::INWARD:  m_cbArrowDirection->SetSelection( 0 ); break;
+        case DIM_ARROW_DIRECTION::OUTWARD: m_cbArrowDirection->SetSelection( 1 ); break;
     }
 
     m_cbUnitsFormat->SetSelection( static_cast<int>( m_dimension->GetUnitsFormat() ) );
@@ -390,16 +390,16 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( PCB_DIMENSION_BASE*
     aTarget->SetLayer( static_cast<PCB_LAYER_ID>( m_cbLayerActual->GetLayerSelection() ) );
 
     switch ( m_cbArrowDirection->GetSelection() ) {
-        case 0: aTarget->SetArrowDirection( DIM_ARROW_DIRECTION::INWARD );     break;
-        case 1: aTarget->SetArrowDirection( DIM_ARROW_DIRECTION::OUTWARD );    break;
+        case 0: aTarget->SetArrowDirection( DIM_ARROW_DIRECTION::INWARD );  break;
+        case 1: aTarget->SetArrowDirection( DIM_ARROW_DIRECTION::OUTWARD ); break;
     }
 
     switch( m_cbUnits->GetSelection() )
     {
-    case 0: aTarget->SetUnitsMode( DIM_UNITS_MODE::INCHES );      break;
-    case 1: aTarget->SetUnitsMode( DIM_UNITS_MODE::MILS );        break;
-    case 2: aTarget->SetUnitsMode( DIM_UNITS_MODE::MILLIMETRES ); break;
-    case 3: aTarget->SetUnitsMode( DIM_UNITS_MODE::AUTOMATIC );   break;
+    case 0: aTarget->SetUnitsMode( DIM_UNITS_MODE::IN );        break;
+    case 1: aTarget->SetUnitsMode( DIM_UNITS_MODE::MILS );      break;
+    case 2: aTarget->SetUnitsMode( DIM_UNITS_MODE::MM );        break;
+    case 3: aTarget->SetUnitsMode( DIM_UNITS_MODE::AUTOMATIC ); break;
     }
 
     aTarget->SetUnitsFormat( static_cast<DIM_UNITS_FORMAT>( m_cbUnitsFormat->GetSelection() ) );

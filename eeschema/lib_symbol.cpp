@@ -1576,7 +1576,7 @@ std::vector<LIB_SYMBOL_UNIT> LIB_SYMBOL::GetUnitDrawItems()
 
 int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aReporter ) const
 {
-    UNITS_PROVIDER unitsProvider( schIUScale, EDA_UNITS::MILLIMETRES );
+    UNITS_PROVIDER unitsProvider( schIUScale, EDA_UNITS::MM );
 
     if( m_me == aRhs.m_me )
         return 0;

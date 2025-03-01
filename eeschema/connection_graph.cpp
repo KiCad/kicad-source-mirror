@@ -1575,7 +1575,7 @@ void CONNECTION_GRAPH::collectAllDriverValues()
             }
             default:
             {
-                UNITS_PROVIDER unitsProvider( schIUScale, EDA_UNITS::MILLIMETRES );
+                UNITS_PROVIDER unitsProvider( schIUScale, EDA_UNITS::MM );
 
                 wxLogTrace( ConnTrace, wxS( "Unexpected strong driver %s" ),
                             driver->GetItemDescription( &unitsProvider, true ) );
@@ -1845,7 +1845,7 @@ void CONNECTION_GRAPH::processSubGraphs()
                     }
                     else
                     {
-                        UNITS_PROVIDER unitsProvider( schIUScale, EDA_UNITS::MILLIMETRES );
+                        UNITS_PROVIDER unitsProvider( schIUScale, EDA_UNITS::MM );
 
                         wxLogTrace( ConnTrace,
                                     wxS( "%ld (%s) weakly driven by unique sheet pin %s, "

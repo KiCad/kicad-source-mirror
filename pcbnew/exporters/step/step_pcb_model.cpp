@@ -1385,12 +1385,12 @@ bool STEP_PCB_MODEL::MakeShapeAsThickSegment( TopoDS_Shape& aShape,
 static wxString formatBBox( const BOX2I& aBBox )
 {
     wxString       str;
-    UNITS_PROVIDER up( pcbIUScale, EDA_UNITS::MILLIMETRES );
+    UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::MM );
 
-    str << "x0: " << up.StringFromValue( aBBox.GetLeft(), false ) << "; ";
-    str << "y0: " << up.StringFromValue( aBBox.GetTop(), false ) << "; ";
-    str << "x1: " << up.StringFromValue( aBBox.GetRight(), false ) << "; ";
-    str << "y1: " << up.StringFromValue( aBBox.GetBottom(), false );
+    str << "x0: " << unitsProvider.StringFromValue( aBBox.GetLeft(), false ) << "; ";
+    str << "y0: " << unitsProvider.StringFromValue( aBBox.GetTop(), false ) << "; ";
+    str << "x1: " << unitsProvider.StringFromValue( aBBox.GetRight(), false ) << "; ";
+    str << "y1: " << unitsProvider.StringFromValue( aBBox.GetBottom(), false );
 
     return str;
 }

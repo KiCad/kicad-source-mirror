@@ -682,7 +682,7 @@ std::set<int> g_excludedLayers =
 
 PANEL_PCBNEW_COLOR_SETTINGS::PANEL_PCBNEW_COLOR_SETTINGS( wxWindow* aParent, BOARD* aBoard ) :
         PANEL_COLOR_SETTINGS( aParent ),
-        UNITS_PROVIDER( pcbIUScale, EDA_UNITS::MILLIMETRES ),
+        UNITS_PROVIDER( pcbIUScale, EDA_UNITS::MM ),
         m_preview( nullptr ),
         m_page( nullptr ),
         m_titleBlock( nullptr ),

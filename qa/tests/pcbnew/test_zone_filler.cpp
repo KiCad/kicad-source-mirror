@@ -131,7 +131,7 @@ BOOST_FIXTURE_TEST_CASE( BasicZoneFills, ZONE_FILL_TEST_FIXTURE )
                 }
             } );
 
-    bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
+    bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
 
     BOOST_CHECK_EQUAL( foundPad2Error, true );
     BOOST_CHECK_EQUAL( foundPad4Error, true );
@@ -199,13 +199,13 @@ BOOST_DATA_TEST_CASE_F( ZONE_FILL_TEST_FIXTURE, RegressionZoneFillTests,
 
     bds.m_DRCEngine->SetViolationHandler(
             [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer,
-                    DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )
+                 DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )
             {
                 if( aItem->GetErrorCode() == DRCE_CLEARANCE )
                     violations.push_back( *aItem );
             } );
 
-    bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
+    bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
 
     if( violations.empty() )
     {
@@ -214,16 +214,13 @@ BOOST_DATA_TEST_CASE_F( ZONE_FILL_TEST_FIXTURE, RegressionZoneFillTests,
     }
     else
     {
-        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCHES );
+        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::IN );
 
         std::map<KIID, EDA_ITEM*> itemMap;
         m_board->FillItemMap( itemMap );
 
         for( const DRC_ITEM& item : violations )
-        {
-            BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR,
-                                                    itemMap ) );
-        }
+            BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
 
         BOOST_ERROR( (const char*)(wxString::Format( "Zone fill regression: %s failed", relPath ).utf8_str()) );
     }
@@ -236,7 +233,8 @@ static const std::vector<wxString> RegressionSliverZoneFillTests_tests = {
 
 
 BOOST_DATA_TEST_CASE_F( ZONE_FILL_TEST_FIXTURE, RegressionSliverZoneFillTests,
-                        boost::unit_test::data::make( RegressionSliverZoneFillTests_tests ), relPath )
+                        boost::unit_test::data::make( RegressionSliverZoneFillTests_tests ),
+                        relPath )
 {
     KI_TEST::LoadBoard( m_settingsManager, relPath, m_board );
 
@@ -248,13 +246,13 @@ BOOST_DATA_TEST_CASE_F( ZONE_FILL_TEST_FIXTURE, RegressionSliverZoneFillTests,
 
     bds.m_DRCEngine->SetViolationHandler(
             [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer,
-                    DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )
+                 DRC_CUSTOM_MARKER_HANDLER* aCustomHandler )
             {
                 if( aItem->GetErrorCode() == DRCE_COPPER_SLIVER )
                     violations.push_back( *aItem );
             } );
 
-    bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
+    bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
 
     if( violations.empty() )
     {
@@ -263,16 +261,13 @@ BOOST_DATA_TEST_CASE_F( ZONE_FILL_TEST_FIXTURE, RegressionSliverZoneFillTests,
     }
     else
     {
-        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCHES );
+        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::IN );
 
         std::map<KIID, EDA_ITEM*> itemMap;
         m_board->FillItemMap( itemMap );
 
         for( const DRC_ITEM& item : violations )
-        {
-            BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR,
-                                                    itemMap ) );
-        }
+            BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
 
         BOOST_ERROR( (const char*)(wxString::Format( "Zone fill copper sliver regression: %s failed", relPath ).utf8_str()) );
     }

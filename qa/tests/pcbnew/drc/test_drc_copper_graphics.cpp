@@ -72,7 +72,7 @@ BOOST_FIXTURE_TEST_CASE( DRCCopperGraphicsTest, DRC_COPPER_GRAPHICS_TEST_FIXTURE
                     violations.push_back( *aItem );
             } );
 
-    bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
+    bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
 
     const int expected_err_cnt = 4;  // "What" copper text shorting zone
                                      // Copper knockout text shorting two zones twice (but not
@@ -88,7 +88,7 @@ BOOST_FIXTURE_TEST_CASE( DRCCopperGraphicsTest, DRC_COPPER_GRAPHICS_TEST_FIXTURE
     {
         BOOST_CHECK_EQUAL( violations.size(), expected_err_cnt );
 
-        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCHES );
+        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::IN );
 
         std::map<KIID, EDA_ITEM*> itemMap;
         m_board->FillItemMap( itemMap );

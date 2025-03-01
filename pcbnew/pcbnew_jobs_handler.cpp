@@ -381,10 +381,10 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
         double scale = 0.0;
         switch ( aStepJob->m_vrmlUnits )
         {
-        case JOB_EXPORT_PCB_3D::VRML_UNITS::MILLIMETERS: scale = 1.0;         break;
-        case JOB_EXPORT_PCB_3D::VRML_UNITS::METERS:      scale = 0.001;       break;
-        case JOB_EXPORT_PCB_3D::VRML_UNITS::TENTHS:      scale = 10.0 / 25.4; break;
-        case JOB_EXPORT_PCB_3D::VRML_UNITS::INCHES:      scale = 1.0 / 25.4;  break;
+        case JOB_EXPORT_PCB_3D::VRML_UNITS::MM:     scale = 1.0;         break;
+        case JOB_EXPORT_PCB_3D::VRML_UNITS::METERS: scale = 0.001;       break;
+        case JOB_EXPORT_PCB_3D::VRML_UNITS::TENTHS: scale = 10.0 / 25.4; break;
+        case JOB_EXPORT_PCB_3D::VRML_UNITS::IN:     scale = 1.0 / 25.4;  break;
         }
 
         EXPORTER_VRML vrmlExporter( brd );
@@ -1315,7 +1315,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
 
         DRILL_PRECISION precision;
 
-        if( aDrillJob->m_drillUnits == JOB_EXPORT_PCB_DRILL::DRILL_UNITS::INCHES )
+        if( aDrillJob->m_drillUnits == JOB_EXPORT_PCB_DRILL::DRILL_UNITS::IN )
             precision = precisionListForInches;
         else
             precision = precisionListForMetric;
@@ -1325,8 +1325,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
         if( excellonWriter == nullptr )
             return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-        excellonWriter->SetFormat( aDrillJob->m_drillUnits
-                                           == JOB_EXPORT_PCB_DRILL::DRILL_UNITS::MILLIMETERS,
+        excellonWriter->SetFormat( aDrillJob->m_drillUnits == JOB_EXPORT_PCB_DRILL::DRILL_UNITS::MM,
                                    zeroFmt, precision.m_Lhs, precision.m_Rhs );
         excellonWriter->SetOptions( aDrillJob->m_excellonMirrorY,
                                     aDrillJob->m_excellonMinimalHeader,
@@ -1415,15 +1414,15 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
                     wxCHECK( file, false );
 
                     PLACE_FILE_EXPORTER exporter( brd,
-                                  aPosJob->m_units == JOB_EXPORT_PCB_POS::UNITS::MILLIMETERS,
-                                  aPosJob->m_smdOnly,
-                                  aPosJob->m_excludeFootprintsWithTh,
-                                  aPosJob->m_excludeDNP,
-                                  frontSide,
-                                  backSide,
-                                  aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV,
-                                  aPosJob->m_useDrillPlaceFileOrigin,
-                                  aPosJob->m_negateBottomX );
+                                          aPosJob->m_units == JOB_EXPORT_PCB_POS::UNITS::MM,
+                                          aPosJob->m_smdOnly,
+                                          aPosJob->m_excludeFootprintsWithTh,
+                                          aPosJob->m_excludeDNP,
+                                          frontSide,
+                                          backSide,
+                                          aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV,
+                                          aPosJob->m_useDrillPlaceFileOrigin,
+                                          aPosJob->m_negateBottomX );
 
                     std::string data = exporter.GenPositionData();
                     fputs( data.c_str(), file );
@@ -1805,10 +1804,10 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
 
     switch( drcJob->m_units )
     {
-    case JOB_PCB_DRC::UNITS::INCHES:      units = EDA_UNITS::INCHES;      break;
-    case JOB_PCB_DRC::UNITS::MILS:        units = EDA_UNITS::MILS;        break;
-    case JOB_PCB_DRC::UNITS::MILLIMETERS: units = EDA_UNITS::MILLIMETRES; break;
-    default:                              units = EDA_UNITS::MILLIMETRES; break;
+    case JOB_PCB_DRC::UNITS::IN:   units = EDA_UNITS::IN;   break;
+    case JOB_PCB_DRC::UNITS::MILS: units = EDA_UNITS::MILS; break;
+    case JOB_PCB_DRC::UNITS::MM:   units = EDA_UNITS::MM;   break;
+    default:                       units = EDA_UNITS::MM;   break;
     }
 
     std::shared_ptr<DRC_ENGINE> drcEngine = brd->GetDesignSettings().m_DRCEngine;
@@ -1998,8 +1997,7 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
     }
 
     std::map<std::string, UTF8> props;
-    props["units"] = job->m_units == JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MILLIMETERS ? "mm"
-                                                                                        : "inch";
+    props["units"] = job->m_units == JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MM ? "mm" : "inch";
     props["sigfig"] = wxString::Format( "%d", job->m_precision );
     props["version"] = job->m_version == JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION::C ? "C" : "B";
     props["OEMRef"] = job->m_colInternalId;

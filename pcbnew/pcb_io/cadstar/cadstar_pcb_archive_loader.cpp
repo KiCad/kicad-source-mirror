@@ -3721,11 +3721,11 @@ void CADSTAR_PCB_ARCHIVE_LOADER::applyDimensionSettings( const DIMENSION&  aCads
                                         aCadstarDim.ID ) );
         KI_FALLTHROUGH;
     case UNITS::MM:
-        aKiCadDim->SetUnitsMode( DIM_UNITS_MODE::MILLIMETRES );
+        aKiCadDim->SetUnitsMode( DIM_UNITS_MODE::MM );
         break;
 
     case UNITS::INCH:
-        aKiCadDim->SetUnitsMode( DIM_UNITS_MODE::INCHES );
+        aKiCadDim->SetUnitsMode( DIM_UNITS_MODE::IN );
         break;
 
     case UNITS::THOU:

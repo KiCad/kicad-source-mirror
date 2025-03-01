@@ -44,14 +44,14 @@ enum class EDA_DATA_TYPE
 
 enum class EDA_UNITS
 {
-    INCHES      = 0,
-    MILLIMETRES = 1,
-    UNSCALED    = 2,
-    DEGREES     = 3,
-    PERCENT     = 4,
-    MILS        = 5,
-    MICROMETRES = 6, //The S is because MILLIMETRES already has an S at the end. But it is
-    CENTIMETRES = 7, //micrometre and centimetre and not micrometre (or cm) times second.
+    IN       = 0,
+    MM       = 1,
+    UNSCALED = 2,
+    DEGREES  = 3,
+    PERCENT  = 4,
+    MILS     = 5,
+    UM       = 6,
+    CM       = 7,
 };
 
 namespace EDA_UNIT_UTILS
@@ -201,7 +201,7 @@ namespace EDA_UNIT_UTILS
          * because the mantissa of the number displayed has 4 digits max for readability.  The
          * actual internal value could need up to 8 digits to preserve precision.
          *
-         * @param aUnits Units (INCHES, MILLIMETRE ..).
+         * @param aUnits Units (IN, MM, ...)
          * @param aValue The double value to convert.
          * @param aAddUnitsText If true, adds the unit label to the end of the string.
          * @param aType DISTANCE, AREA, or VOLUME.

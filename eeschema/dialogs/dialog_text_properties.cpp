@@ -448,7 +448,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
         return false;
 
     // Don't allow text to disappear; it can be difficult to correct if you can't select it
-    if( !m_textSize.Validate( 0.01, 1000.0, EDA_UNITS::MILLIMETRES ) )
+    if( !m_textSize.Validate( 0.01, 1000.0, EDA_UNITS::MM ) )
         return false;
 
     SCH_COMMIT commit( m_frame );

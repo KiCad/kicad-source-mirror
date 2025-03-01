@@ -70,9 +70,9 @@ enum class DIM_TEXT_POSITION
  */
 enum class DIM_UNITS_MODE
 {
-    INCHES,
+    IN,
     MILS,
-    MILLIMETRES,
+    MM,
     AUTOMATIC
 };
 

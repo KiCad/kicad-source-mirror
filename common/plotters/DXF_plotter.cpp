@@ -136,12 +136,12 @@ void DXF_PLOTTER::SetUnits( DXF_UNITS aUnit )
 
     switch( aUnit )
     {
-    case DXF_UNITS::MILLIMETERS:
+    case DXF_UNITS::MM:
         m_unitScalingFactor = 0.00254;
         m_measurementDirective = 1;
         break;
 
-    case DXF_UNITS::INCHES:
+    case DXF_UNITS::IN:
     default:
         m_unitScalingFactor = 0.0001;
         m_measurementDirective = 0;

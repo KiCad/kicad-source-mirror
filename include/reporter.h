@@ -129,7 +129,7 @@ public:
 
     virtual EDA_UNITS GetUnits() const
     {
-        return EDA_UNITS::MILLIMETRES;
+        return EDA_UNITS::MM;
     }
 
     virtual ~REPORTER()

@@ -47,10 +47,10 @@ public:
 
 
 // Defined values to write coordinates using inches or mm:
-static const double conv_unit_inch = 0.001 / pcbIUScale.IU_PER_MILS ;      // units = INCHES
+static const double conv_unit_inch = 0.001 / pcbIUScale.IU_PER_MILS ;      // units = in
 static const char unit_text_inch[] = "## Unit = inches, Angle = deg.\n";
 
-static const double conv_unit_mm = 1.0 / pcbIUScale.IU_PER_MM; // units = mm
+static const double conv_unit_mm = 1.0 / pcbIUScale.IU_PER_MM;             // units = mm
 static const char unit_text_mm[] = "## Unit = mm, Angle = deg.\n";
 
 // Sort function use by GenerefootprintsPosition()
