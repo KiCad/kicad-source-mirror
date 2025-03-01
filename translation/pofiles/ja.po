@@ -16,16 +16,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-26 20:12+0300\n"
-"PO-Revision-Date: 2025-02-20 15:02+0000\n"
+"PO-Revision-Date: 2025-03-01 03:31+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10.1-dev\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4761,9 +4761,8 @@ msgid "Failed to write file '%s'."
 msgstr "ファイル '%s' の書き込みに失敗しました。"
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
-#, fuzzy
 msgid "Embedded Reference"
-msgstr "埋め込みリファレンスをコピーする"
+msgstr "埋め込みリファレンス"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
@@ -5264,14 +5263,12 @@ msgstr "Python インタープリターの状態"
 
 #: common/dialogs/panel_printer_list.cpp:154
 #: common/dialogs/panel_printer_list.cpp:175
-#, fuzzy
 msgid "Default printer"
-msgstr "デフォルトのフォント"
+msgstr "デフォルトのプリンター"
 
 #: common/dialogs/panel_printer_list_base.cpp:17
-#, fuzzy
 msgid "Printers"
-msgstr "印刷"
+msgstr "プリンター"
 
 #: common/dialogs/panel_printer_list_base.cpp:27
 #: common/widgets/wx_html_report_panel.cpp:246
@@ -7479,7 +7476,6 @@ msgid "Export Drill Data Job Settings"
 msgstr "ドリルデータのエクスポートジョブ設定"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
-#, fuzzy
 msgid "PCB: Export Drill Data"
 msgstr "PCB: ドリルデータとしてエクスポート"
 
@@ -7499,18 +7495,16 @@ msgstr "PCB: DXFとしてエクスポート"
 
 #: common/jobs/job_export_pcb_gencad.cpp:49
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:128
-#, fuzzy
 msgid "Export GenCAD File"
-msgstr "SVG ファイルをエクスポート"
+msgstr "GenCADファイルをエクスポート"
 
 #: common/jobs/job_export_pcb_gencad.cpp:55
 msgid "Export GenCAD Job Settings"
 msgstr "GenCADのエクスポートジョブ設定"
 
 #: common/jobs/job_export_pcb_gencad.cpp:59
-#, fuzzy
 msgid "PCB: Export GenCAD"
-msgstr "PCB: DXFとしてエクスポート"
+msgstr "PCB: GenCADとしてエクスポート"
 
 #: common/jobs/job_export_pcb_gerber.cpp:65
 msgid "Export single Gerber"
@@ -7535,32 +7529,27 @@ msgstr "PCB: ガーバーとしてエクスポート"
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
 #: pcbnew/dialogs/dialog_export_2581_base.h:85
 msgid "Export IPC-2581"
-msgstr "IPC-2581にエクスポート"
+msgstr "IPC-2581 としてエクスポート"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
-#, fuzzy
 msgid "Export IPC-2581 Job Settings"
 msgstr "IPC-2581のエクスポートジョブ設定"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
-#, fuzzy
 msgid "PCB: Export IPC-2581"
 msgstr "PCB: IPC-2581 としてエクスポート"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:33
-#, fuzzy
 msgid "Export IPC-D-356"
-msgstr "IPC-2581にエクスポート"
+msgstr "IPC-D-356としてエクスポート"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:39
-#, fuzzy
 msgid "Export IPC-D-356 Job Settings"
-msgstr "IPC-2581のエクスポートジョブ設定"
+msgstr "IPC-D-356 のエクスポートジョブ設定"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:52
-#, fuzzy
 msgid "PCB: Export IPC-D-356"
-msgstr "PCB: IPC-2581 としてエクスポート"
+msgstr "PCB: IPC-D-356 としてエクスポート"
 
 #: common/jobs/job_export_pcb_odb.cpp:57
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
@@ -7718,7 +7707,6 @@ msgid "Schematic: Perform ERC"
 msgstr "回路図: ERC を実行"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy Files"
 msgstr "特別:ファイルのコピー"
 
@@ -13948,7 +13936,6 @@ msgstr "置換"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:149
 #: pcbnew/dialogs/dialog_find_base.cpp:125
-#, fuzzy
 msgid "Show search panel"
 msgstr "検索パネルを表示"
 
@@ -14049,9 +14036,8 @@ msgstr "幅を0に設定すると、回路図のデフォルトの線幅を使�
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:115
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:234
-#, fuzzy
 msgid "Fill:"
-msgstr "塗りつぶし"
+msgstr "塗りつぶし:"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:142
 msgid "Clear colors to use Schematic Editor colors."
@@ -16836,14 +16822,14 @@ msgid "The current configuration does not include the symbol library '%s'"
 msgstr "現在の構成にはシンボル ライブラリ '%s' が含まれていません"
 
 #: eeschema/erc/erc.cpp:1414
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration"
-msgstr "シンボルライブラリ '%s' は現在の設定では有効化されていません。"
+msgstr "シンボルライブラリ '%s' は現在の設定では有効化されていません"
 
 #: eeschema/erc/erc.cpp:1429
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' was not found at '%s'."
-msgstr "フットプリント ライブラリ '%s' が見つかりません。"
+msgstr "シンボルライブラリ '%s' が '%s' 内に見つかりません。"
 
 #: eeschema/erc/erc.cpp:1449
 #, c-format
@@ -22582,14 +22568,12 @@ msgid "Place Sheet Pins"
 msgstr "シートピンを配置"
 
 #: eeschema/tools/ee_actions.cpp:552 eeschema/tools/ee_actions.cpp:560
-#, fuzzy
 msgid "Sync Sheet Pins..."
-msgstr "シートピンを同期"
+msgstr "シートピンを同期…"
 
 #: eeschema/tools/ee_actions.cpp:568
-#, fuzzy
 msgid "Import Sheet..."
-msgstr "シートをインポート"
+msgstr "シートをインポート…"
 
 #: eeschema/tools/ee_actions.cpp:569
 msgid "Import sheet into project"
@@ -27415,7 +27399,8 @@ msgstr "ローカル ファイル"
 msgid ""
 "This plugin requires the KiCad API, which is currently disabled in "
 "preferences. Would you like to enable it?"
-msgstr ""
+msgstr "このプラグインには KiCad API "
+"が必要ですが、現在の設定では無効になっています。有効にしますか？"
 
 #: kicad/pcm/pcm.cpp:1121
 msgid "PCM Update"
@@ -27766,18 +27751,16 @@ msgid "Local path: monitoring folder changes"
 msgstr "ローカル パス: フォルダーの変更を監視します"
 
 #: kicad/project_tree_pane.cpp:1631
-#, fuzzy
 msgid "The selected directory is already a Git project."
-msgstr "選択したディレクトリはすでにgitプロジェクトです。"
+msgstr "選択したディレクトリはすでにGitプロジェクトです。"
 
 #: kicad/project_tree_pane.cpp:1638
 msgid "Set default remote"
 msgstr "デフォルトのリモートを設定"
 
 #: kicad/project_tree_pane.cpp:1653
-#, fuzzy
 msgid "Failed to initialize Git project."
-msgstr "git プロジェクトの初期化に失敗しました。"
+msgstr "Git プロジェクトの初期化に失敗しました。"
 
 #: kicad/project_tree_pane.cpp:1713
 msgid "Failed to set default remote."
@@ -27817,19 +27800,16 @@ msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "ブランチ '%s' のHEAD参照の更新に失敗しました"
 
 #: kicad/project_tree_pane.cpp:1919
-#, fuzzy
 msgid "Are you sure you want to remove Git tracking from this project?"
-msgstr "プロジェクトから gitのトラッキングを解除しますか?"
+msgstr "プロジェクトから Gitのトラッキングを解除しますか?"
 
 #: kicad/project_tree_pane.cpp:1936
-#, fuzzy
 msgid "Failed to remove Git directory"
-msgstr "gitディレクトリの削除に失敗しました"
+msgstr "Gitディレクトリの削除に失敗しました"
 
 #: kicad/project_tree_pane.cpp:2252
-#, fuzzy
 msgid "The selected directory is not a Git project."
-msgstr "選択したディレクトリはすでにgitプロジェクトです。"
+msgstr "選択したディレクトリはGitプロジェクトではありません。"
 
 #: kicad/project_tree_pane.cpp:2401
 msgid "Discarding commit due to empty commit message."
@@ -34979,17 +34959,12 @@ msgid "Export to GenCAD settings"
 msgstr "GenCAD 設定へエクスポート"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:55
-#, fuzzy
 msgid "Output File:"
 msgstr "出力ファイル:"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:61
-#, fuzzy
 msgid "Enter a filename if you do not want to use default file names"
-msgstr ""
-"デフォルトのファイル名でないものを使いたい場合、ファイル名を入力してくださ"
-"い。\n"
-"これは現在のシートを印刷するときにのみ使用されます"
+msgstr "デフォルトのファイル名を使いたくない場合はファイル名を入力してください"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:436
 #, c-format
@@ -35573,9 +35548,8 @@ msgid "Set to specified values:"
 msgstr "指定した値に設定:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:147
-#, fuzzy
 msgid "Visible  (fields only)"
-msgstr "表示    （テキストのみ）"
+msgstr "表示    （フィールドのみ）"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:235
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:99
@@ -37811,9 +37785,8 @@ msgid "Apply Anyway"
 msgstr "強制的に追加"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Cancel Changes"
-msgstr "変更をキャンセルしますか?"
+msgstr "変更をキャンセル"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:571
 #, c-format
@@ -41740,9 +41713,9 @@ msgid "Checking board footprints against library..."
 msgstr "ライブラリに対するフットプリントをチェックしています..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:892
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' was not found at '%s'."
-msgstr "フットプリント ライブラリ '%s' が見つかりません。"
+msgstr "フットプリント ライブラリ '%s' が '%s' 内に見つかりません。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:942
 #, c-format
@@ -42021,11 +41994,13 @@ msgid "Generate IPC-D-356 netlist file"
 msgstr "IPC-D-356形式ネットリストを生成"
 
 #: pcbnew/exporters/export_d356.cpp:404
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "IPC-D-356 netlist file created:\n"
 "'%s'."
-msgstr "IPC-D-356形式ネットリスト ファイル"
+msgstr ""
+"IPC-D-356形式ネットリスト ファイルが作成されました:\n"
+"'%s' ."
 
 #: pcbnew/exporters/export_d356.cpp:405
 msgid "IPC-D-356 Netlist File"
@@ -42377,31 +42352,29 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1302
-#, fuzzy
 msgid "The board must be saved before generating IPC-2581 file."
-msgstr "IPC2581 ファイルを生成する前にボードを保存する必要があります。"
+msgstr "IPC-2581 ファイルを生成する前にボードを保存する必要があります。"
 
 #: pcbnew/files.cpp:1318
-#, fuzzy
 msgid "Generating IPC-2581 file"
-msgstr "IPC2581ファイルを生成"
+msgstr "IPC-2581ファイルを生成"
 
 #: pcbnew/files.cpp:1343 pcbnew/pcbnew_jobs_handler.cpp:2031
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "%s"
 msgstr ""
-"IPC2581ファイル生成中のエラー '%s'.\n"
+"IPC-2581ファイル生成中のエラー '%s'.\n"
 "%s"
 
 #: pcbnew/files.cpp:1408 pcbnew/pcbnew_jobs_handler.cpp:2064
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "Failed to rename temporary file '%s."
 msgstr ""
-"IPC2581ファイル生成中のエラー '%s'.\n"
+"IPC-2581ファイル生成中のエラー '%s'.\n"
 "一時ファイル '%s' のリネームに失敗しました。"
 
 #: pcbnew/files.cpp:1440
@@ -46426,14 +46399,12 @@ msgid "Saved DRC Report to %s\n"
 msgstr "%s にDRC レポートを保存\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2112
-#, fuzzy
 msgid "Successfully created IPC-D-356 file\n"
-msgstr "genCADファイルの作成に成功しました\n"
+msgstr "IPC-D-356ファイルの作成に成功しました\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2117
-#, fuzzy
 msgid "Failed to create IPC-D-356 file\n"
-msgstr "ファイルの作成に失敗しました。"
+msgstr "IPC-D-356ファイルの作成に失敗しました\n"
 
 #: pcbnew/pcbnew_printout.cpp:124
 msgid "Multiple Layers"
@@ -49048,9 +49019,8 @@ msgid "Show/hide the net inspector"
 msgstr "ネット インスペクターの表示を切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:1345
-#, fuzzy
 msgid "Zone Manager..."
-msgstr "ゾーン マネージャー"
+msgstr "ゾーン マネージャー…"
 
 #: pcbnew/tools/pcb_actions.cpp:1346
 msgid "Show the zone manager dialog"
@@ -50952,18 +50922,16 @@ msgid "Highlight Selected Net"
 msgstr "選択されたネットをハイライト表示"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1229
-#, fuzzy
 msgid "Rename Selected Net..."
-msgstr "選択したネットの名前を変更"
+msgstr "選択したネットの名前を変更…"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1233
 msgid "Delete Selected Net"
 msgstr "選択したネットを削除"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1239
-#, fuzzy
 msgid "Add Net..."
-msgstr "テキストを追加..."
+msgstr "ネットを追加..."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1253
 msgid "Highlight Selected Nets"
@@ -51003,9 +50971,8 @@ msgid "Group by Netclass"
 msgstr "ネットクラスによるグループ化"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1390
-#, fuzzy
 msgid "Add Custom Group..."
-msgstr "カスタムグループを追加"
+msgstr "カスタムグループを追加…"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1403
 msgid "Remove All Custom Groups"
@@ -51020,9 +50987,8 @@ msgid "Show Unconnected Nets"
 msgstr "未接続ネットを表示"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1426
-#, fuzzy
 msgid "Save Net Inspector Report..."
-msgstr "ネット インスペクターレポートを保存"
+msgstr "ネット インスペクターレポートを保存…"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1435
 msgid "Show / Hide Columns"
