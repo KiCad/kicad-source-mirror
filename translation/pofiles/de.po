@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-01 18:34+0300\n"
-"PO-Revision-Date: 2025-02-28 04:19+0000\n"
+"PO-Revision-Date: 2025-03-01 20:38+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -38,7 +38,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.2-rc\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -3796,9 +3796,8 @@ msgstr "Bitte geben Sie eine URL für das Repository ein"
 
 #: common/dialogs/git/dialog_git_repository.cpp:453
 #: common/dialogs/git/dialog_git_repository_base.cpp:108
-#, fuzzy
 msgid "SSH key password:"
-msgstr "Passwort für SSH-Schlüssel"
+msgstr "SSH-Schlüsselpasswort:"
 
 #: common/dialogs/git/dialog_git_repository.cpp:459
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
@@ -3806,14 +3805,12 @@ msgid "Password:"
 msgstr "Passwort:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:38
-#, fuzzy
 msgid "Location:"
-msgstr "Ort"
+msgstr "Ort:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:45
-#, fuzzy
 msgid "Connection type:"
-msgstr "Verbindungstyp"
+msgstr "Verbindungstyp:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:52
 msgid "HTTPS"
@@ -3825,9 +3822,8 @@ msgid "Local"
 msgstr "Lokal"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:83
-#, fuzzy
 msgid "SSH private key:     "
-msgstr "Privater SSH-Schlüssel"
+msgstr "Privater SSH-Schlüssel:     "
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:90
 msgid "Select SSH private key file"
