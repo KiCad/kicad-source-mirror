@@ -90,7 +90,7 @@ PANEL_JOBSET_BASE::PANEL_JOBSET_BASE( wxWindow* parent, wxWindowID id, const wxP
 	m_outputList->SetSizer( m_outputListSizer );
 	m_outputList->Layout();
 	m_outputListSizer->Fit( m_outputList );
-	sbOutputs->Add( m_outputList, 1, wxEXPAND|wxALL, 0 );
+	sbOutputs->Add( m_outputList, 1, wxEXPAND, 0 );
 
 	wxBoxSizer* bOutputButtons;
 	bOutputButtons = new wxBoxSizer( wxHORIZONTAL );
