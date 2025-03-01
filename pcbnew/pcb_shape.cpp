@@ -359,6 +359,7 @@ void PCB_SHAPE::updateHatching() const
         }
 
         m_hatching.BooleanSubtract( holes );
+        m_hatching.Fracture();
     }
 }
 

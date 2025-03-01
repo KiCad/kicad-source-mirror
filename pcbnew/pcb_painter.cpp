@@ -2130,7 +2130,11 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
     }
 
     if( aShape->IsHatchedFill() )
+    {
+        m_gal->SetIsStroke( false );
+        m_gal->SetIsFill( true );
         m_gal->DrawPolygon( aShape->GetHatching() );
+    }
 }
 
 
