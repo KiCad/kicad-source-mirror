@@ -103,7 +103,7 @@ SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const VECTOR2I& aPos, VECTOR2I aSize ) 
     m_fields.emplace_back( aPos, SHEETFILENAME, this,
                            GetDefaultFieldName( SHEETFILENAME, DO_TRANSLATE ) );
     m_fields.back().SetVisible( true );
-    m_fields.back().SetLayer( LAYER_SHEETNAME );
+    m_fields.back().SetLayer( LAYER_SHEETFILENAME );
 
     AutoplaceFields( nullptr, m_fieldsAutoplaced );
 }
