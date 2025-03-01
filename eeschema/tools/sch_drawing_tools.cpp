@@ -1634,6 +1634,7 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
         globalLabel->SetShape( m_lastGlobalLabelShape );
         globalLabel->GetField( FIELD_T::INTERSHEET_REFS )->SetVisible( settings.m_IntersheetRefsShow );
         globalLabel->SetAutoRotateOnPlacement( m_lastAutoLabelRotateOnPlacement );
+        labelItem = globalLabel;
         textItem = globalLabel;
 
         if( SCH_LINE* wire = findWire( aPosition ) )
@@ -3315,7 +3316,7 @@ int SCH_DRAWING_TOOLS::AutoPlaceAllSheetPins( const TOOL_EVENT& aEvent )
         m_statusPopup->PopupFor( 2000 );
         m_frame->PopTool( aEvent );
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
-        m_view->ClearPreview(); 
+        m_view->ClearPreview();
         return 0;
     }
 
