@@ -20,7 +20,7 @@
 # listed as a reviewer because not many others were familiar with it is now familiar with the
 # larger team.
 
-[Suggested Reviewers]
+^[Suggested Reviewers]
 
 /vcpkg*.json @mroszko
 
