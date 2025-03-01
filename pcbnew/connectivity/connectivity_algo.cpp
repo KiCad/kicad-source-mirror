@@ -386,6 +386,10 @@ CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode, const std::vect
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return CLUSTERS();
 
+    std::set<KICAD_T> typesToInclude;
+    std::copy( aTypes.begin(), aTypes.end(),
+               std::inserter( typesToInclude, typesToInclude.begin() ) );
+
     while( !item_set.empty() )
     {
         std::shared_ptr<CN_CLUSTER> cluster = std::make_shared<CN_CLUSTER>();
@@ -416,7 +420,7 @@ CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode, const std::vect
                 if( withinAnyNet && n->Net() != root->Net() )
                     continue;
 
-                if( aExcludeZones && n->Parent()->Type() == PCB_ZONE_T )
+                if( !typesToInclude.contains( n->Parent()->Type() ) )
                     continue;
 
                 if( !visited.contains( n ) && n->Valid() )
