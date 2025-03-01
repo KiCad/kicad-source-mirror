@@ -683,7 +683,7 @@ bool SYMBOL_LIBRARY_MANAGER::SymbolNameInUse( const wxString& aName, const wxStr
 
     for( wxString& candidate : existing )
     {
-        if( candidate.CmpNoCase( aName ) )
+        if( candidate.CmpNoCase( aName ) == 0 )
             return true;
     }
 
