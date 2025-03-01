@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-01 18:34+0300\n"
-"PO-Revision-Date: 2025-03-01 03:31+0000\n"
+"PO-Revision-Date: 2025-03-01 20:38+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -352,14 +352,12 @@ msgid "Reload board"
 msgstr "Läs in mönsterkortet på nytt"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:49
-#, fuzzy
 msgid "Reload board and refresh 3D view"
-msgstr "Läs in mönsterkort och 3D-modeller på nytt"
+msgstr "Läs in mönsterkortet på nytt och uppdatera 3D-visningen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
-#, fuzzy
 msgid "Use raytracing"
-msgstr "Strålföljning"
+msgstr "Använd strålföljning"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:56
 msgid "Render current view using Raytracing"
@@ -370,27 +368,24 @@ msgid "Copy 3D image to clipboard"
 msgstr "Kopiera 3D-bild till urklipp"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:64
-#, fuzzy
 msgid "Copy the current 3D image to the clipboard"
-msgstr "Kopiera 3D-bild till urklipp"
+msgstr "Kopiera nuvarande 3D-bild till urklipp"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
 msgid "Export Current View as PNG..."
 msgstr "Exportera Aktuell Vy som PNG..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
-#, fuzzy
 msgid "Export the Current View as a PNG image"
-msgstr "Exportera Aktuell Vy som PNG..."
+msgstr "Exportera aktuell vy som en PNG-bild"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
 msgid "Export Current View as JPEG..."
 msgstr "Exportera Aktuell Vy som JPEG..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:80
-#, fuzzy
 msgid "Export the Current View as a JPEG image"
-msgstr "Exportera Aktuell Vy som JPEG..."
+msgstr "Exportera aktuell vy som en JPEG-bild"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:88
 msgid "Set Pivot"
@@ -3710,7 +3705,6 @@ msgid "Enter the password for the SSH key"
 msgstr "Ange lösenordet för SSH-nyckeln"
 
 #: common/dialogs/git/dialog_git_repository.cpp:337
-#, fuzzy
 msgid "Test Connection"
 msgstr "Testa anslutning"
 
@@ -3756,9 +3750,8 @@ msgstr "Vänligen ange en URL-adress till förvaret"
 
 #: common/dialogs/git/dialog_git_repository.cpp:453
 #: common/dialogs/git/dialog_git_repository_base.cpp:108
-#, fuzzy
 msgid "SSH key password:"
-msgstr "Lösenord för SSH-nyckel"
+msgstr "Lösenord för SSH-nyckel:"
 
 #: common/dialogs/git/dialog_git_repository.cpp:459
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
