@@ -1500,11 +1500,11 @@ void PCB_EDIT_FRAME::SetGridColor( const COLOR4D& aColor )
 }
 
 
-void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
+void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer, bool aForceRedraw )
 {
     const PCB_LAYER_ID oldLayer = GetActiveLayer();
 
-    if( oldLayer == aLayer )
+    if( oldLayer == aLayer && !aForceRedraw )
         return;
 
     PCB_BASE_FRAME::SetActiveLayer( aLayer );
@@ -1523,7 +1523,7 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
     *
     * For pads/vias, this is to avoid clutter when there are pad/via layers
     * that vary in flash (i.e. clearance from the hole or pad edge), padstack
-    * shape on eahc layer or clearances on each layer.
+    * shape on each layer or clearances on each layer.
     *
     * For tracks, this follows the same logic as pads/vias, but in theory could
     * have their own set of independent clearance layers to allow track clearance
@@ -1645,7 +1645,9 @@ void PCB_EDIT_FRAME::onBoardLoaded()
     m_appearancePanel->ApplyLayerPreset( localSettings.m_ActiveLayerPreset );
 
     if( GetBoard()->GetDesignSettings().IsLayerEnabled( localSettings.m_ActiveLayer ) )
-        SetActiveLayer( localSettings.m_ActiveLayer );
+        SetActiveLayer( localSettings.m_ActiveLayer, true );
+    else
+        SetActiveLayer( GetActiveLayer(), true );   // Make sure to repaint even if not switching
 
     PROJECT_FILE& projectFile = Prj().GetProjectFile();
 
