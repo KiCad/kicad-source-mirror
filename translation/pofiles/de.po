@@ -30,16 +30,16 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-01 18:34+0300\n"
-"PO-Revision-Date: 2025-02-27 16:59+0000\n"
+"PO-Revision-Date: 2025-03-01 20:38+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.2-dev\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -407,18 +407,16 @@ msgid "Export Current View as PNG..."
 msgstr "Aktuelle Ansicht als PNG-Datei exportieren..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
-#, fuzzy
 msgid "Export the Current View as a PNG image"
-msgstr "Aktuelle Ansicht als PNG-Datei exportieren..."
+msgstr "Aktuelle Ansicht als PNG-Datei exportieren"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
 msgid "Export Current View as JPEG..."
 msgstr "Aktuelle Ansicht als JPEG-Datei exportieren..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:80
-#, fuzzy
 msgid "Export the Current View as a JPEG image"
-msgstr "Aktuelle Ansicht als JPEG-Datei exportieren..."
+msgstr "Aktuelle Ansicht als JPEG-Datei exportieren"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:88
 msgid "Set Pivot"
@@ -3816,9 +3814,8 @@ msgstr "Bitte geben Sie eine URL für das Repository ein"
 
 #: common/dialogs/git/dialog_git_repository.cpp:453
 #: common/dialogs/git/dialog_git_repository_base.cpp:108
-#, fuzzy
 msgid "SSH key password:"
-msgstr "Passwort für SSH-Schlüssel"
+msgstr "SSH-Schlüsselpasswort:"
 
 #: common/dialogs/git/dialog_git_repository.cpp:459
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
@@ -3826,14 +3823,12 @@ msgid "Password:"
 msgstr "Passwort:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:38
-#, fuzzy
 msgid "Location:"
-msgstr "Ort"
+msgstr "Ort:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:45
-#, fuzzy
 msgid "Connection type:"
-msgstr "Verbindungstyp"
+msgstr "Verbindungstyp:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:52
 msgid "HTTPS"
@@ -3845,9 +3840,8 @@ msgid "Local"
 msgstr "Lokal"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:83
-#, fuzzy
 msgid "SSH private key:     "
-msgstr "Privater SSH-Schlüssel"
+msgstr "Privater SSH-Schlüssel:     "
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:90
 msgid "Select SSH private key file"
@@ -8718,9 +8712,8 @@ msgid "Region to hold the IPC/Scripting action buttons"
 msgstr ""
 
 #: common/tool/action_toolbar.cpp:1045
-#, fuzzy
 msgid "Layer selector"
-msgstr "Lagenauswahl:"
+msgstr "Lagenauswahl"
 
 #: common/tool/action_toolbar.cpp:1046
 #, fuzzy
@@ -8728,9 +8721,8 @@ msgid "Control to select the layer"
 msgstr "Löscht die Elemente auf der gewählten Grafiklage"
 
 #: common/tool/action_toolbar.cpp:1048
-#, fuzzy
 msgid "Symbol unit selector"
-msgstr "Symboleinheit-Notation:"
+msgstr "Symboleinheit-Auswahl"
 
 #: common/tool/action_toolbar.cpp:1049
 #, fuzzy
@@ -10844,14 +10836,12 @@ msgid "Footprint Filters:"
 msgstr "Footprintfilter:"
 
 #: cvpcb/toolbars_cvpcb.cpp:122
-#, fuzzy
 msgid "Footprint filters"
-msgstr "Footprintfilter:"
+msgstr "Footprintfilter"
 
 #: cvpcb/toolbars_cvpcb.cpp:123
-#, fuzzy
 msgid "Footprint filtering controls"
-msgstr "Footprintfilter:"
+msgstr "Footprintfiltersteuerung"
 
 #: cvpcb/tools/cvpcb_actions.cpp:55
 msgid "View Selected Footprint"
@@ -21478,14 +21468,13 @@ msgstr "Signalname kopieren"
 #: eeschema/sim/simulator_frame_ui.cpp:180
 #: eeschema/sim/simulator_frame_ui.cpp:187
 #: eeschema/sim/simulator_frame_ui.cpp:200
-#, fuzzy
 msgid "Create new cursor..."
-msgstr "Neue Platine erstellen"
+msgstr "Neuen Cursor erstellen..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "Delete %s..."
-msgstr "Voreinstellung löschen..."
+msgstr "%s löschen..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:242
 #: eeschema/sim/simulator_frame_ui.cpp:900
@@ -21522,9 +21511,8 @@ msgstr "Messung löschen"
 
 #: eeschema/sim/simulator_frame_ui.cpp:651
 #: eeschema/sim/simulator_frame_ui.cpp:672
-#, fuzzy
 msgid "Cursor "
-msgstr "Zeiger 1"
+msgstr "Cursor "
 
 #: eeschema/sim/simulator_frame_ui.cpp:729
 #: eeschema/sim/simulator_frame_ui.cpp:1155
@@ -29015,16 +29003,12 @@ msgid "Origin Selector"
 msgstr "Originalbild"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:161
-#, fuzzy
 msgid "Select the origin of the status bar coordinates"
-msgstr ""
-"Wählen Sie aus, welcher Ursprung für die X-, Y-Koordinatenanzeige verwendet "
-"wird."
+msgstr "Ursprung für die Koordinatenanzeige in der Statusleiste auswählen"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:162
-#, fuzzy
 msgid "Page Selector"
-msgstr "Lagenauswahl"
+msgstr "Seitenauswahl"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:163
 #, fuzzy
@@ -33362,9 +33346,8 @@ msgstr "Unterhalb der Flächengrenze"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:363
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:288
-#, fuzzy
 msgid "Area limit:"
-msgstr "Unterhalb der Flächengrenze"
+msgstr "Flächengrenze:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:366
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:291
@@ -47724,22 +47707,20 @@ msgid "Dimension objects"
 msgstr "Bemaßungstext"
 
 #: pcbnew/toolbars_pcb_editor.cpp:123
-#, fuzzy
 msgid "Track width selector"
-msgstr "Leiterbahnbreite-Korrektur:"
+msgstr "Leiterbahnbreite-Auswahl"
 
 #: pcbnew/toolbars_pcb_editor.cpp:124
 msgid "Control to select the track width"
-msgstr ""
+msgstr "Steuerelement zum Wählen der Leiterbahnbreite"
 
 #: pcbnew/toolbars_pcb_editor.cpp:125
-#, fuzzy
 msgid "Via diameter selector"
-msgstr "Ermittlung des Via-Durchmessers für:"
+msgstr "Viadurchmesser-Auswahl"
 
 #: pcbnew/toolbars_pcb_editor.cpp:126
 msgid "Control to select the via diameter"
-msgstr ""
+msgstr "Steuerelement zum Wählen des Viadurchmessers"
 
 #: pcbnew/toolbars_pcb_editor.cpp:194
 #, fuzzy
