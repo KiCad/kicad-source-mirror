@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-01 18:34+0300\n"
-"PO-Revision-Date: 2025-03-01 20:38+0000\n"
+"PO-Revision-Date: 2025-03-02 06:36+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -3764,9 +3764,8 @@ msgid "Location:"
 msgstr "Plats"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:45
-#, fuzzy
 msgid "Connection type:"
-msgstr "Anslutningstyp"
+msgstr "Anslutningstyp:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:52
 msgid "HTTPS"
@@ -3778,9 +3777,8 @@ msgid "Local"
 msgstr "Lokal"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:83
-#, fuzzy
 msgid "SSH private key:     "
-msgstr "Privat SSH-nyckel"
+msgstr "Privat SSH-nyckel:     "
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:90
 msgid "Select SSH private key file"
@@ -3791,7 +3789,6 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:101
-#, fuzzy
 msgid "User name:"
 msgstr "Användarnamn:"
 
@@ -5620,19 +5617,16 @@ msgstr "Topplager"
 
 #: common/dialogs/panel_toolbar_customization.cpp:133
 #: common/dialogs/panel_toolbar_customization_base.cpp:68
-#, fuzzy
 msgid "Insert separator"
-msgstr "Cellavskiljare"
+msgstr "Infoga avskiljare"
 
 #: common/dialogs/panel_toolbar_customization.cpp:139
-#, fuzzy
 msgid "Insert spacer"
-msgstr "Infoga fotavtryck"
+msgstr "Infoga mellanrum"
 
 #: common/dialogs/panel_toolbar_customization.cpp:140
-#, fuzzy
 msgid "Insert group"
-msgstr "Gå in i grupp"
+msgstr "Infoga grupp"
 
 #: common/dialogs/panel_toolbar_customization.cpp:543 common/eda_item.cpp:370
 #: pcbnew/pcb_group.cpp:392
@@ -5640,9 +5634,8 @@ msgid "Group"
 msgstr "Grupp"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:19
-#, fuzzy
 msgid "Customize toolbars"
-msgstr "Anpassat lageruppsättning"
+msgstr "Anpassa verktygslister"
 
 #: common/draw_panel_gal.cpp:321 common/draw_panel_gal.cpp:508
 msgid "Could not use OpenGL, falling back to software rendering"
@@ -5946,9 +5939,8 @@ msgstr "Färger"
 #: common/eda_base_frame.cpp:1345 common/eda_base_frame.cpp:1362
 #: common/eda_base_frame.cpp:1373 common/eda_base_frame.cpp:1399
 #: common/eda_base_frame.cpp:1427
-#, fuzzy
 msgid "Toolbars"
-msgstr "&Verktyg"
+msgstr "Verktygslister"
 
 #: common/eda_base_frame.cpp:1307 common/hotkey_store.cpp:77
 #: common/tool/common_tools.cpp:614 eeschema/menubar.cpp:137
@@ -8586,19 +8578,17 @@ msgid "Quit %s"
 msgstr "Avsluta %s"
 
 #: common/tool/action_toolbar.cpp:1036
-#, fuzzy
 msgid "Grid Selector"
-msgstr "Stil på rutnät"
+msgstr "Rutnätsväljare"
 
 #: common/tool/action_toolbar.cpp:1037
 #, fuzzy
 msgid "Grid Selection box"
-msgstr "Endast markering"
+msgstr "Ruta för val av rutnätsstorlek"
 
 #: common/tool/action_toolbar.cpp:1039
-#, fuzzy
 msgid "Zoom Selector"
-msgstr "Zooma till valda objekt"
+msgstr "Zoomväljare"
 
 #: common/tool/action_toolbar.cpp:1040
 #, fuzzy
@@ -8608,31 +8598,29 @@ msgstr "Zooma till valda objekt"
 #: common/tool/action_toolbar.cpp:1042
 #, fuzzy
 msgid "IPC/Scripting plugins"
-msgstr "Skriptkonsol"
+msgstr "Insticksprogram för IPC/skriptning"
 
 #: common/tool/action_toolbar.cpp:1043
+#, fuzzy
 msgid "Region to hold the IPC/Scripting action buttons"
-msgstr ""
+msgstr "Område som ska innehålla åtgärdsknapparna för IPC/skriptning"
 
 #: common/tool/action_toolbar.cpp:1045
-#, fuzzy
 msgid "Layer selector"
-msgstr "Lagval:"
+msgstr "Lagerväljare"
 
 #: common/tool/action_toolbar.cpp:1046
-#, fuzzy
 msgid "Control to select the layer"
-msgstr "Rensa det valda grafiska lagret"
+msgstr "Kontrollelement för att välja lager"
 
 #: common/tool/action_toolbar.cpp:1048
-#, fuzzy
 msgid "Symbol unit selector"
-msgstr "Symbolenhetsmärkning:"
+msgstr "Symbolenhetsväljare"
 
 #: common/tool/action_toolbar.cpp:1049
 #, fuzzy
 msgid "Displays the current unit"
-msgstr "Stäng den aktuella redigeraren"
+msgstr "Visar den aktuella enheten"
 
 #: common/tool/actions.cpp:45
 msgid "New..."
@@ -9231,14 +9219,13 @@ msgid "Hide Library Tree"
 msgstr "Göm biblioteksträd"
 
 #: common/tool/actions.cpp:836
-#, fuzzy
 msgid "Show Side Panel"
-msgstr "Visa dolda stift"
+msgstr "Visa sidopanel"
 
 #: common/tool/actions.cpp:841
 #, fuzzy
 msgid "Show Console Panel"
-msgstr "Visa konsolfönster"
+msgstr "Visa kommandoradspanel"
 
 #: common/tool/actions.cpp:846
 msgid "Focus Library Tree Search Field"
@@ -10214,9 +10201,8 @@ msgid "KiCad s-expression schematic files"
 msgstr "KiCad s-expression kretsschemafiler"
 
 #: common/wildcards_and_files_ext.cpp:289
-#, fuzzy
 msgid "Altium Project files"
-msgstr "Alla KiCad projektfiler"
+msgstr "Altium projektfiler"
 
 #: common/wildcards_and_files_ext.cpp:295
 msgid "CADSTAR Archive files"
@@ -10724,9 +10710,8 @@ msgid "Footprint Filters:"
 msgstr "Fotavtrycksfilter:"
 
 #: cvpcb/toolbars_cvpcb.cpp:122
-#, fuzzy
 msgid "Footprint filters"
-msgstr "Fotavtrycksfilter:"
+msgstr "Fotavtrycksfilter"
 
 #: cvpcb/toolbars_cvpcb.cpp:123
 #, fuzzy
@@ -21258,14 +21243,13 @@ msgstr "Kopiera signalnamn"
 #: eeschema/sim/simulator_frame_ui.cpp:180
 #: eeschema/sim/simulator_frame_ui.cpp:187
 #: eeschema/sim/simulator_frame_ui.cpp:200
-#, fuzzy
 msgid "Create new cursor..."
-msgstr "Skapa ett nytt projekt"
+msgstr "Skapa ny markör..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "Delete %s..."
-msgstr "Ta bort förinställning ..."
+msgstr "Ta bort %s..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:242
 #: eeschema/sim/simulator_frame_ui.cpp:900
@@ -21302,9 +21286,8 @@ msgstr "Radera mätvärde"
 
 #: eeschema/sim/simulator_frame_ui.cpp:651
 #: eeschema/sim/simulator_frame_ui.cpp:672
-#, fuzzy
 msgid "Cursor "
-msgstr "Markör 1"
+msgstr "Markör "
 
 #: eeschema/sim/simulator_frame_ui.cpp:729
 #: eeschema/sim/simulator_frame_ui.cpp:1155
@@ -22209,17 +22192,14 @@ msgid "Delete Hierarchical Labels"
 msgstr "Radera hierarkiska etiketter"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:99
-#, fuzzy
 msgid ""
 "Associate selected sheet pin and hierarchical label using the label name"
 msgstr ""
-"Synkronisera arkstift och hierarkiska etiketter med hjälp av etikettnamnet"
+"Synkronisera valt arkstift och hierarkisk etikett med hjälp av etikettnamnet"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
-#, fuzzy
 msgid "Associate selected sheet pin and hierarchical label using the pin name"
-msgstr ""
-"Associera valda arkstift och hierarkisk etikett med hjälp av stiftnamnet"
+msgstr "Associera valt arkstift och hierarkisk etikett med hjälp av stiftnamnet"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
@@ -22749,19 +22729,16 @@ msgid "Place Sheet Pins"
 msgstr "Placera arkstift"
 
 #: eeschema/tools/ee_actions.cpp:572
-#, fuzzy
 msgid "Autoplace All Sheet Pins"
-msgstr "Placera arkstift"
+msgstr "Autoplacera alla arkstift"
 
 #: eeschema/tools/ee_actions.cpp:573
-#, fuzzy
 msgid "Imports and auto places all sheet pins"
-msgstr "Importera hierarkiska arkstift"
+msgstr "Importerar och placerar alla arkstift automatiskt"
 
 #: eeschema/tools/ee_actions.cpp:578 eeschema/tools/ee_actions.cpp:586
-#, fuzzy
 msgid "Sync Sheet Pins..."
-msgstr "Synkronisera arkstift"
+msgstr "Synkronisera arkstift..."
 
 #: eeschema/tools/ee_actions.cpp:594
 msgid "Import Sheet..."
@@ -25329,7 +25306,7 @@ msgstr "Textredigerare"
 #: gerbview/toolbars_gerber.cpp:271
 #, fuzzy
 msgid "Component highlight"
-msgstr "Växla nätmarkering"
+msgstr "Framhäv komponent"
 
 #: gerbview/toolbars_gerber.cpp:273
 #, fuzzy
@@ -25342,14 +25319,12 @@ msgid "Aperture highlight"
 msgstr "Nätfärg markering"
 
 #: gerbview/toolbars_gerber.cpp:277
-#, fuzzy
 msgid "DCode Selector"
-msgstr "Ledning vald"
+msgstr "DCode-väljare"
 
 #: gerbview/toolbars_gerber.cpp:278
-#, fuzzy
 msgid "Select all items with the selected DCode"
-msgstr "Välj alla objekt på skärmen"
+msgstr "Välj alla objekt med den valda DCode:n"
 
 #: gerbview/toolbars_gerber.cpp:281
 msgid "<No selection>"
@@ -27097,9 +27072,8 @@ msgstr ""
 "Projektet kan inte importeras."
 
 #: kicad/import_project.cpp:146
-#, fuzzy
 msgid "Import Altium Project Files"
-msgstr "Importera Eagle Project-filer"
+msgstr "Importera Altium projektfiler"
 
 #: kicad/import_project.cpp:154
 msgid "Import CADSTAR Archive Project Files"
@@ -27222,14 +27196,12 @@ msgid "Import Non-KiCad Project..."
 msgstr "Importera icke-KiCad-projekt ..."
 
 #: kicad/menubar.cpp:115
-#, fuzzy
 msgid "Altium Project..."
-msgstr "EAGLE-projekt..."
+msgstr "Altium-projekt..."
 
 #: kicad/menubar.cpp:116
-#, fuzzy
 msgid "Import Altium Schematic and PCB (*.PrjPcb)"
-msgstr "Importera CADSTAR-arkivschemat och PCB (*.csa, *.cpa)"
+msgstr "Importera Altium kretsschema och mönsterkort (*.PrjPcb)"
 
 #: kicad/menubar.cpp:119
 msgid "CADSTAR Project..."
@@ -28732,14 +28704,12 @@ msgid "Origin Selector"
 msgstr "Originalbild"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:161
-#, fuzzy
 msgid "Select the origin of the status bar coordinates"
-msgstr "Välj vilket origo som ska användas för X-, Y-koordinatvisning."
+msgstr "Välj vilket origo som ska användas för statusfältets koordinatvisning"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:162
-#, fuzzy
 msgid "Page Selector"
-msgstr "Skiktval"
+msgstr "Sidoväljare"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:163
 #, fuzzy
@@ -33063,9 +33033,8 @@ msgstr "Under areagränsen"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:363
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:288
-#, fuzzy
 msgid "Area limit:"
-msgstr "Under areagränsen"
+msgstr "Areabegränsning:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:366
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:291
@@ -42630,9 +42599,9 @@ msgid "(layer %s; %d spokes connected to isolated island)"
 msgstr "(lager %s; %d ekrar anslutna till isolerad ö)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:224
-#, fuzzy, c-format
+#, c-format
 msgid "(layer %s; %s custom spoke count %d; actual %d)"
-msgstr "(lager %s; %s minsta antal ekrar %d; faktiskt %d)"
+msgstr "(lager %s; %s anpassat antal ekrar %d; faktiskt %d)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:290
 #, c-format
@@ -47532,42 +47501,39 @@ msgid "A wire_via refers to missing padstack '%s'."
 msgstr "En wire_via refererar till en saknad kragstapel '%s'."
 
 #: pcbnew/toolbars_footprint_editor.cpp:103 pcbnew/toolbars_pcb_editor.cpp:216
-#, fuzzy
 msgid "Dimension objects"
-msgstr "Måttsättningstext"
+msgstr "Måttsättningsobjekt"
 
 #: pcbnew/toolbars_pcb_editor.cpp:123
-#, fuzzy
 msgid "Track width selector"
-msgstr "Ledarbreddskorrigering:"
+msgstr "Ledarbreddsväljare"
 
 #: pcbnew/toolbars_pcb_editor.cpp:124
+#, fuzzy
 msgid "Control to select the track width"
-msgstr ""
+msgstr "Kontrollobjekt för val av ledarbredd"
 
 #: pcbnew/toolbars_pcb_editor.cpp:125
-#, fuzzy
 msgid "Via diameter selector"
-msgstr "Tar reda på viadiameter för:"
+msgstr "Väljare för viadiameter"
 
 #: pcbnew/toolbars_pcb_editor.cpp:126
+#, fuzzy
 msgid "Control to select the via diameter"
-msgstr ""
+msgstr "Kontrollelement för val av viadiameter"
 
 #: pcbnew/toolbars_pcb_editor.cpp:194
-#, fuzzy
 msgid "Track routing tools"
-msgstr "Ledare som korsar"
+msgstr "Ledardragningsverktyg"
 
 #: pcbnew/toolbars_pcb_editor.cpp:197
-#, fuzzy
 msgid "Track tuning tools"
-msgstr "Ledarvinkel"
+msgstr "Ledarlängdsjusteringsverktyg"
 
 #: pcbnew/toolbars_pcb_editor.cpp:225
 #, fuzzy
 msgid "PCB origins"
-msgstr "Sidans origo"
+msgstr "Mönsterkorts origo"
 
 #: pcbnew/toolbars_pcb_editor.cpp:374
 msgid ""
@@ -49207,18 +49173,16 @@ msgid "Show the footprint checker window"
 msgstr "Visa fönstret för fotavtryckskontroll"
 
 #: pcbnew/tools/pcb_actions.cpp:805
-#, fuzzy
 msgid "Load footprint from current PCB"
-msgstr "Ladda fotavtryck från aktuellt mönsterkort"
+msgstr "Läs in fotavtryck från aktuellt mönsterkort"
 
 #: pcbnew/tools/pcb_actions.cpp:806
 msgid "Load footprint from current board"
 msgstr "Ladda fotavtryck från aktuellt mönsterkort"
 
 #: pcbnew/tools/pcb_actions.cpp:812
-#, fuzzy
 msgid "Insert footprint into PCB"
-msgstr "&Sätt in fotavtryck på mönsterkortet"
+msgstr "Infoga fotavtryck på mönsterkortet"
 
 #: pcbnew/tools/pcb_actions.cpp:813
 msgid "Insert footprint into current board"
@@ -49562,9 +49526,8 @@ msgid "Change via size to previous pre-defined size"
 msgstr "Byt viastorlek till föregående fördefinierade storlek"
 
 #: pcbnew/tools/pcb_actions.cpp:1164
-#, fuzzy
 msgid "Automatically select track width"
-msgstr "Zooma automatiskt för att passa"
+msgstr "Välj ledarbredd automatiskt"
 
 #: pcbnew/tools/pcb_actions.cpp:1165
 msgid ""
@@ -49846,9 +49809,8 @@ msgid "Cycle between showing zone fills and just their outlines"
 msgstr "Byt mellan att visa zonfyllningar och att bara visa deras konturer"
 
 #: pcbnew/tools/pcb_actions.cpp:1543
-#, fuzzy
 msgid "Automatic zoom"
-msgstr "Automatisk"
+msgstr "Automatisk zoom"
 
 #: pcbnew/tools/pcb_actions.cpp:1544
 msgid "Automatic Zoom on footprint change"
