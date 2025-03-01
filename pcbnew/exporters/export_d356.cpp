@@ -395,7 +395,7 @@ void PCB_EDIT_FRAME::GenD356File( wxCommandEvent& aEvent )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    IPC356D_WRITER writer( GetBoard(), this );
+    IPC356D_WRITER writer( GetBoard() );
 
     bool success = writer.Write( dlg.GetPath() );
 

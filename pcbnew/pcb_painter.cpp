@@ -2483,9 +2483,6 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
     for( PCB_TABLECELL* cell : aTable->GetCells() )
         draw( static_cast<PCB_TEXTBOX*>( cell ), aLayer );
 
-    VECTOR2I  pos = aTable->GetPosition();
-    VECTOR2I  end = aTable->GetEnd();
-
     // Selection for tables is done with a background wash, so pass in nullptr to GetColor()
     // so we just get the "normal" (un-selected/un-brightened) color for the borders.
     COLOR4D    color = m_pcbSettings.GetColor( nullptr, aLayer );
@@ -2529,20 +2526,6 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
                 {
                     SHAPE_SEGMENT seg( ptA, ptB );
                     strokeShape( seg );
-                }
-            };
-
-    auto strokeRect =
-            [&]( VECTOR2I ptA, VECTOR2I ptB )
-            {
-                if( lineStyle <= LINE_STYLE::FIRST_TYPE )
-                {
-                    m_gal->DrawRectangle( ptA, ptB );
-                }
-                else
-                {
-                    SHAPE_RECT rect( BOX2I( ptA, ptB - ptA ) );
-                    strokeShape( rect );
                 }
             };
 
