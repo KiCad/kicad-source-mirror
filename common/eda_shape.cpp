@@ -548,7 +548,7 @@ void EDA_SHAPE::SetFillModeProp( UI_FILL_MODE aFill )
     case UI_FILL_MODE::HATCH:         SetFillMode( FILL_T::HATCH );         break;
     case UI_FILL_MODE::REVERSE_HATCH: SetFillMode( FILL_T::REVERSE_HATCH ); break;
     case UI_FILL_MODE::CROSS_HATCH:   SetFillMode( FILL_T::CROSS_HATCH );   break;
-    default:                          SetFillMode( FILL_T::FILLED_SHAPE );  break;
+    default:                          SetFilled( true );                    break;
     }
 }
 
