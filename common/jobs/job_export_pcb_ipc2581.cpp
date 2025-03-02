@@ -25,7 +25,7 @@
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS,
                               {
-                                      { JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::IN, "in" },
+                                      { JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::INCH, "in" },
                                       { JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MM, "mm" },
                               } )
 

@@ -36,7 +36,7 @@ public:
 
     enum class IPC2581_UNITS
     {
-        IN,
+        INCH,
         MM
     };
 
