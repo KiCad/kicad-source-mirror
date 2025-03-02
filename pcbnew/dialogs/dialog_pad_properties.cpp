@@ -270,7 +270,10 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
                                nullptr, this );
 
     if( m_padType->GetSelection() != PTH_DLG_TYPE && m_padType->GetSelection() != NPTH_DLG_TYPE )
+    {
         m_gbSizerHole->Show( false );
+        m_staticline71->Show( false );
+    }
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
@@ -1119,6 +1122,7 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
                          m_previewPad->GetKeepTopBottom() );
 
     m_gbSizerHole->Show( hasHole );
+    m_staticline71->Show( hasHole );
 
     if( !hasHole )
     {
