@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,6 +24,10 @@ PANEL_TOOLBAR_CUSTOMIZATION_BASE::PANEL_TOOLBAR_CUSTOMIZATION_BASE( wxWindow* pa
 
 	wxFlexGridSizer* m_customizeControls;
 	m_customizeControls = new wxFlexGridSizer( 1, 3, 0, 0 );
+	m_customizeControls->AddGrowableCol( 0 );
+	m_customizeControls->AddGrowableCol( 2 );
+	m_customizeControls->AddGrowableRow( 0 );
+	m_customizeControls->AddGrowableRow( 2 );
 	m_customizeControls->SetFlexibleDirection( wxHORIZONTAL );
 	m_customizeControls->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -42,7 +46,7 @@ PANEL_TOOLBAR_CUSTOMIZATION_BASE::PANEL_TOOLBAR_CUSTOMIZATION_BASE( wxWindow* pa
 	bSizer11 = new wxBoxSizer( wxVERTICAL );
 
 	m_toolbarTree = new wxTreeCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE|wxTR_EDIT_LABELS|wxTR_HIDE_ROOT|wxTR_NO_LINES );
-	bSizer11->Add( m_toolbarTree, 0, wxALL|wxEXPAND, 5 );
+	bSizer11->Add( m_toolbarTree, 1, wxALL|wxEXPAND, 5 );
 
 
 	bSizer10->Add( bSizer11, 1, wxEXPAND, 5 );
@@ -104,7 +108,6 @@ PANEL_TOOLBAR_CUSTOMIZATION_BASE::PANEL_TOOLBAR_CUSTOMIZATION_BASE( wxWindow* pa
 
 	this->SetSizer( bPanelSizer );
 	this->Layout();
-	bPanelSizer->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_TOOLBAR_CUSTOMIZATION_BASE::OnUpdateUI ) );
