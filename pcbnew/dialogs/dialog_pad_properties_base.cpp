@@ -380,21 +380,18 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_LeftBoxSizer->Add( gbSizerPadOrientation, 0, wxEXPAND, 5 );
 
-	m_staticline6 = new wxStaticLine( m_panelGeneral, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_LeftBoxSizer->Add( m_staticline6, 0, wxEXPAND|wxTOP|wxBOTTOM, 12 );
-
 	wxBoxSizer* bSizer35;
 	bSizer35 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_offsetShapeOpt = new wxCheckBox( m_panelGeneral, wxID_ANY, _("Offset shape from hole"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer35->Add( m_offsetShapeOpt, 0, wxLEFT, 5 );
+	bSizer35->Add( m_offsetShapeOpt, 0, wxTOP|wxLEFT, 5 );
 
 	m_offsetShapeOptLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _(":"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_offsetShapeOptLabel->Wrap( -1 );
-	bSizer35->Add( m_offsetShapeOptLabel, 0, wxRIGHT, 5 );
+	bSizer35->Add( m_offsetShapeOptLabel, 0, wxTOP|wxRIGHT, 5 );
 
 
-	m_LeftBoxSizer->Add( bSizer35, 0, wxEXPAND, 5 );
+	m_LeftBoxSizer->Add( bSizer35, 0, wxEXPAND|wxTOP, 5 );
 
 
 	m_LeftBoxSizer->Add( 0, 2, 0, wxEXPAND, 5 );
