@@ -296,6 +296,13 @@ float SCH_PAINTER::getShadowWidth( bool aForHighlight ) const
 COLOR4D SCH_PAINTER::getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDrawingShadows,
                                      bool aDimmed ) const
 {
+    auto isBackgroundLayer =
+            []( int layer )
+            {
+                return layer == LAYER_DEVICE_BACKGROUND || layer == LAYER_NOTES_BACKGROUND
+                    || layer == LAYER_SHAPES_BACKGROUND || layer == LAYER_SHEET_BACKGROUND;
+            };
+
     COLOR4D color = m_schSettings.GetLayerColor( aLayer );
 
     // Graphic items of a SYMBOL frequently use the LAYER_DEVICE layer color
@@ -320,7 +327,7 @@ COLOR4D SCH_PAINTER::getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDr
         {
             const SCH_SHEET* sheet = static_cast<const SCH_SHEET*>( aItem );
 
-            if( aLayer == LAYER_SHEET_BACKGROUND )
+            if( isBackgroundLayer( aLayer ) )
                 color = sheet->GetBackgroundColor();
             else
                 color = sheet->GetBorderColor();
@@ -329,8 +336,7 @@ COLOR4D SCH_PAINTER::getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDr
         {
             const SCH_SHAPE* shape = static_cast<const SCH_SHAPE*>( aItem );
 
-            if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND
-                || aLayer == LAYER_SHAPES_BACKGROUND )
+            if( isBackgroundLayer( aLayer ) )
             {
                 if( shape->GetFillMode() == FILL_T::FILLED_SHAPE )
                     color = shape->GetStroke().GetColor();
@@ -368,8 +374,7 @@ COLOR4D SCH_PAINTER::getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDr
         {
             const SCH_TEXTBOX* textBox = dynamic_cast<const SCH_TEXTBOX*>( aItem );
 
-            if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND
-                || aLayer == LAYER_SHAPES_BACKGROUND )
+            if( isBackgroundLayer( aLayer ) )
                 color = textBox->GetFillColor();
             else if( !isSymbolChild || textBox->GetTextColor() != COLOR4D::UNSPECIFIED )
                 color = textBox->GetTextColor();
@@ -385,8 +390,7 @@ COLOR4D SCH_PAINTER::getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDr
         // If we ARE overriding the item colors, what do we do with non-item-color fills?
         // There are two theories: we should leave them untouched, or we should drop them entirely.
         // We currently implment the first.
-        if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND
-            || aLayer == LAYER_SHAPES_BACKGROUND || aLayer == LAYER_SHEET_BACKGROUND )
+        if( isBackgroundLayer( aLayer) )
         {
             if( aItem->Type() == SCH_SHAPE_T || aItem->Type() == SCH_RULE_AREA_T )
             {
@@ -418,8 +422,7 @@ COLOR4D SCH_PAINTER::getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDr
             else
                 color = color.WithAlpha( 0.15 );
         }
-        else if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_SHEET_BACKGROUND
-                 || aLayer == LAYER_SHAPES_BACKGROUND )
+        else if( isBackgroundLayer( aLayer ) )
         {
             color = color.WithAlpha( 0.2 );
         }
@@ -428,9 +431,7 @@ COLOR4D SCH_PAINTER::getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDr
     {
         color = m_schSettings.GetLayerColor( LAYER_SELECTION_SHADOWS );
     }
-    else if( aItem->IsSelected()
-             && ( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_SHEET_BACKGROUND
-                  || aLayer == LAYER_NOTES_BACKGROUND || aLayer == LAYER_SHAPES_BACKGROUND ) )
+    else if( aItem->IsSelected() && isBackgroundLayer( aLayer ) )
     {
         // Selected items will be painted over all other items, so make backgrounds translucent so
         // that non-selected overlapping objects are visible
