@@ -2895,7 +2895,7 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR::FootprintLoad( const wxString& aLibraryPath,
 
 
 void PCB_IO_KICAD_SEXPR::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFootprint,
-                                const std::map<std::string, UTF8>* aProperties )
+                                        const std::map<std::string, UTF8>* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 

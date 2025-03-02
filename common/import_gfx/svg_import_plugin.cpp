@@ -195,8 +195,12 @@ bool SVG_IMPORT_PLUGIN::Import()
                 // *not* closed so create a filled, closed shape for the fill, and an unfilled,
                 // open shape for the outline
                 static IMPORTED_STROKE noStroke( -1, LINE_STYLE::SOLID, COLOR4D::UNSPECIFIED );
-                DrawPath( path->pts, path->npts, true, noStroke, true, fillColor );
-                DrawPath( path->pts, path->npts, false, stroke, false, COLOR4D::UNSPECIFIED );
+                const bool             closed = true;
+
+                DrawPath( path->pts, path->npts, closed, noStroke, true, fillColor );
+
+                if( stroke.GetWidth() > 0 )
+                    DrawPath( path->pts, path->npts, !closed, stroke, false, COLOR4D::UNSPECIFIED );
             }
             else
             {
