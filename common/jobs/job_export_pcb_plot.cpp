@@ -49,6 +49,31 @@ JOB_EXPORT_PCB_PLOT::JOB_EXPORT_PCB_PLOT( PLOT_FORMAT aFormat, const std::string
                                                 &m_printMaskLayersToIncludeOnAllLayers,
                                                 m_printMaskLayersToIncludeOnAllLayers ) );
 
+    m_params.emplace_back( new JOB_PARAM<bool>( "mirror",
+                                                &m_mirror, m_mirror ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "black_and_white",
+                                                &m_blackAndWhite, m_blackAndWhite ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "negative",
+                                                &m_negative, m_negative ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "plot_footprint_values",
+                                                &m_plotFootprintValues, m_plotFootprintValues ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "plot_ref_des",
+                                                &m_plotRefDes, m_plotRefDes ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "hide_dnp_footprints_on_fab_layers",
+                                                &m_hideDNPFPsOnFabLayers,
+                                                m_hideDNPFPsOnFabLayers ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "sketch_dnp_footprints_on_fab_layers",
+                                                &m_sketchDNPFPsOnFabLayers,
+                                                m_sketchDNPFPsOnFabLayers ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "crossout_dnp_footprints_on_fab_layers",
+                                                &m_crossoutDNPFPsOnFabLayers,
+                                                m_crossoutDNPFPsOnFabLayers ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "sketch_pads_on_fab_layers",
+                                                &m_sketchPadsOnFabLayers,
+                                                m_sketchPadsOnFabLayers ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "plot_pad_numbers",
                                                 &m_plotPadNumbers, m_plotPadNumbers ) );
 
@@ -59,10 +84,11 @@ JOB_EXPORT_PCB_PLOT::JOB_EXPORT_PCB_PLOT( PLOT_FORMAT aFormat, const std::string
                                                 &m_subtractSolderMaskFromSilk,
                                                 m_subtractSolderMaskFromSilk ) );
 
-    m_params.emplace_back( new JOB_PARAM<bool>( "plot_ref_des", &m_plotRefDes, m_plotRefDes ) );
-
     m_params.emplace_back( new JOB_PARAM<bool>( "use_drill_origin",
                                                 &m_useDrillOrigin, m_useDrillOrigin ) );
+
+    m_params.emplace_back( new JOB_PARAM<DRILL_MARKS>( "drill_shape",
+                                                       &m_drillShapeOption, m_drillShapeOption ) );
 
     m_params.emplace_back( new JOB_PARAM<wxString>( "drawing_sheet",
                                                     &m_drawingSheet, m_drawingSheet ) );

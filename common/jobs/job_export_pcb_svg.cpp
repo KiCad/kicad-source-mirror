@@ -37,16 +37,7 @@ JOB_EXPORT_PCB_SVG::JOB_EXPORT_PCB_SVG() :
     m_plotDrawingSheet = true;
 
     m_params.emplace_back( new JOB_PARAM<wxString>( "color_theme", &m_colorTheme, m_colorTheme ) );
-    m_params.emplace_back( new JOB_PARAM<bool>( "mirror", &m_mirror, m_mirror ) );
-    m_params.emplace_back(
-            new JOB_PARAM<bool>( "black_and_white", &m_blackAndWhite, m_blackAndWhite ) );
-    m_params.emplace_back( new JOB_PARAM<bool>( "negative", &m_negative, m_negative ) );
-    m_params.emplace_back( new JOB_PARAM<bool>(
-            "sketch_pads_on_fab_layers", &m_sketchPadsOnFabLayers, m_sketchPadsOnFabLayers ) );
-    m_params.emplace_back(
-            new JOB_PARAM<int>( "page_size_mode", &m_pageSizeMode, m_pageSizeMode ) );
-    m_params.emplace_back(
-            new JOB_PARAM<DRILL_MARKS>( "drill_shape", &m_drillShapeOption, m_drillShapeOption ) );
+    m_params.emplace_back( new JOB_PARAM<int>( "page_size_mode", &m_pageSizeMode, m_pageSizeMode ) );
     m_params.emplace_back( new JOB_PARAM<unsigned int>( "precision", &m_precision, m_precision ) );
     m_params.emplace_back( new JOB_PARAM<GEN_MODE>( "gen_mode", &m_genMode, m_genMode ) );
 }

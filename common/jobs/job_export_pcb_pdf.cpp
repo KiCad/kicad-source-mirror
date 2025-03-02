@@ -46,20 +46,6 @@ JOB_EXPORT_PCB_PDF::JOB_EXPORT_PCB_PDF() :
 
     m_params.emplace_back( new JOB_PARAM<wxString>( "color_theme",
             &m_colorTheme, m_colorTheme ) );
-    m_params.emplace_back( new JOB_PARAM<bool>( "mirror",
-            &m_mirror, m_mirror ) );
-    m_params.emplace_back( new JOB_PARAM<bool>( "black_and_white",
-            &m_blackAndWhite, m_blackAndWhite ) );
-    m_params.emplace_back( new JOB_PARAM<bool>( "negative",
-            &m_negative, m_negative ) );
-    m_params.emplace_back( new JOB_PARAM<bool>( "plot_footprint_values",
-            &m_plotFootprintValues, m_plotFootprintValues ) );
-    m_params.emplace_back( new JOB_PARAM<bool>( "plot_pad_numbers",
-            &m_plotPadNumbers, m_plotPadNumbers ) );
-    m_params.emplace_back( new JOB_PARAM<bool>( "sketch_pads_on_fab_layers",
-            &m_sketchPadsOnFabLayers, m_sketchPadsOnFabLayers ) );
-    m_params.emplace_back( new JOB_PARAM<DRILL_MARKS>( "drill_shape",
-            &m_drillShapeOption, m_drillShapeOption ) );
 
     m_params.emplace_back( new JOB_PARAM<bool>( "pdf_metadata",
             &m_pdfMetadata, m_pdfMetadata ) );
