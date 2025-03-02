@@ -82,10 +82,10 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	gbSizerCommon->AddGrowableCol( 1 );
 	gbSizerCommon->AddGrowableCol( 4 );
 
-	m_LeftBoxSizer->Add( gbSizerCommon, 0, wxEXPAND, 5 );
+	m_LeftBoxSizer->Add( gbSizerCommon, 0, wxEXPAND|wxBOTTOM, 5 );
 
 	m_staticline5 = new wxStaticLine( m_panelGeneral, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_LeftBoxSizer->Add( m_staticline5, 0, wxEXPAND|wxTOP|wxBOTTOM, 12 );
+	m_LeftBoxSizer->Add( m_staticline5, 0, wxEXPAND|wxTOP|wxBOTTOM, 7 );
 
 	m_padstackControls = new wxBoxSizer( wxHORIZONTAL );
 
