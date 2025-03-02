@@ -67,10 +67,12 @@ int GRAPHICS_IMPORTER_PCBNEW::MapLineWidth( double aLineWidth )
 
 STROKE_PARAMS GRAPHICS_IMPORTER_PCBNEW::MapStrokeParams( const IMPORTED_STROKE& aStroke )
 {
-    double width = aStroke.GetWidth();
+    // Historicaly -1 meant no-stroke in Eeschema, but this has never been the case for
+    // PCBNew.  (The importer, which doesn't know which program it's creating content for,
+    // also uses -1 for no-stroke.)
+    int width = ( aStroke.GetWidth() == -1 ) ? 0 : MapLineWidth( aStroke.GetWidth() );
 
-    return STROKE_PARAMS( width != -1 ? MapLineWidth( width ) : -1, aStroke.GetPlotStyle(),
-                          aStroke.GetColor() );
+    return STROKE_PARAMS( width, aStroke.GetPlotStyle(), aStroke.GetColor() );
 }
 
 

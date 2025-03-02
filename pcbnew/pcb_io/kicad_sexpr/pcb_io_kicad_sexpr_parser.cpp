@@ -3030,7 +3030,7 @@ PCB_SHAPE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
     case T_gr_vector:
     case T_gr_line:
     case T_fp_line:
-        // Default PCB_SHAPE type is S_SEGMENT.
+        shape->SetShape( SHAPE_T::SEGMENT );
         token = NextTok();
 
         if( token == T_locked )
@@ -3094,7 +3094,15 @@ PCB_SHAPE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
     }
 
     default:
-        Expecting( "gr_arc, gr_circle, gr_curve, gr_line, gr_poly, gr_rect or gr_bbox" );
+        if( aParent && aParent->Type() == PCB_FOOTPRINT_T )
+        {
+            Expecting( "fp_arc, fp_circle, fp_curve, fp_line, fp_poly or fp_rect" );
+        }
+        else
+        {
+            Expecting( "gr_arc, gr_circle, gr_curve, gr_vector, gr_line, gr_poly, gr_rect or "
+                       "gr_bbox" );
+        }
     }
 
     bool foundFill = false;
@@ -3159,8 +3167,8 @@ PCB_SHAPE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
 
                 switch( token )
                 {
-                // T_yes was used to indicate filling when first introduced,
-                // so treat it like a solid fill since that was the only fill available
+                // T_yes was used to indicate filling when first introduced, so treat it like a
+                // solid fill since that was the only fill available at the time.
                 case T_yes:
                 case T_solid:         shape->SetFillMode( FILL_T::FILLED_SHAPE );  break;
 
@@ -3177,19 +3185,15 @@ PCB_SHAPE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
 
             break;
 
-        // We continue to parse the status field but it is no longer written
-        case T_status:
+        case T_status:      // legacy token; ignore value
             parseHex();
             NeedRIGHT();
             break;
 
-        // Handle (locked) from 5.99 development, and (locked yes) from modern times
+        // Handle "(locked)" from 5.99 development, and "(locked yes)" from modern times
         case T_locked:
-        {
-            bool locked = parseMaybeAbsentBool( true );
-            shape->SetLocked( locked );
+            shape->SetLocked( parseMaybeAbsentBool( true ) );
             break;
-        }
 
         case T_net:
             if( !shape->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true ) )
@@ -3197,6 +3201,7 @@ PCB_SHAPE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
                 wxLogError( _( "Invalid net ID in\nfile: '%s'\nline: %d\noffset: %d." ),
                             CurSource(), CurLineNumber(), CurOffset() );
             }
+
             NeedRIGHT();
             break;
 
