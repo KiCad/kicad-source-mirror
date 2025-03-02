@@ -93,8 +93,8 @@ GR_TEXT_V_ALIGN_T EDA_TEXT::MapVertJustify( int aVertJustify )
 
 
 EDA_TEXT::EDA_TEXT( const EDA_IU_SCALE& aIuScale, const wxString& aText ) :
-        m_text( aText ),
         m_IuScale( aIuScale ),
+        m_text( aText ),
         m_render_cache_font( nullptr ),
         m_visible( true )
 {
