@@ -1846,7 +1846,7 @@ void PCB_IO_IPC2581::generateAuxilliaryLayers( wxXmlNode* aCadLayerNode )
 
             if( std::get<2>( layers ) == UNDEFINED_LAYER )
             {
-                addAttribute( node, "name", genLayerString( std::get<1>( layers ), name ) );
+                addAttribute( node, "name", genLayerString( std::get<1>( layers ), TO_UTF8( name ) ) );
                 addAttribute( node, "side",
                               IsFrontLayer( std::get<1>( layers ) ) ? "TOP" : "BOTTOM" );
             }
@@ -1854,7 +1854,7 @@ void PCB_IO_IPC2581::generateAuxilliaryLayers( wxXmlNode* aCadLayerNode )
             {
                 addAttribute(
                         node, "name",
-                        genLayersString( std::get<1>( layers ), std::get<2>( layers ), name ) );
+                        genLayersString( std::get<1>( layers ), std::get<2>( layers ), TO_UTF8( name ) ) );
 
                 const bool first_external =
                         std::get<1>( layers ) == F_Cu || std::get<1>( layers ) == B_Cu;
@@ -3208,10 +3208,10 @@ void PCB_IO_IPC2581::generateLayerSetAuxilliary( wxXmlNode* aStepNode )
 
         wxXmlNode* layerNode = appendNode( aStepNode, "LayerFeature" );
         if( std::get<2>( layers ) == UNDEFINED_LAYER )
-            layerNode->AddAttribute( "layerRef", genLayerString( std::get<1>( layers ), name ) );
+            layerNode->AddAttribute( "layerRef", genLayerString( std::get<1>( layers ), TO_UTF8( name ) ) );
         else
             layerNode->AddAttribute( "layerRef", genLayersString( std::get<1>( layers ),
-                                                                  std::get<2>( layers ), name ) );
+                                                                  std::get<2>( layers ), TO_UTF8( name ) ) );
 
         for( BOARD_ITEM* item : vec )
         {
