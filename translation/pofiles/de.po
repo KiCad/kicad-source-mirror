@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-01 18:34+0300\n"
-"PO-Revision-Date: 2025-03-01 20:38+0000\n"
+"PO-Revision-Date: 2025-03-03 08:42+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -380,14 +380,12 @@ msgid "Reload board"
 msgstr "Platine neu laden"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:49
-#, fuzzy
 msgid "Reload board and refresh 3D view"
-msgstr "Platine und 3D-Modelle neu laden"
+msgstr "Platine neu laden und 3D-Ansicht aktualisieren"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
-#, fuzzy
 msgid "Use raytracing"
-msgstr "Raytracing"
+msgstr "Raytracing nutzen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:56
 msgid "Render current view using Raytracing"
@@ -398,9 +396,8 @@ msgid "Copy 3D image to clipboard"
 msgstr "Kopiere 3D-Grafik in die Zwischenablage"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:64
-#, fuzzy
 msgid "Copy the current 3D image to the clipboard"
-msgstr "Kopiere 3D-Grafik in die Zwischenablage"
+msgstr "Kopiere aktuelle 3D-Ansicht in Zwischenablage"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
 msgid "Export Current View as PNG..."
@@ -3768,7 +3765,6 @@ msgid "Enter the password for the SSH key"
 msgstr "Passwort für den SSH-Schlüssel eingeben"
 
 #: common/dialogs/git/dialog_git_repository.cpp:337
-#, fuzzy
 msgid "Test Connection"
 msgstr "Verbindung testen"
 
@@ -3852,7 +3848,6 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:101
-#, fuzzy
 msgid "User name:"
 msgstr "Benutzername:"
 
@@ -6027,9 +6022,8 @@ msgstr "Farben"
 #: common/eda_base_frame.cpp:1345 common/eda_base_frame.cpp:1362
 #: common/eda_base_frame.cpp:1373 common/eda_base_frame.cpp:1399
 #: common/eda_base_frame.cpp:1427
-#, fuzzy
 msgid "Toolbars"
-msgstr "&Werkzeuge"
+msgstr "Werkzeugleisten"
 
 #: common/eda_base_frame.cpp:1307 common/hotkey_store.cpp:77
 #: common/tool/common_tools.cpp:614 eeschema/menubar.cpp:137
@@ -8683,24 +8677,20 @@ msgid "Quit %s"
 msgstr "%s beenden"
 
 #: common/tool/action_toolbar.cpp:1036
-#, fuzzy
 msgid "Grid Selector"
-msgstr "Rasterdarstellung"
+msgstr "Rasterauswahl"
 
 #: common/tool/action_toolbar.cpp:1037
-#, fuzzy
 msgid "Grid Selection box"
-msgstr "Nur Auswahl"
+msgstr "Rasterauswahl-Box"
 
 #: common/tool/action_toolbar.cpp:1039
-#, fuzzy
 msgid "Zoom Selector"
-msgstr "Zoom auf Auswahl"
+msgstr "Zoomauswahl"
 
 #: common/tool/action_toolbar.cpp:1040
-#, fuzzy
 msgid "Zoom Selection box"
-msgstr "Zoom auf Auswahl"
+msgstr "Zoomauswahl-Box"
 
 #: common/tool/action_toolbar.cpp:1042
 #, fuzzy
