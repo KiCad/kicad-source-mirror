@@ -51,7 +51,7 @@ enum class EDA_UNITS
     PERCENT  = 4,
     MILS     = 5,
     UM       = 6,
-    CM       = 7,
+    CM       = 7
 };
 
 namespace EDA_UNIT_UTILS
