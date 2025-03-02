@@ -202,9 +202,9 @@ protected:
             {
                 DisplayErrorMessage( m_grid, title, e->message );
             }
-            else if( adapter->SupportsSettingsDialog( row.Nickname() ) )
+            else if( adapter->SupportsConfigurationDialog( row.Nickname() ) )
             {
-
+                adapter->ShowConfigurationDialog( row.Nickname(), m_dialog );
             }
 
             aEvent.Skip();
@@ -333,7 +333,7 @@ void PANEL_SYM_LIB_TABLE::setupGrid( WX_GRID* aGrid )
                 aGrid->SetCellRenderer( ii, COL_STATUS,
                                         new GRID_BITMAP_BUTTON_RENDERER( KiBitmapBundle( BITMAPS::small_warning ) ) );
             }
-            else if( adapter->SupportsSettingsDialog( tableRow.Nickname() ) )
+            else if( adapter->SupportsConfigurationDialog( tableRow.Nickname() ) )
             {
                 aGrid->SetCellValue( ii, COL_STATUS,
                                      wxString::Format( _( "Library settings for %s..." ),

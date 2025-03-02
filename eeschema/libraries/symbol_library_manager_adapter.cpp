@@ -21,6 +21,7 @@
 #include <magic_enum.hpp>
 
 #include <common.h>
+#include <dialog_shim.h>
 #include <ki_exception.h>
 #include <wx/log.h>
 
@@ -609,16 +610,25 @@ std::vector<SUB_LIBRARY> SYMBOL_LIBRARY_MANAGER_ADAPTER::GetSubLibraries(
 }
 
 
-bool SYMBOL_LIBRARY_MANAGER_ADAPTER::SupportsSettingsDialog( const wxString& aNickname ) const
+bool SYMBOL_LIBRARY_MANAGER_ADAPTER::SupportsConfigurationDialog( const wxString& aNickname ) const
 {
     if( std::optional<const LIB_DATA*> result = fetchIfLoaded( aNickname ) )
-    {
-        const LIB_DATA* rowData = *result;
-        // TODO(JE) move to enum SCH_FILE_T in LIBRARY_TABLE_ROW
-        return rowData->row->Type() == wxT( "Database" );
-    }
+        return ( *result )->plugin->SupportsConfigurationDialog();
 
     return false;
+}
+
+
+void SYMBOL_LIBRARY_MANAGER_ADAPTER::ShowConfigurationDialog( const wxString& aNickname,
+                                                              wxWindow* aParent ) const
+{
+    std::optional<const LIB_DATA*> optRow = fetchIfLoaded( aNickname );
+
+    if( !optRow || !( *optRow )->plugin->SupportsConfigurationDialog() )
+        return;
+
+    DIALOG_SHIM* dialog = ( *optRow )->plugin->CreateConfigurationDialog( aParent );
+    dialog->ShowModal();
 }
 
 

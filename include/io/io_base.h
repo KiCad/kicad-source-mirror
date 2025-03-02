@@ -32,6 +32,8 @@
 
 class REPORTER;
 class PROGRESS_REPORTER;
+class DIALOG_SHIM;
+class wxWindow;
 
 class KICOMMON_API IO_BASE
 {
@@ -193,6 +195,19 @@ public:
      *  #SCH_IO, which has been avoided to date.
      */
     virtual void GetLibraryOptions( std::map<std::string, UTF8>* aListToAppendTo ) const;
+
+
+    /**
+     * @return true if this plugin supports a GUI for configuration that can be launched from
+     *         the library table configuration dialog or other UI contexts
+     */
+    virtual bool SupportsConfigurationDialog() const { return false; }
+
+    /**
+     * @return a new instance of dialog that configures this plugin, or nullptr if this plugin
+     *         does not support a configuration dialog.  Caller takes ownership.
+     */
+    virtual DIALOG_SHIM* CreateConfigurationDialog( wxWindow* aParent ) { return nullptr; }
 
     virtual void Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED );
 
