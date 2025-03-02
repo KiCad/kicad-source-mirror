@@ -403,7 +403,7 @@ void DIALOG_PLOT::init_Dialog()
                                             == PLOT_TEXT_MODE::DEFAULT );
 
     // DXF units selection
-    m_DXF_plotUnits->SetSelection( m_plotOpts.GetDXFPlotUnits() == DXF_UNITS::IN ? 0 : 1 );
+    m_DXF_plotUnits->SetSelection( m_plotOpts.GetDXFPlotUnits() == DXF_UNITS::INCH ? 0 : 1 );
 
     // Plot mirror option
     m_plotMirrorOpt->SetValue( m_plotOpts.GetMirror() );
@@ -451,8 +451,8 @@ void DIALOG_PLOT::transferPlotParamsToJob()
     if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::DXF )
     {
         JOB_EXPORT_PCB_DXF* dxfJob = static_cast<JOB_EXPORT_PCB_DXF*>( m_job );
-        dxfJob->m_dxfUnits = m_plotOpts.GetDXFPlotUnits() == DXF_UNITS::IN
-                                                             ? JOB_EXPORT_PCB_DXF::DXF_UNITS::IN
+        dxfJob->m_dxfUnits = m_plotOpts.GetDXFPlotUnits() == DXF_UNITS::INCH
+                                                             ? JOB_EXPORT_PCB_DXF::DXF_UNITS::INCH
                                                              : JOB_EXPORT_PCB_DXF::DXF_UNITS::MM;
         dxfJob->m_plotGraphicItemsUsingContours = m_plotOpts.GetPlotMode() == OUTLINE_MODE::SKETCH;
         dxfJob->m_polygonMode = m_plotOpts.GetDXFPlotPolygonMode();
@@ -1053,7 +1053,7 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetDXFPlotPolygonMode( m_DXF_plotModeOpt->GetValue() );
 
     sel = m_DXF_plotUnits->GetSelection();
-    tempOptions.SetDXFPlotUnits( sel == 0 ? DXF_UNITS::IN : DXF_UNITS::MM );
+    tempOptions.SetDXFPlotUnits( sel == 0 ? DXF_UNITS::INCH : DXF_UNITS::MM );
 
     if( !m_DXF_plotTextStrokeFontOpt->IsEnabled() ) // Currently, only DXF supports this option
         tempOptions.SetTextMode( PLOT_TEXT_MODE::DEFAULT );

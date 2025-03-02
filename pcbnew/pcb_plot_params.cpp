@@ -105,7 +105,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_plotDrawingSheet           = false;
     m_plotMode                   = FILLED;
     m_DXFPolygonMode             = true;
-    m_DXFUnits                   = DXF_UNITS::IN;
+    m_DXFUnits                   = DXF_UNITS::INCH;
     m_useAuxOrigin               = false;
     m_HPGLPenNum                 = 1;
     m_HPGLPenSpeed               = 20;        // this param is always in cm/s
@@ -219,7 +219,7 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter ) const
     // DXF options
     KICAD_FORMAT::FormatBool( aFormatter, getTokenName( T_dxfpolygonmode ), m_DXFPolygonMode );
     KICAD_FORMAT::FormatBool( aFormatter, getTokenName( T_dxfimperialunits ),
-                              m_DXFUnits == DXF_UNITS::IN );
+                              m_DXFUnits == DXF_UNITS::INCH );
     KICAD_FORMAT::FormatBool( aFormatter, getTokenName( T_dxfusepcbnewfont ),
                               m_textMode != PLOT_TEXT_MODE::NATIVE );
 
@@ -776,7 +776,7 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             break;
 
         case T_dxfimperialunits:
-            aPcbPlotParams->m_DXFUnits = parseBool() ? DXF_UNITS::IN : DXF_UNITS::MM;
+            aPcbPlotParams->m_DXFUnits = parseBool() ? DXF_UNITS::INCH : DXF_UNITS::MM;
             break;
 
         case T_dxfusepcbnewfont:

@@ -39,7 +39,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_POS::SIDE,
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_POS::UNITS,
                               {
-                                      { JOB_EXPORT_PCB_POS::UNITS::IN, "in" },
+                                      { JOB_EXPORT_PCB_POS::UNITS::INCH, "in" },
                                       { JOB_EXPORT_PCB_POS::UNITS::MM, "mm" },
                               } )
 

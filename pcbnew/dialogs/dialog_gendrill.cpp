@@ -137,7 +137,7 @@ bool DIALOG_GENDRILL::TransferDataFromWindow()
         m_job->m_format = m_rbExcellon->GetValue() ? JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::EXCELLON
 												   : JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::GERBER;
         m_job->m_drillUnits = m_units->GetSelection() == 0 ? JOB_EXPORT_PCB_DRILL::DRILL_UNITS::MM
-                                                           : JOB_EXPORT_PCB_DRILL::DRILL_UNITS::IN;
+                                                           : JOB_EXPORT_PCB_DRILL::DRILL_UNITS::INCH;
         m_job->m_drillOrigin = static_cast<JOB_EXPORT_PCB_DRILL::DRILL_ORIGIN>( m_origin->GetSelection() );
         m_job->m_excellonCombinePTHNPTH = m_Check_Merge_PTH_NPTH->IsChecked();
         m_job->m_excellonMinimalHeader = m_Check_Minimal->IsChecked();
@@ -181,7 +181,7 @@ bool DIALOG_GENDRILL::TransferDataToWindow()
 
         m_rbExcellon->SetValue( m_job->m_format == JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::EXCELLON );
         m_rbGerberX2->SetValue( m_job->m_format == JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::GERBER );
-        m_units->SetSelection( m_job->m_drillUnits == JOB_EXPORT_PCB_DRILL::DRILL_UNITS::IN );
+        m_units->SetSelection( m_job->m_drillUnits == JOB_EXPORT_PCB_DRILL::DRILL_UNITS::INCH );
         m_zeros->SetSelection( static_cast<int>( m_job->m_zeroFormat ) );
         updatePrecisionOptions();
         m_Check_Minimal->SetValue( m_job->m_excellonMinimalHeader );

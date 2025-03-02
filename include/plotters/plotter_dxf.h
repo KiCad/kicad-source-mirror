@@ -31,7 +31,7 @@ public:
         m_textAsLines = true;
         m_currentColor = COLOR4D::BLACK;
         m_currentLineType = LINE_STYLE::SOLID;
-        SetUnits( DXF_UNITS::IN );
+        SetUnits( DXF_UNITS::INCH );
     }
 
     virtual PLOT_FORMAT GetPlotterType() const override

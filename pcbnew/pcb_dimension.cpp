@@ -147,7 +147,7 @@ static void CollectKnockedOutSegments( const SHAPE_POLY_SET& aPoly, const SEG& a
 PCB_DIMENSION_BASE::PCB_DIMENSION_BASE( BOARD_ITEM* aParent, KICAD_T aType ) :
         PCB_TEXT( aParent, aType ),
         m_overrideTextEnabled( false ),
-        m_units( EDA_UNITS::IN ),
+        m_units( EDA_UNITS::INCH ),
         m_autoUnits( false ),
         m_unitsFormat( DIM_UNITS_FORMAT::BARE_SUFFIX ),
         m_arrowDirection( DIM_ARROW_DIRECTION::OUTWARD ),
@@ -429,7 +429,7 @@ wxString PCB_DIMENSION_BASE::GetValueText() const
     {
         switch( m_units )
         {
-        case EDA_UNITS::IN:   precision = precision - 4;                break;
+        case EDA_UNITS::INCH: precision = precision - 4;                break;
         case EDA_UNITS::MILS: precision = std::max( 0, precision - 7 ); break;
         case EDA_UNITS::MM:   precision = precision - 5;                break;
         default:              precision = precision - 4;                break;
@@ -487,7 +487,7 @@ DIM_UNITS_MODE PCB_DIMENSION_BASE::GetUnitsMode() const
         switch( m_units )
         {
         default:
-        case EDA_UNITS::IN:   return DIM_UNITS_MODE::IN;
+        case EDA_UNITS::INCH: return DIM_UNITS_MODE::INCH;
         case EDA_UNITS::MM:   return DIM_UNITS_MODE::MM;
         case EDA_UNITS::MILS: return DIM_UNITS_MODE::MILS;
         }
@@ -499,9 +499,9 @@ void PCB_DIMENSION_BASE::SetUnitsMode( DIM_UNITS_MODE aMode )
 {
     switch( aMode )
     {
-    case DIM_UNITS_MODE::IN:
+    case DIM_UNITS_MODE::INCH:
         m_autoUnits = false;
-        m_units = EDA_UNITS::IN;
+        m_units = EDA_UNITS::INCH;
         break;
 
     case DIM_UNITS_MODE::MILS:
@@ -1783,7 +1783,7 @@ static struct DIMENSION_DESC
                     .Map( DIM_UNITS_FORMAT::PAREN_SUFFIX, _HKI( "1234.0 (mm)" ) );
 
         ENUM_MAP<DIM_UNITS_MODE>::Instance()
-                    .Map( DIM_UNITS_MODE::IN,        _HKI( "Inches" ) )
+                    .Map( DIM_UNITS_MODE::INCH,      _HKI( "Inches" ) )
                     .Map( DIM_UNITS_MODE::MILS,      _HKI( "Mils" ) )
                     .Map( DIM_UNITS_MODE::MM,        _HKI( "Millimeters" ) )
                     .Map( DIM_UNITS_MODE::AUTOMATIC, _HKI( "Automatic" ) );

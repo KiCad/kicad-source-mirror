@@ -391,7 +391,7 @@ bool DIALOG_EXPORT_2581::TransferDataFromWindow()
         m_job->m_version = GetVersion() == 'B' ? JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION::B
 											   : JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION::C;
         m_job->m_units = GetUnitsString() == wxT( "mm" ) ? JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MM
-														 : JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::IN;
+														 : JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::INCH;
         m_job->m_precision = m_precision->GetValue();
         m_job->m_compress = GetCompress();
     }

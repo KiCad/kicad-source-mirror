@@ -1435,7 +1435,7 @@ void PCB_EDIT_FRAME::GenODBPPFiles( wxCommandEvent& event )
 
     job.m_precision = dlg.GetPrecision();
     job.m_units = dlg.GetUnitsString() == "mm" ? JOB_EXPORT_PCB_ODB::ODB_UNITS::MM
-                                               : JOB_EXPORT_PCB_ODB::ODB_UNITS::IN;
+                                               : JOB_EXPORT_PCB_ODB::ODB_UNITS::INCH;
 
     WX_PROGRESS_REPORTER progressReporter( this, _( "Generating ODB++ output files" ), 3, false );
     WX_STRING_REPORTER reporter;

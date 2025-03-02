@@ -44,7 +44,7 @@ enum class EDA_DATA_TYPE
 
 enum class EDA_UNITS
 {
-    IN       = 0,
+    INCH     = 0,       // Do not use IN: it conflicts with a Windows header
     MM       = 1,
     UNSCALED = 2,
     DEGREES  = 3,

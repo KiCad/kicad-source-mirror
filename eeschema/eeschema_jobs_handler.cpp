@@ -1150,7 +1150,7 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
 
     switch( ercJob->m_units )
     {
-    case JOB_SCH_ERC::UNITS::IN:   units = EDA_UNITS::IN;   break;
+    case JOB_SCH_ERC::UNITS::INCH: units = EDA_UNITS::INCH; break;
     case JOB_SCH_ERC::UNITS::MILS: units = EDA_UNITS::MILS; break;
     case JOB_SCH_ERC::UNITS::MM:   units = EDA_UNITS::MM;   break;
     default:                       units = EDA_UNITS::MM;   break;

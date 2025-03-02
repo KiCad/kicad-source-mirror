@@ -144,7 +144,7 @@ int CLI::PCB_EXPORT_POS_COMMAND::doPerform( KIWAY& aKiway )
     }
     else if( units == wxS( "in" ) )
     {
-        aPosJob->m_units = JOB_EXPORT_PCB_POS::UNITS::IN;
+        aPosJob->m_units = JOB_EXPORT_PCB_POS::UNITS::INCH;
     }
     else
     {

@@ -140,7 +140,7 @@ int CLI::PCB_EXPORT_DXF_COMMAND::doPerform( KIWAY& aKiway )
     }
     else if( units == wxS( "in" ) )
     {
-        dxfJob->m_dxfUnits = JOB_EXPORT_PCB_DXF::DXF_UNITS::IN;
+        dxfJob->m_dxfUnits = JOB_EXPORT_PCB_DXF::DXF_UNITS::INCH;
     }
     else
     {

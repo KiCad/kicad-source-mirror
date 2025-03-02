@@ -50,7 +50,7 @@ enum class ALTIUM_UNIT
 {
     UNKNOWN = 0,
 
-    IN      = 1,
+    INCH    = 1,
     MILS    = 2,
     MM      = 3,
     CM      = 4

@@ -51,7 +51,7 @@ using KIGFX::RENDER_SETTINGS;
 // Units (inch/mm for DXF plotter
 enum class DXF_UNITS
 {
-    IN = 0,
+    INCH = 0,   // Do not use MM: it conficts with a Windows header
     MM = 1
 };
 

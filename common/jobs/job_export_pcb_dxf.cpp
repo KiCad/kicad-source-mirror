@@ -30,7 +30,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_DXF::GEN_MODE,
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_DXF::DXF_UNITS,
                               {
-                                      { JOB_EXPORT_PCB_DXF::DXF_UNITS::IN, "in" },
+                                      { JOB_EXPORT_PCB_DXF::DXF_UNITS::INCH, "in" },
                                       { JOB_EXPORT_PCB_DXF::DXF_UNITS::MM, "mm" },
                               } )
 
@@ -38,7 +38,7 @@ JOB_EXPORT_PCB_DXF::JOB_EXPORT_PCB_DXF() :
         JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::DXF, "dxf", false ),
         m_plotGraphicItemsUsingContours( true ),
         m_polygonMode( true ),
-        m_dxfUnits( DXF_UNITS::IN ),
+        m_dxfUnits( DXF_UNITS::INCH ),
         m_genMode( GEN_MODE::MULTI )
 {
     m_plotDrawingSheet = false;

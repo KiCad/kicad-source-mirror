@@ -125,7 +125,7 @@ public:
 
     enum class VRML_UNITS
     {
-        IN,
+        INCH,  // Do not use IN: it conflicts with a Windows header
         MM,
         METERS,
         TENTHS // inches

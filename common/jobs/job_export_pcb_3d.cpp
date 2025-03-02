@@ -36,7 +36,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_3D::FORMAT,
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_3D::VRML_UNITS,
                               {
-                                      { JOB_EXPORT_PCB_3D::VRML_UNITS::IN,     "in" },
+                                      { JOB_EXPORT_PCB_3D::VRML_UNITS::INCH,   "in" },
                                       { JOB_EXPORT_PCB_3D::VRML_UNITS::METERS, "m" },
                                       { JOB_EXPORT_PCB_3D::VRML_UNITS::MM,     "mm" },
                                       { JOB_EXPORT_PCB_3D::VRML_UNITS::TENTHS, "tenths" },

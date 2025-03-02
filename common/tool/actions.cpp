@@ -939,7 +939,7 @@ TOOL_ACTION ACTIONS::inchesUnits( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Inches" ) )
         .Icon( BITMAPS::unit_inch )
         .Flags( AF_NONE )
-        .Parameter( EDA_UNITS::IN ) );
+        .Parameter( EDA_UNITS::INCH ) );
 
 TOOL_ACTION ACTIONS::milsUnits( TOOL_ACTION_ARGS()
         .Name( "common.Control.mils" )

@@ -63,7 +63,7 @@ void IMAGE_SIZE::SetOutputSizeFromInitialImageSize()
     // Set the m_outputSize value from the m_originalSizePixels and the selected unit
     if( m_unit == EDA_UNITS::MM )
         m_outputSize = (double)GetOriginalSizePixels() / m_originalDPI * 25.4;
-    else if( m_unit == EDA_UNITS::IN )
+    else if( m_unit == EDA_UNITS::INCH )
         m_outputSize = (double)GetOriginalSizePixels() / m_originalDPI;
     else
         m_outputSize = m_originalDPI;
@@ -76,7 +76,7 @@ int IMAGE_SIZE::GetOutputDPI()
 
     if( m_unit == EDA_UNITS::MM )
         outputDPI = GetOriginalSizePixels() / ( m_outputSize / 25.4 );
-    else if( m_unit == EDA_UNITS::IN )
+    else if( m_unit == EDA_UNITS::INCH )
         outputDPI = GetOriginalSizePixels() / m_outputSize;
     else
         outputDPI = KiROUND( m_outputSize );
@@ -102,7 +102,7 @@ void IMAGE_SIZE::SetUnit( EDA_UNITS aUnit )
     {
         size_mm = m_outputSize;
     }
-    else if( m_unit == EDA_UNITS::IN )
+    else if( m_unit == EDA_UNITS::INCH )
     {
         size_mm = m_outputSize * 25.4;
     }
@@ -121,7 +121,7 @@ void IMAGE_SIZE::SetUnit( EDA_UNITS aUnit )
     {
         m_outputSize = size_mm;
     }
-    else if( aUnit == EDA_UNITS::IN )
+    else if( aUnit == EDA_UNITS::INCH )
     {
         m_outputSize = size_mm / 25.4;
     }

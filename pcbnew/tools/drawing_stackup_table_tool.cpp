@@ -260,7 +260,7 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawSpecificationStackup( const VECTOR2I&
     switch( m_frame->GetUserUnits() )
     {
     case EDA_UNITS::MM:   t->SetText( _( "Thickness (mm)" ) );        break;
-    case EDA_UNITS::IN:   t->SetText( _( "Thickness (inches)" ) );    break;
+    case EDA_UNITS::INCH: t->SetText( _( "Thickness (inches)" ) );    break;
     case EDA_UNITS::MILS: t->SetText( _( "Thickness (mils)" ) );      break;
     default:              wxFAIL_MSG( wxT( "Unhandled unit type" ) );
     }

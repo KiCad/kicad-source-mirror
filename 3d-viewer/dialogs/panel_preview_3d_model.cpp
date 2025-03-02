@@ -286,7 +286,7 @@ wxString PANEL_PREVIEW_3D_MODEL::formatRotationValue( double aValue )
 wxString PANEL_PREVIEW_3D_MODEL::formatOffsetValue( double aValue )
 {
     // Convert from internal units (mm) to user units
-    if( m_userUnits == EDA_UNITS::IN )
+    if( m_userUnits == EDA_UNITS::INCH )
         aValue /= 25.4;
     else if( m_userUnits == EDA_UNITS::MILS )
         aValue /= 25.4 / 1e3;
@@ -511,7 +511,7 @@ void PANEL_PREVIEW_3D_MODEL::doIncrementOffset( wxSpinEvent& event, double aSign
     if( wxGetMouseState().ShiftDown( ) )
         step_mm = OFFSET_INCREMENT_MM_FINE;
 
-    if( m_userUnits == EDA_UNITS::MILS || m_userUnits == EDA_UNITS::IN )
+    if( m_userUnits == EDA_UNITS::MILS || m_userUnits == EDA_UNITS::INCH )
     {
         step_mm = 25.4*OFFSET_INCREMENT_MIL/1000;
 
@@ -586,7 +586,7 @@ void PANEL_PREVIEW_3D_MODEL::onMouseWheelOffset( wxMouseEvent& event )
     if( event.ShiftDown( ) )
         step_mm = OFFSET_INCREMENT_MM_FINE;
 
-    if( m_userUnits == EDA_UNITS::MILS || m_userUnits == EDA_UNITS::IN )
+    if( m_userUnits == EDA_UNITS::MILS || m_userUnits == EDA_UNITS::INCH )
     {
         step_mm = 25.4*OFFSET_INCREMENT_MIL/1000.0;
 

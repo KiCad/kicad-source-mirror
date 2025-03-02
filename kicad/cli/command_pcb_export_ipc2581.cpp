@@ -133,7 +133,7 @@ int CLI::PCB_EXPORT_IPC2581_COMMAND::doPerform( KIWAY& aKiway )
     if( units == "mm" )
         ipc2581Job->m_units = JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MM;
     else if( units == "in" )
-        ipc2581Job->m_units = JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::IN;
+        ipc2581Job->m_units = JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::INCH;
 
     ipc2581Job->m_colInternalId =
             From_UTF8( m_argParser.get<std::string>( ARG_BOM_COL_INT_ID ).c_str() );

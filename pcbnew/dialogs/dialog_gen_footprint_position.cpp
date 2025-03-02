@@ -90,7 +90,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
         PROJECT_FILE&    projectFile = m_editFrame->Prj().GetProjectFile();
         PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings();
 
-        m_units = cfg->m_PlaceFile.units == 0 ? EDA_UNITS::IN : EDA_UNITS::MM;
+        m_units = cfg->m_PlaceFile.units == 0 ? EDA_UNITS::INCH : EDA_UNITS::MM;
 
         // Output directory
         m_outputDirectoryName->SetValue( projectFile.m_PcbLastPath[LAST_PATH_POS_FILES] );
@@ -113,7 +113,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
         SetTitle( m_job->GetSettingsDialogTitle() );
 
         m_browseButton->Hide();
-        m_units = m_job->m_units == JOB_EXPORT_PCB_POS::UNITS::IN ? EDA_UNITS::IN : EDA_UNITS::MM;
+        m_units = m_job->m_units == JOB_EXPORT_PCB_POS::UNITS::INCH ? EDA_UNITS::INCH : EDA_UNITS::MM;
         m_staticTextDir->SetLabel( _( "Output file:" ) );
         m_outputDirectoryName->SetValue( m_job->GetConfiguredOutputPath() );
 
@@ -264,7 +264,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::onGenerate( wxCommandEvent& event )
 {
     if( !m_job )
     {
-        m_units  = m_unitsCtrl->GetSelection() == 0 ? EDA_UNITS::IN : EDA_UNITS::MM;
+        m_units  = m_unitsCtrl->GetSelection() == 0 ? EDA_UNITS::INCH : EDA_UNITS::MM;
 
         PCBNEW_SETTINGS* cfg = m_editFrame->GetPcbNewSettings();
 
@@ -274,7 +274,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::onGenerate( wxCommandEvent& event )
 
         m_editFrame->Prj().GetProjectFile().m_PcbLastPath[LAST_PATH_POS_FILES] = dirStr;
         cfg->m_PlaceFile.output_directory   = dirStr;
-        cfg->m_PlaceFile.units              = m_units == EDA_UNITS::IN ? 0 : 1;
+        cfg->m_PlaceFile.units              = m_units == EDA_UNITS::INCH ? 0 : 1;
         cfg->m_PlaceFile.file_options       = m_singleFile->GetValue() ? 1 : 0;
         cfg->m_PlaceFile.file_format        = m_formatCtrl->GetSelection();
         cfg->m_PlaceFile.include_board_edge = m_cbIncludeBoardEdge->GetValue();
@@ -291,7 +291,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::onGenerate( wxCommandEvent& event )
     else
     {
         m_job->SetConfiguredOutputPath( m_outputDirectoryName->GetValue() );
-        m_job->m_units = m_unitsCtrl->GetSelection() == 0 ? JOB_EXPORT_PCB_POS::UNITS::IN
+        m_job->m_units = m_unitsCtrl->GetSelection() == 0 ? JOB_EXPORT_PCB_POS::UNITS::INCH
                                                           : JOB_EXPORT_PCB_POS::UNITS::MM;
         m_job->m_format = static_cast<JOB_EXPORT_PCB_POS::FORMAT>( m_formatCtrl->GetSelection() );
         m_job->m_side = JOB_EXPORT_PCB_POS::SIDE::BOTH;

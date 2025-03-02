@@ -50,7 +50,7 @@ double DIALOG_IMPORT_GRAPHICS::s_importScale = 1.0; // Do not change the importe
 
 
 const std::map<DXF_IMPORT_UNITS, wxString> dxfUnitsMap = {
-    { DXF_IMPORT_UNITS::IN,   _( "Inches" ) },
+    { DXF_IMPORT_UNITS::INCH, _( "Inches" ) },
     { DXF_IMPORT_UNITS::MM,   _( "Millimeters" ) },
     { DXF_IMPORT_UNITS::MILS, _( "Mils" ) },
     { DXF_IMPORT_UNITS::CM,   _( "Centimeter" ) },

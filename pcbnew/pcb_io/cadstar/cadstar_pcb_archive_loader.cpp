@@ -3725,7 +3725,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::applyDimensionSettings( const DIMENSION&  aCads
         break;
 
     case UNITS::INCH:
-        aKiCadDim->SetUnitsMode( DIM_UNITS_MODE::IN );
+        aKiCadDim->SetUnitsMode( DIM_UNITS_MODE::INCH );
         break;
 
     case UNITS::THOU:

@@ -128,7 +128,7 @@ BOOST_DATA_TEST_CASE_F( TRACK_CLEANER_TEST_FIXTURE, FailedToCleanRegressionTests
         BOOST_CHECK_EQUAL( dryRunItems.size(), entry.m_Expected );
         BOOST_CHECK_EQUAL( realRunItems.size(), entry.m_Expected );
 
-        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::IN );
+        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCH );
 
         std::map<KIID, EDA_ITEM*> itemMap;
         m_board->FillItemMap( itemMap );
@@ -222,7 +222,7 @@ BOOST_DATA_TEST_CASE_F( TRACK_CLEANER_TEST_FIXTURE, TrackCleanerRegressionTests,
     }
     else
     {
-        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::IN );
+        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCH );
 
         std::map<KIID, EDA_ITEM*> itemMap;
         m_board->FillItemMap( itemMap );

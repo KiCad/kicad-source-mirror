@@ -205,7 +205,7 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
 
     switch( m_dimension->GetUnitsMode() )
     {
-        case DIM_UNITS_MODE::IN:        m_cbUnits->SetSelection( 0 ); break;
+        case DIM_UNITS_MODE::INCH:      m_cbUnits->SetSelection( 0 ); break;
         case DIM_UNITS_MODE::MILS:      m_cbUnits->SetSelection( 1 ); break;
         case DIM_UNITS_MODE::MM:        m_cbUnits->SetSelection( 2 ); break;
         case DIM_UNITS_MODE::AUTOMATIC: m_cbUnits->SetSelection( 3 ); break;
@@ -396,7 +396,7 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( PCB_DIMENSION_BASE*
 
     switch( m_cbUnits->GetSelection() )
     {
-    case 0: aTarget->SetUnitsMode( DIM_UNITS_MODE::IN );        break;
+    case 0: aTarget->SetUnitsMode( DIM_UNITS_MODE::INCH );      break;
     case 1: aTarget->SetUnitsMode( DIM_UNITS_MODE::MILS );      break;
     case 2: aTarget->SetUnitsMode( DIM_UNITS_MODE::MM );        break;
     case 3: aTarget->SetUnitsMode( DIM_UNITS_MODE::AUTOMATIC ); break;

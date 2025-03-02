@@ -24,7 +24,7 @@
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_ODB::ODB_UNITS,
                               {
-                                      { JOB_EXPORT_PCB_ODB::ODB_UNITS::IN, "in" },
+                                      { JOB_EXPORT_PCB_ODB::ODB_UNITS::INCH, "in" },
                                       { JOB_EXPORT_PCB_ODB::ODB_UNITS::MM, "mm" },
                               } )
 

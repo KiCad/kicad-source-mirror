@@ -1636,7 +1636,7 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
 
     switch( aElem.textunit )
     {
-    case ALTIUM_UNIT::IN:   dimension->SetUnits( EDA_UNITS::IN );   break;
+    case ALTIUM_UNIT::INCH: dimension->SetUnits( EDA_UNITS::INCH );   break;
     case ALTIUM_UNIT::MILS: dimension->SetUnits( EDA_UNITS::MILS ); break;
     case ALTIUM_UNIT::MM:   dimension->SetUnits( EDA_UNITS::MM );   break;
     case ALTIUM_UNIT::CM:   dimension->SetUnits( EDA_UNITS::MM );   break;
@@ -1687,7 +1687,7 @@ void ALTIUM_PCB::HelperParseDimensions6Radial(const ADIMENSION6 &aElem)
 
     switch( aElem.textunit )
     {
-    case ALTIUM_UNIT::IN:   dimension->SetUnits( EDA_UNITS::IN );   break;
+    case ALTIUM_UNIT::INCH: dimension->SetUnits( EDA_UNITS::INCH );   break;
     case ALTIUM_UNIT::MILS: dimension->SetUnits( EDA_UNITS::MILS ); break;
     case ALTIUM_UNIT::MM:   dimension->SetUnits( EDA_UNITS::MM );   break;
     case ALTIUM_UNIT::CM:   dimension->SetUnits( EDA_UNITS::MM );   break;

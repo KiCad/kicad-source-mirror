@@ -124,34 +124,34 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataToWindow()
 
 bool PANEL_SETUP_CONSTRAINTS::TransferDataFromWindow()
 {
-    if( !m_minClearance.Validate( 0, 10, EDA_UNITS::IN ) )
+    if( !m_minClearance.Validate( 0, 10, EDA_UNITS::INCH ) )
         return false;
 
-    if( !m_minConn.Validate( 0, 10, EDA_UNITS::IN ) )
+    if( !m_minConn.Validate( 0, 10, EDA_UNITS::INCH ) )
         return false;
 
-    if( !m_trackMinWidth.Validate( 0, 10, EDA_UNITS::IN ) )
+    if( !m_trackMinWidth.Validate( 0, 10, EDA_UNITS::INCH ) )
         return false;
 
-    if( !m_viaMinAnnulus.Validate( 0, 10, EDA_UNITS::IN ) )
+    if( !m_viaMinAnnulus.Validate( 0, 10, EDA_UNITS::INCH ) )
         return false;
 
-    if( !m_viaMinSize.Validate( 0, 10, EDA_UNITS::IN ) )
+    if( !m_viaMinSize.Validate( 0, 10, EDA_UNITS::INCH ) )
         return false;
 
-    if( !m_holeClearance.Validate( 0, 10, EDA_UNITS::IN ) )
+    if( !m_holeClearance.Validate( 0, 10, EDA_UNITS::INCH ) )
         return false;
 
-    if( !m_edgeClearance.Validate( 0, 10, EDA_UNITS::IN ) )
+    if( !m_edgeClearance.Validate( 0, 10, EDA_UNITS::INCH ) )
         return false;
 
-    if( !m_minGrooveWidth.Validate( 0, 10, EDA_UNITS::IN ) )
+    if( !m_minGrooveWidth.Validate( 0, 10, EDA_UNITS::INCH ) )
         return false;
 
     if( !m_throughHoleMin.Validate( 2, 1000, EDA_UNITS::MILS ) )   // #107 to 1 inch
         return false;
 
-    if( !m_holeToHoleMin.Validate( 0, 10, EDA_UNITS::IN ) )
+    if( !m_holeToHoleMin.Validate( 0, 10, EDA_UNITS::INCH ) )
         return false;
 
     // These are all stored in project file, not board, so no need for OnModify()

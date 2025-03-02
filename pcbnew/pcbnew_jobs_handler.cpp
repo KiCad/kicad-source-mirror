@@ -384,7 +384,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
         case JOB_EXPORT_PCB_3D::VRML_UNITS::MM:     scale = 1.0;         break;
         case JOB_EXPORT_PCB_3D::VRML_UNITS::METERS: scale = 0.001;       break;
         case JOB_EXPORT_PCB_3D::VRML_UNITS::TENTHS: scale = 10.0 / 25.4; break;
-        case JOB_EXPORT_PCB_3D::VRML_UNITS::IN:     scale = 1.0 / 25.4;  break;
+        case JOB_EXPORT_PCB_3D::VRML_UNITS::INCH:   scale = 1.0 / 25.4;  break;
         }
 
         EXPORTER_VRML vrmlExporter( brd );
@@ -1315,7 +1315,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
 
         DRILL_PRECISION precision;
 
-        if( aDrillJob->m_drillUnits == JOB_EXPORT_PCB_DRILL::DRILL_UNITS::IN )
+        if( aDrillJob->m_drillUnits == JOB_EXPORT_PCB_DRILL::DRILL_UNITS::INCH )
             precision = precisionListForInches;
         else
             precision = precisionListForMetric;
@@ -1804,7 +1804,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
 
     switch( drcJob->m_units )
     {
-    case JOB_PCB_DRC::UNITS::IN:   units = EDA_UNITS::IN;   break;
+    case JOB_PCB_DRC::UNITS::INCH: units = EDA_UNITS::INCH;   break;
     case JOB_PCB_DRC::UNITS::MILS: units = EDA_UNITS::MILS; break;
     case JOB_PCB_DRC::UNITS::MM:   units = EDA_UNITS::MM;   break;
     default:                       units = EDA_UNITS::MM;   break;
