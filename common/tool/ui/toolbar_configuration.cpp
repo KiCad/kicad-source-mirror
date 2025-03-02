@@ -53,7 +53,7 @@ void to_json( nlohmann::json& aJson, const TOOLBAR_ITEM& aItem )
         aJson["name"] = aItem.m_ActionName;
         break;
 
-    case TOOLBAR_ITEM_TYPE::GROUP:
+    case TOOLBAR_ITEM_TYPE::TB_GROUP:
         aJson["group_name"] = aItem.m_GroupName;
 
         nlohmann::json grpItems = nlohmann::json::array();
@@ -106,7 +106,7 @@ void from_json( const nlohmann::json& aJson, TOOLBAR_ITEM& aItem )
 
         break;
 
-    case TOOLBAR_ITEM_TYPE::GROUP:
+    case TOOLBAR_ITEM_TYPE::TB_GROUP:
         if( aJson.contains( "group_name" ) )
             aItem.m_GroupName = aJson["group_name"].get<wxString>();
 

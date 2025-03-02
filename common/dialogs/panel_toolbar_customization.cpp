@@ -72,7 +72,7 @@ public:
         m_name( aName )
     {
         wxASSERT( aType == TOOLBAR_ITEM_TYPE::CONTROL
-                  || aType == TOOLBAR_ITEM_TYPE::GROUP );
+                  || aType == TOOLBAR_ITEM_TYPE::TB_GROUP );
     }
 
     TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE aType, TOOL_ACTION* aAction ) :
@@ -286,7 +286,7 @@ std::optional<TOOLBAR_CONFIGURATION> PANEL_TOOLBAR_CUSTOMIZATION::parseToolbarTr
             config.AppendAction( *( tbData->GetAction() ) );
             break;
 
-        case TOOLBAR_ITEM_TYPE::GROUP:
+        case TOOLBAR_ITEM_TYPE::TB_GROUP:
             TOOLBAR_GROUP_CONFIG grpConfig( tbData->GetName() );
 
             if( m_toolbarTree->ItemHasChildren( mainId ) )
@@ -304,7 +304,7 @@ std::optional<TOOLBAR_CONFIGURATION> PANEL_TOOLBAR_CUSTOMIZATION::parseToolbarTr
 
                     switch( childTbData->GetType() )
                     {
-                    case TOOLBAR_ITEM_TYPE::GROUP:
+                    case TOOLBAR_ITEM_TYPE::TB_GROUP:
                     case TOOLBAR_ITEM_TYPE::SPACER:
                     case TOOLBAR_ITEM_TYPE::SEPARATOR:
                     case TOOLBAR_ITEM_TYPE::CONTROL:
@@ -408,10 +408,10 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateToolbarTree()
             break;
             }
 
-        case TOOLBAR_ITEM_TYPE::GROUP:
+        case TOOLBAR_ITEM_TYPE::TB_GROUP:
             {
             // Add a group of items to the toolbar
-            TOOLBAR_TREE_ITEM_DATA* groupTreeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE::GROUP );
+            TOOLBAR_TREE_ITEM_DATA* groupTreeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE::TB_GROUP );
             groupTreeItem->SetName( item.m_GroupName );
 
             wxTreeItemId groupId = m_toolbarTree->AppendItem( root, item.m_GroupName, -1, -1,
@@ -539,7 +539,7 @@ void PANEL_TOOLBAR_CUSTOMIZATION::populateActions()
 
 void PANEL_TOOLBAR_CUSTOMIZATION::onGroupPress( wxCommandEvent& aEvent )
 {
-    TOOLBAR_TREE_ITEM_DATA* treeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE::GROUP,
+    TOOLBAR_TREE_ITEM_DATA* treeItem = new TOOLBAR_TREE_ITEM_DATA( TOOLBAR_ITEM_TYPE::TB_GROUP,
                                                                    _( "Group" ) );
 
     wxTreeItemId newItem;
@@ -754,7 +754,7 @@ void PANEL_TOOLBAR_CUSTOMIZATION::onBtnAddAction( wxCommandEvent& event )
         TOOLBAR_TREE_ITEM_DATA* data =
                 dynamic_cast<TOOLBAR_TREE_ITEM_DATA*>( m_toolbarTree->GetItemData( selItem ) );
 
-        if( data && data->GetType() == TOOLBAR_ITEM_TYPE::GROUP )
+        if( data && data->GetType() == TOOLBAR_ITEM_TYPE::TB_GROUP )
         {
             // Insert into the end of the group
             newItem = m_toolbarTree->AppendItem( selItem, label, imgIdx, -1, toolTreeItem );
@@ -803,7 +803,7 @@ void PANEL_TOOLBAR_CUSTOMIZATION::onTreeBeginLabelEdit( wxTreeEvent& event )
             event.Veto();
             break;
 
-        case TOOLBAR_ITEM_TYPE::GROUP:
+        case TOOLBAR_ITEM_TYPE::TB_GROUP:
         case TOOLBAR_ITEM_TYPE::SPACER:
             // Do nothing here
             break;

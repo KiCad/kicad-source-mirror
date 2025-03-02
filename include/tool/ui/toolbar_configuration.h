@@ -36,7 +36,7 @@
 enum class TOOLBAR_ITEM_TYPE
 {
     TOOL,
-    GROUP,
+    TB_GROUP,
     SPACER,
     CONTROL,
     SEPARATOR
@@ -156,7 +156,7 @@ public:
 
     TOOLBAR_CONFIGURATION& AppendGroup( const TOOLBAR_GROUP_CONFIG& aGroup )
     {
-        TOOLBAR_ITEM item( TOOLBAR_ITEM_TYPE::GROUP );
+        TOOLBAR_ITEM item( TOOLBAR_ITEM_TYPE::TB_GROUP );
         item.m_GroupName = aGroup.GetName();
         item.m_GroupItems = aGroup.GetGroupItems();
 

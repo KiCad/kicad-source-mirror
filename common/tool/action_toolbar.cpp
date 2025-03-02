@@ -280,7 +280,7 @@ void ACTION_TOOLBAR::ApplyConfiguration( const TOOLBAR_CONFIGURATION& aConfig )
             AddSpacer( item.m_Size );
             break;
 
-        case TOOLBAR_ITEM_TYPE::GROUP:
+        case TOOLBAR_ITEM_TYPE::TB_GROUP:
             {
             // Add a group of items to the toolbar
             std::vector<const TOOL_ACTION*> tools;
@@ -291,7 +291,7 @@ void ACTION_TOOLBAR::ApplyConfiguration( const TOOLBAR_CONFIGURATION& aConfig )
                 {
                 case TOOLBAR_ITEM_TYPE::SEPARATOR:
                 case TOOLBAR_ITEM_TYPE::SPACER:
-                case TOOLBAR_ITEM_TYPE::GROUP:
+                case TOOLBAR_ITEM_TYPE::TB_GROUP:
                 case TOOLBAR_ITEM_TYPE::CONTROL:
                     wxASSERT_MSG( false, "Unsupported group item type" );
                     continue;
