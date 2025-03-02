@@ -88,7 +88,7 @@ BOOST_FIXTURE_TEST_CASE( DRCCopperGraphicsTest, DRC_COPPER_GRAPHICS_TEST_FIXTURE
     {
         BOOST_CHECK_EQUAL( violations.size(), expected_err_cnt );
 
-        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::IN );
+        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCH );
 
         std::map<KIID, EDA_ITEM*> itemMap;
         m_board->FillItemMap( itemMap );

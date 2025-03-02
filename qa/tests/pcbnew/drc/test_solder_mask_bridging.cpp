@@ -80,7 +80,7 @@ BOOST_FIXTURE_TEST_CASE( DRCSolderMaskBridgingTest, DRC_SOLDER_MASK_BRIDGING_TES
     {
         BOOST_CHECK_EQUAL( violations.size(), expected_err_cnt );
 
-        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::IN );
+        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCH );
 
         std::map<KIID, EDA_ITEM*> itemMap;
         m_board->FillItemMap( itemMap );

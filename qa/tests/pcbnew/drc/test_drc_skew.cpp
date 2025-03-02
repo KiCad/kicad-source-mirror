@@ -94,7 +94,7 @@ BOOST_FIXTURE_TEST_CASE( DRCSkew, DRC_REGRESSION_TEST_FIXTURE )
         }
         else
         {
-            UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::IN );
+            UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCH );
 
             std::map<KIID, EDA_ITEM*> itemMap;
             m_board->FillItemMap( itemMap );

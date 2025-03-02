@@ -214,7 +214,7 @@ BOOST_DATA_TEST_CASE_F( ZONE_FILL_TEST_FIXTURE, RegressionZoneFillTests,
     }
     else
     {
-        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::IN );
+        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCH );
 
         std::map<KIID, EDA_ITEM*> itemMap;
         m_board->FillItemMap( itemMap );
@@ -261,7 +261,7 @@ BOOST_DATA_TEST_CASE_F( ZONE_FILL_TEST_FIXTURE, RegressionSliverZoneFillTests,
     }
     else
     {
-        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::IN );
+        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCH );
 
         std::map<KIID, EDA_ITEM*> itemMap;
         m_board->FillItemMap( itemMap );
