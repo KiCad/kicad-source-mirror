@@ -205,7 +205,7 @@
                           <property name="permission">protected</property>
                           <object class="sizeritem" expanded="true">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND</property>
+                            <property name="flag">wxEXPAND|wxBOTTOM</property>
                             <property name="proportion">0</property>
                             <object class="wxGridBagSizer" expanded="false">
                               <property name="empty_cell_size"></property>
@@ -1016,7 +1016,7 @@
                             </object>
                           </object>
                           <object class="sizeritem" expanded="false">
-                            <property name="border">12</property>
+                            <property name="border">7</property>
                             <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
                             <property name="proportion">0</property>
                             <object class="wxStaticLine" expanded="false">
