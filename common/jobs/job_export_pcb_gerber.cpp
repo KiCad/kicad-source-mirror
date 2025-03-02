@@ -33,19 +33,13 @@ JOB_EXPORT_PCB_GERBER::JOB_EXPORT_PCB_GERBER( const std::string& aType ) :
 {
     m_plotDrawingSheet = false;
 
-    m_params.emplace_back( new JOB_PARAM<wxString>( "drawing_sheet",
-                                                    &m_drawingSheet,
-                                                    m_drawingSheet ) );
-    m_params.emplace_back( new JOB_PARAM<bool>( "plot_footprint_values",
-                                                &m_plotFootprintValues,
-                                                m_plotFootprintValues ) );
-
     m_params.emplace_back( new JOB_PARAM<bool>( "include_netlist_attributes",
                                                 &m_includeNetlistAttributes,
                                                 m_includeNetlistAttributes ) );
 
     m_params.emplace_back( new JOB_PARAM<bool>( "use_x2_format", &m_useX2Format, m_useX2Format ) );
-    m_params.emplace_back( new JOB_PARAM<bool>( "disable_aperture_macros", &m_disableApertureMacros,
+    m_params.emplace_back( new JOB_PARAM<bool>( "disable_aperture_macros",
+                                                &m_disableApertureMacros,
                                                 m_disableApertureMacros ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "use_protel_file_extension",
                                                 &m_useProtelFileExtension,

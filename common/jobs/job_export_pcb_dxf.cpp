@@ -43,9 +43,8 @@ JOB_EXPORT_PCB_DXF::JOB_EXPORT_PCB_DXF() :
 {
     m_plotDrawingSheet = false;
 
-    m_params.emplace_back(
-            new JOB_PARAM<bool>( "plot_footprint_values", &m_plotFootprintValues, m_plotFootprintValues ) );
-    m_params.emplace_back( new JOB_PARAM<bool>( "plot_graphic_items_using_contours", &m_plotGraphicItemsUsingContours,
+    m_params.emplace_back( new JOB_PARAM<bool>( "plot_graphic_items_using_contours",
+                                                &m_plotGraphicItemsUsingContours,
                                                 m_plotGraphicItemsUsingContours ) );
     m_params.emplace_back( new JOB_PARAM<DXF_UNITS>( "units", &m_dxfUnits, m_dxfUnits ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "polygon_mode", &m_polygonMode, m_polygonMode ) );
