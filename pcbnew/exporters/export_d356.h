@@ -58,7 +58,9 @@ public:
      * @param aPcb is the board to extract a netlist from
      * @param aParent will be used as the parent for any warning dialogs
      */
-    IPC356D_WRITER( BOARD* aPcb ) : m_pcb( aPcb ) {}
+    IPC356D_WRITER( BOARD* aPcb ) :
+            m_pcb( aPcb )
+    {}
 
     virtual ~IPC356D_WRITER() {}
 
