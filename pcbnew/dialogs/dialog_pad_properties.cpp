@@ -1119,7 +1119,6 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
                          m_previewPad->GetKeepTopBottom() );
 
     m_gbSizerHole->Show( hasHole );
-    m_staticline6->Show( hasHole );
 
     if( !hasHole )
     {
