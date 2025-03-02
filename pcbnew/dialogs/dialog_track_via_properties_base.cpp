@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -341,7 +341,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 
 	m_ViaTypeLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Via type:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaTypeLabel->Wrap( -1 );
-	gbSizer4->Add( m_ViaTypeLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	gbSizer4->Add( m_ViaTypeLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxString m_ViaTypeChoiceChoices[] = { _("Through"), _("Micro"), _("Blind/buried") };
 	int m_ViaTypeChoiceNChoices = sizeof( m_ViaTypeChoiceChoices ) / sizeof( wxString );
@@ -349,42 +349,42 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_ViaTypeChoice->SetSelection( 0 );
 	m_ViaTypeChoice->Enable( false );
 
-	gbSizer4->Add( m_ViaTypeChoice, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxEXPAND, 5 );
+	gbSizer4->Add( m_ViaTypeChoice, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_ViaStartLayerLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Start layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaStartLayerLabel->Wrap( -1 );
-	gbSizer4->Add( m_ViaStartLayerLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_LEFT|wxALL, 5 );
+	gbSizer4->Add( m_ViaStartLayerLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_ViaStartLayer = new PCB_LAYER_BOX_SELECTOR( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	gbSizer4->Add( m_ViaStartLayer, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxEXPAND, 5 );
+	gbSizer4->Add( m_ViaStartLayer, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_ViaEndLayerLabel1 = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("End layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaEndLayerLabel1->Wrap( -1 );
-	gbSizer4->Add( m_ViaEndLayerLabel1, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_LEFT|wxALL, 5 );
+	gbSizer4->Add( m_ViaEndLayerLabel1, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_ViaEndLayer = new PCB_LAYER_BOX_SELECTOR( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	gbSizer4->Add( m_ViaEndLayer, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxEXPAND, 5 );
+	gbSizer4->Add( m_ViaEndLayer, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_annularRingsLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Annular rings:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_annularRingsLabel->Wrap( -1 );
-	gbSizer4->Add( m_annularRingsLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_LEFT|wxALL, 5 );
+	gbSizer4->Add( m_annularRingsLabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	wxString m_annularRingsCtrlChoices[] = { _("All copper layers"), _("Start, end, and connected layers"), _("Connected layers only") };
 	int m_annularRingsCtrlNChoices = sizeof( m_annularRingsCtrlChoices ) / sizeof( wxString );
 	m_annularRingsCtrl = new wxChoice( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_annularRingsCtrlNChoices, m_annularRingsCtrlChoices, 0 );
 	m_annularRingsCtrl->SetSelection( 0 );
-	gbSizer4->Add( m_annularRingsCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxEXPAND, 5 );
+	gbSizer4->Add( m_annularRingsCtrl, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 4 );
 
 	m_protectionPresetsLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Protection features:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_protectionPresetsLabel->Wrap( -1 );
-	gbSizer4->Add( m_protectionPresetsLabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_LEFT|wxALL, 5 );
+	gbSizer4->Add( m_protectionPresetsLabel, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	wxArrayString m_protectionFeaturesChoices;
 	m_protectionFeatures = new wxChoice( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_protectionFeaturesChoices, 0 );
 	m_protectionFeatures->SetSelection( 0 );
 	m_protectionFeatures->SetToolTip( _("Select which protection feature according to IPC-4761 the via should have.") );
 
-	gbSizer4->Add( m_protectionFeatures, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxEXPAND, 5 );
+	gbSizer4->Add( m_protectionFeatures, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 4 );
 
 
 	gbSizer4->AddGrowableCol( 1 );
