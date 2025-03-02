@@ -235,6 +235,9 @@ std::pair<std::set<wxString>,std::set<wxString>> KIGIT_COMMON::GetDifferentFiles
         std::set<wxString> modified_set;
         git_revwalk* walker = nullptr;
 
+        if( !m_repo )
+            return modified_set;
+
         if( git_revwalk_new( &walker, m_repo ) != GIT_OK )
         {
             wxLogTrace( traceGit, "Failed to create revwalker" );
@@ -303,6 +306,9 @@ std::pair<std::set<wxString>,std::set<wxString>> KIGIT_COMMON::GetDifferentFiles
             git_diff*        diff;
             git_diff_options diff_opts;
             git_diff_init_options( &diff_opts, GIT_DIFF_OPTIONS_VERSION );
+
+            if( !diff_opts.flags || !m_repo || !parent_tree || !tree )
+                continue;
 
             if( git_diff_tree_to_tree( &diff, m_repo, parent_tree, tree, &diff_opts ) == GIT_OK )
             {
