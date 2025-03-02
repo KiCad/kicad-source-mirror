@@ -597,18 +597,28 @@ void PAD::BuildEffectiveShapes() const
     m_effectiveBoundingBox = BOX2I();
 
     Padstack().ForEachUniqueLayer(
-        [&]( PCB_LAYER_ID aLayer )
-        {
-            const SHAPE_COMPOUND& layerShape = buildEffectiveShape( aLayer );
-            m_effectiveBoundingBox.Merge( layerShape.BBox() );
-        } );
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                const SHAPE_COMPOUND& layerShape = buildEffectiveShape( aLayer );
+                m_effectiveBoundingBox.Merge( layerShape.BBox() );
+            } );
 
     // Hole shape
     m_effectiveHoleShape = nullptr;
 
     VECTOR2I half_size = m_padStack.Drill().size / 2;
-    int      half_width = std::min( half_size.x, half_size.y );
-    VECTOR2I half_len( half_size.x - half_width, half_size.y - half_width );
+    int      half_width;
+    VECTOR2I half_len;
+
+    if( m_padStack.Drill().shape == PAD_DRILL_SHAPE::CIRCLE )
+    {
+        half_width = half_size.x;
+    }
+    else
+    {
+        half_width = std::min( half_size.x, half_size.y );
+        half_len = VECTOR2I( half_size.x - half_width, half_size.y - half_width );
+    }
 
     RotatePoint( half_len, GetOrientation() );
 
