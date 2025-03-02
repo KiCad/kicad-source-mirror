@@ -332,36 +332,28 @@ COLOR4D SCH_PAINTER::getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDr
             if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND
                 || aLayer == LAYER_SHAPES_BACKGROUND )
             {
-                if( !isSymbolChild || shape->GetFillColor() != COLOR4D::UNSPECIFIED )
+                if( shape->GetFillMode() == FILL_T::FILLED_SHAPE )
+                    color = shape->GetStroke().GetColor();
+                else if( shape->GetFillMode() == FILL_T::FILLED_WITH_COLOR )
                     color = shape->GetFillColor();
+                else if( shape->GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
+                    color = m_schSettings.GetLayerColor( LAYER_DEVICE_BACKGROUND );
 
-                if( isSymbolChild )
+                // A filled shape means filled; if they didn't specify a fill colour then use
+                // the border colour.
+                if( shape->GetFillMode() != FILL_T::NO_FILL && color == COLOR4D::UNSPECIFIED )
                 {
-                    if( shape->GetFillMode() == FILL_T::FILLED_SHAPE )
-                        color = shape->GetStroke().GetColor();
-                    else if( shape->GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
-                        color = m_schSettings.GetLayerColor( LAYER_DEVICE_BACKGROUND );
+                    if( aItem->Type() == SCH_RULE_AREA_T )
+                        color = m_schSettings.GetLayerColor( LAYER_RULE_AREAS );
+                    else if( isSymbolChild )
+                        color = m_schSettings.GetLayerColor( LAYER_DEVICE );
+                    else
+                        color = m_schSettings.GetLayerColor( LAYER_NOTES );
                 }
             }
             else
             {
-                if( !isSymbolChild || shape->GetStroke().GetColor() != COLOR4D::UNSPECIFIED )
-                    color = shape->GetStroke().GetColor();
-            }
-
-            // A filled shape means filled; if they didn't specify a fill colour then use the
-            // border colour.
-            if( color == COLOR4D::UNSPECIFIED )
-            {
-                if( aItem->Type() == SCH_RULE_AREA_T )
-                {
-                    color = m_schSettings.GetLayerColor( LAYER_RULE_AREAS );
-                }
-                else
-                {
-                    color = m_schSettings.GetLayerColor( isSymbolChild ? LAYER_DEVICE
-                                                                       : LAYER_NOTES );
-                }
+                color = shape->GetStroke().GetColor();
             }
         }
         else if( aItem->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
@@ -386,6 +378,29 @@ COLOR4D SCH_PAINTER::getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDr
         {
             if( !isSymbolChild || otherTextItem->GetTextColor() != COLOR4D::UNSPECIFIED )
                 color = otherTextItem->GetTextColor();
+        }
+    }
+    else  /* overrideItemColors */
+    {
+        // If we ARE overriding the item colors, what do we do with non-item-color fills?
+        // There are two theories: we should leave them untouched, or we should drop them entirely.
+        // We currently implment the first.
+        if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND
+            || aLayer == LAYER_SHAPES_BACKGROUND || aLayer == LAYER_SHEET_BACKGROUND )
+        {
+            if( aItem->Type() == SCH_SHAPE_T || aItem->Type() == SCH_RULE_AREA_T )
+            {
+                const SCH_SHAPE* shape = static_cast<const SCH_SHAPE*>( aItem );
+
+                if( shape->GetFillMode() == FILL_T::FILLED_WITH_COLOR )
+                    color = shape->GetFillColor();
+            }
+            else if( aItem->Type() == SCH_SHEET_T )
+            {
+                const SCH_SHEET* sheet = static_cast<const SCH_SHEET*>( aItem );
+
+                color = sheet->GetBackgroundColor();
+            }
         }
     }
 
