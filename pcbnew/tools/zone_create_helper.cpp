@@ -95,6 +95,7 @@ std::unique_ptr<ZONE> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
     // Get the current default settings for zones
     ZONE_SETTINGS         zoneInfo = board->GetDesignSettings().GetDefaultZoneSettings();
     zoneInfo.m_Layers.reset().set( m_params.m_layer );  // TODO(JE) multilayer defaults?
+    zoneInfo.m_layerProperties.clear();                 // Do not copy over layer properties
     zoneInfo.m_NetcodeSelection = highlightedNets.empty() ? -1 : *highlightedNets.begin();
     zoneInfo.SetIsRuleArea( m_params.m_keepout );
 

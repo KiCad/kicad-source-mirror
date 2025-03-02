@@ -1022,6 +1022,12 @@
 			(thermal_gap 0.762)
 			(thermal_bridge_width 0.508)
 		)
+		(property
+			(layer "B.Cu")
+			(hatch_position
+				(xy 1 1)
+			)
+		)
 		(polygon
 			(pts
 				(xy 232.833 116.922) (xy 232.833 38.436) (xy 133.9 38.436) (xy 133.9 116.922)

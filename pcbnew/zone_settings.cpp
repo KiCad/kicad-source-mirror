@@ -35,6 +35,11 @@
 #include <wx/dataview.h>
 #include <widgets/color_swatch.h>
 
+bool ZONE_LAYER_PROPERTIES::operator==( const ZONE_LAYER_PROPERTIES& aOther ) const
+{
+    return hatching_offset == aOther.hatching_offset;
+}
+
 ZONE_SETTINGS::ZONE_SETTINGS()
 {
     m_ZonePriority = 0;
@@ -124,6 +129,10 @@ bool ZONE_SETTINGS::operator==( const ZONE_SETTINGS& aOther ) const
     if( m_removeIslands               != aOther.m_removeIslands ) return false;
     if( m_minIslandArea               != aOther.m_minIslandArea ) return false;
 
+    if( !std::equal( std::begin( m_layerProperties ), std::end( m_layerProperties ),
+                     std::begin( aOther.m_layerProperties ) ) )
+        return false;
+
     // Currently, the teardrop area type is not really a ZONE_SETTINGS parameter,
     // but a ZONE parameter only.
     // However it can be used in dialogs
@@ -169,6 +178,11 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE& aSource )
     m_Locked                      = aSource.IsLocked();
     m_removeIslands               = aSource.GetIslandRemovalMode();
     m_minIslandArea               = aSource.GetMinIslandArea();
+
+    m_layerProperties.clear();
+
+    std::ranges::copy( aSource.LayerProperties(),
+                       std::inserter( m_layerProperties, std::end( m_layerProperties ) ) );
 
     // Currently, the teardrop area type is not really a ZONE_SETTINGS parameter,
     // but a ZONE parameter only.
@@ -220,7 +234,10 @@ void ZONE_SETTINGS::ExportSetting( ZONE& aTarget, bool aFullExport ) const
     if( aFullExport )
     {
         aTarget.SetAssignedPriority( m_ZonePriority );
+
+        aTarget.SetLayerProperties( m_layerProperties );
         aTarget.SetLayerSet( m_Layers );
+
         aTarget.SetZoneName( m_Name );
 
         if( !m_isRuleArea )
@@ -231,6 +248,56 @@ void ZONE_SETTINGS::ExportSetting( ZONE& aTarget, bool aFullExport ) const
     // using new parameters values
     aTarget.SetBorderDisplayStyle( m_ZoneBorderDisplayStyle,
                                    m_BorderHatchPitch, true );
+}
+
+void ZONE_SETTINGS::CopyFrom( const ZONE_SETTINGS& aOther, bool aCopyFull )
+{
+    // clang-format off
+    m_ZonePriority                = aOther.m_ZonePriority;
+    m_FillMode                    = aOther.m_FillMode;
+    m_ZoneClearance               = aOther.m_ZoneClearance;
+    m_ZoneMinThickness            = aOther.m_ZoneMinThickness;
+    m_HatchThickness              = aOther.m_HatchThickness;
+    m_HatchGap                    = aOther.m_HatchGap;
+    m_HatchOrientation            = aOther.m_HatchOrientation;
+    m_HatchSmoothingLevel         = aOther.m_HatchSmoothingLevel;
+    m_HatchSmoothingValue         = aOther.m_HatchSmoothingValue;
+    m_HatchBorderAlgorithm        = aOther.m_HatchBorderAlgorithm;
+    m_HatchHoleMinArea            = aOther.m_HatchHoleMinArea;
+    m_NetcodeSelection            = aOther.m_NetcodeSelection;
+    m_Name                        = aOther.m_Name;
+    m_ZoneBorderDisplayStyle      = aOther.m_ZoneBorderDisplayStyle;
+    m_BorderHatchPitch            = aOther.m_BorderHatchPitch;
+    m_ThermalReliefGap            = aOther.m_ThermalReliefGap;
+    m_ThermalReliefSpokeWidth     = aOther.m_ThermalReliefSpokeWidth;
+    m_padConnection               = aOther.m_padConnection;
+    m_cornerSmoothingType         = aOther.m_cornerSmoothingType;
+    m_cornerRadius                = aOther.m_cornerRadius;
+    m_isRuleArea                  = aOther.m_isRuleArea;
+    m_ruleAreaPlacementEnabled    = aOther.m_ruleAreaPlacementEnabled;
+    m_ruleAreaPlacementSourceType = aOther.m_ruleAreaPlacementSourceType;
+    m_ruleAreaPlacementSource     = aOther.m_ruleAreaPlacementSource;
+    m_keepoutDoNotAllowCopperPour = aOther.m_keepoutDoNotAllowCopperPour;
+    m_keepoutDoNotAllowVias       = aOther.m_keepoutDoNotAllowVias;
+    m_keepoutDoNotAllowTracks     = aOther.m_keepoutDoNotAllowTracks;
+    m_keepoutDoNotAllowPads       = aOther.m_keepoutDoNotAllowPads;
+    m_keepoutDoNotAllowFootprints = aOther.m_keepoutDoNotAllowFootprints;
+    m_Locked                      = aOther.m_Locked;
+    m_removeIslands               = aOther.m_removeIslands;
+    m_minIslandArea               = aOther.m_minIslandArea;
+    // clang-format on
+
+    if( aCopyFull )
+    {
+        m_layerProperties.clear();
+
+        std::ranges::copy( aOther.m_layerProperties,
+                           std::inserter( m_layerProperties, std::end( m_layerProperties ) ) );
+
+        m_TeardropType = aOther.m_TeardropType;
+
+        m_Layers = aOther.m_Layers;
+    }
 }
 
 

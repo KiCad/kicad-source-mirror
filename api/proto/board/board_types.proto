@@ -647,6 +647,14 @@ message ZoneFilledPolygons
   kiapi.common.types.PolySet shapes = 2;
 }
 
+message ZoneLayerProperties
+{
+  BoardLayer layer = 1;
+
+  kiapi.common.types.Vector2 hatching_offset = 2;
+}
+
+
 message Zone
 {
   kiapi.common.types.KIID id = 1;
@@ -673,6 +681,8 @@ message Zone
   ZoneBorderSettings border = 11;
 
   kiapi.common.types.LockedState locked = 12;
+
+  repeated ZoneLayerProperties layer_properties = 13;
 }
 
 // An aligned dimension is drawn parallel to the line segment between the start and end points

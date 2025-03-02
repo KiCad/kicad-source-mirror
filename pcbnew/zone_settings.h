@@ -30,6 +30,8 @@
 #ifndef ZONE_SETTINGS_H_
 #define ZONE_SETTINGS_H_
 
+#include <optional>
+#include <map>
 #include <layer_ids.h>
 #include <lset.h>
 #include <zones.h>
@@ -42,6 +44,13 @@ enum class ZONE_FILL_MODE
 {
     POLYGONS = 0,     // fill zone with polygons
     HATCH_PATTERN = 1 // fill zone using a grid pattern
+};
+
+struct ZONE_LAYER_PROPERTIES
+{
+    std::optional<VECTOR2I> hatching_offset;
+
+    bool operator==( const ZONE_LAYER_PROPERTIES& aOther ) const;
 };
 
 
@@ -120,6 +129,8 @@ public:
      */
     TEARDROP_TYPE   m_TeardropType;
 
+    std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES> m_layerProperties;
+
 private:
     int             m_cornerSmoothingType;   // Corner smoothing type
     unsigned int    m_cornerRadius;          // Corner chamfer distance / fillet radius
@@ -186,6 +197,19 @@ public:
      *      m_NetcodeSelection
      */
     void ExportSetting( ZONE& aTarget, bool aFullExport = true ) const;
+
+    /**
+     * Function CopyFrom
+     * copy settings from a different ZONE_SETTINGS object
+     * 
+     * @param aOther the other ZONE_SETTINGS
+     * @param aCopyFull if false: some parameters are not copied.
+     * This option is used specifically to copy zone settings from
+     * a zone to the default zone settings.
+     * There, the layer information is not needed, plus layer specific
+     * properties should not be overridden in the zone default settings.
+     */
+    void CopyFrom( const ZONE_SETTINGS& aOther, bool aCopyFull = true );
 
     void SetCornerSmoothingType( int aType) { m_cornerSmoothingType = aType; }
     int GetCornerSmoothingType() const { return m_cornerSmoothingType; }

@@ -260,7 +260,7 @@ void DIALOG_ZONE_MANAGER::OnOk( wxCommandEvent& aEvt )
     if( m_zoneInfo )
     {
         if( std::shared_ptr<ZONE_SETTINGS> zone = m_panelZoneProperties->GetZoneSettings() )
-            *m_zoneInfo = *zone;
+            m_zoneInfo->CopyFrom( *zone, false );
     }
 
     aEvt.Skip();

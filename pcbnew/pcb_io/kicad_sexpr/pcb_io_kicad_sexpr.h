@@ -33,6 +33,7 @@
 #include <string>
 #include <optional>
 #include <layer_ids.h>
+#include <zone_settings.h>
 #include <lset.h>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <wx_filename.h>
@@ -177,7 +178,8 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
 //----------------- Start of 10.0 development -----------------
 //#define SEXPR_BOARD_FILE_VERSION    20250210  // Knockout for textboxes
 //#define SEXPR_BOARD_FILE_VERSION      20250222  // Hatching for PCB shapes
-#define SEXPR_BOARD_FILE_VERSION      20250228  // ipc-4761 via protection features
+//#define SEXPR_BOARD_FILE_VERSION      20250228  // ipc-4761 via protection features
+#define SEXPR_BOARD_FILE_VERSION      20250302  // Zone Hatching Offsets
 
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
@@ -452,6 +454,9 @@ private:
     void format( const PCB_TRACK* aTrack ) const;
 
     void format( const ZONE* aZone ) const;
+
+    void format( const ZONE_LAYER_PROPERTIES& aZoneLayerProperties, int aNestLevel,
+                 PCB_LAYER_ID aLayer ) const;
 
     void formatPolyPts( const SHAPE_LINE_CHAIN& outline,
                         const FOOTPRINT* aParentFP = nullptr ) const;

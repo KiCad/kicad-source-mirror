@@ -606,6 +606,19 @@ void PCB_IO_KICAD_SEXPR::formatSetup( const BOARD* aBoard ) const
 
     KICAD_FORMAT::FormatBool( m_out, "filling", dsnSettings.m_FillVias );
 
+    if( !dsnSettings.GetDefaultZoneSettings().m_layerProperties.empty() )
+    {
+        m_out->Print( 0, " (zone_defaults" );
+
+        for( const auto& [layer, properties] :
+             dsnSettings.GetDefaultZoneSettings().m_layerProperties )
+        {
+            format( properties, 0, layer );
+        }
+
+        m_out->Print( 0, ")\n" );
+    }
+
     VECTOR2I origin = dsnSettings.GetAuxOrigin();
 
     if( origin != VECTOR2I( 0, 0 ) )
@@ -2658,6 +2671,11 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone ) const
 
     m_out->Print( ")" );
 
+    for( const auto& [layer, properties] : aZone->LayerProperties() )
+    {
+        format( properties, 0, layer );
+    }
+
     if( aZone->GetNumCorners() )
     {
         SHAPE_POLY_SET::POLYGON poly = aZone->Outline()->Polygon(0);
@@ -2691,6 +2709,26 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone ) const
     }
 
     m_out->Print( ")" );
+}
+
+
+void PCB_IO_KICAD_SEXPR::format( const ZONE_LAYER_PROPERTIES& aZoneLayerProperties, int aNestLevel,
+                                 PCB_LAYER_ID aLayer ) const
+{
+    // Do not store the layer properties if no value is actually set.
+    if( !aZoneLayerProperties.hatching_offset.has_value() )
+        return;
+
+    m_out->Print( aNestLevel, "(property\n" );
+    m_out->Print( aNestLevel, "(layer %s)\n", m_out->Quotew( LSET::Name( aLayer ) ).c_str() );
+
+    if( aZoneLayerProperties.hatching_offset.has_value() )
+    {
+        m_out->Print( aNestLevel, "(hatch_position (xy %s))",
+                      formatInternalUnits( aZoneLayerProperties.hatching_offset.value() ).c_str() );
+    }
+
+    m_out->Print( aNestLevel, ")\n" );
 }
 
 

@@ -171,6 +171,7 @@ hatch
 hatch_thickness
 hatch_gap
 hatch_orientation
+hatch_position
 hatch_smoothing_level
 hatch_smoothing_value
 hatch_border_algorithm
@@ -398,4 +399,5 @@ zone_clearance
 zone_connect
 zone_layer_connections
 zone_type
+zone_defaults
 zones

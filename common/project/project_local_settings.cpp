@@ -33,11 +33,13 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
         JSON_SETTINGS( aFilename, SETTINGS_LOC::PROJECT, projectLocalSettingsVersion,
                        /* aCreateIfMissing = */ true, /* aCreateIfDefault = */ false,
                        /* aWriteFile = */ true ),
+        // clang-format off: suggestion is less readable.
         m_ActiveLayer( UNDEFINED_LAYER ),
         m_ContrastModeDisplay( HIGH_CONTRAST_MODE::NORMAL ),
         m_NetColorMode( NET_COLOR_MODE::RATSNEST ),
         m_AutoTrackWidth( true ),
         m_ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_FILLED ),
+        m_PrototypeZoneFill( false ),
         m_TrackOpacity( 1.0 ),
         m_ViaOpacity( 1.0 ),
         m_PadOpacity( 1.0 ),
@@ -47,6 +49,7 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
         m_PcbSelectionFilter(),
         m_project( aProject ),
         m_wasMigrated( false )
+// clang-format on: suggestion is less readable.
 {
     // Keep old files around
     m_deleteLegacyAfterMigration = false;
@@ -200,6 +203,9 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                            &m_ZoneDisplayMode,
                            ZONE_DISPLAY_MODE::SHOW_FILLED, ZONE_DISPLAY_MODE::SHOW_FILLED,
                            ZONE_DISPLAY_MODE::SHOW_TRIANGULATION ) );
+
+    m_params.emplace_back(
+            new PARAM<bool>( "board.prototype_zone_fills", &m_PrototypeZoneFill, false ) );
 
     m_params.emplace_back( new PARAM<wxString>( "git.repo_username", &m_GitRepoUsername, "" ) );
 

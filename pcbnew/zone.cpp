@@ -42,6 +42,7 @@
 #include <trigo.h>
 #include <i18n_utility.h>
 #include <mutex>
+#include <magic_enum.hpp>
 
 #include <google/protobuf/any.pb.h>
 #include <api/api_enums.h>
@@ -84,7 +85,8 @@ ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent ) :
         SetIsRuleArea( true );        // Zones living in footprints have the rule area option
 
     if( aParent->GetBoard() )
-        aParent->GetBoard()->GetDesignSettings().GetDefaultZoneSettings().ExportSetting( *this );
+        aParent->GetBoard()->GetDesignSettings().GetDefaultZoneSettings().ExportSetting( *this,
+                                                                                         false );
     else
         ZONE_SETTINGS().ExportSetting( *this );
 
@@ -191,6 +193,11 @@ void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone )
                 m_insulatedIslands[layer] = aZone.m_insulatedIslands.at( layer );
             } );
 
+    m_layerProperties.clear();
+
+    std::ranges::copy( aZone.LayerProperties(),
+                       std::inserter( m_layerProperties, std::end( m_layerProperties ) ) );
+
     m_borderStyle             = aZone.m_borderStyle;
     m_borderHatchPitch        = aZone.m_borderHatchPitch;
     m_borderHatchLines        = aZone.m_borderHatchLines;
@@ -213,6 +220,7 @@ void ZONE::Serialize( google::protobuf::Any& aContainer ) const
 {
     using namespace kiapi::board;
     types::Zone zone;
+    using kiapi::common::PackVector2;
 
     zone.mutable_id()->set_value( m_Uuid.AsStdString() );
     PackLayerSet( *zone.mutable_layers(), GetLayerSet() );
@@ -292,6 +300,18 @@ void ZONE::Serialize( google::protobuf::Any& aContainer ) const
         kiapi::common::PackPolySet( *filledLayer->mutable_shapes(), *shape );
     }
 
+    for( const auto& [layer, properties] : m_layerProperties )
+    {
+        types::ZoneLayerProperties* layerProperties = zone.add_layer_properties();
+        layerProperties->set_layer( ToProtoEnum<PCB_LAYER_ID, types::BoardLayer>( layer ) );
+
+        if( properties.hatching_offset.has_value() )
+        {
+            PackVector2( *layerProperties->mutable_hatching_offset(),
+                         properties.hatching_offset.value() );
+        }
+    }
+
     zone.mutable_border()->set_style(
             ToProtoEnum<ZONE_BORDER_DISPLAY_STYLE, types::ZoneBorderStyle>( m_borderStyle ) );
     zone.mutable_border()->mutable_pitch()->set_value_nm( m_borderHatchPitch );
@@ -304,6 +324,7 @@ bool ZONE::Deserialize( const google::protobuf::Any& aContainer )
 {
     using namespace kiapi::board;
     types::Zone zone;
+    using kiapi::common::UnpackVector2;
 
     if( !aContainer.UnpackTo( &zone ) )
         return false;
@@ -366,6 +387,20 @@ bool ZONE::Deserialize( const google::protobuf::Any& aContainer )
 
         SetNetCode( cu.net().code().value() );
         m_teardropType = FromProtoEnum<TEARDROP_TYPE>( cu.teardrop().type() );
+
+        for( const auto& properties : zone.layer_properties() )
+        {
+            PCB_LAYER_ID layer = FromProtoEnum<PCB_LAYER_ID>( properties.layer() );
+
+            ZONE_LAYER_PROPERTIES layerProperties;
+
+            if( properties.has_hatching_offset() )
+            {
+                layerProperties.hatching_offset = UnpackVector2( properties.hatching_offset() );
+            }
+
+            m_layerProperties[layer] = layerProperties;
+        }
     }
 
     m_borderStyle = FromProtoEnum<ZONE_BORDER_DISPLAY_STYLE>( zone.border().style() );
@@ -510,9 +545,46 @@ void ZONE::SetLayerSet( const LSET& aLayerSet )
                     m_filledPolysHash[layer]  = {};
                     m_insulatedIslands[layer] = {};
                 } );
+
+        std::erase_if( m_layerProperties,
+                       [&]( const auto& item )
+                       {
+                           return !aLayerSet.Contains( item.first );
+                       } );
     }
 
     m_layerSet = aLayerSet;
+}
+
+
+const ZONE_LAYER_PROPERTIES& ZONE::LayerProperties( PCB_LAYER_ID aLayer ) const
+{
+    wxCHECK_MSG( m_layerProperties.contains( aLayer ), m_layerProperties.at( GetFirstLayer() ),
+                 "Attempt to retrieve properties for layer "
+                         + std::string( magic_enum::enum_name( aLayer ) )
+                         + " from a "
+                           "zone that does not contain it" );
+    return m_layerProperties.at( aLayer );
+}
+
+
+void ZONE::SetLayerProperties( const std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES>& aOther )
+{
+    m_layerProperties.clear();
+
+    std::ranges::copy( aOther, std::inserter( m_layerProperties, std::end( m_layerProperties ) ) );
+}
+
+
+const std::optional<VECTOR2I>& ZONE::HatchingOffset( PCB_LAYER_ID aLayer ) const
+{
+    wxCHECK_MSG( m_layerProperties.contains( aLayer ),
+                 m_layerProperties.at( GetFirstLayer() ).hatching_offset,
+                 "Attempt to retrieve properties for layer "
+                         + std::string( magic_enum::enum_name( aLayer ) )
+                         + " from a "
+                           "zone that does not contain it" );
+    return m_layerProperties.at( aLayer ).hatching_offset;
 }
 
 
@@ -963,7 +1035,18 @@ void ZONE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
         fillsCopy[oldLayer] = *shapePtr;
     }
 
+    std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES> layerPropertiesCopy;
+
+    std::ranges::copy( m_layerProperties,
+                       std::inserter( layerPropertiesCopy, std::end( layerPropertiesCopy ) ) );
+
     SetLayerSet( GetLayerSet().Flip( GetBoard()->GetCopperLayerCount() ) );
+
+    for( auto& [oldLayer, properties] : layerPropertiesCopy )
+    {
+        PCB_LAYER_ID newLayer = GetBoard()->FlipLayer( oldLayer );
+        m_layerProperties[newLayer] = properties;
+    }
 
     for( auto& [oldLayer, shape] : fillsCopy )
     {

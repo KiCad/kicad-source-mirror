@@ -27,6 +27,7 @@
  * @brief Pcbnew s-expression file format parser implementation.
  */
 
+#include "layer_ids.h"
 #include <cerrno>
 #include <charconv>
 #include <confirm.h>
@@ -2548,6 +2549,9 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
 
             break;
         }
+        case T_zone_defaults:
+            parseZoneDefaults( bds.GetDefaultZoneSettings() );
+            break;
 
         default:
             Unexpected( CurText() );
@@ -2562,6 +2566,70 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
         stackup.RemoveAll();
         stackup.BuildDefaultStackupList( &bds, m_board->GetCopperLayerCount() );
     }
+}
+
+
+void PCB_IO_KICAD_SEXPR_PARSER::parseZoneDefaults( ZONE_SETTINGS& aZoneSettings )
+{
+    T token;
+
+    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+        {
+            Expecting( T_LEFT );
+        }
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_property:
+            parseZoneLayerProperty( aZoneSettings.m_layerProperties );
+            break;
+        default:
+            Unexpected( CurText() );
+        }
+    }
+}
+
+
+void PCB_IO_KICAD_SEXPR_PARSER::parseZoneLayerProperty(
+        std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES>& aProperties )
+{
+    T token;
+
+    PCB_LAYER_ID          layer = UNDEFINED_LAYER;
+    ZONE_LAYER_PROPERTIES properties;
+
+    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+        {
+            Expecting( T_LEFT );
+        }
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_layer:
+            layer = parseBoardItemLayer();
+            NeedRIGHT();
+            break;
+        case T_hatch_position:
+        {
+            properties.hatching_offset = parseXY();
+            NeedRIGHT();
+            break;
+        }
+        default:
+            Unexpected( CurText() );
+            break;
+        }
+    }
+
+    aProperties.emplace( layer, properties );
 }
 
 
@@ -6835,6 +6903,10 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
         case T_layers:  // keyword for zones that can live on a set of layers
             zone->SetLayerSet( parseBoardItemLayersAsMask() );
+            break;
+
+        case T_property:
+            parseZoneLayerProperty( zone->LayerProperties() );
             break;
 
         case T_tstamp:

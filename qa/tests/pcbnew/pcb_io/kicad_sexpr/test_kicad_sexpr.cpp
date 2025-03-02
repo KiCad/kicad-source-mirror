@@ -96,6 +96,7 @@ BOOST_AUTO_TEST_CASE( Issue19775_ZoneLayerWildcards )
         BOOST_CHECK( z->GetLayerSet().Contains( F_Cu ) && z->GetLayerSet().Contains( B_Cu ) );
         BOOST_CHECK( z->GetFilledPolysList( F_Cu )->TotalVertices() > 0 );
         BOOST_CHECK( z->GetFilledPolysList( B_Cu )->TotalVertices() > 0 );
+        BOOST_CHECK( z->LayerProperties().contains( F_Cu ) );
     }
 }
 

@@ -44,6 +44,12 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
     ZONE_SETTINGS zoneInfo = m_pcb->GetDesignSettings().GetDefaultZoneSettings();
     BOARD_COMMIT  commit( this );
 
+    // store default layer properties
+    std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES> layer_properties;
+
+    std::ranges::copy( zoneInfo.m_layerProperties,
+                       std::inserter( layer_properties, std::end( layer_properties ) ) );
+
     if( aZone->GetIsRuleArea() )
     {
         // edit a rule area on a copper layer
@@ -79,6 +85,11 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
 
     if( net )   // net == NULL should not occur
         aZone->SetNetCode( net->GetNetCode() );
+
+    // restore default layer properties
+    zoneInfo.m_layerProperties.clear();
+    std::ranges::copy( layer_properties, std::inserter( zoneInfo.m_layerProperties,
+                                                        std::end( zoneInfo.m_layerProperties ) ) );
 
     m_pcb->GetDesignSettings().SetDefaultZoneSettings( zoneInfo );
 

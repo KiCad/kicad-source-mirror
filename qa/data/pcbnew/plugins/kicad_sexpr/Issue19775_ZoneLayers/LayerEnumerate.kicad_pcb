@@ -148,6 +148,12 @@
 			(island_removal_mode 1)
 			(island_area_min 10)
 		)
+		(property
+			(layer "F.Cu")
+			(hatch_position
+				(xy 1 1)
+			)
+		)
 		(polygon
 			(pts
 				(xy 134 70.5) (xy 159.5 70.5) (xy 159.5 86.5) (xy 137 86.5)

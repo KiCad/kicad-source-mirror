@@ -50,6 +50,8 @@
 #include <thread_pool.h>
 #include <math/util.h>      // for KiROUND
 #include "zone_filler.h"
+#include "project.h"
+#include "project/project_local_settings.h"
 
 // Helper classes for connect_nearby_polys
 class RESULTS
@@ -878,6 +880,24 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
 
                 if( oldFillHashes[ { zone, layer } ] != zone->GetHashValue( layer ) )
                     outOfDate = true;
+            }
+        }
+
+        if( ( m_board->GetProject()
+              && m_board->GetProject()->GetLocalSettings().m_PrototypeZoneFill ) )
+        {
+            KIDIALOG dlg( aParent, _( "Prototype zone fill enabled. Disable setting and refill?" ),
+                          _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+            dlg.SetOKCancelLabels( _( "Disable and refill" ), _( "Continue without Refill" ) );
+            dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
+
+            if( dlg.ShowModal() == wxID_OK )
+            {
+                m_board->GetProject()->GetLocalSettings().m_PrototypeZoneFill = false;
+            }
+            else if( !outOfDate )
+            {
+                return false;
             }
         }
 
@@ -1812,7 +1832,9 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
      * Process the hatch pattern (note that we do this while deflated)
      */
 
-    if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
+    if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN
+        && ( !m_board->GetProject()
+             || !m_board->GetProject()->GetLocalSettings().m_PrototypeZoneFill ) )
     {
         if( !addHatchFillTypeOnZone( aZone, aLayer, aDebugLayer, aFillPolys ) )
             return false;
@@ -2379,31 +2401,53 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
     // Build holes
     SHAPE_POLY_SET holes;
 
-    for( int xx = 0; ; xx++ )
+    VECTOR2I offset_opt = VECTOR2I();
+    bool     zone_has_offset = false;
+
+    if( aZone->LayerProperties().contains( aLayer ) )
     {
-        int xpos = xx * gridsize;
+        zone_has_offset = aZone->HatchingOffset( aLayer ).has_value();
 
-        if( xpos > bbox.GetWidth() )
-            break;
+        offset_opt = aZone->HatchingOffset( aLayer ).value_or( VECTOR2I( 0, 0 ) );
+    }
 
-        for( int yy = 0; ; yy++ )
+    if( !zone_has_offset )
+    {
+        if( m_board->GetDesignSettings().GetDefaultZoneSettings().m_layerProperties.contains(
+                    aLayer ) )
         {
-            int ypos = yy * gridsize;
+            const ZONE_LAYER_PROPERTIES& properties =
+                    m_board->GetDesignSettings().GetDefaultZoneSettings().m_layerProperties.at(
+                            aLayer );
 
-            if( ypos > bbox.GetHeight() )
-                break;
+            offset_opt = properties.hatching_offset.value_or( VECTOR2I( 0, 0 ) );
+        }
+    }
 
+
+    int x_offset = bbox.GetX() - ( bbox.GetX() ) % gridsize - gridsize;
+    int y_offset = bbox.GetY() - ( bbox.GetY() ) % gridsize - gridsize;
+
+
+    for( int xx = x_offset; xx <= bbox.GetRight(); xx += gridsize )
+    {
+        for( int yy = y_offset; yy <= bbox.GetBottom(); yy += gridsize )
+        {
             // Generate hole
             SHAPE_LINE_CHAIN hole( hole_base );
-            hole.Move( VECTOR2I( xpos, ypos ) );
+            hole.Move( VECTOR2I( xx, yy ) );
+
+            if( !aZone->GetHatchOrientation().IsZero() )
+            {
+                hole.Rotate( aZone->GetHatchOrientation() );
+            }
+
+            hole.Move( VECTOR2I( offset_opt.x % gridsize, offset_opt.y % gridsize ) );
+
             holes.AddOutline( hole );
         }
     }
 
-    holes.Move( bbox.GetPosition() );
-
-    if( !aZone->GetHatchOrientation().IsZero() )
-        holes.Rotate( aZone->GetHatchOrientation() );
 
     DUMP_POLYS_TO_COPPER_LAYER( holes, In10_Cu, wxT( "hatch-holes" ) );
 

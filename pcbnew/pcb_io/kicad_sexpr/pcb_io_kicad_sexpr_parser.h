@@ -303,6 +303,10 @@ private:
 
     void parseMargins( int& aLeft, int& aTop, int& aRight, int& aBottom );
 
+    void parseZoneDefaults( ZONE_SETTINGS& aZoneSettings );
+
+    void parseZoneLayerProperty( std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES>& aProperties );
+
     std::pair<wxString, wxString> parseBoardProperty();
 
     /**
