@@ -70,7 +70,7 @@ enum class DIM_TEXT_POSITION
  */
 enum class DIM_UNITS_MODE
 {
-    IN,
+    INCH,       // Do not use IN: it conflicts with a Windows header
     MILS,
     MM,
     AUTOMATIC

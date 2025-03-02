@@ -36,7 +36,7 @@ public:
     enum class ODB_UNITS
     {
         MM,
-        IN,
+        INCH,       // Do not use IN: it conflicts with a Windows header
     };
 
     enum class ODB_COMPRESSION

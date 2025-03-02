@@ -49,7 +49,7 @@ wxString KIGFX::PREVIEW::DimensionLabel( const wxString& prefix, double aVal,
     case EDA_UNITS::MM:       fmtStr = wxT( "%.3f" ); break;  // 1um
     case EDA_UNITS::CM:       fmtStr = wxT( "%.4f" ); break;  // 1um
     case EDA_UNITS::MILS:     fmtStr = wxT( "%.1f" ); break;  // 0.1mil
-    case EDA_UNITS::IN:       fmtStr = wxT( "%.4f" ); break;  // 0.1mil
+    case EDA_UNITS::INCH:     fmtStr = wxT( "%.4f" ); break;  // 0.1mil
     case EDA_UNITS::DEGREES:  fmtStr = wxT( "%.1f" ); break;  // 0.1deg
     case EDA_UNITS::PERCENT:  fmtStr = wxT( "%.1f" ); break;  // 0.1%
     case EDA_UNITS::UNSCALED: fmtStr = wxT( "%f" );   break;

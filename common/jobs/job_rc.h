@@ -32,7 +32,7 @@ public:
 
     enum class UNITS
     {
-        IN,
+        INCH,       // Do not use IN: it conflicts with a Windows header
         MM,
         MILS
     };

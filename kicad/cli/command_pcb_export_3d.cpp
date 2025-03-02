@@ -281,7 +281,7 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
         wxString units = From_UTF8( m_argParser.get<std::string>( ARG_VRML_UNITS ).c_str() );
 
         if( units == wxS( "in" ) )
-            step->m_vrmlUnits = JOB_EXPORT_PCB_3D::VRML_UNITS::IN;
+            step->m_vrmlUnits = JOB_EXPORT_PCB_3D::VRML_UNITS::INCH;
         else if( units == wxS( "mm" ) )
             step->m_vrmlUnits = JOB_EXPORT_PCB_3D::VRML_UNITS::MM;
         else if( units == wxS( "m" ) )

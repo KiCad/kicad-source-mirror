@@ -304,7 +304,7 @@ void PL_EDITOR_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::toggleGrid,        CHECK( cond.GridVisible() ) );
     mgr->SetConditions( ACTIONS::toggleCursorStyle, CHECK( cond.FullscreenCursor() ) );
     mgr->SetConditions( ACTIONS::millimetersUnits,  CHECK( cond.Units( EDA_UNITS::MM ) ) );
-    mgr->SetConditions( ACTIONS::inchesUnits,       CHECK( cond.Units( EDA_UNITS::IN ) ) );
+    mgr->SetConditions( ACTIONS::inchesUnits,       CHECK( cond.Units( EDA_UNITS::INCH ) ) );
     mgr->SetConditions( ACTIONS::milsUnits,         CHECK( cond.Units( EDA_UNITS::MILS ) ) );
 
     mgr->SetConditions( ACTIONS::cut,               ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
@@ -705,9 +705,9 @@ void PL_EDITOR_FRAME::DisplayGridMsg()
 
     switch( GetUserUnits() )
     {
-    case EDA_UNITS::IN: gridformatter = wxS( "grid %.3f" ); break;
-    case EDA_UNITS::MM: gridformatter = wxS( "grid %.4f" ); break;
-    default:            gridformatter = wxS( "grid %f" );   break;
+    case EDA_UNITS::INCH: gridformatter = wxS( "grid %.3f" ); break;
+    case EDA_UNITS::MM:   gridformatter = wxS( "grid %.4f" ); break;
+    default:              gridformatter = wxS( "grid %f" );   break;
     }
 
     double grid = EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, GetUserUnits(),
@@ -767,7 +767,7 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
 
     switch( GetUserUnits() )
     {
-    case EDA_UNITS::IN:       SetStatusText( _( "inches" ), 6 ); break;
+    case EDA_UNITS::INCH:     SetStatusText( _( "inches" ), 6 ); break;
     case EDA_UNITS::MILS:     SetStatusText( _( "mils" ), 6 );   break;
     case EDA_UNITS::MM:       SetStatusText( _( "mm" ), 6 );     break;
     case EDA_UNITS::UNSCALED: SetStatusText( wxEmptyString, 6 ); break;

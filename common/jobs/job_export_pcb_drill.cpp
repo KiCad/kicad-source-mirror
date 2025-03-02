@@ -36,7 +36,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_DRILL::DRILL_ORIGIN,
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_DRILL::DRILL_UNITS,
                               {
-                                    { JOB_EXPORT_PCB_DRILL::DRILL_UNITS::IN, "in" },
+                                    { JOB_EXPORT_PCB_DRILL::DRILL_UNITS::INCH, "in" },
                                     { JOB_EXPORT_PCB_DRILL::DRILL_UNITS::MM, "mm" },
                               } )
 
@@ -66,7 +66,7 @@ JOB_EXPORT_PCB_DRILL::JOB_EXPORT_PCB_DRILL() :
         m_excellonOvalDrillRoute( false ),
         m_format( DRILL_FORMAT::EXCELLON ),
         m_drillOrigin( DRILL_ORIGIN::ABS ),
-        m_drillUnits( DRILL_UNITS::IN ),
+        m_drillUnits( DRILL_UNITS::INCH ),
         m_zeroFormat( ZEROS_FORMAT::DECIMAL ),
         m_mapFormat( MAP_FORMAT::PDF ),
         m_gerberPrecision( 5 ),

@@ -448,7 +448,7 @@ static wxString ComboBoxUnits( EDA_UNITS aUnits, double aValue, bool aIncludeLab
     case EDA_UNITS::UNSCALED: format = wxT( "%.0f" ); break;
     case EDA_UNITS::MM:       format = wxT( "%.3f" ); break;
     case EDA_UNITS::MILS:     format = wxT( "%.2f" ); break;
-    case EDA_UNITS::IN:       format = wxT( "%.5f" ); break;
+    case EDA_UNITS::INCH:     format = wxT( "%.5f" ); break;
     }
 
     text.Printf( format, EDA_UNIT_UTILS::UI::ToUserUnit( pcbIUScale, aUnits, aValue ) );

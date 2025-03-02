@@ -84,7 +84,7 @@ void NUMERIC_EVALUATOR::SetDefaultUnits( EDA_UNITS aUnits )
     {
     case EDA_UNITS::MM:       m_defaultUnits = Unit::MM;      break;
     case EDA_UNITS::MILS:     m_defaultUnits = Unit::Mil;     break;
-    case EDA_UNITS::IN:       m_defaultUnits = Unit::Inch;    break;
+    case EDA_UNITS::INCH:     m_defaultUnits = Unit::Inch;    break;
     case EDA_UNITS::DEGREES:  m_defaultUnits = Unit::Degrees; break;
     case EDA_UNITS::UNSCALED: m_defaultUnits = Unit::SI;      break;
     default:                  m_defaultUnits = Unit::MM;      break;

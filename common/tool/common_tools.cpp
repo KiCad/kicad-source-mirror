@@ -50,7 +50,7 @@
 COMMON_TOOLS::COMMON_TOOLS() :
     TOOL_INTERACTIVE( "common.Control" ),
     m_frame( nullptr ),
-    m_imperialUnit( EDA_UNITS::IN ),
+    m_imperialUnit( EDA_UNITS::INCH ),
     m_metricUnit( EDA_UNITS::MM )
 {
 }

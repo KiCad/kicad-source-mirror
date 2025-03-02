@@ -141,7 +141,7 @@ void DXF_PLOTTER::SetUnits( DXF_UNITS aUnit )
         m_measurementDirective = 1;
         break;
 
-    case DXF_UNITS::IN:
+    case DXF_UNITS::INCH:
     default:
         m_unitScalingFactor = 0.0001;
         m_measurementDirective = 0;

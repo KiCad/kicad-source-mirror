@@ -320,7 +320,7 @@ void EDA_DRAW_FRAME::ToggleUserUnits()
     }
     else
     {
-        SetUserUnits( GetUserUnits() == EDA_UNITS::IN ? EDA_UNITS::MM : EDA_UNITS::IN );
+        SetUserUnits( GetUserUnits() == EDA_UNITS::INCH ? EDA_UNITS::MM : EDA_UNITS::INCH );
         unitsChangeRefresh();
 
         wxCommandEvent e( EDA_EVT_UNITS_CHANGED );
@@ -678,7 +678,7 @@ void EDA_DRAW_FRAME::DisplayUnitsMsg()
 
     switch( GetUserUnits() )
     {
-    case EDA_UNITS::IN:   msg = _( "inches" ); break;
+    case EDA_UNITS::INCH: msg = _( "inches" ); break;
     case EDA_UNITS::MILS: msg = _( "mils" );   break;
     case EDA_UNITS::MM:   msg = _( "mm" );     break;
     default:              msg = _( "Units" );  break;
@@ -1270,7 +1270,7 @@ void EDA_DRAW_FRAME::setupUnits( APP_SETTINGS_BASE* aCfg )
     {
     default:
     case EDA_UNITS::MM:   m_toolManager->RunAction( ACTIONS::millimetersUnits ); break;
-    case EDA_UNITS::IN:   m_toolManager->RunAction( ACTIONS::inchesUnits );      break;
+    case EDA_UNITS::INCH: m_toolManager->RunAction( ACTIONS::inchesUnits );      break;
     case EDA_UNITS::MILS: m_toolManager->RunAction( ACTIONS::milsUnits );        break;
     }
 }

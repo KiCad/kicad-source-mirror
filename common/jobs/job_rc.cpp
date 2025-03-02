@@ -22,7 +22,7 @@
 
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_RC::UNITS, {
-                                                     { JOB_RC::UNITS::IN,   "in" },
+                                                     { JOB_RC::UNITS::INCH, "in" },
                                                      { JOB_RC::UNITS::MM,   "mm" },
                                                      { JOB_RC::UNITS::MILS, "mils" },
                                                   } )
