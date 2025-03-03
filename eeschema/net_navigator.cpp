@@ -379,6 +379,82 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
 }
 
 
+const SCH_ITEM* SCH_EDIT_FRAME::SelectNextPrevNetNavigatorItem( bool aNext )
+{
+    wxCHECK( m_netNavigator, nullptr );
+
+    wxTreeItemId id = m_netNavigator->GetSelection();
+
+    if( !id.IsOk() )
+        return nullptr;
+
+    wxTreeItemId nextId;
+    wxTreeItemId netNode = m_netNavigator->GetRootItem();
+
+    std::vector<wxTreeItemId> netItems;
+    std::list<wxTreeItemId> itemList;
+    itemList.push_back( netNode );
+
+    while( !itemList.empty() )
+    {
+        wxTreeItemId current = itemList.front();
+        itemList.pop_front();
+
+        wxTreeItemIdValue cookie;
+        wxTreeItemId      child = m_netNavigator->GetFirstChild( current, cookie );
+
+        while( child.IsOk() )
+        {
+            if( m_netNavigator->ItemHasChildren( child ) )
+                itemList.push_back( child );
+            else
+                netItems.push_back( child );
+
+            child = m_netNavigator->GetNextSibling( child );
+        }
+    }
+
+    // Locate current item and move forward or backward with wrap
+    auto it = std::find( netItems.begin(), netItems.end(), id );
+
+    if( it != netItems.end() )
+    {
+        if( aNext )
+        {
+            ++it;
+            if( it == netItems.end() )
+                it = netItems.begin();
+        }
+        else
+        {
+            if( it == netItems.begin() )
+                it = netItems.end();
+            --it;
+        }
+        nextId = *it;
+    }
+
+    if( nextId.IsOk() )
+    {
+        if( !m_netNavigator->IsVisible( nextId ) )
+        {
+            m_netNavigator->CollapseAll();
+            m_netNavigator->EnsureVisible( nextId );
+        }
+
+        m_netNavigator->SelectItem( nextId );
+
+        NET_NAVIGATOR_ITEM_DATA* data = static_cast<NET_NAVIGATOR_ITEM_DATA*>(
+            m_netNavigator->GetItemData( nextId ) );
+
+        if( data && data->GetItem() )
+            return data->GetItem();
+    }
+
+    return nullptr;
+}
+
+
 void SCH_EDIT_FRAME::SelectNetNavigatorItem( const NET_NAVIGATOR_ITEM_DATA* aSelection )
 {
     wxCHECK( m_netNavigator, /* void */ );

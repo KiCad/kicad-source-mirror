@@ -606,7 +606,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 schframe->FocusOnItem( nullptr );
 
             EE_COLLECTOR collector;
-            
+
             if( m_selection.GetSize() == 1 && dynamic_cast<SCH_TABLE*>( m_selection.GetItem( 0 ) ) )
             {
                 m_toolMgr->RunAction( EE_ACTIONS::move );
@@ -2855,6 +2855,50 @@ bool EE_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 }
 
 
+int EE_SELECTION_TOOL::SelectNext( const TOOL_EVENT& aEvent )
+{
+    SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+
+    if( !editFrame || !editFrame->GetNetNavigator() || m_selection.Size() == 0 )
+        return 0;
+
+    if( !m_selection.Front()->IsBrightened() )
+        return 0;
+
+    const SCH_ITEM* item = editFrame->SelectNextPrevNetNavigatorItem( true );
+
+    if( item )
+    {
+        select( const_cast<SCH_ITEM*>( item ) );
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+    }
+
+    return 0;
+}
+
+
+int EE_SELECTION_TOOL::SelectPrevious( const TOOL_EVENT& aEvent )
+{
+    SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+
+    if( !editFrame || !editFrame->GetNetNavigator() || m_selection.Size() == 0 )
+        return 0;
+
+    if( !m_selection.Front()->IsBrightened() )
+        return 0;
+
+    const SCH_ITEM* item = editFrame->SelectNextPrevNetNavigatorItem( false );
+
+    if( item )
+    {
+        select( const_cast<SCH_ITEM*>( item ) );
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+    }
+
+    return 0;
+}
+
+
 void EE_SELECTION_TOOL::setTransitions()
 {
     Go( &EE_SELECTION_TOOL::UpdateMenu,          ACTIONS::updateMenu.MakeEvent() );
@@ -2876,6 +2920,9 @@ void EE_SELECTION_TOOL::setTransitions()
 
     Go( &EE_SELECTION_TOOL::SelectAll,           EE_ACTIONS::selectAll.MakeEvent() );
     Go( &EE_SELECTION_TOOL::UnselectAll,         EE_ACTIONS::unselectAll.MakeEvent() );
+
+    Go( &EE_SELECTION_TOOL::SelectNext,          EE_ACTIONS::nextNetItem.MakeEvent() );
+    Go( &EE_SELECTION_TOOL::SelectPrevious,      EE_ACTIONS::previousNetItem.MakeEvent() );
 
     Go( &EE_SELECTION_TOOL::disambiguateCursor,  EVENTS::DisambiguatePoint );
 }

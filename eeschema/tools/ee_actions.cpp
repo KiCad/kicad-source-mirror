@@ -1108,6 +1108,20 @@ TOOL_ACTION EE_ACTIONS::remapSymbols( TOOL_ACTION_ARGS()
         .Tooltip( _( "Remap library symbol references in legacy schematics to the symbol library table" ) )
         .Icon( BITMAPS::rescue ) );
 
+TOOL_ACTION EE_ACTIONS::nextNetItem( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.nextNetItem" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( WXK_TAB )
+        .FriendlyName( _( "Next Net Item" ) )
+        .Tooltip( _( "Select next item on the current net" ) ) );
+
+TOOL_ACTION EE_ACTIONS::previousNetItem( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.previousNetItem" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + static_cast<int>( WXK_TAB ) )
+        .FriendlyName( _( "Previous Net Item" ) )
+        .Tooltip( _( "Select previous item on the current net" ) ) );
+
 TOOL_ACTION EE_ACTIONS::drawSheetOnClipboard( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.drawSheetOnClipboard" )
         .Scope( AS_GLOBAL )
