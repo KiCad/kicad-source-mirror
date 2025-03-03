@@ -131,6 +131,9 @@ public:
 
     bool operator==( const LIBRARY_TABLE& aOther ) const;
 
+    /// Builds a new row that is suitable for this table (does not insert it)
+    LIBRARY_TABLE_ROW MakeRow() const;
+
     const wxString& Path() const { return m_path; }
     void SetPath( const wxString &aPath ) { m_path = aPath; }
 

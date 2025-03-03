@@ -100,7 +100,7 @@ protected:
 
     LIBRARY_TABLE_ROW makeNewRow() override
     {
-        return LIBRARY_TABLE_ROW();
+        return m_table.MakeRow();
     }
 
     LIBRARY_TABLE_ROWS_ITER begin() override { return m_table.Rows().begin(); }

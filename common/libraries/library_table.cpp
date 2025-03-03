@@ -192,3 +192,14 @@ void LIBRARY_TABLE::Format( OUTPUTFORMATTER* aOutput ) const
 
     self.Format( aOutput );
 }
+
+
+LIBRARY_TABLE_ROW LIBRARY_TABLE::MakeRow() const
+{
+    LIBRARY_TABLE_ROW row = {};
+
+    row.SetScope( m_scope );
+    row.SetOk();
+
+    return row;
+}
