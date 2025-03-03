@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-01 18:34+0300\n"
-"PO-Revision-Date: 2025-03-02 06:36+0000\n"
+"PO-Revision-Date: 2025-03-03 08:43+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -3744,9 +3744,8 @@ msgid "Password:"
 msgstr "Lösenord:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:38
-#, fuzzy
 msgid "Location:"
-msgstr "Plats"
+msgstr "Plats:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:45
 msgid "Connection type:"
