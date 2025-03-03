@@ -151,6 +151,7 @@ bool SYMBOL_EDITOR_CONTROL::Init()
 
         ctxMenu.AddSeparator( 100 );
         ctxMenu.AddItem( EE_ACTIONS::importSymbol,        libInferredCondition, 100 );
+        ctxMenu.AddItem( EE_ACTIONS::exportSymbol,        symbolSelectedCondition );
 
         if( ADVANCED_CFG::GetCfg().m_EnableLibWithText )
         {
@@ -724,6 +725,15 @@ int SYMBOL_EDITOR_CONTROL::ExportView( const TOOL_EVENT& aEvent )
 }
 
 
+int SYMBOL_EDITOR_CONTROL::ExportSymbol( const TOOL_EVENT& aEvent )
+{
+    if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
+        static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->ExportSymbol();
+
+    return 0;
+}
+
+
 int SYMBOL_EDITOR_CONTROL::ExportSymbolAsSVG( const TOOL_EVENT& aEvent )
 {
     if( !m_isSymbolEditor )
@@ -887,6 +897,7 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
     Go( &SYMBOL_EDITOR_CONTROL::CutCopyDelete,         EE_ACTIONS::cutSymbol.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::CutCopyDelete,         EE_ACTIONS::copySymbol.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::DuplicateSymbol,       EE_ACTIONS::pasteSymbol.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ExportSymbol,          EE_ACTIONS::exportSymbol.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_CONTROL::OpenWithTextEditor,    ACTIONS::openWithTextEditor.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::OpenDirectory,         ACTIONS::openDirectory.MakeEvent() );
