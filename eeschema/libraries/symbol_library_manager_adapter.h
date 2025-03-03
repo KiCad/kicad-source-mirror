@@ -98,6 +98,9 @@ public:
 
     void BlockUntilLoaded();
 
+    /// Loads or reloads the given library, if it exists
+    std::optional<LIB_STATUS> LoadOne( const wxString& aNickname );
+
     std::optional<wxString> FindLibraryByURI( const wxString& aURI ) const;
 
     /// Returns a list of library nicknames that are available (skips any that failed to load)

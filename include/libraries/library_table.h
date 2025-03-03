@@ -154,6 +154,8 @@ public:
 
     void Format( OUTPUTFORMATTER* aOutput ) const;
 
+    bool HasRow( const wxString& aNickname ) const;
+
 private:
     bool initFromIR( const LIBRARY_TABLE_IR& aIR );
     bool addRowFromIR( const LIBRARY_TABLE_ROW_IR& aIR );

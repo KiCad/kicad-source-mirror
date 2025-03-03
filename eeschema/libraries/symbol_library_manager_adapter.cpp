@@ -61,6 +61,39 @@ void SYMBOL_LIBRARY_MANAGER_ADAPTER::ProjectChanged()
 }
 
 
+std::optional<LIB_STATUS> SYMBOL_LIBRARY_MANAGER_ADAPTER::LoadOne( const wxString& aNickname )
+{
+    LOCALE_IO toggle;
+
+    if( LIBRARY_RESULT<LIB_DATA*> result = loadIfNeeded( aNickname ); result.has_value() )
+    {
+        LIB_DATA*       lib = *result;
+        std::lock_guard lock ( lib->mutex );
+        lib->status.load_status = LOAD_STATUS::LOADING;
+
+        std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
+
+        try
+        {
+            wxArrayString dummyList;
+            lib->plugin->EnumerateSymbolLib( dummyList, getUri( lib->row ), &options );
+            wxLogTrace( traceLibraries, "%s: library enumerated %zu items", aNickname, dummyList.size() );
+            lib->status.load_status = LOAD_STATUS::LOADED;
+        }
+        catch( IO_ERROR& e )
+        {
+            lib->status.load_status = LOAD_STATUS::ERROR;
+            lib->status.error = LIBRARY_ERROR( { e.What() } );
+            wxLogTrace( traceLibraries, "%s: plugin threw exception: %s", aNickname, e.What() );
+        }
+
+        return lib->status;
+    }
+
+    return std::nullopt;
+}
+
+
 LIBRARY_RESULT<LIB_DATA*> SYMBOL_LIBRARY_MANAGER_ADAPTER::loadIfNeeded( const wxString& aNickname )
 {
     auto tryLoadFromScope =

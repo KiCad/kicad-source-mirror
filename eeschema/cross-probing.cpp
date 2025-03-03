@@ -41,6 +41,9 @@
 #include <tools/sch_actions.h>
 #include <tools/sch_editor_control.h>
 #include <advanced_config.h>
+
+#include <pgm_base.h>
+#include <libraries/symbol_library_manager_adapter.h>
 #include <widgets/sch_design_block_pane.h>
 #include <wx/log.h>
 #include <trace_helpers.h>
@@ -843,11 +846,14 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     {
         std::stringstream ss( payload );
         std::string       file;
-        // TODO(JE) library tables
-#if 0
-        SYMBOL_LIB_TABLE* symLibTbl = PROJECT_SCH::SchSymbolLibTable( &Prj() );
 
-        wxCHECK_RET( symLibTbl, "Could not load symbol lib table." );
+        LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
+        std::optional<LIBRARY_TABLE*> optTable =
+                manager.Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::PROJECT );
+
+        wxCHECK_RET( optTable, "Could not load symbol lib table." );
+
+        LIBRARY_TABLE* table = *optTable;
 
         while( std::getline( ss, file, '\n' ) )
         {
@@ -866,23 +872,25 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
             pi.reset( SCH_IO_MGR::FindPlugin( type ) );
 
-            if( !symLibTbl->HasLibrary( fn.GetName() ) )
+            if( !table->HasRow( fn.GetName() ) )
             {
-                symLibTbl->InsertRow( new SYMBOL_LIB_TABLE_ROW( fn.GetName(), fn.GetFullPath(),
-                                                                SCH_IO_MGR::ShowType( type ) ) );
-                wxString tblName = Prj().SymbolLibTableName();
+                LIBRARY_TABLE_ROW& row = table->Rows().emplace_back( table->MakeRow() );
+                row.SetNickname( fn.GetName() );
+                row.SetURI( fn.GetFullPath() );
+                row.SetType( SCH_IO_MGR::ShowType( type ) );
 
-                try
-                {
-                    symLibTbl->Save( tblName );
-                }
-                catch( const IO_ERROR& ioe )
-                {
-                    wxLogError( _( "Error saving project-specific library table:\n\n%s" ), ioe.What() );
-                }
+                Pgm().GetLibraryManager().Save( table ).map_error(
+                    []( const LIBRARY_ERROR& aError )
+                    {
+                        wxLogError( _( "Error saving project-specific library table:\n\n%s" ),
+                                    aError.message );
+                    } );
+
+                SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
+                adapter->LoadOne( fn.GetName() );
             }
         }
-#endif
+
         Kiway().ExpressMail( FRAME_CVPCB, MAIL_RELOAD_LIB, payload );
         Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_RELOAD_LIB, payload );
         Kiway().ExpressMail( FRAME_SCH_VIEWER, MAIL_RELOAD_LIB, payload );

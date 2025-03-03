@@ -203,3 +203,15 @@ LIBRARY_TABLE_ROW LIBRARY_TABLE::MakeRow() const
 
     return row;
 }
+
+
+bool LIBRARY_TABLE::HasRow( const wxString& aNickname ) const
+{
+    for( const LIBRARY_TABLE_ROW& row : m_rows )
+    {
+        if( row.Nickname() == aNickname )
+            return true;
+    }
+
+    return false;
+}
