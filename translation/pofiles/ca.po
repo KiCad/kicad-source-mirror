@@ -6,16 +6,15 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-01 18:34+0300\n"
-"PO-Revision-Date: 2025-02-10 23:20+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"PO-Revision-Date: 2025-03-04 03:35+0000\n"
+"Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v9/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: f:/kicad-svn/kicad\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -1827,9 +1826,8 @@ msgid "Drawing Sheet (.kicad_wks file)"
 msgstr "Fulla de Dibuix (fitxer .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:200
-#, fuzzy
 msgid "Export to File..."
-msgstr "Exporta a un Fitxer"
+msgstr "Exporta a un Fitxer..."
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:203
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:147
@@ -2092,9 +2090,9 @@ msgid "Design block metadata file '%s' could not be saved."
 msgstr "No s'ha pogut crear el fitxer '%s'."
 
 #: common/design_block_io.cpp:441
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' does not exist."
-msgstr "No es pot escriure al directori «%s»"
+msgstr "El bloc de disseny '%s' no existeix."
 
 #: common/design_block_io.cpp:447
 #, fuzzy, c-format
@@ -2102,13 +2100,13 @@ msgid "Design block folder '%s' could not be deleted."
 msgstr "No s'ha pogut crear el fitxer '%s'."
 
 #: common/design_block_lib_table.cpp:233
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Duplicate library nickname '%s' found in design block library table file "
 "line %d."
 msgstr ""
-"Sobrenom de la biblioteca '%s' duplicat a la línia %d de la taula de "
-"biblioteques de símbols"
+"S'ha trobat un sobrenom de biblioteca duplicat '%s' a la línia de fitxers de "
+"la taula de la biblioteca de blocs de disseny %d."
 
 #: common/design_block_lib_table.cpp:336
 #, fuzzy, c-format
@@ -2744,14 +2742,12 @@ msgid "Configure Global Library Table"
 msgstr "Configura la taula global de biblioteques"
 
 #: common/dialogs/dialog_grid_settings.cpp:82
-#, fuzzy
 msgid "Grid size X out of range."
-msgstr "Ajusta la longitud d'una sola pista"
+msgstr "La mida de la quadrícula X fora de l'abast."
 
 #: common/dialogs/dialog_grid_settings.cpp:89
-#, fuzzy
 msgid "Grid size Y out of range."
-msgstr "Ajusta la longitud d'una sola pista"
+msgstr "La mida de la quadrícula Y fora de l'abast."
 
 #: common/dialogs/dialog_grid_settings_base.cpp:25
 #: common/dialogs/git/dialog_git_repository_base.cpp:31
@@ -3438,27 +3434,26 @@ msgid "Close"
 msgstr "Tanca"
 
 #: common/dialogs/dialog_print_generic.cpp:156
-#, fuzzy
 msgid "Warning: scale is not a number."
-msgstr "Atenció: Número d'escala invàlid"
+msgstr "Avís: l'escala no és un nombre."
 
 #: common/dialogs/dialog_print_generic.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: scale set to a very large value.\n"
 "It will be clamped to %f."
 msgstr ""
-"Atenció: L'opció de l'escala està establerta a un valor molt gran.\n"
-" S'ha retallat a %f"
+"Avís: l'escala s'ha configurat en un valor molt gran.\n"
+"Es fixarà a %f."
 
 #: common/dialogs/dialog_print_generic.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: scale set to a very small value.\n"
 "It will be clamped to %f."
 msgstr ""
-"Atenció: L'opció de l'escala està establerta a un valor molt baix.\n"
-" S'ha augmentat a %f"
+"Avís: l'escala s'ha configurat en un valor molt petit.\n"
+"Es fixarà a %f."
 
 #: common/dialogs/dialog_print_generic.cpp:244
 #: common/dialogs/dialog_print_generic.cpp:295
@@ -3811,9 +3806,8 @@ msgid "C&ommit"
 msgstr ""
 
 #: common/dialogs/git/dialog_git_commit.cpp:178
-#, fuzzy
 msgid "Commit message cannot be empty"
-msgstr "El camp %s no pot estar buit."
+msgstr "El missatge de confirmació no pot estar buit"
 
 #: common/dialogs/git/dialog_git_repository.cpp:156
 #: common/dialogs/git/dialog_git_repository.cpp:388
@@ -3826,9 +3820,8 @@ msgid "Test Connection"
 msgstr "Selecciona la connexió"
 
 #: common/dialogs/git/dialog_git_repository.cpp:342
-#, fuzzy
 msgid "Connection successful"
-msgstr "Fitxer creat satisfactòriament."
+msgstr "Connexió correcta"
 
 #: common/dialogs/git/dialog_git_repository.cpp:346
 #, c-format
@@ -3880,7 +3873,7 @@ msgstr "Paraules clau"
 #: common/dialogs/git/dialog_git_repository.cpp:459
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
 msgid "Password:"
-msgstr ""
+msgstr "Contrasenya:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:38
 #, fuzzy
@@ -3888,24 +3881,21 @@ msgid "Location:"
 msgstr "Gir"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:45
-#, fuzzy
 msgid "Connection type:"
-msgstr "Nom de connexió"
+msgstr "Tipus de connexió:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:52
 msgid "HTTPS"
-msgstr ""
+msgstr "HTTPS"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:52
 #: eeschema/widgets/search_handlers.cpp:452
-#, fuzzy
 msgid "Local"
-msgstr "Fitxer local"
+msgstr "Local"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:83
-#, fuzzy
 msgid "SSH private key:     "
-msgstr "Privat"
+msgstr "Clau privada SSH:     "
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:90
 #, fuzzy
