@@ -65,10 +65,10 @@ public:
         int jobBmpColId = m_jobList->AppendColumn( wxT( "" ) );
         int jobNoColId = m_jobList->AppendColumn( _( "No." ) );
         int jobDescColId = m_jobList->AppendColumn( _( "Job Description" ) );
-        int jobSourceColId = m_jobList->AppendColumn( wxT( "Source" ) );
-        m_jobList->SetColumnWidth( jobBmpColId, wxLIST_AUTOSIZE_USEHEADER );
-        m_jobList->SetColumnWidth( jobNoColId, wxLIST_AUTOSIZE_USEHEADER );
-        m_jobList->SetColumnWidth( jobDescColId, wxLIST_AUTOSIZE_USEHEADER );
+        int jobSourceColId = m_jobList->AppendColumn( _( "Source" ) );
+        m_jobList->SetColumnWidth( jobBmpColId, GetTextExtent( wxT( "XXXX" ) ).GetWidth() );
+        m_jobList->SetColumnWidth( jobNoColId, GetTextExtent( wxT( "XXXX" ) ).GetWidth() );
+        m_jobList->SetColumnWidth( jobSourceColId, GetTextExtent( wxT( "XXXXXXXX" ) ).GetWidth() );
 
         wxImageList* imageList = new wxImageList( 16, 16, true, 3 );
         imageList->Add( KiBitmapBundle( BITMAPS::ercerr ).GetBitmap( wxSize( 16, 16 ) ) );
@@ -109,15 +109,13 @@ public:
 
         SetupStandardButtons( { { wxID_OK, _( "Close" ) } } );
         finishDialogSettings();
-    }
 
-    void onJobListSize( wxSizeEvent& event ) override
-    {
         int width = m_jobList->GetSize().x;
-        width -= m_jobList->GetColumnWidth( 0 );
-        width -= m_jobList->GetColumnWidth( 1 );
+        width -= m_jobList->GetColumnWidth( jobBmpColId );
+        width -= m_jobList->GetColumnWidth( jobNoColId );
+        width -= m_jobList->GetColumnWidth( jobSourceColId );
 
-        m_jobList->SetColumnWidth( 2, width );
+        m_jobList->SetColumnWidth( jobDescColId, width );
     }
 
     void OnJobListItemSelected( wxListEvent& event ) override
@@ -132,12 +130,12 @@ public:
 
         if( static_cast<size_t>( itemIndex ) < jobs.size() )
         {
-            JOBSET_JOB& job = jobs[itemIndex];
+            wxString jobId = jobs[itemIndex].m_id;
 
-            if( m_destination->m_lastRunReporters.contains( job.m_id ) )
+            if( m_destination->m_lastRunReporters.contains( jobId ) )
             {
                 WX_STRING_REPORTER* reporter =
-                        static_cast<WX_STRING_REPORTER*>( m_destination->m_lastRunReporters[job.m_id] );
+                        static_cast<WX_STRING_REPORTER*>( m_destination->m_lastRunReporters[jobId] );
 
                 if( reporter )
                     m_textCtrlOutput->SetValue( reporter->GetMessages() );
