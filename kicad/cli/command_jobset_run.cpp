@@ -87,18 +87,15 @@ int CLI::JOBSET_RUN_COMMAND::doPerform( KIWAY& aKiway )
 
     if( !outputKey.IsEmpty() )
     {
-        JOBSET_OUTPUT* output = jobFile.GetOutput( outputKey );
-        if( output == nullptr || !jobsRunner.RunJobsForOutput( output, bail ) )
-        {
+        JOBSET_DESTINATION* destination = jobFile.GetDestination( outputKey );
+
+        if( destination == nullptr || !jobsRunner.RunJobsForDestination( destination, bail ) )
             return_code = CLI::EXIT_CODES::ERR_JOBS_RUN_FAILED;
-        }
     }
     else
     {
-        if( !jobsRunner.RunJobsAllOutputs( bail ) )
-        {
+        if( !jobsRunner.RunJobsAllDestinations( bail ) )
             return_code = CLI::EXIT_CODES::ERR_JOBS_RUN_FAILED;
-        }
     }
 
     return return_code;

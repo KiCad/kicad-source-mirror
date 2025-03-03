@@ -21,7 +21,7 @@
 #pragma once
 
 class JOBSET;
-struct JOBSET_OUTPUT;
+struct JOBSET_DESTINATION;
 struct JOBSET_JOB;
 class KIWAY;
 class REPORTER;
@@ -33,8 +33,8 @@ public:
     JOBS_RUNNER( KIWAY* aKiway, JOBSET* aJobsFile, PROJECT* aProject,
                  REPORTER* aReporter = nullptr );
 
-    bool RunJobsAllOutputs( bool aBail = false );
-    bool RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail = false );
+    bool RunJobsAllDestinations( bool aBail = false );
+    bool RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool aBail = false );
 
 private:
     int runSpecialExecute( const JOBSET_JOB* aJob, PROJECT* aProject );

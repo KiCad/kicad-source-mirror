@@ -775,8 +775,8 @@ void KICAD_MANAGER_FRAME::OpenJobsFile( const wxFileName& aFileName, bool aCreat
 
         if( aCreate && !aFileName.FileExists() )
         {
-            JOBSET_OUTPUT* output = jobsFile->AddNewJobOutput( JOBSET_OUTPUT_TYPE::FOLDER );
-            output->m_outputHandler->SetOutputPath( aFileName.GetName() );
+            JOBSET_DESTINATION* dest = jobsFile->AddNewDestination( JOBSET_DESTINATION_T::FOLDER );
+            dest->m_outputHandler->SetOutputPath( aFileName.GetName() );
             jobsFile->SaveToFile( wxEmptyString, true );
         }
 

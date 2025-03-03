@@ -33,9 +33,9 @@ class STD_BITMAP_BUTTON;
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_JOBSET_OUTPUT_OPTIONS_BASE
+/// Class DIALOG_DESTINATION_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_JOBSET_OUTPUT_OPTIONS_BASE : public DIALOG_SHIM
+class DIALOG_DESTINATION_BASE : public DIALOG_SHIM
 {
 	private:
 
@@ -59,9 +59,9 @@ class DIALOG_JOBSET_OUTPUT_OPTIONS_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_JOBSET_OUTPUT_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("%s Output Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_DESTINATION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("%s Destination"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
-		~DIALOG_JOBSET_OUTPUT_OPTIONS_BASE();
+		~DIALOG_DESTINATION_BASE();
 
 };
 

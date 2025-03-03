@@ -52,14 +52,8 @@
 // Handles the selection of command events.
 void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
-    int  id = event.GetId();
-    const PCB_DISPLAY_OPTIONS& displ_opts = GetDisplayOptions();
-
-    switch( id )   // Execute command
+    switch( event.GetId() )   // Execute command
     {
-    case 0:
-        break;
-
     case ID_MENU_EXPORT_FOOTPRINTS_TO_LIBRARY:
         ExportFootprintsToLibrary( false );
         break;
