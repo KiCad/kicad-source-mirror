@@ -123,8 +123,8 @@ class DIALOG_JOBSET_RUN_LOG_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerOK;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnJobListItemSelected( wxListEvent& event ) { event.Skip(); }
-		virtual void onJobListSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnButtonOk( wxCommandEvent& event ) { event.Skip(); }
 
 

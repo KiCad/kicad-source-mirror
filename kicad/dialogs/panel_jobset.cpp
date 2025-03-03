@@ -57,7 +57,9 @@ public:
                            JOBSET_DESTINATION* aDestination ) :
             DIALOG_JOBSET_RUN_LOG_BASE( aParent ),
             m_jobsFile( aJobsFile ),
-            m_destination( aDestination )
+            m_destination( aDestination ),
+            m_lastWidth( -1 ),
+            m_marginsWidth( -1 )
     {
         m_staticTextOutputName->SetLabel( wxString::Format( _( "Destination: %s" ),
                                                             aDestination->GetDescription() ) );
@@ -66,9 +68,9 @@ public:
         int jobNoColId = m_jobList->AppendColumn( _( "No." ) );
         int jobDescColId = m_jobList->AppendColumn( _( "Job Description" ) );
         int jobSourceColId = m_jobList->AppendColumn( _( "Source" ) );
-        m_jobList->SetColumnWidth( jobBmpColId, GetTextExtent( wxT( "XXXX" ) ).GetWidth() );
+        m_jobList->SetColumnWidth( jobBmpColId, 26 );
         m_jobList->SetColumnWidth( jobNoColId, GetTextExtent( wxT( "XXXX" ) ).GetWidth() );
-        m_jobList->SetColumnWidth( jobSourceColId, GetTextExtent( wxT( "XXXXXXXX" ) ).GetWidth() );
+        m_jobList->SetColumnWidth( jobSourceColId, GetTextExtent( wxT( "XXXXXX" ) ).GetWidth() );
 
         wxImageList* imageList = new wxImageList( 16, 16, true, 3 );
         imageList->Add( KiBitmapBundle( BITMAPS::ercerr ).GetBitmap( wxSize( 16, 16 ) ) );
@@ -109,13 +111,25 @@ public:
 
         SetupStandardButtons( { { wxID_OK, _( "Close" ) } } );
         finishDialogSettings();
+    }
 
-        int width = m_jobList->GetSize().x;
-        width -= m_jobList->GetColumnWidth( jobBmpColId );
-        width -= m_jobList->GetColumnWidth( jobNoColId );
-        width -= m_jobList->GetColumnWidth( jobSourceColId );
+    virtual void OnUpdateUI( wxUpdateUIEvent& event ) override
+    {
+        if( GetSize().GetWidth() != m_lastWidth )
+        {
+            m_lastWidth = GetSize().GetWidth();
 
-        m_jobList->SetColumnWidth( jobDescColId, width );
+            if( m_marginsWidth < 0 )
+                m_marginsWidth = m_lastWidth - ( m_jobList->GetSize().GetWidth() * 2 );
+
+            int width = ( m_lastWidth / 2 );
+            width -= m_marginsWidth;
+            width -= m_jobList->GetColumnWidth( 0 );
+            width -= m_jobList->GetColumnWidth( 1 );
+            width -= m_jobList->GetColumnWidth( 3 );
+
+            m_jobList->SetColumnWidth( 2, width );
+        }
     }
 
     void OnJobListItemSelected( wxListEvent& event ) override
@@ -150,6 +164,9 @@ public:
 private:
     JOBSET*             m_jobsFile;
     JOBSET_DESTINATION* m_destination;
+
+    int                 m_lastWidth;
+    int                 m_marginsWidth;
 };
 
 

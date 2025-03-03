@@ -1361,6 +1361,7 @@
       <property name="window_extra_style"></property>
       <property name="window_name"></property>
       <property name="window_style"></property>
+      <event name="OnUpdateUI">OnUpdateUI</event>
       <object class="wxBoxSizer" expanded="true">
         <property name="minimum_size"></property>
         <property name="name">bMainSizer</property>
@@ -1440,7 +1441,7 @@
             <object class="sizeritem" expanded="false">
               <property name="border">5</property>
               <property name="flag">wxALL|wxEXPAND</property>
-              <property name="proportion">3</property>
+              <property name="proportion">1</property>
               <object class="wxListCtrl" expanded="false">
                 <property name="BottomDockable">1</property>
                 <property name="LeftDockable">1</property>
@@ -1499,13 +1500,12 @@
                 <property name="window_name"></property>
                 <property name="window_style"></property>
                 <event name="OnListItemSelected">OnJobListItemSelected</event>
-                <event name="OnSize">onJobListSize</event>
               </object>
             </object>
             <object class="sizeritem" expanded="true">
               <property name="border">5</property>
               <property name="flag">wxALL|wxEXPAND</property>
-              <property name="proportion">4</property>
+              <property name="proportion">1</property>
               <object class="wxTextCtrl" expanded="true">
                 <property name="BottomDockable">1</property>
                 <property name="LeftDockable">1</property>
