@@ -155,7 +155,7 @@ KICOMMON_API void from_json( const nlohmann::json& j, JOBSET_DESTINATION& f );
 
 #if defined( __MINGW32__ )
 template class KICOMMON_API PARAM_LIST<struct JOBSET_JOB>;
-template class KICOMMON_API PARAM_LIST<struct JOBSET_OUTPUT>;
+template class KICOMMON_API PARAM_LIST<struct JOBSET_DESTINATION>;
 #else
 extern template class APIVISIBLE PARAM_LIST<JOBSET_JOB>;
 extern template class APIVISIBLE PARAM_LIST<JOBSET_DESTINATION>;
