@@ -994,13 +994,9 @@ void DIALOG_LABEL_PROPERTIES::OnLabelFilter( wxCommandEvent& event )
 
 void DIALOG_LABEL_PROPERTIES::OnLabelItemSelected( wxCommandEvent& event )
 {
-    static bool isHandlingSelection = true; // Prevent OnFilter from firing
-
     // Get the selected item's value
     wxString selectedValue = m_valueCombo->GetValue();
     m_previousLabelText = selectedValue; // Update the previous text to match the selected value
-
-    isHandlingSelection = false; // Reset the flag
 }
 
 
