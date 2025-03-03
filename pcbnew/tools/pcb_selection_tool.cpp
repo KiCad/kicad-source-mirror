@@ -515,12 +515,16 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 if( doDrag )
                 {
-                    bool isTracks = m_selection.GetSize() > 0
-                            && m_selection.OnlyContains( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } );
+                    size_t segs = m_selection.CountType( PCB_TRACE_T );
+                    size_t arcs = m_selection.CountType( PCB_ARC_T );
+                    size_t vias = m_selection.CountType( PCB_VIA_T );
+                    // Note: multi-track dragging is currently supported, but not multi-via
+                    bool   routable = ( segs >= 1 || arcs >= 1 || vias == 1 )
+                                        && ( segs + arcs + vias == m_selection.GetSize() );
 
-                    if( isTracks && trackDragAction == TRACK_DRAG_ACTION::DRAG )
+                    if( routable && trackDragAction == TRACK_DRAG_ACTION::DRAG )
                         m_toolMgr->RunAction( PCB_ACTIONS::drag45Degree );
-                    else if( isTracks && trackDragAction == TRACK_DRAG_ACTION::DRAG_FREE_ANGLE )
+                    else if( routable && trackDragAction == TRACK_DRAG_ACTION::DRAG_FREE_ANGLE )
                         m_toolMgr->RunAction( PCB_ACTIONS::dragFreeAngle );
                     else
                         m_toolMgr->RunAction( PCB_ACTIONS::move );
