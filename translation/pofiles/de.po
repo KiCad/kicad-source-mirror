@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-01 18:34+0300\n"
-"PO-Revision-Date: 2025-03-03 08:42+0000\n"
+"PO-Revision-Date: 2025-03-04 03:35+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -5695,19 +5695,16 @@ msgstr "Oberste Lage"
 
 #: common/dialogs/panel_toolbar_customization.cpp:133
 #: common/dialogs/panel_toolbar_customization_base.cpp:68
-#, fuzzy
 msgid "Insert separator"
-msgstr "Zelltrenner"
+msgstr "Trenner einfügen"
 
 #: common/dialogs/panel_toolbar_customization.cpp:139
-#, fuzzy
 msgid "Insert spacer"
-msgstr "Einfügen"
+msgstr "Platzhalter einfügen"
 
 #: common/dialogs/panel_toolbar_customization.cpp:140
-#, fuzzy
 msgid "Insert group"
-msgstr "Gruppe betreten"
+msgstr "Gruppe einfügen"
 
 #: common/dialogs/panel_toolbar_customization.cpp:543 common/eda_item.cpp:370
 #: pcbnew/pcb_group.cpp:392
@@ -5715,9 +5712,8 @@ msgid "Group"
 msgstr "Gruppe"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:19
-#, fuzzy
 msgid "Customize toolbars"
-msgstr "Benutzerdefinierte Lageneinstellung"
+msgstr "Werkzeugleisten anpassen"
 
 #: common/draw_panel_gal.cpp:321 common/draw_panel_gal.cpp:508
 msgid "Could not use OpenGL, falling back to software rendering"
@@ -8693,9 +8689,8 @@ msgid "Zoom Selection box"
 msgstr "Zoomauswahl-Box"
 
 #: common/tool/action_toolbar.cpp:1042
-#, fuzzy
 msgid "IPC/Scripting plugins"
-msgstr "Skriptkonsole"
+msgstr "IPC/Scriptplugins"
 
 #: common/tool/action_toolbar.cpp:1043
 msgid "Region to hold the IPC/Scripting action buttons"
@@ -8715,9 +8710,8 @@ msgid "Symbol unit selector"
 msgstr "Symboleinheit-Auswahl"
 
 #: common/tool/action_toolbar.cpp:1049
-#, fuzzy
 msgid "Displays the current unit"
-msgstr "Den aktuellen Editor schließen"
+msgstr "Zeigt aktuelle Einheit an"
 
 #: common/tool/actions.cpp:45
 msgid "New..."
@@ -10310,9 +10304,8 @@ msgid "KiCad s-expression schematic files"
 msgstr "KiCad S-Expression Schaltplandateien"
 
 #: common/wildcards_and_files_ext.cpp:289
-#, fuzzy
 msgid "Altium Project files"
-msgstr "Alle KiCad Projektdateien"
+msgstr "Altium-Projektdateien"
 
 #: common/wildcards_and_files_ext.cpp:295
 msgid "CADSTAR Archive files"
@@ -22965,14 +22958,14 @@ msgid "Place Sheet Pins"
 msgstr "Schaltplanpins einfügen"
 
 #: eeschema/tools/ee_actions.cpp:572
-#, fuzzy
 msgid "Autoplace All Sheet Pins"
-msgstr "Schaltplanpins einfügen"
+msgstr "Alle Schaltplanpins automatisch einfügen"
 
 #: eeschema/tools/ee_actions.cpp:573
-#, fuzzy
 msgid "Imports and auto places all sheet pins"
-msgstr "Pins aus hierarchischen Schaltplänen importieren"
+msgstr ""
+"Importiert und platziert alle Pins aus hierarchischen Schaltplänen "
+"automatisch"
 
 #: eeschema/tools/ee_actions.cpp:578 eeschema/tools/ee_actions.cpp:586
 msgid "Sync Sheet Pins..."
@@ -25572,9 +25565,8 @@ msgid "Component highlight"
 msgstr "Netzhervorhebung umschalten"
 
 #: gerbview/toolbars_gerber.cpp:273
-#, fuzzy
 msgid "Net highlight"
-msgstr "Netzhervorhebungsfarbe"
+msgstr "Netzhervorhebung"
 
 #: gerbview/toolbars_gerber.cpp:275
 #, fuzzy
@@ -25582,14 +25574,12 @@ msgid "Aperture highlight"
 msgstr "Netzhervorhebungsfarbe"
 
 #: gerbview/toolbars_gerber.cpp:277
-#, fuzzy
 msgid "DCode Selector"
-msgstr "Auswahl routen"
+msgstr "DCode Auswahl"
 
 #: gerbview/toolbars_gerber.cpp:278
-#, fuzzy
 msgid "Select all items with the selected DCode"
-msgstr "Wählt alle Elemente auf Bildschirm aus"
+msgstr "Wählt alle Elemente mit gewähltem DCode"
 
 #: gerbview/toolbars_gerber.cpp:281
 msgid "<No selection>"
@@ -27347,9 +27337,8 @@ msgstr ""
 "anderen Pfad. Das Projekt kann nicht importiert werden."
 
 #: kicad/import_project.cpp:146
-#, fuzzy
 msgid "Import Altium Project Files"
-msgstr "Importiere Eagle-Projektdateien"
+msgstr "Importiere Altium-Projektdateien"
 
 #: kicad/import_project.cpp:154
 msgid "Import CADSTAR Archive Project Files"
@@ -27472,9 +27461,8 @@ msgid "Import Non-KiCad Project..."
 msgstr "Nicht-KiCad-Projekt importieren..."
 
 #: kicad/menubar.cpp:115
-#, fuzzy
 msgid "Altium Project..."
-msgstr "EAGLE-Projekt..."
+msgstr "Altium-Projekt..."
 
 #: kicad/menubar.cpp:116
 #, fuzzy
