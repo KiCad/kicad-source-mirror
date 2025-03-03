@@ -129,8 +129,8 @@ JOB_EXPORT_SCH_PLOT::JOB_EXPORT_SCH_PLOT( bool aOutputIsDirectory ) :
 }
 
 
-JOB_EXPORT_SCH_PLOT_PDF::JOB_EXPORT_SCH_PLOT_PDF() :
-		JOB_EXPORT_SCH_PLOT( false )
+JOB_EXPORT_SCH_PLOT_PDF::JOB_EXPORT_SCH_PLOT_PDF( bool aOutputIsDirectory ) :
+		JOB_EXPORT_SCH_PLOT( aOutputIsDirectory )
 {
     m_plotFormat = SCH_PLOT_FORMAT::PDF;
 }
