@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-01 18:34+0300\n"
-"PO-Revision-Date: 2025-03-02 06:36+0000\n"
+"PO-Revision-Date: 2025-03-03 08:42+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -3759,9 +3759,8 @@ msgid "Password:"
 msgstr "Lösenord:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:38
-#, fuzzy
 msgid "Location:"
-msgstr "Plats"
+msgstr "Plats:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:45
 msgid "Connection type:"
@@ -5608,12 +5607,11 @@ msgstr "Höger"
 
 #: common/dialogs/panel_toolbar_customization.cpp:48
 msgid "Top main"
-msgstr ""
+msgstr "Övre ordinarie"
 
 #: common/dialogs/panel_toolbar_customization.cpp:49
-#, fuzzy
 msgid "Top auxillary"
-msgstr "Topplager"
+msgstr "Övre extra"
 
 #: common/dialogs/panel_toolbar_customization.cpp:133
 #: common/dialogs/panel_toolbar_customization_base.cpp:68
@@ -8582,7 +8580,6 @@ msgid "Grid Selector"
 msgstr "Rutnätsväljare"
 
 #: common/tool/action_toolbar.cpp:1037
-#, fuzzy
 msgid "Grid Selection box"
 msgstr "Ruta för val av rutnätsstorlek"
 
@@ -8591,17 +8588,14 @@ msgid "Zoom Selector"
 msgstr "Zoomväljare"
 
 #: common/tool/action_toolbar.cpp:1040
-#, fuzzy
 msgid "Zoom Selection box"
-msgstr "Zooma till valda objekt"
+msgstr "Ruta för val av zoomnivå"
 
 #: common/tool/action_toolbar.cpp:1042
-#, fuzzy
 msgid "IPC/Scripting plugins"
 msgstr "Insticksprogram för IPC/skriptning"
 
 #: common/tool/action_toolbar.cpp:1043
-#, fuzzy
 msgid "Region to hold the IPC/Scripting action buttons"
 msgstr "Område som ska innehålla åtgärdsknapparna för IPC/skriptning"
 
@@ -8618,9 +8612,8 @@ msgid "Symbol unit selector"
 msgstr "Symbolenhetsväljare"
 
 #: common/tool/action_toolbar.cpp:1049
-#, fuzzy
 msgid "Displays the current unit"
-msgstr "Visar den aktuella enheten"
+msgstr "Visar den aktuella symbolenheten"
 
 #: common/tool/actions.cpp:45
 msgid "New..."
@@ -9223,7 +9216,6 @@ msgid "Show Side Panel"
 msgstr "Visa sidopanel"
 
 #: common/tool/actions.cpp:841
-#, fuzzy
 msgid "Show Console Panel"
 msgstr "Visa kommandoradspanel"
 
@@ -10714,9 +10706,8 @@ msgid "Footprint filters"
 msgstr "Fotavtrycksfilter"
 
 #: cvpcb/toolbars_cvpcb.cpp:123
-#, fuzzy
 msgid "Footprint filtering controls"
-msgstr "Fotavtrycksfilter:"
+msgstr "Kontrollelement för fotavtrycksfilter"
 
 #: cvpcb/tools/cvpcb_actions.cpp:55
 msgid "View Selected Footprint"
@@ -25299,24 +25290,20 @@ msgid "DCode:"
 msgstr "DC-kod:"
 
 #: gerbview/toolbars_gerber.cpp:268 gerbview/toolbars_gerber.cpp:269
-#, fuzzy
 msgid "Text info entry"
-msgstr "Textredigerare"
+msgstr "Textinformationsinmatning"
 
 #: gerbview/toolbars_gerber.cpp:271
-#, fuzzy
 msgid "Component highlight"
 msgstr "Framhäv komponent"
 
 #: gerbview/toolbars_gerber.cpp:273
-#, fuzzy
 msgid "Net highlight"
-msgstr "Nätfärg markering"
+msgstr "Framhäv nät"
 
 #: gerbview/toolbars_gerber.cpp:275
-#, fuzzy
 msgid "Aperture highlight"
-msgstr "Nätfärg markering"
+msgstr "Framhäv bländare"
 
 #: gerbview/toolbars_gerber.cpp:277
 msgid "DCode Selector"
@@ -28699,9 +28686,8 @@ msgstr ""
 "som inte finns på hela sidan visas"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:160
-#, fuzzy
 msgid "Origin Selector"
-msgstr "Originalbild"
+msgstr "Origoväljare"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:161
 msgid "Select the origin of the status bar coordinates"
@@ -28712,9 +28698,8 @@ msgid "Page Selector"
 msgstr "Sidoväljare"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:163
-#, fuzzy
 msgid "Select the page to simulate item displays"
-msgstr "Välj typ av objekt att spara"
+msgstr "Välj sida för att simulera objektvisning"
 
 #: pagelayout_editor/tools/pl_actions.cpp:72
 msgid "Place Bitmaps"
@@ -39215,7 +39200,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:58
 msgid "This layer is required and cannot be disabled"
-msgstr "Detta lager behövs och kan inte deaktiveras."
+msgstr "Detta lager behövs och kan inte deaktiveras"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:88
 #: pcbnew/dialogs/panel_setup_layers.cpp:294
@@ -47509,7 +47494,6 @@ msgid "Track width selector"
 msgstr "Ledarbreddsväljare"
 
 #: pcbnew/toolbars_pcb_editor.cpp:124
-#, fuzzy
 msgid "Control to select the track width"
 msgstr "Kontrollobjekt för val av ledarbredd"
 
@@ -47518,9 +47502,8 @@ msgid "Via diameter selector"
 msgstr "Väljare för viadiameter"
 
 #: pcbnew/toolbars_pcb_editor.cpp:126
-#, fuzzy
 msgid "Control to select the via diameter"
-msgstr "Kontrollelement för val av viadiameter"
+msgstr "Kontrollobjekt för val av viadiameter"
 
 #: pcbnew/toolbars_pcb_editor.cpp:194
 msgid "Track routing tools"
@@ -47531,7 +47514,6 @@ msgid "Track tuning tools"
 msgstr "Ledarlängdsjusteringsverktyg"
 
 #: pcbnew/toolbars_pcb_editor.cpp:225
-#, fuzzy
 msgid "PCB origins"
 msgstr "Mönsterkorts origo"
 
