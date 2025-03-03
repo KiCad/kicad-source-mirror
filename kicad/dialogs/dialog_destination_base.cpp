@@ -7,11 +7,11 @@
 
 #include "widgets/std_bitmap_button.h"
 
-#include "dialog_jobset_output_options_base.h"
+#include "dialog_destination_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_JOBSET_OUTPUT_OPTIONS_BASE::DIALOG_JOBSET_OUTPUT_OPTIONS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_DESTINATION_BASE::DIALOG_DESTINATION_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
@@ -43,7 +43,7 @@ DIALOG_JOBSET_OUTPUT_OPTIONS_BASE::DIALOG_JOBSET_OUTPUT_OPTIONS_BASE( wxWindow* 
 
 	fgSizer1->Add( m_choiceArchiveformat, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_textOutputPath = new wxStaticText( this, wxID_ANY, _("Output path:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textOutputPath = new wxStaticText( this, wxID_ANY, _("Destination path:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textOutputPath->Wrap( -1 );
 	fgSizer1->Add( m_textOutputPath, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -91,12 +91,12 @@ DIALOG_JOBSET_OUTPUT_OPTIONS_BASE::DIALOG_JOBSET_OUTPUT_OPTIONS_BASE( wxWindow* 
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	m_buttonOutputPath->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_JOBSET_OUTPUT_OPTIONS_BASE::onOutputPathBrowseClicked ), NULL, this );
+	m_buttonOutputPath->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESTINATION_BASE::onOutputPathBrowseClicked ), NULL, this );
 }
 
-DIALOG_JOBSET_OUTPUT_OPTIONS_BASE::~DIALOG_JOBSET_OUTPUT_OPTIONS_BASE()
+DIALOG_DESTINATION_BASE::~DIALOG_DESTINATION_BASE()
 {
 	// Disconnect Events
-	m_buttonOutputPath->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_JOBSET_OUTPUT_OPTIONS_BASE::onOutputPathBrowseClicked ), NULL, this );
+	m_buttonOutputPath->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESTINATION_BASE::onOutputPathBrowseClicked ), NULL, this );
 
 }

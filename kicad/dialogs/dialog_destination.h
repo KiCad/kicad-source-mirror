@@ -20,15 +20,15 @@
 
 #pragma once
 
-#include "dialog_jobset_output_options_base.h"
+#include <dialogs/dialog_destination_base.h>
 
 class JOBSET;
-struct JOBSET_OUTPUT;
+struct JOBSET_DESTINATION;
 
-class DIALOG_JOBSET_OUTPUT_OPTIONS : public DIALOG_JOBSET_OUTPUT_OPTIONS_BASE
+class DIALOG_DESTINATION : public DIALOG_DESTINATION_BASE
 {
 public:
-    DIALOG_JOBSET_OUTPUT_OPTIONS( wxWindow* aParent, JOBSET* aJobsFile, JOBSET_OUTPUT* aOutput );
+    DIALOG_DESTINATION( wxWindow* aParent, JOBSET* aJobsFile, JOBSET_DESTINATION* aDestination );
 
 private:
     virtual void onOutputPathBrowseClicked(wxCommandEvent& event) override;
@@ -38,7 +38,7 @@ private:
 
 private:
     JOBSET*                 m_jobsFile;
-    JOBSET_OUTPUT*          m_output;
+    JOBSET_DESTINATION*     m_destination;
     std::map<int, wxString> m_onlyMap;
 };
 

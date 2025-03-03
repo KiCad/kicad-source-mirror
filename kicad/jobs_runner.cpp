@@ -48,14 +48,12 @@ JOBS_RUNNER::JOBS_RUNNER( KIWAY* aKiway, JOBSET* aJobsFile, PROJECT* aProject,
 }
 
 
-bool JOBS_RUNNER::RunJobsAllOutputs( bool aBail )
+bool JOBS_RUNNER::RunJobsAllDestinations( bool aBail )
 {
     bool success = true;
 
-    for( JOBSET_OUTPUT& output : m_jobsFile->GetOutputs() )
-    {
-        success &= RunJobsForOutput( &output, aBail );
-    }
+    for( JOBSET_DESTINATION& destination : m_jobsFile->GetDestinations() )
+        success &= RunJobsForDestination( &destination, aBail );
 
     return success;
 }
@@ -124,8 +122,8 @@ int JOBS_RUNNER::runSpecialCopyFiles( const JOBSET_JOB* aJob, PROJECT* aProject 
 
     std::vector<wxString> exclusions;
 
-    for( const JOBSET_OUTPUT& output : m_jobsFile->GetOutputs() )
-        exclusions.push_back( projectPath + output.m_outputHandler->GetOutputPath() );
+    for( const JOBSET_DESTINATION& destination : m_jobsFile->GetDestinations() )
+        exclusions.push_back( projectPath + destination.m_outputHandler->GetOutputPath() );
 
     wxString errors;
     int      copyCount = 0;
@@ -165,23 +163,23 @@ private:
 };
 
 
-bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
+bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool aBail )
 {
     bool                    genOutputs = true;
     bool                    success = true;
-    std::vector<JOBSET_JOB> jobsForOutput = m_jobsFile->GetJobsForOutput( aOutput );
+    std::vector<JOBSET_JOB> jobsForDestination = m_jobsFile->GetJobsForDestination( aDestination );
     wxString msg;
 
     wxFileName tmp;
     tmp.AssignDir( wxFileName::GetTempDir() );
     tmp.AppendDir( KIID().AsString() );
 
-    aOutput->m_lastRunSuccessMap.clear();
+    aDestination->m_lastRunSuccessMap.clear();
 
-    for( auto& [name, reporter] : aOutput->m_lastRunReporters )
+    for( auto& [name, reporter] : aDestination->m_lastRunReporters )
         delete reporter;
 
-    aOutput->m_lastRunReporters.clear();
+    aDestination->m_lastRunReporters.clear();
 
     wxString tempDirPath = tmp.GetFullPath();
 
@@ -193,22 +191,23 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
 			m_reporter->Report( msg, RPT_SEVERITY_ERROR );
 		}
 
-        aOutput->m_lastRunSuccess = false;
+        aDestination->m_lastRunSuccess = false;
 
 		return false;
     }
 
-    bool continueOuput = aOutput->m_outputHandler->OutputPrecheck();
+    bool continueOuput = aDestination->m_outputHandler->OutputPrecheck();
 
     if( !continueOuput )
     {
         if( m_reporter )
         {
-            msg = wxString::Format( wxT( "Output precheck failed for output %s" ), aOutput->m_id );
+            msg = wxString::Format( wxT( "Output precheck failed for output %s" ),
+                                    aDestination->m_id );
             m_reporter->Report( msg, RPT_SEVERITY_ERROR );
         }
 
-        aOutput->m_lastRunSuccess = false;
+        aDestination->m_lastRunSuccess = false;
         return false;
     }
 
@@ -216,7 +215,7 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
     {
         msg += wxT( "|--------------------------------\n" );
         msg += wxT( "| " );
-        msg += wxString::Format( "Performing jobs for output %s", aOutput->m_id );
+        msg += wxString::Format( "Performing jobs for output %s", aDestination->m_id );
         msg += wxT( "\n" );
         msg += wxT( "|--------------------------------\n" );
 
@@ -224,7 +223,7 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
 
         int jobNum = 1;
 
-        for( const JOBSET_JOB& job : jobsForOutput )
+        for( const JOBSET_JOB& job : jobsForDestination )
         {
             msg += wxString::Format( wxT( "|%-5d | %-50s\n" ), jobNum, job.GetDescription() );
             jobNum++;
@@ -243,7 +242,7 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
     int failCount = 0;
     int successCount = 0;
 
-    for( const JOBSET_JOB& job : jobsForOutput )
+    for( const JOBSET_JOB& job : jobsForDestination )
     {
         if( m_reporter != nullptr )
         {
@@ -264,7 +263,7 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
         if( !reporterToUse || reporterToUse == &NULL_REPORTER::GetInstance() )
         {
             reporterToUse = new JOBSET_OUTPUT_REPORTER( tempDirPath );
-            aOutput->m_lastRunReporters[job.m_id] = reporterToUse;
+            aDestination->m_lastRunReporters[job.m_id] = reporterToUse;
         }
 
         int result = CLI::EXIT_CODES::SUCCESS;
@@ -286,7 +285,7 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
             }
         }
 
-        aOutput->m_lastRunSuccessMap[job.m_id] = ( result == CLI::EXIT_CODES::SUCCESS );
+        aDestination->m_lastRunSuccessMap[job.m_id] = ( result == CLI::EXIT_CODES::SUCCESS );
 
         if( m_reporter )
         {
@@ -327,9 +326,9 @@ bool JOBS_RUNNER::RunJobsForOutput( JOBSET_OUTPUT* aOutput, bool aBail )
     }
 
     if( genOutputs )
-        success &= aOutput->m_outputHandler->HandleOutputs( tempDirPath, m_project, outputs );
+        success &= aDestination->m_outputHandler->HandleOutputs( tempDirPath, m_project, outputs );
 
-    aOutput->m_lastRunSuccess = success;
+    aDestination->m_lastRunSuccess = success;
 
     if( m_reporter )
     {
