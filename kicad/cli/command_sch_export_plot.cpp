@@ -134,6 +134,7 @@ CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
 int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
 {
     wxString filename = m_argInput;
+
     if( !wxFile::Exists( filename ) )
     {
         wxFprintf( stderr, _( "Schematic file does not exist or is not accessible\n" ) );
@@ -143,22 +144,20 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
     std::vector<wxString> pages;
     wxString              pagesStr = From_UTF8( m_argParser.get<std::string>( ARG_PAGES ).c_str() );
     wxStringTokenizer     tokenizer( pagesStr, "," );
+
     while( tokenizer.HasMoreTokens() )
-    {
         pages.push_back( tokenizer.GetNextToken().Trim() );
-    }
 
     std::unique_ptr<JOB_EXPORT_SCH_PLOT> plotJob;
 
     switch( m_plotFormat )
     {
-    case SCH_PLOT_FORMAT::PDF: plotJob = std::make_unique<JOB_EXPORT_SCH_PLOT_PDF>(); break;
-    case SCH_PLOT_FORMAT::DXF: plotJob = std::make_unique<JOB_EXPORT_SCH_PLOT_DXF>(); break;
-    case SCH_PLOT_FORMAT::SVG: plotJob = std::make_unique<JOB_EXPORT_SCH_PLOT_SVG>(); break;
-    case SCH_PLOT_FORMAT::POST: plotJob = std::make_unique<JOB_EXPORT_SCH_PLOT_PS>(); break;
-    case SCH_PLOT_FORMAT::HPGL: plotJob = std::make_unique<JOB_EXPORT_SCH_PLOT_HPGL>(); break;
+    case SCH_PLOT_FORMAT::PDF:  plotJob = std::make_unique<JOB_EXPORT_SCH_PLOT_PDF>( false ); break;
+    case SCH_PLOT_FORMAT::DXF:  plotJob = std::make_unique<JOB_EXPORT_SCH_PLOT_DXF>();        break;
+    case SCH_PLOT_FORMAT::SVG:  plotJob = std::make_unique<JOB_EXPORT_SCH_PLOT_SVG>();        break;
+    case SCH_PLOT_FORMAT::POST: plotJob = std::make_unique<JOB_EXPORT_SCH_PLOT_PS>();         break;
+    case SCH_PLOT_FORMAT::HPGL: plotJob = std::make_unique<JOB_EXPORT_SCH_PLOT_HPGL>();       break;
     }
-
 
     plotJob->m_filename = filename;
     plotJob->m_plotFormat = m_plotFormat;
