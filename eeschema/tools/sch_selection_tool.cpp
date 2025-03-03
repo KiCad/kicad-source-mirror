@@ -597,7 +597,11 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
             SCH_COLLECTOR collector;
 
-            if( CollectHits( collector, evt->DragOrigin(), { SCH_TABLECELL_T } ) )
+            if( m_selection.GetSize() == 1 && dynamic_cast<SCH_TABLE*>( m_selection.GetItem( 0 ) ) )
+            {
+                m_toolMgr->RunAction( SCH_ACTIONS::move );
+            }
+            else if( CollectHits( collector, evt->DragOrigin(), { SCH_TABLECELL_T } ) )
             {
                 selectTableCells( static_cast<SCH_TABLE*>( collector[0]->GetParent() ) );
             }
@@ -2827,6 +2831,50 @@ bool SCH_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 }
 
 
+int SCH_SELECTION_TOOL::SelectNext( const TOOL_EVENT& aEvent )
+{
+    SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+
+    if( !editFrame || !editFrame->GetNetNavigator() || m_selection.Size() == 0 )
+        return 0;
+
+    if( !m_selection.Front()->IsSelected() )
+        return 0;
+
+    const SCH_ITEM* item = editFrame->SelectNextPrevNetNavigatorItem( true );
+
+    if( item )
+    {
+        select( const_cast<SCH_ITEM*>( item ) );
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+    }
+
+    return 0;
+}
+
+
+int SCH_SELECTION_TOOL::SelectPrevious( const TOOL_EVENT& aEvent )
+{
+    SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+
+    if( !editFrame || !editFrame->GetNetNavigator() || m_selection.Size() == 0 )
+        return 0;
+
+    if( !m_selection.Front()->IsBrightened() )
+        return 0;
+
+    const SCH_ITEM* item = editFrame->SelectNextPrevNetNavigatorItem( false );
+
+    if( item )
+    {
+        select( const_cast<SCH_ITEM*>( item ) );
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+    }
+
+    return 0;
+}
+
+
 void SCH_SELECTION_TOOL::setTransitions()
 {
     Go( &SCH_SELECTION_TOOL::UpdateMenu,          ACTIONS::updateMenu.MakeEvent() );
@@ -2848,6 +2896,9 @@ void SCH_SELECTION_TOOL::setTransitions()
 
     Go( &SCH_SELECTION_TOOL::SelectAll,           SCH_ACTIONS::selectAll.MakeEvent() );
     Go( &SCH_SELECTION_TOOL::UnselectAll,         SCH_ACTIONS::unselectAll.MakeEvent() );
+
+    Go( &SCH_SELECTION_TOOL::SelectNext,          SCH_ACTIONS::nextNetItem.MakeEvent() );
+    Go( &SCH_SELECTION_TOOL::SelectPrevious,      SCH_ACTIONS::previousNetItem.MakeEvent() );
 
     Go( &SCH_SELECTION_TOOL::disambiguateCursor,  EVENTS::DisambiguatePoint );
 }

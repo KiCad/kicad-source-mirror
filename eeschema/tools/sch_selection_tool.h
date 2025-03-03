@@ -152,6 +152,12 @@ public:
     ///< Unselect all visible items in sheet
     int UnselectAll( const TOOL_EVENT& aEvent );
 
+    ///< Select next net item
+    int SelectNext( const TOOL_EVENT& aEvent );
+
+    ///< Select previous net item
+    int SelectPrevious( const TOOL_EVENT& aEvent );
+
     void ClearSelection( bool aQuietMode = false );
 
     /**

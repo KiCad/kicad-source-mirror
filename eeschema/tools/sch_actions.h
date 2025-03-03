@@ -175,6 +175,9 @@ public:
     static TOOL_ACTION rescueSymbols;
     static TOOL_ACTION remapSymbols;
 
+    static TOOL_ACTION nextNetItem;
+    static TOOL_ACTION previousNetItem;
+
     // Suite operations
     static TOOL_ACTION editWithLibEdit;
     static TOOL_ACTION editLibSymbolWithLibEdit;

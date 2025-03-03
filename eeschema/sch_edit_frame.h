@@ -959,6 +959,8 @@ public:
 
     void SelectNetNavigatorItem( const NET_NAVIGATOR_ITEM_DATA* aSelection = nullptr );
 
+    const SCH_ITEM* SelectNextPrevNetNavigatorItem( bool aNext );
+
     void ToggleNetNavigator();
 
     PLUGIN_ACTION_SCOPE PluginActionScope() const override
