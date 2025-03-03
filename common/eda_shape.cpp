@@ -2036,6 +2036,8 @@ void EDA_SHAPE::SwapShape( EDA_SHAPE* aImage )
     SWAPITEM( m_editState );
     SWAPITEM( m_endsSwapped );
     #undef SWAPITEM
+
+    m_hatchingDirty = true;
 }
 
 
