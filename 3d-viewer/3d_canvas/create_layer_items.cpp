@@ -103,6 +103,68 @@ void transformFPShapesToPolySet( const FOOTPRINT* aFootprint, PCB_LAYER_ID aLaye
 }
 
 
+void transformFPTextToPolySet( const FOOTPRINT* aFootprint, PCB_LAYER_ID aLayer,
+                               const std::bitset<LAYER_3D_END>& aFlags, SHAPE_POLY_SET& aBuffer,
+                               int aMaxError, ERROR_LOC aErrorLoc )
+{
+    for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
+    {
+        if( item->GetLayer() != aLayer )
+            continue;
+
+        if( item->Type() == PCB_TEXT_T )
+        {
+            PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
+
+            if( !aFlags.test( LAYER_FP_TEXT ) )
+                continue;
+
+            if( text->GetText() == wxT( "${REFERENCE}" ) && !aFlags.test( LAYER_FP_REFERENCES ) )
+                continue;
+
+            if( text->GetText() == wxT( "${VALUE}" ) && !aFlags.test( LAYER_FP_VALUES ) )
+                continue;
+
+            if( aLayer != UNDEFINED_LAYER && text->GetLayer() == aLayer )
+                text->TransformTextToPolySet( aBuffer, 0, aMaxError, aErrorLoc );
+        }
+
+        if( item->Type() == PCB_TEXTBOX_T )
+        {
+            PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( item );
+
+            if( aLayer != UNDEFINED_LAYER && textbox->GetLayer() == aLayer )
+            {
+                // border
+                if( textbox->IsBorderEnabled() )
+                {
+                    textbox->PCB_SHAPE::TransformShapeToPolygon( aBuffer, aLayer, 0, aMaxError,
+                                                                 aErrorLoc );
+                }
+
+                // text
+                textbox->TransformTextToPolySet( aBuffer, 0, aMaxError, aErrorLoc );
+            }
+        }
+    }
+
+    for( const PCB_FIELD* field : aFootprint->GetFields( true /* visibleOnly */ ) )
+    {
+        if( !aFlags.test( LAYER_FP_TEXT ) )
+            continue;
+
+        if( field->IsReference() && !aFlags.test( LAYER_FP_REFERENCES ) )
+            continue;
+
+        if( field->IsValue() && !aFlags.test( LAYER_FP_VALUES ) )
+            continue;
+
+        if( field && field->GetLayer() == aLayer )
+            field->TransformTextToPolySet( aBuffer, 0, aMaxError, aErrorLoc );
+    }
+}
+
+
 void BOARD_ADAPTER::destroyLayers()
 {
 #define DELETE_AND_FREE( ptr ) \
@@ -1023,14 +1085,14 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 }
                 else
                 {
-                    footprint->TransformPadsToPolySet( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
+                    footprint->TransformPadsToPolySet( *layerPoly, layer, 0, maxError,
+                                                       ERROR_INSIDE );
                 }
 
-                // On tech layers, use a poor circle approximation, only for texts (stroke font)
-                footprint->TransformFPTextToPolySet( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
-
-                // Add the remaining things with dynamic seg count for circles
-                transformFPShapesToPolySet( footprint, layer, *layerPoly, maxError, ERROR_INSIDE );
+                transformFPTextToPolySet( footprint, layer, visibilityFlags, *layerPoly, maxError,
+                                          ERROR_INSIDE );
+                transformFPShapesToPolySet( footprint, layer, *layerPoly, maxError,
+                                            ERROR_INSIDE );
             }
 
             if( cfg.show_zones || layer == F_Mask || layer == B_Mask )
