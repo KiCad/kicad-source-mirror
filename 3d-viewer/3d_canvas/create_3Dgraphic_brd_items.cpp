@@ -188,23 +188,23 @@ void BOARD_ADAPTER::addShape( const PCB_DIMENSION_BASE* aDimension, CONTAINER_2D
 
 void BOARD_ADAPTER::addFootprintShapes( const FOOTPRINT* aFootprint, CONTAINER_2D_BASE* aContainer,
                                         PCB_LAYER_ID aLayerId,
-                                        const std::bitset<LAYER_3D_END>& aVisibilityFlags )
+                                        const std::bitset<LAYER_3D_END>& aFlags )
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
 
     for( PCB_FIELD* field : aFootprint->GetFields() )
     {
-        if( field->GetLayer() == aLayerId && field->IsVisible() )
-        {
-            if( !aVisibilityFlags.test( LAYER_FP_TEXT ) )
-                continue;
-            else if( field->IsReference() && !aVisibilityFlags.test( LAYER_FP_REFERENCES ) )
-                continue;
-            else if( field->IsValue() && !aVisibilityFlags.test( LAYER_FP_VALUES ) )
-                continue;
+        if( !aFlags.test( LAYER_FP_TEXT ) )
+            continue;
 
+        if( field->IsReference() && !aFlags.test( LAYER_FP_REFERENCES ) )
+            continue;
+
+        if( field->IsValue() && !aFlags.test( LAYER_FP_VALUES ) )
+            continue;
+
+        if( field->GetLayer() == aLayerId && field->IsVisible() )
             addText( field, aContainer, field );
-        }
     }
 
     for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
@@ -215,19 +215,17 @@ void BOARD_ADAPTER::addFootprintShapes( const FOOTPRINT* aFootprint, CONTAINER_2
         {
             PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
 
-            if( text->GetLayer() == aLayerId )
-            {
-                if( !aVisibilityFlags.test( LAYER_FP_TEXT ) )
-                    continue;
-                else if( text->GetText() == wxT( "${REFERENCE}" )
-                         && !aVisibilityFlags.test( LAYER_FP_REFERENCES ) )
-                    continue;
-                else if( text->GetText() == wxT( "${VALUE}" )
-                         && !aVisibilityFlags.test( LAYER_FP_VALUES ) )
-                    continue;
+            if( !aFlags.test( LAYER_FP_TEXT ) )
+                continue;
 
+            if( text->GetText() == wxT( "${REFERENCE}" ) && !aFlags.test( LAYER_FP_REFERENCES ) )
+                continue;
+
+            if( text->GetText() == wxT( "${VALUE}" ) && !aFlags.test( LAYER_FP_VALUES ) )
+                continue;
+
+            if( text->GetLayer() == aLayerId )
                 addText( text, aContainer, text );
-            }
 
             break;
         }
@@ -283,7 +281,7 @@ void BOARD_ADAPTER::addFootprintShapes( const FOOTPRINT* aFootprint, CONTAINER_2
 }
 
 
-void BOARD_ADAPTER::createTrackWithMargin( const PCB_TRACK*   aTrack,
+void BOARD_ADAPTER::createTrackWithMargin( const PCB_TRACK* aTrack,
                                            CONTAINER_2D_BASE* aDstContainer, PCB_LAYER_ID aLayer,
                                            int aMargin )
 {

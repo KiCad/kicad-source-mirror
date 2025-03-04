@@ -3911,8 +3911,6 @@ void FOOTPRINT::TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_I
                                             bool aIncludeText, bool aIncludeShapes,
                                             bool aIncludePrivateItems ) const
 {
-    std::vector<const PCB_TEXT*> texts; // List of PCB_TEXTs to convert
-
     for( BOARD_ITEM* item : GraphicalItems() )
     {
         if( GetPrivateLayers().test( item->GetLayer() ) && !aIncludePrivateItems )
@@ -3923,7 +3921,7 @@ void FOOTPRINT::TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_I
             PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
 
             if( aLayer != UNDEFINED_LAYER && text->GetLayer() == aLayer )
-                texts.push_back( text );
+                text->TransformTextToPolySet( aBuffer, aClearance, aError, aErrorLoc );
         }
 
         if( item->Type() == PCB_TEXTBOX_T && aIncludeText )
@@ -3934,7 +3932,11 @@ void FOOTPRINT::TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_I
             {
                 // border
                 if( textbox->IsBorderEnabled() )
-                    textbox->PCB_SHAPE::TransformShapeToPolygon( aBuffer, aLayer, 0, aError, aErrorLoc );
+                {
+                    textbox->PCB_SHAPE::TransformShapeToPolygon( aBuffer, aLayer, 0, aError,
+                                                                 aErrorLoc );
+                }
+
                 // text
                 textbox->TransformTextToPolySet( aBuffer, 0, aError, aErrorLoc );
             }
@@ -3954,12 +3956,9 @@ void FOOTPRINT::TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_I
         for( const PCB_FIELD* field : m_fields )
         {
             if( field->GetLayer() == aLayer && field->IsVisible() )
-                texts.push_back( field );
+                field->TransformTextToPolySet( aBuffer, aClearance, aError, aErrorLoc );
         }
     }
-
-    for( const PCB_TEXT* text : texts )
-        text->TransformTextToPolySet( aBuffer, aClearance, aError, aErrorLoc );
 }
 
 
