@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 06:36+0300\n"
-"PO-Revision-Date: 2025-02-27 07:25+0000\n"
+"PO-Revision-Date: 2025-03-04 22:27+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -50,7 +50,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10.2-dev\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -376,14 +376,12 @@ msgid "Reload board"
 msgstr "重新加载电路板"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:49
-#, fuzzy
 msgid "Reload board and refresh 3D view"
-msgstr "重新加载电路板和 3D 模型"
+msgstr "重新加载电路板并刷新 3D 视图"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
-#, fuzzy
 msgid "Use raytracing"
-msgstr "光线追踪"
+msgstr "使用光线追踪"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:56
 msgid "Render current view using Raytracing"
@@ -394,27 +392,24 @@ msgid "Copy 3D image to clipboard"
 msgstr "复制 3D 图像到剪贴板"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:64
-#, fuzzy
 msgid "Copy the current 3D image to the clipboard"
-msgstr "复制 3D 图像到剪贴板"
+msgstr "复制当前 3D 图像到剪贴板"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
 msgid "Export Current View as PNG..."
 msgstr "将当前视图导出为 PNG..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
-#, fuzzy
 msgid "Export the Current View as a PNG image"
-msgstr "将当前视图导出为 PNG..."
+msgstr "将当前视图导出为 PNG 图像"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
 msgid "Export Current View as JPEG..."
 msgstr "将当前视图导出为 JPEG..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:80
-#, fuzzy
 msgid "Export the Current View as a JPEG image"
-msgstr "将当前视图导出为 JPEG..."
+msgstr "将当前视图导出为 JPEG 图像"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:88
 msgid "Set Pivot"
@@ -2751,7 +2746,7 @@ msgstr "已链接"
 
 #: common/dialogs/dialog_grid_settings_base.h:57
 msgid "Grid Settings"
-msgstr "网格设置"
+msgstr "栅格设置"
 
 #: common/dialogs/dialog_hotkey_list.cpp:36
 msgid "Hotkey List"
@@ -3690,7 +3685,6 @@ msgid "Enter the password for the SSH key"
 msgstr "请输入 SSH 密钥的密码"
 
 #: common/dialogs/git/dialog_git_repository.cpp:337
-#, fuzzy
 msgid "Test Connection"
 msgstr "测试连接"
 
@@ -3736,9 +3730,8 @@ msgstr "请输入仓库 URL"
 
 #: common/dialogs/git/dialog_git_repository.cpp:453
 #: common/dialogs/git/dialog_git_repository_base.cpp:108
-#, fuzzy
 msgid "SSH key password:"
-msgstr "SSH 密钥密码"
+msgstr "SSH 密钥密码:"
 
 #: common/dialogs/git/dialog_git_repository.cpp:459
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
@@ -3746,14 +3739,12 @@ msgid "Password:"
 msgstr "密码:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:38
-#, fuzzy
 msgid "Location:"
-msgstr "地址"
+msgstr "地址:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:45
-#, fuzzy
 msgid "Connection type:"
-msgstr "连接类型"
+msgstr "连接类型:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:52
 msgid "HTTPS"
@@ -3765,9 +3756,8 @@ msgid "Local"
 msgstr "本地"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:83
-#, fuzzy
 msgid "SSH private key:     "
-msgstr "SSH 私钥"
+msgstr "SSH 私钥:     "
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:90
 msgid "Select SSH private key file"
@@ -3778,9 +3768,8 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:101
-#, fuzzy
 msgid "User name:"
-msgstr "用户:"
+msgstr "用户名:"
 
 #: common/dialogs/git/dialog_git_repository_base.h:77
 msgid "Git Repository"
@@ -5230,14 +5219,12 @@ msgstr "Python 解释器状态"
 
 #: common/dialogs/panel_printer_list.cpp:154
 #: common/dialogs/panel_printer_list.cpp:175
-#, fuzzy
 msgid "Default printer"
-msgstr "默认字体"
+msgstr "默认打印机"
 
 #: common/dialogs/panel_printer_list_base.cpp:17
-#, fuzzy
 msgid "Printers"
-msgstr "打印"
+msgstr "打印机"
 
 #: common/dialogs/panel_printer_list_base.cpp:27
 #: common/widgets/wx_html_report_panel.cpp:246
@@ -5559,19 +5546,16 @@ msgstr "顶层"
 
 #: common/dialogs/panel_toolbar_customization.cpp:133
 #: common/dialogs/panel_toolbar_customization_base.cpp:72
-#, fuzzy
 msgid "Insert separator"
-msgstr "单元格分隔符"
+msgstr "插入分隔符"
 
 #: common/dialogs/panel_toolbar_customization.cpp:139
-#, fuzzy
 msgid "Insert spacer"
-msgstr "插入"
+msgstr "插入分隔条"
 
 #: common/dialogs/panel_toolbar_customization.cpp:140
-#, fuzzy
 msgid "Insert group"
-msgstr "进入组合"
+msgstr "插入组"
 
 #: common/dialogs/panel_toolbar_customization.cpp:543 common/eda_item.cpp:406
 #: pcbnew/pcb_group.cpp:392
@@ -5579,9 +5563,8 @@ msgid "Group"
 msgstr "分组"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:19
-#, fuzzy
 msgid "Customize toolbars"
-msgstr "自定义图层设置"
+msgstr "自定义工具栏"
 
 #: common/draw_panel_gal.cpp:321 common/draw_panel_gal.cpp:508
 msgid "Could not use OpenGL, falling back to software rendering"
@@ -5885,9 +5868,8 @@ msgstr "颜色选项"
 #: common/eda_base_frame.cpp:1345 common/eda_base_frame.cpp:1362
 #: common/eda_base_frame.cpp:1373 common/eda_base_frame.cpp:1399
 #: common/eda_base_frame.cpp:1427
-#, fuzzy
 msgid "Toolbars"
-msgstr "工具 (&T)"
+msgstr "工具栏 (&T)"
 
 #: common/eda_base_frame.cpp:1307 common/hotkey_store.cpp:77
 #: common/tool/common_tools.cpp:614 eeschema/menubar.cpp:137
@@ -8509,24 +8491,20 @@ msgid "Quit %s"
 msgstr "退出 %s"
 
 #: common/tool/action_toolbar.cpp:1036
-#, fuzzy
 msgid "Grid Selector"
-msgstr "网格样式"
+msgstr "栅格选择器"
 
 #: common/tool/action_toolbar.cpp:1037
-#, fuzzy
 msgid "Grid Selection box"
-msgstr "仅所选部分"
+msgstr "栅格选择框"
 
 #: common/tool/action_toolbar.cpp:1039
-#, fuzzy
 msgid "Zoom Selector"
-msgstr "缩放至选区大小"
+msgstr "缩放选择器"
 
 #: common/tool/action_toolbar.cpp:1040
-#, fuzzy
 msgid "Zoom Selection box"
-msgstr "缩放至选区大小"
+msgstr "缩放选择框"
 
 #: common/tool/action_toolbar.cpp:1042
 #, fuzzy
@@ -8538,24 +8516,20 @@ msgid "Region to hold the IPC/Scripting action buttons"
 msgstr ""
 
 #: common/tool/action_toolbar.cpp:1045
-#, fuzzy
 msgid "Layer selector"
-msgstr "层选择:"
+msgstr "层选择器"
 
 #: common/tool/action_toolbar.cpp:1046
-#, fuzzy
 msgid "Control to select the layer"
-msgstr "清除选定的图形层"
+msgstr "控制以选择层"
 
 #: common/tool/action_toolbar.cpp:1048
-#, fuzzy
 msgid "Symbol unit selector"
-msgstr "符号单元标记:"
+msgstr "符号单元选择器"
 
 #: common/tool/action_toolbar.cpp:1049
-#, fuzzy
 msgid "Displays the current unit"
-msgstr "关闭当前编辑器"
+msgstr "显示当前符号单元"
 
 #: common/tool/actions.cpp:45
 msgid "New..."
@@ -9149,14 +9123,12 @@ msgid "Hide Library Tree"
 msgstr "隐藏库结构树"
 
 #: common/tool/actions.cpp:836
-#, fuzzy
 msgid "Show Side Panel"
-msgstr "显示隐藏引脚"
+msgstr "显示侧边栏面板"
 
 #: common/tool/actions.cpp:841
-#, fuzzy
 msgid "Show Console Panel"
-msgstr "显示控制台窗口"
+msgstr "显示控制台面板"
 
 #: common/tool/actions.cpp:846
 msgid "Focus Library Tree Search Field"
@@ -9188,7 +9160,7 @@ msgstr "切换到快速栅格 2"
 
 #: common/tool/actions.cpp:902
 msgid "Cycle Fast Grid"
-msgstr "循环切换快速网格"
+msgstr "循环切换快速栅格"
 
 #: common/tool/actions.cpp:909
 msgid "Switch to Next Grid"
@@ -10125,9 +10097,8 @@ msgid "KiCad s-expression schematic files"
 msgstr "KiCad s-expression 原理图文件"
 
 #: common/wildcards_and_files_ext.cpp:289
-#, fuzzy
 msgid "Altium Project files"
-msgstr "所有 KiCad 工程文件"
+msgstr "Altium 工程文件"
 
 #: common/wildcards_and_files_ext.cpp:295
 msgid "CADSTAR Archive files"
@@ -11809,7 +11780,7 @@ msgstr "编辑违规严重级别......"
 
 #: eeschema/dialogs/dialog_erc.cpp:715
 msgid "Edit connection grid spacing..."
-msgstr "编辑最小网格间距..."
+msgstr "编辑最小栅格间距..."
 
 #: eeschema/dialogs/dialog_erc.cpp:727 eeschema/dialogs/dialog_erc.cpp:763
 #: pcbnew/dialogs/dialog_drc.cpp:767 pcbnew/dialogs/dialog_drc.cpp:820
@@ -13877,9 +13848,8 @@ msgid "Whole &words only"
 msgstr "全字匹配 (&W)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:90
-#, fuzzy
 msgid "Regular Expression"
-msgstr "格式错误的表达式"
+msgstr "正则表达式"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:93
 msgid "Search pin &names and numbers"
@@ -16755,12 +16725,12 @@ msgstr "当前配置不包含符号库 '%s'"
 #: eeschema/erc/erc.cpp:1414
 #, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration"
-msgstr "当前配置中未启用符号库 '%s'。"
+msgstr "当前配置中未启用符号库 '%s'"
 
 #: eeschema/erc/erc.cpp:1429
 #, c-format
 msgid "The symbol library '%s' was not found at '%s'."
-msgstr "找不到符号库 '%s'。"
+msgstr "在 '%2$s' 中找不到符号库 '%1$s'。"
 
 #: eeschema/erc/erc.cpp:1449
 #, c-format
@@ -17487,12 +17457,12 @@ msgstr "在"
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:74
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:115
 msgid "DXF origin on PCB Grid, X Coordinate"
-msgstr "PCB 网格上的 DXF 原点, X 坐标"
+msgstr "PCB 栅格上的 DXF 原点, X 坐标"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:95
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:132
 msgid "DXF origin on PCB Grid, Y Coordinate"
-msgstr "PCB 网格上的 DXF 原点, Y 坐标"
+msgstr "PCB 栅格上的 DXF 原点, Y 坐标"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:116
 msgid "Import Parameters"
@@ -20929,14 +20899,13 @@ msgstr "复制信号名称"
 #: eeschema/sim/simulator_frame_ui.cpp:180
 #: eeschema/sim/simulator_frame_ui.cpp:187
 #: eeschema/sim/simulator_frame_ui.cpp:200
-#, fuzzy
 msgid "Create new cursor..."
-msgstr "创建新的电路板"
+msgstr "创建新的光标..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "Delete %s..."
-msgstr "删除预设..."
+msgstr "删除 %s..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:242
 #: eeschema/sim/simulator_frame_ui.cpp:900
@@ -20973,9 +20942,8 @@ msgstr "删除测量"
 
 #: eeschema/sim/simulator_frame_ui.cpp:651
 #: eeschema/sim/simulator_frame_ui.cpp:672
-#, fuzzy
 msgid "Cursor "
-msgstr "光标 1"
+msgstr "光标 "
 
 #: eeschema/sim/simulator_frame_ui.cpp:729
 #: eeschema/sim/simulator_frame_ui.cpp:1155
@@ -21604,7 +21572,7 @@ msgid ""
 msgstr "符号 '%s' 无法替换另一个符号 '%s', 后者是它的继承符号。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:995
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
 msgstr "符号 '%s' 已存在于库 '%s' 中, 是否覆盖?"
@@ -21637,7 +21605,7 @@ msgid "Export Symbol"
 msgstr "导出符号"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1129
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is read-only."
 msgstr "'%s' 库为只读。"
 
@@ -22195,9 +22163,8 @@ msgid "Import a symbol to the current library"
 msgstr "导入符号到当前库"
 
 #: eeschema/tools/ee_actions.cpp:274
-#, fuzzy
 msgid "Export..."
-msgstr "导出 (&E)..."
+msgstr "导出..."
 
 #: eeschema/tools/ee_actions.cpp:275
 msgid "Export a symbol to a new library file"
@@ -22412,14 +22379,12 @@ msgid "Place Sheet Pins"
 msgstr "放置图纸引脚"
 
 #: eeschema/tools/ee_actions.cpp:579
-#, fuzzy
 msgid "Autoplace All Sheet Pins"
-msgstr "放置图纸引脚"
+msgstr "自动放置所有图纸引脚"
 
 #: eeschema/tools/ee_actions.cpp:580
-#, fuzzy
 msgid "Imports and auto places all sheet pins"
-msgstr "导入层次图纸引脚"
+msgstr "导入并自动放置所有图纸引脚"
 
 #: eeschema/tools/ee_actions.cpp:585 eeschema/tools/ee_actions.cpp:593
 msgid "Sync Sheet Pins..."
@@ -22847,24 +22812,20 @@ msgid ""
 msgstr "将旧原理图中的库符号引用重新映射到符号库表"
 
 #: eeschema/tools/ee_actions.cpp:1115
-#, fuzzy
 msgid "Next Net Item"
-msgstr "文本项目"
+msgstr "下一网络项目"
 
 #: eeschema/tools/ee_actions.cpp:1116
-#, fuzzy
 msgid "Select next item on the current net"
-msgstr "选择光标下的连接项"
+msgstr "选择当前网络中的下一连接项"
 
 #: eeschema/tools/ee_actions.cpp:1122
-#, fuzzy
 msgid "Previous Net Item"
-msgstr "上一图纸"
+msgstr "上一网络项目"
 
 #: eeschema/tools/ee_actions.cpp:1123
-#, fuzzy
 msgid "Select previous item on the current net"
-msgstr "选择光标下的连接项"
+msgstr "选择当前网络中的上一连接项"
 
 #: eeschema/tools/ee_actions.cpp:1128
 msgid "Export Drawing to Clipboard"
@@ -24974,24 +24935,20 @@ msgid "DCode:"
 msgstr "D 码:"
 
 #: gerbview/toolbars_gerber.cpp:268 gerbview/toolbars_gerber.cpp:269
-#, fuzzy
 msgid "Text info entry"
-msgstr "文本编辑器"
+msgstr "文本信息入口"
 
 #: gerbview/toolbars_gerber.cpp:271
-#, fuzzy
 msgid "Component highlight"
-msgstr "切换网络高亮"
+msgstr "元件高亮"
 
 #: gerbview/toolbars_gerber.cpp:273
-#, fuzzy
 msgid "Net highlight"
-msgstr "网络颜色高亮"
+msgstr "网络高亮"
 
 #: gerbview/toolbars_gerber.cpp:275
-#, fuzzy
 msgid "Aperture highlight"
-msgstr "网络颜色高亮"
+msgstr "开窗高亮"
 
 #: gerbview/toolbars_gerber.cpp:277
 #, fuzzy
@@ -26340,9 +26297,9 @@ msgstr "复制文件作业设置"
 
 #: kicad/dialogs/dialog_destination.cpp:55
 #: kicad/dialogs/dialog_destination_base.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "%s Destination"
-msgstr "目标:"
+msgstr "%s 目标"
 
 #: kicad/dialogs/dialog_destination.cpp:86
 msgid "Select output directory"
@@ -26457,9 +26414,9 @@ msgid "Update Available"
 msgstr "有可用更新"
 
 #: kicad/dialogs/panel_jobset.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Destination: %s"
-msgstr "目标:"
+msgstr "目标: %s"
 
 #: kicad/dialogs/panel_jobset.cpp:68
 msgid "No."
@@ -26533,47 +26490,40 @@ msgid "Select job type:"
 msgstr "选择作业类型:"
 
 #: kicad/dialogs/panel_jobset.cpp:783
-#, fuzzy
 msgid "Destination Types"
-msgstr "目标:"
+msgstr "目标类型"
 
 #: kicad/dialogs/panel_jobset.cpp:792
-#, fuzzy
 msgid "Add New Destination"
-msgstr "目标:"
+msgstr "添加新目标"
 
 #: kicad/dialogs/panel_jobset.cpp:793
-#, fuzzy
 msgid "Select destination type:"
-msgstr "选择作业类型:"
+msgstr "选择目标类型:"
 
 #: kicad/dialogs/panel_jobset.cpp:958
-#, fuzzy
 msgid "No destinations defined"
-msgstr "未定义任何输出"
+msgstr "未定义任何目标"
 
 #: kicad/dialogs/panel_jobset_base.cpp:24
 msgid "Jobs"
 msgstr "作业"
 
 #: kicad/dialogs/panel_jobset_base.cpp:83
-#, fuzzy
 msgid "Destinations"
-msgstr "目标:"
+msgstr "目标"
 
 #: kicad/dialogs/panel_jobset_base.cpp:116
 msgid "Save Jobset"
 msgstr "保存作业集"
 
 #: kicad/dialogs/panel_jobset_base.cpp:122
-#, fuzzy
 msgid "Generate All Destinations"
-msgstr "生成通用选项"
+msgstr "生成所有目标"
 
 #: kicad/dialogs/panel_jobset_base.h:133
-#, fuzzy
 msgid "Jobset Run Log"
-msgstr "工作输出日志"
+msgstr "作业集运行日志"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:143
 msgid "Edit the project schematic"
@@ -26672,9 +26622,8 @@ msgid ""
 msgstr "创建新目录时出错。请尝试不同路径。无法导入该工程。"
 
 #: kicad/import_project.cpp:146
-#, fuzzy
 msgid "Import Altium Project Files"
-msgstr "导入 Eagle 工程文件"
+msgstr "导入 Altium 工程文件"
 
 #: kicad/import_project.cpp:154
 msgid "Import CADSTAR Archive Project Files"
@@ -26797,14 +26746,12 @@ msgid "Import Non-KiCad Project..."
 msgstr "导入非 KiCad 工程..."
 
 #: kicad/menubar.cpp:115
-#, fuzzy
 msgid "Altium Project..."
-msgstr "Eagle 工程..."
+msgstr "Altium 工程..."
 
 #: kicad/menubar.cpp:116
-#, fuzzy
 msgid "Import Altium Schematic and PCB (*.PrjPcb)"
-msgstr "导入 CADSTAR 归档原理图和 PCB (*.csa, *.cpa)"
+msgstr "导入 Altium 原理图和 PCB (*.PrjPcb)"
 
 #: kicad/menubar.cpp:119
 msgid "CADSTAR Project..."
@@ -28277,24 +28224,20 @@ msgstr ""
 "这并非所有图纸上都显示"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:160
-#, fuzzy
 msgid "Origin Selector"
-msgstr "原始图片"
+msgstr "原点选择器"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:161
-#, fuzzy
 msgid "Select the origin of the status bar coordinates"
-msgstr "选择用于 X, Y 坐标显示的原点。"
+msgstr "选择状态栏坐标的原点"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:162
-#, fuzzy
 msgid "Page Selector"
-msgstr "层选择"
+msgstr "页面选择器"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:163
-#, fuzzy
 msgid "Select the page to simulate item displays"
-msgstr "选择项目的显示方式"
+msgstr "选择页面以模拟项目显示"
 
 #: pagelayout_editor/tools/pl_actions.cpp:72
 msgid "Place Bitmaps"
@@ -32534,9 +32477,8 @@ msgstr "仅低于面积限制时"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:363
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:288
-#, fuzzy
 msgid "Area limit:"
-msgstr "仅低于面积限制时"
+msgstr "面积限制:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:366
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:291
@@ -34780,9 +34722,8 @@ msgid "Gerber X2"
 msgstr "Gerber X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:92
-#, fuzzy
 msgid "Generate tenting layers"
-msgstr "生成布置文件"
+msgstr "生成盖油层"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:106
 msgid "Generate map:"
@@ -35787,7 +35728,7 @@ msgstr "0.1"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:37
 msgid "Round outwards to grid multiples (when possible)"
-msgstr "向外取整至网格倍数 (如果可能)"
+msgstr "向外取整至栅格倍数 (如果可能)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:39
 msgid "This is only possible for rectangular outsets."
@@ -37485,9 +37426,8 @@ msgid "Border style:"
 msgstr "边框样式:"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:148
-#, fuzzy
 msgid "Unknown choice"
-msgstr "未知方法"
+msgstr "未知选择"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:628
 #, c-format
@@ -37690,9 +37630,8 @@ msgid "End layer:"
 msgstr "结束层:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:378
-#, fuzzy
 msgid "Protection features:"
-msgstr "截面积:"
+msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:385
 msgid ""
@@ -38621,9 +38560,8 @@ msgid "Apply board defaults to non-copper footprint shapes"
 msgstr "将电路板默认设置应用于 non-copper 封装形状"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:58
-#, fuzzy
 msgid "This layer is required and cannot be disabled"
-msgstr "名称 %s 是保留字, 不能使用。"
+msgstr "该层必须存在, 不能禁用"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:88
 #: pcbnew/dialogs/panel_setup_layers.cpp:294
@@ -41661,9 +41599,9 @@ msgid "(layer %s; %d spokes connected to isolated island)"
 msgstr "(层 %s; %d 条引线与死铜相连)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:224
-#, fuzzy, c-format
+#, c-format
 msgid "(layer %s; %s custom spoke count %d; actual %d)"
-msgstr "(层 %s; %s 最小引线数量 %d; 实际 %d)"
+msgstr "(层 %s; %s 自定义引线数量 %d; 实际 %d)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:290
 #, c-format
@@ -46497,23 +46435,20 @@ msgid "A wire_via refers to missing padstack '%s'."
 msgstr "一个 wire_via 缺失 padstack '%s'。"
 
 #: pcbnew/toolbars_footprint_editor.cpp:103 pcbnew/toolbars_pcb_editor.cpp:216
-#, fuzzy
 msgid "Dimension objects"
-msgstr "测量标注文本"
+msgstr "测量标注对象"
 
 #: pcbnew/toolbars_pcb_editor.cpp:123
-#, fuzzy
 msgid "Track width selector"
-msgstr "走线宽度修正:"
+msgstr "走线宽度选择器"
 
 #: pcbnew/toolbars_pcb_editor.cpp:124
 msgid "Control to select the track width"
 msgstr ""
 
 #: pcbnew/toolbars_pcb_editor.cpp:125
-#, fuzzy
 msgid "Via diameter selector"
-msgstr "过孔直径解析:"
+msgstr "过孔直径选择器"
 
 #: pcbnew/toolbars_pcb_editor.cpp:126
 msgid "Control to select the via diameter"
@@ -46530,9 +46465,8 @@ msgid "Track tuning tools"
 msgstr "布线结束处太靠近了"
 
 #: pcbnew/toolbars_pcb_editor.cpp:225
-#, fuzzy
 msgid "PCB origins"
-msgstr "页面原点"
+msgstr "PCB 原点"
 
 #: pcbnew/toolbars_pcb_editor.cpp:374
 msgid ""
@@ -48143,18 +48077,16 @@ msgid "Show the footprint checker window"
 msgstr "显示封装检查器窗口"
 
 #: pcbnew/tools/pcb_actions.cpp:805
-#, fuzzy
 msgid "Load footprint from current PCB"
-msgstr "从当前电路板加载封装"
+msgstr "从当前 PCB 加载封装"
 
 #: pcbnew/tools/pcb_actions.cpp:806
 msgid "Load footprint from current board"
 msgstr "从当前电路板加载封装"
 
 #: pcbnew/tools/pcb_actions.cpp:812
-#, fuzzy
 msgid "Insert footprint into PCB"
-msgstr "在 PCB 上插入封装 (&I)"
+msgstr "在 PCB 上插入封装"
 
 #: pcbnew/tools/pcb_actions.cpp:813
 msgid "Insert footprint into current board"
@@ -48490,9 +48422,8 @@ msgid "Change via size to previous pre-defined size"
 msgstr "将过孔尺寸更改为上一个预设尺寸"
 
 #: pcbnew/tools/pcb_actions.cpp:1164
-#, fuzzy
 msgid "Automatically select track width"
-msgstr "自动缩放以适合"
+msgstr "自动选择走线宽度"
 
 #: pcbnew/tools/pcb_actions.cpp:1165
 msgid ""
@@ -48766,9 +48697,8 @@ msgid "Cycle between showing zone fills and just their outlines"
 msgstr "在显示填充区填充内容和仅显示填充区外框之间循环切换"
 
 #: pcbnew/tools/pcb_actions.cpp:1543
-#, fuzzy
 msgid "Automatic zoom"
-msgstr "自动"
+msgstr "自动缩放"
 
 #: pcbnew/tools/pcb_actions.cpp:1544
 msgid "Automatic Zoom on footprint change"
@@ -50532,7 +50462,7 @@ msgstr "高亮所选的网络"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1229
 msgid "Rename Selected Net..."
-msgstr "Rename Selected Networks"
+msgstr "重命名选中网络..."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1233
 msgid "Delete Selected Net"
