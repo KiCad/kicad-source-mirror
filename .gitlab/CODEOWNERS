@@ -31,11 +31,16 @@
 /common/api/ @craftyjon
 /common/git/ @sethhillbrand
 /common/database/ @craftyjon
+/common/io/eagle/ @stambaughw
+
+/cmake/KiCadVersion.cmake @stambaughw
 
 /eeschema/api/ @craftyjon
 /eeschema/erc/ @jeffyoung
 /eeschema/connection_graph.* @craftyjon @sethhillbrand
 /eeschema/sch_io/database/ @craftyjon
+/eeschema/sch_io/kicad_sexr/ @stambaughw
+/eeschema/sch_io/eagle/ @stambaughw
 
 /libs/kinng/ @craftyjon
 
