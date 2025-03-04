@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 06:36+0300\n"
-"PO-Revision-Date: 2025-03-03 08:42+0000\n"
+"PO-Revision-Date: 2025-03-04 22:27+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -12744,9 +12744,8 @@ msgid "Enter the text to be used within the schematic"
 msgstr "Ange texten som ska användas i kretsschemat"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:62
-#, fuzzy
 msgid "Multiple label input"
-msgstr "Flera lager"
+msgstr "Inmatning av flera etiketter"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:42
@@ -14036,9 +14035,8 @@ msgid "Whole &words only"
 msgstr "Endast &hela ord"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:90
-#, fuzzy
 msgid "Regular Expression"
-msgstr "Felaktigt uttryckt"
+msgstr "Reguljärt uttryck"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:93
 msgid "Search pin &names and numbers"
@@ -21955,7 +21953,7 @@ msgstr ""
 "Symbol '%s' kan inte ersätta en annan symbol '%s' som härstammar från den."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:995
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
 msgstr "Symbol '%s' finns redan i bibliotek '%s'. Vill du skriva över den?"
@@ -21990,7 +21988,7 @@ msgid "Export Symbol"
 msgstr "Exportera symbol"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1129
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is read-only."
 msgstr "Biblioteket '%s' är skrivskyddat."
 
@@ -22560,9 +22558,8 @@ msgid "Import a symbol to the current library"
 msgstr "Importera en symbol till det aktuella biblioteket"
 
 #: eeschema/tools/ee_actions.cpp:274
-#, fuzzy
 msgid "Export..."
-msgstr "&Exportera..."
+msgstr "Exportera..."
 
 #: eeschema/tools/ee_actions.cpp:275
 msgid "Export a symbol to a new library file"
@@ -23225,24 +23222,20 @@ msgstr ""
 "symbolbibliotekstabellen"
 
 #: eeschema/tools/ee_actions.cpp:1115
-#, fuzzy
 msgid "Next Net Item"
-msgstr "Textobjekt"
+msgstr "Nästa nätobjekt"
 
 #: eeschema/tools/ee_actions.cpp:1116
-#, fuzzy
 msgid "Select next item on the current net"
-msgstr "Välj ett anslutningsobjekt under markören"
+msgstr "Välj nästa objekt på det aktuella nätet"
 
 #: eeschema/tools/ee_actions.cpp:1122
-#, fuzzy
 msgid "Previous Net Item"
-msgstr "Föregående ark"
+msgstr "Föregående nätobjekt"
 
 #: eeschema/tools/ee_actions.cpp:1123
-#, fuzzy
 msgid "Select previous item on the current net"
-msgstr "Välj ett anslutningsobjekt under markören"
+msgstr "Välj föregående objekt på det aktuella nätet"
 
 #: eeschema/tools/ee_actions.cpp:1128
 msgid "Export Drawing to Clipboard"
@@ -26153,9 +26146,8 @@ msgid "Generate map / summary of drill hits"
 msgstr "Generera karta / översikt över borrträffar"
 
 #: kicad/cli/command_pcb_export_drill.cpp:94
-#, fuzzy
 msgid "Generate a file specifically for tenting"
-msgstr "Inställningar för åtgärden generera komponentlista"
+msgstr "Generera en fil särskilt för täckning av vior"
 
 #: kicad/cli/command_pcb_export_drill.cpp:99
 msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
@@ -26821,9 +26813,9 @@ msgstr "Kopiera filens inställningar för åtgärd"
 
 #: kicad/dialogs/dialog_destination.cpp:55
 #: kicad/dialogs/dialog_destination_base.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "%s Destination"
-msgstr "Mål:"
+msgstr "%s-mål"
 
 #: kicad/dialogs/dialog_destination.cpp:86
 msgid "Select output directory"
@@ -26842,9 +26834,8 @@ msgid "Zip"
 msgstr "Zip"
 
 #: kicad/dialogs/dialog_destination_base.cpp:46
-#, fuzzy
 msgid "Destination path:"
-msgstr "Mål:"
+msgstr "Målsökväg:"
 
 #: kicad/dialogs/dialog_destination_base.cpp:64
 msgid "Include jobs:"
@@ -26942,9 +26933,9 @@ msgid "Update Available"
 msgstr "Tillgängliga uppdateringar"
 
 #: kicad/dialogs/panel_jobset.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Destination: %s"
-msgstr "Mål:"
+msgstr "Mål: %s"
 
 #: kicad/dialogs/panel_jobset.cpp:68
 msgid "No."
@@ -26975,19 +26966,16 @@ msgid "Running jobs"
 msgstr "Pågående arbeten"
 
 #: kicad/dialogs/panel_jobset.cpp:295
-#, fuzzy
 msgid "Edit Destination Options..."
-msgstr "Ändra rektangelegenskaper"
+msgstr "Redigera alternativ för destination..."
 
 #: kicad/dialogs/panel_jobset.cpp:296
-#, fuzzy
 msgid "Delete Destination"
-msgstr "Ta bort association"
+msgstr "Ta bort destination"
 
 #: kicad/dialogs/panel_jobset.cpp:299
-#, fuzzy
 msgid "View Last Run Log..."
-msgstr "Se resultat från senaste körning..."
+msgstr "Visa logg från senaste körning..."
 
 #: kicad/dialogs/panel_jobset.cpp:389
 msgid "Edit Job Description"
@@ -27018,47 +27006,40 @@ msgid "Select job type:"
 msgstr "Välj jobbtyp:"
 
 #: kicad/dialogs/panel_jobset.cpp:783
-#, fuzzy
 msgid "Destination Types"
-msgstr "Mål:"
+msgstr "Måltyper"
 
 #: kicad/dialogs/panel_jobset.cpp:792
-#, fuzzy
 msgid "Add New Destination"
-msgstr "Mål:"
+msgstr "Lägg till nytt mål"
 
 #: kicad/dialogs/panel_jobset.cpp:793
-#, fuzzy
 msgid "Select destination type:"
-msgstr "Välj jobbtyp:"
+msgstr "Välj måltyp:"
 
 #: kicad/dialogs/panel_jobset.cpp:958
-#, fuzzy
 msgid "No destinations defined"
-msgstr "Inga utmatningar definierade"
+msgstr "Inga mål definierade"
 
 #: kicad/dialogs/panel_jobset_base.cpp:24
 msgid "Jobs"
 msgstr "Åtgärder"
 
 #: kicad/dialogs/panel_jobset_base.cpp:83
-#, fuzzy
 msgid "Destinations"
-msgstr "Mål:"
+msgstr "Mål"
 
 #: kicad/dialogs/panel_jobset_base.cpp:116
 msgid "Save Jobset"
 msgstr "Spara åtgärdsserie"
 
 #: kicad/dialogs/panel_jobset_base.cpp:122
-#, fuzzy
 msgid "Generate All Destinations"
-msgstr "Generera alla utmatningar"
+msgstr "Generera alla mål"
 
 #: kicad/dialogs/panel_jobset_base.h:133
-#, fuzzy
 msgid "Jobset Run Log"
-msgstr "Logg för utmatningar från åtgärder"
+msgstr "Logg från körning av åtgärdsserie"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:143
 msgid "Edit the project schematic"
@@ -35433,9 +35414,8 @@ msgid "Gerber X2"
 msgstr "Gerber X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:92
-#, fuzzy
 msgid "Generate tenting layers"
-msgstr "Generera placeringsfiler"
+msgstr "Generera täckningslager"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:106
 msgid "Generate map:"
@@ -38196,9 +38176,8 @@ msgid "Border style:"
 msgstr "Kantstil:"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:148
-#, fuzzy
 msgid "Unknown choice"
-msgstr "Okänd metod"
+msgstr "Okänt val"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:628
 #, c-format
@@ -38256,78 +38235,76 @@ msgid "Edit Track/Via Properties"
 msgstr "Ändra egenskaper för ledare/via"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:178
-#, fuzzy
 msgid "From rules"
 msgstr "Från designregler"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:180
 msgid "Type I a ( tented top )"
-msgstr ""
+msgstr "Typ I a ( täckt ovansida )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:181
 msgid "Type I b ( tented both sides )"
-msgstr ""
+msgstr "Typ I b ( täckt på båda sidor )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:182
 msgid "Type I a ( tented bottom )"
-msgstr ""
+msgstr "Typ I a ( täckt undersida )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:183
 msgid "Type II a ( covered and tented top )"
-msgstr ""
+msgstr "Typ II a ( torr- och våtfilmstäckt ovansida )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:184
 msgid "Type II b ( covered and tented both sides )"
-msgstr ""
+msgstr "Typ II b (torr- och våtfilmstäckt båda sidor )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:185
 msgid "Type II a ( covered and tented bottom )"
-msgstr ""
+msgstr "Typ II a ( torr- och våtfilmstäckt undersida )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:186
 msgid "Type III a ( plugged top )"
-msgstr ""
+msgstr "Typ III a ( pluggad ovansida )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:187
 msgid "Type III b ( plugged both sides )"
-msgstr ""
+msgstr "Typ III b ( pluggad båda sidor )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:188
 msgid "Type III a ( plugged bottom )"
-msgstr ""
+msgstr "Typ III a ( pluggad undersida )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:189
 msgid "Type IV a ( plugged and tented top )"
-msgstr ""
+msgstr "Type IV a ( pluggad och täckt ovansida )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:190
 msgid "Type IV b ( plugged and tented both sides )"
-msgstr ""
+msgstr "Typ IV b ( pluggad och täckt båda sidor )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:191
 msgid "Type IV a ( plugged and tented bottom )"
-msgstr ""
+msgstr "Typ IV a ( pluggad och täckt undersida )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:192
-#, fuzzy
 msgid "Type V ( filled )"
-msgstr "Skriv filtertext"
+msgstr "Typ V ( fylld )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:193
 msgid "Type VI a ( filled and tented top )"
-msgstr ""
+msgstr "Typ VI a ( fylld och täckt ovansida )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:194
 msgid "Type VI b ( filled and tented both sides )"
-msgstr ""
+msgstr "Typ VI b ( fylld och täckt båda sidor )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:195
 msgid "Type VI a ( filled and tented bottom )"
-msgstr ""
+msgstr "Typ VI a ( fylld och täckt undersida )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:196
 msgid "Type VII ( filled and capped )"
-msgstr ""
+msgstr "Typ VII ( fylld och överpläterad )"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:41
 msgid "Automatically update via nets"
@@ -38404,14 +38381,13 @@ msgid "End layer:"
 msgstr "Slutlager:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:378
-#, fuzzy
 msgid "Protection features:"
-msgstr "Tvärsnittsarea:"
+msgstr "Skyddsegenskaper:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:385
 msgid ""
 "Select which protection feature according to IPC-4761 the via should have."
-msgstr ""
+msgstr "Välj vilken slags skydd enligt IPC-4761 viat skall ha."
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:437
 msgid "Add teardrops on via's track connections"
@@ -46931,38 +46907,32 @@ msgid "Not tented"
 msgstr "Ej täckt"
 
 #: pcbnew/pcb_track.cpp:2199
-#, fuzzy
 msgid "Covered"
-msgstr "Svävande objekt"
+msgstr "Våtfilmstäckt"
 
 #: pcbnew/pcb_track.cpp:2200
-#, fuzzy
 msgid "Not covered"
-msgstr "Inte spegelvänd"
+msgstr "Ej våtfilmstäckt"
 
 #: pcbnew/pcb_track.cpp:2205
-#, fuzzy
 msgid "Plugged"
-msgstr "Insticksprogram"
+msgstr "Pluggat"
 
 #: pcbnew/pcb_track.cpp:2206
-#, fuzzy
 msgid "Not plugged"
-msgstr "Hittades inte"
+msgstr "Ej pluggat"
 
 #: pcbnew/pcb_track.cpp:2211
 msgid "Capped"
-msgstr ""
+msgstr "Överpläterad"
 
 #: pcbnew/pcb_track.cpp:2212
-#, fuzzy
 msgid "Not capped"
-msgstr "Ingen anslutning"
+msgstr "Ej överpläterad"
 
 #: pcbnew/pcb_track.cpp:2218
-#, fuzzy
 msgid "Not filled"
-msgstr "<Inte definierat>"
+msgstr "Ej fyllt"
 
 #: pcbnew/pcb_track.cpp:2282
 msgid "Via Properties"
@@ -46989,33 +46959,28 @@ msgid "Back tenting"
 msgstr "Viatäckning på baksida"
 
 #: pcbnew/pcb_track.cpp:2301
-#, fuzzy
 msgid "Front covering"
-msgstr "Viatäckning på framsida"
+msgstr "Våtfilmstäckt framsida"
 
 #: pcbnew/pcb_track.cpp:2303
-#, fuzzy
 msgid "Back covering"
-msgstr "Viatäckning på baksida"
+msgstr "Våtfilmstäckt baksida"
 
 #: pcbnew/pcb_track.cpp:2305
-#, fuzzy
 msgid "Front plugging"
-msgstr "Viatäckning på framsida"
+msgstr "Pluggad framsida"
 
 #: pcbnew/pcb_track.cpp:2307
-#, fuzzy
 msgid "Back plugging"
-msgstr "Viatäckning på baksida"
+msgstr "Pluggad baksida"
 
 #: pcbnew/pcb_track.cpp:2309
 msgid "Capping"
-msgstr ""
+msgstr "Överplätering"
 
 #: pcbnew/pcb_track.cpp:2311
-#, fuzzy
 msgid "Filling"
-msgstr "Fyll"
+msgstr "Fyllning"
 
 #: pcbnew/pcbexpr_evaluator.cpp:562
 msgid "must be mm, in, or mil"
@@ -52159,12 +52124,11 @@ msgstr "Ta bort isolerade kopparöar ..."
 
 #: pcbnew/zone_filler.cpp:889
 msgid "Prototype zone fill enabled. Disable setting and refill?"
-msgstr ""
+msgstr "Prototypzonfyllning aktiv. Deaktivera och fyll på nytt?"
 
 #: pcbnew/zone_filler.cpp:891
-#, fuzzy
 msgid "Disable and refill"
-msgstr "Inaktivera kantutjämning"
+msgstr "Deaktivera och fyll på nytt"
 
 #: pcbnew/zone_filler.cpp:891 pcbnew/zone_filler.cpp:908
 msgid "Continue without Refill"
