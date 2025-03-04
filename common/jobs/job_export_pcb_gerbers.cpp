@@ -24,17 +24,9 @@
 
 JOB_EXPORT_PCB_GERBERS::JOB_EXPORT_PCB_GERBERS() :
         JOB_EXPORT_PCB_GERBER( "gerbers" ),
-        m_layersIncludeOnAll(),
-        m_layersIncludeOnAllSet( false ),
         m_useBoardPlotParams( false ),
         m_createJobsFile( true )
 {
-    m_params.emplace_back( new JOB_PARAM<bool>( "layers_include_on_all_set", &m_layersIncludeOnAllSet,
-                                                m_layersIncludeOnAllSet ) );
-
-    m_params.emplace_back( new JOB_PARAM_LSEQ( "layers_include_on_all", &m_layersIncludeOnAll,
-                                                m_layersIncludeOnAll ) );
-
     m_params.emplace_back( new JOB_PARAM<bool>( "create_gerber_job_file", &m_createJobsFile,
                                                 m_createJobsFile ) );
 }

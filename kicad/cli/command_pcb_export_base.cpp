@@ -74,8 +74,7 @@ CLI::PCB_EXPORT_BASE_COMMAND::PCB_EXPORT_BASE_COMMAND( const std::string& aName,
 }
 
 
-LSEQ CLI::PCB_EXPORT_BASE_COMMAND::convertLayerStringList( wxString& aLayerString,
-                                                           bool& aLayerArgSet ) const
+LSEQ CLI::PCB_EXPORT_BASE_COMMAND::convertLayerStringList( wxString& aLayerString ) const
 {
     LSEQ layerMask;
 
@@ -92,16 +91,12 @@ LSEQ CLI::PCB_EXPORT_BASE_COMMAND::convertLayerStringList( wxString& aLayerStrin
             {
                 for( PCB_LAYER_ID layer : m_layerMasks.at( token ).Seq() )
                     layerMask.push_back( layer );
-
-                aLayerArgSet = true;
             }
             // Search for a layer name in canonical layer name used in GUI (not translated):
             else if( m_layerGuiMasks.count( token ) )
             {
                 for( PCB_LAYER_ID layer : m_layerGuiMasks.at( token ).Seq() )
                     layerMask.push_back( layer );
-
-                aLayerArgSet = true;
             }
             else
             {
@@ -134,7 +129,7 @@ int CLI::PCB_EXPORT_BASE_COMMAND::doPerform( KIWAY& aKiway )
     {
         wxString layers = From_UTF8( m_argParser.get<std::string>( ARG_LAYERS ).c_str() );
 
-        LSEQ layerMask = convertLayerStringList( layers, m_selectedLayersSet );
+        LSEQ layerMask = convertLayerStringList( layers );
 
         if( m_requireLayers && layerMask.size() < 1 )
         {

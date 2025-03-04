@@ -66,9 +66,9 @@ public:
     bool m_subtractSolderMaskFromSilk;
     bool m_plotPadNumbers;
 
-    LSEQ m_printMaskLayer;
+    LSEQ m_plotLayerSequence;
     ///< Layers to include on all individual layer prints
-    LSEQ m_printMaskLayersToIncludeOnAllLayers;
+    LSEQ m_plotOnAllLayersSequence;
 
     enum class DRILL_MARKS
     {

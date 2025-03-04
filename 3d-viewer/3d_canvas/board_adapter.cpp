@@ -833,7 +833,10 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetVisibleLayers() const
             return ret;
 
         const PCB_PLOT_PARAMS& plotParams = m_board->GetPlotOptions();
-        LSET layers = plotParams.GetLayerSelection() | plotParams.GetPlotOnAllLayersSelection();
+        LSET                   layers = plotParams.GetLayerSelection();
+
+        for( PCB_LAYER_ID commonLayer : plotParams.GetPlotOnAllLayersSequence() )
+            layers.set( commonLayer );
 
         ret.set( LAYER_3D_BOARD,             true );
         ret.set( LAYER_3D_COPPER_TOP,        layers.test( F_Cu ) );

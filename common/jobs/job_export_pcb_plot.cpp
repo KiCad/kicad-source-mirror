@@ -38,16 +38,17 @@ JOB_EXPORT_PCB_PLOT::JOB_EXPORT_PCB_PLOT( PLOT_FORMAT aFormat, const std::string
         m_plotDrawingSheet( true ),
         m_subtractSolderMaskFromSilk( false ),
         m_plotPadNumbers( false ),
-        m_printMaskLayer(),
-        m_printMaskLayersToIncludeOnAllLayers(),
+        m_plotLayerSequence(),
+        m_plotOnAllLayersSequence(),
         m_drillShapeOption( DRILL_MARKS::FULL_DRILL_SHAPE ),
         m_useDrillOrigin( false )
 {
-    m_params.emplace_back( new JOB_PARAM_LSEQ( "layers", &m_printMaskLayer, m_printMaskLayer ) );
+    m_params.emplace_back( new JOB_PARAM_LSEQ( "layers",
+                                               &m_plotLayerSequence, m_plotLayerSequence ) );
 
     m_params.emplace_back( new JOB_PARAM_LSEQ( "layers_to_include_on_all_layers",
-                                                &m_printMaskLayersToIncludeOnAllLayers,
-                                                m_printMaskLayersToIncludeOnAllLayers ) );
+                                                &m_plotOnAllLayersSequence,
+                                               m_plotOnAllLayersSequence ) );
 
     m_params.emplace_back( new JOB_PARAM<bool>( "mirror",
                                                 &m_mirror, m_mirror ) );

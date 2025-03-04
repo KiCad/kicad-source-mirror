@@ -179,8 +179,7 @@ int CLI::PCB_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
     svgJob->SetVarOverrides( m_argDefineVars );
 
     wxString layers = From_UTF8( m_argParser.get<std::string>( ARG_COMMON_LAYERS ).c_str() );
-    bool     blah = false;
-    svgJob->m_printMaskLayersToIncludeOnAllLayers = convertLayerStringList( layers, blah );
+    svgJob->m_plotOnAllLayersSequence = convertLayerStringList( layers );
 
     if( !wxFile::Exists( svgJob->m_filename ) )
     {
@@ -188,7 +187,7 @@ int CLI::PCB_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
 
-    svgJob->m_printMaskLayer = m_selectedLayers;
+    svgJob->m_plotLayerSequence = m_selectedLayers;
 
     if( m_argParser.get<bool>( ARG_MODE_MULTI ) )
         svgJob->m_genMode = JOB_EXPORT_PCB_SVG::GEN_MODE::MULTI;

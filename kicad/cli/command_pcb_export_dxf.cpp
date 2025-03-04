@@ -99,8 +99,7 @@ CLI::PCB_EXPORT_DXF_COMMAND::PCB_EXPORT_DXF_COMMAND() : PCB_EXPORT_BASE_COMMAND(
             .default_value( std::string() )
             .help( UTF8STDSTR(
                     _( "Layers to include on each plot, comma separated list of untranslated "
-                       "layer names to include such as "
-                       "F.Cu,B.Cu" ) ) )
+                       "layer names to include such as F.Cu,B.Cu" ) ) )
             .metavar( "COMMON_LAYER_LIST" );
 
     m_argParser.add_argument( ARG_MODE_SINGLE )
@@ -175,11 +174,10 @@ int CLI::PCB_EXPORT_DXF_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_ARGS;
     }
 
-    dxfJob->m_printMaskLayer = m_selectedLayers;
+    dxfJob->m_plotLayerSequence = m_selectedLayers;
 
     wxString layers = From_UTF8( m_argParser.get<std::string>( ARG_COMMON_LAYERS ).c_str() );
-    bool     blah = false;
-    dxfJob->m_printMaskLayersToIncludeOnAllLayers = convertLayerStringList( layers, blah );
+    dxfJob->m_plotOnAllLayersSequence = convertLayerStringList( layers );
 
     if( m_argParser.get<bool>( ARG_MODE_MULTI ) )
         dxfJob->m_genMode = JOB_EXPORT_PCB_DXF::GEN_MODE::MULTI;

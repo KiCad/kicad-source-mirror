@@ -135,7 +135,6 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent,
     m_hash_key = TO_UTF8( GetTitle() );
 
     int                       order = 0;
-    LSET                      plotOnAllLayersSelection = m_plotOpts.GetPlotOnAllLayersSelection();
     wxArrayInt                plotAllLayersOrder;
     wxArrayString             plotAllLayersChoicesStrings;
     std::vector<PCB_LAYER_ID> layersIdChoiceList;
@@ -151,9 +150,7 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent,
         plotAllLayersChoicesStrings.Add( layerName );
         layersIdChoiceList.push_back( layer );
 
-        size_t size = plotOnAllLayersSelection.size();
-
-        if( ( static_cast<size_t>( layer ) <= size ) && plotOnAllLayersSelection.test( layer ) )
+        if( alg::contains( m_plotOpts.GetPlotOnAllLayersSequence(), layer ) )
             plotAllLayersOrder.push_back( order );
         else
             plotAllLayersOrder.push_back( ~order );
@@ -493,8 +490,8 @@ void DIALOG_PLOT::transferPlotParamsToJob()
     m_job->m_blackAndWhite = m_plotOpts.GetBlackAndWhite();
     m_job->m_mirror = m_plotOpts.GetMirror();
     m_job->m_negative = m_plotOpts.GetNegative();
-    m_job->m_printMaskLayer = m_plotOpts.GetLayerSelection().UIOrder();
-    m_job->m_printMaskLayersToIncludeOnAllLayers = m_plotOpts.GetPlotOnAllLayersSelection().UIOrder();
+    m_job->m_plotLayerSequence = m_plotOpts.GetLayerSelection().SeqStackupForPlotting();
+    m_job->m_plotOnAllLayersSequence = m_plotOpts.GetPlotOnAllLayersSequence();
 
     if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::SVG ||
         m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::PDF )
@@ -1172,27 +1169,24 @@ void DIALOG_PLOT::applyPlotSettings()
     // Get a list of copper layers that aren't being used by inverting enabled layers.
     LSET disabledCopperLayers = LSET::AllCuMask() & ~m_editFrame->GetBoard()->GetEnabledLayers();
 
-    LSET plotOnAllLayers;
-
     // Add selected layers from plot on all layers list in order set by user.
-    wxArrayInt plotOnAllLayersSelections;
+    wxArrayInt plotOnAllLayers;
+    LSEQ commonLayers;
 
-    m_plotAllLayersList->GetCheckedItems( plotOnAllLayersSelections );
-
-    size_t count = plotOnAllLayersSelections.GetCount();
-
-    for( size_t i = 0; i < count; i++ )
+    if( m_plotAllLayersList->GetCheckedItems( plotOnAllLayers ) )
     {
-        int index = plotOnAllLayersSelections.Item( i );
-        wxClientData* tmp = m_plotAllLayersList->GetClientObject( index );
-        PCB_LAYER_ID_CLIENT_DATA* layerId = dynamic_cast<PCB_LAYER_ID_CLIENT_DATA*>( tmp );
+        size_t count = plotOnAllLayers.GetCount();
 
-        wxCHECK2( layerId, continue );
+        for( size_t i = 0; i < count; i++ )
+        {
+            int          index = plotOnAllLayers.Item( i );
+            PCB_LAYER_ID client_layer = getLayerClientData( m_plotAllLayersList, index )->Layer();
 
-        plotOnAllLayers.set( layerId->Layer() );
+            commonLayers.push_back( client_layer );
+        }
     }
 
-    tempOptions.SetPlotOnAllLayersSelection( plotOnAllLayers );
+    tempOptions.SetPlotOnAllLayersSequence( commonLayers );
 
     // Enable all of the disabled copper layers.
     // If someone enables more copper layers they will be selected by default.

@@ -75,7 +75,7 @@ struct PCB_EXPORT_BASE_COMMAND : public COMMAND
 
 protected:
     int  doPerform( KIWAY& aKiway ) override;
-    LSEQ convertLayerStringList( wxString& aLayerString, bool& aLayerArgSet ) const;
+    LSEQ convertLayerStringList( wxString& aLayerString ) const;
     void addLayerArg( bool aRequire );
 
     // The list of canonical layer names used in .kicad_pcb files:
