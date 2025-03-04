@@ -156,12 +156,18 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
 
             if( !m_drcEngine->IsErrorLimitExceeded( DRCE_FOOTPRINT_FILTERS ) )
             {
+                wxString libId = footprint->GetFPID().GetUniStringLibId();
                 wxString fpName = footprint->GetFPID().GetUniStringLibItemName();
                 size_t   filtercount = component->GetFootprintFilters().GetCount();
                 bool     found = ( 0 == filtercount ); // if no entries, do not filter
 
                 for( size_t jj = 0; jj < filtercount && !found; jj++ )
-                    found = fpName.Matches( component->GetFootprintFilters()[jj] );
+                {
+                    if( component->GetFootprintFilters()[jj].Find( ':' ) == wxNOT_FOUND )
+                        found = fpName.Matches( component->GetFootprintFilters()[jj] );
+                    else
+                        found = libId.Matches( component->GetFootprintFilters()[jj] );
+                }
 
                 if( !found )
                 {
