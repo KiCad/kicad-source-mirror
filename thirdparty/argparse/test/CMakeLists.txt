@@ -37,6 +37,8 @@ file(GLOB ARGPARSE_TEST_SOURCES
     test_error_reporting.cpp
     test_get.cpp
     test_help.cpp
+    test_hidden_alias.cpp
+    test_hidden_argument.cpp
     test_invalid_arguments.cpp
     test_is_used.cpp
     test_issue_37.cpp
@@ -49,6 +51,7 @@ file(GLOB ARGPARSE_TEST_SOURCES
     test_repr.cpp
     test_required_arguments.cpp
     test_scan.cpp
+    test_store_into.cpp
     test_stringstream.cpp
     test_version.cpp
     test_subparsers.cpp
