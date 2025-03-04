@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-01 18:34+0300\n"
+"POT-Creation-Date: 2025-03-04 06:36+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -14538,9 +14538,10 @@ msgstr ""
 "Symbol '%s' cannot replace another symbol '%s' that is a descendent of it."
 
 #, c-format
-msgid "Symbol '%s' already exists in library '%s'.Do you want to overwrite it?"
+msgid ""
+"Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
 msgstr ""
-"Symbol '%s' already exists in library '%s'.Do you want to overwrite it?"
+"Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
 
 #, c-format
 msgid ""
@@ -14562,6 +14563,33 @@ msgstr "Overwrite All"
 
 msgid "Rename All"
 msgstr "Rename All"
+
+msgid "Export Symbol"
+msgstr "Export Symbol"
+
+#, c-format
+msgid "Library '%s' is read-only."
+msgstr "Library '%s' is read-only."
+
+#, c-format
+msgid "Error occurred attempting to load symbol library file '%s'."
+msgstr "Error occurred attempting to load symbol library file '%s'."
+
+#, c-format
+msgid "Symbol %s already exists in library '%s'."
+msgstr "Symbol %s already exists in library '%s'."
+
+#, c-format
+msgid "Insufficient permissions to save library '%s'."
+msgstr "Insufficient permissions to save library '%s'."
+
+#, c-format
+msgid "Error creating symbol library '%s'."
+msgstr "Error creating symbol library '%s'."
+
+#, c-format
+msgid "Symbol %s saved to library '%s'."
+msgstr "Symbol %s saved to library '%s'."
 
 #, c-format
 msgid "Symbol name '%s' already in use."
@@ -14648,10 +14676,6 @@ msgstr "Cannot import symbol library '%s'."
 #, c-format
 msgid "Symbol library file '%s' is empty."
 msgstr "Symbol library file '%s' is empty."
-
-#, c-format
-msgid "Symbol %s already exists in library '%s'."
-msgstr "Symbol %s already exists in library '%s'."
 
 #, c-format
 msgid ""
@@ -14974,6 +14998,12 @@ msgstr "Import Symbol..."
 
 msgid "Import a symbol to the current library"
 msgstr "Import a symbol to the current library"
+
+msgid "Export..."
+msgstr "Export…"
+
+msgid "Export a symbol to a new library file"
+msgstr "Export a symbol to a new library file"
 
 msgid "Update Symbol Fields..."
 msgstr "Update Symbol Fields..."
@@ -17933,18 +17963,9 @@ msgstr "Overwrite files in destination"
 msgid "Copy Files Job Settings"
 msgstr "Copy Files Job Settings"
 
-msgid "Record output messages"
-msgstr "Record output messages"
-
-msgid "Ignore non-zero exit code"
-msgstr "Ignore non-zero exit code"
-
-msgid "Execute Command Job Settings"
-msgstr "Execute Command Job Settings"
-
 #, c-format
-msgid "%s Output Options"
-msgstr "%s Output Options"
+msgid "%s Destination"
+msgstr "%s Destination"
 
 msgid "Select output directory"
 msgstr "Select output directory"
@@ -17958,8 +17979,20 @@ msgstr "Output path cannot be empty"
 msgid "Zip"
 msgstr "Zip"
 
+msgid "Destination path:"
+msgstr "Destination path:"
+
 msgid "Include jobs:"
 msgstr "Include jobs:"
+
+msgid "Record output messages"
+msgstr "Record output messages"
+
+msgid "Ignore non-zero exit code"
+msgstr "Ignore non-zero exit code"
+
+msgid "Execute Command Job Settings"
+msgstr "Execute Command Job Settings"
 
 msgid "Project Template Selector"
 msgstr "Project Template Selector"
@@ -18024,14 +18057,17 @@ msgid "Update Available"
 msgstr "Update Available"
 
 #, c-format
-msgid "Output: %s"
-msgstr "Output: %s"
+msgid "Destination: %s"
+msgstr "Destination: %s"
 
 msgid "No."
 msgstr "No."
 
 msgid "Job Description"
 msgstr "Job Description"
+
+msgid "Source"
+msgstr "Source"
 
 msgid "No output messages"
 msgstr "No output messages"
@@ -18045,14 +18081,14 @@ msgstr "Last run failed"
 msgid "Running jobs"
 msgstr "Running jobs"
 
-msgid "Edit Output Options..."
-msgstr "Edit Output Options..."
+msgid "Edit Destination Options..."
+msgstr "Edit Destination Options..."
 
-msgid "Delete Output"
-msgstr "Delete Output"
+msgid "Delete Destination"
+msgstr "Delete Destination"
 
-msgid "View Last Run Results..."
-msgstr "View Last Run Results..."
+msgid "View Last Run Log..."
+msgstr "View Last Run Log..."
 
 msgid "Edit Job Description"
 msgstr "Edit Job Description"
@@ -18075,32 +18111,32 @@ msgstr "Add New Job"
 msgid "Select job type:"
 msgstr "Select job type:"
 
-msgid "Output Types"
-msgstr "Output Types"
+msgid "Destination Types"
+msgstr "Destination Types"
 
-msgid "Add New Output"
-msgstr "Add New Output"
+msgid "Add New Destination"
+msgstr "Add New Destination"
 
-msgid "Select output type:"
-msgstr "Select output type:"
+msgid "Select destination type:"
+msgstr "Select destination type:"
 
-msgid "No outputs defined"
-msgstr "No outputs defined"
+msgid "No destinations defined"
+msgstr "No destinations defined"
 
 msgid "Jobs"
 msgstr "Jobs"
 
-msgid "Outputs"
-msgstr "Outputs"
+msgid "Destinations"
+msgstr "Destinations"
 
 msgid "Save Jobset"
 msgstr "Save Jobset"
 
-msgid "Generate All Outputs"
-msgstr "Generate All Outputs"
+msgid "Generate All Destinations"
+msgstr "Generate All Destinations"
 
-msgid "Job Output Run Log"
-msgstr "Job Output Run Log"
+msgid "Jobset Run Log"
+msgstr "Jobset Run Log"
 
 msgid "Edit the project schematic"
 msgstr "Edit the project schematic"
@@ -36767,6 +36803,50 @@ msgstr "KiCad Schematic Symbol"
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
 
+#, c-format
+#~ msgid ""
+#~ "Symbol '%s' already exists in library '%s'.Do you want to overwrite it?"
+#~ msgstr ""
+#~ "Symbol '%s' already exists in library '%s'.Do you want to overwrite it?"
+
+#, c-format
+#~ msgid "%s Output Options"
+#~ msgstr "%s Output Options"
+
+#, c-format
+#~ msgid "Output: %s"
+#~ msgstr "Output: %s"
+
+#~ msgid "Edit Output Options..."
+#~ msgstr "Edit Output Options..."
+
+#~ msgid "Delete Output"
+#~ msgstr "Delete Output"
+
+#~ msgid "View Last Run Results..."
+#~ msgstr "View Last Run Results..."
+
+#~ msgid "Output Types"
+#~ msgstr "Output Types"
+
+#~ msgid "Add New Output"
+#~ msgstr "Add New Output"
+
+#~ msgid "Select output type:"
+#~ msgstr "Select output type:"
+
+#~ msgid "No outputs defined"
+#~ msgstr "No outputs defined"
+
+#~ msgid "Outputs"
+#~ msgstr "Outputs"
+
+#~ msgid "Generate All Outputs"
+#~ msgstr "Generate All Outputs"
+
+#~ msgid "Job Output Run Log"
+#~ msgstr "Job Output Run Log"
+
 #~ msgid "Test connection"
 #~ msgstr "Test connection"
 
@@ -45377,31 +45457,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "Discard New Sheet"
 #~ msgstr "Discard New Sheet"
-
-#~ msgid "Export Symbol"
-#~ msgstr "Export Symbol"
-
-#, c-format
-#~ msgid "Error occurred attempting to load symbol library file '%s'."
-#~ msgstr "Error occurred attempting to load symbol library file '%s'."
-
-#, c-format
-#~ msgid "Insufficient permissions to save library '%s'."
-#~ msgstr "Insufficient permissions to save library '%s'."
-
-#, c-format
-#~ msgid "Error creating symbol library '%s'."
-#~ msgstr "Error creating symbol library '%s'."
-
-#, c-format
-#~ msgid "Symbol %s saved to library '%s'."
-#~ msgstr "Symbol %s saved to library '%s'."
-
-#~ msgid "Export..."
-#~ msgstr "Export…"
-
-#~ msgid "Export a symbol to a new library file"
-#~ msgstr "Export a symbol to a new library file"
 
 #~ msgid "Show in Differential Mode"
 #~ msgstr "Show in Differential Mode"
@@ -55484,9 +55539,6 @@ msgstr "KiCad Drawing Sheet"
 #, c-format
 #~ msgid "Failed reading model library '%s'."
 #~ msgstr "Failed reading model library '%s'."
-
-#~ msgid "Source"
-#~ msgstr "Source"
 
 #~ msgid "Instance"
 #~ msgstr "Instance"
