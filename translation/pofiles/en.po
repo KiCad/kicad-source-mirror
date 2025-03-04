@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-01 18:34+0300\n"
+"POT-Creation-Date: 2025-03-04 06:36+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -8101,6 +8101,9 @@ msgstr "Label:"
 msgid "Enter the text to be used within the schematic"
 msgstr "Enter the text to be used within the schematic"
 
+msgid "Multiple label input"
+msgstr "Multiple label input"
+
 msgid "Syntax help"
 msgstr "Syntax help"
 
@@ -8896,8 +8899,8 @@ msgstr "Match &case"
 msgid "Whole &words only"
 msgstr "Whole &words only"
 
-msgid "Wi&ldcards"
-msgstr "Wi&ldcards"
+msgid "Regular Expression"
+msgstr "Regular Expression"
 
 msgid "Search pin &names and numbers"
 msgstr "Search pin &names and numbers"
@@ -8913,6 +8916,9 @@ msgstr "Search the current selection &only"
 
 msgid "Replace matches in reference designators"
 msgstr "Replace matches in reference designators"
+
+msgid "Search &net names"
+msgstr "Search &net names"
 
 msgid "Replace"
 msgstr "Replace"
@@ -14643,9 +14649,10 @@ msgstr ""
 "Symbol '%s' cannot replace another symbol '%s' that is a descendent of it."
 
 #, c-format
-msgid "Symbol '%s' already exists in library '%s'.Do you want to overwrite it?"
+msgid ""
+"Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
 msgstr ""
-"Symbol '%s' already exists in library '%s'.Do you want to overwrite it?"
+"Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
 
 #, c-format
 msgid ""
@@ -14667,6 +14674,33 @@ msgstr "Overwrite All"
 
 msgid "Rename All"
 msgstr "Rename All"
+
+msgid "Export Symbol"
+msgstr "Export Symbol"
+
+#, c-format
+msgid "Library '%s' is read-only."
+msgstr "Library '%s' is read-only."
+
+#, c-format
+msgid "Error occurred attempting to load symbol library file '%s'."
+msgstr "Error occurred attempting to load symbol library file '%s'."
+
+#, c-format
+msgid "Symbol %s already exists in library '%s'."
+msgstr "Symbol %s already exists in library '%s'."
+
+#, c-format
+msgid "Insufficient permissions to save library '%s'."
+msgstr "Insufficient permissions to save library '%s'."
+
+#, c-format
+msgid "Error creating symbol library '%s'."
+msgstr "Error creating symbol library '%s'."
+
+#, c-format
+msgid "Symbol %s saved to library '%s'."
+msgstr "Symbol %s saved to library '%s'."
 
 #, c-format
 msgid "Symbol name '%s' already in use."
@@ -14753,10 +14787,6 @@ msgstr "Cannot import symbol library '%s'."
 #, c-format
 msgid "Symbol library file '%s' is empty."
 msgstr "Symbol library file '%s' is empty."
-
-#, c-format
-msgid "Symbol %s already exists in library '%s'."
-msgstr "Symbol %s already exists in library '%s'."
 
 #, c-format
 msgid ""
@@ -15075,6 +15105,12 @@ msgstr "Import Symbol..."
 
 msgid "Import a symbol to the current library"
 msgstr "Import a symbol to the current library"
+
+msgid "Export..."
+msgstr "Export…"
+
+msgid "Export a symbol to a new library file"
+msgstr "Export a symbol to a new library file"
 
 msgid "Update Symbol Fields..."
 msgstr "Update Symbol Fields..."
@@ -15558,6 +15594,18 @@ msgid ""
 msgstr ""
 "Remap library symbol references in legacy schematics to the symbol library "
 "table"
+
+msgid "Next Net Item"
+msgstr "Next Net Item"
+
+msgid "Select next item on the current net"
+msgstr "Select next item on the current net"
+
+msgid "Previous Net Item"
+msgstr "Previous Net Item"
+
+msgid "Select previous item on the current net"
+msgstr "Select previous item on the current net"
 
 msgid "Export Drawing to Clipboard"
 msgstr "Export Drawing to Clipboard"
@@ -17594,6 +17642,9 @@ msgstr "Generate independent files for NPTH and PTH holes"
 msgid "Generate map / summary of drill hits"
 msgstr "Generate map / summary of drill hits"
 
+msgid "Generate a file specifically for tenting"
+msgstr "Generate a file specifically for tenting"
+
 msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
 msgstr "Valid options: pdf,gerberx2,ps,dxf,svg"
 
@@ -18058,18 +18109,9 @@ msgstr "Overwrite files in destination"
 msgid "Copy Files Job Settings"
 msgstr "Copy Files Job Settings"
 
-msgid "Record output messages"
-msgstr "Record output messages"
-
-msgid "Ignore non-zero exit code"
-msgstr "Ignore non-zero exit code"
-
-msgid "Execute Command Job Settings"
-msgstr "Execute Command Job Settings"
-
 #, c-format
-msgid "%s Output Options"
-msgstr "%s Output Options"
+msgid "%s Destination"
+msgstr "%s Destination"
 
 msgid "Select output directory"
 msgstr "Select output directory"
@@ -18083,8 +18125,20 @@ msgstr "Output path cannot be empty"
 msgid "Zip"
 msgstr "Zip"
 
+msgid "Destination path:"
+msgstr "Destination path:"
+
 msgid "Include jobs:"
 msgstr "Include jobs:"
+
+msgid "Record output messages"
+msgstr "Record output messages"
+
+msgid "Ignore non-zero exit code"
+msgstr "Ignore non-zero exit code"
+
+msgid "Execute Command Job Settings"
+msgstr "Execute Command Job Settings"
 
 msgid "Project Template Selector"
 msgstr "Project Template Selector"
@@ -18149,14 +18203,17 @@ msgid "Update Available"
 msgstr "Update Available"
 
 #, c-format
-msgid "Output: %s"
-msgstr "Output: %s"
+msgid "Destination: %s"
+msgstr "Destination: %s"
 
 msgid "No."
 msgstr "No."
 
 msgid "Job Description"
 msgstr "Job Description"
+
+msgid "Source"
+msgstr "Source"
 
 msgid "No output messages"
 msgstr "No output messages"
@@ -18170,14 +18227,14 @@ msgstr "Last run failed"
 msgid "Running jobs"
 msgstr "Running jobs"
 
-msgid "Edit Output Options..."
-msgstr "Edit Output Options..."
+msgid "Edit Destination Options..."
+msgstr "Edit Destination Options..."
 
-msgid "Delete Output"
-msgstr "Delete Output"
+msgid "Delete Destination"
+msgstr "Delete Destination"
 
-msgid "View Last Run Results..."
-msgstr "View Last Run Results..."
+msgid "View Last Run Log..."
+msgstr "View Last Run Log..."
 
 msgid "Edit Job Description"
 msgstr "Edit Job Description"
@@ -18200,32 +18257,32 @@ msgstr "Add New Job"
 msgid "Select job type:"
 msgstr "Select job type:"
 
-msgid "Output Types"
-msgstr "Output Types"
+msgid "Destination Types"
+msgstr "Destination Types"
 
-msgid "Add New Output"
-msgstr "Add New Output"
+msgid "Add New Destination"
+msgstr "Add New Destination"
 
-msgid "Select output type:"
-msgstr "Select output type:"
+msgid "Select destination type:"
+msgstr "Select destination type:"
 
-msgid "No outputs defined"
-msgstr "No outputs defined"
+msgid "No destinations defined"
+msgstr "No destinations defined"
 
 msgid "Jobs"
 msgstr "Jobs"
 
-msgid "Outputs"
-msgstr "Outputs"
+msgid "Destinations"
+msgstr "Destinations"
 
 msgid "Save Jobset"
 msgstr "Save Jobset"
 
-msgid "Generate All Outputs"
-msgstr "Generate All Outputs"
+msgid "Generate All Destinations"
+msgstr "Generate All Destinations"
 
-msgid "Job Output Run Log"
-msgstr "Job Output Run Log"
+msgid "Jobset Run Log"
+msgstr "Jobset Run Log"
 
 msgid "Edit the project schematic"
 msgstr "Edit the project schematic"
@@ -23806,6 +23863,9 @@ msgstr "Hit(s): %d / %zu"
 msgid "Search for:"
 msgstr "Search for:"
 
+msgid "Wi&ldcards"
+msgstr "Wi&ldcards"
+
 msgid "Wra&p"
 msgstr "Wra&p"
 
@@ -23820,9 +23880,6 @@ msgstr "Search &other text items"
 
 msgid "Search DRC &markers"
 msgstr "Search DRC &markers"
-
-msgid "Search &net names"
-msgstr "Search &net names"
 
 msgid "Restart Search"
 msgstr "Restart Search"
@@ -24308,6 +24365,9 @@ msgstr "Use alternate drill mode for oval holes"
 
 msgid "Gerber X2"
 msgstr "Gerber X2"
+
+msgid "Generate tenting layers"
+msgstr "Generate tenting layers"
 
 msgid "Generate map:"
 msgstr "Generate map:"
@@ -26252,6 +26312,9 @@ msgstr "Border width:"
 msgid "Border style:"
 msgstr "Border style:"
 
+msgid "Unknown choice"
+msgstr "Unknown choice"
+
 #, c-format
 msgid "Applying these changes will short net %s with %s."
 msgstr "Applying these changes will short net %s with %s."
@@ -26292,6 +26355,60 @@ msgstr "Via start layer and end layer cannot be the same"
 
 msgid "Edit Track/Via Properties"
 msgstr "Edit Track/Via Properties"
+
+msgid "From rules"
+msgstr "From rules"
+
+msgid "Type I a ( tented top )"
+msgstr "Type I a ( tented top )"
+
+msgid "Type I b ( tented both sides )"
+msgstr "Type I b ( tented both sides )"
+
+msgid "Type I a ( tented bottom )"
+msgstr "Type I a ( tented bottom )"
+
+msgid "Type II a ( covered and tented top )"
+msgstr "Type II a ( covered and tented top )"
+
+msgid "Type II b ( covered and tented both sides )"
+msgstr "Type II b ( covered and tented both sides )"
+
+msgid "Type II a ( covered and tented bottom )"
+msgstr "Type II a ( covered and tented bottom )"
+
+msgid "Type III a ( plugged top )"
+msgstr "Type III a ( plugged top )"
+
+msgid "Type III b ( plugged both sides )"
+msgstr "Type III b ( plugged both sides )"
+
+msgid "Type III a ( plugged bottom )"
+msgstr "Type III a ( plugged bottom )"
+
+msgid "Type IV a ( plugged and tented top )"
+msgstr "Type IV a ( plugged and tented top )"
+
+msgid "Type IV b ( plugged and tented both sides )"
+msgstr "Type IV b ( plugged and tented both sides )"
+
+msgid "Type IV a ( plugged and tented bottom )"
+msgstr "Type IV a ( plugged and tented bottom )"
+
+msgid "Type V ( filled )"
+msgstr "Type V ( filled )"
+
+msgid "Type VI a ( filled and tented top )"
+msgstr "Type VI a ( filled and tented top )"
+
+msgid "Type VI b ( filled and tented both sides )"
+msgstr "Type VI b ( filled and tented both sides )"
+
+msgid "Type VI a ( filled and tented bottom )"
+msgstr "Type VI a ( filled and tented bottom )"
+
+msgid "Type VII ( filled and capped )"
+msgstr "Type VII ( filled and capped )"
 
 msgid "Automatically update via nets"
 msgstr "Automatically update via nets"
@@ -26346,29 +26463,13 @@ msgstr "Start layer:"
 msgid "End layer:"
 msgstr "End layer:"
 
-msgid "Front tenting:"
-msgstr "Front tenting:"
+msgid "Protection features:"
+msgstr "Protection features:"
 
-msgid "From design rules"
-msgstr "From design rules"
-
-msgid "Tented"
-msgstr "Tented"
-
-msgid "Not tented"
-msgstr "Not tented"
-
-msgid "Whether to tent (cover with soldermask) this via on the front side"
-msgstr "Whether to tent (cover with soldermask) this via on the front side"
-
-msgid "Link front and back tenting settings"
-msgstr "Link front and back tenting settings"
-
-msgid "Back tenting:"
-msgstr "Back tenting:"
-
-msgid "Whether to tent (cover with soldermask) this via on the back side"
-msgstr "Whether to tent (cover with soldermask) this via on the back side"
+msgid ""
+"Select which protection feature according to IPC-4761 the via should have."
+msgstr ""
+"Select which protection feature according to IPC-4761 the via should have."
 
 msgid "Add teardrops on via's track connections"
 msgstr "Add teardrops on via's track connections"
@@ -32915,6 +33016,36 @@ msgstr "Track (arc) %s on %s, length %s"
 msgid "Track %s on %s, length %s"
 msgstr "Track %s on %s, length %s"
 
+msgid "From design rules"
+msgstr "From design rules"
+
+msgid "Tented"
+msgstr "Tented"
+
+msgid "Not tented"
+msgstr "Not tented"
+
+msgid "Covered"
+msgstr "Covered"
+
+msgid "Not covered"
+msgstr "Not covered"
+
+msgid "Plugged"
+msgstr "Plugged"
+
+msgid "Not plugged"
+msgstr "Not plugged"
+
+msgid "Capped"
+msgstr "Capped"
+
+msgid "Not capped"
+msgstr "Not capped"
+
+msgid "Not filled"
+msgstr "Not filled"
+
 msgid "Via Properties"
 msgstr "Via Properties"
 
@@ -32932,6 +33063,24 @@ msgstr "Front tenting"
 
 msgid "Back tenting"
 msgstr "Back tenting"
+
+msgid "Front covering"
+msgstr "Front covering"
+
+msgid "Back covering"
+msgstr "Back covering"
+
+msgid "Front plugging"
+msgstr "Front plugging"
+
+msgid "Back plugging"
+msgstr "Back plugging"
+
+msgid "Capping"
+msgstr "Capping"
+
+msgid "Filling"
+msgstr "Filling"
 
 msgid "must be mm, in, or mil"
 msgstr "must be mm, in, or mil"
@@ -36760,14 +36909,20 @@ msgstr "Building zone fills..."
 msgid "Removing isolated copper islands..."
 msgstr "Removing isolated copper islands..."
 
+msgid "Prototype zone fill enabled. Disable setting and refill?"
+msgstr "Prototype zone fill enabled. Disable setting and refill?"
+
+msgid "Disable and refill"
+msgstr "Disable and refill"
+
+msgid "Continue without Refill"
+msgstr "Continue without Refill"
+
 msgid "Zone fills are out-of-date. Refill?"
 msgstr "Zone fills are out-of-date. Refill?"
 
 msgid "Refill"
 msgstr "Refill"
-
-msgid "Continue without Refill"
-msgstr "Continue without Refill"
 
 msgid ""
 "Top zone has the highest priority. When a zone is inside another zone, if "
@@ -36919,6 +37074,65 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#, c-format
+#~ msgid ""
+#~ "Symbol '%s' already exists in library '%s'.Do you want to overwrite it?"
+#~ msgstr ""
+#~ "Symbol '%s' already exists in library '%s'.Do you want to overwrite it?"
+
+#, c-format
+#~ msgid "%s Output Options"
+#~ msgstr "%s Output Options"
+
+#, c-format
+#~ msgid "Output: %s"
+#~ msgstr "Output: %s"
+
+#~ msgid "Edit Output Options..."
+#~ msgstr "Edit Output Options..."
+
+#~ msgid "Delete Output"
+#~ msgstr "Delete Output"
+
+#~ msgid "View Last Run Results..."
+#~ msgstr "View Last Run Results..."
+
+#~ msgid "Output Types"
+#~ msgstr "Output Types"
+
+#~ msgid "Add New Output"
+#~ msgstr "Add New Output"
+
+#~ msgid "Select output type:"
+#~ msgstr "Select output type:"
+
+#~ msgid "No outputs defined"
+#~ msgstr "No outputs defined"
+
+#~ msgid "Outputs"
+#~ msgstr "Outputs"
+
+#~ msgid "Generate All Outputs"
+#~ msgstr "Generate All Outputs"
+
+#~ msgid "Job Output Run Log"
+#~ msgstr "Job Output Run Log"
+
+#~ msgid "Front tenting:"
+#~ msgstr "Front tenting:"
+
+#~ msgid "Whether to tent (cover with soldermask) this via on the front side"
+#~ msgstr "Whether to tent (cover with soldermask) this via on the front side"
+
+#~ msgid "Link front and back tenting settings"
+#~ msgstr "Link front and back tenting settings"
+
+#~ msgid "Back tenting:"
+#~ msgstr "Back tenting:"
+
+#~ msgid "Whether to tent (cover with soldermask) this via on the back side"
+#~ msgstr "Whether to tent (cover with soldermask) this via on the back side"
 
 #~ msgid "Copy 3D Image"
 #~ msgstr "Copy 3D Image"
@@ -45633,31 +45847,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "Discard New Sheet"
 #~ msgstr "Discard New Sheet"
-
-#~ msgid "Export Symbol"
-#~ msgstr "Export Symbol"
-
-#, c-format
-#~ msgid "Error occurred attempting to load symbol library file '%s'."
-#~ msgstr "Error occurred attempting to load symbol library file '%s'."
-
-#, c-format
-#~ msgid "Insufficient permissions to save library '%s'."
-#~ msgstr "Insufficient permissions to save library '%s'."
-
-#, c-format
-#~ msgid "Error creating symbol library '%s'."
-#~ msgstr "Error creating symbol library '%s'."
-
-#, c-format
-#~ msgid "Symbol %s saved to library '%s'."
-#~ msgstr "Symbol %s saved to library '%s'."
-
-#~ msgid "Export..."
-#~ msgstr "Export…"
-
-#~ msgid "Export a symbol to a new library file"
-#~ msgstr "Export a symbol to a new library file"
 
 #~ msgid "Show in Differential Mode"
 #~ msgstr "Show in Differential Mode"
@@ -55740,9 +55929,6 @@ msgstr "KiCad Drawing Sheet"
 #, c-format
 #~ msgid "Failed reading model library '%s'."
 #~ msgstr "Failed reading model library '%s'."
-
-#~ msgid "Source"
-#~ msgstr "Source"
 
 #~ msgid "Instance"
 #~ msgstr "Instance"
