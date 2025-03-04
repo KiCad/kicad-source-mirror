@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 06:36+0300\n"
-"PO-Revision-Date: 2025-03-01 03:31+0000\n"
+"PO-Revision-Date: 2025-03-04 22:27+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3714,7 +3714,6 @@ msgid "Enter the password for the SSH key"
 msgstr "SSH鍵のパスワードを入力してください"
 
 #: common/dialogs/git/dialog_git_repository.cpp:337
-#, fuzzy
 msgid "Test Connection"
 msgstr "接続をテスト"
 
@@ -3760,9 +3759,8 @@ msgstr "リポジトリのURLを入力してください"
 
 #: common/dialogs/git/dialog_git_repository.cpp:453
 #: common/dialogs/git/dialog_git_repository_base.cpp:108
-#, fuzzy
 msgid "SSH key password:"
-msgstr "SSH鍵のパスワード"
+msgstr "SSH鍵のパスワード:"
 
 #: common/dialogs/git/dialog_git_repository.cpp:459
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
@@ -3770,14 +3768,12 @@ msgid "Password:"
 msgstr "Password:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:38
-#, fuzzy
 msgid "Location:"
-msgstr "場所"
+msgstr "場所:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:45
-#, fuzzy
 msgid "Connection type:"
-msgstr "接続タイプ"
+msgstr "接続タイプ:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:52
 msgid "HTTPS"
@@ -3789,9 +3785,8 @@ msgid "Local"
 msgstr "ローカル"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:83
-#, fuzzy
 msgid "SSH private key:     "
-msgstr "SSH秘密鍵"
+msgstr "SSH秘密鍵:     "
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:90
 msgid "Select SSH private key file"
@@ -3802,9 +3797,8 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:101
-#, fuzzy
 msgid "User name:"
-msgstr "Username:"
+msgstr "ユーザー名:"
 
 #: common/dialogs/git/dialog_git_repository_base.h:77
 msgid "Git Repository"
@@ -21957,7 +21951,7 @@ msgstr ""
 "ん。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:995
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
 msgstr "シンボル '%s' はライブラリ '%s' にすでに存在します。上書きしますか？"
@@ -21991,7 +21985,7 @@ msgid "Export Symbol"
 msgstr "シンボルをエクスポート"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1129
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is read-only."
 msgstr "ライブラリ '%s' は読み込み専用です。"
 
@@ -22558,9 +22552,8 @@ msgid "Import a symbol to the current library"
 msgstr "現在のライブラリへシンボルをインポート"
 
 #: eeschema/tools/ee_actions.cpp:274
-#, fuzzy
 msgid "Export..."
-msgstr "エクスポート(&e)..."
+msgstr "エクスポート..."
 
 #: eeschema/tools/ee_actions.cpp:275
 msgid "Export a symbol to a new library file"
@@ -26779,9 +26772,9 @@ msgstr "ジョブの設定ファイルをコピー"
 
 #: kicad/dialogs/dialog_destination.cpp:55
 #: kicad/dialogs/dialog_destination_base.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "%s Destination"
-msgstr "宛先:"
+msgstr "% 宛先"
 
 #: kicad/dialogs/dialog_destination.cpp:86
 msgid "Select output directory"
@@ -26800,9 +26793,8 @@ msgid "Zip"
 msgstr "Zip"
 
 #: kicad/dialogs/dialog_destination_base.cpp:46
-#, fuzzy
 msgid "Destination path:"
-msgstr "宛先:"
+msgstr "宛先パス:"
 
 #: kicad/dialogs/dialog_destination_base.cpp:64
 msgid "Include jobs:"
@@ -26902,9 +26894,9 @@ msgid "Update Available"
 msgstr "更新が利用可能です"
 
 #: kicad/dialogs/panel_jobset.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Destination: %s"
-msgstr "宛先:"
+msgstr "宛先: %s"
 
 #: kicad/dialogs/panel_jobset.cpp:68
 msgid "No."
@@ -26935,19 +26927,16 @@ msgid "Running jobs"
 msgstr "実行中のジョブ"
 
 #: kicad/dialogs/panel_jobset.cpp:295
-#, fuzzy
 msgid "Edit Destination Options..."
-msgstr "矩形のオプションを編集..."
+msgstr "宛先のオプションを編集..."
 
 #: kicad/dialogs/panel_jobset.cpp:296
-#, fuzzy
 msgid "Delete Destination"
-msgstr "関連付けを削除"
+msgstr "宛先を削除"
 
 #: kicad/dialogs/panel_jobset.cpp:299
-#, fuzzy
 msgid "View Last Run Log..."
-msgstr "最後の実行結果を表示…"
+msgstr "最後の実行ログを表示…"
 
 #: kicad/dialogs/panel_jobset.cpp:389
 msgid "Edit Job Description"
@@ -26978,47 +26967,40 @@ msgid "Select job type:"
 msgstr "ジョブのタイプを選択:"
 
 #: kicad/dialogs/panel_jobset.cpp:783
-#, fuzzy
 msgid "Destination Types"
-msgstr "宛先:"
+msgstr "宛先タイプ"
 
 #: kicad/dialogs/panel_jobset.cpp:792
-#, fuzzy
 msgid "Add New Destination"
-msgstr "宛先:"
+msgstr "新しい宛先を追加"
 
 #: kicad/dialogs/panel_jobset.cpp:793
-#, fuzzy
 msgid "Select destination type:"
-msgstr "ジョブのタイプを選択:"
+msgstr "宛先のタイプを選択:"
 
 #: kicad/dialogs/panel_jobset.cpp:958
-#, fuzzy
 msgid "No destinations defined"
-msgstr "出力が定義されていません"
+msgstr "宛先が定義されていません"
 
 #: kicad/dialogs/panel_jobset_base.cpp:24
 msgid "Jobs"
 msgstr "ジョブ"
 
 #: kicad/dialogs/panel_jobset_base.cpp:83
-#, fuzzy
 msgid "Destinations"
-msgstr "宛先:"
+msgstr "宛先"
 
 #: kicad/dialogs/panel_jobset_base.cpp:116
 msgid "Save Jobset"
 msgstr "ジョブセットを保存"
 
 #: kicad/dialogs/panel_jobset_base.cpp:122
-#, fuzzy
 msgid "Generate All Destinations"
-msgstr "全ての出力を生成"
+msgstr "全ての宛先を生成"
 
 #: kicad/dialogs/panel_jobset_base.h:133
-#, fuzzy
 msgid "Jobset Run Log"
-msgstr "ジョブの実行ログ"
+msgstr "ジョブセットの実行ログ"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:143
 msgid "Edit the project schematic"
@@ -38107,7 +38089,6 @@ msgid "Applying these changes will short net %s with other nets."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:639
-#, fuzzy
 msgid "Apply Anyway"
 msgstr "強制的に追加"
 
