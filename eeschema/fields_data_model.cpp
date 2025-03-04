@@ -787,11 +787,13 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ExpandAfterSort()
 
 void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit )
 {
-    for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
-    {
-        SCH_SYMBOL& symbol = *m_symbolsList[i].GetSymbol();
 
-        aCommit.Modify( &symbol, m_symbolsList[i].GetSheetPath().LastScreen() );
+    for( const SCH_REFERENCE& instance : m_symbolsList )
+    {
+        SCH_SYMBOL&         symbol = *instance.GetSymbol();
+        SCHEMATIC_SETTINGS& settings = symbol.Schematic()->Settings();
+
+        aCommit.Modify( &symbol, instance.GetSheetPath().LastScreen() );
 
         const std::map<wxString, wxString>& fieldStore = m_dataStore[symbol.m_Uuid];
 
@@ -800,7 +802,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit )
             // Attributes bypass the field logic, so handle them first
             if( isAttribute( srcName ) )
             {
-                setAttributeValue( *m_symbolsList[i].GetSymbol(), srcName, srcValue );
+                setAttributeValue( symbol, srcName, srcValue );
                 continue;
             }
 
@@ -827,8 +829,12 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit )
 
             if( createField )
             {
-                const VECTOR2I symbolPos = symbol.GetPosition();
-                destField = symbol.AddField( SCH_FIELD( symbolPos, FIELD_T::USER, &symbol, srcName ) );
+                destField = symbol.AddField( SCH_FIELD( symbol.GetPosition(), FIELD_T::USER,
+                                                        &symbol, srcName ) );
+                destField->SetTextAngle( symbol.GetField( FIELD_T::REFERENCE )->GetTextAngle() );
+                destField->SetTextSize( VECTOR2I( settings.m_DefaultTextSize,
+                                                  settings.m_DefaultTextSize ) );
+                destField->SetVisible( false );
             }
 
             if( !destField )
