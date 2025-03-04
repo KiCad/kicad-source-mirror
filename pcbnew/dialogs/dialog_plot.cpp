@@ -360,6 +360,7 @@ void DIALOG_PLOT::init_Dialog()
 
     // SVG precision and units for coordinates
     m_svgPrecsision->SetValue( m_plotOpts.GetSvgPrecision() );
+    m_SVG_fitPageToBoard->SetValue( m_plotOpts.GetSvgFitPagetoBoard() );
 
     m_sketchPadsOnFabLayers->SetValue( m_plotOpts.GetSketchPadsOnFabLayers() );
     m_plotPadNumbers->SetValue( m_plotOpts.GetPlotPadNumbers() );
@@ -446,6 +447,7 @@ void DIALOG_PLOT::transferPlotParamsToJob()
         JOB_EXPORT_PCB_SVG* svgJob = static_cast<JOB_EXPORT_PCB_SVG*>( m_job );
         svgJob->m_precision = m_plotOpts.GetSvgPrecision();
         svgJob->m_genMode = JOB_EXPORT_PCB_SVG::GEN_MODE::MULTI;
+        svgJob->m_fitPageToBoard = m_plotOpts.GetSvgFitPagetoBoard();
     }
 
     if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::DXF )
@@ -1157,6 +1159,7 @@ void DIALOG_PLOT::applyPlotSettings()
 
     tempOptions.SetGerberPrecision( m_coordFormatCtrl->GetSelection() == 0 ? 5 : 6 );
     tempOptions.SetSvgPrecision( m_svgPrecsision->GetValue() );
+    tempOptions.SetSvgFitPageToBoard( m_SVG_fitPageToBoard->GetValue() );
 
     LSET selectedLayers;
 

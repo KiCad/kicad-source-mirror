@@ -116,6 +116,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxSpinCtrl* m_svgPrecsision;
 		wxStaticText* m_staticText18;
 		wxChoice* m_SVGColorChoice;
+		wxCheckBox* m_SVG_fitPageToBoard;
 		wxStaticBoxSizer* m_PDFOptionsSizer;
 		wxStaticText* m_staticText19;
 		wxChoice* m_PDFColorChoice;
