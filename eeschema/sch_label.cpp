@@ -850,7 +850,43 @@ void SCH_LABEL_BASE::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFun
 
 bool SCH_LABEL_BASE::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const
 {
-    return SCH_ITEM::Matches( UnescapeString( GetText() ), aSearchData );
+    if( SCH_ITEM::Matches( UnescapeString( GetText() ), aSearchData ) )
+    {
+        return true;
+    }
+
+    const SCH_SEARCH_DATA* searchData = dynamic_cast<const SCH_SEARCH_DATA*>( &aSearchData );
+    SCH_CONNECTION* connection = nullptr;
+    SCH_SHEET_PATH* sheetPath = reinterpret_cast<SCH_SHEET_PATH*>( aAuxData );
+
+    if( searchData && searchData->searchNetNames && sheetPath
+        && ( connection = Connection( sheetPath ) ) )
+    {
+        if( connection->IsBus() )
+        {
+            auto allMembers = connection->AllMembers();
+
+            std::set<wxString> netNames;
+
+            for( std::shared_ptr<SCH_CONNECTION> member : allMembers )
+                netNames.insert( member->GetNetName() );
+
+            for( const wxString& netName : netNames )
+            {
+                if( EDA_ITEM::Matches( netName, aSearchData ) )
+                    return true;
+            }
+
+            return false;
+        }
+
+        wxString netName = connection->GetNetName();
+
+        if( EDA_ITEM::Matches( netName, aSearchData ) )
+            return true;
+    }
+
+    return false;
 }
 
 

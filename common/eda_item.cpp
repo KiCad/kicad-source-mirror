@@ -32,6 +32,7 @@
 #include <wx/log.h>
 
 #include <wx/fdrepdlg.h>
+#include <wx/regex.h>
 #include <eda_pattern_match.h>
 
 EDA_ITEM::EDA_ITEM( EDA_ITEM* parent, KICAD_T idType, bool isSCH_ITEM, bool isBOARD_ITEM ) :
@@ -182,6 +183,21 @@ bool EDA_ITEM::Matches( const wxString& aText, const EDA_SEARCH_DATA& aSearchDat
     {
         return text.Matches( searchText );
     }
+    else if( aSearchData.matchMode == EDA_SEARCH_MATCH_MODE::REGEX )
+    {
+        if( aSearchData.regex_string != searchText || !aSearchData.regex.IsValid() )
+        {
+            int flag = aSearchData.matchCase ? 0 : wxRE_ICASE;
+            wxLogNull noLogs;
+
+            if( !aSearchData.regex.Compile( searchText, flag ) )
+                return false;
+
+            aSearchData.regex_string = searchText;
+        }
+
+        return aSearchData.regex.Matches( text );
+    }
     else
     {
         return text.Find( searchText ) != wxNOT_FOUND;
@@ -195,6 +211,26 @@ bool EDA_ITEM::Replace( const EDA_SEARCH_DATA& aSearchData, wxString& aText )
     wxString searchText = aSearchData.findString;
     wxString result;
     bool     replaced = false;
+
+    if( aSearchData.matchMode == EDA_SEARCH_MATCH_MODE::REGEX )
+    {
+        if( aSearchData.regex_string != searchText || !aSearchData.regex.IsValid() )
+        {
+            int flag = aSearchData.matchCase ? 0 : wxRE_ICASE;
+            wxLogNull noLogs;
+
+            if( !aSearchData.regex.Compile( searchText, flag ) )
+                return false;
+
+            aSearchData.regex_string = searchText;
+        }
+
+        if( !aSearchData.regex.Replace( &text, aSearchData.replaceString ) )
+            return false;
+
+        aText = text;
+        return true;
+    }
 
     if( !aSearchData.matchCase )
     {
