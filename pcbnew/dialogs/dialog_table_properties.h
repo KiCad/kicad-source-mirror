@@ -46,6 +46,7 @@ private:
     bool TransferDataFromWindow() override;
 
     void onBorderChecked( wxCommandEvent& aEvent ) override;
+    void onHeaderChecked( wxCommandEvent& aEvent ) override;
     void onSize( wxSizeEvent& aEvent ) override;
 
 private:
