@@ -256,7 +256,7 @@ DIALOG_JOBSET_RUN_LOG_BASE::DIALOG_JOBSET_RUN_LOG_BASE( wxWindow* parent, wxWind
 	m_sdbSizer->AddButton( m_sdbSizerOK );
 	m_sdbSizer->Realize();
 
-	bMainSizer->Add( m_sdbSizer, 0, wxEXPAND, 5 );
+	bMainSizer->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 5 );
 
 
 	this->SetSizer( bMainSizer );

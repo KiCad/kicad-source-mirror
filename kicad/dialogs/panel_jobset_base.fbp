@@ -1571,7 +1571,7 @@
         </object>
         <object class="sizeritem" expanded="false">
           <property name="border">5</property>
-          <property name="flag">wxEXPAND</property>
+          <property name="flag">wxALL|wxEXPAND</property>
           <property name="proportion">0</property>
           <object class="wxStdDialogButtonSizer" expanded="false">
             <property name="Apply">0</property>
