@@ -35,9 +35,6 @@ public:
     wxString GetDefaultDescription() const override;
     wxString GetSettingsDialogTitle() const override;
 
-    LSEQ m_layersIncludeOnAll;
-
-    bool m_layersIncludeOnAllSet;
     bool m_useBoardPlotParams;
 
     bool m_createJobsFile;

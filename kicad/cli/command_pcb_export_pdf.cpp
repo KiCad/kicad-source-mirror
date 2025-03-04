@@ -165,7 +165,7 @@ int CLI::PCB_EXPORT_PDF_COMMAND::doPerform( KIWAY& aKiway )
     int drillShape = m_argParser.get<int>( ARG_DRILL_SHAPE_OPTION );
     pdfJob->m_drillShapeOption = static_cast<JOB_EXPORT_PCB_PDF::DRILL_MARKS>( drillShape );
 
-    pdfJob->m_printMaskLayer = m_selectedLayers;
+    pdfJob->m_plotLayerSequence = m_selectedLayers;
 
     bool argModeMulti = m_argParser.get<bool>( ARG_MODE_MULTIPAGE );
     bool argModeSeparate = m_argParser.get<bool>( ARG_MODE_SEPARATE );
@@ -178,8 +178,7 @@ int CLI::PCB_EXPORT_PDF_COMMAND::doPerform( KIWAY& aKiway )
     }
 
     wxString layers = From_UTF8( m_argParser.get<std::string>( ARG_COMMON_LAYERS ).c_str() );
-    bool     blah = false;
-    pdfJob->m_printMaskLayersToIncludeOnAllLayers = convertLayerStringList( layers, blah );
+    pdfJob->m_plotOnAllLayersSequence = convertLayerStringList( layers );
 
     if( argModeMulti )
         pdfJob->m_pdfGenMode = JOB_EXPORT_PCB_PDF::GEN_MODE::ONE_PAGE_PER_LAYER_ONE_FILE;

@@ -72,8 +72,7 @@ int CLI::PCB_EXPORT_GERBERS_COMMAND::doPerform( KIWAY& aKiway )
         return exitCode;
 
     wxString layers = From_UTF8( m_argParser.get<std::string>( ARG_COMMON_LAYERS ).c_str() );
-    gerberJob->m_layersIncludeOnAll =
-            convertLayerStringList( layers, gerberJob->m_layersIncludeOnAllSet );
+    gerberJob->m_plotOnAllLayersSequence = convertLayerStringList( layers );
     gerberJob->m_useBoardPlotParams = m_argParser.get<bool>( ARG_USE_BOARD_PLOT_PARAMS );
 
     LOCALE_IO dummy;

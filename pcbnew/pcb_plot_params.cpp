@@ -31,6 +31,7 @@
 #include <plotters/plotter.h>
 #include <io/kicad/kicad_io_utils.h>
 #include <settings/color_settings.h>
+#include <lseq.h>
 
 
 #define PLOT_LINEWIDTH_DEFAULT    ( DEFAULT_TEXT_WIDTH * IU_PER_MM )
@@ -180,8 +181,12 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter ) const
 
     aFormatter->Print( "(layerselection 0x%s)", m_layerSelection.FmtHex().c_str() );
 
-    aFormatter->Print( "(plot_on_all_layers_selection 0x%s)",
-                       m_plotOnAllLayersSelection.FmtHex().c_str() );
+    LSET commonLayers;
+
+    for( PCB_LAYER_ID commonLayer : m_plotOnAllLayersSequence )
+        commonLayers.set( commonLayer );
+
+    aFormatter->Print( "(plot_on_all_layers_selection 0x%s)", commonLayers.FmtHex().c_str() );
 
     KICAD_FORMAT::FormatBool( aFormatter, "disableapertmacros", m_gerberDisableApertMacros );
     KICAD_FORMAT::FormatBool( aFormatter, "usegerberextensions", m_useGerberProtelExtensions );
@@ -255,7 +260,7 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
     if( m_layerSelection != aPcbPlotParams.m_layerSelection )
         return false;
 
-    if( m_plotOnAllLayersSelection != aPcbPlotParams.m_plotOnAllLayersSelection )
+    if( m_plotOnAllLayersSequence != aPcbPlotParams.m_plotOnAllLayersSequence )
         return false;
 
     if( m_useGerberProtelExtensions != aPcbPlotParams.m_useGerberProtelExtensions )
@@ -647,22 +652,27 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
 
             if( cur.find_first_of( "0x" ) == 0 )
             {
-                // The layers were renumbered in 5e0abadb23425765e164f49ee2f893e94ddb97fc, but there wasn't
-                // a board file version change with it, so this value is the one immediately after that happened.
+                LSET layers;
+
+                // The layers were renumbered in 5e0abadb23425765e164f49ee2f893e94ddb97fc, but
+                // there wasn't a board file version change with it, so this value is the one
+                // immediately after that happened.
                 if( m_boardFileVersion < 20240819 )
                 {
                     BASE_SET legacyLSET( LEGACY_PCB_LAYER_ID_COUNT );
 
                     // skip the leading 2 0x bytes.
                     legacyLSET.ParseHex( cur.c_str() + 2, cur.size() - 2 );
-                    aPcbPlotParams->SetPlotOnAllLayersSelection( remapLegacyLayerLSET( legacyLSET ) );
+
+                    layers = remapLegacyLayerLSET( legacyLSET );
                 }
                 else
                 {
                     // skip the leading 2 0x bytes.
-                    aPcbPlotParams->m_plotOnAllLayersSelection.ParseHex( cur.c_str() + 2,
-                                                                         cur.size() - 2 );
+                    layers.ParseHex( cur.c_str() + 2, cur.size() - 2 );
                 }
+
+                aPcbPlotParams->SetPlotOnAllLayersSequence( layers.SeqStackupForPlotting() );
             }
             else
             {
@@ -719,7 +729,7 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
 
         case T_excludeedgelayer:
             if( !parseBool() )
-                aPcbPlotParams->m_plotOnAllLayersSelection.set( Edge_Cuts );
+                aPcbPlotParams->m_plotOnAllLayersSequence.push_back( Edge_Cuts );
 
             break;
 

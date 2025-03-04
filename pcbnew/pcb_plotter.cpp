@@ -408,8 +408,8 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT
     aOpts.SetMirror( aJob->m_mirror );
     aOpts.SetNegative( aJob->m_negative );
 
-    aOpts.SetLayerSelection( aJob->m_printMaskLayer );
-    aOpts.SetPlotOnAllLayersSelection( aJob->m_printMaskLayersToIncludeOnAllLayers );
+    aOpts.SetLayerSelection( aJob->m_plotLayerSequence );
+    aOpts.SetPlotOnAllLayersSequence( aJob->m_plotOnAllLayersSequence );
 
     switch( aJob->m_plotFormat )
     {

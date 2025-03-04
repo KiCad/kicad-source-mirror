@@ -778,12 +778,10 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     }
 
     LOCALE_IO dummy;
-    if( !plotter.Plot( outPath, aSvgJob->m_printMaskLayer,
-                       aSvgJob->m_printMaskLayersToIncludeOnAllLayers, false,
-                       aSvgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE,
-                       layerName,
-                       sheetName,
-                       sheetPath ) )
+
+    if( !plotter.Plot( outPath, aSvgJob->m_plotLayerSequence, aSvgJob->m_plotOnAllLayersSequence,
+                       false, aSvgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE,
+                       layerName, sheetName, sheetPath ) )
     {
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
@@ -851,10 +849,9 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
             sheetPath = aDxfJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
     }
 
-    if( !plotter.Plot( outPath, aDxfJob->m_printMaskLayer,
-                       aDxfJob->m_printMaskLayersToIncludeOnAllLayers, false,
-                       aDxfJob->m_genMode == JOB_EXPORT_PCB_DXF::GEN_MODE::SINGLE, layerName,
-                       sheetName, sheetPath ) )
+    if( !plotter.Plot( outPath, aDxfJob->m_plotLayerSequence, aDxfJob->m_plotOnAllLayersSequence,
+                       false, aDxfJob->m_genMode == JOB_EXPORT_PCB_DXF::GEN_MODE::SINGLE,
+                       layerName, sheetName, sheetPath ) )
     {
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
@@ -928,13 +925,11 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
 
 
     LOCALE_IO dummy;
-    if( !pcbPlotter.Plot( outPath, aPdfJob->m_printMaskLayer,
-                            aPdfJob->m_printMaskLayersToIncludeOnAllLayers,
-                            false,
-                            aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_FILE,
-                            layerName,
-                            sheetName,
-                            sheetPath ) )
+
+    if( !pcbPlotter.Plot( outPath, aPdfJob->m_plotLayerSequence,
+                          aPdfJob->m_plotOnAllLayersSequence, false,
+                          aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_FILE,
+                          layerName, sheetName, sheetPath ) )
     {
         returnCode = CLI::EXIT_CODES::ERR_UNKNOWN;
     }
@@ -970,7 +965,6 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     brd->SynchronizeProperties();
 
     PCB_PLOT_PARAMS       boardPlotOptions = brd->GetPlotOptions();
-    LSET                  plotOnAllLayersSelection = boardPlotOptions.GetPlotOnAllLayersSelection();
     GERBER_JOBFILE_WRITER jobfile_writer( brd );
 
     wxString fileExt;
@@ -983,21 +977,18 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
         // we don't plot 32 layers when we only have 4, etc.
         LSET plotLayers = ( boardPlotOptions.GetLayerSelection() & LSET::AllNonCuMask() )
                           | ( brd->GetEnabledLayers() & LSET::AllCuMask() );
-        aGerberJob->m_printMaskLayer = plotLayers.SeqStackupForPlotting();
-        aGerberJob->m_layersIncludeOnAll = boardPlotOptions.GetPlotOnAllLayersSelection().UIOrder();
+        aGerberJob->m_plotLayerSequence = plotLayers.SeqStackupForPlotting();
+        aGerberJob->m_plotOnAllLayersSequence = boardPlotOptions.GetPlotOnAllLayersSequence();
     }
     else
     {
         // default to the board enabled layers
-        if( aGerberJob->m_printMaskLayer.empty() )
-            aGerberJob->m_printMaskLayer = brd->GetEnabledLayers().SeqStackupForPlotting();
-
-        if( aGerberJob->m_layersIncludeOnAllSet )
-            aGerberJob->m_layersIncludeOnAll = plotOnAllLayersSelection.UIOrder();
+        if( aGerberJob->m_plotLayerSequence.empty() )
+            aGerberJob->m_plotLayerSequence = brd->GetEnabledLayers().SeqStackupForPlotting();
     }
 
     // Ensure layers to plot are restricted to enabled layers of the board to plot
-    LSET layersToPlot = LSET( { aGerberJob->m_printMaskLayer } ) & brd->GetEnabledLayers();
+    LSET layersToPlot = LSET( { aGerberJob->m_plotLayerSequence } ) & brd->GetEnabledLayers();
 
     for( PCB_LAYER_ID layer : layersToPlot.UIOrder() )
     {
@@ -1007,7 +998,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
         plotSequence.push_back( layer );
 
         // Now all the "include on all" layers
-        for( PCB_LAYER_ID layer_all : aGerberJob->m_layersIncludeOnAll )
+        for( PCB_LAYER_ID layer_all : aGerberJob->m_plotOnAllLayersSequence )
         {
             // Don't plot the same layer more than once;
             if( find( plotSequence.begin(), plotSequence.end(), layer_all ) != plotSequence.end() )
@@ -1202,8 +1193,8 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
 
     PCB_PLOT_PARAMS plotOpts;
     populateGerberPlotOptionsFromJob( plotOpts, aGerberJob );
-    plotOpts.SetLayerSelection( aGerberJob->m_printMaskLayer );
-    plotOpts.SetPlotOnAllLayersSelection( aGerberJob->m_printMaskLayersToIncludeOnAllLayers );
+    plotOpts.SetLayerSelection( aGerberJob->m_plotLayerSequence );
+    plotOpts.SetPlotOnAllLayersSequence( aGerberJob->m_plotOnAllLayersSequence );
 
     PCB_LAYER_ID layer = UNDEFINED_LAYER;
     wxString     layerName;
@@ -1214,9 +1205,9 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
     // The first layer will be treated as the layer name for the gerber header,
     // the other layers will be treated equivalent to the "Plot on All Layers" option
     // in the GUI
-    if( aGerberJob->m_printMaskLayer.size() >= 1 )
+    if( aGerberJob->m_plotLayerSequence.size() >= 1 )
     {
-        layer = aGerberJob->m_printMaskLayer.front();
+        layer = aGerberJob->m_plotLayerSequence.front();
         layerName = brd->GetLayerName( layer );
     }
 
@@ -1235,7 +1226,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
 
     if( plotter )
     {
-        PlotBoardLayers( brd, plotter, aGerberJob->m_printMaskLayer, plotOpts );
+        PlotBoardLayers( brd, plotter, aGerberJob->m_plotLayerSequence, plotOpts );
         plotter->EndPlot();
     }
     else
