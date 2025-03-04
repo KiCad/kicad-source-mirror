@@ -447,11 +447,25 @@ bool SCH_PIN::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) cons
     const SCH_SEARCH_DATA& schSearchData =
             dynamic_cast<const SCH_SEARCH_DATA&>( aSearchData );
 
-    if( !schSearchData.searchAllPins )
-        return false;
+    if( schSearchData.searchAllPins
+        && ( EDA_ITEM::Matches( GetName(), aSearchData )
+             || EDA_ITEM::Matches( GetNumber(), aSearchData ) ) )
+    {
+        return true;
+    }
 
-    return EDA_ITEM::Matches( GetName(), aSearchData )
-                || EDA_ITEM::Matches( GetNumber(), aSearchData );
+    SCH_CONNECTION* connection = nullptr;
+    SCH_SHEET_PATH* sheetPath = reinterpret_cast<SCH_SHEET_PATH*>( aAuxData );
+
+    if( schSearchData.searchNetNames && sheetPath && ( connection = Connection( sheetPath ) ) )
+    {
+        wxString netName = connection->GetNetName();
+
+        if( EDA_ITEM::Matches( netName, aSearchData ) )
+            return true;
+    }
+
+    return false;
 }
 
 

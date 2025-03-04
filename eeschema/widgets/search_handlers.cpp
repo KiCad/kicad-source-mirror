@@ -182,7 +182,7 @@ int SYMBOL_SEARCH_HANDLER::Search( const wxString& aQuery )
     frp.searchCurrentSheetOnly = false;
 
     auto search =
-            [frp]( SCH_ITEM* item, SCH_SHEET_PATH* sheet )
+            [&frp]( SCH_ITEM* item, SCH_SHEET_PATH* sheet )
             {
                 if( item && item->Type() == SCH_SYMBOL_T )
                 {
@@ -263,7 +263,7 @@ int POWER_SEARCH_HANDLER::Search( const wxString& aQuery )
     frp.searchCurrentSheetOnly = false;
 
     auto search =
-            [frp]( SCH_ITEM* item, SCH_SHEET_PATH* sheet )
+            [&frp]( SCH_ITEM* item, SCH_SHEET_PATH* sheet )
             {
                 if( item && item->Type() == SCH_SYMBOL_T )
                 {
@@ -334,7 +334,7 @@ int TEXT_SEARCH_HANDLER::Search( const wxString& aQuery )
     frp.searchCurrentSheetOnly = false;
 
     auto search =
-            [frp]( SCH_ITEM* item, SCH_SHEET_PATH* sheet )
+            [&frp]( SCH_ITEM* item, SCH_SHEET_PATH* sheet )
             {
                 if( item->Type() == SCH_TEXT_T || item->Type() == SCH_TEXTBOX_T )
                 {
@@ -418,7 +418,7 @@ int LABEL_SEARCH_HANDLER::Search( const wxString& aQuery )
     frp.searchCurrentSheetOnly = false;
 
     auto search =
-            [frp]( SCH_ITEM* item, SCH_SHEET_PATH* sheet )
+            [&frp]( SCH_ITEM* item, SCH_SHEET_PATH* sheet )
             {
                 if( item->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
                 {

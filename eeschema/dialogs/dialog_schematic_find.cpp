@@ -48,13 +48,12 @@ DIALOG_SCH_FIND::DIALOG_SCH_FIND( SCH_EDIT_FRAME* aParent, SCH_SEARCH_DATA* aDat
         m_comboReplace->Show( true );
         m_checkSelectedOnly->Show( true );
         m_checkReplaceReferences->Show( true );
-        m_checkWildcardMatch->Show( false );  // Wildcard replace is not implemented.
+        m_checkRegexMatch->Show( true );
     }
 
     m_checkMatchCase->SetValue( m_findReplaceData->matchCase );
     m_checkWholeWord->SetValue( m_findReplaceData->matchMode == EDA_SEARCH_MATCH_MODE::WHOLEWORD );
-    m_checkWildcardMatch->SetValue( m_findReplaceData->matchMode
-                                    == EDA_SEARCH_MATCH_MODE::WILDCARD );
+    m_checkRegexMatch->SetValue( m_findReplaceData->matchMode == EDA_SEARCH_MATCH_MODE::REGEX );
 
     m_checkAllFields->SetValue( m_findReplaceData->searchAllFields );
     m_checkReplaceReferences->SetValue( m_findReplaceData->replaceReferences );
@@ -62,6 +61,7 @@ DIALOG_SCH_FIND::DIALOG_SCH_FIND( SCH_EDIT_FRAME* aParent, SCH_SEARCH_DATA* aDat
     m_checkCurrentSheetOnly->SetValue( m_findReplaceData->searchCurrentSheetOnly );
     m_checkCurrentSheetOnly->Enable( !m_findReplaceData->searchSelectedOnly );
     m_checkSelectedOnly->SetValue( m_findReplaceData->searchSelectedOnly );
+    m_checkConnections->SetValue( m_findReplaceData->searchNetNames );
 
     if( int hotkey = ACTIONS::showSearch.GetHotKey() )
     {
@@ -225,11 +225,12 @@ void DIALOG_SCH_FIND::updateFlags()
     m_findReplaceData->searchAllPins            = m_checkAllPins->GetValue();
     m_findReplaceData->searchCurrentSheetOnly   = m_checkCurrentSheetOnly->GetValue();
     m_findReplaceData->replaceReferences        = m_checkReplaceReferences->GetValue();
+    m_findReplaceData->searchNetNames           = m_checkConnections->GetValue();
 
     if( m_checkWholeWord->GetValue() )
         m_findReplaceData->matchMode = EDA_SEARCH_MATCH_MODE::WHOLEWORD;
-    else if( m_checkWildcardMatch->IsShown() && m_checkWildcardMatch->GetValue() )
-        m_findReplaceData->matchMode = EDA_SEARCH_MATCH_MODE::WILDCARD;
+    else if( m_checkRegexMatch->IsShown() && m_checkRegexMatch->GetValue() )
+        m_findReplaceData->matchMode = EDA_SEARCH_MATCH_MODE::REGEX;
     else
         m_findReplaceData->matchMode = EDA_SEARCH_MATCH_MODE::PLAIN;
 

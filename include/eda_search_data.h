@@ -24,6 +24,8 @@
 #ifndef EDA_ITEM_SEARCH_H
 #define EDA_ITEM_SEARCH_H
 
+#include <wx/log.h>
+#include <wx/regex.h>
 #include <wx/string.h>
 
 enum class EDA_SEARCH_MATCH_MODE
@@ -31,6 +33,7 @@ enum class EDA_SEARCH_MATCH_MODE
     PLAIN,
     WHOLEWORD,
     WILDCARD,
+    REGEX,
     PERMISSIVE
 };
 
@@ -38,6 +41,9 @@ struct EDA_SEARCH_DATA
 {
     wxString findString;
     wxString replaceString;
+
+    mutable wxRegEx  regex;
+    mutable wxString regex_string;
 
     bool     searchAndReplace;
 
@@ -55,6 +61,23 @@ struct EDA_SEARCH_DATA
     {
     }
 
+    // Need an explicit copy constructor because wxRegEx is not copyable
+    EDA_SEARCH_DATA( const EDA_SEARCH_DATA& other ) :
+            findString( other.findString ),
+            replaceString( other.replaceString ),
+            regex_string( other.regex_string ),
+            searchAndReplace( other.searchAndReplace ),
+            matchCase( other.matchCase ),
+            markersOnly( other.markersOnly ),
+            matchMode( other.matchMode )
+    {
+        if( matchMode == EDA_SEARCH_MATCH_MODE::REGEX )
+        {
+            wxLogNull noLogs;
+            regex.Compile( findString, matchCase ? wxRE_DEFAULT : wxRE_ICASE );
+        }
+    }
+
     virtual ~EDA_SEARCH_DATA() {}
 };
 
@@ -64,6 +87,7 @@ struct SCH_SEARCH_DATA : public EDA_SEARCH_DATA
     bool searchAllPins;
     bool searchCurrentSheetOnly;
     bool searchSelectedOnly;
+    bool searchNetNames;
 
     bool replaceReferences;
 
@@ -73,6 +97,7 @@ struct SCH_SEARCH_DATA : public EDA_SEARCH_DATA
             searchAllPins( false ),
             searchCurrentSheetOnly( false ),
             searchSelectedOnly( false ),
+            searchNetNames( false ),
             replaceReferences( false )
     {
     }
