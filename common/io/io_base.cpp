@@ -76,7 +76,7 @@ bool IO_BASE::CanReadLibrary( const wxString& aFileName ) const
     {
         const std::vector<std::string>& exts = desc.m_FileExtensions;
 
-        wxString fileExt = wxFileName( aFileName ).GetExt().MakeLower();
+        wxString fileExt = wxFileName( aFileName ).GetExt().Lower();
 
         for( const std::string& ext : exts )
         {
