@@ -65,6 +65,7 @@ class DIALOG_TABLE_PROPERTIES_BASE : public DIALOG_SHIM
 		// Virtual event handlers, override them in your derived class
 		virtual void onSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void onBorderChecked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onHeaderChecked( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

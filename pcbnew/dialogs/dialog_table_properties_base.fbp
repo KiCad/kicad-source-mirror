@@ -570,6 +570,7 @@
                     <property name="window_extra_style"></property>
                     <property name="window_name"></property>
                     <property name="window_style"></property>
+                    <event name="OnCheckBox">onHeaderChecked</event>
                   </object>
                 </object>
                 <object class="gbsizeritem" expanded="true">

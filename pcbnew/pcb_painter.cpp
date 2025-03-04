@@ -2538,7 +2538,13 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
         {
             for( int col = 0; col < aTable->GetColCount() - 1; ++col )
             {
-                for( int row = 0; row < aTable->GetRowCount(); ++row )
+                int row = 1;
+                if( aTable->StrokeHeader() )
+                {
+                    row = 0;
+                }
+
+                for( ; row < aTable->GetRowCount(); ++row )
                 {
                     PCB_TABLECELL* cell = aTable->GetCell( row, col );
                     std::vector<VECTOR2I> corners = cell->GetCornersInSequence();
@@ -2581,10 +2587,21 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
         std::vector<VECTOR2I> topRight    = aTable->GetCell( 0, aTable->GetColCount() - 1 )->GetCornersInSequence();
         std::vector<VECTOR2I> bottomRight = aTable->GetCell( aTable->GetRowCount() - 1, aTable->GetColCount() - 1 )->GetCornersInSequence();
 
-        strokeLine( topLeft[0], topRight[1] );
-        strokeLine( topRight[1], bottomRight[2] );
-        strokeLine( bottomRight[2], bottomLeft[3] );
-        strokeLine( bottomLeft[3], topLeft[0] );
+        if( aTable->StrokeHeader() )
+        {
+            strokeLine( topLeft[0], topRight[1] );
+            strokeLine( topLeft[0], topLeft[3] );
+            strokeLine( topLeft[3], topRight[2] );
+            strokeLine( topRight[1], topRight[2] );
+        }
+
+        if( aTable->StrokeExternal() )
+        {
+            strokeLine( topLeft[3], topRight[2] );
+            strokeLine( topRight[2], bottomRight[2] );
+            strokeLine( bottomRight[2], bottomLeft[3] );
+            strokeLine( bottomLeft[3], topLeft[3] );
+        }
     }
 
     // Highlight selected tablecells with a background wash.
