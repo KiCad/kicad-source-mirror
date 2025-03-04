@@ -2704,6 +2704,9 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos,
         break;
     }
 
+    case NOT_USED:      // Things like CONSTRUCTION_GEOM that aren't part of the model
+        return false;
+
     default:            // Suppress warnings
         break;
     }
