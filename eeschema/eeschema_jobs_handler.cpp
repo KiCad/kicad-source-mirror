@@ -249,8 +249,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
 {
     JOB_EXPORT_SCH_PLOT* aPlotJob = dynamic_cast<JOB_EXPORT_SCH_PLOT*>( aJob );
 
-    if( !aPlotJob )
-        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    wxCHECK( aPlotJob, CLI::EXIT_CODES::ERR_UNKNOWN );
 
     SCHEMATIC* sch = getSchematic( aPlotJob->m_filename );
 
@@ -360,6 +359,9 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
 
     schPlotter->Plot( format, plotOpts, renderSettings.get(), m_reporter );
 
+    if( m_reporter->HasMessageOfSeverity( RPT_SEVERITY_ERROR ) )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
     return CLI::EXIT_CODES::OK;
 }
 
@@ -368,8 +370,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
 {
     JOB_EXPORT_SCH_NETLIST* aNetJob = dynamic_cast<JOB_EXPORT_SCH_NETLIST*>( aJob );
 
-    if( !aNetJob )
-        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    wxCHECK( aNetJob, CLI::EXIT_CODES::ERR_UNKNOWN );
 
     SCHEMATIC* sch = getSchematic( aNetJob->m_filename );
 
@@ -487,8 +488,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 {
     JOB_EXPORT_SCH_BOM* aBomJob = dynamic_cast<JOB_EXPORT_SCH_BOM*>( aJob );
 
-    if( !aBomJob )
-        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    wxCHECK( aBomJob, CLI::EXIT_CODES::ERR_UNKNOWN );
 
     SCHEMATIC* sch = getSchematic( aBomJob->m_filename );
 
@@ -768,8 +768,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
 {
     JOB_EXPORT_SCH_PYTHONBOM* aNetJob = dynamic_cast<JOB_EXPORT_SCH_PYTHONBOM*>( aJob );
 
-    if( !aNetJob )
-        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    wxCHECK( aNetJob, CLI::EXIT_CODES::ERR_UNKNOWN );
 
     SCHEMATIC* sch = getSchematic( aNetJob->m_filename );
 
@@ -792,10 +791,9 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
                     } )
             > 0 )
         {
-            m_reporter->Report(
-                    _( "Warning: schematic has annotation errors, please use the schematic "
-                       "editor to fix them\n" ),
-                    RPT_SEVERITY_WARNING );
+            m_reporter->Report( _( "Warning: schematic has annotation errors, please use the "
+                                   "schematic editor to fix them\n" ),
+                                RPT_SEVERITY_WARNING );
         }
     }
 
@@ -841,24 +839,19 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*  aSvgJob,
                                            SCH_RENDER_SETTINGS* aRenderSettings,
                                            LIB_SYMBOL*          symbol )
 {
-    wxASSERT( symbol != nullptr );
+    wxCHECK( symbol, CLI::EXIT_CODES::ERR_UNKNOWN );
 
-    if( symbol == nullptr )
-        return CLI::EXIT_CODES::ERR_UNKNOWN;
-
-    LIB_SYMBOL* symbolToPlot = symbol;
+    LIB_SYMBOL_SPTR parent;
+    LIB_SYMBOL*     symbolToPlot = symbol;
 
     // if the symbol is an alias, then the draw items are stored in the root symbol
     if( symbol->IsAlias() )
     {
-        if(  LIB_SYMBOL_SPTR parent = symbol->GetRootSymbol() )
-        {
-            symbolToPlot = parent.get();
-        }
-        else
-        {
-            wxCHECK( false, CLI::EXIT_CODES::ERR_UNKNOWN );
-        }
+        parent = symbol->GetRootSymbol();
+
+        wxCHECK( parent, CLI::EXIT_CODES::ERR_UNKNOWN );
+
+        symbolToPlot = parent.get();
     }
 
     // iterate from unit 1, unit 0 would be "all units" which we don't want
@@ -943,6 +936,9 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*  aSvgJob,
         }
     }
 
+    if( m_reporter->HasMessageOfSeverity( RPT_SEVERITY_ERROR ) )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
     return CLI::EXIT_CODES::OK;
 }
 
@@ -951,8 +947,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymExportSvg( JOB* aJob )
 {
     JOB_SYM_EXPORT_SVG* svgJob = dynamic_cast<JOB_SYM_EXPORT_SVG*>( aJob );
 
-    if( !svgJob )
-        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    wxCHECK( svgJob, CLI::EXIT_CODES::ERR_UNKNOWN );
 
     wxFileName fn( svgJob->m_libraryPath );
     fn.MakeAbsolute();
@@ -1024,8 +1019,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
 {
     JOB_SYM_UPGRADE* upgradeJob = dynamic_cast<JOB_SYM_UPGRADE*>( aJob );
 
-    if( !upgradeJob )
-        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    wxCHECK( upgradeJob, CLI::EXIT_CODES::ERR_UNKNOWN );
 
     wxFileName fn( upgradeJob->m_libraryPath );
     fn.MakeAbsolute();
@@ -1114,8 +1108,7 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
 {
     JOB_SCH_ERC* ercJob = dynamic_cast<JOB_SCH_ERC*>( aJob );
 
-    if( !ercJob )
-        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    wxCHECK( ercJob, CLI::EXIT_CODES::ERR_UNKNOWN );
 
     SCHEMATIC* sch = getSchematic( ercJob->m_filename );
 
