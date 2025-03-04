@@ -371,7 +371,9 @@ void SCH_PLOTTER::createPSFiles( const SCH_PLOT_OPTS& aPlotOpts,
             break;
 
         case PAGE_SIZE_AUTO:
-        default: plotPage = actualPage; break;
+        default:
+            plotPage = actualPage;
+            break;
         }
 
         double  scalex = (double) plotPage.GetWidthMils() / actualPage.GetWidthMils();
@@ -394,10 +396,16 @@ void SCH_PLOTTER::createPSFiles( const SCH_PLOT_OPTS& aPlotOpts,
             m_lastOutputFilePath = plotFileName.GetFullPath();
 
             if( !plotFileName.IsOk() )
-                return;
-
-            if( plotOneSheetPS( plotFileName.GetFullPath(), screen, aRenderSettings, actualPage,
-                                plot_offset, scale, aPlotOpts ) )
+            {
+                if( aReporter )
+                {
+                    // Error
+                    msg.Printf( _( "Failed to create file '%s'." ), plotFileName.GetFullPath() );
+                    aReporter->Report( msg, RPT_SEVERITY_ERROR );
+                }
+            }
+            else if( plotOneSheetPS( plotFileName.GetFullPath(), screen, aRenderSettings,
+                                     actualPage, plot_offset, scale, aPlotOpts ) )
             {
                 if( aReporter )
                 {
@@ -426,9 +434,7 @@ void SCH_PLOTTER::createPSFiles( const SCH_PLOT_OPTS& aPlotOpts,
     }
 
     if( aReporter )
-    {
         aReporter->ReportTail( _( "Done." ), RPT_SEVERITY_INFO );
-    }
 
     restoreEnvironment( nullptr, oldsheetpath );
 }
