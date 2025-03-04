@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 06:36+0300\n"
-"PO-Revision-Date: 2025-02-27 07:25+0000\n"
+"PO-Revision-Date: 2025-03-04 22:27+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -50,7 +50,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10.2-dev\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2732,7 +2732,7 @@ msgstr "已链接"
 
 #: common/dialogs/dialog_grid_settings_base.h:57
 msgid "Grid Settings"
-msgstr "网格设置"
+msgstr "栅格设置"
 
 #: common/dialogs/dialog_hotkey_list.cpp:36
 msgid "Hotkey List"
@@ -3670,7 +3670,6 @@ msgid "Enter the password for the SSH key"
 msgstr "请输入 SSH 密钥的密码"
 
 #: common/dialogs/git/dialog_git_repository.cpp:337
-#, fuzzy
 msgid "Test Connection"
 msgstr "测试连接"
 
@@ -3716,9 +3715,8 @@ msgstr "请输入仓库 URL"
 
 #: common/dialogs/git/dialog_git_repository.cpp:453
 #: common/dialogs/git/dialog_git_repository_base.cpp:108
-#, fuzzy
 msgid "SSH key password:"
-msgstr "SSH 密钥密码"
+msgstr "SSH 密钥密码:"
 
 #: common/dialogs/git/dialog_git_repository.cpp:459
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
@@ -3726,14 +3724,12 @@ msgid "Password:"
 msgstr "密码:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:38
-#, fuzzy
 msgid "Location:"
-msgstr "地址"
+msgstr "地址:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:45
-#, fuzzy
 msgid "Connection type:"
-msgstr "连接类型"
+msgstr "连接类型:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:52
 msgid "HTTPS"
@@ -3745,9 +3741,8 @@ msgid "Local"
 msgstr "本地"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:83
-#, fuzzy
 msgid "SSH private key:     "
-msgstr "SSH 私钥"
+msgstr "SSH 私钥:     "
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:90
 msgid "Select SSH private key file"
@@ -3758,9 +3753,8 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:101
-#, fuzzy
 msgid "User name:"
-msgstr "用户:"
+msgstr "用户名:"
 
 #: common/dialogs/git/dialog_git_repository_base.h:77
 msgid "Git Repository"
@@ -9015,7 +9009,7 @@ msgstr "切换到快速栅格 2"
 
 #: common/tool/actions.cpp:872
 msgid "Cycle Fast Grid"
-msgstr "循环切换快速网格"
+msgstr "循环切换快速栅格"
 
 #: common/tool/actions.cpp:879
 msgid "Switch to Next Grid"
@@ -11627,7 +11621,7 @@ msgstr "编辑违规严重级别......"
 
 #: eeschema/dialogs/dialog_erc.cpp:715
 msgid "Edit connection grid spacing..."
-msgstr "编辑最小网格间距..."
+msgstr "编辑最小栅格间距..."
 
 #: eeschema/dialogs/dialog_erc.cpp:727 eeschema/dialogs/dialog_erc.cpp:763
 #: pcbnew/dialogs/dialog_drc.cpp:767 pcbnew/dialogs/dialog_drc.cpp:820
@@ -16570,12 +16564,12 @@ msgstr "当前配置不包含符号库 '%s'"
 #: eeschema/erc/erc.cpp:1414
 #, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration"
-msgstr "当前配置中未启用符号库 '%s'。"
+msgstr "当前配置中未启用符号库 '%s'"
 
 #: eeschema/erc/erc.cpp:1429
 #, c-format
 msgid "The symbol library '%s' was not found at '%s'."
-msgstr "找不到符号库 '%s'。"
+msgstr "在 '%2$s' 中找不到符号库 '%1$s'。"
 
 #: eeschema/erc/erc.cpp:1449
 #, c-format
@@ -17302,12 +17296,12 @@ msgstr "在"
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:74
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:115
 msgid "DXF origin on PCB Grid, X Coordinate"
-msgstr "PCB 网格上的 DXF 原点, X 坐标"
+msgstr "PCB 栅格上的 DXF 原点, X 坐标"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:95
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:132
 msgid "DXF origin on PCB Grid, Y Coordinate"
-msgstr "PCB 网格上的 DXF 原点, Y 坐标"
+msgstr "PCB 栅格上的 DXF 原点, Y 坐标"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:116
 msgid "Import Parameters"
@@ -21392,7 +21386,7 @@ msgid ""
 msgstr "符号 '%s' 无法替换另一个符号 '%s', 后者是它的继承符号。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:997
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
 msgstr "符号 '%s' 已存在于库 '%s' 中, 是否覆盖?"
@@ -21425,7 +21419,7 @@ msgid "Export Symbol"
 msgstr "导出符号"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1131
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is read-only."
 msgstr "'%s' 库为只读。"
 
@@ -21988,9 +21982,8 @@ msgid "Import a symbol to the current library"
 msgstr "导入符号到当前库"
 
 #: eeschema/tools/ee_actions.cpp:274
-#, fuzzy
 msgid "Export..."
-msgstr "导出 (&E)..."
+msgstr "导出..."
 
 #: eeschema/tools/ee_actions.cpp:275
 msgid "Export a symbol to a new library file"
@@ -26065,9 +26058,9 @@ msgstr "复制文件作业设置"
 
 #: kicad/dialogs/dialog_destination.cpp:55
 #: kicad/dialogs/dialog_destination_base.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "%s Destination"
-msgstr "目标:"
+msgstr "%s 目标"
 
 #: kicad/dialogs/dialog_destination.cpp:86
 msgid "Select output directory"
@@ -26182,9 +26175,9 @@ msgid "Update Available"
 msgstr "有可用更新"
 
 #: kicad/dialogs/panel_jobset.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Destination: %s"
-msgstr "目标:"
+msgstr "目标: %s"
 
 #: kicad/dialogs/panel_jobset.cpp:68
 msgid "No."
@@ -26258,47 +26251,40 @@ msgid "Select job type:"
 msgstr "选择作业类型:"
 
 #: kicad/dialogs/panel_jobset.cpp:783
-#, fuzzy
 msgid "Destination Types"
-msgstr "目标:"
+msgstr "目标类型"
 
 #: kicad/dialogs/panel_jobset.cpp:792
-#, fuzzy
 msgid "Add New Destination"
-msgstr "目标:"
+msgstr "添加新目标"
 
 #: kicad/dialogs/panel_jobset.cpp:793
-#, fuzzy
 msgid "Select destination type:"
-msgstr "选择作业类型:"
+msgstr "选择目标类型:"
 
 #: kicad/dialogs/panel_jobset.cpp:958
-#, fuzzy
 msgid "No destinations defined"
-msgstr "未定义任何输出"
+msgstr "未定义任何目标"
 
 #: kicad/dialogs/panel_jobset_base.cpp:24
 msgid "Jobs"
 msgstr "作业"
 
 #: kicad/dialogs/panel_jobset_base.cpp:83
-#, fuzzy
 msgid "Destinations"
-msgstr "目标:"
+msgstr "目标"
 
 #: kicad/dialogs/panel_jobset_base.cpp:116
 msgid "Save Jobset"
 msgstr "保存作业集"
 
 #: kicad/dialogs/panel_jobset_base.cpp:122
-#, fuzzy
 msgid "Generate All Destinations"
-msgstr "生成通用选项"
+msgstr "生成所有目标"
 
 #: kicad/dialogs/panel_jobset_base.h:133
-#, fuzzy
 msgid "Jobset Run Log"
-msgstr "工作输出日志"
+msgstr "作业集运行日志"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:143
 msgid "Edit the project schematic"
@@ -35483,7 +35469,7 @@ msgstr "0.1"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:37
 msgid "Round outwards to grid multiples (when possible)"
-msgstr "向外取整至网格倍数 (如果可能)"
+msgstr "向外取整至栅格倍数 (如果可能)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:39
 msgid "This is only possible for rectangular outsets."
