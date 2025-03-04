@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 06:36+0300\n"
-"PO-Revision-Date: 2025-03-03 08:43+0000\n"
+"PO-Revision-Date: 2025-03-04 22:27+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -21773,7 +21773,7 @@ msgstr ""
 "Symbol '%s' kan inte ersätta en annan symbol '%s' som härstammar från den."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:997
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
 msgstr "Symbol '%s' finns redan i bibliotek '%s'. Vill du skriva över den?"
@@ -21808,7 +21808,7 @@ msgid "Export Symbol"
 msgstr "Exportera symbol"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1131
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is read-only."
 msgstr "Biblioteket '%s' är skrivskyddat."
 
@@ -22383,9 +22383,8 @@ msgid "Import a symbol to the current library"
 msgstr "Importera en symbol till det aktuella biblioteket"
 
 #: eeschema/tools/ee_actions.cpp:274
-#, fuzzy
 msgid "Export..."
-msgstr "&Exportera..."
+msgstr "Exportera..."
 
 #: eeschema/tools/ee_actions.cpp:275
 msgid "Export a symbol to a new library file"
@@ -26584,9 +26583,9 @@ msgstr "Kopiera filens inställningar för åtgärd"
 
 #: kicad/dialogs/dialog_destination.cpp:55
 #: kicad/dialogs/dialog_destination_base.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "%s Destination"
-msgstr "Mål:"
+msgstr "%s-mål"
 
 #: kicad/dialogs/dialog_destination.cpp:86
 msgid "Select output directory"
@@ -26605,9 +26604,8 @@ msgid "Zip"
 msgstr "Zip"
 
 #: kicad/dialogs/dialog_destination_base.cpp:46
-#, fuzzy
 msgid "Destination path:"
-msgstr "Mål:"
+msgstr "Målsökväg:"
 
 #: kicad/dialogs/dialog_destination_base.cpp:64
 msgid "Include jobs:"
@@ -26705,9 +26703,9 @@ msgid "Update Available"
 msgstr "Tillgängliga uppdateringar"
 
 #: kicad/dialogs/panel_jobset.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Destination: %s"
-msgstr "Mål:"
+msgstr "Mål: %s"
 
 #: kicad/dialogs/panel_jobset.cpp:68
 msgid "No."
@@ -26738,19 +26736,16 @@ msgid "Running jobs"
 msgstr "Pågående arbeten"
 
 #: kicad/dialogs/panel_jobset.cpp:295
-#, fuzzy
 msgid "Edit Destination Options..."
-msgstr "Ändra rektangelegenskaper"
+msgstr "Redigera alternativ för destination..."
 
 #: kicad/dialogs/panel_jobset.cpp:296
-#, fuzzy
 msgid "Delete Destination"
-msgstr "Ta bort association"
+msgstr "Ta bort destination"
 
 #: kicad/dialogs/panel_jobset.cpp:299
-#, fuzzy
 msgid "View Last Run Log..."
-msgstr "Se resultat från senaste körning..."
+msgstr "Visa logg från senaste körning..."
 
 #: kicad/dialogs/panel_jobset.cpp:389
 msgid "Edit Job Description"
@@ -26781,47 +26776,40 @@ msgid "Select job type:"
 msgstr "Välj jobbtyp:"
 
 #: kicad/dialogs/panel_jobset.cpp:783
-#, fuzzy
 msgid "Destination Types"
-msgstr "Mål:"
+msgstr "Måltyper"
 
 #: kicad/dialogs/panel_jobset.cpp:792
-#, fuzzy
 msgid "Add New Destination"
-msgstr "Mål:"
+msgstr "Lägg till nytt mål"
 
 #: kicad/dialogs/panel_jobset.cpp:793
-#, fuzzy
 msgid "Select destination type:"
-msgstr "Välj jobbtyp:"
+msgstr "Välj måltyp:"
 
 #: kicad/dialogs/panel_jobset.cpp:958
-#, fuzzy
 msgid "No destinations defined"
-msgstr "Inga utmatningar definierade"
+msgstr "Inga mål definierade"
 
 #: kicad/dialogs/panel_jobset_base.cpp:24
 msgid "Jobs"
 msgstr "Åtgärder"
 
 #: kicad/dialogs/panel_jobset_base.cpp:83
-#, fuzzy
 msgid "Destinations"
-msgstr "Mål:"
+msgstr "Mål"
 
 #: kicad/dialogs/panel_jobset_base.cpp:116
 msgid "Save Jobset"
 msgstr "Spara åtgärdsserie"
 
 #: kicad/dialogs/panel_jobset_base.cpp:122
-#, fuzzy
 msgid "Generate All Destinations"
-msgstr "Generera alla utmatningar"
+msgstr "Generera alla mål"
 
 #: kicad/dialogs/panel_jobset_base.h:133
-#, fuzzy
 msgid "Jobset Run Log"
-msgstr "Logg för utmatningar från åtgärder"
+msgstr "Logg från körning av åtgärdsserie"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:143
 msgid "Edit the project schematic"
