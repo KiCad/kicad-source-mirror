@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 06:36+0300\n"
-"PO-Revision-Date: 2025-03-03 08:43+0000\n"
+"PO-Revision-Date: 2025-03-04 11:31+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -26848,9 +26848,9 @@ msgstr "Dateien kopieren-Auftragseinstellungen"
 
 #: kicad/dialogs/dialog_destination.cpp:55
 #: kicad/dialogs/dialog_destination_base.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "%s Destination"
-msgstr "Ziel:"
+msgstr "%s Ziel"
 
 #: kicad/dialogs/dialog_destination.cpp:86
 msgid "Select output directory"
@@ -26972,9 +26972,9 @@ msgid "Update Available"
 msgstr "Aktualisierung verfügbar"
 
 #: kicad/dialogs/panel_jobset.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Destination: %s"
-msgstr "Ziel:"
+msgstr "Ziel: %s"
 
 #: kicad/dialogs/panel_jobset.cpp:68
 msgid "No."
@@ -27048,14 +27048,12 @@ msgid "Select job type:"
 msgstr "Auftragstyp wählen:"
 
 #: kicad/dialogs/panel_jobset.cpp:783
-#, fuzzy
 msgid "Destination Types"
-msgstr "Ziel:"
+msgstr "Zieltypen"
 
 #: kicad/dialogs/panel_jobset.cpp:792
-#, fuzzy
 msgid "Add New Destination"
-msgstr "Ziel:"
+msgstr "Neues Ziel hinzufügen"
 
 #: kicad/dialogs/panel_jobset.cpp:793
 #, fuzzy
@@ -27072,9 +27070,8 @@ msgid "Jobs"
 msgstr "Aufträge"
 
 #: kicad/dialogs/panel_jobset_base.cpp:83
-#, fuzzy
 msgid "Destinations"
-msgstr "Ziel:"
+msgstr "Ziele"
 
 #: kicad/dialogs/panel_jobset_base.cpp:116
 msgid "Save Jobset"
