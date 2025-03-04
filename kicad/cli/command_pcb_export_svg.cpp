@@ -32,6 +32,7 @@
 
 #define ARG_EXCLUDE_DRAWING_SHEET "--exclude-drawing-sheet"
 #define ARG_PAGE_SIZE "--page-size-mode"
+#define ARG_FIT_PAGE_TO_BOARD "--fit-page-to-board"
 #define ARG_MODE_SINGLE "--mode-single"
 #define ARG_MODE_MULTI "--mode-multi"
 
@@ -87,6 +88,10 @@ CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND(
             .default_value( 0 )
             .metavar( "MODE" );
 
+    m_argParser.add_argument( ARG_FIT_PAGE_TO_BOARD )
+            .help( UTF8STDSTR( _( "Fit the page to the board" ) ) )
+            .flag();
+
     m_argParser.add_argument( ARG_EXCLUDE_DRAWING_SHEET )
             .help( UTF8STDSTR( _( "No drawing sheet" ) ) )
             .flag();
@@ -135,7 +140,6 @@ int CLI::PCB_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
 
     svgJob->m_mirror = m_argParser.get<bool>( ARG_MIRROR );
     svgJob->m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );
-    svgJob->m_pageSizeMode = m_argParser.get<int>( ARG_PAGE_SIZE );
     svgJob->m_negative = m_argParser.get<bool>( ARG_NEGATIVE );
     svgJob->m_sketchPadsOnFabLayers = m_argParser.get<bool>( ARG_SKETCH_PADS_ON_FAB_LAYERS );
     svgJob->m_hideDNPFPsOnFabLayers = m_argParser.get<bool>( ARG_HIDE_DNP_FPS_ON_FAB_LAYERS );
@@ -148,6 +152,25 @@ int CLI::PCB_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
 
     if( m_argParser.get<bool>( DEPRECATED_ARG_PLOT_INVISIBLE_TEXT ) )
         wxFprintf( stdout, DEPRECATED_ARD_PLOT_INVISIBLE_TEXT_WARNING );
+
+    svgJob->m_fitPageToBoard = m_argParser.get<bool>( ARG_FIT_PAGE_TO_BOARD );
+
+    // legacy compat, should eliminate this arg eventually
+    int legacyPageSizeMode = m_argParser.get<int>( ARG_PAGE_SIZE );
+
+    if( legacyPageSizeMode == 0 )
+    {
+        svgJob->m_plotDrawingSheet = true;
+    }
+    else if( legacyPageSizeMode == 1 )
+    {
+        svgJob->m_plotDrawingSheet = false;
+    }
+    else if( legacyPageSizeMode == 2 )
+    {
+        svgJob->m_fitPageToBoard = true;
+        svgJob->m_plotDrawingSheet = false;
+    }
 
     svgJob->m_filename = m_argInput;
     svgJob->SetConfiguredOutputPath( m_argOutput );

@@ -153,6 +153,9 @@ public:
     void        SetSvgPrecision( unsigned aPrecision );
     unsigned    GetSvgPrecision() const { return m_svgPrecision; }
 
+    void        SetSvgFitPageToBoard( int aSvgFitPageToBoard ) { m_svgFitPageToBoard = aSvgFitPageToBoard; }
+    bool        GetSvgFitPagetoBoard() const { return m_svgFitPageToBoard; }
+
     void        SetBlackAndWhite( bool blackAndWhite ) { m_blackAndWhite = blackAndWhite; }
     unsigned    GetBlackAndWhite() const { return m_blackAndWhite; }
 
@@ -260,6 +263,7 @@ private:
 
     /// Precision of coordinates in SVG: accepted 3 - 6; 6 is the internal resolution of Pcbnew
     unsigned   m_svgPrecision;
+    bool        m_svgFitPageToBoard;
 
     bool       m_useAuxOrigin;          ///< Plot gerbers using auxiliary (drill) origin instead
                                         ///<   of absolute coordinates

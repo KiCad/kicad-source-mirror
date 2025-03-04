@@ -68,6 +68,24 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
         return false;
     }
 
+    PAGE_INFO existingPageInfo = m_board->GetPageSettings();
+    VECTOR2I  existingAuxOrigin = m_board->GetDesignSettings().GetAuxOrigin();
+
+    if( m_plotOpts.GetFormat() == PLOT_FORMAT::SVG && m_plotOpts.GetSvgFitPagetoBoard() ) // Page is board boundary size
+    {
+        BOX2I     bbox = m_board->ComputeBoundingBox( false );
+        PAGE_INFO currPageInfo = m_board->GetPageSettings();
+
+        currPageInfo.SetWidthMils( bbox.GetWidth() / pcbIUScale.IU_PER_MILS );
+        currPageInfo.SetHeightMils( bbox.GetHeight() / pcbIUScale.IU_PER_MILS );
+
+        m_board->SetPageSettings( currPageInfo );
+        m_plotOpts.SetUseAuxOrigin( true );
+
+        VECTOR2I origin = bbox.GetOrigin();
+        m_board->GetDesignSettings().SetAuxOrigin( origin );
+    }
+
     // To reuse logic, in single plot mode, we want to kick any extra layers from the main list to commonLayers
     LSEQ layersToPlot;
     LSEQ commonLayers;
@@ -263,6 +281,13 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
 
     m_reporter->ReportTail( _( "Done." ), RPT_SEVERITY_INFO );
 
+    if( m_plotOpts.GetFormat() == PLOT_FORMAT::SVG && m_plotOpts.GetSvgFitPagetoBoard() )
+    {
+        // restore the original page and aux origin
+        m_board->SetPageSettings( existingPageInfo );
+        m_board->GetDesignSettings().SetAuxOrigin( existingAuxOrigin );
+    }
+
     return success;
 }
 
@@ -343,6 +368,7 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT
     {
         JOB_EXPORT_PCB_SVG* svgJob = static_cast<JOB_EXPORT_PCB_SVG*>( aJob );
         aOpts.SetSvgPrecision( svgJob->m_precision );
+        aOpts.SetSvgFitPageToBoard( svgJob->m_fitPageToBoard );
     }
 
     if( aJob->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::DXF )

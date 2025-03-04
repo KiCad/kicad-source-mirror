@@ -30,14 +30,15 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_SVG::GEN_MODE,
 
 JOB_EXPORT_PCB_SVG::JOB_EXPORT_PCB_SVG() :
     JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::SVG, "svg", false ),
-    m_pageSizeMode( 0 ),
+    m_fitPageToBoard( false ),
     m_precision( 4 ),
     m_genMode( GEN_MODE::SINGLE )   // TODO change to MULTI for V10
 {
     m_plotDrawingSheet = true;
 
     m_params.emplace_back( new JOB_PARAM<wxString>( "color_theme", &m_colorTheme, m_colorTheme ) );
-    m_params.emplace_back( new JOB_PARAM<int>( "page_size_mode", &m_pageSizeMode, m_pageSizeMode ) );
+    m_params.emplace_back(
+            new JOB_PARAM<bool>( "fit_page_to_board", &m_fitPageToBoard, m_fitPageToBoard ) );
     m_params.emplace_back( new JOB_PARAM<unsigned int>( "precision", &m_precision, m_precision ) );
     m_params.emplace_back( new JOB_PARAM<GEN_MODE>( "gen_mode", &m_genMode, m_genMode ) );
 }

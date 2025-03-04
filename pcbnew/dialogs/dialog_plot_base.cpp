@@ -383,6 +383,9 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_SVGColorChoice->SetSelection( 0 );
 	gbSizer3->Add( m_SVGColorChoice, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
+	m_SVG_fitPageToBoard = new wxCheckBox( m_svgOptionsSizer->GetStaticBox(), wxID_ANY, _("Fit page to board"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer3->Add( m_SVG_fitPageToBoard, wxGBPosition( 2, 0 ), wxGBSpan( 2, 1 ), wxALL, 5 );
+
 
 	m_svgOptionsSizer->Add( gbSizer3, 1, wxEXPAND|wxBOTTOM, 5 );
 
