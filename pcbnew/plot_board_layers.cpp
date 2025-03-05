@@ -1315,14 +1315,21 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
         }
 
         bool startPlotSuccess = false;
-        if (plotter->GetPlotterType() == PLOT_FORMAT::PDF)
+        try
         {
-            startPlotSuccess =
-                    static_cast<PDF_PLOTTER*>( plotter )->StartPlot( aPageNumber, aPageName );
+            if( plotter->GetPlotterType() == PLOT_FORMAT::PDF )
+            {
+                startPlotSuccess =
+                        static_cast<PDF_PLOTTER*>( plotter )->StartPlot( aPageNumber, aPageName );
+            }
+            else
+            {
+                startPlotSuccess = plotter->StartPlot( aPageName );
+            }
         }
-        else
+        catch( ... )
         {
-            startPlotSuccess = plotter->StartPlot( aPageName );
+            startPlotSuccess = false;
         }
 
 

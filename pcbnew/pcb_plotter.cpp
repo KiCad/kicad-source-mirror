@@ -213,9 +213,16 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
                     plotter->SetSubject( msg );
             }
 
-            PlotBoardLayers( m_board, plotter, plotSequence, m_plotOpts );
-            PlotInteractiveLayer( m_board, plotter, m_plotOpts );
-
+            try
+            {
+                PlotBoardLayers( m_board, plotter, plotSequence, m_plotOpts );
+                PlotInteractiveLayer( m_board, plotter, m_plotOpts );
+            }
+            catch( ... )
+            {
+                success = false;
+                break;
+            }
 
             if( m_plotOpts.GetFormat() == PLOT_FORMAT::PDF && m_plotOpts.m_PDFSingle
                 && i != layersToPlot.size() - 1 )
@@ -247,7 +254,15 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
                 || i == aLayersToPlot.size() - 1
                 || pageNum == finalPageCount )
             {
-                plotter->EndPlot();
+                try
+                {
+                    plotter->EndPlot();
+                }
+                catch( ... )
+                {
+                    success = false;
+                }
+
                 delete plotter->RenderSettings();
                 delete plotter;
                 plotter = nullptr;

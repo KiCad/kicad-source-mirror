@@ -776,8 +776,6 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
             sheetPath = aSvgJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
     }
 
-    LOCALE_IO dummy;
-
     if( !plotter.Plot( outPath, aSvgJob->m_plotLayerSequence, aSvgJob->m_plotOnAllLayersSequence,
                        false, aSvgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE,
                        layerName, sheetName, sheetPath ) )
@@ -1759,8 +1757,6 @@ int PCBNEW_JOBS_HANDLER::doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPR
     }
 
     PCB_PLOTTER plotter( brd.get(), m_reporter, plotOpts );
-
-    LOCALE_IO dummy;
 
     if( !plotter.Plot( outputFile.GetFullPath(),
                         aSvgJob->m_plotLayerSequence,

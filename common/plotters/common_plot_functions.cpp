@@ -85,100 +85,105 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
 
     drawList.BuildDrawItemsList( aPageInfo, aTitleBlock );
 
-    // Draw bitmaps first
-    for( DS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item; item = drawList.GetNext() )
+    try
     {
-        if( item->Type() == WSG_BITMAP_T )
+        // Draw bitmaps first
+        for( DS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item; item = drawList.GetNext() )
         {
-            DS_DRAW_ITEM_BITMAP* drawItem = (DS_DRAW_ITEM_BITMAP*) item;
-            DS_DATA_ITEM_BITMAP* bitmap = (DS_DATA_ITEM_BITMAP*) drawItem->GetPeer();
+            if( item->Type() == WSG_BITMAP_T )
+            {
+                DS_DRAW_ITEM_BITMAP* drawItem = (DS_DRAW_ITEM_BITMAP*) item;
+                DS_DATA_ITEM_BITMAP* bitmap = (DS_DATA_ITEM_BITMAP*) drawItem->GetPeer();
 
-            if( bitmap->m_ImageBitmap == nullptr )
+                if( bitmap->m_ImageBitmap == nullptr )
+                    continue;
+
+                bitmap->m_ImageBitmap->PlotImage( plotter, drawItem->GetPosition(), plotColor,
+                                                  PLOTTER::USE_DEFAULT_LINE_WIDTH );
+            }
+        }
+
+        // Draw other items
+        for( DS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item; item = drawList.GetNext() )
+        {
+            if( item->Type() == WSG_BITMAP_T )
                 continue;
 
-            bitmap->m_ImageBitmap->PlotImage( plotter, drawItem->GetPosition(), plotColor,
-                                              PLOTTER::USE_DEFAULT_LINE_WIDTH );
+            plotter->SetColor( plotColor );
+            plotter->SetCurrentLineWidth( PLOTTER::USE_DEFAULT_LINE_WIDTH );
+
+            switch( item->Type() )
+            {
+            case WSG_LINE_T:
+            {
+                DS_DRAW_ITEM_LINE* line = (DS_DRAW_ITEM_LINE*) item;
+                plotter->SetCurrentLineWidth( std::max( line->GetPenWidth(), defaultPenWidth ) );
+                plotter->MoveTo( line->GetStart() );
+                plotter->FinishTo( line->GetEnd() );
+            }
+            break;
+
+            case WSG_RECT_T:
+            {
+                DS_DRAW_ITEM_RECT* rect = (DS_DRAW_ITEM_RECT*) item;
+                plotter->SetCurrentLineWidth( std::max( rect->GetPenWidth(), defaultPenWidth ) );
+                plotter->MoveTo( rect->GetStart() );
+                plotter->LineTo( VECTOR2I( rect->GetEnd().x, rect->GetStart().y ) );
+                plotter->LineTo( VECTOR2I( rect->GetEnd().x, rect->GetEnd().y ) );
+                plotter->LineTo( VECTOR2I( rect->GetStart().x, rect->GetEnd().y ) );
+                plotter->FinishTo( rect->GetStart() );
+            }
+            break;
+
+            case WSG_TEXT_T:
+            {
+                DS_DRAW_ITEM_TEXT* text = (DS_DRAW_ITEM_TEXT*) item;
+                KIFONT::FONT*      font = text->GetFont();
+                COLOR4D            color = plotColor;
+
+                if( !font )
+                {
+                    font = KIFONT::FONT::GetFont( settings->GetDefaultFont(), text->IsBold(),
+                                                  text->IsItalic() );
+                }
+
+                if( plotter->GetColorMode() && text->GetTextColor() != COLOR4D::UNSPECIFIED )
+                    color = text->GetTextColor();
+
+                int penWidth = std::max( text->GetEffectiveTextPenWidth(), defaultPenWidth );
+
+                plotter->Text( text->GetTextPos(), color, text->GetShownText( true ),
+                               text->GetTextAngle(), text->GetTextSize(), text->GetHorizJustify(),
+                               text->GetVertJustify(), penWidth, text->IsItalic(), text->IsBold(),
+                               text->IsMultilineAllowed(), font, text->GetFontMetrics() );
+            }
+            break;
+
+            case WSG_POLY_T:
+            {
+                DS_DRAW_ITEM_POLYPOLYGONS* poly = (DS_DRAW_ITEM_POLYPOLYGONS*) item;
+                int                        penWidth = poly->GetPenWidth();
+                std::vector<VECTOR2I>      points;
+
+                for( int idx = 0; idx < poly->GetPolygons().OutlineCount(); ++idx )
+                {
+                    points.clear();
+                    SHAPE_LINE_CHAIN& outline = poly->GetPolygons().Outline( idx );
+
+                    for( int ii = 0; ii < outline.PointCount(); ii++ )
+                        points.emplace_back( outline.CPoint( ii ).x, outline.CPoint( ii ).y );
+
+                    plotter->PlotPoly( points, FILL_T::FILLED_SHAPE, penWidth );
+                }
+            }
+            break;
+
+            default: wxFAIL_MSG( wxT( "PlotDrawingSheet(): Unknown drawing sheet item." ) ); break;
+            }
         }
     }
-
-    // Draw other items
-    for( DS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item; item = drawList.GetNext() )
+    catch( ... )
     {
-        if( item->Type() == WSG_BITMAP_T )
-            continue;
-
-        plotter->SetColor( plotColor );
-        plotter->SetCurrentLineWidth( PLOTTER::USE_DEFAULT_LINE_WIDTH );
-
-        switch( item->Type() )
-        {
-        case WSG_LINE_T:
-        {
-            DS_DRAW_ITEM_LINE* line = (DS_DRAW_ITEM_LINE*) item;
-            plotter->SetCurrentLineWidth( std::max( line->GetPenWidth(), defaultPenWidth ) );
-            plotter->MoveTo( line->GetStart() );
-            plotter->FinishTo( line->GetEnd() );
-        }
-            break;
-
-        case WSG_RECT_T:
-        {
-            DS_DRAW_ITEM_RECT* rect = (DS_DRAW_ITEM_RECT*) item;
-            plotter->SetCurrentLineWidth( std::max( rect->GetPenWidth(), defaultPenWidth ) );
-            plotter->MoveTo( rect->GetStart() );
-            plotter->LineTo( VECTOR2I( rect->GetEnd().x, rect->GetStart().y ) );
-            plotter->LineTo( VECTOR2I( rect->GetEnd().x, rect->GetEnd().y ) );
-            plotter->LineTo( VECTOR2I( rect->GetStart().x, rect->GetEnd().y ) );
-            plotter->FinishTo( rect->GetStart() );
-        }
-            break;
-
-        case WSG_TEXT_T:
-        {
-            DS_DRAW_ITEM_TEXT* text = (DS_DRAW_ITEM_TEXT*) item;
-            KIFONT::FONT*      font = text->GetFont();
-            COLOR4D            color = plotColor;
-
-            if( !font )
-            {
-                font = KIFONT::FONT::GetFont( settings->GetDefaultFont(), text->IsBold(),
-                                              text->IsItalic() );
-            }
-
-            if( plotter->GetColorMode() && text->GetTextColor() != COLOR4D::UNSPECIFIED )
-                color = text->GetTextColor();
-
-            int penWidth = std::max( text->GetEffectiveTextPenWidth(), defaultPenWidth );
-
-            plotter->Text( text->GetTextPos(), color, text->GetShownText( true ),
-                           text->GetTextAngle(), text->GetTextSize(), text->GetHorizJustify(),
-                           text->GetVertJustify(), penWidth, text->IsItalic(), text->IsBold(),
-                           text->IsMultilineAllowed(), font, text->GetFontMetrics() );
-        }
-            break;
-
-        case WSG_POLY_T:
-        {
-            DS_DRAW_ITEM_POLYPOLYGONS* poly = (DS_DRAW_ITEM_POLYPOLYGONS*) item;
-            int                        penWidth = poly->GetPenWidth();
-            std::vector<VECTOR2I>      points;
-
-            for( int idx = 0; idx < poly->GetPolygons().OutlineCount(); ++idx )
-            {
-                points.clear();
-                SHAPE_LINE_CHAIN& outline = poly->GetPolygons().Outline( idx );
-
-                for( int ii = 0; ii < outline.PointCount(); ii++ )
-                    points.emplace_back( outline.CPoint( ii ).x, outline.CPoint( ii ).y );
-
-                plotter->PlotPoly( points, FILL_T::FILLED_SHAPE, penWidth );
-            }
-        }
-            break;
-
-        default:
-            wxFAIL_MSG( wxT( "PlotDrawingSheet(): Unknown drawing sheet item." ) );
-            break;
-        }
+        wxFAIL_MSG( wxT( "PlotDrawingSheet(): Exception during plot." ) );
     }
 }

@@ -658,10 +658,10 @@ protected:
 
     FILL_T     m_fillMode;          // true if the current contour rect, arc, circle, polygon must
                                     // be filled
-    long       m_pen_rgb_color;     // current rgb color value: each color has a value 0 ... 255,
+    uint32_t   m_pen_rgb_color;     // current rgb color value: each color has a value 0 ... 255,
                                     //   and the 3 colors are grouped in a 3x8 bits value (written
                                     //   in hex to svg files)
-    long       m_brush_rgb_color;   // same as m_pen_rgb_color, used to fill some contours.
+    uint32_t   m_brush_rgb_color;   // same as m_pen_rgb_color, used to fill some contours.
     double     m_brush_alpha;
     bool       m_graphics_changed;  // true if a pen/brush parameter is modified color, pen size,
                                     //   fill mode ... the new SVG stype must be output on file
