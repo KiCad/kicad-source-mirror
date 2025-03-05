@@ -122,7 +122,7 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_OPTS& aPlotOpts,
     if( aPlotOpts.m_plotAll || aPlotOpts.m_plotPages.size() > 0 )
     {
         sheetList.BuildSheetList( &m_schematic->Root(), true );
-        sheetList.SortByPageNumbers();
+        sheetList.SortByHierarchicalPageNumbers();
 
         // remove the non-selected pages if we are in plot pages mode
         if( aPlotOpts.m_plotPages.size() > 0 )
@@ -226,7 +226,20 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_OPTS& aPlotOpts,
              *  reconfigure, and then start a new one */
             plotter->ClosePage();
             setupPlotPagePDF( plotter, screen, aPlotOpts );
-            plotter->StartPage( sheetList[i].GetPageNumber(), sheetName );
+            SCH_SHEET_PATH parentSheet = sheetList[i];
+
+            if( parentSheet.size() > 1 )
+            {
+                // The sheet path is the full path to the sheet, so we need to remove the last
+                // sheet name to get the parent sheet path
+                parentSheet.pop_back();
+            }
+
+            wxString parentSheetName =
+                    parentSheet.Last()->GetField( FIELD_T::SHEET_NAME )->GetShownText( false );
+
+            plotter->StartPage( sheetList[i].GetPageNumber(), sheetName,
+                                parentSheet.GetPageNumber(), parentSheetName );
         }
 
         plotOneSheetPDF( plotter, screen, aPlotOpts );
