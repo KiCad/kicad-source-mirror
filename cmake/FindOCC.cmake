@@ -48,9 +48,7 @@ set( OCC_LIBS_COMMON
     TKLCAF
     TKMath
     TKMesh
-    TKMeshVS
     TKOffset
-    TKOpenGl
     TKPrim
     TKRWMesh
     TKService
