@@ -31,7 +31,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 06:36+0300\n"
 "PO-Revision-Date: 2025-03-06 03:38+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -44189,7 +44189,7 @@ msgstr "Bauteilklasse %s in \"%s\" ändern."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:241
 #, c-format
 msgid "Remove %s component class (currently '%s')."
-msgstr "Bauteilklasse %s entfernen (aktuell \"%s\")."
+msgstr "Bauteilklasse von %s entfernen (aktuell \"%s\")."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:247
 #, c-format
