@@ -709,13 +709,6 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
                 m_labelList->push_back( std::unique_ptr<SCH_LABEL_BASE>( label ) );
                 break;
             }
-            case SCH_DIRECTIVE_LABEL_T:
-            {
-                SCH_DIRECTIVE_LABEL* label = new SCH_DIRECTIVE_LABEL( *static_cast<SCH_DIRECTIVE_LABEL*>( m_currentLabel ) );
-                label->SetText( text );
-                m_labelList->push_back( std::unique_ptr<SCH_LABEL_BASE>( label ) );
-                break;
-            }
             default:
                 break;
             }
