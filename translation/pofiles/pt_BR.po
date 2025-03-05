@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 06:36+0300\n"
-"PO-Revision-Date: 2025-02-28 04:19+0000\n"
+"PO-Revision-Date: 2025-03-05 17:33+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/v9/pt_BR/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10.2-rc\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -3733,7 +3733,6 @@ msgid "Enter the password for the SSH key"
 msgstr "Insira a senha da chave SSH"
 
 #: common/dialogs/git/dialog_git_repository.cpp:337
-#, fuzzy
 msgid "Test Connection"
 msgstr "Testar a conexão"
 
@@ -3779,9 +3778,8 @@ msgstr "Insira uma URL para o repositório"
 
 #: common/dialogs/git/dialog_git_repository.cpp:453
 #: common/dialogs/git/dialog_git_repository_base.cpp:108
-#, fuzzy
 msgid "SSH key password:"
-msgstr "Senha da chave SSH"
+msgstr "Senha da chave SSH:"
 
 #: common/dialogs/git/dialog_git_repository.cpp:459
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
@@ -3789,14 +3787,12 @@ msgid "Password:"
 msgstr "Senha:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:38
-#, fuzzy
 msgid "Location:"
-msgstr "Localização"
+msgstr "Local:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:45
-#, fuzzy
 msgid "Connection type:"
-msgstr "Tipo da conexão"
+msgstr "Tipo da conexão:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:52
 msgid "HTTPS"
@@ -3808,9 +3804,8 @@ msgid "Local"
 msgstr "Local"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:83
-#, fuzzy
 msgid "SSH private key:     "
-msgstr "Chave privado SSH"
+msgstr "Chave privado SSH:     "
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:90
 msgid "Select SSH private key file"
@@ -3821,7 +3816,6 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:101
-#, fuzzy
 msgid "User name:"
 msgstr "Nome do usuário:"
 
@@ -21972,7 +21966,7 @@ msgstr ""
 "dele."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:997
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
 msgstr "O símbolo '%s' já existe na biblioteca '%s'. Deseja substituí-lo?"
@@ -22007,7 +22001,7 @@ msgid "Export Symbol"
 msgstr "Exporte o símbolo"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1131
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is read-only."
 msgstr "A biblioteca '%s' é somente leitura."
 
@@ -22587,9 +22581,8 @@ msgid "Import a symbol to the current library"
 msgstr "Importe um símbolo para a biblioteca atual"
 
 #: eeschema/tools/ee_actions.cpp:274
-#, fuzzy
 msgid "Export..."
-msgstr "&Exportar..."
+msgstr "Exportar..."
 
 #: eeschema/tools/ee_actions.cpp:275
 msgid "Export a symbol to a new library file"
@@ -26813,9 +26806,9 @@ msgstr "Copiar as configurações de tarefa dos arquivos"
 
 #: kicad/dialogs/dialog_destination.cpp:55
 #: kicad/dialogs/dialog_destination_base.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "%s Destination"
-msgstr "Destino:"
+msgstr "%s Destino"
 
 #: kicad/dialogs/dialog_destination.cpp:86
 msgid "Select output directory"
@@ -26834,9 +26827,8 @@ msgid "Zip"
 msgstr "Zip"
 
 #: kicad/dialogs/dialog_destination_base.cpp:46
-#, fuzzy
 msgid "Destination path:"
-msgstr "Destino:"
+msgstr "Caminho do destino:"
 
 #: kicad/dialogs/dialog_destination_base.cpp:64
 msgid "Include jobs:"
@@ -26937,9 +26929,9 @@ msgid "Update Available"
 msgstr "Atualização disponível"
 
 #: kicad/dialogs/panel_jobset.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Destination: %s"
-msgstr "Destino:"
+msgstr "Destino: %s"
 
 #: kicad/dialogs/panel_jobset.cpp:68
 msgid "No."
@@ -26970,19 +26962,16 @@ msgid "Running jobs"
 msgstr "Tarefas em execução"
 
 #: kicad/dialogs/panel_jobset.cpp:295
-#, fuzzy
 msgid "Edit Destination Options..."
-msgstr "Editar Opções de Retângulo…"
+msgstr "Editar as opções do destino…"
 
 #: kicad/dialogs/panel_jobset.cpp:296
-#, fuzzy
 msgid "Delete Destination"
-msgstr "Exclua a associação"
+msgstr "Excluir o destino"
 
 #: kicad/dialogs/panel_jobset.cpp:299
-#, fuzzy
 msgid "View Last Run Log..."
-msgstr "Ver os resultados da última execução..."
+msgstr "Ver o registro da última execução..."
 
 #: kicad/dialogs/panel_jobset.cpp:389
 msgid "Edit Job Description"
@@ -27013,47 +27002,40 @@ msgid "Select job type:"
 msgstr "Selecione o tipo de trabalho:"
 
 #: kicad/dialogs/panel_jobset.cpp:783
-#, fuzzy
 msgid "Destination Types"
-msgstr "Destino:"
+msgstr "Tipos de destino"
 
 #: kicad/dialogs/panel_jobset.cpp:792
-#, fuzzy
 msgid "Add New Destination"
-msgstr "Destino:"
+msgstr "Adicionar um novo destino"
 
 #: kicad/dialogs/panel_jobset.cpp:793
-#, fuzzy
 msgid "Select destination type:"
-msgstr "Selecione o tipo de trabalho:"
+msgstr "Selecione o tipo de destino:"
 
 #: kicad/dialogs/panel_jobset.cpp:958
-#, fuzzy
 msgid "No destinations defined"
-msgstr "Nenhuma saída definida"
+msgstr "Nenhum destino foi definido"
 
 #: kicad/dialogs/panel_jobset_base.cpp:24
 msgid "Jobs"
 msgstr "Tarefas"
 
 #: kicad/dialogs/panel_jobset_base.cpp:83
-#, fuzzy
 msgid "Destinations"
-msgstr "Destino:"
+msgstr "Destinos"
 
 #: kicad/dialogs/panel_jobset_base.cpp:116
 msgid "Save Jobset"
 msgstr "Salvar o conjunto de tarefas"
 
 #: kicad/dialogs/panel_jobset_base.cpp:122
-#, fuzzy
 msgid "Generate All Destinations"
-msgstr "Gerar todas as saídas"
+msgstr "Gerar todos os destinos"
 
 #: kicad/dialogs/panel_jobset_base.h:133
-#, fuzzy
 msgid "Jobset Run Log"
-msgstr "Registro de execução da saída de trabalho"
+msgstr "Registro do conjunto de tarefas"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:143
 msgid "Edit the project schematic"
@@ -38231,22 +38213,20 @@ msgstr "Estilo da borda:"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:546
 #, c-format
 msgid "Applying these changes will short net %s with %s."
-msgstr ""
+msgstr "A aplicação dessas alterações reduzirá a net %s com %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:552
 #, c-format
 msgid "Applying these changes will short net %s with other nets."
-msgstr ""
+msgstr "A aplicação dessas alterações encurtará a net %s com outras nets."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Apply Anyway"
-msgstr "Adicione mesmo assim"
+msgstr "Aplicar mesmo assim"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Cancel Changes"
-msgstr "Cancela as alterações?"
+msgstr "Cancelar as alterações"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:571
 #, c-format
