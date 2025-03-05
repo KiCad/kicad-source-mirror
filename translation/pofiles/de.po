@@ -31,7 +31,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 06:36+0300\n"
 "PO-Revision-Date: 2025-03-06 03:38+0000\n"
-"Last-Translator: Kliment <kliment@0xfb.com>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -1890,7 +1890,7 @@ msgstr "&Speichern"
 
 #: common/confirm.cpp:74 common/confirm.cpp:111
 msgid "&Discard Changes"
-msgstr "Änderungen verwerfen"
+msgstr "Än&derungen verwerfen"
 
 #: common/confirm.cpp:77 common/confirm.cpp:157
 msgid "&Apply to all"
@@ -38549,14 +38549,14 @@ msgid "Unknown choice"
 msgstr "Unbekannte Methode"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:628
-#, c-format, fuzzy
+#, c-format
 msgid "Applying these changes will short net %s with %s."
-msgstr "Diese Änderungen würden Netze %s und %s kurzschliessen."
+msgstr "Diese Änderungen werden die Netze %s und %s verbinden."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:634
-#, c-format, fuzzy
+#, c-format
 msgid "Applying these changes will short net %s with other nets."
-msgstr "Diese Änderungen würden das Netz %s mit andere Netze kurzschliessen."
+msgstr "Diese Änderungen würden das Netz %s mit andere Netze verbinden."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:639
 msgid "Apply Anyway"
