@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 06:36+0300\n"
-"PO-Revision-Date: 2025-03-04 22:27+0000\n"
+"PO-Revision-Date: 2025-03-05 19:43+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -6874,14 +6874,14 @@ msgid "Could not copy file: %s to %s"
 msgstr "Kunde inte kopiera filen: %s till %s"
 
 #: common/gestfich.cpp:477
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy directory: %s to %s"
-msgstr "Kunde inte kopiera filen: %s till %s"
+msgstr "Kunde inte kopiera katalog: %s till %s"
 
 #: common/gestfich.cpp:529
-#, fuzzy, c-format
+#, c-format
 msgid "Source directory does not exist: %s"
-msgstr "Katalog '%s' finns inte"
+msgstr "Källkatalog finns inte: %s"
 
 #: common/gestfich.cpp:584
 #, c-format
