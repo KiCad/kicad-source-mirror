@@ -21,7 +21,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 06:36+0300\n"
 "PO-Revision-Date: 2025-03-06 03:38+0000\n"
-"Last-Translator: Kliment <kliment@0xfb.com>\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
 "Language: fi\n"
@@ -7005,7 +7005,7 @@ msgstr "Hakemistoa %s ei voitu kopioida kohteeseen %s"
 #: common/gestfich.cpp:529
 #, c-format
 msgid "Source directory does not exist: %s"
-msgstr "Lähdehakemistoa %s ei ole olemassa"
+msgstr "Lähdehakemistoa ei ole olemassa: %s"
 
 #: common/gestfich.cpp:584
 #, c-format
