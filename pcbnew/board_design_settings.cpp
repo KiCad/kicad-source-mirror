@@ -1484,8 +1484,13 @@ void BOARD_DESIGN_SETTINGS::SetEnabledLayers( LSET aMask )
     m_enabledLayers = aMask;
 
     // update layer counts to ensure their consistency with m_EnabledLayers
-    m_copperLayerCount      = (int) aMask.ClearNonCopperLayers().count();
-    m_userDefinedLayerCount = (int) ( aMask & LSET::UserDefinedLayersMask() ).count();
+    LSET copperLayers = aMask;
+    copperLayers.ClearNonCopperLayers();
+
+    LSET userLayers = aMask & LSET::UserDefinedLayersMask();
+
+    m_copperLayerCount      = (int) copperLayers.count();
+    m_userDefinedLayerCount = (int) userLayers.count();
 }
 
 

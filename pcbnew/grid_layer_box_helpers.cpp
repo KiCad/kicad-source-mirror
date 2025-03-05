@@ -110,9 +110,11 @@ void GRID_CELL_LAYER_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC&
 // Note: this implementation is an adaptation of wxGridCellChoiceEditor
 
 
-GRID_CELL_LAYER_SELECTOR::GRID_CELL_LAYER_SELECTOR( PCB_BASE_FRAME* aFrame, LSET aMask ) :
+GRID_CELL_LAYER_SELECTOR::GRID_CELL_LAYER_SELECTOR( PCB_BASE_FRAME* aFrame, LSET aMask,
+                                                    bool aShowNonActivated ) :
         m_frame( aFrame ),
         m_mask( aMask ),
+        m_showNonActivated( aShowNonActivated ),
         m_value( 0 )
 {
 }
@@ -134,6 +136,7 @@ void GRID_CELL_LAYER_SELECTOR::Create( wxWindow* aParent, wxWindowID aId,
     LayerBox()->SetLayersHotkeys( false );
     LayerBox()->SetBoardFrame( m_frame );
     LayerBox()->SetNotAllowedLayerSet( m_mask );
+    LayerBox()->ShowNonActivatedLayers( m_showNonActivated );
 
     wxGridCellEditor::Create(aParent, aId, aEventHandler);
 }
