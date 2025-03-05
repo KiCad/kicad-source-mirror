@@ -1040,7 +1040,12 @@ void ZONE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
     std::ranges::copy( m_layerProperties,
                        std::inserter( layerPropertiesCopy, std::end( layerPropertiesCopy ) ) );
 
-    SetLayerSet( GetLayerSet().Flip( GetBoard()->GetCopperLayerCount() ) );
+    LSET flipped;
+
+    for( PCB_LAYER_ID layer : GetLayerSet() )
+        flipped.set( GetBoard()->FlipLayer( layer ) );
+
+    SetLayerSet( flipped );
 
     for( auto& [oldLayer, properties] : layerPropertiesCopy )
     {

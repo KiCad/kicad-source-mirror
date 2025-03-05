@@ -466,7 +466,7 @@ LSEQ LSET::SeqStackupForPlotting() const
 }
 
 
-LSET& LSET::Flip( int aCopperLayersCount )
+LSET& LSET::FlipStandardLayers( int aCopperLayersCount )
 {
     LSET oldMask = *this;
 
@@ -495,6 +495,8 @@ LSET& LSET::Flip( int aCopperLayersCount )
     {
         if( oldMask.test( pair.first ) )
             set( pair.second );
+
+        oldMask.set( pair.first, false );
     }
 
     if( aCopperLayersCount >= 4 )
@@ -510,6 +512,12 @@ LSET& LSET::Flip( int aCopperLayersCount )
             }
         }
     }
+
+    oldMask.ClearCopperLayers();
+
+    // Copy across any remaining, non-side-specific layers
+    for( PCB_LAYER_ID layer : oldMask )
+        set( layer );
 
     return *this;
 }

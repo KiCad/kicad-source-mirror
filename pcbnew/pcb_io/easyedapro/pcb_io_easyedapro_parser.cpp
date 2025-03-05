@@ -656,7 +656,7 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_PARSER::createPAD( FOOTPRINT*            
         }
         else if( klayer == B_Cu )
         {
-            pad->SetLayerSet( PAD::SMDMask().Flip() );
+            pad->SetLayerSet( PAD::SMDMask().FlipStandardLayers() );
         }
 
         pad->SetAttribute( PAD_ATTRIB::SMD );
