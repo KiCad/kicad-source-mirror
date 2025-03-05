@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 06:36+0300\n"
-"PO-Revision-Date: 2025-03-05 19:43+0000\n"
+"PO-Revision-Date: 2025-03-06 03:38+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -10840,7 +10840,7 @@ msgstr "Lägg till i bibliotekstabellen"
 #: eeschema/design_block_utils.cpp:176 pcbnew/footprint_libraries_utils.cpp:368
 #, c-format
 msgid "Library %s is read only."
-msgstr "Biblioteket '%s' är skrivskyddat."
+msgstr "Biblioteket %s är skrivskyddat."
 
 #: eeschema/design_block_utils.cpp:182 pcbnew/footprint_libraries_utils.cpp:374
 #, c-format
@@ -37927,22 +37927,21 @@ msgstr "Kantstil:"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:546
 #, c-format
 msgid "Applying these changes will short net %s with %s."
-msgstr ""
+msgstr "Om dessa ändringar verkställs, kommer nät %s att kortslutas med %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:552
 #, c-format
 msgid "Applying these changes will short net %s with other nets."
 msgstr ""
+"Om dessa ändringar verkställs, kommer att kortsluta nät %s med andra nät."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Apply Anyway"
-msgstr "Lägg till ändå"
+msgstr "Verkställ ändå"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Cancel Changes"
-msgstr "Vill du förkasta ändringarna?"
+msgstr "Förkasta ändringarna"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:571
 #, c-format
