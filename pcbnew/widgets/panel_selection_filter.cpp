@@ -64,6 +64,8 @@ PANEL_SELECTION_FILTER::PANEL_SELECTION_FILTER( wxWindow* aParent ) :
     m_cbOtherItems->Bind( wxEVT_RIGHT_DOWN, &PANEL_SELECTION_FILTER::onRightClick, this );
 
     m_frame->Bind( EDA_LANG_CHANGED, &PANEL_SELECTION_FILTER::OnLanguageChanged, this );
+
+    SetMinSize( GetBestSize() );
 }
 
 
