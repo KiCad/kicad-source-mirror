@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 06:36+0300\n"
-"PO-Revision-Date: 2025-03-05 19:43+0000\n"
+"PO-Revision-Date: 2025-03-06 03:38+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -10994,7 +10994,7 @@ msgstr "Lägg till i bibliotekstabellen"
 #: eeschema/design_block_utils.cpp:176 pcbnew/footprint_libraries_utils.cpp:368
 #, c-format
 msgid "Library %s is read only."
-msgstr "Biblioteket '%s' är skrivskyddat."
+msgstr "Biblioteket %s är skrivskyddat."
 
 #: eeschema/design_block_utils.cpp:182 pcbnew/footprint_libraries_utils.cpp:374
 #, c-format
