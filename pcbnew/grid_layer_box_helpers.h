@@ -56,7 +56,8 @@ private:
 class GRID_CELL_LAYER_SELECTOR : public wxGridCellEditor
 {
 public:
-    GRID_CELL_LAYER_SELECTOR( PCB_BASE_FRAME* aFrame, LSET forbiddenLayers );
+    GRID_CELL_LAYER_SELECTOR( PCB_BASE_FRAME* aFrame, LSET forbiddenLayers,
+                              bool aShowNonActivated = false );
 
     wxGridCellEditor* Clone() const override;
     void Create( wxWindow* aParent, wxWindowID aId, wxEvtHandler* aEventHandler ) override;
@@ -82,6 +83,7 @@ protected:
 
     PCB_BASE_FRAME* m_frame;
     LSET            m_mask;
+    bool            m_showNonActivated;
     int             m_value;
 
     wxDECLARE_NO_COPY_CLASS( GRID_CELL_LAYER_SELECTOR );

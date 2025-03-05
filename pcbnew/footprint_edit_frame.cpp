@@ -195,15 +195,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     float proportion = GetFootprintEditorSettings()->m_AuiPanels.properties_splitter;
     m_propertiesPanel->SetSplitterProportion( proportion );
 
-    // Must be set after calling LoadSettings() to be sure these parameters are not dependent
-    // on what is read in stored settings.  Enable one internal layer, because footprints
-    // support keepout areas that can be on internal layers only (therefore on the first internal
-    // layer).  This is needed to handle these keepout in internal layers only.
-    GetBoard()->SetCopperLayerCount( 3 );
-    GetBoard()->SetEnabledLayers( GetBoard()->GetEnabledLayers().set( In1_Cu ) );
-    GetBoard()->SetVisibleLayers( GetBoard()->GetEnabledLayers() );
-    GetBoard()->SetLayerName( In1_Cu, _( "Inner layers" ) );
-
     SetActiveLayer( F_SilkS );
 
     // Fetch a COPY of the config as a lot of these initializations are going to overwrite our
@@ -550,25 +541,52 @@ void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
     // ("old" footprints can have null uuids that create issues in fp editor)
     aFootprint->FixUuids();
 
+    // Enable one internal layer, because footprints support keepout areas that can be on
+    // internal layers only (therefore on the first internal layer).  This is needed to handle
+    // these keepout in internal layers only.
+    GetBoard()->SetCopperLayerCount( 3 );
+    GetBoard()->SetLayerName( In1_Cu, _( "Inner layers" ) );
+
+    // Don't drop pre-existing user layers
+    LSET enabledLayers = GetBoard()->GetEnabledLayers();
+    enabledLayers.set( In1_Cu );    // we've already done this, but it needs doing again :shrug:
+
+    aFootprint->RunOnDescendants(
+            [&]( BOARD_ITEM* child )
+            {
+                LSET childLayers = child->GetLayerSet() & LSET::UserDefinedLayersMask();
+
+                for( PCB_LAYER_ID layer : childLayers )
+                    enabledLayers.set( layer );
+            } );
+
+    GetBoard()->SetEnabledLayers( enabledLayers );
+
+    // Footprint Editor layer visibility is kept in the view, not the board (because the board
+    // just delegates to the project file, which we don't have).
+    for( PCB_LAYER_ID layer : enabledLayers )
+        GetCanvas()->GetView()->SetLayerVisible( layer, true );
+
     const wxString libName = aFootprint->GetFPID().GetLibNickname();
 
     if( IsCurrentFPFromBoard() )
     {
-        const wxString msg =
-                wxString::Format( _( "Editing %s from board.  Saving will update the board only." ),
-                                  aFootprint->GetReference() );
-        const wxString openLibLink =
-                wxString::Format( _( "Open in library %s" ), UnescapeString( libName ) );
+        const wxString msg = wxString::Format( _( "Editing %s from board.  Saving will update the "
+                                                  "board only." ),
+                                               aFootprint->GetReference() );
+        const wxString openLibLink = wxString::Format( _( "Open in library %s" ),
+                                                       UnescapeString( libName ) );
 
-        const auto openLibraryCopy = [this]( wxHyperlinkEvent& aEvent )
-        {
-            GetToolManager()->RunAction( PCB_ACTIONS::editLibFpInFpEditor );
-        };
+        const auto openLibraryCopy =
+                [this]( wxHyperlinkEvent& aEvent )
+                {
+                    GetToolManager()->RunAction( PCB_ACTIONS::editLibFpInFpEditor );
+                };
 
         if( WX_INFOBAR* infobar = GetInfoBar() )
         {
-            wxHyperlinkCtrl* button =
-                    new wxHyperlinkCtrl( infobar, wxID_ANY, openLibLink, wxEmptyString );
+            wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, openLibLink,
+                                                           wxEmptyString );
             button->Bind( wxEVT_COMMAND_HYPERLINK, openLibraryCopy );
 
             infobar->RemoveAllButtons();
@@ -589,10 +607,11 @@ void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
         {
             wxString link = _( "Save as editable copy" );
 
-            const auto saveAsEditableCopy = [this, aFootprint]( wxHyperlinkEvent& aEvent )
-            {
-                SaveFootprintAs( aFootprint );
-            };
+            const auto saveAsEditableCopy =
+                    [this, aFootprint]( wxHyperlinkEvent& aEvent )
+                    {
+                        SaveFootprintAs( aFootprint );
+                    };
 
             wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, link, wxEmptyString );
             button->Bind( wxEVT_COMMAND_HYPERLINK, saveAsEditableCopy );
@@ -610,6 +629,7 @@ void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
     }
 
     UpdateMsgPanel();
+    UpdateUserInterface();
 }
 
 

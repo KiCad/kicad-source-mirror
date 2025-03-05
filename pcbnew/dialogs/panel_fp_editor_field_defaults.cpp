@@ -317,7 +317,10 @@ PANEL_FP_EDITOR_FIELD_DEFAULTS::PANEL_FP_EDITOR_FIELD_DEFAULTS( wxWindow*       
 
     attr = new wxGridCellAttr;
     attr->SetRenderer( new GRID_CELL_LAYER_RENDERER( nullptr ) );
-    attr->SetEditor( new GRID_CELL_LAYER_SELECTOR( nullptr, LSET::AllTechMask() | LSET::AllCuMask() | Edge_Cuts | Margin ) );
+    LSET forbiddenLayers = LSET::AllCuMask() | LSET::AllTechMask();
+    forbiddenLayers.set( Edge_Cuts );
+    forbiddenLayers.set( Margin );
+    attr->SetEditor( new GRID_CELL_LAYER_SELECTOR( nullptr, forbiddenLayers ) );
     m_layerNameitemsGrid->SetColAttr( 0, attr );
 
 
