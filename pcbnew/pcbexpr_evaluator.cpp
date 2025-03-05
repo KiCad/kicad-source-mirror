@@ -166,18 +166,36 @@ public:
             return *( m_item->GetEffectiveNetClass() )
                    == *( bValue->m_item->GetEffectiveNetClass() );
         }
-        else
+
+        if( b->GetType() == LIBEVAL::VT_STRING )
         {
-            return LIBEVAL::VALUE::EqualTo( aCtx, b );
+            if( m_item->GetEffectiveNetClass()->ContainsNetclassWithName( b->AsString() ) )
+                return true;
+
+            return m_item->GetEffectiveNetClass()->GetName() == b->AsString();
         }
+
+        return LIBEVAL::VALUE::EqualTo( aCtx, b );
     }
 
     bool NotEqualTo( LIBEVAL::CONTEXT* aCtx, const LIBEVAL::VALUE* b ) const override
     {
         if( const PCBEXPR_NETCLASS_VALUE* bValue = dynamic_cast<const PCBEXPR_NETCLASS_VALUE*>( b ) )
-            return m_item->GetEffectiveNetClass() != bValue->m_item->GetEffectiveNetClass();
-        else
-            return LIBEVAL::VALUE::NotEqualTo( aCtx, b );
+        {
+            return *( m_item->GetEffectiveNetClass() )
+                   != *( bValue->m_item->GetEffectiveNetClass() );
+        }
+
+        if( b->GetType() == LIBEVAL::VT_STRING )
+        {
+            const bool isInConstituents =
+                    m_item->GetEffectiveNetClass()->ContainsNetclassWithName( b->AsString() );
+            const bool isFullName = m_item->GetEffectiveNetClass()->GetName() == b->AsString();
+
+            return !isInConstituents && !isFullName;
+        }
+
+        return LIBEVAL::VALUE::NotEqualTo( aCtx, b );
     }
 
 protected:
