@@ -1592,7 +1592,7 @@ void CONNECTION_GRAPH::collectAllDriverValues()
                 }
                 else
                 {
-                    UNITS_PROVIDER unitsProvider( schIUScale, EDA_UNITS::MILLIMETRES );
+                    UNITS_PROVIDER unitsProvider( schIUScale, EDA_UNITS::MM );
                     wxLogTrace( ConnTrace, wxS( "Unexpected normal pin %s" ),
                                 driver->GetItemDescription( &unitsProvider, true ) );
                 }
