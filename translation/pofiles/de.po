@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 06:36+0300\n"
-"PO-Revision-Date: 2025-03-05 19:43+0000\n"
+"PO-Revision-Date: 2025-03-06 03:38+0000\n"
 "Last-Translator: Kliment <kliment@0xfb.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -27008,9 +27008,8 @@ msgid "Edit Destination Options..."
 msgstr "Ausgabeoptionen bearbeiten..."
 
 #: kicad/dialogs/panel_jobset.cpp:296
-#, fuzzy
 msgid "Delete Destination"
-msgstr "Zuordnung löschen"
+msgstr "Ziel löschen"
 
 #: kicad/dialogs/panel_jobset.cpp:299
 msgid "View Last Run Log..."
