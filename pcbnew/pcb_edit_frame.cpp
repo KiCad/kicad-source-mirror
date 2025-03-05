@@ -327,15 +327,20 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .Right().Layer( 4 )
                       .Caption( _( "Appearance" ) ).PaneBorder( false )
                       .MinSize( m_appearancePanel->GetMinSize().x, -1 )
+#ifdef __WXMAC__
+                      // Best size for this pane is calculated larger than necessary on wxMac
+                      .BestSize( m_appearancePanel->GetMinSize().x, -1 )
+#else
                       .BestSize( m_appearancePanel->GetBestSize().x, -1 )
+#endif
                       .FloatingSize( m_appearancePanel->GetBestSize() )
                       .CloseButton( false ) );
 
     m_auimgr.AddPane( m_selectionFilterPanel, EDA_PANE().Name( wxS( "SelectionFilter" ) )
                       .Right().Layer( 4 ).Position( 2 )
                       .Caption( _( "Selection Filter" ) ).PaneBorder( false )
-                      .MinSize( m_selectionFilterPanel->GetMinSize().x, m_selectionFilterPanel->GetMinSize().y  )
-                      .BestSize( m_selectionFilterPanel->GetBestSize().x, m_selectionFilterPanel->GetMinSize().y )
+                      .MinSize( m_selectionFilterPanel->GetMinSize().x, -1  )
+                      .BestSize( m_selectionFilterPanel->GetBestSize().x, -1 )
                       .FloatingSize( m_selectionFilterPanel->GetBestSize() )
                       .CloseButton( false ) );
 
