@@ -30,8 +30,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 06:36+0300\n"
-"PO-Revision-Date: 2025-03-04 11:31+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2025-03-05 19:43+0000\n"
+"Last-Translator: Kliment <kliment@0xfb.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -6961,14 +6961,14 @@ msgid "Could not copy file: %s to %s"
 msgstr "Konnte Datei nicht kopieren: %s nach %s"
 
 #: common/gestfich.cpp:477
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy directory: %s to %s"
-msgstr "Konnte Datei nicht kopieren: %s nach %s"
+msgstr "Konnte das Verzeichnis %s nicht nach %s kopieren"
 
 #: common/gestfich.cpp:529
-#, fuzzy, c-format
+#, c-format
 msgid "Source directory does not exist: %s"
-msgstr "Verzeichnis \"%s\" existiert nicht"
+msgstr "Das Quellverzeichnis %s existiert nicht"
 
 #: common/gestfich.cpp:584
 #, c-format
@@ -22003,11 +22003,11 @@ msgstr ""
 "ersetzen."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:997
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
 msgstr ""
-"Symbol \"%s\" existiert bereits in Bibliothek \"%s\". Soll es überschrieben "
+"Symbol '%s' existiert bereits in Bibliothek '%s'. Soll es überschrieben "
 "werden?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1014
@@ -22040,9 +22040,9 @@ msgid "Export Symbol"
 msgstr "Symbol exportieren"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1131
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is read-only."
-msgstr "Bibliothek \"%s\" ist schreibgeschützt."
+msgstr "Bibliothek '%s; ist schreibgeschützt."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1171
 #, c-format
@@ -22617,9 +22617,8 @@ msgid "Import a symbol to the current library"
 msgstr "Ein Symbol in die aktive Bibliothek importieren"
 
 #: eeschema/tools/ee_actions.cpp:274
-#, fuzzy
 msgid "Export..."
-msgstr "&Exportieren ..."
+msgstr "Exportieren..."
 
 #: eeschema/tools/ee_actions.cpp:275
 msgid "Export a symbol to a new library file"
@@ -26869,9 +26868,8 @@ msgid "Zip"
 msgstr "Zip"
 
 #: kicad/dialogs/dialog_destination_base.cpp:46
-#, fuzzy
 msgid "Destination path:"
-msgstr "Ziel:"
+msgstr "Zielpfad:"
 
 #: kicad/dialogs/dialog_destination_base.cpp:64
 msgid "Include jobs:"
@@ -27015,9 +27013,8 @@ msgid "Delete Destination"
 msgstr "Zuordnung löschen"
 
 #: kicad/dialogs/panel_jobset.cpp:299
-#, fuzzy
 msgid "View Last Run Log..."
-msgstr "Ergebnisse des letzten Laufs anzeigen ..."
+msgstr "Ergebnisse des letzten Laufs anzeigen..."
 
 #: kicad/dialogs/panel_jobset.cpp:389
 msgid "Edit Job Description"
@@ -27056,14 +27053,12 @@ msgid "Add New Destination"
 msgstr "Neues Ziel hinzufügen"
 
 #: kicad/dialogs/panel_jobset.cpp:793
-#, fuzzy
 msgid "Select destination type:"
-msgstr "Auftragstyp wählen:"
+msgstr "Zieltyp wählen:"
 
 #: kicad/dialogs/panel_jobset.cpp:958
-#, fuzzy
 msgid "No destinations defined"
-msgstr "Keine Ausgaben definiert"
+msgstr "Keine Ziele definiert"
 
 #: kicad/dialogs/panel_jobset_base.cpp:24
 msgid "Jobs"
@@ -27078,9 +27073,8 @@ msgid "Save Jobset"
 msgstr "Auftragssatz speichern"
 
 #: kicad/dialogs/panel_jobset_base.cpp:122
-#, fuzzy
 msgid "Generate All Destinations"
-msgstr "Alle Ausgaben generieren"
+msgstr "Alle Ziele generieren"
 
 #: kicad/dialogs/panel_jobset_base.h:133
 #, fuzzy
@@ -38277,24 +38271,22 @@ msgid "Border style:"
 msgstr "Umrandungsstil:"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:546
-#, c-format
+#, c-format, fuzzy
 msgid "Applying these changes will short net %s with %s."
-msgstr ""
+msgstr "Diese Änderungen würden Netze %s und %s kurzschliessen."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:552
-#, c-format
+#, c-format, fuzzy
 msgid "Applying these changes will short net %s with other nets."
-msgstr ""
+msgstr "Diese Änderungen würden das Netz %s mit andere Netze kurzschliessen."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Apply Anyway"
-msgstr "Trotzdem hinzufügen"
+msgstr "Trotzdem anwenden"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Cancel Changes"
-msgstr "Änderungen verwerfen?"
+msgstr "Änderungen verwerfen"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:571
 #, c-format
