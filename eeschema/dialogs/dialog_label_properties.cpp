@@ -693,6 +693,12 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
             }
         }
     }
+    else if( m_labelList && m_currentLabel->Type() == SCH_DIRECTIVE_LABEL_T )
+    {
+        SCH_DIRECTIVE_LABEL* label =
+                new SCH_DIRECTIVE_LABEL( *static_cast<SCH_DIRECTIVE_LABEL*>( m_currentLabel ) );
+        m_labelList->push_back( std::unique_ptr<SCH_LABEL_BASE>( label ) );
+    }
 
     return true;
 }
