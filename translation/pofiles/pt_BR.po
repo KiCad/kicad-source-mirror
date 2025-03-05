@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 06:36+0300\n"
-"PO-Revision-Date: 2025-02-27 10:55+0000\n"
+"PO-Revision-Date: 2025-03-05 17:33+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10.2-dev\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -366,14 +366,12 @@ msgid "Reload board"
 msgstr "Recarregar a placa"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:49
-#, fuzzy
 msgid "Reload board and refresh 3D view"
-msgstr "Recarregar placa e modelos 3D"
+msgstr "Recarregar a visualização da placa e dos modelos 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
-#, fuzzy
 msgid "Use raytracing"
-msgstr "Raytracing"
+msgstr "Usar o raytracing"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:56
 msgid "Render current view using Raytracing"
@@ -384,27 +382,24 @@ msgid "Copy 3D image to clipboard"
 msgstr "Copiar imagem 3D para a área de transferência"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:64
-#, fuzzy
 msgid "Copy the current 3D image to the clipboard"
-msgstr "Copiar imagem 3D para a área de transferência"
+msgstr "Copiar a imagem 3D atual para a área de transferência"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
 msgid "Export Current View as PNG..."
 msgstr "Exportar visualização atual como PNG…"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
-#, fuzzy
 msgid "Export the Current View as a PNG image"
-msgstr "Exportar visualização atual como PNG…"
+msgstr "Exportar a visualização atual como uma imagem PNG"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
 msgid "Export Current View as JPEG..."
 msgstr "Exportar visualização atual como JPEG…"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:80
-#, fuzzy
 msgid "Export the Current View as a JPEG image"
-msgstr "Exportar visualização atual como JPEG…"
+msgstr "Exportar a visualização atual como uma imagem JPEG"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:88
 msgid "Set Pivot"
@@ -3753,7 +3748,6 @@ msgid "Enter the password for the SSH key"
 msgstr "Insira a senha da chave SSH"
 
 #: common/dialogs/git/dialog_git_repository.cpp:337
-#, fuzzy
 msgid "Test Connection"
 msgstr "Testar a conexão"
 
@@ -3799,9 +3793,8 @@ msgstr "Insira uma URL para o repositório"
 
 #: common/dialogs/git/dialog_git_repository.cpp:453
 #: common/dialogs/git/dialog_git_repository_base.cpp:108
-#, fuzzy
 msgid "SSH key password:"
-msgstr "Senha da chave SSH"
+msgstr "Senha da chave SSH:"
 
 #: common/dialogs/git/dialog_git_repository.cpp:459
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
@@ -3809,14 +3802,12 @@ msgid "Password:"
 msgstr "Senha:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:38
-#, fuzzy
 msgid "Location:"
-msgstr "Localização"
+msgstr "Local:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:45
-#, fuzzy
 msgid "Connection type:"
-msgstr "Tipo da conexão"
+msgstr "Tipo da conexão:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:52
 msgid "HTTPS"
@@ -3828,9 +3819,8 @@ msgid "Local"
 msgstr "Local"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:83
-#, fuzzy
 msgid "SSH private key:     "
-msgstr "Chave privado SSH"
+msgstr "Chave privado SSH:     "
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:90
 msgid "Select SSH private key file"
@@ -3841,7 +3831,6 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:101
-#, fuzzy
 msgid "User name:"
 msgstr "Nome do usuário:"
 
@@ -5682,28 +5671,24 @@ msgstr "Direita"
 
 #: common/dialogs/panel_toolbar_customization.cpp:48
 msgid "Top main"
-msgstr ""
+msgstr "Margem superior"
 
 #: common/dialogs/panel_toolbar_customization.cpp:49
-#, fuzzy
 msgid "Top auxillary"
-msgstr "Camada de cima"
+msgstr "Camada superficial"
 
 #: common/dialogs/panel_toolbar_customization.cpp:133
 #: common/dialogs/panel_toolbar_customization_base.cpp:72
-#, fuzzy
 msgid "Insert separator"
-msgstr "Separadores de célula"
+msgstr "Inserir separador"
 
 #: common/dialogs/panel_toolbar_customization.cpp:139
-#, fuzzy
 msgid "Insert spacer"
-msgstr "Inserir"
+msgstr "Inserir espaçador"
 
 #: common/dialogs/panel_toolbar_customization.cpp:140
-#, fuzzy
 msgid "Insert group"
-msgstr "Entre no grupo"
+msgstr "Inserir grupo"
 
 #: common/dialogs/panel_toolbar_customization.cpp:543 common/eda_item.cpp:406
 #: pcbnew/pcb_group.cpp:392
@@ -5711,9 +5696,8 @@ msgid "Group"
 msgstr "Grupo"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:19
-#, fuzzy
 msgid "Customize toolbars"
-msgstr "Conjunto de camadas personalizadas"
+msgstr "Personalizar as barras de ferramentas"
 
 #: common/draw_panel_gal.cpp:321 common/draw_panel_gal.cpp:508
 msgid "Could not use OpenGL, falling back to software rendering"
@@ -6018,9 +6002,8 @@ msgstr "Cores"
 #: common/eda_base_frame.cpp:1345 common/eda_base_frame.cpp:1362
 #: common/eda_base_frame.cpp:1373 common/eda_base_frame.cpp:1399
 #: common/eda_base_frame.cpp:1427
-#, fuzzy
 msgid "Toolbars"
-msgstr "&Ferramentas"
+msgstr "Barra de ferramentas"
 
 #: common/eda_base_frame.cpp:1307 common/hotkey_store.cpp:77
 #: common/tool/common_tools.cpp:614 eeschema/menubar.cpp:137
@@ -8673,53 +8656,44 @@ msgid "Quit %s"
 msgstr "Encerre %s"
 
 #: common/tool/action_toolbar.cpp:1036
-#, fuzzy
 msgid "Grid Selector"
-msgstr "Estilo da grade"
+msgstr "Seletor de grade"
 
 #: common/tool/action_toolbar.cpp:1037
-#, fuzzy
 msgid "Grid Selection box"
-msgstr "Clarificar Seleção"
+msgstr "Caixa de seleção de caixa"
 
 #: common/tool/action_toolbar.cpp:1039
-#, fuzzy
 msgid "Zoom Selector"
-msgstr "Amplie no selecionado"
+msgstr "Seletor de ampliação"
 
 #: common/tool/action_toolbar.cpp:1040
-#, fuzzy
 msgid "Zoom Selection box"
-msgstr "Amplie no selecionado"
+msgstr "Caixa do seletor de ampliação"
 
 #: common/tool/action_toolbar.cpp:1042
-#, fuzzy
 msgid "IPC/Scripting plugins"
-msgstr "Console do script"
+msgstr "IPC/Plug-ins de script"
 
 #: common/tool/action_toolbar.cpp:1043
 msgid "Region to hold the IPC/Scripting action buttons"
-msgstr ""
+msgstr "Região para manter os botões de ação do IPC/Scripting"
 
 #: common/tool/action_toolbar.cpp:1045
-#, fuzzy
 msgid "Layer selector"
-msgstr "Seleção da camada:"
+msgstr "Seletor de camada"
 
 #: common/tool/action_toolbar.cpp:1046
-#, fuzzy
 msgid "Control to select the layer"
-msgstr "Limpa a camada gráfica que foi selecionada"
+msgstr "Controle para selecionar a camada"
 
 #: common/tool/action_toolbar.cpp:1048
-#, fuzzy
 msgid "Symbol unit selector"
-msgstr "Notação da unidade do símbolo:"
+msgstr "Seletor de unidade de símbolos"
 
 #: common/tool/action_toolbar.cpp:1049
-#, fuzzy
 msgid "Displays the current unit"
-msgstr "Feche o editor atual"
+msgstr "Exibe a unidade atual"
 
 #: common/tool/actions.cpp:45
 msgid "New..."
@@ -9319,14 +9293,12 @@ msgid "Hide Library Tree"
 msgstr "Ocultar a árvore da biblioteca"
 
 #: common/tool/actions.cpp:836
-#, fuzzy
 msgid "Show Side Panel"
-msgstr "Mostra os pinos ocultos"
+msgstr "Exibe o painel lateral"
 
 #: common/tool/actions.cpp:841
-#, fuzzy
 msgid "Show Console Panel"
-msgstr "Mostre a janela de comando"
+msgstr "Exibe o painel do console"
 
 #: common/tool/actions.cpp:846
 msgid "Focus Library Tree Search Field"
@@ -10302,9 +10274,8 @@ msgid "KiCad s-expression schematic files"
 msgstr "Arquivos dos esquemáticos s-expression do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:289
-#, fuzzy
 msgid "Altium Project files"
-msgstr "Todos os arquivos do projeto KiCad"
+msgstr "Arquivos do projeto Altium"
 
 #: common/wildcards_and_files_ext.cpp:295
 msgid "CADSTAR Archive files"
@@ -10818,14 +10789,12 @@ msgid "Footprint Filters:"
 msgstr "Filtros de footprint:"
 
 #: cvpcb/toolbars_cvpcb.cpp:122
-#, fuzzy
 msgid "Footprint filters"
-msgstr "Filtros de footprint:"
+msgstr "Filtros de footprint"
 
 #: cvpcb/toolbars_cvpcb.cpp:123
-#, fuzzy
 msgid "Footprint filtering controls"
-msgstr "Filtros de footprint:"
+msgstr "Controle de filtros de footprint"
 
 #: cvpcb/tools/cvpcb_actions.cpp:55
 msgid "View Selected Footprint"
@@ -12869,9 +12838,8 @@ msgid "Enter the text to be used within the schematic"
 msgstr "Entre o texto para ser usado com o esquema"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:62
-#, fuzzy
 msgid "Multiple label input"
-msgstr "Múltiplas camadas"
+msgstr "Entrada múltipla de etiquetas"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:42
@@ -14173,9 +14141,8 @@ msgid "Whole &words only"
 msgstr "Apenas &palavras inteiras"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:90
-#, fuzzy
 msgid "Regular Expression"
-msgstr "Expressão malformada"
+msgstr "Expressão regular"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:93
 msgid "Search pin &names and numbers"
@@ -21471,14 +21438,13 @@ msgstr "Copiar o nome do sinal"
 #: eeschema/sim/simulator_frame_ui.cpp:180
 #: eeschema/sim/simulator_frame_ui.cpp:187
 #: eeschema/sim/simulator_frame_ui.cpp:200
-#, fuzzy
 msgid "Create new cursor..."
-msgstr "Criar nova placa"
+msgstr "Criar um novo cursor..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "Delete %s..."
-msgstr "Excluir predefinição..."
+msgstr "Excluir %s..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:242
 #: eeschema/sim/simulator_frame_ui.cpp:900
@@ -21515,9 +21481,8 @@ msgstr "Excluir a medição"
 
 #: eeschema/sim/simulator_frame_ui.cpp:651
 #: eeschema/sim/simulator_frame_ui.cpp:672
-#, fuzzy
 msgid "Cursor "
-msgstr "Cursor 1"
+msgstr "Cursor "
 
 #: eeschema/sim/simulator_frame_ui.cpp:729
 #: eeschema/sim/simulator_frame_ui.cpp:1155
@@ -22180,7 +22145,7 @@ msgstr ""
 "dele."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:995
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
 msgstr "O símbolo '%s' já existe na biblioteca '%s'. Deseja substituí-lo?"
@@ -22215,7 +22180,7 @@ msgid "Export Symbol"
 msgstr "Exporte o símbolo"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1129
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is read-only."
 msgstr "A biblioteca '%s' é somente leitura."
 
@@ -22792,9 +22757,8 @@ msgid "Import a symbol to the current library"
 msgstr "Importe um símbolo para a biblioteca atual"
 
 #: eeschema/tools/ee_actions.cpp:274
-#, fuzzy
 msgid "Export..."
-msgstr "&Exportar..."
+msgstr "Exportar..."
 
 #: eeschema/tools/ee_actions.cpp:275
 msgid "Export a symbol to a new library file"
@@ -23015,14 +22979,12 @@ msgid "Place Sheet Pins"
 msgstr "Posicionar planilha de pinos"
 
 #: eeschema/tools/ee_actions.cpp:579
-#, fuzzy
 msgid "Autoplace All Sheet Pins"
-msgstr "Posicionar planilha de pinos"
+msgstr "Posicionamento automático de todos os pinos da folha"
 
 #: eeschema/tools/ee_actions.cpp:580
-#, fuzzy
 msgid "Imports and auto places all sheet pins"
-msgstr "Importa pinos hierárquicos da folha"
+msgstr "Importação e colocação automática de todos os pinos da folha"
 
 #: eeschema/tools/ee_actions.cpp:585 eeschema/tools/ee_actions.cpp:593
 msgid "Sync Sheet Pins..."
@@ -23461,24 +23423,20 @@ msgstr ""
 "a tabela dos símbolos da biblioteca"
 
 #: eeschema/tools/ee_actions.cpp:1115
-#, fuzzy
 msgid "Next Net Item"
-msgstr "Itens de texto"
+msgstr "Próximo item net"
 
 #: eeschema/tools/ee_actions.cpp:1116
-#, fuzzy
 msgid "Select next item on the current net"
-msgstr "Selecione um item da conexão sob o cursor"
+msgstr "Selecionar o próximo item na net atual"
 
 #: eeschema/tools/ee_actions.cpp:1122
-#, fuzzy
 msgid "Previous Net Item"
-msgstr "Folha anterior"
+msgstr "Item net anterior"
 
 #: eeschema/tools/ee_actions.cpp:1123
-#, fuzzy
 msgid "Select previous item on the current net"
-msgstr "Selecione um item da conexão sob o cursor"
+msgstr "Selecionar o item anterior na net atual"
 
 #: eeschema/tools/ee_actions.cpp:1128
 msgid "Export Drawing to Clipboard"
@@ -25620,34 +25578,28 @@ msgid "DCode:"
 msgstr "DCode:"
 
 #: gerbview/toolbars_gerber.cpp:268 gerbview/toolbars_gerber.cpp:269
-#, fuzzy
 msgid "Text info entry"
-msgstr "Editor de textos"
+msgstr "Entrada de informações de texto"
 
 #: gerbview/toolbars_gerber.cpp:271
-#, fuzzy
 msgid "Component highlight"
-msgstr "Alterna o destaque de rede"
+msgstr "Destaque do componente"
 
 #: gerbview/toolbars_gerber.cpp:273
-#, fuzzy
 msgid "Net highlight"
-msgstr "Destaque da cor da net"
+msgstr "Destaque da net"
 
 #: gerbview/toolbars_gerber.cpp:275
-#, fuzzy
 msgid "Aperture highlight"
-msgstr "Destaque da cor da net"
+msgstr "Destaque da abertura"
 
 #: gerbview/toolbars_gerber.cpp:277
-#, fuzzy
 msgid "DCode Selector"
-msgstr "Rota selecionada"
+msgstr "Seletor DCode"
 
 #: gerbview/toolbars_gerber.cpp:278
-#, fuzzy
 msgid "Select all items with the selected DCode"
-msgstr "Selecione todos os itens na tela"
+msgstr "Selecionar todos os itens com o DCode selecionado"
 
 #: gerbview/toolbars_gerber.cpp:281
 msgid "<No selection>"
@@ -26418,9 +26370,8 @@ msgid "Generate map / summary of drill hits"
 msgstr "Gera o mapa / resumo dos acertos da perfuração"
 
 #: kicad/cli/command_pcb_export_drill.cpp:94
-#, fuzzy
 msgid "Generate a file specifically for tenting"
-msgstr "Exportar configurações de tarefa lista de materiais (BOM)"
+msgstr "Gerar um arquivo especificamente para cobertura"
 
 #: kicad/cli/command_pcb_export_drill.cpp:99
 msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
@@ -27086,9 +27037,9 @@ msgstr "Copiar as configurações de tarefa dos arquivos"
 
 #: kicad/dialogs/dialog_destination.cpp:55
 #: kicad/dialogs/dialog_destination_base.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "%s Destination"
-msgstr "Destino:"
+msgstr "%s Destino"
 
 #: kicad/dialogs/dialog_destination.cpp:86
 msgid "Select output directory"
@@ -27107,9 +27058,8 @@ msgid "Zip"
 msgstr "Zip"
 
 #: kicad/dialogs/dialog_destination_base.cpp:46
-#, fuzzy
 msgid "Destination path:"
-msgstr "Destino:"
+msgstr "Caminho do destino:"
 
 #: kicad/dialogs/dialog_destination_base.cpp:64
 msgid "Include jobs:"
@@ -27210,9 +27160,9 @@ msgid "Update Available"
 msgstr "Atualização disponível"
 
 #: kicad/dialogs/panel_jobset.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Destination: %s"
-msgstr "Destino:"
+msgstr "Destino: %s"
 
 #: kicad/dialogs/panel_jobset.cpp:68
 msgid "No."
@@ -27243,19 +27193,16 @@ msgid "Running jobs"
 msgstr "Tarefas em execução"
 
 #: kicad/dialogs/panel_jobset.cpp:295
-#, fuzzy
 msgid "Edit Destination Options..."
-msgstr "Editar Opções de Retângulo…"
+msgstr "Editar as opções do destino…"
 
 #: kicad/dialogs/panel_jobset.cpp:296
-#, fuzzy
 msgid "Delete Destination"
-msgstr "Exclua a associação"
+msgstr "Excluir o destino"
 
 #: kicad/dialogs/panel_jobset.cpp:299
-#, fuzzy
 msgid "View Last Run Log..."
-msgstr "Ver os resultados da última execução..."
+msgstr "Ver o registro da última execução..."
 
 #: kicad/dialogs/panel_jobset.cpp:389
 msgid "Edit Job Description"
@@ -27286,47 +27233,40 @@ msgid "Select job type:"
 msgstr "Selecione o tipo de trabalho:"
 
 #: kicad/dialogs/panel_jobset.cpp:783
-#, fuzzy
 msgid "Destination Types"
-msgstr "Destino:"
+msgstr "Tipos de destino"
 
 #: kicad/dialogs/panel_jobset.cpp:792
-#, fuzzy
 msgid "Add New Destination"
-msgstr "Destino:"
+msgstr "Adicionar um novo destino"
 
 #: kicad/dialogs/panel_jobset.cpp:793
-#, fuzzy
 msgid "Select destination type:"
-msgstr "Selecione o tipo de trabalho:"
+msgstr "Selecione o tipo de destino:"
 
 #: kicad/dialogs/panel_jobset.cpp:958
-#, fuzzy
 msgid "No destinations defined"
-msgstr "Nenhuma saída definida"
+msgstr "Nenhum destino foi definido"
 
 #: kicad/dialogs/panel_jobset_base.cpp:24
 msgid "Jobs"
 msgstr "Tarefas"
 
 #: kicad/dialogs/panel_jobset_base.cpp:83
-#, fuzzy
 msgid "Destinations"
-msgstr "Destino:"
+msgstr "Destinos"
 
 #: kicad/dialogs/panel_jobset_base.cpp:116
 msgid "Save Jobset"
 msgstr "Salvar o conjunto de tarefas"
 
 #: kicad/dialogs/panel_jobset_base.cpp:122
-#, fuzzy
 msgid "Generate All Destinations"
-msgstr "Gerar todas as saídas"
+msgstr "Gerar todos os destinos"
 
 #: kicad/dialogs/panel_jobset_base.h:133
-#, fuzzy
 msgid "Jobset Run Log"
-msgstr "Registro de execução da saída de trabalho"
+msgstr "Registro do conjunto de tarefas"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:143
 msgid "Edit the project schematic"
@@ -27435,9 +27375,8 @@ msgstr ""
 "projeto não pode ser importado."
 
 #: kicad/import_project.cpp:146
-#, fuzzy
 msgid "Import Altium Project Files"
-msgstr "Importe os arquivos do projeto Eagle"
+msgstr "Importar os arquivos do projeto Altium"
 
 #: kicad/import_project.cpp:154
 msgid "Import CADSTAR Archive Project Files"
@@ -27560,14 +27499,12 @@ msgid "Import Non-KiCad Project..."
 msgstr "Importe o projeto que não seja do KiCad..."
 
 #: kicad/menubar.cpp:115
-#, fuzzy
 msgid "Altium Project..."
-msgstr "Projeto EAGLE..."
+msgstr "Projeto Altium..."
 
 #: kicad/menubar.cpp:116
-#, fuzzy
 msgid "Import Altium Schematic and PCB (*.PrjPcb)"
-msgstr "Importe o esquema do arquivo CADSTAR e a PCI (*.csa, *.cpa)"
+msgstr "Importar esquemático Altium e PCI (*.PrjPcb)"
 
 #: kicad/menubar.cpp:119
 msgid "CADSTAR Project..."
@@ -29067,24 +29004,20 @@ msgstr ""
 "que não estão em todas as páginas são exibidos"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:160
-#, fuzzy
 msgid "Origin Selector"
-msgstr "Imagem original"
+msgstr "Seletor de origem"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:161
-#, fuzzy
 msgid "Select the origin of the status bar coordinates"
-msgstr "Seleciona qual origem é usada para a exibição das coordenadas X, Y."
+msgstr "Selecione a origem das coordenadas da barra de status"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:162
-#, fuzzy
 msgid "Page Selector"
-msgstr "Seleção da camada"
+msgstr "Seletor de página"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:163
-#, fuzzy
 msgid "Select the page to simulate item displays"
-msgstr "Selecionar como os itens são exibidos"
+msgstr "Selecione a página para simular a exibição de itens"
 
 #: pagelayout_editor/tools/pl_actions.cpp:72
 msgid "Place Bitmaps"
@@ -33411,9 +33344,8 @@ msgstr "Abaixo do limite da área"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:363
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:288
-#, fuzzy
 msgid "Area limit:"
-msgstr "Abaixo do limite da área"
+msgstr "Limite da área:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:366
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:291
@@ -35738,9 +35670,8 @@ msgid "Gerber X2"
 msgstr "Gerber X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:92
-#, fuzzy
 msgid "Generate tenting layers"
-msgstr "Gera os arquivos de posicionamento"
+msgstr "Gerar camadas de cobertura"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:106
 msgid "Generate map:"
@@ -38532,9 +38463,8 @@ msgid "Border style:"
 msgstr "Estilo da borda:"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:148
-#, fuzzy
 msgid "Unknown choice"
-msgstr "Método Desconhecido"
+msgstr "Escolha desconhecida"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:628
 #, c-format
@@ -38591,78 +38521,76 @@ msgid "Edit Track/Via Properties"
 msgstr "Editar propriedades de trilha/via"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:178
-#, fuzzy
 msgid "From rules"
-msgstr "Das regras do desenho"
+msgstr "A partir das regras"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:180
 msgid "Type I a ( tented top )"
-msgstr ""
+msgstr "Tipo I a ( coberto em cima )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:181
 msgid "Type I b ( tented both sides )"
-msgstr ""
+msgstr "Tipo I b ( coberto em ambos os lados )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:182
 msgid "Type I a ( tented bottom )"
-msgstr ""
+msgstr "Tipo I a ( coberto em baixo )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:183
 msgid "Type II a ( covered and tented top )"
-msgstr ""
+msgstr "Type II a ( tampa e coberto em cima )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:184
 msgid "Type II b ( covered and tented both sides )"
-msgstr ""
+msgstr "Tipo II b ( tampa e coberto em ambos os lados )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:185
 msgid "Type II a ( covered and tented bottom )"
-msgstr ""
+msgstr "Type II a ( tampa e coberto em baixo )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:186
 msgid "Type III a ( plugged top )"
-msgstr ""
+msgstr "Tipo III a ( parte de cima com tampão )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:187
 msgid "Type III b ( plugged both sides )"
-msgstr ""
+msgstr "Type III b ( com tampão em ambos os lados )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:188
 msgid "Type III a ( plugged bottom )"
-msgstr ""
+msgstr "Type III a ( com tampão em baixo )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:189
 msgid "Type IV a ( plugged and tented top )"
-msgstr ""
+msgstr "Type IV a ( tampão e coberto em cima )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:190
 msgid "Type IV b ( plugged and tented both sides )"
-msgstr ""
+msgstr "Type IV b ( tampão e coberto em ambos os lados )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:191
 msgid "Type IV a ( plugged and tented bottom )"
-msgstr ""
+msgstr "Type IV a ( tampão e coberto em baixo )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:192
-#, fuzzy
 msgid "Type V ( filled )"
-msgstr "Insira o texto do filtro"
+msgstr "Type V ( preenchido )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:193
 msgid "Type VI a ( filled and tented top )"
-msgstr ""
+msgstr "Type VI a ( preenchido e coberto em cima )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:194
 msgid "Type VI b ( filled and tented both sides )"
-msgstr ""
+msgstr "Type VI b ( preenchido e coberto em ambos os lados )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:195
 msgid "Type VI a ( filled and tented bottom )"
-msgstr ""
+msgstr "Type VI a ( preenchido e coberto em baixo )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:196
 msgid "Type VII ( filled and capped )"
-msgstr ""
+msgstr "Type VII ( preenchido e tampado )"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:41
 msgid "Automatically update via nets"
@@ -38739,14 +38667,14 @@ msgid "End layer:"
 msgstr "Camada final:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:378
-#, fuzzy
 msgid "Protection features:"
-msgstr "Área da seção transversal:"
+msgstr "Recursos de proteção:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:385
 msgid ""
 "Select which protection feature according to IPC-4761 the via should have."
 msgstr ""
+"Selecione qual recurso de proteção, de acordo com o IPC-4761, a via deve ter."
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:437
 msgid "Add teardrops on via's track connections"
@@ -42821,9 +42749,9 @@ msgid "(layer %s; %d spokes connected to isolated island)"
 msgstr "(camada %s; %d raios conectados à ilha isolada)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:224
-#, fuzzy, c-format
+#, c-format
 msgid "(layer %s; %s custom spoke count %d; actual %d)"
-msgstr "(camada %s; %s quantidade de raio mín %d; atual %d)"
+msgstr "(camada %s; %s quantidade personalizada do raio %d; atual %d)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:290
 #, c-format
@@ -47062,38 +46990,32 @@ msgid "Not tented"
 msgstr "Não coberto"
 
 #: pcbnew/pcb_track.cpp:2199
-#, fuzzy
 msgid "Covered"
-msgstr "Itens suspensos"
+msgstr "Coberto"
 
 #: pcbnew/pcb_track.cpp:2200
-#, fuzzy
 msgid "Not covered"
-msgstr "Não espelhado"
+msgstr "Não coberto"
 
 #: pcbnew/pcb_track.cpp:2205
-#, fuzzy
 msgid "Plugged"
-msgstr "Plug-ins"
+msgstr "Com tampa"
 
 #: pcbnew/pcb_track.cpp:2206
-#, fuzzy
 msgid "Not plugged"
-msgstr "Não encontrado"
+msgstr "Sem tampa"
 
 #: pcbnew/pcb_track.cpp:2211
 msgid "Capped"
-msgstr ""
+msgstr "Tampado"
 
 #: pcbnew/pcb_track.cpp:2212
-#, fuzzy
 msgid "Not capped"
-msgstr "Não conectado"
+msgstr "Sem tampar"
 
 #: pcbnew/pcb_track.cpp:2218
-#, fuzzy
 msgid "Not filled"
-msgstr "<Não definido>"
+msgstr "Não preenchido"
 
 #: pcbnew/pcb_track.cpp:2282
 msgid "Via Properties"
@@ -47120,33 +47042,28 @@ msgid "Back tenting"
 msgstr "Cobertura do verso"
 
 #: pcbnew/pcb_track.cpp:2301
-#, fuzzy
 msgid "Front covering"
-msgstr "Cobertura frontal"
+msgstr "Cobertura frente"
 
 #: pcbnew/pcb_track.cpp:2303
-#, fuzzy
 msgid "Back covering"
-msgstr "Cobertura do verso"
+msgstr "Cobertura verso"
 
 #: pcbnew/pcb_track.cpp:2305
-#, fuzzy
 msgid "Front plugging"
-msgstr "Cobertura frontal"
+msgstr "Tampão frente"
 
 #: pcbnew/pcb_track.cpp:2307
-#, fuzzy
 msgid "Back plugging"
-msgstr "Cobertura do verso"
+msgstr "Tampão verso"
 
 #: pcbnew/pcb_track.cpp:2309
 msgid "Capping"
-msgstr ""
+msgstr "Tamponamento"
 
 #: pcbnew/pcb_track.cpp:2311
-#, fuzzy
 msgid "Filling"
-msgstr "Preencha"
+msgstr "Preenchimento"
 
 #: pcbnew/pcbexpr_evaluator.cpp:562
 msgid "must be mm, in, or mil"
@@ -47863,42 +47780,36 @@ msgid "A wire_via refers to missing padstack '%s'."
 msgstr "Um wire_via refere-se ao empilhamento ausente da ilha '%s'."
 
 #: pcbnew/toolbars_footprint_editor.cpp:103 pcbnew/toolbars_pcb_editor.cpp:216
-#, fuzzy
 msgid "Dimension objects"
-msgstr "Dimensão do texto"
+msgstr "Dimensão dos objetos"
 
 #: pcbnew/toolbars_pcb_editor.cpp:123
-#, fuzzy
 msgid "Track width selector"
-msgstr "Correção da largura da trilha:"
+msgstr "Seletor da largura da trilha"
 
 #: pcbnew/toolbars_pcb_editor.cpp:124
 msgid "Control to select the track width"
-msgstr ""
+msgstr "Controle para selecionar a largura da trilha"
 
 #: pcbnew/toolbars_pcb_editor.cpp:125
-#, fuzzy
 msgid "Via diameter selector"
-msgstr "Resolução do diâmetro da via para:"
+msgstr "Seletor do diâmetro da via"
 
 #: pcbnew/toolbars_pcb_editor.cpp:126
 msgid "Control to select the via diameter"
-msgstr ""
+msgstr "Controle para selecionar o diâmetro da via"
 
 #: pcbnew/toolbars_pcb_editor.cpp:194
-#, fuzzy
 msgid "Track routing tools"
-msgstr "Cruzamento das trilhas"
+msgstr "Ferramentas de roteamento da trilha"
 
 #: pcbnew/toolbars_pcb_editor.cpp:197
-#, fuzzy
 msgid "Track tuning tools"
-msgstr "Ângulo da trilha"
+msgstr "Ferramenta de ajuste da trilha"
 
 #: pcbnew/toolbars_pcb_editor.cpp:225
-#, fuzzy
 msgid "PCB origins"
-msgstr "Origem da página"
+msgstr "Origem da PCI"
 
 #: pcbnew/toolbars_pcb_editor.cpp:374
 msgid ""
@@ -49547,18 +49458,16 @@ msgid "Show the footprint checker window"
 msgstr "Mostra a janela do verificador de footprint"
 
 #: pcbnew/tools/pcb_actions.cpp:805
-#, fuzzy
 msgid "Load footprint from current PCB"
-msgstr "Carregar footprint da placa atual"
+msgstr "Carregar o footprint da PCI atual"
 
 #: pcbnew/tools/pcb_actions.cpp:806
 msgid "Load footprint from current board"
 msgstr "Carregar footprint da placa atual"
 
 #: pcbnew/tools/pcb_actions.cpp:812
-#, fuzzy
 msgid "Insert footprint into PCB"
-msgstr "&Insere um footprint na PCI"
+msgstr "Inserir o footprint na PCI"
 
 #: pcbnew/tools/pcb_actions.cpp:813
 msgid "Insert footprint into current board"
@@ -49912,9 +49821,8 @@ msgid "Change via size to previous pre-defined size"
 msgstr "Alterna o tamanho da via para o tamanho predefinido anteriormente"
 
 #: pcbnew/tools/pcb_actions.cpp:1164
-#, fuzzy
 msgid "Automatically select track width"
-msgstr "Trilhas roteadas automaticamente"
+msgstr "Selecione automaticamente a largura da trilha"
 
 #: pcbnew/tools/pcb_actions.cpp:1165
 msgid ""
@@ -50201,9 +50109,8 @@ msgstr ""
 "contornos"
 
 #: pcbnew/tools/pcb_actions.cpp:1543
-#, fuzzy
 msgid "Automatic zoom"
-msgstr "Automático"
+msgstr "Aproximação automática"
 
 #: pcbnew/tools/pcb_actions.cpp:1544
 msgid "Automatic Zoom on footprint change"
@@ -52347,11 +52254,12 @@ msgstr "Removendo as ilhas isoladas com cobre..."
 #: pcbnew/zone_filler.cpp:889
 msgid "Prototype zone fill enabled. Disable setting and refill?"
 msgstr ""
+"Preenchimento da região do protótipo ativado. Desativar a configuração e o "
+"preenchimento?"
 
 #: pcbnew/zone_filler.cpp:891
-#, fuzzy
 msgid "Disable and refill"
-msgstr "Desativar antiserrilhamento"
+msgstr "Desativar e preencher"
 
 #: pcbnew/zone_filler.cpp:891 pcbnew/zone_filler.cpp:908
 msgid "Continue without Refill"
