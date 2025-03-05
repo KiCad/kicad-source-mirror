@@ -230,7 +230,7 @@ public:
                     dynamic_cast<const PCBEXPR_COMPONENT_CLASS_VALUE*>( b ) )
         {
             if( !m_item || !bValue->m_item )
-                return LIBEVAL::VALUE::EqualTo( aCtx, b );
+                return LIBEVAL::VALUE::NotEqualTo( aCtx, b );
 
             const COMPONENT_CLASS* aClass = m_item->GetComponentClass();
             const COMPONENT_CLASS* bClass = bValue->m_item->GetComponentClass();
