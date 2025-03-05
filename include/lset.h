@@ -279,7 +279,7 @@ public:
      * @param aCopperLayersCount = the number of copper layers. if 0 (in fact if < 4 )
      *  internal layers will be not flipped because the layer count is not known
      */
-    LSET& Flip( int aCopperLayersCount = 0 );
+    LSET& FlipStandardLayers( int aCopperLayersCount = 0 );
 
     /**
      * Return the number of layers between aStart and aEnd, inclusive.

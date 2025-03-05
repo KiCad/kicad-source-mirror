@@ -124,7 +124,7 @@ BOOST_AUTO_TEST_CASE(LSETManipulations)
     BOOST_CHECK_EQUAL(extractedLayer, UNDEFINED_LAYER);
 
     // Test Flip: should swap front and back layers
-    set.Flip( 4 );
+    set.FlipStandardLayers( 4 );
     BOOST_CHECK(set.Contains(B_Cu));
     BOOST_CHECK(set.Contains(In1_Cu)); // Internal layers remain unchanged
 
@@ -132,7 +132,7 @@ BOOST_AUTO_TEST_CASE(LSETManipulations)
     set = {F_Cu};
     extractedLayer = set.ExtractLayer();
     BOOST_CHECK_EQUAL(extractedLayer, F_Cu);
-    set.Flip();
+    set.FlipStandardLayers();
     extractedLayer = set.ExtractLayer();
     BOOST_CHECK_EQUAL(extractedLayer, B_Cu);
 }

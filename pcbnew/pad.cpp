@@ -998,8 +998,12 @@ void PAD::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
     m_padStack.FlipLayers( copperLayerCount );
 
     // Flip pads layers after padstack geometry
-    LSET layerSet = m_padStack.LayerSet();
-    SetLayerSet( layerSet.Flip( copperLayerCount ) );
+    LSET flipped;
+
+    for( PCB_LAYER_ID layer : m_padStack.LayerSet() )
+        flipped.set( GetBoard()->FlipLayer( layer ) );
+
+    SetLayerSet( flipped );
 
     // Flip the basic shapes, in custom pads
     FlipPrimitives( aFlipDirection );

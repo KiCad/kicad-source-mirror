@@ -976,7 +976,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             else if( klayer == B_Cu )
             {
                 pad->SetLayer( B_Cu );
-                pad->SetLayerSet( PAD::SMDMask().Flip() );
+                pad->SetLayerSet( PAD::SMDMask().FlipStandardLayers() );
                 pad->SetAttribute( PAD_ATTRIB::SMD );
             }
             else if( elayer == wxS( "11" ) )

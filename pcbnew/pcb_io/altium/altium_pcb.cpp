@@ -3528,7 +3528,7 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
 
     case ALTIUM_LAYER::BOTTOM_LAYER:
         pad->SetLayer( B_Cu );
-        pad->SetLayerSet( PAD::SMDMask().Flip() );
+        pad->SetLayerSet( PAD::SMDMask().FlipStandardLayers() );
         break;
 
     case ALTIUM_LAYER::MULTI_LAYER:
