@@ -878,7 +878,7 @@ int ERC_TESTER::TestNoConnectPins()
                         addOther( pin->GetPosition(), pin );
                 }
             }
-            else if( item->IsConnectable() )
+            else if( item->IsConnectable() && item->Type() != SCH_NO_CONNECT_T )
             {
                 for( const VECTOR2I& pt : item->GetConnectionPoints() )
                     addOther( pt, item );
