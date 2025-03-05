@@ -29,6 +29,7 @@
 
 #include <algorithm>
 #include <cstdio> // snprintf
+#include <stack>
 
 #include <wx/filename.h>
 #include <wx/mstream.h>
@@ -658,13 +659,19 @@ void PDF_PLOTTER::closePdfStream()
 }
 
 
-void PDF_PLOTTER::StartPage( const wxString& aPageNumber, const wxString& aPageName )
+void PDF_PLOTTER::StartPage( const wxString& aPageNumber, const wxString& aPageName,
+                             const wxString& aParentPageNumber, const wxString& aParentPageName )
 {
     wxASSERT( m_outputFile );
     wxASSERT( !m_workFile );
 
     m_pageNumbers.push_back( aPageNumber );
-    m_pageName = aPageName;
+    m_pageName = aPageName.IsEmpty()
+                    ? wxString::Format( _( "Page %s" ), aPageNumber )
+                    : wxString::Format( _( "%s (Page %s)" ), aPageName, aPageNumber );
+    m_parentPageName = aParentPageName.IsEmpty()
+                    ? wxString::Format( _( "Page %s" ), aParentPageNumber )
+                    : wxString::Format( _( "%s (Page %s)" ), aParentPageName, aParentPageNumber );
 
     // Compute the paper size in IUs
     m_paperSize = m_pageInfo.GetSizeMils();
@@ -889,20 +896,34 @@ void PDF_PLOTTER::ClosePage()
     // Mark the page stream as idle
     m_pageStreamHandle = 0;
 
-    wxString pageOutlineName = wxEmptyString;
+    int                        actionHandle = emitGoToAction( pageHandle );
+    PDF_PLOTTER::OUTLINE_NODE* parent_node = m_outlineRoot.get();
 
-    if( m_pageName.IsEmpty() )
+    if( !m_parentPageName.IsEmpty() )
     {
-        pageOutlineName = wxString::Format( _( "Page %s" ), m_pageNumbers.back() );
-    }
-    else
-    {
-        pageOutlineName = wxString::Format( _( "%s (Page %s)" ), m_pageName, m_pageNumbers.back() );
+        // Search for the parent node iteratively through the entire tree
+        std::stack<OUTLINE_NODE*> nodes;
+        nodes.push( m_outlineRoot.get() );
+
+        while( !nodes.empty() )
+        {
+            OUTLINE_NODE* node = nodes.top();
+            nodes.pop();
+
+            // Check if this node matches
+            if( node->title == m_parentPageName )
+            {
+                parent_node = node;
+                break;
+            }
+
+            // Add all children to the stack
+            for( OUTLINE_NODE* child : node->children )
+                nodes.push( child );
+        }
     }
 
-    int           actionHandle = emitGoToAction( pageHandle );
-    OUTLINE_NODE* pageOutlineNode =
-            addOutlineNode( m_outlineRoot.get(), actionHandle, pageOutlineName );
+    OUTLINE_NODE* pageOutlineNode = addOutlineNode( parent_node, actionHandle, m_pageName );
 
     // let's reorg the symbol bookmarks under a page handle
     // let's reorg the symbol bookmarks under a page handle

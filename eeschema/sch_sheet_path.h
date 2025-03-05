@@ -617,6 +617,13 @@ public:
      */
     void SortByPageNumbers( bool aUpdateVirtualPageNums = true );
 
+    /**
+     * This works like #SortByPageNumbers, but it sorts the sheets first by their hierarchical
+     * depth and then by their page numbers.  This ensures that printouts follow the
+     * hierarchical structure of the schematic.
+     */
+    void SortByHierarchicalPageNumbers( bool aUpdateVirtualPageNums = true );
+
     bool NameExists( const wxString& aSheetName ) const;
 
     bool PageNumberExists( const wxString& aPageNumber ) const;

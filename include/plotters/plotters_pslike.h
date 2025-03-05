@@ -289,7 +289,9 @@ public:
      * Start a new page in the PDF document.
      */
     virtual void StartPage( const wxString& aPageNumber,
-                            const wxString& aPageName = wxEmptyString );
+                            const wxString& aPageName = wxEmptyString,
+                            const wxString& aParentPageNumber = wxEmptyString,
+                            const wxString& aParentPageName = wxEmptyString );
 
     /**
      * Close the current page in the PDF document (and emit its compressed stream).
@@ -498,8 +500,11 @@ protected:
     std::vector<int> m_pageHandles; ///< Handles to the page objects.
     int m_pageStreamHandle;         ///< Handle of the page content object.
     int m_streamLengthHandle;       ///< Handle to the deferred stream length.
+
     wxString m_workFilename;
     wxString m_pageName;
+    wxString m_parentPageName;
+
     FILE* m_workFile;               ///< Temporary file to construct the stream before zipping.
     std::vector<long> m_xrefTable;  ///< The PDF xref offset table.
 

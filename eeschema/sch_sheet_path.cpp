@@ -816,6 +816,44 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet, bool aCheckIntegrity )
 }
 
 
+void SCH_SHEET_LIST::SortByHierarchicalPageNumbers( bool aUpdateVirtualPageNums )
+{
+    for( const SCH_SHEET_PATH& path : *this )
+        path.CachePageNumber();
+
+    std::sort( begin(), end(),
+        []( const SCH_SHEET_PATH& a, const SCH_SHEET_PATH& b ) -> bool
+        {
+            if( a.size() != b.size() )
+                return a.size() < b.size();
+
+            int retval = SCH_SHEET::ComparePageNum( a.GetCachedPageNumber(),
+                                                    b.GetCachedPageNumber() );
+
+            if( retval < 0 )
+                return true;
+            else if( retval > 0 )
+                return false;
+
+            if( a.GetVirtualPageNumber() < b.GetVirtualPageNumber() )
+                return true;
+            else if( a.GetVirtualPageNumber() > b.GetVirtualPageNumber() )
+                return false;
+
+            // Enforce strict ordering.  If the page numbers are the same, use UUIDs
+            return a.GetCurrentHash() < b.GetCurrentHash();
+        } );
+
+    if( aUpdateVirtualPageNums )
+    {
+        int virtualPageNum = 1;
+
+        for( SCH_SHEET_PATH& sheet : *this )
+            sheet.SetVirtualPageNumber( virtualPageNum++ );
+    }
+}
+
+
 void SCH_SHEET_LIST::SortByPageNumbers( bool aUpdateVirtualPageNums )
 {
     for( const SCH_SHEET_PATH& path : *this )
