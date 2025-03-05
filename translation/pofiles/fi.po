@@ -20,16 +20,15 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 06:36+0300\n"
-"PO-Revision-Date: 2025-02-19 03:13+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"PO-Revision-Date: 2025-03-05 19:43+0000\n"
+"Last-Translator: Kliment <kliment@0xfb.com>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v9/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.1-dev\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -3752,9 +3751,8 @@ msgstr "Anna ohjelmistoarkiston URL-osoite"
 
 #: common/dialogs/git/dialog_git_repository.cpp:453
 #: common/dialogs/git/dialog_git_repository_base.cpp:108
-#, fuzzy
 msgid "SSH key password:"
-msgstr "SSH avaimen salasana"
+msgstr "SSH-avaimen salasana:"
 
 #: common/dialogs/git/dialog_git_repository.cpp:459
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
@@ -3762,14 +3760,12 @@ msgid "Password:"
 msgstr "Salasana:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:38
-#, fuzzy
 msgid "Location:"
-msgstr "Sijainti"
+msgstr "Sijainti:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:45
-#, fuzzy
 msgid "Connection type:"
-msgstr "Yhteystyyppi"
+msgstr "Yhteystyyppi:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:52
 msgid "HTTPS"
@@ -3781,9 +3777,8 @@ msgid "Local"
 msgstr "Paikallinen"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:83
-#, fuzzy
 msgid "SSH private key:     "
-msgstr "Yksityinen SSH-avain"
+msgstr "Yksityinen SSH-avain:     "
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:90
 msgid "Select SSH private key file"
@@ -3794,7 +3789,6 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:101
-#, fuzzy
 msgid "User name:"
 msgstr "Käyttäjänimi:"
 
@@ -6898,14 +6892,14 @@ msgid "Could not copy file: %s to %s"
 msgstr "Tiedostoa %s ei voitu kopioida kohteeseen %s"
 
 #: common/gestfich.cpp:477
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy directory: %s to %s"
-msgstr "Tiedostoa %s ei voitu kopioida kohteeseen %s"
+msgstr "Hakemistoa %s ei voitu kopioida kohteeseen %s"
 
 #: common/gestfich.cpp:529
-#, fuzzy, c-format
+#, c-format
 msgid "Source directory does not exist: %s"
-msgstr "Hakemistoa '%s' ei ole olemassa"
+msgstr "Lähdehakemistoa %s ei ole olemassa"
 
 #: common/gestfich.cpp:584
 #, c-format
@@ -7472,7 +7466,6 @@ msgid "Export Drill Data Job Settings"
 msgstr "Vie poratietojen työasetukset"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
-#, fuzzy
 msgid "PCB: Export Drill Data"
 msgstr "PCB: Poratietojen vienti"
 
@@ -7520,29 +7513,24 @@ msgid "Export IPC-2581"
 msgstr "Vie IPC-2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
-#, fuzzy
 msgid "Export IPC-2581 Job Settings"
 msgstr "Vie IPC-2581 työasetukset"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
-#, fuzzy
 msgid "PCB: Export IPC-2581"
-msgstr "PCB: Vie IPC2581"
+msgstr "PCB: Vie IPC-2581"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:33
-#, fuzzy
 msgid "Export IPC-D-356"
-msgstr "Vie IPC-2581"
+msgstr "Vie IPC-D-356"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:39
-#, fuzzy
 msgid "Export IPC-D-356 Job Settings"
-msgstr "Vie IPC-2581 työasetukset"
+msgstr "Vie IPC-D-356 työasetukset"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:52
-#, fuzzy
 msgid "PCB: Export IPC-D-356"
-msgstr "PCB: Vie IPC2581"
+msgstr "PCB: Vie IPC-D-356"
 
 #: common/jobs/job_export_pcb_odb.cpp:57
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
@@ -16643,9 +16631,9 @@ msgstr "BOM muodon esiasetusta '%s' ei löydy"
 
 #: eeschema/eeschema_jobs_handler.cpp:760
 #: eeschema/eeschema_jobs_handler.cpp:833
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote bill of materials to '%s'."
-msgstr "Luo materiaaliluettelo"
+msgstr "Materiaaliluettelo tallennettu kohteeseen '%s'."
 
 #: eeschema/eeschema_jobs_handler.cpp:890
 #, c-format
@@ -16839,14 +16827,14 @@ msgid "The current configuration does not include the symbol library '%s'"
 msgstr "Nykyinen kokoonpano ei sisällä symbolikirjastoa %s"
 
 #: eeschema/erc/erc.cpp:1414
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration"
-msgstr "Symbolikirjasto '%s' ei ole käytössä nykyisessä kokoonpanossa."
+msgstr "Symbolikirjasto '%s' ei ole käytössä nykyisessä kokoonpanossa"
 
 #: eeschema/erc/erc.cpp:1429
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' was not found at '%s'."
-msgstr "Jalanjälkikirjastoa '%s' ei löydy."
+msgstr "Symbolikirjastoa '%s' ei löydy kohdasta '%s'."
 
 #: eeschema/erc/erc.cpp:1449
 #, c-format
@@ -26591,9 +26579,9 @@ msgstr "Kopioi tiedostot -työasetukset"
 
 #: kicad/dialogs/dialog_destination.cpp:55
 #: kicad/dialogs/dialog_destination_base.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "%s Destination"
-msgstr "Kohde:"
+msgstr "%s Kohde"
 
 #: kicad/dialogs/dialog_destination.cpp:86
 msgid "Select output directory"
@@ -26714,9 +26702,9 @@ msgid "Update Available"
 msgstr "Päivitys saatavilla"
 
 #: kicad/dialogs/panel_jobset.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Destination: %s"
-msgstr "Kohde:"
+msgstr "Kohde: %s"
 
 #: kicad/dialogs/panel_jobset.cpp:68
 msgid "No."
@@ -26747,9 +26735,8 @@ msgid "Running jobs"
 msgstr "Käynnissä olevat työt"
 
 #: kicad/dialogs/panel_jobset.cpp:295
-#, fuzzy
 msgid "Edit Destination Options..."
-msgstr "Suorakulmion asetukset"
+msgstr "Muokkaa kohdeasetuksia..."
 
 #: kicad/dialogs/panel_jobset.cpp:296
 #, fuzzy
@@ -26790,14 +26777,12 @@ msgid "Select job type:"
 msgstr "Valitse työtyyppi:"
 
 #: kicad/dialogs/panel_jobset.cpp:783
-#, fuzzy
 msgid "Destination Types"
-msgstr "Kohde:"
+msgstr "Kohdetyypit"
 
 #: kicad/dialogs/panel_jobset.cpp:792
-#, fuzzy
 msgid "Add New Destination"
-msgstr "Kohde:"
+msgstr "Lisää uusi kohde"
 
 #: kicad/dialogs/panel_jobset.cpp:793
 #, fuzzy
@@ -26814,9 +26799,8 @@ msgid "Jobs"
 msgstr "Työt"
 
 #: kicad/dialogs/panel_jobset_base.cpp:83
-#, fuzzy
 msgid "Destinations"
-msgstr "Kohde:"
+msgstr "Kohteet"
 
 #: kicad/dialogs/panel_jobset_base.cpp:116
 msgid "Save Jobset"
@@ -37947,9 +37931,8 @@ msgid "Apply Anyway"
 msgstr "Lisää joka tapauksessa"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Cancel Changes"
-msgstr "Perutaanko muutokset?"
+msgstr "Peruuta muutokset"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:571
 #, c-format
@@ -41382,9 +41365,9 @@ msgid "Checking board footprints against library..."
 msgstr "Tarkistetaan piirilevyn jalanjälkiä kirjastosta..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:890
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' was not found at '%s'."
-msgstr "Jalanjälkikirjastoa '%s' ei löydy."
+msgstr "Jalanjälkikirjastoa '%s' ei löydy kohteesta '%s'."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:940
 #, c-format
@@ -41668,16 +41651,17 @@ msgid "Generate IPC-D-356 netlist file"
 msgstr "Luo IPC-D-356 netlist-tiedosto"
 
 #: pcbnew/exporters/export_d356.cpp:404
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "IPC-D-356 netlist file created:\n"
 "'%s'."
-msgstr "IPC-D-356 Netlist-tiedosto ..."
+msgstr ""
+"Luotiin IPC-D-356 Netlist-tiedosto:\n"
+"'%s'."
 
 #: pcbnew/exporters/export_d356.cpp:405
-#, fuzzy
 msgid "IPC-D-356 Netlist File"
-msgstr "IPC-D-356 Netlist-tiedosto ..."
+msgstr "IPC-D-356 Netlist-tiedosto"
 
 #: pcbnew/exporters/export_footprint_associations.cpp:73
 msgid "Save Footprint Association File"
@@ -45713,10 +45697,10 @@ msgid "No layers selected for plotting."
 msgstr "Kerroksia ei ole valittu."
 
 #: pcbnew/pcb_plotter.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "Color theme '%s' not found, will use theme from PCB Editor settings.\n"
 msgstr ""
-"Käytettävä väriteema (Asettaa teeman piirilevyeditorin vakioasetuksiin)"
+"Väriteemaa '%s' ei löydy, käytetään teema piirilevyeditorin asetuksista.\n"
 
 #: pcbnew/pcb_reference_image.cpp:343
 msgid "Associated Layer"
@@ -45998,17 +45982,17 @@ msgstr "GenCAD-tiedoston luominen onnistui\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:1443 pcbnew/pcbnew_jobs_handler.cpp:1516
 #, fuzzy, c-format
 msgid "Wrote front position data to '%s'.\n"
-msgstr "Vie sijaintitiedot"
+msgstr "Etupuolen sijaintitiedot kirjoitettiin kohteeseen '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1461 pcbnew/pcbnew_jobs_handler.cpp:1540
 #, fuzzy, c-format
 msgid "Wrote back position data to '%s'.\n"
-msgstr "Kirjoitti BOM-tulosteen '%s'"
+msgstr "Kääntöpuolen sijaintitiedot kirjoitettiin kohteeseen '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1490
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote position data to '%s'.\n"
-msgstr "Vie sijaintitiedot"
+msgstr "Sijaintitiedot kirjoitettiin kohteeseen '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1588
 msgid "Footprint library path does not exist or is not accessible\n"
@@ -46075,9 +46059,8 @@ msgid "Successfully created IPC-D-356 file\n"
 msgstr "GenCAD-tiedoston luominen onnistui\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2104
-#, fuzzy
 msgid "Failed to create IPC-D-356 file\n"
-msgstr "Tiedoston luominen epäonnistui."
+msgstr "IPC-D-356-tiedoston luominen epäonnistui\n"
 
 #: pcbnew/pcbnew_printout.cpp:124
 msgid "Multiple Layers"
