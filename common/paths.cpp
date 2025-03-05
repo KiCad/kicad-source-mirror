@@ -385,7 +385,7 @@ wxString PATHS::GetStockPlugins3DPath()
 
     // AppImages have a different path to the plugins, otherwise we end up with host sytem
     // plugins being loaded.
-    if( wxGetEnv( wxT( "APPIMAGE" ), nullptr ) && wxGetEnv( wxT( "APPDIR" ), &envPath ) )
+    if( wxGetEnv( wxT( "APPDIR" ), &envPath ) )
     {
         fn.AssignDir( envPath );
         fn.AppendDir( wxT( "usr" ) );
