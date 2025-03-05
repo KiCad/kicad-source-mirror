@@ -64,6 +64,8 @@
 #include "kiface_base.h"
 #include "pcbnew_settings.h"
 
+#include <pcb_group.h>
+
 using KIGFX::PCB_PAINTER;
 using KIGFX::PCB_RENDER_SETTINGS;
 
@@ -2144,6 +2146,12 @@ std::vector<PCB_SHAPE*> PAD::Recombine( bool aIsDryRun, int maxError )
 
         if( !aIsDryRun )
         {
+            // If the editor was inside a group when the pad was exploded, the added exploded shapes
+            // will be part of the group.  Remove them here before duplicating; we don't want the
+            // primitives to wind up in a group.
+            if( PCB_GROUP* group = fpShape->GetParentGroup(); group )
+                group->RemoveItem( fpShape );
+
             PCB_SHAPE* primitive = static_cast<PCB_SHAPE*>( fpShape->Duplicate() );
 
             primitive->SetParent( nullptr );
