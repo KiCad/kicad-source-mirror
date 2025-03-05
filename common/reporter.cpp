@@ -138,7 +138,21 @@ REPORTER& CLI_REPORTER::Report( const wxString& aMsg, SEVERITY aSeverity )
     else
         wxFprintf( target, aMsg + wxS( "\n" ) );
 
+    m_hasMessageMap[aSeverity] = true;
+
     return *this;
+}
+
+
+bool CLI_REPORTER::HasMessageOfSeverity( int aSeverityMask ) const
+{
+    for( const auto& [severity, flag] : m_hasMessageMap )
+    {
+        if( ( aSeverityMask & severity ) > 0 && flag )
+            return true;
+    }
+
+    return false;
 }
 
 
