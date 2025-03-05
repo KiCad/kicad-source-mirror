@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 06:36+0300\n"
-"PO-Revision-Date: 2025-02-27 07:25+0000\n"
+"PO-Revision-Date: 2025-03-06 03:38+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -124,7 +124,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.2-dev\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -3814,9 +3814,8 @@ msgid "Enter the password for the SSH key"
 msgstr "Inserire la password per la chiave SSH"
 
 #: common/dialogs/git/dialog_git_repository.cpp:337
-#, fuzzy
 msgid "Test Connection"
-msgstr "Test connessione"
+msgstr "Prova connessione"
 
 #: common/dialogs/git/dialog_git_repository.cpp:342
 msgid "Connection successful"
@@ -3860,9 +3859,8 @@ msgstr "Inserire un url per il repository"
 
 #: common/dialogs/git/dialog_git_repository.cpp:453
 #: common/dialogs/git/dialog_git_repository_base.cpp:108
-#, fuzzy
 msgid "SSH key password:"
-msgstr "Pasword chiave SSH"
+msgstr "Password chiave SSH:"
 
 #: common/dialogs/git/dialog_git_repository.cpp:459
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
@@ -3870,14 +3868,12 @@ msgid "Password:"
 msgstr "Password:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:38
-#, fuzzy
 msgid "Location:"
-msgstr "Posizione"
+msgstr "Posizione:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:45
-#, fuzzy
 msgid "Connection type:"
-msgstr "Tipo connessione"
+msgstr "Tipo connessione:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:52
 msgid "HTTPS"
@@ -3889,9 +3885,8 @@ msgid "Local"
 msgstr "Locale"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:83
-#, fuzzy
 msgid "SSH private key:     "
-msgstr "Chiave privata SSH"
+msgstr "Chiave privata SSH:     "
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:90
 msgid "Select SSH private key file"
@@ -3902,9 +3897,8 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:101
-#, fuzzy
 msgid "User name:"
-msgstr "Nomeutente:"
+msgstr "Nome utente:"
 
 #: common/dialogs/git/dialog_git_repository_base.h:77
 msgid "Git Repository"
@@ -21952,7 +21946,7 @@ msgstr ""
 "discendente."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:997
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
 msgstr "Il simbolo '%s' esiste già nella libreria '%s'. Sovrascriverlo?"
@@ -21987,9 +21981,9 @@ msgid "Export Symbol"
 msgstr "Esporta simbolo"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1131
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is read-only."
-msgstr "La libreria \"%s\" è in sola lettura."
+msgstr "La libreria '%s' è in sola lettura."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1171
 #, c-format
@@ -22564,9 +22558,8 @@ msgid "Import a symbol to the current library"
 msgstr "Importa un simbolo nella libreria corrente"
 
 #: eeschema/tools/ee_actions.cpp:274
-#, fuzzy
 msgid "Export..."
-msgstr "&Esporta..."
+msgstr "Esporta..."
 
 #: eeschema/tools/ee_actions.cpp:275
 msgid "Export a symbol to a new library file"
