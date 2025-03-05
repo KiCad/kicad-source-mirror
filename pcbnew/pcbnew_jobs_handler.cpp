@@ -61,7 +61,6 @@
 #include <pad.h>
 #include <pcb_marker.h>
 #include <project/project_file.h>
-#include <exporters/export_svg.h>
 #include <exporters/export_gencad_writer.h>
 #include <exporters/export_d356.h>
 #include <kiface_ids.h>
@@ -1668,9 +1667,12 @@ int PCBNEW_JOBS_HANDLER::JobExportFpSvg( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
 
-    if( !svgJob->m_outputDirectory.IsEmpty() && !wxDir::Exists( svgJob->m_outputDirectory ) )
+    wxString outPath = svgJob->GetFullOutputPath( nullptr );
+
+    if( !PATHS::EnsurePathExists( outPath, true ) )
     {
-        wxFileName::Mkdir( svgJob->m_outputDirectory );
+        m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
     int  exitCode = CLI::EXIT_CODES::OK;
@@ -1733,7 +1735,7 @@ int PCBNEW_JOBS_HANDLER::doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPR
     brd->Add( fp, ADD_MODE::INSERT, true );
 
     wxFileName outputFile;
-    outputFile.SetPath( aSvgJob->m_outputDirectory );
+    outputFile.SetPath( aSvgJob->GetFullOutputPath(nullptr) );
     outputFile.SetName( aFootprint->GetFPID().GetLibItemName().wx_str() );
     outputFile.SetExt( FILEEXT::SVGFileExtension );
 
@@ -1742,22 +1744,35 @@ int PCBNEW_JOBS_HANDLER::doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPR
                                           outputFile.GetFullPath() ),
                         RPT_SEVERITY_ACTION );
 
+    PCB_PLOT_PARAMS plotOpts;
+    PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aSvgJob, *m_reporter );
 
-    PCB_PLOT_SVG_OPTIONS svgPlotOptions;
-    svgPlotOptions.m_blackAndWhite = aSvgJob->m_blackAndWhite;
-    svgPlotOptions.m_colorTheme = aSvgJob->m_colorTheme;
-    svgPlotOptions.m_outputFile = outputFile.GetFullPath();
-    svgPlotOptions.m_mirror = false;
-    svgPlotOptions.m_pageSizeMode = 2; // board bounding box
-    svgPlotOptions.m_printMaskLayer = aSvgJob->m_printMaskLayer;
-    svgPlotOptions.m_sketchPadsOnFabLayers = aSvgJob->m_sketchPadsOnFabLayers;
-    svgPlotOptions.m_hideDNPFPsOnFabLayers = aSvgJob->m_hideDNPFPsOnFabLayers;
-    svgPlotOptions.m_sketchDNPFPsOnFabLayers = aSvgJob->m_sketchDNPFPsOnFabLayers;
-    svgPlotOptions.m_crossoutDNPFPsOnFabLayers = aSvgJob->m_crossoutDNPFPsOnFabLayers;
-    svgPlotOptions.m_plotFrame = false;
+    // always fixed for the svg plot
+    plotOpts.SetPlotFrameRef( false );
+    plotOpts.SetSvgFitPageToBoard( true );
+    plotOpts.SetMirror( false );
+    plotOpts.SetSkipPlotNPTH_Pads( false );
 
-    if( !EXPORT_SVG::Plot( brd.get(), svgPlotOptions ) )
+    if( plotOpts.GetSketchPadsOnFabLayers() )
+    {
+        plotOpts.SetPlotPadNumbers( true );
+    }
+
+    PCB_PLOTTER plotter( brd.get(), m_reporter, plotOpts );
+
+    LOCALE_IO dummy;
+
+    if( !plotter.Plot( outputFile.GetFullPath(),
+                        aSvgJob->m_plotLayerSequence,
+                       aSvgJob->m_plotOnAllLayersSequence,
+                       false,
+                       true,
+                        wxEmptyString, wxEmptyString,
+                       wxEmptyString ) )
+    {
         m_reporter->Report( _( "Error creating svg file" ) + wxS( "\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
 
     return CLI::EXIT_CODES::OK;
 }

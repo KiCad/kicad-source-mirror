@@ -81,7 +81,7 @@ int CLI::FP_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
     std::unique_ptr<JOB_FP_EXPORT_SVG> svgJob = std::make_unique<JOB_FP_EXPORT_SVG>();
 
     svgJob->m_libraryPath = m_argInput;
-    svgJob->m_outputDirectory = m_argOutput;
+    svgJob->SetConfiguredOutputPath( m_argOutput );
     svgJob->m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );
     svgJob->m_sketchPadsOnFabLayers = m_argParser.get<bool>( ARG_SKETCH_PADS_ON_FAB_LAYERS );
     svgJob->m_hideDNPFPsOnFabLayers = m_argParser.get<bool>( ARG_HIDE_DNP_FPS_ON_FAB_LAYERS );
@@ -99,9 +99,9 @@ int CLI::FP_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
     svgJob->m_colorTheme = From_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
 
     if( !m_selectedLayers.empty() )
-        svgJob->m_printMaskLayer = m_selectedLayers;
+        svgJob->m_plotLayerSequence = m_selectedLayers;
     else
-        svgJob->m_printMaskLayer = LSET::AllLayersMask().SeqStackupForPlotting();
+        svgJob->m_plotLayerSequence = LSET::AllLayersMask().SeqStackupForPlotting();
 
     int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, svgJob.get() );
 

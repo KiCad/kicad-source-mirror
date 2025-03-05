@@ -25,27 +25,16 @@
 #include <layer_ids.h>
 #include <lseq.h>
 #include <wx/string.h>
+#include <jobs/job_export_pcb_plot.h>
 #include "job.h"
 
-class KICOMMON_API JOB_FP_EXPORT_SVG : public JOB
+class KICOMMON_API JOB_FP_EXPORT_SVG : public JOB_EXPORT_PCB_PLOT
 {
 public:
     JOB_FP_EXPORT_SVG();
 
     wxString m_libraryPath;
     wxString m_footprint;
-
-    wxString m_outputDirectory;
-
-    wxString m_colorTheme;
-
-    bool m_blackAndWhite;
-    bool m_sketchPadsOnFabLayers;
-    bool m_hideDNPFPsOnFabLayers;
-    bool m_sketchDNPFPsOnFabLayers;
-    bool m_crossoutDNPFPsOnFabLayers;
-
-    LSEQ m_printMaskLayer;
 };
 
 #endif
