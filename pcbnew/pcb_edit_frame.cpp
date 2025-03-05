@@ -326,26 +326,18 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_appearancePanel, EDA_PANE().Name( wxS( "LayersManager" ) )
                       .Right().Layer( 4 )
                       .Caption( _( "Appearance" ) ).PaneBorder( false )
-                      .MinSize( FromDIP( 180 ), -1 )
-                      .BestSize( FromDIP( 180 ), -1 )
-                      .FloatingSize( FromDIP( 180 ), -1 )
+                      .MinSize( m_appearancePanel->GetMinSize().x, -1 )
+                      .BestSize( m_appearancePanel->GetBestSize().x, -1 )
+                      .FloatingSize( m_appearancePanel->GetBestSize() )
                       .CloseButton( false ) );
 
     m_auimgr.AddPane( m_selectionFilterPanel, EDA_PANE().Name( wxS( "SelectionFilter" ) )
                       .Right().Layer( 4 ).Position( 2 )
                       .Caption( _( "Selection Filter" ) ).PaneBorder( false )
-                      .MinSize( FromDIP( 180 ), -1 )
-                      .BestSize( FromDIP( 180 ), -1 )
-                      .FloatingSize( FromDIP( 180 ), -1 )
+                      .MinSize( m_selectionFilterPanel->GetMinSize().x, m_selectionFilterPanel->GetMinSize().y  )
+                      .BestSize( m_selectionFilterPanel->GetBestSize().x, m_selectionFilterPanel->GetMinSize().y )
+                      .FloatingSize( m_selectionFilterPanel->GetBestSize() )
                       .CloseButton( false ) );
-
-    m_auimgr.AddPane( m_propertiesPanel, EDA_PANE().Name( PropertiesPaneName() )
-                      .Left().Layer( 5 )
-                      .Caption( _( "Properties" ) ).PaneBorder( false )
-                      .MinSize( FromDIP( wxSize( 240, 60 ) ) )
-                      .BestSize( FromDIP( wxSize( 300, 200 ) ) )
-                      .FloatingSize( wxSize( 300, 200 ) )
-                      .CloseButton( true ) );
 
     // Center
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( wxS( "DrawFrame" ) )
