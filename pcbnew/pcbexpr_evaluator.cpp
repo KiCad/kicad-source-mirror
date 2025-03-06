@@ -344,6 +344,20 @@ LIBEVAL::VALUE* PCBEXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 
             return new LIBEVAL::VALUE( static_cast<double>( item->Get<int>( it->second ) ) );
         }
+        else if( m_type == LIBEVAL::VT_NUMERIC_DOUBLE )
+        {
+            if( m_isOptional )
+            {
+                auto val = item->Get<std::optional<double>>( it->second );
+
+                if( val.has_value() )
+                    return new LIBEVAL::VALUE( val.value() );
+
+                return LIBEVAL::VALUE::MakeNullValue();
+            }
+
+            return new LIBEVAL::VALUE( item->Get<double>( it->second ) );
+        }
         else
         {
             wxString str;
@@ -428,17 +442,6 @@ LIBEVAL::VALUE* PCBEXPR_TYPE_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 }
 
 
-LIBEVAL::VALUE* PCBORIENTATION_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
-{
-    BOARD_ITEM* item = GetObject( aCtx );
-
-    if( !item || item->Type() != PCB_FOOTPRINT_T )
-        return new LIBEVAL::VALUE();
-
-    return new LIBEVAL::VALUE( static_cast<FOOTPRINT*>( item )->GetOrientationDegrees() );
-}
-
-
 LIBEVAL::FUNC_CALL_REF PCBEXPR_UCODE::CreateFuncCall( const wxString& aName )
 {
     PCBEXPR_BUILTIN_FUNCTIONS& registry = PCBEXPR_BUILTIN_FUNCTIONS::Instance();
@@ -498,15 +501,6 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCBEXPR_UCODE::CreateVarRef( const wxString& a
         else
             return nullptr;
     }
-    else if( aField.CmpNoCase( wxT( "Orientation" ) ) == 0 )
-    {
-        if( aVar == wxT( "A" ) )
-            return std::make_unique<PCBORIENTATION_REF>( 0 );
-        else if( aVar == wxT( "B" ) )
-            return std::make_unique<PCBORIENTATION_REF>( 1 );
-        else
-            return nullptr;
-    }
 
     if( aVar == wxT( "A" ) || aVar == wxT( "AB" ) )
         vref = std::make_unique<PCBEXPR_VAR_REF>( 0 );
@@ -542,6 +536,15 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCBEXPR_UCODE::CreateVarRef( const wxString& a
                     vref->SetType( LIBEVAL::VT_NUMERIC );
                     vref->SetIsOptional();
                 }
+                else if( prop->TypeHash() == TYPE_HASH( double ) )
+                {
+                    vref->SetType( LIBEVAL::VT_NUMERIC_DOUBLE );
+                }
+                else if( prop->TypeHash() == TYPE_HASH( std::optional<double> ) )
+                {
+                    vref->SetType( LIBEVAL::VT_NUMERIC_DOUBLE );
+                    vref->SetIsOptional();
+                }
                 else if( prop->TypeHash() == TYPE_HASH( bool ) )
                 {
                     vref->SetType( LIBEVAL::VT_NUMERIC );
@@ -550,7 +553,6 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCBEXPR_UCODE::CreateVarRef( const wxString& a
                 {
                     vref->SetType( LIBEVAL::VT_STRING );
                 }
-
                 else if ( prop->HasChoices() )
                 {   // it's an enum, we treat it as string
                     vref->SetType( LIBEVAL::VT_STRING );
@@ -590,7 +592,8 @@ BOARD* PCBEXPR_CONTEXT::GetBoard() const
 
 const std::vector<wxString>& PCBEXPR_UNIT_RESOLVER::GetSupportedUnits() const
 {
-    static const std::vector<wxString> pcbUnits = { wxT( "mil" ), wxT( "mm" ), wxT( "in" ), wxT( "deg" ) };
+    static const std::vector<wxString> pcbUnits = { wxT( "mil" ), wxT( "mm" ), wxT( "in" ),
+                                                    wxT( "deg" ) };
 
     return pcbUnits;
 }
