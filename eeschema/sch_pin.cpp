@@ -1387,13 +1387,19 @@ bool SCH_PIN::HasConnectivityChanges( const SCH_ITEM* aItem,
 }
 
 
-bool SCH_PIN::ConnectionPropagatesTo( const EDA_ITEM* aItem ) const
+bool SCH_PIN::ConnectionPropagatesTo( const SCH_SHEET_PATH& aSheet, const SCH_ITEM* aItem ) const
 {
     if( !m_libPin )
         return false;
 
-    // Reciprocal checking is done in CONNECTION_GRAPH anyway
-    return m_libPin->GetType() != ELECTRICAL_PINTYPE::PT_NC;
+    if( m_libPin->GetType() == ELECTRICAL_PINTYPE::PT_NC )
+    {
+        // A no-connect can be connected to a single pin.  It is not allowed to connect
+        // multiple pins together.
+        return aItem->Connection( &aSheet )->Members().empty();
+    }
+
+    return true;
 }
 
 

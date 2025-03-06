@@ -541,7 +541,8 @@ bool SCH_BUS_ENTRY_BASE::operator <( const SCH_ITEM& aItem ) const
 }
 
 
-bool SCH_BUS_WIRE_ENTRY::ConnectionPropagatesTo( const EDA_ITEM* aItem ) const
+bool SCH_BUS_WIRE_ENTRY::ConnectionPropagatesTo( const SCH_SHEET_PATH& aSheet,
+                                                 const SCH_ITEM* aItem ) const
 {
     // Don't generate connections between bus entries and buses, since there is
     // a connectivity change at that point (e.g. A[7..0] to A7)
