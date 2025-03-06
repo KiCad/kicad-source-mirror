@@ -154,10 +154,7 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromLibPath( const wxString& a
         if( !pi )
             continue;
 
-        // Use SCH_IO::CanReadLibrary() here instead of SCH_IO_KICAD_SEXPR::CanReadLibrary
-        // because aLibPath does not always exist, and we need to use the version that
-        // does not test the existence of fil, just know if aLibPath file type can be handled.
-        if( pi->SCH_IO::CanReadLibrary( aLibPath ) )
+        if( pi->CanReadLibrary( aLibPath ) )
             return fileType;
     }
 
