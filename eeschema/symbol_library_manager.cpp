@@ -741,7 +741,8 @@ bool SYMBOL_LIBRARY_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate
     // try to use path normalized to an environmental variable or project path
     wxString relPath = NormalizePath( aFilePath, &Pgm().GetLocalEnvVariables(), &m_frame.Prj() );
 
-    SCH_IO_MGR::SCH_FILE_T schFileType = SCH_IO_MGR::GuessPluginTypeFromLibPath( aFilePath );
+    SCH_IO_MGR::SCH_FILE_T schFileType = SCH_IO_MGR::GuessPluginTypeFromLibPath( aFilePath,
+                    aCreate ? KICTL_CREATE : 0 );
 
     if( schFileType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
         schFileType = SCH_IO_MGR::SCH_LEGACY;
