@@ -1,0 +1,5 @@
+(version 1)
+(rule "A"
+   (condition "A.Type == 'Footprint' && A.Orientation == 90 deg")
+   (constraint assertion "A.Orientation != A.Orientation")
+)
