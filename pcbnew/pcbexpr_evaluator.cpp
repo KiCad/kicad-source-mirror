@@ -326,6 +326,20 @@ LIBEVAL::VALUE* PCBEXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 
             return new LIBEVAL::VALUE( static_cast<double>( item->Get<int>( it->second ) ) );
         }
+        else if( m_type == LIBEVAL::VT_NUMERIC_DOUBLE )
+        {
+            if( m_isOptional )
+            {
+                auto val = item->Get<std::optional<double>>( it->second );
+
+                if( val.has_value() )
+                    return new LIBEVAL::VALUE( val.value() );
+
+                return LIBEVAL::VALUE::MakeNullValue();
+            }
+
+            return new LIBEVAL::VALUE( item->Get<double>( it->second ) );
+        }
         else
         {
             wxString str;
@@ -504,6 +518,15 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCBEXPR_UCODE::CreateVarRef( const wxString& a
                     vref->SetType( LIBEVAL::VT_NUMERIC );
                     vref->SetIsOptional();
                 }
+                else if( prop->TypeHash() == TYPE_HASH( double ) )
+                {
+                    vref->SetType( LIBEVAL::VT_NUMERIC_DOUBLE );
+                }
+                else if( prop->TypeHash() == TYPE_HASH( std::optional<double> ) )
+                {
+                    vref->SetType( LIBEVAL::VT_NUMERIC_DOUBLE );
+                    vref->SetIsOptional();
+                }
                 else if( prop->TypeHash() == TYPE_HASH( bool ) )
                 {
                     vref->SetType( LIBEVAL::VT_NUMERIC );
@@ -551,7 +574,8 @@ BOARD* PCBEXPR_CONTEXT::GetBoard() const
 
 const std::vector<wxString>& PCBEXPR_UNIT_RESOLVER::GetSupportedUnits() const
 {
-    static const std::vector<wxString> pcbUnits = { wxT( "mil" ), wxT( "mm" ), wxT( "in" ) };
+    static const std::vector<wxString> pcbUnits = { wxT( "mil" ), wxT( "mm" ), wxT( "in" ),
+                                                    wxT( "deg" ) };
 
     return pcbUnits;
 }

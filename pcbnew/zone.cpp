@@ -2005,7 +2005,7 @@ static struct ZONE_DESC
                     groupFill )
                 .SetAvailableFunc( isCopperZone );
 
-        propMgr.AddProperty( new PROPERTY<ZONE, EDA_ANGLE>( _HKI( "Orientation" ),
+        propMgr.AddProperty( new PROPERTY<ZONE, EDA_ANGLE>( _HKI( "Hatch Orientation" ),
                     &ZONE::SetHatchOrientation, &ZONE::GetHatchOrientation,
                     PROPERTY_DISPLAY::PT_DEGREE ),
                     groupFill )
