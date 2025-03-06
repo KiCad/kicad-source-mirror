@@ -2066,7 +2066,7 @@ void ALTIUM_PCB::ParseNets6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbF
         checkpoint();
         ANET6 elem( reader );
 
-        NETINFO_ITEM* netInfo = new NETINFO_ITEM( m_board, elem.name, 0 );
+        NETINFO_ITEM* netInfo = new NETINFO_ITEM( m_board, elem.name, -1 );
         m_board->Add( netInfo, ADD_MODE::APPEND );
 
         // needs to be called after m_board->Add() as assign us the NetCode
@@ -2130,15 +2130,15 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltium
             continue;
 
         std::unique_ptr<ZONE> zone = std::make_unique<ZONE>(m_board);
-        m_polygons.emplace_back(zone.get());
 
+        // Be sure to set the zone layer before setting the net code
+        // so that we know that this is a copper zone and so needs a valid net code.
+        HelperSetZoneLayers( *zone, elem.layer );
         zone->SetNetCode( GetNetCode( elem.net ) );
         zone->SetPosition( elem.vertices.at( 0 ).position );
         zone->SetLocked( elem.locked );
         zone->SetAssignedPriority( elem.pourindex > 0 ? elem.pourindex : 0 );
         zone->Outline()->AddOutline( outline.Outline( 0 ) );
-
-        HelperSetZoneLayers( *zone, elem.layer );
 
         if( elem.pourindex > m_highest_pour_index )
             m_highest_pour_index = elem.pourindex;
@@ -2237,6 +2237,7 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltium
         zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
                                      ZONE::GetDefaultHatchPitch(), true );
 
+        m_polygons.emplace_back( zone.get() );
         m_board->Add( zone.release(), ADD_MODE::APPEND );
     }
 
