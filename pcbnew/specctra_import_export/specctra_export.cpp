@@ -1530,6 +1530,22 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         }
     }
 
+    // Create a list of all in-use non-default netclasses
+    std::unordered_map<wxString, NETCLASS*> netclassesInUse;
+
+    for( NETINFO_ITEM* net : aBoard->GetNetInfo() )
+    {
+        NETCLASS*       netclass = net->GetNetClass();
+        const wxString& name = netclass->GetName();
+
+        // Don't add the default netclass
+        if( name == NETCLASS::Default )
+            continue;
+
+        if( !netclassesInUse.contains( name ) )
+            netclassesInUse[name] = netclass;
+    }
+
     //-----< output vias used in netclasses >-----------------------------------
     {
         // Assume the netclass vias are all the same kind of thru, blind, or buried vias.
@@ -1556,7 +1572,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         // pcb->library->spareViaIndex = pcb->library->vias.size();
 
         // output the non-Default netclass vias
-        for( const auto& [name, netclass] : netSettings->GetNetclasses() )
+        for( const auto& [name, netclass] : netclassesInUse )
         {
             via = makeVia( netclass->GetViaDiameter(), netclass->GetViaDrill(),
                            m_top_via_layer, m_bot_via_layer );
@@ -1688,14 +1704,15 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
     //-----<output NETCLASSs>----------------------------------------------------
 
-    exportNETCLASS( netSettings->GetDefaultNetclass(), aBoard );
+    // Export netclass info
+    exportNETCLASS( netSettings->GetDefaultNetclass().get(), aBoard );
 
-    for( const auto& [name, netclass] : netSettings->GetNetclasses() )
+    for( const auto& [name, netclass] : netclassesInUse )
         exportNETCLASS( netclass, aBoard );
 }
 
 
-void SPECCTRA_DB::exportNETCLASS( const std::shared_ptr<NETCLASS>& aNetClass, BOARD* aBoard )
+void SPECCTRA_DB::exportNETCLASS( const NETCLASS* aNetClass, const BOARD* aBoard )
 {
     /*  From page 11 of specctra spec:
      *
@@ -1731,8 +1748,6 @@ void SPECCTRA_DB::exportNETCLASS( const std::shared_ptr<NETCLASS>& aNetClass, BO
 
     m_pcb->m_network->m_classes.push_back( clazz );
 
-    // Freerouter creates a class named 'default' anyway, and if we try to use that we end up
-    // with two 'default' via rules so use something else as the name of our default class.
     clazz->m_class_id = TO_UTF8( aNetClass->GetName() );
 
     for( NETINFO_ITEM* net : aBoard->GetNetInfo() )
@@ -1753,6 +1768,8 @@ void SPECCTRA_DB::exportNETCLASS( const std::shared_ptr<NETCLASS>& aNetClass, BO
     std::snprintf( text, sizeof( text ), "(clearance %.6g)", scale( clearance ) );
     clazz->m_rules->m_rules.push_back( text );
 
+    // Freerouter creates a class named 'default' anyway, and if we try to use that we end up
+    // with two 'default' via rules so use something else as the name of our default class.
     if( aNetClass->GetName() == NETCLASS::Default )
         clazz->m_class_id = "kicad_default";
 
