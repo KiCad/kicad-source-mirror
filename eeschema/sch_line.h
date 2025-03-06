@@ -277,7 +277,8 @@ public:
 
     std::vector<VECTOR2I> GetConnectionPoints() const override;
 
-    bool ConnectionPropagatesTo( const EDA_ITEM* aItem ) const override;
+    bool ConnectionPropagatesTo( const SCH_SHEET_PATH& aSheet,
+                                 const SCH_ITEM* aItem ) const override;
 
     void GetSelectedPoints( std::vector<VECTOR2I>& aPoints ) const;
 

@@ -286,7 +286,8 @@ public:
         return m_isDangling && GetPosition() == aPos;
     }
 
-    bool ConnectionPropagatesTo( const EDA_ITEM* aItem ) const override;
+    bool ConnectionPropagatesTo( const SCH_SHEET_PATH& aSheet,
+                                 const SCH_ITEM* aItem ) const override;
 
     const wxString& GetOperatingPoint() const { return m_operatingPoint; }
     void SetOperatingPoint( const wxString& aText ) { m_operatingPoint = aText; }
