@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-06 13:54+0300\n"
-"PO-Revision-Date: 2025-03-06 03:38+0000\n"
+"PO-Revision-Date: 2025-03-06 15:21+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -14863,7 +14863,7 @@ msgstr " (已加载 %d 个项目)"
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:74
 #: eeschema/widgets/design_block_pane.cpp:39
 msgid "Place repeated copies"
-msgstr "放置副本"
+msgstr "持续放置副本"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:75
 msgid "Keep the symbol selected for subsequent clicks."
