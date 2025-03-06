@@ -220,13 +220,13 @@ void SVG_PLOTTER::setFillMode( FILL_T fill )
 void SVG_PLOTTER::setSVGPlotStyle( int aLineWidth, bool aIsGroup, const std::string& aExtraStyle )
 {
     if( aIsGroup )
-        fputs( "</g>\n<g ", m_outputFile );
+        fmt::print( m_outputFile, "</g>\n<g " );
 
-    fputs( "style=\"", m_outputFile );
+    fmt::print( m_outputFile, "style=\"" );
 
     if( m_fillMode == FILL_T::NO_FILL )
     {
-        fputs( "fill:none; ", m_outputFile );
+        fmt::print( m_outputFile, "fill:none; " );
     }
     else
     {
@@ -248,7 +248,7 @@ void SVG_PLOTTER::setSVGPlotStyle( int aLineWidth, bool aIsGroup, const std::str
 
     if( pen_w <= 0 )
     {
-        fputs( "stroke:none;", m_outputFile );
+        fmt::print( m_outputFile, "stroke:none;" );
     }
     else
     {
@@ -259,7 +259,7 @@ void SVG_PLOTTER::setSVGPlotStyle( int aLineWidth, bool aIsGroup, const std::str
         // issues were previously reported reported when using nm as integer units
         fmt::print( m_outputFile, "\nstroke:#{:06X}; stroke-width:{:.{}f}; stroke-opacity:1; \n",
                     m_pen_rgb_color, pen_w, m_precision );
-        fputs( "stroke-linecap:round; stroke-linejoin:round;", m_outputFile );
+        fmt::print( m_outputFile, "stroke-linecap:round; stroke-linejoin:round;" );
 
         //set any extra attributes for non-solid lines
         switch( m_dashed )
@@ -298,17 +298,17 @@ void SVG_PLOTTER::setSVGPlotStyle( int aLineWidth, bool aIsGroup, const std::str
     }
 
     if( aExtraStyle.length() )
-        fputs( aExtraStyle.c_str(), m_outputFile );
+        fmt::print( m_outputFile, "{}", aExtraStyle );
 
-    fputs( "\"", m_outputFile );
+    fmt::print( m_outputFile, "\"" );
 
     if( aIsGroup )
     {
-        fputs( ">", m_outputFile );
+        fmt::print( m_outputFile, ">" );
         m_graphics_changed = false;
     }
 
-    fputs( "\n", m_outputFile );
+    fmt::print( m_outputFile, "\n" );
 }
 
 
@@ -603,7 +603,7 @@ void SVG_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
 
     setFillMode( aFill );
     SetCurrentLineWidth( aWidth );
-    fputs( "<path ", m_outputFile );
+    fmt::print( m_outputFile, "<path " );
 
     switch( aFill )
     {
@@ -633,7 +633,7 @@ void SVG_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
     // If the corner list ends where it begins, then close the poly
     if( aCornerList.front() == aCornerList.back() )
     {
-        fputs( "Z\" /> \n", m_outputFile );
+        fmt::print( m_outputFile, "Z\" /> \n" );
     }
     else
     {
@@ -693,7 +693,7 @@ void SVG_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double
             fmt::print( m_outputFile, "{}", static_cast<char>( encoded[i] ) );
 
             if( ( i % 64 )  == 63 )
-                fputs( "\n", m_outputFile );
+                fmt::print( m_outputFile, "\n" );
         }
 
         fmt::print( m_outputFile,
@@ -710,7 +710,7 @@ void SVG_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
     {
         if( m_penState != 'Z' )
         {
-            fputs( "\" />\n", m_outputFile );
+            fmt::print( m_outputFile, "\" />\n" );
             m_penState        = 'Z';
             m_penLastpos.x    = -1;
             m_penLastpos.y    = -1;
@@ -756,24 +756,17 @@ bool SVG_PLOTTER::StartPlot( const wxString& aPageNumber )
 {
     wxASSERT( m_outputFile );
 
-    static const char*  header[] =
-    {
-        "<?xml version=\"1.0\" standalone=\"no\"?>\n",
-        " <!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \n",
-        " \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\"> \n",
-        "<svg\n"
-        "  xmlns:svg=\"http://www.w3.org/2000/svg\"\n"
-        "  xmlns=\"http://www.w3.org/2000/svg\"\n",
-        "  xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n",
-        "  version=\"1.1\"\n",
-        nullptr
-    };
+    std::string header = "<?xml version=\"1.0\" standalone=\"no\"?>\n"
+                " <!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \n"
+                " \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\"> \n"
+                "<svg\n"
+                "  xmlns:svg=\"http://www.w3.org/2000/svg\"\n"
+                "  xmlns=\"http://www.w3.org/2000/svg\"\n"
+                "  xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n"
+                "  version=\"1.1\"\n";
 
     // Write header.
-    for( int ii = 0; header[ii] != nullptr; ii++ )
-    {
-        fputs( header[ii], m_outputFile );
-    }
+    fmt::print( m_outputFile, "{}", header );
 
     // Write viewport pos and size
     VECTOR2D origin;    // TODO set to actual value
@@ -809,15 +802,15 @@ bool SVG_PLOTTER::StartPlot( const wxString& aPageNumber )
                   m_precision );
 
     // output the pen cap and line joint
-    fputs( "stroke-linecap:round; stroke-linejoin:round;\"\n", m_outputFile );
-    fputs( " transform=\"translate(0 0) scale(1 1)\">\n", m_outputFile );
+    fmt::print( m_outputFile, "stroke-linecap:round; stroke-linejoin:round;\"\n" );
+    fmt::print( m_outputFile, " transform=\"translate(0 0) scale(1 1)\">\n" );
     return true;
 }
 
 
 bool SVG_PLOTTER::EndPlot()
 {
-    fputs( "</g> \n</svg>\n", m_outputFile );
+    fmt::print( m_outputFile, "</g> \n</svg>\n" );
     fclose( m_outputFile );
     m_outputFile = nullptr;
 
@@ -919,7 +912,7 @@ void SVG_PLOTTER::Text( const VECTOR2I&        aPos,
                     TO_UTF8( XmlEsc( aText ) ) );
 
         if( !aOrient.IsZero() )
-            fputs( "</g>\n", m_outputFile );
+            fmt::print( m_outputFile, "</g>\n" );
     }
 
     // Output the text again as graphics with a <desc> tag (for non-WYSIWYG search and for
@@ -932,7 +925,7 @@ void SVG_PLOTTER::Text( const VECTOR2I&        aPos,
         PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth,
                        aItalic, aBold, aMultilineAllowed, aFont, aFontMetrics );
 
-        fputs( "</g>", m_outputFile );
+        fmt::print( m_outputFile, "</g>" );
     }
 }
 
