@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-06 13:54+0300\n"
-"PO-Revision-Date: 2025-03-06 03:38+0000\n"
+"PO-Revision-Date: 2025-03-06 23:18+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v9/fi/>\n"
 "Language: fi\n"
@@ -1814,7 +1814,7 @@ msgstr ""
 
 #: common/confirm.cpp:50 common/confirm.cpp:56
 msgid "File Open Warning"
-msgstr "Tiedoston avaamisvaroitus"
+msgstr "Varoitus: Tiedosto auki"
 
 #: common/confirm.cpp:52 common/confirm.cpp:58
 msgid "Interleaved saves may produce very unexpected results."
