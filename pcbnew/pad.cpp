@@ -1790,6 +1790,9 @@ double PAD::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
     if( aLayer == LAYER_PAD_HOLEWALLS )
         aView->Update( this, KIGFX::REPAINT );
 
+    if( renderSettings.IsPrinting() )
+        return LOD_SHOW;
+
     VECTOR2L padSize = GetShape( pcbLayer ) != PAD_SHAPE::CUSTOM
                        ? VECTOR2L( GetSize( pcbLayer ) ) : GetBoundingBox().GetSize();
 
