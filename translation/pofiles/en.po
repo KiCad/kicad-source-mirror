@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-04 06:36+0300\n"
+"POT-Creation-Date: 2025-03-06 13:54+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -17718,6 +17718,9 @@ msgstr ""
 "Set page sizing mode (0 = page with frame and title block, 1 = current page "
 "size, 2 = board area only)"
 
+msgid "Fit the page to the board"
+msgstr "Fit the page to the board"
+
 msgid "No drawing sheet"
 msgstr "No drawing sheet"
 
@@ -25568,6 +25571,9 @@ msgstr ""
 "User unit is 10^-<N> mm\n"
 "Choose 4 if you are not sure."
 
+msgid "Fit page to board"
+msgstr "Fit page to board"
+
 msgid "Generate property popups for front footprints"
 msgstr "Generate property popups for front footprints"
 
@@ -29976,11 +29982,11 @@ msgstr "Apply footprint filters (%s)"
 msgid "KiCad Footprint Editor"
 msgstr "KiCad Footprint Editor"
 
-msgid "Inner layers"
-msgstr "Inner layers"
-
 msgid "Footprint changes are unsaved"
 msgstr "Footprint changes are unsaved"
+
+msgid "Inner layers"
+msgstr "Inner layers"
 
 #, c-format
 msgid "Editing %s from board.  Saving will update the board only."
