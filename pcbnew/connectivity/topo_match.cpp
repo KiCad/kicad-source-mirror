@@ -399,10 +399,68 @@ CONNECTION_GRAPH::STATUS CONNECTION_GRAPH::FindIsomorphism( CONNECTION_GRAPH* aT
         }
 
 
+        int        minMatches = std::numeric_limits<int>::max();
+        COMPONENT* altNextRef = nullptr;
+        COMPONENT* bestNextRef = nullptr;
+        int        bestRefIndex;
+        int        altRefIndex;
+
+        for( size_t i = 0; i < m_components.size(); i++ )
+        {
+            COMPONENT* cmp = m_components[i];
+
+            if( cmp == current.m_ref )
+                continue;
+
+            bool found = false;
+
+            for( auto it = current.m_locked.begin(); it != current.m_locked.end(); it++ )
+            {
+                if( it->second == cmp )
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if( found )
+                continue;
+
+            auto matches = aTarget->findMatchingComponents( this, cmp, current );
+
+            int nMatches = matches.size();
+            if( nMatches == 1 )
+            {
+                bestNextRef = cmp;
+                bestRefIndex = i;
+                break;
+            }
+            else if( nMatches == 0 )
+            {
+                altNextRef = cmp;
+                altRefIndex = i;
+            }
+            else if( nMatches < minMatches )
+            {
+                minMatches = nMatches;
+                bestNextRef = cmp;
+                bestRefIndex = i;
+            }
+        }
+
         BACKTRACK_STAGE next( current );
         next.m_currentMatch = -1;
-        next.m_ref = m_components[current.m_refIndex + 1];
-        next.m_refIndex = current.m_refIndex + 1;
+
+        if( bestNextRef )
+        {
+            next.m_ref = bestNextRef;
+            next.m_refIndex = bestRefIndex;
+        }
+        else
+        {
+            next.m_ref = altNextRef;
+            next.m_refIndex = altRefIndex;
+        }
 
         stack.push_back( next );
     };
