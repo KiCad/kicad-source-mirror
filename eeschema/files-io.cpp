@@ -511,12 +511,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
             for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
                 screen->MigrateSimModels();
-
-            if( schematic.GetFirst()->GetFileFormatVersionAtLoad() < SEXPR_SCHEMATIC_FILE_VERSION )
-            {
-                // Allow the schematic to be saved to new file format without making any edits.
-                OnModify();
-            }
         }
 
         // After the schematic is successfully loaded, we load the drawing sheet.
@@ -1032,6 +1026,10 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
     {
         // File doesn't exist yet; true if we just imported something
         updateFileHistory = true;
+    }
+    else if( screens.GetFirst()->GetFileFormatVersionAtLoad() < SEXPR_SCHEMATIC_FILE_VERSION )
+    {
+        // Allow the user to save un-edited files in new format
     }
     else if( !IsContentModified() )
     {
