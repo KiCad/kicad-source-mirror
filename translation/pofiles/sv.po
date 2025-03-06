@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-06 13:54+0300\n"
-"PO-Revision-Date: 2025-03-06 03:38+0000\n"
+"PO-Revision-Date: 2025-03-06 23:18+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13260,27 +13260,26 @@ msgid "Define as power symbol"
 msgstr "Definiera som strömförsörjningssymbol"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:193
-#, fuzzy
 msgid ""
 "Power symbols define a global net with the value as a netname.\n"
 "They will not be included in the BOM and cannot be assigned a footprint."
 msgstr ""
-"Om du ställer in detta alternativ visas symbolen i fråga i dialogrutan \n"
-"\"lägg till strömförsörjningssybol\". Det låser värdetexten för att skydda "
-"den\n"
-"från redigering i kretsschemaredigeraren. Symbolen ingår inte i\n"
-"komponentlistan och kan inte tilldelas ett fotavtryck."
+"Strömförsörjningssymboler definierar ett globalt nät med värdet som nätnamn."
+"\n"
+"De kommer inte att tas med i materiallistan och kan inte tilldelas ett "
+"fotavtryck."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:203
-#, fuzzy
 msgid "Define as local power symbol"
-msgstr "Definiera som strömförsörjningssymbol"
+msgstr "Definiera som lokal strömförsörjningssymbol"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:204
 msgid ""
 "Local power symbols create labels that are limited to the sheet in which "
 "they are used"
 msgstr ""
+"Lokala strömförsörjningssymboler skapar etiketter som är begränsade till det "
+"kretsschemaark i vilket de används"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:221
 msgid "Pin Text Options"
@@ -16037,9 +16036,8 @@ msgid "Sheet background:"
 msgstr "Arkbakgrund:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:97
-#, fuzzy
 msgid "Power Symbols:"
-msgstr "Power-symbol"
+msgstr "Strömförsörjningssymboler:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:105
 msgid ""
@@ -16048,6 +16046,12 @@ msgid ""
 "Global will convert new power symbols to global power symbols.\n"
 "Local will convert new power symbols to a local power symbols."
 msgstr ""
+"Välj tilldelad typ för ny strömförsörjningssymbol.\n"
+"Som förval följs symboldefinitionen.\n"
+"Global kommer att omvandla nya strömförsörjningssymboler till globala "
+"strömförsörjningssymboler.\n"
+"Lokal kommer att omvandla nya strömförsörjningssymboler till lokala "
+"strömförsörjningssymboler."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:134
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:192
@@ -22133,9 +22137,8 @@ msgid "Power Symbol"
 msgstr "Power-symbol"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1763
-#, fuzzy
 msgid "Power Symbol (Local)"
-msgstr "Power-symbol"
+msgstr "Strömförsörjningssymbol (lokal)"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1770
 msgid "Datasheet"
@@ -26515,9 +26518,8 @@ msgstr ""
 "sidstorlek, 2 = endast mönsterkortsyta)"
 
 #: kicad/cli/command_pcb_export_svg.cpp:92
-#, fuzzy
 msgid "Fit the page to the board"
-msgstr "Kopiera nuvarande 3D-bild till urklipp"
+msgstr "Anpassa sidan till mönsterkortet"
 
 #: kicad/cli/command_pcb_export_svg.cpp:96
 #: kicad/cli/command_sch_export_plot.cpp:77
@@ -37421,9 +37423,8 @@ msgstr ""
 "Välj 4 om du är osäker."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:386
-#, fuzzy
 msgid "Fit page to board"
-msgstr "Kopiering av bild till urklipp misslyckades"
+msgstr "Anpassa sida till mönsterkort"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:412
 msgid "Generate property popups for front footprints"
