@@ -3951,7 +3951,7 @@ private:
     /**
      * Export \a aNetClass to the DSN file.
      */
-    void exportNETCLASS( const std::shared_ptr<NETCLASS>& aNetClass, BOARD* aBoard );
+    void exportNETCLASS( const NETCLASS* aNetClass, const BOARD* aBoard );
 
     //-----</FromBOARD>------------------------------------------------------
 
