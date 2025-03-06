@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-06 13:54+0300\n"
-"PO-Revision-Date: 2025-02-28 10:10+0100\n"
+"POT-Creation-Date: 2025-03-06 16:11+0100\n"
+"PO-Revision-Date: 2025-03-06 16:10+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Poedit-Basepath: ../../../git_dev\n"
+"X-Poedit-Basepath: ../../../kicad_9\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Generator: Poedit 3.5\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -216,8 +216,9 @@ msgstr "Exporter la Vue en Cours en JPEG..."
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:62
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:661
 #: common/eda_base_frame.cpp:1215 common/hotkey_store.cpp:80
-#: common/tool/actions.cpp:1073 pcbnew/footprint_chooser_frame.cpp:282
-#: pcbnew/footprint_viewer_frame.cpp:981 pcbnew/pcb_base_frame.cpp:682
+#: common/tool/actions.cpp:1073 ⁨pcbnew/footprint_chooser_frame - Copie.cpp⁩:282
+#: pcbnew/footprint_chooser_frame.cpp:282 pcbnew/footprint_viewer_frame.cpp:981
+#: pcbnew/pcb_base_frame.cpp:682
 msgid "3D Viewer"
 msgstr "Visu 3D"
 
@@ -1723,7 +1724,7 @@ msgstr "Empreinte (.kicad_mod fichier)"
 #: bitmap2component/bitmap2cmp_panel_base.cpp:175
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:76
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:195
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:183
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:134
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:146
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:25
@@ -2650,7 +2651,7 @@ msgstr "Sélectionnez le fichier table de librairies %s globale:"
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:310
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:324
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:340
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:208
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:196
 msgid "dummy"
 msgstr "dummy"
 
@@ -2703,15 +2704,15 @@ msgstr "(optionnel)"
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:39
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:80
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:53
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:291
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:307
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:320
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:333
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:346
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:406
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:420
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:435
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:446
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:279
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:295
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:308
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:321
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:334
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:394
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:408
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:423
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:434
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:121
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:132
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:287
@@ -3045,7 +3046,7 @@ msgstr "dummy text"
 #: eeschema/dialogs/dialog_label_properties.cpp:172
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:113
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:296
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:350
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:338
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:136
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:138
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:230
@@ -3060,7 +3061,7 @@ msgstr "Taille de la page (utilisateur):"
 
 #: common/dialogs/dialog_page_settings_base.cpp:72
 #: pcbnew/dialogs/dialog_board_statistics.cpp:105
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:311
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:299
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:178
 msgid "Height:"
 msgstr "Hauteur:"
@@ -3077,7 +3078,7 @@ msgstr "Hauteur de la page (utilisateur)."
 #: eeschema/dialogs/dialog_table_properties_base.cpp:116
 #: eeschema/dialogs/dialog_text_properties_base.cpp:220
 #: pcbnew/dialogs/dialog_board_statistics.cpp:103
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:282
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:270
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:25
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:70
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:105
@@ -3805,7 +3806,6 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:101
-#, fuzzy
 msgid "User name:"
 msgstr "Identifiant :"
 
@@ -7011,6 +7011,7 @@ msgid "Failed to perform checkout operation."
 msgstr "Échec de l'opération d'extraction."
 
 #: common/git/git_pull_handler.cpp:241
+#, c++-format
 msgid "Could not lookup commit '{}'"
 msgstr "Impossible de rechercher le commit '{}'"
 
@@ -8258,12 +8259,10 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Unités manquantes pour '%s'| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1161
-#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Non correspondance de type entre '%s' et %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1167
-#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Non correspondance de type entre %lf et '%s'"
 
@@ -10298,7 +10297,6 @@ msgid "DXF Files"
 msgstr "Fichiers DXF"
 
 #: common/wildcards_and_files_ext.cpp:516
-#: resources/linux/mime/kicad-gerbers.xml.in:22
 msgid "Gerber job file"
 msgstr "Fichier Gerber job"
 
@@ -12263,7 +12261,7 @@ msgstr "Autoriser le placement automatique de ce champ en schématique"
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:125
 #: eeschema/dialogs/dialog_text_properties_base.cpp:89
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:151
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:228
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:216
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:183
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:105
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:107
@@ -12279,7 +12277,7 @@ msgstr "Fonte:"
 #: eeschema/dialogs/dialog_text_properties_base.cpp:93
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:94
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:155
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:232
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:220
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:187
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:109
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:111
@@ -12368,7 +12366,7 @@ msgid "Color:"
 msgstr "Couleur:"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:256
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:298
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:286
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_reference_image_properties_base.cpp:32
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:204
@@ -12377,7 +12375,7 @@ msgid "Position X:"
 msgstr "Position X:"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:267
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:324
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:312
 #: pcbnew/dialogs/dialog_reference_image_properties_base.cpp:43
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:217
 msgid "Position Y:"
@@ -12970,7 +12968,7 @@ msgstr "Numéros de pins:"
 #: pcbnew/dialogs/dialog_create_array_base.cpp:133
 #: pcbnew/dialogs/dialog_create_array_base.cpp:311
 #: pcbnew/dialogs/dialog_create_array_base.cpp:322
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:64
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:85
 #: pcbnew/dialogs/dialog_export_step_base.cpp:205
@@ -13545,7 +13543,7 @@ msgstr "&Visible"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:170
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:295
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:204
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:192
 msgid "Preview:"
 msgstr "Prévisualisation:"
 
@@ -15006,6 +15004,7 @@ msgid "Code"
 msgstr "Code"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:223
+#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Enregistrer {} dans le champ Valeur comme \"{}\""
 
@@ -15040,6 +15039,7 @@ msgstr "Choisir Symbole d'Alimentation"
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:69
 #: eeschema/symbol_chooser_frame.cpp:112
 #: pcbnew/dialogs/dialog_footprint_chooser.cpp:111
+#: ⁨pcbnew/footprint_chooser_frame - Copie.cpp⁩:173
 #: pcbnew/footprint_chooser_frame.cpp:173
 #, c-format
 msgid " (%d items loaded)"
@@ -22032,11 +22032,11 @@ msgstr ""
 "apparenté."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:997
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
 msgstr ""
-"Le symbole '%s' existe déjà dans la librairie '%s', voulez-vous l'écraser ?"
+"Le symbole '%s' existe déjà dans la librairie '%s'. Voulez-vous l'écraser ?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1014
 #, c-format
@@ -22068,7 +22068,7 @@ msgid "Export Symbol"
 msgstr "Exporter Symbole"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1131
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is read-only."
 msgstr "La librairie '%s' est en lecture seule."
 
@@ -22247,22 +22247,22 @@ msgstr "Symbole non trouvé."
 msgid "Cannot load symbol '%s' from library '%s'."
 msgstr "Impossible de charger le symbole '%s' à partie de la librairie '%s'."
 
-#: eeschema/symbol_library_manager.cpp:800
+#: eeschema/symbol_library_manager.cpp:801
 #, c-format
 msgid "Cannot enumerate library '%s'."
 msgstr "Ne peut pas énumérer la librairie '%s'."
 
-#: eeschema/symbol_library_manager.cpp:862
-#: eeschema/symbol_library_manager.cpp:867
+#: eeschema/symbol_library_manager.cpp:863
+#: eeschema/symbol_library_manager.cpp:868
 #, c-format
 msgid "Error updating library buffer: %s"
 msgstr "Erreur de mise à jour de la mémoire tampon de la librairie : %s"
 
-#: eeschema/symbol_library_manager.cpp:872
+#: eeschema/symbol_library_manager.cpp:873
 msgid "Error updating library buffer."
 msgstr "Erreur de mise à jour de la mémoire tampon de la librairie."
 
-#: eeschema/symbol_library_manager.cpp:1009
+#: eeschema/symbol_library_manager.cpp:1010
 #: eeschema/tools/sch_editor_control.cpp:461
 #, c-format
 msgid "Error saving symbol %s to library '%s'."
@@ -22648,9 +22648,8 @@ msgid "Import a symbol to the current library"
 msgstr "Importer un symbole vers la librairie courante"
 
 #: eeschema/tools/ee_actions.cpp:274
-#, fuzzy
 msgid "Export..."
-msgstr "&Exporter..."
+msgstr "Exporter..."
 
 #: eeschema/tools/ee_actions.cpp:275
 msgid "Export a symbol to a new library file"
@@ -26574,9 +26573,8 @@ msgstr ""
 "titre, 1 = taille de la page actuelle, 2 = zone du PCB uniquement)"
 
 #: kicad/cli/command_pcb_export_svg.cpp:92
-#, fuzzy
 msgid "Fit the page to the board"
-msgstr "Remplir toutes les zones di CI"
+msgstr "Ajuster la page au PCB"
 
 #: kicad/cli/command_pcb_export_svg.cpp:96
 #: kicad/cli/command_sch_export_plot.cpp:77
@@ -26919,9 +26917,9 @@ msgstr "Paramètres de Job Copie de Fichiers"
 
 #: kicad/dialogs/dialog_destination.cpp:55
 #: kicad/dialogs/dialog_destination_base.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "%s Destination"
-msgstr "Destination:"
+msgstr "Destination %s"
 
 #: kicad/dialogs/dialog_destination.cpp:86
 msgid "Select output directory"
@@ -26940,9 +26938,8 @@ msgid "Zip"
 msgstr "Zip"
 
 #: kicad/dialogs/dialog_destination_base.cpp:46
-#, fuzzy
 msgid "Destination path:"
-msgstr "Destination:"
+msgstr "Chemin de destination :"
 
 #: kicad/dialogs/dialog_destination_base.cpp:64
 msgid "Include jobs:"
@@ -27043,9 +27040,9 @@ msgid "Update Available"
 msgstr "Mise à Jour Disponible"
 
 #: kicad/dialogs/panel_jobset.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Destination: %s"
-msgstr "Destination:"
+msgstr "Destination : %s"
 
 #: kicad/dialogs/panel_jobset.cpp:68
 msgid "No."
@@ -27076,19 +27073,16 @@ msgid "Running jobs"
 msgstr "Exécution des tâches"
 
 #: kicad/dialogs/panel_jobset.cpp:295
-#, fuzzy
 msgid "Edit Destination Options..."
-msgstr "Éditer Options pour le Rectangle..."
+msgstr "Éditer Options de Destination..."
 
 #: kicad/dialogs/panel_jobset.cpp:296
-#, fuzzy
 msgid "Delete Destination"
-msgstr "Effacement  association"
+msgstr "Supprimer Destination"
 
 #: kicad/dialogs/panel_jobset.cpp:299
-#, fuzzy
 msgid "View Last Run Log..."
-msgstr "Voir les résultats de la dernière exécution..."
+msgstr "Voir Résultats de Dernière Exécution..."
 
 #: kicad/dialogs/panel_jobset.cpp:389
 msgid "Edit Job Description"
@@ -27119,47 +27113,40 @@ msgid "Select job type:"
 msgstr "Sélection type de tâche:"
 
 #: kicad/dialogs/panel_jobset.cpp:783
-#, fuzzy
 msgid "Destination Types"
-msgstr "Destination:"
+msgstr "Types de Destination:"
 
 #: kicad/dialogs/panel_jobset.cpp:792
-#, fuzzy
 msgid "Add New Destination"
-msgstr "Destination:"
+msgstr "Ajouter Nouvelle Destination"
 
 #: kicad/dialogs/panel_jobset.cpp:793
-#, fuzzy
 msgid "Select destination type:"
-msgstr "Sélection type de tâche:"
+msgstr "Sélection type de destination:"
 
 #: kicad/dialogs/panel_jobset.cpp:958
-#, fuzzy
 msgid "No destinations defined"
-msgstr "Aucune sortie définie"
+msgstr "Aucune destnation définie"
 
 #: kicad/dialogs/panel_jobset_base.cpp:24
 msgid "Jobs"
 msgstr "Jobs"
 
 #: kicad/dialogs/panel_jobset_base.cpp:83
-#, fuzzy
 msgid "Destinations"
-msgstr "Destination:"
+msgstr "Destinations"
 
 #: kicad/dialogs/panel_jobset_base.cpp:116
 msgid "Save Jobset"
 msgstr "Sauver Jobset"
 
 #: kicad/dialogs/panel_jobset_base.cpp:122
-#, fuzzy
 msgid "Generate All Destinations"
-msgstr "Générer Toutes les Sorties"
+msgstr "Générer Toutes les Destinations"
 
 #: kicad/dialogs/panel_jobset_base.h:133
-#, fuzzy
 msgid "Jobset Run Log"
-msgstr "Log des Messages des Jobs"
+msgstr "Log des Exécutions des Jobs"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:143
 msgid "Edit the project schematic"
@@ -28752,7 +28739,7 @@ msgid "Default Values"
 msgstr "Valeurs par Défaut"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:497
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:397
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:385
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:151
 msgid "Line thickness:"
 msgstr "Epaisseur de ligne:"
@@ -33688,16 +33675,12 @@ msgid "Precision:"
 msgstr "Précision:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:168
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:180
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
 msgid "Choose how many digits of precision to display"
 msgstr "Choisir le nombre de chiffres de la précision à afficher"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
-msgid "Arrow direction:"
-msgstr "Direction de flèche :"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:357
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:345
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:237
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:202
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:75
@@ -33705,61 +33688,205 @@ msgstr "Direction de flèche :"
 msgid "0.0"
 msgstr "0,0"
 
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:75
 #: pcbnew/pcb_dimension.cpp:1771
 msgid "0.00"
 msgstr "0,00"
 
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:75
 #: pcbnew/pcb_dimension.cpp:1772
 msgid "0.000"
 msgstr "0,000"
 
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:75
 #: pcbnew/pcb_dimension.cpp:1773
 msgid "0.0000"
 msgstr "0,0000"
 
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:75
 #: pcbnew/pcb_dimension.cpp:1774
 msgid "0.00000"
 msgstr "0,00000"
 
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/pcb_dimension.cpp:1775
 msgid "0.00 in / 0 mils / 0.0 mm"
 msgstr "0,00 inch / 0 mils / 0,0 mm"
 
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/pcb_dimension.cpp:1776
 msgid "0.000 / 0 / 0.00"
 msgstr "0.000 / 0 / 0.00"
 
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/pcb_dimension.cpp:1777
 msgid "0.0000 / 0.0 / 0.000"
 msgstr "0.0000 / 0.0 / 0.000"
 
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/pcb_dimension.cpp:1778
 msgid "0.00000 / 0.00 / 0.0000"
 msgstr "0.00000 / 0.00 / 0.0000"
 
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:184
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:187
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:94
+msgid "Suppress trailing zeroes"
+msgstr "Suppression zéros de fin"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:188
+msgid ""
+"When checked, \"0.100\" will be shown as \"0.1\" even if the precision "
+"setting is higher"
+msgstr ""
+"Lorsque sélectionné, \"0,100\" sera affiché comme \"0,1\" même si le réglage "
+"de précision est plus élevé"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:209
+msgid "Dimension Text"
+msgstr "Texte de Cote"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:272
+#: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:144
+#: pcbnew/dialogs/dialog_text_properties_base.cpp:167
+#: pcbnew/dialogs/dialog_textbox_properties_base.cpp:155
+msgid "Text width"
+msgstr "Largeur texte"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:288
+#: pcbnew/dialogs/dialog_text_properties_base.cpp:206
+msgid "Text pos X"
+msgstr "Texte pos X"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:301
+#: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:157
+#: pcbnew/dialogs/dialog_text_properties_base.cpp:180
+#: pcbnew/dialogs/dialog_textbox_properties_base.cpp:171
+msgid "Text height"
+msgstr "Hauteur texte"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:314
+#: pcbnew/dialogs/dialog_text_properties_base.cpp:219
+msgid "Text pos Y"
+msgstr "Texte pos Y"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:325
+#: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:168
+#: pcbnew/dialogs/dialog_target_properties_base.cpp:39
+#: pcbnew/dialogs/dialog_text_properties_base.cpp:191
+#: pcbnew/dialogs/dialog_textbox_properties_base.cpp:182
+msgid "Thickness:"
+msgstr "Épaisseur:"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:327
+#: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:170
+#: pcbnew/dialogs/dialog_text_properties_base.cpp:193
+#: pcbnew/dialogs/dialog_textbox_properties_base.cpp:184
+msgid "Text thickness"
+msgstr "Épaisseur texte"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:340
+#: pcbnew/dialogs/dialog_text_properties_base.cpp:232
+#: pcbnew/dialogs/dialog_textbox_properties_base.cpp:197
+msgid "Text orientation"
+msgstr "Orientation texte"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:346
+#: pcbnew/dialogs/dialog_text_properties_base.cpp:238
+#: pcbnew/dialogs/dialog_textbox_properties_base.cpp:203
+msgid "90.0"
+msgstr "90,0"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:347
+#: pcbnew/dialogs/dialog_text_properties_base.cpp:239
+#: pcbnew/dialogs/dialog_textbox_properties_base.cpp:204
+msgid "-90.0"
+msgstr "-90,0"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:348
+#: pcbnew/dialogs/dialog_text_properties_base.cpp:240
+#: pcbnew/dialogs/dialog_textbox_properties_base.cpp:205
+msgid "180.0"
+msgstr "180,0"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:351
+msgid "Position mode:"
+msgstr "Mode de position:"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:355
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:48
+msgid "Outside"
+msgstr "Extérieur"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:355
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:48
+msgid "Inline"
+msgstr "En ligne"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:355
+#: pcbnew/layer_pairs.cpp:138
+msgid "Manual"
+msgstr "Manuel"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:359
+msgid "Choose how to position the text relative to the dimension line"
+msgstr "Choisissez comment positionner le texte par rapport à la ligne de cote"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:363
+msgid "Keep aligned with dimension"
+msgstr "Garder aligné avec cote"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:364
+msgid "Automatically set the text orientation to match the dimension lines"
+msgstr ""
+"Définir automatiquement l’orientation du texte pour qu’elle corresponde aux "
+"lignes de la cote"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:378
+msgid "Dimension Line"
+msgstr "Ligne de Cote"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:387
+msgid "Thickness of the dimension lines"
+msgstr "Épaisseur des lignes de cote"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:401
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:83
+msgid "Arrow length:"
+msgstr "Longueur de flèche:"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:412
+#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:99
+msgid "Extension line offset:"
+msgstr "Offset de ligne d'extension:"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:414
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:419
+msgid "Gap between the measured points and the start of the extension lines"
+msgstr "Écart entre les points mesurés et le début des lignes d’extension"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:427
+msgid "Extension line overshoot:"
+msgstr "Dépassement de la ligne d'extension :"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:438
+msgid "Arrow direction:"
+msgstr "Direction de flèche :"
+
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:442
 #: pcbnew/pcb_dimension.cpp:1792
 msgid "Inward"
 msgstr "Vers l'intérieur"
 
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:184
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:442
 #: pcbnew/pcb_dimension.cpp:1793
 msgid "Outward"
 msgstr "Vers l'extérieur"
 
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:188
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:446
 msgid ""
 "Chose Dimension Arrow Direction\n"
 "Automatic: Determined based on text position.\n"
@@ -33770,146 +33897,6 @@ msgstr ""
 "Automatique : Déterminée en fonction de la position du texte.\n"
 "Vers l'intérieur :    >;-----<\n"
 "Vers l'extérieur : <----->"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:199
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:94
-msgid "Suppress trailing zeroes"
-msgstr "Suppression zéros de fin"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:200
-msgid ""
-"When checked, \"0.100\" will be shown as \"0.1\" even if the precision "
-"setting is higher"
-msgstr ""
-"Lorsque sélectionné, \"0,100\" sera affiché comme \"0,1\" même si le réglage "
-"de précision est plus élevé"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:221
-msgid "Dimension Text"
-msgstr "Texte de Cote"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:284
-#: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:144
-#: pcbnew/dialogs/dialog_text_properties_base.cpp:167
-#: pcbnew/dialogs/dialog_textbox_properties_base.cpp:155
-msgid "Text width"
-msgstr "Largeur texte"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:300
-#: pcbnew/dialogs/dialog_text_properties_base.cpp:206
-msgid "Text pos X"
-msgstr "Texte pos X"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:313
-#: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:157
-#: pcbnew/dialogs/dialog_text_properties_base.cpp:180
-#: pcbnew/dialogs/dialog_textbox_properties_base.cpp:171
-msgid "Text height"
-msgstr "Hauteur texte"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:326
-#: pcbnew/dialogs/dialog_text_properties_base.cpp:219
-msgid "Text pos Y"
-msgstr "Texte pos Y"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:337
-#: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:168
-#: pcbnew/dialogs/dialog_target_properties_base.cpp:39
-#: pcbnew/dialogs/dialog_text_properties_base.cpp:191
-#: pcbnew/dialogs/dialog_textbox_properties_base.cpp:182
-msgid "Thickness:"
-msgstr "Épaisseur:"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:339
-#: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:170
-#: pcbnew/dialogs/dialog_text_properties_base.cpp:193
-#: pcbnew/dialogs/dialog_textbox_properties_base.cpp:184
-msgid "Text thickness"
-msgstr "Épaisseur texte"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:352
-#: pcbnew/dialogs/dialog_text_properties_base.cpp:232
-#: pcbnew/dialogs/dialog_textbox_properties_base.cpp:197
-msgid "Text orientation"
-msgstr "Orientation texte"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:358
-#: pcbnew/dialogs/dialog_text_properties_base.cpp:238
-#: pcbnew/dialogs/dialog_textbox_properties_base.cpp:203
-msgid "90.0"
-msgstr "90,0"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:359
-#: pcbnew/dialogs/dialog_text_properties_base.cpp:239
-#: pcbnew/dialogs/dialog_textbox_properties_base.cpp:204
-msgid "-90.0"
-msgstr "-90,0"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:360
-#: pcbnew/dialogs/dialog_text_properties_base.cpp:240
-#: pcbnew/dialogs/dialog_textbox_properties_base.cpp:205
-msgid "180.0"
-msgstr "180,0"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:363
-msgid "Position mode:"
-msgstr "Mode de position:"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:367
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:48
-msgid "Outside"
-msgstr "Extérieur"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:367
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:48
-msgid "Inline"
-msgstr "En ligne"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:367
-#: pcbnew/layer_pairs.cpp:138
-msgid "Manual"
-msgstr "Manuel"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:371
-msgid "Choose how to position the text relative to the dimension line"
-msgstr "Choisissez comment positionner le texte par rapport à la ligne de cote"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:375
-msgid "Keep aligned with dimension"
-msgstr "Garder aligné avec cote"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:376
-msgid "Automatically set the text orientation to match the dimension lines"
-msgstr ""
-"Définir automatiquement l’orientation du texte pour qu’elle corresponde aux "
-"lignes de la cote"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:390
-msgid "Dimension Line"
-msgstr "Ligne de Cote"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:399
-msgid "Thickness of the dimension lines"
-msgstr "Épaisseur des lignes de cote"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:413
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:83
-msgid "Arrow length:"
-msgstr "Longueur de flèche:"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:424
-#: pcbnew/dialogs/panel_setup_dimensions_base.cpp:99
-msgid "Extension line offset:"
-msgstr "Offset de ligne d'extension:"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:426
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:431
-msgid "Gap between the measured points and the start of the extension lines"
-msgstr "Écart entre les points mesurés et le début des lignes d’extension"
-
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:439
-msgid "Extension line overshoot:"
-msgstr "Dépassement de la ligne d'extension :"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.h:142
 #: pcbnew/pcb_dimension.cpp:1806 pcbnew/pcb_dimension.cpp:1909
@@ -37550,9 +37537,8 @@ msgstr ""
 "Choisissez 4 si vous n’êtes pas sûr."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:386
-#, fuzzy
 msgid "Fit page to board"
-msgstr "Fichier à charger"
+msgstr "Ajuster page au PCB"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:412
 msgid "Generate property popups for front footprints"
@@ -43155,19 +43141,23 @@ msgstr "Style de Connexion de Zone"
 msgid "footprint %s"
 msgstr "empreinte %s"
 
+#: ⁨pcbnew/footprint_chooser_frame - Copie.cpp⁩:79
 #: pcbnew/footprint_chooser_frame.cpp:79
 msgid "Footprint Chooser"
 msgstr "Sélecteur d'Empreintes"
 
+#: ⁨pcbnew/footprint_chooser_frame - Copie.cpp⁩:153
 #: pcbnew/footprint_chooser_frame.cpp:153
 msgid "Show 3D viewer in own window"
 msgstr "Afficher la visionneuse 3D dans sa propre fenêtre"
 
+#: ⁨pcbnew/footprint_chooser_frame - Copie.cpp⁩:426
 #: pcbnew/footprint_chooser_frame.cpp:426
 #, c-format
 msgid "Filter by pin count (%d)"
 msgstr "Filtre sur le nombre de pads (%d)"
 
+#: ⁨pcbnew/footprint_chooser_frame - Copie.cpp⁩:448
 #: pcbnew/footprint_chooser_frame.cpp:448
 #, c-format
 msgid "Apply footprint filters (%s)"
@@ -52247,38 +52237,6 @@ msgstr "Editeur de PCB KiCad"
 msgid "The KiCad Developers"
 msgstr "Développeurs KiCad"
 
-#: resources/linux/mime/kicad-gerbers.xml.in:5
-msgid "Gerber file"
-msgstr "Fichier Gerber"
-
-#: resources/linux/mime/kicad-gerbers.xml.in:27
-msgid "Excellon drill file"
-msgstr "Fichier de perçage Excellon"
-
-#: resources/linux/mime/kicad-kicad.xml.in:5
-msgid "KiCad Project"
-msgstr "Projet KiCad"
-
-#: resources/linux/mime/kicad-kicad.xml.in:12
-msgid "KiCad Schematic"
-msgstr "Schématique KiCad"
-
-#: resources/linux/mime/kicad-kicad.xml.in:27
-msgid "KiCad Printed Circuit Board"
-msgstr "Fichier Circuit Imprimé KiCad"
-
-#: resources/linux/mime/kicad-kicad.xml.in:41
-msgid "KiCad Footprint"
-msgstr "Empreintes KiCad"
-
-#: resources/linux/mime/kicad-kicad.xml.in:55
-msgid "KiCad Schematic Symbol"
-msgstr "Symbole Schématique KiCad"
-
-#: resources/linux/mime/kicad-kicad.xml.in:69
-msgid "KiCad Drawing Sheet"
-msgstr "Feuille de Dessin KiCad"
-
 #, c-format
 #~ msgid "%s Output Options"
 #~ msgstr "%s Options de Sortie"
@@ -52348,6 +52306,30 @@ msgstr "Feuille de Dessin KiCad"
 
 #~ msgid "Display"
 #~ msgstr "Affichage"
+
+#~ msgid "Gerber file"
+#~ msgstr "Fichier Gerber"
+
+#~ msgid "Excellon drill file"
+#~ msgstr "Fichier de perçage Excellon"
+
+#~ msgid "KiCad Project"
+#~ msgstr "Projet KiCad"
+
+#~ msgid "KiCad Schematic"
+#~ msgstr "Schématique KiCad"
+
+#~ msgid "KiCad Printed Circuit Board"
+#~ msgstr "Fichier Circuit Imprimé KiCad"
+
+#~ msgid "KiCad Footprint"
+#~ msgstr "Empreintes KiCad"
+
+#~ msgid "KiCad Schematic Symbol"
+#~ msgstr "Symbole Schématique KiCad"
+
+#~ msgid "KiCad Drawing Sheet"
+#~ msgstr "Feuille de Dessin KiCad"
 
 #~ msgid "Generates Placement Areas in easy way"
 #~ msgstr "Génère dZones de Placement de manière aisée"
