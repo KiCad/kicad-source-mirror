@@ -183,7 +183,6 @@ public:
         }
         else
         {
-            std::cout << "Registering new file " << aFilename << std::endl;
             ret = RegisterSettings( new T );
         }
 
