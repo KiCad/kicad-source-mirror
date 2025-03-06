@@ -118,7 +118,7 @@ bool PIN::IsIsomorphic( const PIN& b ) const
 }
 
 // fixme: terrible performance, but computers are fast these days, ain't they? :D
-bool checkIfPadNetsMatch( BACKTRACK_STAGE& aMatches, CONNECTION_GRAPH* aRefGraph, COMPONENT* aRef, COMPONENT* aTgt )
+bool checkIfPadNetsMatch( const BACKTRACK_STAGE& aMatches, CONNECTION_GRAPH* aRefGraph, COMPONENT* aRef, COMPONENT* aTgt )
 {
     std::map<PIN*, PIN*> pairs;
     std::vector<PIN*>    pref, ptgt;
@@ -197,7 +197,7 @@ bool checkIfPadNetsMatch( BACKTRACK_STAGE& aMatches, CONNECTION_GRAPH* aRefGraph
 
 
 std::vector<COMPONENT*>
-CONNECTION_GRAPH::findMatchingComponents( CONNECTION_GRAPH* aRefGraph, COMPONENT* aRef, BACKTRACK_STAGE& partialMatches )
+CONNECTION_GRAPH::findMatchingComponents( CONNECTION_GRAPH* aRefGraph, COMPONENT* aRef, const BACKTRACK_STAGE& partialMatches )
 {
     std::vector<COMPONENT*> matches;
     for( auto cmpTarget : m_components )
@@ -228,10 +228,26 @@ CONNECTION_GRAPH::findMatchingComponents( CONNECTION_GRAPH* aRefGraph, COMPONENT
         {
             wxLogTrace( traceTopoMatch, wxT("reject\n") );
         }
-
-
-
     }
+
+    auto padSimilarity=[]( COMPONENT*a, COMPONENT*b ) -> double {
+        int n=0;
+        for(int i=0;i<a->m_pins.size();i++)
+        {
+            PIN* pa = a->m_pins[i];
+            PIN* pb = b->m_pins[i];
+            if( pa->GetNetCode() == pb->GetNetCode() )
+                n++;
+        }
+        return (double)n / (double) a->m_pins.size();
+    };
+
+    
+    std::sort(matches.begin(), matches.end(), [&] ( COMPONENT*a, COMPONENT*b ) -> int 
+    {
+        return padSimilarity( aRef,a ) > padSimilarity( aRef, b );
+    }
+);
 
     return matches;
 }
