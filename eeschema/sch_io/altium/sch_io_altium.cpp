@@ -1514,6 +1514,7 @@ void SCH_IO_ALTIUM::ParseComponent( int aIndex, const std::map<wxString, wxStrin
     ksymbol->SetName( name );
     ksymbol->SetDescription( elem.componentdescription );
     ksymbol->SetLibId( libId );
+    ksymbol->SetUnitCount( elem.partcount - 1 );
     m_libSymbols.insert( { aIndex, ksymbol } );
 
     // each component has its own symbol for now
@@ -1537,7 +1538,12 @@ void SCH_IO_ALTIUM::ParseComponent( int aIndex, const std::map<wxString, wxStrin
     }
 
     symbol->SetLibId( libId );
-    symbol->SetUnit( std::max( 0, elem.currentpartid ) );
+
+    if( ksymbol->GetUnitCount() > 1 )
+        symbol->SetUnit( std::max( 1, elem.currentpartid ) );
+    else
+        symbol->SetUnit( 0 );
+
     symbol->GetField( FIELD_T::DESCRIPTION )->SetText( elem.componentdescription );
 
     SCH_SCREEN* screen = getCurrentScreen();
