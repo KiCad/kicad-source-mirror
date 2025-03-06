@@ -536,7 +536,9 @@ COMPONENT::COMPONENT( const wxString& aRef, FOOTPRINT* aParentFp, std::optional<
 
 bool COMPONENT::IsSameKind( const COMPONENT& b ) const
 {
-    return m_prefix == b.m_prefix && m_parentFootprint->GetFPID() == b.m_parentFootprint->GetFPID();
+    return m_prefix == b.m_prefix && 
+    ( (m_parentFootprint->GetFPID() == b.m_parentFootprint->GetFPID() ) || 
+    ( m_parentFootprint->GetFPID().empty() && b.m_parentFootprint->GetFPID().empty() ) );
 }
 
 void COMPONENT::AddPin( PIN* aPin )
@@ -552,12 +554,7 @@ bool COMPONENT::MatchesWith( COMPONENT* b )
         return false;
     }
 
-    if( m_parentFootprint->GetFPID() != b->m_parentFootprint->GetFPID() )
-    {
-        return false;
-    }
-
-    if( m_prefix != b->m_prefix )
+    if( !IsSameKind( *b ) )
     {
         return false;
     }
