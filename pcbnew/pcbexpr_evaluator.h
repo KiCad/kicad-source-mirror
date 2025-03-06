@@ -172,6 +172,19 @@ public:
 };
 
 
+class PCBORIENTATION_REF : public PCBEXPR_VAR_REF
+{
+public:
+    PCBORIENTATION_REF( int aItemIndex ) :
+            PCBEXPR_VAR_REF( aItemIndex )
+    {
+        SetType( LIBEVAL::VT_NUMERIC );
+    }
+
+    LIBEVAL::VALUE* GetValue( LIBEVAL::CONTEXT* aCtx ) override;
+};
+
+
 class PCBEXPR_BUILTIN_FUNCTIONS
 {
 public:
