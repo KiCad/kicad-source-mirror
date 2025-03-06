@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-04 06:36+0300\n"
+"POT-Creation-Date: 2025-03-06 13:54+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -8370,15 +8370,21 @@ msgid "Define as power symbol"
 msgstr "Define as power symbol"
 
 msgid ""
-"Setting this option makes the symbol in question appear in the\n"
-"\"add power symbol\" dialog.  It will lock the value text to protect it\n"
-"from editing in the schematic.  The symbol will not be included in\n"
-"the BOM and cannot be assigned a footprint."
+"Power symbols define a global net with the value as a netname.\n"
+"They will not be included in the BOM and cannot be assigned a footprint."
 msgstr ""
-"Setting this option makes the symbol in question appear in the\n"
-"\"add power symbol\" dialog.  It will lock the value text to protect it\n"
-"from editing in the schematic.  The symbol will not be included in\n"
-"the BOM and cannot be assigned a footprint."
+"Power symbols define a global net with the value as a netname.\n"
+"They will not be included in the BOM and cannot be assigned a footprint."
+
+msgid "Define as local power symbol"
+msgstr "Define as local power symbol"
+
+msgid ""
+"Local power symbols create labels that are limited to the sheet in which "
+"they are used"
+msgstr ""
+"Local power symbols create labels that are limited to the sheet in which "
+"they are used"
 
 msgid "Pin Text Options"
 msgstr "Pin Text Options"
@@ -10241,6 +10247,20 @@ msgstr "Sheet border:"
 
 msgid "Sheet background:"
 msgstr "Sheet background:"
+
+msgid "Power Symbols:"
+msgstr "Power Symbols:"
+
+msgid ""
+"Select the assigned type of new power symbol.\n"
+"Default will follow the symbol definition.\n"
+"Global will convert new power symbols to global power symbols.\n"
+"Local will convert new power symbols to a local power symbols."
+msgstr ""
+"Select the assigned type of new power symbol.\n"
+"Default will follow the symbol definition.\n"
+"Global will convert new power symbols to global power symbols.\n"
+"Local will convert new power symbols to a local power symbols."
 
 msgid "Left Click Mouse Commands"
 msgstr "Left Click Mouse Commands"
@@ -14770,6 +14790,9 @@ msgstr "Body"
 msgid "Power Symbol"
 msgstr "Power Symbol"
 
+msgid "Power Symbol (Local)"
+msgstr "Power Symbol (Local)"
+
 msgid "Datasheet"
 msgstr "Datasheet"
 
@@ -17863,6 +17886,9 @@ msgid ""
 msgstr ""
 "Set page sizing mode (0 = page with frame and title block, 1 = current page "
 "size, 2 = board area only)"
+
+msgid "Fit the page to the board"
+msgstr "Fit the page to the board"
 
 msgid "No drawing sheet"
 msgstr "No drawing sheet"
@@ -25729,6 +25755,9 @@ msgstr ""
 "User unit is 10^-<N> mm\n"
 "Choose 4 if you are not sure."
 
+msgid "Fit page to board"
+msgstr "Fit page to board"
+
 msgid "Generate property popups for front footprints"
 msgstr "Generate property popups for front footprints"
 
@@ -30185,11 +30214,11 @@ msgstr "Apply footprint filters (%s)"
 msgid "KiCad Footprint Editor"
 msgstr "KiCad Footprint Editor"
 
-msgid "Inner layers"
-msgstr "Inner layers"
-
 msgid "Footprint changes are unsaved"
 msgstr "Footprint changes are unsaved"
+
+msgid "Inner layers"
+msgstr "Inner layers"
 
 #, c-format
 msgid "Editing %s from board.  Saving will update the board only."
@@ -37074,6 +37103,17 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid ""
+#~ "Setting this option makes the symbol in question appear in the\n"
+#~ "\"add power symbol\" dialog.  It will lock the value text to protect it\n"
+#~ "from editing in the schematic.  The symbol will not be included in\n"
+#~ "the BOM and cannot be assigned a footprint."
+#~ msgstr ""
+#~ "Setting this option makes the symbol in question appear in the\n"
+#~ "\"add power symbol\" dialog.  It will lock the value text to protect it\n"
+#~ "from editing in the schematic.  The symbol will not be included in\n"
+#~ "the BOM and cannot be assigned a footprint."
 
 #, c-format
 #~ msgid ""
