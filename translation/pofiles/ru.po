@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-06 13:54+0300\n"
-"PO-Revision-Date: 2025-03-01 20:38+0000\n"
+"PO-Revision-Date: 2025-03-06 15:21+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v9/ru/>\n"
 "Language: ru\n"
@@ -21778,7 +21778,7 @@ msgstr ""
 "Символ '%s' не может заменить другой символ '%s', являющийся его потомком."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:997
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
 msgstr ""
@@ -21814,7 +21814,7 @@ msgid "Export Symbol"
 msgstr "Экспорт символа"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1131
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is read-only."
 msgstr "Библиотека '%s' доступна только для чтения."
 
@@ -22386,7 +22386,6 @@ msgid "Import a symbol to the current library"
 msgstr "Импорт символа в текущую библиотеку"
 
 #: eeschema/tools/ee_actions.cpp:274
-#, fuzzy
 msgid "Export..."
 msgstr "Экспорт..."
 
@@ -26255,9 +26254,8 @@ msgstr ""
 "размер листа, 2 = только область платы)"
 
 #: kicad/cli/command_pcb_export_svg.cpp:92
-#, fuzzy
 msgid "Fit the page to the board"
-msgstr "Не удалось скопировать изображение в буфер обмена"
+msgstr "Страница по размеру платы"
 
 #: kicad/cli/command_pcb_export_svg.cpp:96
 #: kicad/cli/command_sch_export_plot.cpp:77
@@ -26584,9 +26582,9 @@ msgstr "Параметры задания копирования файлов"
 
 #: kicad/dialogs/dialog_destination.cpp:55
 #: kicad/dialogs/dialog_destination_base.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "%s Destination"
-msgstr "Цель:"
+msgstr "Место назначения %s"
 
 #: kicad/dialogs/dialog_destination.cpp:86
 msgid "Select output directory"
@@ -26605,9 +26603,8 @@ msgid "Zip"
 msgstr "Zip"
 
 #: kicad/dialogs/dialog_destination_base.cpp:46
-#, fuzzy
 msgid "Destination path:"
-msgstr "Цель:"
+msgstr "Путь места назначения:"
 
 #: kicad/dialogs/dialog_destination_base.cpp:64
 msgid "Include jobs:"
@@ -26705,9 +26702,9 @@ msgid "Update Available"
 msgstr "Доступно обновление"
 
 #: kicad/dialogs/panel_jobset.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Destination: %s"
-msgstr "Цель:"
+msgstr "Место назначения: %s"
 
 #: kicad/dialogs/panel_jobset.cpp:68
 msgid "No."
@@ -26738,17 +26735,14 @@ msgid "Running jobs"
 msgstr "Выполнение заданий"
 
 #: kicad/dialogs/panel_jobset.cpp:295
-#, fuzzy
 msgid "Edit Destination Options..."
-msgstr "Править параметры выхода..."
+msgstr "Править параметры места назначения..."
 
 #: kicad/dialogs/panel_jobset.cpp:296
-#, fuzzy
 msgid "Delete Destination"
-msgstr "Удалить связь с посад. местом"
+msgstr "Удалить место назначения"
 
 #: kicad/dialogs/panel_jobset.cpp:299
-#, fuzzy
 msgid "View Last Run Log..."
 msgstr "Просмотр результатов последнего запуска..."
 
@@ -26781,45 +26775,38 @@ msgid "Select job type:"
 msgstr "Выберите тип задания:"
 
 #: kicad/dialogs/panel_jobset.cpp:783
-#, fuzzy
 msgid "Destination Types"
-msgstr "Цель:"
+msgstr "Типы места назначения"
 
 #: kicad/dialogs/panel_jobset.cpp:792
-#, fuzzy
 msgid "Add New Destination"
-msgstr "Цель:"
+msgstr "Добавить новое место назначения"
 
 #: kicad/dialogs/panel_jobset.cpp:793
-#, fuzzy
 msgid "Select destination type:"
-msgstr "Выберите тип задания:"
+msgstr "Выберите тип места назначения:"
 
 #: kicad/dialogs/panel_jobset.cpp:958
-#, fuzzy
 msgid "No destinations defined"
-msgstr "Выводы не определены"
+msgstr "Места назначения не определены"
 
 #: kicad/dialogs/panel_jobset_base.cpp:24
 msgid "Jobs"
 msgstr "Задания"
 
 #: kicad/dialogs/panel_jobset_base.cpp:83
-#, fuzzy
 msgid "Destinations"
-msgstr "Цель:"
+msgstr "Места назначения"
 
 #: kicad/dialogs/panel_jobset_base.cpp:116
 msgid "Save Jobset"
 msgstr "Сохранить список заданий"
 
 #: kicad/dialogs/panel_jobset_base.cpp:122
-#, fuzzy
 msgid "Generate All Destinations"
-msgstr "Сгенерировать все выходные файлы"
+msgstr "Сгенерировать все места назначения"
 
 #: kicad/dialogs/panel_jobset_base.h:133
-#, fuzzy
 msgid "Jobset Run Log"
 msgstr "Журнал выполнения заданий"
 
@@ -37154,9 +37141,8 @@ msgstr ""
 "Если не уверены, используйте значение 4."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:386
-#, fuzzy
 msgid "Fit page to board"
-msgstr "Не удалось скопировать изображение в буфер обмена"
+msgstr "Страница по размеру платы"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:412
 msgid "Generate property popups for front footprints"
