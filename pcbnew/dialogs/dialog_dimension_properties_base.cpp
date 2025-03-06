@@ -169,10 +169,6 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 
 	gbSizerFormat->Add( m_lblPrecision, wxGBPosition( 2, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_lblArrowDirection = new wxStaticText( m_sizerFormat->GetStaticBox(), wxID_ANY, _("Arrow direction:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_lblArrowDirection->Wrap( -1 );
-	gbSizerFormat->Add( m_lblArrowDirection, wxGBPosition( 3, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
-
 	wxString m_cbPrecisionChoices[] = { _("0"), _("0.0"), _("0.00"), _("0.000"), _("0.0000"), _("0.00000"), _("0.00 in / 0 mils / 0.0 mm"), _("0.000 / 0 / 0.00"), _("0.0000 / 0.0 / 0.000"), _("0.00000 / 0.00 / 0.0000") };
 	int m_cbPrecisionNChoices = sizeof( m_cbPrecisionChoices ) / sizeof( wxString );
 	m_cbPrecision = new wxChoice( m_sizerFormat->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbPrecisionNChoices, m_cbPrecisionChoices, 0 );
@@ -180,14 +176,6 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 	m_cbPrecision->SetToolTip( _("Choose how many digits of precision to display") );
 
 	gbSizerFormat->Add( m_cbPrecision, wxGBPosition( 2, 5 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
-
-	wxString m_cbArrowDirectionChoices[] = { _("Inward"), _("Outward") };
-	int m_cbArrowDirectionNChoices = sizeof( m_cbArrowDirectionChoices ) / sizeof( wxString );
-	m_cbArrowDirection = new wxChoice( m_sizerFormat->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbArrowDirectionNChoices, m_cbArrowDirectionChoices, 0 );
-	m_cbArrowDirection->SetSelection( 0 );
-	m_cbArrowDirection->SetToolTip( _("Chose Dimension Arrow Direction\nAutomatic: Determined based on text position.\nInward:    >-----<\nOutward: <----->") );
-
-	gbSizerFormat->Add( m_cbArrowDirection, wxGBPosition( 3, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_cbLayer = new PCB_LAYER_BOX_SELECTOR( m_sizerFormat->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	gbSizerFormat->Add( m_cbLayer, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
@@ -199,7 +187,7 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 	m_cbSuppressZeroes = new wxCheckBox( m_sizerFormat->GetStaticBox(), wxID_ANY, _("Suppress trailing zeroes"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbSuppressZeroes->SetToolTip( _("When checked, \"0.100\" will be shown as \"0.1\" even if the precision setting is higher") );
 
-	gbSizerFormat->Add( m_cbSuppressZeroes, wxGBPosition( 4, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizerFormat->Add( m_cbSuppressZeroes, wxGBPosition( 3, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_lblPreview = new wxStaticText( m_sizerFormat->GetStaticBox(), wxID_ANY, _("Preview:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblPreview->Wrap( -1 );
@@ -446,6 +434,18 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 	m_lblExtensionOvershootUnits = new wxStaticText( sbSizerLine->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblExtensionOvershootUnits->Wrap( -1 );
 	gbSizerLine->Add( m_lblExtensionOvershootUnits, wxGBPosition( 1, 6 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_lblArrowDirection = new wxStaticText( sbSizerLine->GetStaticBox(), wxID_ANY, _("Arrow direction:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblArrowDirection->Wrap( -1 );
+	gbSizerLine->Add( m_lblArrowDirection, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
+
+	wxString m_cbArrowDirectionChoices[] = { _("Inward"), _("Outward") };
+	int m_cbArrowDirectionNChoices = sizeof( m_cbArrowDirectionChoices ) / sizeof( wxString );
+	m_cbArrowDirection = new wxChoice( sbSizerLine->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbArrowDirectionNChoices, m_cbArrowDirectionChoices, 0 );
+	m_cbArrowDirection->SetSelection( 0 );
+	m_cbArrowDirection->SetToolTip( _("Chose Dimension Arrow Direction\nAutomatic: Determined based on text position.\nInward:    >-----<\nOutward: <----->") );
+
+	gbSizerLine->Add( m_cbArrowDirection, wxGBPosition( 2, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP, 5 );
 
 
 	gbSizerLine->AddGrowableCol( 1 );

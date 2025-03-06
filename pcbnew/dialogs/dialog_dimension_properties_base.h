@@ -70,9 +70,7 @@ class DIALOG_DIMENSION_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_lblSuffix;
 		wxTextCtrl* m_txtSuffix;
 		wxStaticText* m_lblPrecision;
-		wxStaticText* m_lblArrowDirection;
 		wxChoice* m_cbPrecision;
-		wxChoice* m_cbArrowDirection;
 		PCB_LAYER_BOX_SELECTOR* m_cbLayer;
 		wxStaticText* m_lblLayer;
 		wxCheckBox* m_cbSuppressZeroes;
@@ -123,6 +121,8 @@ class DIALOG_DIMENSION_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_lblExtensionOvershoot;
 		wxTextCtrl* m_txtExtensionOvershoot;
 		wxStaticText* m_lblExtensionOvershootUnits;
+		wxStaticText* m_lblArrowDirection;
+		wxChoice* m_cbArrowDirection;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
