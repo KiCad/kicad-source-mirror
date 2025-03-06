@@ -75,8 +75,8 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
     {
         m_argParser.add_argument( ARG_FORMAT )
                 .default_value( std::string( "step" ) )
-                .help( UTF8STDSTR(
-                        _( "Output file format, options: step, brep, xao, glb (binary glTF), ply, stl" ) ) );
+                .help( UTF8STDSTR( _( "Output file format, options: step, brep, xao, glb "
+                                      "(binary glTF), ply, stl" ) ) );
     }
 
     m_argParser.add_argument( ARG_FORCE, "-f" )
@@ -84,14 +84,14 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
             .flag();
 
     m_argParser.add_argument( ARG_NO_UNSPECIFIED )
-            .help( UTF8STDSTR(
-                    _( "Exclude 3D models for components with 'Unspecified' footprint type" ) ) )
+            .help( UTF8STDSTR( _( "Exclude 3D models for components with 'Unspecified' footprint "
+                                  "type" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_NO_DNP )
-            .help( UTF8STDSTR(
-                    _( "Exclude 3D models for components with 'Do not populate' attribute" ) ) )
+            .help( UTF8STDSTR( _( "Exclude 3D models for components with 'Do not populate' "
+                                  "attribute" ) ) )
             .flag();
 
     if( m_format != JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN
@@ -167,14 +167,14 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
 
         m_argParser.add_argument( ARG_MIN_DISTANCE )
                 .default_value( std::string( "0.01mm" ) )
-                .help( UTF8STDSTR(
-                        _( "Minimum distance between points to treat them as separate ones" ) ) )
+                .help( UTF8STDSTR( _( "Minimum distance between points to treat them as separate "
+                                      "ones" ) ) )
                 .metavar( "MIN_DIST" );
 
         m_argParser.add_argument( ARG_NET_FILTER )
                 .default_value( std::string() )
-                .help( UTF8STDSTR( _(
-                        "Only include copper items belonging to nets matching this wildcard" ) ) );
+                .help( UTF8STDSTR( _( "Only include copper items belonging to nets matching this "
+                                      "wildcard" ) ) );
     }
 
     if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP )
@@ -194,14 +194,13 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
     {
         m_argParser.add_argument( ARG_VRML_UNITS )
                 .default_value( std::string( "in" ) )
-                .help( UTF8STDSTR(
-                        _( "Output units; valid options: mm, m, in, tenths" ) ) );
+                .help( UTF8STDSTR( _( "Output units; valid options: mm, m, in, tenths" ) ) );
 
         m_argParser.add_argument( ARG_VRML_MODELS_DIR )
                 .default_value( std::string( "" ) )
-                .help( UTF8STDSTR(
-                        _( "Name of folder to create and store 3d models in, if not specified or "
-                           "empty, the models will be embedded in main exported VRML file" ) ) );
+                .help( UTF8STDSTR( _( "Name of folder to create and store 3d models in, if not "
+                                      "specified or empty, the models will be embedded in main "
+                                      "exported VRML file" ) ) );
 
         m_argParser.add_argument( ARG_VRML_MODELS_RELATIVE )
                 .help( UTF8STDSTR( _( "Used with --models-dir to output relative paths in the "
