@@ -223,7 +223,9 @@ static bool testFootprintSelector( FOOTPRINT* aFp, const wxString& aSelector )
     {
         wxString name = aSelector.Mid( 8, aSelector.Length() - 9 );
 
-        if( aFp->GetComponentClass()->ContainsClassName( name ) )
+        const COMPONENT_CLASS* compClass = aFp->GetComponentClass();
+
+        if( compClass && compClass->ContainsClassName( name ) )
             return true;
     }
     else if( aFp->GetReference().Matches( aSelector ) )
