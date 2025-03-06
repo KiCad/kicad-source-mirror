@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 06:36+0300\n"
-"PO-Revision-Date: 2025-03-06 03:38+0000\n"
+"PO-Revision-Date: 2025-03-06 10:53+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -26766,9 +26766,9 @@ msgstr "Impostazioni lavoro Copia file"
 
 #: kicad/dialogs/dialog_destination.cpp:55
 #: kicad/dialogs/dialog_destination_base.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "%s Destination"
-msgstr "Destinazione:"
+msgstr "%s Destinazione"
 
 #: kicad/dialogs/dialog_destination.cpp:86
 msgid "Select output directory"
@@ -26787,9 +26787,8 @@ msgid "Zip"
 msgstr "Zip"
 
 #: kicad/dialogs/dialog_destination_base.cpp:46
-#, fuzzy
 msgid "Destination path:"
-msgstr "Destinazione:"
+msgstr "Percorso destinazione:"
 
 #: kicad/dialogs/dialog_destination_base.cpp:64
 msgid "Include jobs:"
@@ -26887,9 +26886,9 @@ msgid "Update Available"
 msgstr "Aggiornamento disponibile"
 
 #: kicad/dialogs/panel_jobset.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Destination: %s"
-msgstr "Destinazione:"
+msgstr "Destinazione: %s"
 
 #: kicad/dialogs/panel_jobset.cpp:68
 msgid "No."
@@ -26900,9 +26899,8 @@ msgid "Job Description"
 msgstr "Descrizione lavoro"
 
 #: kicad/dialogs/panel_jobset.cpp:70
-#, fuzzy
 msgid "Source"
-msgstr "Sorgente:"
+msgstr "Sorgente"
 
 #: kicad/dialogs/panel_jobset.cpp:159
 msgid "No output messages"
@@ -26921,19 +26919,16 @@ msgid "Running jobs"
 msgstr "Lavori in esecuzione"
 
 #: kicad/dialogs/panel_jobset.cpp:295
-#, fuzzy
 msgid "Edit Destination Options..."
-msgstr "Modifica opzioni d'uscita..."
+msgstr "Modifica opzioni destinazione..."
 
 #: kicad/dialogs/panel_jobset.cpp:296
-#, fuzzy
 msgid "Delete Destination"
-msgstr "Cancella associazione"
+msgstr "Cancella destinazione"
 
 #: kicad/dialogs/panel_jobset.cpp:299
-#, fuzzy
 msgid "View Last Run Log..."
-msgstr "Mostra i risultati dell'ultima esecuzione..."
+msgstr "Mostra messaggi dell'ultima esecuzione..."
 
 #: kicad/dialogs/panel_jobset.cpp:389
 msgid "Edit Job Description"
@@ -26964,47 +26959,40 @@ msgid "Select job type:"
 msgstr "Seleziona tipo lavoro:"
 
 #: kicad/dialogs/panel_jobset.cpp:783
-#, fuzzy
 msgid "Destination Types"
-msgstr "Destinazione:"
+msgstr "Tipi di destinazione"
 
 #: kicad/dialogs/panel_jobset.cpp:792
-#, fuzzy
 msgid "Add New Destination"
-msgstr "Destinazione:"
+msgstr "Aggiungi nuova destinazione"
 
 #: kicad/dialogs/panel_jobset.cpp:793
-#, fuzzy
 msgid "Select destination type:"
-msgstr "Seleziona tipo lavoro:"
+msgstr "Seleziona tipo destinazione:"
 
 #: kicad/dialogs/panel_jobset.cpp:958
-#, fuzzy
 msgid "No destinations defined"
-msgstr "Nessuna uscita definita"
+msgstr "Nessuna destinazione definita"
 
 #: kicad/dialogs/panel_jobset_base.cpp:24
 msgid "Jobs"
 msgstr "Lavori"
 
 #: kicad/dialogs/panel_jobset_base.cpp:83
-#, fuzzy
 msgid "Destinations"
-msgstr "Destinazione:"
+msgstr "Destinazioni"
 
 #: kicad/dialogs/panel_jobset_base.cpp:116
 msgid "Save Jobset"
 msgstr "Salva insieme di lavori"
 
 #: kicad/dialogs/panel_jobset_base.cpp:122
-#, fuzzy
 msgid "Generate All Destinations"
-msgstr "Genera tutte le uscite"
+msgstr "Genera tutte le destinazioni"
 
 #: kicad/dialogs/panel_jobset_base.h:133
-#, fuzzy
 msgid "Jobset Run Log"
-msgstr "Registro risultati esecuzione dei lavori"
+msgstr "Risultati esecuzione gruppo di lavori"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:143
 msgid "Edit the project schematic"
@@ -39098,14 +39086,12 @@ msgstr ""
 "personalizzate o altre impostazioni."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:160
-#, fuzzy
 msgid "Minimum groove for creepage:"
-msgstr "Distanza rame minima"
+msgstr "Scanalatura minima per creepage:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:165
-#, fuzzy
 msgid "The minimum slot width from DRC creepage checks"
-msgstr "Larghezza minima rame degli elementi rame connessi."
+msgstr "Larghezza solco minima dai controlli DRC del creepage"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:185
 msgid "Holes"
@@ -39385,9 +39371,8 @@ msgid "Board contour"
 msgstr "Contorno scheda"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:328
-#, fuzzy
 msgid "Board contour setback"
-msgstr "Contorno scheda"
+msgstr "Distanza dal contorno scheda"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:342
 #: pcbnew/dialogs/panel_setup_layers.cpp:356
