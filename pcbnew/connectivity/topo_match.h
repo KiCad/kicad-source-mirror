@@ -184,7 +184,7 @@ private:
 
     std::vector<COMPONENT*> findMatchingComponents( CONNECTION_GRAPH* aRefGraph,
                                                     COMPONENT*             ref,
-                                                    BACKTRACK_STAGE& partialMatches );
+                                                    const BACKTRACK_STAGE& partialMatches );
 
     std::vector<COMPONENT*> m_components;
 
