@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 06:36+0300\n"
-"PO-Revision-Date: 2025-03-04 22:27+0000\n"
+"PO-Revision-Date: 2025-03-06 03:38+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -30612,7 +30612,7 @@ msgstr "边缘连接器选项。"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:121
 msgid "Core"
-msgstr "核心"
+msgstr "Core"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:122
 msgid "PrePreg"
