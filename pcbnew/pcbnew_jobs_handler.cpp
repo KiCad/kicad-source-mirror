@@ -345,20 +345,13 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
 
         switch( aStepJob->m_format )
         {
-        case JOB_EXPORT_PCB_3D::FORMAT::VRML: fn.SetExt( FILEEXT::VrmlFileExtension );
-            break;
-        case JOB_EXPORT_PCB_3D::FORMAT::STEP: fn.SetExt( FILEEXT::StepFileExtension );
-            break;
-        case JOB_EXPORT_PCB_3D::FORMAT::BREP: fn.SetExt( FILEEXT::BrepFileExtension );
-            break;
-        case JOB_EXPORT_PCB_3D::FORMAT::XAO: fn.SetExt( FILEEXT::XaoFileExtension );
-            break;
-        case JOB_EXPORT_PCB_3D::FORMAT::GLB: fn.SetExt( FILEEXT::GltfBinaryFileExtension );
-            break;
-        case JOB_EXPORT_PCB_3D::FORMAT::PLY: fn.SetExt( FILEEXT::PlyFileExtension );
-            break;
-        case JOB_EXPORT_PCB_3D::FORMAT::STL: fn.SetExt( FILEEXT::StlFileExtension );
-            break;
+        case JOB_EXPORT_PCB_3D::FORMAT::VRML: fn.SetExt( FILEEXT::VrmlFileExtension );       break;
+        case JOB_EXPORT_PCB_3D::FORMAT::STEP: fn.SetExt( FILEEXT::StepFileExtension );       break;
+        case JOB_EXPORT_PCB_3D::FORMAT::BREP: fn.SetExt( FILEEXT::BrepFileExtension );       break;
+        case JOB_EXPORT_PCB_3D::FORMAT::XAO:  fn.SetExt( FILEEXT::XaoFileExtension );        break;
+        case JOB_EXPORT_PCB_3D::FORMAT::GLB:  fn.SetExt( FILEEXT::GltfBinaryFileExtension ); break;
+        case JOB_EXPORT_PCB_3D::FORMAT::PLY:  fn.SetExt( FILEEXT::PlyFileExtension );        break;
+        case JOB_EXPORT_PCB_3D::FORMAT::STL:  fn.SetExt( FILEEXT::StlFileExtension );        break;
         default:
             m_reporter->Report( _( "Unknown export format" ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_UNKNOWN; // shouldnt have gotten here
@@ -400,11 +393,17 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
             originY = pcbIUScale.IUTomm( bbox.GetCenter().y );
         }
 
-        bool success = vrmlExporter.ExportVRML_File(
-                brd->GetProject(), &messages, outPath, scale,
-                aStepJob->m_3dparams.m_IncludeUnspecified, aStepJob->m_3dparams.m_IncludeDNP,
-                !aStepJob->m_vrmlModelDir.IsEmpty(), aStepJob->m_vrmlRelativePaths,
-                aStepJob->m_vrmlModelDir, originX, originY );
+        bool success = vrmlExporter.ExportVRML_File( brd->GetProject(),
+                                                     &messages,
+                                                     outPath,
+                                                     scale,
+                                                     aStepJob->m_3dparams.m_IncludeUnspecified,
+                                                     aStepJob->m_3dparams.m_IncludeDNP,
+                                                     !aStepJob->m_vrmlModelDir.IsEmpty(),
+                                                     aStepJob->m_vrmlRelativePaths,
+                                                     aStepJob->m_vrmlModelDir,
+                                                     originX,
+                                                     originY );
 
         if ( success )
         {
