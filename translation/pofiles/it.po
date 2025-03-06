@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 06:36+0300\n"
-"PO-Revision-Date: 2025-03-06 03:38+0000\n"
+"PO-Revision-Date: 2025-03-06 10:53+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -5758,12 +5758,11 @@ msgstr "Destra"
 
 #: common/dialogs/panel_toolbar_customization.cpp:48
 msgid "Top main"
-msgstr ""
+msgstr "Cima principale"
 
 #: common/dialogs/panel_toolbar_customization.cpp:49
-#, fuzzy
 msgid "Top auxillary"
-msgstr "Strato superiore"
+msgstr "Cima ausiliario"
 
 #: common/dialogs/panel_toolbar_customization.cpp:133
 #: common/dialogs/panel_toolbar_customization_base.cpp:72
@@ -23406,19 +23405,16 @@ msgid "Next Net Item"
 msgstr "Elemento net successivo"
 
 #: eeschema/tools/ee_actions.cpp:1116
-#, fuzzy
 msgid "Select next item on the current net"
-msgstr "Seleziona un elemento di connessione sotto il puntatore"
+msgstr "Seleziona elemento successivo sul collegamento corrente"
 
 #: eeschema/tools/ee_actions.cpp:1122
-#, fuzzy
 msgid "Previous Net Item"
-msgstr "Foglio precedente"
+msgstr "Elemento net precedente"
 
 #: eeschema/tools/ee_actions.cpp:1123
-#, fuzzy
 msgid "Select previous item on the current net"
-msgstr "Seleziona un elemento di connessione sotto il puntatore"
+msgstr "Seleziona elemento precedente sul collegamento corrente"
 
 #: eeschema/tools/ee_actions.cpp:1128
 msgid "Export Drawing to Clipboard"
@@ -25563,29 +25559,24 @@ msgid "Text info entry"
 msgstr "Voce info testo"
 
 #: gerbview/toolbars_gerber.cpp:271
-#, fuzzy
 msgid "Component highlight"
-msgstr "Commuta evidenziamento net"
+msgstr "Evidenziamento componente"
 
 #: gerbview/toolbars_gerber.cpp:273
-#, fuzzy
 msgid "Net highlight"
-msgstr "Colore evidenziazione collegamento"
+msgstr "Evidenziamento net"
 
 #: gerbview/toolbars_gerber.cpp:275
-#, fuzzy
 msgid "Aperture highlight"
-msgstr "Colore evidenziazione collegamento"
+msgstr "Evidenziamento apertura"
 
 #: gerbview/toolbars_gerber.cpp:277
-#, fuzzy
 msgid "DCode Selector"
-msgstr "Sbroglio selezionato"
+msgstr "Selettore DCode"
 
 #: gerbview/toolbars_gerber.cpp:278
-#, fuzzy
 msgid "Select all items with the selected DCode"
-msgstr "Seleziona tutti gli elementi sullo schermo"
+msgstr "Seleziona tutti gli elementi con il DCode selezionato"
 
 #: gerbview/toolbars_gerber.cpp:281
 msgid "<No selection>"
@@ -26349,9 +26340,8 @@ msgid "Generate map / summary of drill hits"
 msgstr "Genera mappa / indice dei centri fori"
 
 #: kicad/cli/command_pcb_export_drill.cpp:94
-#, fuzzy
 msgid "Generate a file specifically for tenting"
-msgstr "Impostazioni lavoro Genera distinta materiali"
+msgstr "Genera file specifico per il tenting"
 
 #: kicad/cli/command_pcb_export_drill.cpp:99
 msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
@@ -27009,9 +26999,9 @@ msgstr "Impostazioni lavoro Copia file"
 
 #: kicad/dialogs/dialog_destination.cpp:55
 #: kicad/dialogs/dialog_destination_base.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "%s Destination"
-msgstr "Destinazione:"
+msgstr "%s Destinazione"
 
 #: kicad/dialogs/dialog_destination.cpp:86
 msgid "Select output directory"
@@ -27030,9 +27020,8 @@ msgid "Zip"
 msgstr "Zip"
 
 #: kicad/dialogs/dialog_destination_base.cpp:46
-#, fuzzy
 msgid "Destination path:"
-msgstr "Destinazione:"
+msgstr "Percorso destinazione:"
 
 #: kicad/dialogs/dialog_destination_base.cpp:64
 msgid "Include jobs:"
@@ -27130,9 +27119,9 @@ msgid "Update Available"
 msgstr "Aggiornamento disponibile"
 
 #: kicad/dialogs/panel_jobset.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Destination: %s"
-msgstr "Destinazione:"
+msgstr "Destinazione: %s"
 
 #: kicad/dialogs/panel_jobset.cpp:68
 msgid "No."
@@ -27143,9 +27132,8 @@ msgid "Job Description"
 msgstr "Descrizione lavoro"
 
 #: kicad/dialogs/panel_jobset.cpp:70
-#, fuzzy
 msgid "Source"
-msgstr "Sorgente:"
+msgstr "Sorgente"
 
 #: kicad/dialogs/panel_jobset.cpp:159
 msgid "No output messages"
@@ -27164,19 +27152,16 @@ msgid "Running jobs"
 msgstr "Lavori in esecuzione"
 
 #: kicad/dialogs/panel_jobset.cpp:295
-#, fuzzy
 msgid "Edit Destination Options..."
-msgstr "Modifica opzioni d'uscita..."
+msgstr "Modifica opzioni destinazione..."
 
 #: kicad/dialogs/panel_jobset.cpp:296
-#, fuzzy
 msgid "Delete Destination"
-msgstr "Cancella associazione"
+msgstr "Cancella destinazione"
 
 #: kicad/dialogs/panel_jobset.cpp:299
-#, fuzzy
 msgid "View Last Run Log..."
-msgstr "Mostra i risultati dell'ultima esecuzione..."
+msgstr "Mostra messaggi dell'ultima esecuzione..."
 
 #: kicad/dialogs/panel_jobset.cpp:389
 msgid "Edit Job Description"
@@ -27207,47 +27192,40 @@ msgid "Select job type:"
 msgstr "Seleziona tipo lavoro:"
 
 #: kicad/dialogs/panel_jobset.cpp:783
-#, fuzzy
 msgid "Destination Types"
-msgstr "Destinazione:"
+msgstr "Tipi di destinazione"
 
 #: kicad/dialogs/panel_jobset.cpp:792
-#, fuzzy
 msgid "Add New Destination"
-msgstr "Destinazione:"
+msgstr "Aggiungi nuova destinazione"
 
 #: kicad/dialogs/panel_jobset.cpp:793
-#, fuzzy
 msgid "Select destination type:"
-msgstr "Seleziona tipo lavoro:"
+msgstr "Seleziona tipo destinazione:"
 
 #: kicad/dialogs/panel_jobset.cpp:958
-#, fuzzy
 msgid "No destinations defined"
-msgstr "Nessuna uscita definita"
+msgstr "Nessuna destinazione definita"
 
 #: kicad/dialogs/panel_jobset_base.cpp:24
 msgid "Jobs"
 msgstr "Lavori"
 
 #: kicad/dialogs/panel_jobset_base.cpp:83
-#, fuzzy
 msgid "Destinations"
-msgstr "Destinazione:"
+msgstr "Destinazioni"
 
 #: kicad/dialogs/panel_jobset_base.cpp:116
 msgid "Save Jobset"
 msgstr "Salva insieme di lavori"
 
 #: kicad/dialogs/panel_jobset_base.cpp:122
-#, fuzzy
 msgid "Generate All Destinations"
-msgstr "Genera tutte le uscite"
+msgstr "Genera tutte le destinazioni"
 
 #: kicad/dialogs/panel_jobset_base.h:133
-#, fuzzy
 msgid "Jobset Run Log"
-msgstr "Registro risultati esecuzione dei lavori"
+msgstr "Risultati esecuzione gruppo di lavori"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:143
 msgid "Edit the project schematic"
@@ -27354,9 +27332,8 @@ msgstr ""
 "diverso. Il progetto non può essere importato."
 
 #: kicad/import_project.cpp:146
-#, fuzzy
 msgid "Import Altium Project Files"
-msgstr "Importa file progetto Eagle"
+msgstr "Importa file progetto Altium"
 
 #: kicad/import_project.cpp:154
 msgid "Import CADSTAR Archive Project Files"
@@ -27479,14 +27456,12 @@ msgid "Import Non-KiCad Project..."
 msgstr "Importa progetto non-KiCad..."
 
 #: kicad/menubar.cpp:115
-#, fuzzy
 msgid "Altium Project..."
-msgstr "Progetto EAGLE..."
+msgstr "Progetto Altium..."
 
 #: kicad/menubar.cpp:116
-#, fuzzy
 msgid "Import Altium Schematic and PCB (*.PrjPcb)"
-msgstr "Imposta un archivio schemi e C.S. CADSTAR (*.csa, *.cpa)"
+msgstr "Importa schemi e C.S. Altium (*.PrjPcb)"
 
 #: kicad/menubar.cpp:119
 msgid "CADSTAR Project..."
@@ -28987,24 +28962,20 @@ msgstr ""
 "che non sono su tutte le pagine sono visualizzati"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:160
-#, fuzzy
 msgid "Origin Selector"
-msgstr "Immagine originale"
+msgstr "Selettore origine"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:161
-#, fuzzy
 msgid "Select the origin of the status bar coordinates"
-msgstr "Seleziona quale origine viene usata per mostrare le coordinate X,Y."
+msgstr "Seleziona origine coordinate della barra di stato"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:162
-#, fuzzy
 msgid "Page Selector"
-msgstr "Selezione strati"
+msgstr "Selettore pagina"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:163
-#, fuzzy
 msgid "Select the page to simulate item displays"
-msgstr "Selezionare l'elemento da salvare"
+msgstr "Seleziona pagina per simulare le visualizzazioni elemento"
 
 #: pagelayout_editor/tools/pl_actions.cpp:72
 msgid "Place Bitmaps"
@@ -33326,9 +33297,8 @@ msgstr "Sotto i limiti di area"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:363
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:288
-#, fuzzy
 msgid "Area limit:"
-msgstr "Sotto i limiti di area"
+msgstr "Limite area:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:366
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:291
@@ -35646,9 +35616,8 @@ msgid "Gerber X2"
 msgstr "Gerber X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:92
-#, fuzzy
 msgid "Generate tenting layers"
-msgstr "Genera file di piazzamento"
+msgstr "Genera strati tenting"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:106
 msgid "Generate map:"
@@ -38428,9 +38397,8 @@ msgid "Border style:"
 msgstr "Stile bordo:"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:148
-#, fuzzy
 msgid "Unknown choice"
-msgstr "Metodo sconosciuto"
+msgstr "Scelta sconosciuta"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:628
 #, c-format
@@ -38490,9 +38458,8 @@ msgid "Edit Track/Via Properties"
 msgstr "Modifica proprietà pista/via"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:178
-#, fuzzy
 msgid "From rules"
-msgstr "Dalle regole di progettazione"
+msgstr "Dalle regole"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:180
 msgid "Type I a ( tented top )"
@@ -38543,9 +38510,8 @@ msgid "Type IV a ( plugged and tented bottom )"
 msgstr "Tipo IV a (plugged e tented sotto)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:192
-#, fuzzy
 msgid "Type V ( filled )"
-msgstr "Battere il testo filtrato"
+msgstr "Tipo V (riempito)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:193
 msgid "Type VI a ( filled and tented top )"
@@ -38639,9 +38605,8 @@ msgid "End layer:"
 msgstr "Strato finale:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:378
-#, fuzzy
 msgid "Protection features:"
-msgstr "Area sezione trasversale:"
+msgstr "Caratteristiche di protezione:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:385
 msgid ""
@@ -39389,14 +39354,12 @@ msgstr ""
 "personalizzate o altre impostazioni."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:160
-#, fuzzy
 msgid "Minimum groove for creepage:"
-msgstr "Distanza rame minima"
+msgstr "Scanalatura minima per creepage:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:165
-#, fuzzy
 msgid "The minimum slot width from DRC creepage checks"
-msgstr "Larghezza minima rame degli elementi rame connessi."
+msgstr "Larghezza solco minima dai controlli DRC del creepage"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:185
 msgid "Holes"
@@ -39680,9 +39643,8 @@ msgid "Board contour"
 msgstr "Contorno scheda"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:329
-#, fuzzy
 msgid "Board contour setback"
-msgstr "Contorno scheda"
+msgstr "Distanza dal contorno scheda"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:343
 #: pcbnew/dialogs/panel_setup_layers.cpp:357
