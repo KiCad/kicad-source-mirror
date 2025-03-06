@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-06 13:54+0300\n"
-"PO-Revision-Date: 2025-03-06 10:53+0000\n"
+"PO-Revision-Date: 2025-03-06 23:18+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -49960,9 +49960,8 @@ msgstr "Mostra l'ispettore del collegamento"
 
 #: pcbnew/tools/pcb_actions.cpp:1345
 #: pcbnew/zone_manager/dialog_zone_manager_base.h:78
-#, fuzzy
 msgid "Zone Manager"
-msgstr "Gestore progetto"
+msgstr "Gestore zone"
 
 #: pcbnew/tools/pcb_actions.cpp:1346
 #, fuzzy
@@ -51203,9 +51202,8 @@ msgid "Show copper zones"
 msgstr "Mostra le zone rame"
 
 #: pcbnew/widgets/appearance_controls.cpp:333
-#, fuzzy
 msgid "Filled Shapes"
-msgstr "Forma riempita"
+msgstr "Forme riempite"
 
 #: pcbnew/widgets/appearance_controls.cpp:333
 #, fuzzy
@@ -51780,29 +51778,24 @@ msgid "User defined layer 40"
 msgstr "Strato definito dall'utente 4"
 
 #: pcbnew/widgets/appearance_controls.cpp:1715
-#, fuzzy
 msgid "User defined layer 41"
-msgstr "Strato definito dall'utente 4"
+msgstr "Strato definito dall'utente 41"
 
 #: pcbnew/widgets/appearance_controls.cpp:1716
-#, fuzzy
 msgid "User defined layer 42"
-msgstr "Strato definito dall'utente 4"
+msgstr "Strato definito dall'utente 42"
 
 #: pcbnew/widgets/appearance_controls.cpp:1717
-#, fuzzy
 msgid "User defined layer 43"
-msgstr "Strato definito dall'utente 4"
+msgstr "Strato definito dall'utente 43"
 
 #: pcbnew/widgets/appearance_controls.cpp:1718
-#, fuzzy
 msgid "User defined layer 44"
-msgstr "Strato definito dall'utente 4"
+msgstr "Strato definito dall'utente 44"
 
 #: pcbnew/widgets/appearance_controls.cpp:1719
-#, fuzzy
 msgid "User defined layer 45"
-msgstr "Strato definito dall'utente 4"
+msgstr "Strato definito dall'utente 45"
 
 #: pcbnew/widgets/appearance_controls.cpp:1766
 msgid "Front copper layer"
@@ -52007,14 +52000,12 @@ msgid "Remove Selected Custom Group"
 msgstr "Rimuovi gruppo personalizzato selezionato"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1287
-#, fuzzy
 msgid "Group name / pattern:"
-msgstr "Nome gruppo:"
+msgstr "Motivo /nome gruppo:"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1287
-#, fuzzy
 msgid "New Group"
-msgstr "Gruppo"
+msgstr "Nuovo gruppo"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1289
 msgid "(Use /.../ to indicate a regular expression.)"
@@ -52050,9 +52041,8 @@ msgid "Show Zero Pad Nets"
 msgstr "Mostra piazzole senza collegamenti"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1417
-#, fuzzy
 msgid "Show Unconnected Nets"
-msgstr "Non connesso"
+msgstr "Mostra net non connesse"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1426
 #, fuzzy
@@ -52060,9 +52050,8 @@ msgid "Save Net Inspector Report"
 msgstr "Ispettore collegamenti"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1435
-#, fuzzy
 msgid "Show / Hide Columns"
-msgstr "Mostra pin nascosti"
+msgstr "Mostra / Nascondi colonne"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1584
 #, fuzzy
@@ -52154,9 +52143,8 @@ msgid "Restrictions"
 msgstr "Restrizioni"
 
 #: pcbnew/zone.cpp:797
-#, fuzzy
 msgid "Placement source"
-msgstr "Piazzamento"
+msgstr "Sorgente piazzamento"
 
 #: pcbnew/zone.cpp:827
 #, c-format
@@ -52258,24 +52246,20 @@ msgid "Keep Out Copper Pours"
 msgstr "Riempimenti aree proibite"
 
 #: pcbnew/zone.cpp:1973
-#, fuzzy
 msgid "Keep Out Footprints"
-msgstr "Impronte proibite"
+msgstr "Impronte proibite impronte"
 
 #: pcbnew/zone.cpp:1982
-#, fuzzy
 msgid "Enable"
-msgstr "Abilitati:"
+msgstr "Abilita"
 
 #: pcbnew/zone.cpp:1989
-#, fuzzy
 msgid "Source Type"
-msgstr "Sorgente 2"
+msgstr "Tipo sorgente"
 
 #: pcbnew/zone.cpp:1994
-#, fuzzy
 msgid "Source Name"
-msgstr "Sorgente 2"
+msgstr "Nome sorgente"
 
 #: pcbnew/zone.cpp:2026
 msgid "Cannot be less than zone minimum width"
@@ -52394,9 +52378,9 @@ msgid "thermal reliefs for PTH"
 msgstr "raccordi termici per fori metallizzati"
 
 #: plugins/3d/vrml/vrml.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "[INFO] load failed: %s"
-msgstr "[INFO] caricamento fallito: riga in ingresso troppo lunga\n"
+msgstr "[INFO] caricamento fallito: %s"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
