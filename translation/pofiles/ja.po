@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-06 13:54+0300\n"
-"PO-Revision-Date: 2025-03-04 22:27+0000\n"
+"PO-Revision-Date: 2025-03-07 09:02+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -26183,9 +26183,8 @@ msgstr ""
 "のページサイズ, 2 = 基板の領域のみ)"
 
 #: kicad/cli/command_pcb_export_svg.cpp:92
-#, fuzzy
 msgid "Fit the page to the board"
-msgstr "基板上の全ゾーンを塗り潰し"
+msgstr "ページを基板に合わせる"
 
 #: kicad/cli/command_pcb_export_svg.cpp:96
 #: kicad/cli/command_sch_export_plot.cpp:77
@@ -36981,9 +36980,8 @@ msgstr ""
 "不明な場合は 4を選択して下さい。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:386
-#, fuzzy
 msgid "Fit page to board"
-msgstr "クリップボードに画像をコピーできませんでした"
+msgstr "ページを基板に合わせる"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:412
 msgid "Generate property popups for front footprints"
@@ -37794,9 +37792,8 @@ msgid "Apply Anyway"
 msgstr "強制的に追加"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Cancel Changes"
-msgstr "変更をキャンセルしますか?"
+msgstr "変更をキャンセルする"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:571
 #, c-format
