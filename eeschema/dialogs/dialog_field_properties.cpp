@@ -292,9 +292,10 @@ void DIALOG_FIELD_PROPERTIES::init()
         m_TextCtrl->Show( false );
     }
 
-    // Show the unit selector for reference fields on multi-unit symbols
+    // Show the unit selector for reference fields on multi-unit schematic symbols
     bool showUnitSelector = m_fieldId == FIELD_T::REFERENCE
                             && m_field->GetParentSymbol()
+                            && m_field->GetParentSymbol()->Type() == SCH_SYMBOL_T
                             && m_field->GetParentSymbol()->IsMulti();
 
     m_unitLabel->Show( showUnitSelector );
@@ -426,7 +427,12 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataToWindow()
 
     if( m_unitChoice->IsShown() )
     {
-        const SCH_SYMBOL* symbol = static_cast<const SCH_SYMBOL*>( m_field->GetParentSymbol() );
+        const SYMBOL* parent = m_field->GetParentSymbol();
+
+        // Control shouldn't be shown for non-schematic symbols
+        wxCHECK( parent->Type() == SCH_SYMBOL_T, true );
+
+        const SCH_SYMBOL* symbol = static_cast<const SCH_SYMBOL*>( parent );
 
         for( int ii = 1; ii <= symbol->GetUnitCount(); ii++ )
         {
@@ -436,7 +442,7 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataToWindow()
                 m_unitChoice->Append( symbol->SubReference( ii, false ) );
         }
 
-        if( symbol->GetUnit() <= ( int )m_unitChoice->GetCount() )
+        if( symbol->GetUnit() <= (int) m_unitChoice->GetCount() )
             m_unitChoice->SetSelection( symbol->GetUnit() - 1 );
     }
 
