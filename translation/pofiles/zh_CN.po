@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-06 13:54+0300\n"
-"PO-Revision-Date: 2025-03-06 15:21+0000\n"
+"PO-Revision-Date: 2025-03-07 09:02+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -7388,7 +7388,7 @@ msgstr "半径为 %f 且度数为 %f 的无效弧线"
 #: common/io/easyeda/easyeda_parser_base.cpp:38
 #, c-format
 msgid "Failed to parse number from '%s'"
-msgstr "解析 '%s' 中的数字失败"
+msgstr "解析 '%s' 中的数值失败"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:171
 #: common/io/easyedapro/easyedapro_import_utils.cpp:226
@@ -13097,9 +13097,8 @@ msgstr ""
 "同时, 该符号也不会在 BOM 中出现, 也不能为其分配封装。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:203
-#, fuzzy
 msgid "Define as local power symbol"
-msgstr "定义为电源符号"
+msgstr "定义为局部电源符号"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:204
 msgid ""
@@ -15817,9 +15816,8 @@ msgid "Sheet background:"
 msgstr "图纸背景:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:97
-#, fuzzy
 msgid "Power Symbols:"
-msgstr "电源符号"
+msgstr "电源符号:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:105
 msgid ""
@@ -21750,9 +21748,8 @@ msgid "Power Symbol"
 msgstr "电源符号"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1763
-#, fuzzy
 msgid "Power Symbol (Local)"
-msgstr "电源符号"
+msgstr "电源符号 (局部)"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1770
 msgid "Datasheet"
@@ -24983,9 +24980,8 @@ msgid "Aperture highlight"
 msgstr "开窗高亮"
 
 #: gerbview/toolbars_gerber.cpp:277
-#, fuzzy
 msgid "DCode Selector"
-msgstr "对选区布线"
+msgstr "D 码选择器"
 
 #: gerbview/toolbars_gerber.cpp:278
 #, fuzzy
@@ -25091,7 +25087,7 @@ msgstr "高亮特性"
 
 #: gerbview/tools/gerbview_actions.cpp:151
 msgid "Highlight DCode"
-msgstr "高亮 DCode"
+msgstr "高亮 D 码"
 
 #: gerbview/tools/gerbview_actions.cpp:159
 msgid "Next Layer"
@@ -25213,7 +25209,7 @@ msgstr "高亮光圈类型 '%s'"
 #: gerbview/tools/gerbview_selection_tool.cpp:94
 #, c-format
 msgid "Highlight DCode D%d"
-msgstr "高亮 DCode D%d"
+msgstr "高亮 D 码 D%d"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:79
 #: gerbview/widgets/layer_widget.cpp:537
@@ -25234,7 +25230,7 @@ msgstr "项目"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:131
 msgid "Show DCodes identification"
-msgstr "显示 D 码识别 ID"
+msgstr "显示 D 码标识符"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:133
 msgid "Show negative objects in this color"
@@ -26356,9 +26352,8 @@ msgid "Zip"
 msgstr "Zip"
 
 #: kicad/dialogs/dialog_destination_base.cpp:46
-#, fuzzy
 msgid "Destination path:"
-msgstr "目标:"
+msgstr "目标路径:"
 
 #: kicad/dialogs/dialog_destination_base.cpp:64
 msgid "Include jobs:"
@@ -26490,14 +26485,12 @@ msgid "Edit Destination Options..."
 msgstr "编辑矩形选项..."
 
 #: kicad/dialogs/panel_jobset.cpp:296
-#, fuzzy
 msgid "Delete Destination"
-msgstr "删除分配"
+msgstr "删除目标"
 
 #: kicad/dialogs/panel_jobset.cpp:299
-#, fuzzy
 msgid "View Last Run Log..."
-msgstr "查看上次运行结果..."
+msgstr "查看上次运行日志..."
 
 #: kicad/dialogs/panel_jobset.cpp:389
 msgid "Edit Job Description"
@@ -32554,7 +32547,7 @@ msgstr "选择中心点..."
 #: pcbnew/dialogs/dialog_create_array.cpp:346
 #, c-format
 msgid "Bad numeric value for %s: %s"
-msgstr "%s 的值不是有效的数字: %s"
+msgstr "%s 的值不是有效的数值: %s"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:382
 #, c-format
@@ -37533,15 +37526,15 @@ msgstr "来自设计规则"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:180
 msgid "Type I a ( tented top )"
-msgstr ""
+msgstr "类型 I a (顶层盖油 )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:181
 msgid "Type I b ( tented both sides )"
-msgstr ""
+msgstr "类型 I b ( 双面盖油 )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:182
 msgid "Type I a ( tented bottom )"
-msgstr ""
+msgstr "类型 I a ( 底层盖油 )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:183
 msgid "Type II a ( covered and tented top )"
@@ -37580,21 +37573,20 @@ msgid "Type IV a ( plugged and tented bottom )"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:192
-#, fuzzy
 msgid "Type V ( filled )"
-msgstr "输入筛选文本 (操作或快捷键名称)"
+msgstr "类型 V ( 填充 )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:193
 msgid "Type VI a ( filled and tented top )"
-msgstr ""
+msgstr "类型 VI a ( 填充 + 顶层盖油 )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:194
 msgid "Type VI b ( filled and tented both sides )"
-msgstr ""
+msgstr "类型 VI b ( 填充 + 双面盖油 )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:195
 msgid "Type VI a ( filled and tented bottom )"
-msgstr ""
+msgstr "类型 VI a ( 填充 + 底层盖油 )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:196
 msgid "Type VII ( filled and capped )"
@@ -37674,7 +37666,7 @@ msgstr "结束层:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:378
 msgid "Protection features:"
-msgstr ""
+msgstr "保护功能:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:385
 msgid ""
@@ -45735,9 +45727,8 @@ msgid "Not capped"
 msgstr "没有连接"
 
 #: pcbnew/pcb_track.cpp:2218
-#, fuzzy
 msgid "Not filled"
-msgstr "<未定义>"
+msgstr "未填充"
 
 #: pcbnew/pcb_track.cpp:2282
 msgid "Via Properties"
@@ -46500,12 +46491,11 @@ msgstr ""
 #: pcbnew/toolbars_pcb_editor.cpp:194
 #, fuzzy
 msgid "Track routing tools"
-msgstr "布线结束处太靠近了"
+msgstr "走线布置工具"
 
 #: pcbnew/toolbars_pcb_editor.cpp:197
-#, fuzzy
 msgid "Track tuning tools"
-msgstr "布线结束处太靠近了"
+msgstr "走线调整工具"
 
 #: pcbnew/toolbars_pcb_editor.cpp:225
 msgid "PCB origins"
@@ -50831,9 +50821,8 @@ msgid "Prototype zone fill enabled. Disable setting and refill?"
 msgstr ""
 
 #: pcbnew/zone_filler.cpp:891
-#, fuzzy
 msgid "Disable and refill"
-msgstr "禁用抗锯齿"
+msgstr "禁用并重新填充"
 
 #: pcbnew/zone_filler.cpp:891 pcbnew/zone_filler.cpp:908
 msgid "Continue without Refill"
