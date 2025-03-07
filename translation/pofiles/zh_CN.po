@@ -42,7 +42,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-06 13:54+0300\n"
 "PO-Revision-Date: 2025-03-07 09:02+0000\n"
-"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -7293,7 +7293,7 @@ msgstr "半径为 %f 且度数为 %f 的无效弧线"
 #: common/io/easyeda/easyeda_parser_base.cpp:38
 #, c-format
 msgid "Failed to parse number from '%s'"
-msgstr "解析 '%s' 中的数字失败"
+msgstr "解析 '%s' 中的数值失败"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:171
 #: common/io/easyedapro/easyedapro_import_utils.cpp:226
@@ -24826,7 +24826,7 @@ msgstr "高亮特性"
 
 #: gerbview/tools/gerbview_actions.cpp:150
 msgid "Highlight DCode"
-msgstr "高亮 DCode"
+msgstr "高亮 D 码"
 
 #: gerbview/tools/gerbview_actions.cpp:158
 msgid "Next Layer"
@@ -24948,7 +24948,7 @@ msgstr "高亮光圈类型 '%s'"
 #: gerbview/tools/gerbview_selection_tool.cpp:94
 #, c-format
 msgid "Highlight DCode D%d"
-msgstr "高亮 DCode D%d"
+msgstr "高亮 D 码 D%d"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:79
 #: gerbview/widgets/layer_widget.cpp:537
@@ -24969,7 +24969,7 @@ msgstr "项目"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:131
 msgid "Show DCodes identification"
-msgstr "显示 D 码识别 ID"
+msgstr "显示 D 码标识符"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:133
 msgid "Show negative objects in this color"
@@ -26086,9 +26086,8 @@ msgid "Zip"
 msgstr "Zip"
 
 #: kicad/dialogs/dialog_destination_base.cpp:46
-#, fuzzy
 msgid "Destination path:"
-msgstr "目标:"
+msgstr "目标路径:"
 
 #: kicad/dialogs/dialog_destination_base.cpp:64
 msgid "Include jobs:"
@@ -26220,14 +26219,12 @@ msgid "Edit Destination Options..."
 msgstr "编辑矩形选项..."
 
 #: kicad/dialogs/panel_jobset.cpp:296
-#, fuzzy
 msgid "Delete Destination"
-msgstr "删除分配"
+msgstr "删除目标"
 
 #: kicad/dialogs/panel_jobset.cpp:299
-#, fuzzy
 msgid "View Last Run Log..."
-msgstr "查看上次运行结果..."
+msgstr "查看上次运行日志..."
 
 #: kicad/dialogs/panel_jobset.cpp:389
 msgid "Edit Job Description"
@@ -32268,7 +32265,7 @@ msgstr "选择中心点..."
 #: pcbnew/dialogs/dialog_create_array.cpp:346
 #, c-format
 msgid "Bad numeric value for %s: %s"
-msgstr "%s 的值不是有效的数字: %s"
+msgstr "%s 的值不是有效的数值: %s"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:382
 #, c-format
