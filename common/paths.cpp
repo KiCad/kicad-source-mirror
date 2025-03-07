@@ -387,7 +387,7 @@ wxString PATHS::GetStockPlugins3DPath()
     // plugins being loaded.
     if( wxGetEnv( wxT( "APPDIR" ), &envPath ) )
     {
-        fn.AssignDir( envPath );
+        fn.Assign( envPath, wxEmptyString );
         fn.AppendDir( wxT( "usr" ) );
         fn.AppendDir( wxT( "lib" ) );
     }
