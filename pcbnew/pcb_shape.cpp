@@ -335,17 +335,17 @@ void PCB_SHAPE::updateHatching() const
                 if( item->GetLayer() == layer && item->GetBoundingBox().Intersects( bbox ) )
                     knockoutItem( item );
             }
-
         }
 
         for( FOOTPRINT* footprint : GetBoard()->Footprints() )
         {
-            int            margin = GetHatchLineSpacing() / 2;
-            SHAPE_POLY_SET hull = footprint->GetBoundingHull( layer );
+            if( footprint == GetParentFootprint() )
+                continue;
 
-            hull.Inflate( margin, CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS, maxError );
-            holes.Append( hull );
+            // Knockout footprint courtyard
+            holes.Append( footprint->GetCourtyard( layer ) );
 
+            // Knockout footprint fields
             footprint->RunOnDescendants(
                     [&]( BOARD_ITEM* item )
                     {
