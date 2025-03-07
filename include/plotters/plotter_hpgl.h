@@ -168,7 +168,7 @@ protected:
      * @param content is the content substring.
      * @return whether a new item was made.
      */
-    bool startOrAppendItem( const VECTOR2D& location, const wxString& content );
+    bool startOrAppendItem( const VECTOR2D& location, const std::string& content = "" );
 
     struct HPGL_ITEM
     {
@@ -201,9 +201,9 @@ protected:
         /// the pen is assumed to be down following the command.
         bool       pen_returns;
 
-        int        pen;            /// Pen number for this command
-        LINE_STYLE dashType;       /// Line style for this command
-        wxString   content;        /// Text of the command
+        int         pen;            /// Pen number for this command
+        LINE_STYLE  dashType;       /// Line style for this command
+        std::string content;        /// Text of the command
     };
 
     /// Sort a list of HPGL items to improve plotting speed on mechanical plotters.

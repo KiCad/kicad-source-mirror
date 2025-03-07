@@ -199,6 +199,7 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <math/util.h>      // for KiROUND
 #include <trigo.h>
+#include <fmt/format.h>
 
 #include <plotters/plotter_hpgl.h>
 
@@ -211,7 +212,7 @@ static double dpoint_dist( const VECTOR2D& a, const VECTOR2D& b );
 // PM 2; ends the polygon definition and closes it if not closed
 // FP;   fills the polygon
 // EP;   draws the polygon outline. It usually gives a better look to the filled polygon
-static const char hpgl_end_polygon_cmd[] = "PM 2; FP; EP;\n";
+static std::string hpgl_end_polygon_cmd = "PM 2; FP; EP;\n";
 
 
 // HPGL scale factor (1 Plotter Logical Unit = 1/40mm = 25 micrometers)
@@ -258,11 +259,11 @@ void HPGL_PLOTTER::SetTargetChordLength( double chord_len )
 bool HPGL_PLOTTER::StartPlot( const wxString& aPageNumber )
 {
     wxASSERT( m_outputFile );
-    fprintf( m_outputFile, "IN;VS%d;PU;PA;SP%d;\n", m_penSpeed, m_penNumber );
+    fmt::print( m_outputFile, "IN;VS{};PU;PA;SP{};\n", m_penSpeed, m_penNumber );
 
     // Set HPGL Pen Thickness (in mm) (useful in polygon fill command)
     double penThicknessMM = userToDeviceSize( m_penDiameter ) / 40;
-    fprintf( m_outputFile, "PT %.1f;\n", penThicknessMM );
+    fmt::print( m_outputFile, "PT {:.1f};\n", penThicknessMM );
 
     return true;
 }
@@ -272,7 +273,7 @@ bool HPGL_PLOTTER::EndPlot()
 {
     wxASSERT( m_outputFile );
 
-    fputs( "PU;\n", m_outputFile );
+    fmt::print( m_outputFile, "PU;\n" );
 
     flushItem();
     sortItems( m_items );
@@ -288,20 +289,20 @@ bool HPGL_PLOTTER::EndPlot()
                 for( HPGL_ITEM const& item : m_items )
                     bbox.Merge( item.bbox );
 
-                fprintf( m_outputFile, "SC%.0f,%.0f,%.0f,%.0f;\n",
-                         bbox.GetX(),
-                         bbox.GetX() + bbox.GetWidth(),
-                         bbox.GetY(),
-                         bbox.GetY() + bbox.GetHeight() );
+                fmt::print( m_outputFile, "SC{:.0f},{:.0f},{:.0f},{:.0f};\n",
+                            bbox.GetX(),
+                            bbox.GetX() + bbox.GetWidth(),
+                            bbox.GetY(),
+                            bbox.GetY() + bbox.GetHeight() );
             }
             else
             {
                 VECTOR2D pagesize_device( m_paperSize * m_iuPerDeviceUnit );
-                fprintf( m_outputFile, "SC%.0f,%.0f,%.0f,%.0f;\n",
-                         0.0,
-                         pagesize_device.x,
-                         0.0,
-                         pagesize_device.y );
+                fmt::print( m_outputFile, "SC{:.0f},{:.0f},{:.0f},{:.0f};\n",
+                            0.0,
+                            pagesize_device.x,
+                            0.0,
+                            pagesize_device.y );
             }
         }
 
@@ -316,43 +317,43 @@ bool HPGL_PLOTTER::EndPlot()
             {
                 if( !pen_up )
                 {
-                    fputs( "PU;", m_outputFile );
+                    fmt::print( m_outputFile, "PU;" );
                     pen_up = true;
                 }
 
-                fprintf( m_outputFile, "PA %.0f,%.0f;", item.loc_start.x, item.loc_start.y );
+                fmt::print( m_outputFile, "PA {:.0f},{:.0f};", item.loc_start.x, item.loc_start.y );
             }
 
             if( item.dashType != current_dash )
             {
                 current_dash = item.dashType;
-                fputs( lineStyleCommand( item.dashType ), m_outputFile );
+                fmt::print( m_outputFile, "{}", lineStyleCommand( item.dashType ) );
             }
 
             if( item.pen != current_pen )
             {
                 if( !pen_up )
                 {
-                    fputs( "PU;", m_outputFile );
+                    fmt::print( m_outputFile, "PU;" );
                     pen_up = true;
                 }
 
-                fprintf( m_outputFile, "SP%d;", item.pen );
+                fmt::print( m_outputFile, "SP{};", item.pen );
                 current_pen = item.pen;
             }
 
             if( pen_up && !item.lift_before )
             {
-                fputs( "PD;", m_outputFile );
+                fmt::print( m_outputFile, "PD;" );
                 pen_up = false;
             }
             else if( !pen_up && item.lift_before )
             {
-                fputs( "PU;", m_outputFile );
+                fmt::print( m_outputFile, "PU;" );
                 pen_up = true;
             }
 
-            fputs( static_cast<const char*>( item.content.utf8_str() ), m_outputFile );
+            fmt::print( m_outputFile, "{}", item.content );
 
             if( !item.pen_returns )
             {
@@ -362,7 +363,7 @@ bool HPGL_PLOTTER::EndPlot()
 
             if( item.lift_after )
             {
-                fputs( "PU;", m_outputFile );
+                fmt::print( m_outputFile, "PU;" );
                 pen_up = true;
             }
             else
@@ -370,11 +371,11 @@ bool HPGL_PLOTTER::EndPlot()
                 loc = item.loc_end;
             }
 
-            fputs( "\n", m_outputFile );
+            fmt::print( m_outputFile, "\n" );
         }
     }
 
-    fputs( "PU;PA;SP0;\n", m_outputFile );
+    fmt::print( m_outputFile, "PU;PA;SP0;\n" );
     fclose( m_outputFile );
     m_outputFile = nullptr;
     return true;
@@ -421,10 +422,10 @@ void HPGL_PLOTTER::Circle( const VECTOR2I& aCenter, int aDiameter, FILL_T aFill,
     {
         // Draw the filled area
         MoveTo( aCenter );
-        startOrAppendItem( center_dev, wxString::Format( "PM 0;CI %g,%g;%s",
-                                                         radius,
-                                                         chord_angle.AsDegrees(),
-                                                         hpgl_end_polygon_cmd ) );
+        startOrAppendItem( center_dev, fmt::format( "PM 0;CI {:g},{:g};{}",
+                                                    radius,
+                                                    chord_angle.AsDegrees(),
+                                                    hpgl_end_polygon_cmd ) );
         m_current_item->lift_before = true;
         m_current_item->bbox.Merge( BOX2D( center_dev - radius,
                                            VECTOR2D( 2 * radius, 2 * radius ) ) );
@@ -434,9 +435,9 @@ void HPGL_PLOTTER::Circle( const VECTOR2I& aCenter, int aDiameter, FILL_T aFill,
     if( radius > 0 )
     {
         MoveTo( aCenter );
-        startOrAppendItem( center_dev, wxString::Format( "CI %g,%g;",
-                                                         radius,
-                                                         chord_angle.AsDegrees() ) );
+        startOrAppendItem( center_dev, fmt::format( "CI {:g},{:g};",
+                                                    radius,
+                                                    chord_angle.AsDegrees() ) );
         m_current_item->lift_before = true;
         m_current_item->bbox.Merge( BOX2D( center_dev - radius,
                                            VECTOR2D( 2 * radius, 2 * radius ) ) );
@@ -470,7 +471,7 @@ void HPGL_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aF
         // Draw the filled area
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
 
-        m_current_item->content << wxString( "PM 0;\n" ); // Start polygon
+        m_current_item->content += std::string( "PM 0;\n" ); // Start polygon
 
         for( unsigned ii = 1; ii < aCornerList.size(); ++ii )
             LineTo( aCornerList[ii] );
@@ -480,7 +481,7 @@ void HPGL_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aF
         if( aCornerList[ii] != aCornerList[0] )
             LineTo( aCornerList[0] );
 
-        m_current_item->content << hpgl_end_polygon_cmd; // Close, fill polygon and draw outlines
+        m_current_item->content += hpgl_end_polygon_cmd; // Close, fill polygon and draw outlines
         m_current_item->pen_returns = true;
     }
     else if( aWidth != 0 )
@@ -525,7 +526,7 @@ void HPGL_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
     else if( plume == 'D' )
     {
         m_penState = 'D';
-        startOrAppendItem( lastpos_dev, wxString::Format( "PA %.0f,%.0f;", pos_dev.x, pos_dev.y ) );
+        startOrAppendItem( lastpos_dev, fmt::format( "PA {:.0f},{:.0f};", pos_dev.x, pos_dev.y ) );
         m_current_item->loc_end = pos_dev;
         m_current_item->bbox.Merge( pos_dev );
     }
@@ -592,11 +593,11 @@ void HPGL_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
                    KiROUND( aCenter.y - aRadius * startAngle.Sin() ) );
     VECTOR2D cmap_dev = userToDeviceCoordinates( cmap );
 
-    startOrAppendItem( cmap_dev, wxString::Format( "AA %.0f,%.0f,%g,%g",
-                                                   centre_device.x,
-                                                   centre_device.y,
-                                                   angle.AsDegrees(),
-                                                   chord_angle.AsDegrees() ) );
+    startOrAppendItem( cmap_dev, fmt::format( "AA {:.0f},{:.0f},{:g},{:g}",
+                                              centre_device.x,
+                                              centre_device.y,
+                                              angle.AsDegrees(),
+                                              chord_angle.AsDegrees() ) );
 
     // TODO We could compute the final position and full bounding box instead...
     m_current_item->bbox.Merge( BOX2D( centre_device - radius_device,
@@ -670,15 +671,15 @@ void HPGL_PLOTTER::FlashPadCircle( const VECTOR2I& pos, int diametre,
 
         // Plot filled area and its outline
         startOrAppendItem( userToDeviceCoordinates( VECTOR2I( pos.x + radius, pos.y ) ),
-                           wxString::Format( "PM 0; PA %.0f,%.0f;CI %.0f;%s",
-                                             pos_dev.x, pos_dev.y, rsize, hpgl_end_polygon_cmd ) );
+                           fmt::format( "PM 0; PA {:.0f},{:.0f};CI {:.0f};{}",
+                                        pos_dev.x, pos_dev.y, rsize, hpgl_end_polygon_cmd ) );
         m_current_item->lift_before = true;
         m_current_item->pen_returns = true;
     }
     else
     {
         // Draw outline only:
-        startOrAppendItem( pos_dev, wxString::Format( "CI %.0f;", rsize ) );
+        startOrAppendItem( pos_dev, fmt::format( "CI {:.0f};", rsize ) );
         m_current_item->lift_before = true;
         m_current_item->pen_returns = true;
     }
@@ -820,7 +821,7 @@ void HPGL_PLOTTER::FlashRegularPolygon( const VECTOR2I& aShapePos, int aRadius, 
 
 bool HPGL_PLOTTER::startItem( const VECTOR2D& location )
 {
-    return startOrAppendItem( location, wxEmptyString );
+    return startOrAppendItem( location );
 }
 
 
@@ -830,7 +831,7 @@ void HPGL_PLOTTER::flushItem()
 }
 
 
-bool HPGL_PLOTTER::startOrAppendItem( const VECTOR2D& location, wxString const& content )
+bool HPGL_PLOTTER::startOrAppendItem( const VECTOR2D& location, std::string const& content )
 {
     if( m_current_item == nullptr )
     {
@@ -847,7 +848,7 @@ bool HPGL_PLOTTER::startOrAppendItem( const VECTOR2D& location, wxString const& 
     }
     else
     {
-        m_current_item->content << content;
+        m_current_item->content += content;
         return false;
     }
 }
