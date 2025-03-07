@@ -667,8 +667,13 @@ void KIBIS_PIN::getKuKdFromFile( const std::string& aSimul )
     {
         std::string line;
 
-        for( int i = 0; i < 11; i++ ) // number of line in the ngspice output header
-            std::getline( KuKdfile, line );
+        while( std::getline( KuKdfile, line ) ) // skip ngspice output header
+        {
+            if( line.find( "Values:" ) != std::string::npos )
+            {
+                break;
+            }
+        }
 
         int    i = 0;
         double t_v, ku_v, kd_v;
