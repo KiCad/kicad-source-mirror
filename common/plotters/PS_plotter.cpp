@@ -32,6 +32,7 @@
 #include <math/util.h>      // for KiROUND
 #include <string_utils.h>
 #include <trigo.h>
+#include <fmt/format.h>
 
 #include <plotters/plotters_pslike.h>
 
@@ -441,7 +442,7 @@ void PS_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
     wxASSERT_MSG( aWidth > 0, "Plotter called to set negative pen width" );
 
     if( aWidth != GetCurrentLineWidth() )
-        fprintf( m_outputFile, "%g setlinewidth\n", userToDeviceSize( aWidth ) );
+        fmt::print( m_outputFile, "{:g} setlinewidth\n", userToDeviceSize( aWidth ) );
 
     m_currentPenWidth = aWidth;
 }
@@ -463,7 +464,7 @@ void PS_PLOTTER::emitSetRGBColor( double r, double g, double b, double a )
     }
 
     // XXX why %.3g ? shouldn't %g suffice? who cares...
-    fprintf( m_outputFile, "%.3g %.3g %.3g setrgbcolor\n", r, g, b );
+    fmt::print( m_outputFile, "{:.3g} {:.3g} {:.3g} setrgbcolor\n", r, g, b );
 }
 
 
@@ -472,30 +473,30 @@ void PS_PLOTTER::SetDash( int aLineWidth, LINE_STYLE aLineStyle )
     switch( aLineStyle )
     {
     case LINE_STYLE::DASH:
-        fprintf( m_outputFile, "[%d %d] 0 setdash\n",
-                 (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
+        fmt::print( m_outputFile, "[{} {}] 0 setdash\n",
+                    (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
         break;
 
     case LINE_STYLE::DOT:
-        fprintf( m_outputFile, "[%d %d] 0 setdash\n",
-                 (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
+        fmt::print( m_outputFile, "[{} {}] 0 setdash\n",
+                    (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
         break;
 
     case LINE_STYLE::DASHDOT:
-        fprintf( m_outputFile, "[%d %d %d %d] 0 setdash\n",
-                 (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),
-                 (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
+        fmt::print( m_outputFile, "[{} {} {} {}] 0 setdash\n",
+                    (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),
+                    (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
         break;
 
     case LINE_STYLE::DASHDOTDOT:
-        fprintf( m_outputFile, "[%d %d %d %d %d %d] 0 setdash\n",
-                 (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),
-                 (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),
-                 (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
+        fmt::print( m_outputFile, "[{} {} {} {} {} {}] 0 setdash\n",
+                    (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),
+                    (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),
+                    (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
         break;
 
     default:
-        fputs( "solidline\n", m_outputFile );
+        fmt::print( m_outputFile, "solidline\n" );
     }
 }
 
@@ -509,7 +510,7 @@ void PS_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int 
     VECTOR2D p2_dev = userToDeviceCoordinates( p2 );
 
     SetCurrentLineWidth( width );
-    fprintf( m_outputFile, "%g %g %g %g rect%d\n", p1_dev.x, p1_dev.y,
+    fmt::print( m_outputFile, "{:g} {:g} {:g} {:g} rect{}\n", p1_dev.x, p1_dev.y,
              p2_dev.x - p1_dev.x, p2_dev.y - p1_dev.y, getFillId( fill ) );
 }
 
@@ -524,7 +525,7 @@ void PS_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int wid
     double   radius = userToDeviceSize( diametre / 2.0 );
 
     SetCurrentLineWidth( width );
-    fprintf( m_outputFile, "%g %g %g cir%d\n", pos_dev.x, pos_dev.y, radius, getFillId( fill ) );
+    fmt::print( m_outputFile, "{:g} {:g} {:g} cir{}\n", pos_dev.x, pos_dev.y, radius, getFillId( fill ) );
 }
 
 
@@ -554,8 +555,8 @@ void PS_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
 
     SetCurrentLineWidth( aWidth );
 
-    fprintf( m_outputFile, "%g %g %g %g %g arc%d\n", center_device.x, center_device.y,
-             radius_device, startAngle.AsDegrees(), endAngle.AsDegrees(), getFillId( aFill ) );
+    fmt::print( m_outputFile, "{:g} {:g} {:g} {:g} {:g} arc{}\n", center_device.x, center_device.y,
+                radius_device, startAngle.AsDegrees(), endAngle.AsDegrees(), getFillId( aFill ) );
 }
 
 
@@ -571,16 +572,16 @@ void PS_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFil
     SetCurrentLineWidth( aWidth );
 
     VECTOR2D pos = userToDeviceCoordinates( aCornerList[0] );
-    fprintf( m_outputFile, "newpath\n%g %g moveto\n", pos.x, pos.y );
+    fmt::print( m_outputFile, "newpath\n{:g} {:g} moveto\n", pos.x, pos.y );
 
     for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
     {
         pos = userToDeviceCoordinates( aCornerList[ii] );
-        fprintf( m_outputFile, "%g %g lineto\n", pos.x, pos.y );
+        fmt::print( m_outputFile, "{:g} {:g} lineto\n", pos.x, pos.y );
     }
 
     // Close/(fill) the path
-    fprintf( m_outputFile, "poly%d\n", getFillId( aFill ) );
+    fmt::print( m_outputFile, "poly{}\n", getFillId( aFill ) );
 }
 
 
@@ -602,32 +603,32 @@ void PS_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double 
     end.x = start.x + drawsize.x;
     end.y = start.y - drawsize.y;
 
-    fprintf( m_outputFile, "/origstate save def\n" );
-    fprintf( m_outputFile, "/pix %d string def\n", pix_size.x );
+    fmt::print( m_outputFile, "/origstate save def\n" );
+    fmt::print( m_outputFile, "/pix {} string def\n", pix_size.x );
 
     // Locate lower-left corner of image
     VECTOR2D start_dev = userToDeviceCoordinates( start );
-    fprintf( m_outputFile, "%g %g translate\n", start_dev.x, start_dev.y );
+    fmt::print( m_outputFile, "{:g} {:g} translate\n", start_dev.x, start_dev.y );
 
     // Map image size to device
     VECTOR2D end_dev = userToDeviceCoordinates( end );
-    fprintf( m_outputFile, "%g %g scale\n",
-             std::abs( end_dev.x - start_dev.x ),
-             std::abs( end_dev.y - start_dev.y ) );
+    fmt::print( m_outputFile, "{:g} {:g} scale\n",
+                std::abs( end_dev.x - start_dev.x ),
+                std::abs( end_dev.y - start_dev.y ) );
 
     // Dimensions of source image (in pixels
-    fprintf( m_outputFile, "%d %d 8", pix_size.x, pix_size.y );
+    fmt::print( m_outputFile, "{} {} 8", pix_size.x, pix_size.y );
 
     //  Map unit square to source
-    fprintf( m_outputFile, " [%d 0 0 %d 0 %d]\n", pix_size.x, -pix_size.y , pix_size.y);
+    fmt::print( m_outputFile, " [{} 0 0 {} 0 {}]\n", pix_size.x, -pix_size.y, pix_size.y );
 
     // include image data in ps file
-    fprintf( m_outputFile, "{currentfile pix readhexstring pop}\n" );
+    fmt::print( m_outputFile, "{{currentfile pix readhexstring pop}}\n" );
 
     if( m_colorMode )
-        fputs( "false 3 colorimage\n", m_outputFile );
+        fmt::print( m_outputFile, "false 3 colorimage\n" );
     else
-        fputs( "image\n", m_outputFile );
+        fmt::print( m_outputFile, "image\n" );
 
     // Single data source, 3 colors, Output RGB data (hexadecimal)
     // (or the same downscaled to gray)
@@ -640,7 +641,7 @@ void PS_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double 
             if( jj >= 16 )
             {
                 jj = 0;
-                fprintf( m_outputFile, "\n");
+                fmt::print( m_outputFile, "\n" );
             }
 
             int red, green, blue;
@@ -675,20 +676,20 @@ void PS_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double 
 
             if( m_colorMode )
             {
-                fprintf( m_outputFile, "%2.2X%2.2X%2.2X", red, green, blue );
+                fmt::print( m_outputFile, "{:02X}{:02X}{:02X}", red, green, blue );
             }
             else
             {
                 // Greyscale conversion (CIE 1931)
                 unsigned char grey = KiROUND( red * 0.2126 + green * 0.7152 + blue * 0.0722 );
 
-                fprintf( m_outputFile, "%2.2X", grey );
+                fmt::print( m_outputFile, "{:02X}", grey );
             }
         }
     }
 
-    fprintf( m_outputFile, "\n");
-    fprintf( m_outputFile, "origstate restore\n" );
+    fmt::print( m_outputFile, "\n" );
+    fmt::print( m_outputFile, "origstate restore\n" );
 }
 
 
@@ -700,7 +701,7 @@ void PS_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
     {
         if( m_penState != 'Z' )
         {
-            fputs( "stroke\n", m_outputFile );
+            fmt::print( m_outputFile, "stroke\n" );
             m_penState     = 'Z';
             m_penLastpos.x = -1;
             m_penLastpos.y = -1;
@@ -711,15 +712,15 @@ void PS_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
 
     if( m_penState == 'Z' )
     {
-        fputs( "newpath\n", m_outputFile );
+        fmt::print( m_outputFile, "newpath\n" );
     }
 
     if( m_penState != plume || pos != m_penLastpos )
     {
         VECTOR2D pos_dev = userToDeviceCoordinates( pos );
-        fprintf( m_outputFile, "%g %g %sto\n",
-                 pos_dev.x, pos_dev.y,
-                 ( plume=='D' ) ? "line" : "move" );
+        fmt::print( m_outputFile, "{:g} {:g} {}to\n",
+                    pos_dev.x, pos_dev.y,
+                    ( plume=='D' ) ? "line" : "move" );
     }
 
     m_penState   = plume;
@@ -731,71 +732,68 @@ bool PS_PLOTTER::StartPlot( const wxString& aPageNumber )
 {
     wxASSERT( m_outputFile );
 
-    static const char* PSMacro[] =
-    {
-    "%%BeginProlog\n",
-    "/line { newpath moveto lineto stroke } bind def\n",
-    "/cir0 { newpath 0 360 arc stroke } bind def\n",
-    "/cir1 { newpath 0 360 arc gsave fill grestore stroke } bind def\n",
-    "/cir2 { newpath 0 360 arc gsave fill grestore stroke } bind def\n",
-    "/arc0 { newpath arc stroke } bind def\n",
-    "/arc1 { newpath 4 index 4 index moveto arc closepath gsave fill\n",
-    "    grestore stroke } bind def\n",
-    "/arc2 { newpath 4 index 4 index moveto arc closepath gsave fill\n",
-    "    grestore stroke } bind def\n",
-    "/poly0 { stroke } bind def\n",
-    "/poly1 { closepath gsave fill grestore stroke } bind def\n",
-    "/poly2 { closepath gsave fill grestore stroke } bind def\n",
-    "/rect0 { rectstroke } bind def\n",
-    "/rect1 { rectfill } bind def\n",
-    "/rect2 { rectfill } bind def\n",
-    "/linemode0 { 0 setlinecap 0 setlinejoin 0 setlinewidth } bind def\n",
-    "/linemode1 { 1 setlinecap 1 setlinejoin } bind def\n",
-    "/dashedline { [200] 100 setdash } bind def\n",
-    "/solidline { [] 0 setdash } bind def\n",
+    std::string PSMacro =
+    "%%BeginProlog\n"
+    "/line { newpath moveto lineto stroke } bind def\n"
+    "/cir0 { newpath 0 360 arc stroke } bind def\n"
+    "/cir1 { newpath 0 360 arc gsave fill grestore stroke } bind def\n"
+    "/cir2 { newpath 0 360 arc gsave fill grestore stroke } bind def\n"
+    "/arc0 { newpath arc stroke } bind def\n"
+    "/arc1 { newpath 4 index 4 index moveto arc closepath gsave fill\n"
+    "    grestore stroke } bind def\n"
+    "/arc2 { newpath 4 index 4 index moveto arc closepath gsave fill\n"
+    "    grestore stroke } bind def\n"
+    "/poly0 { stroke } bind def\n"
+    "/poly1 { closepath gsave fill grestore stroke } bind def\n"
+    "/poly2 { closepath gsave fill grestore stroke } bind def\n"
+    "/rect0 { rectstroke } bind def\n"
+    "/rect1 { rectfill } bind def\n"
+    "/rect2 { rectfill } bind def\n"
+    "/linemode0 { 0 setlinecap 0 setlinejoin 0 setlinewidth } bind def\n"
+    "/linemode1 { 1 setlinecap 1 setlinejoin } bind def\n"
+    "/dashedline { [200] 100 setdash } bind def\n"
+    "/solidline { [] 0 setdash } bind def\n"
 
     // This is for 'hidden' text (search anchors for PDF)
-    "/phantomshow { moveto\n",
-    "    /KicadFont findfont 0.000001 scalefont setfont\n",
-    "    show } bind def\n",
+    "/phantomshow { moveto\n"
+    "    /KicadFont findfont 0.000001 scalefont setfont\n"
+    "    show } bind def\n"
 
     // This is for regular postscript text
-    "/textshow { gsave\n",
-    "    findfont exch scalefont setfont concat 1 scale 0 0 moveto show\n",
-    "    } bind def\n",
+    "/textshow { gsave\n"
+    "    findfont exch scalefont setfont concat 1 scale 0 0 moveto show\n"
+    "    } bind def\n"
 
     // Utility for getting Latin1 encoded fonts
-    "/reencodefont {\n",
-    "  findfont dup length dict begin\n",
-    "  { 1 index /FID ne\n",
-    "    { def }\n",
-    "    { pop pop } ifelse\n",
-    "  } forall\n",
-    "  /Encoding ISOLatin1Encoding def\n",
-    "  currentdict\n",
+    "/reencodefont {\n"
+    "  findfont dup length dict begin\n"
+    "  { 1 index /FID ne\n"
+    "    { def }\n"
+    "    { pop pop } ifelse\n"
+    "  } forall\n"
+    "  /Encoding ISOLatin1Encoding def\n"
+    "  currentdict\n"
     "  end } bind def\n"
 
     // Remap AdobeStandard fonts to Latin1
-    "/KicadFont /Helvetica reencodefont definefont pop\n",
-    "/KicadFont-Bold /Helvetica-Bold reencodefont definefont pop\n",
-    "/KicadFont-Oblique /Helvetica-Oblique reencodefont definefont pop\n",
-    "/KicadFont-BoldOblique /Helvetica-BoldOblique reencodefont definefont pop\n",
-    "%%EndProlog\n",
-    nullptr
-    };
+    "/KicadFont /Helvetica reencodefont definefont pop\n"
+    "/KicadFont-Bold /Helvetica-Bold reencodefont definefont pop\n"
+    "/KicadFont-Oblique /Helvetica-Oblique reencodefont definefont pop\n"
+    "/KicadFont-BoldOblique /Helvetica-BoldOblique reencodefont definefont pop\n"
+    "%%EndProlog\n";
 
     time_t time1970 = time( nullptr );
 
-    fputs( "%!PS-Adobe-3.0\n", m_outputFile );    // Print header
+    fmt::print( m_outputFile, "%!PS-Adobe-3.0\n" ); // Print header
 
-    fprintf( m_outputFile, "%%%%Creator: %s\n", TO_UTF8( m_creator ) );
+    fmt::print( m_outputFile, "%%Creator: {}\n", TO_UTF8( m_creator ) );
 
     /* A "newline" character ("\n") is not included in the following string,
        because it is provided by the ctime() function. */
-    fprintf( m_outputFile, "%%%%CreationDate: %s", ctime( &time1970 ) );
-    fprintf( m_outputFile, "%%%%Title: %s\n", encodeStringForPlotter( m_title ).c_str() );
-    fprintf( m_outputFile, "%%%%Pages: 1\n" );
-    fprintf( m_outputFile, "%%%%PageOrder: Ascend\n" );
+    fmt::print( m_outputFile, "%%CreationDate: {}", ctime( &time1970 ) );
+    fmt::print( m_outputFile, "%%Title: {}\n", encodeStringForPlotter( m_title ).c_str() );
+    fmt::print( m_outputFile, "%%Pages: 1\n" );
+    fmt::print( m_outputFile, "%%PageOrder: Ascend\n" );
 
     // Print boundary box in 1/72 pixels per inch, box is in mils
     const double BIGPTsPERMIL = 0.072;
@@ -811,7 +809,7 @@ bool PS_PLOTTER::StartPlot( const wxString& aPageNumber )
         psPaperSize.y = m_pageInfo.GetWidthMils();
     }
 
-    fprintf( m_outputFile, "%%%%BoundingBox: 0 0 %d %d\n",
+    fmt::print( m_outputFile, "%%BoundingBox: 0 0 {} {}\n",
              (int) ceil( psPaperSize.x * BIGPTsPERMIL ),
              (int) ceil( psPaperSize.y * BIGPTsPERMIL ) );
 
@@ -830,59 +828,51 @@ bool PS_PLOTTER::StartPlot( const wxString& aPageNumber )
     // Also note pageSize is given in mils, not in internal units and must be
     // converted to internal units.
 
+    wxString pageType = m_pageInfo.GetType();
     if( m_pageInfo.IsCustom() )
-    {
-        fprintf( m_outputFile, "%%%%DocumentMedia: Custom %d %d 0 () ()\n",
-                 KiROUND( psPaperSize.x * BIGPTsPERMIL ),
-                 KiROUND( psPaperSize.y * BIGPTsPERMIL ) );
-    }
-    else  // a standard paper size
-    {
-        fprintf( m_outputFile, "%%%%DocumentMedia: %s %d %d 0 () ()\n",
-                 TO_UTF8( m_pageInfo.GetType() ),
-                 KiROUND( psPaperSize.x * BIGPTsPERMIL ),
-                 KiROUND( psPaperSize.y * BIGPTsPERMIL ) );
-    }
+        pageType = "Custom";
+
+    fmt::print( m_outputFile, "%%DocumentMedia: {} {} {} 0 () ()\n",
+                TO_UTF8( pageType ),
+                KiROUND( psPaperSize.x * BIGPTsPERMIL ),
+                KiROUND( psPaperSize.y * BIGPTsPERMIL ) );
 
     if( m_pageInfo.IsPortrait() )
-        fprintf( m_outputFile, "%%%%Orientation: Portrait\n" );
+        fmt::print( m_outputFile, "%%Orientation: Portrait\n" );
     else
-        fprintf( m_outputFile, "%%%%Orientation: Landscape\n" );
+        fmt::print( m_outputFile, "%%Orientation: Landscape\n" );
 
-    fprintf( m_outputFile, "%%%%EndComments\n" );
+    fmt::print( m_outputFile, "%%EndComments\n" );
 
     // Now specify various other details.
-
-    for( int ii = 0; PSMacro[ii] != nullptr; ii++ )
-    {
-        fputs( PSMacro[ii], m_outputFile );
-    }
+    fmt::print( m_outputFile, "{}", PSMacro );
 
     // The following strings are output here (rather than within PSMacro[])
     // to highlight that it has been provided to ensure that the contents of
     // the postscript file comply with the Document Structuring Convention.
     std::string page_num = encodeStringForPlotter( aPageNumber );
 
-    fprintf( m_outputFile, "%%Page: %s 1\n", page_num.c_str() );
+    fmt::print( m_outputFile, "%%Page: {} 1\n", page_num );
 
-    fputs( "%%BeginPageSetup\n"
-           "gsave\n"
-           "0.0072 0.0072 scale\n"    // Configure postscript for decimils coordinates
-           "linemode1\n", m_outputFile );
+    fmt::print( m_outputFile,
+                "%%BeginPageSetup\n"
+                "gsave\n"
+                "0.0072 0.0072 scale\n"    // Configure postscript for decimils coordinates
+                "linemode1\n" );
 
 
     // Rototranslate the coordinate to achieve the landscape layout
     if( !m_pageInfo.IsPortrait() )
-        fprintf( m_outputFile, "%d 0 translate 90 rotate\n", 10 * psPaperSize.x );
+        fmt::print( m_outputFile, "{} 0 translate 90 rotate\n", 10 * psPaperSize.x );
 
     // Apply the user fine scale adjustments
     if( plotScaleAdjX != 1.0 || plotScaleAdjY != 1.0 )
-        fprintf( m_outputFile, "%g %g scale\n", plotScaleAdjX, plotScaleAdjY );
+        fmt::print( m_outputFile, "{:g} {:g} scale\n", plotScaleAdjX, plotScaleAdjY );
 
     // Set default line width
-    fprintf( m_outputFile, "%g setlinewidth\n",
+    fmt::print( m_outputFile, "{:g} setlinewidth\n",
              userToDeviceSize( m_renderSettings->GetDefaultPenWidth() ) );
-    fputs( "%%EndPageSetup\n", m_outputFile );
+    fmt::print( m_outputFile, "%%EndPageSetup\n" );
 
     return true;
 }
@@ -891,9 +881,10 @@ bool PS_PLOTTER::StartPlot( const wxString& aPageNumber )
 bool PS_PLOTTER::EndPlot()
 {
     wxASSERT( m_outputFile );
-    fputs( "showpage\n"
-           "grestore\n"
-           "%%EOF\n", m_outputFile );
+    fmt::print( m_outputFile,
+                "showpage\n"
+                "grestore\n"
+                "%%EOF\n" );
     fclose( m_outputFile );
     m_outputFile = nullptr;
 
@@ -924,7 +915,7 @@ void PS_PLOTTER::Text( const VECTOR2I&        aPos,
     {
         std::string ps_test = encodeStringForPlotter( aText );
         VECTOR2D pos_dev = userToDeviceCoordinates( aPos );
-        fprintf( m_outputFile, "%s %g %g phantomshow\n", ps_test.c_str(), pos_dev.x, pos_dev.y );
+        fmt::print( m_outputFile, "{} {:g} {:g} phantomshow\n", ps_test.c_str(), pos_dev.x, pos_dev.y );
     }
 
     PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth, aItalic,
@@ -948,7 +939,7 @@ void PS_PLOTTER::PlotText( const VECTOR2I&        aPos,
     {
         std::string ps_test = encodeStringForPlotter( aText );
         VECTOR2D pos_dev = userToDeviceCoordinates( aPos );
-        fprintf( m_outputFile, "%s %g %g phantomshow\n", ps_test.c_str(), pos_dev.x, pos_dev.y );
+        fmt::print( m_outputFile, "{} {:g} {:g} phantomshow\n", ps_test, pos_dev.x, pos_dev.y );
     }
 
     PLOTTER::PlotText( aPos, aColor, aText, aAttributes, aFont, aFontMetrics, aData );
