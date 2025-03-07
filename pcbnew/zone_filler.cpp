@@ -883,6 +883,24 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
             }
         }
 
+        if( ( m_board->GetProject()
+              && m_board->GetProject()->GetLocalSettings().m_PrototypeZoneFill ) )
+        {
+            KIDIALOG dlg( aParent, _( "Prototype zone fill enabled. Disable setting and refill?" ),
+                          _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+            dlg.SetOKCancelLabels( _( "Disable and refill" ), _( "Continue without Refill" ) );
+            dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
+
+            if( dlg.ShowModal() == wxID_OK )
+            {
+                m_board->GetProject()->GetLocalSettings().m_PrototypeZoneFill = false;
+            }
+            else if( !outOfDate )
+            {
+                return false;
+            }
+        }
+
         if( outOfDate )
         {
             KIDIALOG dlg( aParent, _( "Zone fills are out-of-date. Refill?" ),
@@ -1814,7 +1832,9 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
      * Process the hatch pattern (note that we do this while deflated)
      */
 
-    if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
+    if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN
+        && ( !m_board->GetProject()
+             || !m_board->GetProject()->GetLocalSettings().m_PrototypeZoneFill ) )
     {
         if( !addHatchFillTypeOnZone( aZone, aLayer, aDebugLayer, aFillPolys ) )
             return false;
