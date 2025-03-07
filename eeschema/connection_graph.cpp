@@ -3640,6 +3640,16 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
                 return true;
         }
 
+        for( SCH_ITEM* item : screen->Items().Overlapping( SCH_SYMBOL_T, noConnectPos ) )
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+            const SCH_PIN* test_pin = symbol->GetPin( noConnectPos );
+
+            if( test_pin && test_pin->GetType() == ELECTRICAL_PINTYPE::PT_NC )
+                return true;
+        }
+
         if( unique_pins.size() > 1 && settings.IsTestEnabled( ERCE_NOCONNECT_CONNECTED ) )
         {
             std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_NOCONNECT_CONNECTED );

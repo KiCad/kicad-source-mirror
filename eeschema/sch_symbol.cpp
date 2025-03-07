@@ -1120,7 +1120,7 @@ const SCH_PIN* SCH_SYMBOL::GetPin( const VECTOR2I& aPos ) const
         if( pin_bodyStyle > 0 && pin_bodyStyle != GetBodyStyle() )
             continue;
 
-        if( pin->IsPointClickableAnchor( aPos ) )
+        if( pin->GetPosition() == aPos )
             return pin.get();
     }
 
