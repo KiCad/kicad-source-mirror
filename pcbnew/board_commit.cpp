@@ -127,37 +127,37 @@ COMMIT& BOARD_COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO aModFlag
 }
 
 
-void BOARD_COMMIT::propagateDamage( BOARD_ITEM* aItem, std::vector<ZONE*>* aStaleZones,
+void BOARD_COMMIT::propagateDamage( BOARD_ITEM* aChangedItem, std::vector<ZONE*>* aStaleZones,
                                     std::vector<PCB_SHAPE*>* aStaleHatchedShapes )
 {
-    wxCHECK( aItem, /* void */ );
+    wxCHECK( aChangedItem, /* void */ );
 
-    if( aStaleZones && aItem->Type() == PCB_ZONE_T )
-        aStaleZones->push_back( static_cast<ZONE*>( aItem ) );
+    if( aStaleZones && aChangedItem->Type() == PCB_ZONE_T )
+        aStaleZones->push_back( static_cast<ZONE*>( aChangedItem ) );
 
-    aItem->RunOnChildren( std::bind( &BOARD_COMMIT::propagateDamage, this, _1, aStaleZones,
-                                     aStaleHatchedShapes ) );
+    aChangedItem->RunOnChildren( std::bind( &BOARD_COMMIT::propagateDamage, this, _1, aStaleZones,
+                                            aStaleHatchedShapes ) );
 
     BOARD* board = static_cast<BOARD*>( m_toolMgr->GetModel() );
-    BOX2I  bbox = aItem->GetBoundingBox();
-    LSET   layers = aItem->GetLayerSet();
+    BOX2I  damageBBox = aChangedItem->GetBoundingBox();
+    LSET   damageLayers = aChangedItem->GetLayerSet();
 
     if( aStaleZones )
     {
-        if( layers.test( Edge_Cuts ) || layers.test( Margin ) )
-            layers = LSET::PhysicalLayersMask();
+        if( damageLayers.test( Edge_Cuts ) || damageLayers.test( Margin ) )
+            damageLayers = LSET::PhysicalLayersMask();
         else
-            layers &= LSET::AllCuMask();
+            damageLayers &= LSET::AllCuMask();
 
-        if( layers.any() )
+        if( damageLayers.any() )
         {
             for( ZONE* zone : board->Zones() )
             {
                 if( zone->GetIsRuleArea() )
                     continue;
 
-                if( ( zone->GetLayerSet() & layers ).any()
-                        && zone->GetBoundingBox().Intersects( bbox ) )
+                if( ( zone->GetLayerSet() & damageLayers ).any()
+                        && zone->GetBoundingBox().Intersects( damageBBox ) )
                 {
                     aStaleZones->push_back( zone );
                 }
@@ -165,26 +165,58 @@ void BOARD_COMMIT::propagateDamage( BOARD_ITEM* aItem, std::vector<ZONE*>* aStal
         }
     }
 
-    if( aStaleHatchedShapes && (    aItem->Type() == PCB_FIELD_T
-                                 || aItem->Type() == PCB_TEXT_T
-                                 || aItem->Type() == PCB_TEXTBOX_T
-                                 || aItem->Type() == PCB_SHAPE_T ) )
+    auto checkItem =
+            [&]( BOARD_ITEM* item )
+            {
+                if( item->Type() != PCB_SHAPE_T )
+                    return;
+
+                PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+
+                if( !shape->IsHatchedFill() )
+                   return;
+
+                if( ( shape->GetLayerSet() & damageLayers ).any()
+                        && shape->GetBoundingBox().Intersects( damageBBox ) )
+                {
+                    aStaleHatchedShapes->push_back( shape );
+                }
+            };
+
+    if( aStaleHatchedShapes && (    aChangedItem->Type() == PCB_FIELD_T
+                                 || aChangedItem->Type() == PCB_TEXT_T
+                                 || aChangedItem->Type() == PCB_TEXTBOX_T
+                                 || aChangedItem->Type() == PCB_SHAPE_T ) )
     {
+        if( aChangedItem->IsOnLayer( F_CrtYd ) )
+        {
+            damageBBox = aChangedItem->GetParentFootprint()->GetBoundingBox();
+            damageLayers |= LSET::FrontMask();
+        }
+        else if( aChangedItem->IsOnLayer( B_CrtYd ) )
+        {
+            damageBBox = aChangedItem->GetParentFootprint()->GetBoundingBox();
+            damageLayers |= LSET::BackMask();
+        }
+
+        for( FOOTPRINT* footprint : board->Footprints() )
+        {
+            footprint->RunOnDescendants(
+                    [&]( BOARD_ITEM* child )
+                    {
+                        checkItem( child );
+                    } );
+        }
+
         for( BOARD_ITEM* item : board->Drawings() )
         {
-            if( item->Type() != PCB_SHAPE_T )
-                continue;
+            item->RunOnDescendants(
+                    [&]( BOARD_ITEM* child )
+                    {
+                        checkItem( child );
+                    } );
 
-            PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
-
-            if( !shape->IsHatchedFill() )
-                continue;
-
-            if( ( shape->GetLayerSet() & layers ).any()
-                    && shape->GetBoundingBox().Intersects( bbox ) )
-            {
-                aStaleHatchedShapes->push_back( shape );
-            }
+            checkItem( item );
         }
     }
 }
