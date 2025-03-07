@@ -670,7 +670,7 @@ std::vector<VECTOR2I> SCH_LINE::GetConnectionPoints() const
 }
 
 
-bool SCH_LINE::ConnectionPropagatesTo( const SCH_SHEET_PATH& aSheet, const SCH_ITEM* aItem ) const
+bool SCH_LINE::ConnectionPropagatesTo( const EDA_ITEM* aItem ) const
 {
     switch( aItem->Type() )
     {

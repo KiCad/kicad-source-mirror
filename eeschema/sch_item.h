@@ -515,11 +515,7 @@ public:
     /**
      * Return true if this item should propagate connection info to \a aItem.
      */
-    virtual bool ConnectionPropagatesTo( const SCH_SHEET_PATH& aSheet,
-                                         const SCH_ITEM* aItem ) const
-    {
-        return true;
-    }
+    virtual bool ConnectionPropagatesTo( const EDA_ITEM* aItem ) const { return true; }
 
     bool IsConnectivityDirty() const { return m_connectivity_dirty; }
 
