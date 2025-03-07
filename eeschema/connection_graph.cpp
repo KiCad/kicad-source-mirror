@@ -1319,8 +1319,8 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
                     bus_connection_ok = !busLine || connected_item->GetLayer() == LAYER_BUS;
                 }
 
-                if( connected_item->ConnectionPropagatesTo( aSheet, test_item ) &&
-                    test_item->ConnectionPropagatesTo( aSheet, connected_item ) &&
+                if( connected_item->ConnectionPropagatesTo( test_item ) &&
+                    test_item->ConnectionPropagatesTo( connected_item ) &&
                     bus_connection_ok )
                 {
                     connected_item->AddConnectionTo( aSheet, test_item );

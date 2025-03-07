@@ -204,8 +204,7 @@ public:
 
     EDA_ITEM* Clone() const override;
 
-    virtual bool ConnectionPropagatesTo( const SCH_SHEET_PATH& aSheet,
-                                         const SCH_ITEM* aItem ) const override;
+    virtual bool ConnectionPropagatesTo( const EDA_ITEM* aItem ) const override;
 
     BITMAPS GetMenuImage() const override;
 
