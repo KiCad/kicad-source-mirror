@@ -4071,6 +4071,9 @@ void SCH_IO_ALTIUM::ParseSheet( const std::map<wxString, wxString>& aProperties 
 void SCH_IO_ALTIUM::ParseSheetName( const std::map<wxString, wxString>& aProperties )
 {
     ASCH_SHEET_NAME elem( aProperties );
+    SCH_SCREEN* currentScreen = getCurrentScreen();
+
+    wxCHECK( currentScreen, /* void */ );
 
     const auto& sheetIt = m_sheets.find( elem.ownerindex );
 
@@ -4081,11 +4084,27 @@ void SCH_IO_ALTIUM::ParseSheetName( const std::map<wxString, wxString>& aPropert
                             RPT_SEVERITY_DEBUG );
         return;
     }
+    wxString sheetName = elem.text;
+    std::set<wxString> sheetNames;
+
+    for( auto items : currentScreen->Items().OfType( SCH_SHEET_T ) )
+    {
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( items );
+        sheetNames.insert( sheet->GetName() );
+    }
+
+    for( int ii = 1; ; ++ii )
+    {
+        if( sheetNames.find( sheetName ) == sheetNames.end() )
+            break;
+
+        sheetName = elem.text + wxString::Format( wxT( "_%d" ), ii );
+    }
 
     SCH_FIELD& sheetNameField = sheetIt->second->GetFields()[SHEETNAME];
 
     sheetNameField.SetPosition( elem.location + m_sheetOffset );
-    sheetNameField.SetText( elem.text );
+    sheetNameField.SetText( sheetName );
     sheetNameField.SetVisible( !elem.isHidden );
     SetTextPositioning( &sheetNameField, ASCH_LABEL_JUSTIFICATION::BOTTOM_LEFT, elem.orientation );
 }
