@@ -1119,7 +1119,7 @@ OPT_TOOL_EVENT EE_SELECTION_TOOL::autostartEvent( TOOL_EVENT* aEvent, EE_GRID_HE
             const SCH_SYMBOL* symbol = static_cast<const SCH_SYMBOL*>( aItem );
             const SCH_PIN*    pin = symbol->GetPin( pos );
 
-            if( !pin )
+            if( !pin || !pin->IsPointClickableAnchor( pos ) )
                 return OPT_TOOL_EVENT();
 
             if( !pin->IsVisible()
