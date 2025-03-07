@@ -591,7 +591,7 @@ void PCB_TEXTBOX::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 
     if( GetTextAngle().IsCardinal() && GetShape() != SHAPE_T::RECTANGLE )
     {
-        std::vector<VECTOR2I> corners = GetCorners();
+        std::vector<VECTOR2I> corners = GetCornersInSequence();
         VECTOR2I              diag = corners[2] - corners[0];
         EDA_ANGLE             angle = GetTextAngle();
 

@@ -190,13 +190,8 @@ void PCB_TABLE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
     if( GetCells().empty() )
         return;
 
-    bool translate = GetCell( 0, 0 )->GetTextAngle() + aAngle == ANGLE_180;
-
     for( PCB_TABLECELL* cell : m_cells )
         cell->Rotate( aRotCentre, aAngle );
-
-    if( translate )
-        Move( GetPosition() - GetEnd() );
 
     Normalize();
 }
