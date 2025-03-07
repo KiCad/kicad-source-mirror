@@ -390,6 +390,7 @@ wxString PATHS::GetStockPlugins3DPath()
         fn.Assign( envPath, wxEmptyString );
         fn.AppendDir( wxT( "usr" ) );
         fn.AppendDir( wxT( "lib" ) );
+        fn.AppendDir( wxT( "x86_64-linux-gnu" ) );
     }
     else
     {
