@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-06 13:54+0300\n"
-"PO-Revision-Date: 2025-03-04 22:27+0000\n"
+"PO-Revision-Date: 2025-03-07 09:02+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -352,14 +352,12 @@ msgid "Reload board"
 msgstr "基板をリロード"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:49
-#, fuzzy
 msgid "Reload board and refresh 3D view"
-msgstr "基板と 3D モデルをリロード"
+msgstr "基板をリロードして3Dビューを更新する"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
-#, fuzzy
 msgid "Use raytracing"
-msgstr "レイトレーシング"
+msgstr "レイトレーシングを使用"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:56
 msgid "Render current view using Raytracing"
@@ -370,27 +368,24 @@ msgid "Copy 3D image to clipboard"
 msgstr "3D 画像をクリップボードへコピー"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:64
-#, fuzzy
 msgid "Copy the current 3D image to the clipboard"
-msgstr "3D 画像をクリップボードへコピー"
+msgstr "現在の3Dイメージをクリップボードへコピー"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
 msgid "Export Current View as PNG..."
 msgstr "現在のビューを PNG としてエクスポート..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
-#, fuzzy
 msgid "Export the Current View as a PNG image"
-msgstr "現在のビューを PNG としてエクスポート..."
+msgstr "現在のビューを PNG としてエクスポート"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
 msgid "Export Current View as JPEG..."
 msgstr "現在のビューを JPEG としてエクスポート..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:80
-#, fuzzy
 msgid "Export the Current View as a JPEG image"
-msgstr "現在のビューを JPEG としてエクスポート..."
+msgstr "現在のビューを JPEG としてエクスポート"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:88
 msgid "Set Pivot"
@@ -5621,19 +5616,16 @@ msgstr "表面レイヤー:"
 
 #: common/dialogs/panel_toolbar_customization.cpp:133
 #: common/dialogs/panel_toolbar_customization_base.cpp:72
-#, fuzzy
 msgid "Insert separator"
-msgstr "セルのセパレーター"
+msgstr "セパレーターを挿入"
 
 #: common/dialogs/panel_toolbar_customization.cpp:139
-#, fuzzy
 msgid "Insert spacer"
-msgstr "挿入"
+msgstr "スペーサーを挿入"
 
 #: common/dialogs/panel_toolbar_customization.cpp:140
-#, fuzzy
 msgid "Insert group"
-msgstr "グループに入る"
+msgstr "グループを挿入"
 
 #: common/dialogs/panel_toolbar_customization.cpp:543 common/eda_item.cpp:406
 #: pcbnew/pcb_group.cpp:392
@@ -26490,9 +26482,8 @@ msgstr ""
 "のページサイズ, 2 = 基板の領域のみ)"
 
 #: kicad/cli/command_pcb_export_svg.cpp:92
-#, fuzzy
 msgid "Fit the page to the board"
-msgstr "基板上の全ゾーンを塗り潰し"
+msgstr "ページを基板に合わせる"
 
 #: kicad/cli/command_pcb_export_svg.cpp:96
 #: kicad/cli/command_sch_export_plot.cpp:77
@@ -37318,9 +37309,8 @@ msgstr ""
 "不明な場合は 4を選択して下さい。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:386
-#, fuzzy
 msgid "Fit page to board"
-msgstr "クリップボードに画像をコピーできませんでした"
+msgstr "ページを基板に合わせる"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:412
 msgid "Generate property popups for front footprints"
@@ -38137,7 +38127,7 @@ msgstr "強制的に追加"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:639
 msgid "Cancel Changes"
-msgstr "変更をキャンセル"
+msgstr "変更をキャンセルする"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:653
 #, c-format
