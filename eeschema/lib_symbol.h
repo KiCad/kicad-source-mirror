@@ -315,6 +315,11 @@ public:
     void AddField( SCH_FIELD& aField ) { AddField( new SCH_FIELD( aField ) ); }
 
     /**
+     * Return the next ordinal for a user field for this symbol
+     */
+    int GetNextFieldOrdinal() const;
+
+    /**
      * Find a field within this symbol matching \a aFieldName; return nullptr if not found.
      */
     SCH_FIELD* GetField( const wxString& aFieldName );

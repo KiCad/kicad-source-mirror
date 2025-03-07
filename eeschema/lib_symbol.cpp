@@ -1038,6 +1038,17 @@ void LIB_SYMBOL::CopyFields( std::vector<SCH_FIELD>& aList )
 }
 
 
+int LIB_SYMBOL::GetNextFieldOrdinal() const
+{
+    int ordinal = 42;     // Arbitrarily larger than any mandatory FIELD_T id
+
+    for( const SCH_ITEM& item : m_drawings[ SCH_FIELD_T ] )
+        ordinal = std::max( ordinal, static_cast<const SCH_FIELD*>( &item )->GetOrdinal() + 1 );
+
+    return ordinal;
+}
+
+
 const SCH_FIELD* LIB_SYMBOL::GetField( FIELD_T aFieldType ) const
 {
     for( const SCH_ITEM& item : m_drawings[ SCH_FIELD_T ] )
