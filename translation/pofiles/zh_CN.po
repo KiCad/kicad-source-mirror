@@ -42,7 +42,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-06 13:54+0300\n"
 "PO-Revision-Date: 2025-03-07 09:02+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -3852,7 +3852,7 @@ msgstr "移除 Git 仓库"
 
 #: common/dialogs/panel_color_settings.cpp:52
 msgid "Reveal Themes in Finder"
-msgstr "在搜索器中显示主题"
+msgstr "在“访达”中显示主题文件"
 
 #: common/dialogs/panel_color_settings.cpp:136
 msgid "New theme name:"
@@ -9868,7 +9868,7 @@ msgstr "重置为默认值"
 
 #: common/widgets/paged_dialog.cpp:92
 msgid "Reveal Preferences in Finder"
-msgstr "在查找器中显示偏好设置"
+msgstr "在“访达”中显示偏好设置文件"
 
 #: common/widgets/paged_dialog.cpp:94
 msgid "Open Preferences Directory"
@@ -27375,11 +27375,11 @@ msgstr "创建一个新目录"
 
 #: kicad/project_tree_pane.cpp:912 kicad/project_tree_pane.cpp:922
 msgid "Reveal in Finder"
-msgstr "在\"访达\"中显示"
+msgstr "在“访达”中显示"
 
 #: kicad/project_tree_pane.cpp:913
 msgid "Reveals the directory in a Finder window"
-msgstr "在\"访达\"窗口中显示目录"
+msgstr "在“访达”窗口中显示目录"
 
 #: kicad/project_tree_pane.cpp:915
 msgid "Open Directory in File Explorer"
@@ -27391,7 +27391,7 @@ msgstr "在默认系统文件管理器中打开目录"
 
 #: kicad/project_tree_pane.cpp:923
 msgid "Reveals the directories in a Finder window"
-msgstr "在\"访达\"窗口中显示目录"
+msgstr "在“访达”窗口中显示目录"
 
 #: kicad/project_tree_pane.cpp:925
 msgid "Open Directories in File Explorer"
@@ -27738,7 +27738,7 @@ msgstr "浏览工程文件"
 
 #: kicad/tools/kicad_manager_actions.cpp:235
 msgid "Reveal project folder in Finder"
-msgstr "在\"访达\"中显示工程文件夹"
+msgstr "在“访达”中显示工程文件夹"
 
 #: kicad/tools/kicad_manager_actions.cpp:237
 msgid "Open project directory in file explorer"
@@ -48328,11 +48328,11 @@ msgstr "编辑创建新焊盘时所使用的焊盘属性"
 
 #: pcbnew/tools/pcb_actions.cpp:1034
 msgid "Reveal Plugin Folder in Finder"
-msgstr "在\"访达\"中显示插件文件夹"
+msgstr "在“访达”中显示插件文件夹"
 
 #: pcbnew/tools/pcb_actions.cpp:1035
 msgid "Reveals the plugins folder in a Finder window"
-msgstr "在\"访达\"窗口中显示插件文件夹"
+msgstr "在“访达”窗口中显示插件文件夹"
 
 #: pcbnew/tools/pcb_actions.cpp:1047
 msgid "Board Setup..."
