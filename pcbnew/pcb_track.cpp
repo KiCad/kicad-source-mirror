@@ -1685,11 +1685,11 @@ double PCB_VIA::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
         }
 
         // Netnames will be shown only if zoom is appropriate
-        return width == 0 ? LOD_HIDE : ( (double) pcbIUScale.mmToIU( 10 ) / width );
+        return lodScaleForThreshold( aView, width, pcbIUScale.mmToIU( 10 ) );
     }
 
-    if( !IsCopperLayer( aLayer ) && !renderSettings->IsPrinting() )
-        return (double) pcbIUScale.mmToIU( 0.6 ) / width;
+    if( !IsCopperLayer( aLayer ) )
+        return lodScaleForThreshold( aView, width, pcbIUScale.mmToIU( 0.6 ) );
 
     return LOD_SHOW;
 }
