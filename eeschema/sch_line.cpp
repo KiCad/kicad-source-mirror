@@ -207,10 +207,10 @@ double SCH_LINE::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
 
         // Operating points will be shown only if zoom is appropriate
         if( height > 0 )
-            return lodScaleForThreshold( height, schIUScale.mmToIU( 5 ) );
+            return lodScaleForThreshold( aView, height, schIUScale.mmToIU( 5 ) );
 
         const int width = std::abs( m_end.x - m_start.x );
-        return lodScaleForThreshold( width, schIUScale.mmToIU( 15 ) );
+        return lodScaleForThreshold( aView, width, schIUScale.mmToIU( 15 ) );
     }
 
     // Other layers are always drawn.
