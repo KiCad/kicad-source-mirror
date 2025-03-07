@@ -1688,7 +1688,7 @@ double PCB_VIA::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
         return width == 0 ? LOD_HIDE : ( (double) pcbIUScale.mmToIU( 10 ) / width );
     }
 
-    if( !IsCopperLayer( aLayer ) )
+    if( !IsCopperLayer( aLayer ) && !renderSettings->IsPrinting() )
         return (double) pcbIUScale.mmToIU( 0.6 ) / width;
 
     return LOD_SHOW;
