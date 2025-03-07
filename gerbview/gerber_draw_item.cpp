@@ -1005,7 +1005,7 @@ double GERBER_DRAW_ITEM::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) cons
 
         // the level of details is chosen experimentally, to show
         // only a readable text:
-        return lodScaleForThreshold( size, gerbIUScale.mmToIU( 3.0 ) );
+        return lodScaleForThreshold( aView, size, gerbIUScale.mmToIU( 3.0 ) );
     }
 
     // Other layers are shown without any conditions

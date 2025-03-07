@@ -1535,7 +1535,7 @@ double PCB_TRACK::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
             return LOD_HIDE;
 
         // Netnames will be shown only if zoom is appropriate
-        return lodScaleForThreshold( m_width, pcbIUScale.mmToIU( 4.0 ) );
+        return lodScaleForThreshold( aView, m_width, pcbIUScale.mmToIU( 4.0 ) );
     }
 
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
