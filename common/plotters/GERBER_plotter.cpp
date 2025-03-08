@@ -752,6 +752,9 @@ void GERBER_PLOTTER::writeApertureList()
                 break;
             }
 
+            // Add separator after aperture macro name
+            fmt::print( m_outputFile, "," );
+
             // Output all corners (should be 4 to 8 corners)
             // Remember: the Y coordinate must be negated, due to the fact in Pcbnew
             // the Y axis is from top to bottom
