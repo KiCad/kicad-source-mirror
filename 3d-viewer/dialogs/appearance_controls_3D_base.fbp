@@ -45,7 +45,7 @@
       <property name="hidden">0</property>
       <property name="id">wxID_ANY</property>
       <property name="maximum_size"></property>
-      <property name="minimum_size">200,360</property>
+      <property name="minimum_size">210,360</property>
       <property name="name">APPEARANCE_CONTROLS_3D_BASE</property>
       <property name="pos"></property>
       <property name="size">-1,-1</property>

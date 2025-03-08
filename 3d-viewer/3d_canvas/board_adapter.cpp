@@ -879,26 +879,6 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetVisibleLayers() const
     {
         ret = preset->layers;
     }
-    else
-    {
-        ret.set( LAYER_3D_BOARD,             m_Cfg->m_Render.show_board_body );
-        ret.set( LAYER_3D_COPPER_TOP,        m_Cfg->m_Render.show_copper_top );
-        ret.set( LAYER_3D_COPPER_BOTTOM,     m_Cfg->m_Render.show_copper_bottom );
-        ret.set( LAYER_3D_SILKSCREEN_TOP,    m_Cfg->m_Render.show_silkscreen_top );
-        ret.set( LAYER_3D_SILKSCREEN_BOTTOM, m_Cfg->m_Render.show_silkscreen_bottom );
-        ret.set( LAYER_3D_SOLDERMASK_TOP,    m_Cfg->m_Render.show_soldermask_top );
-        ret.set( LAYER_3D_SOLDERMASK_BOTTOM, m_Cfg->m_Render.show_soldermask_bottom );
-        ret.set( LAYER_3D_SOLDERPASTE,       m_Cfg->m_Render.show_solderpaste );
-        ret.set( LAYER_3D_ADHESIVE,          m_Cfg->m_Render.show_adhesive );
-        ret.set( LAYER_3D_USER_COMMENTS,     m_Cfg->m_Render.show_comments );
-        ret.set( LAYER_3D_USER_DRAWINGS,     m_Cfg->m_Render.show_drawings );
-        ret.set( LAYER_3D_USER_ECO1,         m_Cfg->m_Render.show_eco1 );
-        ret.set( LAYER_3D_USER_ECO2,         m_Cfg->m_Render.show_eco2 );
-
-        ret.set( LAYER_FP_REFERENCES,        m_Cfg->m_Render.show_fp_references );
-        ret.set( LAYER_FP_VALUES,            m_Cfg->m_Render.show_fp_values );
-        ret.set( LAYER_FP_TEXT,              m_Cfg->m_Render.show_fp_text );
-    }
 
     return ret;
 }

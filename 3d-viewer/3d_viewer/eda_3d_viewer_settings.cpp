@@ -81,6 +81,35 @@ PARAM_LAYER_PRESET_3D::PARAM_LAYER_PRESET_3D( const std::string& aPath,
         m_presets( aPresetList )
 {
     wxASSERT( aPresetList );
+
+#define LAYER( n, l ) m_layerToLayerNameMap[l] = n; m_layerNameToLayerMap[n] = l;
+
+    LAYER( "fp_values",           LAYER_FP_VALUES            );
+    LAYER( "fp_references",       LAYER_FP_REFERENCES        );
+    LAYER( "fp_text",             LAYER_FP_TEXT              );
+    LAYER( "background_bottom",   LAYER_3D_BACKGROUND_BOTTOM );
+    LAYER( "background_top",      LAYER_3D_BACKGROUND_TOP    );
+    LAYER( "board",               LAYER_3D_BOARD             );
+    LAYER( "copper",              LAYER_3D_COPPER_TOP        );
+    LAYER( "copper_bottom",       LAYER_3D_COPPER_BOTTOM     );
+    LAYER( "silkscreen_bottom",   LAYER_3D_SILKSCREEN_BOTTOM );
+    LAYER( "silkscreen_top",      LAYER_3D_SILKSCREEN_TOP    );
+    LAYER( "soldermask_bottom",   LAYER_3D_SOLDERMASK_BOTTOM );
+    LAYER( "soldermask_top",      LAYER_3D_SOLDERMASK_TOP    );
+    LAYER( "solderpaste",         LAYER_3D_SOLDERPASTE       );
+    LAYER( "adhesive",            LAYER_3D_ADHESIVE          );
+    LAYER( "user_comments",       LAYER_3D_USER_COMMENTS     );
+    LAYER( "user_drawings",       LAYER_3D_USER_DRAWINGS     );
+    LAYER( "user_eco1",           LAYER_3D_USER_ECO1         );
+    LAYER( "user_eco2",           LAYER_3D_USER_ECO2         );
+    LAYER( "3d_axes",             LAYER_3D_AXES              );
+    LAYER( "th_models",           LAYER_3D_TH_MODELS         );
+    LAYER( "smd_models",          LAYER_3D_SMD_MODELS        );
+    LAYER( "virtual_models",      LAYER_3D_VIRTUAL_MODELS    );
+    LAYER( "non_pos_file_models", LAYER_3D_MODELS_NOT_IN_POS );
+    LAYER( "dnp_models",          LAYER_3D_MODELS_MARKED_DNP );
+    LAYER( "bounding_boxes",      LAYER_3D_BOUNDING_BOXES    );
+    LAYER( "off_board_silk",      LAYER_3D_OFF_BOARD_SILK    );
 }
 
 
@@ -99,7 +128,7 @@ nlohmann::json PARAM_LAYER_PRESET_3D::presetsToJson()
         for( int layer = 0; layer < LAYER_3D_END; ++layer )
         {
             if( preset.layers.test( layer ) )
-                layers.push_back( layer );
+                layers.push_back( m_layerToLayerNameMap[layer] );
         }
 
         js["layers"] = layers;
@@ -109,7 +138,7 @@ nlohmann::json PARAM_LAYER_PRESET_3D::presetsToJson()
         for( const auto& [ layer, color ] : preset.colors )
         {
             nlohmann::json layerColor = {
-                { "layer", layer },
+                { "layer", m_layerToLayerNameMap[layer] },
                 { "color", color.ToCSSString() }
             };
 
@@ -144,26 +173,20 @@ void PARAM_LAYER_PRESET_3D::jsonToPresets( const nlohmann::json& aJson )
 
                 for( const nlohmann::json& layer : preset.at( "layers" ) )
                 {
-                    if( layer.is_number_integer() )
-                    {
-                        int layerNum = layer.get<int>();
-
-                        if( layerNum >= 0 && layerNum < LAYER_3D_END )
-                            p.layers.set( layerNum );
-                    }
+                    if( layer.is_string() )
+                        p.layers.set( m_layerNameToLayerMap[layer.get<wxString>()] );
                 }
             }
 
             if( preset.contains( "colors" ) && preset.at( "colors" ).is_array() )
             {
-                for( const nlohmann::json& layerColor : preset.at( "colors" ) )
+                for( const nlohmann::json& entry : preset.at( "colors" ) )
                 {
-                    if( layerColor.contains( "layer" ) && layerColor.contains( "color" )
-                        && layerColor.at( "layer" ).is_number_integer() )
+                    if( entry.contains( "layer" ) && entry.contains( "color" )
+                        && entry.at( "layer" ).is_string() )
                     {
-                        int layerNum = layerColor.at( "layer" ).get<int>();
-                        COLOR4D color = layerColor.at( "color" ).get<COLOR4D>();
-                        p.colors[ layerNum ] = color;
+                        int layerNum = m_layerNameToLayerMap[entry.at( "layer" ).get<wxString>()];
+                        p.colors[ layerNum ] = entry.at( "color" ).get<COLOR4D>();
                     }
                 }
             }
@@ -175,7 +198,7 @@ void PARAM_LAYER_PRESET_3D::jsonToPresets( const nlohmann::json& aJson )
 
 
 ///! Update the schema version whenever a migration is required
-const int viewer3dSchemaVersion = 3;
+const int viewer3dSchemaVersion = 4;
 
 
 EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS() :
@@ -423,6 +446,69 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS() :
                 {
                     Set( "render.show_eco1", *optval );
                     Set( "render.show_eco2", *optval );
+                }
+
+                return true;
+            } );
+
+    registerMigration( 3, 4,
+            [&]() -> bool
+            {
+                std::map<int, wxString> legacyColorMap;
+
+                legacyColorMap[142] = "fp_values";
+                legacyColorMap[143] = "fp_references";
+                legacyColorMap[130] = "fp_text";
+                legacyColorMap[466] = "background_bottom";
+                legacyColorMap[467] = "background_top";
+                legacyColorMap[468] = "board";
+                legacyColorMap[469] = "copper";
+                legacyColorMap[470] = "copper_bottom";
+                legacyColorMap[471] = "silkscreen_bottom";
+                legacyColorMap[472] = "silkscreen_top";
+                legacyColorMap[473] = "soldermask_bottom";
+                legacyColorMap[474] = "soldermask_top";
+                legacyColorMap[475] = "solderpaste";
+                legacyColorMap[476] = "adhesive";
+                legacyColorMap[477] = "user_comments";
+                legacyColorMap[478] = "user_drawings";
+                legacyColorMap[479] = "user_eco1";
+                legacyColorMap[480] = "user_eco2";
+                legacyColorMap[481] = "th_models";
+                legacyColorMap[482] = "smd_models";
+                legacyColorMap[483] = "virtual_models";
+                legacyColorMap[484] = "non_pos_file_models";
+                legacyColorMap[485] = "dnp_models";
+                legacyColorMap[486] = "3d_axes";
+                legacyColorMap[487] = "bounding_boxes";
+                legacyColorMap[488] = "off_board_silk";
+
+                if( !Contains( "layer_presets" ) || !At( "layer_presets" ).is_array() )
+                    return true;
+
+                for( nlohmann::json& preset : At( "layer_presets" ) )
+                {
+                    if( preset.contains( "colors" ) && preset.at( "colors" ).is_array() )
+                    {
+                        for( nlohmann::json& color : preset.at( "colors" ) )
+                        {
+                            if( color.contains( "layer" ) && color.at( "layer" ).is_number_integer() )
+                                color["layer"] = legacyColorMap[color["layer"].get<int>()];
+                        }
+                    }
+
+                    if( preset.contains( "layers" ) && preset.at( "layers" ).is_array() )
+                    {
+                        nlohmann::json mappedLayers = nlohmann::json::array();
+
+                        for( const nlohmann::json& layer : preset.at( "layers" ) )
+                        {
+                            if( layer.is_number_integer() )
+                                mappedLayers.push_back( legacyColorMap[layer.get<int>()] );
+                        }
+
+                        preset["layers"] = mappedLayers;
+                    }
                 }
 
                 return true;

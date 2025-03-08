@@ -85,7 +85,7 @@ wxString LayerName( int aLayer )
     case LAYER_RULE_AREAS:              return _( "Rule areas" );
     case LAYER_DEVICE:                  return _( "Symbol body outlines" );
     case LAYER_DEVICE_BACKGROUND:       return _( "Symbol body fills" );
-    case LAYER_SHAPES_BACKGROUND: return _( "Shape fills" );
+    case LAYER_SHAPES_BACKGROUND:       return _( "Shape fills" );
     case LAYER_NOTES:                   return _( "Schematic text && graphics" );
     case LAYER_PRIVATE_NOTES:           return _( "Symbol private text && graphics" );
     case LAYER_NOTES_BACKGROUND:        return _( "Schematic text && graphics backgrounds" );
