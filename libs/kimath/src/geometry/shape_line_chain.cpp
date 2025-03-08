@@ -1969,11 +1969,14 @@ const std::optional<SHAPE_LINE_CHAIN::INTERSECTION> SHAPE_LINE_CHAIN::SelfInters
 {
     for( int s1 = 0; s1 < SegmentCount(); s1++ )
     {
+        const SEG cs1 = CSegment( s1 );
+
         for( int s2 = s1 + 1; s2 < SegmentCount(); s2++ )
         {
-            const VECTOR2I s2a = CSegment( s2 ).A, s2b = CSegment( s2 ).B;
+            const SEG      cs2 = CSegment( s2 );
+            const VECTOR2I s2a = cs2.A, s2b = cs2.B;
 
-            if( s1 + 1 != s2 && CSegment( s1 ).Contains( s2a ) )
+            if( s1 + 1 != s2 && cs1.Contains( s2a ) )
             {
                 INTERSECTION is;
                 is.index_our = s1;
@@ -1981,7 +1984,7 @@ const std::optional<SHAPE_LINE_CHAIN::INTERSECTION> SHAPE_LINE_CHAIN::SelfInters
                 is.p = s2a;
                 return is;
             }
-            else if( CSegment( s1 ).Contains( s2b ) &&
+            else if( cs1.Contains( s2b ) &&
                      // for closed polylines, the ending point of the
                      // last segment == starting point of the first segment
                      // this is a normal case, not self intersecting case
@@ -1995,7 +1998,7 @@ const std::optional<SHAPE_LINE_CHAIN::INTERSECTION> SHAPE_LINE_CHAIN::SelfInters
             }
             else
             {
-                OPT_VECTOR2I p = CSegment( s1 ).Intersect( CSegment( s2 ), true );
+                OPT_VECTOR2I p = cs1.Intersect( cs2, true );
 
                 if( p )
                 {
