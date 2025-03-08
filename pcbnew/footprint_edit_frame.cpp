@@ -196,6 +196,12 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         libWidth = cfg->m_LibWidth;
         aui_cfg = cfg->m_AuiPanels;
     }
+    else
+    {
+        // keep gcc quiet about uninitalized vars:
+        aui_cfg.appearance_panel_tab = 0;
+        aui_cfg.right_panel_width = -1;
+    }
 
     m_auimgr.SetManagedWindow( this );
 
