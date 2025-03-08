@@ -1967,13 +1967,19 @@ bool SHAPE_LINE_CHAIN::CheckClearance( const VECTOR2I& aP, const int aDist ) con
 
 const std::optional<SHAPE_LINE_CHAIN::INTERSECTION> SHAPE_LINE_CHAIN::SelfIntersecting() const
 {
-    for( int s1 = 0; s1 < SegmentCount(); s1++ )
-    {
-        const SEG cs1 = CSegment( s1 );
+    const size_t     segCount = SegmentCount();
+    std::vector<SEG> segments( segCount );
 
-        for( int s2 = s1 + 1; s2 < SegmentCount(); s2++ )
+    for( size_t s = 0; s < segCount; s++ )
+        segments[s] = CSegment( s );
+
+    for( size_t s1 = 0; s1 < segCount; s1++ )
+    {
+        const SEG& cs1 = segments[s1];
+
+        for( size_t s2 = s1 + 1; s2 < segCount; s2++ )
         {
-            const SEG      cs2 = CSegment( s2 );
+            const SEG&     cs2 = segments[s2];
             const VECTOR2I s2a = cs2.A, s2b = cs2.B;
 
             if( s1 + 1 != s2 && cs1.Contains( s2a ) )
@@ -1988,7 +1994,7 @@ const std::optional<SHAPE_LINE_CHAIN::INTERSECTION> SHAPE_LINE_CHAIN::SelfInters
                      // for closed polylines, the ending point of the
                      // last segment == starting point of the first segment
                      // this is a normal case, not self intersecting case
-                     !( IsClosed() && s1 == 0 && s2 == SegmentCount()-1 ) )
+                     !( IsClosed() && s1 == 0 && s2 == segCount - 1 ) )
             {
                 INTERSECTION is;
                 is.index_our = s1;
