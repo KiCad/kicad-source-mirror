@@ -1918,24 +1918,30 @@ bool SHAPE_LINE_CHAIN_BASE::PointOnEdge( const VECTOR2I& aPt, int aAccuracy ) co
 
 int SHAPE_LINE_CHAIN_BASE::EdgeContainingPoint( const VECTOR2I& aPt, int aAccuracy ) const
 {
-    if( !GetPointCount() )
+    const int     threshold = aAccuracy + 1;
+    const int64_t thresholdSq = int64_t( threshold ) * threshold;
+    const size_t  pointCount = GetPointCount();
+
+    if( !pointCount )
     {
-		return -1;
+        return -1;
     }
-	else if( GetPointCount() == 1 )
+    else if( pointCount == 1 )
     {
-	    VECTOR2I dist = GetPoint(0) - aPt;
-	    return ( hypot( dist.x, dist.y ) <= aAccuracy + 1 ) ? 0 : -1;
+        SEG::ecoord distSq = GetPoint( 0 ).SquaredDistance( aPt );
+        return distSq <= thresholdSq ? 0 : -1;
     }
 
-    for( size_t i = 0; i < GetSegmentCount(); i++ )
+    const size_t segCount = GetSegmentCount();
+
+    for( size_t i = 0; i < segCount; i++ )
     {
         const SEG s = GetSegment( i );
 
         if( s.A == aPt || s.B == aPt )
             return i;
 
-        if( s.Distance( aPt ) <= aAccuracy + 1 )
+        if( s.SquaredDistance( aPt ) <= thresholdSq )
             return i;
     }
 
