@@ -578,10 +578,11 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
     // Update fields
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
 
-    for( PCB_FIELD* existing : m_footprint->GetFields() )
+    while( !m_footprint->GetFields().empty() )
     {
-        m_footprint->Remove( existing );
+        PCB_FIELD* existing = m_footprint->GetFields().front();
         view->Remove( existing );
+        m_footprint->Remove( existing );
         delete existing;
     }
 
