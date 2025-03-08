@@ -46,6 +46,8 @@
 #include <macros.h>
 #include <trigo.h>
 #include <string_utils.h>
+#include <fmt/format.h>
+#include <fmt/chrono.h>
 
 #include <plotters/plotters_pslike.h>
 
@@ -99,14 +101,10 @@ std::string PDF_PLOTTER::encodeStringForPlotter( const wxString& aText )
     {
         result = "<FEFF";
 
-
         for( size_t ii = 0; ii < aText.Len(); ii++ )
         {
             unsigned int code = aText[ii];
-            char buffer[16];
-            std::snprintf( buffer, sizeof( buffer ), "%4.4X", code );
-            result += buffer;
-
+            result += fmt::format("{:04X}", code);
         }
 
         result += '>';
@@ -163,7 +161,7 @@ void PDF_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
     wxASSERT_MSG( aWidth > 0, "Plotter called to set negative pen width" );
 
     if( aWidth != m_currentPenWidth )
-        fprintf( m_workFile, "%g w\n", userToDeviceSize( aWidth ) );
+        fmt::println( m_workFile, "{:g} w", userToDeviceSize( aWidth ) );
 
     m_currentPenWidth = aWidth;
 }
@@ -182,7 +180,7 @@ void PDF_PLOTTER::emitSetRGBColor( double r, double g, double b, double a )
         b = ( b * a ) + ( 1 - a );
     }
 
-    fprintf( m_workFile, "%g %g %g rg %g %g %g RG\n", r, g, b, r, g, b );
+    fmt::println( m_workFile, "{:g} {:g} {:g} rg {:g} {:g} {:g} RG", r, g, b, r, g, b );
 }
 
 
@@ -193,30 +191,30 @@ void PDF_PLOTTER::SetDash( int aLineWidth, LINE_STYLE aLineStyle )
     switch( aLineStyle )
     {
     case LINE_STYLE::DASH:
-        fprintf( m_workFile, "[%d %d] 0 d\n",
+        fmt::println( m_workFile, "[{} {}] 0 d",
                 (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
         break;
 
     case LINE_STYLE::DOT:
-        fprintf( m_workFile, "[%d %d] 0 d\n",
+        fmt::println( m_workFile, "[{} {}] 0 d",
                 (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
         break;
 
     case LINE_STYLE::DASHDOT:
-        fprintf( m_workFile, "[%d %d %d %d] 0 d\n",
+        fmt::println( m_workFile, "[{} {} {} {}] 0 d",
                 (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),
                 (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
         break;
 
     case LINE_STYLE::DASHDOTDOT:
-        fprintf( m_workFile, "[%d %d %d %d %d %d] 0 d\n",
+        fmt::println( m_workFile, "[{} {} {} {} {} {}] 0 d",
                 (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),
                 (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),
                 (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
         break;
 
     default:
-        fputs( "[] 0 d\n", m_workFile );
+        fmt::println( m_workFile, "[] 0 d\n" );
     }
 }
 
@@ -267,7 +265,7 @@ void PDF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int
     else
         paintOp = width > 0 ? 'B' : 'f';
 
-    fprintf( m_workFile, "%g %g %g %g re %c\n", p1_dev.x, p1_dev.y, p2_dev.x - p1_dev.x,
+    fmt::println( m_workFile, "{:g} {:g} {:g} {:g} re {}", p1_dev.x, p1_dev.y, p2_dev.x - p1_dev.x,
              p2_dev.y - p1_dev.y, paintOp );
 }
 
@@ -302,31 +300,31 @@ void PDF_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T aFill, int w
     double magic = radius * 0.551784; // You don't want to know where this come from
 
     // This is the convex hull for the bezier approximated circle
-    fprintf( m_workFile,
-             "%g %g m "
-             "%g %g %g %g %g %g c "
-             "%g %g %g %g %g %g c "
-             "%g %g %g %g %g %g c "
-             "%g %g %g %g %g %g c %c\n",
-             pos_dev.x - radius, pos_dev.y,
+    fmt::println( m_workFile,
+                  "{:g} {:g} m "
+                  "{:g} {:g} {:g} {:g} {:g} {:g} c "
+                  "{:g} {:g} {:g} {:g} {:g} {:g} c "
+                  "{:g} {:g} {:g} {:g} {:g} {:g} c "
+                  "{:g} {:g} {:g} {:g} {:g} {:g} c {}",
+                  pos_dev.x - radius, pos_dev.y,
 
-             pos_dev.x - radius, pos_dev.y + magic,
-             pos_dev.x - magic, pos_dev.y + radius,
-             pos_dev.x, pos_dev.y + radius,
+                  pos_dev.x - radius, pos_dev.y + magic,
+                  pos_dev.x - magic, pos_dev.y + radius,
+                  pos_dev.x, pos_dev.y + radius,
 
-             pos_dev.x + magic, pos_dev.y + radius,
-             pos_dev.x + radius, pos_dev.y + magic,
-             pos_dev.x + radius, pos_dev.y,
+                  pos_dev.x + magic, pos_dev.y + radius,
+                  pos_dev.x + radius, pos_dev.y + magic,
+                  pos_dev.x + radius, pos_dev.y,
 
-             pos_dev.x + radius, pos_dev.y - magic,
-             pos_dev.x + magic, pos_dev.y - radius,
-             pos_dev.x, pos_dev.y - radius,
+                  pos_dev.x + radius, pos_dev.y - magic,
+                  pos_dev.x + magic, pos_dev.y - radius,
+                  pos_dev.x, pos_dev.y - radius,
 
-             pos_dev.x - magic, pos_dev.y - radius,
-             pos_dev.x - radius, pos_dev.y - magic,
-             pos_dev.x - radius, pos_dev.y,
+                  pos_dev.x - magic, pos_dev.y - radius,
+                  pos_dev.x - radius, pos_dev.y - magic,
+                  pos_dev.x - radius, pos_dev.y,
 
-             aFill == FILL_T::NO_FILL ? 's' : 'b' );
+                  aFill == FILL_T::NO_FILL ? 's' : 'b' );
 }
 
 
@@ -360,31 +358,31 @@ void PDF_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
     start.x = KiROUND( aCenter.x + aRadius * ( -startAngle ).Cos() );
     start.y = KiROUND( aCenter.y + aRadius * ( -startAngle ).Sin() );
     VECTOR2D pos_dev = userToDeviceCoordinates( start );
-    fprintf( m_workFile, "%g %g m ", pos_dev.x, pos_dev.y );
+    fmt::print( m_workFile, "{:g} {:g} m ", pos_dev.x, pos_dev.y );
 
     for( EDA_ANGLE ii = startAngle + delta; ii < endAngle; ii += delta )
     {
         end.x = KiROUND( aCenter.x + aRadius * ( -ii ).Cos() );
         end.y = KiROUND( aCenter.y + aRadius * ( -ii ).Sin() );
         pos_dev = userToDeviceCoordinates( end );
-        fprintf( m_workFile, "%g %g l ", pos_dev.x, pos_dev.y );
+        fmt::print( m_workFile, "{:g} {:g} l ", pos_dev.x, pos_dev.y );
     }
 
     end.x = KiROUND( aCenter.x + aRadius * ( -endAngle ).Cos() );
     end.y = KiROUND( aCenter.y + aRadius * ( -endAngle ).Sin() );
     pos_dev = userToDeviceCoordinates( end );
-    fprintf( m_workFile, "%g %g l ", pos_dev.x, pos_dev.y );
+    fmt::print( m_workFile, "{:g} {:g} l ", pos_dev.x, pos_dev.y );
 
     // The arc is drawn... if not filled we stroke it, otherwise we finish
     // closing the pie at the center
     if( aFill == FILL_T::NO_FILL )
     {
-        fputs( "S\n", m_workFile );
+        fmt::println( m_workFile, "S" );
     }
     else
     {
         pos_dev = userToDeviceCoordinates( aCenter );
-        fprintf( m_workFile, "%g %g l b\n", pos_dev.x, pos_dev.y );
+        fmt::println( m_workFile, "{:g} {:g} l b", pos_dev.x, pos_dev.y );
     }
 }
 
@@ -403,21 +401,21 @@ void PDF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
     SetCurrentLineWidth( aWidth );
 
     VECTOR2D pos = userToDeviceCoordinates( aCornerList[0] );
-    fprintf( m_workFile, "%f %f m\n", pos.x, pos.y );
+    fmt::println( m_workFile, "{:f} {:f} m", pos.x, pos.y );
 
     for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
     {
         pos = userToDeviceCoordinates( aCornerList[ii] );
-        fprintf( m_workFile, "%f %f l\n", pos.x, pos.y );
+        fmt::println( m_workFile, "{:f} {:f} l", pos.x, pos.y );
     }
 
     // Close path and stroke and/or fill
     if( aFill == FILL_T::NO_FILL )
-        fputs( "S\n", m_workFile );
+        fmt::println( m_workFile, "S" );
     else if( aWidth == 0 )
-        fputs( "f\n", m_workFile );
+        fmt::println( m_workFile, "f" );
     else
-        fputs( "b\n", m_workFile );
+        fmt::println( m_workFile, "b" );
 }
 
 
@@ -429,7 +427,7 @@ void PDF_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
     {
         if( m_penState != 'Z' )
         {
-            fputs( "S\n", m_workFile );
+            fmt::println( m_workFile, "S" );
             m_penState     = 'Z';
             m_penLastpos.x = -1;
             m_penLastpos.y = -1;
@@ -441,7 +439,7 @@ void PDF_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
     if( m_penState != plume || pos != m_penLastpos )
     {
         VECTOR2D pos_dev = userToDeviceCoordinates( pos );
-        fprintf( m_workFile, "%f %f %c\n",
+        fmt::println( m_workFile, "{:f} {:f} {}",
                  pos_dev.x, pos_dev.y,
                  ( plume=='D' ) ? 'l' : 'm' );
     }
@@ -522,13 +520,13 @@ void PDF_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double
        3) restore the CTM
        4) profit
      */
-    fprintf( m_workFile, "q %g 0 0 %g %g %g cm\n", // Step 1
+    fmt::println( m_workFile, "q {:g} 0 0 {:g} {:g} {:g} cm", // Step 1
              userToDeviceSize( drawsize.x ),
              userToDeviceSize( drawsize.y ),
              dev_start.x, dev_start.y );
 
-    fprintf( m_workFile, "/Im%d Do\n", imgHandle );
-    fputs( "Q\n", m_workFile );
+    fmt::println( m_workFile, "/Im{} Do", imgHandle );
+    fmt::println( m_workFile, "Q" );
 }
 
 
@@ -548,7 +546,7 @@ int PDF_PLOTTER::startPdfObject(int handle)
         handle = allocPdfObject();
 
     m_xrefTable[handle] = ftell( m_outputFile );
-    fprintf( m_outputFile, "%d 0 obj\n", handle );
+    fmt::println( m_outputFile, "{} 0 obj", handle );
     return handle;
 }
 
@@ -557,7 +555,7 @@ void PDF_PLOTTER::closePdfObject()
 {
     wxASSERT( m_outputFile );
     wxASSERT( !m_workFile );
-    fputs( "endobj\n", m_outputFile );
+    fmt::println( m_outputFile, "endobj" );
 }
 
 
@@ -573,15 +571,14 @@ int PDF_PLOTTER::startPdfStream( int handle )
 
     if( ADVANCED_CFG::GetCfg().m_DebugPDFWriter )
     {
-        fprintf( m_outputFile,
-                 "<< /Length %d 0 R >>\n" // Length is deferred
-                 "stream\n", handle + 1 );
+        fmt::println( m_outputFile,
+                 "<< /Length {} 0 R >>\nstream", handle + 1 );
     }
     else
     {
-        fprintf( m_outputFile,
-                 "<< /Length %d 0 R /Filter /FlateDecode >>\n" // Length is deferred
-                 "stream\n", handle + 1 );
+        fmt::println( m_outputFile,
+                 "<< /Length {} 0 R /Filter /FlateDecode >>\n"
+                 "stream", handle + 1 );
     }
 
     // Open a temporary file to accumulate the stream
@@ -649,12 +646,12 @@ void PDF_PLOTTER::closePdfStream()
     }
 
     delete[] inbuf;
-    fputs( "\nendstream\n", m_outputFile );
+    fmt::print( m_outputFile, "\nendstream\n" );
     closePdfObject();
 
     // Writing the deferred length as an indirect object
     startPdfObject( m_streamLengthHandle );
-    fprintf( m_outputFile, "%u\n", out_count );
+    fmt::println( m_outputFile, "{}", out_count );
     closePdfObject();
 }
 
@@ -685,10 +682,10 @@ void PDF_PLOTTER::StartPage( const wxString& aPageNumber, const wxString& aPageN
        compressed later in closePdfStream */
 
     // Default graphic settings (coordinate system, default color and line style)
-    fprintf( m_workFile,
-             "%g 0 0 %g 0 0 cm 1 J 1 j 0 0 0 rg 0 0 0 RG %g w\n",
-             0.0072 * plotScaleAdjX, 0.0072 * plotScaleAdjY,
-             userToDeviceSize( m_renderSettings->GetDefaultPenWidth() ) );
+    fmt::println( m_workFile,
+                  "{:g} 0 0 {:g} 0 0 cm 1 J 1 j 0 0 0 rg 0 0 0 RG {:g} w",
+                  0.0072 * plotScaleAdjX, 0.0072 * plotScaleAdjY,
+                  userToDeviceSize( m_renderSettings->GetDefaultPenWidth() ) );
 }
 
 
@@ -849,19 +846,19 @@ void PDF_PLOTTER::ClosePage()
         hyperLinkArrayHandle = startPdfObject();
         bool isFirst = true;
 
-        fputs( "[", m_outputFile );
+        fmt::print( m_outputFile, "[" );
 
         for( int handle : hyperlinkHandles )
         {
             if( isFirst )
                 isFirst = false;
             else
-                fprintf( m_outputFile, " " );
+                fmt::print( m_outputFile, " " );
 
-            fprintf( m_outputFile, "%d 0 R", handle );
+            fmt::print( m_outputFile, "{} 0 R", handle );
         }
 
-        fputs( "]\n", m_outputFile );
+        fmt::println( m_outputFile, "]" );
         closePdfObject();
     }
 
@@ -869,27 +866,27 @@ void PDF_PLOTTER::ClosePage()
     int pageHandle = startPdfObject();
     m_pageHandles.push_back( pageHandle );
 
-    fprintf( m_outputFile,
-             "<<\n"
-             "/Type /Page\n"
-             "/Parent %d 0 R\n"
-             "/Resources <<\n"
-             "    /ProcSet [/PDF /Text /ImageC /ImageB]\n"
-             "    /Font %d 0 R\n"
-             "    /XObject %d 0 R >>\n"
-             "/MediaBox [0 0 %g %g]\n"
-             "/Contents %d 0 R\n",
-             m_pageTreeHandle,
-             m_fontResDictHandle,
-             m_imgResDictHandle,
-             psPaperSize.x,
-             psPaperSize.y,
-             m_pageStreamHandle );
+    fmt::print( m_outputFile,
+                "<<\n"
+                "/Type /Page\n"
+                "/Parent {} 0 R\n"
+                "/Resources <<\n"
+                "    /ProcSet [/PDF /Text /ImageC /ImageB]\n"
+                "    /Font {} 0 R\n"
+                "    /XObject {} 0 R >>\n"
+                "/MediaBox [0 0 {:g} {:g}]\n"
+                "/Contents {} 0 R\n",
+                m_pageTreeHandle,
+                m_fontResDictHandle,
+                m_imgResDictHandle,
+                psPaperSize.x,
+                psPaperSize.y,
+                m_pageStreamHandle );
 
     if( hyperlinkHandles.size() > 0 )
-        fprintf( m_outputFile, "/Annots %d 0 R", hyperLinkArrayHandle );
+        fmt::print( m_outputFile, "/Annots {} 0 R", hyperLinkArrayHandle );
 
-    fputs( ">>\n", m_outputFile );
+    fmt::print( m_outputFile, ">>\n" );
 
     closePdfObject();
 
@@ -983,7 +980,7 @@ bool PDF_PLOTTER::StartPlot( const wxString& aPageNumber, const wxString& aPageN
     /* The header (that's easy!). The second line is binary junk required
        to make the file binary from the beginning (the important thing is
        that they must have the bit 7 set) */
-    fputs("%PDF-1.5\n%\200\201\202\203\n", m_outputFile);
+    fmt::print( m_outputFile, "%PDF-1.5\n%\200\201\202\203\n" );
 
     /* Allocate an entry for the page tree root, it will go in every page parent entry */
     m_pageTreeHandle = allocPdfObject();
@@ -1010,8 +1007,8 @@ int PDF_PLOTTER::emitGoToAction( int aPageHandle, const VECTOR2I& aBottomLeft,
     int actionHandle = allocPdfObject();
     startPdfObject( actionHandle );
 
-    fprintf( m_outputFile,
-             "<</S /GoTo /D [%d 0 R /FitR %d %d %d %d]\n"
+    fmt::print( m_outputFile,
+             "<</S /GoTo /D [{} 0 R /FitR {} {} {} {}]\n"
              ">>\n",
              aPageHandle, aBottomLeft.x, aBottomLeft.y, aTopRight.x, aTopRight.y );
 
@@ -1026,9 +1023,9 @@ int PDF_PLOTTER::emitGoToAction( int aPageHandle )
     int actionHandle = allocPdfObject();
     startPdfObject( actionHandle );
 
-    fprintf( m_outputFile,
-             "<</S /GoTo /D [%d 0 R /Fit]\n"
-             ">>\n",
+    fmt::println( m_outputFile,
+             "<</S /GoTo /D [{} 0 R /Fit]\n"
+             ">>",
              aPageHandle );
 
     closePdfObject();
@@ -1066,36 +1063,37 @@ void PDF_PLOTTER::emitOutlineNode( OUTLINE_NODE* node, int parentHandle, int nex
     {
         startPdfObject( nodeHandle );
 
-        fprintf( m_outputFile,
-                 "<<\n"
-                 "/Title %s\n"
-                 "/Parent %d 0 R\n",
-                 encodeStringForPlotter(node->title ).c_str(),
-                 parentHandle);
+        fmt::print( m_outputFile,
+                    "<<\n"
+                    "/Title {}\n"
+                    "/Parent {} 0 R\n",
+                    encodeStringForPlotter(node->title ),
+                    parentHandle);
 
         if( nextNode > 0 )
         {
-            fprintf( m_outputFile, "/Next %d 0 R\n", nextNode );
+            fmt::println( m_outputFile, "/Next {} 0 R", nextNode );
         }
 
         if( prevNode > 0 )
         {
-            fprintf( m_outputFile, "/Prev %d 0 R\n", prevNode );
+            fmt::println( m_outputFile, "/Prev {} 0 R", prevNode );
         }
 
         if( node->children.size() > 0 )
         {
-            fprintf( m_outputFile, "/Count %zd\n", -1 * node->children.size() );
-            fprintf( m_outputFile, "/First %d 0 R\n", node->children.front()->entryHandle );
-            fprintf( m_outputFile, "/Last %d 0 R\n", node->children.back()->entryHandle );
+            int32_t count = -1 * static_cast<int32_t>( node->children.size() );
+            fmt::println( m_outputFile, "/Count {}", count );
+            fmt::println( m_outputFile, "/First {} 0 R", node->children.front()->entryHandle );
+            fmt::println( m_outputFile, "/Last {} 0 R", node->children.back()->entryHandle );
         }
 
         if( node->actionHandle != -1 )
         {
-            fprintf( m_outputFile, "/A %d 0 R\n", node->actionHandle );
+            fmt::println( m_outputFile, "/A {} 0 R", node->actionHandle );
         }
 
-        fputs( ">>\n", m_outputFile );
+        fmt::println( m_outputFile, ">>" );
         closePdfObject();
     }
 }
@@ -1122,16 +1120,16 @@ int PDF_PLOTTER::emitOutline()
 
         startPdfObject( m_outlineRoot->entryHandle );
 
-        fprintf( m_outputFile,
-                 "<< /Type /Outlines\n"
-                 "   /Count %d\n"
-                 "   /First %d 0 R\n"
-                 "   /Last %d 0 R\n"
-                 ">>\n",
-                 m_totalOutlineNodes,
-                 m_outlineRoot->children.front()->entryHandle,
-                 m_outlineRoot->children.back()->entryHandle
-        );
+        fmt::print( m_outputFile,
+                    "<< /Type /Outlines\n"
+                    "   /Count {}\n"
+                    "   /First {} 0 R\n"
+                    "   /Last {} 0 R\n"
+                    ">>\n",
+                    m_totalOutlineNodes,
+                    m_outlineRoot->children.front()->entryHandle,
+                    m_outlineRoot->children.back()->entryHandle
+            );
 
         closePdfObject();
 
@@ -1171,41 +1169,35 @@ bool PDF_PLOTTER::EndPlot()
     for( int i = 0; i < 4; i++ )
     {
         fontdefs[i].font_handle = startPdfObject();
-        fprintf( m_outputFile,
-                 "<< /BaseFont %s\n"
-                 "   /Type /Font\n"
-                 "   /Subtype /Type1\n"
-                 /* Adobe is so Mac-based that the nearest thing to Latin1 is
-                    the Windows ANSI encoding! */
-                 "   /Encoding /WinAnsiEncoding\n"
-                 ">>\n",
+        fmt::println( m_outputFile,
+                 "<< /BaseFont {}\n   /Type /Font\n   /Subtype /Type1\n   /Encoding /WinAnsiEncoding\n>>",
                  fontdefs[i].psname );
         closePdfObject();
     }
 
     // Named font dictionary (was allocated, now we emit it)
     startPdfObject( m_fontResDictHandle );
-    fputs( "<<\n", m_outputFile );
+    fmt::println( m_outputFile, "<<" );
 
     for( int i = 0; i < 4; i++ )
     {
-        fprintf( m_outputFile, "    %s %d 0 R\n",
+        fmt::println( m_outputFile, "    {} {} 0 R",
                  fontdefs[i].rsname, fontdefs[i].font_handle );
     }
 
-    fputs( ">>\n", m_outputFile );
+    fmt::println( m_outputFile, ">>" );
     closePdfObject();
 
     // Named image dictionary (was allocated, now we emit it)
     startPdfObject( m_imgResDictHandle );
-    fputs( "<<\n", m_outputFile );
+    fmt::println( m_outputFile, "<<\n" );
 
     for( const auto& [imgHandle, image] : m_imageHandles )
     {
-        fprintf( m_outputFile, "    /Im%d %d 0 R\n", imgHandle, imgHandle );
+        fmt::print( m_outputFile, "    /Im{} {} 0 R\n", imgHandle, imgHandle );
     }
 
-    fputs( ">>\n", m_outputFile );
+    fmt::println( m_outputFile, ">>" );
     closePdfObject();
 
     // Emit images with optional SMask for transparency
@@ -1219,24 +1211,24 @@ bool PDF_PLOTTER::EndPlot()
         int imgLenHandle = allocPdfObject();
         int smaskHandle = ( image.HasAlpha() || image.HasMask() ) ? allocPdfObject() : -1;
 
-        fprintf( m_outputFile,
-                 "<<\n"
-                 "/Type /XObject\n"
-                 "/Subtype /Image\n"
-                 "/BitsPerComponent 8\n"
-                 "/ColorSpace %s\n"
-                 "/Width %d\n"
-                 "/Height %d\n"
-                 "/Filter /FlateDecode\n"
-                 "/Length %d 0 R\n", // Length is deferred
-                 m_colorMode ? "/DeviceRGB" : "/DeviceGray", image.GetWidth(), image.GetHeight(),
-                 imgLenHandle );
+        fmt::print( m_outputFile,
+                    "<<\n"
+                    "/Type /XObject\n"
+                    "/Subtype /Image\n"
+                    "/BitsPerComponent 8\n"
+                    "/ColorSpace {}\n"
+                    "/Width {}\n"
+                    "/Height {}\n"
+                    "/Filter /FlateDecode\n"
+                    "/Length {} 0 R\n", // Length is deferred
+                    m_colorMode ? "/DeviceRGB" : "/DeviceGray", image.GetWidth(), image.GetHeight(),
+                    imgLenHandle );
 
         if( smaskHandle != -1 )
-            fprintf( m_outputFile, "/SMask %d 0 R\n", smaskHandle );
+            fmt::println( m_outputFile, "/SMask {} 0 R", smaskHandle );
 
-        fputs( ">>\n", m_outputFile );
-        fputs( "stream\n", m_outputFile );
+        fmt::println( m_outputFile, ">>" );
+        fmt::println( m_outputFile, "stream" );
 
         long imgStreamStart = ftell( m_outputFile );
 
@@ -1251,11 +1243,11 @@ bool PDF_PLOTTER::EndPlot()
 
         long imgStreamSize = ftell( m_outputFile ) - imgStreamStart;
 
-        fputs( "\nendstream\n", m_outputFile );
+        fmt::print( m_outputFile, "\nendstream\n" );
         closePdfObject();
 
         startPdfObject( imgLenHandle );
-        fprintf( m_outputFile, "%ld\n", imgStreamSize );
+        fmt::println( m_outputFile, "{}", imgStreamSize );
         closePdfObject();
 
         if( smaskHandle != -1 )
@@ -1264,20 +1256,20 @@ bool PDF_PLOTTER::EndPlot()
             startPdfObject( smaskHandle );
             int smaskLenHandle = allocPdfObject();
 
-            fprintf( m_outputFile,
-                     "<<\n"
-                     "/Type /XObject\n"
-                     "/Subtype /Image\n"
-                     "/BitsPerComponent 8\n"
-                     "/ColorSpace /DeviceGray\n"
-                     "/Width %d\n"
-                     "/Height %d\n"
-                     "/Length %d 0 R\n"
-                     "/Filter /FlateDecode\n"
-                     ">>\n", // Length is deferred
-                     image.GetWidth(), image.GetHeight(), smaskLenHandle );
+            fmt::print( m_outputFile,
+                        "<<\n"
+                        "/Type /XObject\n"
+                        "/Subtype /Image\n"
+                        "/BitsPerComponent 8\n"
+                        "/ColorSpace /DeviceGray\n"
+                        "/Width {}\n"
+                        "/Height {}\n"
+                        "/Length {} 0 R\n"
+                        "/Filter /FlateDecode\n"
+                        ">>\n", // Length is deferred
+                        image.GetWidth(), image.GetHeight(), smaskLenHandle );
 
-            fputs( "stream\n", m_outputFile );
+            fmt::println( m_outputFile, "stream" );
 
             long smaskStreamStart = ftell( m_outputFile );
 
@@ -1291,11 +1283,11 @@ bool PDF_PLOTTER::EndPlot()
 
             long smaskStreamSize = ftell( m_outputFile ) - smaskStreamStart;
 
-            fputs( "\nendstream\n", m_outputFile );
+            fmt::print( m_outputFile, "\nendstream\n" );
             closePdfObject();
 
             startPdfObject( smaskLenHandle );
-            fprintf( m_outputFile, "%u\n", (unsigned) smaskStreamSize );
+            fmt::println( m_outputFile, "{}", (unsigned) smaskStreamSize );
             closePdfObject();
         }
 
@@ -1309,13 +1301,13 @@ bool PDF_PLOTTER::EndPlot()
 
         startPdfObject( linkHandle );
 
-        fprintf( m_outputFile,
-                 "<<\n"
-                 "/Type /Annot\n"
-                 "/Subtype /Link\n"
-                 "/Rect [%g %g %g %g]\n"
-                 "/Border [16 16 0]\n",
-                 box.GetLeft(), box.GetBottom(), box.GetRight(), box.GetTop() );
+        fmt::print( m_outputFile,
+                    "<<\n"
+                    "/Type /Annot\n"
+                    "/Subtype /Link\n"
+                    "/Rect [{:g} {:g} {:g} {:g}]\n"
+                    "/Border [16 16 0]\n",
+                    box.GetLeft(), box.GetBottom(), box.GetRight(), box.GetTop() );
 
         wxString pageNumber;
         bool     pageFound = false;
@@ -1326,10 +1318,10 @@ bool PDF_PLOTTER::EndPlot()
             {
                 if( m_pageNumbers[ii] == pageNumber )
                 {
-                    fprintf( m_outputFile,
-                             "/Dest [%d 0 R /FitB]\n"
-                             ">>\n",
-                             m_pageHandles[ii] );
+                    fmt::print( m_outputFile,
+                                "/Dest [{} 0 R /FitB]\n"
+                                ">>\n",
+                                m_pageHandles[ii] );
 
                     pageFound = true;
                     break;
@@ -1339,16 +1331,16 @@ bool PDF_PLOTTER::EndPlot()
             if( !pageFound )
             {
                 // destination page is not being plotted, assign the NOP action to the link
-                fprintf( m_outputFile, "/A << /Type /Action /S /NOP >>\n"
-                                       ">>\n" );
+                fmt::print( m_outputFile, "/A << /Type /Action /S /NOP >>\n"
+                                          ">>\n" );
             }
         }
         else
         {
-            fprintf( m_outputFile,
-                     "/A << /Type /Action /S /URI /URI %s >>\n"
-                     ">>\n",
-                     encodeStringForPlotter( url ).c_str() );
+            fmt::print( m_outputFile,
+                        "/A << /Type /Action /S /URI /URI {} >>\n"
+                        ">>\n",
+                        encodeStringForPlotter( url ) );
         }
 
         closePdfObject();
@@ -1447,18 +1439,18 @@ bool PDF_PLOTTER::EndPlot()
 
         startPdfObject( menuHandle );
 
-        fprintf( m_outputFile,
-                 "<<\n"
-                 "/Type /Annot\n"
-                 "/Subtype /Link\n"
-                 "/Rect [%g %g %g %g]\n"
-                 "/Border [16 16 0]\n",
-                 box.GetLeft(), box.GetBottom(), box.GetRight(), box.GetTop() );
+        fmt::print( m_outputFile,
+                    "<<\n"
+                    "/Type /Annot\n"
+                    "/Subtype /Link\n"
+                    "/Rect [{:g} {:g} {:g} {:g}]\n"
+                    "/Border [16 16 0]\n",
+                    box.GetLeft(), box.GetBottom(), box.GetRight(), box.GetTop() );
 
-        fprintf( m_outputFile,
-                 "/A << /Type /Action /S /JavaScript /JS %s >>\n"
+        fmt::print( m_outputFile,
+                 "/A << /Type /Action /S /JavaScript /JS {} >>\n"
                  ">>\n",
-                 encodeStringForPlotter( js ).c_str() );
+                 encodeStringForPlotter( js ) );
 
         closePdfObject();
     }
@@ -1483,13 +1475,13 @@ function ShM(aEntries) {
 }
 )JS";
 
-        fprintf( m_outputFile,
-                 "<< /JavaScript\n"
-                 " << /Names\n"
-                 "    [ (JSInit) << /Type /Action /S /JavaScript /JS %s >> ]\n"
-                 " >>\n"
-                 ">>\n",
-                 encodeStringForPlotter( js ).c_str() );
+        fmt::print( m_outputFile,
+                    "<< /JavaScript\n"
+                    " << /Names\n"
+                    "    [ (JSInit) << /Type /Action /S /JavaScript /JS {} >> ]\n"
+                    " >>\n"
+                    ">>\n",
+                    encodeStringForPlotter( js ) );
 
         closePdfObject();
     }
@@ -1498,24 +1490,23 @@ function ShM(aEntries) {
        So we use just an array... The handle was allocated at the beginning,
        now we instantiate the corresponding object */
     startPdfObject( m_pageTreeHandle );
-    fputs( "<<\n"
-           "/Type /Pages\n"
-           "/Kids [\n", m_outputFile );
+    fmt::print( m_outputFile,
+                "<<\n"
+                "/Type /Pages\n"
+                "/Kids [\n" );
 
     for( unsigned i = 0; i < m_pageHandles.size(); i++ )
-        fprintf( m_outputFile, "%d 0 R\n", m_pageHandles[i] );
+        fmt::println( m_outputFile, "{} 0 R", m_pageHandles[i] );
 
-    fprintf( m_outputFile,
-            "]\n"
-            "/Count %ld\n"
-            ">>\n", (long) m_pageHandles.size() );
+    fmt::print( m_outputFile,
+                "]\n"
+                "/Count {}\n"
+                ">>\n", m_pageHandles.size() );
     closePdfObject();
 
-    // The info dictionary
-    int infoDictHandle = startPdfObject();
-    char date_buf[250];
-    time_t ltime = time( nullptr );
-    strftime( date_buf, 250, "D:%Y%m%d%H%M%S", localtime( &ltime ) );
+    int         infoDictHandle = startPdfObject();
+
+    std::string dt = fmt::format( "D:{:%Y:%m:%d:%H:%M:%S}", fmt::localtime( std::time( nullptr ) ) );
 
     if( m_title.IsEmpty() )
     {
@@ -1524,21 +1515,21 @@ function ShM(aEntries) {
         m_title = m_title.AfterLast( '/' );
     }
 
-    fprintf( m_outputFile,
-             "<<\n"
-             "/Producer (KiCad PDF)\n"
-             "/CreationDate (%s)\n"
-             "/Creator %s\n"
-             "/Title %s\n"
-             "/Author %s\n"
-             "/Subject %s\n",
-             date_buf,
-             encodeStringForPlotter( m_creator ).c_str(),
-             encodeStringForPlotter( m_title ).c_str(),
-             encodeStringForPlotter( m_author ).c_str(),
-             encodeStringForPlotter( m_subject ).c_str() );
+    fmt::print( m_outputFile,
+                "<<\n"
+                "/Producer (KiCad PDF)\n"
+                "/CreationDate ({})\n"
+                "/Creator {}\n"
+                "/Title {}\n"
+                "/Author {}\n"
+                "/Subject {}\n",
+                dt,
+                encodeStringForPlotter( m_creator ),
+                encodeStringForPlotter( m_title ),
+                encodeStringForPlotter( m_author ),
+                encodeStringForPlotter( m_subject ) );
 
-    fputs( ">>\n", m_outputFile );
+    fmt::println( m_outputFile, ">>" );
     closePdfObject();
 
     // Let's dump in the outline
@@ -1549,30 +1540,16 @@ function ShM(aEntries) {
 
     if( outlineHandle > 0 )
     {
-        fprintf( m_outputFile,
-                 "<<\n"
-                 "/Type /Catalog\n"
-                 "/Pages %d 0 R\n"
-                 "/Version /1.5\n"
-                 "/PageMode /UseOutlines\n"
-                 "/Outlines %d 0 R\n"
-                 "/Names %d 0 R\n"
-                 "/PageLayout /SinglePage\n"
-                 ">>\n",
+        fmt::println( m_outputFile,
+                 "<<\n/Type /Catalog\n/Pages {} 0 R\n/Version /1.5\n/PageMode /UseOutlines\n/Outlines {} 0 R\n/Names {} 0 R\n/PageLayout /SinglePage\n>>",
                  m_pageTreeHandle,
                  outlineHandle,
                  m_jsNamesHandle );
     }
     else
     {
-        fprintf( m_outputFile,
-                 "<<\n"
-                 "/Type /Catalog\n"
-                 "/Pages %d 0 R\n"
-                 "/Version /1.5\n"
-                 "/PageMode /UseNone\n"
-                 "/PageLayout /SinglePage\n"
-                 ">>\n",
+        fmt::println( m_outputFile,
+                 "<<\n/Type /Catalog\n/Pages {} 0 R\n/Version /1.5\n/PageMode /UseNone\n/PageLayout /SinglePage\n>>",
                  m_pageTreeHandle );
     }
 
@@ -1582,24 +1559,24 @@ function ShM(aEntries) {
        be 20 bytes long, and object zero must be done in that way). Also
        the offset must be kept along for the trailer */
     long xref_start = ftell( m_outputFile );
-    fprintf( m_outputFile,
-             "xref\n"
-             "0 %ld\n"
-             "0000000000 65535 f \n", (long) m_xrefTable.size() );
+    fmt::print( m_outputFile,
+                "xref\n"
+                "0 {}\n"
+                "0000000000 65535 f \n", m_xrefTable.size() );
 
     for( unsigned i = 1; i < m_xrefTable.size(); i++ )
     {
-        fprintf( m_outputFile, "%010ld 00000 n \n", m_xrefTable[i] );
+        fmt::print( m_outputFile, "{:010d} 00000 n \n", m_xrefTable[i] );
     }
 
     // Done the xref, go for the trailer
-    fprintf( m_outputFile,
-             "trailer\n"
-             "<< /Size %lu /Root %d 0 R /Info %d 0 R >>\n"
-             "startxref\n"
-             "%ld\n" // The offset we saved before
-             "%%%%EOF\n",
-             (unsigned long) m_xrefTable.size(), catalogHandle, infoDictHandle, xref_start );
+    fmt::print( m_outputFile,
+                "trailer\n"
+                "<< /Size {} /Root {} 0 R /Info {} 0 R >>\n"
+                "startxref\n"
+                "{}\n" // The offset we saved before
+                "%%EOF\n",
+                m_xrefTable.size(), catalogHandle, infoDictHandle, xref_start );
 
     fclose( m_outputFile );
     m_outputFile = nullptr;
@@ -1704,14 +1681,14 @@ void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
            coordinate system will be used for the overlining. Also the %f
            for the trig part of the matrix to avoid %g going in exponential
            format (which is not supported) */
-        fprintf( m_workFile, "q %f %f %f %f %f %f cm BT %s %g Tf %d Tr %g Tz ",
+        fmt::print( m_workFile, "q {:f} {:f} {:f} {:f} {:f} {:f} cm BT {} {:g} Tf {} Tr {:g} Tz ",
                  ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f,
                  fontname, heightFactor, render_mode, wideningFactor * 100 );
 
         std::string txt_pdf = encodeStringForPlotter( word );
-        fprintf( m_workFile, "%s Tj ET\n", txt_pdf.c_str() );
+        fmt::println( m_workFile, "{} Tj ET", txt_pdf );
         // Restore the CTM
-        fputs( "Q\n", m_workFile );
+        fmt::println( m_workFile, "Q" );
     }
 
     // Plot the stroked text (if requested)
