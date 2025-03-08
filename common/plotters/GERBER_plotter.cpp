@@ -30,6 +30,7 @@
 #include <trigo.h>
 #include <wx/log.h>
 #include <cstdio>
+#include <fmt/format.h>
 
 #include <build_version.h>
 
@@ -155,7 +156,7 @@ void GERBER_PLOTTER::SetGerberCoordinatesFormat( int aResolution, bool aUseInche
 
 void GERBER_PLOTTER::emitDcode( const VECTOR2D& pt, int dcode )
 {
-    fprintf( m_outputFile, "X%dY%dD%02d*\n", KiROUND( pt.x ), KiROUND( pt.y ), dcode );
+    fmt::println( m_outputFile, "X{}Y{}D{:02d}*", KiROUND( pt.x ), KiROUND( pt.y ), dcode );
 }
 
 
@@ -163,9 +164,9 @@ void GERBER_PLOTTER::ClearAllAttributes()
 {
     // Remove all attributes from object attributes dictionary (TO. and TA commands)
     if( m_useX2format )
-        fputs( "%TD*%\n", m_outputFile );
+        fmt::println( m_outputFile, "%TD*%" );
     else
-        fputs( "G04 #@! TD*\n", m_outputFile );
+        fmt::println( m_outputFile, "G04 #@! TD*" );
 
     m_objectAttributesDictionary.clear();
 }
@@ -179,9 +180,9 @@ void GERBER_PLOTTER::clearNetAttribute()
 
     // Remove all net attributes from object attributes dictionary
     if( m_useX2format )
-        fputs( "%TD*%\n", m_outputFile );
+        fmt::println( m_outputFile, "%TD*%" );
     else
-        fputs( "G04 #@! TD*\n", m_outputFile );
+        fmt::println( m_outputFile, "G04 #@! TD*" );
 
     m_objectAttributesDictionary.clear();
 }
@@ -225,12 +226,12 @@ void GERBER_PLOTTER::formatNetAttribute( GBR_NETLIST_METADATA* aData )
         clearNetAttribute();
 
     if( !short_attribute_string.empty() )
-        fputs( short_attribute_string.c_str(), m_outputFile );
+        fmt::print( m_outputFile, "{}", short_attribute_string );
 
     if( m_useX2format && !aData->m_ExtraData.IsEmpty() )
     {
         std::string extra_data = TO_UTF8( aData->m_ExtraData );
-        fputs( extra_data.c_str(), m_outputFile );
+        fmt::print( m_outputFile, "{}", extra_data );
     }
 }
 
@@ -262,7 +263,7 @@ bool GERBER_PLOTTER::StartPlot( const wxString& aPageNumber )
     for( unsigned ii = 0; ii < m_headerExtraLines.GetCount(); ii++ )
     {
         if( ! m_headerExtraLines[ii].IsEmpty() )
-            fprintf( m_outputFile, "%s\n", TO_UTF8( m_headerExtraLines[ii] ) );
+            fmt::println( m_outputFile, "{}", TO_UTF8( m_headerExtraLines[ii] ) );
     }
 
     // Set coordinate format to 3.6 or 4.5 absolute, leading zero omitted
@@ -271,11 +272,11 @@ bool GERBER_PLOTTER::StartPlot( const wxString& aPageNumber )
     // It is fixed here to 3 (inch) or 4 (mm), but is not actually used
     int leadingDigitCount = m_gerberUnitInch ? 3 : 4;
 
-    fprintf( m_outputFile, "%%FSLAX%d%dY%d%d*%%\n",
+    fmt::println( m_outputFile, "%FSLAX{}{}Y{}{}*%",
              leadingDigitCount, m_gerberUnitFmt,
              leadingDigitCount, m_gerberUnitFmt );
-    fprintf( m_outputFile,
-             "G04 Gerber Fmt %d.%d, Leading zero omitted, Abs format (unit %s)*\n",
+    fmt::println( m_outputFile,
+             "G04 Gerber Fmt {}.{}, Leading zero omitted, Abs format (unit {})*",
              leadingDigitCount, m_gerberUnitFmt,
              m_gerberUnitInch ? "inch" : "mm" );
 
@@ -285,23 +286,23 @@ bool GERBER_PLOTTER::StartPlot( const wxString& aPageNumber )
     // So use a ISO date format (using a space as separator between date and time),
     // not a localized date format
     wxDateTime date = wxDateTime::Now();
-    fprintf( m_outputFile, "G04 Created by KiCad (%s) date %s*\n",
+    fmt::println( m_outputFile, "G04 Created by KiCad ({}) date {}*",
              TO_UTF8( Title ), TO_UTF8( date.FormatISOCombined( ' ') ) );
 
     /* Mass parameter: unit = IN/MM */
     if( m_gerberUnitInch )
-        fputs( "%MOIN*%\n", m_outputFile );
+        fmt::println( m_outputFile, "%MOIN*%" );
     else
-        fputs( "%MOMM*%\n", m_outputFile );
+        fmt::println( m_outputFile, "%MOMM*%" );
 
     // Be sure the usual dark polarity is selected:
-    fputs( "%LPD*%\n", m_outputFile );
+    fmt::println( m_outputFile, "%LPD*%" );
 
     // Set initial interpolation mode: always G01 (linear):
-    fputs( "G01*\n", m_outputFile );
+    fmt::println( m_outputFile, "G01*" );
 
     // Add aperture list start point
-    fputs( "G04 APERTURE LIST*\n", m_outputFile );
+    fmt::println( m_outputFile, "G04 APERTURE LIST*" );
 
     // Give a minimal value to the default pen size, used to plot items in sketch mode
     if( m_renderSettings )
@@ -322,7 +323,7 @@ bool GERBER_PLOTTER::EndPlot()
     wxASSERT( m_outputFile );
 
     /* Outfile is actually a temporary file i.e. workFile */
-    fputs( "M02*\n", m_outputFile );
+    fmt::println( m_outputFile, "M02*" );
     fflush( m_outputFile );
 
     fclose( workFile );
@@ -333,7 +334,7 @@ bool GERBER_PLOTTER::EndPlot()
     // Placement of apertures in RS274X
     while( fgets( line, 1024, workFile ) )
     {
-        fputs( line, m_outputFile );
+        fmt::print( m_outputFile, "{}", line );
 
         char* substr = strtok( line, "\n\r" );
 
@@ -344,26 +345,26 @@ bool GERBER_PLOTTER::EndPlot()
                 m_hasApertureOutline4P || m_hasApertureRotRect ||
                 m_hasApertureChamferedRect || m_am_freepoly_list.AmCount() )
             {
-                fputs( "G04 Aperture macros list*\n", m_outputFile );
+                fmt::println( m_outputFile, "G04 Aperture macros list*" );
 
                 if( m_hasApertureRoundRect )
-                    fputs( APER_MACRO_ROUNDRECT_HEADER, m_outputFile );
+                    fmt::print( m_outputFile, APER_MACRO_ROUNDRECT_HEADER );
 
                 if( m_hasApertureRotOval )
-                    fputs( APER_MACRO_SHAPE_OVAL_HEADER, m_outputFile );
+                    fmt::print( m_outputFile, APER_MACRO_SHAPE_OVAL_HEADER );
 
                 if( m_hasApertureRotRect )
-                    fputs( APER_MACRO_ROT_RECT_HEADER, m_outputFile );
+                    fmt::print( m_outputFile, APER_MACRO_ROT_RECT_HEADER );
 
                 if( m_hasApertureOutline4P )
-                    fputs( APER_MACRO_OUTLINE4P_HEADER, m_outputFile );
+                    fmt::print( m_outputFile, APER_MACRO_OUTLINE4P_HEADER );
 
                 if( m_hasApertureChamferedRect )
                 {
-                    fputs( APER_MACRO_OUTLINE5P_HEADER, m_outputFile );
-                    fputs( APER_MACRO_OUTLINE6P_HEADER, m_outputFile );
-                    fputs( APER_MACRO_OUTLINE7P_HEADER, m_outputFile );
-                    fputs( APER_MACRO_OUTLINE8P_HEADER, m_outputFile );
+                    fmt::print( m_outputFile, APER_MACRO_OUTLINE5P_HEADER );
+                    fmt::print( m_outputFile, APER_MACRO_OUTLINE6P_HEADER );
+                    fmt::print( m_outputFile, APER_MACRO_OUTLINE7P_HEADER );
+                    fmt::print( m_outputFile, APER_MACRO_OUTLINE8P_HEADER );
                 }
 
                 if( m_am_freepoly_list.AmCount() )
@@ -378,11 +379,11 @@ bool GERBER_PLOTTER::EndPlot()
                     m_am_freepoly_list.Format( m_outputFile, fscale );
                 }
 
-                fputs( "G04 Aperture macros list end*\n", m_outputFile );
+                fmt::println( m_outputFile, "G04 Aperture macros list end*" );
             }
 
             writeApertureList();
-            fputs( "G04 APERTURE END LIST*\n", m_outputFile );
+            fmt::println( m_outputFile, "G04 APERTURE END LIST*" );
         }
     }
 
@@ -534,7 +535,7 @@ void GERBER_PLOTTER::selectAperture( const VECTOR2I& aSize, int aRadius, const E
         // Pick an existing aperture or create a new one
         m_currentApertureIdx = GetOrCreateAperture( aSize, aRadius, aRotation, aType,
                                                     aApertureAttribute, aCustomAttribute );
-        fprintf( m_outputFile, "D%d*\n", m_apertures[m_currentApertureIdx].m_DCode );
+        fmt::println( m_outputFile, "D{}*", m_apertures[m_currentApertureIdx].m_DCode );
     }
 }
 
@@ -571,7 +572,7 @@ void GERBER_PLOTTER::selectAperture( const std::vector<VECTOR2I>& aCorners,
         // Pick an existing aperture or create a new one
         m_currentApertureIdx = GetOrCreateAperture( aCorners, aRotation, aType, aApertureAttribute,
                                                     aCustomAttribute );
-        fprintf( m_outputFile, "D%d*\n", m_apertures[m_currentApertureIdx].m_DCode );
+        fmt::println( m_outputFile, "D{}*", m_apertures[m_currentApertureIdx].m_DCode );
     }
 }
 
@@ -624,14 +625,12 @@ void GERBER_PLOTTER::writeApertureList()
 
         if( attribute != m_apertureAttribute )
         {
-            fputs( GBR_APERTURE_METADATA::FormatAttribute(
+            fmt::print( m_outputFile, "{}", GBR_APERTURE_METADATA::FormatAttribute(
                            (GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB) attribute,
-                           useX1StructuredComment, tool.m_CustomAttribute )
-                           .c_str(),
-                   m_outputFile );
+                           useX1StructuredComment, tool.m_CustomAttribute ) );
         }
 
-        fprintf( m_outputFile, "%%ADD%d", tool.m_DCode );
+        fmt::print( m_outputFile, "%ADD{}", tool.m_DCode );
 
         /* Please note: the Gerber specs for mass parameters say that
            exponential syntax is *not* allowed and the decimal point should
@@ -643,23 +642,23 @@ void GERBER_PLOTTER::writeApertureList()
         switch( tool.m_Type )
         {
         case APERTURE::AT_CIRCLE:
-            fprintf( m_outputFile, "C,%#f*%%\n", tool.GetDiameter() * fscale );
+            fmt::println( m_outputFile, "C,{:#f}*%", tool.GetDiameter() * fscale );
             break;
 
         case APERTURE::AT_RECT:
-            fprintf( m_outputFile, "R,%#fX%#f*%%\n",
-                     tool.m_Size.x * fscale,
-                     tool.m_Size.y * fscale );
+            fmt::println( m_outputFile, "R,{:#f}X{:#f}*%",
+                          tool.m_Size.x * fscale,
+                          tool.m_Size.y * fscale );
             break;
 
         case APERTURE::AT_PLOTTING:
-            fprintf( m_outputFile, "C,%#f*%%\n", tool.m_Size.x * fscale );
+            fmt::println( m_outputFile, "C,{:#f}*%", tool.m_Size.x * fscale );
             break;
 
         case APERTURE::AT_OVAL:
-            fprintf( m_outputFile, "O,%#fX%#f*%%\n",
-                     tool.m_Size.x * fscale,
-                     tool.m_Size.y * fscale );
+            fmt::println( m_outputFile, "O,{:#f}X{:#f}*%",
+                          tool.m_Size.x * fscale,
+                          tool.m_Size.y * fscale );
             break;
 
         case APERTURE::AT_REGULAR_POLY:
@@ -673,10 +672,10 @@ void GERBER_PLOTTER::writeApertureList()
         case APERTURE::AT_REGULAR_POLY10:
         case APERTURE::AT_REGULAR_POLY11:
         case APERTURE::AT_REGULAR_POLY12:
-            fprintf( m_outputFile, "P,%#fX%dX%#f*%%\n",
-                     tool.GetDiameter() * fscale,
-                     tool.GetRegPolyVerticeCount(),
-                     tool.GetRotation().AsDegrees() );
+            fmt::println( m_outputFile, "P,{:#f}X{}X{:#f}*%",
+                          tool.GetDiameter() * fscale,
+                          tool.GetRegPolyVerticeCount(),
+                          tool.GetRotation().AsDegrees() );
             break;
 
         case APERTURE::AM_ROUND_RECT:       // Aperture macro for round rect pads
@@ -704,27 +703,27 @@ void GERBER_PLOTTER::writeApertureList()
             for( int ii = 0; ii < 4; ii++ )
                 RotatePoint( corners[ii], -tool.m_Rotation );
 
-            fprintf( m_outputFile, "%s,%#fX",
-                     APER_MACRO_ROUNDRECT_NAME,
-                     tool.m_Radius * fscale );
+            fmt::print( m_outputFile, "{},{:#f}X",
+                        APER_MACRO_ROUNDRECT_NAME,
+                        tool.m_Radius * fscale );
 
             // Add each corner
             for( int ii = 0; ii < 4; ii++ )
             {
-                fprintf( m_outputFile, "%#fX%#fX",
-                         corners[ii].x * fscale,
-                         corners[ii].y * fscale );
+                fmt::print( m_outputFile, "{:#f}X{:#f}X",
+                            corners[ii].x * fscale,
+                            corners[ii].y * fscale );
             }
 
-            fprintf( m_outputFile, "0*%%\n" );
+            fmt::println( m_outputFile, "0*%" );
         }
             break;
 
         case APERTURE::AM_ROT_RECT:         // Aperture macro for rotated rect pads
-            fprintf( m_outputFile, "%s,%#fX%#fX%#f*%%\n", APER_MACRO_ROT_RECT_NAME,
-                     tool.m_Size.x * fscale,
-                     tool.m_Size.y * fscale,
-                     tool.m_Rotation.AsDegrees() );
+            fmt::println( m_outputFile, "{},{:#f}X{:#f}X{:#f}*%", APER_MACRO_ROT_RECT_NAME,
+                        tool.m_Size.x * fscale,
+                        tool.m_Size.y * fscale,
+                        tool.m_Rotation.AsDegrees() );
             break;
 
         case APERTURE::APER_MACRO_OUTLINE4P:    // Aperture macro for trapezoid pads
@@ -735,19 +734,19 @@ void GERBER_PLOTTER::writeApertureList()
             switch( tool.m_Type )
             {
             case APERTURE::APER_MACRO_OUTLINE4P:
-                fprintf( m_outputFile, "%s,", APER_MACRO_OUTLINE4P_NAME );
+                fmt::print( m_outputFile, APER_MACRO_OUTLINE4P_NAME );
                 break;
             case APERTURE::APER_MACRO_OUTLINE5P:
-                fprintf( m_outputFile, "%s,", APER_MACRO_OUTLINE5P_NAME );
+                fmt::print( m_outputFile, APER_MACRO_OUTLINE5P_NAME );
                 break;
             case APERTURE::APER_MACRO_OUTLINE6P:
-                fprintf( m_outputFile, "%s,", APER_MACRO_OUTLINE6P_NAME );
+                fmt::print( m_outputFile, APER_MACRO_OUTLINE6P_NAME );
                 break;
             case APERTURE::APER_MACRO_OUTLINE7P:
-                fprintf( m_outputFile, "%s,", APER_MACRO_OUTLINE7P_NAME );
+                fmt::print( m_outputFile, APER_MACRO_OUTLINE7P_NAME );
                 break;
             case APERTURE::APER_MACRO_OUTLINE8P:
-                fprintf( m_outputFile, "%s,", APER_MACRO_OUTLINE8P_NAME );
+                fmt::print( m_outputFile, APER_MACRO_OUTLINE8P_NAME );
                 break;
             default:
                 break;
@@ -757,10 +756,10 @@ void GERBER_PLOTTER::writeApertureList()
             // Remember: the Y coordinate must be negated, due to the fact in Pcbnew
             // the Y axis is from top to bottom
             for( const VECTOR2I& corner : tool.m_Corners)
-                fprintf( m_outputFile, "%#fX%#fX", corner.x * fscale, -corner.y * fscale );
+                fmt::print( m_outputFile, "{:#f}X{:#f}X", corner.x * fscale, -corner.y * fscale );
 
             // close outline and output rotation
-            fprintf( m_outputFile, "%#f*%%\n", tool.m_Rotation.AsDegrees() );
+            fmt::println( m_outputFile, "{:#f}*%", tool.m_Rotation.AsDegrees() );
             break;
 
         case APERTURE::AM_ROTATED_OVAL:         // Aperture macro for rotated oval pads
@@ -780,11 +779,11 @@ void GERBER_PLOTTER::writeApertureList()
                 RotatePoint( start, tool.m_Rotation );
                 RotatePoint( end, tool.m_Rotation );
 
-                fprintf( m_outputFile, "%s,%#fX%#fX%#fX%#fX%#fX0*%%\n",
-                         APER_MACRO_SHAPE_OVAL_NAME,
-                         tool.m_Size.y * fscale,              // width
-                         start.x * fscale, -start.y * fscale, // X,Y corner start pos
-                         end.x * fscale, -end.y * fscale );   // X,Y corner end pos
+                fmt::println( m_outputFile, "{},{:#f}X{:#f}X{:#f}X{:#f}X{:#f}X0*%",
+                              APER_MACRO_SHAPE_OVAL_NAME,
+                              tool.m_Size.y * fscale,              // width
+                              start.x * fscale, -start.y * fscale, // X,Y corner start pos
+                              end.x * fscale, -end.y * fscale );   // X,Y corner end pos
         }
             break;
 
@@ -796,10 +795,10 @@ void GERBER_PLOTTER::writeApertureList()
 
             // Write DCODE id ( "%ADDxx" is already in buffer) and rotation
             // the full line is something like :%ADD12FreePoly1,45.000000*%
-            fprintf( m_outputFile, "%s%d,%#f*%%\n",
-                     AM_FREEPOLY_BASENAME,
-                     idx,
-                     tool.m_Rotation.AsDegrees() );
+            fmt::println( m_outputFile, "{}{},{:#f}*%",
+                          AM_FREEPOLY_BASENAME,
+                          idx,
+                          tool.m_Rotation.AsDegrees() );
             break;
         }
         }
@@ -811,9 +810,9 @@ void GERBER_PLOTTER::writeApertureList()
         if( attribute )
         {
             if( m_useX2format )
-                fputs( "%TD*%\n", m_outputFile );
+                fmt::println( m_outputFile, "%TD*%" );
             else
-                fputs( "G04 #@! TD*\n", m_outputFile );
+                fmt::println( m_outputFile, "G04 #@! TD*" );
 
             m_apertureAttribute = 0;
         }
@@ -919,18 +918,18 @@ void GERBER_PLOTTER::plotArc( const SHAPE_ARC& aArc, bool aPlotInRegion )
                          userToDeviceCoordinates( aArc.GetArcMid() ),
                          devEnd, 0 );
 
-    fprintf( m_outputFile, "G75*\n" );        // Multiquadrant (360 degrees) mode
+    fmt::println( m_outputFile, "G75*" );        // Multiquadrant (360 degrees) mode
 
     if( deviceArc.IsClockwise() )
-        fprintf( m_outputFile, "G02*\n" );    // Active circular interpolation, CW
+        fmt::println( m_outputFile, "G02*" );    // Active circular interpolation, CW
     else
-        fprintf( m_outputFile, "G03*\n" );    // Active circular interpolation, CCW
+        fmt::println( m_outputFile, "G03*" );    // Active circular interpolation, CCW
 
-    fprintf( m_outputFile, "X%dY%dI%dJ%dD01*\n",
+    fmt::println( m_outputFile, "X{}Y{}I{}J{}D01*",
              KiROUND( devEnd.x ), KiROUND( devEnd.y ),
              KiROUND( devRelCenter.x ), KiROUND( devRelCenter.y ) );
 
-    fprintf( m_outputFile, "G01*\n" ); // Back to linear interpolate (perhaps useless here).
+    fmt::println( m_outputFile, "G01*" ); // Back to linear interpolate (perhaps useless here).
 }
 
 
@@ -953,18 +952,18 @@ void GERBER_PLOTTER::plotArc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAn
     // devRelCenter is the position on arc center relative to the arc start, in Gerber coord.
     VECTOR2D devRelCenter = userToDeviceCoordinates( aCenter ) - userToDeviceCoordinates( start );
 
-    fprintf( m_outputFile, "G75*\n" ); // Multiquadrant (360 degrees) mode
+    fmt::println( m_outputFile, "G75*" ); // Multiquadrant (360 degrees) mode
 
     if( aStartAngle > aEndAngle )
-        fprintf( m_outputFile, "G03*\n" ); // Active circular interpolation, CCW
+        fmt::println( m_outputFile, "G03*" ); // Active circular interpolation, CCW
     else
-        fprintf( m_outputFile, "G02*\n" ); // Active circular interpolation, CW
+        fmt::println( m_outputFile, "G02*" ); // Active circular interpolation, CW
 
-    fprintf( m_outputFile, "X%dY%dI%dJ%dD01*\n",
+    fmt::println( m_outputFile, "X{}Y{}I{}J{}D01*",
              KiROUND( devEnd.x ), KiROUND( devEnd.y ),
              KiROUND( devRelCenter.x ), KiROUND( devRelCenter.y ) );
 
-    fprintf( m_outputFile, "G01*\n" ); // Back to linear interpolate (perhaps useless here).
+    fmt::println( m_outputFile, "G01*" ); // Back to linear interpolate (perhaps useless here).
 }
 
 
@@ -981,7 +980,7 @@ void GERBER_PLOTTER::PlotGerberRegion( const SHAPE_LINE_CHAIN& aPoly, GBR_METADA
 
         if( !attrib.empty() )
         {
-            fputs( attrib.c_str(), m_outputFile );
+            fmt::print( m_outputFile, "{}", attrib );
             clearTA_AperFunction = true;
         }
     }
@@ -992,9 +991,9 @@ void GERBER_PLOTTER::PlotGerberRegion( const SHAPE_LINE_CHAIN& aPoly, GBR_METADA
     if( clearTA_AperFunction )
     {
         if( m_useX2format )
-            fputs( "%TD.AperFunction*%\n", m_outputFile );
+            fmt::println( m_outputFile, "%TD.AperFunction*%" );
         else
-            fputs( "G04 #@! TD.AperFunction*\n", m_outputFile );
+            fmt::println( m_outputFile, "G04 #@! TD.AperFunction*" );
     }
 }
 
@@ -1013,7 +1012,7 @@ void GERBER_PLOTTER::PlotGerberRegion( const std::vector<VECTOR2I>& aCornerList,
 
         if( !attrib.empty() )
         {
-            fputs( attrib.c_str(), m_outputFile );
+            fmt::print( m_outputFile, "{}", attrib );
             clearTA_AperFunction = true;
         }
     }
@@ -1024,9 +1023,9 @@ void GERBER_PLOTTER::PlotGerberRegion( const std::vector<VECTOR2I>& aCornerList,
     if( clearTA_AperFunction )
     {
         if( m_useX2format )
-            fputs( "%TD.AperFunction*%\n", m_outputFile );
+            fmt::println( m_outputFile, "%TD.AperFunction*%" );
         else
-            fputs( "G04 #@! TD.AperFunction*\n", m_outputFile );
+            fmt::println( m_outputFile, "G04 #@! TD.AperFunction*" );
     }
 }
 
@@ -1060,11 +1059,11 @@ void GERBER_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aPoly, FILL_T aFill, int 
 
     if( aFill != FILL_T::NO_FILL )
     {
-        fputs( "G36*\n", m_outputFile );
+        fmt::println( m_outputFile, "G36*" );
 
         MoveTo( VECTOR2I( aPoly.CPoint( 0 ) ) );
 
-        fputs( "G01*\n", m_outputFile );      // Set linear interpolation.
+        fmt::println( m_outputFile, "G01*" ); // Set linear interpolation.
 
         for( int ii = 1; ii < aPoly.PointCount(); ii++ )
         {
@@ -1091,7 +1090,7 @@ void GERBER_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aPoly, FILL_T aFill, int 
         if( aPoly.CPoint( 0 ) != aPoly.CPoint( -1 ) )
             FinishTo( VECTOR2I( aPoly.CPoint( 0 ) ) );
 
-        fputs( "G37*\n", m_outputFile );
+        fmt::println( m_outputFile, "G37*" );
     }
 
     if( aWidth > 0 || aFill == FILL_T::NO_FILL )    // Draw the polyline/polygon outline
@@ -1148,10 +1147,10 @@ void GERBER_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T 
 
     if( aFill != FILL_T::NO_FILL )
     {
-        fputs( "G36*\n", m_outputFile );
+        fmt::println( m_outputFile, "G36*" );
 
         MoveTo( aCornerList[0] );
-        fputs( "G01*\n", m_outputFile );      // Set linear interpolation.
+        fmt::println( m_outputFile, "G01*" ); // Set linear interpolation.
 
         for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
             LineTo( aCornerList[ii] );
@@ -1160,7 +1159,7 @@ void GERBER_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T 
         if( aCornerList[0] != aCornerList[aCornerList.size()-1] )
             FinishTo( aCornerList[0] );
 
-        fputs( "G37*\n", m_outputFile );
+        fmt::println( m_outputFile, "G37*" );
     }
 
     if( aWidth > 0 || aFill == FILL_T::NO_FILL )    // Draw the polyline/polygon outline
@@ -1520,7 +1519,7 @@ void GERBER_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I&
 
             if( !attrib.empty() )
             {
-                fputs( attrib.c_str(), m_outputFile );
+                fmt::print( m_outputFile, "{}", attrib );
                 clearTA_AperFunction = true;
             }
         }
@@ -1532,9 +1531,9 @@ void GERBER_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I&
         if( clearTA_AperFunction )
         {
             if( m_useX2format )
-                fputs( "%TD.AperFunction*%\n", m_outputFile );
+                fmt::println( m_outputFile, "%TD.AperFunction*%" );
             else
-                fputs( "G04 #@! TD.AperFunction*\n", m_outputFile );
+                fmt::println( m_outputFile, "G04 #@! TD.AperFunction*" );
         }
     }
 }
@@ -1646,8 +1645,8 @@ void GERBER_PLOTTER::plotRoundRectAsRegion( const VECTOR2I& aRectCenter, const V
                       first_pt.x, first_pt.y, last_pt.x, last_pt.y );
 #endif
 
-    fputs( "G36*\n", m_outputFile );  // Start region
-    fputs( "G01*\n", m_outputFile );  // Set linear interpolation.
+    fmt::println( m_outputFile, "G36*" );  // Start region
+    fmt::println( m_outputFile, "G01*" ); // Set linear interpolation.
     first_pt = last_pt;
     MoveTo( first_pt );             // Start point of region, must be same as end point
 
@@ -1665,7 +1664,7 @@ void GERBER_PLOTTER::plotRoundRectAsRegion( const VECTOR2I& aRectCenter, const V
         }
     }
 
-    fputs( "G37*\n", m_outputFile );      // Close region
+    fmt::println( m_outputFile, "G37*" ); // Close region
 }
 
 
@@ -2018,9 +2017,9 @@ void GERBER_PLOTTER::PlotText( const VECTOR2I&        aPos,
 void GERBER_PLOTTER::SetLayerPolarity( bool aPositive )
 {
     if( aPositive )
-        fprintf( m_outputFile, "%%LPD*%%\n" );
+        fmt::println( m_outputFile, "%LPD*%" );
     else
-        fprintf( m_outputFile, "%%LPC*%%\n" );
+        fmt::println( m_outputFile, "%LPC*%" );
 }
 
 
@@ -2032,9 +2031,9 @@ bool APER_MACRO_FREEPOLY::IsSamePoly( const std::vector<VECTOR2I>& aPolygon ) co
 
 void APER_MACRO_FREEPOLY::Format( FILE * aOutput, double aIu2GbrMacroUnit )
 {
-   // Write aperture header
-    fprintf( aOutput, "%%AM%s%d*\n", AM_FREEPOLY_BASENAME, m_Id );
-    fprintf( aOutput, "4,1,%d,", (int)m_Corners.size() );
+    // Write aperture header
+    fmt::println( aOutput, "%AM{}{}*", AM_FREEPOLY_BASENAME, m_Id );
+    fmt::print( aOutput, "4,1,{},", (int) m_Corners.size() );
 
     // Insert a newline after curr_line_count_max coordinates.
     int curr_line_corner_count = 0;
@@ -2048,18 +2047,18 @@ void APER_MACRO_FREEPOLY::Format( FILE * aOutput, double aIu2GbrMacroUnit )
             jj = 0;
 
         // Note: parameter values are always mm or inches
-        fprintf( aOutput, "%#f,%#f,",
+        fmt::print( aOutput, "{:#f},{:#f},",
                  m_Corners[jj].x * aIu2GbrMacroUnit, -m_Corners[jj].y * aIu2GbrMacroUnit );
 
         if( curr_line_count_max >= 0 && ++curr_line_corner_count >= curr_line_count_max )
         {
-            fprintf( aOutput, "\n" );
+            fmt::println( aOutput, "" );
             curr_line_corner_count = 0;
         }
     }
 
     // output rotation parameter
-    fputs( "$1*%\n", aOutput );
+    fmt::println( aOutput, "$1*%" );
 }
 
 
