@@ -260,7 +260,7 @@ static int RPT_SEVERITY_ALL = RPT_SEVERITY_WARNING | RPT_SEVERITY_ERROR | RPT_SE
 
 void DIALOG_DRC::syncCheckboxes()
 {
-    m_showAll->SetValue( m_severities == RPT_SEVERITY_ALL );
+    m_showAll->SetValue( ( m_severities & RPT_SEVERITY_ALL ) == RPT_SEVERITY_ALL );
     m_showErrors->SetValue( m_severities & RPT_SEVERITY_ERROR );
     m_showWarnings->SetValue( m_severities & RPT_SEVERITY_WARNING );
     m_showExclusions->SetValue( m_severities & RPT_SEVERITY_EXCLUSION );

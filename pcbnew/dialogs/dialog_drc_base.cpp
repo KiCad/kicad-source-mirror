@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -87,7 +87,7 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	wxBoxSizer* bSizer13;
 	bSizer13 = new wxBoxSizer( wxVERTICAL );
 
-	m_Notebook = new wxNotebook( results, ID_NOTEBOOK1, wxDefaultPosition, wxDefaultSize, 0 );
+	m_Notebook = new wxNotebook( results, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_Notebook->SetMinSize( wxSize( 640,-1 ) );
 
 	m_panelViolations = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
