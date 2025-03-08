@@ -18,17 +18,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-06 13:54+0300\n"
-"PO-Revision-Date: 2025-02-27 16:59+0000\n"
+"PO-Revision-Date: 2025-03-08 17:50+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.10.2-dev\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -355,14 +355,12 @@ msgid "Reload board"
 msgstr "Przeładuj płytkę"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:49
-#, fuzzy
 msgid "Reload board and refresh 3D view"
-msgstr "Przeładowuje płytkę oraz modele 3D"
+msgstr "Przeładowuje płytkę oraz odświeża podgląd 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
-#, fuzzy
 msgid "Use raytracing"
-msgstr "Modelowanie ze śledzeniem promieni"
+msgstr "Użyj modelowania ze śledzeniem promieni"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:56
 msgid "Render current view using Raytracing"
@@ -373,27 +371,24 @@ msgid "Copy 3D image to clipboard"
 msgstr "Kopiuj obraz 3D do schowka"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:64
-#, fuzzy
 msgid "Copy the current 3D image to the clipboard"
-msgstr "Kopiuj obraz 3D do schowka"
+msgstr "Kopiuj obecny obraz 3D do schowka"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
 msgid "Export Current View as PNG..."
 msgstr "Eksportuj bieżący widok jako plik PNG..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
-#, fuzzy
 msgid "Export the Current View as a PNG image"
-msgstr "Eksportuj bieżący widok jako plik PNG..."
+msgstr "Eksportuj bieżący widok jako obraz PNG"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
 msgid "Export Current View as JPEG..."
 msgstr "Eksportuj bieżący widok jako plik JPEG..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:80
-#, fuzzy
 msgid "Export the Current View as a JPEG image"
-msgstr "Eksportuj bieżący widok jako plik JPEG..."
+msgstr "Eksportuj bieżący widok jako obraz JPEG"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:88
 msgid "Set Pivot"
@@ -3729,7 +3724,6 @@ msgid "Enter the password for the SSH key"
 msgstr "Wpisz hasło dla klucza SSH"
 
 #: common/dialogs/git/dialog_git_repository.cpp:337
-#, fuzzy
 msgid "Test Connection"
 msgstr "Testuj połączenie"
 
@@ -3775,9 +3769,8 @@ msgstr "Wprowadź adres URL repozytorium"
 
 #: common/dialogs/git/dialog_git_repository.cpp:453
 #: common/dialogs/git/dialog_git_repository_base.cpp:108
-#, fuzzy
 msgid "SSH key password:"
-msgstr "Hasło klucza SSH"
+msgstr "Hasło klucza SSH:"
 
 #: common/dialogs/git/dialog_git_repository.cpp:459
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
@@ -3785,14 +3778,12 @@ msgid "Password:"
 msgstr "Hasło:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:38
-#, fuzzy
 msgid "Location:"
-msgstr "Położenie"
+msgstr "Położenie:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:45
-#, fuzzy
 msgid "Connection type:"
-msgstr "Typ połączenia"
+msgstr "Typ połączenia:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:52
 msgid "HTTPS"
@@ -3805,9 +3796,8 @@ msgid "Local"
 msgstr "Lokalnie"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:83
-#, fuzzy
 msgid "SSH private key:     "
-msgstr "Klucz prywatny SSH"
+msgstr "Klucz prywatny SSH:     "
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:90
 msgid "Select SSH private key file"
@@ -3818,7 +3808,6 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:101
-#, fuzzy
 msgid "User name:"
 msgstr "Nazwa użytkownika:"
 
@@ -5658,28 +5647,24 @@ msgstr "Prawo"
 
 #: common/dialogs/panel_toolbar_customization.cpp:48
 msgid "Top main"
-msgstr ""
+msgstr "Pasek główny"
 
 #: common/dialogs/panel_toolbar_customization.cpp:49
-#, fuzzy
 msgid "Top auxillary"
-msgstr "Warstwa górna"
+msgstr "Pasek dodatkowy"
 
 #: common/dialogs/panel_toolbar_customization.cpp:133
 #: common/dialogs/panel_toolbar_customization_base.cpp:72
-#, fuzzy
 msgid "Insert separator"
-msgstr "Separatory komórek"
+msgstr "Wstaw separator"
 
 #: common/dialogs/panel_toolbar_customization.cpp:139
-#, fuzzy
 msgid "Insert spacer"
-msgstr "Wstaw"
+msgstr "Wstaw przekładkę"
 
 #: common/dialogs/panel_toolbar_customization.cpp:140
-#, fuzzy
 msgid "Insert group"
-msgstr "Wejdź do grupy"
+msgstr "Wstaw grupę"
 
 #: common/dialogs/panel_toolbar_customization.cpp:543 common/eda_item.cpp:406
 #: pcbnew/pcb_group.cpp:392
@@ -5687,9 +5672,8 @@ msgid "Group"
 msgstr "Grupuj"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:19
-#, fuzzy
 msgid "Customize toolbars"
-msgstr "Własny stos warstw"
+msgstr "Personalizuj paski narzędzi"
 
 #: common/draw_panel_gal.cpp:321 common/draw_panel_gal.cpp:508
 msgid "Could not use OpenGL, falling back to software rendering"
@@ -5993,9 +5977,8 @@ msgstr "Kolory"
 #: common/eda_base_frame.cpp:1345 common/eda_base_frame.cpp:1362
 #: common/eda_base_frame.cpp:1373 common/eda_base_frame.cpp:1399
 #: common/eda_base_frame.cpp:1427
-#, fuzzy
 msgid "Toolbars"
-msgstr "Narzędzia"
+msgstr "Paski narzędzi"
 
 #: common/eda_base_frame.cpp:1307 common/hotkey_store.cpp:77
 #: common/tool/common_tools.cpp:614 eeschema/menubar.cpp:137
@@ -8638,38 +8621,32 @@ msgid "Quit %s"
 msgstr "Zakończ %s"
 
 #: common/tool/action_toolbar.cpp:1036
-#, fuzzy
 msgid "Grid Selector"
-msgstr "Styl siatki"
+msgstr "Wybór siatki"
 
 #: common/tool/action_toolbar.cpp:1037
-#, fuzzy
 msgid "Grid Selection box"
-msgstr "Tylko zaznaczone"
+msgstr "Rozwijane menu z wyborem siatki"
 
 #: common/tool/action_toolbar.cpp:1039
-#, fuzzy
 msgid "Zoom Selector"
-msgstr "Przybliż zaznaczenie"
+msgstr "Wybór powiększenia"
 
 #: common/tool/action_toolbar.cpp:1040
-#, fuzzy
 msgid "Zoom Selection box"
-msgstr "Przybliż zaznaczenie"
+msgstr "Rozwijane menu z wyborem powiększenia"
 
 #: common/tool/action_toolbar.cpp:1042
-#, fuzzy
 msgid "IPC/Scripting plugins"
-msgstr "Konsola Skryptów"
+msgstr "Wtyczki IPC/Skryptów"
 
 #: common/tool/action_toolbar.cpp:1043
 msgid "Region to hold the IPC/Scripting action buttons"
-msgstr ""
+msgstr "Obszar gdzie przechowuje się aktywne przyciski IPC/Skryptów"
 
 #: common/tool/action_toolbar.cpp:1045
-#, fuzzy
 msgid "Layer selector"
-msgstr "Wybór warstwy:"
+msgstr "Wybór warstwy"
 
 #: common/tool/action_toolbar.cpp:1046
 #, fuzzy
@@ -13350,16 +13327,13 @@ msgid "Define as power symbol"
 msgstr "Utwórz symbol jako symbol zasilania"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:193
-#, fuzzy
 msgid ""
 "Power symbols define a global net with the value as a netname.\n"
 "They will not be included in the BOM and cannot be assigned a footprint."
 msgstr ""
-"Zaznaczenie tej opcji powoduje, że dany symbol pojawia się wyłącznie\n"
-"w oknie dialogowym \"Dodaj port zasilania\".   Zablokuje to również\n"
-"możliwość edycji jego wartości na schemacie.   Symbol ten nie będzie "
-"uwzględniany w\n"
-"zestawieniu materiałowym oraz nie będzie można mu przydzielić footprintu."
+"Porty zasilania definiują globalną sieć połączeń z wartością jako nazwę "
+"sieci.\n"
+"Nie zostaną uwzględnione w BOM i nie można im przypisać footprintu."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:203
 #, fuzzy
@@ -21423,9 +21397,9 @@ msgid "Create new cursor..."
 msgstr "Utwórz raport..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "Delete %s..."
-msgstr "Usuń ustawienie..."
+msgstr "Usuń %s..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:242
 #: eeschema/sim/simulator_frame_ui.cpp:900
@@ -21462,9 +21436,8 @@ msgstr "Usuń pomiar"
 
 #: eeschema/sim/simulator_frame_ui.cpp:651
 #: eeschema/sim/simulator_frame_ui.cpp:672
-#, fuzzy
 msgid "Cursor "
-msgstr "Kursor 1"
+msgstr "Kursor "
 
 #: eeschema/sim/simulator_frame_ui.cpp:729
 #: eeschema/sim/simulator_frame_ui.cpp:1155
@@ -27019,9 +26992,9 @@ msgstr "Ustawienia zadania kopiowania plików"
 
 #: kicad/dialogs/dialog_destination.cpp:55
 #: kicad/dialogs/dialog_destination_base.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "%s Destination"
-msgstr "Miejsce docelowe:"
+msgstr "%s docelowe"
 
 #: kicad/dialogs/dialog_destination.cpp:86
 msgid "Select output directory"
@@ -27145,9 +27118,9 @@ msgid "Update Available"
 msgstr "Dostępne aktualizacje"
 
 #: kicad/dialogs/panel_jobset.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Destination: %s"
-msgstr "Miejsce docelowe:"
+msgstr "Miejsce docelowe: %s"
 
 #: kicad/dialogs/panel_jobset.cpp:68
 msgid "No."
@@ -29003,10 +28976,8 @@ msgid "Origin Selector"
 msgstr "Obraz oryginalny"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:161
-#, fuzzy
 msgid "Select the origin of the status bar coordinates"
-msgstr ""
-"Wybiera który punkt bazowy używany jest do wyświetlania współrzędnych X, Y."
+msgstr "Wybierz początek układu współrzędnych paska stanu"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:162
 #, fuzzy
