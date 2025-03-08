@@ -11,7 +11,7 @@
 
 APPEARANCE_CONTROLS_3D_BASE::APPEARANCE_CONTROLS_3D_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : WX_PANEL( parent, id, pos, size, style, name )
 {
-	this->SetMinSize( wxSize( 200,360 ) );
+	this->SetMinSize( wxSize( 210,360 ) );
 
 	m_sizerOuter = new wxBoxSizer( wxVERTICAL );
 

@@ -64,7 +64,11 @@ private:
 
     void jsonToPresets( const nlohmann::json& aJson );
 
+private:
     std::vector<LAYER_PRESET_3D>* m_presets;
+
+    std::map<int, wxString>       m_layerToLayerNameMap;
+    std::map<wxString, int>       m_layerNameToLayerMap;
 };
 
 

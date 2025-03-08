@@ -157,7 +157,7 @@ private:
 
     void onLayerPresetChanged( wxCommandEvent& aEvent ) override;
 
-    void doApplyLayerPreset( const LAYER_PRESET_3D& aPreset );
+    void doApplyLayerPreset( const wxString& aPresetName );
 
     void onViewportChanged( wxCommandEvent& aEvent ) override;
     void onUpdateViewportsCb( wxUpdateUIEvent& aEvent ) override;

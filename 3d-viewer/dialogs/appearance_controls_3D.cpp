@@ -140,10 +140,10 @@ APPEARANCE_CONTROLS_3D::APPEARANCE_CONTROLS_3D( EDA_3D_VIEWER_FRAME* aParent,
             } );
 
     m_cbUseBoardEditorCopperColors = new wxCheckBox( m_panelLayers, wxID_ANY,
-                                                     _( "Use board editor copper colors" ) );
+                                                     _( "Use PCB editor copper colors" ) );
     m_cbUseBoardEditorCopperColors->SetFont( infoFont );
-    m_cbUseBoardEditorCopperColors->SetToolTip(
-                _( "Use the board editor copper colors (openGL only)" ) );
+    m_cbUseBoardEditorCopperColors->SetToolTip( _( "Use the board editor layer colors for copper "
+                                                   "layers (realtime renderer only)" ) );
 
     m_cbUseBoardEditorCopperColors->Bind( wxEVT_CHECKBOX,
             [this]( wxCommandEvent& aEvent )
@@ -156,10 +156,9 @@ APPEARANCE_CONTROLS_3D::APPEARANCE_CONTROLS_3D( EDA_3D_VIEWER_FRAME* aParent,
                 m_frame->NewDisplay( true );
             } );
 
-
-    m_panelLayersSizer->Add( m_cbUseBoardStackupColors, 0, wxEXPAND | wxTOP | wxLEFT | wxRIGHT, 7 );
+    m_panelLayersSizer->Add( m_cbUseBoardStackupColors, 0, wxEXPAND | wxTOP | wxLEFT | wxRIGHT, 5 );
     m_panelLayersSizer->Add( m_cbUseBoardEditorCopperColors, 0,
-                             wxEXPAND | wxTOP | wxLEFT | wxRIGHT, 7 );
+                             wxEXPAND | wxALL, 5 );
 
     m_cbLayerPresets->SetToolTip( wxString::Format( _( "Save and restore color and visibility "
                                                        "combinations.\n"
@@ -279,16 +278,7 @@ void APPEARANCE_CONTROLS_3D::CommonSettingsChanged()
 
 void APPEARANCE_CONTROLS_3D::ApplyLayerPreset( const wxString& aPresetName )
 {
-    if( aPresetName == FOLLOW_PCB || aPresetName == FOLLOW_PLOT_SETTINGS )
-    {
-        m_frame->GetAdapter().m_Cfg->m_CurrentPreset = aPresetName;
-        UpdateLayerCtls();
-        m_frame->NewDisplay( true );
-    }
-    else if( LAYER_PRESET_3D* preset = m_frame->GetAdapter().m_Cfg->FindPreset( aPresetName ) )
-    {
-        doApplyLayerPreset( *preset );
-    }
+    doApplyLayerPreset( aPresetName );
 
     // Move to front of MRU list
     if( m_presetMRU.Index( aPresetName ) != wxNOT_FOUND )
@@ -731,17 +721,11 @@ void APPEARANCE_CONTROLS_3D::onLayerPresetChanged( wxCommandEvent& aEvent )
 
     if( index == 0 )
     {
-        name = FOLLOW_PCB;
-        cfg->m_CurrentPreset = name;
-        UpdateLayerCtls();
-        m_frame->NewDisplay( true );
+        doApplyLayerPreset( FOLLOW_PCB );
     }
     else if( index == 1 )
     {
-        name = FOLLOW_PLOT_SETTINGS;
-        cfg->m_CurrentPreset = name;
-        UpdateLayerCtls();
-        m_frame->NewDisplay( true );
+        doApplyLayerPreset( FOLLOW_PLOT_SETTINGS );
     }
     else if( index == count - 3 )
     {
@@ -827,10 +811,9 @@ void APPEARANCE_CONTROLS_3D::onLayerPresetChanged( wxCommandEvent& aEvent )
         resetSelection();
         return;
     }
-    else if( LAYER_PRESET_3D* preset = cfg->FindPreset( m_cbLayerPresets->GetStringSelection() ) )
+    else
     {
-        name = preset->name;
-        doApplyLayerPreset( *preset );
+        doApplyLayerPreset( m_cbLayerPresets->GetStringSelection() );
     }
 
     // Move to front of MRU list
@@ -843,16 +826,28 @@ void APPEARANCE_CONTROLS_3D::onLayerPresetChanged( wxCommandEvent& aEvent )
 }
 
 
-void APPEARANCE_CONTROLS_3D::doApplyLayerPreset( const LAYER_PRESET_3D& aPreset )
+void APPEARANCE_CONTROLS_3D::doApplyLayerPreset( const wxString& aPresetName )
 {
     BOARD_ADAPTER& adapter = m_frame->GetAdapter();
 
-    adapter.m_Cfg->m_CurrentPreset = aPreset.name;
-    adapter.SetVisibleLayers( aPreset.layers );
-    adapter.SetLayerColors( aPreset.colors );
+    if( aPresetName == FOLLOW_PCB || aPresetName == FOLLOW_PLOT_SETTINGS )
+    {
+        adapter.m_Cfg->m_CurrentPreset = aPresetName;
+        adapter.SetVisibleLayers( adapter.GetVisibleLayers() );
+    }
+    else if( LAYER_PRESET_3D* preset = adapter.m_Cfg->FindPreset( aPresetName ) )
+    {
+        adapter.m_Cfg->m_CurrentPreset = aPresetName;
+        adapter.SetVisibleLayers( preset->layers );
+        adapter.SetLayerColors( preset->colors );
 
-    if( aPreset.name.Lower() == _( "legacy colors" ) )
-        adapter.m_Cfg->m_UseStackupColors = false;
+        if( preset->name.Lower() == _( "legacy colors" ) )
+            adapter.m_Cfg->m_UseStackupColors = false;
+    }
+    else
+    {
+        return;
+    }
 
     UpdateLayerCtls();
     m_frame->NewDisplay( true );
