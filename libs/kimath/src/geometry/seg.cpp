@@ -361,7 +361,7 @@ bool SEG::Collide( const SEG& aSeg, int aClearance, int* aActual ) const
 
 bool SEG::Contains( const VECTOR2I& aP ) const
 {
-    return Distance( aP ) <= 1;
+    return SquaredDistance( aP ) <= 3;
 }
 
 
