@@ -30,8 +30,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-06 13:54+0300\n"
-"PO-Revision-Date: 2025-03-08 12:59+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2025-03-09 00:47+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -13405,9 +13405,8 @@ msgstr ""
 "Bauteilliste (BoM) aufgenommen und es kann kein Footprint zugewiesen werden."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:203
-#, fuzzy
 msgid "Define as local power symbol"
-msgstr "Als Spannungssymbol definieren"
+msgstr "Als lokales Spannungssymbol definieren"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:204
 msgid ""
@@ -14190,9 +14189,8 @@ msgid "Whole &words only"
 msgstr "Nur ganze &Wörter"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:90
-#, fuzzy
 msgid "Regular Expression"
-msgstr "Fehlerhafter Ausdruck"
+msgstr "Regulärer Ausdruck"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:93
 msgid "Search pin &names and numbers"
@@ -22369,9 +22367,8 @@ msgid "Power Symbol"
 msgstr "Spannungssymbol"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1763
-#, fuzzy
 msgid "Power Symbol (Local)"
-msgstr "Spannungssymbol"
+msgstr "Spannungssymbol (lokal)"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1770
 msgid "Datasheet"
