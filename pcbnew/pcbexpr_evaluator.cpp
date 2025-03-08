@@ -236,10 +236,16 @@ public:
             // of all unique component class objects
             return aClass == bClass;
         }
-        else
+
+        if( b->GetType() == LIBEVAL::VT_STRING )
         {
-            return LIBEVAL::VALUE::EqualTo( aCtx, b );
+            if( m_item->GetComponentClass()->ContainsClassName( b->AsString() ) )
+                return true;
+
+            return m_item->GetComponentClass()->GetFullName() == b->AsString();
         }
+
+        return LIBEVAL::VALUE::EqualTo( aCtx, b );
     }
 
     bool NotEqualTo( LIBEVAL::CONTEXT* aCtx, const LIBEVAL::VALUE* b ) const override
@@ -257,10 +263,17 @@ public:
             // of all unique component class objects
             return aClass != bClass;
         }
-        else
+
+        if( b->GetType() == LIBEVAL::VT_STRING )
         {
-            return LIBEVAL::VALUE::NotEqualTo( aCtx, b );
+            const bool isInConstituents =
+                    m_item->GetComponentClass()->ContainsClassName( b->AsString() );
+            const bool isFullName = m_item->GetComponentClass()->GetFullName() == b->AsString();
+
+            return !isInConstituents && !isFullName;
         }
+
+        return LIBEVAL::VALUE::NotEqualTo( aCtx, b );
     }
 
 protected:
