@@ -55,7 +55,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
           m_ExportIdf(),
           m_ExportStep(),
           m_ExportODBPP(),
-          m_ExportSvg(),
           m_ExportVrml(),
           m_FootprintWizardList(),
           m_GenDrill(),
@@ -409,33 +408,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
 
     m_params.emplace_back( new PARAM<bool>( "export_step.overwrite_file",
             &m_ExportStep.overwrite_file, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "export_svg.black_and_white",
-            &m_ExportSvg.black_and_white, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "export_svg.use_theme",
-            &m_ExportSvg.use_selected_theme, true ) );
-
-    m_params.emplace_back( new PARAM<wxString>( "export_svg.color_theme",
-            &m_ExportSvg.color_theme, "" ) );
-
-    m_params.emplace_back( new PARAM<bool>( "export_svg.mirror",
-            &m_ExportSvg.mirror, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "export_svg.one_file",
-            &m_ExportSvg.one_file, false ) );
-
-    m_params.emplace_back(new PARAM<bool>( "export_svg.plot_board_edges",
-            &m_ExportSvg.plot_board_edges, true ) );
-
-    m_params.emplace_back( new PARAM<int>( "export_svg.page_size",
-            &m_ExportSvg.page_size, 0 ) );
-
-    m_params.emplace_back( new PARAM<wxString>( "export_svg.output_dir",
-            &m_ExportSvg.output_dir, "" ) );
-
-    m_params.emplace_back( new PARAM_LIST<int>( "export_svg.layers",
-            &m_ExportSvg.layers, {} ) );
 
     m_params.emplace_back( new PARAM<int>( "export_vrml.units",
             &m_ExportVrml.units, 1 ) );
