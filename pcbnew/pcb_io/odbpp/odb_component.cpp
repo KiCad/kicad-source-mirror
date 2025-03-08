@@ -78,7 +78,7 @@ ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
 
     if( aFp->GetAttributes() & FP_SMD )
     {
-        AddSystemAttribute( comp, ODB_ATTR::COMP_MOUNT_TYPE::SMD );
+        AddSystemAttribute( comp, ODB_ATTR::COMP_MOUNT_TYPE::MT_SMD );
     }
     else if( aFp->GetAttributes() & FP_THROUGH_HOLE )
     {
