@@ -209,20 +209,6 @@ public:
         int    compressFormat;
     };
 
-    struct DIALOG_EXPORT_SVG
-    {
-        bool             black_and_white;
-        bool             mirror;
-        bool             one_file;
-        bool             plot_board_edges;
-        int              page_size;
-        wxString         output_dir;        // legacy; now in project settings
-        std::vector<int> layers;
-        bool             use_selected_theme;// color theme option to use for export
-                                            // false = board theme, true = selected theme
-        wxString         color_theme;       // color theme used for export
-    };
-
     struct DIALOG_EXPORT_VRML
     {
         int    units;
@@ -395,8 +381,6 @@ public:
     DIALOG_EXPORT_2581 m_Export2581;
 
     DIALOG_EXPORT_ODBPP m_ExportODBPP;
-
-    DIALOG_EXPORT_SVG m_ExportSvg;
 
     DIALOG_EXPORT_VRML m_ExportVrml;
 
