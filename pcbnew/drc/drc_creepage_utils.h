@@ -697,11 +697,29 @@ public:
     ~CREEPAGE_GRAPH()
     {
         for( CREEP_SHAPE* cs : m_shapeCollection )
+        {
             if( cs )
             {
                 delete cs;
                 cs = nullptr;
             }
+        }
+
+        // Clear out the circular shared pointer references
+        for( std::shared_ptr<GRAPH_NODE>& n : m_nodes )
+        {
+            if( n )
+            {
+                n->m_node_conns.clear();
+                n = nullptr;
+            }
+        }
+
+        for( std::shared_ptr<GRAPH_CONNECTION>& c : m_connections )
+        {
+            if( c )
+                c = nullptr;
+        }
     };
 
 
