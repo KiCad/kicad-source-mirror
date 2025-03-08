@@ -416,6 +416,23 @@ public:
                                           int aClearance, int aError, ERROR_LOC aErrorLoc,
                                           bool ignoreLineWidth = false ) const;
 
+    /**
+     * Convert the item shape to a polyset. Circles and arcs are approximated by segments; hatched
+     * fills will be included.
+     *
+     * @param aBuffer a buffer to store the polygon.
+     * @param aClearance the clearance around the pad.
+     * @param aError the maximum deviation from true circle.
+     * @param aErrorLoc should the approximation error be placed outside or inside the polygon?
+     * @param ignoreLineWidth used for edge cut items where the line width is only
+     *                        for visualization.
+     */
+    virtual void TransformShapeToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
+                                          int aClearance, int aError, ERROR_LOC aErrorLoc ) const
+    {
+        TransformShapeToPolygon( aBuffer, aLayer, aClearance, aError, aErrorLoc );
+    }
+
     enum COMPARE_FLAGS : int
     {
         DRC = 0x01

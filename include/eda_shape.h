@@ -415,7 +415,8 @@ public:
      *                        visualization
      */
     void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance, int aError,
-                                  ERROR_LOC aErrorLoc, bool ignoreLineWidth = false ) const;
+                                  ERROR_LOC aErrorLoc, bool ignoreLineWidth = false,
+                                  bool includeFill = false ) const;
 
     int Compare( const EDA_SHAPE* aOther ) const;
 

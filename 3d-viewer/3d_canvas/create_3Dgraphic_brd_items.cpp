@@ -656,7 +656,7 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
             {
                 SHAPE_POLY_SET polyList;
 
-                aShape->TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0, ARC_HIGH_DEF,
+                aShape->TransformShapeToPolySet( polyList, UNDEFINED_LAYER, 0, ARC_HIGH_DEF,
                                                  ERROR_INSIDE );
 
                 polyList.Simplify();

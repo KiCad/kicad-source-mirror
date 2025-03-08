@@ -1006,9 +1006,9 @@ void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PCB_LAYER_ID aLa
                     else
                     {
                         if( inflate != 0 )
-                            item->TransformShapeToPolygon( exactPolys, aLayer, 0, ERROR );
+                            item->TransformShapeToPolySet( exactPolys, aLayer, 0, ERROR );
 
-                        item->TransformShapeToPolygon( *aResult, aLayer, inflate, ERROR );
+                        item->TransformShapeToPolySet( *aResult, aLayer, inflate, ERROR );
                     }
                 }
             }

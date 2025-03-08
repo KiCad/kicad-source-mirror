@@ -519,7 +519,7 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
             return true;
         }
 
-        graphic->TransformShapeToPolygon( m_poly_shapes[pcblayer], pcblayer, 0, maxError,
+        graphic->TransformShapeToPolySet( m_poly_shapes[pcblayer], pcblayer, 0, maxError,
                                           ERROR_INSIDE );
 
         break;

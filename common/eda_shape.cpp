@@ -2083,7 +2083,8 @@ int EDA_SHAPE::Compare( const EDA_SHAPE* aOther ) const
 
 
 void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance, int aError,
-                                         ERROR_LOC aErrorLoc, bool ignoreLineWidth ) const
+                                         ERROR_LOC aErrorLoc, bool ignoreLineWidth,
+                                         bool includeFill ) const
 {
     int width = ignoreLineWidth ? 0 : GetWidth();
 
@@ -2200,7 +2201,7 @@ void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance
         break;
     }
 
-    if( IsHatchedFill() )
+    if( IsHatchedFill() && includeFill )
     {
         for( int ii = 0; ii < GetHatching().OutlineCount(); ++ii )
             aBuffer.AddOutline( GetHatching().COutline( ii ) );

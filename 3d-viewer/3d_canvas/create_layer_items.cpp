@@ -97,7 +97,7 @@ void transformFPShapesToPolySet( const FOOTPRINT* aFootprint, PCB_LAYER_ID aLaye
         if( item->Type() == PCB_SHAPE_T || BaseType( item->Type() ) == PCB_DIMENSION_T )
         {
             if( item->GetLayer() == aLayer )
-                item->TransformShapeToPolygon( aBuffer, aLayer, 0, aMaxError, aErrorLoc );
+                item->TransformShapeToPolySet( aBuffer, aLayer, 0, aMaxError, aErrorLoc );
         }
     }
 }
@@ -716,20 +716,22 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     {
                         PCB_TEXTBOX* text_box = static_cast<PCB_TEXTBOX*>( item );
                         text_box->TransformTextToPolySet( *platedCopperPolys,
-                                                           0, maxError, ERROR_INSIDE );
+                                                          0, maxError, ERROR_INSIDE );
                         // Add box outlines
                         text_box->PCB_SHAPE::TransformShapeToPolygon( *platedCopperPolys, layer,
                                                                        0, maxError, ERROR_INSIDE );
                     }
                     else if( item->Type() == PCB_TEXT_T )
                     {
-                        static_cast<PCB_TEXT*>( item )->TransformTextToPolySet(
-                                                                *platedCopperPolys,
-                                                                0, maxError, ERROR_INSIDE );
+                        static_cast<PCB_TEXT*>( item )->TransformTextToPolySet( *platedCopperPolys,
+                                                                                0, maxError,
+                                                                                ERROR_INSIDE );
                     }
                     else
-                        item->TransformShapeToPolygon( *platedCopperPolys, layer,
-                                                        0, maxError, ERROR_INSIDE );
+                    {
+                        item->TransformShapeToPolySet( *platedCopperPolys, layer,
+                                                       0, maxError, ERROR_INSIDE );
+                    }
                 }
             }
         }
@@ -753,7 +755,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 switch( item->Type() )
                 {
                 case PCB_SHAPE_T:
-                    item->TransformShapeToPolygon( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
+                    item->TransformShapeToPolySet( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
                     break;
 
                 case PCB_TEXT_T:
@@ -1026,7 +1028,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 switch( item->Type() )
                 {
                 case PCB_SHAPE_T:
-                    item->TransformShapeToPolygon( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
+                    item->TransformShapeToPolySet( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
                     break;
 
                 case PCB_TEXT_T:

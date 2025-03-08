@@ -3944,10 +3944,10 @@ void FOOTPRINT::TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_I
 
         if( item->Type() == PCB_SHAPE_T && aIncludeShapes )
         {
-            const PCB_SHAPE* outline = static_cast<PCB_SHAPE*>( item );
+            const PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
 
-            if( aLayer != UNDEFINED_LAYER && outline->GetLayer() == aLayer )
-                outline->TransformShapeToPolygon( aBuffer, aLayer, 0, aError, aErrorLoc );
+            if( aLayer != UNDEFINED_LAYER && shape->GetLayer() == aLayer )
+                shape->TransformShapeToPolySet( aBuffer, aLayer, 0, aError, aErrorLoc );
         }
     }
 
