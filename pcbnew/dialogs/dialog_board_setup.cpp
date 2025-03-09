@@ -37,6 +37,7 @@
 #include <dialogs/panel_setup_teardrops.h>
 #include <dialogs/panel_setup_tuning_patterns.h>
 #include <dialogs/panel_setup_netclasses.h>
+#include <dialogs/panel_assign_component_classes.h>
 #include <panel_text_variables.h>
 #include <project.h>
 #include <project/project_file.h>
@@ -46,6 +47,8 @@
 #include <wildcards_and_files_ext.h>
 
 #include "dialog_board_setup.h"
+
+#include <footprint.h>
 
 
 #define RESOLVE_PAGE( T, pageIndex ) static_cast<T*>( m_treebook->ResolvePage( pageIndex ) )
@@ -184,6 +187,17 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
                                                    board->GetNetClassAssignmentCandidates(),
                                                    false );
             }, _( "Net Classes" ) );
+
+    m_componentClassesPage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                // Construct the panel
+                return new PANEL_ASSIGN_COMPONENT_CLASSES(
+                        aParent, m_frame, m_frame->Prj().GetProjectFile().ComponentClassSettings(),
+                        this );
+            },
+            _( "Component Classes" ) );
 
     m_customRulesPage = m_treebook->GetPageCount();
     m_treebook->AddLazySubPage(
@@ -375,6 +389,14 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
 
             RESOLVE_PAGE( PANEL_SETUP_NETCLASSES,
                           m_netclassesPage )->ImportSettingsFrom( otherProjectFile.m_NetSettings );
+        }
+
+        if( importDlg.m_ComponentClassesOpt->GetValue() )
+        {
+            PROJECT_FILE& otherProjectFile = otherPrj->GetProjectFile();
+
+            RESOLVE_PAGE( PANEL_ASSIGN_COMPONENT_CLASSES, m_componentClassesPage )
+                    ->ImportSettingsFrom( otherProjectFile.m_ComponentClassSettings );
         }
 
         if( importDlg.m_TracksAndViasOpt->GetValue() )

@@ -55,6 +55,7 @@
 #include <pcbnew_settings.h>
 #include <progress_reporter.h>
 #include <project.h>
+#include <project/component_class_settings.h>
 #include <project/net_settings.h>
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
@@ -73,18 +74,13 @@ VECTOR2I BOARD_ITEM::ZeroOffset( 0, 0 );
 
 
 BOARD::BOARD() :
-        BOARD_ITEM_CONTAINER( (BOARD_ITEM*) nullptr, PCB_T ),
-        m_LegacyDesignSettingsLoaded( false ),
-        m_LegacyCopperEdgeClearanceLoaded( false ),
-        m_LegacyNetclassesLoaded( false ),
-        m_boardUse( BOARD_USE::NORMAL ),
-        m_timeStamp( 1 ),
-        m_paper( PAGE_INFO::A4 ),
-        m_project( nullptr ),
-        m_userUnits( EDA_UNITS::MM ),
+        BOARD_ITEM_CONTAINER( (BOARD_ITEM*) nullptr, PCB_T ), m_LegacyDesignSettingsLoaded( false ),
+        m_LegacyCopperEdgeClearanceLoaded( false ), m_LegacyNetclassesLoaded( false ),
+        m_boardUse( BOARD_USE::NORMAL ), m_timeStamp( 1 ), m_paper( PAGE_INFO::A4 ),
+        m_project( nullptr ), m_userUnits( EDA_UNITS::MM ),
         m_designSettings( new BOARD_DESIGN_SETTINGS( nullptr, "board.design_settings" ) ),
-        m_NetInfo( this ),
-        m_embedFonts( false )
+        m_NetInfo( this ), m_embedFonts( false ),
+        m_componentClassManager( std::make_unique<COMPONENT_CLASS_MANAGER>( this ) )
 {
     // A too small value do not allow connecting 2 shapes (i.e. segments) not exactly connected
     // A too large value do not allow safely connecting 2 shapes like very short segments.
@@ -2159,6 +2155,17 @@ void BOARD::SynchronizeNetsAndNetClasses( bool aResetTrackAndViaSizes )
     }
 
     InvokeListeners( &BOARD_LISTENER::OnBoardNetSettingsChanged, *this );
+}
+
+
+bool BOARD::SynchronizeComponentClasses( const std::unordered_set<wxString>& aNewSheetPaths ) const
+{
+    std::shared_ptr<COMPONENT_CLASS_SETTINGS> settings =
+            GetProject()->GetProjectFile().ComponentClassSettings();
+
+    return m_componentClassManager->SyncDynamicComponentClassAssignments(
+            settings->GetComponentClassAssignments(), settings->GetEnableSheetComponentClasses(),
+            aNewSheetPaths );
 }
 
 

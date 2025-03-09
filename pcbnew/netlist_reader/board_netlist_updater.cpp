@@ -32,6 +32,7 @@
 #include <base_units.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <component_classes/component_class.h>
 #include <netinfo.h>
 #include <footprint.h>
 #include <pad.h>
@@ -157,7 +158,8 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::addNewFootprint( COMPONENT* aComponent )
         return nullptr;
     }
 
-    footprint->SetComponentClass( m_board->GetComponentClassManager().GetNoneComponentClass() );
+    footprint->SetStaticComponentClass(
+            m_board->GetComponentClassManager().GetNoneComponentClass() );
 
     if( m_isDryRun )
     {
@@ -207,8 +209,8 @@ void BOARD_NETLIST_UPDATER::updateComponentClass( FOOTPRINT* aFootprint, COMPONE
     wxString         curClassName, newClassName;
     COMPONENT_CLASS* newClass = nullptr;
 
-    if( const COMPONENT_CLASS* curClass = aFootprint->GetComponentClass() )
-        curClassName = curClass->GetFullName();
+    if( const COMPONENT_CLASS* curClass = aFootprint->GetStaticComponentClass() )
+        curClassName = curClass->GetName();
 
     // Calculate the new component class
     if( m_isDryRun )
@@ -218,9 +220,9 @@ void BOARD_NETLIST_UPDATER::updateComponentClass( FOOTPRINT* aFootprint, COMPONE
     }
     else
     {
-        newClass = m_board->GetComponentClassManager().GetEffectiveComponentClass(
+        newClass = m_board->GetComponentClassManager().GetEffectiveStaticComponentClass(
                 aNewComponent->GetComponentClassNames() );
-        newClassName = newClass->GetFullName();
+        newClassName = newClass->GetName();
     }
 
     if( curClassName == newClassName )
@@ -254,7 +256,7 @@ void BOARD_NETLIST_UPDATER::updateComponentClass( FOOTPRINT* aFootprint, COMPONE
     {
         wxASSERT_MSG( newClass != nullptr, "Component class should not be nullptr" );
 
-        aFootprint->SetComponentClass( newClass );
+        aFootprint->SetStaticComponentClass( newClass );
 
         if( curClassName == wxEmptyString && newClassName != wxEmptyString )
         {
@@ -1214,6 +1216,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     FOOTPRINT* lastPreexistingFootprint = nullptr;
     COMPONENT* component = nullptr;
     wxString   msg;
+    std::unordered_set<wxString> sheetPaths;
 
     m_errorCount = 0;
     m_warningCount = 0;
@@ -1294,6 +1297,8 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                     updateFootprintParameters( tmp, component );
                     updateComponentPadConnections( tmp, component );
                     updateComponentClass( tmp, component );
+
+                    sheetPaths.insert( footprint->GetSheetname() );
                 }
 
                 matchCount++;
@@ -1317,6 +1322,8 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                 updateFootprintParameters( footprint, component );
                 updateComponentPadConnections( footprint, component );
                 updateComponentClass( footprint, component );
+
+                sheetPaths.insert( footprint->GetSheetname() );
             }
         }
         else if( matchCount > 1 )
@@ -1403,6 +1410,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     {
         // Finalise the component class manager
         m_board->GetComponentClassManager().FinishNetlistUpdate();
+        m_board->SynchronizeComponentClasses( sheetPaths );
 
         m_board->BuildConnectivity();
         testConnectivity( aNetlist, footprintMap );

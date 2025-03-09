@@ -29,6 +29,7 @@
 #include <drc_rules_lexer.h>
 #include <pcbexpr_evaluator.h>
 #include <reporter.h>
+#include <component_classes/component_class_assignment_rule.h>
 
 using namespace DRCRULE_T;
 
@@ -182,6 +183,81 @@ void DRC_RULES_PARSER::Parse( std::vector<std::shared_ptr<DRC_RULE>>& aRules, RE
 }
 
 
+void DRC_RULES_PARSER::ParseComponentClassAssignmentRules(
+        std::vector<std::shared_ptr<COMPONENT_CLASS_ASSIGNMENT_RULE>>& aRules, REPORTER* aReporter )
+{
+    bool     haveVersion = false;
+    wxString msg;
+
+    m_reporter = aReporter;
+
+    for( T token = NextTok(); token != T_EOF; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            reportError( _( "Missing '('." ) );
+
+        token = NextTok();
+
+        if( !haveVersion && token != T_version )
+        {
+            reportError( _( "Missing version statement." ) );
+            haveVersion = true; // don't keep on reporting it
+        }
+
+        switch( token )
+        {
+        case T_version:
+            haveVersion = true;
+            token = NextTok();
+
+            if( (int) token == DSN_RIGHT )
+            {
+                reportError( _( "Missing version number." ) );
+                break;
+            }
+
+            if( (int) token == DSN_NUMBER )
+            {
+                m_requiredVersion = (int) strtol( CurText(), nullptr, 10 );
+                m_tooRecent = ( m_requiredVersion > DRC_RULE_FILE_VERSION );
+                token = NextTok();
+            }
+            else
+            {
+                msg.Printf( _( "Unrecognized item '%s'.| Expected version number." ), FromUTF8() );
+                reportError( msg );
+            }
+
+            if( (int) token != DSN_RIGHT )
+            {
+                msg.Printf( _( "Unrecognized item '%s'." ), FromUTF8() );
+                reportError( msg );
+                parseUnknown();
+            }
+
+            break;
+
+        case T_assign_component_class:
+            aRules.emplace_back( parseComponentClassAssignment() );
+            break;
+
+        case T_EOF: reportError( _( "Incomplete statement." ) ); break;
+
+        default:
+            msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
+                        wxT( "assign_component_class or version" ) );
+            reportError( msg );
+            parseUnknown();
+        }
+    }
+
+    if( m_reporter && !m_reporter->HasMessage() )
+        m_reporter->Report( _( "No errors found." ), RPT_SEVERITY_INFO );
+
+    m_reporter = nullptr;
+}
+
+
 std::shared_ptr<DRC_RULE> DRC_RULES_PARSER::parseDRC_RULE()
 {
     std::shared_ptr<DRC_RULE> rule = std::make_shared<DRC_RULE>();
@@ -263,6 +339,80 @@ std::shared_ptr<DRC_RULE> DRC_RULES_PARSER::parseDRC_RULE()
         reportError( _( "Missing ')'." ) );
 
     return rule;
+}
+
+
+std::shared_ptr<COMPONENT_CLASS_ASSIGNMENT_RULE> DRC_RULES_PARSER::parseComponentClassAssignment()
+{
+    std::shared_ptr<DRC_RULE_CONDITION> condition;
+
+    T        token = NextTok();
+    wxString msg;
+
+    if( !IsSymbol( token ) )
+        reportError( _( "Missing component class name." ) );
+
+    wxString componentClass = FromUTF8();
+
+    for( token = NextTok(); token != T_RIGHT && token != T_EOF; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            reportError( _( "Missing '('." ) );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_condition:
+            token = NextTok();
+
+            if( (int) token == DSN_RIGHT )
+            {
+                reportError( _( "Missing condition expression." ) );
+                break;
+            }
+
+            if( IsSymbol( token ) )
+            {
+                condition = std::make_shared<DRC_RULE_CONDITION>( FromUTF8() );
+
+                if( !condition->Compile( m_reporter, CurLineNumber(), CurOffset() ) )
+                {
+                    reportError( wxString::Format( _( "Could not parse expression '%s'." ),
+                                                   FromUTF8() ) );
+                }
+            }
+            else
+            {
+                msg.Printf( _( "Unrecognized item '%s'.| Expected quoted expression." ),
+                            FromUTF8() );
+                reportError( msg );
+            }
+
+            if( (int) NextTok() != DSN_RIGHT )
+            {
+                reportError( wxString::Format( _( "Unrecognized item '%s'." ), FromUTF8() ) );
+                parseUnknown();
+            }
+
+            break;
+
+        case T_EOF: reportError( _( "Incomplete statement." ) ); return nullptr;
+
+        default:
+            msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
+                        wxT( "condition" ) );
+            reportError( msg );
+            parseUnknown();
+        }
+    }
+
+    if( (int) CurTok() != DSN_RIGHT )
+        reportError( _( "Missing ')'." ) );
+
+    return std::make_shared<COMPONENT_CLASS_ASSIGNMENT_RULE>( componentClass,
+                                                              std::move( condition ) );
+    ;
 }
 
 

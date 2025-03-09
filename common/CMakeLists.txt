@@ -113,6 +113,7 @@ set( KICOMMON_SRCS
     settings/settings_manager.cpp
 
     project/board_project_settings.cpp
+    project/component_class_settings.cpp
     project/net_settings.cpp
     project/project_archiver.cpp
     project/project_file.cpp
@@ -775,7 +776,10 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/teardrop/teardrop_parameters.cpp     #needed by board_design_settings.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/router/pns_meander.cpp               #needed by board_design_settings.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/board.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/component_class_manager.cpp          #needed by board.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/component_classes/component_class.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/component_classes/component_class_assignment_rule.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/component_classes/component_class_cache_proxy.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/component_classes/component_class_manager.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/board_item.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_dimension.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_shape.cpp

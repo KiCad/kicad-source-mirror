@@ -4507,7 +4507,8 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
 
     if( m_board )
     {
-        footprint->SetComponentClass( m_board->GetComponentClassManager().GetNoneComponentClass() );
+        footprint->SetStaticComponentClass(
+                m_board->GetComponentClassManager().GetNoneComponentClass() );
     }
 
     token = NextTok();

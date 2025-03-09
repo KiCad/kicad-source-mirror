@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -64,6 +64,7 @@ class DIALOG_IMPORT_SETTINGS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_TeardropsOpt;
 		wxCheckBox* m_TuningPatternsOpt;
 		wxCheckBox* m_NetclassesOpt;
+		wxCheckBox* m_ComponentClassesOpt;
 		wxCheckBox* m_CustomRulesOpt;
 		wxCheckBox* m_SeveritiesOpt;
 

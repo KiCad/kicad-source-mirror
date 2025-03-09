@@ -250,8 +250,8 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
         // Fetch component classes
         std::set<wxString> classNames;
 
-        for( const auto& [k, v] : m_board->GetComponentClassManager().GetClasses() )
-            classNames.insert( k );
+        for( const wxString& className : m_board->GetComponentClassManager().GetClassNames() )
+            classNames.insert( className );
 
         for( const wxString& sourceName : classNames )
             m_placementProperties->m_componentClassCombo->Append( sourceName );

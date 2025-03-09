@@ -181,6 +181,8 @@ set( PCBNEW_DIALOGS
     dialogs/panel_pcbnew_display_origin_base.cpp
     dialogs/panel_rule_area_properties_keepout_base.cpp
     dialogs/panel_rule_area_properties_placement_base.cpp
+    dialogs/panel_assign_component_classes.cpp
+    dialogs/panel_assign_component_classes_base.cpp
     dialogs/panel_setup_constraints.cpp
     dialogs/panel_setup_constraints_base.cpp
     dialogs/panel_setup_dimensions.cpp
@@ -329,7 +331,6 @@ set( PCBNEW_CLASS_SRCS
     array_pad_number_provider.cpp
     build_BOM_from_board.cpp
     cleanup_item.cpp
-    component_class_manager.cpp
     convert_shape_list_to_polygon.cpp
     cross-probing.cpp
     edit.cpp
@@ -427,6 +428,11 @@ set( PCBNEW_CLASS_SRCS
     widgets/search_handlers.cpp
     widgets/net_inspector_panel.cpp
     widgets/pcb_net_inspector_panel.cpp
+
+    component_classes/component_class.cpp
+    component_classes/component_class_cache_proxy.cpp
+    component_classes/component_class_assignment_rule.cpp
+    component_classes/component_class_manager.cpp
 
     )
 

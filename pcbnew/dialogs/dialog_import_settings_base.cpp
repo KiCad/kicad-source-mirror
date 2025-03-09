@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -75,6 +75,9 @@ DIALOG_IMPORT_SETTINGS_BASE::DIALOG_IMPORT_SETTINGS_BASE( wxWindow* parent, wxWi
 	m_NetclassesOpt = new wxCheckBox( this, wxID_ANY, _("Net classes"), wxDefaultPosition, wxDefaultSize, 0 );
 	bLeftCol->Add( m_NetclassesOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
+	m_ComponentClassesOpt = new wxCheckBox( this, wxID_ANY, _("Component classes"), wxDefaultPosition, wxDefaultSize, 0 );
+	bLeftCol->Add( m_ComponentClassesOpt, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+
 	m_CustomRulesOpt = new wxCheckBox( this, wxID_ANY, _("Custom rules"), wxDefaultPosition, wxDefaultSize, 0 );
 	bLeftCol->Add( m_CustomRulesOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
@@ -120,6 +123,7 @@ DIALOG_IMPORT_SETTINGS_BASE::DIALOG_IMPORT_SETTINGS_BASE( wxWindow* parent, wxWi
 	m_TracksAndViasOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_SETTINGS_BASE::OnCheckboxClicked ), NULL, this );
 	m_TuningPatternsOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_SETTINGS_BASE::OnCheckboxClicked ), NULL, this );
 	m_NetclassesOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_SETTINGS_BASE::OnCheckboxClicked ), NULL, this );
+	m_ComponentClassesOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_SETTINGS_BASE::OnCheckboxClicked ), NULL, this );
 	m_CustomRulesOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_SETTINGS_BASE::OnCheckboxClicked ), NULL, this );
 	m_SeveritiesOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_SETTINGS_BASE::OnCheckboxClicked ), NULL, this );
 	m_selectAllButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_SETTINGS_BASE::OnSelectAll ), NULL, this );
@@ -136,6 +140,7 @@ DIALOG_IMPORT_SETTINGS_BASE::~DIALOG_IMPORT_SETTINGS_BASE()
 	m_TracksAndViasOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_SETTINGS_BASE::OnCheckboxClicked ), NULL, this );
 	m_TuningPatternsOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_SETTINGS_BASE::OnCheckboxClicked ), NULL, this );
 	m_NetclassesOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_SETTINGS_BASE::OnCheckboxClicked ), NULL, this );
+	m_ComponentClassesOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_SETTINGS_BASE::OnCheckboxClicked ), NULL, this );
 	m_CustomRulesOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_SETTINGS_BASE::OnCheckboxClicked ), NULL, this );
 	m_SeveritiesOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_SETTINGS_BASE::OnCheckboxClicked ), NULL, this );
 	m_selectAllButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_SETTINGS_BASE::OnSelectAll ), NULL, this );

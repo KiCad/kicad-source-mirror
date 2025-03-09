@@ -32,7 +32,7 @@
 #include <board_item_container.h>
 #include <board_item.h>
 #include <collectors.h>
-#include <component_class_manager.h>
+#include <component_classes/component_class_manager.h>
 #include <embedded_files.h>
 #include <layer_ids.h> // ALL_LAYERS definition.
 #include <lset.h>
@@ -54,6 +54,7 @@ class BOARD;
 class MSG_PANEL_ITEM;
 class SHAPE;
 class REPORTER;
+class COMPONENT_CLASS_CACHE_PROXY;
 
 namespace KIGFX {
 class VIEW;
@@ -984,7 +985,22 @@ public:
     double Similarity( const BOARD_ITEM& aOther ) const override;
 
     /// Sets the component class object pointer for this footprint
-    void SetComponentClass( const COMPONENT_CLASS* aClass ) { m_componentClass = aClass; }
+    void SetStaticComponentClass( const COMPONENT_CLASS* aClass ) const;
+
+    /// Returns the component class for this footprint
+    const COMPONENT_CLASS* GetStaticComponentClass() const;
+
+    /// Returns the component class for this footprint
+    const COMPONENT_CLASS* GetComponentClass() const;
+
+    /// Used for display in the properties panel
+    wxString GetComponentClassAsString() const;
+
+    /// Forces immediate recalculation of the component class for this footprint
+    void RecomputeComponentClass() const;
+
+    /// Forces deferred (on next access) recalculation of the component class for this footprint
+    void InvalidateComponentClassCache() const;
 
     /**
      * @brief Sets the transient component class names
@@ -1009,13 +1025,6 @@ public:
     /// Resolves a set of component class names to this footprint's actual component class
     void ResolveComponentClassNames( BOARD*                              aBoard,
                                      const std::unordered_set<wxString>& aComponentClassNames );
-
-    /// Returns the component class for this footprint
-    const COMPONENT_CLASS* GetComponentClass() const { return m_componentClass; }
-
-    /// Used for display in the properties panel
-    wxString GetComponentClassAsString() const;
-
 
     bool operator==( const BOARD_ITEM& aOther ) const override;
     bool operator==( const FOOTPRINT& aOther ) const;
@@ -1117,8 +1126,8 @@ private:
     mutable HASH_128   m_courtyard_cache_back_hash;
     mutable std::mutex m_courtyard_cache_mutex;
 
-    const COMPONENT_CLASS* m_componentClass;
     std::unordered_set<wxString> m_transientComponentClassNames;
+    std::unique_ptr<COMPONENT_CLASS_CACHE_PROXY> m_componentClassCacheProxy;
 };
 
 #endif     // FOOTPRINT_H

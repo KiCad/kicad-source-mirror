@@ -38,6 +38,7 @@
 #include <pcb_shape.h>
 #include <zone.h>
 #include <zone_filler.h>
+#include <drc/drc_cache_generator.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
@@ -113,6 +114,16 @@ void LoadBoard( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath,
     aBoard->GetDesignSettings().m_DRCEngine = m_DRCEngine;
     aBoard->BuildListOfNets();
     aBoard->BuildConnectivity();
+
+    if( aBoard->GetProject() )
+    {
+        std::unordered_set<wxString> dummy;
+        aBoard->SynchronizeComponentClasses( dummy );
+
+        DRC_CACHE_GENERATOR cacheGenerator;
+        cacheGenerator.SetDRCEngine( m_DRCEngine.get() );
+        cacheGenerator.Run();
+    }
 }
 
 

@@ -177,10 +177,10 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
 //#define SEXPR_BOARD_FILE_VERSION    20241229  // Expand User layers to arbitrary count
 //----------------- Start of 10.0 development -----------------
 //#define SEXPR_BOARD_FILE_VERSION    20250210  // Knockout for textboxes
-//#define SEXPR_BOARD_FILE_VERSION      20250222  // Hatching for PCB shapes
-//#define SEXPR_BOARD_FILE_VERSION      20250228  // ipc-4761 via protection features
-#define SEXPR_BOARD_FILE_VERSION      20250302  // Zone Hatching Offsets
-
+//#define SEXPR_BOARD_FILE_VERSION    20250222  // Hatching for PCB shapes
+//#define SEXPR_BOARD_FILE_VERSION    20250228  // ipc-4761 via protection features
+//#define SEXPR_BOARD_FILE_VERSION    20250302  // Zone Hatching Offsets
+#define SEXPR_BOARD_FILE_VERSION      20250309  // Component class dynamic assignment rules
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting

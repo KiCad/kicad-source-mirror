@@ -83,7 +83,8 @@ bool DIALOG_IMPORT_SETTINGS::UpdateImportSettingsButton()
                                || m_ConstraintsOpt->IsChecked() || m_NetclassesOpt->IsChecked()
                                || m_SeveritiesOpt->IsChecked() || m_TextAndGraphicsOpt->IsChecked()
                                || m_FormattingOpt->IsChecked() || m_TracksAndViasOpt->IsChecked()
-                               || m_TuningPatternsOpt->IsChecked() || m_CustomRulesOpt->IsChecked() );
+                               || m_TuningPatternsOpt->IsChecked() || m_CustomRulesOpt->IsChecked()
+                               || m_ComponentClassesOpt->IsChecked() );
 
     m_sdbSizer1OK->Enable( buttonEnableState );
 

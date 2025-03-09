@@ -36,6 +36,7 @@
 #include <geometry/convex_hull.h>
 #include <geometry/shape_utils.h>
 #include <pcb_group.h>
+#include <component_classes/component_class.h>
 #include <connectivity/connectivity_data.h>
 #include <connectivity/topo_match.h>
 #include <optional>

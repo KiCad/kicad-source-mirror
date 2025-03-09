@@ -31,6 +31,7 @@
 #include <board_connected_item.h>
 #include <pcbexpr_evaluator.h>
 #include <drc/drc_engine.h>
+#include <component_classes/component_class.h>
 
 /* --------------------------------------------------------------------------------------------
  * Specialized Expression References
@@ -216,7 +217,7 @@ public:
             return LIBEVAL::VALUE::AsString();
 
         if( const COMPONENT_CLASS* compClass = m_item->GetComponentClass() )
-            const_cast<PCBEXPR_COMPONENT_CLASS_VALUE*>( this )->Set( compClass->GetFullName() );
+            const_cast<PCBEXPR_COMPONENT_CLASS_VALUE*>( this )->Set( compClass->GetName() );
 
         return LIBEVAL::VALUE::AsString();
     }
@@ -232,9 +233,7 @@ public:
             const COMPONENT_CLASS* aClass = m_item->GetComponentClass();
             const COMPONENT_CLASS* bClass = bValue->m_item->GetComponentClass();
 
-            // Note this depends on COMPONENT_CLASS_MANAGER maintaining ownership
-            // of all unique component class objects
-            return aClass == bClass;
+            return *aClass == *bClass;
         }
 
         if( b->GetType() == LIBEVAL::VT_STRING )
@@ -242,7 +241,7 @@ public:
             if( m_item->GetComponentClass()->ContainsClassName( b->AsString() ) )
                 return true;
 
-            return m_item->GetComponentClass()->GetFullName() == b->AsString();
+            return m_item->GetComponentClass()->GetName() == b->AsString();
         }
 
         return LIBEVAL::VALUE::EqualTo( aCtx, b );
@@ -259,16 +258,14 @@ public:
             const COMPONENT_CLASS* aClass = m_item->GetComponentClass();
             const COMPONENT_CLASS* bClass = bValue->m_item->GetComponentClass();
 
-            // Note this depends on COMPONENT_CLASS_MANAGER maintaining ownership
-            // of all unique component class objects
-            return aClass != bClass;
+            return *aClass != *bClass;
         }
 
         if( b->GetType() == LIBEVAL::VT_STRING )
         {
             const bool isInConstituents =
                     m_item->GetComponentClass()->ContainsClassName( b->AsString() );
-            const bool isFullName = m_item->GetComponentClass()->GetFullName() == b->AsString();
+            const bool isFullName = m_item->GetComponentClass()->GetName() == b->AsString();
 
             return !isInConstituents && !isFullName;
         }

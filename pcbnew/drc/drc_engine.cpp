@@ -632,6 +632,9 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
     if( !cacheGenerator.Run() )         // ... and regenerate them.
         return;
 
+    // Recompute component classes
+    m_board->GetComponentClassManager().ForceComponentClassRecalculation();
+
     int timestamp = m_board->GetTimeStamp();
 
     for( DRC_TEST_PROVIDER* provider : m_testProviders )

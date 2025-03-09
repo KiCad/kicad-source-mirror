@@ -33,6 +33,8 @@
 #include <confirm.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <convert_shape_list_to_polygon.h>
+#include <component_classes/component_class.h>
+#include <component_classes/component_class_cache_proxy.h>
 #include <drc/drc_item.h>
 #include <embedded_files.h>
 #include <font/font.h>
@@ -67,12 +69,10 @@
 
 
 FOOTPRINT::FOOTPRINT( BOARD* parent ) :
-        BOARD_ITEM_CONTAINER((BOARD_ITEM*) parent, PCB_FOOTPRINT_T ),
-        m_boundingBoxCacheTimeStamp( 0 ),
-        m_textExcludedBBoxCacheTimeStamp( 0 ),
-        m_hullCacheTimeStamp( 0 ),
-        m_initial_comments( nullptr ),
-        m_componentClass( nullptr )
+        BOARD_ITEM_CONTAINER( (BOARD_ITEM*) parent, PCB_FOOTPRINT_T ),
+        m_boundingBoxCacheTimeStamp( 0 ), m_textExcludedBBoxCacheTimeStamp( 0 ),
+        m_hullCacheTimeStamp( 0 ), m_initial_comments( nullptr ),
+        m_componentClassCacheProxy( std::make_unique<COMPONENT_CLASS_CACHE_PROXY>( this ) )
 {
     m_attributes   = 0;
     m_layer        = F_Cu;
@@ -104,8 +104,8 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
 
 
 FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
-    BOARD_ITEM_CONTAINER( aFootprint ),
-    EMBEDDED_FILES( aFootprint )
+        BOARD_ITEM_CONTAINER( aFootprint ), EMBEDDED_FILES( aFootprint ),
+        m_componentClassCacheProxy( std::make_unique<COMPONENT_CLASS_CACHE_PROXY>( this ) )
 {
     m_pos          = aFootprint.m_pos;
     m_fpid         = aFootprint.m_fpid;
@@ -131,8 +131,6 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     m_zoneConnection                 = aFootprint.m_zoneConnection;
     m_netTiePadGroups                = aFootprint.m_netTiePadGroups;
     m_fileFormatVersionAtLoad        = aFootprint.m_fileFormatVersionAtLoad;
-
-    m_componentClass                 = aFootprint.m_componentClass;
 
     std::map<BOARD_ITEM*, BOARD_ITEM*> ptrMap;
 
@@ -754,8 +752,6 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
     m_zoneConnection                 = aOther.m_zoneConnection;
     m_netTiePadGroups                = aOther.m_netTiePadGroups;
 
-    m_componentClass                 = aOther.m_componentClass;
-
     // Move the fields
     for( PCB_FIELD* field : m_fields )
         delete field;
@@ -866,8 +862,6 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
     m_solderPasteMarginRatio         = aOther.m_solderPasteMarginRatio;
     m_zoneConnection                 = aOther.m_zoneConnection;
     m_netTiePadGroups                = aOther.m_netTiePadGroups;
-
-    m_componentClass                 = aOther.m_componentClass;
 
     std::map<BOARD_ITEM*, BOARD_ITEM*> ptrMap;
 
@@ -1717,9 +1711,11 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
     aList.emplace_back( _( "Rotation" ), wxString::Format( wxT( "%.4g" ),
                                                            GetOrientation().AsDegrees() ) );
 
-    if( m_componentClass )
+    if( !m_componentClassCacheProxy->GetComponentClass()->IsEmpty() )
     {
-        aList.emplace_back( _( "Component Class" ), m_componentClass->GetName() );
+        aList.emplace_back(
+                _( "Component Class" ),
+                m_componentClassCacheProxy->GetComponentClass()->GetHumanReadableName() );
     }
 
     msg.Printf( _( "Footprint: %s" ), m_fpid.GetUniStringLibId() );
@@ -4042,11 +4038,35 @@ void FOOTPRINT::EmbedFonts()
 }
 
 
+void FOOTPRINT::SetStaticComponentClass( const COMPONENT_CLASS* aClass ) const
+{
+    m_componentClassCacheProxy->SetStaticComponentClass( aClass );
+}
+
+
+const COMPONENT_CLASS* FOOTPRINT::GetStaticComponentClass() const
+{
+    return m_componentClassCacheProxy->GetStaticComponentClass();
+}
+
+
+void FOOTPRINT::RecomputeComponentClass() const
+{
+    m_componentClassCacheProxy->RecomputeComponentClass();
+}
+
+
+const COMPONENT_CLASS* FOOTPRINT::GetComponentClass() const
+{
+    return m_componentClassCacheProxy->GetComponentClass();
+}
+
+
 wxString FOOTPRINT::GetComponentClassAsString() const
 {
-    if( m_componentClass )
+    if( !m_componentClassCacheProxy->GetComponentClass()->IsEmpty() )
     {
-        return m_componentClass->GetFullName();
+        return m_componentClassCacheProxy->GetComponentClass()->GetName();
     }
 
     return wxEmptyString;
@@ -4057,8 +4077,15 @@ void FOOTPRINT::ResolveComponentClassNames(
         BOARD* aBoard, const std::unordered_set<wxString>& aComponentClassNames )
 {
     const COMPONENT_CLASS* componentClass =
-            aBoard->GetComponentClassManager().GetEffectiveComponentClass( aComponentClassNames );
-    SetComponentClass( componentClass );
+            aBoard->GetComponentClassManager().GetEffectiveStaticComponentClass(
+                    aComponentClassNames );
+    SetStaticComponentClass( componentClass );
+}
+
+
+void FOOTPRINT::InvalidateComponentClassCache() const
+{
+    m_componentClassCacheProxy->InvalidateCache();
 }
 
 

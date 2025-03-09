@@ -1201,14 +1201,14 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
         m_out->Print( ")" );
     }
 
-    if( const COMPONENT_CLASS* compClass = aFootprint->GetComponentClass() )
+    if( const COMPONENT_CLASS* compClass = aFootprint->GetStaticComponentClass() )
     {
         if( !compClass->IsEmpty() )
         {
             m_out->Print( "(component_classes" );
 
             for( const COMPONENT_CLASS* constituent : compClass->GetConstituentClasses() )
-                m_out->Print( "(class %s)", m_out->Quotew( constituent->GetFullName() ).c_str() );
+                m_out->Print( "(class %s)", m_out->Quotew( constituent->GetName() ).c_str() );
 
             m_out->Print( ")" );
         }

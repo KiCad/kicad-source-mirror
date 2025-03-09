@@ -28,6 +28,7 @@
 #include <wx/log.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <component_classes/component_class.h>
 #include <drc/drc_rtree.h>
 #include <drc/drc_engine.h>
 #include <lset.h>

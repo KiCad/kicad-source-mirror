@@ -2059,6 +2059,9 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
                 board_item->Rotate( refPt, rotateAngle );
                 board_item->Normalize();
+
+                if( board_item->Type() == PCB_FOOTPRINT_T )
+                    static_cast<FOOTPRINT*>( board_item )->InvalidateComponentClassCache();
             }
         }
 
@@ -2389,6 +2392,9 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 
         boardItem->Flip( refPt, flipDirection );
         boardItem->Normalize();
+
+        if( boardItem->Type() == PCB_FOOTPRINT_T )
+            static_cast<FOOTPRINT*>( boardItem )->InvalidateComponentClassCache();
     }
 
     if( !localCommit.Empty() )

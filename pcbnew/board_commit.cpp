@@ -42,6 +42,7 @@
 #include <teardrop/teardrop.h>
 
 #include <functional>
+#include <project/project_file.h>
 using namespace std::placeholders;
 
 
@@ -317,6 +318,15 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
     if( !staleTeardropPadsAndVias.empty() || !staleTeardropTracks.empty() )
         teardropMgr.RemoveTeardrops( *this, &staleTeardropPadsAndVias, &staleTeardropTracks );
 
+    auto updateComponentClasses = [this]( BOARD_ITEM* boardItem )
+    {
+        if( boardItem->Type() != PCB_FOOTPRINT_T )
+            return;
+
+        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( boardItem );
+        GetBoard()->GetComponentClassManager().RebuildRequiredCaches( footprint );
+    };
+
     for( COMMIT_LINE& ent : m_changes )
     {
         if( !ent.m_item || !ent.m_item->IsBOARD_ITEM() )
@@ -366,6 +376,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
             if( view && boardItem->Type() != PCB_NETINFO_T )
                 view->Add( boardItem );
+
+            updateComponentClasses( boardItem );
 
             break;
 
@@ -510,6 +522,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 propagateDamage( boardItem, staleZones, &staleHatchedShapes );       // after
             }
 
+            updateComponentClasses( boardItem );
+
             if( view )
                 view->Update( boardItem );
 
@@ -533,7 +547,10 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 {
                     item->ClearEditFlags();
                 } );
-    }
+    } // ... and regenerate them.
+
+    // Invalidate component classes
+    board->GetComponentClassManager().InvalidateComponentClasses();
 
     if( m_isBoardEditor )
     {
@@ -703,6 +720,15 @@ void BOARD_COMMIT::Revert()
 
     board->IncrementTimeStamp();   // clear caches
 
+    auto updateComponentClasses = [this]( BOARD_ITEM* boardItem )
+    {
+        if( boardItem->Type() != PCB_FOOTPRINT_T )
+            return;
+
+        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( boardItem );
+        GetBoard()->GetComponentClassManager().RebuildRequiredCaches( footprint );
+    };
+
     std::vector<BOARD_ITEM*> bulkAddedItems;
     std::vector<BOARD_ITEM*> bulkRemovedItems;
     std::vector<BOARD_ITEM*> itemsChanged;
@@ -767,6 +793,8 @@ void BOARD_COMMIT::Revert()
                 bulkAddedItems.push_back( boardItem );
             }
 
+            updateComponentClasses( boardItem );
+
             break;
         }
 
@@ -792,6 +820,8 @@ void BOARD_COMMIT::Revert()
             connectivity->Add( boardItem );
             itemsChanged.push_back( boardItem );
 
+            updateComponentClasses( boardItem );
+
             delete entry.m_copy;
             break;
         }
@@ -803,6 +833,9 @@ void BOARD_COMMIT::Revert()
 
         boardItem->ClearEditFlags();
     }
+
+    // Invalidate component classes
+    board->GetComponentClassManager().InvalidateComponentClasses();
 
     if( bulkAddedItems.size() > 0 || bulkRemovedItems.size() > 0 || itemsChanged.size() > 0 )
         board->OnItemsCompositeUpdate( bulkAddedItems, bulkRemovedItems, itemsChanged );
@@ -822,4 +855,3 @@ void BOARD_COMMIT::Revert()
 
     clear();
 }
-

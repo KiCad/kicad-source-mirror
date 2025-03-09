@@ -569,6 +569,13 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                                           aList->GetPickedItemStatus( ii ) ) );
             break;
         }
+
+        if( eda_item->Type() == PCB_FOOTPRINT_T )
+        {
+            FOOTPRINT* fp = static_cast<FOOTPRINT*>( eda_item );
+            fp->InvalidateComponentClassCache();
+            GetBoard()->GetComponentClassManager().RebuildRequiredCaches( fp );
+        }
     }
 
     if( not_found )
@@ -586,6 +593,8 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         if( solder_mask_dirty )
             HideSolderMask();
     }
+
+    GetBoard()->GetComponentClassManager().InvalidateComponentClasses();
 
     PCB_SELECTION_TOOL* selTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
     selTool->RebuildSelection();

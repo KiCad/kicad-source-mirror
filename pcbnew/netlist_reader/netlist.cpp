@@ -90,9 +90,14 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aR
 
     SetMsgPanel( board );
 
-    // Re-sync nets, netclasses, and DRC rules to account for new aggregate netclass rules
+    // Re-sync nets and  netclasses
     board->SynchronizeNetsAndNetClasses( false );
 
+    // Recompute component classes
+    board->GetComponentClassManager().InvalidateComponentClasses();
+    board->GetComponentClassManager().RebuildRequiredCaches();
+
+    // Resync DRC rules to account for new aggregate netclass / component class rules
     DRC_TOOL* drcTool = m_toolManager->GetTool<DRC_TOOL>();
 
     try

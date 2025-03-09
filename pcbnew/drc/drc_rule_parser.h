@@ -45,8 +45,14 @@ public:
 
     void Parse( std::vector<std::shared_ptr<DRC_RULE>>& aRules, REPORTER* aReporter );
 
+    void ParseComponentClassAssignmentRules(
+            std::vector<std::shared_ptr<COMPONENT_CLASS_ASSIGNMENT_RULE>>& aRules,
+            REPORTER*                                                      aReporter );
+
 private:
     std::shared_ptr<DRC_RULE> parseDRC_RULE();
+
+    std::shared_ptr<COMPONENT_CLASS_ASSIGNMENT_RULE> parseComponentClassAssignment();
 
     void parseConstraint( DRC_RULE* aRule );
     void parseValueWithUnits( const wxString& aExpr, int& aResult, bool aUnitless = false );

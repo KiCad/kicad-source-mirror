@@ -1353,6 +1353,15 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
     if( dlg.ShowQuasiModal() == wxID_OK )
     {
         GetBoard()->SynchronizeNetsAndNetClasses( true );
+
+        if( !GetBoard()->SynchronizeComponentClasses( std::unordered_set<wxString>() ) )
+        {
+            m_infoBar->RemoveAllButtons();
+            m_infoBar->AddCloseButton();
+            m_infoBar->ShowMessage( _( "Could not load component class assignment rules" ),
+                                    wxICON_WARNING, WX_INFOBAR::MESSAGE_TYPE::GENERIC );
+        }
+
         // We don't know if anything was modified, so err on the side of requiring a save
         OnModify();
 
@@ -2538,7 +2547,7 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
     aNew->SetSheetfile( aExisting->GetSheetfile() );
     aNew->SetSheetname( aExisting->GetSheetname() );
     aNew->SetFilters( aExisting->GetFilters() );
-    aNew->SetComponentClass( aExisting->GetComponentClass() );
+    aNew->SetStaticComponentClass( aExisting->GetComponentClass() );
 
     aCommit.Remove( aExisting );
     aCommit.Add( aNew );

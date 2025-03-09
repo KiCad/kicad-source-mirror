@@ -807,6 +807,14 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             loadedBoard->SetModified();
         }
 
+        if( !loadedBoard->SynchronizeComponentClasses( std::unordered_set<wxString>() ) )
+        {
+            m_infoBar->RemoveAllButtons();
+            m_infoBar->AddCloseButton();
+            m_infoBar->ShowMessage( _( "Could not load component class assignment rules" ),
+                                    wxICON_WARNING, WX_INFOBAR::MESSAGE_TYPE::GENERIC );
+        }
+
         // we should not ask PCB_IOs to do these items:
         loadedBoard->BuildListOfNets();
         ResolveDRCExclusions( true );
@@ -943,6 +951,9 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // Load project settings after setting up board; some of them depend on the nets list
     LoadProjectSettings();
     LoadDrawingSheet();
+
+    // Initialise caches used by component classes
+    GetBoard()->GetComponentClassManager().RebuildRequiredCaches();
 
     // Syncs the UI (appearance panel, etc) with the loaded board and project
     onBoardLoaded();

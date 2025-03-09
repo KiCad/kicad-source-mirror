@@ -31,6 +31,7 @@
 class BOARD_DESIGN_SETTINGS;
 class ERC_SETTINGS;
 class NET_SETTINGS;
+class COMPONENT_CLASS_SETTINGS;
 class LAYER_PAIR_SETTINGS;
 class SCHEMATIC_SETTINGS;
 class TEMPLATES;
@@ -103,6 +104,11 @@ public:
     std::shared_ptr<NET_SETTINGS>& NetSettings()
     {
         return m_NetSettings;
+    }
+
+    std::shared_ptr<COMPONENT_CLASS_SETTINGS>& ComponentClassSettings()
+    {
+        return m_ComponentClassSettings;
     }
 
     /**
@@ -182,6 +188,10 @@ public:
      */
     std::shared_ptr<NET_SETTINGS> m_NetSettings;
 
+    /**
+     * Component class settings for the project (owned here)
+     */
+    std::shared_ptr<COMPONENT_CLASS_SETTINGS> m_ComponentClassSettings;
 
     std::vector<LAYER_PRESET>     m_LayerPresets;   /// List of stored layer presets
     std::vector<VIEWPORT>         m_Viewports;      /// List of stored viewports (pos + zoom)
