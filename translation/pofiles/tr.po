@@ -22,13 +22,14 @@
 # Argeolog <argelojik@gmail.com>, 2025.
 # dsa-t <dudesuchamazing@gmail.com>, 2025.
 # Ahmet Saygın ÖĞÜLMÜŞ <ogulmus.ahmetsaygin@gmail.com>, 2025.
+# dogukansahil <dogukansahil@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:04+0300\n"
 "PO-Revision-Date: 2025-03-09 19:19+0000\n"
-"Last-Translator: Ahmet Saygın ÖĞÜLMÜŞ <ogulmus.ahmetsaygin@gmail.com>\n"
+"Last-Translator: dogukansahil <dogukansahil@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
 "Language: tr\n"
@@ -360,9 +361,8 @@ msgid "Reload board and refresh 3D view"
 msgstr "Kartı yeniden yükle ve 3D modelleri yenile"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
-#, fuzzy
 msgid "Use raytracing"
-msgstr "Işın İzleme"
+msgstr "Işın İzleme kullan"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:56
 msgid "Render current view using Raytracing"
@@ -373,18 +373,16 @@ msgid "Copy 3D image to clipboard"
 msgstr "3B görüntüyü panoya kopyala"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:64
-#, fuzzy
 msgid "Copy the current 3D image to the clipboard"
-msgstr "3B görüntüyü panoya kopyala"
+msgstr "Geçerli 3B görüntüyü panoya kopyala"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
 msgid "Export Current View as PNG..."
 msgstr "Geçerli Görünümü PNG Olarak Dışa Aktar..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
-#, fuzzy
 msgid "Export the Current View as a PNG image"
-msgstr "Geçerli Görünümü PNG Olarak Dışa Aktar..."
+msgstr "Geçerli Görünümü PNG Olarak Dışa Aktar"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
 msgid "Export Current View as JPEG..."
