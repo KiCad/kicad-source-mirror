@@ -21,15 +21,16 @@
 # Seth Hillbrand <seth@kipro-pcb.com>, 2025.
 # Argeolog <argelojik@gmail.com>, 2025.
 # dsa-t <dudesuchamazing@gmail.com>, 2025.
+# Ahmet Saygın ÖĞÜLMÜŞ <ogulmus.ahmetsaygin@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:04+0300\n"
-"PO-Revision-Date: 2025-03-09 16:03+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"PO-Revision-Date: 2025-03-09 19:19+0000\n"
+"Last-Translator: Ahmet Saygın ÖĞÜLMÜŞ <ogulmus.ahmetsaygin@gmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -355,9 +356,8 @@ msgid "Reload board"
 msgstr "Kartı yeniden yükle"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:49
-#, fuzzy
 msgid "Reload board and refresh 3D view"
-msgstr "Kartı ve 3B modelleri yeniden yükle"
+msgstr "Kartı yeniden yükle ve 3D modelleri yenile"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
 #, fuzzy
@@ -391,9 +391,8 @@ msgid "Export Current View as JPEG..."
 msgstr "Geçerli Görünümü JPEG Olarak Dışa Aktar..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:80
-#, fuzzy
 msgid "Export the Current View as a JPEG image"
-msgstr "Geçerli Görünümü JPEG Olarak Dışa Aktar..."
+msgstr "Geçerli Görünümü JPEG Olarak Dışa Aktar"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:88
 msgid "Set Pivot"
@@ -1776,6 +1775,7 @@ msgstr "Panoya Aktar"
 #: bitmap2component/bitmap2component.cpp:406
 msgid "No shape in black and white image to convert: no outline created."
 msgstr ""
+"Siyah beyaz görüntüde dönüştürülecek bir şekil yok: dış hat oluşturulmadı."
 
 #: common/api/api_handler.cpp:27
 msgid "Modification from API"
@@ -2005,7 +2005,7 @@ msgstr "Dosya '%s' oluşturulamadı."
 
 #: common/design_block_io.cpp:355
 msgid "Design block does not have a valid library ID."
-msgstr ""
+msgstr "Tasarım bloğunun geçerli bir kütüphane kimliği yok."
 
 #: common/design_block_io.cpp:362
 #, fuzzy, c-format
@@ -2826,6 +2826,8 @@ msgid ""
 "Do not show this dialog again until KiCad restarts. You can re-enable this "
 "dialog in Pcbnew preferences."
 msgstr ""
+"Bu iletişim kutusunu KiCad yeniden başlatılana kadar gösterme. Bu iletişim "
+"kutusunu Pcbnew tercihleri içinde yeniden etkinleştirebilirsiniz."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
 #, fuzzy, c-format
@@ -3468,7 +3470,7 @@ msgstr "Sayfa Ayarı..."
 
 #: common/dialogs/dialog_rc_job.cpp:28
 msgid "JSON"
-msgstr ""
+msgstr "JSON"
 
 #: common/dialogs/dialog_rc_job_base.cpp:25
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:277
@@ -3503,7 +3505,7 @@ msgstr "Uyarılar"
 
 #: common/dialogs/dialog_rc_job_base.cpp:68
 msgid "Report job failure when violations present"
-msgstr ""
+msgstr "İhlaller mevcut olduğunda iş hatasını bildir"
 
 #: common/dialogs/dialog_rc_job_base.cpp:74 kicad/cli/command_pcb_drc.cpp:56
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
@@ -4744,7 +4746,7 @@ msgstr "Gömülü Referansı Kopyala"
 
 #: common/dialogs/panel_embedded_files.cpp:55
 msgid "Copy the reference for this embedded file"
-msgstr ""
+msgstr "Bu gömülü dosyanın referansını kopyala"
 
 #: common/dialogs/panel_embedded_files.cpp:284
 #: common/dialogs/panel_embedded_files.cpp:399
@@ -5648,7 +5650,7 @@ msgstr "Sağ"
 
 #: common/dialogs/panel_toolbar_customization.cpp:48
 msgid "Top main"
-msgstr ""
+msgstr "En üstteki"
 
 #: common/dialogs/panel_toolbar_customization.cpp:49
 #, fuzzy
@@ -5695,7 +5697,7 @@ msgstr "OpenGL kullanılamadı"
 
 #: common/draw_panel_gal.cpp:543
 msgid "Error switching GAL backend"
-msgstr ""
+msgstr "GAL arkaplanına geçişte hata oluştu"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:558
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3391
@@ -7433,12 +7435,14 @@ msgstr "DXF görüntüler şu anda desteklenmiyor."
 #: common/import_gfx/graphics_importer_buffer.cpp:126
 #, c-format
 msgid "Imported graphic is too large. Maximum scale is %f"
-msgstr ""
+msgstr "İçe aktarılan grafik çok büyük. Maksimum ölçek %f"
 
 #: common/import_gfx/graphics_importer_buffer.cpp:186
 #, c-format
 msgid "Import offset adjusted to (%f, %f) to fit within numeric limits"
 msgstr ""
+"İçe aktarma ofseti, sayısal sınırlara sığdırmak için (%f, %f) olarak "
+"ayarlandı"
 
 #: common/io/altium/altium_binary_parser.cpp:62 common/richio.cpp:123
 #, c-format
@@ -7642,7 +7646,7 @@ msgstr "Diğer sayfalara aktar"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:47
 msgid "PCB: Export Gerbers"
-msgstr ""
+msgstr "PCB: Gerber dosyalarını dışa aktar"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
 #: pcbnew/dialogs/dialog_export_2581_base.h:85
@@ -7720,7 +7724,7 @@ msgstr "Diğer sayfalara aktar"
 
 #: common/jobs/job_export_pcb_pos.cpp:121
 msgid "PCB: Export Position Data"
-msgstr ""
+msgstr "PCB: Konum verilerini dışa aktar"
 
 #: common/jobs/job_export_pcb_svg.cpp:49
 #: common/jobs/job_export_sch_plot.cpp:179 kicad/kicad_cli.cpp:147
@@ -7831,7 +7835,7 @@ msgstr "Seçenekleri Düzenle..."
 
 #: common/jobs/job_pcb_drc.cpp:47
 msgid "PCB: Perform DRC"
-msgstr ""
+msgstr "PCB: DRC gerçekleştir"
 
 #: common/jobs/job_pcb_render.cpp:127
 #, fuzzy, c-format
@@ -7845,7 +7849,7 @@ msgstr "Seçenekleri Düzenle..."
 
 #: common/jobs/job_pcb_render.cpp:137
 msgid "PCB: Render"
-msgstr ""
+msgstr "PCB:Render al"
 
 #: common/jobs/job_sch_erc.cpp:33
 #, fuzzy
@@ -7869,7 +7873,7 @@ msgstr "Specctra DSN dosyası"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
-msgstr ""
+msgstr "Özel: Komutu çalıştır"
 
 #: common/jobs/jobs_output_archive.cpp:96 common/jobs/jobset.cpp:44
 msgid "Archive"
@@ -8713,7 +8717,7 @@ msgstr "Komut Dosyası Konsolu"
 
 #: common/tool/action_toolbar.cpp:1043
 msgid "Region to hold the IPC/Scripting action buttons"
-msgstr ""
+msgstr "IPC/Scripting eylem düğmelerini tutacak bölge"
 
 #: common/tool/action_toolbar.cpp:1045
 #, fuzzy
@@ -9011,7 +9015,7 @@ msgstr "Seçimden Çizgiler Oluşturun"
 
 #: common/tool/actions.cpp:373
 msgid "Decrement Secondary"
-msgstr ""
+msgstr "İkincil değeri azalt"
 
 #: common/tool/actions.cpp:374
 #, fuzzy
@@ -10127,7 +10131,7 @@ msgstr "Temel Özellikler"
 
 #: common/widgets/search_pane.cpp:43
 msgid "Toggle zooming to selections in the search pane"
-msgstr ""
+msgstr "Arama panelinde seçimlere yakınlaştırmayı aç/kapat"
 
 #: common/widgets/search_pane.cpp:45
 #, fuzzy
@@ -10136,7 +10140,7 @@ msgstr "Seçime Ekle"
 
 #: common/widgets/search_pane.cpp:45
 msgid "Toggle panning to selections in the search pane"
-msgstr ""
+msgstr "Arama panelinde seçimlere kaydırmayı aç/kapat"
 
 #: common/widgets/unit_binder.cpp:359
 #, c-format
@@ -10389,7 +10393,7 @@ msgstr "KiCad ayak izi kitaplığı yolları"
 
 #: common/wildcards_and_files_ext.cpp:365
 msgid "KiCad design block path"
-msgstr ""
+msgstr "KiCad tasarım bloğu yolu"
 
 #: common/wildcards_and_files_ext.cpp:372
 #, fuzzy
@@ -11174,7 +11178,7 @@ msgstr "Lütfen bir sembol kitaplığı tablo dosyası seçin."
 
 #: eeschema/design_block_utils.cpp:301 eeschema/design_block_utils.cpp:394
 msgid "Design blocks with nested sheets are not supported."
-msgstr ""
+msgstr "İç içe geçmiş sayfalar içeren tasarım blokları desteklenmez."
 
 #: eeschema/design_block_utils.cpp:332 eeschema/design_block_utils.cpp:430
 #, fuzzy
@@ -11185,7 +11189,7 @@ msgstr ""
 
 #: eeschema/design_block_utils.cpp:377
 msgid "Please select some items to save as a design block."
-msgstr ""
+msgstr "Lütfen bir tasarım bloğu olarak kaydetmek için bazı öğeleri seçin."
 
 #: eeschema/design_block_utils.cpp:468
 #, fuzzy
@@ -11207,6 +11211,8 @@ msgid ""
 "Delete design block library '%s' from disk? This will delete all design "
 "blocks within the library."
 msgstr ""
+"Tasarım bloğu kütüphanesi ‘%s’ diskten silinsin mi? Bu işlem, kütüphane "
+"içindeki tüm tasarım bloklarını silecektir."
 
 #: eeschema/design_block_utils.cpp:497
 #, fuzzy, c-format
@@ -12360,7 +12366,7 @@ msgstr "Bu eklenti zaten var."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:824
 msgid "Maximum number of plugins already added to dialog."
-msgstr ""
+msgstr "İletişim kutusuna eklenebilecek maksimum eklenti sayısına ulaşıldı."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:862
 msgid "You must provide a netlist generator title"
@@ -13440,6 +13446,8 @@ msgid ""
 "Local power symbols create labels that are limited to the sheet in which "
 "they are used"
 msgstr ""
+"Yerel güç sembolleri, yalnızca kullanıldıkları sayfa ile sınırlı etiketler "
+"oluşturur"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:221
 msgid "Pin Text Options"
@@ -14008,7 +14016,7 @@ msgstr "Hata oluştur"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:167
 msgid "Generate clickable links for hierarchical elements"
-msgstr ""
+msgstr "Hiyerarşik öğeler için tıklanabilir bağlantılar oluştur"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:171
 #: pcbnew/dialogs/dialog_plot_base.cpp:418
@@ -14238,7 +14246,7 @@ msgstr "&Büyük/küçük harf eşleştir"
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:86
 #: pcbnew/dialogs/dialog_find_base.cpp:46
 msgid "Whole &words only"
-msgstr ""
+msgstr "Yalnızca tam kelimeler &words"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:90
 #, fuzzy
@@ -15228,6 +15236,10 @@ msgid ""
 "%s\n"
 "Using generic SPICE model."
 msgstr ""
+"Ayrıştırma başarısız:\n"
+"\n"
+"%s\n"
+"Genel SPICE modeli kullanılıyor."
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
@@ -16414,6 +16426,10 @@ msgid ""
 "Global will convert new power symbols to global power symbols.\n"
 "Local will convert new power symbols to a local power symbols."
 msgstr ""
+"Yeni güç sembolü için atanan türü seçin.\n"
+"\t•\tVarsayılan: Sembol tanımını takip eder.\n"
+"\t•\tGlobal: Yeni güç sembollerini küresel güç sembollerine dönüştürür.\n"
+"\t•\tYerel: Yeni güç sembollerini yerel güç sembollerine dönüştürür."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:134
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:192
@@ -16967,7 +16983,7 @@ msgstr "Elektriksel tipi:"
 
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:45
 msgid "Show pin &alternate mode indicator icons"
-msgstr ""
+msgstr "Pin &alternatif mod gösterge simgelerini göster"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:33
 #, fuzzy
@@ -17009,7 +17025,7 @@ msgstr "Oluşturma Seçenekleri"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:147
 msgid "Keep pins attached when dragging edges"
-msgstr ""
+msgstr "Kenarları sürüklerken pinleri bağlı tut"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:486
 #, fuzzy, c-format
@@ -17139,6 +17155,10 @@ msgid ""
 "unique names differing only by white space characters.  Removing the white "
 "space characters will have no effect on existing symbol field names."
 msgstr ""
+"Bu, aslında yalnızca boşluk karakterleriyle farklılık gösteren benzersiz "
+"adlar olmasına rağmen, yinelenen alan adları gibi görünebilir. Boşluk "
+"karakterlerini kaldırmak, mevcut sembol alan adları üzerinde herhangi bir "
+"etki yaratmaz."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:221
 #, fuzzy
@@ -17666,7 +17686,7 @@ msgstr "Şemada başka hiçbir yere bağlı olmayan genel etiket"
 
 #: eeschema/erc/erc_item.cpp:129
 msgid "Local and global labels have same name"
-msgstr ""
+msgstr "Yerel ve global etiketler aynı ada sahip"
 
 #: eeschema/erc/erc_item.cpp:133
 #, fuzzy
@@ -17972,6 +17992,8 @@ msgid ""
 "This schematic contains symbols that have leading and/or trailing white "
 "space field names."
 msgstr ""
+"Bu şema, başında ve/veya sonunda boşluk karakterleri içeren alan adlarına "
+"sahip semboller içeriyor."
 
 #: eeschema/files-io.cpp:603
 msgid "Schematic is read only."
@@ -18460,7 +18482,7 @@ msgstr "Yeni Kütüphaneye Ayak İzleri..."
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:121
 #: pcbnew/menubar_footprint_editor.cpp:124 pcbnew/menubar_pcb_editor.cpp:232
 msgid "Panels"
-msgstr ""
+msgstr "Paneller"
 
 #: eeschema/menubar.cpp:354
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:184
@@ -22546,7 +22568,7 @@ msgstr "'%s' sembol kütüphanesi silinemiyor."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:975
 msgid "Library is read-only.  Changes cannot be saved to this library."
-msgstr ""
+msgstr "Kütüphane salt okunur. Değişiklikler bu kütüphaneye kaydedilemez."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:977
 #, fuzzy
@@ -22717,13 +22739,15 @@ msgstr "'%s' kitaplığı, ayak izi kitaplığı tablosunda değil."
 #: eeschema/symbol_editor/symbol_editor.cpp:973
 #, c-format
 msgid "Symbol '%s' cannot replace another symbol '%s' that it descends from"
-msgstr ""
+msgstr "Sembol ‘%s’, türediği başka bir sembol olan ‘%s’ ile değiştirilemez"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:982
 #, c-format
 msgid ""
 "Symbol '%s' cannot replace another symbol '%s' that is a descendent of it."
 msgstr ""
+"Sembol ‘%s’, kendisinden türemiş olan başka bir sembol ‘%s’ ile "
+"değiştirilemez."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:995
 #, fuzzy, c-format
@@ -22743,6 +22767,9 @@ msgid ""
 "\n"
 "Do you want to overwrite all of them, or rename the new symbols?"
 msgstr ""
+"\n"
+"Tümünü üzerine yazmak mı yoksa yeni sembolleri yeniden adlandırmak mı "
+"istiyorsunuz?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1023
 #, fuzzy
@@ -23267,7 +23294,7 @@ msgstr "Geçerli görünümden bir PNG dosyası oluştur"
 
 #: eeschema/tools/ee_actions.cpp:163
 msgid "Save Selection as Design Block..."
-msgstr ""
+msgstr "Seçimi Tasarım Bloğu olarak Kaydet…"
 
 #: eeschema/tools/ee_actions.cpp:164
 #, fuzzy
@@ -23570,7 +23597,7 @@ msgstr "Güç Sembolü"
 
 #: eeschema/tools/ee_actions.cpp:471
 msgid "Place Design Block"
-msgstr ""
+msgstr "Tasarım Bloğunu Yerleştir"
 
 #: eeschema/tools/ee_actions.cpp:472
 msgid "Add selected design block to current sheet"
@@ -24346,7 +24373,7 @@ msgstr "Bacak adını göster"
 
 #: eeschema/tools/ee_actions.cpp:1266
 msgid "Show indicator icons for pins with alternate modes"
-msgstr ""
+msgstr "Alternatif modlara sahip pinler için gösterge simgelerini göster"
 
 #: eeschema/tools/ee_actions.cpp:1272 eeschema/tools/ee_actions.cpp:1282
 #: eeschema/tools/ee_actions.cpp:1292 eeschema/tools/ee_actions.cpp:1303
@@ -24547,7 +24574,7 @@ msgstr "Sürükle"
 
 #: eeschema/tools/ee_actions.cpp:1493
 msgid "Move items while keeping their connections"
-msgstr ""
+msgstr "Öğeleri bağlantılarını koruyarak taşı"
 
 #: eeschema/tools/ee_actions.cpp:1500 eeschema/tools/sch_move_tool.cpp:1823
 #: eeschema/tools/symbol_editor_move_tool.cpp:426
@@ -24790,7 +24817,7 @@ msgstr "Veri sayfası tanımlanmadı."
 #: pagelayout_editor/tools/pl_editor_control.cpp:160
 #: pcbnew/tools/pcb_control.cpp:1706
 msgid "UUID"
-msgstr ""
+msgstr "UUID"
 
 #: eeschema/tools/ee_point_editor.cpp:1129
 #: pcbnew/tools/pcb_point_editor.cpp:2370
@@ -25368,13 +25395,15 @@ msgstr "Sonraki tıklamalar için sembolü seçili tutun."
 
 #: eeschema/widgets/design_block_pane.cpp:123
 msgid "Place the design block as a new sheet."
-msgstr ""
+msgstr "Tasarım bloğunu yeni bir sayfa olarak yerleştir."
 
 #: eeschema/widgets/design_block_pane.cpp:129
 msgid ""
 "Preserve reference designators in the source schematic. Otherwise, clear "
 "then reannotate according to settings."
 msgstr ""
+"Kaynak şemadaki referans tasarımcılarını koru. Aksi takdirde, temizle ve "
+"ayarlara göre yeniden numaralandır."
 
 #: eeschema/widgets/filedlg_hook_save_project.h:32
 #, fuzzy
@@ -26510,7 +26539,7 @@ msgstr "RS274X: GerbView tarafından yoksayılan Komut nakavtı"
 
 #: gerbview/rs274x.cpp:680
 msgid "IPNEG Gerber command is deprecated since 2012. Skip it"
-msgstr ""
+msgstr "IPNEG Gerber komutu 2012’den beri kullanım dışıdır. Atla"
 
 #: gerbview/toolbars_gerber.cpp:184 gerbview/toolbars_gerber.cpp:272
 #, fuzzy
@@ -26536,7 +26565,7 @@ msgstr "DCode:"
 
 #: gerbview/toolbars_gerber.cpp:268 gerbview/toolbars_gerber.cpp:269
 msgid "Text info entry"
-msgstr ""
+msgstr "Metin bilgi girişi"
 
 #: gerbview/toolbars_gerber.cpp:271
 #, fuzzy
@@ -27099,7 +27128,7 @@ msgstr ""
 
 #: kicad/cli/command_jobset.h:32
 msgid "Jobset"
-msgstr ""
+msgstr "İş kümesi"
 
 #: kicad/cli/command_jobset_run.cpp:45
 #, fuzzy
@@ -27110,7 +27139,7 @@ msgstr "Ağ adı filtresi:"
 msgid ""
 "Stops processing jobs as they are executed sequentially on the first failure "
 "of a job"
-msgstr ""
+msgstr "İşler sırayla yürütülürken, bir işin ilk hatasında işlemi durdurur"
 
 #: kicad/cli/command_jobset_run.cpp:53
 #, fuzzy
@@ -27122,6 +27151,8 @@ msgid ""
 "Jobset file output to generate, leave blank for all outputs defined in the "
 "jobset"
 msgstr ""
+"Oluşturulacak iş kümesi dosya çıktısını belirleyin, iş kümesinde tanımlanan "
+"tüm çıktılar için boş bırakın"
 
 #: kicad/cli/command_pcb_drc.cpp:47
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
@@ -27232,6 +27263,8 @@ msgstr "Sadece bileşenleri olmayan bir tahta oluşturun"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:68
 msgid "Cut via holes in board body even if conductor layers are not exported."
 msgstr ""
+"İletken katmanlar dışa aktarılmasa bile, kart gövdesindeki via deliklerini "
+"kesin."
 
 #: kicad/cli/command_pcb_export_3d.cpp:123
 #, fuzzy
@@ -27248,6 +27281,8 @@ msgid ""
 "Only include component 3D models matching this list of reference designators "
 "(comma-separated, wildcards supported)"
 msgstr ""
+"Yalnızca bu listeye uygun referans tasarımcılarıyla eşleşen bileşen 3D "
+"modellerini dahil et (virgülle ayrılmış, joker karakterler desteklenir)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:137
 #: pcbnew/dialogs/dialog_export_step_base.cpp:121
@@ -27512,6 +27547,9 @@ msgid ""
 "directory and filename path. COMMON_LAYER_LIST does not function in this "
 "mode. Instead LAYER_LIST controls all layers plotted."
 msgstr ""
+"Çıktı argüman yolu, tam dizin ve dosya adı yolu olarak işlev görecek şekilde "
+"tek bir dosya oluşturur. COMMON_LAYER_LIST bu modda çalışmaz. Bunun yerine, "
+"tüm katmanların çizimini LAYER_LIST kontrol eder."
 
 #: kicad/cli/command_pcb_export_dxf.cpp:113
 #: kicad/cli/command_pcb_export_svg.cpp:122
@@ -27519,6 +27557,8 @@ msgid ""
 "Generates one or more files with behavior similar to the KiCad GUI plotting. "
 "The given output path specifies a directory in which files may be output."
 msgstr ""
+"KiCad GUI çizim işlemine benzer şekilde bir veya daha fazla dosya oluşturur. "
+"Belirtilen çıktı yolu, dosyaların kaydedileceği bir dizini belirtir."
 
 #: kicad/cli/command_pcb_export_dxf.cpp:143
 #: kicad/cli/command_pcb_export_gencad.cpp:91
@@ -27538,11 +27578,13 @@ msgid ""
 "This command has deprecated behavior as of KiCad 9.0, the default behavior "
 "of this command will change in a future release."
 msgstr ""
+"Bu komut, KiCad 9.0 itibarıyla kullanım dışı kalan bir davranışa sahiptir. "
+"Gelecek sürümlerde bu komutun varsayılan davranışı değişecektir."
 
 #: kicad/cli/command_pcb_export_dxf.cpp:193
 #: kicad/cli/command_pcb_export_svg.cpp:204
 msgid "The new behavior will match --mode-multi"
-msgstr ""
+msgstr "Yeni davranış --mode-multi ile eşleşecektir"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:38
 #, fuzzy
@@ -27615,6 +27657,8 @@ msgstr "Beklenmeyen dosya uzantısı: '%s'."
 msgid ""
 "This command is deprecated as of KiCad 9.0, please use \"gerbers\" instead\n"
 msgstr ""
+"Bu komut, KiCad 9.0 itibarıyla kullanım dışıdır. Lütfen yerine “gerbers” "
+"komutunu kullanın\n"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:42
 msgid ""
@@ -27834,7 +27878,7 @@ msgstr ""
 
 #: kicad/cli/command_pcb_render.cpp:296
 msgid "Top light intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr ""
+msgstr "Üst ışık yoğunluğu, format: ‘R,G,B’ veya tek bir sayı, aralık: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:301
 msgid "Bottom light intensity, format 'R,G,B' or a single number, range: 0-1"
@@ -27842,7 +27886,7 @@ msgstr "Alt ışık yoğunluğu, format: 'R,G,B' veya tek bir sayı, aralık: 0-
 
 #: kicad/cli/command_pcb_render.cpp:306
 msgid "Side lights intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr ""
+msgstr "Yan ışıkların yoğunluğu, format: ‘R,G,B’ veya tek bir sayı, aralık: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:311
 msgid "Camera light intensity, format 'R,G,B' or a single number, range: 0-1"
@@ -27850,7 +27894,7 @@ msgstr "amera ışık yoğunluğu, format: 'R,G,B' veya tek bir sayı, aralık: 
 
 #: kicad/cli/command_pcb_render.cpp:317
 msgid "Side lights elevation angle in degrees, range: 0-90"
-msgstr ""
+msgstr "Yan ışıkların yükselme açısı (derece cinsinden), aralık: 0-90"
 
 #: kicad/cli/command_pcb_render.cpp:342
 #, fuzzy
@@ -27992,7 +28036,7 @@ msgstr "Hata oluştur"
 
 #: kicad/cli/command_sch_export_plot.cpp:92
 msgid "Do not generate clickable links for hierarchical elements in PDF"
-msgstr ""
+msgstr "PDF içinde hiyerarşik öğeler için tıklanabilir bağlantılar oluşturma"
 
 #: kicad/cli/command_sch_export_plot.cpp:97
 msgid "Do not generate PDF metadata from AUTHOR and SUBJECT variables"
@@ -28134,7 +28178,7 @@ msgstr "Değişken adı boş olamaz."
 
 #: kicad/dialogs/dialog_destination.cpp:195
 msgid "Zip"
-msgstr ""
+msgstr "Sıkıştır(Zip)"
 
 #: kicad/dialogs/dialog_destination_base.cpp:46
 #, fuzzy
@@ -28153,7 +28197,7 @@ msgstr "Çıktı Mesajları"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:54
 msgid "Ignore non-zero exit code"
-msgstr ""
+msgstr "Sıfır olmayan çıkış kodunu yok say"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:52
 #, fuzzy
@@ -28283,7 +28327,7 @@ msgstr "Bağlantı başarılı"
 
 #: kicad/dialogs/panel_jobset.cpp:238
 msgid "Last run failed"
-msgstr ""
+msgstr "Son çalıştırma başarısız oldu"
 
 #: kicad/dialogs/panel_jobset.cpp:265 kicad/dialogs/panel_jobset.cpp:979
 #, fuzzy
@@ -28382,7 +28426,7 @@ msgstr "Oluşturma Seçenekleri"
 
 #: kicad/dialogs/panel_jobset_base.h:133
 msgid "Jobset Run Log"
-msgstr ""
+msgstr "İş Kümesi Çalıştırma Günlüğü"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:143
 #, fuzzy
@@ -29083,6 +29127,8 @@ msgid ""
 "This plugin requires the KiCad API, which is currently disabled in "
 "preferences. Would you like to enable it?"
 msgstr ""
+"Bu eklenti, KiCad API’sini gerektiriyor ancak şu anda tercihlerde devre dışı "
+"bırakılmış. Etkinleştirmek ister misiniz?"
 
 #: kicad/pcm/pcm.cpp:1121
 #, fuzzy
@@ -29860,10 +29906,11 @@ msgstr "Düzenleyicide yeni belge oluştur"
 #: libs/kimath/src/geometry/roundrect.cpp:60
 msgid "Roundrect radius is larger than the rectangle's major dimension"
 msgstr ""
+"Yuvarlatılmış dikdörtgenin yarıçapı, dikdörtgenin ana boyutundan daha büyük"
 
 #: libs/kimath/src/geometry/roundrect.cpp:65
 msgid "Roundrect radius must be non-negative"
-msgstr ""
+msgstr "Yuvarlatılmış dikdörtgenin yarıçapı negatif olamaz"
 
 #: libs/kiplatform/os/windows/environment.cpp:72
 #, c-format
@@ -35099,7 +35146,7 @@ msgstr "X Konumu"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:177
 msgid "Source items remain in place"
-msgstr ""
+msgstr "Kaynak öğeler yerinde kalır"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:180
 #, fuzzy
@@ -35641,12 +35688,12 @@ msgstr "Yön:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:442
 #: pcbnew/pcb_dimension.cpp:1792
 msgid "Inward"
-msgstr ""
+msgstr "İçe doğru"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:442
 #: pcbnew/pcb_dimension.cpp:1793
 msgid "Outward"
-msgstr ""
+msgstr "Dışa doğru"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:446
 msgid ""
@@ -36143,7 +36190,7 @@ msgstr "Değişken adı boş olamaz."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:223
 msgid "The output file name conflicts with the selected compression format."
-msgstr ""
+msgstr "Çıktı dosya adı, seçilen sıkıştırma formatı ile çakışıyor."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:351
 #, fuzzy, c-format
@@ -36203,15 +36250,15 @@ msgstr "Boyut"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:71
 msgid "Select the format to compress the output ODB++ files"
-msgstr ""
+msgstr "Çıktı ODB++ dosyalarını sıkıştırmak için formatı seçin"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:75
 msgid "ZIP"
-msgstr ""
+msgstr "Sıkıştır (ZIP)"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:75
 msgid "TGZ"
-msgstr ""
+msgstr "TGZ"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:276
 msgid "Non-unity scaled models:"
@@ -36309,7 +36356,7 @@ msgstr "ASCII"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "STL"
-msgstr ""
+msgstr "STL"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
 #, fuzzy
@@ -36498,7 +36545,7 @@ msgstr "Gerber çıktı dosyalarını ön izle"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:258
 msgid "Don't write P-curves to STEP file"
-msgstr ""
+msgstr "P-eğrilerini STEP dosyasına yazma"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:259
 msgid ""
@@ -36723,7 +36770,7 @@ msgstr "Joker karakterler"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
 msgid "Wra&p"
-msgstr ""
+msgstr "Wra&p"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
 #, fuzzy
@@ -37380,7 +37427,7 @@ msgstr "Alt katmandaki ayak izleri için negatif X koordinatları kullanın"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:111
 msgid "Generate single file with both front and back positions"
-msgstr ""
+msgstr "Ön ve arka konumları içeren tek bir dosya oluştur"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:78
 #, fuzzy
@@ -37710,7 +37757,7 @@ msgstr "Gözyaşı damlalarını kaldırma"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:115
 msgid "Remove teardrops according to filtering options"
-msgstr ""
+msgstr "Filtreleme seçeneklerine göre teardrop’ları kaldır"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:119
 #, fuzzy
@@ -37719,7 +37766,7 @@ msgstr "Gözyaşı damlalarını kaldırma"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:120
 msgid "Remove all teardrops, regardless of filtering options"
-msgstr ""
+msgstr "Filtreleme seçeneklerinden bağımsız olarak tüm teardrop’ları kaldır"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:130
 msgid "Edit default values in Board Setup"
@@ -38524,7 +38571,7 @@ msgstr "Elemanlar"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:32
 msgid "Replace existing placement rule areas"
-msgstr ""
+msgstr "Mevcut yerleşim kuralı alanlarını değiştir"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:35
 #, fuzzy
@@ -38584,7 +38631,7 @@ msgstr "Öge(ler)i seçimden kaldır."
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.h:58
 msgid "Repeat Multichannel Layout"
-msgstr ""
+msgstr "Çoklu kanal yerleşimini tekrar et"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:149
 #, fuzzy
@@ -38618,15 +38665,15 @@ msgstr ".1"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:37
 msgid "Round outwards to grid multiples (when possible)"
-msgstr ""
+msgstr "Mümkün olduğunda ızgara katlarına dışa doğru yuvarla"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:39
 msgid "This is only possible for rectangular outsets."
-msgstr ""
+msgstr "Bu, yalnızca dikdörtgen genişlemeler için mümkündür."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:43
 msgid "Round corners (when possible)"
-msgstr ""
+msgstr "Köşeleri yuvarla (mümkünse)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:46
 #, fuzzy
@@ -38653,6 +38700,8 @@ msgid ""
 "This is not possible for items like pads, which will still use the value "
 "below."
 msgstr ""
+"Bu, pedler gibi öğeler için mümkün değildir; bu öğeler hala aşağıdaki değeri "
+"kullanacaktır."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:86
 #, fuzzy
@@ -38792,7 +38841,7 @@ msgstr "Çıkış Modu:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
 msgid "Front/Inner/Bottom"
-msgstr ""
+msgstr "Ön / İç / Alt"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:105
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:289
