@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-06 13:54+0300\n"
-"PO-Revision-Date: 2025-03-05 17:33+0000\n"
+"PO-Revision-Date: 2025-03-09 15:33+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -13359,27 +13359,26 @@ msgid "Define as power symbol"
 msgstr "Defina como um símbolo de alimentação"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:193
-#, fuzzy
 msgid ""
 "Power symbols define a global net with the value as a netname.\n"
 "They will not be included in the BOM and cannot be assigned a footprint."
 msgstr ""
-"Ao definir esta opção faz com que o símbolo em questão apareça na\n"
-"caixa de diálogo \"adicione o símbolo da alimentação\".  Isso irá bloquear o "
-"conteúdo do texto para protegê-lo\n"
-"da edição no esquema.  O símbolo não será incluído\n"
-"na LDM e não pode ser atribuído a um footprint."
+"Os símbolos de potência definem uma rede global com o valor como um nome de "
+"rede.\n"
+"Eles não serão incluídos na lista BOM e não podem ser atribuídos a um "
+"footprint."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:203
-#, fuzzy
 msgid "Define as local power symbol"
-msgstr "Defina como um símbolo de alimentação"
+msgstr "Definir como um símbolo de alimentação local"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:204
 msgid ""
 "Local power symbols create labels that are limited to the sheet in which "
 "they are used"
 msgstr ""
+"Os símbolos de alimentação local criam etiquetas que se limitam à folha em "
+"que são usadas"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:221
 msgid "Pin Text Options"
@@ -16148,9 +16147,8 @@ msgid "Sheet background:"
 msgstr "Plano de fundo da folha:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:97
-#, fuzzy
 msgid "Power Symbols:"
-msgstr "Símbolo de alimentação"
+msgstr "Símbolos de alimentação:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:105
 msgid ""
@@ -16159,6 +16157,12 @@ msgid ""
 "Global will convert new power symbols to global power symbols.\n"
 "Local will convert new power symbols to a local power symbols."
 msgstr ""
+"Selecione o tipo atribuído do novo símbolo de alimentação.\n"
+"Padrão seguirá a definição do símbolo.\n"
+"Global converterá os novos símbolos de alimentação em símbolos de "
+"alimentação globais.\n"
+"Local converterá os novos símbolos de alimentação em símbolos de alimentação "
+"locais."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:134
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:192
@@ -22328,9 +22332,8 @@ msgid "Power Symbol"
 msgstr "Símbolo de alimentação"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1763
-#, fuzzy
 msgid "Power Symbol (Local)"
-msgstr "Símbolo de alimentação"
+msgstr "Símbolo de alimentação (local)"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1770
 msgid "Datasheet"
@@ -26734,9 +26737,8 @@ msgstr ""
 "do bloco, 1 = tamanho da página atual, 2 = apenas área do quadro)"
 
 #: kicad/cli/command_pcb_export_svg.cpp:92
-#, fuzzy
 msgid "Fit the page to the board"
-msgstr "Preencher todas as zonas da placa"
+msgstr "Ajuste a página à placa"
 
 #: kicad/cli/command_pcb_export_svg.cpp:96
 #: kicad/cli/command_sch_export_plot.cpp:77
@@ -37698,9 +37700,8 @@ msgstr ""
 "Escolha 4 caso não tenha certeza."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:386
-#, fuzzy
 msgid "Fit page to board"
-msgstr "Falha ao copiar imagem para área de transferência"
+msgstr "Ajuste da página à placa"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:412
 msgid "Generate property popups for front footprints"
