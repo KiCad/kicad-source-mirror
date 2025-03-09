@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:04+0300\n"
-"PO-Revision-Date: 2025-03-06 23:18+0000\n"
+"PO-Revision-Date: 2025-03-09 20:51+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -794,15 +794,15 @@ msgid "Use board stackup colors"
 msgstr "Använd färger från mönsterkortets lageruppbyggnad"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:143
-#, fuzzy
 msgid "Use PCB editor copper colors"
 msgstr "Använd kopparfärger från mönsterkortsredigeraren"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:145
-#, fuzzy
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
-msgstr "Använd kopparfärger från mönsterkortsredigeraren (endast openGL)"
+msgstr ""
+"Använd mönsterkortsredigerarens färger för kopparlager (endast "
+"realtidsrenderare)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:163
 #, c-format
@@ -47030,9 +47030,8 @@ msgid "Filling"
 msgstr "Fyllning"
 
 #: pcbnew/pcbexpr_evaluator.cpp:617
-#, fuzzy
 msgid "must be mm, in, mil, or deg"
-msgstr "måste vara mm, in eller mil"
+msgstr "måste vara mm, tum, mils (1/1000 tum) eller grader"
 
 #: pcbnew/pcbexpr_functions.cpp:75
 #, c-format
@@ -52119,9 +52118,8 @@ msgid "Source Name"
 msgstr "Källnamn"
 
 #: pcbnew/zone.cpp:1978
-#, fuzzy
 msgid "Hatch Orientation"
-msgstr "Orientering"
+msgstr "Skrafferingens riktning"
 
 #: pcbnew/zone.cpp:1996
 msgid "Cannot be less than zone minimum width"
