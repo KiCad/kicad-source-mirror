@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:05+0300\n"
-"PO-Revision-Date: 2025-03-06 15:21+0000\n"
+"PO-Revision-Date: 2025-03-09 19:19+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v9/ru/>\n"
 "Language: ru\n"
@@ -801,15 +801,15 @@ msgid "Use board stackup colors"
 msgstr "Исп. цвета из структуры платы"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:143
-#, fuzzy
 msgid "Use PCB editor copper colors"
 msgstr "Исп. цвета меди из редактора плат"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:145
-#, fuzzy
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
-msgstr "Используйте медные цвета редактора плат (только для openGL)"
+msgstr ""
+"Использовать цвета редактора плат для медных слоев (только для быстрого "
+"рендерера)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:163
 #, c-format
@@ -51449,9 +51449,8 @@ msgid "Source Name"
 msgstr "Название источника"
 
 #: pcbnew/zone.cpp:2008
-#, fuzzy
 msgid "Hatch Orientation"
-msgstr "Ориентация"
+msgstr "Ориентация штриховки"
 
 #: pcbnew/zone.cpp:2026
 msgid "Cannot be less than zone minimum width"
