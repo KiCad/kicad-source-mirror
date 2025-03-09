@@ -20,13 +20,14 @@
 # John Beard <john.j.beard@gmail.com>, 2025.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2025.
 # Argeolog <argelojik@gmail.com>, 2025.
+# dsa-t <dudesuchamazing@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-06 13:54+0300\n"
-"PO-Revision-Date: 2025-03-09 16:01+0000\n"
-"Last-Translator: Argeolog <argelojik@gmail.com>\n"
+"PO-Revision-Date: 2025-03-09 16:03+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
 "Language: tr\n"
@@ -42186,6 +42187,7 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_rules_help_2constraints.h:2
+#, fuzzy
 msgid ""
 "### Constraints\n"
 "\n"
