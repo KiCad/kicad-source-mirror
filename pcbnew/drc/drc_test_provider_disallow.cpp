@@ -85,17 +85,17 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
     std::atomic<size_t>                  done( 1 );
     int                                  totalCount = 0;
 
-    forEachGeometryItem( {}, LSET::AllLayersMask(),
+    forEachGeometryItem( { PCB_ZONE_T }, LSET::AllLayersMask(),
             [&]( BOARD_ITEM* item ) -> bool
             {
-                ZONE* zone = dynamic_cast<ZONE*>( item );
+                ZONE* zone = static_cast<ZONE*>( item );
 
-                if( zone && zone->GetIsRuleArea() && zone->HasKeepoutParametersSet()
+                if( zone->GetIsRuleArea() && zone->HasKeepoutParametersSet()
                     && zone->GetDoNotAllowCopperPour() )
                 {
                     antiCopperKeepouts.push_back( zone );
                 }
-                else if( zone && zone->IsOnCopperLayer() )
+                else if( zone->IsOnCopperLayer() )
                 {
                     copperZones.push_back( zone );
                 }

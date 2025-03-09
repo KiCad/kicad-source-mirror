@@ -101,11 +101,15 @@ bool DRC_TEST_PROVIDER_TEXT_MIRRORING::Run()
                 }
             };
 
-    const int                         progressDelta = 500;
-    int                               count = 0;
-    int                               progressIndex = 0;
-    static const std::vector<KICAD_T> itemTypes = { PCB_FIELD_T, PCB_TEXT_T, PCB_TEXTBOX_T,
-                                                    PCB_TABLECELL_T };
+    const int progressDelta = 500;
+    int       count = 0;
+    int       progressIndex = 0;
+
+    static const std::vector<KICAD_T> itemTypes = {
+            PCB_FIELD_T,
+            PCB_TEXT_T, PCB_TEXTBOX_T, PCB_TABLECELL_T,
+            PCB_DIMENSION_T
+    };
 
     forEachGeometryItem( itemTypes, topLayers | bottomLayers,
             [&]( BOARD_ITEM* item ) -> bool
@@ -120,26 +124,19 @@ bool DRC_TEST_PROVIDER_TEXT_MIRRORING::Run()
                 if( !reportProgress( progressIndex++, count, progressDelta ) )
                     return false;
 
-                EDA_TEXT* text = nullptr;
-
-                switch( item->Type() )
+                if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( item ) )
                 {
-                case PCB_FIELD_T:     text = static_cast<PCB_FIELD*>( item );     break;
-                case PCB_TEXT_T:      text = static_cast<PCB_TEXT*>( item );      break;
-                case PCB_TEXTBOX_T:   text = static_cast<PCB_TEXTBOX*>( item );   break;
-                case PCB_TABLECELL_T: text = static_cast<PCB_TABLECELL*>( item ); break;
-                default:              UNIMPLEMENTED_FOR( item->GetClass() );      break;
+                    if( !text->IsVisible()
+                            || !m_drcEngine->GetBoard()->IsLayerEnabled( item->GetLayer() )
+                            || !m_drcEngine->GetBoard()->IsLayerVisible( item->GetLayer() ) )
+                    {
+                        return true;
+                    }
+
+                    checkTextMirroring( item, text, true, DRCE_MIRRORED_TEXT_ON_FRONT_LAYER );
+                    checkTextMirroring( item, text, false, DRCE_NONMIRRORED_TEXT_ON_BACK_LAYER );
                 }
 
-                if( !text || !text->IsVisible()
-                        || !m_drcEngine->GetBoard()->IsLayerEnabled( item->GetLayer() )
-                        || !m_drcEngine->GetBoard()->IsLayerVisible( item->GetLayer() ) )
-                {
-                    return true;
-                }
-
-                checkTextMirroring( item, text, true, DRCE_MIRRORED_TEXT_ON_FRONT_LAYER );
-                checkTextMirroring( item, text, false, DRCE_NONMIRRORED_TEXT_ON_BACK_LAYER );
                 return true;
             } );
 
