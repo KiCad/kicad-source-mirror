@@ -21,6 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "pcb_table.h"
 #include <drc/drc_item.h>
 #include <drc/drc_test_provider.h>
 #include <pcb_track.h>
@@ -228,6 +229,27 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
                     return n;
 
                 n++;
+            }
+            else if( item->Type() == PCB_TABLE_T )
+            {
+                if( typeMask[ PCB_TABLE_T ] )
+                {
+                    if( !aFunc( item ) )
+                        return n;
+
+                    n++;
+                }
+
+                if( typeMask[ PCB_TABLECELL_T ] )
+                {
+                    for( PCB_TABLECELL* cell : static_cast<PCB_TABLE*>( item )->GetCells() )
+                    {
+                        if( !aFunc( cell ) )
+                            return n;
+
+                        n++;
+                    }
+                }
             }
         }
     }

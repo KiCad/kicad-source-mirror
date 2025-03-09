@@ -87,21 +87,21 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
     int                                  totalCount = 0;
     std::unique_ptr<DRC_RTREE>           antiTrackKeepouts = std::make_unique<DRC_RTREE>();
 
-    forEachGeometryItem( {}, LSET::AllLayersMask(),
+    forEachGeometryItem( { PCB_ZONE_T }, LSET::AllLayersMask(),
             [&]( BOARD_ITEM* item ) -> bool
             {
-                ZONE* zone = dynamic_cast<ZONE*>( item );
+                ZONE* zone = static_cast<ZONE*>( item );
 
-                if( zone && zone->GetIsRuleArea() && zone->GetDoNotAllowCopperPour() )
+                if( zone->GetIsRuleArea() && zone->GetDoNotAllowCopperPour() )
                 {
                     antiCopperKeepouts.push_back( zone );
                 }
-                else if( zone && zone->GetIsRuleArea() && zone->GetDoNotAllowTracks() )
+                else if( zone->GetIsRuleArea() && zone->GetDoNotAllowTracks() )
                 {
                     for( PCB_LAYER_ID layer : zone->GetLayerSet() )
                         antiTrackKeepouts->Insert( zone, layer );
                 }
-                else if( zone && zone->IsOnCopperLayer() )
+                else if( zone->IsOnCopperLayer() )
                 {
                     copperZones.push_back( zone );
                 }

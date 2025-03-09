@@ -30,6 +30,7 @@
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider.h>
 #include <font/font.h>
+#include <pcb_dimension.h>
 
 
 /*
@@ -261,7 +262,11 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                 return true;
             };
 
-    static const std::vector<KICAD_T> itemTypes = { PCB_FIELD_T, PCB_TEXT_T, PCB_TEXTBOX_T };
+    static const std::vector<KICAD_T> itemTypes = {
+        PCB_FIELD_T,
+        PCB_TEXT_T, PCB_TEXTBOX_T, PCB_TABLECELL_T,
+        PCB_DIMENSION_T
+    };
 
     forEachGeometryItem( itemTypes, LSET::AllLayersMask(),
             [&]( BOARD_ITEM* item ) -> bool
@@ -276,32 +281,26 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                 if( !reportProgress( ii++, count, progressDelta ) )
                     return false;
 
-                EDA_TEXT* text = nullptr;
-                int       strikes = 0;
-
-                switch( item->Type() )
+                if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( item ) )
                 {
-                case PCB_FIELD_T:   text = static_cast<PCB_FIELD*>( item );   break;
-                case PCB_TEXT_T:    text = static_cast<PCB_TEXT*>( item );    break;
-                case PCB_TEXTBOX_T: text = static_cast<PCB_TEXTBOX*>( item ); break;
-                default:            UNIMPLEMENTED_FOR( item->GetClass() );    break;
+                    int strikes = 0;
+
+                    if( !text->IsVisible() )
+                        return true;
+
+                    if( m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_THICKNESS ) )
+                        strikes++;
+                    else
+                        checkTextThickness( item, text );
+
+                    if( m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_HEIGHT ) )
+                        strikes++;
+                    else
+                        checkTextHeight( item, text );
+
+                    if( strikes >= 2 )
+                        return false;
                 }
-
-                if( !text || !text->IsVisible() )
-                    return true;
-
-                if( m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_THICKNESS ) )
-                    strikes++;
-                else
-                    checkTextThickness( item, text );
-
-                if( m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_HEIGHT ) )
-                    strikes++;
-                else
-                    checkTextHeight( item, text );
-
-                if( strikes >= 2 )
-                    return false;
 
                 return true;
             } );
