@@ -19,21 +19,22 @@
 # Bahtiyar Bayram <bahtiyar.bayramov@gmail.com>, 2024.
 # John Beard <john.j.beard@gmail.com>, 2025.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2025.
+# Argeolog <argelojik@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-06 13:54+0300\n"
-"PO-Revision-Date: 2025-02-19 03:14+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"PO-Revision-Date: 2025-03-09 15:33+0000\n"
+"Last-Translator: Argeolog <argelojik@gmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.1-dev\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -48748,9 +48749,8 @@ msgid "From design rules"
 msgstr "Tasarım Kurallarından"
 
 #: pcbnew/pcb_track.cpp:2193
-#, fuzzy
 msgid "Tented"
-msgstr "Merkez"
+msgstr "Dielektrik"
 
 #: pcbnew/pcb_track.cpp:2194
 #, fuzzy
