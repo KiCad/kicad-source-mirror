@@ -37814,9 +37814,8 @@ msgstr "Elektriksel uzunluk"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:399
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:441
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:487
-#, fuzzy
 msgid "%("
-msgstr "%"
+msgstr "%("
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:245
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:292
