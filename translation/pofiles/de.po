@@ -30,10 +30,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:04+0300\n"
-"PO-Revision-Date: 2025-03-09 00:47+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2025-03-09 20:51+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5697,12 +5697,11 @@ msgstr "Rechts"
 
 #: common/dialogs/panel_toolbar_customization.cpp:48
 msgid "Top main"
-msgstr ""
+msgstr "Oben (Haupt)"
 
 #: common/dialogs/panel_toolbar_customization.cpp:49
-#, fuzzy
 msgid "Top auxillary"
-msgstr "Oberste Lage"
+msgstr "Oben (Zusatz)"
 
 #: common/dialogs/panel_toolbar_customization.cpp:133
 #: common/dialogs/panel_toolbar_customization_base.cpp:72
@@ -8707,16 +8706,15 @@ msgstr "IPC/Scriptplugins"
 
 #: common/tool/action_toolbar.cpp:1043
 msgid "Region to hold the IPC/Scripting action buttons"
-msgstr ""
+msgstr "Bereich für die IPC/Scripting Aktionsbuttons"
 
 #: common/tool/action_toolbar.cpp:1045
 msgid "Layer selector"
 msgstr "Lagenauswahl"
 
 #: common/tool/action_toolbar.cpp:1046
-#, fuzzy
 msgid "Control to select the layer"
-msgstr "Löscht die Elemente auf der gewählten Grafiklage"
+msgstr "Steuerelement um die Lage auszuwählen"
 
 #: common/tool/action_toolbar.cpp:1048
 msgid "Symbol unit selector"
@@ -9321,14 +9319,12 @@ msgid "Hide Library Tree"
 msgstr "Bibliotheksbaum ausblenden"
 
 #: common/tool/actions.cpp:836
-#, fuzzy
 msgid "Show Side Panel"
-msgstr "Verborgene Pins anzeigen"
+msgstr "Seitenpanel anzeigen"
 
 #: common/tool/actions.cpp:841
-#, fuzzy
 msgid "Show Console Panel"
-msgstr "Konsolenfenster anzeigen"
+msgstr "Konsolenpanel anzeigen"
 
 #: common/tool/actions.cpp:846
 msgid "Focus Library Tree Search Field"
