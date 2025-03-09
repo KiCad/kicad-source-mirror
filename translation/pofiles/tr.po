@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:05+0300\n"
-"PO-Revision-Date: 2025-03-09 19:19+0000\n"
+"PO-Revision-Date: 2025-03-10 01:39+0000\n"
 "Last-Translator: Ahmet Saygın ÖĞÜLMÜŞ <ogulmus.ahmetsaygin@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v9/tr/>\n"
 "Language: tr\n"
@@ -38653,7 +38653,7 @@ msgstr "Delik şekli:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2537
 msgid "Oblong"
-msgstr ""
+msgstr "Dikdörtgen"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:487
 msgid "Specify pad to die length"
@@ -39495,6 +39495,7 @@ msgid ""
 "If the new track has the same connection as an already existing track, the "
 "old track is removed."
 msgstr ""
+"Yeni parça, mevcut bir izle aynı bağlantıya sahipse, eski iz kaldırılır."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:87
 #, fuzzy
@@ -39781,7 +39782,7 @@ msgstr "Metin Özellikleri"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:28
 msgid "Opaque"
-msgstr ""
+msgstr "Opak"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:29
 #, fuzzy
@@ -39839,7 +39840,7 @@ msgstr "Yönerge Etiketi"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:128
 msgid "Orthogonal"
-msgstr ""
+msgstr "Dik kenarlı"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:130
 #, fuzzy
@@ -39875,7 +39876,7 @@ msgstr "Pivot Belirle"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:183
 msgid "Pan:"
-msgstr ""
+msgstr "Kaydır:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:219
 #: pcbnew/dialogs/dialog_render_job_base.cpp:297
@@ -39899,7 +39900,7 @@ msgstr "Işık Yapılandırması"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:290
 msgid "Side lights elevation:"
-msgstr ""
+msgstr "Yan ışıkların yükselmesi:"
 
 #: pcbnew/dialogs/dialog_render_job_base.h:100
 #, fuzzy
@@ -39918,7 +39919,7 @@ msgstr "Dönüştürülmüş"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:284
 msgid "Not found on board: "
-msgstr ""
+msgstr "Kartta bulunamadı: "
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:439
 #, fuzzy
@@ -39942,11 +39943,11 @@ msgstr "DRC kurallarında kullanılmak üzere bu kural alanı için özgün bir 
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:66
 msgid "Reset this value to zero."
-msgstr ""
+msgstr "Bu değeri sıfırlayın."
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:76
 msgid "Reset this value to the original value."
-msgstr ""
+msgstr "Bu değeri orijinal değere sıfırlayın."
 
 #: pcbnew/dialogs/dialog_set_offset_base.cpp:19
 #, fuzzy
@@ -40223,7 +40224,7 @@ msgstr "Tüm ayak izi atamalarını silin"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:265
 msgid "Update Thickness According to Text Size"
-msgstr ""
+msgstr "Yazı tipi boyutuna göre kalınlığı güncelle"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:266
 msgid ""
@@ -40231,6 +40232,9 @@ msgid ""
 "Normal text: thickness is size/8\n"
 "Bold text: thickness is size/5"
 msgstr ""
+"Metin genişliği ve yüksekliğine göre en uygun metin kalınlığını ayarlayın\n"
+"Normal metin: kalınlık, boyutun 1/8’i kadar\n"
+"Kalın metin: kalınlık, boyutun 1/5’i kadar"
 
 #: pcbnew/dialogs/dialog_textbox_properties.cpp:412
 #, fuzzy
@@ -40349,7 +40353,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:283
 msgid "Front/Inner/Back"
-msgstr ""
+msgstr "Ön / İç / Arka"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:301
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
@@ -40680,13 +40684,15 @@ msgstr "pads can be moved with respect to the rest of the footprint."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:108
 msgid "Do not prompt for lock overrides for this session"
-msgstr ""
+msgstr "Bu oturum için kilit geçersiz kılmaları için uyarı yapma"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:109
 msgid ""
 "If checked, no prompt will be shown when attempting to edit locked items.  "
 "This setting is reset when KiCad restarts."
 msgstr ""
+"Eğer işaretlenirse, kilitli öğeleri düzenlemeye çalışırken herhangi bir "
+"uyarı gösterilmez. Bu ayar, KiCad yeniden başlatıldığında sıfırlanır."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:179
 #: pcbnew/dialogs/panel_edit_options_base.cpp:247
@@ -41706,6 +41712,9 @@ msgid ""
 "different net than the solder mask opening's parent.\n"
 "Distances smaller than this minimum will create a DRC error."
 msgstr ""
+"Bir lehim maskesi açıklığı ile, lehim maskesi açıklığının bağlı olduğu ağdan "
+"farklı bir ağa ait bakır öğesi arasındaki minimum mesafe. \n"
+"Bu minimumdan daha küçük mesafeler, DRC hatasına neden olacaktır."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:105
 #, fuzzy
@@ -41818,6 +41827,9 @@ msgid ""
 "For the full documentation see [https://docs.kicad.org](https://go.kicad.org/"
 "docs/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 msgstr ""
+"### Dokümantasyon\n"
+"\n"
+"Tam dokümantasyon için https://docs.kicad.org adresini ziyaret edin."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -41843,6 +41855,27 @@ msgid ""
 "<br>\n"
 "\n"
 msgstr ""
+"### Top-level Clauses\n"
+"\n"
+"    (version 1)\n"
+"\n"
+"    (rule <rule_name> <rule_clause> ...)\n"
+"\n"
+"<br>\n"
+"\n"
+"### Rule Clauses\n"
+"\n"
+"    (constraint <constraint_type> ...)\n"
+"\n"
+"    (condition \"<expression>\")\n"
+"\n"
+"    (layer \"<layer_name>\")\n"
+"\n"
+"    (severity <severity_name>)\n"
+"\n"
+"\n"
+"<br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_2constraints.h:2
 #, fuzzy
@@ -42105,6 +42138,14 @@ msgid ""
 "<br>\n"
 "\n"
 msgstr ""
+"### Items\n"
+"\n"
+" * `A` &nbsp;&nbsp; _the first (or only) item under test_\n"
+" * `B` &nbsp;&nbsp; _the second item under test (for binary tests)_\n"
+" * `L` &nbsp;&nbsp; _the layer currently under test_\n"
+"\n"
+"<br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_4severity_names.h:2
 msgid ""
@@ -42118,6 +42159,15 @@ msgid ""
 "<br>\n"
 "\n"
 msgstr ""
+"### Severity Names\n"
+"\n"
+" * warning\n"
+" * error\n"
+" * exclusion\n"
+" * ignore\n"
+"\n"
+"<br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_5examples.h:2
 msgid ""
