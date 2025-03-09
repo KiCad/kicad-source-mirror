@@ -1065,6 +1065,7 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectiv
             m_drawings.push_back( aBoardItem );
         else
             m_drawings.push_front( aBoardItem );
+
         break;
 
     case PCB_PAD_T:
@@ -1072,6 +1073,7 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectiv
             m_pads.push_back( static_cast<PAD*>( aBoardItem ) );
         else
             m_pads.push_front( static_cast<PAD*>( aBoardItem ) );
+
         break;
 
     case PCB_ZONE_T:
@@ -1079,6 +1081,7 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectiv
             m_zones.push_back( static_cast<ZONE*>( aBoardItem ) );
         else
             m_zones.insert( m_zones.begin(), static_cast<ZONE*>( aBoardItem ) );
+
         break;
 
     case PCB_GROUP_T:
@@ -1086,6 +1089,7 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectiv
             m_groups.push_back( static_cast<PCB_GROUP*>( aBoardItem ) );
         else
             m_groups.insert( m_groups.begin(), static_cast<PCB_GROUP*>( aBoardItem ) );
+
         break;
 
     default:
