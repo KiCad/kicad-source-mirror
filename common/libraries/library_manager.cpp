@@ -212,11 +212,11 @@ std::optional<LIBRARY_TABLE*> LIBRARY_MANAGER::Table( LIBRARY_TABLE_TYPE aType,
 }
 
 
-std::vector<const LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::Rows( LIBRARY_TABLE_TYPE aType,
-                                                             LIBRARY_TABLE_SCOPE aScope,
-                                                             bool aIncludeInvalid ) const
+std::vector<LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::Rows( LIBRARY_TABLE_TYPE aType,
+                                                       LIBRARY_TABLE_SCOPE aScope,
+                                                       bool aIncludeInvalid ) const
 {
-    std::map<wxString, const LIBRARY_TABLE_ROW*> rows;
+    std::map<wxString, LIBRARY_TABLE_ROW*> rows;
     std::vector<wxString> rowOrder;
 
     std::list<std::ranges::ref_view<
@@ -249,7 +249,7 @@ std::vector<const LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::Rows( LIBRARY_TABLE_TYPE 
 
                 if( aTable->IsOk() || aIncludeInvalid )
                 {
-                    for( const LIBRARY_TABLE_ROW& row : aTable->Rows() )
+                    for( LIBRARY_TABLE_ROW& row : aTable->Rows() )
                     {
                         if( row.IsOk() || aIncludeInvalid )
                         {
@@ -278,7 +278,7 @@ std::vector<const LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::Rows( LIBRARY_TABLE_TYPE 
         processTable( table );
     }
 
-    std::vector<const LIBRARY_TABLE_ROW*> ret;
+    std::vector<LIBRARY_TABLE_ROW*> ret;
 
     for( const wxString& row : rowOrder )
         ret.emplace_back( rows[row] );
@@ -287,17 +287,31 @@ std::vector<const LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::Rows( LIBRARY_TABLE_TYPE 
 }
 
 
-LIBRARY_RESULT<const LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::GetRow( LIBRARY_TABLE_TYPE aType,
-                                                                  const wxString& aNickname,
-                                                                  LIBRARY_TABLE_SCOPE aScope ) const
+std::optional<LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::GetRow( LIBRARY_TABLE_TYPE  aType,
+                                                           const wxString&     aNickname,
+                                                           LIBRARY_TABLE_SCOPE aScope ) const
 {
-    for( const LIBRARY_TABLE_ROW* row : Rows( aType, aScope, true ) )
+    for( LIBRARY_TABLE_ROW* row : Rows( aType, aScope, true ) )
     {
         if( row->Nickname() == aNickname )
             return row;
     }
 
-    return tl::unexpected( LIBRARY_ERROR { .message = _( "Library not found" ) } );
+    return std::nullopt;
+}
+
+
+std::optional<LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::FindRowByURI( LIBRARY_TABLE_TYPE aType,
+        const wxString& aUri,
+        LIBRARY_TABLE_SCOPE aScope ) const
+{
+    for( LIBRARY_TABLE_ROW* row : Rows( aType, aScope, true ) )
+    {
+        if( UrisAreEquivalent( GetFullURI( row, true ), aUri ) )
+            return row;
+    }
+
+    return std::nullopt;
 }
 
 
@@ -356,17 +370,20 @@ std::optional<wxString> LIBRARY_MANAGER::GetFullURI( LIBRARY_TABLE_TYPE aType,
                                                      const wxString& aNickname,
                                                      bool aSubstituted ) const
 {
-    if( LIBRARY_RESULT<const LIBRARY_TABLE_ROW*> result = GetRow( aType, aNickname ) )
-    {
-        const LIBRARY_TABLE_ROW* row = *result;
-
-        if( aSubstituted )
-            return ExpandEnvVarSubstitutions( row->URI(), nullptr );
-
-        return row->URI();
-    }
+    if( std::optional<const LIBRARY_TABLE_ROW*> result = GetRow( aType, aNickname ) )
+        return GetFullURI( *result, aSubstituted );
 
     return std::nullopt;
+}
+
+
+wxString LIBRARY_MANAGER::GetFullURI( const LIBRARY_TABLE_ROW* aRow,
+                                      bool aSubstituted )
+{
+    if( aSubstituted )
+        return ExpandEnvVarSubstitutions( aRow->URI(), nullptr );
+
+    return aRow->URI();
 }
 
 
@@ -404,4 +421,39 @@ bool LIBRARY_MANAGER::UrisAreEquivalent( const wxString& aURI1, const wxString& 
 
 LIBRARY_MANAGER_ADAPTER::~LIBRARY_MANAGER_ADAPTER()
 {
+}
+
+
+LIBRARY_TABLE* LIBRARY_MANAGER_ADAPTER::GlobalTable() const
+{
+    wxCHECK( m_manager.Table( Type(), LIBRARY_TABLE_SCOPE::GLOBAL ), nullptr );
+    return *m_manager.Table( Type(), LIBRARY_TABLE_SCOPE::GLOBAL );
+}
+
+
+std::optional<LIBRARY_TABLE*> LIBRARY_MANAGER_ADAPTER::ProjectTable() const
+{
+    return m_manager.Table( Type(), LIBRARY_TABLE_SCOPE::PROJECT );
+}
+
+
+std::vector<LIBRARY_TABLE_ROW *> LIBRARY_MANAGER_ADAPTER::Rows(
+        LIBRARY_TABLE_SCOPE aScope, bool aIncludeInvalid ) const
+{
+    return m_manager.Rows( Type(), aScope, aIncludeInvalid );
+}
+
+
+std::optional<LIBRARY_TABLE_ROW *> LIBRARY_MANAGER_ADAPTER::GetRow(
+    const wxString &aNickname, LIBRARY_TABLE_SCOPE aScope ) const
+{
+    return m_manager.GetRow( Type(), aNickname, aScope );
+}
+
+
+std::optional<LIBRARY_TABLE_ROW*> LIBRARY_MANAGER_ADAPTER::FindRowByURI(
+        const wxString& aUri,
+        LIBRARY_TABLE_SCOPE aScope ) const
+{
+    return m_manager.FindRowByURI( Type(), aUri, aScope );
 }

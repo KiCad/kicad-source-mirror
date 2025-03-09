@@ -1468,7 +1468,7 @@ int ERC_TESTER::TestLibSymbolIssues()
 
             wxString libName = symbol->GetLibId().GetLibNickname();
 
-            LIBRARY_RESULT<const LIBRARY_TABLE_ROW*> optRow =
+            std::optional<const LIBRARY_TABLE_ROW*> optRow =
                     manager.GetRow( LIBRARY_TABLE_TYPE::SYMBOL, libName );
 
             if( !optRow || !adapter->HasLibrary( libName, true ) )

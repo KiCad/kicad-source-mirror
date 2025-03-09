@@ -35,6 +35,7 @@
 #include <project_sch.h>
 #include <string_utils.h>
 #include <symbol_preview_widget.h>
+#include <libraries/symbol_library_manager_adapter.h>
 #include <widgets/wx_panel.h>
 
 
@@ -81,6 +82,8 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( const wxString& aForceRefresh,
     m_lastSyncHash = m_libMgr->GetHash();
     int i = 0, max = GetLibrariesCount();
 
+    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame->Prj() );
+
     // Process already stored libraries
     for( auto it = m_tree.m_Children.begin(); it != m_tree.m_Children.end(); )
     {
@@ -92,24 +95,20 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( const wxString& aForceRefresh,
             nextUpdate = wxGetUTCTimeMillis() + PROGRESS_INTERVAL_MILLIS;
         }
 
-        // TODO(JE) library tables
-#if 0
         // There is a bug in SYMBOL_LIBRARY_MANAGER::LibraryExists() that uses the buffered
         // modified libraries before the symbol library table which prevents the library from
         // being removed from the tree control.
         if( !m_libMgr->LibraryExists( name, true )
-          || !PROJECT_SCH::SchSymbolLibTable( &m_frame->Prj() )->HasLibrary( name, true )
-          || PROJECT_SCH::SchSymbolLibTable( &m_frame->Prj() )->FindRow( name, true )
-                   != PROJECT_SCH::SchSymbolLibTable( &m_frame->Prj() )->FindRow( name, false )
+          || !adapter->HasLibrary( name, true )
+          || ( *adapter->GetRow( name ) )->Hidden()
           || name == aForceRefresh )
         {
             it = deleteLibrary( it );
             continue;
         }
         else
-#endif
         {
-            updateLibrary( *(LIB_TREE_NODE_LIBRARY*) it->get() );
+            updateLibrary( *static_cast<LIB_TREE_NODE_LIBRARY*>( it->get() ) );
         }
 
         ++it;
@@ -121,8 +120,11 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( const wxString& aForceRefresh,
     COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
     PROJECT_FILE&    project = m_frame->Prj().GetProjectFile();
 
-    for( const wxString& libName : m_libMgr->GetLibraryNames() )
+    for( const auto& [libName, status] : adapter->GetLibraryStatuses() )
     {
+        if( status.load_status != LOAD_STATUS::LOADED || status.error )
+            continue;
+
         if( m_libHashes.count( libName ) == 0 )
         {
             if( wxGetUTCTimeMillis() > nextUpdate )
@@ -131,11 +133,13 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( const wxString& aForceRefresh,
                 nextUpdate = wxGetUTCTimeMillis() + PROGRESS_INTERVAL_MILLIS;
             }
 
-            SYMBOL_LIB_TABLE_ROW* library = m_libMgr->GetLibrary( libName );
+            auto optRow = adapter->GetRow( libName );
+            wxCHECK2( optRow.has_value(), continue );
+
             bool pinned = alg::contains( cfg->m_Session.pinned_symbol_libs, libName )
                             || alg::contains( project.m_PinnedSymbolLibs, libName );
 
-            LIB_TREE_NODE_LIBRARY& lib_node = DoAddLibraryNode( libName, library->GetDescr(),
+            LIB_TREE_NODE_LIBRARY& lib_node = DoAddLibraryNode( libName, ( *optRow )->Description(),
                                                                 pinned );
 
             updateLibrary( lib_node );
@@ -269,11 +273,11 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
         {
             if( node->m_Type == LIB_TREE_NODE::TYPE::LIBRARY )
             {
-                LIB_SYMBOL_LIBRARY_MANAGER& libMgr = m_frame->GetLibManager();
-                SYMBOL_LIB_TABLE_ROW*   lib = libMgr.GetLibrary( node->m_LibId.GetLibNickname() );
+                SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager(
+                        &m_frame->Prj() );
 
-                if( lib )
-                    node->m_Desc = lib->GetDescr();
+                if( auto optRow = adapter->GetRow( node->m_LibId.GetLibNickname() ) )
+                    node->m_Desc = ( *optRow )->Description();
 
                 if( !m_libMgr->IsLibraryLoaded( node->m_Name ) )
                     aVariant = _( "(failed to load)" ) + wxS( " " ) + aVariant.GetString();

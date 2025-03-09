@@ -27,6 +27,7 @@
 
 #include <eda_draw_frame.h>
 #include <frame_type.h>
+#include <libraries/library_table.h>
 #include <sch_draw_panel.h>
 #include <sch_screen.h>
 #include <schematic_settings.h>
@@ -303,15 +304,6 @@ protected:
     void handleIconizeEvent( wxIconizeEvent& aEvent ) override;
 
     void doCloseWindow() override;
-
-    /**
-     * Save Symbol Library Tables to disk.
-     *
-     * @param aGlobal when true, the Global Table is saved.
-     * @param aProject when true, the Project Table is saved.
-     * @return True when all requested actions succeeded.
-     */
-    bool saveSymbolLibTables( bool aGlobal, bool aProject );
 
     /**
      * Creates (or removes) a watcher on the specified symbol library

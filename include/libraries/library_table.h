@@ -156,6 +156,9 @@ public:
 
     bool HasRow( const wxString& aNickname ) const;
 
+    std::optional<LIBRARY_TABLE_ROW*> Row( const wxString& aNickname );
+    std::optional<const LIBRARY_TABLE_ROW*> Row( const wxString& aNickname ) const;
+
 private:
     bool initFromIR( const LIBRARY_TABLE_IR& aIR );
     bool addRowFromIR( const LIBRARY_TABLE_ROW_IR& aIR );

@@ -33,6 +33,7 @@
 #include <kiway.h>
 #include <launch_ext.h> // To default when file manager setting is empty
 #include <lib_symbol_library_manager.h>
+#include <libraries/library_manager.h>
 #include <pgm_base.h>
 #include <sch_painter.h>
 #include <string_utils.h>
@@ -366,15 +367,18 @@ int SYMBOL_EDITOR_CONTROL::OpenDirectory( const TOOL_EVENT& aEvent )
     if( !m_isSymbolEditor )
         return 0;
 
-    SYMBOL_EDIT_FRAME*          editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
-    LIB_SYMBOL_LIBRARY_MANAGER& libMgr = editFrame->GetLibManager();
+    LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
+    SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
 
     LIB_ID libId = editFrame->GetTreeLIBID();
 
     wxString libName = libId.GetLibNickname();
-    wxString libItemName = libMgr.GetLibrary( libName )->GetFullURI( true );
+    std::optional<wxString> libItemName =
+        manager.GetFullURI( LIBRARY_TABLE_TYPE::SYMBOL, libName, true );
 
-    wxFileName fileName( libItemName );
+    wxCHECK( libItemName, 0 );
+
+    wxFileName fileName( *libItemName );
 
     wxString filePath = wxEmptyString;
     wxString explorerCommand;
@@ -417,9 +421,8 @@ int SYMBOL_EDITOR_CONTROL::OpenWithTextEditor( const TOOL_EVENT& aEvent )
     if( !m_isSymbolEditor )
         return 0;
 
-    SYMBOL_EDIT_FRAME*          editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
-    LIB_SYMBOL_LIBRARY_MANAGER& libMgr = editFrame->GetLibManager();
-    wxString                    textEditorName = Pgm().GetTextEditor();
+    SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
+    wxString           textEditorName = Pgm().GetTextEditor();
 
     if( textEditorName.IsEmpty() )
     {
@@ -427,9 +430,17 @@ int SYMBOL_EDITOR_CONTROL::OpenWithTextEditor( const TOOL_EVENT& aEvent )
         return 0;
     }
 
+    LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
+
     LIB_ID   libId = editFrame->GetTreeLIBID();
     wxString libName = libId.GetLibNickname();
-    wxString tempFName = libMgr.GetLibrary( libName )->GetFullURI( true ).wc_str();
+
+    std::optional<wxString> optUri =
+        manager.GetFullURI( LIBRARY_TABLE_TYPE::SYMBOL, libName, true );
+
+    wxCHECK( optUri, 0 );
+
+    wxString tempFName = ( *optUri ).wc_str();
 
     if( !tempFName.IsEmpty() )
         ExecuteFile( textEditorName, tempFName, nullptr, false );

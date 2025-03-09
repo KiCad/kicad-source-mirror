@@ -19,13 +19,15 @@
 
 #include <lib_logger.h>
 #include <lib_symbol_library_manager.h>
+#include <project_sch.h>
 #include <symbol_edit_frame.h>
-#include <symbol_lib_table.h>
 #include <template_fieldnames.h>
 #include <lib_symbol.h>
 #include <sch_field.h>
+#include <libraries/symbol_library_manager_adapter.h>
 
 
+// TODO(JE) library tables -- this class doesn't need to exist anymore
 LIB_SYMBOL_LIBRARY_MANAGER::LIB_SYMBOL_LIBRARY_MANAGER( SYMBOL_EDIT_FRAME& aFrame ) :
         SYMBOL_LIBRARY_MANAGER( aFrame ),
         m_syncHash( 0 )
@@ -42,7 +44,8 @@ void LIB_SYMBOL_LIBRARY_MANAGER::Sync( const wxString& aForceRefresh,
     m_logger->Activate();
     {
         getAdapter()->Sync( aForceRefresh, aProgressCallback );
-        m_syncHash = symTable()->GetModifyHash();
+        SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame.Prj() );
+        m_syncHash = adapter->GetModifyHash();
     }
     m_logger->Deactivate();
 }

@@ -121,7 +121,7 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( SCH_BASE_FRAME* aFrame )
             continue;
         }
 
-        LIBRARY_RESULT<const LIBRARY_TABLE_ROW*> rowResult =
+        std::optional<const LIBRARY_TABLE_ROW*> rowResult =
                 manager.GetRow( LIBRARY_TABLE_TYPE::SYMBOL, lib );
 
         wxCHECK2( rowResult, continue );
@@ -214,7 +214,7 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibrary( wxString const& aLibNickname, bool p
     std::vector<LIB_SYMBOL*>    symbols = m_adapter->GetSymbols( aLibNickname, type );
     std::vector<LIB_TREE_ITEM*> comp_list;
 
-    LIBRARY_RESULT<const LIBRARY_TABLE_ROW*> row =
+    std::optional<const LIBRARY_TABLE_ROW*> row =
             Pgm().GetLibraryManager().GetRow( LIBRARY_TABLE_TYPE::SYMBOL, aLibNickname );
 
     if( row && symbols.size() > 0 )

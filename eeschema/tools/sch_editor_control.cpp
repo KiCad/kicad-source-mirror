@@ -80,6 +80,7 @@
 #include <wx/treectrl.h>
 #include <wx/msgdlg.h>
 #include <io/kicad/kicad_io_utils.h>
+#include <libraries/symbol_library_manager_adapter.h>
 #include <printing/dialog_print.h>
 
 #ifdef KICAD_IPC_API
@@ -382,11 +383,17 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
 
     bool                   append = false;
     SCH_COMMIT             commit( m_frame );
-    SYMBOL_LIB_TABLE_ROW*  row = mgr.GetLibrary( targetLib );
-    SCH_IO_MGR::SCH_FILE_T type = SCH_IO_MGR::EnumFromStr( row->GetType() );
+    LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
+    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame->Prj() );
+
+    auto optRow = adapter->GetRow( targetLib );
+    wxCHECK( optRow, 0 );
+    const LIBRARY_TABLE_ROW* row = *optRow;
+
+    SCH_IO_MGR::SCH_FILE_T type = SCH_IO_MGR::EnumFromStr( row->Type() );
     IO_RELEASER<SCH_IO>    pi( SCH_IO_MGR::FindPlugin( type ) );
 
-    wxFileName dest = row->GetFullURI( true );
+    wxFileName dest = manager.GetFullURI( row );
     dest.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
 
     for( const std::pair<const LIB_ID, LIB_SYMBOL*>& it : libSymbols )
@@ -400,7 +407,7 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
         }
         catch( const IO_ERROR& ioe )
         {
-            msg.Printf( _( "Error saving symbol %s to library '%s'." ), newSym->GetName(), row->GetNickName() );
+            msg.Printf( _( "Error saving symbol %s to library '%s'." ), newSym->GetName(), row->Nickname() );
             msg += wxS( "\n\n" ) + ioe.What();
             wxLogWarning( msg );
             return 0;

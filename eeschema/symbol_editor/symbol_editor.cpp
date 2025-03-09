@@ -146,18 +146,23 @@ bool SYMBOL_EDIT_FRAME::saveCurrentSymbol()
 bool SYMBOL_EDIT_FRAME::LoadSymbol( const LIB_ID& aLibId, int aUnit, int aBodyStyle )
 {
     LIB_ID libId = aLibId;
+    LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
+    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
 
     // Some libraries can't be edited, so load the underlying chosen symbol
-    if( SYMBOL_LIB_TABLE_ROW* lib = m_libMgr->GetLibrary( aLibId.GetLibNickname() ) )
+    if( auto optRow = manager.GetRow( LIBRARY_TABLE_TYPE::SYMBOL, aLibId.GetLibNickname() );
+        optRow.has_value() )
     {
-        if( lib->SchLibType() == SCH_IO_MGR::SCH_DATABASE
-            || lib->SchLibType() == SCH_IO_MGR::SCH_CADSTAR_ARCHIVE
-            || lib->SchLibType() == SCH_IO_MGR::SCH_HTTP )
+        const LIBRARY_TABLE_ROW* row = *optRow;
+        SCH_IO_MGR::SCH_FILE_T type = SCH_IO_MGR::EnumFromStr( row->Type() );
 
+        if( type == SCH_IO_MGR::SCH_DATABASE
+            || type == SCH_IO_MGR::SCH_CADSTAR_ARCHIVE
+            || type == SCH_IO_MGR::SCH_HTTP )
         {
             try
             {
-                LIB_SYMBOL* readOnlySym = PROJECT_SCH::SymbolLibManager( &Prj() )->LoadSymbol( aLibId );
+                LIB_SYMBOL* readOnlySym = adapter->LoadSymbol( aLibId );
 
                 if( readOnlySym && readOnlySym->GetSourceLibId().IsValid() )
                     libId = readOnlySym->GetSourceLibId();
@@ -1082,13 +1087,18 @@ void SYMBOL_EDIT_FRAME::ExportSymbol()
     fn = dlg.GetPath();
     fn.MakeAbsolute();
 
+    LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
+
     wxString                    libraryName;
     std::unique_ptr<LIB_SYMBOL> flattenedSymbol = symbol->Flatten();
 
     for( const wxString& candidate : m_libMgr->GetLibraryNames() )
     {
-        if( m_libMgr->GetLibrary( candidate )->GetFullURI( true ) == fn.GetFullPath() )
-            libraryName = candidate;
+        if( auto uri = manager.GetFullURI( LIBRARY_TABLE_TYPE::SYMBOL, candidate, true ); uri )
+        {
+            if( *uri == fn.GetFullPath() )
+                libraryName = candidate;
+        }
     }
 
     if( !libraryName.IsEmpty() )
@@ -1495,12 +1505,13 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
     wxString   msg;
     SYMBOL_SAVEAS_TYPE     type = SYMBOL_SAVEAS_TYPE::NORMAL_SAVE_AS;
     SCH_IO_MGR::SCH_FILE_T fileType = SCH_IO_MGR::SCH_FILE_T::SCH_KICAD;
-    PROJECT&   prj = Prj();
+    PROJECT& prj = Prj();
+
+    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &prj );
 
     m_toolManager->RunAction( ACTIONS::cancelInteractive );
 
-    if( !aNewFile
-        && ( aLibrary.empty() || !PROJECT_SCH::SymbolLibManager( &prj )->HasLibrary( aLibrary ) ) )
+    if( !aNewFile && ( aLibrary.empty() || !adapter->HasLibrary( aLibrary ) ) )
     {
         ShowInfoBarError( _( "No library specified." ) );
         return false;
@@ -1541,8 +1552,10 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
     }
     else
     {
-        // TODO(JE) library tables
-        //fn = PROJECT_SCH::SymbolLibManager( &prj )->GetFullURI( aLibrary );
+        std::optional<LIBRARY_TABLE_ROW*> optRow = adapter->GetRow( aLibrary );
+        wxCHECK( optRow, false );
+
+        fn = LIBRARY_MANAGER::GetFullURI( *optRow );
         fileType = SCH_IO_MGR::GuessPluginTypeFromLibPath( fn.GetFullPath() );
 
         if( fileType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
@@ -1593,7 +1606,7 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
             break;
 
         case SYMBOL_SAVEAS_TYPE::ADD_PROJECT_TABLE_ENTRY:
-            resyncLibTree = addLibTableEntry( fn.GetFullPath(), PROJECT_LIB_TABLE );
+            resyncLibTree = addLibTableEntry( fn.GetFullPath(), LIBRARY_TABLE_SCOPE::PROJECT );
             break;
 
         default:

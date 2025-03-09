@@ -343,7 +343,7 @@ void SYMBOL_LIBRARY_MANAGER_ADAPTER::AsyncLoad()
         return;
     }
 
-    std::vector<const LIBRARY_TABLE_ROW*> rows = m_manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL );
+    std::vector<LIBRARY_TABLE_ROW*> rows = m_manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL );
 
     m_loadTotal = rows.size();
     m_loadCount.store( 0 );
@@ -543,6 +543,51 @@ bool SYMBOL_LIBRARY_MANAGER_ADAPTER::HasLibrary( const wxString& aNickname,
 {
     if( std::optional<const LIB_DATA*> r = fetchIfLoaded( aNickname ); r.has_value() )
         return !aCheckEnabled || !( *r )->row->Disabled();
+
+    return false;
+}
+
+
+bool SYMBOL_LIBRARY_MANAGER_ADAPTER::DeleteLibrary( const wxString& aNickname )
+{
+    if( LIBRARY_RESULT<LIB_DATA*> result = loadIfNeeded( aNickname ); result.has_value() )
+    {
+        LIB_DATA* data = *result;
+        std::map<std::string, UTF8> options = data->row->GetOptionsMap();
+
+        try
+        {
+            return data->plugin->DeleteLibrary( getUri( data->row ), &options );
+        }
+        catch( ... )
+        {
+            return false;
+        }
+    }
+
+    return false;
+}
+
+
+bool SYMBOL_LIBRARY_MANAGER_ADAPTER::CreateLibrary( const wxString& aNickname )
+{
+    LOCALE_IO toggle;
+
+    if( LIBRARY_RESULT<LIB_DATA*> result = loadIfNeeded( aNickname ); result.has_value() )
+    {
+        LIB_DATA* data = *result;
+        std::map<std::string, UTF8> options = data->row->GetOptionsMap();
+
+        try
+        {
+            data->plugin->CreateLibrary( getUri( data->row ), &options );
+            return true;
+        }
+        catch( ... )
+        {
+            return false;
+        }
+    }
 
     return false;
 }

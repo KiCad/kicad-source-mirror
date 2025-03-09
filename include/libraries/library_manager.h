@@ -67,20 +67,26 @@ public:
      *                        loaded for some reason (file not found, etc)
      * @return a list of library nicknames (the first part of a LIB_ID)
      */
-    std::vector<const LIBRARY_TABLE_ROW*> Rows( LIBRARY_TABLE_TYPE aType,
-                                                LIBRARY_TABLE_SCOPE aScope = LIBRARY_TABLE_SCOPE::BOTH,
-                                                bool aIncludeInvalid = false ) const;
+    std::vector<LIBRARY_TABLE_ROW*> Rows( LIBRARY_TABLE_TYPE aType,
+                                          LIBRARY_TABLE_SCOPE aScope = LIBRARY_TABLE_SCOPE::BOTH,
+                                          bool aIncludeInvalid = false ) const;
 
     /**
      *
      * @param aType determines which type of libraries to return (symbol, footprint, ...)
      * @param aScope determines whether to search project, global, or both library tables
      * @param aNickname is the library nickname to retrieve
-     * @return the row, or a LIBRARY_ERROR with an error message
+     * @return the row, or a nullopt if it does not exist
      */
-    LIBRARY_RESULT<const LIBRARY_TABLE_ROW*> GetRow( LIBRARY_TABLE_TYPE aType,
-                                                     const wxString& aNickname,
-                                                     LIBRARY_TABLE_SCOPE aScope = LIBRARY_TABLE_SCOPE::BOTH ) const;
+    std::optional<LIBRARY_TABLE_ROW*> GetRow( LIBRARY_TABLE_TYPE aType,
+                                               const wxString &aNickname,
+                                               LIBRARY_TABLE_SCOPE aScope =
+                                                       LIBRARY_TABLE_SCOPE::BOTH ) const;
+
+    std::optional<LIBRARY_TABLE_ROW*> FindRowByURI( LIBRARY_TABLE_TYPE aType,
+                                                    const wxString &aUri,
+                                                    LIBRARY_TABLE_SCOPE aScope =
+                                                            LIBRARY_TABLE_SCOPE::BOTH ) const;
 
     void LoadProjectTables( const wxString& aProjectPath );
 
@@ -97,6 +103,8 @@ public:
      */
     std::optional<wxString> GetFullURI( LIBRARY_TABLE_TYPE aType, const wxString& aNickname,
                                         bool aSubstituted = false ) const;
+
+    static wxString GetFullURI( const LIBRARY_TABLE_ROW* aRow, bool aSubstituted = false );
 
     static wxString ExpandURI( const wxString& aShortURI, const PROJECT& aProject );
 
@@ -141,6 +149,26 @@ public:
 
     /// The type of library table this adapter works with
     virtual LIBRARY_TABLE_TYPE Type() const = 0;
+
+    /// Retrieves the global library table for this adapter type
+    LIBRARY_TABLE* GlobalTable() const;
+
+    /// Retrieves the project library table for this adapter type, or nullopt if one doesn't exist
+    std::optional<LIBRARY_TABLE*> ProjectTable() const;
+
+    /// Like LIBRARY_MANAGER::Rows but filtered to the LIBRARY_TABLE_TYPE of this adapter
+    std::vector<LIBRARY_TABLE_ROW *> Rows(
+        LIBRARY_TABLE_SCOPE aScope = LIBRARY_TABLE_SCOPE::BOTH,
+        bool aIncludeInvalid = false ) const;
+
+    /// Like LIBRARY_MANAGER::GetRow but filtered to the LIBRARY_TABLE_TYPE of this adapter
+    std::optional<LIBRARY_TABLE_ROW *> GetRow( const wxString &aNickname,
+        LIBRARY_TABLE_SCOPE aScope = LIBRARY_TABLE_SCOPE::BOTH ) const;
+
+    /// Like LIBRARY_MANAGER::FindRowByURI but filtered to the LIBRARY_TABLE_TYPE of this adapter
+    std::optional<LIBRARY_TABLE_ROW*> FindRowByURI( const wxString &aUri,
+                                                    LIBRARY_TABLE_SCOPE aScope =
+                                                            LIBRARY_TABLE_SCOPE::BOTH ) const;
 
     virtual int GetModifyHash() const { return 0; };
 

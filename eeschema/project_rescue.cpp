@@ -39,6 +39,8 @@
 
 #include <cctype>
 #include <map>
+#include <pgm_base.h>
+#include <libraries/symbol_library_manager_adapter.h>
 
 
 // Helper sort function, used in getSymbols, to sort a symbol list by lib_id
@@ -381,8 +383,7 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues( RESCUER& aRescuer,
             }
 
             // Get the library symbol from the symbol library table.
-            // TODO(JE) library tables -- patched out for testing
-            // lib_match = SchGetLibSymbol( symbol_id, PROJECT_SCH::SchSymbolLibTable( aRescuer.GetPrj() ) );
+            lib_match = SchGetLibSymbol( symbol_id, PROJECT_SCH::SymbolLibManager( aRescuer.GetPrj() ) );
 
             if( !cache_match && !lib_match )
                 continue;
@@ -776,43 +777,34 @@ void SYMBOL_LIB_TABLE_RESCUER::OpenRescueLibrary()
     (*m_properties)[ SCH_IO_KICAD_LEGACY::PropBuffering ] = "";
 
     wxFileName fn = GetRescueLibraryFileName( m_schematic );
-    // TODO(JE) library tables - patched out for testing
-#if 0
 
-    SYMBOL_LIB_TABLE_ROW* row = PROJECT_SCH::SchSymbolLibTable( m_prj )->FindRow( fn.GetName() );
+    LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
+    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( m_prj );
 
     // If a rescue library already exists copy the contents of that library so we do not
     // lose any previous rescues.
-    if( row )
+    if( std::optional<const LIBRARY_TABLE_ROW*> optRow =
+            manager.GetRow( LIBRARY_TABLE_TYPE::SYMBOL, fn.GetName() ) )
     {
-        if( SCH_IO_MGR::EnumFromStr( row->GetType() ) == SCH_IO_MGR::SCH_KICAD )
+        const LIBRARY_TABLE_ROW* row = *optRow;
+
+        if( SCH_IO_MGR::EnumFromStr( row->Type() ) == SCH_IO_MGR::SCH_KICAD )
             fn.SetExt( FILEEXT::KiCadSymbolLibFileExtension );
 
-        std::vector<LIB_SYMBOL*> symbols;
-
-        try
-        {
-            PROJECT_SCH::SchSymbolLibTable( m_prj )->LoadSymbolLib( symbols, fn.GetName() );
-        }
-        catch( ... /* IO_ERROR */ )
-        {
-            return;
-        }
-
-        for( LIB_SYMBOL* symbol : symbols )
+        for( LIB_SYMBOL* symbol : adapter->GetSymbols( fn.GetName() ) )
             m_rescueLibSymbols.emplace_back( std::make_unique<LIB_SYMBOL>( *symbol ) );
     }
-#endif
 }
 
 
 bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( wxWindow *aParent )
 {
-    // TODO(JE) library tables - patched out for testing
-#if 0
-    wxString msg;
+    LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
+
     wxFileName fn = GetRescueLibraryFileName( m_schematic );
-    SYMBOL_LIB_TABLE_ROW* row = PROJECT_SCH::SchSymbolLibTable( m_prj )->FindRow( fn.GetName() );
+
+    std::optional<const LIBRARY_TABLE_ROW*> optRow =
+                manager.GetRow( LIBRARY_TABLE_TYPE::SYMBOL, fn.GetName() );
 
     fn.SetExt( FILEEXT::KiCadSymbolLibFileExtension );
 
@@ -827,6 +819,7 @@ bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( wxWindow *aParent )
     }
     catch( const IO_ERROR& ioe )
     {
+        wxString msg;
         msg.Printf( _( "Failed to save rescue library %s." ), fn.GetFullPath() );
         DisplayErrorMessage( aParent, msg, ioe.What() );
         return false;
@@ -834,34 +827,42 @@ bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( wxWindow *aParent )
 
     // If the rescue library already exists in the symbol library table no need save it to add
     // it to the table.
-    if( !row || ( SCH_IO_MGR::EnumFromStr( row->GetType() ) == SCH_IO_MGR::SCH_LEGACY ) )
+    if( !optRow || ( SCH_IO_MGR::EnumFromStr( ( *optRow )->Type() ) == SCH_IO_MGR::SCH_LEGACY ) )
     {
         wxString uri = wxS( "${KIPRJMOD}/" ) + fn.GetFullName();
         wxString libNickname = fn.GetName();
 
-        row = new SYMBOL_LIB_TABLE_ROW( libNickname, uri, wxT( "KiCad" ) );
-        PROJECT_SCH::SchSymbolLibTable( m_prj )->InsertRow( row, true );
+        std::optional<LIBRARY_TABLE*> optTable =
+                Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
+                                                 LIBRARY_TABLE_SCOPE::PROJECT );
+        wxCHECK( optTable, false );
+        LIBRARY_TABLE* projectTable = *optTable;
+        LIBRARY_TABLE_ROW* row = nullptr;
 
-        fn = wxFileName( m_prj->GetProjectPath(), SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+        if( std::optional<LIBRARY_TABLE_ROW*> oldRow = projectTable->Row( libNickname ); oldRow )
+            row = *oldRow;
+        else
+            row = &projectTable->Rows().emplace_back( projectTable->MakeRow() );
 
-        try
-        {
-            PROJECT_SCH::SchSymbolLibTable( m_prj )->Save( fn.GetFullPath() );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            msg.Printf( _( "Error occurred saving project specific symbol library table." ) );
-            DisplayErrorMessage( aParent, msg, ioe.What() );
+        row->SetNickname( libNickname );
+        row->SetURI( uri );
+        row->SetType( wxT( "KiCad" ) );
+
+        bool success = true;
+
+        manager.Save( projectTable ).map_error(
+            [&success]( const LIBRARY_ERROR& aError )
+            {
+                success = false;
+                wxMessageBox( wxString::Format( _( "Error saving project-specific library table:\n\n%s" ),
+                                                aError.message ),
+                              _( "File Save Error" ), wxOK | wxICON_ERROR );
+            } );
+
+        if( !success )
             return false;
-        }
     }
 
-    m_prj->SetElem( PROJECT::ELEM::SYMBOL_LIB_TABLE, nullptr );
-
-    // This can only happen if the symbol library table file was corrupted on write.
-    if( !PROJECT_SCH::SchSymbolLibTable( m_prj ) )
-        return false;
-#endif
     // Update the schematic symbol library links since the library list has changed.
     SCH_SCREENS schematic( m_schematic->Root() );
     schematic.UpdateSymbolLinks();

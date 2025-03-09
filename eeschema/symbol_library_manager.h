@@ -35,14 +35,13 @@
 #include <wx/arrstr.h>
 #include <sch_io/sch_io_mgr.h>
 #include <sch_screen.h>
+#include <libraries/library_table.h>
 
 class LIB_SYMBOL;
 class LEGACY_SYMBOL_LIB;
 class PROGRESS_REPORTER;
 class SCH_IO;
 class SCH_BASE_FRAME;
-class SYMBOL_LIB_TABLE;
-class SYMBOL_LIB_TABLE_ROW;
 class LIB_LOGGER;
 
 
@@ -177,21 +176,13 @@ private:
 
 /**
  * Class to handle modifications to the symbol libraries.
+ * TODO(JE) Library tables - this class probably shouldn't exist anymore
  */
 class SYMBOL_LIBRARY_MANAGER
 {
 public:
     SYMBOL_LIBRARY_MANAGER( SCH_BASE_FRAME& aFrame );
     virtual ~SYMBOL_LIBRARY_MANAGER();
-
-    /**
-     * Preload all symbol libraries in the symbol library table using #SYMBOL_ASYNC_LOADER.
-     *
-     * Call before the first call to Sync() to get better performance.
-     *
-     * @param aReporter is used to report progress of the load
-     */
-    void Preload( PROGRESS_REPORTER& aReporter );
 
     int GetHash() const;
 
@@ -211,11 +202,6 @@ public:
      */
     wxArrayString GetLibraryNames() const;
 
-    /**
-     * Find a single library within the (aggregate) library table.
-     */
-    SYMBOL_LIB_TABLE_ROW* GetLibrary( const wxString& aLibrary ) const;
-
     std::list<LIB_SYMBOL*> EnumerateSymbols( const wxString& aLibrary ) const;
 
     /**
@@ -223,9 +209,9 @@ public:
      *
      * The library file is created.
      */
-    bool CreateLibrary( const wxString& aFilePath, SYMBOL_LIB_TABLE& aTable )
+    bool CreateLibrary( const wxString& aFilePath, LIBRARY_TABLE_SCOPE aScope )
     {
-        return addLibrary( aFilePath, true, aTable );
+        return addLibrary( aFilePath, true, aScope );
     }
 
     /**
@@ -233,9 +219,9 @@ public:
      *
      * The library is added to the library table as well.
      */
-    bool AddLibrary( const wxString& aFilePath, SYMBOL_LIB_TABLE& aTable )
+    bool AddLibrary( const wxString& aFilePath, LIBRARY_TABLE_SCOPE aScope )
     {
-        return addLibrary( aFilePath, false, aTable );
+        return addLibrary( aFilePath, false, aScope );
     }
 
     /**
@@ -403,11 +389,7 @@ protected:
     static wxString getLibraryName( const wxString& aFilePath );
 
     /// Helper function to add either existing or create new library.
-    bool addLibrary( const wxString& aFilePath, bool aCreate, SYMBOL_LIB_TABLE& aTable );
-
-
-    /// Return the current symbol library table.
-    SYMBOL_LIB_TABLE* symTable() const;
+    bool addLibrary( const wxString& aFilePath, bool aCreate, LIBRARY_TABLE_SCOPE aScope );
 
     /**
      * Return a set of #LIB_SYMBOL objects belonging to the original library.

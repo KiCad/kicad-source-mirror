@@ -41,6 +41,9 @@
 #include <locale_io.h>
 #include <confirm.h>
 #include <string_utils.h>
+#include <libraries/library_manager.h>
+#include <libraries/symbol_library_manager_adapter.h>
+
 #include "lib_logger.h"
 
 
@@ -54,40 +57,6 @@ SYMBOL_LIBRARY_MANAGER::SYMBOL_LIBRARY_MANAGER( SCH_BASE_FRAME& aFrame ) :
 SYMBOL_LIBRARY_MANAGER::~SYMBOL_LIBRARY_MANAGER()
 {
     delete m_logger;
-}
-
-
-void SYMBOL_LIBRARY_MANAGER::Preload( PROGRESS_REPORTER& aReporter )
-{
-    SYMBOL_ASYNC_LOADER loader( symTable()->GetLogicalLibs(), symTable(), false, nullptr,
-                                &aReporter );
-
-    LOCALE_IO toggle;
-
-    loader.Start();
-
-    while( !loader.Done() )
-    {
-        if( !aReporter.KeepRefreshing() )
-            break;
-
-        wxMilliSleep( 33 /* 30 FPS refresh rate */ );
-    }
-
-    loader.Join();
-
-    if( !loader.GetErrors().IsEmpty() )
-    {
-        HTML_MESSAGE_BOX dlg( &m_frame, _( "Load Error" ) );
-
-        dlg.MessageSet( _( "Errors loading symbols:" ) );
-
-        wxString msg = loader.GetErrors();
-        msg.Replace( "\n", "<BR>" );
-
-        dlg.AddHTML_Text( msg );
-        dlg.ShowModal();
-    }
 }
 
 
@@ -105,27 +74,24 @@ bool SYMBOL_LIBRARY_MANAGER::HasModifications() const
 
 int SYMBOL_LIBRARY_MANAGER::GetHash() const
 {
-    int hash = symTable()->GetModifyHash();
-
-    for( const auto& [name, buffer] : m_libs )
-        hash += buffer.GetHash();
-
-    return hash;
+    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame.Prj() );
+    return adapter->GetModifyHash();
 }
 
 
 int SYMBOL_LIBRARY_MANAGER::GetLibraryHash( const wxString& aLibrary ) const
 {
-    const auto libBufIt = m_libs.find( aLibrary );
-
-    if( libBufIt != m_libs.end() )
+    if( const auto libBufIt = m_libs.find( aLibrary ); libBufIt != m_libs.end() )
         return libBufIt->second.GetHash();
 
-    SYMBOL_LIB_TABLE_ROW* row = GetLibrary( aLibrary );
+    LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
 
-    // return -1 if library does not exist or 0 if not modified
-    return row ? std::hash<std::string>{}( aLibrary.ToStdString() +
-                                           row->GetFullURI( true ).ToStdString() ) : -1;
+    if( auto uri = manager.GetFullURI( LIBRARY_TABLE_TYPE::SYMBOL, aLibrary, true ); uri )
+    {
+        return std::hash<std::string>{}( aLibrary.ToStdString() + uri->ToStdString() );
+    }
+
+    return -1;
 }
 
 
@@ -133,38 +99,18 @@ wxArrayString SYMBOL_LIBRARY_MANAGER::GetLibraryNames() const
 {
     wxArrayString res;
 
-    for( const wxString& libName : symTable()->GetLogicalLibs() )
+    LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
+
+    for( const LIBRARY_TABLE_ROW* row : manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL ) )
     {
         // Database libraries are hidden from the symbol editor at the moment
-        SYMBOL_LIB_TABLE_ROW* row = GetLibrary( libName );
-
-        if( !row || row->SchLibType() == SCH_IO_MGR::SCH_DATABASE )
+        if( row->Type() == SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_DATABASE ) )
             continue;
 
-        res.Add( libName );
+        res.Add( row->Nickname() );
     }
 
     return res;
-}
-
-
-SYMBOL_LIB_TABLE_ROW* SYMBOL_LIBRARY_MANAGER::GetLibrary( const wxString& aLibrary ) const
-{
-    SYMBOL_LIB_TABLE_ROW* row = nullptr;
-
-    try
-    {
-        row = symTable()->FindRow( aLibrary, true );
-    }
-    catch( const IO_ERROR& e )
-    {
-        wxString msg;
-
-        msg.Printf( _( "Library '%s' not found in the Symbol Library Table." ),  aLibrary );
-        DisplayErrorMessage( &m_frame, msg, e.What() );
-    }
-
-    return row;
 }
 
 
@@ -206,11 +152,11 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
 
         // clear the deleted symbols buffer only if data is saved to the original file
         wxFileName original, destination( aFileName );
-        SYMBOL_LIB_TABLE_ROW* row = GetLibrary( aLibrary );
+        LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
 
-        if( row )
+        if( auto uri = manager.GetFullURI( LIBRARY_TABLE_TYPE::SYMBOL, aLibrary, true ); uri )
         {
-            original = row->GetFullURI();
+            original = *uri;
             original.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
         }
 
@@ -355,7 +301,8 @@ bool SYMBOL_LIBRARY_MANAGER::IsLibraryReadOnly( const wxString& aLibrary ) const
     wxCHECK_MSG( LibraryExists( aLibrary ), true,
                  wxString::Format( "Library missing: %s", aLibrary ) );
 
-    return !symTable()->IsSymbolLibWritable( aLibrary );
+    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame.Prj() );
+    return !adapter->IsSymbolLibWritable( aLibrary );
 }
 
 
@@ -364,7 +311,8 @@ bool SYMBOL_LIBRARY_MANAGER::IsLibraryLoaded( const wxString& aLibrary ) const
     wxCHECK_MSG( LibraryExists( aLibrary ), false,
                  wxString::Format( "Library missing: %s", aLibrary ) );
 
-    return symTable()->IsSymbolLibLoaded( aLibrary );
+    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame.Prj() );
+    return adapter->IsLibraryLoaded( aLibrary );
 }
 
 
@@ -383,16 +331,8 @@ std::list<LIB_SYMBOL*> SYMBOL_LIBRARY_MANAGER::EnumerateSymbols( const wxString&
     }
     else
     {
-        std::vector<LIB_SYMBOL*> symbols;
-
-        try
-        {
-            symTable()->LoadSymbolLib( symbols, aLibrary );
-        }
-        catch( const IO_ERROR& e )
-        {
-            wxLogWarning( e.Problem() );
-        }
+        SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame.Prj() );
+        std::vector<LIB_SYMBOL*> symbols = adapter->GetSymbols( aLibrary );
 
         std::copy( symbols.begin(), symbols.end(), std::back_inserter( ret ) );
     }
@@ -414,10 +354,12 @@ LIB_SYMBOL* SYMBOL_LIBRARY_MANAGER::GetBufferedSymbol( const wxString& aSymbolNa
 
     if( !bufferedSymbol ) // no buffer symbol found
     {
+        SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame.Prj() );
+
         // create a copy of the symbol
         try
         {
-            LIB_SYMBOL* symbol = symTable()->LoadSymbol( aLibrary, aSymbolName );
+            LIB_SYMBOL* symbol = adapter->LoadSymbol( aLibrary, aSymbolName );
 
             if( symbol == nullptr )
                 THROW_IO_ERROR( _( "Symbol not found." ) );
@@ -631,11 +573,12 @@ LIB_SYMBOL* SYMBOL_LIBRARY_MANAGER::GetSymbol( const wxString& aSymbolName,
     }
 
     // Get the original symbol
+    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame.Prj() );
     LIB_SYMBOL* symbol = nullptr;
 
     try
     {
-        symbol = symTable()->LoadSymbol( aLibrary, aSymbolName );
+        symbol = adapter->LoadSymbol( aLibrary, aSymbolName );
     }
     catch( const IO_ERROR& e )
     {
@@ -660,9 +603,11 @@ bool SYMBOL_LIBRARY_MANAGER::SymbolExists( const wxString& aSymbolName,
     if( libBufIt != m_libs.end() )
         return libBufIt->second.GetBuffer( aSymbolName ) != nullptr;
 
+    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame.Prj() );
+
     try
     {
-        symbol = symTable()->LoadSymbol( aLibrary, aSymbolName );
+        symbol = adapter->LoadSymbol( aLibrary, aSymbolName );
     }
     catch( IO_ERROR& )
     {
@@ -700,7 +645,9 @@ bool SYMBOL_LIBRARY_MANAGER::LibraryExists( const wxString& aLibrary, bool aChec
     if( m_libs.count( aLibrary ) > 0 )
         return true;
 
-    return symTable()->HasLibrary( aLibrary, aCheckEnabled );
+    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame.Prj() );
+
+    return adapter->HasLibrary( aLibrary, aCheckEnabled );
 }
 
 
@@ -754,7 +701,8 @@ size_t SYMBOL_LIBRARY_MANAGER::GetDerivedSymbolNames( const wxString& aSymbolNam
 
 size_t SYMBOL_LIBRARY_MANAGER::GetLibraryCount() const
 {
-    return symTable()->GetLogicalLibs().size();
+    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame.Prj() );
+    return adapter->GetLibraryNames().size();
 }
 
 
@@ -766,7 +714,7 @@ wxString SYMBOL_LIBRARY_MANAGER::getLibraryName( const wxString& aFilePath )
 
 
 bool SYMBOL_LIBRARY_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate,
-                                         SYMBOL_LIB_TABLE& aTable )
+                                         LIBRARY_TABLE_SCOPE aScope )
 {
     wxString libName = getLibraryName( aFilePath );
     wxCHECK( !LibraryExists( libName ), false );  // either create or add an existing one
@@ -780,21 +728,26 @@ bool SYMBOL_LIBRARY_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate
     if( schFileType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
         schFileType = SCH_IO_MGR::SCH_LEGACY;
 
-    wxString typeName = SCH_IO_MGR::ShowType( schFileType );
-    SYMBOL_LIB_TABLE_ROW* libRow = new SYMBOL_LIB_TABLE_ROW( libName, relPath, typeName );
-    aTable.InsertRow( libRow );
+    std::optional<LIBRARY_TABLE*> optTable =
+                Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL, aScope );
+    wxCHECK( optTable, false );
+    LIBRARY_TABLE* table = *optTable;
+
+    LIBRARY_TABLE_ROW& row = table->Rows().emplace_back( table->MakeRow() );
+
+    row.SetNickname( libName );
+    row.SetURI( relPath );
+    row.SetType( SCH_IO_MGR::ShowType( schFileType ) );
 
     if( aCreate )
     {
         wxCHECK( schFileType != SCH_IO_MGR::SCH_FILE_T::SCH_LEGACY, false );
 
-        try
+        SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame.Prj() );
+
+        if( !adapter->CreateLibrary( libName ) )
         {
-            aTable.CreateSymbolLib( libName );
-        }
-        catch( const IO_ERROR& )
-        {
-            aTable.RemoveRow( libRow );
+            table->Rows().erase( table->Rows().end() - 1 );
             return false;
         }
     }
@@ -805,34 +758,15 @@ bool SYMBOL_LIBRARY_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate
 }
 
 
-SYMBOL_LIB_TABLE* SYMBOL_LIBRARY_MANAGER::symTable() const
-{
-    // TODO(JE) library tables
-    return nullptr;
-    //return PROJECT_SCH::SchSymbolLibTable( &m_frame.Prj() );
-}
-
-
 std::set<LIB_SYMBOL*> SYMBOL_LIBRARY_MANAGER::getOriginalSymbols( const wxString& aLibrary )
 {
     std::set<LIB_SYMBOL*> symbols;
     wxCHECK( LibraryExists( aLibrary ), symbols );
 
-    try
-    {
-        wxArrayString symbolNames;
-        symTable()->EnumerateSymbolLib( aLibrary, symbolNames );
+    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &m_frame.Prj() );
 
-        for( const auto& symbolName : symbolNames )
-        {
-            LIB_SYMBOL* symbol = symTable()->LoadSymbol( aLibrary, symbolName );
-            symbols.insert( symbol );
-        }
-    }
-    catch( const IO_ERROR& e )
-    {
-        wxLogError( wxString::Format( _( "Cannot enumerate library '%s'." ), aLibrary ), e.What() );
-    }
+    for( LIB_SYMBOL* symbol : adapter->GetSymbols( aLibrary ) )
+        symbols.insert( symbol );
 
     return symbols;
 }

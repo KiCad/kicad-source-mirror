@@ -52,7 +52,7 @@ BOOST_AUTO_TEST_CASE( ProjectLibraryTable )
     fn.AppendDir( "libraries" );
     fn.AppendDir( "test_project" );
 
-    std::vector<const LIBRARY_TABLE_ROW*> rows = manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL );
+    std::vector<LIBRARY_TABLE_ROW*> rows = manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL );
 
     BOOST_REQUIRE( rows.size() == 3 );
     BOOST_REQUIRE( rows[0]->Nickname() == "Device" );
@@ -134,7 +134,7 @@ BOOST_AUTO_TEST_CASE( AsyncLoad )
 
     adapter.BlockUntilLoaded();
 
-    std::vector<const LIBRARY_TABLE_ROW*> rows = manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL );
+    std::vector<LIBRARY_TABLE_ROW*> rows = manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL );
 
     BOOST_REQUIRE_GE( rows.size(), 2 );
 

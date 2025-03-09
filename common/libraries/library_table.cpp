@@ -215,3 +215,27 @@ bool LIBRARY_TABLE::HasRow( const wxString& aNickname ) const
 
     return false;
 }
+
+
+std::optional<LIBRARY_TABLE_ROW*> LIBRARY_TABLE::Row( const wxString& aNickname )
+{
+    for( LIBRARY_TABLE_ROW& row : m_rows )
+    {
+        if( row.Nickname() == aNickname )
+            return &row;
+    }
+
+    return std::nullopt;
+}
+
+
+std::optional<const LIBRARY_TABLE_ROW*> LIBRARY_TABLE::Row( const wxString& aNickname ) const
+{
+    for( const LIBRARY_TABLE_ROW& row : m_rows )
+    {
+        if( row.Nickname() == aNickname )
+            return &row;
+    }
+
+    return std::nullopt;
+}

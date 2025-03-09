@@ -350,47 +350,6 @@ LIB_SYMBOL* SCH_BASE_FRAME::GetLibSymbol( const LIB_ID& aLibId, bool aUseCacheLi
 }
 
 
-// TODO(JE) library tables - remove this function
-bool SCH_BASE_FRAME::saveSymbolLibTables( bool aGlobal, bool aProject )
-{
-    wxString msg;
-    bool success = true;
-
-    if( aGlobal )
-    {
-        try
-        {
-            SYMBOL_LIB_TABLE::GetGlobalLibTable().Save( SYMBOL_LIB_TABLE::GetGlobalTableFileName() );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            success = false;
-            msg.Printf( _( "Error saving global symbol library table:\n%s" ), ioe.What() );
-            DisplayErrorMessage( this, msg );
-        }
-    }
-
-    if( aProject && !Prj().GetProjectName().IsEmpty() )
-    {
-        wxFileName fn( Prj().GetProjectPath(), SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
-
-        try
-        {
-            //PROJECT_SCH::SchSymbolLibTable( &Prj() )->Save( fn.GetFullPath() );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            success = false;
-            msg.Printf( _( "Error saving project-specific symbol library table:\n%s" ),
-                        ioe.What() );
-            DisplayErrorMessage( this, msg );
-        }
-    }
-
-    return success;
-}
-
-
 void SCH_BASE_FRAME::RedrawScreen( const VECTOR2I& aCenterPoint, bool aWarpPointer )
 {
     GetCanvas()->GetView()->SetCenter( aCenterPoint );
@@ -871,6 +830,7 @@ wxString SCH_BASE_FRAME::SelectLibrary( const wxString& aDialogTitle, const wxSt
 
             // TODO(JE) library tables
 #if 0
+
             if( !mgr.CreateLibrary( fn.GetFullPath(), scope ) )
                 DisplayError( this, wxString::Format( _( "Could not add library '%s'." ), libraryName ) );
 #endif

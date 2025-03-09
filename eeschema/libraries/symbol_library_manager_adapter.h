@@ -213,11 +213,11 @@ public:
 
     std::optional<LIBRARY_ERROR> LibraryError( const wxString& aNickname ) const;
 
-    // TODO(JE) is this the right API still?
-    void DeleteLibrary( const wxString& aNickname );
+    /// Deletes the given library from disk if it exists; returns true if deleted
+    bool DeleteLibrary( const wxString& aNickname );
 
-    // TODO(JE) is this the right API still?
-    void CreateLibrary( const wxString& aNickname );
+    /// Creates the library (i.e. saves to disk) for the given row if it exists
+    bool CreateLibrary( const wxString& aNickname );
 
     static std::optional<SCH_IO_MGR::SCH_FILE_T> ParseLibType( const wxString& aType );
 
