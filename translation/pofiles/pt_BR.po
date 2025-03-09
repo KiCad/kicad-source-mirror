@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-06 13:54+0300\n"
-"PO-Revision-Date: 2025-03-05 17:33+0000\n"
+"PO-Revision-Date: 2025-03-09 15:33+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/v9/pt_BR/>\n"
@@ -26472,9 +26472,8 @@ msgstr ""
 "do bloco, 1 = tamanho da página atual, 2 = apenas área do quadro)"
 
 #: kicad/cli/command_pcb_export_svg.cpp:92
-#, fuzzy
 msgid "Fit the page to the board"
-msgstr "Preencher todas as zonas da placa"
+msgstr "Ajuste a página à placa"
 
 #: kicad/cli/command_pcb_export_svg.cpp:96
 #: kicad/cli/command_sch_export_plot.cpp:77
@@ -37415,9 +37414,8 @@ msgstr ""
 "Escolha 4 caso não tenha certeza."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:386
-#, fuzzy
 msgid "Fit page to board"
-msgstr "Falha ao copiar imagem para área de transferência"
+msgstr "Ajuste da página à placa"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:412
 msgid "Generate property popups for front footprints"
