@@ -2201,10 +2201,7 @@ void FOOTPRINT::RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFun
             aFunction( zone  );
 
         for( PCB_GROUP* group : m_groups )
-        {
             aFunction( group );
-            group->RunOnDescendants( aFunction, aDepth + 1 );
-        }
 
         for( BOARD_ITEM* drawing : m_drawings )
         {
@@ -2688,7 +2685,7 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootpr
                         Add( aCurrItem );
                     } );
 
-            Add( new_item );
+            Add( group );
         }
 
         new_item = group;

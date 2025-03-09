@@ -210,12 +210,6 @@ void BOARD_COMMIT::propagateDamage( BOARD_ITEM* aChangedItem, std::vector<ZONE*>
 
         for( BOARD_ITEM* item : board->Drawings() )
         {
-            item->RunOnDescendants(
-                    [&]( BOARD_ITEM* child )
-                    {
-                        checkItem( child );
-                    } );
-
             checkItem( item );
         }
     }
