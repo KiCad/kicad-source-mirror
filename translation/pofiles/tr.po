@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-06 13:54+0300\n"
-"PO-Revision-Date: 2025-03-09 15:33+0000\n"
+"PO-Revision-Date: 2025-03-09 15:37+0000\n"
 "Last-Translator: Argeolog <argelojik@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
@@ -23572,7 +23572,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:472
 msgid "Add selected design block to current sheet"
-msgstr ""
+msgstr "Seçili tasarım bloğunu geçerli sayfaya ekle"
 
 #: eeschema/tools/ee_actions.cpp:483
 #, fuzzy
@@ -24827,7 +24827,7 @@ msgstr "*** yeni sembolün çok az birimi var ***"
 
 #: eeschema/tools/sch_drawing_tools.cpp:625
 msgid "All units of this symbol are already placed."
-msgstr ""
+msgstr "Bu sembolün tüm birimleri zaten yerleştirildi."
 
 #: eeschema/tools/sch_drawing_tools.cpp:784
 #, fuzzy
@@ -36388,6 +36388,8 @@ msgid ""
 "A list of comma-selected reference designators to export (wildcards are "
 "supported)"
 msgstr ""
+"Seçilen referans tasarımcılarının virgülle ayrılmış bir listesini dışa aktar "
+"(genel ifadeler desteklenir)."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:119
 #, fuzzy
@@ -38625,7 +38627,7 @@ msgstr "Izgaralar:"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:50
 msgid "0.01"
-msgstr ""
+msgstr "0.01"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:60
 #, fuzzy
@@ -40165,7 +40167,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_render_job_base.cpp:219
 #: pcbnew/dialogs/dialog_render_job_base.cpp:297
 msgid "°"
-msgstr ""
+msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:233
 #, fuzzy
@@ -40540,11 +40542,13 @@ msgstr "'%s' içinde bilinmeyen düğüm '%s'"
 #, c-format
 msgid "Applying these changes will short net %s with %s."
 msgstr ""
+"Bu değişiklikleri uygulamak, %s hattını %s hattı ile kısa devre yapacaktır."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:634
 #, c-format
 msgid "Applying these changes will short net %s with other nets."
 msgstr ""
+"Bu değişiklikleri uygulamak, %s hattını diğer hatlarla kısa devre yapacaktır."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:639
 #, fuzzy
@@ -50513,6 +50517,8 @@ msgstr "Bölge köşesi ekle"
 msgid ""
 "Add slots in acute corners to allow access to a cutter of the given radius"
 msgstr ""
+"Belirtilen yarıçaptaki bir kesiciye erişim sağlamak için keskin köşelere "
+"yuvalar ekleyin"
 
 #: pcbnew/tools/edit_tool.cpp:1307
 #, fuzzy
