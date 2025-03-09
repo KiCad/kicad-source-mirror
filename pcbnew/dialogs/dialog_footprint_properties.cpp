@@ -46,6 +46,8 @@
 #include <panel_fp_properties_3d_model.h>
 #include <dialogs/panel_preview_3d_model.h>
 #include <dialog_footprint_properties.h>
+#include <tool/tool_manager.h>
+#include <tools/pcb_selection_tool.h>
 
 
 int DIALOG_FOOTPRINT_PROPERTIES::m_page = 0;     // remember the last open page during session
@@ -501,7 +503,9 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     if( !m_itemsGrid->CommitPendingChanges() )
         return false;
 
-    BOARD_COMMIT commit( m_frame );
+    KIGFX::PCB_VIEW*    view = m_frame->GetCanvas()->GetView();
+    PCB_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
+    BOARD_COMMIT        commit( m_frame );
     commit.Modify( m_footprint );
 
     // Make sure this happens inside a commit to capture any changed files
@@ -555,6 +559,15 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
             newField->SetOrdinal( ordinal++ );
 
         m_footprint->Add( newField );
+        view->Add( newField );
+
+        if( newField->IsSelected() )
+        {
+            // The old copy was in the selection list, but this one is not.  Remove the
+            // out-of-sync selection flag so we can re-add the field to the selection.
+            newField->ClearSelected();
+            selectionTool->AddItemToSel( newField, true );
+        }
     }
 
     // Initialize masks clearances

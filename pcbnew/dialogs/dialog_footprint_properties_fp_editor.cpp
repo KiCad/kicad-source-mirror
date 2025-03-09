@@ -530,8 +530,9 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
         return false;
     }
 
-    KIGFX::PCB_VIEW* view = m_frame->GetCanvas()->GetView();
-    BOARD_COMMIT     commit( m_frame );
+    KIGFX::PCB_VIEW*    view = m_frame->GetCanvas()->GetView();
+    PCB_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
+    BOARD_COMMIT        commit( m_frame );
     commit.Modify( m_footprint );
 
     // Must be done inside the commit to capture the undo state
@@ -589,6 +590,14 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
         PCB_FIELD* newField = field.CloneField();
         m_footprint->Add( newField );
         view->Add( newField );
+
+        if( newField->IsSelected() )
+        {
+            // The old copy was in the selection list, but this one is not.  Remove the
+            // out-of-sync selection flag so we can re-add the field to the selection.
+            newField->ClearSelected();
+            selectionTool->AddItemToSel( newField, true );
+        }
     }
 
     LSET privateLayers;
