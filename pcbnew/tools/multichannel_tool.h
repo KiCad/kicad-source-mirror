@@ -68,6 +68,8 @@ struct RULE_AREA_COMPAT_DATA
     bool                      m_doCopy = false;
     wxString                  m_errorMsg;
     TMATCH::COMPONENT_MATCHES m_matchingComponents;
+    std::unordered_set<BOARD_ITEM*> m_affectedItems;
+    std::unordered_set<BOARD_ITEM*> m_groupableItems;
 };
 
 struct RULE_AREA
