@@ -28,7 +28,6 @@
 #include <pad.h>
 #include <zone.h>
 #include <pcb_text.h>
-#include <pcb_group.h>
 
 
 // A list of all basic (ie: non-compound) board geometry items
@@ -154,11 +153,9 @@ void DRC_TEST_PROVIDER::reportRuleStatistics()
 int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, LSET aLayers,
                                             const std::function<bool( BOARD_ITEM*)>& aFunc )
 {
-    BOARD* brd = m_drcEngine->GetBoard();
-    bool   cancelled = false;
-    int    n = 0;
-
+    BOARD *brd = m_drcEngine->GetBoard();
     std::bitset<MAX_STRUCT_TYPE_ID> typeMask;
+    int n = 0;
 
     if( aTypes.size() == 0 )
     {
@@ -171,77 +168,68 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
             typeMask[ aType ] = true;
     }
 
-    auto processItem =
-            [&]( BOARD_ITEM* item )
-            {
-                if( ( item->GetLayerSet() & aLayers ).any() )
-                {
-                    if( typeMask[ PCB_TRACE_T ] && item->Type() == PCB_TRACE_T )
-                    {
-                        cancelled |= !aFunc( item );
-                        n++;
-                    }
-                    else if( typeMask[ PCB_VIA_T ] && item->Type() == PCB_VIA_T )
-                    {
-                        cancelled |= !aFunc( item );
-                        n++;
-                    }
-                    else if( typeMask[ PCB_ARC_T ] && item->Type() == PCB_ARC_T )
-                    {
-                        cancelled |= !aFunc( item );
-                        n++;
-                    }
-                    else if( typeMask[ PCB_DIMENSION_T ] && BaseType( item->Type() ) == PCB_DIMENSION_T )
-                    {
-                        cancelled |= !aFunc( item );
-                        n++;
-                    }
-                    else if( typeMask[ PCB_SHAPE_T ] && item->Type() == PCB_SHAPE_T )
-                    {
-                        cancelled |= !aFunc( item );
-                        n++;
-                    }
-                    else if( typeMask[ PCB_TEXT_T ] && item->Type() == PCB_TEXT_T )
-                    {
-                        cancelled |= !aFunc( item );
-                        n++;
-                    }
-                    else if( typeMask[ PCB_TEXTBOX_T ] && item->Type() == PCB_TEXTBOX_T )
-                    {
-                        cancelled |= !aFunc( item );
-                        n++;
-                    }
-                    else if( typeMask[ PCB_TARGET_T ] && item->Type() == PCB_TARGET_T )
-                    {
-                        cancelled |= !aFunc( item );
-                        n++;
-                    }
-                }
-            };
-
     for( PCB_TRACK* item : brd->Tracks() )
     {
-        processItem( item );
-
-        if( cancelled )
-            return n;
+        if( (item->GetLayerSet() & aLayers).any() )
+        {
+            if( typeMask[ PCB_TRACE_T ] && item->Type() == PCB_TRACE_T )
+            {
+                aFunc( item );
+                n++;
+            }
+            else if( typeMask[ PCB_VIA_T ] && item->Type() == PCB_VIA_T )
+            {
+                aFunc( item );
+                n++;
+            }
+            else if( typeMask[ PCB_ARC_T ] && item->Type() == PCB_ARC_T )
+            {
+                aFunc( item );
+                n++;
+            }
+        }
     }
 
     for( BOARD_ITEM* item : brd->Drawings() )
     {
-        processItem( item );
-
-        if( item->Type() == PCB_GROUP_T )
+        if( (item->GetLayerSet() & aLayers).any() )
         {
-            static_cast<PCB_GROUP*>( item )->RunOnDescendants(
-                    [&]( BOARD_ITEM* child )
-                    {
-                        processItem( child );
-                    } );
-        }
+            if( typeMask[ PCB_DIMENSION_T ] && BaseType( item->Type() ) == PCB_DIMENSION_T )
+            {
+                if( !aFunc( item ) )
+                    return n;
 
-        if( cancelled )
-            return n;
+                n++;
+            }
+            else if( typeMask[ PCB_SHAPE_T ] && item->Type() == PCB_SHAPE_T )
+            {
+                if( !aFunc( item ) )
+                    return n;
+
+                n++;
+            }
+            else if( typeMask[ PCB_TEXT_T ] && item->Type() == PCB_TEXT_T )
+            {
+                if( !aFunc( item ) )
+                    return n;
+
+                n++;
+            }
+            else if( typeMask[ PCB_TEXTBOX_T ] && item->Type() == PCB_TEXTBOX_T )
+            {
+                if( !aFunc( item ) )
+                    return n;
+
+                n++;
+            }
+            else if( typeMask[ PCB_TARGET_T ] && item->Type() == PCB_TARGET_T )
+            {
+                if( !aFunc( item ) )
+                    return n;
+
+                n++;
+            }
+        }
     }
 
     if( typeMask[ PCB_ZONE_T ] )
@@ -250,12 +238,11 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
         {
             if( ( item->GetLayerSet() & aLayers ).any() )
             {
-                cancelled |= !aFunc( item );
+                if( !aFunc( item ) )
+                    return n;
+
                 n++;
             }
-
-            if( cancelled )
-                return n;
         }
     }
 
@@ -267,7 +254,9 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
             {
                 if( ( field->GetLayerSet() & aLayers ).any() )
                 {
-                    cancelled |= !aFunc( field );
+                    if( !aFunc( field ) )
+                        return n;
+
                     n++;
                 }
             }
@@ -280,7 +269,9 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
                 // Careful: if a pad has a hole then it pierces all layers
                 if( pad->HasHole() || ( pad->GetLayerSet() & aLayers ).any() )
                 {
-                    cancelled |= !aFunc( pad );
+                    if( !aFunc( pad ) )
+                        return n;
+
                     n++;
                 }
             }
@@ -288,15 +279,36 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
 
         for( BOARD_ITEM* dwg : footprint->GraphicalItems() )
         {
-            processItem( dwg );
-
-            if( dwg->Type() == PCB_GROUP_T )
+            if( (dwg->GetLayerSet() & aLayers).any() )
             {
-                static_cast<PCB_GROUP*>( dwg )->RunOnDescendants(
-                        [&]( BOARD_ITEM* child )
-                        {
-                            processItem( child );
-                        } );
+                if( typeMask[ PCB_DIMENSION_T ] && BaseType( dwg->Type() ) == PCB_DIMENSION_T )
+                {
+                    if( !aFunc( dwg ) )
+                        return n;
+
+                    n++;
+                }
+                else if( typeMask[ PCB_TEXT_T ] && dwg->Type() == PCB_TEXT_T )
+                {
+                    if( !aFunc( dwg ) )
+                        return n;
+
+                    n++;
+                }
+                else if( typeMask[ PCB_TEXTBOX_T ] && dwg->Type() == PCB_TEXTBOX_T )
+                {
+                    if( !aFunc( dwg ) )
+                        return n;
+
+                    n++;
+                }
+                else if( typeMask[ PCB_SHAPE_T ] && dwg->Type() == PCB_SHAPE_T )
+                {
+                    if( !aFunc( dwg ) )
+                        return n;
+
+                    n++;
+                }
             }
         }
 
@@ -306,7 +318,9 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
             {
                 if( (zone->GetLayerSet() & aLayers).any() )
                 {
-                    cancelled |= !aFunc( zone );
+                    if( !aFunc( zone ) )
+                        return n;
+
                     n++;
                 }
             }
@@ -314,12 +328,11 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
 
         if( typeMask[ PCB_FOOTPRINT_T ] )
         {
-            cancelled |= !aFunc( footprint );
+            if( !aFunc( footprint ) )
+                return n;
+
             n++;
         }
-
-        if( cancelled )
-            return n;
     }
 
     return n;
