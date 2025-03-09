@@ -538,16 +538,13 @@ void BOARD::RunOnDescendants( const std::function<void ( BOARD_ITEM* )>& aFuncti
         for( PCB_MARKER* marker : m_markers )
             aFunction( marker );
 
+        for( PCB_GROUP* group : m_groups )
+            aFunction( group );
+
         for( FOOTPRINT* footprint : m_footprints )
         {
             aFunction( footprint );
             footprint->RunOnDescendants( aFunction, aDepth + 1 );
-        }
-
-        for( PCB_GROUP* group : m_groups )
-        {
-            aFunction( group );
-            group->RunOnDescendants( aFunction, aDepth + 1 );
         }
 
         for( BOARD_ITEM* drawing : m_drawings )
