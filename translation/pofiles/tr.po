@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-06 13:54+0300\n"
-"PO-Revision-Date: 2025-03-09 15:37+0000\n"
+"PO-Revision-Date: 2025-03-09 16:01+0000\n"
 "Last-Translator: Argeolog <argelojik@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
@@ -7871,7 +7871,7 @@ msgstr ""
 
 #: common/jobs/jobs_output_archive.cpp:96 common/jobs/jobset.cpp:44
 msgid "Archive"
-msgstr ""
+msgstr "Arşiv"
 
 #: common/jobs/jobs_output_folder.cpp:85 common/jobs/jobset.cpp:42
 #, fuzzy
@@ -23616,7 +23616,7 @@ msgstr "Çizim Sayfası Dosyası"
 
 #: eeschema/tools/ee_actions.cpp:554
 msgid "Copy sheet into project and draw on current sheet"
-msgstr ""
+msgstr "Sayfayı projeye kopyalayın ve geçerli sayfaya çizin"
 
 #: eeschema/tools/ee_actions.cpp:562
 #, fuzzy
@@ -27836,7 +27836,7 @@ msgstr ""
 
 #: kicad/cli/command_pcb_render.cpp:301
 msgid "Bottom light intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr ""
+msgstr "Alt ışık yoğunluğu, format: 'R,G,B' veya tek bir sayı, aralık: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:306
 msgid "Side lights intensity, format 'R,G,B' or a single number, range: 0-1"
@@ -27844,7 +27844,7 @@ msgstr ""
 
 #: kicad/cli/command_pcb_render.cpp:311
 msgid "Camera light intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr ""
+msgstr "amera ışık yoğunluğu, format: 'R,G,B' veya tek bir sayı, aralık: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:317
 msgid "Side lights elevation angle in degrees, range: 0-90"
@@ -35501,6 +35501,10 @@ msgid ""
 "Inward:    >-----<\n"
 "Outward: <----->"
 msgstr ""
+"Boyut Ok Yönünü Seçin\n"
+"Otomatik: Metin konumuna göre belirlenir.\n"
+"İçeriye: >-----<\n"
+"Dışarıya: <----->"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:199
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:94
@@ -38558,6 +38562,8 @@ msgstr "Diğer ögeler"
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:84
 msgid "Copy text, shapes, zones, and other items inside the source rule area"
 msgstr ""
+"Kaynak kural alanı içindeki metni, şekilleri, bölgeleri ve diğer öğeleri "
+"kopyalayın"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:88
 #, fuzzy
@@ -40257,7 +40263,7 @@ msgstr "%s, %s'den küçük olmalıdır."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:460
 msgid "Arc must have 3 distinct points"
-msgstr ""
+msgstr "Yay, 3 farklı noktadan oluşmalıdır."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:474
 #, fuzzy, c-format
@@ -40363,7 +40369,7 @@ msgstr "Özel kağıt boyutu:"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:69
 msgid "By Center and Size"
-msgstr ""
+msgstr "Merkez ve Boyut ile"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:85
 #, fuzzy
@@ -40382,11 +40388,11 @@ msgstr "X'i Başlat"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:133
 msgid "By Center/Start/Angle"
-msgstr ""
+msgstr "Merkez/Başlangıç/Açı ile"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:149
 msgid "By Start/Mid/End"
-msgstr ""
+msgstr "Başlangıç/Orta/Sonuç ile"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:165
 #, fuzzy
@@ -42362,6 +42368,72 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
+"### Kısıtlamalar\n"
+"\n"
+"/ Kısıtlama türü / Bağımsız değişken türü / Açıklama |\n"
+"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|"
+"\n"
+"| `annular_width' / min/opt|max / Halka şeklindeki halkaların açıklıklardaki "
+"genişliğini kontrol eder.<br> |\n"
+"| 'onaylama' | \"&lt;ifade>\" / Verilen ifadeyi kontrol eder.<br> |\n"
+"/ 'boşluk' | dak / Farklı ağlardaki bakır nesneler arasındaki ** elektriksel "
+"** boşluğu belirtir.  Net'ten bağımsız olarak nesneler arasında boşluk "
+"belirtmek istiyorsanız `physical_clearance` bölümüne bakın.)<br><br>Bakır "
+"nesnelerin üst üste gelmesine (çarpışmasına) izin vermek için, `min` değeri "
+"sıfırdan küçük olan bir `boşluk` kısıtlaması oluşturun (örneğin, `-1`).<br> |"
+"\n"
+"| `courtyard_clearance' | min / Ayak izi avluları arasındaki boşluğu kontrol "
+"eder ve herhangi iki avlu `min` mesafesinden daha yakınsa bir hata üretir.  "
+"Bir ayak izinin avlu şekli yoksa, bu kısıtlamadan herhangi bir hata "
+"oluşmaz.<br> |\n"
+"/ 'sürünme` / dak / Farklı ağlardaki bakır nesneler arasındaki sürünme "
+"mesafesini belirtir.<br> |\n"
+"| `diff_pair_gap' / min / opt | max / Diferansiyel bir çiftteki bağlı "
+"parçalar arasındaki boşluğu kontrol eder.  Birleştirilmiş parçalar birbirine "
+"paralel olan parçalardır.  Diferansiyel çift boşluğu, bir diferansiyel "
+"çiftin ayrılmamış kısımları üzerinde test edilmez (örneğin, bir bileşenden "
+"fan çıkışı).<br> |\n"
+"| `diff_pair_uncoupled' | max / Bir diferansiyel çift izinin, çiftteki diğer "
+"polarite izinden ayrılmamış olarak yönlendirildiği mesafeyi kontrol eder ("
+"örneğin, çiftin bir bileşenden dışarı fırladığı veya vıa gibi başka bir "
+"nesnenin etrafından geçmek için ayrıldığı yer).<br> |\n"
+"| 'izin verme` | "
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`"
+"footprint'<br> | Boşluklarla ayrılmış, izin verilmeyecek bir veya daha fazla "
+"nesne türü belirtin.  Örneğin, `(kısıt parçaya izin vermiyor)` veya '(kısıt "
+"ped aracılığıyla parçaya izin vermiyor)'.  Bu tür bir nesne kural koşuluyla "
+"eşleşirse, bir DRC hatası oluşturulur.<br><br>Bu kısıtlama esas olarak bir "
+"saklama kuralı alanıyla aynıdır, ancak daha spesifik saklama kısıtlamaları "
+"oluşturmak için kullanılabilir.<br> |\n"
+"| `edge_clearance' / min /opt | max / Nesneler ile tahta kenarı arasındaki "
+"boşluğu kontrol eder.<br><br>Bu, tahta kenarı `Kenardaki tüm grafik "
+"öğelerini içereceğinden \"frezeleme toleransı\" olarak da "
+"düşünülebilir.Tabakanın yanı sıra * oval * ped deliklerini de keser.  Delme "
+"toleransı için `physical_hole_clearance` bölümüne bakın.)<br> |\n"
+"/ 'uzunluk| / min / maks / Kural koşuluyla eşleşen ağlar için yönlendirilen "
+"toplam uzunluğu kontrol eder ve her ağ için kısıtlamanın `min` değerinin "
+"(belirtilmişse) altında veya `maks` değerinin (belirtilmişse) üzerinde bir "
+"hata oluşturur.<br> |\n"
+"| `delik' / min | maks / Bir pedde veya içinden delinmiş bir deliğin "
+"boyutunu (çapını) kontrol eder.  Oval delikler için, daha küçük (küçük) çap "
+"`min` değerine (belirtilmişse) ve daha büyük (büyük) çap `max` değerine "
+"(belirtilmişse) karşı test edilecektir.<br> |\n"
+"| `hole_clearance' | dak / Bir pedde veya içinden delinmiş bir delik ile "
+"farklı bir ağdaki bakır nesneler arasındaki boşluğu kontrol eder.  Açıklık, "
+"merkezinden değil deliğin çapından ölçülür.<br> |\n"
+"| `hole_to_hole' | dak / Pedlerde ve deliklerde mekanik olarak delinmiş "
+"delikler arasındaki boşluğu kontrol eder.  Açıklık, merkezleri arasında "
+"değil, deliklerin çapları arasında ölçülür.<br><br>Bu kısıtlama, matkap "
+"uçlarının korunması içindir.  ** Lazerle delinmiş ** (mikrovyalar) ile "
+"mekanik olarak delinmemiş diğer delikler arasındaki boşluk kontrol edilmez "
+"ve ** öğütülmüş ** (oval şekilli) ile mekanik olarak delinmemiş diğer "
+"delikler arasındaki boşluk kontrol edilmez.<br> |\n"
+"/ 'physical_clearance| / min / Belirli bir katmandaki (bakır olmayan "
+"katmanlar dahil) iki nesne arasındaki boşluğu kontrol eder.<br><br>Bu, "
+"`temizleme` işleminden daha genel amaçlı kontroller gerçekleştirebilirken, "
+"çok daha yavaştır.  Mümkün olduğunda 'boşluk' kullanın.<br> |\n"
+"\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_3items.h:2
 msgid ""
@@ -47943,7 +48015,7 @@ msgstr "Bilinmeyen özellik %s"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1174
 #, c-format
 msgid "Circle with unequal x and y radii (x=%d, y=%d)"
-msgstr ""
+msgstr "Eşitsiz x ve y yarıçaplarına sahip daire (x=%d, y=%d)"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1314
 #, c-format
@@ -48782,7 +48854,7 @@ msgstr "Bulunamadı"
 
 #: pcbnew/pcb_track.cpp:2211
 msgid "Capped"
-msgstr ""
+msgstr "Kapalı"
 
 #: pcbnew/pcb_track.cpp:2212
 #, fuzzy
@@ -48846,7 +48918,7 @@ msgstr "Düzenleme"
 
 #: pcbnew/pcb_track.cpp:2309
 msgid "Capping"
-msgstr ""
+msgstr "Kapalı"
 
 #: pcbnew/pcb_track.cpp:2311
 #, fuzzy
@@ -49608,7 +49680,7 @@ msgstr "Yol genişliği:"
 
 #: pcbnew/toolbars_pcb_editor.cpp:124
 msgid "Control to select the track width"
-msgstr ""
+msgstr "Parça genişliğini seçmek için kontrol"
 
 #: pcbnew/toolbars_pcb_editor.cpp:125
 #, fuzzy
@@ -50755,7 +50827,7 @@ msgstr ""
 
 #: pcbnew/tools/item_modification_routine.cpp:292
 msgid " Consider enabling the 'Add Slots' option."
-msgstr ""
+msgstr " 'Yuva Ekle' seçeneğini etkinleştirmeyi düşünün."
 
 #: pcbnew/tools/item_modification_routine.cpp:294
 msgid " Slots were added."
@@ -50850,6 +50922,8 @@ msgstr ""
 #, c-format
 msgid "Copy Rule Area contents failed between rule areas '%s' and '%s'."
 msgstr ""
+"Kural Alanı içeriklerini kopyalama işlemi '%s' ve '%s' kural alanları "
+"arasında başarısız oldu."
 
 #: pcbnew/tools/multichannel_tool.cpp:543
 #, fuzzy
@@ -50883,6 +50957,8 @@ msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheet(s) or component classes."
 msgstr ""
+"Şematikte yalnızca bir tane veya hiç hiyerarşik sayfa veya bileşen sınıfı "
+"olmadığı için yerleşim alanları otomatik olarak oluşturulamıyor."
 
 #: pcbnew/tools/multichannel_tool.cpp:1157
 #, fuzzy
@@ -52851,7 +52927,7 @@ msgstr "Yineleme Sayısı"
 
 #: pcbnew/tools/pcb_actions.cpp:2330
 msgid "Clones placement & routing across multiple identical channels"
-msgstr ""
+msgstr "Birden fazla özdeş kanalda klon yerleştirme ve yönlendirme"
 
 #: pcbnew/tools/pcb_actions.cpp:2341
 #, fuzzy
