@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-06 13:54+0300\n"
+"POT-Creation-Date: 2025-03-09 19:05+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -495,11 +495,13 @@ msgstr "Background gradient end color"
 msgid "Use board stackup colors"
 msgstr "Use board stackup colors"
 
-msgid "Use board editor copper colors"
-msgstr "Use board editor copper colors"
+msgid "Use PCB editor copper colors"
+msgstr "Use PCB editor copper colors"
 
-msgid "Use the board editor copper colors (openGL only)"
-msgstr "Use the board editor copper colors (openGL only)"
+msgid ""
+"Use the board editor layer colors for copper layers (realtime renderer only)"
+msgstr ""
+"Use the board editor layer colors for copper layers (realtime renderer only)"
 
 #, c-format
 msgid ""
@@ -22876,9 +22878,6 @@ msgstr "Precision:"
 msgid "Choose how many digits of precision to display"
 msgstr "Choose how many digits of precision to display"
 
-msgid "Arrow direction:"
-msgstr "Arrow direction:"
-
 msgid "0.0"
 msgstr "0.0"
 
@@ -22905,23 +22904,6 @@ msgstr "0.0000 / 0.0 / 0.000"
 
 msgid "0.00000 / 0.00 / 0.0000"
 msgstr "0.00000 / 0.00 / 0.0000"
-
-msgid "Inward"
-msgstr "Inward"
-
-msgid "Outward"
-msgstr "Outward"
-
-msgid ""
-"Chose Dimension Arrow Direction\n"
-"Automatic: Determined based on text position.\n"
-"Inward:    >-----<\n"
-"Outward: <----->"
-msgstr ""
-"Chose Dimension Arrow Direction\n"
-"Automatic: Determined based on text position.\n"
-"Inward:    >-----<\n"
-"Outward: <----->"
 
 msgid "Suppress trailing zeroes"
 msgstr "Suppress trailing zeroes"
@@ -23004,6 +22986,26 @@ msgstr "Gap between the measured points and the start of the extension lines"
 
 msgid "Extension line overshoot:"
 msgstr "Extension line overshoot:"
+
+msgid "Arrow direction:"
+msgstr "Arrow direction:"
+
+msgid "Inward"
+msgstr "Inward"
+
+msgid "Outward"
+msgstr "Outward"
+
+msgid ""
+"Chose Dimension Arrow Direction\n"
+"Automatic: Determined based on text position.\n"
+"Inward:    >-----<\n"
+"Outward: <----->"
+msgstr ""
+"Chose Dimension Arrow Direction\n"
+"Automatic: Determined based on text position.\n"
+"Inward:    >-----<\n"
+"Outward: <----->"
 
 msgid "Dimension Properties"
 msgstr "Dimension Properties"
@@ -36613,6 +36615,9 @@ msgstr "Source Type"
 msgid "Source Name"
 msgstr "Source Name"
 
+msgid "Hatch Orientation"
+msgstr "Hatch Orientation"
+
 msgid "Cannot be less than zone minimum width"
 msgstr "Cannot be less than zone minimum width"
 
@@ -36808,6 +36813,12 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Use board editor copper colors"
+#~ msgstr "Use board editor copper colors"
+
+#~ msgid "Use the board editor copper colors (openGL only)"
+#~ msgstr "Use the board editor copper colors (openGL only)"
 
 #, c-format
 #~ msgid ""
