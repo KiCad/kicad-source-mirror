@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:05+0300\n"
-"PO-Revision-Date: 2025-03-06 23:18+0000\n"
+"PO-Revision-Date: 2025-03-09 20:51+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -781,15 +781,15 @@ msgid "Use board stackup colors"
 msgstr "Använd färger från mönsterkortets lageruppbyggnad"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:143
-#, fuzzy
 msgid "Use PCB editor copper colors"
 msgstr "Använd kopparfärger från mönsterkortsredigeraren"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:145
-#, fuzzy
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
-msgstr "Använd kopparfärger från mönsterkortsredigeraren (endast openGL)"
+msgstr ""
+"Använd mönsterkortsredigerarens färger för kopparlager (endast "
+"realtidsrenderare)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:163
 #, c-format
@@ -51701,9 +51701,8 @@ msgid "Source Name"
 msgstr "Källnamn"
 
 #: pcbnew/zone.cpp:2008
-#, fuzzy
 msgid "Hatch Orientation"
-msgstr "Orientering"
+msgstr "Skrafferingens riktning"
 
 #: pcbnew/zone.cpp:2026
 msgid "Cannot be less than zone minimum width"
