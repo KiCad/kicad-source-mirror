@@ -31,7 +31,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:04+0300\n"
 "PO-Revision-Date: 2025-03-09 20:51+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -829,15 +829,15 @@ msgid "Use board stackup colors"
 msgstr "Farben des Platinen-Lagenaufbaus verwenden"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:143
-#, fuzzy
 msgid "Use PCB editor copper colors"
-msgstr "Farben des Platineneditors verwenden"
+msgstr "Kupferfarben des Platineneditors verwenden"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:145
-#, fuzzy
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
-msgstr "Kupferfarbe des Platineneditors verwenden (nur openGL)"
+msgstr ""
+"Lagenfarben des Platineneditors für Kupferlagen verwenden (nur Echtzeit-"
+"Renderer)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:163
 #, c-format
