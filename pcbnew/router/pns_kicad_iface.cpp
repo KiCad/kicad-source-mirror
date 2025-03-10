@@ -1437,11 +1437,8 @@ bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, BOARD_ITEM* aItem, P
     if( !IsKicadCopperLayer( aLayer ) )
         return false;
 
-    if( ( aItem->Type() == PCB_FIELD_T || aItem->Type() == PCB_TEXT_T )
-             && !static_cast<PCB_TEXT*>( aItem )->IsVisible() )
-    {
+    if( aItem->Type() == PCB_FIELD_T && !static_cast<PCB_FIELD*>( aItem )->IsVisible() )
         return false;
-    }
 
     std::unique_ptr<PNS::SOLID> solid = std::make_unique<PNS::SOLID>();
     SHAPE_SIMPLE*               shape = new SHAPE_SIMPLE;

@@ -391,7 +391,8 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
         if( field->IsReference() || field->IsValue() )
             continue;
 
-        texts.push_back( field );
+        if( field->IsVisible() )
+            texts.push_back( field );
     }
 
     for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
@@ -402,9 +403,6 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
 
     for( const PCB_TEXT* text : texts )
     {
-        if( !text->IsVisible() )
-            continue;
-
         PCB_LAYER_ID textLayer = text->GetLayer();
         bool         strikeout = false;
 

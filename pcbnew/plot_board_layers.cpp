@@ -956,9 +956,6 @@ void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PCB_LAYER_ID aLa
                 if( !aPlotFPText )
                     return;
 
-                if( !aText.IsVisible() )
-                    return;
-
                 if( aText.GetText() == wxT( "${REFERENCE}" ) && !aPlotReferences )
                     return;
 
@@ -991,7 +988,7 @@ void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PCB_LAYER_ID aLa
                 if( field->IsValue() && !aPlotValues )
                     continue;
 
-                if( field->IsOnLayer( aLayer ) )
+                if( field->IsVisible() && field->IsOnLayer( aLayer ) )
                     handleFPTextItem( static_cast<const PCB_TEXT&>( *field ) );
             }
 
