@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:04+0300\n"
-"PO-Revision-Date: 2025-03-10 18:23+0000\n"
+"PO-Revision-Date: 2025-03-11 17:51+0000\n"
 "Last-Translator: Marc de Miguel <marc.demiguel.c@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
@@ -77,13 +77,12 @@ msgid "Build Tech layer %d"
 msgstr "Construeix Capa Tècnica %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1143
-#, fuzzy
 msgid "Simplifying copper layer polygons"
-msgstr "S'estan simplificant els polígons de les capes de coure"
+msgstr "Simplificant polígons de les capes de coure"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1148
 msgid "Calculating plated copper"
-msgstr ""
+msgstr "Calculant coure revestit"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1232
 #, c-format
@@ -99,9 +98,8 @@ msgid "Build BVH for holes and vias"
 msgstr "Construeix BVH per a forats i vies"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:403
-#, fuzzy
 msgid "OpenGL context creation error"
-msgstr "Resolució de les àrees restringides per:"
+msgstr "Error de creació del context per OpenGL"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:434
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -276,23 +274,20 @@ msgstr "Aparença"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:330
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:630
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
-#, fuzzy
 msgid "Follow PCB Editor"
-msgstr "Editor de PCB's"
+msgstr "Editor de PCB"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:332
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:631
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
-#, fuzzy
 msgid "Follow PCB Plot Settings"
-msgstr "Ajusts del filtre"
+msgstr "Seguir configuració de traçat de la placa"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:561
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:656
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:844
-#, fuzzy
 msgid "legacy colors"
-msgstr "Utilitza els colors:"
+msgstr "antics colors"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:697
 msgid "3D Image File Name"
@@ -354,14 +349,12 @@ msgid "Reload board"
 msgstr "Recarrega la placa"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:49
-#, fuzzy
 msgid "Reload board and refresh 3D view"
-msgstr "Torna a carregar la placa i els models 3D"
+msgstr "Recarregar la placa de nou i refrescar la vista 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
-#, fuzzy
 msgid "Use raytracing"
-msgstr "Traçat de rajos (Raytracing)"
+msgstr "Usar traçat de rajos"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:56
 msgid "Render current view using Raytracing"
@@ -372,9 +365,8 @@ msgid "Copy 3D image to clipboard"
 msgstr "Copia la imatge 3D al porta-retalls"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:64
-#, fuzzy
 msgid "Copy the current 3D image to the clipboard"
-msgstr "Copia la imatge 3D al porta-retalls"
+msgstr "Copia la imatge 3D actual al porta-retalls"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
 msgid "Export Current View as PNG..."
@@ -393,14 +385,12 @@ msgid "Export the Current View as a JPEG image"
 msgstr "Exporta la vista actual com a una imtage JPEG"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:88
-#, fuzzy
 msgid "Set Pivot"
-msgstr "Pin de la fulla"
+msgstr "Fixar pivot"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:89
-#, fuzzy
 msgid "Place point around which the board will be rotated (middle mouse click)"
-msgstr "Rotació del pivot central (clic amb el botó del mig del ratolí)"
+msgstr "Situar el centre de rotació de la placa (clic central en el ratolí)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:96
 msgid "Rotate X Clockwise"
@@ -427,24 +417,20 @@ msgid "Rotate Z Counterclockwise"
 msgstr "Rota en Z en sentit antihorari"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:145
-#, fuzzy
 msgid "Move Board Left"
-msgstr "Mou la placa a l'esquerra"
+msgstr "Moure la placa a l'esquerra"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:154
-#, fuzzy
 msgid "Move Board Right"
-msgstr "Mou la placa a la dreta"
+msgstr "Moure la placa a la dreta"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:163
-#, fuzzy
 msgid "Move Board Up"
-msgstr "Mou la placa a dalt"
+msgstr "Moure la placa cap amunt"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:172
-#, fuzzy
 msgid "Move Board Down"
-msgstr "Mou la placa a baix"
+msgstr "Moure la placa cap avall"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:181
 #, fuzzy
@@ -464,9 +450,8 @@ msgid "Flip the board view"
 msgstr "Capgira la vista de la placa"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:199
-#, fuzzy
 msgid "Toggle Orthographic Projection"
-msgstr "Commuta la projecció ortogràfica"
+msgstr "Activar/Desactivar projecció ortogràfica"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:200
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:202
@@ -545,9 +530,8 @@ msgid "Use a CAD color style based on the diffuse color of the material"
 msgstr "Utilitza un estil de color CAD basat en el color difús del material"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:321
-#, fuzzy
 msgid "Show Through Hole 3D Models"
-msgstr "Commuta els models 3D dels forats passants"
+msgstr "Mostrar models 3D dels forats passants"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:322
 #, fuzzy
@@ -566,9 +550,8 @@ msgstr ""
 "Commuta els models 3D pels components del tipus 'Muntats en superfície'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:339
-#, fuzzy
 msgid "Show Unspecified 3D Models"
-msgstr "Commuta Altres models 3D"
+msgstr "Mostrar models 3D no especificats"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:340
 #, fuzzy
@@ -576,19 +559,16 @@ msgid "Show 3D models for 'unspecified' type footprints"
 msgstr "Commuta els models 3D pels components del tipus 'Altres'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:348
-#, fuzzy
 msgid "Show 3D Models not in POS File"
-msgstr "Commuta els models 3D pels components del tipus 'Altres'"
+msgstr "Mostrar models 3D que no hi siguin a l'arxiu POS"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:349
-#, fuzzy
 msgid "Show 3D models even if not found in .pos file"
-msgstr "Commuta els models 3D pels components del tipus 'Altres'"
+msgstr "Mostrar models 3D encara que no hi siguin en l'arxiu .pos"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:357
-#, fuzzy
 msgid "Show 3D Models marked DNP"
-msgstr "Commuta els models 3D SMD"
+msgstr "Mostrar models 3D marcats com a DNP"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:358
 #, fuzzy
