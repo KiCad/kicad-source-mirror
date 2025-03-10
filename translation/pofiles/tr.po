@@ -29,8 +29,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:04+0300\n"
-"PO-Revision-Date: 2025-03-10 15:35+0000\n"
-"Last-Translator: İclal Gör <iclallgor@gmail.com>\n"
+"PO-Revision-Date: 2025-03-10 18:23+0000\n"
+"Last-Translator: Ahmet Saygın ÖĞÜLMÜŞ <ogulmus.ahmetsaygin@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
 "Language: tr\n"
@@ -799,12 +799,10 @@ msgid "Use board stackup colors"
 msgstr "Kart yığın renklerini kullan"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:143
-#, fuzzy
 msgid "Use PCB editor copper colors"
-msgstr "Kart yığın renklerini kullan"
+msgstr "PCB düzenleyici bakır renklerini kullan"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:145
-#, fuzzy
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
 msgstr "Kaplamasız bakır için çıplak bakır rengi kullanın (yavaş)"
@@ -983,7 +981,6 @@ msgid "Configure Paths"
 msgstr "Yolları Yapılandır"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
-#, fuzzy
 msgid "Embed model"
 msgstr "Gömülü Model"
 
@@ -1836,7 +1833,6 @@ msgid "&Cancel"
 msgstr "İp&tal"
 
 #: common/confirm.cpp:54 common/confirm.cpp:59
-#, fuzzy
 msgid "&Open Anyway"
 msgstr "Yine de Aç"
 
@@ -1853,12 +1849,10 @@ msgid "&Save"
 msgstr "&Kaydet"
 
 #: common/confirm.cpp:74 common/confirm.cpp:111
-#, fuzzy
 msgid "&Discard Changes"
 msgstr "Değişiklikleri At"
 
 #: common/confirm.cpp:77 common/confirm.cpp:157
-#, fuzzy
 msgid "&Apply to all"
 msgstr "Tümüne uygula"
 
@@ -1867,7 +1861,6 @@ msgid "Your current changes will be permanently lost."
 msgstr "Geçerli değişiklikleriniz kalıcı olarak kaybolacak."
 
 #: common/confirm.cpp:124
-#, fuzzy
 msgid "&Revert"
 msgstr "Geri al"
 
@@ -1937,7 +1930,6 @@ msgid "&No"
 msgstr "&Hayır"
 
 #: common/design_block_info_impl.cpp:135
-#, fuzzy
 msgid "Loading design_blocks..."
 msgstr "Kurallar yükleniyor..."
 
@@ -1954,7 +1946,6 @@ msgid "UNKNOWN (%d)"
 msgstr "BİLİNMEYEN (%d)"
 
 #: common/design_block_io.cpp:137
-#, fuzzy
 msgid "KiCad Design Block folders"
 msgstr "KiCad eski proje dosyaları"
 
@@ -1965,7 +1956,7 @@ msgid "Cannot overwrite library path '%s'."
 msgstr "'%s' kitaplık yolunun üzerine yazılamıyor."
 
 #: common/design_block_io.cpp:184
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library path '%s' could not be created.\n"
 "\n"
@@ -1982,7 +1973,7 @@ msgid "Insufficient permissions to delete folder '%s'."
 msgstr "'%s' klasörünü silmek için izin yok."
 
 #: common/design_block_io.cpp:212
-#, fuzzy, c-format
+#, c-format
 msgid "Library folder '%s' has unexpected files."
 msgstr "'%s' kütüphane dosyası bulunamadı."
 
@@ -55044,6 +55035,8 @@ msgstr "Yollar ve geçişler oluştur"
 #: pcbnew/zone_filler.cpp:889
 msgid "Prototype zone fill enabled. Disable setting and refill?"
 msgstr ""
+"Prototip bölge dolgusu etkinleştirildi. Ayarı devre dışı bırakıp tekrar "
+"doldurulsun mu?"
 
 #: pcbnew/zone_filler.cpp:891
 #, fuzzy
