@@ -129,6 +129,7 @@ bool DRC_CACHE_GENERATOR::Run()
         PCB_PAD_T,
         PCB_SHAPE_T,
         PCB_FIELD_T, PCB_TEXT_T, PCB_TEXTBOX_T,
+        PCB_TABLE_T, PCB_TABLECELL_T,
         PCB_DIMENSION_T
     };
 

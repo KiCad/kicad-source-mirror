@@ -108,7 +108,7 @@ protected:
     std::unique_ptr<PNS::SEGMENT> syncTrack( PCB_TRACK* aTrack );
     std::unique_ptr<PNS::ARC>     syncArc( PCB_ARC* aArc );
     std::unique_ptr<PNS::VIA>     syncVia( PCB_VIA* aVia );
-    bool syncTextItem( PNS::NODE* aWorld, PCB_TEXT* aText, PCB_LAYER_ID aLayer );
+    bool syncTextItem( PNS::NODE* aWorld, BOARD_ITEM* aItem, PCB_LAYER_ID aLayer );
     bool syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aItem );
     bool syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_SET* aBoardOutline );
     bool inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedWidth );
