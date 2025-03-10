@@ -150,8 +150,6 @@ private:
 
     void updatePreviewSymbol();
 
-    void loadAllLibraries();
-
 private:
     wxChoice*           m_unitChoice;
     wxChoice*           m_bodyStyleChoice;

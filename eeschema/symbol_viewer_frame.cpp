@@ -198,7 +198,6 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     symbolPanel->Fit();
 
     // Preload libraries
-    loadAllLibraries();
     ReCreateLibList();
 
     m_selection_changed = false;
@@ -271,60 +270,6 @@ SYMBOL_VIEWER_FRAME::~SYMBOL_VIEWER_FRAME()
         GetCanvas()->GetView()->Remove( m_previewItem.get() );
         m_previewItem = nullptr;
     }
-}
-
-
-void SYMBOL_VIEWER_FRAME::loadAllLibraries()
-{
-    // TODO: deduplicate with SYMBOL_TREE_MODEL_ADAPTER::AddLibraries
-    std::vector<wxString> libraryNames = PROJECT_SCH::SymbolLibManager( &Prj() )->GetLibraryNames();
-    std::unique_ptr<WX_PROGRESS_REPORTER> progressReporter = nullptr;
-
-    if( m_show_progress )
-    {
-        progressReporter = std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Load Symbol Libraries" ),
-                                                                   libraryNames.size(), PR_CAN_ABORT );
-    }
-
-    // TODO(JE) library tables -- is this necessary?
-#if 0
-    // Disable KIID generation: not needed for library parts; sometimes very slow
-    KIID::CreateNilUuids( true );
-
-    std::unordered_map<wxString, std::vector<LIB_SYMBOL*>> loadedSymbols;
-
-    SYMBOL_ASYNC_LOADER loader( libraryNames, PROJECT_SCH::SchSymbolLibTable( &Prj() ), false,
-                                nullptr, progressReporter.get() );
-
-    LOCALE_IO toggle;
-
-    loader.Start();
-
-    while( !loader.Done() )
-    {
-        if( progressReporter && !progressReporter->KeepRefreshing() )
-            break;
-
-        wxMilliSleep( 33 );
-    }
-
-    loader.Join();
-
-    KIID::CreateNilUuids( false );
-
-    if( !loader.GetErrors().IsEmpty() )
-    {
-        HTML_MESSAGE_BOX dlg( this, _( "Load Error" ) );
-
-        dlg.MessageSet( _( "Errors loading symbols:" ) );
-
-        wxString msg = loader.GetErrors();
-        msg.Replace( "\n", "<BR>" );
-
-        dlg.AddHTML_Text( msg );
-        dlg.ShowModal();
-    }
-#endif
 }
 
 
@@ -543,8 +488,8 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
 
     COMMON_SETTINGS*      cfg = Pgm().GetCommonSettings();
     PROJECT_FILE&         project = Kiway().Prj().GetProjectFile();
-    SYMBOL_LIBRARY_MANAGER_ADAPTER* libs = PROJECT_SCH::SymbolLibManager( &Prj() );
-    std::vector<wxString> libNicknames = libs->GetLibraryNames();
+    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
+    std::vector<wxString> libNicknames = adapter->GetLibraryNames();
     std::vector<wxString> pinnedMatches;
     std::vector<wxString> otherMatches;
 
@@ -575,31 +520,26 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
                 // Remove libs which have no power symbols, if this filter is activated
                 if( m_listPowerOnly )
                 {
-                    std::vector<wxString> symbolNames = libs->GetSymbolNames(
+                    std::vector<wxString> symbolNames = adapter->GetSymbolNames(
                             aLib, SYMBOL_LIBRARY_MANAGER_ADAPTER::SYMBOL_TYPE::POWER_ONLY );
 
                     if( symbolNames.empty() )
                         return;
                 }
 
-                // TODO(JE) library tables
-#if 0
-                SYMBOL_LIB_TABLE_ROW* row = libTable->FindRow( aLib );
-
+                LIBRARY_TABLE_ROW* row = adapter->GetRow( aLib ).value_or( nullptr );
                 wxCHECK( row, /* void */ );
 
-                if( !row->GetIsVisible() )
+                if( row->Hidden() )
                     return;
 
-                if( row->SupportsSubLibraries() )
+                if( adapter->SupportsSubLibraries( aLib ) )
                 {
-                    std::vector<wxString> subLibraries;
-                    row->GetSubLibraryNames( subLibraries );
-
-                    for( const wxString& lib : subLibraries )
+                    for( const auto& [nickname, description] : adapter->GetSubLibraries( aLib ) )
                     {
-                        wxString suffix = lib.IsEmpty() ? wxString( wxT( "" ) )
-                                                        : wxString::Format( wxT( " - %s" ), lib );
+                        wxString suffix = nickname.IsEmpty()
+                                              ? wxString( wxT( "" ) )
+                                              : wxString::Format( wxT( " - %s" ), nickname );
                         wxString name = wxString::Format( wxT( "%s%s" ), aLib, suffix );
 
                         doAddLib( name );
@@ -609,7 +549,6 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
                 {
                     doAddLib( aLib );
                 }
-#endif
             };
 
     if( m_libFilter->GetValue().IsEmpty() )
@@ -682,7 +621,8 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
     if( libName.IsEmpty() )
         return false;
 
-    std::vector<LIB_SYMBOL*> symbols;
+    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
+    std::vector<LIB_SYMBOL*> symbols = adapter->GetSymbols( libName );
 
     std::set<wxString> excludes;
 
@@ -713,14 +653,12 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
 
     for( const LIB_SYMBOL* symbol : symbols )
     {
-        // TODO(JE) library tables
-#if 0
-        if( row && row->SupportsSubLibraries()
+        if( adapter->SupportsSubLibraries( libName )
             && !subLib.IsSameAs( symbol->GetLibId().GetSubLibraryName() ) )
         {
             continue;
         }
-#endif
+
         if( !excludes.count( symbol->GetName() ) )
             m_symbolList->Append( UnescapeString( symbol->GetName() ) );
     }
@@ -765,10 +703,9 @@ void SYMBOL_VIEWER_FRAME::ClickOnLibList( wxCommandEvent& event )
 
     wxString selection = EscapeString( m_libList->GetBaseString( ii ), CTX_LIBID );
 
-    // TODO(JE) library tables
-#if 0
-    if( !PROJECT_SCH::SchSymbolLibTable( &Prj() )->FindRow( selection )
-        && selection.Find( '-' ) != wxNOT_FOUND )
+    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
+
+    if( !adapter->HasLibrary( selection ) && selection.Find( '-' ) != wxNOT_FOUND )
     {
         // Probably a sub-library
         wxString sublib;
@@ -777,7 +714,6 @@ void SYMBOL_VIEWER_FRAME::ClickOnLibList( wxCommandEvent& event )
         SetSelectedLibrary( selection, sublib );
     }
     else
-#endif
     {
         SetSelectedLibrary( selection );
     }
@@ -1130,15 +1066,12 @@ void SYMBOL_VIEWER_FRAME::DisplayLibInfos()
 
     if( m_libList && !m_libList->IsEmpty() && !libName.IsEmpty() )
     {
-        // TODO(JE) library tables
-#if 0
-        const SYMBOL_LIB_TABLE_ROW* row =
-                PROJECT_SCH::SchSymbolLibTable( &Prj() )->FindRow( libName, true );
+        SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
+        LIBRARY_TABLE_ROW* row = adapter->GetRow( libName ).value_or( nullptr );
 
-        wxString title = row ? row->GetFullURI( true ) : _( "[no library selected]" );
-#else
-        wxString title = libName;
-#endif
+        wxString title = row
+                             ? LIBRARY_MANAGER::GetFullURI( row, true )
+                             : _( "[no library selected]" );
 
         title += wxT( " \u2014 " ) + _( "Symbol Library Browser" );
         SetTitle( title );
@@ -1164,19 +1097,17 @@ void SYMBOL_VIEWER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     }
     case MAIL_REFRESH_SYMBOL:
     {
-        // TODO(JE) library tables
-#if 0
-        SYMBOL_LIB_TABLE* tbl = PROJECT_SCH::SchSymbolLibTable( &Prj() );
         LIB_SYMBOL* symbol = GetSelectedSymbol();
+        wxCHECK2( symbol, break );
 
-        wxCHECK2( tbl && symbol, break );
-
-        const SYMBOL_LIB_TABLE_ROW* row = tbl->FindRow( symbol->GetLibId().GetLibNickname() );
+        SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
+        LIBRARY_TABLE_ROW* row =
+                adapter->GetRow( symbol->GetLibId().GetLibNickname() ).value_or( nullptr );
 
         if( !row )
             return;
 
-        wxString libfullname = row->GetFullURI( true );
+        wxString libfullname = LIBRARY_MANAGER::GetFullURI( row, true );
 
         wxString lib( mail.GetPayload() );
     wxLogTrace( traceLibWatch, "Received refresh symbol request for %s, current symbols "
@@ -1188,7 +1119,6 @@ void SYMBOL_VIEWER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             updatePreviewSymbol();
             GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
         }
-#endif
         break;
     }
     default:;
