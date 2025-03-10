@@ -41,8 +41,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:04+0300\n"
-"PO-Revision-Date: 2025-03-07 09:02+0000\n"
-"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
+"PO-Revision-Date: 2025-03-10 07:38+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -816,15 +816,13 @@ msgid "Use board stackup colors"
 msgstr "使用电路板叠层颜色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:143
-#, fuzzy
 msgid "Use PCB editor copper colors"
-msgstr "使用电路板编辑器铜箔颜色"
+msgstr "使用 PCB 编辑器铜箔颜色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:145
-#, fuzzy
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
-msgstr "使用电路板编辑器铜箔颜色 (仅使用 openGL)"
+msgstr "使用电路板编辑器板层颜色 (仅实时渲染)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:163
 #, c-format
@@ -8513,9 +8511,8 @@ msgid "Zoom Selection box"
 msgstr "缩放选择框"
 
 #: common/tool/action_toolbar.cpp:1042
-#, fuzzy
 msgid "IPC/Scripting plugins"
-msgstr "脚本控制台"
+msgstr "IPC/脚本插件"
 
 #: common/tool/action_toolbar.cpp:1043
 msgid "Region to hold the IPC/Scripting action buttons"
@@ -12585,9 +12582,8 @@ msgid "Enter the text to be used within the schematic"
 msgstr "输入文本将在原理图中使用"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:62
-#, fuzzy
 msgid "Multiple label input"
-msgstr "多层"
+msgstr "多标签输入"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:42
@@ -24987,9 +24983,8 @@ msgid "DCode Selector"
 msgstr "D 码选择器"
 
 #: gerbview/toolbars_gerber.cpp:278
-#, fuzzy
 msgid "Select all items with the selected DCode"
-msgstr "选择屏幕上的所有项目"
+msgstr "选择被选中 D 码的所有项目"
 
 #: gerbview/toolbars_gerber.cpp:281
 msgid "<No selection>"
@@ -25713,9 +25708,8 @@ msgid "Generate map / summary of drill hits"
 msgstr "生成钻孔的映射/摘要"
 
 #: kicad/cli/command_pcb_export_drill.cpp:94
-#, fuzzy
 msgid "Generate a file specifically for tenting"
-msgstr "生成物料清单作业设置"
+msgstr "生成盖油专用文件"
 
 #: kicad/cli/command_pcb_export_drill.cpp:99
 msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
@@ -27181,7 +27175,7 @@ msgstr "本地文件"
 msgid ""
 "This plugin requires the KiCad API, which is currently disabled in "
 "preferences. Would you like to enable it?"
-msgstr ""
+msgstr "此插件需要 KiCad API, 但是其在首选项中已被禁用。要启用它吗?"
 
 #: kicad/pcm/pcm.cpp:1121
 msgid "PCM Update"
@@ -37529,71 +37523,71 @@ msgstr "来自设计规则"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:180
 msgid "Type I a ( tented top )"
-msgstr "类型 I a (顶层盖油 )"
+msgstr "I a 型 (顶部帐篷式封孔)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:181
 msgid "Type I b ( tented both sides )"
-msgstr "类型 I b ( 双面盖油 )"
+msgstr "I b 型 (双面帐篷式封孔)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:182
 msgid "Type I a ( tented bottom )"
-msgstr "类型 I a ( 底层盖油 )"
+msgstr "I a 型 (底部帐篷式封孔)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:183
 msgid "Type II a ( covered and tented top )"
-msgstr ""
+msgstr "II a 型 (顶部帐篷式封孔 + 覆孔)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:184
 msgid "Type II b ( covered and tented both sides )"
-msgstr ""
+msgstr "II b 型 (双面帐篷式封孔 + 覆孔)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:185
 msgid "Type II a ( covered and tented bottom )"
-msgstr ""
+msgstr "II a 型 (底部帐篷式封孔 + 覆孔)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:186
 msgid "Type III a ( plugged top )"
-msgstr ""
+msgstr "III a 型 (顶部塞孔)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:187
 msgid "Type III b ( plugged both sides )"
-msgstr ""
+msgstr "III b 型 (双面塞孔)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:188
 msgid "Type III a ( plugged bottom )"
-msgstr ""
+msgstr "III a 型 (底部塞孔)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:189
 msgid "Type IV a ( plugged and tented top )"
-msgstr ""
+msgstr "IV a 型 (顶部帐篷式封孔 + 塞孔)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:190
 msgid "Type IV b ( plugged and tented both sides )"
-msgstr ""
+msgstr "IV b 型 (双面帐篷式封孔 + 塞孔)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:191
 msgid "Type IV a ( plugged and tented bottom )"
-msgstr ""
+msgstr "IV a 型 (底部帐篷式封孔 + 塞孔)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:192
 msgid "Type V ( filled )"
-msgstr "类型 V ( 填充 )"
+msgstr "V 型 (全填孔)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:193
 msgid "Type VI a ( filled and tented top )"
-msgstr "类型 VI a ( 填充 + 顶层盖油 )"
+msgstr "VI a 型 (顶部帐篷式封孔 + 填孔)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:194
 msgid "Type VI b ( filled and tented both sides )"
-msgstr "类型 VI b ( 填充 + 双面盖油 )"
+msgstr "VI b 型 (双面帐篷式封孔 + 填孔)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:195
 msgid "Type VI a ( filled and tented bottom )"
-msgstr "类型 VI a ( 填充 + 底层盖油 )"
+msgstr "VI a 型 (底部帐篷式封孔 + 填孔)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:196
 msgid "Type VII ( filled and capped )"
-msgstr ""
+msgstr "VII 型 (填孔 + 盖孔)"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:41
 msgid "Automatically update via nets"
@@ -45787,9 +45781,8 @@ msgid "Filling"
 msgstr "填充"
 
 #: pcbnew/pcbexpr_evaluator.cpp:617
-#, fuzzy
 msgid "must be mm, in, mil, or deg"
-msgstr "单位必须为 mm, in 或 mil"
+msgstr "单位必须为 mm, in, mil 或 deg"
 
 #: pcbnew/pcbexpr_functions.cpp:75
 #, c-format
