@@ -87,7 +87,6 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
 
     m_adapter = SYMBOL_TREE_MODEL_ADAPTER::Create( m_frame, libmgr );
     SYMBOL_TREE_MODEL_ADAPTER* adapter = static_cast<SYMBOL_TREE_MODEL_ADAPTER*>( m_adapter.get() );
-    bool loaded = false;
 
     if( aFilter )
     {
@@ -97,18 +96,11 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
         {
             if( libmgr->HasLibrary( nickname, true ) )
             {
-                loaded = true;
-
                 bool pinned = alg::contains( session.pinned_symbol_libs, nickname )
                                 || alg::contains( project.m_PinnedSymbolLibs, nickname );
 
-                // TODO(JE) library tables
-#if 0
-                SYMBOL_LIB_TABLE_ROW* row = libs->FindRow( nickname );
-
-                if( row && row->GetIsVisible() )
+                if( auto row = libmgr->GetRow( nickname ); row && !( *row )->Hidden()  )
                     adapter->AddLibrary( nickname, pinned );
-#endif
             }
         }
 

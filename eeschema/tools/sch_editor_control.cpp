@@ -393,7 +393,7 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
     SCH_IO_MGR::SCH_FILE_T type = SCH_IO_MGR::EnumFromStr( row->Type() );
     IO_RELEASER<SCH_IO>    pi( SCH_IO_MGR::FindPlugin( type ) );
 
-    wxFileName dest = manager.GetFullURI( row );
+    wxFileName dest = LIBRARY_MANAGER::GetFullURI( row );
     dest.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
 
     for( const std::pair<const LIB_ID, LIB_SYMBOL*>& it : libSymbols )
@@ -431,45 +431,29 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
         }
     }
 
-    // TODO(JE) library tables
-#if 0
-    // Save the modified symbol library table. We need to look this up by name in each table to find
-    // whether the new library is a global or project entity as the code above to choose the library
-    // returns a different type depending on whether a global or project library is chosen.
-    SYMBOL_LIB_TABLE* globalTable = &SYMBOL_LIB_TABLE::GetGlobalLibTable();
-    SYMBOL_LIB_TABLE* projectTable = nullptr;
-
-    if( !m_frame->Prj().IsNullProject() )
-        projectTable = PROJECT_SCH::SchSymbolLibTable( &m_frame->Prj() );
-
-    if( globalTable->FindRow( targetLib ) )
+    if( row->Scope() == LIBRARY_TABLE_SCOPE::GLOBAL )
     {
-        try
-        {
-            wxString globalTablePath = SYMBOL_LIB_TABLE::GetGlobalTableFileName();
-            globalTable->Save( globalTablePath );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            msg.Printf( _( "Error saving global library table:\n\n%s" ), ioe.What() );
-            wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
-        }
+        LIBRARY_TABLE* globalTable = adapter->GlobalTable();
+
+        Pgm().GetLibraryManager().Save( globalTable ).map_error(
+            []( const LIBRARY_ERROR& aError )
+            {
+                wxMessageBox( wxString::Format( _( "Error saving global library table:\n\n%s" ),
+                                                aError.message ),
+                              _( "File Save Error" ), wxOK | wxICON_ERROR );
+            } );
     }
-    else if( projectTable && projectTable->FindRow( targetLib ) )
+    else if( std::optional<LIBRARY_TABLE*> optTable = adapter->ProjectTable() )
     {
-        try
-        {
-            wxString   projectPath = m_frame->Prj().GetProjectPath();
-            wxFileName projectTableFn( projectPath, SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
-            projectTable->Save( projectTableFn.GetFullPath() );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            msg.Printf( _( "Error saving project-specific library table:\n\n%s" ), ioe.What() );
-            wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
-        }
+        Pgm().GetLibraryManager().Save( *optTable ).map_error(
+            []( const LIBRARY_ERROR& aError )
+            {
+                wxMessageBox( wxString::Format( _( "Error saving project-specific library table:\n\n%s" ),
+                                                aError.message ),
+                              _( "File Save Error" ), wxOK | wxICON_ERROR );
+            } );
     }
-#endif
+
     if( append )
     {
         std::set<SCH_SCREEN*> processedScreens;

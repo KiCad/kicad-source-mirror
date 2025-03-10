@@ -76,9 +76,6 @@ SYMBOL_TREE_MODEL_ADAPTER::~SYMBOL_TREE_MODEL_ADAPTER()
 
 void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( SCH_BASE_FRAME* aFrame )
 {
-    // Disable KIID generation: not needed for library parts; sometimes very slow
-    // KIID::CreateNilUuids( true );
-
     COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
     PROJECT_FILE&    project = aFrame->Prj().GetProjectFile();
 
@@ -168,9 +165,6 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( SCH_BASE_FRAME* aFrame )
             addFunc( lib, libSymbols, libDescription );
         }
     }
-
-    // TODO(JE) library tables
-    //KIID::CreateNilUuids( false );
 
     if( !m_pending_load_libraries.empty() && !m_check_pending_libraries_timer )
     {
