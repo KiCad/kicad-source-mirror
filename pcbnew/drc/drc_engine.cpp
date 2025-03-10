@@ -1349,8 +1349,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     {
         std::vector<DRC_ENGINE_CONSTRAINT*>* ruleset = m_constraintMap[ aConstraintType ];
 
-        for( int ii = 0; ii < (int) ruleset->size(); ++ii )
-            processConstraint( ruleset->at( ii ) );
+        for( DRC_ENGINE_CONSTRAINT* rule : *ruleset )
+            processConstraint( rule );
     }
 
     if( constraint.GetParentRule() && !constraint.GetParentRule()->m_Implicit )
@@ -1364,6 +1364,10 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                                    || aConstraintType == THERMAL_RELIEF_GAP_CONSTRAINT
                                    || aConstraintType == THERMAL_SPOKE_WIDTH_CONSTRAINT ) )
     {
+        REPORT( "" )
+        REPORT( wxString::Format( _( "Inheriting from parent: %s." ),
+                                  EscapeHTML( parentFootprint->GetItemDescription( this, true ) ) ) )
+
         if( a == pad )
             a = parentFootprint;
         else
@@ -1373,8 +1377,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
         {
             std::vector<DRC_ENGINE_CONSTRAINT*>* ruleset = m_constraintMap[ aConstraintType ];
 
-            for( int ii = 0; ii < (int) ruleset->size(); ++ii )
-                processConstraint( ruleset->at( ii ) );
+            for( DRC_ENGINE_CONSTRAINT* rule : *ruleset )
+                processConstraint( rule );
 
             if( constraint.GetParentRule() && !constraint.GetParentRule()->m_Implicit )
                 return constraint;
