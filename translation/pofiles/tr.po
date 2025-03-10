@@ -30,7 +30,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:04+0300\n"
 "PO-Revision-Date: 2025-03-10 15:08+0000\n"
-"Last-Translator: İclal Gör <iclallgor@gmail.com>\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
 "Language: tr\n"
@@ -42177,6 +42177,7 @@ msgid "Check rule syntax"
 msgstr "Kural sözdizimini kontrol et"
 
 #: pcbnew/dialogs/panel_setup_rules_help_10documentation.h:2
+#, fuzzy
 msgid ""
 "### Documentation\n"
 "\n"
@@ -42526,6 +42527,7 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_5examples.h:2
+#, fuzzy
 msgid ""
 "### Examples\n"
 "\n"
@@ -42876,6 +42878,7 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_9more_examples.h:2
+#, fuzzy
 msgid ""
 "### More Examples\n"
 "\n"
