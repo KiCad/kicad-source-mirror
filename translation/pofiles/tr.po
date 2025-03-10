@@ -24,8 +24,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:05+0300\n"
-"PO-Revision-Date: 2025-03-10 15:08+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2025-03-10 15:35+0000\n"
+"Last-Translator: İclal Gör <iclallgor@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v9/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -1744,9 +1744,8 @@ msgid "Drawing Sheet (.kicad_wks file)"
 msgstr "Çizim sayfası (.kicad_wks dosyası)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:200
-#, fuzzy
 msgid "Export to File..."
-msgstr "Dosyaya Aktar"
+msgstr "Dosyaya Aktar..."
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:203
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:147
@@ -2008,9 +2007,9 @@ msgid "Design block metadata file '%s' could not be saved."
 msgstr "Dosya '%s' oluşturulamadı."
 
 #: common/design_block_io.cpp:441
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' does not exist."
-msgstr "'%s' klasörü bulunamadı"
+msgstr "Tasarım bloğu '%s' mevcut değil."
 
 #: common/design_block_io.cpp:447
 #, fuzzy, c-format
@@ -3337,27 +3336,26 @@ msgid "Close"
 msgstr "Kapat"
 
 #: common/dialogs/dialog_print_generic.cpp:156
-#, fuzzy
 msgid "Warning: scale is not a number."
-msgstr "Uyarı: Kötü ölçek numarası"
+msgstr "Uyarı: Ölçek bir sayı değildir."
 
 #: common/dialogs/dialog_print_generic.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: scale set to a very large value.\n"
 "It will be clamped to %f."
 msgstr ""
-"Uyarı: Ölçek seçeneği çok büyük bir değere ayarlandı.\n"
-"%f'ye kenetlendi"
+"Uyarı: ölçek çok büyük bir değere ayarlandı.\n"
+"%f'ye sabitlenecek."
 
 #: common/dialogs/dialog_print_generic.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: scale set to a very small value.\n"
 "It will be clamped to %f."
 msgstr ""
-"Uyarı: Ölçek seçeneği çok küçük bir değere ayarlandı.\n"
-"%f'ye kenetlendi"
+"Uyarı: ölçek çok büyük bir değere ayarlandı.\n"
+"%f'ye sabitlenecek."
 
 #: common/dialogs/dialog_print_generic.cpp:244
 #: common/dialogs/dialog_print_generic.cpp:295
@@ -4426,9 +4424,8 @@ msgstr "Kitaplık tablosu satır yolu hücresi boştur."
 #: common/dialogs/panel_design_block_lib_table.cpp:549
 #: eeschema/dialogs/panel_sym_lib_table.cpp:463
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:577
-#, fuzzy
 msgid "Invalid Row Definition"
-msgstr "Geçersiz arşiv dosyası biçimi."
+msgstr "Geçersiz Satır Tanımı"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:551
 #: eeschema/dialogs/panel_sym_lib_table.cpp:465
@@ -4443,9 +4440,8 @@ msgstr ""
 #: common/dialogs/panel_design_block_lib_table.cpp:554
 #: eeschema/dialogs/panel_sym_lib_table.cpp:468
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:581
-#, fuzzy
 msgid "Remove Invalid Cells"
-msgstr "Alan Ekle..."
+msgstr "Geçersiz Hücreleri Kaldır"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:555
 #: eeschema/dialogs/panel_sym_lib_table.cpp:469
@@ -7455,9 +7451,8 @@ msgid "Loading file canceled by user."
 msgstr "Dosya yükleme kullanıcı tarafından iptal edildi."
 
 #: common/jobs/job.cpp:82
-#, fuzzy
 msgid "Job Settings"
-msgstr "Seçenekleri Düzenle..."
+msgstr "İş Ayarları"
 
 #: common/jobs/job_export_pcb_3d.cpp:144
 #, fuzzy
@@ -7480,9 +7475,8 @@ msgid "Export drill data"
 msgstr "Ön lehim maskesi"
 
 #: common/jobs/job_export_pcb_drill.cpp:129
-#, fuzzy
 msgid "Export Drill Data Job Settings"
-msgstr "Seçenekleri Düzenle..."
+msgstr "Matkap Veri İş Ayarlarını Dışa Aktar"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
 #, fuzzy
@@ -7497,9 +7491,8 @@ msgstr "Dışa Aktar"
 
 #: common/jobs/job_export_pcb_dxf.cpp:63
 #: common/jobs/job_export_sch_plot.cpp:166
-#, fuzzy
 msgid "Export DXF Job Settings"
-msgstr "Seçenekleri Düzenle..."
+msgstr "DXF İş Ayarlarını Dışa Aktar"
 
 #: common/jobs/job_export_pcb_dxf.cpp:67
 #, fuzzy
@@ -7573,9 +7566,8 @@ msgid "Export ODB++"
 msgstr "Dışa Aktar"
 
 #: common/jobs/job_export_pcb_odb.cpp:63
-#, fuzzy
 msgid "Export ODB++ Job Settings"
-msgstr "Seçenekleri Düzenle..."
+msgstr "ODB++ İş Ayarlarını Dışa Aktar"
 
 #: common/jobs/job_export_pcb_odb.cpp:76
 #, fuzzy
@@ -7590,9 +7582,8 @@ msgstr "Dışa Aktar"
 
 #: common/jobs/job_export_pcb_pdf.cpp:71
 #: common/jobs/job_export_sch_plot.cpp:147
-#, fuzzy
 msgid "Export PDF Job Settings"
-msgstr "Seçenekleri Düzenle..."
+msgstr "PDF İş Ayarlarını Dışa Aktar"
 
 #: common/jobs/job_export_pcb_pdf.cpp:75
 #, fuzzy
@@ -7621,9 +7612,8 @@ msgstr "Dosyaya Aktar"
 
 #: common/jobs/job_export_pcb_svg.cpp:55
 #: common/jobs/job_export_sch_plot.cpp:185
-#, fuzzy
 msgid "Export SVG Job Settings"
-msgstr "Seçenekleri Düzenle..."
+msgstr "SVG İş Ayarlarını Dışa Aktar"
 
 #: common/jobs/job_export_pcb_svg.cpp:59
 #, fuzzy
@@ -7666,9 +7656,8 @@ msgid "Export Postscript"
 msgstr "PostScript"
 
 #: common/jobs/job_export_sch_plot.cpp:204
-#, fuzzy
 msgid "Export Postscript Job Settings"
-msgstr "Seçenekleri Düzenle..."
+msgstr "Postscript İş Ayarlarını Dışa Aktar"
 
 #: common/jobs/job_export_sch_plot.cpp:217 kicad/kicad_cli.cpp:144
 #, fuzzy
@@ -7676,9 +7665,8 @@ msgid "Export HPGL"
 msgstr "Dışa Aktar"
 
 #: common/jobs/job_export_sch_plot.cpp:223
-#, fuzzy
 msgid "Export HPGL Job Settings"
-msgstr "Seçenekleri Düzenle..."
+msgstr "HPGL İş Ayarlarını Dışa Aktar"
 
 #: common/jobs/job_export_sch_plot.cpp:227
 #, fuzzy
@@ -7711,14 +7699,12 @@ msgid "Schematic PythonBOM export"
 msgstr "Şematik Dosyalar"
 
 #: common/jobs/job_pcb_drc.cpp:37
-#, fuzzy
 msgid "Perform DRC"
-msgstr "PCB'i Şematik'ten Güncelleştir..."
+msgstr "DRC'yi gerçekleştirin"
 
 #: common/jobs/job_pcb_drc.cpp:43 pcbnew/dialogs/dialog_drc_job_config.cpp:24
-#, fuzzy
 msgid "DRC Job Settings"
-msgstr "Seçenekleri Düzenle..."
+msgstr "DRC İş Ayarları"
 
 #: common/jobs/job_pcb_drc.cpp:47
 msgid "PCB: Perform DRC"
@@ -7730,18 +7716,16 @@ msgid "Render %s"
 msgstr "%s'yi işle"
 
 #: common/jobs/job_pcb_render.cpp:133
-#, fuzzy
 msgid "Render PCB Job Settings"
-msgstr "Seçenekleri Düzenle..."
+msgstr "PCB İş Ayarlarını Oluştur"
 
 #: common/jobs/job_pcb_render.cpp:137
 msgid "PCB: Render"
 msgstr "PCB:Render al"
 
 #: common/jobs/job_sch_erc.cpp:33
-#, fuzzy
 msgid "Perform ERC"
-msgstr "PCB'i Şematik'ten Güncelleştir..."
+msgstr "ERC gerçekleştirin"
 
 #: common/jobs/job_sch_erc.cpp:39
 #, fuzzy
@@ -7749,9 +7733,8 @@ msgid "Schematic ERC Job Settings"
 msgstr "Ağ Listesini Dışa Aktar"
 
 #: common/jobs/job_sch_erc.cpp:43
-#, fuzzy
 msgid "Schematic: Perform ERC"
-msgstr "PCB'den Şematik Güncelleştir..."
+msgstr "Şema: ERC'yi gerçekleştirin"
 
 #: common/jobs/job_special_copyfiles.cpp:46
 #, fuzzy
@@ -8174,9 +8157,9 @@ msgid "Illegal character found in library nickname"
 msgstr "Kütüphane takma adında geçersiz karakter bulundu"
 
 #: common/lib_table_base.cpp:544
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get writer for %s"
-msgstr "'%s' dosyası oluşturulamadı."
+msgstr "%s için yazar alınamadı"
 
 #: common/lib_table_grid_tricks.cpp:33
 msgid "Edit options..."
@@ -8469,9 +8452,9 @@ msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr "Zip arşivi '%s' oluşturuldu (%s sıkıştırılmamış, %s sıkıştırılmış)."
 
 #: common/project/project_archiver.cpp:399
-#, fuzzy, c-format
+#, c-format
 msgid "Error: '%s'."
-msgstr "Hata: %s"
+msgstr "Hata: %s."
 
 #: common/rc_item.cpp:425 eeschema/erc/erc_item.cpp:404
 msgid "Excluded warning: "
@@ -10603,9 +10586,8 @@ msgid "Footprint '%s' not found."
 msgstr "'%s' ayak izi bulunamadı."
 
 #: cvpcb/display_footprints_frame.cpp:445
-#, fuzzy
 msgid "Error loading footprint"
-msgstr "'%s' yazı tipi yüklenirken hata oluştu."
+msgstr "Ayak izi yüklenirken hata oluştu"
 
 #: cvpcb/display_footprints_frame.cpp:508 pcbnew/footprint.cpp:1750
 #, c-format
@@ -10743,9 +10725,10 @@ msgid "Automatically Assign Footprints"
 msgstr "Ayak izlerini otomatik olarak atayın"
 
 #: cvpcb/tools/cvpcb_actions.cpp:133
-#, fuzzy
 msgid "Assign footprints automatically using a footprint association file"
-msgstr "Kısıtlama çözümleme raporu için bir öğe seçin."
+msgstr ""
+"Ayak izi ilişkilendirme dosyasını kullanarak ayak izlerini otomatik olarak "
+"atayın"
 
 #: cvpcb/tools/cvpcb_actions.cpp:140
 #, fuzzy
@@ -10957,9 +10940,8 @@ msgstr "Kütüphaneyi listenin başında tut"
 
 #: eeschema/design_block_utils.cpp:85 eeschema/sch_base_frame.cpp:302
 #: pcbnew/footprint_libraries_utils.cpp:425
-#, fuzzy
 msgid "Add To Library Table"
-msgstr "Kütüphane ekleyin..."
+msgstr "Kütüphane Tablosuna Ekle"
 
 #: eeschema/design_block_utils.cpp:176 pcbnew/footprint_libraries_utils.cpp:368
 #, c-format
@@ -11677,9 +11659,8 @@ msgid "Untitled Field"
 msgstr "Adsız Alan"
 
 #: eeschema/dialogs/dialog_design_block_properties.cpp:234
-#, fuzzy
 msgid "Duplicate fields are not allowed."
-msgstr "İzin verilmeyen öğeler"
+msgstr "Çift alanlara izin verilmez."
 
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:26
 #, fuzzy
@@ -12002,7 +11983,7 @@ msgstr "İhlaller (%s)"
 #: eeschema/dialogs/dialog_erc_base.cpp:98
 #: pcbnew/dialogs/dialog_drc_base.cpp:148
 msgid "Edit ignored tests"
-msgstr "Yoksayılan testleri düzenle..."
+msgstr "Yoksayılan testleri düzenle"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:108
 #: pcbnew/dialogs/dialog_drc_base.cpp:158
@@ -12027,9 +12008,8 @@ msgid "Electrical Rules Checker"
 msgstr "Elektrik Kuralları Denetleyicisi"
 
 #: eeschema/dialogs/dialog_erc_job_config.cpp:23
-#, fuzzy
 msgid "ERC Job Settings"
-msgstr "Seçenekleri Düzenle..."
+msgstr "ERC İş Ayarları"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:221
 #, fuzzy
@@ -13666,9 +13646,8 @@ msgid "Cannot normalize path '%s%s'."
 msgstr "'%s%s' yolu normalleştirilemiyor."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:567
-#, fuzzy
 msgid "No project or path defined for the current schematic."
-msgstr "Diğer sayfalara aktar"
+msgstr "Mevcut şema için tanımlanmış bir proje veya yol yok."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:25
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:27
@@ -14080,9 +14059,8 @@ msgid "Schematic Setup"
 msgstr "Şematik Kurulum"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:45
-#, fuzzy
 msgid "Import Settings from Another Project..."
-msgstr "Ayarları önceki bir sürümden içe aktarın:"
+msgstr "Başka Bir Projeden Ayarları İçe Aktar..."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:79
 #, fuzzy
@@ -14307,9 +14285,9 @@ msgid "Link '%s' to this file?"
 msgstr "Bu dosyaya '%s' bağlantısı mı?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:530
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to copy schematic file '%s' to destination '%s'."
-msgstr "'%s' içinde '%s' ayrıştırılamıyor"
+msgstr "Şema dosyası '%s' hedef '%s'e kopyalanamadı."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:574
 #, c-format
@@ -14415,13 +14393,12 @@ msgid "A DC source must be specified."
 msgstr "Bir sayfanın belirtilen bir dosyası olmalıdır."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:366
-#, fuzzy
 msgid "Source 1 and Source 2 must be different."
-msgstr "Kaynak 1 ve Kaynak 2 farklı olmalıdır"
+msgstr "Kaynak 1 ve Kaynak 2 farklı olmalıdır."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:422
 msgid "A frequency range must be specified."
-msgstr "En az bir veya daha fazla katman belirtilmelidir"
+msgstr "Bir frekans aralığı belirtilmelidir."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:620
 #, fuzzy
@@ -14641,9 +14618,8 @@ msgid "Input signals:"
 msgstr "Giriş Bacağı"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:338
-#, fuzzy
 msgid "Linearize inputs before performing FFT"
-msgstr "DRC gerçekleştirmeden önce tüm bölgeleri yeniden doldur."
+msgstr "FFT gerçekleştirmeden önce girdileri doğrusallaştırın"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:359
 #, fuzzy
@@ -15059,9 +15035,8 @@ msgid "Waveform:"
 msgstr "Dalga formu:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:120
-#, fuzzy
 msgid "Built-in SPICE model"
-msgstr "Etiketler kontrol ediliyor..."
+msgstr "Dahili SPICE modeli"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:129
 #, fuzzy
@@ -15119,9 +15094,8 @@ msgid "Pin Assignments"
 msgstr "Ayak izi atamaları"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:132
-#, fuzzy
 msgid "Simulation Model Editor"
-msgstr "Spice Modeli..."
+msgstr "Simülasyon Model Editörü"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:46
 #, fuzzy
@@ -15266,9 +15240,8 @@ msgid "Changes have not yet been saved. Export unsaved data?"
 msgstr "Değişiklikler kaydedilmez. Kaydedilmemiş verileri dışa aktarma yapma?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1363
-#, fuzzy
 msgid "No output file specified in Export tab."
-msgstr "Dosya adı girilmemiş"
+msgstr "Dışa Aktar sekmesinde çıktı dosyası belirtilmedi."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1377
 #, fuzzy, c-format
@@ -15286,9 +15259,9 @@ msgid "Could not write BOM output '%s'."
 msgstr "'%s' klasörüne çizim dosyaları yazılamadı."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1402
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote BOM output to '%s'"
-msgstr "Çıktı dizini '%s' oluşturulamıyor."
+msgstr "BOM çıktısı '%s'e yazıldı"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1781
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2183
@@ -15510,9 +15483,8 @@ msgid "Show pin names"
 msgstr "Bacak adını göster"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:229
-#, fuzzy
 msgid "Update Symbol from Library..."
-msgstr "Sembolleri Kütüphaneden Güncelle"
+msgstr "Kütüphaneden Sembolü Güncelle..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:232
 #: eeschema/tools/ee_actions.cpp:789
@@ -15844,10 +15816,11 @@ msgstr "Şemayı Güncelleştir"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:32
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:27
-#, fuzzy
 msgid ""
 "Re-link footprints to schematic symbols based on their reference designators"
-msgstr "'%s' için birden fazla ayak izi bulundu."
+msgstr ""
+"Referans tanımlayıcılarına göre ayak izlerini şematik sembollere yeniden "
+"bağlayın"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:33
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:28
@@ -15895,9 +15868,8 @@ msgstr "Semboldeki diğer tüm alanları ayak izinden güncelleyin"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.h:57
 #: eeschema/tools/backannotate.cpp:579
-#, fuzzy
 msgid "Update Schematic from PCB"
-msgstr "PCB'den Şematik Güncelleştir..."
+msgstr "PCB'den Şemayı Güncelle"
 
 #: eeschema/dialogs/dialog_update_symbol_fields.cpp:227
 #: eeschema/dialogs/dialog_update_symbol_fields_base.h:68
@@ -16135,9 +16107,8 @@ msgid "Color highlight thickness:"
 msgstr "Kalınlığı vurgula:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:202
-#, fuzzy
 msgid "Color highlight opacity:"
-msgstr "DRC ihlali: engelleri vurgula."
+msgstr "Renk vurgusu opaklığı:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
 #, fuzzy
@@ -16311,9 +16282,8 @@ msgid "Dialog Preferences"
 msgstr "İletişim Kutusu Tercihleri"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:326
-#, fuzzy
 msgid "Show footprint previews in Symbol Chooser"
-msgstr "%s sembolü için ayak izi tanımlanmadı."
+msgstr "Sembol Seçici'de ayak izi önizlemelerini göster"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:329
 #, fuzzy
@@ -16825,9 +16795,8 @@ msgid "All supported formats"
 msgstr "Desteklenen tüm dosyalar (%s)"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:653
-#, fuzzy
 msgid "Add Library"
-msgstr "Kütüphane ekleyin..."
+msgstr "Kütüphane Ekle"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:667
 #, fuzzy
@@ -17026,9 +16995,9 @@ msgid "Unable to open destination '%s'"
 msgstr "Hedef '%s' açılamıyor"
 
 #: eeschema/eeschema_jobs_handler.cpp:735
-#, fuzzy, c-format
+#, c-format
 msgid "BOM format preset '%s' not found"
-msgstr "'%s' ayak izi bulunamadı."
+msgstr "BOM biçimi ön ayarı '%s' bulunamadı"
 
 #: eeschema/eeschema_jobs_handler.cpp:760
 #: eeschema/eeschema_jobs_handler.cpp:831
@@ -17049,9 +17018,8 @@ msgstr "Kütüphane yüklenemiyor\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:976
 #: eeschema/symbol_editor/symbol_editor.cpp:1096
-#, fuzzy
 msgid "There is no symbol selected to save."
-msgstr "Sembol seçilmedi"
+msgstr "Kaydedilecek bir sembol seçilmedi."
 
 #: eeschema/eeschema_jobs_handler.cpp:1033 pcbnew/pcbnew_jobs_handler.cpp:1561
 msgid "Output path must not conflict with existing path\n"
@@ -17178,9 +17146,9 @@ msgid "Different footprints assigned to %s and %s"
 msgstr "%s ve %s'ye farklı ayak izleri atandı"
 
 #: eeschema/erc/erc.cpp:613
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has unplaced units %s"
-msgstr "%s sembolü '%s' kitaplığında bulunamadı."
+msgstr "%s sembolünde yerleştirilmemiş %s birimleri var"
 
 #: eeschema/erc/erc.cpp:658
 #, c-format
@@ -17234,9 +17202,9 @@ msgid "The current configuration does not include the symbol library '%s'"
 msgstr "Mevcut yapılandırma '%s' sembol kütüphanesini içermiyor"
 
 #: eeschema/erc/erc.cpp:1414
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration"
-msgstr "'%s' kitaplığı, ayak izi kitaplığı tablosunda değil."
+msgstr "'%s' sembol kütüphanesi mevcut yapılandırmada etkin değil"
 
 #: eeschema/erc/erc.cpp:1429
 #, c-format
@@ -17244,9 +17212,9 @@ msgid "The symbol library '%s' was not found at '%s'."
 msgstr "'%s' sembol kütüphanesi '%s' konumunda bulunamadı."
 
 #: eeschema/erc/erc.cpp:1449
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
-msgstr "%s sembolü '%s' kitaplığında bulunamadı."
+msgstr "'%s' sembolü '%s' sembol kütüphanesinde bulunamadı"
 
 #: eeschema/erc/erc.cpp:1474
 #, c-format
@@ -17427,9 +17395,8 @@ msgid "A pin with a \"no connection\" flag is connected"
 msgstr "\"Bağlantı yok\" bayrağı olan bir pın bağlı"
 
 #: eeschema/erc/erc_item.cpp:101
-#, fuzzy
 msgid "Unconnected \"no connection\" flag"
-msgstr "Bölge %s ayak bağlantısı: %s."
+msgstr "Bağlantısız \"bağlantı yok\" bayrağı"
 
 #: eeschema/erc/erc_item.cpp:105
 msgid "Label not connected to anything"
@@ -17535,9 +17502,8 @@ msgid "Assigned footprint doesn't match footprint filters"
 msgstr "Ayak izi kitaplıktaki kopyayla eşleşmiyor"
 
 #: eeschema/erc/erc_item.cpp:193
-#, fuzzy
 msgid "Symbol is not annotated"
-msgstr "'%s' sembol kütüphanesi silinemiyor."
+msgstr "Sembol açıklanmadı"
 
 #: eeschema/erc/erc_item.cpp:197
 #, fuzzy
@@ -17697,9 +17663,8 @@ msgstr ""
 "kullanılamayabilir."
 
 #: eeschema/files-io.cpp:406
-#, fuzzy
 msgid "Illegal entry found in project file symbol library list."
-msgstr "Genel ve proje sembolü kitaplığı listelerini düzenleme"
+msgstr "Proje dosyası sembol kitaplığı listesinde yasa dışı giriş bulundu."
 
 #: eeschema/files-io.cpp:407
 #, fuzzy
@@ -17713,16 +17678,15 @@ msgid ""
 "\n"
 "This may cause broken symbol library links under certain conditions."
 msgstr ""
-"Proje dosyası sembol kitaplığı listesinde tanımlanan sembol kitaplıkları "
+"Proje dosyası sembol kütüphanesi listesinde tanımlanan sembol kütüphaneleri "
 "artık desteklenmiyor ve kaldırılacak.\n"
 "\n"
-"Bu, belirli koşullar altında sembol kitaplığı bağlantılarının kopmasına "
-"neden olabilir"
+"Bu, belirli koşullar altında bozuk sembol kütüphanesi bağlantılarına neden "
+"olabilir."
 
 #: eeschema/files-io.cpp:414
-#, fuzzy
 msgid "Do not show this dialog again."
-msgstr "Tekrar gösterme"
+msgstr "Bu iletişim kutusunu bir daha gösterme."
 
 #: eeschema/files-io.cpp:443
 #, fuzzy, c-format
@@ -17834,9 +17798,8 @@ msgid "File '%s' saved."
 msgstr "Ayak izi '%s' kaydedildi."
 
 #: eeschema/files-io.cpp:866
-#, fuzzy
 msgid "File write operation failed."
-msgstr "Yapılandırma dosyası yazma sorunları"
+msgstr "Dosya yazma işlemi başarısız oldu."
 
 #: eeschema/files-io.cpp:933 eeschema/files-io.cpp:1001
 #: kicad/import_project.cpp:93 kicad/tools/kicad_manager_control.cpp:111
@@ -17992,9 +17955,8 @@ msgstr "fit"
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:202
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:215
 #: pcbnew/tools/drawing_tool.cpp:1908 pcbnew/tools/drawing_tool.cpp:2000
-#, fuzzy
 msgid "Import Graphics"
-msgstr "Grafikler..."
+msgstr "Grafikleri içe aktar"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:217
 msgid "No file selected!"
@@ -18103,15 +18065,13 @@ msgid "Power flag differs."
 msgstr "Güç işareti farklı."
 
 #: eeschema/lib_symbol.cpp:1613
-#, fuzzy
 msgid "Unit count differs."
-msgstr "Metin Öğesi Özellikleri"
+msgstr "Birim sayısı farklılık göstermektedir."
 
 #: eeschema/lib_symbol.cpp:1653
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:743
-#, fuzzy
 msgid "Graphic item count differs."
-msgstr "Metin Öğesi Özellikleri"
+msgstr "Grafiksel öğe sayısı farklılık göstermektedir."
 
 #: eeschema/lib_symbol.cpp:1665
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:757
@@ -18120,9 +18080,8 @@ msgid "%s differs."
 msgstr "%s farklı."
 
 #: eeschema/lib_symbol.cpp:1676
-#, fuzzy
 msgid "Pin count differs."
-msgstr "Bacak Özellikleri"
+msgstr "Pin sayıları farklılık göstermektedir."
 
 #: eeschema/lib_symbol.cpp:1692
 #, fuzzy, c-format
@@ -18140,53 +18099,44 @@ msgid "%s field differs."
 msgstr "%s alanı farklı."
 
 #: eeschema/lib_symbol.cpp:1737
-#, fuzzy
 msgid "Field count differs."
-msgstr "Bacak Özellikleri"
+msgstr "Alan sayısı farklılık göstermektedir."
 
 #: eeschema/lib_symbol.cpp:1746
-#, fuzzy
 msgid "Footprint filters differs."
-msgstr "Ayak izi türü:"
+msgstr "Footprint filtreleri farklılık göstermektedir."
 
 #: eeschema/lib_symbol.cpp:1758
-#, fuzzy
 msgid "Footprint filters differ."
-msgstr "Ayak izi türü:"
+msgstr "Ayak izi filtreleri farklıdır."
 
 #: eeschema/lib_symbol.cpp:1769
-#, fuzzy
 msgid "Symbol keywords differ."
-msgstr "Ayak İzi(Footprint) Editörü"
+msgstr "Sembol anahtar sözcükleri farklıdır."
 
 #: eeschema/lib_symbol.cpp:1778
 msgid "Symbol pin name offsets differ."
 msgstr "Sembol pin adı ofsetleri farklıdır."
 
 #: eeschema/lib_symbol.cpp:1789
-#, fuzzy
 msgid "Show pin names settings differ."
-msgstr "Pin adı metnini göster"
+msgstr "Pin adlarını gösterme ayarları farklıdır."
 
 #: eeschema/lib_symbol.cpp:1798
-#, fuzzy
 msgid "Show pin numbers settings differ."
-msgstr "Pin numarası metnini göster"
+msgstr "Pin numaralarını gösterme ayarları farklıdır."
 
 #: eeschema/lib_symbol.cpp:1807
-#, fuzzy
 msgid "Exclude from simulation settings differ."
-msgstr "Karta ekleme"
+msgstr "Simülasyondan hariç tutma ayarları farklıdır."
 
 #: eeschema/lib_symbol.cpp:1816
-#, fuzzy
 msgid "Exclude from bill of materials settings differ."
-msgstr "Şematik ürün reçetesin ekleme"
+msgstr "Malzeme listesinden hariç tutma ayarları farklıdır."
 
 #: eeschema/lib_symbol.cpp:1825
-#, fuzzy
 msgid "Exclude from board settings differ."
-msgstr "Karta ekleme"
+msgstr "Panodan hariç tutma ayarları farklıdır."
 
 #: eeschema/libarch.cpp:77
 #, c-format
@@ -18224,9 +18174,8 @@ msgstr ""
 "Geçerli şematik sayfayı başka bir uygulamadan içe aktarılanla değiştirin"
 
 #: eeschema/menubar.cpp:109
-#, fuzzy
 msgid "Footprint Assignments..."
-msgstr "Ayak izi atamaları"
+msgstr "Ayak İzi Atamaları..."
 
 #: eeschema/menubar.cpp:110 eeschema/symbol_editor/menubar_symbol_editor.cpp:71
 #: pcbnew/menubar_footprint_editor.cpp:69 pcbnew/menubar_pcb_editor.cpp:116
@@ -18366,9 +18315,8 @@ msgid "Nets"
 msgstr "Ağlar"
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:56
-#, fuzzy
 msgid "Failed to create directory 'devices' ."
-msgstr "Dizin kaldırılamadı %s"
+msgstr "'devices' dizini oluşturulamadı."
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:407
 #: pcbnew/pcbnew_jobs_handler.cpp:1114
@@ -18377,9 +18325,9 @@ msgid "Failed to create file '%s'.\n"
 msgstr "'%s' dosyası oluşturulamadı.\n"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:451
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open file '%s' to write IBIS model"
-msgstr "'%s' özel ayak bulunamadı."
+msgstr "IBIS modelini yazmak için '%s' dosyası açılamadı"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:527
 #, c-format
@@ -18396,9 +18344,9 @@ msgstr ""
 "uyumsuz"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:577
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find library file '%s'"
-msgstr "%s kütüphane dosyası bulunamadı."
+msgstr "'%s' kütüphane dosyası bulunamadı"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:158
 #, c-format
@@ -18457,9 +18405,8 @@ msgid "Change Body Style"
 msgstr "Köşe Stili"
 
 #: eeschema/picksymbol.cpp:234
-#, fuzzy
 msgid "Set Pin Function"
-msgstr "Ayak İzi Seç..."
+msgstr "Pin Fonksiyonunu Ayarla"
 
 #: eeschema/pin_numbers.cpp:129 pcbnew/zones.h:62
 msgid "none"
@@ -18584,9 +18531,8 @@ msgid "This project has nothing to rescue."
 msgstr "Bu projenin kurtaracak hiçbir şeyi yok."
 
 #: eeschema/project_rescue.cpp:608
-#, fuzzy
 msgid "No symbols were rescued."
-msgstr "Sembol seçilmedi"
+msgstr "Hiçbir sembol kurtarılamadı."
 
 #: eeschema/project_rescue.cpp:716
 #: eeschema/symbol_editor/symbol_editor.cpp:1211
@@ -18609,9 +18555,8 @@ msgid "Not Found"
 msgstr "Bulunamadı"
 
 #: eeschema/project_sch.cpp:115
-#, fuzzy
 msgid "The following libraries were not found:"
-msgstr "'%s' ayak izi kitaplığı bulunamadı."
+msgstr "Aşağıdaki kütüphaneler bulunamadı:"
 
 #: eeschema/project_sch.cpp:169 eeschema/sheet.cpp:409
 #, c-format
@@ -18736,9 +18681,8 @@ msgid "Schematic Hierarchy"
 msgstr "Şematik boyutu"
 
 #: eeschema/sch_edit_frame.cpp:421
-#, fuzzy
 msgid "New schematic file is unsaved"
-msgstr "Şematik dosya '%s' bulunamadı."
+msgstr "Yeni şematik dosya kaydedilmedi"
 
 #: eeschema/sch_edit_frame.cpp:1032
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:640
@@ -18779,9 +18723,8 @@ msgid "Assigning footprints requires a fully annotated schematic."
 msgstr "Ağlistesi vermek için tam numaralandırılmış bir şema gerekir."
 
 #: eeschema/sch_edit_frame.cpp:1497
-#, fuzzy
 msgid "Could not open CvPcb"
-msgstr "Arşiv dosyası açılamadı."
+msgstr "CvPcb açılamadı"
 
 #: eeschema/sch_edit_frame.cpp:1746 eeschema/sim/simulator_frame.cpp:341
 #: kicad/kicad_manager_frame.cpp:1041 pcbnew/footprint_edit_frame.cpp:1067
@@ -18816,9 +18759,8 @@ msgid "Save Symbol to Schematic"
 msgstr "Şemaya Kaydet"
 
 #: eeschema/sch_edit_frame.cpp:2521 eeschema/tools/ee_actions.cpp:61
-#, fuzzy
 msgid "Compare Symbol with Library"
-msgstr "Ayak izlerinden Kütüphaneye..."
+msgstr "Sembolü Kütüphaneyle Karşılaştır"
 
 #: eeschema/sch_field.cpp:1203
 #, c-format
@@ -18962,9 +18904,9 @@ msgstr ""
 #: eeschema/sch_io/altium/sch_io_altium.cpp:3606
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:1000
 #: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:697
-#, fuzzy, c-format
+#, c-format
 msgid "Power symbol creates a global label with name '%s'"
-msgstr "'%s' genel kütüphane tablo yolu oluşturulamıyor."
+msgstr "Güç simgesi '%s' adlı genel bir etiket oluşturur"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:3771
 #, c-format
@@ -19002,7 +18944,7 @@ msgstr "Altium şematik dosyaları"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:89
 msgid "File does not appear to be a CADSTAR parts Library file"
-msgstr "'%s' dosyası geçerli bir şema dosyası gibi görünmüyor."
+msgstr "Dosya bir CADSTAR parça Kütüphanesi dosyası gibi görünmüyor"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:133
 #, c-format
