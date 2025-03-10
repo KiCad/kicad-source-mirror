@@ -29,8 +29,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:04+0300\n"
-"PO-Revision-Date: 2025-03-10 11:57+0000\n"
-"Last-Translator: Argeolog <argelojik@gmail.com>\n"
+"PO-Revision-Date: 2025-03-10 13:09+0000\n"
+"Last-Translator: İclal Gör <iclallgor@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
 "Language: tr\n"
@@ -1805,7 +1805,7 @@ msgstr "Çıktı dizini \"%s\" oluşturuldu."
 #: common/common.cpp:413 pcbnew/dialogs/dialog_export_odbpp.cpp:315
 #, c-format
 msgid "Cannot create output directory '%s'."
-msgstr "Çıktı dizini oluşturulamıyor. '%s'"
+msgstr "Çıktı dizini oluşturulamıyor '%s'."
 
 #: common/common.cpp:704
 msgid "This operating system is not supported by KiCad and its dependencies."
@@ -3802,9 +3802,8 @@ msgid "Local"
 msgstr "Yerel"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:83
-#, fuzzy
 msgid "SSH private key:     "
-msgstr "SSH Özel Anahtarı"
+msgstr "SSH Özel Anahtarı:     "
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:90
 msgid "Select SSH private key file"
@@ -4269,7 +4268,7 @@ msgid ""
 "and board editors with previously open files"
 msgstr ""
 "İİşaretlenirse, bir projeyi başlatmak, önceden açık dosyalara sahip şematik "
-"ve pano editörleri gibi araçları da başlatır."
+"ve pano editörleri gibi araçları da başlatır"
 
 #: common/dialogs/panel_common_settings_base.cpp:337
 msgid "&Auto save:"
@@ -7004,14 +7003,14 @@ msgid "Could not create destination directory: %s"
 msgstr "'%s' klasörü oluşturulamıyor"
 
 #: common/gestfich.cpp:397 common/gestfich.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy file: %s to %s"
-msgstr "'%s'ye bağlanılamadı "
+msgstr "%s'ye bağlanılamadı"
 
 #: common/gestfich.cpp:477
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy directory: %s to %s"
-msgstr "'%s'ye bağlanılamadı "
+msgstr "%s'ye bağlanılamadı"
 
 #: common/gestfich.cpp:529
 #, fuzzy, c-format
@@ -7019,9 +7018,9 @@ msgid "Source directory does not exist: %s"
 msgstr "'%s' klasörü bulunamadı"
 
 #: common/gestfich.cpp:584
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read file: %s"
-msgstr "Dosya okunamadı "
+msgstr "Dosya okunamadı: %s"
 
 #: common/git/git_clone_handler.cpp:50
 #, c-format
@@ -10881,10 +10880,9 @@ msgid "Save to Schematic"
 msgstr "Şemaya Kaydet"
 
 #: cvpcb/tools/cvpcb_actions.cpp:73
-#, fuzzy
 msgid "Save footprint assignments in 'footprint' fields of schematic symbols"
 msgstr ""
-"Lehimleme alanları ilişkilendirmelerini şematik sembol lehimleme  alanlarına "
+"Lehimleme alanları ilişkilendirmelerini şematik sembol lehimleme alanlarına "
 "ve şematik dosyalarına kaydet"
 
 #: cvpcb/tools/cvpcb_actions.cpp:81
@@ -10892,12 +10890,11 @@ msgid "Save to Schematic and File"
 msgstr "Şematik ve Dosyaya Kaydet"
 
 #: cvpcb/tools/cvpcb_actions.cpp:82
-#, fuzzy
 msgid ""
 "Save footprint assignments in 'footprint' fields of schematic symbols and "
 "then save schematic files"
 msgstr ""
-"Lehimleme alanları ilişkilendirmelerini şematik sembol lehimleme  alanlarına "
+"Lehimleme alanları ilişkilendirmelerini şematik sembol lehimleme alanlarına "
 "ve şematik dosyalarına kaydet"
 
 #: cvpcb/tools/cvpcb_actions.cpp:105
@@ -12314,9 +12311,9 @@ msgid ""
 "Usually '<path to SPICE binary> \"%I\"'\n"
 "%I will be replaced by the netlist filepath"
 msgstr ""
-"SPICE'i çalıştırmak için komut satırını girin.  \n"
-"Genellikle '<SPICE ikili dosyasının yolu> \"%I\"' şeklindedir.  \n"
-"%I, parça listesi dosya yoluyla değiştirilecektir."
+"SPICE'i çalıştırmak için komut satırını girin \n"
+"Genellikle '<SPICE ikili dosyasının yolu> \"%I\"' şeklindedir \n"
+"%I, parça listesi dosya yoluyla değiştirilecektir"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:368
 msgid "Export netlist as a SPICE .subckt model"
@@ -15893,9 +15890,8 @@ msgstr "Tabloyu Düzenle"
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:40
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:36
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:36
-#, fuzzy
 msgid "Cell contents:"
-msgstr " bağlam: "
+msgstr "bağlam:"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:64
@@ -19222,9 +19218,8 @@ msgid "Altium Schematic Library or Integrated Library"
 msgstr "Altium şematik dosyaları"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:89
-#, fuzzy
 msgid "File does not appear to be a CADSTAR parts Library file"
-msgstr "'%s'  dosyası geçerli bir şema dosyası gibi görünmüyor."
+msgstr "'%s' dosyası geçerli bir şema dosyası gibi görünmüyor."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:133
 #, c-format
@@ -21916,18 +21911,12 @@ msgid "SPICE Simulator"
 msgstr "Simülatör..."
 
 #: eeschema/sim/simulator_frame.cpp:378 eeschema/tools/simulator_control.cpp:84
-#, fuzzy
 msgid "Errors during netlist generation."
-msgstr ""
-"Netlist oluşturma sırasında hatalar.\n"
-"\n"
+msgstr "Netlist oluşturma sırasında hatalar."
 
 #: eeschema/sim/simulator_frame.cpp:383 eeschema/tools/simulator_control.cpp:89
-#, fuzzy
 msgid "Warnings during netlist generation."
-msgstr ""
-"Netlist oluşturma sırasında hatalar.\n"
-"\n"
+msgstr "Netlist oluşturma sırasında hatalar."
 
 #: eeschema/sim/simulator_frame.cpp:393
 msgid "Simulator requires a fully annotated schematic."
@@ -22759,7 +22748,7 @@ msgstr "%s sembolü '%s' kitaplığında bulunamadı."
 msgid ""
 "The following symbols in the inheritance chain of '%s' already exist in "
 "library '%s':\n"
-msgstr "%s sembolü '%s' kitaplığında bulunamadı."
+msgstr "%s sembolü '%s' kitaplığında bulunamadı.\n"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1019
 msgid ""
@@ -25282,9 +25271,8 @@ msgstr "Ortak ayarlarda eksik veya hatalı dosya gezgini argümanı '%F'."
 
 #: eeschema/tools/symbol_editor_control.cpp:371
 #: pcbnew/tools/footprint_editor_control.cpp:669
-#, fuzzy
 msgid "No text editor selected in KiCad. Please choose one."
-msgstr "KiCad'de metin düzenleyicisi seçilmedi.  Lütfen birini seçin."
+msgstr "KiCad'de metin düzenleyicisi seçilmedi. Lütfen birini seçin."
 
 #: eeschema/tools/symbol_editor_control.cpp:439
 #: eeschema/widgets/panel_symbol_chooser.cpp:684
@@ -25675,9 +25663,9 @@ msgid "Do not export"
 msgstr "Doldurma"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "Gerbers with known layers: %d"
-msgstr "Bilinen katmanlara sahip gerberler: "
+msgstr "Bilinen katmanlara sahip gerberler: %d"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:216
 #, fuzzy
@@ -27703,7 +27691,7 @@ msgstr "Verilen katmanları tek bir Gerber dosyasına çiz"
 #: kicad/cli/command_pcb_export_pdf.cpp:176
 #, fuzzy
 msgid "Cannot use more than one mode flag\n"
-msgstr "Etiket, birden fazla bağlantı kuruyor"
+msgstr "Etiket, birden fazla bağlantı kuruyor\n"
 
 #: kicad/cli/command_pcb_export_pos.cpp:46
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:58
@@ -27896,9 +27884,8 @@ msgid "Side lights elevation angle in degrees, range: 0-90"
 msgstr "Yan ışıkların yükselme açısı (derece cinsinden), aralık: 0-90"
 
 #: kicad/cli/command_pcb_render.cpp:342
-#, fuzzy
 msgid "Invalid background\n"
-msgstr "Arka plan"
+msgstr "Geçersiz arka plan\n"
 
 #: kicad/cli/command_pcb_render.cpp:348
 #, fuzzy
@@ -30772,7 +30759,7 @@ msgstr "Direnç:"
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
 #, c-format
 msgid "Frequency for 100% skin depth:"
-msgstr "100%  s cilt derinliği için frekans:"
+msgstr "100% s cilt derinliği için frekans:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:138
 #, fuzzy
@@ -38142,7 +38129,7 @@ msgstr "Öğeleri ağalara göre filtreleyin:"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:150
 #, fuzzy
 msgid "-- leave unchanged --  "
-msgstr "-- değiştirilmemiş bırak --"
+msgstr "-- değiştirilmemiş bırak --  "
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:162
 #, fuzzy
@@ -41247,7 +41234,7 @@ msgstr "Yeni grafik öğeleri için varsayılan özellikler:"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:309
 #, fuzzy
 msgid "Hidden footprint libraries are not yet supported."
-msgstr "Ayak izi kitaplığı güncellenmedi\n"
+msgstr "Ayak izi kitaplığı güncellenmedi"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:885
 #, fuzzy, c-format
@@ -42086,12 +42073,11 @@ msgstr "Lehim maskesi minimum köprü genişliği:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:77
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:82
-#, fuzzy
 msgid ""
 "Minimum distance between openings in the solder mask.\n"
 "Pad openings closer than this distance will be plotted as a single opening."
 msgstr ""
-"Lehim maskesindeki açıklıklar arasındaki minimum mesafe.  Bu mesafeden daha "
+"Lehim maskesindeki açıklıklar arasındaki minimum mesafe. Bu mesafeden daha "
 "yakın olan ped açıklıkları tek bir açıklık olarak çizilecektir."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:90
@@ -42596,6 +42582,33 @@ msgid ""
 "<br><br>\n"
 "\n"
 msgstr ""
+"### Örnekler\n"
+"\n"
+"(sürüm 1)\n"
+"\n"
+"(kural HV\n"
+"(kısıtlama boşluğu (min 1,5 mm))\n"
+"(koşul \"A.hasNetclass('HV')\"))\n"
+"\n"
+"(kural HV\n"
+"(katman dış)\n"
+"(kısıtlama boşluğu (min 1,5 mm))\n"
+"(koşul \"A.hasNetclass('HV')\"))\n"
+"\n"
+"(kural HV_HV\n"
+"# HV rayları arasında daha geniş boşluk\n"
+"(kısıtlama boşluğu (min \"1,5 mm + 2,0 mm\"))\n"
+"(koşul \"A.hasNetclass('HV') && B.hasNetclass('HV')\"))\n"
+"\n"
+"(kural HV_unshielded\n"
+"(kısıtlama boşluğu (min 2 mm))\n"
+"(koşul \"A.hasNetclass('HV') && !A.enclosedByArea('Shield*')\"))\n"
+"\n"
+"(kural heavy_thermals\n"
+"(kısıtlama termal_spoke_genişliği (min 0,5 mm))\n"
+"(koşul \"A.hasNetclass('HV')\"))\n"
+"<br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_6notes.h:2
 msgid ""
@@ -42618,16 +42631,12 @@ msgstr ""
 "\n"
 "Sürüm maddesi ilk madde olmalıdır. Dosyanın sözdizimi sürümünü belirtir, "
 "böylece\n"
-"\n"
 "gelecekteki kural ayrıştırıcıları otomatik güncellemeler gerçekleştirebilir."
-"\n"
 "\n"
 "\"1\" olarak ayarlanmalıdır.\n"
 "\n"
 "Kurallar özgüllüğe göre sıralanmalıdır. Daha sonraki kurallar\n"
-"\n"
 "önceliklidir; eşleşen bir kural bulunduğunda\n"
-"\n"
 "başka kural kontrol edilmez.\n"
 "\n"
 "Satır(lar)a yorum eklemek veya yorumunu kaldırmak için Ctrl+/ kullanın\n"
@@ -45084,15 +45093,13 @@ msgstr "** Şekilleri birleştirirken sorunlar oluştu **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:653
 #: pcbnew/exporters/step/step_pcb_model.cpp:1943
-#, fuzzy
 msgid "Errors:\n"
-msgstr "Hatalar"
+msgstr "Hatalar:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:659
 #: pcbnew/exporters/step/step_pcb_model.cpp:1949
-#, fuzzy
 msgid "Warnings:\n"
-msgstr "Uyarılar"
+msgstr "Uyarılar:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:678
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
@@ -45107,7 +45114,7 @@ msgstr "Bağlantı tamamlanmadı (kontur noktaları %d): OCC hatası %d\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1649
 #, fuzzy, c-format
 msgid "z: %g; bounding box: %s\n"
-msgstr "Model sınırlama kutularını göster"
+msgstr "Model sınırlama kutularını göster\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1646
 msgid ""
@@ -45124,7 +45131,7 @@ msgstr "Basitleştirilmemiş çokgen kullanılıyor.\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1734
 #, fuzzy
 msgid "Failed to create a prismatic shape\n"
-msgstr "'%s' dosyası oluşturulamadı."
+msgstr "'%s' dosyası oluşturulamadı.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1745
 msgid "** Face skipped **\n"
@@ -46011,9 +46018,8 @@ msgid "Footprint '%s' saved."
 msgstr "Ayak izi '%s' kaydedildi."
 
 #: pcbnew/load_select_footprint.cpp:376
-#, fuzzy
 msgid "Error saving footprint library"
-msgstr "Ayak izi kitaplığını kaydediliyor\n"
+msgstr "Ayak izi kitaplığını kaydediliyor"
 
 #: pcbnew/load_select_footprint.cpp:380
 #, fuzzy, c-format
@@ -48457,7 +48463,7 @@ msgstr "Katman s% 'deki çokgende işlenmemiş şekil türü d% , sıra d% d%"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3430
 #, c-format
 msgid "Invalid hole with %d points in zone on layer %s with net %s"
-msgstr ""
+msgstr "%s katmanındaki bölgede %d noktalı geçersiz delik, net %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3472
 #, c-format
@@ -48465,6 +48471,8 @@ msgid ""
 "Outline seems discontinuous: last point was %s, start point of next segment "
 "is %s"
 msgstr ""
+"Ana hatlar kesikli görünüyor: son nokta %s idi, bir sonraki bölümün "
+"başlangıç noktası %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3488
 #, fuzzy, c-format
@@ -49377,15 +49385,13 @@ msgstr ""
 "oluştu."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:327
-#, fuzzy
 msgid "Failed to load board\n"
-msgstr "'%s' yüklenemedi."
+msgstr "'%s' yüklenemedi\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:364 pcbnew/pcbnew_jobs_handler.cpp:453
 #: pcbnew/pcbnew_jobs_handler.cpp:501
-#, fuzzy
 msgid "Unknown export format"
-msgstr "Bilinmeyen netlist biçimi.\n"
+msgstr "Bilinmeyen netlist biçimi"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:418
 #, fuzzy, c-format
@@ -51076,6 +51082,7 @@ msgid ""
 "The footprint could not be added to the selected library ('%s'). This "
 "library is read-only."
 msgstr ""
+"Ayak izi seçilen kitaplığa eklenemedi ('%s'). Bu kitaplık salt okunurdur."
 
 #: pcbnew/tools/footprint_editor_control.cpp:405
 msgid "_copy"
@@ -51193,6 +51200,8 @@ msgid ""
 "Some of the dogbone corners are too narrow to fit a cutter of the specified "
 "radius."
 msgstr ""
+"Bazı köpek kemiği köşeleri belirtilen yarıçaptaki bir kesiciye uymayacak "
+"kadar dardır."
 
 #: pcbnew/tools/item_modification_routine.cpp:292
 msgid " Consider enabling the 'Add Slots' option."
@@ -51200,7 +51209,7 @@ msgstr " 'Yuva Ekle' seçeneğini etkinleştirmeyi düşünün."
 
 #: pcbnew/tools/item_modification_routine.cpp:294
 msgid " Slots were added."
-msgstr ""
+msgstr " Slotlar eklendi."
 
 #: pcbnew/tools/item_modification_routine.cpp:385
 #: pcbnew/tools/pcb_actions.cpp:660
@@ -51285,7 +51294,7 @@ msgstr "Referans göstergelerini '%s' ile değiştirir."
 
 #: pcbnew/tools/multichannel_tool.cpp:439
 msgid "No Rule Areas to repeat layout to have been found."
-msgstr ""
+msgstr "Tekrarlanacak düzen için Kural Alanı bulunamadı."
 
 #: pcbnew/tools/multichannel_tool.cpp:512
 #, c-format
@@ -51306,7 +51315,7 @@ msgstr "Dönüştürülmüş"
 
 #: pcbnew/tools/multichannel_tool.cpp:976
 msgid "One or both of the areas has no components assigned."
-msgstr ""
+msgstr "Alanlardan biri veya her ikisine hiçbir bileşen atanmamış."
 
 #: pcbnew/tools/multichannel_tool.cpp:980
 #, fuzzy
@@ -51315,11 +51324,11 @@ msgstr "Eleman türü:"
 
 #: pcbnew/tools/multichannel_tool.cpp:984
 msgid "Iteration count exceeded (timeout)"
-msgstr ""
+msgstr "Tekrarlama sayısı aşıldı (zaman aşımı)"
 
 #: pcbnew/tools/multichannel_tool.cpp:988
 msgid "Topology mismatch"
-msgstr ""
+msgstr "Topoloji uyumsuzluğu"
 
 #: pcbnew/tools/multichannel_tool.cpp:1039
 msgid ""
@@ -52546,7 +52555,7 @@ msgstr "Pin adı metnini göster"
 
 #: pcbnew/tools/pcb_actions.cpp:1429
 msgid "Show lines/arcs representing missing connections on the board"
-msgstr ""
+msgstr "Tahtada eksik bağlantıları temsil eden çizgileri/yayları göster"
 
 #: pcbnew/tools/pcb_actions.cpp:1436
 #, fuzzy
@@ -53677,7 +53686,7 @@ msgstr "Parça"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2850
 msgid "Split Arc"
-msgstr ""
+msgstr "Bölünmüş Yay"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2927
 #, fuzzy
@@ -55173,9 +55182,8 @@ msgid "[INFO] load failed: %s"
 msgstr "[BİLGİ] yükleme başarısız: giriş satırı çok uzun\n"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
-#, fuzzy
 msgid "bitmap2component;Bitmap;Converter;"
-msgstr "Bitmap/Bileşen Dönüştürücü"
+msgstr "Bitmap/Bileşen Dönüştürücü;"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
@@ -55215,9 +55223,8 @@ msgid "gerbview;PCB;Gerber;"
 msgstr "gerbview;PCB;Gerber;"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
-#, fuzzy
 msgid "Projectmanager;"
-msgstr "Proje Yöneticisi"
+msgstr "Proje Yöneticisi;"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
@@ -55233,9 +55240,8 @@ msgid "KiCad PCB Calculator"
 msgstr "KiCad PCB Hesaplayıcı"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
-#, fuzzy
 msgid "PCB;Calculator;"
-msgstr "KiCad PCB Hesaplayıcı"
+msgstr "KiCad PCB Hesaplayıcı;"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 #, fuzzy
