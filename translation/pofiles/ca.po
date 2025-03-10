@@ -1,15 +1,16 @@
 # Arnau Llovet Vidal <arnaullv@gmail.com>, 2021, 2022, 2023, 2024, 2025.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023, 2025.
 # John Beard <john.j.beard@gmail.com>, 2025.
+# Marc de Miguel <marc.demiguel.c@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:04+0300\n"
-"PO-Revision-Date: 2025-03-04 03:35+0000\n"
-"Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"PO-Revision-Date: 2025-03-10 15:08+0000\n"
+"Last-Translator: Marc de Miguel <marc.demiguel.c@gmail.com>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1413,6 +1414,8 @@ msgid ""
 "Show or hide the board body\n"
 "If hidden, show only copper and silkscreen layers."
 msgstr ""
+"Mostrar o amagar la placa\n"
+"Si està amagada, mostrar només les capes de coure i serigrafia."
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:236
 msgid "Reload board and 3D models"
@@ -1854,6 +1857,8 @@ msgstr "Exporta al porta-retalls"
 #: bitmap2component/bitmap2component.cpp:406
 msgid "No shape in black and white image to convert: no outline created."
 msgstr ""
+"No s'ha trobat cap forma en la imatge en blanc i negre: no s'ha creat la "
+"silueta."
 
 #: common/api/api_handler.cpp:27
 #, fuzzy
@@ -2048,13 +2053,13 @@ msgid "Cannot overwrite library path '%s'."
 msgstr "No es pot sobreescriure el camí de la biblioteca '%s'."
 
 #: common/design_block_io.cpp:184
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library path '%s' could not be created.\n"
 "\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"No pot crear-se la carpeta '%s'.\n"
+"No s'ha pogut creat la carpeta '%s'.\n"
 "\n"
 "Si us plau, confirma que tens permisos d'escriptura i intenta-ho un altre "
 "cop."
@@ -2087,7 +2092,7 @@ msgstr "No s'ha pogut crear el fitxer '%s'."
 
 #: common/design_block_io.cpp:355
 msgid "Design block does not have a valid library ID."
-msgstr ""
+msgstr "El bloc de disseny no té un ID de la llibreria vàlid."
 
 #: common/design_block_io.cpp:362
 #, fuzzy, c-format
@@ -2402,6 +2407,8 @@ msgid ""
 "Note: complete netclass assignments can be edited in Schematic Setup > "
 "Project."
 msgstr ""
+"Nota: les assignacions de xarxa poden ser completament editades a "
+"Configuració de l'Esquema > Projecte."
 
 #: common/dialogs/dialog_assign_netclass_base.h:56
 #, fuzzy
@@ -2887,7 +2894,7 @@ msgstr ""
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1401
 msgid "PCB"
-msgstr ""
+msgstr "PCI"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1350 eeschema/sch_plotter.cpp:1060
