@@ -302,7 +302,8 @@ wxString BOARD_INSPECTION_TOOL::InspectDRCErrorMenuText( const std::shared_ptr<R
     if( aDRCItem->GetErrorCode() == DRCE_CLEARANCE
             || aDRCItem->GetErrorCode() == DRCE_EDGE_CLEARANCE
             || aDRCItem->GetErrorCode() == DRCE_HOLE_CLEARANCE
-            || aDRCItem->GetErrorCode() == DRCE_DRILLED_HOLES_TOO_CLOSE )
+            || aDRCItem->GetErrorCode() == DRCE_DRILLED_HOLES_TOO_CLOSE
+            || aDRCItem->GetErrorCode() == DRCE_STARVED_THERMAL )
     {
         return menuDescription( PCB_ACTIONS::inspectClearance );
     }
