@@ -32,7 +32,7 @@
 #include <wx/crt.h>
 
 CLI::PCB_EXPORT_BASE_COMMAND::PCB_EXPORT_BASE_COMMAND( const std::string& aName,
-                                                       bool               aInputIsDir,
+                                                       bool               aInputCanBeDir,
                                                        bool               aOutputIsDir ) :
         COMMAND( aName )
 {
@@ -40,7 +40,7 @@ CLI::PCB_EXPORT_BASE_COMMAND::PCB_EXPORT_BASE_COMMAND( const std::string& aName,
     m_requireLayers = false;
     m_hasLayerArg = false;
 
-    addCommonArgs( true, true, aInputIsDir, aOutputIsDir );
+    addCommonArgs( true, true, aInputCanBeDir, aOutputIsDir );
 
     // Build list of layer names and their layer mask:
     for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )

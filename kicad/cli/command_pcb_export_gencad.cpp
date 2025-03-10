@@ -32,7 +32,8 @@
 #include <locale_io.h>
 
 
-CLI::PCB_EXPORT_GENCAD_COMMAND::PCB_EXPORT_GENCAD_COMMAND() : PCB_EXPORT_BASE_COMMAND( "gencad" )
+CLI::PCB_EXPORT_GENCAD_COMMAND::PCB_EXPORT_GENCAD_COMMAND() :
+        PCB_EXPORT_BASE_COMMAND( "gencad", false, true )
 {
     // TODO: Update string to remove reference to layers
     m_argParser.add_description( UTF8STDSTR( _( "Generate Gencad from a list of layers" ) ) );

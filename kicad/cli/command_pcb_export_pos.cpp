@@ -41,7 +41,8 @@
 #define ARG_GERBER_BOARD_EDGE "--gerber-board-edge"
 
 
-CLI::PCB_EXPORT_POS_COMMAND::PCB_EXPORT_POS_COMMAND() : PCB_EXPORT_BASE_COMMAND( "pos" )
+CLI::PCB_EXPORT_POS_COMMAND::PCB_EXPORT_POS_COMMAND() :
+        PCB_EXPORT_BASE_COMMAND( "pos" )
 {
     m_argParser.add_description( UTF8STDSTR( _( "Generate Position File" ) ) );
 

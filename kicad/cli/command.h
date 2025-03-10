@@ -67,12 +67,12 @@ protected:
      *
      * @param aInput Configures the input arg
      * @param aOutput Configures the output arg
-     * @param aInputIsDir Configures whether the input arg description will be for a file or
-     *                    directory
+     * @param aInputCanBeDir Configures whether the input arg description will be for either a
+     *                       file or directory
      * @param aOutputIsDir Configures whether the output arg description will be for a file or
      *                     directory
      */
-    void addCommonArgs( bool aInput, bool aOutput, bool aInputIsDir, bool aOutputIsDir );
+    void addCommonArgs( bool aInput, bool aOutput, bool aInputCanBeDir, bool aOutputIsDir );
 
     /**
      * Set up the drawing sheet arg used by many of the export commands

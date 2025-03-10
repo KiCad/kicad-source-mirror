@@ -36,7 +36,8 @@
 #define ARG_MODE_SINGLE "--mode-single"
 #define ARG_MODE_MULTI "--mode-multi"
 
-CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND( "svg" )
+CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() :
+        PCB_EXPORT_BASE_COMMAND( "svg", false, true )
 {
     m_argParser.add_description( UTF8STDSTR( _( "Generate SVG outputs of a given layer list" ) ) );
 

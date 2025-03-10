@@ -70,7 +70,7 @@ namespace CLI
 
 struct PCB_EXPORT_BASE_COMMAND : public COMMAND
 {
-    PCB_EXPORT_BASE_COMMAND( const std::string& aName, bool aInputIsDir = false,
+    PCB_EXPORT_BASE_COMMAND( const std::string& aName, bool aInputCanBeDir = false,
                              bool aOutputIsDir = false );
 
 protected:
