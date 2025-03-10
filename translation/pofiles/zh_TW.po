@@ -10,7 +10,7 @@
 # William Lin <unrealin01@gmail.com>, 2024.
 # pominglee <pominglee@gmail.com>, 2024.
 # Andrew <yenchang.lin@gmail.com>, 2024.
-# CloverGit <w991593239@163.com>, 2024.
+# CloverGit <w991593239@163.com>, 2024, 2025.
 # Ricky From Hong Kong <lamricky11@hotmail.com>, 2024.
 # John Beard <john.j.beard@gmail.com>, 2025.
 # reimu105 <peter112548@gmail.com>, 2025.
@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:04+0300\n"
-"PO-Revision-Date: 2025-02-12 01:02+0000\n"
-"Last-Translator: reimu105 <peter112548@gmail.com>\n"
+"PO-Revision-Date: 2025-03-10 07:38+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -3723,9 +3723,8 @@ msgstr "請輸入倉庫 URL"
 
 #: common/dialogs/git/dialog_git_repository.cpp:453
 #: common/dialogs/git/dialog_git_repository_base.cpp:108
-#, fuzzy
 msgid "SSH key password:"
-msgstr "SSH 密鑰密碼"
+msgstr "SSH 密鑰密碼:"
 
 #: common/dialogs/git/dialog_git_repository.cpp:459
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
@@ -3733,14 +3732,12 @@ msgid "Password:"
 msgstr "密碼:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:38
-#, fuzzy
 msgid "Location:"
-msgstr "地址"
+msgstr "地址:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:45
-#, fuzzy
 msgid "Connection type:"
-msgstr "連接類型"
+msgstr "連接類型:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:52
 msgid "HTTPS"
@@ -3753,9 +3750,8 @@ msgid "Local"
 msgstr "本地"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:83
-#, fuzzy
 msgid "SSH private key:     "
-msgstr "SSH 私鑰"
+msgstr "SSH 私鑰:     "
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:90
 msgid "Select SSH private key file"
@@ -4661,7 +4657,7 @@ msgstr "複製此嵌入檔案的引用"
 
 #: common/dialogs/panel_embedded_files.cpp:284
 #: common/dialogs/panel_embedded_files.cpp:399
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists."
 msgstr "檔案 \"%s\" 已存在。"
 
@@ -4687,19 +4683,17 @@ msgid "Overwrite"
 msgstr "覆蓋"
 
 #: common/dialogs/panel_embedded_files.cpp:306
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add file '%s'."
-msgstr "建立檔案 '%s' 失敗。"
+msgstr "新增檔案 '%s' 失敗。"
 
 #: common/dialogs/panel_embedded_files.cpp:320
-#, fuzzy
 msgid "Select a file to embed"
-msgstr "選擇要調整的值"
+msgstr "選擇要嵌入的檔案"
 
 #: common/dialogs/panel_embedded_files.cpp:321
-#, fuzzy
 msgid "All files|*.*"
-msgstr "所有檔案"
+msgstr "所有檔案|*.*"
 
 #: common/dialogs/panel_embedded_files.cpp:386
 msgid "Select a directory to export files"
