@@ -48,6 +48,7 @@
 #include <wx/richmsgdlg.h>
 
 #include <advanced_config.h>
+#include <pgm_base.h>
 #include <libraries/symbol_library_manager_adapter.h>
 
 #include "printing/sch_printout.h"
@@ -284,6 +285,11 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
         }
     }
 
+    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &Prj() );
+    std::optional<LIBRARY_TABLE*> optTable = adapter->ProjectTable();
+    wxCHECK( optTable, false );
+    LIBRARY_TABLE* projectTable = *optTable;
+
     SCH_SHEET_LIST loadedSheets( tmpSheet.get() );
     Schematic().RefreshHierarchy();
     SCH_SHEET_LIST schematicSheets = Schematic().Hierarchy();
@@ -376,9 +382,9 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
                     duplicateLibNames.Add( name );
             }
 
-            SYMBOL_LIB_TABLE table;
             wxFileName symLibTableFn( fileName.GetPath(),
                                       SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+            LIBRARY_TABLE table( symLibTableFn.GetFullPath(), LIBRARY_TABLE_SCOPE::PROJECT );
 
             // If there are any new or duplicate libraries, check to see if it's possible that
             // there could be any missing libraries that would cause broken symbol library links.
@@ -400,15 +406,11 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
                 }
                 else
                 {
-                    try
-                    {
-                        table.Load( symLibTableFn.GetFullPath() );
-                    }
-                    catch( const IO_ERROR& ioe )
+                    if( !table.IsOk() )
                     {
                         msg.Printf( _( "Error loading the symbol library table '%s'." ),
                                     symLibTableFn.GetFullPath() );
-                        DisplayErrorMessage( nullptr, msg, ioe.What() );
+                        DisplayErrorMessage( nullptr, msg, table.ErrorDescription() );
                         return false;
                     }
                 }
@@ -419,13 +421,13 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
             // library table.
             if( !newLibNames.IsEmpty() )
             {
-                bool missingLibNames = table.IsEmpty();
+                bool missingLibNames = table.Rows().empty();
 
                 if( !missingLibNames )
                 {
                     for( const wxString& newLibName : newLibNames )
                     {
-                        if( !table.HasLibrary( newLibName ) )
+                        if( !table.HasRow( newLibName ) )
                         {
                             missingLibNames = true;
                             break;
@@ -452,23 +454,20 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
             // The library name already exists in the current project.  Check to see if the
             // duplicate name is the same library in the current project.  If it's not, it's
             // most likely that the symbol library links will be broken.
-            if( !duplicateLibNames.IsEmpty() && !table.IsEmpty() )
+            if( !duplicateLibNames.IsEmpty() && !table.Rows().empty() )
             {
                 bool libNameConflict = false;
 
                 for( const wxString& duplicateLibName : duplicateLibNames )
                 {
-                    const SYMBOL_LIB_TABLE_ROW* thisRow = nullptr;
-                    const SYMBOL_LIB_TABLE_ROW* otherRow = nullptr;
+                    const LIBRARY_TABLE_ROW* thisRow = nullptr;
+                    const LIBRARY_TABLE_ROW* otherRow = nullptr;
 
-                    // TODO(JE) library tables
-#if 0
-                    if( PROJECT_SCH::SymbolLibManager( &Prj() )->HasLibrary( duplicateLibName ) )
-                        thisRow = PROJECT_SCH::SymbolLibManager( &Prj() )->FindRow( duplicateLibName );
-#endif
+                    if( adapter->HasLibrary( duplicateLibName ) )
+                        thisRow = *adapter->GetRow( duplicateLibName );
 
-                    if( table.HasLibrary( duplicateLibName ) )
-                        otherRow = table.FindRow( duplicateLibName );
+                    if( table.HasRow( duplicateLibName ) )
+                        otherRow = *table.Row( duplicateLibName );
 
                     // It's in the global library table so there is no conflict.
                     if( thisRow && !otherRow )
@@ -478,8 +477,8 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
                         continue;
 
                     wxFileName otherUriFileName;
-                    wxString thisURI = thisRow->GetFullURI( true );
-                    wxString otherURI = otherRow->GetFullURI( false);
+                    wxString thisURI = LIBRARY_MANAGER::GetFullURI( thisRow, true );;
+                    wxString otherURI = LIBRARY_MANAGER::GetFullURI( otherRow, false );
 
                     if( otherURI.Contains( "${KIPRJMOD}" ) || otherURI.Contains( "$(KIPRJMOD)" ) )
                     {
@@ -516,19 +515,20 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
             // All (most?) of the possible broken symbol library link cases are covered.  Map the
             // new appended schematic project symbol library table entries to the current project
             // symbol library table.
-            if( !newLibNames.IsEmpty() && !table.IsEmpty() )
+            if( !newLibNames.IsEmpty() && !table.Rows().empty() )
             {
                 for( const wxString& libName : newLibNames )
                 {
-                    if( !table.HasLibrary( libName )
-                      || PROJECT_SCH::SymbolLibManager( &Prj() )->HasLibrary( libName ) )
+                    if( !table.HasRow( libName ) || adapter->HasLibrary( libName ) )
                     {
                         continue;
                     }
 
+                    LIBRARY_TABLE_ROW* row = *table.Row( libName );
+
                     // Don't expand environment variable because KIPRJMOD will not be correct
                     // for a different project.
-                    wxString uri = table.GetFullURI( libName, false );
+                    wxString uri = LIBRARY_MANAGER::GetFullURI( row, false );
                     wxFileName newLib;
 
                     if( uri.Contains( "${KIPRJMOD}" ) || uri.Contains( "$(KIPRJMOD)" ) )
@@ -541,22 +541,21 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
                     }
                     else
                     {
-                        uri = table.GetFullURI( libName );
+                        uri = LIBRARY_MANAGER::GetFullURI( row, true );
                     }
 
                     // Add the library from the imported project to the current project
                     // symbol library table.
-                    const SYMBOL_LIB_TABLE_ROW* row = table.FindRow( libName );
 
-                    wxCHECK( row, false );
+                    LIBRARY_TABLE_ROW& newRow =
+                            projectTable->Rows().emplace_back( projectTable->MakeRow() );
 
-                    SYMBOL_LIB_TABLE_ROW* newRow = new SYMBOL_LIB_TABLE_ROW( libName, uri,
-                                                                             row->GetType(),
-                                                                             row->GetOptions(),
-                                                                             row->GetDescr() );
+                    newRow.SetNickname( libName );
+                    newRow.SetURI( uri );
+                    newRow.SetType( row->Type() );
+                    newRow.SetDescription( row->Description() );
+                    newRow.SetOptions( row->Options() );
 
-                    // TODO(JE) library tables
-                    //PROJECT_SCH::SchSymbolLibTable( &Prj() )->InsertRow( newRow );
                     libTableChanged = true;
                 }
             }
@@ -566,14 +565,17 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
     SCH_SCREEN* newScreen = tmpSheet->GetScreen();
     wxCHECK_MSG( newScreen, false, "No screen defined for sheet." );
 
-    // TODO(JE) library tables
-#if 0
     if( libTableChanged )
     {
-        PROJECT_SCH::SchSymbolLibTable( &Prj() )->Save( Prj().GetProjectPath() +
-                                         SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+        Pgm().GetLibraryManager().Save( projectTable ).map_error(
+            [&]( const LIBRARY_ERROR& aError )
+            {
+                wxMessageDialog dlg( this, _( "Error saving project library table." ),
+                                     _( "File Save Error" ), wxOK | wxICON_ERROR );
+                dlg.SetExtendedMessage( aError.message );
+                dlg.ShowModal();
+            } );
     }
-#endif
 
     // Make the best attempt to set the symbol instance data for the loaded schematic.
     if( newScreen->GetFileFormatVersionAtLoad() < 20221002 )
