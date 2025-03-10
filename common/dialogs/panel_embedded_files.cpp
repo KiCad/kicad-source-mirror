@@ -318,7 +318,7 @@ void PANEL_EMBEDDED_FILES::onAddEmbeddedFiles( wxCommandEvent& event )
 {
     // TODO: Update strings to reflect that multiple files can be selected.
     wxFileDialog fileDialog( this, _( "Select a file to embed" ), wxEmptyString, wxEmptyString,
-                             _( "All files|*.*" ),
+                             _( "All Files" ) + wxT( " (*.*)|*.*" ),
                              wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
 
     if( fileDialog.ShowModal() == wxID_OK )
