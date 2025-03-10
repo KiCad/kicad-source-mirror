@@ -367,8 +367,11 @@ protected:
         if( filename.IsEmpty() || filename == wxT( "~" ) )
         {
             FILEDLG_OPEN_EMBED_FILE customize;
-            wxFileDialog openFileDialog( this, _( "Open file" ), "", "", "All files (*.*)|*.*",
+
+            wxFileDialog openFileDialog( this, _( "Open file" ), "", "",
+                                         _( "All Files" ) + wxT( " (*.*)|*.*" ),
                                          wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
             openFileDialog.SetCustomizeHook( customize );
 
             if( openFileDialog.ShowModal() == wxID_OK )
