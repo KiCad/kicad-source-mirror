@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:05+0300\n"
-"PO-Revision-Date: 2025-03-10 15:35+0000\n"
+"PO-Revision-Date: 2025-03-10 18:23+0000\n"
 "Last-Translator: Marc de Miguel <marc.demiguel.c@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v9/ca/>\n"
 "Language: ca\n"
@@ -3826,7 +3826,7 @@ msgstr "El missatge de confirmació no pot estar buit"
 #: common/dialogs/git/dialog_git_repository.cpp:156
 #: common/dialogs/git/dialog_git_repository.cpp:388
 msgid "Enter the password for the SSH key"
-msgstr ""
+msgstr "Introdueixi la contrasenya per la clau SSH"
 
 #: common/dialogs/git/dialog_git_repository.cpp:337
 #, fuzzy
@@ -3932,15 +3932,15 @@ msgstr "Dipòsit de Github"
 
 #: common/dialogs/git/dialog_git_switch.cpp:40
 msgid "Git Branch Switch"
-msgstr ""
+msgstr "Canvi de branca a Git"
 
 #: common/dialogs/git/dialog_git_switch.cpp:48
 msgid "Select or enter a branch name:"
-msgstr ""
+msgstr "Seleccioni o introdueixi un nom per a la branca:"
 
 #: common/dialogs/git/dialog_git_switch.cpp:54
 msgid "Branch"
-msgstr ""
+msgstr "Branca"
 
 #: common/dialogs/git/dialog_git_switch.cpp:55
 msgid "Last Commit"
@@ -3980,7 +3980,7 @@ msgstr "Nom de l'àrea:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:51
 msgid "Author e-mail:"
-msgstr ""
+msgstr "Correu electrònic de l'autor:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:68
 #, fuzzy
@@ -4109,19 +4109,23 @@ msgstr ""
 #: common/dialogs/panel_common_settings.cpp:352
 #, c-format
 msgid "Default 'explorer.exe /n,/select,%F' for this OS."
-msgstr ""
+msgstr "Carpeta 'explorer.exe /n,/select,%F' per aquest sistema operatiu."
 
 #: common/dialogs/panel_common_settings.cpp:356
 msgid ""
 "File explorer command.\n"
 "example:"
 msgstr ""
+"Comanda de l'explorador de fitxers\n"
+"exemple:"
 
 #: common/dialogs/panel_common_settings.cpp:360
 #, c-format
 msgid ""
 "Explorer command with mandatory '%s' suffix after last entered character."
 msgstr ""
+"Comanda de l'explorador amb el sufix '%s' obligatori després de l'últim "
+"caràcter."
 
 #: common/dialogs/panel_common_settings.cpp:374
 msgid "Executable files ("
