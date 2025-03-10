@@ -30,7 +30,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:04+0300\n"
 "PO-Revision-Date: 2025-03-10 11:57+0000\n"
-"Last-Translator: İclal Gör <iclallgor@gmail.com>\n"
+"Last-Translator: Argeolog <argelojik@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
 "Language: tr\n"
@@ -43925,11 +43925,11 @@ msgstr "Delikli ayak izleri"
 
 #: pcbnew/drc/drc_item.cpp:293
 msgid "Mirrored text on front layer"
-msgstr ""
+msgstr "Ön katmanda yansıtılmış metin"
 
 #: pcbnew/drc/drc_item.cpp:297
 msgid "Non-Mirrored text on back layer"
-msgstr ""
+msgstr "Arka katmanda Yansıtılmamış metin"
 
 #: pcbnew/drc/drc_item.cpp:304
 #, fuzzy
@@ -44063,7 +44063,7 @@ msgstr "\"%s\" onayları denetleniyor."
 
 #: pcbnew/drc/drc_rule_parser.cpp:492
 msgid "within_diff_pairs option invalid for constraint type."
-msgstr ""
+msgstr "within_diff_pairs seçeneği kısıtlama türü için geçersiz."
 
 #: pcbnew/drc/drc_rule_parser.cpp:510
 #, fuzzy
