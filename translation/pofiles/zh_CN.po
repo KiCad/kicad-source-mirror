@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:04+0300\n"
-"PO-Revision-Date: 2025-03-10 07:38+0000\n"
+"PO-Revision-Date: 2025-03-10 11:57+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -13085,15 +13085,12 @@ msgid "Define as power symbol"
 msgstr "定义为电源符号"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:193
-#, fuzzy
 msgid ""
 "Power symbols define a global net with the value as a netname.\n"
 "They will not be included in the BOM and cannot be assigned a footprint."
 msgstr ""
-"勾选此选项后, 相关的符号将会出现在 \"添加电源符号\" 窗口中, 作为一个电源符号"
-"使用。\n"
-"电源符号的数值文本会被锁定, 以防其在原理图中被不慎编辑。\n"
-"同时, 该符号也不会在 BOM 中出现, 也不能为其分配封装。"
+"电源符号定义了一个全局网络, 其值为网络名称。\n"
+"该符号将不会在 BOM 中出现, 也不能为其分配封装。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:203
 msgid "Define as local power symbol"
@@ -13103,7 +13100,7 @@ msgstr "定义为局部电源符号"
 msgid ""
 "Local power symbols create labels that are limited to the sheet in which "
 "they are used"
-msgstr ""
+msgstr "由局部电源符号创建的标签作用域仅限于使用它们的图纸"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:221
 msgid "Pin Text Options"
@@ -26477,9 +26474,8 @@ msgid "Running jobs"
 msgstr "正在运行中的作业"
 
 #: kicad/dialogs/panel_jobset.cpp:295
-#, fuzzy
 msgid "Edit Destination Options..."
-msgstr "编辑矩形选项..."
+msgstr "编辑目标选项..."
 
 #: kicad/dialogs/panel_jobset.cpp:296
 msgid "Delete Destination"
@@ -37465,12 +37461,12 @@ msgstr "未知选择"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:628
 #, c-format
 msgid "Applying these changes will short net %s with %s."
-msgstr ""
+msgstr "进行这些更改后, 网络 %s 将与网络 %s 短路。"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:634
 #, c-format
 msgid "Applying these changes will short net %s with other nets."
-msgstr ""
+msgstr "进行这些更改后, 网络 %s 将与其他网络短路。"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:639
 msgid "Apply Anyway"
@@ -37668,7 +37664,7 @@ msgstr "保护功能:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:385
 msgid ""
 "Select which protection feature according to IPC-4761 the via should have."
-msgstr ""
+msgstr "根据 IPC-4761 标准, 选择过孔应具备的保护功能。"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:437
 msgid "Add teardrops on via's track connections"
@@ -38869,8 +38865,8 @@ msgid ""
 "Tented: vias are covered with solder mask.\n"
 "Not tented: vias are not covered with solder mask."
 msgstr ""
-"过孔盖油: 使用阻焊覆盖过孔。\n"
-"过孔开窗: 不使用阻焊覆盖过孔。"
+"帐篷式封孔 (过孔盖油): 使用阻焊覆盖过孔。\n"
+"不进行封孔 (过孔开窗): 不使用阻焊覆盖过孔。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:136
 msgid "Solder Paste Settings"
@@ -39877,7 +39873,7 @@ msgstr ""
 "       (condition \"A.intersectsCourtyard('U3')\"))\n"
 "\n"
 "\n"
-"    # 防止在盖油过孔上出现丝印\n"
+"    # 防止在帐篷式封孔 (过孔盖油) 上出现丝印\n"
 "    (rule silk_over_via\n"
 "       (constraint silk_clearance (min 0.2mm))\n"
 "       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
@@ -39885,13 +39881,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -40000,8 +39996,8 @@ msgstr ""
 "    # 在已知工厂会机械加工钻出盲孔/埋孔后再进行激光钻微孔的情况下,\n"
 "    # 允许盲孔/埋孔与微孔之间的孔对孔违规\n"
 "    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
-"'Micro'\")\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
+"\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
 "\n"
@@ -45688,40 +45684,35 @@ msgstr "来自设计规则"
 
 #: pcbnew/pcb_track.cpp:2193
 msgid "Tented"
-msgstr "盖油"
+msgstr "帐篷式封孔 (过孔盖油)"
 
 #: pcbnew/pcb_track.cpp:2194
 msgid "Not tented"
-msgstr "过孔开窗"
+msgstr "不进行封孔 (过孔开窗)"
 
 #: pcbnew/pcb_track.cpp:2199
-#, fuzzy
 msgid "Covered"
-msgstr "悬停项目"
+msgstr "覆孔"
 
 #: pcbnew/pcb_track.cpp:2200
-#, fuzzy
 msgid "Not covered"
-msgstr "不作镜像"
+msgstr "不进行覆孔"
 
 #: pcbnew/pcb_track.cpp:2205
-#, fuzzy
 msgid "Plugged"
-msgstr "插件"
+msgstr "塞孔"
 
 #: pcbnew/pcb_track.cpp:2206
-#, fuzzy
 msgid "Not plugged"
-msgstr "找不到"
+msgstr "不进行塞孔"
 
 #: pcbnew/pcb_track.cpp:2211
 msgid "Capped"
-msgstr ""
+msgstr "盖孔"
 
 #: pcbnew/pcb_track.cpp:2212
-#, fuzzy
 msgid "Not capped"
-msgstr "没有连接"
+msgstr "不进行盖孔"
 
 #: pcbnew/pcb_track.cpp:2218
 msgid "Not filled"
@@ -45752,33 +45743,28 @@ msgid "Back tenting"
 msgstr "底层盖油"
 
 #: pcbnew/pcb_track.cpp:2301
-#, fuzzy
 msgid "Front covering"
-msgstr "顶层盖油"
+msgstr "顶部覆孔"
 
 #: pcbnew/pcb_track.cpp:2303
-#, fuzzy
 msgid "Back covering"
-msgstr "底层盖油"
+msgstr "底部覆孔"
 
 #: pcbnew/pcb_track.cpp:2305
-#, fuzzy
 msgid "Front plugging"
-msgstr "顶层盖油"
+msgstr "顶部塞孔"
 
 #: pcbnew/pcb_track.cpp:2307
-#, fuzzy
 msgid "Back plugging"
-msgstr "底层盖油"
+msgstr "底部塞孔"
 
 #: pcbnew/pcb_track.cpp:2309
 msgid "Capping"
-msgstr ""
+msgstr "盖孔"
 
 #: pcbnew/pcb_track.cpp:2311
-#, fuzzy
 msgid "Filling"
-msgstr "填充"
+msgstr "填孔"
 
 #: pcbnew/pcbexpr_evaluator.cpp:617
 msgid "must be mm, in, mil, or deg"
@@ -46964,7 +46950,7 @@ msgstr "未定义 'diff_pair_uncoupled' 约束。"
 #: pcbnew/tools/board_inspection_tool.cpp:1045
 #, c-format
 msgid "Note: %s is tented; clearance will only be applied to holes."
-msgstr "注意: %s 过孔盖油; 间距仅适用于过孔。"
+msgstr "注意: %s 已使用帐篷式封孔 (过孔盖油); 间距仅适用于孔。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1062
 msgid "Silkscreen clearance resolution for:"
