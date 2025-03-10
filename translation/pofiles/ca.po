@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:05+0300\n"
-"PO-Revision-Date: 2025-03-10 15:08+0000\n"
+"PO-Revision-Date: 2025-03-10 15:35+0000\n"
 "Last-Translator: Marc de Miguel <marc.demiguel.c@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v9/ca/>\n"
 "Language: ca\n"
@@ -2888,6 +2888,8 @@ msgid ""
 "This project file contains multiple PCB+Schematic combinations.\n"
 "Choose which one should be imported to KiCad."
 msgstr ""
+"Aquest projecte conté múltiples combinacions de PCB i esquemes.\n"
+"Esculli quin s'hauria d'importar a KiCad."
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
 #, fuzzy
@@ -3321,6 +3323,7 @@ msgstr "Alterna l'assignació"
 #: common/dialogs/dialog_paste_special_base.cpp:29
 msgid "Remove the net information from all connected items before pasting"
 msgstr ""
+"Elimini la xarxa assignada de tots els elements connectats abans d'enganxar"
 
 #: common/dialogs/dialog_paste_special_base.h:47
 msgid "Paste Special"
@@ -3331,6 +3334,8 @@ msgid ""
 "Select an <b>Option Choice</b> in the listbox above, and then click the "
 "<b>Append Selected Option</b> button."
 msgstr ""
+"Seleccioni una <b>Opció</b> de la llista superior, i cliqui el botó de "
+"<b>Afegir Opció Seleccionada</b>."
 
 #: common/dialogs/dialog_plugin_options.cpp:53
 #, fuzzy, c-format
@@ -3555,7 +3560,7 @@ msgstr "Configuració de la pàgina..."
 
 #: common/dialogs/dialog_rc_job.cpp:28
 msgid "JSON"
-msgstr ""
+msgstr "JSON"
 
 #: common/dialogs/dialog_rc_job_base.cpp:25
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:277
