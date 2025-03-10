@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:05+0300\n"
-"PO-Revision-Date: 2025-03-07 09:02+0000\n"
+"PO-Revision-Date: 2025-03-10 07:38+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -804,15 +804,13 @@ msgid "Use board stackup colors"
 msgstr "使用电路板叠层颜色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:143
-#, fuzzy
 msgid "Use PCB editor copper colors"
-msgstr "使用电路板编辑器铜箔颜色"
+msgstr "使用 PCB 编辑器铜箔颜色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:145
-#, fuzzy
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
-msgstr "使用电路板编辑器铜箔颜色 (仅使用 openGL)"
+msgstr "使用电路板编辑器板层颜色 (仅实时渲染)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:163
 #, c-format
@@ -26943,7 +26941,7 @@ msgstr "本地文件"
 msgid ""
 "This plugin requires the KiCad API, which is currently disabled in "
 "preferences. Would you like to enable it?"
-msgstr ""
+msgstr "此插件需要 KiCad API, 但是其在首选项中已被禁用。要启用它吗?"
 
 #: kicad/pcm/pcm.cpp:1121
 msgid "PCM Update"
