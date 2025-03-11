@@ -238,16 +238,19 @@ const BOX2I PCB_TABLE::GetBoundingBox() const
 
 std::shared_ptr<SHAPE> PCB_TABLE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
 {
-    VECTOR2I                        origin = GetPosition();
-    VECTOR2I                        end = GetEnd();
+    std::vector<VECTOR2I> topLeft     = GetCell( 0, 0 )->GetCornersInSequence();
+    std::vector<VECTOR2I> bottomLeft  = GetCell( GetRowCount() - 1, 0 )->GetCornersInSequence();
+    std::vector<VECTOR2I> topRight    = GetCell( 0, GetColCount() - 1 )->GetCornersInSequence();
+    std::vector<VECTOR2I> bottomRight = GetCell( GetRowCount() - 1, GetColCount() - 1 )->GetCornersInSequence();
+
     std::shared_ptr<SHAPE_COMPOUND> shape = std::make_shared<SHAPE_COMPOUND>();
 
     std::vector<VECTOR2I> pts;
 
-    pts.emplace_back( origin );
-    pts.emplace_back( end.x, origin.y );
-    pts.emplace_back( end );
-    pts.emplace_back( origin.x, end.y );
+    pts.emplace_back( topLeft[3] );
+    pts.emplace_back( topRight[2] );
+    pts.emplace_back( bottomRight[2] );
+    pts.emplace_back( bottomLeft[3] );
 
     shape->AddShape( new SHAPE_SIMPLE( pts ) );
 
@@ -261,13 +264,15 @@ std::shared_ptr<SHAPE> PCB_TABLE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHI
     {
         for( int col = 0; col < GetColCount() - 1; ++col )
         {
-            for( int row = 0; row < GetRowCount(); ++row )
+            int row = StrokeHeader() ? 0 : 1;
+
+            for( ; row < GetRowCount(); ++row )
             {
                 PCB_TABLECELL* cell = GetCell( row, col );
-                VECTOR2I       topRight( cell->GetEndX(), cell->GetStartY() );
+                std::vector<VECTOR2I> corners = cell->GetCornersInSequence();
 
-                if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
-                    addSeg( topRight, cell->GetEnd(), GetSeparatorsStroke().GetWidth() );
+                if( corners.size() == 4 )
+                    addSeg( corners[1], corners[2], GetSeparatorsStroke().GetWidth() );
             }
         }
     }
@@ -279,20 +284,28 @@ std::shared_ptr<SHAPE> PCB_TABLE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHI
             for( int col = 0; col < GetColCount(); ++col )
             {
                 PCB_TABLECELL* cell = GetCell( row, col );
-                VECTOR2I       botLeft( cell->GetStartX(), cell->GetEndY() );
+                std::vector<VECTOR2I> corners = cell->GetCornersInSequence();
 
-                if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
-                    addSeg( botLeft, cell->GetEnd(), GetSeparatorsStroke().GetWidth() );
+                if( corners.size() == 4 )
+                    addSeg( corners[2], corners[3], GetSeparatorsStroke().GetWidth() );
             }
         }
     }
 
+    if( StrokeHeader() && GetBorderStroke().GetWidth() >= 0 )
+    {
+        addSeg( topLeft[0], topRight[1], GetBorderStroke().GetWidth() );
+        addSeg( topLeft[0], topLeft[3], GetBorderStroke().GetWidth() );
+        addSeg( topLeft[3], topRight[2], GetBorderStroke().GetWidth() );
+        addSeg( topRight[1], topRight[2], GetBorderStroke().GetWidth() );
+    }
+
     if( StrokeExternal() && GetBorderStroke().GetWidth() >= 0 )
     {
-        addSeg( pts[0], pts[1], GetBorderStroke().GetWidth() );
-        addSeg( pts[1], pts[2], GetBorderStroke().GetWidth() );
-        addSeg( pts[2], pts[3], GetBorderStroke().GetWidth() );
-        addSeg( pts[3], pts[0], GetBorderStroke().GetWidth() );
+        addSeg( topLeft[3], topRight[2], GetBorderStroke().GetWidth() );
+        addSeg( topRight[2], bottomRight[2], GetBorderStroke().GetWidth() );
+        addSeg( bottomRight[2], bottomLeft[3], GetBorderStroke().GetWidth() );
+        addSeg( bottomLeft[3], topLeft[3], GetBorderStroke().GetWidth() );
     }
 
     return shape;
