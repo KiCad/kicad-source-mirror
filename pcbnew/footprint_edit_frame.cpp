@@ -181,6 +181,12 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // NOTE: KifaceSettings() will return PCBNEW_SETTINGS if we started from pcbnew
     LoadSettings( GetSettings() );
 
+    // Enable one internal layer, because footprints support keepout areas that can be on
+    // internal layers only (therefore on the first internal layer).  This is needed to handle
+    // these keepout in internal layers only.
+    GetBoard()->SetCopperLayerCount( 3 );
+    GetBoard()->SetLayerName( In1_Cu, _( "Inner layers" ) );
+
     float proportion = GetFootprintEditorSettings()->m_AuiPanels.properties_splitter;
     m_propertiesPanel->SetSplitterProportion( proportion );
 
@@ -544,7 +550,6 @@ void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
 
     // Don't drop pre-existing user layers
     LSET enabledLayers = GetBoard()->GetEnabledLayers();
-    enabledLayers.set( In1_Cu );    // we've already done this, but it needs doing again :shrug:
 
     aFootprint->RunOnDescendants(
             [&]( BOARD_ITEM* child )

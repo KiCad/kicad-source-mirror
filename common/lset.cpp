@@ -703,7 +703,8 @@ LSET LSET::SideSpecificMask()
 
 LSET LSET::ForbiddenFootprintLayers()
 {
-    static const LSET saved = InternalCuMask();
+    static LSET saved = InternalCuMask();
+    saved.set( In1_Cu, false );
     return saved;
 }
 
