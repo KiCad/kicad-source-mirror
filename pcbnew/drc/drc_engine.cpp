@@ -746,6 +746,24 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 if( c->constraint.m_Value.HasMax() )
                     constraint .m_Value.SetMax( c->constraint.m_Value.Max() );
 
+                switch( c->constraint.m_Type )
+                {
+                case CLEARANCE_CONSTRAINT:
+                case COURTYARD_CLEARANCE_CONSTRAINT:
+                case SILK_CLEARANCE_CONSTRAINT:
+                case HOLE_CLEARANCE_CONSTRAINT:
+                case EDGE_CLEARANCE_CONSTRAINT:
+                case PHYSICAL_CLEARANCE_CONSTRAINT:
+                case PHYSICAL_HOLE_CLEARANCE_CONSTRAINT:
+                    if( constraint.m_Value.Min() > MAXIMUM_CLEARANCE )
+                        constraint.m_Value.SetMin( MAXIMUM_CLEARANCE );
+
+                    break;
+
+                default:
+                    break;
+                }
+
                 // While the expectation would be to OR the disallow flags, we've already
                 // masked them down to aItem's type -- so we're really only looking for a
                 // boolean here.

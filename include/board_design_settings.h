@@ -101,6 +101,8 @@
 #define MINIMUM_ERROR_SIZE_MM         0.001   // For arc approximation
 #define MAXIMUM_ERROR_SIZE_MM         0.1     // For arc approximation
 
+#define MAXIMUM_CLEARANCE             pcbIUScale.mmToIU( 500 )  // to prevent int-overflows
+
 // Min/max values used in dialogs to validate settings
 #define MINIMUM_LINE_WIDTH_MM         0.005   // minimal line width entered in a dialog
 #define MAXIMUM_LINE_WIDTH_MM         100.0   // max line width entered in a dialog

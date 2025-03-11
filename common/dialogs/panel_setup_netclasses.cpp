@@ -35,6 +35,7 @@
 #include <dialogs/panel_setup_netclasses.h>
 #include <tool/tool_manager.h>
 #include <pcb_painter.h>
+#include <board_design_settings.h>
 #include <string_utils.h>
 #include <view/view.h>
 #include <widgets/grid_color_swatch_helpers.h>
@@ -504,16 +505,16 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
 
                 wxASSERT_MSG( lineIdx >= 0, "Line style name not found." );
 
+                // clang-format off
                 nc->SetClearance( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_CLEARANCE ) );
                 nc->SetTrackWidth( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_TRACKSIZE ) );
                 nc->SetViaDiameter( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_VIASIZE ) );
                 nc->SetViaDrill( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_VIADRILL ) );
                 nc->SetuViaDiameter( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_uVIASIZE ) );
                 nc->SetuViaDrill( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_uVIADRILL ) );
-                nc->SetDiffPairWidth(
-                        m_netclassGrid->GetOptionalUnitValue( aRow, GRID_DIFF_PAIR_WIDTH ) );
-                nc->SetDiffPairGap( m_netclassGrid->GetOptionalUnitValue( aRow,
-                                                                          GRID_DIFF_PAIR_GAP ) );
+                nc->SetDiffPairWidth( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_DIFF_PAIR_WIDTH ) );
+                nc->SetDiffPairGap( m_netclassGrid->GetOptionalUnitValue( aRow, GRID_DIFF_PAIR_GAP ) );
+                // clang-format on
 
                 if( !nc->IsDefault() )
                 {
@@ -590,6 +591,26 @@ bool PANEL_SETUP_NETCLASSES::validateNetclassName( int aRow, const wxString& aNa
 }
 
 
+bool PANEL_SETUP_NETCLASSES::validateNetclassClearance( int aRow )
+{
+    // Clip clearance.  This is not a nag; we can end up with overflow errors and very poor
+    // performance if the clearance is too large.
+
+    std::optional<int> clearance = m_netclassGrid->GetOptionalUnitValue( aRow, GRID_CLEARANCE );
+
+    if( clearance.has_value() && clearance.value() > MAXIMUM_CLEARANCE )
+    {
+        wxString msg = wxString::Format( _( "Clearance was too large.  It has been clipped to %s." ),
+                                         m_frame->StringFromValue( MAXIMUM_CLEARANCE, true ) );
+        PAGED_DIALOG::GetDialog( this )->SetError( msg, this, m_netclassGrid, aRow, GRID_CLEARANCE );
+        m_netclassGrid->SetUnitValue( aRow, GRID_CLEARANCE, MAXIMUM_CLEARANCE );
+        return false;
+    }
+
+    return true;
+}
+
+
 void PANEL_SETUP_NETCLASSES::OnNetclassGridCellChanging( wxGridEvent& event )
 {
     if( event.GetCol() == GRID_NAME )
@@ -614,6 +635,10 @@ void PANEL_SETUP_NETCLASSES::OnNetclassGridCellChanging( wxGridEvent& event )
         {
             event.Veto();
         }
+    }
+    else if( event.GetCol() == GRID_CLEARANCE )
+    {
+        validateNetclassClearance( event.GetRow() );
     }
 }
 
@@ -901,8 +926,6 @@ bool PANEL_SETUP_NETCLASSES::Validate()
     if( !m_netclassGrid->CommitPendingChanges() || !m_assignmentGrid->CommitPendingChanges() )
         return false;
 
-    wxString msg;
-
     // Test net class parameters.
     for( int row = 0; row < m_netclassGrid->GetNumberRows(); row++ )
     {
@@ -911,6 +934,9 @@ bool PANEL_SETUP_NETCLASSES::Validate()
         netclassName.Trim( false );
 
         if( !validateNetclassName( row, netclassName, false ) )
+            return false;
+
+        if( !validateNetclassClearance( row ) )
             return false;
     }
 

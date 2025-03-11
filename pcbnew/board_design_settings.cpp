@@ -1311,7 +1311,8 @@ int BOARD_DESIGN_SETTINGS::GetBiggestClearanceValue() const
         biggest = std::max( biggest, constraint.Value().Min() );
     }
 
-    return biggest;
+    // Clip to avoid integer overflows in subsequent calculations
+    return std::min( biggest, MAXIMUM_CLEARANCE );
 }
 
 
