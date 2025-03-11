@@ -265,10 +265,12 @@ void WX_INFOBAR::onSize( wxSizeEvent& aEvent )
             // min height for the control.  The min height of the text control will be the size
             // of a single line of text.  This assumes that two lines of text are larger
             // than the height of the icon for the bar.
-            textCtrl->Wrap( text->GetSize().GetWidth() );
-            wxString new_text = textCtrl->GetLabel();
-            int      height = ( new_text.Freq( '\n' ) + 1 ) * text->GetMinSize().GetHeight();
-            SetMinSize( wxSize( GetSize().GetWidth(), height ) );
+            textCtrl->Wrap( -1 );
+            wxString wrapped_text = textCtrl->GetLabel();
+            int      height = ( wrapped_text.Freq( '\n' ) + 1 ) * text->GetMinSize().GetHeight();
+            int      margins = text->GetMinSize().GetHeight() - 1;
+            SetMinSize( wxSize( GetSize().GetWidth(), height + margins ) );
+            textCtrl->Wrap( -1 );
         }
     }
 
