@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:04+0300\n"
 "PO-Revision-Date: 2025-03-11 17:51+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -793,7 +793,6 @@ msgid "Use board stackup colors"
 msgstr "基板スタックアップの色を使用"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:143
-#, fuzzy
 msgid "Use PCB editor copper colors"
 msgstr "基板エディタの銅色を使用する"
 
@@ -13266,15 +13265,11 @@ msgid "Define as power symbol"
 msgstr "電源シンボルとして定義"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:193
-#, fuzzy
 msgid ""
 "Power symbols define a global net with the value as a netname.\n"
 "They will not be included in the BOM and cannot be assigned a footprint."
 msgstr ""
-"このオプションをセットすることで、\"電源ポートを追加\" ダイアログに当該シンボ"
-"ルを\n"
-"表示させます。  \n"
-"回路図での編集から保護するために値のテキストはロックされます。  \n"
+"電源シンボルのネット名はグローバル ネットとして定義します。\n"
 "シンボルは BOM に含まれず、フットプリントを割り当てることはできません。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:203
@@ -21277,9 +21272,8 @@ msgstr "信号名をコピー"
 #: eeschema/sim/simulator_frame_ui.cpp:180
 #: eeschema/sim/simulator_frame_ui.cpp:187
 #: eeschema/sim/simulator_frame_ui.cpp:200
-#, fuzzy
 msgid "Create new cursor..."
-msgstr "新規基板を作成"
+msgstr "新規基板を作成。"
 
 #: eeschema/sim/simulator_frame_ui.cpp:194
 #, c-format
@@ -26802,7 +26796,7 @@ msgstr "ジョブの設定ファイルをコピー"
 #: kicad/dialogs/dialog_destination_base.h:62
 #, c-format
 msgid "%s Destination"
-msgstr "% 宛先"
+msgstr "%s 宛先"
 
 #: kicad/dialogs/dialog_destination.cpp:86
 msgid "Select output directory"
@@ -28773,9 +28767,8 @@ msgid "Origin Selector"
 msgstr "オリジナル画像"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:161
-#, fuzzy
 msgid "Select the origin of the status bar coordinates"
-msgstr "X,Y座標を表示するために使う原点を選択します。"
+msgstr "ステータスバーの座標の原点を選択する"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:162
 #, fuzzy
@@ -33059,9 +33052,8 @@ msgstr "領域制限以下"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:363
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:288
-#, fuzzy
 msgid "Area limit:"
-msgstr "領域制限以下"
+msgstr "領域制限:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:366
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:291
@@ -38113,12 +38105,12 @@ msgstr "不明なメソッド"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:628
 #, c-format
 msgid "Applying these changes will short net %s with %s."
-msgstr ""
+msgstr "これらの変更を適用するとネット %s が %s にショートします。"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:634
 #, c-format
 msgid "Applying these changes will short net %s with other nets."
-msgstr ""
+msgstr "これらの変更を適用するとネット %s が他のネットにショートします。"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:639
 msgid "Apply Anyway"
@@ -39271,9 +39263,8 @@ msgid "Apply board defaults to non-copper footprint shapes"
 msgstr "基板のデフォルトを非導体のフットプリント形状に適用"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:58
-#, fuzzy
 msgid "This layer is required and cannot be disabled"
-msgstr "名前 %s は予約されており、使用することはできません。"
+msgstr "このレイヤーは必須であり無効にすることはできません"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:88
 #: pcbnew/dialogs/panel_setup_layers.cpp:294
