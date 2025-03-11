@@ -2538,11 +2538,7 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
         {
             for( int col = 0; col < aTable->GetColCount() - 1; ++col )
             {
-                int row = 1;
-                if( aTable->StrokeHeader() )
-                {
-                    row = 0;
-                }
+                int row = aTable->StrokeHeader() ? 0 : 1;
 
                 for( ; row < aTable->GetRowCount(); ++row )
                 {
