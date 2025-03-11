@@ -162,6 +162,13 @@ void EMBEDDED_FILES::WriteEmbeddedFiles( OUTPUTFORMATTER& aOut, bool aWriteData 
     {
         const EMBEDDED_FILE& file = *entry;
 
+        // Skip empty files
+        if( file.compressedEncodedData.empty() )
+        {
+            wxLogDebug( wxT( "Error: Embedded file '%s' is empty" ), file.name );
+            continue;
+        }
+
         aOut.Print( "(file " );
         aOut.Print( "(name %s)", aOut.Quotew( file.name ).c_str() );
 
@@ -376,7 +383,21 @@ void EMBEDDED_FILES_PARSER::ParseEmbedded( EMBEDDED_FILES* aFiles )
                 break;
 
             case T_data:
-                NeedBAR();
+                try
+                {
+                    NeedBAR();
+                }
+                catch( const PARSE_ERROR& e )
+                {
+                    // No data in the file -- due to bug in writer for 9.0.0
+                    NeedRIGHT();
+                    break;
+                }
+                catch( ... )
+                {
+                    throw;
+                }
+
                 token = NextTok();
 
                 file->compressedEncodedData.reserve( 1 << 17 );
