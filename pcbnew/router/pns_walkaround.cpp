@@ -342,10 +342,12 @@ const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
 
     for( int pol = 0; pol < MaxWalkPolicies; pol++ )
     {
-        auto&       st = m_currentResult.status[pol];
-        const auto& ln = m_currentResult.lines[pol].CLine();
+        auto& st = m_currentResult.status[pol];
+        auto& ln = m_currentResult.lines[pol];
 
-        m_currentResult.lines[pol].ClearLinks();
+        ln.ClearLinks();
+        ln.Line().Simplify2();
+
         if( st == ST_IN_PROGRESS )
             st = ST_ALMOST_DONE;
 
