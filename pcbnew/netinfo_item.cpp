@@ -27,6 +27,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <fmt/format.h>
 #include <pcb_base_frame.h>
 #include <string_utils.h>
 #include <widgets/msgpanel.h>
@@ -86,7 +87,7 @@ void NETINFO_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANE
 
     aList.emplace_back( _( "Net Name" ), UnescapeString( GetNetname() ) );
 
-    aList.emplace_back( _( "Net Code" ), wxString::Format( wxT( "%d" ), GetNetCode() ) );
+    aList.emplace_back( _( "Net Code" ), fmt::format( "{}", GetNetCode() ) );
 
     // Warning: for netcode == NETINFO_LIST::ORPHANED, the parent or the board can be NULL
     BOARD * board = m_parent ? m_parent->GetBoard() : nullptr;
@@ -105,7 +106,7 @@ void NETINFO_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANE
             }
         }
 
-        aList.emplace_back( _( "Pads" ), wxString::Format( wxT( "%d" ), count ) );
+        aList.emplace_back( _( "Pads" ), fmt::format( "{}", count ) );
 
         count = 0;
 
@@ -120,7 +121,7 @@ void NETINFO_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANE
             }
         }
 
-        aList.emplace_back( _( "Vias" ), wxString::Format( wxT( "%d" ), count ) );
+        aList.emplace_back( _( "Vias" ), fmt::format( "{}", count ) );
 
         if( startTrack )
         {

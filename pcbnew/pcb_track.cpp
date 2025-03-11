@@ -1814,16 +1814,12 @@ void PCB_TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame,
 
 #if 0   // Enable for debugging
     if( GetBoard() )
-        aList.emplace_back( _( "NetCode" ), wxString::Format( wxT( "%d" ), GetNetCode() ) );
+        aList.emplace_back( _( "NetCode" ), fmt::format( "{}", GetNetCode() ) );
 
-    aList.emplace_back( wxT( "Flags" ), wxString::Format( wxT( "0x%08X" ), m_flags ) );
+    aList.emplace_back( wxT( "Flags" ), fmt::format( "#08X", m_flags ) );
 
-    aList.emplace_back( wxT( "Start pos" ), wxString::Format( wxT( "%d %d" ),
-                                                              m_Start.x,
-                                                              m_Start.y ) );
-    aList.emplace_back( wxT( "End pos" ), wxString::Format( wxT( "%d %d" ),
-                                                            m_End.x,
-                                                            m_End.y ) );
+    aList.emplace_back( wxT( "Start pos" ), fmt::format( "{} {}", m_Start.x, m_Start.y ) );
+    aList.emplace_back( wxT( "End pos" ), fmt::format( "{} {}", m_End.x, m_End.y ) );
 #endif
 
     if( aFrame->GetName() == PCB_EDIT_FRAME_NAME && IsLocked() )

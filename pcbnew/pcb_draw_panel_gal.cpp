@@ -52,6 +52,7 @@
 #include <functional>
 #include <memory>
 #include <thread>
+#include <fmt/format.h>
 
 using namespace std::placeholders;
 
@@ -712,11 +713,11 @@ void PCB_DRAW_PANEL_GAL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
         }
     }
 
-    aList.emplace_back( _( "Pads" ), wxString::Format( wxT( "%d" ), padCount ) );
-    aList.emplace_back( _( "Vias" ), wxString::Format( wxT( "%d" ), viaCount ) );
-    aList.emplace_back( _( "Track Segments" ), wxString::Format( wxT( "%d" ), trackSegmentCount ) );
-    aList.emplace_back( _( "Nets" ), wxString::Format( wxT( "%d" ), (int) netCodes.size() ) );
-    aList.emplace_back( _( "Unrouted" ), wxString::Format( wxT( "%d" ), unconnected ) );
+    aList.emplace_back( _( "Pads" ), fmt::format( "{}", padCount ) );
+    aList.emplace_back( _( "Vias" ), fmt::format( "{}", viaCount ) );
+    aList.emplace_back( _( "Track Segments" ), fmt::format( "{}", trackSegmentCount ) );
+    aList.emplace_back( _( "Nets" ), fmt::format( "{}", (int) netCodes.size() ) );
+    aList.emplace_back( _( "Unrouted" ), fmt::format( "{}", unconnected ) );
 }
 
 

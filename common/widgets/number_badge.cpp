@@ -23,7 +23,7 @@
 
 #include <gal/color4d.h>
 #include <widgets/number_badge.h>
-
+#include <fmt/format.h>
 #include <algorithm>
 #include <kiplatform/ui.h>
 
@@ -127,7 +127,7 @@ void NUMBER_BADGE::computeSize()
 {
     wxClientDC dc( this );
 
-    wxString test = wxString::Format( wxT( "%d" ), m_currentNumber );
+    wxString test = fmt::format( "{}", m_currentNumber );
     int      len  = test.length();
 
     // Determine the size using the string "m999{+}" where the 'm' on the front serves as a margin
@@ -177,9 +177,9 @@ void NUMBER_BADGE::onPaint( wxPaintEvent& aEvt )
 
     // Cap the number displayed and add the "+" to the end if required
     if( m_currentNumber > m_maxNumber )
-        text = wxString::Format( wxT( "%d+" ), m_maxNumber );
+        text = fmt::format( "{}+", m_maxNumber );
     else
-        text = wxString::Format( wxT( "%d" ), m_currentNumber );
+        text = fmt::format( "{}", m_currentNumber );
 
     dc.SetFont( wxFont( m_textSize, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, BADGE_FONTWEIGHT ) );
     dc.SetTextForeground( m_textColour );

@@ -327,40 +327,35 @@ bool DSNLEXER::IsSymbol( int aTok )
 
 void DSNLEXER::Expecting( int aTok ) const
 {
-    wxString errText = wxString::Format(
-        _( "Expecting %s" ), GetTokenString( aTok ) );
+    wxString errText = wxString::Format( _( "Expecting %s" ), GetTokenString( aTok ) );
     THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
 }
 
 
 void DSNLEXER::Expecting( const char* text ) const
 {
-    wxString errText = wxString::Format(
-        _( "Expecting '%s'" ), wxString::FromUTF8( text ) );
+    wxString errText = wxString::Format( _( "Expecting '%s'" ), wxString::FromUTF8( text ) );
     THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
 }
 
 
 void DSNLEXER::Unexpected( int aTok ) const
 {
-    wxString errText = wxString::Format(
-        _( "Unexpected %s" ), GetTokenString( aTok ) );
+    wxString errText = wxString::Format( _( "Unexpected %s" ), GetTokenString( aTok ) );
     THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
 }
 
 
 void DSNLEXER::Duplicate( int aTok )
 {
-    wxString errText = wxString::Format(
-        _("%s is a duplicate"), GetTokenString( aTok ).GetData() );
+    wxString errText = wxString::Format( _("%s is a duplicate"), GetTokenString( aTok ).GetData() );
     THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
 }
 
 
 void DSNLEXER::Unexpected( const char* text ) const
 {
-    wxString errText = wxString::Format(
-        _( "Unexpected '%s'" ), wxString::FromUTF8( text ) );
+    wxString errText = wxString::Format( _( "Unexpected '%s'" ), wxString::FromUTF8( text ) );
     THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
 }
 

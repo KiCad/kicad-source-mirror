@@ -26,6 +26,7 @@
 #include <cstring>
 #include <memory>
 #include <wx/translation.h>
+#include <fmt/format.h>
 
 #include <ki_exception.h>
 #include <macros.h>     // TO_UTF8()
@@ -276,8 +277,8 @@ bool LIB_ID::isLegalLibraryNameChar( unsigned aUniChar )
 
 const wxString LIB_ID::GetFullLibraryName() const
 {
-    wxString suffix = m_subLibraryName.wx_str().IsEmpty()
-                              ? wxString( wxS( "" ) )
-                              : wxString::Format( wxT( " - %s" ), m_subLibraryName.wx_str() );
-    return wxString::Format( wxT( "%s%s" ), m_libraryName.wx_str(), suffix );
+    if( m_subLibraryName.empty() )
+        return m_libraryName.c_str();
+
+    return fmt::format( "{} - {}", m_libraryName.c_str(), m_subLibraryName.c_str() );
 }

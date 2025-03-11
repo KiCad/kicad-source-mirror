@@ -26,6 +26,7 @@
 #include <wx/statusbr.h>
 #include <wx/gauge.h>
 #include <wx/stattext.h>
+#include <fmt/format.h>
 #include <array>
 #include <widgets/kistatusbar.h>
 #include <widgets/bitmap_button.h>
@@ -214,9 +215,7 @@ void KISTATUSBAR::SetNotificationCount(int aCount)
     wxString cnt = "";
 
     if( aCount > 0 )
-    {
-        cnt = wxString::Format( "%d", aCount );
-    }
+        cnt = fmt::format( "{}", aCount );
 
     m_notificationsButton->SetBadgeText( cnt );
 
