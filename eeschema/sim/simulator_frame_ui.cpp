@@ -1616,7 +1616,12 @@ void SIMULATOR_FRAME_UI::AddTuner( const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL*
     SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
 
     if( !plotTab )
+    {
+        DisplayErrorMessage( nullptr, _( "The current analysis must have a plot in order to tune "
+                                         "the value of a passive R, L, C model or voltage or "
+                                         "current source." ) );
         return;
+    }
 
     wxString ref = aSymbol->GetRef( &aSheetPath );
 
@@ -1627,23 +1632,20 @@ void SIMULATOR_FRAME_UI::AddTuner( const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL*
             return;
     }
 
-    const SPICE_ITEM* item = GetExporter()->FindItem( ref );
-
-    // Do nothing if the symbol is not tunable.
-    if( !item || !item->model->GetTunerParam() )
-        return;
-
-    try
+    if( const SPICE_ITEM* item = GetExporter()->FindItem( ref ) )
     {
-        TUNER_SLIDER* tuner = new TUNER_SLIDER( this, m_panelTuners, aSheetPath, aSymbol );
-        m_sizerTuners->Add( tuner );
-        m_tuners.push_back( tuner );
-        m_panelTuners->Layout();
-        OnModify();
-    }
-    catch( const KI_PARAM_ERROR& e )
-    {
-        DisplayErrorMessage( nullptr, e.What() );
+        try
+        {
+            TUNER_SLIDER* tuner = new TUNER_SLIDER( this, m_panelTuners, aSheetPath, aSymbol );
+            m_sizerTuners->Add( tuner );
+            m_tuners.push_back( tuner );
+            m_panelTuners->Layout();
+            OnModify();
+        }
+        catch( const KI_PARAM_ERROR& e )
+        {
+            DisplayErrorMessage( nullptr, e.What() );
+        }
     }
 }
 

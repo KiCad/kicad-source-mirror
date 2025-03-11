@@ -773,6 +773,9 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
 
                 EDA_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
 
+                if( item && item->Type() == SCH_FIELD_T )
+                    item = static_cast<SCH_FIELD*>( item )->GetParentSymbol();
+
                 if( m_pickerItem != item )
                 {
                     if( m_pickerItem )
