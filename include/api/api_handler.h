@@ -93,9 +93,9 @@ protected:
     void registerHandler( HANDLER_RESULT<ResponseType> ( HandlerType::*aHandler )(
             const HANDLER_CONTEXT<RequestType>& ) )
     {
-        std::string typeName = RequestType().GetTypeName();
+        std::string typeName { RequestType().GetTypeName() };
 
-        wxASSERT_MSG( !m_handlers.count( typeName ),
+        wxASSERT_MSG( !m_handlers.contains( typeName ),
                       wxString::Format( "Duplicate API handler for type %s", typeName ) );
 
         m_handlers[typeName] =
