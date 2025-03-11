@@ -54,10 +54,11 @@ public:
     {
         // Inspect() is virtual so calling it from a class common inspector preserves
         // polymorphism.
-        m_inspector = [this]( EDA_ITEM* aItem, void* aTestData )
-        {
-            return this->Inspect( aItem, aTestData );
-        };
+        m_inspector =
+                [this]( EDA_ITEM* aItem, void* aTestData )
+                {
+                    return this->Inspect( aItem, aTestData );
+                };
     }
 
     virtual ~COLLECTOR() {}
