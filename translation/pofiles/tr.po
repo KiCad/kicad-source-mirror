@@ -24,8 +24,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:05+0300\n"
-"PO-Revision-Date: 2025-03-10 18:23+0000\n"
-"Last-Translator: Ahmet Saygın ÖĞÜLMÜŞ <ogulmus.ahmetsaygin@gmail.com>\n"
+"PO-Revision-Date: 2025-03-11 17:51+0000\n"
+"Last-Translator: Argeolog <argelojik@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v9/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -17183,7 +17183,7 @@ msgid "Pins of type %s and %s are connected"
 msgstr "%s ve %s tipi pimler bağlı"
 
 #: eeschema/erc/erc.cpp:1186
-#, c-format
+#, c-format, fuzzy
 msgid "Pin %s is connected to both %s and %s"
 msgstr "Pin %s hem %s hem de %s'ye bağlı"
 
