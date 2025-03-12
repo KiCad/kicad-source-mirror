@@ -37,7 +37,7 @@
 #include <kidialog.h>
 #include <confirm.h>
 #include <tool/tool_manager.h>
-#include <ee_selection_tool.h>
+#include <sch_selection_tool.h>
 #include <dialogs/dialog_design_block_properties.h>
 #include <nlohmann/json.hpp>
 
@@ -370,7 +370,7 @@ void SCH_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
     }
 
     // Get all selected items
-    EE_SELECTION selection = m_toolManager->GetTool<EE_SELECTION_TOOL>()->GetSelection();
+    SCH_SELECTION selection = m_toolManager->GetTool<SCH_SELECTION_TOOL>()->GetSelection();
 
     if( selection.Empty() )
     {

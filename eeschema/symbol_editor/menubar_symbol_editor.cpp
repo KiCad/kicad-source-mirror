@@ -26,8 +26,8 @@
 #include <bitmaps.h>
 #include <tool/action_menu.h>
 #include <tool/tool_manager.h>
-#include <tools/ee_actions.h>
-#include <tools/ee_selection_tool.h>
+#include <tools/sch_actions.h>
+#include <tools/sch_selection_tool.h>
 #include <symbol_library_manager.h>
 #include "symbol_edit_frame.h"
 #include <widgets/wx_menubar.h>
@@ -35,7 +35,7 @@
 
 void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
 {
-    EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
+    SCH_SELECTION_TOOL* selTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>();
     // wxWidgets handles the Mac Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar*  oldMenuBar = GetMenuBar();
@@ -47,14 +47,14 @@ void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
 
     fileMenu->Add( ACTIONS::newLibrary );
     fileMenu->Add( ACTIONS::addLibrary );
-    fileMenu->Add( EE_ACTIONS::saveLibraryAs );
-    fileMenu->Add( EE_ACTIONS::newSymbol );
-    fileMenu->Add( EE_ACTIONS::editLibSymbolWithLibEdit );
+    fileMenu->Add( SCH_ACTIONS::saveLibraryAs );
+    fileMenu->Add( SCH_ACTIONS::newSymbol );
+    fileMenu->Add( SCH_ACTIONS::editLibSymbolWithLibEdit );
 
     fileMenu->AppendSeparator();
     fileMenu->Add( ACTIONS::save );
-    fileMenu->Add( EE_ACTIONS::saveSymbolAs );
-    fileMenu->Add( EE_ACTIONS::saveSymbolCopyAs );
+    fileMenu->Add( SCH_ACTIONS::saveSymbolAs );
+    fileMenu->Add( SCH_ACTIONS::saveSymbolCopyAs );
 
     if( !IsSymbolFromSchematic() )
         fileMenu->Add( ACTIONS::saveAll );
@@ -67,8 +67,8 @@ void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
     submenuImport->SetTitle( _( "Import" ) );
     submenuImport->SetIcon( BITMAPS::import );
 
-    submenuImport->Add( EE_ACTIONS::importSymbol, ACTION_MENU::NORMAL, _( "Symbol..." ) );
-    submenuImport->Add( EE_ACTIONS::importGraphics, ACTION_MENU::NORMAL, _( "Graphics..." ) );
+    submenuImport->Add( SCH_ACTIONS::importSymbol,   ACTION_MENU::NORMAL, _( "Symbol..." ) );
+    submenuImport->Add( SCH_ACTIONS::importGraphics, ACTION_MENU::NORMAL, _( "Graphics..." ) );
 
     fileMenu->Add( submenuImport );
 
@@ -76,13 +76,13 @@ void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
     ACTION_MENU* submenuExport = new ACTION_MENU( false, selTool );
     submenuExport->SetTitle( _( "Export" ) );
     submenuExport->SetIcon( BITMAPS::export_file );
-    submenuExport->Add( EE_ACTIONS::exportSymbol,      ACTION_MENU::NORMAL, _( "Symbol..." ) );
-    submenuExport->Add( EE_ACTIONS::exportSymbolView,  ACTION_MENU::NORMAL, _( "View as PNG..." ) );
-    submenuExport->Add( EE_ACTIONS::exportSymbolAsSVG, ACTION_MENU::NORMAL, _( "Symbol as SVG..." ) );
+    submenuExport->Add( SCH_ACTIONS::exportSymbol,      ACTION_MENU::NORMAL, _( "Symbol..." ) );
+    submenuExport->Add( SCH_ACTIONS::exportSymbolView,  ACTION_MENU::NORMAL, _( "View as PNG..." ) );
+    submenuExport->Add( SCH_ACTIONS::exportSymbolAsSVG, ACTION_MENU::NORMAL, _( "Symbol as SVG..." ) );
     fileMenu->Add( submenuExport );
 
     fileMenu->AppendSeparator();
-    fileMenu->Add( EE_ACTIONS::symbolProperties );
+    fileMenu->Add( SCH_ACTIONS::symbolProperties );
 
     fileMenu->AppendSeparator();
     fileMenu->AddClose( _( "Library Editor" ) );
@@ -108,9 +108,9 @@ void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
     editMenu->Add( ACTIONS::unselectAll );
 
     editMenu->AppendSeparator();
-    editMenu->Add( EE_ACTIONS::pinTable );
-    editMenu->Add( EE_ACTIONS::setUnitDisplayName );
-    editMenu->Add( EE_ACTIONS::updateSymbolFields );
+    editMenu->Add( SCH_ACTIONS::pinTable );
+    editMenu->Add( SCH_ACTIONS::setUnitDisplayName );
+    editMenu->Add( SCH_ACTIONS::updateSymbolFields );
 
 
     //-- View menu -----------------------------------------------
@@ -134,24 +134,24 @@ void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
     viewMenu->Add( ACTIONS::zoomRedraw );
 
     viewMenu->AppendSeparator();
-    viewMenu->Add( EE_ACTIONS::showHiddenPins,   ACTION_MENU::CHECK );
-    viewMenu->Add( EE_ACTIONS::showHiddenFields, ACTION_MENU::CHECK );
-    viewMenu->Add( EE_ACTIONS::togglePinAltIcons,ACTION_MENU::CHECK );
+    viewMenu->Add( SCH_ACTIONS::showHiddenPins,    ACTION_MENU::CHECK );
+    viewMenu->Add( SCH_ACTIONS::showHiddenFields,  ACTION_MENU::CHECK );
+    viewMenu->Add( SCH_ACTIONS::togglePinAltIcons, ACTION_MENU::CHECK );
 
 
     //-- Place menu -----------------------------------------------
     //
     ACTION_MENU* placeMenu = new ACTION_MENU( false, selTool );
 
-    placeMenu->Add( EE_ACTIONS::placeSymbolPin );
-    placeMenu->Add( EE_ACTIONS::placeSymbolText );
-    placeMenu->Add( EE_ACTIONS::drawSymbolTextBox );
-    placeMenu->Add( EE_ACTIONS::drawRectangle );
-    placeMenu->Add( EE_ACTIONS::drawCircle );
-    placeMenu->Add( EE_ACTIONS::drawArc );
-    placeMenu->Add( EE_ACTIONS::drawBezier );
-    placeMenu->Add( EE_ACTIONS::drawSymbolLines );
-    placeMenu->Add( EE_ACTIONS::drawSymbolPolygon );
+    placeMenu->Add( SCH_ACTIONS::placeSymbolPin );
+    placeMenu->Add( SCH_ACTIONS::placeSymbolText );
+    placeMenu->Add( SCH_ACTIONS::drawSymbolTextBox );
+    placeMenu->Add( SCH_ACTIONS::drawRectangle );
+    placeMenu->Add( SCH_ACTIONS::drawCircle );
+    placeMenu->Add( SCH_ACTIONS::drawArc );
+    placeMenu->Add( SCH_ACTIONS::drawBezier );
+    placeMenu->Add( SCH_ACTIONS::drawSymbolLines );
+    placeMenu->Add( SCH_ACTIONS::drawSymbolPolygon );
 
 
     //-- Inspect menu -----------------------------------------------
@@ -161,7 +161,7 @@ void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
     inspectMenu->Add( ACTIONS::showDatasheet );
 
     inspectMenu->AppendSeparator();
-    inspectMenu->Add( EE_ACTIONS::checkSymbol );
+    inspectMenu->Add( SCH_ACTIONS::checkSymbol );
 
 
     //-- Preferences menu -----------------------------------------------

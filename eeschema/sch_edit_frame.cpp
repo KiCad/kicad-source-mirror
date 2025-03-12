@@ -74,10 +74,10 @@
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 #include <tool/zoom_tool.h>
-#include <tools/ee_actions.h>
+#include <tools/sch_actions.h>
 #include <tools/ee_grid_helper.h>
-#include <tools/ee_inspection_tool.h>
-#include <tools/ee_point_editor.h>
+#include <tools/sch_inspection_tool.h>
+#include <tools/sch_point_editor.h>
 #include <tools/sch_design_block_control.h>
 #include <tools/sch_drawing_tools.h>
 #include <tools/sch_edit_tool.h>
@@ -423,7 +423,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     KIPLATFORM::APP::SetShutdownBlockReason( this, _( "New schematic file is unsaved" ) );
 
     // Init for dropping files
-    m_acceptedExts.emplace( FILEEXT::KiCadSchematicFileExtension, &EE_ACTIONS::ddAppendFile );
+    m_acceptedExts.emplace( FILEEXT::KiCadSchematicFileExtension, &SCH_ACTIONS::ddAppendFile );
     DragAcceptFiles( true );
 
     // Ensure the window is on top
@@ -529,32 +529,32 @@ void SCH_EDIT_FRAME::setupTools()
     m_toolManager = new TOOL_MANAGER;
     m_toolManager->SetEnvironment( &Schematic(), GetCanvas()->GetView(),
                                    GetCanvas()->GetViewControls(), config(), this );
-    m_actions = new EE_ACTIONS();
+    m_actions = new SCH_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
 
     // Register tools
     m_toolManager->RegisterTool( new COMMON_CONTROL );
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
-    m_toolManager->RegisterTool( new EE_SELECTION_TOOL );
+    m_toolManager->RegisterTool( new SCH_SELECTION_TOOL );
     m_toolManager->RegisterTool( new PICKER_TOOL );
     m_toolManager->RegisterTool( new SCH_DRAWING_TOOLS );
     m_toolManager->RegisterTool( new SCH_LINE_WIRE_BUS_TOOL );
     m_toolManager->RegisterTool( new SCH_MOVE_TOOL );
     m_toolManager->RegisterTool( new SCH_EDIT_TOOL );
     m_toolManager->RegisterTool( new SCH_EDIT_TABLE_TOOL );
-    m_toolManager->RegisterTool( new EE_INSPECTION_TOOL );
+    m_toolManager->RegisterTool( new SCH_INSPECTION_TOOL );
     m_toolManager->RegisterTool( new SCH_DESIGN_BLOCK_CONTROL );
     m_toolManager->RegisterTool( new SCH_EDITOR_CONTROL );
     m_toolManager->RegisterTool( new SCH_FIND_REPLACE_TOOL );
-    m_toolManager->RegisterTool( new EE_POINT_EDITOR );
+    m_toolManager->RegisterTool( new SCH_POINT_EDITOR );
     m_toolManager->RegisterTool( new SCH_NAVIGATE_TOOL );
     m_toolManager->RegisterTool( new PROPERTIES_TOOL );
     m_toolManager->RegisterTool( new EMBED_TOOL );
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active
-    m_toolManager->PostAction( EE_ACTIONS::selectionActivate );
+    m_toolManager->PostAction( SCH_ACTIONS::selectionActivate );
 
     GetCanvas()->SetEventDispatcher( m_toolDispatcher );
 }
@@ -622,46 +622,39 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::undo,                ENABLE( undoCond ) );
     mgr->SetConditions( ACTIONS::redo,                ENABLE( cond.RedoAvailable() ) );
 
-    mgr->SetConditions( EE_ACTIONS::showSearch,       CHECK( searchPaneCond ) );
-    mgr->SetConditions( EE_ACTIONS::showHierarchy,    CHECK( hierarchyNavigatorCond ) );
-    mgr->SetConditions( EE_ACTIONS::showNetNavigator, CHECK( netNavigatorCond ) );
-    mgr->SetConditions( ACTIONS::showProperties,      CHECK( propertiesCond ) );
-    mgr->SetConditions( EE_ACTIONS::showDesignBlockPanel,     CHECK( designBlockCond ) );
-    mgr->SetConditions( ACTIONS::toggleGrid,          CHECK( cond.GridVisible() ) );
-    mgr->SetConditions( ACTIONS::toggleGridOverrides, CHECK( cond.GridOverrides() ) );
-    mgr->SetConditions( ACTIONS::toggleCursorStyle,   CHECK( cond.FullscreenCursor() ) );
-    mgr->SetConditions( ACTIONS::millimetersUnits,    CHECK( cond.Units( EDA_UNITS::MM ) ) );
-    mgr->SetConditions( ACTIONS::inchesUnits,         CHECK( cond.Units( EDA_UNITS::INCH ) ) );
-    mgr->SetConditions( ACTIONS::milsUnits,           CHECK( cond.Units( EDA_UNITS::MILS ) ) );
+    mgr->SetConditions( SCH_ACTIONS::showSearch,           CHECK( searchPaneCond ) );
+    mgr->SetConditions( SCH_ACTIONS::showHierarchy,        CHECK( hierarchyNavigatorCond ) );
+    mgr->SetConditions( SCH_ACTIONS::showNetNavigator,     CHECK( netNavigatorCond ) );
+    mgr->SetConditions( ACTIONS::showProperties,           CHECK( propertiesCond ) );
+    mgr->SetConditions( SCH_ACTIONS::showDesignBlockPanel, CHECK( designBlockCond ) );
+    mgr->SetConditions( ACTIONS::toggleGrid,               CHECK( cond.GridVisible() ) );
+    mgr->SetConditions( ACTIONS::toggleGridOverrides,      CHECK( cond.GridOverrides() ) );
+    mgr->SetConditions( ACTIONS::toggleCursorStyle,        CHECK( cond.FullscreenCursor() ) );
+    mgr->SetConditions( ACTIONS::millimetersUnits,         CHECK( cond.Units( EDA_UNITS::MM ) ) );
+    mgr->SetConditions( ACTIONS::inchesUnits,              CHECK( cond.Units( EDA_UNITS::INCH ) ) );
+    mgr->SetConditions( ACTIONS::milsUnits,                CHECK( cond.Units( EDA_UNITS::MILS ) ) );
 
-    mgr->SetConditions( EE_ACTIONS::lineModeFree,
-                        CHECK( cond.LineMode( LINE_MODE::LINE_MODE_FREE ) ) );
-    mgr->SetConditions( EE_ACTIONS::lineMode90,
-                        CHECK( cond.LineMode( LINE_MODE::LINE_MODE_90 ) ) );
-    mgr->SetConditions( EE_ACTIONS::lineMode45,
-                        CHECK( cond.LineMode( LINE_MODE::LINE_MODE_45 ) ) );
+    mgr->SetConditions( SCH_ACTIONS::lineModeFree,    CHECK( cond.LineMode( LINE_MODE::LINE_MODE_FREE ) ) );
+    mgr->SetConditions( SCH_ACTIONS::lineMode90,      CHECK( cond.LineMode( LINE_MODE::LINE_MODE_90 ) ) );
+    mgr->SetConditions( SCH_ACTIONS::lineMode45,      CHECK( cond.LineMode( LINE_MODE::LINE_MODE_45 ) ) );
 
     mgr->SetConditions( ACTIONS::cut,                 ENABLE( hasElements ) );
     mgr->SetConditions( ACTIONS::copy,                ENABLE( hasElements ) );
     mgr->SetConditions( ACTIONS::copyAsText,          ENABLE( hasElements ) );
-    mgr->SetConditions( ACTIONS::paste,
-                        ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
-    mgr->SetConditions( ACTIONS::pasteSpecial,
-                        ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
+    mgr->SetConditions( ACTIONS::paste,               ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
+    mgr->SetConditions( ACTIONS::pasteSpecial,        ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
     mgr->SetConditions( ACTIONS::doDelete,            ENABLE( hasElements ) );
     mgr->SetConditions( ACTIONS::duplicate,           ENABLE( hasElements ) );
     mgr->SetConditions( ACTIONS::selectAll,           ENABLE( hasElements ) );
     mgr->SetConditions( ACTIONS::unselectAll,         ENABLE( hasElements ) );
 
-    mgr->SetConditions( EE_ACTIONS::rotateCW,         ENABLE( hasElements ) );
-    mgr->SetConditions( EE_ACTIONS::rotateCCW,        ENABLE( hasElements ) );
-    mgr->SetConditions( EE_ACTIONS::mirrorH,          ENABLE( hasElements ) );
-    mgr->SetConditions( EE_ACTIONS::mirrorV,          ENABLE( hasElements ) );
+    mgr->SetConditions( SCH_ACTIONS::rotateCW,        ENABLE( hasElements ) );
+    mgr->SetConditions( SCH_ACTIONS::rotateCCW,       ENABLE( hasElements ) );
+    mgr->SetConditions( SCH_ACTIONS::mirrorH,         ENABLE( hasElements ) );
+    mgr->SetConditions( SCH_ACTIONS::mirrorV,         ENABLE( hasElements ) );
 
-    mgr->SetConditions( ACTIONS::zoomTool,
-                        CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
-    mgr->SetConditions( ACTIONS::selectionTool,
-                        CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
+    mgr->SetConditions( ACTIONS::zoomTool,            CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
+    mgr->SetConditions( ACTIONS::selectionTool,       CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
 
     auto showHiddenPinsCond =
             [this]( const SELECTION& )
@@ -755,65 +748,64 @@ void SCH_EDIT_FRAME::setupUIConditions()
                 return navigateTool && navigateTool->CanGoUp();
             };
 
-    mgr->SetConditions( EE_ACTIONS::leaveSheet,            ENABLE( belowRootSheetCondition ) );
+    mgr->SetConditions( SCH_ACTIONS::leaveSheet,            ENABLE( belowRootSheetCondition ) );
 
     /* Some of these are bound by default to arrow keys which will get a different action if we
      * disable the buttons.  So always leave them enabled so the action is consistent.
      * https://gitlab.com/kicad/code/kicad/-/issues/14783
-    mgr->SetConditions( EE_ACTIONS::navigateUp,            ENABLE( belowRootSheetCondition ) );
-    mgr->SetConditions( EE_ACTIONS::navigateForward,       ENABLE( navHistoryHasForward ) );
-    mgr->SetConditions( EE_ACTIONS::navigateBack,          ENABLE( navHistoryHsBackward ) );
+    mgr->SetConditions( SCH_ACTIONS::navigateUp,            ENABLE( belowRootSheetCondition ) );
+    mgr->SetConditions( SCH_ACTIONS::navigateForward,       ENABLE( navHistoryHasForward ) );
+    mgr->SetConditions( SCH_ACTIONS::navigateBack,          ENABLE( navHistoryHsBackward ) );
      */
 
-    mgr->SetConditions( EE_ACTIONS::remapSymbols,          ENABLE( remapSymbolsCondition ) );
-    mgr->SetConditions( EE_ACTIONS::toggleHiddenPins,      CHECK( showHiddenPinsCond ) );
-    mgr->SetConditions( EE_ACTIONS::toggleHiddenFields,    CHECK( showHiddenFieldsCond ) );
-    mgr->SetConditions( EE_ACTIONS::toggleDirectiveLabels, CHECK( showDirectiveLabelsCond ) );
-    mgr->SetConditions( EE_ACTIONS::toggleERCErrors,       CHECK( showERCErrorsCond ) );
-    mgr->SetConditions( EE_ACTIONS::toggleERCWarnings,     CHECK( showERCWarningsCond ) );
-    mgr->SetConditions( EE_ACTIONS::toggleERCExclusions,   CHECK( showERCExclusionsCond ) );
-    mgr->SetConditions( EE_ACTIONS::markSimExclusions,     CHECK( markSimExclusionsCond ) );
-    mgr->SetConditions( EE_ACTIONS::toggleOPVoltages,      CHECK( showOPVoltagesCond ) );
-    mgr->SetConditions( EE_ACTIONS::toggleOPCurrents,      CHECK( showOPCurrentsCond ) );
-    mgr->SetConditions( EE_ACTIONS::togglePinAltIcons,     CHECK( showPinAltModeIconsCond ) );
-    mgr->SetConditions( EE_ACTIONS::toggleAnnotateAuto,    CHECK( showAnnotateAutomaticallyCond ) );
-    mgr->SetConditions( ACTIONS::toggleBoundingBoxes,      CHECK( cond.BoundingBoxes() ) );
+    mgr->SetConditions( SCH_ACTIONS::remapSymbols,          ENABLE( remapSymbolsCondition ) );
+    mgr->SetConditions( SCH_ACTIONS::toggleHiddenPins,      CHECK( showHiddenPinsCond ) );
+    mgr->SetConditions( SCH_ACTIONS::toggleHiddenFields,    CHECK( showHiddenFieldsCond ) );
+    mgr->SetConditions( SCH_ACTIONS::toggleDirectiveLabels, CHECK( showDirectiveLabelsCond ) );
+    mgr->SetConditions( SCH_ACTIONS::toggleERCErrors,       CHECK( showERCErrorsCond ) );
+    mgr->SetConditions( SCH_ACTIONS::toggleERCWarnings,     CHECK( showERCWarningsCond ) );
+    mgr->SetConditions( SCH_ACTIONS::toggleERCExclusions,   CHECK( showERCExclusionsCond ) );
+    mgr->SetConditions( SCH_ACTIONS::markSimExclusions,     CHECK( markSimExclusionsCond ) );
+    mgr->SetConditions( SCH_ACTIONS::toggleOPVoltages,      CHECK( showOPVoltagesCond ) );
+    mgr->SetConditions( SCH_ACTIONS::toggleOPCurrents,      CHECK( showOPCurrentsCond ) );
+    mgr->SetConditions( SCH_ACTIONS::togglePinAltIcons,     CHECK( showPinAltModeIconsCond ) );
+    mgr->SetConditions( SCH_ACTIONS::toggleAnnotateAuto,    CHECK( showAnnotateAutomaticallyCond ) );
+    mgr->SetConditions( ACTIONS::toggleBoundingBoxes,       CHECK( cond.BoundingBoxes() ) );
 
-    mgr->SetConditions( EE_ACTIONS::saveSheetAsDesignBlock,     ENABLE( hasElements ) );
-    mgr->SetConditions( EE_ACTIONS::saveSelectionAsDesignBlock,
-                        ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( SCH_ACTIONS::saveSheetAsDesignBlock,     ENABLE( hasElements ) );
+    mgr->SetConditions( SCH_ACTIONS::saveSelectionAsDesignBlock, ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
 
 #define CURRENT_TOOL( action ) mgr->SetConditions( action, CHECK( cond.CurrentTool( action ) ) )
 
     CURRENT_TOOL( ACTIONS::deleteTool );
-    CURRENT_TOOL( EE_ACTIONS::highlightNetTool );
-    CURRENT_TOOL( EE_ACTIONS::placeSymbol );
-    CURRENT_TOOL( EE_ACTIONS::placePower );
-    CURRENT_TOOL( EE_ACTIONS::placeDesignBlock );
-    CURRENT_TOOL( EE_ACTIONS::drawWire );
-    CURRENT_TOOL( EE_ACTIONS::drawBus );
-    CURRENT_TOOL( EE_ACTIONS::placeBusWireEntry );
-    CURRENT_TOOL( EE_ACTIONS::placeNoConnect );
-    CURRENT_TOOL( EE_ACTIONS::placeJunction );
-    CURRENT_TOOL( EE_ACTIONS::placeLabel );
-    CURRENT_TOOL( EE_ACTIONS::placeClassLabel );
-    CURRENT_TOOL( EE_ACTIONS::placeGlobalLabel );
-    CURRENT_TOOL( EE_ACTIONS::placeHierLabel );
-    CURRENT_TOOL( EE_ACTIONS::drawRuleArea );
-    CURRENT_TOOL( EE_ACTIONS::drawSheet );
-    CURRENT_TOOL( EE_ACTIONS::placeSheetPin );
-    CURRENT_TOOL( EE_ACTIONS::syncSheetPins );
-    CURRENT_TOOL( EE_ACTIONS::drawSheetFromFile );
-    CURRENT_TOOL( EE_ACTIONS::drawSheetFromDesignBlock );
-    CURRENT_TOOL( EE_ACTIONS::drawRectangle );
-    CURRENT_TOOL( EE_ACTIONS::drawCircle );
-    CURRENT_TOOL( EE_ACTIONS::drawArc );
-    CURRENT_TOOL( EE_ACTIONS::drawBezier );
-    CURRENT_TOOL( EE_ACTIONS::drawLines );
-    CURRENT_TOOL( EE_ACTIONS::placeSchematicText );
-    CURRENT_TOOL( EE_ACTIONS::drawTextBox );
-    CURRENT_TOOL( EE_ACTIONS::drawTable );
-    CURRENT_TOOL( EE_ACTIONS::placeImage );
+    CURRENT_TOOL( SCH_ACTIONS::highlightNetTool );
+    CURRENT_TOOL( SCH_ACTIONS::placeSymbol );
+    CURRENT_TOOL( SCH_ACTIONS::placePower );
+    CURRENT_TOOL( SCH_ACTIONS::placeDesignBlock );
+    CURRENT_TOOL( SCH_ACTIONS::drawWire );
+    CURRENT_TOOL( SCH_ACTIONS::drawBus );
+    CURRENT_TOOL( SCH_ACTIONS::placeBusWireEntry );
+    CURRENT_TOOL( SCH_ACTIONS::placeNoConnect );
+    CURRENT_TOOL( SCH_ACTIONS::placeJunction );
+    CURRENT_TOOL( SCH_ACTIONS::placeLabel );
+    CURRENT_TOOL( SCH_ACTIONS::placeClassLabel );
+    CURRENT_TOOL( SCH_ACTIONS::placeGlobalLabel );
+    CURRENT_TOOL( SCH_ACTIONS::placeHierLabel );
+    CURRENT_TOOL( SCH_ACTIONS::drawRuleArea );
+    CURRENT_TOOL( SCH_ACTIONS::drawSheet );
+    CURRENT_TOOL( SCH_ACTIONS::placeSheetPin );
+    CURRENT_TOOL( SCH_ACTIONS::syncSheetPins );
+    CURRENT_TOOL( SCH_ACTIONS::drawSheetFromFile );
+    CURRENT_TOOL( SCH_ACTIONS::drawSheetFromDesignBlock );
+    CURRENT_TOOL( SCH_ACTIONS::drawRectangle );
+    CURRENT_TOOL( SCH_ACTIONS::drawCircle );
+    CURRENT_TOOL( SCH_ACTIONS::drawArc );
+    CURRENT_TOOL( SCH_ACTIONS::drawBezier );
+    CURRENT_TOOL( SCH_ACTIONS::drawLines );
+    CURRENT_TOOL( SCH_ACTIONS::placeSchematicText );
+    CURRENT_TOOL( SCH_ACTIONS::drawTextBox );
+    CURRENT_TOOL( SCH_ACTIONS::drawTable );
+    CURRENT_TOOL( SCH_ACTIONS::placeImage );
 
 #undef CURRENT_TOOL
 #undef CHECK
@@ -963,7 +955,7 @@ void SCH_EDIT_FRAME::HardRedraw()
 
     GetCanvas()->DisplaySheet( GetCurrentSheet().LastScreen() );
 
-    if( EE_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>() )
+    if( SCH_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>() )
         selectionTool->Reset( TOOL_BASE::REDRAW );
 
     GetCanvas()->ForceRefresh();
@@ -973,7 +965,7 @@ void SCH_EDIT_FRAME::HardRedraw()
 bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 {
     // Exit interactive editing
-    // Note this this will commit *some* pending changes.  For instance, the EE_POINT_EDITOR
+    // Note this this will commit *some* pending changes.  For instance, the SCH_POINT_EDITOR
     // will cancel any drag currently in progress, but commit all changes from previous drags.
     if( m_toolManager )
         m_toolManager->RunAction( ACTIONS::cancelInteractive );
@@ -1265,7 +1257,7 @@ void SCH_EDIT_FRAME::ShowFindReplaceDialog( bool aReplace )
 {
     wxString findString;
 
-    EE_SELECTION& selection = m_toolManager->GetTool<EE_SELECTION_TOOL>()->GetSelection();
+    SCH_SELECTION& selection = m_toolManager->GetTool<SCH_SELECTION_TOOL>()->GetSelection();
 
     if( selection.Size() == 1 )
     {
@@ -2092,7 +2084,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
     if( m_highlightedConnChanged
         || !Schematic().ConnectionGraph()->FindFirstSubgraphByName( highlightedConn ) )
     {
-        GetToolManager()->RunAction( EE_ACTIONS::updateNetHighlighting );
+        GetToolManager()->RunAction( SCH_ACTIONS::updateNetHighlighting );
         RefreshNetNavigator();
         m_highlightedConnChanged = false;
     }
@@ -2239,7 +2231,7 @@ void SCH_EDIT_FRAME::UpdateNetHighlightStatus()
 void SCH_EDIT_FRAME::SetScreen( BASE_SCREEN* aScreen )
 {
     if( m_toolManager )
-        m_toolManager->RunAction( EE_ACTIONS::clearSelection );
+        m_toolManager->RunAction( SCH_ACTIONS::clearSelection );
 
     SCH_BASE_FRAME::SetScreen( aScreen );
     GetCanvas()->DisplaySheet( static_cast<SCH_SCREEN*>( aScreen ) );
@@ -2329,7 +2321,7 @@ wxString SCH_EDIT_FRAME::GetCurrentFileName() const
 
 SELECTION& SCH_EDIT_FRAME::GetCurrentSelection()
 {
-    return m_toolManager->GetTool<EE_SELECTION_TOOL>()->GetSelection();
+    return m_toolManager->GetTool<SCH_SELECTION_TOOL>()->GetSelection();
 }
 
 
@@ -2422,12 +2414,12 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     wxCHECK( m_toolManager, /* void */ );
 
     m_toolManager->RunAction( ACTIONS::cancelInteractive );
-    m_toolManager->RunAction( EE_ACTIONS::clearSelection );
+    m_toolManager->RunAction( SCH_ACTIONS::clearSelection );
     SCH_SCREEN* screen = GetCurrentSheet().LastScreen();
 
     wxCHECK( screen, /* void */ );
 
-    m_toolManager->RunAction( EE_ACTIONS::clearSelection );
+    m_toolManager->RunAction( SCH_ACTIONS::clearSelection );
 
     SCH_BASE_FRAME::SetScreen( screen );
 
@@ -2443,7 +2435,7 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     GetCurrentSheet().LastScreen()->TestDanglingEnds();
     RefreshOperatingPointDisplay();
 
-    EE_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
+    SCH_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>();
 
     wxCHECK( selectionTool, /* void */ );
 

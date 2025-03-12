@@ -25,7 +25,6 @@
 #include <sch_commit.h>
 #include <sch_sheet_pin.h>
 #include <schematic.h>
-#include <tools/ee_actions.h>
 #include <tools/sch_find_replace_tool.h>
 #include <sch_sheet_path.h>
 

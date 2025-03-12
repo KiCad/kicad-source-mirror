@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <tools/ee_selection.h>
+#include <tools/sch_selection.h>
 #include <sch_item.h>
 #include <sch_reference_list.h>
 #include <sch_sheet_path.h>
@@ -30,14 +30,14 @@
 #include <sch_sheet.h>
 
 
-EE_SELECTION::EE_SELECTION( SCH_SCREEN* aScreen ) :
-    SELECTION()
+SCH_SELECTION::SCH_SELECTION( SCH_SCREEN* aScreen ) :
+        SELECTION()
 {
     m_screen = aScreen;
 }
 
 
-EDA_ITEM* EE_SELECTION::GetTopLeftItem( bool onlyModules ) const
+EDA_ITEM* SCH_SELECTION::GetTopLeftItem( bool onlyModules ) const
 {
     EDA_ITEM* topLeftConnectedItem = nullptr;
     VECTOR2I  topLeftConnectedPos;
@@ -82,7 +82,7 @@ EDA_ITEM* EE_SELECTION::GetTopLeftItem( bool onlyModules ) const
 }
 
 
-BOX2I EE_SELECTION::GetBoundingBox() const
+BOX2I SCH_SELECTION::GetBoundingBox() const
 {
     BOX2I bbox;
 
@@ -115,7 +115,7 @@ BOX2I EE_SELECTION::GetBoundingBox() const
 }
 
 
-const std::vector<KIGFX::VIEW_ITEM*> EE_SELECTION::updateDrawList() const
+const std::vector<KIGFX::VIEW_ITEM*> SCH_SELECTION::updateDrawList() const
 {
     std::vector<VIEW_ITEM*> items;
 

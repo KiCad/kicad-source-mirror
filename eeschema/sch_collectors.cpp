@@ -25,7 +25,7 @@
 
 #include <macros.h>
 #include <trace_helpers.h>
-#include <ee_collectors.h>
+#include <sch_collectors.h>
 #include <sch_bus_entry.h>
 #include <sch_symbol.h>
 #include <sch_line.h>
@@ -35,7 +35,7 @@
 #include "sch_reference_list.h"
 
 
-const std::vector<KICAD_T> EE_COLLECTOR::EditableItems = {
+const std::vector<KICAD_T> SCH_COLLECTOR::EditableItems = {
     SCH_SHAPE_T,
     SCH_TEXT_T,
     SCH_TEXTBOX_T,
@@ -56,7 +56,7 @@ const std::vector<KICAD_T> EE_COLLECTOR::EditableItems = {
 };
 
 
-const std::vector<KICAD_T> EE_COLLECTOR::MovableItems =
+const std::vector<KICAD_T> SCH_COLLECTOR::MovableItems =
 {
     SCH_MARKER_T,
     SCH_JUNCTION_T,
@@ -82,21 +82,21 @@ const std::vector<KICAD_T> EE_COLLECTOR::MovableItems =
 };
 
 
-const std::vector<KICAD_T> EE_COLLECTOR::FieldOwners = {
+const std::vector<KICAD_T> SCH_COLLECTOR::FieldOwners = {
     SCH_SYMBOL_T,
     SCH_SHEET_T,
     SCH_LABEL_LOCATE_ANY_T
 };
 
 
-INSPECT_RESULT EE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
+INSPECT_RESULT SCH_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
 {
     if( m_Unit || m_BodyStyle )
     {
         SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( aItem );
 
         // Special selection rules apply to pins of different units when edited in synchronized
-        // pins mode.  Leave it to EE_SELECTION_TOOL::Selectable() to decide what to do with them.
+        // pins mode.  Leave it to SCH_SELECTION_TOOL::Selectable() to decide what to do with them.
 
         if( schItem && schItem->Type() != SCH_PIN_T )
         {
@@ -120,8 +120,8 @@ INSPECT_RESULT EE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
 }
 
 
-void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen, const std::vector<KICAD_T>& aFilterList,
-                            const VECTOR2I& aPos, int aUnit, int aConvert )
+void SCH_COLLECTOR::Collect( SCH_SCREEN* aScreen, const std::vector<KICAD_T>& aFilterList,
+                             const VECTOR2I& aPos, int aUnit, int aConvert )
 {
     Empty(); // empty the collection just in case
 
@@ -140,8 +140,8 @@ void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen, const std::vector<KICAD_T>& aFi
 }
 
 
-void EE_COLLECTOR::Collect( LIB_ITEMS_CONTAINER& aItems, const std::vector<KICAD_T>& aFilterList,
-                            const VECTOR2I& aPos, int aUnit, int aConvert )
+void SCH_COLLECTOR::Collect( LIB_ITEMS_CONTAINER& aItems, const std::vector<KICAD_T>& aFilterList,
+                             const VECTOR2I& aPos, int aUnit, int aConvert )
 {
     Empty();        // empty the collection just in case
 
@@ -160,7 +160,7 @@ void EE_COLLECTOR::Collect( LIB_ITEMS_CONTAINER& aItems, const std::vector<KICAD
 }
 
 
-bool EE_COLLECTOR::IsCorner() const
+bool SCH_COLLECTOR::IsCorner() const
 {
     if( GetCount() != 2 )
         return false;

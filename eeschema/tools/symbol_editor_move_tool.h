@@ -25,14 +25,14 @@
 #ifndef SYMBOL_EDITOR_MOVE_TOOL_H
 #define SYMBOL_EDITOR_MOVE_TOOL_H
 
-#include <tools/ee_tool_base.h>
+#include <tools/sch_tool_base.h>
 #include <symbol_edit_frame.h>
 
 class SYMBOL_EDIT_FRAME;
-class EE_SELECTION_TOOL;
+class SCH_SELECTION_TOOL;
 
 
-class SYMBOL_EDITOR_MOVE_TOOL : public EE_TOOL_BASE<SYMBOL_EDIT_FRAME>
+class SYMBOL_EDITOR_MOVE_TOOL : public SCH_TOOL_BASE<SYMBOL_EDIT_FRAME>
 {
 public:
     SYMBOL_EDITOR_MOVE_TOOL();

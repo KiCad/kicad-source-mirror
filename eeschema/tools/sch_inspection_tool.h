@@ -22,25 +22,25 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef EE_INSPECTION_TOOL_H
-#define EE_INSPECTION_TOOL_H
+#ifndef SCH_INSPECTION_TOOL_H
+#define SCH_INSPECTION_TOOL_H
 
-#include <tools/ee_tool_base.h>
+#include <tools/sch_tool_base.h>
 #include <dialogs/dialog_book_reporter.h>
 #include <sch_base_frame.h>
 
 
-class EE_SELECTION_TOOL;
+class SCH_SELECTION_TOOL;
 class SCH_BASE_FRAME;
 class DIALOG_ERC;
 class SYMBOL_DIFF_WIDGET;
 
 
-class EE_INSPECTION_TOOL : public wxEvtHandler, public EE_TOOL_BASE<SCH_BASE_FRAME>
+class SCH_INSPECTION_TOOL : public wxEvtHandler, public SCH_TOOL_BASE<SCH_BASE_FRAME>
 {
 public:
-    EE_INSPECTION_TOOL();
-    ~EE_INSPECTION_TOOL() {}
+    SCH_INSPECTION_TOOL();
+    ~SCH_INSPECTION_TOOL() {}
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
@@ -86,4 +86,4 @@ private:
     HTML_MESSAGE_BOX* m_busSyntaxHelp;
 };
 
-#endif /* EE_INSPECTION_TOOL_H */
+#endif /* SCH_INSPECTION_TOOL_H */

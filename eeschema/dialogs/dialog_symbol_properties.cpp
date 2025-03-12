@@ -37,7 +37,7 @@
 #include <widgets/grid_combobox.h>
 #include <widgets/std_bitmap_button.h>
 #include <settings/settings_manager.h>
-#include <ee_collectors.h>
+#include <sch_collectors.h>
 #include <symbol_library.h>
 #include <fields_grid_table.h>
 #include <sch_edit_frame.h>

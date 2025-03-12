@@ -26,13 +26,13 @@
 #include <tool/action_manager.h>
 #include <tool/picker_tool.h>
 #include <tools/sch_edit_tool.h>
-#include <tools/ee_inspection_tool.h>
+#include <tools/sch_inspection_tool.h>
 #include <tools/sch_line_wire_bus_tool.h>
 #include <tools/sch_move_tool.h>
 #include <tools/sch_drawing_tools.h>
 #include <confirm.h>
-#include <ee_actions.h>
-#include <ee_tool_utils.h>
+#include <sch_actions.h>
+#include <sch_tool_utils.h>
 #include <increment.h>
 #include <string_utils.h>
 #include <sch_bitmap.h>
@@ -87,9 +87,9 @@ protected:
 private:
     void update() override
     {
-        EE_SELECTION_TOOL* selTool = getToolManager()->GetTool<EE_SELECTION_TOOL>();
-        EE_SELECTION&      selection = selTool->GetSelection();
-        SCH_SYMBOL*        symbol = dynamic_cast<SCH_SYMBOL*>( selection.Front() );
+        SCH_SELECTION_TOOL* selTool = getToolManager()->GetTool<SCH_SELECTION_TOOL>();
+        SCH_SELECTION&      selection = selTool->GetSelection();
+        SCH_SYMBOL*         symbol = dynamic_cast<SCH_SYMBOL*>( selection.Front() );
 
         Clear();
 
@@ -126,7 +126,7 @@ private:
         {
             AppendSeparator();
 
-            wxMenuItem* item = Add( EE_ACTIONS::placeNextSymbolUnit );
+            wxMenuItem* item = Add( SCH_ACTIONS::placeNextSymbolUnit );
             item->Enable( missingUnits.size() );
         }
     }
@@ -152,10 +152,10 @@ protected:
 private:
     void update() override
     {
-        EE_SELECTION_TOOL* selTool = getToolManager()->GetTool<EE_SELECTION_TOOL>();
-        EE_SELECTION&      selection = selTool->GetSelection();
-        SCH_SYMBOL*        symbol = dynamic_cast<SCH_SYMBOL*>( selection.Front() );
-        wxMenuItem*        item;
+        SCH_SELECTION_TOOL* selTool = getToolManager()->GetTool<SCH_SELECTION_TOOL>();
+        SCH_SELECTION&      selection = selTool->GetSelection();
+        SCH_SYMBOL*         symbol = dynamic_cast<SCH_SYMBOL*>( selection.Front() );
+        wxMenuItem*         item;
 
         Clear();
 
@@ -189,10 +189,10 @@ protected:
 private:
     void update() override
     {
-        EE_SELECTION_TOOL* selTool = getToolManager()->GetTool<EE_SELECTION_TOOL>();
-        EE_SELECTION&      selection = selTool->GetSelection();
-        SCH_PIN*           pin = dynamic_cast<SCH_PIN*>( selection.Front() );
-        SCH_PIN*           libPin = pin ? pin->GetLibPin() : nullptr;
+        SCH_SELECTION_TOOL* selTool = getToolManager()->GetTool<SCH_SELECTION_TOOL>();
+        SCH_SELECTION&      selection = selTool->GetSelection();
+        SCH_PIN*            pin = dynamic_cast<SCH_PIN*>( selection.Front() );
+        SCH_PIN*            libPin = pin ? pin->GetLibPin() : nullptr;
 
         Clear();
 
@@ -237,10 +237,10 @@ protected:
 private:
     void update() override
     {
-        EE_SELECTION_TOOL* selTool = getToolManager()->GetTool<EE_SELECTION_TOOL>();
-        EE_SELECTION&      selection = selTool->GetSelection();
-        SCH_PIN*           pin = dynamic_cast<SCH_PIN*>( selection.Front() );
-        SCH_SHEET_PIN*     sheetPin = dynamic_cast<SCH_SHEET_PIN*>( selection.Front() );
+        SCH_SELECTION_TOOL* selTool = getToolManager()->GetTool<SCH_SELECTION_TOOL>();
+        SCH_SELECTION&      selection = selTool->GetSelection();
+        SCH_PIN*            pin = dynamic_cast<SCH_PIN*>( selection.Front() );
+        SCH_SHEET_PIN*      sheetPin = dynamic_cast<SCH_SHEET_PIN*>( selection.Front() );
 
         Clear();
 
@@ -257,17 +257,17 @@ private:
 
 
 SCH_EDIT_TOOL::SCH_EDIT_TOOL() :
-        EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveEdit" )
+        SCH_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveEdit" )
 {
     m_pickerItem = nullptr;
 }
 
 
-using E_C = EE_CONDITIONS;
+using S_C = SCH_CONDITIONS;
 
 bool SCH_EDIT_TOOL::Init()
 {
-    EE_TOOL_BASE::Init();
+    SCH_TOOL_BASE::Init();
 
     SCH_DRAWING_TOOLS* drawingTools = m_toolMgr->GetTool<SCH_DRAWING_TOOLS>();
     SCH_MOVE_TOOL*     moveTool = m_toolMgr->GetTool<SCH_MOVE_TOOL>();
@@ -336,7 +336,7 @@ bool SCH_EDIT_TOOL::Init()
 
     static const std::vector<KICAD_T> sheetTypes = { SCH_SHEET_T };
 
-    auto sheetSelection = E_C::Count( 1 ) && E_C::OnlyTypes( sheetTypes );
+    auto sheetSelection = S_C::Count( 1 ) && S_C::OnlyTypes( sheetTypes );
 
     auto haveHighlight =
             [&]( const SELECTION& sel )
@@ -349,11 +349,11 @@ bool SCH_EDIT_TOOL::Init()
     auto anyTextTool =
             [this]( const SELECTION& aSel )
             {
-                return ( m_frame->IsCurrentTool( EE_ACTIONS::placeLabel )
-                      || m_frame->IsCurrentTool( EE_ACTIONS::placeClassLabel )
-                      || m_frame->IsCurrentTool( EE_ACTIONS::placeGlobalLabel )
-                      || m_frame->IsCurrentTool( EE_ACTIONS::placeHierLabel )
-                      || m_frame->IsCurrentTool( EE_ACTIONS::placeSchematicText ) );
+                return ( m_frame->IsCurrentTool( SCH_ACTIONS::placeLabel )
+                      || m_frame->IsCurrentTool( SCH_ACTIONS::placeClassLabel )
+                      || m_frame->IsCurrentTool( SCH_ACTIONS::placeGlobalLabel )
+                      || m_frame->IsCurrentTool( SCH_ACTIONS::placeHierLabel )
+                      || m_frame->IsCurrentTool( SCH_ACTIONS::placeSchematicText ) );
             };
 
     auto duplicateCondition =
@@ -391,8 +391,8 @@ bool SCH_EDIT_TOOL::Init()
                     return false;
                 }
 
-                SCH_ITEM*           firstItem   = dynamic_cast<SCH_ITEM*>( aSel.Front() );
-                const EE_SELECTION* eeSelection = dynamic_cast<const EE_SELECTION*>( &aSel );
+                SCH_ITEM*            firstItem   = dynamic_cast<SCH_ITEM*>( aSel.Front() );
+                const SCH_SELECTION* eeSelection = dynamic_cast<const SCH_SELECTION*>( &aSel );
 
                 if( !firstItem || !eeSelection )
                     return false;
@@ -462,7 +462,7 @@ bool SCH_EDIT_TOOL::Init()
             {
                 for( const EDA_ITEM* item : aSel )
                 {
-                    if( item->IsType( EE_COLLECTOR::FieldOwners ) )
+                    if( item->IsType( SCH_COLLECTOR::FieldOwners ) )
                         return true;
                 }
 
@@ -478,7 +478,7 @@ bool SCH_EDIT_TOOL::Init()
                                                        SCH_TEXT_T,
                                                        SCH_TEXTBOX_T };
 
-    auto toChangeCondition = ( E_C::OnlyTypes( allTextTypes ) );
+    auto toChangeCondition = ( S_C::OnlyTypes( allTextTypes ) );
 
     static const std::vector<KICAD_T> toLabelTypes = { SCH_DIRECTIVE_LABEL_T,
                                                        SCH_GLOBAL_LABEL_T,
@@ -486,8 +486,8 @@ bool SCH_EDIT_TOOL::Init()
                                                        SCH_TEXT_T,
                                                        SCH_TEXTBOX_T };
 
-    auto toLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toLabelTypes ) )
-                                || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allTextTypes ) );
+    auto toLabelCondition = ( S_C::Count( 1 ) && S_C::OnlyTypes( toLabelTypes ) )
+                                || ( S_C::MoreThan( 1 ) && S_C::OnlyTypes( allTextTypes ) );
 
     static const std::vector<KICAD_T> toCLabelTypes = { SCH_LABEL_T,
                                                         SCH_HIER_LABEL_T,
@@ -495,8 +495,8 @@ bool SCH_EDIT_TOOL::Init()
                                                         SCH_TEXT_T,
                                                         SCH_TEXTBOX_T };
 
-    auto toCLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toCLabelTypes ) )
-                                || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allTextTypes ) );
+    auto toCLabelCondition = ( S_C::Count( 1 ) && S_C::OnlyTypes( toCLabelTypes ) )
+                                || ( S_C::MoreThan( 1 ) && S_C::OnlyTypes( allTextTypes ) );
 
     static const std::vector<KICAD_T> toHLabelTypes = { SCH_LABEL_T,
                                                         SCH_DIRECTIVE_LABEL_T,
@@ -504,8 +504,8 @@ bool SCH_EDIT_TOOL::Init()
                                                         SCH_TEXT_T,
                                                         SCH_TEXTBOX_T };
 
-    auto toHLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toHLabelTypes ) )
-                                || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allTextTypes ) );
+    auto toHLabelCondition = ( S_C::Count( 1 ) && S_C::OnlyTypes( toHLabelTypes ) )
+                                || ( S_C::MoreThan( 1 ) && S_C::OnlyTypes( allTextTypes ) );
 
     static const std::vector<KICAD_T> toGLabelTypes = { SCH_LABEL_T,
                                                         SCH_DIRECTIVE_LABEL_T,
@@ -513,8 +513,8 @@ bool SCH_EDIT_TOOL::Init()
                                                         SCH_TEXT_T,
                                                         SCH_TEXTBOX_T };
 
-    auto toGLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toGLabelTypes ) )
-                                || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allTextTypes ) );
+    auto toGLabelCondition = ( S_C::Count( 1 ) && S_C::OnlyTypes( toGLabelTypes ) )
+                                || ( S_C::MoreThan( 1 ) && S_C::OnlyTypes( allTextTypes ) );
 
     static const std::vector<KICAD_T> toTextTypes = { SCH_LABEL_T,
                                                       SCH_DIRECTIVE_LABEL_T,
@@ -522,8 +522,8 @@ bool SCH_EDIT_TOOL::Init()
                                                       SCH_HIER_LABEL_T,
                                                       SCH_TEXTBOX_T };
 
-    auto toTextCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toTextTypes ) )
-                                || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allTextTypes ) );
+    auto toTextCondition = ( S_C::Count( 1 ) && S_C::OnlyTypes( toTextTypes ) )
+                                || ( S_C::MoreThan( 1 ) && S_C::OnlyTypes( allTextTypes ) );
 
     static const std::vector<KICAD_T> toTextBoxTypes = { SCH_LABEL_T,
                                                          SCH_DIRECTIVE_LABEL_T,
@@ -531,14 +531,14 @@ bool SCH_EDIT_TOOL::Init()
                                                          SCH_HIER_LABEL_T,
                                                          SCH_TEXT_T };
 
-    auto toTextBoxCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toTextBoxTypes ) )
-                                   || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allTextTypes ) );
+    auto toTextBoxCondition = ( S_C::Count( 1 ) && S_C::OnlyTypes( toTextBoxTypes ) )
+                                   || ( S_C::MoreThan( 1 ) && S_C::OnlyTypes( allTextTypes ) );
 
     static const std::vector<KICAD_T> busEntryTypes = { SCH_BUS_WIRE_ENTRY_T, SCH_BUS_BUS_ENTRY_T};
 
-    auto entryCondition = E_C::MoreThan( 0 ) && E_C::OnlyTypes( busEntryTypes );
+    auto entryCondition = S_C::MoreThan( 0 ) && S_C::OnlyTypes( busEntryTypes );
 
-    auto singleSheetCondition =  E_C::Count( 1 ) && E_C::OnlyTypes( sheetTypes );
+    auto singleSheetCondition =  S_C::Count( 1 ) && S_C::OnlyTypes( sheetTypes );
 
     auto makeSymbolUnitMenu =
             [&]( TOOL_INTERACTIVE* tool )
@@ -582,10 +582,10 @@ bool SCH_EDIT_TOOL::Init()
                 CONDITIONAL_MENU* menu = new CONDITIONAL_MENU( moveTool );
                 menu->SetTitle( _( "Transform Selection" ) );
 
-                menu->AddItem( EE_ACTIONS::rotateCCW,   orientCondition );
-                menu->AddItem( EE_ACTIONS::rotateCW,    orientCondition );
-                menu->AddItem( EE_ACTIONS::mirrorV,     orientCondition );
-                menu->AddItem( EE_ACTIONS::mirrorH,     orientCondition );
+                menu->AddItem( SCH_ACTIONS::rotateCCW,   orientCondition );
+                menu->AddItem( SCH_ACTIONS::rotateCW,    orientCondition );
+                menu->AddItem( SCH_ACTIONS::mirrorV,     orientCondition );
+                menu->AddItem( SCH_ACTIONS::mirrorH,     orientCondition );
 
                 return menu;
             };
@@ -596,10 +596,10 @@ bool SCH_EDIT_TOOL::Init()
                 CONDITIONAL_MENU* menu = new CONDITIONAL_MENU( moveTool );
                 menu->SetTitle( _( "Attributes" ) );
 
-                menu->AddCheckItem( EE_ACTIONS::setExcludeFromSimulation,    E_C::ShowAlways );
-                menu->AddCheckItem( EE_ACTIONS::setExcludeFromBOM,           E_C::ShowAlways );
-                menu->AddCheckItem( EE_ACTIONS::setExcludeFromBoard,         E_C::ShowAlways );
-                menu->AddCheckItem( EE_ACTIONS::setDNP,                      E_C::ShowAlways );
+                menu->AddCheckItem( SCH_ACTIONS::setExcludeFromSimulation,    S_C::ShowAlways );
+                menu->AddCheckItem( SCH_ACTIONS::setExcludeFromBOM,           S_C::ShowAlways );
+                menu->AddCheckItem( SCH_ACTIONS::setExcludeFromBoard,         S_C::ShowAlways );
+                menu->AddCheckItem( SCH_ACTIONS::setDNP,                      S_C::ShowAlways );
 
                 return menu;
             };
@@ -610,9 +610,9 @@ bool SCH_EDIT_TOOL::Init()
                 CONDITIONAL_MENU* menu = new CONDITIONAL_MENU( m_selectionTool );
                 menu->SetTitle( _( "Edit Main Fields" ) );
 
-                menu->AddItem( EE_ACTIONS::editReference,    E_C::SingleSymbol, 200 );
-                menu->AddItem( EE_ACTIONS::editValue,        E_C::SingleSymbol, 200 );
-                menu->AddItem( EE_ACTIONS::editFootprint,    E_C::SingleSymbol, 200 );
+                menu->AddItem( SCH_ACTIONS::editReference,    S_C::SingleSymbol, 200 );
+                menu->AddItem( SCH_ACTIONS::editValue,        S_C::SingleSymbol, 200 );
+                menu->AddItem( SCH_ACTIONS::editFootprint,    S_C::SingleSymbol, 200 );
 
                 return menu;
             };
@@ -624,17 +624,17 @@ bool SCH_EDIT_TOOL::Init()
                 menu->SetTitle( _( "Change To" ) );
                 menu->SetIcon( BITMAPS::right );
 
-                menu->AddItem( EE_ACTIONS::toLabel,    toLabelCondition );
-                menu->AddItem( EE_ACTIONS::toCLabel,   toCLabelCondition );
-                menu->AddItem( EE_ACTIONS::toHLabel,   toHLabelCondition );
-                menu->AddItem( EE_ACTIONS::toGLabel,   toGLabelCondition );
-                menu->AddItem( EE_ACTIONS::toText,     toTextCondition );
-                menu->AddItem( EE_ACTIONS::toTextBox,  toTextBoxCondition );
+                menu->AddItem( SCH_ACTIONS::toLabel,    toLabelCondition );
+                menu->AddItem( SCH_ACTIONS::toCLabel,   toCLabelCondition );
+                menu->AddItem( SCH_ACTIONS::toHLabel,   toHLabelCondition );
+                menu->AddItem( SCH_ACTIONS::toGLabel,   toGLabelCondition );
+                menu->AddItem( SCH_ACTIONS::toText,     toTextCondition );
+                menu->AddItem( SCH_ACTIONS::toTextBox,  toTextBoxCondition );
 
                 return menu;
             };
 
-    const auto canCopyText = EE_CONDITIONS::OnlyTypes( {
+    const auto canCopyText = SCH_CONDITIONS::OnlyTypes( {
             SCH_TEXT_T,
             SCH_TEXTBOX_T,
             SCH_FIELD_T,
@@ -654,20 +654,20 @@ bool SCH_EDIT_TOOL::Init()
     CONDITIONAL_MENU& moveMenu = moveTool->GetToolMenu().GetMenu();
 
     moveMenu.AddSeparator();
-    moveMenu.AddMenu( makeSymbolUnitMenu( moveTool ), E_C::SingleMultiUnitSymbol, 1 );
-    moveMenu.AddMenu( makeBodyStyleMenu( moveTool ),  E_C::SingleDeMorganSymbol, 1 );
+    moveMenu.AddMenu( makeSymbolUnitMenu( moveTool ), S_C::SingleMultiUnitSymbol, 1 );
+    moveMenu.AddMenu( makeBodyStyleMenu( moveTool ),  S_C::SingleDeMorganSymbol, 1 );
 
     moveMenu.AddMenu( makeTransformMenu(),            orientCondition, 200 );
-    moveMenu.AddMenu( makeAttributesMenu(),           E_C::HasType( SCH_SYMBOL_T ), 200 );
-    moveMenu.AddItem( EE_ACTIONS::swap,               SELECTION_CONDITIONS::MoreThan( 1 ), 200);
-    moveMenu.AddItem( EE_ACTIONS::properties,         propertiesCondition, 200 );
-    moveMenu.AddMenu( makeEditFieldsMenu(),           E_C::SingleSymbol, 200 );
+    moveMenu.AddMenu( makeAttributesMenu(),           S_C::HasType( SCH_SYMBOL_T ), 200 );
+    moveMenu.AddItem( SCH_ACTIONS::swap,              SELECTION_CONDITIONS::MoreThan( 1 ), 200);
+    moveMenu.AddItem( SCH_ACTIONS::properties,        propertiesCondition, 200 );
+    moveMenu.AddMenu( makeEditFieldsMenu(),           S_C::SingleSymbol, 200 );
 
     moveMenu.AddSeparator();
-    moveMenu.AddItem( ACTIONS::cut,                   E_C::IdleSelection );
-    moveMenu.AddItem( ACTIONS::copy,                  E_C::IdleSelection );
-    moveMenu.AddItem( ACTIONS::copyAsText,            canCopyText && E_C::IdleSelection );
-    moveMenu.AddItem( ACTIONS::doDelete,              E_C::NotEmpty );
+    moveMenu.AddItem( ACTIONS::cut,                   S_C::IdleSelection );
+    moveMenu.AddItem( ACTIONS::copy,                  S_C::IdleSelection );
+    moveMenu.AddItem( ACTIONS::copyAsText,            canCopyText && S_C::IdleSelection );
+    moveMenu.AddItem( ACTIONS::doDelete,              S_C::NotEmpty );
     moveMenu.AddItem( ACTIONS::duplicate,             duplicateCondition );
 
     //
@@ -675,62 +675,62 @@ bool SCH_EDIT_TOOL::Init()
     //
     CONDITIONAL_MENU& drawMenu = drawingTools->GetToolMenu().GetMenu();
 
-    drawMenu.AddItem( EE_ACTIONS::clearHighlight,     haveHighlight && EE_CONDITIONS::Idle, 1 );
-    drawMenu.AddSeparator(                            haveHighlight && EE_CONDITIONS::Idle, 1 );
+    drawMenu.AddItem( SCH_ACTIONS::clearHighlight,    haveHighlight && SCH_CONDITIONS::Idle, 1 );
+    drawMenu.AddSeparator(                            haveHighlight && SCH_CONDITIONS::Idle, 1 );
 
-    drawMenu.AddItem( EE_ACTIONS::enterSheet,         sheetSelection && EE_CONDITIONS::Idle, 1 );
-    drawMenu.AddSeparator(                            sheetSelection && EE_CONDITIONS::Idle, 1 );
+    drawMenu.AddItem( SCH_ACTIONS::enterSheet,        sheetSelection && SCH_CONDITIONS::Idle, 1 );
+    drawMenu.AddSeparator(                            sheetSelection && SCH_CONDITIONS::Idle, 1 );
 
-    drawMenu.AddMenu( makeSymbolUnitMenu( drawingTools ), E_C::SingleMultiUnitSymbol, 1 );
-    drawMenu.AddMenu( makeBodyStyleMenu( drawingTools ),  E_C::SingleDeMorganSymbol, 1 );
+    drawMenu.AddMenu( makeSymbolUnitMenu( drawingTools ), S_C::SingleMultiUnitSymbol, 1 );
+    drawMenu.AddMenu( makeBodyStyleMenu( drawingTools ),  S_C::SingleDeMorganSymbol, 1 );
 
     drawMenu.AddMenu( makeTransformMenu(),            orientCondition, 200 );
-    drawMenu.AddMenu( makeAttributesMenu(),           E_C::HasType( SCH_SYMBOL_T ), 200 );
-    drawMenu.AddItem( EE_ACTIONS::properties,         propertiesCondition, 200 );
-    drawMenu.AddMenu( makeEditFieldsMenu(),           E_C::SingleSymbol, 200 );
-    drawMenu.AddItem( EE_ACTIONS::autoplaceFields,    autoplaceCondition, 200 );
+    drawMenu.AddMenu( makeAttributesMenu(),           S_C::HasType( SCH_SYMBOL_T ), 200 );
+    drawMenu.AddItem( SCH_ACTIONS::properties,        propertiesCondition, 200 );
+    drawMenu.AddMenu( makeEditFieldsMenu(),           S_C::SingleSymbol, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::autoplaceFields,   autoplaceCondition, 200 );
 
-    drawMenu.AddItem( EE_ACTIONS::editWithLibEdit,    E_C::SingleSymbolOrPower && E_C::Idle, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::editWithLibEdit,   S_C::SingleSymbolOrPower && S_C::Idle, 200 );
 
-    drawMenu.AddItem( EE_ACTIONS::toLabel,            anyTextTool && E_C::Idle, 200 );
-    drawMenu.AddItem( EE_ACTIONS::toHLabel,           anyTextTool && E_C::Idle, 200 );
-    drawMenu.AddItem( EE_ACTIONS::toGLabel,           anyTextTool && E_C::Idle, 200 );
-    drawMenu.AddItem( EE_ACTIONS::toText,             anyTextTool && E_C::Idle, 200 );
-    drawMenu.AddItem( EE_ACTIONS::toTextBox,          anyTextTool && E_C::Idle, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::toLabel,           anyTextTool && S_C::Idle, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::toHLabel,          anyTextTool && S_C::Idle, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::toGLabel,          anyTextTool && S_C::Idle, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::toText,            anyTextTool && S_C::Idle, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::toTextBox,         anyTextTool && S_C::Idle, 200 );
 
     //
     // Add editing actions to the selection tool menu
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    selToolMenu.AddMenu( makeSymbolUnitMenu( m_selectionTool ),  E_C::SingleMultiUnitSymbol, 1 );
-    selToolMenu.AddMenu( makeBodyStyleMenu( m_selectionTool ),   E_C::SingleDeMorganSymbol, 1 );
-    selToolMenu.AddMenu( makePinFunctionMenu( m_selectionTool ), E_C::SingleMultiFunctionPin, 1 );
-    selToolMenu.AddMenu( makePinTricksMenu( m_selectionTool ),   E_C::AllPinsOrSheetPins, 1 );
+    selToolMenu.AddMenu( makeSymbolUnitMenu( m_selectionTool ),  S_C::SingleMultiUnitSymbol, 1 );
+    selToolMenu.AddMenu( makeBodyStyleMenu( m_selectionTool ),   S_C::SingleDeMorganSymbol, 1 );
+    selToolMenu.AddMenu( makePinFunctionMenu( m_selectionTool ), S_C::SingleMultiFunctionPin, 1 );
+    selToolMenu.AddMenu( makePinTricksMenu( m_selectionTool ),   S_C::AllPinsOrSheetPins, 1 );
 
     selToolMenu.AddMenu( makeTransformMenu(),          orientCondition, 200 );
-    selToolMenu.AddMenu( makeAttributesMenu(),         E_C::HasType( SCH_SYMBOL_T ), 200 );
-    selToolMenu.AddItem( EE_ACTIONS::swap,             SELECTION_CONDITIONS::MoreThan( 1 ), 200 );
-    selToolMenu.AddItem( EE_ACTIONS::properties,       propertiesCondition, 200 );
-    selToolMenu.AddMenu( makeEditFieldsMenu(),         E_C::SingleSymbol, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::autoplaceFields,  autoplaceCondition, 200 );
+    selToolMenu.AddMenu( makeAttributesMenu(),         S_C::HasType( SCH_SYMBOL_T ), 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::swap,            SELECTION_CONDITIONS::MoreThan( 1 ), 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::properties,      propertiesCondition, 200 );
+    selToolMenu.AddMenu( makeEditFieldsMenu(),         S_C::SingleSymbol, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::autoplaceFields, autoplaceCondition, 200 );
 
-    selToolMenu.AddItem( EE_ACTIONS::editWithLibEdit,  E_C::SingleSymbolOrPower && E_C::Idle, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::changeSymbol,     E_C::SingleSymbolOrPower, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::updateSymbol,     E_C::SingleSymbolOrPower, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::changeSymbols,    E_C::MultipleSymbolsOrPower, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::updateSymbols,    E_C::MultipleSymbolsOrPower, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::editWithLibEdit, S_C::SingleSymbolOrPower && S_C::Idle, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::changeSymbol,    S_C::SingleSymbolOrPower, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::updateSymbol,    S_C::SingleSymbolOrPower, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::changeSymbols,   S_C::MultipleSymbolsOrPower, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::updateSymbols,   S_C::MultipleSymbolsOrPower, 200 );
     selToolMenu.AddMenu( makeConvertToMenu(),          toChangeCondition, 200 );
 
-    selToolMenu.AddItem( EE_ACTIONS::cleanupSheetPins, sheetHasUndefinedPins, 250 );
+    selToolMenu.AddItem( SCH_ACTIONS::cleanupSheetPins, sheetHasUndefinedPins, 250 );
 
     selToolMenu.AddSeparator( 300 );
-    selToolMenu.AddItem( ACTIONS::cut,                 E_C::IdleSelection, 300 );
-    selToolMenu.AddItem( ACTIONS::copy,                E_C::IdleSelection, 300 );
-    selToolMenu.AddItem( ACTIONS::copyAsText,          canCopyText && E_C::IdleSelection, 300 );
-    selToolMenu.AddItem( ACTIONS::paste,               E_C::Idle, 300 );
-    selToolMenu.AddItem( ACTIONS::pasteSpecial,        E_C::Idle, 300 );
-    selToolMenu.AddItem( ACTIONS::doDelete,            E_C::NotEmpty, 300 );
+    selToolMenu.AddItem( ACTIONS::cut,                 S_C::IdleSelection, 300 );
+    selToolMenu.AddItem( ACTIONS::copy,                S_C::IdleSelection, 300 );
+    selToolMenu.AddItem( ACTIONS::copyAsText,          canCopyText && S_C::IdleSelection, 300 );
+    selToolMenu.AddItem( ACTIONS::paste,               S_C::Idle, 300 );
+    selToolMenu.AddItem( ACTIONS::pasteSpecial,        S_C::Idle, 300 );
+    selToolMenu.AddItem( ACTIONS::doDelete,            S_C::NotEmpty, 300 );
     selToolMenu.AddItem( ACTIONS::duplicate,           duplicateCondition, 300 );
 
     selToolMenu.AddSeparator( 400 );
@@ -738,14 +738,12 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( ACTIONS::unselectAll,         hasElements, 400 );
 
     ACTION_MANAGER* mgr = m_toolMgr->GetActionManager();
-    mgr->SetConditions( EE_ACTIONS::setDNP,
-                        ACTION_CONDITIONS().Check( attribDNPCond ) );
-    mgr->SetConditions( EE_ACTIONS::setExcludeFromSimulation,
-                        ACTION_CONDITIONS().Check( attribExcludeFromSimCond ) );
-    mgr->SetConditions( EE_ACTIONS::setExcludeFromBOM,
-                        ACTION_CONDITIONS().Check( attribExcludeFromBOMCond ) );
-    mgr->SetConditions( EE_ACTIONS::setExcludeFromBoard,
-                        ACTION_CONDITIONS().Check( attribExcludeFromBoardCond ) );
+    // clang-format off
+    mgr->SetConditions( SCH_ACTIONS::setDNP,                   ACTION_CONDITIONS().Check( attribDNPCond ) );
+    mgr->SetConditions( SCH_ACTIONS::setExcludeFromSimulation, ACTION_CONDITIONS().Check( attribExcludeFromSimCond ) );
+    mgr->SetConditions( SCH_ACTIONS::setExcludeFromBOM,        ACTION_CONDITIONS().Check( attribExcludeFromBOMCond ) );
+    mgr->SetConditions( SCH_ACTIONS::setExcludeFromBoard,      ACTION_CONDITIONS().Check( attribExcludeFromBoardCond ) );
+    // clang-format on
 
     return true;
 }
@@ -777,8 +775,8 @@ const std::vector<KICAD_T> SCH_EDIT_TOOL::RotatableItems = {
 
 int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 {
-    bool          clockwise = ( aEvent.Matches( EE_ACTIONS::rotateCW.MakeEvent() ) );
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( RotatableItems, true );
+    bool           clockwise = ( aEvent.Matches( SCH_ACTIONS::rotateCW.MakeEvent() ) );
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection( RotatableItems, true );
 
     if( selection.GetSize() == 0 )
         return 0;
@@ -1040,10 +1038,10 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     }
     else
     {
-        EE_SELECTION selectionCopy = selection;
+        SCH_SELECTION selectionCopy = selection;
 
         if( selection.IsHover() )
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
         SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
         lwbTool->TrimOverLappingWires( commit, &selectionCopy );
@@ -1061,12 +1059,12 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( RotatableItems );
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection( RotatableItems );
 
     if( selection.GetSize() == 0 )
         return 0;
 
-    bool        vertical = ( aEvent.Matches( EE_ACTIONS::mirrorV.MakeEvent() ) );
+    bool        vertical = ( aEvent.Matches( SCH_ACTIONS::mirrorV.MakeEvent() ) );
     SCH_ITEM*   item = static_cast<SCH_ITEM*>( selection.Front() );
     bool        connections = false;
     bool        moving = item->IsMoving();
@@ -1235,10 +1233,10 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     }
     else
     {
-        EE_SELECTION selectionCopy = selection;
+        SCH_SELECTION selectionCopy = selection;
 
         if( selection.IsHover() )
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
         if( connections )
         {
@@ -1362,7 +1360,7 @@ static void swapFieldPositionsWithMatching( std::vector<SCH_FIELD>& aAFields,
 
 int SCH_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION&          selection = m_selectionTool->RequestSelection( swappableItems );
+    SCH_SELECTION&         selection = m_selectionTool->RequestSelection( swappableItems );
     std::vector<EDA_ITEM*> sorted = selection.GetItemsSortedBySelectionOrder();
 
     // Sheet pins are special, we need to make sure if we have any sheet pins,
@@ -1477,7 +1475,7 @@ int SCH_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
     else
     {
         if( selection.IsHover() )
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
         if( connections )
             m_frame->TestDanglingEnds();
@@ -1496,10 +1494,10 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
     if( sourceItems.empty() )
         return 0;
 
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
-    SCH_COMMIT   commit( m_toolMgr );
-    EE_SELECTION newItems;
+    SCH_COMMIT    commit( m_toolMgr );
+    SCH_SELECTION newItems;
 
     for( const std::unique_ptr<SCH_ITEM>& item : sourceItems )
     {
@@ -1556,7 +1554,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
             }
         }
 
-        m_toolMgr->RunAction<EDA_ITEM*>( EE_ACTIONS::addItemToSel, newItem );
+        m_toolMgr->RunAction<EDA_ITEM*>( SCH_ACTIONS::addItemToSel, newItem );
         newItem->SetFlags( IS_NEW );
         m_frame->AddToScreen( newItem, m_frame->GetScreen() );
         commit.Added( newItem, m_frame->GetScreen() );
@@ -1578,9 +1576,9 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
             }
 
             // Annotation clears the selection so re-add the item
-            m_toolMgr->RunAction<EDA_ITEM*>( EE_ACTIONS::addItemToSel, newItem );
+            m_toolMgr->RunAction<EDA_ITEM*>( SCH_ACTIONS::addItemToSel, newItem );
 
-            restore_state = !m_toolMgr->RunSynchronousAction( EE_ACTIONS::move, &commit );
+            restore_state = !m_toolMgr->RunSynchronousAction( SCH_ACTIONS::move, &commit );
         }
 
         if( restore_state )
@@ -1649,7 +1647,7 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
         return 0;
 
     // Don't leave a freed pointer in the selection
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     for( EDA_ITEM* item : items )
         item->ClearFlags( STRUCT_DELETED );
@@ -1735,7 +1733,7 @@ int SCH_EDIT_TOOL::InteractiveDelete( const TOOL_EVENT& aEvent )
 {
     PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
 
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
     m_pickerItem = nullptr;
 
     // Deactivate other tools; particularly important if another PICKER is currently running
@@ -1749,7 +1747,7 @@ int SCH_EDIT_TOOL::InteractiveDelete( const TOOL_EVENT& aEvent )
             {
                 if( m_pickerItem )
                 {
-                    EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+                    SCH_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
                     selectionTool->UnbrightenItem( m_pickerItem );
                     selectionTool->AddItemToSel( m_pickerItem, true /*quiet mode*/ );
                     m_toolMgr->RunAction( ACTIONS::doDelete );
@@ -1762,11 +1760,11 @@ int SCH_EDIT_TOOL::InteractiveDelete( const TOOL_EVENT& aEvent )
     picker->SetMotionHandler(
             [this]( const VECTOR2D& aPos )
             {
-                EE_COLLECTOR collector;
+                SCH_COLLECTOR collector;
                 collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
                 collector.Collect( m_frame->GetScreen(), deletableItems, aPos );
 
-                EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+                SCH_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
                 selectionTool->GuessSelectionCandidates( collector, aPos );
 
                 EDA_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
@@ -1787,10 +1785,10 @@ int SCH_EDIT_TOOL::InteractiveDelete( const TOOL_EVENT& aEvent )
             [this]( const int& aFinalState )
             {
                 if( m_pickerItem )
-                    m_toolMgr->GetTool<EE_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
+                    m_toolMgr->GetTool<SCH_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
 
                 // Wake the selection tool after exiting to ensure the cursor gets updated
-                m_toolMgr->PostAction( EE_ACTIONS::selectionActivate );
+                m_toolMgr->PostAction( SCH_ACTIONS::selectionActivate );
             } );
 
     m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
@@ -1848,9 +1846,9 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
 
 int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION sel = m_selectionTool->RequestSelection( { SCH_FIELD_T,
-                                                            SCH_SYMBOL_T,
-                                                            SCH_PIN_T } );
+    SCH_SELECTION sel = m_selectionTool->RequestSelection( { SCH_FIELD_T,
+                                                             SCH_SYMBOL_T,
+                                                             SCH_PIN_T } );
 
     if( sel.Size() != 1 )
         return 0;
@@ -1862,9 +1860,9 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
     {
         SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
 
-        if( ( aEvent.IsAction( &EE_ACTIONS::editReference ) && field->GetId() != FIELD_T::REFERENCE )
-         || ( aEvent.IsAction( &EE_ACTIONS::editValue )     && field->GetId() != FIELD_T::VALUE     )
-         || ( aEvent.IsAction( &EE_ACTIONS::editFootprint ) && field->GetId() != FIELD_T::FOOTPRINT ) )
+        if( ( aEvent.IsAction( &SCH_ACTIONS::editReference ) && field->GetId() != FIELD_T::REFERENCE )
+         || ( aEvent.IsAction( &SCH_ACTIONS::editValue )     && field->GetId() != FIELD_T::VALUE     )
+         || ( aEvent.IsAction( &SCH_ACTIONS::editFootprint ) && field->GetId() != FIELD_T::FOOTPRINT ) )
         {
             item = field->GetParentSymbol();
             m_selectionTool->ClearSelection( true );
@@ -1876,15 +1874,15 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
     {
         SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
-        if( aEvent.IsAction( &EE_ACTIONS::editReference ) )
+        if( aEvent.IsAction( &SCH_ACTIONS::editReference ) )
         {
             editFieldText( symbol->GetField( FIELD_T::REFERENCE ) );
         }
-        else if( aEvent.IsAction( &EE_ACTIONS::editValue ) )
+        else if( aEvent.IsAction( &SCH_ACTIONS::editValue ) )
         {
             editFieldText( symbol->GetField( FIELD_T::VALUE ) );
         }
-        else if( aEvent.IsAction( &EE_ACTIONS::editFootprint ) )
+        else if( aEvent.IsAction( &SCH_ACTIONS::editFootprint ) )
         {
             if( !symbol->IsPower() )
                 editFieldText( symbol->GetField( FIELD_T::FOOTPRINT ) );
@@ -1905,15 +1903,15 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
 
         if( symbol )
         {
-            if( aEvent.IsAction( &EE_ACTIONS::editReference ) )
+            if( aEvent.IsAction( &SCH_ACTIONS::editReference ) )
             {
                 editFieldText( symbol->GetField( FIELD_T::REFERENCE ) );
             }
-            else if( aEvent.IsAction( &EE_ACTIONS::editValue ) )
+            else if( aEvent.IsAction( &SCH_ACTIONS::editValue ) )
             {
                 editFieldText( symbol->GetField( FIELD_T::VALUE ) );
             }
-            else if( aEvent.IsAction( &EE_ACTIONS::editFootprint ) )
+            else if( aEvent.IsAction( &SCH_ACTIONS::editFootprint ) )
             {
                 if( !symbol->IsPower() )
                     editFieldText( symbol->GetField( FIELD_T::FOOTPRINT ) );
@@ -1922,7 +1920,7 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
     }
 
     if( clearSelection )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     return 0;
 }
@@ -1930,10 +1928,10 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( RotatableItems );
-    SCH_COMMIT    commit( m_toolMgr );
-    SCH_ITEM*     head = static_cast<SCH_ITEM*>( selection.Front() );
-    bool          moving = head && head->IsMoving();
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection( RotatableItems );
+    SCH_COMMIT     commit( m_toolMgr );
+    SCH_ITEM*      head = static_cast<SCH_ITEM*>( selection.Front() );
+    bool           moving = head && head->IsMoving();
 
     if( selection.Empty() )
         return 0;
@@ -1944,9 +1942,9 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
     {
         SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( ii ) );
 
-        if( item->IsType( EE_COLLECTOR::FieldOwners ) )
+        if( item->IsType( SCH_COLLECTOR::FieldOwners ) )
             autoplaceItems.push_back( item );
-        else if( item->GetParent() && item->GetParent()->IsType( EE_COLLECTOR::FieldOwners ) )
+        else if( item->GetParent() && item->GetParent()->IsType( SCH_COLLECTOR::FieldOwners ) )
             autoplaceItems.push_back( static_cast<SCH_ITEM*>( item->GetParent() ) );
     }
 
@@ -1970,7 +1968,7 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
             commit.Push( _( "Autoplace Fields" ) );
 
         if( selection.IsHover() )
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
     }
 
     return 0;
@@ -1979,16 +1977,16 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::ChangeSymbols( const TOOL_EVENT& aEvent )
 {
-    SCH_SYMBOL* selectedSymbol = nullptr;
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
+    SCH_SYMBOL*    selectedSymbol = nullptr;
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
 
     if( !selection.Empty() )
         selectedSymbol = dynamic_cast<SCH_SYMBOL*>( selection.Front() );
 
     DIALOG_CHANGE_SYMBOLS::MODE mode = DIALOG_CHANGE_SYMBOLS::MODE::UPDATE;
 
-    if( aEvent.IsAction( &EE_ACTIONS::changeSymbol )
-            || aEvent.IsAction( &EE_ACTIONS::changeSymbols ) )
+    if( aEvent.IsAction( &SCH_ACTIONS::changeSymbol )
+            || aEvent.IsAction( &SCH_ACTIONS::changeSymbols ) )
     {
         mode = DIALOG_CHANGE_SYMBOLS::MODE::CHANGE;
     }
@@ -1999,7 +1997,7 @@ int SCH_EDIT_TOOL::ChangeSymbols( const TOOL_EVENT& aEvent )
     dlg.ShowQuasiModal();
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     return 0;
 }
@@ -2007,20 +2005,20 @@ int SCH_EDIT_TOOL::ChangeSymbols( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::ChangeBodyStyle( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
 
     if( selection.Empty() )
         return 0;
 
     SCH_SYMBOL* symbol = (SCH_SYMBOL*) selection.Front();
 
-    if( aEvent.IsAction( &EE_ACTIONS::showDeMorganStandard )
+    if( aEvent.IsAction( &SCH_ACTIONS::showDeMorganStandard )
             && symbol->GetBodyStyle() == BODY_STYLE::BASE )
     {
         return 0;
     }
 
-    if( aEvent.IsAction( &EE_ACTIONS::showDeMorganAlternate )
+    if( aEvent.IsAction( &SCH_ACTIONS::showDeMorganAlternate )
             && symbol->GetBodyStyle() == BODY_STYLE::DEMORGAN )
     {
         return 0;
@@ -2040,7 +2038,7 @@ int SCH_EDIT_TOOL::ChangeBodyStyle( const TOOL_EVENT& aEvent )
         commit.Push( _( "Change Body Style" ) );
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     return 0;
 }
@@ -2048,8 +2046,8 @@ int SCH_EDIT_TOOL::ChangeBodyStyle( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION& selection = m_selectionTool->RequestSelection();
-    bool          clearSelection = selection.IsHover();
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection();
+    bool           clearSelection = selection.IsHover();
 
     if( selection.Empty() )
     {
@@ -2393,7 +2391,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     case SCH_MARKER_T:
         if( SELECTION_CONDITIONS::OnlyTypes( { SCH_MARKER_T } )( selection ) )
         {
-            EE_INSPECTION_TOOL* inspectionTool = m_toolMgr->GetTool<EE_INSPECTION_TOOL>();
+            SCH_INSPECTION_TOOL* inspectionTool = m_toolMgr->GetTool<SCH_INSPECTION_TOOL>();
 
             if( inspectionTool )
                 inspectionTool->CrossProbe( static_cast<SCH_MARKER*> ( selection.Front() ) );
@@ -2411,7 +2409,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     updateItem( curr_item, true );
 
     if( clearSelection )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     return 0;
 }
@@ -2420,7 +2418,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 {
     KICAD_T       convertTo = aEvent.Parameter<KICAD_T>();
-    EE_SELECTION  selection = m_selectionTool->RequestSelection( { SCH_LABEL_LOCATE_ANY_T,
+    SCH_SELECTION selection = m_selectionTool->RequestSelection( { SCH_LABEL_LOCATE_ANY_T,
                                                                    SCH_TEXT_T,
                                                                    SCH_TEXTBOX_T } );
     SCH_COMMIT    commit( m_toolMgr );
@@ -2757,7 +2755,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             }
 
             if( selected )
-                m_toolMgr->RunAction<EDA_ITEM*>( EE_ACTIONS::removeItemFromSel, item );
+                m_toolMgr->RunAction<EDA_ITEM*>( SCH_ACTIONS::removeItemFromSel, item );
 
             if( !item->IsNew() )
             {
@@ -2769,7 +2767,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             }
 
             if( selected )
-                m_toolMgr->RunAction<EDA_ITEM*>( EE_ACTIONS::addItemToSel, newtext );
+                m_toolMgr->RunAction<EDA_ITEM*>( SCH_ACTIONS::addItemToSel, newtext );
 
             // Otherwise, pointer is owned by the undo stack
             if( item->IsNew() )
@@ -2781,7 +2779,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
         commit.Push( _( "Change To" ) );
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     return 0;
 }
@@ -2796,7 +2794,7 @@ int SCH_EDIT_TOOL::JustifyText( const TOOL_EVENT& aEvent )
         SCH_LABEL_T
     };
 
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( justifiableItems );
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection( justifiableItems );
 
     if( selection.GetSize() == 0 )
         return 0;
@@ -2863,10 +2861,10 @@ int SCH_EDIT_TOOL::JustifyText( const TOOL_EVENT& aEvent )
     }
     else
     {
-        EE_SELECTION selectionCopy = selection;
+        SCH_SELECTION selectionCopy = selection;
 
         if( selection.IsHover() )
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
         if( !localCommit.Empty() )
         {
@@ -2885,11 +2883,11 @@ int SCH_EDIT_TOOL::JustifyText( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 {
-    bool          isSlice   = aEvent.Matches( EE_ACTIONS::slice.MakeEvent() );
-    VECTOR2I      cursorPos = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_LINE_T } );
-    SCH_SCREEN*   screen = m_frame->GetScreen();
-    SCH_COMMIT    commit( m_toolMgr );
+    bool           isSlice   = aEvent.Matches( SCH_ACTIONS::slice.MakeEvent() );
+    VECTOR2I       cursorPos = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_LINE_T } );
+    SCH_SCREEN*    screen = m_frame->GetScreen();
+    SCH_COMMIT     commit( m_toolMgr );
     std::vector<SCH_LINE*> lines;
 
     for( EDA_ITEM* item : selection )
@@ -2937,14 +2935,14 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
     {
         m_frame->TestDanglingEnds();
 
-        if( m_toolMgr->RunSynchronousAction( EE_ACTIONS::drag, &commit, isSlice ) )
+        if( m_toolMgr->RunSynchronousAction( SCH_ACTIONS::drag, &commit, isSlice ) )
             commit.Push( isSlice ? _( "Slice Wire" ) : _( "Break Wire" ) );
         else
             commit.Revert();
     }
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     return 0;
 }
@@ -2952,9 +2950,9 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::CleanupSheetPins( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SHEET_T } );
-    SCH_SHEET*    sheet = (SCH_SHEET*) selection.Front();
-    SCH_COMMIT    commit( m_toolMgr );
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SHEET_T } );
+    SCH_SHEET*     sheet = (SCH_SHEET*) selection.Front();
+    SCH_COMMIT     commit( m_toolMgr );
 
     if( !sheet || !sheet->HasUndefinedPins() )
         return 0;
@@ -2971,7 +2969,7 @@ int SCH_EDIT_TOOL::CleanupSheetPins( const TOOL_EVENT& aEvent )
     commit.Push( _( "Cleanup Sheet Pins" ) );
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     return 0;
 }
@@ -2979,7 +2977,7 @@ int SCH_EDIT_TOOL::CleanupSheetPins( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::EditPageNumber( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SHEET_T } );
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SHEET_T } );
 
     if( selection.GetSize() > 1 )
         return 0;
@@ -3045,7 +3043,7 @@ int SCH_EDIT_TOOL::EditPageNumber( const TOOL_EVENT& aEvent )
     commit.Push( wxS( "Change Sheet Page Number" ) );
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     return 0;
 }
@@ -3056,7 +3054,7 @@ int SCH_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
     const ACTIONS::INCREMENT          incParam = aEvent.Parameter<ACTIONS::INCREMENT>();
     static const std::vector<KICAD_T> incrementable = { SCH_LABEL_T, SCH_GLOBAL_LABEL_T,
                                                         SCH_HIER_LABEL_T, SCH_TEXT_T };
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( incrementable );
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection( incrementable );
 
     if( selection.Empty() )
         return 0;
@@ -3130,7 +3128,7 @@ int SCH_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
     commit->Push( _( "Increment" ) );
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     return 0;
 }
@@ -3138,11 +3136,11 @@ int SCH_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::DdAppendFile( const TOOL_EVENT& aEvent )
 {
-    return m_toolMgr->RunAction( EE_ACTIONS::importSheet, aEvent.Parameter<wxString*>() );
+    return m_toolMgr->RunAction( SCH_ACTIONS::importSheet, aEvent.Parameter<wxString*>() );
 }
 
 
-void SCH_EDIT_TOOL::collectUnits( const EE_SELECTION& aSelection,
+void SCH_EDIT_TOOL::collectUnits( const SCH_SELECTION& aSelection,
                                   std::set<std::pair<SCH_SYMBOL*, SCH_SCREEN*>>& aCollectedUnits )
 {
     for( EDA_ITEM* item : aSelection )
@@ -3179,8 +3177,8 @@ void SCH_EDIT_TOOL::collectUnits( const EE_SELECTION& aSelection,
 
 int SCH_EDIT_TOOL::SetAttribute( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
-    SCH_COMMIT    commit( m_toolMgr );
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
+    SCH_COMMIT     commit( m_toolMgr );
 
     std::set<std::pair<SCH_SYMBOL*, SCH_SCREEN*>> collectedUnits;
 
@@ -3189,10 +3187,10 @@ int SCH_EDIT_TOOL::SetAttribute( const TOOL_EVENT& aEvent )
 
     for( const auto& [symbol, _] : collectedUnits )
     {
-        if( ( aEvent.IsAction( &EE_ACTIONS::setDNP ) && !symbol->GetDNP() )
-         || ( aEvent.IsAction( &EE_ACTIONS::setExcludeFromSimulation ) && !symbol->GetExcludedFromSim() )
-         || ( aEvent.IsAction( &EE_ACTIONS::setExcludeFromBOM ) && !symbol->GetExcludedFromBOM() )
-         || ( aEvent.IsAction( &EE_ACTIONS::setExcludeFromBoard ) && !symbol->GetExcludedFromBoard() ) )
+        if( ( aEvent.IsAction( &SCH_ACTIONS::setDNP ) && !symbol->GetDNP() )
+         || ( aEvent.IsAction( &SCH_ACTIONS::setExcludeFromSimulation ) && !symbol->GetExcludedFromSim() )
+         || ( aEvent.IsAction( &SCH_ACTIONS::setExcludeFromBOM ) && !symbol->GetExcludedFromBOM() )
+         || ( aEvent.IsAction( &SCH_ACTIONS::setExcludeFromBoard ) && !symbol->GetExcludedFromBoard() ) )
         {
             new_state = true;
             break;
@@ -3203,16 +3201,16 @@ int SCH_EDIT_TOOL::SetAttribute( const TOOL_EVENT& aEvent )
     {
         commit.Modify( symbol, screen );
 
-        if( aEvent.IsAction( &EE_ACTIONS::setDNP ) )
+        if( aEvent.IsAction( &SCH_ACTIONS::setDNP ) )
             symbol->SetDNP( new_state );
 
-        if( aEvent.IsAction( &EE_ACTIONS::setExcludeFromSimulation ) )
+        if( aEvent.IsAction( &SCH_ACTIONS::setExcludeFromSimulation ) )
             symbol->SetExcludedFromSim( new_state );
 
-        if( aEvent.IsAction( &EE_ACTIONS::setExcludeFromBOM ) )
+        if( aEvent.IsAction( &SCH_ACTIONS::setExcludeFromBOM ) )
             symbol->SetExcludedFromBOM( new_state );
 
-        if( aEvent.IsAction( &EE_ACTIONS::setExcludeFromBoard ) )
+        if( aEvent.IsAction( &SCH_ACTIONS::setExcludeFromBoard ) )
             symbol->SetExcludedFromBoard( new_state );
     }
 
@@ -3220,7 +3218,7 @@ int SCH_EDIT_TOOL::SetAttribute( const TOOL_EVENT& aEvent )
         commit.Push( _( "Toggle Attribute" ) );
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     return 0;
 }
@@ -3229,12 +3227,12 @@ int SCH_EDIT_TOOL::SetAttribute( const TOOL_EVENT& aEvent )
 void SCH_EDIT_TOOL::setTransitions()
 {
     // clang-format off
-    Go( &SCH_EDIT_TOOL::RepeatDrawItem,     EE_ACTIONS::repeatDrawItem.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::Rotate,             EE_ACTIONS::rotateCW.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::Rotate,             EE_ACTIONS::rotateCCW.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorV.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorH.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::Swap,               EE_ACTIONS::swap.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::RepeatDrawItem,     SCH_ACTIONS::repeatDrawItem.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::Rotate,             SCH_ACTIONS::rotateCW.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::Rotate,             SCH_ACTIONS::rotateCCW.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::Mirror,             SCH_ACTIONS::mirrorV.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::Mirror,             SCH_ACTIONS::mirrorH.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::Swap,               SCH_ACTIONS::swap.MakeEvent() );
     Go( &SCH_EDIT_TOOL::DoDelete,           ACTIONS::doDelete.MakeEvent() );
     Go( &SCH_EDIT_TOOL::InteractiveDelete,  ACTIONS::deleteTool.MakeEvent() );
 
@@ -3244,40 +3242,40 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::Increment,          ACTIONS::incrementSecondary.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Increment,          ACTIONS::decrementSecondary.MakeEvent() );
 
-    Go( &SCH_EDIT_TOOL::Properties,         EE_ACTIONS::properties.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::EditField,          EE_ACTIONS::editReference.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::EditField,          EE_ACTIONS::editValue.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::EditField,          EE_ACTIONS::editFootprint.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::AutoplaceFields,    EE_ACTIONS::autoplaceFields.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ChangeSymbols,      EE_ACTIONS::changeSymbols.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ChangeSymbols,      EE_ACTIONS::updateSymbols.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ChangeSymbols,      EE_ACTIONS::changeSymbol.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ChangeSymbols,      EE_ACTIONS::updateSymbol.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ChangeBodyStyle,    EE_ACTIONS::toggleDeMorgan.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ChangeBodyStyle,    EE_ACTIONS::showDeMorganStandard.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ChangeBodyStyle,    EE_ACTIONS::showDeMorganAlternate.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toLabel.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toHLabel.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toGLabel.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toCLabel.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toText.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toTextBox.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::Properties,         SCH_ACTIONS::properties.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::EditField,          SCH_ACTIONS::editReference.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::EditField,          SCH_ACTIONS::editValue.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::EditField,          SCH_ACTIONS::editFootprint.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::AutoplaceFields,    SCH_ACTIONS::autoplaceFields.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeSymbols,      SCH_ACTIONS::changeSymbols.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeSymbols,      SCH_ACTIONS::updateSymbols.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeSymbols,      SCH_ACTIONS::changeSymbol.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeSymbols,      SCH_ACTIONS::updateSymbol.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeBodyStyle,    SCH_ACTIONS::toggleDeMorgan.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeBodyStyle,    SCH_ACTIONS::showDeMorganStandard.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeBodyStyle,    SCH_ACTIONS::showDeMorganAlternate.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toLabel.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toHLabel.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toGLabel.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toCLabel.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toText.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toTextBox.MakeEvent() );
     Go( &SCH_EDIT_TOOL::JustifyText,        ACTIONS::leftJustify.MakeEvent() );
     Go( &SCH_EDIT_TOOL::JustifyText,        ACTIONS::centerJustify.MakeEvent() );
     Go( &SCH_EDIT_TOOL::JustifyText,        ACTIONS::rightJustify.MakeEvent() );
 
-    Go( &SCH_EDIT_TOOL::BreakWire,          EE_ACTIONS::breakWire.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::BreakWire,          EE_ACTIONS::slice.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::BreakWire,          SCH_ACTIONS::breakWire.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::BreakWire,          SCH_ACTIONS::slice.MakeEvent() );
 
-    Go( &SCH_EDIT_TOOL::SetAttribute,       EE_ACTIONS::setDNP.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::SetAttribute,       EE_ACTIONS::setExcludeFromBOM.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::SetAttribute,       EE_ACTIONS::setExcludeFromBoard.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::SetAttribute,       EE_ACTIONS::setExcludeFromSimulation.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::SetAttribute,       SCH_ACTIONS::setDNP.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::SetAttribute,       SCH_ACTIONS::setExcludeFromBOM.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::SetAttribute,       SCH_ACTIONS::setExcludeFromBoard.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::SetAttribute,       SCH_ACTIONS::setExcludeFromSimulation.MakeEvent() );
 
-    Go( &SCH_EDIT_TOOL::CleanupSheetPins,   EE_ACTIONS::cleanupSheetPins.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::GlobalEdit,         EE_ACTIONS::editTextAndGraphics.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::EditPageNumber,     EE_ACTIONS::editPageNumber.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::CleanupSheetPins,   SCH_ACTIONS::cleanupSheetPins.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::GlobalEdit,         SCH_ACTIONS::editTextAndGraphics.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::EditPageNumber,     SCH_ACTIONS::editPageNumber.MakeEvent() );
 
-    Go( &SCH_EDIT_TOOL::DdAppendFile,       EE_ACTIONS::ddAppendFile.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::DdAppendFile,       SCH_ACTIONS::ddAppendFile.MakeEvent() );
     // clang-format on
 }

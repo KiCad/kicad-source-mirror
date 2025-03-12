@@ -33,14 +33,14 @@
 #include <sch_edit_frame.h>
 #include <sch_line.h>
 
-#include <ee_tool_base.h>
+#include <sch_tool_base.h>
 
 class TOOL_EVENT;
 
 class SCH_BUS_WIRE_ENTRY;
 class SCH_LABEL;
 class SCH_EDIT_FRAME;
-class EE_SELECTION_TOOL;
+class SCH_SELECTION_TOOL;
 
 
 /// Collection of data related to the bus unfolding tool
@@ -70,7 +70,7 @@ struct DRAW_SEGMENT_EVENT_PARAMS
  * Tool responsible for drawing/placing items (symbols, wires, buses, labels, etc.)
  */
 
-class SCH_LINE_WIRE_BUS_TOOL : public EE_TOOL_BASE<SCH_EDIT_FRAME>
+class SCH_LINE_WIRE_BUS_TOOL : public SCH_TOOL_BASE<SCH_EDIT_FRAME>
 {
 public:
     SCH_LINE_WIRE_BUS_TOOL();
@@ -88,12 +88,12 @@ public:
     /**
      * Handle the addition of junctions to a selection of objects
      */
-    int AddJunctionsIfNeeded( SCH_COMMIT* aCommit, EE_SELECTION* aSelection );
+    int AddJunctionsIfNeeded( SCH_COMMIT* aCommit, SCH_SELECTION* aSelection );
 
     /**
      * Logic to remove wires when overlapping correct items
      */
-    int TrimOverLappingWires( SCH_COMMIT* aCommit, EE_SELECTION* aSelection );
+    int TrimOverLappingWires( SCH_COMMIT* aCommit, SCH_SELECTION* aSelection );
 
 private:
     int doDrawSegments( const TOOL_EVENT& aTool, int aType, bool aQuitOnDraw );

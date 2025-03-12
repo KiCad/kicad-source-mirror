@@ -27,7 +27,7 @@
 #define SCH_EDITOR_CONTROL_H
 
 #include <sch_base_frame.h>
-#include <tools/ee_tool_base.h>
+#include <tools/sch_tool_base.h>
 #include <status_popup.h>
 
 class SCH_EDIT_FRAME;
@@ -35,11 +35,11 @@ class SCH_EDIT_FRAME;
 /**
  * Handle actions specific to the schematic editor.
  */
-class SCH_EDITOR_CONTROL : public wxEvtHandler, public EE_TOOL_BASE<SCH_EDIT_FRAME>
+class SCH_EDITOR_CONTROL : public wxEvtHandler, public SCH_TOOL_BASE<SCH_EDIT_FRAME>
 {
 public:
     SCH_EDITOR_CONTROL()  :
-            EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.EditorControl" ),
+            SCH_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.EditorControl" ),
             m_probingPcbToSch( false ),
             m_pickerItem( nullptr ),
             m_duplicateIsHoverSelection( false ),

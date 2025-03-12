@@ -28,7 +28,7 @@
 #include <sch_painter.h>
 #include <tool/action_menu.h>
 #include <tool/action_toolbar.h>
-#include <tools/ee_actions.h>
+#include <tools/sch_actions.h>
 #include <tools/symbol_editor_control.h>
 #include <widgets/wx_menubar.h>
 #include <toolbars_symbol_viewer.h>
@@ -63,12 +63,12 @@ std::optional<TOOLBAR_CONFIGURATION> SYMBOL_VIEWER_TOOLBAR_SETTINGS::DefaultTool
               .AppendAction( ACTIONS::zoomFitScreen );
 
         config.AppendSeparator()
-              .AppendAction( EE_ACTIONS::showElectricalTypes )
-              .AppendAction( EE_ACTIONS::showPinNumbers );
+              .AppendAction( SCH_ACTIONS::showElectricalTypes )
+              .AppendAction( SCH_ACTIONS::showPinNumbers );
 
         config.AppendSeparator()
-              .AppendAction( EE_ACTIONS::showDeMorganStandard )
-              .AppendAction( EE_ACTIONS::showDeMorganAlternate );
+              .AppendAction( SCH_ACTIONS::showDeMorganStandard )
+              .AppendAction( SCH_ACTIONS::showDeMorganAlternate );
 
         config.AppendSeparator()
               .AppendControl( ACTION_TOOLBAR_CONTROLS::unitSelector );
@@ -77,7 +77,7 @@ std::optional<TOOLBAR_CONFIGURATION> SYMBOL_VIEWER_TOOLBAR_SETTINGS::DefaultTool
               .AppendAction( ACTIONS::showDatasheet );
 
         config.AppendSeparator()
-              .AppendAction( EE_ACTIONS::addSymbolToSchematic );
+              .AppendAction( SCH_ACTIONS::addSymbolToSchematic );
         break;
     }
 
@@ -134,8 +134,8 @@ void SYMBOL_VIEWER_FRAME::doReCreateMenuBar()
     viewMenu->AppendSeparator();
 
     viewMenu->AppendSeparator();
-    viewMenu->Add( EE_ACTIONS::showElectricalTypes, ACTION_MENU::CHECK );
-    viewMenu->Add( EE_ACTIONS::showPinNumbers,      ACTION_MENU::CHECK );
+    viewMenu->Add( SCH_ACTIONS::showElectricalTypes, ACTION_MENU::CHECK );
+    viewMenu->Add( SCH_ACTIONS::showPinNumbers,      ACTION_MENU::CHECK );
 
 
     //-- Menubar -------------------------------------------------------------

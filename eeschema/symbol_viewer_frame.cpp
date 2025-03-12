@@ -56,9 +56,9 @@
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 #include <tool/zoom_tool.h>
-#include <tools/ee_actions.h>
+#include <tools/sch_actions.h>
 #include <tools/symbol_editor_control.h>
-#include <tools/ee_inspection_tool.h>
+#include <tools/sch_inspection_tool.h>
 #include <view/view_controls.h>
 #include <wx/srchctrl.h>
 #include <wx/log.h>
@@ -324,15 +324,15 @@ void SYMBOL_VIEWER_FRAME::setupTools()
     m_toolManager = new TOOL_MANAGER;
     m_toolManager->SetEnvironment( GetScreen(), GetCanvas()->GetView(),
                                    GetCanvas()->GetViewControls(), config(), this );
-    m_actions = new EE_ACTIONS();
+    m_actions = new SCH_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
 
     // Register tools
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new COMMON_CONTROL );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
-    m_toolManager->RegisterTool( new EE_INSPECTION_TOOL );     // manage show datasheet
-    m_toolManager->RegisterTool( new EE_SELECTION_TOOL );      // manage context menu
+    m_toolManager->RegisterTool( new SCH_INSPECTION_TOOL );     // manage show datasheet
+    m_toolManager->RegisterTool( new SCH_SELECTION_TOOL );      // manage context menu
     m_toolManager->RegisterTool( new SYMBOL_EDITOR_CONTROL );  // manage render settings
 
     m_toolManager->InitTools();
@@ -397,14 +397,12 @@ void SYMBOL_VIEWER_FRAME::setupUIConditions()
                 return symbol && !symbol->GetDatasheetField().GetText().IsEmpty();
             };
 
-    mgr->SetConditions( ACTIONS::showDatasheet,       ENABLE( haveDatasheetCond ) );
-    mgr->SetConditions( EE_ACTIONS::showElectricalTypes, CHECK( electricalTypesShownCondition ) );
-    mgr->SetConditions( EE_ACTIONS::showPinNumbers,      CHECK( pinNumbersShownCondition ) );
+    mgr->SetConditions( ACTIONS::showDatasheet,             ENABLE( haveDatasheetCond ) );
+    mgr->SetConditions( SCH_ACTIONS::showElectricalTypes,   CHECK( electricalTypesShownCondition ) );
+    mgr->SetConditions( SCH_ACTIONS::showPinNumbers,        CHECK( pinNumbersShownCondition ) );
 
-    mgr->SetConditions( EE_ACTIONS::showDeMorganStandard,
-                        ACTION_CONDITIONS().Enable( demorganCond ).Check( demorganStandardCond ) );
-    mgr->SetConditions( EE_ACTIONS::showDeMorganAlternate,
-                        ACTION_CONDITIONS().Enable( demorganCond ).Check( demorganAlternateCond ) );
+    mgr->SetConditions( SCH_ACTIONS::showDeMorganStandard,  ACTION_CONDITIONS().Enable( demorganCond ).Check( demorganStandardCond ) );
+    mgr->SetConditions( SCH_ACTIONS::showDeMorganAlternate, ACTION_CONDITIONS().Enable( demorganCond ).Check( demorganAlternateCond ) );
 
 #undef CHECK
 #undef ENABLE
@@ -847,7 +845,7 @@ void SYMBOL_VIEWER_FRAME::SetSelectedSymbol( const wxString& aSymbolName )
 
 void SYMBOL_VIEWER_FRAME::DClickOnSymbolList( wxCommandEvent& event )
 {
-    m_toolManager->RunAction( EE_ACTIONS::addSymbolToSchematic );
+    m_toolManager->RunAction( SCH_ACTIONS::addSymbolToSchematic );
 }
 
 
@@ -1121,7 +1119,7 @@ void SYMBOL_VIEWER_FRAME::DisplayLibInfos()
 
 SELECTION& SYMBOL_VIEWER_FRAME::GetCurrentSelection()
 {
-    return m_toolManager->GetTool<EE_SELECTION_TOOL>()->GetSelection();
+    return m_toolManager->GetTool<SCH_SELECTION_TOOL>()->GetSelection();
 }
 
 

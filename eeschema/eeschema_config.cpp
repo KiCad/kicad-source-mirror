@@ -46,7 +46,7 @@
 #include <zoom_defines.h>
 #include <sim/spice_settings.h>
 #include <tool/tool_manager.h>
-#include <tools/ee_selection_tool.h>
+#include <tools/sch_selection_tool.h>
 
 
 /// Helper for all the old plotting/printing code while it still exists
@@ -73,7 +73,7 @@ bool SCH_EDIT_FRAME::LoadProjectSettings()
 
     PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();
 
-    EE_SELECTION_TOOL* selTool = GetToolManager()->GetTool<EE_SELECTION_TOOL>();
+    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
     selTool->GetFilter() = localSettings.m_SchSelectionFilter;
     m_selectionFilterPanel->SetCheckboxesFromFilter( localSettings.m_SchSelectionFilter );
 
@@ -243,7 +243,7 @@ void SCH_EDIT_FRAME::SaveProjectLocalSettings()
         m_schematic->RecordERCExclusions();
 
     PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();
-    EE_SELECTION_TOOL* selTool = GetToolManager()->GetTool<EE_SELECTION_TOOL>();
+    SCH_SELECTION_TOOL*     selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
 
     localSettings.m_SchSelectionFilter = selTool->GetFilter();
 }

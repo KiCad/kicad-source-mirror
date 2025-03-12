@@ -29,7 +29,7 @@
 #include <symbol_edit_frame.h>
 #include <symbol_lib_table.h>
 #include <tool/tool_manager.h>
-#include <tools/ee_actions.h>
+#include <tools/sch_actions.h>
 
 SYMBOL_TREE_PANE::SYMBOL_TREE_PANE( SYMBOL_EDIT_FRAME* aParent,
                                     LIB_SYMBOL_LIBRARY_MANAGER* aLibMgr )
@@ -84,7 +84,7 @@ void SYMBOL_TREE_PANE::onMenuClose( wxMenuEvent& aEvent )
 
 void SYMBOL_TREE_PANE::onSymbolSelected( wxCommandEvent& aEvent )
 {
-    m_symbolEditFrame->GetToolManager()->RunAction( EE_ACTIONS::editSymbol );
+    m_symbolEditFrame->GetToolManager()->RunAction( SCH_ACTIONS::editSymbol );
 
     // Make sure current-part highlighting doesn't get lost in selection highlighting
     m_tree->Unselect();

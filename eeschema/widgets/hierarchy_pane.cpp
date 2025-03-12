@@ -30,7 +30,7 @@
 #include <sch_commit.h>
 #include <schematic.h>
 #include <tool/tool_manager.h>
-#include <tools/ee_actions.h>
+#include <tools/sch_actions.h>
 
 #include <hierarchy_pane.h>
 #include <kiface_base.h>
@@ -321,7 +321,7 @@ void HIERARCHY_PANE::onSelectSheetPath( wxTreeEvent& aEvent )
         return;
 
     SetCursor( wxCURSOR_ARROWWAIT );
-    m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( EE_ACTIONS::changeSheet,
+    m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet,
                                                            &itemData->m_SheetPath );
     SetCursor( wxCURSOR_ARROW );
 }

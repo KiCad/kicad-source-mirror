@@ -46,7 +46,7 @@
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
 #include <tools/simulator_control.h>
-#include <tools/ee_actions.h>
+#include <tools/sch_actions.h>
 #include <string_utils.h>
 #include <pgm_base.h>
 #include "ngspice.h"
@@ -778,34 +778,34 @@ void SIMULATOR_FRAME::setupUIConditions()
 
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
+    // clang-format off
+    mgr->SetConditions( SCH_ACTIONS::openWorkbook,          ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    mgr->SetConditions( SCH_ACTIONS::saveWorkbook,          ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    mgr->SetConditions( SCH_ACTIONS::saveWorkbookAs,        ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
 
-    mgr->SetConditions( EE_ACTIONS::openWorkbook,          ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
-    mgr->SetConditions( EE_ACTIONS::saveWorkbook,          ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
-    mgr->SetConditions( EE_ACTIONS::saveWorkbookAs,        ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    mgr->SetConditions( SCH_ACTIONS::exportPlotAsPNG,       ENABLE( havePlot ) );
+    mgr->SetConditions( SCH_ACTIONS::exportPlotAsCSV,       ENABLE( havePlot ) );
+    mgr->SetConditions( SCH_ACTIONS::exportPlotToClipboard, ENABLE( havePlot ) );
+    mgr->SetConditions( SCH_ACTIONS::exportPlotToSchematic, ENABLE( havePlot ) );
 
-    mgr->SetConditions( EE_ACTIONS::exportPlotAsPNG,       ENABLE( havePlot ) );
-    mgr->SetConditions( EE_ACTIONS::exportPlotAsCSV,       ENABLE( havePlot ) );
-    mgr->SetConditions( EE_ACTIONS::exportPlotToClipboard, ENABLE( havePlot ) );
-    mgr->SetConditions( EE_ACTIONS::exportPlotToSchematic, ENABLE( havePlot ) );
+    mgr->SetConditions( ACTIONS::toggleSimulationSidePanel, CHECK( isSidePanelShown ) );
+    mgr->SetConditions( ACTIONS::toggleConsole,             CHECK( isConsoleShown ) );
 
-    mgr->SetConditions( ACTIONS::toggleSimulationSidePanel,   CHECK( isSidePanelShown ) );
-    mgr->SetConditions( ACTIONS::toggleConsole,   CHECK( isConsoleShown ) );
+    mgr->SetConditions( ACTIONS::zoomUndo,                  ENABLE( haveZoomUndo ) );
+    mgr->SetConditions( ACTIONS::zoomRedo,                  ENABLE( haveZoomRedo ) );
+    mgr->SetConditions( SCH_ACTIONS::toggleGrid,            CHECK( showGridCondition ) );
+    mgr->SetConditions( SCH_ACTIONS::toggleLegend,          CHECK( showLegendCondition ) );
+    mgr->SetConditions( SCH_ACTIONS::toggleDottedSecondary, CHECK( showDottedCondition ) );
+    mgr->SetConditions( SCH_ACTIONS::toggleDarkModePlots,   CHECK( darkModePlotCondition ) );
 
-    mgr->SetConditions( ACTIONS::zoomUndo,                 ENABLE( haveZoomUndo ) );
-    mgr->SetConditions( ACTIONS::zoomRedo,                 ENABLE( haveZoomRedo ) );
-    mgr->SetConditions( EE_ACTIONS::toggleGrid,            CHECK( showGridCondition ) );
-    mgr->SetConditions( EE_ACTIONS::toggleLegend,          CHECK( showLegendCondition ) );
-    mgr->SetConditions( EE_ACTIONS::toggleDottedSecondary, CHECK( showDottedCondition ) );
-    mgr->SetConditions( EE_ACTIONS::toggleDarkModePlots,   CHECK( darkModePlotCondition ) );
-
-    mgr->SetConditions( EE_ACTIONS::newAnalysisTab,        ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
-    mgr->SetConditions( EE_ACTIONS::simAnalysisProperties, ENABLE( haveSim ) );
-    mgr->SetConditions( EE_ACTIONS::runSimulation,         ENABLE( !simRunning ) );
-    mgr->SetConditions( EE_ACTIONS::stopSimulation,        ENABLE( simRunning ) );
-    mgr->SetConditions( EE_ACTIONS::simProbe,              ENABLE( simFinished ) );
-    mgr->SetConditions( EE_ACTIONS::simTune,               ENABLE( simFinished ) );
-    mgr->SetConditions( EE_ACTIONS::showNetlist,           ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
-
+    mgr->SetConditions( SCH_ACTIONS::newAnalysisTab,        ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    mgr->SetConditions( SCH_ACTIONS::simAnalysisProperties, ENABLE( haveSim ) );
+    mgr->SetConditions( SCH_ACTIONS::runSimulation,         ENABLE( !simRunning ) );
+    mgr->SetConditions( SCH_ACTIONS::stopSimulation,        ENABLE( simRunning ) );
+    mgr->SetConditions( SCH_ACTIONS::simProbe,              ENABLE( simFinished ) );
+    mgr->SetConditions( SCH_ACTIONS::simTune,               ENABLE( simFinished ) );
+    mgr->SetConditions( SCH_ACTIONS::showNetlist,           ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    // clang-format on
 #undef CHECK
 #undef ENABLE
 }

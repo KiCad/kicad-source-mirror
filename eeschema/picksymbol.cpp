@@ -30,7 +30,7 @@
 #include <core/kicad_algo.h>
 #include <symbol_library_common.h>
 #include <confirm.h>
-#include <ee_tool_utils.h>
+#include <sch_tool_utils.h>
 #include <eeschema_id.h>
 #include <general.h>
 #include <kidialog.h>
@@ -43,7 +43,7 @@
 #include <sch_edit_frame.h>
 #include <symbol_lib_table.h>
 #include <tool/tool_manager.h>
-#include <tools/ee_actions.h>
+#include <tools/sch_actions.h>
 #include <project_sch.h>
 
 #include <dialog_symbol_chooser.h>
@@ -212,7 +212,7 @@ void SCH_EDIT_FRAME::FlipBodyStyle( SCH_SYMBOL* aSymbol )
 
     // If selected make sure all the now-included pins are selected
     if( aSymbol->IsSelected() )
-        m_toolManager->RunAction<EDA_ITEM*>( EE_ACTIONS::addItemToSel, aSymbol );
+        m_toolManager->RunAction<EDA_ITEM*>( SCH_ACTIONS::addItemToSel, aSymbol );
 
     commit.Push( _( "Change Body Style" ) );
 }

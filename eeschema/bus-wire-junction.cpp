@@ -29,12 +29,9 @@
 #include <sch_junction.h>
 #include <sch_line.h>
 #include <sch_no_connect.h>
-#include <sch_screen.h>
-#include <sch_view.h>
 #include <sch_commit.h>
 #include <tool/tool_manager.h>
-#include <tools/ee_actions.h>
-#include <tools/ee_selection_tool.h>
+#include <tools/sch_selection_tool.h>
 #include <trigo.h>
 
 
@@ -117,7 +114,7 @@ bool SCH_EDIT_FRAME::TrimWire( SCH_COMMIT* aCommit, const VECTOR2I& aStart, cons
 
 void SCH_EDIT_FRAME::SchematicCleanUp( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen )
 {
-    EE_SELECTION_TOOL*           selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
+    SCH_SELECTION_TOOL*          selectionTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>();
     std::vector<SCH_LINE*>       lines;
     std::vector<SCH_JUNCTION*>   junctions;
     std::vector<SCH_NO_CONNECT*> ncs;
@@ -360,9 +357,9 @@ bool SCH_EDIT_FRAME::BreakSegmentsOnJunctions( SCH_COMMIT* aCommit, SCH_SCREEN* 
 
 void SCH_EDIT_FRAME::DeleteJunction( SCH_COMMIT* aCommit, SCH_ITEM* aJunction )
 {
-    SCH_SCREEN*        screen = GetScreen();
-    PICKED_ITEMS_LIST  undoList;
-    EE_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
+    SCH_SCREEN*         screen = GetScreen();
+    PICKED_ITEMS_LIST   undoList;
+    SCH_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>();
 
     aJunction->SetFlags( STRUCT_DELETED );
     RemoveFromScreen( aJunction, screen );

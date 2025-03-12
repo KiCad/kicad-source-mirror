@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <ee_actions.h>
+#include <sch_actions.h>
 #include <sch_edit_frame.h>
 #include <tool/tool_manager.h>
 #include <schematic.h>
@@ -33,7 +33,7 @@
 #include <sch_bitmap.h>
 #include <sch_sheet_pin.h>
 #include <sch_table.h>
-#include <tools/ee_selection_tool.h>
+#include <tools/sch_selection_tool.h>
 #include <drawing_sheet/ds_proxy_undo_item.h>
 #include <tool/actions.h>
 #include <wx/log.h>
@@ -361,7 +361,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                 refreshHierarchy = true;
 
                 if( static_cast<SCH_SHEET*>( eda_item )->GetScreen() == GetScreen() )
-                    GetToolManager()->PostAction( EE_ACTIONS::leaveSheet );
+                    GetToolManager()->PostAction( SCH_ACTIONS::leaveSheet );
             }
 
             RemoveFromScreen( eda_item, screen );
@@ -563,7 +563,7 @@ void SCH_EDIT_FRAME::RollbackSchematicFromUndo()
 
         delete undo;
 
-        m_toolManager->GetTool<EE_SELECTION_TOOL>()->RebuildSelection();
+        m_toolManager->GetTool<SCH_SELECTION_TOOL>()->RebuildSelection();
     }
 
     GetCanvas()->Refresh();

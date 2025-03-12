@@ -30,13 +30,13 @@
 #include <project_sch.h>
 #include <tools/sch_drawing_tools.h>
 #include <tools/sch_line_wire_bus_tool.h>
-#include <tools/ee_selection_tool.h>
+#include <tools/sch_selection_tool.h>
 #include <tools/ee_grid_helper.h>
 #include <tools/rule_area_create_helper.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <design_block_lib_table.h>
-#include <ee_actions.h>
-#include <ee_tool_utils.h>
+#include <sch_actions.h>
+#include <sch_tool_utils.h>
 #include <sch_edit_frame.h>
 #include <pgm_base.h>
 #include <design_block.h>
@@ -77,7 +77,7 @@
 #include <wx/msgdlg.h>
 
 SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
-        EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawing" ),
+        SCH_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawing" ),
         m_lastSheetPinType( LABEL_FLAG_SHAPE::L_INPUT ),
         m_lastGlobalLabelShape( LABEL_FLAG_SHAPE::L_INPUT ),
         m_lastNetClassFlagShape( LABEL_FLAG_SHAPE::F_ROUND ),
@@ -106,7 +106,7 @@ SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
 
 bool SCH_DRAWING_TOOLS::Init()
 {
-    EE_TOOL_BASE::Init();
+    SCH_TOOL_BASE::Init();
 
     auto belowRootSheetCondition =
             [&]( const SELECTION& aSel )
@@ -121,9 +121,9 @@ bool SCH_DRAWING_TOOLS::Init()
             };
 
     CONDITIONAL_MENU& ctxMenu = m_menu->GetMenu();
-    ctxMenu.AddItem( EE_ACTIONS::leaveSheet, belowRootSheetCondition, 150 );
-    ctxMenu.AddItem( EE_ACTIONS::closeOutline, inDrawingRuleArea, 200 );
-    ctxMenu.AddItem( EE_ACTIONS::deleteLastPoint, inDrawingRuleArea, 200 );
+    ctxMenu.AddItem( SCH_ACTIONS::leaveSheet,      belowRootSheetCondition, 150 );
+    ctxMenu.AddItem( SCH_ACTIONS::closeOutline,    inDrawingRuleArea,       200 );
+    ctxMenu.AddItem( SCH_ACTIONS::deleteLastPoint, inDrawingRuleArea,       200 );
 
     return true;
 }
@@ -131,8 +131,8 @@ bool SCH_DRAWING_TOOLS::Init()
 
 int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 {
-    const EE_ACTIONS::PLACE_SYMBOL_PARAMS& toolParams =
-            aEvent.Parameter<EE_ACTIONS::PLACE_SYMBOL_PARAMS>();
+    const SCH_ACTIONS::PLACE_SYMBOL_PARAMS& toolParams =
+            aEvent.Parameter<SCH_ACTIONS::PLACE_SYMBOL_PARAMS>();
 
     SCH_SYMBOL* symbol = toolParams.m_Symbol;
     // If we get an parameterised symbol, we probably just want to place
@@ -168,11 +168,11 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     hierarchy.GetSymbols( existingRefs );
     existingRefs.SortByReferenceOnly();
 
-    if( aEvent.IsAction( &EE_ACTIONS::placeSymbol ) )
+    if( aEvent.IsAction( &SCH_ACTIONS::placeSymbol ) )
     {
         historyList = &m_symbolHistoryList;
     }
-    else if (aEvent.IsAction( &EE_ACTIONS::placePower ) )
+    else if (aEvent.IsAction( &SCH_ACTIONS::placePower ) )
     {
         historyList = &m_powerHistoryList;
         filter.FilterPowerSymbols( true );
@@ -187,7 +187,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     auto addSymbol =
             [this]( SCH_SYMBOL* aSymbol )
             {
-                m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
                 m_selectionTool->AddItemToSel( aSymbol );
 
                 aSymbol->SetFlags( IS_NEW | IS_MOVING );
@@ -210,7 +210,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     auto cleanup =
             [&]()
             {
-                m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
                 m_view->ClearPreview();
                 delete symbol;
                 symbol = nullptr;
@@ -337,7 +337,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
         {
             if( !symbol )
             {
-                m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
                 SYMBOL_LIB_TABLE* libs = PROJECT_SCH::SchSymbolLibTable( &m_frame->Prj() );
                 SYMBOL_LIB*       cache = PROJECT_SCH::SchLibs( &m_frame->Prj() )->GetCacheLibrary();
@@ -542,7 +542,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
             }
         }
         else if( evt->IsAction( &ACTIONS::duplicate )
-                 || evt->IsAction( &EE_ACTIONS::repeatDrawItem ) )
+                 || evt->IsAction( &SCH_ACTIONS::repeatDrawItem ) )
         {
             if( symbol )
             {
@@ -597,7 +597,7 @@ int SCH_DRAWING_TOOLS::PlaceNextSymbolUnit( const TOOL_EVENT& aEvent )
     if( !symbol )
     {
         static const std::vector<KICAD_T> symbolTypes = { SCH_SYMBOL_T };
-        EE_SELECTION& selection = m_selectionTool->RequestSelection( symbolTypes );
+        SCH_SELECTION& selection = m_selectionTool->RequestSelection( symbolTypes );
 
         if( selection.Size() != 1 )
         {
@@ -637,15 +637,15 @@ int SCH_DRAWING_TOOLS::PlaceNextSymbolUnit( const TOOL_EVENT& aEvent )
     newSymbol->SetRefProp( symbol->GetRef( &sheetPath, false ) );
 
     // Post the new symbol - don't reannotate it - we set the reference ourselves
-    m_toolMgr->PostAction( EE_ACTIONS::placeSymbol,
-                           EE_ACTIONS::PLACE_SYMBOL_PARAMS{ newSymbol.release(), false } );
+    m_toolMgr->PostAction( SCH_ACTIONS::placeSymbol,
+                           SCH_ACTIONS::PLACE_SYMBOL_PARAMS{ newSymbol.release(), false } );
     return 0;
 }
 
 
 int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
 {
-    bool          placingDesignBlock = aEvent.IsAction( &EE_ACTIONS::placeDesignBlock );
+    bool          placingDesignBlock = aEvent.IsAction( &SCH_ACTIONS::placeDesignBlock );
 
     DESIGN_BLOCK* designBlock = nullptr;
     wxString      sheetFileName = wxEmptyString;
@@ -697,10 +697,11 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
     auto placeSheetContents =
             [&]()
             {
-                SCH_COMMIT         commit( m_toolMgr );
-                EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-                EDA_ITEMS          newItems;
-                bool               keepAnnotations = cfg->m_DesignBlockChooserPanel.keep_annotations;
+                SCH_COMMIT          commit( m_toolMgr );
+                SCH_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+
+                EDA_ITEMS newItems;
+                bool      keepAnnotations = cfg->m_DesignBlockChooserPanel.keep_annotations;
 
                 selectionTool->ClearSelection();
 
@@ -775,7 +776,7 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                 }
 
                 // Start moving selection, cancel undoes the insertion
-                bool placed = m_toolMgr->RunSynchronousAction( EE_ACTIONS::move, &commit );
+                bool placed = m_toolMgr->RunSynchronousAction( SCH_ACTIONS::move, &commit );
 
                 // Update our cursor position to the new location in case we're placing repeated copies
                 cursorPos = grid.Align( controls->GetMousePosition(), GRID_HELPER_GRIDS::GRID_CONNECTABLE );
@@ -839,7 +840,7 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
             while( placeSheetContents() && cfg->m_DesignBlockChooserPanel.repeated_placement )
                 ;
 
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
             m_view->ClearPreview();
             delete designBlock;
             designBlock = nullptr;
@@ -886,11 +887,13 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) || isSyntheticClick )
         {
             if( placingDesignBlock )
-                m_toolMgr->PostAction( EE_ACTIONS::drawSheetFromDesignBlock, designBlock );
+            {
+                m_toolMgr->PostAction( SCH_ACTIONS::drawSheetFromDesignBlock, designBlock );
+            }
             else
             {
                 // drawSheet must delete
-                m_toolMgr->PostAction( EE_ACTIONS::drawSheetFromFile,
+                m_toolMgr->PostAction( SCH_ACTIONS::drawSheetFromFile,
                                        new wxString( sheetFileName ) );
             }
 
@@ -905,7 +908,7 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
             m_menu->ShowContextMenu( m_selectionTool->GetSelection() );
         }
         else if( evt->IsAction( &ACTIONS::duplicate )
-                 || evt->IsAction( &EE_ACTIONS::repeatDrawItem ) )
+                 || evt->IsAction( &SCH_ACTIONS::repeatDrawItem ) )
         {
             wxBell();
         }
@@ -938,7 +941,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     VECTOR2I              cursorPos;
 
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     // Add all the drawable symbols to preview
     if( image )
@@ -962,7 +965,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
     auto cleanup =
             [&] ()
             {
-                m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
                 m_view->ClearPreview();
                 m_view->RecacheAllItems();
                 delete image;
@@ -1057,7 +1060,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
         {
             if( !image )
             {
-                m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
                 wxFileDialog dlg( m_frame, _( "Choose Image" ), m_mruPath, wxEmptyString,
                                   _( "Image Files" ) + wxS( " " ) + wxImage::GetImageExtWildcard(),
@@ -1134,7 +1137,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
             m_menu->ShowContextMenu( m_selectionTool->GetSelection() );
         }
         else if( evt->IsAction( &ACTIONS::duplicate )
-                 || evt->IsAction( &EE_ACTIONS::repeatDrawItem ) )
+                 || evt->IsAction( &SCH_ACTIONS::repeatDrawItem ) )
         {
             if( image )
             {
@@ -1211,7 +1214,7 @@ int SCH_DRAWING_TOOLS::ImportGraphics( const TOOL_EVENT& aEvent )
     KIGFX::VIEW_CONTROLS*  controls = getViewControls();
     std::vector<SCH_ITEM*> newItems;      // all new items, including group
     std::vector<SCH_ITEM*> selectedItems; // the group, or newItems if no group
-    EE_SELECTION           preview;
+    SCH_SELECTION          preview;
     SCH_COMMIT             commit( m_toolMgr );
 
     for( std::unique_ptr<EDA_ITEM>& ptr : list )
@@ -1239,10 +1242,10 @@ int SCH_DRAWING_TOOLS::ImportGraphics( const TOOL_EVENT& aEvent )
     m_view->Add( &preview );
 
     // Clear the current selection then select the drawings so that edit tools work on them
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     EDA_ITEMS selItems( selectedItems.begin(), selectedItems.end() );
-    m_toolMgr->RunAction<EDA_ITEMS*>( EE_ACTIONS::addItemsToSel, &selItems );
+    m_toolMgr->RunAction<EDA_ITEMS*>( SCH_ACTIONS::addItemsToSel, &selItems );
 
     m_frame->PushTool( aEvent );
 
@@ -1286,7 +1289,7 @@ int SCH_DRAWING_TOOLS::ImportGraphics( const TOOL_EVENT& aEvent )
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
             for( SCH_ITEM* item : newItems )
                 delete item;
@@ -1354,8 +1357,8 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
 
     if( type == SCH_JUNCTION_T && aEvent.HasPosition() )
     {
-        EE_SELECTION& selection = m_selectionTool->GetSelection();
-        SCH_LINE*     wire = dynamic_cast<SCH_LINE*>( selection.Front() );
+        SCH_SELECTION& selection = m_selectionTool->GetSelection();
+        SCH_LINE*      wire = dynamic_cast<SCH_LINE*>( selection.Front() );
 
         if( wire )
         {
@@ -1393,7 +1396,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     cursorPos = aEvent.HasPosition() ? aEvent.Position() : controls->GetMousePosition();
 
@@ -1506,26 +1509,26 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         }
         else if( evt->Category() == TC_COMMAND )
         {
-            if( ( type == SCH_BUS_WIRE_ENTRY_T ) && (   evt->IsAction( &EE_ACTIONS::rotateCW )
-                                                     || evt->IsAction( &EE_ACTIONS::rotateCCW )
-                                                     || evt->IsAction( &EE_ACTIONS::mirrorV )
-                                                     || evt->IsAction( &EE_ACTIONS::mirrorH ) ) )
+            if( ( type == SCH_BUS_WIRE_ENTRY_T ) && (   evt->IsAction( &SCH_ACTIONS::rotateCW )
+                                                     || evt->IsAction( &SCH_ACTIONS::rotateCCW )
+                                                     || evt->IsAction( &SCH_ACTIONS::mirrorV )
+                                                     || evt->IsAction( &SCH_ACTIONS::mirrorH ) ) )
             {
                 SCH_BUS_ENTRY_BASE* busItem = static_cast<SCH_BUS_ENTRY_BASE*>( previewItem );
 
-                if( evt->IsAction( &EE_ACTIONS::rotateCW ) )
+                if( evt->IsAction( &SCH_ACTIONS::rotateCW ) )
                 {
                     busItem->Rotate( busItem->GetPosition(), false );
                 }
-                else if( evt->IsAction( &EE_ACTIONS::rotateCCW ) )
+                else if( evt->IsAction( &SCH_ACTIONS::rotateCCW ) )
                 {
                     busItem->Rotate( busItem->GetPosition(), true );
                 }
-                else if( evt->IsAction( &EE_ACTIONS::mirrorV ) )
+                else if( evt->IsAction( &SCH_ACTIONS::mirrorV ) )
                 {
                     busItem->MirrorVertically( busItem->GetPosition().y );
                 }
-                else if( evt->IsAction( &EE_ACTIONS::mirrorH ) )
+                else if( evt->IsAction( &SCH_ACTIONS::mirrorH ) )
                 {
                     busItem->MirrorHorizontally( busItem->GetPosition().x );
                 }
@@ -1533,7 +1536,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                 m_view->ClearPreview();
                 m_view->AddToPreview( previewItem->Clone() );
             }
-            else if( evt->IsAction( &EE_ACTIONS::properties ) )
+            else if( evt->IsAction( &SCH_ACTIONS::properties ) )
             {
                 switch( type )
                 {
@@ -1805,12 +1808,12 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
     REENTRANCY_GUARD guard( &m_inDrawingTool );
 
-    bool isText        = aEvent.IsAction( &EE_ACTIONS::placeSchematicText );
-    bool isGlobalLabel = aEvent.IsAction( &EE_ACTIONS::placeGlobalLabel );
-    bool isHierLabel   = aEvent.IsAction( &EE_ACTIONS::placeHierLabel );
-    bool isClassLabel  = aEvent.IsAction( &EE_ACTIONS::placeClassLabel );
-    bool isNetLabel    = aEvent.IsAction( &EE_ACTIONS::placeLabel );
-    bool isSheetPin    = aEvent.IsAction( &EE_ACTIONS::placeSheetPin );
+    bool isText        = aEvent.IsAction( &SCH_ACTIONS::placeSchematicText );
+    bool isGlobalLabel = aEvent.IsAction( &SCH_ACTIONS::placeGlobalLabel );
+    bool isHierLabel   = aEvent.IsAction( &SCH_ACTIONS::placeHierLabel );
+    bool isClassLabel  = aEvent.IsAction( &SCH_ACTIONS::placeClassLabel );
+    bool isNetLabel    = aEvent.IsAction( &SCH_ACTIONS::placeLabel );
+    bool isSheetPin    = aEvent.IsAction( &SCH_ACTIONS::placeSheetPin );
 
     GRID_HELPER_GRIDS snapGrid = isText ? GRID_TEXT : GRID_CONNECTABLE;
 
@@ -1818,7 +1821,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     if( isSheetPin )
         sheet = dynamic_cast<SCH_SHEET*>( m_selectionTool->GetSelection().Front() );
 
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     m_frame->PushTool( aEvent );
 
@@ -1856,7 +1859,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     auto cleanup =
             [&]()
             {
-                m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
                 m_view->ClearPreview();
                 delete item;
                 item = nullptr;
@@ -1969,7 +1972,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             // First click creates...
             if( !item )
             {
-                m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
                 if( isText )
                 {
@@ -2133,7 +2136,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     }
 
                     m_frame->PopTool( aEvent );
-                    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+                    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
                     m_dialogSyncSheetPin->Show( true );
                     break;
                 }
@@ -2178,7 +2181,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         else if( item && evt->IsSelectionEvent() )
         {
             // This happens if our text was replaced out from under us by ConvertTextType()
-            EE_SELECTION& selection = m_selectionTool->GetSelection();
+            SCH_SELECTION& selection = m_selectionTool->GetSelection();
 
             if( selection.GetSize() == 1 )
             {
@@ -2196,7 +2199,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                                              evt->Parameter<ACTIONS::INCREMENT>() );
         }
         else if( evt->IsAction( &ACTIONS::duplicate )
-                 || evt->IsAction( &EE_ACTIONS::repeatDrawItem ) )
+                 || evt->IsAction( &SCH_ACTIONS::repeatDrawItem ) )
         {
             if( item )
             {
@@ -2257,7 +2260,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     SCHEMATIC*          schematic = getModel<SCHEMATIC>();
     SCHEMATIC_SETTINGS& sch_settings = schematic->Settings();
     SCH_SHAPE*          item = nullptr;
-    bool                isTextBox = aEvent.IsAction( &EE_ACTIONS::drawTextBox );
+    bool                isTextBox = aEvent.IsAction( &SCH_ACTIONS::drawTextBox );
     SHAPE_T             type = aEvent.Parameter<SHAPE_T>();
     wxString            description;
 
@@ -2274,7 +2277,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     // gets whacked.
     m_toolMgr->DeactivateTool();
 
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     m_frame->PushTool( aEvent );
 
@@ -2287,7 +2290,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     auto cleanup =
             [&] ()
             {
-                m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
                 m_view->ClearPreview();
                 delete item;
                 item = nullptr;
@@ -2359,7 +2362,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_LEFT ) && !item )
         {
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
             if( isTextBox )
             {
@@ -2454,7 +2457,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             }
         }
         else if( evt->IsAction( &ACTIONS::duplicate )
-                 || evt->IsAction( &EE_ACTIONS::repeatDrawItem ) )
+                 || evt->IsAction( &SCH_ACTIONS::repeatDrawItem ) )
         {
             if( item )
             {
@@ -2477,7 +2480,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsDblClick( BUT_LEFT ) && !item )
         {
-            m_toolMgr->RunAction( EE_ACTIONS::properties );
+            m_toolMgr->RunAction( SCH_ACTIONS::properties );
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
@@ -2528,7 +2531,7 @@ int SCH_DRAWING_TOOLS::DrawRuleArea( const TOOL_EVENT& aEvent )
     // gets whacked.
     m_toolMgr->DeactivateTool();
 
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     m_frame->PushTool( aEvent );
 
@@ -2544,7 +2547,7 @@ int SCH_DRAWING_TOOLS::DrawRuleArea( const TOOL_EVENT& aEvent )
         started = false;
         getViewControls()->SetAutoPan( false );
         getViewControls()->CaptureCursor( false );
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
     };
 
     Activate();
@@ -2618,11 +2621,11 @@ int SCH_DRAWING_TOOLS::DrawRuleArea( const TOOL_EVENT& aEvent )
         }
         // events that lock in nodes
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
-                 || evt->IsAction( &EE_ACTIONS::closeOutline ) )
+                 || evt->IsAction( &SCH_ACTIONS::closeOutline ) )
         {
             // Check if it is double click / closing line (so we have to finish the zone)
             const bool endPolygon = evt->IsDblClick( BUT_LEFT )
-                                    || evt->IsAction( &EE_ACTIONS::closeOutline )
+                                    || evt->IsAction( &SCH_ACTIONS::closeOutline )
                                     || polyGeomMgr.NewPointClosesOutline( cursorPos );
 
             if( endPolygon )
@@ -2647,7 +2650,7 @@ int SCH_DRAWING_TOOLS::DrawRuleArea( const TOOL_EVENT& aEvent )
             }
         }
         else if( started
-                 && ( evt->IsAction( &EE_ACTIONS::deleteLastPoint )
+                 && ( evt->IsAction( &SCH_ACTIONS::deleteLastPoint )
                       || evt->IsAction( &ACTIONS::doDelete )
                       || evt->IsAction( &ACTIONS::undo ) ) )
         {
@@ -2699,7 +2702,7 @@ int SCH_DRAWING_TOOLS::DrawTable( const TOOL_EVENT& aEvent )
     // gets whacked.
     m_toolMgr->DeactivateTool();
 
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     m_frame->PushTool( aEvent );
 
@@ -2712,7 +2715,7 @@ int SCH_DRAWING_TOOLS::DrawTable( const TOOL_EVENT& aEvent )
     auto cleanup =
             [&] ()
             {
-                m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
                 m_view->ClearPreview();
                 delete table;
                 table = nullptr;
@@ -2786,7 +2789,7 @@ int SCH_DRAWING_TOOLS::DrawTable( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_LEFT ) && !table )
         {
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
             table = new SCH_TABLE( 0 );
             table->SetColCount( 1 );
@@ -2807,7 +2810,7 @@ int SCH_DRAWING_TOOLS::DrawTable( const TOOL_EVENT& aEvent )
         else if( table && (   evt->IsClick( BUT_LEFT )
                            || evt->IsDblClick( BUT_LEFT )
                            || isSyntheticClick
-                           || evt->IsAction( &EE_ACTIONS::finishInteractive ) ) )
+                           || evt->IsAction( &SCH_ACTIONS::finishInteractive ) ) )
         {
             table->ClearEditFlags();
             table->SetFlags( IS_NEW );
@@ -2877,7 +2880,7 @@ int SCH_DRAWING_TOOLS::DrawTable( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsDblClick( BUT_LEFT ) && !table )
         {
-            m_toolMgr->RunAction( EE_ACTIONS::properties );
+            m_toolMgr->RunAction( SCH_ACTIONS::properties );
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
@@ -2910,8 +2913,8 @@ int SCH_DRAWING_TOOLS::DrawTable( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 {
-    bool isDrawSheetCopy = aEvent.IsAction( &EE_ACTIONS::drawSheetFromFile );
-    bool isDrawSheetFromDesignBlock = aEvent.IsAction( &EE_ACTIONS::drawSheetFromDesignBlock );
+    bool isDrawSheetCopy = aEvent.IsAction( &SCH_ACTIONS::drawSheetFromFile );
+    bool isDrawSheetFromDesignBlock = aEvent.IsAction( &SCH_ACTIONS::drawSheetFromDesignBlock );
 
     DESIGN_BLOCK* designBlock = nullptr;
     SCH_SHEET*    sheet = nullptr;
@@ -2950,7 +2953,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
     EE_GRID_HELPER        grid( m_toolMgr );
     VECTOR2I              cursorPos;
 
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     m_frame->PushTool( aEvent );
 
@@ -2963,7 +2966,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
     auto cleanup =
             [&] ()
             {
-                m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
                 m_view->ClearPreview();
                 delete sheet;
                 sheet = nullptr;
@@ -3041,7 +3044,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
         }
         else if( !sheet && ( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) ) )
         {
-            EE_SELECTION& selection = m_selectionTool->GetSelection();
+            SCH_SELECTION& selection = m_selectionTool->GetSelection();
 
             if( selection.Size() == 1
                     && selection.Front()->Type() == SCH_SHEET_T
@@ -3054,13 +3057,13 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                 }
                 else if( evt->IsDblClick( BUT_LEFT ) )
                 {
-                    m_toolMgr->PostAction( EE_ACTIONS::enterSheet );
+                    m_toolMgr->PostAction( SCH_ACTIONS::enterSheet );
                     m_frame->PopTool( aEvent );
                     break;
                 }
             }
 
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
             sheet = new SCH_SHEET( m_frame->GetCurrentSheet().Last(), cursorPos );
             sheet->SetScreen( nullptr );
@@ -3170,7 +3173,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             sheet = nullptr;
         }
         else if( evt->IsAction( &ACTIONS::duplicate )
-                 || evt->IsAction( &EE_ACTIONS::repeatDrawItem ) )
+                 || evt->IsAction( &SCH_ACTIONS::repeatDrawItem ) )
         {
             if( sheet )
             {
@@ -3268,8 +3271,8 @@ int SCH_DRAWING_TOOLS::doSyncSheetsPins( std::list<SCH_SHEET_PATH> sheetPaths )
                     [&]( EDA_ITEM* aItem, SCH_SHEET_PATH aPath )
                     {
                         m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>(
-                                EE_ACTIONS::changeSheet, &aPath );
-                        EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+                                SCH_ACTIONS::changeSheet, &aPath );
+                        SCH_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
                         selectionTool->UnbrightenItem( aItem );
                         selectionTool->AddItemToSel( aItem, true );
                         m_toolMgr->RunAction( ACTIONS::doDelete );
@@ -3288,8 +3291,8 @@ int SCH_DRAWING_TOOLS::doSyncSheetsPins( std::list<SCH_SHEET_PATH> sheetPaths )
                                     sheet, DIALOG_SYNC_SHEET_PINS::PlaceItemKind::HIERLABEL,
                                     aTemplates );
                             m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>(
-                                    EE_ACTIONS::changeSheet, &aPath );
-                            m_toolMgr->RunAction( EE_ACTIONS::placeHierLabel );
+                                    SCH_ACTIONS::changeSheet, &aPath );
+                            m_toolMgr->RunAction( SCH_ACTIONS::placeHierLabel );
                             break;
                         }
                         case SHEET_SYNCHRONIZATION_AGENT::PLACE_SHEET_PIN:
@@ -3300,10 +3303,10 @@ int SCH_DRAWING_TOOLS::doSyncSheetsPins( std::list<SCH_SHEET_PATH> sheetPaths )
                                     sheet, DIALOG_SYNC_SHEET_PINS::PlaceItemKind::SHEET_PIN,
                                     aTemplates );
                             m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>(
-                                    EE_ACTIONS::changeSheet, &aPath );
-                            m_toolMgr->GetTool<EE_SELECTION_TOOL>()->SyncSelection( {}, nullptr,
-                                                                                    { sheet } );
-                            m_toolMgr->RunAction( EE_ACTIONS::placeSheetPin );
+                                    SCH_ACTIONS::changeSheet, &aPath );
+                            m_toolMgr->GetTool<SCH_SELECTION_TOOL>()->SyncSelection( {}, nullptr,
+                                                                                     { sheet } );
+                            m_toolMgr->RunAction( SCH_ACTIONS::placeSheetPin );
                             break;
                         }
                         }
@@ -3357,12 +3360,12 @@ int SCH_DRAWING_TOOLS::AutoPlaceAllSheetPins( const TOOL_EVENT& aEvent )
         m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
         m_statusPopup->PopupFor( 2000 );
         m_frame->PopTool( aEvent );
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
         m_view->ClearPreview();
         return 0;
     }
 
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     SCH_COMMIT commit( m_toolMgr );
     BOX2I      boundingBox = sheet->GetBoundingBox();
@@ -3535,34 +3538,34 @@ std::vector<SCH_HIERLABEL*> SCH_DRAWING_TOOLS::importHierLabels( SCH_SHEET* aShe
 void SCH_DRAWING_TOOLS::setTransitions()
 {
     // clang-format off
-    Go( &SCH_DRAWING_TOOLS::PlaceSymbol,         EE_ACTIONS::placeSymbol.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::PlaceSymbol,         EE_ACTIONS::placePower.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::PlaceNextSymbolUnit, EE_ACTIONS::placeNextSymbolUnit.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::SingleClickPlace,    EE_ACTIONS::placeNoConnect.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::SingleClickPlace,    EE_ACTIONS::placeJunction.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::SingleClickPlace,    EE_ACTIONS::placeBusWireEntry.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::TwoClickPlace,       EE_ACTIONS::placeLabel.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::TwoClickPlace,       EE_ACTIONS::placeClassLabel.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::TwoClickPlace,       EE_ACTIONS::placeHierLabel.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::TwoClickPlace,       EE_ACTIONS::placeGlobalLabel.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::DrawSheet,           EE_ACTIONS::drawSheet.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::DrawSheet,           EE_ACTIONS::drawSheetFromFile.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::DrawSheet,           EE_ACTIONS::drawSheetFromDesignBlock.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::TwoClickPlace,       EE_ACTIONS::placeSheetPin.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::ImportSheet,         EE_ACTIONS::placeDesignBlock.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::ImportSheet,         EE_ACTIONS::importSheet.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::TwoClickPlace,       EE_ACTIONS::placeSchematicText.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawRectangle.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawCircle.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawArc.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawBezier.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawTextBox.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::DrawRuleArea,        EE_ACTIONS::drawRuleArea.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::DrawTable,           EE_ACTIONS::drawTable.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::PlaceImage,          EE_ACTIONS::placeImage.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::ImportGraphics,      EE_ACTIONS::importGraphics.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::SyncSheetsPins,      EE_ACTIONS::syncSheetPins.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::SyncAllSheetsPins,   EE_ACTIONS::syncAllSheetsPins.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::AutoPlaceAllSheetPins,   EE_ACTIONS::autoplaceAllSheetPins.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::PlaceSymbol,           SCH_ACTIONS::placeSymbol.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::PlaceSymbol,           SCH_ACTIONS::placePower.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::PlaceNextSymbolUnit,   SCH_ACTIONS::placeNextSymbolUnit.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::SingleClickPlace,      SCH_ACTIONS::placeNoConnect.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::SingleClickPlace,      SCH_ACTIONS::placeJunction.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::SingleClickPlace,      SCH_ACTIONS::placeBusWireEntry.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::TwoClickPlace,         SCH_ACTIONS::placeLabel.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::TwoClickPlace,         SCH_ACTIONS::placeClassLabel.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::TwoClickPlace,         SCH_ACTIONS::placeHierLabel.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::TwoClickPlace,         SCH_ACTIONS::placeGlobalLabel.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::DrawSheet,             SCH_ACTIONS::drawSheet.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::DrawSheet,             SCH_ACTIONS::drawSheetFromFile.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::DrawSheet,             SCH_ACTIONS::drawSheetFromDesignBlock.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::TwoClickPlace,         SCH_ACTIONS::placeSheetPin.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::ImportSheet,           SCH_ACTIONS::placeDesignBlock.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::ImportSheet,           SCH_ACTIONS::importSheet.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::TwoClickPlace,         SCH_ACTIONS::placeSchematicText.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::DrawShape,             SCH_ACTIONS::drawRectangle.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::DrawShape,             SCH_ACTIONS::drawCircle.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::DrawShape,             SCH_ACTIONS::drawArc.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::DrawShape,             SCH_ACTIONS::drawBezier.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::DrawShape,             SCH_ACTIONS::drawTextBox.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::DrawRuleArea,          SCH_ACTIONS::drawRuleArea.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::DrawTable,             SCH_ACTIONS::drawTable.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::PlaceImage,            SCH_ACTIONS::placeImage.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::ImportGraphics,        SCH_ACTIONS::importGraphics.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::SyncSheetsPins,        SCH_ACTIONS::syncSheetPins.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::SyncAllSheetsPins,     SCH_ACTIONS::syncAllSheetsPins.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::AutoPlaceAllSheetPins, SCH_ACTIONS::autoplaceAllSheetPins.MakeEvent() );
     // clang-format on
 }

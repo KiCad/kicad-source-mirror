@@ -35,7 +35,7 @@
 #include <trace_helpers.h>
 #include <connection_graph.h>
 #include <widgets/wx_aui_utils.h>
-#include <tools/ee_actions.h>
+#include <tools/sch_actions.h>
 
 
 static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
@@ -542,7 +542,7 @@ void SCH_EDIT_FRAME::onNetNavigatorSelection( wxTreeEvent& aEvent )
 
     if( GetCurrentSheet() != itemData->GetSheetPath() )
     {
-        GetToolManager()->RunAction<SCH_SHEET_PATH*>( EE_ACTIONS::changeSheet,
+        GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet,
                                                       &itemData->GetSheetPath() );
     }
 

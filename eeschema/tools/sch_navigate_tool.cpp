@@ -24,7 +24,7 @@
 
 #include <schematic.h>
 #include <eeschema_id.h>
-#include <tools/ee_actions.h>
+#include <tools/sch_actions.h>
 #include <tools/sch_navigate_tool.h>
 #include "eda_doc.h"
 
@@ -123,7 +123,7 @@ int SCH_NAVIGATE_TOOL::Forward( const TOOL_EVENT& aEvent )
         m_navIndex++;
 
         m_frame->GetToolManager()->RunAction( ACTIONS::cancelInteractive );
-        m_frame->GetToolManager()->RunAction( EE_ACTIONS::clearSelection );
+        m_frame->GetToolManager()->RunAction( SCH_ACTIONS::clearSelection );
 
         m_frame->SetCurrentSheet( *m_navIndex );
         m_frame->DisplayCurrentSheet();
@@ -144,7 +144,7 @@ int SCH_NAVIGATE_TOOL::Back( const TOOL_EVENT& aEvent )
         m_navIndex--;
 
         m_frame->GetToolManager()->RunAction( ACTIONS::cancelInteractive );
-        m_frame->GetToolManager()->RunAction( EE_ACTIONS::clearSelection );
+        m_frame->GetToolManager()->RunAction( SCH_ACTIONS::clearSelection );
 
         m_frame->SetCurrentSheet( *m_navIndex );
         m_frame->DisplayCurrentSheet();
@@ -234,8 +234,8 @@ int SCH_NAVIGATE_TOOL::ChangeSheet( const TOOL_EVENT& aEvent )
 
 int SCH_NAVIGATE_TOOL::EnterSheet( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    const EE_SELECTION& selection = selTool->RequestSelection( { SCH_SHEET_T } );
+    SCH_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    const SCH_SELECTION& selection = selTool->RequestSelection( { SCH_SHEET_T } );
 
     if( selection.GetSize() == 1 )
     {
@@ -269,16 +269,16 @@ int SCH_NAVIGATE_TOOL::LeaveSheet( const TOOL_EVENT& aEvent )
 
 void SCH_NAVIGATE_TOOL::setTransitions()
 {
-    Go( &SCH_NAVIGATE_TOOL::ChangeSheet,           EE_ACTIONS::changeSheet.MakeEvent() );
-    Go( &SCH_NAVIGATE_TOOL::EnterSheet,            EE_ACTIONS::enterSheet.MakeEvent() );
-    Go( &SCH_NAVIGATE_TOOL::LeaveSheet,            EE_ACTIONS::leaveSheet.MakeEvent() );
+    Go( &SCH_NAVIGATE_TOOL::ChangeSheet,           SCH_ACTIONS::changeSheet.MakeEvent() );
+    Go( &SCH_NAVIGATE_TOOL::EnterSheet,            SCH_ACTIONS::enterSheet.MakeEvent() );
+    Go( &SCH_NAVIGATE_TOOL::LeaveSheet,            SCH_ACTIONS::leaveSheet.MakeEvent() );
 
-    Go( &SCH_NAVIGATE_TOOL::Up,                    EE_ACTIONS::navigateUp.MakeEvent() );
-    Go( &SCH_NAVIGATE_TOOL::Forward,               EE_ACTIONS::navigateForward.MakeEvent() );
-    Go( &SCH_NAVIGATE_TOOL::Back,                  EE_ACTIONS::navigateBack.MakeEvent() );
+    Go( &SCH_NAVIGATE_TOOL::Up,                    SCH_ACTIONS::navigateUp.MakeEvent() );
+    Go( &SCH_NAVIGATE_TOOL::Forward,               SCH_ACTIONS::navigateForward.MakeEvent() );
+    Go( &SCH_NAVIGATE_TOOL::Back,                  SCH_ACTIONS::navigateBack.MakeEvent() );
 
-    Go( &SCH_NAVIGATE_TOOL::Previous,              EE_ACTIONS::navigatePrevious.MakeEvent() );
-    Go( &SCH_NAVIGATE_TOOL::Next,                  EE_ACTIONS::navigateNext.MakeEvent() );
+    Go( &SCH_NAVIGATE_TOOL::Previous,              SCH_ACTIONS::navigatePrevious.MakeEvent() );
+    Go( &SCH_NAVIGATE_TOOL::Next,                  SCH_ACTIONS::navigateNext.MakeEvent() );
 }
 
 
@@ -297,7 +297,7 @@ void SCH_NAVIGATE_TOOL::pushToHistory( SCH_SHEET_PATH aPath )
 void SCH_NAVIGATE_TOOL::changeSheet( SCH_SHEET_PATH aPath )
 {
     m_frame->GetToolManager()->RunAction( ACTIONS::cancelInteractive );
-    m_frame->GetToolManager()->RunAction( EE_ACTIONS::clearSelection );
+    m_frame->GetToolManager()->RunAction( SCH_ACTIONS::clearSelection );
 
     // Store the current zoom level into the current screen before switching
     m_frame->GetScreen()->m_LastZoomLevel = m_frame->GetCanvas()->GetView()->GetScale();

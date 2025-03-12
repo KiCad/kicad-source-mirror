@@ -22,15 +22,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef KICAD_SCH_SELECTION_TOOL_H
-#define KICAD_SCH_SELECTION_TOOL_H
+#ifndef SCH_SELECTION_TOOL_H
+#define SCH_SELECTION_TOOL_H
 
 #include <project/sch_project_settings.h>
 #include <tool/selection_tool.h>
 #include <tool/action_menu.h>
 #include <tool/tool_menu.h>
-#include <tools/ee_selection.h>
-#include <ee_collectors.h>
+#include <tools/sch_selection.h>
+#include <sch_collectors.h>
 #include <sch_symbol.h>
 #include <gal/cursors.h>
 
@@ -45,7 +45,7 @@ namespace KIGFX
 }
 
 
-class EE_CONDITIONS : public SELECTION_CONDITIONS
+class SCH_CONDITIONS : public SELECTION_CONDITIONS
 {
 public:
     static SELECTION_CONDITION SingleSymbol;
@@ -60,11 +60,11 @@ public:
 };
 
 
-class EE_SELECTION_TOOL : public SELECTION_TOOL
+class SCH_SELECTION_TOOL : public SELECTION_TOOL
 {
 public:
-    EE_SELECTION_TOOL();
-    ~EE_SELECTION_TOOL();
+    SCH_SELECTION_TOOL();
+    ~SCH_SELECTION_TOOL();
 
     /// @copydoc TOOL_BASE::Init()
     bool Init() override;
@@ -85,7 +85,7 @@ public:
     /**
      * @return the set of currently selected items.
      */
-    EE_SELECTION& GetSelection();
+    SCH_SELECTION& GetSelection();
 
     /**
      * Return either an existing selection (filtered), or the selection at the current cursor
@@ -94,8 +94,8 @@ public:
      * @param aScanTypes [optional] List of item types that are acceptable for selection.
      * @return either the current selection or, if empty, the selection at the cursor.
      */
-    EE_SELECTION& RequestSelection( const std::vector<KICAD_T>& aScanTypes = { SCH_LOCATE_ANY_T },
-                                    bool aPromoteCellSelections = false );
+    SCH_SELECTION& RequestSelection( const std::vector<KICAD_T>& aScanTypes = { SCH_LOCATE_ANY_T },
+                                     bool aPromoteCellSelections = false );
 
     /**
      * Perform a click-type selection at a point (usually the cursor position).
@@ -172,7 +172,7 @@ public:
      * Apply heuristics to try and determine a single object when multiple are found under the
      * cursor.
      */
-    void GuessSelectionCandidates( EE_COLLECTOR& collector, const VECTOR2I& aPos );
+    void GuessSelectionCandidates( SCH_COLLECTOR& collector, const VECTOR2I& aPos );
 
     /**
      * Rebuild the selection from the EDA_ITEMs' selection flags.
@@ -190,7 +190,7 @@ public:
      * @param aWhere Point from which the collection should be made.
      * @param aScanTypes [optional] A list of item types that are acceptable for collection.
      */
-    bool CollectHits( EE_COLLECTOR& aCollector, const VECTOR2I& aWhere,
+    bool CollectHits( SCH_COLLECTOR& aCollector, const VECTOR2I& aWhere,
                       const std::vector<KICAD_T>& aScanTypes = { SCH_LOCATE_ANY_T } );
 
     ///< Set selection to items passed by parameter.
@@ -215,7 +215,7 @@ private:
      * @param aCheckLocked If false, remove locked elements from #collector
      * @param aSelectedOnly If true, remove non-selected items from #collector
      */
-    void narrowSelection( EE_COLLECTOR& collector, const VECTOR2I& aWhere, bool aCheckLocked,
+    void narrowSelection( SCH_COLLECTOR& collector, const VECTOR2I& aWhere, bool aCheckLocked,
                           bool aSelectedOnly = false );
 
     /**
@@ -233,7 +233,7 @@ private:
      * @param aExclusiveOr Indicates if found item(s) should be toggle in the selection.
      * @return true if the selection was modified.
      */
-    bool selectPoint( EE_COLLECTOR& aCollector, const VECTOR2I& aWhere, EDA_ITEM** aItem = nullptr,
+    bool selectPoint( SCH_COLLECTOR& aCollector, const VECTOR2I& aWhere, EDA_ITEM** aItem = nullptr,
                       bool* aSelectionCancelledFlag = nullptr, bool aAdd = false,
                       bool aSubtract = false, bool aExclusiveOr = false );
 
@@ -309,7 +309,7 @@ private:
 private:
 
     SCH_BASE_FRAME* m_frame;             // Pointer to the parent frame
-    EE_SELECTION    m_selection;         // Current state of selection
+    SCH_SELECTION   m_selection;         // Current state of selection
 
     KICURSOR        m_nonModifiedCursor; // Cursor in the absence of shift/ctrl/alt
 
@@ -321,4 +321,4 @@ private:
     SCH_SELECTION_FILTER_OPTIONS m_filter;
 };
 
-#endif //KICAD_SCH_SELECTION_TOOL_H
+#endif //SCH_SELECTION_TOOL_H

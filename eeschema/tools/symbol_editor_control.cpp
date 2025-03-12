@@ -30,7 +30,7 @@
 #include <sch_painter.h>
 #include <tool/tool_manager.h>
 #include <tool/library_editor_control.h>
-#include <tools/ee_actions.h>
+#include <tools/sch_actions.h>
 #include <lib_symbol_library_manager.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <symbol_viewer_frame.h>
@@ -48,7 +48,7 @@
 bool SYMBOL_EDITOR_CONTROL::Init()
 {
     m_frame = getEditFrame<SCH_BASE_FRAME>();
-    m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+    m_selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
     m_isSymbolEditor = m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR );
 
     if( m_isSymbolEditor )
@@ -131,27 +131,27 @@ bool SYMBOL_EDITOR_CONTROL::Init()
                 };
 
 // clang-format off
-        ctxMenu.AddItem( EE_ACTIONS::newSymbol,           libInferredCondition, 10 );
-        ctxMenu.AddItem( EE_ACTIONS::deriveFromExistingSymbol, symbolSelectedCondition, 10 );
+        ctxMenu.AddItem( SCH_ACTIONS::newSymbol,                libInferredCondition, 10 );
+        ctxMenu.AddItem( SCH_ACTIONS::deriveFromExistingSymbol, symbolSelectedCondition, 10 );
 
         ctxMenu.AddSeparator( 10 );
         ctxMenu.AddItem( ACTIONS::save,                   symbolSelectedCondition || libInferredCondition, 10 );
-        ctxMenu.AddItem( EE_ACTIONS::saveLibraryAs,       libSelectedCondition, 10 );
-        ctxMenu.AddItem( EE_ACTIONS::saveSymbolAs,        symbolSelectedCondition, 10 );
-        ctxMenu.AddItem( EE_ACTIONS::saveSymbolCopyAs,    symbolSelectedCondition, 10 );
+        ctxMenu.AddItem( SCH_ACTIONS::saveLibraryAs,      libSelectedCondition, 10 );
+        ctxMenu.AddItem( SCH_ACTIONS::saveSymbolAs,       symbolSelectedCondition, 10 );
+        ctxMenu.AddItem( SCH_ACTIONS::saveSymbolCopyAs,   symbolSelectedCondition, 10 );
         ctxMenu.AddItem( ACTIONS::revert,                 symbolSelectedCondition || libInferredCondition, 10 );
 
         ctxMenu.AddSeparator( 10 );
-        ctxMenu.AddItem( EE_ACTIONS::cutSymbol,           symbolSelectedCondition || multiSymbolSelectedCondition, 10 );
-        ctxMenu.AddItem( EE_ACTIONS::copySymbol,          symbolSelectedCondition || multiSymbolSelectedCondition, 10 );
-        ctxMenu.AddItem( EE_ACTIONS::pasteSymbol,         libInferredCondition, 10 );
-        ctxMenu.AddItem( EE_ACTIONS::duplicateSymbol,     symbolSelectedCondition, 10 );
-        ctxMenu.AddItem( EE_ACTIONS::renameSymbol,        symbolSelectedCondition, 10 );
-        ctxMenu.AddItem( EE_ACTIONS::deleteSymbol,        symbolSelectedCondition || multiSymbolSelectedCondition, 10 );
+        ctxMenu.AddItem( SCH_ACTIONS::cutSymbol,          symbolSelectedCondition || multiSymbolSelectedCondition, 10 );
+        ctxMenu.AddItem( SCH_ACTIONS::copySymbol,         symbolSelectedCondition || multiSymbolSelectedCondition, 10 );
+        ctxMenu.AddItem( SCH_ACTIONS::pasteSymbol,        libInferredCondition, 10 );
+        ctxMenu.AddItem( SCH_ACTIONS::duplicateSymbol,    symbolSelectedCondition, 10 );
+        ctxMenu.AddItem( SCH_ACTIONS::renameSymbol,       symbolSelectedCondition, 10 );
+        ctxMenu.AddItem( SCH_ACTIONS::deleteSymbol,       symbolSelectedCondition || multiSymbolSelectedCondition, 10 );
 
         ctxMenu.AddSeparator( 100 );
-        ctxMenu.AddItem( EE_ACTIONS::importSymbol,        libInferredCondition, 100 );
-        ctxMenu.AddItem( EE_ACTIONS::exportSymbol,        symbolSelectedCondition );
+        ctxMenu.AddItem( SCH_ACTIONS::importSymbol,       libInferredCondition, 100 );
+        ctxMenu.AddItem( SCH_ACTIONS::exportSymbol,       symbolSelectedCondition );
 
         if( ADVANCED_CFG::GetCfg().m_EnableLibWithText )
         {
@@ -265,11 +265,11 @@ int SYMBOL_EDITOR_CONTROL::AddSymbol( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    if( aEvent.IsAction( &EE_ACTIONS::newSymbol ) )
+    if( aEvent.IsAction( &SCH_ACTIONS::newSymbol ) )
         editFrame->CreateNewSymbol();
-    else if( aEvent.IsAction( &EE_ACTIONS::deriveFromExistingSymbol ) )
+    else if( aEvent.IsAction( &SCH_ACTIONS::deriveFromExistingSymbol ) )
         editFrame->CreateNewSymbol( target.GetLibItemName() );
-    else if( aEvent.IsAction( &EE_ACTIONS::importSymbol ) )
+    else if( aEvent.IsAction( &SCH_ACTIONS::importSymbol ) )
         editFrame->ImportSymbol();
 
     return 0;
@@ -283,15 +283,15 @@ int SYMBOL_EDITOR_CONTROL::Save( const TOOL_EVENT& aEvt )
 
     SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
 
-    if( aEvt.IsAction( &EE_ACTIONS::save ) )
+    if( aEvt.IsAction( &SCH_ACTIONS::save ) )
         editFrame->Save();
-    else if( aEvt.IsAction( &EE_ACTIONS::saveLibraryAs ) )
+    else if( aEvt.IsAction( &SCH_ACTIONS::saveLibraryAs ) )
         editFrame->SaveLibraryAs();
-    else if( aEvt.IsAction( &EE_ACTIONS::saveSymbolAs ) )
+    else if( aEvt.IsAction( &SCH_ACTIONS::saveSymbolAs ) )
         editFrame->SaveSymbolCopyAs( true );
-    else if( aEvt.IsAction( &EE_ACTIONS::saveSymbolCopyAs ) )
+    else if( aEvt.IsAction( &SCH_ACTIONS::saveSymbolCopyAs ) )
         editFrame->SaveSymbolCopyAs( false );
-    else if( aEvt.IsAction( &EE_ACTIONS::saveAll ) )
+    else if( aEvt.IsAction( &SCH_ACTIONS::saveAll ) )
         editFrame->SaveAll();
 
     return 0;
@@ -390,10 +390,10 @@ int SYMBOL_EDITOR_CONTROL::CutCopyDelete( const TOOL_EVENT& aEvt )
 
     SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
 
-    if( aEvt.IsAction( &EE_ACTIONS::cutSymbol ) || aEvt.IsAction( &EE_ACTIONS::copySymbol ) )
+    if( aEvt.IsAction( &SCH_ACTIONS::cutSymbol ) || aEvt.IsAction( &SCH_ACTIONS::copySymbol ) )
         editFrame->CopySymbolToClipboard();
 
-    if( aEvt.IsAction( &EE_ACTIONS::cutSymbol ) || aEvt.IsAction( &EE_ACTIONS::deleteSymbol ) )
+    if( aEvt.IsAction( &SCH_ACTIONS::cutSymbol ) || aEvt.IsAction( &SCH_ACTIONS::deleteSymbol ) )
     {
         bool hasWritableLibs = false;
         wxString msg;
@@ -430,7 +430,7 @@ int SYMBOL_EDITOR_CONTROL::DuplicateSymbol( const TOOL_EVENT& aEvent )
     LIB_ID             sel = editFrame->GetTargetLibId();
     // DuplicateSymbol() is called to duplicate a symbol, or to paste a previously
     // saved symbol in clipboard
-    bool               isPasteAction = aEvent.IsAction( &EE_ACTIONS::pasteSymbol );
+    bool               isPasteAction = aEvent.IsAction( &SCH_ACTIONS::pasteSymbol );
     wxString           msg;
 
     if( !sel.IsValid() && !isPasteAction )
@@ -567,13 +567,13 @@ int SYMBOL_EDITOR_CONTROL::RenameSymbol( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_CONTROL::OnDeMorgan( const TOOL_EVENT& aEvent )
 {
-    int bodyStyle = aEvent.IsAction( &EE_ACTIONS::showDeMorganStandard ) ? BODY_STYLE::BASE
-                                                                         : BODY_STYLE::DEMORGAN;
+    int bodyStyle = aEvent.IsAction( &SCH_ACTIONS::showDeMorganStandard ) ? BODY_STYLE::BASE
+                                                                          : BODY_STYLE::DEMORGAN;
 
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
         m_toolMgr->RunAction( ACTIONS::cancelInteractive );
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
         SYMBOL_EDIT_FRAME* symbolEditor = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
         symbolEditor->SetBodyStyle( bodyStyle );
@@ -848,8 +848,8 @@ int SYMBOL_EDITOR_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
         }
 
         schframe->Raise();
-        schframe->GetToolManager()->PostAction( EE_ACTIONS::placeSymbol,
-                                                EE_ACTIONS::PLACE_SYMBOL_PARAMS{ symbol, true } );
+        schframe->GetToolManager()->PostAction( SCH_ACTIONS::placeSymbol,
+                                                SCH_ACTIONS::PLACE_SYMBOL_PARAMS{ symbol, true } );
     }
 
     return 0;
@@ -878,49 +878,49 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
     // clang-format off
     Go( &SYMBOL_EDITOR_CONTROL::AddLibrary,            ACTIONS::newLibrary.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::AddLibrary,            ACTIONS::addLibrary.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::AddSymbol,             EE_ACTIONS::newSymbol.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::AddSymbol,             EE_ACTIONS::deriveFromExistingSymbol.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::AddSymbol,             EE_ACTIONS::importSymbol.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::EditSymbol,            EE_ACTIONS::editSymbol.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::EditLibrarySymbol,     EE_ACTIONS::editLibSymbolWithLibEdit.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::AddSymbol,             SCH_ACTIONS::newSymbol.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::AddSymbol,             SCH_ACTIONS::deriveFromExistingSymbol.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::AddSymbol,             SCH_ACTIONS::importSymbol.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::EditSymbol,            SCH_ACTIONS::editSymbol.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::EditLibrarySymbol,     SCH_ACTIONS::editLibSymbolWithLibEdit.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_CONTROL::DdAddLibrary,          ACTIONS::ddAddLibrary.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_CONTROL::Save,                  ACTIONS::save.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::Save,                  EE_ACTIONS::saveLibraryAs.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::Save,                  EE_ACTIONS::saveSymbolAs.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::Save,                  EE_ACTIONS::saveSymbolCopyAs.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::Save,                  SCH_ACTIONS::saveLibraryAs.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::Save,                  SCH_ACTIONS::saveSymbolAs.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::Save,                  SCH_ACTIONS::saveSymbolCopyAs.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::Save,                  ACTIONS::saveAll.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::Revert,                ACTIONS::revert.MakeEvent() );
 
-    Go( &SYMBOL_EDITOR_CONTROL::DuplicateSymbol,       EE_ACTIONS::duplicateSymbol.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::RenameSymbol,          EE_ACTIONS::renameSymbol.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::CutCopyDelete,         EE_ACTIONS::deleteSymbol.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::CutCopyDelete,         EE_ACTIONS::cutSymbol.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::CutCopyDelete,         EE_ACTIONS::copySymbol.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::DuplicateSymbol,       EE_ACTIONS::pasteSymbol.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::ExportSymbol,          EE_ACTIONS::exportSymbol.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::DuplicateSymbol,       SCH_ACTIONS::duplicateSymbol.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::RenameSymbol,          SCH_ACTIONS::renameSymbol.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::CutCopyDelete,         SCH_ACTIONS::deleteSymbol.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::CutCopyDelete,         SCH_ACTIONS::cutSymbol.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::CutCopyDelete,         SCH_ACTIONS::copySymbol.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::DuplicateSymbol,       SCH_ACTIONS::pasteSymbol.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ExportSymbol,          SCH_ACTIONS::exportSymbol.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_CONTROL::OpenWithTextEditor,    ACTIONS::openWithTextEditor.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::OpenDirectory,         ACTIONS::openDirectory.MakeEvent() );
 
-    Go( &SYMBOL_EDITOR_CONTROL::ExportView,            EE_ACTIONS::exportSymbolView.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::ExportSymbolAsSVG,     EE_ACTIONS::exportSymbolAsSVG.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::AddSymbolToSchematic,  EE_ACTIONS::addSymbolToSchematic.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ExportView,            SCH_ACTIONS::exportSymbolView.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ExportSymbolAsSVG,     SCH_ACTIONS::exportSymbolAsSVG.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::AddSymbolToSchematic,  SCH_ACTIONS::addSymbolToSchematic.MakeEvent() );
 
-    Go( &SYMBOL_EDITOR_CONTROL::OnDeMorgan,            EE_ACTIONS::showDeMorganStandard.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::OnDeMorgan,            EE_ACTIONS::showDeMorganAlternate.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::OnDeMorgan,            SCH_ACTIONS::showDeMorganStandard.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::OnDeMorgan,            SCH_ACTIONS::showDeMorganAlternate.MakeEvent() );
 
-    Go( &SYMBOL_EDITOR_CONTROL::ShowElectricalTypes,   EE_ACTIONS::showElectricalTypes.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::ShowPinNumbers,        EE_ACTIONS::showPinNumbers.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::ToggleSyncedPinsMode,  EE_ACTIONS::toggleSyncedPinsMode.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ShowElectricalTypes,   SCH_ACTIONS::showElectricalTypes.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ShowPinNumbers,        SCH_ACTIONS::showPinNumbers.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ToggleSyncedPinsMode,  SCH_ACTIONS::toggleSyncedPinsMode.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_CONTROL::ToggleProperties,      ACTIONS::showProperties.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::ToggleHiddenPins,      EE_ACTIONS::showHiddenPins.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::ToggleHiddenFields,    EE_ACTIONS::showHiddenFields.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::TogglePinAltIcons,     EE_ACTIONS::togglePinAltIcons.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ToggleHiddenPins,      SCH_ACTIONS::showHiddenPins.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ToggleHiddenFields,    SCH_ACTIONS::showHiddenFields.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::TogglePinAltIcons,     SCH_ACTIONS::togglePinAltIcons.MakeEvent() );
 
-    Go( &SYMBOL_EDITOR_CONTROL::ChangeUnit,            EE_ACTIONS::previousUnit.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::ChangeUnit,            EE_ACTIONS::nextUnit.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ChangeUnit,            SCH_ACTIONS::previousUnit.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ChangeUnit,            SCH_ACTIONS::nextUnit.MakeEvent() );
     // clang-format on
 }

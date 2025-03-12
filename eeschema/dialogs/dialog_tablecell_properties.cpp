@@ -22,7 +22,6 @@
  */
 
 #include <gr_text.h>
-#include <ee_actions.h>
 #include <sch_edit_frame.h>
 #include <widgets/bitmap_button.h>
 #include <widgets/color_swatch.h>

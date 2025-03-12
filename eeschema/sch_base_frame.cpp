@@ -47,8 +47,7 @@
 #include <tool/action_toolbar.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
-#include <tools/ee_actions.h>
-#include <tools/ee_selection_tool.h>
+#include <tools/sch_selection_tool.h>
 #include <view/view_controls.h>
 #include <wx/choicdlg.h>
 #include <wx/fswatcher.h>
@@ -111,7 +110,7 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
               // wxWidgets, we can't get modifier-key-up events.
               if( m_toolManager )
               {
-                  EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
+                  SCH_SELECTION_TOOL* selTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>();
 
                   if( selTool )
                       selTool->OnIdle( aEvent );
@@ -434,9 +433,9 @@ void SCH_BASE_FRAME::RefreshZoomDependentItems()
     // items.
     if( m_toolManager )
     {
-        EE_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
-        SELECTION&         selection = selectionTool->GetSelection();
-        KIGFX::SCH_VIEW*   view = GetCanvas()->GetView();
+        SCH_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>();
+        SELECTION&          selection = selectionTool->GetSelection();
+        KIGFX::SCH_VIEW*    view = GetCanvas()->GetView();
 
         for( EDA_ITEM* item : selection )
         {

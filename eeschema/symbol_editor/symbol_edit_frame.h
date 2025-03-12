@@ -30,7 +30,6 @@
 
 #include <sch_base_frame.h>
 #include <sch_screen.h>
-#include <ee_collectors.h>
 #include <symbol_tree_pane.h>
 #include <optional>
 

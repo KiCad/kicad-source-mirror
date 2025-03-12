@@ -68,7 +68,7 @@ EE_GRID_HELPER::~EE_GRID_HELPER()
 
 
 VECTOR2I EE_GRID_HELPER::BestDragOrigin( const VECTOR2I& aMousePos, GRID_HELPER_GRIDS aGrid,
-                                         const EE_SELECTION& aItems )
+                                         const SCH_SELECTION& aItems )
 {
     clearAnchors();
 
@@ -130,7 +130,7 @@ VECTOR2I EE_GRID_HELPER::BestDragOrigin( const VECTOR2I& aMousePos, GRID_HELPER_
 VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, GRID_HELPER_GRIDS aGrid,
                                          SCH_ITEM* aSkip )
 {
-    EE_SELECTION skipItems;
+    SCH_SELECTION skipItems;
     skipItems.Add( aSkip );
 
     return BestSnapAnchor( aOrigin, aGrid, skipItems );
@@ -138,7 +138,7 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, GRID_HELPER_GR
 
 
 VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, GRID_HELPER_GRIDS aGrid,
-                                         const EE_SELECTION& aSkip )
+                                         const SCH_SELECTION& aSkip )
 {
     constexpr int snapRange = SNAP_RANGE * schIUScale.IU_PER_MILS;
 
@@ -321,7 +321,7 @@ SCH_ITEM* EE_GRID_HELPER::GetSnapped() const
 
 
 std::set<SCH_ITEM*> EE_GRID_HELPER::queryVisible( const BOX2I& aArea,
-                                                  const EE_SELECTION& aSkipList ) const
+                                                  const SCH_SELECTION& aSkipList ) const
 {
     std::set<SCH_ITEM*>                       items;
     std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;

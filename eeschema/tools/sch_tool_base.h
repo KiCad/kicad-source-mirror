@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef EE_TOOL_BASE_H
-#define EE_TOOL_BASE_H
+#ifndef SCH_TOOL_BASE_H
+#define SCH_TOOL_BASE_H
 
 #include <math/vector2d.h>
 #include <tool/tool_event.h>
@@ -31,12 +31,12 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_menu.h>
 #include <tool/actions.h>
-#include <tools/ee_selection_tool.h>
+#include <tools/sch_selection_tool.h>
 #include <sch_edit_frame.h>
 #include <sch_view.h>
 #include <symbol_edit_frame.h>
 
-class EE_SELECTION;
+class SCH_SELECTION;
 
 /**
  * A foundation class for a tool operating on a schematic or symbol.
@@ -44,13 +44,13 @@ class EE_SELECTION;
 
 
 template <class T>
-class EE_TOOL_BASE : public TOOL_INTERACTIVE
+class SCH_TOOL_BASE : public TOOL_INTERACTIVE
 {
 public:
     /**
      * Create a tool with given name. The name must be unique.
      */
-    EE_TOOL_BASE( const std::string& aName ) :
+    SCH_TOOL_BASE( const std::string& aName ) :
             TOOL_INTERACTIVE ( aName ),
             m_frame( nullptr ),
             m_view( nullptr ),
@@ -58,13 +58,13 @@ public:
             m_isSymbolEditor( false )
     {};
 
-    ~EE_TOOL_BASE() override {};
+    ~SCH_TOOL_BASE() override {};
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override
     {
         m_frame = getEditFrame<T>();
-        m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+        m_selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
         m_isSymbolEditor = m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR );
 
         // A basic context menu.  Many (but not all) tools will choose to override this.
@@ -195,10 +195,10 @@ protected:
     }
 
 protected:
-    T*                 m_frame;
-    KIGFX::SCH_VIEW*   m_view;
-    EE_SELECTION_TOOL* m_selectionTool;
-    bool               m_isSymbolEditor;
+    T*                  m_frame;
+    KIGFX::SCH_VIEW*    m_view;
+    SCH_SELECTION_TOOL* m_selectionTool;
+    bool                m_isSymbolEditor;
 };
 
 

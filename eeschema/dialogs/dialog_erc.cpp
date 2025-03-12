@@ -34,8 +34,8 @@
 #include <wildcards_and_files_ext.h>
 #include <sch_marker.h>
 #include <connection_graph.h>
-#include <tools/ee_actions.h>
-#include <tools/ee_inspection_tool.h>
+#include <tools/sch_actions.h>
+#include <tools/sch_inspection_tool.h>
 #include <dialog_erc.h>
 #include <erc/erc.h>
 #include <erc/erc_report.h>
@@ -292,7 +292,7 @@ void DIALOG_ERC::OnDeleteOneClick( wxCommandEvent& aEvent )
     if( m_notebook->GetSelection() == 0 )
     {
         // Clear the selection.  It may be the selected ERC marker.
-        m_parent->GetToolManager()->RunAction( EE_ACTIONS::clearSelection );
+        m_parent->GetToolManager()->RunAction( SCH_ACTIONS::clearSelection );
 
         m_markerTreeModel->DeleteCurrentItem( true );
 
@@ -570,7 +570,7 @@ void DIALOG_ERC::OnERCItemSelected( wxDataViewEvent& aEvent )
         if( !sheet.empty() && sheet != m_parent->GetCurrentSheet() )
         {
             m_parent->GetToolManager()->RunAction( ACTIONS::cancelInteractive );
-            m_parent->GetToolManager()->RunAction( EE_ACTIONS::clearSelection );
+            m_parent->GetToolManager()->RunAction( SCH_ACTIONS::clearSelection );
 
             // Store the current zoom level into the current screen before switching
             m_parent->GetScreen()->m_LastZoomLevel = m_parent->GetCanvas()->GetView()->GetScale();
@@ -604,9 +604,9 @@ void DIALOG_ERC::OnERCItemDClick( wxDataViewEvent& aEvent )
 
 void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
 {
-    TOOL_MANAGER*       toolMgr = m_parent->GetToolManager();
-    EE_INSPECTION_TOOL* inspectionTool = toolMgr->GetTool<EE_INSPECTION_TOOL>();
-    RC_TREE_NODE*       node = RC_TREE_MODEL::ToNode( aEvent.GetItem() );
+    TOOL_MANAGER*        toolMgr = m_parent->GetToolManager();
+    SCH_INSPECTION_TOOL* inspectionTool = toolMgr->GetTool<SCH_INSPECTION_TOOL>();
+    RC_TREE_NODE*        node = RC_TREE_MODEL::ToNode( aEvent.GetItem() );
 
     if( !node )
         return;
@@ -836,7 +836,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
 
         // Clear the selection before deleting markers. It may be some selected ERC markers.
         // Deleting a selected marker without deselecting it first generates a crash
-        m_parent->GetToolManager()->RunAction( EE_ACTIONS::clearSelection );
+        m_parent->GetToolManager()->RunAction( SCH_ACTIONS::clearSelection );
 
         SCH_SCREENS ScreenList( m_parent->Schematic().Root() );
         ScreenList.DeleteMarkers( MARKER_BASE::MARKER_ERC, rcItem->GetErrorCode() );
@@ -1016,7 +1016,7 @@ void DIALOG_ERC::deleteAllMarkers( bool aIncludeExclusions )
     // Freeze to avoid repainting the dialog, which can cause a RePaint()
     // of the screen as well
     Freeze();
-    m_parent->GetToolManager()->RunAction( EE_ACTIONS::clearSelection );
+    m_parent->GetToolManager()->RunAction( SCH_ACTIONS::clearSelection );
 
     m_markerTreeModel->DeleteItems( false, aIncludeExclusions, false );
 

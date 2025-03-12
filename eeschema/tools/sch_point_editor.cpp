@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "ee_point_editor.h"
+#include "sch_point_editor.h"
 
 #include <functional>
 using namespace std::placeholders;
@@ -35,8 +35,8 @@ using namespace std::placeholders;
 #include <geometry/seg.h>
 #include <geometry/shape_utils.h>
 #include <tool/point_editor_behavior.h>
-#include <tools/ee_actions.h>
-#include <tools/ee_selection_tool.h>
+#include <tools/sch_actions.h>
+#include <tools/sch_selection_tool.h>
 #include <sch_edit_frame.h>
 #include <sch_line.h>
 #include <sch_bitmap.h>
@@ -95,7 +95,8 @@ class LINE_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 {
 public:
     LINE_POINT_EDIT_BEHAVIOR( SCH_LINE& aLine, SCH_SCREEN& aScreen ) :
-            m_line( aLine ), m_screen( aScreen )
+            m_line( aLine ),
+            m_screen( aScreen )
     {
     }
 
@@ -237,7 +238,9 @@ private:
 class BITMAP_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 {
 public:
-    BITMAP_POINT_EDIT_BEHAVIOR( SCH_BITMAP& aBitmap ) : m_bitmap( aBitmap ) {}
+    BITMAP_POINT_EDIT_BEHAVIOR( SCH_BITMAP& aBitmap ) :
+            m_bitmap( aBitmap )
+    {}
 
     void MakePoints( EDIT_POINTS& aPoints ) override
     {
@@ -434,7 +437,8 @@ class RECTANGLE_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 {
 public:
     RECTANGLE_POINT_EDIT_BEHAVIOR( SCH_SHAPE& aRect, EDA_DRAW_FRAME& aFrame ) :
-            m_rect( aRect ), m_frame( aFrame )
+            m_rect( aRect ),
+            m_frame( aFrame )
     {
     }
 
@@ -744,7 +748,9 @@ private:
 class TEXTBOX_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 {
 public:
-    TEXTBOX_POINT_EDIT_BEHAVIOR( SCH_TEXTBOX& aTextbox ) : m_textbox( aTextbox ) {}
+    TEXTBOX_POINT_EDIT_BEHAVIOR( SCH_TEXTBOX& aTextbox ) :
+            m_textbox( aTextbox )
+    {}
 
     void MakePoints( EDIT_POINTS& aPoints ) override
     {
@@ -776,7 +782,9 @@ private:
 class SHEET_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 {
 public:
-    SHEET_POINT_EDIT_BEHAVIOR( SCH_SHEET& aSheet ) : m_sheet( aSheet ) {}
+    SHEET_POINT_EDIT_BEHAVIOR( SCH_SHEET& aSheet ) :
+            m_sheet( aSheet )
+    {}
 
     void MakePoints( EDIT_POINTS& aPoints ) override
     {
@@ -880,7 +888,7 @@ private:
 };
 
 
-void EE_POINT_EDITOR::makePointsAndBehavior( EDA_ITEM* aItem )
+void SCH_POINT_EDITOR::makePointsAndBehavior( EDA_ITEM* aItem )
 {
     m_editBehavior = nullptr;
     m_editPoints = std::make_shared<EDIT_POINTS>( aItem );
@@ -971,38 +979,38 @@ void EE_POINT_EDITOR::makePointsAndBehavior( EDA_ITEM* aItem )
 }
 
 
-EE_POINT_EDITOR::EE_POINT_EDITOR() :
-    EE_TOOL_BASE<SCH_BASE_FRAME>( "eeschema.PointEditor" ),
-    m_editedPoint( nullptr ),
-    m_inPointEditor( false )
+SCH_POINT_EDITOR::SCH_POINT_EDITOR() :
+        SCH_TOOL_BASE<SCH_BASE_FRAME>( "eeschema.PointEditor" ),
+        m_editedPoint( nullptr ),
+        m_inPointEditor( false )
 {
 }
 
 
-void EE_POINT_EDITOR::Reset( RESET_REASON aReason )
+void SCH_POINT_EDITOR::Reset( RESET_REASON aReason )
 {
-    EE_TOOL_BASE::Reset( aReason );
+    SCH_TOOL_BASE::Reset( aReason );
 
     m_editPoints.reset();
     m_editedPoint = nullptr;
 }
 
 
-bool EE_POINT_EDITOR::Init()
+bool SCH_POINT_EDITOR::Init()
 {
-    EE_TOOL_BASE::Init();
+    SCH_TOOL_BASE::Init();
 
     auto& menu = m_selectionTool->GetToolMenu().GetMenu();
-    menu.AddItem( EE_ACTIONS::pointEditorAddCorner,
-                              std::bind( &EE_POINT_EDITOR::addCornerCondition, this, _1 ) );
-    menu.AddItem( EE_ACTIONS::pointEditorRemoveCorner,
-                              std::bind( &EE_POINT_EDITOR::removeCornerCondition, this, _1 ) );
+    menu.AddItem( SCH_ACTIONS::pointEditorAddCorner,
+                  std::bind( &SCH_POINT_EDITOR::addCornerCondition, this, _1 ) );
+    menu.AddItem( SCH_ACTIONS::pointEditorRemoveCorner,
+                  std::bind( &SCH_POINT_EDITOR::removeCornerCondition, this, _1 ) );
 
     return true;
 }
 
 
-int EE_POINT_EDITOR::clearEditedPoints( const TOOL_EVENT& aEvent )
+int SCH_POINT_EDITOR::clearEditedPoints( const TOOL_EVENT& aEvent )
 {
     setEditedPoint( nullptr );
 
@@ -1010,7 +1018,7 @@ int EE_POINT_EDITOR::clearEditedPoints( const TOOL_EVENT& aEvent )
 }
 
 
-void EE_POINT_EDITOR::updateEditedPoint( const TOOL_EVENT& aEvent )
+void SCH_POINT_EDITOR::updateEditedPoint( const TOOL_EVENT& aEvent )
 {
     EDIT_POINT* point = m_editedPoint;
 
@@ -1036,7 +1044,7 @@ void EE_POINT_EDITOR::updateEditedPoint( const TOOL_EVENT& aEvent )
 }
 
 
-int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
+int SCH_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 {
     if( !m_selectionTool )
         return 0;
@@ -1054,12 +1062,10 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
             return 0;
     }
 
-    const EE_SELECTION& selection = m_selectionTool->GetSelection();
+    const SCH_SELECTION& selection = m_selectionTool->GetSelection();
 
     if( selection.Size() != 1 || !selection.Front()->IsType( pointEditorTypes ) )
-    {
         return 0;
-    }
 
     // Wait till drawing tool is done
     if( selection.Front()->IsNew() )
@@ -1185,7 +1191,7 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 }
 
 
-void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid, SCH_COMMIT& aCommit ) const
+void SCH_POINT_EDITOR::updateParentItem( bool aSnapToGrid, SCH_COMMIT& aCommit ) const
 {
     EDA_ITEM* item = m_editPoints->GetParent();
 
@@ -1205,7 +1211,7 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid, SCH_COMMIT& aCommit ) 
 }
 
 
-void EE_POINT_EDITOR::updatePoints()
+void SCH_POINT_EDITOR::updatePoints()
 {
     if( !m_editPoints || !m_editBehavior )
         return;
@@ -1215,7 +1221,7 @@ void EE_POINT_EDITOR::updatePoints()
 }
 
 
-void EE_POINT_EDITOR::setEditedPoint( EDIT_POINT* aPoint )
+void SCH_POINT_EDITOR::setEditedPoint( EDIT_POINT* aPoint )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
 
@@ -1237,7 +1243,7 @@ void EE_POINT_EDITOR::setEditedPoint( EDIT_POINT* aPoint )
 }
 
 
-bool EE_POINT_EDITOR::removeCornerCondition( const SELECTION& )
+bool SCH_POINT_EDITOR::removeCornerCondition( const SELECTION& )
 {
     bool isRuleArea = false;
 
@@ -1272,7 +1278,7 @@ bool EE_POINT_EDITOR::removeCornerCondition( const SELECTION& )
 }
 
 
-bool EE_POINT_EDITOR::addCornerCondition( const SELECTION& )
+bool SCH_POINT_EDITOR::addCornerCondition( const SELECTION& )
 {
     if( !m_editPoints
         || !( m_editPoints->GetParent()->Type() == SCH_SHAPE_T
@@ -1293,12 +1299,14 @@ bool EE_POINT_EDITOR::addCornerCondition( const SELECTION& )
 }
 
 
-int EE_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
+int SCH_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
 {
     if( !m_editPoints
         || !( m_editPoints->GetParent()->Type() == SCH_SHAPE_T
               || m_editPoints->GetParent()->Type() == SCH_RULE_AREA_T ) )
+    {
         return 0;
+    }
 
     SCH_SHAPE*        shape = static_cast<SCH_SHAPE*>( m_editPoints->GetParent() );
     SHAPE_LINE_CHAIN& poly = shape->GetPolyShape().Outline( 0 );
@@ -1336,7 +1344,7 @@ int EE_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
 }
 
 
-int EE_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
+int SCH_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 {
     if( !m_editPoints || !m_editedPoint
         || !m_editPoints->GetParent()->IsType( { SCH_SHAPE_T, SCH_RULE_AREA_T } ) )
@@ -1380,22 +1388,22 @@ int EE_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 }
 
 
-int EE_POINT_EDITOR::modifiedSelection( const TOOL_EVENT& aEvent )
+int SCH_POINT_EDITOR::modifiedSelection( const TOOL_EVENT& aEvent )
 {
     updatePoints();
     return 0;
 }
 
 
-void EE_POINT_EDITOR::setTransitions()
+void SCH_POINT_EDITOR::setTransitions()
 {
-    Go( &EE_POINT_EDITOR::Main,              EVENTS::PointSelectedEvent );
-    Go( &EE_POINT_EDITOR::Main,              EVENTS::SelectedEvent );
-    Go( &EE_POINT_EDITOR::Main,              ACTIONS::activatePointEditor.MakeEvent() );
-    Go( &EE_POINT_EDITOR::addCorner,         EE_ACTIONS::pointEditorAddCorner.MakeEvent() );
-    Go( &EE_POINT_EDITOR::removeCorner,      EE_ACTIONS::pointEditorRemoveCorner.MakeEvent() );
-    Go( &EE_POINT_EDITOR::modifiedSelection, EVENTS::SelectedItemsModified );
-    Go( &EE_POINT_EDITOR::clearEditedPoints, EVENTS::ClearedEvent );
+    Go( &SCH_POINT_EDITOR::Main,              EVENTS::PointSelectedEvent );
+    Go( &SCH_POINT_EDITOR::Main,              EVENTS::SelectedEvent );
+    Go( &SCH_POINT_EDITOR::Main,              ACTIONS::activatePointEditor.MakeEvent() );
+    Go( &SCH_POINT_EDITOR::addCorner,         SCH_ACTIONS::pointEditorAddCorner.MakeEvent() );
+    Go( &SCH_POINT_EDITOR::removeCorner,      SCH_ACTIONS::pointEditorRemoveCorner.MakeEvent() );
+    Go( &SCH_POINT_EDITOR::modifiedSelection, EVENTS::SelectedItemsModified );
+    Go( &SCH_POINT_EDITOR::clearEditedPoints, EVENTS::ClearedEvent );
 }
 
 

@@ -542,10 +542,10 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataToWindow()
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
-    TOOL_MANAGER*      toolMgr = m_parent->GetToolManager();
-    EE_SELECTION_TOOL* selectionTool = toolMgr->GetTool<EE_SELECTION_TOOL>();
-    EE_SELECTION&      selection = selectionTool->GetSelection();
-    SCH_SYMBOL*        symbol = nullptr;
+    TOOL_MANAGER*       toolMgr = m_parent->GetToolManager();
+    SCH_SELECTION_TOOL* selectionTool = toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    SCH_SELECTION&      selection = selectionTool->GetSelection();
+    SCH_SYMBOL*         symbol = nullptr;
 
     UpdateScope();
 
@@ -1185,8 +1185,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& a
     }
     else if( m_radioSelect->GetValue() )
     {
-        EE_SELECTION_TOOL* selTool = m_parent->GetToolManager()->GetTool<EE_SELECTION_TOOL>();
-
+        SCH_SELECTION_TOOL*    selTool = m_parent->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
         std::vector<SCH_ITEM*> items( symbols.begin(), symbols.end() );
 
         if( refs.size() > 0 )

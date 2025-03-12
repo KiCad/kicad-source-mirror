@@ -27,7 +27,6 @@
 #include <wildcards_and_files_ext.h>
 #include <schematic.h>
 #include <connection_graph.h>
-#include <tools/ee_actions.h>
 #include <tool/tool_manager.h>
 #include <panel_setup_pinmap.h>
 #include <erc/erc.h>

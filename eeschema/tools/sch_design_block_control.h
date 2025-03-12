@@ -26,15 +26,17 @@
 #define SCH_DESIGN_BLOCK_CONTROL_H
 
 #include <sch_base_frame.h>
-#include <tools/ee_tool_base.h>
+#include <tools/sch_tool_base.h>
 
 /**
  * Handle schematic design block actions in the schematic editor.
  */
-class SCH_DESIGN_BLOCK_CONTROL : public wxEvtHandler, public EE_TOOL_BASE<SCH_BASE_FRAME>
+class SCH_DESIGN_BLOCK_CONTROL : public wxEvtHandler, public SCH_TOOL_BASE<SCH_BASE_FRAME>
 {
 public:
-    SCH_DESIGN_BLOCK_CONTROL() : EE_TOOL_BASE<SCH_BASE_FRAME>( "eeschema.SchDesignBlockControl" ) {}
+    SCH_DESIGN_BLOCK_CONTROL() :
+            SCH_TOOL_BASE<SCH_BASE_FRAME>( "eeschema.SchDesignBlockControl" )
+    {}
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;

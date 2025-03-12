@@ -71,9 +71,8 @@
 #include <wx/log.h>
 #include <wx/richmsgdlg.h>
 #include <wx/stdpaths.h>
-#include <tools/ee_actions.h>
-#include <tools/ee_inspection_tool.h>
-#include <tools/ee_selection_tool.h>
+#include <tools/sch_inspection_tool.h>
+#include <tools/sch_selection_tool.h>
 #include <paths.h>
 #include <wx_filename.h>  // For ::ResolvePossibleSymlinks
 #include <widgets/wx_progress_reporters.h>
@@ -149,7 +148,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         ClearUndoRedoList();
         ClearRepeatItemsList();
         SetScreen( nullptr );
-        m_toolManager->GetTool<EE_INSPECTION_TOOL>()->Reset( TOOL_BASE::SUPERMODEL_RELOAD );
+        m_toolManager->GetTool<SCH_INSPECTION_TOOL>()->Reset( TOOL_BASE::SUPERMODEL_RELOAD );
         CreateScreens();
     }
 
@@ -673,7 +672,7 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
     eeconfig()->m_System.show_import_issues = importOptions.GetShowIssues();
 
     // Don't leave dangling pointers to previously-opened document.
-    m_toolManager->GetTool<EE_SELECTION_TOOL>()->ClearSelection();
+    m_toolManager->GetTool<SCH_SELECTION_TOOL>()->ClearSelection();
     ClearUndoRedoList();
     ClearRepeatItemsList();
 

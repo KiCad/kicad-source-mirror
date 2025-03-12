@@ -51,7 +51,7 @@ class SCH_TABLE;
 class SCH_SYMBOL;
 class SCH_FIELD;
 struct SCH_SYMBOL_INSTANCE;
-class EE_SELECTION;
+class SCH_SELECTION;
 class SCH_IO_KICAD_SEXPR_LIB_CACHE;
 class LIB_SYMBOL;
 class SYMBOL_LIB;
@@ -103,7 +103,7 @@ public:
 
     void Format( SCH_SHEET* aSheet );
 
-    void Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelectionPath,
+    void Format( SCH_SELECTION* aSelection, SCH_SHEET_PATH* aSelectionPath,
                  SCHEMATIC& aSchematic, OUTPUTFORMATTER* aFormatter, bool aForClipboard );
 
     void EnumerateSymbolLib( wxArrayString&    aSymbolNameList,

@@ -29,7 +29,6 @@
 #include <kidialog.h>
 #include <kiway.h>
 #include <widgets/wx_infobar.h>
-#include <tools/ee_actions.h>
 #include <tools/symbol_editor_drawing_tools.h>
 #include <symbol_edit_frame.h>
 #include <symbol_library.h>

@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef EE_SELECTION_H
-#define EE_SELECTION_H
+#ifndef SCH_SELECTION_H
+#define SCH_SELECTION_H
 
 class SCH_REFERENCE_LIST;
 class SCH_SCREEN;
@@ -34,7 +34,7 @@ class SCH_SHEET_PATH;
 #include <sch_sheet_path.h> // SCH_MULTI_UNIT_REFERENCE_MAP
 
 
-class EE_SELECTION : public SELECTION
+class SCH_SELECTION : public SELECTION
 {
     /**
      * Screen of selected objects.  Used to fetch library symbols for copy.
@@ -42,7 +42,7 @@ class EE_SELECTION : public SELECTION
     SCH_SCREEN* m_screen;
 
 public:
-    EE_SELECTION( SCH_SCREEN* aScreen = nullptr );
+    SCH_SELECTION( SCH_SCREEN* aScreen = nullptr );
 
     EDA_ITEM* GetTopLeftItem( bool onlyModules = false ) const override;
 
@@ -54,4 +54,4 @@ public:
     const std::vector<KIGFX::VIEW_ITEM*> updateDrawList() const override;
 };
 
-#endif  //  EE_SELECTION_H
+#endif  //  SCH_SELECTION_H

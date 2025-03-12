@@ -40,7 +40,7 @@
 #include <sim/simulator_frame.h>
 #include <sim/sim_plot_tab.h>
 #include <tool/tool_manager.h>
-#include <tools/ee_actions.h>
+#include <tools/sch_actions.h>
 #include <scintilla_tricks.h>
 #include <sim/spice_circuit_model.h>
 #include <dialogs/dialog_user_defined_signals.h>
@@ -153,7 +153,7 @@ int SIMULATOR_CONTROL::SaveWorkbook( const TOOL_EVENT& aEvent )
 {
     wxString filename;
 
-    if( aEvent.IsAction( &EE_ACTIONS::saveWorkbook ) )
+    if( aEvent.IsAction( &SCH_ACTIONS::saveWorkbook ) )
         filename = m_simulator->Settings()->GetWorkbookFilename();
 
     if( filename.IsEmpty() )
@@ -497,7 +497,7 @@ int SIMULATOR_CONTROL::Probe( const TOOL_EVENT& aEvent )
     if( blocking_dialog )
         blocking_dialog->Close( true );
 
-    m_schematicFrame->GetToolManager()->PostAction( EE_ACTIONS::simProbe );
+    m_schematicFrame->GetToolManager()->PostAction( SCH_ACTIONS::simProbe );
     m_schematicFrame->Raise();
 
     return 0;
@@ -514,7 +514,7 @@ int SIMULATOR_CONTROL::Tune( const TOOL_EVENT& aEvent )
     if( blocking_dialog )
         blocking_dialog->Close( true );
 
-    m_schematicFrame->GetToolManager()->PostAction( EE_ACTIONS::simTune );
+    m_schematicFrame->GetToolManager()->PostAction( SCH_ACTIONS::simTune );
     m_schematicFrame->Raise();
 
     return 0;
@@ -641,14 +641,14 @@ int SIMULATOR_CONTROL::ShowNetlist( const TOOL_EVENT& aEvent )
 
 void SIMULATOR_CONTROL::setTransitions()
 {
-    Go( &SIMULATOR_CONTROL::NewAnalysisTab,         EE_ACTIONS::newAnalysisTab.MakeEvent() );
-    Go( &SIMULATOR_CONTROL::OpenWorkbook,           EE_ACTIONS::openWorkbook.MakeEvent() );
-    Go( &SIMULATOR_CONTROL::SaveWorkbook,           EE_ACTIONS::saveWorkbook.MakeEvent() );
-    Go( &SIMULATOR_CONTROL::SaveWorkbook,           EE_ACTIONS::saveWorkbookAs.MakeEvent() );
-    Go( &SIMULATOR_CONTROL::ExportPlotAsPNG,        EE_ACTIONS::exportPlotAsPNG.MakeEvent() );
-    Go( &SIMULATOR_CONTROL::ExportPlotAsCSV,        EE_ACTIONS::exportPlotAsCSV.MakeEvent() );
-    Go( &SIMULATOR_CONTROL::ExportPlotToClipboard,  EE_ACTIONS::exportPlotToClipboard.MakeEvent() );
-    Go( &SIMULATOR_CONTROL::ExportPlotToSchematic,  EE_ACTIONS::exportPlotToSchematic.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::NewAnalysisTab,         SCH_ACTIONS::newAnalysisTab.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::OpenWorkbook,           SCH_ACTIONS::openWorkbook.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::SaveWorkbook,           SCH_ACTIONS::saveWorkbook.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::SaveWorkbook,           SCH_ACTIONS::saveWorkbookAs.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::ExportPlotAsPNG,        SCH_ACTIONS::exportPlotAsPNG.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::ExportPlotAsCSV,        SCH_ACTIONS::exportPlotAsCSV.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::ExportPlotToClipboard,  SCH_ACTIONS::exportPlotToClipboard.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::ExportPlotToSchematic,  SCH_ACTIONS::exportPlotToSchematic.MakeEvent() );
 
     Go( &SIMULATOR_CONTROL::Close,                  ACTIONS::quit.MakeEvent() );
 
@@ -666,16 +666,16 @@ void SIMULATOR_CONTROL::setTransitions()
     Go( &SIMULATOR_CONTROL::UndoZoom,               ACTIONS::zoomUndo.MakeEvent() );
     Go( &SIMULATOR_CONTROL::RedoZoom,               ACTIONS::zoomRedo.MakeEvent() );
     Go( &SIMULATOR_CONTROL::ToggleGrid,             ACTIONS::toggleGrid.MakeEvent() );
-    Go( &SIMULATOR_CONTROL::ToggleLegend,           EE_ACTIONS::toggleLegend.MakeEvent() );
-    Go( &SIMULATOR_CONTROL::ToggleDottedSecondary,  EE_ACTIONS::toggleDottedSecondary.MakeEvent() );
-    Go( &SIMULATOR_CONTROL::ToggleDarkModePlots,    EE_ACTIONS::toggleDarkModePlots.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::ToggleLegend,           SCH_ACTIONS::toggleLegend.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::ToggleDottedSecondary,  SCH_ACTIONS::toggleDottedSecondary.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::ToggleDarkModePlots,    SCH_ACTIONS::toggleDarkModePlots.MakeEvent() );
 
-    Go( &SIMULATOR_CONTROL::EditAnalysisTab,        EE_ACTIONS::simAnalysisProperties.MakeEvent() );
-    Go( &SIMULATOR_CONTROL::RunSimulation,          EE_ACTIONS::runSimulation.MakeEvent() );
-    Go( &SIMULATOR_CONTROL::RunSimulation,          EE_ACTIONS::stopSimulation.MakeEvent() );
-    Go( &SIMULATOR_CONTROL::Probe,                  EE_ACTIONS::simProbe.MakeEvent() );
-    Go( &SIMULATOR_CONTROL::Tune,                   EE_ACTIONS::simTune.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::EditAnalysisTab,        SCH_ACTIONS::simAnalysisProperties.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::RunSimulation,          SCH_ACTIONS::runSimulation.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::RunSimulation,          SCH_ACTIONS::stopSimulation.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::Probe,                  SCH_ACTIONS::simProbe.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::Tune,                   SCH_ACTIONS::simTune.MakeEvent() );
 
-    Go( &SIMULATOR_CONTROL::EditUserDefinedSignals, EE_ACTIONS::editUserDefinedSignals.MakeEvent() );
-    Go( &SIMULATOR_CONTROL::ShowNetlist,            EE_ACTIONS::showNetlist.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::EditUserDefinedSignals, SCH_ACTIONS::editUserDefinedSignals.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::ShowNetlist,            SCH_ACTIONS::showNetlist.MakeEvent() );
 }

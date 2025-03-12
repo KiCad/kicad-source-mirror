@@ -25,7 +25,7 @@
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
 #include <tool/tool_manager.h>
-#include <tools/ee_actions.h>
+#include <tools/sch_actions.h>
 #include <widgets/wx_menubar.h>
 
 
@@ -42,16 +42,16 @@ std::optional<TOOLBAR_CONFIGURATION> SIMULATOR_TOOLBAR_SETTINGS::DefaultToolbarC
         return std::nullopt;
 
     case TOOLBAR_LOC::TOP_MAIN:
-        config.AppendAction( EE_ACTIONS::openWorkbook )
-              .AppendAction( EE_ACTIONS::saveWorkbook );
+        config.AppendAction( SCH_ACTIONS::openWorkbook )
+              .AppendAction( SCH_ACTIONS::saveWorkbook );
 
         config.AppendSeparator()
-              .AppendAction( EE_ACTIONS::newAnalysisTab )
-              .AppendAction( EE_ACTIONS::simAnalysisProperties );
+              .AppendAction( SCH_ACTIONS::newAnalysisTab )
+              .AppendAction( SCH_ACTIONS::simAnalysisProperties );
 
         config.AppendSeparator()
-              .AppendAction( EE_ACTIONS::runSimulation )
-              .AppendAction( EE_ACTIONS::stopSimulation );
+              .AppendAction( SCH_ACTIONS::runSimulation )
+              .AppendAction( SCH_ACTIONS::stopSimulation );
 
         config.AppendSeparator()
               .AppendAction( ACTIONS::zoomInCenter )
@@ -63,12 +63,12 @@ std::optional<TOOLBAR_CONFIGURATION> SIMULATOR_TOOLBAR_SETTINGS::DefaultToolbarC
               .AppendAction( ACTIONS::zoomFitScreen );
 
         config.AppendSeparator()
-              .AppendAction( EE_ACTIONS::simProbe )
-              .AppendAction( EE_ACTIONS::simTune );
+              .AppendAction( SCH_ACTIONS::simProbe )
+              .AppendAction( SCH_ACTIONS::simTune );
 
         config.AppendSeparator()
-              .AppendAction( EE_ACTIONS::editUserDefinedSignals )
-              .AppendAction( EE_ACTIONS::showNetlist );
+              .AppendAction( SCH_ACTIONS::editUserDefinedSignals )
+              .AppendAction( SCH_ACTIONS::showNetlist );
         break;
     }
 
@@ -94,19 +94,19 @@ void SIMULATOR_FRAME::doReCreateMenuBar()
     //
     ACTION_MENU* fileMenu = new ACTION_MENU( false, tool );
 
-    fileMenu->Add( EE_ACTIONS::newAnalysisTab );
+    fileMenu->Add( SCH_ACTIONS::newAnalysisTab );
 
     fileMenu->AppendSeparator();
-    fileMenu->Add( EE_ACTIONS::openWorkbook );
-    fileMenu->Add( EE_ACTIONS::saveWorkbook );
-    fileMenu->Add( EE_ACTIONS::saveWorkbookAs );
+    fileMenu->Add( SCH_ACTIONS::openWorkbook );
+    fileMenu->Add( SCH_ACTIONS::saveWorkbook );
+    fileMenu->Add( SCH_ACTIONS::saveWorkbookAs );
 
     fileMenu->AppendSeparator();
-    fileMenu->Add( EE_ACTIONS::exportPlotAsPNG );
-    fileMenu->Add( EE_ACTIONS::exportPlotAsCSV );
+    fileMenu->Add( SCH_ACTIONS::exportPlotAsPNG );
+    fileMenu->Add( SCH_ACTIONS::exportPlotAsCSV );
     fileMenu->AppendSeparator();
-    fileMenu->Add( EE_ACTIONS::exportPlotToClipboard );
-    fileMenu->Add( EE_ACTIONS::exportPlotToSchematic );
+    fileMenu->Add( SCH_ACTIONS::exportPlotToClipboard );
+    fileMenu->Add( SCH_ACTIONS::exportPlotToSchematic );
 
     fileMenu->AppendSeparator();
     fileMenu->AddClose( _( "Simulator" ) );
@@ -134,26 +134,26 @@ void SIMULATOR_FRAME::doReCreateMenuBar()
 
     viewMenu->AppendSeparator();
     viewMenu->Add( ACTIONS::toggleGrid,               ACTION_MENU::CHECK );
-    viewMenu->Add( EE_ACTIONS::toggleLegend,          ACTION_MENU::CHECK );
-    viewMenu->Add( EE_ACTIONS::toggleDottedSecondary, ACTION_MENU::CHECK );
-    viewMenu->Add( EE_ACTIONS::toggleDarkModePlots,   ACTION_MENU::CHECK );
+    viewMenu->Add( SCH_ACTIONS::toggleLegend,          ACTION_MENU::CHECK );
+    viewMenu->Add( SCH_ACTIONS::toggleDottedSecondary, ACTION_MENU::CHECK );
+    viewMenu->Add( SCH_ACTIONS::toggleDarkModePlots,   ACTION_MENU::CHECK );
 
 
     //-- Simulation menu -----------------------------------------------------------
     //
     ACTION_MENU* simulationMenu = new ACTION_MENU( false, tool );
 
-    simulationMenu->Add( EE_ACTIONS::newAnalysisTab );
-    simulationMenu->Add( EE_ACTIONS::simAnalysisProperties );
-    simulationMenu->Add( EE_ACTIONS::runSimulation );
+    simulationMenu->Add( SCH_ACTIONS::newAnalysisTab );
+    simulationMenu->Add( SCH_ACTIONS::simAnalysisProperties );
+    simulationMenu->Add( SCH_ACTIONS::runSimulation );
 
     simulationMenu->AppendSeparator();
-    simulationMenu->Add( EE_ACTIONS::simProbe );
-    simulationMenu->Add( EE_ACTIONS::simTune );
+    simulationMenu->Add( SCH_ACTIONS::simProbe );
+    simulationMenu->Add( SCH_ACTIONS::simTune );
 
     simulationMenu->AppendSeparator();
-    simulationMenu->Add( EE_ACTIONS::editUserDefinedSignals );
-    simulationMenu->Add( EE_ACTIONS::showNetlist );
+    simulationMenu->Add( SCH_ACTIONS::editUserDefinedSignals );
+    simulationMenu->Add( SCH_ACTIONS::showNetlist );
 
 
     //-- Preferences menu -----------------------------------------------
@@ -161,7 +161,7 @@ void SIMULATOR_FRAME::doReCreateMenuBar()
     ACTION_MENU* prefsMenu = new ACTION_MENU( false, tool );
 
     //prefsMenu->Add( ACTIONS::configurePaths );
-    //prefsMenu->Add( EE_ACTIONS::showSimLibTable );
+    //prefsMenu->Add( SCH_ACTIONS::showSimLibTable );
     prefsMenu->Add( ACTIONS::openPreferences );
 
     prefsMenu->AppendSeparator();

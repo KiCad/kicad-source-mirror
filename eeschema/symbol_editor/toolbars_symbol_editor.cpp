@@ -32,8 +32,8 @@
 #include <toolbars_symbol_editor.h>
 #include <tool/action_toolbar.h>
 #include <tool/tool_manager.h>
-#include <tools/ee_actions.h>
-#include <tools/ee_selection_tool.h>
+#include <tools/sch_actions.h>
+#include <tools/sch_selection_tool.h>
 #include <widgets/sch_properties_panel.h>
 #include <widgets/sch_properties_panel.h>
 #include <widgets/wx_aui_utils.h>
@@ -64,10 +64,10 @@ std::optional<TOOLBAR_CONFIGURATION> SYMBOL_EDIT_TOOLBAR_SETTINGS::DefaultToolba
               .AppendAction( ACTIONS::toggleCursorStyle );
 
         config.AppendSeparator()
-              .AppendAction( EE_ACTIONS::showElectricalTypes )
-              .AppendAction( EE_ACTIONS::showHiddenPins )
-              .AppendAction( EE_ACTIONS::showHiddenFields );
-        //    .AppendAction( EE_ACTIONS::togglePinAltIcons );
+              .AppendAction( SCH_ACTIONS::showElectricalTypes )
+              .AppendAction( SCH_ACTIONS::showHiddenPins )
+              .AppendAction( SCH_ACTIONS::showHiddenFields );
+        //    .AppendAction( SCH_ACTIONS::togglePinAltIcons );
 
         if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
             config.AppendAction( ACTIONS::toggleBoundingBoxes );
@@ -88,21 +88,21 @@ std::optional<TOOLBAR_CONFIGURATION> SYMBOL_EDIT_TOOLBAR_SETTINGS::DefaultToolba
         config.AppendAction( ACTIONS::selectionTool );
 
         config.AppendSeparator()
-              .AppendAction( EE_ACTIONS::placeSymbolPin )
-              .AppendAction( EE_ACTIONS::placeSymbolText )
-              .AppendAction( EE_ACTIONS::drawSymbolTextBox )
-              .AppendAction( EE_ACTIONS::drawRectangle )
-              .AppendAction( EE_ACTIONS::drawCircle )
-              .AppendAction( EE_ACTIONS::drawArc )
-              .AppendAction( EE_ACTIONS::drawBezier )
-              .AppendAction( EE_ACTIONS::drawSymbolLines )
-              .AppendAction( EE_ACTIONS::drawSymbolPolygon )
-              .AppendAction( EE_ACTIONS::placeSymbolAnchor )
+              .AppendAction( SCH_ACTIONS::placeSymbolPin )
+              .AppendAction( SCH_ACTIONS::placeSymbolText )
+              .AppendAction( SCH_ACTIONS::drawSymbolTextBox )
+              .AppendAction( SCH_ACTIONS::drawRectangle )
+              .AppendAction( SCH_ACTIONS::drawCircle )
+              .AppendAction( SCH_ACTIONS::drawArc )
+              .AppendAction( SCH_ACTIONS::drawBezier )
+              .AppendAction( SCH_ACTIONS::drawSymbolLines )
+              .AppendAction( SCH_ACTIONS::drawSymbolPolygon )
+              .AppendAction( SCH_ACTIONS::placeSymbolAnchor )
               .AppendAction( ACTIONS::deleteTool);
         break;
 
     case TOOLBAR_LOC::TOP_MAIN:
-        config.AppendAction( EE_ACTIONS::newSymbol );
+        config.AppendAction( SCH_ACTIONS::newSymbol );
 
 /* TODO (ISM): Handle visibility changes
         if( !IsSymbolFromSchematic() )
@@ -123,31 +123,31 @@ std::optional<TOOLBAR_CONFIGURATION> SYMBOL_EDIT_TOOLBAR_SETTINGS::DefaultToolba
               .AppendAction( ACTIONS::zoomTool );
 
         config.AppendSeparator()
-              .AppendAction( EE_ACTIONS::rotateCCW )
-              .AppendAction( EE_ACTIONS::rotateCW )
-              .AppendAction( EE_ACTIONS::mirrorV )
-              .AppendAction( EE_ACTIONS::mirrorH );
+              .AppendAction( SCH_ACTIONS::rotateCCW )
+              .AppendAction( SCH_ACTIONS::rotateCW )
+              .AppendAction( SCH_ACTIONS::mirrorV )
+              .AppendAction( SCH_ACTIONS::mirrorH );
 
         config.AppendSeparator()
-              .AppendAction( EE_ACTIONS::symbolProperties )
-              .AppendAction( EE_ACTIONS::pinTable );
+              .AppendAction( SCH_ACTIONS::symbolProperties )
+              .AppendAction( SCH_ACTIONS::pinTable );
 
         config.AppendSeparator()
               .AppendAction( ACTIONS::showDatasheet )
-              .AppendAction( EE_ACTIONS::checkSymbol );
+              .AppendAction( SCH_ACTIONS::checkSymbol );
 
         config.AppendSeparator()
-              .AppendAction( EE_ACTIONS::showDeMorganStandard )
-              .AppendAction( EE_ACTIONS::showDeMorganAlternate );
+              .AppendAction( SCH_ACTIONS::showDeMorganStandard )
+              .AppendAction( SCH_ACTIONS::showDeMorganAlternate );
 
         config.AppendSeparator()
               .AppendControl( ACTION_TOOLBAR_CONTROLS::unitSelector );
 
         config.AppendSeparator()
-              .AppendAction( EE_ACTIONS::toggleSyncedPinsMode );
+              .AppendAction( SCH_ACTIONS::toggleSyncedPinsMode );
 
         config.AppendSeparator()
-              .AppendAction( EE_ACTIONS::addSymbolToSchematic );
+              .AppendAction( SCH_ACTIONS::addSymbolToSchematic );
         break;
     }
 

@@ -35,8 +35,8 @@
 #include <python_scripting.h>
 #include <tool/tool_manager.h>
 #include <tool/action_toolbar.h>
-#include <tools/ee_actions.h>
-#include <tools/ee_selection_tool.h>
+#include <tools/sch_actions.h>
+#include <tools/sch_selection_tool.h>
 #include <widgets/design_block_pane.h>
 #include <widgets/hierarchy_pane.h>
 #include <widgets/wx_aui_utils.h>
@@ -64,18 +64,18 @@ std::optional<TOOLBAR_CONFIGURATION> SCH_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
               .AppendAction( ACTIONS::toggleCursorStyle );
 
         config.AppendSeparator()
-              .AppendAction( EE_ACTIONS::toggleHiddenPins );
+              .AppendAction( SCH_ACTIONS::toggleHiddenPins );
 
         config.AppendSeparator()
-              .AppendAction( EE_ACTIONS::lineModeFree )
-              .AppendAction( EE_ACTIONS::lineMode90 )
-              .AppendAction( EE_ACTIONS::lineMode45 );
+              .AppendAction( SCH_ACTIONS::lineModeFree )
+              .AppendAction( SCH_ACTIONS::lineMode90 )
+              .AppendAction( SCH_ACTIONS::lineMode45 );
 
         config.AppendSeparator()
-              .AppendAction( EE_ACTIONS::toggleAnnotateAuto );
+              .AppendAction( SCH_ACTIONS::toggleAnnotateAuto );
 
         config.AppendSeparator()
-              .AppendAction( EE_ACTIONS::showHierarchy )
+              .AppendAction( SCH_ACTIONS::showHierarchy )
               .AppendAction( ACTIONS::showProperties );
 
         if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
@@ -91,35 +91,35 @@ std::optional<TOOLBAR_CONFIGURATION> SCH_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
 
     case TOOLBAR_LOC::RIGHT:
         config.AppendAction( ACTIONS::selectionTool )
-              .AppendAction( EE_ACTIONS::highlightNetTool );
+              .AppendAction( SCH_ACTIONS::highlightNetTool );
 
         config.AppendSeparator()
-              .AppendAction( EE_ACTIONS::placeSymbol )
-              .AppendAction( EE_ACTIONS::placePower )
-              .AppendAction( EE_ACTIONS::drawWire )
-              .AppendAction( EE_ACTIONS::drawBus )
-              .AppendAction( EE_ACTIONS::placeBusWireEntry )
-              .AppendAction( EE_ACTIONS::placeNoConnect )
-              .AppendAction( EE_ACTIONS::placeJunction )
-              .AppendAction( EE_ACTIONS::placeLabel )
-              .AppendAction( EE_ACTIONS::placeClassLabel )
-              .AppendAction( EE_ACTIONS::drawRuleArea )
-              .AppendAction( EE_ACTIONS::placeGlobalLabel )
-              .AppendAction( EE_ACTIONS::placeHierLabel )
-              .AppendAction( EE_ACTIONS::drawSheet )
-              .AppendAction( EE_ACTIONS::placeSheetPin )
-              .AppendAction( EE_ACTIONS::syncAllSheetsPins );
+              .AppendAction( SCH_ACTIONS::placeSymbol )
+              .AppendAction( SCH_ACTIONS::placePower )
+              .AppendAction( SCH_ACTIONS::drawWire )
+              .AppendAction( SCH_ACTIONS::drawBus )
+              .AppendAction( SCH_ACTIONS::placeBusWireEntry )
+              .AppendAction( SCH_ACTIONS::placeNoConnect )
+              .AppendAction( SCH_ACTIONS::placeJunction )
+              .AppendAction( SCH_ACTIONS::placeLabel )
+              .AppendAction( SCH_ACTIONS::placeClassLabel )
+              .AppendAction( SCH_ACTIONS::drawRuleArea )
+              .AppendAction( SCH_ACTIONS::placeGlobalLabel )
+              .AppendAction( SCH_ACTIONS::placeHierLabel )
+              .AppendAction( SCH_ACTIONS::drawSheet )
+              .AppendAction( SCH_ACTIONS::placeSheetPin )
+              .AppendAction( SCH_ACTIONS::syncAllSheetsPins );
 
         config.AppendSeparator()
-              .AppendAction( EE_ACTIONS::placeSchematicText )
-              .AppendAction( EE_ACTIONS::drawTextBox )
-              .AppendAction( EE_ACTIONS::drawTable )
-              .AppendAction( EE_ACTIONS::drawRectangle )
-              .AppendAction( EE_ACTIONS::drawCircle )
-              .AppendAction( EE_ACTIONS::drawArc )
-              .AppendAction( EE_ACTIONS::drawBezier )
-              .AppendAction( EE_ACTIONS::drawLines )
-              .AppendAction( EE_ACTIONS::placeImage )
+              .AppendAction( SCH_ACTIONS::placeSchematicText )
+              .AppendAction( SCH_ACTIONS::drawTextBox )
+              .AppendAction( SCH_ACTIONS::drawTable )
+              .AppendAction( SCH_ACTIONS::drawRectangle )
+              .AppendAction( SCH_ACTIONS::drawCircle )
+              .AppendAction( SCH_ACTIONS::drawArc )
+              .AppendAction( SCH_ACTIONS::drawBezier )
+              .AppendAction( SCH_ACTIONS::drawLines )
+              .AppendAction( SCH_ACTIONS::placeImage )
               .AppendAction( ACTIONS::deleteTool );
 
         break;
@@ -134,7 +134,7 @@ std::optional<TOOLBAR_CONFIGURATION> SCH_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
         config.AppendAction( ACTIONS::save );
 
         config.AppendSeparator()
-              .AppendAction( EE_ACTIONS::schematicSetup );
+              .AppendAction( SCH_ACTIONS::schematicSetup );
 
         config.AppendSeparator()
               .AppendAction( ACTIONS::pageSettings )
@@ -161,15 +161,15 @@ std::optional<TOOLBAR_CONFIGURATION> SCH_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
               .AppendAction( ACTIONS::zoomTool );
 
         config.AppendSeparator()
-              .AppendAction( EE_ACTIONS::navigateBack )
-              .AppendAction( EE_ACTIONS::navigateUp )
-              .AppendAction( EE_ACTIONS::navigateForward );
+              .AppendAction( SCH_ACTIONS::navigateBack )
+              .AppendAction( SCH_ACTIONS::navigateUp )
+              .AppendAction( SCH_ACTIONS::navigateForward );
 
         config.AppendSeparator()
-              .AppendAction( EE_ACTIONS::rotateCCW )
-              .AppendAction( EE_ACTIONS::rotateCW )
-              .AppendAction( EE_ACTIONS::mirrorV )
-              .AppendAction( EE_ACTIONS::mirrorH );
+              .AppendAction( SCH_ACTIONS::rotateCCW )
+              .AppendAction( SCH_ACTIONS::rotateCW )
+              .AppendAction( SCH_ACTIONS::mirrorV )
+              .AppendAction( SCH_ACTIONS::mirrorH );
 
         config.AppendSeparator()
               .AppendAction( ACTIONS::showSymbolEditor )
@@ -177,15 +177,15 @@ std::optional<TOOLBAR_CONFIGURATION> SCH_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
               .AppendAction( ACTIONS::showFootprintEditor );
 
         config.AppendSeparator()
-              .AppendAction( EE_ACTIONS::annotate )
-              .AppendAction( EE_ACTIONS::runERC )
-              .AppendAction( EE_ACTIONS::showSimulator )
-              .AppendAction( EE_ACTIONS::assignFootprints )
-              .AppendAction( EE_ACTIONS::editSymbolFields )
-              .AppendAction( EE_ACTIONS::generateBOM );
+              .AppendAction( SCH_ACTIONS::annotate )
+              .AppendAction( SCH_ACTIONS::runERC )
+              .AppendAction( SCH_ACTIONS::showSimulator )
+              .AppendAction( SCH_ACTIONS::assignFootprints )
+              .AppendAction( SCH_ACTIONS::editSymbolFields )
+              .AppendAction( SCH_ACTIONS::generateBOM );
 
         config.AppendSeparator()
-              .AppendAction( EE_ACTIONS::showPcbNew );
+              .AppendAction( SCH_ACTIONS::showPcbNew );
 
         // Insert all the IPC plugins here on the toolbar
         // TODO (ISM): Move this to individual actions for each script

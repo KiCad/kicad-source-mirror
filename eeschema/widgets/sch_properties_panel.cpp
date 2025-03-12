@@ -36,7 +36,7 @@
 #include <settings/color_settings.h>
 #include <string_utils.h>
 #include <tool/tool_manager.h>
-#include <tools/ee_selection_tool.h>
+#include <tools/sch_selection_tool.h>
 
 
 SCH_PROPERTIES_PANEL::SCH_PROPERTIES_PANEL( wxWindow* aParent, SCH_BASE_FRAME* aFrame ) :
@@ -103,8 +103,8 @@ SCH_PROPERTIES_PANEL::~SCH_PROPERTIES_PANEL()
 
 void SCH_PROPERTIES_PANEL::UpdateData()
 {
-    EE_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<EE_SELECTION_TOOL>();
-    const SELECTION& selection = selectionTool->GetSelection();
+    SCH_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    const SELECTION&    selection = selectionTool->GetSelection();
 
     // Will actually just be updatePropertyValues() if selection hasn't changed
     rebuildProperties( selection );
@@ -113,8 +113,8 @@ void SCH_PROPERTIES_PANEL::UpdateData()
 
 void SCH_PROPERTIES_PANEL::AfterCommit()
 {
-    EE_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<EE_SELECTION_TOOL>();
-    const SELECTION& selection = selectionTool->GetSelection();
+    SCH_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    const SELECTION&    selection = selectionTool->GetSelection();
 
     rebuildProperties( selection );
 }
@@ -136,9 +136,9 @@ wxPGProperty* SCH_PROPERTIES_PANEL::createPGProperty( const PROPERTY_BASE* aProp
 
 PROPERTY_BASE* SCH_PROPERTIES_PANEL::getPropertyFromEvent( const wxPropertyGridEvent& aEvent ) const
 {
-    EE_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<EE_SELECTION_TOOL>();
-    const SELECTION& selection = selectionTool->GetSelection();
-    SCH_ITEM* firstItem = static_cast<SCH_ITEM*>( selection.Front() );
+    SCH_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    const SELECTION&    selection = selectionTool->GetSelection();
+    SCH_ITEM*           firstItem = static_cast<SCH_ITEM*>( selection.Front() );
 
     wxCHECK_MSG( firstItem, nullptr,
                  wxT( "getPropertyFromEvent for a property with nothing selected!") );
@@ -154,9 +154,9 @@ PROPERTY_BASE* SCH_PROPERTIES_PANEL::getPropertyFromEvent( const wxPropertyGridE
 
 void SCH_PROPERTIES_PANEL::valueChanging( wxPropertyGridEvent& aEvent )
 {
-    EE_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<EE_SELECTION_TOOL>();
-    const SELECTION& selection = selectionTool->GetSelection();
-    EDA_ITEM* item = selection.Front();
+    SCH_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    const SELECTION&    selection = selectionTool->GetSelection();
+    EDA_ITEM*           item = selection.Front();
 
     PROPERTY_BASE* property = getPropertyFromEvent( aEvent );
     wxCHECK( property, /* void */ );
@@ -179,14 +179,13 @@ void SCH_PROPERTIES_PANEL::valueChanging( wxPropertyGridEvent& aEvent )
 
 void SCH_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
 {
-    EE_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<EE_SELECTION_TOOL>();
-    const SELECTION& selection = selectionTool->GetSelection();
-
-    PROPERTY_BASE* property = getPropertyFromEvent( aEvent );
+    SCH_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    const SELECTION&    selection = selectionTool->GetSelection();
+    PROPERTY_BASE*      property = getPropertyFromEvent( aEvent );
     wxCHECK( property, /* void */ );
 
-    wxVariant newValue = aEvent.GetPropertyValue();
-    SCH_COMMIT changes( m_frame );
+    wxVariant   newValue = aEvent.GetPropertyValue();
+    SCH_COMMIT  changes( m_frame );
     SCH_SCREEN* screen = m_frame->GetScreen();
 
     PROPERTY_COMMIT_HANDLER handler( &changes );
