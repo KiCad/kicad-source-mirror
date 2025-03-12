@@ -76,6 +76,7 @@ private:
 bool DRC_TEST_PROVIDER_CREEPAGE::Run()
 {
     m_board = m_drcEngine->GetBoard();
+    m_reportedPairs.clear();
 
     if( !m_drcEngine->IsErrorLimitExceeded( DRCE_CREEPAGE ) )
     {
