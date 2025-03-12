@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:05+0300\n"
-"PO-Revision-Date: 2025-03-12 09:51+0000\n"
+"PO-Revision-Date: 2025-03-12 14:00+0000\n"
 "Last-Translator: İclal Gör <iclallgor@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v9/tr/>\n"
 "Language: tr\n"
@@ -3455,14 +3455,12 @@ msgstr "Çıkış Modu:"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:23
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:55
 #: pcbnew/dialogs/dialog_render_job_base.cpp:33
-#, fuzzy
 msgid "Format:"
-msgstr "Biçim"
+msgstr "Biçim:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:43
-#, fuzzy
 msgid "Include:"
-msgstr "Katmanları Dahil Et"
+msgstr "Dahil Et:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:56
 #: common/widgets/wx_html_report_panel_base.cpp:52
@@ -3742,9 +3740,8 @@ msgstr "Lütfen depo için bir URL girin"
 
 #: common/dialogs/git/dialog_git_repository.cpp:453
 #: common/dialogs/git/dialog_git_repository_base.cpp:108
-#, fuzzy
 msgid "SSH key password:"
-msgstr "SSH Anahtar Şifresi"
+msgstr "SSH Anahtar Şifresi:"
 
 #: common/dialogs/git/dialog_git_repository.cpp:459
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
@@ -3752,14 +3749,12 @@ msgid "Password:"
 msgstr "Şifre:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:38
-#, fuzzy
 msgid "Location:"
-msgstr "Konum"
+msgstr "Konum:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:45
-#, fuzzy
 msgid "Connection type:"
-msgstr "Bağlantı Tipi"
+msgstr "Bağlantı Tipi:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:52
 msgid "HTTPS"
@@ -4455,9 +4450,8 @@ msgstr "'%s' rumuzunda yasa dışı karakter '%c'."
 #: eeschema/dialogs/panel_sym_lib_table.cpp:556
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:608
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:656
-#, fuzzy
 msgid "Library Nickname Error"
-msgstr "Oluşturanın takma adı:"
+msgstr "Kütüphane Takma Adı Hatası"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:614
 #: eeschema/dialogs/panel_sym_lib_table.cpp:542
@@ -4526,9 +4520,8 @@ msgstr "%s Kütüphanesini Seç"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:988
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1016
-#, fuzzy
 msgid "Warning: Duplicate Nicknames"
-msgstr "Çiftleme:"
+msgstr "Uyarı: Yinelenen Takma Adlar"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:989
 #: eeschema/dialogs/panel_sym_lib_table.cpp:668
@@ -4822,9 +4815,8 @@ msgstr "Baskı izleri/padler:"
 
 #: common/dialogs/panel_grid_settings.cpp:54
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:81
-#, fuzzy
 msgid "Tracks:"
-msgstr "Yollar"
+msgstr "Yollar:"
 
 #: common/dialogs/panel_grid_settings.cpp:137 common/tool/grid_menu.cpp:100
 #, c-format
@@ -4875,9 +4867,8 @@ msgid "Wires:"
 msgstr "Yollar:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:138
-#, fuzzy
 msgid "Vias:"
-msgstr "Atlamalar"
+msgstr "Yollar:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:146
 #: eeschema/dialogs/dialog_field_properties_base.cpp:33
@@ -5432,9 +5423,8 @@ msgid "<b>Nets matching '%s':</b>"
 msgstr "<b>Eşleşen ağlar%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
-#, fuzzy
 msgid "Netclasses"
-msgstr "Malzeme sınıfları:"
+msgstr "Netclasslar"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:641
@@ -5523,9 +5513,8 @@ msgid "Import colors from schematic"
 msgstr "Renkleri şemadan içe aktar"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:128
-#, fuzzy
 msgid "Netclass Assignments"
-msgstr "Malzeme atamaları:"
+msgstr "Netclass Atamaları"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:152
 msgid "Pattern"
@@ -7743,9 +7732,8 @@ msgid "Archive"
 msgstr "Arşiv"
 
 #: common/jobs/jobs_output_folder.cpp:85 common/jobs/jobset.cpp:42
-#, fuzzy
 msgid "Folder"
-msgstr "Klasör:"
+msgstr "Klasör"
 
 #: common/json_schema_validator.cpp:48
 #, c-format
@@ -8101,14 +8089,12 @@ msgid "DRC errors"
 msgstr "DRC hataları"
 
 #: common/layer_id.cpp:140
-#, fuzzy
 msgid "DRC shape 1"
-msgstr "Delik şekli:"
+msgstr "DRC şekil 1"
 
 #: common/layer_id.cpp:141
-#, fuzzy
 msgid "DRC shape 2"
-msgstr "Delik şekli:"
+msgstr "DRC şekil 2"
 
 #: common/layer_id.cpp:142
 msgid "DRC exclusions"
@@ -8787,9 +8773,8 @@ msgstr "Tümünü Daralt"
 #: common/tool/actions.cpp:342 eeschema/tools/sch_edit_tool.cpp:3138
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1214
 #: pcbnew/tools/edit_tool.cpp:3084
-#, fuzzy
 msgid "Increment"
-msgstr "Artış adımı:"
+msgstr "Artış"
 
 #: common/tool/actions.cpp:343
 #, fuzzy
@@ -8797,9 +8782,8 @@ msgid "Increment the selected item(s)"
 msgstr "Seçili öğeleri sil"
 
 #: common/tool/actions.cpp:348
-#, fuzzy
 msgid "Increment Primary"
-msgstr "Artış adımı:"
+msgstr "Artış Birincil"
 
 #: common/tool/actions.cpp:349
 #, fuzzy
@@ -8807,9 +8791,8 @@ msgid "Increment the primary field of the selected item(s)"
 msgstr "Seçimden Çizgiler Oluşturun"
 
 #: common/tool/actions.cpp:355
-#, fuzzy
 msgid "Decrement Primary"
-msgstr "Artış adımı:"
+msgstr "Birincil Azaltma"
 
 #: common/tool/actions.cpp:356
 #, fuzzy
@@ -8817,9 +8800,8 @@ msgid "Decrement the primary field of the selected item(s)"
 msgstr "Seçili öğe(leri) çoğalt"
 
 #: common/tool/actions.cpp:362
-#, fuzzy
 msgid "Increment Secondary"
-msgstr "Artış adımı:"
+msgstr "Birincil Azaltma"
 
 #: common/tool/actions.cpp:363
 #, fuzzy
@@ -10927,9 +10909,8 @@ msgstr "Proje"
 
 #: eeschema/design_block_utils.cpp:84 eeschema/sch_base_frame.cpp:301
 #: pcbnew/footprint_libraries_utils.cpp:424
-#, fuzzy
 msgid "Choose the Library Table to add the library to:"
-msgstr "Kütüphaneyi listenin başında tut"
+msgstr "Kütüphaneyi eklemek için Kütüphane Tablosunu seçin:"
 
 #: eeschema/design_block_utils.cpp:85 eeschema/sch_base_frame.cpp:302
 #: pcbnew/footprint_libraries_utils.cpp:425
@@ -10947,9 +10928,8 @@ msgid "Library %s already exists."
 msgstr "'%s' sembol kitaplığı zaten var."
 
 #: eeschema/design_block_utils.cpp:239
-#, fuzzy
 msgid "Enter a description for the library:"
-msgstr "Bu kütüphane girdisi için seçenekleri düzenle"
+msgstr "Kütüphane için bir açıklama girin:"
 
 #: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:3010
 #: pcbnew/footprint.cpp:4129 pcbnew/plot_board_layers.cpp:193
@@ -12157,9 +12137,8 @@ msgstr "Bir netlist oluşturucu başlığı sağlamalısınız"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:27
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:36
-#, fuzzy
 msgid "Output path:"
-msgstr "Çıktı"
+msgstr "Çıkış yolu:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:59
 msgid "Add Exporter..."
@@ -13479,9 +13458,8 @@ msgid "&Pin length:"
 msgstr "B&acak uzunluğu:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:83
-#, fuzzy
 msgid "N&ame text size:"
-msgstr "&Ad Metin Boyutu"
+msgstr "N&ame metin boyutu:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:90
 msgid "Number text si&ze:"
@@ -13724,9 +13702,8 @@ msgid "Plot the background color if the output format supports it"
 msgstr "Çıktı formatı destekliyorsa arka plan rengini çizin"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:100
-#, fuzzy
 msgid "Minimum line width:"
-msgstr "En ince yol genişliği"
+msgstr "Minimum satır genişliği:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:105
 msgid ""
@@ -14038,9 +14015,8 @@ msgid "Search the current selection &only"
 msgstr "Yalnızca geçerli sayfa"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:105
-#, fuzzy
 msgid "Replace matches in reference designators"
-msgstr "Referans tasarımcıyla eşleşen sembolleri güncelleyin:"
+msgstr "Referans belirteçlerindeki eşleşmeleri değiştirin"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:124
 #, fuzzy
@@ -14150,9 +14126,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:115
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:212
-#, fuzzy
 msgid "Filled shape"
-msgstr "Delik şekli:"
+msgstr "Dolu şekil"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:141
 #, fuzzy
@@ -14399,9 +14374,8 @@ msgid "New Simulation Tab"
 msgstr "Simülasyon"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:21
-#, fuzzy
 msgid "Analysis type:"
-msgstr "Pasif tip"
+msgstr "Analiz türü:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "AC"
@@ -14606,32 +14580,28 @@ msgid "Use initial conditions"
 msgstr "Kullanıcı yapılandırması"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:323
-#, fuzzy
 msgid "Input signals:"
-msgstr "Giriş Bacağı"
+msgstr "Giriş sinyalleri:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:338
 msgid "Linearize inputs before performing FFT"
 msgstr "FFT gerçekleştirmeden önce girdileri doğrusallaştırın"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:359
-#, fuzzy
 msgid "Measured node:"
-msgstr "Ölçülen düğüm"
+msgstr "Ölçülen düğüm:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:371
-#, fuzzy
 msgid "Reference node:"
-msgstr "Referans düğümü"
+msgstr "Referans düğümü:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:380
 msgid "(optional; default GND)"
 msgstr "(isteğe bağlı; varsayılan GND)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:384
-#, fuzzy
 msgid "Noise source:"
-msgstr "Gürültü kaynağı"
+msgstr "Gürültü kaynağı:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:459
 msgid "Save contributions from all noise generators"
@@ -14652,9 +14622,8 @@ msgid "Load Directives from Schematic"
 msgstr "[şematikten]"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:567
-#, fuzzy
 msgid "Transfer function:"
-msgstr "Transfer Fonksiyonu"
+msgstr "Transfer Fonksiyonu:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:571
 msgid "(output voltage) / (input voltage)"
@@ -14665,9 +14634,8 @@ msgid "(output voltage) / (input current)"
 msgstr "(çıkış gerilimi) / (giriş akımı)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:577
-#, fuzzy
 msgid "Input:"
-msgstr "Girdi"
+msgstr "Girdi:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:586
 #: eeschema/dialogs/dialog_sim_command_base.cpp:604
@@ -14675,14 +14643,12 @@ msgid "Ref:"
 msgstr "Referans:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:595
-#, fuzzy
 msgid "Output:"
-msgstr "Çıktı"
+msgstr "Çıktı:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:619
-#, fuzzy
 msgid "Find:"
-msgstr "Bul"
+msgstr "Bul:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
 #, fuzzy
@@ -14703,9 +14669,8 @@ msgid "Add full path for .include library directives"
 msgstr "Tam yol ekle .include kütüphane direktiflerini dahil et"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:662
-#, fuzzy
 msgid "Compatibility mode:"
-msgstr "Uyumlu"
+msgstr "Uyumluluk modu:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 msgid "User configuration"
@@ -14771,9 +14736,8 @@ msgid "Dotted current/phase"
 msgstr "Geçerli Sayfayı Çiz"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:822
-#, fuzzy
 msgid "Margins:"
-msgstr "Kenar boşluğu"
+msgstr "Kenarlar:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:832
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:546
@@ -14907,9 +14871,8 @@ msgid "G"
 msgstr "G"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "T"
-msgstr "T:"
+msgstr "T"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 #, fuzzy
@@ -14937,9 +14900,8 @@ msgid "Failed to read simulation model from fields."
 msgstr "'%s' sembol kitaplığı dosyası oluşturulamadı."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:539
-#, fuzzy
 msgid "Component:"
-msgstr "Elemanlar"
+msgstr "Bileşen:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:539
 #: eeschema/dialogs/dialog_sim_model_base.cpp:62
@@ -15059,9 +15021,8 @@ msgid "Parameters"
 msgstr "Parametreler"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:219
-#, fuzzy
 msgid "Code"
-msgstr "DCode:"
+msgstr "Kod"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:223
 msgid "Save {} in Value field as \"{}\""
@@ -15162,9 +15123,8 @@ msgstr "#"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:729
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:823
-#, fuzzy
 msgid "New field name:"
-msgstr "Bacak adını göster"
+msgstr "Yeni alan adı:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:729
 msgid "Add Field"
@@ -15258,9 +15218,8 @@ msgstr "BOM çıktısı '%s'e yazıldı"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1781
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2183
-#, fuzzy
 msgid "BOM preset name:"
-msgstr "Katman Adı"
+msgstr "BOM ön ayar adı:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1781
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2183
@@ -15279,9 +15238,8 @@ msgstr ""
 "Lütfen farklı bir isim kullanın."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:63
-#, fuzzy
 msgid "View presets:"
-msgstr "Ön Ayar Değiştiriciyi Görüntüle"
+msgstr "Ön ayarları görüntüle:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:100
 #, fuzzy
@@ -15302,9 +15260,8 @@ msgid "Group symbols together based on common properties"
 msgstr "Sembolleri ortak özelliklere göre birlikte gruplayın"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:163
-#, fuzzy
 msgid "Scope:"
-msgstr "Kapsam"
+msgstr "Kapsam:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:167
 #, fuzzy
@@ -15317,9 +15274,8 @@ msgid "Recursive"
 msgstr "Özyineleme (Recursion) Seviyesi"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:176
-#, fuzzy
 msgid "Cross-probe action:"
-msgstr "Çapraz yoklama"
+msgstr "Çapraz sorgulama eylemi:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:180
 #: gerbview/tools/gerbview_selection_tool.cpp:46
@@ -15337,9 +15293,8 @@ msgid "Edit"
 msgstr "Dü&zenle"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:215
-#, fuzzy
 msgid "Field delimiter:"
-msgstr "Milimetre"
+msgstr "Alan ayırıcı:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:219
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:237
@@ -15356,14 +15311,12 @@ msgid "\""
 msgstr "\""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:233
-#, fuzzy
 msgid "Reference delimiter:"
-msgstr "Başvuru Belirleyicileri"
+msgstr "Referans ayırıcı:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:242
-#, fuzzy
 msgid "Range delimiter:"
-msgstr "Sayfa Sınırları"
+msgstr "Aralık ayırıcısı:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:246
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:35
@@ -15385,9 +15338,8 @@ msgid "Keep line breaks"
 msgstr "Rota izleri"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:261
-#, fuzzy
 msgid "Format presets:"
-msgstr "Biçim"
+msgstr "Biçim ön ayarları:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:322
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:332
@@ -15692,9 +15644,8 @@ msgstr "Sembol Özellikleri"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:43
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:39
-#, fuzzy
 msgid "Horizontal alignment:"
-msgstr "Yatay metin"
+msgstr "Yatay hizalama:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:45
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:41
@@ -15704,9 +15655,8 @@ msgstr "Yatay metin"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:70
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:66
-#, fuzzy
 msgid "Vertical alignment:"
-msgstr "Dikey metin"
+msgstr "Dikey hizalama:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:72
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:68
@@ -15732,9 +15682,8 @@ msgstr "Arka plan dolgusu:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:264
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:191
-#, fuzzy
 msgid "Cell margins:"
-msgstr "Kenar boşluğu"
+msgstr "Hücre kenarları:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:306
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:230
@@ -15784,9 +15733,8 @@ msgid "Edit Text Properties"
 msgstr "Metin Özellikleri"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:266
-#, fuzzy
 msgid "Background fill"
-msgstr "Arka plan dolgusu:"
+msgstr "Arka plan dolgusu"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:292
 msgid "Link:"
@@ -15870,9 +15818,8 @@ msgid "Update Symbol Fields"
 msgstr "Sembol Alanlarını Güncelle"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:21
-#, fuzzy
 msgid "Parent symbol:"
-msgstr "Güç simgesi"
+msgstr "Üst simge:"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:36
 msgid "Update/reset Fields"
@@ -15930,14 +15877,12 @@ msgid "Wire & Bus Properties"
 msgstr "Hat, Tel ve Veri Yolu Özellikleri"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:20
-#, fuzzy
 msgid "Bill of Materials Presets:"
-msgstr "Ürün Reçetesi"
+msgstr "Malzeme Listesi Ön Ayarları:"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:60
-#, fuzzy
 msgid "Bill of Materials Formatting Presets:"
-msgstr "Ürün Reçetesi Oluşturma Yardımı"
+msgstr "Malzeme Listesi Biçimlendirme Ön Ayarları:"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:20
 #, fuzzy
@@ -16008,9 +15953,8 @@ msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr "PCB düzenleyicide vurgulandıklarında ağları vurgulayın"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:90
-#, fuzzy
 msgid "Default font:"
-msgstr "Varsayılan yazı tipi"
+msgstr "Varsayılan yazı tipi:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:103
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:35
@@ -16104,9 +16048,8 @@ msgid "Color highlight opacity:"
 msgstr "Renk vurgusu opaklığı:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
-#, fuzzy
 msgid "Line drawing mode:"
-msgstr "Çizim Sayfasını Yazdır"
+msgstr "Çizgi çizme modu:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:37
 #, fuzzy
@@ -16294,9 +16237,8 @@ msgid "Member net/alias name cannot be empty."
 msgstr "Değişken adı boş olamaz."
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:24
-#, fuzzy
 msgid "Bus definitions:"
-msgstr "Veri Yolu Tanımları"
+msgstr "Otobüs tanımları:"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:44
 msgid "Alias"
@@ -16308,9 +16250,9 @@ msgid "(source)"
 msgstr "Kaynak"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:94
-#, fuzzy, c-format
+#, c-format
 msgid "Members of '%s':"
-msgstr "'%s' için bir rakama ihtiyacınız var"
+msgstr "'%s' üyeleri:"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:114
 #, fuzzy
@@ -16324,9 +16266,8 @@ msgid "Annotations"
 msgstr "Ek açıklamalar"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:30
-#, fuzzy
 msgid "Symbol unit notation:"
-msgstr "Numaralandırmayı Temizle"
+msgstr "Sembol birim gösterimi:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid ".A"
@@ -16359,14 +16300,12 @@ msgid "Default text size:"
 msgstr "Varsayılan çizgi genişliği:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
-#, fuzzy
 msgid "Overbar offset ratio:"
-msgstr "Etiket Özellikleri"
+msgstr "Üst çubuk ofset oranı:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:77
-#, fuzzy
 msgid "Label offset ratio:"
-msgstr "Etiket Özellikleri"
+msgstr "Etiket ofset oranı:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:79
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:84
@@ -16378,9 +16317,8 @@ msgstr ""
 "kaydırmak için metin boyutunun yüzdesi"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:92
-#, fuzzy
 msgid "Global label margin ratio:"
-msgstr "Genel Etiket"
+msgstr "Küresel etiket kenar oranı:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:94
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:99
@@ -16394,9 +16332,8 @@ msgid "Default line width:"
 msgstr "Varsayılan çizgi genişliği:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:133
-#, fuzzy
 msgid "Pin symbol size:"
-msgstr "Güç sembolleri"
+msgstr "Pin sembol boyutu:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:151
 #: eeschema/erc/erc_item.cpp:39
@@ -16493,9 +16430,8 @@ msgid "Significant digits (voltages):"
 msgstr "Öncelikli sayılar (voltajlar):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:296
-#, fuzzy
 msgid "Range (voltages):"
-msgstr "Tüm değişiklikleri kaydet"
+msgstr "Aralık (voltajlar):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
 #, fuzzy
@@ -16554,9 +16490,8 @@ msgid "Significant digits (currents):"
 msgstr "Öncelikli sayılar (akımlar):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:315
-#, fuzzy
 msgid "Range (currents):"
-msgstr "Tüm değişiklikleri kaydet"
+msgstr "Aralık (akımlar):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
 #, fuzzy
@@ -16629,9 +16564,8 @@ msgstr "Bağlantı Yok"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:42
 #: eeschema/dialogs/panel_simulator_preferences.cpp:63
-#, fuzzy
 msgid "Pan left/right"
-msgstr "Sola/sağa kaydır:"
+msgstr "Sola/sağa kaydır"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:43
 #, fuzzy
@@ -16639,9 +16573,8 @@ msgid "Pan right/left"
 msgstr "Sağa Kaydır"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:44
-#, fuzzy
 msgid "Pan up/down"
-msgstr "Yukarı/aşağı kaydır:"
+msgstr "Yukarı/aşağı kaydır"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences.cpp:64
@@ -16655,9 +16588,8 @@ msgid "Zoom vertically"
 msgstr "Dikey"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:33
-#, fuzzy
 msgid "Vertical Touchpad or Scroll Wheel Movement"
-msgstr "Dikey dokunmatik yüzey veya kaydırma tekerleği hareketi:"
+msgstr "Dikey Dokunmatik Yüzey veya Kaydırma Tekerleği Hareketi"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:109
@@ -16676,19 +16608,16 @@ msgid "Action"
 msgstr "Eylem"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:54
-#, fuzzy
 msgid "None:"
-msgstr "Hiçbiri"
+msgstr "Hiçbiri:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:63
-#, fuzzy
 msgid "Ctrl:"
-msgstr "Ctrl"
+msgstr "Ctrl:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:72
-#, fuzzy
 msgid "Shift:"
-msgstr "Kaydırma"
+msgstr "Kaydır:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:81
 msgid "Alt:"
@@ -16713,9 +16642,8 @@ msgid "Use theme:"
 msgstr "Yükselme süresi:"
 
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:41
-#, fuzzy
 msgid "Show pin &electrical type"
-msgstr "Elektriksel tipi:"
+msgstr "Pin ve elektrik türünü göster"
 
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:45
 msgid "Show pin &alternate mode indicator icons"
@@ -16750,9 +16678,8 @@ msgid "Def&ault pin name size:"
 msgstr "Varsayılan çizgi genişliği:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:110
-#, fuzzy
 msgid "&Pitch of repeated pins:"
-msgstr "Yinelenen kopyaları yerleştirin"
+msgstr "&Tekrarlanan pinlerin aralığı:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:140
 #, fuzzy
@@ -17475,9 +17402,8 @@ msgid "Wires not connected to anything"
 msgstr "Hiçbir şeye bağlı olmayan teller"
 
 #: eeschema/erc/erc_item.cpp:177
-#, fuzzy
 msgid "Library symbol issue"
-msgstr "Kütüphane Sembolü:"
+msgstr "Kütüphane sembolü sorunu"
 
 #: eeschema/erc/erc_item.cpp:181
 #, fuzzy
@@ -17528,9 +17454,8 @@ msgid "Units of same symbol have different values"
 msgstr "Aynı sembolün birimleri farklı değerlere sahiptir"
 
 #: eeschema/erc/erc_item.cpp:221
-#, fuzzy
 msgid "Duplicate reference designators"
-msgstr "Varsayılan başvuru belirteci:"
+msgstr "Çift referans belirteçleri"
 
 #: eeschema/erc/erc_item.cpp:225
 #, fuzzy
@@ -17915,9 +17840,8 @@ msgid "Manual removal will be required for the file(s) above."
 msgstr "Yukarıdaki dosya (lar) için manuel kaldırma gerekli olacaktır."
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:2086
-#, fuzzy
 msgid "Derived from"
-msgstr "Sembolden türet:"
+msgstr "Türetilmiş"
 
 #: eeschema/generate_alias_info.cpp:82 eeschema/sch_base_frame.cpp:85
 #: eeschema/symbol_editor/symbol_editor.cpp:171
@@ -23005,9 +22929,8 @@ msgid "Rename Symbol..."
 msgstr "Sembolü Değiştir..."
 
 #: eeschema/tools/ee_actions.cpp:229
-#, fuzzy
 msgid "Save the current symbol to a different library or name"
-msgstr "Geçerli sembolü farklı bir kitaplığa kaydedin."
+msgstr "Mevcut sembolü farklı bir kütüphaneye veya isme kaydet"
 
 #: eeschema/tools/ee_actions.cpp:235
 #, fuzzy
@@ -23015,9 +22938,8 @@ msgid "Save Copy As..."
 msgstr "Kopyayı Farklı Kaydet..."
 
 #: eeschema/tools/ee_actions.cpp:236
-#, fuzzy
 msgid "Save a copy of the current symbol to a different library or name"
-msgstr "Geçerli sembolü farklı bir kitaplığa kaydedin."
+msgstr "Mevcut sembolün bir kopyasını farklı bir kütüphaneye veya ada kaydedin"
 
 #: eeschema/tools/ee_actions.cpp:243
 #, fuzzy
@@ -23030,14 +22952,12 @@ msgid "Paste Symbol"
 msgstr "Güç Sembolü"
 
 #: eeschema/tools/ee_actions.cpp:267
-#, fuzzy
 msgid "Import Symbol..."
-msgstr "Dışarıdan Simge Al"
+msgstr "İthalat Sembolü..."
 
 #: eeschema/tools/ee_actions.cpp:268
-#, fuzzy
 msgid "Import a symbol to the current library"
-msgstr "Yeni Kütüphaneye Ayak İzleri..."
+msgstr "Mevcut kütüphaneye bir sembol aktarın"
 
 #: eeschema/tools/ee_actions.cpp:274
 #, fuzzy
@@ -23045,9 +22965,8 @@ msgid "Export..."
 msgstr "Dışa aktar..."
 
 #: eeschema/tools/ee_actions.cpp:275
-#, fuzzy
 msgid "Export a symbol to a new library file"
-msgstr "Yeni Kütüphaneye Ayak İzleri..."
+msgstr "Bir sembolü yeni bir kütüphane dosyasına aktarın"
 
 #: eeschema/tools/ee_actions.cpp:281
 msgid "Update Symbol Fields..."
@@ -23413,14 +23332,12 @@ msgid "Swap"
 msgstr "Takas"
 
 #: eeschema/tools/ee_actions.cpp:728 pcbnew/tools/pcb_actions.cpp:570
-#, fuzzy
 msgid "Swap positions of selected items"
-msgstr "Seçim %d kilitli öğe içeriyor."
+msgstr "Seçili öğelerin konumlarını değiştirin"
 
 #: eeschema/tools/ee_actions.cpp:744
-#, fuzzy
 msgid "Edit Reference Designator..."
-msgstr "Başvuru Belirleyicileri"
+msgstr "Referans Belirleyicisini Düzenle..."
 
 #: eeschema/tools/ee_actions.cpp:752
 #, fuzzy
@@ -23456,9 +23373,8 @@ msgid "Assign different symbols from the library"
 msgstr "Sembol alanlarını yeni kütüphaneden güncelle"
 
 #: eeschema/tools/ee_actions.cpp:782
-#, fuzzy
 msgid "Update Symbols from Library..."
-msgstr "Sembolleri Kütüphaneden Güncelle"
+msgstr "Sembolleri Kütüphaneden Güncelle..."
 
 #: eeschema/tools/ee_actions.cpp:783
 #, fuzzy
@@ -23481,9 +23397,8 @@ msgid "Update symbol to include any changes from the library"
 msgstr "Sembol alanlarını yeni kütüphaneden güncelle"
 
 #: eeschema/tools/ee_actions.cpp:803 pcbnew/tools/pcb_actions.cpp:1117
-#, fuzzy
 msgid "Assign Netclass..."
-msgstr "Net Sınıfı Ata"
+msgstr "Netclass'ı ata..."
 
 #: eeschema/tools/ee_actions.cpp:804 pcbnew/tools/pcb_actions.cpp:1118
 msgid "Assign a netclass to nets matching a pattern"
@@ -23584,9 +23499,8 @@ msgid "Delete unreferenced sheet pins"
 msgstr "Varsayılan başvuru belirteci:"
 
 #: eeschema/tools/ee_actions.cpp:891 pcbnew/tools/pcb_actions.cpp:833
-#, fuzzy
 msgid "Edit Text & Graphics Properties..."
-msgstr "Metin ve Grafik Özelliklerini Düzenle"
+msgstr "Metin ve Grafik Özelliklerini Düzenle..."
 
 #: eeschema/tools/ee_actions.cpp:892
 #, fuzzy
@@ -23594,14 +23508,12 @@ msgid "Edit text and graphics properties globally across schematic"
 msgstr "Metin ve Grafik Özelliklerini Düzenle"
 
 #: eeschema/tools/ee_actions.cpp:898
-#, fuzzy
 msgid "Symbol Properties..."
-msgstr "Sembol Özellikleri"
+msgstr "Sembol Özellikleri..."
 
 #: eeschema/tools/ee_actions.cpp:904
-#, fuzzy
 msgid "Pin Table..."
-msgstr "Bacak Tablosu"
+msgstr "Pin Tablosu..."
 
 #: eeschema/tools/ee_actions.cpp:905
 msgid "Displays pin table for bulk editing of pins"
@@ -23711,18 +23623,16 @@ msgid "Bulk-edit fields of all symbols in schematic"
 msgstr "Şematikteki tüm sembolleri güncelle"
 
 #: eeschema/tools/ee_actions.cpp:1012
-#, fuzzy
 msgid "Edit Symbol Library Links..."
-msgstr "Sembolleri Kütüphaneden Güncelle"
+msgstr "Sembol Kütüphanesi Bağlantılarını Düzenle..."
 
 #: eeschema/tools/ee_actions.cpp:1013
 msgid "Edit links between schematic and library symbols"
 msgstr "Şematik ve kitaplık sembolleri arasındaki bağlantıları düzenleme"
 
 #: eeschema/tools/ee_actions.cpp:1019
-#, fuzzy
 msgid "Assign Footprints..."
-msgstr "Ayak İzleri Ata"
+msgstr "Ayak İzleri Ata..."
 
 #: eeschema/tools/ee_actions.cpp:1020
 #, fuzzy
@@ -23730,9 +23640,8 @@ msgid "Run footprint assignment tool"
 msgstr "Ayak izi atamaları"
 
 #: eeschema/tools/ee_actions.cpp:1026
-#, fuzzy
 msgid "Import Footprint Assignments..."
-msgstr "Sembol : Ayak İzi Atamaları"
+msgstr "Ayak İzi Atamaları İçe Aktar..."
 
 #: eeschema/tools/ee_actions.cpp:1027
 msgid ""
@@ -23742,9 +23651,8 @@ msgstr ""
 "tarafından oluşturulan cmp dosyası"
 
 #: eeschema/tools/ee_actions.cpp:1033
-#, fuzzy
 msgid "Annotate Schematic..."
-msgstr "Şemayı Numaralandır"
+msgstr "Şemayı Numaralandır..."
 
 #: eeschema/tools/ee_actions.cpp:1034
 #, fuzzy
@@ -23752,9 +23660,8 @@ msgid "Fill in schematic symbol reference designators"
 msgstr "Öğeleri üst referans tanımlayıcısına göre filtreleyin:"
 
 #: eeschema/tools/ee_actions.cpp:1040
-#, fuzzy
 msgid "Increment Annotations From..."
-msgstr "Açıklamayı Sil"
+msgstr "Açıklamaları Artır..."
 
 #: eeschema/tools/ee_actions.cpp:1041
 #, fuzzy
@@ -23763,9 +23670,8 @@ msgid ""
 msgstr "Yapıştırılan tüm sembollerdeki referans göstergelerini temizle"
 
 #: eeschema/tools/ee_actions.cpp:1048
-#, fuzzy
 msgid "Schematic Setup..."
-msgstr "Şematik Kurulum"
+msgstr "Şematik Kurulum..."
 
 #: eeschema/tools/ee_actions.cpp:1049
 msgid "Edit schematic setup including annotation styles and electrical rules"
@@ -23774,27 +23680,24 @@ msgstr ""
 "kurulumu düzenleyin"
 
 #: eeschema/tools/ee_actions.cpp:1055
-#, fuzzy
 msgid "Edit Sheet Page Number..."
-msgstr "Bacak Numarası"
+msgstr "Sayfa Numarasını Düzenle..."
 
 #: eeschema/tools/ee_actions.cpp:1056
 msgid "Edit the page number of the current or selected sheet"
 msgstr "Geçerli veya seçili sayfanın sayfa numarasını düzenleme"
 
 #: eeschema/tools/ee_actions.cpp:1061
-#, fuzzy
 msgid "Rescue Symbols..."
-msgstr "Kurtarma Sembolleri"
+msgstr "Kurtarma Sembolleri..."
 
 #: eeschema/tools/ee_actions.cpp:1062
 msgid "Find old symbols in project and rename/rescue them"
 msgstr "Projedeki eski sembolleri bulun ve yeniden adlandırın / kurtarın"
 
 #: eeschema/tools/ee_actions.cpp:1068
-#, fuzzy
 msgid "Remap Legacy Library Symbols..."
-msgstr "Kütüphane Sembolü:"
+msgstr "Eski Kütüphane Sembollerini Yeniden Eşle..."
 
 #: eeschema/tools/ee_actions.cpp:1069
 msgid ""
@@ -23819,14 +23722,12 @@ msgid "Import Graphics..."
 msgstr "Grafikler..."
 
 #: eeschema/tools/ee_actions.cpp:1085 pcbnew/tools/pcb_actions.cpp:339
-#, fuzzy
 msgid "Import 2D drawing file"
-msgstr "Dosya okunurken hata oluştu."
+msgstr "2D çizim dosyasını içe aktar"
 
 #: eeschema/tools/ee_actions.cpp:1092
-#, fuzzy
 msgid "Switch to PCB Editor"
-msgstr "PCB Düzenleyiciye Aktar..."
+msgstr "PCB Editörüne Geç"
 
 #: eeschema/tools/ee_actions.cpp:1093
 #, fuzzy
@@ -23834,27 +23735,24 @@ msgid "Open PCB in board editor"
 msgstr "Şema Düzenleyici"
 
 #: eeschema/tools/ee_actions.cpp:1099
-#, fuzzy
 msgid "Export Netlist..."
-msgstr "Ağ Listesini Dışa Aktar"
+msgstr "Netlist'i dışa aktar..."
 
 #: eeschema/tools/ee_actions.cpp:1100
 msgid "Export file containing netlist in one of several formats"
 msgstr "Netlist içeren dosyayı çeşitli biçimlerden birinde dışa aktarın"
 
 #: eeschema/tools/ee_actions.cpp:1106
-#, fuzzy
 msgid "Generate Bill of Materials..."
-msgstr "Ürün Reçetesi"
+msgstr "Malzeme Listesi Oluştur..."
 
 #: eeschema/tools/ee_actions.cpp:1107
 msgid "Generate a bill of materials for the current schematic"
 msgstr "Mevcut şematik için bir malzeme listesi oluşturun"
 
 #: eeschema/tools/ee_actions.cpp:1113
-#, fuzzy
 msgid "Generate Legacy Bill of Materials..."
-msgstr "Ürün Reçetesi"
+msgstr "Eski Malzeme Listesini Oluştur..."
 
 #: eeschema/tools/ee_actions.cpp:1114
 #, fuzzy
@@ -23863,9 +23761,8 @@ msgid ""
 msgstr "Mevcut şematik için bir malzeme listesi oluşturun"
 
 #: eeschema/tools/ee_actions.cpp:1121
-#, fuzzy
 msgid "Generate Bill of Materials (External)..."
-msgstr "Ürün Reçetesi"
+msgstr "Malzeme Listesi Oluştur (Harici)..."
 
 #: eeschema/tools/ee_actions.cpp:1122
 #, fuzzy
@@ -23875,9 +23772,8 @@ msgid ""
 msgstr "Mevcut şematik için bir malzeme listesi oluşturun"
 
 #: eeschema/tools/ee_actions.cpp:1128
-#, fuzzy
 msgid "Export Symbols to Library..."
-msgstr "Sembolleri Kütüphaneden Güncelle"
+msgstr "Sembolleri Kütüphaneye Aktar..."
 
 #: eeschema/tools/ee_actions.cpp:1129
 msgid ""
@@ -24026,9 +23922,8 @@ msgid "Previous Symbol Unit"
 msgstr "Sembol"
 
 #: eeschema/tools/ee_actions.cpp:1258
-#, fuzzy
 msgid "Open the previous unit of the symbol"
-msgstr "Sembolün tüm birimlerini sırayla yerleştirin."
+msgstr "Sembolün önceki birimini aç"
 
 #: eeschema/tools/ee_actions.cpp:1264
 #, fuzzy
@@ -24183,9 +24078,8 @@ msgid "Align Items to Grid"
 msgstr "Öğeleri Izgaraya Hizala"
 
 #: eeschema/tools/ee_actions.cpp:1437
-#, fuzzy
 msgid "Save Current Sheet Copy As..."
-msgstr "Yalnızca geçerli sayfa"
+msgstr "Geçerli Sayfa Kopyasını Farklı Kaydet..."
 
 #: eeschema/tools/ee_actions.cpp:1438
 #, fuzzy
@@ -24245,9 +24139,8 @@ msgid "Export Current Plot to Clipboard"
 msgstr "Pano'ya Çizim"
 
 #: eeschema/tools/ee_actions.cpp:1504
-#, fuzzy
 msgid "Export Current Plot to Schematic"
-msgstr "Geçerli Görünümü PNG Olarak Dışa Aktar..."
+msgstr "Mevcut Grafiği Şemaya Aktar"
 
 #: eeschema/tools/ee_actions.cpp:1510
 #, fuzzy
@@ -24291,9 +24184,8 @@ msgid "Stop Simulation"
 msgstr "Çalıştırma/Durdurma Benzetimi"
 
 #: eeschema/tools/ee_actions.cpp:1549
-#, fuzzy
 msgid "Probe Schematic..."
-msgstr "Şemayı Numaralandır"
+msgstr "Prob Şeması..."
 
 #: eeschema/tools/ee_actions.cpp:1550
 msgid "Add a simulator probe"
@@ -24309,9 +24201,8 @@ msgid "Select a value to be tuned"
 msgstr "Ayarlanacak bir değer seçin"
 
 #: eeschema/tools/ee_actions.cpp:1564
-#, fuzzy
 msgid "User-defined Signals..."
-msgstr "Kullanıcı Tanımlı Kaynak"
+msgstr "Kullanıcı Tanımlı Sinyaller..."
 
 #: eeschema/tools/ee_actions.cpp:1565
 msgid "Add, edit or delete user-defined simulation signals"
@@ -24335,9 +24226,8 @@ msgid "Run %s"
 msgstr "%s bacağı %s bulundu"
 
 #: eeschema/tools/ee_inspection_tool.cpp:318
-#, fuzzy
 msgid "No symbol issues found."
-msgstr "Sembol seçilmedi"
+msgstr "Hiçbir sembol sorunu bulunamadı."
 
 #: eeschema/tools/ee_inspection_tool.cpp:322
 msgid "Symbol Warnings"
@@ -24359,9 +24249,8 @@ msgid "Summary"
 msgstr "Özet"
 
 #: eeschema/tools/ee_inspection_tool.cpp:387
-#, fuzzy
 msgid "Schematic vs library diff for:"
-msgstr "Şematik salt okunur."
+msgstr "Schematic vs library diff for:"
 
 #: eeschema/tools/ee_inspection_tool.cpp:389
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:48
@@ -24382,9 +24271,8 @@ msgstr "'%s' kitaplığı, ayak izi kitaplığı tablosunda değil."
 
 #: eeschema/tools/ee_inspection_tool.cpp:402
 #: eeschema/tools/ee_inspection_tool.cpp:408
-#, fuzzy
 msgid "Manage Symbol Libraries"
-msgstr "Sembol Kitaplıklarını Yönet..."
+msgstr "Sembol Kitaplıklarını Yönet"
 
 #: eeschema/tools/ee_inspection_tool.cpp:406
 #: pcbnew/tools/board_inspection_tool.cpp:1616
@@ -24400,9 +24288,8 @@ msgstr "Seçim %d kilitli öğe içeriyor."
 
 #: eeschema/tools/ee_inspection_tool.cpp:447
 #: pcbnew/tools/board_inspection_tool.cpp:1642
-#, fuzzy
 msgid "No relevant differences detected."
-msgstr "Sembol seçilmedi"
+msgstr "İlgili bir fark tespit edilmedi."
 
 #: eeschema/tools/ee_inspection_tool.cpp:450
 #: pcbnew/tools/board_inspection_tool.cpp:1644
@@ -24450,9 +24337,8 @@ msgid "Select a single symbol to place the next unit."
 msgstr "Yeni köşeyi sonra eklemek için bir köşe seç."
 
 #: eeschema/tools/sch_drawing_tools.cpp:587
-#, fuzzy
 msgid "This symbol has only one unit."
-msgstr "*** yeni sembolün çok az birimi var ***"
+msgstr "Bu sembolün yalnızca bir birimi vardır."
 
 #: eeschema/tools/sch_drawing_tools.cpp:595
 msgid "All units of this symbol are already placed."
@@ -24464,9 +24350,8 @@ msgid "Add design block"
 msgstr "Sinyal Ekle"
 
 #: eeschema/tools/sch_drawing_tools.cpp:755
-#, fuzzy
 msgid "Import Schematic Sheet Content..."
-msgstr "Şema ekle"
+msgstr "Şematik Sayfa İçeriğini İçe Aktar..."
 
 #: eeschema/tools/sch_drawing_tools.cpp:786
 #, fuzzy
@@ -24499,9 +24384,8 @@ msgstr "Dosyada grafik öğe bulunamadı."
 #: eeschema/tools/sch_drawing_tools.cpp:1287
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:726
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:815
-#, fuzzy
 msgid "Import Graphic"
-msgstr "Grafikler..."
+msgstr "Grafik İçe Aktar"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1344
 #, fuzzy
@@ -24551,9 +24435,8 @@ msgstr "Bir sayfanın üzerine tıklayın."
 
 #: eeschema/tools/sch_drawing_tools.cpp:2012
 #: eeschema/tools/sch_drawing_tools.cpp:2114
-#, fuzzy
 msgid "No new hierarchical labels found."
-msgstr "Hiyerarşik etiketler"
+msgstr "Yeni hiyerarşik etiket bulunamadı."
 
 #: eeschema/tools/sch_drawing_tools.cpp:2026
 #, fuzzy
@@ -24583,9 +24466,9 @@ msgid "Draw Table"
 msgstr "Çizim"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2895
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' does not exist."
-msgstr "'%s' klasörü bulunamadı"
+msgstr "'%s' dosyası mevcut değil."
 
 #: eeschema/tools/sch_drawing_tools.cpp:2979
 msgid "Press <ESC> to cancel sheet creation."
@@ -24653,9 +24536,8 @@ msgid "Mirror"
 msgstr "Ayna"
 
 #: eeschema/tools/sch_edit_tool.cpp:1520
-#, fuzzy
 msgid "Label value cannot go below zero"
-msgstr "Değişken adı boş olamaz."
+msgstr "Etiket değeri sıfırın altına düşemez"
 
 #: eeschema/tools/sch_edit_tool.cpp:1599
 #, fuzzy
@@ -24746,9 +24628,8 @@ msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "Hata: Geçerli sayfada bulunan yinelenen alt sayfa adları."
 
 #: eeschema/tools/sch_editor_control.cpp:934
-#, fuzzy
 msgid "No net selected."
-msgstr "Sembol seçilmedi"
+msgstr "Hiçbir net seçilmedi."
 
 #: eeschema/tools/sch_editor_control.cpp:960
 msgid "Net must be labeled to assign a netclass."
@@ -24796,9 +24677,8 @@ msgid "No errors found."
 msgstr "Ayak izi sorunu bulunamadı."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:331
-#, fuzzy
 msgid "Reached end of schematic."
-msgstr "Şemaya Kaydet"
+msgstr "Şemanın sonuna ulaşıldı."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:332
 msgid "Reached end of sheet."
@@ -24836,9 +24716,8 @@ msgid "Page '%s' not found."
 msgstr "'%s' dosyası bulunamadı."
 
 #: eeschema/tools/simulator_control.cpp:109
-#, fuzzy
 msgid "Open Simulation Workbook"
-msgstr "Aç..."
+msgstr "Simülasyon Çalışma Kitabını Aç"
 
 #: eeschema/tools/simulator_control.cpp:128
 msgid "noname"
@@ -30377,9 +30256,8 @@ msgstr "ohm"
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:160
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:258
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:238
-#, fuzzy
 msgid "Voltage drop:"
-msgstr "Gerilim"
+msgstr "Gerilim düşümü:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:240
 msgid "Dissipated power:"
@@ -30490,9 +30368,8 @@ msgid "OVC IV"
 msgstr "OVC IV"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:83
-#, fuzzy
 msgid "Impulse voltage:"
-msgstr "Tüm değişiklikleri kaydet"
+msgstr "Darbe gerilimi:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:85
 msgid ""
@@ -30516,18 +30393,16 @@ msgid "Compute the clearance and creepage distances"
 msgstr "Açıklık ve kaçak mesafelerini hesapla"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:119
-#, fuzzy
 msgid "RMS Voltage:"
-msgstr "Gerilim"
+msgstr "RMS Voltajı:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:121
 msgid "Expected RMS voltage."
 msgstr "Beklenen RMS gerilimi."
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:134
-#, fuzzy
 msgid "Transient overvoltage:"
-msgstr "Geçici gürültü"
+msgstr "Geçici aşırı gerilim:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:136
 msgid ""
@@ -30552,9 +30427,8 @@ msgstr ""
 "Birkaç milisaniye veya daha kısa süren olaylar."
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:149
-#, fuzzy
 msgid "Recurring peak voltage:"
-msgstr "Tüm değişiklikleri kaydet"
+msgstr "Tekrarlayan tepe voltajı:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:151
 msgid ""
@@ -30571,9 +30445,8 @@ msgstr ""
 "Nispeten uzun süreli olaylar."
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:164
-#, fuzzy
 msgid "Type of insulation:"
-msgstr "Doğrultu"
+msgstr "Yalıtım türü:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:166
 msgid ""
@@ -30685,9 +30558,8 @@ msgid "IIIb"
 msgstr "IIIb"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:209
-#, fuzzy
 msgid "PCB material:"
-msgstr "Tüm birimler için ortak"
+msgstr "PCB malzemesi:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:211
 msgid ""
@@ -30748,9 +30620,8 @@ msgstr ""
 "kesik: sızıntı"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:36
-#, fuzzy
 msgid "Voltage > 500 V:"
-msgstr "Gerilim"
+msgstr "Voltaj > 500 V:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:43
 #, fuzzy
@@ -30867,9 +30738,8 @@ msgid "Ambient temperature:"
 msgstr "Ortam kamera ışığı:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:48
-#, fuzzy
 msgid "Melting point:"
-msgstr "Çalışma Noktası"
+msgstr "Erime noktası:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:62
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:153
@@ -31012,9 +30882,8 @@ msgid "Threshold voltage:"
 msgstr "Eşik gerilimi:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:88
-#, fuzzy
 msgid "Material names:"
-msgstr "Malzeme"
+msgstr "Malzeme adları:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:92
 #, fuzzy
@@ -31056,14 +30925,12 @@ msgid "kOhm"
 msgstr "kOhm"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:40
-#, fuzzy
 msgid "Exclude value 1:"
-msgstr "İşaretçiyi Hariç Tut"
+msgstr "Değer 1'i hariç tut:"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:51
-#, fuzzy
 msgid "Exclude value 2:"
-msgstr "İşaretçiyi Hariç Tut"
+msgstr "Değer 2'yi hariç tut:"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:71
 msgid "E1"
@@ -31097,9 +30964,8 @@ msgstr "3R çözümü:"
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:111
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:131
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:151
-#, fuzzy
 msgid "Approximation:"
-msgstr "Doğrula"
+msgstr "Yaklaştırma:"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:122
 msgid "3R solution:"
@@ -31199,9 +31065,8 @@ msgid "Regulator"
 msgstr "Regülatör"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:86
-#, fuzzy
 msgid "Regulators data file:"
-msgstr "Regülatörler"
+msgstr "Düzenleyiciler veri dosyası:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:88
 msgid "The name of the data file which stores known regulators parameters."
@@ -31279,9 +31144,8 @@ msgid "For 3 terminal regulators only, the  Adjust pin current."
 msgstr "Sadece 3 terminal regülatörleri için, Ayar pimi akımı."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:278
-#, fuzzy
 msgid "Overall tolerance:"
-msgstr "Genel İlerleme"
+msgstr "Genel tolerans:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:305
 #, fuzzy
@@ -31314,9 +31178,9 @@ msgid "Copy to Clipboard"
 msgstr "Panoya Aktar"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators.cpp:220
-#, fuzzy, c-format
+#, c-format
 msgid "Attenuation more than %f dB"
-msgstr "Zayıflama (a):"
+msgstr "Zayıflama %f dB'den fazla"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:24
 msgid "Pi"
@@ -31371,15 +31235,13 @@ msgid "Temperature rise"
 msgstr "Sıcaklık artışı"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:31
-#, fuzzy
 msgid "Current (I):"
-msgstr "Akım"
+msgstr "Akım (I):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:42
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:167
-#, fuzzy
 msgid "Temperature rise:"
-msgstr "Sıcaklık artışı"
+msgstr "Sıcaklık artışı:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:53
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:54
@@ -31411,9 +31273,8 @@ msgstr "İz kalınlığı (H):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:136
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:234
-#, fuzzy
 msgid "Cross-section area:"
-msgstr "Bağlantı Adı"
+msgstr "Kesit alanı:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:144
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:242
@@ -31429,9 +31290,8 @@ msgstr "Direnç:"
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:172
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:270
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:250
-#, fuzzy
 msgid "Power loss:"
-msgstr "Güç sembolleri"
+msgstr "Güç kaybı:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:180
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:278
@@ -31521,9 +31381,8 @@ msgid "Rough:"
 msgstr "Pürüzlü:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:158
-#, fuzzy
 msgid "Insulator mu:"
-msgstr "yalıtkan"
+msgstr "Yalıtkan mu:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:170
 #, fuzzy
@@ -31591,9 +31450,8 @@ msgid "Via length is the board thickness for through hole vias"
 msgstr "Geçiş uzunluğu, geçiş delikleri için tahta kalınlığıdır"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:71
-#, fuzzy
 msgid "Via pad diameter:"
-msgstr "Geçiş dış çapı"
+msgstr "Ped çapı üzerinden:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:73
 msgid "Diameter of pad surrounding via (annular ring)"
@@ -31963,9 +31821,8 @@ msgid "High Speed"
 msgstr "Hızlı"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:183
-#, fuzzy
 msgid "Wavelength"
-msgstr "Boşluk uzunluğu:"
+msgstr "Dalga boyu"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:184
 #, fuzzy
@@ -32101,23 +31958,20 @@ msgstr ""
 "___K___ iç izler için 0,024 veya dış izler için 0,048'dir\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:61
-#, fuzzy
 msgid "Dielectric Loss Factor"
-msgstr "Dielektrik kayıplar:"
+msgstr "Dielektrik Kayıp Faktörü"
 
 #: pcb_calculator/transline_dlg_funct.cpp:79
-#, fuzzy
 msgid "Specific Resistance"
-msgstr "Direnç:"
+msgstr "Belirli Direnç"
 
 #: pcb_calculator/transline_ident.cpp:93
 msgid "Substrate relative permittivity (dielectric constant)"
 msgstr "Substrat bağıl geçirgenliği (dielektrik sabiti)"
 
 #: pcb_calculator/transline_ident.cpp:97
-#, fuzzy
 msgid "Dielectric loss (dissipation factor)"
-msgstr "Dielektrik kayıplar (tek):"
+msgstr "Dielektrik kaybı (dağılım faktörü)"
 
 #: pcb_calculator/transline_ident.cpp:103
 msgid ""
@@ -32137,9 +31991,9 @@ msgstr "Giriş sinyalinin frekansı"
 #: pcb_calculator/transline_ident.cpp:266
 #: pcb_calculator/transline_ident.cpp:351
 #: pcb_calculator/transline_ident.cpp:385
-#, fuzzy, c-format
+#, c-format
 msgid "Effective %s:"
-msgstr "%s Bekleniyor"
+msgstr "Etkin %s:"
 
 #: pcb_calculator/transline_ident.cpp:120
 #: pcb_calculator/transline_ident.cpp:162
@@ -32199,9 +32053,8 @@ msgstr "pürüzlülük"
 
 #: pcb_calculator/transline_ident.cpp:133
 #: pcb_calculator/transline_ident.cpp:320
-#, fuzzy
 msgid "Conductor roughness"
-msgstr "İletken kayıpları:"
+msgstr "İletken pürüzlülüğü"
 
 #: pcb_calculator/transline_ident.cpp:136
 msgid "substrate"
@@ -32311,9 +32164,8 @@ msgid "Height of waveguide"
 msgstr "Dalga kılavuzunun yüksekliği"
 
 #: pcb_calculator/transline_ident.cpp:252
-#, fuzzy
 msgid "Waveguide length"
-msgstr "Boşluk uzunluğu:"
+msgstr "Dalga kılavuzu uzunluğu"
 
 #: pcb_calculator/transline_ident.cpp:283
 #: pcb_calculator/transline_ident.cpp:404
