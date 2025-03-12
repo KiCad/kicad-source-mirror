@@ -99,6 +99,9 @@ wxArrayInt LISTBOX_TRICKS::listBoxDeleteSelected()
     wxArrayInt selections;
     m_listBox.GetSelections( selections );
 
+    if( selections.GetCount() == 0 )    // Nothing to remove
+        return selections;
+
     std::sort( selections.begin(), selections.end() );
 
     for( int ii = selections.GetCount() - 1; ii >= 0; ii-- )
