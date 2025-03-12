@@ -29,7 +29,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:04+0300\n"
-"PO-Revision-Date: 2025-03-12 14:00+0000\n"
+"PO-Revision-Date: 2025-03-12 15:38+0000\n"
 "Last-Translator: İclal Gör <iclallgor@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
@@ -32582,9 +32582,8 @@ msgid "Twists"
 msgstr "bükülme"
 
 #: pcb_calculator/transline_ident.cpp:392
-#, fuzzy
 msgid "Number of twists per length"
-msgstr "Paket başına birim sayısı:"
+msgstr "Uzunluk başına büküm sayısı"
 
 #: pcb_calculator/transline_ident.cpp:400
 msgid "environment"
@@ -32595,9 +32594,8 @@ msgid "Relative permittivity of environment"
 msgstr "Çevrenin göreceli geçirgenliği"
 
 #: pcb_calculator/transline_ident.cpp:410
-#, fuzzy
 msgid "Cable length"
-msgstr "Boşluk uzunluğu:"
+msgstr "Kablo uzunluğu"
 
 #: pcb_calculator/widgets/unit_selector.cpp:35
 msgid "um"
@@ -32677,9 +32675,9 @@ msgid "Autoplacing components..."
 msgstr "Ağlar yükleniyor..."
 
 #: pcbnew/autorouter/ar_autoplacer.cpp:898
-#, fuzzy, c-format
+#, c-format
 msgid "Autoplacing %s"
-msgstr "Otomatik kaydırma hızı:"
+msgstr "%s otomatik yerleştiriliyor"
 
 #: pcbnew/autorouter/autoplace_tool.cpp:71
 #, c-format
@@ -32760,19 +32758,16 @@ msgid "Best Length Ratio"
 msgstr "Elektriksel uzunluk"
 
 #: pcbnew/board_connected_item.cpp:264
-#, fuzzy
 msgid "Max Length"
-msgstr "Boşluk uzunluğu:"
+msgstr "Maksimum Uzunluk"
 
 #: pcbnew/board_connected_item.cpp:270
-#, fuzzy
 msgid "Best Width Ratio"
-msgstr "Metin genişliği:"
+msgstr "En İyi Genişlik Oranı"
 
 #: pcbnew/board_connected_item.cpp:277
-#, fuzzy
 msgid "Max Width"
-msgstr "Azami genişlik:"
+msgstr "Maksimum Genişlik"
 
 #: pcbnew/board_connected_item.cpp:283
 #, fuzzy
@@ -32790,9 +32785,8 @@ msgid "Allow Teardrops To Span Two Tracks"
 msgstr "Yollarda göster"
 
 #: pcbnew/board_connected_item.cpp:301
-#, fuzzy
 msgid "Max Width Ratio"
-msgstr "Azami genişlik:"
+msgstr "Maksimum Genişlik Oranı"
 
 #: pcbnew/board_item.cpp:176
 #, fuzzy
@@ -32819,9 +32813,8 @@ msgid "Top Silk Screen"
 msgstr "ipek baskı"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:660
-#, fuzzy
 msgid "Top Solder Paste"
-msgstr "Lehim pastası:"
+msgstr "Üst Lehim Macunu"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:668
 #, fuzzy
@@ -32876,14 +32869,12 @@ msgid "Epsilon R:"
 msgstr "Epsilon R:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:39
-#, fuzzy
 msgid "Loss Tan:"
-msgstr "kayıp tanjantı"
+msgstr "Kayıp Tan:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:60
-#, fuzzy
 msgid "Common materials:"
-msgstr "Tüm birimler için ortak"
+msgstr "Yaygın malzemeler:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.h:56
 msgid "Dielectric Material Characteristics"
@@ -32974,9 +32965,8 @@ msgid "Remove Dielectric Layer"
 msgstr "Dielektrik Katmanı Kaldır..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:388
-#, fuzzy
 msgid "Select layer to remove:"
-msgstr "Ekrandaki tüm öğeleri seç"
+msgstr "Kaldırılacak katmanı seçin:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1170
 msgid ""
@@ -33003,9 +32993,8 @@ msgstr "Özel."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:22
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:529
-#, fuzzy
 msgid "Copper layers:"
-msgstr "Tüm Bakır Katmanlar"
+msgstr "Bakır katmanları:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:24
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:32
@@ -33113,9 +33102,8 @@ msgid "HAL lead-free"
 msgstr "HAL kurşunsuz"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:42
-#, fuzzy
 msgid "Hard gold"
-msgstr "Kart gövdesi:"
+msgstr "Sert altın"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:43
 #, fuzzy
