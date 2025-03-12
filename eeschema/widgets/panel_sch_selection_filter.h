@@ -24,7 +24,7 @@
 #include <widgets/panel_sch_selection_filter_base.h>
 
 class SCH_BASE_FRAME;
-class EE_SELECTION_TOOL;
+class SCH_SELECTION_TOOL;
 struct SCH_SELECTION_FILTER_OPTIONS;
 
 
@@ -49,9 +49,9 @@ private:
     void onPopupSelection( wxCommandEvent& aEvent );
 
 private:
-    SCH_BASE_FRAME*    m_frame;
-    EE_SELECTION_TOOL* m_tool;
-    wxCheckBox*        m_onlyCheckbox;
+    SCH_BASE_FRAME*     m_frame;
+    SCH_SELECTION_TOOL* m_tool;
+    wxCheckBox*         m_onlyCheckbox;
 };
 
 #endif //KICAD_PANEL_SCH_SELECTION_FILTER_H

@@ -22,7 +22,6 @@
  */
 
 #include <kiplatform/ui.h>
-#include <ee_actions.h>
 #include <sch_edit_frame.h>
 #include <widgets/color_swatch.h>
 #include <widgets/grid_color_swatch_helpers.h>

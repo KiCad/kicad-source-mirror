@@ -31,8 +31,8 @@
 #include <erc/erc_settings.h>
 #include <sch_reference_list.h>
 #include <symbol_library.h>
-#include <tools/ee_selection.h>
-#include <tools/ee_selection_tool.h>
+#include <tools/sch_selection.h>
+#include <tools/sch_selection_tool.h>
 #include <tool/tool_manager.h>
 #include <dialog_erc.h>
 
@@ -138,9 +138,9 @@ void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool aRe
 
     case ANNOTATE_SELECTION:
     {
-        EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
-        EE_SELECTION&      selection = selTool->RequestSelection();
-        SCH_SHEET_LIST     selectedSheets;
+        SCH_SELECTION_TOOL* selTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>();
+        SCH_SELECTION&      selection = selTool->RequestSelection();
+        SCH_SHEET_LIST      selectedSheets;
 
         for( EDA_ITEM* item : selection.Items() )
         {
@@ -178,7 +178,7 @@ void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool aRe
 }
 
 
-std::unordered_set<SCH_SYMBOL*> getInferredSymbols( const EE_SELECTION& aSelection )
+std::unordered_set<SCH_SYMBOL*> getInferredSymbols( const SCH_SELECTION& aSelection )
 {
     std::unordered_set<SCH_SYMBOL*> symbols;
 
@@ -214,13 +214,13 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T  aAn
                                       bool aRecursive, int aStartNumber, bool aResetAnnotation,
                                       bool aRepairTimestamps, REPORTER& aReporter )
 {
-    EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
-    EE_SELECTION&      selection = selTool->GetSelection();
+    SCH_SELECTION_TOOL* selTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>();
+    SCH_SELECTION&      selection = selTool->GetSelection();
 
-    SCH_REFERENCE_LIST references;
-    SCH_SCREENS        screens( Schematic().Root() );
-    SCH_SHEET_LIST     sheets = Schematic().Hierarchy();
-    SCH_SHEET_PATH     currentSheet = GetCurrentSheet();
+    SCH_REFERENCE_LIST  references;
+    SCH_SCREENS         screens( Schematic().Root() );
+    SCH_SHEET_LIST      sheets = Schematic().Hierarchy();
+    SCH_SHEET_PATH      currentSheet = GetCurrentSheet();
 
 
     // Store the selected sheets relative to the full hierarchy so we get the correct sheet numbers
@@ -498,8 +498,8 @@ int SCH_EDIT_FRAME::CheckAnnotate( ANNOTATION_ERROR_HANDLER aErrorHandler,
         break;
 
     case ANNOTATE_SELECTION:
-        EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
-        EE_SELECTION&      selection = selTool->RequestSelection();
+        SCH_SELECTION_TOOL* selTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>();
+        SCH_SELECTION&      selection = selTool->RequestSelection();
 
         for( SCH_SYMBOL* symbol : getInferredSymbols( selection ) )
             GetCurrentSheet().AppendSymbol( referenceList, symbol, false, true );

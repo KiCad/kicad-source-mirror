@@ -36,7 +36,7 @@ class EDA_DRAW_FRAME;
 class TOOL_BASE;
 
 template<class T>
-class EE_TOOL_BASE;
+class SCH_TOOL_BASE;
 
 #define SKIP_UNDO          0x0001
 #define APPEND_UNDO        0x0002
@@ -47,7 +47,7 @@ class SCH_COMMIT : public COMMIT
 public:
     SCH_COMMIT( TOOL_MANAGER* aToolMgr );
     SCH_COMMIT( EDA_DRAW_FRAME* aFrame );
-    SCH_COMMIT( EE_TOOL_BASE<SCH_BASE_FRAME>* aFrame );
+    SCH_COMMIT( SCH_TOOL_BASE<SCH_BASE_FRAME>* aFrame );
 
     virtual ~SCH_COMMIT();
 

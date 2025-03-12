@@ -29,7 +29,7 @@
 #include <math/vector2d.h>
 #include <origin_viewitem.h>
 #include <tool/grid_helper.h>
-#include <ee_selection.h>
+#include <sch_selection.h>
 
 class SCH_ITEM;
 
@@ -57,14 +57,14 @@ public:
     GRID_HELPER_GRIDS GetItemGrid( const EDA_ITEM* aItem ) const override;
 
     VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, GRID_HELPER_GRIDS aGrid,
-                             const EE_SELECTION& aItems );
+                             const SCH_SELECTION& aItems );
 
     VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, GRID_HELPER_GRIDS aGrid, SCH_ITEM* aSkip );
     VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, GRID_HELPER_GRIDS aGrid,
-                             const EE_SELECTION& aSkip = {} );
+                             const SCH_SELECTION& aSkip = {} );
 
 private:
-    std::set<SCH_ITEM*> queryVisible( const BOX2I& aArea, const EE_SELECTION& aSkipList ) const;
+    std::set<SCH_ITEM*> queryVisible( const BOX2I& aArea, const SCH_SELECTION& aSkipList ) const;
 
     ANCHOR* nearestAnchor( const VECTOR2I& aPos, int aFlags, GRID_HELPER_GRIDS aGrid );
 

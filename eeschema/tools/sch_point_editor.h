@@ -22,14 +22,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef EE_POINT_EDITOR_H
-#define EE_POINT_EDITOR_H
+#ifndef SCH_POINT_EDITOR_H
+#define SCH_POINT_EDITOR_H
 
-#include <tools/ee_tool_base.h>
+#include <tools/sch_tool_base.h>
 #include <tool/edit_points.h>
 #include <tool/selection.h>
 
-class EE_SELECTION_TOOL;
+class SCH_SELECTION_TOOL;
 class POINT_EDIT_BEHAVIOR;
 class SCH_BASE_FRAME;
 class SCH_COMMIT;
@@ -37,10 +37,10 @@ class SCH_COMMIT;
 /**
  * Tool that displays edit points allowing to modify items by dragging the points.
  */
-class EE_POINT_EDITOR : public EE_TOOL_BASE<SCH_BASE_FRAME>
+class SCH_POINT_EDITOR : public SCH_TOOL_BASE<SCH_BASE_FRAME>
 {
 public:
-    EE_POINT_EDITOR();
+    SCH_POINT_EDITOR();
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
@@ -123,4 +123,4 @@ private:
     std::unique_ptr<POINT_EDIT_BEHAVIOR> m_editBehavior;
 };
 
-#endif  // EE_POINT_EDITOR_H
+#endif  // SCH_POINT_EDITOR_H

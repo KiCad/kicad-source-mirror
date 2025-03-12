@@ -25,14 +25,14 @@
 #ifndef SYMBOL_EDITOR_PIN_TOOL_H
 #define SYMBOL_EDITOR_PIN_TOOL_H
 
-#include <tools/ee_tool_base.h>
+#include <tools/sch_tool_base.h>
 #include <sch_base_frame.h>
 
 
 class SYMBOL_EDIT_FRAME;
 
 
-class SYMBOL_EDITOR_PIN_TOOL : public EE_TOOL_BASE<SYMBOL_EDIT_FRAME>
+class SYMBOL_EDITOR_PIN_TOOL : public SCH_TOOL_BASE<SYMBOL_EDIT_FRAME>
 {
 public:
     SYMBOL_EDITOR_PIN_TOOL();

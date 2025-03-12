@@ -53,10 +53,8 @@ class KIID_PATH;
 class SCH_SCREEN;
 class LIB_SYMBOL;
 class MSG_PANEL_ITEM;
-class NETLIST_OBJECT_LIST;
 class SYMBOL_LIB;
 class SYMBOL_LIBS;
-class EE_COLLECTOR;
 class SCH_SCREEN;
 class SCH_COMMIT;
 

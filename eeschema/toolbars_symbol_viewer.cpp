@@ -28,7 +28,7 @@
 #include <sch_painter.h>
 #include <tool/action_menu.h>
 #include <tool/action_toolbar.h>
-#include <tools/ee_actions.h>
+#include <tools/sch_actions.h>
 #include <tools/symbol_editor_control.h>
 #include <widgets/wx_menubar.h>
 
@@ -62,12 +62,12 @@ void SYMBOL_VIEWER_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::zoomFitScreen );
 
     m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EE_ACTIONS::showElectricalTypes,   ACTION_TOOLBAR::TOGGLE );
-    m_mainToolBar->Add( EE_ACTIONS::showPinNumbers,        ACTION_TOOLBAR::TOGGLE );
+    m_mainToolBar->Add( SCH_ACTIONS::showElectricalTypes,   ACTION_TOOLBAR::TOGGLE );
+    m_mainToolBar->Add( SCH_ACTIONS::showPinNumbers,        ACTION_TOOLBAR::TOGGLE );
 
     m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EE_ACTIONS::showDeMorganStandard,  ACTION_TOOLBAR::TOGGLE );
-    m_mainToolBar->Add( EE_ACTIONS::showDeMorganAlternate, ACTION_TOOLBAR::TOGGLE );
+    m_mainToolBar->Add( SCH_ACTIONS::showDeMorganStandard,  ACTION_TOOLBAR::TOGGLE );
+    m_mainToolBar->Add( SCH_ACTIONS::showDeMorganAlternate, ACTION_TOOLBAR::TOGGLE );
 
     m_mainToolBar->AddScaledSeparator( this );
 
@@ -80,7 +80,7 @@ void SYMBOL_VIEWER_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::showDatasheet );
 
     m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EE_ACTIONS::addSymbolToSchematic );
+    m_mainToolBar->Add( SCH_ACTIONS::addSymbolToSchematic );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->KiRealize();
@@ -121,8 +121,8 @@ void SYMBOL_VIEWER_FRAME::doReCreateMenuBar()
     viewMenu->AppendSeparator();
 
     viewMenu->AppendSeparator();
-    viewMenu->Add( EE_ACTIONS::showElectricalTypes, ACTION_MENU::CHECK );
-    viewMenu->Add( EE_ACTIONS::showPinNumbers,      ACTION_MENU::CHECK );
+    viewMenu->Add( SCH_ACTIONS::showElectricalTypes, ACTION_MENU::CHECK );
+    viewMenu->Add( SCH_ACTIONS::showPinNumbers,      ACTION_MENU::CHECK );
 
 
     //-- Menubar -------------------------------------------------------------

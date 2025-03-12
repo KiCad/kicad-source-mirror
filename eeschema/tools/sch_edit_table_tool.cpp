@@ -21,20 +21,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <ee_actions.h>
+#include <sch_actions.h>
 #include <tools/sch_edit_table_tool.h>
 #include <dialogs/dialog_table_properties.h>
 
 
 SCH_EDIT_TABLE_TOOL::SCH_EDIT_TABLE_TOOL() :
-        EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.TableEditor" )
+        SCH_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.TableEditor" )
 {
 }
 
 
 bool SCH_EDIT_TABLE_TOOL::Init()
 {
-    EE_TOOL_BASE::Init();
+    SCH_TOOL_BASE::Init();
 
     addMenus( m_selectionTool->GetToolMenu().GetMenu() );
 
@@ -44,9 +44,9 @@ bool SCH_EDIT_TABLE_TOOL::Init()
 
 int SCH_EDIT_TABLE_TOOL::EditTable( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::EditableItems );
-    bool          clearSelection = selection.IsHover();
-    SCH_TABLE*    parentTable = nullptr;
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::EditableItems );
+    bool           clearSelection = selection.IsHover();
+    SCH_TABLE*     parentTable = nullptr;
 
     for( EDA_ITEM* item : selection.Items() )
     {
@@ -75,7 +75,7 @@ int SCH_EDIT_TABLE_TOOL::EditTable( const TOOL_EVENT& aEvent )
     }
 
     if( clearSelection )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     return 0;
 }

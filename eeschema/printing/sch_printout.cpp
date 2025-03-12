@@ -20,7 +20,7 @@
 
 #include "sch_printout.h"
 #include <tool/tool_manager.h>
-#include <tools/ee_selection_tool.h>
+#include <tools/sch_selection_tool.h>
 #include <sch_edit_frame.h>
 #include <math/vector2wx.h>
 #include <pgm_base.h>
@@ -297,10 +297,10 @@ bool SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen, wxDC* aDC, bool aForPrinting 
 
         painter->SetSchematic( &m_parent->Schematic() );
 
-        SETTINGS_MANAGER&  mgr   = Pgm().GetSettingsManager();
-        EESCHEMA_SETTINGS* cfg   = m_parent->eeconfig();
-        COLOR_SETTINGS*    theme = mgr.GetColorSettings( cfg->m_Printing.color_theme );
-        EE_SELECTION_TOOL* selTool = m_parent->GetToolManager()->GetTool<EE_SELECTION_TOOL>();
+        SETTINGS_MANAGER&   mgr   = Pgm().GetSettingsManager();
+        EESCHEMA_SETTINGS*  cfg   = m_parent->eeconfig();
+        COLOR_SETTINGS*     theme = mgr.GetColorSettings( cfg->m_Printing.color_theme );
+        SCH_SELECTION_TOOL* selTool = m_parent->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
 
         // Target paper size
         wxRect pageSizePix;

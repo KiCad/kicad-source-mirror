@@ -26,7 +26,7 @@
 #define SCH_DRAWING_TOOLS_H
 
 #include "sch_sheet_path.h"
-#include <tools/ee_tool_base.h>
+#include <tools/sch_tool_base.h>
 #include <sch_base_frame.h>
 #include <sch_label.h>
 #include <status_popup.h>
@@ -35,7 +35,7 @@
 class SCH_SYMBOL;
 class SCH_BUS_WIRE_ENTRY;
 class SCH_EDIT_FRAME;
-class EE_SELECTION_TOOL;
+class SCH_SELECTION_TOOL;
 class DIALOG_SYNC_SHEET_PINS;
 
 
@@ -43,7 +43,7 @@ class DIALOG_SYNC_SHEET_PINS;
  * Tool responsible for drawing/placing items (symbols, wires, buses, labels, etc.).
  */
 
-class SCH_DRAWING_TOOLS : public EE_TOOL_BASE<SCH_EDIT_FRAME>
+class SCH_DRAWING_TOOLS : public SCH_TOOL_BASE<SCH_EDIT_FRAME>
 {
 public:
     SCH_DRAWING_TOOLS();

@@ -23,8 +23,8 @@
  */
 
 #include <tool/tool_manager.h>
-#include <tools/ee_selection_tool.h>
-#include <ee_actions.h>
+#include <tools/sch_selection_tool.h>
+#include <sch_actions.h>
 #include <ee_grid_helper.h>
 #include <eda_item.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -37,7 +37,7 @@
 
 
 SYMBOL_EDITOR_MOVE_TOOL::SYMBOL_EDITOR_MOVE_TOOL() :
-        EE_TOOL_BASE( "eeschema.SymbolMoveTool" ),
+        SCH_TOOL_BASE( "eeschema.SymbolMoveTool" ),
         m_moveInProgress( false )
 {
 }
@@ -45,7 +45,7 @@ SYMBOL_EDITOR_MOVE_TOOL::SYMBOL_EDITOR_MOVE_TOOL() :
 
 bool SYMBOL_EDITOR_MOVE_TOOL::Init()
 {
-    EE_TOOL_BASE::Init();
+    SCH_TOOL_BASE::Init();
 
     //
     // Add move actions to the selection tool menu
@@ -73,8 +73,8 @@ bool SYMBOL_EDITOR_MOVE_TOOL::Init()
                 return true;
             };
 
-    selToolMenu.AddItem( EE_ACTIONS::move,        canMove && EE_CONDITIONS::IdleSelection, 150 );
-    selToolMenu.AddItem( EE_ACTIONS::alignToGrid, canMove && EE_CONDITIONS::IdleSelection, 150 );
+    selToolMenu.AddItem( SCH_ACTIONS::move,         canMove && SCH_CONDITIONS::IdleSelection, 150 );
+    selToolMenu.AddItem( SCH_ACTIONS::alignToGrid,  canMove && SCH_CONDITIONS::IdleSelection, 150 );
 
     return true;
 }
@@ -82,7 +82,7 @@ bool SYMBOL_EDITOR_MOVE_TOOL::Init()
 
 void SYMBOL_EDITOR_MOVE_TOOL::Reset( RESET_REASON aReason )
 {
-    EE_TOOL_BASE::Reset( aReason );
+    SCH_TOOL_BASE::Reset( aReason );
 
     if( aReason == MODEL_RELOAD )
         m_moveInProgress = false;
@@ -124,7 +124,7 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
 
     // Be sure that there is at least one item that we can move. If there's no selection try
     // looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection).
-    EE_SELECTION& selection = m_frame->IsSymbolAlias()
+    SCH_SELECTION& selection = m_frame->IsSymbolAlias()
                                             ? m_selectionTool->RequestSelection( { SCH_FIELD_T } )
                                             : m_selectionTool->RequestSelection();
     bool          unselect = selection.IsHover();
@@ -164,7 +164,7 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
-        if( evt->IsAction( &EE_ACTIONS::move )
+        if( evt->IsAction( &SCH_ACTIONS::move )
                 || evt->IsMotion()
                 || evt->IsDrag( BUT_LEFT )
                 || evt->IsAction( &ACTIONS::refreshPreview ) )
@@ -368,7 +368,7 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
         item->ClearEditFlags();
 
     if( unselect )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     m_moveInProgress = false;
     m_frame->PopTool( aEvent );
@@ -379,9 +379,9 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
 
 int SYMBOL_EDITOR_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
 {
-    EE_GRID_HELPER    grid( m_toolMgr);
-    EE_SELECTION&     selection = m_selectionTool->RequestSelection();
-    SCH_COMMIT        commit( m_toolMgr );
+    EE_GRID_HELPER grid( m_toolMgr);
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection();
+    SCH_COMMIT     commit( m_toolMgr );
 
     auto doMoveItem =
             [&]( EDA_ITEM* item, const VECTOR2I& delta )
@@ -437,6 +437,6 @@ void SYMBOL_EDITOR_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta 
 
 void SYMBOL_EDITOR_MOVE_TOOL::setTransitions()
 {
-    Go( &SYMBOL_EDITOR_MOVE_TOOL::Main,               EE_ACTIONS::move.MakeEvent() );
-    Go( &SYMBOL_EDITOR_MOVE_TOOL::AlignElements,      EE_ACTIONS::alignToGrid.MakeEvent() );
+    Go( &SYMBOL_EDITOR_MOVE_TOOL::Main,               SCH_ACTIONS::move.MakeEvent() );
+    Go( &SYMBOL_EDITOR_MOVE_TOOL::AlignElements,      SCH_ACTIONS::alignToGrid.MakeEvent() );
 }

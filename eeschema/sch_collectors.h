@@ -23,8 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef EE_COLLECTORS_H
-#define EE_COLLECTORS_H
+#ifndef SCH_COLLECTORS_H
+#define SCH_COLLECTORS_H
 
 #include <lib_symbol.h>
 #include <collector.h>
@@ -36,14 +36,14 @@ class SCH_SHEET_PATH;
 class SCH_SYMBOL;
 
 
-class EE_COLLECTOR : public COLLECTOR
+class SCH_COLLECTOR : public COLLECTOR
 {
 public:
     static const std::vector<KICAD_T> EditableItems;
     static const std::vector<KICAD_T> MovableItems;
     static const std::vector<KICAD_T> FieldOwners;
 
-    EE_COLLECTOR( const std::vector<KICAD_T>& aScanTypes = { SCH_LOCATE_ANY_T } ) :
+    SCH_COLLECTOR( const std::vector<KICAD_T>& aScanTypes = { SCH_LOCATE_ANY_T } ) :
             m_Unit( 0 ),
             m_BodyStyle( 0 ),
             m_ShowPinElectricalTypes( false )
@@ -111,4 +111,4 @@ public:
 void CollectOtherUnits( const wxString& thisRef, int thisUnit, const LIB_ID& aLibId,
                         SCH_SHEET_PATH& aSheet, std::vector<SCH_SYMBOL*>* otherUnits );
 
-#endif // EE_COLLECTORS_H
+#endif // SCH_COLLECTORS_H

@@ -27,7 +27,7 @@
 
 #include <optional>
 
-#include <tools/ee_tool_base.h>
+#include <tools/sch_tool_base.h>
 
 
 class SYMBOL_EDIT_FRAME;
@@ -39,7 +39,7 @@ class SYMBOL_EDIT_FRAME;
  * Tool responsible for drawing/placing items (body outlines, pins, etc.)
  */
 
-class SYMBOL_EDITOR_DRAWING_TOOLS : public EE_TOOL_BASE<SYMBOL_EDIT_FRAME>
+class SYMBOL_EDITOR_DRAWING_TOOLS : public SCH_TOOL_BASE<SYMBOL_EDIT_FRAME>
 {
 public:
     SYMBOL_EDITOR_DRAWING_TOOLS();

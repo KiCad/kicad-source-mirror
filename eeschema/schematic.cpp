@@ -22,7 +22,7 @@
 #include <connection_graph.h>
 #include <core/ignore.h>
 #include <core/kicad_algo.h>
-#include <ee_collectors.h>
+#include <sch_collectors.h>
 #include <erc/erc_settings.h>
 #include <font/outline_font.h>
 #include <netlist_exporter_spice.h>

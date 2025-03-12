@@ -27,18 +27,18 @@
 #define SYMBOL_EDITOR_CONTROL_H
 
 #include <sch_base_frame.h>
-#include <tools/ee_tool_base.h>
+#include <tools/sch_tool_base.h>
 
 class SYMBOL_EDIT_FRAME;
 
 /**
  * Handle actions for the various symbol editor and viewers.
  */
-class SYMBOL_EDITOR_CONTROL : public wxEvtHandler, public EE_TOOL_BASE<SCH_BASE_FRAME>
+class SYMBOL_EDITOR_CONTROL : public wxEvtHandler, public SCH_TOOL_BASE<SCH_BASE_FRAME>
 {
 public:
     SYMBOL_EDITOR_CONTROL() :
-        EE_TOOL_BASE<SCH_BASE_FRAME>( "eeschema.SymbolLibraryControl" )
+            SCH_TOOL_BASE<SCH_BASE_FRAME>( "eeschema.SymbolLibraryControl" )
     { }
 
     /// @copydoc TOOL_INTERACTIVE::Init()

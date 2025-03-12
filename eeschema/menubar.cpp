@@ -31,8 +31,8 @@
 #include <tool/action_manager.h>
 #include <tool/action_menu.h>
 #include <tool/tool_manager.h>
-#include <tools/ee_selection_tool.h>
-#include <tools/ee_actions.h>
+#include <tools/sch_selection_tool.h>
+#include <tools/sch_actions.h>
 #include "eeschema_id.h"
 #include "sch_edit_frame.h"
 #include <widgets/wx_menubar.h>
@@ -41,7 +41,7 @@
 
 void SCH_EDIT_FRAME::doReCreateMenuBar()
 {
-    EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
+    SCH_SELECTION_TOOL* selTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>();
 
     // wxWidgets handles the Mac Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
@@ -89,7 +89,7 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     if( Kiface().IsSingle() )
         fileMenu->Add( ACTIONS::saveAs );
     else
-        fileMenu->Add( EE_ACTIONS::saveCurrSheetCopyAs );
+        fileMenu->Add( SCH_ACTIONS::saveCurrSheetCopyAs );
 
     fileMenu->Add( ACTIONS::revert );
 
@@ -105,9 +105,8 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
                 ID_IMPORT_NON_KICAD_SCH,
                 BITMAPS::import_document );
 
-    submenuImport->Add( EE_ACTIONS::importFPAssignments, ACTION_MENU::NORMAL,
-                        _( "Footprint Assignments..." ) );
-    submenuImport->Add( EE_ACTIONS::importGraphics, ACTION_MENU::NORMAL, _( "Graphics..." ) );
+    submenuImport->Add( SCH_ACTIONS::importFPAssignments, ACTION_MENU::NORMAL, _( "Footprint Assignments..." ) );
+    submenuImport->Add( SCH_ACTIONS::importGraphics,      ACTION_MENU::NORMAL, _( "Graphics..." ) );
 
     fileMenu->Add( submenuImport );
 
@@ -116,17 +115,14 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     ACTION_MENU* submenuExport = new ACTION_MENU( false, selTool );
     submenuExport->SetTitle( _( "Export" ) );
     submenuExport->SetIcon( BITMAPS::export_file );
-    submenuExport->Add( EE_ACTIONS::drawSheetOnClipboard, ACTION_MENU::NORMAL,
-                        _( "Drawing to Clipboard" ) );
-    submenuExport->Add( EE_ACTIONS::exportNetlist,        ACTION_MENU::NORMAL, _( "Netlist..." ) );
-    submenuExport->Add( EE_ACTIONS::exportSymbolsToLibrary, ACTION_MENU::NORMAL,
-                        _( "Symbols to Library..." ) );
-    submenuExport->Add( EE_ACTIONS::exportSymbolsToNewLibrary, ACTION_MENU::NORMAL,
-                        _( "Symbols to New Library..." ) );
+    submenuExport->Add( SCH_ACTIONS::drawSheetOnClipboard,      ACTION_MENU::NORMAL, _( "Drawing to Clipboard" ) );
+    submenuExport->Add( SCH_ACTIONS::exportNetlist,             ACTION_MENU::NORMAL, _( "Netlist..." ) );
+    submenuExport->Add( SCH_ACTIONS::exportSymbolsToLibrary,    ACTION_MENU::NORMAL, _( "Symbols to Library..." ) );
+    submenuExport->Add( SCH_ACTIONS::exportSymbolsToNewLibrary, ACTION_MENU::NORMAL, _( "Symbols to New Library..." ) );
     fileMenu->Add( submenuExport );
 
     fileMenu->AppendSeparator();
-    fileMenu->Add( EE_ACTIONS::schematicSetup );
+    fileMenu->Add( SCH_ACTIONS::schematicSetup );
 
     fileMenu->AppendSeparator();
     fileMenu->Add( ACTIONS::pageSettings );
@@ -162,17 +158,17 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
 
     editMenu->AppendSeparator();
     editMenu->Add( ACTIONS::deleteTool );
-    editMenu->Add( EE_ACTIONS::editTextAndGraphics );
-    editMenu->Add( EE_ACTIONS::changeSymbols );
-    editMenu->Add( EE_ACTIONS::editPageNumber );
+    editMenu->Add( SCH_ACTIONS::editTextAndGraphics );
+    editMenu->Add( SCH_ACTIONS::changeSymbols );
+    editMenu->Add( SCH_ACTIONS::editPageNumber );
 
     ACTION_MENU* submenuAttributes = new ACTION_MENU( false, selTool );
     submenuAttributes->SetTitle( _( "Attributes" ) );
 
-    submenuAttributes->Add( EE_ACTIONS::setExcludeFromSimulation, ACTION_MENU::CHECK );
-    submenuAttributes->Add( EE_ACTIONS::setExcludeFromBOM, ACTION_MENU::CHECK );
-    submenuAttributes->Add( EE_ACTIONS::setExcludeFromBoard, ACTION_MENU::CHECK );
-    submenuAttributes->Add( EE_ACTIONS::setDNP, ACTION_MENU::CHECK );
+    submenuAttributes->Add( SCH_ACTIONS::setExcludeFromSimulation, ACTION_MENU::CHECK );
+    submenuAttributes->Add( SCH_ACTIONS::setExcludeFromBOM, ACTION_MENU::CHECK );
+    submenuAttributes->Add( SCH_ACTIONS::setExcludeFromBoard, ACTION_MENU::CHECK );
+    submenuAttributes->Add( SCH_ACTIONS::setDNP, ACTION_MENU::CHECK );
 
     editMenu->Add( submenuAttributes );
 
@@ -186,13 +182,13 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
 
     showHidePanels->Add( ACTIONS::showProperties, ACTION_MENU::CHECK );
     showHidePanels->Add( ACTIONS::showSearch, ACTION_MENU::CHECK );
-    showHidePanels->Add( EE_ACTIONS::showHierarchy, ACTION_MENU::CHECK );
+    showHidePanels->Add( SCH_ACTIONS::showHierarchy, ACTION_MENU::CHECK );
 
     if( ADVANCED_CFG::GetCfg().m_IncrementalConnectivity )
-        showHidePanels->Add( EE_ACTIONS::showNetNavigator, ACTION_MENU::CHECK );
+        showHidePanels->Add( SCH_ACTIONS::showNetNavigator, ACTION_MENU::CHECK );
 
     if( ADVANCED_CFG::GetCfg().m_EnableDesignBlocks )
-        showHidePanels->Add( EE_ACTIONS::showDesignBlockPanel, ACTION_MENU::CHECK,
+        showHidePanels->Add( SCH_ACTIONS::showDesignBlockPanel, ACTION_MENU::CHECK,
                              _( "Design Blocks" ) );
 
     viewMenu->Add( showHidePanels );
@@ -209,25 +205,25 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     viewMenu->Add( ACTIONS::zoomRedraw );
 
     viewMenu->AppendSeparator();
-    viewMenu->Add( EE_ACTIONS::navigateBack );
-    viewMenu->Add( EE_ACTIONS::navigateUp );
-    viewMenu->Add( EE_ACTIONS::navigateForward );
-    viewMenu->Add( EE_ACTIONS::navigatePrevious );
-    viewMenu->Add( EE_ACTIONS::navigateNext );
+    viewMenu->Add( SCH_ACTIONS::navigateBack );
+    viewMenu->Add( SCH_ACTIONS::navigateUp );
+    viewMenu->Add( SCH_ACTIONS::navigateForward );
+    viewMenu->Add( SCH_ACTIONS::navigatePrevious );
+    viewMenu->Add( SCH_ACTIONS::navigateNext );
 
 
 
     viewMenu->AppendSeparator();
-    viewMenu->Add( EE_ACTIONS::toggleHiddenPins,      ACTION_MENU::CHECK );
-    viewMenu->Add( EE_ACTIONS::toggleHiddenFields,    ACTION_MENU::CHECK );
-    viewMenu->Add( EE_ACTIONS::toggleDirectiveLabels, ACTION_MENU::CHECK );
-    viewMenu->Add( EE_ACTIONS::toggleERCErrors,       ACTION_MENU::CHECK );
-    viewMenu->Add( EE_ACTIONS::toggleERCWarnings,     ACTION_MENU::CHECK );
-    viewMenu->Add( EE_ACTIONS::toggleERCExclusions,   ACTION_MENU::CHECK );
-    viewMenu->Add( EE_ACTIONS::markSimExclusions,     ACTION_MENU::CHECK );
-    viewMenu->Add( EE_ACTIONS::toggleOPVoltages,      ACTION_MENU::CHECK );
-    viewMenu->Add( EE_ACTIONS::toggleOPCurrents,      ACTION_MENU::CHECK );
-    viewMenu->Add( EE_ACTIONS::togglePinAltIcons,     ACTION_MENU::CHECK );
+    viewMenu->Add( SCH_ACTIONS::toggleHiddenPins,      ACTION_MENU::CHECK );
+    viewMenu->Add( SCH_ACTIONS::toggleHiddenFields,    ACTION_MENU::CHECK );
+    viewMenu->Add( SCH_ACTIONS::toggleDirectiveLabels, ACTION_MENU::CHECK );
+    viewMenu->Add( SCH_ACTIONS::toggleERCErrors,       ACTION_MENU::CHECK );
+    viewMenu->Add( SCH_ACTIONS::toggleERCWarnings,     ACTION_MENU::CHECK );
+    viewMenu->Add( SCH_ACTIONS::toggleERCExclusions,   ACTION_MENU::CHECK );
+    viewMenu->Add( SCH_ACTIONS::markSimExclusions,     ACTION_MENU::CHECK );
+    viewMenu->Add( SCH_ACTIONS::toggleOPVoltages,      ACTION_MENU::CHECK );
+    viewMenu->Add( SCH_ACTIONS::toggleOPCurrents,      ACTION_MENU::CHECK );
+    viewMenu->Add( SCH_ACTIONS::togglePinAltIcons,     ACTION_MENU::CHECK );
 
 #ifdef __APPLE__
     viewMenu->AppendSeparator();
@@ -237,54 +233,54 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     //
     ACTION_MENU* placeMenu = new ACTION_MENU( false, selTool );
 
-    placeMenu->Add( EE_ACTIONS::placeSymbol );
-    placeMenu->Add( EE_ACTIONS::placePower );
-    placeMenu->Add( EE_ACTIONS::drawWire );
-    placeMenu->Add( EE_ACTIONS::drawBus );
-    placeMenu->Add( EE_ACTIONS::placeBusWireEntry );
-    placeMenu->Add( EE_ACTIONS::placeNoConnect );
-    placeMenu->Add( EE_ACTIONS::placeJunction );
-    placeMenu->Add( EE_ACTIONS::placeLabel );
-    placeMenu->Add( EE_ACTIONS::placeGlobalLabel );
-    placeMenu->Add( EE_ACTIONS::placeClassLabel );
-    placeMenu->Add( EE_ACTIONS::drawRuleArea );
+    placeMenu->Add( SCH_ACTIONS::placeSymbol );
+    placeMenu->Add( SCH_ACTIONS::placePower );
+    placeMenu->Add( SCH_ACTIONS::drawWire );
+    placeMenu->Add( SCH_ACTIONS::drawBus );
+    placeMenu->Add( SCH_ACTIONS::placeBusWireEntry );
+    placeMenu->Add( SCH_ACTIONS::placeNoConnect );
+    placeMenu->Add( SCH_ACTIONS::placeJunction );
+    placeMenu->Add( SCH_ACTIONS::placeLabel );
+    placeMenu->Add( SCH_ACTIONS::placeGlobalLabel );
+    placeMenu->Add( SCH_ACTIONS::placeClassLabel );
+    placeMenu->Add( SCH_ACTIONS::drawRuleArea );
 
     placeMenu->AppendSeparator();
-    placeMenu->Add( EE_ACTIONS::placeHierLabel );
-    placeMenu->Add( EE_ACTIONS::drawSheet );
-    placeMenu->Add( EE_ACTIONS::placeSheetPin );
-    placeMenu->Add( EE_ACTIONS::syncAllSheetsPins );
-    placeMenu->Add( EE_ACTIONS::importSheet );
+    placeMenu->Add( SCH_ACTIONS::placeHierLabel );
+    placeMenu->Add( SCH_ACTIONS::drawSheet );
+    placeMenu->Add( SCH_ACTIONS::placeSheetPin );
+    placeMenu->Add( SCH_ACTIONS::syncAllSheetsPins );
+    placeMenu->Add( SCH_ACTIONS::importSheet );
 
     placeMenu->AppendSeparator();
-    placeMenu->Add( EE_ACTIONS::placeSchematicText );
-    placeMenu->Add( EE_ACTIONS::drawTextBox );
-    placeMenu->Add( EE_ACTIONS::drawTable );
-    placeMenu->Add( EE_ACTIONS::drawRectangle );
-    placeMenu->Add( EE_ACTIONS::drawCircle );
-    placeMenu->Add( EE_ACTIONS::drawArc );
-    placeMenu->Add( EE_ACTIONS::drawBezier );
-    placeMenu->Add( EE_ACTIONS::drawLines );
-    placeMenu->Add( EE_ACTIONS::placeImage );
+    placeMenu->Add( SCH_ACTIONS::placeSchematicText );
+    placeMenu->Add( SCH_ACTIONS::drawTextBox );
+    placeMenu->Add( SCH_ACTIONS::drawTable );
+    placeMenu->Add( SCH_ACTIONS::drawRectangle );
+    placeMenu->Add( SCH_ACTIONS::drawCircle );
+    placeMenu->Add( SCH_ACTIONS::drawArc );
+    placeMenu->Add( SCH_ACTIONS::drawBezier );
+    placeMenu->Add( SCH_ACTIONS::drawLines );
+    placeMenu->Add( SCH_ACTIONS::placeImage );
 
 
     //-- Inspect menu -----------------------------------------------
     //
     ACTION_MENU* inspectMenu = new ACTION_MENU( false, selTool );
 
-    inspectMenu->Add( EE_ACTIONS::showBusSyntaxHelp );
+    inspectMenu->Add( SCH_ACTIONS::showBusSyntaxHelp );
 
     inspectMenu->AppendSeparator();
-    inspectMenu->Add( EE_ACTIONS::runERC );
+    inspectMenu->Add( SCH_ACTIONS::runERC );
     inspectMenu->Add( ACTIONS::prevMarker );
     inspectMenu->Add( ACTIONS::nextMarker );
     inspectMenu->Add( ACTIONS::excludeMarker );
 
     inspectMenu->AppendSeparator();
-    inspectMenu->Add( EE_ACTIONS::diffSymbol );
+    inspectMenu->Add( SCH_ACTIONS::diffSymbol );
 
     inspectMenu->AppendSeparator();
-    inspectMenu->Add( EE_ACTIONS::showSimulator );
+    inspectMenu->Add( SCH_ACTIONS::showSimulator );
 
 
     //-- Tools menu -----------------------------------------------
@@ -294,34 +290,34 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     wxMenuItem* update = toolsMenu->Add( ACTIONS::updatePcbFromSchematic );
     update->Enable( !Kiface().IsSingle() );
 
-    toolsMenu->Add( EE_ACTIONS::showPcbNew );
+    toolsMenu->Add( SCH_ACTIONS::showPcbNew );
 
     if( !Kiface().IsSingle() )
         toolsMenu->Add( ACTIONS::showProjectManager );
 
     toolsMenu->AppendSeparator();
     toolsMenu->Add( ACTIONS::showSymbolEditor );
-    toolsMenu->Add( EE_ACTIONS::updateSymbols );
+    toolsMenu->Add( SCH_ACTIONS::updateSymbols );
 
     toolsMenu->AppendSeparator();
-    toolsMenu->Add( EE_ACTIONS::rescueSymbols );
-    toolsMenu->Add( EE_ACTIONS::remapSymbols );
+    toolsMenu->Add( SCH_ACTIONS::rescueSymbols );
+    toolsMenu->Add( SCH_ACTIONS::remapSymbols );
 
     if( ADVANCED_CFG::GetCfg().m_ShowRepairSchematic )
-        toolsMenu->Add( EE_ACTIONS::repairSchematic );
+        toolsMenu->Add( SCH_ACTIONS::repairSchematic );
 
     toolsMenu->AppendSeparator();
-    toolsMenu->Add( EE_ACTIONS::editSymbolFields );
-    toolsMenu->Add( EE_ACTIONS::editSymbolLibraryLinks );
+    toolsMenu->Add( SCH_ACTIONS::editSymbolFields );
+    toolsMenu->Add( SCH_ACTIONS::editSymbolLibraryLinks );
 
     toolsMenu->AppendSeparator();
-    toolsMenu->Add( EE_ACTIONS::annotate );
-    toolsMenu->Add( EE_ACTIONS::incrementAnnotations );
+    toolsMenu->Add( SCH_ACTIONS::annotate );
+    toolsMenu->Add( SCH_ACTIONS::incrementAnnotations );
 
     toolsMenu->AppendSeparator();
-    toolsMenu->Add( EE_ACTIONS::assignFootprints );
-    toolsMenu->Add( EE_ACTIONS::generateBOM );
-    toolsMenu->Add( EE_ACTIONS::generateBOMLegacy );
+    toolsMenu->Add( SCH_ACTIONS::assignFootprints );
+    toolsMenu->Add( SCH_ACTIONS::generateBOM );
+    toolsMenu->Add( SCH_ACTIONS::generateBOMLegacy );
 
     toolsMenu->AppendSeparator();
     update = toolsMenu->Add( ACTIONS::updateSchematicFromPcb );

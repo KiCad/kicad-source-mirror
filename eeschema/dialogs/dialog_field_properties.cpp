@@ -35,7 +35,7 @@
 #include <common.h>
 #include <string_utils.h>
 #include <sch_edit_frame.h>
-#include <ee_collectors.h>
+#include <sch_collectors.h>
 #include <sch_symbol.h>
 #include <template_fieldnames.h>
 #include <symbol_library.h>

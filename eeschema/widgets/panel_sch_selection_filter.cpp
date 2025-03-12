@@ -21,7 +21,7 @@
 #include <project/sch_project_settings.h>
 #include <sch_base_frame.h>
 #include <tool/tool_manager.h>
-#include <tools/ee_selection_tool.h>
+#include <tools/sch_selection_tool.h>
 #include <widgets/panel_sch_selection_filter.h>
 
 
@@ -45,7 +45,7 @@ PANEL_SCH_SELECTION_FILTER::PANEL_SCH_SELECTION_FILTER( wxWindow* aParent ) :
     SetBorders( true, false, false, false );
 
     wxASSERT( m_frame );
-    m_tool = m_frame->GetToolManager()->GetTool<EE_SELECTION_TOOL>();
+    m_tool = m_frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
     wxASSERT( m_tool );
 
     SCH_SELECTION_FILTER_OPTIONS& opts = m_tool->GetFilter();

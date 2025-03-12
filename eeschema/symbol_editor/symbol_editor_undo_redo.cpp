@@ -27,8 +27,7 @@
 #include <widgets/lib_tree.h>
 #include <symbol_tree_pane.h>
 #include <tool/tool_manager.h>
-#include <tools/ee_actions.h>
-#include <tools/ee_selection_tool.h>
+#include <tools/sch_selection_tool.h>
 #include <tools/symbol_editor_drawing_tools.h>
 
 

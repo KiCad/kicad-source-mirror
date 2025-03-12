@@ -25,13 +25,13 @@
 #include "symbol_editor_edit_tool.h"
 
 #include <tool/picker_tool.h>
-#include <tools/ee_selection_tool.h>
-#include <tools/ee_tool_utils.h>
+#include <tools/sch_selection_tool.h>
+#include <tools/sch_tool_utils.h>
 #include <tools/symbol_editor_pin_tool.h>
 #include <tools/symbol_editor_drawing_tools.h>
 #include <tools/symbol_editor_move_tool.h>
 #include <clipboard.h>
-#include <ee_actions.h>
+#include <sch_actions.h>
 #include <increment.h>
 #include <pin_layout_cache.h>
 #include <string_utils.h>
@@ -52,7 +52,7 @@
 #include <io/kicad/kicad_io_utils.h>
 
 SYMBOL_EDITOR_EDIT_TOOL::SYMBOL_EDITOR_EDIT_TOOL() :
-        EE_TOOL_BASE( "eeschema.SymbolEditTool" ),
+        SCH_TOOL_BASE( "eeschema.SymbolEditTool" ),
         m_pickerItem( nullptr )
 {
 }
@@ -60,7 +60,7 @@ SYMBOL_EDITOR_EDIT_TOOL::SYMBOL_EDITOR_EDIT_TOOL() :
 
 bool SYMBOL_EDITOR_EDIT_TOOL::Init()
 {
-    EE_TOOL_BASE::Init();
+    SCH_TOOL_BASE::Init();
 
     SYMBOL_EDITOR_DRAWING_TOOLS* drawingTools = m_toolMgr->GetTool<SYMBOL_EDITOR_DRAWING_TOOLS>();
     SYMBOL_EDITOR_MOVE_TOOL*     moveTool = m_toolMgr->GetTool<SYMBOL_EDITOR_MOVE_TOOL>();
@@ -91,7 +91,7 @@ bool SYMBOL_EDITOR_EDIT_TOOL::Init()
                 return true;
             };
 
-    const auto canCopyText = EE_CONDITIONS::OnlyTypes( {
+    const auto canCopyText = SCH_CONDITIONS::OnlyTypes( {
             SCH_TEXT_T,
             SCH_TEXTBOX_T,
             SCH_FIELD_T,
@@ -100,26 +100,27 @@ bool SYMBOL_EDITOR_EDIT_TOOL::Init()
             SCH_TABLECELL_T,
     } );
 
+    // clang-format off
     // Add edit actions to the move tool menu
     if( moveTool )
     {
         CONDITIONAL_MENU& moveMenu = moveTool->GetToolMenu().GetMenu();
 
         moveMenu.AddSeparator( 200 );
-        moveMenu.AddItem( EE_ACTIONS::rotateCCW,    canEdit && EE_CONDITIONS::NotEmpty, 200 );
-        moveMenu.AddItem( EE_ACTIONS::rotateCW,     canEdit && EE_CONDITIONS::NotEmpty, 200 );
-        moveMenu.AddItem( EE_ACTIONS::mirrorV,      canEdit && EE_CONDITIONS::NotEmpty, 200 );
-        moveMenu.AddItem( EE_ACTIONS::mirrorH,      canEdit && EE_CONDITIONS::NotEmpty, 200 );
+        moveMenu.AddItem( SCH_ACTIONS::rotateCCW,   canEdit && SCH_CONDITIONS::NotEmpty, 200 );
+        moveMenu.AddItem( SCH_ACTIONS::rotateCW,    canEdit && SCH_CONDITIONS::NotEmpty, 200 );
+        moveMenu.AddItem( SCH_ACTIONS::mirrorV,     canEdit && SCH_CONDITIONS::NotEmpty, 200 );
+        moveMenu.AddItem( SCH_ACTIONS::mirrorH,     canEdit && SCH_CONDITIONS::NotEmpty, 200 );
 
-        moveMenu.AddItem( EE_ACTIONS::swap,         canEdit && SELECTION_CONDITIONS::MoreThan( 1 ), 200);
-        moveMenu.AddItem( EE_ACTIONS::properties,   canEdit && EE_CONDITIONS::Count( 1 ), 200 );
+        moveMenu.AddItem( SCH_ACTIONS::swap,        canEdit && SELECTION_CONDITIONS::MoreThan( 1 ), 200);
+        moveMenu.AddItem( SCH_ACTIONS::properties,  canEdit && SCH_CONDITIONS::Count( 1 ), 200 );
 
         moveMenu.AddSeparator( 300 );
-        moveMenu.AddItem( ACTIONS::cut,             EE_CONDITIONS::IdleSelection, 300 );
-        moveMenu.AddItem( ACTIONS::copy,            EE_CONDITIONS::IdleSelection, 300 );
-        moveMenu.AddItem( ACTIONS::copyAsText,      canCopyText && EE_CONDITIONS::IdleSelection, 300 );
-        moveMenu.AddItem( ACTIONS::duplicate,       canEdit && EE_CONDITIONS::NotEmpty, 300 );
-        moveMenu.AddItem( ACTIONS::doDelete,        canEdit && EE_CONDITIONS::NotEmpty, 200 );
+        moveMenu.AddItem( ACTIONS::cut,             SCH_CONDITIONS::IdleSelection, 300 );
+        moveMenu.AddItem( ACTIONS::copy,            SCH_CONDITIONS::IdleSelection, 300 );
+        moveMenu.AddItem( ACTIONS::copyAsText,      canCopyText && SCH_CONDITIONS::IdleSelection, 300 );
+        moveMenu.AddItem( ACTIONS::duplicate,       canEdit && SCH_CONDITIONS::NotEmpty, 300 );
+        moveMenu.AddItem( ACTIONS::doDelete,        canEdit && SCH_CONDITIONS::NotEmpty, 200 );
 
         moveMenu.AddSeparator( 400 );
         moveMenu.AddItem( ACTIONS::selectAll,       haveSymbolCondition, 400 );
@@ -130,35 +131,36 @@ bool SYMBOL_EDITOR_EDIT_TOOL::Init()
     CONDITIONAL_MENU& drawMenu = drawingTools->GetToolMenu().GetMenu();
 
     drawMenu.AddSeparator( 200 );
-    drawMenu.AddItem( EE_ACTIONS::rotateCCW,        canEdit && EE_CONDITIONS::IdleSelection, 200 );
-    drawMenu.AddItem( EE_ACTIONS::rotateCW,         canEdit && EE_CONDITIONS::IdleSelection, 200 );
-    drawMenu.AddItem( EE_ACTIONS::mirrorV,          canEdit && EE_CONDITIONS::IdleSelection, 200 );
-    drawMenu.AddItem( EE_ACTIONS::mirrorH,          canEdit && EE_CONDITIONS::IdleSelection, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::rotateCCW,       canEdit && SCH_CONDITIONS::IdleSelection, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::rotateCW,        canEdit && SCH_CONDITIONS::IdleSelection, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::mirrorV,         canEdit && SCH_CONDITIONS::IdleSelection, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::mirrorH,         canEdit && SCH_CONDITIONS::IdleSelection, 200 );
 
-    drawMenu.AddItem( EE_ACTIONS::properties,       canEdit && EE_CONDITIONS::Count( 1 ), 200 );
+    drawMenu.AddItem( SCH_ACTIONS::properties,      canEdit && SCH_CONDITIONS::Count( 1 ), 200 );
 
     // Add editing actions to the selection tool menu
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    selToolMenu.AddItem( EE_ACTIONS::rotateCCW,     canEdit && EE_CONDITIONS::NotEmpty, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::rotateCW,      canEdit && EE_CONDITIONS::NotEmpty, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::mirrorV,       canEdit && EE_CONDITIONS::NotEmpty, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::mirrorH,       canEdit && EE_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::rotateCCW,    canEdit && SCH_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::rotateCW,     canEdit && SCH_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::mirrorV,      canEdit && SCH_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::mirrorH,      canEdit && SCH_CONDITIONS::NotEmpty, 200 );
 
-    selToolMenu.AddItem( EE_ACTIONS::swap,          canEdit && SELECTION_CONDITIONS::MoreThan( 1 ), 200 );
-    selToolMenu.AddItem( EE_ACTIONS::properties,    canEdit && EE_CONDITIONS::Count( 1 ), 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::swap,         canEdit && SELECTION_CONDITIONS::MoreThan( 1 ), 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::properties,   canEdit && SCH_CONDITIONS::Count( 1 ), 200 );
 
     selToolMenu.AddSeparator( 300 );
-    selToolMenu.AddItem( ACTIONS::cut,              EE_CONDITIONS::IdleSelection, 300 );
-    selToolMenu.AddItem( ACTIONS::copy,             EE_CONDITIONS::IdleSelection, 300 );
-    selToolMenu.AddItem( ACTIONS::copyAsText,       canCopyText && EE_CONDITIONS::IdleSelection, 300 );
-    selToolMenu.AddItem( ACTIONS::paste,            canEdit && EE_CONDITIONS::Idle, 300 );
-    selToolMenu.AddItem( ACTIONS::duplicate,        canEdit && EE_CONDITIONS::NotEmpty, 300 );
-    selToolMenu.AddItem( ACTIONS::doDelete,         canEdit && EE_CONDITIONS::NotEmpty, 300 );
+    selToolMenu.AddItem( ACTIONS::cut,              SCH_CONDITIONS::IdleSelection, 300 );
+    selToolMenu.AddItem( ACTIONS::copy,             SCH_CONDITIONS::IdleSelection, 300 );
+    selToolMenu.AddItem( ACTIONS::copyAsText,       canCopyText && SCH_CONDITIONS::IdleSelection, 300 );
+    selToolMenu.AddItem( ACTIONS::paste,            canEdit && SCH_CONDITIONS::Idle, 300 );
+    selToolMenu.AddItem( ACTIONS::duplicate,        canEdit && SCH_CONDITIONS::NotEmpty, 300 );
+    selToolMenu.AddItem( ACTIONS::doDelete,         canEdit && SCH_CONDITIONS::NotEmpty, 300 );
 
     selToolMenu.AddSeparator( 400 );
     selToolMenu.AddItem( ACTIONS::selectAll,        haveSymbolCondition, 400 );
     selToolMenu.AddItem( ACTIONS::unselectAll,      haveSymbolCondition, 400 );
+    // clang-format on
 
     return true;
 }
@@ -166,13 +168,13 @@ bool SYMBOL_EDITOR_EDIT_TOOL::Init()
 
 int SYMBOL_EDITOR_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION& selection = m_selectionTool->RequestSelection();
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection();
 
     if( selection.GetSize() == 0 )
         return 0;
 
     VECTOR2I    rotPoint;
-    bool        ccw = ( aEvent.Matches( EE_ACTIONS::rotateCCW.MakeEvent() ) );
+    bool        ccw = ( aEvent.Matches( SCH_ACTIONS::rotateCCW.MakeEvent() ) );
     SCH_ITEM*   item = static_cast<SCH_ITEM*>( selection.Front() );
     SCH_COMMIT  localCommit( m_toolMgr );
     SCH_COMMIT* commit = dynamic_cast<SCH_COMMIT*>( aEvent.Commit() );
@@ -202,7 +204,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     else
     {
         if( selection.IsHover() )
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
         if( !localCommit.Empty() )
             localCommit.Push( _( "Rotate" ) );
@@ -214,13 +216,13 @@ int SYMBOL_EDITOR_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION& selection = m_selectionTool->RequestSelection();
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection();
 
     if( selection.GetSize() == 0 )
         return 0;
 
     VECTOR2I  mirrorPoint;
-    bool      xAxis = ( aEvent.Matches( EE_ACTIONS::mirrorV.MakeEvent() ) );
+    bool      xAxis = ( aEvent.Matches( SCH_ACTIONS::mirrorV.MakeEvent() ) );
     SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.Front() );
 
     if( !item->IsMoving() )
@@ -280,7 +282,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     else
     {
         if( selection.IsHover() )
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
         m_frame->OnModify();
     }
@@ -301,7 +303,7 @@ const std::vector<KICAD_T> swappableItems = {
 
 int SYMBOL_EDITOR_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION&          selection = m_selectionTool->RequestSelection( swappableItems );
+    SCH_SELECTION&         selection = m_selectionTool->RequestSelection( swappableItems );
     std::vector<EDA_ITEM*> sorted = selection.GetItemsSortedBySelectionOrder();
 
     if( selection.Size() < 2 )
@@ -362,7 +364,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
     else
     {
         if( selection.IsHover() )
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
         m_frame->OnModify();
     }
@@ -391,7 +393,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
         return 0;
 
     // Don't leave a freed pointer in the selection
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     commit.Modify( symbol, m_frame->GetScreen() );
 
@@ -488,7 +490,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::InteractiveDelete( const TOOL_EVENT& aEvent )
 {
     PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
 
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
     m_pickerItem = nullptr;
 
     // Deactivate other tools; particularly important if another PICKER is currently running
@@ -501,7 +503,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::InteractiveDelete( const TOOL_EVENT& aEvent )
             {
                 if( m_pickerItem )
                 {
-                    EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+                    SCH_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
                     selectionTool->UnbrightenItem( m_pickerItem );
                     selectionTool->AddItemToSel( m_pickerItem, true /*quiet mode*/ );
                     m_toolMgr->RunAction( ACTIONS::doDelete );
@@ -514,8 +516,8 @@ int SYMBOL_EDITOR_EDIT_TOOL::InteractiveDelete( const TOOL_EVENT& aEvent )
     picker->SetMotionHandler(
             [this]( const VECTOR2D& aPos )
             {
-                EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-                EE_COLLECTOR       collector;
+                SCH_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+                SCH_COLLECTOR       collector;
 
                 selectionTool->CollectHits( collector, aPos, nonFields );
 
@@ -547,10 +549,10 @@ int SYMBOL_EDITOR_EDIT_TOOL::InteractiveDelete( const TOOL_EVENT& aEvent )
             [this]( const int& aFinalState )
             {
                 if( m_pickerItem )
-                    m_toolMgr->GetTool<EE_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
+                    m_toolMgr->GetTool<SCH_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
 
                 // Wake the selection tool after exiting to ensure the cursor gets updated
-                m_toolMgr->PostAction( EE_ACTIONS::selectionActivate );
+                m_toolMgr->PostAction( SCH_ACTIONS::selectionActivate );
             } );
 
     m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
@@ -561,9 +563,9 @@ int SYMBOL_EDITOR_EDIT_TOOL::InteractiveDelete( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION& selection = m_selectionTool->RequestSelection();
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection();
 
-    if( selection.Empty() || aEvent.IsAction( &EE_ACTIONS::symbolProperties ) )
+    if( selection.Empty() || aEvent.IsAction( &SCH_ACTIONS::symbolProperties ) )
     {
         if( m_frame->GetCurSymbol() )
             editSymbolProperties();
@@ -620,7 +622,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     }
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     return 0;
 }
@@ -719,7 +721,7 @@ void SYMBOL_EDITOR_EDIT_TOOL::editSymbolProperties()
     bool        partLocked = symbol->UnitsLocked();
 
     m_toolMgr->RunAction( ACTIONS::cancelInteractive );
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     DIALOG_LIB_SYMBOL_PROPERTIES dlg( m_frame, symbol );
 
@@ -770,7 +772,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::PinTable( const TOOL_EVENT& aEvent )
 
     commit.Modify( symbol );
 
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     DIALOG_LIB_EDIT_PIN_TABLE dlg( m_frame, symbol );
 
@@ -850,7 +852,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::SetUnitDisplayName( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_EDIT_TOOL::Undo( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
 
     // Nuke the selection for later rebuilding.  This does *not* clear the flags on any items;
     // it just clears the SELECTION's reference to them.
@@ -866,7 +868,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Undo( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_EDIT_TOOL::Redo( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
 
     // Nuke the selection for later rebuilding.  This does *not* clear the flags on any items;
     // it just clears the SELECTION's reference to them.
@@ -893,8 +895,8 @@ int SYMBOL_EDITOR_EDIT_TOOL::Cut( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
 {
-    LIB_SYMBOL*   symbol = m_frame->GetCurSymbol();
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( nonFields );
+    LIB_SYMBOL*    symbol = m_frame->GetCurSymbol();
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection( nonFields );
 
     if( !symbol || !selection.GetSize() )
         return 0;
@@ -932,8 +934,8 @@ int SYMBOL_EDITOR_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_EDIT_TOOL::CopyAsText( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    EE_SELECTION&      selection = selTool->RequestSelection();
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    SCH_SELECTION&      selection = selTool->RequestSelection();
 
     if( selection.Empty() )
         return 0;
@@ -941,7 +943,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::CopyAsText( const TOOL_EVENT& aEvent )
     wxString itemsAsText = GetSelectedItemsAsText( selection );
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     return SaveClipboard( itemsAsText.ToStdString() );
 }
@@ -1010,13 +1012,13 @@ int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 
     m_selectionTool->RebuildSelection();
 
-    EE_SELECTION& selection = m_selectionTool->GetSelection();
+    SCH_SELECTION& selection = m_selectionTool->GetSelection();
 
     if( !selection.Empty() )
     {
         selection.SetReferencePoint( getViewControls()->GetCursorPosition( true ) );
 
-        if( m_toolMgr->RunSynchronousAction( EE_ACTIONS::move, &commit ) )
+        if( m_toolMgr->RunSynchronousAction( SCH_ACTIONS::move, &commit ) )
             commit.Push( _( "Paste" ) );
         else
             commit.Revert();
@@ -1028,9 +1030,9 @@ int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 {
-    LIB_SYMBOL*   symbol = m_frame->GetCurSymbol();
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( nonFields );
-    SCH_COMMIT    commit( m_toolMgr );
+    LIB_SYMBOL*    symbol = m_frame->GetCurSymbol();
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection( nonFields );
+    SCH_COMMIT     commit( m_toolMgr );
 
     if( selection.GetSize() == 0 )
         return 0;
@@ -1092,12 +1094,12 @@ int SYMBOL_EDITOR_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         getView()->Add( newItem );
     }
 
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
-    m_toolMgr->RunAction<EDA_ITEMS*>( EE_ACTIONS::addItemsToSel, &newItems );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+    m_toolMgr->RunAction<EDA_ITEMS*>( SCH_ACTIONS::addItemsToSel, &newItems );
 
     selection.SetReferencePoint( getViewControls()->GetCursorPosition( true ) );
 
-    if( m_toolMgr->RunSynchronousAction( EE_ACTIONS::move, &commit ) )
+    if( m_toolMgr->RunSynchronousAction( SCH_ACTIONS::move, &commit ) )
         commit.Push( _( "Duplicate" ) );
     else
         commit.Revert();
@@ -1109,7 +1111,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 int SYMBOL_EDITOR_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
 {
     const ACTIONS::INCREMENT incParam = aEvent.Parameter<ACTIONS::INCREMENT>();
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_PIN_T, SCH_TEXT_T } );
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_PIN_T, SCH_TEXT_T } );
 
     if( selection.Empty() )
         return 0;
@@ -1228,11 +1230,11 @@ void SYMBOL_EDITOR_EDIT_TOOL::setTransitions()
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Paste,              ACTIONS::paste.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Duplicate,          ACTIONS::duplicate.MakeEvent() );
 
-    Go( &SYMBOL_EDITOR_EDIT_TOOL::Rotate,             EE_ACTIONS::rotateCW.MakeEvent() );
-    Go( &SYMBOL_EDITOR_EDIT_TOOL::Rotate,             EE_ACTIONS::rotateCCW.MakeEvent() );
-    Go( &SYMBOL_EDITOR_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorV.MakeEvent() );
-    Go( &SYMBOL_EDITOR_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorH.MakeEvent() );
-    Go( &SYMBOL_EDITOR_EDIT_TOOL::Swap,               EE_ACTIONS::swap.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::Rotate,             SCH_ACTIONS::rotateCW.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::Rotate,             SCH_ACTIONS::rotateCCW.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::Mirror,             SCH_ACTIONS::mirrorV.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::Mirror,             SCH_ACTIONS::mirrorH.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::Swap,               SCH_ACTIONS::swap.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::DoDelete,           ACTIONS::doDelete.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::InteractiveDelete,  ACTIONS::deleteTool.MakeEvent() );
 
@@ -1242,10 +1244,10 @@ void SYMBOL_EDITOR_EDIT_TOOL::setTransitions()
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Increment,          ACTIONS::incrementSecondary.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Increment,          ACTIONS::decrementSecondary.MakeEvent() );
 
-    Go( &SYMBOL_EDITOR_EDIT_TOOL::Properties,         EE_ACTIONS::properties.MakeEvent() );
-    Go( &SYMBOL_EDITOR_EDIT_TOOL::Properties,         EE_ACTIONS::symbolProperties.MakeEvent() );
-    Go( &SYMBOL_EDITOR_EDIT_TOOL::PinTable,           EE_ACTIONS::pinTable.MakeEvent() );
-    Go( &SYMBOL_EDITOR_EDIT_TOOL::UpdateSymbolFields, EE_ACTIONS::updateSymbolFields.MakeEvent() );
-    Go( &SYMBOL_EDITOR_EDIT_TOOL::SetUnitDisplayName, EE_ACTIONS::setUnitDisplayName.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::Properties,         SCH_ACTIONS::properties.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::Properties,         SCH_ACTIONS::symbolProperties.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::PinTable,           SCH_ACTIONS::pinTable.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::UpdateSymbolFields, SCH_ACTIONS::updateSymbolFields.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::SetUnitDisplayName, SCH_ACTIONS::setUnitDisplayName.MakeEvent() );
     // clang-format on
 }

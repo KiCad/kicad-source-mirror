@@ -28,9 +28,9 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_grid_helper.h>
-#include <tools/ee_selection_tool.h>
+#include <tools/sch_selection_tool.h>
 #include <tools/sch_line_wire_bus_tool.h>
-#include <ee_actions.h>
+#include <sch_actions.h>
 #include <sch_commit.h>
 #include <eda_item.h>
 #include <sch_item.h>
@@ -52,7 +52,7 @@
 
 
 SCH_MOVE_TOOL::SCH_MOVE_TOOL() :
-        EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveMove" ),
+        SCH_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveMove" ),
         m_inMoveTool( false ),
         m_moveInProgress( false ),
         m_isDrag( false ),
@@ -63,7 +63,7 @@ SCH_MOVE_TOOL::SCH_MOVE_TOOL() :
 
 bool SCH_MOVE_TOOL::Init()
 {
-    EE_TOOL_BASE::Init();
+    SCH_TOOL_BASE::Init();
 
     auto moveCondition =
             []( const SELECTION& aSel )
@@ -81,9 +81,9 @@ bool SCH_MOVE_TOOL::Init()
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    selToolMenu.AddItem( EE_ACTIONS::move, moveCondition, 150 );
-    selToolMenu.AddItem( EE_ACTIONS::drag, moveCondition, 150 );
-    selToolMenu.AddItem( EE_ACTIONS::alignToGrid, moveCondition, 150 );
+    selToolMenu.AddItem( SCH_ACTIONS::move, moveCondition, 150 );
+    selToolMenu.AddItem( SCH_ACTIONS::drag, moveCondition, 150 );
+    selToolMenu.AddItem( SCH_ACTIONS::alignToGrid, moveCondition, 150 );
 
     return true;
 }
@@ -371,7 +371,7 @@ void SCH_MOVE_TOOL::orthoLineDrag( SCH_COMMIT* aCommit, SCH_LINE* line, const VE
 
 int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 {
-    m_isDrag = aEvent.IsAction( &EE_ACTIONS::drag );
+    m_isDrag = aEvent.IsAction( &SCH_ACTIONS::drag );
 
     if( SCH_COMMIT* commit = dynamic_cast<SCH_COMMIT*>( aEvent.Commit() ) )
     {
@@ -431,7 +431,7 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 
                 // And give it a kick so it doesn't have to wait for the first mouse movement
                 // to refresh.
-                m_toolMgr->PostAction( EE_ACTIONS::restartMove );
+                m_toolMgr->PostAction( SCH_ACTIONS::restartMove );
             }
         }
         else
@@ -448,7 +448,7 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 
     REENTRANCY_GUARD guard( &m_inMoveTool );
 
-    EE_SELECTION& userSelection = m_selectionTool->GetSelection();
+    SCH_SELECTION& userSelection = m_selectionTool->GetSelection();
 
     // If a single pin is selected, promote the move selection to its parent symbol
     if( userSelection.GetSize() == 1 )
@@ -469,9 +469,9 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 
     // Be sure that there is at least one item that we can move. If there's no selection try
     // looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection).
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::MovableItems,
-                                                                 true );
-    bool          unselect = selection.IsHover();
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::MovableItems,
+                                                                  true );
+    bool           unselect = selection.IsHover();
 
     // Keep an original copy of the starting points for cleanup after the move
     std::vector<DANGLING_END_ITEM> internalPoints;
@@ -506,9 +506,9 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
-        if( evt->IsAction( &EE_ACTIONS::restartMove )
-                || evt->IsAction( &EE_ACTIONS::move )
-                || evt->IsAction( &EE_ACTIONS::drag )
+        if( evt->IsAction( &SCH_ACTIONS::restartMove )
+                || evt->IsAction( &SCH_ACTIONS::move )
+                || evt->IsAction( &SCH_ACTIONS::drag )
                 || evt->IsMotion()
                 || evt->IsDrag( BUT_LEFT )
                 || evt->IsAction( &ACTIONS::refreshPreview ) )
@@ -649,7 +649,7 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                 //
                 m_cursor = controls->GetCursorPosition();
 
-                if( evt->IsAction( &EE_ACTIONS::restartMove ) )
+                if( evt->IsAction( &SCH_ACTIONS::restartMove ) )
                 {
                     wxASSERT_MSG( m_anchorPos, "Should be already set from previous cmd" );
                 }
@@ -858,13 +858,13 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
         {
             wxBell();
         }
-        else if( evt->IsAction( &EE_ACTIONS::rotateCW ) )
+        else if( evt->IsAction( &SCH_ACTIONS::rotateCW ) )
         {
-            m_toolMgr->RunSynchronousAction( EE_ACTIONS::rotateCW, aCommit );
+            m_toolMgr->RunSynchronousAction( SCH_ACTIONS::rotateCW, aCommit );
         }
-        else if( evt->IsAction( &EE_ACTIONS::rotateCCW ) )
+        else if( evt->IsAction( &SCH_ACTIONS::rotateCCW ) )
         {
-            m_toolMgr->RunSynchronousAction( EE_ACTIONS::rotateCCW, aCommit );
+            m_toolMgr->RunSynchronousAction( SCH_ACTIONS::rotateCCW, aCommit );
         }
         else if( evt->IsAction( &ACTIONS::increment ) )
         {
@@ -898,8 +898,8 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                 }
             }
         }
-        else if( evt->IsAction( &EE_ACTIONS::highlightNet )
-                    || evt->IsAction( &EE_ACTIONS::selectOnPCB ) )
+        else if( evt->IsAction( &SCH_ACTIONS::highlightNet )
+                    || evt->IsAction( &SCH_ACTIONS::selectOnPCB ) )
         {
             // These don't make any sense during a move.  Eat them.
         }
@@ -931,7 +931,7 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
     // Create a selection of original selection, drag selected/changed items, and new
     // bend lines for later before we clear them in the aCommit. We'll need these
     // to check for new junctions needed, etc.
-    EE_SELECTION selectionCopy( selection );
+    SCH_SELECTION selectionCopy( selection );
 
     for( SCH_LINE* line : m_newDragLines )
         selectionCopy.Add( line );
@@ -1014,7 +1014,7 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
         item->ClearEditFlags();
 
     if( unselect )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
     else
         m_selectionTool->RebuildSelection();  // Schematic cleanup might have merged lines, etc.
 
@@ -1651,7 +1651,7 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
 int SCH_MOVE_TOOL::AlignToGrid( const TOOL_EVENT& aEvent )
 {
     EE_GRID_HELPER    grid( m_toolMgr);
-    EE_SELECTION&     selection = m_selectionTool->RequestSelection( EE_COLLECTOR::MovableItems );
+    SCH_SELECTION&    selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::MovableItems );
     GRID_HELPER_GRIDS selectionGrid = grid.GetSelectionGrid( selection );
     SCH_COMMIT        commit( m_toolMgr );
 
@@ -1840,9 +1840,9 @@ void SCH_MOVE_TOOL::clearNewDragLines()
 
 void SCH_MOVE_TOOL::setTransitions()
 {
-    Go( &SCH_MOVE_TOOL::Main,               EE_ACTIONS::move.MakeEvent() );
-    Go( &SCH_MOVE_TOOL::Main,               EE_ACTIONS::drag.MakeEvent() );
-    Go( &SCH_MOVE_TOOL::AlignToGrid,        EE_ACTIONS::alignToGrid.MakeEvent() );
+    Go( &SCH_MOVE_TOOL::Main,               SCH_ACTIONS::move.MakeEvent() );
+    Go( &SCH_MOVE_TOOL::Main,               SCH_ACTIONS::drag.MakeEvent() );
+    Go( &SCH_MOVE_TOOL::AlignToGrid,        SCH_ACTIONS::alignToGrid.MakeEvent() );
 }
 
 

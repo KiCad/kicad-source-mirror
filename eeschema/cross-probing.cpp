@@ -35,7 +35,7 @@
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <richio.h>
-#include <tools/ee_actions.h>
+#include <tools/sch_actions.h>
 #include <tools/sch_editor_control.h>
 #include <advanced_config.h>
 #include <widgets/design_block_pane.h>
@@ -130,7 +130,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString* aPath, const wx
             {
                 BOX2I bbox = symbol->GetBoundingBox();
 
-                m_toolMgr->GetTool<EE_SELECTION_TOOL>()->ZoomFitCrossProbeBBox( bbox );
+                m_toolMgr->GetTool<SCH_SELECTION_TOOL>()->ZoomFitCrossProbeBBox( bbox );
             }
 
             if( pin )
@@ -212,7 +212,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     }
     else if( strcmp( idcmd, "$ERC" ) == 0 )
     {
-        GetToolManager()->RunAction( EE_ACTIONS::runERC );
+        GetToolManager()->RunAction( SCH_ACTIONS::runERC );
         return;
     }
     else if( strcmp( idcmd, "$NET:" ) == 0 )
@@ -227,7 +227,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         else
             m_highlightedConn = wxEmptyString;
 
-        GetToolManager()->RunAction( EE_ACTIONS::updateNetHighlighting );
+        GetToolManager()->RunAction( SCH_ACTIONS::updateNetHighlighting );
         RefreshNetNavigator();
 
         SetStatusText( _( "Selected net:" ) + wxS( " " ) + UnescapeString( netName ) );
@@ -875,8 +875,8 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
             m_syncingPcbToSchSelection = true; // recursion guard
 
-            GetToolManager()->GetTool<EE_SELECTION_TOOL>()->SyncSelection( sheetPath, focusItem,
-                                                                           items );
+            GetToolManager()->GetTool<SCH_SELECTION_TOOL>()->SyncSelection( sheetPath, focusItem,
+                                                                            items );
 
             m_syncingPcbToSchSelection = false;
         }

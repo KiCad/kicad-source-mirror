@@ -25,12 +25,12 @@
 #ifndef KICAD_SCH_MOVE_TOOL_H
 #define KICAD_SCH_MOVE_TOOL_H
 
-#include <tools/ee_tool_base.h>
+#include <tools/sch_tool_base.h>
 #include <sch_base_frame.h>
 
 
 class SCH_EDIT_FRAME;
-class EE_SELECTION_TOOL;
+class SCH_SELECTION_TOOL;
 
 
 struct SPECIAL_CASE_LABEL_INFO
@@ -40,7 +40,7 @@ struct SPECIAL_CASE_LABEL_INFO
 };
 
 
-class SCH_MOVE_TOOL : public EE_TOOL_BASE<SCH_EDIT_FRAME>
+class SCH_MOVE_TOOL : public SCH_TOOL_BASE<SCH_EDIT_FRAME>
 {
 public:
     SCH_MOVE_TOOL();

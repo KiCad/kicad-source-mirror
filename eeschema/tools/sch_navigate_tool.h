@@ -27,7 +27,7 @@
 #define SCH_NAVIGATE_TOOL_H
 
 #include <sch_base_frame.h>
-#include <tools/ee_tool_base.h>
+#include <tools/sch_tool_base.h>
 #include <status_popup.h>
 
 class SCH_EDIT_FRAME;
@@ -35,10 +35,10 @@ class SCH_EDIT_FRAME;
 /**
  * Handle actions specific to the schematic editor.
  */
-class SCH_NAVIGATE_TOOL : public wxEvtHandler, public EE_TOOL_BASE<SCH_EDIT_FRAME>
+class SCH_NAVIGATE_TOOL : public wxEvtHandler, public SCH_TOOL_BASE<SCH_EDIT_FRAME>
 {
 public:
-    SCH_NAVIGATE_TOOL() : EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.NavigateTool" ) {}
+    SCH_NAVIGATE_TOOL() : SCH_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.NavigateTool" ) {}
 
     ~SCH_NAVIGATE_TOOL() { }
 

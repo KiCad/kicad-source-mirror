@@ -359,7 +359,6 @@ set( EESCHEMA_SRCS
     cross-probing.cpp
     design_block_tree_model_adapter.cpp
     design_block_utils.cpp
-    ee_collectors.cpp
     eeschema_config.cpp
     eeschema_helpers.cpp
     eeschema_jobs_handler.cpp
@@ -383,6 +382,7 @@ set( EESCHEMA_SRCS
     sch_base_frame.cpp
     sch_bitmap.cpp
     sch_bus_entry.cpp
+    sch_collectors.cpp
     sch_commit.cpp
     sch_connection.cpp
     sch_draw_panel.cpp
@@ -446,14 +446,9 @@ set( EESCHEMA_SRCS
 
     tools/assign_footprints.cpp
     tools/backannotate.cpp
-    tools/ee_actions.cpp
     tools/ee_grid_helper.cpp
-    tools/ee_inspection_tool.cpp
-    tools/ee_point_editor.cpp
-    tools/ee_selection.cpp
-    tools/ee_selection_tool.cpp
-    tools/ee_tool_utils.cpp
     tools/rule_area_create_helper.cpp
+    tools/sch_actions.cpp
     tools/sch_drawing_tools.cpp
     tools/sch_design_block_control.cpp
     tools/sch_edit_table_tool.cpp
@@ -461,9 +456,14 @@ set( EESCHEMA_SRCS
     tools/sch_editor_control.cpp
     tools/sch_editor_conditions.cpp
     tools/sch_find_replace_tool.cpp
+    tools/sch_inspection_tool.cpp
     tools/sch_line_wire_bus_tool.cpp
     tools/sch_move_tool.cpp
     tools/sch_navigate_tool.cpp
+    tools/sch_point_editor.cpp
+    tools/sch_selection.cpp
+    tools/sch_selection_tool.cpp
+    tools/sch_tool_utils.cpp
     tools/symbol_editor_control.cpp
     tools/symbol_editor_drawing_tools.cpp
     tools/symbol_editor_edit_tool.cpp

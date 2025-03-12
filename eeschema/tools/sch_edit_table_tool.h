@@ -24,7 +24,7 @@
 #ifndef SCH_EDIT_TABLE_TOOL_H
 #define SCH_EDIT_TABLE_TOOL_H
 
-#include <tools/ee_tool_base.h>
+#include <tools/sch_tool_base.h>
 #include <tool/edit_table_tool_base.h>
 #include <sch_table.h>
 #include <sch_tablecell.h>
@@ -34,7 +34,7 @@
 class SCH_EDIT_FRAME;
 
 
-class SCH_EDIT_TABLE_TOOL : public EE_TOOL_BASE<SCH_EDIT_FRAME>,
+class SCH_EDIT_TABLE_TOOL : public SCH_TOOL_BASE<SCH_EDIT_FRAME>,
                             public EDIT_TABLE_TOOL_BASE<SCH_TABLE, SCH_TABLECELL, SCH_COMMIT>
 {
 public:
@@ -65,7 +65,7 @@ private:
     BASE_SCREEN* getScreen() override { return m_frame->GetScreen(); }
 
     const SELECTION& getTableCellSelection() override;
-    void clearSelection() override { m_toolMgr->RunAction( EE_ACTIONS::clearSelection ); };
+    void clearSelection() override { m_toolMgr->RunAction( SCH_ACTIONS::clearSelection ); };
 
     SCH_TABLECELL* copyCell( SCH_TABLECELL* aSource ) override;
 };

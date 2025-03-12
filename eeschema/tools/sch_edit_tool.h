@@ -25,15 +25,15 @@
 #ifndef KICAD_SCH_EDIT_TOOL_H
 #define KICAD_SCH_EDIT_TOOL_H
 
-#include <tools/ee_tool_base.h>
+#include <tools/sch_tool_base.h>
 #include <sch_base_frame.h>
 
 
 class SCH_EDIT_FRAME;
-class EE_SELECTION_TOOL;
+class SCH_SELECTION_TOOL;
 
 
-class SCH_EDIT_TOOL : public EE_TOOL_BASE<SCH_EDIT_FRAME>
+class SCH_EDIT_TOOL : public SCH_TOOL_BASE<SCH_EDIT_FRAME>
 {
 public:
     SCH_EDIT_TOOL();
@@ -97,7 +97,7 @@ public:
 private:
     void editFieldText( SCH_FIELD* aField );
 
-    void collectUnits( const EE_SELECTION& aSelection,
+    void collectUnits( const SCH_SELECTION& aSelection,
                        std::set<std::pair<SCH_SYMBOL*, SCH_SCREEN*>>& aCollectedUnits );
 
     ///< Set up handlers for various events.

@@ -53,14 +53,10 @@
 #include <boost/range/adaptor/reversed.hpp>
 
 #include <sch_edit_frame.h>
-#include <symbol.h>
 #include <sch_line.h>
-#include <sch_pin.h>
 #include <kiface_base.h>
 #include <algorithm>
 #include <tool/tool_manager.h>
-#include <tools/ee_selection_tool.h>
-#include <eeschema_settings.h>
 #include <core/arraydim.h>
 
 #define FIELD_PADDING schIUScale.MilsToIU( 15 )       // arbitrarily chosen for aesthetics

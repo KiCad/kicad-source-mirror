@@ -23,7 +23,7 @@
 
 #include <macros.h>
 #include <tool/tool_manager.h>
-#include <tools/ee_tool_base.h>
+#include <tools/sch_tool_base.h>
 
 #include <lib_symbol.h>
 
@@ -47,7 +47,7 @@ SCH_COMMIT::SCH_COMMIT( TOOL_MANAGER* aToolMgr ) :
 }
 
 
-SCH_COMMIT::SCH_COMMIT( EE_TOOL_BASE<SCH_BASE_FRAME>* aTool )
+SCH_COMMIT::SCH_COMMIT( SCH_TOOL_BASE<SCH_BASE_FRAME>* aTool )
 {
     m_toolMgr = aTool->GetManager();
     m_isLibEditor = aTool->IsSymbolEditor();
@@ -180,7 +180,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
     KIGFX::VIEW*        view = m_toolMgr->GetView();
 
     SCH_EDIT_FRAME*     frame = static_cast<SCH_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
-    EE_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
     bool                itemsDeselected = false;
     bool                selectedModified = false;
     bool                dirtyConnectivity = false;
@@ -488,9 +488,9 @@ void SCH_COMMIT::revertLibEdit()
         return;
 
     // Symbol editor just saves copies of the whole symbol, so grab the first and discard the rest
-    SYMBOL_EDIT_FRAME* frame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
-    LIB_SYMBOL*        copy = dynamic_cast<LIB_SYMBOL*>( m_changes.front().m_copy );
-    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+    SYMBOL_EDIT_FRAME*  frame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
+    LIB_SYMBOL*         copy = dynamic_cast<LIB_SYMBOL*>( m_changes.front().m_copy );
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
 
     if( frame && copy )
     {
@@ -510,10 +510,10 @@ void SCH_COMMIT::revertLibEdit()
 
 void SCH_COMMIT::Revert()
 {
-    KIGFX::VIEW*       view = m_toolMgr->GetView();
-    SCH_EDIT_FRAME*    frame = dynamic_cast<SCH_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
-    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    SCH_SHEET_LIST     sheets;
+    KIGFX::VIEW*        view = m_toolMgr->GetView();
+    SCH_EDIT_FRAME*     frame = dynamic_cast<SCH_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    SCH_SHEET_LIST      sheets;
 
     if( m_changes.empty() )
         return;

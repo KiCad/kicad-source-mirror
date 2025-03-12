@@ -35,7 +35,7 @@ class TOOL_MANAGER;
  * Gather all the actions that are shared by tools. The instance of SCH_ACTIONS is created
  * inside of ACTION_MANAGER object that registers the actions.
  */
-class EE_ACTIONS : public ACTIONS
+class SCH_ACTIONS : public ACTIONS
 {
 public:
     // Menu bar save curr sheet as command

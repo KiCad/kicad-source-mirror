@@ -27,18 +27,18 @@
 #define SCH_FIND_REPLACE_TOOL_H
 
 #include <sch_base_frame.h>
-#include <tools/ee_tool_base.h>
+#include <tools/sch_tool_base.h>
 
 class SCH_EDIT_FRAME;
 
 /**
  * Handle actions specific to the schematic editor.
  */
-class SCH_FIND_REPLACE_TOOL : public wxEvtHandler, public EE_TOOL_BASE<SCH_EDIT_FRAME>
+class SCH_FIND_REPLACE_TOOL : public wxEvtHandler, public SCH_TOOL_BASE<SCH_EDIT_FRAME>
 {
 public:
     SCH_FIND_REPLACE_TOOL()  :
-            EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.FindReplace" ),
+            SCH_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.FindReplace" ),
             m_foundItemHighlighted( false )
     { }
 

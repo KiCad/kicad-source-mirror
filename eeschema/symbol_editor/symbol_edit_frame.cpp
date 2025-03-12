@@ -60,11 +60,11 @@
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 #include <tool/zoom_tool.h>
-#include <tools/ee_actions.h>
-#include <tools/ee_inspection_tool.h>
-#include <tools/ee_point_editor.h>
+#include <tools/sch_actions.h>
+#include <tools/sch_inspection_tool.h>
+#include <tools/sch_point_editor.h>
 #include <tools/ee_grid_helper.h>
-#include <tools/ee_selection_tool.h>
+#include <tools/sch_selection_tool.h>
 #include <tools/symbol_editor_control.h>
 #include <tools/symbol_editor_drawing_tools.h>
 #include <tools/symbol_editor_edit_tool.h>
@@ -236,7 +236,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     FinishAUIInitialization();
 
     // Can't put this in LoadSettings, because it has to be called before setupTools :/
-    EE_SELECTION_TOOL* selTool = GetToolManager()->GetTool<EE_SELECTION_TOOL>();
+    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
     selTool->GetFilter() = GetSettings()->m_SelectionFilter;
 
     if( m_settings->m_LibWidth > 0 )
@@ -346,7 +346,7 @@ void SYMBOL_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     bool prop_shown = m_auimgr.GetPane( PropertiesPaneName() ).IsShown();
     m_settings->m_AuiPanels.show_properties = prop_shown;
 
-    EE_SELECTION_TOOL* selTool = GetToolManager()->GetTool<EE_SELECTION_TOOL>();
+    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
     m_settings->m_SelectionFilter = selTool->GetFilter();
 }
 
@@ -374,19 +374,19 @@ void SYMBOL_EDIT_FRAME::setupTools()
     m_toolManager = new TOOL_MANAGER;
     m_toolManager->SetEnvironment( GetScreen(), GetCanvas()->GetView(),
                                    GetCanvas()->GetViewControls(), GetSettings(), this );
-    m_actions = new EE_ACTIONS();
+    m_actions = new SCH_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
 
     // Register tools
     m_toolManager->RegisterTool( new COMMON_CONTROL );
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
-    m_toolManager->RegisterTool( new EE_SELECTION_TOOL );
+    m_toolManager->RegisterTool( new SCH_SELECTION_TOOL );
     m_toolManager->RegisterTool( new PICKER_TOOL );
-    m_toolManager->RegisterTool( new EE_INSPECTION_TOOL );
+    m_toolManager->RegisterTool( new SCH_INSPECTION_TOOL );
     m_toolManager->RegisterTool( new SYMBOL_EDITOR_PIN_TOOL );
     m_toolManager->RegisterTool( new SYMBOL_EDITOR_DRAWING_TOOLS );
-    m_toolManager->RegisterTool( new EE_POINT_EDITOR );
+    m_toolManager->RegisterTool( new SCH_POINT_EDITOR );
     m_toolManager->RegisterTool( new SYMBOL_EDITOR_MOVE_TOOL );
     m_toolManager->RegisterTool( new SYMBOL_EDITOR_EDIT_TOOL );
     m_toolManager->RegisterTool( new LIBRARY_EDITOR_CONTROL );
@@ -471,12 +471,12 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     // clang-format off
     mgr->SetConditions( ACTIONS::saveAll,                       ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
     mgr->SetConditions( ACTIONS::save,                          ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
-    mgr->SetConditions( EE_ACTIONS::saveLibraryAs,              ENABLE( libSelectedCondition ) );
-    mgr->SetConditions( EE_ACTIONS::saveSymbolAs,               ENABLE( saveSymbolAsCondition ) );
-    mgr->SetConditions( EE_ACTIONS::saveSymbolCopyAs,           ENABLE( saveSymbolAsCondition ) );
-    mgr->SetConditions( EE_ACTIONS::newSymbol,                  ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
-    mgr->SetConditions( EE_ACTIONS::importSymbol,               ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
-    mgr->SetConditions( EE_ACTIONS::editLibSymbolWithLibEdit,   ENABLE( isSymbolFromSchematicCond ) );
+    mgr->SetConditions( SCH_ACTIONS::saveLibraryAs,             ENABLE( libSelectedCondition ) );
+    mgr->SetConditions( SCH_ACTIONS::saveSymbolAs,              ENABLE( saveSymbolAsCondition ) );
+    mgr->SetConditions( SCH_ACTIONS::saveSymbolCopyAs,          ENABLE( saveSymbolAsCondition ) );
+    mgr->SetConditions( SCH_ACTIONS::newSymbol,                 ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    mgr->SetConditions( SCH_ACTIONS::importSymbol,              ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    mgr->SetConditions( SCH_ACTIONS::editLibSymbolWithLibEdit,  ENABLE( isSymbolFromSchematicCond ) );
 
     mgr->SetConditions( ACTIONS::undo,                ENABLE( haveSymbolCond && cond.UndoAvailable() ) );
     mgr->SetConditions( ACTIONS::redo,                ENABLE( haveSymbolCond && cond.RedoAvailable() ) );
@@ -500,11 +500,11 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::unselectAll,         ENABLE( haveSymbolCond ) );
 
     // These actions in symbol editor when editing alias field rotations are allowed.
-    mgr->SetConditions( EE_ACTIONS::rotateCW,         ENABLE( isEditableInAliasCond ) );
-    mgr->SetConditions( EE_ACTIONS::rotateCCW,        ENABLE( isEditableInAliasCond ) );
+    mgr->SetConditions( SCH_ACTIONS::rotateCW,        ENABLE( isEditableInAliasCond ) );
+    mgr->SetConditions( SCH_ACTIONS::rotateCCW,       ENABLE( isEditableInAliasCond ) );
 
-    mgr->SetConditions( EE_ACTIONS::mirrorH,          ENABLE( isEditableCond ) );
-    mgr->SetConditions( EE_ACTIONS::mirrorV,          ENABLE( isEditableCond ) );
+    mgr->SetConditions( SCH_ACTIONS::mirrorH,         ENABLE( isEditableCond ) );
+    mgr->SetConditions( SCH_ACTIONS::mirrorV,         ENABLE( isEditableCond ) );
 
     mgr->SetConditions( ACTIONS::zoomTool,            CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
     mgr->SetConditions( ACTIONS::selectionTool,       CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
@@ -546,13 +546,13 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
                 return m_auimgr.GetPane( PropertiesPaneName() ).IsShown();
             };
 
-    mgr->SetConditions( EE_ACTIONS::showElectricalTypes, CHECK( pinTypeCond ) );
-    mgr->SetConditions( ACTIONS::toggleBoundingBoxes,    CHECK( cond.BoundingBoxes() ) );
-    mgr->SetConditions( ACTIONS::showLibraryTree,        CHECK( showLibraryTreeCond ) );
-    mgr->SetConditions( ACTIONS::showProperties,         CHECK( propertiesCond ) );
-    mgr->SetConditions( EE_ACTIONS::showHiddenPins,      CHECK( hiddenPinCond ) );
-    mgr->SetConditions( EE_ACTIONS::showHiddenFields,    CHECK( hiddenFieldCond ) );
-    mgr->SetConditions( EE_ACTIONS::togglePinAltIcons,   CHECK( showPinAltIconsCond ) );
+    mgr->SetConditions( SCH_ACTIONS::showElectricalTypes, CHECK( pinTypeCond ) );
+    mgr->SetConditions( ACTIONS::toggleBoundingBoxes,     CHECK( cond.BoundingBoxes() ) );
+    mgr->SetConditions( ACTIONS::showLibraryTree,         CHECK( showLibraryTreeCond ) );
+    mgr->SetConditions( ACTIONS::showProperties,          CHECK( propertiesCond ) );
+    mgr->SetConditions( SCH_ACTIONS::showHiddenPins,      CHECK( hiddenPinCond ) );
+    mgr->SetConditions( SCH_ACTIONS::showHiddenFields,    CHECK( hiddenFieldCond ) );
+    mgr->SetConditions( SCH_ACTIONS::togglePinAltIcons,   CHECK( showPinAltIconsCond ) );
 
     auto demorganCond =
             [this]( const SELECTION& )
@@ -596,35 +596,31 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
                 return m_symbol && !m_symbol->GetDatasheetField().GetText().IsEmpty();
             };
 
-    mgr->SetConditions( ACTIONS::showDatasheet,    ENABLE( haveDatasheetCond ) );
-    mgr->SetConditions( EE_ACTIONS::symbolProperties, ENABLE( canEditProperties && haveSymbolCond ) );
-    mgr->SetConditions( EE_ACTIONS::runERC,           ENABLE( haveSymbolCond ) );
-    mgr->SetConditions( EE_ACTIONS::pinTable,         ENABLE( isEditableCond && haveSymbolCond ) );
+    mgr->SetConditions( ACTIONS::showDatasheet,        ENABLE( haveDatasheetCond ) );
+    mgr->SetConditions( SCH_ACTIONS::symbolProperties, ENABLE( canEditProperties && haveSymbolCond ) );
+    mgr->SetConditions( SCH_ACTIONS::runERC,           ENABLE( haveSymbolCond ) );
+    mgr->SetConditions( SCH_ACTIONS::pinTable,         ENABLE( isEditableCond && haveSymbolCond ) );
 
-    mgr->SetConditions( EE_ACTIONS::showDeMorganStandard,
-                        ACTION_CONDITIONS().Enable( demorganCond ).Check( demorganStandardCond ) );
-    mgr->SetConditions( EE_ACTIONS::showDeMorganAlternate,
-                        ACTION_CONDITIONS().Enable( demorganCond ).Check( demorganAlternateCond ) );
-    mgr->SetConditions( EE_ACTIONS::toggleSyncedPinsMode,
-                        ACTION_CONDITIONS().Enable( multiUnitModeCond ).Check( syncedPinsModeCond ) );
-    mgr->SetConditions( EE_ACTIONS::setUnitDisplayName,
-                        ACTION_CONDITIONS().Enable( isEditableCond && hasMultipleUnitsCond ) );
+    mgr->SetConditions( SCH_ACTIONS::showDeMorganStandard,  ACTION_CONDITIONS().Enable( demorganCond ).Check( demorganStandardCond ) );
+    mgr->SetConditions( SCH_ACTIONS::showDeMorganAlternate, ACTION_CONDITIONS().Enable( demorganCond ).Check( demorganAlternateCond ) );
+    mgr->SetConditions( SCH_ACTIONS::toggleSyncedPinsMode,  ACTION_CONDITIONS().Enable( multiUnitModeCond ).Check( syncedPinsModeCond ) );
+    mgr->SetConditions( SCH_ACTIONS::setUnitDisplayName,    ACTION_CONDITIONS().Enable( isEditableCond && hasMultipleUnitsCond ) );
 
 // Only enable a tool if the symbol is edtable
 #define EDIT_TOOL( tool ) ACTION_CONDITIONS().Enable( isEditableCond ).Check( cond.CurrentTool( tool ) )
 
     mgr->SetConditions( ACTIONS::deleteTool,             EDIT_TOOL( ACTIONS::deleteTool ) );
-    mgr->SetConditions( EE_ACTIONS::placeSymbolPin,      EDIT_TOOL( EE_ACTIONS::placeSymbolPin ) );
-    mgr->SetConditions( EE_ACTIONS::placeSymbolText,     EDIT_TOOL( EE_ACTIONS::placeSymbolText ) );
-    mgr->SetConditions( EE_ACTIONS::drawSymbolTextBox,   EDIT_TOOL( EE_ACTIONS::drawSymbolTextBox ) );
-    mgr->SetConditions( EE_ACTIONS::drawRectangle,       EDIT_TOOL( EE_ACTIONS::drawRectangle ) );
-    mgr->SetConditions( EE_ACTIONS::drawCircle,          EDIT_TOOL( EE_ACTIONS::drawCircle ) );
-    mgr->SetConditions( EE_ACTIONS::drawArc,             EDIT_TOOL( EE_ACTIONS::drawArc ) );
-    mgr->SetConditions( EE_ACTIONS::drawBezier,          EDIT_TOOL( EE_ACTIONS::drawBezier ) );
-    mgr->SetConditions( EE_ACTIONS::drawSymbolLines,     EDIT_TOOL( EE_ACTIONS::drawSymbolLines ) );
-    mgr->SetConditions( EE_ACTIONS::drawSymbolPolygon,   EDIT_TOOL( EE_ACTIONS::drawSymbolPolygon ) );
-    mgr->SetConditions( EE_ACTIONS::placeSymbolAnchor,   EDIT_TOOL( EE_ACTIONS::placeSymbolAnchor ) );
-    mgr->SetConditions( EE_ACTIONS::importGraphics,      EDIT_TOOL( EE_ACTIONS::importGraphics ) );
+    mgr->SetConditions( SCH_ACTIONS::placeSymbolPin,     EDIT_TOOL( SCH_ACTIONS::placeSymbolPin ) );
+    mgr->SetConditions( SCH_ACTIONS::placeSymbolText,    EDIT_TOOL( SCH_ACTIONS::placeSymbolText ) );
+    mgr->SetConditions( SCH_ACTIONS::drawSymbolTextBox,  EDIT_TOOL( SCH_ACTIONS::drawSymbolTextBox ) );
+    mgr->SetConditions( SCH_ACTIONS::drawRectangle,      EDIT_TOOL( SCH_ACTIONS::drawRectangle ) );
+    mgr->SetConditions( SCH_ACTIONS::drawCircle,         EDIT_TOOL( SCH_ACTIONS::drawCircle ) );
+    mgr->SetConditions( SCH_ACTIONS::drawArc,            EDIT_TOOL( SCH_ACTIONS::drawArc ) );
+    mgr->SetConditions( SCH_ACTIONS::drawBezier,         EDIT_TOOL( SCH_ACTIONS::drawBezier ) );
+    mgr->SetConditions( SCH_ACTIONS::drawSymbolLines,    EDIT_TOOL( SCH_ACTIONS::drawSymbolLines ) );
+    mgr->SetConditions( SCH_ACTIONS::drawSymbolPolygon,  EDIT_TOOL( SCH_ACTIONS::drawSymbolPolygon ) );
+    mgr->SetConditions( SCH_ACTIONS::placeSymbolAnchor,  EDIT_TOOL( SCH_ACTIONS::placeSymbolAnchor ) );
+    mgr->SetConditions( SCH_ACTIONS::importGraphics,     EDIT_TOOL( SCH_ACTIONS::importGraphics ) );
 
 #undef CHECK
 #undef ENABLE
@@ -832,7 +828,7 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
 {
     wxCHECK( m_toolManager, /* void */ );
 
-    m_toolManager->RunAction( EE_ACTIONS::clearSelection );
+    m_toolManager->RunAction( SCH_ACTIONS::clearSelection );
     GetCanvas()->GetView()->Clear();
     delete m_symbol;
 
@@ -892,7 +888,7 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
         button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
                 [this, symbolName, libName]( wxHyperlinkEvent& aEvent )
                 {
-                    GetToolManager()->RunAction( EE_ACTIONS::editLibSymbolWithLibEdit );
+                    GetToolManager()->RunAction( SCH_ACTIONS::editLibSymbolWithLibEdit );
                 } ) );
 
         infobar.AddButton( button );
@@ -1025,7 +1021,7 @@ void SYMBOL_EDIT_FRAME::SetUnit( int aUnit )
         return;
 
     m_toolManager->RunAction( ACTIONS::cancelInteractive );
-    m_toolManager->RunAction( EE_ACTIONS::clearSelection );
+    m_toolManager->RunAction( SCH_ACTIONS::clearSelection );
 
     m_unit = aUnit;
 
@@ -1434,8 +1430,8 @@ void SYMBOL_EDIT_FRAME::HardRedraw()
 
     if( m_symbol )
     {
-        EE_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
-        EE_SELECTION&      selection = selectionTool->GetSelection();
+        SCH_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>();
+        SCH_SELECTION&      selection = selectionTool->GetSelection();
 
         for( SCH_ITEM& item : m_symbol->GetDrawItems() )
         {
@@ -1719,7 +1715,7 @@ void SYMBOL_EDIT_FRAME::ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aItem
 
 SELECTION& SYMBOL_EDIT_FRAME::GetCurrentSelection()
 {
-    return m_toolManager->GetTool<EE_SELECTION_TOOL>()->GetSelection();
+    return m_toolManager->GetTool<SCH_SELECTION_TOOL>()->GetSelection();
 }
 
 

@@ -31,7 +31,7 @@
 #include <wx/button.h>
 #include <wx/checkbox.h>
 #include <wx/sizer.h>
-#include <ee_actions.h>
+#include <sch_actions.h>
 #include <tool/tool_manager.h>
 
 
@@ -51,7 +51,7 @@ DESIGN_BLOCK_PANE::DESIGN_BLOCK_PANE( SCH_EDIT_FRAME* aParent, const LIB_ID* aPr
             // Accept handler
             [this]()
             {
-                m_frame->GetToolManager()->RunAction( EE_ACTIONS::placeDesignBlock );
+                m_frame->GetToolManager()->RunAction( SCH_ACTIONS::placeDesignBlock );
             } );
 
     sizer->Add( m_chooserPanel, 1, wxEXPAND, 5 );

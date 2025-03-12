@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <tools/ee_tool_base.h>
+#include <tools/sch_tool_base.h>
 
 
 class SCH_PIN;
@@ -32,7 +32,7 @@ class SCH_SHAPE;
 class SYMBOL_EDIT_FRAME;
 
 
-class SYMBOL_EDITOR_EDIT_TOOL : public EE_TOOL_BASE<SYMBOL_EDIT_FRAME>
+class SYMBOL_EDITOR_EDIT_TOOL : public SCH_TOOL_BASE<SYMBOL_EDIT_FRAME>
 {
 public:
     SYMBOL_EDITOR_EDIT_TOOL();

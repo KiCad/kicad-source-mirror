@@ -25,13 +25,13 @@
 #include <design_block_pane.h>
 #include <panel_design_block_chooser.h>
 #include <dialog_design_block_properties.h>
-#include <ee_actions.h>
+#include <sch_actions.h>
 
 bool SCH_DESIGN_BLOCK_CONTROL::Init()
 {
     m_editFrame     = getEditFrame<SCH_EDIT_FRAME>();
     m_frame         = m_editFrame;
-    m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+    m_selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
 
     auto pinnedLib =
             [this]( const SELECTION& aSel )
@@ -67,21 +67,21 @@ bool SCH_DESIGN_BLOCK_CONTROL::Init()
 
     CONDITIONAL_MENU& ctxMenu = m_menu->GetMenu();
 
-    ctxMenu.AddItem( ACTIONS::pinLibrary,                    unpinnedLib, 1 );
-    ctxMenu.AddItem( ACTIONS::unpinLibrary,                  pinnedLib, 1 );
-    ctxMenu.AddItem( ACTIONS::newLibrary,                    !isDesignBlock, 1 );
+    ctxMenu.AddItem( ACTIONS::pinLibrary,                     unpinnedLib, 1 );
+    ctxMenu.AddItem( ACTIONS::unpinLibrary,                   pinnedLib, 1 );
+    ctxMenu.AddItem( ACTIONS::newLibrary,                     !isDesignBlock, 1 );
     ctxMenu.AddSeparator( 1 );
 
-    ctxMenu.AddItem( EE_ACTIONS::placeDesignBlock,           isDesignBlock, 50 );
+    ctxMenu.AddItem( SCH_ACTIONS::placeDesignBlock,           isDesignBlock, 50 );
     ctxMenu.AddSeparator( 50 );
 
-    ctxMenu.AddItem( EE_ACTIONS::editDesignBlockProperties,  isDesignBlock, 100 );
-    ctxMenu.AddItem( EE_ACTIONS::saveSheetAsDesignBlock,     isInLibrary, 100 );
-    ctxMenu.AddItem( EE_ACTIONS::saveSelectionAsDesignBlock, isInLibrary, 100 );
-    ctxMenu.AddItem( EE_ACTIONS::deleteDesignBlock,          isDesignBlock, 100 );
+    ctxMenu.AddItem( SCH_ACTIONS::editDesignBlockProperties,  isDesignBlock, 100 );
+    ctxMenu.AddItem( SCH_ACTIONS::saveSheetAsDesignBlock,     isInLibrary, 100 );
+    ctxMenu.AddItem( SCH_ACTIONS::saveSelectionAsDesignBlock, isInLibrary, 100 );
+    ctxMenu.AddItem( SCH_ACTIONS::deleteDesignBlock,          isDesignBlock, 100 );
     ctxMenu.AddSeparator( 100 );
 
-    ctxMenu.AddItem( ACTIONS::hideLibraryTree,               SELECTION_CONDITIONS::ShowAlways, 400 );
+    ctxMenu.AddItem( ACTIONS::hideLibraryTree,                SELECTION_CONDITIONS::ShowAlways, 400 );
 
     return true;
 }
@@ -194,10 +194,10 @@ void SCH_DESIGN_BLOCK_CONTROL::setTransitions()
 
     Go( &SCH_DESIGN_BLOCK_CONTROL::NewLibrary,                  ACTIONS::newLibrary.MakeEvent() );
 
-    Go( &SCH_DESIGN_BLOCK_CONTROL::SaveSheetAsDesignBlock,      EE_ACTIONS::saveSheetAsDesignBlock.MakeEvent() );
-    Go( &SCH_DESIGN_BLOCK_CONTROL::SaveSelectionAsDesignBlock,  EE_ACTIONS::saveSelectionAsDesignBlock.MakeEvent() );
-    Go( &SCH_DESIGN_BLOCK_CONTROL::DeleteDesignBlock,           EE_ACTIONS::deleteDesignBlock.MakeEvent() );
-    Go( &SCH_DESIGN_BLOCK_CONTROL::EditDesignBlockProperties,   EE_ACTIONS::editDesignBlockProperties.MakeEvent() );
+    Go( &SCH_DESIGN_BLOCK_CONTROL::SaveSheetAsDesignBlock,      SCH_ACTIONS::saveSheetAsDesignBlock.MakeEvent() );
+    Go( &SCH_DESIGN_BLOCK_CONTROL::SaveSelectionAsDesignBlock,  SCH_ACTIONS::saveSelectionAsDesignBlock.MakeEvent() );
+    Go( &SCH_DESIGN_BLOCK_CONTROL::DeleteDesignBlock,           SCH_ACTIONS::deleteDesignBlock.MakeEvent() );
+    Go( &SCH_DESIGN_BLOCK_CONTROL::EditDesignBlockProperties,   SCH_ACTIONS::editDesignBlockProperties.MakeEvent() );
 
     Go( &SCH_DESIGN_BLOCK_CONTROL::HideLibraryTree,             ACTIONS::hideLibraryTree.MakeEvent() );
 }

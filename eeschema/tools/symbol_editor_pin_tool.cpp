@@ -24,11 +24,11 @@
 
 #include "symbol_editor_pin_tool.h"
 
-#include <tools/ee_selection_tool.h>
+#include <tools/sch_selection_tool.h>
 #include <symbol_edit_frame.h>
 #include <sch_commit.h>
 #include <kidialog.h>
-#include <ee_actions.h>
+#include <sch_actions.h>
 #include <dialogs/dialog_pin_properties.h>
 #include <increment.h>
 #include <settings/settings_manager.h>
@@ -90,14 +90,14 @@ static int GetLastPinNumSize()
 
 
 SYMBOL_EDITOR_PIN_TOOL::SYMBOL_EDITOR_PIN_TOOL() :
-        EE_TOOL_BASE<SYMBOL_EDIT_FRAME>( "eeschema.PinEditing" )
+        SCH_TOOL_BASE<SYMBOL_EDIT_FRAME>( "eeschema.PinEditing" )
 {
 }
 
 
 bool SYMBOL_EDITOR_PIN_TOOL::Init()
 {
-    EE_TOOL_BASE::Init();
+    SCH_TOOL_BASE::Init();
 
     auto canEdit =
             [&]( const SELECTION& sel )
@@ -110,14 +110,14 @@ bool SYMBOL_EDITOR_PIN_TOOL::Init()
 
     static const std::vector<KICAD_T> pinTypes = { SCH_PIN_T };
 
-    auto singlePinCondition = EE_CONDITIONS::Count( 1 ) && EE_CONDITIONS::OnlyTypes( pinTypes );
+    auto singlePinCondition = SCH_CONDITIONS::Count( 1 ) && SCH_CONDITIONS::OnlyTypes( pinTypes );
 
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
     selToolMenu.AddSeparator( 250 );
-    selToolMenu.AddItem( EE_ACTIONS::pushPinLength,    canEdit && singlePinCondition, 250 );
-    selToolMenu.AddItem( EE_ACTIONS::pushPinNameSize,  canEdit && singlePinCondition, 250 );
-    selToolMenu.AddItem( EE_ACTIONS::pushPinNumSize,   canEdit && singlePinCondition, 250 );
+    selToolMenu.AddItem( SCH_ACTIONS::pushPinLength,    canEdit && singlePinCondition, 250 );
+    selToolMenu.AddItem( SCH_ACTIONS::pushPinNameSize,  canEdit && singlePinCondition, 250 );
+    selToolMenu.AddItem( SCH_ACTIONS::pushPinNumSize,   canEdit && singlePinCondition, 250 );
 
     return true;
 }
@@ -379,9 +379,9 @@ void SYMBOL_EDITOR_PIN_TOOL::CreateImagePins( SCH_PIN* aPin )
 
 int SYMBOL_EDITOR_PIN_TOOL::PushPinProperties( const TOOL_EVENT& aEvent )
 {
-    LIB_SYMBOL*   symbol = m_frame->GetCurSymbol();
-    EE_SELECTION& selection = m_selectionTool->GetSelection();
-    SCH_PIN*      sourcePin = dynamic_cast<SCH_PIN*>( selection.Front() );
+    LIB_SYMBOL*    symbol = m_frame->GetCurSymbol();
+    SCH_SELECTION& selection = m_selectionTool->GetSelection();
+    SCH_PIN*       sourcePin = dynamic_cast<SCH_PIN*>( selection.Front() );
 
     if( !sourcePin )
         return 0;
@@ -393,16 +393,16 @@ int SYMBOL_EDITOR_PIN_TOOL::PushPinProperties( const TOOL_EVENT& aEvent )
         if( pin == sourcePin )
             continue;
 
-        if( aEvent.IsAction( &EE_ACTIONS::pushPinLength ) )
+        if( aEvent.IsAction( &SCH_ACTIONS::pushPinLength ) )
         {
             if( !pin->GetBodyStyle() || pin->GetBodyStyle() == m_frame->GetBodyStyle() )
                 pin->ChangeLength( sourcePin->GetLength() );
         }
-        else if( aEvent.IsAction( &EE_ACTIONS::pushPinNameSize ) )
+        else if( aEvent.IsAction( &SCH_ACTIONS::pushPinNameSize ) )
         {
             pin->SetNameTextSize( sourcePin->GetNameTextSize() );
         }
-        else if( aEvent.IsAction( &EE_ACTIONS::pushPinNumSize ) )
+        else if( aEvent.IsAction( &SCH_ACTIONS::pushPinNumSize ) )
         {
             pin->SetNumberTextSize( sourcePin->GetNumberTextSize() );
         }
@@ -435,10 +435,10 @@ SCH_PIN* SYMBOL_EDITOR_PIN_TOOL::RepeatPin( const SCH_PIN* aSourcePin )
     switch( pin->GetOrientation() )
     {
     default:
-    case PIN_ORIENTATION::PIN_RIGHT: step.y = schIUScale.MilsToIU( cfg->m_Repeat.pin_step );   break;
-    case PIN_ORIENTATION::PIN_UP:    step.x = schIUScale.MilsToIU( cfg->m_Repeat.pin_step );  break;
-    case PIN_ORIENTATION::PIN_DOWN:  step.x = schIUScale.MilsToIU( cfg->m_Repeat.pin_step) ;  break;
-    case PIN_ORIENTATION::PIN_LEFT:  step.y = schIUScale.MilsToIU( cfg->m_Repeat.pin_step );   break;
+    case PIN_ORIENTATION::PIN_RIGHT: step.y = schIUScale.MilsToIU( cfg->m_Repeat.pin_step ); break;
+    case PIN_ORIENTATION::PIN_UP:    step.x = schIUScale.MilsToIU( cfg->m_Repeat.pin_step ); break;
+    case PIN_ORIENTATION::PIN_DOWN:  step.x = schIUScale.MilsToIU( cfg->m_Repeat.pin_step) ; break;
+    case PIN_ORIENTATION::PIN_LEFT:  step.y = schIUScale.MilsToIU( cfg->m_Repeat.pin_step ); break;
     }
 
     pin->Move( step );
@@ -466,7 +466,7 @@ SCH_PIN* SYMBOL_EDITOR_PIN_TOOL::RepeatPin( const SCH_PIN* aSourcePin )
 
 void SYMBOL_EDITOR_PIN_TOOL::setTransitions()
 {
-    Go( &SYMBOL_EDITOR_PIN_TOOL::PushPinProperties,    EE_ACTIONS::pushPinLength.MakeEvent() );
-    Go( &SYMBOL_EDITOR_PIN_TOOL::PushPinProperties,    EE_ACTIONS::pushPinNameSize.MakeEvent() );
-    Go( &SYMBOL_EDITOR_PIN_TOOL::PushPinProperties,    EE_ACTIONS::pushPinNumSize.MakeEvent() );
+    Go( &SYMBOL_EDITOR_PIN_TOOL::PushPinProperties,    SCH_ACTIONS::pushPinLength.MakeEvent() );
+    Go( &SYMBOL_EDITOR_PIN_TOOL::PushPinProperties,    SCH_ACTIONS::pushPinNameSize.MakeEvent() );
+    Go( &SYMBOL_EDITOR_PIN_TOOL::PushPinProperties,    SCH_ACTIONS::pushPinNumSize.MakeEvent() );
 }

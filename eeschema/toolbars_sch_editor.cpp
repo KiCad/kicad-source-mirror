@@ -35,8 +35,8 @@
 #include <python_scripting.h>
 #include <tool/tool_manager.h>
 #include <tool/action_toolbar.h>
-#include <tools/ee_actions.h>
-#include <tools/ee_selection_tool.h>
+#include <tools/sch_actions.h>
+#include <tools/sch_selection_tool.h>
 #include <widgets/design_block_pane.h>
 #include <widgets/hierarchy_pane.h>
 #include <widgets/wx_aui_utils.h>
@@ -70,7 +70,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::save );
 
     m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EE_ACTIONS::schematicSetup );
+    m_mainToolBar->Add( SCH_ACTIONS::schematicSetup );
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::pageSettings );
@@ -97,15 +97,15 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::zoomTool, ACTION_TOOLBAR::TOGGLE, ACTION_TOOLBAR::CANCEL );
 
     m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EE_ACTIONS::navigateBack );
-    m_mainToolBar->Add( EE_ACTIONS::navigateUp );
-    m_mainToolBar->Add( EE_ACTIONS::navigateForward );
+    m_mainToolBar->Add( SCH_ACTIONS::navigateBack );
+    m_mainToolBar->Add( SCH_ACTIONS::navigateUp );
+    m_mainToolBar->Add( SCH_ACTIONS::navigateForward );
 
     m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EE_ACTIONS::rotateCCW );
-    m_mainToolBar->Add( EE_ACTIONS::rotateCW );
-    m_mainToolBar->Add( EE_ACTIONS::mirrorV );
-    m_mainToolBar->Add( EE_ACTIONS::mirrorH );
+    m_mainToolBar->Add( SCH_ACTIONS::rotateCCW );
+    m_mainToolBar->Add( SCH_ACTIONS::rotateCW );
+    m_mainToolBar->Add( SCH_ACTIONS::mirrorV );
+    m_mainToolBar->Add( SCH_ACTIONS::mirrorH );
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::showSymbolEditor );
@@ -113,15 +113,15 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::showFootprintEditor );
 
     m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EE_ACTIONS::annotate );
-    m_mainToolBar->Add( EE_ACTIONS::runERC );
-    m_mainToolBar->Add( EE_ACTIONS::showSimulator );
-    m_mainToolBar->Add( EE_ACTIONS::assignFootprints );
-    m_mainToolBar->Add( EE_ACTIONS::editSymbolFields );
-    m_mainToolBar->Add( EE_ACTIONS::generateBOM );
+    m_mainToolBar->Add( SCH_ACTIONS::annotate );
+    m_mainToolBar->Add( SCH_ACTIONS::runERC );
+    m_mainToolBar->Add( SCH_ACTIONS::showSimulator );
+    m_mainToolBar->Add( SCH_ACTIONS::assignFootprints );
+    m_mainToolBar->Add( SCH_ACTIONS::editSymbolFields );
+    m_mainToolBar->Add( SCH_ACTIONS::generateBOM );
 
     m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EE_ACTIONS::showPcbNew );
+    m_mainToolBar->Add( SCH_ACTIONS::showPcbNew );
 
     // Add scripting console and API plugins
     bool scriptingAvailable = SCRIPTING::IsWxAvailable();
@@ -161,37 +161,37 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
 
     // Set up toolbar
     // clang-format off
-    m_drawToolBar->Add( ACTIONS::selectionTool,             ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::highlightNetTool,       ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( ACTIONS::selectionTool,          ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( SCH_ACTIONS::highlightNetTool,   ACTION_TOOLBAR::TOGGLE );
 
     m_drawToolBar->AddScaledSeparator( this );
-    m_drawToolBar->Add( EE_ACTIONS::placeSymbol,            ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::placePower,             ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::drawWire,               ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::drawBus,                ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::placeBusWireEntry,      ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::placeNoConnect,         ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::placeJunction,          ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::placeLabel,             ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::placeClassLabel,        ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::drawRuleArea,           ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::placeGlobalLabel,       ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::placeHierLabel,         ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::drawSheet,              ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::placeSheetPin,          ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::syncAllSheetsPins );
+    m_drawToolBar->Add( SCH_ACTIONS::placeSymbol,        ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( SCH_ACTIONS::placePower,         ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( SCH_ACTIONS::drawWire,           ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( SCH_ACTIONS::drawBus,            ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( SCH_ACTIONS::placeBusWireEntry,  ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( SCH_ACTIONS::placeNoConnect,     ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( SCH_ACTIONS::placeJunction,      ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( SCH_ACTIONS::placeLabel,         ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( SCH_ACTIONS::placeClassLabel,    ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( SCH_ACTIONS::drawRuleArea,       ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( SCH_ACTIONS::placeGlobalLabel,   ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( SCH_ACTIONS::placeHierLabel,     ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( SCH_ACTIONS::drawSheet,          ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( SCH_ACTIONS::placeSheetPin,      ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( SCH_ACTIONS::syncAllSheetsPins );
 
     m_drawToolBar->AddScaledSeparator( this );
-    m_drawToolBar->Add( EE_ACTIONS::placeSchematicText,     ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::drawTextBox,            ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::drawTable,              ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::drawRectangle,          ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::drawCircle,             ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::drawArc,                ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::drawBezier,             ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::drawLines,              ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::placeImage,             ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( ACTIONS::deleteTool,                ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( SCH_ACTIONS::placeSchematicText, ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( SCH_ACTIONS::drawTextBox,        ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( SCH_ACTIONS::drawTable,          ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( SCH_ACTIONS::drawRectangle,      ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( SCH_ACTIONS::drawCircle,         ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( SCH_ACTIONS::drawArc,            ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( SCH_ACTIONS::drawBezier,         ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( SCH_ACTIONS::drawLines,          ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( SCH_ACTIONS::placeImage,         ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( ACTIONS::deleteTool,             ACTION_TOOLBAR::TOGGLE );
     // clang-format on
 
     m_drawToolBar->KiRealize();
@@ -222,24 +222,24 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,   ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( EE_ACTIONS::toggleHiddenPins, ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( SCH_ACTIONS::toggleHiddenPins,    ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( EE_ACTIONS::lineModeFree,     ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( EE_ACTIONS::lineMode90,       ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( EE_ACTIONS::lineMode45,       ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( SCH_ACTIONS::lineModeFree,        ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( SCH_ACTIONS::lineMode90,          ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( SCH_ACTIONS::lineMode45,          ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( EE_ACTIONS::toggleAnnotateAuto,      ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( SCH_ACTIONS::toggleAnnotateAuto,  ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( EE_ACTIONS::showHierarchy,           ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::showProperties,             ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( SCH_ACTIONS::showHierarchy,       ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::showProperties,          ACTION_TOOLBAR::TOGGLE );
 
     if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
-        m_optionsToolBar->Add( ACTIONS::toggleBoundingBoxes,    ACTION_TOOLBAR::TOGGLE );
+        m_optionsToolBar->Add( ACTIONS::toggleBoundingBoxes, ACTION_TOOLBAR::TOGGLE );
 
-    EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
+    SCH_SELECTION_TOOL* selTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>();
     std::unique_ptr<ACTION_MENU> gridMenu = std::make_unique<ACTION_MENU>( false, selTool );
     gridMenu->Add( ACTIONS::gridProperties );
     m_optionsToolBar->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );

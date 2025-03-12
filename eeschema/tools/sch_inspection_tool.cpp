@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "tools/ee_inspection_tool.h"
+#include "tools/sch_inspection_tool.h"
 
 #include <sch_symbol.h>
 #include <id.h>
@@ -33,9 +33,9 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/conditional_menu.h>
 #include <tool/selection_conditions.h>
-#include <tools/ee_actions.h>
-#include <tools/ee_selection_tool.h>
-#include <tools/ee_selection.h>
+#include <tools/sch_actions.h>
+#include <tools/sch_selection_tool.h>
+#include <tools/sch_selection.h>
 #include <sim/simulator_frame.h>
 #include <sch_edit_frame.h>
 #include <symbol_edit_frame.h>
@@ -53,32 +53,32 @@
 #include <math/util.h>      // for KiROUND
 
 
-EE_INSPECTION_TOOL::EE_INSPECTION_TOOL() :
-        EE_TOOL_BASE<SCH_BASE_FRAME>( "eeschema.InspectionTool" ), m_busSyntaxHelp( nullptr )
+SCH_INSPECTION_TOOL::SCH_INSPECTION_TOOL() :
+        SCH_TOOL_BASE<SCH_BASE_FRAME>( "eeschema.InspectionTool" ), m_busSyntaxHelp( nullptr )
 {
 }
 
 
-bool EE_INSPECTION_TOOL::Init()
+bool SCH_INSPECTION_TOOL::Init()
 {
-    EE_TOOL_BASE::Init();
+    SCH_TOOL_BASE::Init();
 
     // Add inspection actions to the selection tool menu
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    selToolMenu.AddItem( EE_ACTIONS::excludeMarker, EE_CONDITIONS::SingleNonExcludedMarker, 100 );
+    selToolMenu.AddItem( SCH_ACTIONS::excludeMarker, SCH_CONDITIONS::SingleNonExcludedMarker, 100 );
 
     selToolMenu.AddItem( ACTIONS::showDatasheet,
-                         EE_CONDITIONS::SingleSymbol && EE_CONDITIONS::Idle, 220 );
+                         SCH_CONDITIONS::SingleSymbol && SCH_CONDITIONS::Idle, 220 );
 
     return true;
 }
 
 
-void EE_INSPECTION_TOOL::Reset( RESET_REASON aReason )
+void SCH_INSPECTION_TOOL::Reset( RESET_REASON aReason )
 {
-    EE_TOOL_BASE::Reset( aReason );
+    SCH_TOOL_BASE::Reset( aReason );
 
     if( aReason == SUPERMODEL_RELOAD || aReason == RESET_REASON::SHUTDOWN )
     {
@@ -89,14 +89,14 @@ void EE_INSPECTION_TOOL::Reset( RESET_REASON aReason )
 }
 
 
-int EE_INSPECTION_TOOL::RunERC( const TOOL_EVENT& aEvent )
+int SCH_INSPECTION_TOOL::RunERC( const TOOL_EVENT& aEvent )
 {
     ShowERCDialog();
     return 0;
 }
 
 
-void EE_INSPECTION_TOOL::ShowERCDialog()
+void SCH_INSPECTION_TOOL::ShowERCDialog()
 {
     SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
 
@@ -120,7 +120,7 @@ void EE_INSPECTION_TOOL::ShowERCDialog()
 }
 
 
-int EE_INSPECTION_TOOL::PrevMarker( const TOOL_EVENT& aEvent )
+int SCH_INSPECTION_TOOL::PrevMarker( const TOOL_EVENT& aEvent )
 {
     SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
 
@@ -139,7 +139,7 @@ int EE_INSPECTION_TOOL::PrevMarker( const TOOL_EVENT& aEvent )
 }
 
 
-int EE_INSPECTION_TOOL::NextMarker( const TOOL_EVENT& aEvent )
+int SCH_INSPECTION_TOOL::NextMarker( const TOOL_EVENT& aEvent )
 {
     SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
 
@@ -157,13 +157,13 @@ int EE_INSPECTION_TOOL::NextMarker( const TOOL_EVENT& aEvent )
 }
 
 
-int EE_INSPECTION_TOOL::CrossProbe( const TOOL_EVENT& aEvent )
+int SCH_INSPECTION_TOOL::CrossProbe( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+    SCH_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
 
     wxCHECK( selectionTool, 0 );
 
-    EE_SELECTION&      selection = selectionTool->GetSelection();
+    SCH_SELECTION&      selection = selectionTool->GetSelection();
 
     if( selection.GetSize() == 1 && selection.Front()->Type() == SCH_MARKER_T )
     {
@@ -181,7 +181,7 @@ int EE_INSPECTION_TOOL::CrossProbe( const TOOL_EVENT& aEvent )
 }
 
 
-void EE_INSPECTION_TOOL::CrossProbe( const SCH_MARKER* aMarker )
+void SCH_INSPECTION_TOOL::CrossProbe( const SCH_MARKER* aMarker )
 {
     SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
 
@@ -202,7 +202,7 @@ void EE_INSPECTION_TOOL::CrossProbe( const SCH_MARKER* aMarker )
 }
 
 
-wxString EE_INSPECTION_TOOL::InspectERCErrorMenuText( const std::shared_ptr<RC_ITEM>& aERCItem )
+wxString SCH_INSPECTION_TOOL::InspectERCErrorMenuText( const std::shared_ptr<RC_ITEM>& aERCItem )
 {
     auto menuDescription =
             [&]( const TOOL_ACTION& aAction )
@@ -233,18 +233,18 @@ wxString EE_INSPECTION_TOOL::InspectERCErrorMenuText( const std::shared_ptr<RC_I
 
     if( aERCItem->GetErrorCode() == ERCE_BUS_TO_NET_CONFLICT )
     {
-        return menuDescription( EE_ACTIONS::showBusSyntaxHelp );
+        return menuDescription( SCH_ACTIONS::showBusSyntaxHelp );
     }
     else if( aERCItem->GetErrorCode() == ERCE_LIB_SYMBOL_MISMATCH )
     {
-        return menuDescription( EE_ACTIONS::diffSymbol );
+        return menuDescription( SCH_ACTIONS::diffSymbol );
     }
 
     return wxEmptyString;
 }
 
 
-void EE_INSPECTION_TOOL::InspectERCError( const std::shared_ptr<RC_ITEM>& aERCItem )
+void SCH_INSPECTION_TOOL::InspectERCError( const std::shared_ptr<RC_ITEM>& aERCItem )
 {
     SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
 
@@ -254,7 +254,7 @@ void EE_INSPECTION_TOOL::InspectERCError( const std::shared_ptr<RC_ITEM>& aERCIt
 
     if( aERCItem->GetErrorCode() == ERCE_BUS_TO_NET_CONFLICT )
     {
-        m_toolMgr->RunAction( EE_ACTIONS::showBusSyntaxHelp );
+        m_toolMgr->RunAction( SCH_ACTIONS::showBusSyntaxHelp );
     }
     else if( aERCItem->GetErrorCode() == ERCE_LIB_SYMBOL_MISMATCH )
     {
@@ -264,11 +264,11 @@ void EE_INSPECTION_TOOL::InspectERCError( const std::shared_ptr<RC_ITEM>& aERCIt
 }
 
 
-int EE_INSPECTION_TOOL::ExcludeMarker( const TOOL_EVENT& aEvent )
+int SCH_INSPECTION_TOOL::ExcludeMarker( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    EE_SELECTION&      selection = selTool->GetSelection();
-    SCH_MARKER*        marker = nullptr;
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    SCH_SELECTION&      selection = selTool->GetSelection();
+    SCH_MARKER*         marker = nullptr;
 
     if( selection.GetSize() == 1 && selection.Front()->Type() == SCH_MARKER_T )
         marker = static_cast<SCH_MARKER*>( selection.Front() );
@@ -301,7 +301,7 @@ int EE_INSPECTION_TOOL::ExcludeMarker( const TOOL_EVENT& aEvent )
 extern void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                             int aGridForPins, UNITS_PROVIDER* aUnitsProvider );
 
-int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
+int SCH_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
 {
     LIB_SYMBOL* symbol = static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurSymbol();
 
@@ -331,7 +331,7 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
 }
 
 
-int EE_INSPECTION_TOOL::ShowBusSyntaxHelp( const TOOL_EVENT& aEvent )
+int SCH_INSPECTION_TOOL::ShowBusSyntaxHelp( const TOOL_EVENT& aEvent )
 {
     if( m_busSyntaxHelp )
     {
@@ -345,13 +345,13 @@ int EE_INSPECTION_TOOL::ShowBusSyntaxHelp( const TOOL_EVENT& aEvent )
 }
 
 
-int EE_INSPECTION_TOOL::DiffSymbol( const TOOL_EVENT& aEvent )
+int SCH_INSPECTION_TOOL::DiffSymbol( const TOOL_EVENT& aEvent )
 {
     SCH_EDIT_FRAME* schEditorFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
 
     wxCHECK( schEditorFrame, 0 );
 
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
 
     if( selection.Empty() )
     {
@@ -364,7 +364,7 @@ int EE_INSPECTION_TOOL::DiffSymbol( const TOOL_EVENT& aEvent )
 }
 
 
-void EE_INSPECTION_TOOL::DiffSymbol( SCH_SYMBOL* symbol )
+void SCH_INSPECTION_TOOL::DiffSymbol( SCH_SYMBOL* symbol )
 {
     SCH_EDIT_FRAME* schEditorFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
 
@@ -462,7 +462,7 @@ void EE_INSPECTION_TOOL::DiffSymbol( SCH_SYMBOL* symbol )
 }
 
 
-SYMBOL_DIFF_WIDGET* EE_INSPECTION_TOOL::constructDiffPanel( wxPanel* aParentPanel )
+SYMBOL_DIFF_WIDGET* SCH_INSPECTION_TOOL::constructDiffPanel( wxPanel* aParentPanel )
 {
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
 
@@ -477,7 +477,7 @@ SYMBOL_DIFF_WIDGET* EE_INSPECTION_TOOL::constructDiffPanel( wxPanel* aParentPane
 }
 
 
-int EE_INSPECTION_TOOL::RunSimulation( const TOOL_EVENT& aEvent )
+int SCH_INSPECTION_TOOL::RunSimulation( const TOOL_EVENT& aEvent )
 {
     SIMULATOR_FRAME* simFrame = (SIMULATOR_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, true );
 
@@ -499,7 +499,7 @@ int EE_INSPECTION_TOOL::RunSimulation( const TOOL_EVENT& aEvent )
 }
 
 
-int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
+int SCH_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
 {
     wxString datasheet;
     EMBEDDED_FILES* files = nullptr;
@@ -526,7 +526,7 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
     }
     else if( m_frame->IsType( FRAME_SCH ) )
     {
-        EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
+        SCH_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
 
         if( selection.Empty() )
             return 0;
@@ -554,12 +554,12 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
 }
 
 
-int EE_INSPECTION_TOOL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
+int SCH_INSPECTION_TOOL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 {
-    SYMBOL_EDIT_FRAME* symbolEditFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
-    SCH_EDIT_FRAME*    schEditFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
-    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    EE_SELECTION&      selection = selTool->GetSelection();
+    SYMBOL_EDIT_FRAME*  symbolEditFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
+    SCH_EDIT_FRAME*     schEditFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    SCH_SELECTION&      selection = selTool->GetSelection();
 
     // Note: the symbol viewer manages its own message panel
 
@@ -592,29 +592,29 @@ int EE_INSPECTION_TOOL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 }
 
 
-void EE_INSPECTION_TOOL::setTransitions()
+void SCH_INSPECTION_TOOL::setTransitions()
 {
-    Go( &EE_INSPECTION_TOOL::RunERC,              EE_ACTIONS::runERC.MakeEvent() );
-    Go( &EE_INSPECTION_TOOL::PrevMarker,          EE_ACTIONS::prevMarker.MakeEvent() );
-    Go( &EE_INSPECTION_TOOL::NextMarker,          EE_ACTIONS::nextMarker.MakeEvent() );
+    Go( &SCH_INSPECTION_TOOL::RunERC,                SCH_ACTIONS::runERC.MakeEvent() );
+    Go( &SCH_INSPECTION_TOOL::PrevMarker,            SCH_ACTIONS::prevMarker.MakeEvent() );
+    Go( &SCH_INSPECTION_TOOL::NextMarker,            SCH_ACTIONS::nextMarker.MakeEvent() );
     // See note 1:
-    Go( &EE_INSPECTION_TOOL::CrossProbe,          EVENTS::PointSelectedEvent );
-    Go( &EE_INSPECTION_TOOL::CrossProbe,          EVENTS::SelectedEvent );
-    Go( &EE_INSPECTION_TOOL::ExcludeMarker,       EE_ACTIONS::excludeMarker.MakeEvent() );
+    Go( &SCH_INSPECTION_TOOL::CrossProbe,            EVENTS::PointSelectedEvent );
+    Go( &SCH_INSPECTION_TOOL::CrossProbe,            EVENTS::SelectedEvent );
+    Go( &SCH_INSPECTION_TOOL::ExcludeMarker,         SCH_ACTIONS::excludeMarker.MakeEvent() );
 
-    Go( &EE_INSPECTION_TOOL::CheckSymbol,         EE_ACTIONS::checkSymbol.MakeEvent() );
-    Go( &EE_INSPECTION_TOOL::DiffSymbol,          EE_ACTIONS::diffSymbol.MakeEvent() );
-    Go( &EE_INSPECTION_TOOL::RunSimulation,       EE_ACTIONS::showSimulator.MakeEvent() );
-    Go( &EE_INSPECTION_TOOL::ShowBusSyntaxHelp,   EE_ACTIONS::showBusSyntaxHelp.MakeEvent() );
+    Go( &SCH_INSPECTION_TOOL::CheckSymbol,           SCH_ACTIONS::checkSymbol.MakeEvent() );
+    Go( &SCH_INSPECTION_TOOL::DiffSymbol,            SCH_ACTIONS::diffSymbol.MakeEvent() );
+    Go( &SCH_INSPECTION_TOOL::RunSimulation,         SCH_ACTIONS::showSimulator.MakeEvent() );
+    Go( &SCH_INSPECTION_TOOL::ShowBusSyntaxHelp,     SCH_ACTIONS::showBusSyntaxHelp.MakeEvent() );
 
-    Go( &EE_INSPECTION_TOOL::ShowDatasheet,       ACTIONS::showDatasheet.MakeEvent() );
+    Go( &SCH_INSPECTION_TOOL::ShowDatasheet,         ACTIONS::showDatasheet.MakeEvent() );
 
     // Note 1: tUpdateMessagePanel is called by CrossProbe. So uncomment this line if
     // call to CrossProbe is modifiied
-    // Go( &EE_INSPECTION_TOOL::UpdateMessagePanel,  EVENTS::SelectedEvent );
-    Go( &EE_INSPECTION_TOOL::UpdateMessagePanel,  EVENTS::UnselectedEvent );
-    Go( &EE_INSPECTION_TOOL::UpdateMessagePanel,  EVENTS::ClearedEvent );
-    Go( &EE_INSPECTION_TOOL::UpdateMessagePanel,  EVENTS::SelectedItemsModified );
+    // Go( &SCH_INSPECTION_TOOL::UpdateMessagePanel, EVENTS::SelectedEvent );
+    Go( &SCH_INSPECTION_TOOL::UpdateMessagePanel,    EVENTS::UnselectedEvent );
+    Go( &SCH_INSPECTION_TOOL::UpdateMessagePanel,    EVENTS::ClearedEvent );
+    Go( &SCH_INSPECTION_TOOL::UpdateMessagePanel,    EVENTS::SelectedItemsModified );
 }
 
 

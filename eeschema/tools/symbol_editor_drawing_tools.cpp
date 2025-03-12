@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <ee_actions.h>
+#include <sch_actions.h>
 #include <optional>
 #include <symbol_edit_frame.h>
 #include <sch_commit.h>
@@ -46,7 +46,7 @@ KIID SYMBOL_EDITOR_DRAWING_TOOLS::g_lastPin;
 
 
 SYMBOL_EDITOR_DRAWING_TOOLS::SYMBOL_EDITOR_DRAWING_TOOLS() :
-        EE_TOOL_BASE<SYMBOL_EDIT_FRAME>( "eeschema.SymbolDrawing" ),
+        SCH_TOOL_BASE<SYMBOL_EDIT_FRAME>( "eeschema.SymbolDrawing" ),
         m_lastTextBold( false ),
         m_lastTextItalic( false ),
         m_lastTextAngle( ANGLE_HORIZONTAL ),
@@ -64,7 +64,7 @@ SYMBOL_EDITOR_DRAWING_TOOLS::SYMBOL_EDITOR_DRAWING_TOOLS() :
 
 bool SYMBOL_EDITOR_DRAWING_TOOLS::Init()
 {
-    EE_TOOL_BASE::Init();
+    SCH_TOOL_BASE::Init();
 
     auto isDrawingCondition =
             [] ( const SELECTION& aSel )
@@ -98,10 +98,10 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     VECTOR2I              cursorPos;
     bool                  ignorePrimePosition = false;
     SCH_ITEM*             item   = nullptr;
-    bool                  isText = aEvent.IsAction( &EE_ACTIONS::placeSymbolText );
+    bool                  isText = aEvent.IsAction( &SCH_ACTIONS::placeSymbolText );
     COMMON_SETTINGS*      common_settings = Pgm().GetCommonSettings();
 
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     m_frame->PushTool( aEvent );
 
@@ -119,7 +119,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     auto cleanup =
             [&] ()
             {
-                m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
                 m_view->ClearPreview();
                 delete item;
                 item = nullptr;
@@ -211,7 +211,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             // First click creates...
             if( !item )
             {
-                m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
                 switch( type )
                 {
@@ -385,7 +385,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::opt
     // gets whacked.
     m_toolMgr->DeactivateTool();
 
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     m_frame->PushTool( aEvent );
 
@@ -398,7 +398,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::opt
     auto cleanup =
             [&] ()
             {
-                m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
                 m_view->ClearPreview();
                 delete item;
                 item = nullptr;
@@ -467,7 +467,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::opt
             if( !symbol )
                 continue;
 
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
             int lineWidth = schIUScale.MilsToIU( cfg->m_Defaults.line_width );
 
@@ -579,7 +579,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::opt
         }
         else if( evt->IsDblClick( BUT_LEFT ) && !item )
         {
-            m_toolMgr->RunAction( EE_ACTIONS::properties );
+            m_toolMgr->RunAction( SCH_ACTIONS::properties );
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
@@ -697,7 +697,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::ImportGraphics( const TOOL_EVENT& aEvent )
     KIGFX::VIEW_CONTROLS*  controls = getViewControls();
     std::vector<SCH_ITEM*> newItems;      // all new items, including group
     std::vector<SCH_ITEM*> selectedItems; // the group, or newItems if no group
-    EE_SELECTION           preview;
+    SCH_SELECTION          preview;
     SCH_COMMIT             commit( m_toolMgr );
 
     for( std::unique_ptr<EDA_ITEM>& ptr : list )
@@ -732,10 +732,10 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::ImportGraphics( const TOOL_EVENT& aEvent )
     m_view->Add( &preview );
 
     // Clear the current selection then select the drawings so that edit tools work on them
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
     EDA_ITEMS selItems( selectedItems.begin(), selectedItems.end() );
-    m_toolMgr->RunAction<EDA_ITEMS*>( EE_ACTIONS::addItemsToSel, &selItems );
+    m_toolMgr->RunAction<EDA_ITEMS*>( SCH_ACTIONS::addItemsToSel, &selItems );
 
     m_frame->PushTool( aEvent );
 
@@ -779,7 +779,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::ImportGraphics( const TOOL_EVENT& aEvent )
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
             for( SCH_ITEM* item : newItems )
                 delete item;
@@ -860,10 +860,10 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem( const TOOL_EVENT& aEvent )
         if( pin )
             g_lastPin = pin->m_Uuid;
 
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
 
         if( pin )
-            m_toolMgr->RunAction<EDA_ITEM*>( EE_ACTIONS::addItemToSel, pin );
+            m_toolMgr->RunAction<EDA_ITEM*>( SCH_ACTIONS::addItemToSel, pin );
     }
 
     return 0;
@@ -873,17 +873,17 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem( const TOOL_EVENT& aEvent )
 void SYMBOL_EDITOR_DRAWING_TOOLS::setTransitions()
 {
     // clang-format off
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace,     EE_ACTIONS::placeSymbolPin.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace,     EE_ACTIONS::placeSymbolText.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         EE_ACTIONS::drawRectangle.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         EE_ACTIONS::drawCircle.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         EE_ACTIONS::drawArc.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         EE_ACTIONS::drawBezier.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         EE_ACTIONS::drawSymbolLines.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         EE_ACTIONS::drawSymbolPolygon.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawSymbolTextBox, EE_ACTIONS::drawSymbolTextBox.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor,       EE_ACTIONS::placeSymbolAnchor.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::ImportGraphics,    EE_ACTIONS::importGraphics.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem,    EE_ACTIONS::repeatDrawItem.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace,     SCH_ACTIONS::placeSymbolPin.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace,     SCH_ACTIONS::placeSymbolText.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         SCH_ACTIONS::drawRectangle.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         SCH_ACTIONS::drawCircle.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         SCH_ACTIONS::drawArc.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         SCH_ACTIONS::drawBezier.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         SCH_ACTIONS::drawSymbolLines.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         SCH_ACTIONS::drawSymbolPolygon.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawSymbolTextBox, SCH_ACTIONS::drawSymbolTextBox.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor,       SCH_ACTIONS::placeSymbolAnchor.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::ImportGraphics,    SCH_ACTIONS::importGraphics.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem,    SCH_ACTIONS::repeatDrawItem.MakeEvent() );
     // clang-format on
 }
