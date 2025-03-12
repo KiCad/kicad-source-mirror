@@ -23,7 +23,9 @@
 #include <i18n_utility.h>
 #include <wildcards_and_files_ext.h>
 
-JOB_EXPORT_PCB_IPCD356::JOB_EXPORT_PCB_IPCD356() : JOB( "ipcd356", false ), m_filename()
+JOB_EXPORT_PCB_IPCD356::JOB_EXPORT_PCB_IPCD356() :
+        JOB( "ipcd356", false ),
+        m_filename()
 {
 }
 
@@ -48,6 +50,7 @@ void JOB_EXPORT_PCB_IPCD356::SetDefaultOutputPath( const wxString& aReferenceNam
 
     SetConfiguredOutputPath( fn.GetFullName() );
 }
+
 
 REGISTER_JOB( pcb_export_ipcd356, _HKI( "PCB: Export IPC-D-356" ), KIWAY::FACE_PCB,
               JOB_EXPORT_PCB_IPCD356 );

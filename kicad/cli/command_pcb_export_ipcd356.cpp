@@ -30,7 +30,8 @@
 
 #include <locale_io.h>
 
-CLI::PCB_EXPORT_IPCD356_COMMAND::PCB_EXPORT_IPCD356_COMMAND() : PCB_EXPORT_BASE_COMMAND( "ipcd356" )
+CLI::PCB_EXPORT_IPCD356_COMMAND::PCB_EXPORT_IPCD356_COMMAND() :
+        PCB_EXPORT_BASE_COMMAND( "ipcd356" )
 {
     m_argParser.add_description( std::string( "Generate IPC-D-356 netlist file" ) );
 }
