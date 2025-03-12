@@ -361,6 +361,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes(
 
             DRC_ITEM::heading_misc,
             DRC_ITEM::itemsNotAllowed,
+            DRC_ITEM::textOnEdgeCuts,
             DRC_ITEM::zonesIntersect,
             DRC_ITEM::isolatedCopper,
             DRC_ITEM::footprint,
