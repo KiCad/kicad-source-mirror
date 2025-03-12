@@ -603,6 +603,7 @@ public:
      * @return the enabled layers in bit-mapped form.
      */
     LSET GetEnabledLayers() const;
+    LSET GetLayerSet() const override { return GetEnabledLayers(); }
 
     /**
      * A proxy function that calls the correspondent function in m_BoardSettings.
@@ -610,6 +611,7 @@ public:
      * @param aLayerMask the new bit-mask of enabled layers.
      */
     void SetEnabledLayers( LSET aLayerMask );
+    void SetLayerSet( const LSET& aLayerMask ) override { SetEnabledLayers( aLayerMask ); }
 
     /**
      * A proxy function that calls the correspondent function in m_BoardSettings
