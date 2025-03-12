@@ -1186,7 +1186,7 @@ void BOARD::FinalizeBulkRemove( std::vector<BOARD_ITEM*>& aRemovedItems )
 
 void BOARD::BulkRemoveStaleTeardrops( BOARD_COMMIT& aCommit )
 {
-    for( int ii = (int) m_zones.size() - 1; ii > 0; --ii )
+    for( int ii = (int) m_zones.size() - 1; ii >= 0; --ii )
     {
         ZONE* zone = m_zones[ii];
 
