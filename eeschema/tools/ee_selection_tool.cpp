@@ -1397,6 +1397,7 @@ bool EE_SELECTION_TOOL::selectPoint( EE_COLLECTOR& aCollector, const VECTOR2I& a
         return true;
     }
 
+    m_frame->GetCanvas()->ForceRefresh();
     return false;
 }
 
@@ -1467,7 +1468,7 @@ int EE_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
     m_multiple = false;
 
     m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
-
+    m_frame->GetCanvas()->ForceRefresh();
     return 0;
 }
 
@@ -1510,7 +1511,7 @@ int EE_SELECTION_TOOL::UnselectAll( const TOOL_EVENT& aEvent )
     m_multiple = false;
 
     m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
-
+    m_frame->GetCanvas()->ForceRefresh();
     return 0;
 }
 
