@@ -27,6 +27,7 @@
 #include <wx/listbase.h>
 
 
+class wxAuiManagerEvent;
 class ACTION_MENU;
 class EDA_DRAW_FRAME;
 class SEARCH_PANE_TAB;
@@ -70,7 +71,6 @@ public:
     void AddSearcher( SEARCH_HANDLER* aHandler );
     void OnSearchTextEntry( wxCommandEvent& aEvent ) override;
     void OnNotebookPageChanged( wxBookCtrlEvent& aEvent ) override;
-    void OnSize( wxSizeEvent& aEvent ) override;
 
     void RefreshSearch();
     void FocusSearch();
@@ -79,6 +79,7 @@ public:
 protected:
     void             OnLanguageChange( wxCommandEvent& aEvent );
     SEARCH_PANE_TAB* GetCurrentTab() const;
+    void             OnClosed( wxAuiManagerEvent& aEvent );
 
 private:
     std::vector<SEARCH_HANDLER*>  m_handlers;

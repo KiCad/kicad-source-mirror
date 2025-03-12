@@ -85,18 +85,19 @@ DESIGN_BLOCK_PANE::DESIGN_BLOCK_PANE( SCH_EDIT_FRAME* aParent, const LIB_ID* aPr
     Layout();
 
     Bind( wxEVT_CHAR_HOOK, &PANEL_DESIGN_BLOCK_CHOOSER::OnChar, m_chooserPanel );
-    Bind( wxEVT_SIZE, &DESIGN_BLOCK_PANE::OnSize, this );
     m_frame->Bind( EDA_LANG_CHANGED, &DESIGN_BLOCK_PANE::OnLanguageChanged, this );
+    m_frame->Bind( wxEVT_AUI_PANE_CLOSE, &DESIGN_BLOCK_PANE::OnClosed, this );
 }
 
 
 DESIGN_BLOCK_PANE::~DESIGN_BLOCK_PANE()
 {
+    m_frame->Unbind( wxEVT_AUI_PANE_CLOSE, &DESIGN_BLOCK_PANE::OnClosed, this );
     m_frame->Unbind( EDA_LANG_CHANGED, &DESIGN_BLOCK_PANE::OnLanguageChanged, this );
 }
 
 
-void DESIGN_BLOCK_PANE::OnSize( wxSizeEvent &aEvent )
+void DESIGN_BLOCK_PANE::OnClosed( wxAuiManagerEvent &aEvent )
 {
     if( APP_SETTINGS_BASE* cfg = m_frame->config() )
     {
