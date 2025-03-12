@@ -105,11 +105,14 @@ SEARCH_PANE::SEARCH_PANE( EDA_DRAW_FRAME* aFrame ) :
             {
                 PopupMenu( m_menu );
             } );
+
+    m_frame->Bind( wxEVT_AUI_PANE_CLOSE, &SEARCH_PANE::OnClosed, this );
 }
 
 
 SEARCH_PANE::~SEARCH_PANE()
 {
+    m_frame->Unbind( wxEVT_AUI_PANE_CLOSE, &SEARCH_PANE::OnClosed, this );
     m_frame->Unbind( EDA_LANG_CHANGED, &SEARCH_PANE::OnLanguageChange, this );
 
     delete m_menu;
@@ -185,7 +188,7 @@ void SEARCH_PANE::OnNotebookPageChanged( wxBookCtrlEvent& aEvent )
 }
 
 
-void SEARCH_PANE::OnSize( wxSizeEvent& aEvent )
+void SEARCH_PANE::OnClosed( wxAuiManagerEvent& aEvent )
 {
     if( APP_SETTINGS_BASE* cfg = m_frame->config() )
         m_frame->SaveSettings( cfg );

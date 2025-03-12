@@ -80,14 +80,13 @@ public:
     void OnDeleteLibrary( wxCommandEvent& aEvent );
     void OnDeleteDesignBlock( wxCommandEvent& aEvent );
 
-    void OnSize( wxSizeEvent& aEvent );
-
     PANEL_DESIGN_BLOCK_CHOOSER* GetDesignBlockPanel() const { return m_chooserPanel; }
 
 protected:
     void setLabelsAndTooltips();
 
     virtual void OnLanguageChanged( wxCommandEvent& aEvent );
+    void OnClosed( wxAuiManagerEvent& aEvent );
 
 protected:
     PANEL_DESIGN_BLOCK_CHOOSER* m_chooserPanel;
