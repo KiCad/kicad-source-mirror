@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-09 19:04+0300\n"
+"POT-Creation-Date: 2025-03-13 15:25+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2785,9 +2785,6 @@ msgstr "Failed to add file '%s'."
 msgid "Select a file to embed"
 msgstr "Select a file to embed"
 
-msgid "All files|*.*"
-msgstr "All files|*.*"
-
 msgid "Select a directory to export files"
 msgstr "Select a directory to export files"
 
@@ -3181,6 +3178,10 @@ msgstr "Netclass must have a name."
 
 msgid "Netclass name already in use."
 msgstr "Netclass name already in use."
+
+#, c-format
+msgid "Clearance was too large.  It has been clipped to %s."
+msgstr "Clearance was too large.  It has been clipped to %s."
 
 msgid "Minimum copper clearance"
 msgstr "Minimum copper clearance"
@@ -14192,6 +14193,13 @@ msgstr "Cursor 2"
 msgid "Diff"
 msgstr "Diff"
 
+msgid ""
+"The current analysis must have a plot in order to tune the value of a "
+"passive R, L, C model or voltage or current source."
+msgstr ""
+"The current analysis must have a plot in order to tune the value of a "
+"passive R, L, C model or voltage or current source."
+
 msgid "Could not apply tuned value(s):"
 msgstr "Could not apply tuned value(s):"
 
@@ -16494,8 +16502,14 @@ msgid "Tune %s"
 msgstr "Tune %s"
 
 #, c-format
-msgid "%s has simulation model of type '%s %s'; only RLC passives be tuned"
-msgstr "%s has simulation model of type '%s %s'; only RLC passives be tuned"
+msgid ""
+"%s has simulation model of type '%s %s'.\n"
+"\n"
+"Only passvie R, L, C models and voltage and current sources may be tuned."
+msgstr ""
+"%s has simulation model of type '%s %s'.\n"
+"\n"
+"Only passvie R, L, C models and voltage and current sources may be tuned."
 
 msgid "Limit to E24 series values."
 msgstr "Limit to E24 series values."
@@ -28889,6 +28903,10 @@ msgid "Condition not satisfied; rule ignored."
 msgstr "Condition not satisfied; rule ignored."
 
 #, c-format
+msgid "Inheriting from parent: %s."
+msgstr "Inheriting from parent: %s."
+
+#, c-format
 msgid "Local clearance on %s: %s."
 msgstr "Local clearance on %s: %s."
 
@@ -30216,11 +30234,11 @@ msgstr "Apply footprint filters (%s)"
 msgid "KiCad Footprint Editor"
 msgstr "KiCad Footprint Editor"
 
-msgid "Footprint changes are unsaved"
-msgstr "Footprint changes are unsaved"
-
 msgid "Inner layers"
 msgstr "Inner layers"
+
+msgid "Footprint changes are unsaved"
+msgstr "Footprint changes are unsaved"
 
 #, c-format
 msgid "Editing %s from board.  Saving will update the board only."
@@ -34463,6 +34481,9 @@ msgstr "Copy Rule Area contents failed between rule areas '%s' and '%s'."
 msgid "Repeat layout"
 msgstr "Repeat layout"
 
+msgid "Group repeated items"
+msgstr "Group repeated items"
+
 #, c-format
 msgid "Copied to %d Rule Areas."
 msgstr "Copied to %d Rule Areas."
@@ -37108,6 +37129,13 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "All files|*.*"
+#~ msgstr "All files|*.*"
+
+#, c-format
+#~ msgid "%s has simulation model of type '%s %s'; only RLC passives be tuned"
+#~ msgstr "%s has simulation model of type '%s %s'; only RLC passives be tuned"
 
 #~ msgid "Use board editor copper colors"
 #~ msgstr "Use board editor copper colors"
