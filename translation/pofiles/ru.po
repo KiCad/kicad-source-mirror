@@ -22,17 +22,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-13 15:25+0300\n"
-"PO-Revision-Date: 2025-03-13 03:37+0000\n"
+"PO-Revision-Date: 2025-03-13 15:14+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -41371,9 +41371,9 @@ msgid "Condition not satisfied; rule ignored."
 msgstr "Условие не соблюдено; правило проигнорировано."
 
 #: pcbnew/drc/drc_engine.cpp:1386
-#, fuzzy, c-format
+#, c-format
 msgid "Inheriting from parent: %s."
-msgstr "Наследуется от символа '%s'."
+msgstr "Наследуется от родителя: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1425 pcbnew/drc/drc_engine.cpp:1449
 #, c-format
@@ -48706,9 +48706,8 @@ msgid "Repeat layout"
 msgstr "Повтор макета"
 
 #: pcbnew/tools/multichannel_tool.cpp:547
-#, fuzzy
 msgid "Group repeated items"
-msgstr "Группировать элементы"
+msgstr "Группировать повторенные элементы"
 
 #: pcbnew/tools/multichannel_tool.cpp:553
 #, c-format
