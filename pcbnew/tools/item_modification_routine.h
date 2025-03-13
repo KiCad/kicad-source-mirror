@@ -168,13 +168,6 @@ public:
 
     virtual wxString GetCommitDescription() const = 0;
 
-    /**
-     * @brief Get a status message to show when the routine is complete
-     *
-     * Usually this will be an error or nothing.
-     */
-    virtual std::optional<wxString> GetStatusMessage() const = 0;
-
 protected:
     /**
      * The BOARD used when creating new shapes
@@ -240,6 +233,13 @@ public:
      * @return did the action succeed
      */
     virtual void ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB ) = 0;
+
+    /**
+     * @brief Get a status message to show when the routine is complete
+     *
+     * Usually this will be an error or nothing.
+     */
+    virtual std::optional<wxString> GetStatusMessage( int aSegmentCount ) const = 0;
 };
 
 /**
@@ -249,12 +249,13 @@ class LINE_FILLET_ROUTINE : public PAIRWISE_LINE_ROUTINE
 {
 public:
     LINE_FILLET_ROUTINE( BOARD_ITEM* aBoard, CHANGE_HANDLER& aHandler, int filletRadiusIU ) :
-            PAIRWISE_LINE_ROUTINE( aBoard, aHandler ), m_filletRadiusIU( filletRadiusIU )
+            PAIRWISE_LINE_ROUTINE( aBoard, aHandler ),
+            m_filletRadiusIU( filletRadiusIU )
     {
     }
 
     wxString GetCommitDescription() const override;
-    std::optional<wxString> GetStatusMessage() const override;
+    std::optional<wxString> GetStatusMessage( int aSegmentCount ) const override;
 
     void ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB ) override;
 
@@ -276,7 +277,7 @@ public:
     }
 
     wxString GetCommitDescription() const override;
-    std::optional<wxString> GetStatusMessage() const override;
+    std::optional<wxString> GetStatusMessage( int aSegmentCount ) const override;
 
     void ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB ) override;
 
@@ -296,7 +297,7 @@ public:
     }
 
     wxString GetCommitDescription() const override;
-    std::optional<wxString> GetStatusMessage() const override;
+    std::optional<wxString> GetStatusMessage( int aSegmentCount ) const override;
 
     void ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB ) override;
 };
@@ -314,13 +315,14 @@ public:
     };
 
     DOGBONE_CORNER_ROUTINE( BOARD_ITEM* aBoard, CHANGE_HANDLER& aHandler, PARAMETERS aParams ) :
-            PAIRWISE_LINE_ROUTINE( aBoard, aHandler ), m_params( std::move( aParams ) ),
+            PAIRWISE_LINE_ROUTINE( aBoard, aHandler ),
+            m_params( std::move( aParams ) ),
             m_haveNarrowMouths( false )
     {
     }
 
     wxString                GetCommitDescription() const override;
-    std::optional<wxString> GetStatusMessage() const override;
+    std::optional<wxString> GetStatusMessage( int aSegmentCount ) const override;
 
     void ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB ) override;
 
@@ -347,6 +349,13 @@ public:
      * Clear up any outstanding work
      */
     void Finalize();
+
+    /**
+     * @brief Get a status message to show when the routine is complete
+     *
+     * Usually this will be an error or nothing.
+     */
+    virtual std::optional<wxString> GetStatusMessage() const = 0;
 
 protected:
     SHAPE_POLY_SET& GetWorkingPolygons() { return m_workingPolygons; }
@@ -427,13 +436,14 @@ public:
     };
 
     OUTSET_ROUTINE( BOARD_ITEM* aBoard, CHANGE_HANDLER& aHandler, const PARAMETERS& aParams ) :
-            ITEM_MODIFICATION_ROUTINE( aBoard, aHandler ), m_params( aParams )
+            ITEM_MODIFICATION_ROUTINE( aBoard, aHandler ),
+            m_params( aParams )
     {
     }
 
     wxString GetCommitDescription() const override;
 
-    std::optional<wxString> GetStatusMessage() const override;
+    std::optional<wxString> GetStatusMessage() const;
 
     void ProcessItem( BOARD_ITEM& aItem );
 

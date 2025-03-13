@@ -1599,7 +1599,7 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
 
     commit.Push( pairwise_line_routine->GetCommitDescription() );
 
-    if( const std::optional<wxString> msg = pairwise_line_routine->GetStatusMessage() )
+    if( const std::optional<wxString> msg = pairwise_line_routine->GetStatusMessage( segmentCount ) )
         frame()->ShowInfoBarMsg( *msg );
 
     return 0;

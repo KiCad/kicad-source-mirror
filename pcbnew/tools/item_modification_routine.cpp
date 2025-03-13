@@ -105,13 +105,13 @@ wxString LINE_FILLET_ROUTINE::GetCommitDescription() const
 }
 
 
-std::optional<wxString> LINE_FILLET_ROUTINE::GetStatusMessage() const
+std::optional<wxString> LINE_FILLET_ROUTINE::GetStatusMessage( int aSegmentCount ) const
 {
     if( GetSuccesses() == 0 )
     {
         return _( "Unable to fillet the selected lines." );
     }
-    else if( GetFailures() > 0 )
+    else if( GetFailures() > 0 || (int) GetSuccesses() < aSegmentCount - 1 )
     {
         return _( "Some of the lines could not be filleted." );
     }
@@ -132,7 +132,6 @@ void LINE_FILLET_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB 
     if( !a_pt || !b_pt )
     {
         // The lines do not share an endpoint, so we can't fillet them
-        AddFailure();
         return;
     }
 
@@ -142,20 +141,21 @@ void LINE_FILLET_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB 
     SHAPE_ARC sArc( seg_a, seg_b, m_filletRadiusIU );
     VECTOR2I  t1newPoint, t2newPoint;
 
-    auto setIfPointOnSeg = []( VECTOR2I& aPointToSet, SEG aSegment, VECTOR2I aVecToTest )
-    {
-        VECTOR2I segToVec = aSegment.NearestPoint( aVecToTest ) - aVecToTest;
+    auto setIfPointOnSeg =
+            []( VECTOR2I& aPointToSet, SEG aSegment, VECTOR2I aVecToTest )
+            {
+                VECTOR2I segToVec = aSegment.NearestPoint( aVecToTest ) - aVecToTest;
 
-        // Find out if we are on the segment (minimum precision)
-        if( segToVec.EuclideanNorm() < SHAPE_ARC::MIN_PRECISION_IU )
-        {
-            aPointToSet.x = aVecToTest.x;
-            aPointToSet.y = aVecToTest.y;
-            return true;
-        }
+                // Find out if we are on the segment (minimum precision)
+                if( segToVec.EuclideanNorm() < SHAPE_ARC::MIN_PRECISION_IU )
+                {
+                    aPointToSet.x = aVecToTest.x;
+                    aPointToSet.y = aVecToTest.y;
+                    return true;
+                }
 
-        return false;
-    };
+                return false;
+            };
 
     //Do not draw a fillet if the end points of the arc are not within the track segments
     if( !setIfPointOnSeg( t1newPoint, seg_a, sArc.GetP0() )
@@ -200,13 +200,13 @@ wxString LINE_CHAMFER_ROUTINE::GetCommitDescription() const
 }
 
 
-std::optional<wxString> LINE_CHAMFER_ROUTINE::GetStatusMessage() const
+std::optional<wxString> LINE_CHAMFER_ROUTINE::GetStatusMessage( int aSegmentCount ) const
 {
     if( GetSuccesses() == 0 )
     {
         return _( "Unable to chamfer the selected lines." );
     }
-    else if( GetFailures() > 0 )
+    else if( GetFailures() > 0 || (int) GetSuccesses() < aSegmentCount - 1 )
     {
         return _( "Some of the lines could not be chamfered." );
     }
@@ -267,7 +267,7 @@ wxString DOGBONE_CORNER_ROUTINE::GetCommitDescription() const
 }
 
 
-std::optional<wxString> DOGBONE_CORNER_ROUTINE::GetStatusMessage() const
+std::optional<wxString> DOGBONE_CORNER_ROUTINE::GetStatusMessage( int aSegmentCount ) const
 {
     wxString msg;
 
@@ -275,7 +275,7 @@ std::optional<wxString> DOGBONE_CORNER_ROUTINE::GetStatusMessage() const
     {
         msg += _( "Unable to add dogbone corners to the selected lines." );
     }
-    else if( GetFailures() > 0 )
+    else if( GetFailures() > 0 || (int) GetSuccesses() < aSegmentCount - 1 )
     {
         msg += _( "Some of the lines could not have dogbone corners added." );
     }
@@ -386,13 +386,13 @@ wxString LINE_EXTENSION_ROUTINE::GetCommitDescription() const
 }
 
 
-std::optional<wxString> LINE_EXTENSION_ROUTINE::GetStatusMessage() const
+std::optional<wxString> LINE_EXTENSION_ROUTINE::GetStatusMessage( int aSegmentCount ) const
 {
     if( GetSuccesses() == 0 )
     {
         return _( "Unable to extend the selected lines to meet." );
     }
-    else if( GetFailures() > 0 )
+    else if( GetFailures() > 0 || (int) GetSuccesses() < aSegmentCount - 1 )
     {
         return _( "Some of the lines could not be extended to meet." );
     }
