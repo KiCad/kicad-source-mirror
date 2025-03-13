@@ -99,6 +99,7 @@ bool SCH_PRINTOUT::OnPrintPage( int page )
     // Ensure the displayed page number is updated:
     KIGFX::SCH_VIEW* sch_view = m_parent->GetCanvas()->GetView();
     sch_view->GetDrawingSheet()->SetPageNumber( TO_UTF8( screen->GetPageNumber() ) );
+    sch_view->GetDrawingSheet()->SetIsFirstPage( screen->GetVirtualPageNumber() == 1 );
 
     // Print page using the current wxPrinterDC
     PrintPage( screen, GetDC(), true );
@@ -109,6 +110,7 @@ bool SCH_PRINTOUT::OnPrintPage( int page )
     m_parent->SetSheetNumberAndCount();
     screen = m_parent->GetCurrentSheet().LastScreen();
     sch_view->GetDrawingSheet()->SetPageNumber( TO_UTF8( screen->GetPageNumber() ) );
+    sch_view->GetDrawingSheet()->SetIsFirstPage( screen->GetVirtualPageNumber() == 1 );
 
     return true;
 }
