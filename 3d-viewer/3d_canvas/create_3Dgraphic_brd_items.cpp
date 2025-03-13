@@ -794,11 +794,18 @@ void BOARD_ADAPTER::addShape( const PCB_TEXTBOX* aTextBox, CONTAINER_2D_BASE* aC
 void BOARD_ADAPTER::addTable( const PCB_TABLE* aTable, CONTAINER_2D_BASE* aContainer,
                               const BOARD_ITEM* aOwner )
 {
-    // JEY TODO: tables
-    // add borders
+    aTable->DrawBorders(
+            [&]( const VECTOR2I& ptA, const VECTOR2I& ptB, const STROKE_PARAMS& stroke )
+            {
+                addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( ptA ), TO_SFVEC2F( ptB ),
+                                     TO_3DU( stroke.GetWidth() ), *aOwner );
+            } );
 
     for( PCB_TABLECELL* cell : aTable->GetCells() )
-        addText( cell, aContainer, aOwner );
+    {
+        if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
+            addText( cell, aContainer, aOwner );
+    }
 }
 
 

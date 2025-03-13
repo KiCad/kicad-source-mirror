@@ -940,7 +940,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     break;
 
                 case PCB_TABLE_T:
-                    // JEY TODO: tables
+                    addTable( static_cast<PCB_TABLE*>( item ), layerContainer, item );
                     break;
 
                 case PCB_DIM_ALIGNED_T:
