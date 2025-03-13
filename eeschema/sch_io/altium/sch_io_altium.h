@@ -71,16 +71,6 @@ struct HARNESS
     HARNESS_PORT              m_entry;
 };
 
-namespace DETAIL
-{
-struct CASE_INSENSITIVE_COMPARER final
-{
-    bool operator()( const wxString& aLhs, const wxString& aRhs ) const noexcept
-    {
-        return aLhs.CompareTo( aRhs, wxString::caseCompare::ignoreCase );
-    }
-};
-} // namespace DETAIL
 
 class SCH_IO_ALTIUM : public SCH_IO
 {
