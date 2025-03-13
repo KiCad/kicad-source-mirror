@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-09 19:05+0300\n"
+"POT-Creation-Date: 2025-03-13 15:26+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2775,9 +2775,6 @@ msgstr "Failed to add file '%s'."
 
 msgid "Select a file to embed"
 msgstr "Select a file to embed"
-
-msgid "All files|*.*"
-msgstr "All files|*.*"
 
 msgid "Select a directory to export files"
 msgstr "Select a directory to export files"
@@ -28661,6 +28658,10 @@ msgid "Condition not satisfied; rule ignored."
 msgstr "Condition not satisfied; rule ignored."
 
 #, c-format
+msgid "Inheriting from parent: %s."
+msgstr "Inheriting from parent: %s."
+
+#, c-format
 msgid "Local clearance on %s: %s."
 msgstr "Local clearance on %s: %s."
 
@@ -29984,11 +29985,11 @@ msgstr "Apply footprint filters (%s)"
 msgid "KiCad Footprint Editor"
 msgstr "KiCad Footprint Editor"
 
-msgid "Footprint changes are unsaved"
-msgstr "Footprint changes are unsaved"
-
 msgid "Inner layers"
 msgstr "Inner layers"
+
+msgid "Footprint changes are unsaved"
+msgstr "Footprint changes are unsaved"
 
 #, c-format
 msgid "Editing %s from board.  Saving will update the board only."
@@ -34208,6 +34209,9 @@ msgstr "Copy Rule Area contents failed between rule areas '%s' and '%s'."
 msgid "Repeat layout"
 msgstr "Repeat layout"
 
+msgid "Group repeated items"
+msgstr "Group repeated items"
+
 #, c-format
 msgid "Copied to %d Rule Areas."
 msgstr "Copied to %d Rule Areas."
@@ -36813,6 +36817,9 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "All files|*.*"
+#~ msgstr "All files|*.*"
 
 #~ msgid "Use board editor copper colors"
 #~ msgstr "Use board editor copper colors"
