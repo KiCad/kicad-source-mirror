@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:05+0300\n"
-"PO-Revision-Date: 2025-03-09 19:19+0000\n"
+"PO-Revision-Date: 2025-03-13 03:38+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v9/ru/>\n"
 "Language: ru\n"
@@ -13898,7 +13898,7 @@ msgstr "Назад"
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:83
 #: pcbnew/dialogs/dialog_find_base.cpp:43
 msgid "Match &case"
-msgstr "Спички и кейс"
+msgstr "Учитывать регистр"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:86
 #: pcbnew/dialogs/dialog_find_base.cpp:46
@@ -13908,7 +13908,7 @@ msgstr "Только целые слова"
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:90
 #: pcbnew/dialogs/dialog_find_base.cpp:49
 msgid "Wi&ldcards"
-msgstr "Визитные карточки"
+msgstr "Шаблоны"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:93
 msgid "Search pin &names and numbers"
@@ -13916,7 +13916,7 @@ msgstr "Искать в именах и номерах выводов"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:96
 msgid "Search &hidden fields"
-msgstr "Поиск и скрытые поля"
+msgstr "Искать в скрытых полях"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:99
 msgid "Search the current &sheet only"
@@ -13924,7 +13924,7 @@ msgstr "Искать только на текущем листе"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:102
 msgid "Search the current selection &only"
-msgstr "Поиск только по текущему выделению"
+msgstr "Искать только в текущем выделении"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:105
 msgid "Replace matches in reference designators"
