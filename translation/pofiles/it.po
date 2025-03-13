@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 19:05+0300\n"
-"PO-Revision-Date: 2025-03-06 23:18+0000\n"
+"PO-Revision-Date: 2025-03-13 12:23+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -124,7 +124,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.10.3\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -5497,7 +5497,7 @@ msgstr "Nome netclass già in uso."
 
 #: common/dialogs/panel_setup_netclasses.cpp:644
 msgid "Minimum copper clearance"
-msgstr "Distanza rame minima"
+msgstr "Clearance rame minima"
 
 #: common/dialogs/panel_setup_netclasses.cpp:645
 msgid "Minimum track width"
@@ -5564,7 +5564,7 @@ msgstr "Netclass"
 #: pcbnew/tools/board_inspection_tool.cpp:641
 #: pcbnew/tools/board_inspection_tool.cpp:1201 pcbnew/zone.cpp:2079
 msgid "Clearance"
-msgstr "Distanza"
+msgstr "Clearance"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:53
 #: pcb_calculator/pcb_calculator_frame.cpp:177
@@ -28912,7 +28912,7 @@ msgstr "Larghezza pista"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:74
 msgid "Minimum clearance"
-msgstr "Distanza minima"
+msgstr "Clearance minima"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:75
 msgid "Via: (diameter - drill)"
@@ -29332,7 +29332,7 @@ msgstr "kV"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:109
 msgid "Compute the clearance and creepage distances"
-msgstr "Calcola le distanze in linea d'aria e superficiale"
+msgstr "Calcola le distanze clearance e creepage"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:119
 msgid "RMS Voltage:"
@@ -29521,7 +29521,7 @@ msgid ""
 "as a soldermask) should not be considered for a reduction."
 msgstr ""
 "Il rivestimento e l'invasatura consentono di ridurre le distanze di "
-"sicurezza e di dispersione. Non supportato dalla calcolatrice.\n"
+"clearance e creepage. Non supportato dalla calcolatrice.\n"
 "\n"
 "Un rivestimento che potrebbe facilmente delaminarsi nel corso della vita del "
 "prodotto (come una maschera per saldatura) non dovrebbe essere considerato "
@@ -29531,7 +29531,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:197
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:122
 msgid "Clearance:"
-msgstr "Distanza (linea d'aria):"
+msgstr "Clearance:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:268
 msgid "Creepage:"
@@ -29554,8 +29554,8 @@ msgid ""
 "solid: clearance\n"
 "dashed: creepage"
 msgstr ""
-"continua: distanza in linea d'aria\n"
-"tratteggiata: distanza superficiale"
+"continua: clearance\n"
+"tratteggiata: creepage"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:36
 msgid "Voltage > 500 V:"
@@ -30355,11 +30355,11 @@ msgstr "Diametro della piazzola che circonda il via (anello circolare)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:85
 msgid "Clearance hole diameter:"
-msgstr "Diametro foro di distanza:"
+msgstr "Diametro foro di clearance:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:87
 msgid "Diameter of clearance hole in ground plane(s)"
-msgstr "Diametro del foro di distanza nei piani di massa"
+msgstr "Diametro del foro di clearance nei piani di massa"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:99
 msgid "Z0:"
@@ -30413,7 +30413,7 @@ msgid ""
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
 "Attenzione:\n"
-"Diametro piazzola via >= Diametro distanza foro.\n"
+"Diametro piazzola via >= Diametro foro clearance.\n"
 "Alcuni parametri non possono essere calcolati per un via dentro una zona "
 "rame."
 
@@ -30660,9 +30660,9 @@ msgstr ""
 "degradate. La norma IEC60664-4 copre questi casi\n"
 "- Quando si utilizza un rivestimento conforme o un rivestimento per "
 "proteggere dall'inquinamento, se tutte le condizioni specificate dalla norma "
-"IEC60664-3 sono soddisfatte, le distanze di isolamento e di dispersione "
-"possono essere ridotte. La maschera di saldatura non è solitamente "
-"considerata un rivestimento conforme.\n"
+"IEC60664-3 sono soddisfatte, le distanze di clearance e creepage possono "
+"venir ridotte. La maschera di saldatura non è solitamente considerata un "
+"rivestimento conforme.\n"
 "- Gli isolamenti attraverso liquidi, aria compressa o gas diversi dall'aria "
 "non rientrano nell'ambito della norma IEC60664"
 
@@ -32904,7 +32904,7 @@ msgstr "Proprietà elettriche"
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:124
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
 msgstr ""
-"La distanza rame per questa zona (imposta a 0 per usare la distanza netclass)"
+"Clearance rame per questa zona (a 0 per usare la clearance della netclass)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:210
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:76
@@ -32959,7 +32959,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:245
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:170
 msgid "Clearance between pads in the same net and filled areas."
-msgstr "Distanza tra piazzole dello stesso collegamento e zone riempite."
+msgstr "Clearance tra piazzole dello stesso collegamento e zone riempite."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:253
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:178
