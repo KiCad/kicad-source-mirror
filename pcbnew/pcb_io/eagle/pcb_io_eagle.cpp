@@ -623,7 +623,7 @@ void PCB_IO_EAGLE::loadLayerDefs( wxXmlNode* aLayers )
         else
         {
             // some eagle boards do not have contiguous layer number sequences.
-            m_cu_map[it->number] = ki_layer_count;
+            m_cu_map[it->number] = BoardLayerFromLegacyId( ki_layer_count );
         }
     }
 
@@ -3330,9 +3330,13 @@ int PCB_IO_EAGLE::getMinimumCopperLayerCount() const
     {
         PCB_LAYER_ID layerId = it->second;
 
-        if( IsCopperLayer( layerId ) && layerId != F_Cu && layerId != B_Cu
-            && ( layerId + 2 ) > minLayerCount )
-            minLayerCount = layerId + 2;
+        if( !IsCopperLayer( layerId ) || layerId == F_Cu || layerId == B_Cu )
+            continue;
+
+        int ordinal = CopperLayerToOrdinal( layerId );
+
+        if( ( ordinal + 2 ) > minLayerCount )
+            minLayerCount = ordinal + 2;
     }
 
     // Ensure the copper layers count is a multiple of 2
