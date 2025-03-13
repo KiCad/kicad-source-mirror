@@ -3932,7 +3932,7 @@ PCB_TABLE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TABLE( BOARD_ITEM* aParent )
                     break;
 
                 case T_header:
-                    table->SetStrokeHeader( parseBool() );
+                    table->SetStrokeHeaderSeparator( parseBool() );
                     NeedRIGHT();
                     break;
 

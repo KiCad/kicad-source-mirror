@@ -323,7 +323,7 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
         ret = hash_board_item( table, aFlags );
 
         hash_combine( ret, table->StrokeExternal() );
-        hash_combine( ret, table->StrokeHeader() );
+        hash_combine( ret, table->StrokeHeaderSeparator() );
         hash_combine( ret, table->StrokeColumns() );
         hash_combine( ret, table->StrokeRows() );
 

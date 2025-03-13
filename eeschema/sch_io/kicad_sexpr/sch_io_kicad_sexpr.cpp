@@ -1392,9 +1392,9 @@ void SCH_IO_KICAD_SEXPR::saveTable( SCH_TABLE* aTable )
 
     m_out->Print( "(border" );
     KICAD_FORMAT::FormatBool( m_out, "external", aTable->StrokeExternal() );
-    KICAD_FORMAT::FormatBool( m_out, "header", aTable->StrokeHeader() );
+    KICAD_FORMAT::FormatBool( m_out, "header", aTable->StrokeHeaderSeparator() );
 
-    if( aTable->StrokeExternal() || aTable->StrokeHeader() )
+    if( aTable->StrokeExternal() || aTable->StrokeHeaderSeparator() )
         aTable->GetBorderStroke().Format( m_out, schIUScale );
 
     m_out->Print( ")" );               // Close `border` token.

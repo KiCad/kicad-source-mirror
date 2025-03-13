@@ -53,8 +53,8 @@ public:
     void SetStrokeExternal( bool aDoStroke ) { m_strokeExternal = aDoStroke; }
     bool StrokeExternal() const              { return m_strokeExternal; }
 
-    void SetStrokeHeader( bool aDoStroke ) { m_strokeHeader = aDoStroke; }
-    bool StrokeHeader() const              { return m_strokeHeader; }
+    void SetStrokeHeaderSeparator( bool aDoStroke ) { m_StrokeHeaderSeparator = aDoStroke; }
+    bool StrokeHeaderSeparator() const              { return m_StrokeHeaderSeparator; }
 
     void SetBorderStroke( const STROKE_PARAMS& aParams ) { m_borderStroke = aParams; }
     const STROKE_PARAMS& GetBorderStroke() const { return m_borderStroke; }
@@ -238,7 +238,7 @@ public:
 
 protected:
     bool                        m_strokeExternal;
-    bool                        m_strokeHeader;
+    bool                        m_StrokeHeaderSeparator;
     STROKE_PARAMS               m_borderStroke;
     bool                        m_strokeRows;
     bool                        m_strokeColumns;

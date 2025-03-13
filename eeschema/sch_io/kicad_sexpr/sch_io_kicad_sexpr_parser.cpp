@@ -4607,7 +4607,7 @@ SCH_TABLE* SCH_IO_KICAD_SEXPR_PARSER::parseSchTable()
                     break;
 
                 case T_header:
-                    table->SetStrokeHeader( parseBool() );
+                    table->SetStrokeHeaderSeparator( parseBool() );
                     NeedRIGHT();
                     break;
 
