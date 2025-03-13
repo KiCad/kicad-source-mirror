@@ -24,9 +24,13 @@
 
 #include "dialog_git_switch.h"
 
+#include <git/kicad_git_memory.h>
+#include <trace_helpers.h>
+
 #include <wx/button.h>
 #include <wx/checkbox.h>
 #include <wx/listctrl.h>
+#include <wx/log.h>
 #include <wx/event.h>
 #include <wx/sizer.h>
 #include <wx/timer.h>
@@ -240,38 +244,41 @@ void DIALOG_GIT_SWITCH::GetBranches()
     git_reference* currentBranchReference = nullptr;
     git_repository_head( &currentBranchReference, m_repository );
 
-    // Get the current branch name
-    if( currentBranchReference )
+    if( !currentBranchReference )
     {
-        m_currentBranch = git_reference_shorthand( currentBranchReference );
-        git_reference_free( currentBranchReference );
+        wxLogTrace( traceGit, "Failed to get current branch" );
+        return;
     }
+
+    KIGIT::GitReferencePtr currentBranch( currentBranchReference );
+    m_currentBranch = git_reference_shorthand( currentBranchReference );
 
     // Initialize branch iterator
     git_branch_iterator_new( &branchIterator, m_repository, GIT_BRANCH_ALL );
+    KIGIT::GitBranchIteratorPtr branchIteratorPtr( branchIterator );
 
     // Iterate over local branches
     git_reference* branchReference = nullptr;
     while( git_branch_next( &branchReference, &branchType, branchIterator ) == 0 )
     {
+        KIGIT::GitReferencePtr branchReferencePtr( branchReference );
+
         // Get the branch OID
         const git_oid* branchOid = git_reference_target( branchReference );
 
         // Skip this branch if it doesn't have an OID
         if( !branchOid )
-        {
-            git_reference_free( branchReference );
             continue;
-        }
 
         git_commit* commit = nullptr;
 
         if( git_commit_lookup( &commit, m_repository, branchOid ) )
         {
             // Skip this branch if it doesn't have a commit
-            git_reference_free( branchReference );
             continue;
         }
+
+        KIGIT::GitCommitPtr commitPtr( commit );
 
         // Retrieve commit details
         BranchData branchData;
@@ -280,10 +287,5 @@ void DIALOG_GIT_SWITCH::GetBranches()
         branchData.isRemote = branchType == GIT_BRANCH_REMOTE;
 
         m_branches[git_reference_shorthand( branchReference )] = branchData;
-
-        git_commit_free( commit );
-        git_reference_free( branchReference );
     }
-
-    git_branch_iterator_free( branchIterator );
 }

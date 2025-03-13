@@ -325,6 +325,7 @@ private:
     std::unordered_map<wxString, wxTreeItemId>       m_gitTreeCache;
     std::mutex                                       m_gitStatusMutex;
     std::map<wxTreeItemId, KIGIT_COMMON::GIT_STATUS> m_gitStatusIcons;
+    bool                                             m_gitIconsInitialized;
 
     DECLARE_EVENT_TABLE()
 };
