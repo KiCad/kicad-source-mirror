@@ -2461,43 +2461,26 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
         return;
 
     for( PCB_TABLECELL* cell : aTable->GetCells() )
-        draw( static_cast<PCB_TEXTBOX*>( cell ), aLayer );
+    {
+        if( cell->GetColSpan() > 0 || cell->GetRowSpan() > 0 )
+            draw( static_cast<PCB_TEXTBOX*>( cell ), aLayer );
+    }
 
     // Selection for tables is done with a background wash, so pass in nullptr to GetColor()
     // so we just get the "normal" (un-selected/un-brightened) color for the borders.
-    COLOR4D    color = m_pcbSettings.GetColor( nullptr, aLayer );
-    int        lineWidth;
-    LINE_STYLE lineStyle;
+    COLOR4D color = m_pcbSettings.GetColor( nullptr, aLayer );
 
-    auto setupStroke =
-            [&]( const STROKE_PARAMS& stroke )
+    aTable->DrawBorders(
+            [&]( const VECTOR2I& ptA, const VECTOR2I& ptB, const STROKE_PARAMS& stroke )
             {
-                lineWidth = getLineThickness( stroke.GetWidth() );
-                lineStyle = stroke.GetLineStyle();
+                int        lineWidth = getLineThickness( stroke.GetWidth() );
+                LINE_STYLE lineStyle = stroke.GetLineStyle();
 
                 m_gal->SetIsFill( false );
                 m_gal->SetIsStroke( true );
                 m_gal->SetStrokeColor( color );
                 m_gal->SetLineWidth( lineWidth );
-            };
 
-    auto strokeShape =
-            [&]( const SHAPE& shape )
-            {
-                STROKE_PARAMS::Stroke( &shape, lineStyle, lineWidth, &m_pcbSettings,
-                        [&]( VECTOR2I a, VECTOR2I b )
-                        {
-                            // DrawLine has problem with 0 length lines so enforce minimum
-                            if( a == b )
-                                m_gal->DrawLine( a+1, b );
-                            else
-                                m_gal->DrawLine( a, b );
-                        } );
-            };
-
-    auto strokeLine =
-            [&]( VECTOR2I ptA, VECTOR2I ptB )
-            {
                 if( lineStyle <= LINE_STYLE::FIRST_TYPE )
                 {
                     m_gal->DrawLine( ptA, ptB );
@@ -2505,80 +2488,18 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
                 else
                 {
                     SHAPE_SEGMENT seg( ptA, ptB );
-                    strokeShape( seg );
+
+                    STROKE_PARAMS::Stroke( &seg, lineStyle, lineWidth, &m_pcbSettings,
+                            [&]( VECTOR2I a, VECTOR2I b )
+                            {
+                                // DrawLine has problem with 0 length lines so enforce minimum
+                                if( a == b )
+                                    m_gal->DrawLine( a+1, b );
+                                else
+                                    m_gal->DrawLine( a, b );
+                            } );
                 }
-            };
-
-    if( aTable->GetSeparatorsStroke().GetWidth() >= 0 )
-    {
-        setupStroke( aTable->GetSeparatorsStroke() );
-
-        // Stroke column edges
-        if( aTable->StrokeColumns() )
-        {
-            for( int col = 0; col < aTable->GetColCount() - 1; ++col )
-            {
-                int row = aTable->StrokeHeader() ? 0 : 1;
-
-                for( ; row < aTable->GetRowCount(); ++row )
-                {
-                    PCB_TABLECELL* cell = aTable->GetCell( row, col );
-                    std::vector<VECTOR2I> corners = cell->GetCornersInSequence();
-
-                    if( corners.size() == 4 )
-                    {
-                        // Draw right edge (between adjacent cells)
-                        strokeLine( corners[1], corners[2] );
-                    }
-                }
-            }
-        }
-
-        // Stroke row edges
-        if( aTable->StrokeRows() )
-        {
-            for( int row = 0; row < aTable->GetRowCount() - 1; ++row )
-            {
-                for( int col = 0; col < aTable->GetColCount(); ++col )
-                {
-                    PCB_TABLECELL* cell = aTable->GetCell( row, col );
-                    std::vector<VECTOR2I> corners = cell->GetCornersInSequence();
-
-                    if( corners.size() == 4 )
-                    {
-                        // Draw bottom edge (between adjacent cells)
-                        strokeLine( corners[2], corners[3] );
-                    }
-                }
-            }
-        }
-    }
-
-    if( aTable->GetBorderStroke().GetWidth() >= 0 )
-    {
-        setupStroke( aTable->GetBorderStroke() );
-
-        std::vector<VECTOR2I> topLeft     = aTable->GetCell( 0, 0 )->GetCornersInSequence();
-        std::vector<VECTOR2I> bottomLeft  = aTable->GetCell( aTable->GetRowCount() - 1, 0 )->GetCornersInSequence();
-        std::vector<VECTOR2I> topRight    = aTable->GetCell( 0, aTable->GetColCount() - 1 )->GetCornersInSequence();
-        std::vector<VECTOR2I> bottomRight = aTable->GetCell( aTable->GetRowCount() - 1, aTable->GetColCount() - 1 )->GetCornersInSequence();
-
-        if( aTable->StrokeHeader() )
-        {
-            strokeLine( topLeft[0], topRight[1] );
-            strokeLine( topLeft[0], topLeft[3] );
-            strokeLine( topLeft[3], topRight[2] );
-            strokeLine( topRight[1], topRight[2] );
-        }
-
-        if( aTable->StrokeExternal() )
-        {
-            strokeLine( topLeft[3], topRight[2] );
-            strokeLine( topRight[2], bottomRight[2] );
-            strokeLine( bottomRight[2], bottomLeft[3] );
-            strokeLine( bottomLeft[3], topLeft[3] );
-        }
-    }
+            } );
 
     // Highlight selected tablecells with a background wash.
     for( PCB_TABLECELL* cell : aTable->GetCells() )

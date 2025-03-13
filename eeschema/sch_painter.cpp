@@ -2117,7 +2117,7 @@ void SCH_PAINTER::draw( const SCH_TABLE* aTable, int aLayer, bool aDimmed )
 
         setupStroke( aTable->GetBorderStroke() );
 
-        if( aTable->StrokeHeader() )
+        if( aTable->StrokeHeaderSeparator() )
         {
             if( !first->GetTextAngle().IsHorizontal() )
                 strokeLine( VECTOR2I( first->GetEndX(), pos.y ),

@@ -38,7 +38,7 @@
 SCH_TABLE::SCH_TABLE( int aLineWidth ) :
         SCH_ITEM( nullptr, SCH_TABLE_T ),
         m_strokeExternal( true ),
-        m_strokeHeader( true ),
+        m_StrokeHeaderSeparator( true ),
         m_borderStroke( aLineWidth, LINE_STYLE::DEFAULT, COLOR4D::UNSPECIFIED ),
         m_strokeRows( true ),
         m_strokeColumns( true ),
@@ -53,7 +53,7 @@ SCH_TABLE::SCH_TABLE( const SCH_TABLE& aTable ) :
         SCH_ITEM( aTable )
 {
     m_strokeExternal = aTable.m_strokeExternal;
-    m_strokeHeader = aTable.m_strokeHeader;
+    m_StrokeHeaderSeparator = aTable.m_StrokeHeaderSeparator;
     m_borderStroke = aTable.m_borderStroke;
     m_strokeRows = aTable.m_strokeRows;
     m_strokeColumns = aTable.m_strokeColumns;
@@ -86,7 +86,7 @@ void SCH_TABLE::SwapData( SCH_ITEM* aItem )
     SCH_TABLE* table = static_cast<SCH_TABLE*>( aItem );
 
     std::swap( m_strokeExternal, table->m_strokeExternal );
-    std::swap( m_strokeHeader, table->m_strokeHeader );
+    std::swap( m_StrokeHeaderSeparator, table->m_StrokeHeaderSeparator );
     std::swap( m_borderStroke, table->m_borderStroke );
     std::swap( m_strokeRows, table->m_strokeRows );
     std::swap( m_strokeColumns, table->m_strokeColumns );
@@ -371,7 +371,7 @@ void SCH_TABLE::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBod
     {
         setupStroke( GetBorderStroke() );
 
-        if( StrokeHeader() )
+        if( StrokeHeaderSeparator() )
         {
             SCH_TABLECELL* cell = GetCell( 0, 0 );
             strokeLine( VECTOR2I( pos.x, cell->GetEndY() ), VECTOR2I( end.x, cell->GetEndY() ) );
@@ -556,7 +556,7 @@ void SCH_TABLE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
         setupStroke( GetBorderStroke() );
         SCH_TABLECELL* cell = GetCell( 0, 0 );
 
-        if( StrokeHeader() )
+        if( StrokeHeaderSeparator() )
         {
             if( !cell->GetTextAngle().IsHorizontal() )
             {
@@ -657,7 +657,7 @@ static struct SCH_TABLE_DESC
                     tableProps );
 
         propMgr.AddProperty( new PROPERTY<SCH_TABLE, bool>( _HKI( "Header Border" ),
-                    &SCH_TABLE::SetStrokeHeader, &SCH_TABLE::StrokeHeader ),
+                    &SCH_TABLE::SetStrokeHeaderSeparator, &SCH_TABLE::StrokeHeaderSeparator ),
                     tableProps );
 
         propMgr.AddProperty( new PROPERTY<SCH_TABLE, int>( _HKI( "Border Width" ),

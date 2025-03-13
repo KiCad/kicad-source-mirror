@@ -1098,8 +1098,6 @@ void BRDITEMS_PLOTTER::PlotTableBorders( const PCB_TABLE* aTable )
     if( !m_layerMask[aTable->GetLayer()] )
         return;
 
-    int          lineWidth;
-    LINE_STYLE   lineStyle;
     GBR_METADATA gbr_metadata;
 
     if( const FOOTPRINT* parentFP = aTable->GetParentFootprint() )
@@ -1108,27 +1106,12 @@ void BRDITEMS_PLOTTER::PlotTableBorders( const PCB_TABLE* aTable )
         gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
     }
 
-    auto setupStroke =
-            [&]( const STROKE_PARAMS& stroke )
+    aTable->DrawBorders(
+            [&]( const VECTOR2I& ptA, const VECTOR2I& ptB, const STROKE_PARAMS& stroke )
             {
-                lineWidth = stroke.GetWidth();
-                lineStyle = stroke.GetLineStyle();
-            };
+                int        lineWidth = stroke.GetWidth();
+                LINE_STYLE lineStyle = stroke.GetLineStyle();
 
-    auto strokeShape =
-            [&]( const SHAPE& shape )
-            {
-                STROKE_PARAMS::Stroke( &shape, lineStyle, lineWidth, m_plotter->RenderSettings(),
-                        [&]( const VECTOR2I& a, const VECTOR2I& b )
-                        {
-                            m_plotter->ThickSegment( a, b, lineWidth, GetPlotMode(),
-                                                     &gbr_metadata );
-                        } );
-            };
-
-    auto strokeLine =
-            [&]( const VECTOR2I& ptA, const VECTOR2I& ptB )
-            {
                 if( lineStyle <= LINE_STYLE::FIRST_TYPE )
                 {
                     m_plotter->ThickSegment( ptA, ptB, lineWidth, GetPlotMode(), &gbr_metadata );
@@ -1136,86 +1119,15 @@ void BRDITEMS_PLOTTER::PlotTableBorders( const PCB_TABLE* aTable )
                 else
                 {
                     SHAPE_SEGMENT seg( ptA, ptB );
-                    strokeShape( seg );
+
+                    STROKE_PARAMS::Stroke( &seg, lineStyle, lineWidth, m_plotter->RenderSettings(),
+                            [&]( const VECTOR2I& a, const VECTOR2I& b )
+                            {
+                                m_plotter->ThickSegment( a, b, lineWidth, GetPlotMode(),
+                                                         &gbr_metadata );
+                            } );
                 }
-            };
-
-    if( aTable->GetSeparatorsStroke().GetWidth() >= 0 )
-    {
-        setupStroke( aTable->GetSeparatorsStroke() );
-
-        if( aTable->StrokeColumns() )
-        {
-            for( int col = 0; col < aTable->GetColCount() - 1; ++col )
-            {
-                int row = 1;
-                if( aTable->StrokeHeader() )
-                {
-                    row = 0;
-                }
-
-                for( ; row < aTable->GetRowCount(); ++row )
-                {
-                    PCB_TABLECELL*        cell = aTable->GetCell( row, col );
-                    std::vector<VECTOR2I> corners = cell->GetCornersInSequence();
-
-                    if( corners.size() == 4 )
-                    {
-                        // Draw right edge (between adjacent cells)
-                        strokeLine( corners[1], corners[2] );
-                    }
-                }
-            }
-        }
-
-        if( aTable->StrokeRows() )
-        {
-            for( int row = 0; row < aTable->GetRowCount() - 1; ++row )
-            {
-                for( int col = 0; col < aTable->GetColCount(); ++col )
-                {
-                    PCB_TABLECELL*        cell = aTable->GetCell( row, col );
-                    std::vector<VECTOR2I> corners = cell->GetCornersInSequence();
-
-                    if( corners.size() == 4 )
-                    {
-                        // Draw bottom edge (between adjacent cells)
-                        strokeLine( corners[2], corners[3] );
-                    }
-                }
-            }
-        }
-    }
-
-    if( aTable->GetBorderStroke().GetWidth() >= 0 )
-    {
-        setupStroke( aTable->GetBorderStroke() );
-
-        std::vector<VECTOR2I> topLeft = aTable->GetCell( 0, 0 )->GetCornersInSequence();
-        std::vector<VECTOR2I> bottomLeft =
-                aTable->GetCell( aTable->GetRowCount() - 1, 0 )->GetCornersInSequence();
-        std::vector<VECTOR2I> topRight =
-                aTable->GetCell( 0, aTable->GetColCount() - 1 )->GetCornersInSequence();
-        std::vector<VECTOR2I> bottomRight =
-                aTable->GetCell( aTable->GetRowCount() - 1, aTable->GetColCount() - 1 )
-                        ->GetCornersInSequence();
-
-        if( aTable->StrokeHeader() )
-        {
-            strokeLine( topLeft[0], topRight[1] );
-            strokeLine( topLeft[0], topLeft[3] );
-            strokeLine( topLeft[3], topRight[2] );
-            strokeLine( topRight[1], topRight[2] );
-        }
-
-        if( aTable->StrokeExternal() )
-        {
-            strokeLine( topLeft[3], topRight[2] );
-            strokeLine( topRight[2], bottomRight[2] );
-            strokeLine( bottomRight[2], bottomLeft[3] );
-            strokeLine( bottomLeft[3], topLeft[3] );
-        }
-    }
+            } );
 }
 
 
