@@ -21,17 +21,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef GITPULLHANDLER_HPP
-#define GITPULLHANDLER_HPP
+#ifndef _GIT_PULL_HANDLER_H_
+#define _GIT_PULL_HANDLER_H_
 
-#include <git2.h>
-#include <functional>
+#include <git/git_repo_mixin.h>
+#include <git/git_progress.h>
+#include <git/kicad_git_errors.h>
+
 #include <vector>
 #include <string>
-
-#include "kicad_git_common.h"
-
-#include <git/git_progress.h>
+#include <wx/string.h>
+#include <git2.h>
 
 // Structure to store commit details
 struct CommitDetails
@@ -65,36 +65,28 @@ struct ConflictData
 };
 
 
-class GIT_PULL_HANDLER : public KIGIT_COMMON, public GIT_PROGRESS
+class GIT_PULL_HANDLER : public KIGIT_ERRORS, public GIT_PROGRESS, public KIGIT_REPO_MIXIN
 {
 public:
     GIT_PULL_HANDLER( KIGIT_COMMON* aCommon );
     ~GIT_PULL_HANDLER();
 
+    bool       PerformFetch( bool aSkipLock = false );
     PullResult PerformPull();
-
-    bool PerformFetch();
 
     const std::vector<std::pair<std::string, std::vector<CommitDetails>>>& GetFetchResults() const;
 
-    // Set the callback function for conflict resolution
-    void SetConflictCallback(
-            std::function<int( std::vector<ConflictData>& aConflicts )> aCallback )
-    {
-        m_conflictCallback = aCallback;
-    }
-
+    // Implementation for progress updates
     void UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage ) override;
 
+
 private:
-    std::string getFirstLineFromCommitMessage( const std::string& aMessage );
-    std::string getFormattedCommitDate( const git_time& aTime );private:
-
-    PullResult handleFastForward();
-    PullResult handleMerge( const git_annotated_commit** aMergeHeads, size_t aMergeHeadsCount);
-
     std::vector<std::pair<std::string, std::vector<CommitDetails>>> m_fetchResults;
-    std::function<int( std::vector<ConflictData>& aConflicts )>     m_conflictCallback;
+
+    std::string getFirstLineFromCommitMessage( const std::string& aMessage );
+    std::string getFormattedCommitDate( const git_time& aTime );
+    PullResult  handleFastForward();
+    PullResult  handleMerge( const git_annotated_commit** aMergeHeads, size_t aMergeHeadsCount );
 };
 
-#endif // GITPULLHANDLER_HPP
+#endif // _GIT_PULL_HANDLER_H_

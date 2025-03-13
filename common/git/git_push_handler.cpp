@@ -23,32 +23,44 @@
 
 #include "git_push_handler.h"
 #include <git/kicad_git_common.h>
+#include <git/kicad_git_memory.h>
+#include <trace_helpers.h>
 
 #include <iostream>
 
-GIT_PUSH_HANDLER::GIT_PUSH_HANDLER( KIGIT_COMMON* aRepo ) :  KIGIT_COMMON( *aRepo )
-{}
+#include <wx/log.h>
 
+GIT_PUSH_HANDLER::GIT_PUSH_HANDLER( KIGIT_COMMON* aRepo ) : KIGIT_REPO_MIXIN( aRepo )
+{}
 
 GIT_PUSH_HANDLER::~GIT_PUSH_HANDLER()
 {}
 
-
 PushResult GIT_PUSH_HANDLER::PerformPush()
 {
+    std::unique_lock<std::mutex> lock( GetCommon()->m_gitActionMutex, std::try_to_lock );
+
+    if(!lock.owns_lock())
+    {
+        wxLogTrace(traceGit, "GIT_PUSH_HANDLER::PerformPush: Could not lock mutex");
+        return PushResult::Error;
+    }
+
     PushResult result = PushResult::Success;
 
     // Fetch updates from remote repository
     git_remote* remote = nullptr;
 
-    if( git_remote_lookup( &remote, m_repo, "origin" ) != 0 )
+    if(git_remote_lookup(&remote, GetRepo(), "origin") != 0)
     {
-        AddErrorString( _( "Could not lookup remote" ) );
+        AddErrorString(_("Could not lookup remote"));
         return PushResult::Error;
     }
 
+    KIGIT::GitRemotePtr remotePtr(remote);
+
     git_remote_callbacks remoteCallbacks;
-    git_remote_init_callbacks( &remoteCallbacks, GIT_REMOTE_CALLBACKS_VERSION );
+    git_remote_init_callbacks(&remoteCallbacks, GIT_REMOTE_CALLBACKS_VERSION);
     remoteCallbacks.sideband_progress = progress_cb;
     remoteCallbacks.transfer_progress = transfer_progress_cb;
     remoteCallbacks.update_tips = update_cb;
@@ -56,14 +68,13 @@ PushResult GIT_PUSH_HANDLER::PerformPush()
     remoteCallbacks.credentials = credentials_cb;
     remoteCallbacks.payload = this;
 
-    m_testedTypes = 0;
+    TestedTypes() = 0;
     ResetNextKey();
 
     if( git_remote_connect( remote, GIT_DIRECTION_PUSH, &remoteCallbacks, nullptr, nullptr ) )
     {
         AddErrorString( wxString::Format( _( "Could not connect to remote: %s" ),
                                           git_error_last()->message ) );
-        git_remote_free( remote );
         return PushResult::Error;
     }
 
@@ -74,30 +85,29 @@ PushResult GIT_PUSH_HANDLER::PerformPush()
     // Get the current HEAD reference
     git_reference* head = nullptr;
 
-    if( git_repository_head( &head, m_repo ) != 0 )
+    if( git_repository_head( &head, GetRepo() ) != 0 )
     {
+        git_remote_disconnect( remote );
         AddErrorString( _( "Could not get repository head" ) );
-        git_remote_free( remote );
         return PushResult::Error;
     }
+
+    KIGIT::GitReferencePtr headPtr( head );
 
     // Create refspec for current branch
     const char* refs[1];
     refs[0] = git_reference_name( head );
     const git_strarray refspecs = { (char**) refs, 1 };
 
-    git_reference_free(head);
     if( git_remote_push( remote, &refspecs, &pushOptions ) )
     {
         AddErrorString( wxString::Format( _( "Could not push to remote: %s" ),
                                           git_error_last()->message ) );
         git_remote_disconnect( remote );
-        git_remote_free( remote );
         return PushResult::Error;
     }
 
     git_remote_disconnect( remote );
-    git_remote_free( remote );
 
     return result;
 }

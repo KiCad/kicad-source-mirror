@@ -24,9 +24,12 @@
 #include "git_clone_handler.h"
 
 #include <git/kicad_git_common.h>
+#include <git/kicad_git_memory.h>
+#include <trace_helpers.h>
 
 #include <git2.h>
 #include <wx/filename.h>
+#include <wx/log.h>
 
 GIT_CLONE_HANDLER::GIT_CLONE_HANDLER() :  KIGIT_COMMON( nullptr )
 {}
@@ -41,6 +44,14 @@ GIT_CLONE_HANDLER::~GIT_CLONE_HANDLER()
 
 bool GIT_CLONE_HANDLER::PerformClone()
 {
+    std::unique_lock<std::mutex> lock( m_gitActionMutex, std::try_to_lock );
+
+    if( !lock.owns_lock() )
+    {
+        wxLogTrace( traceGit, "GIT_CLONE_HANDLER::PerformClone() could not lock" );
+        return false;
+    }
+
     wxFileName clonePath( m_clonePath );
 
     if( !clonePath.DirExists() )

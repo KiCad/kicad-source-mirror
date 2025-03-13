@@ -27,6 +27,7 @@
 #include <git/kicad_git_errors.h>
 
 #include <git2.h>
+#include <mutex>
 #include <set>
 
 #include <wx/string.h>
@@ -36,6 +37,7 @@ class KIGIT_COMMON : public KIGIT_ERRORS
 
 public:
     KIGIT_COMMON( git_repository* aRepo );
+    KIGIT_COMMON( const KIGIT_COMMON& aOther );
     ~KIGIT_COMMON();
 
     git_repository* GetRepo() const;
@@ -48,8 +50,6 @@ public:
     wxString GetCurrentBranchName() const;
 
     std::vector<wxString> GetBranchNames() const;
-
-    virtual void UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage ) {};
 
     /**
      * Return a vector of project files in the repository.  Sorted by the depth of
@@ -142,13 +142,18 @@ protected:
 
     unsigned m_testedTypes;
 
+    std::mutex m_gitActionMutex;
+
+    // Make git handlers friends so they can access the mutex
+    friend class GIT_PUSH_HANDLER;
+    friend class GIT_PULL_HANDLER;
+
 private:
     void updatePublicKeys();
     void updateConnectionType();
 
     std::vector<wxString> m_publicKeys;
     int m_nextPublicKey;
-
 };
 
 

@@ -22,14 +22,16 @@
  */
 
 #include "kigit_pcb_merge.h"
+#include <git/kicad_git_blob_reader.h>
+#include <git/kicad_git_memory.h>
 
+#include <board.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.h>
 #include <richio.h>
+#include <trace_helpers.h>
 
-#include <board.h>
-
-#include <git/kicad_git_blob_reader.h>
+#include <wx/log.h>
 
 void KIGIT_PCB_MERGE::findSetDifferences( const BOARD_ITEM_SET& aAncestorSet, const BOARD_ITEM_SET& aOtherSet,
                                           std::vector<BOARD_ITEM*>& aAdded, std::vector<BOARD_ITEM*>& aRemoved,
@@ -93,21 +95,27 @@ int KIGIT_PCB_MERGE::Merge()
 
     if( git_blob_lookup( &ancestor_blob, repo, &ancestor->id ) != 0 )
     {
+        wxLogTrace( traceGit, "Could not find ancestor blob: %s", git_error_last()->message );
         return GIT_ENOTFOUND;
     }
+
+    KIGIT::GitBlobPtr ancestor_blob_ptr( ancestor_blob );
 
     if( git_blob_lookup( &ours_blob, repo, &ours->id ) != 0 )
     {
-        git_blob_free( ancestor_blob );
+        wxLogTrace( traceGit, "Could not find ours blob: %s", git_error_last()->message );
         return GIT_ENOTFOUND;
     }
 
+    KIGIT::GitBlobPtr ours_blob_ptr( ours_blob );
+
     if( git_blob_lookup( &theirs_blob, repo, &theirs->id ) != 0 )
     {
-        git_blob_free( ancestor_blob );
-        git_blob_free( ours_blob );
+        wxLogTrace( traceGit, "Could not find theirs blob: %s", git_error_last()->message );
         return GIT_ENOTFOUND;
     }
+
+    KIGIT::GitBlobPtr theirs_blob_ptr( theirs_blob );
 
     // Get the raw data from the blobs
     BLOB_READER ancestor_reader( ancestor_blob );
@@ -127,17 +135,16 @@ int KIGIT_PCB_MERGE::Merge()
         ours_board.reset( static_cast<BOARD*>( ours_parser.Parse() ) );
         theirs_board.reset( static_cast<BOARD*>( theirs_parser.Parse() ) );
     }
-    catch(const IO_ERROR&)
+    catch(const IO_ERROR& e)
     {
-        git_blob_free( ancestor_blob );
-        git_blob_free( ours_blob );
-        git_blob_free( theirs_blob );
+        wxLogTrace( traceGit, "Could not parse board: %s", e.What() );
         return GIT_EUSER;
     }
-
-    git_blob_free( ancestor_blob );
-    git_blob_free( ours_blob );
-    git_blob_free( theirs_blob );
+    catch( ... )
+    {
+        wxLogTrace( traceGit, "Could not parse board: unknown error" );
+        return GIT_EUSER;
+    }
 
     // Parse the differences between the ancestor and ours
     KIGIT_PCB_MERGE_DIFFERENCES ancestor_ours_differences = compareBoards( ancestor_board.get(), ours_board.get() );

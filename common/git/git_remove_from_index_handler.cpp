@@ -24,6 +24,7 @@
 #include <wx/string.h>
 #include <wx/log.h>
 
+#include <git/kicad_git_memory.h>
 #include "git_remove_from_index_handler.h"
 
 GIT_REMOVE_FROM_INDEX_HANDLER::GIT_REMOVE_FROM_INDEX_HANDLER( git_repository* aRepository )
@@ -51,14 +52,13 @@ bool GIT_REMOVE_FROM_INDEX_HANDLER::RemoveFromIndex( const wxString& aFilePath )
         return false;
     }
 
+    KIGIT::GitIndexPtr indexPtr( index );
+
     if( git_index_find( &at_pos, index, aFilePath.ToUTF8().data() ) != 0 )
     {
-        git_index_free( index );
         wxLogError( "Failed to find index entry for %s", aFilePath );
         return false;
     }
-
-    git_index_free( index );
 
     m_filesToRemove.push_back( aFilePath );
     return true;
@@ -78,6 +78,8 @@ void GIT_REMOVE_FROM_INDEX_HANDLER::PerformRemoveFromIndex()
             return;
         }
 
+        KIGIT::GitIndexPtr indexPtr( index );
+
         if( git_index_remove_bypath( index, file.ToUTF8().data() ) != 0 )
         {
             wxLogError( "Failed to remove index entry for %s", file );
@@ -95,7 +97,5 @@ void GIT_REMOVE_FROM_INDEX_HANDLER::PerformRemoveFromIndex()
             wxLogError( "Failed to write index tree" );
             return;
         }
-
-        git_index_free( index );
     }
 }

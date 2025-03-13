@@ -25,6 +25,7 @@
 #include <confirm.h>
 
 #include <git2.h>
+#include <git/kicad_git_memory.h>
 #include <gestfich.h>
 
 #include <cerrno>
@@ -326,13 +327,14 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
     git_remote_create_with_fetchspec( &remote, m_repository, "origin", txtURL.ToStdString().c_str(),
                                       "+refs/heads/*:refs/remotes/origin/*" );
 
+    KIGIT::GitRemotePtr remotePtr( remote );
+
     if( git_remote_connect( remote, GIT_DIRECTION_FETCH, &callbacks, nullptr, nullptr ) != GIT_OK )
         SetTestResult( true, git_error_last()->message );
     else
         SetTestResult( false, wxEmptyString );
 
     git_remote_disconnect( remote );
-    git_remote_free( remote );
 
     auto dlg = wxMessageDialog( this, wxEmptyString, _( "Test Connection" ),
                                 wxOK | wxICON_INFORMATION );

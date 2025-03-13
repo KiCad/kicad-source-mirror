@@ -24,10 +24,12 @@
 #include <kiplatform/secrets.h>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
+#include <trace_helpers.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/wx_grid.h>
 
 #include <git2.h>
+#include <git/kicad_git_memory.h>
 #include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/checkbox.h>
@@ -67,18 +69,27 @@ static std::pair<wxString, wxString> getDefaultAuthorAndEmail()
 
     if( git_config_open_default( &config ) != 0 )
     {
-        printf( "Failed to open default Git config: %s\n", giterr_last()->message );
+        wxLogTrace( traceGit, "Failed to open default Git config: %s", giterr_last()->message );
         return std::make_pair( name, email );
     }
 
+    KIGIT::GitConfigPtr configPtr( config );
+
     if( git_config_get_entry( &name_c, config, "user.name" ) != 0 )
     {
-        printf( "Failed to get user.name from Git config: %s\n", giterr_last()->message );
+        wxLogTrace( traceGit, "Failed to get user.name from Git config: %s", giterr_last()->message );
+        return std::make_pair( name, email );
     }
+
+    KIGIT::GitConfigEntryPtr namePtr( name_c );
+
     if( git_config_get_entry( &email_c, config, "user.email" ) != 0 )
     {
-        printf( "Failed to get user.email from Git config: %s\n", giterr_last()->message );
+        wxLogTrace( traceGit, "Failed to get user.email from Git config: %s", giterr_last()->message );
+        return std::make_pair( name, email );
     }
+
+    KIGIT::GitConfigEntryPtr emailPtr( email_c );
 
     if( name_c )
         name = name_c->value;
@@ -86,12 +97,9 @@ static std::pair<wxString, wxString> getDefaultAuthorAndEmail()
     if( email_c )
         email = email_c->value;
 
-    git_config_entry_free( name_c );
-    git_config_entry_free( email_c );
-    git_config_free( config );
-
     return std::make_pair( name, email );
 }
+
 
 bool PANEL_GIT_REPOS::TransferDataFromWindow()
 {
@@ -184,36 +192,32 @@ static bool testRepositoryConnection( COMMON_SETTINGS::GIT_REPOSITORY& repositor
 
     // Initialize the Git repository
     git_repository* repo = nullptr;
-    int result = git_repository_init( &repo, tempDirPath.mb_str( wxConvUTF8 ), 0 );
+    const char*     path = tempDirPath.mb_str( wxConvUTF8 );
 
-    if (result != 0)
+    if( git_repository_init( &repo, path, 0 ) != 0 )
     {
-        git_repository_free(repo);
         git_libgit2_shutdown();
         wxRmdir(tempDirPath);
         return false;
     }
 
-    git_remote* remote = nullptr;
-    result = git_remote_create_anonymous( &remote, repo, tempDirPath.mb_str( wxConvUTF8 ) );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+    git_remote*             remote = nullptr;
 
-    if (result != 0)
+    if( git_remote_create_anonymous( &remote, repo, path ) != 0 )
     {
-        git_remote_free(remote);
-        git_repository_free(repo);
         git_libgit2_shutdown();
         wxRmdir(tempDirPath);
         return false;
     }
+
+    KIGIT::GitRemotePtr remotePtr( remote );
 
     // We don't really care about the result of this call, the authentication callback
     // will set the return values we need
-    git_remote_connect(remote, GIT_DIRECTION_FETCH, &callbacks, nullptr, nullptr);
+    git_remote_connect( remote, GIT_DIRECTION_FETCH, &callbacks, nullptr, nullptr );
 
-    git_remote_disconnect(remote);
-    git_remote_free(remote);
-    git_repository_free(repo);
-
+    git_remote_disconnect( remote );
     git_libgit2_shutdown();
 
     // Clean up the temporary directory

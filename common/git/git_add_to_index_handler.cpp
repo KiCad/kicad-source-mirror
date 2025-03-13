@@ -22,6 +22,7 @@
  */
 
 #include "git_add_to_index_handler.h"
+#include <git/kicad_git_memory.h>
 
 #include <iterator>
 
@@ -53,14 +54,13 @@ bool GIT_ADD_TO_INDEX_HANDLER::AddToIndex( const wxString& aFilePath )
         return false;
     }
 
+    KIGIT::GitIndexPtr indexPtr( index );
+
     if( git_index_find( &at_pos, index, aFilePath.ToUTF8().data() ) == GIT_OK )
     {
-        git_index_free( index );
         wxLogError( "%s already in index", aFilePath );
         return false;
     }
-
-    git_index_free( index );
 
     // Add file to index if not already there
     m_filesToAdd.push_back( aFilePath );
@@ -82,6 +82,8 @@ bool GIT_ADD_TO_INDEX_HANDLER::PerformAddToIndex()
         return false;
     }
 
+    KIGIT::GitIndexPtr indexPtr( index );
+
     for( auto& file : m_filesToAdd )
     {
         if( git_index_add_bypath( index, file.ToUTF8().data() ) != 0 )
@@ -99,11 +101,8 @@ bool GIT_ADD_TO_INDEX_HANDLER::PerformAddToIndex()
         m_filesFailedToAdd.clear();
         std::copy( m_filesToAdd.begin(), m_filesToAdd.end(),
                    std::back_inserter( m_filesFailedToAdd ) );
-        git_index_free( index );
         return false;
     }
-
-    git_index_free( index );
 
     return true;
 }

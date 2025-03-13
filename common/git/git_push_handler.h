@@ -21,37 +21,37 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef GITPUSHHANDLER_HPP
-#define GITPUSHHANDLER_HPP
+#ifndef _GIT_PUSH_HANDLER_H_
+#define _GIT_PUSH_HANDLER_H_
 
-#include <git2.h>
-#include <functional>
-#include <vector>
-#include <string>
-
-#include "kicad_git_common.h"
 #include <git/git_progress.h>
+#include <git/git_repo_mixin.h>
+#include <git/kicad_git_errors.h>
+#include <wx/string.h>
 
-// Enum for result codes
+class KIGIT_COMMON;
+
 enum class PushResult
 {
     Success,
-    Error,
-    UpToDate
+    Error
 };
 
-class GIT_PUSH_HANDLER : public KIGIT_COMMON, public GIT_PROGRESS
+class GIT_PUSH_HANDLER : public KIGIT_ERRORS, public GIT_PROGRESS, public KIGIT_REPO_MIXIN
 {
 public:
-    GIT_PUSH_HANDLER( KIGIT_COMMON* aRepo );
+    GIT_PUSH_HANDLER( KIGIT_COMMON* aCommon );
     ~GIT_PUSH_HANDLER();
 
     PushResult PerformPush();
 
-    void UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage ) override;
+    // Virtual method for progress reporting
+    virtual void ReportProgress(int aCurrent, int aTotal, const wxString& aMessage) {}
 
 private:
 
+    // Implementation of GIT_PROGRESS's virtual method
+    void UpdateProgress(int aCurrent, int aTotal, const wxString& aMessage) override;
 };
 
-#endif // GITPUSHHANDLER_HPP
+#endif // _GIT_PUSH_HANDLER_H_

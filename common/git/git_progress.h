@@ -62,6 +62,8 @@ public:
         }
     }
 
+    virtual void UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage ) {};
+
 
 protected:
     int m_previousProgress;
