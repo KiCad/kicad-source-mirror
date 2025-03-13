@@ -247,7 +247,10 @@ bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool 
         if( m_reporter != nullptr )
         {
             msg = wxT( "|--------------------------------\n" );
+
             msg += wxString::Format( wxT( "| Running job %d, %s" ), jobNum, job.GetDescription() );
+            jobNum++;
+
             msg += wxT( "\n" );
             msg += wxT( "|--------------------------------\n" );
 
