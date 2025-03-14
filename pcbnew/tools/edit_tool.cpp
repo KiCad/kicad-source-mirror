@@ -1943,6 +1943,12 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         }
     }
 
+    if( m_dragging )
+    {
+        m_toolMgr->PostAction( PCB_ACTIONS::updateLocalRatsnest, VECTOR2I() );
+        m_toolMgr->PostAction( PCB_ACTIONS::refreshPreview );
+    }
+
     return 0;
 }
 
@@ -2065,7 +2071,10 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
         if( m_dragging )
+        {
             m_toolMgr->PostAction( PCB_ACTIONS::updateLocalRatsnest, VECTOR2I() );
+            m_toolMgr->PostAction( PCB_ACTIONS::refreshPreview );
+        }
     }
 
     // Restore the old reference so any mouse dragging that occurs doesn't make the selection jump
@@ -2229,7 +2238,10 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
     if( m_dragging )
+    {
         m_toolMgr->PostAction( PCB_ACTIONS::updateLocalRatsnest, VECTOR2I() );
+        m_toolMgr->PostAction( PCB_ACTIONS::refreshPreview );
+    }
 
     return 0;
 }
@@ -2304,7 +2316,10 @@ int EDIT_TOOL::JustifyText( const TOOL_EVENT& aEvent )
     m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
     if( m_dragging )
+    {
         m_toolMgr->PostAction( PCB_ACTIONS::updateLocalRatsnest, VECTOR2I() );
+        m_toolMgr->PostAction( PCB_ACTIONS::refreshPreview );
+    }
 
     return 0;
 }
@@ -2385,7 +2400,10 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
     if( m_dragging )
+    {
         m_toolMgr->PostAction( PCB_ACTIONS::updateLocalRatsnest, VECTOR2I() );
+        m_toolMgr->PostAction( PCB_ACTIONS::refreshPreview );
+    }
 
     // Restore the old reference so any mouse dragging that occurs doesn't make the selection jump
     // to this now invalid reference
@@ -2810,7 +2828,10 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
         if( m_dragging )
+        {
             m_toolMgr->PostAction( PCB_ACTIONS::updateLocalRatsnest, VECTOR2I() );
+            m_toolMgr->PostAction( PCB_ACTIONS::refreshPreview );
+        }
     }
 
     return 0;
