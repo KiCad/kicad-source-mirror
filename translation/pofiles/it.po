@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-13 15:25+0300\n"
-"PO-Revision-Date: 2025-03-14 10:01+0000\n"
+"PO-Revision-Date: 2025-03-15 03:29+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -22323,9 +22323,8 @@ msgid "Power Symbol"
 msgstr "Simbolo di potenza"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1763
-#, fuzzy
 msgid "Power Symbol (Local)"
-msgstr "Simbolo di potenza"
+msgstr "Simbolo di potenza (locale)"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1770
 msgid "Datasheet"
@@ -24687,14 +24686,16 @@ msgid "Tune %s"
 msgstr "Regola %s"
 
 #: eeschema/widgets/tuner_slider.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s has simulation model of type '%s %s'.\n"
 "\n"
 "Only passvie R, L, C models and voltage and current sources may be tuned."
 msgstr ""
-"%s ha un modello di simulazione di tipo '%s %s'; solo i passivi RLC possono "
-"essere regolati"
+"%s ha un modello di simulazione di tipo '%s %s'.\n"
+"\n"
+"Solo i modelli passivi R, L, C e le sorgenti di tensione e corrente possono "
+"essere regolati."
 
 #: eeschema/widgets/tuner_slider_base.cpp:43
 msgid "Limit to E24 series values."
@@ -26716,9 +26717,8 @@ msgstr ""
 "iscrizioni, 1 = dimensione pagina corrente, 2 = solo area scheda)"
 
 #: kicad/cli/command_pcb_export_svg.cpp:93
-#, fuzzy
 msgid "Fit the page to the board"
-msgstr "Copia immagine 3D corrente negli appunti"
+msgstr "Adatta la pagina alla scheda"
 
 #: kicad/cli/command_pcb_export_svg.cpp:97
 #: kicad/cli/command_sch_export_plot.cpp:77
@@ -37653,9 +37653,8 @@ msgstr ""
 "Scegliere 4 nel dubbio."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:386
-#, fuzzy
 msgid "Fit page to board"
-msgstr "Impossibile salvare immagine sugli appunti"
+msgstr "Adatta pagina a scheda"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:412
 msgid "Generate property popups for front footprints"
@@ -39905,22 +39904,18 @@ msgstr ""
 "saldatura genitore per creare un errore DRC"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:105
-#, fuzzy
 msgid "Allow bridged solder mask apertures between pads within footprints"
 msgstr ""
 "Consenti aperture maschera di saldatura che fanno ponte tra piazzole "
 "all'interno delle impronte"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:106
-#, fuzzy
 msgid ""
 "Disable DRC error checking for solder mask aperture bridging between pads in "
 "the same footprint."
 msgstr ""
-"Per i test DRC:\n"
-"Disabilita il tipo errore DRC di ponte di apertura della maschera di "
-"saldatura tra piazzole della stessa impronta (utile per le connessioni tra "
-"collegamenti)"
+"Disattiva il controllo errori DRC per il collegamento delle aperture della "
+"maschera di saldatura tra piazzole nella stessa impronta."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:113
 #, fuzzy
