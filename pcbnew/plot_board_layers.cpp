@@ -1011,24 +1011,19 @@ void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PCB_LAYER_ID aLa
             }
         }
 
-        // Plot (untented) vias
+        // Plot untented vias and tracks
         for( const PCB_TRACK* track : aBoard->Tracks() )
         {
-            if( track->Type() != PCB_VIA_T )
+            // Note: IsOnLayer() checks relevant mask layers of untented vias and tracks
+            if( !track->IsOnLayer( aLayer ) )
                 continue;
 
-            const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
-
-            // Note: IsOnLayer() checks relevant mask layers of untented vias
-            if( !via->IsOnLayer( aLayer ) )
-                continue;
-
-            int clearance = via->GetSolderMaskExpansion();
+            int clearance = track->GetSolderMaskExpansion();
 
             if( inflate != 0 )
-                via->TransformShapeToPolygon( exactPolys, aLayer, clearance, ERROR );
+                track->TransformShapeToPolygon( exactPolys, aLayer, clearance, ERROR );
 
-            via->TransformShapeToPolygon( *aResult, aLayer, clearance + inflate, ERROR );
+            track->TransformShapeToPolygon( *aResult, aLayer, clearance + inflate, ERROR );
         }
 
         for( const BOARD_ITEM* item : aBoard->Drawings() )
