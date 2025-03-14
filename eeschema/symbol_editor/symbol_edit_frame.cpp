@@ -238,6 +238,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Can't put this in LoadSettings, because it has to be called before setupTools :/
     SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
     selTool->GetFilter() = GetSettings()->m_SelectionFilter;
+    m_selectionFilterPanel->SetCheckboxesFromFilter( selTool->GetFilter() );
 
     if( m_settings->m_LibWidth > 0 )
         SetAuiPaneSize( m_auimgr, m_auimgr.GetPane( "LibraryTree" ), m_settings->m_LibWidth, -1 );
