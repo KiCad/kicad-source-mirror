@@ -14,13 +14,14 @@
 # Ricky From Hong Kong <lamricky11@hotmail.com>, 2024.
 # John Beard <john.j.beard@gmail.com>, 2025.
 # reimu105 <peter112548@gmail.com>, 2025.
+# Shuwn Hsu <shuwn@sray.dev>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-13 15:25+0300\n"
-"PO-Revision-Date: 2025-03-10 07:38+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"PO-Revision-Date: 2025-03-14 10:01+0000\n"
+"Last-Translator: Shuwn Hsu <shuwn@sray.dev>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -28,7 +29,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -3847,8 +3848,9 @@ msgid "Remove Git Repository"
 msgstr "移除 Git 倉庫"
 
 #: common/dialogs/panel_color_settings.cpp:52
+#, fuzzy
 msgid "Reveal Themes in Finder"
-msgstr "在搜索器中顯示主題"
+msgstr "在 Finder 中顯示主題"
 
 #: common/dialogs/panel_color_settings.cpp:136
 msgid "New theme name:"
@@ -5309,7 +5311,7 @@ msgstr "網路類名已被使用。"
 #: common/dialogs/panel_setup_netclasses.cpp:603
 #, c-format
 msgid "Clearance was too large.  It has been clipped to %s."
-msgstr ""
+msgstr "間隙設置過大，已將其調整為 %s。"
 
 #: common/dialogs/panel_setup_netclasses.cpp:669
 msgid "Minimum copper clearance"
@@ -8548,7 +8550,7 @@ msgstr "腳本控制檯"
 
 #: common/tool/action_toolbar.cpp:1043
 msgid "Region to hold the IPC/Scripting action buttons"
-msgstr ""
+msgstr "用於放置 IPC/腳本操作按鈕的區域"
 
 #: common/tool/action_toolbar.cpp:1045
 #, fuzzy
@@ -9939,7 +9941,7 @@ msgstr "重置為預設值"
 
 #: common/widgets/paged_dialog.cpp:92
 msgid "Reveal Preferences in Finder"
-msgstr "在尋找器中顯示偏好設置"
+msgstr "在 Finder 中顯示偏好設置"
 
 #: common/widgets/paged_dialog.cpp:94
 msgid "Open Preferences Directory"
@@ -11007,7 +11009,7 @@ msgstr "'%s' 庫為唯讀。"
 msgid ""
 "Delete design block library '%s' from disk? This will delete all design "
 "blocks within the library."
-msgstr ""
+msgstr "確定要從磁碟中刪除設計區塊庫「%s」嗎？這會刪除庫中所有的設計區塊。"
 
 #: eeschema/design_block_utils.cpp:497
 #, c-format
@@ -12141,7 +12143,7 @@ msgstr "此插件已存在。"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:824
 msgid "Maximum number of plugins already added to dialog."
-msgstr ""
+msgstr "對話框中已經添加了最大數量的插件。"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:862
 msgid "You must provide a netlist generator title"
@@ -13208,7 +13210,7 @@ msgstr "定義為電源符號"
 msgid ""
 "Local power symbols create labels that are limited to the sheet in which "
 "they are used"
-msgstr ""
+msgstr "本地電源符號創建的標籤僅適用於它們所在的工作表"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:221
 msgid "Pin Text Options"
@@ -13970,7 +13972,7 @@ msgstr "區分大小寫"
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:86
 #: pcbnew/dialogs/dialog_find_base.cpp:46
 msgid "Whole &words only"
-msgstr ""
+msgstr "僅限完整單詞"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:90
 #, fuzzy
@@ -14885,6 +14887,10 @@ msgid ""
 "%s\n"
 "Using generic SPICE model."
 msgstr ""
+"解析失敗：\n"
+"\n"
+"%s\n"
+"將使用通用 SPICE 模型。"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
@@ -27670,11 +27676,11 @@ msgstr "建立一個新目錄"
 
 #: kicad/project_tree_pane.cpp:912 kicad/project_tree_pane.cpp:922
 msgid "Reveal in Finder"
-msgstr "在\"訪達\"中顯示"
+msgstr "在 Finder 中顯示"
 
 #: kicad/project_tree_pane.cpp:913
 msgid "Reveals the directory in a Finder window"
-msgstr "在\"訪達\"視窗中顯示目錄"
+msgstr "在 Finder 視窗中顯示目錄"
 
 #: kicad/project_tree_pane.cpp:915
 msgid "Open Directory in File Explorer"
@@ -27686,7 +27692,7 @@ msgstr "在預設系統檔案管理員中打開目錄"
 
 #: kicad/project_tree_pane.cpp:923
 msgid "Reveals the directories in a Finder window"
-msgstr "在\"訪達\"視窗中顯示目錄"
+msgstr "在 Finder 視窗中顯示目錄"
 
 #: kicad/project_tree_pane.cpp:925
 msgid "Open Directories in File Explorer"
@@ -28047,7 +28053,7 @@ msgstr "瀏覽專案檔案"
 
 #: kicad/tools/kicad_manager_actions.cpp:235
 msgid "Reveal project folder in Finder"
-msgstr "在\"訪達\"中顯示專案資料夾"
+msgstr "在 Finder 中顯示專案資料夾"
 
 #: kicad/tools/kicad_manager_actions.cpp:237
 msgid "Open project directory in file explorer"
@@ -48863,11 +48869,11 @@ msgstr "編輯建立新焊盤時使用的焊盤屬性"
 
 #: pcbnew/tools/pcb_actions.cpp:1034
 msgid "Reveal Plugin Folder in Finder"
-msgstr "在\"訪達\"中顯示插件資料夾"
+msgstr "在 Finder 中顯示插件資料夾"
 
 #: pcbnew/tools/pcb_actions.cpp:1035
 msgid "Reveals the plugins folder in a Finder window"
-msgstr "在\"訪達\"視窗中顯示插件資料夾"
+msgstr "在 Finder 視窗中顯示插件資料夾"
 
 #: pcbnew/tools/pcb_actions.cpp:1047
 msgid "Board Setup..."
