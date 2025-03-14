@@ -2166,6 +2166,9 @@ int PCB_SELECTION_TOOL::syncSelectionWithNets( const TOOL_EVENT& aEvent )
 
 void PCB_SELECTION_TOOL::doSyncSelection( const std::vector<BOARD_ITEM*>& aItems, bool aWithNets )
 {
+    if( m_selection.Front() && m_selection.Front()->IsMoving() )
+        return;
+
     ClearSelection( true /*quiet mode*/ );
 
     // Perform individual selection of each item before processing the event.
