@@ -3491,6 +3491,44 @@ void FOOTPRINT::CheckNetTiePadGroups( const std::function<void( const wxString& 
 }
 
 
+void FOOTPRINT::CheckClippedSilk( const std::function<void( BOARD_ITEM* aItemA,
+                                                            BOARD_ITEM* aItemB,
+                                                            const VECTOR2I& aPt )>& aErrorHandler )
+{
+    auto checkColliding =
+            [&]( BOARD_ITEM* item, BOARD_ITEM* other )
+            {
+                for( PCB_LAYER_ID silk : { F_SilkS, B_SilkS } )
+                {
+                    PCB_LAYER_ID mask = silk == F_SilkS ? F_Mask : B_Mask;
+
+                    if( !item->IsOnLayer( silk ) || !other->IsOnLayer( mask ) )
+                        continue;
+
+                    std::shared_ptr<SHAPE> itemShape = item->GetEffectiveShape( silk );
+                    std::shared_ptr<SHAPE> otherShape = other->GetEffectiveShape( mask );
+                    int                    actual;
+                    VECTOR2I               pos;
+
+                    if( itemShape->Collide( otherShape.get(), 0, &actual, &pos ) )
+                        aErrorHandler( item, other, pos );
+                }
+            };
+
+    for( BOARD_ITEM* item : m_drawings )
+    {
+        for( BOARD_ITEM* other : m_drawings )
+        {
+            if( other != item )
+                checkColliding( item, other );
+        }
+
+        for( PAD* pad : m_pads )
+            checkColliding( item, pad );
+    }
+}
+
+
 void FOOTPRINT::swapData( BOARD_ITEM* aImage )
 {
     wxASSERT( aImage->Type() == PCB_FOOTPRINT_T );
