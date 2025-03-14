@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-13 15:26+0300\n"
-"PO-Revision-Date: 2025-03-13 12:23+0000\n"
+"PO-Revision-Date: 2025-03-15 03:29+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -124,7 +124,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.3\n"
+"X-Generator: Weblate 5.11-dev\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -898,15 +898,15 @@ msgid "Use board stackup colors"
 msgstr "Usa colori stackup scheda"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:143
-#, fuzzy
 msgid "Use PCB editor copper colors"
-msgstr "Usa colori rame dell'editor di schede"
+msgstr "Usa colori rame dell'editor schede"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:145
-#, fuzzy
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
-msgstr "Usa i colori rame dell'editor di schede (solo openGL)"
+msgstr ""
+"Usa i colori strati dell'editor schede per gli strati rame (solo rendering "
+"in tempo reale)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:163
 #, c-format
@@ -26437,9 +26437,8 @@ msgstr ""
 "iscrizioni, 1 = dimensione pagina corrente, 2 = solo area scheda)"
 
 #: kicad/cli/command_pcb_export_svg.cpp:92
-#, fuzzy
 msgid "Fit the page to the board"
-msgstr "Impossibile salvare immagine sugli appunti"
+msgstr "Adatta la pagina alla scheda"
 
 #: kicad/cli/command_pcb_export_svg.cpp:96
 #: kicad/cli/command_sch_export_plot.cpp:77
@@ -29330,7 +29329,7 @@ msgstr "kV"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:109
 msgid "Compute the clearance and creepage distances"
-msgstr "Calcola le distanze clearance e creepage"
+msgstr "Calcola le distanze di clearance e creepage"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:119
 msgid "RMS Voltage:"
@@ -30411,7 +30410,7 @@ msgid ""
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
 "Attenzione:\n"
-"Diametro piazzola via >= Diametro foro clearance.\n"
+"Diametro piazzola via >= Diametro foro di clearance.\n"
 "Alcuni parametri non possono essere calcolati per un via dentro una zona "
 "rame."
 
@@ -34878,7 +34877,7 @@ msgstr "Modifica impronta di libreria..."
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:266
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:235
 msgid "Clearances"
-msgstr "Distanze"
+msgstr "Clearance"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:268
 msgid "Leave values blank to use Board Setup values."
@@ -34889,7 +34888,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:247
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:968
 msgid "Pad clearance:"
-msgstr "Distanza piazzola:"
+msgstr "Clearance piazzola:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:280
 msgid ""
@@ -34897,8 +34896,8 @@ msgid ""
 "If 0, the Netclass values are used\n"
 "This value can be superseded by a pad local value."
 msgstr ""
-"Questo è il valore locale della distanza collegamenti per tutte le piazzole "
-"di questa impronta.\n"
+"Questo è il valore locale della clearance per tutte le piazzole di questa "
+"impronta.\n"
 "Se a 0, verranno usati i valori della netclass.\n"
 "Questo valore può essere superato dal valore locale di una piazzola."
 
@@ -34916,7 +34915,7 @@ msgid ""
 "This value can be superseded by a pad local value.\n"
 "If 0, the global value is used."
 msgstr ""
-"Questo valore è la distanza locale tra piazzole e maschera di saldatura per "
+"Questo valore è la clearance locale tra piazzole e maschera di saldatura per "
 "questa impronta.\n"
 "Può essere superato da un valore locale nella piazzola.<\n"
 "Se a 0, verrà usato il valore globale."
@@ -34933,7 +34932,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:994
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:147
 msgid "Solder paste absolute clearance:"
-msgstr "Distanza assoluta pasta salda:"
+msgstr "Clearance assoluta pasta salda:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:309
 msgid ""
@@ -34944,11 +34943,11 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"Questo è il valore locale di distanza tra le piazzole e la pasta salda per "
+"Questo è il valore locale di clearance tra le piazzole e la pasta salda per "
 "questa impronta.\n"
 "Può essere superato da un valore locale nella piazzola.\n"
-"Il valore di distanza finale sarà la somma di questo valore e il rapporto "
-"del valore di distanza.\n"
+"Il valore di clearance finale sarà la somma di questo valore e il rapporto "
+"del valore di clearance.\n"
 "Un valore negativo indica una dimensione minore dalla maschera rispetto alla "
 "piazzola."
 
@@ -34957,7 +34956,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1007
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:162
 msgid "Solder paste relative clearance:"
-msgstr "Distanza relativa pasta salda:"
+msgstr "Clearance relativa pasta salda:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:322
 #, c-format
@@ -34971,16 +34970,16 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"Questo è il rapporto distanza locale applicato come percentuale tra la "
+"Questo è il rapporto clearance locale applicato come percentuale tra la "
 "larghezza e l'altezza piazzola per questa impronta.\n"
-"Il valore 10 indica che la distanza orizzontale sarà pari al 10% della "
-"larghezza della piazzola, e la distanza verticale al 10% dell'altezza della "
+"Il valore 10 indica che la clearance orizzontale sarà pari al 10% della "
+"larghezza della piazzola, e la clearance verticale al 10% dell'altezza della "
 "piazzola.\n"
 "Questo valore può essere superato da un valore locale della piazzola.\n"
-"La distanza finale sarà data dalla somma di questo valore e il valore di "
-"distanza assoluto.\n"
-"Un valore negativo indica una dimensione di apertura dalla maschera "
-"(stencil) minore rispetto alla dimensione della piazzola."
+"La clearance finale sarà data dalla somma di questo valore e il valore di "
+"clearance assoluto.\n"
+"Un valore negativo indica una dimensione di apertura dalla maschera (stencil)"
+" minore rispetto alla dimensione della piazzola."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:345
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:314
@@ -34999,8 +34998,8 @@ msgid ""
 "Note: solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
 msgstr ""
-"Nota: le distanze pasta salda (assoluta e relativa) vengono sommate per "
-"determinare la distanza finale."
+"Nota: le clearance pasta salda (assoluta e relativa) vengono sommate per "
+"determinare la clearance finale."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:357
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:326
@@ -35027,7 +35026,7 @@ msgstr "Raccordi termici"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:376
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:399
 msgid "Clearance Overrides and Settings"
-msgstr "Impostazioni e scavalcamenti distanze"
+msgstr "Impostazioni e scavalcamenti clearance"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:389
 msgid ""
@@ -35106,10 +35105,10 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Valore locale di distanza per tutte le piazzole di questa impronta.\n"
+"Valore locale di clearance per tutte le piazzole di questa impronta.\n"
 "Se a 0, verranno usati i valori della netclass.\n"
-"Può essere scavalcato, piazzola per piazzola, dal valore locale\n"
-"di Distanza e Impostazioni di ogni piazzola."
+"Può essere scavalcato, piazzola per piazzola, dal valore locale della\n"
+"scheda Impostazioni e Clearance di ogni piazzola."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:262
 msgid ""
@@ -35119,11 +35118,11 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Valore di distanza locale tra piazzole e maschera di saldatura per\n"
+"Valore di clearance locale tra piazzole e maschera di saldatura per\n"
 "questa impronta.\n"
 "Se a 0, verrà usato il valore globale.\n"
-"Può essere scavalcato, piazzola per piazzola, dal valore locale\n"
-"di Distanza e Impostazioni nelle Proprietà di ogni piazzola."
+"Può essere scavalcato, piazzola per piazzola, dal valore locale della\n"
+"scheda Impostazioni e Clearance nelle Proprietà di ogni piazzola."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:278
 msgid ""
@@ -35135,14 +35134,14 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Questa è la distanza locale tra le piazzole e la pastasalda per\n"
+"Questa è la clearance locale tra le piazzole e la pastasalda per\n"
 "questa impronta.\n"
-"Il valore di distanza finale sarà la somma di questo valore e il rapporto "
-"del valore di distanza.\n"
+"Il valore di clearance finale sarà la somma di questo valore e il rapporto "
+"del valore di clearance.\n"
 "Un valore negativo indica una dimensione minore della maschera rispetto alla "
 "piazzola.\n"
 "Può essere scavalcato, piazzola per piazzola, dal valore locale della\n"
-"scheda Distanza e Impostazioni nelle Proprietà di ogni piazzola."
+"scheda Impostazioni e Clearance nelle Proprietà di ogni piazzola."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:291
 #, c-format
@@ -35157,17 +35156,17 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local Clearance "
 "and Settings tab of Pad Properties."
 msgstr ""
-"Questo è il rapporto di distanza locale in percentuale della larghezza e "
+"Questo è il rapporto di clearance locale in percentuale della larghezza e "
 "altezza per questa impronta.\n"
-"Un valore di 10 indica che la distanza orizzontale sarà pari al 10% della "
-"larghezza della piazzola, e il valore di distanza verticale al "
-"10% dell'altezza della piazzola.\n"
-"La distanza finale sarà data dalla somma di questo valore e il valore di "
+"Un valore di 10 indica che la clearance orizzontale sarà pari al 10% della "
+"larghezza della piazzola, e il valore di clearance verticale al 10% "
+"dell'altezza della piazzola.\n"
+"La clearance finale sarà data dalla somma di questo valore e il valore di "
 "distanza assoluto.\n"
 "Un valore negativo indica un valore di apertura dalla maschera (stencil) "
 "minore rispetto alla dimensione della piazzola.\n"
-"Questo valore può essere scavalcato, piazzola per piazzola, dal valore di "
-"Distanza locale e Impostazioni nella scheda delle proprietà della piazzola."
+"Questo valore può essere scavalcato, piazzola per piazzola, nella scheda "
+"Impostazioni e Clearance locale delle proprietà della piazzola."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:342
 msgid "Net Ties"
@@ -36893,7 +36892,7 @@ msgstr "Angolo raggio:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:947
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1075
 msgid "Clearance Overrides"
-msgstr "Scavalcamento distanze"
+msgstr "Scavalcamento clearance"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:950
 msgid "Leave values blank to use parent footprint or netclass values."
@@ -36904,23 +36903,23 @@ msgstr ""
 msgid ""
 "Positive clearance means area bigger than the pad (usual for mask clearance)."
 msgstr ""
-"Distanza positiva significa area più grande della piazzola (usuale per "
-"distanza maschera)."
+"Clearance positiva significa area più grande della piazzola (usuale per la "
+"clearance maschera)."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:958
 msgid ""
 "Negative clearance means area smaller than the pad (usual for paste "
 "clearance)."
 msgstr ""
-"Distanza negativa significa area più piccola della piazzola (usuale per "
-"distanza pastasalda)."
+"Clearance negativa significa area più piccola della piazzola (usuale per la "
+"clearance pastasalda)."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:970
 msgid ""
 "This is the local net clearance for this pad.\n"
 "If 0, the footprint local value or the Netclass value is used."
 msgstr ""
-"Questo è il valore locale di distanza collegamenti per la piazzola.\n"
+"Questo è il valore locale di clearance collegamenti per la piazzola.\n"
 "Se a 0, verrà usato il valore locale dell'impronta o della netclass."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:983
@@ -36928,7 +36927,7 @@ msgid ""
 "This is the local clearance between this pad and the solder mask.\n"
 "If 0, the footprint local value or the global value is used."
 msgstr ""
-"Questo è il valore locale di distanza tra questa piazzola e la maschera di "
+"Questo è il valore locale di clearance tra questa piazzola e la maschera di "
 "saldatura.\n"
 "Se a 0, verrà usato il valore locale dell'impronta o il valore globale."
 
@@ -36940,10 +36939,10 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"Questa è la distanza locale tra questa piazzola e la pasta salda.\n"
+"Questa è la clearance locale tra questa piazzola e la pasta salda.\n"
 "Se a 0 verrà usato il valore locale dell'impronta o il valore globale.\n"
-"La distanza finale sarà la somma di questo valore e il rapporto del valore "
-"di distanza.\n"
+"La clearance finale sarà la somma di questo valore e il rapporto del valore "
+"di clearance.\n"
 "Un valore negativo indica una dimensione minore dalla maschera rispetto alla "
 "piazzola."
 
@@ -36956,13 +36955,13 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"Questo è il locale rapporto in percentuale di distanza tra questa piazzola e "
-"la pasta salda.\n"
-"Un valore di 10 indica che il valore di distanza sarà pari al 10% delle "
+"Questo è il locale rapporto in percentuale di clearance tra questa piazzola "
+"e la pasta salda.\n"
+"Un valore di 10 indica che il valore di clearance sarà pari al 10% delle "
 "dimensioni della piazzola.\n"
 "Se a 0 verrà usato il valore dell'impronta o il valore globale.\n"
-"La distanza finale sarà data dalla somma di questo valore e il valore di "
-"distanza.\n"
+"La clearance finale sarà data dalla somma di questo valore e il valore di "
+"clearance.\n"
 "Un valore negativo indica una dimensione minore dalla maschera rispetto alla "
 "piazzola."
 
@@ -37354,9 +37353,8 @@ msgstr ""
 "Scegliere 4 nel dubbio."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:386
-#, fuzzy
 msgid "Fit page to board"
-msgstr "Impossibile salvare immagine sugli appunti"
+msgstr "Adatta pagina a scheda"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:412
 msgid "Generate property popups for front footprints"
@@ -38090,7 +38088,7 @@ msgid ""
 "This is the local clearance between the shape and the solder mask opening.\n"
 "Leave blank to use the value defined in the Board Setup."
 msgstr ""
-"Questa è la distanza locale tra forma e l'apertura della maschera di "
+"Questa è la clearance locale tra forma e l'apertura della maschera di "
 "saldatura.\n"
 "Lasciare vuoto per usare il valore definito nell'impostazione scheda."
 
@@ -38277,7 +38275,7 @@ msgid ""
 "This is the local clearance between the track and the solder mask opening.\n"
 "Leave blank to use the value defined in the Board Setup."
 msgstr ""
-"Questa è la distanza locale tra la pista e l'apertura della maschera di "
+"Questa è la clearance locale tra la pista e l'apertura della maschera di "
 "saldatura.\n"
 "Lasciare vuoto per usare il valore definito nell'impostazione scheda."
 
@@ -38822,11 +38820,11 @@ msgstr "Mostra numeri piazzole"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:69
 msgid "Clearance Outlines"
-msgstr "Distanze contorni"
+msgstr "Clearance contorni"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:85
 msgid "Do not show clearances"
-msgstr "Non mostrare le distanze"
+msgstr "Non mostrare le clearance"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:85
 msgid "Show when routing"
@@ -38834,7 +38832,7 @@ msgstr "Mostra durante lo sbroglio"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:85
 msgid "Show when routing w/ via clearance at end"
-msgstr "Mostra nello sbroglio con la distanza via alla fine"
+msgstr "Mostra nello sbroglio con la clearance via alla fine"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:85
 msgid "Show when routing and editing"
@@ -38846,7 +38844,7 @@ msgstr "Mostra sempre"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:91
 msgid "Show pad clearance"
-msgstr "Mostra distanza piazzole"
+msgstr "Mostra clearance piazzole"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:110
 msgid "Show all fields when parent footprint is selected"
@@ -39014,7 +39012,7 @@ msgstr "Piazza elementi corrispondenti alla classe componenti:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:46
 msgid "Minimum clearance:"
-msgstr "Distanza minima:"
+msgstr "Clearance minima:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:51
 msgid ""
@@ -39022,7 +39020,7 @@ msgid ""
 "net.  If set, this is an absolute minimum which cannot be reduced by "
 "netclasses, custom rules, or other settings."
 msgstr ""
-"Distanza minima tra elementi rame che non appartengono alla stessa net.  Se "
+"Clearance minima tra elementi rame che non appartengono alla stessa net.  Se "
 "impostata, è un minimo assoluto che non può essere ridotto da netclass, "
 "regola personalizzata, o altre impostazioni."
 
@@ -39072,7 +39070,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:128
 msgid "Copper to hole clearance:"
-msgstr "Distanza foro rame:"
+msgstr "Clearance foro rame:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:133
 msgid ""
@@ -39080,13 +39078,13 @@ msgid ""
 "set, this is an absolute minimum and cannot be reduced by custom rules or "
 "other settings."
 msgstr ""
-"Distanza minima tra un foro e un elemento rame non associato.  Se impostata, "
-"è un minimo assoluto e non può essere ridotto da regole personalizzate o "
-"altre impostazioni."
+"Clearance minima tra un foro e un elemento rame non associato.  Se "
+"impostata, è un minimo assoluto e non può essere ridotto da regole "
+"personalizzate o altre impostazioni."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:144
 msgid "Copper to edge clearance:"
-msgstr "Distanza bordo rame:"
+msgstr "Clearance bordo rame:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:149
 msgid ""
@@ -39094,7 +39092,7 @@ msgid ""
 "this is an absolute minimum and cannot be reduced by custom rules or other "
 "settings."
 msgstr ""
-"Distanza minima tra il bordo scheda e qualunque elemento rame.  Se "
+"Clearance minima tra il bordo scheda e qualunque elemento rame.  Se "
 "impostata, è un valore minimo e non può essere ridotto da regole "
 "personalizzate o altre impostazioni."
 
@@ -39124,7 +39122,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:217
 msgid "Hole to hole clearance:"
-msgstr "Distanza da foro a foro:"
+msgstr "Clearance da foro a foro:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:222
 msgid ""
@@ -39132,7 +39130,7 @@ msgid ""
 "absolute minimum and cannot be reduced by custom rules or other settings. "
 "(Note: does not apply to milled holes.)"
 msgstr ""
-"La distanza minima tra due fori passanti.  Se impostata, è un minimo "
+"La clearance minima tra due fori passanti.  Se impostata, è un minimo "
 "assoluto e non può essere ridotto da regole personalizzate o altre "
 "impostazioni. (Nota: non si applica ai fori fresati.)"
 
@@ -39170,7 +39168,7 @@ msgstr "Serigrafia"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:315
 msgid "Minimum item clearance:"
-msgstr "Distanza minima elemento:"
+msgstr "Clearance minima elemento:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:320
 msgid ""
@@ -39178,7 +39176,7 @@ msgid ""
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
 msgstr ""
-"Distanza minima tra due elementi sullo stesso strato serigrafia.  Se "
+"Clearance minima tra due elementi sullo stesso strato serigrafia.  Se "
 "impostata può migliorare la leggibilità.  (Nota: non si applica a forme "
 "multiple all'interno di una singola impronta)"
 
@@ -39542,18 +39540,17 @@ msgstr "Impostazioni maschera di saldatura"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:62
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:67
-#, fuzzy
 msgid ""
 "Global clearance between pads and the solder mask.\n"
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Positive clearance means a solder mask opening bigger than the pad (typical "
 "for solder mask clearance)."
 msgstr ""
-"Distanza globale tra le piazzole e la pasta salda\n"
+"Clearance globale tra le piazzole e la pasta salda\n"
 "Questo valore può essere superato dal valore locale di una impronta o di una "
 "piazzola.\n"
-"Il valore di distanza finale sarà la somma di questo valore e il rapporto "
-"valore di distanza."
+"Clearance positiva significa apertura di maschera di saldatura più grande "
+"della piazzola (tipica per la clearance maschera di saldatura)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:75
 msgid "Solder mask minimum web width:"
@@ -39572,7 +39569,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:90
 msgid "Solder mask to copper clearance:"
-msgstr "Distanza maschera di saldatura dal rame:"
+msgstr "Clearance maschera di saldatura dal rame:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:92
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:97
@@ -39588,22 +39585,18 @@ msgstr ""
 "saldatura genitore per creare un errore DRC"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:105
-#, fuzzy
 msgid "Allow bridged solder mask apertures between pads within footprints"
 msgstr ""
 "Consenti aperture maschera di saldatura che fanno ponte tra piazzole "
 "all'interno delle impronte"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:106
-#, fuzzy
 msgid ""
 "Disable DRC error checking for solder mask aperture bridging between pads in "
 "the same footprint."
 msgstr ""
-"Per i test DRC:\n"
-"Disabilita il tipo errore DRC di ponte di apertura della maschera di "
-"saldatura tra piazzole della stessa impronta (utile per le connessioni tra "
-"collegamenti)"
+"Disattiva il controllo errori DRC per il collegamento delle aperture della "
+"maschera di saldatura tra piazzole nella stessa impronta."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:113
 #, fuzzy
@@ -39628,7 +39621,6 @@ msgstr "Distanza relativa pasta salda:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:149
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:154
-#, fuzzy
 msgid ""
 "Global absolute clearance between pads and the solder paste.\n"
 "Negative clearance means solder paste area smaller than the pad (typical for "
@@ -39637,16 +39629,16 @@ msgid ""
 "Final clearance value is the sum of this value and the relative clearance "
 "value."
 msgstr ""
-"Rapporto globale in percentuale della distanza tra piazzole e pasta salda.\n"
-"Un valore di 10 indica che la distanza sarà pari al 10% delle dimensioni "
-"della piazzola.\n"
-"Può essere superato dai valori locali di un'impronta o di una piazzola.\n"
-"Il valore finale della distanza è dato dalla somma di questo valore e quello "
-"di distanza."
+"Clearance assoluta globale tra le piazzole e la pastasalda.\n"
+"Clearance negativa significa area della pastasalda più piccola della "
+"piazzola (tipico per la clearance della pastasalda).\n"
+"Questo valore può essere sostituito da valori locali per un'impronta o una "
+"piazzola.\n"
+"Il valore clearance finale è la somma di questo valore e del valore della "
+"clearance relativa."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:164
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:169
-#, fuzzy
 msgid ""
 "Global clearance ratio between pads and the solder paste as a percentage of "
 "the pad size.\n"
@@ -39655,20 +39647,22 @@ msgid ""
 "Final clearance value is the sum of this value and the absolute clearance "
 "value."
 msgstr ""
-"Rapporto globale in percentuale della distanza tra piazzole e pasta salda.\n"
-"Un valore di 10 indica che la distanza sarà pari al 10% delle dimensioni "
-"della piazzola.\n"
-"Può essere superato dai valori locali di un'impronta o di una piazzola.\n"
-"Il valore finale della distanza è dato dalla somma di questo valore e quello "
-"di distanza."
+"Rapporto di clearance globale tra piazzola e pastasalda come percentuale "
+"della dimensione della piazzola.\n"
+"Un valore di 10 significa che il valore di clearance è il 10 percento della "
+"dimensione della piazzola.\n"
+"Questo valore può essere sostituito da valori locali per una impronta o una "
+"piazzola.\n"
+"Il valore di clearance finale è la somma di questo valore e del valore di "
+"clearance assoluto."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:183
 msgid ""
 "Note: Solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
 msgstr ""
-"Nota: le distanze pasta salda (assoluta e relativa) vengono sommate per "
-"determinare la distanza finale."
+"Nota: le clearance pasta salda (assoluta e relativa) vengono sommate per "
+"determinare la clearance finale."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:107
 msgid "Cancel Changes?"
@@ -40939,135 +40933,127 @@ msgid ""
 msgstr ""
 "### Ulteriori esempi\n"
 "\n"
-"    (rule \"rame proibito\"\n"
+"    (rule \"copper keepout\"\n"
 "       (constraint disallow track via zone)\n"
 "       (condition \"A.intersectsArea('zone3')\"))\n"
 "\n"
 "\n"
-"    (rule \"BGA neckdown - cioè limiti specifici per BGA\"\n"
+"    (rule \"BGA neckdown\"\n"
 "       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
 "       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
 "       (condition \"A.intersectsCourtyard('U3')\"))\n"
 "\n"
 "\n"
-"    # prevenzione serigrafia sui i via tented\n"
+"    # prevent silk over tented vias\n"
 "    (rule silk_over_via\n"
 "       (constraint silk_clearance (min 0.2mm))\n"
 "       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
 "\n"
 "\n"
-"    (rule \"Distanza tra via di collegamenti diversi\"\n"
+"    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
 "\n"
-"    (rule \"Distanza tra piazzole di collegamenti diversi\"\n"
+"\n"
+"    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
 "\n"
 "\n"
-"    (rule \"Distanza tra foro via e pista\"\n"
+"\n"
+"    (rule \"Via Hole to Track Clearance\"\n"
 "        (constraint hole_clearance (min 0.254mm))\n"
 "        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
 "\n"
-"    (rule \"Distanza tra piazziola e pista\"\n"
+"    (rule \"Pad to Track Clearance\"\n"
 "        (constraint clearance (min 0.2mm))\n"
 "        (condition \"A.Type == 'Pad' && B.Type == 'Track'\"))\n"
 "\n"
 "\n"
-"    (rule \"distanza-ritaglio-1mm\"\n"
+"    (rule \"clearance-to-1mm-cutout\"\n"
 "        (constraint edge_clearance (min 0.8mm))\n"
 "        (condition \"A.Layer == 'Edge.Cuts' && A.Line_Width == 1.0mm\"))\n"
 "\n"
 "\n"
-"    (rule \"Dimensione massima foro meccanico\"\n"
+"    (rule \"Max Drill Hole Size Mechanical\"\n"
 "        (constraint hole_size (max 6.3mm))\n"
 "        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
 "\n"
-"    (rule \"Dimensione massima foro metallizzato\"\n"
+"    (rule \"Max Drill Hole Size PTH\"\n"
 "        (constraint hole_size (max 6.35mm))\n"
 "        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
 "\n"
 "\n"
-"    # Specifica spazio ottimale per una particolare coppia bilanciata\n"
+"    # Specify an optimal gap for a particular diff-pair\n"
 "    (rule \"dp clock gap\"\n"
 "        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
 "        (condition \"A.inDiffPair('/CLK')\"))\n"
 "\n"
-"    # Specifica una distanza maggiore attorno a qualsiasi coppia "
-"differenziale\n"
+"    # Specify a larger clearance around any diff-pair\n"
 "    (rule \"dp clearance\"\n"
 "        (constraint clearance (min \"1.5mm\"))\n"
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 "\n"
 "\n"
-"    # Non usare supporti termici su piazzole dissipative\n"
+"    # Don't use thermal reliefs on heatsink pads\n"
 "    (rule heat_sink_pad\n"
 "        (constraint zone_connection solid)\n"
 "        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
 "\n"
-"    # Richiedi che tutti e quattro i raggi dei supporti termici siano "
-"connessi alla zona genitore\n"
+"    # Require all four thermal relief spokes to connect to parent zone\n"
 "    (rule fully_spoked_pads\n"
 "        (constraint min_resolved_spokes 4))\n"
 "\n"
-"    # Imposta la dimensione spazi e raggi dei supporti termici per tutte le "
-"zone\n"
+"    # Set thermal relief gap & spoke width for all zones\n"
 "    (rule defined_relief\n"
 "        (constraint thermal_relief_gap (min 10mil))\n"
 "        (constraint thermal_spoke_width (min 12mil)))\n"
 "\n"
-"    # Supera le dimensioni per spazi e raggi dei supporti termici per le "
-"zone GND e PWR\n"
+"    # Override thermal relief gap & spoke width for GND and PWR zones\n"
 "    (rule defined_relief_pwr\n"
 "        (constraint thermal_relief_gap (min 10mil))\n"
 "        (constraint thermal_spoke_width (min 12mil))\n"
 "        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
 "\n"
-"    # Previene i riempimenti di rame sotto lo spazio ingombro dei "
-"condensatori\n"
+"    # Prevent copper fills under the courtyards of capacitors\n"
 "    (rule no_copper_under_caps\n"
 "        (constraint physical_clearance (min 0mm))\n"
 "        (condition \"A.Type == 'Zone' && B.Reference == 'C*'\"))\n"
 "\n"
 "\n"
-"    # Previene lo scorrimento dello stagno (wicking) dalle piazzole SMD\n"
+"    # Prevent solder wicking from SMD pads\n"
 "    (rule holes_in_pads\n"
 "        (constraint physical_hole_clearance (min 0.2mm))\n"
 "        (condition \"B.Pad_Type == 'SMD'\"))\n"
 "\n"
-"    # Impedisce di superare i vincoli dei margini della maschera di "
-"saldatura\n"
+"    # Disallow solder mask margin overrides\n"
 "    (rule \"disallow solder mask margin overrides\"\n"
 "        (constraint assertion \"A.Soldermask_Margin_Override == null\")\n"
 "        (condition \"A.Type == 'Pad'\"))\n"
 "\n"
 "\n"
-"    #Applica una distanza meccanica tra i componenti e il bordo della "
-"scheda\n"
+"    # Enforce a mechanical clearance between components and board edge\n"
 "    (rule front_mechanical_board_edge_clearance\n"
 "        (layer \"F.Courtyard\")\n"
 "        (constraint physical_clearance (min 3mm))\n"
 "        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
 "\n"
 "\n"
-"    #Consente l'intersezione della serigrafia con il bordo della scheda per "
-"i connettori\n"
+"    # Allow silk intersection with board edge for connectors\n"
 "    (rule silk_board_edge_clearance\n"
 "        (constraint silk_clearance)\n"
 "        (severity ignore)\n"
 "        (condition \"A.memberOfFootprint('J*') && B.Layer=='Edge.Cuts'\"))\n"
 "\n"
 "\n"
-"    # Controlla la capacità di trasporto di corrente\n"
+"    # Check current-carrying capacity\n"
 "    (rule high-current\n"
 "        (constraint track_width (min 1.0mm))\n"
 "        (constraint connection_width (min 0.8mm))\n"
 "        (condition \"A.hasNetclass('Power')\"))\n"
 "\n"
 "\n"
-"    # Limiti di dimensioni separati per punte da trapano e frese\n"
+"    # Separate drill bit and milling cutter size constraints\n"
 "    (rule \"Plated through-hole size\"\n"
 "        (constraint hole_size (min 0.2mm) (max 6.35mm))\n"
 "        (condition \"A.isPlated() && A.Hole_Size_X == A.Hole_Size_Y\"))\n"
@@ -41076,12 +41062,14 @@ msgstr ""
 "        (condition \"A.isPlated() && A.Hole_Size_X != A.Hole_Size_Y\"))\n"
 "\n"
 "\n"
-"    # Consente violazioni da foro a foro di microvia ciechi/sepolti quando\n"
-"    # è noto che la fabbrica perforerà meccanicamente i fori di micro-via\n"
-"    # ciechi/sepolti prima di forare al laser.\n"
+"    # Allow blind/buried to micro-via hole-to-hole violations when it is "
+"known that\n"
+"    # the fab will mechanically drill blind/buried via holes -before- laser "
+"drilling \n"
+"    # micro-vias.\n"
 "    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
-"'Micro'\")\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
+"\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
 "\n"
@@ -41257,9 +41245,9 @@ msgid "Pad is not a through hole pad; connection will be: %s."
 msgstr "La piazzola non è una piazzola foro passante; la connessione sarà: %s."
 
 #: pcbnew/drc/drc_engine.cpp:790
-#, fuzzy, c-format
+#, c-format
 msgid "Net tie on %s; clearance: 0."
-msgstr "Superamento locale su %s; distanza: %s"
+msgstr "Net tie su %s; clearance: 0."
 
 #: pcbnew/drc/drc_engine.cpp:793
 #, fuzzy
@@ -41269,7 +41257,7 @@ msgstr "Titoli fogli"
 #: pcbnew/drc/drc_engine.cpp:820 pcbnew/drc/drc_engine.cpp:830
 #, c-format
 msgid "Local override on %s; clearance: %s."
-msgstr "Superamento locale su %s; distanza: %s"
+msgstr "Superamento locale su %s; clearance: %s"
 
 #: pcbnew/drc/drc_engine.cpp:845 pcbnew/drc/drc_engine.cpp:1459
 #: pcbnew/drc/drc_engine.cpp:1475
@@ -41280,7 +41268,7 @@ msgstr "minimi scheda"
 #: pcbnew/drc/drc_engine.cpp:1469
 #, c-format
 msgid "Board minimum clearance: %s."
-msgstr "Distanza minima scheda: %s."
+msgstr "Clearance minima scheda: %s."
 
 #: pcbnew/drc/drc_engine.cpp:857
 msgid "board minimum hole"
@@ -41289,7 +41277,7 @@ msgstr "foro minimo scheda"
 #: pcbnew/drc/drc_engine.cpp:860
 #, c-format
 msgid "Board minimum hole clearance: %s."
-msgstr "Distanza minima fori scheda: %s."
+msgstr "Clearance minima fori scheda: %s."
 
 #: pcbnew/drc/drc_engine.cpp:879
 #, c-format
@@ -41327,7 +41315,7 @@ msgstr "--> Asserzione fallita. <--"
 #: pcbnew/drc/drc_engine.cpp:966
 #, c-format
 msgid "Checking %s clearance: %s."
-msgstr "Controllo %s; distanza: %s."
+msgstr "Controllo %s; clearance: %s."
 
 #: pcbnew/drc/drc_engine.cpp:971
 #, fuzzy, c-format
@@ -41412,7 +41400,7 @@ msgstr "Controllo %s spazio coppia differenziale distanza: opt %s."
 #: pcbnew/drc/drc_engine.cpp:1106
 #, c-format
 msgid "Checking %s clearance: min %s."
-msgstr "Controllo %s; distanza: min %s."
+msgstr "Controllo %s; clearance: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1114
 #, c-format
@@ -41432,7 +41420,7 @@ msgstr "Controllo %s: min %s; opz %s; max %s."
 
 #: pcbnew/drc/drc_engine.cpp:1156
 msgid "Netclass clearances apply only between copper items."
-msgstr "Le distanze netclass si applicano solo tra elementi rame."
+msgstr "Le clearance netclass si applicano solo tra elementi rame."
 
 #: pcbnew/drc/drc_engine.cpp:1160 pcbnew/drc/drc_engine.cpp:1165
 #, c-format
@@ -41515,7 +41503,7 @@ msgstr "Deriva dal simbolo '%s'."
 #: pcbnew/drc/drc_engine.cpp:1407 pcbnew/drc/drc_engine.cpp:1431
 #, c-format
 msgid "Local clearance on %s: %s."
-msgstr "Distanza locale su %s: %s."
+msgstr "Clearance locale su %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1490
 #, c-format
@@ -41585,7 +41573,7 @@ msgstr "Testo (o dimensione) sullo strato Edge.Cuts"
 
 #: pcbnew/drc/drc_item.cpp:68
 msgid "Clearance violation"
-msgstr "Violazione distanza"
+msgstr "Violazione clearance"
 
 #: pcbnew/drc/drc_item.cpp:72
 #, fuzzy
@@ -41598,7 +41586,7 @@ msgstr "Incrocio di piste"
 
 #: pcbnew/drc/drc_item.cpp:80
 msgid "Board edge clearance violation"
-msgstr "Violazione distanza bordo scheda"
+msgstr "Violazione clearance bordo scheda"
 
 #: pcbnew/drc/drc_item.cpp:84
 msgid "Copper zones intersect"
@@ -41622,7 +41610,7 @@ msgstr "La pista ha un capo non connesso"
 
 #: pcbnew/drc/drc_item.cpp:104
 msgid "Hole clearance violation"
-msgstr "Violazione distanza foro"
+msgstr "Violazione clearance foro"
 
 #: pcbnew/drc/drc_item.cpp:108
 #, fuzzy
@@ -41997,15 +41985,15 @@ msgstr "Controllo connessioni..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:143
 msgid "Checking track & via clearances..."
-msgstr "Controllo distanze piste e via..."
+msgstr "Controllo clearance piste e via..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:150
 msgid "Checking hole clearances..."
-msgstr "Controllo distanze fori..."
+msgstr "Controllo clearance fori..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:158
 msgid "Checking pad clearances..."
-msgstr "Controllo distanze piazzole..."
+msgstr "Controllo clearance piazzole..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:166
 msgid "Checking pads..."
@@ -42013,11 +42001,11 @@ msgstr "Controllo piazzole..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:174
 msgid "Checking copper graphic clearances..."
-msgstr "Controllo distanze grafiche in rame..."
+msgstr "Controllo clearance grafiche in rame..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:182
 msgid "Checking copper zone clearances..."
-msgstr "Controllo distanze zone in rame..."
+msgstr "Controllo clearance zone in rame..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:286
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:590
@@ -42050,12 +42038,12 @@ msgstr "(coll %s e %s)"
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:297
 #, c-format
 msgid "(%s clearance %s; actual %s)"
-msgstr "(%s distanza %s; reale %s)"
+msgstr "(%s clearance %s; reale %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:359
 #, c-format
 msgid "(%s clearance %s; actual < 0)"
-msgstr "(%s distanza %s; reale < 0)"
+msgstr "(%s clearance %s; reale < 0)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:85
 msgid "Checking footprint courtyard definitions..."
@@ -42100,11 +42088,11 @@ msgstr "Controllo vincoli proibite e disabilitazioni..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:150
 msgid "Checking copper to board edge clearances..."
-msgstr "Controllo distanze rame da bordi scheda..."
+msgstr "Controllo clearance rame da bordi scheda..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:155
 msgid "Checking silk to board edge clearances..."
-msgstr "Controllo distanze serigrafia da bordi scheda..."
+msgstr "Controllo clearance serigrafia da bordi scheda..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:75
 msgid "Checking pad holes..."
@@ -42132,7 +42120,7 @@ msgstr "(%s foro max %s; effettivo %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:120
 msgid "Checking hole to hole clearances..."
-msgstr "Controllo distanze da foro a foro..."
+msgstr "Controllo clearance da foro a foro..."
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:323
 #, c-format
@@ -42147,7 +42135,7 @@ msgstr "Piaz %s"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:204
 #, c-format
 msgid "%s has clearance override."
-msgstr "%s ha scavalcamento distanza."
+msgstr "%s ha scavalcamento clearance."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:211
 #, c-format
@@ -42158,7 +42146,7 @@ msgstr "%s ha scavalcamento espansione maschera di saldatura."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:226
 #, c-format
 msgid "%s has solder paste clearance override."
-msgstr "%s ha scavalcamento distanza pasta salda."
+msgstr "%s ha scavalcamento clearance pasta salda."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:233
 #, c-format
@@ -42329,7 +42317,7 @@ msgstr "%s proprietà connessione piazzole diversa."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:518
 #, c-format
 msgid "%s local clearance differs."
-msgstr "%s distanza locale diversa."
+msgstr "%s clearance locale diversa."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:520
 #, c-format
@@ -42424,7 +42412,7 @@ msgstr "Esente dai requisiti ingombri"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:654
 msgid "Pad clearance overridden."
-msgstr "Scavalcamento distanza piazzole."
+msgstr "Scavalcamento clearance piazzole."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:661
 msgid "Solder mask expansion overridden."
@@ -42432,12 +42420,11 @@ msgstr "Espansione maschera di saldatura superata."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:669
 msgid "Solder paste absolute clearance overridden."
-msgstr "Distanza assoluta pasta salda superata."
+msgstr "Clearance assoluta pasta salda superata."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:676
-#, fuzzy
 msgid "Solder paste relative clearance overridden."
-msgstr "Distanza relativa pasta salda superata."
+msgstr "Clearance relativa pasta salda superata."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:683
 msgid "Zone connection overridden."
@@ -42566,12 +42553,12 @@ msgstr "Raccolta elementi fisici..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:185
 msgid "Checking physical clearances..."
-msgstr "Controllo distanze fisiche..."
+msgstr "Controllo clearance fisiche..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:533
 #, c-format
 msgid "Internal clearance violation (%s clearance %s; actual %s)"
-msgstr "Violazione distanza interna (%s distanza %s; reale %s)"
+msgstr "Violazione clearance interna (%s clearance %s; reale %s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:117
 #, c-format
@@ -42650,7 +42637,7 @@ msgstr "Creazione maschera di saldatura..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:798
 msgid "Checking solder mask to silk clearance..."
-msgstr "Controllo distanze maschera di saldatura a serigrafia..."
+msgstr "Controllo clearance maschera di saldatura a serigrafia..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:803
 msgid "Checking solder mask web integrity..."
@@ -43028,7 +43015,6 @@ msgid "Current Board will be closed. Continue?"
 msgstr "La scheda corrente verrà chiusa. Continuare?"
 
 #: pcbnew/files.cpp:496
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -43036,7 +43022,7 @@ msgid ""
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
 "Se le zone su questa scheda vengono ri-riempite, verranno usate le "
-"impostazioni sulla distanza dal bordo rame (vedere Impostazioni scheda > "
+"impostazioni sulla clearance dal bordo rame (vedere Impostazioni scheda > "
 "Regole di progettazione > Vincoli).\n"
 "Ciò può portare a riempimenti diversi dalle versioni precedenti di KiCad che "
 "usavano lo spessore della linea del bordo scheda sullo strato Edge Cuts."
@@ -43268,7 +43254,7 @@ msgstr "Scavalcamenti"
 
 #: pcbnew/footprint.cpp:4164 pcbnew/pad.cpp:2716
 msgid "Clearance Override"
-msgstr "Scavalcamento distanze"
+msgstr "Scavalcamento clearance"
 
 #: pcbnew/footprint.cpp:4169 pcbnew/pad.cpp:2726
 msgid "Solderpaste Margin Override"
@@ -44575,7 +44561,7 @@ msgstr "Foro X / Y"
 #: pcbnew/zone.cpp:872
 #, c-format
 msgid "Min Clearance: %s"
-msgstr "Distanza min: %s"
+msgstr "Clearance min: %s"
 
 #: pcbnew/pad.cpp:1535
 msgid "Trap"
@@ -44734,14 +44720,14 @@ msgstr "(foro piazzola fuori dalla sagoma)"
 
 #: pcbnew/pad.cpp:2365
 msgid "(negative local clearance values have no effect)"
-msgstr "(valori di distanza locale negativi non hanno effetto)"
+msgstr "(valori di clearance locale negativi non hanno effetto)"
 
 #: pcbnew/pad.cpp:2384
 msgid ""
 "(negative solder mask clearance is larger than some shape primitives; "
 "results may be surprising)"
 msgstr ""
-"(distanza negativa dalla maschera di saldatura più grande di alcune "
+"(clearance negativa dalla maschera di saldatura più grande di alcune "
 "primitive di forma; i risultati potrebbero sorprendere)"
 
 #: pcbnew/pad.cpp:2394
@@ -44749,7 +44735,7 @@ msgid ""
 "(negative solder mask clearance is larger than pad; no solder mask will be "
 "generated)"
 msgstr ""
-"(distanza maschera di saldatura negativa più grande della piazzola; non "
+"(clearance maschera di saldatura negativa più grande della piazzola; non "
 "verrà generata nessuna maschera di saldatura)"
 
 #: pcbnew/pad.cpp:2413
@@ -45020,7 +45006,7 @@ msgstr "Rapporto violazione"
 
 #: pcbnew/pcb_edit_frame.cpp:2701
 msgid "Clearance Report"
-msgstr "Rapporto distanza"
+msgstr "Rapporto clearance"
 
 #: pcbnew/pcb_edit_frame.cpp:2711
 msgid "Constraints Report"
@@ -47313,7 +47299,7 @@ msgstr ""
 #: pcbnew/router/pns_kicad_iface.cpp:667 pcbnew/router/pns_kicad_iface.cpp:783
 #: pcbnew/router/router_tool.cpp:755 pcbnew/router/router_tool.cpp:819
 msgid "board minimum clearance"
-msgstr "distanza minima scheda"
+msgstr "clearance minima scheda"
 
 #: pcbnew/router/pns_kicad_iface.cpp:702 pcbnew/router/pns_kicad_iface.cpp:782
 #: pcbnew/router/router_tool.cpp:781 pcbnew/router/router_tool.cpp:806
@@ -47362,7 +47348,7 @@ msgstr ""
 
 #: pcbnew/router/pns_router.cpp:228
 msgid "Diff pair gap is less than board minimum clearance."
-msgstr "Spazio coppia differenziale minore della distanza minima scheda."
+msgstr "Spazio coppia differenziale minore della clearance minima scheda."
 
 #: pcbnew/router/pns_router.cpp:261
 msgid "Cannot start routing from a non-plated hole."
@@ -48071,17 +48057,17 @@ msgstr "Vincoli di dimensione foro risolti: min %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:539
 msgid "Hole Clearance"
-msgstr "Distanza foro"
+msgstr "Clearance fori"
 
 #: pcbnew/tools/board_inspection_tool.cpp:540
 #: pcbnew/tools/board_inspection_tool.cpp:1135
 msgid "Hole clearance resolution for:"
-msgstr "Risoluzione distanza foro per:"
+msgstr "Risoluzione clearance fori per:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:548
 #: pcbnew/tools/board_inspection_tool.cpp:651
 msgid "Items belong to the same net. Clearance is 0."
-msgstr "Gli elementi appartengono allo stesso collegamento. La distanza è 0."
+msgstr "Gli elementi appartengono allo stesso collegamento. La clearance è 0."
 
 #: pcbnew/tools/board_inspection_tool.cpp:557
 #: pcbnew/tools/board_inspection_tool.cpp:577
@@ -48101,12 +48087,12 @@ msgstr "Gli elementi appartengono allo stesso collegamento. La distanza è 0."
 #: pcbnew/tools/board_inspection_tool.cpp:1307
 #, c-format
 msgid "Resolved min clearance: %s."
-msgstr "Risoluzione distanza min: %s."
+msgstr "Risoluzione clearance min: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:563
 #: pcbnew/tools/board_inspection_tool.cpp:1290
 msgid "Physical hole clearance resolution for:"
-msgstr "Risoluzione distanza foro meccanico per:"
+msgstr "Risoluzione clearance foro fisico per:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:572
 #: pcbnew/tools/board_inspection_tool.cpp:1302
@@ -48120,26 +48106,26 @@ msgstr "Foro a foro"
 #: pcbnew/tools/board_inspection_tool.cpp:584
 #: pcbnew/tools/board_inspection_tool.cpp:1164
 msgid "Hole-to-hole clearance resolution for:"
-msgstr "Risoluzione distanza foro a foro per:"
+msgstr "Risoluzione clearance foro a foro per:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:598
 msgid "Edge Clearance"
-msgstr "Distanza bordo"
+msgstr "Clearance bordo"
 
 #: pcbnew/tools/board_inspection_tool.cpp:599
 #: pcbnew/tools/board_inspection_tool.cpp:1203
 msgid "Edge clearance resolution for:"
-msgstr "Risoluzione distanza bordo per:"
+msgstr "Risoluzione clearance bordo per:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:643
 #: pcbnew/tools/board_inspection_tool.cpp:948
 msgid "Clearance resolution for:"
-msgstr "Risoluzione distanza per:"
+msgstr "Risoluzione clearance per:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:666
 #: pcbnew/tools/board_inspection_tool.cpp:1224
 msgid "Physical clearance resolution for:"
-msgstr "Risoluzione distanza fisica per:"
+msgstr "Risoluzione clearance fisica per:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:675
 #: pcbnew/tools/board_inspection_tool.cpp:1236
@@ -48158,12 +48144,12 @@ msgstr "Asserzioni per:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:718
 msgid "Select two items for a clearance resolution report."
-msgstr "Seleziona due elementi per un rapporto di risoluzione distanza."
+msgstr "Seleziona due elementi per un rapporto di risoluzione clearance."
 
 #: pcbnew/tools/board_inspection_tool.cpp:734
 #: pcbnew/tools/board_inspection_tool.cpp:747
 msgid "Cannot generate clearance report on empty group."
-msgstr "Impossibile generare rapporto distanze su un gruppo vuoto."
+msgstr "Impossibile generare rapporto clearance su un gruppo vuoto."
 
 #: pcbnew/tools/board_inspection_tool.cpp:825
 msgid "Zone connection resolution for:"
@@ -48199,35 +48185,35 @@ msgstr "Numero min raggi risolto: %d."
 #: pcbnew/tools/board_inspection_tool.cpp:879
 #: pcbnew/tools/board_inspection_tool.cpp:927
 msgid "Zone clearance resolution for:"
-msgstr "Risoluzione distanza zone per:"
+msgstr "Risoluzione clearance zone per:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:883
 #, c-format
 msgid "Zone clearance: %s."
-msgstr "Distanza zone: %s."
+msgstr "Clearance zone: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:893
 #, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
-msgstr "Scavalcato da distanza fisica più larga da %s; distanza: %s."
+msgstr "Scavalcato da clearance fisica più larga da %s; clearance: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:909
 #, c-format
 msgid "Overridden by larger physical hole clearance from %s; clearance: %s."
-msgstr "Scavalcato da distanza fisica foro più larga da %s; distanza: %s."
+msgstr "Scavalcato da clearance fisica foro più larga da %s; clearance: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:953
 msgid "Items belong to the same net. Min clearance is 0."
-msgstr "Gli elementi sono dello stesso collegamento. La distanza min è 0."
+msgstr "Gli elementi sono dello stesso collegamento. La clearance min è 0."
 
 #: pcbnew/tools/board_inspection_tool.cpp:968
 msgid "Min clearance is 0."
-msgstr "Distanza min è 0."
+msgstr "Clearance min è 0."
 
 #: pcbnew/tools/board_inspection_tool.cpp:972
 #, c-format
 msgid "Resolved clearance: %s; clearance will not be tested."
-msgstr "Distanza locale risolta: %s; la distanza non verrà controllata."
+msgstr "Clearance locale risolta: %s; la clearance non verrà controllata."
 
 #: pcbnew/tools/board_inspection_tool.cpp:995
 msgid "Diff Pair"
@@ -48253,19 +48239,19 @@ msgstr "Nessun vincolo 'diff_pair_uncoupled' definito."
 #: pcbnew/tools/board_inspection_tool.cpp:1046
 #, c-format
 msgid "Note: %s is tented; clearance will only be applied to holes."
-msgstr "Nota: %s è tendato; la distanza sarà applicata solamente ai fori."
+msgstr "Nota: %s è tendato; la clearance sarà applicata solamente ai fori."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1063
 msgid "Silkscreen clearance resolution for:"
-msgstr "Risoluzione distanza serigrafia per:"
+msgstr "Risoluzione clearance serigrafia per:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1091
 msgid "Courtyard clearance resolution for:"
-msgstr "Risoluzione distanza ingombro per:"
+msgstr "Risoluzione clearance ingombro per:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1219
 msgid "Physical Clearances"
-msgstr "Distanze fisiche"
+msgstr "Clearance fisiche"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1334
 msgid "Select an item for a constraints resolution report."
@@ -50280,13 +50266,13 @@ msgstr "Mostra statistiche scheda"
 
 #: pcbnew/tools/pcb_actions.cpp:1844
 msgid "Clearance Resolution"
-msgstr "Risoluzione distanze"
+msgstr "Risoluzione clearance"
 
 #: pcbnew/tools/pcb_actions.cpp:1845
 msgid ""
 "Show clearance resolution for the active layer between two selected objects"
 msgstr ""
-"Mostra la risoluzione distanze per lo strato attivo tra due oggetti "
+"Mostra la risoluzione clearance per lo strato attivo tra due oggetti "
 "selezionati"
 
 #: pcbnew/tools/pcb_actions.cpp:1851
@@ -50957,27 +50943,27 @@ msgstr "Vincoli spazio CD: %s"
 
 #: pcbnew/tools/pcb_control.cpp:1753
 msgid "Resolved clearance"
-msgstr "Distanza risolta"
+msgstr "Clearance risolta"
 
 #: pcbnew/tools/pcb_control.cpp:1763
 msgid "Actual clearance"
-msgstr "Distanza effettiva"
+msgstr "Clearance effettiva"
 
 #: pcbnew/tools/pcb_control.cpp:1806
 msgid "Resolved hole clearance"
-msgstr "Distanza foro risolta"
+msgstr "Clearance foro risolta"
 
 #: pcbnew/tools/pcb_control.cpp:1811
 msgid "Actual hole clearance"
-msgstr "Distanza foro effettiva"
+msgstr "Clearance foro effettiva"
 
 #: pcbnew/tools/pcb_control.cpp:1844
 msgid "Resolved edge clearance"
-msgstr "Distanza bordo risolta"
+msgstr "Clearance bordo risolta"
 
 #: pcbnew/tools/pcb_control.cpp:1849
 msgid "Resolved margin clearance"
-msgstr "Distanza margine risolta"
+msgstr "Clearance margine risolta"
 
 #: pcbnew/tools/pcb_control.cpp:1860
 msgid "Selected Items"
