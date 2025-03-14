@@ -733,7 +733,7 @@ bool SYMBOL_LIBRARY_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate
     wxCHECK( optTable, false );
     LIBRARY_TABLE* table = *optTable;
 
-    LIBRARY_TABLE_ROW& row = table->Rows().emplace_back( table->MakeRow() );
+    LIBRARY_TABLE_ROW& row = table->InsertRow();
 
     row.SetNickname( libName );
     row.SetURI( relPath );

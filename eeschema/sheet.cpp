@@ -547,8 +547,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
                     // Add the library from the imported project to the current project
                     // symbol library table.
 
-                    LIBRARY_TABLE_ROW& newRow =
-                            projectTable->Rows().emplace_back( projectTable->MakeRow() );
+                    LIBRARY_TABLE_ROW& newRow = projectTable->InsertRow();
 
                     newRow.SetNickname( libName );
                     newRow.SetURI( uri );

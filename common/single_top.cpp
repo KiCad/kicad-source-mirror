@@ -56,6 +56,7 @@
 #include <kiplatform/environment.h>
 
 #include <git2.h>
+#include <libraries/library_manager.h>
 
 #ifdef KICAD_USE_SENTRY
 #include <sentry.h>
@@ -378,6 +379,8 @@ bool PGM_SINGLE_TOP::OnPgmInit()
     GetSettingsManager().SetKiway( &Kiway );
 
     GetSettingsManager().RegisterSettings( new KICAD_SETTINGS );
+
+    GetLibraryManager().LoadGlobalTables();
 
 #ifdef KICAD_IPC_API
     // Create the API server thread once the app event loop exists

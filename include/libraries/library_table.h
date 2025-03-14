@@ -48,6 +48,7 @@ struct LIBRARY_TABLE_IR;
 struct LIBRARY_TABLE_ROW_IR;
 struct LIBRARY_TABLE_INTERNALS;
 class OUTPUTFORMATTER;
+class PROJECT;
 
 
 class KICOMMON_API LIBRARY_TABLE_ROW
@@ -134,6 +135,9 @@ public:
     /// Builds a new row that is suitable for this table (does not insert it)
     LIBRARY_TABLE_ROW MakeRow() const;
 
+    /// Builds a new row and inserts it at the end of the table; returning a reference to the row
+    LIBRARY_TABLE_ROW& InsertRow();
+
     const wxString& Path() const { return m_path; }
     void SetPath( const wxString &aPath ) { m_path = aPath; }
 
@@ -155,6 +159,14 @@ public:
     void Format( OUTPUTFORMATTER* aOutput ) const;
 
     bool HasRow( const wxString& aNickname ) const;
+
+    /**
+     * Returns true if the given (fully-expanded) URI exists as a library in this table
+     * @param aSubstituted is true if the URI should be compared with full (expanded/substituted)
+     *                     versions of the row URIs
+     */
+    bool HasRowWithURI( const wxString& aUri, const PROJECT& aProject,
+                        bool aSubstituted = false ) const;
 
     std::optional<LIBRARY_TABLE_ROW*> Row( const wxString& aNickname );
     std::optional<const LIBRARY_TABLE_ROW*> Row( const wxString& aNickname ) const;

@@ -19,6 +19,7 @@
  */
 
 #include <common.h>
+#include <env_vars.h>
 #include <list>
 #include <magic_enum.hpp>
 #include <unordered_set>
@@ -30,7 +31,9 @@
 #include <wildcards_and_files_ext.h>
 
 #include <libraries/library_manager.h>
+#include <settings/kicad_settings.h>
 #include <settings/settings_manager.h>
+#include <wx/dir.h>
 #include <wx/log.h>
 
 struct LIBRARY_MANAGER_INTERNALS
@@ -144,9 +147,214 @@ void LIBRARY_MANAGER::loadNestedTables( LIBRARY_TABLE& aRootTable )
 }
 
 
+class PCM_LIB_TRAVERSER final : public wxDirTraverser
+{
+public:
+    explicit PCM_LIB_TRAVERSER( const wxString& aBasePath, LIBRARY_MANAGER& aManager,
+                                const wxString& aPrefix ) :
+            m_manager( aManager ),
+            m_project( Pgm().GetSettingsManager().Prj() ),
+            m_path_prefix( aBasePath ),
+            m_lib_prefix( aPrefix )
+    {
+        wxFileName f( aBasePath, "" );
+        m_prefix_dir_count = f.GetDirCount();
+
+        m_symbolTable = m_manager.Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::GLOBAL )
+                                .value_or( nullptr );
+        m_fpTable = m_manager.Table( LIBRARY_TABLE_TYPE::FOOTPRINT, LIBRARY_TABLE_SCOPE::GLOBAL )
+                            .value_or( nullptr );
+        m_designBlockTable =
+            m_manager.Table( LIBRARY_TABLE_TYPE::DESIGN_BLOCK, LIBRARY_TABLE_SCOPE::GLOBAL )
+                    .value_or( nullptr );
+    }
+
+    /// Handles symbol library files, minimum nest level 2
+    wxDirTraverseResult OnFile( const wxString& aFilePath ) override
+    {
+        wxFileName file = wxFileName::FileName( aFilePath );
+
+        // consider a file to be a lib if it's name ends with .kicad_sym and
+        // it is under $KICADn_3RD_PARTY/symbols/<pkgid>/ i.e. has nested level of at least +2
+        if( file.GetExt() == wxT( "kicad_sym" ) && file.GetDirCount() >= m_prefix_dir_count + 2
+            && file.GetDirs()[m_prefix_dir_count] == wxT( "symbols" ) )
+        {
+            addRowIfNecessary( m_symbolTable, file, ADD_MODE::FILE, 10 );
+        }
+
+        return wxDIR_CONTINUE;
+    }
+
+    /// Handles footprint library and design block library directories, minimum nest level 3
+    wxDirTraverseResult OnDir( const wxString& dirPath ) override
+    {
+        static wxString designBlockExt = wxString::Format( wxS( ".%s" ),
+                                                           FILEEXT::KiCadDesignBlockLibPathExtension );
+        wxFileName dir = wxFileName::DirName( dirPath );
+
+        // consider a directory to be a lib if it's name ends with .pretty and
+        // it is under $KICADn_3RD_PARTY/footprints/<pkgid>/ i.e. has nested level of at least +3
+        if( dirPath.EndsWith( wxS( ".pretty" ) ) && dir.GetDirCount() >= m_prefix_dir_count + 3
+            && dir.GetDirs()[m_prefix_dir_count] == wxT( "footprints" ) )
+        {
+            addRowIfNecessary( m_fpTable, dir, ADD_MODE::DIRECTORY, 7 );
+        }
+        else if( dirPath.EndsWith( designBlockExt )
+                 && dir.GetDirCount() >= m_prefix_dir_count + 3
+                 && dir.GetDirs()[m_prefix_dir_count] == wxT( "design_blocks" ) )
+        {
+            addRowIfNecessary( m_designBlockTable, dir, ADD_MODE::DIRECTORY, designBlockExt.Len() );
+        }
+
+        return wxDIR_CONTINUE;
+    }
+
+    std::set<LIBRARY_TABLE*> Modified() const { return m_modified; }
+
+private:
+    void ensureUnique( LIBRARY_TABLE* aTable, const wxString& aBaseName, wxString& aNickname ) const
+    {
+        if( aTable->HasRow( aNickname ) )
+        {
+            int increment = 1;
+
+            do
+            {
+                aNickname = wxString::Format( "%s%s_%d", m_lib_prefix, aBaseName, increment );
+                increment++;
+            } while( aTable->HasRow( aNickname ) );
+        }
+    }
+
+    enum class ADD_MODE
+    {
+        FILE,
+        DIRECTORY
+    };
+
+    void addRowIfNecessary( LIBRARY_TABLE* aTable, const wxFileName& aSource, ADD_MODE aMode,
+                            int aExtensionLength )
+    {
+        wxString versionedPath = wxString::Format( wxS( "${%s}" ),
+        ENV_VAR::GetVersionedEnvVarName( wxS( "3RD_PARTY" ) ) );
+
+        wxArrayString parts = aSource.GetDirs();
+        parts.RemoveAt( 0, m_prefix_dir_count );
+        parts.Insert( versionedPath, 0 );
+
+        if( aMode == ADD_MODE::FILE )
+            parts.Add( aSource.GetFullName() );
+
+        wxString libPath = wxJoin( parts, '/' );
+
+        if( !aTable->HasRowWithURI( libPath, m_project ) )
+        {
+            wxString name = parts.Last().substr( 0, parts.Last().length() - aExtensionLength );
+            wxString nickname = wxString::Format( "%s%s", m_lib_prefix, name );
+
+            ensureUnique( aTable, name, nickname );
+
+            wxLogTrace( traceLibraries, "Manager: Adding PCM lib '%s' as '%s'", libPath, nickname );
+
+            LIBRARY_TABLE_ROW& row = aTable->InsertRow();
+
+            row.SetNickname( nickname );
+            row.SetURI( libPath );
+            row.SetType( wxT( "KiCad" ) );
+            row.SetDescription( _( "Added by Plugin and Content Manager" ) );
+            m_modified.insert( aTable );
+        }
+        else
+        {
+            wxLogTrace( traceLibraries, "Manager: Not adding existing PCM lib '%s'", libPath );
+        }
+    }
+
+    LIBRARY_MANAGER& m_manager;
+    const PROJECT&   m_project;
+    wxString         m_path_prefix;
+    wxString         m_lib_prefix;
+    size_t           m_prefix_dir_count;
+    std::set<LIBRARY_TABLE*> m_modified;
+
+    LIBRARY_TABLE*   m_symbolTable;
+    LIBRARY_TABLE*   m_fpTable;
+    LIBRARY_TABLE*   m_designBlockTable;
+};
+
+
 void LIBRARY_MANAGER::LoadGlobalTables()
 {
     loadTables( PATHS::GetUserSettingsPath(), LIBRARY_TABLE_SCOPE::GLOBAL );
+
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
+
+    wxCHECK( settings, /* void */ );
+
+    wxString packagesPath;
+    const ENV_VAR_MAP& vars = Pgm().GetLocalEnvVariables();
+
+    if( std::optional<wxString> v = ENV_VAR::GetVersionedEnvVarValue( vars, wxT( "3RD_PARTY" ) ) )
+        packagesPath = *v;
+
+    if( settings->m_PcmLibAutoAdd )
+    {
+        // Scan for libraries in PCM packages directory
+        wxFileName d( packagesPath, "" );
+
+        if( d.DirExists() )
+        {
+            PCM_LIB_TRAVERSER traverser( packagesPath, *this, settings->m_PcmLibPrefix );
+            wxDir             dir( d.GetPath() );
+
+            dir.Traverse( traverser );
+
+            for( LIBRARY_TABLE* table : traverser.Modified() )
+            {
+                Pgm().GetLibraryManager().Save( table ).map_error(
+                    []( const LIBRARY_ERROR& aError )
+                    {
+                        wxLogTrace( traceLibraries, "Warning: save failed after PCM auto-add: %s",
+                                    aError.message );
+                    } );
+            }
+        }
+    }
+
+    auto cleanupRemovedPCMLibraries =
+        [&]( LIBRARY_TABLE_TYPE aType )
+        {
+            LIBRARY_TABLE* table = Table( aType, LIBRARY_TABLE_SCOPE::GLOBAL ).value_or( nullptr );
+            wxCHECK( table, /* void */ );
+
+            auto toErase = std::ranges::remove_if( table->Rows(),
+                [&]( const LIBRARY_TABLE_ROW& aRow )
+                {
+                    wxString path = GetFullURI( &aRow, true );
+                    return path.StartsWith( packagesPath ) && !wxFile::Exists( path );
+                } );
+
+            table->Rows().erase( toErase.begin(), toErase.end() );
+
+            if( !toErase.empty() )
+            {
+                Pgm().GetLibraryManager().Save( table ).map_error(
+                        []( const LIBRARY_ERROR& aError )
+                        {
+                            wxLogTrace( traceLibraries,
+                                        "Warning: save failed after PCM auto-remove: %s",
+                                        aError.message );
+                        } );
+            }
+        };
+
+    if( settings->m_PcmLibAutoRemove )
+    {
+        cleanupRemovedPCMLibraries( LIBRARY_TABLE_TYPE::SYMBOL );
+        cleanupRemovedPCMLibraries( LIBRARY_TABLE_TYPE::FOOTPRINT );
+        cleanupRemovedPCMLibraries( LIBRARY_TABLE_TYPE::DESIGN_BLOCK );
+    }
 }
 
 

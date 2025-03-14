@@ -874,7 +874,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
             if( !table->HasRow( fn.GetName() ) )
             {
-                LIBRARY_TABLE_ROW& row = table->Rows().emplace_back( table->MakeRow() );
+                LIBRARY_TABLE_ROW& row = table->InsertRow();
                 row.SetNickname( fn.GetName() );
                 row.SetURI( fn.GetFullPath() );
                 row.SetType( SCH_IO_MGR::ShowType( type ) );

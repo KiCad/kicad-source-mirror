@@ -27,6 +27,7 @@
 #include <trace_helpers.h>
 #include <wx_filename.h>
 #include <xnode.h>
+#include <libraries/library_manager.h>
 
 
 bool LIBRARY_TABLE_ROW::operator==( const LIBRARY_TABLE_ROW& aOther ) const
@@ -205,11 +206,33 @@ LIBRARY_TABLE_ROW LIBRARY_TABLE::MakeRow() const
 }
 
 
+LIBRARY_TABLE_ROW& LIBRARY_TABLE::InsertRow()
+{
+    return Rows().emplace_back( MakeRow() );
+}
+
+
 bool LIBRARY_TABLE::HasRow( const wxString& aNickname ) const
 {
     for( const LIBRARY_TABLE_ROW& row : m_rows )
     {
         if( row.Nickname() == aNickname )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool LIBRARY_TABLE::HasRowWithURI( const wxString& aUri, const PROJECT& aProject,
+                                   bool aSubstituted ) const
+{
+    for( const LIBRARY_TABLE_ROW& row : m_rows )
+    {
+        if( !aSubstituted && row.URI() == aUri )
+            return true;
+
+        if( aSubstituted && LIBRARY_MANAGER::ExpandURI( row.URI(), aProject ) == aUri )
             return true;
     }
 

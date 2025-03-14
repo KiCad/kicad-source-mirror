@@ -842,7 +842,7 @@ bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( wxWindow *aParent )
         if( std::optional<LIBRARY_TABLE_ROW*> oldRow = projectTable->Row( libNickname ); oldRow )
             row = *oldRow;
         else
-            row = &projectTable->Rows().emplace_back( projectTable->MakeRow() );
+            row = &projectTable->InsertRow();
 
         row->SetNickname( libNickname );
         row->SetURI( uri );

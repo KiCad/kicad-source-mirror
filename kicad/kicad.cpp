@@ -65,6 +65,9 @@
 
 // a dummy to quiet linking with EDA_BASE_FRAME::config();
 #include <kiface_base.h>
+#include <libraries/library_manager.h>
+
+
 KIFACE_BASE& Kiface()
 {
     // This function should never be called.  It is only referenced from
@@ -258,6 +261,8 @@ bool PGM_KICAD::OnPgmInit()
                                              frame->GetTitle() );
 
     KICAD_SETTINGS* settings = static_cast<KICAD_SETTINGS*>( PgmSettings() );
+
+    GetLibraryManager().LoadGlobalTables();
 
 #ifdef KICAD_IPC_API
     m_api_server = std::make_unique<KICAD_API_SERVER>();

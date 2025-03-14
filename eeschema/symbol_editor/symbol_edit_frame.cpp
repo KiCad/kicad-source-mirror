@@ -1942,7 +1942,7 @@ bool SYMBOL_EDIT_FRAME::addLibTableEntry( const wxString& aLibFile, LIBRARY_TABL
     wxCHECK( optTable, false );
     LIBRARY_TABLE* table = *optTable;
 
-    LIBRARY_TABLE_ROW* row = &table->Rows().emplace_back( table->MakeRow() );
+    LIBRARY_TABLE_ROW* row = &table->InsertRow();
 
     row->SetNickname( libNickname );
 
