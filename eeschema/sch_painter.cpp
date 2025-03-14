@@ -338,12 +338,29 @@ COLOR4D SCH_PAINTER::getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDr
 
             if( isBackgroundLayer( aLayer ) )
             {
-                if( shape->GetFillMode() == FILL_T::FILLED_SHAPE )
+                switch( shape->GetFillMode() )
+                {
+                case FILL_T::NO_FILL:
+                    break;
+
+                case FILL_T::HATCH:
+                case FILL_T::REVERSE_HATCH:
+                case FILL_T::CROSS_HATCH:
+                case FILL_T::FILLED_SHAPE:
                     color = shape->GetStroke().GetColor();
-                else if( shape->GetFillMode() == FILL_T::FILLED_WITH_COLOR )
+                    break;
+
+                case FILL_T::FILLED_WITH_COLOR:
                     color = shape->GetFillColor();
-                else if( shape->GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
+                    break;
+
+                case FILL_T::FILLED_WITH_BG_BODYCOLOR:
                     color = m_schSettings.GetLayerColor( LAYER_DEVICE_BACKGROUND );
+                    break;
+
+                default:
+                    wxFAIL_MSG( wxT( "Unsupported fill type" ) );
+                }
 
                 // A filled shape means filled; if they didn't specify a fill colour then use
                 // the border colour.
