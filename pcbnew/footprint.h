@@ -497,6 +497,9 @@ public:
      */
     void CheckNetTiePadGroups( const std::function<void( const wxString& )>& aErrorHandler );
 
+    void CheckClippedSilk( const std::function<void( BOARD_ITEM* aItemA,
+                                                     BOARD_ITEM* aItemB,
+                                                     const VECTOR2I& aPt )>& aErrorHandler );
     /**
      * Cache the pads that are allowed to connect to each other in the footprint.
      */
