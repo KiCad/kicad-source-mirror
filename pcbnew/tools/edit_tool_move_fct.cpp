@@ -465,12 +465,16 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
         if( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
             eatFirstMouseUp = false;
 
-        if( evt->IsAction( &PCB_ACTIONS::move ) || evt->IsMotion() || evt->IsDrag( BUT_LEFT )
+        if( evt->IsAction( &PCB_ACTIONS::move )
+                || evt->IsMotion()
+                || evt->IsDrag( BUT_LEFT )
                 || evt->IsAction( &ACTIONS::refreshPreview )
                 || evt->IsAction( &PCB_ACTIONS::moveWithReference )
                 || evt->IsAction( &PCB_ACTIONS::moveIndividually ) )
         {
-            if( m_dragging && evt->Category() == TC_MOUSE )
+            if( m_dragging && (    evt->IsMotion()
+                                || evt->IsDrag( BUT_LEFT )
+                                || evt->IsAction( &ACTIONS::refreshPreview ) ) )
             {
                 bool redraw3D = false;
 
