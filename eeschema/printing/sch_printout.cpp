@@ -109,6 +109,7 @@ bool SCH_PRINTOUT::OnPrintPage( int page )
     m_parent->SetSheetNumberAndCount();
     screen = m_parent->GetCurrentSheet().LastScreen();
     sch_view->GetDrawingSheet()->SetPageNumber( TO_UTF8( screen->GetPageNumber() ) );
+    sch_view->GetDrawingSheet()->SetIsFirstPage( screen->GetVirtualPageNumber() == 1 );
 
     return true;
 }
