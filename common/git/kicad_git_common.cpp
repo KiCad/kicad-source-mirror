@@ -656,6 +656,59 @@ void KIGIT_COMMON::updateConnectionType()
 }
 
 
+int KIGIT_COMMON::HandleSSHKeyAuthentication( git_cred** aOut, const wxString& aUsername )
+{
+    if( !( m_testedTypes & KIGIT_CREDENTIAL_SSH_AGENT ) )
+        return HandleSSHAgentAuthentication( aOut, aUsername );
+
+    // SSH key authentication with password
+    wxString sshKey = GetNextPublicKey();
+
+    if( sshKey.IsEmpty() )
+    {
+        m_testedTypes |= GIT_CREDENTIAL_SSH_KEY;
+        return GIT_PASSTHROUGH;
+    }
+
+    wxString sshPubKey = sshKey + ".pub";
+    wxString password = GetPassword();
+
+    if( git_credential_ssh_key_new( aOut, aUsername.mbc_str(), sshPubKey.mbc_str(), sshKey.mbc_str(),
+                                password.mbc_str() ) != GIT_OK )
+    {
+        wxLogTrace( traceGit, "Failed to create SSH key credential for %s: %s",
+                    aUsername, git_error_last()->message );
+        return GIT_ERROR;
+    }
+
+    return GIT_OK;
+}
+
+
+int KIGIT_COMMON::HandlePlaintextAuthentication( git_cred** aOut, const wxString& aUsername )
+{
+    wxString password = GetPassword();
+
+    git_credential_userpass_plaintext_new( aOut, aUsername.mbc_str(), password.mbc_str() );
+    m_testedTypes |= GIT_CREDENTIAL_USERPASS_PLAINTEXT;
+
+    return GIT_OK;
+}
+
+int KIGIT_COMMON::HandleSSHAgentAuthentication( git_cred** aOut, const wxString& aUsername )
+{
+    if( git_credential_ssh_key_from_agent( aOut, aUsername.mbc_str() ) != GIT_OK )
+    {
+        wxLogTrace( traceGit, "Failed to create SSH agent credential for %s: %s",
+                    aUsername, git_error_last()->message );
+        return GIT_ERROR;
+    }
+
+    m_testedTypes |= KIGIT_CREDENTIAL_SSH_AGENT;
+    return GIT_OK;
+}
+
+
 extern "C" int fetchhead_foreach_cb( const char*, const char*,
                                      const git_oid* aOID, unsigned int aIsMerge, void* aPayload )
 {
@@ -789,34 +842,15 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
                 && ( aAllowedTypes & GIT_CREDENTIAL_USERPASS_PLAINTEXT )
                 && !( parent->TestedTypes() & GIT_CREDENTIAL_USERPASS_PLAINTEXT ) )
     {
-        wxString username = parent->GetUsername().Trim().Trim( false );
-        wxString password = parent->GetPassword().Trim().Trim( false );
-
-        git_credential_userpass_plaintext_new( aOut, username.ToStdString().c_str(),
-                                            password.ToStdString().c_str() );
-        parent->TestedTypes() |= GIT_CREDENTIAL_USERPASS_PLAINTEXT;
+        // Plaintext authentication
+        return parent->HandlePlaintextAuthentication( aOut, aUsername );
     }
     else if( parent->GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH
                 && ( aAllowedTypes & GIT_CREDENTIAL_SSH_KEY )
                 && !( parent->TestedTypes() & GIT_CREDENTIAL_SSH_KEY ) )
     {
         // SSH key authentication
-        wxString sshKey = parent->GetNextPublicKey();
-
-        if( sshKey.IsEmpty() )
-        {
-            parent->TestedTypes() |= GIT_CREDENTIAL_SSH_KEY;
-            return GIT_PASSTHROUGH;
-        }
-
-        wxString sshPubKey = sshKey + ".pub";
-        wxString username = parent->GetUsername().Trim().Trim( false );
-        wxString password = parent->GetPassword().Trim().Trim( false );
-
-        git_credential_ssh_key_new( aOut, username.ToStdString().c_str(),
-                              sshPubKey.ToStdString().c_str(),
-                              sshKey.ToStdString().c_str(),
-                              password.ToStdString().c_str() );
+        return parent->HandleSSHKeyAuthentication( aOut, aUsername );
     }
     else
     {
