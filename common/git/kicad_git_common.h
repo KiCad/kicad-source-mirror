@@ -131,6 +131,12 @@ public:
         return m_publicKeys[m_nextPublicKey++];
     }
 
+    int HandleSSHKeyAuthentication( git_cred** aOut, const wxString& aUsername );
+
+    int HandlePlaintextAuthentication( git_cred** aOut, const wxString& aUsername );
+
+    int HandleSSHAgentAuthentication( git_cred** aOut, const wxString& aUsername );
+
 protected:
     git_repository* m_repo;
 
@@ -154,10 +160,13 @@ private:
 
     std::vector<wxString> m_publicKeys;
     int m_nextPublicKey;
+
+    // Create a dummy flag to tell if we have tested ssh agent credentials separately
+    // from the ssh key credentials
+    static const unsigned KIGIT_CREDENTIAL_SSH_AGENT = 1 << sizeof( m_testedTypes - 1 );
 };
 
-
-extern "C" int progress_cb( const char* str, int len, void* data );
+extern "C" int  progress_cb( const char* str, int len, void* data );
 extern "C" void clone_progress_cb( const char* str, size_t len, size_t total, void* data );
 extern "C" int transfer_progress_cb( const git_transfer_progress* aStats, void* aPayload );
 extern "C" int update_cb( const char* aRefname, const git_oid* aFirst, const git_oid* aSecond,

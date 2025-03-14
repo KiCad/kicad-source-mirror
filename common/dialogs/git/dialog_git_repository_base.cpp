@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -30,20 +30,26 @@ DIALOG_GIT_REPOSITORY_BASE::DIALOG_GIT_REPOSITORY_BASE( wxWindow* parent, wxWind
 
 	m_staticText3 = new wxStaticText( this, wxID_ANY, _("Name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->Wrap( -1 );
+	m_staticText3->Hide();
+
 	fgSizer2->Add( m_staticText3, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_txtName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_txtName->Hide();
+
 	fgSizer2->Add( m_txtName, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_staticText4 = new wxStaticText( this, wxID_ANY, _("Location:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
-	fgSizer2->Add( m_staticText4, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	fgSizer2->Add( m_staticText4, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_txtURL = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_txtURL, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_staticText9 = new wxStaticText( this, wxID_ANY, _("Connection type:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText9->Wrap( -1 );
+	m_staticText9->Hide();
+
 	fgSizer2->Add( m_staticText9, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizer3;
@@ -53,6 +59,8 @@ DIALOG_GIT_REPOSITORY_BASE::DIALOG_GIT_REPOSITORY_BASE( wxWindow* parent, wxWind
 	int m_ConnTypeNChoices = sizeof( m_ConnTypeChoices ) / sizeof( wxString );
 	m_ConnType = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_ConnTypeNChoices, m_ConnTypeChoices, 0 );
 	m_ConnType->SetSelection( 0 );
+	m_ConnType->Hide();
+
 	bSizer3->Add( m_ConnType, 0, wxRIGHT, 5 );
 
 
@@ -80,23 +88,13 @@ DIALOG_GIT_REPOSITORY_BASE::DIALOG_GIT_REPOSITORY_BASE( wxWindow* parent, wxWind
 	fgSizer21->SetFlexibleDirection( wxBOTH );
 	fgSizer21->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_labelSSH = new wxStaticText( m_panelAuth, wxID_ANY, _("SSH private key:     "), wxDefaultPosition, wxDefaultSize, 0 );
-	m_labelSSH->Wrap( -1 );
-	fgSizer21->Add( m_labelSSH, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
-
-	wxBoxSizer* bSizer5;
-	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
+	m_cbCustom = new wxCheckBox( m_panelAuth, wxID_ANY, _("SSH private key:     "), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer21->Add( m_cbCustom, 0, wxALL, 5 );
 
 	m_fpSSHKey = new wxFilePickerCtrl( m_panelAuth, wxID_ANY, wxEmptyString, _("Select SSH private key file"), _("*"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE|wxFLP_FILE_MUST_EXIST|wxFLP_OPEN );
 	m_fpSSHKey->SetMinSize( wxSize( 250,-1 ) );
 
-	bSizer5->Add( m_fpSSHKey, 0, wxEXPAND|wxRIGHT, 5 );
-
-	m_btnTest = new wxButton( m_panelAuth, wxID_ANY, _("Test"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer5->Add( m_btnTest, 0, wxRIGHT, 5 );
-
-
-	fgSizer21->Add( bSizer5, 0, wxEXPAND, 5 );
+	fgSizer21->Add( m_fpSSHKey, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_staticText11 = new wxStaticText( m_panelAuth, wxID_ANY, _("User name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11->Wrap( -1 );
@@ -129,6 +127,8 @@ DIALOG_GIT_REPOSITORY_BASE::DIALOG_GIT_REPOSITORY_BASE( wxWindow* parent, wxWind
 	m_sdbSizer->AddButton( m_sdbSizerOK );
 	m_sdbSizerCancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
+	m_sdbSizerHelp = new wxButton( this, wxID_HELP );
+	m_sdbSizer->AddButton( m_sdbSizerHelp );
 	m_sdbSizer->Realize();
 
 	bSizerMain->Add( m_sdbSizer, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
@@ -145,8 +145,9 @@ DIALOG_GIT_REPOSITORY_BASE::DIALOG_GIT_REPOSITORY_BASE( wxWindow* parent, wxWind
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GIT_REPOSITORY_BASE::OnUpdateUI ) );
 	m_txtURL->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_GIT_REPOSITORY_BASE::OnLocationExit ), NULL, this );
 	m_ConnType->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_GIT_REPOSITORY_BASE::OnSelectConnType ), NULL, this );
+	m_cbCustom->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GIT_REPOSITORY_BASE::onCbCustom ), NULL, this );
 	m_fpSSHKey->Connect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( DIALOG_GIT_REPOSITORY_BASE::OnFileUpdated ), NULL, this );
-	m_btnTest->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GIT_REPOSITORY_BASE::OnTestClick ), NULL, this );
+	m_sdbSizerHelp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GIT_REPOSITORY_BASE::OnTestClick ), NULL, this );
 	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GIT_REPOSITORY_BASE::OnOKClick ), NULL, this );
 }
 
@@ -157,8 +158,9 @@ DIALOG_GIT_REPOSITORY_BASE::~DIALOG_GIT_REPOSITORY_BASE()
 	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GIT_REPOSITORY_BASE::OnUpdateUI ) );
 	m_txtURL->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_GIT_REPOSITORY_BASE::OnLocationExit ), NULL, this );
 	m_ConnType->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_GIT_REPOSITORY_BASE::OnSelectConnType ), NULL, this );
+	m_cbCustom->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GIT_REPOSITORY_BASE::onCbCustom ), NULL, this );
 	m_fpSSHKey->Disconnect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( DIALOG_GIT_REPOSITORY_BASE::OnFileUpdated ), NULL, this );
-	m_btnTest->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GIT_REPOSITORY_BASE::OnTestClick ), NULL, this );
+	m_sdbSizerHelp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GIT_REPOSITORY_BASE::OnTestClick ), NULL, this );
 	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GIT_REPOSITORY_BASE::OnOKClick ), NULL, this );
 
 }

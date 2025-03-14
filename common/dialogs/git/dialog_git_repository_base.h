@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,12 +21,10 @@
 #include <wx/textctrl.h>
 #include <wx/choice.h>
 #include <wx/sizer.h>
+#include <wx/checkbox.h>
 #include <wx/filepicker.h>
-#include <wx/button.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
 #include <wx/panel.h>
+#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -51,9 +49,8 @@ class DIALOG_GIT_REPOSITORY_BASE : public DIALOG_SHIM
 		wxPanel* m_panelAuth;
 		wxStaticText* m_staticText2;
 		wxStaticLine* m_staticline2;
-		wxStaticText* m_labelSSH;
+		wxCheckBox* m_cbCustom;
 		wxFilePickerCtrl* m_fpSSHKey;
-		wxButton* m_btnTest;
 		wxStaticText* m_staticText11;
 		wxTextCtrl* m_txtUsername;
 		wxStaticText* m_labelPass1;
@@ -61,12 +58,14 @@ class DIALOG_GIT_REPOSITORY_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
+		wxButton* m_sdbSizerHelp;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnLocationExit( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnSelectConnType( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onCbCustom( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFileUpdated( wxFileDirPickerEvent& event ) { event.Skip(); }
 		virtual void OnTestClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOKClick( wxCommandEvent& event ) { event.Skip(); }
