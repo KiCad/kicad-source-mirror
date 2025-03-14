@@ -86,10 +86,8 @@ KICOMMON_API bool ConfirmRevertDialog( wxWindow* parent, const wxString& aMessag
 
 /**
  * Display an error or warning message box with \a aMessage.
- *
- * @warning Setting \a displaytime does not work.  Do not use it.
  */
-KICOMMON_API void DisplayError( wxWindow* aParent, const wxString& aText, int aDisplayTime = 0 );
+KICOMMON_API void DisplayError( wxWindow* aParent, const wxString& aText );
 
 /**
  * Display an error message with \a aMessage

@@ -167,7 +167,7 @@ int OKOrCancelDialog( wxWindow* aParent, const wxString& aWarning, const wxStrin
 
 
 // DisplayError should be deprecated, use DisplayErrorMessage instead
-void DisplayError( wxWindow* aParent, const wxString& aText, int aDisplayTime )
+void DisplayError( wxWindow* aParent, const wxString& aText )
 {
     if( !wxTheApp || !wxTheApp->IsMainLoopRunning() )
     {
@@ -182,10 +182,9 @@ void DisplayError( wxWindow* aParent, const wxString& aText, int aDisplayTime )
     }
 
     wxMessageDialog* dlg;
-    int              icon = aDisplayTime > 0 ? wxICON_INFORMATION : wxICON_ERROR;
 
-    dlg = new wxMessageDialog( aParent, aText, _( "Warning" ),
-                               wxOK | wxCENTRE | wxRESIZE_BORDER | icon | wxSTAY_ON_TOP );
+    dlg = new wxMessageDialog( aParent, aText, _( "Error" ),
+                               wxOK | wxCENTRE | wxRESIZE_BORDER | wxICON_ERROR | wxSTAY_ON_TOP );
 
     dlg->ShowModal();
     dlg->Destroy();
