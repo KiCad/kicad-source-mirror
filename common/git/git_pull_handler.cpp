@@ -79,7 +79,7 @@ bool GIT_PULL_HANDLER::PerformFetch( bool aSkipLock )
     if( git_remote_connect( remote, GIT_DIRECTION_FETCH, &remoteCallbacks, nullptr, nullptr ) )
     {
         AddErrorString( wxString::Format( _( "Could not connect to remote '%s': %s" ), "origin",
-                                          git_error_last()->message ) );
+                                          KIGIT_COMMON::GetLastGitError() ) );
         return false;
     }
 
@@ -90,7 +90,7 @@ bool GIT_PULL_HANDLER::PerformFetch( bool aSkipLock )
     if( git_remote_fetch( remote, nullptr, &fetchOptions, nullptr ) )
     {
         AddErrorString( wxString::Format( _( "Could not fetch data from remote '%s': %s" ),
-                                          "origin", git_error_last()->message ) );
+                                          "origin", KIGIT_COMMON::GetLastGitError() ) );
         return false;
     }
 

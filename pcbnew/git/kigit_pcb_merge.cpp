@@ -23,6 +23,7 @@
 
 #include "kigit_pcb_merge.h"
 #include <git/kicad_git_blob_reader.h>
+#include <git/kicad_git_common.h>
 #include <git/kicad_git_memory.h>
 
 #include <board.h>
@@ -95,7 +96,7 @@ int KIGIT_PCB_MERGE::Merge()
 
     if( git_blob_lookup( &ancestor_blob, repo, &ancestor->id ) != 0 )
     {
-        wxLogTrace( traceGit, "Could not find ancestor blob: %s", git_error_last()->message );
+        wxLogTrace( traceGit, "Could not find ancestor blob: %s", KIGIT_COMMON::GetLastGitError() );
         return GIT_ENOTFOUND;
     }
 
@@ -103,7 +104,7 @@ int KIGIT_PCB_MERGE::Merge()
 
     if( git_blob_lookup( &ours_blob, repo, &ours->id ) != 0 )
     {
-        wxLogTrace( traceGit, "Could not find ours blob: %s", git_error_last()->message );
+        wxLogTrace( traceGit, "Could not find ours blob: %s", KIGIT_COMMON::GetLastGitError() );
         return GIT_ENOTFOUND;
     }
 
@@ -111,7 +112,7 @@ int KIGIT_PCB_MERGE::Merge()
 
     if( git_blob_lookup( &theirs_blob, repo, &theirs->id ) != 0 )
     {
-        wxLogTrace( traceGit, "Could not find theirs blob: %s", git_error_last()->message );
+        wxLogTrace( traceGit, "Could not find theirs blob: %s", KIGIT_COMMON::GetLastGitError() );
         return GIT_ENOTFOUND;
     }
 

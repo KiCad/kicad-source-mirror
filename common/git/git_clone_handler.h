@@ -24,13 +24,14 @@
 #ifndef GIT_CLONE_HANDLER_H_
 #define GIT_CLONE_HANDLER_H_
 
-#include <git/kicad_git_common.h>
-#include <git/git_progress.h>
+#include "kicad_git_common.h"
+#include "git_repo_mixin.h"
+#include "git_progress.h"
 
-class GIT_CLONE_HANDLER : public KIGIT_COMMON, public GIT_PROGRESS
+class GIT_CLONE_HANDLER : public KIGIT_REPO_MIXIN
 {
 public:
-    GIT_CLONE_HANDLER();
+    GIT_CLONE_HANDLER( KIGIT_COMMON* aCommon );
     ~GIT_CLONE_HANDLER();
 
     bool PerformClone();

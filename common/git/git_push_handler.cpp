@@ -74,7 +74,7 @@ PushResult GIT_PUSH_HANDLER::PerformPush()
     if( git_remote_connect( remote, GIT_DIRECTION_PUSH, &remoteCallbacks, nullptr, nullptr ) )
     {
         AddErrorString( wxString::Format( _( "Could not connect to remote: %s" ),
-                                          git_error_last()->message ) );
+                                          KIGIT_COMMON::GetLastGitError() ) );
         return PushResult::Error;
     }
 
@@ -102,7 +102,7 @@ PushResult GIT_PUSH_HANDLER::PerformPush()
     if( git_remote_push( remote, &refspecs, &pushOptions ) )
     {
         AddErrorString( wxString::Format( _( "Could not push to remote: %s" ),
-                                          git_error_last()->message ) );
+                                          KIGIT_COMMON::GetLastGitError() ) );
         git_remote_disconnect( remote );
         return PushResult::Error;
     }

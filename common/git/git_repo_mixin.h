@@ -15,12 +15,16 @@
 #define GIT_REPO_MIXIN_H
 
 #include "kicad_git_common.h"
+#include "kicad_git_errors.h"
+#include "git_progress.h"
 
-class KIGIT_REPO_MIXIN
+class KIGIT_REPO_MIXIN: public KIGIT_ERRORS, public GIT_PROGRESS
 {
 public:
     KIGIT_REPO_MIXIN( KIGIT_COMMON* aCommon ) : m_common( aCommon )
     {
+        // Ensure m_common is initialized
+        wxASSERT( aCommon != nullptr );
     }
 
     virtual ~KIGIT_REPO_MIXIN()
@@ -122,15 +126,6 @@ public:
     wxString GetPassword() const
     {
         return m_common->GetPassword();
-    }
-
-    /**
-     * @brief Set the connection type
-     * @param aConnType The connection type
-     */
-    void SetConnType( KIGIT_COMMON::GIT_CONN_TYPE aConnType )
-    {
-        m_common->SetConnType( aConnType );
     }
 
     /**

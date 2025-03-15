@@ -23,6 +23,7 @@
 
 #include "kicad_git_common.h"
 #include "kicad_git_memory.h"
+#include "git_repo_mixin.h"
 
 #include <git/git_progress.h>
 #include <kiplatform/secrets.h>
@@ -36,12 +37,12 @@
 #include <vector>
 
 KIGIT_COMMON::KIGIT_COMMON( git_repository* aRepo ) :
-        m_repo( aRepo ), m_connType( GIT_CONN_TYPE::GIT_CONN_LOCAL ), m_testedTypes( 0 )
+        m_repo( aRepo ), m_connType( GIT_CONN_TYPE::GIT_CONN_LOCAL ), m_testedTypes( 0 ),
+        m_nextPublicKey( 0 )
 {}
 
 KIGIT_COMMON::KIGIT_COMMON( const KIGIT_COMMON& aOther ) :
         // Initialize base class and member variables
-        KIGIT_ERRORS(),
         m_repo( aOther.m_repo ),
         m_connType( aOther.m_connType ),
         m_remote( aOther.m_remote ),
@@ -171,13 +172,13 @@ std::vector<wxString> KIGIT_COMMON::GetProjectDirs()
 
     if( git_reference_name_to_id( &oid, m_repo, "HEAD" ) != GIT_OK )
     {
-        wxLogTrace( traceGit, "An error occurred: %s", git_error_last()->message );
+        wxLogTrace( traceGit, "An error occurred: %s", KIGIT_COMMON::GetLastGitError() );
         return projDirs;
     }
 
     if( git_commit_lookup( &commit, m_repo, &oid ) != GIT_OK )
     {
-        wxLogTrace( traceGit, "An error occurred: %s", git_error_last()->message );
+        wxLogTrace( traceGit, "An error occurred: %s", KIGIT_COMMON::GetLastGitError() );
         return projDirs;
     }
 
@@ -185,7 +186,7 @@ std::vector<wxString> KIGIT_COMMON::GetProjectDirs()
 
     if( git_commit_tree( &tree, commit ) != GIT_OK )
     {
-        wxLogTrace( traceGit, "An error occurred: %s", git_error_last()->message );
+        wxLogTrace( traceGit, "An error occurred: %s", KIGIT_COMMON::GetLastGitError() );
         return projDirs;
     }
 
@@ -230,27 +231,31 @@ std::vector<wxString> KIGIT_COMMON::GetProjectDirs()
 
 std::pair<std::set<wxString>,std::set<wxString>> KIGIT_COMMON::GetDifferentFiles() const
 {
-    auto get_modified_files = [&]( git_oid* from_oid, git_oid* to_oid ) -> std::set<wxString>
+    auto get_modified_files = [&]( const git_oid* from_oid, const git_oid* to_oid ) -> std::set<wxString>
     {
         std::set<wxString> modified_set;
         git_revwalk* walker = nullptr;
 
-        if( !m_repo )
+        if( !m_repo || !from_oid )
             return modified_set;
 
         if( git_revwalk_new( &walker, m_repo ) != GIT_OK )
         {
-            wxLogTrace( traceGit, "Failed to create revwalker" );
+            wxLogTrace( traceGit, "Failed to create revwalker: %s", KIGIT_COMMON::GetLastGitError() );
             return modified_set;
         }
 
         KIGIT::GitRevWalkPtr walkerPtr( walker );
 
-        if( ( git_revwalk_push( walker, from_oid ) != GIT_OK )
-            || ( git_revwalk_hide( walker, to_oid ) != GIT_OK ) )
+        if( git_revwalk_push( walker, from_oid ) != GIT_OK )
         {
-            wxLogTrace( traceGit, "Failed to push/hide commits" );
+            wxLogTrace( traceGit, "Failed to set from commit: %s", KIGIT_COMMON::GetLastGitError() );
             return modified_set;
+        }
+
+        if( to_oid && git_revwalk_hide( walker, to_oid ) != GIT_OK )
+        {
+            wxLogTrace( traceGit, "Failed to set end commit (maybe new repo): %s", KIGIT_COMMON::GetLastGitError() );
         }
 
         git_oid     oid;
@@ -261,7 +266,7 @@ std::pair<std::set<wxString>,std::set<wxString>> KIGIT_COMMON::GetDifferentFiles
         {
             if( git_commit_lookup( &commit, m_repo, &oid ) != GIT_OK )
             {
-                wxLogTrace( traceGit, "Failed to lookup commit" );
+                wxLogTrace( traceGit, "Failed to lookup commit: %s", KIGIT_COMMON::GetLastGitError() );
                 continue;
             }
 
@@ -270,7 +275,7 @@ std::pair<std::set<wxString>,std::set<wxString>> KIGIT_COMMON::GetDifferentFiles
 
             if( git_commit_tree( &tree, commit ) != GIT_OK )
             {
-                wxLogTrace( traceGit, "Failed to get commit tree" );
+                wxLogTrace( traceGit, "Failed to get commit tree: %s", KIGIT_COMMON::GetLastGitError() );
                 continue;
             }
 
@@ -279,7 +284,16 @@ std::pair<std::set<wxString>,std::set<wxString>> KIGIT_COMMON::GetDifferentFiles
             // get parent commit tree to diff against
             if( !git_commit_parentcount( commit ) )
             {
-                wxLogTrace( traceGit, "No parent commit" );
+                git_tree_walk(
+                    tree, GIT_TREEWALK_PRE,
+                    []( const char* root, const git_tree_entry* entry, void* payload )
+                    {
+                        std::set<wxString>* modified_set_internal = static_cast<std::set<wxString>*>( payload );
+                        wxString filePath = wxString::Format( "%s%s", root, git_tree_entry_name( entry ) );
+                        modified_set_internal->insert( filePath );
+                        return 0; // continue walking
+                    },
+                    &modified_set );
                 continue;
             }
 
@@ -287,7 +301,7 @@ std::pair<std::set<wxString>,std::set<wxString>> KIGIT_COMMON::GetDifferentFiles
 
             if( git_commit_parent( &parent, commit, 0 ) != GIT_OK )
             {
-                wxLogTrace( traceGit, "Failed to get parent commit" );
+                wxLogTrace( traceGit, "Failed to get parent commit: %s", KIGIT_COMMON::GetLastGitError() );
                 continue;
             }
 
@@ -296,7 +310,7 @@ std::pair<std::set<wxString>,std::set<wxString>> KIGIT_COMMON::GetDifferentFiles
 
             if( git_commit_tree( &parent_tree, parent ) != GIT_OK )
             {
-                wxLogTrace( traceGit, "Failed to get parent commit tree" );
+                wxLogTrace( traceGit, "Failed to get parent commit tree: %s", KIGIT_COMMON::GetLastGitError() );
                 continue;
             }
 
@@ -322,7 +336,13 @@ std::pair<std::set<wxString>,std::set<wxString>> KIGIT_COMMON::GetDifferentFiles
 
                 git_diff_free( diff );
             }
+            else
+            {
+                wxLogTrace( traceGit, "Failed to diff trees: %s", KIGIT_COMMON::GetLastGitError() );
+            }
         }
+
+        wxLogTrace( traceGit, "Finished walking commits with end: %s", KIGIT_COMMON::GetLastGitError() );
 
         return modified_set;
     };
@@ -346,15 +366,14 @@ std::pair<std::set<wxString>,std::set<wxString>> KIGIT_COMMON::GetDifferentFiles
     if( git_branch_upstream( &remote_head, head ) != GIT_OK )
     {
         wxLogTrace( traceGit, "Failed to get modified remote HEAD" );
-        return modified_files;
     }
 
     KIGIT::GitReferencePtr remoteHeadPtr( remote_head );
-    git_oid                head_oid = *git_reference_target( head );
-    git_oid                remote_oid = *git_reference_target( remote_head );
+    const git_oid*         head_oid = git_reference_target( head );
+    const git_oid*         remote_oid = git_reference_target( remote_head );
 
-    modified_files.first = get_modified_files( &head_oid, &remote_oid );
-    modified_files.second = get_modified_files( &remote_oid, &head_oid );
+    modified_files.first = get_modified_files( head_oid, remote_oid );
+    modified_files.second = get_modified_files( remote_oid, head_oid );
 
     return modified_files;
 }
@@ -370,7 +389,7 @@ bool KIGIT_COMMON::HasLocalCommits() const
 
     if( git_repository_head( &head, m_repo ) != GIT_OK )
     {
-        wxLogTrace( traceGit, "Failed to get HEAD" );
+        wxLogTrace( traceGit, "Failed to get HEAD: %s", KIGIT_COMMON::GetLastGitError() );
         return false;
     }
 
@@ -378,27 +397,33 @@ bool KIGIT_COMMON::HasLocalCommits() const
 
     if( git_branch_upstream( &remote_head, head ) != GIT_OK )
     {
-        wxLogTrace( traceGit, "Failed to get remote HEAD" );
-        return false;
+        // No remote branch, so we have local commits (new repo?)
+        wxLogTrace( traceGit, "Failed to get remote HEAD: %s", KIGIT_COMMON::GetLastGitError() );
+        return true;
     }
 
     KIGIT::GitReferencePtr remoteHeadPtr( remote_head );
-    git_oid                head_oid = *git_reference_target( head );
-    git_oid                remote_oid = *git_reference_target( remote_head );
+    const git_oid*         head_oid = git_reference_target( head );
+    const git_oid*         remote_oid = git_reference_target( remote_head );
     git_revwalk*           walker = nullptr;
 
     if( git_revwalk_new( &walker, m_repo ) != GIT_OK )
     {
-        wxLogTrace( traceGit, "Failed to create revwalker" );
+        wxLogTrace( traceGit, "Failed to create revwalker: %s", KIGIT_COMMON::GetLastGitError() );
         return false;
     }
 
     KIGIT::GitRevWalkPtr walkerPtr( walker );
 
-    if( ( git_revwalk_push( walker, &head_oid ) != GIT_OK )
-        || ( git_revwalk_hide( walker, &remote_oid ) != GIT_OK ) )
+    if( !head_oid || git_revwalk_push( walker, head_oid ) != GIT_OK )
     {
-        wxLogTrace( traceGit, "Failed to push/hide commits" );
+        wxLogTrace( traceGit, "Failed to push commits: %s", KIGIT_COMMON::GetLastGitError() );
+        return false;
+    }
+
+    if( remote_oid && git_revwalk_hide( walker, remote_oid ) != GIT_OK )
+    {
+        wxLogTrace( traceGit, "Failed to push/hide commits: %s", KIGIT_COMMON::GetLastGitError() );
         return false;
     }
 
@@ -407,7 +432,7 @@ bool KIGIT_COMMON::HasLocalCommits() const
     // If we can't walk to the next commit, then we are at or behind the remote
     if( git_revwalk_next( &oid, walker ) != GIT_OK )
     {
-        wxLogTrace( traceGit, "Failed to walk to next commit" );
+        wxLogTrace( traceGit, "Failed to walk to next commit: %s", KIGIT_COMMON::GetLastGitError() );
         return false;
     }
 
@@ -453,23 +478,61 @@ wxString KIGIT_COMMON::GetRemotename() const
 
     if( git_repository_head( &head, m_repo ) != GIT_OK )
     {
-        wxLogTrace( traceGit, "Failed to get remote name" );
+        wxLogTrace( traceGit, "Failed to get remote name: %s", KIGIT_COMMON::GetLastGitError() );
         return retval;
     }
 
     KIGIT::GitReferencePtr headPtr( head );
 
-    if( git_branch_upstream( &upstream, head ) == GIT_OK )
+    if( git_branch_upstream( &upstream, head ) != GIT_OK )
     {
-        git_buf     remote_name = GIT_BUF_INIT_CONST( nullptr, 0 );
+        wxLogTrace( traceGit, "Failed to get upstream branch: %s", KIGIT_COMMON::GetLastGitError() );
+        git_strarray remotes = { nullptr, 0 };
 
-        if( git_branch_remote_name( &remote_name, m_repo, git_reference_name( upstream ) ) == GIT_OK )
+        if( git_remote_list( &remotes, m_repo ) == GIT_OK )
         {
-            retval = remote_name.ptr;
-            git_buf_dispose( &remote_name );
+            if( remotes.count == 1 )
+                retval = remotes.strings[0];
+
+            git_strarray_dispose( &remotes );
+        }
+        else
+        {
+            wxLogTrace( traceGit, "Failed to list remotes: %s", KIGIT_COMMON::GetLastGitError() );
+
+            // If we can't get the remote name from the upstream branch or the list of remotes,
+            // just return the default remote name
+
+            git_remote* remote = nullptr;
+
+            if( git_remote_lookup( &remote, m_repo, "origin" ) == GIT_OK )
+            {
+                retval = git_remote_name( remote );
+                git_remote_free( remote );
+            }
+            else
+            {
+                wxLogTrace( traceGit, "Failed to get remote name from default remote: %s",
+                            KIGIT_COMMON::GetLastGitError() );
+            }
         }
 
-        git_reference_free( upstream );
+        return retval;
+    }
+
+    KIGIT::GitReferencePtr upstreamPtr( upstream );
+    git_buf     remote_name = GIT_BUF_INIT_CONST( nullptr, 0 );
+
+    if( git_branch_remote_name( &remote_name, m_repo, git_reference_name( upstream ) ) == GIT_OK )
+    {
+        retval = remote_name.ptr;
+        git_buf_dispose( &remote_name );
+    }
+    else
+    {
+        wxLogTrace( traceGit,
+                    "Failed to get remote name from upstream branch: %s",
+                    KIGIT_COMMON::GetLastGitError() );
     }
 
     return retval;
@@ -593,6 +656,21 @@ void KIGIT_COMMON::UpdateCurrentBranchInfo()
     updatePublicKeys();
 }
 
+KIGIT_COMMON::GIT_CONN_TYPE KIGIT_COMMON::GetConnType() const
+{
+    wxString remote = m_remote;
+
+    if( remote.IsEmpty() )
+        remote = GetRemotename();
+
+    if( remote.StartsWith( "https://" ) || remote.StartsWith( "http://" ) )
+        return GIT_CONN_TYPE::GIT_CONN_HTTPS;
+    else if( remote.StartsWith( "ssh://" ) || remote.StartsWith( "git@" ) || remote.StartsWith( "git+ssh://" ) )
+        return GIT_CONN_TYPE::GIT_CONN_SSH;
+
+    return GIT_CONN_TYPE::GIT_CONN_LOCAL;
+}
+
 void KIGIT_COMMON::updateConnectionType()
 {
     if( m_remote.StartsWith( "https://" ) || m_remote.StartsWith( "http://" ) )
@@ -683,7 +761,7 @@ int KIGIT_COMMON::HandleSSHKeyAuthentication( git_cred** aOut, const wxString& a
                                 password.mbc_str() ) != GIT_OK )
     {
         wxLogTrace( traceGit, "Failed to create SSH key credential for %s: %s",
-                    aUsername, git_error_last()->message );
+                    aUsername, KIGIT_COMMON::GetLastGitError() );
         return GIT_ERROR;
     }
 
@@ -706,7 +784,7 @@ int KIGIT_COMMON::HandleSSHAgentAuthentication( git_cred** aOut, const wxString&
     if( git_credential_ssh_key_from_agent( aOut, aUsername.mbc_str() ) != GIT_OK )
     {
         wxLogTrace( traceGit, "Failed to create SSH agent credential for %s: %s",
-                    aUsername, git_error_last()->message );
+                    aUsername, KIGIT_COMMON::GetLastGitError() );
         return GIT_ERROR;
     }
 
@@ -832,7 +910,8 @@ extern "C" int push_update_reference_cb( const char* aRefname, const char* aStat
 extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aUsername,
                                unsigned int aAllowedTypes, void* aPayload )
 {
-    KIGIT_COMMON* parent = static_cast<KIGIT_COMMON*>( aPayload );
+    KIGIT_REPO_MIXIN* parent = reinterpret_cast<KIGIT_REPO_MIXIN*>( aPayload );
+    KIGIT_COMMON* common = parent->GetCommon();
 
     if( parent->GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_LOCAL )
         return GIT_PASSTHROUGH;
@@ -849,14 +928,14 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
                 && !( parent->TestedTypes() & GIT_CREDENTIAL_USERPASS_PLAINTEXT ) )
     {
         // Plaintext authentication
-        return parent->HandlePlaintextAuthentication( aOut, aUsername );
+        return common->HandlePlaintextAuthentication( aOut, aUsername );
     }
     else if( parent->GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH
                 && ( aAllowedTypes & GIT_CREDENTIAL_SSH_KEY )
                 && !( parent->TestedTypes() & GIT_CREDENTIAL_SSH_KEY ) )
     {
         // SSH key authentication
-        return parent->HandleSSHKeyAuthentication( aOut, aUsername );
+        return common->HandleSSHKeyAuthentication( aOut, aUsername );
     }
     else
     {

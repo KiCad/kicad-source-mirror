@@ -37,7 +37,7 @@ enum class PushResult
     Error
 };
 
-class GIT_PUSH_HANDLER : public KIGIT_ERRORS, public GIT_PROGRESS, public KIGIT_REPO_MIXIN
+class GIT_PUSH_HANDLER : public KIGIT_REPO_MIXIN
 {
 public:
     GIT_PUSH_HANDLER( KIGIT_COMMON* aCommon );

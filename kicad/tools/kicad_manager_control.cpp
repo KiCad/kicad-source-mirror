@@ -49,6 +49,8 @@
 #include <design_block_lib_table.h>
 #include "dialog_pcm.h"
 #include <project/project_archiver.h>
+#include <project_tree_pane.h>
+#include <project_tree.h>
 #include <launch_ext.h>
 
 #include "widgets/filedlg_new_project.h"
@@ -163,11 +165,13 @@ int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
     if( !pro.IsOk() )
         return -1;
 
-    GIT_CLONE_HANDLER cloneHandler;
+    PROJECT_TREE_PANE *pane = static_cast<PROJECT_TREE_PANE*>( m_frame->GetToolCanvas() );
+
+
+    GIT_CLONE_HANDLER cloneHandler( pane->m_TreeProject->GitCommon() );
 
     cloneHandler.SetURL( dlg.GetRepoURL() );
     cloneHandler.SetClonePath( pro.GetPath() );
-    cloneHandler.SetConnType( dlg.GetRepoType() );
     cloneHandler.SetUsername( dlg.GetUsername() );
     cloneHandler.SetPassword( dlg.GetPassword() );
     cloneHandler.SetSSHKey( dlg.GetRepoSSHPath() );

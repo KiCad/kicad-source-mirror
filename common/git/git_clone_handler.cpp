@@ -31,20 +31,17 @@
 #include <wx/filename.h>
 #include <wx/log.h>
 
-GIT_CLONE_HANDLER::GIT_CLONE_HANDLER() :  KIGIT_COMMON( nullptr )
+GIT_CLONE_HANDLER::GIT_CLONE_HANDLER( KIGIT_COMMON* aCommon ) :  KIGIT_REPO_MIXIN( aCommon )
 {}
 
 
 GIT_CLONE_HANDLER::~GIT_CLONE_HANDLER()
-{
-    if( m_repo )
-        git_repository_free( m_repo );
-}
+{}
 
 
 bool GIT_CLONE_HANDLER::PerformClone()
 {
-    std::unique_lock<std::mutex> lock( m_gitActionMutex, std::try_to_lock );
+    std::unique_lock<std::mutex> lock( GetCommon()->m_gitActionMutex, std::try_to_lock );
 
     if( !lock.owns_lock() )
     {
@@ -73,15 +70,18 @@ bool GIT_CLONE_HANDLER::PerformClone()
     cloneOptions.fetch_opts.callbacks.credentials = credentials_cb;
     cloneOptions.fetch_opts.callbacks.payload = this;
 
-    m_testedTypes = 0;
+    TestedTypes() = 0;
     ResetNextKey();
+    git_repository* newRepo = nullptr;
 
-    if( git_clone( &m_repo, m_URL.ToStdString().c_str(), m_clonePath.ToStdString().c_str(),
+    if( git_clone( &newRepo, m_URL.ToStdString().c_str(), m_clonePath.ToStdString().c_str(),
                    &cloneOptions ) != 0 )
     {
         AddErrorString( wxString::Format( _( "Could not clone repository '%s'" ), m_URL ) );
         return false;
     }
+
+    GetCommon()->SetRepo( newRepo );
 
     if( m_progressReporter )
         m_progressReporter->Hide();

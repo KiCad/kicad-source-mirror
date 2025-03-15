@@ -289,7 +289,7 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
     common.SetPassword( m_txtPassword->GetValue() );
     common.SetUsername( m_txtUsername->GetValue() );
     common.SetSSHKey( m_fpSSHKey->GetFileName().GetFullPath() );
-    common.SetConnType( static_cast<KIGIT_COMMON::GIT_CONN_TYPE>( m_ConnType->GetSelection() ) );
+
 
     wxString txtURL = m_txtURL->GetValue();
     git_remote_create_with_fetchspec( &remote, m_repository, "origin", txtURL.mbc_str(),
@@ -299,7 +299,7 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
     if( git_remote_connect( remote, GIT_DIRECTION_FETCH, &callbacks, nullptr, nullptr ) == GIT_OK )
         success = true;
     else
-        error = git_error_last()->message;
+        error = KIGIT_COMMON::GetLastGitError();
 
     git_remote_disconnect( remote );
 
