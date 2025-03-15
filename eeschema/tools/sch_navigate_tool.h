@@ -65,7 +65,7 @@ public:
     ///< Navigate to next sheet by numeric sheet number
     int Next( const TOOL_EVENT& aEvent );
 
-    void HypertextCommand( const wxString& href );
+    void HypertextCommand( const wxString& aHref );
 
     bool CanGoBack();
     bool CanGoForward();
