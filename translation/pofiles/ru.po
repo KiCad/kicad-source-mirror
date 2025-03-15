@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-15 19:01+0300\n"
-"PO-Revision-Date: 2025-03-13 15:14+0000\n"
+"PO-Revision-Date: 2025-03-15 18:54+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v9/ru/>\n"
 "Language: ru\n"
@@ -22613,14 +22613,12 @@ msgid "Place Sheet Pins"
 msgstr "Разместить выводы листа"
 
 #: eeschema/tools/sch_actions.cpp:559 eeschema/tools/sch_actions.cpp:567
-#, fuzzy
 msgid "Sync Sheet Pins..."
-msgstr "Синхронизировать выводы листа"
+msgstr "Синхронизировать выводы листа..."
 
 #: eeschema/tools/sch_actions.cpp:575
-#, fuzzy
 msgid "Import Sheet..."
-msgstr "Импорт листа"
+msgstr "Импорт листа..."
 
 #: eeschema/tools/sch_actions.cpp:576
 msgid "Import sheet into project"
@@ -27832,18 +27830,16 @@ msgid "Local path: monitoring folder changes"
 msgstr "Локальный каталог: изменения отслеживаются"
 
 #: kicad/project_tree_pane.cpp:1630
-#, fuzzy
 msgid "The selected directory is already a Git project."
-msgstr "Выбранный каталог уже является git-проектом."
+msgstr "Выбранный каталог уже является проектом Git."
 
 #: kicad/project_tree_pane.cpp:1637
 msgid "Set default remote"
 msgstr "Установить внешний репозиторий по умолчанию"
 
 #: kicad/project_tree_pane.cpp:1652
-#, fuzzy
 msgid "Failed to initialize Git project."
-msgstr "Не удалось инициализировать проект git."
+msgstr "Не удалось инициализировать проект Git."
 
 #: kicad/project_tree_pane.cpp:1712
 msgid "Failed to set default remote."
@@ -27883,19 +27879,16 @@ msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "Не удалось обновить ссылку HEAD для ветки '%s'"
 
 #: kicad/project_tree_pane.cpp:1918
-#, fuzzy
 msgid "Are you sure you want to remove Git tracking from this project?"
-msgstr "Вы уверены, что хотите удалить отслеживание git из этого проекта?"
+msgstr "Вы уверены, что хотите удалить отслеживание Git из этого проекта?"
 
 #: kicad/project_tree_pane.cpp:1935
-#, fuzzy
 msgid "Failed to remove Git directory"
-msgstr "Не удалось удалить каталог git"
+msgstr "Не удалось удалить каталог Git"
 
 #: kicad/project_tree_pane.cpp:2236
-#, fuzzy
 msgid "The selected directory is not a Git project."
-msgstr "Выбранный каталог уже является git-проектом."
+msgstr "Выбранный каталог не является проектом Git."
 
 #: kicad/project_tree_pane.cpp:2385
 msgid "Discarding commit due to empty commit message."
