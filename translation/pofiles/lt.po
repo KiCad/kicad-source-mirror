@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-13 15:26+0300\n"
+"POT-Creation-Date: 2025-03-15 19:01+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/master-"
@@ -43,7 +43,7 @@ msgstr ""
 "X-Poedit-SearchPath-17: scripts\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
-#: common/dialogs/panel_embedded_files.cpp:320
+#: common/dialogs/panel_embedded_files.cpp:321
 #: common/widgets/grid_text_button_helpers.cpp:372
 #, fuzzy
 msgid "All Files"
@@ -257,7 +257,7 @@ msgstr "Atstatyti numatytuosius nustatymus"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:139
 #: bitmap2component/bitmap2cmp_frame.cpp:307 cvpcb/menubar.cpp:79
-#: eeschema/menubar.cpp:351 eeschema/sim/toolbars_simulator_frame.cpp:171
+#: eeschema/menubar.cpp:347 eeschema/sim/toolbars_simulator_frame.cpp:171
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:181
 #: eeschema/toolbars_symbol_viewer.cpp:130 gerbview/menubar.cpp:231
 #: kicad/menubar.cpp:227 pagelayout_editor/menubar.cpp:150
@@ -268,14 +268,14 @@ msgid "&File"
 msgstr "&Failas"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:140 cvpcb/menubar.cpp:80
-#: eeschema/menubar.cpp:352
+#: eeschema/menubar.cpp:348
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:182 kicad/menubar.cpp:228
 #: pagelayout_editor/menubar.cpp:151 pcbnew/menubar_footprint_editor.cpp:244
 #: pcbnew/menubar_pcb_editor.cpp:477
 msgid "&Edit"
 msgstr "K&eisti"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:141 eeschema/menubar.cpp:353
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:141 eeschema/menubar.cpp:349
 #: eeschema/sim/toolbars_simulator_frame.cpp:172
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:183
 #: eeschema/toolbars_symbol_viewer.cpp:131 gerbview/menubar.cpp:232
@@ -358,16 +358,16 @@ msgstr ""
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:748 common/confirm.cpp:211
 #: common/dialogs/dialog_grid_settings.cpp:82
 #: common/dialogs/dialog_grid_settings.cpp:89
-#: common/dialogs/panel_embedded_files.cpp:307
-#: common/dialogs/panel_embedded_files.cpp:424
-#: common/dialogs/panel_embedded_files.cpp:455
-#: common/dialogs/panel_embedded_files.cpp:465
+#: common/dialogs/panel_embedded_files.cpp:308
+#: common/dialogs/panel_embedded_files.cpp:425
+#: common/dialogs/panel_embedded_files.cpp:457
+#: common/dialogs/panel_embedded_files.cpp:469
 #: common/dialogs/panel_setup_severities.cpp:44 common/kidialog.cpp:126
 #: eeschema/dialogs/dialog_erc.cpp:878
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1808
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2210
-#: eeschema/erc/erc_item.cpp:81 eeschema/files-io.cpp:937
-#: eeschema/files-io.cpp:1005 eeschema/sch_marker.cpp:376
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1807
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2209
+#: eeschema/erc/erc_item.cpp:81 eeschema/files-io.cpp:936
+#: eeschema/files-io.cpp:1004 eeschema/sch_marker.cpp:376
 #: kicad/import_proj.cpp:79 kicad/import_project.cpp:123 kicad/kicad.cpp:318
 #: kicad/tools/kicad_manager_control.cpp:269
 #: kicad/tools/kicad_manager_control.cpp:326
@@ -911,15 +911,15 @@ msgid "Presets (%s+Tab):"
 msgstr "(„Ctrl“ + tabuliavimo klavišas)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:637
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1640
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2074
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1639
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2073
 #: pcbnew/widgets/appearance_controls.cpp:2632
 msgid "Save preset..."
 msgstr "Išsaugoti iš anksto nustatytą ..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:638
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1641
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2075
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1640
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2074
 #: pcbnew/widgets/appearance_controls.cpp:2633
 msgid "Delete preset..."
 msgstr "Ištrinti iš anksto nustatytą ..."
@@ -935,30 +935,30 @@ msgid "Save Layer Preset"
 msgstr "Išsaugoti sluoksnio išankstinį nustatymą"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:754
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1815
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2217
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1814
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2216
 #: pcbnew/widgets/appearance_controls.cpp:2772
 #, fuzzy
 msgid "Overwrite existing preset?"
 msgstr "Atidarykite esamą projektą"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:780
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1840
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2242
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1839
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2241
 #: pcbnew/widgets/appearance_controls.cpp:2798
 msgid "Presets"
 msgstr "Parinktys"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:789
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1852
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2254
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1851
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2253
 #: pcbnew/widgets/appearance_controls.cpp:2810
 msgid "Delete Preset"
 msgstr "Ištrinti iš anksto nustatytą"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:790
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1853
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2255
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1852
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2254
 #: pcbnew/widgets/appearance_controls.cpp:2811
 msgid "Select preset:"
 msgstr "Pasirinkite išankstinį nustatymą:"
@@ -1480,13 +1480,13 @@ msgid "Clear Recent Files"
 msgstr "Išvalyti naujausius failus"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:396
-#: eeschema/tools/sch_drawing_tools.cpp:1032
+#: eeschema/tools/sch_drawing_tools.cpp:1035
 #: pagelayout_editor/pl_editor_frame.cpp:878 pcbnew/tools/drawing_tool.cpp:750
 msgid "Choose Image"
 msgstr "Parinkti paveikslėlį"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:397
-#: eeschema/tools/sch_drawing_tools.cpp:1033
+#: eeschema/tools/sch_drawing_tools.cpp:1036
 #: pagelayout_editor/pl_editor_frame.cpp:879 pcbnew/tools/drawing_tool.cpp:751
 msgid "Image Files"
 msgstr "Vaizdo failai"
@@ -1998,13 +1998,13 @@ msgstr "Gerai"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:591
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:154
 #: eeschema/dialogs/panel_template_fieldnames.cpp:212
-#: eeschema/erc/erc_item.cpp:77 eeschema/files-io.cpp:452
+#: eeschema/erc/erc_item.cpp:77 eeschema/files-io.cpp:451
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:261
 #: eeschema/sch_marker.cpp:373 eeschema/sheet.cpp:780
-#: eeschema/symbol_editor/symbol_editor.cpp:134
-#: eeschema/symbol_editor/symbol_editor.cpp:504
-#: eeschema/symbol_editor/symbol_editor.cpp:1296
-#: eeschema/symbol_editor/symbol_editor.cpp:1694
+#: eeschema/symbol_editor/symbol_editor.cpp:133
+#: eeschema/symbol_editor/symbol_editor.cpp:503
+#: eeschema/symbol_editor/symbol_editor.cpp:1295
+#: eeschema/symbol_editor/symbol_editor.cpp:1693
 #: pcbnew/dialogs/dialog_drc.cpp:985 pcbnew/dialogs/dialog_export_vrml.cpp:128
 #: pcbnew/drc/drc_item.cpp:224 pcbnew/import_gfx/dialog_import_graphics.cpp:293
 #: pcbnew/pcb_marker.cpp:208
@@ -2017,14 +2017,14 @@ msgid "Information"
 msgstr "Patvirtinimas"
 
 #: common/confirm.cpp:266 common/confirm.cpp:269
-#: common/dialogs/panel_embedded_files.cpp:285
-#: common/dialogs/panel_embedded_files.cpp:401
+#: common/dialogs/panel_embedded_files.cpp:286
+#: common/dialogs/panel_embedded_files.cpp:402
 #: eeschema/design_block_utils.cpp:50 eeschema/design_block_utils.cpp:183
-#: eeschema/symbol_editor/symbol_editor.cpp:372
-#: eeschema/symbol_editor/symbol_editor.cpp:1001
-#: eeschema/symbol_editor/symbol_editor.cpp:1023
-#: eeschema/symbol_editor/symbol_editor.cpp:1141
-#: eeschema/symbol_editor/symbol_editor.cpp:1183
+#: eeschema/symbol_editor/symbol_editor.cpp:371
+#: eeschema/symbol_editor/symbol_editor.cpp:1000
+#: eeschema/symbol_editor/symbol_editor.cpp:1022
+#: eeschema/symbol_editor/symbol_editor.cpp:1140
+#: eeschema/symbol_editor/symbol_editor.cpp:1182
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:137
 #: eeschema/tools/symbol_editor_control.cpp:493
 #: eeschema/tools/symbol_editor_pin_tool.cpp:242 kicad/import_project.cpp:109
@@ -2187,9 +2187,9 @@ msgstr "Negalima sukurti visuotinės bibliotekos lentelės kelio „%s“."
 #: common/widgets/widget_hotkey_list.cpp:529
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:50
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:100
-#: eeschema/sch_symbol.cpp:2107 eeschema/symbol_editor/symbol_editor.cpp:829
-#: eeschema/symbol_editor/symbol_editor.cpp:1768
-#: eeschema/symbol_viewer_frame.cpp:461 include/lib_table_grid.h:214
+#: eeschema/sch_symbol.cpp:2107 eeschema/symbol_editor/symbol_editor.cpp:828
+#: eeschema/symbol_editor/symbol_editor.cpp:1767
+#: eeschema/symbol_viewer_frame.cpp:459 include/lib_table_grid.h:214
 #: kicad/pcm/dialogs/panel_package_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:43
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:50
@@ -2595,8 +2595,8 @@ msgstr "aplinkos įvairovė"
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
 #: eeschema/fields_grid_table.cpp:470 eeschema/sch_pin.cpp:1578
 #: eeschema/sch_symbol.cpp:2068 eeschema/sch_symbol.cpp:2121
-#: eeschema/symbol_editor/symbol_editor.cpp:1738
-#: eeschema/symbol_viewer_frame.cpp:459
+#: eeschema/symbol_editor/symbol_editor.cpp:1737
+#: eeschema/symbol_viewer_frame.cpp:457
 #: eeschema/sync_sheet_pin/sheet_synchronization_model.h:66
 #: eeschema/widgets/search_handlers.cpp:402
 #: eeschema/widgets/tuner_slider_base.cpp:27
@@ -2811,7 +2811,7 @@ msgstr "Pėdsakų ilgis už diapazono ribų"
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:97
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:109
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:32
-#: eeschema/symbol_editor/symbol_editor.cpp:862
+#: eeschema/symbol_editor/symbol_editor.cpp:861
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:27
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:31
 #: pcbnew/footprint_libraries_utils.cpp:1049
@@ -2926,7 +2926,7 @@ msgid "PCB"
 msgstr "PCB"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
-#: eeschema/sch_edit_frame.cpp:1342 eeschema/sch_plotter.cpp:1047
+#: eeschema/sch_edit_frame.cpp:1334 eeschema/sch_plotter.cpp:1060
 #: eeschema/widgets/symbol_diff_widget.cpp:44
 msgid "Schematic"
 msgstr "Schema"
@@ -3769,7 +3769,7 @@ msgstr "Testas"
 
 #: common/dialogs/git/dialog_git_auth.cpp:53
 #: common/dialogs/git/dialog_git_commit.cpp:151
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1340
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1339
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:147
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout.cpp:78
 #: pcbnew/tools/multichannel_tool.cpp:978
@@ -3779,11 +3779,11 @@ msgstr "Gerai"
 #: common/dialogs/git/dialog_git_auth.cpp:54
 #: common/dialogs/git/dialog_git_commit.cpp:152
 #: common/dialogs/git/dialog_git_switch.cpp:69
-#: common/dialogs/panel_embedded_files.cpp:425 common/tool/actions.cpp:159
+#: common/dialogs/panel_embedded_files.cpp:426 common/tool/actions.cpp:159
 #: eeschema/dialogs/dialog_erc.cpp:426
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1340 eeschema/sheet.cpp:784
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:962
-#: eeschema/symbol_editor/symbol_editor.cpp:1026
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1339 eeschema/sheet.cpp:784
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:959
+#: eeschema/symbol_editor/symbol_editor.cpp:1025
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:151
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:66
 #: pcbnew/dialogs/dialog_drc.cpp:348
@@ -4005,7 +4005,7 @@ msgid "Switch"
 msgstr "Perjungti vienetus"
 
 #: common/dialogs/git/dialog_git_switch.cpp:219
-#: eeschema/design_block_utils.cpp:90 eeschema/sch_base_frame.cpp:307
+#: eeschema/design_block_utils.cpp:90 eeschema/sch_base_frame.cpp:306
 #: pcbnew/footprint_libraries_utils.cpp:430
 msgid "Add"
 msgstr "Pridėti"
@@ -4722,10 +4722,10 @@ msgid "One of the nicknames will need to be changed after adding this library."
 msgstr "Pridėjus šią biblioteką, reikės pakeisti vieną iš slapyvardžių."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1010
-#: common/dialogs/panel_embedded_files.cpp:403
-#: common/dialogs/panel_embedded_files.cpp:425
+#: common/dialogs/panel_embedded_files.cpp:404
+#: common/dialogs/panel_embedded_files.cpp:426
 #: eeschema/design_block_utils.cpp:89
-#: eeschema/dialogs/panel_sym_lib_table.cpp:688 eeschema/sch_base_frame.cpp:306
+#: eeschema/dialogs/panel_sym_lib_table.cpp:688 eeschema/sch_base_frame.cpp:305
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1038
 #: pcbnew/footprint_libraries_utils.cpp:429 pcbnew/tools/pcb_actions.cpp:585
 msgid "Skip"
@@ -4744,7 +4744,7 @@ msgstr "Išsaugoti biblioteką"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1197
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1245
-#: eeschema/tools/sch_editor_control.cpp:505
+#: eeschema/tools/sch_editor_control.cpp:504
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1299
 #, c-format
 msgid ""
@@ -4760,10 +4760,10 @@ msgstr ""
 #: common/dialogs/panel_design_block_lib_table.cpp:1211
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1246
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1259
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1872
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1924
-#: eeschema/tools/sch_editor_control.cpp:506
-#: eeschema/tools/sch_editor_control.cpp:521
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1869
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1921
+#: eeschema/tools/sch_editor_control.cpp:505
+#: eeschema/tools/sch_editor_control.cpp:520
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1300
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1313
 msgid "File Save Error"
@@ -4771,7 +4771,7 @@ msgstr "Failo išsaugojimo klaida"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1210
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1258
-#: eeschema/tools/sch_editor_control.cpp:520
+#: eeschema/tools/sch_editor_control.cpp:519
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1312
 #, c-format
 msgid ""
@@ -4803,7 +4803,7 @@ msgstr "Matoma"
 #: common/dialogs/panel_design_block_lib_table_base.cpp:95
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:46
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:96
-#: eeschema/symbol_editor/symbol_editor.cpp:828 include/lib_table_grid.h:208
+#: eeschema/symbol_editor/symbol_editor.cpp:827 include/lib_table_grid.h:208
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:46
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:95
 #: pcbnew/footprint_libraries_utils.cpp:1014
@@ -4888,28 +4888,28 @@ msgid "This is a read-only table which shows pertinent environment variables."
 msgstr ""
 "Tai tik skaitoma lentelė, kurioje rodomi atitinkami aplinkos kintamieji."
 
-#: common/dialogs/panel_embedded_files.cpp:53
+#: common/dialogs/panel_embedded_files.cpp:54
 #, fuzzy
 msgid "Copy Embedded Reference"
 msgstr "Kopijuoti su nuoroda"
 
-#: common/dialogs/panel_embedded_files.cpp:54
+#: common/dialogs/panel_embedded_files.cpp:55
 msgid "Copy the reference for this embedded file"
 msgstr ""
 
-#: common/dialogs/panel_embedded_files.cpp:283
-#: common/dialogs/panel_embedded_files.cpp:398
+#: common/dialogs/panel_embedded_files.cpp:284
+#: common/dialogs/panel_embedded_files.cpp:399
 #, fuzzy, c-format
 msgid "File '%s' already exists."
 msgstr "Failas %s jau yra."
 
-#: common/dialogs/panel_embedded_files.cpp:286
-#: common/dialogs/panel_embedded_files.cpp:403
+#: common/dialogs/panel_embedded_files.cpp:287
+#: common/dialogs/panel_embedded_files.cpp:404
 #: eeschema/design_block_utils.cpp:51 eeschema/design_block_utils.cpp:184
-#: eeschema/symbol_editor/symbol_editor.cpp:373
-#: eeschema/symbol_editor/symbol_editor.cpp:1003
-#: eeschema/symbol_editor/symbol_editor.cpp:1142
-#: eeschema/symbol_editor/symbol_editor.cpp:1184
+#: eeschema/symbol_editor/symbol_editor.cpp:372
+#: eeschema/symbol_editor/symbol_editor.cpp:1002
+#: eeschema/symbol_editor/symbol_editor.cpp:1141
+#: eeschema/symbol_editor/symbol_editor.cpp:1183
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:138
 #: eeschema/tools/symbol_editor_control.cpp:495
 #: kicad/tools/kicad_manager_control.cpp:356
@@ -4924,41 +4924,41 @@ msgstr "Failas %s jau yra."
 msgid "Overwrite"
 msgstr "Perrašyti"
 
-#: common/dialogs/panel_embedded_files.cpp:305
+#: common/dialogs/panel_embedded_files.cpp:306
 #, fuzzy, c-format
 msgid "Failed to add file '%s'."
 msgstr "Nepavyko sukurti failo „%s“"
 
-#: common/dialogs/panel_embedded_files.cpp:319
+#: common/dialogs/panel_embedded_files.cpp:320
 #, fuzzy
 msgid "Select a file to embed"
 msgstr "Pasirinkite norimą sureguliuoti vertę"
 
-#: common/dialogs/panel_embedded_files.cpp:385
+#: common/dialogs/panel_embedded_files.cpp:386
 #, fuzzy
 msgid "Select a directory to export files"
 msgstr "Pasirinkite „GenCAD“ eksporto failo pavadinimą"
 
-#: common/dialogs/panel_embedded_files.cpp:417
+#: common/dialogs/panel_embedded_files.cpp:418
 #, fuzzy, c-format
 msgid "Directory '%s' is not writable."
 msgstr "Simbolių biblioteka „%s“ nėra rašoma."
 
-#: common/dialogs/panel_embedded_files.cpp:420
+#: common/dialogs/panel_embedded_files.cpp:421
 #, fuzzy, c-format
 msgid "Folder '%s' is not writable."
 msgstr "Simbolių biblioteka „%s“ nėra rašoma."
 
-#: common/dialogs/panel_embedded_files.cpp:425
+#: common/dialogs/panel_embedded_files.cpp:426
 msgid "Retry"
 msgstr ""
 
-#: common/dialogs/panel_embedded_files.cpp:452
+#: common/dialogs/panel_embedded_files.cpp:454
 #, fuzzy, c-format
 msgid "Failed to open file '%s'."
 msgstr "Не удалось открыть файл  '%s'"
 
-#: common/dialogs/panel_embedded_files.cpp:462
+#: common/dialogs/panel_embedded_files.cpp:466
 #, fuzzy, c-format
 msgid "Failed to write file '%s'."
 msgstr "Nepavyko sukurti failo „%s“"
@@ -5512,7 +5512,7 @@ msgstr "Neprijungta"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:858 pcbnew/footprint.cpp:4084
-#: pcbnew/pad.cpp:2547 pcbnew/pcb_table.cpp:541 pcbnew/pcb_textbox.cpp:867
+#: pcbnew/pad.cpp:2547 pcbnew/pcb_table.cpp:557 pcbnew/pcb_textbox.cpp:867
 #: pcbnew/zone.cpp:857 pcbnew/zone.cpp:1837
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Solid"
@@ -5522,7 +5522,7 @@ msgstr "Solidus"
 #: common/stroke_params.cpp:41
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:662 eeschema/sch_line.cpp:1048
-#: eeschema/sch_line.cpp:1060 pcbnew/pcb_table.cpp:542
+#: eeschema/sch_line.cpp:1060 pcbnew/pcb_table.cpp:558
 #: pcbnew/pcb_textbox.cpp:868
 msgid "Dashed"
 msgstr "Punktyrinis"
@@ -5531,7 +5531,7 @@ msgstr "Punktyrinis"
 #: common/stroke_params.cpp:42
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:663 eeschema/sch_line.cpp:1049
-#: eeschema/sch_line.cpp:1061 pcbnew/pcb_table.cpp:543
+#: eeschema/sch_line.cpp:1061 pcbnew/pcb_table.cpp:559
 #: pcbnew/pcb_textbox.cpp:869
 msgid "Dotted"
 msgstr "Punktyras"
@@ -5540,7 +5540,7 @@ msgstr "Punktyras"
 #: common/stroke_params.cpp:43
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:664 eeschema/sch_line.cpp:1050
-#: eeschema/sch_line.cpp:1062 pcbnew/pcb_table.cpp:544
+#: eeschema/sch_line.cpp:1062 pcbnew/pcb_table.cpp:560
 #: pcbnew/pcb_textbox.cpp:870
 msgid "Dash-Dot"
 msgstr "Brūkšnys-Taškas"
@@ -5549,7 +5549,7 @@ msgstr "Brūkšnys-Taškas"
 #: common/stroke_params.cpp:44
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:665 eeschema/sch_line.cpp:1051
-#: eeschema/sch_line.cpp:1063 pcbnew/pcb_table.cpp:545
+#: eeschema/sch_line.cpp:1063 pcbnew/pcb_table.cpp:561
 #: pcbnew/pcb_textbox.cpp:871
 #, fuzzy
 msgid "Dash-Dot-Dot"
@@ -6082,7 +6082,7 @@ msgid "Data Collection"
 msgstr "Trinkelių jungtys"
 
 #: common/eda_base_frame.cpp:1156 common/tool/actions.cpp:1088
-#: common/tool/common_tools.cpp:615 eeschema/symbol_editor/symbol_editor.cpp:85
+#: common/tool/common_tools.cpp:615 eeschema/symbol_editor/symbol_editor.cpp:84
 #: kicad/tools/kicad_manager_actions.cpp:125
 msgid "Symbol Editor"
 msgstr "Simbolių redaktorius"
@@ -6107,8 +6107,8 @@ msgid "Colors"
 msgstr "Spalvos"
 
 #: common/eda_base_frame.cpp:1165 common/hotkey_store.cpp:77
-#: common/tool/common_tools.cpp:614 eeschema/menubar.cpp:137
-#: eeschema/sch_edit_frame.cpp:1756 kicad/tools/kicad_manager_actions.cpp:114
+#: common/tool/common_tools.cpp:614 eeschema/menubar.cpp:133
+#: eeschema/sch_edit_frame.cpp:1748 kicad/tools/kicad_manager_actions.cpp:114
 #, fuzzy
 msgid "Schematic Editor"
 msgstr "Schemų redaktoriaus savybės"
@@ -6126,7 +6126,7 @@ msgstr "Lauko pavadinimo šablonai"
 
 #: common/eda_base_frame.cpp:1173 eeschema/sim/simulator_frame.cpp:115
 #: eeschema/sim/toolbars_simulator_frame.cpp:114
-#: eeschema/tools/ee_actions.cpp:74
+#: eeschema/tools/sch_actions.cpp:74
 #, fuzzy
 msgid "Simulator"
 msgstr "Simuliatorius ..."
@@ -6335,7 +6335,7 @@ msgid "Search"
 msgstr "Paieškos tekstas"
 
 #: common/eda_draw_frame.cpp:1226 common/tool/actions.cpp:1114
-#: eeschema/eeschema_settings.cpp:93 eeschema/sch_edit_frame.cpp:2213
+#: eeschema/eeschema_settings.cpp:93 eeschema/sch_edit_frame.cpp:2205
 #: pagelayout_editor/pl_editor_frame.cpp:195
 #: pcbnew/footprint_edit_frame.cpp:247 pcbnew/pcb_edit_frame.cpp:349
 #: pcbnew/pcb_edit_frame.cpp:1715
@@ -6389,7 +6389,7 @@ msgid "Text Box"
 msgstr "Tekstas apačioje"
 
 #: common/eda_item.cpp:355 common/eda_item.cpp:383 eeschema/sch_table.cpp:587
-#: pcbnew/pcb_table.cpp:395
+#: pcbnew/pcb_table.cpp:411
 #, fuzzy
 msgid "Table"
 msgstr "Lentelė:"
@@ -6470,7 +6470,7 @@ msgid "Bitmap"
 msgstr "Bitmap"
 
 #: common/eda_item.cpp:380 eeschema/sch_rule_area.cpp:50
-#: eeschema/sch_rule_area.cpp:371 pcbnew/zone.cpp:920
+#: eeschema/sch_rule_area.cpp:374 pcbnew/zone.cpp:920
 msgid "Rule Area"
 msgstr "Taisyklės sritis"
 
@@ -6500,7 +6500,7 @@ msgid "Field"
 msgstr "Laukas"
 
 #: common/eda_item.cpp:390 common/eda_item.cpp:402
-#: eeschema/symbol_editor/symbol_editor.cpp:1765
+#: eeschema/symbol_editor/symbol_editor.cpp:1764
 msgid "Symbol"
 msgstr "Simbolis"
 
@@ -6621,7 +6621,7 @@ msgstr "Ilgis"
 msgid "Angle"
 msgstr "Kampas"
 
-#: common/eda_shape.cpp:1010 eeschema/sch_rule_area.cpp:375
+#: common/eda_shape.cpp:1010 eeschema/sch_rule_area.cpp:378
 msgid "Points"
 msgstr "Taškai"
 
@@ -6670,7 +6670,7 @@ msgid "Shape Properties"
 msgstr "Lapo ypatybės"
 
 #: common/eda_shape.cpp:2256 eeschema/sch_table.cpp:646
-#: eeschema/sch_tablecell.cpp:192 pcbnew/pcb_table.cpp:556
+#: eeschema/sch_tablecell.cpp:192 pcbnew/pcb_table.cpp:572
 #: pcbnew/pcb_tablecell.cpp:192 pcbnew/pcb_textbox.cpp:882
 #: pcbnew/pcb_track.cpp:2075
 #, fuzzy
@@ -6678,7 +6678,7 @@ msgid "Start X"
 msgstr "Начальная точка по X:"
 
 #: common/eda_shape.cpp:2261 eeschema/sch_table.cpp:649
-#: eeschema/sch_tablecell.cpp:193 pcbnew/pcb_table.cpp:559
+#: eeschema/sch_tablecell.cpp:193 pcbnew/pcb_table.cpp:575
 #: pcbnew/pcb_tablecell.cpp:193 pcbnew/pcb_textbox.cpp:883
 #: pcbnew/pcb_track.cpp:2079
 #, fuzzy
@@ -6876,7 +6876,7 @@ msgstr "Teksto savybės"
 #: eeschema/fields_grid_table.cpp:482 eeschema/sch_field.cpp:1220
 #: eeschema/sch_label.cpp:1197 eeschema/sch_tablecell.cpp:127
 #: eeschema/sch_text.cpp:646 eeschema/sch_textbox.cpp:559
-#: eeschema/widgets/sch_properties_panel.cpp:258 pcbnew/pcb_dimension.cpp:642
+#: eeschema/widgets/sch_properties_panel.cpp:257 pcbnew/pcb_dimension.cpp:642
 #: pcbnew/pcb_tablecell.cpp:116 pcbnew/pcb_text.cpp:287
 #: pcbnew/pcb_textbox.cpp:565 pcbnew/widgets/pcb_properties_panel.cpp:286
 #, fuzzy
@@ -7083,7 +7083,7 @@ msgstr "Netinkamas slapyvardis (pasikartojantis vardas)"
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:129
 #: eeschema/dialogs/dialog_text_properties_base.cpp:93
 #: eeschema/fields_grid_table.cpp:61
-#: eeschema/widgets/sch_properties_panel.cpp:252
+#: eeschema/widgets/sch_properties_panel.cpp:251
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:155
 #, fuzzy
 msgid "Default Font"
@@ -7439,8 +7439,8 @@ msgid "No error"
 msgstr "klaidos"
 
 #: common/grid_tricks.cpp:359 common/tool/actions.cpp:214
-#: common/widgets/listbox_tricks.cpp:52 eeschema/tools/ee_actions.cpp:249
-#: pcbnew/dialogs/panel_setup_rules.cpp:130 pcbnew/tools/edit_tool.cpp:2637
+#: common/widgets/listbox_tricks.cpp:52 eeschema/tools/sch_actions.cpp:249
+#: pcbnew/dialogs/panel_setup_rules.cpp:130 pcbnew/tools/edit_tool.cpp:2655
 msgid "Cut"
 msgstr "Iškirpti"
 
@@ -7449,7 +7449,7 @@ msgid "Clear selected cells placing original contents on clipboard"
 msgstr "Išvalykite pasirinktus langelius, įdėdami originalų turinį į iškarpinę"
 
 #: common/grid_tricks.cpp:361 common/tool/actions.cpp:225
-#: common/widgets/listbox_tricks.cpp:50 eeschema/tools/ee_actions.cpp:255
+#: common/widgets/listbox_tricks.cpp:50 eeschema/tools/sch_actions.cpp:255
 #: kicad/dialogs/panel_jobset.cpp:392 pcbnew/dialogs/panel_setup_rules.cpp:131
 msgid "Copy"
 msgstr "Kopijuoti"
@@ -7460,8 +7460,8 @@ msgstr "Nukopijuokite pasirinktus langelius į mainų sritį"
 
 #: common/grid_tricks.cpp:366 common/tool/actions.cpp:245
 #: common/widgets/listbox_tricks.cpp:51
-#: eeschema/tools/sch_editor_control.cpp:2282
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1020
+#: eeschema/tools/sch_editor_control.cpp:2281
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1022
 #: pcbnew/dialogs/panel_setup_rules.cpp:132 pcbnew/tools/pcb_control.cpp:1249
 msgid "Paste"
 msgstr "Įterpti"
@@ -7471,10 +7471,10 @@ msgid "Paste clipboard cells to matrix at current cell"
 msgstr "Įklijuokite iškarpinės langelius matricai dabartinėje langelyje"
 
 #: common/grid_tricks.cpp:368 common/tool/actions.cpp:291
-#: common/widgets/listbox_tricks.cpp:54 eeschema/tools/sch_edit_tool.cpp:1722
-#: eeschema/tools/symbol_editor_edit_tool.cpp:476
+#: common/widgets/listbox_tricks.cpp:54 eeschema/tools/sch_edit_tool.cpp:1720
+#: eeschema/tools/symbol_editor_edit_tool.cpp:478
 #: kicad/dialogs/panel_jobset.cpp:394 kicad/project_tree_pane.cpp:985
-#: pcbnew/dialogs/panel_setup_rules.cpp:133 pcbnew/tools/edit_tool.cpp:2650
+#: pcbnew/dialogs/panel_setup_rules.cpp:133 pcbnew/tools/edit_tool.cpp:2668
 msgid "Delete"
 msgstr "Pašalinti"
 
@@ -7530,7 +7530,7 @@ msgstr "Baigti piešti"
 msgid "Add to Selection"
 msgstr "Pridėti prie pasirinkimo"
 
-#: common/hotkey_store.cpp:51 eeschema/tools/ee_actions.cpp:932
+#: common/hotkey_store.cpp:51 eeschema/tools/sch_actions.cpp:932
 #: gerbview/tools/gerbview_actions.cpp:132 pcbnew/tools/pcb_actions.cpp:1240
 #: pcbnew/tools/pcb_actions.cpp:1269
 msgid "Highlight Net"
@@ -8319,7 +8319,7 @@ msgid "Helper items"
 msgstr "Pagalbiniai daiktai"
 
 #: common/layer_id.cpp:107 common/layer_id.cpp:149 common/tool/grid_menu.cpp:56
-#: eeschema/tools/sch_editor_control.cpp:2879
+#: eeschema/tools/sch_editor_control.cpp:2878
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:103
 #: gerbview/widgets/gerbview_layer_widget.cpp:135
 #: pcbnew/widgets/appearance_controls.cpp:351
@@ -8564,7 +8564,7 @@ msgstr "Редактировать установки для новых конт
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
 #: eeschema/dialogs/dialog_sim_model.cpp:629 eeschema/sch_item.cpp:510
 #: eeschema/sch_item.cpp:559 eeschema/sch_pin.cpp:1567
-#: eeschema/sch_symbol.cpp:3035 eeschema/symbol_editor/symbol_editor.cpp:1751
+#: eeschema/sch_symbol.cpp:3035 eeschema/symbol_editor/symbol_editor.cpp:1750
 msgid "Unit"
 msgstr "Vienetas"
 
@@ -8717,23 +8717,23 @@ msgstr "Operacinė sistema nepalaiko šios kalbos."
 msgid "The KiCad language file for this language is not installed."
 msgstr "Šios kalbos KiCad kalbos failas nėra įdiegtas."
 
-#: common/plotters/PDF_plotter.cpp:896
+#: common/plotters/PDF_plotter.cpp:670 common/plotters/PDF_plotter.cpp:673
 #, fuzzy, c-format
 msgid "Page %s"
 msgstr "Pirmas lapas"
 
-#: common/plotters/PDF_plotter.cpp:900
+#: common/plotters/PDF_plotter.cpp:671 common/plotters/PDF_plotter.cpp:674
 #, fuzzy, c-format
 msgid "%s (Page %s)"
 msgstr "(puslapis %s)"
 
-#: common/plotters/PDF_plotter.cpp:1397
+#: common/plotters/PDF_plotter.cpp:1418
 #, fuzzy, c-format
 msgid "Show Page %s"
 msgstr "Rodyti lapo ribas"
 
-#: common/plotters/PDF_plotter.cpp:1417
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:928
+#: common/plotters/PDF_plotter.cpp:1438
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:925
 #: eeschema/tools/sch_navigate_tool.cpp:103
 #, c-format
 msgid "Open %s"
@@ -8790,9 +8790,9 @@ msgstr "Gaunant failą įvyko klaida!\n"
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:55
 #: eeschema/netlist_exporters/netlist_exporter_pads.cpp:43
-#: eeschema/sch_plotter.cpp:197 eeschema/sch_plotter.cpp:403
-#: eeschema/sch_plotter.cpp:421 eeschema/sch_plotter.cpp:562
-#: eeschema/sch_plotter.cpp:774 eeschema/sch_plotter.cpp:937
+#: eeschema/sch_plotter.cpp:197 eeschema/sch_plotter.cpp:416
+#: eeschema/sch_plotter.cpp:434 eeschema/sch_plotter.cpp:575
+#: eeschema/sch_plotter.cpp:787 eeschema/sch_plotter.cpp:950
 #: gerbview/export_to_pcbnew.cpp:67 pagelayout_editor/files.cpp:214
 #: pcbnew/build_BOM_from_board.cpp:102
 #: pcbnew/dialogs/dialog_board_statistics.cpp:670
@@ -8892,7 +8892,7 @@ msgstr "Gaukite ir perkelkite pėdsaką"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:268
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:128
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:199
-#: eeschema/dialogs/dialog_update_from_pcb_base.cpp:72 eeschema/menubar.cpp:170
+#: eeschema/dialogs/dialog_update_from_pcb_base.cpp:72 eeschema/menubar.cpp:166
 #: eeschema/sch_sheet.cpp:1727 eeschema/sch_symbol.cpp:3043
 #: eeschema/tools/sch_edit_tool.cpp:597
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:179
@@ -8947,7 +8947,7 @@ msgstr "Nauja..."
 msgid "Create a new document in the editor"
 msgstr "Sukurkite naują dokumentą redaktoriuje"
 
-#: common/tool/actions.cpp:52 eeschema/symbol_editor/symbol_editor.cpp:868
+#: common/tool/actions.cpp:52 eeschema/symbol_editor/symbol_editor.cpp:867
 #: pcbnew/footprint_libraries_utils.cpp:1059
 msgid "New Library..."
 msgstr "Nauja biblioteka ..."
@@ -8992,7 +8992,7 @@ msgstr "„File Explorer“ atidarykite katalogą"
 msgid "Open a library file with system file explorer"
 msgstr "Atidarykite failus teksto rengyklėje"
 
-#: common/tool/actions.cpp:91 eeschema/symbol_editor/symbol_editor.cpp:858
+#: common/tool/actions.cpp:91 eeschema/symbol_editor/symbol_editor.cpp:857
 #: eeschema/widgets/tuner_slider_base.cpp:117
 #: pcbnew/footprint_libraries_utils.cpp:1045
 msgid "Save"
@@ -9002,7 +9002,7 @@ msgstr "Išsaugoti"
 msgid "Save changes"
 msgstr "Išsaugoti pakeitimus"
 
-#: common/tool/actions.cpp:100 eeschema/tools/ee_actions.cpp:228
+#: common/tool/actions.cpp:100 eeschema/tools/sch_actions.cpp:228
 msgid "Save As..."
 msgstr "Išsaugoti kaip..."
 
@@ -9124,8 +9124,8 @@ msgid "Paste item(s) from clipboard with options"
 msgstr "Įklijuokite elementą (-us) iš mainų srities su parinktimis"
 
 #: common/tool/actions.cpp:278 common/widgets/listbox_tricks.cpp:53
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1101
-#: pcbnew/tools/edit_tool.cpp:2979
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1103
+#: pcbnew/tools/edit_tool.cpp:3000
 msgid "Duplicate"
 msgstr "Kopijuoti"
 
@@ -9146,8 +9146,8 @@ msgstr "Interaktyvus ištrynimo įrankis"
 msgid "Delete clicked items"
 msgstr "Ištrinkite spustelėtus elementus"
 
-#: common/tool/actions.cpp:307 eeschema/tools/sch_edit_tool.cpp:2882
-#: pcbnew/tools/edit_tool.cpp:2294
+#: common/tool/actions.cpp:307 eeschema/tools/sch_edit_tool.cpp:2880
+#: pcbnew/tools/edit_tool.cpp:2306
 #, fuzzy
 msgid "Left Justify"
 msgstr "Išlyginti vertikaliai"
@@ -9156,8 +9156,8 @@ msgstr "Išlyginti vertikaliai"
 msgid "Left-justify fields and text items"
 msgstr ""
 
-#: common/tool/actions.cpp:314 eeschema/tools/sch_edit_tool.cpp:2884
-#: pcbnew/tools/edit_tool.cpp:2296
+#: common/tool/actions.cpp:314 eeschema/tools/sch_edit_tool.cpp:2882
+#: pcbnew/tools/edit_tool.cpp:2308
 #, fuzzy
 msgid "Center Justify"
 msgstr "Išlyginti vertikaliai"
@@ -9166,8 +9166,8 @@ msgstr "Išlyginti vertikaliai"
 msgid "Center-justify fields and text items"
 msgstr ""
 
-#: common/tool/actions.cpp:321 eeschema/tools/sch_edit_tool.cpp:2886
-#: pcbnew/tools/edit_tool.cpp:2298
+#: common/tool/actions.cpp:321 eeschema/tools/sch_edit_tool.cpp:2884
+#: pcbnew/tools/edit_tool.cpp:2310
 #, fuzzy
 msgid "Right Justify"
 msgstr "Išlyginti horizontaliai"
@@ -9186,9 +9186,9 @@ msgstr "Atnaujinti"
 msgid "Collapse All"
 msgstr "Pakeisti &visus"
 
-#: common/tool/actions.cpp:342 eeschema/tools/sch_edit_tool.cpp:3138
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1214
-#: pcbnew/tools/edit_tool.cpp:3084
+#: common/tool/actions.cpp:342 eeschema/tools/sch_edit_tool.cpp:3136
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1216
+#: pcbnew/tools/edit_tool.cpp:3105
 #, fuzzy
 msgid "Increment"
 msgstr "Padidėjimo žingsnis:"
@@ -9794,7 +9794,7 @@ msgid "Show 3D viewer window"
 msgstr "Rodyti 3D peržiūros priemonės langą"
 
 #: common/tool/actions.cpp:1080 eeschema/symbol_diff_frame.cpp:57
-#: eeschema/symbol_viewer_frame.cpp:104 eeschema/symbol_viewer_frame.cpp:1113
+#: eeschema/symbol_viewer_frame.cpp:104 eeschema/symbol_viewer_frame.cpp:1111
 msgid "Symbol Library Browser"
 msgstr "Simbolių bibliotekos naršyklė"
 
@@ -10164,7 +10164,7 @@ msgid "Board"
 msgstr "Stalo"
 
 #: common/widgets/footprint_diff_widget.cpp:42 cvpcb/cvpcb_mainframe.cpp:814
-#: eeschema/sch_base_frame.cpp:594 eeschema/sch_symbol.cpp:2090
+#: eeschema/sch_base_frame.cpp:593 eeschema/sch_symbol.cpp:2090
 #: eeschema/sch_symbol.cpp:2094 eeschema/sch_symbol.cpp:2131
 #: eeschema/widgets/symbol_diff_widget.cpp:45 pcbnew/footprint.cpp:1694
 msgid "Library"
@@ -10505,7 +10505,7 @@ msgstr "Spartusis klavišas"
 
 #: common/widgets/widget_hotkey_list.cpp:528
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:47 eeschema/sch_item.cpp:66
-#: eeschema/symbol_editor/symbol_editor.cpp:1754
+#: eeschema/symbol_editor/symbol_editor.cpp:1753
 #: eeschema/tools/sch_edit_tool.cpp:167
 #, fuzzy
 msgid "Alternate"
@@ -10914,8 +10914,8 @@ msgstr "„%s“ nėra galiojantis pėdsakas."
 #: eeschema/design_block_tree_model_adapter.cpp:130
 #: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2109
 #: eeschema/sch_symbol.cpp:2685 eeschema/sch_symbol.cpp:3013
-#: eeschema/symbol_editor/symbol_editor.cpp:1769
-#: eeschema/symbol_viewer_frame.cpp:462 pcbnew/footprint.cpp:4133
+#: eeschema/symbol_editor/symbol_editor.cpp:1768
+#: eeschema/symbol_viewer_frame.cpp:460 pcbnew/footprint.cpp:4133
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:196
 msgid "Keywords"
 msgstr "Raktiniai žodžiai"
@@ -11403,17 +11403,17 @@ msgstr "Simbolis '%s' jau yra bibliotekoje '%s'"
 msgid "Overwrite existing design block?"
 msgstr "Atidarykite esamą projektą"
 
-#: eeschema/design_block_utils.cpp:70 eeschema/sch_base_frame.cpp:287
+#: eeschema/design_block_utils.cpp:70 eeschema/sch_base_frame.cpp:286
 #: pcbnew/footprint_libraries_utils.cpp:410
 msgid "Add the library to the global library table?"
 msgstr "Pridėti biblioteką prie visuotinės bibliotekos lentelės?"
 
-#: eeschema/design_block_utils.cpp:71 eeschema/sch_base_frame.cpp:288
+#: eeschema/design_block_utils.cpp:71 eeschema/sch_base_frame.cpp:287
 #: pcbnew/footprint_libraries_utils.cpp:411
 msgid "Add To Global Library Table"
 msgstr "Pridėti prie visuotinės bibliotekos lentelės"
 
-#: eeschema/design_block_utils.cpp:81 eeschema/sch_base_frame.cpp:298
+#: eeschema/design_block_utils.cpp:81 eeschema/sch_base_frame.cpp:297
 #: eeschema/widgets/search_handlers.cpp:454
 #: pcbnew/footprint_libraries_utils.cpp:421
 msgid "Global"
@@ -11421,18 +11421,18 @@ msgstr "Globaliai"
 
 #: eeschema/design_block_utils.cpp:82
 #: eeschema/dialogs/dialog_schematic_setup.cpp:101
-#: eeschema/sch_base_frame.cpp:299
+#: eeschema/sch_base_frame.cpp:298
 #: pcbnew/dialogs/dialog_board_statistics.cpp:677
 #: pcbnew/footprint_libraries_utils.cpp:422
 msgid "Project"
 msgstr "Projektas"
 
-#: eeschema/design_block_utils.cpp:84 eeschema/sch_base_frame.cpp:301
+#: eeschema/design_block_utils.cpp:84 eeschema/sch_base_frame.cpp:300
 #: pcbnew/footprint_libraries_utils.cpp:424
 msgid "Choose the Library Table to add the library to:"
 msgstr "Pasirinkite bibliotekos lentelę, prie kurios pridėsite biblioteką:"
 
-#: eeschema/design_block_utils.cpp:85 eeschema/sch_base_frame.cpp:302
+#: eeschema/design_block_utils.cpp:85 eeschema/sch_base_frame.cpp:301
 #: pcbnew/footprint_libraries_utils.cpp:425
 msgid "Add To Library Table"
 msgstr "Pridėti prie bibliotekos lentelės"
@@ -12058,7 +12058,7 @@ msgstr "Jungtis:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:99
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:210
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1383
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1380
 #: pcbnew/footprint_edit_frame.cpp:243 pcbnew/footprint_edit_frame.cpp:1004
 msgid "Libraries"
 msgstr "Bibliotekos"
@@ -12462,7 +12462,7 @@ msgstr "Išskyrimo"
 msgid "Delete Marker"
 msgstr "Pašalinti markerį"
 
-#: eeschema/dialogs/dialog_erc_base.h:101 eeschema/tools/ee_actions.cpp:47
+#: eeschema/dialogs/dialog_erc_base.h:101 eeschema/tools/sch_actions.cpp:47
 msgid "Electrical Rules Checker"
 msgstr "Elektros taisyklių tikrintuvas"
 
@@ -13373,7 +13373,7 @@ msgid "ALL"
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:46 eeschema/sch_item.cpp:68
-#: eeschema/symbol_editor/symbol_editor.cpp:1756
+#: eeschema/symbol_editor/symbol_editor.cpp:1755
 #: eeschema/tools/sch_edit_tool.cpp:164
 msgid "Standard"
 msgstr "Standartinis"
@@ -13436,7 +13436,7 @@ msgid "Read Only"
 msgstr "Tik skaitymui"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1222
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1488
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1487
 msgid "Save changes?"
 msgstr "Įrašyti pakeitimus?"
 
@@ -13613,8 +13613,8 @@ msgstr ""
 "Ištrinti alternatyvų kūno stilių (DeMorgan) piešti elementus iš simbolio?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:389
-#: eeschema/symbol_editor/symbol_editor.cpp:363
-#: eeschema/symbol_editor/symbol_editor.cpp:953
+#: eeschema/symbol_editor/symbol_editor.cpp:362
+#: eeschema/symbol_editor/symbol_editor.cpp:952
 #: eeschema/tools/symbol_editor_control.cpp:483
 #, fuzzy
 msgid "Symbol must have a name."
@@ -13659,7 +13659,7 @@ msgid "Derive from symbol:"
 msgstr "Išveskite iš simbolio:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:148
-#: eeschema/sch_rule_area.cpp:381
+#: eeschema/sch_rule_area.cpp:384
 msgid "<None>"
 msgstr "<Nėra>"
 
@@ -14054,7 +14054,7 @@ msgid "Select Output Directory"
 msgstr "Pasirinkite Išvesties katalogas"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:270
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1315
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1314
 #: pcbnew/dialogs/dialog_gendrill.cpp:337 pcbnew/dialogs/dialog_plot.cpp:794
 #, fuzzy, c-format
 msgid ""
@@ -14609,7 +14609,7 @@ msgstr ""
 msgid "Loading Bus Aliases"
 msgstr "Autobusų slapyvardžiai"
 
-#: eeschema/dialogs/dialog_schematic_setup.cpp:269 eeschema/files-io.cpp:280
+#: eeschema/dialogs/dialog_schematic_setup.cpp:269 eeschema/files-io.cpp:279
 #: eeschema/picksymbol.cpp:124
 msgid "Root"
 msgstr "Pirmas lapas"
@@ -14622,8 +14622,8 @@ msgstr "Įkeliant scheminį failą „%s“ įvyko klaida."
 
 #: eeschema/dialogs/dialog_shape_properties.cpp:69
 #: eeschema/dialogs/dialog_sheet_properties.cpp:90
-#: eeschema/dialogs/dialog_table_properties.cpp:111
-#: eeschema/dialogs/dialog_tablecell_properties.cpp:55
+#: eeschema/dialogs/dialog_table_properties.cpp:110
+#: eeschema/dialogs/dialog_tablecell_properties.cpp:54
 #: eeschema/dialogs/dialog_text_properties.cpp:72
 #, fuzzy
 msgid "Note: individual item colors overridden in Preferences."
@@ -15458,7 +15458,7 @@ msgstr "Parametras"
 #: eeschema/dialogs/dialog_sim_model.cpp:631 eeschema/sch_item.cpp:505
 #: eeschema/sch_label.cpp:1195 eeschema/sch_marker.cpp:364
 #: eeschema/sch_pin.cpp:1561 eeschema/sch_pin.cpp:1580
-#: eeschema/symbol_editor/symbol_editor.cpp:1767
+#: eeschema/symbol_editor/symbol_editor.cpp:1766
 #: eeschema/widgets/search_handlers.cpp:317
 #: eeschema/widgets/search_handlers.cpp:401 gerbview/gerber_draw_item.cpp:668
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
@@ -15695,18 +15695,18 @@ msgstr "Stulpelio Nuoroda negalima paslėpti."
 msgid "The Item Number column cannot be grouped by."
 msgstr "Stulpelio Nuoroda negalima paslėpti."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1305
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1304
 #, fuzzy
 msgid "Bill of Materials Output File"
 msgstr "Medžiagų žiniaraštis"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1317
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1326
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1316
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1325
 #, fuzzy
 msgid "BOM Output File"
 msgstr "Išėjimas"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1324
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1323
 #, fuzzy
 msgid ""
 "Cannot make path relative (target volume different from schematic file "
@@ -15715,54 +15715,54 @@ msgstr ""
 "Negalima nustatyti kelio santykinio (tikslinė apimtis skiriasi nuo failo "
 "tūrio)!"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1338
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1337
 #, fuzzy
 msgid "Unsaved data"
 msgstr "[Neišsaugotas]"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1339
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1338
 msgid "Changes have not yet been saved. Export unsaved data?"
 msgstr ""
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1363
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1362
 #, fuzzy
 msgid "No output file specified in Export tab."
 msgstr "Nepasirinktas failas!"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1377
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1376
 #, fuzzy, c-format
 msgid "Could not open/create path '%s'."
 msgstr "Nepavyko sukurti failo „%s“."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1386
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1385
 #, fuzzy, c-format
 msgid "Could not create BOM output '%s'."
 msgstr "Не удалось записать файлы чертежа в директорию '%s'."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1395
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1394
 #, fuzzy, c-format
 msgid "Could not write BOM output '%s'."
 msgstr "Не удалось записать файлы чертежа в директорию '%s'."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1402
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1401
 #, fuzzy, c-format
 msgid "Wrote BOM output to '%s'"
 msgstr "Negalima sukurti išvesties katalogo „%s“.\n"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1781
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2183
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1780
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2182
 #, fuzzy
 msgid "BOM preset name:"
 msgstr "Iš anksto nustatytas sluoksnio pavadinimas:"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1781
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2183
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1780
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2182
 #, fuzzy
 msgid "Save BOM Preset"
 msgstr "Išsaugoti sluoksnio išankstinį nustatymą"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1807
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2209
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1806
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2208
 #: pcbnew/widgets/appearance_controls.cpp:2764
 msgid ""
 "Default presets cannot be modified.\n"
@@ -15882,7 +15882,7 @@ msgstr "Dydis"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:322
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:332
-#: eeschema/menubar.cpp:117 eeschema/symbol_editor/menubar_symbol_editor.cpp:77
+#: eeschema/menubar.cpp:116 eeschema/symbol_editor/menubar_symbol_editor.cpp:77
 #: pcbnew/dialogs/dialog_export_2581.cpp:48
 #: pcbnew/dialogs/dialog_export_step.cpp:109
 #: pcbnew/menubar_footprint_editor.cpp:74 pcbnew/menubar_pcb_editor.cpp:126
@@ -15970,7 +15970,7 @@ msgid "Update Symbol from Library..."
 msgstr "Atnaujinti bibliotekos simbolį ..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:232
-#: eeschema/tools/ee_actions.cpp:789
+#: eeschema/tools/sch_actions.cpp:789
 msgid "Change Symbol..."
 msgstr "Keisti simbolį ..."
 
@@ -15979,7 +15979,7 @@ msgid "Edit Symbol..."
 msgstr "Redaguoti simbolį ..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:241
-#: eeschema/tools/ee_actions.cpp:998
+#: eeschema/tools/sch_actions.cpp:998
 msgid "Edit Library Symbol..."
 msgstr "Redaguoti bibliotekos simbolį ..."
 
@@ -16131,8 +16131,8 @@ msgstr "Kai kurių projekto failų nepavyko sukurti."
 msgid "Remap Symbols"
 msgstr "Perkelti simbolius"
 
-#: eeschema/dialogs/dialog_table_properties.cpp:394
-#: pcbnew/dialogs/dialog_table_properties.cpp:405
+#: eeschema/dialogs/dialog_table_properties.cpp:393
+#: pcbnew/dialogs/dialog_table_properties.cpp:410
 #, fuzzy
 msgid "Edit Table"
 msgstr "Правка метки"
@@ -16169,12 +16169,12 @@ msgstr "Stulpeliai"
 
 #: eeschema/dialogs/dialog_table_properties_base.h:76
 #: eeschema/sch_table.cpp:653 pcbnew/dialogs/dialog_table_properties_base.h:73
-#: pcbnew/pcb_table.cpp:563
+#: pcbnew/pcb_table.cpp:579
 #, fuzzy
 msgid "Table Properties"
 msgstr "Žymos savybės"
 
-#: eeschema/dialogs/dialog_tablecell_properties.cpp:323
+#: eeschema/dialogs/dialog_tablecell_properties.cpp:322
 #: pcbnew/dialogs/dialog_tablecell_properties.cpp:274
 #, fuzzy
 msgid "Edit Table Cell Properties"
@@ -17099,15 +17099,15 @@ msgstr "A"
 msgid "PA"
 msgstr "A"
 
-#: eeschema/dialogs/panel_setup_pinmap.cpp:229
+#: eeschema/dialogs/panel_setup_pinmap.cpp:228
 msgid "No error or warning"
 msgstr "Nerodyti klaidų ar įspėjimų"
 
-#: eeschema/dialogs/panel_setup_pinmap.cpp:234
+#: eeschema/dialogs/panel_setup_pinmap.cpp:233
 msgid "Generate warning"
 msgstr "Generuoti įspėjimą"
 
-#: eeschema/dialogs/panel_setup_pinmap.cpp:239
+#: eeschema/dialogs/panel_setup_pinmap.cpp:238
 msgid "Generate error"
 msgstr "Generuoti klaidą"
 
@@ -17264,7 +17264,7 @@ msgstr ""
 msgid "Error Loading Library"
 msgstr "Įkeliant biblioteką įvyko klaida"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:640 eeschema/files-io.cpp:661
+#: eeschema/dialogs/panel_sym_lib_table.cpp:640 eeschema/files-io.cpp:660
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:200
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:78
 #: pcbnew/files.cpp:156 pcbnew/footprint_libraries_utils.cpp:119
@@ -17490,7 +17490,7 @@ msgid "Unable to load library\n"
 msgstr "Negaliu užkrauti %s failo"
 
 #: eeschema/eeschema_jobs_handler.cpp:976
-#: eeschema/symbol_editor/symbol_editor.cpp:1096
+#: eeschema/symbol_editor/symbol_editor.cpp:1095
 msgid "There is no symbol selected to save."
 msgstr "Nėra pasirinkto simbolio išsaugoti."
 
@@ -17530,20 +17530,20 @@ msgstr ""
 msgid "Saved ERC Report to %s\n"
 msgstr "Сохранить отчет DRC"
 
-#: eeschema/eeschema_settings.cpp:71 eeschema/tools/ee_actions.cpp:958
+#: eeschema/eeschema_settings.cpp:71 eeschema/tools/sch_actions.cpp:958
 #, fuzzy
 msgid "Net Navigator"
 msgstr "„Hierarchijos navigatorius“"
 
-#: eeschema/eeschema_settings.cpp:115 eeschema/sch_edit_frame.cpp:2212
+#: eeschema/eeschema_settings.cpp:115 eeschema/sch_edit_frame.cpp:2204
 #: pcbnew/footprint_edit_frame.cpp:260 pcbnew/footprint_edit_frame.cpp:1010
 #: pcbnew/pcb_edit_frame.cpp:341 pcbnew/pcb_edit_frame.cpp:1714
 msgid "Selection Filter"
 msgstr "Pasirinkimo filtras"
 
-#: eeschema/eeschema_settings.cpp:135 eeschema/menubar.cpp:196
-#: eeschema/sch_edit_frame.cpp:2208 eeschema/sch_edit_frame.cpp:2214
-#: eeschema/tools/ee_actions.cpp:149
+#: eeschema/eeschema_settings.cpp:135 eeschema/menubar.cpp:192
+#: eeschema/sch_edit_frame.cpp:2200 eeschema/sch_edit_frame.cpp:2206
+#: eeschema/tools/sch_actions.cpp:149
 #, fuzzy
 msgid "Design Blocks"
 msgstr "Projektavimo taisyklės"
@@ -18038,7 +18038,7 @@ msgstr ""
 "\n"
 "** %d ERC pranešimai: %d klaidų, %d įspėjimų\n"
 
-#: eeschema/fields_grid_table.cpp:279 eeschema/files-io.cpp:913
+#: eeschema/fields_grid_table.cpp:279 eeschema/files-io.cpp:912
 #: eeschema/tools/sch_editor_control.cpp:129
 msgid "Schematic Files"
 msgstr "Schemų failai"
@@ -18066,38 +18066,38 @@ msgstr "Automatinio įdėjimo taisyklės"
 msgid "Private"
 msgstr "Spausdinti sluoksnius"
 
-#: eeschema/files-io.cpp:112
+#: eeschema/files-io.cpp:111
 #, fuzzy, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
 msgstr "Scheminė byla „%s“ jau atidaryta."
 
-#: eeschema/files-io.cpp:137
+#: eeschema/files-io.cpp:136
 #, fuzzy, c-format
 msgid "Schematic '%s' does not exist.  Do you wish to create it?"
 msgstr "Schemos „%s“ nėra. Ar norite jį sukurti?"
 
-#: eeschema/files-io.cpp:159
+#: eeschema/files-io.cpp:158
 #, fuzzy
 msgid "Creating Schematic"
 msgstr "Spaudinio schemą"
 
-#: eeschema/files-io.cpp:160
+#: eeschema/files-io.cpp:159
 #, fuzzy
 msgid "Loading Schematic"
 msgstr "Spaudinio schemą"
 
-#: eeschema/files-io.cpp:224
+#: eeschema/files-io.cpp:223
 msgid "Schematic file changes are unsaved"
 msgstr "Scheminių failų pakeitimai neišsaugoti"
 
-#: eeschema/files-io.cpp:239
+#: eeschema/files-io.cpp:238
 #, c-format
 msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
 
-#: eeschema/files-io.cpp:287
+#: eeschema/files-io.cpp:286
 #, fuzzy
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
@@ -18106,26 +18106,26 @@ msgstr ""
 "Nepavyko įkelti visos schemos. Bandant įkelti hierarchines lapų schemas "
 "įvyko klaidų."
 
-#: eeschema/files-io.cpp:294 eeschema/files-io.cpp:302
-#: eeschema/files-io.cpp:1399 eeschema/sheet.cpp:231
+#: eeschema/files-io.cpp:293 eeschema/files-io.cpp:301
+#: eeschema/files-io.cpp:1398 eeschema/sheet.cpp:231
 #, fuzzy, c-format
 msgid "Error loading schematic '%s'."
 msgstr ""
 "Įkeliant schemą įvyko klaida.\n"
 "%s"
 
-#: eeschema/files-io.cpp:310
+#: eeschema/files-io.cpp:309
 #, fuzzy, c-format
 msgid "Memory exhausted loading schematic '%s'."
 msgstr "Įkeliant scheminį failą „%s“ įvyko klaida."
 
-#: eeschema/files-io.cpp:329 eeschema/files-io.cpp:1402
-#: eeschema/files-io.cpp:1414 eeschema/sheet.cpp:234
+#: eeschema/files-io.cpp:328 eeschema/files-io.cpp:1401
+#: eeschema/files-io.cpp:1413 eeschema/sheet.cpp:234
 #, fuzzy, c-format
 msgid "Failed to load '%s'."
 msgstr "Nepavyko įkelti „%s“"
 
-#: eeschema/files-io.cpp:342
+#: eeschema/files-io.cpp:341
 msgid ""
 "An error was found when loading the schematic that has been automatically "
 "fixed.  Please save the schematic to repair the broken file or it may not be "
@@ -18135,15 +18135,15 @@ msgstr ""
 "schemą, kad pataisytumėte sugedusį failą, kitaip jis gali būti nenaudojamas "
 "su kitomis „KiCad“ versijomis."
 
-#: eeschema/files-io.cpp:406
+#: eeschema/files-io.cpp:405
 msgid "Illegal entry found in project file symbol library list."
 msgstr "Neteisėtas įrašas rastas projekto failų simbolių bibliotekos sąraše."
 
-#: eeschema/files-io.cpp:407
+#: eeschema/files-io.cpp:406
 msgid "Project Load Warning"
 msgstr "Įspėjimas apie projekto apkrovą"
 
-#: eeschema/files-io.cpp:410
+#: eeschema/files-io.cpp:409
 msgid ""
 "Symbol libraries defined in the project file symbol library list are no "
 "longer supported and will be removed.\n"
@@ -18155,16 +18155,16 @@ msgstr ""
 "\n"
 "Tam tikromis sąlygomis tai gali sugadinti simbolių bibliotekos nuorodas."
 
-#: eeschema/files-io.cpp:414
+#: eeschema/files-io.cpp:413
 msgid "Do not show this dialog again."
 msgstr "Neberodyti šio lango."
 
-#: eeschema/files-io.cpp:443
+#: eeschema/files-io.cpp:442
 #, fuzzy, c-format
 msgid "The project symbol library cache file '%s' was not found."
 msgstr "Nepavyko išsaugoti simbolių bibliotekos failo „%s“."
 
-#: eeschema/files-io.cpp:445
+#: eeschema/files-io.cpp:444
 msgid ""
 "This can result in a broken schematic under certain conditions.  If the "
 "schematic does not have any missing symbols upon opening, save it "
@@ -18173,17 +18173,17 @@ msgid ""
 "symbol cache library file and reloading the schematic is required."
 msgstr ""
 
-#: eeschema/files-io.cpp:456
+#: eeschema/files-io.cpp:455
 #, fuzzy
 msgid "Load Without Cache File"
 msgstr "Užkrauti neišsaugant"
 
-#: eeschema/files-io.cpp:457
+#: eeschema/files-io.cpp:456
 #, fuzzy
 msgid "Abort"
 msgstr "Nutraukiama\n"
 
-#: eeschema/files-io.cpp:472 eeschema/files-io.cpp:492
+#: eeschema/files-io.cpp:471 eeschema/files-io.cpp:491
 #: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:827
 #, fuzzy
 msgid ""
@@ -18193,18 +18193,18 @@ msgstr ""
 "Šį failą sukūrė senesnė „Pcbnew“ versija.\n"
 "Vėl išsaugojus šį failą, jis bus išsaugotas nauju failo formatu."
 
-#: eeschema/files-io.cpp:544
+#: eeschema/files-io.cpp:543
 msgid ""
 "This schematic contains symbols that have leading and/or trailing white "
 "space field names."
 msgstr ""
 
-#: eeschema/files-io.cpp:603
+#: eeschema/files-io.cpp:602
 #, fuzzy
 msgid "Schematic is read only."
 msgstr "Scheminė byla „%s“ jau atidaryta."
 
-#: eeschema/files-io.cpp:622
+#: eeschema/files-io.cpp:621
 #, fuzzy
 msgid ""
 "This operation replaces the contents of the current schematic, which will be "
@@ -18216,23 +18216,23 @@ msgstr ""
 "\n"
 "Ar prieš tęsdami norite išsaugoti dabartinį dokumentą?"
 
-#: eeschema/files-io.cpp:664
+#: eeschema/files-io.cpp:663
 msgid "Import Schematic"
 msgstr "Importuoti schemą"
 
-#: eeschema/files-io.cpp:701
+#: eeschema/files-io.cpp:700
 #, fuzzy, c-format
 msgid "Insufficient permissions to read file '%s'."
 msgstr ""
 "Neturite reikiamų teisių failo įrašymui\n"
 "%s"
 
-#: eeschema/files-io.cpp:723
+#: eeschema/files-io.cpp:722
 #, c-format
 msgid "No loader can read the specified file: '%s'."
 msgstr ""
 
-#: eeschema/files-io.cpp:761 eeschema/files-io.cpp:807
+#: eeschema/files-io.cpp:760 eeschema/files-io.cpp:806
 #, fuzzy, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
@@ -18241,12 +18241,12 @@ msgstr ""
 "Klaida išsaugant scheminį failą „%s“.\n"
 "%s"
 
-#: eeschema/files-io.cpp:812 pcbnew/files.cpp:1054 pcbnew/files.cpp:1347
+#: eeschema/files-io.cpp:811 pcbnew/files.cpp:1054 pcbnew/files.cpp:1347
 #, fuzzy, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "Nepavyko sukurti laikino failo „%s“"
 
-#: eeschema/files-io.cpp:832
+#: eeschema/files-io.cpp:831
 #, fuzzy, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
@@ -18255,22 +18255,22 @@ msgstr ""
 "Klaida išsaugant scheminį failą „%s“.\n"
 "Nepavyko pervadinti laikino failo %s"
 
-#: eeschema/files-io.cpp:838 pcbnew/files.cpp:1075 pcbnew/files.cpp:1413
+#: eeschema/files-io.cpp:837 pcbnew/files.cpp:1075 pcbnew/files.cpp:1413
 #, fuzzy, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "Nepavyko sukurti laikino failo „%s“"
 
-#: eeschema/files-io.cpp:861 pagelayout_editor/files.cpp:187
+#: eeschema/files-io.cpp:860 pagelayout_editor/files.cpp:187
 #: pagelayout_editor/files.cpp:219 pcbnew/files.cpp:1108
 #, fuzzy, c-format
 msgid "File '%s' saved."
 msgstr "Failas „%s“ išsaugotas."
 
-#: eeschema/files-io.cpp:866
+#: eeschema/files-io.cpp:865
 msgid "File write operation failed."
 msgstr "Failo rašymo operacija nepavyko."
 
-#: eeschema/files-io.cpp:933 eeschema/files-io.cpp:1001
+#: eeschema/files-io.cpp:932 eeschema/files-io.cpp:1000
 #: kicad/import_project.cpp:93 kicad/tools/kicad_manager_control.cpp:111
 #: kicad/tools/kicad_manager_control.cpp:313
 #, fuzzy, c-format
@@ -18283,34 +18283,34 @@ msgstr ""
 "\n"
 "Įsitikinkite, kad turite rašymo leidimus, ir bandykite dar kartą."
 
-#: eeschema/files-io.cpp:1083
+#: eeschema/files-io.cpp:1082
 #, fuzzy, c-format
 msgid "Failed to save %s."
 msgstr "Nepavyko išsaugoti '%s'"
 
-#: eeschema/files-io.cpp:1085
+#: eeschema/files-io.cpp:1084
 #, fuzzy
 msgid "Locked File Warning"
 msgstr "Įspėjimas apie projekto išsaugojimą"
 
-#: eeschema/files-io.cpp:1087
+#: eeschema/files-io.cpp:1086
 #, fuzzy
 msgid ""
 "You do not have write permissions to:\n"
 "\n"
 msgstr "Neturite rašymo leidimų į aplanką „%s“."
 
-#: eeschema/files-io.cpp:1103
+#: eeschema/files-io.cpp:1102
 #, fuzzy
 msgid "Saving will overwrite existing files."
 msgstr "Išsaugojus projektą nauju failo formatu, perrašomi esami failai."
 
-#: eeschema/files-io.cpp:1104
+#: eeschema/files-io.cpp:1103
 #, fuzzy
 msgid "Save Warning"
 msgstr "Įspėjimas apie projekto išsaugojimą"
 
-#: eeschema/files-io.cpp:1107
+#: eeschema/files-io.cpp:1106
 #, fuzzy
 msgid ""
 "The following files will be overwritten:\n"
@@ -18320,29 +18320,29 @@ msgstr ""
 "\n"
 "%s"
 
-#: eeschema/files-io.cpp:1108
+#: eeschema/files-io.cpp:1107
 msgid "Overwrite Files"
 msgstr "Perrašyti failus"
 
-#: eeschema/files-io.cpp:1109
+#: eeschema/files-io.cpp:1108
 msgid "Abort Project Save"
 msgstr "Nutraukti projekto išsaugojimą"
 
-#: eeschema/files-io.cpp:1338
+#: eeschema/files-io.cpp:1337
 #, fuzzy
 msgid "Importing Schematic"
 msgstr "Importuoti schemą"
 
-#: eeschema/files-io.cpp:1410
+#: eeschema/files-io.cpp:1409
 #, fuzzy, c-format
 msgid "Unhandled exception occurred loading schematic '%s'."
 msgstr "Įkeliant scheminį failą „%s“ įvyko klaida."
 
-#: eeschema/files-io.cpp:1472
+#: eeschema/files-io.cpp:1471
 msgid "The current schematic has been modified.  Save changes?"
 msgstr "Dabartinė schema buvo modifikuota. Išsaugoti pakeitimus?"
 
-#: eeschema/files-io.cpp:1570
+#: eeschema/files-io.cpp:1569
 #, fuzzy
 msgid ""
 "Well this is potentially embarrassing!\n"
@@ -18357,35 +18357,35 @@ msgstr ""
 "jis nebuvo tinkamai išsaugotas. Ar norite atkurti paskutinius išsaugotus "
 "redagavimus?"
 
-#: eeschema/files-io.cpp:1581
+#: eeschema/files-io.cpp:1580
 #, c-format
 msgid ""
 "The file '%s' could not be opened.\n"
 "Manual recovery of automatically saved files is required."
 msgstr ""
 
-#: eeschema/files-io.cpp:1632
+#: eeschema/files-io.cpp:1631
 #, fuzzy
 msgid "The following automatically saved file(s) could not be restored\n"
 msgstr "Nepavyko pašalinti automatinio išsaugojimo failo „%s“!"
 
-#: eeschema/files-io.cpp:1637
+#: eeschema/files-io.cpp:1636
 msgid "Manual recovery will be required to restore the file(s) above."
 msgstr ""
 
-#: eeschema/files-io.cpp:1647
+#: eeschema/files-io.cpp:1646
 #, fuzzy, c-format
 msgid ""
 "The autosave file '%s' could not be removed.\n"
 "Manual removal will be required."
 msgstr "Nepavyko pašalinti automatinio išsaugojimo failo „%s“!"
 
-#: eeschema/files-io.cpp:1681
+#: eeschema/files-io.cpp:1680
 #, fuzzy
 msgid "The following automatically saved file(s) could not be removed\n"
 msgstr "Nepavyko pašalinti automatinio išsaugojimo failo „%s“!"
 
-#: eeschema/files-io.cpp:1686
+#: eeschema/files-io.cpp:1685
 msgid "Manual removal will be required for the file(s) above."
 msgstr ""
 
@@ -18394,9 +18394,9 @@ msgstr ""
 msgid "Derived from"
 msgstr "Išveskite iš simbolio:"
 
-#: eeschema/generate_alias_info.cpp:82 eeschema/sch_base_frame.cpp:85
-#: eeschema/symbol_editor/symbol_editor.cpp:171
-#: eeschema/symbol_editor/symbol_editor.cpp:237
+#: eeschema/generate_alias_info.cpp:82 eeschema/sch_base_frame.cpp:84
+#: eeschema/symbol_editor/symbol_editor.cpp:170
+#: eeschema/symbol_editor/symbol_editor.cpp:236
 #: eeschema/symbol_library_manager.cpp:458
 #: eeschema/widgets/panel_symbol_chooser.cpp:566
 #: eeschema/widgets/panel_symbol_chooser.cpp:625
@@ -18651,62 +18651,62 @@ msgid ""
 msgstr ""
 "Pakeiskite dabartinį schemos lapą į vieną, importuotą iš kitos programos"
 
-#: eeschema/menubar.cpp:109
+#: eeschema/menubar.cpp:108
 #, fuzzy
 msgid "Footprint Assignments..."
 msgstr "Pėdsakų užduotys"
 
-#: eeschema/menubar.cpp:110 eeschema/symbol_editor/menubar_symbol_editor.cpp:71
+#: eeschema/menubar.cpp:109 eeschema/symbol_editor/menubar_symbol_editor.cpp:71
 #: pcbnew/menubar_footprint_editor.cpp:69 pcbnew/menubar_pcb_editor.cpp:116
 msgid "Graphics..."
 msgstr "Grafika ..."
 
-#: eeschema/menubar.cpp:120
+#: eeschema/menubar.cpp:118
 #, fuzzy
 msgid "Drawing to Clipboard"
 msgstr "Экспорт схемы в буфер обмена"
 
-#: eeschema/menubar.cpp:121 pcbnew/menubar_pcb_editor.cpp:114
+#: eeschema/menubar.cpp:119 pcbnew/menubar_pcb_editor.cpp:114
 #: pcbnew/pcb_edit_frame.cpp:235
 msgid "Netlist..."
 msgstr "„Netlist“ ..."
 
-#: eeschema/menubar.cpp:123
+#: eeschema/menubar.cpp:120
 #, fuzzy
 msgid "Symbols to Library..."
 msgstr "Atnaujinti bibliotekos simbolius ..."
 
-#: eeschema/menubar.cpp:125
+#: eeschema/menubar.cpp:121
 #, fuzzy
 msgid "Symbols to New Library..."
 msgstr "Eksportuoti pėdsakus į naują biblioteką ..."
 
-#: eeschema/menubar.cpp:185
+#: eeschema/menubar.cpp:181
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:121
 #: pcbnew/menubar_footprint_editor.cpp:124 pcbnew/menubar_pcb_editor.cpp:232
 msgid "Panels"
 msgstr ""
 
-#: eeschema/menubar.cpp:354
+#: eeschema/menubar.cpp:350
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:184
 #: pagelayout_editor/menubar.cpp:153 pcbnew/menubar_footprint_editor.cpp:246
 #: pcbnew/menubar_pcb_editor.cpp:479
 msgid "&Place"
 msgstr "Naujas"
 
-#: eeschema/menubar.cpp:355
+#: eeschema/menubar.cpp:351
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:185
 #: pagelayout_editor/menubar.cpp:154 pcbnew/menubar_footprint_editor.cpp:247
 #: pcbnew/menubar_pcb_editor.cpp:481
 msgid "&Inspect"
 msgstr "& Tikrinti"
 
-#: eeschema/menubar.cpp:356 gerbview/menubar.cpp:233 kicad/menubar.cpp:230
+#: eeschema/menubar.cpp:352 gerbview/menubar.cpp:233 kicad/menubar.cpp:230
 #: pcbnew/menubar_footprint_editor.cpp:248 pcbnew/menubar_pcb_editor.cpp:482
 msgid "&Tools"
 msgstr "Įrankiai"
 
-#: eeschema/menubar.cpp:357
+#: eeschema/menubar.cpp:353
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:186
 #: pagelayout_editor/menubar.cpp:155 pcbnew/menubar_footprint_editor.cpp:249
 #: pcbnew/menubar_pcb_editor.cpp:483
@@ -18835,9 +18835,9 @@ msgid "Command error. Return code %d."
 msgstr "Komandos klaida. Grąžinimo kodas %d"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:164
-#: eeschema/sch_plotter.cpp:240 eeschema/sch_plotter.cpp:437
-#: eeschema/sch_plotter.cpp:589 eeschema/sch_plotter.cpp:791
-#: eeschema/sch_plotter.cpp:958
+#: eeschema/sch_plotter.cpp:253 eeschema/sch_plotter.cpp:450
+#: eeschema/sch_plotter.cpp:602 eeschema/sch_plotter.cpp:804
+#: eeschema/sch_plotter.cpp:971
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:393
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:490
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:539
@@ -18880,7 +18880,7 @@ msgstr "Pakeisti tipą"
 msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr "Nerasta alternatyvaus simbolio „%s“ kūno stiliaus bibliotekoje „%s“."
 
-#: eeschema/picksymbol.cpp:217 eeschema/tools/sch_edit_tool.cpp:2044
+#: eeschema/picksymbol.cpp:217 eeschema/tools/sch_edit_tool.cpp:2042
 #, fuzzy
 msgid "Change Body Style"
 msgstr "Suapvalinimo tipas:"
@@ -19016,7 +19016,7 @@ msgid "No symbols were rescued."
 msgstr "Jokių simbolių nepavyko išgelbėti."
 
 #: eeschema/project_rescue.cpp:716
-#: eeschema/symbol_editor/symbol_editor.cpp:1211
+#: eeschema/symbol_editor/symbol_editor.cpp:1210
 #, fuzzy, c-format
 msgid "Failed to create symbol library file '%s'."
 msgstr "Nepavyko sukurti simbolių bibliotekos failo „%s“"
@@ -19043,7 +19043,7 @@ msgstr "Nerasta šių bibliotekų:"
 msgid "Error loading the symbol library table '%s'."
 msgstr "Įkeliant simbolių bibliotekos lentelę „%s“ įvyko klaida."
 
-#: eeschema/sch_base_frame.cpp:252
+#: eeschema/sch_base_frame.cpp:251
 #, c-format
 msgid ""
 "Error saving global symbol library table:\n"
@@ -19052,7 +19052,7 @@ msgstr ""
 "Klaida išsaugant visuotinės simbolių bibliotekos lentelę:\n"
 "%s"
 
-#: eeschema/sch_base_frame.cpp:268
+#: eeschema/sch_base_frame.cpp:267
 #, c-format
 msgid ""
 "Error saving project-specific symbol library table:\n"
@@ -19061,15 +19061,15 @@ msgstr ""
 "Klaida išsaugant konkretaus projekto simbolių bibliotekos lentelę:\n"
 "%s"
 
-#: eeschema/sch_base_frame.cpp:588
+#: eeschema/sch_base_frame.cpp:587
 msgid "No symbol libraries are loaded."
 msgstr "Nėra simbolių bibliotekų."
 
-#: eeschema/sch_base_frame.cpp:633
+#: eeschema/sch_base_frame.cpp:632
 msgid "Select Symbol Library"
 msgstr "Pasirinkite „Symbol Library“"
 
-#: eeschema/sch_base_frame.cpp:754
+#: eeschema/sch_base_frame.cpp:753
 #, fuzzy
 msgid ""
 "The library containing the current symbol has changed.\n"
@@ -19148,7 +19148,7 @@ msgstr "„Bus Alias“ %s nariai"
 msgid "KiCad Schematic Editor"
 msgstr "Schemų redaktoriaus savybės"
 
-#: eeschema/sch_edit_frame.cpp:235 eeschema/sch_edit_frame.cpp:2211
+#: eeschema/sch_edit_frame.cpp:235 eeschema/sch_edit_frame.cpp:2203
 #, fuzzy
 msgid "Schematic Hierarchy"
 msgstr "Scheminis paritetas"
@@ -19157,9 +19157,9 @@ msgstr "Scheminis paritetas"
 msgid "New schematic file is unsaved"
 msgstr "Naujas scheminis failas neišsaugotas"
 
-#: eeschema/sch_edit_frame.cpp:1032
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:640
-#: eeschema/symbol_editor/symbol_editor.cpp:1672
+#: eeschema/sch_edit_frame.cpp:1024
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:637
+#: eeschema/symbol_editor/symbol_editor.cpp:1671
 #: kicad/dialogs/panel_jobset.cpp:830 pagelayout_editor/pl_editor_frame.cpp:411
 #: pcbnew/footprint_edit_frame.cpp:858 pcbnew/footprint_edit_frame.cpp:898
 #: pcbnew/pcb_edit_frame.cpp:1184
@@ -19167,7 +19167,7 @@ msgstr "Naujas scheminis failas neišsaugotas"
 msgid "Save changes to '%s' before closing?"
 msgstr "Išsaugoti „%s“ pakeitimus prieš uždarant?"
 
-#: eeschema/sch_edit_frame.cpp:1194
+#: eeschema/sch_edit_frame.cpp:1186
 #, fuzzy
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
@@ -19178,60 +19178,60 @@ msgstr ""
 "režimu. Norėdami sukurti / atnaujinti PCB iš schemų, paleiskite „Kicad“ "
 "apvalkalą ir sukurkite projektą."
 
-#: eeschema/sch_edit_frame.cpp:1363
+#: eeschema/sch_edit_frame.cpp:1355
 msgid "New Schematic"
 msgstr "Nauja schema"
 
-#: eeschema/sch_edit_frame.cpp:1375
+#: eeschema/sch_edit_frame.cpp:1367
 #, fuzzy, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "Scheminis failas „%s“ jau yra."
 
-#: eeschema/sch_edit_frame.cpp:1400
+#: eeschema/sch_edit_frame.cpp:1392
 msgid "Open Schematic"
 msgstr "Atverti schemą"
 
-#: eeschema/sch_edit_frame.cpp:1470
+#: eeschema/sch_edit_frame.cpp:1462
 #, fuzzy
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr "Norint eksportuoti netlistą, reikalinga visiškai anotuota schema."
 
-#: eeschema/sch_edit_frame.cpp:1497
+#: eeschema/sch_edit_frame.cpp:1489
 msgid "Could not open CvPcb"
 msgstr "Nepavyko atidaryti „CvPcb“"
 
-#: eeschema/sch_edit_frame.cpp:1746 eeschema/sim/simulator_frame.cpp:341
+#: eeschema/sch_edit_frame.cpp:1738 eeschema/sim/simulator_frame.cpp:341
 #: kicad/kicad_manager_frame.cpp:1041 pcbnew/footprint_edit_frame.cpp:1072
 #: pcbnew/pcb_edit_frame.cpp:1801
 msgid "[Read Only]"
 msgstr "[Tik skaitymui]"
 
-#: eeschema/sch_edit_frame.cpp:1749 eeschema/sim/simulator_frame.cpp:344
+#: eeschema/sch_edit_frame.cpp:1741 eeschema/sim/simulator_frame.cpp:344
 #: pcbnew/footprint_edit_frame.cpp:1081 pcbnew/pcb_edit_frame.cpp:1804
 msgid "[Unsaved]"
 msgstr "[Neišsaugotas]"
 
-#: eeschema/sch_edit_frame.cpp:1753
+#: eeschema/sch_edit_frame.cpp:1745
 #, fuzzy
 msgid "[no schematic loaded]"
 msgstr "Schema išsaugota"
 
-#: eeschema/sch_edit_frame.cpp:2109
+#: eeschema/sch_edit_frame.cpp:2101
 #, fuzzy
 msgid "Schematic Cleanup"
 msgstr "Scheminė sąranka"
 
-#: eeschema/sch_edit_frame.cpp:2237
+#: eeschema/sch_edit_frame.cpp:2229
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Paryškintas tinklas: %s"
 
-#: eeschema/sch_edit_frame.cpp:2415
+#: eeschema/sch_edit_frame.cpp:2407
 #, fuzzy
 msgid "Save Symbol to Schematic"
 msgstr "Pridėti simbolį prie schemos"
 
-#: eeschema/sch_edit_frame.cpp:2521 eeschema/tools/ee_actions.cpp:61
+#: eeschema/sch_edit_frame.cpp:2513 eeschema/tools/sch_actions.cpp:61
 #, fuzzy
 msgid "Compare Symbol with Library"
 msgstr "Atnaujinti bibliotekos simbolius ..."
@@ -20237,7 +20237,7 @@ msgid "Net"
 msgstr "Grandinė"
 
 #: eeschema/sch_label.cpp:1337 eeschema/sch_line.cpp:894
-#: eeschema/sch_rule_area.cpp:386
+#: eeschema/sch_rule_area.cpp:389
 #, fuzzy
 msgid "Resolved netclass"
 msgstr "Priskirtas „Netclass“"
@@ -20394,19 +20394,19 @@ msgstr "PIN vardas"
 msgid "No sheets to plot."
 msgstr "Importuoti lapo kaištį"
 
-#: eeschema/sch_plotter.cpp:238 pcbnew/pcbnew_jobs_handler.cpp:1041
+#: eeschema/sch_plotter.cpp:251 pcbnew/pcbnew_jobs_handler.cpp:1041
 #, fuzzy, c-format
 msgid "Plotted to '%s'.\n"
 msgstr "Nepavyko įkelti „%s“"
 
-#: eeschema/sch_plotter.cpp:412 eeschema/sch_plotter.cpp:570
-#: eeschema/sch_plotter.cpp:766 eeschema/sch_plotter.cpp:929
+#: eeschema/sch_plotter.cpp:425 eeschema/sch_plotter.cpp:583
+#: eeschema/sch_plotter.cpp:779 eeschema/sch_plotter.cpp:942
 #: pcbnew/pcb_plotter.cpp:255
 #, fuzzy, c-format
 msgid "Plotted to '%s'."
 msgstr "Nepavyko įkelti „%s“"
 
-#: eeschema/sch_plotter.cpp:1055
+#: eeschema/sch_plotter.cpp:1068
 #, fuzzy, c-format
 msgid "Failed to write plot files to folder '%s'."
 msgstr "Не удалось записать файлы чертежа в директорию '%s'."
@@ -20558,14 +20558,14 @@ msgid "Hierarchical Sheet %s"
 msgstr "Hierarchinis lapas %s"
 
 #: eeschema/sch_sheet.cpp:1717 eeschema/sch_table.cpp:663
-#: pcbnew/pcb_table.cpp:573 pcbnew/pcb_tablecell.cpp:190
+#: pcbnew/pcb_table.cpp:589 pcbnew/pcb_tablecell.cpp:190
 #: pcbnew/pcb_textbox.cpp:906
 #, fuzzy
 msgid "Border Width"
 msgstr "Kraštinės plotis:"
 
 #: eeschema/sch_sheet.cpp:1721 eeschema/sch_table.cpp:672
-#: pcbnew/pcb_table.cpp:582
+#: pcbnew/pcb_table.cpp:598
 #, fuzzy
 msgid "Border Color"
 msgstr "Kraštinės spalva:"
@@ -20593,7 +20593,7 @@ msgid "Exclude From Bill of Materials"
 msgstr "Neįtraukti į medžiagų sąrašą"
 
 #: eeschema/sch_sheet.cpp:1740 eeschema/sch_symbol.cpp:1102
-#: eeschema/sch_symbol.cpp:3054 eeschema/tools/ee_actions.cpp:991
+#: eeschema/sch_symbol.cpp:3054 eeschema/tools/sch_actions.cpp:991
 #: pcbnew/footprint.cpp:4153
 #, fuzzy
 msgid "Do not Populate"
@@ -20656,52 +20656,52 @@ msgstr "Atspindys pagal Y"
 msgid "Library Link"
 msgstr "Bibliotekos nuoroda:"
 
-#: eeschema/sch_table.cpp:424 pcbnew/pcb_table.cpp:359
+#: eeschema/sch_table.cpp:424 pcbnew/pcb_table.cpp:375
 #, c-format
 msgid "%d Column Table"
 msgstr ""
 
-#: eeschema/sch_table.cpp:587 pcbnew/pcb_table.cpp:395
+#: eeschema/sch_table.cpp:587 pcbnew/pcb_table.cpp:411
 #, fuzzy, c-format
 msgid "%d Columns"
 msgstr "Stulpeliai"
 
-#: eeschema/sch_table.cpp:655 pcbnew/pcb_table.cpp:565
+#: eeschema/sch_table.cpp:655 pcbnew/pcb_table.cpp:581
 #, fuzzy
 msgid "External Border"
 msgstr "Išoriniai duomenys"
 
-#: eeschema/sch_table.cpp:659 pcbnew/pcb_table.cpp:569
+#: eeschema/sch_table.cpp:659 pcbnew/pcb_table.cpp:585
 #, fuzzy
 msgid "Header Border"
 msgstr "Puslapio paraštės"
 
-#: eeschema/sch_table.cpp:668 pcbnew/pcb_table.cpp:578
+#: eeschema/sch_table.cpp:668 pcbnew/pcb_table.cpp:594
 #: pcbnew/pcb_tablecell.cpp:189 pcbnew/pcb_textbox.cpp:902
 #, fuzzy
 msgid "Border Style"
 msgstr "Suapvalinimo tipas:"
 
-#: eeschema/sch_table.cpp:676 pcbnew/pcb_table.cpp:586
+#: eeschema/sch_table.cpp:676 pcbnew/pcb_table.cpp:602
 #, fuzzy
 msgid "Row Separators"
 msgstr "Pašalinti generatorių"
 
-#: eeschema/sch_table.cpp:680 pcbnew/pcb_table.cpp:590
+#: eeschema/sch_table.cpp:680 pcbnew/pcb_table.cpp:606
 msgid "Cell Separators"
 msgstr ""
 
-#: eeschema/sch_table.cpp:684 pcbnew/pcb_table.cpp:594
+#: eeschema/sch_table.cpp:684 pcbnew/pcb_table.cpp:610
 #, fuzzy
 msgid "Separators Width"
 msgstr "Terminis plotis"
 
-#: eeschema/sch_table.cpp:689 pcbnew/pcb_table.cpp:599
+#: eeschema/sch_table.cpp:689 pcbnew/pcb_table.cpp:615
 #, fuzzy
 msgid "Separators Style"
 msgstr "Generatoriaus failai:"
 
-#: eeschema/sch_table.cpp:693 pcbnew/pcb_table.cpp:603
+#: eeschema/sch_table.cpp:693 pcbnew/pcb_table.cpp:619
 #, fuzzy
 msgid "Separators Color"
 msgstr "Aiški spalva"
@@ -21709,106 +21709,106 @@ msgstr "Raktiniai žodžiai:"
 msgid "waveform has less than two points"
 msgstr "Forma neturi taškų!"
 
-#: eeschema/sim/kibis/kibis.cpp:651 eeschema/sim/kibis/kibis.cpp:712
+#: eeschema/sim/kibis/kibis.cpp:651 eeschema/sim/kibis/kibis.cpp:717
 #, fuzzy
 msgid "Cannot remove temporary output file"
 msgstr ""
 "Negalima pervadinti laikino failo „%s“ į pėdsakų bibliotekos failą „%s“"
 
-#: eeschema/sim/kibis/kibis.cpp:697
+#: eeschema/sim/kibis/kibis.cpp:702
 #, fuzzy
 msgid "Error while reading temporary file"
 msgstr "Gaunant failą įvyko klaida!\n"
 
-#: eeschema/sim/kibis/kibis.cpp:707
+#: eeschema/sim/kibis/kibis.cpp:712
 #, fuzzy
 msgid "Error while creating temporary output file"
 msgstr "Nepavyko sukurti laikino failo „%s“"
 
-#: eeschema/sim/kibis/kibis.cpp:744
+#: eeschema/sim/kibis/kibis.cpp:749
 msgid ""
 "Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
 "pdf"
 msgstr ""
 
-#: eeschema/sim/kibis/kibis.cpp:849
+#: eeschema/sim/kibis/kibis.cpp:854
 msgid "Model has only one waveform pair, reduced accuracy"
 msgstr ""
 
-#: eeschema/sim/kibis/kibis.cpp:869 eeschema/sim/kibis/kibis.cpp:1075
+#: eeschema/sim/kibis/kibis.cpp:874 eeschema/sim/kibis/kibis.cpp:1080
 msgid "Driver needs at least a pullup or a pulldown"
 msgstr ""
 
-#: eeschema/sim/kibis/kibis.cpp:1058 eeschema/sim/kibis/kibis.cpp:1067
+#: eeschema/sim/kibis/kibis.cpp:1063 eeschema/sim/kibis/kibis.cpp:1072
 msgid ""
 "There are two waveform pairs, but only one transistor. More equations than "
 "unknowns."
 msgstr ""
 
-#: eeschema/sim/kibis/kibis.cpp:1166
+#: eeschema/sim/kibis/kibis.cpp:1171
 msgid "Model has no waveform pair, using [Ramp] instead, poor accuracy"
 msgstr ""
 
-#: eeschema/sim/kibis/kibis.cpp:1180
+#: eeschema/sim/kibis/kibis.cpp:1185
 msgid "Model has more than 2 waveform pairs, using the first two."
 msgstr ""
 
-#: eeschema/sim/kibis/kibis.cpp:1220
+#: eeschema/sim/kibis/kibis.cpp:1225
 #, fuzzy
 msgid "Invalid model type for a driver."
 msgstr "Netinkama „Spice“ vertės eilutė"
 
-#: eeschema/sim/kibis/kibis.cpp:1273
+#: eeschema/sim/kibis/kibis.cpp:1278
 #, fuzzy
 msgid "Invalid model type for a device"
 msgstr "Netinkama „Spice“ vertės eilutė"
 
-#: eeschema/sim/kibis/kibis.cpp:1472 eeschema/sim/kibis/kibis.cpp:1519
+#: eeschema/sim/kibis/kibis.cpp:1477 eeschema/sim/kibis/kibis.cpp:1524
 #, fuzzy
 msgid "Number of cycles should be greater than 0."
 msgstr "Pėdsakų tarpas turi būti didesnis nei 0."
 
-#: eeschema/sim/kibis/kibis.cpp:1478 eeschema/sim/kibis/kibis.cpp:1525
+#: eeschema/sim/kibis/kibis.cpp:1483 eeschema/sim/kibis/kibis.cpp:1530
 #, fuzzy
 msgid "ON time should be greater than 0."
 msgstr "Pėdsakų tarpas turi būti didesnis nei 0."
 
-#: eeschema/sim/kibis/kibis.cpp:1484 eeschema/sim/kibis/kibis.cpp:1531
+#: eeschema/sim/kibis/kibis.cpp:1489 eeschema/sim/kibis/kibis.cpp:1536
 #, fuzzy
 msgid "OFF time should be greater than 0."
 msgstr "Pėdsakų tarpas turi būti didesnis nei 0."
 
-#: eeschema/sim/kibis/kibis.cpp:1492
+#: eeschema/sim/kibis/kibis.cpp:1497
 msgid "Rising edge is longer than on time."
 msgstr ""
 
-#: eeschema/sim/kibis/kibis.cpp:1501
+#: eeschema/sim/kibis/kibis.cpp:1506
 msgid "Falling edge is longer than off time."
 msgstr ""
 
-#: eeschema/sim/kibis/kibis.cpp:1539
+#: eeschema/sim/kibis/kibis.cpp:1544
 msgid "Rising edge is longer than ON time."
 msgstr ""
 
-#: eeschema/sim/kibis/kibis.cpp:1547
+#: eeschema/sim/kibis/kibis.cpp:1552
 msgid "Falling edge is longer than OFF time."
 msgstr ""
 
-#: eeschema/sim/kibis/kibis.cpp:1562 eeschema/sim/kibis/kibis.cpp:1594
+#: eeschema/sim/kibis/kibis.cpp:1567 eeschema/sim/kibis/kibis.cpp:1599
 #, fuzzy
 msgid "Bitrate should be greater than 0."
 msgstr "Pėdsakų tarpas turi būti didesnis nei 0."
 
-#: eeschema/sim/kibis/kibis.cpp:1568 eeschema/sim/kibis/kibis.cpp:1600
+#: eeschema/sim/kibis/kibis.cpp:1573 eeschema/sim/kibis/kibis.cpp:1605
 #, fuzzy
 msgid "Number of bits should be greater than 0."
 msgstr "Pėdsakų tarpas turi būti didesnis nei 0."
 
-#: eeschema/sim/kibis/kibis.cpp:1580
+#: eeschema/sim/kibis/kibis.cpp:1585
 msgid "Bitrate is too high for rising / falling edges"
 msgstr ""
 
-#: eeschema/sim/kibis/kibis.cpp:1608
+#: eeschema/sim/kibis/kibis.cpp:1613
 msgid "Bitrate could be too high for rising / falling edges"
 msgstr ""
 
@@ -22677,33 +22677,33 @@ msgid "KiCad Symbol Editor"
 msgstr "Simbolių redaktorius"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:149
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1210
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1207
 #: eeschema/symbol_library.cpp:523 eeschema/symbol_tree_model_adapter.cpp:74
 #: eeschema/symbol_viewer_frame.cpp:275
 msgid "Loading Symbol Libraries"
 msgstr "Įkeliamos simbolių bibliotekos"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:268
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:269
 msgid "Library changes are unsaved"
 msgstr "Bibliotekos pakeitimai neišsaugoti"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:279
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:280
 #, fuzzy
 msgid "Symbol library loading was cancelled by user."
 msgstr "Biblioteka %s jau yra."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:885
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:882
 #, c-format
 msgid ""
 "Editing symbol %s from schematic.  Saving will update the schematic only."
 msgstr "Redaguoti simbolį %s iš schemos. Išsaugojus bus atnaujinta tik schema."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:889
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:886
 #, fuzzy, c-format
 msgid "Open symbol from library %s"
 msgstr "Atnaujinti bibliotekos simbolius"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:902
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:899
 msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
@@ -22711,53 +22711,53 @@ msgstr ""
 "Senųjų bibliotekų simboliai nėra redaguojami. Norėdami pereiti į dabartinį "
 "formatą, naudokite simbolių bibliotekų tvarkymą."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:905
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:902
 msgid "Manage symbol libraries"
 msgstr "Tvarkykite simbolių bibliotekas"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:918
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:915
 #, fuzzy, c-format
 msgid "Symbol %s is a derived symbol. Symbol graphics will not be editable."
 msgstr "Simbolis %s yra kilęs iš %s. Simbolių grafika nebus redaguojama."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:947
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:944
 #, fuzzy
 msgid "Library is read-only.  Changes cannot be saved to this library."
 msgstr "Редактировать таблицу библиотек посад.мест"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:949
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:946
 #, fuzzy
 msgid "Create an editable copy"
 msgstr "Naujas katalogas"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:955
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:952
 #, fuzzy, c-format
 msgid "Create an editable copy of the symbol or the entire library (%s)?"
 msgstr "Очистить и обозначить заново все компоненты на всей схеме?"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:959
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:956
 #, fuzzy
 msgid "Select type of item to save"
 msgstr "Выбор библиотеки для просмотра"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:962
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:959
 #, fuzzy
 msgid "Copy symbol"
 msgstr "Grupės simboliai"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:963
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:960
 #, fuzzy
 msgid "Copy library"
 msgstr "biblioteka"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1072
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1123
-#: eeschema/tools/sch_editor_control.cpp:413
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1069
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1120
+#: eeschema/tools/sch_editor_control.cpp:412
 #, fuzzy, c-format
 msgid "Library '%s' already exists."
 msgstr "Biblioteka %s jau yra."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1080
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1077
 #, fuzzy, c-format
 msgid ""
 "Could not create the library file '%s'.\n"
@@ -22766,49 +22766,49 @@ msgstr ""
 "Nepavyko sukurti bibliotekos failo „%s“.\n"
 "Patikrinkite rašymo leidimą."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1091
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1129
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1088
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1126
 msgid "Could not open the library file."
 msgstr "Nepavyko atidaryti bibliotekos failo."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1216
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1213
 #, fuzzy, c-format
 msgid "Loading library '%s'..."
 msgstr "Įkeliama biblioteka „%s“"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1299
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1296
 #, fuzzy, c-format
 msgid "Failed to save backup to '%s'."
 msgstr "Nepavyko išsaugoti atsarginės kopijos aplanke „%s“"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1537
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1534
 #, fuzzy, c-format
 msgid "The current configuration does not include the symbol library '%s'."
 msgstr "Dabartinėje konfigūracijoje nėra bibliotekos „%s“."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1539
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1550
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1536
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1547
 #, fuzzy
 msgid "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
 "Dabartinėje konfigūracijoje nėra bibliotekos „%s“.\n"
 "Norėdami redaguoti konfigūraciją, naudokite „Tvarkyti simbolių bibliotekas“."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1540
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1537
 msgid "Library not found in symbol library table."
 msgstr "Biblioteka nerasta simbolių bibliotekos lentelėje."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1548
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1545
 #, fuzzy, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration."
 msgstr "Biblioteka „%s“ nėra įgalinta dabartinėje konfigūracijoje."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1551
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1548
 msgid "Symbol library not enabled."
 msgstr "Simbolių biblioteka neįgalinta."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1869
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1921
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1866
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1918
 #, fuzzy
 msgid "Error saving global library table."
 msgstr ""
@@ -22816,8 +22816,8 @@ msgstr ""
 "\n"
 "%s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1870
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1922
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1867
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1919
 #, fuzzy
 msgid "Error saving project library table."
 msgstr ""
@@ -22825,28 +22825,28 @@ msgstr ""
 "\n"
 "%s"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:68
+#: eeschema/symbol_editor/symbol_editor.cpp:67
 #, fuzzy
 msgid "[from schematic]"
 msgstr "%s iš schemos"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:78
+#: eeschema/symbol_editor/symbol_editor.cpp:77
 msgid "[Read Only Library]"
 msgstr "[Tik skaitoma biblioteka]"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:82
+#: eeschema/symbol_editor/symbol_editor.cpp:81
 #, fuzzy
 msgid "[no symbol loaded]"
 msgstr "nepasirinktas joks simbolis"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:114
+#: eeschema/symbol_editor/symbol_editor.cpp:113
 #: eeschema/tools/symbol_editor_control.cpp:822
 msgid "No schematic currently open."
 msgstr "Šiuo metu nėra atidarytos schemos."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:130
-#: eeschema/symbol_editor/symbol_editor.cpp:500
-#: eeschema/symbol_editor/symbol_editor.cpp:1689
+#: eeschema/symbol_editor/symbol_editor.cpp:129
+#: eeschema/symbol_editor/symbol_editor.cpp:499
+#: eeschema/symbol_editor/symbol_editor.cpp:1688
 #: eeschema/tools/symbol_editor_control.cpp:263
 #: eeschema/tools/symbol_editor_control.cpp:406
 #: eeschema/tools/symbol_editor_control.cpp:448
@@ -22854,138 +22854,138 @@ msgstr "Šiuo metu nėra atidarytos schemos."
 msgid "Symbol library '%s' is not writable."
 msgstr "Simbolių biblioteka „%s“ nėra rašoma."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:132
-#: eeschema/symbol_editor/symbol_editor.cpp:502
-#: eeschema/symbol_editor/symbol_editor.cpp:1690
+#: eeschema/symbol_editor/symbol_editor.cpp:131
+#: eeschema/symbol_editor/symbol_editor.cpp:501
+#: eeschema/symbol_editor/symbol_editor.cpp:1689
 msgid "You must save to a different location."
 msgstr "Turite išsaugoti kitoje vietoje."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:189
-#: eeschema/symbol_editor/symbol_editor.cpp:1495
+#: eeschema/symbol_editor/symbol_editor.cpp:188
+#: eeschema/symbol_editor/symbol_editor.cpp:1494
 msgid "The current symbol has been modified.  Save changes?"
 msgstr "Dabartinis simbolis pakeistas. Išsaugoti pakeitimus?"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:370
-#: eeschema/symbol_editor/symbol_editor.cpp:1138
+#: eeschema/symbol_editor/symbol_editor.cpp:369
+#: eeschema/symbol_editor/symbol_editor.cpp:1137
 #: eeschema/tools/symbol_editor_control.cpp:490
 #, fuzzy, c-format
 msgid "Symbol '%s' already exists in library '%s'."
 msgstr "Simbolis '%s' jau yra bibliotekoje '%s'"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:818
+#: eeschema/symbol_editor/symbol_editor.cpp:817
 #, fuzzy
 msgid "Save Symbol As"
 msgstr "Keisti simbolius ..."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:857
+#: eeschema/symbol_editor/symbol_editor.cpp:856
 #: pcbnew/footprint_libraries_utils.cpp:1044
 msgid "Save in library:"
 msgstr "Išsaugoti bibliotekoje:"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:947
+#: eeschema/symbol_editor/symbol_editor.cpp:946
 #: pcbnew/footprint_libraries_utils.cpp:1127
 #, fuzzy
 msgid "A library must be specified."
 msgstr "Nenurodyta biblioteka."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:959
+#: eeschema/symbol_editor/symbol_editor.cpp:958
 #, fuzzy, c-format
 msgid ""
 "Library '%s' is read-only. Choose a different library to save the symbol "
 "'%s' to."
 msgstr "Редактировать таблицу библиотек посад.мест"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:975
+#: eeschema/symbol_editor/symbol_editor.cpp:974
 #, c-format
 msgid "Symbol '%s' cannot replace another symbol '%s' that it descends from"
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_editor.cpp:984
+#: eeschema/symbol_editor/symbol_editor.cpp:983
 #, c-format
 msgid ""
 "Symbol '%s' cannot replace another symbol '%s' that is a descendent of it."
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_editor.cpp:997
+#: eeschema/symbol_editor/symbol_editor.cpp:996
 #, fuzzy, c-format
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
 msgstr "Simbolis '%s' jau yra bibliotekoje '%s'"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1014
+#: eeschema/symbol_editor/symbol_editor.cpp:1013
 #, fuzzy, c-format
 msgid ""
 "The following symbols in the inheritance chain of '%s' already exist in "
 "library '%s':\n"
 msgstr "Simbolis '%s' jau yra bibliotekoje '%s'"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1021
+#: eeschema/symbol_editor/symbol_editor.cpp:1020
 #, fuzzy
 msgid ""
 "\n"
 "Do you want to overwrite all of them, or rename the new symbols?"
 msgstr "Ar tikrai norite pašalinti visą plokštę?"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1025
+#: eeschema/symbol_editor/symbol_editor.cpp:1024
 #, fuzzy
 msgid "Overwrite All"
 msgstr "Perrašyti"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1025
+#: eeschema/symbol_editor/symbol_editor.cpp:1024
 #, fuzzy
 msgid "Rename All"
 msgstr "Pervadinti failą"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1105
+#: eeschema/symbol_editor/symbol_editor.cpp:1104
 msgid "Export Symbol"
 msgstr "Eksporto simbolis"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1131
+#: eeschema/symbol_editor/symbol_editor.cpp:1130
 #, fuzzy, c-format
 msgid "Library '%s' is read-only."
 msgstr "Biblioteka „%s“ yra tik skaitoma."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1171
+#: eeschema/symbol_editor/symbol_editor.cpp:1170
 #, fuzzy, c-format
 msgid "Error occurred attempting to load symbol library file '%s'."
 msgstr "Bandant įkelti simbolių bibliotekos failą „%s“ įvyko klaida"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1179
+#: eeschema/symbol_editor/symbol_editor.cpp:1178
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:135
 #, fuzzy, c-format
 msgid "Symbol %s already exists in library '%s'."
 msgstr "Simbolis '%s' jau yra bibliotekoje '%s'"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1194
+#: eeschema/symbol_editor/symbol_editor.cpp:1193
 #, fuzzy, c-format
 msgid "Insufficient permissions to save library '%s'."
 msgstr ""
 "Neturite reikiamų teisių failo įrašymui\n"
 "%s"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1213
+#: eeschema/symbol_editor/symbol_editor.cpp:1212
 #, fuzzy, c-format
 msgid "Error creating symbol library '%s'."
 msgstr "Kuriant simbolių biblioteką „%s“ įvyko klaida"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1220
+#: eeschema/symbol_editor/symbol_editor.cpp:1219
 #, fuzzy, c-format
 msgid "Symbol %s saved to library '%s'."
 msgstr "Simbolis „%s“ išsaugotas bibliotekoje „%s“"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1238
+#: eeschema/symbol_editor/symbol_editor.cpp:1237
 #, fuzzy, c-format
 msgid "Symbol name '%s' already in use."
 msgstr "Pavadinimas „%s“ jau naudojamas."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1276
+#: eeschema/symbol_editor/symbol_editor.cpp:1275
 #, fuzzy, c-format
 msgid ""
 "The symbol '%s' has been modified.\n"
 "Do you want to remove it from the library?"
 msgstr "'%s' nerastas '%s' bibliotekoje."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1288
+#: eeschema/symbol_editor/symbol_editor.cpp:1287
 #, fuzzy, c-format
 msgid ""
 "The symbol %s is used to derive other symbols.\n"
@@ -22998,68 +22998,68 @@ msgstr ""
 "\n"
 "Ar norite ištrinti šį simbolį ir visus jo darinius?"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1293
-#: eeschema/tools/ee_actions.cpp:242
+#: eeschema/symbol_editor/symbol_editor.cpp:1292
+#: eeschema/tools/sch_actions.cpp:242
 msgid "Delete Symbol"
 msgstr "Ištrinti simbolį"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1294
+#: eeschema/symbol_editor/symbol_editor.cpp:1293
 msgid "Keep Symbol"
 msgstr "Laikyti simbolį"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1431 pcbnew/files.cpp:342
+#: eeschema/symbol_editor/symbol_editor.cpp:1430 pcbnew/files.cpp:342
 #: pcbnew/footprint_libraries_utils.cpp:1213
 #, fuzzy, c-format
 msgid "Revert '%s' to last version saved?"
 msgstr "Grąžinti „%s“ į paskutinę išsaugotą versiją?"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1509
+#: eeschema/symbol_editor/symbol_editor.cpp:1508
 #, fuzzy, c-format
 msgid "Symbol %s not found in library '%s'."
 msgstr "'%s' nerastas '%s' bibliotekoje."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1538
+#: eeschema/symbol_editor/symbol_editor.cpp:1537
 msgid "No library specified."
 msgstr "Nenurodyta biblioteka."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1557
+#: eeschema/symbol_editor/symbol_editor.cpp:1556
 #, fuzzy, c-format
 msgid "Save Library '%s' As..."
 msgstr "Išsaugoti biblioteką „%s“ kaip ..."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1597
+#: eeschema/symbol_editor/symbol_editor.cpp:1596
 #, fuzzy, c-format
 msgid "Failed to save changes to symbol library file '%s'."
 msgstr "Nepavyko išsaugoti simbolių bibliotekos failo „%s“ pakeitimų"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1599
+#: eeschema/symbol_editor/symbol_editor.cpp:1598
 #, fuzzy
 msgid "Error Saving Library"
 msgstr "Klaida išsaugant biblioteką"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1645
+#: eeschema/symbol_editor/symbol_editor.cpp:1644
 #, fuzzy, c-format
 msgid "Symbol library file '%s' saved."
 msgstr "Simbolių bibliotekos failas „%s“ išsaugotas"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1744
+#: eeschema/symbol_editor/symbol_editor.cpp:1743
 msgid "Undefined!"
 msgstr "Nenurodyta!"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1745
-#: eeschema/symbol_viewer_frame.cpp:460 pcbnew/board_item.cpp:400
+#: eeschema/symbol_editor/symbol_editor.cpp:1744
+#: eeschema/symbol_viewer_frame.cpp:458 pcbnew/board_item.cpp:400
 msgid "Parent"
 msgstr "Kaip motininės"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1760
+#: eeschema/symbol_editor/symbol_editor.cpp:1759
 msgid "Body"
 msgstr "Kontūras"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1763
+#: eeschema/symbol_editor/symbol_editor.cpp:1762
 msgid "Power Symbol"
 msgstr "Maitinimo šaltinio simbolis"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1770
+#: eeschema/symbol_editor/symbol_editor.cpp:1769
 msgid "Datasheet"
 msgstr "Dokumentacija"
 
@@ -23146,7 +23146,7 @@ msgstr ""
 "%s"
 
 #: eeschema/symbol_library_manager.cpp:1010
-#: eeschema/tools/sch_editor_control.cpp:461
+#: eeschema/tools/sch_editor_control.cpp:460
 #, fuzzy, c-format
 msgid "Error saving symbol %s to library '%s'."
 msgstr "Klaida įkeliant simbolį „%s“ iš bibliotekos „%s“."
@@ -23160,7 +23160,7 @@ msgstr "(nepavyko užkrauti)"
 msgid "KiCad Symbol Library Browser"
 msgstr "Simbolių bibliotekos naršyklė"
 
-#: eeschema/symbol_viewer_frame.cpp:1111 pcbnew/footprint_viewer_frame.cpp:1026
+#: eeschema/symbol_viewer_frame.cpp:1109 pcbnew/footprint_viewer_frame.cpp:1026
 #: pcbnew/footprint_viewer_frame.cpp:1031
 #, fuzzy
 msgid "[no library selected]"
@@ -23173,7 +23173,7 @@ msgid ""
 msgstr ""
 
 #: eeschema/sync_sheet_pin/dialog_sync_sheet_pins_base.h:50
-#: eeschema/tools/ee_actions.cpp:560 eeschema/tools/ee_actions.cpp:568
+#: eeschema/tools/sch_actions.cpp:560 eeschema/tools/sch_actions.cpp:568
 #, fuzzy
 msgid "Synchronize sheet pins and hierarchical labels"
 msgstr "Pakeiskite esamą elementą į hierarchinę etiketę"
@@ -23209,13 +23209,14 @@ msgstr "Удалить иерархическую метку"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:99
 #, fuzzy
-msgid "Change sheet pin to hierarchical label"
+msgid ""
+"Associate selected sheet pin and hierarchical label using the label name"
 msgstr "Pakeiskite esamą elementą į hierarchinę etiketę"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
 #, fuzzy
-msgid "Change hierarchical label to sheet pin"
-msgstr "Изменить на иерархическую метку"
+msgid "Associate selected sheet pin and hierarchical label using the pin name"
+msgstr "Pakeiskite esamą elementą į hierarchinę etiketę"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
@@ -23379,257 +23380,262 @@ msgstr "Tinklo %s negalima pakeisti į „%s“, nes jį valdo maitinimo kaišti
 msgid "Add label '%s' to %s pin %s net."
 msgstr "Prie %s smeigtuko %s pridėkite etiketę „%s“."
 
-#: eeschema/tools/ee_actions.cpp:48
+#: eeschema/tools/rule_area_create_helper.cpp:69
+#, fuzzy
+msgid "Draw Rule Area"
+msgstr "Taisyklės sritis"
+
+#: eeschema/tools/sch_actions.cpp:48
 #, fuzzy
 msgid "Show the electrical rules checker window"
 msgstr "Rodyti dizaino taisyklių tikrintuvo langą"
 
-#: eeschema/tools/ee_actions.cpp:54
+#: eeschema/tools/sch_actions.cpp:54
 msgid "Symbol Checker"
 msgstr "Simbolių tikrintuvas"
 
-#: eeschema/tools/ee_actions.cpp:55
+#: eeschema/tools/sch_actions.cpp:55
 msgid "Show the symbol checker window"
 msgstr "Rodyti simbolių tikrintuvo langą"
 
-#: eeschema/tools/ee_actions.cpp:62
+#: eeschema/tools/sch_actions.cpp:62
 #, fuzzy
 msgid "Show differences between schematic symbol and its library equivalent"
 msgstr "Tikrinami pėdsakai ..."
 
-#: eeschema/tools/ee_actions.cpp:68
+#: eeschema/tools/sch_actions.cpp:68
 #, fuzzy
 msgid "Show Bus Syntax Help"
 msgstr "Sintaksės pagalba"
 
-#: eeschema/tools/ee_actions.cpp:75
+#: eeschema/tools/sch_actions.cpp:75
 msgid "Show simulation window for running SPICE or IBIS simulations."
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:84 pcbnew/tools/pcb_actions.cpp:1978
+#: eeschema/tools/sch_actions.cpp:84 pcbnew/tools/pcb_actions.cpp:1978
 msgid "Create Corner"
 msgstr "Kampas"
 
-#: eeschema/tools/ee_actions.cpp:90 eeschema/tools/ee_point_editor.cpp:1376
+#: eeschema/tools/sch_actions.cpp:90 eeschema/tools/sch_point_editor.cpp:1384
 #: pcbnew/tools/pcb_actions.cpp:1985
 msgid "Remove Corner"
 msgstr "Nuimkite kampą"
 
-#: eeschema/tools/ee_actions.cpp:105
+#: eeschema/tools/sch_actions.cpp:105
 msgid "Select Node"
 msgstr "Pasirinkite mazgas"
 
-#: eeschema/tools/ee_actions.cpp:106
+#: eeschema/tools/sch_actions.cpp:106
 msgid "Select a connection item under the cursor"
 msgstr "Po žymekliu pasirinkite ryšio elementą"
 
-#: eeschema/tools/ee_actions.cpp:113
+#: eeschema/tools/sch_actions.cpp:113
 msgid "Select Connection"
 msgstr "Pasirinkite Ryšys"
 
-#: eeschema/tools/ee_actions.cpp:114
+#: eeschema/tools/sch_actions.cpp:114
 msgid "Select a complete connection"
 msgstr "Pasirinkite visą ryšį"
 
-#: eeschema/tools/ee_actions.cpp:150
+#: eeschema/tools/sch_actions.cpp:150
 #, fuzzy
 msgid "Show/hide design blocks library"
 msgstr "„KiCad“ pėdsakų bibliotekos keliai"
 
-#: eeschema/tools/ee_actions.cpp:156
+#: eeschema/tools/sch_actions.cpp:156
 #, fuzzy
 msgid "Save Current Sheet as Design Block..."
 msgstr "Išsaugoti šį lapą kitu pavadinimu"
 
-#: eeschema/tools/ee_actions.cpp:157
+#: eeschema/tools/sch_actions.cpp:157
 #, fuzzy
 msgid "Create a new design block from the current sheet"
 msgstr "Sukurkite PNG failą iš dabartinio rodinio"
 
-#: eeschema/tools/ee_actions.cpp:163
+#: eeschema/tools/sch_actions.cpp:163
 msgid "Save Selection as Design Block..."
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:164
+#: eeschema/tools/sch_actions.cpp:164
 #, fuzzy
 msgid "Create a new design block from the current selection"
 msgstr "Iš pasirinkimo sukuria taisyklių sritį"
 
-#: eeschema/tools/ee_actions.cpp:170
+#: eeschema/tools/sch_actions.cpp:170
 #, fuzzy
 msgid "Delete Design Block"
 msgstr "Pašalinti bloką"
 
-#: eeschema/tools/ee_actions.cpp:171
+#: eeschema/tools/sch_actions.cpp:171
 #, fuzzy
 msgid "Remove the selected design block from its library"
 msgstr "Pašalinkite pasirinktą simbolį iš jo bibliotekos"
 
-#: eeschema/tools/ee_actions.cpp:177 eeschema/tools/ee_actions.cpp:736
+#: eeschema/tools/sch_actions.cpp:177 eeschema/tools/sch_actions.cpp:736
 #: pcbnew/tools/pcb_actions.cpp:677
 msgid "Properties..."
 msgstr "Savybės..."
 
-#: eeschema/tools/ee_actions.cpp:178
+#: eeschema/tools/sch_actions.cpp:178
 #, fuzzy
 msgid "Edit properies of design block"
 msgstr "Negaliu užkrauti %s failo"
 
-#: eeschema/tools/ee_actions.cpp:188
+#: eeschema/tools/sch_actions.cpp:188
 #, fuzzy
 msgid "Save Library As..."
 msgstr "Išsaugoti biblioteką „%s“ kaip ..."
 
-#: eeschema/tools/ee_actions.cpp:189
+#: eeschema/tools/sch_actions.cpp:189
 #, fuzzy
 msgid "Save the current library to a new file"
 msgstr "Сохранить текущую библиотеку под новым именем."
 
-#: eeschema/tools/ee_actions.cpp:195
+#: eeschema/tools/sch_actions.cpp:195
 msgid "New Symbol..."
 msgstr "Naujas simbolis ..."
 
-#: eeschema/tools/ee_actions.cpp:196
+#: eeschema/tools/sch_actions.cpp:196
 #, fuzzy
 msgid "Create a new symbol in an existing library"
 msgstr "Išveskite iš esamo simbolio:"
 
-#: eeschema/tools/ee_actions.cpp:202
+#: eeschema/tools/sch_actions.cpp:202
 #, fuzzy
 msgid "Derive from Existing Symbol..."
 msgstr "Išveskite iš esamo simbolio…"
 
-#: eeschema/tools/ee_actions.cpp:203
+#: eeschema/tools/sch_actions.cpp:203
 #, fuzzy
 msgid "Create a new symbol, derived from an existing symbol"
 msgstr "Išveskite iš esamo simbolio:"
 
-#: eeschema/tools/ee_actions.cpp:209
+#: eeschema/tools/sch_actions.cpp:209
 #, fuzzy
 msgid "Edit Symbol"
 msgstr "Redaguoti simbolį ..."
 
-#: eeschema/tools/ee_actions.cpp:210
+#: eeschema/tools/sch_actions.cpp:210
 msgid "Show selected symbol on editor canvas"
 msgstr "Rodyti pasirinktą simbolį redaktoriaus drobėje"
 
-#: eeschema/tools/ee_actions.cpp:216
+#: eeschema/tools/sch_actions.cpp:216
 #, fuzzy
 msgid "Duplicate Symbol"
 msgstr "Kopijuoti žymą"
 
-#: eeschema/tools/ee_actions.cpp:222
+#: eeschema/tools/sch_actions.cpp:222
 #, fuzzy
 msgid "Rename Symbol..."
 msgstr "Gelbėjimo simboliai ..."
 
-#: eeschema/tools/ee_actions.cpp:229
+#: eeschema/tools/sch_actions.cpp:229
 #, fuzzy
 msgid "Save the current symbol to a different library or name"
 msgstr "Išsaugokite dabartinį simbolį schemoje"
 
-#: eeschema/tools/ee_actions.cpp:235
+#: eeschema/tools/sch_actions.cpp:235
 msgid "Save Copy As..."
 msgstr "Išsaugoti kopiją kaip ..."
 
-#: eeschema/tools/ee_actions.cpp:236
+#: eeschema/tools/sch_actions.cpp:236
 #, fuzzy
 msgid "Save a copy of the current symbol to a different library or name"
 msgstr "Išsaugokite dabartinį simbolį schemoje"
 
-#: eeschema/tools/ee_actions.cpp:243
+#: eeschema/tools/sch_actions.cpp:243
 msgid "Remove the selected symbol from its library"
 msgstr "Pašalinkite pasirinktą simbolį iš jo bibliotekos"
 
-#: eeschema/tools/ee_actions.cpp:261
+#: eeschema/tools/sch_actions.cpp:261
 msgid "Paste Symbol"
 msgstr "Įklijuoti simbolį"
 
-#: eeschema/tools/ee_actions.cpp:267
+#: eeschema/tools/sch_actions.cpp:267
 msgid "Import Symbol..."
 msgstr "Importuoti simbolį ..."
 
-#: eeschema/tools/ee_actions.cpp:268
+#: eeschema/tools/sch_actions.cpp:268
 msgid "Import a symbol to the current library"
 msgstr "Importuokite simbolį į dabartinę biblioteką"
 
-#: eeschema/tools/ee_actions.cpp:274
+#: eeschema/tools/sch_actions.cpp:274
 #, fuzzy
 msgid "Export..."
 msgstr "Eksportuoti..."
 
-#: eeschema/tools/ee_actions.cpp:275
+#: eeschema/tools/sch_actions.cpp:275
 msgid "Export a symbol to a new library file"
 msgstr "Eksportuokite simbolį į naują bibliotekos failą"
 
-#: eeschema/tools/ee_actions.cpp:281
+#: eeschema/tools/sch_actions.cpp:281
 #, fuzzy
 msgid "Update Symbol Fields..."
 msgstr "Удалить поля"
 
-#: eeschema/tools/ee_actions.cpp:282
+#: eeschema/tools/sch_actions.cpp:282
 #, fuzzy
 msgid "Update symbol to match changes made in parent symbol"
 msgstr "Atnaujinti simbolį, kad būtų įtraukti visi bibliotekos pakeitimai"
 
-#: eeschema/tools/ee_actions.cpp:288
+#: eeschema/tools/sch_actions.cpp:288
 msgid "Set Unit Display Name..."
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:289
+#: eeschema/tools/sch_actions.cpp:289
 #, fuzzy
 msgid "Set the display name for a particular unit in a multi-unit symbol"
 msgstr "Įveskite lapo kelio puslapio numerį %s"
 
-#: eeschema/tools/ee_actions.cpp:294
+#: eeschema/tools/sch_actions.cpp:294
 msgid "Add Symbol to Schematic"
 msgstr "Pridėti simbolį prie schemos"
 
-#: eeschema/tools/ee_actions.cpp:295
+#: eeschema/tools/sch_actions.cpp:295
 #, fuzzy
 msgid "Add the current symbol to the schematic"
 msgstr "Išsaugokite dabartinį simbolį schemoje"
 
-#: eeschema/tools/ee_actions.cpp:301
+#: eeschema/tools/sch_actions.cpp:301
 msgid "Show Pin Electrical Types"
 msgstr "Rodyti kaiščių elektros tipus"
 
-#: eeschema/tools/ee_actions.cpp:302
+#: eeschema/tools/sch_actions.cpp:302
 msgid "Annotate pins with their electrical types"
 msgstr "Pažymėkite kaiščius su jų elektriniais tipais"
 
-#: eeschema/tools/ee_actions.cpp:308
+#: eeschema/tools/sch_actions.cpp:308
 #, fuzzy
 msgid "Show Pin Numbers"
 msgstr "Rodyti išvado numerį"
 
-#: eeschema/tools/ee_actions.cpp:309
+#: eeschema/tools/sch_actions.cpp:309
 #, fuzzy
 msgid "Annotate pins with their numbers"
 msgstr "Pažymėkite kaiščius su jų elektriniais tipais"
 
-#: eeschema/tools/ee_actions.cpp:315
+#: eeschema/tools/sch_actions.cpp:315
 msgid "Export View as PNG..."
 msgstr "Eksportuoti rodinį kaip PNG ..."
 
-#: eeschema/tools/ee_actions.cpp:316
+#: eeschema/tools/sch_actions.cpp:316
 msgid "Create PNG file from the current view"
 msgstr "Sukurkite PNG failą iš dabartinio rodinio"
 
-#: eeschema/tools/ee_actions.cpp:322
+#: eeschema/tools/sch_actions.cpp:322
 msgid "Export Symbol as SVG..."
 msgstr "Eksportuoti simbolį kaip SVG ..."
 
-#: eeschema/tools/ee_actions.cpp:323
+#: eeschema/tools/sch_actions.cpp:323
 msgid "Create SVG file from the current symbol"
 msgstr "Sukurkite SVG failą iš dabartinio simbolio"
 
-#: eeschema/tools/ee_actions.cpp:329
+#: eeschema/tools/sch_actions.cpp:329
 #, fuzzy
 msgid "Synchronized Pins Mode"
 msgstr "Sinchronizuotų kaiščių redagavimo režimas"
 
-#: eeschema/tools/ee_actions.cpp:330
+#: eeschema/tools/sch_actions.cpp:330
 #, fuzzy
 msgid ""
 "Synchronized Pins Mode\n"
@@ -23642,20 +23648,20 @@ msgstr ""
 "Pagal numatytuosius nustatymus įgalinta kelių vienetų dalims su keičiamais "
 "vienetais."
 
-#: eeschema/tools/ee_actions.cpp:338 eeschema/tools/ee_actions.cpp:1151
+#: eeschema/tools/sch_actions.cpp:338 eeschema/tools/sch_actions.cpp:1151
 msgid "Show Hidden Pins"
 msgstr "Rodyti paslėptus kaiščius"
 
-#: eeschema/tools/ee_actions.cpp:344 eeschema/tools/ee_actions.cpp:1157
+#: eeschema/tools/sch_actions.cpp:344 eeschema/tools/sch_actions.cpp:1157
 msgid "Show Hidden Fields"
 msgstr "Rodyti paslėptus laukus"
 
-#: eeschema/tools/ee_actions.cpp:355
+#: eeschema/tools/sch_actions.cpp:355
 #, fuzzy
 msgid "Draw Pins"
 msgstr "Brėžiniai"
 
-#: eeschema/tools/ee_actions.cpp:363 eeschema/tools/ee_actions.cpp:595
+#: eeschema/tools/sch_actions.cpp:363 eeschema/tools/sch_actions.cpp:595
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:301
 #: pagelayout_editor/tools/pl_actions.cpp:61 pcbnew/tools/drawing_tool.cpp:1044
 #: pcbnew/tools/pcb_actions.cpp:185
@@ -23663,612 +23669,612 @@ msgstr "Brėžiniai"
 msgid "Draw Text"
 msgstr "Brėžti liniją"
 
-#: eeschema/tools/ee_actions.cpp:371 eeschema/tools/ee_actions.cpp:602
+#: eeschema/tools/sch_actions.cpp:371 eeschema/tools/sch_actions.cpp:602
 #: pcbnew/tools/pcb_actions.cpp:192
 #, fuzzy
 msgid "Draw Text Boxes"
 msgstr "Brėžti liniją"
 
-#: eeschema/tools/ee_actions.cpp:378 eeschema/tools/ee_actions.cpp:1383
+#: eeschema/tools/sch_actions.cpp:378 eeschema/tools/sch_actions.cpp:1383
 #: pagelayout_editor/tools/pl_actions.cpp:45 pcbnew/tools/pcb_actions.cpp:108
 #, fuzzy
 msgid "Draw Lines"
 msgstr "Brėžti liniją"
 
-#: eeschema/tools/ee_actions.cpp:379
+#: eeschema/tools/sch_actions.cpp:379
 #, fuzzy
 msgid "Draw connected graphic lines"
 msgstr "Pridėti sujungtas grafines linijas"
 
-#: eeschema/tools/ee_actions.cpp:387 pcbnew/tools/pcb_actions.cpp:117
+#: eeschema/tools/sch_actions.cpp:387 pcbnew/tools/pcb_actions.cpp:117
 #, fuzzy
 msgid "Draw Polygons"
 msgstr "Nubraižykite grafinį daugiakampį"
 
-#: eeschema/tools/ee_actions.cpp:395
+#: eeschema/tools/sch_actions.cpp:395
 msgid "Move Symbol Anchor"
 msgstr "Perkelti simbolio inkarą"
 
-#: eeschema/tools/ee_actions.cpp:404
+#: eeschema/tools/sch_actions.cpp:404
 msgid "Push Pin Length"
 msgstr "Paspauskite kaiščio ilgį"
 
-#: eeschema/tools/ee_actions.cpp:405
+#: eeschema/tools/sch_actions.cpp:405
 msgid "Copy pin length to other pins in symbol"
 msgstr "Nukopijuokite kaiščių ilgį į kitus simbolių kaiščius"
 
-#: eeschema/tools/ee_actions.cpp:411
+#: eeschema/tools/sch_actions.cpp:411
 msgid "Push Pin Name Size"
 msgstr "Paspauskite kaiščio pavadinimo dydį"
 
-#: eeschema/tools/ee_actions.cpp:412
+#: eeschema/tools/sch_actions.cpp:412
 msgid "Copy pin name size to other pins in symbol"
 msgstr "Nukopijuokite smeigtuko vardo dydį į kitus simbolio kaiščius"
 
-#: eeschema/tools/ee_actions.cpp:418
+#: eeschema/tools/sch_actions.cpp:418
 msgid "Push Pin Number Size"
 msgstr "Paspauskite kaiščio skaičiaus dydį"
 
-#: eeschema/tools/ee_actions.cpp:419
+#: eeschema/tools/sch_actions.cpp:419
 msgid "Copy pin number size to other pins in symbol"
 msgstr "Nukopijuokite smeigtuko numerio dydį į kitus simbolio kaiščius"
 
-#: eeschema/tools/ee_actions.cpp:430
+#: eeschema/tools/sch_actions.cpp:430
 #, fuzzy
 msgid "Place Symbols"
 msgstr "Įklijuoti simbolį"
 
-#: eeschema/tools/ee_actions.cpp:438
+#: eeschema/tools/sch_actions.cpp:438
 #, fuzzy
 msgid "Place Next Symbol Unit"
 msgstr "Simbolių vienetas"
 
-#: eeschema/tools/ee_actions.cpp:439
+#: eeschema/tools/sch_actions.cpp:439
 #, fuzzy
 msgid ""
 "Place the next unit of the current symbol that is missing from the schematic"
 msgstr "Išsaugokite dabartinį simbolį schemoje"
 
-#: eeschema/tools/ee_actions.cpp:449
+#: eeschema/tools/sch_actions.cpp:449
 #, fuzzy
 msgid "Place Power Symbols"
 msgstr "Maitinimo šaltinio simbolis"
 
-#: eeschema/tools/ee_actions.cpp:458
+#: eeschema/tools/sch_actions.cpp:458
 #, fuzzy
 msgid "Place Design Block"
 msgstr "Atšaukti bloką"
 
-#: eeschema/tools/ee_actions.cpp:459
+#: eeschema/tools/sch_actions.cpp:459
 msgid "Add selected design block to current sheet"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:470
+#: eeschema/tools/sch_actions.cpp:470
 #, fuzzy
 msgid "Place No Connect Flags"
 msgstr "Pažymėti \"Neprijungta\""
 
-#: eeschema/tools/ee_actions.cpp:480
+#: eeschema/tools/sch_actions.cpp:480
 #, fuzzy
 msgid "Place Junctions"
 msgstr "Nauja jungtis"
 
-#: eeschema/tools/ee_actions.cpp:490
+#: eeschema/tools/sch_actions.cpp:490
 #, fuzzy
 msgid "Place Wire to Bus Entries"
 msgstr "Prijungti laidininką prie šynos"
 
-#: eeschema/tools/ee_actions.cpp:500
+#: eeschema/tools/sch_actions.cpp:500
 #, fuzzy
 msgid "Place Net Labels"
 msgstr "Разместить имя цепи - локальная метка"
 
-#: eeschema/tools/ee_actions.cpp:508
+#: eeschema/tools/sch_actions.cpp:508
 #, fuzzy
 msgid "Place Directive Labels"
 msgstr "„Net Label“"
 
-#: eeschema/tools/ee_actions.cpp:517
+#: eeschema/tools/sch_actions.cpp:517
 #, fuzzy
 msgid "Place Hierarchical Labels"
 msgstr "Hierarchinė žyma"
 
-#: eeschema/tools/ee_actions.cpp:526
+#: eeschema/tools/sch_actions.cpp:526
 #, fuzzy
 msgid "Draw Hierarchical Sheets"
 msgstr "Pridėti hierarchinį lapą"
 
-#: eeschema/tools/ee_actions.cpp:534
+#: eeschema/tools/sch_actions.cpp:534
 #, fuzzy
 msgid "Draw Sheet from File"
 msgstr "Tempti lapą"
 
-#: eeschema/tools/ee_actions.cpp:535
+#: eeschema/tools/sch_actions.cpp:535
 msgid "Copy sheet into project and draw on current sheet"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:543
+#: eeschema/tools/sch_actions.cpp:543
 #, fuzzy
 msgid "Draw Sheet from Design Block"
 msgstr "Pašalinti bloką"
 
-#: eeschema/tools/ee_actions.cpp:544
+#: eeschema/tools/sch_actions.cpp:544
 #, fuzzy
 msgid "Copy design block into project as a sheet on current sheet"
 msgstr "Sukurkite PNG failą iš dabartinio rodinio"
 
-#: eeschema/tools/ee_actions.cpp:552
+#: eeschema/tools/sch_actions.cpp:552
 #, fuzzy
 msgid "Place Sheet Pins"
 msgstr "Naujas lapas"
 
-#: eeschema/tools/ee_actions.cpp:559 eeschema/tools/ee_actions.cpp:567
+#: eeschema/tools/sch_actions.cpp:559 eeschema/tools/sch_actions.cpp:567
 #, fuzzy
-msgid "Sync Sheet Pins"
+msgid "Sync Sheet Pins..."
 msgstr "Lapo kaištis"
 
-#: eeschema/tools/ee_actions.cpp:575
+#: eeschema/tools/sch_actions.cpp:575
 #, fuzzy
-msgid "Import Sheet"
+msgid "Import Sheet..."
 msgstr "Importuoti lapo kaištį"
 
-#: eeschema/tools/ee_actions.cpp:576
+#: eeschema/tools/sch_actions.cpp:576
 #, fuzzy
 msgid "Import sheet into project"
 msgstr "Importuoti lapo kaištį"
 
-#: eeschema/tools/ee_actions.cpp:586
+#: eeschema/tools/sch_actions.cpp:586
 #, fuzzy
 msgid "Place Global Labels"
 msgstr "Вращать глобальную метку"
 
-#: eeschema/tools/ee_actions.cpp:610 pcbnew/tools/pcb_actions.cpp:199
+#: eeschema/tools/sch_actions.cpp:610 pcbnew/tools/pcb_actions.cpp:199
 #, fuzzy
 msgid "Draw Tables"
 msgstr "Brėžti liniją"
 
-#: eeschema/tools/ee_actions.cpp:617 pagelayout_editor/tools/pl_actions.cpp:53
+#: eeschema/tools/sch_actions.cpp:617 pagelayout_editor/tools/pl_actions.cpp:53
 #: pcbnew/tools/pcb_actions.cpp:125
 #, fuzzy
 msgid "Draw Rectangles"
 msgstr "Nubrėžkite stačiakampį"
 
-#: eeschema/tools/ee_actions.cpp:625 pcbnew/tools/pcb_actions.cpp:134
+#: eeschema/tools/sch_actions.cpp:625 pcbnew/tools/pcb_actions.cpp:134
 #, fuzzy
 msgid "Draw Circles"
 msgstr "Brėžti apskritimą"
 
-#: eeschema/tools/ee_actions.cpp:633 pcbnew/tools/pcb_actions.cpp:143
+#: eeschema/tools/sch_actions.cpp:633 pcbnew/tools/pcb_actions.cpp:143
 #, fuzzy
 msgid "Draw Arcs"
 msgstr "Brėžti arką"
 
-#: eeschema/tools/ee_actions.cpp:641 pcbnew/tools/pcb_actions.cpp:151
+#: eeschema/tools/sch_actions.cpp:641 pcbnew/tools/pcb_actions.cpp:151
 #, fuzzy
 msgid "Draw Bezier Curve"
 msgstr "Bezje krevė"
 
-#: eeschema/tools/ee_actions.cpp:649
+#: eeschema/tools/sch_actions.cpp:649
 #, fuzzy
 msgid "Place Images"
 msgstr "Разместить узел"
 
-#: eeschema/tools/ee_actions.cpp:657 pcbnew/tools/pcb_actions.cpp:306
+#: eeschema/tools/sch_actions.cpp:657 pcbnew/tools/pcb_actions.cpp:306
 #, fuzzy
 msgid "Draw Rule Areas"
 msgstr "Taisyklės sritis"
 
-#: eeschema/tools/ee_actions.cpp:665 pcbnew/tools/pcb_actions.cpp:404
+#: eeschema/tools/sch_actions.cpp:665 pcbnew/tools/pcb_actions.cpp:404
 msgid "Delete Last Point"
 msgstr "Pašalinti paskutinį tašką"
 
-#: eeschema/tools/ee_actions.cpp:666 pcbnew/tools/pcb_actions.cpp:405
+#: eeschema/tools/sch_actions.cpp:666 pcbnew/tools/pcb_actions.cpp:405
 msgid "Delete the last point added to the current item"
 msgstr "Ištrinkite paskutinį tašką, pridėtą prie dabartinio elemento"
 
-#: eeschema/tools/ee_actions.cpp:672 pcbnew/tools/pcb_actions.cpp:411
+#: eeschema/tools/sch_actions.cpp:672 pcbnew/tools/pcb_actions.cpp:411
 msgid "Close Outline"
 msgstr "Uždaryti kontūrą"
 
-#: eeschema/tools/ee_actions.cpp:673
+#: eeschema/tools/sch_actions.cpp:673
 #, fuzzy
 msgid "Close the in-progress outline"
 msgstr "Uždarykite vykstančią schemą"
 
-#: eeschema/tools/ee_actions.cpp:688
+#: eeschema/tools/sch_actions.cpp:688
 msgid "Repeat Last Item"
 msgstr "Pakartokite paskutinį elementą"
 
-#: eeschema/tools/ee_actions.cpp:689
+#: eeschema/tools/sch_actions.cpp:689
 msgid "Duplicates the last drawn item"
 msgstr "Pasikartoja paskutinis nupieštas elementas"
 
-#: eeschema/tools/ee_actions.cpp:694 pcbnew/tools/pcb_actions.cpp:527
+#: eeschema/tools/sch_actions.cpp:694 pcbnew/tools/pcb_actions.cpp:527
 msgid "Rotate Clockwise"
 msgstr "Pasukite pagal laikrodžio rodyklę"
 
-#: eeschema/tools/ee_actions.cpp:702 pcbnew/tools/pcb_actions.cpp:537
+#: eeschema/tools/sch_actions.cpp:702 pcbnew/tools/pcb_actions.cpp:537
 msgid "Rotate Counterclockwise"
 msgstr "Pasukti Z prieš laikr. rodyklę"
 
-#: eeschema/tools/ee_actions.cpp:710 pcbnew/tools/pcb_actions.cpp:561
+#: eeschema/tools/sch_actions.cpp:710 pcbnew/tools/pcb_actions.cpp:561
 #, fuzzy
 msgid "Mirror Vertically"
 msgstr "Paskirstyti vertikaliai"
 
-#: eeschema/tools/ee_actions.cpp:711
+#: eeschema/tools/sch_actions.cpp:711
 msgid "Flips selected item(s) from top to bottom"
 msgstr "Apverčia pasirinktą (-us) elementą (-us) iš viršaus į apačią"
 
-#: eeschema/tools/ee_actions.cpp:719 pcbnew/tools/pcb_actions.cpp:554
+#: eeschema/tools/sch_actions.cpp:719 pcbnew/tools/pcb_actions.cpp:554
 #, fuzzy
 msgid "Mirror Horizontally"
 msgstr "Paskirstyti horizontaliai"
 
-#: eeschema/tools/ee_actions.cpp:720
+#: eeschema/tools/sch_actions.cpp:720
 msgid "Flips selected item(s) from left to right"
 msgstr "Apverčia pasirinktą (-us) elementą (-us) iš kairės į dešinę"
 
-#: eeschema/tools/ee_actions.cpp:727 pcbnew/tools/edit_tool_move_fct.cpp:152
+#: eeschema/tools/sch_actions.cpp:727 pcbnew/tools/edit_tool_move_fct.cpp:152
 #: pcbnew/tools/pcb_actions.cpp:569
 msgid "Swap"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:728 pcbnew/tools/pcb_actions.cpp:570
+#: eeschema/tools/sch_actions.cpp:728 pcbnew/tools/pcb_actions.cpp:570
 #, fuzzy
 msgid "Swap positions of selected items"
 msgstr "Leisti pasirinkti užrakintus elementus"
 
-#: eeschema/tools/ee_actions.cpp:744
+#: eeschema/tools/sch_actions.cpp:744
 msgid "Edit Reference Designator..."
 msgstr "Redaguoti nuorodų žymeklį ..."
 
-#: eeschema/tools/ee_actions.cpp:752
+#: eeschema/tools/sch_actions.cpp:752
 msgid "Edit Value..."
 msgstr "Redaguoti vertę ..."
 
-#: eeschema/tools/ee_actions.cpp:760
+#: eeschema/tools/sch_actions.cpp:760
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:235
 msgid "Edit Footprint..."
 msgstr "Redaguoti pėdsaką ..."
 
-#: eeschema/tools/ee_actions.cpp:768 eeschema/tools/sch_edit_tool.cpp:1974
+#: eeschema/tools/sch_actions.cpp:768 eeschema/tools/sch_edit_tool.cpp:1972
 msgid "Autoplace Fields"
 msgstr "Laukus išdėstyti automatiškai"
 
-#: eeschema/tools/ee_actions.cpp:769
+#: eeschema/tools/sch_actions.cpp:769
 #, fuzzy
 msgid ""
 "Runs the automatic placement algorithm on the symbol's (or sheet's) fields"
 msgstr "Paleidžia automatinio talpinimo algoritmą simbolio arba lapo laukuose"
 
-#: eeschema/tools/ee_actions.cpp:775
+#: eeschema/tools/sch_actions.cpp:775
 msgid "Change Symbols..."
 msgstr "Keisti simbolius ..."
 
-#: eeschema/tools/ee_actions.cpp:776
+#: eeschema/tools/sch_actions.cpp:776
 msgid "Assign different symbols from the library"
 msgstr "Priskirkite skirtingus simbolius iš bibliotekos"
 
-#: eeschema/tools/ee_actions.cpp:782
+#: eeschema/tools/sch_actions.cpp:782
 msgid "Update Symbols from Library..."
 msgstr "Atnaujinti bibliotekos simbolius ..."
 
-#: eeschema/tools/ee_actions.cpp:783
+#: eeschema/tools/sch_actions.cpp:783
 msgid "Update symbols to include any changes from the library"
 msgstr "Atnaujinkite simbolius, kad būtų įtraukti visi bibliotekos pakeitimai"
 
-#: eeschema/tools/ee_actions.cpp:790
+#: eeschema/tools/sch_actions.cpp:790
 msgid "Assign a different symbol from the library"
 msgstr "Priskirkite kitą simbolį nei biblioteka"
 
-#: eeschema/tools/ee_actions.cpp:796
+#: eeschema/tools/sch_actions.cpp:796
 msgid "Update Symbol..."
 msgstr "Atnaujinti simbolį ..."
 
-#: eeschema/tools/ee_actions.cpp:797
+#: eeschema/tools/sch_actions.cpp:797
 msgid "Update symbol to include any changes from the library"
 msgstr "Atnaujinti simbolį, kad būtų įtraukti visi bibliotekos pakeitimai"
 
-#: eeschema/tools/ee_actions.cpp:803 pcbnew/tools/pcb_actions.cpp:1117
+#: eeschema/tools/sch_actions.cpp:803 pcbnew/tools/pcb_actions.cpp:1117
 msgid "Assign Netclass..."
 msgstr "Priskirti „Netclass“ ..."
 
-#: eeschema/tools/ee_actions.cpp:804 pcbnew/tools/pcb_actions.cpp:1118
+#: eeschema/tools/sch_actions.cpp:804 pcbnew/tools/pcb_actions.cpp:1118
 #, fuzzy
 msgid "Assign a netclass to nets matching a pattern"
 msgstr "Priskirkite tinklo klasę prie pasirinkto laido tinklo"
 
-#: eeschema/tools/ee_actions.cpp:810
+#: eeschema/tools/sch_actions.cpp:810
 #, fuzzy
 msgid "De Morgan Conversion"
 msgstr "„DeMorgan“ konversija"
 
-#: eeschema/tools/ee_actions.cpp:811
+#: eeschema/tools/sch_actions.cpp:811
 #, fuzzy
 msgid "Switch between De Morgan representations"
 msgstr "Perjungti „DeMorgan“ vaizdus"
 
-#: eeschema/tools/ee_actions.cpp:817
+#: eeschema/tools/sch_actions.cpp:817
 #, fuzzy
 msgid "De Morgan Standard"
 msgstr "„DeMorgan Standard“"
 
-#: eeschema/tools/ee_actions.cpp:818
+#: eeschema/tools/sch_actions.cpp:818
 #, fuzzy
 msgid "Switch to standard De Morgan representation"
 msgstr "Perjunkite į standartinį „DeMorgan“ vaizdavimą"
 
-#: eeschema/tools/ee_actions.cpp:824
+#: eeschema/tools/sch_actions.cpp:824
 #, fuzzy
 msgid "De Morgan Alternate"
 msgstr "„DeMorgan Alternate“"
 
-#: eeschema/tools/ee_actions.cpp:825
+#: eeschema/tools/sch_actions.cpp:825
 #, fuzzy
 msgid "Switch to alternate De Morgan representation"
 msgstr "Perjunkite į alternatyvų „DeMorgan“ vaizdavimą"
 
-#: eeschema/tools/ee_actions.cpp:831
+#: eeschema/tools/sch_actions.cpp:831
 msgid "Change to Label"
 msgstr "Pakeiskite į etiketę"
 
-#: eeschema/tools/ee_actions.cpp:832
+#: eeschema/tools/sch_actions.cpp:832
 msgid "Change existing item to a label"
 msgstr "Pakeiskite esamą elementą į etiketę"
 
-#: eeschema/tools/ee_actions.cpp:840
+#: eeschema/tools/sch_actions.cpp:840
 #, fuzzy
 msgid "Change to Directive Label"
 msgstr "Pakeiskite į hierarchinę etiketę"
 
-#: eeschema/tools/ee_actions.cpp:841
+#: eeschema/tools/sch_actions.cpp:841
 #, fuzzy
 msgid "Change existing item to a directive label"
 msgstr "Pakeiskite esamą elementą į etiketę"
 
-#: eeschema/tools/ee_actions.cpp:849
+#: eeschema/tools/sch_actions.cpp:849
 msgid "Change to Hierarchical Label"
 msgstr "Pakeiskite į hierarchinę etiketę"
 
-#: eeschema/tools/ee_actions.cpp:850
+#: eeschema/tools/sch_actions.cpp:850
 msgid "Change existing item to a hierarchical label"
 msgstr "Pakeiskite esamą elementą į hierarchinę etiketę"
 
-#: eeschema/tools/ee_actions.cpp:858
+#: eeschema/tools/sch_actions.cpp:858
 msgid "Change to Global Label"
 msgstr "Pakeisti į „Global Label“"
 
-#: eeschema/tools/ee_actions.cpp:859
+#: eeschema/tools/sch_actions.cpp:859
 msgid "Change existing item to a global label"
 msgstr "Pakeiskite esamą elementą į visuotinę etiketę"
 
-#: eeschema/tools/ee_actions.cpp:867
+#: eeschema/tools/sch_actions.cpp:867
 msgid "Change to Text"
 msgstr "Pakeisti tekstą"
 
-#: eeschema/tools/ee_actions.cpp:868
+#: eeschema/tools/sch_actions.cpp:868
 msgid "Change existing item to a text comment"
 msgstr "Pakeiskite esamą elementą į teksto komentarą"
 
-#: eeschema/tools/ee_actions.cpp:876
+#: eeschema/tools/sch_actions.cpp:876
 #, fuzzy
 msgid "Change to Text Box"
 msgstr "Pakeisti tekstą"
 
-#: eeschema/tools/ee_actions.cpp:877
+#: eeschema/tools/sch_actions.cpp:877
 #, fuzzy
 msgid "Change existing item to a text box"
 msgstr "Pakeiskite esamą elementą į teksto komentarą"
 
-#: eeschema/tools/ee_actions.cpp:885 eeschema/tools/sch_edit_tool.cpp:2979
+#: eeschema/tools/sch_actions.cpp:885 eeschema/tools/sch_edit_tool.cpp:2977
 msgid "Cleanup Sheet Pins"
 msgstr "Išvalyti lapo jungtis"
 
-#: eeschema/tools/ee_actions.cpp:886
+#: eeschema/tools/sch_actions.cpp:886
 msgid "Delete unreferenced sheet pins"
 msgstr "Ištrinkite nerašomus lapo kaiščius"
 
-#: eeschema/tools/ee_actions.cpp:891 pcbnew/tools/pcb_actions.cpp:833
+#: eeschema/tools/sch_actions.cpp:891 pcbnew/tools/pcb_actions.cpp:833
 msgid "Edit Text & Graphics Properties..."
 msgstr "Redaguoti teksto ir grafikos ypatybes ..."
 
-#: eeschema/tools/ee_actions.cpp:892
+#: eeschema/tools/sch_actions.cpp:892
 msgid "Edit text and graphics properties globally across schematic"
 msgstr "Redaguoti teksto ir grafikos ypatybes visoje schemoje"
 
-#: eeschema/tools/ee_actions.cpp:898
+#: eeschema/tools/sch_actions.cpp:898
 msgid "Symbol Properties..."
 msgstr "Simbolio ypatybės ..."
 
-#: eeschema/tools/ee_actions.cpp:904
+#: eeschema/tools/sch_actions.cpp:904
 msgid "Pin Table..."
 msgstr "Prisegti lentelę ..."
 
-#: eeschema/tools/ee_actions.cpp:905
+#: eeschema/tools/sch_actions.cpp:905
 msgid "Displays pin table for bulk editing of pins"
 msgstr "Rodoma smeigtukų lentelė, skirta masiniam smeigtukų redagavimui"
 
-#: eeschema/tools/ee_actions.cpp:911
+#: eeschema/tools/sch_actions.cpp:911
 #, fuzzy
 msgid "Break"
 msgstr "Pertraukti šyną"
 
-#: eeschema/tools/ee_actions.cpp:912
+#: eeschema/tools/sch_actions.cpp:912
 #, fuzzy
 msgid "Divide into connected segments"
 msgstr "„Via“ neprijungta"
 
-#: eeschema/tools/ee_actions.cpp:918
+#: eeschema/tools/sch_actions.cpp:918
 msgid "Slice"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:919
+#: eeschema/tools/sch_actions.cpp:919
 #, fuzzy
 msgid "Divide into unconnected segments"
 msgstr "„Via“ neprijungta"
 
-#: eeschema/tools/ee_actions.cpp:933 pcbnew/tools/pcb_actions.cpp:1241
+#: eeschema/tools/sch_actions.cpp:933 pcbnew/tools/pcb_actions.cpp:1241
 msgid "Highlight net under cursor"
 msgstr "Pažymėkite tinklą po žymekliu"
 
-#: eeschema/tools/ee_actions.cpp:940 pcbnew/tools/pcb_actions.cpp:1256
+#: eeschema/tools/sch_actions.cpp:940 pcbnew/tools/pcb_actions.cpp:1256
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1217
 msgid "Clear Net Highlighting"
 msgstr "Išvalyti tinklo paryškinimą"
 
-#: eeschema/tools/ee_actions.cpp:941
+#: eeschema/tools/sch_actions.cpp:941
 #, fuzzy
 msgid "Clear any existing net highlighting"
 msgstr "Išvalyti tinklo paryškinimą"
 
-#: eeschema/tools/ee_actions.cpp:950
+#: eeschema/tools/sch_actions.cpp:950
 msgid "Highlight Nets"
 msgstr "Paryškinkite tinklus"
 
-#: eeschema/tools/ee_actions.cpp:951
+#: eeschema/tools/sch_actions.cpp:951
 msgid "Highlight wires and pins of a net"
 msgstr "Pažymėkite laidus ir tinklo kaiščius"
 
-#: eeschema/tools/ee_actions.cpp:959
+#: eeschema/tools/sch_actions.cpp:959
 #, fuzzy
 msgid "Show/hide the net navigator"
 msgstr "Parodykite tinklo inspektorių"
 
-#: eeschema/tools/ee_actions.cpp:966
+#: eeschema/tools/sch_actions.cpp:966
 msgid "Edit with Symbol Editor"
 msgstr "Redaguoti naudojant „Symbol Editor“"
 
-#: eeschema/tools/ee_actions.cpp:967
+#: eeschema/tools/sch_actions.cpp:967
 #, fuzzy
 msgid "Open the selected symbol in the Symbol Editor"
 msgstr "Pėdsakų rengyklėje atidaromas pasirinktas pėdsakas"
 
-#: eeschema/tools/ee_actions.cpp:973
+#: eeschema/tools/sch_actions.cpp:973
 #, fuzzy
 msgid "Exclude from Bill of Materials"
 msgstr "Neįtraukti į medžiagų sąrašą"
 
-#: eeschema/tools/ee_actions.cpp:974
+#: eeschema/tools/sch_actions.cpp:974
 #, fuzzy
 msgid "Set the exclude from bill of materials attribute"
 msgstr "Neįtraukti į medžiagų sąrašą"
 
-#: eeschema/tools/ee_actions.cpp:979
+#: eeschema/tools/sch_actions.cpp:979
 #, fuzzy
 msgid "Exclude from Simulation"
 msgstr "Išjungti simuliacinį simbolį"
 
-#: eeschema/tools/ee_actions.cpp:980
+#: eeschema/tools/sch_actions.cpp:980
 #, fuzzy
 msgid "Set the exclude from simulation attribute"
 msgstr "Nustatymas %s „išskirti iš BOM“ gamybos atributas."
 
-#: eeschema/tools/ee_actions.cpp:985
+#: eeschema/tools/sch_actions.cpp:985
 #, fuzzy
 msgid "Exclude from Board"
 msgstr "Išskirkite iš lentos"
 
-#: eeschema/tools/ee_actions.cpp:986
+#: eeschema/tools/sch_actions.cpp:986
 #, fuzzy
 msgid "Set the exclude from board attribute"
 msgstr "Nustatymas %s „išskirti iš BOM“ gamybos atributas."
 
-#: eeschema/tools/ee_actions.cpp:992
+#: eeschema/tools/sch_actions.cpp:992
 msgid "Set the do not populate attribute"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:999
+#: eeschema/tools/sch_actions.cpp:999
 #, fuzzy
 msgid "Open the library symbol in the Symbol Editor"
 msgstr "Norėdami redaguoti simbolį, atidarykite simbolių redaktorių"
 
-#: eeschema/tools/ee_actions.cpp:1005
+#: eeschema/tools/sch_actions.cpp:1005
 msgid "Edit Symbol Fields..."
 msgstr "Redaguoti simbolių laukus ..."
 
-#: eeschema/tools/ee_actions.cpp:1006
+#: eeschema/tools/sch_actions.cpp:1006
 msgid "Bulk-edit fields of all symbols in schematic"
 msgstr "Masinis visų schemų simbolių laukų redagavimas"
 
-#: eeschema/tools/ee_actions.cpp:1012
+#: eeschema/tools/sch_actions.cpp:1012
 msgid "Edit Symbol Library Links..."
 msgstr "Redaguoti simbolių bibliotekos nuorodas ..."
 
-#: eeschema/tools/ee_actions.cpp:1013
+#: eeschema/tools/sch_actions.cpp:1013
 msgid "Edit links between schematic and library symbols"
 msgstr "Redaguoti scheminių ir bibliotekos simbolių nuorodas"
 
-#: eeschema/tools/ee_actions.cpp:1019
+#: eeschema/tools/sch_actions.cpp:1019
 msgid "Assign Footprints..."
 msgstr "Priskirti pėdsakus ..."
 
-#: eeschema/tools/ee_actions.cpp:1020
+#: eeschema/tools/sch_actions.cpp:1020
 msgid "Run footprint assignment tool"
 msgstr "Paleiskite pėdsakų priskyrimo įrankį"
 
-#: eeschema/tools/ee_actions.cpp:1026
+#: eeschema/tools/sch_actions.cpp:1026
 msgid "Import Footprint Assignments..."
 msgstr "Importuoti pėdsakų priskyrimus ..."
 
-#: eeschema/tools/ee_actions.cpp:1027
+#: eeschema/tools/sch_actions.cpp:1027
 #, fuzzy
 msgid ""
 "Import symbol footprint assignments from .cmp file created by board editor"
 msgstr ""
 "Importuoti simbolių pėdsakų priskyrimus iš .cmp failo, kurį sukūrė „Pcbnew“"
 
-#: eeschema/tools/ee_actions.cpp:1033
+#: eeschema/tools/sch_actions.cpp:1033
 msgid "Annotate Schematic..."
 msgstr "Anotuoti schemą ..."
 
-#: eeschema/tools/ee_actions.cpp:1034
+#: eeschema/tools/sch_actions.cpp:1034
 msgid "Fill in schematic symbol reference designators"
 msgstr "Užpildykite scheminius simbolių nuorodų žymiklius"
 
-#: eeschema/tools/ee_actions.cpp:1040
+#: eeschema/tools/sch_actions.cpp:1040
 #, fuzzy
 msgid "Increment Annotations From..."
 msgstr "Ištrinti anotacijas"
 
-#: eeschema/tools/ee_actions.cpp:1041
+#: eeschema/tools/sch_actions.cpp:1041
 #, fuzzy
 msgid ""
 "Increment a subset of reference designators starting at a particular symbol"
 msgstr "Neteisėta nuorodos žymiklio vertė!"
 
-#: eeschema/tools/ee_actions.cpp:1048
+#: eeschema/tools/sch_actions.cpp:1048
 msgid "Schematic Setup..."
 msgstr "Scheminė sąranka ..."
 
-#: eeschema/tools/ee_actions.cpp:1049
+#: eeschema/tools/sch_actions.cpp:1049
 msgid "Edit schematic setup including annotation styles and electrical rules"
 msgstr ""
 "Redaguoti scheminę sąranką, įskaitant anotacijų stilius ir elektrines "
 "taisykles"
 
-#: eeschema/tools/ee_actions.cpp:1055
+#: eeschema/tools/sch_actions.cpp:1055
 #, fuzzy
 msgid "Edit Sheet Page Number..."
 msgstr "Redaguoti puslapio numerį ..."
 
-#: eeschema/tools/ee_actions.cpp:1056
+#: eeschema/tools/sch_actions.cpp:1056
 msgid "Edit the page number of the current or selected sheet"
 msgstr "Redaguokite dabartinio arba pasirinkto lapo puslapio numerį"
 
-#: eeschema/tools/ee_actions.cpp:1061
+#: eeschema/tools/sch_actions.cpp:1061
 msgid "Rescue Symbols..."
 msgstr "Gelbėjimo simboliai ..."
 
-#: eeschema/tools/ee_actions.cpp:1062
+#: eeschema/tools/sch_actions.cpp:1062
 msgid "Find old symbols in project and rename/rescue them"
 msgstr "Suraskite senus simbolius projekte ir pervardykite / išgelbėkite juos"
 
-#: eeschema/tools/ee_actions.cpp:1068
+#: eeschema/tools/sch_actions.cpp:1068
 msgid "Remap Legacy Library Symbols..."
 msgstr "Perkelti senosios bibliotekos simbolius ..."
 
-#: eeschema/tools/ee_actions.cpp:1069
+#: eeschema/tools/sch_actions.cpp:1069
 msgid ""
 "Remap library symbol references in legacy schematics to the symbol library "
 "table"
@@ -24276,77 +24282,77 @@ msgstr ""
 "Perkelkite senosios schemos bibliotekos simbolių nuorodas į simbolių "
 "bibliotekos lentelę"
 
-#: eeschema/tools/ee_actions.cpp:1075
+#: eeschema/tools/sch_actions.cpp:1075
 msgid "Export Drawing to Clipboard"
 msgstr "Eksportuoti piešinį į iškarpinę"
 
-#: eeschema/tools/ee_actions.cpp:1076
+#: eeschema/tools/sch_actions.cpp:1076
 msgid "Export drawing of current sheet to clipboard"
 msgstr "Eksportuoti dabartinio lapo piešinį į iškarpinę"
 
-#: eeschema/tools/ee_actions.cpp:1084 pcbnew/tools/pcb_actions.cpp:338
+#: eeschema/tools/sch_actions.cpp:1084 pcbnew/tools/pcb_actions.cpp:338
 #, fuzzy
 msgid "Import Graphics..."
 msgstr "& Importuoti grafiką ..."
 
-#: eeschema/tools/ee_actions.cpp:1085 pcbnew/tools/pcb_actions.cpp:339
+#: eeschema/tools/sch_actions.cpp:1085 pcbnew/tools/pcb_actions.cpp:339
 msgid "Import 2D drawing file"
 msgstr "Importuoti 2D piešimo failą"
 
-#: eeschema/tools/ee_actions.cpp:1092
+#: eeschema/tools/sch_actions.cpp:1092
 msgid "Switch to PCB Editor"
 msgstr "Perjunkite į PCB redaktorių"
 
-#: eeschema/tools/ee_actions.cpp:1093
+#: eeschema/tools/sch_actions.cpp:1093
 msgid "Open PCB in board editor"
 msgstr "Atidarykite PCB plokštės redaktoriuje"
 
-#: eeschema/tools/ee_actions.cpp:1099
+#: eeschema/tools/sch_actions.cpp:1099
 msgid "Export Netlist..."
 msgstr "Eksportuoti „Netlist“ ..."
 
-#: eeschema/tools/ee_actions.cpp:1100
+#: eeschema/tools/sch_actions.cpp:1100
 msgid "Export file containing netlist in one of several formats"
 msgstr "Eksportuoti failą, kuriame yra netlistas vienu iš kelių formatų"
 
-#: eeschema/tools/ee_actions.cpp:1106
+#: eeschema/tools/sch_actions.cpp:1106
 #, fuzzy
 msgid "Generate Bill of Materials..."
 msgstr "Medžiagų specifikacija (BoM)"
 
-#: eeschema/tools/ee_actions.cpp:1107
+#: eeschema/tools/sch_actions.cpp:1107
 msgid "Generate a bill of materials for the current schematic"
 msgstr "Sukurkite dabartinės schemos medžiagų sąrašą"
 
-#: eeschema/tools/ee_actions.cpp:1113
+#: eeschema/tools/sch_actions.cpp:1113
 #, fuzzy
 msgid "Generate Legacy Bill of Materials..."
 msgstr "Medžiagų specifikacija (BoM)"
 
-#: eeschema/tools/ee_actions.cpp:1114
+#: eeschema/tools/sch_actions.cpp:1114
 #, fuzzy
 msgid ""
 "Generate a bill of materials for the current schematic (Legacy Generator)"
 msgstr "Sukurkite dabartinės schemos medžiagų sąrašą"
 
-#: eeschema/tools/ee_actions.cpp:1121
+#: eeschema/tools/sch_actions.cpp:1121
 #, fuzzy
 msgid "Generate Bill of Materials (External)..."
 msgstr "Medžiagų specifikacija (BoM)"
 
-#: eeschema/tools/ee_actions.cpp:1122
+#: eeschema/tools/sch_actions.cpp:1122
 #, fuzzy
 msgid ""
 "Generate a bill of materials for the current schematic using external "
 "generator"
 msgstr "Sukurkite dabartinės schemos medžiagų sąrašą"
 
-#: eeschema/tools/ee_actions.cpp:1128
+#: eeschema/tools/sch_actions.cpp:1128
 #, fuzzy
 msgid "Export Symbols to Library..."
 msgstr "Atnaujinti bibliotekos simbolius ..."
 
-#: eeschema/tools/ee_actions.cpp:1129
+#: eeschema/tools/sch_actions.cpp:1129
 #, fuzzy
 msgid ""
 "Add symbols used in schematic to an existing symbol library\n"
@@ -24355,12 +24361,12 @@ msgstr ""
 "Pridėkite laive naudojamus pėdsakus prie esamos pėdsakų bibliotekos\n"
 "(nepašalina kitų pėdsakų iš šios bibliotekos)"
 
-#: eeschema/tools/ee_actions.cpp:1136
+#: eeschema/tools/sch_actions.cpp:1136
 #, fuzzy
 msgid "Export Symbols to New Library..."
 msgstr "Atnaujinti bibliotekos simbolius ..."
 
-#: eeschema/tools/ee_actions.cpp:1137
+#: eeschema/tools/sch_actions.cpp:1137
 #, fuzzy
 msgid ""
 "Create a new symbol library using the symbols used in the schematic\n"
@@ -24369,280 +24375,280 @@ msgstr ""
 "Sukurkite naują pėdsakų biblioteką su laive naudojamais pėdsakais\n"
 "(jei biblioteka jau yra, ji bus pakeista)"
 
-#: eeschema/tools/ee_actions.cpp:1144
+#: eeschema/tools/sch_actions.cpp:1144
 #, fuzzy
 msgid "Select on PCB"
 msgstr "Parinkti elementus"
 
-#: eeschema/tools/ee_actions.cpp:1145
+#: eeschema/tools/sch_actions.cpp:1145
 #, fuzzy
 msgid "Select corresponding items in PCB editor"
 msgstr "Pažymėkite atitinkamus elementus lentos redaktoriuje"
 
-#: eeschema/tools/ee_actions.cpp:1162
+#: eeschema/tools/sch_actions.cpp:1162
 #, fuzzy
 msgid "Show Directive Labels"
 msgstr "„Net Label“"
 
-#: eeschema/tools/ee_actions.cpp:1167
+#: eeschema/tools/sch_actions.cpp:1167
 #, fuzzy
 msgid "Show ERC Warnings"
 msgstr "KDR įspėjimai"
 
-#: eeschema/tools/ee_actions.cpp:1168
+#: eeschema/tools/sch_actions.cpp:1168
 #, fuzzy
 msgid "Show markers for electrical rules checker warnings"
 msgstr "Atlikite elektrinių taisyklių patikrinimą"
 
-#: eeschema/tools/ee_actions.cpp:1173
+#: eeschema/tools/sch_actions.cpp:1173
 #, fuzzy
 msgid "Show ERC Errors"
 msgstr "Išvado savybės"
 
-#: eeschema/tools/ee_actions.cpp:1174
+#: eeschema/tools/sch_actions.cpp:1174
 #, fuzzy
 msgid "Show markers for electrical rules checker errors"
 msgstr "Atlikite elektrinių taisyklių patikrinimą"
 
-#: eeschema/tools/ee_actions.cpp:1179
+#: eeschema/tools/sch_actions.cpp:1179
 #, fuzzy
 msgid "Show ERC Exclusions"
 msgstr "KDR išimtys"
 
-#: eeschema/tools/ee_actions.cpp:1180
+#: eeschema/tools/sch_actions.cpp:1180
 #, fuzzy
 msgid "Show markers for excluded electrical rules checker violations"
 msgstr "Atlikite elektrinių taisyklių patikrinimą"
 
-#: eeschema/tools/ee_actions.cpp:1185
+#: eeschema/tools/sch_actions.cpp:1185
 #, fuzzy
 msgid "Mark items excluded from simulation"
 msgstr "Išjungti simuliacinį simbolį"
 
-#: eeschema/tools/ee_actions.cpp:1186
+#: eeschema/tools/sch_actions.cpp:1186
 msgid "Draw 'X's over items which have been excluded from simulation"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:1191
+#: eeschema/tools/sch_actions.cpp:1191
 #, fuzzy
 msgid "Show OP Voltages"
 msgstr "Rodyti lapo ribas"
 
-#: eeschema/tools/ee_actions.cpp:1192
+#: eeschema/tools/sch_actions.cpp:1192
 msgid "Show operating point voltage data from simulation"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:1197
+#: eeschema/tools/sch_actions.cpp:1197
 #, fuzzy
 msgid "Show OP Currents"
 msgstr "Rodyti žymeklį"
 
-#: eeschema/tools/ee_actions.cpp:1198
+#: eeschema/tools/sch_actions.cpp:1198
 msgid "Show operating point current data from simulation"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:1203
+#: eeschema/tools/sch_actions.cpp:1203
 #, fuzzy
 msgid "Show Pin Alternate Icons"
 msgstr "Rodyti išvado pavadinimą"
 
-#: eeschema/tools/ee_actions.cpp:1204
+#: eeschema/tools/sch_actions.cpp:1204
 msgid "Show indicator icons for pins with alternate modes"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:1209 eeschema/tools/ee_actions.cpp:1218
-#: eeschema/tools/ee_actions.cpp:1227 eeschema/tools/ee_actions.cpp:1237
+#: eeschema/tools/sch_actions.cpp:1209 eeschema/tools/sch_actions.cpp:1218
+#: eeschema/tools/sch_actions.cpp:1227 eeschema/tools/sch_actions.cpp:1237
 #, fuzzy
 msgid "Line Mode for Wires and Buses"
 msgstr "Priverstiniai H / V laidai ir autobusai"
 
-#: eeschema/tools/ee_actions.cpp:1210
+#: eeschema/tools/sch_actions.cpp:1210
 #, fuzzy
 msgid "Draw and drag at any angle"
 msgstr "Nubrėžkite stačiakampį"
 
-#: eeschema/tools/ee_actions.cpp:1219
+#: eeschema/tools/sch_actions.cpp:1219
 #, fuzzy
 msgid "Constrain drawing and dragging to horizontal or vertical motions"
 msgstr "L ir imituokite grafines linijas H, V ir 45 laipsnių kampu"
 
-#: eeschema/tools/ee_actions.cpp:1228
+#: eeschema/tools/sch_actions.cpp:1228
 #, fuzzy
 msgid ""
 "Constrain drawing and dragging to horizontal, vertical, or 45-degree angle "
 "motions"
 msgstr "L ir imituokite grafines linijas H, V ir 45 laipsnių kampu"
 
-#: eeschema/tools/ee_actions.cpp:1238
+#: eeschema/tools/sch_actions.cpp:1238
 #, fuzzy
 msgid "Switch to next line mode"
 msgstr "Perjunkite į kitą tinklelį"
 
-#: eeschema/tools/ee_actions.cpp:1243
+#: eeschema/tools/sch_actions.cpp:1243
 #, fuzzy
 msgid "Annotate Automatically"
 msgstr "Pritaikyti automatiškai"
 
-#: eeschema/tools/ee_actions.cpp:1244
+#: eeschema/tools/sch_actions.cpp:1244
 #, fuzzy
 msgid "Toggle automatic annotation of new symbols"
 msgstr "& Uomatiškai įdėkite simbolių laukus"
 
-#: eeschema/tools/ee_actions.cpp:1250
+#: eeschema/tools/sch_actions.cpp:1250
 #, fuzzy
 msgid "Repair Schematic"
 msgstr "Spaudinio schemą"
 
-#: eeschema/tools/ee_actions.cpp:1251
+#: eeschema/tools/sch_actions.cpp:1251
 #, fuzzy
 msgid "Run various diagnostics and attempt to repair schematic"
 msgstr "Vykdykite įvairią diagnostiką ir bandykite suremontuoti lentą"
 
-#: eeschema/tools/ee_actions.cpp:1257
+#: eeschema/tools/sch_actions.cpp:1257
 #, fuzzy
 msgid "Previous Symbol Unit"
 msgstr "Simbolių vienetas"
 
-#: eeschema/tools/ee_actions.cpp:1258
+#: eeschema/tools/sch_actions.cpp:1258
 #, fuzzy
 msgid "Open the previous unit of the symbol"
 msgstr "Nuosekliai dėkite visus simbolio vienetus."
 
-#: eeschema/tools/ee_actions.cpp:1264
+#: eeschema/tools/sch_actions.cpp:1264
 #, fuzzy
 msgid "Next Symbol Unit"
 msgstr "Simbolių vienetas"
 
-#: eeschema/tools/ee_actions.cpp:1265
+#: eeschema/tools/sch_actions.cpp:1265
 #, fuzzy
 msgid "Open the next unit of the symbol"
 msgstr "Ištrinti papildomus vienetus iš simbolio?"
 
-#: eeschema/tools/ee_actions.cpp:1273
+#: eeschema/tools/sch_actions.cpp:1273
 #, fuzzy
 msgid "Change Sheet"
 msgstr "Pakeisti tipą"
 
-#: eeschema/tools/ee_actions.cpp:1274
+#: eeschema/tools/sch_actions.cpp:1274
 #, fuzzy
 msgid "Change to provided sheet's contents in the schematic editor"
 msgstr "Eeschema lange rodykite pasirinkto lapo turinį"
 
-#: eeschema/tools/ee_actions.cpp:1280
+#: eeschema/tools/sch_actions.cpp:1280
 msgid "Enter Sheet"
 msgstr "Įveskite lapą"
 
-#: eeschema/tools/ee_actions.cpp:1281
+#: eeschema/tools/sch_actions.cpp:1281
 #, fuzzy
 msgid "Display the selected sheet's contents in the schematic editor"
 msgstr "Eeschema lange rodykite pasirinkto lapo turinį"
 
-#: eeschema/tools/ee_actions.cpp:1289
+#: eeschema/tools/sch_actions.cpp:1289
 msgid "Leave Sheet"
 msgstr "Užverti lapą"
 
-#: eeschema/tools/ee_actions.cpp:1290
+#: eeschema/tools/sch_actions.cpp:1290
 #, fuzzy
 msgid "Display the parent sheet in the schematic editor"
 msgstr "Eeschema lange rodykite tėvų lapą"
 
-#: eeschema/tools/ee_actions.cpp:1297
+#: eeschema/tools/sch_actions.cpp:1297
 #, fuzzy
 msgid "Navigate Up"
 msgstr "Eikite į puslapį"
 
-#: eeschema/tools/ee_actions.cpp:1298
+#: eeschema/tools/sch_actions.cpp:1298
 msgid "Navigate up one sheet in the hierarchy"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:1305
+#: eeschema/tools/sch_actions.cpp:1305
 #, fuzzy
 msgid "Navigate Back"
 msgstr "Eikite į puslapį"
 
-#: eeschema/tools/ee_actions.cpp:1306
+#: eeschema/tools/sch_actions.cpp:1306
 msgid "Move backward in sheet navigation history"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:1313
+#: eeschema/tools/sch_actions.cpp:1313
 #, fuzzy
 msgid "Navigate Forward"
 msgstr "Navigatorius"
 
-#: eeschema/tools/ee_actions.cpp:1314
+#: eeschema/tools/sch_actions.cpp:1314
 msgid "Move forward in sheet navigation history"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:1321
+#: eeschema/tools/sch_actions.cpp:1321
 #, fuzzy
 msgid "Previous Sheet"
 msgstr "Ankstesnis sluoksnis"
 
-#: eeschema/tools/ee_actions.cpp:1322
+#: eeschema/tools/sch_actions.cpp:1322
 msgid "Move to previous sheet by number"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:1329
+#: eeschema/tools/sch_actions.cpp:1329
 #, fuzzy
 msgid "Next Sheet"
 msgstr "Ориентировать лист"
 
-#: eeschema/tools/ee_actions.cpp:1330
+#: eeschema/tools/sch_actions.cpp:1330
 msgid "Move to next sheet by number"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:1337
+#: eeschema/tools/sch_actions.cpp:1337
 #, fuzzy
 msgid "Hierarchy Navigator"
 msgstr "„Hierarchijos navigatorius“"
 
-#: eeschema/tools/ee_actions.cpp:1338
+#: eeschema/tools/sch_actions.cpp:1338
 #, fuzzy
 msgid "Show/hide the schematic sheet hierarchy navigator"
 msgstr "Rodyti scheminę lapų hierarchiją"
 
-#: eeschema/tools/ee_actions.cpp:1350
+#: eeschema/tools/sch_actions.cpp:1350
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:1274
 #, fuzzy
 msgid "Draw Wires"
 msgstr "Tempti laidininką"
 
-#: eeschema/tools/ee_actions.cpp:1361
+#: eeschema/tools/sch_actions.cpp:1361
 #, fuzzy
 msgid "Draw Buses"
 msgstr "Brėžiniai"
 
-#: eeschema/tools/ee_actions.cpp:1371
+#: eeschema/tools/sch_actions.cpp:1371
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:80
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:124
 msgid "Unfold from Bus"
 msgstr "Išskleiskite iš autobuso"
 
-#: eeschema/tools/ee_actions.cpp:1372
+#: eeschema/tools/sch_actions.cpp:1372
 msgid "Break a wire out of a bus"
 msgstr "Nutraukti laidą iš autobuso"
 
-#: eeschema/tools/ee_actions.cpp:1392 pcbnew/tools/pcb_actions.cpp:2367
+#: eeschema/tools/sch_actions.cpp:1392 pcbnew/tools/pcb_actions.cpp:2367
 #, fuzzy
 msgid "Undo Last Segment"
 msgstr "Anuliuoti paskutinį segmentą"
 
-#: eeschema/tools/ee_actions.cpp:1393
+#: eeschema/tools/sch_actions.cpp:1393
 #, fuzzy
 msgid "Walks the current line back one segment."
 msgstr "Padarykite dabartinį sluoksnį skaidresnį"
 
-#: eeschema/tools/ee_actions.cpp:1400
+#: eeschema/tools/sch_actions.cpp:1400
 #, fuzzy
 msgid "Switch Segment Posture"
 msgstr "Perjungti lanko laikyseną"
 
-#: eeschema/tools/ee_actions.cpp:1401
+#: eeschema/tools/sch_actions.cpp:1401
 #, fuzzy
 msgid "Switches posture of the current segment."
 msgstr "Keičia trasuojamo takelio padėtį."
 
-#: eeschema/tools/ee_actions.cpp:1412 eeschema/tools/sch_move_tool.cpp:396
+#: eeschema/tools/sch_actions.cpp:1412 eeschema/tools/sch_move_tool.cpp:396
 #: eeschema/tools/symbol_editor_move_tool.cpp:109
 #: pagelayout_editor/tools/pl_actions.cpp:82
 #: pcbnew/dialogs/panel_edit_options_base.cpp:81
@@ -24650,277 +24656,159 @@ msgstr "Keičia trasuojamo takelio padėtį."
 msgid "Move"
 msgstr "Perkelti"
 
-#: eeschema/tools/ee_actions.cpp:1421 eeschema/tools/sch_move_tool.cpp:396
+#: eeschema/tools/sch_actions.cpp:1421 eeschema/tools/sch_move_tool.cpp:396
 msgid "Drag"
 msgstr "Tempti"
 
-#: eeschema/tools/ee_actions.cpp:1422
+#: eeschema/tools/sch_actions.cpp:1422
 #, fuzzy
 msgid "Move items while keeping their connections"
 msgstr "Выбирает все медное соединение."
 
-#: eeschema/tools/ee_actions.cpp:1429 eeschema/tools/sch_move_tool.cpp:1823
+#: eeschema/tools/sch_actions.cpp:1429 eeschema/tools/sch_move_tool.cpp:1823
 #: eeschema/tools/symbol_editor_move_tool.cpp:426
 #, fuzzy
 msgid "Align Items to Grid"
 msgstr "Sulygiuokite elementus su tinkleliu"
 
-#: eeschema/tools/ee_actions.cpp:1437
+#: eeschema/tools/sch_actions.cpp:1437
 #, fuzzy
 msgid "Save Current Sheet Copy As..."
 msgstr "Išsaugoti šį lapą kitu pavadinimu"
 
-#: eeschema/tools/ee_actions.cpp:1438
+#: eeschema/tools/sch_actions.cpp:1438
 #, fuzzy
 msgid "Save a copy of the current sheet to another location or name"
 msgstr "Išsaugokite dabartinio dokumento kopiją kitoje vietoje"
 
-#: eeschema/tools/ee_actions.cpp:1452
+#: eeschema/tools/sch_actions.cpp:1452
 msgid "New Analysis Tab..."
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:1453
+#: eeschema/tools/sch_actions.cpp:1453
 msgid "Create a new tab containing a simulation analysis"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:1461
+#: eeschema/tools/sch_actions.cpp:1461
 #, fuzzy
 msgid "Open Workbook..."
 msgstr "Atidarykite darbaknygę"
 
-#: eeschema/tools/ee_actions.cpp:1462
+#: eeschema/tools/sch_actions.cpp:1462
 msgid "Open a saved set of analysis tabs and settings"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:1470
+#: eeschema/tools/sch_actions.cpp:1470
 msgid "Save Workbook"
 msgstr "Išsaugoti darbo knygą"
 
-#: eeschema/tools/ee_actions.cpp:1471
+#: eeschema/tools/sch_actions.cpp:1471
 #, fuzzy
 msgid "Save the current set of analysis tabs and settings"
 msgstr ""
 "Nuskaityti darbines grandines ir išvardinti trūkstamus ar papildomus korpusus"
 
-#: eeschema/tools/ee_actions.cpp:1479
+#: eeschema/tools/sch_actions.cpp:1479
 #, fuzzy
 msgid "Save Workbook As..."
 msgstr "Išsaugoti darbo knygą"
 
-#: eeschema/tools/ee_actions.cpp:1480
+#: eeschema/tools/sch_actions.cpp:1480
 #, fuzzy
 msgid "Save the current set of analysis tabs and settings to another location"
 msgstr "Išsaugokite dabartinį dokumentą kitoje vietoje"
 
-#: eeschema/tools/ee_actions.cpp:1486
+#: eeschema/tools/sch_actions.cpp:1486
 #, fuzzy
 msgid "Export Current Plot as PNG..."
 msgstr "Išeksportuoti matomą vaizdą kaip PNG..."
 
-#: eeschema/tools/ee_actions.cpp:1492
+#: eeschema/tools/sch_actions.cpp:1492
 #, fuzzy
 msgid "Export Current Plot as CSV..."
 msgstr "Išeksportuoti matomą vaizdą kaip PNG..."
 
-#: eeschema/tools/ee_actions.cpp:1498
+#: eeschema/tools/sch_actions.cpp:1498
 #, fuzzy
 msgid "Export Current Plot to Clipboard"
 msgstr "Eksportuoti piešinį į iškarpinę"
 
-#: eeschema/tools/ee_actions.cpp:1504
+#: eeschema/tools/sch_actions.cpp:1504
 #, fuzzy
 msgid "Export Current Plot to Schematic"
 msgstr "Išeksportuoti matomą vaizdą kaip PNG..."
 
-#: eeschema/tools/ee_actions.cpp:1510
+#: eeschema/tools/sch_actions.cpp:1510
 #, fuzzy
 msgid "Show Legend"
 msgstr "Rodyti ir legendą"
 
-#: eeschema/tools/ee_actions.cpp:1516
+#: eeschema/tools/sch_actions.cpp:1516
 msgid "Dotted Current/Phase"
 msgstr "Taškinė srovė / fazė"
 
-#: eeschema/tools/ee_actions.cpp:1517
+#: eeschema/tools/sch_actions.cpp:1517
 msgid "Draw secondary signal trace (current or phase) with a dotted line"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:1522
+#: eeschema/tools/sch_actions.cpp:1522
 #, fuzzy
 msgid "Dark Mode Plots"
 msgstr "3D modeliai"
 
-#: eeschema/tools/ee_actions.cpp:1523
+#: eeschema/tools/sch_actions.cpp:1523
 msgid "Draw plots with a black background"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:1528
+#: eeschema/tools/sch_actions.cpp:1528
 #, fuzzy
 msgid "Edit Analysis Tab..."
 msgstr "Правка глобальной метки"
 
-#: eeschema/tools/ee_actions.cpp:1529
+#: eeschema/tools/sch_actions.cpp:1529
 msgid "Edit the current analysis tab's SPICE command and plot setup"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:1536
+#: eeschema/tools/sch_actions.cpp:1536
 msgid "Run Simulation"
 msgstr "Vykdyti modeliavimą"
 
-#: eeschema/tools/ee_actions.cpp:1542
+#: eeschema/tools/sch_actions.cpp:1542
 #, fuzzy
 msgid "Stop Simulation"
 msgstr "„Run / Stop“ modeliavimas"
 
-#: eeschema/tools/ee_actions.cpp:1549
+#: eeschema/tools/sch_actions.cpp:1549
 #, fuzzy
 msgid "Probe Schematic..."
 msgstr "Anotuoti schemą ..."
 
-#: eeschema/tools/ee_actions.cpp:1550
+#: eeschema/tools/sch_actions.cpp:1550
 msgid "Add a simulator probe"
 msgstr "Pridėkite simuliatoriaus zondą"
 
-#: eeschema/tools/ee_actions.cpp:1557
+#: eeschema/tools/sch_actions.cpp:1557
 #, fuzzy
 msgid "Add Tuned Value..."
 msgstr "Atnaujinti reikšmes"
 
-#: eeschema/tools/ee_actions.cpp:1558
+#: eeschema/tools/sch_actions.cpp:1558
 msgid "Select a value to be tuned"
 msgstr "Pasirinkite norimą sureguliuoti vertę"
 
-#: eeschema/tools/ee_actions.cpp:1564
+#: eeschema/tools/sch_actions.cpp:1564
 #, fuzzy
 msgid "User-defined Signals..."
 msgstr "Vartotojo nurodyta pradžia"
 
-#: eeschema/tools/ee_actions.cpp:1565
+#: eeschema/tools/sch_actions.cpp:1565
 msgid "Add, edit or delete user-defined simulation signals"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:1571
+#: eeschema/tools/sch_actions.cpp:1571
 #, fuzzy
 msgid "Show SPICE Netlist"
 msgstr "Rodyti „SPICE Netlist“ ..."
-
-#: eeschema/tools/ee_inspection_tool.cpp:224
-#: pcbnew/tools/board_inspection_tool.cpp:292
-#, fuzzy, c-format
-msgid "Run %s > %s"
-msgstr "%s ir %s"
-
-#: eeschema/tools/ee_inspection_tool.cpp:231
-#: pcbnew/tools/board_inspection_tool.cpp:299
-#, fuzzy, c-format
-msgid "Run %s"
-msgstr "%s %s"
-
-#: eeschema/tools/ee_inspection_tool.cpp:318
-#, fuzzy
-msgid "No symbol issues found."
-msgstr "Simbolis nerastas."
-
-#: eeschema/tools/ee_inspection_tool.cpp:322
-#, fuzzy
-msgid "Symbol Warnings"
-msgstr "Simbolis"
-
-#: eeschema/tools/ee_inspection_tool.cpp:358
-#, fuzzy
-msgid "Select a symbol to diff against its library equivalent."
-msgstr "Tikrinami pėdsakai ..."
-
-#: eeschema/tools/ee_inspection_tool.cpp:379
-#, fuzzy, c-format
-msgid "Symbol %s"
-msgstr "Simboliai"
-
-#: eeschema/tools/ee_inspection_tool.cpp:385
-#: pcbnew/tools/board_inspection_tool.cpp:1586
-msgid "Summary"
-msgstr ""
-
-#: eeschema/tools/ee_inspection_tool.cpp:387
-#, fuzzy
-msgid "Schematic vs library diff for:"
-msgstr "Редактора библиотек схемы"
-
-#: eeschema/tools/ee_inspection_tool.cpp:389
-#: pcbnew/dialogs/dialog_footprint_associations.cpp:48
-#: pcbnew/tools/board_inspection_tool.cpp:1590
-#, fuzzy
-msgid "Library: "
-msgstr "Biblioteka:"
-
-#: eeschema/tools/ee_inspection_tool.cpp:390
-#: pcbnew/tools/board_inspection_tool.cpp:1591
-#, fuzzy
-msgid "Library item: "
-msgstr "Bibliotekų failai:"
-
-#: eeschema/tools/ee_inspection_tool.cpp:400
-#: pcbnew/tools/board_inspection_tool.cpp:1609
-#, fuzzy
-msgid "The library is not included in the current configuration."
-msgstr "Biblioteka „%s“ nėra įgalinta dabartinėje konfigūracijoje."
-
-#: eeschema/tools/ee_inspection_tool.cpp:402
-#: eeschema/tools/ee_inspection_tool.cpp:408
-#, fuzzy
-msgid "Manage Symbol Libraries"
-msgstr "Tvarkyti simbolių bibliotekas ..."
-
-#: eeschema/tools/ee_inspection_tool.cpp:406
-#: pcbnew/tools/board_inspection_tool.cpp:1617
-#, fuzzy
-msgid "The library is not enabled in the current configuration."
-msgstr "Biblioteka „%s“ nėra įgalinta dabartinėje konfigūracijoje."
-
-#: eeschema/tools/ee_inspection_tool.cpp:426
-#: pcbnew/tools/board_inspection_tool.cpp:1637
-#, fuzzy, c-format
-msgid "The library no longer contains the item %s."
-msgstr "Pasirinkime yra %d užrakintų elementų."
-
-#: eeschema/tools/ee_inspection_tool.cpp:447
-#: pcbnew/tools/board_inspection_tool.cpp:1643
-#, fuzzy
-msgid "No relevant differences detected."
-msgstr "Nepasirinkti sluoksniai."
-
-#: eeschema/tools/ee_inspection_tool.cpp:450
-#: pcbnew/tools/board_inspection_tool.cpp:1645
-#, fuzzy
-msgid "Visual"
-msgstr "Dalis"
-
-#: eeschema/tools/ee_inspection_tool.cpp:545
-#, fuzzy
-msgid "No datasheet defined."
-msgstr "Nėra apibrėžta per grąžtą."
-
-#: eeschema/tools/ee_inspection_tool.cpp:574
-#: pagelayout_editor/tools/pl_editor_control.cpp:160
-#: pcbnew/tools/pcb_control.cpp:1676
-msgid "UUID"
-msgstr ""
-
-#: eeschema/tools/ee_point_editor.cpp:1129
-#: pcbnew/tools/pcb_point_editor.cpp:2370
-#, fuzzy
-msgid "Move Point"
-msgstr "Perkelti galinį tašką"
-
-#: eeschema/tools/ee_point_editor.cpp:1334
-#, fuzzy
-msgid "Add Corner"
-msgstr "Pridėti maitinimą"
-
-#: eeschema/tools/rule_area_create_helper.cpp:69
-#, fuzzy
-msgid "Draw Rule Area"
-msgstr "Taisyklės sritis"
 
 #: eeschema/tools/sch_drawing_tools.cpp:320
 msgid "Press <ESC> to cancel symbol creation."
@@ -24945,144 +24833,144 @@ msgstr "*** naujajame simbolyje yra per mažai vienetų ***"
 msgid "All units of this symbol are already placed."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:754
+#: eeschema/tools/sch_drawing_tools.cpp:755
 #, fuzzy
 msgid "Add design block"
 msgstr "Pridėkite signalų prie diagramos"
 
-#: eeschema/tools/sch_drawing_tools.cpp:755
+#: eeschema/tools/sch_drawing_tools.cpp:756
 #, fuzzy
 msgid "Import Schematic Sheet Content..."
 msgstr "Papildomas schemos lapas"
 
-#: eeschema/tools/sch_drawing_tools.cpp:786
+#: eeschema/tools/sch_drawing_tools.cpp:787
 #, fuzzy
 msgid "Choose Schematic"
 msgstr "Nauja schema"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1010 pcbnew/tools/drawing_tool.cpp:728
+#: eeschema/tools/sch_drawing_tools.cpp:1013 pcbnew/tools/drawing_tool.cpp:728
 msgid "Press <ESC> to cancel image creation."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:1061
+#: eeschema/tools/sch_drawing_tools.cpp:1064
 #: pagelayout_editor/pl_editor_frame.cpp:890
 #: pagelayout_editor/pl_editor_frame.cpp:898 pcbnew/tools/drawing_tool.cpp:780
 #, fuzzy, c-format
 msgid "Could not load image from '%s'."
 msgstr "Nepavyko įkelti vaizdo iš „%s“"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1084 pcbnew/tools/drawing_tool.cpp:801
+#: eeschema/tools/sch_drawing_tools.cpp:1087 pcbnew/tools/drawing_tool.cpp:801
 #, fuzzy
 msgid "Place Image"
 msgstr "Разместить узел"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1175
+#: eeschema/tools/sch_drawing_tools.cpp:1178
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:691
 #: pcbnew/tools/drawing_tool.cpp:1825
 #, fuzzy
 msgid "No graphic items found in file."
 msgstr "Faile nerasta grafinių elementų, kuriuos reikia importuoti"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1205
-#: eeschema/tools/sch_drawing_tools.cpp:1287
+#: eeschema/tools/sch_drawing_tools.cpp:1208
+#: eeschema/tools/sch_drawing_tools.cpp:1290
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:726
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:815
 #, fuzzy
 msgid "Import Graphic"
 msgstr "& Importuoti grafiką ..."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1344
+#: eeschema/tools/sch_drawing_tools.cpp:1347
 msgid "Add No Connect Flag"
 msgstr "Pažymėti \"Neprijungta\""
 
-#: eeschema/tools/sch_drawing_tools.cpp:1351
+#: eeschema/tools/sch_drawing_tools.cpp:1354
 msgid "Add Junction"
 msgstr "Sujungimas"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1357
+#: eeschema/tools/sch_drawing_tools.cpp:1360
 msgid "Add Wire to Bus Entry"
 msgstr "Pridėkite laidą prie įvažiavimo į autobusą"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1432
+#: eeschema/tools/sch_drawing_tools.cpp:1435
 #, fuzzy
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr ""
 "Выделенный фрагмент содержит заблокированные элементы. Хотите продолжить?"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1902
+#: eeschema/tools/sch_drawing_tools.cpp:1905
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:185
 msgid "Press <ESC> to cancel item creation."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:1933
+#: eeschema/tools/sch_drawing_tools.cpp:1936
 msgid "Add Text"
 msgstr "Tekstas"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1960
+#: eeschema/tools/sch_drawing_tools.cpp:1963
 msgid "Add Hierarchical Label"
 msgstr "Hierarchinė žyma"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1965
-#: eeschema/tools/sch_drawing_tools.cpp:1970
-#: eeschema/tools/sch_drawing_tools.cpp:1975
+#: eeschema/tools/sch_drawing_tools.cpp:1968
+#: eeschema/tools/sch_drawing_tools.cpp:1973
+#: eeschema/tools/sch_drawing_tools.cpp:1978
 msgid "Add Label"
 msgstr "Etiketė"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1988
+#: eeschema/tools/sch_drawing_tools.cpp:1991
 msgid "Click over a sheet."
 msgstr "Spustelėkite virš lapo."
 
-#: eeschema/tools/sch_drawing_tools.cpp:2012
-#: eeschema/tools/sch_drawing_tools.cpp:2114
+#: eeschema/tools/sch_drawing_tools.cpp:2015
+#: eeschema/tools/sch_drawing_tools.cpp:2117
 msgid "No new hierarchical labels found."
 msgstr "Nerasta naujų hierarchinių etikečių."
 
-#: eeschema/tools/sch_drawing_tools.cpp:2026
+#: eeschema/tools/sch_drawing_tools.cpp:2029
 msgid "Add Sheet Pin"
 msgstr "Pridėti lapo kaištį"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2340
+#: eeschema/tools/sch_drawing_tools.cpp:2343
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:490
 #, fuzzy
 msgid "Add Text Box"
 msgstr "Tekstas"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2349
+#: eeschema/tools/sch_drawing_tools.cpp:2352
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:496
 #, fuzzy, c-format
 msgid "Add %s"
 msgstr "Pridėti autobusą"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2404
+#: eeschema/tools/sch_drawing_tools.cpp:2407
 #, fuzzy, c-format
 msgid "Draw %s"
 msgstr "Brėžiniai"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2780 pcbnew/tools/drawing_tool.cpp:1250
+#: eeschema/tools/sch_drawing_tools.cpp:2783 pcbnew/tools/drawing_tool.cpp:1250
 #, fuzzy
 msgid "Draw Table"
 msgstr "Brėžti liniją"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2895
+#: eeschema/tools/sch_drawing_tools.cpp:2898
 #, fuzzy, c-format
 msgid "File '%s' does not exist."
 msgstr "Katalogas „%s“ nėra rašomas."
 
-#: eeschema/tools/sch_drawing_tools.cpp:2979
+#: eeschema/tools/sch_drawing_tools.cpp:2982
 msgid "Press <ESC> to cancel sheet creation."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:3218
+#: eeschema/tools/sch_drawing_tools.cpp:3221
 #, fuzzy
 msgid "Modify sheet pin"
 msgstr "Pridėkite lapo kaištį"
 
-#: eeschema/tools/sch_drawing_tools.cpp:3224
+#: eeschema/tools/sch_drawing_tools.cpp:3227
 #, fuzzy
 msgid "Modify schematic item"
 msgstr "Linija (grafinė)"
 
-#: eeschema/tools/sch_drawing_tools.cpp:3336
+#: eeschema/tools/sch_drawing_tools.cpp:3339
 #, fuzzy
 msgid "No sub schematic found in the current project"
 msgstr "Uždarykite dabartinį projektą"
@@ -25116,84 +25004,84 @@ msgstr "Pašalinti iš pasirinkimo"
 msgid "Edit Main Fields"
 msgstr "Redaguoti %s lauką"
 
-#: eeschema/tools/sch_edit_tool.cpp:624 eeschema/tools/sch_edit_tool.cpp:2789
+#: eeschema/tools/sch_edit_tool.cpp:624 eeschema/tools/sch_edit_tool.cpp:2787
 #, fuzzy
 msgid "Change To"
 msgstr "Keisti"
 
-#: eeschema/tools/sch_edit_tool.cpp:1055
-#: eeschema/tools/symbol_editor_edit_tool.cpp:208
-#: pcbnew/tools/edit_tool.cpp:2060
+#: eeschema/tools/sch_edit_tool.cpp:1053
+#: eeschema/tools/symbol_editor_edit_tool.cpp:210
+#: pcbnew/tools/edit_tool.cpp:2066
 msgid "Rotate"
 msgstr "Pasukti"
 
-#: eeschema/tools/sch_edit_tool.cpp:1253 gerbview/gerber_draw_item.cpp:731
+#: eeschema/tools/sch_edit_tool.cpp:1251 gerbview/gerber_draw_item.cpp:731
 #: pcbnew/pcb_tablecell.cpp:109 pcbnew/pcb_text.cpp:283
-#: pcbnew/pcb_textbox.cpp:562 pcbnew/tools/edit_tool.cpp:2224
+#: pcbnew/pcb_textbox.cpp:562 pcbnew/tools/edit_tool.cpp:2233
 msgid "Mirror"
 msgstr "Atspindėti"
 
-#: eeschema/tools/sch_edit_tool.cpp:1520
+#: eeschema/tools/sch_edit_tool.cpp:1518
 msgid "Label value cannot go below zero"
 msgstr "Etiketės vertė negali būti mažesnė už nulį"
 
-#: eeschema/tools/sch_edit_tool.cpp:1599
+#: eeschema/tools/sch_edit_tool.cpp:1597
 #, fuzzy
 msgid "Repeat Item"
 msgstr "Pakartotiniai elementai"
 
-#: eeschema/tools/sch_edit_tool.cpp:1820 eeschema/tools/sch_edit_tool.cpp:1824
-#: eeschema/tools/symbol_editor_edit_tool.cpp:690
+#: eeschema/tools/sch_edit_tool.cpp:1818 eeschema/tools/sch_edit_tool.cpp:1822
+#: eeschema/tools/symbol_editor_edit_tool.cpp:692
 #, c-format
 msgid "Edit %s Field"
 msgstr "Redaguoti %s lauką"
 
-#: eeschema/tools/sch_edit_tool.cpp:1828
-#: eeschema/tools/symbol_editor_edit_tool.cpp:692
+#: eeschema/tools/sch_edit_tool.cpp:1826
+#: eeschema/tools/symbol_editor_edit_tool.cpp:694
 #, fuzzy, c-format
 msgid "Edit '%s' Field"
 msgstr "Redaguoti %s lauką"
 
-#: eeschema/tools/sch_edit_tool.cpp:2198
+#: eeschema/tools/sch_edit_tool.cpp:2196
 #, fuzzy
 msgid "Edit Sheet Properties"
 msgstr "Lapo išvado savbės"
 
-#: eeschema/tools/sch_edit_tool.cpp:2345
+#: eeschema/tools/sch_edit_tool.cpp:2343
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:65
 msgid "Rule Area Properties"
 msgstr "Taisyklės srities ypatybės"
 
-#: eeschema/tools/sch_edit_tool.cpp:2467 eeschema/tools/sch_edit_tool.cpp:2558
+#: eeschema/tools/sch_edit_tool.cpp:2465 eeschema/tools/sch_edit_tool.cpp:2556
 #, fuzzy
 msgid "<empty>"
 msgstr "Išvalyti"
 
-#: eeschema/tools/sch_edit_tool.cpp:2949
+#: eeschema/tools/sch_edit_tool.cpp:2947
 #, fuzzy
 msgid "Slice Wire"
 msgstr "Pašalinti laidininką"
 
-#: eeschema/tools/sch_edit_tool.cpp:2949
+#: eeschema/tools/sch_edit_tool.cpp:2947
 msgid "Break Wire"
 msgstr "Pertraukti laidininką"
 
-#: eeschema/tools/sch_edit_tool.cpp:2970
+#: eeschema/tools/sch_edit_tool.cpp:2968
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr "Ar norite ištrinti nerašomus kaiščius iš šio lapo?"
 
-#: eeschema/tools/sch_edit_tool.cpp:3031
+#: eeschema/tools/sch_edit_tool.cpp:3029
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "Įveskite lapo kelio puslapio numerį %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:3034
+#: eeschema/tools/sch_edit_tool.cpp:3032
 #: eeschema/widgets/hierarchy_pane.cpp:417
 #, fuzzy
 msgid "Edit Sheet Page Number"
 msgstr "Redaguoti puslapio numerį"
 
-#: eeschema/tools/sch_edit_tool.cpp:3228
+#: eeschema/tools/sch_edit_tool.cpp:3226
 #, fuzzy
 msgid "Toggle Attribute"
 msgstr "Požymis"
@@ -25203,36 +25091,36 @@ msgstr "Požymis"
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
 msgstr "Grąžinti „%s“ į paskutinę išsaugotą versiją?"
 
-#: eeschema/tools/sch_editor_control.cpp:359
+#: eeschema/tools/sch_editor_control.cpp:358
 #, fuzzy
 msgid "Include power symbols in schematic to the library?"
 msgstr "Atnaujinkite pėdsakus, kad būtų įtraukti visi bibliotekos pakeitimai"
 
-#: eeschema/tools/sch_editor_control.cpp:425
+#: eeschema/tools/sch_editor_control.cpp:424
 #, fuzzy, c-format
 msgid "Could not add library '%s'."
 msgstr "Nepavyko rasti bibliotekos failo %s"
 
-#: eeschema/tools/sch_editor_control.cpp:438
+#: eeschema/tools/sch_editor_control.cpp:437
 #, fuzzy
 msgid "Update symbols in schematic to refer to new library?"
 msgstr "Atnaujinkite pėdsakus, kad būtų įtraukti visi bibliotekos pakeitimai"
 
-#: eeschema/tools/sch_editor_control.cpp:827
+#: eeschema/tools/sch_editor_control.cpp:826
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr ""
 "Klaida: dabartiniame lape rasti pasikartojančių antrinių lapų pavadinimai."
 
-#: eeschema/tools/sch_editor_control.cpp:934
+#: eeschema/tools/sch_editor_control.cpp:933
 #, fuzzy
 msgid "No net selected."
 msgstr "Цепь не выбрана."
 
-#: eeschema/tools/sch_editor_control.cpp:960
+#: eeschema/tools/sch_editor_control.cpp:959
 msgid "Net must be labeled to assign a netclass."
 msgstr "Tinklas turi būti paženklintas, kad priskirtumėte tinklo klasę."
 
-#: eeschema/tools/sch_editor_control.cpp:1812
+#: eeschema/tools/sch_editor_control.cpp:1811
 #, fuzzy, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -25243,46 +25131,148 @@ msgstr ""
 "buvo atsisakyta, nes paskirties vieta jau turi lapą arba vieną iš jo "
 "antrinių lapų kaip vienas iš tėvų."
 
-#: eeschema/tools/sch_editor_control.cpp:2328
+#: eeschema/tools/sch_editor_control.cpp:2327
 #, fuzzy
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr "bibliotekos „%s“ negalima ištrinti"
 
-#: eeschema/tools/sch_editor_control.cpp:2416
+#: eeschema/tools/sch_editor_control.cpp:2415
 #, fuzzy
 msgid "Increment Annotations"
 msgstr "Ištrinti anotacijas"
 
-#: eeschema/tools/sch_editor_control.cpp:2836
+#: eeschema/tools/sch_editor_control.cpp:2835
 #: pcbnew/tools/board_editor_control.cpp:614
 #: pcbnew/tools/footprint_editor_control.cpp:889
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d pakeisti pasikartojantys ID.\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2846
+#: eeschema/tools/sch_editor_control.cpp:2845
 #: pcbnew/tools/board_editor_control.cpp:629
 #: pcbnew/tools/footprint_editor_control.cpp:896
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d pašalintos galimos problemos."
 
-#: eeschema/tools/sch_editor_control.cpp:2853
+#: eeschema/tools/sch_editor_control.cpp:2852
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "Nerasta klaidų."
 
-#: eeschema/tools/sch_find_replace_tool.cpp:331
+#: eeschema/tools/sch_find_replace_tool.cpp:330
 msgid "Reached end of schematic."
 msgstr "Pasiekė schemos pabaigą."
 
-#: eeschema/tools/sch_find_replace_tool.cpp:332
+#: eeschema/tools/sch_find_replace_tool.cpp:331
 msgid "Reached end of sheet."
 msgstr "Pasiekė lapo galą."
 
-#: eeschema/tools/sch_find_replace_tool.cpp:336
+#: eeschema/tools/sch_find_replace_tool.cpp:335
 msgid "Find again to wrap around to the start."
 msgstr "Raskite dar kartą, kad apsivyniotumėte iki pradžios."
+
+#: eeschema/tools/sch_inspection_tool.cpp:224
+#: pcbnew/tools/board_inspection_tool.cpp:292
+#, fuzzy, c-format
+msgid "Run %s > %s"
+msgstr "%s ir %s"
+
+#: eeschema/tools/sch_inspection_tool.cpp:231
+#: pcbnew/tools/board_inspection_tool.cpp:299
+#, fuzzy, c-format
+msgid "Run %s"
+msgstr "%s %s"
+
+#: eeschema/tools/sch_inspection_tool.cpp:318
+#, fuzzy
+msgid "No symbol issues found."
+msgstr "Simbolis nerastas."
+
+#: eeschema/tools/sch_inspection_tool.cpp:322
+#, fuzzy
+msgid "Symbol Warnings"
+msgstr "Simbolis"
+
+#: eeschema/tools/sch_inspection_tool.cpp:358
+#, fuzzy
+msgid "Select a symbol to diff against its library equivalent."
+msgstr "Tikrinami pėdsakai ..."
+
+#: eeschema/tools/sch_inspection_tool.cpp:379
+#, fuzzy, c-format
+msgid "Symbol %s"
+msgstr "Simboliai"
+
+#: eeschema/tools/sch_inspection_tool.cpp:385
+#: pcbnew/tools/board_inspection_tool.cpp:1586
+msgid "Summary"
+msgstr ""
+
+#: eeschema/tools/sch_inspection_tool.cpp:387
+#, fuzzy
+msgid "Schematic vs library diff for:"
+msgstr "Редактора библиотек схемы"
+
+#: eeschema/tools/sch_inspection_tool.cpp:389
+#: pcbnew/dialogs/dialog_footprint_associations.cpp:48
+#: pcbnew/tools/board_inspection_tool.cpp:1590
+#, fuzzy
+msgid "Library: "
+msgstr "Biblioteka:"
+
+#: eeschema/tools/sch_inspection_tool.cpp:390
+#: pcbnew/tools/board_inspection_tool.cpp:1591
+#, fuzzy
+msgid "Library item: "
+msgstr "Bibliotekų failai:"
+
+#: eeschema/tools/sch_inspection_tool.cpp:400
+#: pcbnew/tools/board_inspection_tool.cpp:1609
+#, fuzzy
+msgid "The library is not included in the current configuration."
+msgstr "Biblioteka „%s“ nėra įgalinta dabartinėje konfigūracijoje."
+
+#: eeschema/tools/sch_inspection_tool.cpp:402
+#: eeschema/tools/sch_inspection_tool.cpp:408
+#, fuzzy
+msgid "Manage Symbol Libraries"
+msgstr "Tvarkyti simbolių bibliotekas ..."
+
+#: eeschema/tools/sch_inspection_tool.cpp:406
+#: pcbnew/tools/board_inspection_tool.cpp:1617
+#, fuzzy
+msgid "The library is not enabled in the current configuration."
+msgstr "Biblioteka „%s“ nėra įgalinta dabartinėje konfigūracijoje."
+
+#: eeschema/tools/sch_inspection_tool.cpp:426
+#: pcbnew/tools/board_inspection_tool.cpp:1637
+#, fuzzy, c-format
+msgid "The library no longer contains the item %s."
+msgstr "Pasirinkime yra %d užrakintų elementų."
+
+#: eeschema/tools/sch_inspection_tool.cpp:447
+#: pcbnew/tools/board_inspection_tool.cpp:1643
+#, fuzzy
+msgid "No relevant differences detected."
+msgstr "Nepasirinkti sluoksniai."
+
+#: eeschema/tools/sch_inspection_tool.cpp:450
+#: pcbnew/tools/board_inspection_tool.cpp:1645
+#, fuzzy
+msgid "Visual"
+msgstr "Dalis"
+
+#: eeschema/tools/sch_inspection_tool.cpp:545
+#, fuzzy
+msgid "No datasheet defined."
+msgstr "Nėra apibrėžta per grąžtą."
+
+#: eeschema/tools/sch_inspection_tool.cpp:574
+#: pagelayout_editor/tools/pl_editor_control.cpp:160
+#: pcbnew/tools/pcb_control.cpp:1676
+msgid "UUID"
+msgstr ""
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:106
 msgid "No bus selected"
@@ -25309,6 +25299,17 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Page '%s' not found."
 msgstr "Failas „%s“ nerastas."
+
+#: eeschema/tools/sch_point_editor.cpp:1135
+#: pcbnew/tools/pcb_point_editor.cpp:2370
+#, fuzzy
+msgid "Move Point"
+msgstr "Perkelti galinį tašką"
+
+#: eeschema/tools/sch_point_editor.cpp:1342
+#, fuzzy
+msgid "Add Corner"
+msgstr "Pridėti maitinimą"
 
 #: eeschema/tools/simulator_control.cpp:109
 #, fuzzy
@@ -25395,37 +25396,37 @@ msgstr "Failo pavadinimas"
 msgid "Place Pin"
 msgstr "Naujas perėjimas"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:468
-#: pcbnew/tools/edit_tool.cpp:2642
+#: eeschema/tools/symbol_editor_edit_tool.cpp:470
+#: pcbnew/tools/edit_tool.cpp:2660
 #, fuzzy
 msgid "Hide Field"
 msgstr "Laukas"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:470
-#: pcbnew/tools/edit_tool.cpp:2644
+#: eeschema/tools/symbol_editor_edit_tool.cpp:472
+#: pcbnew/tools/edit_tool.cpp:2662
 #, fuzzy
 msgid "Hide Fields"
 msgstr "Rodyti paslėptus laukus"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:472
+#: eeschema/tools/symbol_editor_edit_tool.cpp:474
 msgid "Use the Symbol Properties dialog to remove fields."
 msgstr ""
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:780
+#: eeschema/tools/symbol_editor_edit_tool.cpp:782
 #, fuzzy
 msgid "Edit Pins"
 msgstr "Pridėti eilutes"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:796
+#: eeschema/tools/symbol_editor_edit_tool.cpp:798
 msgid "Symbol is not derived from another symbol."
 msgstr ""
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:824
+#: eeschema/tools/symbol_editor_edit_tool.cpp:826
 #, fuzzy, c-format
 msgid "Enter display name for unit %s"
 msgstr "Įveskite lapo kelio puslapio numerį %s"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:833
+#: eeschema/tools/symbol_editor_edit_tool.cpp:835
 msgid "Set Unit Display Name"
 msgstr ""
 
@@ -25580,7 +25581,7 @@ msgstr "Nenurodytas korpusas"
 msgid "Invalid footprint specified"
 msgstr "Nurodytas neteisingas pėdsakas"
 
-#: eeschema/widgets/sch_properties_panel.cpp:204
+#: eeschema/widgets/sch_properties_panel.cpp:203
 #: pcbnew/widgets/pcb_properties_panel.cpp:225
 #, fuzzy
 msgid "Edit Properties"
@@ -28424,12 +28425,12 @@ msgstr ""
 msgid "Import EasyEDA Pro Project"
 msgstr "Importuoti „Eagle“ projekto failus"
 
-#: kicad/jobs_runner.cpp:295
+#: kicad/jobs_runner.cpp:298
 #, fuzzy
 msgid "Job successful"
 msgstr "Failo rašymo operacija nepavyko."
 
-#: kicad/jobs_runner.cpp:302
+#: kicad/jobs_runner.cpp:305
 #, fuzzy
 msgid "Job failed"
 msgstr "Darbo bylos"
@@ -29390,7 +29391,7 @@ msgstr "Vietinis kelias: stebimas aplanko pakeitimas"
 
 #: kicad/project_tree_pane.cpp:1630
 #, fuzzy
-msgid "The selected directory is already a git project."
+msgid "The selected directory is already a Git project."
 msgstr "Pasirinktas failas neteisingas arba gali būti sugadintas!"
 
 #: kicad/project_tree_pane.cpp:1637
@@ -29399,8 +29400,9 @@ msgid "Set default remote"
 msgstr "Использовать имена цепей по умолчанию"
 
 #: kicad/project_tree_pane.cpp:1652
-msgid "Failed to initialize git project."
-msgstr ""
+#, fuzzy
+msgid "Failed to initialize Git project."
+msgstr "Nepavyko įkelti „%s“"
 
 #: kicad/project_tree_pane.cpp:1712
 #, fuzzy
@@ -29445,13 +29447,18 @@ msgstr "reikia numerio „%s“"
 
 #: kicad/project_tree_pane.cpp:1918
 #, fuzzy
-msgid "Are you sure you want to remove git tracking from this project?"
+msgid "Are you sure you want to remove Git tracking from this project?"
 msgstr "Ar tikrai norite pašalinti „%s“?"
 
 #: kicad/project_tree_pane.cpp:1935
 #, fuzzy
-msgid "Failed to remove git directory"
+msgid "Failed to remove Git directory"
 msgstr "Nepavyko sukurti katalogo „%s“"
+
+#: kicad/project_tree_pane.cpp:2236
+#, fuzzy
+msgid "The selected directory is not a Git project."
+msgstr "Pasirinktas failas neteisingas arba gali būti sugadintas!"
 
 #: kicad/project_tree_pane.cpp:2385
 msgid "Discarding commit due to empty commit message."
@@ -45504,42 +45511,42 @@ msgstr "%s pagalvėlė %s nerasta %s."
 msgid "Processing symbol '%s:%s'."
 msgstr "Apdorojimo simbolis „%s: %s“."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1319
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1322
 #, fuzzy, c-format
 msgid "Multiple footprints found for %s."
 msgstr "Rasti keli „%s“ pėdsakai."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1351
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1354
 #, fuzzy, c-format
 msgid "Cannot remove unused footprint %s (footprint is locked)."
 msgstr "Negalima pašalinti nepanaudoto pėdsako %s (užrakinta)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1356
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1359
 #, fuzzy, c-format
 msgid "Could not remove unused footprint %s (footprint is locked)."
 msgstr "Negalima pašalinti nepanaudoto pėdsako %s (užrakinta)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1369
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1372
 #, c-format
 msgid "Remove unused footprint %s."
 msgstr "Pašalinkite nenaudotą pėdsaką %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1378
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1381
 #, fuzzy, c-format
 msgid "Removed unused footprint %s."
 msgstr "Pašalinkite nenaudotą pėdsaką %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1409
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1412
 #, fuzzy, c-format
 msgid "Removed unused net %s."
 msgstr "Pašalinkite nenaudojamą tinklą „%s“."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1421
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1424
 #, fuzzy
 msgid "Update Netlist"
 msgstr "Atnaujinti grandinių sąrašą"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1444
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1447
 #, c-format
 msgid "Total warnings: %d, errors: %d."
 msgstr "Iš viso perspėjimu: %d, klaidų - %d."
@@ -49911,33 +49918,33 @@ msgstr "Vario sluoksnių daugiakampių supaprastinimas"
 msgid "Heal Shapes"
 msgstr "Užkrauti 3D formas"
 
-#: pcbnew/tools/edit_tool.cpp:2380 pcbnew/tools/pcb_actions.cpp:547
+#: pcbnew/tools/edit_tool.cpp:2395 pcbnew/tools/pcb_actions.cpp:547
 #, fuzzy
 msgid "Change Side / Flip"
 msgstr "Ppakeisti perėjimo ir grąžto dydį"
 
-#: pcbnew/tools/edit_tool.cpp:2646
+#: pcbnew/tools/edit_tool.cpp:2664
 msgid "Use the Footprint Properties dialog to remove fields."
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:2805
+#: pcbnew/tools/edit_tool.cpp:2823
 msgid "Move Exactly"
 msgstr "Tiksliai perkelti"
 
-#: pcbnew/tools/edit_tool.cpp:2974
+#: pcbnew/tools/edit_tool.cpp:2995
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "Kopijuojami %d elementai"
 
-#: pcbnew/tools/edit_tool.cpp:3315
+#: pcbnew/tools/edit_tool.cpp:3336
 msgid "Select reference point for the copy..."
 msgstr "Pasirinkite kopijos atskaitos tašką ..."
 
-#: pcbnew/tools/edit_tool.cpp:3316 pcbnew/tools/edit_tool.cpp:3333
+#: pcbnew/tools/edit_tool.cpp:3337 pcbnew/tools/edit_tool.cpp:3354
 msgid "Selection copied"
 msgstr "Pasirinkimas nukopijuotas"
 
-#: pcbnew/tools/edit_tool.cpp:3317
+#: pcbnew/tools/edit_tool.cpp:3338
 #, fuzzy
 msgid "Copy canceled"
 msgstr "Kopija atšaukta"
@@ -54011,6 +54018,14 @@ msgstr "Redaguoti scheminius simbolius"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Lapo formatų redaktorius"
+
+#, fuzzy
+#~ msgid "Change sheet pin to hierarchical label"
+#~ msgstr "Pakeiskite esamą elementą į hierarchinę etiketę"
+
+#, fuzzy
+#~ msgid "Change hierarchical label to sheet pin"
+#~ msgstr "Изменить на иерархическую метку"
 
 #, fuzzy
 #~ msgid "All files|*.*"

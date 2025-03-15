@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-13 15:26+0300\n"
+"POT-Creation-Date: 2025-03-15 19:01+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -14752,11 +14752,13 @@ msgstr "Add Sheet Pins"
 msgid "Delete Hierarchical Labels"
 msgstr "Delete Hierarchical Labels"
 
-msgid "Change sheet pin to hierarchical label"
-msgstr "Change sheet pin to hierarchical label"
+msgid ""
+"Associate selected sheet pin and hierarchical label using the label name"
+msgstr ""
+"Associate selected sheet pin and hierarchical label using the label name"
 
-msgid "Change hierarchical label to sheet pin"
-msgstr "Change hierarchical label to sheet pin"
+msgid "Associate selected sheet pin and hierarchical label using the pin name"
+msgstr "Associate selected sheet pin and hierarchical label using the pin name"
 
 msgid "Break sheet pin and hierarchical label association(s)"
 msgstr "Break sheet pin and hierarchical label association(s)"
@@ -14883,6 +14885,9 @@ msgstr "Net %s cannot be changed to %s because it is driven by a power pin."
 #, c-format
 msgid "Add label '%s' to %s pin %s net."
 msgstr "Add label '%s' to %s pin %s net."
+
+msgid "Draw Rule Area"
+msgstr "Draw Rule Area"
 
 msgid "Show the electrical rules checker window"
 msgstr "Show the electrical rules checker window"
@@ -15159,11 +15164,11 @@ msgstr "Copy design block into project as a sheet on current sheet"
 msgid "Place Sheet Pins"
 msgstr "Place Sheet Pins"
 
-msgid "Sync Sheet Pins"
-msgstr "Sync Sheet Pins"
+msgid "Sync Sheet Pins..."
+msgstr "Sync Sheet Pins..."
 
-msgid "Import Sheet"
-msgstr "Import Sheet"
+msgid "Import Sheet..."
+msgstr "Import Sheet..."
 
 msgid "Import sheet into project"
 msgstr "Import sheet into project"
@@ -15823,73 +15828,6 @@ msgstr "Add, edit or delete user-defined simulation signals"
 msgid "Show SPICE Netlist"
 msgstr "Show SPICE Netlist"
 
-#, c-format
-msgid "Run %s > %s"
-msgstr "Run %s > %s"
-
-#, c-format
-msgid "Run %s"
-msgstr "Run %s"
-
-msgid "No symbol issues found."
-msgstr "No symbol issues found."
-
-msgid "Symbol Warnings"
-msgstr "Symbol Warnings"
-
-msgid "Select a symbol to diff against its library equivalent."
-msgstr "Select a symbol to diff against its library equivalent."
-
-#, c-format
-msgid "Symbol %s"
-msgstr "Symbol %s"
-
-msgid "Summary"
-msgstr "Summary"
-
-msgid "Schematic vs library diff for:"
-msgstr "Schematic vs library diff for:"
-
-msgid "Library: "
-msgstr "Library: "
-
-msgid "Library item: "
-msgstr "Library item: "
-
-msgid "The library is not included in the current configuration."
-msgstr "The library is not included in the current configuration."
-
-msgid "Manage Symbol Libraries"
-msgstr "Manage Symbol Libraries"
-
-msgid "The library is not enabled in the current configuration."
-msgstr "The library is not enabled in the current configuration."
-
-#, c-format
-msgid "The library no longer contains the item %s."
-msgstr "The library no longer contains the item %s."
-
-msgid "No relevant differences detected."
-msgstr "No relevant differences detected."
-
-msgid "Visual"
-msgstr "Visual"
-
-msgid "No datasheet defined."
-msgstr "No datasheet defined."
-
-msgid "UUID"
-msgstr "UUID"
-
-msgid "Move Point"
-msgstr "Move Point"
-
-msgid "Add Corner"
-msgstr "Add Corner"
-
-msgid "Draw Rule Area"
-msgstr "Draw Rule Area"
-
 msgid "Press <ESC> to cancel symbol creation."
 msgstr "Press <ESC> to cancel symbol creation."
 
@@ -16121,6 +16059,64 @@ msgstr "Reached end of sheet."
 msgid "Find again to wrap around to the start."
 msgstr "Find again to wrap around to the start."
 
+#, c-format
+msgid "Run %s > %s"
+msgstr "Run %s > %s"
+
+#, c-format
+msgid "Run %s"
+msgstr "Run %s"
+
+msgid "No symbol issues found."
+msgstr "No symbol issues found."
+
+msgid "Symbol Warnings"
+msgstr "Symbol Warnings"
+
+msgid "Select a symbol to diff against its library equivalent."
+msgstr "Select a symbol to diff against its library equivalent."
+
+#, c-format
+msgid "Symbol %s"
+msgstr "Symbol %s"
+
+msgid "Summary"
+msgstr "Summary"
+
+msgid "Schematic vs library diff for:"
+msgstr "Schematic vs library diff for:"
+
+msgid "Library: "
+msgstr "Library: "
+
+msgid "Library item: "
+msgstr "Library item: "
+
+msgid "The library is not included in the current configuration."
+msgstr "The library is not included in the current configuration."
+
+msgid "Manage Symbol Libraries"
+msgstr "Manage Symbol Libraries"
+
+msgid "The library is not enabled in the current configuration."
+msgstr "The library is not enabled in the current configuration."
+
+#, c-format
+msgid "The library no longer contains the item %s."
+msgstr "The library no longer contains the item %s."
+
+msgid "No relevant differences detected."
+msgstr "No relevant differences detected."
+
+msgid "Visual"
+msgstr "Visual"
+
+msgid "No datasheet defined."
+msgstr "No datasheet defined."
+
+msgid "UUID"
+msgstr "UUID"
+
 msgid "No bus selected"
 msgstr "No bus selected"
 
@@ -16139,6 +16135,12 @@ msgstr "Press <ESC> to cancel move."
 #, c-format
 msgid "Page '%s' not found."
 msgstr "Page '%s' not found."
+
+msgid "Move Point"
+msgstr "Move Point"
+
+msgid "Add Corner"
+msgstr "Add Corner"
 
 msgid "Open Simulation Workbook"
 msgstr "Open Simulation Workbook"
@@ -18924,14 +18926,14 @@ msgstr "Network path: not monitoring folder changes"
 msgid "Local path: monitoring folder changes"
 msgstr "Local path: monitoring folder changes"
 
-msgid "The selected directory is already a git project."
-msgstr "The selected directory is already a git project."
+msgid "The selected directory is already a Git project."
+msgstr "The selected directory is already a Git project."
 
 msgid "Set default remote"
 msgstr "Set default remote"
 
-msgid "Failed to initialize git project."
-msgstr "Failed to initialize git project."
+msgid "Failed to initialize Git project."
+msgstr "Failed to initialize Git project."
 
 msgid "Failed to set default remote."
 msgstr "Failed to set default remote."
@@ -18961,11 +18963,14 @@ msgstr "Failed to switch to branch '%s'"
 msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "Failed to update HEAD reference for branch '%s'"
 
-msgid "Are you sure you want to remove git tracking from this project?"
-msgstr "Are you sure you want to remove git tracking from this project?"
+msgid "Are you sure you want to remove Git tracking from this project?"
+msgstr "Are you sure you want to remove Git tracking from this project?"
 
-msgid "Failed to remove git directory"
-msgstr "Failed to remove git directory"
+msgid "Failed to remove Git directory"
+msgstr "Failed to remove Git directory"
+
+msgid "The selected directory is not a Git project."
+msgstr "The selected directory is not a Git project."
 
 msgid "Discarding commit due to empty commit message."
 msgstr "Discarding commit due to empty commit message."
@@ -36817,6 +36822,30 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Change sheet pin to hierarchical label"
+#~ msgstr "Change sheet pin to hierarchical label"
+
+#~ msgid "Change hierarchical label to sheet pin"
+#~ msgstr "Change hierarchical label to sheet pin"
+
+#~ msgid "Sync Sheet Pins"
+#~ msgstr "Sync Sheet Pins"
+
+#~ msgid "Import Sheet"
+#~ msgstr "Import Sheet"
+
+#~ msgid "The selected directory is already a git project."
+#~ msgstr "The selected directory is already a git project."
+
+#~ msgid "Failed to initialize git project."
+#~ msgstr "Failed to initialize git project."
+
+#~ msgid "Are you sure you want to remove git tracking from this project?"
+#~ msgstr "Are you sure you want to remove git tracking from this project?"
+
+#~ msgid "Failed to remove git directory"
+#~ msgstr "Failed to remove git directory"
 
 #~ msgid "All files|*.*"
 #~ msgstr "All files|*.*"

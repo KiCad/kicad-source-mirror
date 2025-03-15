@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-13 15:26+0300\n"
+"POT-Creation-Date: 2025-03-15 19:01+0300\n"
 "PO-Revision-Date: 2025-03-06 23:18+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v9/fi/>\n"
@@ -44,7 +44,7 @@ msgstr ""
 "X-Poedit-SearchPath-6: 3d-viewer\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
-#: common/dialogs/panel_embedded_files.cpp:320
+#: common/dialogs/panel_embedded_files.cpp:321
 #: common/widgets/grid_text_button_helpers.cpp:372
 msgid "All Files"
 msgstr "Kaikki Tiedostot"
@@ -253,7 +253,7 @@ msgstr "Palauta Oletusasetukset"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:139
 #: bitmap2component/bitmap2cmp_frame.cpp:307 cvpcb/menubar.cpp:79
-#: eeschema/menubar.cpp:351 eeschema/sim/toolbars_simulator_frame.cpp:171
+#: eeschema/menubar.cpp:347 eeschema/sim/toolbars_simulator_frame.cpp:171
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:181
 #: eeschema/toolbars_symbol_viewer.cpp:130 gerbview/menubar.cpp:231
 #: kicad/menubar.cpp:227 pagelayout_editor/menubar.cpp:150
@@ -264,14 +264,14 @@ msgid "&File"
 msgstr "&Tiedosto"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:140 cvpcb/menubar.cpp:80
-#: eeschema/menubar.cpp:352
+#: eeschema/menubar.cpp:348
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:182 kicad/menubar.cpp:228
 #: pagelayout_editor/menubar.cpp:151 pcbnew/menubar_footprint_editor.cpp:244
 #: pcbnew/menubar_pcb_editor.cpp:477
 msgid "&Edit"
 msgstr "&Muokkaa"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:141 eeschema/menubar.cpp:353
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:141 eeschema/menubar.cpp:349
 #: eeschema/sim/toolbars_simulator_frame.cpp:172
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:183
 #: eeschema/toolbars_symbol_viewer.cpp:131 gerbview/menubar.cpp:232
@@ -348,16 +348,16 @@ msgstr "Ei riittäviä käyttöoikeuksia tiedoston '%s' tallentamiseen."
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:748 common/confirm.cpp:211
 #: common/dialogs/dialog_grid_settings.cpp:82
 #: common/dialogs/dialog_grid_settings.cpp:89
-#: common/dialogs/panel_embedded_files.cpp:307
-#: common/dialogs/panel_embedded_files.cpp:424
-#: common/dialogs/panel_embedded_files.cpp:455
-#: common/dialogs/panel_embedded_files.cpp:465
+#: common/dialogs/panel_embedded_files.cpp:308
+#: common/dialogs/panel_embedded_files.cpp:425
+#: common/dialogs/panel_embedded_files.cpp:457
+#: common/dialogs/panel_embedded_files.cpp:469
 #: common/dialogs/panel_setup_severities.cpp:44 common/kidialog.cpp:126
 #: eeschema/dialogs/dialog_erc.cpp:878
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1808
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2210
-#: eeschema/erc/erc_item.cpp:81 eeschema/files-io.cpp:937
-#: eeschema/files-io.cpp:1005 eeschema/sch_marker.cpp:376
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1807
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2209
+#: eeschema/erc/erc_item.cpp:81 eeschema/files-io.cpp:936
+#: eeschema/files-io.cpp:1004 eeschema/sch_marker.cpp:376
 #: kicad/import_proj.cpp:79 kicad/import_project.cpp:123 kicad/kicad.cpp:318
 #: kicad/tools/kicad_manager_control.cpp:269
 #: kicad/tools/kicad_manager_control.cpp:326
@@ -853,15 +853,15 @@ msgid "Presets (%s+Tab):"
 msgstr "Esiasetukset (%s+Sarkain):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:637
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1640
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2074
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1639
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2073
 #: pcbnew/widgets/appearance_controls.cpp:2632
 msgid "Save preset..."
 msgstr "Tallenna esiasetus ..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:638
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1641
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2075
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1640
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2074
 #: pcbnew/widgets/appearance_controls.cpp:2633
 msgid "Delete preset..."
 msgstr "Poista esiasetus ..."
@@ -877,29 +877,29 @@ msgid "Save Layer Preset"
 msgstr "Tallenna Kerroksen Esiasetus"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:754
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1815
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2217
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1814
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2216
 #: pcbnew/widgets/appearance_controls.cpp:2772
 msgid "Overwrite existing preset?"
 msgstr "Korvataanko olemassa oleva esiasetus?"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:780
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1840
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2242
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1839
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2241
 #: pcbnew/widgets/appearance_controls.cpp:2798
 msgid "Presets"
 msgstr "Esiasetukset"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:789
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1852
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2254
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1851
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2253
 #: pcbnew/widgets/appearance_controls.cpp:2810
 msgid "Delete Preset"
 msgstr "Poista Esiasetus"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:790
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1853
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2255
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1852
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2254
 #: pcbnew/widgets/appearance_controls.cpp:2811
 msgid "Select preset:"
 msgstr "Valitse esiasetus:"
@@ -1377,13 +1377,13 @@ msgid "Clear Recent Files"
 msgstr "Tyhjennä Viimeisimmät Tiedostot"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:396
-#: eeschema/tools/sch_drawing_tools.cpp:1032
+#: eeschema/tools/sch_drawing_tools.cpp:1035
 #: pagelayout_editor/pl_editor_frame.cpp:878 pcbnew/tools/drawing_tool.cpp:750
 msgid "Choose Image"
 msgstr "Valitse Kuva"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:397
-#: eeschema/tools/sch_drawing_tools.cpp:1033
+#: eeschema/tools/sch_drawing_tools.cpp:1036
 #: pagelayout_editor/pl_editor_frame.cpp:879 pcbnew/tools/drawing_tool.cpp:751
 msgid "Image Files"
 msgstr "Kuvatiedostot"
@@ -1874,13 +1874,13 @@ msgstr "&Hyväksy"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:591
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:154
 #: eeschema/dialogs/panel_template_fieldnames.cpp:212
-#: eeschema/erc/erc_item.cpp:77 eeschema/files-io.cpp:452
+#: eeschema/erc/erc_item.cpp:77 eeschema/files-io.cpp:451
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:261
 #: eeschema/sch_marker.cpp:373 eeschema/sheet.cpp:780
-#: eeschema/symbol_editor/symbol_editor.cpp:134
-#: eeschema/symbol_editor/symbol_editor.cpp:504
-#: eeschema/symbol_editor/symbol_editor.cpp:1296
-#: eeschema/symbol_editor/symbol_editor.cpp:1694
+#: eeschema/symbol_editor/symbol_editor.cpp:133
+#: eeschema/symbol_editor/symbol_editor.cpp:503
+#: eeschema/symbol_editor/symbol_editor.cpp:1295
+#: eeschema/symbol_editor/symbol_editor.cpp:1693
 #: pcbnew/dialogs/dialog_drc.cpp:985 pcbnew/dialogs/dialog_export_vrml.cpp:128
 #: pcbnew/drc/drc_item.cpp:224 pcbnew/import_gfx/dialog_import_graphics.cpp:293
 #: pcbnew/pcb_marker.cpp:208
@@ -1892,14 +1892,14 @@ msgid "Information"
 msgstr "Tietoa"
 
 #: common/confirm.cpp:266 common/confirm.cpp:269
-#: common/dialogs/panel_embedded_files.cpp:285
-#: common/dialogs/panel_embedded_files.cpp:401
+#: common/dialogs/panel_embedded_files.cpp:286
+#: common/dialogs/panel_embedded_files.cpp:402
 #: eeschema/design_block_utils.cpp:50 eeschema/design_block_utils.cpp:183
-#: eeschema/symbol_editor/symbol_editor.cpp:372
-#: eeschema/symbol_editor/symbol_editor.cpp:1001
-#: eeschema/symbol_editor/symbol_editor.cpp:1023
-#: eeschema/symbol_editor/symbol_editor.cpp:1141
-#: eeschema/symbol_editor/symbol_editor.cpp:1183
+#: eeschema/symbol_editor/symbol_editor.cpp:371
+#: eeschema/symbol_editor/symbol_editor.cpp:1000
+#: eeschema/symbol_editor/symbol_editor.cpp:1022
+#: eeschema/symbol_editor/symbol_editor.cpp:1140
+#: eeschema/symbol_editor/symbol_editor.cpp:1182
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:137
 #: eeschema/tools/symbol_editor_control.cpp:493
 #: eeschema/tools/symbol_editor_pin_tool.cpp:242 kicad/import_project.cpp:109
@@ -2059,9 +2059,9 @@ msgstr "Ei voida luoda yleistä kirjastotaulukon polkua '%s'."
 #: common/widgets/widget_hotkey_list.cpp:529
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:50
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:100
-#: eeschema/sch_symbol.cpp:2107 eeschema/symbol_editor/symbol_editor.cpp:829
-#: eeschema/symbol_editor/symbol_editor.cpp:1768
-#: eeschema/symbol_viewer_frame.cpp:461 include/lib_table_grid.h:214
+#: eeschema/sch_symbol.cpp:2107 eeschema/symbol_editor/symbol_editor.cpp:828
+#: eeschema/symbol_editor/symbol_editor.cpp:1767
+#: eeschema/symbol_viewer_frame.cpp:459 include/lib_table_grid.h:214
 #: kicad/pcm/dialogs/panel_package_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:43
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:50
@@ -2456,8 +2456,8 @@ msgstr "Ympäristömuuttujat"
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
 #: eeschema/fields_grid_table.cpp:470 eeschema/sch_pin.cpp:1578
 #: eeschema/sch_symbol.cpp:2068 eeschema/sch_symbol.cpp:2121
-#: eeschema/symbol_editor/symbol_editor.cpp:1738
-#: eeschema/symbol_viewer_frame.cpp:459
+#: eeschema/symbol_editor/symbol_editor.cpp:1737
+#: eeschema/symbol_viewer_frame.cpp:457
 #: eeschema/sync_sheet_pin/sheet_synchronization_model.h:66
 #: eeschema/widgets/search_handlers.cpp:402
 #: eeschema/widgets/tuner_slider_base.cpp:27
@@ -2670,7 +2670,7 @@ msgstr "Ruudukon koko Y alueen ulkopuolella."
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:97
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:109
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:32
-#: eeschema/symbol_editor/symbol_editor.cpp:862
+#: eeschema/symbol_editor/symbol_editor.cpp:861
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:27
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:31
 #: pcbnew/footprint_libraries_utils.cpp:1049
@@ -2780,7 +2780,7 @@ msgid "PCB"
 msgstr "Piirilevy"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
-#: eeschema/sch_edit_frame.cpp:1342 eeschema/sch_plotter.cpp:1047
+#: eeschema/sch_edit_frame.cpp:1334 eeschema/sch_plotter.cpp:1060
 #: eeschema/widgets/symbol_diff_widget.cpp:44
 msgid "Schematic"
 msgstr "Kytkentäkaavio"
@@ -3616,7 +3616,7 @@ msgstr "Testaa"
 
 #: common/dialogs/git/dialog_git_auth.cpp:53
 #: common/dialogs/git/dialog_git_commit.cpp:151
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1340
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1339
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:147
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout.cpp:78
 #: pcbnew/tools/multichannel_tool.cpp:978
@@ -3626,11 +3626,11 @@ msgstr "Hyväksy"
 #: common/dialogs/git/dialog_git_auth.cpp:54
 #: common/dialogs/git/dialog_git_commit.cpp:152
 #: common/dialogs/git/dialog_git_switch.cpp:69
-#: common/dialogs/panel_embedded_files.cpp:425 common/tool/actions.cpp:159
+#: common/dialogs/panel_embedded_files.cpp:426 common/tool/actions.cpp:159
 #: eeschema/dialogs/dialog_erc.cpp:426
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1340 eeschema/sheet.cpp:784
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:962
-#: eeschema/symbol_editor/symbol_editor.cpp:1026
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1339 eeschema/sheet.cpp:784
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:959
+#: eeschema/symbol_editor/symbol_editor.cpp:1025
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:151
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:66
 #: pcbnew/dialogs/dialog_drc.cpp:348
@@ -3828,7 +3828,7 @@ msgid "Switch"
 msgstr "Vaihda"
 
 #: common/dialogs/git/dialog_git_switch.cpp:219
-#: eeschema/design_block_utils.cpp:90 eeschema/sch_base_frame.cpp:307
+#: eeschema/design_block_utils.cpp:90 eeschema/sch_base_frame.cpp:306
 #: pcbnew/footprint_libraries_utils.cpp:430
 msgid "Add"
 msgstr "Lisää"
@@ -4554,10 +4554,10 @@ msgid "One of the nicknames will need to be changed after adding this library."
 msgstr "Tämän kirjaston lisäämisen jälkeen yksi lempinimistä täytyy vaihtaa."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1010
-#: common/dialogs/panel_embedded_files.cpp:403
-#: common/dialogs/panel_embedded_files.cpp:425
+#: common/dialogs/panel_embedded_files.cpp:404
+#: common/dialogs/panel_embedded_files.cpp:426
 #: eeschema/design_block_utils.cpp:89
-#: eeschema/dialogs/panel_sym_lib_table.cpp:688 eeschema/sch_base_frame.cpp:306
+#: eeschema/dialogs/panel_sym_lib_table.cpp:688 eeschema/sch_base_frame.cpp:305
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1038
 #: pcbnew/footprint_libraries_utils.cpp:429 pcbnew/tools/pcb_actions.cpp:585
 msgid "Skip"
@@ -4575,7 +4575,7 @@ msgstr "Suunnittelun lohkokirjastot"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1197
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1245
-#: eeschema/tools/sch_editor_control.cpp:505
+#: eeschema/tools/sch_editor_control.cpp:504
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1299
 #, c-format
 msgid ""
@@ -4591,10 +4591,10 @@ msgstr ""
 #: common/dialogs/panel_design_block_lib_table.cpp:1211
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1246
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1259
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1872
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1924
-#: eeschema/tools/sch_editor_control.cpp:506
-#: eeschema/tools/sch_editor_control.cpp:521
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1869
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1921
+#: eeschema/tools/sch_editor_control.cpp:505
+#: eeschema/tools/sch_editor_control.cpp:520
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1300
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1313
 msgid "File Save Error"
@@ -4602,7 +4602,7 @@ msgstr "Tiedoston tallennusvirhe"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1210
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1258
-#: eeschema/tools/sch_editor_control.cpp:520
+#: eeschema/tools/sch_editor_control.cpp:519
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1312
 #, c-format
 msgid ""
@@ -4634,7 +4634,7 @@ msgstr "Näkyvä"
 #: common/dialogs/panel_design_block_lib_table_base.cpp:95
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:46
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:96
-#: eeschema/symbol_editor/symbol_editor.cpp:828 include/lib_table_grid.h:208
+#: eeschema/symbol_editor/symbol_editor.cpp:827 include/lib_table_grid.h:208
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:46
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:95
 #: pcbnew/footprint_libraries_utils.cpp:1014
@@ -4715,27 +4715,27 @@ msgid "This is a read-only table which shows pertinent environment variables."
 msgstr ""
 "Tämä on vain luku -taulukko, joka näyttää asiaankuuluvat ympäristömuuttujat."
 
-#: common/dialogs/panel_embedded_files.cpp:53
+#: common/dialogs/panel_embedded_files.cpp:54
 msgid "Copy Embedded Reference"
 msgstr "Kopioi upotettu viite"
 
-#: common/dialogs/panel_embedded_files.cpp:54
+#: common/dialogs/panel_embedded_files.cpp:55
 msgid "Copy the reference for this embedded file"
 msgstr "Kopioi tämän upotetun tiedoston viite"
 
-#: common/dialogs/panel_embedded_files.cpp:283
-#: common/dialogs/panel_embedded_files.cpp:398
+#: common/dialogs/panel_embedded_files.cpp:284
+#: common/dialogs/panel_embedded_files.cpp:399
 #, c-format
 msgid "File '%s' already exists."
 msgstr "Tiedosto '%s' on jo olemassa."
 
-#: common/dialogs/panel_embedded_files.cpp:286
-#: common/dialogs/panel_embedded_files.cpp:403
+#: common/dialogs/panel_embedded_files.cpp:287
+#: common/dialogs/panel_embedded_files.cpp:404
 #: eeschema/design_block_utils.cpp:51 eeschema/design_block_utils.cpp:184
-#: eeschema/symbol_editor/symbol_editor.cpp:373
-#: eeschema/symbol_editor/symbol_editor.cpp:1003
-#: eeschema/symbol_editor/symbol_editor.cpp:1142
-#: eeschema/symbol_editor/symbol_editor.cpp:1184
+#: eeschema/symbol_editor/symbol_editor.cpp:372
+#: eeschema/symbol_editor/symbol_editor.cpp:1002
+#: eeschema/symbol_editor/symbol_editor.cpp:1141
+#: eeschema/symbol_editor/symbol_editor.cpp:1183
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:138
 #: eeschema/tools/symbol_editor_control.cpp:495
 #: kicad/tools/kicad_manager_control.cpp:356
@@ -4750,39 +4750,39 @@ msgstr "Tiedosto '%s' on jo olemassa."
 msgid "Overwrite"
 msgstr "Korvaa"
 
-#: common/dialogs/panel_embedded_files.cpp:305
+#: common/dialogs/panel_embedded_files.cpp:306
 #, c-format
 msgid "Failed to add file '%s'."
 msgstr "Tiedoston '%s' lisääminen epäonnistui."
 
-#: common/dialogs/panel_embedded_files.cpp:319
+#: common/dialogs/panel_embedded_files.cpp:320
 msgid "Select a file to embed"
 msgstr "Valitse upotettava tiedosto"
 
-#: common/dialogs/panel_embedded_files.cpp:385
+#: common/dialogs/panel_embedded_files.cpp:386
 msgid "Select a directory to export files"
 msgstr "Valitse hakemisto tiedostojen viemistä varten"
 
-#: common/dialogs/panel_embedded_files.cpp:417
+#: common/dialogs/panel_embedded_files.cpp:418
 #, c-format
 msgid "Directory '%s' is not writable."
 msgstr "Hakemistoon '%s' ei voi kirjoittaa."
 
-#: common/dialogs/panel_embedded_files.cpp:420
+#: common/dialogs/panel_embedded_files.cpp:421
 #, c-format
 msgid "Folder '%s' is not writable."
 msgstr "Kansio '%s' ei ole kirjoitettavissa."
 
-#: common/dialogs/panel_embedded_files.cpp:425
+#: common/dialogs/panel_embedded_files.cpp:426
 msgid "Retry"
 msgstr "Yritä uudelleen"
 
-#: common/dialogs/panel_embedded_files.cpp:452
+#: common/dialogs/panel_embedded_files.cpp:454
 #, c-format
 msgid "Failed to open file '%s'."
 msgstr "Tiedoston '%s' avaaminen epäonnistui."
 
-#: common/dialogs/panel_embedded_files.cpp:462
+#: common/dialogs/panel_embedded_files.cpp:466
 #, c-format
 msgid "Failed to write file '%s'."
 msgstr "Tiedoston '%s' kirjoittaminen epäonnistui."
@@ -5305,7 +5305,7 @@ msgstr "<Ei määritelty>"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:858 pcbnew/footprint.cpp:4084
-#: pcbnew/pad.cpp:2547 pcbnew/pcb_table.cpp:541 pcbnew/pcb_textbox.cpp:867
+#: pcbnew/pad.cpp:2547 pcbnew/pcb_table.cpp:557 pcbnew/pcb_textbox.cpp:867
 #: pcbnew/zone.cpp:857 pcbnew/zone.cpp:1837
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Solid"
@@ -5315,7 +5315,7 @@ msgstr "Kiinteä"
 #: common/stroke_params.cpp:41
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:662 eeschema/sch_line.cpp:1048
-#: eeschema/sch_line.cpp:1060 pcbnew/pcb_table.cpp:542
+#: eeschema/sch_line.cpp:1060 pcbnew/pcb_table.cpp:558
 #: pcbnew/pcb_textbox.cpp:868
 msgid "Dashed"
 msgstr "Katkoviiva"
@@ -5324,7 +5324,7 @@ msgstr "Katkoviiva"
 #: common/stroke_params.cpp:42
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:663 eeschema/sch_line.cpp:1049
-#: eeschema/sch_line.cpp:1061 pcbnew/pcb_table.cpp:543
+#: eeschema/sch_line.cpp:1061 pcbnew/pcb_table.cpp:559
 #: pcbnew/pcb_textbox.cpp:869
 msgid "Dotted"
 msgstr "Pisteviiva"
@@ -5333,7 +5333,7 @@ msgstr "Pisteviiva"
 #: common/stroke_params.cpp:43
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:664 eeschema/sch_line.cpp:1050
-#: eeschema/sch_line.cpp:1062 pcbnew/pcb_table.cpp:544
+#: eeschema/sch_line.cpp:1062 pcbnew/pcb_table.cpp:560
 #: pcbnew/pcb_textbox.cpp:870
 msgid "Dash-Dot"
 msgstr "Viiva-Piste"
@@ -5342,7 +5342,7 @@ msgstr "Viiva-Piste"
 #: common/stroke_params.cpp:44
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:665 eeschema/sch_line.cpp:1051
-#: eeschema/sch_line.cpp:1063 pcbnew/pcb_table.cpp:545
+#: eeschema/sch_line.cpp:1063 pcbnew/pcb_table.cpp:561
 #: pcbnew/pcb_textbox.cpp:871
 msgid "Dash-Dot-Dot"
 msgstr "Viiva-Piste-Piste"
@@ -5846,7 +5846,7 @@ msgid "Data Collection"
 msgstr "Tiedonkeruu"
 
 #: common/eda_base_frame.cpp:1156 common/tool/actions.cpp:1088
-#: common/tool/common_tools.cpp:615 eeschema/symbol_editor/symbol_editor.cpp:85
+#: common/tool/common_tools.cpp:615 eeschema/symbol_editor/symbol_editor.cpp:84
 #: kicad/tools/kicad_manager_actions.cpp:125
 msgid "Symbol Editor"
 msgstr "Symbolieditori"
@@ -5871,8 +5871,8 @@ msgid "Colors"
 msgstr "Värit"
 
 #: common/eda_base_frame.cpp:1165 common/hotkey_store.cpp:77
-#: common/tool/common_tools.cpp:614 eeschema/menubar.cpp:137
-#: eeschema/sch_edit_frame.cpp:1756 kicad/tools/kicad_manager_actions.cpp:114
+#: common/tool/common_tools.cpp:614 eeschema/menubar.cpp:133
+#: eeschema/sch_edit_frame.cpp:1748 kicad/tools/kicad_manager_actions.cpp:114
 msgid "Schematic Editor"
 msgstr "Kytkentäkaavioeditori"
 
@@ -5888,7 +5888,7 @@ msgstr "Kentän Nimimallit"
 
 #: common/eda_base_frame.cpp:1173 eeschema/sim/simulator_frame.cpp:115
 #: eeschema/sim/toolbars_simulator_frame.cpp:114
-#: eeschema/tools/ee_actions.cpp:74
+#: eeschema/tools/sch_actions.cpp:74
 msgid "Simulator"
 msgstr "Simulaattori"
 
@@ -6081,7 +6081,7 @@ msgid "Search"
 msgstr "Etsi"
 
 #: common/eda_draw_frame.cpp:1226 common/tool/actions.cpp:1114
-#: eeschema/eeschema_settings.cpp:93 eeschema/sch_edit_frame.cpp:2213
+#: eeschema/eeschema_settings.cpp:93 eeschema/sch_edit_frame.cpp:2205
 #: pagelayout_editor/pl_editor_frame.cpp:195
 #: pcbnew/footprint_edit_frame.cpp:247 pcbnew/pcb_edit_frame.cpp:349
 #: pcbnew/pcb_edit_frame.cpp:1715
@@ -6131,7 +6131,7 @@ msgid "Text Box"
 msgstr "Tekstiruutu"
 
 #: common/eda_item.cpp:355 common/eda_item.cpp:383 eeschema/sch_table.cpp:587
-#: pcbnew/pcb_table.cpp:395
+#: pcbnew/pcb_table.cpp:411
 msgid "Table"
 msgstr "Taulukko"
 
@@ -6208,7 +6208,7 @@ msgid "Bitmap"
 msgstr "Bittikartta"
 
 #: common/eda_item.cpp:380 eeschema/sch_rule_area.cpp:50
-#: eeschema/sch_rule_area.cpp:371 pcbnew/zone.cpp:920
+#: eeschema/sch_rule_area.cpp:374 pcbnew/zone.cpp:920
 msgid "Rule Area"
 msgstr "Sääntöalue"
 
@@ -6237,7 +6237,7 @@ msgid "Field"
 msgstr "Kenttä"
 
 #: common/eda_item.cpp:390 common/eda_item.cpp:402
-#: eeschema/symbol_editor/symbol_editor.cpp:1765
+#: eeschema/symbol_editor/symbol_editor.cpp:1764
 msgid "Symbol"
 msgstr "Symboli"
 
@@ -6354,7 +6354,7 @@ msgstr "Pituus"
 msgid "Angle"
 msgstr "Kulma"
 
-#: common/eda_shape.cpp:1010 eeschema/sch_rule_area.cpp:375
+#: common/eda_shape.cpp:1010 eeschema/sch_rule_area.cpp:378
 msgid "Points"
 msgstr "Pisteet"
 
@@ -6402,14 +6402,14 @@ msgid "Shape Properties"
 msgstr "Muodon ominaisuudet"
 
 #: common/eda_shape.cpp:2256 eeschema/sch_table.cpp:646
-#: eeschema/sch_tablecell.cpp:192 pcbnew/pcb_table.cpp:556
+#: eeschema/sch_tablecell.cpp:192 pcbnew/pcb_table.cpp:572
 #: pcbnew/pcb_tablecell.cpp:192 pcbnew/pcb_textbox.cpp:882
 #: pcbnew/pcb_track.cpp:2075
 msgid "Start X"
 msgstr "Alku X"
 
 #: common/eda_shape.cpp:2261 eeschema/sch_table.cpp:649
-#: eeschema/sch_tablecell.cpp:193 pcbnew/pcb_table.cpp:559
+#: eeschema/sch_tablecell.cpp:193 pcbnew/pcb_table.cpp:575
 #: pcbnew/pcb_tablecell.cpp:193 pcbnew/pcb_textbox.cpp:883
 #: pcbnew/pcb_track.cpp:2079
 msgid "Start Y"
@@ -6602,7 +6602,7 @@ msgstr "Tekstin Ominaisuudet"
 #: eeschema/fields_grid_table.cpp:482 eeschema/sch_field.cpp:1220
 #: eeschema/sch_label.cpp:1197 eeschema/sch_tablecell.cpp:127
 #: eeschema/sch_text.cpp:646 eeschema/sch_textbox.cpp:559
-#: eeschema/widgets/sch_properties_panel.cpp:258 pcbnew/pcb_dimension.cpp:642
+#: eeschema/widgets/sch_properties_panel.cpp:257 pcbnew/pcb_dimension.cpp:642
 #: pcbnew/pcb_tablecell.cpp:116 pcbnew/pcb_text.cpp:287
 #: pcbnew/pcb_textbox.cpp:565 pcbnew/widgets/pcb_properties_panel.cpp:286
 msgid "Font"
@@ -6799,7 +6799,7 @@ msgstr "Virheellinen alias (kaksoisnimi)"
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:129
 #: eeschema/dialogs/dialog_text_properties_base.cpp:93
 #: eeschema/fields_grid_table.cpp:61
-#: eeschema/widgets/sch_properties_panel.cpp:252
+#: eeschema/widgets/sch_properties_panel.cpp:251
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:155
 msgid "Default Font"
 msgstr "Oletuskirjasin"
@@ -7118,8 +7118,8 @@ msgid "No error"
 msgstr "EI virhettä"
 
 #: common/grid_tricks.cpp:359 common/tool/actions.cpp:214
-#: common/widgets/listbox_tricks.cpp:52 eeschema/tools/ee_actions.cpp:249
-#: pcbnew/dialogs/panel_setup_rules.cpp:130 pcbnew/tools/edit_tool.cpp:2637
+#: common/widgets/listbox_tricks.cpp:52 eeschema/tools/sch_actions.cpp:249
+#: pcbnew/dialogs/panel_setup_rules.cpp:130 pcbnew/tools/edit_tool.cpp:2655
 msgid "Cut"
 msgstr "Leikkaa"
 
@@ -7128,7 +7128,7 @@ msgid "Clear selected cells placing original contents on clipboard"
 msgstr "Tyhjennä valitut solut asettamalla alkuperäinen sisältö leikepöydälle"
 
 #: common/grid_tricks.cpp:361 common/tool/actions.cpp:225
-#: common/widgets/listbox_tricks.cpp:50 eeschema/tools/ee_actions.cpp:255
+#: common/widgets/listbox_tricks.cpp:50 eeschema/tools/sch_actions.cpp:255
 #: kicad/dialogs/panel_jobset.cpp:392 pcbnew/dialogs/panel_setup_rules.cpp:131
 msgid "Copy"
 msgstr "Kopioi"
@@ -7139,8 +7139,8 @@ msgstr "Kopioi valitut solut leikepöydälle"
 
 #: common/grid_tricks.cpp:366 common/tool/actions.cpp:245
 #: common/widgets/listbox_tricks.cpp:51
-#: eeschema/tools/sch_editor_control.cpp:2282
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1020
+#: eeschema/tools/sch_editor_control.cpp:2281
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1022
 #: pcbnew/dialogs/panel_setup_rules.cpp:132 pcbnew/tools/pcb_control.cpp:1249
 msgid "Paste"
 msgstr "Liitä"
@@ -7150,10 +7150,10 @@ msgid "Paste clipboard cells to matrix at current cell"
 msgstr "Liitä leikepöydän solut matriisiin nykyisessä solussa"
 
 #: common/grid_tricks.cpp:368 common/tool/actions.cpp:291
-#: common/widgets/listbox_tricks.cpp:54 eeschema/tools/sch_edit_tool.cpp:1722
-#: eeschema/tools/symbol_editor_edit_tool.cpp:476
+#: common/widgets/listbox_tricks.cpp:54 eeschema/tools/sch_edit_tool.cpp:1720
+#: eeschema/tools/symbol_editor_edit_tool.cpp:478
 #: kicad/dialogs/panel_jobset.cpp:394 kicad/project_tree_pane.cpp:985
-#: pcbnew/dialogs/panel_setup_rules.cpp:133 pcbnew/tools/edit_tool.cpp:2650
+#: pcbnew/dialogs/panel_setup_rules.cpp:133 pcbnew/tools/edit_tool.cpp:2668
 msgid "Delete"
 msgstr "Poista"
 
@@ -7205,7 +7205,7 @@ msgstr "Lopeta piirtäminen"
 msgid "Add to Selection"
 msgstr "Lisää Valintaan"
 
-#: common/hotkey_store.cpp:51 eeschema/tools/ee_actions.cpp:932
+#: common/hotkey_store.cpp:51 eeschema/tools/sch_actions.cpp:932
 #: gerbview/tools/gerbview_actions.cpp:132 pcbnew/tools/pcb_actions.cpp:1240
 #: pcbnew/tools/pcb_actions.cpp:1269
 msgid "Highlight Net"
@@ -7918,7 +7918,7 @@ msgid "Helper items"
 msgstr "Avustajakohteet"
 
 #: common/layer_id.cpp:107 common/layer_id.cpp:149 common/tool/grid_menu.cpp:56
-#: eeschema/tools/sch_editor_control.cpp:2879
+#: eeschema/tools/sch_editor_control.cpp:2878
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:103
 #: gerbview/widgets/gerbview_layer_widget.cpp:135
 #: pcbnew/widgets/appearance_controls.cpp:351
@@ -8139,7 +8139,7 @@ msgstr "Kirjastoasetukset kohteelle %s..."
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
 #: eeschema/dialogs/dialog_sim_model.cpp:629 eeschema/sch_item.cpp:510
 #: eeschema/sch_item.cpp:559 eeschema/sch_pin.cpp:1567
-#: eeschema/sch_symbol.cpp:3035 eeschema/symbol_editor/symbol_editor.cpp:1751
+#: eeschema/sch_symbol.cpp:3035 eeschema/symbol_editor/symbol_editor.cpp:1750
 msgid "Unit"
 msgstr "Yksikkö"
 
@@ -8293,23 +8293,23 @@ msgstr "Käyttöjärjestelmä ei tue tätä kieltä."
 msgid "The KiCad language file for this language is not installed."
 msgstr "Tämän kielen KiCad-kielitiedostoa ei ole asennettu."
 
-#: common/plotters/PDF_plotter.cpp:896
+#: common/plotters/PDF_plotter.cpp:670 common/plotters/PDF_plotter.cpp:673
 #, c-format
 msgid "Page %s"
 msgstr "Sivu %s"
 
-#: common/plotters/PDF_plotter.cpp:900
+#: common/plotters/PDF_plotter.cpp:671 common/plotters/PDF_plotter.cpp:674
 #, c-format
 msgid "%s (Page %s)"
 msgstr "%s (Sivu %s)"
 
-#: common/plotters/PDF_plotter.cpp:1397
+#: common/plotters/PDF_plotter.cpp:1418
 #, c-format
 msgid "Show Page %s"
 msgstr "Näytä Sivu %s"
 
-#: common/plotters/PDF_plotter.cpp:1417
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:928
+#: common/plotters/PDF_plotter.cpp:1438
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:925
 #: eeschema/tools/sch_navigate_tool.cpp:103
 #, c-format
 msgid "Open %s"
@@ -8361,9 +8361,9 @@ msgstr "Virhe tiedostoa purettaessa!"
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:55
 #: eeschema/netlist_exporters/netlist_exporter_pads.cpp:43
-#: eeschema/sch_plotter.cpp:197 eeschema/sch_plotter.cpp:403
-#: eeschema/sch_plotter.cpp:421 eeschema/sch_plotter.cpp:562
-#: eeschema/sch_plotter.cpp:774 eeschema/sch_plotter.cpp:937
+#: eeschema/sch_plotter.cpp:197 eeschema/sch_plotter.cpp:416
+#: eeschema/sch_plotter.cpp:434 eeschema/sch_plotter.cpp:575
+#: eeschema/sch_plotter.cpp:787 eeschema/sch_plotter.cpp:950
 #: gerbview/export_to_pcbnew.cpp:67 pagelayout_editor/files.cpp:214
 #: pcbnew/build_BOM_from_board.cpp:102
 #: pcbnew/dialogs/dialog_board_statistics.cpp:670
@@ -8458,7 +8458,7 @@ msgstr "Ryhmitetty Arvon ja Jalanjäljen mukaan"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:268
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:128
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:199
-#: eeschema/dialogs/dialog_update_from_pcb_base.cpp:72 eeschema/menubar.cpp:170
+#: eeschema/dialogs/dialog_update_from_pcb_base.cpp:72 eeschema/menubar.cpp:166
 #: eeschema/sch_sheet.cpp:1727 eeschema/sch_symbol.cpp:3043
 #: eeschema/tools/sch_edit_tool.cpp:597
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:179
@@ -8511,7 +8511,7 @@ msgstr "Uusi..."
 msgid "Create a new document in the editor"
 msgstr "Luo uusi asiakirja editorissa"
 
-#: common/tool/actions.cpp:52 eeschema/symbol_editor/symbol_editor.cpp:868
+#: common/tool/actions.cpp:52 eeschema/symbol_editor/symbol_editor.cpp:867
 #: pcbnew/footprint_libraries_utils.cpp:1059
 msgid "New Library..."
 msgstr "Uusi Kirjasto..."
@@ -8552,7 +8552,7 @@ msgstr "Avaa tiedostoselaimessa..."
 msgid "Open a library file with system file explorer"
 msgstr "Avaa kirjastotiedosto järjestelmän tiedostohallinnassa"
 
-#: common/tool/actions.cpp:91 eeschema/symbol_editor/symbol_editor.cpp:858
+#: common/tool/actions.cpp:91 eeschema/symbol_editor/symbol_editor.cpp:857
 #: eeschema/widgets/tuner_slider_base.cpp:117
 #: pcbnew/footprint_libraries_utils.cpp:1045
 msgid "Save"
@@ -8562,7 +8562,7 @@ msgstr "Tallenna"
 msgid "Save changes"
 msgstr "Tallenna muutokset"
 
-#: common/tool/actions.cpp:100 eeschema/tools/ee_actions.cpp:228
+#: common/tool/actions.cpp:100 eeschema/tools/sch_actions.cpp:228
 msgid "Save As..."
 msgstr "Tallenna nimellä..."
 
@@ -8675,8 +8675,8 @@ msgid "Paste item(s) from clipboard with options"
 msgstr "Liitä kohde leikepöydältä vaihtoehdoilla"
 
 #: common/tool/actions.cpp:278 common/widgets/listbox_tricks.cpp:53
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1101
-#: pcbnew/tools/edit_tool.cpp:2979
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1103
+#: pcbnew/tools/edit_tool.cpp:3000
 msgid "Duplicate"
 msgstr "Monista"
 
@@ -8696,8 +8696,8 @@ msgstr "Interaktiivinen Poistotyökalu"
 msgid "Delete clicked items"
 msgstr "Poista napsautetut kohteet"
 
-#: common/tool/actions.cpp:307 eeschema/tools/sch_edit_tool.cpp:2882
-#: pcbnew/tools/edit_tool.cpp:2294
+#: common/tool/actions.cpp:307 eeschema/tools/sch_edit_tool.cpp:2880
+#: pcbnew/tools/edit_tool.cpp:2306
 msgid "Left Justify"
 msgstr "Tasaa vasemmalle"
 
@@ -8705,8 +8705,8 @@ msgstr "Tasaa vasemmalle"
 msgid "Left-justify fields and text items"
 msgstr "Tasaa kentät ja tekstikohteet vasemmalle"
 
-#: common/tool/actions.cpp:314 eeschema/tools/sch_edit_tool.cpp:2884
-#: pcbnew/tools/edit_tool.cpp:2296
+#: common/tool/actions.cpp:314 eeschema/tools/sch_edit_tool.cpp:2882
+#: pcbnew/tools/edit_tool.cpp:2308
 msgid "Center Justify"
 msgstr "Tasaa keskelle"
 
@@ -8714,8 +8714,8 @@ msgstr "Tasaa keskelle"
 msgid "Center-justify fields and text items"
 msgstr "Tasaa kentät ja tekstikohteet keskelle"
 
-#: common/tool/actions.cpp:321 eeschema/tools/sch_edit_tool.cpp:2886
-#: pcbnew/tools/edit_tool.cpp:2298
+#: common/tool/actions.cpp:321 eeschema/tools/sch_edit_tool.cpp:2884
+#: pcbnew/tools/edit_tool.cpp:2310
 msgid "Right Justify"
 msgstr "Tasaa oikealle"
 
@@ -8731,9 +8731,9 @@ msgstr "Laajenna kaikki"
 msgid "Collapse All"
 msgstr "Kokoa kaikki"
 
-#: common/tool/actions.cpp:342 eeschema/tools/sch_edit_tool.cpp:3138
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1214
-#: pcbnew/tools/edit_tool.cpp:3084
+#: common/tool/actions.cpp:342 eeschema/tools/sch_edit_tool.cpp:3136
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1216
+#: pcbnew/tools/edit_tool.cpp:3105
 msgid "Increment"
 msgstr "Lisäys"
 
@@ -9282,7 +9282,7 @@ msgid "Show 3D viewer window"
 msgstr "Näytä 3D-katseluikkuna"
 
 #: common/tool/actions.cpp:1080 eeschema/symbol_diff_frame.cpp:57
-#: eeschema/symbol_viewer_frame.cpp:104 eeschema/symbol_viewer_frame.cpp:1113
+#: eeschema/symbol_viewer_frame.cpp:104 eeschema/symbol_viewer_frame.cpp:1111
 msgid "Symbol Library Browser"
 msgstr "Symbolikirjastoselain"
 
@@ -9637,7 +9637,7 @@ msgid "Board"
 msgstr "Piirilevy"
 
 #: common/widgets/footprint_diff_widget.cpp:42 cvpcb/cvpcb_mainframe.cpp:814
-#: eeschema/sch_base_frame.cpp:594 eeschema/sch_symbol.cpp:2090
+#: eeschema/sch_base_frame.cpp:593 eeschema/sch_symbol.cpp:2090
 #: eeschema/sch_symbol.cpp:2094 eeschema/sch_symbol.cpp:2131
 #: eeschema/widgets/symbol_diff_widget.cpp:45 pcbnew/footprint.cpp:1694
 msgid "Library"
@@ -9957,7 +9957,7 @@ msgstr "Pikanäppäin"
 
 #: common/widgets/widget_hotkey_list.cpp:528
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:47 eeschema/sch_item.cpp:66
-#: eeschema/symbol_editor/symbol_editor.cpp:1754
+#: eeschema/symbol_editor/symbol_editor.cpp:1753
 #: eeschema/tools/sch_edit_tool.cpp:167
 msgid "Alternate"
 msgstr "Vaihtoehtoinen"
@@ -10350,8 +10350,8 @@ msgstr "'%s' ei ole kelvollinen jalanjälki."
 #: eeschema/design_block_tree_model_adapter.cpp:130
 #: eeschema/generate_alias_info.cpp:40 eeschema/sch_symbol.cpp:2109
 #: eeschema/sch_symbol.cpp:2685 eeschema/sch_symbol.cpp:3013
-#: eeschema/symbol_editor/symbol_editor.cpp:1769
-#: eeschema/symbol_viewer_frame.cpp:462 pcbnew/footprint.cpp:4133
+#: eeschema/symbol_editor/symbol_editor.cpp:1768
+#: eeschema/symbol_viewer_frame.cpp:460 pcbnew/footprint.cpp:4133
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:196
 msgid "Keywords"
 msgstr "Avainsanat"
@@ -10819,17 +10819,17 @@ msgstr "Suunnittelulohko '%s' on jo olemassa kirjastossa '%s'."
 msgid "Overwrite existing design block?"
 msgstr "Korvataanko olemassa oleva suunnittelulohko?"
 
-#: eeschema/design_block_utils.cpp:70 eeschema/sch_base_frame.cpp:287
+#: eeschema/design_block_utils.cpp:70 eeschema/sch_base_frame.cpp:286
 #: pcbnew/footprint_libraries_utils.cpp:410
 msgid "Add the library to the global library table?"
 msgstr "Lisätäänkö kirjasto yleiseen kirjastotaulukkoon?"
 
-#: eeschema/design_block_utils.cpp:71 eeschema/sch_base_frame.cpp:288
+#: eeschema/design_block_utils.cpp:71 eeschema/sch_base_frame.cpp:287
 #: pcbnew/footprint_libraries_utils.cpp:411
 msgid "Add To Global Library Table"
 msgstr "Lisää yleiseen kirjastotaulukkoon"
 
-#: eeschema/design_block_utils.cpp:81 eeschema/sch_base_frame.cpp:298
+#: eeschema/design_block_utils.cpp:81 eeschema/sch_base_frame.cpp:297
 #: eeschema/widgets/search_handlers.cpp:454
 #: pcbnew/footprint_libraries_utils.cpp:421
 msgid "Global"
@@ -10837,18 +10837,18 @@ msgstr "Globaali"
 
 #: eeschema/design_block_utils.cpp:82
 #: eeschema/dialogs/dialog_schematic_setup.cpp:101
-#: eeschema/sch_base_frame.cpp:299
+#: eeschema/sch_base_frame.cpp:298
 #: pcbnew/dialogs/dialog_board_statistics.cpp:677
 #: pcbnew/footprint_libraries_utils.cpp:422
 msgid "Project"
 msgstr "Projekti"
 
-#: eeschema/design_block_utils.cpp:84 eeschema/sch_base_frame.cpp:301
+#: eeschema/design_block_utils.cpp:84 eeschema/sch_base_frame.cpp:300
 #: pcbnew/footprint_libraries_utils.cpp:424
 msgid "Choose the Library Table to add the library to:"
 msgstr "Valitse kirjastotaulukko, johon haluat lisätä kirjaston:"
 
-#: eeschema/design_block_utils.cpp:85 eeschema/sch_base_frame.cpp:302
+#: eeschema/design_block_utils.cpp:85 eeschema/sch_base_frame.cpp:301
 #: pcbnew/footprint_libraries_utils.cpp:425
 msgid "Add To Library Table"
 msgstr "Lisää Kirjastotaulukkoon"
@@ -11530,7 +11530,7 @@ msgstr "Yhteysmerkkijono:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:99
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:210
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1383
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1380
 #: pcbnew/footprint_edit_frame.cpp:243 pcbnew/footprint_edit_frame.cpp:1004
 msgid "Libraries"
 msgstr "Kirjastot"
@@ -11921,7 +11921,7 @@ msgstr "Poisto"
 msgid "Delete Marker"
 msgstr "Poista merkki"
 
-#: eeschema/dialogs/dialog_erc_base.h:101 eeschema/tools/ee_actions.cpp:47
+#: eeschema/dialogs/dialog_erc_base.h:101 eeschema/tools/sch_actions.cpp:47
 msgid "Electrical Rules Checker"
 msgstr "Sähkösääntöjen tarkistaja"
 
@@ -12778,7 +12778,7 @@ msgid "ALL"
 msgstr "KAIKKI"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:46 eeschema/sch_item.cpp:68
-#: eeschema/symbol_editor/symbol_editor.cpp:1756
+#: eeschema/symbol_editor/symbol_editor.cpp:1755
 #: eeschema/tools/sch_edit_tool.cpp:164
 msgid "Standard"
 msgstr "Standardi"
@@ -12840,7 +12840,7 @@ msgid "Read Only"
 msgstr "Lue Ainoastaan"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1222
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1488
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1487
 msgid "Save changes?"
 msgstr "Tallenna muutokset?"
 
@@ -13009,8 +13009,8 @@ msgid "Delete alternate body style (De Morgan) from symbol?"
 msgstr "Poista vaihtoehtoinen rungon tyyli (De Morgan) symbolista?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:389
-#: eeschema/symbol_editor/symbol_editor.cpp:363
-#: eeschema/symbol_editor/symbol_editor.cpp:953
+#: eeschema/symbol_editor/symbol_editor.cpp:362
+#: eeschema/symbol_editor/symbol_editor.cpp:952
 #: eeschema/tools/symbol_editor_control.cpp:483
 msgid "Symbol must have a name."
 msgstr "Symbolilla tulee olla nimi."
@@ -13053,7 +13053,7 @@ msgid "Derive from symbol:"
 msgstr "Johda symbolista:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:148
-#: eeschema/sch_rule_area.cpp:381
+#: eeschema/sch_rule_area.cpp:384
 msgid "<None>"
 msgstr "<Ei mitään>"
 
@@ -13450,7 +13450,7 @@ msgid "Select Output Directory"
 msgstr "Valitse Tulostushakemisto"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:270
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1315
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1314
 #: pcbnew/dialogs/dialog_gendrill.cpp:337 pcbnew/dialogs/dialog_plot.cpp:794
 #, c-format
 msgid ""
@@ -13982,7 +13982,7 @@ msgstr ""
 msgid "Loading Bus Aliases"
 msgstr "Ladataan väyläaliakset"
 
-#: eeschema/dialogs/dialog_schematic_setup.cpp:269 eeschema/files-io.cpp:280
+#: eeschema/dialogs/dialog_schematic_setup.cpp:269 eeschema/files-io.cpp:279
 #: eeschema/picksymbol.cpp:124
 msgid "Root"
 msgstr "Juuri"
@@ -13996,8 +13996,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_shape_properties.cpp:69
 #: eeschema/dialogs/dialog_sheet_properties.cpp:90
-#: eeschema/dialogs/dialog_table_properties.cpp:111
-#: eeschema/dialogs/dialog_tablecell_properties.cpp:55
+#: eeschema/dialogs/dialog_table_properties.cpp:110
+#: eeschema/dialogs/dialog_tablecell_properties.cpp:54
 #: eeschema/dialogs/dialog_text_properties.cpp:72
 msgid "Note: individual item colors overridden in Preferences."
 msgstr "Huomautus: yksittäisten kohteiden värit ohitetaan Asetuksissa."
@@ -14778,7 +14778,7 @@ msgstr "Parametri"
 #: eeschema/dialogs/dialog_sim_model.cpp:631 eeschema/sch_item.cpp:505
 #: eeschema/sch_label.cpp:1195 eeschema/sch_marker.cpp:364
 #: eeschema/sch_pin.cpp:1561 eeschema/sch_pin.cpp:1580
-#: eeschema/symbol_editor/symbol_editor.cpp:1767
+#: eeschema/symbol_editor/symbol_editor.cpp:1766
 #: eeschema/widgets/search_handlers.cpp:317
 #: eeschema/widgets/search_handlers.cpp:401 gerbview/gerber_draw_item.cpp:668
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
@@ -15001,16 +15001,16 @@ msgstr "Määrä-saraketta ei voi ryhmitellä."
 msgid "The Item Number column cannot be grouped by."
 msgstr "Tuotenumero-saraketta ei voi ryhmitellä."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1305
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1304
 msgid "Bill of Materials Output File"
 msgstr "Materiaaliluettelon tulostustiedosto"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1317
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1326
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1316
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1325
 msgid "BOM Output File"
 msgstr "BOM-tulostustiedosto"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1324
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1323
 msgid ""
 "Cannot make path relative (target volume different from schematic file "
 "volume)!"
@@ -15018,50 +15018,50 @@ msgstr ""
 "Polkua ei voi tehdä suhteelliseksi (kohdemäärä eroaa kytkentäkaavion "
 "tiedostomäärästä)!"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1338
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1337
 msgid "Unsaved data"
 msgstr "Tallentamaton tieto"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1339
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1338
 msgid "Changes have not yet been saved. Export unsaved data?"
 msgstr "Muutokset ovat tallentamatta. Viedäänkö tallentamaton tieto?"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1363
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1362
 msgid "No output file specified in Export tab."
 msgstr "Vienti-välilehdellä ei ole määritetty tulostustiedostoa."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1377
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1376
 #, c-format
 msgid "Could not open/create path '%s'."
 msgstr "Polkua '%s' ei voitu avata/luoda."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1386
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1385
 #, c-format
 msgid "Could not create BOM output '%s'."
 msgstr "BOM-tulostetta %s ei voitu luoda."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1395
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1394
 #, c-format
 msgid "Could not write BOM output '%s'."
 msgstr "Ei voitu kirjoittaa BOM-tulostetta '%s'."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1402
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1401
 #, c-format
 msgid "Wrote BOM output to '%s'"
 msgstr "Kirjoitti BOM-tulosteen '%s'"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1781
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2183
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1780
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2182
 msgid "BOM preset name:"
 msgstr "BOM esiasetuksen nimi:"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1781
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2183
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1780
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2182
 msgid "Save BOM Preset"
 msgstr "Tallenna BOM Esiasetus"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1807
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2209
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1806
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2208
 #: pcbnew/widgets/appearance_controls.cpp:2764
 msgid ""
 "Default presets cannot be modified.\n"
@@ -15168,7 +15168,7 @@ msgstr "Muodon esiasetukset:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:322
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:332
-#: eeschema/menubar.cpp:117 eeschema/symbol_editor/menubar_symbol_editor.cpp:77
+#: eeschema/menubar.cpp:116 eeschema/symbol_editor/menubar_symbol_editor.cpp:77
 #: pcbnew/dialogs/dialog_export_2581.cpp:48
 #: pcbnew/dialogs/dialog_export_step.cpp:109
 #: pcbnew/menubar_footprint_editor.cpp:74 pcbnew/menubar_pcb_editor.cpp:126
@@ -15254,7 +15254,7 @@ msgid "Update Symbol from Library..."
 msgstr "Päivitä Symboli Kirjastosta ..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:232
-#: eeschema/tools/ee_actions.cpp:789
+#: eeschema/tools/sch_actions.cpp:789
 msgid "Change Symbol..."
 msgstr "Vaihda Symboli ..."
 
@@ -15263,7 +15263,7 @@ msgid "Edit Symbol..."
 msgstr "Muokkaa Symbolia ..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:241
-#: eeschema/tools/ee_actions.cpp:998
+#: eeschema/tools/sch_actions.cpp:998
 msgid "Edit Library Symbol..."
 msgstr "Muokkaa Kirjastosymbolia ..."
 
@@ -15412,8 +15412,8 @@ msgstr "Joitakin projektitiedostoja ei voitu varmuuskopioida."
 msgid "Remap Symbols"
 msgstr "Suunnittele symbolit uudelleen"
 
-#: eeschema/dialogs/dialog_table_properties.cpp:394
-#: pcbnew/dialogs/dialog_table_properties.cpp:405
+#: eeschema/dialogs/dialog_table_properties.cpp:393
+#: pcbnew/dialogs/dialog_table_properties.cpp:410
 msgid "Edit Table"
 msgstr "Muokkaa taulukkoa"
 
@@ -15444,11 +15444,11 @@ msgstr "Sarakerivit"
 
 #: eeschema/dialogs/dialog_table_properties_base.h:76
 #: eeschema/sch_table.cpp:653 pcbnew/dialogs/dialog_table_properties_base.h:73
-#: pcbnew/pcb_table.cpp:563
+#: pcbnew/pcb_table.cpp:579
 msgid "Table Properties"
 msgstr "Talukon ominaisuudet"
 
-#: eeschema/dialogs/dialog_tablecell_properties.cpp:323
+#: eeschema/dialogs/dialog_tablecell_properties.cpp:322
 #: pcbnew/dialogs/dialog_tablecell_properties.cpp:274
 msgid "Edit Table Cell Properties"
 msgstr "Muokkaa taulukon solun ominaisuuksia"
@@ -16285,15 +16285,15 @@ msgstr "TA"
 msgid "PA"
 msgstr "PA"
 
-#: eeschema/dialogs/panel_setup_pinmap.cpp:229
+#: eeschema/dialogs/panel_setup_pinmap.cpp:228
 msgid "No error or warning"
 msgstr "Ei virhettä tai varoitusta"
 
-#: eeschema/dialogs/panel_setup_pinmap.cpp:234
+#: eeschema/dialogs/panel_setup_pinmap.cpp:233
 msgid "Generate warning"
 msgstr "Luo varoitus"
 
-#: eeschema/dialogs/panel_setup_pinmap.cpp:239
+#: eeschema/dialogs/panel_setup_pinmap.cpp:238
 msgid "Generate error"
 msgstr "Luo virhe"
 
@@ -16433,7 +16433,7 @@ msgstr "Symbolikirjaston \"%s\" lataaminen epäonnistui."
 msgid "Error Loading Library"
 msgstr "Virhe Kirjaston Lataamisessa"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:640 eeschema/files-io.cpp:661
+#: eeschema/dialogs/panel_sym_lib_table.cpp:640 eeschema/files-io.cpp:660
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:200
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:78
 #: pcbnew/files.cpp:156 pcbnew/footprint_libraries_utils.cpp:119
@@ -16649,7 +16649,7 @@ msgid "Unable to load library\n"
 msgstr "Kirjastoa ei voi ladata\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:976
-#: eeschema/symbol_editor/symbol_editor.cpp:1096
+#: eeschema/symbol_editor/symbol_editor.cpp:1095
 msgid "There is no symbol selected to save."
 msgstr "Tallennettavaksi ei ole valittu symbolia."
 
@@ -16687,19 +16687,19 @@ msgstr "ERC-raporttia ei voi tallentaa kohteeseen %s\n"
 msgid "Saved ERC Report to %s\n"
 msgstr "ERC-raportti tallennettu kohteeseen %s\n"
 
-#: eeschema/eeschema_settings.cpp:71 eeschema/tools/ee_actions.cpp:958
+#: eeschema/eeschema_settings.cpp:71 eeschema/tools/sch_actions.cpp:958
 msgid "Net Navigator"
 msgstr "Verkkonavigaattori"
 
-#: eeschema/eeschema_settings.cpp:115 eeschema/sch_edit_frame.cpp:2212
+#: eeschema/eeschema_settings.cpp:115 eeschema/sch_edit_frame.cpp:2204
 #: pcbnew/footprint_edit_frame.cpp:260 pcbnew/footprint_edit_frame.cpp:1010
 #: pcbnew/pcb_edit_frame.cpp:341 pcbnew/pcb_edit_frame.cpp:1714
 msgid "Selection Filter"
 msgstr "Valintasuodatin"
 
-#: eeschema/eeschema_settings.cpp:135 eeschema/menubar.cpp:196
-#: eeschema/sch_edit_frame.cpp:2208 eeschema/sch_edit_frame.cpp:2214
-#: eeschema/tools/ee_actions.cpp:149
+#: eeschema/eeschema_settings.cpp:135 eeschema/menubar.cpp:192
+#: eeschema/sch_edit_frame.cpp:2200 eeschema/sch_edit_frame.cpp:2206
+#: eeschema/tools/sch_actions.cpp:149
 msgid "Design Blocks"
 msgstr "Suunnittelulohkot"
 
@@ -17167,7 +17167,7 @@ msgstr ""
 "\n"
 " ** ERC-viestit: %d Virheet %d Varoitukset %d\n"
 
-#: eeschema/fields_grid_table.cpp:279 eeschema/files-io.cpp:913
+#: eeschema/fields_grid_table.cpp:279 eeschema/files-io.cpp:912
 #: eeschema/tools/sch_editor_control.cpp:129
 msgid "Schematic Files"
 msgstr "Kytkentäkaaviotiedostot"
@@ -17193,29 +17193,29 @@ msgstr "Salli Automaattinen sijoittelu"
 msgid "Private"
 msgstr "Yksityinen"
 
-#: eeschema/files-io.cpp:112
+#: eeschema/files-io.cpp:111
 #, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
 msgstr "Kytkentäkaavio '%s' on jo avattu '%s' kohteessa '%s'."
 
-#: eeschema/files-io.cpp:137
+#: eeschema/files-io.cpp:136
 #, c-format
 msgid "Schematic '%s' does not exist.  Do you wish to create it?"
 msgstr "Kytkentäkaaviota '%s' ei ole olemassa. Haluatko luoda sen?"
 
-#: eeschema/files-io.cpp:159
+#: eeschema/files-io.cpp:158
 msgid "Creating Schematic"
 msgstr "Luodaan Kytkentäkaavio"
 
-#: eeschema/files-io.cpp:160
+#: eeschema/files-io.cpp:159
 msgid "Loading Schematic"
 msgstr "Ladataan Kytkentäkaaviota"
 
-#: eeschema/files-io.cpp:224
+#: eeschema/files-io.cpp:223
 msgid "Schematic file changes are unsaved"
 msgstr "Kytkentäkaaviotiedoston muutoksia ei ole tallennettu"
 
-#: eeschema/files-io.cpp:239
+#: eeschema/files-io.cpp:238
 #, c-format
 msgid ""
 "'%s' is not a KiCad schematic file.\n"
@@ -17224,7 +17224,7 @@ msgstr ""
 "'%s' ei ole KiCad-kytkentäkaaviotiedosto.\n"
 "Käytä Tiedosto -> Tuo muita kuin KiCad-kytkentäkaaviotiedostoja."
 
-#: eeschema/files-io.cpp:287
+#: eeschema/files-io.cpp:286
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheets."
@@ -17232,24 +17232,24 @@ msgstr ""
 "Koko kytkentäkaaviota ei voitu ladata.  Hierarkisten taulukoiden kaavioiden "
 "lataamisessa tapahtui virheitä."
 
-#: eeschema/files-io.cpp:294 eeschema/files-io.cpp:302
-#: eeschema/files-io.cpp:1399 eeschema/sheet.cpp:231
+#: eeschema/files-io.cpp:293 eeschema/files-io.cpp:301
+#: eeschema/files-io.cpp:1398 eeschema/sheet.cpp:231
 #, c-format
 msgid "Error loading schematic '%s'."
 msgstr "Virhe ladattaessa kytkentäkaaviota '%s'."
 
-#: eeschema/files-io.cpp:310
+#: eeschema/files-io.cpp:309
 #, c-format
 msgid "Memory exhausted loading schematic '%s'."
 msgstr "Muisti ehtyi ladatessa kytkentäkaaviota '%s'."
 
-#: eeschema/files-io.cpp:329 eeschema/files-io.cpp:1402
-#: eeschema/files-io.cpp:1414 eeschema/sheet.cpp:234
+#: eeschema/files-io.cpp:328 eeschema/files-io.cpp:1401
+#: eeschema/files-io.cpp:1413 eeschema/sheet.cpp:234
 #, c-format
 msgid "Failed to load '%s'."
 msgstr "'%s' lataaminen epäonnistui."
 
-#: eeschema/files-io.cpp:342
+#: eeschema/files-io.cpp:341
 msgid ""
 "An error was found when loading the schematic that has been automatically "
 "fixed.  Please save the schematic to repair the broken file or it may not be "
@@ -17259,15 +17259,15 @@ msgstr ""
 "vioittunut tiedosto korjaamalla kaavio tai se ei välttämättä ole "
 "käyttökelpoinen muiden KiCad-versioiden kanssa."
 
-#: eeschema/files-io.cpp:406
+#: eeschema/files-io.cpp:405
 msgid "Illegal entry found in project file symbol library list."
 msgstr "Projektitiedostojen symbolikirjastoluettelosta löytyi laiton merkintä."
 
-#: eeschema/files-io.cpp:407
+#: eeschema/files-io.cpp:406
 msgid "Project Load Warning"
 msgstr "Projektin Latausvaroitus"
 
-#: eeschema/files-io.cpp:410
+#: eeschema/files-io.cpp:409
 msgid ""
 "Symbol libraries defined in the project file symbol library list are no "
 "longer supported and will be removed.\n"
@@ -17280,16 +17280,16 @@ msgstr ""
 "Tämä voi aiheuttaa rikkoutuneita symbolikirjastolinkkejä tietyissä "
 "olosuhteissa."
 
-#: eeschema/files-io.cpp:414
+#: eeschema/files-io.cpp:413
 msgid "Do not show this dialog again."
 msgstr "Älä näytä tätä ikkunaa uudestaan."
 
-#: eeschema/files-io.cpp:443
+#: eeschema/files-io.cpp:442
 #, c-format
 msgid "The project symbol library cache file '%s' was not found."
 msgstr "Projektin symbolikirjaston välimuistitiedostoa \"%s\" ei löydy."
 
-#: eeschema/files-io.cpp:445
+#: eeschema/files-io.cpp:444
 msgid ""
 "This can result in a broken schematic under certain conditions.  If the "
 "schematic does not have any missing symbols upon opening, save it "
@@ -17304,15 +17304,15 @@ msgstr ""
 "symbolien välimuistikirjastotiedoston palauttaminen ja kaavion lataaminen "
 "uudelleen."
 
-#: eeschema/files-io.cpp:456
+#: eeschema/files-io.cpp:455
 msgid "Load Without Cache File"
 msgstr "Lataa ilman välimuistitiedostoa"
 
-#: eeschema/files-io.cpp:457
+#: eeschema/files-io.cpp:456
 msgid "Abort"
 msgstr "Keskeytä"
 
-#: eeschema/files-io.cpp:472 eeschema/files-io.cpp:492
+#: eeschema/files-io.cpp:471 eeschema/files-io.cpp:491
 #: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:827
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
@@ -17321,7 +17321,7 @@ msgstr ""
 "Tämä tiedosto on luotu KiCadin aiemmalla versiolla. Tiedosto muunnetaan "
 "uuteen tiedostomuotoon tallennettaessa."
 
-#: eeschema/files-io.cpp:544
+#: eeschema/files-io.cpp:543
 msgid ""
 "This schematic contains symbols that have leading and/or trailing white "
 "space field names."
@@ -17329,11 +17329,11 @@ msgstr ""
 "Tämä kytkentäkaavio sisältää symboleja, joiden alussa ja/tai lopussa on "
 "välilyöntikenttien nimet."
 
-#: eeschema/files-io.cpp:603
+#: eeschema/files-io.cpp:602
 msgid "Schematic is read only."
 msgstr "Kytkentäkaavio on vain luettavissa."
 
-#: eeschema/files-io.cpp:622
+#: eeschema/files-io.cpp:621
 msgid ""
 "This operation replaces the contents of the current schematic, which will be "
 "permanently lost.\n"
@@ -17345,21 +17345,21 @@ msgstr ""
 "\n"
 "Haluatko jatkaa?"
 
-#: eeschema/files-io.cpp:664
+#: eeschema/files-io.cpp:663
 msgid "Import Schematic"
 msgstr "Tuo kaavio"
 
-#: eeschema/files-io.cpp:701
+#: eeschema/files-io.cpp:700
 #, c-format
 msgid "Insufficient permissions to read file '%s'."
 msgstr "Riittämättömät oikeudet lukea tiedostoa '%s'."
 
-#: eeschema/files-io.cpp:723
+#: eeschema/files-io.cpp:722
 #, c-format
 msgid "No loader can read the specified file: '%s'."
 msgstr "Mikään latausohjelma ei voi lukea määritettyä tiedostoa: '%s'."
 
-#: eeschema/files-io.cpp:761 eeschema/files-io.cpp:807
+#: eeschema/files-io.cpp:760 eeschema/files-io.cpp:806
 #, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
@@ -17368,12 +17368,12 @@ msgstr ""
 "Virhe tallentaessa kytkentäkaaviotiedostoa '%s'.\n"
 "%s"
 
-#: eeschema/files-io.cpp:812 pcbnew/files.cpp:1054 pcbnew/files.cpp:1347
+#: eeschema/files-io.cpp:811 pcbnew/files.cpp:1054 pcbnew/files.cpp:1347
 #, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "Väliaikaisen tiedoston '%s' luominen epäonnistui."
 
-#: eeschema/files-io.cpp:832
+#: eeschema/files-io.cpp:831
 #, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
@@ -17382,22 +17382,22 @@ msgstr ""
 "Virhe kytkentäkaaviotiedoston '%s' tallennuksessa.\n"
 "Väliaikaisen tiedoston '%s' nimeäminen uudelleen epäonnistui."
 
-#: eeschema/files-io.cpp:838 pcbnew/files.cpp:1075 pcbnew/files.cpp:1413
+#: eeschema/files-io.cpp:837 pcbnew/files.cpp:1075 pcbnew/files.cpp:1413
 #, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "Väliaikaisen tiedoston '%s' uudelleennimeäminen epäonnistui."
 
-#: eeschema/files-io.cpp:861 pagelayout_editor/files.cpp:187
+#: eeschema/files-io.cpp:860 pagelayout_editor/files.cpp:187
 #: pagelayout_editor/files.cpp:219 pcbnew/files.cpp:1108
 #, c-format
 msgid "File '%s' saved."
 msgstr "Tiedosto '%s' tallennettu."
 
-#: eeschema/files-io.cpp:866
+#: eeschema/files-io.cpp:865
 msgid "File write operation failed."
 msgstr "Tiedoston kirjoittaminen ei onnistunut."
 
-#: eeschema/files-io.cpp:933 eeschema/files-io.cpp:1001
+#: eeschema/files-io.cpp:932 eeschema/files-io.cpp:1000
 #: kicad/import_project.cpp:93 kicad/tools/kicad_manager_control.cpp:111
 #: kicad/tools/kicad_manager_control.cpp:313
 #, c-format
@@ -17410,16 +17410,16 @@ msgstr ""
 "\n"
 "Varmista, että sinulla on kirjoitusoikeudet ja yritä uudelleen."
 
-#: eeschema/files-io.cpp:1083
+#: eeschema/files-io.cpp:1082
 #, c-format
 msgid "Failed to save %s."
 msgstr "%s:n tallentaminen epäonnistui."
 
-#: eeschema/files-io.cpp:1085
+#: eeschema/files-io.cpp:1084
 msgid "Locked File Warning"
 msgstr "Varoitus lukitusta tiedostosta"
 
-#: eeschema/files-io.cpp:1087
+#: eeschema/files-io.cpp:1086
 msgid ""
 "You do not have write permissions to:\n"
 "\n"
@@ -17427,15 +17427,15 @@ msgstr ""
 "Sinulla ei ole kirjoitusoikeuksia:\n"
 "\n"
 
-#: eeschema/files-io.cpp:1103
+#: eeschema/files-io.cpp:1102
 msgid "Saving will overwrite existing files."
 msgstr "Tallentaminen korvaa olemassa olevat tiedostot."
 
-#: eeschema/files-io.cpp:1104
+#: eeschema/files-io.cpp:1103
 msgid "Save Warning"
 msgstr "Tallennusvaroitus"
 
-#: eeschema/files-io.cpp:1107
+#: eeschema/files-io.cpp:1106
 msgid ""
 "The following files will be overwritten:\n"
 "\n"
@@ -17443,28 +17443,28 @@ msgstr ""
 "Seuraavat tiedostot korvataan uusilla:\n"
 "\n"
 
-#: eeschema/files-io.cpp:1108
+#: eeschema/files-io.cpp:1107
 msgid "Overwrite Files"
 msgstr "Korvaa tiedostot"
 
-#: eeschema/files-io.cpp:1109
+#: eeschema/files-io.cpp:1108
 msgid "Abort Project Save"
 msgstr "Keskeytä projektin tallennus"
 
-#: eeschema/files-io.cpp:1338
+#: eeschema/files-io.cpp:1337
 msgid "Importing Schematic"
 msgstr "Tuodaan Kytkentäkaaviota"
 
-#: eeschema/files-io.cpp:1410
+#: eeschema/files-io.cpp:1409
 #, c-format
 msgid "Unhandled exception occurred loading schematic '%s'."
 msgstr "Käsittelemätön poikkeus tapahtui ladattaessa kytkentäkaaviota '%s'."
 
-#: eeschema/files-io.cpp:1472
+#: eeschema/files-io.cpp:1471
 msgid "The current schematic has been modified.  Save changes?"
 msgstr "Nykyistä kaaviota on muokattu. Tallenna muutokset?"
 
-#: eeschema/files-io.cpp:1570
+#: eeschema/files-io.cpp:1569
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing one or more of the schematic "
@@ -17478,7 +17478,7 @@ msgstr ""
 "niitä ei tallennettu oikein. Haluatko palauttaa viimeksi tekemäsi "
 "muokkaukset?"
 
-#: eeschema/files-io.cpp:1581
+#: eeschema/files-io.cpp:1580
 #, c-format
 msgid ""
 "The file '%s' could not be opened.\n"
@@ -17487,16 +17487,16 @@ msgstr ""
 "Tiedostoa '%s' ei voitu avata.\n"
 "Automaattisesti tallennettujen tiedostojen manuaalinen palautus vaaditaan."
 
-#: eeschema/files-io.cpp:1632
+#: eeschema/files-io.cpp:1631
 msgid "The following automatically saved file(s) could not be restored\n"
 msgstr ""
 "Seuraavia automaattisesti tallennettuja tiedostoja ei voitu palauttaa\n"
 
-#: eeschema/files-io.cpp:1637
+#: eeschema/files-io.cpp:1636
 msgid "Manual recovery will be required to restore the file(s) above."
 msgstr "Yllä olevat tiedostot vaativat manuaalisen palautuksen."
 
-#: eeschema/files-io.cpp:1647
+#: eeschema/files-io.cpp:1646
 #, c-format
 msgid ""
 "The autosave file '%s' could not be removed.\n"
@@ -17505,11 +17505,11 @@ msgstr ""
 "Automaattista tallennustiedostoa '%s' ei voitu poistaa.\n"
 "Manuaalinen poisto vaaditaan."
 
-#: eeschema/files-io.cpp:1681
+#: eeschema/files-io.cpp:1680
 msgid "The following automatically saved file(s) could not be removed\n"
 msgstr "Seuraavia automaattisesti tallennettuja tiedostoja ei voitu poistaa\n"
 
-#: eeschema/files-io.cpp:1686
+#: eeschema/files-io.cpp:1685
 msgid "Manual removal will be required for the file(s) above."
 msgstr "Yllä olevat tiedostot vaativat manuaalisen poiston."
 
@@ -17517,9 +17517,9 @@ msgstr "Yllä olevat tiedostot vaativat manuaalisen poiston."
 msgid "Derived from"
 msgstr "Johdettu kohteesta"
 
-#: eeschema/generate_alias_info.cpp:82 eeschema/sch_base_frame.cpp:85
-#: eeschema/symbol_editor/symbol_editor.cpp:171
-#: eeschema/symbol_editor/symbol_editor.cpp:237
+#: eeschema/generate_alias_info.cpp:82 eeschema/sch_base_frame.cpp:84
+#: eeschema/symbol_editor/symbol_editor.cpp:170
+#: eeschema/symbol_editor/symbol_editor.cpp:236
 #: eeschema/symbol_library_manager.cpp:458
 #: eeschema/widgets/panel_symbol_chooser.cpp:566
 #: eeschema/widgets/panel_symbol_chooser.cpp:625
@@ -17754,58 +17754,58 @@ msgid ""
 "Replace current schematic sheet with one imported from another application"
 msgstr "Korvaa nykyinen kaaviokuva toisella sovelluksella tuotavalla"
 
-#: eeschema/menubar.cpp:109
+#: eeschema/menubar.cpp:108
 msgid "Footprint Assignments..."
 msgstr "Jalanjälkien määritykset..."
 
-#: eeschema/menubar.cpp:110 eeschema/symbol_editor/menubar_symbol_editor.cpp:71
+#: eeschema/menubar.cpp:109 eeschema/symbol_editor/menubar_symbol_editor.cpp:71
 #: pcbnew/menubar_footprint_editor.cpp:69 pcbnew/menubar_pcb_editor.cpp:116
 msgid "Graphics..."
 msgstr "Grafiikka..."
 
-#: eeschema/menubar.cpp:120
+#: eeschema/menubar.cpp:118
 msgid "Drawing to Clipboard"
 msgstr "Piirros Leikepöydälle"
 
-#: eeschema/menubar.cpp:121 pcbnew/menubar_pcb_editor.cpp:114
+#: eeschema/menubar.cpp:119 pcbnew/menubar_pcb_editor.cpp:114
 #: pcbnew/pcb_edit_frame.cpp:235
 msgid "Netlist..."
 msgstr "Netlist ..."
 
-#: eeschema/menubar.cpp:123
+#: eeschema/menubar.cpp:120
 msgid "Symbols to Library..."
 msgstr "Symbolit kirjastoon..."
 
-#: eeschema/menubar.cpp:125
+#: eeschema/menubar.cpp:121
 msgid "Symbols to New Library..."
 msgstr "Symbolit uuteen kirjastoon..."
 
-#: eeschema/menubar.cpp:185
+#: eeschema/menubar.cpp:181
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:121
 #: pcbnew/menubar_footprint_editor.cpp:124 pcbnew/menubar_pcb_editor.cpp:232
 msgid "Panels"
 msgstr "Paneelit"
 
-#: eeschema/menubar.cpp:354
+#: eeschema/menubar.cpp:350
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:184
 #: pagelayout_editor/menubar.cpp:153 pcbnew/menubar_footprint_editor.cpp:246
 #: pcbnew/menubar_pcb_editor.cpp:479
 msgid "&Place"
 msgstr "&Aseta"
 
-#: eeschema/menubar.cpp:355
+#: eeschema/menubar.cpp:351
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:185
 #: pagelayout_editor/menubar.cpp:154 pcbnew/menubar_footprint_editor.cpp:247
 #: pcbnew/menubar_pcb_editor.cpp:481
 msgid "&Inspect"
 msgstr "&Tarkasta"
 
-#: eeschema/menubar.cpp:356 gerbview/menubar.cpp:233 kicad/menubar.cpp:230
+#: eeschema/menubar.cpp:352 gerbview/menubar.cpp:233 kicad/menubar.cpp:230
 #: pcbnew/menubar_footprint_editor.cpp:248 pcbnew/menubar_pcb_editor.cpp:482
 msgid "&Tools"
 msgstr "&Työkalut"
 
-#: eeschema/menubar.cpp:357
+#: eeschema/menubar.cpp:353
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:186
 #: pagelayout_editor/menubar.cpp:155 pcbnew/menubar_footprint_editor.cpp:249
 #: pcbnew/menubar_pcb_editor.cpp:483
@@ -17932,9 +17932,9 @@ msgid "Command error. Return code %d."
 msgstr "Komentovirhe. Palautuskoodi %d."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:164
-#: eeschema/sch_plotter.cpp:240 eeschema/sch_plotter.cpp:437
-#: eeschema/sch_plotter.cpp:589 eeschema/sch_plotter.cpp:791
-#: eeschema/sch_plotter.cpp:958
+#: eeschema/sch_plotter.cpp:253 eeschema/sch_plotter.cpp:450
+#: eeschema/sch_plotter.cpp:602 eeschema/sch_plotter.cpp:804
+#: eeschema/sch_plotter.cpp:971
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:393
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:490
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:539
@@ -17975,7 +17975,7 @@ msgstr "Vaihda Yksikköä"
 msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr "Vaihtoehtoista rungon tyyliä ei löydy symbolille '%s' kirjastossa'%s'."
 
-#: eeschema/picksymbol.cpp:217 eeschema/tools/sch_edit_tool.cpp:2044
+#: eeschema/picksymbol.cpp:217 eeschema/tools/sch_edit_tool.cpp:2042
 msgid "Change Body Style"
 msgstr "Vaihda rungon tyyliä"
 
@@ -18109,7 +18109,7 @@ msgid "No symbols were rescued."
 msgstr "Mitään symboleja ei saatu pelastettua."
 
 #: eeschema/project_rescue.cpp:716
-#: eeschema/symbol_editor/symbol_editor.cpp:1211
+#: eeschema/symbol_editor/symbol_editor.cpp:1210
 #, c-format
 msgid "Failed to create symbol library file '%s'."
 msgstr "Symbolikirjastotiedoston '%s' luominen epäonnistui."
@@ -18137,7 +18137,7 @@ msgstr "Seuraavia kirjastoja ei löytynyt:"
 msgid "Error loading the symbol library table '%s'."
 msgstr "Symbolikirjastotaulukon '%s' lataamisessa tapahtui virhe."
 
-#: eeschema/sch_base_frame.cpp:252
+#: eeschema/sch_base_frame.cpp:251
 #, c-format
 msgid ""
 "Error saving global symbol library table:\n"
@@ -18146,7 +18146,7 @@ msgstr ""
 "Virhe globaalin symbolikirjastotaulukon tallennuksessa:\n"
 "%s"
 
-#: eeschema/sch_base_frame.cpp:268
+#: eeschema/sch_base_frame.cpp:267
 #, c-format
 msgid ""
 "Error saving project-specific symbol library table:\n"
@@ -18155,15 +18155,15 @@ msgstr ""
 "Virhe projektikohtaisen symbolikirjastotaulukon tallennuksessa:\n"
 "%s"
 
-#: eeschema/sch_base_frame.cpp:588
+#: eeschema/sch_base_frame.cpp:587
 msgid "No symbol libraries are loaded."
 msgstr "Symbolikirjastoja ei ole ladattu."
 
-#: eeschema/sch_base_frame.cpp:633
+#: eeschema/sch_base_frame.cpp:632
 msgid "Select Symbol Library"
 msgstr "Valitse Symbol Library"
 
-#: eeschema/sch_base_frame.cpp:754
+#: eeschema/sch_base_frame.cpp:753
 msgid ""
 "The library containing the current symbol has changed.\n"
 "Do you want to reload the library?"
@@ -18239,7 +18239,7 @@ msgstr "Väylän vaihtoehto %s -Jäsenet"
 msgid "KiCad Schematic Editor"
 msgstr "KiCad Kytkentäkaavioeditori"
 
-#: eeschema/sch_edit_frame.cpp:235 eeschema/sch_edit_frame.cpp:2211
+#: eeschema/sch_edit_frame.cpp:235 eeschema/sch_edit_frame.cpp:2203
 msgid "Schematic Hierarchy"
 msgstr "Kytkentäkaaviohierarkkia"
 
@@ -18247,9 +18247,9 @@ msgstr "Kytkentäkaaviohierarkkia"
 msgid "New schematic file is unsaved"
 msgstr "Uusi kaaviokuva on tallentamaton"
 
-#: eeschema/sch_edit_frame.cpp:1032
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:640
-#: eeschema/symbol_editor/symbol_editor.cpp:1672
+#: eeschema/sch_edit_frame.cpp:1024
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:637
+#: eeschema/symbol_editor/symbol_editor.cpp:1671
 #: kicad/dialogs/panel_jobset.cpp:830 pagelayout_editor/pl_editor_frame.cpp:411
 #: pcbnew/footprint_edit_frame.cpp:858 pcbnew/footprint_edit_frame.cpp:898
 #: pcbnew/pcb_edit_frame.cpp:1184
@@ -18257,7 +18257,7 @@ msgstr "Uusi kaaviokuva on tallentamaton"
 msgid "Save changes to '%s' before closing?"
 msgstr "Tallennetaanko muutokset '%s' ennen sulkemista?"
 
-#: eeschema/sch_edit_frame.cpp:1194
+#: eeschema/sch_edit_frame.cpp:1186
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
@@ -18267,58 +18267,58 @@ msgstr ""
 "editoriin. Voit luoda/päivittää piirilevyjä kytkentäkaavioista, kun "
 "käynnistät KiCad-ohjelman ja luot projektin."
 
-#: eeschema/sch_edit_frame.cpp:1363
+#: eeschema/sch_edit_frame.cpp:1355
 msgid "New Schematic"
 msgstr "Uusi kytkentäkaavio"
 
-#: eeschema/sch_edit_frame.cpp:1375
+#: eeschema/sch_edit_frame.cpp:1367
 #, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "Kytkentäkaaviotiedosto '%s' on jo olemassa."
 
-#: eeschema/sch_edit_frame.cpp:1400
+#: eeschema/sch_edit_frame.cpp:1392
 msgid "Open Schematic"
 msgstr "Avaa kytkentäkaavio"
 
-#: eeschema/sch_edit_frame.cpp:1470
+#: eeschema/sch_edit_frame.cpp:1462
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr ""
 "Jalanjälkien määrittely edellyttää, että kaikki kytkentäkaavion osat on "
 "numeroitu."
 
-#: eeschema/sch_edit_frame.cpp:1497
+#: eeschema/sch_edit_frame.cpp:1489
 msgid "Could not open CvPcb"
 msgstr "CvPcb: tä ei voitu avata"
 
-#: eeschema/sch_edit_frame.cpp:1746 eeschema/sim/simulator_frame.cpp:341
+#: eeschema/sch_edit_frame.cpp:1738 eeschema/sim/simulator_frame.cpp:341
 #: kicad/kicad_manager_frame.cpp:1041 pcbnew/footprint_edit_frame.cpp:1072
 #: pcbnew/pcb_edit_frame.cpp:1801
 msgid "[Read Only]"
 msgstr "[Lue ainoastaan]"
 
-#: eeschema/sch_edit_frame.cpp:1749 eeschema/sim/simulator_frame.cpp:344
+#: eeschema/sch_edit_frame.cpp:1741 eeschema/sim/simulator_frame.cpp:344
 #: pcbnew/footprint_edit_frame.cpp:1081 pcbnew/pcb_edit_frame.cpp:1804
 msgid "[Unsaved]"
 msgstr "[Tallentamaton]"
 
-#: eeschema/sch_edit_frame.cpp:1753
+#: eeschema/sch_edit_frame.cpp:1745
 msgid "[no schematic loaded]"
 msgstr "[Kytkentäkaaviota ei ole ladattu]"
 
-#: eeschema/sch_edit_frame.cpp:2109
+#: eeschema/sch_edit_frame.cpp:2101
 msgid "Schematic Cleanup"
 msgstr "Kytkentäkaavion Siivous"
 
-#: eeschema/sch_edit_frame.cpp:2237
+#: eeschema/sch_edit_frame.cpp:2229
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Korostettu verkko: %s"
 
-#: eeschema/sch_edit_frame.cpp:2415
+#: eeschema/sch_edit_frame.cpp:2407
 msgid "Save Symbol to Schematic"
 msgstr "Tallenna Symboli Kytkentäkaavioon"
 
-#: eeschema/sch_edit_frame.cpp:2521 eeschema/tools/ee_actions.cpp:61
+#: eeschema/sch_edit_frame.cpp:2513 eeschema/tools/sch_actions.cpp:61
 msgid "Compare Symbol with Library"
 msgstr "Vertaa symbolia kirjastoon"
 
@@ -19292,7 +19292,7 @@ msgid "Net"
 msgstr "Kytkentäverkko"
 
 #: eeschema/sch_label.cpp:1337 eeschema/sch_line.cpp:894
-#: eeschema/sch_rule_area.cpp:386
+#: eeschema/sch_rule_area.cpp:389
 msgid "Resolved netclass"
 msgstr "Ratkaistu verkkoluokka"
 
@@ -19444,19 +19444,19 @@ msgstr "Nastan Nimi"
 msgid "No sheets to plot."
 msgstr "Ei arkkeja piirrettäväksi."
 
-#: eeschema/sch_plotter.cpp:238 pcbnew/pcbnew_jobs_handler.cpp:1041
+#: eeschema/sch_plotter.cpp:251 pcbnew/pcbnew_jobs_handler.cpp:1041
 #, c-format
 msgid "Plotted to '%s'.\n"
 msgstr "Piirrettiin '%s'.\n"
 
-#: eeschema/sch_plotter.cpp:412 eeschema/sch_plotter.cpp:570
-#: eeschema/sch_plotter.cpp:766 eeschema/sch_plotter.cpp:929
+#: eeschema/sch_plotter.cpp:425 eeschema/sch_plotter.cpp:583
+#: eeschema/sch_plotter.cpp:779 eeschema/sch_plotter.cpp:942
 #: pcbnew/pcb_plotter.cpp:255
 #, c-format
 msgid "Plotted to '%s'."
 msgstr "Piirrettiin '%s'."
 
-#: eeschema/sch_plotter.cpp:1055
+#: eeschema/sch_plotter.cpp:1068
 #, c-format
 msgid "Failed to write plot files to folder '%s'."
 msgstr "Piirustustiedostoja ei voitu kirjoittaa kansioon '%s'."
@@ -19599,13 +19599,13 @@ msgid "Hierarchical Sheet %s"
 msgstr "Hierarkinen lehti %s"
 
 #: eeschema/sch_sheet.cpp:1717 eeschema/sch_table.cpp:663
-#: pcbnew/pcb_table.cpp:573 pcbnew/pcb_tablecell.cpp:190
+#: pcbnew/pcb_table.cpp:589 pcbnew/pcb_tablecell.cpp:190
 #: pcbnew/pcb_textbox.cpp:906
 msgid "Border Width"
 msgstr "Reunan Leveys"
 
 #: eeschema/sch_sheet.cpp:1721 eeschema/sch_table.cpp:672
-#: pcbnew/pcb_table.cpp:582
+#: pcbnew/pcb_table.cpp:598
 msgid "Border Color"
 msgstr "Reunan Väri"
 
@@ -19628,7 +19628,7 @@ msgid "Exclude From Bill of Materials"
 msgstr "Jätä pois materiaaliluettelosta"
 
 #: eeschema/sch_sheet.cpp:1740 eeschema/sch_symbol.cpp:1102
-#: eeschema/sch_symbol.cpp:3054 eeschema/tools/ee_actions.cpp:991
+#: eeschema/sch_symbol.cpp:3054 eeschema/tools/sch_actions.cpp:991
 #: pcbnew/footprint.cpp:4153
 msgid "Do not Populate"
 msgstr "Ei asenneta"
@@ -19688,46 +19688,46 @@ msgstr "Peilaa Y"
 msgid "Library Link"
 msgstr "Kirjastolinkki"
 
-#: eeschema/sch_table.cpp:424 pcbnew/pcb_table.cpp:359
+#: eeschema/sch_table.cpp:424 pcbnew/pcb_table.cpp:375
 #, c-format
 msgid "%d Column Table"
 msgstr "%d Sarakkeen taulukko"
 
-#: eeschema/sch_table.cpp:587 pcbnew/pcb_table.cpp:395
+#: eeschema/sch_table.cpp:587 pcbnew/pcb_table.cpp:411
 #, c-format
 msgid "%d Columns"
 msgstr "%d Sarakkeita"
 
-#: eeschema/sch_table.cpp:655 pcbnew/pcb_table.cpp:565
+#: eeschema/sch_table.cpp:655 pcbnew/pcb_table.cpp:581
 msgid "External Border"
 msgstr "Ulkoreunus"
 
-#: eeschema/sch_table.cpp:659 pcbnew/pcb_table.cpp:569
+#: eeschema/sch_table.cpp:659 pcbnew/pcb_table.cpp:585
 msgid "Header Border"
 msgstr "Otsikon reunat"
 
-#: eeschema/sch_table.cpp:668 pcbnew/pcb_table.cpp:578
+#: eeschema/sch_table.cpp:668 pcbnew/pcb_table.cpp:594
 #: pcbnew/pcb_tablecell.cpp:189 pcbnew/pcb_textbox.cpp:902
 msgid "Border Style"
 msgstr "Reunan Tyyli"
 
-#: eeschema/sch_table.cpp:676 pcbnew/pcb_table.cpp:586
+#: eeschema/sch_table.cpp:676 pcbnew/pcb_table.cpp:602
 msgid "Row Separators"
 msgstr "Rivin erottimet"
 
-#: eeschema/sch_table.cpp:680 pcbnew/pcb_table.cpp:590
+#: eeschema/sch_table.cpp:680 pcbnew/pcb_table.cpp:606
 msgid "Cell Separators"
 msgstr "Solun erottimet"
 
-#: eeschema/sch_table.cpp:684 pcbnew/pcb_table.cpp:594
+#: eeschema/sch_table.cpp:684 pcbnew/pcb_table.cpp:610
 msgid "Separators Width"
 msgstr "Erottimen leveys"
 
-#: eeschema/sch_table.cpp:689 pcbnew/pcb_table.cpp:599
+#: eeschema/sch_table.cpp:689 pcbnew/pcb_table.cpp:615
 msgid "Separators Style"
 msgstr "Erottimen tyyli"
 
-#: eeschema/sch_table.cpp:693 pcbnew/pcb_table.cpp:603
+#: eeschema/sch_table.cpp:693 pcbnew/pcb_table.cpp:619
 msgid "Separators Color"
 msgstr "Erottimen väri"
 
@@ -20656,34 +20656,34 @@ msgstr "Puuttuva avainsana."
 msgid "waveform has less than two points"
 msgstr "aaltomuodossa on vähemmän, kuin kaksi pistettä"
 
-#: eeschema/sim/kibis/kibis.cpp:651 eeschema/sim/kibis/kibis.cpp:712
+#: eeschema/sim/kibis/kibis.cpp:651 eeschema/sim/kibis/kibis.cpp:717
 msgid "Cannot remove temporary output file"
 msgstr "Väliaikaista tulostustiedostoa ei voi poistaa"
 
-#: eeschema/sim/kibis/kibis.cpp:697
+#: eeschema/sim/kibis/kibis.cpp:702
 msgid "Error while reading temporary file"
 msgstr "Virhe luettaessa väliaikaista tiedostoa"
 
-#: eeschema/sim/kibis/kibis.cpp:707
+#: eeschema/sim/kibis/kibis.cpp:712
 msgid "Error while creating temporary output file"
 msgstr "Virhe luotaessa väliaikaista tulostetiedostoa"
 
-#: eeschema/sim/kibis/kibis.cpp:744
+#: eeschema/sim/kibis/kibis.cpp:749
 msgid ""
 "Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
 "pdf"
 msgstr ""
 "Kibis ei vielä tue DUT-arvoja. https://ibis.org/summits/nov16a/chen.pdf"
 
-#: eeschema/sim/kibis/kibis.cpp:849
+#: eeschema/sim/kibis/kibis.cpp:854
 msgid "Model has only one waveform pair, reduced accuracy"
 msgstr "Mallissa on vain yksi aaltomuotopari, alennettu tarkkuus"
 
-#: eeschema/sim/kibis/kibis.cpp:869 eeschema/sim/kibis/kibis.cpp:1075
+#: eeschema/sim/kibis/kibis.cpp:874 eeschema/sim/kibis/kibis.cpp:1080
 msgid "Driver needs at least a pullup or a pulldown"
 msgstr "Ohjain tarvitsee vähintään ylösvedon tai alavedon"
 
-#: eeschema/sim/kibis/kibis.cpp:1058 eeschema/sim/kibis/kibis.cpp:1067
+#: eeschema/sim/kibis/kibis.cpp:1063 eeschema/sim/kibis/kibis.cpp:1072
 msgid ""
 "There are two waveform pairs, but only one transistor. More equations than "
 "unknowns."
@@ -20691,65 +20691,65 @@ msgstr ""
 "Aaltomuotopareja on kaksi, mutta vain yksi transistori. Enemmän yhtälöitä "
 "kuin tuntemattomia."
 
-#: eeschema/sim/kibis/kibis.cpp:1166
+#: eeschema/sim/kibis/kibis.cpp:1171
 msgid "Model has no waveform pair, using [Ramp] instead, poor accuracy"
 msgstr ""
 "Mallissa ei ole aaltomuotoparia, sen sijaan käytetään [Ramp]-toimintoa, "
 "huono tarkkuus"
 
-#: eeschema/sim/kibis/kibis.cpp:1180
+#: eeschema/sim/kibis/kibis.cpp:1185
 msgid "Model has more than 2 waveform pairs, using the first two."
 msgstr "Mallissa on enemmän kuin 2 aaltomuotoparia käyttäen kahta ensimmäistä."
 
-#: eeschema/sim/kibis/kibis.cpp:1220
+#: eeschema/sim/kibis/kibis.cpp:1225
 msgid "Invalid model type for a driver."
 msgstr "Virheellinen mallityyppi ohjaimelle."
 
-#: eeschema/sim/kibis/kibis.cpp:1273
+#: eeschema/sim/kibis/kibis.cpp:1278
 msgid "Invalid model type for a device"
 msgstr "Virheellinen mallityyppi laitteelle"
 
-#: eeschema/sim/kibis/kibis.cpp:1472 eeschema/sim/kibis/kibis.cpp:1519
+#: eeschema/sim/kibis/kibis.cpp:1477 eeschema/sim/kibis/kibis.cpp:1524
 msgid "Number of cycles should be greater than 0."
 msgstr "Jaksojen lukumäärän tulee olla suurempi kuin 0."
 
-#: eeschema/sim/kibis/kibis.cpp:1478 eeschema/sim/kibis/kibis.cpp:1525
+#: eeschema/sim/kibis/kibis.cpp:1483 eeschema/sim/kibis/kibis.cpp:1530
 msgid "ON time should be greater than 0."
 msgstr "ON-ajan tulee olla suurempi kuin 0."
 
-#: eeschema/sim/kibis/kibis.cpp:1484 eeschema/sim/kibis/kibis.cpp:1531
+#: eeschema/sim/kibis/kibis.cpp:1489 eeschema/sim/kibis/kibis.cpp:1536
 msgid "OFF time should be greater than 0."
 msgstr "OFF-ajan tulee olla suurempi kuin 0."
 
-#: eeschema/sim/kibis/kibis.cpp:1492
+#: eeschema/sim/kibis/kibis.cpp:1497
 msgid "Rising edge is longer than on time."
 msgstr "Nouseva reuna on pidempi kuin aloitusaika."
 
-#: eeschema/sim/kibis/kibis.cpp:1501
+#: eeschema/sim/kibis/kibis.cpp:1506
 msgid "Falling edge is longer than off time."
 msgstr "Laskeva reuna on pidempi kuin lopetusaika."
 
-#: eeschema/sim/kibis/kibis.cpp:1539
+#: eeschema/sim/kibis/kibis.cpp:1544
 msgid "Rising edge is longer than ON time."
 msgstr "Nouseva reuna on pidempi kuin ON-aika."
 
-#: eeschema/sim/kibis/kibis.cpp:1547
+#: eeschema/sim/kibis/kibis.cpp:1552
 msgid "Falling edge is longer than OFF time."
 msgstr "Laskeva reuna on pidempi kuin OFF-aika."
 
-#: eeschema/sim/kibis/kibis.cpp:1562 eeschema/sim/kibis/kibis.cpp:1594
+#: eeschema/sim/kibis/kibis.cpp:1567 eeschema/sim/kibis/kibis.cpp:1599
 msgid "Bitrate should be greater than 0."
 msgstr "Bittinopeuden tulee olla suurempi kuin 0."
 
-#: eeschema/sim/kibis/kibis.cpp:1568 eeschema/sim/kibis/kibis.cpp:1600
+#: eeschema/sim/kibis/kibis.cpp:1573 eeschema/sim/kibis/kibis.cpp:1605
 msgid "Number of bits should be greater than 0."
 msgstr "Bittien lukumäärän tulee olla suurempi kuin 0."
 
-#: eeschema/sim/kibis/kibis.cpp:1580
+#: eeschema/sim/kibis/kibis.cpp:1585
 msgid "Bitrate is too high for rising / falling edges"
 msgstr "Bittinopeus on liian korkea nouseviin/laskeviin reunoihin"
 
-#: eeschema/sim/kibis/kibis.cpp:1608
+#: eeschema/sim/kibis/kibis.cpp:1613
 msgid "Bitrate could be too high for rising / falling edges"
 msgstr "Bittinopeus voi olla liian korkea nouseville / laskeville reunoille"
 
@@ -21567,33 +21567,33 @@ msgid "KiCad Symbol Editor"
 msgstr "KiCad Symbolieditori"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:149
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1210
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1207
 #: eeschema/symbol_library.cpp:523 eeschema/symbol_tree_model_adapter.cpp:74
 #: eeschema/symbol_viewer_frame.cpp:275
 msgid "Loading Symbol Libraries"
 msgstr "Ladataan symbolikirjastoja"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:268
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:269
 msgid "Library changes are unsaved"
 msgstr "Kirjastomuutoksia ei ole tallennettu"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:279
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:280
 msgid "Symbol library loading was cancelled by user."
 msgstr "Käyttäjä keskeytti symbolikirjaston latauksen."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:885
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:882
 #, c-format
 msgid ""
 "Editing symbol %s from schematic.  Saving will update the schematic only."
 msgstr ""
 "Editoi symboli %s kaavamaisesti. Tallentaminen päivittää vain kaavamaisen."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:889
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:886
 #, c-format
 msgid "Open symbol from library %s"
 msgstr "Avaa symboli kirjastosta %s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:902
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:899
 msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
@@ -21601,49 +21601,49 @@ msgstr ""
 "Vanhojen kirjastojen symboleja ei voi muokata. Käytä Symbolikirjastojen "
 "hallinta -toimintoa siirtyäksesi nykyiseen muotoon."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:905
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:902
 msgid "Manage symbol libraries"
 msgstr "Hallitse symbolikirjastoja"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:918
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:915
 #, c-format
 msgid "Symbol %s is a derived symbol. Symbol graphics will not be editable."
 msgstr "Symboli %s on johdettu symboli. Symboligrafiikka ei ole muokattavissa."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:947
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:944
 msgid "Library is read-only.  Changes cannot be saved to this library."
 msgstr ""
 "Kirjasto on vain luku -tilassa.  Muutoksia ei voi tallentaa tähän kirjastoon."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:949
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:946
 msgid "Create an editable copy"
 msgstr "Luo muokattava kopio"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:955
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:952
 #, c-format
 msgid "Create an editable copy of the symbol or the entire library (%s)?"
 msgstr "Luodaanko muokattava kopio symbolista tai koko kirjastosta (%s)?"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:959
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:956
 msgid "Select type of item to save"
 msgstr "Valitse tallennettavan kohteen tyyppi"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:962
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:959
 msgid "Copy symbol"
 msgstr "Kopio symboli"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:963
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:960
 msgid "Copy library"
 msgstr "Kopio kirjasto"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1072
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1123
-#: eeschema/tools/sch_editor_control.cpp:413
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1069
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1120
+#: eeschema/tools/sch_editor_control.cpp:412
 #, c-format
 msgid "Library '%s' already exists."
 msgstr "Kirjasto '%s' on jo olemassa."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1080
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1077
 #, c-format
 msgid ""
 "Could not create the library file '%s'.\n"
@@ -21652,74 +21652,74 @@ msgstr ""
 "Kirjastotiedostoa '%s' ei voitu luoda.\n"
 "Varmistu, että sinulla on kirjoitusoikeudet ja yritä uudestaan."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1091
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1129
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1088
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1126
 msgid "Could not open the library file."
 msgstr "Kirjastotiedostoa ei voitu avata."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1216
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1213
 #, c-format
 msgid "Loading library '%s'..."
 msgstr "Ladataan kirjastoa '%s'..."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1299
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1296
 #, c-format
 msgid "Failed to save backup to '%s'."
 msgstr "Varmuuskopion tallentaminen kansioon '%s' epäonnistui."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1537
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1534
 #, c-format
 msgid "The current configuration does not include the symbol library '%s'."
 msgstr "Nykyinen kokoonpano ei sisällä symbolikirjastoa '%s'."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1539
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1550
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1536
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1547
 msgid "Use Manage Symbol Libraries to edit the configuration."
 msgstr "Käytä Symbolikirjastojen hallintaa kokoonpanon muokkaamiseen."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1540
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1537
 msgid "Library not found in symbol library table."
 msgstr "Kirjastoa ei löydy symbolikirjastotaulukosta."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1548
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1545
 #, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration."
 msgstr "Symbolikirjasto '%s' ei ole käytössä nykyisessä kokoonpanossa."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1551
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1548
 msgid "Symbol library not enabled."
 msgstr "Symbolikirjastoa ei ole otettu käyttöön."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1869
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1921
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1866
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1918
 msgid "Error saving global library table."
 msgstr "Virhe yleisen kirjastotaulukon tallennuksessa."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1870
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1922
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1867
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1919
 msgid "Error saving project library table."
 msgstr "Virhe projektikohtaisen kirjastotaulukon tallennuksessa."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:68
+#: eeschema/symbol_editor/symbol_editor.cpp:67
 msgid "[from schematic]"
 msgstr "[kytkentäkaaviosta]"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:78
+#: eeschema/symbol_editor/symbol_editor.cpp:77
 msgid "[Read Only Library]"
 msgstr "[Vain luku -kirjasto]"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:82
+#: eeschema/symbol_editor/symbol_editor.cpp:81
 msgid "[no symbol loaded]"
 msgstr "[ei ladattua symbolia]"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:114
+#: eeschema/symbol_editor/symbol_editor.cpp:113
 #: eeschema/tools/symbol_editor_control.cpp:822
 msgid "No schematic currently open."
 msgstr "Ei kaaviota auki tällä hetkellä."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:130
-#: eeschema/symbol_editor/symbol_editor.cpp:500
-#: eeschema/symbol_editor/symbol_editor.cpp:1689
+#: eeschema/symbol_editor/symbol_editor.cpp:129
+#: eeschema/symbol_editor/symbol_editor.cpp:499
+#: eeschema/symbol_editor/symbol_editor.cpp:1688
 #: eeschema/tools/symbol_editor_control.cpp:263
 #: eeschema/tools/symbol_editor_control.cpp:406
 #: eeschema/tools/symbol_editor_control.cpp:448
@@ -21727,39 +21727,39 @@ msgstr "Ei kaaviota auki tällä hetkellä."
 msgid "Symbol library '%s' is not writable."
 msgstr "Symbolikirjasto '%s' ei ole kirjoitettavissa."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:132
-#: eeschema/symbol_editor/symbol_editor.cpp:502
-#: eeschema/symbol_editor/symbol_editor.cpp:1690
+#: eeschema/symbol_editor/symbol_editor.cpp:131
+#: eeschema/symbol_editor/symbol_editor.cpp:501
+#: eeschema/symbol_editor/symbol_editor.cpp:1689
 msgid "You must save to a different location."
 msgstr "Valitse toinen tallennuskohde."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:189
-#: eeschema/symbol_editor/symbol_editor.cpp:1495
+#: eeschema/symbol_editor/symbol_editor.cpp:188
+#: eeschema/symbol_editor/symbol_editor.cpp:1494
 msgid "The current symbol has been modified.  Save changes?"
 msgstr "Nykyistä symbolia on muokattu. Tallenna muutokset?"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:370
-#: eeschema/symbol_editor/symbol_editor.cpp:1138
+#: eeschema/symbol_editor/symbol_editor.cpp:369
+#: eeschema/symbol_editor/symbol_editor.cpp:1137
 #: eeschema/tools/symbol_editor_control.cpp:490
 #, c-format
 msgid "Symbol '%s' already exists in library '%s'."
 msgstr "Symboli '%s' on jo olemassa kirjastossa '%s'."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:818
+#: eeschema/symbol_editor/symbol_editor.cpp:817
 msgid "Save Symbol As"
 msgstr "Tallenna symboli uudella nimellä"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:857
+#: eeschema/symbol_editor/symbol_editor.cpp:856
 #: pcbnew/footprint_libraries_utils.cpp:1044
 msgid "Save in library:"
 msgstr "Tallenna kirjastoon:"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:947
+#: eeschema/symbol_editor/symbol_editor.cpp:946
 #: pcbnew/footprint_libraries_utils.cpp:1127
 msgid "A library must be specified."
 msgstr "Kirjasto on määritettävä."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:959
+#: eeschema/symbol_editor/symbol_editor.cpp:958
 #, c-format
 msgid ""
 "Library '%s' is read-only. Choose a different library to save the symbol "
@@ -21768,25 +21768,25 @@ msgstr ""
 "Kirjasto '%s' on vain luku -tilassa. Valitse toinen kirjasto, johon symboli "
 "%s tallennetaan."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:975
+#: eeschema/symbol_editor/symbol_editor.cpp:974
 #, c-format
 msgid "Symbol '%s' cannot replace another symbol '%s' that it descends from"
 msgstr "Symboli '%s' ei voi korvata toista symbolia '%s', josta se on peräisin"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:984
+#: eeschema/symbol_editor/symbol_editor.cpp:983
 #, c-format
 msgid ""
 "Symbol '%s' cannot replace another symbol '%s' that is a descendent of it."
 msgstr ""
 "Symboli '%s' ei voi korvata toista symbolia '%s', joka on sen jälkeläinen."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:997
+#: eeschema/symbol_editor/symbol_editor.cpp:996
 #, fuzzy, c-format
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
 msgstr "Symboli '%s' on jo kirjastossa '%s'. Haluatko korvata sen?"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1014
+#: eeschema/symbol_editor/symbol_editor.cpp:1013
 #, c-format
 msgid ""
 "The following symbols in the inheritance chain of '%s' already exist in "
@@ -21795,7 +21795,7 @@ msgstr ""
 "Seuraavat symbolit '%s':n periytymisketjussa ovat jo olemassa kirjastossa "
 "'%s':\n"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1021
+#: eeschema/symbol_editor/symbol_editor.cpp:1020
 msgid ""
 "\n"
 "Do you want to overwrite all of them, or rename the new symbols?"
@@ -21803,55 +21803,55 @@ msgstr ""
 "\n"
 "Haluatko korvata ne kaikki vai nimetä uudet symbolit uudelleen?"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1025
+#: eeschema/symbol_editor/symbol_editor.cpp:1024
 msgid "Overwrite All"
 msgstr "Korvaa kaikki"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1025
+#: eeschema/symbol_editor/symbol_editor.cpp:1024
 msgid "Rename All"
 msgstr "Nimeä kaikki uudelleen"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1105
+#: eeschema/symbol_editor/symbol_editor.cpp:1104
 msgid "Export Symbol"
 msgstr "Vie symboli"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1131
+#: eeschema/symbol_editor/symbol_editor.cpp:1130
 #, fuzzy, c-format
 msgid "Library '%s' is read-only."
 msgstr "Kirjasto '%s' on vain luettavissa."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1171
+#: eeschema/symbol_editor/symbol_editor.cpp:1170
 #, c-format
 msgid "Error occurred attempting to load symbol library file '%s'."
 msgstr "Virhe yritettäessä ladata symbolikirjastotiedostoa '%s'."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1179
+#: eeschema/symbol_editor/symbol_editor.cpp:1178
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:135
 #, c-format
 msgid "Symbol %s already exists in library '%s'."
 msgstr "Symboli %s on jo olemassa kirjastossa '%s'."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1194
+#: eeschema/symbol_editor/symbol_editor.cpp:1193
 #, c-format
 msgid "Insufficient permissions to save library '%s'."
 msgstr "Ei riittäviä oikeuksia kirjaston '%s' tallentamiseen."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1213
+#: eeschema/symbol_editor/symbol_editor.cpp:1212
 #, c-format
 msgid "Error creating symbol library '%s'."
 msgstr "Virhe luotaessa symbolikirjastoa '%s'."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1220
+#: eeschema/symbol_editor/symbol_editor.cpp:1219
 #, c-format
 msgid "Symbol %s saved to library '%s'."
 msgstr "Symboli %s tallennettu kirjastoon '%s'."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1238
+#: eeschema/symbol_editor/symbol_editor.cpp:1237
 #, c-format
 msgid "Symbol name '%s' already in use."
 msgstr "Symbolinimi '%s' on jo käytössä."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1276
+#: eeschema/symbol_editor/symbol_editor.cpp:1275
 #, c-format
 msgid ""
 "The symbol '%s' has been modified.\n"
@@ -21860,7 +21860,7 @@ msgstr ""
 "Symbolia '%s' on muokattu.\n"
 "Haluatko poistaa sen kirjastosta?"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1288
+#: eeschema/symbol_editor/symbol_editor.cpp:1287
 #, c-format
 msgid ""
 "The symbol %s is used to derive other symbols.\n"
@@ -21873,67 +21873,67 @@ msgstr ""
 "\n"
 "Haluatko poistaa tämän symbolin ja kaikki sen johdannaiset?"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1293
-#: eeschema/tools/ee_actions.cpp:242
+#: eeschema/symbol_editor/symbol_editor.cpp:1292
+#: eeschema/tools/sch_actions.cpp:242
 msgid "Delete Symbol"
 msgstr "Poista symboli"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1294
+#: eeschema/symbol_editor/symbol_editor.cpp:1293
 msgid "Keep Symbol"
 msgstr "Säilytä symboli"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1431 pcbnew/files.cpp:342
+#: eeschema/symbol_editor/symbol_editor.cpp:1430 pcbnew/files.cpp:342
 #: pcbnew/footprint_libraries_utils.cpp:1213
 #, c-format
 msgid "Revert '%s' to last version saved?"
 msgstr "Palataanko '%s' viimeksi tallennettuun versioon?"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1509
+#: eeschema/symbol_editor/symbol_editor.cpp:1508
 #, c-format
 msgid "Symbol %s not found in library '%s'."
 msgstr "Symbolia %s ei löydy kirjastosta '%s'."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1538
+#: eeschema/symbol_editor/symbol_editor.cpp:1537
 msgid "No library specified."
 msgstr "Ei kirjastoa määriteltynä."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1557
+#: eeschema/symbol_editor/symbol_editor.cpp:1556
 #, c-format
 msgid "Save Library '%s' As..."
 msgstr "Tallenna Kirjasto %s Nimellä..."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1597
+#: eeschema/symbol_editor/symbol_editor.cpp:1596
 #, c-format
 msgid "Failed to save changes to symbol library file '%s'."
 msgstr "Symbolikirjastotiedoston '%s' muutosten tallentaminen epäonnistui."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1599
+#: eeschema/symbol_editor/symbol_editor.cpp:1598
 msgid "Error Saving Library"
 msgstr "Virhe Tallennettaessa Kirjastoa"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1645
+#: eeschema/symbol_editor/symbol_editor.cpp:1644
 #, c-format
 msgid "Symbol library file '%s' saved."
 msgstr "Symbolikirjastotiedosto '%s' tallennettu."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1744
+#: eeschema/symbol_editor/symbol_editor.cpp:1743
 msgid "Undefined!"
 msgstr "Määrittelemätön!"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1745
-#: eeschema/symbol_viewer_frame.cpp:460 pcbnew/board_item.cpp:400
+#: eeschema/symbol_editor/symbol_editor.cpp:1744
+#: eeschema/symbol_viewer_frame.cpp:458 pcbnew/board_item.cpp:400
 msgid "Parent"
 msgstr "Vanhempi"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1760
+#: eeschema/symbol_editor/symbol_editor.cpp:1759
 msgid "Body"
 msgstr "Runko"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1763
+#: eeschema/symbol_editor/symbol_editor.cpp:1762
 msgid "Power Symbol"
 msgstr "Virtasymboli"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1770
+#: eeschema/symbol_editor/symbol_editor.cpp:1769
 msgid "Datasheet"
 msgstr "Datalehti"
 
@@ -22005,7 +22005,7 @@ msgid "Error updating library buffer."
 msgstr "Virhe päivitettäessä kirjastopuskuria."
 
 #: eeschema/symbol_library_manager.cpp:1010
-#: eeschema/tools/sch_editor_control.cpp:461
+#: eeschema/tools/sch_editor_control.cpp:460
 #, c-format
 msgid "Error saving symbol %s to library '%s'."
 msgstr "Virhe tallentaessa symbolia %s kirjastoon %s."
@@ -22018,7 +22018,7 @@ msgstr "(lataus epäonnistui)"
 msgid "KiCad Symbol Library Browser"
 msgstr "KiCad-Symbolikirjastoselain"
 
-#: eeschema/symbol_viewer_frame.cpp:1111 pcbnew/footprint_viewer_frame.cpp:1026
+#: eeschema/symbol_viewer_frame.cpp:1109 pcbnew/footprint_viewer_frame.cpp:1026
 #: pcbnew/footprint_viewer_frame.cpp:1031
 msgid "[no library selected]"
 msgstr "[Kirjastoa ei ole valittu]"
@@ -22032,7 +22032,7 @@ msgstr ""
 "kumoa-toiminnolla jokaisessa asiakirjassa, jota asia koskee"
 
 #: eeschema/sync_sheet_pin/dialog_sync_sheet_pins_base.h:50
-#: eeschema/tools/ee_actions.cpp:560 eeschema/tools/ee_actions.cpp:568
+#: eeschema/tools/sch_actions.cpp:560 eeschema/tools/sch_actions.cpp:568
 msgid "Synchronize sheet pins and hierarchical labels"
 msgstr "Synkronoi arkin nastat ja hierarkkiset tarrat"
 
@@ -22061,12 +22061,15 @@ msgid "Delete Hierarchical Labels"
 msgstr "Poista hierarkiset nimiöt"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:99
-msgid "Change sheet pin to hierarchical label"
-msgstr "Vaihda lehtinasta hierarkkiseksi nimiöksi"
+#, fuzzy
+msgid ""
+"Associate selected sheet pin and hierarchical label using the label name"
+msgstr "Synkronoi arkin nastat ja hierarkkiset tarrat"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
-msgid "Change hierarchical label to sheet pin"
-msgstr "Muuta hierarkkinen nimiö lehden nastaksi"
+#, fuzzy
+msgid "Associate selected sheet pin and hierarchical label using the pin name"
+msgstr "Riko sivun nastan ja hierarkkisen nimiön yhteydet"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
@@ -22230,233 +22233,237 @@ msgstr "Verkkoa %s ei voi muuttaa %s koska se on virtanastan ohjaama."
 msgid "Add label '%s' to %s pin %s net."
 msgstr "Lisää nimike \"%s\" komponentin %s nastan %s verkkoon."
 
-#: eeschema/tools/ee_actions.cpp:48
+#: eeschema/tools/rule_area_create_helper.cpp:69
+msgid "Draw Rule Area"
+msgstr "Piirrä sääntöalue"
+
+#: eeschema/tools/sch_actions.cpp:48
 msgid "Show the electrical rules checker window"
 msgstr "Näytä sähkösuunnittelusääntöjen tarkistusikkuna"
 
-#: eeschema/tools/ee_actions.cpp:54
+#: eeschema/tools/sch_actions.cpp:54
 msgid "Symbol Checker"
 msgstr "Symbolien tarkistaja"
 
-#: eeschema/tools/ee_actions.cpp:55
+#: eeschema/tools/sch_actions.cpp:55
 msgid "Show the symbol checker window"
 msgstr "Näytä symbolien tarkistusikkuna"
 
-#: eeschema/tools/ee_actions.cpp:62
+#: eeschema/tools/sch_actions.cpp:62
 msgid "Show differences between schematic symbol and its library equivalent"
 msgstr "Näytä erot kytkentäkaaviosymbolin ja sen kirjastovastineen välillä"
 
-#: eeschema/tools/ee_actions.cpp:68
+#: eeschema/tools/sch_actions.cpp:68
 msgid "Show Bus Syntax Help"
 msgstr "Näytä väyläsyntaksin ohje"
 
-#: eeschema/tools/ee_actions.cpp:75
+#: eeschema/tools/sch_actions.cpp:75
 msgid "Show simulation window for running SPICE or IBIS simulations."
 msgstr ""
 "Näytä simulaatioikkuna SPICE- tai IBIS-simulaatioiden suorittamista varten."
 
-#: eeschema/tools/ee_actions.cpp:84 pcbnew/tools/pcb_actions.cpp:1978
+#: eeschema/tools/sch_actions.cpp:84 pcbnew/tools/pcb_actions.cpp:1978
 msgid "Create Corner"
 msgstr "Luo kulma"
 
-#: eeschema/tools/ee_actions.cpp:90 eeschema/tools/ee_point_editor.cpp:1376
+#: eeschema/tools/sch_actions.cpp:90 eeschema/tools/sch_point_editor.cpp:1384
 #: pcbnew/tools/pcb_actions.cpp:1985
 msgid "Remove Corner"
 msgstr "Poista kulma"
 
-#: eeschema/tools/ee_actions.cpp:105
+#: eeschema/tools/sch_actions.cpp:105
 msgid "Select Node"
 msgstr "Valitse solmu"
 
-#: eeschema/tools/ee_actions.cpp:106
+#: eeschema/tools/sch_actions.cpp:106
 msgid "Select a connection item under the cursor"
 msgstr "Valitse yhteyskohde kohdistimen alta"
 
-#: eeschema/tools/ee_actions.cpp:113
+#: eeschema/tools/sch_actions.cpp:113
 msgid "Select Connection"
 msgstr "Valitse Yhteys"
 
-#: eeschema/tools/ee_actions.cpp:114
+#: eeschema/tools/sch_actions.cpp:114
 msgid "Select a complete connection"
 msgstr "Valitse täydellinen yhteys"
 
-#: eeschema/tools/ee_actions.cpp:150
+#: eeschema/tools/sch_actions.cpp:150
 msgid "Show/hide design blocks library"
 msgstr "Näytä/piilota suunnittelulohkojen kirjasto"
 
-#: eeschema/tools/ee_actions.cpp:156
+#: eeschema/tools/sch_actions.cpp:156
 msgid "Save Current Sheet as Design Block..."
 msgstr "Tallenna nykyinen arkki suunnittelulohkona..."
 
-#: eeschema/tools/ee_actions.cpp:157
+#: eeschema/tools/sch_actions.cpp:157
 msgid "Create a new design block from the current sheet"
 msgstr "Luo uusi suunnittelulohko nykyisestä arkista"
 
-#: eeschema/tools/ee_actions.cpp:163
+#: eeschema/tools/sch_actions.cpp:163
 msgid "Save Selection as Design Block..."
 msgstr "Tallenna valinta suunnittelulohkona..."
 
-#: eeschema/tools/ee_actions.cpp:164
+#: eeschema/tools/sch_actions.cpp:164
 msgid "Create a new design block from the current selection"
 msgstr "Luo uusi suunnittelulohko nykyisestä valinnasta"
 
-#: eeschema/tools/ee_actions.cpp:170
+#: eeschema/tools/sch_actions.cpp:170
 msgid "Delete Design Block"
 msgstr "Poista suunnittelulohko"
 
-#: eeschema/tools/ee_actions.cpp:171
+#: eeschema/tools/sch_actions.cpp:171
 msgid "Remove the selected design block from its library"
 msgstr "Poista valittu suunnittelulohko sen kirjastosta"
 
-#: eeschema/tools/ee_actions.cpp:177 eeschema/tools/ee_actions.cpp:736
+#: eeschema/tools/sch_actions.cpp:177 eeschema/tools/sch_actions.cpp:736
 #: pcbnew/tools/pcb_actions.cpp:677
 msgid "Properties..."
 msgstr "Ominaisuudet..."
 
-#: eeschema/tools/ee_actions.cpp:178
+#: eeschema/tools/sch_actions.cpp:178
 msgid "Edit properies of design block"
 msgstr "Muokkaa suunnittelulohkon ominaisuuksia"
 
-#: eeschema/tools/ee_actions.cpp:188
+#: eeschema/tools/sch_actions.cpp:188
 msgid "Save Library As..."
 msgstr "Tallenna kirjasto uudella nimellä..."
 
-#: eeschema/tools/ee_actions.cpp:189
+#: eeschema/tools/sch_actions.cpp:189
 msgid "Save the current library to a new file"
 msgstr "Tallenna nykyinen kirjasto uuteen tiedostoon"
 
-#: eeschema/tools/ee_actions.cpp:195
+#: eeschema/tools/sch_actions.cpp:195
 msgid "New Symbol..."
 msgstr "Uusi symboli ..."
 
-#: eeschema/tools/ee_actions.cpp:196
+#: eeschema/tools/sch_actions.cpp:196
 msgid "Create a new symbol in an existing library"
 msgstr "Luo uusi symboli olemassa olevaan kirjastoon"
 
-#: eeschema/tools/ee_actions.cpp:202
+#: eeschema/tools/sch_actions.cpp:202
 #, fuzzy
 msgid "Derive from Existing Symbol..."
 msgstr "Johda olemassa olevasta symbolista…"
 
-#: eeschema/tools/ee_actions.cpp:203
+#: eeschema/tools/sch_actions.cpp:203
 msgid "Create a new symbol, derived from an existing symbol"
 msgstr "Luo uusi symboli, joka on johdettu olemassa olevasta symbolista"
 
-#: eeschema/tools/ee_actions.cpp:209
+#: eeschema/tools/sch_actions.cpp:209
 msgid "Edit Symbol"
 msgstr "Muokkaa symbolia"
 
-#: eeschema/tools/ee_actions.cpp:210
+#: eeschema/tools/sch_actions.cpp:210
 msgid "Show selected symbol on editor canvas"
 msgstr "Näytä valittu symboli editorin kankaalle"
 
-#: eeschema/tools/ee_actions.cpp:216
+#: eeschema/tools/sch_actions.cpp:216
 msgid "Duplicate Symbol"
 msgstr "Tee symbolista kaksoiskappale"
 
-#: eeschema/tools/ee_actions.cpp:222
+#: eeschema/tools/sch_actions.cpp:222
 msgid "Rename Symbol..."
 msgstr "Uudelleennimeä Symbolit ..."
 
-#: eeschema/tools/ee_actions.cpp:229
+#: eeschema/tools/sch_actions.cpp:229
 msgid "Save the current symbol to a different library or name"
 msgstr "Tallenna nykyinen symboli eri kirjastoon tai nimellä"
 
-#: eeschema/tools/ee_actions.cpp:235
+#: eeschema/tools/sch_actions.cpp:235
 msgid "Save Copy As..."
 msgstr "Tallenna kopio nimellä ..."
 
-#: eeschema/tools/ee_actions.cpp:236
+#: eeschema/tools/sch_actions.cpp:236
 msgid "Save a copy of the current symbol to a different library or name"
 msgstr ""
 "Tallentaa kopion nykyisestä symbolista toiseen kirjastoon tai toiseen nimeen"
 
-#: eeschema/tools/ee_actions.cpp:243
+#: eeschema/tools/sch_actions.cpp:243
 msgid "Remove the selected symbol from its library"
 msgstr "Poista valittu symboli sen kirjastosta"
 
-#: eeschema/tools/ee_actions.cpp:261
+#: eeschema/tools/sch_actions.cpp:261
 msgid "Paste Symbol"
 msgstr "Liitä symboli"
 
-#: eeschema/tools/ee_actions.cpp:267
+#: eeschema/tools/sch_actions.cpp:267
 msgid "Import Symbol..."
 msgstr "Tuo symboli ..."
 
-#: eeschema/tools/ee_actions.cpp:268
+#: eeschema/tools/sch_actions.cpp:268
 msgid "Import a symbol to the current library"
 msgstr "Tuo symboli nykyiseen kirjastoon"
 
-#: eeschema/tools/ee_actions.cpp:274
+#: eeschema/tools/sch_actions.cpp:274
 #, fuzzy
 msgid "Export..."
 msgstr "&Vie…"
 
-#: eeschema/tools/ee_actions.cpp:275
+#: eeschema/tools/sch_actions.cpp:275
 msgid "Export a symbol to a new library file"
 msgstr "Vie symboli uuteen kirjastotiedostoon"
 
-#: eeschema/tools/ee_actions.cpp:281
+#: eeschema/tools/sch_actions.cpp:281
 msgid "Update Symbol Fields..."
 msgstr "Päivitä symbolin kenttiä..."
 
-#: eeschema/tools/ee_actions.cpp:282
+#: eeschema/tools/sch_actions.cpp:282
 msgid "Update symbol to match changes made in parent symbol"
 msgstr "Päivitä symboli vastaamaan kantasymboliin tehtyjä muutoksia"
 
-#: eeschema/tools/ee_actions.cpp:288
+#: eeschema/tools/sch_actions.cpp:288
 msgid "Set Unit Display Name..."
 msgstr "Aseta Yksikön Näyttönimi..."
 
-#: eeschema/tools/ee_actions.cpp:289
+#: eeschema/tools/sch_actions.cpp:289
 msgid "Set the display name for a particular unit in a multi-unit symbol"
 msgstr "Aseta tietyn yksikön näyttönimi usean yksikön symbolilla"
 
-#: eeschema/tools/ee_actions.cpp:294
+#: eeschema/tools/sch_actions.cpp:294
 msgid "Add Symbol to Schematic"
 msgstr "Lisää Symboli Kytkentäkaavioon"
 
-#: eeschema/tools/ee_actions.cpp:295
+#: eeschema/tools/sch_actions.cpp:295
 msgid "Add the current symbol to the schematic"
 msgstr "Lisää nykyinen symboli kytkentäkaavioon"
 
-#: eeschema/tools/ee_actions.cpp:301
+#: eeschema/tools/sch_actions.cpp:301
 msgid "Show Pin Electrical Types"
 msgstr "Näytä Nastan Sähkötyypit"
 
-#: eeschema/tools/ee_actions.cpp:302
+#: eeschema/tools/sch_actions.cpp:302
 msgid "Annotate pins with their electrical types"
 msgstr "Merkitse nastat niiden sähkötyypeillä"
 
-#: eeschema/tools/ee_actions.cpp:308
+#: eeschema/tools/sch_actions.cpp:308
 msgid "Show Pin Numbers"
 msgstr "Näytä Nastanumerot"
 
-#: eeschema/tools/ee_actions.cpp:309
+#: eeschema/tools/sch_actions.cpp:309
 msgid "Annotate pins with their numbers"
 msgstr "Merkitse nastat niiden numeroihin"
 
-#: eeschema/tools/ee_actions.cpp:315
+#: eeschema/tools/sch_actions.cpp:315
 msgid "Export View as PNG..."
 msgstr "Vie näkymä PNG: nä ..."
 
-#: eeschema/tools/ee_actions.cpp:316
+#: eeschema/tools/sch_actions.cpp:316
 msgid "Create PNG file from the current view"
 msgstr "Luo PNG-tiedosto nykyisestä näkymästä"
 
-#: eeschema/tools/ee_actions.cpp:322
+#: eeschema/tools/sch_actions.cpp:322
 msgid "Export Symbol as SVG..."
 msgstr "Vie symboli SVG: ksi ..."
 
-#: eeschema/tools/ee_actions.cpp:323
+#: eeschema/tools/sch_actions.cpp:323
 msgid "Create SVG file from the current symbol"
 msgstr "Luo SVG-tiedosto nykyisestä symbolista"
 
-#: eeschema/tools/ee_actions.cpp:329
+#: eeschema/tools/sch_actions.cpp:329
 msgid "Synchronized Pins Mode"
 msgstr "Synkronoitu Nastojen Tila"
 
-#: eeschema/tools/ee_actions.cpp:330
+#: eeschema/tools/sch_actions.cpp:330
 msgid ""
 "Synchronized Pins Mode\n"
 "When enabled propagates all changes (except pin numbers) to other units.\n"
@@ -22468,571 +22475,573 @@ msgstr ""
 "Kytketty oletuksena käyttöön moniyksikköisille osille, joissa on "
 "vaihdettavat yksiköt."
 
-#: eeschema/tools/ee_actions.cpp:338 eeschema/tools/ee_actions.cpp:1151
+#: eeschema/tools/sch_actions.cpp:338 eeschema/tools/sch_actions.cpp:1151
 msgid "Show Hidden Pins"
 msgstr "Näytä Piilotetut Nastat"
 
-#: eeschema/tools/ee_actions.cpp:344 eeschema/tools/ee_actions.cpp:1157
+#: eeschema/tools/sch_actions.cpp:344 eeschema/tools/sch_actions.cpp:1157
 msgid "Show Hidden Fields"
 msgstr "Näytä piilotetut kentät"
 
-#: eeschema/tools/ee_actions.cpp:355
+#: eeschema/tools/sch_actions.cpp:355
 msgid "Draw Pins"
 msgstr "Piirrä nastat"
 
-#: eeschema/tools/ee_actions.cpp:363 eeschema/tools/ee_actions.cpp:595
+#: eeschema/tools/sch_actions.cpp:363 eeschema/tools/sch_actions.cpp:595
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:301
 #: pagelayout_editor/tools/pl_actions.cpp:61 pcbnew/tools/drawing_tool.cpp:1044
 #: pcbnew/tools/pcb_actions.cpp:185
 msgid "Draw Text"
 msgstr "Piirrä tekstilaatikko"
 
-#: eeschema/tools/ee_actions.cpp:371 eeschema/tools/ee_actions.cpp:602
+#: eeschema/tools/sch_actions.cpp:371 eeschema/tools/sch_actions.cpp:602
 #: pcbnew/tools/pcb_actions.cpp:192
 msgid "Draw Text Boxes"
 msgstr "Piirrä tekstilaatikot"
 
-#: eeschema/tools/ee_actions.cpp:378 eeschema/tools/ee_actions.cpp:1383
+#: eeschema/tools/sch_actions.cpp:378 eeschema/tools/sch_actions.cpp:1383
 #: pagelayout_editor/tools/pl_actions.cpp:45 pcbnew/tools/pcb_actions.cpp:108
 msgid "Draw Lines"
 msgstr "Piirrä viivat"
 
-#: eeschema/tools/ee_actions.cpp:379
+#: eeschema/tools/sch_actions.cpp:379
 msgid "Draw connected graphic lines"
 msgstr "Piirrä yhdistetyt graafiset viivat"
 
-#: eeschema/tools/ee_actions.cpp:387 pcbnew/tools/pcb_actions.cpp:117
+#: eeschema/tools/sch_actions.cpp:387 pcbnew/tools/pcb_actions.cpp:117
 msgid "Draw Polygons"
 msgstr "Piirrä monikulmioita"
 
-#: eeschema/tools/ee_actions.cpp:395
+#: eeschema/tools/sch_actions.cpp:395
 msgid "Move Symbol Anchor"
 msgstr "Siirrä Symboliankkuria"
 
-#: eeschema/tools/ee_actions.cpp:404
+#: eeschema/tools/sch_actions.cpp:404
 msgid "Push Pin Length"
 msgstr "Työnnä Nastan Pituus"
 
-#: eeschema/tools/ee_actions.cpp:405
+#: eeschema/tools/sch_actions.cpp:405
 msgid "Copy pin length to other pins in symbol"
 msgstr "Kopioi nastan pituus muihin symbolin nastoihin"
 
-#: eeschema/tools/ee_actions.cpp:411
+#: eeschema/tools/sch_actions.cpp:411
 msgid "Push Pin Name Size"
 msgstr "Työnnä Nastan Nimen Kokoa"
 
-#: eeschema/tools/ee_actions.cpp:412
+#: eeschema/tools/sch_actions.cpp:412
 msgid "Copy pin name size to other pins in symbol"
 msgstr "Kopioi nastan nimen koko muihin symbolin nastoihin"
 
-#: eeschema/tools/ee_actions.cpp:418
+#: eeschema/tools/sch_actions.cpp:418
 msgid "Push Pin Number Size"
 msgstr "Työnnä Nastan Numeron Koko"
 
-#: eeschema/tools/ee_actions.cpp:419
+#: eeschema/tools/sch_actions.cpp:419
 msgid "Copy pin number size to other pins in symbol"
 msgstr "Kopioi nastan numeron koko muihin symbolin nastoihin"
 
-#: eeschema/tools/ee_actions.cpp:430
+#: eeschema/tools/sch_actions.cpp:430
 msgid "Place Symbols"
 msgstr "Aseta symbolit"
 
-#: eeschema/tools/ee_actions.cpp:438
+#: eeschema/tools/sch_actions.cpp:438
 msgid "Place Next Symbol Unit"
 msgstr "Sijoita seuraava symboliyksikkö"
 
-#: eeschema/tools/ee_actions.cpp:439
+#: eeschema/tools/sch_actions.cpp:439
 msgid ""
 "Place the next unit of the current symbol that is missing from the schematic"
 msgstr ""
 "Aseta nykyisen symbolin seuraava yksikkö, joka puuttuu kytkentäkaaviosta"
 
-#: eeschema/tools/ee_actions.cpp:449
+#: eeschema/tools/sch_actions.cpp:449
 msgid "Place Power Symbols"
 msgstr "Aseta virtasymbolit"
 
-#: eeschema/tools/ee_actions.cpp:458
+#: eeschema/tools/sch_actions.cpp:458
 msgid "Place Design Block"
 msgstr "Aseta suunnittelulohko"
 
-#: eeschema/tools/ee_actions.cpp:459
+#: eeschema/tools/sch_actions.cpp:459
 msgid "Add selected design block to current sheet"
 msgstr "Lisää valittu suunnittelulohko nykyiseen arkkiin"
 
-#: eeschema/tools/ee_actions.cpp:470
+#: eeschema/tools/sch_actions.cpp:470
 msgid "Place No Connect Flags"
 msgstr "Aseta ei yhdistetty -lippuja"
 
-#: eeschema/tools/ee_actions.cpp:480
+#: eeschema/tools/sch_actions.cpp:480
 msgid "Place Junctions"
 msgstr "Aseta liittymiä"
 
-#: eeschema/tools/ee_actions.cpp:490
+#: eeschema/tools/sch_actions.cpp:490
 msgid "Place Wire to Bus Entries"
 msgstr "Aseta johto väyläsisääntuloihin"
 
-#: eeschema/tools/ee_actions.cpp:500
+#: eeschema/tools/sch_actions.cpp:500
 msgid "Place Net Labels"
 msgstr "Aseta verkkonimiöt"
 
-#: eeschema/tools/ee_actions.cpp:508
+#: eeschema/tools/sch_actions.cpp:508
 msgid "Place Directive Labels"
 msgstr "Sijoita direktiivin nimikkeet"
 
-#: eeschema/tools/ee_actions.cpp:517
+#: eeschema/tools/sch_actions.cpp:517
 msgid "Place Hierarchical Labels"
 msgstr "Aseta hierarkkiset nimiöt"
 
-#: eeschema/tools/ee_actions.cpp:526
+#: eeschema/tools/sch_actions.cpp:526
 msgid "Draw Hierarchical Sheets"
 msgstr "Piirrä hierarkkisia sivuja"
 
-#: eeschema/tools/ee_actions.cpp:534
+#: eeschema/tools/sch_actions.cpp:534
 msgid "Draw Sheet from File"
 msgstr "Piirrä arkki tiedostosta"
 
-#: eeschema/tools/ee_actions.cpp:535
+#: eeschema/tools/sch_actions.cpp:535
 msgid "Copy sheet into project and draw on current sheet"
 msgstr "Kopioi arkki projektiin ja piirrä nykyiselle arkille"
 
-#: eeschema/tools/ee_actions.cpp:543
+#: eeschema/tools/sch_actions.cpp:543
 msgid "Draw Sheet from Design Block"
 msgstr "Piirrä arkki suunnittelulohkosta"
 
-#: eeschema/tools/ee_actions.cpp:544
+#: eeschema/tools/sch_actions.cpp:544
 msgid "Copy design block into project as a sheet on current sheet"
 msgstr "Kopioi suunnittelulohko projektiin nykyisen arkin arkkina"
 
-#: eeschema/tools/ee_actions.cpp:552
+#: eeschema/tools/sch_actions.cpp:552
 msgid "Place Sheet Pins"
 msgstr "Aseta sivunastat"
 
-#: eeschema/tools/ee_actions.cpp:559 eeschema/tools/ee_actions.cpp:567
-msgid "Sync Sheet Pins"
+#: eeschema/tools/sch_actions.cpp:559 eeschema/tools/sch_actions.cpp:567
+#, fuzzy
+msgid "Sync Sheet Pins..."
 msgstr "Synkronoi lehden nastat"
 
-#: eeschema/tools/ee_actions.cpp:575
-msgid "Import Sheet"
+#: eeschema/tools/sch_actions.cpp:575
+#, fuzzy
+msgid "Import Sheet..."
 msgstr "Tuo arkki"
 
-#: eeschema/tools/ee_actions.cpp:576
+#: eeschema/tools/sch_actions.cpp:576
 msgid "Import sheet into project"
 msgstr "Tuo arkki projektiin"
 
-#: eeschema/tools/ee_actions.cpp:586
+#: eeschema/tools/sch_actions.cpp:586
 msgid "Place Global Labels"
 msgstr "Aseta globaalit nimiöt"
 
-#: eeschema/tools/ee_actions.cpp:610 pcbnew/tools/pcb_actions.cpp:199
+#: eeschema/tools/sch_actions.cpp:610 pcbnew/tools/pcb_actions.cpp:199
 msgid "Draw Tables"
 msgstr "Piirrä taulukot"
 
-#: eeschema/tools/ee_actions.cpp:617 pagelayout_editor/tools/pl_actions.cpp:53
+#: eeschema/tools/sch_actions.cpp:617 pagelayout_editor/tools/pl_actions.cpp:53
 #: pcbnew/tools/pcb_actions.cpp:125
 msgid "Draw Rectangles"
 msgstr "Piirrä suorakulmioita"
 
-#: eeschema/tools/ee_actions.cpp:625 pcbnew/tools/pcb_actions.cpp:134
+#: eeschema/tools/sch_actions.cpp:625 pcbnew/tools/pcb_actions.cpp:134
 msgid "Draw Circles"
 msgstr "Piirrä ympyröitä"
 
-#: eeschema/tools/ee_actions.cpp:633 pcbnew/tools/pcb_actions.cpp:143
+#: eeschema/tools/sch_actions.cpp:633 pcbnew/tools/pcb_actions.cpp:143
 msgid "Draw Arcs"
 msgstr "Piirrä kaaret"
 
-#: eeschema/tools/ee_actions.cpp:641 pcbnew/tools/pcb_actions.cpp:151
+#: eeschema/tools/sch_actions.cpp:641 pcbnew/tools/pcb_actions.cpp:151
 msgid "Draw Bezier Curve"
 msgstr "Piirrä Bezier-käyrä"
 
-#: eeschema/tools/ee_actions.cpp:649
+#: eeschema/tools/sch_actions.cpp:649
 msgid "Place Images"
 msgstr "Aseta kuvat"
 
-#: eeschema/tools/ee_actions.cpp:657 pcbnew/tools/pcb_actions.cpp:306
+#: eeschema/tools/sch_actions.cpp:657 pcbnew/tools/pcb_actions.cpp:306
 msgid "Draw Rule Areas"
 msgstr "Piirrä sääntöalueet"
 
-#: eeschema/tools/ee_actions.cpp:665 pcbnew/tools/pcb_actions.cpp:404
+#: eeschema/tools/sch_actions.cpp:665 pcbnew/tools/pcb_actions.cpp:404
 msgid "Delete Last Point"
 msgstr "Poista Viimeinen Kohta"
 
-#: eeschema/tools/ee_actions.cpp:666 pcbnew/tools/pcb_actions.cpp:405
+#: eeschema/tools/sch_actions.cpp:666 pcbnew/tools/pcb_actions.cpp:405
 msgid "Delete the last point added to the current item"
 msgstr "Poista nykyiseen kohteeseen viimeksi lisätty piste"
 
-#: eeschema/tools/ee_actions.cpp:672 pcbnew/tools/pcb_actions.cpp:411
+#: eeschema/tools/sch_actions.cpp:672 pcbnew/tools/pcb_actions.cpp:411
 msgid "Close Outline"
 msgstr "Sulje ääriviivat"
 
-#: eeschema/tools/ee_actions.cpp:673
+#: eeschema/tools/sch_actions.cpp:673
 msgid "Close the in-progress outline"
 msgstr "Sulje keskeneräinen ääriviiva"
 
-#: eeschema/tools/ee_actions.cpp:688
+#: eeschema/tools/sch_actions.cpp:688
 msgid "Repeat Last Item"
 msgstr "Toista Viimeinen Kohde"
 
-#: eeschema/tools/ee_actions.cpp:689
+#: eeschema/tools/sch_actions.cpp:689
 msgid "Duplicates the last drawn item"
 msgstr "Kopioi viimeisen piirretyn kohteen"
 
-#: eeschema/tools/ee_actions.cpp:694 pcbnew/tools/pcb_actions.cpp:527
+#: eeschema/tools/sch_actions.cpp:694 pcbnew/tools/pcb_actions.cpp:527
 msgid "Rotate Clockwise"
 msgstr "Käännä Myötäpäivään"
 
-#: eeschema/tools/ee_actions.cpp:702 pcbnew/tools/pcb_actions.cpp:537
+#: eeschema/tools/sch_actions.cpp:702 pcbnew/tools/pcb_actions.cpp:537
 msgid "Rotate Counterclockwise"
 msgstr "Käännä Vastapäivään"
 
-#: eeschema/tools/ee_actions.cpp:710 pcbnew/tools/pcb_actions.cpp:561
+#: eeschema/tools/sch_actions.cpp:710 pcbnew/tools/pcb_actions.cpp:561
 msgid "Mirror Vertically"
 msgstr "Peilaa Pystysuunnassa"
 
-#: eeschema/tools/ee_actions.cpp:711
+#: eeschema/tools/sch_actions.cpp:711
 msgid "Flips selected item(s) from top to bottom"
 msgstr "Kääntää valitut kohteet ylhäältä alas"
 
-#: eeschema/tools/ee_actions.cpp:719 pcbnew/tools/pcb_actions.cpp:554
+#: eeschema/tools/sch_actions.cpp:719 pcbnew/tools/pcb_actions.cpp:554
 msgid "Mirror Horizontally"
 msgstr "Peilaa Vaakasuunnassa"
 
-#: eeschema/tools/ee_actions.cpp:720
+#: eeschema/tools/sch_actions.cpp:720
 msgid "Flips selected item(s) from left to right"
 msgstr "Kääntää valitut kohteet vasemmalta oikealle"
 
-#: eeschema/tools/ee_actions.cpp:727 pcbnew/tools/edit_tool_move_fct.cpp:152
+#: eeschema/tools/sch_actions.cpp:727 pcbnew/tools/edit_tool_move_fct.cpp:152
 #: pcbnew/tools/pcb_actions.cpp:569
 msgid "Swap"
 msgstr "Vaihda"
 
-#: eeschema/tools/ee_actions.cpp:728 pcbnew/tools/pcb_actions.cpp:570
+#: eeschema/tools/sch_actions.cpp:728 pcbnew/tools/pcb_actions.cpp:570
 msgid "Swap positions of selected items"
 msgstr "Vaihda valittujen kohteiden paikkaa"
 
-#: eeschema/tools/ee_actions.cpp:744
+#: eeschema/tools/sch_actions.cpp:744
 msgid "Edit Reference Designator..."
 msgstr "Muokkaa viitetunnusta ..."
 
-#: eeschema/tools/ee_actions.cpp:752
+#: eeschema/tools/sch_actions.cpp:752
 msgid "Edit Value..."
 msgstr "Muokkaa arvoa ..."
 
-#: eeschema/tools/ee_actions.cpp:760
+#: eeschema/tools/sch_actions.cpp:760
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:235
 msgid "Edit Footprint..."
 msgstr "Muokkaa Jalanjälkeä ..."
 
-#: eeschema/tools/ee_actions.cpp:768 eeschema/tools/sch_edit_tool.cpp:1974
+#: eeschema/tools/sch_actions.cpp:768 eeschema/tools/sch_edit_tool.cpp:1972
 msgid "Autoplace Fields"
 msgstr "Sijoita Automaatisesti Kentät"
 
-#: eeschema/tools/ee_actions.cpp:769
+#: eeschema/tools/sch_actions.cpp:769
 msgid ""
 "Runs the automatic placement algorithm on the symbol's (or sheet's) fields"
 msgstr ""
 "Suorittaa automaattisen sijoittelualgoritmin symbolin (tai sivun) kentissä"
 
-#: eeschema/tools/ee_actions.cpp:775
+#: eeschema/tools/sch_actions.cpp:775
 msgid "Change Symbols..."
 msgstr "Vaihda symboleja ..."
 
-#: eeschema/tools/ee_actions.cpp:776
+#: eeschema/tools/sch_actions.cpp:776
 msgid "Assign different symbols from the library"
 msgstr "Määritä kirjastosta erilaisia symboleja"
 
-#: eeschema/tools/ee_actions.cpp:782
+#: eeschema/tools/sch_actions.cpp:782
 msgid "Update Symbols from Library..."
 msgstr "Päivitä symbolit kirjastosta..."
 
-#: eeschema/tools/ee_actions.cpp:783
+#: eeschema/tools/sch_actions.cpp:783
 msgid "Update symbols to include any changes from the library"
 msgstr "Päivitä symbolit sisällyttämään kirjastoon tehdyt muutokset"
 
-#: eeschema/tools/ee_actions.cpp:790
+#: eeschema/tools/sch_actions.cpp:790
 msgid "Assign a different symbol from the library"
 msgstr "Määritä eri symboli kirjastosta"
 
-#: eeschema/tools/ee_actions.cpp:796
+#: eeschema/tools/sch_actions.cpp:796
 msgid "Update Symbol..."
 msgstr "Päivitä symboli ..."
 
-#: eeschema/tools/ee_actions.cpp:797
+#: eeschema/tools/sch_actions.cpp:797
 msgid "Update symbol to include any changes from the library"
 msgstr "Päivitä symboli sisällyttääksesi muutokset kirjastosta"
 
-#: eeschema/tools/ee_actions.cpp:803 pcbnew/tools/pcb_actions.cpp:1117
+#: eeschema/tools/sch_actions.cpp:803 pcbnew/tools/pcb_actions.cpp:1117
 msgid "Assign Netclass..."
 msgstr "Määritä Verkkoluokka..."
 
-#: eeschema/tools/ee_actions.cpp:804 pcbnew/tools/pcb_actions.cpp:1118
+#: eeschema/tools/sch_actions.cpp:804 pcbnew/tools/pcb_actions.cpp:1118
 msgid "Assign a netclass to nets matching a pattern"
 msgstr "Määritä verkkoluokka verkoille, jotka vastaavat kuviota"
 
-#: eeschema/tools/ee_actions.cpp:810
+#: eeschema/tools/sch_actions.cpp:810
 msgid "De Morgan Conversion"
 msgstr "De Morgan Muunnos"
 
-#: eeschema/tools/ee_actions.cpp:811
+#: eeschema/tools/sch_actions.cpp:811
 msgid "Switch between De Morgan representations"
 msgstr "Vaihda De Morgan Esitysten välillä"
 
-#: eeschema/tools/ee_actions.cpp:817
+#: eeschema/tools/sch_actions.cpp:817
 msgid "De Morgan Standard"
 msgstr "De Morganin Vakio"
 
-#: eeschema/tools/ee_actions.cpp:818
+#: eeschema/tools/sch_actions.cpp:818
 msgid "Switch to standard De Morgan representation"
 msgstr "Vaihda tavalliseen De Morgan esitykseen"
 
-#: eeschema/tools/ee_actions.cpp:824
+#: eeschema/tools/sch_actions.cpp:824
 msgid "De Morgan Alternate"
 msgstr "De Morgan Vaihtoehto"
 
-#: eeschema/tools/ee_actions.cpp:825
+#: eeschema/tools/sch_actions.cpp:825
 msgid "Switch to alternate De Morgan representation"
 msgstr "Vaihda vaihtoehtoiseen De Morgan esitykseen"
 
-#: eeschema/tools/ee_actions.cpp:831
+#: eeschema/tools/sch_actions.cpp:831
 msgid "Change to Label"
 msgstr "Muuta nimiöksi"
 
-#: eeschema/tools/ee_actions.cpp:832
+#: eeschema/tools/sch_actions.cpp:832
 msgid "Change existing item to a label"
 msgstr "Vaihda nykyinen kohde tunnisteeksi"
 
-#: eeschema/tools/ee_actions.cpp:840
+#: eeschema/tools/sch_actions.cpp:840
 msgid "Change to Directive Label"
 msgstr "Muuta Direktiivi Etiketiksi"
 
-#: eeschema/tools/ee_actions.cpp:841
+#: eeschema/tools/sch_actions.cpp:841
 msgid "Change existing item to a directive label"
 msgstr "Vaihda nykyinen kohde ohjaustunnisteeksi"
 
-#: eeschema/tools/ee_actions.cpp:849
+#: eeschema/tools/sch_actions.cpp:849
 msgid "Change to Hierarchical Label"
 msgstr "Muuta hierarkiseksi nimiöksi"
 
-#: eeschema/tools/ee_actions.cpp:850
+#: eeschema/tools/sch_actions.cpp:850
 msgid "Change existing item to a hierarchical label"
 msgstr "Vaihda nykyinen kohde hierarkkiseksi nimiöksi"
 
-#: eeschema/tools/ee_actions.cpp:858
+#: eeschema/tools/sch_actions.cpp:858
 msgid "Change to Global Label"
 msgstr "Muuta globaaliksi nimiöksi"
 
-#: eeschema/tools/ee_actions.cpp:859
+#: eeschema/tools/sch_actions.cpp:859
 msgid "Change existing item to a global label"
 msgstr "Vaihda nykyinen kohde globaaliksi tarraksi"
 
-#: eeschema/tools/ee_actions.cpp:867
+#: eeschema/tools/sch_actions.cpp:867
 msgid "Change to Text"
 msgstr "Muuta tekstiksi"
 
-#: eeschema/tools/ee_actions.cpp:868
+#: eeschema/tools/sch_actions.cpp:868
 msgid "Change existing item to a text comment"
 msgstr "Vaihda nykyinen kohde tekstikommentiksi"
 
-#: eeschema/tools/ee_actions.cpp:876
+#: eeschema/tools/sch_actions.cpp:876
 msgid "Change to Text Box"
 msgstr "Vaihda tekstiruutuun"
 
-#: eeschema/tools/ee_actions.cpp:877
+#: eeschema/tools/sch_actions.cpp:877
 msgid "Change existing item to a text box"
 msgstr "Muuta olemassa oleva kohde tekstiruutuun"
 
-#: eeschema/tools/ee_actions.cpp:885 eeschema/tools/sch_edit_tool.cpp:2979
+#: eeschema/tools/sch_actions.cpp:885 eeschema/tools/sch_edit_tool.cpp:2977
 msgid "Cleanup Sheet Pins"
 msgstr "Siivoa lehtinastat"
 
-#: eeschema/tools/ee_actions.cpp:886
+#: eeschema/tools/sch_actions.cpp:886
 msgid "Delete unreferenced sheet pins"
 msgstr "Poista viittaamattomat arkin nastat"
 
-#: eeschema/tools/ee_actions.cpp:891 pcbnew/tools/pcb_actions.cpp:833
+#: eeschema/tools/sch_actions.cpp:891 pcbnew/tools/pcb_actions.cpp:833
 msgid "Edit Text & Graphics Properties..."
 msgstr "Muokkaa teksti- ja grafiikkaominaisuuksia ..."
 
-#: eeschema/tools/ee_actions.cpp:892
+#: eeschema/tools/sch_actions.cpp:892
 msgid "Edit text and graphics properties globally across schematic"
 msgstr ""
 "Muokkaa tekstin ja grafiikan ominaisuuksia maailmanlaajuisesti kaavamaisesti"
 
-#: eeschema/tools/ee_actions.cpp:898
+#: eeschema/tools/sch_actions.cpp:898
 msgid "Symbol Properties..."
 msgstr "Symbolien ominaisuudet ..."
 
-#: eeschema/tools/ee_actions.cpp:904
+#: eeschema/tools/sch_actions.cpp:904
 msgid "Pin Table..."
 msgstr "Nastataulukko..."
 
-#: eeschema/tools/ee_actions.cpp:905
+#: eeschema/tools/sch_actions.cpp:905
 msgid "Displays pin table for bulk editing of pins"
 msgstr "Näyttää nastataulukon nastojen joukkomuokkausta varten"
 
-#: eeschema/tools/ee_actions.cpp:911
+#: eeschema/tools/sch_actions.cpp:911
 msgid "Break"
 msgstr "Riko"
 
-#: eeschema/tools/ee_actions.cpp:912
+#: eeschema/tools/sch_actions.cpp:912
 msgid "Divide into connected segments"
 msgstr "Jaa yhdistettyihin segmentteihin"
 
-#: eeschema/tools/ee_actions.cpp:918
+#: eeschema/tools/sch_actions.cpp:918
 msgid "Slice"
 msgstr "Leikkaa"
 
-#: eeschema/tools/ee_actions.cpp:919
+#: eeschema/tools/sch_actions.cpp:919
 msgid "Divide into unconnected segments"
 msgstr "Jaa toisiinsa yhdistämättömiin osiin"
 
-#: eeschema/tools/ee_actions.cpp:933 pcbnew/tools/pcb_actions.cpp:1241
+#: eeschema/tools/sch_actions.cpp:933 pcbnew/tools/pcb_actions.cpp:1241
 msgid "Highlight net under cursor"
 msgstr "Korosta verkko kohdistimen alla"
 
-#: eeschema/tools/ee_actions.cpp:940 pcbnew/tools/pcb_actions.cpp:1256
+#: eeschema/tools/sch_actions.cpp:940 pcbnew/tools/pcb_actions.cpp:1256
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1217
 msgid "Clear Net Highlighting"
 msgstr "Tyhjennä verkon korostus"
 
-#: eeschema/tools/ee_actions.cpp:941
+#: eeschema/tools/sch_actions.cpp:941
 msgid "Clear any existing net highlighting"
 msgstr "Poista verkon korostus"
 
-#: eeschema/tools/ee_actions.cpp:950
+#: eeschema/tools/sch_actions.cpp:950
 msgid "Highlight Nets"
 msgstr "Korosta verkot"
 
-#: eeschema/tools/ee_actions.cpp:951
+#: eeschema/tools/sch_actions.cpp:951
 msgid "Highlight wires and pins of a net"
 msgstr "Korosta verkon johdot ja nastat"
 
-#: eeschema/tools/ee_actions.cpp:959
+#: eeschema/tools/sch_actions.cpp:959
 msgid "Show/hide the net navigator"
 msgstr "Näytä/piilota verkkonavigaattori"
 
-#: eeschema/tools/ee_actions.cpp:966
+#: eeschema/tools/sch_actions.cpp:966
 msgid "Edit with Symbol Editor"
 msgstr "Muokkaa Symbol Editorilla"
 
-#: eeschema/tools/ee_actions.cpp:967
+#: eeschema/tools/sch_actions.cpp:967
 msgid "Open the selected symbol in the Symbol Editor"
 msgstr "Avaa valitun symbolin Editorissa"
 
-#: eeschema/tools/ee_actions.cpp:973
+#: eeschema/tools/sch_actions.cpp:973
 msgid "Exclude from Bill of Materials"
 msgstr "Jätä pois materiaaliluettelosta"
 
-#: eeschema/tools/ee_actions.cpp:974
+#: eeschema/tools/sch_actions.cpp:974
 msgid "Set the exclude from bill of materials attribute"
 msgstr "Aseta poissulkeminen materiaaliluettelosta -määrite"
 
-#: eeschema/tools/ee_actions.cpp:979
+#: eeschema/tools/sch_actions.cpp:979
 msgid "Exclude from Simulation"
 msgstr "Sulje pois simulaatiosta"
 
-#: eeschema/tools/ee_actions.cpp:980
+#: eeschema/tools/sch_actions.cpp:980
 msgid "Set the exclude from simulation attribute"
 msgstr "Aseta poissulkeminen simulaatiosta -määrite"
 
-#: eeschema/tools/ee_actions.cpp:985
+#: eeschema/tools/sch_actions.cpp:985
 msgid "Exclude from Board"
 msgstr "Jätä pois piirilevyltä"
 
-#: eeschema/tools/ee_actions.cpp:986
+#: eeschema/tools/sch_actions.cpp:986
 msgid "Set the exclude from board attribute"
 msgstr "Aseta poissulkeminen piirilevyltä -määrite"
 
-#: eeschema/tools/ee_actions.cpp:992
+#: eeschema/tools/sch_actions.cpp:992
 msgid "Set the do not populate attribute"
 msgstr "Aseta attribuutti Älä täytä"
 
-#: eeschema/tools/ee_actions.cpp:999
+#: eeschema/tools/sch_actions.cpp:999
 msgid "Open the library symbol in the Symbol Editor"
 msgstr "Avaa kirjastosymboli editorissa"
 
-#: eeschema/tools/ee_actions.cpp:1005
+#: eeschema/tools/sch_actions.cpp:1005
 msgid "Edit Symbol Fields..."
 msgstr "Muokkaa symbolikenttiä ..."
 
-#: eeschema/tools/ee_actions.cpp:1006
+#: eeschema/tools/sch_actions.cpp:1006
 msgid "Bulk-edit fields of all symbols in schematic"
 msgstr "Joukkomuokkaa kaikkien symbolin kenttiä kytkentäkaaviossa"
 
-#: eeschema/tools/ee_actions.cpp:1012
+#: eeschema/tools/sch_actions.cpp:1012
 msgid "Edit Symbol Library Links..."
 msgstr "Muokkaa symbolikirjastolinkkejä ..."
 
-#: eeschema/tools/ee_actions.cpp:1013
+#: eeschema/tools/sch_actions.cpp:1013
 msgid "Edit links between schematic and library symbols"
 msgstr "Muokkaa linkkejä kytkentäkaavion ja kirjastosymbolin välillä"
 
-#: eeschema/tools/ee_actions.cpp:1019
+#: eeschema/tools/sch_actions.cpp:1019
 msgid "Assign Footprints..."
 msgstr "Määritä Jalanjäljet ..."
 
-#: eeschema/tools/ee_actions.cpp:1020
+#: eeschema/tools/sch_actions.cpp:1020
 msgid "Run footprint assignment tool"
 msgstr "Suorita jalanjäljen määritystyökalu"
 
-#: eeschema/tools/ee_actions.cpp:1026
+#: eeschema/tools/sch_actions.cpp:1026
 msgid "Import Footprint Assignments..."
 msgstr "Tuo Jalanjäljen Määritykset ..."
 
-#: eeschema/tools/ee_actions.cpp:1027
+#: eeschema/tools/sch_actions.cpp:1027
 msgid ""
 "Import symbol footprint assignments from .cmp file created by board editor"
 msgstr ""
 "Tuo symbolien jalanjälkimääritykset piirilevyeditorin luomasta .cmp-"
 "tiedostosta"
 
-#: eeschema/tools/ee_actions.cpp:1033
+#: eeschema/tools/sch_actions.cpp:1033
 msgid "Annotate Schematic..."
 msgstr "Merkitse Kytkentäkaavio..."
 
-#: eeschema/tools/ee_actions.cpp:1034
+#: eeschema/tools/sch_actions.cpp:1034
 msgid "Fill in schematic symbol reference designators"
 msgstr "Täytä kytkentäkaavion symboliviittaukset"
 
-#: eeschema/tools/ee_actions.cpp:1040
+#: eeschema/tools/sch_actions.cpp:1040
 msgid "Increment Annotations From..."
 msgstr "Lisää huomatuksia alkaen..."
 
-#: eeschema/tools/ee_actions.cpp:1041
+#: eeschema/tools/sch_actions.cpp:1041
 msgid ""
 "Increment a subset of reference designators starting at a particular symbol"
 msgstr "Kasvata viitetunnusten osajoukkoa alkaen tietystä symbolista"
 
-#: eeschema/tools/ee_actions.cpp:1048
+#: eeschema/tools/sch_actions.cpp:1048
 msgid "Schematic Setup..."
 msgstr "Kytkentäkaavion Asetukset ..."
 
-#: eeschema/tools/ee_actions.cpp:1049
+#: eeschema/tools/sch_actions.cpp:1049
 msgid "Edit schematic setup including annotation styles and electrical rules"
 msgstr ""
 "Muokkaa kytkentäkaavan asetuksia, mukaan lukien merkintätyylit ja sähköiset "
 "säännöt"
 
-#: eeschema/tools/ee_actions.cpp:1055
+#: eeschema/tools/sch_actions.cpp:1055
 msgid "Edit Sheet Page Number..."
 msgstr "Muokkaa arkin sivunumeroa ..."
 
-#: eeschema/tools/ee_actions.cpp:1056
+#: eeschema/tools/sch_actions.cpp:1056
 msgid "Edit the page number of the current or selected sheet"
 msgstr "Muokkaa nykyisen tai valitun taulukon sivunumeroa"
 
-#: eeschema/tools/ee_actions.cpp:1061
+#: eeschema/tools/sch_actions.cpp:1061
 msgid "Rescue Symbols..."
 msgstr "Pelasta symbolit..."
 
-#: eeschema/tools/ee_actions.cpp:1062
+#: eeschema/tools/sch_actions.cpp:1062
 msgid "Find old symbols in project and rename/rescue them"
 msgstr "Etsi vanhoja symboleja projektista ja nimeä ne uudelleen / pelasta ne"
 
-#: eeschema/tools/ee_actions.cpp:1068
+#: eeschema/tools/sch_actions.cpp:1068
 msgid "Remap Legacy Library Symbols..."
 msgstr "Uudelleensijoita vanhojen kirjastojen symbolit ..."
 
-#: eeschema/tools/ee_actions.cpp:1069
+#: eeschema/tools/sch_actions.cpp:1069
 msgid ""
 "Remap library symbol references in legacy schematics to the symbol library "
 "table"
@@ -23040,61 +23049,61 @@ msgstr ""
 "Muuta kirjastosymboliviittauksia vanhoissa kaavioissa "
 "symbolikirjastotaulukkoon"
 
-#: eeschema/tools/ee_actions.cpp:1075
+#: eeschema/tools/sch_actions.cpp:1075
 msgid "Export Drawing to Clipboard"
 msgstr "Vie piirustus leikepöydälle"
 
-#: eeschema/tools/ee_actions.cpp:1076
+#: eeschema/tools/sch_actions.cpp:1076
 msgid "Export drawing of current sheet to clipboard"
 msgstr "Vie nykyisen arkin piirustus leikepöydälle"
 
-#: eeschema/tools/ee_actions.cpp:1084 pcbnew/tools/pcb_actions.cpp:338
+#: eeschema/tools/sch_actions.cpp:1084 pcbnew/tools/pcb_actions.cpp:338
 msgid "Import Graphics..."
 msgstr "Tuo Grafiikkaa..."
 
-#: eeschema/tools/ee_actions.cpp:1085 pcbnew/tools/pcb_actions.cpp:339
+#: eeschema/tools/sch_actions.cpp:1085 pcbnew/tools/pcb_actions.cpp:339
 msgid "Import 2D drawing file"
 msgstr "Tuo 2D-piirustustiedosto"
 
-#: eeschema/tools/ee_actions.cpp:1092
+#: eeschema/tools/sch_actions.cpp:1092
 msgid "Switch to PCB Editor"
 msgstr "Vaihda piirilevyeditoriin"
 
-#: eeschema/tools/ee_actions.cpp:1093
+#: eeschema/tools/sch_actions.cpp:1093
 msgid "Open PCB in board editor"
 msgstr "Avaa piirilevy editorissa"
 
-#: eeschema/tools/ee_actions.cpp:1099
+#: eeschema/tools/sch_actions.cpp:1099
 msgid "Export Netlist..."
 msgstr "Vie Netlist ..."
 
-#: eeschema/tools/ee_actions.cpp:1100
+#: eeschema/tools/sch_actions.cpp:1100
 msgid "Export file containing netlist in one of several formats"
 msgstr ""
 "Vie tiedosto, joka sisältää netlist-tiedoston yhdessä useista muodoista"
 
-#: eeschema/tools/ee_actions.cpp:1106
+#: eeschema/tools/sch_actions.cpp:1106
 msgid "Generate Bill of Materials..."
 msgstr "Luo materiaaliluettelo..."
 
-#: eeschema/tools/ee_actions.cpp:1107
+#: eeschema/tools/sch_actions.cpp:1107
 msgid "Generate a bill of materials for the current schematic"
 msgstr "Luo materiaalilista nykyistä kaaviota varten"
 
-#: eeschema/tools/ee_actions.cpp:1113
+#: eeschema/tools/sch_actions.cpp:1113
 msgid "Generate Legacy Bill of Materials..."
 msgstr "Luo vanha materiaaliluettelo..."
 
-#: eeschema/tools/ee_actions.cpp:1114
+#: eeschema/tools/sch_actions.cpp:1114
 msgid ""
 "Generate a bill of materials for the current schematic (Legacy Generator)"
 msgstr "Luo materiaaliluettelo nykyiselle kaaviolle (Legacy generaatori)"
 
-#: eeschema/tools/ee_actions.cpp:1121
+#: eeschema/tools/sch_actions.cpp:1121
 msgid "Generate Bill of Materials (External)..."
 msgstr "Luo materiaaliluettelo (ulkoinen)..."
 
-#: eeschema/tools/ee_actions.cpp:1122
+#: eeschema/tools/sch_actions.cpp:1122
 msgid ""
 "Generate a bill of materials for the current schematic using external "
 "generator"
@@ -23102,11 +23111,11 @@ msgstr ""
 "Luo materiaaliluettelo nykyiselle kytkentäkaaviolle käyttämällä ulkoista "
 "generaattoria"
 
-#: eeschema/tools/ee_actions.cpp:1128
+#: eeschema/tools/sch_actions.cpp:1128
 msgid "Export Symbols to Library..."
 msgstr "Vie symbolit kirjastoon..."
 
-#: eeschema/tools/ee_actions.cpp:1129
+#: eeschema/tools/sch_actions.cpp:1129
 msgid ""
 "Add symbols used in schematic to an existing symbol library\n"
 "(does not remove other symbols from this library)"
@@ -23115,11 +23124,11 @@ msgstr ""
 "symbolikirjastoon\n"
 "(ei poista muita symboleja tästä kirjastosta)"
 
-#: eeschema/tools/ee_actions.cpp:1136
+#: eeschema/tools/sch_actions.cpp:1136
 msgid "Export Symbols to New Library..."
 msgstr "Vie symbolit uuteen kirjastoon..."
 
-#: eeschema/tools/ee_actions.cpp:1137
+#: eeschema/tools/sch_actions.cpp:1137
 msgid ""
 "Create a new symbol library using the symbols used in the schematic\n"
 "(if the library already exists it will be replaced)"
@@ -23127,89 +23136,89 @@ msgstr ""
 "Luo uusi symbolikirjasto käyttämällä kytkentäkaaviossa käytettyjä symboleja\n"
 "(jos kirjasto on jo olemassa, se korvataan)"
 
-#: eeschema/tools/ee_actions.cpp:1144
+#: eeschema/tools/sch_actions.cpp:1144
 msgid "Select on PCB"
 msgstr "Valitse piirilevyltä"
 
-#: eeschema/tools/ee_actions.cpp:1145
+#: eeschema/tools/sch_actions.cpp:1145
 msgid "Select corresponding items in PCB editor"
 msgstr "Valitse vastaavat kohteet piirilevyeditorissa"
 
-#: eeschema/tools/ee_actions.cpp:1162
+#: eeschema/tools/sch_actions.cpp:1162
 msgid "Show Directive Labels"
 msgstr "Näytä Asetusnimikkeet"
 
-#: eeschema/tools/ee_actions.cpp:1167
+#: eeschema/tools/sch_actions.cpp:1167
 msgid "Show ERC Warnings"
 msgstr "Näytä ERC Varoitukset"
 
-#: eeschema/tools/ee_actions.cpp:1168
+#: eeschema/tools/sch_actions.cpp:1168
 msgid "Show markers for electrical rules checker warnings"
 msgstr "Näytä merkinnät sähkösääntöjen tarkastusvaroituksista"
 
-#: eeschema/tools/ee_actions.cpp:1173
+#: eeschema/tools/sch_actions.cpp:1173
 msgid "Show ERC Errors"
 msgstr "Näytä ERC Virheet"
 
-#: eeschema/tools/ee_actions.cpp:1174
+#: eeschema/tools/sch_actions.cpp:1174
 msgid "Show markers for electrical rules checker errors"
 msgstr "Näytä merkinnät sähkösääntöjen tarkastusvirheistä"
 
-#: eeschema/tools/ee_actions.cpp:1179
+#: eeschema/tools/sch_actions.cpp:1179
 msgid "Show ERC Exclusions"
 msgstr "Näytä ERC Poikkeukset"
 
-#: eeschema/tools/ee_actions.cpp:1180
+#: eeschema/tools/sch_actions.cpp:1180
 msgid "Show markers for excluded electrical rules checker violations"
 msgstr "Näytä merkinnät sähkösääntöjen tarkastusrikkeistä"
 
-#: eeschema/tools/ee_actions.cpp:1185
+#: eeschema/tools/sch_actions.cpp:1185
 msgid "Mark items excluded from simulation"
 msgstr "Merkitse simulaatiosta poissuljetut kohteet"
 
-#: eeschema/tools/ee_actions.cpp:1186
+#: eeschema/tools/sch_actions.cpp:1186
 msgid "Draw 'X's over items which have been excluded from simulation"
 msgstr "Piirrä 'X':t kohteiden päälle, jotka on jätetty pois simulaatiosta"
 
-#: eeschema/tools/ee_actions.cpp:1191
+#: eeschema/tools/sch_actions.cpp:1191
 msgid "Show OP Voltages"
 msgstr "Näytä OP Jännitteet"
 
-#: eeschema/tools/ee_actions.cpp:1192
+#: eeschema/tools/sch_actions.cpp:1192
 msgid "Show operating point voltage data from simulation"
 msgstr "Näytä toimintapisteen jännitetiedot simulaatiosta"
 
-#: eeschema/tools/ee_actions.cpp:1197
+#: eeschema/tools/sch_actions.cpp:1197
 msgid "Show OP Currents"
 msgstr "Näytä OP Virrat"
 
-#: eeschema/tools/ee_actions.cpp:1198
+#: eeschema/tools/sch_actions.cpp:1198
 msgid "Show operating point current data from simulation"
 msgstr "Näytä toimintapisteen virtatiedot simulaatiosta"
 
-#: eeschema/tools/ee_actions.cpp:1203
+#: eeschema/tools/sch_actions.cpp:1203
 msgid "Show Pin Alternate Icons"
 msgstr "Näytä nastan vaihtoehtoiset kuvakkeet"
 
-#: eeschema/tools/ee_actions.cpp:1204
+#: eeschema/tools/sch_actions.cpp:1204
 msgid "Show indicator icons for pins with alternate modes"
 msgstr "Näytä vaihtoehtoisissa tiloissa olevien nastojen indikaattorikuvakkeet"
 
-#: eeschema/tools/ee_actions.cpp:1209 eeschema/tools/ee_actions.cpp:1218
-#: eeschema/tools/ee_actions.cpp:1227 eeschema/tools/ee_actions.cpp:1237
+#: eeschema/tools/sch_actions.cpp:1209 eeschema/tools/sch_actions.cpp:1218
+#: eeschema/tools/sch_actions.cpp:1227 eeschema/tools/sch_actions.cpp:1237
 msgid "Line Mode for Wires and Buses"
 msgstr "Viivatila Johtimille ja Väylille"
 
-#: eeschema/tools/ee_actions.cpp:1210
+#: eeschema/tools/sch_actions.cpp:1210
 msgid "Draw and drag at any angle"
 msgstr "Piirrä ja vedä missä tahansa kulmassa"
 
-#: eeschema/tools/ee_actions.cpp:1219
+#: eeschema/tools/sch_actions.cpp:1219
 msgid "Constrain drawing and dragging to horizontal or vertical motions"
 msgstr ""
 "Rajoita piirtämistä ja vetämistä vaaka- tai pystysuuntaisiin liikkeisiin"
 
-#: eeschema/tools/ee_actions.cpp:1228
+#: eeschema/tools/sch_actions.cpp:1228
 msgid ""
 "Constrain drawing and dragging to horizontal, vertical, or 45-degree angle "
 "motions"
@@ -23217,150 +23226,150 @@ msgstr ""
 "Rajoita piirtämistä ja vetämistä vaaka-, pysty- tai 45 asteen kulman "
 "liikkeisiin"
 
-#: eeschema/tools/ee_actions.cpp:1238
+#: eeschema/tools/sch_actions.cpp:1238
 msgid "Switch to next line mode"
 msgstr "Vaihda seuraavaan viivatilaan"
 
-#: eeschema/tools/ee_actions.cpp:1243
+#: eeschema/tools/sch_actions.cpp:1243
 msgid "Annotate Automatically"
 msgstr "Selitykset Automaattisesti"
 
-#: eeschema/tools/ee_actions.cpp:1244
+#: eeschema/tools/sch_actions.cpp:1244
 msgid "Toggle automatic annotation of new symbols"
 msgstr "Kytke uusien symbolien automaattinen huomautus (päälle/pois)"
 
-#: eeschema/tools/ee_actions.cpp:1250
+#: eeschema/tools/sch_actions.cpp:1250
 msgid "Repair Schematic"
 msgstr "Korjaa Kytkentäkaavio"
 
-#: eeschema/tools/ee_actions.cpp:1251
+#: eeschema/tools/sch_actions.cpp:1251
 msgid "Run various diagnostics and attempt to repair schematic"
 msgstr "Suorita erilaisia diagnooseja ja yritä korjata kytkentäkaavio"
 
-#: eeschema/tools/ee_actions.cpp:1257
+#: eeschema/tools/sch_actions.cpp:1257
 msgid "Previous Symbol Unit"
 msgstr "Aikaisempi symboliyksikkö"
 
-#: eeschema/tools/ee_actions.cpp:1258
+#: eeschema/tools/sch_actions.cpp:1258
 msgid "Open the previous unit of the symbol"
 msgstr "Avaa symbolin edellinen yksikkö"
 
-#: eeschema/tools/ee_actions.cpp:1264
+#: eeschema/tools/sch_actions.cpp:1264
 msgid "Next Symbol Unit"
 msgstr "Seuraava symboliyksikkö"
 
-#: eeschema/tools/ee_actions.cpp:1265
+#: eeschema/tools/sch_actions.cpp:1265
 msgid "Open the next unit of the symbol"
 msgstr "Avaa symbolin seuraava yksikkö"
 
-#: eeschema/tools/ee_actions.cpp:1273
+#: eeschema/tools/sch_actions.cpp:1273
 msgid "Change Sheet"
 msgstr "Vaihda Arkki"
 
-#: eeschema/tools/ee_actions.cpp:1274
+#: eeschema/tools/sch_actions.cpp:1274
 msgid "Change to provided sheet's contents in the schematic editor"
 msgstr "Vaihda toimitettujen arkkien sisältöön kytkentäkaavioeditorissa"
 
-#: eeschema/tools/ee_actions.cpp:1280
+#: eeschema/tools/sch_actions.cpp:1280
 msgid "Enter Sheet"
 msgstr "Siirry Lehdelle"
 
-#: eeschema/tools/ee_actions.cpp:1281
+#: eeschema/tools/sch_actions.cpp:1281
 msgid "Display the selected sheet's contents in the schematic editor"
 msgstr "Näytä valitun sivun sisältö kytkentäkaavioeditorissa"
 
-#: eeschema/tools/ee_actions.cpp:1289
+#: eeschema/tools/sch_actions.cpp:1289
 msgid "Leave Sheet"
 msgstr "Poistu Lehdeltä"
 
-#: eeschema/tools/ee_actions.cpp:1290
+#: eeschema/tools/sch_actions.cpp:1290
 msgid "Display the parent sheet in the schematic editor"
 msgstr "Näytä edellinen lehti kytkentäkaavioeditorissa"
 
-#: eeschema/tools/ee_actions.cpp:1297
+#: eeschema/tools/sch_actions.cpp:1297
 msgid "Navigate Up"
 msgstr "Siirry Ylös"
 
-#: eeschema/tools/ee_actions.cpp:1298
+#: eeschema/tools/sch_actions.cpp:1298
 msgid "Navigate up one sheet in the hierarchy"
 msgstr "Siirry ylöspäin yksi sivu hierarkiassa"
 
-#: eeschema/tools/ee_actions.cpp:1305
+#: eeschema/tools/sch_actions.cpp:1305
 msgid "Navigate Back"
 msgstr "Siirry Takaisin"
 
-#: eeschema/tools/ee_actions.cpp:1306
+#: eeschema/tools/sch_actions.cpp:1306
 msgid "Move backward in sheet navigation history"
 msgstr "Siirry taaksepäin sivun navigointihistoriassa"
 
-#: eeschema/tools/ee_actions.cpp:1313
+#: eeschema/tools/sch_actions.cpp:1313
 msgid "Navigate Forward"
 msgstr "Siirry Eteenpäin"
 
-#: eeschema/tools/ee_actions.cpp:1314
+#: eeschema/tools/sch_actions.cpp:1314
 msgid "Move forward in sheet navigation history"
 msgstr "Siirry eteenpäin sivun navigointihistoriassa"
 
-#: eeschema/tools/ee_actions.cpp:1321
+#: eeschema/tools/sch_actions.cpp:1321
 msgid "Previous Sheet"
 msgstr "Edellinen Sivu"
 
-#: eeschema/tools/ee_actions.cpp:1322
+#: eeschema/tools/sch_actions.cpp:1322
 msgid "Move to previous sheet by number"
 msgstr "Siirry edelliselle sivulle numeron mukaan"
 
-#: eeschema/tools/ee_actions.cpp:1329
+#: eeschema/tools/sch_actions.cpp:1329
 msgid "Next Sheet"
 msgstr "Seuraava Sivu"
 
-#: eeschema/tools/ee_actions.cpp:1330
+#: eeschema/tools/sch_actions.cpp:1330
 msgid "Move to next sheet by number"
 msgstr "Siirry seuraavalle sivulle numeron mukaan"
 
-#: eeschema/tools/ee_actions.cpp:1337
+#: eeschema/tools/sch_actions.cpp:1337
 msgid "Hierarchy Navigator"
 msgstr "Hierarkia-navigaattori"
 
-#: eeschema/tools/ee_actions.cpp:1338
+#: eeschema/tools/sch_actions.cpp:1338
 msgid "Show/hide the schematic sheet hierarchy navigator"
 msgstr "Näytä/ piilota kytkentäkaavionarkin hierarkia-navigaattori"
 
-#: eeschema/tools/ee_actions.cpp:1350
+#: eeschema/tools/sch_actions.cpp:1350
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:1274
 msgid "Draw Wires"
 msgstr "Piirrä Johdot"
 
-#: eeschema/tools/ee_actions.cpp:1361
+#: eeschema/tools/sch_actions.cpp:1361
 msgid "Draw Buses"
 msgstr "Piirrä väylät"
 
-#: eeschema/tools/ee_actions.cpp:1371
+#: eeschema/tools/sch_actions.cpp:1371
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:80
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:124
 msgid "Unfold from Bus"
 msgstr "Avautuu Väylästä"
 
-#: eeschema/tools/ee_actions.cpp:1372
+#: eeschema/tools/sch_actions.cpp:1372
 msgid "Break a wire out of a bus"
 msgstr "Katkaise johto väylästä"
 
-#: eeschema/tools/ee_actions.cpp:1392 pcbnew/tools/pcb_actions.cpp:2367
+#: eeschema/tools/sch_actions.cpp:1392 pcbnew/tools/pcb_actions.cpp:2367
 msgid "Undo Last Segment"
 msgstr "Kumoa Viimeinen Segmentti"
 
-#: eeschema/tools/ee_actions.cpp:1393
+#: eeschema/tools/sch_actions.cpp:1393
 msgid "Walks the current line back one segment."
 msgstr "Siirtää nykyisen viivan taaksepäin yhden osion."
 
-#: eeschema/tools/ee_actions.cpp:1400
+#: eeschema/tools/sch_actions.cpp:1400
 msgid "Switch Segment Posture"
 msgstr "Vaihda Segmentin Asentoa"
 
-#: eeschema/tools/ee_actions.cpp:1401
+#: eeschema/tools/sch_actions.cpp:1401
 msgid "Switches posture of the current segment."
 msgstr "Vaihtaa nykyisen segmentin asentoa."
 
-#: eeschema/tools/ee_actions.cpp:1412 eeschema/tools/sch_move_tool.cpp:396
+#: eeschema/tools/sch_actions.cpp:1412 eeschema/tools/sch_move_tool.cpp:396
 #: eeschema/tools/symbol_editor_move_tool.cpp:109
 #: pagelayout_editor/tools/pl_actions.cpp:82
 #: pcbnew/dialogs/panel_edit_options_base.cpp:81
@@ -23368,241 +23377,138 @@ msgstr "Vaihtaa nykyisen segmentin asentoa."
 msgid "Move"
 msgstr "Siirrä"
 
-#: eeschema/tools/ee_actions.cpp:1421 eeschema/tools/sch_move_tool.cpp:396
+#: eeschema/tools/sch_actions.cpp:1421 eeschema/tools/sch_move_tool.cpp:396
 msgid "Drag"
 msgstr "Vedä"
 
-#: eeschema/tools/ee_actions.cpp:1422
+#: eeschema/tools/sch_actions.cpp:1422
 msgid "Move items while keeping their connections"
 msgstr "Siirrä kohteita säilyttäen samalla niiden yhteydet"
 
-#: eeschema/tools/ee_actions.cpp:1429 eeschema/tools/sch_move_tool.cpp:1823
+#: eeschema/tools/sch_actions.cpp:1429 eeschema/tools/sch_move_tool.cpp:1823
 #: eeschema/tools/symbol_editor_move_tool.cpp:426
 msgid "Align Items to Grid"
 msgstr "Kohdista kohteet ruudukkoon"
 
-#: eeschema/tools/ee_actions.cpp:1437
+#: eeschema/tools/sch_actions.cpp:1437
 msgid "Save Current Sheet Copy As..."
 msgstr "Tallenna Nykyinen Lehti Nimellä..."
 
-#: eeschema/tools/ee_actions.cpp:1438
+#: eeschema/tools/sch_actions.cpp:1438
 msgid "Save a copy of the current sheet to another location or name"
 msgstr "Tallenna kopio nykyisestä asiakirjasta toiseen sijaintiin tai nimeen"
 
-#: eeschema/tools/ee_actions.cpp:1452
+#: eeschema/tools/sch_actions.cpp:1452
 msgid "New Analysis Tab..."
 msgstr "Uusi analyysivälilehti..."
 
-#: eeschema/tools/ee_actions.cpp:1453
+#: eeschema/tools/sch_actions.cpp:1453
 msgid "Create a new tab containing a simulation analysis"
 msgstr "Luo uusi välilehti, joka sisältää simulaatioanalyysin"
 
-#: eeschema/tools/ee_actions.cpp:1461
+#: eeschema/tools/sch_actions.cpp:1461
 msgid "Open Workbook..."
 msgstr "Avaa Työkirja..."
 
-#: eeschema/tools/ee_actions.cpp:1462
+#: eeschema/tools/sch_actions.cpp:1462
 msgid "Open a saved set of analysis tabs and settings"
 msgstr "Avaa tallennettu joukko analyysivälilehtiä ja asetuksia"
 
-#: eeschema/tools/ee_actions.cpp:1470
+#: eeschema/tools/sch_actions.cpp:1470
 msgid "Save Workbook"
 msgstr "Tallenna työkirja"
 
-#: eeschema/tools/ee_actions.cpp:1471
+#: eeschema/tools/sch_actions.cpp:1471
 msgid "Save the current set of analysis tabs and settings"
 msgstr "Tallenna nykyiset analyysivälilehdet ja -asetukset"
 
-#: eeschema/tools/ee_actions.cpp:1479
+#: eeschema/tools/sch_actions.cpp:1479
 msgid "Save Workbook As..."
 msgstr "Tallenna Työkirja Nimellä..."
 
-#: eeschema/tools/ee_actions.cpp:1480
+#: eeschema/tools/sch_actions.cpp:1480
 msgid "Save the current set of analysis tabs and settings to another location"
 msgstr "Tallenna nykyiset analyysivälilehdet ja asetukset toiseen paikkaan"
 
-#: eeschema/tools/ee_actions.cpp:1486
+#: eeschema/tools/sch_actions.cpp:1486
 msgid "Export Current Plot as PNG..."
 msgstr "Vie Nykyinen Piirros PNG-muodossa..."
 
-#: eeschema/tools/ee_actions.cpp:1492
+#: eeschema/tools/sch_actions.cpp:1492
 msgid "Export Current Plot as CSV..."
 msgstr "Vie Nykyinen Piirros CVS-muodossa..."
 
-#: eeschema/tools/ee_actions.cpp:1498
+#: eeschema/tools/sch_actions.cpp:1498
 msgid "Export Current Plot to Clipboard"
 msgstr "Vie nykyinen piirustus leikepöydälle"
 
-#: eeschema/tools/ee_actions.cpp:1504
+#: eeschema/tools/sch_actions.cpp:1504
 msgid "Export Current Plot to Schematic"
 msgstr "Vie nykyinen piirustus kytkentäkaavioon"
 
-#: eeschema/tools/ee_actions.cpp:1510
+#: eeschema/tools/sch_actions.cpp:1510
 msgid "Show Legend"
 msgstr "Näytä Selite"
 
-#: eeschema/tools/ee_actions.cpp:1516
+#: eeschema/tools/sch_actions.cpp:1516
 msgid "Dotted Current/Phase"
 msgstr "Pistevirta/Vaihe"
 
-#: eeschema/tools/ee_actions.cpp:1517
+#: eeschema/tools/sch_actions.cpp:1517
 msgid "Draw secondary signal trace (current or phase) with a dotted line"
 msgstr "Piirrä toissijaisen signaalin jälki (virta tai vaihe) katkoviivalla"
 
-#: eeschema/tools/ee_actions.cpp:1522
+#: eeschema/tools/sch_actions.cpp:1522
 msgid "Dark Mode Plots"
 msgstr "Pimeätilapiirto"
 
-#: eeschema/tools/ee_actions.cpp:1523
+#: eeschema/tools/sch_actions.cpp:1523
 msgid "Draw plots with a black background"
 msgstr "Piirrä kuvioita mustalla taustalla"
 
-#: eeschema/tools/ee_actions.cpp:1528
+#: eeschema/tools/sch_actions.cpp:1528
 msgid "Edit Analysis Tab..."
 msgstr "Muokkaa Analyysivälilehteä..."
 
-#: eeschema/tools/ee_actions.cpp:1529
+#: eeschema/tools/sch_actions.cpp:1529
 msgid "Edit the current analysis tab's SPICE command and plot setup"
 msgstr "Muokkaa nykyisen analyysivälilehden SPICE-komentoa ja piirtoasetuksia"
 
-#: eeschema/tools/ee_actions.cpp:1536
+#: eeschema/tools/sch_actions.cpp:1536
 msgid "Run Simulation"
 msgstr "Suorita simulointi"
 
-#: eeschema/tools/ee_actions.cpp:1542
+#: eeschema/tools/sch_actions.cpp:1542
 msgid "Stop Simulation"
 msgstr "Pysäytä Simulointi"
 
-#: eeschema/tools/ee_actions.cpp:1549
+#: eeschema/tools/sch_actions.cpp:1549
 msgid "Probe Schematic..."
 msgstr "Testaa Kytkentäkaavio..."
 
-#: eeschema/tools/ee_actions.cpp:1550
+#: eeschema/tools/sch_actions.cpp:1550
 msgid "Add a simulator probe"
 msgstr "Lisää simulaattorianturi"
 
-#: eeschema/tools/ee_actions.cpp:1557
+#: eeschema/tools/sch_actions.cpp:1557
 msgid "Add Tuned Value..."
 msgstr "Lisää Säädetty Arvo..."
 
-#: eeschema/tools/ee_actions.cpp:1558
+#: eeschema/tools/sch_actions.cpp:1558
 msgid "Select a value to be tuned"
 msgstr "Valitse viritettävä arvo"
 
-#: eeschema/tools/ee_actions.cpp:1564
+#: eeschema/tools/sch_actions.cpp:1564
 msgid "User-defined Signals..."
 msgstr "Käyttäjän määrittämät signaalit..."
 
-#: eeschema/tools/ee_actions.cpp:1565
+#: eeschema/tools/sch_actions.cpp:1565
 msgid "Add, edit or delete user-defined simulation signals"
 msgstr "Lisää, muokkaa tai poista käyttäjän määrittämiä simulaatiosignaaleja"
 
-#: eeschema/tools/ee_actions.cpp:1571
+#: eeschema/tools/sch_actions.cpp:1571
 msgid "Show SPICE Netlist"
 msgstr "Näytä SPICE Verkkolista"
-
-#: eeschema/tools/ee_inspection_tool.cpp:224
-#: pcbnew/tools/board_inspection_tool.cpp:292
-#, c-format
-msgid "Run %s > %s"
-msgstr "Suorita %s > %s"
-
-#: eeschema/tools/ee_inspection_tool.cpp:231
-#: pcbnew/tools/board_inspection_tool.cpp:299
-#, c-format
-msgid "Run %s"
-msgstr "Suorita %s"
-
-#: eeschema/tools/ee_inspection_tool.cpp:318
-msgid "No symbol issues found."
-msgstr "Symboleissa ei havaittu ongelmia."
-
-#: eeschema/tools/ee_inspection_tool.cpp:322
-msgid "Symbol Warnings"
-msgstr "Symbolivaroitukset"
-
-#: eeschema/tools/ee_inspection_tool.cpp:358
-msgid "Select a symbol to diff against its library equivalent."
-msgstr "Valitse symboli, joka eroaa sen kirjastovastaavuudesta."
-
-#: eeschema/tools/ee_inspection_tool.cpp:379
-#, c-format
-msgid "Symbol %s"
-msgstr "Symboli %s"
-
-#: eeschema/tools/ee_inspection_tool.cpp:385
-#: pcbnew/tools/board_inspection_tool.cpp:1586
-msgid "Summary"
-msgstr "Yhteenveto"
-
-#: eeschema/tools/ee_inspection_tool.cpp:387
-msgid "Schematic vs library diff for:"
-msgstr "Kytkentäkaavion vs kirjaston ero:"
-
-#: eeschema/tools/ee_inspection_tool.cpp:389
-#: pcbnew/dialogs/dialog_footprint_associations.cpp:48
-#: pcbnew/tools/board_inspection_tool.cpp:1590
-msgid "Library: "
-msgstr "Kirjasto: "
-
-#: eeschema/tools/ee_inspection_tool.cpp:390
-#: pcbnew/tools/board_inspection_tool.cpp:1591
-msgid "Library item: "
-msgstr "Kirjastokohde: "
-
-#: eeschema/tools/ee_inspection_tool.cpp:400
-#: pcbnew/tools/board_inspection_tool.cpp:1609
-msgid "The library is not included in the current configuration."
-msgstr "Kirjasto ei sisälly nykyiseen kokoonpanoon."
-
-#: eeschema/tools/ee_inspection_tool.cpp:402
-#: eeschema/tools/ee_inspection_tool.cpp:408
-msgid "Manage Symbol Libraries"
-msgstr "Hallitse Symbolikirjastoja"
-
-#: eeschema/tools/ee_inspection_tool.cpp:406
-#: pcbnew/tools/board_inspection_tool.cpp:1617
-msgid "The library is not enabled in the current configuration."
-msgstr "Kirjasto ei ole käytössä nykyisessä kokoonpanossa."
-
-#: eeschema/tools/ee_inspection_tool.cpp:426
-#: pcbnew/tools/board_inspection_tool.cpp:1637
-#, c-format
-msgid "The library no longer contains the item %s."
-msgstr "Kirjasto ei enää sisällä kohdetta %s."
-
-#: eeschema/tools/ee_inspection_tool.cpp:447
-#: pcbnew/tools/board_inspection_tool.cpp:1643
-msgid "No relevant differences detected."
-msgstr "Olennaisia eroja ei havaittu."
-
-#: eeschema/tools/ee_inspection_tool.cpp:450
-#: pcbnew/tools/board_inspection_tool.cpp:1645
-msgid "Visual"
-msgstr "Visuaalinen"
-
-#: eeschema/tools/ee_inspection_tool.cpp:545
-msgid "No datasheet defined."
-msgstr "Tietolomaketta ei ole määriltety."
-
-#: eeschema/tools/ee_inspection_tool.cpp:574
-#: pagelayout_editor/tools/pl_editor_control.cpp:160
-#: pcbnew/tools/pcb_control.cpp:1676
-msgid "UUID"
-msgstr "UUID"
-
-#: eeschema/tools/ee_point_editor.cpp:1129
-#: pcbnew/tools/pcb_point_editor.cpp:2370
-msgid "Move Point"
-msgstr "Siirrä Pistettä"
-
-#: eeschema/tools/ee_point_editor.cpp:1334
-msgid "Add Corner"
-msgstr "Lisää Kulma"
-
-#: eeschema/tools/rule_area_create_helper.cpp:69
-msgid "Draw Rule Area"
-msgstr "Piirrä sääntöalue"
 
 #: eeschema/tools/sch_drawing_tools.cpp:320
 msgid "Press <ESC> to cancel symbol creation."
@@ -23624,132 +23530,132 @@ msgstr "Tällä symbolilla on vain yksi yksikkö."
 msgid "All units of this symbol are already placed."
 msgstr "Kaikki tämän symbolin yksiköt on jo sijoitettu."
 
-#: eeschema/tools/sch_drawing_tools.cpp:754
+#: eeschema/tools/sch_drawing_tools.cpp:755
 msgid "Add design block"
 msgstr "Lisää suunnittelulohko"
 
-#: eeschema/tools/sch_drawing_tools.cpp:755
+#: eeschema/tools/sch_drawing_tools.cpp:756
 msgid "Import Schematic Sheet Content..."
 msgstr "Tuo Kytkentäkaaviosivun Sisältö..."
 
-#: eeschema/tools/sch_drawing_tools.cpp:786
+#: eeschema/tools/sch_drawing_tools.cpp:787
 msgid "Choose Schematic"
 msgstr "Valitse kytkentäkaavio"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1010 pcbnew/tools/drawing_tool.cpp:728
+#: eeschema/tools/sch_drawing_tools.cpp:1013 pcbnew/tools/drawing_tool.cpp:728
 msgid "Press <ESC> to cancel image creation."
 msgstr "Paina <ESC> keskeyttääksesi kuvan luonnin."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1061
+#: eeschema/tools/sch_drawing_tools.cpp:1064
 #: pagelayout_editor/pl_editor_frame.cpp:890
 #: pagelayout_editor/pl_editor_frame.cpp:898 pcbnew/tools/drawing_tool.cpp:780
 #, c-format
 msgid "Could not load image from '%s'."
 msgstr "Ei voitu ladata kuvaa kohteesta '%s'."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1084 pcbnew/tools/drawing_tool.cpp:801
+#: eeschema/tools/sch_drawing_tools.cpp:1087 pcbnew/tools/drawing_tool.cpp:801
 msgid "Place Image"
 msgstr "Aseta Kuva"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1175
+#: eeschema/tools/sch_drawing_tools.cpp:1178
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:691
 #: pcbnew/tools/drawing_tool.cpp:1825
 msgid "No graphic items found in file."
 msgstr "Tiedostosta ei löydy tuotavia grafiikkakohteita."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1205
-#: eeschema/tools/sch_drawing_tools.cpp:1287
+#: eeschema/tools/sch_drawing_tools.cpp:1208
+#: eeschema/tools/sch_drawing_tools.cpp:1290
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:726
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:815
 msgid "Import Graphic"
 msgstr "Tuo Grafiikka"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1344
+#: eeschema/tools/sch_drawing_tools.cpp:1347
 msgid "Add No Connect Flag"
 msgstr "Lisää Ei Yhteyttä Lippu"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1351
+#: eeschema/tools/sch_drawing_tools.cpp:1354
 msgid "Add Junction"
 msgstr "Lisää Risteys"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1357
+#: eeschema/tools/sch_drawing_tools.cpp:1360
 msgid "Add Wire to Bus Entry"
 msgstr "Lisää Johto Väyläliitäntään"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1432
+#: eeschema/tools/sch_drawing_tools.cpp:1435
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr "Risteyksen sijainti ei sisällä liitettäviä johtoja ja/tai nastoja."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1902
+#: eeschema/tools/sch_drawing_tools.cpp:1905
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:185
 msgid "Press <ESC> to cancel item creation."
 msgstr "Paina <ESC> keskeyttääksesi kohteen luonnin."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1933
+#: eeschema/tools/sch_drawing_tools.cpp:1936
 msgid "Add Text"
 msgstr "Lisää Tekstiä"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1960
+#: eeschema/tools/sch_drawing_tools.cpp:1963
 msgid "Add Hierarchical Label"
 msgstr "Lisää Hierarkkinen Nimike"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1965
-#: eeschema/tools/sch_drawing_tools.cpp:1970
-#: eeschema/tools/sch_drawing_tools.cpp:1975
+#: eeschema/tools/sch_drawing_tools.cpp:1968
+#: eeschema/tools/sch_drawing_tools.cpp:1973
+#: eeschema/tools/sch_drawing_tools.cpp:1978
 msgid "Add Label"
 msgstr "Lisää Nimike"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1988
+#: eeschema/tools/sch_drawing_tools.cpp:1991
 msgid "Click over a sheet."
 msgstr "Napsauta arkin päällä."
 
-#: eeschema/tools/sch_drawing_tools.cpp:2012
-#: eeschema/tools/sch_drawing_tools.cpp:2114
+#: eeschema/tools/sch_drawing_tools.cpp:2015
+#: eeschema/tools/sch_drawing_tools.cpp:2117
 msgid "No new hierarchical labels found."
 msgstr "Uusia hierarkisia nimiöitä ei löytynyt."
 
-#: eeschema/tools/sch_drawing_tools.cpp:2026
+#: eeschema/tools/sch_drawing_tools.cpp:2029
 msgid "Add Sheet Pin"
 msgstr "Lisää arkin tappi"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2340
+#: eeschema/tools/sch_drawing_tools.cpp:2343
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:490
 msgid "Add Text Box"
 msgstr "Lisää Tekstiruutu"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2349
+#: eeschema/tools/sch_drawing_tools.cpp:2352
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:496
 #, c-format
 msgid "Add %s"
 msgstr "Lisää %s"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2404
+#: eeschema/tools/sch_drawing_tools.cpp:2407
 #, c-format
 msgid "Draw %s"
 msgstr "Piirrä %s"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2780 pcbnew/tools/drawing_tool.cpp:1250
+#: eeschema/tools/sch_drawing_tools.cpp:2783 pcbnew/tools/drawing_tool.cpp:1250
 msgid "Draw Table"
 msgstr "Piirrä taulukko"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2895
+#: eeschema/tools/sch_drawing_tools.cpp:2898
 #, c-format
 msgid "File '%s' does not exist."
 msgstr "Tiedostoa '%s' ei ole olemassa."
 
-#: eeschema/tools/sch_drawing_tools.cpp:2979
+#: eeschema/tools/sch_drawing_tools.cpp:2982
 msgid "Press <ESC> to cancel sheet creation."
 msgstr "Paina <ESC> keskeyttääksesi lehden luonnin."
 
-#: eeschema/tools/sch_drawing_tools.cpp:3218
+#: eeschema/tools/sch_drawing_tools.cpp:3221
 msgid "Modify sheet pin"
 msgstr "Muokkaa lehden nastaa"
 
-#: eeschema/tools/sch_drawing_tools.cpp:3224
+#: eeschema/tools/sch_drawing_tools.cpp:3227
 msgid "Modify schematic item"
 msgstr "Muokkaa kytkentäkaavion kohdetta"
 
-#: eeschema/tools/sch_drawing_tools.cpp:3336
+#: eeschema/tools/sch_drawing_tools.cpp:3339
 msgid "No sub schematic found in the current project"
 msgstr "Nykyisestä projektista ei löytynyt alikaaviota"
 
@@ -23777,78 +23683,78 @@ msgstr "Muunna Valinta"
 msgid "Edit Main Fields"
 msgstr "Muokkaa Pääkenttiä"
 
-#: eeschema/tools/sch_edit_tool.cpp:624 eeschema/tools/sch_edit_tool.cpp:2789
+#: eeschema/tools/sch_edit_tool.cpp:624 eeschema/tools/sch_edit_tool.cpp:2787
 msgid "Change To"
 msgstr "Muuta"
 
-#: eeschema/tools/sch_edit_tool.cpp:1055
-#: eeschema/tools/symbol_editor_edit_tool.cpp:208
-#: pcbnew/tools/edit_tool.cpp:2060
+#: eeschema/tools/sch_edit_tool.cpp:1053
+#: eeschema/tools/symbol_editor_edit_tool.cpp:210
+#: pcbnew/tools/edit_tool.cpp:2066
 msgid "Rotate"
 msgstr "Käännä"
 
-#: eeschema/tools/sch_edit_tool.cpp:1253 gerbview/gerber_draw_item.cpp:731
+#: eeschema/tools/sch_edit_tool.cpp:1251 gerbview/gerber_draw_item.cpp:731
 #: pcbnew/pcb_tablecell.cpp:109 pcbnew/pcb_text.cpp:283
-#: pcbnew/pcb_textbox.cpp:562 pcbnew/tools/edit_tool.cpp:2224
+#: pcbnew/pcb_textbox.cpp:562 pcbnew/tools/edit_tool.cpp:2233
 msgid "Mirror"
 msgstr "Peilaa"
 
-#: eeschema/tools/sch_edit_tool.cpp:1520
+#: eeschema/tools/sch_edit_tool.cpp:1518
 msgid "Label value cannot go below zero"
 msgstr "Arvo ei voi olla nollaa pienempi"
 
-#: eeschema/tools/sch_edit_tool.cpp:1599
+#: eeschema/tools/sch_edit_tool.cpp:1597
 msgid "Repeat Item"
 msgstr "Toista Kohde"
 
-#: eeschema/tools/sch_edit_tool.cpp:1820 eeschema/tools/sch_edit_tool.cpp:1824
-#: eeschema/tools/symbol_editor_edit_tool.cpp:690
+#: eeschema/tools/sch_edit_tool.cpp:1818 eeschema/tools/sch_edit_tool.cpp:1822
+#: eeschema/tools/symbol_editor_edit_tool.cpp:692
 #, c-format
 msgid "Edit %s Field"
 msgstr "Muokkaa %s kenttää"
 
-#: eeschema/tools/sch_edit_tool.cpp:1828
-#: eeschema/tools/symbol_editor_edit_tool.cpp:692
+#: eeschema/tools/sch_edit_tool.cpp:1826
+#: eeschema/tools/symbol_editor_edit_tool.cpp:694
 #, c-format
 msgid "Edit '%s' Field"
 msgstr "Muokkaa '%s' Kenttää"
 
-#: eeschema/tools/sch_edit_tool.cpp:2198
+#: eeschema/tools/sch_edit_tool.cpp:2196
 msgid "Edit Sheet Properties"
 msgstr "Muokkaa lehden ominaisuuksia"
 
-#: eeschema/tools/sch_edit_tool.cpp:2345
+#: eeschema/tools/sch_edit_tool.cpp:2343
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:65
 msgid "Rule Area Properties"
 msgstr "Sääntöalueen ominaisuudet"
 
-#: eeschema/tools/sch_edit_tool.cpp:2467 eeschema/tools/sch_edit_tool.cpp:2558
+#: eeschema/tools/sch_edit_tool.cpp:2465 eeschema/tools/sch_edit_tool.cpp:2556
 msgid "<empty>"
 msgstr "<tyhjä>"
 
-#: eeschema/tools/sch_edit_tool.cpp:2949
+#: eeschema/tools/sch_edit_tool.cpp:2947
 msgid "Slice Wire"
 msgstr "Halkaise Johto"
 
-#: eeschema/tools/sch_edit_tool.cpp:2949
+#: eeschema/tools/sch_edit_tool.cpp:2947
 msgid "Break Wire"
 msgstr "Katkaise Johto"
 
-#: eeschema/tools/sch_edit_tool.cpp:2970
+#: eeschema/tools/sch_edit_tool.cpp:2968
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr "Haluatko poistaa viittaamattomat nastat tältä taulukolta?"
 
-#: eeschema/tools/sch_edit_tool.cpp:3031
+#: eeschema/tools/sch_edit_tool.cpp:3029
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "Syötä arkin polun sivunumero %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:3034
+#: eeschema/tools/sch_edit_tool.cpp:3032
 #: eeschema/widgets/hierarchy_pane.cpp:417
 msgid "Edit Sheet Page Number"
 msgstr "Muokkaa arkin sivunumeroa"
 
-#: eeschema/tools/sch_edit_tool.cpp:3228
+#: eeschema/tools/sch_edit_tool.cpp:3226
 msgid "Toggle Attribute"
 msgstr "Kytke Määrite (päälle/pois)"
 
@@ -23858,32 +23764,32 @@ msgid "Revert '%s' (and all sub-sheets) to last version saved?"
 msgstr ""
 "Palautetaanko '%s' (ja kaikki välisivut) viimeksi tallennettuun versioon?"
 
-#: eeschema/tools/sch_editor_control.cpp:359
+#: eeschema/tools/sch_editor_control.cpp:358
 msgid "Include power symbols in schematic to the library?"
 msgstr "Sisällytetäänkö tehosymbolit kytkentäkaaviosta kirjastoon?"
 
-#: eeschema/tools/sch_editor_control.cpp:425
+#: eeschema/tools/sch_editor_control.cpp:424
 #, c-format
 msgid "Could not add library '%s'."
 msgstr "Kirjastoa '%s' ei voitu lisätä."
 
-#: eeschema/tools/sch_editor_control.cpp:438
+#: eeschema/tools/sch_editor_control.cpp:437
 msgid "Update symbols in schematic to refer to new library?"
 msgstr "Päivitetäänkö kytkentäkaavion symbolit viittaamaan uuteen kirjastoon?"
 
-#: eeschema/tools/sch_editor_control.cpp:827
+#: eeschema/tools/sch_editor_control.cpp:826
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "Virhe: päällekkäiset aliarkinimet löytyvät nykyiseltä taulukolta."
 
-#: eeschema/tools/sch_editor_control.cpp:934
+#: eeschema/tools/sch_editor_control.cpp:933
 msgid "No net selected."
 msgstr "Kytkentäverkko valitsematta."
 
-#: eeschema/tools/sch_editor_control.cpp:960
+#: eeschema/tools/sch_editor_control.cpp:959
 msgid "Net must be labeled to assign a netclass."
 msgstr "Verkko on merkittävä verkkoluokan määrittämiseksi."
 
-#: eeschema/tools/sch_editor_control.cpp:1812
+#: eeschema/tools/sch_editor_control.cpp:1811
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -23894,45 +23800,135 @@ msgstr ""
 "hylättiin, koska kohteella on jo taulukko tai yksi sen alilomakkeista "
 "vanhempana."
 
-#: eeschema/tools/sch_editor_control.cpp:2328
+#: eeschema/tools/sch_editor_control.cpp:2327
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr ""
 "Symboleja, joissa on rikkinäiset kirjastosymbolilinkit, ei voi muokata."
 
-#: eeschema/tools/sch_editor_control.cpp:2416
+#: eeschema/tools/sch_editor_control.cpp:2415
 msgid "Increment Annotations"
 msgstr "Lisää huomautuksia"
 
-#: eeschema/tools/sch_editor_control.cpp:2836
+#: eeschema/tools/sch_editor_control.cpp:2835
 #: pcbnew/tools/board_editor_control.cpp:614
 #: pcbnew/tools/footprint_editor_control.cpp:889
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d kaksoiskappaleet vaihdettu.\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2846
+#: eeschema/tools/sch_editor_control.cpp:2845
 #: pcbnew/tools/board_editor_control.cpp:629
 #: pcbnew/tools/footprint_editor_control.cpp:896
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d mahdolliset ongelmat korjattu."
 
-#: eeschema/tools/sch_editor_control.cpp:2853
+#: eeschema/tools/sch_editor_control.cpp:2852
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "Ei virheitä."
 
-#: eeschema/tools/sch_find_replace_tool.cpp:331
+#: eeschema/tools/sch_find_replace_tool.cpp:330
 msgid "Reached end of schematic."
 msgstr "Saavutettu kaavamaisen loppu."
 
-#: eeschema/tools/sch_find_replace_tool.cpp:332
+#: eeschema/tools/sch_find_replace_tool.cpp:331
 msgid "Reached end of sheet."
 msgstr "Saavutettu arkin pää."
 
-#: eeschema/tools/sch_find_replace_tool.cpp:336
+#: eeschema/tools/sch_find_replace_tool.cpp:335
 msgid "Find again to wrap around to the start."
 msgstr "Etsi uudestaan, jotta pääset alkuun."
+
+#: eeschema/tools/sch_inspection_tool.cpp:224
+#: pcbnew/tools/board_inspection_tool.cpp:292
+#, c-format
+msgid "Run %s > %s"
+msgstr "Suorita %s > %s"
+
+#: eeschema/tools/sch_inspection_tool.cpp:231
+#: pcbnew/tools/board_inspection_tool.cpp:299
+#, c-format
+msgid "Run %s"
+msgstr "Suorita %s"
+
+#: eeschema/tools/sch_inspection_tool.cpp:318
+msgid "No symbol issues found."
+msgstr "Symboleissa ei havaittu ongelmia."
+
+#: eeschema/tools/sch_inspection_tool.cpp:322
+msgid "Symbol Warnings"
+msgstr "Symbolivaroitukset"
+
+#: eeschema/tools/sch_inspection_tool.cpp:358
+msgid "Select a symbol to diff against its library equivalent."
+msgstr "Valitse symboli, joka eroaa sen kirjastovastaavuudesta."
+
+#: eeschema/tools/sch_inspection_tool.cpp:379
+#, c-format
+msgid "Symbol %s"
+msgstr "Symboli %s"
+
+#: eeschema/tools/sch_inspection_tool.cpp:385
+#: pcbnew/tools/board_inspection_tool.cpp:1586
+msgid "Summary"
+msgstr "Yhteenveto"
+
+#: eeschema/tools/sch_inspection_tool.cpp:387
+msgid "Schematic vs library diff for:"
+msgstr "Kytkentäkaavion vs kirjaston ero:"
+
+#: eeschema/tools/sch_inspection_tool.cpp:389
+#: pcbnew/dialogs/dialog_footprint_associations.cpp:48
+#: pcbnew/tools/board_inspection_tool.cpp:1590
+msgid "Library: "
+msgstr "Kirjasto: "
+
+#: eeschema/tools/sch_inspection_tool.cpp:390
+#: pcbnew/tools/board_inspection_tool.cpp:1591
+msgid "Library item: "
+msgstr "Kirjastokohde: "
+
+#: eeschema/tools/sch_inspection_tool.cpp:400
+#: pcbnew/tools/board_inspection_tool.cpp:1609
+msgid "The library is not included in the current configuration."
+msgstr "Kirjasto ei sisälly nykyiseen kokoonpanoon."
+
+#: eeschema/tools/sch_inspection_tool.cpp:402
+#: eeschema/tools/sch_inspection_tool.cpp:408
+msgid "Manage Symbol Libraries"
+msgstr "Hallitse Symbolikirjastoja"
+
+#: eeschema/tools/sch_inspection_tool.cpp:406
+#: pcbnew/tools/board_inspection_tool.cpp:1617
+msgid "The library is not enabled in the current configuration."
+msgstr "Kirjasto ei ole käytössä nykyisessä kokoonpanossa."
+
+#: eeschema/tools/sch_inspection_tool.cpp:426
+#: pcbnew/tools/board_inspection_tool.cpp:1637
+#, c-format
+msgid "The library no longer contains the item %s."
+msgstr "Kirjasto ei enää sisällä kohdetta %s."
+
+#: eeschema/tools/sch_inspection_tool.cpp:447
+#: pcbnew/tools/board_inspection_tool.cpp:1643
+msgid "No relevant differences detected."
+msgstr "Olennaisia eroja ei havaittu."
+
+#: eeschema/tools/sch_inspection_tool.cpp:450
+#: pcbnew/tools/board_inspection_tool.cpp:1645
+msgid "Visual"
+msgstr "Visuaalinen"
+
+#: eeschema/tools/sch_inspection_tool.cpp:545
+msgid "No datasheet defined."
+msgstr "Tietolomaketta ei ole määriltety."
+
+#: eeschema/tools/sch_inspection_tool.cpp:574
+#: pagelayout_editor/tools/pl_editor_control.cpp:160
+#: pcbnew/tools/pcb_control.cpp:1676
+msgid "UUID"
+msgstr "UUID"
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:106
 msgid "No bus selected"
@@ -23959,6 +23955,15 @@ msgstr "Paina <ESC> keskeyttääksesi siirtämisen."
 #, c-format
 msgid "Page '%s' not found."
 msgstr "Sivua '%s' ei löydy."
+
+#: eeschema/tools/sch_point_editor.cpp:1135
+#: pcbnew/tools/pcb_point_editor.cpp:2370
+msgid "Move Point"
+msgstr "Siirrä Pistettä"
+
+#: eeschema/tools/sch_point_editor.cpp:1342
+msgid "Add Corner"
+msgstr "Lisää Kulma"
 
 #: eeschema/tools/simulator_control.cpp:109
 msgid "Open Simulation Workbook"
@@ -24038,34 +24043,34 @@ msgstr "SVG Tiedostonimi"
 msgid "Place Pin"
 msgstr "Aseta nasta"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:468
-#: pcbnew/tools/edit_tool.cpp:2642
+#: eeschema/tools/symbol_editor_edit_tool.cpp:470
+#: pcbnew/tools/edit_tool.cpp:2660
 msgid "Hide Field"
 msgstr "Piilota kenttä"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:470
-#: pcbnew/tools/edit_tool.cpp:2644
+#: eeschema/tools/symbol_editor_edit_tool.cpp:472
+#: pcbnew/tools/edit_tool.cpp:2662
 msgid "Hide Fields"
 msgstr "Piilota kentät"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:472
+#: eeschema/tools/symbol_editor_edit_tool.cpp:474
 msgid "Use the Symbol Properties dialog to remove fields."
 msgstr "Käytä symbolin ominaisuudet valintaikkunaa kenttien poistamiseen."
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:780
+#: eeschema/tools/symbol_editor_edit_tool.cpp:782
 msgid "Edit Pins"
 msgstr "Muokkaa nastoja"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:796
+#: eeschema/tools/symbol_editor_edit_tool.cpp:798
 msgid "Symbol is not derived from another symbol."
 msgstr "Symboli ei ole johdettu toisesta symbolista."
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:824
+#: eeschema/tools/symbol_editor_edit_tool.cpp:826
 #, c-format
 msgid "Enter display name for unit %s"
 msgstr "Anna näyttönimi yksikölle %s"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:833
+#: eeschema/tools/symbol_editor_edit_tool.cpp:835
 msgid "Set Unit Display Name"
 msgstr "Aseta yksikön näyttönimi"
 
@@ -24209,7 +24214,7 @@ msgstr "Ei määritelty jalanjälkeä"
 msgid "Invalid footprint specified"
 msgstr "Määritetty virheellinen jalanjälki"
 
-#: eeschema/widgets/sch_properties_panel.cpp:204
+#: eeschema/widgets/sch_properties_panel.cpp:203
 #: pcbnew/widgets/pcb_properties_panel.cpp:225
 msgid "Edit Properties"
 msgstr "Muokkaa ominaisuuksia"
@@ -26944,11 +26949,11 @@ msgstr "Tuo EasyEDA Vakio -varmuuskopio"
 msgid "Import EasyEDA Pro Project"
 msgstr "Tuo EasyEDA Pro Projekti"
 
-#: kicad/jobs_runner.cpp:295
+#: kicad/jobs_runner.cpp:298
 msgid "Job successful"
 msgstr "Tehtävä onnistui"
 
-#: kicad/jobs_runner.cpp:302
+#: kicad/jobs_runner.cpp:305
 msgid "Job failed"
 msgstr "Tehtävä epäonnistui"
 
@@ -27841,7 +27846,8 @@ msgid "Local path: monitoring folder changes"
 msgstr "Paikallinen polku: valvotaan kansion muutoksia"
 
 #: kicad/project_tree_pane.cpp:1630
-msgid "The selected directory is already a git project."
+#, fuzzy
+msgid "The selected directory is already a Git project."
 msgstr "Valittu hakemisto on jo git-projekti."
 
 #: kicad/project_tree_pane.cpp:1637
@@ -27849,7 +27855,8 @@ msgid "Set default remote"
 msgstr "Aseta oletus etävarasto"
 
 #: kicad/project_tree_pane.cpp:1652
-msgid "Failed to initialize git project."
+#, fuzzy
+msgid "Failed to initialize Git project."
 msgstr "Git-projektin alustaminen epäonnistui."
 
 #: kicad/project_tree_pane.cpp:1712
@@ -27890,12 +27897,19 @@ msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "Haaran '%s' HEAD-viitteen päivittäminen epäonnistui"
 
 #: kicad/project_tree_pane.cpp:1918
-msgid "Are you sure you want to remove git tracking from this project?"
+#, fuzzy
+msgid "Are you sure you want to remove Git tracking from this project?"
 msgstr "Haluatko varmasti poistaa git-seurannan tästä projektista?"
 
 #: kicad/project_tree_pane.cpp:1935
-msgid "Failed to remove git directory"
+#, fuzzy
+msgid "Failed to remove Git directory"
 msgstr "Git-hakemiston poistaminen epäonnistui"
+
+#: kicad/project_tree_pane.cpp:2236
+#, fuzzy
+msgid "The selected directory is not a Git project."
+msgstr "Valittu hakemisto on jo git-projekti."
 
 #: kicad/project_tree_pane.cpp:2385
 msgid "Discarding commit due to empty commit message."
@@ -43272,41 +43286,41 @@ msgstr "%s anturaa %s ei löydy kansiosta %s."
 msgid "Processing symbol '%s:%s'."
 msgstr "Käsitellään symbolia '%s: %s'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1319
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1322
 #, c-format
 msgid "Multiple footprints found for %s."
 msgstr "%s:lle löydetty useita jalanjälkiä."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1351
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1354
 #, c-format
 msgid "Cannot remove unused footprint %s (footprint is locked)."
 msgstr "Käyttämätöntä jalanjälkeä %s ei voi poistaa (jalanjälki on lukittu)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1356
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1359
 #, c-format
 msgid "Could not remove unused footprint %s (footprint is locked)."
 msgstr "Käyttämätöntä jalanjälkeä %s ei voitu poistaa (jalanjälki on lukittu)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1369
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1372
 #, c-format
 msgid "Remove unused footprint %s."
 msgstr "Poista käyttämätön jalanjälki %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1378
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1381
 #, c-format
 msgid "Removed unused footprint %s."
 msgstr "Poistettu käyttämätön jalanjälki %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1409
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1412
 #, c-format
 msgid "Removed unused net %s."
 msgstr "Poistettiin käyttämätön verkko \"%s\"."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1421
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1424
 msgid "Update Netlist"
 msgstr "Päivitä verkkolista"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1444
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1447
 #, c-format
 msgid "Total warnings: %d, errors: %d."
 msgstr "Varoituksia yhteensä: %d, virheitä: %d."
@@ -47446,32 +47460,32 @@ msgstr "Yksinkertaista monikulmiot"
 msgid "Heal Shapes"
 msgstr "Paranna muotoja"
 
-#: pcbnew/tools/edit_tool.cpp:2380 pcbnew/tools/pcb_actions.cpp:547
+#: pcbnew/tools/edit_tool.cpp:2395 pcbnew/tools/pcb_actions.cpp:547
 msgid "Change Side / Flip"
 msgstr "Vaihda Puolta / Käännä"
 
-#: pcbnew/tools/edit_tool.cpp:2646
+#: pcbnew/tools/edit_tool.cpp:2664
 msgid "Use the Footprint Properties dialog to remove fields."
 msgstr "Käytä Jalanjälkiominaisuuksia -valintaikkunaa kenttien poistamiseen."
 
-#: pcbnew/tools/edit_tool.cpp:2805
+#: pcbnew/tools/edit_tool.cpp:2823
 msgid "Move Exactly"
 msgstr "Liiku tarkalleen"
 
-#: pcbnew/tools/edit_tool.cpp:2974
+#: pcbnew/tools/edit_tool.cpp:2995
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "Kopioitu %d kohde(tta)"
 
-#: pcbnew/tools/edit_tool.cpp:3315
+#: pcbnew/tools/edit_tool.cpp:3336
 msgid "Select reference point for the copy..."
 msgstr "Valitse kopion viitepiste ..."
 
-#: pcbnew/tools/edit_tool.cpp:3316 pcbnew/tools/edit_tool.cpp:3333
+#: pcbnew/tools/edit_tool.cpp:3337 pcbnew/tools/edit_tool.cpp:3354
 msgid "Selection copied"
 msgstr "Valinta kopioitu"
 
-#: pcbnew/tools/edit_tool.cpp:3317
+#: pcbnew/tools/edit_tool.cpp:3338
 msgid "Copy canceled"
 msgstr "Kopiointi peruutettu"
 
@@ -51214,6 +51228,12 @@ msgstr "KiCad kytkentäkaaviosymboli"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Piirustuslehti"
+
+#~ msgid "Change sheet pin to hierarchical label"
+#~ msgstr "Vaihda lehtinasta hierarkkiseksi nimiöksi"
+
+#~ msgid "Change hierarchical label to sheet pin"
+#~ msgstr "Muuta hierarkkinen nimiö lehden nastaksi"
 
 #~ msgid "All files|*.*"
 #~ msgstr "Kaikki tiedostot|*.*"
