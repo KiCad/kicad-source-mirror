@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-15 19:01+0300\n"
-"PO-Revision-Date: 2025-03-15 15:58+0000\n"
+"PO-Revision-Date: 2025-03-15 23:26+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -39617,19 +39617,16 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:118
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:123
-#, fuzzy
 msgid ""
 "Tented: vias are covered with solder mask.\n"
 "Not tented: vias are not covered with solder mask."
 msgstr ""
-"Via sepolti: non tracciati sullo strato della maschera di saldatura\n"
-"Non sepolti: i via sono tracciati sullo strato della maschera di saldatura\n"
-"(La maschera di saldatura è uno strato negativo)"
+"Tented: fori coperti dalla maschera di saldatura.\n"
+"Non tented: fori non coperti dalla maschera di saldatura."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:136
-#, fuzzy
 msgid "Solder Paste Settings"
-msgstr "Distanza relativa pasta salda:"
+msgstr "Impostazioni pasta salda"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:149
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:154
@@ -39695,7 +39692,6 @@ msgstr ""
 "Le regole di progettazione non possono essere aggiunte senza un progetto"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:23
-#, fuzzy
 msgid "DRC Rules"
 msgstr "Regole DRC"
 
@@ -41087,18 +41083,16 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
-#, fuzzy
 msgid "Default Properties for Round Shapes"
-msgstr "Proprietà predefinite per le forme tonde:"
+msgstr "Proprietà predefinite per le forme tonde"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:171
 msgid "Allow teardrop to span two track segments"
 msgstr "Permetti lacrime estese su due segmenti di pista"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:189
-#, fuzzy
 msgid "Default Properties for Rectangular Shapes"
-msgstr "Proprietà predefinite per le forme rettangolari:"
+msgstr "Proprietà predefinite per le forme rettangolari"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:341
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:506
