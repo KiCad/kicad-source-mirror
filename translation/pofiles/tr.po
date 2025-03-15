@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-13 15:26+0300\n"
-"PO-Revision-Date: 2025-03-15 03:30+0000\n"
+"PO-Revision-Date: 2025-03-15 15:58+0000\n"
 "Last-Translator: İclal Gör <iclallgor@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v9/tr/>\n"
 "Language: tr\n"
@@ -21373,9 +21373,8 @@ msgid "DC Value"
 msgstr "Değer"
 
 #: eeschema/sim/sim_model_ibis.cpp:426
-#, fuzzy
 msgid "ON time"
-msgstr "ON Süresi:"
+msgstr "ON Süresi"
 
 #: eeschema/sim/sim_model_ibis.cpp:434
 msgid "OFF time"
@@ -34304,9 +34303,8 @@ msgid "Offset added to the next row position."
 msgstr "Sonraki satır konumuna eklenen ofset."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:127
-#, fuzzy
 msgid "Vertical offset:"
-msgstr "Dikey metin"
+msgstr "Dikey ofset:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:129
 msgid "Offset added to the next column position"
@@ -34318,9 +34316,8 @@ msgid "Stagger Settings"
 msgstr "Sayfa Ayarları"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:152
-#, fuzzy
 msgid "Stagger:"
-msgstr "derecelendir"
+msgstr "Stagger:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:154
 msgid "Value -1,  0 or 1 disable this option."
@@ -34369,15 +34366,13 @@ msgstr "Alternatif satırlarda/sütunlarda ters numaralandırma"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:206
 #: pcbnew/dialogs/dialog_create_array_base.cpp:411
-#, fuzzy
 msgid "Use first free number"
-msgstr "İlk kullanılmayan numarayı kullan:"
+msgstr "İlk kullanılmayan numarayı kullan"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:206
 #: pcbnew/dialogs/dialog_create_array_base.cpp:411
-#, fuzzy
 msgid "From start value"
-msgstr "Başlangıç değeri:"
+msgstr "Başlangıç değerinden"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:208
 #, fuzzy
