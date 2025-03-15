@@ -22,16 +22,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-15 19:00+0300\n"
-"PO-Revision-Date: 2025-02-19 03:13+0000\n"
+"PO-Revision-Date: 2025-03-15 17:07+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.10.1-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -3689,9 +3689,8 @@ msgstr "Zpráva comitu nemůže být prázdná"
 
 #: common/dialogs/git/dialog_git_repository.cpp:74
 #: common/dialogs/git/dialog_git_repository.cpp:306
-#, fuzzy
 msgid "Test Connection"
-msgstr "Test spojení"
+msgstr "Testování spojení"
 
 #: common/dialogs/git/dialog_git_repository.cpp:165
 #: common/dialogs/git/dialog_git_repository.cpp:357
@@ -3740,9 +3739,8 @@ msgstr "Zadejte adresu URL pro repozitář"
 
 #: common/dialogs/git/dialog_git_repository.cpp:424
 #: common/dialogs/git/dialog_git_repository_base.cpp:106
-#, fuzzy
 msgid "SSH key password:"
-msgstr "Heslo klíče SSH"
+msgstr "Heslo SSH klíče:"
 
 #: common/dialogs/git/dialog_git_repository.cpp:432
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
@@ -3750,14 +3748,12 @@ msgid "Password:"
 msgstr "Heslo:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:42
-#, fuzzy
 msgid "Location:"
-msgstr "Umístění"
+msgstr "Umístění:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:49
-#, fuzzy
 msgid "Connection type:"
-msgstr "Typ připojení"
+msgstr "Typ připojení:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:58
 msgid "HTTPS"
@@ -3770,9 +3766,8 @@ msgid "Local"
 msgstr "Místní"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:91
-#, fuzzy
 msgid "SSH private key:     "
-msgstr "Privátní SSH klíč"
+msgstr "Privátní SSH klíč:     "
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
 msgid "Select SSH private key file"
@@ -3783,7 +3778,6 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:99
-#, fuzzy
 msgid "User name:"
 msgstr "Uživatelské jméno:"
 
@@ -4766,9 +4760,8 @@ msgid "Failed to write file '%s'."
 msgstr "Selhalo přepsání souboru '%s'."
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
-#, fuzzy
 msgid "Embedded Reference"
-msgstr "Kopírovat vloženou referenci"
+msgstr "Vložený odkaz"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
 msgid "Add embedded file"
@@ -6975,14 +6968,14 @@ msgid "Could not copy file: %s to %s"
 msgstr "Nelze zkopírovat soubor: %s do %s"
 
 #: common/gestfich.cpp:477
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy directory: %s to %s"
-msgstr "Nelze zkopírovat soubor: %s do %s"
+msgstr "Nelze zkopírovat adresář: %s do %s"
 
 #: common/gestfich.cpp:529
-#, fuzzy, c-format
+#, c-format
 msgid "Source directory does not exist: %s"
-msgstr "Adresář '%s' neexistuje"
+msgstr "Zdrojový adresář neexistuje: %s"
 
 #: common/gestfich.cpp:584
 #, c-format
@@ -24261,7 +24254,7 @@ msgstr "Nevybrány žádné vrstvy."
 #: eeschema/tools/sch_inspection_tool.cpp:450
 #: pcbnew/tools/board_inspection_tool.cpp:1645
 msgid "Visual"
-msgstr ""
+msgstr "Vizuální"
 
 #: eeschema/tools/sch_inspection_tool.cpp:545
 msgid "No datasheet defined."
@@ -35179,10 +35172,11 @@ msgid ""
 msgstr ""
 "Jedná se o poměr lokální izolační mezery v procentech použitý jako procento "
 "šířky a výšky plošky pro toto pouzdro.\n"
-"Hodnota 10 znamená, že hodnota mezera je 10% velikosti plošky\n"
+"Hodnota 10 znamená, že vodorovná hodnota mezery je 10% šířky plošky a "
+"hodnota svislé mezery je 10% výšky plošky.\n"
 "Tuto hodnotu lze nahradit lokální hodnotou plošky.\n"
-"Konečná hodnota mezery je součtem této hodnoty a velikosti mezery\n"
-"Záporná hodnota znamená menší velikost masky než velikost plošky. % o % o."
+"Konečná hodnota mezery je součet této hodnoty a hodnoty absolutní mezery.\n"
+"Záporná hodnota znamená, že maska je menší než ploška. % o % o."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:345
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:314
