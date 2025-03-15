@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-15 19:01+0300\n"
-"PO-Revision-Date: 2025-03-15 23:26+0000\n"
+"PO-Revision-Date: 2025-03-16 01:02+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -41096,14 +41096,12 @@ msgstr "Proprietà predefinite per le forme rettangolari"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:341
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:506
-#, fuzzy
 msgid "Allow teardrop to span track segments"
-msgstr "Permetti lacrime estese su 2 segmenti di pista"
+msgstr "Permetti estensione lacrime su segmenti di pista"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:359
-#, fuzzy
 msgid "Properties for Track-to-Track Teardrops"
-msgstr "Proprietà per le lacrime da-pista-a-pista:"
+msgstr "Proprietà per le lacrime da-pista-a-pista"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:473
 msgid ""
