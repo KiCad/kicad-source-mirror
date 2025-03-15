@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-13 15:25+0300\n"
+"POT-Creation-Date: 2025-03-15 19:00+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1076,9 +1076,6 @@ msgstr "&Revert"
 msgid "&OK"
 msgstr "&OK"
 
-msgid "Warning"
-msgstr "Warning"
-
 msgid "Information"
 msgstr "Information"
 
@@ -2113,11 +2110,11 @@ msgstr "C&ommit"
 msgid "Commit message cannot be empty"
 msgstr "Commit message cannot be empty"
 
-msgid "Enter the password for the SSH key"
-msgstr "Enter the password for the SSH key"
-
 msgid "Test Connection"
 msgstr "Test Connection"
+
+msgid "Enter the password for the SSH key"
+msgstr "Enter the password for the SSH key"
 
 msgid "Connection successful"
 msgstr "Connection successful"
@@ -3285,6 +3282,9 @@ msgstr "Pattern"
 
 msgid "Net Class"
 msgstr "Net Class"
+
+msgid "Warning"
+msgstr "Warning"
 
 msgid "Ignore"
 msgstr "Ignore"
@@ -15025,6 +15025,9 @@ msgstr "Net %s cannot be changed to %s because it is driven by a power pin."
 msgid "Add label '%s' to %s pin %s net."
 msgstr "Add label '%s' to %s pin %s net."
 
+msgid "Draw Rule Area"
+msgstr "Draw Rule Area"
+
 msgid "Show the electrical rules checker window"
 msgstr "Show the electrical rules checker window"
 
@@ -15982,73 +15985,6 @@ msgstr "Add, edit or delete user-defined simulation signals"
 msgid "Show SPICE Netlist"
 msgstr "Show SPICE Netlist"
 
-#, c-format
-msgid "Run %s > %s"
-msgstr "Run %s > %s"
-
-#, c-format
-msgid "Run %s"
-msgstr "Run %s"
-
-msgid "No symbol issues found."
-msgstr "No symbol issues found."
-
-msgid "Symbol Warnings"
-msgstr "Symbol Warnings"
-
-msgid "Select a symbol to diff against its library equivalent."
-msgstr "Select a symbol to diff against its library equivalent."
-
-#, c-format
-msgid "Symbol %s"
-msgstr "Symbol %s"
-
-msgid "Summary"
-msgstr "Summary"
-
-msgid "Schematic vs library diff for:"
-msgstr "Schematic vs library diff for:"
-
-msgid "Library: "
-msgstr "Library: "
-
-msgid "Library item: "
-msgstr "Library item: "
-
-msgid "The library is not included in the current configuration."
-msgstr "The library is not included in the current configuration."
-
-msgid "Manage Symbol Libraries"
-msgstr "Manage Symbol Libraries"
-
-msgid "The library is not enabled in the current configuration."
-msgstr "The library is not enabled in the current configuration."
-
-#, c-format
-msgid "The library no longer contains the item %s."
-msgstr "The library no longer contains the item %s."
-
-msgid "No relevant differences detected."
-msgstr "No relevant differences detected."
-
-msgid "Visual"
-msgstr "Visual"
-
-msgid "No datasheet defined."
-msgstr "No datasheet defined."
-
-msgid "UUID"
-msgstr "UUID"
-
-msgid "Move Point"
-msgstr "Move Point"
-
-msgid "Add Corner"
-msgstr "Add Corner"
-
-msgid "Draw Rule Area"
-msgstr "Draw Rule Area"
-
 msgid "Press <ESC> to cancel symbol creation."
 msgstr "Press <ESC> to cancel symbol creation."
 
@@ -16280,6 +16216,64 @@ msgstr "Reached end of sheet."
 msgid "Find again to wrap around to the start."
 msgstr "Find again to wrap around to the start."
 
+#, c-format
+msgid "Run %s > %s"
+msgstr "Run %s > %s"
+
+#, c-format
+msgid "Run %s"
+msgstr "Run %s"
+
+msgid "No symbol issues found."
+msgstr "No symbol issues found."
+
+msgid "Symbol Warnings"
+msgstr "Symbol Warnings"
+
+msgid "Select a symbol to diff against its library equivalent."
+msgstr "Select a symbol to diff against its library equivalent."
+
+#, c-format
+msgid "Symbol %s"
+msgstr "Symbol %s"
+
+msgid "Summary"
+msgstr "Summary"
+
+msgid "Schematic vs library diff for:"
+msgstr "Schematic vs library diff for:"
+
+msgid "Library: "
+msgstr "Library: "
+
+msgid "Library item: "
+msgstr "Library item: "
+
+msgid "The library is not included in the current configuration."
+msgstr "The library is not included in the current configuration."
+
+msgid "Manage Symbol Libraries"
+msgstr "Manage Symbol Libraries"
+
+msgid "The library is not enabled in the current configuration."
+msgstr "The library is not enabled in the current configuration."
+
+#, c-format
+msgid "The library no longer contains the item %s."
+msgstr "The library no longer contains the item %s."
+
+msgid "No relevant differences detected."
+msgstr "No relevant differences detected."
+
+msgid "Visual"
+msgstr "Visual"
+
+msgid "No datasheet defined."
+msgstr "No datasheet defined."
+
+msgid "UUID"
+msgstr "UUID"
+
 msgid "No bus selected"
 msgstr "No bus selected"
 
@@ -16298,6 +16292,12 @@ msgstr "Press <ESC> to cancel move."
 #, c-format
 msgid "Page '%s' not found."
 msgstr "Page '%s' not found."
+
+msgid "Move Point"
+msgstr "Move Point"
+
+msgid "Add Corner"
+msgstr "Add Corner"
 
 msgid "Open Simulation Workbook"
 msgstr "Open Simulation Workbook"
@@ -18964,6 +18964,10 @@ msgstr "Directory name:"
 
 msgid "Create New Directory"
 msgstr "Create New Directory"
+
+#, c-format
+msgid "Failed to get status list: %s"
+msgstr "Failed to get status list: %s"
 
 msgid "Switch to this Project"
 msgstr "Switch to this Project"
@@ -22308,6 +22312,9 @@ msgstr "Pre-defined Sizes"
 msgid "Length-tuning Patterns"
 msgstr "Length-tuning Patterns"
 
+msgid "Component Classes"
+msgstr "Component Classes"
+
 msgid "Board Data"
 msgstr "Board Data"
 
@@ -24886,6 +24893,9 @@ msgstr "Teardrop defaults"
 msgid "Length-tuning pattern defaults"
 msgstr "Length-tuning pattern defaults"
 
+msgid "Component classes"
+msgstr "Component classes"
+
 msgid "Custom rules"
 msgstr "Custom rules"
 
@@ -25001,9 +25011,6 @@ msgstr "Sheets"
 
 msgid "Component Class"
 msgstr "Component Class"
-
-msgid "Component Classes"
-msgstr "Component Classes"
 
 msgid "Replace existing placement rule areas"
 msgstr "Replace existing placement rule areas"
@@ -26620,6 +26627,61 @@ msgstr ""
 
 msgid "Update PCB from Schematic"
 msgstr "Update PCB from Schematic"
+
+#, c-format
+msgid "Error with conditions for component class assignment %s"
+msgstr "Error with conditions for component class assignment %s"
+
+msgid "Reference..."
+msgstr "Reference..."
+
+msgid "Footprint..."
+msgstr "Footprint..."
+
+msgid "Side..."
+msgstr "Side..."
+
+msgid "Rotation..."
+msgstr "Rotation..."
+
+msgid "Footprint Field..."
+msgstr "Footprint Field..."
+
+msgid "Sheet Name..."
+msgstr "Sheet Name..."
+
+msgid "Footprint Field:"
+msgstr "Footprint Field:"
+
+msgid "Import references from selection"
+msgstr "Import references from selection"
+
+msgid "Assign component class per sheet"
+msgstr "Assign component class per sheet"
+
+msgid "Custom Assignments:"
+msgstr "Custom Assignments:"
+
+msgid "Add Custom Assignment"
+msgstr "Add Custom Assignment"
+
+msgid "Component Class:"
+msgstr "Component Class:"
+
+msgid "Match All"
+msgstr "Match All"
+
+msgid "Match Any"
+msgstr "Match Any"
+
+msgid "Footprint:"
+msgstr "Footprint:"
+
+msgid "Field Value:"
+msgstr "Field Value:"
+
+msgid "Sheet Name:"
+msgstr "Sheet Name:"
 
 msgid "Constrain actions to H, V, 45 degrees"
 msgstr "Constrain actions to H, V, 45 degrees"
@@ -29194,6 +29256,13 @@ msgstr "'layer' keyword already present."
 msgid "Missing ')'."
 msgstr "Missing ')'."
 
+msgid "Missing component class name."
+msgstr "Missing component class name."
+
+#, c-format
+msgid "Could not parse expression '%s'."
+msgstr "Could not parse expression '%s'."
+
 #, c-format
 msgid "Missing constraint type.|  Expected %s."
 msgstr "Missing constraint type.|  Expected %s."
@@ -30054,6 +30123,9 @@ msgstr "Error loading PCB '%s'."
 msgid "Memory exhausted loading PCB '%s'"
 msgstr "Memory exhausted loading PCB '%s'"
 
+msgid "Could not load component class assignment rules"
+msgstr "Could not load component class assignment rules"
+
 #, c-format
 msgid "Error saving footprint %s to project specific library."
 msgstr "Error saving footprint %s to project specific library."
@@ -30592,9 +30664,6 @@ msgstr "Error saving footprint library"
 #, c-format
 msgid "Footprint library '%s' saved as '%s'."
 msgstr "Footprint library '%s' saved as '%s'."
-
-msgid "Footprint..."
-msgstr "Footprint..."
 
 msgid "View as &PNG..."
 msgstr "View as &PNG..."
