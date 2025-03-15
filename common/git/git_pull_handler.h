@@ -25,8 +25,6 @@
 #define _GIT_PULL_HANDLER_H_
 
 #include <git/git_repo_mixin.h>
-#include <git/git_progress.h>
-#include <git/kicad_git_errors.h>
 
 #include <vector>
 #include <string>
@@ -65,7 +63,7 @@ struct ConflictData
 };
 
 
-class GIT_PULL_HANDLER : public KIGIT_ERRORS, public GIT_PROGRESS, public KIGIT_REPO_MIXIN
+class GIT_PULL_HANDLER : public KIGIT_REPO_MIXIN
 {
 public:
     GIT_PULL_HANDLER( KIGIT_COMMON* aCommon );

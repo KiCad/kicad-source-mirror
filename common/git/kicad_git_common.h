@@ -32,7 +32,7 @@
 
 #include <wx/string.h>
 
-class KIGIT_COMMON : public KIGIT_ERRORS
+class KIGIT_COMMON
 {
 
 public:
@@ -90,18 +90,11 @@ public:
 
     wxString GetUsername() const { return m_username; }
     wxString GetPassword() const { return m_password; }
-    GIT_CONN_TYPE GetConnType() const { return m_connType; }
+    GIT_CONN_TYPE GetConnType() const;
 
     void SetUsername( const wxString& aUsername ) { m_username = aUsername; }
     void SetPassword( const wxString& aPassword ) { m_password = aPassword; }
     void SetSSHKey( const wxString& aSSHKey );
-
-    void SetConnType( GIT_CONN_TYPE aConnType ) { m_connType = aConnType; }
-    void SetConnType( unsigned aConnType )
-    {
-        if( aConnType < static_cast<unsigned>( GIT_CONN_TYPE::GIT_CONN_LAST ) )
-            m_connType = static_cast<GIT_CONN_TYPE>( aConnType );
-    }
 
     // Holds a temporary variable that can be used by the authentication callback
     // to remember which types of authentication have been tested so that we
@@ -137,6 +130,16 @@ public:
 
     int HandleSSHAgentAuthentication( git_cred** aOut, const wxString& aUsername );
 
+    static wxString GetLastGitError()
+    {
+        const git_error* error = git_error_last();
+
+        if( error == nullptr )
+            return wxString( "No error" );
+
+        return wxString( error->message );
+    }
+
 protected:
     git_repository* m_repo;
 
@@ -153,6 +156,7 @@ protected:
     // Make git handlers friends so they can access the mutex
     friend class GIT_PUSH_HANDLER;
     friend class GIT_PULL_HANDLER;
+    friend class GIT_CLONE_HANDLER;
 
 private:
     void updatePublicKeys();
