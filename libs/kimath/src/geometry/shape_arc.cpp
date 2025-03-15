@@ -473,7 +473,7 @@ bool SHAPE_ARC::NearestPoints( const SHAPE_CIRCLE& aCircle, VECTOR2I& aPtA, VECT
         }
     }
 
-    std::vector<VECTOR2I> pts = { m_start, m_end, circle1.NearestPoint( GetCenter() ) };
+    std::vector<VECTOR2I> pts = { m_start, m_end, circle1.NearestPoint( aCircle.GetCenter() ) };
 
     for( const VECTOR2I& pt : pts )
     {
