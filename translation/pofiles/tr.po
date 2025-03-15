@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-15 19:00+0300\n"
-"PO-Revision-Date: 2025-03-15 19:28+0000\n"
+"PO-Revision-Date: 2025-03-15 19:31+0000\n"
 "Last-Translator: NAXSISFLYBY <naxsis61@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
@@ -49749,8 +49749,9 @@ msgid "Via diameter selector"
 msgstr "Mekanik boşluk çözünürlüğü:"
 
 #: pcbnew/toolbars_pcb_editor.cpp:126
+#, fuzzy
 msgid "Control to select the via diameter"
-msgstr ""
+msgstr "Via çapını seçmek için kontrol"
 
 #: pcbnew/toolbars_pcb_editor.cpp:194
 #, fuzzy
