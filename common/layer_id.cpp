@@ -260,3 +260,115 @@ PCB_LAYER_ID BoardLayerFromLegacyId( int aLegacyId )
         }
     }
 }
+
+
+PCB_LAYER_ID Map3DUserLayerToPCBLayer( int aLayer )
+{
+    // NOTE: User_1..User45 are NOT consecutive numbers!
+
+    switch( aLayer )
+    {
+    case LAYER_3D_USER_1:  return User_1;
+    case LAYER_3D_USER_2:  return User_2;
+    case LAYER_3D_USER_3:  return User_3;
+    case LAYER_3D_USER_4:  return User_4;
+    case LAYER_3D_USER_5:  return User_5;
+    case LAYER_3D_USER_6:  return User_6;
+    case LAYER_3D_USER_7:  return User_7;
+    case LAYER_3D_USER_8:  return User_8;
+    case LAYER_3D_USER_9:  return User_9;
+    case LAYER_3D_USER_10: return User_10;
+    case LAYER_3D_USER_11: return User_11;
+    case LAYER_3D_USER_12: return User_12;
+    case LAYER_3D_USER_13: return User_13;
+    case LAYER_3D_USER_14: return User_14;
+    case LAYER_3D_USER_15: return User_15;
+    case LAYER_3D_USER_16: return User_16;
+    case LAYER_3D_USER_17: return User_17;
+    case LAYER_3D_USER_18: return User_18;
+    case LAYER_3D_USER_19: return User_19;
+    case LAYER_3D_USER_20: return User_20;
+    case LAYER_3D_USER_21: return User_21;
+    case LAYER_3D_USER_22: return User_22;
+    case LAYER_3D_USER_23: return User_23;
+    case LAYER_3D_USER_24: return User_24;
+    case LAYER_3D_USER_25: return User_25;
+    case LAYER_3D_USER_26: return User_26;
+    case LAYER_3D_USER_27: return User_27;
+    case LAYER_3D_USER_28: return User_28;
+    case LAYER_3D_USER_29: return User_29;
+    case LAYER_3D_USER_30: return User_30;
+    case LAYER_3D_USER_31: return User_31;
+    case LAYER_3D_USER_32: return User_32;
+    case LAYER_3D_USER_33: return User_33;
+    case LAYER_3D_USER_34: return User_34;
+    case LAYER_3D_USER_35: return User_35;
+    case LAYER_3D_USER_36: return User_36;
+    case LAYER_3D_USER_37: return User_37;
+    case LAYER_3D_USER_38: return User_38;
+    case LAYER_3D_USER_39: return User_39;
+    case LAYER_3D_USER_40: return User_40;
+    case LAYER_3D_USER_41: return User_41;
+    case LAYER_3D_USER_42: return User_42;
+    case LAYER_3D_USER_43: return User_43;
+    case LAYER_3D_USER_44: return User_44;
+    case LAYER_3D_USER_45: return User_45;
+    default:               return UNDEFINED_LAYER;
+    }
+}
+
+
+int MapPCBUserLayerTo3DLayer( PCB_LAYER_ID aLayer )
+{
+    // NOTE: User_1..User45 are NOT consecutive numbers!
+
+    switch( aLayer )
+    {
+    case User_1:  return LAYER_3D_USER_1;
+    case User_2:  return LAYER_3D_USER_2;
+    case User_3:  return LAYER_3D_USER_3;
+    case User_4:  return LAYER_3D_USER_4;
+    case User_5:  return LAYER_3D_USER_5;
+    case User_6:  return LAYER_3D_USER_6;
+    case User_7:  return LAYER_3D_USER_7;
+    case User_8:  return LAYER_3D_USER_8;
+    case User_9:  return LAYER_3D_USER_9;
+    case User_10: return LAYER_3D_USER_10;
+    case User_11: return LAYER_3D_USER_11;
+    case User_12: return LAYER_3D_USER_12;
+    case User_13: return LAYER_3D_USER_13;
+    case User_14: return LAYER_3D_USER_14;
+    case User_15: return LAYER_3D_USER_15;
+    case User_16: return LAYER_3D_USER_16;
+    case User_17: return LAYER_3D_USER_17;
+    case User_18: return LAYER_3D_USER_18;
+    case User_19: return LAYER_3D_USER_19;
+    case User_20: return LAYER_3D_USER_20;
+    case User_21: return LAYER_3D_USER_21;
+    case User_22: return LAYER_3D_USER_22;
+    case User_23: return LAYER_3D_USER_23;
+    case User_24: return LAYER_3D_USER_24;
+    case User_25: return LAYER_3D_USER_25;
+    case User_26: return LAYER_3D_USER_26;
+    case User_27: return LAYER_3D_USER_27;
+    case User_28: return LAYER_3D_USER_28;
+    case User_29: return LAYER_3D_USER_29;
+    case User_30: return LAYER_3D_USER_30;
+    case User_31: return LAYER_3D_USER_31;
+    case User_32: return LAYER_3D_USER_32;
+    case User_33: return LAYER_3D_USER_33;
+    case User_34: return LAYER_3D_USER_34;
+    case User_35: return LAYER_3D_USER_35;
+    case User_36: return LAYER_3D_USER_36;
+    case User_37: return LAYER_3D_USER_37;
+    case User_38: return LAYER_3D_USER_38;
+    case User_39: return LAYER_3D_USER_39;
+    case User_40: return LAYER_3D_USER_40;
+    case User_41: return LAYER_3D_USER_41;
+    case User_42: return LAYER_3D_USER_42;
+    case User_43: return LAYER_3D_USER_43;
+    case User_44: return LAYER_3D_USER_44;
+    case User_45: return LAYER_3D_USER_45;
+    default:      return UNDEFINED_LAYER;
+    }
+}

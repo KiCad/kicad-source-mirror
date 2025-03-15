@@ -112,11 +112,6 @@ public:
      */
     std::map<int, COLOR4D> GetLayerColors() const;
 
-    /**
-     * Build the copper color list used by the board editor, and store it in m_BoardEditorColors
-     */
-    void GetBoardEditorCopperLayerColors( PCBNEW_SETTINGS* aCfg );
-
     std::map<int, COLOR4D> GetDefaultColors() const;
     void SetLayerColors( const std::map<int, COLOR4D>& aColors );
 
@@ -210,15 +205,7 @@ public:
      * @param aLayerId the layer to get the color information.
      * @return the color in SFVEC3F format.
      */
-    SFVEC4F GetLayerColor( PCB_LAYER_ID aLayerId ) const;
-
-    /**
-     * Get the technical color of a layer.
-     *
-     * @param aItemId the item id to get the color information.
-     * @return the color in SFVEC3F format.
-     */
-    SFVEC4F GetItemColor( int aItemId ) const;
+    SFVEC4F GetLayerColor( int aLayerId ) const;
 
     /**
      * @param[in] aColor is the color mapped.
@@ -455,6 +442,7 @@ public:
     SFVEC4F           m_UserCommentsColor;
     SFVEC4F           m_ECO1Color;
     SFVEC4F           m_ECO2Color;
+    SFVEC4F           m_UserDefinedLayerColor[45];
 
     std::map<int, COLOR4D> m_ColorOverrides;  ///< allows to override color scheme colors
     std::map<int, COLOR4D> m_BoardEditorColors; ///< list of colors used by the board editor
@@ -462,7 +450,6 @@ public:
 private:
     BOARD*            m_board;
     S3D_CACHE*        m_3dModelManager;
-    COLOR_SETTINGS*   m_colors;
 
     VECTOR2I          m_boardPos;             ///< Board center position in board internal units.
     VECTOR2I          m_boardSize;            ///< Board size in board internal units.

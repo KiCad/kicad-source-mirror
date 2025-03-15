@@ -362,9 +362,33 @@ void RENDER_3D_OPENGL::setLayerMaterial( PCB_LAYER_ID aLayerID )
         break;
 
     default:
+    {
+        int layer3D = MapPCBUserLayerTo3DLayer( aLayerID );
+
+        if( layer3D != UNDEFINED_LAYER )
+        {
+            // Note: MUST do this in LAYER_3D space; User_1..User_45 are NOT contiguous
+            int user_idx = layer3D - LAYER_3D_USER_1;
+
+            m_materials.m_Plastic.m_Diffuse = m_boardAdapter.m_UserDefinedLayerColor[ user_idx ];
+            m_materials.m_Plastic.m_Ambient = SFVEC3F( m_materials.m_Plastic.m_Diffuse.r * 0.05f,
+                                                       m_materials.m_Plastic.m_Diffuse.g * 0.05f,
+                                                       m_materials.m_Plastic.m_Diffuse.b * 0.05f );
+
+            m_materials.m_Plastic.m_Specular = SFVEC3F( m_materials.m_Plastic.m_Diffuse.r * 0.7f,
+                                                        m_materials.m_Plastic.m_Diffuse.g * 0.7f,
+                                                        m_materials.m_Plastic.m_Diffuse.b * 0.7f );
+
+            m_materials.m_Plastic.m_Shininess = 0.078125f * 128.0f;
+            m_materials.m_Plastic.m_Emissive  = SFVEC3F( 0.0f, 0.0f, 0.0f );
+            OglSetMaterial( m_materials.m_Plastic, 1.0f );
+            break;
+        }
+
         m_materials.m_Copper.m_Diffuse = m_boardAdapter.m_CopperColor;
         OglSetMaterial( m_materials.m_Copper, 1.0f );
         break;
+    }
     }
 }
 
