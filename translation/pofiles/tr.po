@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-15 19:00+0300\n"
-"PO-Revision-Date: 2025-03-15 19:19+0000\n"
+"PO-Revision-Date: 2025-03-15 19:28+0000\n"
 "Last-Translator: NAXSISFLYBY <naxsis61@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
@@ -5388,7 +5388,7 @@ msgstr "Netclass'ın adı zaten kullanılıyor."
 #: common/dialogs/panel_setup_netclasses.cpp:603
 #, c-format
 msgid "Clearance was too large.  It has been clipped to %s."
-msgstr ""
+msgstr "Temas mesafesi çok büyüktü. %s'ye kırpıldı."
 
 #: common/dialogs/panel_setup_netclasses.cpp:669
 msgid "Minimum copper clearance"
@@ -21914,6 +21914,8 @@ msgid ""
 "The current analysis must have a plot in order to tune the value of a "
 "passive R, L, C model or voltage or current source."
 msgstr ""
+"Geçerli analiz, pasif R, L, C modeli veya voltaj ya da akım kaynağının "
+"değerini ayarlamak için bir grafik içermelidir."
 
 #: eeschema/sim/simulator_frame_ui.cpp:1661
 #: eeschema/sim/simulator_frame_ui.cpp:1674
