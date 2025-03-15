@@ -1296,8 +1296,8 @@ bool PDF_PLOTTER::EndPlot()
 
     for( const auto& [ linkHandle, linkPair ] : m_hyperlinkHandles )
     {
-        const BOX2D&    box = linkPair.first;
-        const wxString& url = linkPair.second;
+        BOX2D    box = linkPair.first;
+        wxString url = linkPair.second;
 
         startPdfObject( linkHandle );
 
@@ -1337,6 +1337,9 @@ bool PDF_PLOTTER::EndPlot()
         }
         else
         {
+            if( m_project )
+                url = ResolveUriByEnvVars( url, m_project );
+
             fmt::print( m_outputFile,
                         "/A << /Type /Action /S /URI /URI {} >>\n"
                         ">>\n",

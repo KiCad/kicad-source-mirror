@@ -26,6 +26,7 @@
 #include <eeschema_id.h>
 #include <tools/sch_actions.h>
 #include <tools/sch_navigate_tool.h>
+#include <common.h>
 #include "eda_doc.h"
 
 
@@ -74,9 +75,10 @@ void SCH_NAVIGATE_TOOL::CleanHistory()
 }
 
 
-void SCH_NAVIGATE_TOOL::HypertextCommand( const wxString& href )
+void SCH_NAVIGATE_TOOL::HypertextCommand( const wxString& aHref )
 {
     wxString destPage;
+    wxString href = ResolveUriByEnvVars( aHref, &m_frame->Prj() );
 
     if( href == SCH_NAVIGATE_TOOL::g_BackLink )
     {
