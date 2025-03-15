@@ -26,7 +26,7 @@
 
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/shape_arc.h>
-
+#include <geometry/shape_circle.h>
 #include <geometry/shape_line_chain.h>
 
 #include <qa_utils/geometry/geometry.h>
@@ -164,6 +164,12 @@ struct ARC_CENTRE_PT_ANGLE
     VECTOR2I m_center_point;
     VECTOR2I m_start_point;
     double   m_center_angle;
+};
+struct ARC_START_MID_END
+{
+    VECTOR2I m_start_point;
+    VECTOR2I m_mid_point;
+    VECTOR2I m_end_point;
 };
 
 
@@ -518,6 +524,49 @@ BOOST_DATA_TEST_CASE( BasicSECGeom, boost::unit_test::data::make( arc_sec_cases 
     this_arc.ConstructFromStartEndCenter( start, end, center, cw );
 
     BOOST_CHECK_EQUAL( this_arc.GetArcMid(), c.m_expected_mid );
+}
+
+
+struct ARC_CICLE_COLLIDE_CASE : public KI_TEST::NAMED_CASE
+{
+    ARC_START_MID_END   m_geom;
+    int                 m_arc_clearance;
+    VECTOR2I            m_circle_center;
+    int                 m_circle_radius;
+    bool                m_exp_result;
+    int                 m_exp_distance;
+};
+
+static const std::vector<ARC_CICLE_COLLIDE_CASE> arc_circle_collide_cases = {
+    { " Issue 20336, large arc", { { 183000000, 65710001}, {150496913, 147587363},{116291153, 66406583}}, 2000000 / 2, {116300000, 133100000}, 300000, true, 53319 }
+};
+
+
+BOOST_DATA_TEST_CASE( CollideCircle, boost::unit_test::data::make( arc_circle_collide_cases ), c )
+{
+    SHAPE_ARC arc( c.m_geom.m_start_point, c.m_geom.m_mid_point, c.m_geom.m_end_point, 0 );
+    SHAPE_CIRCLE circle( c.m_circle_center, c.m_circle_radius );
+
+    // Test a zero width arc (distance should equal the clearance)
+    BOOST_TEST_CONTEXT( "Test Clearance" )
+    {
+        int dist = -1;
+        BOOST_CHECK_EQUAL( arc.Collide( &circle, c.m_arc_clearance, &dist ), c.m_exp_result );
+        BOOST_CHECK_EQUAL( dist, c.m_exp_distance );
+    }
+
+    // Test by changing the width of the arc (distance should equal zero)
+    BOOST_TEST_CONTEXT( "Test Width" )
+    {
+        int dist = -1;
+        arc.SetWidth( c.m_arc_clearance * 2 );
+        BOOST_CHECK_EQUAL( arc.Collide( &circle, 0, &dist ), c.m_exp_result );
+
+        if( c.m_exp_result )
+            BOOST_CHECK_EQUAL( dist, 0 );
+        else
+            BOOST_CHECK_EQUAL( dist, -1 );
+    }
 }
 
 
