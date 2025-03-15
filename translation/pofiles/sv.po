@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-15 19:00+0300\n"
-"PO-Revision-Date: 2025-03-13 19:06+0000\n"
+"PO-Revision-Date: 2025-03-15 22:10+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22287,12 +22287,11 @@ msgstr "Radera hierarkiska etiketter"
 msgid ""
 "Associate selected sheet pin and hierarchical label using the label name"
 msgstr ""
-"Synkronisera valt arkstift och hierarkisk etikett med hjälp av etikettnamnet"
+"Synkronisera valt arkstift och hierarkisk etikett baserat på etikettnamn"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
 msgid "Associate selected sheet pin and hierarchical label using the pin name"
-msgstr ""
-"Associera valt arkstift och hierarkisk etikett med hjälp av stiftnamnet"
+msgstr "Synkronisera valt arkstift och hierarkisk etikett baserat på stiftnamn"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
@@ -22847,7 +22846,7 @@ msgstr "Synkronisera arkstift..."
 
 #: eeschema/tools/sch_actions.cpp:601
 msgid "Import Sheet..."
-msgstr "Importera kretsschemaark..."
+msgstr "Importera ark..."
 
 #: eeschema/tools/sch_actions.cpp:602
 msgid "Import sheet into project"
@@ -28152,12 +28151,11 @@ msgstr "Lyckades inte uppdatera HEAD-referens för gren '%s'"
 
 #: kicad/project_tree_pane.cpp:1921
 msgid "Are you sure you want to remove Git tracking from this project?"
-msgstr ""
-"Är du säker på att du vill ta bort Git-versionshantering från detta projekt?"
+msgstr "Är du säker på att du vill ta bort Git-övervakning från detta projekt?"
 
 #: kicad/project_tree_pane.cpp:1938
 msgid "Failed to remove Git directory"
-msgstr "Lyckades inte ta bort Git-katalog"
+msgstr "Kunde inte ta bort Git-katalog"
 
 #: kicad/project_tree_pane.cpp:2265
 msgid "The selected directory is not a Git project."
