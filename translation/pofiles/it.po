@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-13 15:25+0300\n"
-"PO-Revision-Date: 2025-03-15 03:29+0000\n"
+"PO-Revision-Date: 2025-03-15 15:58+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -39877,14 +39877,13 @@ msgstr "Larghezza minima griglia maschera di saldatura:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:77
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:82
-#, fuzzy
 msgid ""
 "Minimum distance between openings in the solder mask.\n"
 "Pad openings closer than this distance will be plotted as a single opening."
 msgstr ""
-"Distanza minima tra le aperture nella maschera di saldatura. Le aperture "
-"delle piazzole più vicine di questa distanza verranno tracciate come una "
-"singola apertura."
+"Distanza minima tra le aperture nella maschera di saldatura.\n"
+"Le aperture delle piazzole più vicine di questa distanza verranno tracciate "
+"come una singola apertura."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:90
 msgid "Solder mask to copper clearance:"
@@ -39892,16 +39891,15 @@ msgstr "Clearance maschera di saldatura dal rame:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:92
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:97
-#, fuzzy
 msgid ""
 "Minimum distance between a solder mask opening and a copper item with a "
 "different net than the solder mask opening's parent.\n"
 "Distances smaller than this minimum will create a DRC error."
 msgstr ""
-"Per i test DRC:\n"
-"distanza massima tra un'apertura della maschera di saldatura e un elemento "
-"in rame con un collegamento diverso dall'apertura della maschera di "
-"saldatura genitore per creare un errore DRC"
+"Distanza minima tra un'apertura della maschera di saldatura e un elemento in "
+"rame con un collegamento diverso da quello del genitore dell'apertura della "
+"maschera di saldatura.\n"
+"Distanze inferiori a questo minimo creeranno un errore DRC."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:105
 msgid "Allow bridged solder mask apertures between pads within footprints"
@@ -39918,9 +39916,8 @@ msgstr ""
 "maschera di saldatura tra piazzole nella stessa impronta."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:113
-#, fuzzy
 msgid "Tent vias:"
-msgstr "Via coperti"
+msgstr "Via coperti:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:118
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:123
