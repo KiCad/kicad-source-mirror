@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-15 19:01+0300\n"
-"PO-Revision-Date: 2025-03-13 19:06+0000\n"
+"PO-Revision-Date: 2025-03-15 22:10+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -22057,15 +22057,14 @@ msgid "Delete Hierarchical Labels"
 msgstr "Radera hierarkiska etiketter"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:99
-#, fuzzy
 msgid ""
 "Associate selected sheet pin and hierarchical label using the label name"
-msgstr "Synkronisera arkstift och hierarkiska etiketter"
+msgstr ""
+"Synkronisera valt arkstift och hierarkisk etikett baserat på etikettnamn"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
-#, fuzzy
 msgid "Associate selected sheet pin and hierarchical label using the pin name"
-msgstr "Bryt association(er) för arkstift och hierarkisk(a) etikett(er)"
+msgstr "Synkronisera valt arkstift och hierarkisk etikett baserat på stiftnamn"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
@@ -22615,14 +22614,12 @@ msgid "Place Sheet Pins"
 msgstr "Placera arkstift"
 
 #: eeschema/tools/sch_actions.cpp:559 eeschema/tools/sch_actions.cpp:567
-#, fuzzy
 msgid "Sync Sheet Pins..."
-msgstr "Synkronisera arkstift"
+msgstr "Synkronisera arkstift..."
 
 #: eeschema/tools/sch_actions.cpp:575
-#, fuzzy
 msgid "Import Sheet..."
-msgstr "Importera ark"
+msgstr "Importera ark..."
 
 #: eeschema/tools/sch_actions.cpp:576
 msgid "Import sheet into project"
@@ -27850,18 +27847,16 @@ msgid "Local path: monitoring folder changes"
 msgstr "Lokal sökväg: övervakning av mappändringar"
 
 #: kicad/project_tree_pane.cpp:1630
-#, fuzzy
 msgid "The selected directory is already a Git project."
-msgstr "Den valda katalogen är redan ett git-projekt."
+msgstr "Den valda katalogen är redan ett Git-projekt."
 
 #: kicad/project_tree_pane.cpp:1637
 msgid "Set default remote"
 msgstr "Ställ in standardfjärrförvar"
 
 #: kicad/project_tree_pane.cpp:1652
-#, fuzzy
 msgid "Failed to initialize Git project."
-msgstr "Lyckades inte initialisera git-projekt."
+msgstr "Lyckades inte initialisera Git-projekt."
 
 #: kicad/project_tree_pane.cpp:1712
 msgid "Failed to set default remote."
@@ -27901,19 +27896,16 @@ msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "Lyckades inte uppdatera HEAD-referens för gren '%s'"
 
 #: kicad/project_tree_pane.cpp:1918
-#, fuzzy
 msgid "Are you sure you want to remove Git tracking from this project?"
-msgstr "Är du säker på att du vill ta bort git-övervakning från detta projekt?"
+msgstr "Är du säker på att du vill ta bort Git-övervakning från detta projekt?"
 
 #: kicad/project_tree_pane.cpp:1935
-#, fuzzy
 msgid "Failed to remove Git directory"
-msgstr "Kunde inte ta bort git-katalog"
+msgstr "Kunde inte ta bort Git-katalog"
 
 #: kicad/project_tree_pane.cpp:2236
-#, fuzzy
 msgid "The selected directory is not a Git project."
-msgstr "Den valda katalogen är redan ett git-projekt."
+msgstr "Den valda katalogen är inte ett Git-projekt."
 
 #: kicad/project_tree_pane.cpp:2385
 msgid "Discarding commit due to empty commit message."
