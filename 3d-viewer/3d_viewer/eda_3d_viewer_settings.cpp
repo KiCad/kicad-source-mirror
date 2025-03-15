@@ -19,6 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <fmt/format.h>
 #include <3d_enums.h>
 #include <common_ogl/ogl_attr_list.h>
 #include <settings/parameters.h>
@@ -353,6 +354,13 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS() :
                                             &m_Render.show_eco1, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.show_eco2",
                                             &m_Render.show_eco2, true ) );
+
+    for( int layer = 0; layer < 45; ++layer )
+    {
+        m_params.emplace_back( new PARAM<bool>( fmt::format( "render.show_user{}", layer + 1 ),
+                                                &m_Render.show_user[layer], false ) );
+    }
+
     m_params.emplace_back( new PARAM<bool>( "render.show_footprints_insert",
                                             &m_Render.show_footprints_insert, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.show_footprints_normal",

@@ -132,6 +132,7 @@ public:
         bool show_drawings;
         bool show_eco1;
         bool show_eco2;
+        bool show_user[45];
         bool show_footprints_insert;
         bool show_footprints_normal;
         bool show_footprints_virtual;

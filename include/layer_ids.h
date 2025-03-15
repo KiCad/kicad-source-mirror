@@ -551,6 +551,51 @@ enum LAYER_3D_ID : int
         LAYER_3D_USER_DRAWINGS,
         LAYER_3D_USER_ECO1,
         LAYER_3D_USER_ECO2,
+        LAYER_3D_USER_1,
+        LAYER_3D_USER_2,
+        LAYER_3D_USER_3,
+        LAYER_3D_USER_4,
+        LAYER_3D_USER_5,
+        LAYER_3D_USER_6,
+        LAYER_3D_USER_7,
+        LAYER_3D_USER_8,
+        LAYER_3D_USER_9,
+        LAYER_3D_USER_10,
+        LAYER_3D_USER_11,
+        LAYER_3D_USER_12,
+        LAYER_3D_USER_13,
+        LAYER_3D_USER_14,
+        LAYER_3D_USER_15,
+        LAYER_3D_USER_16,
+        LAYER_3D_USER_17,
+        LAYER_3D_USER_18,
+        LAYER_3D_USER_19,
+        LAYER_3D_USER_20,
+        LAYER_3D_USER_21,
+        LAYER_3D_USER_22,
+        LAYER_3D_USER_23,
+        LAYER_3D_USER_24,
+        LAYER_3D_USER_25,
+        LAYER_3D_USER_26,
+        LAYER_3D_USER_27,
+        LAYER_3D_USER_28,
+        LAYER_3D_USER_29,
+        LAYER_3D_USER_30,
+        LAYER_3D_USER_31,
+        LAYER_3D_USER_32,
+        LAYER_3D_USER_33,
+        LAYER_3D_USER_34,
+        LAYER_3D_USER_35,
+        LAYER_3D_USER_36,
+        LAYER_3D_USER_37,
+        LAYER_3D_USER_38,
+        LAYER_3D_USER_39,
+        LAYER_3D_USER_40,
+        LAYER_3D_USER_41,
+        LAYER_3D_USER_42,
+        LAYER_3D_USER_43,
+        LAYER_3D_USER_44,
+        LAYER_3D_USER_45,
         LAYER_3D_TH_MODELS,
         LAYER_3D_SMD_MODELS,
         LAYER_3D_VIRTUAL_MODELS,
@@ -861,6 +906,10 @@ inline size_t CopperLayerToOrdinal( PCB_LAYER_ID aLayer )
  * Retrieve a layer ID from an integer converted from a legacy (pre-V9) enum value.
  */
 KICOMMON_API PCB_LAYER_ID BoardLayerFromLegacyId( int aLegacyId );
+
+
+KICOMMON_API PCB_LAYER_ID Map3DUserLayerToPCBLayer( int aLayer );
+KICOMMON_API int MapPCBUserLayerTo3DLayer( PCB_LAYER_ID aLayer );
 
 
 KICOMMON_API PCB_LAYER_ID ToLAYER_ID( int aLayer );
