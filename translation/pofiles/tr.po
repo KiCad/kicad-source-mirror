@@ -24,8 +24,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-15 19:01+0300\n"
-"PO-Revision-Date: 2025-03-15 15:58+0000\n"
-"Last-Translator: İclal Gör <iclallgor@gmail.com>\n"
+"PO-Revision-Date: 2025-03-15 19:19+0000\n"
+"Last-Translator: NAXSISFLYBY <naxsis61@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v9/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -1968,14 +1968,14 @@ msgid "Unexpected folder '%s' found in library path '%s'."
 msgstr "'%s' kütüphane yolunda beklenmeyen '%s' klasörü bulundu."
 
 #: common/design_block_io.cpp:247
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' cannot be deleted."
-msgstr "'%s' sembol kütüphanesi silinemiyor."
+msgstr "Tasarım blok kütüphanesi '%s' silinemiyor."
 
 #: common/design_block_io.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Design block metadata file '%s' could not be read."
-msgstr "Dosya '%s' oluşturulamadı."
+msgstr "Tasarım blok meta veri dosyası '%s' okunamadı."
 
 #: common/design_block_io.cpp:355
 msgid "Design block does not have a valid library ID."
