@@ -177,7 +177,6 @@ APPEARANCE_CONTROLS_3D::APPEARANCE_CONTROLS_3D( EDA_3D_VIEWER_FRAME* aParent,
                 cfg->m_UseStackupColors = aEvent.IsChecked();
 
                 UpdateLayerCtls();
-                syncLayerPresetSelection();
                 m_frame->NewDisplay( true );
             } );
 
@@ -194,7 +193,6 @@ APPEARANCE_CONTROLS_3D::APPEARANCE_CONTROLS_3D( EDA_3D_VIEWER_FRAME* aParent,
                 cfg->m_Render.use_board_editor_copper_colors = aEvent.IsChecked();
 
                 UpdateLayerCtls();
-                syncLayerPresetSelection();
                 m_frame->NewDisplay( true );
             } );
 
@@ -314,7 +312,13 @@ void APPEARANCE_CONTROLS_3D::CommonSettingsChanged()
     rebuildControls();
 
     UpdateLayerCtls();
-    syncLayerPresetSelection();
+
+    const wxString& currentPreset = m_frame->GetAdapter().m_Cfg->m_CurrentPreset;
+
+    if( currentPreset == FOLLOW_PCB || currentPreset == FOLLOW_PLOT_SETTINGS )
+        updateLayerPresetWidget( currentPreset );
+    else
+        syncLayerPresetSelection();
 }
 
 
@@ -502,7 +506,12 @@ void APPEARANCE_CONTROLS_3D::onColorSwatchChanged( COLOR_SWATCH* aSwatch )
 
     m_frame->GetAdapter().SetLayerColors( colors );
 
-    syncLayerPresetSelection();
+    const wxString& currentPreset = m_frame->GetAdapter().m_Cfg->m_CurrentPreset;
+
+    if( currentPreset == FOLLOW_PCB || currentPreset == FOLLOW_PLOT_SETTINGS )
+        updateLayerPresetWidget( currentPreset );
+    else
+        syncLayerPresetSelection();
 
     m_frame->NewDisplay( true );
 }

@@ -786,6 +786,46 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetVisibleLayers() const
 {
     std::bitset<LAYER_3D_END> ret;
 
+    if( m_board->IsFootprintHolder() )
+    {
+        if( m_Cfg->m_Render.preview_show_board_body )
+        {
+            ret.set( LAYER_3D_BOARD,             m_Cfg->m_Render.show_board_body );
+            ret.set( LAYER_3D_SOLDERMASK_TOP,    m_Cfg->m_Render.show_soldermask_top );
+            ret.set( LAYER_3D_SOLDERMASK_BOTTOM, m_Cfg->m_Render.show_soldermask_bottom );
+            ret.set( LAYER_3D_SOLDERPASTE,       m_Cfg->m_Render.show_solderpaste );
+            ret.set( LAYER_3D_ADHESIVE,          m_Cfg->m_Render.show_adhesive );
+        }
+
+        ret.set( LAYER_3D_COPPER_TOP,        true );
+        ret.set( LAYER_3D_COPPER_BOTTOM,     true );
+        ret.set( LAYER_3D_SILKSCREEN_TOP,    true );
+        ret.set( LAYER_3D_SILKSCREEN_BOTTOM, true );
+        ret.set( LAYER_3D_USER_COMMENTS,     true );
+        ret.set( LAYER_3D_USER_DRAWINGS,     true );
+        ret.set( LAYER_3D_USER_ECO1,         true );
+        ret.set( LAYER_3D_USER_ECO2,         true );
+
+        for( int layer = LAYER_3D_USER_1; layer <= LAYER_3D_USER_45; ++layer )
+            ret.set( layer, true );
+
+        ret.set( LAYER_FP_REFERENCES,        true );
+        ret.set( LAYER_FP_VALUES,            true );
+        ret.set( LAYER_FP_TEXT,              true );
+
+        ret.set( LAYER_3D_TH_MODELS,         true );
+        ret.set( LAYER_3D_SMD_MODELS,        true );
+        ret.set( LAYER_3D_VIRTUAL_MODELS,    true );
+        ret.set( LAYER_3D_MODELS_NOT_IN_POS, true );
+        ret.set( LAYER_3D_MODELS_MARKED_DNP, true );
+
+        ret.set( LAYER_3D_BOUNDING_BOXES,    m_Cfg->m_Render.show_model_bbox );
+        ret.set( LAYER_3D_OFF_BOARD_SILK,    m_Cfg->m_Render.show_off_board_silk );
+        ret.set( LAYER_3D_AXES,              m_Cfg->m_Render.show_axis );
+
+        return ret;
+    }
+
     ret.set( LAYER_3D_BOARD,             m_Cfg->m_Render.show_board_body );
     ret.set( LAYER_3D_COPPER_TOP,        m_Cfg->m_Render.show_copper_top );
     ret.set( LAYER_3D_COPPER_BOTTOM,     m_Cfg->m_Render.show_copper_bottom );
@@ -916,6 +956,12 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetDefaultVisibleLayers() const
     ret.set( LAYER_3D_AXES,              true );
 
     return ret;
+}
+
+
+bool BOARD_ADAPTER::GetUseBoardEditorCopperLayerColors() const
+{
+    return m_Cfg->m_Render.use_board_editor_copper_colors && !m_board->IsFootprintHolder();
 }
 
 

@@ -152,21 +152,19 @@ public:
         bool subtract_mask_from_silk;
         bool clip_silk_on_via_annuli;
         bool differentiate_plated_copper;
-        // Board editor copper colors are used only in OpenGL mode if
-        // use_board_editor_copper_colors is true
-        bool use_board_editor_copper_colors;
+        bool use_board_editor_copper_colors;    // OpenGL only
+        bool preview_show_board_body;
 
         /**
          * return true if platted copper aeras and non platted copper areas must be drawn
          * using a different color
-         * in OPENGL mode, if use_board_editor_copper_colors, always false
-         * in RAYTRACING mode, use_board_editor_copper_colors is ignored (board editor copper
-         * colors are ignored)
          */
         bool DifferentiatePlatedCopper()
         {
-            return engine == RENDER_ENGINE::RAYTRACING ? differentiate_plated_copper
-                                : differentiate_plated_copper && !use_board_editor_copper_colors;
+            if( engine == RENDER_ENGINE::OPENGL && use_board_editor_copper_colors )
+                return false;
+
+            return differentiate_plated_copper;
         }
     };
 
