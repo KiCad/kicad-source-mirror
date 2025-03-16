@@ -280,15 +280,16 @@ void DIALOG_TABLE_PROPERTIES::getContextualTextVars( const wxString& aCrossRef,
 void DIALOG_TABLE_PROPERTIES::onBorderChecked( wxCommandEvent& aEvent )
 {
     bool border = m_borderCheckbox->GetValue();
+    bool headerSeparator = m_headerBorder->GetValue();
 
-    if( border && m_borderWidth.GetValue() < 0 )
+    if( ( border || headerSeparator ) && m_borderWidth.GetValue() < 0 )
         m_borderWidth.SetValue( m_frame->eeconfig()->m_Drawing.default_line_thickness );
 
-    m_borderWidth.Enable( border );
-    m_borderColorLabel->Enable( border );
-    m_borderColorSwatch->Enable( border );
-    m_borderStyleLabel->Enable( border );
-    m_borderStyleCombo->Enable( border );
+    m_borderWidth.Enable( border || headerSeparator );
+    m_borderColorLabel->Enable( border || headerSeparator );
+    m_borderColorSwatch->Enable( border || headerSeparator );
+    m_borderStyleLabel->Enable( border || headerSeparator );
+    m_borderStyleCombo->Enable( border || headerSeparator );
 
     bool row = m_rowSeparators->GetValue();
     bool col = m_colSeparators->GetValue();
@@ -348,7 +349,7 @@ bool DIALOG_TABLE_PROPERTIES::TransferDataFromWindow()
     {
         STROKE_PARAMS stroke = m_table->GetBorderStroke();
 
-        if( m_borderCheckbox->GetValue() )
+        if( m_borderCheckbox->GetValue() || m_headerBorder->GetValue() )
             stroke.SetWidth( std::max( 0, m_borderWidth.GetIntValue() ) );
         else
             stroke.SetWidth( -1 );

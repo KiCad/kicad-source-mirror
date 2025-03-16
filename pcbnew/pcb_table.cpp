@@ -236,8 +236,7 @@ const BOX2I PCB_TABLE::GetBoundingBox() const
 }
 
 
-void PCB_TABLE::DrawBorders( const std::function<void( const VECTOR2I& aPt1,
-                                                       const VECTOR2I& aPt2,
+void PCB_TABLE::DrawBorders( const std::function<void( const VECTOR2I& aPt1, const VECTOR2I& aPt2,
                                                        const STROKE_PARAMS& aStroke )>& aCallback ) const
 {
     std::vector<VECTOR2I> topLeft     = GetCell( 0, 0 )->GetCornersInSequence();
@@ -258,6 +257,9 @@ void PCB_TABLE::DrawBorders( const std::function<void( const VECTOR2I& aPt1,
             PCB_TABLECELL* cell = GetCell( row, col );
 
             if( cell->GetColSpan() == 0 )
+                continue;
+
+            if( col + cell->GetColSpan() == GetColCount() )
                 continue;
 
             std::vector<VECTOR2I> corners = cell->GetCornersInSequence();
@@ -281,6 +283,9 @@ void PCB_TABLE::DrawBorders( const std::function<void( const VECTOR2I& aPt1,
             PCB_TABLECELL* cell = GetCell( row, col );
 
             if( cell->GetRowSpan() == 0 )
+                continue;
+
+            if( row + cell->GetRowSpan() == GetRowCount() )
                 continue;
 
             std::vector<VECTOR2I> corners = cell->GetCornersInSequence();

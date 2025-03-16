@@ -329,6 +329,75 @@ bool SCH_TABLE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
 }
 
 
+void SCH_TABLE::DrawBorders( const std::function<void( const VECTOR2I& aPt1, const VECTOR2I& aPt2,
+                                                       const STROKE_PARAMS& aStroke )>& aCallback ) const
+{
+    std::vector<VECTOR2I> topLeft     = GetCell( 0, 0 )->GetCornersInSequence();
+    std::vector<VECTOR2I> bottomLeft  = GetCell( GetRowCount() - 1, 0 )->GetCornersInSequence();
+    std::vector<VECTOR2I> topRight    = GetCell( 0, GetColCount() - 1 )->GetCornersInSequence();
+    std::vector<VECTOR2I> bottomRight = GetCell( GetRowCount() - 1, GetColCount() - 1 )->GetCornersInSequence();
+    STROKE_PARAMS         stroke;
+
+    for( int col = 0; col < GetColCount() - 1; ++col )
+    {
+        if( StrokeColumns() )
+            stroke = GetSeparatorsStroke();
+        else
+            continue;
+
+        for( int row = 0; row < GetRowCount(); ++row )
+        {
+            SCH_TABLECELL* cell = GetCell( row, col );
+
+            if( cell->GetColSpan() == 0 )
+                continue;
+
+            if( col + cell->GetColSpan() == GetColCount() )
+                continue;
+
+            std::vector<VECTOR2I> corners = cell->GetCornersInSequence();
+
+            if( corners.size() == 4 )
+                aCallback( corners[1], corners[2], stroke );
+        }
+    }
+
+    for( int row = 0; row < GetRowCount() - 1; ++row )
+    {
+        if( row == 0 && StrokeHeaderSeparator() )
+            stroke = GetBorderStroke();
+        else if( StrokeRows() )
+            stroke = GetSeparatorsStroke();
+        else
+            continue;
+
+        for( int col = 0; col < GetColCount(); ++col )
+        {
+            SCH_TABLECELL* cell = GetCell( row, col );
+
+            if( cell->GetRowSpan() == 0 )
+                continue;
+
+            if( row + cell->GetRowSpan() == GetRowCount() )
+                continue;
+
+            std::vector<VECTOR2I> corners = cell->GetCornersInSequence();
+
+            if( corners.size() == 4 )
+                aCallback( corners[2], corners[3], stroke );
+        }
+    }
+
+    if( StrokeExternal() && GetBorderStroke().GetWidth() >= 0 )
+    {
+        aCallback( topLeft[0], topRight[1], GetBorderStroke() );
+        aCallback( topRight[1], bottomRight[2], GetBorderStroke() );
+        aCallback( bottomRight[2], bottomLeft[3], GetBorderStroke() );
+        aCallback( bottomLeft[3], topLeft[0], GetBorderStroke() );
+    }
+}
+
+
 void SCH_TABLE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
                       int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
@@ -339,18 +408,13 @@ void SCH_TABLE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
         return;
 
     RENDER_SETTINGS* settings = aPlotter->RenderSettings();
-    VECTOR2I         pos = GetPosition();
-    VECTOR2I         end = GetEnd();
-    int              lineWidth;
-    COLOR4D          color;
-    LINE_STYLE       lineStyle;
 
-    auto setupStroke =
-            [&]( const STROKE_PARAMS& stroke )
+    DrawBorders(
+            [&]( const VECTOR2I& ptA, const VECTOR2I& ptB, const STROKE_PARAMS& stroke )
             {
-                lineWidth = stroke.GetWidth();
-                color = stroke.GetColor();
-                lineStyle = stroke.GetLineStyle();
+                int        lineWidth = stroke.GetWidth();
+                COLOR4D    color = stroke.GetColor();
+                LINE_STYLE lineStyle = stroke.GetLineStyle();
 
                 if( lineWidth == 0 )
                 {
@@ -371,82 +435,10 @@ void SCH_TABLE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
 
                 aPlotter->SetColor( color );
                 aPlotter->SetDash( lineWidth, lineStyle );
-            };
 
-    if( GetSeparatorsStroke().GetWidth() >= 0 )
-    {
-        setupStroke( GetSeparatorsStroke() );
-
-        if( StrokeColumns() )
-        {
-            for( int col = 0; col < GetColCount() - 1; ++col )
-            {
-                for( int row = 0; row < GetRowCount(); ++row )
-                {
-                    SCH_TABLECELL* cell = GetCell( row, col );
-                    VECTOR2I       topRight( cell->GetEndX(), cell->GetStartY() );
-
-                    if( !cell->GetTextAngle().IsHorizontal() )
-                        topRight = VECTOR2I( cell->GetStartX(), cell->GetEndY() );
-
-                    if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
-                    {
-                        aPlotter->MoveTo( topRight );
-                        aPlotter->FinishTo( VECTOR2I( cell->GetEndX(), cell->GetEndY() ) );
-                    }
-                }
-            }
-        }
-
-        if( StrokeRows() )
-        {
-            for( int row = 0; row < GetRowCount() - 1; ++row )
-            {
-                for( int col = 0; col < GetColCount(); ++col )
-                {
-                    SCH_TABLECELL* cell = GetCell( row, col );
-                    VECTOR2I       botLeft( cell->GetStartX(), cell->GetEndY() );
-
-                    if( !cell->GetTextAngle().IsHorizontal() )
-                        botLeft = VECTOR2I( cell->GetEndX(), cell->GetStartY() );
-
-                    if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
-                    {
-                        aPlotter->MoveTo( botLeft );
-                        aPlotter->FinishTo( VECTOR2I( cell->GetEndX(), cell->GetEndY() ) );
-                    }
-                }
-            }
-        }
-    }
-
-    if( GetBorderStroke().GetWidth() >= 0 )
-    {
-        setupStroke( GetBorderStroke() );
-        SCH_TABLECELL* cell = GetCell( 0, 0 );
-
-        if( StrokeHeaderSeparator() )
-        {
-            if( !cell->GetTextAngle().IsHorizontal() )
-            {
-                aPlotter->MoveTo( VECTOR2I( cell->GetEndX(), pos.y ) );
-                aPlotter->FinishTo( VECTOR2I( cell->GetEndX(), cell->GetEndY() ) );
-            }
-            else
-            {
-                aPlotter->MoveTo( VECTOR2I( pos.x, cell->GetEndY() ) );
-                aPlotter->FinishTo( VECTOR2I( end.x, cell->GetEndY() ) );
-            }
-         }
-
-        if( StrokeExternal() )
-        {
-            RotatePoint( pos, GetPosition(), cell->GetTextAngle() );
-            RotatePoint( end, GetPosition(), cell->GetTextAngle() );
-
-            aPlotter->Rect( pos, end, FILL_T::NO_FILL, lineWidth );
-        }
-    }
+                aPlotter->MoveTo( ptA );
+                aPlotter->FinishTo( ptB );
+            } );
 }
 
 

@@ -285,6 +285,7 @@ public:
 
     VECTOR2I              GetArcMid() const;
     std::vector<VECTOR2I> GetRectCorners() const;
+    std::vector<VECTOR2I> GetCornersInSequence() const;
 
     /**
      * Calc arc start and end angles such that aStartAngle < aEndAngle.  Each may be between
@@ -439,6 +440,8 @@ protected:
     void rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle );
     void flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection );
     void scale( double aScale );
+
+    virtual EDA_ANGLE getDrawRotation() const { return ANGLE_0; }
 
     const BOX2I getBoundingBox() const;
 
