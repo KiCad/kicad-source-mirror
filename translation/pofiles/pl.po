@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-15 19:01+0300\n"
-"PO-Revision-Date: 2025-03-08 17:50+0000\n"
+"PO-Revision-Date: 2025-03-17 01:10+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -787,7 +787,6 @@ msgid "Use board stackup colors"
 msgstr "Użyj kolorów ze stosu warstw"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:143
-#, fuzzy
 msgid "Use PCB editor copper colors"
 msgstr "Użyj kolorów miedzi z edytora obwodów drukowanych"
 
@@ -6909,14 +6908,14 @@ msgid "Could not copy file: %s to %s"
 msgstr "Nie można skopiować: %s do %s"
 
 #: common/gestfich.cpp:477
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy directory: %s to %s"
-msgstr "Nie można skopiować: %s do %s"
+msgstr "Nie można skopiować folderu: %s do %s"
 
 #: common/gestfich.cpp:529
-#, fuzzy, c-format
+#, c-format
 msgid "Source directory does not exist: %s"
-msgstr "Folder '%s' nie istnieje"
+msgstr "Folder źródłowy nie istnieje: %s"
 
 #: common/gestfich.cpp:584
 #, c-format
@@ -21885,7 +21884,7 @@ msgstr ""
 "Symbol '%s' nie może zastąpić innego symbolu '%s', którego jest potomkiem."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:996
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
 msgstr "Symbol '%s' istnieje już w bibliotece '%s'. Czy chcesz go nadpisać?"
@@ -21920,7 +21919,7 @@ msgid "Export Symbol"
 msgstr "Eksportuj symbol"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1130
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is read-only."
 msgstr "Biblioteka '%s' jest tylko do odczytu."
 
@@ -22168,15 +22167,15 @@ msgid "Delete Hierarchical Labels"
 msgstr "Usuń etykiety hierarchiczne"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:99
-#, fuzzy
 msgid ""
 "Associate selected sheet pin and hierarchical label using the label name"
-msgstr "Synchronizacja pinów arkusza i etykiet hierarchicznych"
+msgstr ""
+"Synchronizuje piny arkusza i etykiety hierarchiczne na podstawie nazw etykiet"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
-#, fuzzy
 msgid "Associate selected sheet pin and hierarchical label using the pin name"
-msgstr "Łamie przypisania pomiędzy pinami a etykietami hierarchicznymi"
+msgstr ""
+"Synchronizuje piny arkusza i etykiety hierarchiczne na podstawie nazw pinów"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
@@ -22502,7 +22501,6 @@ msgid "Import a symbol to the current library"
 msgstr "Importuje symbol do bieżącej biblioteki"
 
 #: eeschema/tools/sch_actions.cpp:274
-#, fuzzy
 msgid "Export..."
 msgstr "Eksportuj..."
 
@@ -22725,14 +22723,12 @@ msgid "Place Sheet Pins"
 msgstr "Umieść piny arkusza"
 
 #: eeschema/tools/sch_actions.cpp:559 eeschema/tools/sch_actions.cpp:567
-#, fuzzy
 msgid "Sync Sheet Pins..."
-msgstr "Synchronizacja pinów arkusza"
+msgstr "Synchronizacja pinów arkusza..."
 
 #: eeschema/tools/sch_actions.cpp:575
-#, fuzzy
 msgid "Import Sheet..."
-msgstr "Importuj arkusz"
+msgstr "Importowanie arkusza..."
 
 #: eeschema/tools/sch_actions.cpp:576
 msgid "Import sheet into project"
@@ -26736,9 +26732,8 @@ msgid "Zip"
 msgstr "Zip"
 
 #: kicad/dialogs/dialog_destination_base.cpp:46
-#, fuzzy
 msgid "Destination path:"
-msgstr "Miejsce docelowe:"
+msgstr "Ścieżka docelowa:"
 
 #: kicad/dialogs/dialog_destination_base.cpp:64
 msgid "Include jobs:"
@@ -26874,17 +26869,14 @@ msgid "Running jobs"
 msgstr "Uruchomione zadania"
 
 #: kicad/dialogs/panel_jobset.cpp:295
-#, fuzzy
 msgid "Edit Destination Options..."
 msgstr "Edycja opcji wyjściowych..."
 
 #: kicad/dialogs/panel_jobset.cpp:296
-#, fuzzy
 msgid "Delete Destination"
-msgstr "Usuń przypisanie"
+msgstr "Usuń miejsce docelowe"
 
 #: kicad/dialogs/panel_jobset.cpp:299
-#, fuzzy
 msgid "View Last Run Log..."
 msgstr "Pokaż wyniki ostatniego uruchomienia..."
 
@@ -26917,33 +26909,28 @@ msgid "Select job type:"
 msgstr "Wybierz typ zadania:"
 
 #: kicad/dialogs/panel_jobset.cpp:783
-#, fuzzy
 msgid "Destination Types"
-msgstr "Miejsce docelowe:"
+msgstr "Typy docelowe"
 
 #: kicad/dialogs/panel_jobset.cpp:792
-#, fuzzy
 msgid "Add New Destination"
-msgstr "Miejsce docelowe:"
+msgstr "Dodaj nowe miejsce docelowe"
 
 #: kicad/dialogs/panel_jobset.cpp:793
-#, fuzzy
 msgid "Select destination type:"
-msgstr "Wybierz typ zadania:"
+msgstr "Wybierz typ docelowy:"
 
 #: kicad/dialogs/panel_jobset.cpp:958
-#, fuzzy
 msgid "No destinations defined"
-msgstr "Nie zdefiniowano formatu wyjściowego"
+msgstr "Nie zdefiniowano miejsca docelowego"
 
 #: kicad/dialogs/panel_jobset_base.cpp:24
 msgid "Jobs"
 msgstr "Zadania"
 
 #: kicad/dialogs/panel_jobset_base.cpp:83
-#, fuzzy
 msgid "Destinations"
-msgstr "Miejsce docelowe:"
+msgstr "Miejsca docelowe"
 
 #: kicad/dialogs/panel_jobset_base.cpp:116
 msgid "Save Jobset"
@@ -38120,12 +38107,12 @@ msgstr "Styl ramki:"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:546
 #, c-format
 msgid "Applying these changes will short net %s with %s."
-msgstr ""
+msgstr "Zastosowanie tych zmian spowoduje zwarcie sieci %s z %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:552
 #, c-format
 msgid "Applying these changes will short net %s with other nets."
-msgstr ""
+msgstr "Zastosowanie tych zmian spowoduje zwarcie sieci %s z innymi sieciami."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
 #, fuzzy
@@ -38133,9 +38120,8 @@ msgid "Apply Anyway"
 msgstr "Dodaj mimo to"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Cancel Changes"
-msgstr "Anulować zmiany?"
+msgstr "Anuluj zmiany"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:571
 #, c-format
