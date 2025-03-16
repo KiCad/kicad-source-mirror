@@ -22,12 +22,9 @@
 #include <cli/exit_codes.h>
 #include "jobs/job_export_pcb_gerber.h"
 #include <kiface_base.h>
-#include <layer_ids.h>
 #include <wx/crt.h>
 
 #include <macros.h>
-#include <wx/tokenzr.h>
-
 #include <locale_io.h>
 #include <string_utils.h>
 
@@ -35,7 +32,8 @@
 CLI::PCB_EXPORT_GERBER_COMMAND::PCB_EXPORT_GERBER_COMMAND( const std::string& aName ) :
         PCB_EXPORT_BASE_COMMAND( aName )
 {
-    addLayerArg( true );
+    addLayerArg();
+    addCommonLayersArg();
     addDrawingSheetArg();
     addDefineArg();
 
@@ -90,13 +88,6 @@ CLI::PCB_EXPORT_GERBER_COMMAND::PCB_EXPORT_GERBER_COMMAND( const std::string& aN
             .help( UTF8STDSTR( _( "Use drill/place file origin" ) ) )
             .flag();
 
-    m_argParser.add_argument( "--cl", ARG_COMMON_LAYERS )
-            .default_value( std::string() )
-            .help( UTF8STDSTR(
-                    _( "Layers to include on each plot, comma separated list of untranslated "
-                       "layer names to include such as F.Cu,B.Cu" ) ) )
-            .metavar( "COMMON_LAYER_LIST" );
-
     m_argParser.add_argument( ARG_PRECISION )
             .help( UTF8STDSTR( _( "Precision of Gerber coordinates, valid options: 5 or 6" ) ) )
             .scan<'i', int>()
@@ -140,10 +131,9 @@ int CLI::PCB_EXPORT_GERBER_COMMAND::populateJob( JOB_EXPORT_PCB_GERBER* aJob )
     aJob->m_useDrillOrigin = m_argParser.get<bool>( ARG_USE_DRILL_FILE_ORIGIN );
     aJob->m_useProtelFileExtension = !m_argParser.get<bool>( ARG_NO_PROTEL_EXTENSION );
     aJob->m_precision = m_argParser.get<int>( ARG_PRECISION );
-    aJob->m_plotLayerSequence = m_selectedLayers;
 
-    wxString layers = From_UTF8( m_argParser.get<std::string>( ARG_COMMON_LAYERS ).c_str() );
-    aJob->m_plotOnAllLayersSequence = convertLayerStringList( layers );
+    aJob->m_argLayers = From_UTF8( m_argParser.get<std::string>( ARG_LAYERS ).c_str() );
+    aJob->m_argCommonLayers = From_UTF8( m_argParser.get<std::string>( ARG_COMMON_LAYERS ).c_str() );
 
     if( m_argParser.get<bool>( DEPRECATED_ARG_PLOT_INVISIBLE_TEXT ) )
         wxFprintf( stdout, DEPRECATED_ARD_PLOT_INVISIBLE_TEXT_WARNING );
@@ -169,20 +159,13 @@ int CLI::PCB_EXPORT_GERBER_COMMAND::doPerform( KIWAY& aKiway )
     wxFprintf( stdout, wxT( "\033[33;1m%s\033[0m\n" ),
                _( "This command is deprecated as of KiCad 9.0, please use \"gerbers\" instead\n" ) );
 
-    int exitCode = PCB_EXPORT_BASE_COMMAND::doPerform( aKiway );
-
-    if( exitCode != EXIT_CODES::OK )
-        return exitCode;
-
     std::unique_ptr<JOB_EXPORT_PCB_GERBER> gerberJob( new JOB_EXPORT_PCB_GERBER() );
 
-    exitCode = populateJob( gerberJob.get() );
+    int exitCode = populateJob( gerberJob.get() );
 
     if( exitCode != EXIT_CODES::OK )
         return exitCode;
 
     LOCALE_IO dummy;
-    exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, gerberJob.get() );
-
-    return exitCode;
+    return aKiway.ProcessJob( KIWAY::FACE_PCB, gerberJob.get() );
 }

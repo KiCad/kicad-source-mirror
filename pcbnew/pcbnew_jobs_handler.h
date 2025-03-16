@@ -55,6 +55,8 @@ public:
 
 private:
     BOARD* getBoard( const wxString& aPath = wxEmptyString );
+    LSEQ convertLayerArg( wxString& aLayerString, BOARD* aBoard ) const;
+
     void populateGerberPlotOptionsFromJob( PCB_PLOT_PARAMS&  aPlotOpts,
                                            JOB_EXPORT_PCB_GERBER* aJob );
     void populateGerberPlotOptionsFromJob( PCB_PLOT_PARAMS& aPlotOpts,

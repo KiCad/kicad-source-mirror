@@ -22,9 +22,6 @@
 #define COMMAND_EXPORT_PCB_BASE_H
 
 #include "command.h"
-#include <layer_ids.h>
-#include <lset.h>
-#include <lseq.h>
 
 namespace CLI
 {
@@ -74,21 +71,8 @@ struct PCB_EXPORT_BASE_COMMAND : public COMMAND
                              bool aOutputIsDir = false );
 
 protected:
-    int  doPerform( KIWAY& aKiway ) override;
-    LSEQ convertLayerStringList( wxString& aLayerString ) const;
-    void addLayerArg( bool aRequire );
-
-    // The list of canonical layer names used in .kicad_pcb files:
-    std::map<std::string, LSET> m_layerMasks;
-
-    // The list of canonical layer names used in GUI (not translated):
-    std::map<std::string, LSET> m_layerGuiMasks;
-
-    LSEQ                        m_selectedLayers;
-    bool                        m_selectedLayersSet;
-
-    bool                        m_hasLayerArg;
-    bool                        m_requireLayers;
+    void addLayerArg();
+    void addCommonLayersArg();
 };
 } // namespace CLI
 

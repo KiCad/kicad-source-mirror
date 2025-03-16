@@ -322,6 +322,75 @@ BOARD* PCBNEW_JOBS_HANDLER::getBoard( const wxString& aPath )
 }
 
 
+LSEQ PCBNEW_JOBS_HANDLER::convertLayerArg( wxString& aLayerString, BOARD* aBoard ) const
+{
+    std::map<wxString, LSET> layerMasks;
+    std::map<wxString, LSET> layerGuiMasks;
+
+    // Build list of layer names and their layer mask:
+    for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
+    {
+        // Add layer name used in pcb files
+        layerMasks[ LSET::Name( layer ) ] = LSET( { layer } );
+        // Add layer name using GUI canonical layer name
+        layerGuiMasks[ LayerName( layer ) ] = LSET( { layer } );
+
+        // Add user layer name
+        if( aBoard )
+            layerGuiMasks[ aBoard->GetLayerName( layer ) ] = LSET( { layer } );
+    }
+
+    // Add list of grouped layer names used in pcb files
+    layerMasks[ wxT( "*" ) ]       = LSET::AllLayersMask();
+    layerMasks[ wxT( "*.Cu" ) ]    = LSET::AllCuMask();
+    layerMasks[ wxT( "*In.Cu" ) ]  = LSET::InternalCuMask();
+    layerMasks[ wxT( "F&B.Cu" ) ]  = LSET( { F_Cu, B_Cu } );
+    layerMasks[ wxT( "*.Adhes" ) ] = LSET( { B_Adhes, F_Adhes } );
+    layerMasks[ wxT( "*.Paste" ) ] = LSET( { B_Paste, F_Paste } );
+    layerMasks[ wxT( "*.Mask" ) ]  = LSET( { B_Mask, F_Mask } );
+    layerMasks[ wxT( "*.SilkS" ) ] = LSET( { B_SilkS, F_SilkS } );
+    layerMasks[ wxT( "*.Fab" ) ]   = LSET( { B_Fab, F_Fab } );
+    layerMasks[ wxT( "*.CrtYd" ) ] = LSET( { B_CrtYd, F_CrtYd } );
+
+    // Add list of grouped layer names using GUI canonical layer names
+    layerGuiMasks[ wxT( "*.Adhesive" ) ]   = LSET( { B_Adhes, F_Adhes } );
+    layerGuiMasks[ wxT( "*.Silkscreen" ) ] = LSET( { B_SilkS, F_SilkS } );
+    layerGuiMasks[ wxT( "*.Courtyard" ) ]  = LSET( { B_CrtYd, F_CrtYd } );
+
+    LSEQ layerMask;
+
+    if( !aLayerString.IsEmpty() )
+    {
+        wxStringTokenizer layerTokens( aLayerString, "," );
+
+        while( layerTokens.HasMoreTokens() )
+        {
+            std::string token = TO_UTF8( layerTokens.GetNextToken() );
+
+            // Search for a layer name in canonical layer name used in .kicad_pcb files:
+            if( layerMasks.count( token ) )
+            {
+                for( PCB_LAYER_ID layer : layerMasks.at( token ).Seq() )
+                    layerMask.push_back( layer );
+            }
+            // Search for a layer name in canonical layer name used in GUI (not translated):
+            else if( layerGuiMasks.count( token ) )
+            {
+                for( PCB_LAYER_ID layer : layerGuiMasks.at( token ).Seq() )
+                    layerMask.push_back( layer );
+            }
+            else
+            {
+                m_reporter->Report( wxString::Format( _( "Invalid layer name \"%s\"\n" ),
+                                                      token ) );
+            }
+        }
+    }
+
+    return layerMask;
+}
+
+
 int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
 {
     JOB_EXPORT_PCB_3D* aStepJob = dynamic_cast<JOB_EXPORT_PCB_3D*>( aJob );
@@ -745,6 +814,14 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     loadOverrideDrawingSheet( brd, aSvgJob->m_drawingSheet );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
+    aSvgJob->m_plotLayerSequence = convertLayerArg( aSvgJob->m_argLayers, brd );
+    aSvgJob->m_plotOnAllLayersSequence = convertLayerArg( aSvgJob->m_argCommonLayers, brd );
+
+    if( aSvgJob->m_plotLayerSequence.size() < 1 )
+    {
+        m_reporter->Report( _( "At least one layer must be specified\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_ARGS;
+    }
 
     PCB_PLOT_PARAMS plotOpts;
     PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aSvgJob, *m_reporter );
@@ -796,7 +873,14 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
     loadOverrideDrawingSheet( brd, aDxfJob->m_drawingSheet );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
+    aDxfJob->m_plotLayerSequence = convertLayerArg( aDxfJob->m_argLayers, brd );
+    aDxfJob->m_plotOnAllLayersSequence = convertLayerArg( aDxfJob->m_argCommonLayers, brd );
 
+    if( aDxfJob->m_plotLayerSequence.size() < 1 )
+    {
+        m_reporter->Report( _( "At least one layer must be specified\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_ARGS;
+    }
 
     if( aDxfJob->m_genMode == JOB_EXPORT_PCB_DXF::GEN_MODE::SINGLE )
     {
@@ -866,6 +950,14 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     loadOverrideDrawingSheet( brd, aPdfJob->m_drawingSheet );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
+    aPdfJob->m_plotLayerSequence = convertLayerArg( aPdfJob->m_argLayers, brd );
+    aPdfJob->m_plotOnAllLayersSequence = convertLayerArg( aPdfJob->m_argCommonLayers, brd );
+
+    if( aPdfJob->m_plotLayerSequence.size() < 1 )
+    {
+        m_reporter->Report( _( "At least one layer must be specified\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_ARGS;
+    }
 
     if( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_FILE
         && aPdfJob->GetConfiguredOutputPath().IsEmpty() )
@@ -953,6 +1045,13 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     loadOverrideDrawingSheet( brd, aGerberJob->m_drawingSheet );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
+
+    if( !aGerberJob->m_argLayers.empty() )
+        aGerberJob->m_plotLayerSequence = convertLayerArg( aGerberJob->m_argLayers, nullptr );
+    else
+        aGerberJob->m_plotLayerSequence = LSET::AllLayersMask().SeqStackupForPlotting();
+
+    aGerberJob->m_plotOnAllLayersSequence = convertLayerArg( aGerberJob->m_argCommonLayers, brd );
 
     PCB_PLOT_PARAMS       boardPlotOptions = brd->GetPlotOptions();
     GERBER_JOBFILE_WRITER jobfile_writer( brd );
@@ -1171,6 +1270,14 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
     aJob->SetTitleBlock( brd->GetTitleBlock() );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
+    aGerberJob->m_plotLayerSequence = convertLayerArg( aGerberJob->m_argLayers, brd );
+    aGerberJob->m_plotOnAllLayersSequence = convertLayerArg( aGerberJob->m_argCommonLayers, brd );
+
+    if( aGerberJob->m_plotLayerSequence.size() < 1 )
+    {
+        m_reporter->Report( _( "At least one layer must be specified\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_ARGS;
+    }
 
     if( aGerberJob->GetConfiguredOutputPath().IsEmpty() )
     {
@@ -1647,6 +1754,11 @@ int PCBNEW_JOBS_HANDLER::JobExportFpSvg( JOB* aJob )
 
     PCB_IO_KICAD_SEXPR pcb_io( CTL_FOR_LIBRARY );
     FP_CACHE   fpLib( &pcb_io, svgJob->m_libraryPath );
+
+    if( !svgJob->m_argLayers.empty() )
+        svgJob->m_plotLayerSequence = convertLayerArg( svgJob->m_argLayers, nullptr );
+    else
+        svgJob->m_plotLayerSequence = LSET::AllLayersMask().SeqStackupForPlotting();
 
     try
     {

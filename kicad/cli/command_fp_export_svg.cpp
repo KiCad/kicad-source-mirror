@@ -22,13 +22,11 @@
 #include <cli/exit_codes.h>
 #include "jobs/job_fp_export_svg.h"
 #include <kiface_base.h>
-#include <layer_ids.h>
 #include <string_utils.h>
 #include <wx/crt.h>
 #include <wx/dir.h>
 
 #include <macros.h>
-#include <wx/tokenzr.h>
 
 #define ARG_FOOTPRINT "--footprint"
 
@@ -37,7 +35,7 @@ CLI::FP_EXPORT_SVG_COMMAND::FP_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND( "
     m_argParser.add_description( UTF8STDSTR( _( "Exports the footprint or entire footprint "
                                                 "library to SVG" ) ) );
 
-    addLayerArg( false );
+    addLayerArg();
     addDefineArg();
 
     m_argParser.add_argument( "-t", ARG_THEME )
@@ -74,10 +72,6 @@ CLI::FP_EXPORT_SVG_COMMAND::FP_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND( "
 
 int CLI::FP_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
 {
-    int baseExit = PCB_EXPORT_BASE_COMMAND::doPerform( aKiway );
-    if( baseExit != EXIT_CODES::OK )
-        return baseExit;
-
     std::unique_ptr<JOB_FP_EXPORT_SVG> svgJob = std::make_unique<JOB_FP_EXPORT_SVG>();
 
     svgJob->m_libraryPath = m_argInput;
@@ -98,12 +92,7 @@ int CLI::FP_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
 
     svgJob->m_colorTheme = From_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
 
-    if( !m_selectedLayers.empty() )
-        svgJob->m_printMaskLayer = m_selectedLayers;
-    else
-        svgJob->m_printMaskLayer = LSET::AllLayersMask().SeqStackupForPlotting();
+    svgJob->m_argLayers = From_UTF8( m_argParser.get<std::string>( ARG_LAYERS ).c_str() );
 
-    int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, svgJob.get() );
-
-    return exitCode;
+    return aKiway.ProcessJob( KIWAY::FACE_PCB, svgJob.get() );
 }

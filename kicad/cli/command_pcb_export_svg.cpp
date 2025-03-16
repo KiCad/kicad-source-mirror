@@ -24,7 +24,6 @@
 #include "command_pcb_export_base.h"
 #include "jobs/job_export_pcb_svg.h"
 #include <kiface_base.h>
-#include <layer_ids.h>
 #include <string_utils.h>
 #include <regex>
 #include <wx/crt.h>
@@ -40,7 +39,8 @@ CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND(
 {
     m_argParser.add_description( UTF8STDSTR( _( "Generate SVG outputs of a given layer list" ) ) );
 
-    addLayerArg( true );
+    addLayerArg();
+    addCommonLayersArg();
     addDrawingSheetArg();
     addDefineArg();
 
@@ -102,15 +102,6 @@ CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND(
             .default_value( 2 )
             .metavar( "SHAPE_OPTION" );
 
-    m_argParser.add_argument( "--cl", ARG_COMMON_LAYERS )
-            .default_value( std::string() )
-            .help( UTF8STDSTR(
-                    _( "Layers to include on each plot, comma separated list of untranslated "
-                       "layer names to include such as "
-                       "F.Cu,B.Cu" ) ) )
-            .metavar( "COMMON_LAYER_LIST" );
-
-
     m_argParser.add_argument( ARG_MODE_SINGLE )
             .help( UTF8STDSTR(
                     _( "Generates a single file with the output arg path acting as the complete "
@@ -132,10 +123,6 @@ CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND(
 
 int CLI::PCB_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
 {
-    int baseExit = PCB_EXPORT_BASE_COMMAND::doPerform( aKiway );
-    if( baseExit != EXIT_CODES::OK )
-        return baseExit;
-
     std::unique_ptr<JOB_EXPORT_PCB_SVG> svgJob( new JOB_EXPORT_PCB_SVG() );
 
     svgJob->m_mirror = m_argParser.get<bool>( ARG_MIRROR );
@@ -178,16 +165,14 @@ int CLI::PCB_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
     svgJob->m_plotDrawingSheet = !m_argParser.get<bool>( ARG_EXCLUDE_DRAWING_SHEET );
     svgJob->SetVarOverrides( m_argDefineVars );
 
-    wxString layers = From_UTF8( m_argParser.get<std::string>( ARG_COMMON_LAYERS ).c_str() );
-    svgJob->m_plotOnAllLayersSequence = convertLayerStringList( layers );
+    svgJob->m_argLayers = From_UTF8( m_argParser.get<std::string>( ARG_LAYERS ).c_str() );
+    svgJob->m_argCommonLayers = From_UTF8( m_argParser.get<std::string>( ARG_COMMON_LAYERS ).c_str() );
 
     if( !wxFile::Exists( svgJob->m_filename ) )
     {
         wxFprintf( stderr, _( "Board file does not exist or is not accessible\n" ) );
         return EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
-
-    svgJob->m_plotLayerSequence = m_selectedLayers;
 
     if( m_argParser.get<bool>( ARG_MODE_MULTI ) )
         svgJob->m_genMode = JOB_EXPORT_PCB_SVG::GEN_MODE::MULTI;
@@ -204,7 +189,5 @@ int CLI::PCB_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
                    _( "The new behavior will match --mode-multi" ) );
     }
 
-    int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, svgJob.get() );
-
-    return exitCode;
+    return aKiway.ProcessJob( KIWAY::FACE_PCB, svgJob.get() );
 }

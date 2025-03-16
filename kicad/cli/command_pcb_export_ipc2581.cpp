@@ -102,11 +102,6 @@ CLI::PCB_EXPORT_IPC2581_COMMAND::PCB_EXPORT_IPC2581_COMMAND() :
 
 int CLI::PCB_EXPORT_IPC2581_COMMAND::doPerform( KIWAY& aKiway )
 {
-    int exitCode = PCB_EXPORT_BASE_COMMAND::doPerform( aKiway );
-
-    if( exitCode != EXIT_CODES::OK )
-        return exitCode;
-
     std::unique_ptr<JOB_EXPORT_PCB_IPC2581> ipc2581Job( new JOB_EXPORT_PCB_IPC2581() );
 
     ipc2581Job->m_filename = m_argInput;
@@ -146,7 +141,5 @@ int CLI::PCB_EXPORT_IPC2581_COMMAND::doPerform( KIWAY& aKiway )
             From_UTF8( m_argParser.get<std::string>( ARG_BOM_COL_DIST ).c_str() );
 
     LOCALE_IO dummy;
-    exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, ipc2581Job.get() );
-
-    return exitCode;
+    return aKiway.ProcessJob( KIWAY::FACE_PCB, ipc2581Job.get() );
 }

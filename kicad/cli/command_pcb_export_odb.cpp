@@ -25,8 +25,6 @@
 #include <wx/crt.h>
 
 #include <macros.h>
-#include <wx/tokenzr.h>
-
 #include <locale_io.h>
 
 #define ARG_COMPRESS "--compression"
@@ -60,11 +58,6 @@ CLI::PCB_EXPORT_ODB_COMMAND::PCB_EXPORT_ODB_COMMAND() :
 
 int CLI::PCB_EXPORT_ODB_COMMAND::doPerform( KIWAY& aKiway )
 {
-    int exitCode = PCB_EXPORT_BASE_COMMAND::doPerform( aKiway );
-
-    if( exitCode != EXIT_CODES::OK )
-        return exitCode;
-
     std::unique_ptr<JOB_EXPORT_PCB_ODB> job( new JOB_EXPORT_PCB_ODB() );
 
     job->m_filename = m_argInput;
@@ -97,7 +90,5 @@ int CLI::PCB_EXPORT_ODB_COMMAND::doPerform( KIWAY& aKiway )
         job->m_compressionMode = JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::NONE;
 
     LOCALE_IO dummy;
-    exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, job.get() );
-
-    return exitCode;
+    return aKiway.ProcessJob( KIWAY::FACE_PCB, job.get() );
 }
