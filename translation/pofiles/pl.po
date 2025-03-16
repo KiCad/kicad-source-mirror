@@ -18,17 +18,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-15 19:00+0300\n"
-"PO-Revision-Date: 2025-03-08 17:50+0000\n"
+"PO-Revision-Date: 2025-03-17 01:10+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -800,7 +800,6 @@ msgid "Use board stackup colors"
 msgstr "Użyj kolorów ze stosu warstw"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:143
-#, fuzzy
 msgid "Use PCB editor copper colors"
 msgstr "Użyj kolorów miedzi z edytora obwodów drukowanych"
 
@@ -22112,7 +22111,7 @@ msgstr ""
 "Symbol '%s' nie może zastąpić innego symbolu '%s', którego jest potomkiem."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:994
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
 msgstr "Symbol '%s' istnieje już w bibliotece '%s'. Czy chcesz go nadpisać?"
@@ -22147,7 +22146,7 @@ msgid "Export Symbol"
 msgstr "Eksportuj symbol"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1128
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is read-only."
 msgstr "Biblioteka '%s' jest tylko do odczytu."
 
@@ -22403,13 +22402,12 @@ msgstr "Usuń etykiety hierarchiczne"
 msgid ""
 "Associate selected sheet pin and hierarchical label using the label name"
 msgstr ""
-"Powiąż wybrany arkusz pinów i etykietę hierarchiczną, używając nazwy etykiety"
+"Synchronizuje piny arkusza i etykiety hierarchiczne na podstawie nazw etykiet"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
 msgid "Associate selected sheet pin and hierarchical label using the pin name"
 msgstr ""
-"Przypisuje wybrany pin arkusza do etykiety hierarchicznej na podstawie nazwy "
-"pinu"
+"Synchronizuje piny arkusza i etykiety hierarchiczne na podstawie nazw pinów"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
@@ -22727,7 +22725,6 @@ msgid "Import a symbol to the current library"
 msgstr "Importuje symbol do bieżącej biblioteki"
 
 #: eeschema/tools/sch_actions.cpp:274
-#, fuzzy
 msgid "Export..."
 msgstr "Eksportuj..."
 
@@ -22965,7 +22962,7 @@ msgstr "Synchronizacja pinów arkusza..."
 
 #: eeschema/tools/sch_actions.cpp:601
 msgid "Import Sheet..."
-msgstr "Importuj arkusz..."
+msgstr "Importowanie arkusza..."
 
 #: eeschema/tools/sch_actions.cpp:602
 msgid "Import sheet into project"
@@ -24633,14 +24630,16 @@ msgid "Tune %s"
 msgstr "Dostrajanie %s"
 
 #: eeschema/widgets/tuner_slider.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s has simulation model of type '%s %s'.\n"
 "\n"
 "Only passvie R, L, C models and voltage and current sources may be tuned."
 msgstr ""
-"%s posiada model symulacji typu '%s %s', tylko elementy pasywne RLC mogą być "
-"dostrajane"
+"%s posiada model symulacji typu '%s %s'. \n"
+"\n"
+"Tylko elementy pasywne R, L, C oraz źródła napięcia/prądu mogą być "
+"dostrajane."
 
 #: eeschema/widgets/tuner_slider_base.cpp:43
 msgid "Limit to E24 series values."
@@ -27030,9 +27029,8 @@ msgid "Zip"
 msgstr "Zip"
 
 #: kicad/dialogs/dialog_destination_base.cpp:46
-#, fuzzy
 msgid "Destination path:"
-msgstr "Miejsce docelowe:"
+msgstr "Ścieżka docelowa:"
 
 #: kicad/dialogs/dialog_destination_base.cpp:64
 msgid "Include jobs:"
@@ -27168,17 +27166,14 @@ msgid "Running jobs"
 msgstr "Uruchomione zadania"
 
 #: kicad/dialogs/panel_jobset.cpp:295
-#, fuzzy
 msgid "Edit Destination Options..."
 msgstr "Edycja opcji wyjściowych..."
 
 #: kicad/dialogs/panel_jobset.cpp:296
-#, fuzzy
 msgid "Delete Destination"
-msgstr "Usuń przypisanie"
+msgstr "Usuń miejsce docelowe"
 
 #: kicad/dialogs/panel_jobset.cpp:299
-#, fuzzy
 msgid "View Last Run Log..."
 msgstr "Pokaż wyniki ostatniego uruchomienia..."
 
@@ -27211,33 +27206,28 @@ msgid "Select job type:"
 msgstr "Wybierz typ zadania:"
 
 #: kicad/dialogs/panel_jobset.cpp:783
-#, fuzzy
 msgid "Destination Types"
-msgstr "Miejsce docelowe:"
+msgstr "Typy docelowe"
 
 #: kicad/dialogs/panel_jobset.cpp:792
-#, fuzzy
 msgid "Add New Destination"
-msgstr "Miejsce docelowe:"
+msgstr "Dodaj nowe miejsce docelowe"
 
 #: kicad/dialogs/panel_jobset.cpp:793
-#, fuzzy
 msgid "Select destination type:"
-msgstr "Wybierz typ zadania:"
+msgstr "Wybierz typ docelowy:"
 
 #: kicad/dialogs/panel_jobset.cpp:958
-#, fuzzy
 msgid "No destinations defined"
-msgstr "Nie zdefiniowano formatu wyjściowego"
+msgstr "Nie zdefiniowano miejsca docelowego"
 
 #: kicad/dialogs/panel_jobset_base.cpp:24
 msgid "Jobs"
 msgstr "Zadania"
 
 #: kicad/dialogs/panel_jobset_base.cpp:83
-#, fuzzy
 msgid "Destinations"
-msgstr "Miejsce docelowe:"
+msgstr "Miejsca docelowe"
 
 #: kicad/dialogs/panel_jobset_base.cpp:116
 msgid "Save Jobset"
@@ -38453,12 +38443,12 @@ msgstr "Nieznana Metoda"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:628
 #, c-format
 msgid "Applying these changes will short net %s with %s."
-msgstr "Akceptując te zmiany nastąpi połączenie sieci %s z %s."
+msgstr "Zastosowanie tych zmian spowoduje zwarcie sieci %s z %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:634
 #, c-format
 msgid "Applying these changes will short net %s with other nets."
-msgstr "Akceptując te zmiany nastąpi połączenie sieci %s z innymi sieciami."
+msgstr "Zastosowanie tych zmian spowoduje zwarcie sieci %s z innymi sieciami."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:639
 msgid "Apply Anyway"
@@ -38830,14 +38820,13 @@ msgid "Update PCB from Schematic"
 msgstr "Uaktualnia PCB na podstawie schematu"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "Error with conditions for component class assignment %s"
-msgstr "Przypisania klas sieci będące w konflikcie"
+msgstr "Błąd związany z warunkami przypisania klasy komponentu %s"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:371
-#, fuzzy
 msgid "Reference..."
-msgstr "Oznaczenie"
+msgstr "Oznaczenie..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:372
 #: pcbnew/menubar_footprint_editor.cpp:68
@@ -38846,24 +38835,20 @@ msgid "Footprint..."
 msgstr "Footprint..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:373
-#, fuzzy
 msgid "Side..."
-msgstr "Strona"
+msgstr "Strona..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:374
-#, fuzzy
 msgid "Rotation..."
-msgstr "Obrót"
+msgstr "Obrót..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:375
-#, fuzzy
 msgid "Footprint Field..."
-msgstr "Pola footprintów"
+msgstr "Pole footprintu..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:376
-#, fuzzy
 msgid "Sheet Name..."
-msgstr "Nazwa Arkusza"
+msgstr "Nazwa arkusza..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:595
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:650
@@ -38913,9 +38898,8 @@ msgid "Match Any"
 msgstr "Pasujące warstwy"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:294
-#, fuzzy
 msgid "Footprint:"
-msgstr "Footprint: "
+msgstr "Footprint:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:358
 #, fuzzy
@@ -43196,9 +43180,8 @@ msgid "Memory exhausted loading PCB '%s'"
 msgstr "Przepełnienie pamięci podczas ładowania płytki '%s'"
 
 #: pcbnew/files.cpp:814 pcbnew/pcb_edit_frame.cpp:1361
-#, fuzzy
 msgid "Could not load component class assignment rules"
-msgstr "Nie można skompilować reguł projektowych."
+msgstr "Nie można załadować reguł przypisywania klas do komponentów"
 
 #: pcbnew/files.cpp:875
 #, c-format
