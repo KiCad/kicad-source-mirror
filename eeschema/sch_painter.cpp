@@ -1999,19 +1999,12 @@ void SCH_PAINTER::draw( const SCH_TABLE* aTable, int aLayer, bool aDimmed )
     if( aLayer == LAYER_SELECTION_SHADOWS )
         return;
 
-    VECTOR2I pos = aTable->GetPosition();
-    VECTOR2I end = aTable->GetEnd();
-
-    int        lineWidth;
-    COLOR4D    color;
-    LINE_STYLE lineStyle;
-
-    auto setupStroke =
-            [&]( const STROKE_PARAMS& stroke )
+    aTable->DrawBorders(
+            [&]( const VECTOR2I& ptA, const VECTOR2I& ptB, const STROKE_PARAMS& stroke )
             {
-                lineWidth = stroke.GetWidth();
-                color = stroke.GetColor();
-                lineStyle = stroke.GetLineStyle();
+                int        lineWidth = stroke.GetWidth();
+                COLOR4D    color = stroke.GetColor();
+                LINE_STYLE lineStyle = stroke.GetLineStyle();
 
                 if( lineWidth == 0 )
                     lineWidth = m_schSettings.GetDefaultPenWidth();
@@ -2026,25 +2019,7 @@ void SCH_PAINTER::draw( const SCH_TABLE* aTable, int aLayer, bool aDimmed )
                 m_gal->SetIsStroke( true );
                 m_gal->SetStrokeColor( color );
                 m_gal->SetLineWidth( (float) lineWidth );
-            };
 
-    auto strokeShape =
-            [&]( const SHAPE& shape )
-            {
-                STROKE_PARAMS::Stroke( &shape, lineStyle, lineWidth, &m_schSettings,
-                        [&]( const VECTOR2I& a, const VECTOR2I& b )
-                        {
-                            // DrawLine has problem with 0 length lines so enforce minimum
-                            if( a == b )
-                                m_gal->DrawLine( a+1, b );
-                            else
-                                m_gal->DrawLine( a, b );
-                        } );
-            };
-
-    auto strokeLine =
-            [&]( const VECTOR2I& ptA, const VECTOR2I& ptB )
-            {
                 if( lineStyle <= LINE_STYLE::FIRST_TYPE )
                 {
                     m_gal->DrawLine( ptA, ptB );
@@ -2052,92 +2027,17 @@ void SCH_PAINTER::draw( const SCH_TABLE* aTable, int aLayer, bool aDimmed )
                 else
                 {
                     SHAPE_SEGMENT seg( ptA, ptB );
-                    strokeShape( seg );
+                    STROKE_PARAMS::Stroke( &seg, lineStyle, lineWidth, &m_schSettings,
+                            [&]( const VECTOR2I& a, const VECTOR2I& b )
+                            {
+                                // DrawLine has problem with 0 length lines so enforce minimum
+                                if( a == b )
+                                    m_gal->DrawLine( a+1, b );
+                                else
+                                    m_gal->DrawLine( a, b );
+                            } );
                 }
-            };
-
-    auto strokeRect =
-            [&]( const VECTOR2I& ptA, const VECTOR2I& ptB )
-            {
-                if( lineStyle <= LINE_STYLE::FIRST_TYPE )
-                {
-                    m_gal->DrawRectangle( ptA, ptB );
-                }
-                else
-                {
-                    SHAPE_RECT rect( BOX2I( ptA, ptB - ptA ) );
-                    strokeShape( rect );
-                }
-            };
-
-    if( aTable->GetSeparatorsStroke().GetWidth() >= 0 )
-    {
-        setupStroke( aTable->GetSeparatorsStroke() );
-
-        if( aTable->StrokeColumns() )
-        {
-            for( int col = 0; col < aTable->GetColCount() - 1; ++col )
-            {
-                for( int row = 0; row < aTable->GetRowCount(); ++row )
-                {
-                    SCH_TABLECELL* cell = aTable->GetCell( row, col );
-                    VECTOR2I       topRight( cell->GetEndX(), cell->GetStartY() );
-
-                    if( !cell->GetTextAngle().IsHorizontal() )
-                        topRight = VECTOR2I( cell->GetStartX(), cell->GetEndY() );
-
-                    if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
-                        strokeLine( topRight, cell->GetEnd() );
-                }
-            }
-        }
-
-        if( aTable->StrokeRows() )
-        {
-            for( int row = 0; row < aTable->GetRowCount() - 1; ++row )
-            {
-                for( int col = 0; col < aTable->GetColCount(); ++col )
-                {
-                    SCH_TABLECELL* cell = aTable->GetCell( row, col );
-                    VECTOR2I       botLeft( cell->GetStartX(), cell->GetEndY() );
-
-                    if( !cell->GetTextAngle().IsHorizontal() )
-                        botLeft = VECTOR2I( cell->GetEndX(), cell->GetStartY() );
-
-                    if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
-                        strokeLine( botLeft, cell->GetEnd() );
-                }
-            }
-        }
-    }
-
-    if( aTable->GetBorderStroke().GetWidth() >= 0 )
-    {
-        SCH_TABLECELL* first = aTable->GetCell( 0, 0 );
-
-        setupStroke( aTable->GetBorderStroke() );
-
-        if( aTable->StrokeHeaderSeparator() )
-        {
-            if( !first->GetTextAngle().IsHorizontal() )
-                strokeLine( VECTOR2I( first->GetEndX(), pos.y ),
-                            VECTOR2I( first->GetEndX(), first->GetEndY() ) );
-            else
-                strokeLine( VECTOR2I( pos.x, first->GetEndY() ),
-                            VECTOR2I( end.x, first->GetEndY() ) );
-        }
-
-        if( aTable->StrokeExternal() )
-        {
-            if( !first->GetTextAngle().IsHorizontal() )
-            {
-                RotatePoint( pos, aTable->GetPosition(), ANGLE_90 );
-                RotatePoint( end, aTable->GetPosition(), ANGLE_90 );
-            }
-
-            strokeRect( pos, end );
-        }
-    }
+            } );
 }
 
 

@@ -204,8 +204,7 @@ public:
 
     const BOX2I GetBoundingBox() const override;
 
-    void DrawBorders( const std::function<void( const VECTOR2I& aPt1,
-                                                const VECTOR2I& aPt2,
+    void DrawBorders( const std::function<void( const VECTOR2I& aPt1, const VECTOR2I& aPt2,
                                                 const STROKE_PARAMS& aStroke )>& aCallback ) const;
 
     // @copydoc BOARD_ITEM::GetEffectiveShape

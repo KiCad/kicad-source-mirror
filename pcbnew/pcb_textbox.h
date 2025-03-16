@@ -98,8 +98,6 @@ public:
 
     bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override;
 
-    std::vector<VECTOR2I> GetCornersInSequence() const;
-
     void Move( const VECTOR2I& aMoveVector ) override;
 
     void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
@@ -164,11 +162,14 @@ public:
     bool operator==( const BOARD_ITEM& aBoardItem ) const override;
 
 protected:
-    bool m_borderEnabled; ///< Controls drawing the border (as defined by the stroke members)
+    EDA_ANGLE getDrawRotation() const override { return GetDrawRotation(); }
 
     virtual void swapData( BOARD_ITEM* aImage ) override;
 
     const KIFONT::METRICS& getFontMetrics() const override { return GetFontMetrics(); }
+
+protected:
+    bool m_borderEnabled; ///< Controls drawing the border (as defined by the stroke members)
 
 private:
     int  m_marginLeft;

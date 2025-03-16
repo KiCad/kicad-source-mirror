@@ -1416,6 +1416,105 @@ std::vector<VECTOR2I> EDA_SHAPE::GetRectCorners() const
 }
 
 
+std::vector<VECTOR2I> EDA_SHAPE::GetCornersInSequence() const
+{
+    std::vector<VECTOR2I> pts;
+    EDA_ANGLE             textAngle( getDrawRotation() );
+
+    textAngle.Normalize();
+
+    BOX2I bbox = getBoundingBox();
+    bbox.Normalize();
+
+    if( textAngle.IsCardinal() )
+    {
+        if( textAngle == ANGLE_0 )
+        {
+            pts.emplace_back( VECTOR2I( bbox.GetLeft(), bbox.GetTop() ) );
+            pts.emplace_back( VECTOR2I( bbox.GetRight(), bbox.GetTop() ) );
+            pts.emplace_back( VECTOR2I( bbox.GetRight(), bbox.GetBottom() ) );
+            pts.emplace_back( VECTOR2I( bbox.GetLeft(), bbox.GetBottom() ) );
+        }
+        else if( textAngle == ANGLE_90 )
+        {
+            pts.emplace_back( VECTOR2I( bbox.GetLeft(), bbox.GetBottom() ) );
+            pts.emplace_back( VECTOR2I( bbox.GetLeft(), bbox.GetTop() ) );
+            pts.emplace_back( VECTOR2I( bbox.GetRight(), bbox.GetTop() ) );
+            pts.emplace_back( VECTOR2I( bbox.GetRight(), bbox.GetBottom() ) );
+        }
+        else if( textAngle == ANGLE_180 )
+        {
+            pts.emplace_back( VECTOR2I( bbox.GetRight(), bbox.GetBottom() ) );
+            pts.emplace_back( VECTOR2I( bbox.GetLeft(), bbox.GetBottom() ) );
+            pts.emplace_back( VECTOR2I( bbox.GetLeft(), bbox.GetTop() ) );
+            pts.emplace_back( VECTOR2I( bbox.GetRight(), bbox.GetTop() ) );
+        }
+        else if( textAngle == ANGLE_270 )
+        {
+            pts.emplace_back( VECTOR2I( bbox.GetRight(), bbox.GetTop() ) );
+            pts.emplace_back( VECTOR2I( bbox.GetRight(), bbox.GetBottom() ) );
+            pts.emplace_back( VECTOR2I( bbox.GetLeft(), bbox.GetBottom() ) );
+            pts.emplace_back( VECTOR2I( bbox.GetLeft(), bbox.GetTop() ) );
+        }
+    }
+    else
+    {
+        std::vector<VECTOR2I> corners = GetRectCorners();
+
+        VECTOR2I minX = corners[0];
+        VECTOR2I maxX = corners[0];
+        VECTOR2I minY = corners[0];
+        VECTOR2I maxY = corners[0];
+
+        for( const VECTOR2I& corner : corners )
+        {
+            if( corner.x < minX.x )
+                minX = corner;
+
+            if( corner.x > maxX.x )
+                maxX = corner;
+
+            if( corner.y < minY.y )
+                minY = corner;
+
+            if( corner.y > maxY.y )
+                maxY = corner;
+        }
+
+        if( textAngle < ANGLE_90 )
+        {
+            pts.emplace_back( minX );
+            pts.emplace_back( minY );
+            pts.emplace_back( maxX );
+            pts.emplace_back( maxY );
+        }
+        else if( textAngle < ANGLE_180 )
+        {
+            pts.emplace_back( maxY );
+            pts.emplace_back( minX );
+            pts.emplace_back( minY );
+            pts.emplace_back( maxX );
+        }
+        else if( textAngle < ANGLE_270 )
+        {
+            pts.emplace_back( maxX );
+            pts.emplace_back( maxY );
+            pts.emplace_back( minX );
+            pts.emplace_back( minY );
+        }
+        else
+        {
+            pts.emplace_back( minY );
+            pts.emplace_back( maxX );
+            pts.emplace_back( maxY );
+            pts.emplace_back( minX );
+        }
+    }
+
+    return pts;
+}
+
+
 void EDA_SHAPE::computeArcBBox( BOX2I& aBBox ) const
 {
     // Start, end, and each inflection point the arc crosses will enclose the entire arc.
