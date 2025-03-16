@@ -422,39 +422,29 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
         m_sheetPath.SetPageNumber( wxT( "1" ) );
     }
 
-    // TODO(JE) library tables
-#if 0
-    SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &m_schematic->Project() );
-
-    wxCHECK_MSG( libTable, nullptr, wxT( "Could not load symbol lib table." ) );
+    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &aSchematic->Project() );
+    LIBRARY_TABLE* table = adapter->ProjectTable().value_or( nullptr );
+    wxCHECK_MSG( table, nullptr, "Could not load symbol lib table." );
 
     m_pi.reset( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
 
     /// @note No check is being done here to see if the existing symbol library exists so this
     ///       will overwrite the existing one.
-    if( !libTable->HasLibrary( getLibName() ) )
+    if( !table->HasRow( getLibName() ) )
     {
         // Create a new empty symbol library.
         m_pi->CreateLibrary( getLibFileName().GetFullPath() );
         wxString libTableUri = wxT( "${KIPRJMOD}/" ) + getLibFileName().GetFullName();
 
         // Add the new library to the project symbol library table.
-        libTable->InsertRow( new SYMBOL_LIB_TABLE_ROW( getLibName(), libTableUri,
-                                                       wxT( "KiCad" ) ) );
+        LIBRARY_TABLE_ROW& row = table->InsertRow();
+        row.SetNickname( getLibName() );
+        row.SetURI( libTableUri );
+        row.SetType( "KiCad" );
 
-        // Save project symbol library table.
-        wxFileName fn( m_schematic->Project().GetProjectPath(),
-                       SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+        adapter->Manager().Save( table );
 
-        // So output formatter goes out of scope and closes the file before reloading.
-        {
-            FILE_OUTPUTFORMATTER formatter( fn.GetFullPath() );
-            libTable->Format( &formatter, 0 );
-        }
-
-        // Reload the symbol library table.
-        m_schematic->Project().SetElem( PROJECT::ELEM::SYMBOL_LIB_TABLE, nullptr );
-        PROJECT_SCH::SchSymbolLibTable( &m_schematic->Project() );
+        adapter->LoadOne( getLibName() );
     }
 
     m_eagleDoc = std::make_unique<EAGLE_DOC>( currentNode, this );
@@ -467,7 +457,7 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
     loadDrawing( m_eagleDoc->drawing );
 
     m_pi->SaveLibrary( getLibFileName().GetFullPath() );
-#endif
+
     SCH_SCREENS allSheets( m_rootSheet );
     allSheets.UpdateSymbolLinks(); // Update all symbol library links for all sheets.
 

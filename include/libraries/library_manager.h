@@ -57,8 +57,16 @@ public:
 
     std::optional<LIBRARY_MANAGER_ADAPTER*> Adapter( LIBRARY_TABLE_TYPE aType ) const;
 
+    /**
+     * Retrieves a given table; creating a new empty project table if a valid project is
+     * loaded and the given table type doesn't exist in the project.
+     * @param aType determines which type of table to return
+     * @param aScope determines whether to return a global or project table
+     * @return the given table if it exists (which should be the case unless a project table is
+     *         requested and there is no valid project loaded)
+     */
     std::optional<LIBRARY_TABLE*> Table( LIBRARY_TABLE_TYPE aType,
-                                         LIBRARY_TABLE_SCOPE aScope ) const;
+                                         LIBRARY_TABLE_SCOPE aScope );
 
     /**
      * Returns a flattened list of libraries of the given type
@@ -115,6 +123,10 @@ private:
 
     void loadNestedTables( LIBRARY_TABLE& aTable );
 
+    static wxString tableFileName( LIBRARY_TABLE_TYPE aType );
+
+    void createEmptyTable( LIBRARY_TABLE_TYPE aType, LIBRARY_TABLE_SCOPE aScope );
+
     std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_TABLE>> m_tables;
 
     /// Map of full URI to table object for tables that are referenced by global or project tables
@@ -146,6 +158,8 @@ public:
     {}
 
     virtual ~LIBRARY_MANAGER_ADAPTER();
+
+    LIBRARY_MANAGER& Manager() const { return m_manager; }
 
     /// The type of library table this adapter works with
     virtual LIBRARY_TABLE_TYPE Type() const = 0;

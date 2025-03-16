@@ -645,10 +645,6 @@ SCH_SHEET* SCH_IO_EASYEDA::LoadSchematicFile( const wxString& aFileName, SCHEMAT
         const_cast<KIID&>( rootSheet->m_Uuid ) = screen->GetUuid();
     }
 
-    // TODO(JE) library tables
-    // SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &aSchematic->Project() );
-    //
-    // wxCHECK_MSG( libTable, nullptr, wxS( "Could not load symbol lib table." ) );
     LoadSchematic( aSchematic, rootSheet, aFileName );
     aSchematic->CurrentSheet().UpdateAllScreenReferences();
 

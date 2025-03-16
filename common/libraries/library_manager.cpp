@@ -147,6 +147,43 @@ void LIBRARY_MANAGER::loadNestedTables( LIBRARY_TABLE& aRootTable )
 }
 
 
+wxString LIBRARY_MANAGER::tableFileName( LIBRARY_TABLE_TYPE aType )
+{
+    switch( aType )
+    {
+    case LIBRARY_TABLE_TYPE::SYMBOL:        return FILEEXT::SymbolLibraryTableFileName;
+    case LIBRARY_TABLE_TYPE::FOOTPRINT:     return FILEEXT::FootprintLibraryTableFileName;
+    case LIBRARY_TABLE_TYPE::DESIGN_BLOCK:  return FILEEXT::DesignBlockLibraryTableFileName;
+    }
+
+    wxCHECK( false, wxEmptyString );
+}
+
+
+void LIBRARY_MANAGER::createEmptyTable( LIBRARY_TABLE_TYPE aType, LIBRARY_TABLE_SCOPE aScope )
+{
+
+
+    if( aScope == LIBRARY_TABLE_SCOPE::GLOBAL )
+    {
+        wxCHECK( !m_tables.contains( aType ), /* void */ );
+        wxFileName fn( PATHS::GetUserSettingsPath(), tableFileName( aType ) );
+
+        m_tables[aType] = std::make_unique<LIBRARY_TABLE>( fn.GetFullPath(),
+                                                           LIBRARY_TABLE_SCOPE::GLOBAL );
+    }
+    else if( aScope == LIBRARY_TABLE_SCOPE::PROJECT )
+    {
+        wxCHECK( !m_projectTables.contains( aType ), /* void */ );
+        wxFileName fn( Pgm().GetSettingsManager().Prj().GetProjectDirectory(),
+                       tableFileName( aType ) );
+
+        m_projectTables[aType] = std::make_unique<LIBRARY_TABLE>( fn.GetFullPath(),
+                                                                  LIBRARY_TABLE_SCOPE::PROJECT );
+    }
+}
+
+
 class PCM_LIB_TRAVERSER final : public wxDirTraverser
 {
 public:
@@ -386,7 +423,7 @@ std::optional<LIBRARY_MANAGER_ADAPTER*> LIBRARY_MANAGER::Adapter( LIBRARY_TABLE_
 
 
 std::optional<LIBRARY_TABLE*> LIBRARY_MANAGER::Table( LIBRARY_TABLE_TYPE aType,
-                                                      LIBRARY_TABLE_SCOPE aScope ) const
+                                                      LIBRARY_TABLE_SCOPE aScope )
 {
     switch( aScope )
     {
@@ -410,7 +447,12 @@ std::optional<LIBRARY_TABLE*> LIBRARY_MANAGER::Table( LIBRARY_TABLE_TYPE aType,
     {
         // TODO: handle multiple projects
         if( !m_projectTables.contains( aType ) )
-            return std::nullopt;
+        {
+            if( !Pgm().GetSettingsManager().Prj().IsNullProject() )
+                createEmptyTable( aType, LIBRARY_TABLE_SCOPE::PROJECT );
+            else
+                return std::nullopt;
+        }
 
         return m_projectTables.at( aType ).get();
     }

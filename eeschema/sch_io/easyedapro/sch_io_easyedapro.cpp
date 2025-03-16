@@ -29,7 +29,6 @@
 #include <schematic.h>
 #include <sch_sheet.h>
 #include <sch_screen.h>
-#include <symbol_lib_table.h>
 #include <kiplatform/environment.h>
 
 #include <fstream>
@@ -47,6 +46,8 @@
 #include <io/easyedapro/easyedapro_import_utils.h>
 #include <core/map_helpers.h>
 #include <project_sch.h>
+#include <libraries/library_table.h>
+#include <libraries/symbol_library_manager_adapter.h>
 
 
 struct SCH_IO_EASYEDAPRO::PRJ_DATA
@@ -461,10 +462,6 @@ SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
         const_cast<KIID&>( rootSheet->m_Uuid ) = screen->GetUuid();
     }
 
-    // TODO(JE) library tables
-    // SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &aSchematic->Project() );
-    // wxCHECK_MSG( libTable, nullptr, wxS( "Could not load symbol lib table." ) );
-
     SCH_EASYEDAPRO_PARSER parser( nullptr, nullptr );
     wxFileName            fname( aFileName );
     wxString              libName = EASYEDAPRO::ShortenLibName( fname.GetName() );
@@ -607,32 +604,26 @@ SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
 
     IO_RELEASER<SCH_IO> sch_plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
 
-    // TODO(JE) library tables
-#if 0
-    if( !libTable->HasLibrary( libName ) )
+    SYMBOL_LIBRARY_MANAGER_ADAPTER* adapter = PROJECT_SCH::SymbolLibManager( &aSchematic->Project() );
+    LIBRARY_TABLE* table = adapter->ProjectTable().value_or( nullptr );
+    wxCHECK_MSG( table, nullptr, "Could not load symbol lib table." );
+
+    if( !table->HasRow( libName ) )
     {
         // Create a new empty symbol library.
         sch_plugin->CreateLibrary( libFileName.GetFullPath() );
         wxString libTableUri = wxS( "${KIPRJMOD}/" ) + libFileName.GetFullName();
 
         // Add the new library to the project symbol library table.
-        libTable->InsertRow( new SYMBOL_LIB_TABLE_ROW( libName, libTableUri, wxS( "KiCad" ) ) );
+        LIBRARY_TABLE_ROW& row = table->InsertRow();
+        row.SetNickname( libName );
+        row.SetURI( libTableUri );
+        row.SetType( "KiCad" );
 
-        // Save project symbol library table.
-        wxFileName fn( aSchematic->Project().GetProjectPath(),
-                       SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+        adapter->Manager().Save( table );
 
-        // So output formatter goes out of scope and closes the file before reloading.
-        {
-            FILE_OUTPUTFORMATTER formatter( fn.GetFullPath() );
-            libTable->Format( &formatter, 0 );
-        }
-
-        // Relaod the symbol library table.
-        aSchematic->Project().SetElem( PROJECT::ELEM::SYMBOL_LIB_TABLE, NULL );
-        PROJECT_SCH::SchSymbolLibTable( &aSchematic->Project() );
+        adapter->LoadOne( libName );
     }
-#endif
 
     // set properties to prevent save file on every symbol save
     std::map<std::string, UTF8> properties;
