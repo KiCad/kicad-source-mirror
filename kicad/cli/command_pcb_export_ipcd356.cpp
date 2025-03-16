@@ -25,9 +25,6 @@
 #include <string_utils.h>
 #include <wx/crt.h>
 
-#include <macros.h>
-#include <wx/tokenzr.h>
-
 #include <locale_io.h>
 
 CLI::PCB_EXPORT_IPCD356_COMMAND::PCB_EXPORT_IPCD356_COMMAND() :
@@ -39,11 +36,6 @@ CLI::PCB_EXPORT_IPCD356_COMMAND::PCB_EXPORT_IPCD356_COMMAND() :
 
 int CLI::PCB_EXPORT_IPCD356_COMMAND::doPerform( KIWAY& aKiway )
 {
-    int exitCode = PCB_EXPORT_BASE_COMMAND::doPerform( aKiway );
-
-    if( exitCode != EXIT_CODES::OK )
-        return exitCode;
-
     std::unique_ptr<JOB_EXPORT_PCB_IPCD356> ipcd356Job( new JOB_EXPORT_PCB_IPCD356() );
 
     ipcd356Job->m_filename = m_argInput;
@@ -55,7 +47,5 @@ int CLI::PCB_EXPORT_IPCD356_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
 
-    exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, ipcd356Job.get() );
-
-    return exitCode;
+    return aKiway.ProcessJob( KIWAY::FACE_PCB, ipcd356Job.get() );
 }

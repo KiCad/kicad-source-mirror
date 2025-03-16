@@ -22,13 +22,10 @@
 #include <cli/exit_codes.h>
 #include "jobs/job_export_pcb_dxf.h"
 #include <kiface_base.h>
-#include <layer_ids.h>
 #include <string_utils.h>
 #include <wx/crt.h>
 
 #include <macros.h>
-#include <wx/tokenzr.h>
-
 #include <locale_io.h>
 
 #define ARG_USE_CONTOURS "--use-contours"
@@ -42,7 +39,8 @@ CLI::PCB_EXPORT_DXF_COMMAND::PCB_EXPORT_DXF_COMMAND() :
 {
     m_argParser.add_description( UTF8STDSTR( _( "Generate a DXF from a list of layers" ) ) );
 
-    addLayerArg( true );
+    addLayerArg();
+    addCommonLayersArg();
     addDrawingSheetArg();
     addDefineArg();
 
@@ -96,13 +94,6 @@ CLI::PCB_EXPORT_DXF_COMMAND::PCB_EXPORT_DXF_COMMAND() :
             .scan<'i', int>()
             .default_value( 2 );
 
-    m_argParser.add_argument( "--cl", ARG_COMMON_LAYERS )
-            .default_value( std::string() )
-            .help( UTF8STDSTR(
-                    _( "Layers to include on each plot, comma separated list of untranslated "
-                       "layer names to include such as F.Cu,B.Cu" ) ) )
-            .metavar( "COMMON_LAYER_LIST" );
-
     m_argParser.add_argument( ARG_MODE_SINGLE )
             .help( UTF8STDSTR(
                     _( "Generates a single file with the output arg path acting as the complete "
@@ -124,10 +115,6 @@ CLI::PCB_EXPORT_DXF_COMMAND::PCB_EXPORT_DXF_COMMAND() :
 
 int CLI::PCB_EXPORT_DXF_COMMAND::doPerform( KIWAY& aKiway )
 {
-    int baseExit = PCB_EXPORT_BASE_COMMAND::doPerform( aKiway );
-    if( baseExit != EXIT_CODES::OK )
-        return baseExit;
-
     std::unique_ptr<JOB_EXPORT_PCB_DXF> dxfJob( new JOB_EXPORT_PCB_DXF() );
 
     dxfJob->m_filename = m_argInput;
@@ -175,10 +162,8 @@ int CLI::PCB_EXPORT_DXF_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_ARGS;
     }
 
-    dxfJob->m_plotLayerSequence = m_selectedLayers;
-
-    wxString layers = From_UTF8( m_argParser.get<std::string>( ARG_COMMON_LAYERS ).c_str() );
-    dxfJob->m_plotOnAllLayersSequence = convertLayerStringList( layers );
+    dxfJob->m_argLayers = From_UTF8( m_argParser.get<std::string>( ARG_LAYERS ).c_str() );
+    dxfJob->m_argCommonLayers = From_UTF8( m_argParser.get<std::string>( ARG_COMMON_LAYERS ).c_str() );
 
     if( m_argParser.get<bool>( ARG_MODE_MULTI ) )
         dxfJob->m_genMode = JOB_EXPORT_PCB_DXF::GEN_MODE::MULTI;
@@ -196,7 +181,5 @@ int CLI::PCB_EXPORT_DXF_COMMAND::doPerform( KIWAY& aKiway )
 
 
     LOCALE_IO dummy;    // Switch to "C" locale
-    int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, dxfJob.get() );
-
-    return exitCode;
+    return aKiway.ProcessJob( KIWAY::FACE_PCB, dxfJob.get() );
 }

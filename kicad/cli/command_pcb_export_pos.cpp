@@ -22,7 +22,6 @@
 #include <cli/exit_codes.h>
 #include "jobs/job_export_pcb_pos.h"
 #include <kiface_base.h>
-#include <layer_ids.h>
 #include <string_utils.h>
 #include <wx/crt.h>
 
@@ -92,11 +91,6 @@ CLI::PCB_EXPORT_POS_COMMAND::PCB_EXPORT_POS_COMMAND() :
 
 int CLI::PCB_EXPORT_POS_COMMAND::doPerform( KIWAY& aKiway )
 {
-    int baseExit = PCB_EXPORT_BASE_COMMAND::doPerform( aKiway );
-
-    if( baseExit != EXIT_CODES::OK )
-        return baseExit;
-
     std::unique_ptr<JOB_EXPORT_PCB_POS> aPosJob( new JOB_EXPORT_PCB_POS() );
 
     aPosJob->m_filename = m_argInput;
@@ -179,9 +173,6 @@ int CLI::PCB_EXPORT_POS_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_ARGS;
     }
 
-
     LOCALE_IO dummy;
-    int       exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, aPosJob.get() );
-
-    return exitCode;
+    return aKiway.ProcessJob( KIWAY::FACE_PCB, aPosJob.get() );
 }

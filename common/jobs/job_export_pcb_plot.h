@@ -42,6 +42,10 @@ public:
 
     JOB_EXPORT_PCB_PLOT( PLOT_FORMAT aFormat, const std::string& aType, bool aOutputIsDirectory );
 
+public:
+    wxString m_argLayers;
+    wxString m_argCommonLayers;
+
     PLOT_FORMAT m_plotFormat;
 
     wxString m_filename;
