@@ -428,7 +428,7 @@ bool GENDRILL_WRITER_BASE::GenDrillReportFile( const wxString& aFullFileName )
 
     int conventional_layer_num = 1;
 
-    for( PCB_LAYER_ID layer : cu.Seq() )
+    for( PCB_LAYER_ID layer : cu.UIOrder() )
     {
         out.Print( 0, "    L%-2d:  %-25s %s\n",
                    conventional_layer_num++,
