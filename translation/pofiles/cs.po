@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-15 19:01+0300\n"
-"PO-Revision-Date: 2025-03-15 17:08+0000\n"
+"PO-Revision-Date: 2025-03-16 16:18+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v9/cs/>\n"
 "Language: cs\n"
@@ -7422,9 +7422,8 @@ msgid "Export Drill Data Job Settings"
 msgstr "Nastavení úlohy exportu dat vrtání"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
-#, fuzzy
 msgid "PCB: Export Drill Data"
-msgstr "DPS: Exportovat data vrtání"
+msgstr "DPS: Export dat vrtání"
 
 #: common/jobs/job_export_pcb_dxf.cpp:57
 #: common/jobs/job_export_sch_plot.cpp:160 kicad/kicad_cli.cpp:143
@@ -7470,27 +7469,22 @@ msgid "Export IPC-2581"
 msgstr "Export IPC-2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
-#, fuzzy
 msgid "Export IPC-2581 Job Settings"
 msgstr "Export nastavení úloh IPC2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
-#, fuzzy
 msgid "PCB: Export IPC-2581"
 msgstr "DPS: Export IPC2581"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:33
-#, fuzzy
 msgid "Export IPC-D-356"
 msgstr "Export IPC-2581"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:39
-#, fuzzy
 msgid "Export IPC-D-356 Job Settings"
 msgstr "Export nastavení úloh IPC2581"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:52
-#, fuzzy
 msgid "PCB: Export IPC-D-356"
 msgstr "DPS: Export IPC2581"
 
@@ -7616,9 +7610,8 @@ msgid "Schematic PythonBOM export"
 msgstr "Textu schématu"
 
 #: common/jobs/job_pcb_drc.cpp:37
-#, fuzzy
 msgid "Perform DRC"
-msgstr "Aktualizovat DPS ze schématu"
+msgstr "Provést DRC"
 
 #: common/jobs/job_pcb_drc.cpp:43 pcbnew/dialogs/dialog_drc_job_config.cpp:24
 #, fuzzy
@@ -7627,7 +7620,7 @@ msgstr "3D nastavení"
 
 #: common/jobs/job_pcb_drc.cpp:47
 msgid "PCB: Perform DRC"
-msgstr ""
+msgstr "DPS: Provést DRC"
 
 #: common/jobs/job_pcb_render.cpp:127
 #, c-format
@@ -7640,14 +7633,12 @@ msgid "Render PCB Job Settings"
 msgstr "Upravit možnosti..."
 
 #: common/jobs/job_pcb_render.cpp:137
-#, fuzzy
 msgid "PCB: Render"
-msgstr "Vykreslit"
+msgstr "DPS: Vykreslit"
 
 #: common/jobs/job_sch_erc.cpp:33
-#, fuzzy
 msgid "Perform ERC"
-msgstr "Aktualizovat DPS ze schématu"
+msgstr "Provést ERC"
 
 #: common/jobs/job_sch_erc.cpp:39
 #, fuzzy
@@ -7655,18 +7646,16 @@ msgid "Schematic ERC Job Settings"
 msgstr "Exportovat Netlist"
 
 #: common/jobs/job_sch_erc.cpp:43
-#, fuzzy
 msgid "Schematic: Perform ERC"
-msgstr "Aktualizace schématu z DPS"
+msgstr "Schéma: Provést ERC"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy Files"
-msgstr "Speciální nástroje"
+msgstr "Speciální: Kopírování souborů"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
-msgstr ""
+msgstr "Speciální: Provést příkaz"
 
 #: common/jobs/jobs_output_archive.cpp:96 common/jobs/jobset.cpp:44
 msgid "Archive"
@@ -8028,14 +8017,12 @@ msgid "DRC errors"
 msgstr "Chyby DRC"
 
 #: common/layer_id.cpp:140
-#, fuzzy
 msgid "DRC shape 1"
-msgstr "tvar X"
+msgstr "Tvar DRC 1"
 
 #: common/layer_id.cpp:141
-#, fuzzy
 msgid "DRC shape 2"
-msgstr "tvar X"
+msgstr "Tvar DRC 2"
 
 #: common/layer_id.cpp:142
 msgid "DRC exclusions"
@@ -8062,14 +8049,12 @@ msgid "Track net names"
 msgstr "Názvy sítě spojů"
 
 #: common/layer_id.cpp:156
-#, fuzzy
 msgid "Pad net names"
-msgstr "Hledat názvy sítí"
+msgstr "Názvy sítě plošky"
 
 #: common/layer_id.cpp:157
-#, fuzzy
 msgid "Via net names"
-msgstr "Hledat názvy sítí"
+msgstr "Názvy sítě prokovu"
 
 #: common/lib_id.cpp:145
 msgid "Illegal character found in library nickname"
@@ -8294,9 +8279,8 @@ msgid "Error loading project footprint library table."
 msgstr "Chyba načtení tabulky knihovny pouzder projektu."
 
 #: common/project.cpp:451 common/project.cpp:457
-#, fuzzy
 msgid "Error loading project design block library table."
-msgstr "Chyba načtení tabulky knihovny pouzder projektu."
+msgstr "Chyba načítání tabulky knihovny bloků návrhu projektu."
 
 #: common/project/net_settings.cpp:65 pcbnew/board.cpp:131
 msgid "This is the default net class."
@@ -8361,9 +8345,9 @@ msgid "Failed to create file '%s'."
 msgstr "Selhalo vytvoření souboru '%s'."
 
 #: common/project/project_archiver.cpp:343
-#, fuzzy, c-format
+#, c-format
 msgid "Error opening directory: '%s'."
-msgstr "Chyba při odstraňování složky '%s': %s"
+msgstr "Chyba při otevírání složky: '%s'."
 
 #: common/project/project_archiver.cpp:379
 #, c-format
@@ -8618,14 +8602,12 @@ msgid "Copy selected item(s) to clipboard"
 msgstr "Kopírovat vybrané položky do schránky"
 
 #: common/tool/actions.cpp:235
-#, fuzzy
 msgid "Copy as Text"
-msgstr "Kopírovat text"
+msgstr "Kopírovat jako text"
 
 #: common/tool/actions.cpp:236
-#, fuzzy
 msgid "Copy selected item(s) to clipboard as text"
-msgstr "Kopírovat vybrané položky do schránky"
+msgstr "Kopírovat vybranou položku(y) do schránky jako text"
 
 #: common/tool/actions.cpp:246
 msgid "Paste item(s) from clipboard"
@@ -8648,9 +8630,8 @@ msgid "Paste Special..."
 msgstr "Speciální koláž..."
 
 #: common/tool/actions.cpp:270
-#, fuzzy
 msgid "Paste item(s) from clipboard with options"
-msgstr "Vložte položku(y) ze schránky s možnostmi očíslování"
+msgstr "Vložit položky ze schránky s možnostmi"
 
 #: common/tool/actions.cpp:278 common/widgets/listbox_tricks.cpp:53
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1103
@@ -8663,9 +8644,8 @@ msgid "Duplicates the selected item(s)"
 msgstr "Duplikuje vybranou položku(y)"
 
 #: common/tool/actions.cpp:292
-#, fuzzy
 msgid "Delete selected item(s)"
-msgstr "Odstraní vybranou položku(y)"
+msgstr "Smazat vybranou položku(y)"
 
 #: common/tool/actions.cpp:299
 msgid "Interactive Delete Tool"
@@ -8713,24 +8693,20 @@ msgstr "Sbalit vše"
 #: common/tool/actions.cpp:342 eeschema/tools/sch_edit_tool.cpp:3136
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1216
 #: pcbnew/tools/edit_tool.cpp:3105
-#, fuzzy
 msgid "Increment"
-msgstr "Krok přírůstku:"
+msgstr "Přírůstek"
 
 #: common/tool/actions.cpp:343
-#, fuzzy
 msgid "Increment the selected item(s)"
-msgstr "Odstraní vybranou položku(y)"
+msgstr "Zvýšit vybranou položku(y)"
 
 #: common/tool/actions.cpp:348
-#, fuzzy
 msgid "Increment Primary"
-msgstr "Krok přírůstku:"
+msgstr "Primární přírůstek"
 
 #: common/tool/actions.cpp:349
-#, fuzzy
 msgid "Increment the primary field of the selected item(s)"
-msgstr "Přesune vybranou položku(y)"
+msgstr "Zvýšit primární pole vybraných položek"
 
 #: common/tool/actions.cpp:355
 #, fuzzy
@@ -8930,9 +8906,8 @@ msgid "Zoom to Objects"
 msgstr "Přiblížit na objekty"
 
 #: common/tool/actions.cpp:589
-#, fuzzy
 msgid "Zoom to Selected Objects"
-msgstr "Přiblížit na objekty"
+msgstr "Zvětšit na vybrané objekty"
 
 #: common/tool/actions.cpp:600
 msgid "Zoom In at Cursor"
@@ -9011,7 +8986,7 @@ msgstr "Návrat k úrovni přiblížení před posledním zrušením přiblíže
 #: common/tool/actions.cpp:698
 #, fuzzy
 msgid "Pan to Center Selected Objects"
-msgstr "Odstraní vybranou položku(y)"
+msgstr "Pan do středu vybraných objektů"
 
 #: common/tool/actions.cpp:705
 msgid "Cursor Up"
@@ -9278,9 +9253,8 @@ msgid "Symbol Library Browser"
 msgstr "Prohlížeč knihoven symbolů"
 
 #: common/tool/actions.cpp:1089 kicad/tools/kicad_manager_actions.cpp:126
-#, fuzzy
 msgid "Create, delete and edit schematic symbols"
-msgstr "Vytvoření, odstranění a úprava symbolů"
+msgstr "Vytvářet, mazat a upravovat symboly schématu"
 
 #: common/tool/actions.cpp:1097 pcbnew/footprint_viewer_frame.cpp:111
 #: pcbnew/footprint_viewer_frame.cpp:1034
@@ -9288,9 +9262,8 @@ msgid "Footprint Library Browser"
 msgstr "Prohlížeč knihoven pouzder"
 
 #: common/tool/actions.cpp:1106
-#, fuzzy
 msgid "Create, delete and edit board footprints"
-msgstr "Vytvoření, odstranění a úprava pouzder"
+msgstr "Vytvářet, mazat a upravovat pouzdra desky"
 
 #: common/tool/actions.cpp:1115
 msgid "Show/hide the properties manager"
@@ -9303,9 +9276,8 @@ msgid "Show Datasheet"
 msgstr "Zobrazit katalogový list"
 
 #: common/tool/actions.cpp:1124
-#, fuzzy
 msgid "Open the datasheet in a browser"
-msgstr "Otevře datasheet v prohlížeči"
+msgstr "Otevřít datasheet v prohlížeči"
 
 #: common/tool/actions.cpp:1132
 msgid "Update PCB from Schematic..."
@@ -9357,9 +9329,8 @@ msgid "Edit the global and project footprint library lists"
 msgstr "Upravit seznamy globálních a projektových knihoven pouzder"
 
 #: common/tool/actions.cpp:1176
-#, fuzzy
 msgid "Manage Design Block Libraries..."
-msgstr "Správa knihoven symbolů..."
+msgstr "Spravovat knihovny bloků návrhu..."
 
 #: common/tool/actions.cpp:1177
 #, fuzzy
@@ -10613,7 +10584,6 @@ msgstr ""
 "Uložit přiřazení pouzdra v polích pouzdra symbolu schématu a souborů schématu"
 
 #: cvpcb/tools/cvpcb_actions.cpp:105
-#, fuzzy
 msgid "Select Next Unassigned Symbol"
 msgstr "Vybrat další nepřiřazený symbol"
 
@@ -10622,9 +10592,8 @@ msgid "Select next symbol with no footprint assignment"
 msgstr "Vybrat další symbol bez přiřazení pouzdra"
 
 #: cvpcb/tools/cvpcb_actions.cpp:114
-#, fuzzy
 msgid "Select Previous Unassigned Symbol"
-msgstr "Vyberte předchozí nepřiřazený symbol"
+msgstr "Vybrat předchozí nepřiřazený symbol"
 
 #: cvpcb/tools/cvpcb_actions.cpp:115
 msgid "Select previous symbol with no footprint assignment"
@@ -10647,9 +10616,8 @@ msgid "Delete Footprint Assignment"
 msgstr "Smazat přiřazení pouzdra"
 
 #: cvpcb/tools/cvpcb_actions.cpp:146
-#, fuzzy
 msgid "Delete All Footprint Assignments"
-msgstr "Symbol : Přiřazení pouzdra"
+msgstr "Smazat všechna přiřazení pouzdra"
 
 #: cvpcb/tools/cvpcb_actions.cpp:153
 msgid "Use symbol footprint filters"
@@ -10760,9 +10728,8 @@ msgid "Unconnected wire endpoint"
 msgstr "Nepřipojený konec vodiče"
 
 #: eeschema/connection_graph.cpp:3842
-#, fuzzy
 msgid "Unconnected wire to bus entry"
-msgstr "Nepřipojený konec vodiče"
+msgstr "Nepřipojený drát ke vstupu na sběrnici"
 
 #: eeschema/connection_graph.cpp:4217
 #, c-format
@@ -10804,19 +10771,18 @@ msgstr "Vybraná síť:"
 #: eeschema/design_block_tree_model_adapter.cpp:150
 #: eeschema/design_block_tree_model_adapter.cpp:199
 #: eeschema/design_block_utils.cpp:622
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading design block %s from library '%s'."
-msgstr "Chyba při načítání symbolu %s z knihovny '%s'."
+msgstr "Chyba načítání návrhového bloku %s z knihovny '%s'."
 
 #: eeschema/design_block_utils.cpp:47
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' already exists in library '%s'."
-msgstr "Symbol '%s' již existuje v knihovně '%s'."
+msgstr "Návrhový blok '%s' již existuje v knihovně '%s'."
 
 #: eeschema/design_block_utils.cpp:50
-#, fuzzy
 msgid "Overwrite existing design block?"
-msgstr "Přepsat existující přednastavení?"
+msgstr "Přepsat existující blok návrhu?"
 
 #: eeschema/design_block_utils.cpp:70 eeschema/sch_base_frame.cpp:286
 #: pcbnew/footprint_libraries_utils.cpp:410
@@ -15150,7 +15116,7 @@ msgstr "-"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:247
 msgid "Leave blank to disable ranges."
-msgstr ""
+msgstr "Nechte prázdné pro deaktivaci rozsahů."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:252
 msgid "Keep tabs"
@@ -17070,7 +17036,7 @@ msgstr "Globální označení není nikde jinde ve schématu připojeno"
 
 #: eeschema/erc/erc_item.cpp:129
 msgid "Local and global labels have same name"
-msgstr ""
+msgstr "Místní a globální štítky mají stejná jména"
 
 #: eeschema/erc/erc_item.cpp:133
 msgid "Different footprint assigned in another unit of the symbol"
@@ -17249,6 +17215,8 @@ msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
+"'%s' není soubor schématu KiCadu.\n"
+"Použijte Soubor -> Import souborů jiných než KiCad."
 
 #: eeschema/files-io.cpp:286
 msgid ""
@@ -18499,7 +18467,7 @@ msgstr "Soubor nenalezen %s."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4828
 msgid "Expected Altium Schematic Library file version 5.0"
-msgstr ""
+msgstr "Očekávám soubor knihovny Altium Schematic verze 5.0"
 
 #: eeschema/sch_io/altium/sch_io_altium.h:81
 msgid "Altium schematic files"
@@ -18895,7 +18863,7 @@ msgstr ""
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:305
 #, c-format
 msgid "Could not connect to %s. Errors: %s"
-msgstr ""
+msgstr "Nelze se připojit k %s. Chyby: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:349
 #, c-format
@@ -19143,6 +19111,8 @@ msgstr "Neplatný ID knihovny symbolů"
 #, c-format
 msgid "File at '%s' was ignored. Using previously found file at '%s' instead."
 msgstr ""
+"Soubor na '%s' byl ignorován. Místo toho byl dříve nalezený soubor použit "
+"pro '%s'."
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:363
 #, c-format
@@ -19721,7 +19691,7 @@ msgstr "Smazat generátor"
 
 #: eeschema/sch_table.cpp:680 pcbnew/pcb_table.cpp:606
 msgid "Cell Separators"
-msgstr ""
+msgstr "Oddělovač buněk"
 
 #: eeschema/sch_table.cpp:684 pcbnew/pcb_table.cpp:610
 #, fuzzy
@@ -26322,7 +26292,7 @@ msgstr "Žádný výkresový list"
 
 #: kicad/cli/command_pcb_render.cpp:219
 msgid "Renders the PCB in 3D view to PNG or JPEG image"
-msgstr ""
+msgstr "Vykreslí DPS ve 3D zobrazení na obrázek PNG nebo JPEG"
 
 #: kicad/cli/command_pcb_render.cpp:225
 #, fuzzy
@@ -26790,7 +26760,7 @@ msgstr "Připojení bylo úspěšné"
 
 #: kicad/dialogs/panel_jobset.cpp:238
 msgid "Last run failed"
-msgstr ""
+msgstr "Poslední spuštění selhalo"
 
 #: kicad/dialogs/panel_jobset.cpp:265 kicad/dialogs/panel_jobset.cpp:979
 #, fuzzy
@@ -27840,7 +27810,7 @@ msgstr "Přesunout do koše"
 
 #: kicad/project_tree_pane.cpp:1000
 msgid "Add Project to Version Control..."
-msgstr ""
+msgstr "Přidat projekt do správy verzí..."
 
 #: kicad/project_tree_pane.cpp:1001
 #, fuzzy
@@ -27854,7 +27824,7 @@ msgstr "&Projekt..."
 
 #: kicad/project_tree_pane.cpp:1006 kicad/project_tree_pane.cpp:1020
 msgid "Commit changes to the local repository"
-msgstr ""
+msgstr "Odeslat změny do místního repozitáře"
 
 #: kicad/project_tree_pane.cpp:1009
 msgid "Push"
@@ -33528,12 +33498,12 @@ msgstr "Směr:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:442
 #: pcbnew/pcb_dimension.cpp:1792
 msgid "Inward"
-msgstr ""
+msgstr "Vnitřní"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:442
 #: pcbnew/pcb_dimension.cpp:1793
 msgid "Outward"
-msgstr ""
+msgstr "Vnější"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:446
 msgid ""
@@ -33542,6 +33512,10 @@ msgid ""
 "Inward:    >-----<\n"
 "Outward: <----->"
 msgstr ""
+"Vyberte směr šipky kótování\n"
+"Automaticky: Stanoveno na základě polohy textu.\n"
+"Vnitřní:    >-----<\n"
+"Vnější: <----->"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.h:142
 #: pcbnew/pcb_dimension.cpp:1806 pcbnew/pcb_dimension.cpp:1909
@@ -34818,8 +34792,8 @@ msgid ""
 msgstr ""
 "Jedná se o poměr lokální izolační mezery v procentech použitý jako procento "
 "šířky a výšky plošky pro toto pouzdro.\n"
-"Hodnota 10 znamená, že vodorovná hodnota mezery je 10% šířky plošky a "
-"hodnota svislé mezery je 10% výšky plošky.\n"
+"Hodnota 10 znamená, že vodorovná hodnota mezery je 10 procent šířky plošky a "
+"hodnota svislé mezery je 10 procent výšky plošky.\n"
 "Tuto hodnotu lze nahradit lokální hodnotou plošky.\n"
 "Konečná hodnota mezery je součet této hodnoty a hodnoty absolutní mezery.\n"
 "Záporná hodnota znamená, že maska je menší než ploška. % o % o."
@@ -34996,8 +34970,8 @@ msgid ""
 msgstr ""
 "To je poměr místní izolační mezery v jako procento šířky a výšky plošky pro "
 "toto pouzdro.\n"
-"Hodnota 10 znamená, že hodnota horizontální mezery je 10% šířky plošky a "
-"hodnota vertikální mezery je 10% výšky plošky.\n"
+"Hodnota 10 znamená, že hodnota horizontální mezery je 10 procent šířky "
+"plošky a hodnota vertikální mezery je 10 procent výšky plošky.\n"
 "Konečná hodnota izolační mezery je součtem této hodnoty a hodnoty izolační "
 "mezery.\n"
 "Záporná hodnota znamená, že maska je menší než velikost plošky.\n"
@@ -36443,7 +36417,7 @@ msgstr "Zobrazit plošky v režimu náčrtu"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
 msgid "Front/Inner/Bottom"
-msgstr ""
+msgstr "Horní/vnitřní/dolní"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:105
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:289
@@ -46670,7 +46644,7 @@ msgstr "Táhnout každopádně"
 #: pcbnew/router/router_tool.cpp:1911 pcbnew/router/router_tool.cpp:2446
 #, c-format
 msgid "(%s to commit anyway.)"
-msgstr ""
+msgstr "(%s došlo k schválení.)"
 
 #: pcbnew/router/router_tool.cpp:1915 pcbnew/router/router_tool.cpp:2450
 #, fuzzy
@@ -50854,184 +50828,148 @@ msgid "User defined layer 9"
 msgstr "Uživatelem definovaná vrstva 9"
 
 #: pcbnew/widgets/appearance_controls.cpp:1684
-#, fuzzy
 msgid "User defined layer 10"
-msgstr "Uživatelem definovaná vrstva 1"
+msgstr "Uživatelem definovaná vrstva 10"
 
 #: pcbnew/widgets/appearance_controls.cpp:1685
-#, fuzzy
 msgid "User defined layer 11"
-msgstr "Uživatelem definovaná vrstva 1"
+msgstr "Uživatelem definovaná vrstva 11"
 
 #: pcbnew/widgets/appearance_controls.cpp:1686
-#, fuzzy
 msgid "User defined layer 12"
-msgstr "Uživatelem definovaná vrstva 1"
+msgstr "Uživatelem definovaná vrstva 12"
 
 #: pcbnew/widgets/appearance_controls.cpp:1687
-#, fuzzy
 msgid "User defined layer 13"
-msgstr "Uživatelem definovaná vrstva 1"
+msgstr "Uživatelem definovaná vrstva 13"
 
 #: pcbnew/widgets/appearance_controls.cpp:1688
-#, fuzzy
 msgid "User defined layer 14"
-msgstr "Uživatelem definovaná vrstva 1"
+msgstr "Uživatelem definovaná vrstva 14"
 
 #: pcbnew/widgets/appearance_controls.cpp:1689
-#, fuzzy
 msgid "User defined layer 15"
-msgstr "Uživatelem definovaná vrstva 1"
+msgstr "Uživatelem definovaná vrstva 15"
 
 #: pcbnew/widgets/appearance_controls.cpp:1690
-#, fuzzy
 msgid "User defined layer 16"
-msgstr "Uživatelem definovaná vrstva 1"
+msgstr "Uživatelem definovaná vrstva 16"
 
 #: pcbnew/widgets/appearance_controls.cpp:1691
-#, fuzzy
 msgid "User defined layer 17"
-msgstr "Uživatelem definovaná vrstva 1"
+msgstr "Uživatelem definovaná vrstva 17"
 
 #: pcbnew/widgets/appearance_controls.cpp:1692
-#, fuzzy
 msgid "User defined layer 18"
-msgstr "Uživatelem definovaná vrstva 1"
+msgstr "Uživatelem definovaná vrstva 18"
 
 #: pcbnew/widgets/appearance_controls.cpp:1693
-#, fuzzy
 msgid "User defined layer 19"
-msgstr "Uživatelem definovaná vrstva 1"
+msgstr "Uživatelem definovaná vrstva 19"
 
 #: pcbnew/widgets/appearance_controls.cpp:1694
-#, fuzzy
 msgid "User defined layer 20"
-msgstr "Uživatelem definovaná vrstva 2"
+msgstr "Uživatelem definovaná vrstva 20"
 
 #: pcbnew/widgets/appearance_controls.cpp:1695
-#, fuzzy
 msgid "User defined layer 21"
-msgstr "Uživatelem definovaná vrstva 2"
+msgstr "Uživatelem definovaná vrstva 21"
 
 #: pcbnew/widgets/appearance_controls.cpp:1696
-#, fuzzy
 msgid "User defined layer 22"
-msgstr "Uživatelem definovaná vrstva 2"
+msgstr "Uživatelem definovaná vrstva 22"
 
 #: pcbnew/widgets/appearance_controls.cpp:1697
-#, fuzzy
 msgid "User defined layer 23"
-msgstr "Uživatelem definovaná vrstva 2"
+msgstr "Uživatelem definovaná vrstva 23"
 
 #: pcbnew/widgets/appearance_controls.cpp:1698
-#, fuzzy
 msgid "User defined layer 24"
-msgstr "Uživatelem definovaná vrstva 2"
+msgstr "Uživatelem definovaná vrstva 24"
 
 #: pcbnew/widgets/appearance_controls.cpp:1699
-#, fuzzy
 msgid "User defined layer 25"
-msgstr "Uživatelem definovaná vrstva 2"
+msgstr "Uživatelem definovaná vrstva 25"
 
 #: pcbnew/widgets/appearance_controls.cpp:1700
-#, fuzzy
 msgid "User defined layer 26"
-msgstr "Uživatelem definovaná vrstva 2"
+msgstr "Uživatelem definovaná vrstva 26"
 
 #: pcbnew/widgets/appearance_controls.cpp:1701
-#, fuzzy
 msgid "User defined layer 27"
-msgstr "Uživatelem definovaná vrstva 2"
+msgstr "Uživatelem definovaná vrstva 27"
 
 #: pcbnew/widgets/appearance_controls.cpp:1702
-#, fuzzy
 msgid "User defined layer 28"
-msgstr "Uživatelem definovaná vrstva 2"
+msgstr "Uživatelem definovaná vrstva 28"
 
 #: pcbnew/widgets/appearance_controls.cpp:1703
-#, fuzzy
 msgid "User defined layer 29"
-msgstr "Uživatelem definovaná vrstva 2"
+msgstr "Uživatelem definovaná vrstva 29"
 
 #: pcbnew/widgets/appearance_controls.cpp:1704
-#, fuzzy
 msgid "User defined layer 30"
-msgstr "Uživatelem definovaná vrstva 3"
+msgstr "Uživatelem definovaná vrstva 30"
 
 #: pcbnew/widgets/appearance_controls.cpp:1705
-#, fuzzy
 msgid "User defined layer 31"
-msgstr "Uživatelem definovaná vrstva 3"
+msgstr "Uživatelem definovaná vrstva 31"
 
 #: pcbnew/widgets/appearance_controls.cpp:1706
-#, fuzzy
 msgid "User defined layer 32"
-msgstr "Uživatelem definovaná vrstva 3"
+msgstr "Uživatelem definovaná vrstva 32"
 
 #: pcbnew/widgets/appearance_controls.cpp:1707
-#, fuzzy
 msgid "User defined layer 33"
-msgstr "Uživatelem definovaná vrstva 3"
+msgstr "Uživatelem definovaná vrstva 33"
 
 #: pcbnew/widgets/appearance_controls.cpp:1708
-#, fuzzy
 msgid "User defined layer 34"
-msgstr "Uživatelem definovaná vrstva 3"
+msgstr "Uživatelem definovaná vrstva 34"
 
 #: pcbnew/widgets/appearance_controls.cpp:1709
-#, fuzzy
 msgid "User defined layer 35"
-msgstr "Uživatelem definovaná vrstva 3"
+msgstr "Uživatelem definovaná vrstva 35"
 
 #: pcbnew/widgets/appearance_controls.cpp:1710
-#, fuzzy
 msgid "User defined layer 36"
-msgstr "Uživatelem definovaná vrstva 3"
+msgstr "Uživatelem definovaná vrstva 36"
 
 #: pcbnew/widgets/appearance_controls.cpp:1711
-#, fuzzy
 msgid "User defined layer 37"
-msgstr "Uživatelem definovaná vrstva 3"
+msgstr "Uživatelem definovaná vrstva 37"
 
 #: pcbnew/widgets/appearance_controls.cpp:1712
-#, fuzzy
 msgid "User defined layer 38"
-msgstr "Uživatelem definovaná vrstva 3"
+msgstr "Uživatelem definovaná vrstva 38"
 
 #: pcbnew/widgets/appearance_controls.cpp:1713
-#, fuzzy
 msgid "User defined layer 39"
-msgstr "Uživatelem definovaná vrstva 3"
+msgstr "Uživatelem definovaná vrstva 39"
 
 #: pcbnew/widgets/appearance_controls.cpp:1714
-#, fuzzy
 msgid "User defined layer 40"
-msgstr "Uživatelem definovaná vrstva 4"
+msgstr "Uživatelem definovaná vrstva 40"
 
 #: pcbnew/widgets/appearance_controls.cpp:1715
-#, fuzzy
 msgid "User defined layer 41"
-msgstr "Uživatelem definovaná vrstva 4"
+msgstr "Uživatelem definovaná vrstva 41"
 
 #: pcbnew/widgets/appearance_controls.cpp:1716
-#, fuzzy
 msgid "User defined layer 42"
-msgstr "Uživatelem definovaná vrstva 4"
+msgstr "Uživatelem definovaná vrstva 42"
 
 #: pcbnew/widgets/appearance_controls.cpp:1717
-#, fuzzy
 msgid "User defined layer 43"
-msgstr "Uživatelem definovaná vrstva 4"
+msgstr "Uživatelem definovaná vrstva 43"
 
 #: pcbnew/widgets/appearance_controls.cpp:1718
-#, fuzzy
 msgid "User defined layer 44"
-msgstr "Uživatelem definovaná vrstva 4"
+msgstr "Uživatelem definovaná vrstva 44"
 
 #: pcbnew/widgets/appearance_controls.cpp:1719
-#, fuzzy
 msgid "User defined layer 45"
-msgstr "Uživatelem definovaná vrstva 4"
+msgstr "Uživatelem definovaná vrstva 45"
 
 #: pcbnew/widgets/appearance_controls.cpp:1766
 msgid "Front copper layer"
@@ -51091,14 +51029,12 @@ msgid "Set Netclass Color"
 msgstr "Nastavit barvu třídy spojů"
 
 #: pcbnew/widgets/appearance_controls.cpp:2407
-#, fuzzy
 msgid "Use Color from Schematic"
-msgstr "Aktualizovat DPS ze schématu"
+msgstr "Použít barvu ze schématu"
 
 #: pcbnew/widgets/appearance_controls.cpp:2416
-#, fuzzy
 msgid "Clear Netclass Color"
-msgstr "Vymazat barvu třídy spojů"
+msgstr "Vymažte barvu sítě"
 
 #: pcbnew/widgets/appearance_controls.cpp:2424
 #, c-format
@@ -51137,9 +51073,8 @@ msgid "Create a new project for this board"
 msgstr "Vytvořit nový projekt pro tuto desku"
 
 #: pcbnew/widgets/legacyfiledlg_netlist_options.h:35
-#, fuzzy
 msgid "Omit extra information"
-msgstr "Bitmapa info"
+msgstr "Vynechat dodatečné informace"
 
 #: pcbnew/widgets/legacyfiledlg_netlist_options.h:36
 msgid "Omit nets"
@@ -51151,9 +51086,8 @@ msgstr ""
 
 #: pcbnew/widgets/net_inspector_panel.cpp:46
 #: pcbnew/widgets/net_inspector_panel.cpp:96
-#, fuzzy
 msgid "Configure netlist inspector"
-msgstr "Konfigurace tříd sítě"
+msgstr "Konfigurace inspektora seznamu sítí"
 
 #: pcbnew/widgets/panel_footprint_chooser.cpp:359
 msgid "No footprint selected"
@@ -51171,9 +51105,8 @@ msgstr "Rozměry"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:122
 #: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:708
-#, fuzzy
 msgid "Netclass"
-msgstr "Třídy spojů"
+msgstr "Třída sítí"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:124
 msgid "Total Length"
@@ -51200,79 +51133,65 @@ msgid "Pad Count"
 msgstr "Počet plošek"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1212
-#, fuzzy
 msgid "Highlight Selected Net"
 msgstr "Zvýraznit vybranou síť"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1229
-#, fuzzy
 msgid "Rename Selected Net"
-msgstr "Výběr mřížky"
+msgstr "Přejmenovat vybranou síť"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1233
-#, fuzzy
 msgid "Delete Selected Net"
-msgstr "Odstraní vybranou položku(y)"
+msgstr "Smazat vybranou síť"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1239
-#, fuzzy
 msgid "Add Net"
-msgstr "Přidat text"
+msgstr "Přidat síť"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1253
-#, fuzzy
 msgid "Highlight Selected Nets"
-msgstr "Zvýraznit vybranou síť"
+msgstr "Zvýraznit vybrané sítě"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1255
-#, fuzzy
 msgid "Delete Selected Nets"
-msgstr "Odstraní vybranou položku(y)"
+msgstr "Smazat vybrané sítě"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1262
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1395
-#, fuzzy
 msgid "Remove Selected Custom Group"
-msgstr "Odebrat položky ze skupiny"
+msgstr "Odstranit vybranou vlastní skupinu"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1287
-#, fuzzy
 msgid "Group name / pattern:"
-msgstr "Název skupiny:"
+msgstr "Název/vzor skupiny:"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1287
-#, fuzzy
 msgid "New Group"
-msgstr "Skupina"
+msgstr "Nová skupina"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1289
 msgid "(Use /.../ to indicate a regular expression.)"
 msgstr ""
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1362
-#, fuzzy
 msgid "Filter by Net Name"
-msgstr "Filtr sítí"
+msgstr "Filtrování podle názvu sítě"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1368
-#, fuzzy
 msgid "Filter by Netclass"
-msgstr "Filtrování položek podle třídy sítě"
+msgstr "Filtrování podle třídy sítě"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1383
-#, fuzzy
 msgid "Group by Netclass"
 msgstr "Seskupit dle třídy spojů"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1390
-#, fuzzy
 msgid "Add Custom Group"
-msgstr "Vlastní pravidla"
+msgstr "Přidat vlastní skupinu"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1403
-#, fuzzy
 msgid "Remove All Custom Groups"
-msgstr "Odebrat položky ze skupiny"
+msgstr "Odebrat všechny vlastní skupiny"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1411
 #, fuzzy
@@ -51280,31 +51199,27 @@ msgid "Show Zero Pad Nets"
 msgstr "Zobrazit nepřipojené sítě"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1417
-#, fuzzy
 msgid "Show Unconnected Nets"
-msgstr "Nezapojeno"
+msgstr "Zobrazit nepřipojené sítě"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1426
-#, fuzzy
 msgid "Save Net Inspector Report"
-msgstr "Kontrola sítě"
+msgstr "Uložit sestavu inspektora sítě"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1435
-#, fuzzy
 msgid "Show / Hide Columns"
-msgstr "Zobrazit skryté vývody"
+msgstr "Zobrazit / skrýt sloupce"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1584
-#, fuzzy
 msgid "Save Net Inspector Report File"
-msgstr "Uložit soubor hlášení"
+msgstr "Uložení souboru zpráv inspektora sítě"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1585
 msgid "Report file"
 msgstr "Soubor hlášení"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1606
-#, fuzzy, c-format
+#, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
 
@@ -51384,9 +51299,8 @@ msgid "Restrictions"
 msgstr "Omezení"
 
 #: pcbnew/zone.cpp:797
-#, fuzzy
 msgid "Placement source"
-msgstr "Umístění"
+msgstr "Zdroj umístění"
 
 #: pcbnew/zone.cpp:827
 #, c-format
@@ -51418,69 +51332,65 @@ msgid "Non-copper Zone"
 msgstr "Zóna bez mědi"
 
 #: pcbnew/zone.cpp:1066
-#, fuzzy, c-format
+#, c-format
 msgid "on %s"
-msgstr "%s na %s"
+msgstr "na %s"
 
 #: pcbnew/zone.cpp:1070
-#, fuzzy, c-format
+#, c-format
 msgid "on %s and %s"
-msgstr "%s a %s"
+msgstr "na %s a %s"
 
 #: pcbnew/zone.cpp:1076
-#, fuzzy, c-format
+#, c-format
 msgid "on %s, %s and %s"
-msgstr "(sítě %s a %s)"
+msgstr "na %s, %s a %s"
 
 #: pcbnew/zone.cpp:1083
-#, fuzzy, c-format
+#, c-format
 msgid "on %s, %s and %zu more"
-msgstr "%s a %d více"
+msgstr "na %s, %s a %zu více"
 
 #: pcbnew/zone.cpp:1093
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area Cutout %s"
-msgstr "Pravidlo oblasti výřezu na %s"
+msgstr "Pravidlo oblasti výřezu %s"
 
 #: pcbnew/zone.cpp:1095
-#, fuzzy, c-format
+#, c-format
 msgid "Zone Cutout %s"
-msgstr "Výřez zóny na %s"
+msgstr "Výřez zóny %s"
 
 #: pcbnew/zone.cpp:1100
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area %s"
-msgstr "Pravidla oblastí"
+msgstr "Oblast pravidel %s"
 
 #: pcbnew/zone.cpp:1102
-#, fuzzy, c-format
+#, c-format
 msgid "Teardrop %s %s"
-msgstr "Přidat označení"
+msgstr "Slzy %s %s"
 
 #: pcbnew/zone.cpp:1104
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s %s"
-msgstr "Zóna %s na %s"
+msgstr "Zóna %s %s"
 
 #: pcbnew/zone.cpp:1947
-#, fuzzy
 msgid "Keepout"
-msgstr "Zakázané zóny"
+msgstr "Zakázaná zóna"
 
 #: pcbnew/zone.cpp:1949
-#, fuzzy
 msgid "Keep Out Tracks"
-msgstr "Bez spojů"
+msgstr "Vyloučit spoje"
 
 #: pcbnew/zone.cpp:1955
-#, fuzzy
 msgid "Keep Out Vias"
-msgstr "Bez prokovů"
+msgstr "Vyloučit prokovy"
 
 #: pcbnew/zone.cpp:1961
-#, fuzzy
 msgid "Keep Out Pads"
-msgstr "Bez plošek"
+msgstr "Vyloučit plošky"
 
 #: pcbnew/zone.cpp:1967
 #, fuzzy
@@ -51493,18 +51403,16 @@ msgid "Keep Out Footprints"
 msgstr "Žádná pouzdra"
 
 #: pcbnew/zone.cpp:1982
-#, fuzzy
 msgid "Enable"
-msgstr "Zapnout:"
+msgstr "Povolit"
 
 #: pcbnew/zone.cpp:1989
 msgid "Source Type"
 msgstr "Typ zdroje"
 
 #: pcbnew/zone.cpp:1994
-#, fuzzy
 msgid "Source Name"
-msgstr "Zdroj 2"
+msgstr "Název zdroje"
 
 #: pcbnew/zone.cpp:2008
 #, fuzzy
@@ -51596,9 +51504,8 @@ msgstr ""
 "* Pokud je priorita stejná, je nastavena chyba DRC."
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:82
-#, fuzzy
 msgid "Refill zones"
-msgstr "Znova vyplnění %d zón"
+msgstr "Znova vyplnění zón"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:83
 #, fuzzy
@@ -51632,9 +51539,9 @@ msgid "thermal reliefs for PTH"
 msgstr "teplotní profily pro PTH"
 
 #: plugins/3d/vrml/vrml.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "[INFO] load failed: %s"
-msgstr "[INFO] načtení se nezdařilo: vstupní řádek je moc dlouhý\n"
+msgstr "[INFO] načtení se nezdařilo: %s"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
@@ -51769,19 +51676,16 @@ msgid "KiCad Printed Circuit Board"
 msgstr "KiCad deska plošných spojů"
 
 #: resources/linux/mime/kicad-kicad.xml.in:41
-#, fuzzy
 msgid "KiCad Footprint"
-msgstr "KiCad editor pouzder"
+msgstr "KiCad pouzdro"
 
 #: resources/linux/mime/kicad-kicad.xml.in:55
-#, fuzzy
 msgid "KiCad Schematic Symbol"
-msgstr "Symbol schématu"
+msgstr "KiCad symbol schématu"
 
 #: resources/linux/mime/kicad-kicad.xml.in:69
-#, fuzzy
 msgid "KiCad Drawing Sheet"
-msgstr "KiCad Editor výkresu"
+msgstr "KiCad výkresový list"
 
 #, fuzzy
 #~ msgid "Change sheet pin to hierarchical label"
