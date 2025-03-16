@@ -271,9 +271,7 @@ void RENDER_3D_OPENGL::setupMaterials()
 
 void RENDER_3D_OPENGL::setLayerMaterial( PCB_LAYER_ID aLayerID )
 {
-    EDA_3D_VIEWER_SETTINGS::RENDER_SETTINGS& cfg = m_boardAdapter.m_Cfg->m_Render;
-
-    if( cfg.use_board_editor_copper_colors && IsCopperLayer( aLayerID ) )
+    if( m_boardAdapter.GetUseBoardEditorCopperLayerColors() && IsCopperLayer( aLayerID ) )
     {
         COLOR4D copper_color = m_boardAdapter.m_BoardEditorColors[aLayerID];
         m_materials.m_Copper.m_Diffuse = SFVEC3F( copper_color.r, copper_color.g,

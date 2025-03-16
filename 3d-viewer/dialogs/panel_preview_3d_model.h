@@ -222,11 +222,11 @@ private:
     int                      m_selected;            /// Index into m_parentInfoList
 
     EDA_UNITS                m_userUnits;
-    bool                     m_bodyStyleShowAll;    /// true if the board body is show
-    /// The 3d viewer Render initial settings (must be saved and restored)
-    EDA_3D_VIEWER_SETTINGS::RENDER_SETTINGS m_initialRender;
 
-    std::unique_ptr<NL_FOOTPRINT_PROPERTIES_PLUGIN>     m_spaceMouse;
+    /// The 3d viewer Render initial settings (must be saved and restored)
+    EDA_3D_VIEWER_SETTINGS::RENDER_SETTINGS          m_initialRender;
+
+    std::unique_ptr<NL_FOOTPRINT_PROPERTIES_PLUGIN>  m_spaceMouse;
 };
 
 #endif  // PANEL_PREVIEW_3D_MODEL_H

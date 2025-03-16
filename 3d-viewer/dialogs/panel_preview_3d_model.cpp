@@ -68,8 +68,6 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
     // This board will only be used to hold a footprint for viewing
     m_dummyBoard->SetBoardUse( BOARD_USE::FPHOLDER );
 
-    m_bodyStyleShowAll = true;
-
     BOARD_DESIGN_SETTINGS parent_bds = aFrame->GetDesignSettings();
     BOARD_DESIGN_SETTINGS& dummy_bds = m_dummyBoard->GetDesignSettings();
     dummy_bds.SetBoardThickness( parent_bds.GetBoardThickness() );
@@ -225,16 +223,6 @@ void PANEL_PREVIEW_3D_MODEL::loadSettings()
         m_previewPane->SetAnimationEnabled( cfg->m_Camera.animation_enabled );
         m_previewPane->SetMovingSpeedMultiplier( cfg->m_Camera.moving_speed_multiplier );
         m_previewPane->SetProjectionMode( cfg->m_Camera.projection_mode );
-
-        // Ensure the board body is always shown, and do not use the settings of the 3D viewer
-        cfg->m_Render.show_copper_top = m_bodyStyleShowAll;
-        cfg->m_Render.show_copper_bottom = m_bodyStyleShowAll;
-        cfg->m_Render.show_soldermask_top = m_bodyStyleShowAll;
-        cfg->m_Render.show_soldermask_bottom = m_bodyStyleShowAll;
-        cfg->m_Render.show_solderpaste = m_bodyStyleShowAll;
-        cfg->m_Render.show_zones = m_bodyStyleShowAll;
-        cfg->m_Render.show_board_body = m_bodyStyleShowAll;
-        cfg->m_Render.use_board_editor_copper_colors = false;
     }
 }
 
@@ -405,13 +393,7 @@ void PANEL_PREVIEW_3D_MODEL::setBodyStyleView( wxCommandEvent& event )
     if( !cfg )
         return;
 
-    m_bodyStyleShowAll = !m_bodyStyleShowAll;
-
-    cfg->m_Render.show_soldermask_top = m_bodyStyleShowAll;
-    cfg->m_Render.show_soldermask_bottom = m_bodyStyleShowAll;
-    cfg->m_Render.show_solderpaste = m_bodyStyleShowAll;
-    cfg->m_Render.show_zones = m_bodyStyleShowAll;
-    cfg->m_Render.show_board_body = m_bodyStyleShowAll;
+    cfg->m_Render.preview_show_board_body = !cfg->m_Render.preview_show_board_body;
 
     m_previewPane->ReloadRequest();
     m_previewPane->Refresh();

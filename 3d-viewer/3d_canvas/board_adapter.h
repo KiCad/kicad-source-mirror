@@ -119,6 +119,8 @@ public:
     std::bitset<LAYER_3D_END> GetDefaultVisibleLayers() const;
     void SetVisibleLayers( const std::bitset<LAYER_3D_END>& aLayers );
 
+    bool GetUseBoardEditorCopperLayerColors() const;
+
     /**
      * Function to be called by the render when it need to reload the settings for the board.
      *
