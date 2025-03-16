@@ -1044,6 +1044,11 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColMove( wxGridEvent& aEvent )
             {
                 int newPos = m_grid->GetColPos( origPos );
 
+#ifdef __WXMAC__
+                if( newPos < origPos )
+                    newPos += 1;
+#endif
+
                 m_dataModel->MoveColumn( origPos, newPos );
 
                 // "Unmove" the column since we've moved the column internally
