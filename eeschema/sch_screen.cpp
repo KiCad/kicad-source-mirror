@@ -1594,6 +1594,48 @@ std::set<wxString> SCH_SCREEN::GetSheetNames() const
 }
 
 
+bool SCH_SCREEN::HasInstanceDataFromOtherProjects() const
+{
+    wxCHECK( Schematic(), false );
+
+    SCH_SHEET_LIST hierarchy = Schematic()->Hierarchy();
+
+    for( const SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
+    {
+        const SCH_SYMBOL* symbol = static_cast<const SCH_SYMBOL*>( item );
+
+        const std::vector<SCH_SYMBOL_INSTANCE> symbolInstances = symbol->GetInstances();
+
+        for( const SCH_SYMBOL_INSTANCE& instance : symbolInstances )
+        {
+            if( !hierarchy.HasPath( instance.m_Path ) )
+                return true;
+        }
+    }
+
+    return false;
+}
+
+
+bool SCH_SCREEN::InProjectPath() const
+{
+    wxCHECK( Schematic() && !m_fileName.IsEmpty(), false );
+
+    wxFileName thisScreenFn( m_fileName );
+    wxFileName thisProjectFn( Schematic()->Prj().GetProjectFullName() );
+
+    wxCHECK( thisProjectFn.IsAbsolute(), false );
+
+    if( thisScreenFn.GetDirCount() < thisProjectFn.GetDirCount() )
+        return false;
+
+    while( thisProjectFn.GetDirCount() != thisScreenFn.GetDirCount() )
+        thisScreenFn.RemoveLastDir();
+
+    return thisScreenFn.GetPath() == thisProjectFn.GetPath();
+}
+
+
 #if defined(DEBUG)
 void SCH_SCREEN::Show( int nestLevel, std::ostream& os ) const
 {

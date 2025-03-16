@@ -65,6 +65,7 @@ class SCH_EDIT_FRAME;
 class SCH_SHEET_LIST;
 class SCH_IO_KICAD_SEXPR_PARSER;
 class SCH_IO_KICAD_SEXPR;
+class TEST_SCH_SCREEN_FIXTURE;
 
 enum SCH_LINE_TEST_T
 {
@@ -548,6 +549,14 @@ public:
 
     bool HasSymbolFieldNamesWithWhiteSpace() const;
 
+    /**
+     * Check if the schematic file is in the current project path.
+     *
+     * @retval true if the schematic file resides in the current project path or a sub-folder.
+     * @retval false if the schematic file does not reside within the current project path.
+     */
+    bool InProjectPath() const;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
@@ -592,11 +601,22 @@ public:
      */
     std::set<wxString> GetSheetNames() const;
 
+    /**
+     * Check symbols for instance data from other projects.
+     *
+     * @retval true if the schematic contains symbols and/or sheets with instances from a
+     *         project other than the current project.
+     * @retval false if the schematic does not  contain symbols and/or sheets with instances
+     *         from a project other than the current project.
+     */
+    bool HasInstanceDataFromOtherProjects() const;
+
 private:
     friend SCH_EDIT_FRAME;     // Only to populate m_symbolInstances.
     friend SCH_IO_KICAD_SEXPR_PARSER;   // Only to load instance information from schematic file.
     friend SCH_IO_KICAD_SEXPR;   // Only to save the loaded instance information to schematic file.
     friend SCH_IO_ALTIUM;
+    friend TEST_SCH_SCREEN_FIXTURE;
 
     bool doIsJunction( const VECTOR2I& aPosition, bool aBreakCrossings,
                        bool* aHasExplicitJunctionDot, bool* aHasBusEntry ) const;
@@ -617,7 +637,6 @@ private:
      * @return the number of potential matches found for \a aSymbol.
      */
     size_t getLibSymbolNameMatches( const SCH_SYMBOL& aSymbol, std::vector<wxString>& aMatches );
-
 
     /**
      * Compare two #BUS_ALIAS objects by name.  For sorting in the set.
