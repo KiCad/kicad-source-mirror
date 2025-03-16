@@ -30,10 +30,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-15 19:00+0300\n"
-"PO-Revision-Date: 2025-03-14 10:01+0000\n"
+"PO-Revision-Date: 2025-03-16 14:39+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -39002,14 +39002,13 @@ msgid "Update PCB from Schematic"
 msgstr "Platine aus Schaltplan aktualisieren"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "Error with conditions for component class assignment %s"
-msgstr "Widersprüchliche Netzklassen-Zuweisungen"
+msgstr "Fehlerhafte Bedingungen für Bauteilklassenzuweisung %s"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:371
-#, fuzzy
 msgid "Reference..."
-msgstr "Referenz"
+msgstr "Referenz ..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:372
 #: pcbnew/menubar_footprint_editor.cpp:68
@@ -39018,24 +39017,20 @@ msgid "Footprint..."
 msgstr "Footprint..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:373
-#, fuzzy
 msgid "Side..."
-msgstr "Seite"
+msgstr "Seite ..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:374
-#, fuzzy
 msgid "Rotation..."
-msgstr "Drehung"
+msgstr "Drehung ..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:375
-#, fuzzy
 msgid "Footprint Field..."
-msgstr "Footprintfelder"
+msgstr "Footprintfeld ..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:376
-#, fuzzy
 msgid "Sheet Name..."
-msgstr "Schaltplanname"
+msgstr "Schaltplanname ..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:595
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:650
@@ -39045,9 +39040,8 @@ msgstr "Schaltplanname"
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:756
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:773
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:344
-#, fuzzy
 msgid "Footprint Field:"
-msgstr "Footprintfelder"
+msgstr "Footprintfeld:"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:618
 #, fuzzy
@@ -39060,9 +39054,8 @@ msgid "Assign component class per sheet"
 msgstr "Bauteilklassen"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:31
-#, fuzzy
 msgid "Custom Assignments:"
-msgstr "Pinbelegungen"
+msgstr "Benutzerdefinierte Zuweisungen:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:38
 #, fuzzy
@@ -39070,9 +39063,8 @@ msgid "Add Custom Assignment"
 msgstr "Netzklassenzuweisung hinzufügen"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:84
-#, fuzzy
 msgid "Component Class:"
-msgstr "Bauteilklasse"
+msgstr "Bauteilklasse:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:118
 #, fuzzy
@@ -39085,9 +39077,8 @@ msgid "Match Any"
 msgstr "Zugeordnete Lagen"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:294
-#, fuzzy
 msgid "Footprint:"
-msgstr "Footprint: "
+msgstr "Footprint:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:358
 #, fuzzy
@@ -39095,9 +39086,8 @@ msgid "Field Value:"
 msgstr "Endwert:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:442
-#, fuzzy
 msgid "Sheet Name:"
-msgstr "Schaltplanname"
+msgstr "Schaltplanname:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:33
 msgid "Constrain actions to H, V, 45 degrees"
