@@ -319,6 +319,20 @@ void ERC_SETTINGS::ResetPinMap()
 }
 
 
+struct CompareMarkers
+{
+    bool operator()( const SCH_MARKER* item1, const SCH_MARKER* item2 ) const
+    {
+        wxCHECK( item1 && item2, false );
+
+        if( item1->GetPosition() == item2->GetPosition() )
+            return item1->SerializeToString() < item2->SerializeToString();
+
+        return item1->GetPosition() < item2->GetPosition();
+    }
+};
+
+
 void SHEETLIST_ERC_ITEMS_PROVIDER::visitMarkers( std::function<void( SCH_MARKER* )> aVisitor ) const
 {
     std::set<SCH_SCREEN*> seenScreens;
@@ -330,7 +344,12 @@ void SHEETLIST_ERC_ITEMS_PROVIDER::visitMarkers( std::function<void( SCH_MARKER*
         if( firstTime )
             seenScreens.insert( sheet.LastScreen() );
 
+        std::set<SCH_MARKER*, CompareMarkers> orderedMarkers;
+
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_MARKER_T ) )
+            orderedMarkers.insert( static_cast<SCH_MARKER*>( item ) );
+
+        for( SCH_ITEM* item : orderedMarkers )
         {
             SCH_MARKER* marker = static_cast<SCH_MARKER*>( item );
 

@@ -59,18 +59,29 @@ wxString ERC_REPORT::GetTextReport()
 
     ERC_SETTINGS& settings = m_sch->ErcSettings();
 
+    SHEETLIST_ERC_ITEMS_PROVIDER errors( m_sch );
+    errors.SetSeverities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING );
+
+    std::map<SCH_SHEET_PATH, std::vector<ERC_ITEM*>> orderedItems;
+
+    for( int i = 0; i < errors.GetCount(); ++i )
+    {
+        if( auto item = dynamic_cast<ERC_ITEM*>( errors.GetItem( i ).get() ) )
+        {
+            if( item->MainItemHasSheetPath() )
+                orderedItems[item->GetMainItemSheetPath()].emplace_back( item );
+            else
+                orderedItems[sheetList[0]].emplace_back( item );
+        }
+    }
+
     for( unsigned i = 0; i < sheetList.size(); i++ )
     {
         msg << wxString::Format( _( "\n***** Sheet %s\n" ), sheetList[i].PathHumanReadable() );
 
-        for( SCH_ITEM* aItem : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
+        for( ERC_ITEM* item : orderedItems[sheetList[i]] )
         {
-            const SCH_MARKER* marker = static_cast<const SCH_MARKER*>( aItem );
-            RC_ITEM*          item = marker->GetRCItem().get();
-            SEVERITY          severity = settings.GetSeverity( item->GetErrorCode() );
-
-            if( marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
-                continue;
+            SEVERITY severity = settings.GetSeverity( item->GetErrorCode() );
 
             total_count++;
 
@@ -81,7 +92,7 @@ wxString ERC_REPORT::GetTextReport()
             default: break;
             }
 
-            msg << marker->GetRCItem()->ShowReport( &unitsProvider, severity, itemMap );
+            msg << item->ShowReport( &unitsProvider, severity, itemMap );
         }
     }
 
@@ -126,23 +137,34 @@ bool ERC_REPORT::WriteJsonReport( const wxString& aFullFileName )
 
     ERC_SETTINGS& settings = m_sch->ErcSettings();
 
+    SHEETLIST_ERC_ITEMS_PROVIDER errors( m_sch );
+    errors.SetSeverities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING );
+
+    std::map<SCH_SHEET_PATH, std::vector<ERC_ITEM*>> orderedItems;
+
+    for( int i = 0; i < errors.GetCount(); ++i )
+    {
+        if( auto item = dynamic_cast<ERC_ITEM*>( errors.GetItem( i ).get() ) )
+        {
+            if( item->MainItemHasSheetPath() )
+                orderedItems[item->GetMainItemSheetPath()].emplace_back( item );
+            else
+                orderedItems[sheetList[0]].emplace_back( item );
+        }
+    }
+
     for( unsigned i = 0; i < sheetList.size(); i++ )
     {
         RC_JSON::ERC_SHEET jsonSheet;
         jsonSheet.path = sheetList[i].PathHumanReadable();
         jsonSheet.uuid_path = sheetList[i].Path().AsString();
 
-        for( SCH_ITEM* aItem : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
+        for( ERC_ITEM* item : orderedItems[sheetList[i]] )
         {
-            const SCH_MARKER* marker = static_cast<const SCH_MARKER*>( aItem );
-            RC_ITEM*          item = marker->GetRCItem().get();
-            SEVERITY          severity = settings.GetSeverity( item->GetErrorCode() );
-
-            if( marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
-                continue;
+            SEVERITY severity = settings.GetSeverity( item->GetErrorCode() );
 
             RC_JSON::VIOLATION violation;
-            marker->GetRCItem()->GetJsonViolation( violation, &unitsProvider, severity, itemMap );
+            item->GetJsonViolation( violation, &unitsProvider, severity, itemMap );
 
             jsonSheet.violations.push_back( violation );
         }
