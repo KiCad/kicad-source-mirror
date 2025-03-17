@@ -1947,9 +1947,17 @@ void PCB_NET_INSPECTOR_PANEL::onUnitsChanged( wxCommandEvent& event )
 
 void PCB_NET_INSPECTOR_PANEL::SaveSettings()
 {
-    // Don't save settings if a board has not yet been loaded - events fire while we set up the
-    // panel which overwrites the settings we haven't yet loaded
-    if( !m_board_loaded || m_board_loading )
+    // Don't save settings if a board has not yet been loaded or the panel hasn't been displayed.
+    // Events fire while we set up the panel which overwrite the settings we haven't yet loaded.
+    bool displayed = false;
+
+    for( unsigned int ii = 0; ii < m_data_model->columnCount() && !displayed; ++ii )
+    {
+        if( m_netsList->GetColumn( ii )->GetWidth() > 0 )
+            displayed = true;
+    }
+
+    if( !displayed || !m_board_loaded || m_board_loading )
         return;
 
     PROJECT_LOCAL_SETTINGS& localSettings = Pgm().GetSettingsManager().Prj().GetLocalSettings();
