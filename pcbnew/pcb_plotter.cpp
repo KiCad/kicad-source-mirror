@@ -106,7 +106,7 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
         commonLayers = aCommonLayers;
     }
 
-    size_t finalPageCount = 0;
+    int finalPageCount = 0;
 
     for( PCB_LAYER_ID layer : layersToPlot )
     {
@@ -126,18 +126,17 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
     wxString msg;
     bool     success = true;
     PLOTTER* plotter = nullptr;
+    int      pageNum = 1;
 
-    for( size_t i = 0, pageNum = 1; i < layersToPlot.size(); i++ )
+    for( size_t i = 0; i < layersToPlot.size(); i++ )
     {
         PCB_LAYER_ID layer = layersToPlot[i];
 
         if( copperLayerShouldBeSkipped( layer ) )
             continue;
 
-        LSEQ plotSequence = getPlotSequence( layer, commonLayers );
-
-        wxString layerName = m_board->GetLayerName( layer );
-
+        LSEQ       plotSequence = getPlotSequence( layer, commonLayers );
+        wxString   layerName = m_board->GetLayerName( layer );
         wxFileName fn;
 
         if( aOutputPathIsSingle )
@@ -155,13 +154,9 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
                 fileExt = GetGerberProtelExtension( layer );
 
             if( m_plotOpts.GetFormat() == PLOT_FORMAT::PDF && m_plotOpts.m_PDFSingle )
-            {
                 fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::PDF ) );
-            }
             else
-            {
                 BuildPlotFileName( &fn, aOutputPath, layerName, fileExt );
-            }
         }
 
         if( jobfile_writer )
@@ -228,15 +223,14 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
                 && i != layersToPlot.size() - 1 )
             {
                 wxString     pageNumber = wxString::Format( "%zu", pageNum + 1 );
-                size_t       nextI = i;
-                PCB_LAYER_ID nextLayer;
+                size_t       nextI = i + 1;
+                PCB_LAYER_ID nextLayer = layersToPlot[nextI];
 
-                do
+                while( copperLayerShouldBeSkipped( nextLayer ) && nextI < layersToPlot.size() - 1 )
                 {
                     ++nextI;
                     nextLayer = layersToPlot[nextI];
-                } while( copperLayerShouldBeSkipped( nextLayer )
-                         && ( nextI < layersToPlot.size() - 1 ) );
+                }
 
                 wxString     pageName = m_board->GetLayerName( nextLayer );
                 wxString     sheetName = layerName;
@@ -247,12 +241,11 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
                                         pageNumber, finalPageCount );
             }
 
-
             // last page
             if( m_plotOpts.GetFormat() != PLOT_FORMAT::PDF
-                || !m_plotOpts.m_PDFSingle
-                || i == aLayersToPlot.size() - 1
-                || pageNum == finalPageCount )
+                    || !m_plotOpts.m_PDFSingle
+                    || i == aLayersToPlot.size() - 1
+                    || pageNum == finalPageCount )
             {
                 try
                 {

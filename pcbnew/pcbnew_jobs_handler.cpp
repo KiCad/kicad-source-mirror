@@ -942,55 +942,54 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
 
 int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
 {
-    JOB_EXPORT_PCB_PDF* aPdfJob = dynamic_cast<JOB_EXPORT_PCB_PDF*>( aJob );
+    bool                plotAllLayersOneFile = false;
+    JOB_EXPORT_PCB_PDF* pdfJob = dynamic_cast<JOB_EXPORT_PCB_PDF*>( aJob );
 
-    if( aPdfJob == nullptr )
+    if( pdfJob == nullptr )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    BOARD* brd = getBoard( aPdfJob->m_filename );
+    BOARD* brd = getBoard( pdfJob->m_filename );
 
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
-    aJob->SetTitleBlock( brd->GetTitleBlock() );
-    loadOverrideDrawingSheet( brd, aPdfJob->m_drawingSheet );
-    brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
+    pdfJob->SetTitleBlock( brd->GetTitleBlock() );
+    loadOverrideDrawingSheet( brd, pdfJob->m_drawingSheet );
+    brd->GetProject()->ApplyTextVars( pdfJob->GetVarOverrides() );
     brd->SynchronizeProperties();
-    aPdfJob->m_plotLayerSequence = convertLayerArg( aPdfJob->m_argLayers, brd );
-    aPdfJob->m_plotOnAllLayersSequence = convertLayerArg( aPdfJob->m_argCommonLayers, brd );
+    pdfJob->m_plotLayerSequence = convertLayerArg( pdfJob->m_argLayers, brd );
+    pdfJob->m_plotOnAllLayersSequence = convertLayerArg( pdfJob->m_argCommonLayers, brd );
 
-    if( aPdfJob->m_plotLayerSequence.size() < 1 )
+    if( pdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_FILE )
+        plotAllLayersOneFile = true;
+
+    if( pdfJob->m_plotLayerSequence.size() < 1 )
     {
         m_reporter->Report( _( "At least one layer must be specified\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_ARGS;
     }
 
-    if( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_FILE
-        && aPdfJob->GetConfiguredOutputPath().IsEmpty() )
+    if( plotAllLayersOneFile && pdfJob->GetConfiguredOutputPath().IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
         fn.SetName( fn.GetName() );
         fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::PDF ) );
 
-        aPdfJob->SetWorkingOutputPath( fn.GetFullName() );
+        pdfJob->SetWorkingOutputPath( fn.GetFullName() );
     }
 
     PCB_PLOT_PARAMS plotOpts;
-    PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aPdfJob, *m_reporter );
-
-    int returnCode = CLI::EXIT_CODES::OK;
+    PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, pdfJob, *m_reporter );
 
     // ensure this is set for this one gen mode
-    if( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ONE_PAGE_PER_LAYER_ONE_FILE )
-    {
+    if( plotAllLayersOneFile )
         plotOpts.m_PDFSingle = true;
-    }
 
     PCB_PLOTTER pcbPlotter( brd, m_reporter, plotOpts );
 
-    wxString outPath = aPdfJob->GetFullOutputPath( brd->GetProject() );
+    wxString outPath = pdfJob->GetFullOutputPath( brd->GetProject() );
 
-    if( !PATHS::EnsurePathExists( outPath, aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_FILE ) )
+    if( !PATHS::EnsurePathExists( outPath, plotAllLayersOneFile ) )
     {
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
@@ -999,30 +998,30 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     std::optional<wxString> layerName;
     std::optional<wxString> sheetName;
     std::optional<wxString> sheetPath;
-    if( aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_FILE )
+
+    if( plotAllLayersOneFile )
     {
-        if( aPdfJob->GetVarOverrides().contains( wxT( "LAYER" ) ) )
-            layerName = aPdfJob->GetVarOverrides().at( wxT( "LAYER" ) );
+        if( pdfJob->GetVarOverrides().contains( wxT( "LAYER" ) ) )
+            layerName = pdfJob->GetVarOverrides().at( wxT( "LAYER" ) );
 
-        if( aPdfJob->GetVarOverrides().contains( wxT( "SHEETNAME" ) ) )
-            sheetName = aPdfJob->GetVarOverrides().at( wxT( "SHEETNAME" ) );
+        if( pdfJob->GetVarOverrides().contains( wxT( "SHEETNAME" ) ) )
+            sheetName = pdfJob->GetVarOverrides().at( wxT( "SHEETNAME" ) );
 
-        if( aPdfJob->GetVarOverrides().contains( wxT( "SHEETPATH" ) ) )
-            sheetPath = aPdfJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
+        if( pdfJob->GetVarOverrides().contains( wxT( "SHEETPATH" ) ) )
+            sheetPath = pdfJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
     }
 
 
     LOCALE_IO dummy;
 
-    if( !pcbPlotter.Plot( outPath, aPdfJob->m_plotLayerSequence,
-                          aPdfJob->m_plotOnAllLayersSequence, false,
-                          aPdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_FILE,
+    if( !pcbPlotter.Plot( outPath, pdfJob->m_plotLayerSequence,
+                          pdfJob->m_plotOnAllLayersSequence, false, plotAllLayersOneFile,
                           layerName, sheetName, sheetPath ) )
     {
-        returnCode = CLI::EXIT_CODES::ERR_UNKNOWN;
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
 
-    return returnCode;
+    return CLI::EXIT_CODES::OK;
 }
 
 
