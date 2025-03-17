@@ -32,6 +32,7 @@ class KICOMMON_API JOB_FP_EXPORT_SVG : public JOB
 public:
     JOB_FP_EXPORT_SVG();
 
+public:
     wxString m_libraryPath;
     wxString m_footprint;
 
@@ -39,13 +40,14 @@ public:
 
     wxString m_colorTheme;
 
-    bool m_blackAndWhite;
-    bool m_sketchPadsOnFabLayers;
-    bool m_hideDNPFPsOnFabLayers;
-    bool m_sketchDNPFPsOnFabLayers;
-    bool m_crossoutDNPFPsOnFabLayers;
+    bool     m_blackAndWhite;
+    bool     m_sketchPadsOnFabLayers;
+    bool     m_hideDNPFPsOnFabLayers;
+    bool     m_sketchDNPFPsOnFabLayers;
+    bool     m_crossoutDNPFPsOnFabLayers;
 
-    LSEQ m_printMaskLayer;
+    wxString m_argLayers;
+    LSEQ     m_plotLayerSequence;
 };
 
 #endif

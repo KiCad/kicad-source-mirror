@@ -231,13 +231,15 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
                 } while( copperLayerShouldBeSkipped( nextLayer )
                          && ( nextI < layersToPlot.size() - 1 ) );
 
-                wxString     pageName = m_board->GetLayerName( nextLayer );
-                wxString     sheetName = layerName;
+                layerName = m_board->GetLayerName( nextLayer );
+
+                wxString pageName = layerName;
+                wxString sheetName = layerName;
 
                 static_cast<PDF_PLOTTER*>( plotter )->ClosePage();
                 static_cast<PDF_PLOTTER*>( plotter )->StartPage( pageNumber, pageName );
-                setupPlotterNewPDFPage( plotter, m_board, &m_plotOpts, sheetName, sheetPath,
-                                        pageNumber, finalPageCount );
+                setupPlotterNewPDFPage( plotter, m_board, &m_plotOpts, layerName, sheetName,
+                                        sheetPath, pageNumber, finalPageCount );
             }
 
 
