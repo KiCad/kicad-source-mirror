@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:43+0300\n"
-"PO-Revision-Date: 2025-03-15 22:10+0000\n"
+"PO-Revision-Date: 2025-03-18 11:03+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -27682,9 +27682,9 @@ msgid "Create New Directory"
 msgstr "Skapa ny mapp"
 
 #: kicad/project_tree_pane.cpp:761
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get status list: %s"
-msgstr "Lyckades inte hämta överlämning: %s"
+msgstr "Lyckades inte hämta statuslista: %s"
 
 #: kicad/project_tree_pane.cpp:896
 msgid "Switch to this Project"
