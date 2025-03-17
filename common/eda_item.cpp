@@ -39,7 +39,8 @@ EDA_ITEM::EDA_ITEM( EDA_ITEM* parent, KICAD_T idType, bool isSCH_ITEM, bool isBO
         m_structType( idType ),
         m_flags( 0 ),
         m_parent( parent ),
-        m_forceVisible( false )
+        m_forceVisible( false ),
+        m_isRollover( false )
 { }
 
 
@@ -48,7 +49,8 @@ EDA_ITEM::EDA_ITEM( KICAD_T idType, bool isSCH_ITEM, bool isBOARD_ITEM ) :
         m_structType( idType ),
         m_flags( 0 ),
         m_parent( nullptr ),
-        m_forceVisible( false )
+        m_forceVisible( false ),
+        m_isRollover( false )
 { }
 
 
