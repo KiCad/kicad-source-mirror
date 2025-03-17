@@ -104,3 +104,8 @@ inside that footprint).  The various ways of specifying `footprint_identifier` a
 True if `A` is a member of the given schematic sheet. The sheet path can contain wildcards.
 <br><br>
 
+    A.memberOfSheetOrChildren('<sheet_path>')
+True if `A` is a member of the given schematic sheet, or any of its child hierarchical sheets. The sheet path can 
+contain wildcards.
+<br><br>
+

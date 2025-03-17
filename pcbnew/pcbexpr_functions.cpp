@@ -995,6 +995,69 @@ static void memberOfSheetFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 }
 
 
+static void memberOfSheetOrChildrenFunc( LIBEVAL::CONTEXT* aCtx, void* self )
+{
+    LIBEVAL::VALUE* arg = aCtx->Pop();
+    LIBEVAL::VALUE* result = aCtx->AllocValue();
+
+    result->Set( 0.0 );
+    aCtx->Push( result );
+
+    if( !arg || arg->AsString().IsEmpty() )
+    {
+        if( aCtx->HasErrorCallback() )
+            aCtx->ReportError( MISSING_SHEET_ARG( wxT( "memberOfSheetOrChildren()" ) ) );
+
+        return;
+    }
+
+    PCBEXPR_VAR_REF* vref = static_cast<PCBEXPR_VAR_REF*>( self );
+    BOARD_ITEM*      item = vref ? vref->GetObject( aCtx ) : nullptr;
+
+    if( !item )
+        return;
+
+    result->SetDeferredEval(
+            [item, arg]() -> double
+            {
+                FOOTPRINT* fp = item->GetParentFootprint();
+
+                if( !fp && item->Type() == PCB_FOOTPRINT_T )
+                    fp = static_cast<FOOTPRINT*>( item );
+
+                if( !fp )
+                    return 0.0;
+
+                wxString sheetName = fp->GetSheetname();
+                wxString refName = arg->AsString();
+
+                if( sheetName.EndsWith( wxT( "/" ) ) )
+                    sheetName.RemoveLast();
+                if( refName.EndsWith( wxT( "/" ) ) )
+                    refName.RemoveLast();
+
+                wxArrayString sheetPath = wxSplit( sheetName, '/' );
+                wxArrayString refPath = wxSplit( refName, '/' );
+
+                if( refPath.size() > sheetPath.size() )
+                    return 0.0;
+
+                if( ( refName.Matches( wxT( "/" ) ) || refName.IsEmpty() ) && sheetName.IsEmpty() )
+                {
+                    return 1.0;
+                }
+
+                for( size_t i = 0; i < refPath.size(); i++ )
+                {
+                    if( !sheetPath[i].Matches( refPath[i] ) )
+                        return 0.0;
+                }
+
+                return 1.0;
+            } );
+}
+
+
 #define MISSING_REF_ARG( f ) \
     wxString::Format( _( "Missing footprint argument (reference designator) to %s." ), f )
 
@@ -1316,6 +1379,7 @@ void PCBEXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
     RegisterFunc( wxT( "memberOfGroup('x')" ), memberOfGroupFunc );
     RegisterFunc( wxT( "memberOfFootprint('x')" ), memberOfFootprintFunc );
     RegisterFunc( wxT( "memberOfSheet('x')" ), memberOfSheetFunc );
+    RegisterFunc( wxT( "memberOfSheetOrChildren('x')" ), memberOfSheetOrChildrenFunc );
 
     RegisterFunc( wxT( "fromTo('x','y')" ), fromToFunc );
     RegisterFunc( wxT( "isCoupledDiffPair()" ), isCoupledDiffPairFunc );

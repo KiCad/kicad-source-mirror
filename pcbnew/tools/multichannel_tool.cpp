@@ -99,8 +99,8 @@ bool MULTICHANNEL_TOOL::identifyComponentsInRuleArea( ZONE*                 aRul
     {
     case RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME:
     {
-        ruleText =
-                wxT( "A.memberOfSheet('" ) + aRuleArea->GetRuleAreaPlacementSource() + wxT( "')" );
+        ruleText = wxT( "A.memberOfSheetOrChildren('" ) + aRuleArea->GetRuleAreaPlacementSource()
+                   + wxT( "')" );
         break;
     }
     case RULE_AREA_PLACEMENT_SOURCE_TYPE::COMPONENT_CLASS:
