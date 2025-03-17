@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-15 19:01+0300\n"
-"PO-Revision-Date: 2025-03-16 01:02+0000\n"
+"PO-Revision-Date: 2025-03-17 09:11+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -41116,9 +41116,8 @@ msgid "Tracks which are similar in size do not need teardrops."
 msgstr "Piste di dimensioni simili non necessitano di lacrime."
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:20
-#, fuzzy
 msgid "Default Properties for New Graphics and Text"
-msgstr "Valori predefiniti per nuove grafiche e testo:"
+msgstr "Proprietà predefinite per testo e nuove grafiche"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:373
 msgid "No via hole size defined."
@@ -41142,9 +41141,8 @@ msgid "Hole"
 msgstr "Foro"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:153
-#, fuzzy
 msgid "Differential Pairs"
-msgstr "Coppia differenziale:"
+msgstr "Coppie differenziali"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:170
 msgid "Gap"
@@ -41155,14 +41153,12 @@ msgid "Via Gap"
 msgstr "Spazio via"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:19
-#, fuzzy
 msgid "Default Properties for Single Track Tuning"
-msgstr "Proprietà predefinite per accordatura pista singola:"
+msgstr "Proprietà predefinite per accordatura pista singola"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:148
-#, fuzzy
 msgid "Default Properties for Differential Pairs"
-msgstr "Proprietà predefinite per coppie differenziali:"
+msgstr "Proprietà predefinite per coppie differenziali"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:277
 msgid "Default Properties for Differential Pair Skews"
@@ -41322,9 +41318,9 @@ msgid "Checking %s clearance: %s."
 msgstr "Controllo %s; clearance: %s."
 
 #: pcbnew/drc/drc_engine.cpp:971
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s creepage: %s."
-msgstr "Controllo %s; distanza: %s."
+msgstr "Controllo creepage %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:976
 #, c-format
@@ -41500,9 +41496,9 @@ msgid "Condition not satisfied; rule ignored."
 msgstr "Condizione non soddisfatta; regola ignorata."
 
 #: pcbnew/drc/drc_engine.cpp:1368
-#, fuzzy, c-format
+#, c-format
 msgid "Inheriting from parent: %s."
-msgstr "Deriva dal simbolo '%s'."
+msgstr "Eredita dal genitore: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1407 pcbnew/drc/drc_engine.cpp:1431
 #, c-format
@@ -41580,9 +41576,8 @@ msgid "Clearance violation"
 msgstr "Violazione clearance"
 
 #: pcbnew/drc/drc_item.cpp:72
-#, fuzzy
 msgid "Creepage violation"
-msgstr "Violazione distanza"
+msgstr "Violazione creepage"
 
 #: pcbnew/drc/drc_item.cpp:76
 msgid "Tracks crossing"
@@ -41617,7 +41612,6 @@ msgid "Hole clearance violation"
 msgstr "Violazione clearance foro"
 
 #: pcbnew/drc/drc_item.cpp:108
-#, fuzzy
 msgid "Drilled hole too close to other hole"
 msgstr "Fori troppo vicini tra loro"
 
@@ -41634,14 +41628,12 @@ msgid "Track width"
 msgstr "Larghezza pista"
 
 #: pcbnew/drc/drc_item.cpp:124
-#, fuzzy
 msgid "Track angle"
-msgstr "Angolo dell'arco:"
+msgstr "Angolo pista"
 
 #: pcbnew/drc/drc_item.cpp:128
-#, fuzzy
 msgid "Track segment length"
-msgstr "Segmenti di pista"
+msgstr "Lunghezza segmento di pista"
 
 #: pcbnew/drc/drc_item.cpp:132
 msgid "Annular width"
@@ -41656,9 +41648,8 @@ msgid "Via diameter"
 msgstr "Diametro via"
 
 #: pcbnew/drc/drc_item.cpp:144
-#, fuzzy
 msgid "Padstack is questionable"
-msgstr "Padstack non valido"
+msgstr "Padstack discutibile"
 
 #: pcbnew/drc/drc_item.cpp:148
 msgid "Padstack is not valid"
@@ -41717,9 +41708,8 @@ msgid "Footprint attributes don't match symbol"
 msgstr "Attributi impronta non corrispondenti al simbolo"
 
 #: pcbnew/drc/drc_item.cpp:204
-#, fuzzy
 msgid "Footprint doesn't match symbol's footprint filters"
-msgstr "I'impronta non corrisponde alla copia in libreria"
+msgstr "L'impronta non corrisponde ai filtri impronta del simbolo"
 
 #: pcbnew/drc/drc_item.cpp:208
 msgid "Footprint not found in libraries"
@@ -41764,19 +41754,16 @@ msgid "Text thickness out of range"
 msgstr "Spessore testo fuori campo"
 
 #: pcbnew/drc/drc_item.cpp:260
-#, fuzzy
 msgid "Track length out of range"
 msgstr "Lunghezza pista fuori campo"
 
 #: pcbnew/drc/drc_item.cpp:264
-#, fuzzy
 msgid "Skew between tracks out of range"
 msgstr "Skew tra piste fuori campo"
 
 #: pcbnew/drc/drc_item.cpp:269
-#, fuzzy
 msgid "Too many or too few vias on a connection"
-msgstr "Troppi via su una connessione"
+msgstr "Troppi o troppo pochi via su una connessione"
 
 #: pcbnew/drc/drc_item.cpp:273
 msgid "Differential pair gap out of range"
@@ -41807,9 +41794,8 @@ msgid "Non-Mirrored text on back layer"
 msgstr "Testo non specchiato sullo strato retro"
 
 #: pcbnew/drc/drc_item.cpp:304
-#, fuzzy
 msgid "Drilled hole too close to other hole - deprecated"
-msgstr "Fori troppo vicini tra loro"
+msgstr "Fori troppo vicini tra loro - deprecato"
 
 #: pcbnew/drc/drc_item.cpp:506
 #, c-format
@@ -42062,14 +42048,13 @@ msgid "Checking footprints for overlapping courtyards..."
 msgstr "Controllo sovrapposizione ingombri impronte..."
 
 #: pcbnew/drc/drc_test_provider_creepage.cpp:83
-#, fuzzy
 msgid "Checking creepage..."
-msgstr "Controllo intestazione..."
+msgstr "Controllo creepage..."
 
 #: pcbnew/drc/drc_test_provider_creepage.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "(%s creepage %s; actual %s)"
-msgstr "(%s distanza %s; reale %s)"
+msgstr "(%s creepage %s; reale %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:607
 #, c-format
@@ -42214,39 +42199,39 @@ msgid "%s orientation differs."
 msgstr "%s orientamento diverso."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:322
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad shape type differs on layer %s."
-msgstr "%s forma piazzola diversa."
+msgstr "%s forma piazzola diversa sullo strato %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:326
-#, fuzzy, c-format
+#, c-format
 msgid "%s size differs on layer %s."
-msgstr "%s dimensione diversa."
+msgstr "%s dimensione diversa sullo strato %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid "%s trapezoid delta differs on layer %s."
-msgstr "%s delta trapezoide diverso."
+msgstr "%s delta trapezoide diverso sullo strato %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:334
-#, fuzzy, c-format
+#, c-format
 msgid "%s rounded corners differ on layer %s."
-msgstr "%s angoli arrotondati diversi."
+msgstr "%s angoli arrotondati diversi sullo strato %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corner sizes differ on layer %s."
-msgstr "%s angoli smussati diversi."
+msgstr "%s dimensioni angoli cianfrinati diverse sullo strato %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:344
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corners differ on layer %s."
-msgstr "%s angoli smussati diversi."
+msgstr "%s angoli cianfrinati diversi sullo strato %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "%s shape offset from hole differs on layer %s."
-msgstr "%s scostamenti forme dai fori diversi."
+msgstr "%s scostamenti forme dai fori diversi sullo strato %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:353
 #, c-format
@@ -42259,9 +42244,9 @@ msgid "%s drill size differs."
 msgstr "%s dimensione foro diversa."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "%s shape primitives differ on layer %s."
-msgstr "%s primitiva forma diversa."
+msgstr "%s primitive forme diversa sullo strato %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:491
 #, c-format
@@ -42460,9 +42445,9 @@ msgid "Checking board footprints against library..."
 msgstr "Controllo impronte scheda rispetto alla libreria..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:890
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' was not found at '%s'."
-msgstr "Libreria impronte '%s' non trovata."
+msgstr "Libreria impronte '%s' non trovata in '%s'."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:940
 #, c-format
@@ -42482,14 +42467,14 @@ msgid "(%s max length %s; actual %s)"
 msgstr "(%s lungh. max: %s; reale %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:175
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min skew %s; actual %s; target net length %s (from %s); actual %s)"
-msgstr "(%s skew max %s; reale %s; lung. collegamento media: %s; reale %s)"
+msgstr "(%s skew min %s; reale %s; lung. net obiettivo: %s (da %s); reale %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:184
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max skew %s; actual %s; target net length %s (from %s); actual %s)"
-msgstr "(%s skew max %s; reale %s; lung. collegamento media: %s; reale %s)"
+msgstr "(%s skew max %s; reale %s; lung. net obiettivo: %s (da %s); reale %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:254
 #, c-format
@@ -42501,14 +42486,13 @@ msgid "Too many vias on a connection"
 msgstr "Troppi via su una connessione"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min count %d; actual %d)"
-msgstr "(%s conteggio max %d; reale %d)"
+msgstr "(%s conteggio min %d; reale %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:269
-#, fuzzy
 msgid "Too few vias on a connection"
-msgstr "Troppi via su una connessione"
+msgstr "Troppo pochi via su una connessione"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:299
 msgid "Gathering length-constrained connections..."
@@ -42570,19 +42554,19 @@ msgid "Missing footprint %s (%s)"
 msgstr "Impronta mancante %s (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid "Value (%s) doesn't match symbol value (%s)."
-msgstr "Impronta %s valore (%s) non corrisponde al valore del simbolo (%s)."
+msgstr "(%s) non corrisponde al valore del simbolo (%s)."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "%s doesn't match footprint given by symbol (%s)."
-msgstr "%s impronta (%s) non corrisponde al simbolo dato (%s)."
+msgstr "%s non corrisponde all'impronta data dal simbolo (%s)."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:177
-#, fuzzy, c-format
+#, c-format
 msgid "%s doesn't match symbol's footprint filters (%s)."
-msgstr "Usa filtri impronte simboli"
+msgstr "%s non corrisponde ai filtri impronte simbolo (%s)."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:228
 msgid "No corresponding pin found in schematic."
@@ -42676,29 +42660,26 @@ msgid "(%s max thickness %s; actual %s)"
 msgstr "(%s spess. max %s; effettivo %s)"
 
 #: pcbnew/drc/drc_test_provider_text_mirroring.cpp:78
-#, fuzzy
 msgid "Checking text mirroring..."
-msgstr "Controllo dimensioni testo..."
+msgstr "Controllo specchiatura testo..."
 
 #: pcbnew/drc/drc_test_provider_track_angle.cpp:78
-#, fuzzy
 msgid "Checking track angles..."
-msgstr "Controllo piste nelle piazzole..."
+msgstr "Controllo angoli piste..."
 
 #: pcbnew/drc/drc_test_provider_track_angle.cpp:180
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min angle %s; actual %s)"
-msgstr "(%s min %s; reale %s)"
+msgstr "(%s angolo min %s; reale %s)"
 
 #: pcbnew/drc/drc_test_provider_track_angle.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max angle %s; actual %s)"
-msgstr "(%s alt. max %s; effettivo %s)"
+msgstr "(%s angolo max %s; effettivo %s)"
 
 #: pcbnew/drc/drc_test_provider_track_segment_length.cpp:75
-#, fuzzy
 msgid "Checking track segment lengths..."
-msgstr "Controllo piste nelle piazzole..."
+msgstr "Controllo lunghezze segmenti di pista..."
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:74
 msgid "Checking track widths..."
