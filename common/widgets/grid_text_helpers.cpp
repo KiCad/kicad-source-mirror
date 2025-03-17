@@ -47,8 +47,8 @@ void GRID_CELL_TEXT_EDITOR::StartingKey( wxKeyEvent& event )
 {
     if( m_validator )
     {
-        m_validator.get()->SetWindow( Text() );
-        m_validator.get()->ProcessEvent( event );
+        m_validator->SetWindow( Text() );
+        m_validator->ProcessEvent( event );
     }
 
     if( event.GetSkipped() )
@@ -66,9 +66,12 @@ void GRID_CELL_TEXT_EDITOR::SetSize( const wxRect& aRect )
 
 #if defined( __WXMSW__ )
     rect.Offset( 0, 1 );
+#elif defined( __WXMAC__ )
+    rect.Offset( 0, 2 );
+    rect.SetHeight( rect.GetHeight() - 4 );
 #endif
 
-    wxGridCellEditor::SetSize( rect );
+    wxGridCellEditor::SetSize( rect );      // NOLINT(*-parent-virtual-call)
 }
 
 
@@ -125,7 +128,10 @@ void GRID_CELL_STC_EDITOR::SetSize( const wxRect& aRect )
 #if defined( __WXMSW__ )
     rect.Offset( -1, 1 );
 #elif defined( __WXGTK__ )
-    rect.Offset( -1, 3 );
+    rect.Offset( -1, 1 );
+#else
+    rect.Offset( 1, 3 );
+    rect.SetHeight( rect.GetHeight() - 6 );
 #endif
 
     wxGridCellEditor::SetSize( rect );
@@ -136,6 +142,11 @@ void GRID_CELL_STC_EDITOR::Create( wxWindow* aParent, wxWindowID aId, wxEvtHandl
 {
     m_control = new wxStyledTextCtrl( aParent, wxID_ANY, wxDefaultPosition, wxSize( 0, 0 ),
                                       wxBORDER_NONE );
+
+#ifdef __WXGTK__
+    stc_ctrl()->SetExtraAscent( 6 );
+    stc_ctrl()->SetExtraDescent( 2 );
+#endif
 
     stc_ctrl()->SetTabIndents( false );
     stc_ctrl()->SetBackSpaceUnIndents( false );
