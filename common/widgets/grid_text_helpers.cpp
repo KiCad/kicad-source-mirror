@@ -144,7 +144,7 @@ void GRID_CELL_STC_EDITOR::Create( wxWindow* aParent, wxWindowID aId, wxEvtHandl
                                       wxBORDER_NONE );
 
 #ifdef __WXGTK__
-    stc_ctrl()->SetExtraAscent( 6 );
+    stc_ctrl()->SetExtraAscent( 2 );
     stc_ctrl()->SetExtraDescent( 2 );
 #endif
 
