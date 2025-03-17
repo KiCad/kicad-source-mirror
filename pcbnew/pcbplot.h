@@ -163,8 +163,9 @@ PLOTTER* StartPlotBoard( BOARD* aBoard, const PCB_PLOT_PARAMS* aPlotOpts, int aL
                          const int aPageCount = 1);
 
 void setupPlotterNewPDFPage( PLOTTER* aPlotter, BOARD* aBoard, const PCB_PLOT_PARAMS* aPlotOpts,
-                             const wxString& aSheetName, const wxString& aSheetPath,
-                             const wxString& aPageNumber, int aPageCount );
+                             const wxString& aLayerName, const wxString& aSheetName,
+                             const wxString& aSheetPath, const wxString& aPageNumber,
+                             int aPageCount );
         /**
  * Plot a sequence of board layer IDs.
  *

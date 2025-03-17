@@ -1357,11 +1357,10 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
     return nullptr;
 }
 
-void setupPlotterNewPDFPage( PLOTTER* aPlotter,
-                            BOARD* aBoard,
-                             const PCB_PLOT_PARAMS* aPlotOpts,
-                             const wxString& aSheetName, const wxString& aSheetPath,
-                             const wxString& aPageNumber, int aPageCount )
+void setupPlotterNewPDFPage( PLOTTER* aPlotter, BOARD* aBoard, const PCB_PLOT_PARAMS* aPlotOpts,
+                             const wxString& aLayerName, const wxString& aSheetName,
+                             const wxString& aSheetPath, const wxString& aPageNumber,
+                             int aPageCount )
 {
     // Plot the frame reference if requested
     if( aPlotOpts->GetPlotFrameRef() )
@@ -1375,4 +1374,6 @@ void setupPlotterNewPDFPage( PLOTTER* aPlotter,
         if( aPlotOpts->GetMirror() )
             initializePlotter( aPlotter, aBoard, aPlotOpts );
     }
+
+    aPlotter->RenderSettings()->SetLayerName( aLayerName );
 }
