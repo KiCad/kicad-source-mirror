@@ -503,7 +503,7 @@ void BOARD_ADAPTER::createPadWithHole( const PAD* aPad, CONTAINER_2D_BASE* aDstC
 
 
 void BOARD_ADAPTER::addPads( const FOOTPRINT* aFootprint, CONTAINER_2D_BASE* aContainer,
-                             PCB_LAYER_ID aLayerId, bool aSkipPlatedPads, bool aSkipNonPlatedPads )
+                             PCB_LAYER_ID aLayerId )
 {
     for( PAD* pad : aFootprint->Pads() )
     {
@@ -527,24 +527,6 @@ void BOARD_ADAPTER::addPads( const FOOTPRINT* aFootprint, CONTAINER_2D_BASE* aCo
 
         switch( aLayerId )
         {
-        case F_Cu:
-            if( aSkipPlatedPads && pad->FlashLayer( F_Mask ) )
-                continue;
-
-            if( aSkipNonPlatedPads && !pad->FlashLayer( F_Mask ) )
-                continue;
-
-            break;
-
-        case B_Cu:
-            if( aSkipPlatedPads && pad->FlashLayer( B_Mask ) )
-                continue;
-
-            if( aSkipNonPlatedPads && !pad->FlashLayer( B_Mask ) )
-                continue;
-
-            break;
-
         case F_Mask:
         case B_Mask:
             margin.x += pad->GetSolderMaskExpansion( aLayerId );

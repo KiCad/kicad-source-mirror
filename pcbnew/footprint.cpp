@@ -3901,8 +3901,7 @@ bool FOOTPRINT::cmp_zones::operator()( const ZONE* aFirst, const ZONE* aSecond )
 
 void FOOTPRINT::TransformPadsToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
                                         int aClearance, int aMaxError, ERROR_LOC aErrorLoc,
-                                        bool aSkipNPTHPadsWihNoCopper, bool aSkipPlatedPads,
-                                        bool aSkipNonPlatedPads ) const
+                                        bool aSkipNPTHPadsWihNoCopper ) const
 {
     auto processPad =
         [&]( const PAD* pad, PCB_LAYER_ID padLayer )
@@ -3911,24 +3910,6 @@ void FOOTPRINT::TransformPadsToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aL
 
             switch( aLayer )
             {
-            case F_Cu:
-                if( aSkipPlatedPads && pad->FlashLayer( F_Mask ) )
-                    return;
-
-                if( aSkipNonPlatedPads && !pad->FlashLayer( F_Mask ) )
-                    return;
-
-                break;
-
-            case B_Cu:
-                if( aSkipPlatedPads && pad->FlashLayer( B_Mask ) )
-                    return;
-
-                if( aSkipNonPlatedPads && !pad->FlashLayer( B_Mask ) )
-                    return;
-
-                break;
-
             case F_Mask:
             case B_Mask:
                 clearance.x += pad->GetSolderMaskExpansion( padLayer );

@@ -29,6 +29,8 @@
 #include <board_design_settings.h>
 #include <footprint.h>
 #include <pcb_textbox.h>
+#include <pcb_table.h>
+#include <pcb_tablecell.h>
 #include <pcb_track.h>
 #include <pcb_shape.h>
 #include <pad.h>
@@ -542,8 +544,22 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
     }
 
     case PCB_TABLE_T:
-        // JEY TODO: tables
+    {
+        PCB_TABLE* table = static_cast<PCB_TABLE*>( aItem );
+
+        for( PCB_TABLECELL* cell : table->GetCells() )
+            cell->TransformTextToPolySet( m_poly_shapes[pcblayer], 0, maxError, ERROR_INSIDE );
+
+        table->DrawBorders(
+                [&]( const VECTOR2I& ptA, const VECTOR2I& ptB,
+                     const STROKE_PARAMS& stroke )
+                {
+                    SHAPE_SEGMENT seg( ptA, ptB, stroke.GetWidth()  );
+                    seg.TransformToPolygon( m_poly_shapes[pcblayer], maxError, ERROR_INSIDE );
+                } );
+
         break;
+    }
 
     default: wxFAIL_MSG( "buildGraphic3DShape: unhandled item type" );
     }

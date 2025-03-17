@@ -537,14 +537,10 @@ public:
      *          Due to diff between layers and holes, these pads must be skipped to be sure
      *          there is no copper left on the board (for instance when creating Gerber Files or
      *          3D shapes).  Defaults to false.
-     * @param aSkipPlatedPads is used on 3D-Viewer to extract plated and non-plated pads.
-     * @param aSkipNonPlatedPads is used on 3D-Viewer to extract plated and plated pads.
      */
     void TransformPadsToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
                                  int aMaxError, ERROR_LOC aErrorLoc,
-                                 bool aSkipNPTHPadsWihNoCopper = false,
-                                 bool aSkipPlatedPads = false,
-                                 bool aSkipNonPlatedPads = false ) const;
+                                 bool aSkipNPTHPadsWihNoCopper = false ) const;
 
     /**
      * Generate shapes of graphic items (outlines) on layer \a aLayer as polygons and adds these

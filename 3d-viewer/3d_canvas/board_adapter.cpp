@@ -144,8 +144,6 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
     m_offboardPadsFront = nullptr;
     m_offboardPadsBack = nullptr;
 
-    m_frontPlatedPadAndGraphicPolys = nullptr;
-    m_backPlatedPadAndGraphicPolys = nullptr;
     m_frontPlatedCopperPolys = nullptr;
     m_backPlatedCopperPolys = nullptr;
 
