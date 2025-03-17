@@ -50,7 +50,9 @@ bool PIN::IsIsomorphic( const PIN& b ) const
 {
     if( m_conns.size() != b.m_conns.size() )
     {
-        wxLogTrace( traceTopoMatch, wxT("[conns mismatch n1 %d n2 %d c-ref %d c-other %d thispin %s-%s otherpin %s-%s"),
+        wxLogTrace( traceTopoMatch,
+                    wxT( "[conns mismatch n1 %d n2 %d c-ref %d c-other %d thispin %s-%s "
+                         "otherpin %s-%s" ),
             m_netcode,
             b.m_netcode,
             (int) m_conns.size(),
@@ -62,24 +64,24 @@ bool PIN::IsIsomorphic( const PIN& b ) const
 
         for( auto c : m_conns )
         {
-            wxLogTrace( traceTopoMatch, wxT("%s-%s "), c->m_parent->m_reference, c->m_ref );
+            wxLogTrace( traceTopoMatch, wxT( "%s-%s " ), c->m_parent->m_reference, c->m_ref );
         }
 
-        wxLogTrace( traceTopoMatch, wxT("||") );
+        wxLogTrace( traceTopoMatch, wxT( "||" ) );
 
         for( auto c : b.m_conns )
         {
-            wxLogTrace( traceTopoMatch, wxT("%s-%s "), c->m_parent->m_reference, c->m_ref );
+            wxLogTrace( traceTopoMatch, wxT( "%s-%s " ), c->m_parent->m_reference, c->m_ref );
         }
 
 
-        wxLogTrace( traceTopoMatch, wxT("] ") );
+        wxLogTrace( traceTopoMatch, wxT( "] " ) );
         return false;
     }
 
     if( m_conns.empty() )
     {
-        wxLogTrace( traceTopoMatch, wxT("[conns empty]") );
+        wxLogTrace( traceTopoMatch, wxT( "[conns empty]" ) );
         return true;
     }
 
@@ -92,12 +94,10 @@ bool PIN::IsIsomorphic( const PIN& b ) const
 
     for( auto& cref : m_conns )
     {
-        //printf("[CREF: %s]", cref->Format().c_str().AsChar() );
         for( int i = 0; i < m_conns.size(); i++ )
         {
             if( b.m_conns[i]->IsTopologicallySimilar( *cref ) )
             {
-                //printf("[CMATCH: %s]", b.m_conns[i]->Format().c_str().AsChar() );
                 matches[nref] = true;
                 break;
             }
@@ -117,8 +117,10 @@ bool PIN::IsIsomorphic( const PIN& b ) const
     return true;
 }
 
+
 // fixme: terrible performance, but computers are fast these days, ain't they? :D
-bool checkIfPadNetsMatch( const BACKTRACK_STAGE& aMatches, CONNECTION_GRAPH* aRefGraph, COMPONENT* aRef, COMPONENT* aTgt )
+bool checkIfPadNetsMatch( const BACKTRACK_STAGE& aMatches, CONNECTION_GRAPH* aRefGraph,
+                          COMPONENT* aRef, COMPONENT* aTgt )
 {
     std::map<PIN*, PIN*> pairs;
     std::vector<PIN*>    pref, ptgt;
@@ -159,7 +161,8 @@ bool checkIfPadNetsMatch( const BACKTRACK_STAGE& aMatches, CONNECTION_GRAPH* aRe
 
     for( PIN* refPin : aRef->Pins() )
     {
-        wxLogTrace( traceTopoMatch, wxT("pad %s-%s: ") , aRef->GetParent()->GetReferenceAsString() , refPin->GetReference() );
+        wxLogTrace( traceTopoMatch, wxT( "pad %s-%s: " ),
+                    aRef->GetParent()->GetReferenceAsString(), refPin->GetReference() );
 
         std::optional<int> prevNet;
 
@@ -170,7 +173,9 @@ bool checkIfPadNetsMatch( const BACKTRACK_STAGE& aMatches, CONNECTION_GRAPH* aRe
                 if ( ppin->GetNetCode() != refPin->GetNetCode() )
                     continue;
 
-                wxLogTrace( traceTopoMatch, wxT("{ref %s-%s:%d} "), ppin->GetParent()->GetParent()->GetReferenceAsString(), ppin->GetReference(), ppin->GetNetCode() );
+                wxLogTrace( traceTopoMatch, wxT( "{ref %s-%s:%d} " ),
+                            ppin->GetParent()->GetParent()->GetReferenceAsString(),
+                            ppin->GetReference(), ppin->GetNetCode() );
 
                 auto tpin = pairs.find( ppin );
 
@@ -178,11 +183,9 @@ bool checkIfPadNetsMatch( const BACKTRACK_STAGE& aMatches, CONNECTION_GRAPH* aRe
                 {
                     int nc = tpin->second->GetNetCode();
 
-//                    printf("%s-%s:%d ", tpin->second->GetParent()->GetParent()->GetReferenceAsString(), tpin->second->GetReference().c_str().AsChar(), tpin->second->GetNetCode() );
-
                     if( prevNet && ( *prevNet != nc ) )
                     {
-                        wxLogTrace( traceTopoMatch, wxT("nets inconsistent\n") );
+                        wxLogTrace( traceTopoMatch, wxT( "nets inconsistent\n" ) );
                         return false;
                     }
 
@@ -197,7 +200,8 @@ bool checkIfPadNetsMatch( const BACKTRACK_STAGE& aMatches, CONNECTION_GRAPH* aRe
 
 
 std::vector<COMPONENT*>
-CONNECTION_GRAPH::findMatchingComponents( CONNECTION_GRAPH* aRefGraph, COMPONENT* aRef, const BACKTRACK_STAGE& partialMatches )
+CONNECTION_GRAPH::findMatchingComponents( CONNECTION_GRAPH* aRefGraph, COMPONENT* aRef,
+                                          const BACKTRACK_STAGE& partialMatches )
 {
     std::vector<COMPONENT*> matches;
     for( auto cmpTarget : m_components )
@@ -208,9 +212,11 @@ CONNECTION_GRAPH::findMatchingComponents( CONNECTION_GRAPH* aRefGraph, COMPONENT
             continue;
         }
 
-        wxLogTrace( traceTopoMatch, wxT("Check '%s'/'%s' "), aRef->m_reference, cmpTarget->m_reference );
+        wxLogTrace( traceTopoMatch, wxT( "Check '%s'/'%s' " ), aRef->m_reference,
+                    cmpTarget->m_reference );
 
-        // first, a basic heuristic (reference prefix, pin count & footprint) followed by a pin connection topology check
+        // first, a basic heuristic (reference prefix, pin count & footprint) followed by a pin
+        // connection topology check
         if( aRef->MatchesWith( cmpTarget ) )
         {
             // then a net integrity check (expensive because of poor optimization)
@@ -230,20 +236,24 @@ CONNECTION_GRAPH::findMatchingComponents( CONNECTION_GRAPH* aRefGraph, COMPONENT
         }
     }
 
-    auto padSimilarity=[]( COMPONENT*a, COMPONENT*b ) -> double {
+    auto padSimilarity=[]( COMPONENT*a, COMPONENT*b ) -> double
+    {
         int n=0;
+
         for(int i=0;i<a->m_pins.size();i++)
         {
             PIN* pa = a->m_pins[i];
             PIN* pb = b->m_pins[i];
+
             if( pa->GetNetCode() == pb->GetNetCode() )
                 n++;
         }
+
         return (double)n / (double) a->m_pins.size();
     };
 
-    
-    std::sort(matches.begin(), matches.end(), [&] ( COMPONENT*a, COMPONENT*b ) -> int 
+
+    std::sort(matches.begin(), matches.end(), [&] ( COMPONENT*a, COMPONENT*b ) -> int
     {
         return padSimilarity( aRef,a ) > padSimilarity( aRef, b );
     }
@@ -252,14 +262,16 @@ CONNECTION_GRAPH::findMatchingComponents( CONNECTION_GRAPH* aRefGraph, COMPONENT
     return matches;
 }
 
+
 void COMPONENT::sortPinsByName()
 {
-std::sort( m_pins.begin(), m_pins.end(),
-                   []( PIN* a, PIN* b )
-                   {
-                       return a->GetReference() < b->GetReference();
-                   } );
+    std::sort( m_pins.begin(), m_pins.end(),
+               []( PIN* a, PIN* b )
+               {
+                   return a->GetReference() < b->GetReference();
+               } );
 }
+
 
 void CONNECTION_GRAPH::BuildConnectivity()
 {
@@ -280,14 +292,18 @@ void CONNECTION_GRAPH::BuildConnectivity()
 
     for( auto iter : nets )
     {
-        wxLogTrace( traceTopoMatch, wxT("net %d: %d connections\n"), iter.first, (int) iter.second.size() );
+        wxLogTrace( traceTopoMatch, wxT( "net %d: %d connections\n" ), iter.first,
+                    (int) iter.second.size() );
+
         for( auto p : iter.second )
         {
             for( auto p2 : iter.second )
+            {
                 if( p != p2 && !alg::contains( p->m_conns, p2 ) )
                 {
                     p->m_conns.push_back( p2 );
                 }
+            }
         }
     }
 
@@ -323,6 +339,7 @@ CONNECTION_GRAPH::STATUS CONNECTION_GRAPH::FindIsomorphism( CONNECTION_GRAPH* aT
 
     bool matchFound = false;
     int  nloops = 0;
+
     while( !stack.empty() )
     {
         nloops++;
@@ -332,7 +349,8 @@ CONNECTION_GRAPH::STATUS CONNECTION_GRAPH::FindIsomorphism( CONNECTION_GRAPH* aT
         {
             if (it->second == current.m_ref)
             {
-                wxLogTrace( traceTopoMatch, wxT("stk: Remove %s from locked\n"), current.m_ref->m_reference );
+                wxLogTrace( traceTopoMatch, wxT( "stk: Remove %s from locked\n" ),
+                            current.m_ref->m_reference );
                 current.m_locked.erase( it );
                 break;
             }
@@ -340,7 +358,7 @@ CONNECTION_GRAPH::STATUS CONNECTION_GRAPH::FindIsomorphism( CONNECTION_GRAPH* aT
 
         if( nloops >= c_ITER_LIMIT )
         {
-            wxLogTrace( traceTopoMatch, wxT("stk: Iter cnt exceeded\n") );
+            wxLogTrace( traceTopoMatch, wxT( "stk: Iter cnt exceeded\n" ) );
             return ST_ITERATION_COUNT_EXCEEDED;
         }
 
@@ -350,41 +368,39 @@ CONNECTION_GRAPH::STATUS CONNECTION_GRAPH::FindIsomorphism( CONNECTION_GRAPH* aT
             current.m_currentMatch = 0;
         }
 
-        wxLogTrace( traceTopoMatch, wxT("stk: Current '%s' stack %d cm %d/%d locked %d/%d\n" ),
-                current.m_ref->m_reference, (int) stack.size(),
-                current.m_currentMatch, (int) current.m_matches.size(),
-                (int) current.m_locked.size(), (int) m_components.size() );
+        wxLogTrace( traceTopoMatch, wxT( "stk: Current '%s' stack %d cm %d/%d locked %d/%d\n" ),
+                    current.m_ref->m_reference, (int) stack.size(), current.m_currentMatch,
+                    (int) current.m_matches.size(), (int) current.m_locked.size(),
+                    (int) m_components.size() );
 
         if ( current.m_matches.empty() )
         {
-            wxLogTrace( traceTopoMatch, wxT("stk: No matches at all, going up [level=%d]\n"), (int) stack.size() );
+            wxLogTrace( traceTopoMatch, wxT( "stk: No matches at all, going up [level=%d]\n" ),
+                        (int) stack.size() );
             stack.pop_back();
             continue;
         }
 
         if( current.m_currentMatch >= 0 && current.m_currentMatch >= current.m_matches.size() )
         {
-            wxLogTrace( traceTopoMatch, wxT("stk: No more matches, going up [level=%d]\n"), (int) stack.size() );
+            wxLogTrace( traceTopoMatch, wxT( "stk: No more matches, going up [level=%d]\n" ),
+                        (int) stack.size() );
             stack.pop_back();
             continue;
         }
 
         auto& match = current.m_matches[current.m_currentMatch];
 
-        wxLogTrace( traceTopoMatch, wxT("stk: candidate '%s', match list : ( "),
-                                current.m_matches[current.m_currentMatch]->m_reference,
-                                current.m_refIndex );
+        wxLogTrace( traceTopoMatch, wxT( "stk: candidate '%s', match list : ( " ),
+                    current.m_matches[current.m_currentMatch]->m_reference, current.m_refIndex );
 
         for( auto m : current.m_matches )
-            wxLogTrace( traceTopoMatch, wxT("%s "), m->GetParent()->GetReferenceAsString() );
+            wxLogTrace( traceTopoMatch, wxT( "%s " ), m->GetParent()->GetReferenceAsString() );
 
-        wxLogTrace( traceTopoMatch, wxT("\n") );
-
-
+        wxLogTrace( traceTopoMatch, wxT( "\n" ) );
 
         current.m_currentMatch++;
         current.m_locked[match] = current.m_ref;
-
 
         if( current.m_locked.size() == m_components.size() )
         {
@@ -429,6 +445,7 @@ CONNECTION_GRAPH::STATUS CONNECTION_GRAPH::FindIsomorphism( CONNECTION_GRAPH* aT
             auto matches = aTarget->findMatchingComponents( this, cmp, current );
 
             int nMatches = matches.size();
+
             if( nMatches == 1 )
             {
                 bestNextRef = cmp;
@@ -468,6 +485,7 @@ CONNECTION_GRAPH::STATUS CONNECTION_GRAPH::FindIsomorphism( CONNECTION_GRAPH* aT
 
     return ST_TOPOLOGY_MISMATCH;
 }
+
 
 #if 0
 int main()
@@ -528,24 +546,31 @@ int main()
 
 #endif
 
-COMPONENT::COMPONENT( const wxString& aRef, FOOTPRINT* aParentFp, std::optional<VECTOR2I> aRaOffset ) :
-    m_reference( aRef ), m_parentFootprint( aParentFp ), m_raOffset( aRaOffset )
+
+COMPONENT::COMPONENT( const wxString& aRef, FOOTPRINT* aParentFp,
+                      std::optional<VECTOR2I> aRaOffset ) :
+        m_reference( aRef ),
+        m_parentFootprint( aParentFp ), m_raOffset( aRaOffset )
 {
     m_prefix = UTIL::GetRefDesPrefix( aRef );
 }
 
+
 bool COMPONENT::IsSameKind( const COMPONENT& b ) const
 {
-    return m_prefix == b.m_prefix && 
-    ( (m_parentFootprint->GetFPID() == b.m_parentFootprint->GetFPID() ) || 
-    ( m_parentFootprint->GetFPID().empty() && b.m_parentFootprint->GetFPID().empty() ) );
+    return m_prefix == b.m_prefix
+           && ( ( m_parentFootprint->GetFPID() == b.m_parentFootprint->GetFPID() )
+                || ( m_parentFootprint->GetFPID().empty()
+                     && b.m_parentFootprint->GetFPID().empty() ) );
 }
+
 
 void COMPONENT::AddPin( PIN* aPin )
 {
     m_pins.push_back( aPin );
     aPin->SetParent( this );
 }
+
 
 bool COMPONENT::MatchesWith( COMPONENT* b )
 {
@@ -571,9 +596,10 @@ bool COMPONENT::MatchesWith( COMPONENT* b )
     return true;
 }
 
+
 void CONNECTION_GRAPH::AddFootprint( FOOTPRINT* aFp, const VECTOR2I& aOffset )
 {
-    auto cmp = new COMPONENT( aFp->GetReference(), aFp );;
+    auto cmp = new COMPONENT( aFp->GetReference(), aFp );
 
     for( auto pad : aFp->Pads() )
     {
@@ -586,7 +612,9 @@ void CONNECTION_GRAPH::AddFootprint( FOOTPRINT* aFp, const VECTOR2I& aOffset )
     m_components.push_back( cmp );
 }
 
-std::unique_ptr<CONNECTION_GRAPH> CONNECTION_GRAPH::BuildFromFootprintSet( const std::set<FOOTPRINT*>& aFps )
+
+std::unique_ptr<CONNECTION_GRAPH>
+CONNECTION_GRAPH::BuildFromFootprintSet( const std::set<FOOTPRINT*>& aFps )
 {
     auto cgraph = std::make_unique<CONNECTION_GRAPH>();
     VECTOR2I ref(0, 0);
