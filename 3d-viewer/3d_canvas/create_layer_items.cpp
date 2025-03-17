@@ -647,11 +647,11 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             // ADD PLATED PADS contours
             for( FOOTPRINT* footprint : m_board->Footprints() )
             {
-                footprint->TransformPadsToPolySet( *m_frontPlatedPadAndGraphicPolys, F_Cu, 0, maxError,
-                                                   ERROR_INSIDE, true, false, true );
+                footprint->TransformPadsToPolySet( *m_frontPlatedPadAndGraphicPolys, F_Cu, 0,
+                                                   maxError, ERROR_INSIDE, true, false, true );
 
-                footprint->TransformPadsToPolySet( *m_backPlatedPadAndGraphicPolys, B_Cu, 0, maxError,
-                                                   ERROR_INSIDE, true, false, true );
+                footprint->TransformPadsToPolySet( *m_backPlatedPadAndGraphicPolys, B_Cu, 0,
+                                                   maxError, ERROR_INSIDE, true, false, true );
             }
         }
     }
@@ -729,8 +729,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     }
                     else
                     {
-                        item->TransformShapeToPolySet( *platedCopperPolys, layer,
-                                                       0, maxError, ERROR_INSIDE );
+                        item->TransformShapeToPolySet( *platedCopperPolys, layer, 0, maxError,
+                                                       ERROR_INSIDE );
                     }
                 }
             }
@@ -1194,14 +1194,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
         // TRIM PLATED COPPER TO SOLDERMASK
         if( m_layers_poly.find( F_Mask ) != m_layers_poly.end() )
-        {
             m_frontPlatedCopperPolys->BooleanIntersection( *m_layers_poly.at( F_Mask ) );
-        }
 
         if( m_layers_poly.find( B_Mask ) != m_layers_poly.end() )
-        {
             m_backPlatedCopperPolys->BooleanIntersection( *m_layers_poly.at( B_Mask ) );
-        }
 
         // Subtract plated copper from unplated copper
         bool hasF_Cu = false;
