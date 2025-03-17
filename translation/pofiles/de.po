@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-15 19:00+0300\n"
-"PO-Revision-Date: 2025-03-16 14:39+0000\n"
+"PO-Revision-Date: 2025-03-17 09:11+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -43373,9 +43373,8 @@ msgid "Memory exhausted loading PCB '%s'"
 msgstr "Speicher erschöpft beim Laden der Platine \"%s\""
 
 #: pcbnew/files.cpp:814 pcbnew/pcb_edit_frame.cpp:1361
-#, fuzzy
 msgid "Could not load component class assignment rules"
-msgstr "Benutzerdefinierte Designregeln konnten nicht kompiliert werden."
+msgstr "Bauteilklassen-Zuweisungsregeln konnten nicht geladen werden"
 
 #: pcbnew/files.cpp:875
 #, c-format
