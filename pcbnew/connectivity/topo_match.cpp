@@ -402,8 +402,8 @@ CONNECTION_GRAPH::STATUS CONNECTION_GRAPH::FindIsomorphism( CONNECTION_GRAPH* aT
         int        minMatches = std::numeric_limits<int>::max();
         COMPONENT* altNextRef = nullptr;
         COMPONENT* bestNextRef = nullptr;
-        int        bestRefIndex;
-        int        altRefIndex;
+        int        bestRefIndex = 0;
+        int        altRefIndex = 0;
 
         for( size_t i = 0; i < m_components.size(); i++ )
         {
