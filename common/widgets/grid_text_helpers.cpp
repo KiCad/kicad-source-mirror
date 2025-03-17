@@ -128,7 +128,7 @@ void GRID_CELL_STC_EDITOR::SetSize( const wxRect& aRect )
 #if defined( __WXMSW__ )
     rect.Offset( -1, 1 );
 #elif defined( __WXGTK__ )
-    rect.Offset( -1, 1 );
+    rect.Offset( -1, 3 );
 #else
     rect.Offset( 1, 3 );
     rect.SetHeight( rect.GetHeight() - 6 );
@@ -142,11 +142,6 @@ void GRID_CELL_STC_EDITOR::Create( wxWindow* aParent, wxWindowID aId, wxEvtHandl
 {
     m_control = new wxStyledTextCtrl( aParent, wxID_ANY, wxDefaultPosition, wxSize( 0, 0 ),
                                       wxBORDER_NONE );
-
-#ifdef __WXGTK__
-    stc_ctrl()->SetExtraAscent( 2 );
-    stc_ctrl()->SetExtraDescent( 2 );
-#endif
 
     stc_ctrl()->SetTabIndents( false );
     stc_ctrl()->SetBackSpaceUnIndents( false );
