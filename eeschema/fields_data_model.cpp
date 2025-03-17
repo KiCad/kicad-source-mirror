@@ -140,6 +140,8 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::SetFieldsOrder( const std::vector<wxString>&
 {
     size_t foundCount = 0;
 
+    wxCHECK( aNewOrder.size() == m_cols.size(), /* void */ );
+
     for( const wxString& newField : aNewOrder )
     {
         for( size_t i = 0; i < m_cols.size(); i++ )
@@ -898,15 +900,17 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyBomPreset( const BOM_PRESET& aPreset )
         SetGroupColumn( i, false );
     }
 
+    std::set<wxString> seen;
     std::vector<wxString> order;
 
     // Set columns that are present and shown
     for( const BOM_FIELD& field : aPreset.fieldsOrdered )
     {
         // Ignore empty fields
-        if( !field.name )
+        if( !field.name || seen.count( field.name ) )
             continue;
 
+        seen.insert( field.name );
         order.emplace_back( field.name );
 
         int col = GetFieldNameCol( field.name );
