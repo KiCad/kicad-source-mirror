@@ -101,6 +101,7 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, wxWindow* aP
         DIALOG_EXPORT_STEP_BASE( aEditFrame ),
         m_editFrame( aEditFrame ),
         m_job( aJob ),
+        m_originUnits( 0 /* mm */ ),
         m_boardPath( aBoardPath )
 {
     if( !m_job )
