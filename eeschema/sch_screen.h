@@ -593,6 +593,11 @@ public:
     void PruneOrphanedSheetInstances( const wxString& aProjectName,
                                       const SCH_SHEET_LIST& aValidSheetPaths );
 
+    /**
+     * @return a list of names of all of the sheets in this schematic file.
+     */
+    std::set<wxString> GetSheetNames() const;
+
 private:
     friend SCH_EDIT_FRAME;     // Only to populate m_symbolInstances.
     friend SCH_IO_KICAD_SEXPR_PARSER;   // Only to load instance information from schematic file.
