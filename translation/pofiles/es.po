@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-15 19:01+0300\n"
+"POT-Creation-Date: 2025-03-17 18:43+0300\n"
 "PO-Revision-Date: 2025-02-19 03:13+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/master-"
@@ -353,9 +353,9 @@ msgstr "Permisos insuficientes para guardar el archivo '%s'."
 #: eeschema/erc/erc_item.cpp:81 eeschema/files-io.cpp:936
 #: eeschema/files-io.cpp:1004 eeschema/sch_marker.cpp:376
 #: kicad/import_proj.cpp:79 kicad/import_project.cpp:123 kicad/kicad.cpp:318
-#: kicad/tools/kicad_manager_control.cpp:269
-#: kicad/tools/kicad_manager_control.cpp:326
-#: kicad/tools/kicad_manager_control.cpp:372
+#: kicad/tools/kicad_manager_control.cpp:275
+#: kicad/tools/kicad_manager_control.cpp:332
+#: kicad/tools/kicad_manager_control.cpp:378
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:143
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:216
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:225
@@ -1909,7 +1909,7 @@ msgstr "Información"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:137
 #: eeschema/tools/symbol_editor_control.cpp:493
 #: eeschema/tools/symbol_editor_pin_tool.cpp:242 kicad/import_project.cpp:109
-#: kicad/tools/kicad_manager_control.cpp:353
+#: kicad/tools/kicad_manager_control.cpp:359
 #: pcbnew/dialogs/dialog_export_idf.cpp:138
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:355
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:409
@@ -3615,12 +3615,11 @@ msgid "Basic"
 msgstr "Básica"
 
 #: common/dialogs/git/dialog_git_auth.cpp:46
-#: common/dialogs/git/dialog_git_repository_base.cpp:52
+#: common/dialogs/git/dialog_git_repository_base.cpp:58
 msgid "SSH"
 msgstr "SSH"
 
 #: common/dialogs/git/dialog_git_auth.cpp:52
-#: common/dialogs/git/dialog_git_repository_base.cpp:95
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:85
 msgid "Test"
 msgstr "Comprobar"
@@ -3636,7 +3635,7 @@ msgstr "Aceptar"
 
 #: common/dialogs/git/dialog_git_auth.cpp:54
 #: common/dialogs/git/dialog_git_commit.cpp:152
-#: common/dialogs/git/dialog_git_switch.cpp:69
+#: common/dialogs/git/dialog_git_switch.cpp:73
 #: common/dialogs/panel_embedded_files.cpp:426 common/tool/actions.cpp:159
 #: eeschema/dialogs/dialog_erc.cpp:426
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1339 eeschema/sheet.cpp:784
@@ -3654,7 +3653,7 @@ msgid "Url"
 msgstr "Url"
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
-#: common/dialogs/git/dialog_git_repository_base.cpp:71
+#: common/dialogs/git/dialog_git_repository_base.cpp:79
 msgid "Authentication"
 msgstr "Autenticación"
 
@@ -3715,135 +3714,136 @@ msgstr "C&onfirmar"
 msgid "Commit message cannot be empty"
 msgstr "El mensaje de confirmación no puede estar vacío"
 
-#: common/dialogs/git/dialog_git_repository.cpp:156
-#: common/dialogs/git/dialog_git_repository.cpp:388
-msgid "Enter the password for the SSH key"
-msgstr "Ingrese la contraseña para la clave SSH"
-
-#: common/dialogs/git/dialog_git_repository.cpp:337
+#: common/dialogs/git/dialog_git_repository.cpp:74
+#: common/dialogs/git/dialog_git_repository.cpp:306
 #, fuzzy
 msgid "Test Connection"
 msgstr "Probar conexión"
 
-#: common/dialogs/git/dialog_git_repository.cpp:342
+#: common/dialogs/git/dialog_git_repository.cpp:165
+#: common/dialogs/git/dialog_git_repository.cpp:357
+msgid "Enter the password for the SSH key"
+msgstr "Ingrese la contraseña para la clave SSH"
+
+#: common/dialogs/git/dialog_git_repository.cpp:311
 msgid "Connection successful"
 msgstr "Conexión exitosa"
 
-#: common/dialogs/git/dialog_git_repository.cpp:346
+#: common/dialogs/git/dialog_git_repository.cpp:315
 #, c-format
 msgid "Could not connect to '%s' "
 msgstr "No se pudo conectar a '%s "
 
-#: common/dialogs/git/dialog_git_repository.cpp:366
+#: common/dialogs/git/dialog_git_repository.cpp:335
 #, c-format
 msgid "Could not open private key '%s'"
 msgstr "No se pudo abrir la clave privada '%s'"
 
-#: common/dialogs/git/dialog_git_repository.cpp:379
+#: common/dialogs/git/dialog_git_repository.cpp:348
 msgid "Invalid SSH Key"
 msgstr "Clave SSH inválida"
 
-#: common/dialogs/git/dialog_git_repository.cpp:380
+#: common/dialogs/git/dialog_git_repository.cpp:349
 msgid "The selected file is not a valid SSH private key"
 msgstr "El archivo seleccionado no es una clave privada SSH válida"
 
-#: common/dialogs/git/dialog_git_repository.cpp:404
+#: common/dialogs/git/dialog_git_repository.cpp:373
 #, c-format
 msgid "Could not open public key '%s'"
 msgstr "No se pudo abrir la clave pública '%s'"
 
-#: common/dialogs/git/dialog_git_repository.cpp:423
-#: common/dialogs/git/dialog_git_repository.cpp:430
+#: common/dialogs/git/dialog_git_repository.cpp:392
+#: common/dialogs/git/dialog_git_repository.cpp:399
 msgid "Missing information"
 msgstr "Información faltante"
 
-#: common/dialogs/git/dialog_git_repository.cpp:424
+#: common/dialogs/git/dialog_git_repository.cpp:393
 msgid "Please enter a name for the repository"
 msgstr "Por favor ingrese un nombre para el repositorio"
 
-#: common/dialogs/git/dialog_git_repository.cpp:431
+#: common/dialogs/git/dialog_git_repository.cpp:400
 msgid "Please enter a URL for the repository"
 msgstr "Por favor ingrese una URL para el repositorio"
 
-#: common/dialogs/git/dialog_git_repository.cpp:453
-#: common/dialogs/git/dialog_git_repository_base.cpp:108
+#: common/dialogs/git/dialog_git_repository.cpp:424
+#: common/dialogs/git/dialog_git_repository_base.cpp:106
 #, fuzzy
 msgid "SSH key password:"
 msgstr "Contraseña de clave SSH"
 
-#: common/dialogs/git/dialog_git_repository.cpp:459
+#: common/dialogs/git/dialog_git_repository.cpp:432
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
 msgid "Password:"
 msgstr "Contraseña:"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:38
+#: common/dialogs/git/dialog_git_repository_base.cpp:42
 #, fuzzy
 msgid "Location:"
 msgstr "Ubicación"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:45
+#: common/dialogs/git/dialog_git_repository_base.cpp:49
 #, fuzzy
 msgid "Connection type:"
 msgstr "Tipo de conexión"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:52
+#: common/dialogs/git/dialog_git_repository_base.cpp:58
 msgid "HTTPS"
 msgstr "HTTPS"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:52
+#: common/dialogs/git/dialog_git_repository_base.cpp:58
 #: eeschema/widgets/search_handlers.cpp:452
 msgid "Local"
 msgstr "Local"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:83
+#: common/dialogs/git/dialog_git_repository_base.cpp:91
 #, fuzzy
 msgid "SSH private key:     "
 msgstr "Clave privada SSH"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:90
+#: common/dialogs/git/dialog_git_repository_base.cpp:94
 msgid "Select SSH private key file"
 msgstr "Seleccione un archivo de clave privada SSH"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:90
+#: common/dialogs/git/dialog_git_repository_base.cpp:94
 msgid "*"
 msgstr "*"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:101
+#: common/dialogs/git/dialog_git_repository_base.cpp:99
 #, fuzzy
 msgid "User name:"
 msgstr "Nombre de usuario:"
 
-#: common/dialogs/git/dialog_git_repository_base.h:77
+#: common/dialogs/git/dialog_git_repository_base.h:76
 msgid "Git Repository"
 msgstr "Repositorio Git"
 
-#: common/dialogs/git/dialog_git_switch.cpp:40
+#: common/dialogs/git/dialog_git_switch.cpp:44
 msgid "Git Branch Switch"
 msgstr "Cambio de rama Git"
 
-#: common/dialogs/git/dialog_git_switch.cpp:48
+#: common/dialogs/git/dialog_git_switch.cpp:52
 msgid "Select or enter a branch name:"
 msgstr "Seleccione o ingrese un nombre de rama:"
 
-#: common/dialogs/git/dialog_git_switch.cpp:54
+#: common/dialogs/git/dialog_git_switch.cpp:58
 msgid "Branch"
 msgstr "Rama"
 
-#: common/dialogs/git/dialog_git_switch.cpp:55
+#: common/dialogs/git/dialog_git_switch.cpp:59
 msgid "Last Commit"
 msgstr "Última confirmación"
 
-#: common/dialogs/git/dialog_git_switch.cpp:56
+#: common/dialogs/git/dialog_git_switch.cpp:60
 msgid "Last Updated"
 msgstr "Última actualización"
 
-#: common/dialogs/git/dialog_git_switch.cpp:66
-#: common/dialogs/git/dialog_git_switch.cpp:147
-#: common/dialogs/git/dialog_git_switch.cpp:214
+#: common/dialogs/git/dialog_git_switch.cpp:70
+#: common/dialogs/git/dialog_git_switch.cpp:151
+#: common/dialogs/git/dialog_git_switch.cpp:218
 msgid "Switch"
 msgstr "Alternar"
 
-#: common/dialogs/git/dialog_git_switch.cpp:219
+#: common/dialogs/git/dialog_git_switch.cpp:223
 #: eeschema/design_block_utils.cpp:90 eeschema/sch_base_frame.cpp:306
 #: pcbnew/footprint_libraries_utils.cpp:430
 msgid "Add"
@@ -4758,7 +4758,7 @@ msgstr "Ya existe el archivo %s."
 #: eeschema/symbol_editor/symbol_editor.cpp:1183
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:138
 #: eeschema/tools/symbol_editor_control.cpp:495
-#: kicad/tools/kicad_manager_control.cpp:356
+#: kicad/tools/kicad_manager_control.cpp:362
 #: pcbnew/dialogs/dialog_export_idf.cpp:139
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:357
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:411
@@ -5878,7 +5878,7 @@ msgstr "Ratón y panel táctil"
 msgid "Hotkeys"
 msgstr "Atajos de teclado"
 
-#: common/eda_base_frame.cpp:1125 kicad/project_tree_pane.cpp:1052
+#: common/eda_base_frame.cpp:1125 kicad/project_tree_pane.cpp:1053
 msgid "Version Control"
 msgstr "Control de versiones"
 
@@ -6952,124 +6952,124 @@ msgstr "La carpeta '%s' no existe"
 msgid "Could not read file: %s"
 msgstr "No se puede leer el archivo "
 
-#: common/git/git_clone_handler.cpp:50
+#: common/git/git_clone_handler.cpp:58
 #, c-format
 msgid "Could not create directory '%s'"
 msgstr "No se pudo crear la carpeta '%s'"
 
-#: common/git/git_clone_handler.cpp:71
+#: common/git/git_clone_handler.cpp:80
 #, c-format
 msgid "Could not clone repository '%s'"
 msgstr "No se pudo clonar el repositorio '%s'"
 
-#: common/git/git_pull_handler.cpp:50
+#: common/git/git_pull_handler.cpp:63
 #, c-format
 msgid "Could not lookup remote '%s'"
 msgstr "No se pudo buscar el remoto '%s'"
 
-#: common/git/git_pull_handler.cpp:67
+#: common/git/git_pull_handler.cpp:81
 #, fuzzy, c-format
 msgid "Could not connect to remote '%s': %s"
 msgstr "No se pudo conectar al remoto '%s'"
 
-#: common/git/git_pull_handler.cpp:79
+#: common/git/git_pull_handler.cpp:92
 #, fuzzy, c-format
 msgid "Could not fetch data from remote '%s': %s"
 msgstr "No se pudieron obtener datos del remoto '%s'"
 
-#: common/git/git_pull_handler.cpp:101
+#: common/git/git_pull_handler.cpp:120
 msgid "Could not read 'FETCH_HEAD'"
 msgstr "No se pudo leer 'FETCH_HEAD'"
 
-#: common/git/git_pull_handler.cpp:109
+#: common/git/git_pull_handler.cpp:128
 msgid "Could not lookup commit"
 msgstr "No se pudo buscar la confirmación"
 
-#: common/git/git_pull_handler.cpp:119
+#: common/git/git_pull_handler.cpp:140
 msgid "Could not analyze merge"
 msgstr "No se pudo analizar la fusión"
 
-#: common/git/git_pull_handler.cpp:129
+#: common/git/git_pull_handler.cpp:146
 msgid "Invalid HEAD.  Cannot merge."
 msgstr "HEAD inválida. No se puede fusionar."
 
-#: common/git/git_pull_handler.cpp:198 common/git/git_push_handler.cpp:79
+#: common/git/git_pull_handler.cpp:211 common/git/git_push_handler.cpp:91
 msgid "Could not get repository head"
 msgstr "No se pudo obtener el HEAD del repositorio"
 
-#: common/git/git_pull_handler.cpp:212
+#: common/git/git_pull_handler.cpp:223
 #, c-format
 msgid "Could not get reference OID for reference '%s'"
 msgstr "No se pudo obtener la referencia OID para la referencia '%s'"
 
-#: common/git/git_pull_handler.cpp:223 common/git/kicad_git_errors.cpp:55
+#: common/git/git_pull_handler.cpp:234 common/git/kicad_git_errors.cpp:55
 msgid "Failed to perform checkout operation."
 msgstr "Fallo al realizar la operación de checkout."
 
-#: common/git/git_pull_handler.cpp:241
+#: common/git/git_pull_handler.cpp:253
 msgid "Could not lookup commit '{}'"
 msgstr "No se pudo buscar la confirmación '{}'"
 
-#: common/git/git_pull_handler.cpp:282
+#: common/git/git_pull_handler.cpp:290
 msgid "Could not merge commits"
 msgstr "No se pudieron fusionar las confirmaciones"
 
-#: common/git/git_pull_handler.cpp:291
+#: common/git/git_pull_handler.cpp:299
 msgid "Could not get repository index"
 msgstr "No se pudo obtener el índice del repositorio"
 
-#: common/git/git_pull_handler.cpp:300
+#: common/git/git_pull_handler.cpp:310
 msgid "Could not get conflict iterator"
 msgstr "No se pudo obtener el iterador de conflicto"
 
-#: common/git/git_pull_handler.cpp:320 common/git/git_pull_handler.cpp:321
+#: common/git/git_pull_handler.cpp:332 common/git/git_pull_handler.cpp:333
 msgid "Changed"
 msgstr "Cambiado"
 
-#: common/git/git_pull_handler.cpp:335 common/git/git_pull_handler.cpp:336
+#: common/git/git_pull_handler.cpp:347 common/git/git_pull_handler.cpp:348
 msgid "Added"
 msgstr "Añadido"
 
-#: common/git/git_push_handler.cpp:46
+#: common/git/git_push_handler.cpp:56
 msgid "Could not lookup remote"
 msgstr "No se ha podido buscar el remoto"
 
-#: common/git/git_push_handler.cpp:64
+#: common/git/git_push_handler.cpp:76
 #, fuzzy, c-format
 msgid "Could not connect to remote: %s"
 msgstr "No se pudo conectar al remoto '%s'"
 
-#: common/git/git_push_handler.cpp:92
+#: common/git/git_push_handler.cpp:104
 #, fuzzy, c-format
 msgid "Could not push to remote: %s"
 msgstr "No se ha podido enviar al remoto"
 
-#: common/git/kicad_git_common.cpp:649
+#: common/git/kicad_git_common.cpp:829
 #, c-format
 msgid "Received %u of %u objects"
 msgstr "Recibidos %u de %u objetos"
 
-#: common/git/kicad_git_common.cpp:678
+#: common/git/kicad_git_common.cpp:858
 #, c-format
 msgid "* [updated] %s..%s %s"
 msgstr "* [actualizado] %s..%s %s"
 
-#: common/git/kicad_git_common.cpp:682
+#: common/git/kicad_git_common.cpp:862
 #, c-format
 msgid "* [new] %s %s"
 msgstr "* [nuevo] %s %s"
 
-#: common/git/kicad_git_common.cpp:702
+#: common/git/kicad_git_common.cpp:882
 #, c-format
 msgid "Writing objects: %lld%% (%u/%u), %zu bytes"
 msgstr "Escribiendo objetos: %lld%% (%u/%u), %zu bytes"
 
-#: common/git/kicad_git_common.cpp:717
+#: common/git/kicad_git_common.cpp:897
 #, c-format
 msgid "* [rejected] %s (%s)"
 msgstr "* [rechazado] %s (%s)"
 
-#: common/git/kicad_git_common.cpp:722
+#: common/git/kicad_git_common.cpp:902
 #, c-format
 msgid "[updated] %s"
 msgstr "[actualizado] %s"
@@ -7199,7 +7199,7 @@ msgstr "Pegar celdas del portapapeles a la matriz en la celda activa"
 #: common/grid_tricks.cpp:368 common/tool/actions.cpp:291
 #: common/widgets/listbox_tricks.cpp:54 eeschema/tools/sch_edit_tool.cpp:1720
 #: eeschema/tools/symbol_editor_edit_tool.cpp:478
-#: kicad/dialogs/panel_jobset.cpp:394 kicad/project_tree_pane.cpp:985
+#: kicad/dialogs/panel_jobset.cpp:394 kicad/project_tree_pane.cpp:986
 #: pcbnew/dialogs/panel_setup_rules.cpp:133 pcbnew/tools/edit_tool.cpp:2668
 msgid "Delete"
 msgstr "Eliminar"
@@ -10608,7 +10608,7 @@ msgstr "Archivo de proyecto: '%s'"
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:94
 #: eeschema/dialogs/dialog_bom.cpp:403
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
-#: kicad/project_tree_pane.cpp:1066
+#: kicad/project_tree_pane.cpp:1067
 msgid "No text editor selected in KiCad.  Please choose one."
 msgstr "No se ha seleccionado un editor en KiCad. Por favor, elija uno."
 
@@ -14400,7 +14400,7 @@ msgstr ""
 "'%s'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:513
-#: kicad/tools/kicad_manager_control.cpp:695
+#: kicad/tools/kicad_manager_control.cpp:701
 #, c-format
 msgid "'%s' already exists."
 msgstr "Ya existe '%s'."
@@ -17499,7 +17499,7 @@ msgstr "Entrada de bus necesaria"
 msgid "ERC report (%s, Encoding UTF8)\n"
 msgstr "Informe de ERC (%s, codificación UTF8)\n"
 
-#: eeschema/erc/erc_report.cpp:64
+#: eeschema/erc/erc_report.cpp:80
 #, c-format
 msgid ""
 "\n"
@@ -17508,7 +17508,7 @@ msgstr ""
 "\n"
 "***** Hoja %s\n"
 
-#: eeschema/erc/erc_report.cpp:88
+#: eeschema/erc/erc_report.cpp:99
 #, c-format
 msgid ""
 "\n"
@@ -17749,8 +17749,8 @@ msgid "File write operation failed."
 msgstr "Error al escribir en el archivo."
 
 #: eeschema/files-io.cpp:932 eeschema/files-io.cpp:1000
-#: kicad/import_project.cpp:93 kicad/tools/kicad_manager_control.cpp:111
-#: kicad/tools/kicad_manager_control.cpp:313
+#: kicad/import_project.cpp:93 kicad/tools/kicad_manager_control.cpp:115
+#: kicad/tools/kicad_manager_control.cpp:319
 #, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
@@ -28302,298 +28302,303 @@ msgstr "No puede moverse '%s' a la papelera."
 msgid "Can not move '%s' to trash."
 msgstr "No puede moverse '%s' a la basura."
 
-#: kicad/project_tree_pane.cpp:306
+#: kicad/project_tree_pane.cpp:308
 msgid "Directory name:"
 msgstr "Nombre de la carpeta:"
 
-#: kicad/project_tree_pane.cpp:306
+#: kicad/project_tree_pane.cpp:308
 msgid "Create New Directory"
 msgstr "Crear carpeta nueva"
 
-#: kicad/project_tree_pane.cpp:895
+#: kicad/project_tree_pane.cpp:761
+#, fuzzy, c-format
+msgid "Failed to get status list: %s"
+msgstr "Fallo al obtener confirmación: %s"
+
+#: kicad/project_tree_pane.cpp:896
 msgid "Switch to this Project"
 msgstr "Cambiar a este proyecto"
 
-#: kicad/project_tree_pane.cpp:896
+#: kicad/project_tree_pane.cpp:897
 msgid "Close all editors, and switch to the selected project"
 msgstr "Cerrar y cambiar al proyecto seleccionado"
 
-#: kicad/project_tree_pane.cpp:903
+#: kicad/project_tree_pane.cpp:904
 msgid "New Directory..."
 msgstr "Nueva carpeta..."
 
-#: kicad/project_tree_pane.cpp:904
+#: kicad/project_tree_pane.cpp:905
 msgid "Create a New Directory"
 msgstr "Crear una carpeta nueva"
 
-#: kicad/project_tree_pane.cpp:912 kicad/project_tree_pane.cpp:922
+#: kicad/project_tree_pane.cpp:913 kicad/project_tree_pane.cpp:923
 msgid "Reveal in Finder"
 msgstr "Revelar en Finder"
 
-#: kicad/project_tree_pane.cpp:913
+#: kicad/project_tree_pane.cpp:914
 msgid "Reveals the directory in a Finder window"
 msgstr "Revela el directorio en una ventana de Finder"
 
-#: kicad/project_tree_pane.cpp:915
+#: kicad/project_tree_pane.cpp:916
 msgid "Open Directory in File Explorer"
 msgstr "Abrir carpeta en el explorador de archivos"
 
-#: kicad/project_tree_pane.cpp:916 pcbnew/tools/pcb_actions.cpp:986
+#: kicad/project_tree_pane.cpp:917 pcbnew/tools/pcb_actions.cpp:986
 msgid "Opens the directory in the default system file manager"
 msgstr "Abre el directorio en el gestor de archivos del sistema"
 
-#: kicad/project_tree_pane.cpp:923
+#: kicad/project_tree_pane.cpp:924
 msgid "Reveals the directories in a Finder window"
 msgstr "Revela las carpetas en una ventana de Finder"
 
-#: kicad/project_tree_pane.cpp:925
+#: kicad/project_tree_pane.cpp:926
 msgid "Open Directories in File Explorer"
 msgstr "Abrir carpetas en el explorador de archivos"
 
-#: kicad/project_tree_pane.cpp:926
+#: kicad/project_tree_pane.cpp:927
 msgid "Opens the directories in the default system file manager"
 msgstr "Abre los directorios en el gestor de archivos del sistema"
 
-#: kicad/project_tree_pane.cpp:937
+#: kicad/project_tree_pane.cpp:938
 msgid "Open the file in a Text Editor"
 msgstr "Abrir el archivo con un editor de texto"
 
-#: kicad/project_tree_pane.cpp:939
+#: kicad/project_tree_pane.cpp:940
 msgid "Open files in a Text Editor"
 msgstr "Abrir archivos en un editor de texto"
 
-#: kicad/project_tree_pane.cpp:941
+#: kicad/project_tree_pane.cpp:942
 msgid "Edit in a Text Editor"
 msgstr "Editar en un editor de texto"
 
-#: kicad/project_tree_pane.cpp:947
+#: kicad/project_tree_pane.cpp:948
 #, fuzzy
 msgid "Run Jobs"
 msgstr "en %s"
 
-#: kicad/project_tree_pane.cpp:955
+#: kicad/project_tree_pane.cpp:956
 msgid "Rename File..."
 msgstr "Renombrar archivo..."
 
-#: kicad/project_tree_pane.cpp:956
+#: kicad/project_tree_pane.cpp:957
 msgid "Rename file"
 msgstr "Renombrar archivo"
 
-#: kicad/project_tree_pane.cpp:960
+#: kicad/project_tree_pane.cpp:961
 msgid "Rename Files..."
 msgstr "Renombrar archivos..."
 
-#: kicad/project_tree_pane.cpp:961
+#: kicad/project_tree_pane.cpp:962
 msgid "Rename files"
 msgstr "Renombrar archivos"
 
-#: kicad/project_tree_pane.cpp:971
+#: kicad/project_tree_pane.cpp:972
 msgid "Delete the file and its content"
 msgstr "Eliminar el archivo y sus contenidos"
 
-#: kicad/project_tree_pane.cpp:973
+#: kicad/project_tree_pane.cpp:974
 msgid "Delete the files and their contents"
 msgstr "Eliminar los archivos y sus contenidos"
 
-#: kicad/project_tree_pane.cpp:988
+#: kicad/project_tree_pane.cpp:989
 msgid "Move to Trash"
 msgstr "Mover a la papelera"
 
-#: kicad/project_tree_pane.cpp:1000
+#: kicad/project_tree_pane.cpp:1001
 msgid "Add Project to Version Control..."
 msgstr "Añadir proyecto al control de versiones..."
 
-#: kicad/project_tree_pane.cpp:1001
+#: kicad/project_tree_pane.cpp:1002
 msgid "Initialize a new repository"
 msgstr "Inicializar un nuevo repositorio"
 
-#: kicad/project_tree_pane.cpp:1005
+#: kicad/project_tree_pane.cpp:1006
 msgid "Commit Project..."
 msgstr "Confirmar proyecto..."
 
-#: kicad/project_tree_pane.cpp:1006 kicad/project_tree_pane.cpp:1020
+#: kicad/project_tree_pane.cpp:1007 kicad/project_tree_pane.cpp:1021
 msgid "Commit changes to the local repository"
 msgstr "Confirmar cambios al repositorio local"
 
-#: kicad/project_tree_pane.cpp:1009
+#: kicad/project_tree_pane.cpp:1010
 msgid "Push"
 msgstr "Enviar (push)"
 
-#: kicad/project_tree_pane.cpp:1010
+#: kicad/project_tree_pane.cpp:1011
 msgid "Push committed local changes to remote repository"
 msgstr "Enviar cambios confirmados localmente al repositorio remoto"
 
-#: kicad/project_tree_pane.cpp:1013
+#: kicad/project_tree_pane.cpp:1014
 msgid "Pull"
 msgstr "Recibir (pull)"
 
-#: kicad/project_tree_pane.cpp:1014
+#: kicad/project_tree_pane.cpp:1015
 msgid "Pull changes from remote repository into local"
 msgstr "Recibir cambios desde el repositorio remoto al local"
 
-#: kicad/project_tree_pane.cpp:1019
+#: kicad/project_tree_pane.cpp:1020
 msgid "Commit File..."
 msgstr "Confirmar (commit) archivo..."
 
-#: kicad/project_tree_pane.cpp:1034
+#: kicad/project_tree_pane.cpp:1035
 msgid "Switch to branch "
 msgstr "Cambiar a rama "
 
-#: kicad/project_tree_pane.cpp:1039
+#: kicad/project_tree_pane.cpp:1040
 msgid "Other..."
 msgstr "Otros..."
 
-#: kicad/project_tree_pane.cpp:1040
+#: kicad/project_tree_pane.cpp:1041
 msgid "Switch to a different branch"
 msgstr "Cambiar a una rama distinta"
 
-#: kicad/project_tree_pane.cpp:1043
+#: kicad/project_tree_pane.cpp:1044
 msgid "Switch to Branch"
 msgstr "Cambiar a rama"
 
-#: kicad/project_tree_pane.cpp:1047
+#: kicad/project_tree_pane.cpp:1048
 msgid "Remove Version Control"
 msgstr "Eliminar control de versiones"
 
-#: kicad/project_tree_pane.cpp:1048
+#: kicad/project_tree_pane.cpp:1049
 msgid "Delete all version control files from the project directory."
 msgstr ""
 "Eliminar todos los archivos de control de versiones en la carpeta del "
 "proyecto."
 
-#: kicad/project_tree_pane.cpp:1103
+#: kicad/project_tree_pane.cpp:1104
 #, c-format
 msgid "Change filename: '%s'"
 msgstr "Cambiar nombre de archivo: '%s'"
 
-#: kicad/project_tree_pane.cpp:1105
+#: kicad/project_tree_pane.cpp:1106
 msgid "Change filename"
 msgstr "Cambiar nombre de archivo"
 
-#: kicad/project_tree_pane.cpp:1437
+#: kicad/project_tree_pane.cpp:1451
 msgid "Network path: not monitoring folder changes"
 msgstr "Ruta de red: no se supervisan cambios en la carpeta"
 
-#: kicad/project_tree_pane.cpp:1443
+#: kicad/project_tree_pane.cpp:1457
 msgid "Local path: monitoring folder changes"
 msgstr "Ruta local: supervisando cambios en la carpeta"
 
-#: kicad/project_tree_pane.cpp:1630
+#: kicad/project_tree_pane.cpp:1644
 #, fuzzy
 msgid "The selected directory is already a Git project."
 msgstr "La carpeta seleccionada ya es un proyecto de git."
 
-#: kicad/project_tree_pane.cpp:1637
+#: kicad/project_tree_pane.cpp:1652
 msgid "Set default remote"
 msgstr "Fijar el remoto por defecto"
 
-#: kicad/project_tree_pane.cpp:1652
+#: kicad/project_tree_pane.cpp:1663
 #, fuzzy
 msgid "Failed to initialize Git project."
 msgstr "Fallo al inicializar el proyecto de git."
 
-#: kicad/project_tree_pane.cpp:1712
+#: kicad/project_tree_pane.cpp:1721
 msgid "Failed to set default remote."
 msgstr "Fallo al fijar el remoto por defecto."
 
-#: kicad/project_tree_pane.cpp:1724 kicad/project_tree_pane.cpp:1758
-#: kicad/project_tree_pane.cpp:1780
+#: kicad/project_tree_pane.cpp:1733 kicad/project_tree_pane.cpp:1767
+#: kicad/project_tree_pane.cpp:1791
 msgid "Fetching Remote"
 msgstr "Obteniendo remoto"
 
-#: kicad/project_tree_pane.cpp:1765
+#: kicad/project_tree_pane.cpp:1774
 #, fuzzy
 msgid "Failed to pull project"
 msgstr "Fallo al enviar el proyecto"
 
-#: kicad/project_tree_pane.cpp:1787
+#: kicad/project_tree_pane.cpp:1798
 msgid "Failed to push project"
 msgstr "Fallo al enviar el proyecto"
 
-#: kicad/project_tree_pane.cpp:1864
+#: kicad/project_tree_pane.cpp:1877
 #, c-format
 msgid "Failed to lookup branch '%s': %s"
 msgstr "Fallo al buscar la rama '%s': %s"
 
-#: kicad/project_tree_pane.cpp:1877
+#: kicad/project_tree_pane.cpp:1890
 #, c-format
 msgid "Failed to find branch head for '%s'"
 msgstr "Fallo al buscar el HEAD de la rama para '%s'"
 
-#: kicad/project_tree_pane.cpp:1888
+#: kicad/project_tree_pane.cpp:1901
 #, c-format
 msgid "Failed to switch to branch '%s'"
 msgstr "Fallo al cambiar a la rama '%s'"
 
-#: kicad/project_tree_pane.cpp:1899
+#: kicad/project_tree_pane.cpp:1910
 #, c-format
 msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "Fallo al actualizar la referencia HEAD para la rama '%s'"
 
-#: kicad/project_tree_pane.cpp:1918
+#: kicad/project_tree_pane.cpp:1923
 #, fuzzy
 msgid "Are you sure you want to remove Git tracking from this project?"
 msgstr "¿Está seguro de que desea eliminar el rastreo de git de este proyecto?"
 
-#: kicad/project_tree_pane.cpp:1935
+#: kicad/project_tree_pane.cpp:1940
 #, fuzzy
 msgid "Failed to remove Git directory"
 msgstr "Fallo al eliminar la carpeta de git"
 
-#: kicad/project_tree_pane.cpp:2236
+#: kicad/project_tree_pane.cpp:2267
 #, fuzzy
 msgid "The selected directory is not a Git project."
 msgstr "La carpeta seleccionada ya es un proyecto de git."
 
-#: kicad/project_tree_pane.cpp:2385
+#: kicad/project_tree_pane.cpp:2412
 msgid "Discarding commit due to empty commit message."
 msgstr "Descartando confirmación debido a un mensaje de confirmación vacío."
 
-#: kicad/project_tree_pane.cpp:2391
+#: kicad/project_tree_pane.cpp:2418
 msgid "Discarding commit due to empty file selection."
 msgstr "Descartando confirmación debido a una selección de archivos vacía."
 
-#: kicad/project_tree_pane.cpp:2397
+#: kicad/project_tree_pane.cpp:2424
 #, c-format
 msgid "Failed to get repository index: %s"
 msgstr "Fallo al obtener el índice del repositorio: %s"
 
-#: kicad/project_tree_pane.cpp:2406
+#: kicad/project_tree_pane.cpp:2435
 #, c-format
 msgid "Failed to add file to index: %s"
 msgstr "Fallo al añadir el archivo al índice: %s"
 
-#: kicad/project_tree_pane.cpp:2415
+#: kicad/project_tree_pane.cpp:2443
 #, c-format
 msgid "Failed to write index: %s"
 msgstr "Fallo al escribir al índice: %s"
 
-#: kicad/project_tree_pane.cpp:2423
+#: kicad/project_tree_pane.cpp:2450
 #, c-format
 msgid "Failed to write tree: %s"
 msgstr "Fallo al escribir el árbol: %s"
 
-#: kicad/project_tree_pane.cpp:2433
+#: kicad/project_tree_pane.cpp:2457
 #, c-format
 msgid "Failed to lookup tree: %s"
 msgstr "Fallo al buscar el árbol: %s"
 
-#: kicad/project_tree_pane.cpp:2444
+#: kicad/project_tree_pane.cpp:2469
 #, c-format
 msgid "Failed to get HEAD reference: %s"
 msgstr "Fallo al obtener la referencia HEAD: %s"
 
-#: kicad/project_tree_pane.cpp:2452
+#: kicad/project_tree_pane.cpp:2478
 #, c-format
 msgid "Failed to get commit: %s"
 msgstr "Fallo al obtener confirmación: %s"
 
-#: kicad/project_tree_pane.cpp:2470
+#: kicad/project_tree_pane.cpp:2493
 #, c-format
 msgid "Failed to create author signature: %s"
 msgstr "Fallo al crear la firma del autor: %s"
 
-#: kicad/project_tree_pane.cpp:2506
+#: kicad/project_tree_pane.cpp:2530
 #, c-format
 msgid "Failed to create commit: %s"
 msgstr "Fallo al crear la confirmación: %s"
@@ -28693,11 +28698,11 @@ msgstr "Abrir editor de texto"
 msgid "Launch preferred text editor"
 msgstr "Abrir editor de texto preferido"
 
-#: kicad/tools/kicad_manager_control.cpp:72
+#: kicad/tools/kicad_manager_control.cpp:76
 msgid "Create New Project"
 msgstr "Crear nuevo proyecto"
 
-#: kicad/tools/kicad_manager_control.cpp:120
+#: kicad/tools/kicad_manager_control.cpp:124
 msgid ""
 "The selected folder is not empty.  It is recommended that you create "
 "projects in their own empty folder.\n"
@@ -28709,78 +28714,78 @@ msgstr ""
 "\n"
 "¿Desea continuar?"
 
-#: kicad/tools/kicad_manager_control.cpp:151
+#: kicad/tools/kicad_manager_control.cpp:155
 msgid "Clone Project from Git Repository"
 msgstr "Clonar proyecto desde un repositorio git"
 
-#: kicad/tools/kicad_manager_control.cpp:173
+#: kicad/tools/kicad_manager_control.cpp:179
 msgid "Cloning Repository"
 msgstr "Clonando repositorio"
 
-#: kicad/tools/kicad_manager_control.cpp:185
+#: kicad/tools/kicad_manager_control.cpp:191
 msgid "No project files were found in the repository."
 msgstr "No se han encontrado archivos de proyecto en el repositorio."
 
-#: kicad/tools/kicad_manager_control.cpp:212
+#: kicad/tools/kicad_manager_control.cpp:218
 #, fuzzy
 msgid "Create New Jobset"
 msgstr "Crear nuevo proyecto"
 
-#: kicad/tools/kicad_manager_control.cpp:242
+#: kicad/tools/kicad_manager_control.cpp:248
 msgid "System Templates"
 msgstr "Plantillas del sistema"
 
-#: kicad/tools/kicad_manager_control.cpp:251
+#: kicad/tools/kicad_manager_control.cpp:257
 msgid "User Templates"
 msgstr "Plantillas de usuario"
 
-#: kicad/tools/kicad_manager_control.cpp:268
+#: kicad/tools/kicad_manager_control.cpp:274
 msgid "No project template was selected.  Cannot generate new project."
 msgstr ""
 "No se ha seleccionado una plantilla. No puede generarse un nuevo proyecto."
 
-#: kicad/tools/kicad_manager_control.cpp:276
+#: kicad/tools/kicad_manager_control.cpp:282
 msgid "New Project Folder"
 msgstr "Nueva carpeta de proyecto"
 
-#: kicad/tools/kicad_manager_control.cpp:325
-#: kicad/tools/kicad_manager_control.cpp:711
+#: kicad/tools/kicad_manager_control.cpp:331
+#: kicad/tools/kicad_manager_control.cpp:717
 #, c-format
 msgid "Insufficient permissions to write to folder '%s'."
 msgstr "Permisos insuficientes para escribir a la carpeta '%s'."
 
-#: kicad/tools/kicad_manager_control.cpp:346
+#: kicad/tools/kicad_manager_control.cpp:352
 msgid "Overwriting files:"
 msgstr "Sobreescribiendo archivos:"
 
-#: kicad/tools/kicad_manager_control.cpp:352
+#: kicad/tools/kicad_manager_control.cpp:358
 msgid "Similar files already exist in the destination folder."
 msgstr "Ya existen archivos similares en la carpeta de destino."
 
-#: kicad/tools/kicad_manager_control.cpp:371
+#: kicad/tools/kicad_manager_control.cpp:377
 msgid "A problem occurred creating new project from template."
 msgstr ""
 "Ha ocurrido un error al crear un proyecto nuevo a partir de la plantilla."
 
-#: kicad/tools/kicad_manager_control.cpp:394
+#: kicad/tools/kicad_manager_control.cpp:400
 msgid "Open Existing Project"
 msgstr "Abrir proyecto"
 
-#: kicad/tools/kicad_manager_control.cpp:429
+#: kicad/tools/kicad_manager_control.cpp:435
 #, fuzzy
 msgid "Open Jobset"
 msgstr "Guardar proyecto"
 
-#: kicad/tools/kicad_manager_control.cpp:636
+#: kicad/tools/kicad_manager_control.cpp:642
 #, c-format
 msgid "Cannot copy folder '%s'."
 msgstr "No se puede copiar la carpeta '%s'."
 
-#: kicad/tools/kicad_manager_control.cpp:682
+#: kicad/tools/kicad_manager_control.cpp:688
 msgid "Save Project To"
 msgstr "Guardar proyecto a"
 
-#: kicad/tools/kicad_manager_control.cpp:702
+#: kicad/tools/kicad_manager_control.cpp:708
 #, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
@@ -28791,23 +28796,23 @@ msgstr ""
 "\n"
 "Por favor, confirme que tiene permisos de escritura e inténtelo de nuevo."
 
-#: kicad/tools/kicad_manager_control.cpp:713
+#: kicad/tools/kicad_manager_control.cpp:719
 msgid "Error!"
 msgstr "¡Error!"
 
-#: kicad/tools/kicad_manager_control.cpp:769
+#: kicad/tools/kicad_manager_control.cpp:775
 msgid "Create (or open) a project to edit a schematic."
 msgstr "Crear (o abrir) un proyecto para editar un esquema."
 
-#: kicad/tools/kicad_manager_control.cpp:775
+#: kicad/tools/kicad_manager_control.cpp:781
 msgid "Create (or open) a project to edit a pcb."
 msgstr "Crear (o abrir) un proyecto para editar una placa."
 
-#: kicad/tools/kicad_manager_control.cpp:792
+#: kicad/tools/kicad_manager_control.cpp:798
 msgid "Application failed to load:\n"
 msgstr "Fallo al cargar la aplicación:\n"
 
-#: kicad/tools/kicad_manager_control.cpp:798
+#: kicad/tools/kicad_manager_control.cpp:804
 msgid "Application cannot start."
 msgstr "La aplicación no se puede iniciar."
 

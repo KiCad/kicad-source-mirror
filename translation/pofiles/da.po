@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-15 19:01+0300\n"
+"POT-Creation-Date: 2025-03-17 18:43+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/kicad/master-"
@@ -347,9 +347,9 @@ msgstr ""
 #: eeschema/erc/erc_item.cpp:81 eeschema/files-io.cpp:936
 #: eeschema/files-io.cpp:1004 eeschema/sch_marker.cpp:376
 #: kicad/import_proj.cpp:79 kicad/import_project.cpp:123 kicad/kicad.cpp:318
-#: kicad/tools/kicad_manager_control.cpp:269
-#: kicad/tools/kicad_manager_control.cpp:326
-#: kicad/tools/kicad_manager_control.cpp:372
+#: kicad/tools/kicad_manager_control.cpp:275
+#: kicad/tools/kicad_manager_control.cpp:332
+#: kicad/tools/kicad_manager_control.cpp:378
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:143
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:216
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:225
@@ -2005,7 +2005,7 @@ msgstr "Bekræftelse"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:137
 #: eeschema/tools/symbol_editor_control.cpp:493
 #: eeschema/tools/symbol_editor_pin_tool.cpp:242 kicad/import_project.cpp:109
-#: kicad/tools/kicad_manager_control.cpp:353
+#: kicad/tools/kicad_manager_control.cpp:359
 #: pcbnew/dialogs/dialog_export_idf.cpp:138
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:355
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:409
@@ -3727,12 +3727,11 @@ msgid "Basic"
 msgstr ""
 
 #: common/dialogs/git/dialog_git_auth.cpp:46
-#: common/dialogs/git/dialog_git_repository_base.cpp:52
+#: common/dialogs/git/dialog_git_repository_base.cpp:58
 msgid "SSH"
 msgstr ""
 
 #: common/dialogs/git/dialog_git_auth.cpp:52
-#: common/dialogs/git/dialog_git_repository_base.cpp:95
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:85
 msgid "Test"
 msgstr ""
@@ -3748,7 +3747,7 @@ msgstr "OK"
 
 #: common/dialogs/git/dialog_git_auth.cpp:54
 #: common/dialogs/git/dialog_git_commit.cpp:152
-#: common/dialogs/git/dialog_git_switch.cpp:69
+#: common/dialogs/git/dialog_git_switch.cpp:73
 #: common/dialogs/panel_embedded_files.cpp:426 common/tool/actions.cpp:159
 #: eeschema/dialogs/dialog_erc.cpp:426
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1339 eeschema/sheet.cpp:784
@@ -3766,7 +3765,7 @@ msgid "Url"
 msgstr ""
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
-#: common/dialogs/git/dialog_git_repository_base.cpp:71
+#: common/dialogs/git/dialog_git_repository_base.cpp:79
 #, fuzzy
 msgid "Authentication"
 msgstr "Begrundelse:"
@@ -3836,145 +3835,146 @@ msgstr ""
 msgid "Commit message cannot be empty"
 msgstr "Netnavnet kan ikke være tomt."
 
-#: common/dialogs/git/dialog_git_repository.cpp:156
-#: common/dialogs/git/dialog_git_repository.cpp:388
-msgid "Enter the password for the SSH key"
-msgstr ""
-
-#: common/dialogs/git/dialog_git_repository.cpp:337
+#: common/dialogs/git/dialog_git_repository.cpp:74
+#: common/dialogs/git/dialog_git_repository.cpp:306
 #, fuzzy
 msgid "Test Connection"
 msgstr "Vælg Forbindelse"
 
-#: common/dialogs/git/dialog_git_repository.cpp:342
+#: common/dialogs/git/dialog_git_repository.cpp:165
+#: common/dialogs/git/dialog_git_repository.cpp:357
+msgid "Enter the password for the SSH key"
+msgstr ""
+
+#: common/dialogs/git/dialog_git_repository.cpp:311
 #, fuzzy
 msgid "Connection successful"
 msgstr "Filskrivningshandling mislykkedes."
 
-#: common/dialogs/git/dialog_git_repository.cpp:346
+#: common/dialogs/git/dialog_git_repository.cpp:315
 #, fuzzy, c-format
 msgid "Could not connect to '%s' "
 msgstr "Kunne ikke åbne arkivfilen\n"
 
-#: common/dialogs/git/dialog_git_repository.cpp:366
+#: common/dialogs/git/dialog_git_repository.cpp:335
 #, fuzzy, c-format
 msgid "Could not open private key '%s'"
 msgstr "Kunne ikke åbne arkivfilen\n"
 
-#: common/dialogs/git/dialog_git_repository.cpp:379
+#: common/dialogs/git/dialog_git_repository.cpp:348
 #, fuzzy
 msgid "Invalid SSH Key"
 msgstr "Ugyldigt signalnavn"
 
-#: common/dialogs/git/dialog_git_repository.cpp:380
+#: common/dialogs/git/dialog_git_repository.cpp:349
 #, fuzzy
 msgid "The selected file is not a valid SSH private key"
 msgstr "Den valgte fil er ikke gyldig eller er muligvis korrupt!"
 
-#: common/dialogs/git/dialog_git_repository.cpp:404
+#: common/dialogs/git/dialog_git_repository.cpp:373
 #, fuzzy, c-format
 msgid "Could not open public key '%s'"
 msgstr "Kunne ikke finde biblioteksfilen %s"
 
-#: common/dialogs/git/dialog_git_repository.cpp:423
-#: common/dialogs/git/dialog_git_repository.cpp:430
+#: common/dialogs/git/dialog_git_repository.cpp:392
+#: common/dialogs/git/dialog_git_repository.cpp:399
 #, fuzzy
 msgid "Missing information"
 msgstr "Manglende fodaftryk"
 
-#: common/dialogs/git/dialog_git_repository.cpp:424
+#: common/dialogs/git/dialog_git_repository.cpp:393
 #, fuzzy
 msgid "Please enter a name for the repository"
 msgstr "Kunne ikke indlæse %s filen"
 
-#: common/dialogs/git/dialog_git_repository.cpp:431
+#: common/dialogs/git/dialog_git_repository.cpp:400
 #, fuzzy
 msgid "Please enter a URL for the repository"
 msgstr "Kunne ikke indlæse %s filen"
 
-#: common/dialogs/git/dialog_git_repository.cpp:453
-#: common/dialogs/git/dialog_git_repository_base.cpp:108
+#: common/dialogs/git/dialog_git_repository.cpp:424
+#: common/dialogs/git/dialog_git_repository_base.cpp:106
 msgid "SSH key password:"
 msgstr ""
 
-#: common/dialogs/git/dialog_git_repository.cpp:459
+#: common/dialogs/git/dialog_git_repository.cpp:432
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
 msgid "Password:"
 msgstr ""
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:38
+#: common/dialogs/git/dialog_git_repository_base.cpp:42
 #, fuzzy
 msgid "Location:"
 msgstr "Rotation"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:45
+#: common/dialogs/git/dialog_git_repository_base.cpp:49
 #, fuzzy
 msgid "Connection type:"
 msgstr "Forbindelsesnavn"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:52
+#: common/dialogs/git/dialog_git_repository_base.cpp:58
 msgid "HTTPS"
 msgstr ""
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:52
+#: common/dialogs/git/dialog_git_repository_base.cpp:58
 #: eeschema/widgets/search_handlers.cpp:452
 #, fuzzy
 msgid "Local"
 msgstr "Rediger lokal fil ..."
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:83
+#: common/dialogs/git/dialog_git_repository_base.cpp:91
 #, fuzzy
 msgid "SSH private key:     "
 msgstr "Opret lag"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:90
+#: common/dialogs/git/dialog_git_repository_base.cpp:94
 #, fuzzy
 msgid "Select SSH private key file"
 msgstr "Vælg en fil"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:90
+#: common/dialogs/git/dialog_git_repository_base.cpp:94
 msgid "*"
 msgstr "*"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:101
+#: common/dialogs/git/dialog_git_repository_base.cpp:99
 #, fuzzy
 msgid "User name:"
 msgstr "Net navn:"
 
-#: common/dialogs/git/dialog_git_repository_base.h:77
+#: common/dialogs/git/dialog_git_repository_base.h:76
 #, fuzzy
 msgid "Git Repository"
 msgstr "Rapport"
 
-#: common/dialogs/git/dialog_git_switch.cpp:40
+#: common/dialogs/git/dialog_git_switch.cpp:44
 msgid "Git Branch Switch"
 msgstr ""
 
-#: common/dialogs/git/dialog_git_switch.cpp:48
+#: common/dialogs/git/dialog_git_switch.cpp:52
 msgid "Select or enter a branch name:"
 msgstr ""
 
-#: common/dialogs/git/dialog_git_switch.cpp:54
+#: common/dialogs/git/dialog_git_switch.cpp:58
 msgid "Branch"
 msgstr ""
 
-#: common/dialogs/git/dialog_git_switch.cpp:55
+#: common/dialogs/git/dialog_git_switch.cpp:59
 msgid "Last Commit"
 msgstr ""
 
-#: common/dialogs/git/dialog_git_switch.cpp:56
+#: common/dialogs/git/dialog_git_switch.cpp:60
 #, fuzzy
 msgid "Last Updated"
 msgstr "Opdateret"
 
-#: common/dialogs/git/dialog_git_switch.cpp:66
-#: common/dialogs/git/dialog_git_switch.cpp:147
-#: common/dialogs/git/dialog_git_switch.cpp:214
+#: common/dialogs/git/dialog_git_switch.cpp:70
+#: common/dialogs/git/dialog_git_switch.cpp:151
+#: common/dialogs/git/dialog_git_switch.cpp:218
 #, fuzzy
 msgid "Switch"
 msgstr "Skift enheder"
 
-#: common/dialogs/git/dialog_git_switch.cpp:219
+#: common/dialogs/git/dialog_git_switch.cpp:223
 #: eeschema/design_block_utils.cpp:90 eeschema/sch_base_frame.cpp:306
 #: pcbnew/footprint_libraries_utils.cpp:430
 msgid "Add"
@@ -4882,7 +4882,7 @@ msgstr "Filen %s findes allerede."
 #: eeschema/symbol_editor/symbol_editor.cpp:1183
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:138
 #: eeschema/tools/symbol_editor_control.cpp:495
-#: kicad/tools/kicad_manager_control.cpp:356
+#: kicad/tools/kicad_manager_control.cpp:362
 #: pcbnew/dialogs/dialog_export_idf.cpp:139
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:357
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:411
@@ -6037,7 +6037,7 @@ msgstr "Mus og touchpad"
 msgid "Hotkeys"
 msgstr "Genvejstaster"
 
-#: common/eda_base_frame.cpp:1125 kicad/project_tree_pane.cpp:1052
+#: common/eda_base_frame.cpp:1125 kicad/project_tree_pane.cpp:1053
 #, fuzzy
 msgid "Version Control"
 msgstr "& Kun valg"
@@ -7158,133 +7158,133 @@ msgstr "Den givne vej eksisterer ikke"
 msgid "Could not read file: %s"
 msgstr "Kunne ikke oprette filen \"%s\"."
 
-#: common/git/git_clone_handler.cpp:50
+#: common/git/git_clone_handler.cpp:58
 #, fuzzy, c-format
 msgid "Could not create directory '%s'"
 msgstr "Kan ikke oprette outputmappe \"%s\".\n"
 
-#: common/git/git_clone_handler.cpp:71
+#: common/git/git_clone_handler.cpp:80
 #, fuzzy, c-format
 msgid "Could not clone repository '%s'"
 msgstr "Kunne ikke indlæse billedet fra \"%s\""
 
-#: common/git/git_pull_handler.cpp:50
+#: common/git/git_pull_handler.cpp:63
 #, fuzzy, c-format
 msgid "Could not lookup remote '%s'"
 msgstr "Kunne ikke indlæse billedet fra \"%s\""
 
-#: common/git/git_pull_handler.cpp:67
+#: common/git/git_pull_handler.cpp:81
 #, fuzzy, c-format
 msgid "Could not connect to remote '%s': %s"
 msgstr "Kunne ikke finde biblioteksfilen %s"
 
-#: common/git/git_pull_handler.cpp:79
+#: common/git/git_pull_handler.cpp:92
 #, fuzzy, c-format
 msgid "Could not fetch data from remote '%s': %s"
 msgstr "Kunne ikke finde biblioteksfilen %s"
 
-#: common/git/git_pull_handler.cpp:101
+#: common/git/git_pull_handler.cpp:120
 #, fuzzy
 msgid "Could not read 'FETCH_HEAD'"
 msgstr "Kunne ikke oprette filen \"%s\"."
 
-#: common/git/git_pull_handler.cpp:109
+#: common/git/git_pull_handler.cpp:128
 #, fuzzy
 msgid "Could not lookup commit"
 msgstr "Kunne ikke åbne CvPcb"
 
-#: common/git/git_pull_handler.cpp:119
+#: common/git/git_pull_handler.cpp:140
 #, fuzzy
 msgid "Could not analyze merge"
 msgstr "Kunne ikke oprette filen \"%s\"."
 
-#: common/git/git_pull_handler.cpp:129
+#: common/git/git_pull_handler.cpp:146
 msgid "Invalid HEAD.  Cannot merge."
 msgstr ""
 
-#: common/git/git_pull_handler.cpp:198 common/git/git_push_handler.cpp:79
+#: common/git/git_pull_handler.cpp:211 common/git/git_push_handler.cpp:91
 msgid "Could not get repository head"
 msgstr ""
 
-#: common/git/git_pull_handler.cpp:212
+#: common/git/git_pull_handler.cpp:223
 #, c-format
 msgid "Could not get reference OID for reference '%s'"
 msgstr ""
 
-#: common/git/git_pull_handler.cpp:223 common/git/kicad_git_errors.cpp:55
+#: common/git/git_pull_handler.cpp:234 common/git/kicad_git_errors.cpp:55
 msgid "Failed to perform checkout operation."
 msgstr ""
 
-#: common/git/git_pull_handler.cpp:241
+#: common/git/git_pull_handler.cpp:253
 #, fuzzy
 msgid "Could not lookup commit '{}'"
 msgstr "Kunne ikke indlæse billedet fra \"%s\""
 
-#: common/git/git_pull_handler.cpp:282
+#: common/git/git_pull_handler.cpp:290
 #, fuzzy
 msgid "Could not merge commits"
 msgstr "Kunne ikke oprette filen \"%s\"."
 
-#: common/git/git_pull_handler.cpp:291
+#: common/git/git_pull_handler.cpp:299
 #, fuzzy
 msgid "Could not get repository index"
 msgstr "Kunne ikke åbne biblioteksfilen."
 
-#: common/git/git_pull_handler.cpp:300
+#: common/git/git_pull_handler.cpp:310
 #, fuzzy
 msgid "Could not get conflict iterator"
 msgstr "Kunne ikke åbne konfigurationsfilen"
 
-#: common/git/git_pull_handler.cpp:320 common/git/git_pull_handler.cpp:321
+#: common/git/git_pull_handler.cpp:332 common/git/git_pull_handler.cpp:333
 #, fuzzy
 msgid "Changed"
 msgstr "Skift"
 
-#: common/git/git_pull_handler.cpp:335 common/git/git_pull_handler.cpp:336
+#: common/git/git_pull_handler.cpp:347 common/git/git_pull_handler.cpp:348
 msgid "Added"
 msgstr ""
 
-#: common/git/git_push_handler.cpp:46
+#: common/git/git_push_handler.cpp:56
 #, fuzzy
 msgid "Could not lookup remote"
 msgstr "Kunne ikke åbne arkivfilen\n"
 
-#: common/git/git_push_handler.cpp:64
+#: common/git/git_push_handler.cpp:76
 #, fuzzy, c-format
 msgid "Could not connect to remote: %s"
 msgstr "Kunne ikke finde biblioteksfilen %s"
 
-#: common/git/git_push_handler.cpp:92
+#: common/git/git_push_handler.cpp:104
 #, fuzzy, c-format
 msgid "Could not push to remote: %s"
 msgstr "Kunne ikke bruge OpenGL"
 
-#: common/git/kicad_git_common.cpp:649
+#: common/git/kicad_git_common.cpp:829
 #, c-format
 msgid "Received %u of %u objects"
 msgstr ""
 
-#: common/git/kicad_git_common.cpp:678
+#: common/git/kicad_git_common.cpp:858
 #, fuzzy, c-format
 msgid "* [updated] %s..%s %s"
 msgstr "Opdateret %s fra %s til %s"
 
-#: common/git/kicad_git_common.cpp:682
+#: common/git/kicad_git_common.cpp:862
 #, fuzzy, c-format
 msgid "* [new] %s %s"
 msgstr "Zone %s på %s"
 
-#: common/git/kicad_git_common.cpp:702
+#: common/git/kicad_git_common.cpp:882
 #, c-format
 msgid "Writing objects: %lld%% (%u/%u), %zu bytes"
 msgstr ""
 
-#: common/git/kicad_git_common.cpp:717
+#: common/git/kicad_git_common.cpp:897
 #, fuzzy, c-format
 msgid "* [rejected] %s (%s)"
 msgstr "Gitter: %s (%s)"
 
-#: common/git/kicad_git_common.cpp:722
+#: common/git/kicad_git_common.cpp:902
 #, fuzzy, c-format
 msgid "[updated] %s"
 msgstr "Opdateret"
@@ -7429,7 +7429,7 @@ msgstr "Indsæt udklipsholderceller i matrix ved den aktuelle celle"
 #: common/grid_tricks.cpp:368 common/tool/actions.cpp:291
 #: common/widgets/listbox_tricks.cpp:54 eeschema/tools/sch_edit_tool.cpp:1720
 #: eeschema/tools/symbol_editor_edit_tool.cpp:478
-#: kicad/dialogs/panel_jobset.cpp:394 kicad/project_tree_pane.cpp:985
+#: kicad/dialogs/panel_jobset.cpp:394 kicad/project_tree_pane.cpp:986
 #: pcbnew/dialogs/panel_setup_rules.cpp:133 pcbnew/tools/edit_tool.cpp:2668
 msgid "Delete"
 msgstr "Slet"
@@ -10936,7 +10936,7 @@ msgstr "Projektfil: \"%s\""
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:94
 #: eeschema/dialogs/dialog_bom.cpp:403
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
-#: kicad/project_tree_pane.cpp:1066
+#: kicad/project_tree_pane.cpp:1067
 msgid "No text editor selected in KiCad.  Please choose one."
 msgstr "Ingen teksteditor valgt i KiCad. Vælg en."
 
@@ -14711,7 +14711,7 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:513
-#: kicad/tools/kicad_manager_control.cpp:695
+#: kicad/tools/kicad_manager_control.cpp:701
 #, fuzzy, c-format
 msgid "'%s' already exists."
 msgstr "\"%s\" findes allerede."
@@ -17959,7 +17959,7 @@ msgstr "Busindgang nødvendig"
 msgid "ERC report (%s, Encoding UTF8)\n"
 msgstr "ERC-rapport (%s, kodning af UTF8)\n"
 
-#: eeschema/erc/erc_report.cpp:64
+#: eeschema/erc/erc_report.cpp:80
 #, c-format
 msgid ""
 "\n"
@@ -17968,7 +17968,7 @@ msgstr ""
 "\n"
 "***** Ark %s\n"
 
-#: eeschema/erc/erc_report.cpp:88
+#: eeschema/erc/erc_report.cpp:99
 #, c-format
 msgid ""
 "\n"
@@ -18209,8 +18209,8 @@ msgid "File write operation failed."
 msgstr "Filskrivningshandling mislykkedes."
 
 #: eeschema/files-io.cpp:932 eeschema/files-io.cpp:1000
-#: kicad/import_project.cpp:93 kicad/tools/kicad_manager_control.cpp:111
-#: kicad/tools/kicad_manager_control.cpp:313
+#: kicad/import_project.cpp:93 kicad/tools/kicad_manager_control.cpp:115
+#: kicad/tools/kicad_manager_control.cpp:319
 #, fuzzy, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
@@ -29110,308 +29110,313 @@ msgstr "Kan ikke konvertere \"%s\" til et heltal"
 msgid "Can not move '%s' to trash."
 msgstr "Kan ikke konvertere \"%s\" til et heltal"
 
-#: kicad/project_tree_pane.cpp:306
+#: kicad/project_tree_pane.cpp:308
 msgid "Directory name:"
 msgstr "Katalognavn:"
 
-#: kicad/project_tree_pane.cpp:306
+#: kicad/project_tree_pane.cpp:308
 msgid "Create New Directory"
 msgstr "Opret nyt bibliotek"
 
-#: kicad/project_tree_pane.cpp:895
+#: kicad/project_tree_pane.cpp:761
+#, fuzzy, c-format
+msgid "Failed to get status list: %s"
+msgstr "Kunne ikke gemme skematisk \"%s\""
+
+#: kicad/project_tree_pane.cpp:896
 msgid "Switch to this Project"
 msgstr "Skift til dette projekt"
 
-#: kicad/project_tree_pane.cpp:896
+#: kicad/project_tree_pane.cpp:897
 msgid "Close all editors, and switch to the selected project"
 msgstr "Luk alle redaktører, og skift til det valgte projekt"
 
-#: kicad/project_tree_pane.cpp:903
+#: kicad/project_tree_pane.cpp:904
 msgid "New Directory..."
 msgstr "Ny mappe ..."
 
-#: kicad/project_tree_pane.cpp:904
+#: kicad/project_tree_pane.cpp:905
 msgid "Create a New Directory"
 msgstr "Opret en ny mappe"
 
-#: kicad/project_tree_pane.cpp:912 kicad/project_tree_pane.cpp:922
+#: kicad/project_tree_pane.cpp:913 kicad/project_tree_pane.cpp:923
 msgid "Reveal in Finder"
 msgstr "Afslør i Finder"
 
-#: kicad/project_tree_pane.cpp:913
+#: kicad/project_tree_pane.cpp:914
 msgid "Reveals the directory in a Finder window"
 msgstr "Afslører biblioteket i et Finder-vindue"
 
-#: kicad/project_tree_pane.cpp:915
+#: kicad/project_tree_pane.cpp:916
 msgid "Open Directory in File Explorer"
 msgstr "Åbn bibliotek i File Explorer"
 
-#: kicad/project_tree_pane.cpp:916 pcbnew/tools/pcb_actions.cpp:986
+#: kicad/project_tree_pane.cpp:917 pcbnew/tools/pcb_actions.cpp:986
 msgid "Opens the directory in the default system file manager"
 msgstr "Åbner biblioteket i standard systemfilhåndtering"
 
-#: kicad/project_tree_pane.cpp:923
+#: kicad/project_tree_pane.cpp:924
 msgid "Reveals the directories in a Finder window"
 msgstr "Afslører mapperne i et Finder-vindue"
 
-#: kicad/project_tree_pane.cpp:925
+#: kicad/project_tree_pane.cpp:926
 msgid "Open Directories in File Explorer"
 msgstr "Åbn kataloger i File Explorer"
 
-#: kicad/project_tree_pane.cpp:926
+#: kicad/project_tree_pane.cpp:927
 msgid "Opens the directories in the default system file manager"
 msgstr "Åbner telefonbøger i standard systemfilhåndtering"
 
-#: kicad/project_tree_pane.cpp:937
+#: kicad/project_tree_pane.cpp:938
 msgid "Open the file in a Text Editor"
 msgstr "Åbn filen i en teksteditor"
 
-#: kicad/project_tree_pane.cpp:939
+#: kicad/project_tree_pane.cpp:940
 msgid "Open files in a Text Editor"
 msgstr "Åbn filer i en teksteditor"
 
-#: kicad/project_tree_pane.cpp:941
+#: kicad/project_tree_pane.cpp:942
 msgid "Edit in a Text Editor"
 msgstr "Rediger i en teksteditor"
 
-#: kicad/project_tree_pane.cpp:947
+#: kicad/project_tree_pane.cpp:948
 #, fuzzy
 msgid "Run Jobs"
 msgstr "%s på %s"
 
-#: kicad/project_tree_pane.cpp:955
+#: kicad/project_tree_pane.cpp:956
 msgid "Rename File..."
 msgstr "Omdøb fil ..."
 
-#: kicad/project_tree_pane.cpp:956
+#: kicad/project_tree_pane.cpp:957
 msgid "Rename file"
 msgstr "Omdøb fil"
 
-#: kicad/project_tree_pane.cpp:960
+#: kicad/project_tree_pane.cpp:961
 msgid "Rename Files..."
 msgstr "Omdøb filer ..."
 
-#: kicad/project_tree_pane.cpp:961
+#: kicad/project_tree_pane.cpp:962
 msgid "Rename files"
 msgstr "Omdøb fil"
 
-#: kicad/project_tree_pane.cpp:971
+#: kicad/project_tree_pane.cpp:972
 msgid "Delete the file and its content"
 msgstr "Slet filen og dens indhold"
 
-#: kicad/project_tree_pane.cpp:973
+#: kicad/project_tree_pane.cpp:974
 msgid "Delete the files and their contents"
 msgstr "Slet filerne og deres indhold"
 
-#: kicad/project_tree_pane.cpp:988
+#: kicad/project_tree_pane.cpp:989
 #, fuzzy
 msgid "Move to Trash"
 msgstr "Konverter til spor"
 
-#: kicad/project_tree_pane.cpp:1000
+#: kicad/project_tree_pane.cpp:1001
 msgid "Add Project to Version Control..."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:1001
+#: kicad/project_tree_pane.cpp:1002
 #, fuzzy
 msgid "Initialize a new repository"
 msgstr "Kan ikke parse '%s' i '%s'"
 
-#: kicad/project_tree_pane.cpp:1005
+#: kicad/project_tree_pane.cpp:1006
 #, fuzzy
 msgid "Commit Project..."
 msgstr "Nyt projekt..."
 
-#: kicad/project_tree_pane.cpp:1006 kicad/project_tree_pane.cpp:1020
+#: kicad/project_tree_pane.cpp:1007 kicad/project_tree_pane.cpp:1021
 msgid "Commit changes to the local repository"
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:1009
+#: kicad/project_tree_pane.cpp:1010
 msgid "Push"
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:1010
+#: kicad/project_tree_pane.cpp:1011
 msgid "Push committed local changes to remote repository"
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:1013
+#: kicad/project_tree_pane.cpp:1014
 msgid "Pull"
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:1014
+#: kicad/project_tree_pane.cpp:1015
 msgid "Pull changes from remote repository into local"
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:1019
+#: kicad/project_tree_pane.cpp:1020
 #, fuzzy
 msgid "Commit File..."
 msgstr "Omdøb fil ..."
 
-#: kicad/project_tree_pane.cpp:1034
+#: kicad/project_tree_pane.cpp:1035
 #, fuzzy
 msgid "Switch to branch "
 msgstr "Skift til indre lag 1"
 
-#: kicad/project_tree_pane.cpp:1039
+#: kicad/project_tree_pane.cpp:1040
 msgid "Other..."
 msgstr "Andet..."
 
-#: kicad/project_tree_pane.cpp:1040
+#: kicad/project_tree_pane.cpp:1041
 #, fuzzy
 msgid "Switch to a different branch"
 msgstr "Tune skævhed af et differentieret par"
 
-#: kicad/project_tree_pane.cpp:1043
+#: kicad/project_tree_pane.cpp:1044
 #, fuzzy
 msgid "Switch to Branch"
 msgstr "Skift til PCB Editor"
 
-#: kicad/project_tree_pane.cpp:1047
+#: kicad/project_tree_pane.cpp:1048
 #, fuzzy
 msgid "Remove Version Control"
 msgstr "Fjern hjørnet"
 
-#: kicad/project_tree_pane.cpp:1048
+#: kicad/project_tree_pane.cpp:1049
 msgid "Delete all version control files from the project directory."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:1103
+#: kicad/project_tree_pane.cpp:1104
 #, fuzzy, c-format
 msgid "Change filename: '%s'"
 msgstr "Skift filnavn: \"%s\""
 
-#: kicad/project_tree_pane.cpp:1105
+#: kicad/project_tree_pane.cpp:1106
 msgid "Change filename"
 msgstr "Skift filnavn"
 
-#: kicad/project_tree_pane.cpp:1437
+#: kicad/project_tree_pane.cpp:1451
 msgid "Network path: not monitoring folder changes"
 msgstr "Netværkssti: overvåger ikke mappens ændringer"
 
-#: kicad/project_tree_pane.cpp:1443
+#: kicad/project_tree_pane.cpp:1457
 msgid "Local path: monitoring folder changes"
 msgstr "Lokal sti: overvågning af mappens ændringer"
 
-#: kicad/project_tree_pane.cpp:1630
+#: kicad/project_tree_pane.cpp:1644
 #, fuzzy
 msgid "The selected directory is already a Git project."
 msgstr "Den valgte fil er ikke gyldig eller er muligvis korrupt!"
 
-#: kicad/project_tree_pane.cpp:1637
+#: kicad/project_tree_pane.cpp:1652
 #, fuzzy
 msgid "Set default remote"
 msgstr "Indstil til standard"
 
-#: kicad/project_tree_pane.cpp:1652
+#: kicad/project_tree_pane.cpp:1663
 #, fuzzy
 msgid "Failed to initialize Git project."
 msgstr "Kunne ikke indlæse \"%s\""
 
-#: kicad/project_tree_pane.cpp:1712
+#: kicad/project_tree_pane.cpp:1721
 #, fuzzy
 msgid "Failed to set default remote."
 msgstr "Kunne ikke oprette filen \"%s\""
 
-#: kicad/project_tree_pane.cpp:1724 kicad/project_tree_pane.cpp:1758
-#: kicad/project_tree_pane.cpp:1780
+#: kicad/project_tree_pane.cpp:1733 kicad/project_tree_pane.cpp:1767
+#: kicad/project_tree_pane.cpp:1791
 #, fuzzy
 msgid "Fetching Remote"
 msgstr "Tilføj ledning til busindgang"
 
-#: kicad/project_tree_pane.cpp:1765
+#: kicad/project_tree_pane.cpp:1774
 #, fuzzy
 msgid "Failed to pull project"
 msgstr "Kunne ikke indlæse \"%s\""
 
-#: kicad/project_tree_pane.cpp:1787
+#: kicad/project_tree_pane.cpp:1798
 #, fuzzy
 msgid "Failed to push project"
 msgstr "Kunne ikke indlæse \"%s\""
 
-#: kicad/project_tree_pane.cpp:1864
+#: kicad/project_tree_pane.cpp:1877
 #, fuzzy, c-format
 msgid "Failed to lookup branch '%s': %s"
 msgstr "Kunne ikke indlæse \"%s\""
 
-#: kicad/project_tree_pane.cpp:1877
+#: kicad/project_tree_pane.cpp:1890
 #, fuzzy, c-format
 msgid "Failed to find branch head for '%s'"
 msgstr "Kunne ikke finde en PDF-fremviser til \"%s\""
 
-#: kicad/project_tree_pane.cpp:1888
+#: kicad/project_tree_pane.cpp:1901
 #, fuzzy, c-format
 msgid "Failed to switch to branch '%s'"
 msgstr "Kunne ikke indlæse \"%s\""
 
-#: kicad/project_tree_pane.cpp:1899
+#: kicad/project_tree_pane.cpp:1910
 #, fuzzy, c-format
 msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "har brug for et nummer til '%s'"
 
-#: kicad/project_tree_pane.cpp:1918
+#: kicad/project_tree_pane.cpp:1923
 #, fuzzy
 msgid "Are you sure you want to remove Git tracking from this project?"
 msgstr "Er du sikker på, at du ønsker at slette '%s'?"
 
-#: kicad/project_tree_pane.cpp:1935
+#: kicad/project_tree_pane.cpp:1940
 #, fuzzy
 msgid "Failed to remove Git directory"
 msgstr "Kunne ikke oprette biblioteket \"%s\""
 
-#: kicad/project_tree_pane.cpp:2236
+#: kicad/project_tree_pane.cpp:2267
 #, fuzzy
 msgid "The selected directory is not a Git project."
 msgstr "Den valgte fil er ikke gyldig eller er muligvis korrupt!"
 
-#: kicad/project_tree_pane.cpp:2385
+#: kicad/project_tree_pane.cpp:2412
 msgid "Discarding commit due to empty commit message."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2391
+#: kicad/project_tree_pane.cpp:2418
 msgid "Discarding commit due to empty file selection."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2397
+#: kicad/project_tree_pane.cpp:2424
 #, fuzzy, c-format
 msgid "Failed to get repository index: %s"
 msgstr "Kan ikke parse '%s' i '%s'"
 
-#: kicad/project_tree_pane.cpp:2406
+#: kicad/project_tree_pane.cpp:2435
 #, fuzzy, c-format
 msgid "Failed to add file to index: %s"
 msgstr "Kunne ikke slette '%s'"
 
-#: kicad/project_tree_pane.cpp:2415
+#: kicad/project_tree_pane.cpp:2443
 #, fuzzy, c-format
 msgid "Failed to write index: %s"
 msgstr "Kunne ikke oprette filen \"%s\""
 
-#: kicad/project_tree_pane.cpp:2423
+#: kicad/project_tree_pane.cpp:2450
 #, fuzzy, c-format
 msgid "Failed to write tree: %s"
 msgstr "Kunne ikke slette '%s'"
 
-#: kicad/project_tree_pane.cpp:2433
+#: kicad/project_tree_pane.cpp:2457
 #, fuzzy, c-format
 msgid "Failed to lookup tree: %s"
 msgstr "Kunne ikke slette '%s'"
 
-#: kicad/project_tree_pane.cpp:2444
+#: kicad/project_tree_pane.cpp:2469
 #, fuzzy, c-format
 msgid "Failed to get HEAD reference: %s"
 msgstr "Kunne ikke oprette biblioteket \"%s\""
 
-#: kicad/project_tree_pane.cpp:2452
+#: kicad/project_tree_pane.cpp:2478
 #, fuzzy, c-format
 msgid "Failed to get commit: %s"
 msgstr "Kunne ikke gemme skematisk \"%s\""
 
-#: kicad/project_tree_pane.cpp:2470
+#: kicad/project_tree_pane.cpp:2493
 #, fuzzy, c-format
 msgid "Failed to create author signature: %s"
 msgstr "Kunne ikke oprette den midlertidige fil \"%s\""
 
-#: kicad/project_tree_pane.cpp:2506
+#: kicad/project_tree_pane.cpp:2530
 #, fuzzy, c-format
 msgid "Failed to create commit: %s"
 msgstr "Kunne ikke oprette filen \"%s\""
@@ -29515,11 +29520,11 @@ msgstr "Åbn Teksteditor"
 msgid "Launch preferred text editor"
 msgstr "Start foretrukken teksteditor"
 
-#: kicad/tools/kicad_manager_control.cpp:72
+#: kicad/tools/kicad_manager_control.cpp:76
 msgid "Create New Project"
 msgstr "Opret nyt projekt"
 
-#: kicad/tools/kicad_manager_control.cpp:120
+#: kicad/tools/kicad_manager_control.cpp:124
 #, fuzzy
 msgid ""
 "The selected folder is not empty.  It is recommended that you create "
@@ -29532,82 +29537,82 @@ msgstr ""
 "\n"
 "Vil du fortsætte?"
 
-#: kicad/tools/kicad_manager_control.cpp:151
+#: kicad/tools/kicad_manager_control.cpp:155
 #, fuzzy
 msgid "Clone Project from Git Repository"
 msgstr "Opret nyt projekt fra skabelon"
 
-#: kicad/tools/kicad_manager_control.cpp:173
+#: kicad/tools/kicad_manager_control.cpp:179
 #, fuzzy
 msgid "Cloning Repository"
 msgstr "Rapport"
 
-#: kicad/tools/kicad_manager_control.cpp:185
+#: kicad/tools/kicad_manager_control.cpp:191
 msgid "No project files were found in the repository."
 msgstr ""
 
-#: kicad/tools/kicad_manager_control.cpp:212
+#: kicad/tools/kicad_manager_control.cpp:218
 #, fuzzy
 msgid "Create New Jobset"
 msgstr "Opret nyt projekt"
 
-#: kicad/tools/kicad_manager_control.cpp:242
+#: kicad/tools/kicad_manager_control.cpp:248
 msgid "System Templates"
 msgstr "Systemskabeloner"
 
-#: kicad/tools/kicad_manager_control.cpp:251
+#: kicad/tools/kicad_manager_control.cpp:257
 msgid "User Templates"
 msgstr "Brugerskabeloner"
 
-#: kicad/tools/kicad_manager_control.cpp:268
+#: kicad/tools/kicad_manager_control.cpp:274
 msgid "No project template was selected.  Cannot generate new project."
 msgstr ""
 "Der blev ikke valgt nogen projektskabelon. Kan ikke generere nyt projekt."
 
-#: kicad/tools/kicad_manager_control.cpp:276
+#: kicad/tools/kicad_manager_control.cpp:282
 msgid "New Project Folder"
 msgstr "Ny projektmappe"
 
-#: kicad/tools/kicad_manager_control.cpp:325
-#: kicad/tools/kicad_manager_control.cpp:711
+#: kicad/tools/kicad_manager_control.cpp:331
+#: kicad/tools/kicad_manager_control.cpp:717
 #, fuzzy, c-format
 msgid "Insufficient permissions to write to folder '%s'."
 msgstr ""
 "Der kræves ikke tilstrækkelige tilladelser til at gemme filen\n"
 "%s"
 
-#: kicad/tools/kicad_manager_control.cpp:346
+#: kicad/tools/kicad_manager_control.cpp:352
 msgid "Overwriting files:"
 msgstr "Overskrivning af filer:"
 
-#: kicad/tools/kicad_manager_control.cpp:352
+#: kicad/tools/kicad_manager_control.cpp:358
 msgid "Similar files already exist in the destination folder."
 msgstr "Lignende filer findes allerede i destinationsmappen."
 
-#: kicad/tools/kicad_manager_control.cpp:371
+#: kicad/tools/kicad_manager_control.cpp:377
 #, fuzzy
 msgid "A problem occurred creating new project from template."
 msgstr "Der opstod et problem ved oprettelse af nyt projekt fra skabelonen!"
 
-#: kicad/tools/kicad_manager_control.cpp:394
+#: kicad/tools/kicad_manager_control.cpp:400
 msgid "Open Existing Project"
 msgstr "Åbn eksisterende projekt"
 
-#: kicad/tools/kicad_manager_control.cpp:429
+#: kicad/tools/kicad_manager_control.cpp:435
 #, fuzzy
 msgid "Open Jobset"
 msgstr "Gem som"
 
-#: kicad/tools/kicad_manager_control.cpp:636
+#: kicad/tools/kicad_manager_control.cpp:642
 #, fuzzy, c-format
 msgid "Cannot copy folder '%s'."
 msgstr "Mappen \"%s\" kan ikke kopieres."
 
-#: kicad/tools/kicad_manager_control.cpp:682
+#: kicad/tools/kicad_manager_control.cpp:688
 msgid "Save Project To"
 msgstr "Gem projekt til"
 
-#: kicad/tools/kicad_manager_control.cpp:702
+#: kicad/tools/kicad_manager_control.cpp:708
 #, fuzzy, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
@@ -29618,25 +29623,25 @@ msgstr ""
 "\n"
 "Sørg for, at du har skrivetilladelser, og prøv igen."
 
-#: kicad/tools/kicad_manager_control.cpp:713
+#: kicad/tools/kicad_manager_control.cpp:719
 msgid "Error!"
 msgstr "Fejl!"
 
-#: kicad/tools/kicad_manager_control.cpp:769
+#: kicad/tools/kicad_manager_control.cpp:775
 #, fuzzy
 msgid "Create (or open) a project to edit a schematic."
 msgstr "Opret nyt projekt fra skabelon"
 
-#: kicad/tools/kicad_manager_control.cpp:775
+#: kicad/tools/kicad_manager_control.cpp:781
 #, fuzzy
 msgid "Create (or open) a project to edit a pcb."
 msgstr "Opret et nyt projekt til dette tavle"
 
-#: kicad/tools/kicad_manager_control.cpp:792
+#: kicad/tools/kicad_manager_control.cpp:798
 msgid "Application failed to load:\n"
 msgstr "Programmet kunne ikke indlæses:\n"
 
-#: kicad/tools/kicad_manager_control.cpp:798
+#: kicad/tools/kicad_manager_control.cpp:804
 #, fuzzy
 msgid "Application cannot start."
 msgstr "Programmet kunne ikke indlæses."

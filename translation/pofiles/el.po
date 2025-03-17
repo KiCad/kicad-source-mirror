@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-15 19:01+0300\n"
+"POT-Creation-Date: 2025-03-17 18:43+0300\n"
 "PO-Revision-Date: 2025-02-19 03:13+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
@@ -350,9 +350,9 @@ msgstr "Ανεπαρκή δικαιώματα για αποθήκευση του
 #: eeschema/erc/erc_item.cpp:81 eeschema/files-io.cpp:936
 #: eeschema/files-io.cpp:1004 eeschema/sch_marker.cpp:376
 #: kicad/import_proj.cpp:79 kicad/import_project.cpp:123 kicad/kicad.cpp:318
-#: kicad/tools/kicad_manager_control.cpp:269
-#: kicad/tools/kicad_manager_control.cpp:326
-#: kicad/tools/kicad_manager_control.cpp:372
+#: kicad/tools/kicad_manager_control.cpp:275
+#: kicad/tools/kicad_manager_control.cpp:332
+#: kicad/tools/kicad_manager_control.cpp:378
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:143
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:216
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:225
@@ -1911,7 +1911,7 @@ msgstr "Πληροφορίες"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:137
 #: eeschema/tools/symbol_editor_control.cpp:493
 #: eeschema/tools/symbol_editor_pin_tool.cpp:242 kicad/import_project.cpp:109
-#: kicad/tools/kicad_manager_control.cpp:353
+#: kicad/tools/kicad_manager_control.cpp:359
 #: pcbnew/dialogs/dialog_export_idf.cpp:138
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:355
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:409
@@ -3630,12 +3630,11 @@ msgid "Basic"
 msgstr "Basic"
 
 #: common/dialogs/git/dialog_git_auth.cpp:46
-#: common/dialogs/git/dialog_git_repository_base.cpp:52
+#: common/dialogs/git/dialog_git_repository_base.cpp:58
 msgid "SSH"
 msgstr "SSH"
 
 #: common/dialogs/git/dialog_git_auth.cpp:52
-#: common/dialogs/git/dialog_git_repository_base.cpp:95
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:85
 msgid "Test"
 msgstr "Δοκιμή"
@@ -3651,7 +3650,7 @@ msgstr "Εντάξει"
 
 #: common/dialogs/git/dialog_git_auth.cpp:54
 #: common/dialogs/git/dialog_git_commit.cpp:152
-#: common/dialogs/git/dialog_git_switch.cpp:69
+#: common/dialogs/git/dialog_git_switch.cpp:73
 #: common/dialogs/panel_embedded_files.cpp:426 common/tool/actions.cpp:159
 #: eeschema/dialogs/dialog_erc.cpp:426
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1339 eeschema/sheet.cpp:784
@@ -3669,7 +3668,7 @@ msgid "Url"
 msgstr "Url"
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
-#: common/dialogs/git/dialog_git_repository_base.cpp:71
+#: common/dialogs/git/dialog_git_repository_base.cpp:79
 msgid "Authentication"
 msgstr "Αυθεντικοποίηση"
 
@@ -3730,135 +3729,136 @@ msgstr "C&ommit"
 msgid "Commit message cannot be empty"
 msgstr "Το μήνυμα του Commit δεν μπορεί να είναι κενό"
 
-#: common/dialogs/git/dialog_git_repository.cpp:156
-#: common/dialogs/git/dialog_git_repository.cpp:388
-msgid "Enter the password for the SSH key"
-msgstr "Εισαγωγή κωδικού για το κλειδί SSH"
-
-#: common/dialogs/git/dialog_git_repository.cpp:337
+#: common/dialogs/git/dialog_git_repository.cpp:74
+#: common/dialogs/git/dialog_git_repository.cpp:306
 #, fuzzy
 msgid "Test Connection"
 msgstr "Έλεγχος σύνδεσης"
 
-#: common/dialogs/git/dialog_git_repository.cpp:342
+#: common/dialogs/git/dialog_git_repository.cpp:165
+#: common/dialogs/git/dialog_git_repository.cpp:357
+msgid "Enter the password for the SSH key"
+msgstr "Εισαγωγή κωδικού για το κλειδί SSH"
+
+#: common/dialogs/git/dialog_git_repository.cpp:311
 msgid "Connection successful"
 msgstr "Επιτυχής σύνδεση"
 
-#: common/dialogs/git/dialog_git_repository.cpp:346
+#: common/dialogs/git/dialog_git_repository.cpp:315
 #, c-format
 msgid "Could not connect to '%s' "
 msgstr "Αδυναμία σύνδεσης σε '%s' "
 
-#: common/dialogs/git/dialog_git_repository.cpp:366
+#: common/dialogs/git/dialog_git_repository.cpp:335
 #, c-format
 msgid "Could not open private key '%s'"
 msgstr "Αδυναμία φόρτωσης private key '%s'"
 
-#: common/dialogs/git/dialog_git_repository.cpp:379
+#: common/dialogs/git/dialog_git_repository.cpp:348
 msgid "Invalid SSH Key"
 msgstr "Εσφαλμένο private κλειδί SSH"
 
-#: common/dialogs/git/dialog_git_repository.cpp:380
+#: common/dialogs/git/dialog_git_repository.cpp:349
 msgid "The selected file is not a valid SSH private key"
 msgstr "Το επιλεγμένο αρχείο δεν είναι έγκυρο SSH private κλειδί"
 
-#: common/dialogs/git/dialog_git_repository.cpp:404
+#: common/dialogs/git/dialog_git_repository.cpp:373
 #, c-format
 msgid "Could not open public key '%s'"
 msgstr "Αδυναμία φόρτωσης public κλειδιού '%s'"
 
-#: common/dialogs/git/dialog_git_repository.cpp:423
-#: common/dialogs/git/dialog_git_repository.cpp:430
+#: common/dialogs/git/dialog_git_repository.cpp:392
+#: common/dialogs/git/dialog_git_repository.cpp:399
 msgid "Missing information"
 msgstr "Ελλειπείς πληροφορίες"
 
-#: common/dialogs/git/dialog_git_repository.cpp:424
+#: common/dialogs/git/dialog_git_repository.cpp:393
 msgid "Please enter a name for the repository"
 msgstr "Παρακαλώ εισάγετε όνομα αποθετηρίου"
 
-#: common/dialogs/git/dialog_git_repository.cpp:431
+#: common/dialogs/git/dialog_git_repository.cpp:400
 msgid "Please enter a URL for the repository"
 msgstr "Παρακαλώ εισάγετε διεύθυνση URL αποθετηρίου"
 
-#: common/dialogs/git/dialog_git_repository.cpp:453
-#: common/dialogs/git/dialog_git_repository_base.cpp:108
+#: common/dialogs/git/dialog_git_repository.cpp:424
+#: common/dialogs/git/dialog_git_repository_base.cpp:106
 #, fuzzy
 msgid "SSH key password:"
 msgstr "Κωδικός κλειδιού SSH"
 
-#: common/dialogs/git/dialog_git_repository.cpp:459
+#: common/dialogs/git/dialog_git_repository.cpp:432
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
 msgid "Password:"
 msgstr "Κωδικός:"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:38
+#: common/dialogs/git/dialog_git_repository_base.cpp:42
 #, fuzzy
 msgid "Location:"
 msgstr "Τοποθεσία"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:45
+#: common/dialogs/git/dialog_git_repository_base.cpp:49
 #, fuzzy
 msgid "Connection type:"
 msgstr "Τύπος Σύνδεσης"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:52
+#: common/dialogs/git/dialog_git_repository_base.cpp:58
 msgid "HTTPS"
 msgstr "HTTPS"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:52
+#: common/dialogs/git/dialog_git_repository_base.cpp:58
 #: eeschema/widgets/search_handlers.cpp:452
 msgid "Local"
 msgstr "Τοπικό"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:83
+#: common/dialogs/git/dialog_git_repository_base.cpp:91
 #, fuzzy
 msgid "SSH private key:     "
 msgstr "Ιδιωτικό SSH Κλειδί"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:90
+#: common/dialogs/git/dialog_git_repository_base.cpp:94
 msgid "Select SSH private key file"
 msgstr "Επιλέξτε αρχείο private SSH κλειδιού"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:90
+#: common/dialogs/git/dialog_git_repository_base.cpp:94
 msgid "*"
 msgstr "*"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:101
+#: common/dialogs/git/dialog_git_repository_base.cpp:99
 #, fuzzy
 msgid "User name:"
 msgstr "Όνομα χρήστη:"
 
-#: common/dialogs/git/dialog_git_repository_base.h:77
+#: common/dialogs/git/dialog_git_repository_base.h:76
 msgid "Git Repository"
 msgstr "Αποθετήριο Git"
 
-#: common/dialogs/git/dialog_git_switch.cpp:40
+#: common/dialogs/git/dialog_git_switch.cpp:44
 msgid "Git Branch Switch"
 msgstr "Αλλαγή Git Branch"
 
-#: common/dialogs/git/dialog_git_switch.cpp:48
+#: common/dialogs/git/dialog_git_switch.cpp:52
 msgid "Select or enter a branch name:"
 msgstr "Επιλογή ή είσαγωγή ονόματος για το branch:"
 
-#: common/dialogs/git/dialog_git_switch.cpp:54
+#: common/dialogs/git/dialog_git_switch.cpp:58
 msgid "Branch"
 msgstr "Branch"
 
-#: common/dialogs/git/dialog_git_switch.cpp:55
+#: common/dialogs/git/dialog_git_switch.cpp:59
 msgid "Last Commit"
 msgstr "Προηγούμενο Commit"
 
-#: common/dialogs/git/dialog_git_switch.cpp:56
+#: common/dialogs/git/dialog_git_switch.cpp:60
 msgid "Last Updated"
 msgstr "Προηγούμενη Ενημέρωση"
 
-#: common/dialogs/git/dialog_git_switch.cpp:66
-#: common/dialogs/git/dialog_git_switch.cpp:147
-#: common/dialogs/git/dialog_git_switch.cpp:214
+#: common/dialogs/git/dialog_git_switch.cpp:70
+#: common/dialogs/git/dialog_git_switch.cpp:151
+#: common/dialogs/git/dialog_git_switch.cpp:218
 msgid "Switch"
 msgstr "Μεταβολή"
 
-#: common/dialogs/git/dialog_git_switch.cpp:219
+#: common/dialogs/git/dialog_git_switch.cpp:223
 #: eeschema/design_block_utils.cpp:90 eeschema/sch_base_frame.cpp:306
 #: pcbnew/footprint_libraries_utils.cpp:430
 msgid "Add"
@@ -4783,7 +4783,7 @@ msgstr "Το αρχείο %s υπάρχει ήδη."
 #: eeschema/symbol_editor/symbol_editor.cpp:1183
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:138
 #: eeschema/tools/symbol_editor_control.cpp:495
-#: kicad/tools/kicad_manager_control.cpp:356
+#: kicad/tools/kicad_manager_control.cpp:362
 #: pcbnew/dialogs/dialog_export_idf.cpp:139
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:357
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:411
@@ -5914,7 +5914,7 @@ msgstr "Ποντίκι και επιφάνεια αφής"
 msgid "Hotkeys"
 msgstr "Συντομεύσεις"
 
-#: common/eda_base_frame.cpp:1125 kicad/project_tree_pane.cpp:1052
+#: common/eda_base_frame.cpp:1125 kicad/project_tree_pane.cpp:1053
 msgid "Version Control"
 msgstr "Έλεγχος Έκδοσης"
 
@@ -6989,124 +6989,124 @@ msgstr "Ο φάκελος '%s' δεν υπάρχει"
 msgid "Could not read file: %s"
 msgstr "Αδυναμία ανάγνωσης αρχείου: %s"
 
-#: common/git/git_clone_handler.cpp:50
+#: common/git/git_clone_handler.cpp:58
 #, c-format
 msgid "Could not create directory '%s'"
 msgstr "Αδυναμία δημιουργίας καταλόγου '%s'"
 
-#: common/git/git_clone_handler.cpp:71
+#: common/git/git_clone_handler.cpp:80
 #, c-format
 msgid "Could not clone repository '%s'"
 msgstr "Αδυναμία αντιγραφής αποθετηρίου git '%s'"
 
-#: common/git/git_pull_handler.cpp:50
+#: common/git/git_pull_handler.cpp:63
 #, c-format
 msgid "Could not lookup remote '%s'"
 msgstr "Αδυναμία εύρεσης απομακρυσμένου '%s'"
 
-#: common/git/git_pull_handler.cpp:67
+#: common/git/git_pull_handler.cpp:81
 #, fuzzy, c-format
 msgid "Could not connect to remote '%s': %s"
 msgstr "Αδυναμία σύνδεσης με απομακρυσμένο '%s'"
 
-#: common/git/git_pull_handler.cpp:79
+#: common/git/git_pull_handler.cpp:92
 #, fuzzy, c-format
 msgid "Could not fetch data from remote '%s': %s"
 msgstr "Αδυναμία λήψης δεδομένων από απομακρυσμένο '%s'"
 
-#: common/git/git_pull_handler.cpp:101
+#: common/git/git_pull_handler.cpp:120
 msgid "Could not read 'FETCH_HEAD'"
 msgstr "Αδυναμία ανάγνωσης 'FETCH_HEAD'"
 
-#: common/git/git_pull_handler.cpp:109
+#: common/git/git_pull_handler.cpp:128
 msgid "Could not lookup commit"
 msgstr "Αδυναμία εύρεσης commit"
 
-#: common/git/git_pull_handler.cpp:119
+#: common/git/git_pull_handler.cpp:140
 msgid "Could not analyze merge"
 msgstr "Αδυναμία ανάλυσης merge"
 
-#: common/git/git_pull_handler.cpp:129
+#: common/git/git_pull_handler.cpp:146
 msgid "Invalid HEAD.  Cannot merge."
 msgstr "Λανθασμένο HEAD.  Αδυναμία merge."
 
-#: common/git/git_pull_handler.cpp:198 common/git/git_push_handler.cpp:79
+#: common/git/git_pull_handler.cpp:211 common/git/git_push_handler.cpp:91
 msgid "Could not get repository head"
 msgstr "Αδυναμία λήψης HEAD του αποθετηρίου"
 
-#: common/git/git_pull_handler.cpp:212
+#: common/git/git_pull_handler.cpp:223
 #, c-format
 msgid "Could not get reference OID for reference '%s'"
 msgstr "Αδυναμία λήψης αναφοράς OID για αναφορά '%s'"
 
-#: common/git/git_pull_handler.cpp:223 common/git/kicad_git_errors.cpp:55
+#: common/git/git_pull_handler.cpp:234 common/git/kicad_git_errors.cpp:55
 msgid "Failed to perform checkout operation."
 msgstr "Αδυναμία εκτέλεσης εντολής checkout."
 
-#: common/git/git_pull_handler.cpp:241
+#: common/git/git_pull_handler.cpp:253
 msgid "Could not lookup commit '{}'"
 msgstr "Αδυναμία εύρεσης commit '{}'"
 
-#: common/git/git_pull_handler.cpp:282
+#: common/git/git_pull_handler.cpp:290
 msgid "Could not merge commits"
 msgstr "Αδυναμία συγχώνευσης commits"
 
-#: common/git/git_pull_handler.cpp:291
+#: common/git/git_pull_handler.cpp:299
 msgid "Could not get repository index"
 msgstr "Αδυναμία εύρεσης index αποθετηρίου git"
 
-#: common/git/git_pull_handler.cpp:300
+#: common/git/git_pull_handler.cpp:310
 msgid "Could not get conflict iterator"
 msgstr "Αδυναμία λήψης του επαναλήπτη σύγκρουσης"
 
-#: common/git/git_pull_handler.cpp:320 common/git/git_pull_handler.cpp:321
+#: common/git/git_pull_handler.cpp:332 common/git/git_pull_handler.cpp:333
 msgid "Changed"
 msgstr "Αλλαγμένο"
 
-#: common/git/git_pull_handler.cpp:335 common/git/git_pull_handler.cpp:336
+#: common/git/git_pull_handler.cpp:347 common/git/git_pull_handler.cpp:348
 msgid "Added"
 msgstr "Προστέθηκε"
 
-#: common/git/git_push_handler.cpp:46
+#: common/git/git_push_handler.cpp:56
 msgid "Could not lookup remote"
 msgstr "Αδυναμία εύρεσης απομακρυσμένου αποθετηρίου git"
 
-#: common/git/git_push_handler.cpp:64
+#: common/git/git_push_handler.cpp:76
 #, fuzzy, c-format
 msgid "Could not connect to remote: %s"
 msgstr "Αδυναμία σύνδεσης με απομακρυσμένο '%s'"
 
-#: common/git/git_push_handler.cpp:92
+#: common/git/git_push_handler.cpp:104
 #, fuzzy, c-format
 msgid "Could not push to remote: %s"
 msgstr "Αδυναμία push σε απομακρυσμένο"
 
-#: common/git/kicad_git_common.cpp:649
+#: common/git/kicad_git_common.cpp:829
 #, c-format
 msgid "Received %u of %u objects"
 msgstr "Λήψη %u αντικειμένων από %u"
 
-#: common/git/kicad_git_common.cpp:678
+#: common/git/kicad_git_common.cpp:858
 #, c-format
 msgid "* [updated] %s..%s %s"
 msgstr "* [Ενημέρωση] %s..%s %s"
 
-#: common/git/kicad_git_common.cpp:682
+#: common/git/kicad_git_common.cpp:862
 #, c-format
 msgid "* [new] %s %s"
 msgstr "* [νέο] %s %s"
 
-#: common/git/kicad_git_common.cpp:702
+#: common/git/kicad_git_common.cpp:882
 #, c-format
 msgid "Writing objects: %lld%% (%u/%u), %zu bytes"
 msgstr "Εγγραφή αντικειμένων: %lld%% (%u/%u), %zu bytes"
 
-#: common/git/kicad_git_common.cpp:717
+#: common/git/kicad_git_common.cpp:897
 #, c-format
 msgid "* [rejected] %s (%s)"
 msgstr "* [απορριφθέντα] %s (%s)"
 
-#: common/git/kicad_git_common.cpp:722
+#: common/git/kicad_git_common.cpp:902
 #, c-format
 msgid "[updated] %s"
 msgstr "[Ενημερωμένο] %s"
@@ -7236,7 +7236,7 @@ msgstr "Επικόλληση κελιών από το πρόχειρο το τρ
 #: common/grid_tricks.cpp:368 common/tool/actions.cpp:291
 #: common/widgets/listbox_tricks.cpp:54 eeschema/tools/sch_edit_tool.cpp:1720
 #: eeschema/tools/symbol_editor_edit_tool.cpp:478
-#: kicad/dialogs/panel_jobset.cpp:394 kicad/project_tree_pane.cpp:985
+#: kicad/dialogs/panel_jobset.cpp:394 kicad/project_tree_pane.cpp:986
 #: pcbnew/dialogs/panel_setup_rules.cpp:133 pcbnew/tools/edit_tool.cpp:2668
 msgid "Delete"
 msgstr "Διαγραφή"
@@ -10629,7 +10629,7 @@ msgstr "Αρχείο έργου: \"%s\""
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:94
 #: eeschema/dialogs/dialog_bom.cpp:403
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
-#: kicad/project_tree_pane.cpp:1066
+#: kicad/project_tree_pane.cpp:1067
 msgid "No text editor selected in KiCad.  Please choose one."
 msgstr ""
 "Δεν έχει επιλεχθεί επεξεργαστής κειμένου στο KiCad.  Παρακαλώ επιλέξτε έναν."
@@ -14421,7 +14421,7 @@ msgstr ""
 "'%s'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:513
-#: kicad/tools/kicad_manager_control.cpp:695
+#: kicad/tools/kicad_manager_control.cpp:701
 #, c-format
 msgid "'%s' already exists."
 msgstr "το '%s' υπάρχει ήδη."
@@ -17515,7 +17515,7 @@ msgstr "Απαιτείται Καταχώριση Διαύλου"
 msgid "ERC report (%s, Encoding UTF8)\n"
 msgstr "Αναφορά ΕΗΚ (%s, κωδικοποίηση UTF8)\n"
 
-#: eeschema/erc/erc_report.cpp:64
+#: eeschema/erc/erc_report.cpp:80
 #, c-format
 msgid ""
 "\n"
@@ -17524,7 +17524,7 @@ msgstr ""
 "\n"
 "***** Φύλλο %s\n"
 
-#: eeschema/erc/erc_report.cpp:88
+#: eeschema/erc/erc_report.cpp:99
 #, c-format
 msgid ""
 "\n"
@@ -17763,8 +17763,8 @@ msgid "File write operation failed."
 msgstr "Η εγγραφή αρχείου απέτυχε."
 
 #: eeschema/files-io.cpp:932 eeschema/files-io.cpp:1000
-#: kicad/import_project.cpp:93 kicad/tools/kicad_manager_control.cpp:111
-#: kicad/tools/kicad_manager_control.cpp:313
+#: kicad/import_project.cpp:93 kicad/tools/kicad_manager_control.cpp:115
+#: kicad/tools/kicad_manager_control.cpp:319
 #, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
@@ -28298,299 +28298,304 @@ msgstr "Αδυναμία μεταφοράς '%s' στον κάδο ανακύκ�
 msgid "Can not move '%s' to trash."
 msgstr "Αδυναμία μεταφοράς '%s' στον κάδο."
 
-#: kicad/project_tree_pane.cpp:306
+#: kicad/project_tree_pane.cpp:308
 msgid "Directory name:"
 msgstr "Όνομα καταλόγου:"
 
-#: kicad/project_tree_pane.cpp:306
+#: kicad/project_tree_pane.cpp:308
 msgid "Create New Directory"
 msgstr "Δημιουργία Νέου Φακέλου"
 
-#: kicad/project_tree_pane.cpp:895
+#: kicad/project_tree_pane.cpp:761
+#, fuzzy, c-format
+msgid "Failed to get status list: %s"
+msgstr "Αποτυχία λήψης commit: %s"
+
+#: kicad/project_tree_pane.cpp:896
 msgid "Switch to this Project"
 msgstr "Μετάβαση σε αυτό το Έργο"
 
-#: kicad/project_tree_pane.cpp:896
+#: kicad/project_tree_pane.cpp:897
 msgid "Close all editors, and switch to the selected project"
 msgstr "Κλείσιμο όλων των επεξεργαστών, και μετάβαση στο επιλεγμένο έργο"
 
-#: kicad/project_tree_pane.cpp:903
+#: kicad/project_tree_pane.cpp:904
 msgid "New Directory..."
 msgstr "Νέος Κατάλογος..."
 
-#: kicad/project_tree_pane.cpp:904
+#: kicad/project_tree_pane.cpp:905
 msgid "Create a New Directory"
 msgstr "Δημιουργία Νέου Φακέλου"
 
-#: kicad/project_tree_pane.cpp:912 kicad/project_tree_pane.cpp:922
+#: kicad/project_tree_pane.cpp:913 kicad/project_tree_pane.cpp:923
 msgid "Reveal in Finder"
 msgstr "Εμφάνιση στον Finder"
 
-#: kicad/project_tree_pane.cpp:913
+#: kicad/project_tree_pane.cpp:914
 msgid "Reveals the directory in a Finder window"
 msgstr "Εμφανίζει τον κατάλογο σε ένα παράθυρο Finder"
 
-#: kicad/project_tree_pane.cpp:915
+#: kicad/project_tree_pane.cpp:916
 msgid "Open Directory in File Explorer"
 msgstr "Άνοιγμα Καταλόγου στην Εξερεύνηση Αρχείων"
 
-#: kicad/project_tree_pane.cpp:916 pcbnew/tools/pcb_actions.cpp:986
+#: kicad/project_tree_pane.cpp:917 pcbnew/tools/pcb_actions.cpp:986
 msgid "Opens the directory in the default system file manager"
 msgstr "Ανοίγει τον κατάλογο στον προεπιλεγμένο διαχειριστή αρχείων συστήματος"
 
-#: kicad/project_tree_pane.cpp:923
+#: kicad/project_tree_pane.cpp:924
 msgid "Reveals the directories in a Finder window"
 msgstr "Εμφανίζει τους κατάλογους σε ένα παράθυρο Finder"
 
-#: kicad/project_tree_pane.cpp:925
+#: kicad/project_tree_pane.cpp:926
 msgid "Open Directories in File Explorer"
 msgstr "Άνοιγμα Καταλόγων στην Εξερεύνηση Αρχείων"
 
-#: kicad/project_tree_pane.cpp:926
+#: kicad/project_tree_pane.cpp:927
 msgid "Opens the directories in the default system file manager"
 msgstr ""
 "Ανοίγει τους καταλόγους στον προεπιλεγμένο διαχειριστή αρχείων συστήματος"
 
-#: kicad/project_tree_pane.cpp:937
+#: kicad/project_tree_pane.cpp:938
 msgid "Open the file in a Text Editor"
 msgstr "Άνοιγμα του αρχείου με έναν επεξεργαστή κειμένου"
 
-#: kicad/project_tree_pane.cpp:939
+#: kicad/project_tree_pane.cpp:940
 msgid "Open files in a Text Editor"
 msgstr "Άνοιγμα αρχείων με έναν Επεξεργαστή Κειμένου"
 
-#: kicad/project_tree_pane.cpp:941
+#: kicad/project_tree_pane.cpp:942
 msgid "Edit in a Text Editor"
 msgstr "Επεξεργασία σε Επεξεργαστή Κειμένου"
 
-#: kicad/project_tree_pane.cpp:947
+#: kicad/project_tree_pane.cpp:948
 #, fuzzy
 msgid "Run Jobs"
 msgstr "Εκτέλεση %s"
 
-#: kicad/project_tree_pane.cpp:955
+#: kicad/project_tree_pane.cpp:956
 msgid "Rename File..."
 msgstr "Μετονομασία Αρχείου..."
 
-#: kicad/project_tree_pane.cpp:956
+#: kicad/project_tree_pane.cpp:957
 msgid "Rename file"
 msgstr "Μετονομασία αρχείου"
 
-#: kicad/project_tree_pane.cpp:960
+#: kicad/project_tree_pane.cpp:961
 msgid "Rename Files..."
 msgstr "Μετονομασία Αρχείων..."
 
-#: kicad/project_tree_pane.cpp:961
+#: kicad/project_tree_pane.cpp:962
 msgid "Rename files"
 msgstr "Μετονομασία αρχείων"
 
-#: kicad/project_tree_pane.cpp:971
+#: kicad/project_tree_pane.cpp:972
 msgid "Delete the file and its content"
 msgstr "Διαγραφή αρχείου και των περιεχομένων του"
 
-#: kicad/project_tree_pane.cpp:973
+#: kicad/project_tree_pane.cpp:974
 msgid "Delete the files and their contents"
 msgstr "Διαγραφή αρχείων και των περιεχομένων τους"
 
-#: kicad/project_tree_pane.cpp:988
+#: kicad/project_tree_pane.cpp:989
 msgid "Move to Trash"
 msgstr "Μετακίνηση σε Σκουπίδια"
 
-#: kicad/project_tree_pane.cpp:1000
+#: kicad/project_tree_pane.cpp:1001
 msgid "Add Project to Version Control..."
 msgstr "Προσθήκη έργου σε Έλεγχο έκδοσης..."
 
-#: kicad/project_tree_pane.cpp:1001
+#: kicad/project_tree_pane.cpp:1002
 msgid "Initialize a new repository"
 msgstr "Αρχικοποίηση νέου αποθετηρίου"
 
-#: kicad/project_tree_pane.cpp:1005
+#: kicad/project_tree_pane.cpp:1006
 msgid "Commit Project..."
 msgstr "Υποβολή Έργου..."
 
-#: kicad/project_tree_pane.cpp:1006 kicad/project_tree_pane.cpp:1020
+#: kicad/project_tree_pane.cpp:1007 kicad/project_tree_pane.cpp:1021
 msgid "Commit changes to the local repository"
 msgstr "Υποβολή αλλαγών στο τοπικό αποθετήριο"
 
-#: kicad/project_tree_pane.cpp:1009
+#: kicad/project_tree_pane.cpp:1010
 msgid "Push"
 msgstr "Push"
 
-#: kicad/project_tree_pane.cpp:1010
+#: kicad/project_tree_pane.cpp:1011
 msgid "Push committed local changes to remote repository"
 msgstr "Δημοσίευση τοπικά υποβληθέντων αλλαγών στο απομακρυσμένο αποθετήριο"
 
-#: kicad/project_tree_pane.cpp:1013
+#: kicad/project_tree_pane.cpp:1014
 msgid "Pull"
 msgstr "Pull"
 
-#: kicad/project_tree_pane.cpp:1014
+#: kicad/project_tree_pane.cpp:1015
 msgid "Pull changes from remote repository into local"
 msgstr "Ενσωμάτωση αλλαγών από το απομακρυσμένο στο τοπικό αποθετήριο"
 
-#: kicad/project_tree_pane.cpp:1019
+#: kicad/project_tree_pane.cpp:1020
 msgid "Commit File..."
 msgstr "Commit Αρχείου..."
 
-#: kicad/project_tree_pane.cpp:1034
+#: kicad/project_tree_pane.cpp:1035
 msgid "Switch to branch "
 msgstr "Αλλαγή στο branch "
 
-#: kicad/project_tree_pane.cpp:1039
+#: kicad/project_tree_pane.cpp:1040
 msgid "Other..."
 msgstr "Άλλο..."
 
-#: kicad/project_tree_pane.cpp:1040
+#: kicad/project_tree_pane.cpp:1041
 msgid "Switch to a different branch"
 msgstr "Εναλλαγή σε διαφορετικό κλάδο"
 
-#: kicad/project_tree_pane.cpp:1043
+#: kicad/project_tree_pane.cpp:1044
 msgid "Switch to Branch"
 msgstr "Εναλλαγή Κλάδου"
 
-#: kicad/project_tree_pane.cpp:1047
+#: kicad/project_tree_pane.cpp:1048
 msgid "Remove Version Control"
 msgstr "Αφαίρεση Ελέγχου Έκδοσης"
 
-#: kicad/project_tree_pane.cpp:1048
+#: kicad/project_tree_pane.cpp:1049
 msgid "Delete all version control files from the project directory."
 msgstr "Διαγραφή όλων των αρχείων ελέγχου έκδοσης από τον κατάλογο του έργου."
 
-#: kicad/project_tree_pane.cpp:1103
+#: kicad/project_tree_pane.cpp:1104
 #, c-format
 msgid "Change filename: '%s'"
 msgstr "Αλλαγή ονόματος αρχείου: '%s'"
 
-#: kicad/project_tree_pane.cpp:1105
+#: kicad/project_tree_pane.cpp:1106
 msgid "Change filename"
 msgstr "Αλλαγή ονόματος αρχείου"
 
-#: kicad/project_tree_pane.cpp:1437
+#: kicad/project_tree_pane.cpp:1451
 msgid "Network path: not monitoring folder changes"
 msgstr "Διαδρομή δικτύου: δεν παρακολουθούνται οι αλλαγές φακέλων"
 
-#: kicad/project_tree_pane.cpp:1443
+#: kicad/project_tree_pane.cpp:1457
 msgid "Local path: monitoring folder changes"
 msgstr "Τοπική διαδρομή: παρακολουθούνται οι αλλαγές φακέλων"
 
-#: kicad/project_tree_pane.cpp:1630
+#: kicad/project_tree_pane.cpp:1644
 #, fuzzy
 msgid "The selected directory is already a Git project."
 msgstr "Ο επιλεγμένος κατάλογος είναι ήδη έργο git."
 
-#: kicad/project_tree_pane.cpp:1637
+#: kicad/project_tree_pane.cpp:1652
 msgid "Set default remote"
 msgstr "Χρήση προκαθορισμένου απομακρυσμένου"
 
-#: kicad/project_tree_pane.cpp:1652
+#: kicad/project_tree_pane.cpp:1663
 #, fuzzy
 msgid "Failed to initialize Git project."
 msgstr "Απέτυχε η προετοιμασία του έργου git."
 
-#: kicad/project_tree_pane.cpp:1712
+#: kicad/project_tree_pane.cpp:1721
 msgid "Failed to set default remote."
 msgstr "Αποτυχία δημιουργίας προκαθορισμένου απομακρυσμένου."
 
-#: kicad/project_tree_pane.cpp:1724 kicad/project_tree_pane.cpp:1758
-#: kicad/project_tree_pane.cpp:1780
+#: kicad/project_tree_pane.cpp:1733 kicad/project_tree_pane.cpp:1767
+#: kicad/project_tree_pane.cpp:1791
 msgid "Fetching Remote"
 msgstr "Λήψη Απομακρυσμένου"
 
-#: kicad/project_tree_pane.cpp:1765
+#: kicad/project_tree_pane.cpp:1774
 #, fuzzy
 msgid "Failed to pull project"
 msgstr "Αποτυχία προώθησης του έργου"
 
-#: kicad/project_tree_pane.cpp:1787
+#: kicad/project_tree_pane.cpp:1798
 msgid "Failed to push project"
 msgstr "Αποτυχία προώθησης του έργου"
 
-#: kicad/project_tree_pane.cpp:1864
+#: kicad/project_tree_pane.cpp:1877
 #, c-format
 msgid "Failed to lookup branch '%s': %s"
 msgstr "Αποτυχία εύρεσης branch '%s': %s"
 
-#: kicad/project_tree_pane.cpp:1877
+#: kicad/project_tree_pane.cpp:1890
 #, c-format
 msgid "Failed to find branch head for '%s'"
 msgstr "Αποτυχία εύρεσης branch head για το '%s'"
 
-#: kicad/project_tree_pane.cpp:1888
+#: kicad/project_tree_pane.cpp:1901
 #, c-format
 msgid "Failed to switch to branch '%s'"
 msgstr "Αποτυχία μετάβασης στο branch '%s'"
 
-#: kicad/project_tree_pane.cpp:1899
+#: kicad/project_tree_pane.cpp:1910
 #, c-format
 msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "Αποτυχία ενημέρωσης αναφοράς HEAD του κλάδου '%s'"
 
-#: kicad/project_tree_pane.cpp:1918
+#: kicad/project_tree_pane.cpp:1923
 #, fuzzy
 msgid "Are you sure you want to remove Git tracking from this project?"
 msgstr ""
 "Είστε βέβαιοι ότι θέλετε να καταργήσετε το ιστορικό από το git σε αυτό το "
 "έργο;"
 
-#: kicad/project_tree_pane.cpp:1935
+#: kicad/project_tree_pane.cpp:1940
 #, fuzzy
 msgid "Failed to remove Git directory"
 msgstr "Αδυναμία διαγραφής καταλόγου git"
 
-#: kicad/project_tree_pane.cpp:2236
+#: kicad/project_tree_pane.cpp:2267
 #, fuzzy
 msgid "The selected directory is not a Git project."
 msgstr "Ο επιλεγμένος κατάλογος είναι ήδη έργο git."
 
-#: kicad/project_tree_pane.cpp:2385
+#: kicad/project_tree_pane.cpp:2412
 msgid "Discarding commit due to empty commit message."
 msgstr "Απόρριψη commit λόγω κενού μηνύματος."
 
-#: kicad/project_tree_pane.cpp:2391
+#: kicad/project_tree_pane.cpp:2418
 msgid "Discarding commit due to empty file selection."
 msgstr "Απόρριψη commit λόγω επιλογής κενού αρχείου."
 
-#: kicad/project_tree_pane.cpp:2397
+#: kicad/project_tree_pane.cpp:2424
 #, c-format
 msgid "Failed to get repository index: %s"
 msgstr "Αποτυχία λήψης ευρετηρίου(index) αποθετηρίου: %s"
 
-#: kicad/project_tree_pane.cpp:2406
+#: kicad/project_tree_pane.cpp:2435
 #, c-format
 msgid "Failed to add file to index: %s"
 msgstr "Αποτυχία προσθήκης αρχείου στο index: %s"
 
-#: kicad/project_tree_pane.cpp:2415
+#: kicad/project_tree_pane.cpp:2443
 #, c-format
 msgid "Failed to write index: %s"
 msgstr "Αποτυχία εγγραφής ευρετηρίου: %s"
 
-#: kicad/project_tree_pane.cpp:2423
+#: kicad/project_tree_pane.cpp:2450
 #, c-format
 msgid "Failed to write tree: %s"
 msgstr "Αποτυχία εγγραφής tree: %s"
 
-#: kicad/project_tree_pane.cpp:2433
+#: kicad/project_tree_pane.cpp:2457
 #, c-format
 msgid "Failed to lookup tree: %s"
 msgstr "Αποτυχία ανεύρεσης tree: %s"
 
-#: kicad/project_tree_pane.cpp:2444
+#: kicad/project_tree_pane.cpp:2469
 #, c-format
 msgid "Failed to get HEAD reference: %s"
 msgstr "Αδυναμία λήψης αναφοράς HEAD: %s"
 
-#: kicad/project_tree_pane.cpp:2452
+#: kicad/project_tree_pane.cpp:2478
 #, c-format
 msgid "Failed to get commit: %s"
 msgstr "Αποτυχία λήψης commit: %s"
 
-#: kicad/project_tree_pane.cpp:2470
+#: kicad/project_tree_pane.cpp:2493
 #, c-format
 msgid "Failed to create author signature: %s"
 msgstr "Αποτυχία δημιουργίας υπογραφής συγγραφέα: %s"
 
-#: kicad/project_tree_pane.cpp:2506
+#: kicad/project_tree_pane.cpp:2530
 #, c-format
 msgid "Failed to create commit: %s"
 msgstr "Αποτυχία δημιουργίας commit: %s"
@@ -28690,11 +28695,11 @@ msgstr "Άνοιγμα Επεξεργαστή Κειμένου"
 msgid "Launch preferred text editor"
 msgstr "Άνοιγμα προτιμώμενου επεξεργαστή κειμένου"
 
-#: kicad/tools/kicad_manager_control.cpp:72
+#: kicad/tools/kicad_manager_control.cpp:76
 msgid "Create New Project"
 msgstr "Δημιουργία Νέου Έργου"
 
-#: kicad/tools/kicad_manager_control.cpp:120
+#: kicad/tools/kicad_manager_control.cpp:124
 msgid ""
 "The selected folder is not empty.  It is recommended that you create "
 "projects in their own empty folder.\n"
@@ -28706,76 +28711,76 @@ msgstr ""
 "\n"
 "Θέλετε να συνεχίσετε;"
 
-#: kicad/tools/kicad_manager_control.cpp:151
+#: kicad/tools/kicad_manager_control.cpp:155
 msgid "Clone Project from Git Repository"
 msgstr "Αντιγραφή Έργου από Αποθετήριο Git"
 
-#: kicad/tools/kicad_manager_control.cpp:173
+#: kicad/tools/kicad_manager_control.cpp:179
 msgid "Cloning Repository"
 msgstr "Αντιγραφή Αποθετηρίου"
 
-#: kicad/tools/kicad_manager_control.cpp:185
+#: kicad/tools/kicad_manager_control.cpp:191
 msgid "No project files were found in the repository."
 msgstr "Δεν βρέθηκαν αρχεία έργου στο αποθετήριο."
 
-#: kicad/tools/kicad_manager_control.cpp:212
+#: kicad/tools/kicad_manager_control.cpp:218
 #, fuzzy
 msgid "Create New Jobset"
 msgstr "Δημιουργία Νέου Έργου"
 
-#: kicad/tools/kicad_manager_control.cpp:242
+#: kicad/tools/kicad_manager_control.cpp:248
 msgid "System Templates"
 msgstr "Πρότυπα Συστήματος"
 
-#: kicad/tools/kicad_manager_control.cpp:251
+#: kicad/tools/kicad_manager_control.cpp:257
 msgid "User Templates"
 msgstr "Πρότυπα Χρήστη"
 
-#: kicad/tools/kicad_manager_control.cpp:268
+#: kicad/tools/kicad_manager_control.cpp:274
 msgid "No project template was selected.  Cannot generate new project."
 msgstr "Δεν επιλέχθηκε κάποιο πρότυπο έργου. Αδυναμία δημιουργίας νέου έργου."
 
-#: kicad/tools/kicad_manager_control.cpp:276
+#: kicad/tools/kicad_manager_control.cpp:282
 msgid "New Project Folder"
 msgstr "Νέος Φάκελος Έργου"
 
-#: kicad/tools/kicad_manager_control.cpp:325
-#: kicad/tools/kicad_manager_control.cpp:711
+#: kicad/tools/kicad_manager_control.cpp:331
+#: kicad/tools/kicad_manager_control.cpp:717
 #, c-format
 msgid "Insufficient permissions to write to folder '%s'."
 msgstr "Ανεπαρκή δικαιώματα για την εγγραφή στο φάκελο '%s'."
 
-#: kicad/tools/kicad_manager_control.cpp:346
+#: kicad/tools/kicad_manager_control.cpp:352
 msgid "Overwriting files:"
 msgstr "Αντικατάσταση αρχείων:"
 
-#: kicad/tools/kicad_manager_control.cpp:352
+#: kicad/tools/kicad_manager_control.cpp:358
 msgid "Similar files already exist in the destination folder."
 msgstr "Υπάρχουν παρόμοια αρχεία στον φάκελο προορισμού."
 
-#: kicad/tools/kicad_manager_control.cpp:371
+#: kicad/tools/kicad_manager_control.cpp:377
 msgid "A problem occurred creating new project from template."
 msgstr "Πρόβλημα κατά τη δημιουργία νέου έργου από πρότυπο."
 
-#: kicad/tools/kicad_manager_control.cpp:394
+#: kicad/tools/kicad_manager_control.cpp:400
 msgid "Open Existing Project"
 msgstr "Άνοιγμα Υπάρχοντος Έργου"
 
-#: kicad/tools/kicad_manager_control.cpp:429
+#: kicad/tools/kicad_manager_control.cpp:435
 #, fuzzy
 msgid "Open Jobset"
 msgstr "Αποθήκευση Ως"
 
-#: kicad/tools/kicad_manager_control.cpp:636
+#: kicad/tools/kicad_manager_control.cpp:642
 #, c-format
 msgid "Cannot copy folder '%s'."
 msgstr "Αδυναμία αντιγραφής φακέλου '%s'."
 
-#: kicad/tools/kicad_manager_control.cpp:682
+#: kicad/tools/kicad_manager_control.cpp:688
 msgid "Save Project To"
 msgstr "Αποθήκευση Αρχείου Έργου Σε"
 
-#: kicad/tools/kicad_manager_control.cpp:702
+#: kicad/tools/kicad_manager_control.cpp:708
 #, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
@@ -28786,23 +28791,23 @@ msgstr ""
 "\n"
 "Βεβαιωθείτε ότι έχετε δικαιώματα εγγραφής και προσπαθήστε ξανά."
 
-#: kicad/tools/kicad_manager_control.cpp:713
+#: kicad/tools/kicad_manager_control.cpp:719
 msgid "Error!"
 msgstr "Σφάλμα!"
 
-#: kicad/tools/kicad_manager_control.cpp:769
+#: kicad/tools/kicad_manager_control.cpp:775
 msgid "Create (or open) a project to edit a schematic."
 msgstr "Δημιουργήστε (ή ανοίξτε) ένα έργο για να επεξεργαστείτε ένα σχηματικό."
 
-#: kicad/tools/kicad_manager_control.cpp:775
+#: kicad/tools/kicad_manager_control.cpp:781
 msgid "Create (or open) a project to edit a pcb."
 msgstr "Δημιουργήστε (ή ανοίξτε) ένα έργο για να επεξεργαστείτε μία πλακέτα."
 
-#: kicad/tools/kicad_manager_control.cpp:792
+#: kicad/tools/kicad_manager_control.cpp:798
 msgid "Application failed to load:\n"
 msgstr "Αποτυχία φόρτωσης της εφαρμογής:\n"
 
-#: kicad/tools/kicad_manager_control.cpp:798
+#: kicad/tools/kicad_manager_control.cpp:804
 msgid "Application cannot start."
 msgstr "Αποτυχία εκκίνησης εφαρμογής."
 

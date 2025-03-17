@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-15 19:01+0300\n"
+"POT-Creation-Date: 2025-03-17 18:43+0300\n"
 "PO-Revision-Date: 2025-03-06 23:18+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v9/fi/>\n"
@@ -359,9 +359,9 @@ msgstr "Ei riittäviä käyttöoikeuksia tiedoston '%s' tallentamiseen."
 #: eeschema/erc/erc_item.cpp:81 eeschema/files-io.cpp:936
 #: eeschema/files-io.cpp:1004 eeschema/sch_marker.cpp:376
 #: kicad/import_proj.cpp:79 kicad/import_project.cpp:123 kicad/kicad.cpp:318
-#: kicad/tools/kicad_manager_control.cpp:269
-#: kicad/tools/kicad_manager_control.cpp:326
-#: kicad/tools/kicad_manager_control.cpp:372
+#: kicad/tools/kicad_manager_control.cpp:275
+#: kicad/tools/kicad_manager_control.cpp:332
+#: kicad/tools/kicad_manager_control.cpp:378
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:143
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:216
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:225
@@ -1903,7 +1903,7 @@ msgstr "Tietoa"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:137
 #: eeschema/tools/symbol_editor_control.cpp:493
 #: eeschema/tools/symbol_editor_pin_tool.cpp:242 kicad/import_project.cpp:109
-#: kicad/tools/kicad_manager_control.cpp:353
+#: kicad/tools/kicad_manager_control.cpp:359
 #: pcbnew/dialogs/dialog_export_idf.cpp:138
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:355
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:409
@@ -3604,12 +3604,11 @@ msgid "Basic"
 msgstr "Perus"
 
 #: common/dialogs/git/dialog_git_auth.cpp:46
-#: common/dialogs/git/dialog_git_repository_base.cpp:52
+#: common/dialogs/git/dialog_git_repository_base.cpp:58
 msgid "SSH"
 msgstr "SSH"
 
 #: common/dialogs/git/dialog_git_auth.cpp:52
-#: common/dialogs/git/dialog_git_repository_base.cpp:95
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:85
 msgid "Test"
 msgstr "Testaa"
@@ -3625,7 +3624,7 @@ msgstr "Hyväksy"
 
 #: common/dialogs/git/dialog_git_auth.cpp:54
 #: common/dialogs/git/dialog_git_commit.cpp:152
-#: common/dialogs/git/dialog_git_switch.cpp:69
+#: common/dialogs/git/dialog_git_switch.cpp:73
 #: common/dialogs/panel_embedded_files.cpp:426 common/tool/actions.cpp:159
 #: eeschema/dialogs/dialog_erc.cpp:426
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1339 eeschema/sheet.cpp:784
@@ -3643,7 +3642,7 @@ msgid "Url"
 msgstr "Url-osoite"
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
-#: common/dialogs/git/dialog_git_repository_base.cpp:71
+#: common/dialogs/git/dialog_git_repository_base.cpp:79
 msgid "Authentication"
 msgstr "Todentaminen"
 
@@ -3704,130 +3703,131 @@ msgstr "M&uutos"
 msgid "Commit message cannot be empty"
 msgstr "Commit viesti ei voi olla tyhjä"
 
-#: common/dialogs/git/dialog_git_repository.cpp:156
-#: common/dialogs/git/dialog_git_repository.cpp:388
-msgid "Enter the password for the SSH key"
-msgstr "Anna SSH-avaimen salasana"
-
-#: common/dialogs/git/dialog_git_repository.cpp:337
+#: common/dialogs/git/dialog_git_repository.cpp:74
+#: common/dialogs/git/dialog_git_repository.cpp:306
 #, fuzzy
 msgid "Test Connection"
 msgstr "Testaa yhteys"
 
-#: common/dialogs/git/dialog_git_repository.cpp:342
+#: common/dialogs/git/dialog_git_repository.cpp:165
+#: common/dialogs/git/dialog_git_repository.cpp:357
+msgid "Enter the password for the SSH key"
+msgstr "Anna SSH-avaimen salasana"
+
+#: common/dialogs/git/dialog_git_repository.cpp:311
 msgid "Connection successful"
 msgstr "Yhteys onnistui"
 
-#: common/dialogs/git/dialog_git_repository.cpp:346
+#: common/dialogs/git/dialog_git_repository.cpp:315
 #, c-format
 msgid "Could not connect to '%s' "
 msgstr "Ei voitu muodostaa yhteyttä kohteeseen '%s' "
 
-#: common/dialogs/git/dialog_git_repository.cpp:366
+#: common/dialogs/git/dialog_git_repository.cpp:335
 #, c-format
 msgid "Could not open private key '%s'"
 msgstr "Yksityistä avainta '%s' ei voitu avata"
 
-#: common/dialogs/git/dialog_git_repository.cpp:379
+#: common/dialogs/git/dialog_git_repository.cpp:348
 msgid "Invalid SSH Key"
 msgstr "Virheellinen SSH-avain"
 
-#: common/dialogs/git/dialog_git_repository.cpp:380
+#: common/dialogs/git/dialog_git_repository.cpp:349
 msgid "The selected file is not a valid SSH private key"
 msgstr "Valittu tiedosto ei ole kelvollinen yksityinen SSH-avain"
 
-#: common/dialogs/git/dialog_git_repository.cpp:404
+#: common/dialogs/git/dialog_git_repository.cpp:373
 #, c-format
 msgid "Could not open public key '%s'"
 msgstr "Julkista avainta %s ei voitu avata"
 
-#: common/dialogs/git/dialog_git_repository.cpp:423
-#: common/dialogs/git/dialog_git_repository.cpp:430
+#: common/dialogs/git/dialog_git_repository.cpp:392
+#: common/dialogs/git/dialog_git_repository.cpp:399
 msgid "Missing information"
 msgstr "Puuttuvat tiedot"
 
-#: common/dialogs/git/dialog_git_repository.cpp:424
+#: common/dialogs/git/dialog_git_repository.cpp:393
 msgid "Please enter a name for the repository"
 msgstr "Anna ohjelmistoarkiston nimi"
 
-#: common/dialogs/git/dialog_git_repository.cpp:431
+#: common/dialogs/git/dialog_git_repository.cpp:400
 msgid "Please enter a URL for the repository"
 msgstr "Anna ohjelmistoarkiston URL-osoite"
 
-#: common/dialogs/git/dialog_git_repository.cpp:453
-#: common/dialogs/git/dialog_git_repository_base.cpp:108
+#: common/dialogs/git/dialog_git_repository.cpp:424
+#: common/dialogs/git/dialog_git_repository_base.cpp:106
 msgid "SSH key password:"
 msgstr "SSH-avaimen salasana:"
 
-#: common/dialogs/git/dialog_git_repository.cpp:459
+#: common/dialogs/git/dialog_git_repository.cpp:432
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
 msgid "Password:"
 msgstr "Salasana:"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:38
+#: common/dialogs/git/dialog_git_repository_base.cpp:42
 msgid "Location:"
 msgstr "Sijainti:"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:45
+#: common/dialogs/git/dialog_git_repository_base.cpp:49
 msgid "Connection type:"
 msgstr "Yhteystyyppi:"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:52
+#: common/dialogs/git/dialog_git_repository_base.cpp:58
 msgid "HTTPS"
 msgstr "HTTPS"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:52
+#: common/dialogs/git/dialog_git_repository_base.cpp:58
 #: eeschema/widgets/search_handlers.cpp:452
 msgid "Local"
 msgstr "Paikallinen"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:83
+#: common/dialogs/git/dialog_git_repository_base.cpp:91
 msgid "SSH private key:     "
 msgstr "Yksityinen SSH-avain:     "
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:90
+#: common/dialogs/git/dialog_git_repository_base.cpp:94
 msgid "Select SSH private key file"
 msgstr "Valitse yksityinen SSH-avaintiedosto"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:90
+#: common/dialogs/git/dialog_git_repository_base.cpp:94
 msgid "*"
 msgstr "*"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:101
+#: common/dialogs/git/dialog_git_repository_base.cpp:99
 msgid "User name:"
 msgstr "Käyttäjänimi:"
 
-#: common/dialogs/git/dialog_git_repository_base.h:77
+#: common/dialogs/git/dialog_git_repository_base.h:76
 msgid "Git Repository"
 msgstr "Git-ohjelmistovarasto"
 
-#: common/dialogs/git/dialog_git_switch.cpp:40
+#: common/dialogs/git/dialog_git_switch.cpp:44
 msgid "Git Branch Switch"
 msgstr "Git-haaran vaihto"
 
-#: common/dialogs/git/dialog_git_switch.cpp:48
+#: common/dialogs/git/dialog_git_switch.cpp:52
 msgid "Select or enter a branch name:"
 msgstr "Valitse tai anna haaran nimi:"
 
-#: common/dialogs/git/dialog_git_switch.cpp:54
+#: common/dialogs/git/dialog_git_switch.cpp:58
 msgid "Branch"
 msgstr "Haara"
 
-#: common/dialogs/git/dialog_git_switch.cpp:55
+#: common/dialogs/git/dialog_git_switch.cpp:59
 msgid "Last Commit"
 msgstr "Viimeisin Commit"
 
-#: common/dialogs/git/dialog_git_switch.cpp:56
+#: common/dialogs/git/dialog_git_switch.cpp:60
 msgid "Last Updated"
 msgstr "Viimeksi päivitetty"
 
-#: common/dialogs/git/dialog_git_switch.cpp:66
-#: common/dialogs/git/dialog_git_switch.cpp:147
-#: common/dialogs/git/dialog_git_switch.cpp:214
+#: common/dialogs/git/dialog_git_switch.cpp:70
+#: common/dialogs/git/dialog_git_switch.cpp:151
+#: common/dialogs/git/dialog_git_switch.cpp:218
 msgid "Switch"
 msgstr "Vaihda"
 
-#: common/dialogs/git/dialog_git_switch.cpp:219
+#: common/dialogs/git/dialog_git_switch.cpp:223
 #: eeschema/design_block_utils.cpp:90 eeschema/sch_base_frame.cpp:306
 #: pcbnew/footprint_libraries_utils.cpp:430
 msgid "Add"
@@ -4738,7 +4738,7 @@ msgstr "Tiedosto '%s' on jo olemassa."
 #: eeschema/symbol_editor/symbol_editor.cpp:1183
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:138
 #: eeschema/tools/symbol_editor_control.cpp:495
-#: kicad/tools/kicad_manager_control.cpp:356
+#: kicad/tools/kicad_manager_control.cpp:362
 #: pcbnew/dialogs/dialog_export_idf.cpp:139
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:357
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:411
@@ -5837,7 +5837,7 @@ msgstr "Hiiri ja Kosketuslevy"
 msgid "Hotkeys"
 msgstr "Pikanäppäimet"
 
-#: common/eda_base_frame.cpp:1125 kicad/project_tree_pane.cpp:1052
+#: common/eda_base_frame.cpp:1125 kicad/project_tree_pane.cpp:1053
 msgid "Version Control"
 msgstr "Versiohallinta"
 
@@ -6907,124 +6907,124 @@ msgstr "Lähdehakemistoa ei ole olemassa: %s"
 msgid "Could not read file: %s"
 msgstr "Tiedostoa %s ei voitu lukea"
 
-#: common/git/git_clone_handler.cpp:50
+#: common/git/git_clone_handler.cpp:58
 #, c-format
 msgid "Could not create directory '%s'"
 msgstr "Hakemistoa '%s' ei voitu luoda"
 
-#: common/git/git_clone_handler.cpp:71
+#: common/git/git_clone_handler.cpp:80
 #, c-format
 msgid "Could not clone repository '%s'"
 msgstr "Ei voitu kloonata arkistoa '%s'"
 
-#: common/git/git_pull_handler.cpp:50
+#: common/git/git_pull_handler.cpp:63
 #, c-format
 msgid "Could not lookup remote '%s'"
 msgstr "Ei voitu etsiä etävarastoa '%s'"
 
-#: common/git/git_pull_handler.cpp:67
+#: common/git/git_pull_handler.cpp:81
 #, c-format
 msgid "Could not connect to remote '%s': %s"
 msgstr "Ei voitu muodostaa yhteyttä etätietovarastoon '%s':%s"
 
-#: common/git/git_pull_handler.cpp:79
+#: common/git/git_pull_handler.cpp:92
 #, c-format
 msgid "Could not fetch data from remote '%s': %s"
 msgstr "Tietoja ei voitu noutaa dataa etävarastosta '%s':%s"
 
-#: common/git/git_pull_handler.cpp:101
+#: common/git/git_pull_handler.cpp:120
 msgid "Could not read 'FETCH_HEAD'"
 msgstr "Ei voitu lukea 'FETCH_HEAD'"
 
-#: common/git/git_pull_handler.cpp:109
+#: common/git/git_pull_handler.cpp:128
 msgid "Could not lookup commit"
 msgstr "Commit:tia ei voitu etsiä"
 
-#: common/git/git_pull_handler.cpp:119
+#: common/git/git_pull_handler.cpp:140
 msgid "Could not analyze merge"
 msgstr "Yhdistämistä ei voitu analysoida"
 
-#: common/git/git_pull_handler.cpp:129
+#: common/git/git_pull_handler.cpp:146
 msgid "Invalid HEAD.  Cannot merge."
 msgstr "Virheellinen HEAD. Ei voi yhdistää."
 
-#: common/git/git_pull_handler.cpp:198 common/git/git_push_handler.cpp:79
+#: common/git/git_pull_handler.cpp:211 common/git/git_push_handler.cpp:91
 msgid "Could not get repository head"
 msgstr "Arkiston päätä ei voitu hakea"
 
-#: common/git/git_pull_handler.cpp:212
+#: common/git/git_pull_handler.cpp:223
 #, c-format
 msgid "Could not get reference OID for reference '%s'"
 msgstr "Viite-OID:tä ei voitu hakea viitteelle '%s'"
 
-#: common/git/git_pull_handler.cpp:223 common/git/kicad_git_errors.cpp:55
+#: common/git/git_pull_handler.cpp:234 common/git/kicad_git_errors.cpp:55
 msgid "Failed to perform checkout operation."
 msgstr "Tarkistustoiminnon suorittaminen epäonnistui."
 
-#: common/git/git_pull_handler.cpp:241
+#: common/git/git_pull_handler.cpp:253
 msgid "Could not lookup commit '{}'"
 msgstr "Ei voitu etsiä commit '{}'"
 
-#: common/git/git_pull_handler.cpp:282
+#: common/git/git_pull_handler.cpp:290
 msgid "Could not merge commits"
 msgstr "Muutoksia ei voitu yhdistää"
 
-#: common/git/git_pull_handler.cpp:291
+#: common/git/git_pull_handler.cpp:299
 msgid "Could not get repository index"
 msgstr "Arkistoindeksiä ei voitu hakea"
 
-#: common/git/git_pull_handler.cpp:300
+#: common/git/git_pull_handler.cpp:310
 msgid "Could not get conflict iterator"
 msgstr "Ristiriitaiteraattoria ei voitu saada"
 
-#: common/git/git_pull_handler.cpp:320 common/git/git_pull_handler.cpp:321
+#: common/git/git_pull_handler.cpp:332 common/git/git_pull_handler.cpp:333
 msgid "Changed"
 msgstr "Muutettu"
 
-#: common/git/git_pull_handler.cpp:335 common/git/git_pull_handler.cpp:336
+#: common/git/git_pull_handler.cpp:347 common/git/git_pull_handler.cpp:348
 msgid "Added"
 msgstr "Lisätty"
 
-#: common/git/git_push_handler.cpp:46
+#: common/git/git_push_handler.cpp:56
 msgid "Could not lookup remote"
 msgstr "Etävaraston haku ei onnistunut"
 
-#: common/git/git_push_handler.cpp:64
+#: common/git/git_push_handler.cpp:76
 #, c-format
 msgid "Could not connect to remote: %s"
 msgstr "Ei voitu muodostaa yhteyttä etävarastoon: %s"
 
-#: common/git/git_push_handler.cpp:92
+#: common/git/git_push_handler.cpp:104
 #, c-format
 msgid "Could not push to remote: %s"
 msgstr "Ei voitu viedä etävarastoon: %s"
 
-#: common/git/kicad_git_common.cpp:649
+#: common/git/kicad_git_common.cpp:829
 #, c-format
 msgid "Received %u of %u objects"
 msgstr "Vastaanotettu %u / %u objektia"
 
-#: common/git/kicad_git_common.cpp:678
+#: common/git/kicad_git_common.cpp:858
 #, c-format
 msgid "* [updated] %s..%s %s"
 msgstr "* [päivitetty] %s..%s %s"
 
-#: common/git/kicad_git_common.cpp:682
+#: common/git/kicad_git_common.cpp:862
 #, c-format
 msgid "* [new] %s %s"
 msgstr "* [uusi] %s %s"
 
-#: common/git/kicad_git_common.cpp:702
+#: common/git/kicad_git_common.cpp:882
 #, c-format
 msgid "Writing objects: %lld%% (%u/%u), %zu bytes"
 msgstr "Kirjoitetaan objektit: %lld%% (%u/%u), %zu tavua"
 
-#: common/git/kicad_git_common.cpp:717
+#: common/git/kicad_git_common.cpp:897
 #, c-format
 msgid "* [rejected] %s (%s)"
 msgstr "* [hylätty] %s (%s)"
 
-#: common/git/kicad_git_common.cpp:722
+#: common/git/kicad_git_common.cpp:902
 #, c-format
 msgid "[updated] %s"
 msgstr "[päivitetty] %s"
@@ -7152,7 +7152,7 @@ msgstr "Liitä leikepöydän solut matriisiin nykyisessä solussa"
 #: common/grid_tricks.cpp:368 common/tool/actions.cpp:291
 #: common/widgets/listbox_tricks.cpp:54 eeschema/tools/sch_edit_tool.cpp:1720
 #: eeschema/tools/symbol_editor_edit_tool.cpp:478
-#: kicad/dialogs/panel_jobset.cpp:394 kicad/project_tree_pane.cpp:985
+#: kicad/dialogs/panel_jobset.cpp:394 kicad/project_tree_pane.cpp:986
 #: pcbnew/dialogs/panel_setup_rules.cpp:133 pcbnew/tools/edit_tool.cpp:2668
 msgid "Delete"
 msgstr "Poista"
@@ -10420,7 +10420,7 @@ msgstr "Projektitiedosto: '%s'"
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:94
 #: eeschema/dialogs/dialog_bom.cpp:403
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
-#: kicad/project_tree_pane.cpp:1066
+#: kicad/project_tree_pane.cpp:1067
 msgid "No text editor selected in KiCad.  Please choose one."
 msgstr "KiCadissa ei ole valittu tekstieditoria. Valitse yksi."
 
@@ -14131,7 +14131,7 @@ msgstr ""
 "'%s'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:513
-#: kicad/tools/kicad_manager_control.cpp:695
+#: kicad/tools/kicad_manager_control.cpp:701
 #, c-format
 msgid "'%s' already exists."
 msgstr "'%s' on jo olemassa."
@@ -17149,7 +17149,7 @@ msgstr "Väylämerkintä tarvitaan"
 msgid "ERC report (%s, Encoding UTF8)\n"
 msgstr "ERC-raportti (%s, koodaus UTF8)\n"
 
-#: eeschema/erc/erc_report.cpp:64
+#: eeschema/erc/erc_report.cpp:80
 #, c-format
 msgid ""
 "\n"
@@ -17158,7 +17158,7 @@ msgstr ""
 "\n"
 "***** Lehti %s\n"
 
-#: eeschema/erc/erc_report.cpp:88
+#: eeschema/erc/erc_report.cpp:99
 #, c-format
 msgid ""
 "\n"
@@ -17398,8 +17398,8 @@ msgid "File write operation failed."
 msgstr "Tiedoston kirjoittaminen ei onnistunut."
 
 #: eeschema/files-io.cpp:932 eeschema/files-io.cpp:1000
-#: kicad/import_project.cpp:93 kicad/tools/kicad_manager_control.cpp:111
-#: kicad/tools/kicad_manager_control.cpp:313
+#: kicad/import_project.cpp:93 kicad/tools/kicad_manager_control.cpp:115
+#: kicad/tools/kicad_manager_control.cpp:319
 #, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
@@ -27672,294 +27672,299 @@ msgstr "Ei voida siirtää '%s' kierrätyskoriin."
 msgid "Can not move '%s' to trash."
 msgstr "Ei voida siirtää '%s' roskakoriin."
 
-#: kicad/project_tree_pane.cpp:306
+#: kicad/project_tree_pane.cpp:308
 msgid "Directory name:"
 msgstr "Hakemiston nimi:"
 
-#: kicad/project_tree_pane.cpp:306
+#: kicad/project_tree_pane.cpp:308
 msgid "Create New Directory"
 msgstr "Luo uusi hakemisto"
 
-#: kicad/project_tree_pane.cpp:895
+#: kicad/project_tree_pane.cpp:761
+#, fuzzy, c-format
+msgid "Failed to get status list: %s"
+msgstr "Muutoksien saaminen epäonnistui: %s"
+
+#: kicad/project_tree_pane.cpp:896
 msgid "Switch to this Project"
 msgstr "Vaihda tähän projektiin"
 
-#: kicad/project_tree_pane.cpp:896
+#: kicad/project_tree_pane.cpp:897
 msgid "Close all editors, and switch to the selected project"
 msgstr "Sulje kaikki muokkausohjelmat ja siirry valittuun projektiin"
 
-#: kicad/project_tree_pane.cpp:903
+#: kicad/project_tree_pane.cpp:904
 msgid "New Directory..."
 msgstr "Uusi hakemisto ..."
 
-#: kicad/project_tree_pane.cpp:904
+#: kicad/project_tree_pane.cpp:905
 msgid "Create a New Directory"
 msgstr "Luo uusi hakemisto"
 
-#: kicad/project_tree_pane.cpp:912 kicad/project_tree_pane.cpp:922
+#: kicad/project_tree_pane.cpp:913 kicad/project_tree_pane.cpp:923
 msgid "Reveal in Finder"
 msgstr "Paljasta Finderissa"
 
-#: kicad/project_tree_pane.cpp:913
+#: kicad/project_tree_pane.cpp:914
 msgid "Reveals the directory in a Finder window"
 msgstr "Paljastaa hakemiston Hakuikkunassa"
 
-#: kicad/project_tree_pane.cpp:915
+#: kicad/project_tree_pane.cpp:916
 msgid "Open Directory in File Explorer"
 msgstr "Avaa hakemisto Resurssienhallinnassa"
 
-#: kicad/project_tree_pane.cpp:916 pcbnew/tools/pcb_actions.cpp:986
+#: kicad/project_tree_pane.cpp:917 pcbnew/tools/pcb_actions.cpp:986
 msgid "Opens the directory in the default system file manager"
 msgstr "Avaa hakemiston järjestelmän oletustiedostonhallinnassa"
 
-#: kicad/project_tree_pane.cpp:923
+#: kicad/project_tree_pane.cpp:924
 msgid "Reveals the directories in a Finder window"
 msgstr "Paljastaa hakemistot Hakuikkunassa"
 
-#: kicad/project_tree_pane.cpp:925
+#: kicad/project_tree_pane.cpp:926
 msgid "Open Directories in File Explorer"
 msgstr "Avaa hakemistot Resurssinhallinnassa"
 
-#: kicad/project_tree_pane.cpp:926
+#: kicad/project_tree_pane.cpp:927
 msgid "Opens the directories in the default system file manager"
 msgstr "Avaa hakemistot järjestelmän oletustiedostonhallinnassa"
 
-#: kicad/project_tree_pane.cpp:937
+#: kicad/project_tree_pane.cpp:938
 msgid "Open the file in a Text Editor"
 msgstr "Avaa tiedosto Tekstieditorissa"
 
-#: kicad/project_tree_pane.cpp:939
+#: kicad/project_tree_pane.cpp:940
 msgid "Open files in a Text Editor"
 msgstr "Avaa tiedostot Tekstieditorissa"
 
-#: kicad/project_tree_pane.cpp:941
+#: kicad/project_tree_pane.cpp:942
 msgid "Edit in a Text Editor"
 msgstr "Muokkaa Tekstieditorissa"
 
-#: kicad/project_tree_pane.cpp:947
+#: kicad/project_tree_pane.cpp:948
 msgid "Run Jobs"
 msgstr "Suorita työt"
 
-#: kicad/project_tree_pane.cpp:955
+#: kicad/project_tree_pane.cpp:956
 msgid "Rename File..."
 msgstr "Nimeä tiedosto uudelleen..."
 
-#: kicad/project_tree_pane.cpp:956
+#: kicad/project_tree_pane.cpp:957
 msgid "Rename file"
 msgstr "Nimeä tiedosto uudelleen"
 
-#: kicad/project_tree_pane.cpp:960
+#: kicad/project_tree_pane.cpp:961
 msgid "Rename Files..."
 msgstr "Nimeä tiedostot uudelleen ..."
 
-#: kicad/project_tree_pane.cpp:961
+#: kicad/project_tree_pane.cpp:962
 msgid "Rename files"
 msgstr "Uudelleennimeä tiedostot"
 
-#: kicad/project_tree_pane.cpp:971
+#: kicad/project_tree_pane.cpp:972
 msgid "Delete the file and its content"
 msgstr "Poista tiedosto ja sen sisältö"
 
-#: kicad/project_tree_pane.cpp:973
+#: kicad/project_tree_pane.cpp:974
 msgid "Delete the files and their contents"
 msgstr "Poista tiedostot ja niiden sisältö"
 
-#: kicad/project_tree_pane.cpp:988
+#: kicad/project_tree_pane.cpp:989
 msgid "Move to Trash"
 msgstr "Siirrä Roskikseen"
 
-#: kicad/project_tree_pane.cpp:1000
+#: kicad/project_tree_pane.cpp:1001
 msgid "Add Project to Version Control..."
 msgstr "Lisää projekti versionhallintaan..."
 
-#: kicad/project_tree_pane.cpp:1001
+#: kicad/project_tree_pane.cpp:1002
 msgid "Initialize a new repository"
 msgstr "Alusta uusi arkisto"
 
-#: kicad/project_tree_pane.cpp:1005
+#: kicad/project_tree_pane.cpp:1006
 msgid "Commit Project..."
 msgstr "Commit_projekti..."
 
-#: kicad/project_tree_pane.cpp:1006 kicad/project_tree_pane.cpp:1020
+#: kicad/project_tree_pane.cpp:1007 kicad/project_tree_pane.cpp:1021
 msgid "Commit changes to the local repository"
 msgstr "Tee muutokset paikalliseen arkistoon"
 
-#: kicad/project_tree_pane.cpp:1009
+#: kicad/project_tree_pane.cpp:1010
 msgid "Push"
 msgstr "Työnnä"
 
-#: kicad/project_tree_pane.cpp:1010
+#: kicad/project_tree_pane.cpp:1011
 msgid "Push committed local changes to remote repository"
 msgstr "Lähetä tehdyt paikalliset muutokset etätietovarastoon"
 
-#: kicad/project_tree_pane.cpp:1013
+#: kicad/project_tree_pane.cpp:1014
 msgid "Pull"
 msgstr "Vedä"
 
-#: kicad/project_tree_pane.cpp:1014
+#: kicad/project_tree_pane.cpp:1015
 msgid "Pull changes from remote repository into local"
 msgstr "Vedä muutokset etätietovarastosta paikalliseen"
 
-#: kicad/project_tree_pane.cpp:1019
+#: kicad/project_tree_pane.cpp:1020
 msgid "Commit File..."
 msgstr "Toimita tiedosto..."
 
-#: kicad/project_tree_pane.cpp:1034
+#: kicad/project_tree_pane.cpp:1035
 msgid "Switch to branch "
 msgstr "Vaihda haaraan "
 
-#: kicad/project_tree_pane.cpp:1039
+#: kicad/project_tree_pane.cpp:1040
 msgid "Other..."
 msgstr "Muu..."
 
-#: kicad/project_tree_pane.cpp:1040
+#: kicad/project_tree_pane.cpp:1041
 msgid "Switch to a different branch"
 msgstr "Vaihda toiseen haaraan"
 
-#: kicad/project_tree_pane.cpp:1043
+#: kicad/project_tree_pane.cpp:1044
 msgid "Switch to Branch"
 msgstr "Vaihda haaraan"
 
-#: kicad/project_tree_pane.cpp:1047
+#: kicad/project_tree_pane.cpp:1048
 msgid "Remove Version Control"
 msgstr "Poista versiohallinta"
 
-#: kicad/project_tree_pane.cpp:1048
+#: kicad/project_tree_pane.cpp:1049
 msgid "Delete all version control files from the project directory."
 msgstr "Poista kaikki versionhallintatiedostot projektihakemistosta."
 
-#: kicad/project_tree_pane.cpp:1103
+#: kicad/project_tree_pane.cpp:1104
 #, c-format
 msgid "Change filename: '%s'"
 msgstr "Vaihda tiedostonimi: '%s'"
 
-#: kicad/project_tree_pane.cpp:1105
+#: kicad/project_tree_pane.cpp:1106
 msgid "Change filename"
 msgstr "Vaihda tiedostonimi"
 
-#: kicad/project_tree_pane.cpp:1437
+#: kicad/project_tree_pane.cpp:1451
 msgid "Network path: not monitoring folder changes"
 msgstr "Verkkopolku: ei valvota kansiomuutoksia"
 
-#: kicad/project_tree_pane.cpp:1443
+#: kicad/project_tree_pane.cpp:1457
 msgid "Local path: monitoring folder changes"
 msgstr "Paikallinen polku: valvotaan kansion muutoksia"
 
-#: kicad/project_tree_pane.cpp:1630
+#: kicad/project_tree_pane.cpp:1644
 #, fuzzy
 msgid "The selected directory is already a Git project."
 msgstr "Valittu hakemisto on jo git-projekti."
 
-#: kicad/project_tree_pane.cpp:1637
+#: kicad/project_tree_pane.cpp:1652
 msgid "Set default remote"
 msgstr "Aseta oletus etävarasto"
 
-#: kicad/project_tree_pane.cpp:1652
+#: kicad/project_tree_pane.cpp:1663
 #, fuzzy
 msgid "Failed to initialize Git project."
 msgstr "Git-projektin alustaminen epäonnistui."
 
-#: kicad/project_tree_pane.cpp:1712
+#: kicad/project_tree_pane.cpp:1721
 msgid "Failed to set default remote."
 msgstr "Etätietovaraston oletuksen asettaminen epäonnistui."
 
-#: kicad/project_tree_pane.cpp:1724 kicad/project_tree_pane.cpp:1758
-#: kicad/project_tree_pane.cpp:1780
+#: kicad/project_tree_pane.cpp:1733 kicad/project_tree_pane.cpp:1767
+#: kicad/project_tree_pane.cpp:1791
 msgid "Fetching Remote"
 msgstr "Noudetaan etätietovarastosta"
 
-#: kicad/project_tree_pane.cpp:1765
+#: kicad/project_tree_pane.cpp:1774
 msgid "Failed to pull project"
 msgstr "Projektin paikallinen päivittäminen epäonnistui"
 
-#: kicad/project_tree_pane.cpp:1787
+#: kicad/project_tree_pane.cpp:1798
 msgid "Failed to push project"
 msgstr "Projektin työntäminen epäonnistui"
 
-#: kicad/project_tree_pane.cpp:1864
+#: kicad/project_tree_pane.cpp:1877
 #, c-format
 msgid "Failed to lookup branch '%s': %s"
 msgstr "Haaran '%s' haku epäonnistui: %s"
 
-#: kicad/project_tree_pane.cpp:1877
+#: kicad/project_tree_pane.cpp:1890
 #, c-format
 msgid "Failed to find branch head for '%s'"
 msgstr "päähaaraa ei löytynyt kohteelle '%s'"
 
-#: kicad/project_tree_pane.cpp:1888
+#: kicad/project_tree_pane.cpp:1901
 #, c-format
 msgid "Failed to switch to branch '%s'"
 msgstr "Siirtyminen haaraan '%s' epäonnistui"
 
-#: kicad/project_tree_pane.cpp:1899
+#: kicad/project_tree_pane.cpp:1910
 #, c-format
 msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "Haaran '%s' HEAD-viitteen päivittäminen epäonnistui"
 
-#: kicad/project_tree_pane.cpp:1918
+#: kicad/project_tree_pane.cpp:1923
 #, fuzzy
 msgid "Are you sure you want to remove Git tracking from this project?"
 msgstr "Haluatko varmasti poistaa git-seurannan tästä projektista?"
 
-#: kicad/project_tree_pane.cpp:1935
+#: kicad/project_tree_pane.cpp:1940
 #, fuzzy
 msgid "Failed to remove Git directory"
 msgstr "Git-hakemiston poistaminen epäonnistui"
 
-#: kicad/project_tree_pane.cpp:2236
+#: kicad/project_tree_pane.cpp:2267
 #, fuzzy
 msgid "The selected directory is not a Git project."
 msgstr "Valittu hakemisto on jo git-projekti."
 
-#: kicad/project_tree_pane.cpp:2385
+#: kicad/project_tree_pane.cpp:2412
 msgid "Discarding commit due to empty commit message."
 msgstr "Hylätään muutos tyhjän toimitusviestin vuoksi."
 
-#: kicad/project_tree_pane.cpp:2391
+#: kicad/project_tree_pane.cpp:2418
 msgid "Discarding commit due to empty file selection."
 msgstr "Hylätään muutos tyhjän tiedoston valinnan vuoksi."
 
-#: kicad/project_tree_pane.cpp:2397
+#: kicad/project_tree_pane.cpp:2424
 #, c-format
 msgid "Failed to get repository index: %s"
 msgstr "Arkistoindeksin hakeminen epäonnistui: %s"
 
-#: kicad/project_tree_pane.cpp:2406
+#: kicad/project_tree_pane.cpp:2435
 #, c-format
 msgid "Failed to add file to index: %s"
 msgstr "Tiedoston lisääminen hakemistoon epäonnistui: %s"
 
-#: kicad/project_tree_pane.cpp:2415
+#: kicad/project_tree_pane.cpp:2443
 #, c-format
 msgid "Failed to write index: %s"
 msgstr "Indeksin kirjoittaminen epäonnistui: %s"
 
-#: kicad/project_tree_pane.cpp:2423
+#: kicad/project_tree_pane.cpp:2450
 #, c-format
 msgid "Failed to write tree: %s"
 msgstr "Hakemistopuun kirjoittaminen epäonnistui: %s"
 
-#: kicad/project_tree_pane.cpp:2433
+#: kicad/project_tree_pane.cpp:2457
 #, c-format
 msgid "Failed to lookup tree: %s"
 msgstr "Hakemistopuun haku epäonnistui: %s"
 
-#: kicad/project_tree_pane.cpp:2444
+#: kicad/project_tree_pane.cpp:2469
 #, c-format
 msgid "Failed to get HEAD reference: %s"
 msgstr "HEAD-viitteen hakeminen epäonnistui: %s"
 
-#: kicad/project_tree_pane.cpp:2452
+#: kicad/project_tree_pane.cpp:2478
 #, c-format
 msgid "Failed to get commit: %s"
 msgstr "Muutoksien saaminen epäonnistui: %s"
 
-#: kicad/project_tree_pane.cpp:2470
+#: kicad/project_tree_pane.cpp:2493
 #, c-format
 msgid "Failed to create author signature: %s"
 msgstr "Tekijän allekirjoituksen luominen epäonnistui: %s"
 
-#: kicad/project_tree_pane.cpp:2506
+#: kicad/project_tree_pane.cpp:2530
 #, c-format
 msgid "Failed to create commit: %s"
 msgstr "Ei onnistunut luoda commit: %s"
@@ -28052,11 +28057,11 @@ msgstr "Avaa Tekstieditori"
 msgid "Launch preferred text editor"
 msgstr "Käynnistä haluamasi tekstieditori"
 
-#: kicad/tools/kicad_manager_control.cpp:72
+#: kicad/tools/kicad_manager_control.cpp:76
 msgid "Create New Project"
 msgstr "Luo Uusi Projekti"
 
-#: kicad/tools/kicad_manager_control.cpp:120
+#: kicad/tools/kicad_manager_control.cpp:124
 msgid ""
 "The selected folder is not empty.  It is recommended that you create "
 "projects in their own empty folder.\n"
@@ -28068,74 +28073,74 @@ msgstr ""
 "\n"
 "Haluatko jatkaa?"
 
-#: kicad/tools/kicad_manager_control.cpp:151
+#: kicad/tools/kicad_manager_control.cpp:155
 msgid "Clone Project from Git Repository"
 msgstr "Kloonaa projekti Git-arkistosta"
 
-#: kicad/tools/kicad_manager_control.cpp:173
+#: kicad/tools/kicad_manager_control.cpp:179
 msgid "Cloning Repository"
 msgstr "Kloonausvarasto"
 
-#: kicad/tools/kicad_manager_control.cpp:185
+#: kicad/tools/kicad_manager_control.cpp:191
 msgid "No project files were found in the repository."
 msgstr "Arkistosta ei löytynyt projektitiedostoja."
 
-#: kicad/tools/kicad_manager_control.cpp:212
+#: kicad/tools/kicad_manager_control.cpp:218
 msgid "Create New Jobset"
 msgstr "Luo uusi työsarja"
 
-#: kicad/tools/kicad_manager_control.cpp:242
+#: kicad/tools/kicad_manager_control.cpp:248
 msgid "System Templates"
 msgstr "Järjestelmämallit"
 
-#: kicad/tools/kicad_manager_control.cpp:251
+#: kicad/tools/kicad_manager_control.cpp:257
 msgid "User Templates"
 msgstr "Käyttäjän Mallit"
 
-#: kicad/tools/kicad_manager_control.cpp:268
+#: kicad/tools/kicad_manager_control.cpp:274
 msgid "No project template was selected.  Cannot generate new project."
 msgstr "Projektimallia ei valittu. Uutta projektia ei voi luoda."
 
-#: kicad/tools/kicad_manager_control.cpp:276
+#: kicad/tools/kicad_manager_control.cpp:282
 msgid "New Project Folder"
 msgstr "Uusi Projektikansio"
 
-#: kicad/tools/kicad_manager_control.cpp:325
-#: kicad/tools/kicad_manager_control.cpp:711
+#: kicad/tools/kicad_manager_control.cpp:331
+#: kicad/tools/kicad_manager_control.cpp:717
 #, c-format
 msgid "Insufficient permissions to write to folder '%s'."
 msgstr "Ei riittäviä oikeuksia kansioon '%s' kirjoittamiseen."
 
-#: kicad/tools/kicad_manager_control.cpp:346
+#: kicad/tools/kicad_manager_control.cpp:352
 msgid "Overwriting files:"
 msgstr "Tiedostojen korvaaminen:"
 
-#: kicad/tools/kicad_manager_control.cpp:352
+#: kicad/tools/kicad_manager_control.cpp:358
 msgid "Similar files already exist in the destination folder."
 msgstr "Samankaltaiset tiedostot ovat jo kohdekansiossa."
 
-#: kicad/tools/kicad_manager_control.cpp:371
+#: kicad/tools/kicad_manager_control.cpp:377
 msgid "A problem occurred creating new project from template."
 msgstr "Uuden projektin luomisessa mallista tapahtui ongelma."
 
-#: kicad/tools/kicad_manager_control.cpp:394
+#: kicad/tools/kicad_manager_control.cpp:400
 msgid "Open Existing Project"
 msgstr "Avaa olemassa oleva projekti"
 
-#: kicad/tools/kicad_manager_control.cpp:429
+#: kicad/tools/kicad_manager_control.cpp:435
 msgid "Open Jobset"
 msgstr "Avaa työsarja"
 
-#: kicad/tools/kicad_manager_control.cpp:636
+#: kicad/tools/kicad_manager_control.cpp:642
 #, c-format
 msgid "Cannot copy folder '%s'."
 msgstr "Kansiota '%s' ei voi kopioida."
 
-#: kicad/tools/kicad_manager_control.cpp:682
+#: kicad/tools/kicad_manager_control.cpp:688
 msgid "Save Project To"
 msgstr "Tallenna projekti kohteeseen"
 
-#: kicad/tools/kicad_manager_control.cpp:702
+#: kicad/tools/kicad_manager_control.cpp:708
 #, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
@@ -28146,23 +28151,23 @@ msgstr ""
 "\n"
 "Varmista, että sinulla on kirjoitusoikeudet ja yritä uudelleen."
 
-#: kicad/tools/kicad_manager_control.cpp:713
+#: kicad/tools/kicad_manager_control.cpp:719
 msgid "Error!"
 msgstr "Virhe!"
 
-#: kicad/tools/kicad_manager_control.cpp:769
+#: kicad/tools/kicad_manager_control.cpp:775
 msgid "Create (or open) a project to edit a schematic."
 msgstr "Luo uusi (tai avaa) projekti muokataksesi kytkentäkaaviota."
 
-#: kicad/tools/kicad_manager_control.cpp:775
+#: kicad/tools/kicad_manager_control.cpp:781
 msgid "Create (or open) a project to edit a pcb."
 msgstr "Luo uusi (tai avaa) projekti muokataksesi piirilevyä."
 
-#: kicad/tools/kicad_manager_control.cpp:792
+#: kicad/tools/kicad_manager_control.cpp:798
 msgid "Application failed to load:\n"
 msgstr "Sovelluksen lataaminen epäonnistui:\n"
 
-#: kicad/tools/kicad_manager_control.cpp:798
+#: kicad/tools/kicad_manager_control.cpp:804
 msgid "Application cannot start."
 msgstr "Sovellusta ei voi käynnistää."
 

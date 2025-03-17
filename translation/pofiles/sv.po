@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-15 19:01+0300\n"
+"POT-Creation-Date: 2025-03-17 18:43+0300\n"
 "PO-Revision-Date: 2025-03-15 22:10+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
@@ -347,9 +347,9 @@ msgstr "Otillräckliga behörigheter för att spara filen '%s'."
 #: eeschema/erc/erc_item.cpp:81 eeschema/files-io.cpp:936
 #: eeschema/files-io.cpp:1004 eeschema/sch_marker.cpp:376
 #: kicad/import_proj.cpp:79 kicad/import_project.cpp:123 kicad/kicad.cpp:318
-#: kicad/tools/kicad_manager_control.cpp:269
-#: kicad/tools/kicad_manager_control.cpp:326
-#: kicad/tools/kicad_manager_control.cpp:372
+#: kicad/tools/kicad_manager_control.cpp:275
+#: kicad/tools/kicad_manager_control.cpp:332
+#: kicad/tools/kicad_manager_control.cpp:378
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:143
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:216
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:225
@@ -1896,7 +1896,7 @@ msgstr "Information"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:137
 #: eeschema/tools/symbol_editor_control.cpp:493
 #: eeschema/tools/symbol_editor_pin_tool.cpp:242 kicad/import_project.cpp:109
-#: kicad/tools/kicad_manager_control.cpp:353
+#: kicad/tools/kicad_manager_control.cpp:359
 #: pcbnew/dialogs/dialog_export_idf.cpp:138
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:355
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:409
@@ -3591,12 +3591,11 @@ msgid "Basic"
 msgstr "Grundläggande"
 
 #: common/dialogs/git/dialog_git_auth.cpp:46
-#: common/dialogs/git/dialog_git_repository_base.cpp:52
+#: common/dialogs/git/dialog_git_repository_base.cpp:58
 msgid "SSH"
 msgstr "SSH"
 
 #: common/dialogs/git/dialog_git_auth.cpp:52
-#: common/dialogs/git/dialog_git_repository_base.cpp:95
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:85
 msgid "Test"
 msgstr "Testa"
@@ -3612,7 +3611,7 @@ msgstr "OK"
 
 #: common/dialogs/git/dialog_git_auth.cpp:54
 #: common/dialogs/git/dialog_git_commit.cpp:152
-#: common/dialogs/git/dialog_git_switch.cpp:69
+#: common/dialogs/git/dialog_git_switch.cpp:73
 #: common/dialogs/panel_embedded_files.cpp:426 common/tool/actions.cpp:159
 #: eeschema/dialogs/dialog_erc.cpp:426
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1339 eeschema/sheet.cpp:784
@@ -3630,7 +3629,7 @@ msgid "Url"
 msgstr "Url-adress"
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
-#: common/dialogs/git/dialog_git_repository_base.cpp:71
+#: common/dialogs/git/dialog_git_repository_base.cpp:79
 msgid "Authentication"
 msgstr "Autentisering"
 
@@ -3691,129 +3690,130 @@ msgstr "Ö&verlämna"
 msgid "Commit message cannot be empty"
 msgstr "Meddelande för överlämning kan inte vara tomt"
 
-#: common/dialogs/git/dialog_git_repository.cpp:156
-#: common/dialogs/git/dialog_git_repository.cpp:388
-msgid "Enter the password for the SSH key"
-msgstr "Ange lösenordet för SSH-nyckeln"
-
-#: common/dialogs/git/dialog_git_repository.cpp:337
+#: common/dialogs/git/dialog_git_repository.cpp:74
+#: common/dialogs/git/dialog_git_repository.cpp:306
 msgid "Test Connection"
 msgstr "Testa anslutning"
 
-#: common/dialogs/git/dialog_git_repository.cpp:342
+#: common/dialogs/git/dialog_git_repository.cpp:165
+#: common/dialogs/git/dialog_git_repository.cpp:357
+msgid "Enter the password for the SSH key"
+msgstr "Ange lösenordet för SSH-nyckeln"
+
+#: common/dialogs/git/dialog_git_repository.cpp:311
 msgid "Connection successful"
 msgstr "Anslutning lyckades"
 
-#: common/dialogs/git/dialog_git_repository.cpp:346
+#: common/dialogs/git/dialog_git_repository.cpp:315
 #, c-format
 msgid "Could not connect to '%s' "
 msgstr "Kunde inte ansluta till '%s' "
 
-#: common/dialogs/git/dialog_git_repository.cpp:366
+#: common/dialogs/git/dialog_git_repository.cpp:335
 #, c-format
 msgid "Could not open private key '%s'"
 msgstr "Kunde inte öppna privat nyckel '%s'"
 
-#: common/dialogs/git/dialog_git_repository.cpp:379
+#: common/dialogs/git/dialog_git_repository.cpp:348
 msgid "Invalid SSH Key"
 msgstr "Ogiltig SSH-nyckel"
 
-#: common/dialogs/git/dialog_git_repository.cpp:380
+#: common/dialogs/git/dialog_git_repository.cpp:349
 msgid "The selected file is not a valid SSH private key"
 msgstr "Den valda filen är inte en giltig privat SSH-nyckel"
 
-#: common/dialogs/git/dialog_git_repository.cpp:404
+#: common/dialogs/git/dialog_git_repository.cpp:373
 #, c-format
 msgid "Could not open public key '%s'"
 msgstr "Kunde inte hitta publik nyckel '%s'"
 
-#: common/dialogs/git/dialog_git_repository.cpp:423
-#: common/dialogs/git/dialog_git_repository.cpp:430
+#: common/dialogs/git/dialog_git_repository.cpp:392
+#: common/dialogs/git/dialog_git_repository.cpp:399
 msgid "Missing information"
 msgstr "Saknad information"
 
-#: common/dialogs/git/dialog_git_repository.cpp:424
+#: common/dialogs/git/dialog_git_repository.cpp:393
 msgid "Please enter a name for the repository"
 msgstr "Vänligen ange ett namn för Git-förvaret"
 
-#: common/dialogs/git/dialog_git_repository.cpp:431
+#: common/dialogs/git/dialog_git_repository.cpp:400
 msgid "Please enter a URL for the repository"
 msgstr "Vänligen ange en URL-adress till förvaret"
 
-#: common/dialogs/git/dialog_git_repository.cpp:453
-#: common/dialogs/git/dialog_git_repository_base.cpp:108
+#: common/dialogs/git/dialog_git_repository.cpp:424
+#: common/dialogs/git/dialog_git_repository_base.cpp:106
 msgid "SSH key password:"
 msgstr "Lösenord för SSH-nyckel:"
 
-#: common/dialogs/git/dialog_git_repository.cpp:459
+#: common/dialogs/git/dialog_git_repository.cpp:432
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
 msgid "Password:"
 msgstr "Lösenord:"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:38
+#: common/dialogs/git/dialog_git_repository_base.cpp:42
 msgid "Location:"
 msgstr "Plats:"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:45
+#: common/dialogs/git/dialog_git_repository_base.cpp:49
 msgid "Connection type:"
 msgstr "Anslutningstyp:"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:52
+#: common/dialogs/git/dialog_git_repository_base.cpp:58
 msgid "HTTPS"
 msgstr "HTTPS"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:52
+#: common/dialogs/git/dialog_git_repository_base.cpp:58
 #: eeschema/widgets/search_handlers.cpp:452
 msgid "Local"
 msgstr "Lokal"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:83
+#: common/dialogs/git/dialog_git_repository_base.cpp:91
 msgid "SSH private key:     "
 msgstr "Privat SSH-nyckel:     "
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:90
+#: common/dialogs/git/dialog_git_repository_base.cpp:94
 msgid "Select SSH private key file"
 msgstr "Välj en fil med privat SSH-nyckel"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:90
+#: common/dialogs/git/dialog_git_repository_base.cpp:94
 msgid "*"
 msgstr "*"
 
-#: common/dialogs/git/dialog_git_repository_base.cpp:101
+#: common/dialogs/git/dialog_git_repository_base.cpp:99
 msgid "User name:"
 msgstr "Användarnamn:"
 
-#: common/dialogs/git/dialog_git_repository_base.h:77
+#: common/dialogs/git/dialog_git_repository_base.h:76
 msgid "Git Repository"
 msgstr "Git-förvar"
 
-#: common/dialogs/git/dialog_git_switch.cpp:40
+#: common/dialogs/git/dialog_git_switch.cpp:44
 msgid "Git Branch Switch"
 msgstr "Byte av Git-gren"
 
-#: common/dialogs/git/dialog_git_switch.cpp:48
+#: common/dialogs/git/dialog_git_switch.cpp:52
 msgid "Select or enter a branch name:"
 msgstr "Välj eller ange ett grennamn:"
 
-#: common/dialogs/git/dialog_git_switch.cpp:54
+#: common/dialogs/git/dialog_git_switch.cpp:58
 msgid "Branch"
 msgstr "Gren"
 
-#: common/dialogs/git/dialog_git_switch.cpp:55
+#: common/dialogs/git/dialog_git_switch.cpp:59
 msgid "Last Commit"
 msgstr "Senaste överlämning"
 
-#: common/dialogs/git/dialog_git_switch.cpp:56
+#: common/dialogs/git/dialog_git_switch.cpp:60
 msgid "Last Updated"
 msgstr "Senast uppdaterad"
 
-#: common/dialogs/git/dialog_git_switch.cpp:66
-#: common/dialogs/git/dialog_git_switch.cpp:147
-#: common/dialogs/git/dialog_git_switch.cpp:214
+#: common/dialogs/git/dialog_git_switch.cpp:70
+#: common/dialogs/git/dialog_git_switch.cpp:151
+#: common/dialogs/git/dialog_git_switch.cpp:218
 msgid "Switch"
 msgstr "Strömbrytare"
 
-#: common/dialogs/git/dialog_git_switch.cpp:219
+#: common/dialogs/git/dialog_git_switch.cpp:223
 #: eeschema/design_block_utils.cpp:90 eeschema/sch_base_frame.cpp:306
 #: pcbnew/footprint_libraries_utils.cpp:430
 msgid "Add"
@@ -4720,7 +4720,7 @@ msgstr "Filen '%s' finns redan."
 #: eeschema/symbol_editor/symbol_editor.cpp:1183
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:138
 #: eeschema/tools/symbol_editor_control.cpp:495
-#: kicad/tools/kicad_manager_control.cpp:356
+#: kicad/tools/kicad_manager_control.cpp:362
 #: pcbnew/dialogs/dialog_export_idf.cpp:139
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:357
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:411
@@ -5820,7 +5820,7 @@ msgstr "Mus och Pekplatta"
 msgid "Hotkeys"
 msgstr "Snabbtangenter"
 
-#: common/eda_base_frame.cpp:1125 kicad/project_tree_pane.cpp:1052
+#: common/eda_base_frame.cpp:1125 kicad/project_tree_pane.cpp:1053
 msgid "Version Control"
 msgstr "Versionshantering"
 
@@ -6889,124 +6889,124 @@ msgstr "Källkatalog finns inte: %s"
 msgid "Could not read file: %s"
 msgstr "Kunde inte läsa fil: %s"
 
-#: common/git/git_clone_handler.cpp:50
+#: common/git/git_clone_handler.cpp:58
 #, c-format
 msgid "Could not create directory '%s'"
 msgstr "Det gick inte att skapa katalogen '%s'"
 
-#: common/git/git_clone_handler.cpp:71
+#: common/git/git_clone_handler.cpp:80
 #, c-format
 msgid "Could not clone repository '%s'"
 msgstr "Det gick inte att klona förvaret '%s'"
 
-#: common/git/git_pull_handler.cpp:50
+#: common/git/git_pull_handler.cpp:63
 #, c-format
 msgid "Could not lookup remote '%s'"
 msgstr "Lyckades inte slå upp fjärrförvar '%s'"
 
-#: common/git/git_pull_handler.cpp:67
+#: common/git/git_pull_handler.cpp:81
 #, c-format
 msgid "Could not connect to remote '%s': %s"
 msgstr "Kunde inte ansluta till fjärrförvar '%s': %s"
 
-#: common/git/git_pull_handler.cpp:79
+#: common/git/git_pull_handler.cpp:92
 #, c-format
 msgid "Could not fetch data from remote '%s': %s"
 msgstr "Kunde inte hämta data från fjärrförvar '%s': %s"
 
-#: common/git/git_pull_handler.cpp:101
+#: common/git/git_pull_handler.cpp:120
 msgid "Could not read 'FETCH_HEAD'"
 msgstr "Kunde inte läsa 'FETCH_HEAD'"
 
-#: common/git/git_pull_handler.cpp:109
+#: common/git/git_pull_handler.cpp:128
 msgid "Could not lookup commit"
 msgstr "Det gick inte att slå upp överlämning"
 
-#: common/git/git_pull_handler.cpp:119
+#: common/git/git_pull_handler.cpp:140
 msgid "Could not analyze merge"
 msgstr "Kunde inte analysera sammanslagning"
 
-#: common/git/git_pull_handler.cpp:129
+#: common/git/git_pull_handler.cpp:146
 msgid "Invalid HEAD.  Cannot merge."
 msgstr "Ogiltig HEAS.  Kan inte slå samman."
 
-#: common/git/git_pull_handler.cpp:198 common/git/git_push_handler.cpp:79
+#: common/git/git_pull_handler.cpp:211 common/git/git_push_handler.cpp:91
 msgid "Could not get repository head"
 msgstr "Kunde inte hämta kodförrådets head"
 
-#: common/git/git_pull_handler.cpp:212
+#: common/git/git_pull_handler.cpp:223
 #, c-format
 msgid "Could not get reference OID for reference '%s'"
 msgstr "Kunde inte hämta referens-OID för referens '%s'"
 
-#: common/git/git_pull_handler.cpp:223 common/git/kicad_git_errors.cpp:55
+#: common/git/git_pull_handler.cpp:234 common/git/kicad_git_errors.cpp:55
 msgid "Failed to perform checkout operation."
 msgstr "Lyckades inte genomföra utckeckning."
 
-#: common/git/git_pull_handler.cpp:241
+#: common/git/git_pull_handler.cpp:253
 msgid "Could not lookup commit '{}'"
 msgstr "Det gick inte att slå upp överlämning '{}'"
 
-#: common/git/git_pull_handler.cpp:282
+#: common/git/git_pull_handler.cpp:290
 msgid "Could not merge commits"
 msgstr "Kunde inte slå samman överlämningar"
 
-#: common/git/git_pull_handler.cpp:291
+#: common/git/git_pull_handler.cpp:299
 msgid "Could not get repository index"
 msgstr "Kunde inte hämta förvarets index"
 
-#: common/git/git_pull_handler.cpp:300
+#: common/git/git_pull_handler.cpp:310
 msgid "Could not get conflict iterator"
 msgstr "Kunde inte hämta konfliktiterator"
 
-#: common/git/git_pull_handler.cpp:320 common/git/git_pull_handler.cpp:321
+#: common/git/git_pull_handler.cpp:332 common/git/git_pull_handler.cpp:333
 msgid "Changed"
 msgstr "Ändrad"
 
-#: common/git/git_pull_handler.cpp:335 common/git/git_pull_handler.cpp:336
+#: common/git/git_pull_handler.cpp:347 common/git/git_pull_handler.cpp:348
 msgid "Added"
 msgstr "Tillagd"
 
-#: common/git/git_push_handler.cpp:46
+#: common/git/git_push_handler.cpp:56
 msgid "Could not lookup remote"
 msgstr "Kunde inte slå upp fjärrförvar"
 
-#: common/git/git_push_handler.cpp:64
+#: common/git/git_push_handler.cpp:76
 #, c-format
 msgid "Could not connect to remote: %s"
 msgstr "Kunde inte ansluta till fjärrförvar: %s"
 
-#: common/git/git_push_handler.cpp:92
+#: common/git/git_push_handler.cpp:104
 #, c-format
 msgid "Could not push to remote: %s"
 msgstr "Kunde inte skicka till fjärrförvar: %s"
 
-#: common/git/kicad_git_common.cpp:649
+#: common/git/kicad_git_common.cpp:829
 #, c-format
 msgid "Received %u of %u objects"
 msgstr "Tog emot %u av %u objekt"
 
-#: common/git/kicad_git_common.cpp:678
+#: common/git/kicad_git_common.cpp:858
 #, c-format
 msgid "* [updated] %s..%s %s"
 msgstr "* [updaterad] %s..%s %s"
 
-#: common/git/kicad_git_common.cpp:682
+#: common/git/kicad_git_common.cpp:862
 #, c-format
 msgid "* [new] %s %s"
 msgstr "* [ny] %s %s"
 
-#: common/git/kicad_git_common.cpp:702
+#: common/git/kicad_git_common.cpp:882
 #, c-format
 msgid "Writing objects: %lld%% (%u/%u), %zu bytes"
 msgstr "Skriver objekt: %lld%% (%u/%u), %zu bytes"
 
-#: common/git/kicad_git_common.cpp:717
+#: common/git/kicad_git_common.cpp:897
 #, c-format
 msgid "* [rejected] %s (%s)"
 msgstr "* [avvisad] %s (%s)"
 
-#: common/git/kicad_git_common.cpp:722
+#: common/git/kicad_git_common.cpp:902
 #, c-format
 msgid "[updated] %s"
 msgstr "[updaterad] %s"
@@ -7134,7 +7134,7 @@ msgstr "Klistra in celler i urklipp vid aktuell cell i matris"
 #: common/grid_tricks.cpp:368 common/tool/actions.cpp:291
 #: common/widgets/listbox_tricks.cpp:54 eeschema/tools/sch_edit_tool.cpp:1720
 #: eeschema/tools/symbol_editor_edit_tool.cpp:478
-#: kicad/dialogs/panel_jobset.cpp:394 kicad/project_tree_pane.cpp:985
+#: kicad/dialogs/panel_jobset.cpp:394 kicad/project_tree_pane.cpp:986
 #: pcbnew/dialogs/panel_setup_rules.cpp:133 pcbnew/tools/edit_tool.cpp:2668
 msgid "Delete"
 msgstr "Radera"
@@ -10408,7 +10408,7 @@ msgstr "Projektfil: '%s'"
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:94
 #: eeschema/dialogs/dialog_bom.cpp:403
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
-#: kicad/project_tree_pane.cpp:1066
+#: kicad/project_tree_pane.cpp:1067
 msgid "No text editor selected in KiCad.  Please choose one."
 msgstr "Ingen textredigerare vald i KiCad. Vänligen välj en."
 
@@ -14112,7 +14112,7 @@ msgstr ""
 "'%s'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:513
-#: kicad/tools/kicad_manager_control.cpp:695
+#: kicad/tools/kicad_manager_control.cpp:701
 #, c-format
 msgid "'%s' already exists."
 msgstr "'%s' finns redan."
@@ -17139,7 +17139,7 @@ msgstr "Bussanslutning behövs"
 msgid "ERC report (%s, Encoding UTF8)\n"
 msgstr "ERC-rapport (%s, Kodning UTF8)\n"
 
-#: eeschema/erc/erc_report.cpp:64
+#: eeschema/erc/erc_report.cpp:80
 #, c-format
 msgid ""
 "\n"
@@ -17148,7 +17148,7 @@ msgstr ""
 "\n"
 "***** Ark %s\n"
 
-#: eeschema/erc/erc_report.cpp:88
+#: eeschema/erc/erc_report.cpp:99
 #, c-format
 msgid ""
 "\n"
@@ -17387,8 +17387,8 @@ msgid "File write operation failed."
 msgstr "Filskrivningen misslyckades."
 
 #: eeschema/files-io.cpp:932 eeschema/files-io.cpp:1000
-#: kicad/import_project.cpp:93 kicad/tools/kicad_manager_control.cpp:111
-#: kicad/tools/kicad_manager_control.cpp:313
+#: kicad/import_project.cpp:93 kicad/tools/kicad_manager_control.cpp:115
+#: kicad/tools/kicad_manager_control.cpp:319
 #, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
@@ -27673,289 +27673,294 @@ msgstr "Kan inte flytta '%s' till papperskorgen."
 msgid "Can not move '%s' to trash."
 msgstr "Kan inte flytta '%s' till papperskorgen."
 
-#: kicad/project_tree_pane.cpp:306
+#: kicad/project_tree_pane.cpp:308
 msgid "Directory name:"
 msgstr "Katalognamn:"
 
-#: kicad/project_tree_pane.cpp:306
+#: kicad/project_tree_pane.cpp:308
 msgid "Create New Directory"
 msgstr "Skapa ny mapp"
 
-#: kicad/project_tree_pane.cpp:895
+#: kicad/project_tree_pane.cpp:761
+#, fuzzy, c-format
+msgid "Failed to get status list: %s"
+msgstr "Lyckades inte hämta överlämning: %s"
+
+#: kicad/project_tree_pane.cpp:896
 msgid "Switch to this Project"
 msgstr "Byt till detta projekt"
 
-#: kicad/project_tree_pane.cpp:896
+#: kicad/project_tree_pane.cpp:897
 msgid "Close all editors, and switch to the selected project"
 msgstr "Stäng alla redigerare och växla till det valda projektet"
 
-#: kicad/project_tree_pane.cpp:903
+#: kicad/project_tree_pane.cpp:904
 msgid "New Directory..."
 msgstr "Ny katalog ..."
 
-#: kicad/project_tree_pane.cpp:904
+#: kicad/project_tree_pane.cpp:905
 msgid "Create a New Directory"
 msgstr "Skapa en ny mapp"
 
-#: kicad/project_tree_pane.cpp:912 kicad/project_tree_pane.cpp:922
+#: kicad/project_tree_pane.cpp:913 kicad/project_tree_pane.cpp:923
 msgid "Reveal in Finder"
 msgstr "Avslöja i Finder"
 
-#: kicad/project_tree_pane.cpp:913
+#: kicad/project_tree_pane.cpp:914
 msgid "Reveals the directory in a Finder window"
 msgstr "Visar katalogen i ett Finder-fönster"
 
-#: kicad/project_tree_pane.cpp:915
+#: kicad/project_tree_pane.cpp:916
 msgid "Open Directory in File Explorer"
 msgstr "Öppna katalog i File Explorer"
 
-#: kicad/project_tree_pane.cpp:916 pcbnew/tools/pcb_actions.cpp:986
+#: kicad/project_tree_pane.cpp:917 pcbnew/tools/pcb_actions.cpp:986
 msgid "Opens the directory in the default system file manager"
 msgstr "Öppnar katalogen i standardsystemfilhanteraren"
 
-#: kicad/project_tree_pane.cpp:923
+#: kicad/project_tree_pane.cpp:924
 msgid "Reveals the directories in a Finder window"
 msgstr "Avslöjar katalogerna i ett Finder-fönster"
 
-#: kicad/project_tree_pane.cpp:925
+#: kicad/project_tree_pane.cpp:926
 msgid "Open Directories in File Explorer"
 msgstr "Öppna kataloger i File Explorer"
 
-#: kicad/project_tree_pane.cpp:926
+#: kicad/project_tree_pane.cpp:927
 msgid "Opens the directories in the default system file manager"
 msgstr "Öppnar katalogerna i standardsystemfilhanteraren"
 
-#: kicad/project_tree_pane.cpp:937
+#: kicad/project_tree_pane.cpp:938
 msgid "Open the file in a Text Editor"
 msgstr "Öppna filen i en textredigerare"
 
-#: kicad/project_tree_pane.cpp:939
+#: kicad/project_tree_pane.cpp:940
 msgid "Open files in a Text Editor"
 msgstr "Öppna filer i en textredigerare"
 
-#: kicad/project_tree_pane.cpp:941
+#: kicad/project_tree_pane.cpp:942
 msgid "Edit in a Text Editor"
 msgstr "Redigera i en textredigerare"
 
-#: kicad/project_tree_pane.cpp:947
+#: kicad/project_tree_pane.cpp:948
 msgid "Run Jobs"
 msgstr "Utför åtgärder"
 
-#: kicad/project_tree_pane.cpp:955
+#: kicad/project_tree_pane.cpp:956
 msgid "Rename File..."
 msgstr "Döp om fil..."
 
-#: kicad/project_tree_pane.cpp:956
+#: kicad/project_tree_pane.cpp:957
 msgid "Rename file"
 msgstr "Döp om fil"
 
-#: kicad/project_tree_pane.cpp:960
+#: kicad/project_tree_pane.cpp:961
 msgid "Rename Files..."
 msgstr "Byt namn på filer ..."
 
-#: kicad/project_tree_pane.cpp:961
+#: kicad/project_tree_pane.cpp:962
 msgid "Rename files"
 msgstr "Byt namn på fil"
 
-#: kicad/project_tree_pane.cpp:971
+#: kicad/project_tree_pane.cpp:972
 msgid "Delete the file and its content"
 msgstr "Ta bort filen och dess innehåll"
 
-#: kicad/project_tree_pane.cpp:973
+#: kicad/project_tree_pane.cpp:974
 msgid "Delete the files and their contents"
 msgstr "Ta bort filerna och deras innehåll"
 
-#: kicad/project_tree_pane.cpp:988
+#: kicad/project_tree_pane.cpp:989
 msgid "Move to Trash"
 msgstr "Flytta till papperskorgen"
 
-#: kicad/project_tree_pane.cpp:1000
+#: kicad/project_tree_pane.cpp:1001
 msgid "Add Project to Version Control..."
 msgstr "Lägg till projekt till versionshantering..."
 
-#: kicad/project_tree_pane.cpp:1001
+#: kicad/project_tree_pane.cpp:1002
 msgid "Initialize a new repository"
 msgstr "Initialisera nytt förvar"
 
-#: kicad/project_tree_pane.cpp:1005
+#: kicad/project_tree_pane.cpp:1006
 msgid "Commit Project..."
 msgstr "Överlämna projekt..."
 
-#: kicad/project_tree_pane.cpp:1006 kicad/project_tree_pane.cpp:1020
+#: kicad/project_tree_pane.cpp:1007 kicad/project_tree_pane.cpp:1021
 msgid "Commit changes to the local repository"
 msgstr "Överlämna ändringar till det lokala förvaret"
 
-#: kicad/project_tree_pane.cpp:1009
+#: kicad/project_tree_pane.cpp:1010
 msgid "Push"
 msgstr "Skicka"
 
-#: kicad/project_tree_pane.cpp:1010
+#: kicad/project_tree_pane.cpp:1011
 msgid "Push committed local changes to remote repository"
 msgstr "Skicka överlämnade lokala ändringar till fjärrförvar"
 
-#: kicad/project_tree_pane.cpp:1013
+#: kicad/project_tree_pane.cpp:1014
 msgid "Pull"
 msgstr "Hämta"
 
-#: kicad/project_tree_pane.cpp:1014
+#: kicad/project_tree_pane.cpp:1015
 msgid "Pull changes from remote repository into local"
 msgstr "Hämta ändringar från fjärrförvar till lokalt förvar"
 
-#: kicad/project_tree_pane.cpp:1019
+#: kicad/project_tree_pane.cpp:1020
 msgid "Commit File..."
 msgstr "Överlämna fil..."
 
-#: kicad/project_tree_pane.cpp:1034
+#: kicad/project_tree_pane.cpp:1035
 msgid "Switch to branch "
 msgstr "Byt till gren "
 
-#: kicad/project_tree_pane.cpp:1039
+#: kicad/project_tree_pane.cpp:1040
 msgid "Other..."
 msgstr "Annan..."
 
-#: kicad/project_tree_pane.cpp:1040
+#: kicad/project_tree_pane.cpp:1041
 msgid "Switch to a different branch"
 msgstr "Byt till en annan gren"
 
-#: kicad/project_tree_pane.cpp:1043
+#: kicad/project_tree_pane.cpp:1044
 msgid "Switch to Branch"
 msgstr "Byt till gren"
 
-#: kicad/project_tree_pane.cpp:1047
+#: kicad/project_tree_pane.cpp:1048
 msgid "Remove Version Control"
 msgstr "Ta bort versionshantering"
 
-#: kicad/project_tree_pane.cpp:1048
+#: kicad/project_tree_pane.cpp:1049
 msgid "Delete all version control files from the project directory."
 msgstr "Ta bort alla versionshanteringsfiler från projektkatalogen."
 
-#: kicad/project_tree_pane.cpp:1103
+#: kicad/project_tree_pane.cpp:1104
 #, c-format
 msgid "Change filename: '%s'"
 msgstr "Ändra filnamn: '%s'"
 
-#: kicad/project_tree_pane.cpp:1105
+#: kicad/project_tree_pane.cpp:1106
 msgid "Change filename"
 msgstr "Ändra filnamn"
 
-#: kicad/project_tree_pane.cpp:1437
+#: kicad/project_tree_pane.cpp:1451
 msgid "Network path: not monitoring folder changes"
 msgstr "Nätverksväg: övervakar inte mappändringar"
 
-#: kicad/project_tree_pane.cpp:1443
+#: kicad/project_tree_pane.cpp:1457
 msgid "Local path: monitoring folder changes"
 msgstr "Lokal sökväg: övervakning av mappändringar"
 
-#: kicad/project_tree_pane.cpp:1630
+#: kicad/project_tree_pane.cpp:1644
 msgid "The selected directory is already a Git project."
 msgstr "Den valda katalogen är redan ett Git-projekt."
 
-#: kicad/project_tree_pane.cpp:1637
+#: kicad/project_tree_pane.cpp:1652
 msgid "Set default remote"
 msgstr "Ställ in standardfjärrförvar"
 
-#: kicad/project_tree_pane.cpp:1652
+#: kicad/project_tree_pane.cpp:1663
 msgid "Failed to initialize Git project."
 msgstr "Lyckades inte initialisera Git-projekt."
 
-#: kicad/project_tree_pane.cpp:1712
+#: kicad/project_tree_pane.cpp:1721
 msgid "Failed to set default remote."
 msgstr "Lyckades inte ställa in standardfjärrförvar."
 
-#: kicad/project_tree_pane.cpp:1724 kicad/project_tree_pane.cpp:1758
-#: kicad/project_tree_pane.cpp:1780
+#: kicad/project_tree_pane.cpp:1733 kicad/project_tree_pane.cpp:1767
+#: kicad/project_tree_pane.cpp:1791
 msgid "Fetching Remote"
 msgstr "Hämtar fjärrförvar"
 
-#: kicad/project_tree_pane.cpp:1765
+#: kicad/project_tree_pane.cpp:1774
 msgid "Failed to pull project"
 msgstr "Lyckades inte hämta projekt"
 
-#: kicad/project_tree_pane.cpp:1787
+#: kicad/project_tree_pane.cpp:1798
 msgid "Failed to push project"
 msgstr "Lyckades inte skicka projekt"
 
-#: kicad/project_tree_pane.cpp:1864
+#: kicad/project_tree_pane.cpp:1877
 #, c-format
 msgid "Failed to lookup branch '%s': %s"
 msgstr "Det gick inte hitta gren '%s': %s"
 
-#: kicad/project_tree_pane.cpp:1877
+#: kicad/project_tree_pane.cpp:1890
 #, c-format
 msgid "Failed to find branch head for '%s'"
 msgstr "Det gick inte att hitta grenhuvud för '%s'"
 
-#: kicad/project_tree_pane.cpp:1888
+#: kicad/project_tree_pane.cpp:1901
 #, c-format
 msgid "Failed to switch to branch '%s'"
 msgstr "Lyckades inte byta till gren '%s'"
 
-#: kicad/project_tree_pane.cpp:1899
+#: kicad/project_tree_pane.cpp:1910
 #, c-format
 msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "Lyckades inte uppdatera HEAD-referens för gren '%s'"
 
-#: kicad/project_tree_pane.cpp:1918
+#: kicad/project_tree_pane.cpp:1923
 msgid "Are you sure you want to remove Git tracking from this project?"
 msgstr "Är du säker på att du vill ta bort Git-övervakning från detta projekt?"
 
-#: kicad/project_tree_pane.cpp:1935
+#: kicad/project_tree_pane.cpp:1940
 msgid "Failed to remove Git directory"
 msgstr "Kunde inte ta bort Git-katalog"
 
-#: kicad/project_tree_pane.cpp:2236
+#: kicad/project_tree_pane.cpp:2267
 msgid "The selected directory is not a Git project."
 msgstr "Den valda katalogen är inte ett Git-projekt."
 
-#: kicad/project_tree_pane.cpp:2385
+#: kicad/project_tree_pane.cpp:2412
 msgid "Discarding commit due to empty commit message."
 msgstr "Avvisar överlämning på grund av tomt överlämningsmeddelande."
 
-#: kicad/project_tree_pane.cpp:2391
+#: kicad/project_tree_pane.cpp:2418
 msgid "Discarding commit due to empty file selection."
 msgstr "Avvisar överlämning på grund av tomt filval."
 
-#: kicad/project_tree_pane.cpp:2397
+#: kicad/project_tree_pane.cpp:2424
 #, c-format
 msgid "Failed to get repository index: %s"
 msgstr "Lyckades inte hämta förvarets index: %s"
 
-#: kicad/project_tree_pane.cpp:2406
+#: kicad/project_tree_pane.cpp:2435
 #, c-format
 msgid "Failed to add file to index: %s"
 msgstr "Lyckades inte lägga till fil till index: %s"
 
-#: kicad/project_tree_pane.cpp:2415
+#: kicad/project_tree_pane.cpp:2443
 #, c-format
 msgid "Failed to write index: %s"
 msgstr "Lyckades inte skriva index: %s"
 
-#: kicad/project_tree_pane.cpp:2423
+#: kicad/project_tree_pane.cpp:2450
 #, c-format
 msgid "Failed to write tree: %s"
 msgstr "Lyckades inte skriva träd: %s"
 
-#: kicad/project_tree_pane.cpp:2433
+#: kicad/project_tree_pane.cpp:2457
 #, c-format
 msgid "Failed to lookup tree: %s"
 msgstr "Lyckades inte slå upp kodförrådsträd: %s"
 
-#: kicad/project_tree_pane.cpp:2444
+#: kicad/project_tree_pane.cpp:2469
 #, c-format
 msgid "Failed to get HEAD reference: %s"
 msgstr "Kunde inte hämta HEAD-pekare: %s"
 
-#: kicad/project_tree_pane.cpp:2452
+#: kicad/project_tree_pane.cpp:2478
 #, c-format
 msgid "Failed to get commit: %s"
 msgstr "Lyckades inte hämta överlämning: %s"
 
-#: kicad/project_tree_pane.cpp:2470
+#: kicad/project_tree_pane.cpp:2493
 #, c-format
 msgid "Failed to create author signature: %s"
 msgstr "Lyckades inte skapa upphovssignatur: %s"
 
-#: kicad/project_tree_pane.cpp:2506
+#: kicad/project_tree_pane.cpp:2530
 #, c-format
 msgid "Failed to create commit: %s"
 msgstr "Lyckades inte skapa överlämning: %s"
@@ -28050,11 +28055,11 @@ msgstr "Öppna textredigeraren"
 msgid "Launch preferred text editor"
 msgstr "Öppna textredigerare"
 
-#: kicad/tools/kicad_manager_control.cpp:72
+#: kicad/tools/kicad_manager_control.cpp:76
 msgid "Create New Project"
 msgstr "Skapa nytt projekt"
 
-#: kicad/tools/kicad_manager_control.cpp:120
+#: kicad/tools/kicad_manager_control.cpp:124
 msgid ""
 "The selected folder is not empty.  It is recommended that you create "
 "projects in their own empty folder.\n"
@@ -28066,74 +28071,74 @@ msgstr ""
 "\n"
 "Vill du fortsätta?"
 
-#: kicad/tools/kicad_manager_control.cpp:151
+#: kicad/tools/kicad_manager_control.cpp:155
 msgid "Clone Project from Git Repository"
 msgstr "Klona projekt från Git-förvar"
 
-#: kicad/tools/kicad_manager_control.cpp:173
+#: kicad/tools/kicad_manager_control.cpp:179
 msgid "Cloning Repository"
 msgstr "Klonar förvar"
 
-#: kicad/tools/kicad_manager_control.cpp:185
+#: kicad/tools/kicad_manager_control.cpp:191
 msgid "No project files were found in the repository."
 msgstr "Inga projektfiler hittades i förvaret."
 
-#: kicad/tools/kicad_manager_control.cpp:212
+#: kicad/tools/kicad_manager_control.cpp:218
 msgid "Create New Jobset"
 msgstr "Skapa ny åtgärdsserie"
 
-#: kicad/tools/kicad_manager_control.cpp:242
+#: kicad/tools/kicad_manager_control.cpp:248
 msgid "System Templates"
 msgstr "Systemmallar"
 
-#: kicad/tools/kicad_manager_control.cpp:251
+#: kicad/tools/kicad_manager_control.cpp:257
 msgid "User Templates"
 msgstr "Egna mallar"
 
-#: kicad/tools/kicad_manager_control.cpp:268
+#: kicad/tools/kicad_manager_control.cpp:274
 msgid "No project template was selected.  Cannot generate new project."
 msgstr "Ingen projektmall valdes. Det går inte att skapa ett nytt projekt."
 
-#: kicad/tools/kicad_manager_control.cpp:276
+#: kicad/tools/kicad_manager_control.cpp:282
 msgid "New Project Folder"
 msgstr "Ny projektmapp"
 
-#: kicad/tools/kicad_manager_control.cpp:325
-#: kicad/tools/kicad_manager_control.cpp:711
+#: kicad/tools/kicad_manager_control.cpp:331
+#: kicad/tools/kicad_manager_control.cpp:717
 #, c-format
 msgid "Insufficient permissions to write to folder '%s'."
 msgstr "Otillräckliga behörigheter för att skriva till mappen '%s'."
 
-#: kicad/tools/kicad_manager_control.cpp:346
+#: kicad/tools/kicad_manager_control.cpp:352
 msgid "Overwriting files:"
 msgstr "Skriva över filer:"
 
-#: kicad/tools/kicad_manager_control.cpp:352
+#: kicad/tools/kicad_manager_control.cpp:358
 msgid "Similar files already exist in the destination folder."
 msgstr "Liknande filer finns redan i målmappen."
 
-#: kicad/tools/kicad_manager_control.cpp:371
+#: kicad/tools/kicad_manager_control.cpp:377
 msgid "A problem occurred creating new project from template."
 msgstr "Ett problem uppstod under skapandet av ett nytt projekt från mall."
 
-#: kicad/tools/kicad_manager_control.cpp:394
+#: kicad/tools/kicad_manager_control.cpp:400
 msgid "Open Existing Project"
 msgstr "Öppna befintligt projekt"
 
-#: kicad/tools/kicad_manager_control.cpp:429
+#: kicad/tools/kicad_manager_control.cpp:435
 msgid "Open Jobset"
 msgstr "Öppna åtgärdsserie"
 
-#: kicad/tools/kicad_manager_control.cpp:636
+#: kicad/tools/kicad_manager_control.cpp:642
 #, c-format
 msgid "Cannot copy folder '%s'."
 msgstr "Kan inte kopiera mappen '%s'."
 
-#: kicad/tools/kicad_manager_control.cpp:682
+#: kicad/tools/kicad_manager_control.cpp:688
 msgid "Save Project To"
 msgstr "Spara projekt till"
 
-#: kicad/tools/kicad_manager_control.cpp:702
+#: kicad/tools/kicad_manager_control.cpp:708
 #, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
@@ -28144,23 +28149,23 @@ msgstr ""
 "\n"
 "Se till att du har skrivbehörighet och försök igen."
 
-#: kicad/tools/kicad_manager_control.cpp:713
+#: kicad/tools/kicad_manager_control.cpp:719
 msgid "Error!"
 msgstr "Fel!"
 
-#: kicad/tools/kicad_manager_control.cpp:769
+#: kicad/tools/kicad_manager_control.cpp:775
 msgid "Create (or open) a project to edit a schematic."
 msgstr "Skapa (eller öppna) ett projekt för att redigera ett kretsschema."
 
-#: kicad/tools/kicad_manager_control.cpp:775
+#: kicad/tools/kicad_manager_control.cpp:781
 msgid "Create (or open) a project to edit a pcb."
 msgstr "Skapa (eller öppna) ett projekt för att redigera ett mönsterkort."
 
-#: kicad/tools/kicad_manager_control.cpp:792
+#: kicad/tools/kicad_manager_control.cpp:798
 msgid "Application failed to load:\n"
 msgstr "Programmet kunde inte laddas:\n"
 
-#: kicad/tools/kicad_manager_control.cpp:798
+#: kicad/tools/kicad_manager_control.cpp:804
 msgid "Application cannot start."
 msgstr "Programmet kan inte starta."
 

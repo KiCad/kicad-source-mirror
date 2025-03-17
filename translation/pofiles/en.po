@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-15 19:01+0300\n"
+"POT-Creation-Date: 2025-03-17 18:43+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2104,11 +2104,11 @@ msgstr "C&ommit"
 msgid "Commit message cannot be empty"
 msgstr "Commit message cannot be empty"
 
-msgid "Enter the password for the SSH key"
-msgstr "Enter the password for the SSH key"
-
 msgid "Test Connection"
 msgstr "Test Connection"
+
+msgid "Enter the password for the SSH key"
+msgstr "Enter the password for the SSH key"
 
 msgid "Connection successful"
 msgstr "Connection successful"
@@ -18801,6 +18801,10 @@ msgstr "Directory name:"
 
 msgid "Create New Directory"
 msgstr "Create New Directory"
+
+#, c-format
+msgid "Failed to get status list: %s"
+msgstr "Failed to get status list: %s"
 
 msgid "Switch to this Project"
 msgstr "Switch to this Project"
