@@ -49,7 +49,8 @@ public:
     { }
 
     TOOLBAR_ITEM( TOOLBAR_ITEM_TYPE aType ) :
-        m_Type( aType )
+        m_Type( aType ),
+        m_Size( 0 )
     { }
 
     TOOLBAR_ITEM( TOOLBAR_ITEM_TYPE aType, int aSize ) :
@@ -60,7 +61,8 @@ public:
     }
 
     TOOLBAR_ITEM( TOOLBAR_ITEM_TYPE aType, std::string aName ) :
-        m_Type( aType )
+        m_Type( aType ),
+        m_Size( 0 )
     {
         if( aType == TOOLBAR_ITEM_TYPE::CONTROL )
             m_ControlName = aName;
