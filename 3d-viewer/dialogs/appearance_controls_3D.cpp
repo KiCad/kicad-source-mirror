@@ -579,8 +579,13 @@ void APPEARANCE_CONTROLS_3D::rebuildLayers()
 
                 sizer->AddSpacer( 5 );
 
-                wxStaticText* label = new wxStaticText( m_windowLayers, layer,
-                                                        aSetting->GetLabel() );
+                wxString     layerName = aSetting->GetLabel();
+                PCB_LAYER_ID boardLayer = Map3DLayerToPCBLayer( layer );
+
+                if( boardLayer != UNDEFINED_LAYER )
+                    layerName = m_frame->GetBoard()->GetLayerName( boardLayer );
+
+                wxStaticText* label = new wxStaticText( m_windowLayers, layer, layerName );
                 label->Wrap( -1 );
                 label->SetToolTip( aSetting->GetTooltip() );
 
@@ -630,7 +635,7 @@ void APPEARANCE_CONTROLS_3D::rebuildLayers()
         }
         else if( setting->m_Id >= LAYER_3D_USER_1 && setting->m_Id <= LAYER_3D_USER_45 )
         {
-            if( enabled.test( Map3DUserLayerToPCBLayer( setting->m_Id ) ) )
+            if( enabled.test( Map3DLayerToPCBLayer( setting->m_Id ) ) )
                 appendLayer( setting );
         }
         else

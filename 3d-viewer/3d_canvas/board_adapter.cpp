@@ -267,7 +267,7 @@ bool BOARD_ADAPTER::Is3dLayerEnabled( PCB_LAYER_ID aLayer,
     case Eco2_User: return aVisibilityFlags.test( LAYER_3D_USER_ECO2 );
     default:
     {
-        int layer3D = MapPCBUserLayerTo3DLayer( aLayer );
+        int layer3D = MapPCBLayerTo3DLayer( aLayer );
 
         if( layer3D != UNDEFINED_LAYER )
             return aVisibilityFlags.test( layer3D );
@@ -922,7 +922,7 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetVisibleLayers() const
         ret.set( LAYER_3D_USER_ECO2,         layers.test( Eco2_User ) );
 
         for( int layer = LAYER_3D_USER_1; layer <= LAYER_3D_USER_45; ++layer )
-            ret.set( layer, layers.test( Map3DUserLayerToPCBLayer( layer ) ) );
+            ret.set( layer, layers.test( Map3DLayerToPCBLayer( layer ) ) );
 
         ret.set( LAYER_FP_REFERENCES, plotParams.GetPlotReference() );
         ret.set( LAYER_FP_VALUES,     plotParams.GetPlotValue() );
@@ -1047,7 +1047,7 @@ float BOARD_ADAPTER::GetFootprintZPos( bool aIsFlipped ) const
 SFVEC4F BOARD_ADAPTER::GetLayerColor( int aLayerId ) const
 {
     if( aLayerId >= LAYER_3D_USER_1 && aLayerId <= LAYER_3D_USER_45 )
-        aLayerId = Map3DUserLayerToPCBLayer( aLayerId );
+        aLayerId = Map3DLayerToPCBLayer( aLayerId );
 
     wxASSERT( aLayerId < PCB_LAYER_ID_COUNT );
 
