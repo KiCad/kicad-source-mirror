@@ -1758,6 +1758,9 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             loadedScreens[item.Last()->GetFileName()] = item.LastScreen();
     }
 
+    // Get set of sheet names in the current schematic to prevent duplicate sheet names on paste.
+    std::set<wxString> existingSheetNames = pasteRoot.LastScreen()->GetSheetNames();
+
     // Build symbol list for reannotation of duplicates
     SCH_REFERENCE_LIST existingRefs;
     hierarchy.GetSymbols( existingRefs );
@@ -1926,14 +1929,13 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             // duplicate sheet names
             hierarchy = m_frame->Schematic().Hierarchy();
 
-            //@todo: it might be better to just iterate through the sheet names
-            // in this screen instead of the whole hierarchy.
             int uniquifier = std::max( 0, wxAtoi( number ) ) + 1;
 
-            while( hierarchy.NameExists( candidateName ) )
+            while( existingSheetNames.count( candidateName ) )
                 candidateName = wxString::Format( wxT( "%s%d" ), baseName, uniquifier++ );
 
             nameField->SetText( candidateName );
+            existingSheetNames.emplace( candidateName );
 
             wxFileName     fn = sheet->GetFileName();
             SCH_SCREEN*    existingScreen = nullptr;

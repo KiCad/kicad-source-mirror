@@ -1577,6 +1577,23 @@ bool SCH_SCREEN::HasSymbolFieldNamesWithWhiteSpace() const
 }
 
 
+std::set<wxString> SCH_SCREEN::GetSheetNames() const
+{
+    std::set<wxString> retv;
+
+    for( SCH_ITEM* item : Items().OfType( SCH_SHEET_T ) )
+    {
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+
+        wxCHECK2( sheet, continue );
+
+        retv.emplace( sheet->GetName() );
+    }
+
+    return retv;
+}
+
+
 #if defined(DEBUG)
 void SCH_SCREEN::Show( int nestLevel, std::ostream& os ) const
 {
