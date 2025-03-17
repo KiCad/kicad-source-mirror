@@ -805,8 +805,6 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetVisibleLayers() const
 {
     std::bitset<LAYER_3D_END> ret;
 
-    wxCHECK( m_board, ret );
-
     if( m_board->IsFootprintHolder() )
     {
         if( m_Cfg->m_Render.preview_show_board_body )
