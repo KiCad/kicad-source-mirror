@@ -607,14 +607,12 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 
     if( m_boardAdapter.m_Cfg->m_Render.DifferentiatePlatedCopper() )
     {
-        const SHAPE_POLY_SET* frontPlatedPadAndGraphicPolys =
-                m_boardAdapter.GetFrontPlatedPadAndGraphicPolys();
-        const SHAPE_POLY_SET* backPlatedPadAndGraphicPolys =
-                m_boardAdapter.GetBackPlatedPadAndGraphicPolys();
+        const SHAPE_POLY_SET* frontPlatedCopperPolys = m_boardAdapter.GetFrontPlatedCopperPolys();
+        const SHAPE_POLY_SET* backPlatedCopperPolys = m_boardAdapter.GetBackPlatedCopperPolys();
 
-        if( frontPlatedPadAndGraphicPolys )
+        if( frontPlatedCopperPolys )
         {
-            SHAPE_POLY_SET poly = frontPlatedPadAndGraphicPolys->CloneDropTriangulation();
+            SHAPE_POLY_SET poly = frontPlatedCopperPolys->CloneDropTriangulation();
             poly.BooleanIntersection( m_boardAdapter.GetBoardPoly() );
             poly.BooleanSubtract( m_boardAdapter.GetTH_ODPolys() );
             poly.BooleanSubtract( m_boardAdapter.GetNPTH_ODPolys() );
@@ -627,9 +625,9 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
                 m_layers[F_Cu] = generateEmptyLayerList( F_Cu );
         }
 
-        if( backPlatedPadAndGraphicPolys )
+        if( backPlatedCopperPolys )
         {
-            SHAPE_POLY_SET poly = backPlatedPadAndGraphicPolys->CloneDropTriangulation();
+            SHAPE_POLY_SET poly = backPlatedCopperPolys->CloneDropTriangulation();
             poly.BooleanIntersection( m_boardAdapter.GetBoardPoly() );
             poly.BooleanSubtract( m_boardAdapter.GetTH_ODPolys() );
             poly.BooleanSubtract( m_boardAdapter.GetNPTH_ODPolys() );

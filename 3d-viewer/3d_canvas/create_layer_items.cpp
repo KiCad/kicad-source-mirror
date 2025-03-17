@@ -183,8 +183,6 @@ void BOARD_ADAPTER::destroyLayers()
 
     DELETE_AND_FREE_MAP( m_layers_poly );
 
-    DELETE_AND_FREE( m_frontPlatedPadAndGraphicPolys )
-    DELETE_AND_FREE( m_backPlatedPadAndGraphicPolys )
     DELETE_AND_FREE( m_frontPlatedCopperPolys )
     DELETE_AND_FREE( m_backPlatedCopperPolys )
 
@@ -302,8 +300,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
     if( cfg.DifferentiatePlatedCopper() )
     {
-        m_frontPlatedPadAndGraphicPolys = new SHAPE_POLY_SET;
-        m_backPlatedPadAndGraphicPolys = new SHAPE_POLY_SET;
         m_frontPlatedCopperPolys = new SHAPE_POLY_SET;
         m_backPlatedCopperPolys = new SHAPE_POLY_SET;
 
@@ -614,10 +610,19 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         // ADD PADS
         for( FOOTPRINT* footprint : m_board->Footprints() )
         {
-            addPads( footprint, layerContainer, layer, cfg.DifferentiatePlatedCopper(), false );
-
-            // Micro-wave footprints may have items on copper layers
+            addPads( footprint, layerContainer, layer );
             addFootprintShapes( footprint, layerContainer, layer, visibilityFlags );
+
+            if( cfg.DifferentiatePlatedCopper() && layer == F_Cu )
+            {
+                footprint->TransformPadsToPolySet( *m_frontPlatedCopperPolys, F_Cu, 0, maxError,
+                                                   ERROR_INSIDE, true );
+            }
+            else if( cfg.DifferentiatePlatedCopper() && layer == B_Cu )
+            {
+                footprint->TransformPadsToPolySet( *m_backPlatedCopperPolys, B_Cu, 0, maxError,
+                                                   ERROR_INSIDE, true );
+            }
         }
     }
 
@@ -636,22 +641,9 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 // Note: NPTH pads are not drawn on copper layers when the pad has same shape as
                 // its hole
                 footprint->TransformPadsToPolySet( *layerPoly, layer, 0, maxError, ERROR_INSIDE,
-                                                   true, cfg.DifferentiatePlatedCopper(), false );
+                                                   true );
 
                 transformFPShapesToPolySet( footprint, layer, *layerPoly, maxError, ERROR_INSIDE );
-            }
-        }
-
-        if( cfg.DifferentiatePlatedCopper() )
-        {
-            // ADD PLATED PADS contours
-            for( FOOTPRINT* footprint : m_board->Footprints() )
-            {
-                footprint->TransformPadsToPolySet( *m_frontPlatedPadAndGraphicPolys, F_Cu, 0,
-                                                   maxError, ERROR_INSIDE, true, false, true );
-
-                footprint->TransformPadsToPolySet( *m_backPlatedPadAndGraphicPolys, B_Cu, 0,
-                                                   maxError, ERROR_INSIDE, true, false, true );
             }
         }
     }
@@ -702,36 +694,29 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             }
 
             // add also this shape to the plated copper polygon list if required
-            if( cfg.DifferentiatePlatedCopper() )
+            if( cfg.DifferentiatePlatedCopper() && ( layer == F_Cu || layer == B_Cu ) )
             {
-                // Note: for TEXT and TEXTBOX, TransformShapeToPolygon returns the bounding
-                // box shape, not the exact text shape. So it is not used for these items
-                if( layer == F_Cu || layer == B_Cu )
-                {
-                    SHAPE_POLY_SET* platedCopperPolys = layer == F_Cu
-                                                            ? m_frontPlatedCopperPolys
+                SHAPE_POLY_SET* copperPolys = layer == F_Cu ? m_frontPlatedCopperPolys
                                                             : m_backPlatedCopperPolys;
 
-                    if( item->Type() == PCB_TEXTBOX_T )
-                    {
-                        PCB_TEXTBOX* text_box = static_cast<PCB_TEXTBOX*>( item );
-                        text_box->TransformTextToPolySet( *platedCopperPolys,
-                                                          0, maxError, ERROR_INSIDE );
-                        // Add box outlines
-                        text_box->PCB_SHAPE::TransformShapeToPolygon( *platedCopperPolys, layer,
-                                                                       0, maxError, ERROR_INSIDE );
-                    }
-                    else if( item->Type() == PCB_TEXT_T )
-                    {
-                        static_cast<PCB_TEXT*>( item )->TransformTextToPolySet( *platedCopperPolys,
-                                                                                0, maxError,
-                                                                                ERROR_INSIDE );
-                    }
-                    else
-                    {
-                        item->TransformShapeToPolySet( *platedCopperPolys, layer, 0, maxError,
-                                                       ERROR_INSIDE );
-                    }
+                // Note: for TEXT and TEXTBOX, TransformShapeToPolygon returns the bounding
+                // box shape, not the exact text shape. So it is not used for these items
+                if( item->Type() == PCB_TEXTBOX_T )
+                {
+                    PCB_TEXTBOX* text_box = static_cast<PCB_TEXTBOX*>( item );
+                    text_box->TransformTextToPolySet( *copperPolys, 0, maxError, ERROR_INSIDE );
+                    // Add box outlines
+                    text_box->PCB_SHAPE::TransformShapeToPolygon( *copperPolys, layer, 0, maxError,
+                                                                  ERROR_INSIDE );
+                }
+                else if( item->Type() == PCB_TEXT_T )
+                {
+                    PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
+                    text->TransformTextToPolySet( *copperPolys, 0, maxError, ERROR_INSIDE );
+                }
+                else
+                {
+                    item->TransformShapeToPolySet( *copperPolys, layer, 0, maxError, ERROR_INSIDE );
                 }
             }
         }
@@ -770,13 +755,32 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 {
                     PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( item );
 
+                    if( textbox->IsBorderEnabled() )
+                    {
+                        textbox->PCB_SHAPE::TransformShapeToPolygon( *layerPoly, layer, 0,
+                                                                     maxError, ERROR_INSIDE );
+                    }
+
                     textbox->TransformTextToPolySet( *layerPoly, 0, maxError, ERROR_INSIDE );
                     break;
                 }
 
                 case PCB_TABLE_T:
-                    // JEY TODO: tables
+                {
+                    PCB_TABLE* table = static_cast<PCB_TABLE*>( item );
+
+                    for( PCB_TABLECELL* cell : table->GetCells() )
+                        cell->TransformTextToPolySet( *layerPoly, 0, maxError, ERROR_INSIDE );
+
+                    table->DrawBorders(
+                            [&]( const VECTOR2I& ptA, const VECTOR2I& ptB,
+                                 const STROKE_PARAMS& stroke )
+                            {
+                                SHAPE_SEGMENT seg( ptA, ptB, stroke.GetWidth()  );
+                                seg.TransformToPolygon( *layerPoly, maxError, ERROR_INSIDE );
+                            } );
                     break;
+                }
 
                 default:
                     wxLogTrace( m_logTrace, wxT( "createLayers: item type: %d not implemented" ),
@@ -1042,7 +1046,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 }
                 else
                 {
-                    addPads( footprint, layerContainer, layer, false, false );
+                    addPads( footprint, layerContainer, layer );
                 }
 
                 addFootprintShapes( footprint, layerContainer, layer, visibilityFlags );
@@ -1088,13 +1092,33 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 {
                     PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( item );
 
+                    if( textbox->IsBorderEnabled() )
+                    {
+                        textbox->PCB_SHAPE::TransformShapeToPolygon( *layerPoly, layer, 0,
+                                                                     maxError, ERROR_INSIDE );
+                    }
+
                     textbox->TransformTextToPolySet( *layerPoly, 0, maxError, ERROR_INSIDE );
                     break;
                 }
 
                 case PCB_TABLE_T:
-                    // JEY TODO: tables
+                {
+                    PCB_TABLE* table = static_cast<PCB_TABLE*>( item );
+
+                    for( PCB_TABLECELL* cell : table->GetCells() )
+                        cell->TransformTextToPolySet( *layerPoly, 0, maxError, ERROR_INSIDE );
+
+                    table->DrawBorders(
+                            [&]( const VECTOR2I& ptA, const VECTOR2I& ptB,
+                                 const STROKE_PARAMS& stroke )
+                            {
+                                SHAPE_SEGMENT seg( ptA, ptB, stroke.GetWidth()  );
+                                seg.TransformToPolygon( *layerPoly, maxError, ERROR_INSIDE );
+                            } );
+
                     break;
+                }
 
                 default:
                     break;
@@ -1172,9 +1196,9 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             if( !footprint->GetBoundingBox().Intersects( boardBBox ) )
             {
                 if( footprint->IsFlipped() )
-                    addPads( footprint, m_offboardPadsBack, B_Cu, false, false );
+                    addPads( footprint, m_offboardPadsBack, B_Cu );
                 else
-                    addPads( footprint, m_offboardPadsFront, F_Cu, false, false );
+                    addPads( footprint, m_offboardPadsFront, F_Cu );
             }
         }
 
@@ -1200,41 +1224,11 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             m_backPlatedCopperPolys->BooleanIntersection( *m_layers_poly.at( B_Mask ) );
 
         // Subtract plated copper from unplated copper
-        bool hasF_Cu = false;
-        bool hasB_Cu = false;
-
         if( m_layers_poly.find( F_Cu ) != m_layers_poly.end() )
-        {
-            m_layers_poly[F_Cu]->BooleanSubtract( *m_frontPlatedPadAndGraphicPolys );
             m_layers_poly[F_Cu]->BooleanSubtract( *m_frontPlatedCopperPolys );
-            hasF_Cu = true;
-        }
 
         if( m_layers_poly.find( B_Cu ) != m_layers_poly.end() )
-        {
-            m_layers_poly[B_Cu]->BooleanSubtract( *m_backPlatedPadAndGraphicPolys );
             m_layers_poly[B_Cu]->BooleanSubtract( *m_backPlatedCopperPolys );
-            hasB_Cu = true;
-        }
-
-        // Add plated graphic items to build vertical walls
-        if( hasF_Cu && m_frontPlatedCopperPolys->OutlineCount() )
-            m_frontPlatedPadAndGraphicPolys->Append( *m_frontPlatedCopperPolys );
-
-        if( hasB_Cu && m_backPlatedCopperPolys->OutlineCount() )
-            m_backPlatedPadAndGraphicPolys->Append( *m_backPlatedCopperPolys );
-
-        m_frontPlatedPadAndGraphicPolys->Simplify();
-        m_backPlatedPadAndGraphicPolys->Simplify();
-        m_frontPlatedCopperPolys->Simplify();
-        m_backPlatedCopperPolys->Simplify();
-
-        // ADD PLATED PADS
-        for( FOOTPRINT* footprint : m_board->Footprints() )
-        {
-            addPads( footprint, m_platedPadsFront, F_Cu, false, true );
-            addPads( footprint, m_platedPadsBack, B_Cu, false, true );
-        }
 
         // ADD PLATED COPPER
         ConvertPolygonToTriangles( *m_frontPlatedCopperPolys, *m_platedPadsFront, m_biuTo3Dunits,

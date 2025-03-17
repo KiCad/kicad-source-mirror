@@ -341,14 +341,14 @@ public:
      */
     const MAP_POLY& GetPolyMap() const noexcept { return m_layers_poly; }
 
-    const SHAPE_POLY_SET* GetFrontPlatedPadAndGraphicPolys()
+    const SHAPE_POLY_SET* GetFrontPlatedCopperPolys()
     {
-        return m_frontPlatedPadAndGraphicPolys;
+        return m_frontPlatedCopperPolys;
     }
 
-    const SHAPE_POLY_SET* GetBackPlatedPadAndGraphicPolys()
+    const SHAPE_POLY_SET* GetBackPlatedCopperPolys()
     {
-        return m_backPlatedPadAndGraphicPolys;
+        return m_backPlatedCopperPolys;
     }
 
     const MAP_POLY& GetHoleIdPolysMap() const noexcept { return m_layerHoleIdPolys; }
@@ -375,7 +375,7 @@ private:
                                    int aInflateValue );
 
     void addPads( const FOOTPRINT* aFootprint, CONTAINER_2D_BASE* aDstContainer,
-                  PCB_LAYER_ID aLayerId, bool aSkipPlatedPads, bool aSkipNonPlatedPads );
+                  PCB_LAYER_ID aLayerId );
 
     void addFootprintShapes( const FOOTPRINT* aFootprint, CONTAINER_2D_BASE* aDstContainer,
                              PCB_LAYER_ID aLayerId,
@@ -461,8 +461,6 @@ private:
     MAP_POLY          m_layers_poly;          ///< Amalgamated polygon contours for various types
                                               ///<   of items
 
-    SHAPE_POLY_SET*   m_frontPlatedPadAndGraphicPolys;
-    SHAPE_POLY_SET*   m_backPlatedPadAndGraphicPolys;
     SHAPE_POLY_SET*   m_frontPlatedCopperPolys;
     SHAPE_POLY_SET*   m_backPlatedCopperPolys;
 
