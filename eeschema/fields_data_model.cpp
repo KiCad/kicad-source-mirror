@@ -113,19 +113,19 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RenameColumn( int aCol, const wxString& newN
 }
 
 
-int FIELDS_EDITOR_GRID_DATA_MODEL::GetFieldNameCol( const wxString& aFieldName )
+int FIELDS_EDITOR_GRID_DATA_MODEL::GetFieldNameCol( const wxString& aFieldName ) const
 {
     for( size_t i = 0; i < m_cols.size(); i++ )
     {
         if( m_cols[i].m_fieldName == aFieldName )
-            return (int) i;
+            return static_cast<int>( i );
     }
 
     return -1;
 }
 
 
-const std::vector<BOM_FIELD> FIELDS_EDITOR_GRID_DATA_MODEL::GetFieldsOrdered()
+std::vector<BOM_FIELD> FIELDS_EDITOR_GRID_DATA_MODEL::GetFieldsOrdered()
 {
     std::vector<BOM_FIELD> fields;
 
@@ -303,7 +303,7 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, i
 
 void FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxString& aValue )
 {
-    wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), wxS( "Invalid column number" ) );
+    wxCHECK_RET( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), wxS( "Invalid column number" ) );
 
     // Can't modify references or text variables column, e.g. ${QUANTITY}
     if( ColIsReference( aCol )
@@ -323,35 +323,35 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxString
 
 bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsReference( int aCol )
 {
-    wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
+    wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
     return m_cols[aCol].m_fieldName == GetCanonicalFieldName( FIELD_T::REFERENCE );
 }
 
 
 bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsValue( int aCol )
 {
-    wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
+    wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
     return m_cols[aCol].m_fieldName == GetCanonicalFieldName( FIELD_T::VALUE );
 }
 
 
 bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsQuantity( int aCol )
 {
-    wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
+    wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
     return m_cols[aCol].m_fieldName == QUANTITY_VARIABLE;
 }
 
 
 bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsItemNumber( int aCol )
 {
-    wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
+    wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
     return m_cols[aCol].m_fieldName == ITEM_NUMBER_VARIABLE;
 }
 
 
 bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsAttribute( int aCol )
 {
-    wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
+    wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
     return isAttribute( m_cols[aCol].m_fieldName );
 }
 
@@ -469,7 +469,7 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef,
     for( size_t i = 0; i < m_cols.size(); ++i )
     {
         //Handled already
-        if( (int) i == refCol )
+        if( static_cast<int>( i ) == refCol )
             continue;
 
         if( !m_cols[i].m_group )
@@ -849,7 +849,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit )
             destField->SetText( symbol.Schematic()->ConvertRefsToKIIDs( srcValue ) );
         }
 
-        for( int ii = (int) symbol.GetFields().size() - 1; ii >= 0; ii-- )
+        for( int ii = static_cast<int>( symbol.GetFields().size() ) - 1; ii >= 0; ii-- )
         {
             if( symbol.GetFields()[ii].IsMandatory() || symbol.GetFields()[ii].IsPrivate() )
                 continue;
@@ -901,10 +901,10 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyBomPreset( const BOM_PRESET& aPreset )
     std::vector<wxString> order;
 
     // Set columns that are present and shown
-    for( BOM_FIELD field : aPreset.fieldsOrdered )
+    for( const BOM_FIELD& field : aPreset.fieldsOrdered )
     {
         // Ignore empty fields
-        if(!field.name)
+        if( !field.name )
             continue;
 
         order.emplace_back( field.name );
@@ -919,7 +919,9 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyBomPreset( const BOM_PRESET& aPreset )
             col = GetFieldNameCol( field.name );
         }
         else
+        {
             SetColLabelValue( col, field.label );
+        }
 
         SetGroupColumn( col, field.groupBy );
         SetShowColumn( col, field.show );
@@ -975,7 +977,7 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::Export( const BOM_FMT_PRESET& settings )
     for( size_t col = 0; col < m_cols.size(); col++ )
     {
         if( m_cols[col].m_show )
-            last_col = (int) col;
+            last_col = static_cast<int>( col );
     }
 
     // No shown columns
@@ -1012,14 +1014,14 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::Export( const BOM_FMT_PRESET& settings )
         if( !m_cols[col].m_show )
             continue;
 
-        out.Append( formatField( m_cols[col].m_label, col == (size_t) last_col ) );
+        out.Append( formatField( m_cols[col].m_label, col == static_cast<size_t>( last_col ) ) );
     }
 
     // Data rows
     for( size_t row = 0; row < m_rows.size(); row++ )
     {
         // Don't output child rows
-        if( GetRowFlags( (int) row ) == CHILD_ITEM )
+        if( GetRowFlags( static_cast<int>( row ) ) == CHILD_ITEM )
             continue;
 
         for( size_t col = 0; col < m_cols.size(); col++ )
@@ -1027,10 +1029,10 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::Export( const BOM_FMT_PRESET& settings )
             if( !m_cols[col].m_show )
                 continue;
 
-            // Get the unanottated version of the field, e.g. no ">   " or "v   " by
-            out.Append( formatField( GetExportValue( (int) row, (int) col, settings.refDelimiter,
-                                                     settings.refRangeDelimiter ),
-                                     col == (size_t) last_col ) );
+            // Get the unannotated version of the field, e.g. no ">   " or "v   " by
+            out.Append( formatField( GetExportValue( static_cast<int>( row ), static_cast<int>( col ),
+                                                     settings.refDelimiter, settings.refRangeDelimiter ),
+                                     col == static_cast<size_t>( last_col ) ) );
         }
     }
 

@@ -80,7 +80,7 @@ public:
         SCOPE_SHEET_RECURSIVE = 2
     };
 
-    FIELDS_EDITOR_GRID_DATA_MODEL( SCH_REFERENCE_LIST& aSymbolsList, wxGridCellAttr* aURLEditor ) :
+    FIELDS_EDITOR_GRID_DATA_MODEL( const SCH_REFERENCE_LIST& aSymbolsList, wxGridCellAttr* aURLEditor ) :
             m_symbolsList( aSymbolsList ),
             m_edited( false ),
             m_sortColumn( 0 ),
@@ -112,7 +112,7 @@ public:
 
     void MoveColumn( int aCol, int aNewPos )
     {
-        wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), "Invalid Column Number" );
+        wxCHECK_RET( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), "Invalid Column Number" );
 
         if( aCol == aNewPos )
         {
@@ -130,32 +130,32 @@ public:
         }
     }
 
-    int GetNumberRows() override { return (int) m_rows.size(); }
-    int GetNumberCols() override { return (int) m_cols.size(); }
+    int GetNumberRows() override { return static_cast<int>( m_rows.size() ); }
+    int GetNumberCols() override { return static_cast<int>( m_cols.size() ); }
 
     void SetColLabelValue( int aCol, const wxString& aLabel ) override
     {
-        wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), "Invalid Column Number" );
+        wxCHECK_RET( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), "Invalid Column Number" );
         m_cols[aCol].m_label = aLabel;
     }
 
 
     wxString GetColLabelValue( int aCol ) override
     {
-        wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), wxString() );
+        wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), wxString() );
         return m_cols[aCol].m_label;
     }
 
     wxString GetColFieldName( int aCol )
     {
-        wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), wxString() );
+        wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), wxString() );
         return m_cols[aCol].m_fieldName;
     }
 
-    int GetFieldNameCol( const wxString& aFieldName );
+    int GetFieldNameCol( const wxString& aFieldName ) const;
 
-    const std::vector<BOM_FIELD> GetFieldsOrdered();
-    void                         SetFieldsOrder( const std::vector<wxString>& aNewOrder );
+    std::vector<BOM_FIELD> GetFieldsOrdered();
+    void                   SetFieldsOrder( const std::vector<wxString>& aNewOrder );
 
     bool IsEmptyCell( int aRow, int aCol ) override
     {
