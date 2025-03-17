@@ -3207,6 +3207,7 @@ void SCH_IO_ALTIUM::ParseHarnessEntry( const std::map<wxString, wxString>& aProp
     HARNESS::HARNESS_PORT port;
     port.m_name = elem.Name;
     port.m_harnessConnectorSide = elem.Side;
+    port.m_primaryConnectionPosition = 0;
 
     VECTOR2I pos = harness.m_location;
     VECTOR2I size = harness.m_size;
