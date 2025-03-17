@@ -253,7 +253,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
     for( int layer = LAYER_3D_USER_1; layer <= LAYER_3D_USER_45; ++layer )
     {
         int          idx = layer - LAYER_3D_USER_1;
-        PCB_LAYER_ID pcb_layer = Map3DUserLayerToPCBLayer( layer );
+        PCB_LAYER_ID pcb_layer = Map3DLayerToPCBLayer( layer );
 
         m_params.emplace_back( new COLOR_MAP_PARAM( "3d_viewer.user_" + std::to_string( idx + 1 ),
                                                     layer, s_defaultTheme.at( pcb_layer ),

@@ -633,11 +633,11 @@ void RENDER_3D_RAYTRACE_BASE::Reload( REPORTER* aStatusReporter, REPORTER* aWarn
 
         default:
         {
-            int layer3D = MapPCBUserLayerTo3DLayer( layer_id );
+            int layer3D = MapPCBLayerTo3DLayer( layer_id );
 
-            if( layer3D != UNDEFINED_LAYER )
+            // Note: MUST do this in LAYER_3D space; User_1..User_45 are NOT contiguous
+            if( layer3D >= LAYER_3D_USER_1 && layer3D <= LAYER_3D_USER_45 )
             {
-                // Note: MUST do this in LAYER_3D space; User_1..User_45 are NOT contiguous
                 layerColor = m_boardAdapter.m_UserDefinedLayerColor[ layer3D - LAYER_3D_USER_1 ];
             }
             else if( m_boardAdapter.m_Cfg->m_Render.differentiate_plated_copper )

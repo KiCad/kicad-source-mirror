@@ -908,8 +908,8 @@ inline size_t CopperLayerToOrdinal( PCB_LAYER_ID aLayer )
 KICOMMON_API PCB_LAYER_ID BoardLayerFromLegacyId( int aLegacyId );
 
 
-KICOMMON_API PCB_LAYER_ID Map3DUserLayerToPCBLayer( int aLayer );
-KICOMMON_API int MapPCBUserLayerTo3DLayer( PCB_LAYER_ID aLayer );
+KICOMMON_API PCB_LAYER_ID Map3DLayerToPCBLayer( int aLayer );
+KICOMMON_API int MapPCBLayerTo3DLayer( PCB_LAYER_ID aLayer );
 
 
 KICOMMON_API PCB_LAYER_ID ToLAYER_ID( int aLayer );
