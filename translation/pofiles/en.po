@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-15 19:00+0300\n"
+"POT-Creation-Date: 2025-03-17 18:42+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -443,6 +443,276 @@ msgstr "User.Eco2"
 
 msgid "Show user ECO2 layer"
 msgstr "Show user ECO2 layer"
+
+msgid "User.1"
+msgstr "User.1"
+
+msgid "Show user defined layer 1"
+msgstr "Show user defined layer 1"
+
+msgid "User.2"
+msgstr "User.2"
+
+msgid "Show user defined layer 2"
+msgstr "Show user defined layer 2"
+
+msgid "User.3"
+msgstr "User.3"
+
+msgid "Show user defined layer 3"
+msgstr "Show user defined layer 3"
+
+msgid "User.4"
+msgstr "User.4"
+
+msgid "Show user defined layer 4"
+msgstr "Show user defined layer 4"
+
+msgid "User.5"
+msgstr "User.5"
+
+msgid "Show user defined layer 5"
+msgstr "Show user defined layer 5"
+
+msgid "User.6"
+msgstr "User.6"
+
+msgid "Show user defined layer 6"
+msgstr "Show user defined layer 6"
+
+msgid "User.7"
+msgstr "User.7"
+
+msgid "Show user defined layer 7"
+msgstr "Show user defined layer 7"
+
+msgid "User.8"
+msgstr "User.8"
+
+msgid "Show user defined layer 8"
+msgstr "Show user defined layer 8"
+
+msgid "User.9"
+msgstr "User.9"
+
+msgid "Show user defined layer 9"
+msgstr "Show user defined layer 9"
+
+msgid "User.10"
+msgstr "User.10"
+
+msgid "Show user defined layer 10"
+msgstr "Show user defined layer 10"
+
+msgid "User.11"
+msgstr "User.11"
+
+msgid "Show user defined layer 11"
+msgstr "Show user defined layer 11"
+
+msgid "User.12"
+msgstr "User.12"
+
+msgid "Show user defined layer 12"
+msgstr "Show user defined layer 12"
+
+msgid "User.13"
+msgstr "User.13"
+
+msgid "Show user defined layer 13"
+msgstr "Show user defined layer 13"
+
+msgid "User.14"
+msgstr "User.14"
+
+msgid "Show user defined layer 14"
+msgstr "Show user defined layer 14"
+
+msgid "User.15"
+msgstr "User.15"
+
+msgid "Show user defined layer 15"
+msgstr "Show user defined layer 15"
+
+msgid "User.16"
+msgstr "User.16"
+
+msgid "Show user defined layer 16"
+msgstr "Show user defined layer 16"
+
+msgid "User.17"
+msgstr "User.17"
+
+msgid "Show user defined layer 17"
+msgstr "Show user defined layer 17"
+
+msgid "User.18"
+msgstr "User.18"
+
+msgid "Show user defined layer 18"
+msgstr "Show user defined layer 18"
+
+msgid "User.19"
+msgstr "User.19"
+
+msgid "Show user defined layer 19"
+msgstr "Show user defined layer 19"
+
+msgid "User.20"
+msgstr "User.20"
+
+msgid "Show user defined layer 20"
+msgstr "Show user defined layer 20"
+
+msgid "User.21"
+msgstr "User.21"
+
+msgid "Show user defined layer 21"
+msgstr "Show user defined layer 21"
+
+msgid "User.22"
+msgstr "User.22"
+
+msgid "Show user defined layer 22"
+msgstr "Show user defined layer 22"
+
+msgid "User.23"
+msgstr "User.23"
+
+msgid "Show user defined layer 23"
+msgstr "Show user defined layer 23"
+
+msgid "User.24"
+msgstr "User.24"
+
+msgid "Show user defined layer 24"
+msgstr "Show user defined layer 24"
+
+msgid "User.25"
+msgstr "User.25"
+
+msgid "Show user defined layer 25"
+msgstr "Show user defined layer 25"
+
+msgid "User.26"
+msgstr "User.26"
+
+msgid "Show user defined layer 26"
+msgstr "Show user defined layer 26"
+
+msgid "User.27"
+msgstr "User.27"
+
+msgid "Show user defined layer 27"
+msgstr "Show user defined layer 27"
+
+msgid "User.28"
+msgstr "User.28"
+
+msgid "Show user defined layer 28"
+msgstr "Show user defined layer 28"
+
+msgid "User.29"
+msgstr "User.29"
+
+msgid "Show user defined layer 29"
+msgstr "Show user defined layer 29"
+
+msgid "User.30"
+msgstr "User.30"
+
+msgid "Show user defined layer 30"
+msgstr "Show user defined layer 30"
+
+msgid "User.31"
+msgstr "User.31"
+
+msgid "Show user defined layer 31"
+msgstr "Show user defined layer 31"
+
+msgid "User.32"
+msgstr "User.32"
+
+msgid "Show user defined layer 32"
+msgstr "Show user defined layer 32"
+
+msgid "User.33"
+msgstr "User.33"
+
+msgid "Show user defined layer 33"
+msgstr "Show user defined layer 33"
+
+msgid "User.34"
+msgstr "User.34"
+
+msgid "Show user defined layer 34"
+msgstr "Show user defined layer 34"
+
+msgid "User.35"
+msgstr "User.35"
+
+msgid "Show user defined layer 35"
+msgstr "Show user defined layer 35"
+
+msgid "User.36"
+msgstr "User.36"
+
+msgid "Show user defined layer 36"
+msgstr "Show user defined layer 36"
+
+msgid "User.37"
+msgstr "User.37"
+
+msgid "Show user defined layer 37"
+msgstr "Show user defined layer 37"
+
+msgid "User.38"
+msgstr "User.38"
+
+msgid "Show user defined layer 38"
+msgstr "Show user defined layer 38"
+
+msgid "User.39"
+msgstr "User.39"
+
+msgid "Show user defined layer 39"
+msgstr "Show user defined layer 39"
+
+msgid "User.40"
+msgstr "User.40"
+
+msgid "Show user defined layer 40"
+msgstr "Show user defined layer 40"
+
+msgid "User.41"
+msgstr "User.41"
+
+msgid "Show user defined layer 41"
+msgstr "Show user defined layer 41"
+
+msgid "User.42"
+msgstr "User.42"
+
+msgid "Show user defined layer 42"
+msgstr "Show user defined layer 42"
+
+msgid "User.43"
+msgstr "User.43"
+
+msgid "Show user defined layer 43"
+msgstr "Show user defined layer 43"
+
+msgid "User.44"
+msgstr "User.44"
+
+msgid "Show user defined layer 44"
+msgstr "Show user defined layer 44"
+
+msgid "User.45"
+msgstr "User.45"
+
+msgid "Show user defined layer 45"
+msgstr "Show user defined layer 45"
 
 msgid "Through-hole Models"
 msgstr "Through-hole Models"
@@ -17639,17 +17909,17 @@ msgstr "Used with --models-dir to output relative paths in the resulting file"
 msgid "Invalid format specified\n"
 msgstr "Invalid format specified\n"
 
-#, c-format
-msgid "Invalid layer name \"%s\"\n"
-msgstr "Invalid layer name \"%s\"\n"
-
 msgid ""
 "Comma separated list of untranslated layer names to include such as F.Cu,B.Cu"
 msgstr ""
 "Comma separated list of untranslated layer names to include such as F.Cu,B.Cu"
 
-msgid "At least one layer must be specified\n"
-msgstr "At least one layer must be specified\n"
+msgid ""
+"Layers to include on each plot, comma separated list of untranslated layer "
+"names to include such as F.Cu,B.Cu"
+msgstr ""
+"Layers to include on each plot, comma separated list of untranslated layer "
+"names to include such as F.Cu,B.Cu"
 
 msgid "Generate Drill Files"
 msgstr "Generate Drill Files"
@@ -17736,13 +18006,6 @@ msgid "Output units, valid options: mm, in"
 msgstr "Output units, valid options: mm, in"
 
 msgid ""
-"Layers to include on each plot, comma separated list of untranslated layer "
-"names to include such as F.Cu,B.Cu"
-msgstr ""
-"Layers to include on each plot, comma separated list of untranslated layer "
-"names to include such as F.Cu,B.Cu"
-
-msgid ""
 "Generates a single file with the output arg path acting as the complete "
 "directory and filename path. COMMON_LAYER_LIST does not function in this "
 "mode. Instead LAYER_LIST controls all layers plotted."
@@ -17771,8 +18034,8 @@ msgstr ""
 msgid "The new behavior will match --mode-multi"
 msgstr "The new behavior will match --mode-multi"
 
-msgid "Generate Gencad from a list of layers"
-msgstr "Generate Gencad from a list of layers"
+msgid "Export the PCB in Gencad format"
+msgstr "Export the PCB in Gencad format"
 
 msgid "Flip bottom footprint padstacks"
 msgstr "Flip bottom footprint padstacks"
@@ -33264,6 +33527,10 @@ msgstr ""
 msgid "Failed to load board\n"
 msgstr "Failed to load board\n"
 
+#, c-format
+msgid "Invalid layer name \"%s\"\n"
+msgstr "Invalid layer name \"%s\"\n"
+
 msgid "Unknown export format"
 msgstr "Unknown export format"
 
@@ -33282,6 +33549,9 @@ msgstr "Successfully created 3D render image"
 
 msgid "Error creating 3D render image"
 msgstr "Error creating 3D render image"
+
+msgid "At least one layer must be specified\n"
+msgstr "At least one layer must be specified\n"
 
 #, c-format
 msgid "Failed to plot to '%s'.\n"
@@ -37198,6 +37468,9 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Generate Gencad from a list of layers"
+#~ msgstr "Generate Gencad from a list of layers"
 
 #~ msgid "All files|*.*"
 #~ msgstr "All files|*.*"
@@ -60091,33 +60364,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "B.Fab"
 #~ msgstr "B.Fab"
-
-#~ msgid "User.1"
-#~ msgstr "User.1"
-
-#~ msgid "User.2"
-#~ msgstr "User.2"
-
-#~ msgid "User.3"
-#~ msgstr "User.3"
-
-#~ msgid "User.4"
-#~ msgstr "User.4"
-
-#~ msgid "User.5"
-#~ msgstr "User.5"
-
-#~ msgid "User.6"
-#~ msgstr "User.6"
-
-#~ msgid "User.7"
-#~ msgstr "User.7"
-
-#~ msgid "User.8"
-#~ msgstr "User.8"
-
-#~ msgid "User.9"
-#~ msgstr "User.9"
 
 #, c-format
 #~ msgid "Violations (%d)"
