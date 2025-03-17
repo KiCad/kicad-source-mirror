@@ -125,6 +125,7 @@
 #endif
 
 #include <macros.h>
+#include <convert_basic_shapes_to_polygon.h>
 
 static constexpr double USER_PREC = 1e-4;
 static constexpr double USER_ANGLE_PREC = 1e-6;
@@ -783,10 +784,12 @@ STEP_PCB_MODEL::~STEP_PCB_MODEL()
 }
 
 
-bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool aVia )
+bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool aVia,
+                                  SHAPE_POLY_SET* aClipPolygon )
 {
     bool                      success = true;
     std::vector<TopoDS_Shape> padShapes;
+    bool castellated = aClipPolygon && aPad->GetProperty() == PAD_PROP::CASTELLATED;
 
     for( PCB_LAYER_ID pcb_layer : aPad->GetLayerSet().Seq() )
     {
@@ -816,6 +819,12 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
         // Make a shape on copper layers
         SHAPE_POLY_SET polySet;
         aPad->TransformShapeToPolygon( polySet, pcb_layer, 0, ARC_HIGH_DEF, ERROR_INSIDE );
+
+        if( castellated )
+        {
+            polySet.ClearArcs();
+            polySet.BooleanIntersection( *aClipPolygon );
+        }
 
         success &= MakeShapes( padShapes, polySet, m_simplifyShapes, thickness, Zpos, aOrigin );
 
@@ -862,20 +871,56 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
         getLayerZPlacement( B_Cu, b_pos, b_thickness );
         double top = std::max( f_pos, f_pos + f_thickness );
         double bottom = std::min( b_pos, b_pos + b_thickness );
+        double hole_height = top - bottom;
 
         TopoDS_Shape plating;
 
         std::shared_ptr<SHAPE_SEGMENT> seg_hole = aPad->GetEffectiveHoleShape();
         double width = std::min( aPad->GetDrillSize().x, aPad->GetDrillSize().y );
 
-        if( MakeShapeAsThickSegment( plating, seg_hole->GetSeg().A, seg_hole->GetSeg().B, width,
-                                     ( top - bottom ), bottom, aOrigin ) )
+        if( !castellated )
         {
-            padShapes.push_back( plating );
+            if( MakeShapeAsThickSegment( plating, seg_hole->GetSeg().A, seg_hole->GetSeg().B, width,
+                                         hole_height, bottom, aOrigin ) )
+            {
+                padShapes.push_back( plating );
+            }
+            else
+            {
+                success = false;
+            }
         }
         else
         {
-            success = false;
+            // Note:
+            // the truncated hole shape is exported as a vertical filled shape. The hole itself
+            // will be removed later, when all holes are removed from the board
+            SHAPE_POLY_SET polyHole;
+
+            if( seg_hole->GetSeg().A == seg_hole->GetSeg().B )  // Hole is a circle
+            {
+                TransformCircleToPolygon( polyHole, seg_hole->GetSeg().A, width/2,
+                                          ARC_HIGH_DEF, ERROR_OUTSIDE );
+
+            }
+            else
+            {
+                TransformOvalToPolygon( polyHole,
+                                        seg_hole->GetSeg().A, seg_hole->GetSeg().B,
+                                        width, ARC_HIGH_DEF, ERROR_OUTSIDE );
+            }
+
+            polyHole.ClearArcs();
+            polyHole.BooleanIntersection( *aClipPolygon );
+
+            if( MakePolygonAsWall( plating, polyHole, hole_height, bottom, aOrigin ) )
+            {
+                padShapes.push_back( plating );
+            }
+            else
+            {
+                success = false;
+            }
         }
     }
 
@@ -1382,6 +1427,25 @@ bool STEP_PCB_MODEL::MakeShapeAsThickSegment( TopoDS_Shape& aShape,
 }
 
 
+bool STEP_PCB_MODEL::MakePolygonAsWall( TopoDS_Shape& aShape,
+                                        SHAPE_POLY_SET& aPolySet,
+                                        double aHeight,
+                                        double aZposition, const VECTOR2D& aOrigin )
+{
+    std::vector<TopoDS_Shape> testShapes;
+
+    bool success = MakeShapes( testShapes, aPolySet, m_simplifyShapes,
+                               aHeight, aZposition, aOrigin );
+
+    if( testShapes.size() > 0 )
+        aShape = testShapes.front();
+    else
+        success = false;
+
+    return success;
+}
+
+
 static wxString formatBBox( const BOX2I& aBBox )
 {
     wxString       str;
@@ -1557,7 +1621,8 @@ static bool makeWireFromChain( BRepLib_MakeWire& aMkWire, const SHAPE_LINE_CHAIN
 }
 
 
-bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE_POLY_SET& aPolySet, bool aConvertToArcs,
+bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE_POLY_SET& aPolySet,
+                                 bool aConvertToArcs,
                                  double aThickness, double aZposition, const VECTOR2D& aOrigin )
 {
     SHAPE_POLY_SET workingPoly = aPolySet;
