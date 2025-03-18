@@ -37,6 +37,7 @@
 #include <sch_rule_area.h>
 #include <sch_screen.h>
 #include <sch_sheet_path.h>
+#include <geometry/shape_rect.h>
 
 
 wxString SCH_RULE_AREA::GetClass() const
@@ -260,15 +261,22 @@ void SCH_RULE_AREA::RefreshContainedItemsAndDirectives(
         }
         else if( areaItem->IsType( { SCH_SYMBOL_T } ) )
         {
-            addContainedItem( areaItem );
+            SCH_SYMBOL*      symbol = static_cast<SCH_SYMBOL*>( areaItem );
+            const BOX2I      symbolBb = symbol->GetBoundingBox();
+            const SHAPE_RECT rect( symbolBb );
 
-            // Add child pins which are within the rule area
-            const SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( areaItem );
-
-            for( SCH_PIN* pin : symbol->GetPins() )
+            if( GetPolyShape().Collide( &rect ) )
             {
-                if( GetPolyShape().Collide( pin->GetPosition() ) )
-                    addContainedItem( pin );
+                addContainedItem( areaItem );
+
+                // Add child pins which are within the rule area
+                const SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( areaItem );
+
+                for( SCH_PIN* pin : symbol->GetPins() )
+                {
+                    if( GetPolyShape().Collide( pin->GetPosition() ) )
+                        addContainedItem( pin );
+                }
             }
         }
     }
