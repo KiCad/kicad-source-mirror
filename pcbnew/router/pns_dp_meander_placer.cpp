@@ -104,7 +104,8 @@ bool DP_MEANDER_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     if( !m_originPair.PLine().SegmentCount() || !m_originPair.NLine().SegmentCount() )
         return false;
 
-    m_tunedPathP = topo.AssembleTuningPath( m_originPair.PLine().GetLink( 0 ), &m_startPad_p, &m_endPad_p );
+    m_tunedPathP = topo.AssembleTuningPath( Router()->GetInterface(), m_originPair.PLine().GetLink( 0 ), &m_startPad_p,
+                                            &m_endPad_p );
 
     m_padToDieP = 0;
 
@@ -114,7 +115,8 @@ bool DP_MEANDER_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     if( m_endPad_p )
         m_padToDieP += m_endPad_p->GetPadToDie();
 
-    m_tunedPathN = topo.AssembleTuningPath( m_originPair.NLine().GetLink( 0 ), &m_startPad_n, &m_endPad_n );
+    m_tunedPathN = topo.AssembleTuningPath( Router()->GetInterface(), m_originPair.NLine().GetLink( 0 ), &m_startPad_n,
+                                            &m_endPad_n );
 
     m_padToDieN = 0;
 
