@@ -995,7 +995,7 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
                 // around it would be.
                 PCB_TEXT textCopy = *text;
                 textCopy.SetIsKnockout( false );
-                textCopy.TransformShapeToPolygon( aHoles, aLayer, 0, m_maxError, ERROR_OUTSIDE );
+                textCopy.TransformTextToPolySet( aHoles, 0, m_maxError, ERROR_INSIDE );
             }
             else
             {
@@ -1910,10 +1910,7 @@ bool ZONE_FILLER::fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
                 if( aItem->IsKnockout() && aItem->IsOnLayer( aLayer )
                         && aItem->GetBoundingBox().Intersects( zone_boundingbox ) )
                 {
-                    DRC_CONSTRAINT cc = bds.m_DRCEngine->EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT,
-                                                                    aZone, aItem, aLayer );
-
-                    addKnockout( aItem, aLayer, cc.GetValue().Min(), false, clearanceHoles );
+                    addKnockout( aItem, aLayer, 0, true, clearanceHoles );
                 }
             };
 
