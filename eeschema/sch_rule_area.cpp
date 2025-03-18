@@ -270,8 +270,6 @@ void SCH_RULE_AREA::RefreshContainedItemsAndDirectives(
                 addContainedItem( areaItem );
 
                 // Add child pins which are within the rule area
-                const SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( areaItem );
-
                 for( SCH_PIN* pin : symbol->GetPins() )
                 {
                     if( GetPolyShape().Collide( pin->GetPosition() ) )
