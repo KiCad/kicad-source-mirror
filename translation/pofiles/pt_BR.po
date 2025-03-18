@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:42+0300\n"
-"PO-Revision-Date: 2025-03-09 15:33+0000\n"
+"PO-Revision-Date: 2025-03-19 01:15+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -726,441 +726,360 @@ msgid "User.1"
 msgstr "User.1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Show user defined layer 1"
-msgstr "Camada 1 definida pelo usuário"
+msgstr "Mostrar camada 1 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
 msgid "User.2"
 msgstr "User.2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "Show user defined layer 2"
-msgstr "Camada 2 definida pelo usuário"
+msgstr "Mostrar camada 2 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
 msgid "User.3"
 msgstr "User.3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Show user defined layer 3"
-msgstr "Camada 3 definida pelo usuário"
+msgstr "Mostrar camada 3 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
 msgid "User.4"
 msgstr "User.4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Show user defined layer 4"
-msgstr "Camada 3 definida pelo usuário"
+msgstr "Mostrar camada 4 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
 msgid "User.5"
 msgstr "User.5"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Show user defined layer 5"
-msgstr "Camada 5 definida pelo usuário"
+msgstr "Mostrar camada 5 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
 msgid "User.6"
 msgstr "User.6"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Show user defined layer 6"
-msgstr "Camada 6 definida pelo usuário"
+msgstr "Mostrar camada 6 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
 msgid "User.7"
 msgstr "User.7"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Show user defined layer 7"
-msgstr "Camada 7 definida pelo usuário"
+msgstr "Mostrar camada 7 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
 msgid "User.8"
 msgstr "User.8"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show user defined layer 8"
-msgstr "Camada 8 definida pelo usuário"
+msgstr "Mostrar camada 8 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
 msgid "User.9"
 msgstr "User.9"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Show user defined layer 9"
-msgstr "Camada 9 definida pelo usuário"
+msgstr "Mostrar camada 9 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "User.10"
-msgstr "User.1"
+msgstr "User.10"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Show user defined layer 10"
-msgstr "Camada 10 definida pelo usuário"
+msgstr "Mostrar camada 10 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "User.11"
-msgstr "User.1"
+msgstr "User.11"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Show user defined layer 11"
-msgstr "Camada 11 definida pelo usuário"
+msgstr "Mostrar camada 11 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "User.12"
-msgstr "User.1"
+msgstr "User.12"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "Show user defined layer 12"
-msgstr "Camada 12 definida pelo usuário"
+msgstr "Mostrar camada 12 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "User.13"
-msgstr "User.1"
+msgstr "User.13"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "Show user defined layer 13"
-msgstr "Camada 13 definida pelo usuário"
+msgstr "Mostrar camada 13 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "User.14"
-msgstr "User.1"
+msgstr "User.14"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Show user defined layer 14"
-msgstr "Camada 14 definida pelo usuário"
+msgstr "Mostrar camada 14 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "User.15"
-msgstr "User.1"
+msgstr "User.15"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Show user defined layer 15"
-msgstr "Camada 15 definida pelo usuário"
+msgstr "Mostrar camada 15 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "User.16"
-msgstr "User.1"
+msgstr "User.16"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "Show user defined layer 16"
-msgstr "Camada 16 definida pelo usuário"
+msgstr "Mostrar camada 16 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "User.17"
-msgstr "User.1"
+msgstr "User.17"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "Show user defined layer 17"
-msgstr "Camada 17 definida pelo usuário"
+msgstr "Mostrar camada 17 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "User.18"
-msgstr "User.1"
+msgstr "User.18"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "Show user defined layer 18"
-msgstr "Camada 18 definida pelo usuário"
+msgstr "Mostrar camada 18 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "User.19"
-msgstr "User.1"
+msgstr "User.19"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "Show user defined layer 19"
-msgstr "Camada 19 definida pelo usuário"
+msgstr "Mostrar camada 19 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "User.20"
-msgstr "User.2"
+msgstr "User.20"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "Show user defined layer 20"
-msgstr "Camada 20 definida pelo usuário"
+msgstr "Mostrar camada 20 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "User.21"
-msgstr "User.2"
+msgstr "User.21"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "Show user defined layer 21"
-msgstr "Camada 21 definida pelo usuário"
+msgstr "Mostrar camada 21 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "User.22"
-msgstr "User.2"
+msgstr "User.22"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "Show user defined layer 22"
-msgstr "Camada 22 definida pelo usuário"
+msgstr "Mostrar camada 22 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "User.23"
-msgstr "User.2"
+msgstr "User.23"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "Show user defined layer 23"
-msgstr "Camada 23 definida pelo usuário"
+msgstr "Mostrar camada 23 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "User.24"
-msgstr "User.2"
+msgstr "User.24"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "Show user defined layer 24"
-msgstr "Camada 24 definida pelo usuário"
+msgstr "Mostrar camada 24 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "User.25"
-msgstr "User.2"
+msgstr "User.25"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "Show user defined layer 25"
-msgstr "Camada 25 definida pelo usuário"
+msgstr "Mostrar camada 25 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "User.26"
-msgstr "User.2"
+msgstr "User.26"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "Show user defined layer 26"
-msgstr "Camada 26 definida pelo usuário"
+msgstr "Mostrar camada 26 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "User.27"
-msgstr "User.2"
+msgstr "User.27"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "Show user defined layer 27"
-msgstr "Camada 27 definida pelo usuário"
+msgstr "Mostrar camada 27 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "User.28"
-msgstr "User.2"
+msgstr "User.28"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "Show user defined layer 28"
-msgstr "Camada 28 definida pelo usuário"
+msgstr "Mostrar camada 28 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "User.29"
-msgstr "User.2"
+msgstr "User.29"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "Show user defined layer 29"
-msgstr "Camada 29 definida pelo usuário"
+msgstr "Mostrar camada 29 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "User.30"
-msgstr "User.3"
+msgstr "User.30"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "Show user defined layer 30"
-msgstr "Camada 30 definida pelo usuário"
+msgstr "Mostrar camada 30 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "User.31"
-msgstr "User.3"
+msgstr "User.31"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "Show user defined layer 31"
-msgstr "Camada 31 definida pelo usuário"
+msgstr "Mostrar camada 31 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "User.32"
-msgstr "User.3"
+msgstr "User.32"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "Show user defined layer 32"
-msgstr "Camada 32 definida pelo usuário"
+msgstr "Mostrar camada 32 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
 msgid "User.33"
-msgstr "User.3"
+msgstr "User.33"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
 msgid "Show user defined layer 33"
-msgstr "Camada 33 definida pelo usuário"
+msgstr "Mostrar camada 33 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "User.34"
-msgstr "User.3"
+msgstr "User.34"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "Show user defined layer 34"
-msgstr "Camada 34 definida pelo usuário"
+msgstr "Mostrar camada 34 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "User.35"
-msgstr "User.3"
+msgstr "User.35"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "Show user defined layer 35"
-msgstr "Camada 35 definida pelo usuário"
+msgstr "Mostrar camada 35 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "User.36"
-msgstr "User.3"
+msgstr "User.36"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "Show user defined layer 36"
-msgstr "Camada 36 definida pelo usuário"
+msgstr "Mostrar camada 36 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "User.37"
-msgstr "User.3"
+msgstr "User.37"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "Show user defined layer 37"
-msgstr "Camada 37 definida pelo usuário"
+msgstr "Mostrar camada 37 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "User.38"
-msgstr "User.3"
+msgstr "User.38"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "Show user defined layer 38"
-msgstr "Camada 38 definida pelo usuário"
+msgstr "Mostrar camada 38 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "User.39"
-msgstr "User.3"
+msgstr "User.39"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "Show user defined layer 39"
-msgstr "Camada 39 definida pelo usuário"
+msgstr "Mostrar camada 39 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "User.40"
-msgstr "User.4"
+msgstr "User.40"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "Show user defined layer 40"
-msgstr "Camada 40 definida pelo usuário"
+msgstr "Mostrar camada 40 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "User.41"
-msgstr "User.4"
+msgstr "User.41"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "Show user defined layer 41"
-msgstr "Camada 41 definida pelo usuário"
+msgstr "Mostrar camada 41 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "User.42"
-msgstr "User.4"
+msgstr "User.42"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "Show user defined layer 42"
-msgstr "Camada 42 definida pelo usuário"
+msgstr "Mostrar camada 42 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "User.43"
-msgstr "User.4"
+msgstr "User.43"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "Show user defined layer 43"
-msgstr "Camada 43 definida pelo usuário"
+msgstr "Mostrar camada 43 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "User.44"
-msgstr "User.4"
+msgstr "User.44"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "Show user defined layer 44"
-msgstr "Camada 44 definida pelo usuário"
+msgstr "Mostrar camada 44 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:112
-#, fuzzy
 msgid "User.45"
-msgstr "User.4"
+msgstr "User.45"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:112
-#, fuzzy
 msgid "Show user defined layer 45"
-msgstr "Camada 45 definida pelo usuário"
+msgstr "Mostrar camada 45 definida pelo usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:114
 msgid "Through-hole Models"
@@ -1254,15 +1173,15 @@ msgid "Use board stackup colors"
 msgstr "Usar as cores do empilhamento da placa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:184
-#, fuzzy
 msgid "Use PCB editor copper colors"
-msgstr "Use cores de cobre do editor de placas"
+msgstr "Use cores de cobre do editor de PCI"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:186
-#, fuzzy
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
-msgstr "Use cores de cobre do editor de placas (apenas openGL)"
+msgstr ""
+"Use as cores de camada do editor para camadas de cobre (apenas no "
+"renderizador em tempo real)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:203
 #, c-format
@@ -5868,7 +5787,7 @@ msgstr "Nome da classe da rede já está em uso."
 #: common/dialogs/panel_setup_netclasses.cpp:603
 #, c-format
 msgid "Clearance was too large.  It has been clipped to %s."
-msgstr ""
+msgstr "A folga era muito grande.  Ela foi reduzida para %s."
 
 #: common/dialogs/panel_setup_netclasses.cpp:669
 msgid "Minimum copper clearance"
@@ -22003,6 +21922,8 @@ msgid ""
 "The current analysis must have a plot in order to tune the value of a "
 "passive R, L, C model or voltage or current source."
 msgstr ""
+"A análise de corrente deve ter um gráfico para ajustar o valor de um modelo "
+"passivo R, L, C ou de uma fonte de tensão ou corrente."
 
 #: eeschema/sim/simulator_frame_ui.cpp:1661
 #: eeschema/sim/simulator_frame_ui.cpp:1674
@@ -25154,14 +25075,16 @@ msgid "Tune %s"
 msgstr "Ajuste %s"
 
 #: eeschema/widgets/tuner_slider.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s has simulation model of type '%s %s'.\n"
 "\n"
 "Only passvie R, L, C models and voltage and current sources may be tuned."
 msgstr ""
-"%s possui um modelo de simulação do tipo '%s %s'; apenas RLC passivos podem "
-"ser ajustados"
+"%s possui um modelo de simulação do tipo '%s %s'.\n"
+"\n"
+"Apenas modelos R, L, C passivos, fontes de corrente e tensão podem ser "
+"ajustados."
 
 #: eeschema/widgets/tuner_slider_base.cpp:43
 msgid "Limit to E24 series values."
@@ -26994,9 +26917,8 @@ msgid "The new behavior will match --mode-multi"
 msgstr "O novo comportamento corresponderá a --mode-multi"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:34
-#, fuzzy
 msgid "Export the PCB in Gencad format"
-msgstr "Exportar a netlist no formato KiCad"
+msgstr "Exportar a PCI no formato Gencad"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:40
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:220
@@ -28587,9 +28509,9 @@ msgid "Create New Directory"
 msgstr "Crie uma nova pasta"
 
 #: kicad/project_tree_pane.cpp:761
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get status list: %s"
-msgstr "Houve uma falha ao obter o commit: %s"
+msgstr "Houve uma falha ao obter a lista de condição: %s"
 
 #: kicad/project_tree_pane.cpp:896
 msgid "Switch to this Project"
@@ -28807,15 +28729,15 @@ msgstr "Houve uma falha atualizar a referência do HEAD para o ramo '%s'"
 
 #: kicad/project_tree_pane.cpp:1923
 msgid "Are you sure you want to remove Git tracking from this project?"
-msgstr "Tem certeza de que deseja remover o rastreamento git deste projeto?"
+msgstr "Tem certeza de que deseja remover o rastreamento Git deste projeto?"
 
 #: kicad/project_tree_pane.cpp:1940
 msgid "Failed to remove Git directory"
-msgstr "Houve uma falha ao remover o diretório git"
+msgstr "Houve uma falha ao remover o diretório Git"
 
 #: kicad/project_tree_pane.cpp:2267
 msgid "The selected directory is not a Git project."
-msgstr "O diretório selecionado não é um projeto git."
+msgstr "O diretório selecionado não é um projeto Git."
 
 #: kicad/project_tree_pane.cpp:2412
 msgid "Discarding commit due to empty commit message."
@@ -36951,7 +36873,6 @@ msgid "Length-tuning pattern defaults"
 msgstr "Padrões do padrão de ajuste de comprimento"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:78
-#, fuzzy
 msgid "Component classes"
 msgstr "Classes do componente"
 
@@ -39349,14 +39270,13 @@ msgid "Update PCB from Schematic"
 msgstr "Atualizaa a PCI a partir do esquema"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "Error with conditions for component class assignment %s"
-msgstr "Atribuições da netclass conflitante"
+msgstr "Erro com condições para atribuição de classe do componente %s"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:371
-#, fuzzy
 msgid "Reference..."
-msgstr "Referência"
+msgstr "Referência..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:372
 #: pcbnew/menubar_footprint_editor.cpp:68
@@ -39365,24 +39285,20 @@ msgid "Footprint..."
 msgstr "Footprint..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:373
-#, fuzzy
 msgid "Side..."
-msgstr "Lado"
+msgstr "Lado..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:374
-#, fuzzy
 msgid "Rotation..."
-msgstr "Rotação"
+msgstr "Rotação..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:375
-#, fuzzy
 msgid "Footprint Field..."
-msgstr "Editar Campo do Footprint…"
+msgstr "Campo do footprint…"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:376
-#, fuzzy
 msgid "Sheet Name..."
-msgstr "Nome da folha"
+msgstr "Nome da folha..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:595
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:650
@@ -39392,59 +39308,48 @@ msgstr "Nome da folha"
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:756
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:773
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:344
-#, fuzzy
 msgid "Footprint Field:"
-msgstr "Campos do footprint"
+msgstr "Campo do footprint:"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:618
-#, fuzzy
 msgid "Import references from selection"
-msgstr "Cria trilhas a partir da seleção"
+msgstr "Importar referências a partir da seleção"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:19
-#, fuzzy
 msgid "Assign component class per sheet"
-msgstr "Classes do componente"
+msgstr "Atribuir classe do componente por folha"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:31
-#, fuzzy
 msgid "Custom Assignments:"
-msgstr "Atribuições do pino"
+msgstr "Tarefas personalizadas:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:38
-#, fuzzy
 msgid "Add Custom Assignment"
-msgstr "Adicionar as atribuições da netclass"
+msgstr "Adicionar tarefas personalizadas"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:84
-#, fuzzy
 msgid "Component Class:"
-msgstr "Classe do componente"
+msgstr "Classe do componente:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:118
-#, fuzzy
 msgid "Match All"
-msgstr "Preenchimento de Hachura"
+msgstr "Corresponder todos"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:122
-#, fuzzy
 msgid "Match Any"
-msgstr "Camadas correspondentes"
+msgstr "Corresponder qualquer um"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:294
-#, fuzzy
 msgid "Footprint:"
-msgstr "Footprint: "
+msgstr "Footprint:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:358
-#, fuzzy
 msgid "Field Value:"
-msgstr "Valor final:"
+msgstr "Valor do campo:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:442
-#, fuzzy
 msgid "Sheet Name:"
-msgstr "Nome da folha"
+msgstr "Nome da folha:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:33
 msgid "Constrain actions to H, V, 45 degrees"
@@ -42136,9 +42041,9 @@ msgid "Condition not satisfied; rule ignored."
 msgstr "Condição não satisfeita; regra ignorada."
 
 #: pcbnew/drc/drc_engine.cpp:1389
-#, fuzzy, c-format
+#, c-format
 msgid "Inheriting from parent: %s."
-msgstr "Derivando do símbolo '%s'."
+msgstr "Herdando do principal: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1428 pcbnew/drc/drc_engine.cpp:1452
 #, c-format
@@ -42540,14 +42445,13 @@ msgid "Missing ')'."
 msgstr "Faltando ')'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:353
-#, fuzzy
 msgid "Missing component class name."
-msgstr "Falta o nome da regra."
+msgstr "Faltando o nome da classe do componente."
 
 #: pcbnew/drc/drc_rule_parser.cpp:381
-#, fuzzy, c-format
+#, c-format
 msgid "Could not parse expression '%s'."
-msgstr "Não foi possível importar a folha de '%s'."
+msgstr "Não foi possível analisar a expressão '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:444
 #, c-format
@@ -43709,9 +43613,9 @@ msgid "Memory exhausted loading PCB '%s'"
 msgstr "Memória esgotada ao carregar a PCI '%s'"
 
 #: pcbnew/files.cpp:814 pcbnew/pcb_edit_frame.cpp:1361
-#, fuzzy
 msgid "Could not load component class assignment rules"
-msgstr "Não foi possível compilar regras personalizadas do desenho."
+msgstr ""
+"Não foi possível carregar as regras de atribuição de classes dos componentes"
 
 #: pcbnew/files.cpp:875
 #, c-format
@@ -47691,9 +47595,8 @@ msgid "Filling"
 msgstr "Preenchimento"
 
 #: pcbnew/pcbexpr_evaluator.cpp:614
-#, fuzzy
 msgid "must be mm, in, mil, or deg"
-msgstr "deve ser mm, pol ou mil"
+msgstr "deve ser mm, in, mil, ou deg"
 
 #: pcbnew/pcbexpr_functions.cpp:76
 #, c-format
@@ -49539,9 +49442,8 @@ msgid "Repeat layout"
 msgstr "Repitir a disposição"
 
 #: pcbnew/tools/multichannel_tool.cpp:548
-#, fuzzy
 msgid "Group repeated items"
-msgstr "Itens importados do grupo"
+msgstr "Itens repetidos do grupo"
 
 #: pcbnew/tools/multichannel_tool.cpp:554
 #, c-format
@@ -52841,9 +52743,8 @@ msgid "Source Name"
 msgstr "Nome da fonte"
 
 #: pcbnew/zone.cpp:1978
-#, fuzzy
 msgid "Hatch Orientation"
-msgstr "Orientação"
+msgstr "Orientação da escotilha"
 
 #: pcbnew/zone.cpp:1996
 msgid "Cannot be less than zone minimum width"
