@@ -30,10 +30,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:42+0300\n"
-"PO-Revision-Date: 2025-03-17 09:11+0000\n"
+"PO-Revision-Date: 2025-03-18 13:22+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5889,7 +5889,7 @@ msgstr "Name der Netzklasse wird bereits benutzt."
 #: common/dialogs/panel_setup_netclasses.cpp:603
 #, c-format
 msgid "Clearance was too large.  It has been clipped to %s."
-msgstr ""
+msgstr "Der Freiraum war zu groß.   Er wurde auf %s begrenzt."
 
 #: common/dialogs/panel_setup_netclasses.cpp:669
 msgid "Minimum copper clearance"
@@ -16647,6 +16647,11 @@ msgid ""
 "Global will convert new power symbols to global power symbols.\n"
 "Local will convert new power symbols to a local power symbols."
 msgstr ""
+"Wählen Sie den Typ des neuen Spannungssymbols.\n"
+"\"Standard\" entspricht der Symboldefinition.\n"
+"\"Global\" wird neue Spannungssymbole zu globalen Spannungssymbolen "
+"umwandeln.\n"
+"\"Lokal\" wird neue Spannungssymbole zu lokalenSpannungssymbolen umwandeln."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:134
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:192
@@ -22025,6 +22030,8 @@ msgid ""
 "The current analysis must have a plot in order to tune the value of a "
 "passive R, L, C model or voltage or current source."
 msgstr ""
+"Die Analyse muss einen Plot haben, um den Wert eines passiven R-, L-, C-"
+"Modells oder einer Spannungs- oder Stromquelle abzustimmen."
 
 #: eeschema/sim/simulator_frame_ui.cpp:1661
 #: eeschema/sim/simulator_frame_ui.cpp:1674
@@ -39109,7 +39116,7 @@ msgstr "Aus Designregeln"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:180
 msgid "Type I a ( tented top )"
-msgstr "Typ I a (Oberseite abgedeckt)"
+msgstr "Typ I a (oberseitig abgedeckt)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:181
 msgid "Type I b ( tented both sides )"
@@ -39117,11 +39124,11 @@ msgstr "Typ I b (beidseitig abgedeckt)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:182
 msgid "Type I a ( tented bottom )"
-msgstr "Type I a (Unterseite abgedeckt)"
+msgstr "Type I a (unterseitig abgedeckt)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:183
 msgid "Type II a ( covered and tented top )"
-msgstr "Typ II a (Oberseite abgedeckt (Trockenfilm + LPI))"
+msgstr "Typ II a (oberseitig abgedeckt (Trockenfilm + LPI))"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:184
 msgid "Type II b ( covered and tented both sides )"
@@ -39129,52 +39136,51 @@ msgstr "Typ II a (beiseitig abgedeckt (Trockenfilm + LPI))"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:185
 msgid "Type II a ( covered and tented bottom )"
-msgstr "Typ II a (Unterseite abgedeckt (Trockenfilm + LPI))"
+msgstr "Typ II a (unterseitig abgedeckt (Trockenfilm + LPI))"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:186
 msgid "Type III a ( plugged top )"
-msgstr ""
+msgstr "Typ III a (oberseitig geplugged)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:187
 msgid "Type III b ( plugged both sides )"
-msgstr ""
+msgstr "Typ III b (beidseitig geplugged)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:188
 msgid "Type III a ( plugged bottom )"
-msgstr ""
+msgstr "Typ III a (unterseitig geplugged)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:189
 msgid "Type IV a ( plugged and tented top )"
-msgstr ""
+msgstr "Typ IV a (oberseitig geplugged und abgedeckt)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:190
 msgid "Type IV b ( plugged and tented both sides )"
-msgstr ""
+msgstr "Typ IV b (beiseitig geplugged und abgedeckt)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:191
 msgid "Type IV a ( plugged and tented bottom )"
-msgstr ""
+msgstr "Typ IV a (unterseitig geplugged und abgedeckt)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:192
-#, fuzzy
 msgid "Type V ( filled )"
-msgstr "Text zum Filtern eingeben"
+msgstr "Typ V (gefüllt)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:193
 msgid "Type VI a ( filled and tented top )"
-msgstr ""
+msgstr "Typ VI a (gefüllt und oberseitig abgedeckt)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:194
 msgid "Type VI b ( filled and tented both sides )"
-msgstr ""
+msgstr "Typ VI b (gefüllt und beidseitig abgedeckt)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:195
 msgid "Type VI a ( filled and tented bottom )"
-msgstr ""
+msgstr "Typ VI a (gefüllt und unterseitig abgedeckt)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:196
 msgid "Type VII ( filled and capped )"
-msgstr ""
+msgstr "Typ VII (gefüllt und überkontaktiert)"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:41
 msgid "Automatically update via nets"
@@ -39259,7 +39265,7 @@ msgstr "Querschnittsfläche:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:385
 msgid ""
 "Select which protection feature according to IPC-4761 the via should have."
-msgstr ""
+msgstr "Viaschutz nach IPC-4761 auswählen."
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:437
 msgid "Add teardrops on via's track connections"
@@ -47738,7 +47744,7 @@ msgstr "Nicht gefunden"
 
 #: pcbnew/pcb_track.cpp:2207
 msgid "Capped"
-msgstr ""
+msgstr "Überkontaktiert"
 
 #: pcbnew/pcb_track.cpp:2208
 #, fuzzy
@@ -47796,7 +47802,7 @@ msgstr "Rücks. Abdeckung"
 
 #: pcbnew/pcb_track.cpp:2305
 msgid "Capping"
-msgstr ""
+msgstr "Überkontaktieren"
 
 #: pcbnew/pcb_track.cpp:2307
 #, fuzzy
@@ -53049,6 +53055,8 @@ msgstr "Entferne isolierte Kupferinseln ..."
 #: pcbnew/zone_filler.cpp:889
 msgid "Prototype zone fill enabled. Disable setting and refill?"
 msgstr ""
+"Prototypische Zonenfüllung aktiviert. Einstellung deaktivieren und neu "
+"füllen?"
 
 #: pcbnew/zone_filler.cpp:891
 #, fuzzy
