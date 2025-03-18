@@ -668,6 +668,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
 void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, bool aIsKnockout,
                                  const KIFONT::METRICS& aFontMetrics, bool aStrikeout )
 {
+    int           maxError = m_board->GetDesignSettings().m_MaxError;
     KIFONT::FONT* font = aText->GetFont();
 
     if( !font )
@@ -730,15 +731,9 @@ void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, boo
         SHAPE_POLY_SET  finalPoly;
 
         if( const PCB_TEXT* text = dynamic_cast<const PCB_TEXT*>( aText) )
-        {
-            text->TransformTextToPolySet( finalPoly, 0, m_board->GetDesignSettings().m_MaxError,
-                                          ERROR_INSIDE );
-        }
+            text->TransformTextToPolySet( finalPoly, 0, maxError, ERROR_INSIDE );
         else if( const PCB_TEXTBOX* textbox = dynamic_cast<const PCB_TEXTBOX*>( aText ) )
-        {
-            textbox->TransformTextToPolySet( finalPoly, 0, m_board->GetDesignSettings().m_MaxError,
-                                             ERROR_INSIDE );
-        }
+            textbox->TransformTextToPolySet( finalPoly, 0, maxError, ERROR_INSIDE );
 
         finalPoly.Fracture();
 

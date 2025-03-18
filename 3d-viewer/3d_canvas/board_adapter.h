@@ -492,11 +492,8 @@ private:
     double            m_biuTo3Dunits;         ///< Scale factor to convert board internal units
                                               ///<  to 3D units normalized between -1.0 and 1.0.
 
-    std::map<PCB_LAYER_ID, float> m_layerZcoordTop;    ///< Top (End) Z position of each
-                                                       ///< layer in 3D units.
-
-    std::map<PCB_LAYER_ID, float> m_layerZcoordBottom; ///< Bottom (Start) Z position of
-                                                       ///< each layer in 3D units.
+    std::map<PCB_LAYER_ID, float> m_layerZcoordTop;    ///< Top (End) Z pos of each layer in 3D units.
+    std::map<PCB_LAYER_ID, float> m_layerZcoordBottom; ///< Bottom (Start) Z pos of each layer.
 
     float             m_frontCopperThickness3DU;
     float             m_backCopperThickness3DU;

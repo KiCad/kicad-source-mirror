@@ -412,8 +412,7 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
                 {
                     // The copper thickness must be > 0 to avoid draw issues (divide by 0 for
                     // instance).   We use a minimal arbitrary value = 1 micrometer here:
-                    int copper_thickness = std::max( item->GetThickness(),
-                                                     pcbIUScale.mmToIU( 0.001 ) );
+                    int copper_thickness = std::max( item->GetThickness(), pcbIUScale.mmToIU( 0.001 ) );
 
                     if( item->GetBrdLayerId() == F_Cu )
                         m_frontCopperThickness3DU = copper_thickness * m_biuTo3Dunits;
@@ -429,8 +428,7 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
                 {
                     // The mask thickness must be > 0 to avoid draw issues (divide by 0 for
                     // instance).   We use a minimal arbitrary value = 1 micrometer here:
-                    int mask_thickness = std::max( item->GetThickness(),
-                                                   pcbIUScale.mmToIU( 0.001 ) );
+                    int mask_thickness = std::max( item->GetThickness(), pcbIUScale.mmToIU( 0.001 ) );
 
                     if( item->GetBrdLayerId() == F_Mask )
                         m_frontMaskThickness3DU = mask_thickness * m_biuTo3Dunits;
@@ -477,8 +475,7 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
         };
 
         m_layerZcoordBottom[layer_id] = m_boardBodyThickness3DU / 2.0
-                                        - ( m_boardBodyThickness3DU * layer_pos
-                                            / ( m_copperLayersCount - 1 ) );
+                                        - ( m_boardBodyThickness3DU * layer_pos / ( m_copperLayersCount - 1 ) );
 
         if( layer_pos < (m_copperLayersCount / 2) )
             m_layerZcoordTop[layer_id] = m_layerZcoordBottom[layer_id] + m_frontCopperThickness3DU;
@@ -554,8 +551,7 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
 
     m_boardCenter = SFVEC3F( m_boardPos.x * m_biuTo3Dunits, m_boardPos.y * m_biuTo3Dunits, 0.0f );
 
-    SFVEC3F boardSize = SFVEC3F( m_boardSize.x * m_biuTo3Dunits, m_boardSize.y * m_biuTo3Dunits,
-                                 0.0f );
+    SFVEC3F boardSize = SFVEC3F( m_boardSize.x * m_biuTo3Dunits, m_boardSize.y * m_biuTo3Dunits, 0.0f );
     boardSize /= 2.0f;
 
     SFVEC3F boardMin = ( m_boardCenter - boardSize );
@@ -924,9 +920,9 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetVisibleLayers() const
         for( int layer = LAYER_3D_USER_1; layer <= LAYER_3D_USER_45; ++layer )
             ret.set( layer, layers.test( Map3DLayerToPCBLayer( layer ) ) );
 
-        ret.set( LAYER_FP_REFERENCES, plotParams.GetPlotReference() );
-        ret.set( LAYER_FP_VALUES,     plotParams.GetPlotValue() );
-        ret.set( LAYER_FP_TEXT,       plotParams.GetPlotFPText() );
+        ret.set( LAYER_FP_REFERENCES,        plotParams.GetPlotReference() );
+        ret.set( LAYER_FP_VALUES,            plotParams.GetPlotValue() );
+        ret.set( LAYER_FP_TEXT,              plotParams.GetPlotFPText() );
     }
     else if( LAYER_PRESET_3D* preset = m_Cfg->FindPreset( m_Cfg->m_CurrentPreset ) )
     {
@@ -1063,9 +1059,8 @@ SFVEC4F BOARD_ADAPTER::GetColor( const COLOR4D& aColor ) const
 
 SFVEC2F BOARD_ADAPTER::GetSphericalCoord( int i ) const
 {
-    SFVEC2F sphericalCoord =
-            SFVEC2F( ( m_Cfg->m_Render.raytrace_lightElevation[i] + 90.0f ) / 180.0f,
-                       m_Cfg->m_Render.raytrace_lightAzimuth[i] / 180.0f );
+    SFVEC2F sphericalCoord = SFVEC2F( ( m_Cfg->m_Render.raytrace_lightElevation[i] + 90.0f ) / 180.0f,
+                                      m_Cfg->m_Render.raytrace_lightAzimuth[i] / 180.0f );
 
     sphericalCoord.x = glm::clamp( sphericalCoord.x, 0.0f, 1.0f );
     sphericalCoord.y = glm::clamp( sphericalCoord.y, 0.0f, 2.0f );

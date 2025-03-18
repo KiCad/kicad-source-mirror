@@ -567,7 +567,7 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 
         if( m_boardAdapter.m_Cfg->m_Render.opengl_copper_thickness )
         {
-            if( map_poly.find( layer ) != map_poly.end() )
+            if( map_poly.contains( layer ) )
             {
                 polyListSubtracted = *map_poly.at( layer );
 
@@ -584,11 +584,11 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 
                 if( m_boardAdapter.m_Cfg->m_Render.subtract_mask_from_silk )
                 {
-                    if( layer == B_SilkS && map_poly.find( B_Mask ) != map_poly.end() )
+                    if( layer == B_SilkS && map_poly.contains( B_Mask ) )
                     {
                         polyListSubtracted.BooleanSubtract( *map_poly.at( B_Mask ) );
                     }
-                    else if( layer == F_SilkS && map_poly.find( F_Mask ) != map_poly.end() )
+                    else if( layer == F_SilkS && map_poly.contains( F_Mask ) )
                     {
                         polyListSubtracted.BooleanSubtract( *map_poly.at( F_Mask ) );
                     }
@@ -962,7 +962,7 @@ void RENDER_3D_OPENGL::load3dModels( REPORTER* aStatusReporter )
 
                 // Check if the fp_model is not present in our cache map
                 // (Not already loaded in memory)
-                if( m_3dModelMap.find( fp_model.m_Filename ) == m_3dModelMap.end() )
+                if( !m_3dModelMap.contains( fp_model.m_Filename ) )
                 {
                     // It is not present, try get it from cache
                     const S3DMODEL* modelPtr =

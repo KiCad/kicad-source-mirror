@@ -3851,8 +3851,7 @@ bool FOOTPRINT::cmp_zones::operator()( const ZONE* aFirst, const ZONE* aSecond )
 
 
 void FOOTPRINT::TransformPadsToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
-                                        int aClearance, int aMaxError, ERROR_LOC aErrorLoc,
-                                        bool aSkipNPTHPadsWihNoCopper ) const
+                                        int aClearance, int aMaxError, ERROR_LOC aErrorLoc ) const
 {
     auto processPad =
         [&]( const PAD* pad, PCB_LAYER_ID padLayer )

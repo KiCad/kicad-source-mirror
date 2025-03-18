@@ -533,16 +533,9 @@ public:
      * @param aBuffer i the buffer to store polygons.
      * @param aClearance is an additional size to add to pad shapes.
      * @param aMaxError is the maximum deviation from true for arcs.
-     * @param aSkipNPTHPadsWihNoCopper if true, do not add a NPTH pad shape, if the shape has
-     *          same size and position as the hole. Usually, these pads are not drawn on copper
-     *          layers, because there is actually no copper
-     *          Due to diff between layers and holes, these pads must be skipped to be sure
-     *          there is no copper left on the board (for instance when creating Gerber Files or
-     *          3D shapes).  Defaults to false.
      */
     void TransformPadsToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
-                                 int aMaxError, ERROR_LOC aErrorLoc,
-                                 bool aSkipNPTHPadsWihNoCopper = false ) const;
+                                 int aMaxError, ERROR_LOC aErrorLoc ) const;
 
     /**
      * Generate shapes of graphic items (outlines) on layer \a aLayer as polygons and adds these

@@ -47,7 +47,6 @@
 /// Render Row abbreviation to reduce source width.
 #define RR  APPEARANCE_CONTROLS_3D::APPEARANCE_SETTING_3D
 
-// clang-format off
 /// Template for object appearance settings
 const APPEARANCE_CONTROLS_3D::APPEARANCE_SETTING_3D APPEARANCE_CONTROLS_3D::s_layerSettings[] = {
 
@@ -118,27 +117,26 @@ const APPEARANCE_CONTROLS_3D::APPEARANCE_SETTING_3D APPEARANCE_CONTROLS_3D::s_la
     RR( _HKI( "Models marked DNP" ),      LAYER_3D_MODELS_MARKED_DNP, EDA_3D_ACTIONS::showDNP ),
     RR( _HKI( "Model Bounding Boxes" ),   LAYER_3D_BOUNDING_BOXES,    EDA_3D_ACTIONS::showBBoxes ),
     RR(),
-    RR( _HKI( "Values" ),               LAYER_FP_VALUES,            _HKI( "Show footprint values" ) ),
-    RR( _HKI( "References" ),           LAYER_FP_REFERENCES,        _HKI( "Show footprint references" ) ),
-    RR( _HKI( "Footprint Text" ),       LAYER_FP_TEXT,              _HKI( "Show all footprint text" ) ),
-    RR( _HKI( "Off-board Silkscreen" ), LAYER_3D_OFF_BOARD_SILK,    _HKI( "Do not clip silk layers to board outline" ) ),
+    RR( _HKI( "Values" ),               LAYER_FP_VALUES,           _HKI( "Show footprint values" ) ),
+    RR( _HKI( "References" ),           LAYER_FP_REFERENCES,       _HKI( "Show footprint references" ) ),
+    RR( _HKI( "Footprint Text" ),       LAYER_FP_TEXT,             _HKI( "Show all footprint text" ) ),
+    RR( _HKI( "Off-board Silkscreen" ), LAYER_3D_OFF_BOARD_SILK,   _HKI( "Do not clip silk layers to board outline" ) ),
     RR(),
     RR( _HKI( "3D Axis" ),              LAYER_3D_AXES,              EDA_3D_ACTIONS::showAxis ),
     RR( _HKI( "Background Start" ),     LAYER_3D_BACKGROUND_TOP,    _HKI( "Background gradient start color" ) ),
     RR( _HKI( "Background End" ),       LAYER_3D_BACKGROUND_BOTTOM, _HKI( "Background gradient end color" ) ),
 };
-// clang-format on
 
 // The list of IDs that can have colors coming from the board stackup, and cannot be
 // modified if use colors from stackup is activated
-static std::vector<int> inStackupColors{ LAYER_3D_BOARD, LAYER_3D_COPPER_TOP,
-                                         LAYER_3D_COPPER_BOTTOM, LAYER_3D_SOLDERPASTE,
+static std::vector<int> inStackupColors{ LAYER_3D_BOARD,
+                                         LAYER_3D_COPPER_TOP, LAYER_3D_COPPER_BOTTOM,
+                                         LAYER_3D_SOLDERPASTE,
                                          LAYER_3D_SILKSCREEN_TOP, LAYER_3D_SILKSCREEN_BOTTOM,
                                          LAYER_3D_SOLDERMASK_TOP, LAYER_3D_SOLDERMASK_BOTTOM
                                         };
 
-APPEARANCE_CONTROLS_3D::APPEARANCE_CONTROLS_3D( EDA_3D_VIEWER_FRAME* aParent,
-                                                wxWindow* aFocusOwner ) :
+APPEARANCE_CONTROLS_3D::APPEARANCE_CONTROLS_3D( EDA_3D_VIEWER_FRAME* aParent, wxWindow* aFocusOwner ) :
         APPEARANCE_CONTROLS_3D_BASE( aParent ),
         m_frame( aParent ),
         m_focusOwner( aFocusOwner ),
@@ -200,18 +198,17 @@ APPEARANCE_CONTROLS_3D::APPEARANCE_CONTROLS_3D( EDA_3D_VIEWER_FRAME* aParent,
     m_panelLayersSizer->Add( m_cbUseBoardEditorCopperColors, 0,
                              wxEXPAND | wxALL, 5 );
 
-    m_cbLayerPresets->SetToolTip( wxString::Format( _( "Save and restore color and visibility "
-                                                       "combinations.\n"
+    m_cbLayerPresets->SetToolTip( wxString::Format( _( "Save and restore color and visibility combinations.\n"
                                                        "Use %s+Tab to activate selector.\n"
-                                                       "Successive Tabs while holding %s down will "
-                                                       "cycle through presets in the popup." ),
+                                                       "Successive Tabs while holding %s down will cycle through "
+                                                       "presets in the popup." ),
                                                     KeyNameFromKeyCode( PRESET_SWITCH_KEY ),
                                                     KeyNameFromKeyCode( PRESET_SWITCH_KEY ) ) );
 
     m_cbViewports->SetToolTip( wxString::Format( _( "Save and restore camera position and zoom.\n"
                                                     "Use %s+Tab to activate selector.\n"
-                                                    "Successive Tabs while holding %s down will "
-                                                    "cycle through viewports in the popup." ),
+                                                    "Successive Tabs while holding %s down will cycle through "
+                                                    "viewports in the popup." ),
                                                  KeyNameFromKeyCode( VIEWPORT_SWITCH_KEY ),
                                                  KeyNameFromKeyCode( VIEWPORT_SWITCH_KEY ) ) );
 
@@ -475,8 +472,7 @@ void APPEARANCE_CONTROLS_3D::OnLayerVisibilityChanged( int aLayer, bool isVisibl
 
     if( doFastRefresh && m_frame->GetAdapter().m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL )
     {
-        RENDER_3D_OPENGL* renderer =
-            static_cast<RENDER_3D_OPENGL*>( m_frame->GetCanvas()->GetCurrentRender() );
+        RENDER_3D_OPENGL* renderer = static_cast<RENDER_3D_OPENGL*>( m_frame->GetCanvas()->GetCurrentRender() );
         renderer->Load3dModelsIfNeeded();
         m_frame->GetCanvas()->Request_refresh();
     }
@@ -595,9 +591,10 @@ void APPEARANCE_CONTROLS_3D::rebuildLayers()
                 }
                 else
                 {
-                    BITMAP_TOGGLE* btn_visible = new BITMAP_TOGGLE(
-                            m_windowLayers, layer, KiBitmapBundle( BITMAPS::visibility ),
-                            KiBitmapBundle( BITMAPS::visibility_off ), aSetting->m_Visible );
+                    BITMAP_TOGGLE* btn_visible = new BITMAP_TOGGLE( m_windowLayers, layer,
+                                                                    KiBitmapBundle( BITMAPS::visibility ),
+                                                                    KiBitmapBundle( BITMAPS::visibility_off ),
+                                                                    aSetting->m_Visible );
 
                     btn_visible->Bind( TOGGLE_CHANGED,
                             [this]( wxCommandEvent& aEvent )
@@ -670,12 +667,8 @@ void APPEARANCE_CONTROLS_3D::UpdateLayerCtls()
 
             // if cfg->m_UseStackupColors is set, board colors cannot be modified locally, but
             // other colors can be
-            if( std::find( inStackupColors.begin(), inStackupColors.end(), setting->m_Id )
-                != inStackupColors.end() )
-            {
-                if( cfg )
-                    setting->m_Ctl_color->SetReadOnly( cfg->m_UseStackupColors );
-            }
+            if( alg::contains( inStackupColors, setting->m_Id ) && cfg )
+                setting->m_Ctl_color->SetReadOnly( cfg->m_UseStackupColors );
         }
     }
 
@@ -722,11 +715,8 @@ void APPEARANCE_CONTROLS_3D::syncLayerPresetSelection()
             presets.begin(), presets.end(),
             [&]( const LAYER_PRESET_3D& aPreset )
             {
-                if( aPreset.name.Lower() == _( "legacy colors" )
-                    && m_cbUseBoardStackupColors->GetValue() )
-                {
+                if( aPreset.name.Lower() == _( "legacy colors" ) && m_cbUseBoardStackupColors->GetValue() )
                     return false;
-                }
 
                 for( int layer = LAYER_3D_BOARD; layer < LAYER_3D_END; ++layer )
                 {
@@ -986,8 +976,7 @@ void APPEARANCE_CONTROLS_3D::onViewportChanged( wxCommandEvent& aEvent )
         {
             m_viewports[name] = VIEWPORT3D( name, m_frame->GetCurrentCamera().GetViewMatrix() );
 
-            index = m_cbViewports->Insert( name, index-1,
-                                           static_cast<void*>( &m_viewports[name] ) );
+            index = m_cbViewports->Insert( name, index-1, static_cast<void*>( &m_viewports[name] ) );
         }
         else
         {

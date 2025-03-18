@@ -727,9 +727,7 @@ void SCH_PAINTER::draw( const LIB_SYMBOL* aSymbol, int aLayer, bool aDrawFields,
     auto childOnLayer =
             []( const SCH_ITEM& item, int layer )
             {
-                std::vector<int> layers = item.ViewGetLayers();
-
-                return std::find( layers.begin(), layers.end(), layer ) != layers.end();
+                return alg::contains( item.ViewGetLayers(), layer );
             };
 
     for( const SCH_ITEM& item : drawnSymbol->GetDrawItems() )

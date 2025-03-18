@@ -923,8 +923,6 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PCB_LAYER_ID aLayer,
                          bool aPlotFPText, bool aPlotReferences, bool aPlotValues )
 {
-#define ERROR maxError, ERROR_OUTSIDE
-
     int             maxError = aBoard->GetDesignSettings().m_MaxError;
     SHAPE_POLY_SET  buffer;
     SHAPE_POLY_SET* boardOutline = nullptr;
@@ -963,9 +961,9 @@ void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PCB_LAYER_ID aLa
                     return;
 
                 if( inflate != 0 )
-                    aText.TransformTextToPolySet( exactPolys, 0, ERROR );
+                    aText.TransformTextToPolySet( exactPolys, 0, maxError, ERROR_OUTSIDE );
 
-                aText.TransformTextToPolySet( *aResult, inflate, ERROR );
+                aText.TransformTextToPolySet( *aResult, inflate, maxError, ERROR_OUTSIDE );
             };
 
     // Generate polygons with arcs inside the shape or exact shape to minimize shape changes
@@ -976,9 +974,9 @@ void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PCB_LAYER_ID aLa
         for( const FOOTPRINT* footprint : aBoard->Footprints() )
         {
             if( inflate != 0 )
-                footprint->TransformPadsToPolySet( exactPolys, aLayer, 0, ERROR );
+                footprint->TransformPadsToPolySet( exactPolys, aLayer, 0, maxError, ERROR_OUTSIDE );
 
-            footprint->TransformPadsToPolySet( *aResult, aLayer, inflate, ERROR );
+            footprint->TransformPadsToPolySet( *aResult, aLayer, inflate, maxError, ERROR_OUTSIDE );
 
             for( const PCB_FIELD* field : footprint->GetFields() )
             {
@@ -1003,9 +1001,9 @@ void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PCB_LAYER_ID aLa
                     else
                     {
                         if( inflate != 0 )
-                            item->TransformShapeToPolySet( exactPolys, aLayer, 0, ERROR );
+                            item->TransformShapeToPolySet( exactPolys, aLayer, 0, maxError, ERROR_OUTSIDE );
 
-                        item->TransformShapeToPolySet( *aResult, aLayer, inflate, ERROR );
+                        item->TransformShapeToPolySet( *aResult, aLayer, inflate, maxError, ERROR_OUTSIDE );
                     }
                 }
             }
@@ -1021,9 +1019,9 @@ void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PCB_LAYER_ID aLa
             int clearance = track->GetSolderMaskExpansion();
 
             if( inflate != 0 )
-                track->TransformShapeToPolygon( exactPolys, aLayer, clearance, ERROR );
+                track->TransformShapeToPolygon( exactPolys, aLayer, clearance, maxError, ERROR_OUTSIDE );
 
-            track->TransformShapeToPolygon( *aResult, aLayer, clearance + inflate, ERROR );
+            track->TransformShapeToPolygon( *aResult, aLayer, clearance + inflate, maxError, ERROR_OUTSIDE );
         }
 
         for( const BOARD_ITEM* item : aBoard->Drawings() )
@@ -1035,16 +1033,16 @@ void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PCB_LAYER_ID aLa
                     const PCB_TEXT* text = static_cast<const PCB_TEXT*>( item );
 
                     if( inflate != 0 )
-                        text->TransformTextToPolySet( exactPolys, 0, ERROR );
+                        text->TransformTextToPolySet( exactPolys, 0, maxError, ERROR_OUTSIDE );
 
-                    text->TransformTextToPolySet( *aResult, inflate, ERROR );
+                    text->TransformTextToPolySet( *aResult, inflate, maxError, ERROR_OUTSIDE );
                 }
                 else
                 {
                     if( inflate != 0 )
-                        item->TransformShapeToPolygon( exactPolys, aLayer, 0, ERROR );
+                        item->TransformShapeToPolygon( exactPolys, aLayer, 0, maxError, ERROR_OUTSIDE );
 
-                    item->TransformShapeToPolygon( *aResult, aLayer, inflate, ERROR );
+                    item->TransformShapeToPolygon( *aResult, aLayer, inflate, maxError, ERROR_OUTSIDE );
                 }
             }
         }
@@ -1059,9 +1057,9 @@ void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PCB_LAYER_ID aLa
                 continue;
 
             if( inflate != 0 )
-                zone->TransformSmoothedOutlineToPolygon( exactPolys, 0, ERROR, boardOutline );
+                zone->TransformSmoothedOutlineToPolygon( exactPolys, 0, maxError, ERROR_OUTSIDE, boardOutline );
 
-            zone->TransformSmoothedOutlineToPolygon( *aResult, inflate, ERROR, boardOutline );
+            zone->TransformSmoothedOutlineToPolygon( *aResult, inflate, maxError, ERROR_OUTSIDE, boardOutline );
         }
     }
 
