@@ -24,8 +24,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:43+0300\n"
-"PO-Revision-Date: 2025-03-15 23:26+0000\n"
-"Last-Translator: Ertuğrul Reisoğlu <reisoglusoftware@gmail.com>\n"
+"PO-Revision-Date: 2025-03-19 01:15+0000\n"
+"Last-Translator: Niyazi <tanyildizn@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v9/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -39306,9 +39306,8 @@ msgid "High"
 msgstr "Vurgula"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:35
-#, fuzzy
 msgid "User"
-msgstr "Kullanıcı1"
+msgstr "Kullanıcı"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:42
 #, fuzzy
