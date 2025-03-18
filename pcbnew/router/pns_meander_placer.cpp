@@ -72,7 +72,7 @@ bool MEANDER_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     m_originLine = m_world->AssembleLine( m_initialSegment );
 
     TOPOLOGY topo( m_world );
-    m_tunedPath = topo.AssembleTuningPath( m_initialSegment, &m_startPad_n, &m_endPad_n );
+    m_tunedPath = topo.AssembleTuningPath( Router()->GetInterface(), m_initialSegment, &m_startPad_n, &m_endPad_n );
 
     m_padToDieLength = 0;
 

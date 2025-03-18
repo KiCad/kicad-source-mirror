@@ -331,7 +331,8 @@ const ITEM_SET TOPOLOGY::AssembleTrivialPath( ITEM* aStart,
 }
 
 
-const ITEM_SET TOPOLOGY::AssembleTuningPath( ITEM* aStart, SOLID** aStartPad, SOLID** aEndPad )
+const ITEM_SET TOPOLOGY::AssembleTuningPath( ROUTER_IFACE* aRouterIface, ITEM* aStart, SOLID** aStartPad,
+                                             SOLID** aEndPad )
 {
     std::pair<const JOINT*, const JOINT*> joints;
     ITEM_SET initialPath = AssembleTrivialPath( aStart, &joints, true );
@@ -416,41 +417,40 @@ const ITEM_SET TOPOLOGY::AssembleTuningPath( ITEM* aStart, SOLID** aStartPad, SO
                 aLine.Insert( aForward ? 0 : aLine.PointCount(), aPad->GetPosition() );
             };
 
-    auto processPad =
-            [&]( const JOINT* aJoint, PAD* aPad, PCB_LAYER_ID aLayer )
-            {
-                const auto& shape = aPad->GetEffectivePolygon( aLayer, ERROR_INSIDE );
+    auto processPad = [&]( const JOINT* aJoint, PAD* aPad, int aLayer )
+    {
+        for( int idx = 0; idx < initialPath.Size(); idx++ )
+        {
+            if( initialPath[idx]->Kind() != ITEM::LINE_T )
+                continue;
 
-                for( int idx = 0; idx < initialPath.Size(); idx++ )
-                {
-                    if( initialPath[idx]->Kind() != ITEM::LINE_T )
-                        continue;
+            LINE*        line = static_cast<LINE*>( initialPath[idx] );
+            PCB_LAYER_ID pcbLayer = aRouterIface->GetBoardLayerFromPNSLayer( line->Layer() );
 
-                    LINE* line = static_cast<LINE*>( initialPath[idx] );
+            if( !aPad->FlashLayer( pcbLayer ) )
+                continue;
 
-                    if( !aPad->FlashLayer( line->Layer() ) )
-                        continue;
+            const std::vector<VECTOR2I>& points = line->CLine().CPoints();
 
-                    const std::vector<VECTOR2I>& points = line->CLine().CPoints();
+            if( points.front() != aJoint->Pos() && points.back() != aJoint->Pos() )
+                continue;
 
-                    if( points.front() != aJoint->Pos() && points.back() != aJoint->Pos() )
-                        continue;
+            const auto& shape = aPad->GetEffectivePolygon( pcbLayer, ERROR_INSIDE );
 
-                    SHAPE_LINE_CHAIN& slc = line->Line();
-                    const PCB_LAYER_ID& layer = static_cast<PCB_LAYER_ID>( line->Layer() );
+            SHAPE_LINE_CHAIN& slc = line->Line();
 
-                    if( shape->Contains( slc.CPoint( 0 ) ) )
-                        clipLineToPad( slc, aPad, layer, true );
-                    else if( shape->Contains( slc.CPoint( -1 ) ) )
-                        clipLineToPad( slc, aPad, layer, false );
-                }
-            };
+            if( shape->Contains( slc.CPoint( 0 ) ) )
+                clipLineToPad( slc, aPad, pcbLayer, true );
+            else if( shape->Contains( slc.CPoint( -1 ) ) )
+                clipLineToPad( slc, aPad, pcbLayer, false );
+        }
+    };
 
     if( padA )
-        processPad( joints.first, padA, static_cast<PCB_LAYER_ID>( joints.first->Layer() ) );
+        processPad( joints.first, padA, joints.first->Layer() );
 
     if( padB )
-        processPad( joints.second, padB, static_cast<PCB_LAYER_ID>( joints.second->Layer() ) );
+        processPad( joints.second, padB, joints.second->Layer() );
 
     return initialPath;
 }

@@ -35,6 +35,7 @@ class JOINT;
 class ITEM;
 class SOLID;
 class DIFF_PAIR;
+class ROUTER_IFACE;
 
 class TOPOLOGY
 {
@@ -90,7 +91,7 @@ public:
      * @param aEndPad will be filled with the ending pad of the path, if found.
      * @return an item set containing all the items in the path.
      */
-    const ITEM_SET AssembleTuningPath( ITEM* aStart, SOLID** aStartPad = nullptr,
+    const ITEM_SET AssembleTuningPath( ROUTER_IFACE* aRouterIface, ITEM* aStart, SOLID** aStartPad = nullptr,
                                        SOLID** aEndPad = nullptr );
 
     const DIFF_PAIR AssembleDiffPair( SEGMENT* aStart );
