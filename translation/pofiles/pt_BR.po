@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:43+0300\n"
-"PO-Revision-Date: 2025-03-09 15:33+0000\n"
+"PO-Revision-Date: 2025-03-19 01:15+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/v9/pt_BR/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -801,15 +801,15 @@ msgid "Use board stackup colors"
 msgstr "Usar as cores do empilhamento da placa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:143
-#, fuzzy
 msgid "Use PCB editor copper colors"
-msgstr "Use cores de cobre do editor de placas"
+msgstr "Use cores de cobre do editor de PCI"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:145
-#, fuzzy
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
-msgstr "Use cores de cobre do editor de placas (apenas openGL)"
+msgstr ""
+"Use as cores de camada do editor para camadas de cobre (apenas no "
+"renderizador em tempo real)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:163
 #, c-format
@@ -22254,16 +22254,17 @@ msgid "Delete Hierarchical Labels"
 msgstr "Excluir a hierarquia da(s) etiqueta(s)"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:99
-#, fuzzy
 msgid ""
 "Associate selected sheet pin and hierarchical label using the label name"
-msgstr "Sincronizar a folha de pinos e a hierarquia das etiquetas"
+msgstr ""
+"Associar o pino da planilha selecionada e a hierarquia da etiqueta usando o "
+"nome da etiqueta"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
-#, fuzzy
 msgid "Associate selected sheet pin and hierarchical label using the pin name"
 msgstr ""
-"Quebra a associação da planilha de pinos e das etiqueta(s) hierárquica(s)"
+"Associar o pino da planilha selecionada e a hierarquia da etiqueta usando o "
+"nome do pino"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
@@ -22813,14 +22814,12 @@ msgid "Place Sheet Pins"
 msgstr "Posicionar planilha de pinos"
 
 #: eeschema/tools/sch_actions.cpp:559 eeschema/tools/sch_actions.cpp:567
-#, fuzzy
 msgid "Sync Sheet Pins..."
-msgstr "Sincronizar planilha de pinos"
+msgstr "Sincronizar a folha de pinos..."
 
 #: eeschema/tools/sch_actions.cpp:575
-#, fuzzy
 msgid "Import Sheet..."
-msgstr "Importar folha"
+msgstr "Importar folha..."
 
 #: eeschema/tools/sch_actions.cpp:576
 msgid "Import sheet into project"
@@ -27911,9 +27910,9 @@ msgid "Create New Directory"
 msgstr "Crie uma nova pasta"
 
 #: kicad/project_tree_pane.cpp:761
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get status list: %s"
-msgstr "Houve uma falha ao obter o commit: %s"
+msgstr "Houve uma falha ao obter a lista de condição: %s"
 
 #: kicad/project_tree_pane.cpp:896
 msgid "Switch to this Project"
@@ -28081,18 +28080,16 @@ msgid "Local path: monitoring folder changes"
 msgstr "Caminho local: monitorando das alterações na pasta"
 
 #: kicad/project_tree_pane.cpp:1644
-#, fuzzy
 msgid "The selected directory is already a Git project."
-msgstr "O diretório selecionado já é um projeto git."
+msgstr "O diretório selecionado já é um projeto Git."
 
 #: kicad/project_tree_pane.cpp:1652
 msgid "Set default remote"
 msgstr "Definir o ramo remoto padrão"
 
 #: kicad/project_tree_pane.cpp:1663
-#, fuzzy
 msgid "Failed to initialize Git project."
-msgstr "Houve uma falha ao inicializar o projeto git."
+msgstr "Houve uma falha ao inicializar o projeto Git."
 
 #: kicad/project_tree_pane.cpp:1721
 msgid "Failed to set default remote."
@@ -28132,19 +28129,16 @@ msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "Houve uma falha atualizar a referência do HEAD para o ramo '%s'"
 
 #: kicad/project_tree_pane.cpp:1923
-#, fuzzy
 msgid "Are you sure you want to remove Git tracking from this project?"
-msgstr "Tem certeza de que deseja remover o rastreamento do git deste projeto?"
+msgstr "Tem certeza de que deseja remover o rastreamento Git deste projeto?"
 
 #: kicad/project_tree_pane.cpp:1940
-#, fuzzy
 msgid "Failed to remove Git directory"
-msgstr "Houve uma falha ao remover o diretório git"
+msgstr "Houve uma falha ao remover o diretório Git"
 
 #: kicad/project_tree_pane.cpp:2267
-#, fuzzy
 msgid "The selected directory is not a Git project."
-msgstr "O diretório selecionado já é um projeto git."
+msgstr "O diretório selecionado não é um projeto Git."
 
 #: kicad/project_tree_pane.cpp:2412
 msgid "Discarding commit due to empty commit message."
@@ -41260,9 +41254,9 @@ msgid "Condition not satisfied; rule ignored."
 msgstr "Condição não satisfeita; regra ignorada."
 
 #: pcbnew/drc/drc_engine.cpp:1368
-#, fuzzy, c-format
+#, c-format
 msgid "Inheriting from parent: %s."
-msgstr "Derivando do símbolo '%s'."
+msgstr "Herdando do principal: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1407 pcbnew/drc/drc_engine.cpp:1431
 #, c-format
@@ -48594,9 +48588,8 @@ msgid "Repeat layout"
 msgstr "Repitir a disposição"
 
 #: pcbnew/tools/multichannel_tool.cpp:547
-#, fuzzy
 msgid "Group repeated items"
-msgstr "Itens importados do grupo"
+msgstr "Itens repetidos do grupo"
 
 #: pcbnew/tools/multichannel_tool.cpp:553
 #, c-format
@@ -51857,9 +51850,8 @@ msgid "Source Name"
 msgstr "Nome da fonte"
 
 #: pcbnew/zone.cpp:2008
-#, fuzzy
 msgid "Hatch Orientation"
-msgstr "Orientação"
+msgstr "Orientação da escotilha"
 
 #: pcbnew/zone.cpp:2026
 msgid "Cannot be less than zone minimum width"
