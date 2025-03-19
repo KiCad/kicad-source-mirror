@@ -16,16 +16,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:42+0300\n"
-"PO-Revision-Date: 2025-03-13 07:35+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"PO-Revision-Date: 2025-03-19 10:08+0000\n"
+"Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -23251,11 +23251,11 @@ msgstr "階層シートピンをインポート"
 
 #: eeschema/tools/sch_actions.cpp:585 eeschema/tools/sch_actions.cpp:593
 msgid "Sync Sheet Pins..."
-msgstr "シートピンを同期…"
+msgstr "シートピンを同期..."
 
 #: eeschema/tools/sch_actions.cpp:601
 msgid "Import Sheet..."
-msgstr "シートをインポート…"
+msgstr "シートをインポート..."
 
 #: eeschema/tools/sch_actions.cpp:602
 msgid "Import sheet into project"
@@ -24910,14 +24910,15 @@ msgid "Tune %s"
 msgstr "調整 %s"
 
 #: eeschema/widgets/tuner_slider.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s has simulation model of type '%s %s'.\n"
 "\n"
 "Only passvie R, L, C models and voltage and current sources may be tuned."
 msgstr ""
-"%s にはタイプ '%s %s' のシミュレーション モデルがあります; RLCの受動部品のみ"
-"調整の必要があります"
+"%s にはタイプ '%s %s' のシミュレーション モデルがあります。\n"
+"\n"
+"RLCの受動部品と電圧ソースおよび電流ソースは調整の必要があります。"
 
 #: eeschema/widgets/tuner_slider_base.cpp:43
 msgid "Limit to E24 series values."
@@ -39021,9 +39022,8 @@ msgid "Match Any"
 msgstr "一致するレイヤー"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:294
-#, fuzzy
 msgid "Footprint:"
-msgstr "フットプリント: "
+msgstr "フットプリント:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:358
 #, fuzzy
