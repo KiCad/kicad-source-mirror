@@ -170,7 +170,7 @@ int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
 
     GIT_CLONE_HANDLER cloneHandler( pane->m_TreeProject->GitCommon() );
 
-    cloneHandler.SetURL( dlg.GetRepoURL() );
+    cloneHandler.SetRemote( dlg.GetFullURL() );
     cloneHandler.SetClonePath( pro.GetPath() );
     cloneHandler.SetUsername( dlg.GetUsername() );
     cloneHandler.SetPassword( dlg.GetPassword() );

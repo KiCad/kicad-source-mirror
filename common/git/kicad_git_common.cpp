@@ -321,7 +321,7 @@ std::pair<std::set<wxString>,std::set<wxString>> KIGIT_COMMON::GetDifferentFiles
             git_diff_options diff_opts;
             git_diff_init_options( &diff_opts, GIT_DIFF_OPTIONS_VERSION );
 
-            if( !diff_opts.flags || !m_repo || !parent_tree || !tree )
+            if( !m_repo || !parent_tree || !tree )
                 continue;
 
             if( git_diff_tree_to_tree( &diff, m_repo, parent_tree, tree, &diff_opts ) == GIT_OK )
@@ -664,9 +664,14 @@ KIGIT_COMMON::GIT_CONN_TYPE KIGIT_COMMON::GetConnType() const
         remote = GetRemotename();
 
     if( remote.StartsWith( "https://" ) || remote.StartsWith( "http://" ) )
+    {
         return GIT_CONN_TYPE::GIT_CONN_HTTPS;
-    else if( remote.StartsWith( "ssh://" ) || remote.StartsWith( "git@" ) || remote.StartsWith( "git+ssh://" ) )
+    }
+    else if( remote.StartsWith( "ssh://" ) || remote.StartsWith( "git@" ) || remote.StartsWith( "git+ssh://" )
+             || remote.EndsWith( ".git" ) )
+    {
         return GIT_CONN_TYPE::GIT_CONN_SSH;
+    }
 
     return GIT_CONN_TYPE::GIT_CONN_LOCAL;
 }
@@ -750,6 +755,7 @@ int KIGIT_COMMON::HandleSSHKeyAuthentication( git_cred** aOut, const wxString& a
 
     if( sshKey.IsEmpty() )
     {
+        wxLogTrace( traceGit, "Finished testing all possible ssh keys" );
         m_testedTypes |= GIT_CREDENTIAL_SSH_KEY;
         return GIT_PASSTHROUGH;
     }
@@ -757,12 +763,14 @@ int KIGIT_COMMON::HandleSSHKeyAuthentication( git_cred** aOut, const wxString& a
     wxString sshPubKey = sshKey + ".pub";
     wxString password = GetPassword();
 
+    wxLogTrace( traceGit, "Testing %s\n", sshKey );
+
     if( git_credential_ssh_key_new( aOut, aUsername.mbc_str(), sshPubKey.mbc_str(), sshKey.mbc_str(),
                                 password.mbc_str() ) != GIT_OK )
     {
         wxLogTrace( traceGit, "Failed to create SSH key credential for %s: %s",
                     aUsername, KIGIT_COMMON::GetLastGitError() );
-        return GIT_ERROR;
+        return GIT_PASSTHROUGH;
     }
 
     return GIT_OK;
@@ -785,7 +793,7 @@ int KIGIT_COMMON::HandleSSHAgentAuthentication( git_cred** aOut, const wxString&
     {
         wxLogTrace( traceGit, "Failed to create SSH agent credential for %s: %s",
                     aUsername, KIGIT_COMMON::GetLastGitError() );
-        return GIT_ERROR;
+        return GIT_PASSTHROUGH;
     }
 
     m_testedTypes |= KIGIT_CREDENTIAL_SSH_AGENT;
@@ -803,18 +811,18 @@ extern "C" int fetchhead_foreach_cb( const char*, const char*,
 }
 
 
-extern "C" void clone_progress_cb( const char* aStr, size_t aLen, size_t aTotal, void* data )
+extern "C" void clone_progress_cb( const char* aStr, size_t aLen, size_t aTotal, void* aPayload )
 {
-    GIT_PROGRESS* parent = (GIT_PROGRESS*) data;
+    KIGIT_REPO_MIXIN* parent = reinterpret_cast<KIGIT_REPO_MIXIN*>( aPayload );
 
     wxString progressMessage( aStr );
     parent->UpdateProgress( aLen, aTotal, progressMessage );
 }
 
 
-extern "C" int progress_cb( const char* str, int len, void* data )
+extern "C" int progress_cb( const char* str, int len, void* aPayload )
 {
-    GIT_PROGRESS* parent = (GIT_PROGRESS*) data;
+    KIGIT_REPO_MIXIN* parent = reinterpret_cast<KIGIT_REPO_MIXIN*>( aPayload );
 
     wxString progressMessage( str, len );
     parent->UpdateProgress( 0, 0, progressMessage );
@@ -825,10 +833,11 @@ extern "C" int progress_cb( const char* str, int len, void* data )
 
 extern "C" int transfer_progress_cb( const git_transfer_progress* aStats, void* aPayload )
 {
-    GIT_PROGRESS* parent = (GIT_PROGRESS*) aPayload;
-    wxString      progressMessage = wxString::Format( _( "Received %u of %u objects" ),
-                                                      aStats->received_objects,
-                                                      aStats->total_objects );
+    KIGIT_REPO_MIXIN* parent = reinterpret_cast<KIGIT_REPO_MIXIN*>( aPayload );
+
+    wxString progressMessage = wxString::Format( _( "Received %u of %u objects" ),
+                                                 aStats->received_objects,
+                                                 aStats->total_objects );
 
     parent->UpdateProgress( aStats->received_objects, aStats->total_objects, progressMessage );
 
@@ -843,8 +852,8 @@ extern "C" int update_cb( const char* aRefname, const git_oid* aFirst, const git
     char          a_str[cstring_len + 1];
     char          b_str[cstring_len + 1];
 
-    GIT_PROGRESS* parent = (GIT_PROGRESS*) aPayload;
-    wxString      status;
+    KIGIT_REPO_MIXIN* parent = reinterpret_cast<KIGIT_REPO_MIXIN*>( aPayload );
+    wxString          status;
 
     git_oid_tostr( b_str, cstring_len, aSecond );
 
@@ -871,8 +880,8 @@ extern "C" int update_cb( const char* aRefname, const git_oid* aFirst, const git
 extern "C" int push_transfer_progress_cb( unsigned int aCurrent, unsigned int aTotal, size_t aBytes,
                                           void* aPayload )
 {
-    long long     progress = 100;
-    GIT_PROGRESS* parent = (GIT_PROGRESS*) aPayload;
+    long long         progress = 100;
+    KIGIT_REPO_MIXIN* parent = reinterpret_cast<KIGIT_REPO_MIXIN*>( aPayload );
 
     if( aTotal != 0 )
     {
@@ -889,8 +898,8 @@ extern "C" int push_transfer_progress_cb( unsigned int aCurrent, unsigned int aT
 
 extern "C" int push_update_reference_cb( const char* aRefname, const char* aStatus, void* aPayload )
 {
-    GIT_PROGRESS* parent = (GIT_PROGRESS*) aPayload;
-    wxString      status( aStatus );
+    KIGIT_REPO_MIXIN* parent = reinterpret_cast<KIGIT_REPO_MIXIN*>( aPayload );
+    wxString          status( aStatus );
 
     if( !status.IsEmpty() )
     {
@@ -913,14 +922,30 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
     KIGIT_REPO_MIXIN* parent = reinterpret_cast<KIGIT_REPO_MIXIN*>( aPayload );
     KIGIT_COMMON* common = parent->GetCommon();
 
+    wxLogTrace( traceGit, "Credentials callback for %s, testing %d", aUrl, aAllowedTypes );
+
     if( parent->GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_LOCAL )
+    {
+        wxLogTrace( traceGit, "Local repository, no credentials needed" );
         return GIT_PASSTHROUGH;
+    }
 
     if( aAllowedTypes & GIT_CREDENTIAL_USERNAME
         && !( parent->TestedTypes() & GIT_CREDENTIAL_USERNAME ) )
     {
         wxString username = parent->GetUsername().Trim().Trim( false );
-        git_credential_username_new( aOut, username.ToStdString().c_str() );
+        wxLogTrace( traceGit, "Username credential for %s at %s with allowed type %d",
+                    username, aUrl, aAllowedTypes );
+        if( git_credential_username_new( aOut, username.ToStdString().c_str() ) != GIT_OK )
+        {
+            wxLogTrace( traceGit, "Failed to create username credential for %s: %s",
+                        username, KIGIT_COMMON::GetLastGitError() );
+        }
+        else
+        {
+            wxLogTrace( traceGit, "Created username credential for %s", username );
+        }
+
         parent->TestedTypes() |= GIT_CREDENTIAL_USERNAME;
     }
     else if( parent->GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_HTTPS
@@ -928,18 +953,28 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
                 && !( parent->TestedTypes() & GIT_CREDENTIAL_USERPASS_PLAINTEXT ) )
     {
         // Plaintext authentication
-        return common->HandlePlaintextAuthentication( aOut, aUsername );
+        wxLogTrace( traceGit, "Plaintext authentication for %s at %s with allowed type %d",
+                    parent->GetUsername(), aUrl, aAllowedTypes );
+        return common->HandlePlaintextAuthentication( aOut, parent->GetUsername() );
     }
     else if( parent->GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH
                 && ( aAllowedTypes & GIT_CREDENTIAL_SSH_KEY )
                 && !( parent->TestedTypes() & GIT_CREDENTIAL_SSH_KEY ) )
     {
         // SSH key authentication
-        return common->HandleSSHKeyAuthentication( aOut, aUsername );
+        return common->HandleSSHKeyAuthentication( aOut, parent->GetUsername() );
     }
     else
     {
-        return GIT_PASSTHROUGH;
+        // If we didn't find anything to try, then we don't have a callback set that the
+        // server likes
+        if( !parent->TestedTypes() )
+            return GIT_PASSTHROUGH;
+
+        git_error_clear();
+        git_error_set_str( GIT_ERROR_NET, _( "Unable to authenticate" ).mbc_str() );
+        // Otherwise, we did try something but we failed, so return an authentication error
+        return GIT_EAUTH;
     }
 
     return GIT_OK;

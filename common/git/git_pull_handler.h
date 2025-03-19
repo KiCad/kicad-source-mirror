@@ -85,6 +85,7 @@ private:
     std::string getFormattedCommitDate( const git_time& aTime );
     PullResult  handleFastForward();
     PullResult  handleMerge( const git_annotated_commit** aMergeHeads, size_t aMergeHeadsCount );
+    PullResult  handleRebase( const git_annotated_commit** aMergeHeads, size_t aMergeHeadsCount );
 };
 
 #endif // _GIT_PULL_HANDLER_H_

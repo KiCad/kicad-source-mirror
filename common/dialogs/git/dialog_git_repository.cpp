@@ -27,6 +27,7 @@
 #include <git2.h>
 #include <git/kicad_git_memory.h>
 #include <git/kicad_git_common.h>
+#include <git/git_repo_mixin.h>
 #include <gestfich.h>
 
 #include <cerrno>
@@ -240,6 +241,7 @@ void DIALOG_GIT_REPOSITORY::updateURLData()
 
         if( valid )
         {
+            m_fullURL = url;
             m_ConnType->SetSelection( static_cast<int>( KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_HTTPS ) );
             SetUsername( username );
             SetPassword( password );
@@ -255,6 +257,7 @@ void DIALOG_GIT_REPOSITORY::updateURLData()
 
         if( valid )
         {
+            m_fullURL = url;
             m_ConnType->SetSelection( static_cast<int>( KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH ) );
             m_txtUsername->SetValue( username );
             m_txtURL->SetValue( repoAddress );
@@ -284,12 +287,13 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
     // type, so we need to keep track of how many times we have tried.
 
     KIGIT_COMMON common( m_repository );
+    common.SetRemote( m_txtURL->GetValue() );
     callbacks.credentials = credentials_cb;
-    callbacks.payload = &common;
     common.SetPassword( m_txtPassword->GetValue() );
     common.SetUsername( m_txtUsername->GetValue() );
     common.SetSSHKey( m_fpSSHKey->GetFileName().GetFullPath() );
-
+    KIGIT_REPO_MIXIN repoMixin( &common );
+    callbacks.payload = &repoMixin;
 
     wxString txtURL = m_txtURL->GetValue();
     git_remote_create_with_fetchspec( &remote, m_repository, "origin", txtURL.mbc_str(),
