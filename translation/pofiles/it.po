@@ -116,10 +116,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:42+0300\n"
-"PO-Revision-Date: 2025-03-17 09:11+0000\n"
+"PO-Revision-Date: 2025-03-19 10:08+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
-"source/it/>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
+"master-source/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -820,454 +820,364 @@ msgid "Show user ECO2 layer"
 msgstr "Mostra strato utente ECO2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "User.1"
-msgstr "User1"
+msgstr "User.1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Show user defined layer 1"
-msgstr "Strato definito dall'utente 1"
+msgstr "Mostra strato definito dall'utente 1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "User.2"
-msgstr "User2"
+msgstr "User.2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "Show user defined layer 2"
-msgstr "Strato definito dall'utente 2"
+msgstr "Mostra strato definito dall'utente 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "User.3"
-msgstr "User3"
+msgstr "User.3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Show user defined layer 3"
-msgstr "Strato definito dall'utente 3"
+msgstr "Mostra strato definito dall'utente 3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "User.4"
-msgstr "User4"
+msgstr "User.4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Show user defined layer 4"
-msgstr "Strato definito dall'utente 4"
+msgstr "Mostra strato definito dall'utente 4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "User.5"
-msgstr "User5"
+msgstr "User.5"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Show user defined layer 5"
-msgstr "Strato definito dall'utente 5"
+msgstr "Mostra strato definito dall'utente 5"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "User.6"
-msgstr "User6"
+msgstr "User.6"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Show user defined layer 6"
-msgstr "Strato definito dall'utente 6"
+msgstr "Mostra strato definito dall'utente 6"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "User.7"
-msgstr "User7"
+msgstr "User.7"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Show user defined layer 7"
-msgstr "Strato definito dall'utente 7"
+msgstr "Mostra strato definito dall'utente 7"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "User.8"
-msgstr "User8"
+msgstr "User.8"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show user defined layer 8"
-msgstr "Strato definito dall'utente 8"
+msgstr "Mostra strato definito dall'utente 8"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "User.9"
-msgstr "User9"
+msgstr "User.9"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Show user defined layer 9"
-msgstr "Strato definito dall'utente 9"
+msgstr "Mostra strato definito dall'utente 9"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "User.10"
-msgstr "User1"
+msgstr "User.10"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Show user defined layer 10"
-msgstr "Strato definito dall'utente 1"
+msgstr "Mostra strato definito dall'utente 10"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "User.11"
-msgstr "User1"
+msgstr "User.11"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Show user defined layer 11"
-msgstr "Strato definito dall'utente 1"
+msgstr "Mostra strato definito dall'utente 11"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "User.12"
-msgstr "User1"
+msgstr "User.12"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "Show user defined layer 12"
-msgstr "Strato definito dall'utente 1"
+msgstr "Mostra strato definito dall'utente 12"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "User.13"
-msgstr "User1"
+msgstr "User.13"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "Show user defined layer 13"
-msgstr "Strato definito dall'utente 1"
+msgstr "Mostra strato definito dall'utente 13"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "User.14"
-msgstr "User1"
+msgstr "User.14"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Show user defined layer 14"
-msgstr "Strato definito dall'utente 1"
+msgstr "Mostra strato definito dall'utente 14"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "User.15"
-msgstr "User1"
+msgstr "User.15"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Show user defined layer 15"
-msgstr "Strato definito dall'utente 1"
+msgstr "Mostra strato definito dall'utente 15"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "User.16"
-msgstr "User1"
+msgstr "User.16"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "Show user defined layer 16"
-msgstr "Strato definito dall'utente 1"
+msgstr "Mostra strato definito dall'utente 16"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "User.17"
-msgstr "User1"
+msgstr "User.17"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "Show user defined layer 17"
-msgstr "Strato definito dall'utente 1"
+msgstr "Mostra strato definito dall'utente 17"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "User.18"
-msgstr "User1"
+msgstr "User.18"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "Show user defined layer 18"
-msgstr "Strato definito dall'utente 1"
+msgstr "Mostra strato definito dall'utente 18"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "User.19"
-msgstr "User1"
+msgstr "User.19"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "Show user defined layer 19"
-msgstr "Strato definito dall'utente 1"
+msgstr "Mostra strato definito dall'utente 19"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "User.20"
-msgstr "User2"
+msgstr "User.20"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "Show user defined layer 20"
-msgstr "Strato definito dall'utente 2"
+msgstr "Mostra strato definito dall'utente 20"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "User.21"
-msgstr "User1"
+msgstr "User.21"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "Show user defined layer 21"
-msgstr "Strato definito dall'utente 2"
+msgstr "Mostra strato definito dall'utente 21"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "User.22"
-msgstr "User2"
+msgstr "User.22"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "Show user defined layer 22"
-msgstr "Strato definito dall'utente 2"
+msgstr "Mostra strato definito dall'utente 22"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "User.23"
-msgstr "User2"
+msgstr "User.23"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "Show user defined layer 23"
-msgstr "Strato definito dall'utente 2"
+msgstr "Mostra strato definito dall'utente 23"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "User.24"
-msgstr "User2"
+msgstr "User.24"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "Show user defined layer 24"
-msgstr "Strato definito dall'utente 2"
+msgstr "Mostra strato definito dall'utente 24"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "User.25"
-msgstr "User2"
+msgstr "User.25"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "Show user defined layer 25"
-msgstr "Strato definito dall'utente 2"
+msgstr "Mostra strato definito dall'utente 25"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "User.26"
-msgstr "User2"
+msgstr "User.26"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "Show user defined layer 26"
-msgstr "Strato definito dall'utente 2"
+msgstr "Mostra strato definito dall'utente 26"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "User.27"
-msgstr "User2"
+msgstr "User.27"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "Show user defined layer 27"
-msgstr "Strato definito dall'utente 2"
+msgstr "Mostra strato definito dall'utente 27"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "User.28"
-msgstr "User2"
+msgstr "User.28"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "Show user defined layer 28"
-msgstr "Strato definito dall'utente 2"
+msgstr "Mostra strato definito dall'utente 28"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "User.29"
-msgstr "User2"
+msgstr "User.29"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "Show user defined layer 29"
-msgstr "Strato definito dall'utente 2"
+msgstr "Mostra strato definito dall'utente 29"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "User.30"
-msgstr "User3"
+msgstr "User.30"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "Show user defined layer 30"
-msgstr "Strato definito dall'utente 3"
+msgstr "Mostra strato definito dall'utente 30"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "User.31"
-msgstr "User1"
+msgstr "User.31"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "Show user defined layer 31"
-msgstr "Strato definito dall'utente 3"
+msgstr "Mostra strato definito dall'utente 31"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "User.32"
-msgstr "User2"
+msgstr "User.32"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "Show user defined layer 32"
-msgstr "Strato definito dall'utente 3"
+msgstr "Mostra strato definito dall'utente 32"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
 msgid "User.33"
-msgstr "User3"
+msgstr "User.33"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
 msgid "Show user defined layer 33"
-msgstr "Strato definito dall'utente 3"
+msgstr "Mostra strato definito dall'utente 33"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "User.34"
-msgstr "User3"
+msgstr "User.34"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "Show user defined layer 34"
-msgstr "Strato definito dall'utente 3"
+msgstr "Mostra strato definito dall'utente 34"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "User.35"
-msgstr "User3"
+msgstr "User.35"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "Show user defined layer 35"
-msgstr "Strato definito dall'utente 3"
+msgstr "Mostra strato definito dall'utente 35"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "User.36"
-msgstr "User3"
+msgstr "User.36"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "Show user defined layer 36"
-msgstr "Strato definito dall'utente 3"
+msgstr "Mostra strato definito dall'utente 36"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "User.37"
-msgstr "User3"
+msgstr "User.37"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "Show user defined layer 37"
-msgstr "Strato definito dall'utente 3"
+msgstr "Mostra strato definito dall'utente 37"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "User.38"
-msgstr "User3"
+msgstr "User.38"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "Show user defined layer 38"
-msgstr "Strato definito dall'utente 3"
+msgstr "Mostra strato definito dall'utente 38"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "User.39"
-msgstr "User3"
+msgstr "User.39"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "Show user defined layer 39"
-msgstr "Strato definito dall'utente 3"
+msgstr "Mostra strato definito dall'utente 39"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "User.40"
-msgstr "User4"
+msgstr "User.40"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "Show user defined layer 40"
-msgstr "Strato definito dall'utente 4"
+msgstr "Mostra strato definito dall'utente 40"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "User.41"
-msgstr "User1"
+msgstr "User.41"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "Show user defined layer 41"
-msgstr "Strato definito dall'utente 41"
+msgstr "Mostra strato definito dall'utente 41"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "User.42"
-msgstr "User2"
+msgstr "User.42"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "Show user defined layer 42"
-msgstr "Strato definito dall'utente 42"
+msgstr "Mostra strato definito dall'utente 42"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "User.43"
-msgstr "User3"
+msgstr "User.43"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "Show user defined layer 43"
-msgstr "Strato definito dall'utente 43"
+msgstr "Mostra strato definito dall'utente 43"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "User.44"
-msgstr "User4"
+msgstr "User.44"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "Show user defined layer 44"
-msgstr "Strato definito dall'utente 44"
+msgstr "Mostra strato definito dall'utente 44"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:112
-#, fuzzy
 msgid "User.45"
-msgstr "User4"
+msgstr "User.45"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:112
-#, fuzzy
 msgid "Show user defined layer 45"
-msgstr "Strato definito dall'utente 45"
+msgstr "Mostra strato definito dall'utente 45"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:114
 msgid "Through-hole Models"
@@ -26972,9 +26882,8 @@ msgid "The new behavior will match --mode-multi"
 msgstr "Il nuovo comportamento corrisponderà a --mode-multi"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:34
-#, fuzzy
 msgid "Export the PCB in Gencad format"
-msgstr "Esporta netlist in formato KiCad"
+msgstr "Esporta C.S. in formato Gencad"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:40
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:220
@@ -39358,14 +39267,12 @@ msgid "Component Class:"
 msgstr "Classe componente:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:118
-#, fuzzy
 msgid "Match All"
-msgstr "Aggiorna tutto"
+msgstr "Abbina tutto"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:122
-#, fuzzy
 msgid "Match Any"
-msgstr "Strati abbinati"
+msgstr "Abbina qualsiasi"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:294
 msgid "Footprint:"
@@ -40080,9 +39987,8 @@ msgid "Zone Fill Strategy"
 msgstr "Strategia riempimento zona"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:424
-#, fuzzy
 msgid "Allow fillets/chamfers outside zone outline"
-msgstr "Permetti stondamento fuori dal contorno zona"
+msgstr "Permetti stondamenti/cianfrini fuori dal contorno zona"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:436
 msgid "Minimum thermal relief spoke count:"
@@ -43574,9 +43480,9 @@ msgid "(layer %s; %d spokes connected to isolated island)"
 msgstr "(strato %s; %d raggi connessi a isola isolata)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:224
-#, fuzzy, c-format
+#, c-format
 msgid "(layer %s; %s custom spoke count %d; actual %d)"
-msgstr "(strato %s; %s conteggio min raggi %d; effettivo %d)"
+msgstr "(strato %s; %s conteggio personalizzato raggi %d; effettivo %d)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:290
 #, c-format
@@ -43588,25 +43494,25 @@ msgid "Checking thermal reliefs..."
 msgstr "Controllo raccordi termici..."
 
 #: pcbnew/edit_zone_helpers.cpp:96
-#, fuzzy
 msgid "Edit Zone Properties"
-msgstr "Modifica proprietà piedino"
+msgstr "Modifica proprietà zona"
 
 #: pcbnew/exporters/export_d356.cpp:392 pcbnew/tools/pcb_actions.cpp:1118
 msgid "Generate IPC-D-356 netlist file"
 msgstr "Genera file netlist IPC-D-356"
 
 #: pcbnew/exporters/export_d356.cpp:404
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "IPC-D-356 netlist file created:\n"
 "'%s'."
-msgstr "File netlist IPC-D-356..."
+msgstr ""
+"File netlist IPC-D-356 creato:\n"
+"'%s'."
 
 #: pcbnew/exporters/export_d356.cpp:405
-#, fuzzy
 msgid "IPC-D-356 Netlist File"
-msgstr "File netlist IPC-D-356..."
+msgstr "File netlist IPC-D-356"
 
 #: pcbnew/exporters/export_footprint_associations.cpp:73
 msgid "Save Footprint Association File"
@@ -43745,15 +43651,13 @@ msgstr "** Problemi durante la fusione delle forme **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:654
 #: pcbnew/exporters/step/step_pcb_model.cpp:2008
-#, fuzzy
 msgid "Errors:\n"
-msgstr "Errori"
+msgstr "Errori:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:660
 #: pcbnew/exporters/step/step_pcb_model.cpp:2014
-#, fuzzy
 msgid "Warnings:\n"
-msgstr "Avvisi"
+msgstr "Avvisi:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:679
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
@@ -43766,9 +43670,9 @@ msgstr "Filo non eseguito (punti di contorno %d): errore OCC %d\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1701
 #: pcbnew/exporters/step/step_pcb_model.cpp:1714
-#, fuzzy, c-format
+#, c-format
 msgid "z: %g; bounding box: %s\n"
-msgstr "Mostra i perimetri di delimitazione dei modelli"
+msgstr "z: %g; riquadro di delimitazione: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1711
 msgid ""
@@ -43783,9 +43687,8 @@ msgid "Using non-simplified polygon.\n"
 msgstr "Utilizzo di poligoni non semplificati.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1799
-#, fuzzy
 msgid "Failed to create a prismatic shape\n"
-msgstr "Fallita creazione del branch."
+msgstr "Fallita creazione forma prismatica\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1810
 msgid "** Face skipped **\n"
@@ -43819,9 +43722,8 @@ msgid "pads"
 msgstr "piazzole"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2039
-#, fuzzy
 msgid "vias"
-msgstr "No via"
+msgstr "via"
 
 #: pcbnew/files.cpp:152
 msgid "All KiCad Board Files"
@@ -43911,9 +43813,9 @@ msgid "Memory exhausted loading PCB '%s'"
 msgstr "Memoria esaurita caricando il C.S. '%s'"
 
 #: pcbnew/files.cpp:814 pcbnew/pcb_edit_frame.cpp:1361
-#, fuzzy
 msgid "Could not load component class assignment rules"
-msgstr "Impossibile compilare le regole di progettazione personalizzate."
+msgstr ""
+"Impossibile caricare le regole di assegnazione della classe del componente"
 
 #: pcbnew/files.cpp:875
 #, c-format
@@ -43967,37 +43869,34 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1321
-#, fuzzy
 msgid "The board must be saved before generating IPC-2581 file."
-msgstr "La scheda deve essere salvata prima di generare il file IPC2581."
+msgstr "La scheda deve essere salvata prima di generare il file IPC-2581."
 
 #: pcbnew/files.cpp:1337
-#, fuzzy
 msgid "Generating IPC-2581 file"
-msgstr "Generazione file IPC2581"
+msgstr "Generazione file IPC-2581"
 
 #: pcbnew/files.cpp:1362 pcbnew/pcbnew_jobs_handler.cpp:2139
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "%s"
 msgstr ""
-"Errore nel generare il file IPC2581 '%s'.\n"
+"Errore nel generare il file IPC-2581 '%s'.\n"
 "%s"
 
 #: pcbnew/files.cpp:1427 pcbnew/pcbnew_jobs_handler.cpp:2172
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "Failed to rename temporary file '%s."
 msgstr ""
-"Errore nel generare il file IPC2581 '%s'.\n"
+"Errore nel generare il file IPC-2581 '%s'.\n"
 "Fallita rinomina del file temporaneo '%s'."
 
 #: pcbnew/files.cpp:1459
-#, fuzzy
 msgid "Generating ODB++ output files"
-msgstr "Generazione file IPC2581"
+msgstr "Generazione file uscita ODB++"
 
 #: pcbnew/footprint.cpp:1263
 msgid "Other"
@@ -44133,19 +44032,18 @@ msgid "Footprint Chooser"
 msgstr "Selezione impronte"
 
 #: pcbnew/footprint_chooser_frame.cpp:164
-#, fuzzy
 msgid "Show 3D viewer in own window"
-msgstr "Mostra la finestra di visualizzazione 3D"
+msgstr "Mostra vista 3D in finestra autonoma"
 
 #: pcbnew/footprint_chooser_frame.cpp:458
-#, fuzzy, c-format
+#, c-format
 msgid "Filter by pin count (%d)"
-msgstr "Filtra per numero di pin"
+msgstr "Filtra per numero di pin (%d)"
 
 #: pcbnew/footprint_chooser_frame.cpp:480
-#, fuzzy, c-format
+#, c-format
 msgid "Apply footprint filters (%s)"
-msgstr "Applica filtri impronte"
+msgstr "Applica filtri impronte (%s)"
 
 #: pcbnew/footprint_edit_frame.cpp:107
 msgid "KiCad Footprint Editor"
@@ -44166,14 +44064,14 @@ msgid "Editing %s from board.  Saving will update the board only."
 msgstr "Modifica %s dalla scheda.  Il salvataggio aggiornerà solo la scheda."
 
 #: pcbnew/footprint_edit_frame.cpp:577
-#, fuzzy, c-format
+#, c-format
 msgid "Open in library %s"
-msgstr "Aggiorna simboli da libreria"
+msgstr "Apri in libreria %s"
 
 #: pcbnew/footprint_edit_frame.cpp:603
-#, fuzzy, c-format
+#, c-format
 msgid "Editing footprint from read-only library %s."
-msgstr "Errore nel caricamento dell'impronta %s dalla libreria '%s'."
+msgstr "Modifica impronta da libreria in sola lettura %s."
 
 #: pcbnew/footprint_edit_frame.cpp:608
 msgid "Save as editable copy"
@@ -44201,12 +44099,8 @@ msgid "Edit Zone"
 msgstr "Modifica zona"
 
 #: pcbnew/footprint_editor_utils.cpp:343 pcbnew/footprint_editor_utils.cpp:355
-#, fuzzy
 msgid "Use Manage Footprint Libraries to edit the configuration."
-msgstr ""
-"La libreria con denominatore \"%s\" non è abilitata nella corrente "
-"configurazione.\n"
-"Usare la gestione librerie di impronte per modificare la configurazione."
+msgstr "Usa la gestione librerie impronte per modificare la configurazione."
 
 #: pcbnew/footprint_editor_utils.cpp:344
 msgid "Library not found in footprint library table."
@@ -44332,9 +44226,8 @@ msgid "Footprint '%s' added to '%s'"
 msgstr "Impronta \"%s\" aggiunta a \"%s\""
 
 #: pcbnew/footprint_libraries_utils.cpp:1242
-#, fuzzy
 msgid "Untitled"
-msgstr "senza-titolo"
+msgstr "Senza-titolo"
 
 #: pcbnew/footprint_viewer_frame.cpp:106
 msgid "KiCad Footprint Library Browser"
@@ -44459,9 +44352,8 @@ msgid "Length Constraints: %s"
 msgstr "Vincoli lunghezza: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2239
-#, fuzzy
 msgid "Tune Skew"
-msgstr "Skew obiettivo"
+msgstr "Regola skew"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2452
 msgid "Unable to tune segments inside other tuning patterns."
@@ -44474,9 +44366,8 @@ msgstr "Regola"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2514
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2532
-#, fuzzy
 msgid "Select a track to tune first."
-msgstr "Seleziona un parametro da regolare"
+msgstr "Seleziona prima una pista da regolare."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2601
 msgid "Single track"
@@ -44625,9 +44516,8 @@ msgid "Footprint '%s' saved."
 msgstr "Impronta '%s' salvata."
 
 #: pcbnew/load_select_footprint.cpp:376
-#, fuzzy
 msgid "Error saving footprint library"
-msgstr "Salvataggio libreria impronte\n"
+msgstr "Errore nel salvataggio libreria impronte"
 
 #: pcbnew/load_select_footprint.cpp:380
 #, c-format
@@ -44701,14 +44591,12 @@ msgid "Export IDF 3D board representation"
 msgstr "Esporta rappresentazione IDF 3D scheda"
 
 #: pcbnew/menubar_pcb_editor.cpp:136
-#, fuzzy
 msgid "STEP / GLB / BREP / XAO / PLY / STL..."
-msgstr "STEP / GLB / BREP / XAO..."
+msgstr "STEP / GLB / BREP / XAO / PLY / STL..."
 
 #: pcbnew/menubar_pcb_editor.cpp:137
-#, fuzzy
 msgid "Export STEP / GLB / BREP / XAO / PLY / STL 3D board representation"
-msgstr "Esporta rappresentazione STEP 3D scheda"
+msgstr "Esporta rappresentazione 3D scheda STEP / GLB / BREP / XAO / PLY / STL"
 
 #: pcbnew/menubar_pcb_editor.cpp:139
 msgid "Footprint Association (.cmp) File..."
@@ -44753,14 +44641,12 @@ msgid "Fabrication Outputs"
 msgstr "File per fabbricazione"
 
 #: pcbnew/menubar_pcb_editor.cpp:303
-#, fuzzy
 msgid "Draw Microwave Shapes"
-msgstr "Aggiungi forma per microonde"
+msgstr "Disegna forme per microonde"
 
 #: pcbnew/menubar_pcb_editor.cpp:326
-#, fuzzy
 msgid "Draw Dimensions"
-msgstr "Disegna quota"
+msgstr "Disegna quote"
 
 #: pcbnew/menubar_pcb_editor.cpp:347
 msgid "Auto-Place Footprints"
@@ -44804,12 +44690,10 @@ msgid "Incorrect number, abort"
 msgstr "Numero sbagliato, interrotto"
 
 #: pcbnew/microwave/microwave_inductor.cpp:316
-#, fuzzy
 msgid "Add Microwave Inductor"
 msgstr "Aggiungi induttore per microonde"
 
 #: pcbnew/microwave/microwave_inductor.cpp:366
-#, fuzzy
 msgid "Length of Track:"
 msgstr "Lunghezza pista:"
 
@@ -44902,14 +44786,14 @@ msgid "Added %s (footprint '%s')."
 msgstr "Aggiunto %s (impronta '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:237
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s component class to '%s'."
-msgstr "Cambia valore %s da %s a %s."
+msgstr "Cambia classe componente %s a '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:243
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s component class (currently '%s')."
-msgstr "Cambia valore %s da %s a %s."
+msgstr "Rimuovi classe componente %s (attualmente '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:249
 #, fuzzy, c-format
