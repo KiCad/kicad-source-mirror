@@ -243,6 +243,7 @@ protected:
     /// The bound widgets.
     wxStaticText*       m_label;
     wxWindow*           m_valueCtrl;
+    wxWindow*           m_eventSource;
     wxStaticText*       m_unitLabel;      ///< Can be nullptr.
 
     /// Currently used units.

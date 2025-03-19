@@ -50,6 +50,7 @@ UNIT_BINDER::UNIT_BINDER( UNITS_PROVIDER* aUnitsProvider, wxWindow* aEventSource
         m_bindFocusEvent( aBindFocusEvent ),
         m_label( aLabel ),
         m_valueCtrl( aValueCtrl ),
+        m_eventSource( aEventSource ),
         m_unitLabel( aUnitLabel ),
         m_iuScale( &aUnitsProvider->GetIuScale() ),
         m_negativeZero( false ),
@@ -88,26 +89,18 @@ UNIT_BINDER::UNIT_BINDER( UNITS_PROVIDER* aUnitsProvider, wxWindow* aEventSource
 
     if( m_valueCtrl )
     {
-        m_valueCtrl->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( UNIT_BINDER::onSetFocus ),
-                              nullptr, this );
-        m_valueCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ),
-                              nullptr, this );
-        m_valueCtrl->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( UNIT_BINDER::onClick ),
-                              nullptr, this );
-        m_valueCtrl->Connect( wxEVT_COMBOBOX, wxCommandEventHandler( UNIT_BINDER::onComboBox ),
-                              nullptr, this );
+        m_valueCtrl->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( UNIT_BINDER::onSetFocus ), nullptr, this );
+        m_valueCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ), nullptr, this );
+        m_valueCtrl->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( UNIT_BINDER::onClick ), nullptr, this );
+        m_valueCtrl->Connect( wxEVT_COMBOBOX, wxCommandEventHandler( UNIT_BINDER::onComboBox ), nullptr, this );
     }
 
     if( m_bindFocusEvent )
-    {
-        Connect( DELAY_FOCUS, wxCommandEventHandler( UNIT_BINDER::delayedFocusHandler ), nullptr,
-                 this );
-    }
+        Connect( DELAY_FOCUS, wxCommandEventHandler( UNIT_BINDER::delayedFocusHandler ), nullptr, this );
 
-    if( aEventSource )
+    if( m_eventSource )
     {
-        aEventSource->Connect( EDA_EVT_UNITS_CHANGED,
-                               wxCommandEventHandler( UNIT_BINDER::onUnitsChanged ),
+        m_eventSource->Connect( EDA_EVT_UNITS_CHANGED, wxCommandEventHandler( UNIT_BINDER::onUnitsChanged ),
                                nullptr, this );
     }
 }
@@ -115,22 +108,21 @@ UNIT_BINDER::UNIT_BINDER( UNITS_PROVIDER* aUnitsProvider, wxWindow* aEventSource
 
 UNIT_BINDER::~UNIT_BINDER()
 {
-    if( m_bindFocusEvent )
-    {
-        Disconnect( DELAY_FOCUS, wxCommandEventHandler( UNIT_BINDER::delayedFocusHandler ), nullptr,
-                    this );
-    }
-
     if( m_valueCtrl )
     {
-        m_valueCtrl->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( UNIT_BINDER::onSetFocus ),
-                                 nullptr, this );
-        m_valueCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ),
-                                 nullptr, this );
-        m_valueCtrl->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( UNIT_BINDER::onClick ),
-                                 nullptr, this );
-        m_valueCtrl->Disconnect( wxEVT_COMBOBOX, wxCommandEventHandler( UNIT_BINDER::onComboBox ),
-                                 nullptr, this );
+        m_valueCtrl->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( UNIT_BINDER::onSetFocus ), nullptr, this );
+        m_valueCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ), nullptr, this );
+        m_valueCtrl->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( UNIT_BINDER::onClick ), nullptr, this );
+        m_valueCtrl->Disconnect( wxEVT_COMBOBOX, wxCommandEventHandler( UNIT_BINDER::onComboBox ), nullptr, this );
+    }
+
+    if( m_bindFocusEvent )
+        Disconnect( DELAY_FOCUS, wxCommandEventHandler( UNIT_BINDER::delayedFocusHandler ), nullptr, this );
+
+    if( m_eventSource )
+    {
+        m_eventSource->Disconnect( EDA_EVT_UNITS_CHANGED, wxCommandEventHandler( UNIT_BINDER::onUnitsChanged ),
+                                   nullptr, this );
     }
 }
 
