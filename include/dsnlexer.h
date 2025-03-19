@@ -423,9 +423,6 @@ public:
      */
     wxString FromUTF8() const
     {
-if( wxString::FromUTF8( curText.c_str() ).IsSameAs( "~" ) )
-wxASSERT( true );
-
         return wxString::FromUTF8( curText.c_str() );
     }
 
