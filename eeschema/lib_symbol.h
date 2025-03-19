@@ -567,6 +567,19 @@ public:
      */
     void SetUnitDisplayName( int aUnit, const wxString& aName );
 
+    bool GetDuplicatePinNumbersAreJumpers() const { return m_duplicatePinNumbersAreJumpers; }
+    void SetDuplicatePinNumbersAreJumpers( bool aEnabled ) { m_duplicatePinNumbersAreJumpers = aEnabled; }
+
+    /**
+     * Each jumper pin group is a set of pin numbers that should be treated as internally connected.
+     * @return The list of jumper pin groups in this symbols
+     */
+    std::vector<std::set<wxString>>& JumperPinGroups() { return m_jumperPinGroups; }
+    const std::vector<std::set<wxString>>& JumperPinGroups() const { return m_jumperPinGroups; }
+
+    /// Retrieves the jumper group containing the specified pin number, if one exists
+    std::optional<const std::set<wxString>> GetJumperPinGroup( const wxString& aPinNumber ) const;
+
     /**
      * @return true if the symbol has multiple units per symbol.
      * When true, the reference has a sub reference to identify symbol.
@@ -676,6 +689,14 @@ private:
     wxString            m_keyWords;         ///< Search keywords
     wxArrayString       m_fpFilters;        ///< List of suitable footprint names for the
                                             ///<  symbol (wild card names accepted).
+
+    /// A list of jumper pin groups, each of which is a set of pin numbers that should be jumpered
+    /// together (treated as internally connected for the purposes of connectivity)
+    std::vector<std::set<wxString> > m_jumperPinGroups;
+
+    /// Flag that this symbol should automatically treat sets of two or more pins with the same
+    /// number as jumpered pin groups
+    bool m_duplicatePinNumbersAreJumpers;
 
     std::map<int, wxString> m_unitDisplayNames;
 };

@@ -202,6 +202,28 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
         KICAD_FORMAT::FormatBool( &aFormatter, "in_bom", !aSymbol->GetExcludedFromBOM() );
         KICAD_FORMAT::FormatBool( &aFormatter, "on_board", !aSymbol->GetExcludedFromBoard() );
 
+        KICAD_FORMAT::FormatBool( &aFormatter, "duplicate_pin_numbers_are_jumpers",
+                                  aSymbol->GetDuplicatePinNumbersAreJumpers() );
+
+        const std::vector<std::set<wxString>>& jumperGroups = aSymbol->JumperPinGroups();
+
+        if( !jumperGroups.empty() )
+        {
+            aFormatter.Print( "(jumper_pin_groups" );
+
+            for( const std::set<wxString>& group : jumperGroups )
+            {
+                aFormatter.Print( "(" );
+
+                for( const wxString& padName : group )
+                    aFormatter.Print( "%s ", aFormatter.Quotew( padName ).c_str() );
+
+                aFormatter.Print( ")" );
+            }
+
+            aFormatter.Print( ")" );
+        }
+
         // TODO: add atomic token here.
 
         // TODO: add required token here."

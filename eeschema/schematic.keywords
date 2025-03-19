@@ -38,6 +38,7 @@ directive_label
 dnp
 do_not_autoplace
 dot
+duplicate_pin_numbers_are_jumpers
 edge_clock_high
 effects
 embedded_fonts
@@ -75,6 +76,7 @@ inverted_clock
 in_bom
 iref
 italic
+jumper_pin_groups
 junction
 justify
 kicad_sch

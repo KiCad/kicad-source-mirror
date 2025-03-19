@@ -102,6 +102,9 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
     m_deleteFilterButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
     m_editFilterButton->SetBitmap( KiBitmapBundle( BITMAPS::small_edit ) );
 
+    m_btnCreateJumperPinGroup->SetBitmap( KiBitmapBundle( BITMAPS::right ) );
+    m_btnRemoveJumperPinGroup->SetBitmap( KiBitmapBundle( BITMAPS::left ) );
+
     SetupStandardButtons();
 
     if( aParent->IsSymbolFromLegacyLibrary() && !aParent->IsSymbolFromSchematic() )
@@ -258,6 +261,35 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
 
     wxArrayString tmp = m_libEntry->GetFPFilters();
     m_FootprintFilterListBox->Append( tmp );
+
+    m_cbDuplicatePinsAreJumpers->SetValue( m_libEntry->GetDuplicatePinNumbersAreJumpers() );
+    m_btnCreateJumperPinGroup->Disable();
+    m_btnRemoveJumperPinGroup->Disable();
+
+    std::set<wxString> availablePins;
+
+    for( const SCH_PIN* pin : m_libEntry->GetPins() )
+        availablePins.insert( pin->GetNumber() );
+
+    for( const std::set<wxString>& group : m_libEntry->JumperPinGroups() )
+    {
+        wxString groupTxt;
+        size_t i = 0;
+
+        for( const wxString& pinNumber : group )
+        {
+            availablePins.erase( pinNumber );
+            groupTxt << pinNumber;
+
+            if( ++i < group.size() )
+                groupTxt << ", ";
+        }
+
+        m_listJumperPinGroups->Append( groupTxt );
+    }
+
+    for( const wxString& pin : availablePins )
+        m_listAvailablePins->AppendString( pin );
 
     // Populate the list of root parts for inherited objects.
     if( m_libEntry->IsDerived() )
@@ -524,6 +556,23 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
     }
 
     m_libEntry->SetFPFilters( m_FootprintFilterListBox->GetStrings());
+
+    m_libEntry->SetDuplicatePinNumbersAreJumpers( m_cbDuplicatePinsAreJumpers->GetValue() );
+
+    std::vector<std::set<wxString>>& jumpers = m_libEntry->JumperPinGroups();
+    jumpers.clear();
+
+    for( unsigned i = 0; i < m_listJumperPinGroups->GetCount(); ++i )
+    {
+        wxStringTokenizer tokenizer( m_listJumperPinGroups->GetString( i ), ", " );
+        std::set<wxString>& group = jumpers.emplace_back();
+
+        while( tokenizer.HasMoreTokens() )
+        {
+            if( wxString token = tokenizer.GetNextToken(); !token.IsEmpty() )
+                group.insert( token );
+        }
+    }
 
     m_Parent->UpdateAfterSymbolProperties( &oldName );
 
@@ -1040,4 +1089,78 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnPageChanging( wxBookCtrlEvent& aEvent )
 {
     if( !m_grid->CommitPendingChanges() )
         aEvent.Veto();
+}
+
+
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnBtnCreateJumperPinGroup( wxCommandEvent& aEvent )
+{
+    wxArrayInt selections;
+    int n = m_listAvailablePins->GetSelections( selections );
+    wxCHECK( n > 0, /* void */ );
+
+    m_listJumperPinGroups->Freeze();
+    m_listAvailablePins->Freeze();
+
+    wxString group;
+    int i = 0;
+
+    for( int idx : selections )
+    {
+        group << m_listAvailablePins->GetString( idx );
+
+        if( ++i < n )
+            group << ", ";
+    }
+
+    for( int idx = selections.size() - 1; idx >= 0; --idx )
+        m_listAvailablePins->Delete( selections[idx] );
+
+    m_listJumperPinGroups->AppendString( group );
+
+    m_listJumperPinGroups->Thaw();
+    m_listAvailablePins->Thaw();
+}
+
+
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnBtnRemoveJumperPinGroup( wxCommandEvent& aEvent )
+{
+    wxArrayInt selections;
+    int n = m_listJumperPinGroups->GetSelections( selections );
+    wxCHECK( n > 0, /* void */ );
+
+    m_listJumperPinGroups->Freeze();
+    m_listAvailablePins->Freeze();
+
+    for( int idx : selections )
+    {
+        wxStringTokenizer tokenizer( m_listJumperPinGroups->GetString( idx ), ", " );
+
+        while( tokenizer.HasMoreTokens() )
+        {
+            if( wxString token = tokenizer.GetNextToken(); !token.IsEmpty() )
+                m_listAvailablePins->AppendString( token );
+        }
+    }
+
+    for( int idx = selections.size() - 1; idx >= 0; --idx )
+        m_listJumperPinGroups->Delete( selections[idx] );
+
+    m_listJumperPinGroups->Thaw();
+    m_listAvailablePins->Thaw();
+}
+
+
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnGroupedPinListClick( wxCommandEvent& aEvent )
+{
+    wxArrayInt selections;
+    int n = m_listJumperPinGroups->GetSelections( selections );
+    m_btnRemoveJumperPinGroup->Enable( n > 0 );
+}
+
+
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnAvailablePinsClick( wxCommandEvent& aEvent )
+{
+    wxArrayInt selections;
+    int n = m_listAvailablePins->GetSelections( selections );
+    m_btnCreateJumperPinGroup->Enable( n > 0 );
 }

@@ -104,6 +104,7 @@ LIB_SYMBOL::LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent, SYMBOL_LIB* 
     m_pinNameOffset  = schIUScale.MilsToIU( DEFAULT_PIN_NAME_OFFSET );
     m_options        = ENTRY_NORMAL;
     m_unitsLocked    = false;
+    m_duplicatePinNumbersAreJumpers = false;
 
     auto addField =
             [&]( FIELD_T id, bool visible )
@@ -143,6 +144,9 @@ LIB_SYMBOL::LIB_SYMBOL( const LIB_SYMBOL& aSymbol, SYMBOL_LIB* aLibrary ) :
     m_options        = aSymbol.m_options;
     m_libId          = aSymbol.m_libId;
     m_keyWords       = aSymbol.m_keyWords;
+
+    std::ranges::copy( aSymbol.m_jumperPinGroups, std::back_inserter( m_jumperPinGroups ) );
+    m_duplicatePinNumbersAreJumpers = aSymbol.m_duplicatePinNumbersAreJumpers;
 
     aSymbol.CopyUnitDisplayNames( m_unitDisplayNames );
 
@@ -190,6 +194,9 @@ const LIB_SYMBOL& LIB_SYMBOL::operator=( const LIB_SYMBOL& aSymbol )
     m_options     = aSymbol.m_options;
     m_libId       = aSymbol.m_libId;
     m_keyWords    = aSymbol.m_keyWords;
+
+    std::ranges::copy( aSymbol.m_jumperPinGroups, std::back_inserter( m_jumperPinGroups ) );
+    m_duplicatePinNumbersAreJumpers = aSymbol.m_duplicatePinNumbersAreJumpers;
 
     m_unitDisplayNames.clear();
     aSymbol.CopyUnitDisplayNames( m_unitDisplayNames );
@@ -1889,4 +1896,16 @@ void LIB_SYMBOL::EmbedFonts()
         auto file = GetEmbeddedFiles()->AddFile( font->GetFileName(), false );
         file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::FONT;
     }
+}
+
+
+std::optional<const std::set<wxString>> LIB_SYMBOL::GetJumperPinGroup( const wxString& aPinNumber ) const
+{
+    for( const std::set<wxString>& group : m_jumperPinGroups )
+    {
+        if( group.contains( aPinNumber ) )
+            return group;
+    }
+
+    return std::nullopt;
 }

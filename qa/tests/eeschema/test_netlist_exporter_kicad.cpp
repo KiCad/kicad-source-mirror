@@ -219,4 +219,10 @@ BOOST_AUTO_TEST_CASE( ComponentClasses )
 }
 
 
+BOOST_AUTO_TEST_CASE( Jumpers )
+{
+    TestNetlist( "jumpers" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

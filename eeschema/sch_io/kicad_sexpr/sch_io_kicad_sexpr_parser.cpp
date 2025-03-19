@@ -394,6 +394,41 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
             NeedRIGHT();
             break;
 
+        case T_duplicate_pin_numbers_are_jumpers:
+            symbol->SetDuplicatePinNumbersAreJumpers( parseBool() );
+            NeedRIGHT();
+            break;
+
+        case T_jumper_pin_groups:
+        {
+            // This should only be formatted if there is at least one group
+            std::vector<std::set<wxString>>& groups = symbol->JumperPinGroups();
+            std::set<wxString>* currentGroup = nullptr;
+
+            for( token = NextTok(); currentGroup || token != T_RIGHT; token = NextTok() )
+            {
+                switch( static_cast<int>( token ) )
+                {
+                case T_LEFT:
+                    currentGroup = &groups.emplace_back();
+                    break;
+
+                case DSN_STRING:
+                    currentGroup->insert( FromUTF8() );
+                    break;
+
+                case T_RIGHT:
+                    currentGroup = nullptr;
+                    break;
+
+                default:
+                    Expecting( "list of pin names" );
+                }
+            }
+
+            break;
+        }
+
         case T_property:
             parseProperty( symbol );
             break;

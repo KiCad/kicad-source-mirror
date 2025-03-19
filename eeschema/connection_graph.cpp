@@ -1189,12 +1189,44 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
+            std::map<wxString, std::vector<SCH_PIN*>> pinNumberMap;
+
             for( SCH_PIN* pin : symbol->GetPins( &aSheet ) )
             {
                 m_items.emplace_back( pin );
                 SCH_CONNECTION* conn = pin->InitializeConnection( aSheet, this );
                 updatePin( pin, conn );
                 connection_map[ pin->GetPosition() ].push_back( pin );
+                pinNumberMap[pin->GetNumber()].emplace_back( pin );
+            }
+
+            auto linkPinsInVec =
+                [&]( const std::vector<SCH_PIN*>& aVec )
+                {
+                    for( size_t i = 0; i < aVec.size(); ++i )
+                    {
+                        for( size_t j = i + 1; j < aVec.size(); ++j )
+                        {
+                            aVec[i]->AddConnectionTo( aSheet, aVec[j] );
+                            aVec[j]->AddConnectionTo( aSheet, aVec[i] );
+                        }
+                    }
+                };
+
+            if( symbol->GetLibSymbolRef()->GetDuplicatePinNumbersAreJumpers() )
+            {
+                for( const std::vector<SCH_PIN*>& group : pinNumberMap | std::views::values )
+                    linkPinsInVec( group );
+            }
+
+            for( const std::set<wxString>& group : symbol->GetLibSymbolRef()->JumperPinGroups() )
+            {
+                std::vector<SCH_PIN*> pins;
+
+                for( const wxString& pinNumber : group )
+                    pins.emplace_back( symbol->GetPin( pinNumber ) );
+
+                linkPinsInVec( pins );
             }
         }
         else

@@ -53,7 +53,8 @@
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20240529  // Embedded Files
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20240819  // Embedded Files - Update hash algorithm to Murmur3
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20241209  // Private flags for SCH_FIELDs
-#define   SEXPR_SYMBOL_LIB_FILE_VERSION  20250318  // ~ no longer means empty text
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20250318  // ~ no longer means empty text
+#define   SEXPR_SYMBOL_LIB_FILE_VERSION  20250324  // Jumper pin groups
 
 /**
  * Schematic file version.

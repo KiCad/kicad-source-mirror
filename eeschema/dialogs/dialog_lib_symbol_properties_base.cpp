@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -214,8 +214,8 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 
 	bSizerLowerBasicPanel->Add( bSizerLeftCol, 1, wxEXPAND, 5 );
 
-	wxBoxSizer* bSizerMiddleCol;
-	bSizerMiddleCol = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerPinTextCol;
+	bSizerPinTextCol = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizerPinTextOpts;
 	sbSizerPinTextOpts = new wxStaticBoxSizer( new wxStaticBox( m_PanelBasic, wxID_ANY, _("Pin Text Options") ), wxVERTICAL );
@@ -264,10 +264,10 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	sbSizerPinTextOpts->Add( 0, 0, 0, wxEXPAND, 5 );
 
 
-	bSizerMiddleCol->Add( sbSizerPinTextOpts, 1, wxALL|wxEXPAND, 5 );
+	bSizerPinTextCol->Add( sbSizerPinTextOpts, 1, wxALL|wxEXPAND, 5 );
 
 
-	bSizerLowerBasicPanel->Add( bSizerMiddleCol, 1, wxEXPAND, 5 );
+	bSizerLowerBasicPanel->Add( bSizerPinTextCol, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerRightCol;
 	bSizerRightCol = new wxBoxSizer( wxVERTICAL );
@@ -300,7 +300,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_PanelBasic->SetSizer( bSizerBasicPanel );
 	m_PanelBasic->Layout();
 	bSizerBasicPanel->Fit( m_PanelBasic );
-	m_NoteBook->AddPage( m_PanelBasic, _("General"), true );
+	m_NoteBook->AddPage( m_PanelBasic, _("General"), false );
 	m_PanelFootprintFilter = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bPanelFpFilterBoxSizer;
 	bPanelFpFilterBoxSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -349,6 +349,78 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_PanelFootprintFilter->Layout();
 	bPanelFpFilterBoxSizer->Fit( m_PanelFootprintFilter );
 	m_NoteBook->AddPage( m_PanelFootprintFilter, _("Footprint Filters"), false );
+	m_PanelPinConnections = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer19;
+	bSizer19 = new wxBoxSizer( wxVERTICAL );
+
+	m_cbDuplicatePinsAreJumpers = new wxCheckBox( m_PanelPinConnections, wxID_ANY, _("Pins with duplicate numbers are jumpers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbDuplicatePinsAreJumpers->SetToolTip( _("When enabled, this symbol can have more than one pin with the same number, and pins with the same number will be considered to be jumpered together internally.") );
+
+	bSizer19->Add( m_cbDuplicatePinsAreJumpers, 0, wxALL, 5 );
+
+	wxStaticBoxSizer* sbJumperPinGroups;
+	sbJumperPinGroups = new wxStaticBoxSizer( new wxStaticBox( m_PanelPinConnections, wxID_ANY, _("Jumper Pin Groups") ), wxVERTICAL );
+
+	wxBoxSizer* bSizer20;
+	bSizer20 = new wxBoxSizer( wxHORIZONTAL );
+
+	wxBoxSizer* bSizer22;
+	bSizer22 = new wxBoxSizer( wxVERTICAL );
+
+	stLabelAvailablePins = new wxStaticText( sbJumperPinGroups->GetStaticBox(), wxID_ANY, _("Available pins"), wxDefaultPosition, wxDefaultSize, 0 );
+	stLabelAvailablePins->Wrap( -1 );
+	bSizer22->Add( stLabelAvailablePins, 0, wxALL, 5 );
+
+	m_listAvailablePins = new wxListBox( sbJumperPinGroups->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_EXTENDED|wxLB_SORT );
+	m_listAvailablePins->SetMinSize( wxSize( 200,-1 ) );
+
+	bSizer22->Add( m_listAvailablePins, 1, wxALL|wxEXPAND, 5 );
+
+
+	bSizer20->Add( bSizer22, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer21;
+	bSizer21 = new wxBoxSizer( wxVERTICAL );
+
+	m_btnCreateJumperPinGroup = new wxBitmapButton( sbJumperPinGroups->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_btnCreateJumperPinGroup->SetToolTip( _("Create jumper group from the selected pins") );
+
+	bSizer21->Add( m_btnCreateJumperPinGroup, 0, wxALL, 5 );
+
+	m_btnRemoveJumperPinGroup = new wxBitmapButton( sbJumperPinGroups->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_btnRemoveJumperPinGroup->SetToolTip( _("Remove the selected jumper pin group") );
+
+	bSizer21->Add( m_btnRemoveJumperPinGroup, 0, wxALL, 5 );
+
+
+	bSizer20->Add( bSizer21, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxBoxSizer* bSizer23;
+	bSizer23 = new wxBoxSizer( wxVERTICAL );
+
+	stLabelGroups = new wxStaticText( sbJumperPinGroups->GetStaticBox(), wxID_ANY, _("Grouped pins"), wxDefaultPosition, wxDefaultSize, 0 );
+	stLabelGroups->Wrap( -1 );
+	bSizer23->Add( stLabelGroups, 0, wxALL, 5 );
+
+	m_listJumperPinGroups = new wxListBox( sbJumperPinGroups->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_EXTENDED|wxLB_SORT );
+	m_listJumperPinGroups->SetMinSize( wxSize( 200,-1 ) );
+
+	bSizer23->Add( m_listJumperPinGroups, 1, wxALL|wxEXPAND, 5 );
+
+
+	bSizer20->Add( bSizer23, 1, wxEXPAND, 5 );
+
+
+	sbJumperPinGroups->Add( bSizer20, 1, wxEXPAND, 5 );
+
+
+	bSizer19->Add( sbJumperPinGroups, 1, wxALL|wxTOP, 5 );
+
+
+	m_PanelPinConnections->SetSizer( bSizer19 );
+	m_PanelPinConnections->Layout();
+	bSizer19->Fit( m_PanelPinConnections );
+	m_NoteBook->AddPage( m_PanelPinConnections, _("Pin Connections"), true );
 
 	bUpperSizer->Add( m_NoteBook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
@@ -414,6 +486,10 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_FootprintFilterListBox->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnEditFootprintFilter ), NULL, this );
 	m_addFilterButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnAddFootprintFilter ), NULL, this );
 	m_editFilterButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnEditFootprintFilter ), NULL, this );
+	m_listAvailablePins->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnAvailablePinsClick ), NULL, this );
+	m_btnCreateJumperPinGroup->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnBtnCreateJumperPinGroup ), NULL, this );
+	m_btnRemoveJumperPinGroup->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnBtnRemoveJumperPinGroup ), NULL, this );
+	m_listJumperPinGroups->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnGroupedPinListClick ), NULL, this );
 	m_spiceFieldsButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnEditSpiceModel ), NULL, this );
 	m_stdSizerButtonCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCancelButtonClick ), NULL, this );
 }
@@ -450,6 +526,10 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::~DIALOG_LIB_SYMBOL_PROPERTIES_BASE()
 	m_FootprintFilterListBox->Disconnect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnEditFootprintFilter ), NULL, this );
 	m_addFilterButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnAddFootprintFilter ), NULL, this );
 	m_editFilterButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnEditFootprintFilter ), NULL, this );
+	m_listAvailablePins->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnAvailablePinsClick ), NULL, this );
+	m_btnCreateJumperPinGroup->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnBtnCreateJumperPinGroup ), NULL, this );
+	m_btnRemoveJumperPinGroup->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnBtnRemoveJumperPinGroup ), NULL, this );
+	m_listJumperPinGroups->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnGroupedPinListClick ), NULL, this );
 	m_spiceFieldsButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnEditSpiceModel ), NULL, this );
 	m_stdSizerButtonCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCancelButtonClick ), NULL, this );
 
