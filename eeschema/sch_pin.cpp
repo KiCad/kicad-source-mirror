@@ -1435,11 +1435,6 @@ wxString SCH_PIN::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull
 
 wxString SCH_PIN::getItemDescription( ALT* aAlt ) const
 {
-    // This code previously checked "m_name.IsEmpty()" to choose the correct
-    // formatting path, but that check fails if the pin is called "~" which is
-    // the default for an empty pin name.  Instead we get the final display string
-    // that will be shown and check if it's empty.
-
     wxString name = UnescapeString( aAlt ? aAlt->m_Name : GetShownName() );
     wxString electricalTypeName = ElectricalPinTypeGetText( aAlt ? aAlt->m_Type : m_type );
     wxString pinShapeName = PinShapeGetText( aAlt ? aAlt->m_Shape : m_shape );

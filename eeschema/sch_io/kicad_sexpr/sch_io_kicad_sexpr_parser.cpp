@@ -1612,10 +1612,10 @@ SCH_PIN* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolPin()
                                    CurOffset() );
             }
 
-            if( m_requiredVersion < 20210606 )
-                pin->SetName( ConvertToNewOverbarNotation( FromUTF8() ) );
-            else if( m_requiredVersion < 20250318 && FromUTF8() == "~" )
+            if( m_requiredVersion < 20250318 && FromUTF8() == "~" )
                 pin->SetName( wxEmptyString );
+            else if( m_requiredVersion < 20210606 )
+                pin->SetName( ConvertToNewOverbarNotation( FromUTF8() ) );
             else
                 pin->SetName( FromUTF8() );
 
@@ -1652,10 +1652,10 @@ SCH_PIN* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolPin()
                                    CurLineNumber(), CurOffset() );
             }
 
-            if( m_requiredVersion < 20210606 )
-                pin->SetNumber( ConvertToNewOverbarNotation( FromUTF8() ) );
-            else if( m_requiredVersion < 20250318 && FromUTF8() == "~" )
+            if( m_requiredVersion < 20250318 && FromUTF8() == "~" )
                 pin->SetNumber( wxEmptyString );
+            else if( m_requiredVersion < 20210606 )
+                pin->SetNumber( ConvertToNewOverbarNotation( FromUTF8() ) );
             else
                 pin->SetNumber( FromUTF8() );
 
