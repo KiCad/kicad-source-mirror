@@ -40,6 +40,7 @@
 #include <settings/common_settings.h>
 #include <bitmaps/bitmap_types.h>
 #include <string_utils.h>
+#include <wx/hyperlink.h>
 
 
 const wxString KIUI::s_FocusStealableInputName = wxS( "KI_NOFOCUS" );
@@ -325,13 +326,14 @@ bool KIUI::IsModalDialogFocused()
 void KIUI::Disable( wxWindow* aWindow )
 {
     wxScrollBar*      scrollBar = dynamic_cast<wxScrollBar*>( aWindow );
+    wxHyperlinkCtrl*  hyperlink = dynamic_cast<wxHyperlinkCtrl*>( aWindow );
     wxGrid*           grid = dynamic_cast<wxGrid*>( aWindow );
     wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( aWindow );
     wxControl*        control = dynamic_cast<wxControl*>( aWindow );
 
-    if( scrollBar )
+    if( scrollBar || hyperlink )
     {
-        // Leave a scroll bar active
+        // Leave navigation controls active
     }
     else if( grid )
     {
