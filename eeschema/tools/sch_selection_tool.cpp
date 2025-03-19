@@ -1976,6 +1976,22 @@ bool SCH_SELECTION_TOOL::selectMultiple()
                 }
             }
 
+            std::vector<EDA_ITEM*> sortedNearbyItems( nearbyItems.begin(), nearbyItems.end() );
+
+            // Sort the filtered selection by rows and columns to have a nice default
+            // for tools that can use it.
+            std::sort( sortedNearbyItems.begin(), sortedNearbyItems.end(),
+                       []( EDA_ITEM* a, EDA_ITEM* b )
+                       {
+                           VECTOR2I aPos = a->GetPosition();
+                           VECTOR2I bPos = b->GetPosition();
+
+                           if( aPos.y == bPos.y )
+                               return aPos.x < bPos.x;
+
+                           return aPos.y < bPos.y;
+                       } );
+
             BOX2I selectionRect( area.GetOrigin(), VECTOR2I( width, height ) );
             selectionRect.Normalize();
 
@@ -2011,7 +2027,7 @@ bool SCH_SELECTION_TOOL::selectMultiple()
                         }
                     };
 
-            for( EDA_ITEM* item : nearbyItems )
+            for( EDA_ITEM* item : sortedNearbyItems )
             {
                 bool           selected = false;
                 EDA_ITEM_FLAGS flags    = 0;

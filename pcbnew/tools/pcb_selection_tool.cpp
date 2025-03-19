@@ -1189,6 +1189,20 @@ bool PCB_SELECTION_TOOL::selectMultiple()
                 FilterCollectorForHierarchy( collector, true );
             }
 
+            // Sort the filtered selection by rows and columns to have a nice default
+            // for tools that can use it.
+            std::sort( collector.begin(), collector.end(),
+                       []( EDA_ITEM* a, EDA_ITEM* b )
+                       {
+                           VECTOR2I aPos = a->GetPosition();
+                           VECTOR2I bPos = b->GetPosition();
+
+                           if( aPos.y == bPos.y )
+                               return aPos.x < bPos.x;
+
+                           return aPos.y < bPos.y;
+                       } );
+
             for( EDA_ITEM* i : collector )
             {
                 BOARD_ITEM* item = static_cast<BOARD_ITEM*>( i );
