@@ -45,7 +45,9 @@ enum class TOOLBAR_ITEM_TYPE
 class KICOMMON_API TOOLBAR_ITEM
 {
 public:
-    TOOLBAR_ITEM()
+    TOOLBAR_ITEM() :
+        m_Type( TOOLBAR_ITEM_TYPE::TOOL ),
+        m_Size( 0 )
     { }
 
     TOOLBAR_ITEM( TOOLBAR_ITEM_TYPE aType ) :
