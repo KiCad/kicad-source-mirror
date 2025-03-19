@@ -61,7 +61,8 @@ EDA_ITEM::EDA_ITEM( const EDA_ITEM& base ) :
         m_structType( base.m_structType ),
         m_flags( base.m_flags ),
         m_parent( base.m_parent ),
-        m_forceVisible( base.m_forceVisible )
+        m_forceVisible( base.m_forceVisible ),
+        m_isRollover( false )
 {
     SetForcedTransparency( base.GetForcedTransparency() );
 }
