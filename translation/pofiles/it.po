@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:43+0300\n"
-"PO-Revision-Date: 2025-03-17 09:11+0000\n"
+"PO-Revision-Date: 2025-03-19 10:08+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -39246,9 +39246,8 @@ msgid "Zone Fill Strategy"
 msgstr "Strategia riempimento zona"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:424
-#, fuzzy
 msgid "Allow fillets/chamfers outside zone outline"
-msgstr "Permetti stondamento fuori dal contorno zona"
+msgstr "Permetti stondamenti/cianfrini fuori dal contorno zona"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:436
 msgid "Minimum thermal relief spoke count:"
@@ -42729,25 +42728,25 @@ msgid "Checking thermal reliefs..."
 msgstr "Controllo raccordi termici..."
 
 #: pcbnew/edit_zone_helpers.cpp:85
-#, fuzzy
 msgid "Edit Zone Properties"
-msgstr "Modifica proprietà piedino"
+msgstr "Modifica proprietà zona"
 
 #: pcbnew/exporters/export_d356.cpp:392 pcbnew/tools/pcb_actions.cpp:1066
 msgid "Generate IPC-D-356 netlist file"
 msgstr "Genera file netlist IPC-D-356"
 
 #: pcbnew/exporters/export_d356.cpp:404
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "IPC-D-356 netlist file created:\n"
 "'%s'."
-msgstr "File netlist IPC-D-356..."
+msgstr ""
+"File netlist IPC-D-356 creato:\n"
+"'%s'."
 
 #: pcbnew/exporters/export_d356.cpp:405
-#, fuzzy
 msgid "IPC-D-356 Netlist File"
-msgstr "File netlist IPC-D-356..."
+msgstr "File netlist IPC-D-356"
 
 #: pcbnew/exporters/export_footprint_associations.cpp:73
 msgid "Save Footprint Association File"
@@ -42885,15 +42884,13 @@ msgstr "** Problemi durante la fusione delle forme **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:653
 #: pcbnew/exporters/step/step_pcb_model.cpp:1943
-#, fuzzy
 msgid "Errors:\n"
-msgstr "Errori"
+msgstr "Errori:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:659
 #: pcbnew/exporters/step/step_pcb_model.cpp:1949
-#, fuzzy
 msgid "Warnings:\n"
-msgstr "Avvisi"
+msgstr "Avvisi:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:678
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
@@ -42906,9 +42903,9 @@ msgstr "Filo non eseguito (punti di contorno %d): errore OCC %d\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1636
 #: pcbnew/exporters/step/step_pcb_model.cpp:1649
-#, fuzzy, c-format
+#, c-format
 msgid "z: %g; bounding box: %s\n"
-msgstr "Mostra i perimetri di delimitazione dei modelli"
+msgstr "z: %g; riquadro di delimitazione: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1646
 msgid ""
@@ -42923,9 +42920,8 @@ msgid "Using non-simplified polygon.\n"
 msgstr "Utilizzo di poligoni non semplificati.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1734
-#, fuzzy
 msgid "Failed to create a prismatic shape\n"
-msgstr "Fallita creazione del branch."
+msgstr "Fallita creazione forma prismatica\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1745
 msgid "** Face skipped **\n"
@@ -42959,9 +42955,8 @@ msgid "pads"
 msgstr "piazzole"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1974
-#, fuzzy
 msgid "vias"
-msgstr "No via"
+msgstr "via"
 
 #: pcbnew/files.cpp:152
 msgid "All KiCad Board Files"
@@ -43102,37 +43097,34 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1302
-#, fuzzy
 msgid "The board must be saved before generating IPC-2581 file."
-msgstr "La scheda deve essere salvata prima di generare il file IPC2581."
+msgstr "La scheda deve essere salvata prima di generare il file IPC-2581."
 
 #: pcbnew/files.cpp:1318
-#, fuzzy
 msgid "Generating IPC-2581 file"
-msgstr "Generazione file IPC2581"
+msgstr "Generazione file IPC-2581"
 
 #: pcbnew/files.cpp:1343 pcbnew/pcbnew_jobs_handler.cpp:2008
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "%s"
 msgstr ""
-"Errore nel generare il file IPC2581 '%s'.\n"
+"Errore nel generare il file IPC-2581 '%s'.\n"
 "%s"
 
 #: pcbnew/files.cpp:1408 pcbnew/pcbnew_jobs_handler.cpp:2041
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "Failed to rename temporary file '%s."
 msgstr ""
-"Errore nel generare il file IPC2581 '%s'.\n"
+"Errore nel generare il file IPC-2581 '%s'.\n"
 "Fallita rinomina del file temporaneo '%s'."
 
 #: pcbnew/files.cpp:1440
-#, fuzzy
 msgid "Generating ODB++ output files"
-msgstr "Generazione file IPC2581"
+msgstr "Generazione file uscita ODB++"
 
 #: pcbnew/footprint.cpp:1356
 msgid "Other"
@@ -43268,19 +43260,18 @@ msgid "Footprint Chooser"
 msgstr "Selezione impronte"
 
 #: pcbnew/footprint_chooser_frame.cpp:153
-#, fuzzy
 msgid "Show 3D viewer in own window"
-msgstr "Mostra la finestra di visualizzazione 3D"
+msgstr "Mostra vista 3D in finestra autonoma"
 
 #: pcbnew/footprint_chooser_frame.cpp:426
-#, fuzzy, c-format
+#, c-format
 msgid "Filter by pin count (%d)"
-msgstr "Filtra per numero di pin"
+msgstr "Filtra per numero di pin (%d)"
 
 #: pcbnew/footprint_chooser_frame.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "Apply footprint filters (%s)"
-msgstr "Applica filtri impronte"
+msgstr "Applica filtri impronte (%s)"
 
 #: pcbnew/footprint_edit_frame.cpp:119
 msgid "KiCad Footprint Editor"
@@ -43301,14 +43292,14 @@ msgid "Editing %s from board.  Saving will update the board only."
 msgstr "Modifica %s dalla scheda.  Il salvataggio aggiornerà solo la scheda."
 
 #: pcbnew/footprint_edit_frame.cpp:588
-#, fuzzy, c-format
+#, c-format
 msgid "Open in library %s"
-msgstr "Aggiorna simboli da libreria"
+msgstr "Apri in libreria %s"
 
 #: pcbnew/footprint_edit_frame.cpp:614
-#, fuzzy, c-format
+#, c-format
 msgid "Editing footprint from read-only library %s."
-msgstr "Errore nel caricamento dell'impronta %s dalla libreria '%s'."
+msgstr "Modifica impronta da libreria in sola lettura %s."
 
 #: pcbnew/footprint_edit_frame.cpp:619
 msgid "Save as editable copy"
@@ -43336,12 +43327,8 @@ msgid "Edit Zone"
 msgstr "Modifica zona"
 
 #: pcbnew/footprint_editor_utils.cpp:365 pcbnew/footprint_editor_utils.cpp:377
-#, fuzzy
 msgid "Use Manage Footprint Libraries to edit the configuration."
-msgstr ""
-"La libreria con denominatore \"%s\" non è abilitata nella corrente "
-"configurazione.\n"
-"Usare la gestione librerie di impronte per modificare la configurazione."
+msgstr "Usa la gestione librerie impronte per modificare la configurazione."
 
 #: pcbnew/footprint_editor_utils.cpp:366
 msgid "Library not found in footprint library table."
@@ -43467,9 +43454,8 @@ msgid "Footprint '%s' added to '%s'"
 msgstr "Impronta \"%s\" aggiunta a \"%s\""
 
 #: pcbnew/footprint_libraries_utils.cpp:1242
-#, fuzzy
 msgid "Untitled"
-msgstr "senza-titolo"
+msgstr "Senza-titolo"
 
 #: pcbnew/footprint_viewer_frame.cpp:116
 msgid "KiCad Footprint Library Browser"
@@ -43614,9 +43600,8 @@ msgid "Length Constraints: %s"
 msgstr "Vincoli lunghezza: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2239
-#, fuzzy
 msgid "Tune Skew"
-msgstr "Skew obiettivo"
+msgstr "Regola skew"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2452
 msgid "Unable to tune segments inside other tuning patterns."
@@ -43629,9 +43614,8 @@ msgstr "Regola"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2514
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2532
-#, fuzzy
 msgid "Select a track to tune first."
-msgstr "Seleziona un parametro da regolare"
+msgstr "Seleziona prima una pista da regolare."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2601
 msgid "Single track"
@@ -43780,9 +43764,8 @@ msgid "Footprint '%s' saved."
 msgstr "Impronta '%s' salvata."
 
 #: pcbnew/load_select_footprint.cpp:378
-#, fuzzy
 msgid "Error saving footprint library"
-msgstr "Salvataggio libreria impronte\n"
+msgstr "Errore nel salvataggio libreria impronte"
 
 #: pcbnew/load_select_footprint.cpp:382
 #, c-format
@@ -43877,14 +43860,12 @@ msgid "Export IDF 3D board representation"
 msgstr "Esporta rappresentazione IDF 3D scheda"
 
 #: pcbnew/menubar_pcb_editor.cpp:136
-#, fuzzy
 msgid "STEP / GLB / BREP / XAO / PLY / STL..."
-msgstr "STEP / GLB / BREP / XAO..."
+msgstr "STEP / GLB / BREP / XAO / PLY / STL..."
 
 #: pcbnew/menubar_pcb_editor.cpp:137
-#, fuzzy
 msgid "Export STEP / GLB / BREP / XAO / PLY / STL 3D board representation"
-msgstr "Esporta rappresentazione STEP 3D scheda"
+msgstr "Esporta rappresentazione 3D scheda STEP / GLB / BREP / XAO / PLY / STL"
 
 #: pcbnew/menubar_pcb_editor.cpp:139
 msgid "Footprint Association (.cmp) File..."
@@ -43929,14 +43910,12 @@ msgid "Fabrication Outputs"
 msgstr "File per fabbricazione"
 
 #: pcbnew/menubar_pcb_editor.cpp:303
-#, fuzzy
 msgid "Draw Microwave Shapes"
-msgstr "Aggiungi forma per microonde"
+msgstr "Disegna forme per microonde"
 
 #: pcbnew/menubar_pcb_editor.cpp:326
-#, fuzzy
 msgid "Draw Dimensions"
-msgstr "Disegna quota"
+msgstr "Disegna quote"
 
 #: pcbnew/menubar_pcb_editor.cpp:347
 msgid "Auto-Place Footprints"
@@ -43980,12 +43959,10 @@ msgid "Incorrect number, abort"
 msgstr "Numero sbagliato, interrotto"
 
 #: pcbnew/microwave/microwave_inductor.cpp:316
-#, fuzzy
 msgid "Add Microwave Inductor"
 msgstr "Aggiungi induttore per microonde"
 
 #: pcbnew/microwave/microwave_inductor.cpp:366
-#, fuzzy
 msgid "Length of Track:"
 msgstr "Lunghezza pista:"
 
@@ -44078,14 +44055,14 @@ msgid "Added %s (footprint '%s')."
 msgstr "Aggiunto %s (impronta '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s component class to '%s'."
-msgstr "Cambia valore %s da %s a %s."
+msgstr "Cambia classe componente %s a '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s component class (currently '%s')."
-msgstr "Cambia valore %s da %s a %s."
+msgstr "Rimuovi classe componente %s (attualmente '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:247
 #, fuzzy, c-format
