@@ -290,10 +290,6 @@ std::string PSLIKE_PLOTTER::encodeStringForPlotter( const wxString& aUnicode )
         {
             switch (ch)
             {
-            // The ~ shouldn't reach the outside
-            case '~':
-                break;
-
             // These characters must be escaped
             case '(':
             case ')':
@@ -324,7 +320,7 @@ int PSLIKE_PLOTTER::returnPostscriptTextWidth( const wxString& aText, int aXSize
     for( wchar_t asciiCode : aText)
     {
         // Skip the negation marks and untabled points.
-        if( asciiCode != '~' && asciiCode < 256 )
+        if( asciiCode < 256 )
             tally += width_table[asciiCode];
     }
 

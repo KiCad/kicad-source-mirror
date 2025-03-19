@@ -253,9 +253,6 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
     if( IsNameShown() && aAllowExtraText )
         text = GetShownName() << wxS( ": " ) << text;
 
-    if( text == wxS( "~" ) ) // Legacy placeholder for empty string
-        text = wxS( "" );
-
     // The iteration here it to allow for nested variables in the
     // text strings (e.g. ${${VAR}}).  Although the symbols and sheets
     // and labels recurse, text that is none of those types such as text

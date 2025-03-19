@@ -65,10 +65,10 @@ void CheckDuplicatePins( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
         wxString pinName;
         wxString nextName;
 
-        if( pin->GetName() != "~"  && !pin->GetName().IsEmpty() )
+        if( !pin->GetName().IsEmpty() )
             pinName = " '" + pin->GetName() + "'";
 
-        if( next->GetName() != "~"  && !next->GetName().IsEmpty() )
+        if( !next->GetName().IsEmpty() )
             nextName = " '" + next->GetName() + "'";
 
         if( aSymbol->HasAlternateBodyStyle() && next->GetBodyStyle() )

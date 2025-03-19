@@ -532,19 +532,13 @@ wxString SCH_PIN::GetShownName() const
     else if( m_libPin )
         return m_libPin->GetShownName();
 
-    if( m_name == wxS( "~" ) )
-        return wxEmptyString;
-    else
-        return m_name;
+    return m_name;
 }
 
 
 wxString SCH_PIN::GetShownNumber() const
 {
-    if( m_number == wxS( "~" ) )
-        return wxEmptyString;
-    else
-        return m_number;
+    return m_number;
 }
 
 

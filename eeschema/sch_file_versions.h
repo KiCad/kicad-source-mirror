@@ -52,7 +52,9 @@
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20231120  // generator_version; V8 cleanups
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20240529  // Embedded Files
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20240819  // Embedded Files - Update hash algorithm to Murmur3
-#define   SEXPR_SYMBOL_LIB_FILE_VERSION  20241209  // Private flags for SCH_FIELDs
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20241209  // Private flags for SCH_FIELDs
+#define   SEXPR_SYMBOL_LIB_FILE_VERSION  20250318  // ~ no longer means empty text
+
 /**
  * Schematic file version.
  */
@@ -116,4 +118,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20241209  // Private flags for SCH_FIELDs
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20250114  // Full paths for text variable cross references
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20250222  // Hatched fills for shapes
-#define   SEXPR_SCHEMATIC_FILE_VERSION 20250227  // Support for local power symbols
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20250227  // Support for local power symbols
+#define   SEXPR_SCHEMATIC_FILE_VERSION 20250318  // ~ no longer means empty text

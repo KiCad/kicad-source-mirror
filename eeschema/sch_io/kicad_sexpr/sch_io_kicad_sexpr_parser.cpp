@@ -1012,7 +1012,11 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>
     }
 
     // Empty property values are valid.
-    value = FromUTF8();
+
+    if( m_requiredVersion < 20250318 && FromUTF8() == "~" )
+        value = wxEmptyString;
+    else
+        value = FromUTF8();
 
     field->SetText( value );
 
@@ -1610,6 +1614,8 @@ SCH_PIN* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolPin()
 
             if( m_requiredVersion < 20210606 )
                 pin->SetName( ConvertToNewOverbarNotation( FromUTF8() ) );
+            else if( m_requiredVersion < 20250318 && FromUTF8() == "~" )
+                pin->SetName( wxEmptyString );
             else
                 pin->SetName( FromUTF8() );
 
@@ -1646,7 +1652,13 @@ SCH_PIN* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolPin()
                                    CurLineNumber(), CurOffset() );
             }
 
-            pin->SetNumber( FromUTF8() );
+            if( m_requiredVersion < 20210606 )
+                pin->SetNumber( ConvertToNewOverbarNotation( FromUTF8() ) );
+            else if( m_requiredVersion < 20250318 && FromUTF8() == "~" )
+                pin->SetNumber( wxEmptyString );
+            else
+                pin->SetNumber( FromUTF8() );
+
             token = NextTok();
 
             if( token != T_RIGHT )
@@ -2211,7 +2223,12 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
     }
 
     // Empty property values are valid.
-    wxString value = FromUTF8();
+    wxString value;
+
+    if( m_requiredVersion < 20250318 && FromUTF8() == "~" )
+        value = wxEmptyString;
+    else
+        value = FromUTF8();
 
     FIELD_T fieldId = FIELD_T::USER;
 
@@ -2555,13 +2572,23 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseSchSymbolInstances( SCH_SCREEN* aScreen )
 
                 case T_value:
                     NeedSYMBOL();
-                    instance.m_Value = FromUTF8();
+
+                    if( m_requiredVersion < 20250318 && FromUTF8() == "~" )
+                        instance.m_Value = wxEmptyString;
+                    else
+                        instance.m_Value = FromUTF8();
+
                     NeedRIGHT();
                     break;
 
                 case T_footprint:
                     NeedSYMBOL();
-                    instance.m_Footprint = FromUTF8();
+
+                    if( m_requiredVersion < 20250318 && FromUTF8() == "~" )
+                        instance.m_Footprint = wxEmptyString;
+                    else
+                        instance.m_Footprint = FromUTF8();
+
                     NeedRIGHT();
                     break;
 
@@ -3134,13 +3161,23 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
 
                 case T_value:
                     NeedSYMBOL();
-                    symbol->SetValueFieldText( FromUTF8() );
+
+                    if( m_requiredVersion < 20250318 && FromUTF8() == "~" )
+                        symbol->SetValueFieldText( wxEmptyString );
+                    else
+                        symbol->SetValueFieldText( FromUTF8() );
+
                     NeedRIGHT();
                     break;
 
                 case T_footprint:
                     NeedSYMBOL();
-                    symbol->SetFootprintFieldText( FromUTF8() );
+
+                    if( m_requiredVersion < 20250318 && FromUTF8() == "~" )
+                        symbol->SetFootprintFieldText( wxEmptyString );
+                    else
+                        symbol->SetFootprintFieldText( FromUTF8() );
+
                     NeedRIGHT();
                     break;
 
@@ -3207,13 +3244,23 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
 
                         case T_value:
                             NeedSYMBOL();
-                            symbol->SetValueFieldText( FromUTF8() );
+
+                            if( m_requiredVersion < 20250318 && FromUTF8() == "~" )
+                                symbol->SetValueFieldText( wxEmptyString );
+                            else
+                                symbol->SetValueFieldText( FromUTF8() );
+
                             NeedRIGHT();
                             break;
 
                         case T_footprint:
                             NeedSYMBOL();
-                            symbol->SetFootprintFieldText( FromUTF8() );
+
+                            if( m_requiredVersion < 20250318 && FromUTF8() == "~" )
+                                symbol->SetFootprintFieldText( wxEmptyString );
+                            else
+                                symbol->SetFootprintFieldText( FromUTF8() );
+
                             NeedRIGHT();
                             break;
 

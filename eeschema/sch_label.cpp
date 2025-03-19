@@ -833,11 +833,7 @@ wxString SCH_LABEL_BASE::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowE
 
     wxString text = EDA_TEXT::GetShownText( aAllowExtraText, aDepth );
 
-    if( text == wxS( "~" ) ) // Legacy placeholder for empty string
-    {
-        text = wxS( "" );
-    }
-    else if( HasTextVars() )
+    if( HasTextVars() )
     {
         if( aDepth < ADVANCED_CFG::GetCfg().m_ResolveTextRecursionDepth )
             text = ExpandTextVars( text, &textResolver );
