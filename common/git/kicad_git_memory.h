@@ -67,6 +67,14 @@ using GitIndexPtr = std::unique_ptr<git_index,
                                        })>;
 
 /**
+ * @brief A unique pointer for git_rebase objects with automatic cleanup.
+ */
+using GitRebasePtr = std::unique_ptr<git_rebase,
+                                        decltype([](git_rebase* aRebase) {
+                                            git_rebase_free(aRebase);
+                                        })>;
+
+/**
 * @brief A unique pointer for git_revwalk objects with automatic cleanup.
 */
 using GitRevWalkPtr = std::unique_ptr<git_revwalk,

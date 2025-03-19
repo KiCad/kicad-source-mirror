@@ -36,19 +36,17 @@ public:
 
     bool PerformClone();
 
-    void SetURL( const wxString& aURL ) { m_URL = aURL; }
-    wxString GetURL() const { return m_URL; }
-
     void SetBranch( const wxString& aBranch ) { m_branch = aBranch; }
     wxString GetBranch() const { return m_branch; }
 
     void SetClonePath( const wxString& aPath ) { m_clonePath = aPath; }
     wxString GetClonePath() const { return m_clonePath; }
 
+    void SetRemote( const wxString& aRemote ) { GetCommon()->m_remote = aRemote; }
+
     void UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage ) override;
 
 private:
-    wxString m_URL;
     wxString m_branch;
     wxString m_clonePath;
 };

@@ -72,6 +72,8 @@ public:
         return url;
     }
 
+    const wxString& GetFullURL() const { return m_fullURL; }
+
     void     SetUsername( const wxString& aUsername ) { m_txtUsername->SetValue( aUsername ); }
     wxString GetUsername() const { return m_txtUsername->GetValue(); }
 
@@ -105,6 +107,7 @@ private:
 
 private:
     git_repository* m_repository;
+    wxString        m_fullURL;
 
     wxString        m_prevFile;
 

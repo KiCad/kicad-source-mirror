@@ -303,6 +303,8 @@ private:
 
     void onGitStatusTimer( wxTimerEvent& event );
 
+    void gitStatusTimerHandler();
+
 public:
     KICAD_MANAGER_FRAME*    m_Parent;
     PROJECT_TREE*           m_TreeProject;

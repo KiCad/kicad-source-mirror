@@ -124,6 +124,12 @@ public:
         return m_publicKeys[m_nextPublicKey++];
     }
 
+    void SetRemote( const wxString& aRemote )
+    {
+        m_remote = aRemote;
+        updateConnectionType();
+    }
+
     int HandleSSHKeyAuthentication( git_cred** aOut, const wxString& aUsername );
 
     int HandlePlaintextAuthentication( git_cred** aOut, const wxString& aUsername );

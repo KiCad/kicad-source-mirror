@@ -45,7 +45,10 @@ GIT_PULL_HANDLER::~GIT_PULL_HANDLER()
 bool GIT_PULL_HANDLER::PerformFetch( bool aSkipLock )
 {
     if( !GetRepo() )
+    {
+        wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformFetch() - No repository found" );
         return false;
+    }
 
     std::unique_lock<std::mutex> lock( GetCommon()->m_gitActionMutex, std::try_to_lock );
 
@@ -60,6 +63,7 @@ bool GIT_PULL_HANDLER::PerformFetch( bool aSkipLock )
 
     if( git_remote_lookup( &remote, GetRepo(), "origin" ) != 0 )
     {
+        wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformFetch() - Failed to lookup remote 'origin'" );
         AddErrorString( wxString::Format( _( "Could not lookup remote '%s'" ), "origin" ) );
         return false;
     }
@@ -78,8 +82,9 @@ bool GIT_PULL_HANDLER::PerformFetch( bool aSkipLock )
 
     if( git_remote_connect( remote, GIT_DIRECTION_FETCH, &remoteCallbacks, nullptr, nullptr ) )
     {
-        AddErrorString( wxString::Format( _( "Could not connect to remote '%s': %s" ), "origin",
-                                          KIGIT_COMMON::GetLastGitError() ) );
+        wxString errorMsg = KIGIT_COMMON::GetLastGitError();
+        wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformFetch() - Failed to connect to remote: %s", errorMsg );
+        AddErrorString( wxString::Format( _( "Could not connect to remote '%s': %s" ), "origin", errorMsg ) );
         return false;
     }
 
@@ -89,11 +94,13 @@ bool GIT_PULL_HANDLER::PerformFetch( bool aSkipLock )
 
     if( git_remote_fetch( remote, nullptr, &fetchOptions, nullptr ) )
     {
-        AddErrorString( wxString::Format( _( "Could not fetch data from remote '%s': %s" ),
-                                          "origin", KIGIT_COMMON::GetLastGitError() ) );
+        wxString errorMsg = KIGIT_COMMON::GetLastGitError();
+        wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformFetch() - Failed to fetch from remote: %s", errorMsg );
+        AddErrorString( wxString::Format( _( "Could not fetch data from remote '%s': %s" ), "origin", errorMsg ) );
         return false;
     }
 
+    wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformFetch() - Fetch completed successfully" );
     return true;
 }
 
@@ -130,12 +137,11 @@ PullResult GIT_PULL_HANDLER::PerformPull()
     }
 
     KIGIT::GitAnnotatedCommitPtr fetchheadCommitPtr( fetchhead_commit );
-    const git_annotated_commit* merge_commits[] = { fetchhead_commit };
-    git_merge_analysis_t        merge_analysis;
-    git_merge_preference_t      merge_preference = GIT_MERGE_PREFERENCE_NONE;
+    const git_annotated_commit*  merge_commits[] = { fetchhead_commit };
+    git_merge_analysis_t         merge_analysis;
+    git_merge_preference_t       merge_preference = GIT_MERGE_PREFERENCE_NONE;
 
-    if( git_merge_analysis( &merge_analysis, &merge_preference, GetRepo(), merge_commits,
-                            1 ) )
+    if( git_merge_analysis( &merge_analysis, &merge_preference, GetRepo(), merge_commits, 1 ) )
     {
         AddErrorString( _( "Could not analyze merge" ) );
         return PullResult::Error;
@@ -165,7 +171,8 @@ PullResult GIT_PULL_HANDLER::PerformPull()
     if( merge_analysis & GIT_MERGE_ANALYSIS_NORMAL )
     {
         wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformPull() - Normal merge" );
-        PullResult ret = handleMerge( merge_commits, 1 );
+        PullResult ret = handleRebase( merge_commits, 1 );
+        // PullResult ret = handleMerge( merge_commits, 1 );
         return ret;
     }
 
@@ -184,6 +191,9 @@ GIT_PULL_HANDLER::GetFetchResults() const
 
 std::string GIT_PULL_HANDLER::getFirstLineFromCommitMessage( const std::string& aMessage )
 {
+    if( aMessage.empty() )
+        return aMessage;
+
     size_t firstLineEnd = aMessage.find_first_of( '\n' );
 
     if( firstLineEnd != std::string::npos )
@@ -197,7 +207,9 @@ std::string GIT_PULL_HANDLER::getFormattedCommitDate( const git_time& aTime )
 {
     char   dateBuffer[64];
     time_t time = static_cast<time_t>( aTime.time );
-    strftime( dateBuffer, sizeof( dateBuffer ), "%Y-%b-%d %H:%M:%S", gmtime( &time ) );
+    struct tm timeInfo;
+    gmtime_r( &time, &timeInfo );
+    strftime( dateBuffer, sizeof( dateBuffer ), "%Y-%b-%d %H:%M:%S", &timeInfo );
     return dateBuffer;
 }
 
@@ -206,6 +218,7 @@ PullResult GIT_PULL_HANDLER::handleFastForward()
 {
     git_reference* rawRef = nullptr;
 
+    // Get the current HEAD reference
     if( git_repository_head( &rawRef, GetRepo() ) )
     {
         AddErrorString( _( "Could not get repository head" ) );
@@ -214,43 +227,131 @@ PullResult GIT_PULL_HANDLER::handleFastForward()
 
     KIGIT::GitReferencePtr headRef( rawRef );
 
-    const char* updatedRefName = git_reference_name( rawRef );
+    git_oid     updatedRefOid;
+    const char* currentBranchName = git_reference_name( rawRef );
+    wxString    remoteBranchName = wxString::Format( "refs/remotes/origin/%s",
+                                    currentBranchName + strlen( "refs/heads/" ) );
 
-    git_oid updatedRefOid;
-
-    if( git_reference_name_to_id( &updatedRefOid, GetRepo(), updatedRefName ) )
+    // Get the OID of the updated reference (remote-tracking branch)
+    if( git_reference_name_to_id( &updatedRefOid, GetRepo(), remoteBranchName.c_str() ) != GIT_OK )
     {
         AddErrorString( wxString::Format( _( "Could not get reference OID for reference '%s'" ),
-                                          updatedRefName ) );
+                                            remoteBranchName ) );
         return PullResult::Error;
     }
 
+    // Get the target commit object
+    git_commit* targetCommit = nullptr;
+
+    if( git_commit_lookup( &targetCommit, GetRepo(), &updatedRefOid ) != GIT_OK )
+    {
+        AddErrorString( _( "Could not look up target commit" ) );
+        return PullResult::Error;
+    }
+
+    KIGIT::GitCommitPtr targetCommitPtr( targetCommit );
+
+    // Get the tree from the target commit
+    git_tree* targetTree = nullptr;
+
+    if( git_commit_tree( &targetTree, targetCommit ) != GIT_OK )
+    {
+        git_commit_free( targetCommit );
+        AddErrorString( _( "Could not get tree from target commit" ) );
+        return PullResult::Error;
+    }
+
+    KIGIT::GitTreePtr targetTreePtr( targetTree );
+
+    // Perform a checkout to update the working directory
     git_checkout_options checkoutOptions;
     git_checkout_init_options( &checkoutOptions, GIT_CHECKOUT_OPTIONS_VERSION );
-    checkoutOptions.checkout_strategy = GIT_CHECKOUT_SAFE;
+    auto notify_cb = []( git_checkout_notify_t why, const char* path, const git_diff_file* baseline,
+                         const git_diff_file* target, const git_diff_file* workdir, void* payload ) -> int
+    {
+        switch( why )
+        {
+        case GIT_CHECKOUT_NOTIFY_CONFLICT:
+            wxLogTrace( traceGit, "Checkout conflict: %s", path ? path : "unknown" );
+            break;
+        case GIT_CHECKOUT_NOTIFY_DIRTY:
+            wxLogTrace( traceGit, "Checkout dirty: %s", path ? path : "unknown" );
+            break;
+        case GIT_CHECKOUT_NOTIFY_UPDATED:
+            wxLogTrace( traceGit, "Checkout updated: %s", path ? path : "unknown" );
+            break;
+        case GIT_CHECKOUT_NOTIFY_UNTRACKED:
+            wxLogTrace( traceGit, "Checkout untracked: %s", path ? path : "unknown" );
+            break;
+        case GIT_CHECKOUT_NOTIFY_IGNORED:
+            wxLogTrace( traceGit, "Checkout ignored: %s", path ? path : "unknown" );
+            break;
+        default:
+            break;
+        }
 
-    if( git_checkout_head( GetRepo(), &checkoutOptions ) )
+        return 0;
+    };
+
+    checkoutOptions.checkout_strategy = GIT_CHECKOUT_SAFE | GIT_CHECKOUT_ALLOW_CONFLICTS;
+    checkoutOptions.notify_flags = GIT_CHECKOUT_NOTIFY_ALL;
+    checkoutOptions.notify_cb = notify_cb;
+
+    if( git_checkout_tree( GetRepo(), reinterpret_cast<git_object*>( targetTree ), &checkoutOptions ) != GIT_OK )
     {
         AddErrorString( _( "Failed to perform checkout operation." ) );
         return PullResult::Error;
     }
 
-    // Collect commit details for updated references
+    git_reference* updatedRef = nullptr;
+
+    // Update the current branch to point to the new commit
+    if (git_reference_set_target(&updatedRef, rawRef, &updatedRefOid, nullptr) != GIT_OK)
+    {
+        AddErrorString( wxString::Format( _( "Failed to update reference '%s' to point to '%s'" ), currentBranchName,
+                                          git_oid_tostr_s( &updatedRefOid ) ) );
+        return PullResult::Error;
+    }
+
+    KIGIT::GitReferencePtr updatedRefPtr( updatedRef );
+
+    // Clean up the repository state
+    if( git_repository_state_cleanup( GetRepo() ) != GIT_OK )
+    {
+        AddErrorString( _( "Failed to clean up repository state after fast-forward." ) );
+        return PullResult::Error;
+    }
+
     git_revwalk* revWalker = nullptr;
-    git_revwalk_new( &revWalker, GetRepo() );
+
+    // Collect commit details for updated references
+    if( git_revwalk_new( &revWalker, GetRepo() ) != GIT_OK )
+    {
+        AddErrorString( _( "Failed to initialize revision walker." ) );
+        return PullResult::Error;
+    }
+
     KIGIT::GitRevWalkPtr revWalkerPtr( revWalker );
     git_revwalk_sorting( revWalker, GIT_SORT_TIME );
-    git_revwalk_push_glob( revWalker, updatedRefName );
+
+    if( git_revwalk_push_glob( revWalker, currentBranchName ) != GIT_OK )
+    {
+        AddErrorString( _( "Failed to push reference to revision walker." ) );
+        return PullResult::Error;
+    }
+
+    std::pair<std::string, std::vector<CommitDetails>>& branchCommits = m_fetchResults.emplace_back();
+    branchCommits.first = currentBranchName;
 
     git_oid commitOid;
 
-    while( git_revwalk_next( &commitOid, revWalker ) == 0 )
+    while( git_revwalk_next( &commitOid, revWalker ) == GIT_OK )
     {
         git_commit* commit = nullptr;
 
         if( git_commit_lookup( &commit, GetRepo(), &commitOid ) )
         {
-            AddErrorString( wxString::Format( _( "Could not lookup commit '{}'" ),
+            AddErrorString( wxString::Format( _( "Could not lookup commit '%s'" ),
                                               git_oid_tostr_s( &commitOid ) ) );
             return PullResult::Error;
         }
@@ -263,13 +364,9 @@ PullResult GIT_PULL_HANDLER::handleFastForward()
         details.m_author = git_commit_author( commit )->name;
         details.m_date = getFormattedCommitDate( git_commit_author( commit )->when );
 
-        std::pair<std::string, std::vector<CommitDetails>>& branchCommits =
-                m_fetchResults.emplace_back();
-        branchCommits.first = updatedRefName;
         branchCommits.second.push_back( details );
     }
 
-    git_repository_state_cleanup( GetRepo() );
     return PullResult::FastForward;
 }
 
@@ -375,6 +472,90 @@ PullResult GIT_PULL_HANDLER::handleMerge( const git_annotated_commit** aMergeHea
     }
 
     return conflict_data.empty() ? PullResult::Success : PullResult::MergeFailed;
+}
+
+
+PullResult GIT_PULL_HANDLER::handleRebase( const git_annotated_commit** aMergeHeads, size_t aMergeHeadsCount )
+{
+    // Get the current branch reference
+    git_reference* head_ref = nullptr;
+
+    if( git_repository_head( &head_ref, GetRepo() ) )
+    {
+        wxString errorMsg = KIGIT_COMMON::GetLastGitError();
+        wxLogTrace( traceGit, "GIT_PULL_HANDLER::handleRebase() - Failed to get HEAD: %s", errorMsg );
+        return PullResult::Error;
+    }
+
+    KIGIT::GitReferencePtr headRefPtr(head_ref);
+
+    // Initialize rebase operation
+    git_rebase* rebase = nullptr;
+    git_rebase_options rebase_opts = GIT_REBASE_OPTIONS_INIT;
+    rebase_opts.checkout_options.checkout_strategy = GIT_CHECKOUT_SAFE;
+
+    if( git_rebase_init( &rebase, GetRepo(), nullptr, nullptr, aMergeHeads[0], &rebase_opts ) )
+    {
+        wxString errorMsg = KIGIT_COMMON::GetLastGitError();
+        wxLogTrace( traceGit, "GIT_PULL_HANDLER::handleRebase() - Failed to initialize rebase: %s", errorMsg );
+        return PullResult::Error;
+    }
+
+    KIGIT::GitRebasePtr   rebasePtr( rebase );
+    git_rebase_operation* operation = nullptr;
+
+    while( git_rebase_next( &operation, rebase ) != GIT_ITEROVER )
+    {
+        // Check for conflicts
+        git_index* index = nullptr;
+        if( git_repository_index( &index, GetRepo() ) )
+        {
+            wxLogTrace( traceGit, "GIT_PULL_HANDLER::handleRebase() - Failed to get index: %s",
+                        KIGIT_COMMON::GetLastGitError() );
+            return PullResult::Error;
+        }
+        KIGIT::GitIndexPtr indexPtr( index );
+
+        if( git_index_has_conflicts( index ) )
+        {
+            // Abort the rebase if there are conflicts because we need to merge manually
+            git_rebase_abort( rebase );
+            AddErrorString( _( "Conflicts detected during rebase" ) );
+            return PullResult::MergeFailed;
+        }
+
+        git_oid commit_id;
+        git_signature* committer = nullptr;
+
+        if( git_signature_default( &committer, GetRepo() ) )
+        {
+            wxLogTrace( traceGit, "GIT_PULL_HANDLER::handleRebase() - Failed to create signature: %s",
+                KIGIT_COMMON::GetLastGitError() );
+            return PullResult::Error;
+        }
+
+        KIGIT::GitSignaturePtr committerPtr( committer );
+
+        if( git_rebase_commit( &commit_id, rebase, nullptr, committer, nullptr, nullptr ) != GIT_OK )
+        {
+            wxString errorMsg = KIGIT_COMMON::GetLastGitError();
+            wxLogTrace( traceGit, "GIT_PULL_HANDLER::handleRebase() - Failed to commit operation: %s", errorMsg );
+            git_rebase_abort( rebase );
+            return PullResult::Error;
+        }
+    }
+
+    // Finish the rebase
+    if( git_rebase_finish( rebase, nullptr ) )
+    {
+        wxLogTrace( traceGit, "GIT_PULL_HANDLER::handleRebase() - Failed to finish rebase: %s",
+                    KIGIT_COMMON::GetLastGitError() );
+        return PullResult::Error;
+    }
+
+    wxLogTrace( traceGit, "GIT_PULL_HANDLER::handleRebase() - Rebase completed successfully" );
+    git_repository_state_cleanup( GetRepo() );
+    return PullResult::Success;
 }
 
 

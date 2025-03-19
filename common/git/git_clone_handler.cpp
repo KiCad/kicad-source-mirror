@@ -73,11 +73,12 @@ bool GIT_CLONE_HANDLER::PerformClone()
     TestedTypes() = 0;
     ResetNextKey();
     git_repository* newRepo = nullptr;
+    wxString        remote = GetCommon()->m_remote;
 
-    if( git_clone( &newRepo, m_URL.ToStdString().c_str(), m_clonePath.ToStdString().c_str(),
+    if( git_clone( &newRepo, remote.mbc_str(), m_clonePath.mbc_str(),
                    &cloneOptions ) != 0 )
     {
-        AddErrorString( wxString::Format( _( "Could not clone repository '%s'" ), m_URL ) );
+        AddErrorString( wxString::Format( _( "Could not clone repository '%s'" ), remote ) );
         return false;
     }
 
