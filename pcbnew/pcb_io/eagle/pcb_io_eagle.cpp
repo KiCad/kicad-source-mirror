@@ -745,8 +745,10 @@ void PCB_IO_EAGLE::loadPlain( wxXmlNode* aGraphics )
 
                 if( t.rot )
                 {
-                    if( !t.rot->spin )
-                        degrees = t.rot->mirror ? -t.rot->degrees : t.rot->degrees;
+                    degrees = t.rot->degrees;
+
+                    if( t.rot->mirror && !t.rot->spin )
+                        degrees *= -1;
 
                     if( t.rot->mirror )
                         pcbtxt->SetMirrored( t.rot->mirror );
