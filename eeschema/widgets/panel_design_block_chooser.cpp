@@ -103,8 +103,10 @@ PANEL_DESIGN_BLOCK_CHOOSER::PANEL_DESIGN_BLOCK_CHOOSER( SCH_EDIT_FRAME* aFrame, 
     wxBoxSizer* detailsSizer = new wxBoxSizer( wxVERTICAL );
     detailsPanel->SetSizer( detailsSizer );
 
-    m_preview = new DESIGN_BLOCK_PREVIEW_WIDGET( detailsPanel, false,
-                                                 EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
+    // Use the same draw engine type as the one used in parent frame m_frame
+    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = m_frame->GetCanvas()->GetBackend();
+    m_preview = new DESIGN_BLOCK_PREVIEW_WIDGET( detailsPanel, false, canvasType );
+
     detailsSizer->Add( m_preview, 1, wxEXPAND, 5 );
     detailsPanel->Layout();
     detailsSizer->Fit( detailsPanel );
