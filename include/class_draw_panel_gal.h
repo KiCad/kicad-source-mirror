@@ -268,7 +268,7 @@ protected:
     void onLostFocus( wxFocusEvent& aEvent );
     void onIdle( wxIdleEvent& aEvent );
     void onRefreshTimer( wxTimerEvent& aEvent );
-    void onShowTimer( wxTimerEvent& aEvent );
+    void onShowEvent( wxShowEvent& aEvent );
 
     wxWindow*                m_parent;           ///< Pointer to the parent window
     EDA_DRAW_FRAME*          m_edaFrame;         ///< Parent EDA_DRAW_FRAME (if available)
@@ -287,9 +287,6 @@ protected:
 
     /// True when canvas needs to be refreshed from idle handler
     bool                     m_needIdleRefresh;
-
-    /// Timer used to execute OnShow() when the window finally appears on the screen.
-    wxTimer                  m_onShowTimer;
 
     /// Interface for drawing objects on a 2D-surface
     KIGFX::GAL*              m_gal;
