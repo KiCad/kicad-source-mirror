@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:42+0300\n"
-"PO-Revision-Date: 2025-03-19 10:08+0000\n"
+"PO-Revision-Date: 2025-03-20 01:10+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -31437,7 +31437,6 @@ msgstr ""
 "\tR1 + (R2|R3)...\t\tqualunque combinazione di cui sopra\n"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the track widths will be calculated "
 "to suit.\n"
@@ -31462,8 +31461,8 @@ msgid ""
 "___H___ is thickness (height) in mils<br>\n"
 "___K___ is 0.024 for internal tracks or 0.048 for external tracks\n"
 msgstr ""
-"Se si specifica la corrente massima, la larghezza della pista verrà "
-"calcolata di conseguenza.\n"
+"Se si specifica la corrente massima, le larghezze delle piste verranno "
+"calcolate di conseguenza.\n"
 "\n"
 "Se si specifica una delle larghezze della pista, verrà calcolata la corrente "
 "massima che questa potrà sopportare. Verrà quindi calcolata la larghezza per "
@@ -31479,8 +31478,8 @@ msgstr ""
 "H)<sup>0.725</sup>___</center>\n"
 "dove:<br>\n"
 "___I___ = corrente massima in A<br>\n"
-"___&Delta;t___ = aumento di temperatura al di sopra dell'ambiente in &deg;"
-"C<br>\n"
+"___&Delta;t___ = aumento di temperatura al di sopra dell'ambiente in "
+"&deg;C<br>\n"
 "___W___ = larghezza in mils<br>\n"
 "___H___ = spessore (altezza) in mils<br>\n"
 "___K___ = 0.024 per piste interne o 0.048 per piste esterne\n"
@@ -44796,24 +44795,24 @@ msgid "Remove %s component class (currently '%s')."
 msgstr "Rimuovi classe componente %s (attualmente '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:249
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s component class from '%s' to '%s'."
-msgstr "Cambia etichetta collegamento pin %s %s da \"%s\" a \"%s\"."
+msgstr "Cambia classe componente %s da '%s' a '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:263
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s component class to '%s'."
-msgstr "Cambiato valore %s da %s a %s."
+msgstr "Cambiato componente classe %s a '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s component class (was '%s')."
-msgstr "Cambiato valore %s da %s a %s."
+msgstr "Rimosso componente classe %s (era '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:275
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s component class from '%s' to '%s'."
-msgstr "Cambiato valore %s da %s a %s."
+msgstr "Cambiato componente classe %s da '%s' a '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:293
 #, c-format
@@ -44826,9 +44825,9 @@ msgid "Cannot update %s (footprint '%s' not found)."
 msgstr "Impossibile aggiornare %s (impronta '%s' non trovata)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot change %s footprint from '%s' to '%s' (footprint is locked)."
-msgstr "Cambia impronta \"%s\" da \"%s\" a \"%s\"."
+msgstr "Impossibile cambiare impronta %s da '%s' a '%s' (impronta bloccata)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:327
 #, c-format
@@ -44836,9 +44835,10 @@ msgid "Change %s footprint from '%s' to '%s'."
 msgstr "Cambia impronta \"%s\" da \"%s\" a \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:341
-#, fuzzy, c-format
+#, c-format
 msgid "Could not change %s footprint from '%s' to '%s' (footprint is locked)."
-msgstr "Cambia impronta \"%s\" da \"%s\" a \"%s\"."
+msgstr ""
+"È stato impossibile cambiare impronta %s da '%s' a '%s' (impronta bloccata)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:354
 #, c-format
@@ -45072,19 +45072,20 @@ msgid "Processing symbol '%s:%s'."
 msgstr "Elaborazione simbolo \"%s:%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1340
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple footprints found for %s."
-msgstr "Impronte multiple trovate per '%s'."
+msgstr "Impronte multiple trovate per %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1372
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot remove unused footprint %s (footprint is locked)."
-msgstr "Impossibile rimuovere l'impronta non usata %s (bloccata)."
+msgstr "Impossibile rimuovere impronta non usata %s (impronta bloccata)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1377
-#, fuzzy, c-format
+#, c-format
 msgid "Could not remove unused footprint %s (footprint is locked)."
-msgstr "Impossibile rimuovere l'impronta non usata %s (bloccata)."
+msgstr ""
+"È stato impossibile rimuovere l'impronta non usata %s (impronta bloccata)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1390
 #, c-format
@@ -45102,7 +45103,6 @@ msgid "Removed unused net %s."
 msgstr "Rimossa connessione non usata %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1443
-#, fuzzy
 msgid "Update Netlist"
 msgstr "Aggiorna netlist"
 
@@ -45112,7 +45112,7 @@ msgid "Total warnings: %d, errors: %d."
 msgstr "Totale avvisi: %d, errori: %d."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:500
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
@@ -45287,9 +45287,8 @@ msgid "NPTH pad of %s"
 msgstr "Piazzola NPTH di %s"
 
 #: pcbnew/pad.cpp:1574
-#, fuzzy
 msgid "NPTH pad"
-msgstr "Piazzole PTH"
+msgstr "Piazzola NPTH"
 
 #: pcbnew/pad.cpp:1583
 #, c-format
@@ -45297,9 +45296,9 @@ msgid "Pad %s of %s on %s"
 msgstr "Piazzola %s di %s su %s"
 
 #: pcbnew/pad.cpp:1590
-#, fuzzy, c-format
+#, c-format
 msgid "Pad on %s"
-msgstr "Piaz %s"
+msgstr "Piazzola su %s"
 
 #: pcbnew/pad.cpp:1598
 #, c-format
@@ -45307,9 +45306,8 @@ msgid "PTH pad %s of %s"
 msgstr "Piazzola PTH %s di %s"
 
 #: pcbnew/pad.cpp:1604
-#, fuzzy
 msgid "PTH pad"
-msgstr "Piazzole PTH"
+msgstr "Piazzola PTH"
 
 #: pcbnew/pad.cpp:1614
 #, c-format
@@ -45317,9 +45315,9 @@ msgid "Pad %s %s of %s on %s"
 msgstr "Piazzola %s %s di %s su %s"
 
 #: pcbnew/pad.cpp:1622
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s on %s"
-msgstr "Via %s su %s"
+msgstr "Piazzola %s su %s"
 
 #: pcbnew/pad.cpp:1631
 #, c-format
@@ -45327,17 +45325,16 @@ msgid "PTH pad %s %s of %s"
 msgstr "Piazzola PTH  %s %s di %s"
 
 #: pcbnew/pad.cpp:1638
-#, fuzzy, c-format
+#, c-format
 msgid "PTH pad %s"
-msgstr "Piazzole PTH"
+msgstr "Piazzola PTH %s"
 
 #: pcbnew/pad.cpp:2209
-#, fuzzy
 msgid ""
 "(plated through holes normally have a copper pad on at least one outer layer)"
 msgstr ""
 "(i fori metallizzati normalmente hanno una piazzola in rame almeno su uno "
-"strato)"
+"strato esterno)"
 
 #: pcbnew/pad.cpp:2217
 msgid "('fiducial' property makes no sense on NPTH pads)"
@@ -45360,9 +45357,8 @@ msgid "('BGA' property is for SMD pads)"
 msgstr "(la proprietà BGA è per piazzole SMD)"
 
 #: pcbnew/pad.cpp:2233
-#, fuzzy
 msgid "('mechanical' property is for PTH pads)"
-msgstr "Attenzione: la proprietà dentellata è per piazzole PTH."
+msgstr "(la proprietà 'meccanica' è per piazzole PTH)"
 
 #: pcbnew/pad.cpp:2249
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
@@ -45371,9 +45367,8 @@ msgstr ""
 "SMD)"
 
 #: pcbnew/pad.cpp:2257
-#, fuzzy
 msgid "(SMD pad has a hole)"
-msgstr "Errore: la piazzola SMD ha un foro."
+msgstr "(la piazzola SMD ha un foro)"
 
 #: pcbnew/pad.cpp:2263
 msgid "(SMD pad has copper on both sides of the board)"
@@ -45394,23 +45389,21 @@ msgid "(SMD pad has no outer layers)"
 msgstr "(la piazzola SMD non ha strati esterni)"
 
 #: pcbnew/pad.cpp:2313
-#, fuzzy
 msgid "(Pad must have a positive size)"
-msgstr "Errore: la piazzola deve avere una dimensione positiva."
+msgstr "(la piazzola deve avere una dimensione positiva)"
 
 #: pcbnew/pad.cpp:2324
-#, fuzzy, c-format
+#, c-format
 msgid "(PTH pad hole size must be larger than %s)"
-msgstr "La dimensione del foro del via deve essere minore del diametro del via"
+msgstr "(la dimensione del foro piazzola PTH deve essere maggiore di %)"
 
 #: pcbnew/pad.cpp:2348
 msgid "(PTH pad hole leaves no copper)"
 msgstr "(foro piazzola PTH non lascia rame)"
 
 #: pcbnew/pad.cpp:2358
-#, fuzzy
 msgid "(PTH pad hole not fully inside copper)"
-msgstr "(foro piazzola PTH non del tutto nel rame)"
+msgstr "(foro piazzola PTH non tutto nel rame)"
 
 #: pcbnew/pad.cpp:2365
 msgid "(pad hole not inside pad shape)"
@@ -45461,9 +45454,8 @@ msgid "(corner chamfer is too large)"
 msgstr "(angolo smusso troppo grande)"
 
 #: pcbnew/pad.cpp:2443
-#, fuzzy
 msgid "(trapezoid delta is too large)"
-msgstr "Errore: il delta del trapeziode è troppo grande."
+msgstr "(il delta del trapezoide è troppo grande)"
 
 #: pcbnew/pad.cpp:2453
 msgid "(custom pad shape must resolve to a single polygon)"
@@ -45487,14 +45479,12 @@ msgid "Castellated pad"
 msgstr "Piazzola dentellata"
 
 #: pcbnew/pad.cpp:2538
-#, fuzzy
 msgid "Mechanical pad"
-msgstr "Strati meccanici"
+msgstr "Piazzola meccanica"
 
 #: pcbnew/pad.cpp:2560
-#, fuzzy
 msgid "Front, back and connected layers"
-msgstr "Inizio, fine, e strati connessi"
+msgstr "Fronte, retro, e strati connessi"
 
 #: pcbnew/pad.cpp:2610
 msgid "Pad Type"
@@ -45521,9 +45511,8 @@ msgid "Corner Radius Ratio"
 msgstr "Rapporto raggio vertice"
 
 #: pcbnew/pad.cpp:2673
-#, fuzzy
 msgid "Corner Radius Size"
-msgstr "Raggio angolo %"
+msgstr "Dimensione raggio angolo"
 
 #: pcbnew/pad.cpp:2679
 msgid "Hole Shape"
@@ -45608,14 +45597,12 @@ msgid "Suppress Trailing Zeroes"
 msgstr "Sopprimi gli zeri finali"
 
 #: pcbnew/pcb_dimension.cpp:1861
-#, fuzzy
 msgid "Arrow Direction"
-msgstr "Direzione:"
+msgstr "Direzione freccia"
 
 #: pcbnew/pcb_dimension.cpp:1874
-#, fuzzy
 msgid "Keep Aligned with Dimension"
-msgstr "Mantieni allineato con la dimensione"
+msgstr "Mantieni allineato con la quota"
 
 #: pcbnew/pcb_dimension.cpp:1911
 #, fuzzy
@@ -45623,12 +45610,10 @@ msgid "Crossbar Height"
 msgstr "Altezza crossbar"
 
 #: pcbnew/pcb_dimension.cpp:1915
-#, fuzzy
 msgid "Extension Line Overshoot"
 msgstr "Overshoot linea estensione"
 
 #: pcbnew/pcb_dimension.cpp:1986
-#, fuzzy
 msgid "Leader Length"
 msgstr "Lunghezza leader"
 
@@ -45724,34 +45709,34 @@ msgid "User Field"
 msgstr "Campo personalizzato"
 
 #: pcbnew/pcb_field.cpp:149
-#, fuzzy, c-format
+#, c-format
 msgid "Reference field of %s"
-msgstr "Elemento riferimento: %s"
+msgstr "Campo riferimento di %s"
 
 #: pcbnew/pcb_field.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid "Value field of %s (%s)"
-msgstr "Valore '%s' di %s"
+msgstr "Campo valore di %s (%s)"
 
 #: pcbnew/pcb_field.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint field of %s (%s)"
-msgstr "Impronta '%s' di %s"
+msgstr "Campo impronta di %s (%s)"
 
 #: pcbnew/pcb_field.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "Datasheet field of %s (%s)"
-msgstr "Datasheet '%s' di %s"
+msgstr "Campo datasheet di %s (%s)"
 
 #: pcbnew/pcb_field.cpp:162
-#, fuzzy, c-format
+#, c-format
 msgid "Field of %s (%s)"
-msgstr "Campo '%s' di %s"
+msgstr "Campo di %s (%s)"
 
 #: pcbnew/pcb_field.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid "%s field of %s (%s)"
-msgstr "%s%s (%s)"
+msgstr "%s campo di %s (%s)"
 
 #: pcbnew/pcb_generator.cpp:218 pcbnew/pcb_generator.cpp:255
 msgid "Update Order"
@@ -45805,12 +45790,12 @@ msgid "Pads6 stream has unexpected length for subrecord 6: %d."
 msgstr "Lo stream pads6 ha una lunghezza inattesa per il subrecord 6: %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:287
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Altium layer %s has no KiCad equivalent. It has been moved to KiCad layer "
 "Eco1_User."
 msgstr ""
-"Lo strato Altium (%d) senza equivalente KiCad. È stato spostato sullo strato "
+"Lo strato Altium %s non ha equivalente KiCad. È stato spostato sullo strato "
 "KiCad Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:482
@@ -45902,29 +45887,24 @@ msgid "Loading dimension drawings..."
 msgstr "Caricamento disegni quote..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1930
-#, fuzzy
 msgid "Ignored Angular dimension (not yet supported)."
-msgstr "Ignorata dimensione di tipo %d (non ancora supportata)."
+msgstr "Ignorata dimensione angolare (non ancora supportata)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1944
-#, fuzzy
 msgid "Ignored Datum dimension (not yet supported)."
-msgstr "Ignorata dimensione di tipo %d (non ancora supportata)."
+msgstr "Ignorata dimensione Datum (non ancora supportata)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1953
-#, fuzzy
 msgid "Ignored Baseline dimension (not yet supported)."
-msgstr "Ignorata dimensione di tipo %d (non ancora supportata)."
+msgstr "Ignorata dimensione Linea di base (non ancora supportata)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1964
-#, fuzzy
 msgid "Ignored Linear dimension (not yet supported)."
-msgstr "Ignorata dimensione di tipo %d (non ancora supportata)."
+msgstr "Ignorata dimensione Lineare (non ancora supportata)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1972
-#, fuzzy
 msgid "Ignored Radial dimension (not yet supported)."
-msgstr "Ignorata dimensione di tipo %d (non ancora supportata)."
+msgstr "Ignorata dimensione radiale (non ancora supportata)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1980
 #, c-format
@@ -45973,35 +45953,39 @@ msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr "Forma poligono ignorata di tipo %d (non ancora supportata)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2547
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Contorno tratteggiato trovato su strato Altium (%d) senza equivalente KiCad. "
-"È stato spostato nello strato KiCad Eco1_User."
+"Caricamento libreria '%s':\n"
+"Impronta %s con contorno tratteggiato sullo strato Altium (%d) senza "
+"equivalente KiCad. Spostamento nello strato KiCad Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2561
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Contorno tratteggiato trovato su strato Altium (%d) senza equivalente KiCad. "
-"È stato spostato nello strato KiCad Eco1_User."
+"Impronta %s con contorno tratteggiato strato Altium (%d) senza equivalente "
+"KiCad. Spostamento nello strato KiCad Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2604
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains polygon shape of kind %d (not yet supported)."
-msgstr "Forma poligono ignorata di tipo %d (non ancora supportata)."
+msgstr ""
+"Errore caricamento libreria '%s':\n"
+"Impronta %s con forma poligono di tipo %d (non ancora supportata)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2617
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s contains polygon shape of kind %d (not yet supported)."
-msgstr "Forma poligono ignorata di tipo %d (non ancora supportata)."
+msgstr ""
+"L'impronta %s contiene una forma poligono di tipo %d (non ancora supportata)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2774
 msgid "Loading zone fills..."
@@ -46016,11 +46000,12 @@ msgid "Loading pads..."
 msgstr "Caricamento piazzole..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3261
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
+"Errore nel caricare la libreria '%s':\n"
 "Impronta %s piazzola %s non è marcata come multistrato, ma è una piazzola "
 "passante."
 
@@ -46032,12 +46017,13 @@ msgstr ""
 "passante."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3303
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
-"La piazzola %s dell'impronta %s ha un foro quadrato (non ancora supportato)."
+"Caricando la libreria '%s':\n"
+"Impronta %s piazzola %s ha un foro quadrato (non ancora supportato)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3316
 #, c-format
@@ -46046,13 +46032,14 @@ msgstr ""
 "La piazzola %s dell'impronta %s ha un foro quadrato (non ancora supportato)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3351
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
-"La piazzola %s dell'impronta %s ha una rotazione del foro di %f gradi. KiCad "
+"Caricando la libreria '%s':\n"
+"Impronta %s piazzola %s ha una rotazione del foro di %f gradi. KiCad "
 "supporta solo rotazioni di 90 gradi."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3366
@@ -46065,11 +46052,13 @@ msgstr ""
 "supporta solo rotazioni di 90 gradi."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3386
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr "Impronta %s piazzola %s usa un foro di tipo sconosciuto %d."
+msgstr ""
+"Errore caricando la libreria '%s':\n"
+"Impronta %s piazzola %s usa un foro di tipo sconosciuto %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3400
 #, c-format
@@ -46077,11 +46066,13 @@ msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "Impronta %s piazzola %s usa un foro di tipo sconosciuto %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3465
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses an unknown pad-shape."
-msgstr "Impronta %s piazzola %s usa una forma piazzola sconosciuta."
+msgstr ""
+"Errore caricando la libreria '%s':\n"
+"Impronta %s piazzola %s usa una forma piazzola sconosciuta."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3478
 #, c-format
@@ -46098,23 +46089,24 @@ msgstr ""
 "stata spostata sullo strato KiCad Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3609
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Piazzola non rame %s sullo strato Altium (%d) senza equivalente KiCad. È "
-"stata spostata sullo strato KiCad Eco1_User."
+"Caricamento libreria '%s':\n"
+"Impronta %s piazzola non rame %s su strato Altium (%d) senza equivalente "
+"KiCad. Spostamento su strato KiCad Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3624
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Piazzola non rame %s sullo strato Altium (%d) senza equivalente KiCad. È "
-"stata spostata sullo strato KiCad Eco1_User."
+"Impronta %s piazzola non rame %s su strato Altium (%d) senza equivalente "
+"KiCad. Spostamento su strato KiCad Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3652
 #, c-format
@@ -46167,18 +46159,21 @@ msgstr ""
 "Codice a barre sullo strato Altium %d ignorato (non ancora supportato)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4225
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains barcode on Altium layer %d (not yet supported)."
 msgstr ""
-"Codice a barre sullo strato Altium %d ignorato (non ancora supportato)."
+"Errore nel caricare la libreria '%s':\n"
+"L'impronta %s contiene codice a barre su strato Altium %d (non ancora "
+"supportato)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4238
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s contains barcode on Altium layer %d (not yet supported)."
 msgstr ""
-"Codice a barre sullo strato Altium %d ignorato (non ancora supportato)."
+"L'impronta %s contiene codice a barre su strato Altium %d (non ancora "
+"supportato)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4438
 #, c-format
@@ -46198,14 +46193,14 @@ msgid "Altium Circuit Studio PCB files"
 msgstr "File C.S. Altium Circuit Studio"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:318
-#, fuzzy, c-format
+#, c-format
 msgid "No footprints in library '%s'"
-msgstr "Nessuna impronta nella libreria"
+msgstr "Nessuna impronta nella libreria '%s'"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:340
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in '%s'."
-msgstr "Impronta '%s' non trovata nella libreria '%s'."
+msgstr "Impronta '%s' non trovata in '%s'."
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.h:43
 msgid "Altium Designer PCB files"
@@ -46875,9 +46870,9 @@ msgstr ""
 "Nome tipo forma piazzola '%s' sconosciuto sullo strato '%s' alla riga %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:805
-#, fuzzy, c-format
+#, c-format
 msgid "No user layer to put layer %s"
-msgstr "Aggiungi strati selezionati all'elenco strati corrispondenti."
+msgstr "Nessuno strato utente in cui mettere lo strato %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1021
 #, c-format
@@ -46989,9 +46984,9 @@ msgstr ""
 "del segmento successivo è %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3488
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid shape type %d in zone outline"
-msgstr "Nome pin foglio non valido"
+msgstr "Tipo forma non valida %d nel contorno zona"
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:69
 msgid "Could not read file "
@@ -47386,24 +47381,24 @@ msgstr ""
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5768
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6781
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid padstack layer in\n"
 "file: %s\n"
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"Net ID non valido in\n"
+"Strato padstack non valido in\n"
 "file: %s\n"
 "riga: %d\n"
 "scostamento: %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5783
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6796
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
 msgstr ""
-"Nome NETCLASS '%s' duplicato nel file '%s' alla riga %d, scostamento %d."
+"Strato padstack '%s' non valido nel file '%s' alla riga %d, scostamento %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6360
 #, c-format
@@ -47453,24 +47448,20 @@ msgstr ""
 "Le zone a riempimento verranno convertite il meglio possibile."
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:903
-#, fuzzy
 msgid "Failed to add component data"
-msgstr "Impossibile leggere dei dati immagine."
+msgstr "Impossibile aggiungere dai componente"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:100
-#, fuzzy
 msgid "Creating ODB++ Structure"
-msgstr "Generazione file IPC2581"
+msgstr "Creazione struttura ODB++"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:118
-#, fuzzy
 msgid "Exporting board to ODB++"
-msgstr "Mostra il corpo scheda"
+msgstr "Esportazione scheda in ODB++"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.h:63
-#, fuzzy
 msgid "ODB++ Production File"
-msgstr "File produzione IPC-2581"
+msgstr "File produzione ODB++"
 
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:48 pcbnew/pcb_io/pcad/pcad_pcb.cpp:59
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:70
@@ -49338,9 +49329,8 @@ msgid "Fillet Tracks"
 msgstr "Piste di stondamento"
 
 #: pcbnew/tools/edit_tool.cpp:1090 pcbnew/tools/edit_tool.cpp:1274
-#, fuzzy
 msgid "Radius:"
-msgstr "Raggio"
+msgstr "Raggio:"
 
 #: pcbnew/tools/edit_tool.cpp:1254
 msgid "Unable to fillet the selected track segments."
@@ -49351,9 +49341,8 @@ msgid "Some of the track segments could not be filleted."
 msgstr "Alcuni dei segmenti di pista potrebbero non essere stati stondati."
 
 #: pcbnew/tools/edit_tool.cpp:1296
-#, fuzzy
 msgid "Arc radius:"
-msgstr "Arco, raggio %s"
+msgstr "Raggio arco:"
 
 #: pcbnew/tools/edit_tool.cpp:1301
 #, fuzzy
