@@ -654,6 +654,7 @@ void PCB_EDIT_FRAME::ToggleSearch()
                             settings->m_AuiPanels.search_panel_width, -1 );
         }
         m_searchPane->FocusSearch();
+        m_searchPane->RefreshSearch();
     }
     else
     {

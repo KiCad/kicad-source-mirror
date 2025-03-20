@@ -31,12 +31,10 @@ PCB_SEARCH_PANE::PCB_SEARCH_PANE( PCB_EDIT_FRAME* aFrame ) :
     if( m_brd != nullptr )
         m_brd->AddListener( this );
 
-    m_pcbFrame->Connect( EDA_EVT_UNITS_CHANGED,
-                         wxCommandEventHandler( PCB_SEARCH_PANE::onUnitsChanged ),
+    m_pcbFrame->Connect( EDA_EVT_UNITS_CHANGED, wxCommandEventHandler( PCB_SEARCH_PANE::onUnitsChanged ),
                          nullptr, this );
 
-    m_pcbFrame->Connect( EDA_EVT_BOARD_CHANGED,
-                         wxCommandEventHandler( PCB_SEARCH_PANE::onBoardChanged ),
+    m_pcbFrame->Connect( EDA_EVT_BOARD_CHANGED, wxCommandEventHandler( PCB_SEARCH_PANE::onBoardChanged ),
                          nullptr, this );
 
     wxFont infoFont = KIUI::GetDockedPaneFont( this );
@@ -53,11 +51,9 @@ PCB_SEARCH_PANE::PCB_SEARCH_PANE( PCB_EDIT_FRAME* aFrame ) :
 
 PCB_SEARCH_PANE::~PCB_SEARCH_PANE()
 {
-    m_pcbFrame->Disconnect( EDA_EVT_UNITS_CHANGED,
-                            wxCommandEventHandler( PCB_SEARCH_PANE::onUnitsChanged ),
+    m_pcbFrame->Disconnect( EDA_EVT_UNITS_CHANGED, wxCommandEventHandler( PCB_SEARCH_PANE::onUnitsChanged ),
                             nullptr, this );
-    m_pcbFrame->Disconnect( EDA_EVT_BOARD_CHANGED,
-                            wxCommandEventHandler( PCB_SEARCH_PANE::onBoardChanged ),
+    m_pcbFrame->Disconnect( EDA_EVT_BOARD_CHANGED, wxCommandEventHandler( PCB_SEARCH_PANE::onBoardChanged ),
                             nullptr, this );
 }
 

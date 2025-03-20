@@ -31,11 +31,11 @@ SCH_SEARCH_PANE::SCH_SEARCH_PANE( SCH_EDIT_FRAME* aFrame ) :
     if( m_sch != nullptr )
         m_sch->AddListener( this );
 
-    m_schFrame->Connect( EDA_EVT_UNITS_CHANGED,
-                         wxCommandEventHandler( SCH_SEARCH_PANE::onUnitsChanged ), nullptr, this );
+    m_schFrame->Connect( EDA_EVT_UNITS_CHANGED, wxCommandEventHandler( SCH_SEARCH_PANE::onUnitsChanged ),
+                         nullptr, this );
 
-    m_schFrame->Connect( EDA_EVT_SCHEMATIC_CHANGED,
-                         wxCommandEventHandler( SCH_SEARCH_PANE::onSchChanged ), nullptr, this );
+    m_schFrame->Connect( EDA_EVT_SCHEMATIC_CHANGED, wxCommandEventHandler( SCH_SEARCH_PANE::onSchChanged ),
+                         nullptr, this );
 
     m_schFrame->Bind( EDA_EVT_SCHEMATIC_CHANGING, [&]( wxCommandEvent& )
                                                   {
@@ -55,12 +55,10 @@ SCH_SEARCH_PANE::SCH_SEARCH_PANE( SCH_EDIT_FRAME* aFrame ) :
 
 SCH_SEARCH_PANE::~SCH_SEARCH_PANE()
 {
-    m_schFrame->Disconnect( EDA_EVT_UNITS_CHANGED,
-                            wxCommandEventHandler( SCH_SEARCH_PANE::onUnitsChanged ), nullptr,
-                            this );
-    m_schFrame->Disconnect( EDA_EVT_SCHEMATIC_CHANGED,
-                            wxCommandEventHandler( SCH_SEARCH_PANE::onSchChanged ), nullptr,
-                            this );
+    m_schFrame->Disconnect( EDA_EVT_UNITS_CHANGED, wxCommandEventHandler( SCH_SEARCH_PANE::onUnitsChanged ),
+                            nullptr, this );
+    m_schFrame->Disconnect( EDA_EVT_SCHEMATIC_CHANGED, wxCommandEventHandler( SCH_SEARCH_PANE::onSchChanged ),
+                            nullptr, this );
 }
 
 

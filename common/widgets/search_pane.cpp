@@ -57,15 +57,13 @@ public:
         switch( id )
         {
         case ID_TOGGLE_ZOOM_TO_SELECTION:
-            settings.selection_zoom =
-                    item->IsChecked() ? APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::ZOOM
-                                      : APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::NONE;
+            settings.selection_zoom = item->IsChecked() ? APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::ZOOM
+                                                        : APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::NONE;
             updateZoomPanCheckboxes();
             break;
         case ID_TOGGLE_PAN_TO_SELECTION:
-            settings.selection_zoom =
-                    item->IsChecked() ? APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::PAN
-                                      : APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::NONE;
+            settings.selection_zoom = item->IsChecked() ? APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::PAN
+                                                        : APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::NONE;
             updateZoomPanCheckboxes();
             break;
         }
@@ -80,10 +78,8 @@ private:
         wxMenuItem* zoomCb = FindItem( ID_TOGGLE_ZOOM_TO_SELECTION );
         wxMenuItem* panCb = FindItem( ID_TOGGLE_PAN_TO_SELECTION );
 
-        zoomCb->Check( settings.selection_zoom
-                       == APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::ZOOM );
-        panCb->Check( settings.selection_zoom
-                      == APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::PAN );
+        zoomCb->Check( settings.selection_zoom == APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::ZOOM );
+        panCb->Check( settings.selection_zoom == APP_SETTINGS_BASE::SEARCH_PANE::SELECTION_ZOOM::PAN );
     }
 
 private:
@@ -92,8 +88,8 @@ private:
 
 
 SEARCH_PANE::SEARCH_PANE( EDA_DRAW_FRAME* aFrame ) :
-	SEARCH_PANE_BASE( aFrame ),
-    m_frame( aFrame )
+        SEARCH_PANE_BASE( aFrame ),
+        m_frame( aFrame )
 {
     m_frame->Bind( EDA_LANG_CHANGED, &SEARCH_PANE::OnLanguageChange, this );
 
