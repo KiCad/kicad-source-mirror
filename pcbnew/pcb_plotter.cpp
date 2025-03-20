@@ -171,7 +171,7 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
                     && m_plotOpts.m_PDFSingle ) )
         {
             // this will only be used by pdf
-            wxString pageNumber = wxString::Format( "%zu", pageNum );
+            wxString pageNumber = wxString::Format( "%d", pageNum );
             wxString pageName = layerName;
             wxString sheetName = layerName;
 
