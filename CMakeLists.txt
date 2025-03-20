@@ -824,7 +824,7 @@ find_package( Pixman 0.30 REQUIRED )
 include_directories( SYSTEM ${PIXMAN_INCLUDE_DIR} )
 
 # Find libgit2, required
-find_package( libgit2 REQUIRED )
+find_package( libgit2 1.5 REQUIRED )
 
 # Set include directories for libgit
 include_directories(${LIBGIT2_INCLUDE_DIRS})
