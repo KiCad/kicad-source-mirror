@@ -1283,10 +1283,9 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
     int              layer = ( connection && connection->IsBus() ) ? LAYER_BUS : m_layer;
     COLOR4D          color = settings->GetLayerColor( layer );
     int              penWidth = GetEffectiveTextPenWidth( settings->GetDefaultPenWidth() );
-    COLOR4D          labelColor = GetLabelColor();
 
-    if( aPlotter->GetColorMode() && labelColor != COLOR4D::UNSPECIFIED )
-        color = labelColor;
+    if( aPlotter->GetColorMode() && GetLabelColor() != COLOR4D::UNSPECIFIED )
+        color = GetLabelColor();
 
     penWidth = std::max( penWidth, settings->GetMinPenWidth() );
     aPlotter->SetCurrentLineWidth( penWidth );
@@ -1311,6 +1310,16 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
     {
         aPlotter->PlotText( textpos, color, GetShownText( sheet, true ), attrs, font,
                             GetFontMetrics() );
+
+        if( aPlotter->GetColorMode() )
+        {
+            // For the graphic shape use the override color or the layer color, but not the
+            // net/netclass color.
+            if( GetTextColor() != COLOR4D::UNSPECIFIED )
+                aPlotter->SetColor( GetTextColor() );
+            else
+                aPlotter->SetColor( settings->GetLayerColor( m_layer ) );
+        }
 
         if( GetShape() == LABEL_FLAG_SHAPE::F_DOT )
         {

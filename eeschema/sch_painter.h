@@ -90,10 +90,10 @@ private:
     void draw( const SCH_TEXTBOX* aTextBox, int aLayer, bool aDimmed );
     void draw( const SCH_TEXT* aText, int aLayer, bool aDimmed );
     void draw( const SCH_TABLE* aTable, int aLayer, bool aDimmed );
-    void draw( const SCH_LABEL* aLabel, int aLayer );
-    void draw( const SCH_DIRECTIVE_LABEL* aLabel, int aLayer );
+    void draw( const SCH_LABEL* aLabel, int aLayer, bool aDimmed );
+    void draw( const SCH_DIRECTIVE_LABEL* aLabel, int aLayer, bool aDimmed );
     void draw( const SCH_HIERLABEL* aLabel, int aLayer, bool aDimmed );
-    void draw( const SCH_GLOBALLABEL* aLabel, int aLayer );
+    void draw( const SCH_GLOBALLABEL* aLabel, int aLayer, bool aDimmed );
     void draw( const SCH_SHEET* aSheet, int aLayer );
     void draw( const SCH_NO_CONNECT* aNC, int aLayer );
     void draw( const SCH_MARKER* aMarker, int aLayer );
@@ -126,7 +126,7 @@ private:
 
     float getShadowWidth( bool aForHighlight ) const;
     COLOR4D getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDrawingShadows,
-                            bool aDimmed = false ) const;
+                            bool aDimmed = false, bool aIgnoreNets = false ) const;
     KIFONT::FONT* getFont( const EDA_TEXT* aText ) const;
     float getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows,
                         bool aDrawingWireColorHighlights = false ) const;
