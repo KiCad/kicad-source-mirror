@@ -665,7 +665,10 @@ XNODE* NETLIST_EXPORTER_XML::makeLibParts()
             xlibpart->AddChild( xfootprints = node( wxT( "footprints" ) ) );
 
             for( unsigned i = 0; i < lcomp->GetFPFilters().GetCount(); ++i )
-                xfootprints->AddChild( node( wxT( "fp" ), lcomp->GetFPFilters()[i] ) );
+            {
+                if( !lcomp->GetFPFilters()[i].IsEmpty() )
+                    xfootprints->AddChild( node( wxT( "fp" ), lcomp->GetFPFilters()[i] ) );
+            }
         }
 
         //----- show the fields here ----------------------------------
