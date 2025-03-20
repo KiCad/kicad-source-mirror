@@ -275,7 +275,7 @@ bool LIB_ID::isLegalLibraryNameChar( unsigned aUniChar )
 const wxString LIB_ID::GetFullLibraryName() const
 {
     if( m_subLibraryName.empty() )
-        return m_libraryName.c_str();
+        return m_libraryName;
 
-    return fmt::format( "{} - {}", m_libraryName.c_str(), m_subLibraryName.c_str() );
+    return wxString::Format( wxS( "%s - %s" ), m_libraryName.c_str(), m_subLibraryName.c_str() );
 }
