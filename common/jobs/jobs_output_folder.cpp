@@ -36,33 +36,28 @@ bool JOBS_OUTPUT_FOLDER::HandleOutputs( const wxString& baseTempPath, PROJECT* a
     wxString outputPath = ExpandTextVars( m_outputPath, aProject );
     outputPath = ExpandEnvVarSubstitutions( outputPath, aProject );
 
+    if( outputPath.StartsWith( "~" ) )
+        outputPath.Replace( "~", wxGetHomeDir(), false );
+
     if( !wxFileName::DirExists( outputPath ) )
     {
         if( !wxFileName::Mkdir( outputPath, wxS_DIR_DEFAULT ) )
-        {
             return false;
-        }
     }
-
-    bool success = true;
 
     wxString errors;
 
     if( !CopyDirectory( baseTempPath, outputPath, errors ) )
-    {
-        success = false;
-    }
+        return false;
 
-    return success;
+    return true;
 }
 
 
 bool JOBS_OUTPUT_FOLDER::OutputPrecheck()
 {
     if( m_outputPath.IsEmpty() )
-    {
         return false;
-    }
 
     return true;
 }
