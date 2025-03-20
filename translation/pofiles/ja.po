@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:43+0300\n"
-"PO-Revision-Date: 2025-03-19 10:08+0000\n"
+"PO-Revision-Date: 2025-03-20 07:53+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -786,10 +786,9 @@ msgid "Use PCB editor copper colors"
 msgstr "基板エディタの銅色を使用する"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:145
-#, fuzzy
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
-msgstr "基板エディタの銅色を使用する（OpenGLのみ）"
+msgstr "基板エディタの銅色を使用する（リアルタイム レンダラーのみ）"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:163
 #, c-format
@@ -4362,21 +4361,18 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are never shared in this process."
 msgstr ""
-"KiCadはクラッシュや稀なイベントのデータを匿名で開発者に報告し、\n"
-"ユーザーベース全体を通じて重要なバグをより効果的に特定したり、\n"
-"機能改善のための分析の手がかりにします。\n"
+"KiCadはクラッシュや稀なイベントのデータを匿名で開発者に報告し、ユーザーベース"
+"全体を通じて重要なバグをより効果的に特定したり、機能改善のための分析の手がか"
+"りにします。\n"
 "\n"
-"インストールされたKiCadと自動的に送信するレポートを\n"
-"紐づけるために完全にランダムで一意の識別子を生成し、\n"
-"クラッシュのレポートの目的だけに使用します。\n"
-"IPアドレスを含む個人情報はこの識別子に保存されたり\n"
-"関連付けたりしません。\n"
-"この識別子はボタンを押すことでいつでもリセットすることができます。\n"
+"インストールされたKiCadと自動的に送信するレポートを紐づけるために完全にランダ"
+"ムで一意の識別子を生成し、クラッシュのレポートの目的だけに使用します。IPアド"
+"レスを含む個人情報はこの識別子に保存されたり関連付けたりしません。この識別子"
+"はボタンを押すことでいつでもリセットすることができます。\n"
 "\n"
-"この活動に参加することを選択した場合、\n"
-"KiCadはクラッシュやイベントが発生した時に自動的にレポートを送信します。\n"
-"回路図やPCBのようなユーザーの設計ファイルは\n"
-"この過程で共有されることはありません。"
+"この活動に参加することを選択した場合、KiCadはクラッシュやイベントが発生した時"
+"に自動的にレポートを送信します。回路図やPCBのようなユーザーの設計ファイルはこ"
+"の過程で共有されることはありません。"
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
@@ -11494,7 +11490,7 @@ msgstr "DSN:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:45
 msgid "Username:"
-msgstr "Username:"
+msgstr "ユーザー名:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:71
 msgid "Connection String:"
@@ -22022,15 +22018,13 @@ msgid "Delete Hierarchical Labels"
 msgstr "階層ラベルを削除"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:99
-#, fuzzy
 msgid ""
 "Associate selected sheet pin and hierarchical label using the label name"
-msgstr "シートピンと階層ラベルを同期"
+msgstr "ラベル名でシートピンと階層ラベルを関連付け"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
-#, fuzzy
 msgid "Associate selected sheet pin and hierarchical label using the pin name"
-msgstr "ブレークシートピンと階層ラベルの関連付け"
+msgstr "ピン名でシートピンと階層ラベルを関連付け"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
@@ -27767,7 +27761,6 @@ msgid "Local path: monitoring folder changes"
 msgstr "ローカル パス: フォルダーの変更を監視します"
 
 #: kicad/project_tree_pane.cpp:1644
-#, fuzzy
 msgid "The selected directory is already a Git project."
 msgstr "選択したディレクトリはすでにgitプロジェクトです。"
 
@@ -27776,7 +27769,6 @@ msgid "Set default remote"
 msgstr "デフォルトのリモートを設定"
 
 #: kicad/project_tree_pane.cpp:1663
-#, fuzzy
 msgid "Failed to initialize Git project."
 msgstr "git プロジェクトの初期化に失敗しました。"
 
@@ -27818,19 +27810,16 @@ msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "ブランチ '%s' のHEAD参照の更新に失敗しました"
 
 #: kicad/project_tree_pane.cpp:1923
-#, fuzzy
 msgid "Are you sure you want to remove Git tracking from this project?"
 msgstr "プロジェクトから gitのトラッキングを解除しますか?"
 
 #: kicad/project_tree_pane.cpp:1940
-#, fuzzy
 msgid "Failed to remove Git directory"
 msgstr "gitディレクトリの削除に失敗しました"
 
 #: kicad/project_tree_pane.cpp:2267
-#, fuzzy
 msgid "The selected directory is not a Git project."
-msgstr "選択したディレクトリはすでにgitプロジェクトです。"
+msgstr "選択したディレクトリはgitプロジェクトではありません。"
 
 #: kicad/project_tree_pane.cpp:2412
 msgid "Discarding commit due to empty commit message."
@@ -30532,8 +30521,7 @@ msgstr ""
 "制御する値はボールド体で表示されます。\n"
 "\n"
 "計算は、電流 は35 A (外層配線) または 17.5 A (内層配線) 、温度上昇は 100℃ 、"
-"幅は 400mil (10mm)\n"
-" までの最大範囲で有効です。\n"
+"幅は 400mil (10mm)までの最大範囲で有効です。\n"
 "\n"
 "計算式 (IPC 2221 より)\n"
 "<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
@@ -51228,9 +51216,8 @@ msgid "Source Name"
 msgstr "ソース名"
 
 #: pcbnew/zone.cpp:2008
-#, fuzzy
 msgid "Hatch Orientation"
-msgstr "向き"
+msgstr "ハッチングの方向"
 
 #: pcbnew/zone.cpp:2026
 msgid "Cannot be less than zone minimum width"
