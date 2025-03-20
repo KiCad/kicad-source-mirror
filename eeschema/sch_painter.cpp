@@ -176,10 +176,10 @@ void SCH_PAINTER::draw( const EDA_ITEM* aItem, int aLayer, bool aDimmed )
         draw( static_cast<const SCH_TABLE*>( aItem ), aLayer, aDimmed );
         break;
     case SCH_LABEL_T:
-        draw( static_cast<const SCH_LABEL*>( aItem ), aLayer );
+        draw( static_cast<const SCH_LABEL*>( aItem ), aLayer, aDimmed );
         break;
     case SCH_DIRECTIVE_LABEL_T:
-        draw( static_cast<const SCH_DIRECTIVE_LABEL*>( aItem ), aLayer );
+        draw( static_cast<const SCH_DIRECTIVE_LABEL*>( aItem ), aLayer, aDimmed );
         break;
     case SCH_FIELD_T:
         draw( static_cast<const SCH_FIELD*>( aItem ), aLayer, aDimmed );
@@ -188,7 +188,7 @@ void SCH_PAINTER::draw( const EDA_ITEM* aItem, int aLayer, bool aDimmed )
         draw( static_cast<const SCH_HIERLABEL*>( aItem ), aLayer, aDimmed );
         break;
     case SCH_GLOBAL_LABEL_T:
-        draw( static_cast<const SCH_GLOBALLABEL*>( aItem ), aLayer );
+        draw( static_cast<const SCH_GLOBALLABEL*>( aItem ), aLayer, aDimmed );
         break;
     case SCH_SHEET_T:
         draw( static_cast<const SCH_SHEET*>( aItem ), aLayer );
@@ -294,7 +294,7 @@ float SCH_PAINTER::getShadowWidth( bool aForHighlight ) const
 
 
 COLOR4D SCH_PAINTER::getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDrawingShadows,
-                                     bool aDimmed ) const
+                                     bool aDimmed, bool aIgnoreNets ) const
 {
     COLOR4D color = m_schSettings.GetLayerColor( aLayer );
 
@@ -366,7 +366,14 @@ COLOR4D SCH_PAINTER::getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDr
         }
         else if( aItem->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
         {
-            color = static_cast<const SCH_LABEL_BASE*>( aItem )->GetLabelColor();
+            const SCH_LABEL_BASE* label = static_cast<const SCH_LABEL_BASE*>( aItem );
+
+            if( label->GetTextColor() != COLOR4D::UNSPECIFIED )
+                color = label->GetTextColor();                      // override color
+            else if( aIgnoreNets )
+                color = m_schSettings.GetLayerColor( aLayer );      // layer color
+            else
+                color = label->GetLabelColor();                     // net/netclass color
         }
         else if( aItem->Type() == SCH_FIELD_T )
         {
@@ -2373,7 +2380,7 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
 }
 
 
-void SCH_PAINTER::draw( const SCH_GLOBALLABEL* aLabel, int aLayer )
+void SCH_PAINTER::draw( const SCH_GLOBALLABEL* aLabel, int aLayer, bool aDimmed )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
@@ -2394,7 +2401,7 @@ void SCH_PAINTER::draw( const SCH_GLOBALLABEL* aLabel, int aLayer )
     if( drawingShadows && !( aLabel->IsBrightened() || aLabel->IsSelected() ) )
         return;
 
-    COLOR4D color = getRenderColor( aLabel, LAYER_GLOBLABEL, drawingShadows );
+    COLOR4D color = getRenderColor( aLabel, LAYER_GLOBLABEL, drawingShadows, aDimmed, true );
 
     if( drawingDangling )
     {
@@ -2436,7 +2443,7 @@ void SCH_PAINTER::draw( const SCH_GLOBALLABEL* aLabel, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( const SCH_LABEL* aLabel, int aLayer )
+void SCH_PAINTER::draw( const SCH_LABEL* aLabel, int aLayer, bool aDimmed )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
@@ -2457,7 +2464,7 @@ void SCH_PAINTER::draw( const SCH_LABEL* aLabel, int aLayer )
     if( drawingShadows && !( aLabel->IsBrightened() || aLabel->IsSelected() ) )
         return;
 
-    COLOR4D color = getRenderColor( aLabel, LAYER_HIERLABEL, drawingShadows );
+    COLOR4D color = getRenderColor( aLabel, LAYER_HIERLABEL, drawingShadows, aDimmed, true );
 
     if( drawingDangling )
     {
@@ -2496,7 +2503,7 @@ void SCH_PAINTER::draw( const SCH_HIERLABEL* aLabel, int aLayer, bool aDimmed )
     if( drawingShadows && !( aLabel->IsBrightened() || aLabel->IsSelected() ) )
         return;
 
-    COLOR4D color = getRenderColor( aLabel, LAYER_HIERLABEL, drawingShadows, aDimmed );
+    COLOR4D color = getRenderColor( aLabel, LAYER_HIERLABEL, drawingShadows, aDimmed, true );
 
     if( drawingDangling )
     {
@@ -2529,7 +2536,7 @@ void SCH_PAINTER::draw( const SCH_HIERLABEL* aLabel, int aLayer, bool aDimmed )
 }
 
 
-void SCH_PAINTER::draw( const SCH_DIRECTIVE_LABEL* aLabel, int aLayer )
+void SCH_PAINTER::draw( const SCH_DIRECTIVE_LABEL* aLabel, int aLayer, bool aDimmed )
 {
     if( !eeconfig()->m_Appearance.show_directive_labels && !aLabel->IsSelected() )
         return;
@@ -2551,7 +2558,7 @@ void SCH_PAINTER::draw( const SCH_DIRECTIVE_LABEL* aLabel, int aLayer )
     if( drawingShadows && !( aLabel->IsBrightened() || aLabel->IsSelected() ) )
         return;
 
-    COLOR4D color = getRenderColor( aLabel, LAYER_NETCLASS_REFS, drawingShadows );
+    COLOR4D color = getRenderColor( aLabel, LAYER_NETCLASS_REFS, drawingShadows, aDimmed, true );
 
     if( aLayer == LAYER_DANGLING )
     {
