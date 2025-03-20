@@ -1893,7 +1893,6 @@ bool ZONE_FILLER::fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
                                      const SHAPE_POLY_SET& aSmoothedOutline,
                                      SHAPE_POLY_SET& aFillPolys )
 {
-    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
     BOX2I                  zone_boundingbox = aZone->GetBoundingBox();
     SHAPE_POLY_SET         clearanceHoles;
     long                   ticker = 0;

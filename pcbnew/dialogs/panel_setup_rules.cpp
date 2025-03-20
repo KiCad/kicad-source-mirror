@@ -216,7 +216,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 
     enum
     {
-        NONE,
+        NO_CONTEXT,
         STRING,
         SEXPR_OPEN,
         SEXPR_TOKEN,
@@ -275,8 +275,8 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
     wxString             partial;
     wxString             last;
     wxString             constraintType;
-    int                  context = NONE;
-    int                  expr_context = NONE;
+    int                  context = NO_CONTEXT;
+    int                  expr_context = NO_CONTEXT;
 
     for( int i = startPos; i < currentPos; ++i )
     {
@@ -290,14 +290,14 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         {
             if( c == '"' )
             {
-                context = NONE;
+                context = NO_CONTEXT;
             }
             else
             {
                 if( expr_context == STRING )
                 {
                     if( c == '\'' )
-                        expr_context = NONE;
+                        expr_context = NO_CONTEXT;
                     else
                         partial += c;
                 }
@@ -364,7 +364,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                 }
             }
 
-            context = NONE;
+            context = NO_CONTEXT;
         }
         else if( c == ' ' )
         {
@@ -386,7 +386,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                 }
                 else
                 {
-                    context = NONE;
+                    context = NO_CONTEXT;
                 }
 
                 partial = wxEmptyString;
@@ -418,7 +418,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                 constraintType = partial;
             }
 
-            context = NONE;
+            context = NO_CONTEXT;
         }
         else
         {
