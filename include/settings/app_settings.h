@@ -135,6 +135,21 @@ public:
         std::vector<wxString>   open_libs;     ///< list of libraries the user has open in the tree.
     };
 
+    struct PANEL_DESIGN_BLOCK_CHOOSER
+    {
+        int  sash_pos_h;
+        int  sash_pos_v;
+        int  width;
+        int  height;
+        int  sort_mode;
+        bool repeated_placement;
+        bool place_as_sheet;
+        bool keep_annotations;
+
+        // For saving tree columns and widths
+        LIB_TREE tree;
+    };
+
     struct PRINTING
     {
         bool             background;    ///< Whether or not to print background color.
@@ -178,6 +193,8 @@ public:
     CROSS_PROBING_SETTINGS m_CrossProbing;
 
     FIND_REPLACE m_FindReplace;
+
+    PANEL_DESIGN_BLOCK_CHOOSER m_DesignBlockChooserPanel;
 
     GRAPHICS m_Graphics;
 

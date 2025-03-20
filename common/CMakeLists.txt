@@ -353,6 +353,8 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_color_picker_base.cpp
     dialogs/dialog_configure_paths.cpp
     dialogs/dialog_configure_paths_base.cpp
+    dialogs/dialog_design_block_properties.cpp
+    dialogs/dialog_design_block_properties_base.cpp
     dialogs/dialog_display_html_text_base.cpp
     dialogs/dialog_edit_library_tables.cpp
     dialogs/dialog_embed_files.cpp
@@ -431,6 +433,7 @@ set( COMMON_WIDGET_SRCS
     widgets/bitmap_toggle.cpp
     widgets/button_row_panel.cpp
     widgets/color_swatch.cpp
+    widgets/design_block_pane.cpp
     widgets/filter_combobox.cpp
     widgets/font_choice.cpp
     widgets/footprint_choice.cpp
@@ -455,6 +458,7 @@ set( COMMON_WIDGET_SRCS
     widgets/mathplot.cpp
     widgets/msgpanel.cpp
     widgets/paged_dialog.cpp
+    widgets/panel_design_block_chooser.cpp
     widgets/properties_panel.cpp
     widgets/search_pane.cpp
     widgets/search_pane_base.cpp
@@ -616,6 +620,7 @@ set( COMMON_SRCS
     lib_table_grid_tricks.cpp
     lib_tree_model.cpp
     lib_tree_model_adapter.cpp
+    design_block_tree_model_adapter.cpp
     marker_base.cpp
     origin_transforms.cpp
     printout.cpp
@@ -649,6 +654,7 @@ set( COMMON_SRCS
     tool/construction_manager.cpp
     tool/common_tools.cpp
     tool/conditional_menu.cpp
+    tool/design_block_control.cpp
     tool/edit_constraints.cpp
     tool/edit_points.cpp
     tool/editor_conditions.cpp

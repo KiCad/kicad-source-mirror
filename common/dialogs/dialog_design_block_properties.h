@@ -22,6 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#ifndef DIALOG_DESIGN_BLOCK_PROPERTIES_H
+#define DIALOG_DESIGN_BLOCK_PROPERTIES_H
+
 #include <dialogs/dialog_design_block_properties_base.h>
 #include <nlohmann/json.hpp>
 
@@ -31,7 +34,7 @@ class DESIGN_BLOCK;
 class DIALOG_DESIGN_BLOCK_PROPERTIES : public DIALOG_DESIGN_BLOCK_PROPERTIES_BASE
 {
 public:
-    DIALOG_DESIGN_BLOCK_PROPERTIES( SCH_EDIT_FRAME* aParent, DESIGN_BLOCK* aDesignBlock );
+    DIALOG_DESIGN_BLOCK_PROPERTIES( wxWindow* aParent, DESIGN_BLOCK* aDesignBlock, bool aDisableName = false );
     ~DIALOG_DESIGN_BLOCK_PROPERTIES() override;
 
     bool TransferDataToWindow() override;
@@ -50,6 +53,8 @@ public:
 private:
     void AdjustGridColumns( int aWidth );
 
-    DESIGN_BLOCK* m_designBlock;
+    DESIGN_BLOCK*                             m_designBlock;
     nlohmann::ordered_map<wxString, wxString> m_fields;
 };
+
+#endif

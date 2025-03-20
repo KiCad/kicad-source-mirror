@@ -155,6 +155,10 @@ public:
         bool  show_properties;
         bool  show_search;
         bool  show_net_inspector;
+        bool  design_blocks_show;
+        int   design_blocks_panel_docked_width;
+        int   design_blocks_panel_float_width;
+        int   design_blocks_panel_float_height;
     };
 
     struct DIALOG_CLEANUP

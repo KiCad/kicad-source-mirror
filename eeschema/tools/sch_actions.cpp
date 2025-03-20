@@ -31,6 +31,8 @@
 #include <sch_line_wire_bus_tool.h>
 #include <tool/tool_action.h>
 
+class DESIGN_BLOCK;
+
 // Actions, being statically-defined, require specialized I18N handling.  We continue to
 // use the _() macro so that string harvesting by the I18N framework doesn't have to be
 // specialized, but we don't translate on initialization and instead do it in the getters.
@@ -163,6 +165,20 @@ TOOL_ACTION SCH_ACTIONS::saveSelectionAsDesignBlock( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Save Selection as Design Block..." ) )
         .Tooltip( _( "Create a new design block from the current selection" ) )
         .Icon( BITMAPS::new_component ) );
+
+TOOL_ACTION SCH_ACTIONS::saveSheetToDesignBlock( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SchDesignBlockControl.saveSheetToDesignBlock" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Save Current Sheet to Design Block..." ) )
+        .Tooltip( _( "Add current sheet to design block" ) )
+        .Icon( BITMAPS::save ) );
+
+TOOL_ACTION SCH_ACTIONS::saveSelectionToDesignBlock( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SchDesignBlockControl.saveSelectionToDesignBlock" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Save Selection to Design Block..." ) )
+        .Tooltip( _( "Add current selection to design block" ) )
+        .Icon( BITMAPS::save ) );
 
 TOOL_ACTION SCH_ACTIONS::deleteDesignBlock( TOOL_ACTION_ARGS()
         .Name( "eeschema.SchDesignBlockControl.saveDeleteDesignBlock" )

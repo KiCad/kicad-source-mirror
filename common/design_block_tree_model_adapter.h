@@ -33,9 +33,9 @@ public:
      *
      * @param aLibs library set from which parts will be loaded
      */
-    static wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> Create( EDA_BASE_FRAME* aParent,
-                                                           LIB_TABLE*      aLibs,
-                                                           APP_SETTINGS_BASE::LIB_TREE& aSettings );
+    static wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> Create( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs,
+                                                           APP_SETTINGS_BASE::LIB_TREE& aSettings,
+                                                           TOOL_INTERACTIVE*            aContextMenuTool );
 
     void AddLibraries( EDA_BASE_FRAME* aParent );
     void ClearLibraries();
@@ -51,16 +51,17 @@ protected:
      * Constructor; takes a set of libraries to be included in the search.
      */
     DESIGN_BLOCK_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs,
-                                     APP_SETTINGS_BASE::LIB_TREE& aSettings );
+                                     APP_SETTINGS_BASE::LIB_TREE& aSettings,
+                                     TOOL_INTERACTIVE* aContextMenuTool );
 
-    std::vector<LIB_TREE_ITEM*> getDesignBlocks( EDA_BASE_FRAME* aParent,
-                                                 const wxString& aLibName );
+    std::vector<LIB_TREE_ITEM*> getDesignBlocks( EDA_BASE_FRAME* aParent, const wxString& aLibName );
 
     PROJECT::LIB_TYPE_T getLibType() override { return PROJECT::LIB_TYPE_T::DESIGN_BLOCK_LIB; }
 
 protected:
     DESIGN_BLOCK_LIB_TABLE* m_libs;
     EDA_BASE_FRAME*         m_frame;
+    TOOL_INTERACTIVE*       m_contextMenuTool;
 };
 
 #endif // DESIGN_BLOCK_TREE_MODEL_ADAPTER_H

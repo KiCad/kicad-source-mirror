@@ -17,7 +17,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "design_block_preview_widget.h"
 #include <schematic.h>
 #include <sch_sheet.h>
 #include <sch_view.h>
@@ -35,13 +34,16 @@
 #include <eeschema_settings.h>
 #include <eeschema_helpers.h>
 #include <settings/settings_manager.h>
+#include <widgets/sch_design_block_preview_widget.h>
 #include <wx/log.h>
 #include <wx/stattext.h>
+#include <wx/panel.h>
 
 
-DESIGN_BLOCK_PREVIEW_WIDGET::DESIGN_BLOCK_PREVIEW_WIDGET( wxWindow* aParent, bool aIncludeStatus,
-                                              EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType ) :
-        wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 ),
+SCH_DESIGN_BLOCK_PREVIEW_WIDGET::SCH_DESIGN_BLOCK_PREVIEW_WIDGET( wxWindow* aParent,
+                                                                 EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType,
+                                                                 bool aIncludeStatus ) :
+        DESIGN_BLOCK_PREVIEW_WIDGET( aParent ),
         m_preview( nullptr ),
         m_status( nullptr ),
         m_statusPanel( nullptr ),
@@ -58,14 +60,13 @@ DESIGN_BLOCK_PREVIEW_WIDGET::DESIGN_BLOCK_PREVIEW_WIDGET( wxWindow* aParent, boo
     EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = aCanvasType;
 
     // Allows only a CAIRO or OPENGL canvas:
-    if( canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL
-        && canvasType != EDA_DRAW_PANEL_GAL::GAL_FALLBACK )
+    if( canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL && canvasType != EDA_DRAW_PANEL_GAL::GAL_FALLBACK )
     {
         canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
     }
 
-    m_preview = new SCH_PREVIEW_PANEL( this, wxID_ANY, wxDefaultPosition, wxSize( -1, -1 ),
-                                       m_galDisplayOptions, canvasType );
+    m_preview = new SCH_PREVIEW_PANEL( this, wxID_ANY, wxDefaultPosition, wxSize( -1, -1 ), m_galDisplayOptions,
+                                       canvasType );
     m_preview->SetStealsFocus( false );
     m_preview->ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
     m_preview->GetGAL()->SetAxesEnabled( false );
@@ -131,11 +132,11 @@ DESIGN_BLOCK_PREVIEW_WIDGET::DESIGN_BLOCK_PREVIEW_WIDGET( wxWindow* aParent, boo
     SetSizer( m_outerSizer );
     Layout();
 
-    Connect( wxEVT_SIZE, wxSizeEventHandler( DESIGN_BLOCK_PREVIEW_WIDGET::onSize ), nullptr, this );
+    Connect( wxEVT_SIZE, wxSizeEventHandler( SCH_DESIGN_BLOCK_PREVIEW_WIDGET::onSize ), nullptr, this );
 }
 
 
-DESIGN_BLOCK_PREVIEW_WIDGET::~DESIGN_BLOCK_PREVIEW_WIDGET()
+SCH_DESIGN_BLOCK_PREVIEW_WIDGET::~SCH_DESIGN_BLOCK_PREVIEW_WIDGET()
 {
     if( m_previewItem )
         m_preview->GetView()->Remove( m_previewItem );
@@ -144,7 +145,7 @@ DESIGN_BLOCK_PREVIEW_WIDGET::~DESIGN_BLOCK_PREVIEW_WIDGET()
 }
 
 
-void DESIGN_BLOCK_PREVIEW_WIDGET::SetStatusText( wxString const& aText )
+void SCH_DESIGN_BLOCK_PREVIEW_WIDGET::SetStatusText( wxString const& aText )
 {
     wxCHECK( m_statusPanel, /* void */ );
 
@@ -155,7 +156,7 @@ void DESIGN_BLOCK_PREVIEW_WIDGET::SetStatusText( wxString const& aText )
 }
 
 
-void DESIGN_BLOCK_PREVIEW_WIDGET::onSize( wxSizeEvent& aEvent )
+void SCH_DESIGN_BLOCK_PREVIEW_WIDGET::onSize( wxSizeEvent& aEvent )
 {
     if( m_previewItem )
     {
@@ -167,7 +168,7 @@ void DESIGN_BLOCK_PREVIEW_WIDGET::onSize( wxSizeEvent& aEvent )
 }
 
 
-void DESIGN_BLOCK_PREVIEW_WIDGET::fitOnDrawArea()
+void SCH_DESIGN_BLOCK_PREVIEW_WIDGET::fitOnDrawArea()
 {
     if( !m_previewItem )
         return;
@@ -179,8 +180,8 @@ void DESIGN_BLOCK_PREVIEW_WIDGET::fitOnDrawArea()
     view->SetScale( 1.0 );
     VECTOR2D clientSize = view->ToWorld( ToVECTOR2D( m_preview->GetClientSize() ), false );
     // Calculate the draw scale to fit the drawing area
-    double scale = std::min( fabs( clientSize.x / m_itemBBox.GetWidth() ),
-                             fabs( clientSize.y / m_itemBBox.GetHeight() ) );
+    double scale =
+            std::min( fabs( clientSize.x / m_itemBBox.GetWidth() ), fabs( clientSize.y / m_itemBBox.GetHeight() ) );
 
     // Above calculation will yield an exact fit; add a bit of whitespace around block
     scale /= 1.2;
@@ -191,7 +192,7 @@ void DESIGN_BLOCK_PREVIEW_WIDGET::fitOnDrawArea()
 }
 
 
-void DESIGN_BLOCK_PREVIEW_WIDGET::DisplayDesignBlock( DESIGN_BLOCK* aDesignBlock )
+void SCH_DESIGN_BLOCK_PREVIEW_WIDGET::DisplayDesignBlock( DESIGN_BLOCK* aDesignBlock )
 {
     KIGFX::VIEW* view = m_preview->GetView();
 
@@ -202,10 +203,10 @@ void DESIGN_BLOCK_PREVIEW_WIDGET::DisplayDesignBlock( DESIGN_BLOCK* aDesignBlock
         m_previewItem = nullptr;
     }
 
-    if( aDesignBlock )
+    if( aDesignBlock && wxFileExists( aDesignBlock->GetSchematicFile() ) )
     {
-        m_previewItem = EESCHEMA_HELPERS::LoadSchematic( aDesignBlock->GetSchematicFile(),
-                                                         SCH_IO_MGR::SCH_KICAD, false, true );
+        m_previewItem =
+                EESCHEMA_HELPERS::LoadSchematic( aDesignBlock->GetSchematicFile(), SCH_IO_MGR::SCH_KICAD, false, true );
         BOX2I bBox;
 
         if( m_previewItem )

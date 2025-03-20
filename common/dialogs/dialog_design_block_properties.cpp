@@ -24,20 +24,20 @@
 
 
 #include <dialogs/dialog_design_block_properties.h>
-#include <sch_edit_frame.h>
 #include <wx/msgdlg.h>
 #include <wx/tooltip.h>
 #include <grid_tricks.h>
 #include <widgets/std_bitmap_button.h>
+#include <bitmaps.h>
 
 #include <design_block.h>
 
-DIALOG_DESIGN_BLOCK_PROPERTIES::DIALOG_DESIGN_BLOCK_PROPERTIES( SCH_EDIT_FRAME* aParent,
-                                                                DESIGN_BLOCK*   aDesignBlock ) :
+DIALOG_DESIGN_BLOCK_PROPERTIES::DIALOG_DESIGN_BLOCK_PROPERTIES( wxWindow*     aParent,
+                                                                DESIGN_BLOCK* aDesignBlock,
+                                                                bool          aDisableName ) :
         DIALOG_DESIGN_BLOCK_PROPERTIES_BASE( aParent ), m_designBlock( aDesignBlock )
 {
-    if( !m_textName->IsEmpty() )
-        m_textName->SetEditable( false );
+    m_textName->SetEditable( !aDisableName );
 
     wxToolTip::Enable( true );
     SetupStandardButtons();
@@ -50,10 +50,11 @@ DIALOG_DESIGN_BLOCK_PROPERTIES::DIALOG_DESIGN_BLOCK_PROPERTIES( SCH_EDIT_FRAME* 
 
     m_fieldsGrid->SetUseNativeColLabels();
 
-    m_fieldsGrid->PushEventHandler( new GRID_TRICKS( m_fieldsGrid, [this]( wxCommandEvent& aEvent )
-                                                       {
-                                                           OnAddField( aEvent );
-                                                       } ) );
+    m_fieldsGrid->PushEventHandler( new GRID_TRICKS( m_fieldsGrid,
+                                                     [this]( wxCommandEvent& aEvent )
+                                                     {
+                                                         OnAddField( aEvent );
+                                                     } ) );
     m_fieldsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 }
 
@@ -86,8 +87,7 @@ bool DIALOG_DESIGN_BLOCK_PROPERTIES::TransferDataToWindow()
 
 bool DIALOG_DESIGN_BLOCK_PROPERTIES::TransferDataFromWindow()
 {
-    m_designBlock->SetLibId(
-            LIB_ID( m_designBlock->GetLibId().GetLibNickname(), m_textName->GetValue() ) );
+    m_designBlock->SetLibId( LIB_ID( m_designBlock->GetLibId().GetLibNickname(), m_textName->GetValue() ) );
     m_designBlock->SetLibDescription( m_textDescription->GetValue() );
     m_designBlock->SetKeywords( m_textKeywords->GetValue() );
 

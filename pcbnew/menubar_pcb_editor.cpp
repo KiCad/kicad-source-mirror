@@ -234,6 +234,10 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     showHidePanels->Add( PCB_ACTIONS::showSearch,                 ACTION_MENU::CHECK );
     showHidePanels->Add( PCB_ACTIONS::showLayersManager,          ACTION_MENU::CHECK );
     showHidePanels->Add( PCB_ACTIONS::showNetInspector,           ACTION_MENU::CHECK );
+
+    if( ADVANCED_CFG::GetCfg().m_EnablePcbDesignBlocks )
+        showHidePanels->Add( PCB_ACTIONS::showDesignBlockPanel, ACTION_MENU::CHECK, _( "Design Blocks" ) );
+
     viewMenu->Add( showHidePanels );
 
     viewMenu->AppendSeparator();
@@ -465,6 +469,8 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
 
     prefsMenu->Add( ACTIONS::configurePaths );
     prefsMenu->Add( ACTIONS::showFootprintLibTable );
+    if( ADVANCED_CFG::GetCfg().m_EnablePcbDesignBlocks )
+        prefsMenu->Add( ACTIONS::showDesignBlockLibTable );
     prefsMenu->Add( ACTIONS::openPreferences );
 
     prefsMenu->AppendSeparator();

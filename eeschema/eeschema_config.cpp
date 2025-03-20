@@ -34,8 +34,8 @@
 #include <sch_edit_frame.h>
 #include <sch_painter.h>
 #include <schematic.h>
-#include <widgets/design_block_pane.h>
 #include <widgets/hierarchy_pane.h>
+#include <widgets/sch_design_block_pane.h>
 #include <widgets/sch_search_pane.h>
 #include <widgets/panel_sch_selection_filter.h>
 #include <widgets/properties_panel.h>

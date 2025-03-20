@@ -25,30 +25,32 @@
 #include <project/project_file.h>
 #include <wx/log.h>
 #include <wx/tokenzr.h>
+#include <settings/app_settings.h>
 #include <string_utils.h>
 #include <eda_pattern_match.h>
 #include <design_block.h>
 #include <design_block_lib_table.h>
 #include <design_block_info.h>
 #include <design_block_tree_model_adapter.h>
-#include <tools/sch_design_block_control.h>
 
 wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>
 DESIGN_BLOCK_TREE_MODEL_ADAPTER::Create( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs,
-                                         APP_SETTINGS_BASE::LIB_TREE& aSettings )
+                                         APP_SETTINGS_BASE::LIB_TREE& aSettings,
+                                         TOOL_INTERACTIVE* aContextMenuTool )
 {
-    auto* adapter = new DESIGN_BLOCK_TREE_MODEL_ADAPTER( aParent, aLibs, aSettings );
-    adapter->m_frame = aParent;
+    auto* adapter = new DESIGN_BLOCK_TREE_MODEL_ADAPTER( aParent, aLibs, aSettings, aContextMenuTool );
     return wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>( adapter );
 }
 
 
-DESIGN_BLOCK_TREE_MODEL_ADAPTER::DESIGN_BLOCK_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent,
-                                                                  LIB_TABLE* aLibs,
-                                                                  APP_SETTINGS_BASE::LIB_TREE& aSettings ) :
-        LIB_TREE_MODEL_ADAPTER( aParent, wxT( "pinned_design_block_libs" ), aSettings ),
+DESIGN_BLOCK_TREE_MODEL_ADAPTER::DESIGN_BLOCK_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs,
+                                                                  APP_SETTINGS_BASE::LIB_TREE& aSettings,
+                                                                  TOOL_INTERACTIVE*            aContextMenuTool ) :
+        LIB_TREE_MODEL_ADAPTER( aParent, wxT( "pinned_design_block_libs" ),
+                                Kiface().KifaceSettings()->m_DesignBlockChooserPanel.tree ),
         m_libs( (DESIGN_BLOCK_LIB_TABLE*) aLibs ),
-        m_frame( aParent )
+        m_frame( aParent ),
+        m_contextMenuTool( aContextMenuTool )
 {
 }
 
@@ -74,8 +76,7 @@ void DESIGN_BLOCK_TREE_MODEL_ADAPTER::AddLibraries( EDA_BASE_FRAME* aParent )
         bool pinned = alg::contains( cfg->m_Session.pinned_design_block_libs, libName )
                       || alg::contains( project.m_PinnedDesignBlockLibs, libName );
 
-        DoAddLibrary( libName, library->GetDescr(), getDesignBlocks( aParent, libName ), pinned,
-                      true );
+        DoAddLibrary( libName, library->GetDescr(), getDesignBlocks( aParent, libName ), pinned, true );
     }
 
     m_tree.AssignIntrinsicRanks();
@@ -88,23 +89,20 @@ void DESIGN_BLOCK_TREE_MODEL_ADAPTER::ClearLibraries()
 }
 
 
-std::vector<LIB_TREE_ITEM*>
-DESIGN_BLOCK_TREE_MODEL_ADAPTER::getDesignBlocks( EDA_BASE_FRAME* aParent,
-                                                  const wxString& aLibName )
+std::vector<LIB_TREE_ITEM*> DESIGN_BLOCK_TREE_MODEL_ADAPTER::getDesignBlocks( EDA_BASE_FRAME* aParent,
+                                                                              const wxString& aLibName )
 {
     std::vector<LIB_TREE_ITEM*> libList;
 
     auto fullListStart = DESIGN_BLOCK_LIB_TABLE::GetGlobalList().GetList().begin();
     auto fullListEnd = DESIGN_BLOCK_LIB_TABLE::GetGlobalList().GetList().end();
 
-    std::unique_ptr<DESIGN_BLOCK_INFO> dummy =
-            std::make_unique<DESIGN_BLOCK_INFO_IMPL>( aLibName, wxEmptyString );
+    std::unique_ptr<DESIGN_BLOCK_INFO> dummy = std::make_unique<DESIGN_BLOCK_INFO_IMPL>( aLibName, wxEmptyString );
 
     // List is sorted, so use a binary search to find the range of footnotes for our library
     auto libBounds = std::equal_range(
             fullListStart, fullListEnd, dummy,
-            []( const std::unique_ptr<DESIGN_BLOCK_INFO>& a,
-                const std::unique_ptr<DESIGN_BLOCK_INFO>& b )
+            []( const std::unique_ptr<DESIGN_BLOCK_INFO>& a, const std::unique_ptr<DESIGN_BLOCK_INFO>& b )
             {
                 return StrNumCmp( a->GetLibNickname(), b->GetLibNickname(), false ) < 0;
             } );
@@ -148,8 +146,7 @@ wxString DESIGN_BLOCK_TREE_MODEL_ADAPTER::GenerateInfo( LIB_ID const& aLibId, in
     catch( const IO_ERROR& ioe )
     {
         wxLogError( _( "Error loading design block %s from library '%s'." ) + wxS( "\n%s" ),
-                    aLibId.GetLibItemName().wx_str(), aLibId.GetLibNickname().wx_str(),
-                    ioe.What() );
+                    aLibId.GetLibItemName().wx_str(), aLibId.GetLibNickname().wx_str(), ioe.What() );
 
         return wxEmptyString;
     }
@@ -206,5 +203,5 @@ wxString DESIGN_BLOCK_TREE_MODEL_ADAPTER::GenerateInfo( LIB_ID const& aLibId, in
 
 TOOL_INTERACTIVE* DESIGN_BLOCK_TREE_MODEL_ADAPTER::GetContextMenuTool()
 {
-    return m_frame->GetToolManager()->GetTool<SCH_DESIGN_BLOCK_CONTROL>();
+    return m_contextMenuTool;
 }

@@ -441,7 +441,7 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
         {
             if( id == ID_COPY_BOARD_AS )
             {
-                success = SavePcbCopy( filename, createProject );
+                success = SavePcbCopy( EnsureFileExtension( filename, FILEEXT::KiCadPcbFileExtension ), createProject );
             }
             else
             {
@@ -1135,7 +1135,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 
 bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject, bool aHeadless )
 {
-    wxFileName pcbFileName( EnsureFileExtension( aFileName, FILEEXT::KiCadPcbFileExtension ) );
+    wxFileName pcbFileName( aFileName );
 
     if( !IsWritable( pcbFileName ) )
     {
@@ -1192,12 +1192,6 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
     {
         DisplayError( this, wxString::Format( _( "Error saving custom rules file '%s'." ),
                                               rulesFile.GetFullPath() ) );
-    }
-
-    if( !aHeadless )
-    {
-        DisplayInfoMessage( this, wxString::Format( _( "Board copied to:\n%s" ),
-                                                    pcbFileName.GetFullPath() ) );
     }
 
     return true;

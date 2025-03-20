@@ -50,6 +50,7 @@
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
 #include <widgets/appearance_controls.h>
+#include <widgets/pcb_design_block_pane.h>
 #include <widgets/layer_box_selector.h>
 #include <widgets/layer_presentation.h>
 #include <widgets/pcb_properties_panel.h>
@@ -699,5 +700,46 @@ void PCB_EDIT_FRAME::OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent )
 
         if( m_SelViaSizeBox->GetSelection() != sel )
             m_SelViaSizeBox->SetSelection( sel );
+    }
+}
+
+
+void PCB_EDIT_FRAME::ToggleLibraryTree()
+{
+    PCBNEW_SETTINGS* cfg = GetPcbNewSettings();
+
+    wxCHECK( cfg, /* void */ );
+
+    wxAuiPaneInfo& db_library_pane = m_auimgr.GetPane( DesignBlocksPaneName() );
+
+    db_library_pane.Show( !db_library_pane.IsShown() );
+
+    if( db_library_pane.IsShown() )
+    {
+        if( db_library_pane.IsFloating() )
+        {
+            db_library_pane.FloatingSize( cfg->m_AuiPanels.design_blocks_panel_float_width,
+                                          cfg->m_AuiPanels.design_blocks_panel_float_height );
+            m_auimgr.Update();
+        }
+        else if( cfg->m_AuiPanels.design_blocks_panel_docked_width > 0 )
+        {
+            // SetAuiPaneSize also updates m_auimgr
+            SetAuiPaneSize( m_auimgr, db_library_pane, cfg->m_AuiPanels.design_blocks_panel_docked_width, -1 );
+        }
+    }
+    else
+    {
+        if( db_library_pane.IsFloating() )
+        {
+            cfg->m_AuiPanels.design_blocks_panel_float_width = db_library_pane.floating_size.x;
+            cfg->m_AuiPanels.design_blocks_panel_float_height = db_library_pane.floating_size.y;
+        }
+        else
+        {
+            cfg->m_AuiPanels.design_blocks_panel_docked_width = m_designBlocksPane->GetSize().x;
+        }
+
+        m_auimgr.Update();
     }
 }

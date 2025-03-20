@@ -79,6 +79,14 @@ public:
 
     DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T GetFileType() { return type; }
 
+    /**
+     * Attempt to reload the library.
+     *
+     * @return true if a reload was required
+     * @throw IO_ERROR if the reload was unsuccessful.
+     */
+    bool Refresh() override;
+
 protected:
     DESIGN_BLOCK_LIB_TABLE_ROW( const DESIGN_BLOCK_LIB_TABLE_ROW& aRow ) :
             LIB_TABLE_ROW( aRow ),

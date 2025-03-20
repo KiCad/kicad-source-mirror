@@ -21,25 +21,25 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 #include <dialog_design_block_properties.h>
-#include <sch_actions.h>
-#include <sch_selection_tool.h>
-#include <sch_design_block_control.h>
-#include <sch_edit_frame.h>
+#include <pcb_edit_frame.h>
 #include <tool/tool_manager.h>
-#include <widgets/sch_design_block_pane.h>
+#include <tools/pcb_actions.h>
+#include <tools/pcb_selection_tool.h>
+#include <tools/pcb_design_block_control.h>
+#include <widgets/pcb_design_block_pane.h>
 #include <widgets/panel_design_block_chooser.h>
 
 
-SCH_DESIGN_BLOCK_CONTROL::~SCH_DESIGN_BLOCK_CONTROL()
+PCB_DESIGN_BLOCK_CONTROL::~PCB_DESIGN_BLOCK_CONTROL()
 {
 }
 
 
-bool SCH_DESIGN_BLOCK_CONTROL::Init()
+bool PCB_DESIGN_BLOCK_CONTROL::Init()
 {
-    m_editFrame     = getEditFrame<SCH_EDIT_FRAME>();
+    m_editFrame     = getEditFrame<PCB_EDIT_FRAME>();
     m_frame         = m_editFrame;
-    m_framesToNotify = { FRAME_PCB_EDITOR };
+    m_framesToNotify = { FRAME_SCH };
 
     auto isInLibrary =
             [this](const SELECTION& aSel )
@@ -62,29 +62,29 @@ bool SCH_DESIGN_BLOCK_CONTROL::Init()
     CONDITIONAL_MENU& ctxMenu = m_menu->GetMenu();
     AddContextMenuItems( &ctxMenu );
 
-    ctxMenu.AddItem( SCH_ACTIONS::placeDesignBlock,           isDesignBlock, 50 );
+    ctxMenu.AddItem( PCB_ACTIONS::placeDesignBlock, isDesignBlock, 50 );
     ctxMenu.AddSeparator( 50 );
 
-    ctxMenu.AddItem( SCH_ACTIONS::editDesignBlockProperties,  isDesignBlock, 100 );
-    ctxMenu.AddItem( SCH_ACTIONS::saveSheetAsDesignBlock,     isInLibrary, 100 );
-    ctxMenu.AddItem( SCH_ACTIONS::saveSelectionAsDesignBlock, isInLibrary && hasSelection, 100 );
-    ctxMenu.AddItem( SCH_ACTIONS::saveSheetToDesignBlock,     isDesignBlock, 100 );
-    ctxMenu.AddItem( SCH_ACTIONS::saveSelectionToDesignBlock, isDesignBlock && hasSelection, 100 );
-    ctxMenu.AddItem( SCH_ACTIONS::deleteDesignBlock,          isDesignBlock, 100 );
+    ctxMenu.AddItem( PCB_ACTIONS::editDesignBlockProperties,  isDesignBlock, 100 );
+    ctxMenu.AddItem( PCB_ACTIONS::saveBoardAsDesignBlock,     isInLibrary, 100 );
+    ctxMenu.AddItem( PCB_ACTIONS::saveSelectionAsDesignBlock, isInLibrary && hasSelection, 100 );
+    ctxMenu.AddItem( PCB_ACTIONS::saveBoardToDesignBlock,     isDesignBlock, 100 );
+    ctxMenu.AddItem( PCB_ACTIONS::saveSelectionToDesignBlock, isDesignBlock && hasSelection, 100 );
+    ctxMenu.AddItem( PCB_ACTIONS::deleteDesignBlock,          isDesignBlock, 100 );
     ctxMenu.AddSeparator( 100 );
 
     return true;
 }
 
 
-int SCH_DESIGN_BLOCK_CONTROL::SaveSheetAsDesignBlock( const TOOL_EVENT& aEvent )
+int PCB_DESIGN_BLOCK_CONTROL::SaveBoardAsDesignBlock( const TOOL_EVENT& aEvent )
 {
     LIB_TREE_NODE* current = getCurrentTreeNode();
 
     if( !current )
         return -1;
 
-    if( !m_editFrame->SaveSheetAsDesignBlock( current->m_LibId.GetLibNickname(), m_editFrame->GetCurrentSheet() ) )
+    if( !m_editFrame->SaveBoardAsDesignBlock( current->m_LibId.GetLibNickname() ) )
         return -1;
 
     notifyOtherFrames();
@@ -93,7 +93,7 @@ int SCH_DESIGN_BLOCK_CONTROL::SaveSheetAsDesignBlock( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_DESIGN_BLOCK_CONTROL::SaveSelectionAsDesignBlock( const TOOL_EVENT& aEvent )
+int PCB_DESIGN_BLOCK_CONTROL::SaveSelectionAsDesignBlock( const TOOL_EVENT& aEvent )
 {
     LIB_TREE_NODE* current = getCurrentTreeNode();
 
@@ -109,14 +109,14 @@ int SCH_DESIGN_BLOCK_CONTROL::SaveSelectionAsDesignBlock( const TOOL_EVENT& aEve
 }
 
 
-int SCH_DESIGN_BLOCK_CONTROL::SaveSheetToDesignBlock( const TOOL_EVENT& aEvent )
+int PCB_DESIGN_BLOCK_CONTROL::SaveBoardToDesignBlock( const TOOL_EVENT& aEvent )
 {
     LIB_TREE_NODE* current = getCurrentTreeNode();
 
     if( !current )
         return -1;
 
-    if( !m_editFrame->SaveSheetToDesignBlock( current->m_LibId, m_editFrame->GetCurrentSheet() ) )
+    if( !m_editFrame->SaveBoardToDesignBlock( current->m_LibId ) )
         return -1;
 
     notifyOtherFrames();
@@ -125,7 +125,7 @@ int SCH_DESIGN_BLOCK_CONTROL::SaveSheetToDesignBlock( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_DESIGN_BLOCK_CONTROL::SaveSelectionToDesignBlock( const TOOL_EVENT& aEvent )
+int PCB_DESIGN_BLOCK_CONTROL::SaveSelectionToDesignBlock( const TOOL_EVENT& aEvent )
 {
     LIB_TREE_NODE* current = getCurrentTreeNode();
 
@@ -140,21 +140,26 @@ int SCH_DESIGN_BLOCK_CONTROL::SaveSelectionToDesignBlock( const TOOL_EVENT& aEve
     return 0;
 }
 
-
-void SCH_DESIGN_BLOCK_CONTROL::setTransitions()
+void PCB_DESIGN_BLOCK_CONTROL::setTransitions()
 {
-    DESIGN_BLOCK_CONTROL::setTransitions();
-
-    Go( &SCH_DESIGN_BLOCK_CONTROL::SaveSheetAsDesignBlock,      SCH_ACTIONS::saveSheetAsDesignBlock.MakeEvent() );
-    Go( &SCH_DESIGN_BLOCK_CONTROL::SaveSelectionAsDesignBlock,  SCH_ACTIONS::saveSelectionAsDesignBlock.MakeEvent() );
-    Go( &SCH_DESIGN_BLOCK_CONTROL::SaveSheetToDesignBlock,      SCH_ACTIONS::saveSheetToDesignBlock.MakeEvent() );
-    Go( &SCH_DESIGN_BLOCK_CONTROL::SaveSelectionToDesignBlock,  SCH_ACTIONS::saveSelectionToDesignBlock.MakeEvent() );
-    Go( &SCH_DESIGN_BLOCK_CONTROL::DeleteDesignBlock,           SCH_ACTIONS::deleteDesignBlock.MakeEvent() );
-    Go( &SCH_DESIGN_BLOCK_CONTROL::EditDesignBlockProperties,   SCH_ACTIONS::editDesignBlockProperties.MakeEvent() );
+    Go( &PCB_DESIGN_BLOCK_CONTROL::SaveBoardAsDesignBlock,      PCB_ACTIONS::saveBoardAsDesignBlock.MakeEvent() );
+    Go( &PCB_DESIGN_BLOCK_CONTROL::SaveSelectionAsDesignBlock,  PCB_ACTIONS::saveSelectionAsDesignBlock.MakeEvent() );
+    Go( &PCB_DESIGN_BLOCK_CONTROL::SaveBoardToDesignBlock,      PCB_ACTIONS::saveBoardToDesignBlock.MakeEvent() );
+    Go( &PCB_DESIGN_BLOCK_CONTROL::SaveSelectionToDesignBlock,  PCB_ACTIONS::saveSelectionToDesignBlock.MakeEvent() );
+    Go( &PCB_DESIGN_BLOCK_CONTROL::DeleteDesignBlock,           PCB_ACTIONS::deleteDesignBlock.MakeEvent() );
+    Go( &PCB_DESIGN_BLOCK_CONTROL::EditDesignBlockProperties,   PCB_ACTIONS::editDesignBlockProperties.MakeEvent() );
 }
 
 
-DESIGN_BLOCK_PANE* SCH_DESIGN_BLOCK_CONTROL::getDesignBlockPane()
+LIB_ID PCB_DESIGN_BLOCK_CONTROL::getSelectedLibId()
+{
+    getDesignBlockPane()->GetSelectedLibId();
+
+    return LIB_ID();
+}
+
+
+DESIGN_BLOCK_PANE* PCB_DESIGN_BLOCK_CONTROL::getDesignBlockPane()
 {
     return m_editFrame->GetDesignBlockPane();
 }

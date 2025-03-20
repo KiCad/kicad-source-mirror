@@ -22,30 +22,30 @@
  */
 
 
-#ifndef SCH_DESIGN_BLOCK_CONTROL_H
-#define SCH_DESIGN_BLOCK_CONTROL_H
+#ifndef PCB_DESIGN_BLOCK_CONTROL_H
+#define PCB_DESIGN_BLOCK_CONTROL_H
 
 #include <tool/design_block_control.h>
 
 class DESIGN_BLOCK_PANE;
-class SCH_EDIT_FRAME;
+class PCB_EDIT_FRAME;
 
 /**
- * Handle design block actions in the schematic editor.
+ * Handle design block actions in the PCB editor.
  */
-class SCH_DESIGN_BLOCK_CONTROL : public DESIGN_BLOCK_CONTROL
+class PCB_DESIGN_BLOCK_CONTROL : public DESIGN_BLOCK_CONTROL
 {
 public:
-    SCH_DESIGN_BLOCK_CONTROL() : DESIGN_BLOCK_CONTROL( "eeschema.SchDesignBlockControl" ) {}
-    virtual ~SCH_DESIGN_BLOCK_CONTROL();
+    PCB_DESIGN_BLOCK_CONTROL() : DESIGN_BLOCK_CONTROL( "pcbnew.PcbDesignBlockControl" ) {}
+    virtual ~PCB_DESIGN_BLOCK_CONTROL();
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
 
-    int SaveSheetAsDesignBlock( const TOOL_EVENT& aEvent );
+    int SaveBoardAsDesignBlock( const TOOL_EVENT& aEvent );
     int SaveSelectionAsDesignBlock( const TOOL_EVENT& aEvent );
 
-    int SaveSheetToDesignBlock( const TOOL_EVENT& aEvent );
+    int SaveBoardToDesignBlock( const TOOL_EVENT& aEvent );
     int SaveSelectionToDesignBlock( const TOOL_EVENT& aEvent );
 
 private:
@@ -55,7 +55,7 @@ private:
 
     DESIGN_BLOCK_PANE* getDesignBlockPane() override;
 
-    SCH_EDIT_FRAME*    m_editFrame = nullptr;
+    PCB_EDIT_FRAME* m_editFrame = nullptr;
 };
 
 

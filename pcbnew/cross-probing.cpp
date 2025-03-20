@@ -54,6 +54,7 @@
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
 #include <netlist_reader/netlist_reader.h>
+#include <widgets/pcb_design_block_pane.h>
 #include <wx/log.h>
 
 /* Execute a remote command sent via a socket on port KICAD_PCB_PORT_SERVICE_NUMBER
@@ -716,6 +717,10 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
     case MAIL_RELOAD_PLUGINS:
         GetToolManager()->RunAction( ACTIONS::pluginsReload );
+        break;
+
+    case MAIL_RELOAD_LIB:
+        m_designBlocksPane->RefreshLibs();
         break;
 
     // many many others.

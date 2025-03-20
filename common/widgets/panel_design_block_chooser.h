@@ -31,24 +31,27 @@ class wxPanel;
 class wxTimer;
 class wxSplitterWindow;
 
-class SCH_EDIT_FRAME;
+class EDA_DRAW_FRAME;
+class DESIGN_BLOCK_PANE;
 class DESIGN_BLOCK_PREVIEW_WIDGET;
 
 
 class PANEL_DESIGN_BLOCK_CHOOSER : public wxPanel
 {
 public:
-/**
- * Create dialog to choose design_block.
- *
- * @param aFrame  the parent frame (usually a SCH_EDIT_FRAME or DESIGN_BLOCK_CHOOSER_FRAME)
- * @param aParent the parent window (usually a DIALOG_SHIM or DESIGN_BLOCK_CHOOSER_FRAME)
- * @param aAcceptHandler a handler to be called on double-click of a footprint
- * @param aEscapeHandler a handler to be called on <ESC>
- */
-    PANEL_DESIGN_BLOCK_CHOOSER( SCH_EDIT_FRAME* aFrame, wxWindow* aParent,
+    /**
+     * Panel for using design blocks.
+     *
+     * @param aFrame  the parent frame (usually a SCH_EDIT_FRAME or PCB_EDIT_FRAME)
+     * @param aParent the parent design block pane
+     * @param aAcceptHandler a handler to be called on double-click of a footprint
+     * @param aContextMenuTool the tool that will be used to provide an appropriate context menu
+     *                         for the design block actions available in that frame
+     */
+    PANEL_DESIGN_BLOCK_CHOOSER( EDA_DRAW_FRAME* aFrame, DESIGN_BLOCK_PANE* aParent,
                                 std::vector<LIB_ID>&  aHistoryList,
-                                std::function<void()> aSelectHandler );
+                                std::function<void()> aSelectHandler,
+                                TOOL_INTERACTIVE*     aContextMenuTool );
 
     ~PANEL_DESIGN_BLOCK_CHOOSER();
 
@@ -56,7 +59,9 @@ public:
 
     void OnChar( wxKeyEvent& aEvent );
 
-    void FinishSetup();
+    wxPanel* GetDetailsPanel() { return m_detailsPanel; }
+    void     SetPreviewWidget( DESIGN_BLOCK_PREVIEW_WIDGET* aPreview );
+    void     FinishSetup();
 
     void SetPreselect( const LIB_ID& aPreselect );
 
@@ -105,16 +110,19 @@ protected:
 protected:
     static wxString       g_designBlockSearchString;
 
-    wxTimer*              m_dbl_click_timer;
-    wxTimer*              m_open_libs_timer;
-    wxSplitterWindow*     m_vsplitter;
+    wxTimer*          m_dbl_click_timer;
+    wxTimer*          m_open_libs_timer;
+    wxSplitterWindow* m_vsplitter;
+    wxPanel*          m_detailsPanel;
+    wxBoxSizer*       m_detailsSizer;
 
     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> m_adapter;
 
-    LIB_TREE*                               m_tree;
-    DESIGN_BLOCK_PREVIEW_WIDGET*            m_preview;
+    LIB_TREE*                    m_tree;
+    DESIGN_BLOCK_PREVIEW_WIDGET* m_preview;
 
-    SCH_EDIT_FRAME*       m_frame;
+    DESIGN_BLOCK_PANE*    m_parent;
+    EDA_DRAW_FRAME*       m_frame;
     std::function<void()> m_selectHandler;
 
     std::vector<LIB_ID>   m_historyList;

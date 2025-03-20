@@ -27,6 +27,7 @@
 #include <tool/tool_action.h>
 #include <tool/actions.h>
 
+class DESIGN_BLOCK;
 class SCH_SYMBOL;
 class TOOL_EVENT;
 class TOOL_MANAGER;
@@ -202,6 +203,8 @@ public:
     static TOOL_ACTION showDesignBlockPanel;
     static TOOL_ACTION saveSheetAsDesignBlock;
     static TOOL_ACTION saveSelectionAsDesignBlock;
+    static TOOL_ACTION saveSheetToDesignBlock;
+    static TOOL_ACTION saveSelectionToDesignBlock;
     static TOOL_ACTION deleteDesignBlock;
     static TOOL_ACTION editDesignBlockProperties;
 

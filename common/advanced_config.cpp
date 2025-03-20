@@ -98,7 +98,7 @@ static const wxChar AllowManualCanvasScale[] = wxT( "AllowManualCanvasScale" );
 static const wxChar UpdateUIEventInterval[] = wxT( "UpdateUIEventInterval" );
 static const wxChar V3DRT_BevelHeight_um[] = wxT( "V3DRT_BevelHeight_um" );
 static const wxChar V3DRT_BevelExtentFactor[] = wxT( "V3DRT_BevelExtentFactor" );
-static const wxChar EnableDesignBlocks[] = wxT( "EnableDesignBlocks" );
+static const wxChar EnablePcbDesignBlocks[] = wxT( "EnablePcbDesignBlocks" );
 static const wxChar EnableGenerators[] = wxT( "EnableGenerators" );
 static const wxChar EnableGit[] = wxT( "EnableGit" );
 static const wxChar EnableLibWithText[] = wxT( "EnableLibWithText" );
@@ -257,7 +257,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_CompactSave               = false;
     m_UpdateUIEventInterval     = 0;
     m_ShowRepairSchematic       = false;
-    m_EnableDesignBlocks        = true;
+    m_EnablePcbDesignBlocks     = false;
     m_EnableGenerators          = false;
     m_EnableGit                 = true;
     m_EnableLibWithText         = false;
@@ -493,8 +493,8 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
                                                m_DisambiguationMenuDelay,
                                                50, 10000 ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableDesignBlocks,
-                                                &m_EnableDesignBlocks, m_EnableDesignBlocks ) );
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnablePcbDesignBlocks, &m_EnablePcbDesignBlocks,
+                                                m_EnablePcbDesignBlocks ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableGenerators,
                                                 &m_EnableGenerators, m_EnableGenerators ) );

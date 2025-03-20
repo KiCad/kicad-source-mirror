@@ -71,6 +71,59 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
     m_params.emplace_back( new PARAM_LIST<wxString>( "find_replace.replace_history",
             &m_FindReplace.replace_history, {} ) );
 
+    m_params.emplace_back( new PARAM<int>( "design_block_chooser.sash_pos_h",
+            &m_DesignBlockChooserPanel.sash_pos_h, -1 ) );
+
+    m_params.emplace_back( new PARAM<int>( "design_block_chooser.sash_pos_v",
+            &m_DesignBlockChooserPanel.sash_pos_v, -1 ) );
+
+    m_params.emplace_back( new PARAM<int>( "design_block_chooser.width",
+            &m_DesignBlockChooserPanel.width, -1 ) );
+
+    m_params.emplace_back( new PARAM<int>( "design_block_chooser.height",
+            &m_DesignBlockChooserPanel.height, -1 ) );
+
+    m_params.emplace_back( new PARAM<int>( "design_block_chooser.sort_mode",
+            &m_DesignBlockChooserPanel.sort_mode, 0 ) );
+
+    m_params.emplace_back( new PARAM<bool>( "design_block_chooser.repeated_placement",
+            &m_DesignBlockChooserPanel.repeated_placement, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "design_block_chooser.place_as_sheet",
+            &m_DesignBlockChooserPanel.place_as_sheet, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "design_block_chooser.keep_annotations",
+            &m_DesignBlockChooserPanel.keep_annotations, false ) );
+
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>(
+            "design_block_chooser.lib_tree.column_widths",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json ret = {};
+
+                for( const auto& [name, width] : m_DesignBlockChooserPanel.tree.column_widths )
+                    ret[std::string( name.ToUTF8() )] = width;
+
+                return ret;
+            },
+            [&]( const nlohmann::json& aJson )
+            {
+                if( !aJson.is_object() )
+                    return;
+
+                m_DesignBlockChooserPanel.tree.column_widths.clear();
+
+                for( const auto& entry : aJson.items() )
+                {
+                    if( !entry.value().is_number_integer() )
+                        continue;
+
+                    m_DesignBlockChooserPanel.tree.column_widths[entry.key()] = entry.value().get<int>();
+                }
+            },
+            {} ) );
+
+
     m_params.emplace_back( new PARAM<int>( "graphics.canvas_type",
             &m_Graphics.canvas_type, EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ) );
 

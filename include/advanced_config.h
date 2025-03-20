@@ -471,13 +471,13 @@ public:
     int m_DisambiguationMenuDelay;
 
     /**
-     * Enable the new Design Blocks feature
+     * Enable the new PCB Design Blocks feature
      *
-     * Setting name: "EnableDesignBlocks"
+     * Setting name: "EnablePcbDesignBlocks"
      * Valid values: true or false
      * Default value: false
      */
-    bool m_EnableDesignBlocks;
+    bool m_EnablePcbDesignBlocks;
 
     /**
      * Enable support for generators.

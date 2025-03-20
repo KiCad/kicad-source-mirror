@@ -58,6 +58,7 @@ class BOARD_NETLIST_UPDATER;
 class ACTION_MENU;
 class TOOL_ACTION;
 class DIALOG_BOARD_SETUP;
+class PCB_DESIGN_BLOCK_PANE;
 
 #ifdef KICAD_IPC_API
 class KICAD_API_SERVER;
@@ -318,6 +319,8 @@ public:
     bool IsSearchPaneShown() { return m_auimgr.GetPane( SearchPaneName() ).IsShown(); }
     void FocusSearch();
 
+    void ToggleLibraryTree() override;
+
     /**
      * Create an ASCII footprint position file.
      *
@@ -464,6 +467,16 @@ public:
      * This is the same as created by CvPcb and can be used if this file is lost.
      */
     void RecreateCmpFileFromBoard( wxCommandEvent& aEvent );
+
+    bool SaveBoardAsDesignBlock( const wxString& aLibraryName );
+
+    bool SaveSelectionAsDesignBlock( const wxString& aLibraryName );
+
+    bool SaveBoardToDesignBlock( const LIB_ID& aLibId );
+
+    bool SaveSelectionToDesignBlock( const LIB_ID& aLibId );
+
+    PCB_DESIGN_BLOCK_PANE* GetDesignBlockPane() const { return m_designBlocksPane; }
 
     /**
      * Save footprints in a library:
@@ -829,6 +842,18 @@ protected:
     bool importFile( const wxString& aFileName, int aFileType,
                      const std::map<std::string, UTF8>* aProperties = nullptr );
 
+    /**
+     * @brief Save a board object to a file
+     *
+     * @param aBoard The board object to save
+     * @param aFileName The file name to save the board to
+     * @param aHeadless If true, suppresses informational output (e.g. to be used from the API)
+     *
+     * @return
+     */
+    bool saveBoardAsFile( BOARD* aBoard, const wxString& aFileName, bool aHeadless = false );
+
+
     bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;
     void doCloseWindow() override;
 
@@ -880,6 +905,9 @@ private:
     DIALOG_BOOK_REPORTER* m_inspectConstraintsDlg;
     DIALOG_BOOK_REPORTER* m_footprintDiffDlg;
     DIALOG_BOARD_SETUP*   m_boardSetupDlg;
+
+    std::vector<LIB_ID>    m_designBlockHistoryList;
+    PCB_DESIGN_BLOCK_PANE* m_designBlocksPane;
 
     const std::map<std::string, UTF8>* m_importProperties; // Properties used for non-KiCad import.
 
