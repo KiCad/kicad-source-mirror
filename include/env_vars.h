@@ -28,6 +28,7 @@
 
 #include <kicommon.h>
 #include <wx/string.h>
+#include <wx/arrstr.h>
 #include <map>
 #include <vector>
 #include <optional>
@@ -36,8 +37,6 @@ class ENV_VAR_ITEM;
 
 namespace ENV_VAR
 {
-    using ENV_VAR_LIST = std::vector<wxString>;
-
     /**
      * Determine if an environment variable is "predefined", i.e. if the
      * name of the variable is special to KiCad, and isn't just a user-specified
@@ -51,7 +50,12 @@ namespace ENV_VAR
     /**
      * Get the list of pre-defined environment variables.
      */
-    KICOMMON_API const ENV_VAR_LIST& GetPredefinedEnvVars();
+    KICOMMON_API const std::vector<wxString>& GetPredefinedEnvVars();
+
+    /**
+     * Return autocomplete tokens for environment variables for Scintilla.
+     */
+    KICOMMON_API void GetEnvVarAutocompleteTokens( wxArrayString* aVars );
 
     /**
      * Construct a versioned environment variable based on this KiCad major version.

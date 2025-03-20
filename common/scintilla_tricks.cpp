@@ -572,8 +572,8 @@ void SCINTILLA_TRICKS::onScintillaUpdateUI( wxStyledTextEvent& aEvent )
 }
 
 
-void SCINTILLA_TRICKS::DoTextVarAutocomplete(
-        const std::function<void( const wxString& xRef, wxArrayString* tokens )>& getTokensFn )
+void SCINTILLA_TRICKS::DoTextVarAutocomplete( const std::function<void( const wxString& xRef,
+                                                                        wxArrayString* tokens )>& getTokensFn )
 {
     wxArrayString autocompleteTokens;
     int           text_pos = m_te->GetCurrentPos();

@@ -389,12 +389,9 @@ void JOBS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
     menu.Append( JOB_DESCRIPTION, _( "Edit Job Description" ) );
     menu.Append( JOB_PROPERTIES, _( "Edit Job Settings..." ) );
     menu.AppendSeparator();
-    menu.Append( GRIDTRICKS_ID_COPY, _( "Copy" ) + "\tCtrl+C",
-                 _( "Copy selected cells to clipboard" ) );
-    menu.Append( GRIDTRICKS_ID_DELETE, _( "Delete" ) + "\tDel",
-                 _( "Delete selected jobs" ) );
-    menu.Append( GRIDTRICKS_ID_SELECT, _( "Select All" ) + "\tCtrl+A",
-                 _( "Select all jobs" ) );
+    menu.Append( GRIDTRICKS_ID_COPY, _( "Copy" ) + "\tCtrl+C", _( "Copy selected cells to clipboard" ) );
+    menu.Append( GRIDTRICKS_ID_DELETE, _( "Delete" ) + "\tDel", _( "Delete selected jobs" ) );
+    menu.Append( GRIDTRICKS_ID_SELECT, _( "Select All" ) + "\tCtrl+A", _( "Select all jobs" ) );
 
     menu.Enable( JOB_DESCRIPTION, selectedRows.size() == 1 );
     menu.Enable( JOB_PROPERTIES, selectedRows.size() == 1 );
@@ -632,13 +629,13 @@ bool PANEL_JOBSET::OpenJobOptionsForListItem( size_t aItemIndex )
 
             DIALOG_EXECUTECOMMAND_JOB_SETTINGS dialog( m_frame, specialJob );
 
-            if( dialog.ShowModal() == wxID_OK )
+            // QuasiModal for Scintilla autocomplete
+            if( dialog.ShowQuasiModal() == wxID_OK )
                 success = true;
         }
         else if( job.m_job->GetType() == "special_copyfiles" )
         {
-            JOB_SPECIAL_COPYFILES* specialJob =
-                    static_cast<JOB_SPECIAL_COPYFILES*>( job.m_job.get() );
+            JOB_SPECIAL_COPYFILES* specialJob = static_cast<JOB_SPECIAL_COPYFILES*>( job.m_job.get() );
             DIALOG_COPYFILES_JOB_SETTINGS dialog( m_frame, specialJob );
 
             if( dialog.ShowModal() == wxID_OK )

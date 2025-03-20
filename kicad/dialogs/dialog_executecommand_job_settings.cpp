@@ -20,15 +20,43 @@
 
 #include <dialogs/dialog_executecommand_job_settings.h>
 #include <jobs/job_special_execute.h>
+#include <scintilla_tricks.h>
+#include <env_vars.h>
+
 
 DIALOG_EXECUTECOMMAND_JOB_SETTINGS::DIALOG_EXECUTECOMMAND_JOB_SETTINGS( wxWindow* aParent,
                                                                         JOB_SPECIAL_EXECUTE* aJob ) :
         DIALOG_EXECUTECOMMAND_JOB_SETTINGS_BASE( aParent ),
-        m_job( aJob )
+        m_job( aJob ),
+        m_scintillaTricks( nullptr )
 {
+    m_scintillaTricks = new SCINTILLA_TRICKS( m_textCtrlCommand, wxT( "{}" ), false,
+            // onAcceptFn
+            [this]( wxKeyEvent& aEvent )
+            {
+                wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
+            },
+
+            // onCharFn
+            [this]( wxStyledTextEvent& aEvent )
+            {
+                m_scintillaTricks->DoTextVarAutocomplete(
+                        // getTokensFn
+                        []( const wxString& xRef, wxArrayString* tokens )
+                        {
+                            ENV_VAR::GetEnvVarAutocompleteTokens( tokens );
+                        } );
+            } );
+
     SetupStandardButtons();
 
     finishDialogSettings();
+}
+
+
+DIALOG_EXECUTECOMMAND_JOB_SETTINGS::~DIALOG_EXECUTECOMMAND_JOB_SETTINGS()
+{
+    delete m_scintillaTricks;
 }
 
 

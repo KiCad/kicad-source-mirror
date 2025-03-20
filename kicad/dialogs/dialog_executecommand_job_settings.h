@@ -21,17 +21,23 @@
 #include <dialogs/dialog_executecommand_job_settings_base.h>
 
 class JOB_SPECIAL_EXECUTE;
+class SCINTILLA_TRICKS;
+
 
 class DIALOG_EXECUTECOMMAND_JOB_SETTINGS: public DIALOG_EXECUTECOMMAND_JOB_SETTINGS_BASE
 {
 public:
     DIALOG_EXECUTECOMMAND_JOB_SETTINGS( wxWindow* aParent, JOB_SPECIAL_EXECUTE* aJob );
+    ~DIALOG_EXECUTECOMMAND_JOB_SETTINGS();
 
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
 
 private:
+    void OnRecordOutputClicked( wxCommandEvent& event ) override;
+
+private:
     JOB_SPECIAL_EXECUTE* m_job;
 
-    void OnRecordOutputClicked( wxCommandEvent& event ) override;
+    SCINTILLA_TRICKS*    m_scintillaTricks;
 };

@@ -17,6 +17,7 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/stc/stc.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
@@ -34,7 +35,7 @@ class DIALOG_EXECUTECOMMAND_JOB_SETTINGS_BASE : public DIALOG_SHIM
 
 	protected:
 		wxStaticText* m_textCommand;
-		wxTextCtrl* m_textCtrlCommand;
+		wxStyledTextCtrl* m_textCtrlCommand;
 		wxStaticText* m_textOutputPath;
 		wxTextCtrl* m_textCtrlOutputPath;
 		wxCheckBox* m_cbRecordOutput;
