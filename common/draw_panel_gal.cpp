@@ -166,6 +166,8 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 
 EDA_DRAW_PANEL_GAL::~EDA_DRAW_PANEL_GAL()
 {
+    // Ensure EDA_DRAW_PANEL_GAL::onShowEvent is not fired during Dtor process
+    Disconnect( wxEVT_SHOW, wxShowEventHandler( EDA_DRAW_PANEL_GAL::onShowEvent ) );
     StopDrawing();
 
     wxASSERT( !m_drawing );
@@ -173,6 +175,7 @@ EDA_DRAW_PANEL_GAL::~EDA_DRAW_PANEL_GAL()
     delete m_viewControls;
     delete m_view;
     delete m_gal;
+    m_gal = nullptr;    // Ensure OnShow is not called
 }
 
 
