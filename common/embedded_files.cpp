@@ -390,8 +390,10 @@ void EMBEDDED_FILES_PARSER::ParseEmbedded( EMBEDDED_FILES* aFiles )
                 catch( const PARSE_ERROR& e )
                 {
                     // No data in the file -- due to bug in writer for 9.0.0
-                    NeedRIGHT();
-                    break;
+                    if( curTok == T_RIGHT )
+                        break;
+                    else
+                        throw e;
                 }
                 catch( ... )
                 {
