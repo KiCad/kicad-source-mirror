@@ -35,9 +35,7 @@ JOBS_OUTPUT_ARCHIVE::JOBS_OUTPUT_ARCHIVE() :
 bool JOBS_OUTPUT_ARCHIVE::OutputPrecheck()
 {
     if( m_outputPath.IsEmpty() )
-    {
         return false;
-    }
 
     return true;
 }
@@ -50,6 +48,9 @@ bool JOBS_OUTPUT_ARCHIVE::HandleOutputs( const wxString& baseTempPath, PROJECT* 
 
     wxString outputPath = ExpandTextVars( m_outputPath, aProject );
     outputPath = ExpandEnvVarSubstitutions( outputPath, aProject );
+
+    if( outputPath.StartsWith( "~" ) )
+        outputPath.Replace( "~", wxGetHomeDir(), false );
 
     wxFFileOutputStream ostream( outputPath );
 
@@ -64,14 +65,10 @@ bool JOBS_OUTPUT_ARCHIVE::HandleOutputs( const wxString& baseTempPath, PROJECT* 
     wxString          errors;
 
     if( !AddDirectoryToZip( zipstream, baseTempPath, errors ) )
-    {
         success = false;
-    }
 
     if( !zipstream.Close() )
-    {
         success = false;
-    }
 
     return success;
 }
