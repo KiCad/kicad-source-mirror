@@ -463,8 +463,8 @@ public:
     std::map<wxString, int> m_ComponentsList;            // list of components
     std::map<wxString, int> m_NetnamesList;              // list of net names
 
-    ///< Dcode (Aperture) List for this layer (max TOOLS_MAX_COUNT: see dcode.h)
-    D_CODE*             m_Aperture_List[TOOLS_MAX_COUNT];
+    /// Dcode (Aperture) List for this layer (see dcode.h)
+    std::map<int, D_CODE*> m_ApertureList;
 
     ///< Whether an aperture macro tool is flashed on or off.
     bool               m_Exposure;

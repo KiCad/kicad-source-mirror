@@ -29,6 +29,7 @@
 #include <X2_gerber_attributes.h>
 #include <algorithm>
 #include <map>
+//#include <numeric>
 #include <core/arraydim.h>
 #include <core/profile.h>
 
@@ -91,8 +92,7 @@ GERBER_FILE_IMAGE::GERBER_FILE_IMAGE( int aLayer ) :
 
     ResetDefaultValues();
 
-    for( unsigned ii = 0; ii < arrayDim( m_Aperture_List ); ii++ )
-        m_Aperture_List[ii] = nullptr;
+    m_ApertureList.clear();
 }
 
 
@@ -105,8 +105,8 @@ GERBER_FILE_IMAGE::~GERBER_FILE_IMAGE()
 
     m_drawings.clear();
 
-    for( unsigned ii = 0; ii < arrayDim( m_Aperture_List ); ii++ )
-        delete m_Aperture_List[ii];
+    for( const auto& ap_item : m_ApertureList )
+        delete ap_item.second;
 
     delete m_FileFunction;
 }
@@ -127,18 +127,17 @@ void GERBER_FILE_IMAGE::SetDrawOffetAndRotation( VECTOR2D aOffsetMM, EDA_ANGLE a
 
 D_CODE* GERBER_FILE_IMAGE::GetDCODEOrCreate( int aDCODE, bool aCreateIfNoExist )
 {
-    unsigned ndx = aDCODE - FIRST_DCODE;
+    auto it = m_ApertureList.find(aDCODE);
 
-    if( ndx < (unsigned) arrayDim( m_Aperture_List ) )
+    if( it != m_ApertureList.end() )
+        return it->second;
+
+    // lazily create the D_CODE if it does not exist.
+    if( aCreateIfNoExist )
     {
-        // lazily create the D_CODE if it does not exist.
-        if( aCreateIfNoExist )
-        {
-            if( m_Aperture_List[ndx] == nullptr )
-                m_Aperture_List[ndx] = new D_CODE( ndx + FIRST_DCODE );
-        }
-
-        return m_Aperture_List[ndx];
+        D_CODE* dcode = new D_CODE(aDCODE);
+        m_ApertureList.insert({ aDCODE, dcode });
+        return dcode;
     }
 
     return nullptr;
@@ -147,10 +146,10 @@ D_CODE* GERBER_FILE_IMAGE::GetDCODEOrCreate( int aDCODE, bool aCreateIfNoExist )
 
 D_CODE* GERBER_FILE_IMAGE::GetDCODE( int aDCODE ) const
 {
-    unsigned ndx = aDCODE - FIRST_DCODE;
+    auto it = m_ApertureList.find(aDCODE);
 
-    if( ndx < (unsigned) arrayDim( m_Aperture_List ) )
-        return m_Aperture_List[ndx];
+    if ( it != m_ApertureList.end() )
+        return it->second;
 
     return nullptr;
 }
@@ -271,14 +270,14 @@ int GERBER_FILE_IMAGE::GetDcodesCount()
 {
     int count = 0;
 
-    for( unsigned ii = 0; ii < arrayDim( m_Aperture_List ); ii++ )
+    for( const auto& n : m_ApertureList )
     {
-        if( m_Aperture_List[ii] )
-        {
-            if( m_Aperture_List[ii]->m_InUse || m_Aperture_List[ii]->m_Defined )
-                ++count;
-        }
+        D_CODE* dcode = n.second;
 
+        wxCHECK2( dcode, continue );
+
+        if( dcode->m_InUse || dcode->m_Defined )
+            count++;
     }
 
     return count;

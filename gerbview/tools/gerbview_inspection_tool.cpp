@@ -68,7 +68,6 @@ void GERBVIEW_INSPECTION_TOOL::Reset( RESET_REASON aReason )
 
 int GERBVIEW_INSPECTION_TOOL::ShowDCodes( const TOOL_EVENT& aEvent )
 {
-    int             ii, jj;
     wxString        Line;
     wxArrayString   list;
     int             curr_layer = m_frame->GetActiveLayer();
@@ -114,18 +113,17 @@ int GERBVIEW_INSPECTION_TOOL::ShowDCodes( const TOOL_EVENT& aEvent )
 
         list.Add( Line );
 
-        for( ii = 0, jj = 1; ii < TOOLS_MAX_COUNT; ii++ )
+        int ii = 1;
+        for( const auto &[_, pt_D_code] : gerber->m_ApertureList )
         {
-            D_CODE* pt_D_code = gerber->GetDCODE( ii + FIRST_DCODE );
-
             if( pt_D_code == nullptr )
                 continue;
 
             if( !pt_D_code->m_InUse && !pt_D_code->m_Defined )
                 continue;
 
-            Line.Printf( wxT( "tool %2.2d:   D%2.2d   V %.4f %s  H %.4f %s   %s  attribute '%s'" ),
-                         jj,
+            Line.Printf( wxT( "tool %d:   Dcode D%d   V %.4f %s  H %.4f %s   %s  attribute '%s'" ),
+                         ii,
                          pt_D_code->m_Num_Dcode,
                          pt_D_code->m_Size.y / scale, units,
                          pt_D_code->m_Size.x / scale, units,
@@ -140,7 +138,7 @@ int GERBVIEW_INSPECTION_TOOL::ShowDCodes( const TOOL_EVENT& aEvent )
                 Line += wxT( " (in use)" );
 
             list.Add( Line );
-            jj++;
+            ii++;
         }
     }
 

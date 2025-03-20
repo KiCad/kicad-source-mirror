@@ -64,11 +64,11 @@ enum APERTURE_DEF_HOLETYPE {
 };
 
 /* define min and max values for D Codes values.
- * note: values >= 0 and < FIRST_DCODE can be used for special purposes
+ * note: values >= 0 and < FIRST_DCODE can be used for special purposes (plot commands)
+ * Revision I1 permits apertures up to 2^31-1.
  */
 #define FIRST_DCODE     10
-#define LAST_DCODE      10000
-#define TOOLS_MAX_COUNT (LAST_DCODE + 1)
+#define LAST_DCODE      0x7FFFFFFF
 
 class APERTURE_MACRO;
 
@@ -81,6 +81,17 @@ class D_CODE
 public:
     D_CODE( int num_dcode );
     ~D_CODE();
+
+    /**
+     * @return true if aDcodeValue is valid ( >= FIRST_DCODE. )
+     * Any value > 0x7FFFFFFF is a negative value for a int and is not acceptable
+     * and is < FIRST_DCODE.
+     */
+    static bool IsValidDcodeValue( int aDcodeValue )
+    {
+        return aDcodeValue >= FIRST_DCODE;
+    }
+
     void Clear_D_CODE_Data();
 
     /**
@@ -187,7 +198,7 @@ public:
     int GetShapeDim( GERBER_DRAW_ITEM* aParent );
 
 public:
-    VECTOR2I                m_Size;         ///< Horizontal and vertical dimensions.
+    VECTOR2I              m_Size;           ///< Horizontal and vertical dimensions.
     APERTURE_T            m_ApertType;      ///< Aperture type ( Line, rectangle, circle,
                                             ///< oval poly, macro )
     int                   m_Num_Dcode;      ///< D code value ( >= 10 )

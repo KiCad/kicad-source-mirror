@@ -921,8 +921,8 @@ bool EXCELLON_IMAGE::Select_Tool( char*& text )
     {
         int dcode_id = tool_id + FIRST_DCODE;     // Remember: dcodes are >= FIRST_DCODE
 
-        if( dcode_id > (TOOLS_MAX_COUNT - 1) )
-            dcode_id = TOOLS_MAX_COUNT - 1;
+        if( !D_CODE::IsValidDcodeValue(dcode_id ) )
+            dcode_id = LAST_DCODE;
 
         m_Current_Tool = dcode_id;
         D_CODE* currDcode = GetDCODE( dcode_id );

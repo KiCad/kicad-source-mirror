@@ -479,9 +479,6 @@ bool GERBER_FILE_IMAGE::Execute_G_Command( char*& text, int G_command )
         if( D_commande < FIRST_DCODE )
             return false;
 
-        if( D_commande > (TOOLS_MAX_COUNT - 1) )
-            D_commande = TOOLS_MAX_COUNT - 1;
-
         m_Current_Tool = D_commande;
         D_CODE* pt_Dcode = GetDCODE( D_commande );
 
@@ -570,9 +567,6 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
 
     if( D_commande >= FIRST_DCODE )  // This is a "Set tool" command
     {
-        if( D_commande > (TOOLS_MAX_COUNT - 1) )
-            D_commande = TOOLS_MAX_COUNT - 1;
-
         // remember which tool is selected, nothing is done with it in this
         // call
         m_Current_Tool = D_commande;

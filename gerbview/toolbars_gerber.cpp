@@ -327,12 +327,9 @@ void GERBVIEW_FRAME::updateDCodeSelectBox()
         wxASSERT_MSG( false, wxT( "Invalid units" ) );
     }
 
-    for( int ii = 0; ii < TOOLS_MAX_COUNT; ii++ )
+    for( const auto [_, dcode] : gerber->m_ApertureList )
     {
-        D_CODE* dcode = gerber->GetDCODE( ii + FIRST_DCODE );
-
-        if( dcode == nullptr )
-            continue;
+        wxCHECK2( dcode,continue );
 
         if( !dcode->m_InUse && !dcode->m_Defined )
             continue;
@@ -434,10 +431,8 @@ void GERBVIEW_FRAME::updateAperAttributesSelectBox()
         if( gerber->GetDcodesCount() == 0 )
             continue;
 
-        for( int ii = 0; ii < TOOLS_MAX_COUNT; ii++ )
+        for( const auto &[_, aperture] : gerber->m_ApertureList )
         {
-            D_CODE* aperture = gerber->GetDCODE( ii + FIRST_DCODE );
-
             if( aperture == nullptr )
                 continue;
 
