@@ -146,7 +146,7 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath,
         else
         {
             wxFileName brdFn = m_board->GetFileName();
-            fn.Assign( aOutputPath, brdFn.GetName() );
+            fn.Assign( aOutputPath, brdFn.GetName(), fileExt );
 
             // Use Gerber Extensions based on layer number
             // (See http://en.wikipedia.org/wiki/Gerber_File)

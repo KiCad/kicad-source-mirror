@@ -1334,8 +1334,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
             for( size_t i = 0; i < count; i++ )
             {
                 int          index = plotOnAllLayers.Item( i );
-                PCB_LAYER_ID client_layer =
-                        getLayerClientData( m_plotAllLayersList, index )->Layer();
+                PCB_LAYER_ID client_layer = getLayerClientData( m_plotAllLayersList, index )->Layer();
 
                 commonLayers.push_back( client_layer );
             }
