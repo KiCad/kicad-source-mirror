@@ -21,16 +21,15 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:43+0300\n"
-"PO-Revision-Date: 2025-02-19 03:13+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/master-"
-"source/es/>\n"
+"PO-Revision-Date: 2025-03-20 07:53+0000\n"
+"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v9/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.1-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -1864,9 +1863,8 @@ msgid "Your current changes will be permanently lost."
 msgstr "Los cambios se perderán de forma permanente."
 
 #: common/confirm.cpp:124
-#, fuzzy
 msgid "&Revert"
-msgstr "Revertir"
+msgstr "&Revertir"
 
 #: common/confirm.cpp:150 common/dialog_about/dialog_about_base.cpp:90
 #: common/dialog_shim.cpp:793
@@ -1950,9 +1948,8 @@ msgid "UNKNOWN (%d)"
 msgstr "DESCONOCIDO (%d)"
 
 #: common/design_block_io.cpp:137
-#, fuzzy
 msgid "KiCad Design Block folders"
-msgstr "Archivos de proyecto heredados de KiCad"
+msgstr "Carpetas de bloque de diseño de KiCad"
 
 #: common/design_block_io.cpp:174
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3025
@@ -1961,15 +1958,15 @@ msgid "Cannot overwrite library path '%s'."
 msgstr "No puede sobrescribirse la ruta de la biblioteca «%s»."
 
 #: common/design_block_io.cpp:184
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library path '%s' could not be created.\n"
 "\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"No puede crearse la carpeta '%s'.\n"
+"No puede crearse la ruta de biblioteca «%s».\n"
 "\n"
-"Por favor, confirme que tiene permisos de escritura e inténtelo de nuevo."
+"Cerciórese de que tiene permisos de escritura e inténtelo de nuevo."
 
 #: common/design_block_io.cpp:203 pcbnew/pcb_io/geda/pcb_io_geda.cpp:970
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3050
@@ -1978,15 +1975,15 @@ msgid "Insufficient permissions to delete folder '%s'."
 msgstr "Permisos insuficientes para eliminar la carpeta '%s'."
 
 #: common/design_block_io.cpp:212
-#, fuzzy, c-format
+#, c-format
 msgid "Library folder '%s' has unexpected files."
-msgstr "La carpeta de bibliotecas '%s' tiene subcarpetas inesperadas."
+msgstr "La carpeta de biblioteca «%s» tiene archivos inesperados."
 
 #: common/design_block_io.cpp:230
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected folder '%s' found in library path '%s'."
 msgstr ""
-"Se encontró un archivo inesperado, «%s», en la ruta de bibliotecas «%s»."
+"Se encontró una carpeta inesperada, «%s», en la ruta de biblioteca «%s»."
 
 #: common/design_block_io.cpp:247
 #, fuzzy, c-format
@@ -1994,9 +1991,9 @@ msgid "Design block library '%s' cannot be deleted."
 msgstr "No puede eliminarse la biblioteca de símbolos '%s'."
 
 #: common/design_block_io.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Design block metadata file '%s' could not be read."
-msgstr "No se puede crear el archivo '%s'."
+msgstr "No se ha podido leer el archivo de metadatos del bloque de diseño «%s»."
 
 #: common/design_block_io.cpp:355
 msgid "Design block does not have a valid library ID."
@@ -3248,7 +3245,7 @@ msgstr ""
 #: common/dialogs/dialog_plugin_options.cpp:53
 #, c-format
 msgid "Options for Library '%s'"
-msgstr "Opciones para la biblioteca '%s'"
+msgstr "Opciones de la biblioteca «%s»"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:26
 msgid "Plugin Options"
@@ -4587,9 +4584,8 @@ msgid "Add Anyway"
 msgstr "Añadir de todas formas"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1176
-#, fuzzy
 msgid "Design Block Libraries"
-msgstr "Guardar todas las librerías"
+msgstr "Bibliotecas de bloques de diseño"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1197
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1245
@@ -4680,7 +4676,7 @@ msgstr "Formato de biblioteca"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:70
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:69
 msgid "Global Libraries"
-msgstr "Librerías globales"
+msgstr "Bibliotecas globales"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:97
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:97
@@ -4691,7 +4687,7 @@ msgstr "Formato de la biblioteca"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:121
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:118
 msgid "Project Specific Libraries"
-msgstr "Librerías específicas del proyecto"
+msgstr "Bibliotecas específicas del proyecto"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:126
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:129
@@ -9819,7 +9815,7 @@ msgstr "Placa"
 #: eeschema/sch_symbol.cpp:2094 eeschema/sch_symbol.cpp:2131
 #: eeschema/widgets/symbol_diff_widget.cpp:45 pcbnew/footprint.cpp:1694
 msgid "Library"
-msgstr "Librería"
+msgstr "Biblioteca"
 
 #: common/widgets/footprint_diff_widget.cpp:50
 #: eeschema/widgets/symbol_diff_widget.cpp:53
@@ -10506,7 +10502,7 @@ msgstr "Asignar huellas"
 
 #: cvpcb/cvpcb_mainframe.cpp:114 pcbnew/dialogs/panel_fp_lib_table.cpp:1278
 msgid "Footprint Libraries"
-msgstr "Librerías de huellas"
+msgstr "Bibliotecas de huellas"
 
 #: cvpcb/cvpcb_mainframe.cpp:118
 msgid "Symbol : Footprint Assignments"
@@ -10704,7 +10700,7 @@ msgstr "Huella: %s"
 #: cvpcb/display_footprints_frame.cpp:536
 #, c-format
 msgid "Lib: %s"
-msgstr "Librería: %s"
+msgstr "Biblioteca: %s"
 
 #: cvpcb/readwrite_dlgs.cpp:121
 msgid ""
@@ -11756,7 +11752,7 @@ msgstr "Cadena de conexión:"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1380
 #: pcbnew/footprint_edit_frame.cpp:243 pcbnew/footprint_edit_frame.cpp:1004
 msgid "Libraries"
-msgstr "Librerías"
+msgstr "Bibliotecas"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:104
 msgid "Reload Configuration"
@@ -11821,9 +11817,8 @@ msgid "Description:"
 msgstr "Descripción:"
 
 #: eeschema/dialogs/dialog_design_block_properties_base.h:70
-#, fuzzy
 msgid "Design Block Properties"
-msgstr "Guardar todas las librerías"
+msgstr "Propiedades del bloque de diseño"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:550
 #, c-format
@@ -16808,7 +16803,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_step.cpp:601
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
-msgstr "El archivo %s ya existe. ¿Desea sobreescribirlo?"
+msgstr "El archivo «%s» ya existe. ¿Quiere sobreescribirlo?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1019 eeschema/libarch.cpp:129
 #: eeschema/libarch.cpp:135
@@ -16828,7 +16823,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1223
 msgid "Symbol Libraries"
-msgstr "Librerías de símbolos"
+msgstr "Bibliotecas de símbolos"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:134
 msgid "Add existing library to table"
@@ -16836,24 +16831,21 @@ msgstr "Añadir biblioteca existente a la tabla"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:159
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:156
-#, fuzzy
 msgid "Reset Libraries"
-msgstr "Guardar librería"
+msgstr "Restablecer bibliotecas"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:45
-#, fuzzy
 msgid "Project Field Name Templates"
-msgstr "Plantillas de nombre de campo de proyecto:"
+msgstr "Plantillas de nombre de campo de proyecto"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:51
-#, fuzzy
 msgid "Global Field Name Templates"
-msgstr "Plantillas globales de nombre de campo:"
+msgstr "Plantillas de nombre de campo global"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:209
-#, fuzzy, c-format
+#, c-format
 msgid "The field name \"%s\" contains trailing and/or leading whitespace."
-msgstr "La entrada contiene un espacio en blanco al final."
+msgstr "El nombre del campo «%s» contiene espacios al principio o al final."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:215
 msgid ""
@@ -16863,14 +16855,12 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:221
-#, fuzzy
 msgid "Remove White Space"
-msgstr "Eliminar modelo 3D"
+msgstr "Quitar espacios"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:222
-#, fuzzy
 msgid "Keep White Space"
-msgstr "Área restringida para pads"
+msgstr "Conservar espacios"
 
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:44
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:40
@@ -22037,11 +22027,10 @@ msgstr ""
 "editar."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:944
-#, fuzzy
 msgid "Library is read-only.  Changes cannot be saved to this library."
 msgstr ""
-"La librería \"%s\" es de sólo lectura y debe guardarse como una librería "
-"diferente."
+"La biblioteca es de solo lectura. No es posible guardar las modificaciones "
+"en esta biblioteca."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:946
 #, fuzzy
@@ -22065,9 +22054,8 @@ msgid "Copy symbol"
 msgstr "Agrupar símbolos"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:960
-#, fuzzy
 msgid "Copy library"
-msgstr "librería"
+msgstr "Copiar biblioteca"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1069
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1120
@@ -22093,7 +22081,7 @@ msgstr "No puede abrirse el archivo de biblioteca."
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1213
 #, c-format
 msgid "Loading library '%s'..."
-msgstr "Cargando la biblioteca '%s'..."
+msgstr "Cargando biblioteca «%s»..."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1296
 #, c-format
@@ -22142,7 +22130,7 @@ msgstr "[desde el esquema]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:77
 msgid "[Read Only Library]"
-msgstr "[Librería de solo lectura]"
+msgstr "[Biblioteca de solo lectura]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:81
 msgid "[no symbol loaded]"
@@ -22196,13 +22184,13 @@ msgid "A library must be specified."
 msgstr "Se debe especificar una biblioteca."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:958
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' is read-only. Choose a different library to save the symbol "
 "'%s' to."
 msgstr ""
-"La librería \"%s\" es de sólo lectura y debe guardarse como una librería "
-"diferente."
+"La biblioteca «%s» es de solo lectura. Elija otra biblioteca en la que "
+"guardar el símbolo «%s»."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:974
 #, c-format
@@ -23103,14 +23091,12 @@ msgid "Sync Sheet Pins..."
 msgstr "Pin de hoja"
 
 #: eeschema/tools/sch_actions.cpp:575
-#, fuzzy
 msgid "Import Sheet..."
-msgstr "Importar Pin de Hoja"
+msgstr "Importar hoja..."
 
 #: eeschema/tools/sch_actions.cpp:576
-#, fuzzy
 msgid "Import sheet into project"
-msgstr "Importar pin de hoja"
+msgstr "Importar hoja en el proyecto"
 
 #: eeschema/tools/sch_actions.cpp:586
 #, fuzzy
@@ -27788,7 +27774,7 @@ msgstr "Salidas de fabricación"
 #: kicad/pcm/dialogs/dialog_pcm.cpp:53
 #, c-format
 msgid "Libraries (%d)"
-msgstr "Librerías (%d)"
+msgstr "Bibliotecas (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:54
 #, c-format
@@ -34677,9 +34663,10 @@ msgid "Export ODB++ File"
 msgstr "Exportar a archivo"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:151
-#, fuzzy
 msgid "The selected output file name is not a supported archive format."
-msgstr "El componente seleccionado no está en la librería activa."
+msgstr ""
+"El nombre de archivo de salida seleccionado no corresponde a un formato de "
+"archivador que se admita."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:204
 #, fuzzy
@@ -35080,9 +35067,8 @@ msgid "Success"
 msgstr "Éxito"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:213
-#, fuzzy
 msgid "Do you want to cancel the export process?"
-msgstr "¿Desea cambiar la librería activa?"
+msgstr "¿Quiere cancelar el proceso de exportación?"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:214
 #, fuzzy
@@ -43661,11 +43647,8 @@ msgid "Edit Zone"
 msgstr "Editar zona"
 
 #: pcbnew/footprint_editor_utils.cpp:365 pcbnew/footprint_editor_utils.cpp:377
-#, fuzzy
 msgid "Use Manage Footprint Libraries to edit the configuration."
-msgstr ""
-"La configuración actual no incluye la librería '%s'. Utilice administrar "
-"librerías de huellas para editar la configuración."
+msgstr "Utilice Gestionar bibliotecas de huellas para editar la configuración."
 
 #: pcbnew/footprint_editor_utils.cpp:366
 msgid "Library not found in footprint library table."
@@ -44403,7 +44386,7 @@ msgstr "No puede añadirse %s (no se ha encontrado la huella '%s')."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:164
 #, c-format
 msgid "Add %s (footprint '%s')."
-msgstr "Añadir %s (huella '%s')."
+msgstr "Añadir %s (huella «%s»)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:194
 #, c-format
@@ -44416,9 +44399,9 @@ msgid "Change %s component class to '%s'."
 msgstr "Cambiando la ruta del componente de \"%s:%s\" a \"%s\".\n"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s component class (currently '%s')."
-msgstr "Eliminar componente de la librería activa"
+msgstr "Quitar clase de componente %s (actualmente «%s»)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:247
 #, fuzzy, c-format
