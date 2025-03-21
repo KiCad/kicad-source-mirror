@@ -432,6 +432,7 @@ set( COMMON_WIDGET_SRCS
     widgets/gal_options_panel_base.cpp
     widgets/grid_bitmap_toggle.cpp
     widgets/grid_button.cpp
+    widgets/grid_checkbox.cpp
     widgets/grid_color_swatch_helpers.cpp
     widgets/grid_combobox.cpp
     widgets/grid_icon_text_helpers.cpp
