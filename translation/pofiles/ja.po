@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:42+0300\n"
-"PO-Revision-Date: 2025-03-20 07:53+0000\n"
-"Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
+"PO-Revision-Date: 2025-03-21 09:26+0000\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -5717,7 +5717,7 @@ msgstr "ネットクラス名はすでに使われています。"
 #: common/dialogs/panel_setup_netclasses.cpp:603
 #, c-format
 msgid "Clearance was too large.  It has been clipped to %s."
-msgstr ""
+msgstr "クリアランスが大きすぎるため、 %s にクリップしました。"
 
 #: common/dialogs/panel_setup_netclasses.cpp:669
 msgid "Minimum copper clearance"
