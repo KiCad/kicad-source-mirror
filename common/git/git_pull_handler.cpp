@@ -208,7 +208,11 @@ std::string GIT_PULL_HANDLER::getFormattedCommitDate( const git_time& aTime )
     char   dateBuffer[64];
     time_t time = static_cast<time_t>( aTime.time );
     struct tm timeInfo;
-    gmtime_r( &time, &timeInfo );
+    #ifdef _WIN32
+        localtime_s( &timeInfo, &time );
+    #else
+        gmtime_r( &time, &timeInfo );
+    #endif
     strftime( dateBuffer, sizeof( dateBuffer ), "%Y-%b-%d %H:%M:%S", &timeInfo );
     return dateBuffer;
 }
