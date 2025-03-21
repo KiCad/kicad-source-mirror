@@ -44,6 +44,7 @@
 #include <widgets/bitmap_button.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/wx_grid.h>
+#include <widgets/grid_checkbox.h>
 #include <wx/debug.h>
 #include <wx/ffile.h>
 #include <wx/grid.h>
@@ -440,7 +441,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties( int aCol )
     else if( m_dataModel->ColIsAttribute( aCol ) )
     {
         attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-        attr->SetRenderer( new wxGridCellBoolRenderer() );
+        attr->SetRenderer( new GRID_CELL_CHECKBOX_RENDERER() );
         attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
         m_dataModel->SetColAttr( attr, aCol );
     }
