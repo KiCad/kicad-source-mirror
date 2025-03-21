@@ -396,7 +396,7 @@ COLOR4D SCH_PAINTER::getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDr
         }
         else if( aItem->Type() == SCH_TEXTBOX_T || aItem->Type() == SCH_TABLECELL_T )
         {
-            const SCH_TEXTBOX* textBox = dynamic_cast<const SCH_TEXTBOX*>( aItem );
+            const SCH_TEXTBOX* textBox = static_cast<const SCH_TEXTBOX*>( aItem );
 
             if( isBackgroundLayer( aLayer ) )
                 color = textBox->GetFillColor();
