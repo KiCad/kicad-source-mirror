@@ -29,6 +29,7 @@
 #include <kiplatform/secrets.h>
 #include <trace_helpers.h>
 
+#include <git2.h>
 #include <wx/filename.h>
 #include <wx/log.h>
 #include <wx/textfile.h>
