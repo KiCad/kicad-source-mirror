@@ -18,10 +18,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:42+0300\n"
-"PO-Revision-Date: 2025-03-17 01:10+0000\n"
+"PO-Revision-Date: 2025-03-22 07:49+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1245,10 +1245,11 @@ msgid "Use PCB editor copper colors"
 msgstr "Użyj kolorów miedzi z edytora obwodów drukowanych"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:186
-#, fuzzy
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
-msgstr "Użyj kolorów miedzi z edytora obwodów drukowanych (tylko OpenGL)"
+msgstr ""
+"Użyj kolorów miedzi z edytora obwodów drukowanych (tylko render w czasie "
+"rzeczywistym)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:203
 #, c-format
@@ -27103,9 +27104,8 @@ msgstr ""
 "= aktualny rozmiar strony, 2 = tylko obszar płytki)"
 
 #: kicad/cli/command_pcb_export_svg.cpp:93
-#, fuzzy
 msgid "Fit the page to the board"
-msgstr "Kopiuj obraz 3D do schowka"
+msgstr "Dopasuj stronę do płytki"
 
 #: kicad/cli/command_pcb_export_svg.cpp:97
 #: kicad/cli/command_sch_export_plot.cpp:77
@@ -27663,14 +27663,12 @@ msgid "Save Jobset"
 msgstr "Zapisz zestaw zadań"
 
 #: kicad/dialogs/panel_jobset_base.cpp:122
-#, fuzzy
 msgid "Generate All Destinations"
 msgstr "Generuj wszystkie elementy wyjściowe"
 
 #: kicad/dialogs/panel_jobset_base.h:133
-#, fuzzy
 msgid "Jobset Run Log"
-msgstr "Log z przebiegu tworzenia elementów wyjściowych"
+msgstr "Log z przebiegu zestawu zadań"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:143
 msgid "Edit the project schematic"
@@ -28504,9 +28502,9 @@ msgid "Create New Directory"
 msgstr "Utwórz nowy folder"
 
 #: kicad/project_tree_pane.cpp:761
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get status list: %s"
-msgstr "Nie udało się pobrać zmian: %s"
+msgstr "Nie udało się pobrać listy statusu: %s"
 
 #: kicad/project_tree_pane.cpp:896
 msgid "Switch to this Project"
@@ -28729,7 +28727,7 @@ msgstr "Czy jesteś pewien, by usunąć dane o śledzeniu zmian w tym projekcie?
 
 #: kicad/project_tree_pane.cpp:1940
 msgid "Failed to remove Git directory"
-msgstr "Nie można usunąć folderu Git"
+msgstr "Nie udało się usunąć folderu Git"
 
 #: kicad/project_tree_pane.cpp:2267
 msgid "The selected directory is not a Git project."
@@ -38059,9 +38057,8 @@ msgstr ""
 "Wybierz 4, jeśli nie jesteś pewien."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:386
-#, fuzzy
 msgid "Fit page to board"
-msgstr "Nie udało się skopiować obrazu do schowka"
+msgstr "Dopasuj stronę do płytki"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:412
 msgid "Generate property popups for front footprints"
@@ -42045,9 +42042,9 @@ msgid "Condition not satisfied; rule ignored."
 msgstr "Warunek nie spełniony; reguła zignorowana."
 
 #: pcbnew/drc/drc_engine.cpp:1389
-#, fuzzy, c-format
+#, c-format
 msgid "Inheriting from parent: %s."
-msgstr "Na podstawie symbolu '%s'."
+msgstr "Na podstawie: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1428 pcbnew/drc/drc_engine.cpp:1452
 #, c-format
@@ -49449,9 +49446,8 @@ msgid "Repeat layout"
 msgstr "Powtórz układ ścieżek"
 
 #: pcbnew/tools/multichannel_tool.cpp:548
-#, fuzzy
 msgid "Group repeated items"
-msgstr "Grupuj importowane elementy"
+msgstr "Grupuj powtórzone elementy"
 
 #: pcbnew/tools/multichannel_tool.cpp:554
 #, c-format
@@ -52757,9 +52753,8 @@ msgid "Source Name"
 msgstr "Nazwa źródła"
 
 #: pcbnew/zone.cpp:1978
-#, fuzzy
 msgid "Hatch Orientation"
-msgstr "Orientacja"
+msgstr "Kierunek kreskowania"
 
 #: pcbnew/zone.cpp:1996
 msgid "Cannot be less than zone minimum width"
