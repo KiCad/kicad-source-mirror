@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:42+0300\n"
-"PO-Revision-Date: 2025-03-10 11:57+0000\n"
+"PO-Revision-Date: 2025-03-22 17:12+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -50,7 +50,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -731,441 +731,360 @@ msgid "User.1"
 msgstr "User.1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Show user defined layer 1"
-msgstr "用户定义层 1"
+msgstr "显示用户定义层 1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
 msgid "User.2"
 msgstr "User.2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "Show user defined layer 2"
-msgstr "用户定义层 2"
+msgstr "显示用户定义层 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
 msgid "User.3"
 msgstr "User.3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Show user defined layer 3"
-msgstr "用户定义层 3"
+msgstr "显示用户定义层 3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
 msgid "User.4"
 msgstr "User.4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Show user defined layer 4"
-msgstr "用户定义层 4"
+msgstr "显示用户定义层 4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
 msgid "User.5"
 msgstr "User.5"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Show user defined layer 5"
-msgstr "用户定义层 5"
+msgstr "显示用户定义层 5"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
 msgid "User.6"
 msgstr "User.6"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Show user defined layer 6"
-msgstr "用户定义层 6"
+msgstr "显示用户定义层 6"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
 msgid "User.7"
 msgstr "User.7"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Show user defined layer 7"
-msgstr "用户定义层 7"
+msgstr "显示用户定义层 7"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
 msgid "User.8"
 msgstr "User.8"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show user defined layer 8"
-msgstr "用户定义层 8"
+msgstr "显示用户定义层 8"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
 msgid "User.9"
 msgstr "User.9"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Show user defined layer 9"
-msgstr "用户定义层 9"
+msgstr "显示用户定义层 9"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "User.10"
-msgstr "User.1"
+msgstr "User.10"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Show user defined layer 10"
-msgstr "用户定义层 10"
+msgstr "显示用户定义层 10"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "User.11"
-msgstr "User.1"
+msgstr "User.11"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Show user defined layer 11"
-msgstr "用户定义层 11"
+msgstr "显示用户定义层 11"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "User.12"
-msgstr "User.1"
+msgstr "User.12"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "Show user defined layer 12"
-msgstr "用户定义层 12"
+msgstr "显示用户定义层 12"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "User.13"
-msgstr "User.1"
+msgstr "User.13"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "Show user defined layer 13"
-msgstr "用户定义层 13"
+msgstr "显示用户定义层 13"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "User.14"
-msgstr "User.1"
+msgstr "User.14"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Show user defined layer 14"
-msgstr "用户定义层 14"
+msgstr "显示用户定义层 14"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "User.15"
-msgstr "User.1"
+msgstr "User.15"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Show user defined layer 15"
-msgstr "用户定义层 15"
+msgstr "显示用户定义层 15"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "User.16"
-msgstr "User.1"
+msgstr "User.16"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "Show user defined layer 16"
-msgstr "用户定义层 16"
+msgstr "显示用户定义层 16"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "User.17"
-msgstr "User.1"
+msgstr "User.17"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "Show user defined layer 17"
-msgstr "用户定义层 17"
+msgstr "显示用户定义层 17"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "User.18"
-msgstr "User.1"
+msgstr "User.18"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "Show user defined layer 18"
-msgstr "用户定义层 18"
+msgstr "显示用户定义层 18"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "User.19"
-msgstr "User.1"
+msgstr "User.19"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "Show user defined layer 19"
-msgstr "用户定义层 19"
+msgstr "显示用户定义层 19"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "User.20"
-msgstr "User.2"
+msgstr "User.20"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "Show user defined layer 20"
-msgstr "用户定义层 20"
+msgstr "显示用户定义层 20"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "User.21"
-msgstr "User.2"
+msgstr "User.21"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "Show user defined layer 21"
-msgstr "用户定义层 21"
+msgstr "显示用户定义层 21"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "User.22"
-msgstr "User.2"
+msgstr "User.22"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "Show user defined layer 22"
-msgstr "用户定义层 22"
+msgstr "显示用户定义层 22"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "User.23"
-msgstr "User.2"
+msgstr "User.23"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "Show user defined layer 23"
-msgstr "用户定义层 23"
+msgstr "显示用户定义层 23"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "User.24"
-msgstr "User.2"
+msgstr "User.24"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "Show user defined layer 24"
-msgstr "用户定义层 24"
+msgstr "显示用户定义层 24"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "User.25"
-msgstr "User.2"
+msgstr "User.25"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "Show user defined layer 25"
-msgstr "用户定义层 25"
+msgstr "显示用户定义层 25"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "User.26"
-msgstr "User.2"
+msgstr "User.26"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "Show user defined layer 26"
-msgstr "用户定义层 26"
+msgstr "显示用户定义层 26"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "User.27"
-msgstr "User.2"
+msgstr "User.27"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "Show user defined layer 27"
-msgstr "用户定义层 27"
+msgstr "显示用户定义层 27"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "User.28"
-msgstr "User.2"
+msgstr "User.28"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "Show user defined layer 28"
-msgstr "用户定义层 28"
+msgstr "显示用户定义层 28"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "User.29"
-msgstr "User.2"
+msgstr "User.29"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "Show user defined layer 29"
-msgstr "用户定义层 29"
+msgstr "显示用户定义层 29"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "User.30"
-msgstr "User.3"
+msgstr "User.30"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "Show user defined layer 30"
-msgstr "用户定义层 30"
+msgstr "显示用户定义层 30"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "User.31"
-msgstr "User.3"
+msgstr "User.31"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "Show user defined layer 31"
-msgstr "用户定义层 31"
+msgstr "显示用户定义层 31"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "User.32"
-msgstr "User.3"
+msgstr "User.32"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "Show user defined layer 32"
-msgstr "用户定义层 32"
+msgstr "显示用户定义层 32"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
 msgid "User.33"
-msgstr "User.3"
+msgstr "User.33"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
 msgid "Show user defined layer 33"
-msgstr "用户定义层 33"
+msgstr "显示用户定义层 33"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "User.34"
-msgstr "User.3"
+msgstr "User.34"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "Show user defined layer 34"
-msgstr "用户定义层 34"
+msgstr "显示用户定义层 34"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "User.35"
-msgstr "User.3"
+msgstr "User.35"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "Show user defined layer 35"
-msgstr "用户定义层 35"
+msgstr "显示用户定义层 35"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "User.36"
-msgstr "User.3"
+msgstr "User.36"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "Show user defined layer 36"
-msgstr "用户定义层 36"
+msgstr "显示用户定义层 36"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "User.37"
-msgstr "User.3"
+msgstr "User.37"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "Show user defined layer 37"
-msgstr "用户定义层 37"
+msgstr "显示用户定义层 37"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "User.38"
-msgstr "User.3"
+msgstr "User.38"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "Show user defined layer 38"
-msgstr "用户定义层 38"
+msgstr "显示用户定义层 38"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "User.39"
-msgstr "User.3"
+msgstr "User.39"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "Show user defined layer 39"
-msgstr "用户定义层 39"
+msgstr "显示用户定义层 39"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "User.40"
-msgstr "User.4"
+msgstr "User.40"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "Show user defined layer 40"
-msgstr "用户定义层 40"
+msgstr "显示用户定义层 40"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "User.41"
-msgstr "User.4"
+msgstr "User.41"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "Show user defined layer 41"
-msgstr "用户定义层 41"
+msgstr "显示用户定义层 41"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "User.42"
-msgstr "User.4"
+msgstr "User.42"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "Show user defined layer 42"
-msgstr "用户定义层 42"
+msgstr "显示用户定义层 42"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "User.43"
-msgstr "User.4"
+msgstr "User.43"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "Show user defined layer 43"
-msgstr "用户定义层 43"
+msgstr "显示用户定义层 43"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "User.44"
-msgstr "User.4"
+msgstr "User.44"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "Show user defined layer 44"
-msgstr "用户定义层 44"
+msgstr "显示用户定义层 44"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:112
-#, fuzzy
 msgid "User.45"
-msgstr "User.4"
+msgstr "User.45"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:112
-#, fuzzy
 msgid "Show user defined layer 45"
-msgstr "用户定义层 45"
+msgstr "显示用户定义层 45"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:114
 msgid "Through-hole Models"
@@ -38291,9 +38210,8 @@ msgid "Error with conditions for component class assignment %s"
 msgstr "冲突的网络类分配"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:371
-#, fuzzy
 msgid "Reference..."
-msgstr "位号"
+msgstr "位号..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:372
 #: pcbnew/menubar_footprint_editor.cpp:68
@@ -38307,9 +38225,8 @@ msgid "Side..."
 msgstr "侧面:"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:374
-#, fuzzy
 msgid "Rotation..."
-msgstr "旋转"
+msgstr "旋转..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:375
 #, fuzzy
@@ -38317,9 +38234,8 @@ msgid "Footprint Field..."
 msgstr "编辑封装字段..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:376
-#, fuzzy
 msgid "Sheet Name..."
-msgstr "图纸名称"
+msgstr "图纸名称..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:595
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:650
@@ -38329,9 +38245,8 @@ msgstr "图纸名称"
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:756
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:773
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:344
-#, fuzzy
 msgid "Footprint Field:"
-msgstr "封装字段"
+msgstr "封装字段:"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:618
 #, fuzzy
@@ -38354,9 +38269,8 @@ msgid "Add Custom Assignment"
 msgstr "添加网络类分配"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:84
-#, fuzzy
 msgid "Component Class:"
-msgstr "元件类"
+msgstr "元件类:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:118
 #, fuzzy
@@ -38369,9 +38283,8 @@ msgid "Match Any"
 msgstr "匹配的层"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:294
-#, fuzzy
 msgid "Footprint:"
-msgstr "封装: "
+msgstr "封装:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:358
 #, fuzzy
@@ -38379,9 +38292,8 @@ msgid "Field Value:"
 msgstr "终止数值:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:442
-#, fuzzy
 msgid "Sheet Name:"
-msgstr "图纸名称"
+msgstr "图纸名称:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:33
 msgid "Constrain actions to H, V, 45 degrees"
@@ -41381,9 +41293,9 @@ msgid "Missing component class name."
 msgstr "缺少规则名称。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:381
-#, fuzzy, c-format
+#, c-format
 msgid "Could not parse expression '%s'."
-msgstr "无法从 '%s' 导入图纸。"
+msgstr "无法解析表达式 '%s'。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:444
 #, c-format
