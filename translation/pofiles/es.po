@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:43+0300\n"
-"PO-Revision-Date: 2025-03-20 07:53+0000\n"
+"PO-Revision-Date: 2025-03-22 07:49+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v9/es/>\n"
 "Language: es\n"
@@ -975,9 +975,8 @@ msgid "Configure Paths"
 msgstr "Configurar rutas"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
-#, fuzzy
 msgid "Embed model"
-msgstr "Modelo de código"
+msgstr "Incrustar modelo"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:64
 msgid "Select 3D Model"
@@ -1771,9 +1770,8 @@ msgid "No shape in black and white image to convert: no outline created."
 msgstr ""
 
 #: common/api/api_handler.cpp:27
-#, fuzzy
 msgid "Modification from API"
-msgstr "Modificación de forma"
+msgstr "Modificación desde API"
 
 #: common/background_jobs_monitor.cpp:98
 msgid "Background Jobs"
@@ -1849,14 +1847,12 @@ msgid "&Save"
 msgstr "&Guardar"
 
 #: common/confirm.cpp:74 common/confirm.cpp:111
-#, fuzzy
 msgid "&Discard Changes"
-msgstr "Descartar cambios"
+msgstr "&Descartar cambios"
 
 #: common/confirm.cpp:77 common/confirm.cpp:157
-#, fuzzy
 msgid "&Apply to all"
-msgstr "Aplicar a todo"
+msgstr "&Aplicar a todo"
 
 #: common/confirm.cpp:123
 msgid "Your current changes will be permanently lost."
@@ -1997,12 +1993,12 @@ msgstr "No se ha podido leer el archivo de metadatos del bloque de diseño «%s�
 
 #: common/design_block_io.cpp:355
 msgid "Design block does not have a valid library ID."
-msgstr ""
+msgstr "El bloque de diseño no tiene un identificador de biblioteca válido."
 
 #: common/design_block_io.cpp:362
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic source file '%s' does not exist."
-msgstr "Ya existe el archivo de esquema '%s'."
+msgstr "El archivo fuente esquemático «%s» no existe."
 
 #: common/design_block_io.cpp:376
 #, fuzzy, c-format
@@ -2020,9 +2016,9 @@ msgid "Design block metadata file '%s' could not be saved."
 msgstr "No se puede crear el archivo '%s'."
 
 #: common/design_block_io.cpp:441
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' does not exist."
-msgstr "La carpeta '%s' no existe"
+msgstr "El bloque de diseño «%s» no existe."
 
 #: common/design_block_io.cpp:447
 #, fuzzy, c-format
@@ -2136,16 +2132,14 @@ msgid "Additional Contributions By"
 msgstr "Contribuciones adicionales de"
 
 #: common/dialog_about/AboutDialog_main.cpp:627
-#, fuzzy
 msgid "Documentation Team"
-msgstr "Documentación"
+msgstr "Equipo de documentación"
 
 #: common/dialog_about/AboutDialog_main.cpp:853
 msgid "Librarian Team"
 msgstr "Equipo de bibliotecarios"
 
 #: common/dialog_about/AboutDialog_main.cpp:906
-#, fuzzy
 msgid "3D models"
 msgstr "Modelos 3D"
 
@@ -2169,9 +2163,8 @@ msgid "Footprints"
 msgstr "Huellas"
 
 #: common/dialog_about/AboutDialog_main.cpp:928
-#, fuzzy
 msgid "Icons"
-msgstr "Ícono"
+msgstr "Iconos"
 
 #: common/dialog_about/AboutDialog_main.cpp:935
 msgid "Package Developers"
@@ -2199,7 +2192,7 @@ msgstr "Desarrolladores"
 
 #: common/dialog_about/dialog_about.cpp:143
 msgid "Doc Writers"
-msgstr "Escritores de la documentación"
+msgstr "Documentadores"
 
 #: common/dialog_about/dialog_about.cpp:146
 msgid "Librarians"
@@ -2822,9 +2815,9 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %lu locked items."
-msgstr "La selección contiene %d elementos bloqueados."
+msgstr "La selección contiene %lu elementos bloqueados."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -3482,9 +3475,8 @@ msgid "Format:"
 msgstr "Formato:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:43
-#, fuzzy
 msgid "Include:"
-msgstr "Incluir &vías"
+msgstr "Incluir:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:56
 #: common/widgets/wx_html_report_panel_base.cpp:52
@@ -3764,9 +3756,8 @@ msgstr "Por favor ingrese una URL para el repositorio"
 
 #: common/dialogs/git/dialog_git_repository.cpp:424
 #: common/dialogs/git/dialog_git_repository_base.cpp:106
-#, fuzzy
 msgid "SSH key password:"
-msgstr "Contraseña de clave SSH"
+msgstr "Contraseña de clave SSH:"
 
 #: common/dialogs/git/dialog_git_repository.cpp:432
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
@@ -3774,14 +3765,12 @@ msgid "Password:"
 msgstr "Contraseña:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:42
-#, fuzzy
 msgid "Location:"
-msgstr "Ubicación"
+msgstr "Ubicación:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:49
-#, fuzzy
 msgid "Connection type:"
-msgstr "Tipo de conexión"
+msgstr "Tipo de conexión:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:58
 msgid "HTTPS"
@@ -3793,9 +3782,8 @@ msgid "Local"
 msgstr "Local"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:91
-#, fuzzy
 msgid "SSH private key:     "
-msgstr "Clave privada SSH"
+msgstr "Clave privada SSH:     "
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
 msgid "Select SSH private key file"
@@ -4043,9 +4031,8 @@ msgid "Text editor:"
 msgstr "Editor de texto:"
 
 #: common/dialogs/panel_common_settings_base.cpp:99
-#, fuzzy
 msgid "File manager:"
-msgstr "Nombre de archivo:"
+msgstr "Gestor de archivos:"
 
 #: common/dialogs/panel_common_settings_base.cpp:115
 msgid "System default PDF viewer"
@@ -4731,9 +4718,8 @@ msgstr ""
 "pertinentes."
 
 #: common/dialogs/panel_embedded_files.cpp:54
-#, fuzzy
 msgid "Copy Embedded Reference"
-msgstr "Copiar con referencia"
+msgstr "Copiar referencia incrustada"
 
 #: common/dialogs/panel_embedded_files.cpp:55
 msgid "Copy the reference for this embedded file"
@@ -4741,9 +4727,9 @@ msgstr ""
 
 #: common/dialogs/panel_embedded_files.cpp:284
 #: common/dialogs/panel_embedded_files.cpp:399
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists."
-msgstr "Ya existe el archivo %s."
+msgstr "Ya existe el archivo «%s»."
 
 #: common/dialogs/panel_embedded_files.cpp:287
 #: common/dialogs/panel_embedded_files.cpp:404
@@ -4767,9 +4753,9 @@ msgid "Overwrite"
 msgstr "Sobreescribir"
 
 #: common/dialogs/panel_embedded_files.cpp:306
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add file '%s'."
-msgstr "No puede crearse el archivo '%s'."
+msgstr "No se pudo añadir el archivo «%s»."
 
 #: common/dialogs/panel_embedded_files.cpp:320
 #, fuzzy
@@ -4782,57 +4768,52 @@ msgid "Select a directory to export files"
 msgstr "Seleccionar un nombre de archivo para exportar a GenCAD"
 
 #: common/dialogs/panel_embedded_files.cpp:418
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' is not writable."
-msgstr "La biblioteca de símbolos '%s' no es escribible."
+msgstr "El directorio «%s» no es escribible."
 
 #: common/dialogs/panel_embedded_files.cpp:421
-#, fuzzy, c-format
+#, c-format
 msgid "Folder '%s' is not writable."
-msgstr "La biblioteca de símbolos '%s' no es escribible."
+msgstr "La carpeta «%s» no es escribible."
 
 #: common/dialogs/panel_embedded_files.cpp:426
 msgid "Retry"
-msgstr ""
+msgstr "Reintentar"
 
 #: common/dialogs/panel_embedded_files.cpp:454
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file '%s'."
-msgstr "No se ha podido abrir el archivo \"%s\""
+msgstr "No se pudo abrir el archivo «%s»."
 
 #: common/dialogs/panel_embedded_files.cpp:466
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write file '%s'."
-msgstr "No puede crearse el archivo '%s'."
+msgstr "No se pudo escribir el archivo «%s»."
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
-#, fuzzy
 msgid "Embedded Reference"
-msgstr "Copiar con referencia"
+msgstr "Referencia incrustada"
 
 #: common/dialogs/panel_embedded_files_base.cpp:61
-#, fuzzy
 msgid "Add embedded file"
-msgstr "Cargar archivo gerber"
+msgstr "Añadir archivo incrustado"
 
 #: common/dialogs/panel_embedded_files_base.cpp:69
-#, fuzzy
 msgid "Remove embedded file"
-msgstr "Eliminar símbolo"
+msgstr "Quitar archivo incrustado"
 
 #: common/dialogs/panel_embedded_files_base.cpp:76
-#, fuzzy
 msgid "Embed fonts"
-msgstr "Modelo de código"
+msgstr "Incrustar tipos de letra"
 
 #: common/dialogs/panel_embedded_files_base.cpp:77
 msgid "Store a copy of all fonts used"
-msgstr ""
+msgstr "Almacenar copias de los tipos de letra usados"
 
 #: common/dialogs/panel_embedded_files_base.cpp:84
-#, fuzzy
 msgid "&Export..."
-msgstr "Exportar..."
+msgstr "&Exportar..."
 
 #: common/dialogs/panel_grid_settings.cpp:53
 #, fuzzy
@@ -5247,12 +5228,16 @@ msgstr ""
 #: common/dialogs/panel_plugin_settings.cpp:121
 msgid "KiCad API is not enabled; external Python plugins will not be available"
 msgstr ""
+"La API de KiCad no está activada; los complementos Python externos no "
+"estarán disponibles"
 
 #: common/dialogs/panel_plugin_settings.cpp:132
 msgid ""
 "No valid Python interpreter chosen; external Python plugins will not be "
 "available"
 msgstr ""
+"No se eligió ningún intérprete de Python válido; los complementos Python "
+"externos no estarán disponibles"
 
 #: common/dialogs/panel_plugin_settings.cpp:146
 #, fuzzy, c-format
@@ -5264,9 +5249,8 @@ msgid "Not a valid Python 3 interpreter"
 msgstr ""
 
 #: common/dialogs/panel_plugin_settings_base.cpp:21
-#, fuzzy
 msgid "KiCad API"
-msgstr "KiCad"
+msgstr "API de KiCad"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:23
 msgid ""
@@ -5276,7 +5260,7 @@ msgstr ""
 
 #: common/dialogs/panel_plugin_settings_base.cpp:27 kicad/pcm/pcm.cpp:781
 msgid "Enable KiCad API"
-msgstr ""
+msgstr "Activar API de KiCad"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:28
 msgid ""
@@ -5286,39 +5270,38 @@ msgstr ""
 
 #: common/dialogs/panel_plugin_settings_base.cpp:40
 msgid "Python Interpreter"
-msgstr ""
+msgstr "Intérprete de Python"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:45
 msgid "Path to Python interpreter:"
-msgstr ""
+msgstr "Ruta al intérprete de Python:"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
-#, fuzzy
 msgid "Select the path to a Python interpreter"
-msgstr "Eliminar el último punto añadido al elemento activo"
+msgstr "Seleccione la ruta hacia un intérprete de Python"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
 msgid "*.*"
 msgstr ""
 
 #: common/dialogs/panel_plugin_settings_base.cpp:52
-#, fuzzy
 msgid "Detect Automatically"
-msgstr "Anotar automáticamente"
+msgstr "Detectar automáticamente"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:58
 msgid ""
 "No Python interpreter chosen; external Python plugins will not be available"
 msgstr ""
+"No se eligió ningún intérprete de Python; los complementos Python externos "
+"no estarán disponibles"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:60
 msgid "Python interpreter status"
-msgstr ""
+msgstr "Estado del intérprete de Python"
 
 #: common/dialogs/panel_setup_netclasses.cpp:96
-#, fuzzy
 msgid "<Not defined>"
-msgstr "Sin conectar"
+msgstr "<No definida>"
 
 #: common/dialogs/panel_setup_netclasses.cpp:98 common/eda_shape.cpp:2213
 #: common/stroke_params.cpp:40
@@ -5372,11 +5355,10 @@ msgid "Dash-Dot-Dot"
 msgstr "Raya-punto-punto"
 
 #: common/dialogs/panel_setup_netclasses.cpp:182
-#, fuzzy
 msgid "Set color to transparent to use layer default color."
 msgstr ""
-"Establezca el color como transparente para utilizar el color por defecto de "
-"KiCad."
+"Establezca el color como transparente para utilizar el color predeterminado "
+"de la capa."
 
 #: common/dialogs/panel_setup_netclasses.cpp:418
 msgid ""
@@ -5636,9 +5618,8 @@ msgid "File not found."
 msgstr "Archivo no encontrado."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:995
-#, fuzzy
 msgid "File could not be opened."
-msgstr "No se puede crear el archivo '%s'."
+msgstr "No se pudo abrir el archivo."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1009
 #, fuzzy
@@ -5647,7 +5628,7 @@ msgstr "No se leyó completamente la hoja de dibujo '%s'."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1036
 msgid "Ran out of memory."
-msgstr ""
+msgstr "Se agotó la memoria."
 
 #: common/drawing_sheet/ds_data_item.cpp:365
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:352
@@ -5957,9 +5938,8 @@ msgid "PCB Editor"
 msgstr "Editor de placas"
 
 #: common/eda_base_frame.cpp:1210 common/eda_base_frame.cpp:1275
-#, fuzzy
 msgid "Plugins"
-msgstr "Complementos (%d)"
+msgstr "Complementos"
 
 #: common/eda_base_frame.cpp:1217
 msgid "Realtime Renderer"
@@ -6172,16 +6152,14 @@ msgstr "Caja de texto"
 
 #: common/eda_item.cpp:355 common/eda_item.cpp:383 eeschema/sch_table.cpp:587
 #: pcbnew/pcb_table.cpp:411
-#, fuzzy
 msgid "Table"
-msgstr "Tabla:"
+msgstr "Tabla"
 
 #: common/eda_item.cpp:356 common/eda_item.cpp:384
 #: eeschema/sch_tablecell.cpp:117 pcbnew/pcb_tablecell.cpp:100
 #: pcbnew/pcb_tablecell.h:48
-#, fuzzy
 msgid "Table Cell"
-msgstr "Nombre de la tabla"
+msgstr "Celda de la tabla"
 
 #: common/eda_item.cpp:357 common/eda_item.cpp:358 pcbnew/pcb_track.cpp:1566
 msgid "Track"
