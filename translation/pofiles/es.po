@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:42+0300\n"
-"PO-Revision-Date: 2025-03-22 09:08+0000\n"
+"PO-Revision-Date: 2025-03-22 17:12+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -2462,9 +2462,9 @@ msgid "Design block '%s' does not exist."
 msgstr "El bloque de diseño «%s» no existe."
 
 #: common/design_block_io.cpp:447
-#, fuzzy, c-format
+#, c-format
 msgid "Design block folder '%s' could not be deleted."
-msgstr "No se puede crear el archivo '%s'."
+msgstr "No se pudo eliminar la carpeta del bloque de diseño «%s»."
 
 #: common/design_block_lib_table.cpp:233
 #, fuzzy, c-format
@@ -2526,7 +2526,7 @@ msgstr "KiCad en la web"
 
 #: common/dialog_about/AboutDialog_main.cpp:130
 msgid "The official KiCad website - "
-msgstr "La página web oficial de KiCad - "
+msgstr "El sitio web oficial de KiCad - "
 
 #: common/dialog_about/AboutDialog_main.cpp:134
 msgid "Developer website - "
