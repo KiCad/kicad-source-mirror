@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:42+0300\n"
-"PO-Revision-Date: 2025-03-18 13:22+0000\n"
+"PO-Revision-Date: 2025-03-22 13:49+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -740,444 +740,363 @@ msgstr "ECO2-Lage anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
 msgid "User.1"
-msgstr "Nutzer.1"
+msgstr "User.1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Show user defined layer 1"
-msgstr "Benutzerdefinierte Lage 1"
+msgstr "Benutzerdefinierte Lage 1 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
 msgid "User.2"
-msgstr "Nutzer.2"
+msgstr "User.2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "Show user defined layer 2"
-msgstr "Benutzerdefinierte Lage 2"
+msgstr "Benutzerdefinierte Lage 2 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
 msgid "User.3"
-msgstr "Nutzer.3"
+msgstr "User.3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Show user defined layer 3"
-msgstr "Benutzerdefinierte Lage 3"
+msgstr "Benutzerdefinierte Lage 3 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
 msgid "User.4"
-msgstr "Nutzer.4"
+msgstr "User.4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Show user defined layer 4"
-msgstr "Benutzerdefinierte Lage 4"
+msgstr "Benutzerdefinierte Lage 4 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
 msgid "User.5"
-msgstr "Nutzer.5"
+msgstr "User.5"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Show user defined layer 5"
-msgstr "Benutzerdefinierte Lage 5"
+msgstr "Benutzerdefinierte Lage 5 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
 msgid "User.6"
-msgstr "Nutzer.6"
+msgstr "User.6"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Show user defined layer 6"
-msgstr "Benutzerdefinierte Lage 6"
+msgstr "Benutzerdefinierte Lage 6 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
 msgid "User.7"
-msgstr "Nutzer.7"
+msgstr "User.7"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Show user defined layer 7"
-msgstr "Benutzerdefinierte Lage 7"
+msgstr "Benutzerdefinierte Lage 7 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
 msgid "User.8"
-msgstr "Nutzer.8"
+msgstr "User.8"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show user defined layer 8"
-msgstr "Benutzerdefinierte Lage 8"
+msgstr "Benutzerdefinierte Lage 8 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
 msgid "User.9"
-msgstr "Nutzer.9"
+msgstr "User.9"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Show user defined layer 9"
-msgstr "Benutzerdefinierte Lage 9"
+msgstr "Benutzerdefinierte Lage 9 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "User.10"
-msgstr "Nutzer.1"
+msgstr "User.10"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Show user defined layer 10"
-msgstr "Benutzerdefinierte Lage 10"
+msgstr "Benutzerdefinierte Lage 10 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "User.11"
-msgstr "Nutzer.1"
+msgstr "User.11"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Show user defined layer 11"
-msgstr "Benutzerdefinierte Lage 11"
+msgstr "Benutzerdefinierte Lage 11 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "User.12"
-msgstr "Nutzer.1"
+msgstr "User.12"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "Show user defined layer 12"
-msgstr "Benutzerdefinierte Lage 12"
+msgstr "Benutzerdefinierte Lage 12 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "User.13"
-msgstr "Nutzer.1"
+msgstr "User.13"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "Show user defined layer 13"
-msgstr "Benutzerdefinierte Lage 13"
+msgstr "Benutzerdefinierte Lage 13 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "User.14"
-msgstr "Nutzer.1"
+msgstr "User.14"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Show user defined layer 14"
-msgstr "Benutzerdefinierte Lage 14"
+msgstr "Benutzerdefinierte Lage 14 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "User.15"
-msgstr "Nutzer.1"
+msgstr "User.15"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Show user defined layer 15"
-msgstr "Benutzerdefinierte Lage 15"
+msgstr "Benutzerdefinierte Lage 15 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "User.16"
-msgstr "Nutzer.1"
+msgstr "User.16"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "Show user defined layer 16"
-msgstr "Benutzerdefinierte Lage 16"
+msgstr "Benutzerdefinierte Lage 16 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "User.17"
-msgstr "Nutzer.1"
+msgstr "User.17"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "Show user defined layer 17"
-msgstr "Benutzerdefinierte Lage 17"
+msgstr "Benutzerdefinierte Lage 17 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "User.18"
-msgstr "Nutzer.1"
+msgstr "User.18"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "Show user defined layer 18"
-msgstr "Benutzerdefinierte Lage 18"
+msgstr "Benutzerdefinierte Lage 18 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "User.19"
-msgstr "Nutzer.1"
+msgstr "User.19"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "Show user defined layer 19"
-msgstr "Benutzerdefinierte Lage 19"
+msgstr "Benutzerdefinierte Lage 19 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "User.20"
-msgstr "Nutzer.2"
+msgstr "User.20"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "Show user defined layer 20"
-msgstr "Benutzerdefinierte Lage 20"
+msgstr "Benutzerdefinierte Lage 20 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "User.21"
-msgstr "Nutzer.2"
+msgstr "User.21"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "Show user defined layer 21"
-msgstr "Benutzerdefinierte Lage 21"
+msgstr "Benutzerdefinierte Lage 21 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "User.22"
-msgstr "Nutzer.2"
+msgstr "User.22"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "Show user defined layer 22"
-msgstr "Benutzerdefinierte Lage 22"
+msgstr "Benutzerdefinierte Lage 22 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "User.23"
-msgstr "Nutzer.2"
+msgstr "User.23"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "Show user defined layer 23"
-msgstr "Benutzerdefinierte Lage 23"
+msgstr "Benutzerdefinierte Lage 23 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "User.24"
-msgstr "Nutzer.2"
+msgstr "User.24"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "Show user defined layer 24"
-msgstr "Benutzerdefinierte Lage 24"
+msgstr "Benutzerdefinierte Lage 24 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "User.25"
-msgstr "Nutzer.2"
+msgstr "User.25"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "Show user defined layer 25"
-msgstr "Benutzerdefinierte Lage 25"
+msgstr "Benutzerdefinierte Lage 25 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "User.26"
-msgstr "Nutzer.2"
+msgstr "User.26"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "Show user defined layer 26"
-msgstr "Benutzerdefinierte Lage 26"
+msgstr "Benutzerdefinierte Lage 26 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "User.27"
-msgstr "Nutzer.2"
+msgstr "User.27"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "Show user defined layer 27"
-msgstr "Benutzerdefinierte Lage 27"
+msgstr "Benutzerdefinierte Lage 27 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "User.28"
-msgstr "Nutzer.2"
+msgstr "User.28"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "Show user defined layer 28"
-msgstr "Benutzerdefinierte Lage 28"
+msgstr "Benutzerdefinierte Lage 28 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "User.29"
-msgstr "Nutzer.2"
+msgstr "User.29"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "Show user defined layer 29"
-msgstr "Benutzerdefinierte Lage 29"
+msgstr "Benutzerdefinierte Lage 29 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "User.30"
-msgstr "Nutzer.3"
+msgstr "User.30"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "Show user defined layer 30"
-msgstr "Benutzerdefinierte Lage 30"
+msgstr "Benutzerdefinierte Lage 30 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "User.31"
-msgstr "Nutzer.3"
+msgstr "User.31"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "Show user defined layer 31"
-msgstr "Benutzerdefinierte Lage 31"
+msgstr "Benutzerdefinierte Lage 31 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "User.32"
-msgstr "Nutzer.3"
+msgstr "User.32"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "Show user defined layer 32"
-msgstr "Benutzerdefinierte Lage 32"
+msgstr "Benutzerdefinierte Lage 32 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
 msgid "User.33"
-msgstr "Nutzer.3"
+msgstr "User.33"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
 msgid "Show user defined layer 33"
-msgstr "Benutzerdefinierte Lage 33"
+msgstr "Benutzerdefinierte Lage 33 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "User.34"
-msgstr "Nutzer.3"
+msgstr "User.34"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "Show user defined layer 34"
-msgstr "Benutzerdefinierte Lage 34"
+msgstr "Benutzerdefinierte Lage 34 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "User.35"
-msgstr "Nutzer.3"
+msgstr "User.35"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "Show user defined layer 35"
-msgstr "Benutzerdefinierte Lage 35"
+msgstr "Benutzerdefinierte Lage 35 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "User.36"
-msgstr "Nutzer.3"
+msgstr "User.36"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "Show user defined layer 36"
-msgstr "Benutzerdefinierte Lage 36"
+msgstr "Benutzerdefinierte Lage 36 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "User.37"
-msgstr "Nutzer.3"
+msgstr "User.37"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "Show user defined layer 37"
-msgstr "Benutzerdefinierte Lage 37"
+msgstr "Benutzerdefinierte Lage 37 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "User.38"
-msgstr "Nutzer.3"
+msgstr "User.38"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "Show user defined layer 38"
-msgstr "Benutzerdefinierte Lage 38"
+msgstr "Benutzerdefinierte Lage 38 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "User.39"
-msgstr "Nutzer.3"
+msgstr "User.39"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "Show user defined layer 39"
-msgstr "Benutzerdefinierte Lage 39"
+msgstr "Benutzerdefinierte Lage 39 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "User.40"
-msgstr "Nutzer.4"
+msgstr "User.40"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "Show user defined layer 40"
-msgstr "Benutzerdefinierte Lage 40"
+msgstr "Benutzerdefinierte Lage 40 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "User.41"
-msgstr "Nutzer.4"
+msgstr "User.41"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "Show user defined layer 41"
-msgstr "Benutzerdefinierte Lage 41"
+msgstr "Benutzerdefinierte Lage 41 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "User.42"
-msgstr "Nutzer.4"
+msgstr "User.42"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "Show user defined layer 42"
-msgstr "Benutzerdefinierte Lage 42"
+msgstr "Benutzerdefinierte Lage 42 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "User.43"
-msgstr "Nutzer.4"
+msgstr "User.43"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "Show user defined layer 43"
-msgstr "Benutzerdefinierte Lage 43"
+msgstr "Benutzerdefinierte Lage 43 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "User.44"
-msgstr "Nutzer.4"
+msgstr "User.44"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "Show user defined layer 44"
-msgstr "Benutzerdefinierte Lage 44"
+msgstr "Benutzerdefinierte Lage 44 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:112
-#, fuzzy
 msgid "User.45"
-msgstr "Nutzer.4"
+msgstr "User.45"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:112
-#, fuzzy
 msgid "Show user defined layer 45"
-msgstr "Benutzerdefinierte Lage 45"
+msgstr "Benutzerdefinierte Lage 45 anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:114
 msgid "Through-hole Models"
@@ -13327,9 +13246,8 @@ msgid "Enter the text to be used within the schematic"
 msgstr "Zu verwendender Text innerhalb des Schaltplans"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:62
-#, fuzzy
 msgid "Multiple label input"
-msgstr "Mehrere Lagen"
+msgstr "Mehrfache Bezeichnereingabe"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:42
@@ -23956,24 +23874,20 @@ msgstr ""
 "Bibliothekstabelle neu zuordnen"
 
 #: eeschema/tools/sch_actions.cpp:1115
-#, fuzzy
 msgid "Next Net Item"
-msgstr "Textelemente"
+msgstr "Nächstes Netzelement"
 
 #: eeschema/tools/sch_actions.cpp:1116
-#, fuzzy
 msgid "Select next item on the current net"
-msgstr "Wählt ein Verbindungselement unter dem Zeiger"
+msgstr "Wähle nächstes Element des aktuellen Netzes"
 
 #: eeschema/tools/sch_actions.cpp:1122
-#, fuzzy
 msgid "Previous Net Item"
-msgstr "Vorheriges Blatt"
+msgstr "Vorheriges Netzelement"
 
 #: eeschema/tools/sch_actions.cpp:1123
-#, fuzzy
 msgid "Select previous item on the current net"
-msgstr "Wählt ein Verbindungselement unter dem Zeiger"
+msgstr "Wähle vorheriges Element des aktuellen Netzes"
 
 #: eeschema/tools/sch_actions.cpp:1128
 msgid "Export Drawing to Clipboard"
@@ -26129,9 +26043,8 @@ msgid "DCode:"
 msgstr "D-Code:"
 
 #: gerbview/toolbars_gerber.cpp:268 gerbview/toolbars_gerber.cpp:269
-#, fuzzy
 msgid "Text info entry"
-msgstr "Text Editor"
+msgstr "Infotext-Eingabe"
 
 #: gerbview/toolbars_gerber.cpp:271
 #, fuzzy
@@ -27808,9 +27721,8 @@ msgid "Generate All Destinations"
 msgstr "Alle Ziele generieren"
 
 #: kicad/dialogs/panel_jobset_base.h:133
-#, fuzzy
 msgid "Jobset Run Log"
-msgstr "Auftragsausgabelog"
+msgstr "Auftragssatz-Ausführungslog"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:143
 msgid "Edit the project schematic"
@@ -28048,9 +27960,8 @@ msgid "Altium Project..."
 msgstr "Altium-Projekt..."
 
 #: kicad/menubar.cpp:116
-#, fuzzy
 msgid "Import Altium Schematic and PCB (*.PrjPcb)"
-msgstr "CADSTAR-Archivschema und PCB importieren (*.csa, *.cpa)"
+msgstr "Altium-Schaltplan und -PCB importieren (*.PrjPcb)"
 
 #: kicad/menubar.cpp:119
 msgid "CADSTAR Project..."
@@ -28649,9 +28560,9 @@ msgid "Create New Directory"
 msgstr "Neues Verzeichnis erstellen"
 
 #: kicad/project_tree_pane.cpp:761
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get status list: %s"
-msgstr "Konnte Commit nicht abrufen: %s"
+msgstr "Statusliste konnte nicht abrufen werden: %s"
 
 #: kicad/project_tree_pane.cpp:896
 msgid "Switch to this Project"
@@ -29565,9 +29476,8 @@ msgstr ""
 "die nicht auf allen Seiten verwendet werden"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:160
-#, fuzzy
 msgid "Origin Selector"
-msgstr "Originalbild"
+msgstr "Ursprungsauswahl"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:161
 msgid "Select the origin of the status bar coordinates"
