@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:42+0300\n"
-"PO-Revision-Date: 2025-03-20 01:10+0000\n"
+"PO-Revision-Date: 2025-03-22 18:24+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -47537,9 +47537,8 @@ msgid "Marker (%s)"
 msgstr "Marcatore (%s)"
 
 #: pcbnew/pcb_plotter.cpp:67
-#, fuzzy
 msgid "No layers selected for plotting."
-msgstr "Nessuno strato selezionato."
+msgstr "Nessuno strato selezionato per la tracciatura."
 
 #: pcbnew/pcb_plotter.cpp:464
 #, fuzzy, c-format
@@ -47583,18 +47582,16 @@ msgid "Pad Primitives"
 msgstr "Primitiva piazzola"
 
 #: pcbnew/pcb_shape.cpp:1057 pcbnew/pcb_track.cpp:2250
-#, fuzzy
 msgid "Technical Layers"
-msgstr "Strati tecnici:"
+msgstr "Strati tecnici"
 
 #: pcbnew/pcb_shape.cpp:1068 pcbnew/pcb_track.cpp:2261
-#, fuzzy
 msgid "Soldermask"
-msgstr "Pasta salda"
+msgstr "Maschera di saldatura"
 
 #: pcbnew/pcb_target.cpp:151
 msgid "PCB Target"
-msgstr "Obiettivo C.S."
+msgstr "C.S. obiettivo"
 
 #: pcbnew/pcb_text.cpp:273
 msgid "PCB Text"
