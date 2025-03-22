@@ -31,4 +31,8 @@
 #define GIT_BUF_INIT { NULL, 0, 0 }
 #endif
 
+#if LIBGIT2_VER_MAJOR > 1 || ( LIBGIT2_VER_MAJOR == 1 && LIBGIT2_VER_MINOR >= 8 )
+#include <git2/sys/errors.h>
+#endif
+
 #endif // KICAD_GIT_COMPAT_H_

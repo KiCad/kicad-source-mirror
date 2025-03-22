@@ -26,6 +26,7 @@
 #include "git_repo_mixin.h"
 
 #include <git/git_progress.h>
+#include <kicad_git_compat.h>
 #include <kiplatform/secrets.h>
 #include <trace_helpers.h>
 
