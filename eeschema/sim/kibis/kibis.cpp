@@ -666,43 +666,56 @@ void KIBIS_PIN::getKuKdFromFile( const std::string& aSimul )
     if( KuKdfile )
     {
         std::string line;
+        bool        valuesTagFound = false;
 
         while( std::getline( KuKdfile, line ) ) // skip ngspice output header
         {
             if( line.find( "Values:" ) != std::string::npos )
             {
+                valuesTagFound = true;
                 break;
             }
+        }
+
+        if( !valuesTagFound )
+        {
+            Report( _( "Missing 'Values:' tag in temporary file" ), RPT_SEVERITY_ERROR );
         }
 
         int    i = 0;
         double t_v, ku_v, kd_v;
 
-        while( KuKdfile )
+        try
         {
-            std::getline( KuKdfile, line );
-
-            if( line.empty() )
-                continue;
-
-            switch( i )
+            while( KuKdfile )
             {
-            case 0:
-                line = line.substr( line.find_first_of( "\t" ) + 1 );
-                t_v = std::stod( line );
-                break;
-            case 1: ku_v = std::stod( line ); break;
-            case 2:
-                kd_v = std::stod( line );
-                ku.push_back( ku_v );
-                kd.push_back( kd_v );
-                t.push_back( t_v );
-                break;
-            default:
-                Report( _( "Error while reading temporary file" ), RPT_SEVERITY_ERROR );
-            }
+                std::getline( KuKdfile, line );
 
-            i = ( i + 1 ) % 3;
+                if( line.empty() )
+                    continue;
+
+                switch( i )
+                {
+                case 0:
+                    line = line.substr( line.find_first_of( "\t" ) + 1 );
+                    t_v = std::stod( line );
+                    break;
+                case 1: ku_v = std::stod( line ); break;
+                case 2:
+                    kd_v = std::stod( line );
+                    ku.push_back( ku_v );
+                    kd.push_back( kd_v );
+                    t.push_back( t_v );
+                    break;
+                default: Report( _( "Error while reading temporary file" ), RPT_SEVERITY_ERROR );
+                }
+
+                i = ( i + 1 ) % 3;
+            }
+        }
+        catch( const std::exception& e )
+        {
+            Report( _( "Error while reading temporary file" ), RPT_SEVERITY_ERROR );
         }
 
         std::getline( KuKdfile, line );
