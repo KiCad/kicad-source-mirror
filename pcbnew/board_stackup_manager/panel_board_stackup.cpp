@@ -1349,7 +1349,7 @@ void PANEL_SETUP_BOARD_STACKUP::ImportSettingsFrom( BOARD* aBoard )
 }
 
 
-void PANEL_SETUP_BOARD_STACKUP::OnLayersOptionsChanged( LSET aNewLayerSet )
+void PANEL_SETUP_BOARD_STACKUP::OnLayersOptionsChanged( const LSET& aNewLayerSet )
 {
     // Can be called spuriously from events before the layers page is even created
     if( !m_panelLayers->IsInitialized() )

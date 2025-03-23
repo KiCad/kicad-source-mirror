@@ -102,7 +102,7 @@ public:
     virtual const wxString GetDescription() const;
 
 protected:
-    int forEachGeometryItem( const std::vector<KICAD_T>& aTypes, LSET aLayers,
+    int forEachGeometryItem( const std::vector<KICAD_T>& aTypes, const LSET& aLayers,
                              const std::function<bool(BOARD_ITEM*)>& aFunc );
 
     // Do not use a wxString with a vararg list: it is a complex thing and can create issues.

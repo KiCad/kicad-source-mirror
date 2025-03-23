@@ -163,11 +163,11 @@ public:
     void        SetSubtractMaskFromSilk( bool aSubtract ) { m_subtractMaskFromSilk = aSubtract; }
     bool        GetSubtractMaskFromSilk() const { return m_subtractMaskFromSilk; }
 
-    void        SetLayerSelection( LSET aSelection )    { m_layerSelection = aSelection; }
-    LSET        GetLayerSelection() const               { return m_layerSelection; }
+    void        SetLayerSelection( const LSET& aSelection ) { m_layerSelection = aSelection; }
+    LSET        GetLayerSelection() const { return m_layerSelection; }
 
     void        SetPlotOnAllLayersSequence( LSEQ aSeq ) { m_plotOnAllLayersSequence = aSeq; }
-    LSEQ        GetPlotOnAllLayersSequence() const      { return m_plotOnAllLayersSequence; }
+    LSEQ        GetPlotOnAllLayersSequence() const { return m_plotOnAllLayersSequence; }
 
     void        SetUseAuxOrigin( bool aAux ) { m_useAuxOrigin = aAux; }
     bool        GetUseAuxOrigin() const { return m_useAuxOrigin; }

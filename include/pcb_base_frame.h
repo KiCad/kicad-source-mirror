@@ -337,7 +337,8 @@ public:
      * @param aDlgPosition is the position of dialog (default is centered).
      * @return the selected layer id.
      */
-    PCB_LAYER_ID SelectOneLayer( PCB_LAYER_ID aDefaultLayer, LSET aNotAllowedLayersMask = LSET(),
+    PCB_LAYER_ID SelectOneLayer( PCB_LAYER_ID aDefaultLayer,
+                                 const LSET& aNotAllowedLayersMask = LSET(),
                                  wxPoint aDlgPosition = wxDefaultPosition );
 
     /**

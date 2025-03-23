@@ -90,7 +90,7 @@ void PlotPolySet( BOARD* aBoard, PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlot
  * Solder mask layers have a minimum thickness value and cannot be drawn like standard layers,
  * unless the minimum thickness is 0.
  */
-void PlotSolderMaskLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
+void PlotSolderMaskLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask,
                           const PCB_PLOT_PARAMS& aPlotOpt )
 {
     if( aBoard->GetDesignSettings().m_SolderMaskMinWidth == 0 )
@@ -109,7 +109,7 @@ void PlotSolderMaskLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 }
 
 
-void PlotClippedSilkLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
+void PlotClippedSilkLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask,
                            const PCB_PLOT_PARAMS& aPlotOpt )
 {
     SHAPE_POLY_SET silkscreen, solderMask;
@@ -329,7 +329,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
 /**
  * Plot any layer EXCEPT a solder-mask with an enforced minimum width.
  */
-void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
+void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask,
                         const PCB_PLOT_PARAMS& aPlotOpt )
 {
     BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOpt );
@@ -840,7 +840,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 /**
  * Plot outlines.
  */
-void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
+void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask,
                         const PCB_PLOT_PARAMS& aPlotOpt )
 {
     BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOpt );

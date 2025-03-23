@@ -144,7 +144,7 @@ public:
     }
 
     LSET GetPrivateLayers() const { return m_privateLayers; }
-    void SetPrivateLayers( LSET aLayers ) { m_privateLayers = aLayers; }
+    void SetPrivateLayers( const LSET& aLayers ) { m_privateLayers = aLayers; }
 
     ///< @copydoc BOARD_ITEM_CONTAINER::Add()
     void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_MODE::INSERT,
@@ -199,7 +199,7 @@ public:
     /**
      * Return the bounding box of the footprint on a given set of layers
     */
-    const BOX2I GetLayerBoundingBox( LSET aLayers ) const;
+    const BOX2I GetLayerBoundingBox( const LSET& aLayers ) const;
 
     VECTOR2I GetCenter() const override { return GetBoundingBox( false ).GetCenter(); }
 
@@ -769,7 +769,7 @@ public:
      * @param aLayerMask A layer or layers to mask the hit test.
      * @return A pointer to a #PAD object if found otherwise NULL.
      */
-    PAD* GetPad( const VECTOR2I& aPosition, LSET aLayerMask = LSET::AllLayersMask() );
+    PAD* GetPad( const VECTOR2I& aPosition, const LSET& aLayerMask = LSET::AllLayersMask() );
 
     std::vector<const PAD*> GetPads( const wxString& aPadNumber,
                                      const PAD* aIgnore = nullptr ) const;

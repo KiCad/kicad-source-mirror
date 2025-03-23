@@ -114,7 +114,7 @@ private:
     const PAD* nearestPad( FOOTPRINT* aRefFP, PAD* aRefPad, const VECTOR2I& aOffset );
 
     // Add a polygonal shape (rectangle) to m_fpAreaFront and/or m_fpAreaBack
-    void addFpBody( const VECTOR2I& aStart, const VECTOR2I& aEnd, LSET aLayerMask );
+    void addFpBody( const VECTOR2I& aStart, const VECTOR2I& aEnd, const LSET& aLayerMask );
 
     // Add a polygonal shape (rectangle) to m_fpAreaFront and/or m_fpAreaBack
     void addPad( PAD* aPad, int aClearance );

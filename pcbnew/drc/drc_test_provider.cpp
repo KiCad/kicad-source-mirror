@@ -151,7 +151,7 @@ void DRC_TEST_PROVIDER::reportRuleStatistics()
 }
 
 
-int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, LSET aLayers,
+int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, const LSET& aLayers,
                                             const std::function<bool( BOARD_ITEM*)>& aFunc )
 {
     BOARD *brd = m_drcEngine->GetBoard();

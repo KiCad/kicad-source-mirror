@@ -333,7 +333,7 @@ private:
 
     void onObjectVisibilityChanged( GAL_LAYER_ID aLayer, bool isVisible, bool isFinal );
 
-    void setVisibleLayers( LSET aLayers );
+    void setVisibleLayers( const LSET& aLayers );
 
     void setVisibleObjects( GAL_SET aObjects );
 

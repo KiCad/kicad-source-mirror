@@ -107,7 +107,7 @@ static wxString escapeString( const wxString& aString )
 }
 
 
-static std::string fmt_mask( LSET aSet )
+static std::string fmt_mask( const LSET& aSet )
 {
     return ( aSet & LSET::AllCuMask() ).to_string();
 }

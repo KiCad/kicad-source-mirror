@@ -634,7 +634,7 @@ public:
      * @return true if connected by pad or track (or optionally zone) on any of the associated
      *         layers.
      */
-    bool FlashLayer( LSET aLayers ) const;
+    bool FlashLayer( const LSET& aLayers ) const;
 
     /**
      * Return the top-most and bottom-most connected layers.

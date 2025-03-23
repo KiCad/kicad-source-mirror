@@ -71,7 +71,7 @@ public:
     /**
      * Set the tool's snap layer set.
      */
-    inline void SetLayerSet( LSET aLayerSet ) { m_layerMask = aLayerSet; }
+    inline void SetLayerSet( const LSET& aLayerSet ) { m_layerMask = aLayerSet; }
 
     int SelectPointInteractively( const TOOL_EVENT& aEvent );
     int SelectItemInteractively( const TOOL_EVENT& aEvent );

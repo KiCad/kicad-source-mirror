@@ -327,7 +327,7 @@ public:
      * @param aVisibleLayerMask is the current visible layers (bit mask).
      * @param aPreferredLayer is the layer to search first.
      */
-    GENERAL_COLLECTORS_GUIDE( LSET aVisibleLayerMask, PCB_LAYER_ID aPreferredLayer,
+    GENERAL_COLLECTORS_GUIDE( const LSET& aVisibleLayerMask, PCB_LAYER_ID aPreferredLayer,
                               KIGFX::VIEW* aView )
     {
         static const VECTOR2I one( 1, 1 );
@@ -375,7 +375,7 @@ public:
     {
         m_visibleLayers.set( aLayerId, isVisible );
     }
-    void SetLayerVisibleBits( LSET aLayerBits ) { m_visibleLayers = aLayerBits; }
+    void SetLayerVisibleBits( const LSET& aLayerBits ) { m_visibleLayers = aLayerBits; }
 
     /**
      * @return int - the preferred layer for HitTest()ing.

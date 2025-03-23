@@ -1344,7 +1344,7 @@ void PCB_VIA::SanitizeLayers()
 }
 
 
-bool PCB_VIA::FlashLayer( LSET aLayers ) const
+bool PCB_VIA::FlashLayer( const LSET& aLayers ) const
 {
     for( size_t ii = 0; ii < aLayers.size(); ++ii )
     {

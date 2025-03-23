@@ -251,7 +251,7 @@ bool AR_AUTOPLACER::fillMatrix()
 }
 
 
-void AR_AUTOPLACER::addFpBody( const VECTOR2I& aStart, const VECTOR2I& aEnd, LSET aLayerMask )
+void AR_AUTOPLACER::addFpBody( const VECTOR2I& aStart, const VECTOR2I& aEnd, const LSET& aLayerMask )
 {
     // Add a polygonal shape (rectangle) to m_fpAreaFront and/or m_fpAreaBack
     if( aLayerMask[ F_Cu ] )

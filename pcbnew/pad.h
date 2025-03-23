@@ -814,7 +814,7 @@ public:
      * @return true if connected by pad or track (or optionally zone) on any of the associated
      *         layers
      */
-    bool FlashLayer( LSET aLayers ) const;
+    bool FlashLayer( const LSET& aLayers ) const;
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;

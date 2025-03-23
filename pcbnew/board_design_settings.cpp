@@ -1473,16 +1473,16 @@ void BOARD_DESIGN_SETTINGS::SetUserDefinedLayerCount( int aNewLayerCount )
 }
 
 
-void BOARD_DESIGN_SETTINGS::SetEnabledLayers( LSET aMask )
+void BOARD_DESIGN_SETTINGS::SetEnabledLayers( const LSET& aMask )
 {
+    m_enabledLayers = aMask;
+
     // Ensures mandatory back and front layers are always enabled regardless of board file
     // configuration.
-    aMask.set( B_Cu ).set( F_Cu )
-         .set( B_CrtYd ).set( F_CrtYd )
-         .set( Edge_Cuts )
-         .set( Margin );
-
-    m_enabledLayers = aMask;
+    m_enabledLayers.set( B_Cu ).set( F_Cu )
+                   .set( B_CrtYd ).set( F_CrtYd )
+                   .set( Edge_Cuts )
+                   .set( Margin );
 
     // update layer counts to ensure their consistency with m_EnabledLayers
     LSET copperLayers = aMask;

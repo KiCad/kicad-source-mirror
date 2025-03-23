@@ -1294,7 +1294,7 @@ void APPEARANCE_CONTROLS::SetObjectVisible( GAL_LAYER_ID aLayer, bool isVisible 
 }
 
 
-void APPEARANCE_CONTROLS::setVisibleLayers( LSET aLayers )
+void APPEARANCE_CONTROLS::setVisibleLayers( const LSET& aLayers )
 {
     KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
 

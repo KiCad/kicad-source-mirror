@@ -330,7 +330,7 @@ PCB_LAYER_ID PAD::GetPrincipalLayer() const
 }
 
 
-bool PAD::FlashLayer( LSET aLayers ) const
+bool PAD::FlashLayer( const LSET& aLayers ) const
 {
     for( PCB_LAYER_ID layer : aLayers.Seq() )
     {

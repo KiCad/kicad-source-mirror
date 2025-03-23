@@ -437,8 +437,8 @@ void AR_MATRIX::traceCircle( int ux0, int uy0, int ux1, int uy1, int lg, int lay
 }
 
 
-void AR_MATRIX::traceFilledCircle(
-        int cx, int cy, int radius, LSET aLayerMask, int color, AR_MATRIX::CELL_OP op_logic )
+void AR_MATRIX::traceFilledCircle( int cx, int cy, int radius, const LSET& aLayerMask, int color,
+                                   AR_MATRIX::CELL_OP op_logic )
 {
     int    row, col;
     int    ux0, uy0, ux1, uy1;
@@ -602,7 +602,7 @@ void AR_MATRIX::traceArc( int ux0, int uy0, int ux1, int uy1, const EDA_ANGLE& a
 
 
 void AR_MATRIX::TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1, double angle,
-                                      LSET aLayerMask, int color, AR_MATRIX::CELL_OP op_logic )
+                                      const LSET& aLayerMask, int color, AR_MATRIX::CELL_OP op_logic )
 {
     int row, col;
     int cx, cy; // Center of rectangle
@@ -689,7 +689,7 @@ void AR_MATRIX::TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1, double
 }
 
 
-void AR_MATRIX::TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1, LSET aLayerMask,
+void AR_MATRIX::TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1, const LSET& aLayerMask,
                                       int color, AR_MATRIX::CELL_OP op_logic )
 {
     int row, col;
@@ -793,8 +793,8 @@ void AR_MATRIX::TraceSegmentPcb( PCB_SHAPE* aShape, int aColor, int aMargin,
  *  (aKeepOut ... 0). The decreasing value depends on the distance to the first rectangle
  *  Therefore the cost is high in rect x0,y0 to x1,y1, and decrease outside this rectangle
  */
-void AR_MATRIX::CreateKeepOutRectangle(
-        int ux0, int uy0, int ux1, int uy1, int marge, int aKeepOut, LSET aLayerMask )
+void AR_MATRIX::CreateKeepOutRectangle( int ux0, int uy0, int ux1, int uy1, int marge,
+                                        int aKeepOut, const LSET& aLayerMask )
 {
     int       row, col;
     int       row_min, row_max, col_min, col_max, pmarge;

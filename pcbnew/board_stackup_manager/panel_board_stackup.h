@@ -103,7 +103,7 @@ public:
      * Rebuild the Layer Stack Panel if the new layer set differs
      * from the current layet set
      */
-    void OnLayersOptionsChanged( LSET aNewLayerSet );
+    void OnLayersOptionsChanged( const LSET& aNewLayerSet );
 
     /// @return the number of copper layers configured for the board stackup
     int GetCopperLayerCount() const;

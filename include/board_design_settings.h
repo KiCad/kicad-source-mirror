@@ -583,7 +583,7 @@ public:
      *
      * @param aMask = The new bit-mask of enabled layers.
      */
-    void SetEnabledLayers( LSET aMask );
+    void SetEnabledLayers( const LSET& aMask );
 
     /**
      * Test whether a given layer \a aLayerId is enabled.

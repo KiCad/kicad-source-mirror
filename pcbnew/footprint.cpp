@@ -1454,7 +1454,7 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText ) const
 }
 
 
-const BOX2I FOOTPRINT::GetLayerBoundingBox( LSET aLayers ) const
+const BOX2I FOOTPRINT::GetLayerBoundingBox( const LSET& aLayers ) const
 {
     std::vector<PCB_TEXT*> texts;
     const BOARD* board = GetBoard();
@@ -1943,7 +1943,7 @@ PAD* FOOTPRINT::FindPadByNumber( const wxString& aPadNumber, PAD* aSearchAfterMe
 }
 
 
-PAD* FOOTPRINT::GetPad( const VECTOR2I& aPosition, LSET aLayerMask )
+PAD* FOOTPRINT::GetPad( const VECTOR2I& aPosition, const LSET& aLayerMask )
 {
     for( PAD* pad : m_pads )
     {

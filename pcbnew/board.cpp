@@ -841,7 +841,7 @@ LSET BOARD::GetVisibleLayers() const
 }
 
 
-void BOARD::SetEnabledLayers( LSET aLayerSet )
+void BOARD::SetEnabledLayers( const LSET& aLayerSet )
 {
     GetDesignSettings().SetEnabledLayers( aLayerSet );
 }
@@ -853,7 +853,7 @@ bool BOARD::IsLayerEnabled( PCB_LAYER_ID aLayer ) const
 }
 
 
-void BOARD::SetVisibleLayers( LSET aLayerSet )
+void BOARD::SetVisibleLayers( const LSET& aLayerSet )
 {
     if( m_project )
         m_project->GetLocalSettings().m_VisibleLayers = aLayerSet;
@@ -2209,17 +2209,14 @@ int BOARD::SetAreasNetCodesFromNetNames()
 }
 
 
-PAD* BOARD::GetPad( const VECTOR2I& aPosition, LSET aLayerSet ) const
+PAD* BOARD::GetPad( const VECTOR2I& aPosition, const LSET& aLayerSet ) const
 {
-    if( !aLayerSet.any() )
-        aLayerSet = LSET::AllCuMask();
-
     for( FOOTPRINT* footprint : m_footprints )
     {
         PAD* pad = nullptr;
 
         if( footprint->HitTest( aPosition ) )
-            pad = footprint->GetPad( aPosition, aLayerSet );
+            pad = footprint->GetPad( aPosition, aLayerSet.any() ? aLayerSet : LSET::AllCuMask() );
 
         if( pad )
             return pad;
@@ -2239,7 +2236,7 @@ PAD* BOARD::GetPad( const PCB_TRACK* aTrace, ENDPOINT_T aEndPoint ) const
 }
 
 
-PAD* BOARD::GetPadFast( const VECTOR2I& aPosition, LSET aLayerSet ) const
+PAD* BOARD::GetPadFast( const VECTOR2I& aPosition, const LSET& aLayerSet ) const
 {
     for( FOOTPRINT* footprint : Footprints() )
     {
@@ -2258,7 +2255,7 @@ PAD* BOARD::GetPadFast( const VECTOR2I& aPosition, LSET aLayerSet ) const
 }
 
 
-PAD* BOARD::GetPad( std::vector<PAD*>& aPadList, const VECTOR2I& aPosition, LSET aLayerSet ) const
+PAD* BOARD::GetPad( std::vector<PAD*>& aPadList, const VECTOR2I& aPosition, const LSET& aLayerSet ) const
 {
     // Search aPadList for aPosition
     // aPadList is sorted by X then Y values, and a fast binary search is used
@@ -2398,9 +2395,9 @@ std::tuple<int, double, double> BOARD::GetTrackLength( const PCB_TRACK& aTrack )
     double length = 0.0;
     double package_length = 0.0;
 
-    auto              connectivity = GetBoard()->GetConnectivity();
-    BOARD_STACKUP&    stackup      = GetDesignSettings().GetStackupDescriptor();
-    bool              useHeight    = GetDesignSettings().m_UseHeightForLengthCalcs;
+    auto           connectivity = GetBoard()->GetConnectivity();
+    BOARD_STACKUP& stackup      = GetDesignSettings().GetStackupDescriptor();
+    bool           useHeight    = GetDesignSettings().m_UseHeightForLengthCalcs;
 
     for( BOARD_CONNECTED_ITEM* item : connectivity->GetConnectedItems( &aTrack, EXCLUDE_ZONES ) )
     {

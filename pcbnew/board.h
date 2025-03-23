@@ -616,7 +616,7 @@ public:
      *
      * @param aLayerMask the new bit-mask of enabled layers.
      */
-    void SetEnabledLayers( LSET aLayerMask );
+    void SetEnabledLayers( const LSET& aLayerMask );
     void SetLayerSet( const LSET& aLayerMask ) override { SetEnabledLayers( aLayerMask ); }
 
     /**
@@ -649,7 +649,7 @@ public:
      *
      * @param aLayerMask is the new bit-mask of visible layers.
      */
-    void SetVisibleLayers( LSET aLayerMask );
+    void SetVisibleLayers( const LSET& aLayerMask );
 
     // these 2 functions are not tidy at this time, since there are PCB_LAYER_IDs that
     // are not stored in the bitmap.
@@ -1110,7 +1110,7 @@ public:
      * @param aLayerMask A layer or layers to mask the hit test.
      * @return A pointer to a PAD object if found or NULL if not found.
      */
-    PAD* GetPad( const VECTOR2I& aPosition, LSET aLayerMask ) const;
+    PAD* GetPad( const VECTOR2I& aPosition, const LSET& aLayerMask ) const;
     PAD* GetPad( const VECTOR2I& aPosition ) const
     {
         return GetPad( aPosition, LSET().set() );
@@ -1134,7 +1134,7 @@ public:
      * @param aLayerMask A layer or layers to mask the hit test.
      * @return A pointer to a PAD object if found or NULL if not found.
      */
-    PAD* GetPadFast( const VECTOR2I& aPosition, LSET aLayerMask ) const;
+    PAD* GetPadFast( const VECTOR2I& aPosition, const LSET& aLayerMask ) const;
 
     /**
      * Locate the pad connected at \a aPosition on \a aLayer starting at list position
@@ -1150,7 +1150,7 @@ public:
      * @param aLayerMask A layer or layers to mask the hit test.
      * @return a PAD object pointer to the connected pad.
      */
-    PAD* GetPad( std::vector<PAD*>& aPadList, const VECTOR2I& aPosition, LSET aLayerMask ) const;
+    PAD* GetPad( std::vector<PAD*>& aPadList, const VECTOR2I& aPosition, const LSET& aLayerMask ) const;
 
     /**
      * First empties then fills the vector with all pads and sorts them by increasing x

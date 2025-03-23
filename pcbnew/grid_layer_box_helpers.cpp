@@ -110,7 +110,7 @@ void GRID_CELL_LAYER_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC&
 // Note: this implementation is an adaptation of wxGridCellChoiceEditor
 
 
-GRID_CELL_LAYER_SELECTOR::GRID_CELL_LAYER_SELECTOR( PCB_BASE_FRAME* aFrame, LSET aMask,
+GRID_CELL_LAYER_SELECTOR::GRID_CELL_LAYER_SELECTOR( PCB_BASE_FRAME* aFrame, const LSET& aMask,
                                                     bool aShowNonActivated ) :
         m_frame( aFrame ),
         m_mask( aMask ),

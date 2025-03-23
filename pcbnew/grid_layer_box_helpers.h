@@ -56,7 +56,7 @@ private:
 class GRID_CELL_LAYER_SELECTOR : public wxGridCellEditor
 {
 public:
-    GRID_CELL_LAYER_SELECTOR( PCB_BASE_FRAME* aFrame, LSET forbiddenLayers,
+    GRID_CELL_LAYER_SELECTOR( PCB_BASE_FRAME* aFrame, const LSET& forbiddenLayers,
                               bool aShowNonActivated = false );
 
     wxGridCellEditor* Clone() const override;

@@ -83,7 +83,7 @@ public:
     }
 
     // Basic functions to plot a board item
-    void SetLayerSet( LSET aLayerMask ) { m_layerMask = aLayerMask; }
+    void SetLayerSet( const LSET& aLayerMask ) { m_layerMask = aLayerMask; }
     void PlotFootprintGraphicItems( const FOOTPRINT* aFootprint );
     void PlotFootprintTextItems( const FOOTPRINT* aFootprint );
 
@@ -215,7 +215,7 @@ void PlotOneBoardLayer( BOARD* aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
  *    SetDrillMarksType( DrillMarksType aVal )
  *        aVal = no hole, small hole, actual hole size
  */
-void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
+void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask,
                         const PCB_PLOT_PARAMS& aPlotOpt );
 
 /**
@@ -226,7 +226,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
  * @param aLayerMask is the mask to define the layers to plot.
  * @param aPlotOpt is the plot options. Has meaning for some formats only.
  */
-void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
+void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask,
                         const PCB_PLOT_PARAMS& aPlotOpt );
 
 /**

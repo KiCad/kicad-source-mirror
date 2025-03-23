@@ -54,7 +54,7 @@ public:
     void SetBoardFrame( PCB_BASE_FRAME* aFrame );
 
     // SetLayerSet allows disabling some layers, which are not shown in list
-    void SetNotAllowedLayerSet( LSET aMask ) { m_layerMaskDisable = aMask; }
+    void SetNotAllowedLayerSet( const LSET& aMask ) { m_layerMaskDisable = aMask; }
 
     // If the UNDEFINED_LAYER should be selectable, give it a name here.  Usually either
     // INDETERMINATE_STATE or INDETERMINATE_ACTION.

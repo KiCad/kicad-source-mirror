@@ -299,7 +299,8 @@ void PCB_ONE_LAYER_SELECTOR::OnRightGridCellClick( wxGridEvent& event )
 }
 
 
-PCB_LAYER_ID PCB_BASE_FRAME::SelectOneLayer( PCB_LAYER_ID aDefaultLayer, LSET aNotAllowedLayersMask,
+PCB_LAYER_ID PCB_BASE_FRAME::SelectOneLayer( PCB_LAYER_ID aDefaultLayer,
+                                             const LSET& aNotAllowedLayersMask,
                                              wxPoint aDlgPosition )
 {
     PCB_ONE_LAYER_SELECTOR dlg( this, aDefaultLayer, aNotAllowedLayersMask, true );
