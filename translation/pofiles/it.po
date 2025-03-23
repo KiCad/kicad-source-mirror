@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:42+0300\n"
-"PO-Revision-Date: 2025-03-23 12:05+0000\n"
+"PO-Revision-Date: 2025-03-23 13:33+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -51816,19 +51816,16 @@ msgid "Align to Center"
 msgstr "Allinea al centro"
 
 #: pcbnew/tools/position_relative_tool.cpp:231
-#, fuzzy
 msgid "Set Relative Position Interactively"
-msgstr "Incremento posizione di ripetizione"
+msgstr "Imposta la posizione relativa in modo interattivo"
 
 #: pcbnew/tools/position_relative_tool.cpp:246
-#, fuzzy
 msgid "Select the reference point on the item to move."
-msgstr "Selezionare il punto di riferimento per lo spostamento..."
+msgstr "Selezionare il punto di riferimento sull'elemento da spostare."
 
 #: pcbnew/tools/position_relative_tool.cpp:251
-#, fuzzy
 msgid "Select the point to define the new offset from."
-msgstr "Elimina l'ultimo punto aggiunto all'elemento corrente"
+msgstr "Selezionare il punto da cui definire il nuovo spostamento."
 
 #: pcbnew/tools/position_relative_tool.cpp:430
 msgid "Position Relative"
@@ -51839,14 +51836,12 @@ msgid "Add Zone Cutout"
 msgstr "Aggiungi zona ritaglio"
 
 #: pcbnew/tools/zone_create_helper.cpp:231
-#, fuzzy
 msgid "Draw Zone"
-msgstr "Disegna linea"
+msgstr "Disegna zona"
 
 #: pcbnew/tools/zone_create_helper.cpp:253
-#, fuzzy
 msgid "Draw Polygon"
-msgstr "Disegna poligoni"
+msgstr "Disegna poligono"
 
 #: pcbnew/tools/zone_filler_tool.cpp:89
 msgid "Checking Zones"
@@ -51978,9 +51973,8 @@ msgid "Filled Shapes"
 msgstr "Forme riempite"
 
 #: pcbnew/widgets/appearance_controls.cpp:333
-#, fuzzy
 msgid "Opacity of filled shapes"
-msgstr "Forma riempita"
+msgstr "Opacità delle forme riempite"
 
 #: pcbnew/widgets/appearance_controls.cpp:334
 msgid "Show user images"
@@ -52395,159 +52389,128 @@ msgid "User defined layer 9"
 msgstr "Strato definito dall'utente 9"
 
 #: pcbnew/widgets/appearance_controls.cpp:1684
-#, fuzzy
 msgid "User defined layer 10"
-msgstr "Strato definito dall'utente 1"
+msgstr "Strato definito dall'utente 10"
 
 #: pcbnew/widgets/appearance_controls.cpp:1685
-#, fuzzy
 msgid "User defined layer 11"
-msgstr "Strato definito dall'utente 1"
+msgstr "Strato definito dall'utente 11"
 
 #: pcbnew/widgets/appearance_controls.cpp:1686
-#, fuzzy
 msgid "User defined layer 12"
-msgstr "Strato definito dall'utente 1"
+msgstr "Strato definito dall'utente 12"
 
 #: pcbnew/widgets/appearance_controls.cpp:1687
-#, fuzzy
 msgid "User defined layer 13"
-msgstr "Strato definito dall'utente 1"
+msgstr "Strato definito dall'utente 13"
 
 #: pcbnew/widgets/appearance_controls.cpp:1688
-#, fuzzy
 msgid "User defined layer 14"
-msgstr "Strato definito dall'utente 1"
+msgstr "Strato definito dall'utente 14"
 
 #: pcbnew/widgets/appearance_controls.cpp:1689
-#, fuzzy
 msgid "User defined layer 15"
-msgstr "Strato definito dall'utente 1"
+msgstr "Strato definito dall'utente 15"
 
 #: pcbnew/widgets/appearance_controls.cpp:1690
-#, fuzzy
 msgid "User defined layer 16"
-msgstr "Strato definito dall'utente 1"
+msgstr "Strato definito dall'utente 16"
 
 #: pcbnew/widgets/appearance_controls.cpp:1691
-#, fuzzy
 msgid "User defined layer 17"
-msgstr "Strato definito dall'utente 1"
+msgstr "Strato definito dall'utente 17"
 
 #: pcbnew/widgets/appearance_controls.cpp:1692
-#, fuzzy
 msgid "User defined layer 18"
-msgstr "Strato definito dall'utente 1"
+msgstr "Strato definito dall'utente 18"
 
 #: pcbnew/widgets/appearance_controls.cpp:1693
-#, fuzzy
 msgid "User defined layer 19"
-msgstr "Strato definito dall'utente 1"
+msgstr "Strato definito dall'utente 19"
 
 #: pcbnew/widgets/appearance_controls.cpp:1694
-#, fuzzy
 msgid "User defined layer 20"
-msgstr "Strato definito dall'utente 2"
+msgstr "Strato definito dall'utente 20"
 
 #: pcbnew/widgets/appearance_controls.cpp:1695
-#, fuzzy
 msgid "User defined layer 21"
-msgstr "Strato definito dall'utente 2"
+msgstr "Strato definito dall'utente 21"
 
 #: pcbnew/widgets/appearance_controls.cpp:1696
-#, fuzzy
 msgid "User defined layer 22"
-msgstr "Strato definito dall'utente 2"
+msgstr "Strato definito dall'utente 22"
 
 #: pcbnew/widgets/appearance_controls.cpp:1697
-#, fuzzy
 msgid "User defined layer 23"
-msgstr "Strato definito dall'utente 2"
+msgstr "Strato definito dall'utente 23"
 
 #: pcbnew/widgets/appearance_controls.cpp:1698
-#, fuzzy
 msgid "User defined layer 24"
-msgstr "Strato definito dall'utente 2"
+msgstr "Strato definito dall'utente 24"
 
 #: pcbnew/widgets/appearance_controls.cpp:1699
-#, fuzzy
 msgid "User defined layer 25"
-msgstr "Strato definito dall'utente 2"
+msgstr "Strato definito dall'utente 25"
 
 #: pcbnew/widgets/appearance_controls.cpp:1700
-#, fuzzy
 msgid "User defined layer 26"
-msgstr "Strato definito dall'utente 2"
+msgstr "Strato definito dall'utente 26"
 
 #: pcbnew/widgets/appearance_controls.cpp:1701
-#, fuzzy
 msgid "User defined layer 27"
-msgstr "Strato definito dall'utente 2"
+msgstr "Strato definito dall'utente 27"
 
 #: pcbnew/widgets/appearance_controls.cpp:1702
-#, fuzzy
 msgid "User defined layer 28"
-msgstr "Strato definito dall'utente 2"
+msgstr "Strato definito dall'utente 28"
 
 #: pcbnew/widgets/appearance_controls.cpp:1703
-#, fuzzy
 msgid "User defined layer 29"
-msgstr "Strato definito dall'utente 2"
+msgstr "Strato definito dall'utente 29"
 
 #: pcbnew/widgets/appearance_controls.cpp:1704
-#, fuzzy
 msgid "User defined layer 30"
-msgstr "Strato definito dall'utente 3"
+msgstr "Strato definito dall'utente 30"
 
 #: pcbnew/widgets/appearance_controls.cpp:1705
-#, fuzzy
 msgid "User defined layer 31"
-msgstr "Strato definito dall'utente 3"
+msgstr "Strato definito dall'utente 31"
 
 #: pcbnew/widgets/appearance_controls.cpp:1706
-#, fuzzy
 msgid "User defined layer 32"
-msgstr "Strato definito dall'utente 3"
+msgstr "Strato definito dall'utente 32"
 
 #: pcbnew/widgets/appearance_controls.cpp:1707
-#, fuzzy
 msgid "User defined layer 33"
-msgstr "Strato definito dall'utente 3"
+msgstr "Strato definito dall'utente 33"
 
 #: pcbnew/widgets/appearance_controls.cpp:1708
-#, fuzzy
 msgid "User defined layer 34"
-msgstr "Strato definito dall'utente 3"
+msgstr "Strato definito dall'utente 34"
 
 #: pcbnew/widgets/appearance_controls.cpp:1709
-#, fuzzy
 msgid "User defined layer 35"
-msgstr "Strato definito dall'utente 3"
+msgstr "Strato definito dall'utente 35"
 
 #: pcbnew/widgets/appearance_controls.cpp:1710
-#, fuzzy
 msgid "User defined layer 36"
-msgstr "Strato definito dall'utente 3"
+msgstr "Strato definito dall'utente 36"
 
 #: pcbnew/widgets/appearance_controls.cpp:1711
-#, fuzzy
 msgid "User defined layer 37"
-msgstr "Strato definito dall'utente 3"
+msgstr "Strato definito dall'utente 37"
 
 #: pcbnew/widgets/appearance_controls.cpp:1712
-#, fuzzy
 msgid "User defined layer 38"
-msgstr "Strato definito dall'utente 3"
+msgstr "Strato definito dall'utente 38"
 
 #: pcbnew/widgets/appearance_controls.cpp:1713
-#, fuzzy
 msgid "User defined layer 39"
-msgstr "Strato definito dall'utente 3"
+msgstr "Strato definito dall'utente 39"
 
 #: pcbnew/widgets/appearance_controls.cpp:1714
-#, fuzzy
 msgid "User defined layer 40"
-msgstr "Strato definito dall'utente 4"
+msgstr "Strato definito dall'utente 40"
 
 #: pcbnew/widgets/appearance_controls.cpp:1715
 msgid "User defined layer 41"
@@ -52627,14 +52590,12 @@ msgid "Set Netclass Color"
 msgstr "Imposta colore netclass"
 
 #: pcbnew/widgets/appearance_controls.cpp:2407
-#, fuzzy
 msgid "Use Color from Schematic"
-msgstr "Aggiorna C.S. dallo schema"
+msgstr "Usa colore dallo schema"
 
 #: pcbnew/widgets/appearance_controls.cpp:2416
-#, fuzzy
 msgid "Clear Netclass Color"
-msgstr "Cancella colore collegamento"
+msgstr "Cancella colore netclass"
 
 #: pcbnew/widgets/appearance_controls.cpp:2424
 #, c-format
@@ -52688,9 +52649,8 @@ msgstr "Non premettere il percorso con l'UUID dell'impronta."
 
 #: pcbnew/widgets/net_inspector_panel.cpp:46
 #: pcbnew/widgets/net_inspector_panel.cpp:96
-#, fuzzy
 msgid "Configure netlist inspector"
-msgstr "Configura le netclass"
+msgstr "Configura ispettore netclass"
 
 #: pcbnew/widgets/panel_footprint_chooser.cpp:361
 msgid "No footprint selected"
@@ -52708,9 +52668,8 @@ msgstr "Dimensioni"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:122
 #: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:708
-#, fuzzy
 msgid "Netclass"
-msgstr "Netclass:"
+msgstr "Netclass"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:124
 msgid "Total Length"
@@ -52737,14 +52696,12 @@ msgid "Pad Count"
 msgstr "Conteggio piazzole"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1212
-#, fuzzy
 msgid "Highlight Selected Net"
-msgstr "Evidenzia collegamento"
+msgstr "Evidenzia collegamento selezionato"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1229
-#, fuzzy
 msgid "Rename Selected Net..."
-msgstr "Rigenera selezione"
+msgstr "Rinomina collegamento selezionato..."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1233
 #, fuzzy
