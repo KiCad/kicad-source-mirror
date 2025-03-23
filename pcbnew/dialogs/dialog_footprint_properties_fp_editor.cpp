@@ -228,6 +228,9 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
     m_bpAddPadGroup->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_bpRemovePadGroup->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
+    m_btnCreateJumperPadGroup->SetBitmap( KiBitmapBundle( BITMAPS::right ) );
+    m_btnRemoveJumperPadGroup->SetBitmap( KiBitmapBundle( BITMAPS::left ) );
+
     SetupStandardButtons();
 
     finishDialogSettings();
@@ -350,6 +353,36 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
             m_padGroupsGrid->SetCellValue( m_padGroupsGrid->GetNumberRows() - 1, 0, group );
         }
     }
+
+    m_cbDuplicatePadsAreJumpers->SetValue( m_footprint->GetDuplicatePadNumbersAreJumpers() );
+    m_btnCreateJumperPadGroup->Disable();
+    m_btnRemoveJumperPadGroup->Disable();
+
+    // Pad connections tab
+    std::set<wxString> availablePads;
+
+    for( const PAD* pad : m_footprint->Pads() )
+        availablePads.insert( pad->GetNumber() );
+
+    for( const std::set<wxString>& group : m_footprint->JumperPadGroups() )
+    {
+        wxString groupTxt;
+        size_t i = 0;
+
+        for( const wxString& pinNumber : group )
+        {
+            availablePads.erase( pinNumber );
+            groupTxt << pinNumber;
+
+            if( ++i < group.size() )
+                groupTxt << ", ";
+        }
+
+        m_listJumperPadGroups->Append( groupTxt );
+    }
+
+    for( const wxString& pin : availablePads )
+        m_listAvailablePads->AppendString( pin );
 
     // Items grid
     for( int col = 0; col < m_itemsGrid->GetNumberCols(); col++ )
@@ -675,6 +708,23 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
 
         if( !group.IsEmpty() )
             m_footprint->AddNetTiePadGroup( group );
+    }
+
+    m_footprint->SetDuplicatePadNumbersAreJumpers( m_cbDuplicatePadsAreJumpers->GetValue() );
+
+    std::vector<std::set<wxString>>& jumpers = m_footprint->JumperPadGroups();
+    jumpers.clear();
+
+    for( unsigned i = 0; i < m_listJumperPadGroups->GetCount(); ++i )
+    {
+        wxStringTokenizer tokenizer( m_listJumperPadGroups->GetString( i ), ", " );
+        std::set<wxString>& group = jumpers.emplace_back();
+
+        while( tokenizer.HasMoreTokens() )
+        {
+            if( wxString token = tokenizer.GetNextToken(); !token.IsEmpty() )
+                group.insert( token );
+        }
     }
 
     // Copy the models from the panel to the footprint
@@ -1018,4 +1068,78 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnChoice( wxCommandEvent& event )
 {
     if( m_initialized )
         OnModify();
+}
+
+
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnBtnCreateJumperPadGroup( wxCommandEvent& aEvent )
+{
+    wxArrayInt selections;
+    int n = m_listAvailablePads->GetSelections( selections );
+    wxCHECK( n > 0, /* void */ );
+
+    m_listJumperPadGroups->Freeze();
+    m_listAvailablePads->Freeze();
+
+    wxString group;
+    int i = 0;
+
+    for( int idx : selections )
+    {
+        group << m_listAvailablePads->GetString( idx );
+
+        if( ++i < n )
+            group << ", ";
+    }
+
+    for( int idx = selections.size() - 1; idx >= 0; --idx )
+        m_listAvailablePads->Delete( selections[idx] );
+
+    m_listJumperPadGroups->AppendString( group );
+
+    m_listJumperPadGroups->Thaw();
+    m_listAvailablePads->Thaw();
+}
+
+
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnBtnRemoveJumperPadGroup( wxCommandEvent& aEvent )
+{
+    wxArrayInt selections;
+    int n = m_listJumperPadGroups->GetSelections( selections );
+    wxCHECK( n > 0, /* void */ );
+
+    m_listJumperPadGroups->Freeze();
+    m_listAvailablePads->Freeze();
+
+    for( int idx : selections )
+    {
+        wxStringTokenizer tokenizer( m_listJumperPadGroups->GetString( idx ), ", " );
+
+        while( tokenizer.HasMoreTokens() )
+        {
+            if( wxString token = tokenizer.GetNextToken(); !token.IsEmpty() )
+                m_listAvailablePads->AppendString( token );
+        }
+    }
+
+    for( int idx = selections.size() - 1; idx >= 0; --idx )
+        m_listJumperPadGroups->Delete( selections[idx] );
+
+    m_listJumperPadGroups->Thaw();
+    m_listAvailablePads->Thaw();
+}
+
+
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnGroupedPadListClick( wxCommandEvent& aEvent )
+{
+    wxArrayInt selections;
+    int n = m_listJumperPadGroups->GetSelections( selections );
+    m_btnRemoveJumperPadGroup->Enable( n > 0 );
+}
+
+
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAvailablePadsClick( wxCommandEvent& aEvent )
+{
+    wxArrayInt selections;
+    int n = m_listJumperPadGroups->GetSelections( selections );
+    m_btnCreateJumperPadGroup->Enable( n > 0 );
 }

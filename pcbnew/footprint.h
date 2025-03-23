@@ -810,6 +810,19 @@ public:
      */
     wxString GetNextPadNumber( const wxString& aLastPadName ) const;
 
+    bool GetDuplicatePadNumbersAreJumpers() const { return m_duplicatePadNumbersAreJumpers; }
+    void SetDuplicatePadNumbersAreJumpers( bool aEnabled ) { m_duplicatePadNumbersAreJumpers = aEnabled; }
+
+    /**
+     * Each jumper pad group is a set of pad numbers that should be treated as internally connected.
+     * @return The list of jumper pad groups in this footprint
+     */
+    std::vector<std::set<wxString>>& JumperPadGroups() { return m_jumperPadGroups; }
+    const std::vector<std::set<wxString>>& JumperPadGroups() const { return m_jumperPadGroups; }
+
+    /// Retrieves the jumper group containing the specified pad number, if one exists
+    std::optional<const std::set<wxString>> GetJumperPadGroup( const wxString& aPadNumber ) const;
+
     /**
      * Position Reference and Value fields at the top and bottom of footprint's bounding box.
      */
@@ -1108,6 +1121,14 @@ private:
     std::vector<FP_3DMODEL>       m_3D_Drawings;       // 3D models.
     wxArrayString*                m_initial_comments;  // s-expression comments in the footprint,
                                                        // lazily allocated only if needed for speed
+
+    /// A list of jumper pad groups, each of which is a set of pad numbers that should be jumpered
+    /// together (treated as internally connected for the purposes of connectivity)
+    std::vector<std::set<wxString>> m_jumperPadGroups;
+
+    /// Flag that this footprint should automatically treat sets of two or more pads with the same
+    /// number as jumpered pin groups
+    bool m_duplicatePadNumbersAreJumpers;
 
     SHAPE_POLY_SET   m_courtyard_cache_front; // Note that a footprint can have both front and back
     SHAPE_POLY_SET   m_courtyard_cache_back;  // courtyards populated.

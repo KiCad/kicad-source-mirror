@@ -738,6 +738,60 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
     }
 
+    if( aNetlistComponent->GetDuplicatePadNumbersAreJumpers()
+        != aPcbFootprint->GetDuplicatePadNumbersAreJumpers() )
+    {
+        bool value = aNetlistComponent->GetDuplicatePadNumbersAreJumpers();
+
+        if( !m_isDryRun )
+        {
+            changed = true;
+            aPcbFootprint->SetDuplicatePadNumbersAreJumpers( value );
+
+            if( value )
+            {
+                msg.Printf( _( "Added %s 'duplicate pad numbers are jumpers' attribute." ),
+                                aPcbFootprint->GetReference() );
+            }
+            else
+            {
+                msg.Printf( _( "Removed %s 'duplicate pad numbers are jumpers' attribute." ),
+                                aPcbFootprint->GetReference() );
+            }
+        }
+        else
+        {
+            if( value )
+            {
+                msg.Printf( _( "Add %s 'duplicate pad numbers are jumpers' attribute." ),
+                                aPcbFootprint->GetReference() );
+            }
+            else
+            {
+                msg.Printf( _( "Remove %s 'duplicate pad numbers are jumpers' attribute." ),
+                                aPcbFootprint->GetReference() );
+            }
+        }
+
+        m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+    }
+
+    if( aNetlistComponent->JumperPadGroups() != aPcbFootprint->JumperPadGroups() )
+    {
+        if( !m_isDryRun )
+        {
+            changed = true;
+            aPcbFootprint->JumperPadGroups() = aNetlistComponent->JumperPadGroups();
+            msg.Printf( _( "Updated %s jumper pad groups" ), aPcbFootprint->GetReference() );
+        }
+        else
+        {
+            msg.Printf( _( "Update %s jumper pad groups" ), aPcbFootprint->GetReference() );
+        }
+
+        m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+    }
+
     if( changed && copy )
         m_commit.Modified( aPcbFootprint, copy );
     else if( copy )

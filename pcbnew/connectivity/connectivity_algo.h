@@ -285,6 +285,8 @@ private:
 
     void markItemNetAsDirty( const BOARD_ITEM* aItem );
 
+    void updateJumperPads();
+
 private:
     CONNECTIVITY_DATA*                                    m_parentConnectivityData;
     CN_LIST                                               m_itemList;

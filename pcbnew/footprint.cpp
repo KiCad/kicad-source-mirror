@@ -131,6 +131,10 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     m_zoneConnection                 = aFootprint.m_zoneConnection;
     m_netTiePadGroups                = aFootprint.m_netTiePadGroups;
     m_fileFormatVersionAtLoad        = aFootprint.m_fileFormatVersionAtLoad;
+    m_duplicatePadNumbersAreJumpers  = aFootprint.m_duplicatePadNumbersAreJumpers;
+
+    std::ranges::copy( aFootprint.m_jumperPadGroups,
+                       std::inserter( m_jumperPadGroups, m_jumperPadGroups.end() ) );
 
     std::map<BOARD_ITEM*, BOARD_ITEM*> ptrMap;
 
@@ -751,6 +755,10 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
     m_solderPasteMarginRatio         = aOther.m_solderPasteMarginRatio;
     m_zoneConnection                 = aOther.m_zoneConnection;
     m_netTiePadGroups                = aOther.m_netTiePadGroups;
+    m_duplicatePadNumbersAreJumpers  = aOther.m_duplicatePadNumbersAreJumpers;
+
+    std::ranges::copy( aOther.m_jumperPadGroups,
+                       std::inserter( m_jumperPadGroups, m_jumperPadGroups.end() ) );
 
     // Move the fields
     for( PCB_FIELD* field : m_fields )
@@ -2719,6 +2727,18 @@ wxString FOOTPRINT::GetNextPadNumber( const wxString& aLastPadNumber ) const
         num++;
 
     return wxString::Format( wxT( "%s%d" ), prefix, num );
+}
+
+
+std::optional<const std::set<wxString>> FOOTPRINT::GetJumperPadGroup( const wxString& aPadNumber ) const
+{
+    for( const std::set<wxString>& group : m_jumperPadGroups )
+    {
+        if( group.contains( aPadNumber ) )
+            return group;
+    }
+
+    return std::nullopt;
 }
 
 

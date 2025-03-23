@@ -635,6 +635,7 @@ void CN_CONNECTIVITY_ALGO::propagateConnections( BOARD_COMMIT* aCommit )
 
 void CN_CONNECTIVITY_ALGO::PropagateNets( BOARD_COMMIT* aCommit )
 {
+    updateJumperPads();
     m_connClusters = SearchClusters( CSM_PROPAGATE );
     propagateConnections( aCommit );
 }
@@ -935,4 +936,58 @@ void CN_CONNECTIVITY_ALGO::Clear()
 void CN_CONNECTIVITY_ALGO::SetProgressReporter( PROGRESS_REPORTER* aReporter )
 {
     m_progressReporter = aReporter;
+}
+
+
+void CN_CONNECTIVITY_ALGO::updateJumperPads()
+{
+    // Map of footprint -> map of pad number -> list of CN_ITEMs for pads with that number
+    std::map<FOOTPRINT*, std::map<wxString, std::vector<CN_ITEM*>>> padsByFootprint;
+
+    for( CN_ITEM* item : m_itemList )
+    {
+        if( item->Parent()->Type() != PCB_PAD_T )
+            continue;
+
+        auto pad = static_cast<const PAD*>( item->Parent() );
+
+        FOOTPRINT* fp = pad->GetParentFootprint();
+
+        padsByFootprint[fp][ pad->GetNumber() ].emplace_back( item );
+    }
+
+    for( auto& [footprint, padsMap] : padsByFootprint )
+    {
+        if( footprint->GetDuplicatePadNumbersAreJumpers() )
+        {
+            for( const std::vector<CN_ITEM*>& padsList : padsMap | std::views::values )
+            {
+                for( size_t i = 0; i < padsList.size(); ++i )
+                {
+                    for( size_t j = 1; j < padsList.size(); ++j )
+                    {
+                        padsList[i]->Connect( padsList[j] );
+                        padsList[j]->Connect( padsList[i] );
+                    }
+                }
+            }
+        }
+
+        for( const std::set<wxString>& group : footprint->JumperPadGroups() )
+        {
+            std::vector<CN_ITEM*> toConnect;
+
+            for( const wxString& padNumber : group )
+                std::ranges::copy( padsMap[padNumber], std::back_inserter( toConnect ) );
+
+            for( size_t i = 0; i < toConnect.size(); ++i )
+            {
+                for( size_t j = 1; j < toConnect.size(); ++j )
+                {
+                    toConnect[i]->Connect( toConnect[j] );
+                    toConnect[j]->Connect( toConnect[i] );
+                }
+            }
+        }
+    }
 }

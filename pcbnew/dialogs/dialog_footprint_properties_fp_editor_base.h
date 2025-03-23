@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -34,12 +34,13 @@ class WX_GRID;
 #include <wx/checkbox.h>
 #include <wx/panel.h>
 #include <wx/gbsizer.h>
+#include <wx/listbox.h>
 #include <wx/notebook.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define ID_NOTEBOOK 1000
+#define ID_NOTEBOOK 6000
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE
@@ -92,6 +93,14 @@ class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE : public DIALOG_SHIM
 		WX_GRID* m_padGroupsGrid;
 		STD_BITMAP_BUTTON* m_bpAddPadGroup;
 		STD_BITMAP_BUTTON* m_bpRemovePadGroup;
+		wxPanel* m_PanelPinConnections;
+		wxCheckBox* m_cbDuplicatePadsAreJumpers;
+		wxStaticText* stLabelAvailablePads;
+		wxListBox* m_listAvailablePads;
+		wxBitmapButton* m_btnCreateJumperPadGroup;
+		wxBitmapButton* m_btnRemoveJumperPadGroup;
+		wxStaticText* stLabelGroups;
+		wxListBox* m_listJumperPadGroups;
 		wxStdDialogButtonSizer* m_sdbSizerStdButtons;
 		wxButton* m_sdbSizerStdButtonsOK;
 		wxButton* m_sdbSizerStdButtonsCancel;
@@ -110,6 +119,10 @@ class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE : public DIALOG_SHIM
 		virtual void OnCheckBox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddPadGroup( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemovePadGroup( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAvailablePadsClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnBtnCreateJumperPadGroup( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnBtnRemoveJumperPadGroup( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnGroupedPadListClick( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

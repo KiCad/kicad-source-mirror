@@ -309,6 +309,9 @@ void KICAD_NETLIST_PARSER::parseComponent()
     nlohmann::ordered_map<wxString, wxString> fields;
     std::unordered_set<wxString>              componentClasses;
 
+    bool duplicatePinsAreJumpers = false;
+    std::vector<std::set<wxString>> jumperPinGroups;
+
     // The token comp was read, so the next data is (ref P1)
     while( (token = NextTok() ) != T_RIGHT )
     {
@@ -487,6 +490,51 @@ void KICAD_NETLIST_PARSER::parseComponent()
 
             break;
 
+        case T_duplicate_pin_numbers_are_jumpers:
+        {
+            NeedSYMBOLorNUMBER();
+            duplicatePinsAreJumpers = From_UTF8( CurText() ) == wxT( "1" );
+            NeedRIGHT();
+            break;
+        }
+
+        case T_jumper_pin_groups:
+        {
+            std::set<wxString>* currentGroup = nullptr;
+
+            for( token = NextTok(); currentGroup || token != T_RIGHT; token = NextTok() )
+            {
+                if( token == T_LEFT )
+                    token = NextTok();
+
+                switch( token )
+                {
+                case T_group:
+                    currentGroup = &jumperPinGroups.emplace_back();
+                    break;
+
+                case T_pin:
+                {
+                    NeedSYMBOLorNUMBER();
+                    wxString padName = From_UTF8( CurText() );
+                    NeedRIGHT();
+                    wxCHECK2( currentGroup, continue );
+                    currentGroup->insert( padName );
+                    break;
+                }
+
+                case T_RIGHT:
+                    currentGroup = nullptr;
+                    break;
+
+                default:
+                    Expecting( "group or pin" );
+                }
+            }
+
+            break;
+        }
+
         default:
             // Skip not used data (i.e all other tokens)
             skipCurrent();
@@ -510,6 +558,9 @@ void KICAD_NETLIST_PARSER::parseComponent()
     component->SetFields( fields );
     component->SetHumanReadablePath( humanSheetPath );
     component->SetComponentClassNames( componentClasses );
+    component->SetDuplicatePadNumbersAreJumpers( duplicatePinsAreJumpers );
+    std::ranges::copy( jumperPinGroups,
+                       std::inserter( component->JumperPadGroups(), component->JumperPadGroups().end() ) );
     m_netlist->AddComponent( component );
 }
 

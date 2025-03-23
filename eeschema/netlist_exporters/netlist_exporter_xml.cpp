@@ -411,6 +411,25 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                     xproperty->AddAttribute( wxT( "name" ), wxT( "ki_fp_filters" ) );
                     xproperty->AddAttribute( wxT( "value" ), filters.Trim( false ) );
                 }
+
+                if( part->GetDuplicatePinNumbersAreJumpers() )
+                    xcomp->AddChild( node( wxT( "duplicate_pin_numbers_are_jumpers" ), wxT( "1" ) ) );
+
+                const std::vector<std::set<wxString>>& jumperGroups = part->JumperPinGroups();
+
+                if( !jumperGroups.empty() )
+                {
+                    XNODE* groupNode;
+                    xcomp->AddChild( xproperty = node( wxT( "jumper_pin_groups" ) ) );
+
+                    for( const std::set<wxString>& group : jumperGroups )
+                    {
+                        xproperty->AddChild( groupNode = node( wxT( "group" ) ) );
+
+                        for( const wxString& padName : group )
+                            groupNode->AddAttribute( wxT( "pin" ), padName );
+                    }
+                }
             }
 
             XNODE* xsheetpath;

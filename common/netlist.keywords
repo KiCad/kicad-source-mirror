@@ -8,12 +8,15 @@ date
 description
 design
 docs
+duplicate_pin_numbers_are_jumpers
 export
 field
 fields
 footprint
 footprints
 fp
+group
+jumper_pin_groups
 lib
 libpart
 libparts

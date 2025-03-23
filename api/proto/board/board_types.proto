@@ -909,6 +909,19 @@ message Footprint3DModel
   double opacity = 6;
 }
 
+message JumperGroup
+{
+  repeated string pad_names = 1;
+}
+
+message JumperSettings
+{
+  /// If true, duplicate pad names in this footprint are jumpered together
+  bool duplicate_names_are_jumpered = 1;
+
+  repeated JumperGroup groups = 2;
+}
+
 // A footprint definition (i.e. what would be in a library)
 message Footprint
 {
@@ -926,6 +939,8 @@ message Footprint
 
   // All footprint items except for mandatory fields
   repeated google.protobuf.Any items = 11;
+
+  JumperSettings jumpers = 12;
 }
 
 // An instance of a footprint on a board

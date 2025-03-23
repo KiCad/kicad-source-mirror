@@ -4787,6 +4787,41 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
 
             break;
 
+        case T_duplicate_pad_numbers_are_jumpers:
+            footprint->SetDuplicatePadNumbersAreJumpers( parseBool() );
+            NeedRIGHT();
+            break;
+
+        case T_jumper_pad_groups:
+        {
+            // This should only be formatted if there is at least one group
+            std::vector<std::set<wxString>>& groups = footprint->JumperPadGroups();
+            std::set<wxString>* currentGroup = nullptr;
+
+            for( token = NextTok(); currentGroup || token != T_RIGHT; token = NextTok() )
+            {
+                switch( static_cast<int>( token ) )
+                {
+                case T_LEFT:
+                    currentGroup = &groups.emplace_back();
+                    break;
+
+                case DSN_STRING:
+                    currentGroup->insert( FromUTF8() );
+                    break;
+
+                case T_RIGHT:
+                    currentGroup = nullptr;
+                    break;
+
+                default:
+                    Expecting( "list of pad names" );
+                }
+            }
+
+            break;
+        }
+
         case T_solder_mask_margin:
             footprint->SetLocalSolderMaskMargin( parseBoardUnits( "local solder mask margin value" ) );
             NeedRIGHT();

@@ -99,6 +99,7 @@ public:
         m_pinCount         = 0;
         m_path             = aPath;
         m_kiids            = aKiids;
+        m_duplicatePadNumbersAreJumpers = false;
     }
 
     virtual ~COMPONENT() { };
@@ -183,6 +184,12 @@ public:
 
     std::unordered_set<wxString>& GetComponentClassNames() { return m_componentClassNames; }
 
+    bool GetDuplicatePadNumbersAreJumpers() const { return m_duplicatePadNumbersAreJumpers; }
+    void SetDuplicatePadNumbersAreJumpers( bool aEnabled ) { m_duplicatePadNumbersAreJumpers = aEnabled; }
+
+    std::vector<std::set<wxString>>& JumperPadGroups() { return m_jumperPadGroups; }
+    const std::vector<std::set<wxString>>& JumperPadGroups() const { return m_jumperPadGroups; }
+
 private:
     std::vector<COMPONENT_NET>   m_nets;  ///< list of nets shared by the component pins
 
@@ -225,6 +232,13 @@ private:
 
     /// Component classes for this footprint
     std::unordered_set<wxString> m_componentClassNames;
+
+    /// Jumper pad groups for this footprint
+    std::vector<std::set<wxString>> m_jumperPadGroups;
+
+    /// Flag that this footprint should automatically treat sets of two or more pads with the same
+    /// number as jumpered pin groups
+    bool m_duplicatePadNumbersAreJumpers;
 
     static COMPONENT_NET         m_emptyNet;
 };

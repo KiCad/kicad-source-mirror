@@ -1053,7 +1053,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Button_Switch_SMD:Panasonic_EVQPUK_EVQPUB"
 			(at 140.97 92.71 0)
 			(hide yes)
 			(effects
@@ -1259,7 +1259,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 140.97 113.538 90)
 			(hide yes)
 			(effects
@@ -1326,7 +1326,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Package_TO_SOT_SMD:SC-82AA"
 			(at 186.69 93.98 0)
 			(hide yes)
 			(effects
@@ -1534,7 +1534,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 204.978 92.71 90)
 			(hide yes)
 			(effects

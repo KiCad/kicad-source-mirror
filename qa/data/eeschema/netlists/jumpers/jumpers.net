@@ -1,8 +1,8 @@
 (export (version "E")
   (design
     (source "/Users/jon/src/kicad/qa/data/eeschema/netlists/jumpers/jumpers.kicad_sch")
-    (date "2025-03-21T17:31:14-0400")
-    (tool "Eeschema 9.99.0-580-g4821313d25")
+    (date "2025-03-22T22:55:57-0400")
+    (tool "Eeschema 9.99.0-581-g93ee71d1e1-dirty")
     (sheet (number "1") (name "/") (tstamps "/")
       (title_block
         (title)
@@ -22,9 +22,10 @@
   (components
     (comp (ref "R1")
       (value "22")
+      (footprint "Resistor_SMD:R_0603_1608Metric")
       (description "Resistor")
       (fields
-        (field (name "Footprint"))
+        (field (name "Footprint") "Resistor_SMD:R_0603_1608Metric")
         (field (name "Datasheet"))
         (field (name "Description") "Resistor"))
       (libsource (lib "Device") (part "R") (description "Resistor"))
@@ -36,9 +37,10 @@
       (tstamps "4c671539-9120-429d-9b52-8f805a6b0fad"))
     (comp (ref "R2")
       (value "22")
+      (footprint "Resistor_SMD:R_0603_1608Metric")
       (description "Resistor")
       (fields
-        (field (name "Footprint"))
+        (field (name "Footprint") "Resistor_SMD:R_0603_1608Metric")
         (field (name "Datasheet"))
         (field (name "Description") "Resistor"))
       (libsource (lib "Device") (part "R") (description "Resistor"))
@@ -50,24 +52,30 @@
       (tstamps "a5325dfa-f0ed-4395-9ec3-24765fab7875"))
     (comp (ref "TB1")
       (value "~")
+      (footprint "Button_Switch_SMD:Panasonic_EVQPUK_EVQPUB")
       (fields
-        (field (name "Footprint"))
+        (field (name "Footprint") "Button_Switch_SMD:Panasonic_EVQPUK_EVQPUB")
         (field (name "Datasheet"))
         (field (name "Description")))
       (libsource (lib "JumperTest") (part "TerminalBlock_2Level") (description ""))
       (property (name "Sheetname") (value "Root"))
       (property (name "Sheetfile") (value "jumpers.kicad_sch"))
+      (duplicate_pin_numbers_are_jumpers "1")
       (sheetpath (names "/") (tstamps "/"))
       (tstamps "0aa9b267-04ec-4615-b424-0bb2ed02b625"))
     (comp (ref "U1")
       (value "~")
+      (footprint "Package_TO_SOT_SMD:SC-82AA")
       (fields
-        (field (name "Footprint"))
+        (field (name "Footprint") "Package_TO_SOT_SMD:SC-82AA")
         (field (name "Datasheet"))
         (field (name "Description")))
       (libsource (lib "JumperTest") (part "Matrix") (description ""))
       (property (name "Sheetname") (value "Root"))
       (property (name "Sheetfile") (value "jumpers.kicad_sch"))
+      (jumper_pin_groups
+        (group (pin "1") (pin "3"))
+        (group (pin "2") (pin "4")))
       (sheetpath (names "/") (tstamps "/"))
       (tstamps "4d14d800-569a-495d-bb5a-a9e55a14d7c8")))
   (libparts

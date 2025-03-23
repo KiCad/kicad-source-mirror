@@ -106,6 +106,7 @@ dimension_units
 dnp
 drawings
 drill
+duplicate_pad_numbers_are_jumpers
 edge
 edge_clearance
 edge_cuts_line_width
@@ -189,6 +190,7 @@ island
 island_removal_mode
 island_area_min
 italic
+jumper_pad_groups
 justify
 keepout
 keep_end_layers

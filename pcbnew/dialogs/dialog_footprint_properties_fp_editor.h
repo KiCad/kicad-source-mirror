@@ -95,6 +95,10 @@ private:
     void OnText( wxCommandEvent& event ) override;
     void OnChoice( wxCommandEvent& event ) override;
     void OnCheckBox( wxCommandEvent& event ) override;
+    void OnBtnCreateJumperPadGroup( wxCommandEvent& event ) override;
+    void OnBtnRemoveJumperPadGroup( wxCommandEvent& event ) override;
+    void OnGroupedPadListClick( wxCommandEvent& event ) override;
+    void OnAvailablePadsClick( wxCommandEvent& event ) override;
 
     bool checkFootprintName( const wxString& aFootprintName, LIB_ID* doOverwrite );
 
