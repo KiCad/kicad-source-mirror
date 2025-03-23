@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:43+0300\n"
-"PO-Revision-Date: 2025-03-23 04:13+0000\n"
+"PO-Revision-Date: 2025-03-23 12:05+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -50167,9 +50167,8 @@ msgid "Cycle Layer Pair Presets"
 msgstr "Salva preimpostazione strato"
 
 #: pcbnew/tools/pcb_actions.cpp:1827
-#, fuzzy
 msgid "Cycle between preset layer pairs"
-msgstr "Passa da una coppia di strati attivi all'altra"
+msgstr "Cicla tra una coppia di strati preselezionati"
 
 #: pcbnew/tools/pcb_actions.cpp:1838
 msgid "Show Board Statistics"
@@ -50241,56 +50240,62 @@ msgid "Align to Top"
 msgstr "Allinea in alto"
 
 #: pcbnew/tools/pcb_actions.cpp:1898
-#, fuzzy
 msgid "Aligns selected items to the top edge of the item under the cursor"
-msgstr "Allinea gli elementi selezionati al bordo superiore"
+msgstr ""
+"Allinea gli elementi selezionati al bordo superiore dell'elemento sotto il "
+"puntatore"
 
 #: pcbnew/tools/pcb_actions.cpp:1904 pcbnew/tools/placement_tool.cpp:286
 msgid "Align to Bottom"
 msgstr "Allinea in basso"
 
 #: pcbnew/tools/pcb_actions.cpp:1905
-#, fuzzy
 msgid "Aligns selected items to the bottom edge of the item under the cursor"
-msgstr "Allinea gli elementi selezionati al bordo inferiore"
+msgstr ""
+"Allinea gli elementi selezionati al bordo inferiore dell'elemento sotto il "
+"puntatore"
 
 #: pcbnew/tools/pcb_actions.cpp:1911 pcbnew/tools/placement_tool.cpp:341
 msgid "Align to Left"
 msgstr "Allinea a sinistra"
 
 #: pcbnew/tools/pcb_actions.cpp:1912
-#, fuzzy
 msgid "Aligns selected items to the left edge of the item under the cursor"
-msgstr "Allinea gli elementi selezionati al bordo sinistro"
+msgstr ""
+"Allinea gli elementi selezionati al bordo sinistro dell'elemento sotto il "
+"puntatore"
 
 #: pcbnew/tools/pcb_actions.cpp:1918 pcbnew/tools/placement_tool.cpp:396
 msgid "Align to Right"
 msgstr "Allinea a destra"
 
 #: pcbnew/tools/pcb_actions.cpp:1919
-#, fuzzy
 msgid "Aligns selected items to the right edge of the item under the cursor"
-msgstr "Allinea gli elementi selezionati al bordo destro"
+msgstr ""
+"Allinea gli elementi selezionati al bordo destro dell'elemento sotto il "
+"puntatore"
 
 #: pcbnew/tools/pcb_actions.cpp:1925
 msgid "Align to Vertical Center"
 msgstr "Allinea al centro verticale"
 
 #: pcbnew/tools/pcb_actions.cpp:1926
-#, fuzzy
 msgid ""
 "Aligns selected items to the vertical center of the item under the cursor"
-msgstr "Allinea gli elementi selezionati al centro verticale"
+msgstr ""
+"Allinea gli elementi selezionati al centro verticale dell'elemento sotto il "
+"puntatore"
 
 #: pcbnew/tools/pcb_actions.cpp:1932
 msgid "Align to Horizontal Center"
 msgstr "Allinea al centro orizzontale"
 
 #: pcbnew/tools/pcb_actions.cpp:1933
-#, fuzzy
 msgid ""
 "Aligns selected items to the horizontal center of the item under the cursor"
-msgstr "Allinea gli elementi selezionati al centro orizzontale"
+msgstr ""
+"Allinea gli elementi selezionati al centro orizzontale dell'elemento sotto "
+"il puntatore"
 
 #: pcbnew/tools/pcb_actions.cpp:1939
 #, fuzzy
@@ -50305,40 +50310,40 @@ msgid ""
 msgstr "Distribuisce gli elementi selezionati lungo l'asse orizzontale"
 
 #: pcbnew/tools/pcb_actions.cpp:1947
-#, fuzzy
 msgid "Distribute Horizontally with Even Gaps"
-msgstr "Distribuisci orizzontalmente"
+msgstr "Distribuisci orizzontalmente con spazi uniformi"
 
 #: pcbnew/tools/pcb_actions.cpp:1948
-#, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most "
 "item so that the gaps between items are equal"
-msgstr "Distribuisce gli elementi selezionati lungo l'asse orizzontale"
+msgstr ""
+"Distribuisce gli elementi selezionati dall'elemento più a sinistra a quello "
+"più a destra in modo che gli spazi tra gli elementi siano uguali"
 
 #: pcbnew/tools/pcb_actions.cpp:1955
-#, fuzzy
 msgid "Distribute Vertically with Even Gaps"
-msgstr "Distribuisci verticalmente"
+msgstr "Distribuisci verticalmente con spazi uniformi"
 
 #: pcbnew/tools/pcb_actions.cpp:1956
-#, fuzzy
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most "
 "item so that the gaps between items are equal"
-msgstr "Distribuisce gli elementi selezionati lungo l'asse orizzontale"
+msgstr ""
+"Distribuisce gli elementi selezionati tra l'elemento più in alto e quello "
+"più in basso in modo che gli spazi tra gli elementi siano uguali"
 
 #: pcbnew/tools/pcb_actions.cpp:1963
-#, fuzzy
 msgid "Distribute Vertically by Centers"
-msgstr "Distribuisci verticalmente"
+msgstr "Distribuisci verticalmente per centri"
 
 #: pcbnew/tools/pcb_actions.cpp:1964
-#, fuzzy
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most "
 "item so that the item centers are equally distributed"
-msgstr "Distribuisce gli elementi selezionati lungo l'asse orizzontale"
+msgstr ""
+"Distribuisce gli elementi selezionati tra l'elemento più in alto e quello "
+"più in basso in modo che i centri degli elementi siano distribuiti equamente"
 
 #: pcbnew/tools/pcb_actions.cpp:1979
 msgid "Create a corner"
@@ -50349,14 +50354,12 @@ msgid "Remove corner"
 msgstr "Elimina vertice"
 
 #: pcbnew/tools/pcb_actions.cpp:1992
-#, fuzzy
 msgid "Chamfer Corner"
-msgstr "Smussi:"
+msgstr "Smussa (cianfrina) angolo"
 
 #: pcbnew/tools/pcb_actions.cpp:1993
-#, fuzzy
 msgid "Chamfer corner"
-msgstr "Smussi:"
+msgstr "Smussa (cianfrina) angolo"
 
 #: pcbnew/tools/pcb_actions.cpp:1999
 msgid "Keep Arc Center, Adjust Radius"
@@ -50391,18 +50394,16 @@ msgstr ""
 "altro elemento"
 
 #: pcbnew/tools/pcb_actions.cpp:2037
-#, fuzzy
 msgid "Position Interactively..."
-msgstr "Posiziona relativamente a..."
+msgstr "Posiziona interattivamente..."
 
 #: pcbnew/tools/pcb_actions.cpp:2038
-#, fuzzy
 msgid ""
 "Positions the selected item(s) by an exact amount relative to another, "
 "interactively"
 msgstr ""
-"Posiziona gli elementi selezionati di un valore esatto relativamente ad un "
-"altro elemento"
+"Posiziona gli elementi selezionati di un valore esatto relativamente a un "
+"altro, interattivamente"
 
 #: pcbnew/tools/pcb_actions.cpp:2100
 msgid "Select/Expand Connection"
@@ -50548,14 +50549,12 @@ msgstr ""
 "della scheda"
 
 #: pcbnew/tools/pcb_actions.cpp:2233
-#, fuzzy
 msgid "Generate Placement Rule Areas..."
-msgstr "Genera file di piazzamento"
+msgstr "Genera aree regole di posizionamento..."
 
 #: pcbnew/tools/pcb_actions.cpp:2234
-#, fuzzy
 msgid "Creates best-fit placement rule areas"
-msgstr "Sostituisci le aree delle regole di posizionamento esistenti"
+msgstr "Crea migliori aree di regole di posizionamento"
 
 #: pcbnew/tools/pcb_actions.cpp:2241
 #, fuzzy
@@ -52268,9 +52267,8 @@ msgid "Refill zones after changes made on board"
 msgstr "Ri-riempi le zone dopo i cambiamenti effettuati sulla scheda"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:90
-#, fuzzy
 msgid "Update Displayed Zones"
-msgstr "Opzioni di visualizzazione strati"
+msgstr "Aggiorna zone mostrate"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:91
 msgid ""
