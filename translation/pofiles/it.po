@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:43+0300\n"
-"PO-Revision-Date: 2025-03-23 13:33+0000\n"
+"PO-Revision-Date: 2025-03-23 16:05+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -44869,7 +44869,6 @@ msgid "Keep Aligned with Dimension"
 msgstr "Mantieni allineato con la quota"
 
 #: pcbnew/pcb_dimension.cpp:1911
-#, fuzzy
 msgid "Crossbar Height"
 msgstr "Altezza crossbar"
 
@@ -48796,28 +48795,25 @@ msgstr ""
 "'%s'."
 
 #: pcbnew/tools/multichannel_tool.cpp:527
-#, fuzzy
 msgid "Repeat layout"
-msgstr "Conteggio ripetizione"
+msgstr "Ripeti disposizione"
 
 #: pcbnew/tools/multichannel_tool.cpp:547
-#, fuzzy
 msgid "Group repeated items"
-msgstr "Raggruppa elementi importati"
+msgstr "Raggruppa elementi ripetuti"
 
 #: pcbnew/tools/multichannel_tool.cpp:553
-#, fuzzy, c-format
+#, c-format
 msgid "Copied to %d Rule Areas."
-msgstr "Converti in area regole"
+msgstr "Copiato in %d aree regole."
 
 #: pcbnew/tools/multichannel_tool.cpp:982
 msgid "One or both of the areas has no components assigned."
 msgstr "A una o entrambe le aree non sono assegnati componenti."
 
 #: pcbnew/tools/multichannel_tool.cpp:986
-#, fuzzy
 msgid "Component count mismatch"
-msgstr "Conteggio componenti: %d."
+msgstr "Conteggio componenti non corrisponde"
 
 #: pcbnew/tools/multichannel_tool.cpp:990
 msgid "Iteration count exceeded (timeout)"
@@ -48836,14 +48832,12 @@ msgstr ""
 "ha solo uno o nessuno foglio gerarchico o classe di componenti."
 
 #: pcbnew/tools/multichannel_tool.cpp:1169
-#, fuzzy
 msgid "Auto-generate placement rule areas"
-msgstr "Genera file di piazzamento"
+msgstr "Genera automaticamente aree regole di posizionamento"
 
 #: pcbnew/tools/multichannel_tool.cpp:1207
-#, fuzzy
 msgid "Group components with their placement rule areas"
-msgstr "File di piazzamento componenti"
+msgstr "Raggruppa i componenti con le relative aree regole di posizionamento"
 
 #: pcbnew/tools/pad_tool.cpp:164
 msgid "Paste Pad Properties"
@@ -48863,7 +48857,6 @@ msgstr ""
 "Premere <Esc> per annullare tutto; doppio clic per finire"
 
 #: pcbnew/tools/pad_tool.cpp:435 pcbnew/tools/pad_tool.cpp:538
-#, fuzzy
 msgid "Renumber Pads"
 msgstr "Rinumera piazzole"
 
@@ -48960,18 +48953,16 @@ msgid "Add a board stackup table on a graphic layer"
 msgstr "Aggiungi tabella stack-up scheda su uno strato grafico"
 
 #: pcbnew/tools/pcb_actions.cpp:174
-#, fuzzy
 msgid "Place Reference Images"
-msgstr "Immagine di riferimento"
+msgstr "Piazza immagini di riferimento"
 
 #: pcbnew/tools/pcb_actions.cpp:175
-#, fuzzy
 msgid ""
 "Add bitmap images to be used as reference (images will not be included in "
 "any output)"
 msgstr ""
-"Agggiunge una immagine bitmap da usare come riferimento (l'immagine non "
-"verrà inclusa in nessun risultato)"
+"Agggiunge immagini bitmap da usare come riferimento (l'immagine non verrà "
+"inclusa in nessun risultato)"
 
 #: pcbnew/tools/pcb_actions.cpp:208
 msgid "Increase Spacing"
@@ -49006,24 +48997,20 @@ msgid "Decrease tuning pattern amplitude by one step."
 msgstr "Diminuisce di un passo l'ampiezza del motivo di regolazione."
 
 #: pcbnew/tools/pcb_actions.cpp:244
-#, fuzzy
 msgid "Draw Aligned Dimensions"
-msgstr "Aggiungi dimensione allineata"
+msgstr "Disegna dimensioni allineate"
 
 #: pcbnew/tools/pcb_actions.cpp:251
-#, fuzzy
 msgid "Draw Center Dimensions"
-msgstr "Aggiungi dimensione centro"
+msgstr "Disegna dimensioni centro"
 
 #: pcbnew/tools/pcb_actions.cpp:258
-#, fuzzy
 msgid "Draw Radial Dimensions"
-msgstr "Aggiungi dimensione radiale"
+msgstr "Disegna dimensioni radiali"
 
 #: pcbnew/tools/pcb_actions.cpp:266
-#, fuzzy
 msgid "Draw Orthogonal Dimensions"
-msgstr "Aggiungi dimensione ortogonale"
+msgstr "Disegna dimensioni ortogonali"
 
 #: pcbnew/tools/pcb_actions.cpp:273
 #, fuzzy
@@ -49031,28 +49018,24 @@ msgid "Draw Leaders"
 msgstr "Disegna archi"
 
 #: pcbnew/tools/pcb_actions.cpp:286
-#, fuzzy
 msgid "Draw Filled Zones"
-msgstr "Aggiungi zona piena"
+msgstr "Disegna zone riempite"
 
 #: pcbnew/tools/pcb_actions.cpp:296
-#, fuzzy
 msgid "Place Vias"
 msgstr "Piazza via"
 
 #: pcbnew/tools/pcb_actions.cpp:297
-#, fuzzy
 msgid "Place free-standing vias"
-msgstr "Aggiungi via indipendenti"
+msgstr "Piazza via indipendenti"
 
 #: pcbnew/tools/pcb_actions.cpp:316
 msgid "Add a Zone Cutout"
 msgstr "Aggiungi una zona ritaglio"
 
 #: pcbnew/tools/pcb_actions.cpp:317
-#, fuzzy
 msgid "Add a cutout to an existing zone or rule area"
-msgstr "Aggiungi un'area di ritaglio all'interno di una zona esistente"
+msgstr "Aggiungi area di ritaglio dentro una preesistente zona o area regole"
 
 #: pcbnew/tools/pcb_actions.cpp:327
 msgid "Add a Similar Zone"
@@ -49067,9 +49050,8 @@ msgid "Place the Footprint Anchor"
 msgstr "Piazza l'ancoraggio impronta"
 
 #: pcbnew/tools/pcb_actions.cpp:349
-#, fuzzy
 msgid "Set the anchor point of the footprint"
-msgstr "Imposta l'origine delle coordinate (àncora) dell'impronta"
+msgstr "Imposta il punto di ancoraggio dell'impronta"
 
 #: pcbnew/tools/pcb_actions.cpp:358
 msgid "Increase Line Width"
@@ -49190,14 +49172,12 @@ msgid "Flips selected item(s) to opposite side of board"
 msgstr "Capovolgi gli elementi selezionati verso la parte opposta della scheda"
 
 #: pcbnew/tools/pcb_actions.cpp:555
-#, fuzzy
 msgid "Mirrors selected item(s) across the Y axis"
-msgstr "Rende speculare l'elemento selezionato lungo l'asse Y"
+msgstr "Rendi speculari gli elementi selezionati lungo l'asse Y"
 
 #: pcbnew/tools/pcb_actions.cpp:562
-#, fuzzy
 msgid "Mirrors selected item(s) across the X axis"
-msgstr "Rende speculare l'elemento selezionato lungo l'asse X"
+msgstr "Rendi speculari gli elementi selezionati lungo l'asse X"
 
 #: pcbnew/tools/pcb_actions.cpp:577
 msgid "Pack and Move Footprints"
@@ -49212,9 +49192,8 @@ msgstr ""
 "dimensione e inizia lo spostamanto"
 
 #: pcbnew/tools/pcb_actions.cpp:586
-#, fuzzy
 msgid "Skip to next item"
-msgstr "Salta elemento"
+msgstr "Salta all'elemento successivo"
 
 #: pcbnew/tools/pcb_actions.cpp:592
 msgid "Change Track Width"
@@ -49245,14 +49224,12 @@ msgid "Cut away corners between selected lines"
 msgstr "Taglia gli spigoli tra le linee selezionate"
 
 #: pcbnew/tools/pcb_actions.cpp:618
-#, fuzzy
 msgid "Dogbone Corners..."
-msgstr "Sposta vertice a..."
+msgstr "Spigoli dogbone..."
 
 #: pcbnew/tools/pcb_actions.cpp:619
-#, fuzzy
 msgid "Add dogbone corners to selected lines"
-msgstr "Taglia gli spigoli tra le linee selezionate"
+msgstr "Aggiungi spigoli dogbone alle linee selezionate"
 
 #: pcbnew/tools/pcb_actions.cpp:625
 msgid "Simplify polygon outlines, removing superfluous points"
@@ -49470,27 +49447,24 @@ msgid "Cleanup redundant items, etc."
 msgstr "Pulisce da elementi ridondanti, ecc."
 
 #: pcbnew/tools/pcb_actions.cpp:870
-#, fuzzy
 msgid "Draw Microwave Gaps"
-msgstr "Aggiungi spazio per microonde"
+msgstr "Disegna spazi per microonde"
 
 #: pcbnew/tools/pcb_actions.cpp:871
 msgid "Create gap of specified length for microwave applications"
 msgstr "Crea spazio di specifica lunghezza per applicazioni a microonde"
 
 #: pcbnew/tools/pcb_actions.cpp:879
-#, fuzzy
 msgid "Draw Microwave Stubs"
-msgstr "Aggiungi spezzone per microonde"
+msgstr "Disegna spezzoni per microonde"
 
 #: pcbnew/tools/pcb_actions.cpp:880
 msgid "Create stub of specified length for microwave applications"
 msgstr "Crea spezzone di specifica lunghezza per applicazioni a microonde"
 
 #: pcbnew/tools/pcb_actions.cpp:888
-#, fuzzy
 msgid "Draw Microwave Arc Stubs"
-msgstr "Aggiungi spezzone di arco per microonde"
+msgstr "Disegna spezzoni di arco per microonde"
 
 #: pcbnew/tools/pcb_actions.cpp:889
 msgid "Create stub (arc) of specified size for microwave applications"
@@ -49498,18 +49472,16 @@ msgstr ""
 "Crea spezzone (curvo) di specifica lunghezza per applicazioni a microonde"
 
 #: pcbnew/tools/pcb_actions.cpp:897
-#, fuzzy
 msgid "Draw Microwave Polygonal Shapes"
-msgstr "Aggiungi forma poligonale per microonde"
+msgstr "Disegna forme poligonali per microonde"
 
 #: pcbnew/tools/pcb_actions.cpp:898
 msgid "Create a microwave polygonal shape from a list of vertices"
 msgstr "Crea una forma poligonale per microonde da un elenco di vertici"
 
 #: pcbnew/tools/pcb_actions.cpp:906
-#, fuzzy
 msgid "Draw Microwave Lines"
-msgstr "Aggiungi linea per microonde"
+msgstr "Disegna linee per microonde"
 
 #: pcbnew/tools/pcb_actions.cpp:907
 msgid "Create line of specified length for microwave applications"
@@ -49669,14 +49641,12 @@ msgid "Generate an IPC-2581 file"
 msgstr "Genera un file IPC-2581"
 
 #: pcbnew/tools/pcb_actions.cpp:1058
-#, fuzzy
 msgid "ODB++ Output File..."
-msgstr "File uscita DIBA"
+msgstr "File uscita ODB++..."
 
 #: pcbnew/tools/pcb_actions.cpp:1059
-#, fuzzy
 msgid "Generate ODB++ output files"
-msgstr "Sovrascrivi file d'uscita"
+msgstr "Genera file d'uscita ODB++"
 
 #: pcbnew/tools/pcb_actions.cpp:1065
 msgid "IPC-D-356 Netlist File..."
@@ -49723,9 +49693,8 @@ msgid "Duplicate Zone onto Layer..."
 msgstr "Duplica zona su strato..."
 
 #: pcbnew/tools/pcb_actions.cpp:1137
-#, fuzzy
 msgid "Place Footprints"
-msgstr "Piazza un'impronta"
+msgstr "Piazza impronte"
 
 #: pcbnew/tools/pcb_actions.cpp:1145
 msgid "Drill/Place File Origin"
@@ -49867,9 +49836,8 @@ msgid "Show the Python scripting console"
 msgstr "Mostra/nascondi console degli script"
 
 #: pcbnew/tools/pcb_actions.cpp:1340
-#, fuzzy
 msgid "Show/hide the net inspector"
-msgstr "Mostra l'ispettore del collegamento"
+msgstr "Mostra/nascondi l'ispettore collegamenti"
 
 #: pcbnew/tools/pcb_actions.cpp:1345
 #: pcbnew/zone_manager/dialog_zone_manager_base.h:78
@@ -49877,9 +49845,8 @@ msgid "Zone Manager"
 msgstr "Gestore zone"
 
 #: pcbnew/tools/pcb_actions.cpp:1346
-#, fuzzy
 msgid "Show the zone manager dialog"
-msgstr "Mostra/nascondi il gestore aspetto"
+msgstr "Mostra/nascondi la finestra del gestore zone"
 
 #: pcbnew/tools/pcb_actions.cpp:1352
 msgid "Flip Board View"
@@ -50162,9 +50129,8 @@ msgid "Make the current layer more transparent"
 msgstr "Rende lo strato corrente più trasparente"
 
 #: pcbnew/tools/pcb_actions.cpp:1826
-#, fuzzy
 msgid "Cycle Layer Pair Presets"
-msgstr "Salva preimpostazione strato"
+msgstr "Cicla le preimpostazioni delle paia di strati"
 
 #: pcbnew/tools/pcb_actions.cpp:1827
 msgid "Cycle between preset layer pairs"
@@ -50298,16 +50264,16 @@ msgstr ""
 "il puntatore"
 
 #: pcbnew/tools/pcb_actions.cpp:1939
-#, fuzzy
 msgid "Distribute Horizontally by Centers"
-msgstr "Distribuisci orizzontalmente"
+msgstr "Distribuisci orizzontalmente per centri"
 
 #: pcbnew/tools/pcb_actions.cpp:1940
-#, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most "
 "itemso that the item centers are equally distributed"
-msgstr "Distribuisce gli elementi selezionati lungo l'asse orizzontale"
+msgstr ""
+"Distribuisce gli elementi selezionati dall'elemento più a sinistra a quello "
+"più a destra in modo che i centri degli elementi siano distribuiti equamente"
 
 #: pcbnew/tools/pcb_actions.cpp:1947
 msgid "Distribute Horizontally with Even Gaps"
@@ -50557,9 +50523,8 @@ msgid "Creates best-fit placement rule areas"
 msgstr "Crea migliori aree di regole di posizionamento"
 
 #: pcbnew/tools/pcb_actions.cpp:2241
-#, fuzzy
 msgid "Repeat Layout..."
-msgstr "Conteggio ripetizione"
+msgstr "Ripeti disposizione..."
 
 #: pcbnew/tools/pcb_actions.cpp:2242
 msgid "Clones placement & routing across multiple identical channels"
@@ -50764,14 +50729,13 @@ msgid "Show a manager dialog for Generator objects"
 msgstr "Mostra una finestra di gestione per gli oggetti generatori"
 
 #: pcbnew/tools/pcb_actions.cpp:2502
-#, fuzzy
 msgid "Length Tuning Settings..."
-msgstr "Modelli di regolazione lunghezze"
+msgstr "Impostazioni regolazione lunghezze..."
 
 #: pcbnew/tools/pcb_actions.cpp:2503
-#, fuzzy
 msgid "Displays tuning pattern properties dialog"
-msgstr "Mostra la finestra delle proprietà dell'elemento"
+msgstr ""
+"Visualizza la finestra di dialogo delle proprietà del modello di regolazione"
 
 #: pcbnew/tools/pcb_control.cpp:240
 msgid "Don't show again"
@@ -50799,9 +50763,8 @@ msgid "Inactive Layer Display"
 msgstr "Visualizzazione strati inattivi"
 
 #: pcbnew/tools/pcb_control.cpp:694
-#, fuzzy
 msgid "Preset Layer Pairs"
-msgstr "Imposta coppia di strati..."
+msgstr "Preimposta coppie di strati"
 
 #: pcbnew/tools/pcb_control.cpp:784
 msgid "Item locked."
@@ -50818,20 +50781,16 @@ msgstr ""
 "Questi elementi non possono essere incollati.\n"
 
 #: pcbnew/tools/pcb_control.cpp:1074
-#, fuzzy
 msgid "Paste Text"
-msgstr "Piazza testo"
+msgstr "Incolla testo"
 
 #: pcbnew/tools/pcb_control.cpp:1242
 msgid "Invalid clipboard contents"
 msgstr "Contenuto appunti non valido"
 
 #: pcbnew/tools/pcb_control.cpp:1525
-#, fuzzy
 msgid "Error loading board."
-msgstr ""
-"Errore nel caricamento della scheda.\n"
-"%s"
+msgstr "Errore nel caricamento scheda."
 
 #: pcbnew/tools/pcb_control.cpp:1559
 msgid "Append Board"
@@ -50884,14 +50843,12 @@ msgid "Selected Items"
 msgstr "Elementi selezionati"
 
 #: pcbnew/tools/pcb_control.cpp:1931
-#, fuzzy
 msgid "Selected 2D Length"
-msgstr "Connessione selezionata:"
+msgstr "lunghezza 2D selezionata"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2366
-#, fuzzy
 msgid "Resize Table Cells"
-msgstr "Rimuovi celle non valide"
+msgstr "Ridimensiona celle tabella"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2451
 msgid "Move Midpoint to Location"
@@ -50930,14 +50887,12 @@ msgid "Remove Polygon Corner"
 msgstr "Elimina vertice poligono"
 
 #: pcbnew/tools/pcb_point_editor.cpp:3026
-#, fuzzy
 msgid "Break Zone Corner"
-msgstr "Aggiungi vertice zona"
+msgstr "Rompi vertice zona"
 
 #: pcbnew/tools/pcb_point_editor.cpp:3028
-#, fuzzy
 msgid "Break Polygon Corner"
-msgstr "Elimina vertice poligono"
+msgstr "Rompi vertice poligono"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:1431
 msgid "Select/Expand Connection..."
@@ -51845,9 +51800,8 @@ msgid "Rename Selected Net"
 msgstr "Rigenera selezione"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1233
-#, fuzzy
 msgid "Delete Selected Net"
-msgstr "Elimina gli elementi selezionati"
+msgstr "Elimina collegamento selezionato"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1239
 #, fuzzy
@@ -51855,14 +51809,12 @@ msgid "Add Net"
 msgstr "Aggiungi testo"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1253
-#, fuzzy
 msgid "Highlight Selected Nets"
-msgstr "Evidenzia collegamenti"
+msgstr "Evidenzia collegamenti selezionati"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1255
-#, fuzzy
 msgid "Delete Selected Nets"
-msgstr "Elimina gli elementi selezionati"
+msgstr "Elimina collegamenti selezionati"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1262
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1395
@@ -51882,19 +51834,16 @@ msgid "(Use /.../ to indicate a regular expression.)"
 msgstr "(Usare /.../ per indicare un'espressione regolare.)"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1362
-#, fuzzy
 msgid "Filter by Net Name"
-msgstr "Filtra per unità:"
+msgstr "Filtra per nome collegamento"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1368
-#, fuzzy
 msgid "Filter by Netclass"
-msgstr "Filtra elementi per netclass:"
+msgstr "Filtra per netclass"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1383
-#, fuzzy
 msgid "Group by Netclass"
-msgstr "Raggruppa per nome"
+msgstr "Raggruppa per netclass"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1390
 #, fuzzy
@@ -51906,9 +51855,8 @@ msgid "Remove All Custom Groups"
 msgstr "Rimuovi tutti i gruppi personalizzati"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1411
-#, fuzzy
 msgid "Show Zero Pad Nets"
-msgstr "Mostra piazzole senza collegamenti"
+msgstr "Mostra collegamenti senza piazzole"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1417
 msgid "Show Unconnected Nets"
@@ -51924,9 +51872,8 @@ msgid "Show / Hide Columns"
 msgstr "Mostra / Nascondi colonne"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1584
-#, fuzzy
 msgid "Save Net Inspector Report File"
-msgstr "Salva il file rapporto"
+msgstr "Salva file rapporto ispettore collegamenti"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1585
 msgid "Report file"
@@ -52091,29 +52038,24 @@ msgid "Zone %s %s"
 msgstr "Zona %s %s"
 
 #: pcbnew/zone.cpp:1947
-#, fuzzy
 msgid "Keepout"
-msgstr "Proibite"
+msgstr "Proibiti"
 
 #: pcbnew/zone.cpp:1949
-#, fuzzy
 msgid "Keep Out Tracks"
 msgstr "Piste proibite"
 
 #: pcbnew/zone.cpp:1955
-#, fuzzy
 msgid "Keep Out Vias"
 msgstr "Via proibiti"
 
 #: pcbnew/zone.cpp:1961
-#, fuzzy
 msgid "Keep Out Pads"
 msgstr "Piazzole proibite"
 
 #: pcbnew/zone.cpp:1967
-#, fuzzy
 msgid "Keep Out Copper Pours"
-msgstr "Riempimenti aree proibite"
+msgstr "Riempimenti aree proibiti"
 
 #: pcbnew/zone.cpp:1973
 msgid "Keep Out Footprints"
@@ -52132,9 +52074,8 @@ msgid "Source Name"
 msgstr "Nome sorgente"
 
 #: pcbnew/zone.cpp:2008
-#, fuzzy
 msgid "Hatch Orientation"
-msgstr "Orientamento"
+msgstr "Orientamento tratteggio"
 
 #: pcbnew/zone.cpp:2026
 msgid "Cannot be less than zone minimum width"
@@ -52202,23 +52143,17 @@ msgstr "Continua senza il ri-riempimento"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:57
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:62
-#, fuzzy
 msgid ""
 "Top zone has the highest priority. When a zone is inside another zone, if "
 "its priority is higher, its outlines are removed from the other zone."
 msgstr ""
-"Le zone vengono riempite secondo un ordine di priorità, il livello 3 ha "
-"maggiore priorità del livello 2.\n"
-"Così quando una zona è interna ad un'altra zona:\n"
-"* Se la sua priorità è maggiore, i suoi contorni verranno rimossi dalle "
-"altre zone.\n"
-"* Se la sua priorità è uguale, verrà segnalato un errore nel controllo "
-"regole elettriche."
+"La zona superiore ha la priorità più alta. Quando una zona è all'interno di "
+"un'altra zona, se la sua priorità è più alta, i suoi contorni vengono "
+"rimossi dall'altra zona."
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:82
-#, fuzzy
 msgid "Refill zones"
-msgstr "Ri-riempi %d zone"
+msgstr "Ri-riempi zone"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:83
 msgid "Refill zones after changes made on board"
