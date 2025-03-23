@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:43+0300\n"
-"PO-Revision-Date: 2025-03-22 07:49+0000\n"
+"PO-Revision-Date: 2025-03-23 21:24+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
@@ -28022,7 +28022,7 @@ msgstr "Nie udało się zaktualizować odnośnika HEAD dla gałęzi '%s'"
 
 #: kicad/project_tree_pane.cpp:1923
 msgid "Are you sure you want to remove Git tracking from this project?"
-msgstr "Czy jesteś pewien, by usunąć dane o śledzeniu zmian w tym projekcie?"
+msgstr "Czy na pewno usunąć dane o śledzeniu zmian w tym projekcie?"
 
 #: kicad/project_tree_pane.cpp:1940
 msgid "Failed to remove Git directory"
