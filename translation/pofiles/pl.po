@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:42+0300\n"
-"PO-Revision-Date: 2025-03-22 07:49+0000\n"
+"PO-Revision-Date: 2025-03-23 21:24+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -5844,7 +5844,7 @@ msgstr "Nazwa klasy połączeń jest już używana."
 #: common/dialogs/panel_setup_netclasses.cpp:603
 #, c-format
 msgid "Clearance was too large.  It has been clipped to %s."
-msgstr ""
+msgstr "Prześwit jest zbyt duży.  Zostanie obcięty do %s."
 
 #: common/dialogs/panel_setup_netclasses.cpp:669
 msgid "Minimum copper clearance"
@@ -9103,9 +9103,8 @@ msgid "Control to select the layer"
 msgstr "Czyści zawartość zaznaczonej warstwy rysunkowej"
 
 #: common/tool/action_toolbar.cpp:1048
-#, fuzzy
 msgid "Symbol unit selector"
-msgstr "Notacja symboli składowych:"
+msgstr "Notacja symboli składowych"
 
 #: common/tool/action_toolbar.cpp:1049
 #, fuzzy
@@ -11204,14 +11203,12 @@ msgid "Footprint Filters:"
 msgstr "Filtry footprintów:"
 
 #: cvpcb/toolbars_cvpcb.cpp:122
-#, fuzzy
 msgid "Footprint filters"
-msgstr "Filtry footprintów:"
+msgstr "Filtry footprintów"
 
 #: cvpcb/toolbars_cvpcb.cpp:123
-#, fuzzy
 msgid "Footprint filtering controls"
-msgstr "Filtry footprintów:"
+msgstr "Kontrolki filtra footprintów"
 
 #: cvpcb/tools/cvpcb_actions.cpp:55
 msgid "View Selected Footprint"
@@ -13794,6 +13791,8 @@ msgid ""
 "Local power symbols create labels that are limited to the sheet in which "
 "they are used"
 msgstr ""
+"Lokalne symbole zasilania tworzą etykiety, których zasięg jest ograniczony "
+"do arkusza gdzie zostały użyte"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:221
 msgid "Pin Text Options"
@@ -16557,9 +16556,8 @@ msgid "Sheet background:"
 msgstr "Tło arkusza:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:97
-#, fuzzy
 msgid "Power Symbols:"
-msgstr "Symbol Zasilania"
+msgstr "Symbole Zasilania:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:105
 msgid ""
@@ -16568,6 +16566,10 @@ msgid ""
 "Global will convert new power symbols to global power symbols.\n"
 "Local will convert new power symbols to a local power symbols."
 msgstr ""
+"Wybiera typ nowego symbolu zasilania.\n"
+"Domyślny będzie podążał za definicją symbolu.\n"
+"Globalny zamieni nowe symbole zasilania na globalne symbole zasilania.\n"
+"Lokalny zamieni nowe symbole zasilania na lokalne symbole zasilania."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:134
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:192
@@ -28723,7 +28725,7 @@ msgstr "Nie udało się zaktualizować odnośnika HEAD dla gałęzi '%s'"
 
 #: kicad/project_tree_pane.cpp:1923
 msgid "Are you sure you want to remove Git tracking from this project?"
-msgstr "Czy jesteś pewien, by usunąć dane o śledzeniu zmian w tym projekcie?"
+msgstr "Czy na pewno usunąć dane o śledzeniu zmian w tym projekcie?"
 
 #: kicad/project_tree_pane.cpp:1940
 msgid "Failed to remove Git directory"
@@ -33757,9 +33759,8 @@ msgstr "Poniżej granicy obszaru"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:363
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:288
-#, fuzzy
 msgid "Area limit:"
-msgstr "Poniżej granicy obszaru"
+msgstr "Granica obszaru:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:366
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:291
@@ -39284,9 +39285,8 @@ msgstr "Nazwa arkusza..."
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:756
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:773
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:344
-#, fuzzy
 msgid "Footprint Field:"
-msgstr "Pola footprintów"
+msgstr "Pole footprintu:"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:618
 #, fuzzy
@@ -39299,9 +39299,8 @@ msgid "Assign component class per sheet"
 msgstr "Klasy komponentów"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:31
-#, fuzzy
 msgid "Custom Assignments:"
-msgstr "Przyporządkowanie pinów"
+msgstr "Własne przypisania:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:38
 #, fuzzy
@@ -39309,9 +39308,8 @@ msgid "Add Custom Assignment"
 msgstr "Dodaj przypisanie klasy sieci"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:84
-#, fuzzy
 msgid "Component Class:"
-msgstr "Klasy komponentów"
+msgstr "Klasa komponentów:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:118
 #, fuzzy
@@ -39333,9 +39331,8 @@ msgid "Field Value:"
 msgstr "Wartość końcowa:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:442
-#, fuzzy
 msgid "Sheet Name:"
-msgstr "Nazwa Arkusza"
+msgstr "Nazwa arkusza:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:33
 msgid "Constrain actions to H, V, 45 degrees"
@@ -48314,18 +48311,16 @@ msgid "Dimension objects"
 msgstr "Tekst wymiarowania"
 
 #: pcbnew/toolbars_pcb_editor.cpp:123
-#, fuzzy
 msgid "Track width selector"
-msgstr "Korekcja szerokości ścieżek:"
+msgstr "Wybór szerokości ścieżki"
 
 #: pcbnew/toolbars_pcb_editor.cpp:124
 msgid "Control to select the track width"
 msgstr ""
 
 #: pcbnew/toolbars_pcb_editor.cpp:125
-#, fuzzy
 msgid "Via diameter selector"
-msgstr "Analiza szerokości przelotki dla:"
+msgstr "Wybór rozmiaru przelotki"
 
 #: pcbnew/toolbars_pcb_editor.cpp:126
 msgid "Control to select the via diameter"
