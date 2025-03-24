@@ -419,6 +419,12 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "git.useDefaultAuthor",
             &m_Git.useDefaultAuthor, true ) );
 
+    m_params.emplace_back( new PARAM<bool>( "git.enableGit",
+            &m_Git.enableGit, true ) );
+
+    m_params.emplace_back( new PARAM<int>( "git.updatInterval",
+            &m_Git.updatInterval, 5 ) );
+
     m_params.emplace_back( new PARAM<wxString>( "api.interpreter_path",
             &m_Api.python_interpreter, wxS( "" ) ) );
 

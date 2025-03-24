@@ -166,6 +166,8 @@ public:
     struct GIT
     {
         std::vector<GIT_REPOSITORY> repositories;
+        bool                        enableGit;
+        int                         updatInterval;
         bool                        useDefaultAuthor;
         wxString                    authorName;
         wxString                    authorEmail;

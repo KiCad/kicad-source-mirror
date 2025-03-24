@@ -100,7 +100,6 @@ static const wxChar V3DRT_BevelHeight_um[] = wxT( "V3DRT_BevelHeight_um" );
 static const wxChar V3DRT_BevelExtentFactor[] = wxT( "V3DRT_BevelExtentFactor" );
 static const wxChar EnablePcbDesignBlocks[] = wxT( "EnablePcbDesignBlocks" );
 static const wxChar EnableGenerators[] = wxT( "EnableGenerators" );
-static const wxChar EnableGit[] = wxT( "EnableGit" );
 static const wxChar EnableLibWithText[] = wxT( "EnableLibWithText" );
 static const wxChar EnableLibDir[] = wxT( "EnableLibDir" );
 static const wxChar DisambiguationTime[] = wxT( "DisambiguationTime" );
@@ -127,7 +126,6 @@ static const wxChar NetInspectorBulkUpdateOptimisationThreshold[] =
         wxT( "NetInspectorBulkUpdateOptimisationThreshold" );
 static const wxChar ExcludeFromSimulationLineWidth[] = wxT( "ExcludeFromSimulationLineWidth" );
 static const wxChar GitIconRefreshInterval[] = wxT( "GitIconRefreshInterval" );
-static const wxChar GitProjectStatusRefreshInterval[] = wxT( "GitProjectStatusRefreshInterval" );
 static const wxChar ConfigurableToolbars[] = wxT( "ConfigurableToolbars" );
 
 } // namespace KEYS
@@ -259,7 +257,6 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_ShowRepairSchematic       = false;
     m_EnablePcbDesignBlocks     = false;
     m_EnableGenerators          = false;
-    m_EnableGit                 = true;
     m_EnableLibWithText         = false;
     m_EnableLibDir              = false;
 
@@ -309,7 +306,6 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_ExcludeFromSimulationLineWidth = 25;
 
     m_GitIconRefreshInterval = 10000;
-    m_GitProjectStatusRefreshInterval = 60000;
 
     m_ConfigurableToolbars = false;
 
@@ -502,9 +498,6 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableAPILogging,
                                                 &m_EnableAPILogging, m_EnableAPILogging ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableGit,
-                                                &m_EnableGit, m_EnableGit ) );
-
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableLibWithText,
                                                 &m_EnableLibWithText, m_EnableLibWithText ) );
 
@@ -597,10 +590,6 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::GitIconRefreshInterval,
                                                &m_GitIconRefreshInterval,
                                                m_GitIconRefreshInterval, 0, 100000 ) );
-
-    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::GitProjectStatusRefreshInterval,
-                                                &m_GitProjectStatusRefreshInterval,
-                                                m_GitProjectStatusRefreshInterval, 0, 100000 ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ConfigurableToolbars,
                                                    &m_ConfigurableToolbars,
