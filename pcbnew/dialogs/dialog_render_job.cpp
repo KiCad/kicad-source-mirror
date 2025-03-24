@@ -29,12 +29,6 @@ static std::map<JOB_PCB_RENDER::BG_STYLE, wxString> bgStyleMap = {
     { JOB_PCB_RENDER::BG_STYLE::TRANSPARENT, _HKI( "Transparent" ) }
 };
 
-static std::map<JOB_PCB_RENDER::QUALITY, wxString> qualityMap = {
-    { JOB_PCB_RENDER::QUALITY::BASIC, _HKI( "Basic" ) },
-    { JOB_PCB_RENDER::QUALITY::HIGH, _HKI( "High" ) },
-    { JOB_PCB_RENDER::QUALITY::USER, _HKI( "User" ) }
-};
-
 static std::map<JOB_PCB_RENDER::SIDE, wxString> sideMap = {
     { JOB_PCB_RENDER::SIDE::BACK, _HKI( "Back" ) },
     { JOB_PCB_RENDER::SIDE::BOTTOM, _HKI( "Bottom" ) },
@@ -54,9 +48,6 @@ DIALOG_RENDER_JOB::DIALOG_RENDER_JOB( wxWindow* aParent, JOB_PCB_RENDER* aJob  )
 
     for( const auto& [k, name] : bgStyleMap )
         m_choiceBgStyle->Append( wxGetTranslation( name ) );
-
-    for( const auto& [k, name] : qualityMap )
-        m_choiceQuality->Append( wxGetTranslation( name ) );
 
     for( const auto& [k, name] : sideMap )
         m_choiceSide->Append( wxGetTranslation( name ) );
@@ -107,27 +98,6 @@ void DIALOG_RENDER_JOB::setSelectedSide( JOB_PCB_RENDER::SIDE aSide )
 }
 
 
-JOB_PCB_RENDER::QUALITY DIALOG_RENDER_JOB::getSelectedQuality()
-{
-    int  selIndx = m_choiceQuality->GetSelection();
-    auto it = qualityMap.begin();
-    std::advance( it, selIndx );
-    return it->first;
-}
-
-
-void DIALOG_RENDER_JOB::setSelectedQuality( JOB_PCB_RENDER::QUALITY aQuality )
-{
-    auto it = qualityMap.find( aQuality );
-
-    if( it != qualityMap.end() )
-    {
-        int idx = std::distance( qualityMap.begin(), it );
-        m_choiceQuality->SetSelection( idx );
-    }
-}
-
-
 JOB_PCB_RENDER::BG_STYLE DIALOG_RENDER_JOB::getSelectedBgStyle()
 {
     int  selIndx = m_choiceBgStyle->GetSelection();
@@ -154,11 +124,14 @@ bool DIALOG_RENDER_JOB::TransferDataFromWindow()
     m_job->SetConfiguredOutputPath( m_textCtrlOutputFile->GetValue() );
 
     m_job->m_format = getSelectedFormat();
-    m_job->m_quality = getSelectedQuality();
+    m_job->m_quality = JOB_PCB_RENDER::QUALITY::USER;
     m_job->m_bgStyle = getSelectedBgStyle();
     m_job->m_side = getSelectedSide();
     m_job->m_zoom = m_spinCtrlZoom->GetValue();
-    m_job->m_floor = m_cbFloor->GetValue();
+    m_job->m_proceduralTextures = m_cbRaytracing_proceduralTextures->GetValue();
+    m_job->m_floor = m_cbRaytracing_addFloor->GetValue();
+    m_job->m_antiAlias = m_cbRaytracing_antiAliasing->GetValue();
+    m_job->m_postProcess = m_cbRaytracing_postProcessing->GetValue();
 
     m_job->m_width = m_spinCtrlWidth->GetValue();
     m_job->m_height = m_spinCtrlHeight->GetValue();
@@ -195,11 +168,13 @@ bool DIALOG_RENDER_JOB::TransferDataToWindow()
 
     setSelectedFormat( m_job->m_format );
     setSelectedBgStyle( m_job->m_bgStyle );
-    setSelectedQuality( m_job->m_quality );
     setSelectedSide( m_job->m_side );
     m_spinCtrlZoom->SetValue( m_job->m_zoom );
     m_radioProjection->SetSelection( m_job->m_perspective ? 0 : 1 );
-    m_cbFloor->SetValue( m_job->m_floor );
+    m_cbRaytracing_proceduralTextures->SetValue( m_job->m_proceduralTextures );
+    m_cbRaytracing_addFloor->SetValue( m_job->m_floor );
+    m_cbRaytracing_antiAliasing->SetValue( m_job->m_antiAlias );
+    m_cbRaytracing_postProcessing->SetValue( m_job->m_postProcess );
 
     int width = m_job->m_width;
     int height = m_job->m_height;

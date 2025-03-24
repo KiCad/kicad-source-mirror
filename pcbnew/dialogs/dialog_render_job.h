@@ -37,9 +37,6 @@ public:
     JOB_PCB_RENDER::SIDE getSelectedSide();
     void                   setSelectedSide( JOB_PCB_RENDER::SIDE aSide );
 
-    JOB_PCB_RENDER::QUALITY getSelectedQuality();
-    void                    setSelectedQuality( JOB_PCB_RENDER::QUALITY aSide );
-
     JOB_PCB_RENDER::BG_STYLE getSelectedBgStyle();
     void                     setSelectedBgStyle( JOB_PCB_RENDER::BG_STYLE aBgStyle );
 
