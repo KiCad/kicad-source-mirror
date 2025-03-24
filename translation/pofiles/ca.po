@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:43+0300\n"
-"PO-Revision-Date: 2025-03-24 03:54+0000\n"
+"PO-Revision-Date: 2025-03-24 15:13+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v9/ca/>\n"
 "Language: ca\n"
@@ -327,7 +327,7 @@ msgstr "Nom del fitxer de la imatge 3D"
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:332
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr "No tens permisos d'escriptura per a desar el fitxer '%s'."
+msgstr "No teniu permisos d'escriptura per a desar el fitxer «%s»."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:748 common/confirm.cpp:211
 #: common/dialogs/dialog_grid_settings.cpp:82
@@ -797,9 +797,8 @@ msgid "3D Axis"
 msgstr "Mostra els Eixos 3D"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "Background Start"
-msgstr "Fons"
+msgstr "Inici del fons"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
 #, fuzzy
@@ -807,9 +806,8 @@ msgid "Background gradient start color"
 msgstr "Inici del gradient del fons:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "Background End"
-msgstr "Fons"
+msgstr "Fi del fons"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
 #, fuzzy
@@ -1444,7 +1442,7 @@ msgstr "Selecciona el fitxer de la fulla de dibuix"
 #: bitmap2component/bitmap2cmp_frame.cpp:551
 #, c-format
 msgid "File '%s' could not be created."
-msgstr "No s'ha pogut crear el fitxer '%s'."
+msgstr "No s'ha pogut crear el fitxer «%s»."
 
 #: bitmap2component/bitmap2cmp_frame.cpp:471
 msgid "Create PostScript File"
@@ -1854,12 +1852,12 @@ msgstr "No es pot fer el camí absolut '%s' respecte a '%s'."
 #: common/common.cpp:404
 #, c-format
 msgid "Output directory '%s' created."
-msgstr "S'ha creat el directori de sortida '%s'."
+msgstr "S'ha creat el directori de sortida «%s»."
 
 #: common/common.cpp:413 pcbnew/dialogs/dialog_export_odbpp.cpp:315
 #, c-format
 msgid "Cannot create output directory '%s'."
-msgstr "No es pot crear el directori de sortida '%s'."
+msgstr "No es pot crear el directori de sortida «%s»."
 
 #: common/common.cpp:704
 msgid "This operating system is not supported by KiCad and its dependencies."
@@ -2017,7 +2015,7 @@ msgstr "Fitxers antics de projectes de KiCad"
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3025
 #, c-format
 msgid "Cannot overwrite library path '%s'."
-msgstr "No es pot sobreescriure el camí de la biblioteca '%s'."
+msgstr "No es pot sobreescriure el camí de la biblioteca «%s»."
 
 #: common/design_block_io.cpp:184
 #, c-format
@@ -3900,14 +3898,12 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:99
-#, fuzzy
 msgid "User name:"
-msgstr "Nom de la xarxa:"
+msgstr "Nom d'usuari:"
 
 #: common/dialogs/git/dialog_git_repository_base.h:76
-#, fuzzy
 msgid "Git Repository"
-msgstr "Dipòsit de Github"
+msgstr "Dipòsit Git"
 
 #: common/dialogs/git/dialog_git_switch.cpp:44
 msgid "Git Branch Switch"
@@ -5581,7 +5577,7 @@ msgstr "Es necessita la classe de xarxa predeterminada."
 #: common/dialogs/panel_setup_netclasses.cpp:883
 #, c-format
 msgid "<b>Nets matching '%s':</b>"
-msgstr "<b>Xarxes coincidents amb '%s':</b>"
+msgstr "<b>Xarxes coincidents amb «%s»:</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
 #, fuzzy
@@ -5750,9 +5746,8 @@ msgstr ""
 #: common/drawing_sheet/drawing_sheet_parser.cpp:558
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3419
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3277
-#, fuzzy
 msgid "Failed to read image data."
-msgstr "No s'ha pogut carregar '%s'."
+msgstr "No s'han pogut llegir les dades de la imatge."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:983
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:74
@@ -5761,9 +5756,8 @@ msgid "File not found."
 msgstr "Fitxer no trobat."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:995
-#, fuzzy
 msgid "File could not be opened."
-msgstr "No s'ha pogut crear el fitxer '%s'."
+msgstr "No s'ha pogut obrir el fitxer."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1009
 #, fuzzy
@@ -5922,12 +5916,12 @@ msgstr "%s és un duplicat"
 #: common/dsnlexer.cpp:363
 #, c-format
 msgid "Unexpected '%s'"
-msgstr "Inesperat '%s'"
+msgstr "«%s» inesperat"
 
 #: common/dsnlexer.cpp:422
 #, c-format
 msgid "need a number for '%s'"
-msgstr "es necessita un número per '%s'"
+msgstr "cal un nombre per a «%s»"
 
 #: common/dsnlexer.cpp:715 common/dsnlexer.cpp:776
 msgid "Un-terminated delimited string"
@@ -5981,7 +5975,7 @@ msgstr "Refés"
 #: common/eda_base_frame.cpp:1030
 #, c-format
 msgid "File '%s' was not found."
-msgstr "No s'ha trobat el fitxer '%s'."
+msgstr "No s'ha trobat el fitxer «%s»."
 
 #: common/eda_base_frame.cpp:1079
 msgid "Preferences"
@@ -8664,7 +8658,7 @@ msgstr "Format del fitxer d'arxiu invàlid."
 #: common/project/project_archiver.cpp:213
 #, c-format
 msgid "Extracting file '%s'."
-msgstr "S'està extraient el fitxer '%s'."
+msgstr "S'està extraient el fitxer «%s»."
 
 #: common/project/project_archiver.cpp:236 kicad/pcm/pcm_task_manager.cpp:251
 #: kicad/pcm/pcm_task_manager.cpp:294
@@ -14590,7 +14584,7 @@ msgstr "Utilitza un camí absolut"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:374
 msgid "Untitled Sheet"
-msgstr "Fulla sense títol"
+msgstr "Full sense títol"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:415
 msgid "Note: item colors are overridden in the current color theme."
@@ -14622,12 +14616,12 @@ msgstr ""
 #: kicad/tools/kicad_manager_control.cpp:701
 #, c-format
 msgid "'%s' already exists."
-msgstr "'%s' ja existeix."
+msgstr "«%s» ja existeix."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:516
 #, c-format
 msgid "Link '%s' to this file?"
-msgstr "Vols enllaçar '%s' a aquest fitxer?"
+msgstr "Voleu enllaçar «%s» a aquest fitxer?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:530
 #, fuzzy, c-format
