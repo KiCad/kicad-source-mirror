@@ -91,6 +91,9 @@ JOB_PCB_RENDER::JOB_PCB_RENDER() :
     m_params.emplace_back( new JOB_PARAM<double>( "zoom", &m_zoom, m_zoom ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "perspective", &m_perspective, m_perspective ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "floor", &m_floor, m_floor ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "anti_alias", &m_antiAlias, m_antiAlias ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "post_process", &m_postProcess, m_postProcess ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "procedural_textures", &m_proceduralTextures, m_proceduralTextures ) );
 
     m_params.emplace_back( new JOB_PARAM<int>( "width", &m_width, m_width ) );
     m_params.emplace_back( new JOB_PARAM<int>( "height", &m_height, m_height ) );

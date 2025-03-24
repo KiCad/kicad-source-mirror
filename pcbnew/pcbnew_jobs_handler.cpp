@@ -493,24 +493,12 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
 
         switch( aStepJob->m_format )
         {
-        case JOB_EXPORT_PCB_3D::FORMAT::STEP:
-            params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::STEP;
-            break;
-        case JOB_EXPORT_PCB_3D::FORMAT::BREP:
-            params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::BREP;
-            break;
-        case JOB_EXPORT_PCB_3D::FORMAT::XAO:
-            params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::XAO;
-            break;
-        case JOB_EXPORT_PCB_3D::FORMAT::GLB:
-            params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::GLB;
-            break;
-        case JOB_EXPORT_PCB_3D::FORMAT::PLY:
-            params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::PLY;
-            break;
-        case JOB_EXPORT_PCB_3D::FORMAT::STL:
-            params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::STL;
-            break;
+        case JOB_EXPORT_PCB_3D::FORMAT::STEP: params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::STEP; break;
+        case JOB_EXPORT_PCB_3D::FORMAT::BREP: params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::BREP; break;
+        case JOB_EXPORT_PCB_3D::FORMAT::XAO:  params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::XAO;  break;
+        case JOB_EXPORT_PCB_3D::FORMAT::GLB:  params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::GLB;  break;
+        case JOB_EXPORT_PCB_3D::FORMAT::PLY:  params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::PLY;  break;
+        case JOB_EXPORT_PCB_3D::FORMAT::STL:  params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::STL;  break;
         default:
             m_reporter->Report( _( "Unknown export format" ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_UNKNOWN; // shouldnt have gotten here
@@ -586,81 +574,87 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
     boardAdapter.m_IsBoardView = false;
     boardAdapter.m_IsPreviewer = true; // Force display 3D models, regardless of 3D viewer options
 
-    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
+    SETTINGS_MANAGER&      mgr = Pgm().GetSettingsManager();
+    EDA_3D_VIEWER_SETTINGS cfg;
+
+    if( EDA_3D_VIEWER_SETTINGS* userCfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ) )
+    {
+        cfg.m_Render = userCfg->m_Render;
+        cfg.m_Camera = userCfg->m_Camera;
+    }
 
     if( aRenderJob->m_quality == JOB_PCB_RENDER::QUALITY::BASIC )
     {
         // Silkscreen is pixelated without antialiasing
-        cfg->m_Render.raytrace_anti_aliasing = true;
+        cfg.m_Render.raytrace_anti_aliasing = true;
 
-        cfg->m_Render.raytrace_backfloor = false;
-        cfg->m_Render.raytrace_post_processing = false;
+        cfg.m_Render.raytrace_backfloor = aRenderJob->m_floor;
+        cfg.m_Render.raytrace_post_processing = aRenderJob->m_floor;
 
-        cfg->m_Render.raytrace_procedural_textures = false;
-        cfg->m_Render.raytrace_reflections = false;
-        cfg->m_Render.raytrace_shadows = false;
+        cfg.m_Render.raytrace_procedural_textures = false;
+        cfg.m_Render.raytrace_reflections = false;
+        cfg.m_Render.raytrace_shadows = aRenderJob->m_floor;
 
         // Better colors
-        cfg->m_Render.differentiate_plated_copper = true;
+        cfg.m_Render.differentiate_plated_copper = true;
 
         // Tracks below soldermask are not visible without refractions
-        cfg->m_Render.raytrace_refractions = true;
-        cfg->m_Render.raytrace_recursivelevel_refractions = 1;
+        cfg.m_Render.raytrace_refractions = true;
+        cfg.m_Render.raytrace_recursivelevel_refractions = 1;
     }
     else if( aRenderJob->m_quality == JOB_PCB_RENDER::QUALITY::HIGH )
     {
-        cfg->m_Render.raytrace_anti_aliasing = true;
-        cfg->m_Render.raytrace_backfloor = true;
-        cfg->m_Render.raytrace_post_processing = true;
-        cfg->m_Render.raytrace_procedural_textures = true;
-        cfg->m_Render.raytrace_reflections = true;
-        cfg->m_Render.raytrace_shadows = true;
-        cfg->m_Render.raytrace_refractions = true;
-        cfg->m_Render.differentiate_plated_copper = true;
+        cfg.m_Render.raytrace_anti_aliasing = true;
+        cfg.m_Render.raytrace_backfloor = true;
+        cfg.m_Render.raytrace_post_processing = true;
+        cfg.m_Render.raytrace_procedural_textures = true;
+        cfg.m_Render.raytrace_reflections = true;
+        cfg.m_Render.raytrace_shadows = true;
+        cfg.m_Render.raytrace_refractions = true;
+        cfg.m_Render.differentiate_plated_copper = true;
     }
-
-    if( aRenderJob->m_floor )
+    else
     {
-        cfg->m_Render.raytrace_backfloor = true;
-        cfg->m_Render.raytrace_shadows = true;
-        cfg->m_Render.raytrace_post_processing = true;
+        cfg.m_Render.raytrace_anti_aliasing = aRenderJob->m_antiAlias;
+        cfg.m_Render.raytrace_backfloor = aRenderJob->m_floor;
+        cfg.m_Render.raytrace_post_processing = aRenderJob->m_postProcess;
+        cfg.m_Render.raytrace_procedural_textures = aRenderJob->m_proceduralTextures;
     }
 
-    cfg->m_Render.raytrace_lightColorTop = COLOR4D(aRenderJob->m_lightTopIntensity.x,
+    cfg.m_Render.raytrace_lightColorTop = COLOR4D( aRenderJob->m_lightTopIntensity.x,
                                                    aRenderJob->m_lightTopIntensity.y,
-                                                   aRenderJob->m_lightTopIntensity.z, 1.0);
+                                                   aRenderJob->m_lightTopIntensity.z, 1.0 );
 
-    cfg->m_Render.raytrace_lightColorBottom = COLOR4D(aRenderJob->m_lightBottomIntensity.x,
+    cfg.m_Render.raytrace_lightColorBottom = COLOR4D( aRenderJob->m_lightBottomIntensity.x,
                                                       aRenderJob->m_lightBottomIntensity.y,
-                                                      aRenderJob->m_lightBottomIntensity.z, 1.0);
+                                                      aRenderJob->m_lightBottomIntensity.z, 1.0 );
 
-    cfg->m_Render.raytrace_lightColorCamera = COLOR4D( aRenderJob->m_lightCameraIntensity.x,
-                                                       aRenderJob->m_lightCameraIntensity.y,
-                                                       aRenderJob->m_lightCameraIntensity.z, 1.0 );
+    cfg.m_Render.raytrace_lightColorCamera = COLOR4D( aRenderJob->m_lightCameraIntensity.x,
+                                                      aRenderJob->m_lightCameraIntensity.y,
+                                                      aRenderJob->m_lightCameraIntensity.z, 1.0 );
 
     COLOR4D lightColor( aRenderJob->m_lightSideIntensity.x,
                         aRenderJob->m_lightSideIntensity.y,
                         aRenderJob->m_lightSideIntensity.z, 1.0 );
 
-    cfg->m_Render.raytrace_lightColor = {
+    cfg.m_Render.raytrace_lightColor = {
         lightColor, lightColor, lightColor, lightColor,
         lightColor, lightColor, lightColor, lightColor,
     };
 
     int sideElevation = aRenderJob->m_lightSideElevation;
 
-    cfg->m_Render.raytrace_lightElevation = {
+    cfg.m_Render.raytrace_lightElevation = {
         sideElevation,  sideElevation,  sideElevation,  sideElevation,
         -sideElevation, -sideElevation, -sideElevation, -sideElevation,
     };
 
-    cfg->m_Render.raytrace_lightAzimuth = {
+    cfg.m_Render.raytrace_lightAzimuth = {
         45, 135, 225, 315, 45, 135, 225, 315,
     };
 
-    cfg->m_CurrentPreset = aRenderJob->m_colorPreset;
-    boardAdapter.m_Cfg = cfg;
+    cfg.m_CurrentPreset = aRenderJob->m_colorPreset;
+    boardAdapter.m_Cfg = &cfg;
 
     if( aRenderJob->m_bgStyle == JOB_PCB_RENDER::BG_STYLE::TRANSPARENT
         || ( aRenderJob->m_bgStyle == JOB_PCB_RENDER::BG_STYLE::DEFAULT
@@ -702,13 +696,11 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
             // First redraw resets lookat point to the board center, so set up the camera here
             camera.ViewCommand_T1( s_viewCmdMap[aRenderJob->m_side] );
 
-            camera.SetLookAtPos_T1(
-                    camera.GetLookAtPos_T1()
-                    + SFVEC3F( aRenderJob->m_pivot.x, aRenderJob->m_pivot.y, aRenderJob->m_pivot.z )
-                              * cmTo3D );
+            camera.SetLookAtPos_T1( camera.GetLookAtPos_T1() + SFVEC3F( aRenderJob->m_pivot.x,
+                                                                        aRenderJob->m_pivot.y,
+                                                                        aRenderJob->m_pivot.z ) * cmTo3D );
 
-            camera.Pan_T1(
-                    SFVEC3F( aRenderJob->m_pan.x, aRenderJob->m_pan.y, aRenderJob->m_pan.z ) );
+            camera.Pan_T1( SFVEC3F( aRenderJob->m_pan.x, aRenderJob->m_pan.y, aRenderJob->m_pan.z ) );
 
             camera.Zoom_T1( aRenderJob->m_zoom );
 
@@ -758,23 +750,20 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
         image = image.Mirror( false );
 
         image.SetOption( wxIMAGE_OPTION_QUALITY, 90 );
-        image.SaveFile( outPath,
-                        aRenderJob->m_format == JOB_PCB_RENDER::FORMAT::PNG ? wxBITMAP_TYPE_PNG
-                                                                            : wxBITMAP_TYPE_JPEG );
+        image.SaveFile( outPath, aRenderJob->m_format == JOB_PCB_RENDER::FORMAT::PNG ? wxBITMAP_TYPE_PNG
+                                                                                     : wxBITMAP_TYPE_JPEG );
     }
 
     if( success )
     {
-        m_reporter->Report( _( "Successfully created 3D render image" ) + wxS( "\n" ),
-                            RPT_SEVERITY_INFO );
+        m_reporter->Report( _( "Successfully created 3D render image" ) + wxS( "\n" ), RPT_SEVERITY_INFO );
+        return CLI::EXIT_CODES::OK;
     }
     else
     {
-        m_reporter->Report( _( "Error creating 3D render image" ) + wxS( "\n" ),
-                            RPT_SEVERITY_ERROR );
+        m_reporter->Report( _( "Error creating 3D render image" ) + wxS( "\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
-
-    return CLI::EXIT_CODES::OK;
 }
 
 

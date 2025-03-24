@@ -92,7 +92,10 @@ public:
     VECTOR3D    m_rotation;
     VECTOR3D    m_pan;
     VECTOR3D    m_pivot;
+    bool        m_proceduralTextures = false;
     bool        m_floor = false;
+    bool        m_antiAlias = true;
+    bool        m_postProcess = false;
     VECTOR3D    m_lightTopIntensity;
     VECTOR3D    m_lightBottomIntensity;
     VECTOR3D    m_lightCameraIntensity;
