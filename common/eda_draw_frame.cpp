@@ -1236,7 +1236,7 @@ void EDA_DRAW_FRAME::ShowChangedLanguage()
 
 void EDA_DRAW_FRAME::UpdateProperties()
 {
-    if( !m_propertiesPanel || !m_propertiesPanel->IsShownOnScreen() )
+    if( m_isClosing || !m_propertiesPanel || !m_propertiesPanel->IsShownOnScreen() )
         return;
 
     m_propertiesPanel->UpdateData();

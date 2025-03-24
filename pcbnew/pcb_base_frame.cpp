@@ -996,9 +996,10 @@ void PCB_BASE_FRAME::OnModify()
     EDA_BASE_FRAME::OnModify();
 
     GetScreen()->SetContentModified();
-    m_autoSaveRequired = true;
-
     GetBoard()->IncrementTimeStamp();
+
+    if( m_isClosing )
+        return;
 
     UpdateStatusBar();
     UpdateMsgPanel();

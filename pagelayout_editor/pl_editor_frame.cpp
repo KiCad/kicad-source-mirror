@@ -375,6 +375,9 @@ void PL_EDITOR_FRAME::OnModify()
 
     GetScreen()->SetContentModified();
 
+    if( m_isClosing )
+        return;
+
     UpdateTitleAndInfo();
 }
 
