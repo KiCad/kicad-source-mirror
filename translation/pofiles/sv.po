@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-24 12:07-0700\n"
-"PO-Revision-Date: 2025-03-18 11:03+0000\n"
+"PO-Revision-Date: 2025-03-24 22:43+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4324,9 +4324,8 @@ msgid "Add"
 msgstr "Lägg till"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
-#, fuzzy
 msgid "Enable Git Tracking"
-msgstr "Aktivera animering"
+msgstr "Aktivera Git-övervakning"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:28
 #, fuzzy
@@ -4334,15 +4333,16 @@ msgid "Remote Tracking"
 msgstr "Dra ledare"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:41
-#, fuzzy
 msgid "Update interval:"
-msgstr "Uppdatera fält"
+msgstr "Uppdateringsintervall:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:46
 msgid ""
 "Number of minutes between remote update checks.  Zero disables automatic "
 "checks."
 msgstr ""
+"Antal minuter mellan kontroll av fjärruppdateringar.  Noll stänger av "
+"automatiska kontroller."
 
 #: common/dialogs/git/panel_git_repos_base.cpp:50
 #: common/dialogs/panel_common_settings_base.cpp:347
@@ -7578,9 +7578,9 @@ msgid "Failed to perform checkout operation."
 msgstr "Lyckades inte genomföra utckeckning."
 
 #: common/git/git_pull_handler.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update reference '%s' to point to '%s'"
-msgstr "Lyckades inte uppdatera HEAD-referens för gren '%s'"
+msgstr "Lyckades inte uppdatera referens '%s' till att peka på '%s'"
 
 #: common/git/git_pull_handler.cpp:325
 #, fuzzy
@@ -7598,9 +7598,9 @@ msgid "Failed to push reference to revision walker."
 msgstr "Lyckades inte skicka ändringar till fjärrförvar."
 
 #: common/git/git_pull_handler.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup commit '%s'"
-msgstr "Det gick inte att slå upp överlämning '{}'"
+msgstr "Kunde inte slå upp överlämning '%s'"
 
 #: common/git/git_pull_handler.cpp:391
 msgid "Could not merge commits"
@@ -7671,9 +7671,8 @@ msgid "[updated] %s"
 msgstr "[updaterad] %s"
 
 #: common/git/kicad_git_common.cpp:977
-#, fuzzy
 msgid "Unable to authenticate"
-msgstr "Kan inte skapa"
+msgstr "Kan inte autentisera"
 
 #: common/git/kicad_git_errors.cpp:40
 msgid "Invalid repository."
@@ -28795,9 +28794,9 @@ msgid "Failed to create commit: %s"
 msgstr "Lyckades inte skapa överlämning: %s"
 
 #: kicad/project_tree_pane.cpp:2548
-#, fuzzy, c-format
+#, c-format
 msgid "Created commit with id: %s"
-msgstr "Lyckades inte skriva index: %s"
+msgstr "Skapade överlämning med id: %s"
 
 #: kicad/tools/kicad_manager_actions.cpp:43
 msgid "New Project..."
