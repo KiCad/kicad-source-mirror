@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:42+0300\n"
-"PO-Revision-Date: 2025-03-21 09:26+0000\n"
+"PO-Revision-Date: 2025-03-24 03:54+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -28216,9 +28216,9 @@ msgid "Create New Directory"
 msgstr "新規ディレクトリを作成"
 
 #: kicad/project_tree_pane.cpp:761
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get status list: %s"
-msgstr "コミットの取得に失敗しました: %s"
+msgstr "ステータスリストの取得に失敗しました: %s"
 
 #: kicad/project_tree_pane.cpp:896
 msgid "Switch to this Project"
@@ -41611,9 +41611,9 @@ msgid "Condition not satisfied; rule ignored."
 msgstr "条件を満たしません; ルールは無視されます。"
 
 #: pcbnew/drc/drc_engine.cpp:1389
-#, fuzzy, c-format
+#, c-format
 msgid "Inheriting from parent: %s."
-msgstr "シンボル '%s' から派生."
+msgstr "親 %s から派生."
 
 #: pcbnew/drc/drc_engine.cpp:1428 pcbnew/drc/drc_engine.cpp:1452
 #, c-format
