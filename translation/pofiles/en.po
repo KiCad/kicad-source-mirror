@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-17 18:42+0300\n"
+"POT-Creation-Date: 2025-03-24 12:07-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1402,15 +1402,26 @@ msgid "Design block library '%s' cannot be deleted."
 msgstr "Design block library '%s' cannot be deleted."
 
 #, c-format
+msgid "Design block '%s' does not exist."
+msgstr "Design block '%s' does not exist."
+
+#, c-format
 msgid "Design block metadata file '%s' could not be read."
 msgstr "Design block metadata file '%s' could not be read."
 
 msgid "Design block does not have a valid library ID."
 msgstr "Design block does not have a valid library ID."
 
+msgid "Design block does not have a schematic or board file."
+msgstr "Design block does not have a schematic or board file."
+
 #, c-format
 msgid "Schematic source file '%s' does not exist."
 msgstr "Schematic source file '%s' does not exist."
+
+#, c-format
+msgid "Board source file '%s' does not exist."
+msgstr "Board source file '%s' does not exist."
 
 #, c-format
 msgid "Design block folder '%s' could not be created."
@@ -1421,12 +1432,12 @@ msgid "Schematic file '%s' could not be saved as design block at '%s'."
 msgstr "Schematic file '%s' could not be saved as design block at '%s'."
 
 #, c-format
-msgid "Design block metadata file '%s' could not be saved."
-msgstr "Design block metadata file '%s' could not be saved."
+msgid "Board file '%s' could not be saved as design block at '%s'."
+msgstr "Board file '%s' could not be saved as design block at '%s'."
 
 #, c-format
-msgid "Design block '%s' does not exist."
-msgstr "Design block '%s' does not exist."
+msgid "Design block metadata file '%s' could not be saved."
+msgstr "Design block metadata file '%s' could not be saved."
 
 #, c-format
 msgid "Design block folder '%s' could not be deleted."
@@ -1450,6 +1461,13 @@ msgstr "Added by Plugin and Content Manager"
 #, c-format
 msgid "Cannot create global library table path '%s'."
 msgstr "Cannot create global library table path '%s'."
+
+msgid "Keywords"
+msgstr "Keywords"
+
+#, c-format
+msgid "Error loading design block %s from library '%s'."
+msgstr "Error loading design block %s from library '%s'."
 
 msgid "Description"
 msgstr "Description"
@@ -1725,6 +1743,30 @@ msgstr "Name"
 msgid "Path"
 msgstr "Path"
 
+msgid "Untitled Field"
+msgstr "Untitled Field"
+
+msgid "Duplicate fields are not allowed."
+msgstr "Duplicate fields are not allowed."
+
+msgid "Default Fields"
+msgstr "Default Fields"
+
+msgid "Value"
+msgstr "Value"
+
+msgid "Name:"
+msgstr "Name:"
+
+msgid "Keywords:"
+msgstr "Keywords:"
+
+msgid "Description:"
+msgstr "Description:"
+
+msgid "Design Block Properties"
+msgstr "Design Block Properties"
+
 msgid "design block"
 msgstr "design block"
 
@@ -1827,9 +1869,6 @@ msgstr "Grid size X out of range."
 
 msgid "Grid size Y out of range."
 msgstr "Grid size Y out of range."
-
-msgid "Name:"
-msgstr "Name:"
 
 msgid "(optional)"
 msgstr "(optional)"
@@ -2169,9 +2208,6 @@ msgstr "Plugin Options"
 msgid "Option"
 msgstr "Option"
 
-msgid "Value"
-msgstr "Value"
-
 msgid "Option Choices"
 msgstr "Option Choices"
 
@@ -2470,6 +2506,25 @@ msgstr "Switch"
 msgid "Add"
 msgstr "Add"
 
+msgid "Enable Git Tracking"
+msgstr "Enable Git Tracking"
+
+msgid "Remote Tracking"
+msgstr "Remote Tracking"
+
+msgid "Update interval:"
+msgstr "Update interval:"
+
+msgid ""
+"Number of minutes between remote update checks.  Zero disables automatic "
+"checks."
+msgstr ""
+"Number of minutes between remote update checks.  Zero disables automatic "
+"checks."
+
+msgid "minutes"
+msgstr "minutes"
+
 msgid "Git Commit Data"
 msgstr "Git Commit Data"
 
@@ -2481,21 +2536,6 @@ msgstr "Author name:"
 
 msgid "Author e-mail:"
 msgstr "Author e-mail:"
-
-msgid "Git Repositories"
-msgstr "Git Repositories"
-
-msgid "Active"
-msgstr "Active"
-
-msgid "Add new repository"
-msgstr "Add new repository"
-
-msgid "Edit repository properties"
-msgstr "Edit repository properties"
-
-msgid "Remove Git Repository"
-msgstr "Remove Git Repository"
 
 msgid "Reveal Themes in Finder"
 msgstr "Reveal Themes in Finder"
@@ -2765,9 +2805,6 @@ msgstr ""
 "Delay after the first change to create a backup file of the board on disk.\n"
 "If set to 0, auto backup is disabled"
 
-msgid "minutes"
-msgstr "minutes"
-
 msgid "File history size:"
 msgstr "File history size:"
 
@@ -2915,6 +2952,13 @@ msgstr "Library Nickname Error"
 msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr "Multiple libraries cannot share the same nickname ('%s')."
 
+#, c-format
+msgid "Design block library '%s' failed to load."
+msgstr "Design block library '%s' failed to load."
+
+msgid "Error Loading Library"
+msgstr "Error Loading Library"
+
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format."
 msgstr ""
@@ -2992,6 +3036,9 @@ msgstr ""
 "Error saving project-specific library table:\n"
 "\n"
 "%s"
+
+msgid "Active"
+msgstr "Active"
 
 msgid "Visible"
 msgstr "Visible"
@@ -4232,11 +4279,11 @@ msgstr ""
 "For instance, ${KIPRJMOD}/libs/footprints.pretty can be defined as a folder "
 "containing a project specific footprint library named footprints.pretty."
 
-msgid "A directory containing system-wide scripts installed with KiCad"
-msgstr "A directory containing system-wide scripts installed with KiCad"
+msgid "A directory containing system-wide scripts installed with KiCad."
+msgstr "A directory containing system-wide scripts installed with KiCad."
 
-msgid "A directory containing user-specific scripts installed with KiCad"
-msgstr "A directory containing user-specific scripts installed with KiCad"
+msgid "A directory containing user-specific scripts installed with KiCad."
+msgstr "A directory containing user-specific scripts installed with KiCad."
 
 #, c-format
 msgid "Deprecated version of %s."
@@ -4412,11 +4459,31 @@ msgstr "Could not get repository head"
 msgid "Could not get reference OID for reference '%s'"
 msgstr "Could not get reference OID for reference '%s'"
 
+msgid "Could not look up target commit"
+msgstr "Could not look up target commit"
+
+msgid "Could not get tree from target commit"
+msgstr "Could not get tree from target commit"
+
 msgid "Failed to perform checkout operation."
 msgstr "Failed to perform checkout operation."
 
-msgid "Could not lookup commit '{}'"
-msgstr "Could not lookup commit '{}'"
+#, c-format
+msgid "Failed to update reference '%s' to point to '%s'"
+msgstr "Failed to update reference '%s' to point to '%s'"
+
+msgid "Failed to clean up repository state after fast-forward."
+msgstr "Failed to clean up repository state after fast-forward."
+
+msgid "Failed to initialize revision walker."
+msgstr "Failed to initialize revision walker."
+
+msgid "Failed to push reference to revision walker."
+msgstr "Failed to push reference to revision walker."
+
+#, c-format
+msgid "Could not lookup commit '%s'"
+msgstr "Could not lookup commit '%s'"
 
 msgid "Could not merge commits"
 msgstr "Could not merge commits"
@@ -4432,6 +4499,9 @@ msgstr "Changed"
 
 msgid "Added"
 msgstr "Added"
+
+msgid "Conflicts detected during rebase"
+msgstr "Conflicts detected during rebase"
 
 msgid "Could not lookup remote"
 msgstr "Could not lookup remote"
@@ -4467,6 +4537,9 @@ msgstr "* [rejected] %s (%s)"
 #, c-format
 msgid "[updated] %s"
 msgstr "[updated] %s"
+
+msgid "Unable to authenticate"
+msgstr "Unable to authenticate"
 
 msgid "Invalid repository."
 msgstr "Invalid repository."
@@ -5324,21 +5397,27 @@ msgstr "Select Preferred Editor"
 
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
-"order to aid identifying critical bugs across the user base more effectively "
-"and help profile functionality to guide improvements. \n"
-"If you choose to voluntarily participate, KiCad will automatically handle "
-"sending said reports when crashes or events occur. \n"
-"Your design files such as schematic or PCB are not shared in this process."
+"order to aid identifying critical bugs and help profile functionality to "
+"guide improvements. \n"
+"If you choose to voluntarily participate, KiCad will automatically send said "
+"reports when crashes or events occur. \n"
+"Your design files such as schematic and PCB are not shared in this process."
 msgstr ""
 "KiCad can anonymously report crashes and special event data to developers in "
-"order to aid identifying critical bugs across the user base more effectively "
-"and help profile functionality to guide improvements. \n"
-"If you choose to voluntarily participate, KiCad will automatically handle "
-"sending said reports when crashes or events occur. \n"
-"Your design files such as schematic or PCB are not shared in this process."
+"order to aid identifying critical bugs and help profile functionality to "
+"guide improvements. \n"
+"If you choose to voluntarily participate, KiCad will automatically send said "
+"reports when crashes or events occur. \n"
+"Your design files such as schematic and PCB are not shared in this process."
 
-msgid "Data collection opt in request"
-msgstr "Data collection opt in request"
+msgid "Data Collection Opt In"
+msgstr "Data Collection Opt In"
+
+msgid "Opt In"
+msgstr "Opt In"
+
+msgid "Decline"
+msgstr "Decline"
 
 msgid "Environment variable HOME is empty.  Unable to continue."
 msgstr "Environment variable HOME is empty.  Unable to continue."
@@ -6317,6 +6396,72 @@ msgstr "Field Validation Error"
 msgid "Mirroring for Y axis is not supported yet"
 msgstr "Mirroring for Y axis is not supported yet"
 
+#, c-format
+msgid "Library %s is read only."
+msgstr "Library %s is read only."
+
+#, c-format
+msgid "Library %s already exists."
+msgstr "Library %s already exists."
+
+msgid "Enter a description for the library:"
+msgstr "Enter a description for the library:"
+
+msgid "Library Description"
+msgstr "Library Description"
+
+msgid "Please select a library to delete."
+msgstr "Please select a library to delete."
+
+#, c-format
+msgid "Library '%s' is read only."
+msgstr "Library '%s' is read only."
+
+#, c-format
+msgid ""
+"Delete design block library '%s' from disk? This will delete all design "
+"blocks within the library."
+msgstr ""
+"Delete design block library '%s' from disk? This will delete all design "
+"blocks within the library."
+
+#, c-format
+msgid "Design block library '%s' deleted"
+msgstr "Design block library '%s' deleted"
+
+#, c-format
+msgid "Delete design block '%s' in library '%s' from disk?"
+msgstr "Delete design block '%s' in library '%s' from disk?"
+
+#, c-format
+msgid "Design block '%s' deleted from library '%s'"
+msgstr "Design block '%s' deleted from library '%s'"
+
+#, c-format
+msgid "Design block '%s' already exists in library '%s'."
+msgstr "Design block '%s' already exists in library '%s'."
+
+msgid "Overwrite existing design block?"
+msgstr "Overwrite existing design block?"
+
+msgid "Add the library to the global library table?"
+msgstr "Add the library to the global library table?"
+
+msgid "Add To Global Library Table"
+msgstr "Add To Global Library Table"
+
+msgid "Global"
+msgstr "Global"
+
+msgid "Project"
+msgstr "Project"
+
+msgid "Choose the Library Table to add the library to:"
+msgstr "Choose the Library Table to add the library to:"
+
+msgid "Add To Library Table"
+msgstr "Add To Library Table"
+
 msgid "Filter:"
 msgstr "Filter:"
 
@@ -6456,6 +6601,15 @@ msgstr "Open Preferences Directory"
 #, c-format
 msgid "Reset %s to Defaults"
 msgstr "Reset %s to Defaults"
+
+msgid "Loading Design Block Libraries"
+msgstr "Loading Design Block Libraries"
+
+msgid "Updating Design Block Libraries"
+msgstr "Updating Design Block Libraries"
+
+msgid "Errors were encountered loading design blocks:"
+msgstr "Errors were encountered loading design blocks:"
 
 msgid "No objects selected"
 msgstr "No objects selected"
@@ -6815,9 +6969,6 @@ msgstr "Symbol to Footprint links have been modified. Save changes?"
 msgid "'%s' is not a valid footprint."
 msgstr "'%s' is not a valid footprint."
 
-msgid "Keywords"
-msgstr "Keywords"
-
 msgid "Pin Count"
 msgstr "Pin Count"
 
@@ -7165,49 +7316,6 @@ msgstr "%s not found"
 msgid "Selected net:"
 msgstr "Selected net:"
 
-#, c-format
-msgid "Error loading design block %s from library '%s'."
-msgstr "Error loading design block %s from library '%s'."
-
-#, c-format
-msgid "Design block '%s' already exists in library '%s'."
-msgstr "Design block '%s' already exists in library '%s'."
-
-msgid "Overwrite existing design block?"
-msgstr "Overwrite existing design block?"
-
-msgid "Add the library to the global library table?"
-msgstr "Add the library to the global library table?"
-
-msgid "Add To Global Library Table"
-msgstr "Add To Global Library Table"
-
-msgid "Global"
-msgstr "Global"
-
-msgid "Project"
-msgstr "Project"
-
-msgid "Choose the Library Table to add the library to:"
-msgstr "Choose the Library Table to add the library to:"
-
-msgid "Add To Library Table"
-msgstr "Add To Library Table"
-
-#, c-format
-msgid "Library %s is read only."
-msgstr "Library %s is read only."
-
-#, c-format
-msgid "Library %s already exists."
-msgstr "Library %s already exists."
-
-msgid "Enter a description for the library:"
-msgstr "Enter a description for the library:"
-
-msgid "Library Description"
-msgstr "Library Description"
-
 msgid "Please select a library to save the design block to."
 msgstr "Please select a library to save the design block to."
 
@@ -7219,33 +7327,6 @@ msgstr "Error saving temporary schematic file to create design block."
 
 msgid "Please select some items to save as a design block."
 msgstr "Please select some items to save as a design block."
-
-msgid "Please select a library to delete."
-msgstr "Please select a library to delete."
-
-#, c-format
-msgid "Library '%s' is read only."
-msgstr "Library '%s' is read only."
-
-#, c-format
-msgid ""
-"Delete design block library '%s' from disk? This will delete all design "
-"blocks within the library."
-msgstr ""
-"Delete design block library '%s' from disk? This will delete all design "
-"blocks within the library."
-
-#, c-format
-msgid "Design block library '%s' deleted"
-msgstr "Design block library '%s' deleted"
-
-#, c-format
-msgid "Delete design block '%s' in library '%s' from disk?"
-msgstr "Delete design block '%s' in library '%s' from disk?"
-
-#, c-format
-msgid "Design block '%s' deleted from library '%s'"
-msgstr "Design block '%s' deleted from library '%s'"
 
 msgid "Annotation Messages:"
 msgstr "Annotation Messages:"
@@ -7735,24 +7816,6 @@ msgstr "Time in seconds that database queries will be cached for"
 
 msgid "Database Library Settings"
 msgstr "Database Library Settings"
-
-msgid "Untitled Field"
-msgstr "Untitled Field"
-
-msgid "Duplicate fields are not allowed."
-msgstr "Duplicate fields are not allowed."
-
-msgid "Default Fields"
-msgstr "Default Fields"
-
-msgid "Keywords:"
-msgstr "Keywords:"
-
-msgid "Description:"
-msgstr "Description:"
-
-msgid "Design Block Properties"
-msgstr "Design Block Properties"
 
 #, c-format
 msgid "Symbol library identifier %s is not valid."
@@ -10909,9 +10972,6 @@ msgstr "Illegal character '%c' in nickname '%s'"
 msgid "Symbol library '%s' failed to load."
 msgstr "Symbol library '%s' failed to load."
 
-msgid "Error Loading Library"
-msgstr "Error Loading Library"
-
 msgid "All supported formats"
 msgstr "All supported formats"
 
@@ -12217,6 +12277,16 @@ msgstr "Connection Name"
 #, c-format
 msgid "Bus Alias %s Members"
 msgstr "Bus Alias %s Members"
+
+#, c-format
+msgid "Design block '%s' already has a schematic."
+msgstr "Design block '%s' already has a schematic."
+
+msgid "Overwrite existing schematic?"
+msgstr "Overwrite existing schematic?"
+
+msgid "Please select a design block to save the schematic to."
+msgstr "Please select a design block to save the schematic to."
 
 msgid "KiCad Schematic Editor"
 msgstr "KiCad Schematic Editor"
@@ -15349,6 +15419,18 @@ msgstr "Save Selection as Design Block..."
 msgid "Create a new design block from the current selection"
 msgstr "Create a new design block from the current selection"
 
+msgid "Save Current Sheet to Design Block..."
+msgstr "Save Current Sheet to Design Block..."
+
+msgid "Add current sheet to design block"
+msgstr "Add current sheet to design block"
+
+msgid "Save Selection to Design Block..."
+msgstr "Save Selection to Design Block..."
+
+msgid "Add current selection to design block"
+msgstr "Add current selection to design block"
+
 msgid "Delete Design Block"
 msgstr "Delete Design Block"
 
@@ -16658,25 +16740,6 @@ msgstr "Place Pin Anyway"
 msgid "Repeat Pin"
 msgstr "Repeat Pin"
 
-msgid "Place as sheet"
-msgstr "Place as sheet"
-
-msgid "Keep annotations"
-msgstr "Keep annotations"
-
-msgid "Place copies of the design block on subsequent clicks."
-msgstr "Place copies of the design block on subsequent clicks."
-
-msgid "Place the design block as a new sheet."
-msgstr "Place the design block as a new sheet."
-
-msgid ""
-"Preserve reference designators in the source schematic. Otherwise, clear "
-"then reannotate according to settings."
-msgstr ""
-"Preserve reference designators in the source schematic. Otherwise, clear "
-"then reannotate according to settings."
-
 msgid "Create a new project for this schematic"
 msgstr "Create a new project for this schematic"
 
@@ -16699,12 +16762,6 @@ msgstr "Renaming sheet"
 #, c-format
 msgid "(page %s)"
 msgstr "(page %s)"
-
-msgid "Loading Design Block Libraries"
-msgstr "Loading Design Block Libraries"
-
-msgid "Updating Design Block Libraries"
-msgstr "Updating Design Block Libraries"
 
 #, c-format
 msgid "Only %s"
@@ -16736,6 +16793,25 @@ msgstr "No footprint specified"
 
 msgid "Invalid footprint specified"
 msgstr "Invalid footprint specified"
+
+msgid "Place as sheet"
+msgstr "Place as sheet"
+
+msgid "Keep annotations"
+msgstr "Keep annotations"
+
+msgid "Place copies of the design block on subsequent clicks."
+msgstr "Place copies of the design block on subsequent clicks."
+
+msgid "Place the design block as a new sheet."
+msgstr "Place the design block as a new sheet."
+
+msgid ""
+"Preserve reference designators in the source schematic. Otherwise, clear "
+"then reannotate according to settings."
+msgstr ""
+"Preserve reference designators in the source schematic. Otherwise, clear "
+"then reannotate according to settings."
 
 msgid "Edit Properties"
 msgstr "Edit Properties"
@@ -19443,6 +19519,10 @@ msgstr "Failed to create author signature: %s"
 #, c-format
 msgid "Failed to create commit: %s"
 msgstr "Failed to create commit: %s"
+
+#, c-format
+msgid "Created commit with id: %s"
+msgstr "Created commit with id: %s"
 
 msgid "New Project..."
 msgstr "New Project..."
@@ -23254,6 +23334,22 @@ msgstr "Pad Numbering:"
 msgid "Circular Array"
 msgstr "Circular Array"
 
+msgid "Item Source"
+msgstr "Item Source"
+
+msgid "Duplicate selection"
+msgstr "Duplicate selection"
+
+msgid "Arrange selection"
+msgstr "Arrange selection"
+
+msgid ""
+"This can conflict with reference designators in the schematic that have not "
+"yet been synchronized with the board."
+msgstr ""
+"This can conflict with reference designators in the schematic that have not "
+"yet been synchronized with the board."
+
 msgid "Footprint Annotation"
 msgstr "Footprint Annotation"
 
@@ -23262,13 +23358,6 @@ msgstr "Keep existing reference designators"
 
 msgid "Assign unique reference designators"
 msgstr "Assign unique reference designators"
-
-msgid ""
-"This can conflict with reference designators in the schematic that have not "
-"yet been synchronized with the board."
-msgstr ""
-"This can conflict with reference designators in the schematic that have not "
-"yet been synchronized with the board."
 
 msgid "Create Array"
 msgstr "Create Array"
@@ -28513,6 +28602,12 @@ msgid ""
 "contain wildcards.\n"
 "<br><br>\n"
 "\n"
+"    A.memberOfSheetOrChildren('<sheet_path>')\n"
+"True if `A` is a member of the given schematic sheet, or any of its child "
+"hierarchical sheets. The sheet path can \n"
+"contain wildcards.\n"
+"<br><br>\n"
+"\n"
 msgstr ""
 "### Expression functions\n"
 "\n"
@@ -28628,6 +28723,12 @@ msgstr ""
 "\n"
 "    A.memberOfSheet('<sheet_path>')\n"
 "True if `A` is a member of the given schematic sheet. The sheet path can "
+"contain wildcards.\n"
+"<br><br>\n"
+"\n"
+"    A.memberOfSheetOrChildren('<sheet_path>')\n"
+"True if `A` is a member of the given schematic sheet, or any of its child "
+"hierarchical sheets. The sheet path can \n"
 "contain wildcards.\n"
 "<br><br>\n"
 "\n"
@@ -30420,14 +30521,6 @@ msgstr ""
 "Error saving board file '%s'.\n"
 "Failed to rename temporary file '%s."
 
-#, c-format
-msgid ""
-"Board copied to:\n"
-"%s"
-msgstr ""
-"Board copied to:\n"
-"%s"
-
 msgid "The board must be saved before generating IPC-2581 file."
 msgstr "The board must be saved before generating IPC-2581 file."
 
@@ -31715,6 +31808,16 @@ msgid ""
 msgstr ""
 "The library containing the current footprint has changed.\n"
 "Do you want to reload the footprint?"
+
+#, c-format
+msgid "Design block '%s' already has a layout."
+msgstr "Design block '%s' already has a layout."
+
+msgid "Overwrite existing layout?"
+msgstr "Overwrite existing layout?"
+
+msgid "Error saving temporary board file to create design block."
+msgstr "Error saving temporary board file to create design block."
 
 msgid "Prefix"
 msgstr "Prefix"
@@ -35047,6 +35150,21 @@ msgstr "Close the in progress outline"
 msgid "Show the design rules checker window"
 msgstr "Show the design rules checker window"
 
+msgid "Add selected design block to current board"
+msgstr "Add selected design block to current board"
+
+msgid "Save Current Board as Design Block..."
+msgstr "Save Current Board as Design Block..."
+
+msgid "Create a new design block from the current board"
+msgstr "Create a new design block from the current board"
+
+msgid "Save Current Board to Design Block..."
+msgstr "Save Current Board to Design Block..."
+
+msgid "Add current board to design block"
+msgstr "Add current board to design block"
+
 msgid "Open in Footprint Editor"
 msgstr "Open in Footprint Editor"
 
@@ -37034,6 +37152,17 @@ msgstr "Rule Areas"
 msgid "Dimensions"
 msgstr "Dimensions"
 
+msgid "Place as group"
+msgstr "Place as group"
+
+msgid "Place the design block as a group."
+msgstr "Place the design block as a group."
+
+msgid ""
+"Preserve reference designators in the source layout. Otherwise, clear them."
+msgstr ""
+"Preserve reference designators in the source layout. Otherwise, clear them."
+
 msgid "Netclass"
 msgstr "Netclass"
 
@@ -37424,6 +37553,12 @@ msgstr "Standalone circuit board editor for KiCad boards"
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "An EDA suite for schematic and circuit board design"
 
+msgid "EDA"
+msgstr "EDA"
+
+msgid "Circuit board"
+msgstr "Circuit board"
+
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
 "It features schematic capture, integrated circuit simulation, printed "
@@ -37468,6 +37603,296 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Git Repositories"
+#~ msgstr "Git Repositories"
+
+#~ msgid "Add new repository"
+#~ msgstr "Add new repository"
+
+#~ msgid "Edit repository properties"
+#~ msgstr "Edit repository properties"
+
+#~ msgid "Remove Git Repository"
+#~ msgstr "Remove Git Repository"
+
+#~ msgid "A directory containing system-wide scripts installed with KiCad"
+#~ msgstr "A directory containing system-wide scripts installed with KiCad"
+
+#~ msgid "A directory containing user-specific scripts installed with KiCad"
+#~ msgstr "A directory containing user-specific scripts installed with KiCad"
+
+#~ msgid "Could not lookup commit '{}'"
+#~ msgstr "Could not lookup commit '{}'"
+
+#~ msgid ""
+#~ "KiCad can anonymously report crashes and special event data to developers "
+#~ "in order to aid identifying critical bugs across the user base more "
+#~ "effectively and help profile functionality to guide improvements. \n"
+#~ "If you choose to voluntarily participate, KiCad will automatically handle "
+#~ "sending said reports when crashes or events occur. \n"
+#~ "Your design files such as schematic or PCB are not shared in this process."
+#~ msgstr ""
+#~ "KiCad can anonymously report crashes and special event data to developers "
+#~ "in order to aid identifying critical bugs across the user base more "
+#~ "effectively and help profile functionality to guide improvements. \n"
+#~ "If you choose to voluntarily participate, KiCad will automatically handle "
+#~ "sending said reports when crashes or events occur. \n"
+#~ "Your design files such as schematic or PCB are not shared in this process."
+
+#~ msgid "Data collection opt in request"
+#~ msgstr "Data collection opt in request"
+
+#~ msgid ""
+#~ "### Expression functions\n"
+#~ "\n"
+#~ "All function parameters support simple wildcards (`*` and `?`).\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.enclosedByArea('<zone_name>')\n"
+#~ "True if all of `A` lies within the given zone's outline.\n"
+#~ "\n"
+#~ "NB: this is potentially a more expensive call than `intersectsArea()`.  "
+#~ "Use `intersectsArea()`\n"
+#~ "where possible.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.existsOnLayer('<layer_name>')\n"
+#~ "True if `A` exists on the given layer.  The layer name can be\n"
+#~ "either the name assigned in Board Setup > Board Editor Layers or\n"
+#~ "the canonical name (ie: `F.Cu`).\n"
+#~ "\n"
+#~ "NB: this returns true if `A` is on the given layer, independently\n"
+#~ "of whether or not the rule is being evaluated for that layer.\n"
+#~ "For the latter use a `(layer \"layer_name\")` clause in the rule.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.fromTo('x', 'y')\n"
+#~ "True if the object exists on the copper path between the given \n"
+#~ "pads. `x` and `y` are the full names of pads in the design, such as \n"
+#~ "`R1-Pad1`.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.getField('<field_name>')\n"
+#~ "The value of the given field. Only footprints have fields, so a field is "
+#~ "only returned if\n"
+#~ "`A` is a footprint.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.hasComponentClass('<component_class_name>')\n"
+#~ "True if the set of component classes assigned to `A` contains the named \n"
+#~ "component class.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.hasNetclass('<netclass_name>')\n"
+#~ "True if `A` has had the given netclass assigned to it, either by an "
+#~ "explicit netclass label\n"
+#~ "or through a pattern match assignment.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.inDiffPair('<net_name>')\n"
+#~ "True if `A` has a net that is part of the specified differential pair.\n"
+#~ "`<net_name>` is the base name of the differential pair.  For example, "
+#~ "`inDiffPair('/CLK')`\n"
+#~ "matches items in the `/CLK_P` and `/CLK_N` nets.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.intersectsArea('<zone_name>')\n"
+#~ "True if any part of `A` lies within the given zone's outline.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.intersectsCourtyard('<footprint_identifier>')\n"
+#~ "True if any part of `A` lies within the given footprint's principal "
+#~ "courtyard.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.intersectsFrontCourtyard('<footprint_identifier>')\n"
+#~ "True if any part of `A` lies within the given footprint's front "
+#~ "courtyard.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.intersectsBackCourtyard('<footprint_identifier>')\n"
+#~ "True if any part of `A` lies within the given footprint's back "
+#~ "courtyard.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "The `footprint_identifier` listed above can be one of the following:\n"
+#~ "\n"
+#~ "1. A reference designator, possibly containing wildcards `*` and `?`\n"
+#~ "2. A footprint library identifier such as `LibName:FootprintName`. In "
+#~ "this case,\n"
+#~ "   the library identifier must contain the `:` character to separate the "
+#~ "library\n"
+#~ "   name from the footprint name, and either name may contain wildcards.\n"
+#~ "3. A component class, in the form `${Class:ClassName}`.  The keyword "
+#~ "`Class` is not\n"
+#~ "   case-sensitive, but component class names are case-sensitive.\n"
+#~ "\n"
+#~ "<br>\n"
+#~ "\n"
+#~ "    A.isBlindBuriedVia()\n"
+#~ "True if `A` is a blind/buried via.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    AB.isCoupledDiffPair()\n"
+#~ "True if `A` and `B` are members of the same diff pair.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.isMicroVia()\n"
+#~ "True if `A` is a microvia.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.isPlated()\n"
+#~ "True if `A` has a hole which is plated.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.memberOfGroup('<group_name>')\n"
+#~ "True if `A` is a member of the given group. The name can contain "
+#~ "wildcards.\n"
+#~ "Includes nested membership.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.memberOfFootprint('<footprint_identifier>')\n"
+#~ "True if `A` is a member of a given footprint (for example, a pad or "
+#~ "graphic shape defined\n"
+#~ "inside that footprint).  The various ways of specifying "
+#~ "`footprint_identifier` are described above.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.memberOfSheet('<sheet_path>')\n"
+#~ "True if `A` is a member of the given schematic sheet. The sheet path can "
+#~ "contain wildcards.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ msgstr ""
+#~ "### Expression functions\n"
+#~ "\n"
+#~ "All function parameters support simple wildcards (`*` and `?`).\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.enclosedByArea('<zone_name>')\n"
+#~ "True if all of `A` lies within the given zone's outline.\n"
+#~ "\n"
+#~ "NB: this is potentially a more expensive call than `intersectsArea()`.  "
+#~ "Use `intersectsArea()`\n"
+#~ "where possible.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.existsOnLayer('<layer_name>')\n"
+#~ "True if `A` exists on the given layer.  The layer name can be\n"
+#~ "either the name assigned in Board Setup > Board Editor Layers or\n"
+#~ "the canonical name (ie: `F.Cu`).\n"
+#~ "\n"
+#~ "NB: this returns true if `A` is on the given layer, independently\n"
+#~ "of whether or not the rule is being evaluated for that layer.\n"
+#~ "For the latter use a `(layer \"layer_name\")` clause in the rule.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.fromTo('x', 'y')\n"
+#~ "True if the object exists on the copper path between the given \n"
+#~ "pads. `x` and `y` are the full names of pads in the design, such as \n"
+#~ "`R1-Pad1`.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.getField('<field_name>')\n"
+#~ "The value of the given field. Only footprints have fields, so a field is "
+#~ "only returned if\n"
+#~ "`A` is a footprint.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.hasComponentClass('<component_class_name>')\n"
+#~ "True if the set of component classes assigned to `A` contains the named \n"
+#~ "component class.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.hasNetclass('<netclass_name>')\n"
+#~ "True if `A` has had the given netclass assigned to it, either by an "
+#~ "explicit netclass label\n"
+#~ "or through a pattern match assignment.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.inDiffPair('<net_name>')\n"
+#~ "True if `A` has a net that is part of the specified differential pair.\n"
+#~ "`<net_name>` is the base name of the differential pair.  For example, "
+#~ "`inDiffPair('/CLK')`\n"
+#~ "matches items in the `/CLK_P` and `/CLK_N` nets.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.intersectsArea('<zone_name>')\n"
+#~ "True if any part of `A` lies within the given zone's outline.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.intersectsCourtyard('<footprint_identifier>')\n"
+#~ "True if any part of `A` lies within the given footprint's principal "
+#~ "courtyard.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.intersectsFrontCourtyard('<footprint_identifier>')\n"
+#~ "True if any part of `A` lies within the given footprint's front "
+#~ "courtyard.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.intersectsBackCourtyard('<footprint_identifier>')\n"
+#~ "True if any part of `A` lies within the given footprint's back "
+#~ "courtyard.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "The `footprint_identifier` listed above can be one of the following:\n"
+#~ "\n"
+#~ "1. A reference designator, possibly containing wildcards `*` and `?`\n"
+#~ "2. A footprint library identifier such as `LibName:FootprintName`. In "
+#~ "this case,\n"
+#~ "   the library identifier must contain the `:` character to separate the "
+#~ "library\n"
+#~ "   name from the footprint name, and either name may contain wildcards.\n"
+#~ "3. A component class, in the form `${Class:ClassName}`.  The keyword "
+#~ "`Class` is not\n"
+#~ "   case-sensitive, but component class names are case-sensitive.\n"
+#~ "\n"
+#~ "<br>\n"
+#~ "\n"
+#~ "    A.isBlindBuriedVia()\n"
+#~ "True if `A` is a blind/buried via.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    AB.isCoupledDiffPair()\n"
+#~ "True if `A` and `B` are members of the same diff pair.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.isMicroVia()\n"
+#~ "True if `A` is a microvia.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.isPlated()\n"
+#~ "True if `A` has a hole which is plated.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.memberOfGroup('<group_name>')\n"
+#~ "True if `A` is a member of the given group. The name can contain "
+#~ "wildcards.\n"
+#~ "Includes nested membership.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.memberOfFootprint('<footprint_identifier>')\n"
+#~ "True if `A` is a member of a given footprint (for example, a pad or "
+#~ "graphic shape defined\n"
+#~ "inside that footprint).  The various ways of specifying "
+#~ "`footprint_identifier` are described above.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.memberOfSheet('<sheet_path>')\n"
+#~ "True if `A` is a member of the given schematic sheet. The sheet path can "
+#~ "contain wildcards.\n"
+#~ "<br><br>\n"
+#~ "\n"
+
+#, c-format
+#~ msgid ""
+#~ "Board copied to:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Board copied to:\n"
+#~ "%s"
 
 #~ msgid "Generate Gencad from a list of layers"
 #~ msgstr "Generate Gencad from a list of layers"
@@ -37827,12 +38252,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "Unable to load repository url"
 #~ msgstr "Unable to load repository url"
-
-#~ msgid "EDA"
-#~ msgstr "EDA"
-
-#~ msgid "Circuit board"
-#~ msgstr "Circuit board"
 
 #~ msgid ""
 #~ "There are hierarchical sheets in the loaded schematic file from an older "
