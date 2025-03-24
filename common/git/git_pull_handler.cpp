@@ -171,9 +171,32 @@ PullResult GIT_PULL_HANDLER::PerformPull()
     if( merge_analysis & GIT_MERGE_ANALYSIS_NORMAL )
     {
         wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformPull() - Normal merge" );
-        PullResult ret = handleRebase( merge_commits, 1 );
-        // PullResult ret = handleMerge( merge_commits, 1 );
-        return ret;
+
+        // Check git config to determine if we should rebase or merge
+        git_config* config = nullptr;
+
+        if( git_repository_config( &config, GetRepo() ) != GIT_OK )
+        {
+            wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformPull() - Failed to get repository config" );
+            AddErrorString( _( "Could not access repository configuration" ) );
+            return PullResult::Error;
+        }
+
+        KIGIT::GitConfigPtr configPtr( config );
+
+        // Check for pull.rebase config
+        int rebase_value = 0;
+        int ret = git_config_get_bool( &rebase_value, config, "pull.rebase" );
+
+        // If pull.rebase is set to true, use rebase; otherwise use merge
+        if( ret == GIT_OK && rebase_value )
+        {
+            wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformPull() - Using rebase based on config" );
+            return handleRebase( merge_commits, 1 );
+        }
+
+        wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformPull() - Using merge based on config" );
+        return handleMerge( merge_commits, 1 );
     }
 
     wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformPull() - Merge needs resolution" );
