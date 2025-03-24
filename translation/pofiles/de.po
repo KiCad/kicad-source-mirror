@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:42+0300\n"
-"PO-Revision-Date: 2025-03-22 13:49+0000\n"
+"PO-Revision-Date: 2025-03-24 15:13+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -26047,18 +26047,16 @@ msgid "Text info entry"
 msgstr "Infotext-Eingabe"
 
 #: gerbview/toolbars_gerber.cpp:271
-#, fuzzy
 msgid "Component highlight"
-msgstr "Netzhervorhebung umschalten"
+msgstr "Bauteilhervorhebung"
 
 #: gerbview/toolbars_gerber.cpp:273
 msgid "Net highlight"
 msgstr "Netzhervorhebung"
 
 #: gerbview/toolbars_gerber.cpp:275
-#, fuzzy
 msgid "Aperture highlight"
-msgstr "Netzhervorhebungsfarbe"
+msgstr "Blendenhervorhebung"
 
 #: gerbview/toolbars_gerber.cpp:277
 msgid "DCode Selector"
