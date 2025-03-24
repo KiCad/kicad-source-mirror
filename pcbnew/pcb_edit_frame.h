@@ -32,11 +32,13 @@ class PCB_SCREEN;
 class BOARD;
 class BOARD_COMMIT;
 class BOARD_ITEM_CONTAINER;
+class DESIGN_BLOCK;
 class DIALOG_BOOK_REPORTER;
 class FOOTPRINT;
 class PCB_TRACK;
 class PCB_VIA;
 class PAD;
+class PCB_SELECTION;
 class PCB_TARGET;
 class PCB_GROUP;
 class PCB_DIMENSION_BASE;
@@ -852,6 +854,8 @@ protected:
      * @return
      */
     bool saveBoardAsFile( BOARD* aBoard, const wxString& aFileName, bool aHeadless = false );
+
+    bool saveSelectionToDesignBlock( const wxString& aNickname, PCB_SELECTION& aSelection, DESIGN_BLOCK& aBlock );
 
 
     bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;

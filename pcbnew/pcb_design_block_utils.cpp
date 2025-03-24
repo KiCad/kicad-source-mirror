@@ -26,6 +26,8 @@
 #include <board_commit.h>
 #include <design_block.h>
 #include <design_block_lib_table.h>
+#include <footprint.h>
+#include <pad.h>
 #include <widgets/pcb_design_block_pane.h>
 #include <pcb_edit_frame.h>
 #include <pcb_io/pcb_io.h>
@@ -236,6 +238,78 @@ bool PCB_EDIT_FRAME::SaveBoardToDesignBlock( const LIB_ID& aLibId )
 }
 
 
+bool PCB_EDIT_FRAME::saveSelectionToDesignBlock( const wxString& aNickname, PCB_SELECTION& aSelection,
+                                                 DESIGN_BLOCK& aBlock )
+{
+    // Create a temporary board
+    BOARD* tempBoard = new BOARD();
+    tempBoard->SetDesignSettings( GetBoard()->GetDesignSettings() );
+    tempBoard->SetProject( &Prj(), true );
+    tempBoard->SynchronizeProperties();
+
+    // For copying net info of selected items into the new board
+    auto addNetIfNeeded =
+            [&]( EDA_ITEM* aItem )
+            {
+                BOARD_CONNECTED_ITEM* cItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem );
+
+                if( cItem && cItem->GetNetCode() )
+                {
+                    NETINFO_ITEM* netinfo = cItem->GetNet();
+
+                    if( netinfo && !tempBoard->FindNet( netinfo->GetNetname() ) )
+                        tempBoard->Add( netinfo );
+                }
+            };
+
+    // Copy the selected items to the temporary board
+    for( EDA_ITEM* item : aSelection )
+    {
+        EDA_ITEM* copy = item->Clone();
+        tempBoard->Add( static_cast<BOARD_ITEM*>( copy ), ADD_MODE::APPEND, false );
+
+        if( FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( item ) )
+            fp->RunOnChildren( addNetIfNeeded );
+        else
+            addNetIfNeeded( copy );
+    }
+
+    // Rebuild connectivity, remove any unused nets
+    tempBoard->BuildListOfNets();
+    tempBoard->BuildConnectivity();
+
+    wxString tempFile = wxFileName::CreateTempFileName( "design_block" );
+
+    if( !saveBoardAsFile( tempBoard, tempFile, false ) )
+    {
+        DisplayErrorMessage( this, _( "Error saving temporary board file to create design block." ) );
+        wxRemoveFile( tempFile );
+        return false;
+    }
+
+    aBlock.SetBoardFile( tempFile );
+
+    bool success = false;
+
+    try
+    {
+        success = Prj().DesignBlockLibs()->DesignBlockSave( aNickname, &aBlock ) == DESIGN_BLOCK_LIB_TABLE::SAVE_OK;
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        DisplayError( this, ioe.What() );
+    }
+
+    // Clean up the temporary file
+    wxRemoveFile( tempFile );
+
+    m_designBlocksPane->RefreshLibs();
+    m_designBlocksPane->SelectLibId( aBlock.GetLibId() );
+
+    return success;
+}
+
+
 bool PCB_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
 {
     // Make sure the user has selected a library to save into
@@ -272,67 +346,14 @@ bool PCB_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
         return false;
     }
 
-    // Create a temporary board
-    BOARD* tempBoard = new BOARD();
-    tempBoard->SetDesignSettings( GetBoard()->GetDesignSettings() );
-    tempBoard->SetProject( &Prj(), true );
-    tempBoard->SynchronizeProperties();
-
-    // Copy all net info into the new board
-    for( NETINFO_ITEM* netInfo : GetBoard()->GetNetInfo() )
-    {
-        EDA_ITEM* copy = netInfo->Clone();
-        tempBoard->Add( static_cast<BOARD_ITEM*>( copy ), ADD_MODE::APPEND, false );
-    }
-
-    // Copy the selected items to the temporary board
-    for( EDA_ITEM* item : selection )
-    {
-        EDA_ITEM* copy = item->Clone();
-        tempBoard->Add( static_cast<BOARD_ITEM*>( copy ), ADD_MODE::APPEND, false );
-    }
-
-    // Rebuild connectivity, remove any unused nets
-    tempBoard->BuildListOfNets();
-    tempBoard->BuildConnectivity();
-    tempBoard->RemoveUnusedNets( nullptr );
-
-    wxString tempFile = wxFileName::CreateTempFileName( "design_block" );
-
-    if( !saveBoardAsFile( tempBoard, tempFile, false ) )
-    {
-        DisplayErrorMessage( this, _( "Error saving temporary board file to create design block." ) );
-        wxRemoveFile( tempFile );
-        return false;
-    }
-
-    blk.SetBoardFile( tempFile );
-
-    bool success = false;
-
-    try
-    {
-        success = Prj().DesignBlockLibs()->DesignBlockSave( aLibraryName, &blk ) == DESIGN_BLOCK_LIB_TABLE::SAVE_OK;
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        DisplayError( this, ioe.What() );
-    }
-
-    // Clean up the temporary file
-    wxRemoveFile( tempFile );
-
-    m_designBlocksPane->RefreshLibs();
-    m_designBlocksPane->SelectLibId( blk.GetLibId() );
-
-    return success;
+    return saveSelectionToDesignBlock( libName, selection, blk );
 }
 
 
 bool PCB_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
 {
     // Make sure the user has selected a library to save into
-    if( m_designBlocksPane->GetSelectedLibId().GetLibNickname().empty() )
+    if( !aLibId.IsValid() )
     {
         DisplayErrorMessage( this, _( "Please select a library to save the design block to." ) );
         return false;
@@ -364,59 +385,5 @@ bool PCB_EDIT_FRAME::SaveSelectionToDesignBlock( const LIB_ID& aLibId )
         return false;
     }
 
-    // Create a temporary board
-    BOARD* tempBoard = new BOARD();
-    tempBoard->SetDesignSettings( GetBoard()->GetDesignSettings() );
-    tempBoard->SetProject( &Prj(), true );
-    tempBoard->SynchronizeProperties();
-
-    // Copy all net info into the new board
-    for( NETINFO_ITEM* netInfo : GetBoard()->GetNetInfo() )
-    {
-        EDA_ITEM* copy = netInfo->Clone();
-        tempBoard->Add( static_cast<BOARD_ITEM*>( copy ), ADD_MODE::APPEND, false );
-    }
-
-    // Copy the selected items to the temporary board
-    for( EDA_ITEM* item : selection )
-    {
-        EDA_ITEM* copy = item->Clone();
-        tempBoard->Add( static_cast<BOARD_ITEM*>( copy ), ADD_MODE::APPEND, false );
-    }
-
-    // Rebuild connectivity, remove any unused nets
-    tempBoard->BuildListOfNets();
-    tempBoard->BuildConnectivity();
-    tempBoard->RemoveUnusedNets( nullptr );
-
-    wxString tempFile = wxFileName::CreateTempFileName( "design_block" );
-
-    if( !saveBoardAsFile( tempBoard, tempFile, false ) )
-    {
-        DisplayErrorMessage( this, _( "Error saving temporary board file to create design block." ) );
-        wxRemoveFile( tempFile );
-        return false;
-    }
-
-    blk->SetBoardFile( tempFile );
-
-    bool success = false;
-
-    try
-    {
-        success = Prj().DesignBlockLibs()->DesignBlockSave( aLibId.GetLibNickname(), blk )
-                  == DESIGN_BLOCK_LIB_TABLE::SAVE_OK;
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        DisplayError( this, ioe.What() );
-    }
-
-    // Clean up the temporary file
-    wxRemoveFile( tempFile );
-
-    m_designBlocksPane->RefreshLibs();
-    m_designBlocksPane->SelectLibId( blk->GetLibId() );
-
-    return success;
+    return saveSelectionToDesignBlock( aLibId.GetLibNickname(), selection, *blk );
 }
