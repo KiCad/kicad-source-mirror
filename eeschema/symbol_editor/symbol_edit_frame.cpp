@@ -1030,10 +1030,12 @@ void SYMBOL_EDIT_FRAME::OnModify()
     EDA_BASE_FRAME::OnModify();
 
     GetScreen()->SetContentModified();
-    m_autoSaveRequired = true;
 
     if( !IsSymbolFromSchematic() )
         storeCurrentSymbol();
+
+    if( m_isClosing )
+        return;
 
     GetLibTree()->RefreshLibTree();
 

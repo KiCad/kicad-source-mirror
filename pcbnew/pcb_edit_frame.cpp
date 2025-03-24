@@ -1829,13 +1829,16 @@ void PCB_EDIT_FRAME::SetLastPath( LAST_PATH_TYPE aType, const wxString& aLastPat
 void PCB_EDIT_FRAME::OnModify()
 {
     PCB_BASE_FRAME::OnModify();
+    m_ZoneFillsDirty = true;
+
+    if( m_isClosing )
+        return;
 
     Update3DView( true, GetPcbNewSettings()->m_Display.m_Live3DRefresh );
 
     if( !GetTitle().StartsWith( wxT( "*" ) ) )
         UpdateTitle();
 
-    m_ZoneFillsDirty = true;
 }
 
 

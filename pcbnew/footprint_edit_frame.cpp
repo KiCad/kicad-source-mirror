@@ -979,6 +979,10 @@ void FOOTPRINT_EDIT_FRAME::ShowChangedLanguage()
 void FOOTPRINT_EDIT_FRAME::OnModify()
 {
     PCB_BASE_FRAME::OnModify();
+
+    if( m_isClosing )
+        return;
+
     Update3DView( true, true );
     GetLibTree()->RefreshLibTree();
 
