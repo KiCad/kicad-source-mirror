@@ -127,6 +127,7 @@ i18n_status.csv
 # Project local settings files and backups (in demos and qa tests)
 *.kicad_prl
 *-backups
+~*.lck
 
 # QA dataoutput
 qa/data/**/*.csv
