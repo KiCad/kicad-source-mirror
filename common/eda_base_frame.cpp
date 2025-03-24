@@ -1114,16 +1114,11 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
 
         book->AddPage( hotkeysPanel, _( "Hotkeys" ) );
 
-        // This currently allows pre-defined repositories that we
-        // don't use, so keep it disabled at the moment
-        if( ADVANCED_CFG::GetCfg().m_EnableGit && false )
-        {
-            book->AddLazyPage(
-                    []( wxWindow* aParent ) -> wxWindow*
-                    {
-                        return new PANEL_GIT_REPOS( aParent );
-                    }, _( "Version Control" ) );
-        }
+        book->AddLazyPage(
+                []( wxWindow* aParent ) -> wxWindow*
+                {
+                    return new PANEL_GIT_REPOS( aParent );
+                }, _( "Version Control" ) );
 
 #ifdef KICAD_USE_SENTRY
         book->AddLazyPage(

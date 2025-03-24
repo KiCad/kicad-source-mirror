@@ -1023,6 +1023,8 @@ void KICAD_MANAGER_FRAME::CommonSettingsChanged( int aFlags )
         onToolbarSizeChanged();
         m_lastToolbarIconSize = settings->m_Appearance.toolbar_icon_size;
     }
+
+    m_leftWin->ReCreateTreePrj();
 }
 
 

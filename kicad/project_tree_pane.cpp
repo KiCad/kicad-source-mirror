@@ -660,7 +660,7 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
     bool prjOpened = fn.FileExists();
 
     // Bind the git repository to the project tree (if it exists)
-    if( ADVANCED_CFG::GetCfg().m_EnableGit )
+    if( Pgm().GetCommonSettings()->m_Git.enableGit )
     {
         m_TreeProject->SetGitRepo( get_git_repository_for_file( fn.GetPath().c_str() ) );
 
@@ -801,7 +801,7 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
     bool vcs_can_push    = vcs_can_fetch && git->HasLocalCommits();
     bool vcs_can_pull    = vcs_can_fetch;
     bool vcs_can_switch  = vcs_has_repo;
-    bool vcs_menu        = ADVANCED_CFG::GetCfg().m_EnableGit;
+    bool vcs_menu        = Pgm().GetCommonSettings()->m_Git.enableGit;
 
     // Check if the libgit2 library has been successfully initialized
 #if ( LIBGIT2_VER_MAJOR >= 1 ) || ( LIBGIT2_VER_MINOR >= 99 )
@@ -1975,7 +1975,7 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
         return;
     }
 
-    if( ADVANCED_CFG::GetCfg().m_EnableGit == false || !m_TreeProject )
+    if( !Pgm().GetCommonSettings()->m_Git.enableGit || !m_TreeProject )
     {
         wxLogTrace( traceGit, wxS( "updateGitStatusIcons: Git is disabled or tree control is null" ) );
         return;
@@ -2068,7 +2068,7 @@ void PROJECT_TREE_PANE::updateGitStatusIconMap()
 
 #endif
 
-    if( ADVANCED_CFG::GetCfg().m_EnableGit == false || !m_TreeProject )
+    if( !Pgm().GetCommonSettings()->m_Git.enableGit || !m_TreeProject )
         return;
 
     std::unique_lock<std::mutex> lock1( m_gitStatusMutex, std::try_to_lock );
@@ -2662,7 +2662,9 @@ void PROJECT_TREE_PANE::onRunSelectedJobsFile(wxCommandEvent& event)
 void PROJECT_TREE_PANE::onGitSyncTimer( wxTimerEvent& aEvent )
 {
     wxLogTrace( traceGit, "onGitSyncTimer" );
-    if( ADVANCED_CFG::GetCfg().m_EnableGit == false || !m_TreeProject )
+    COMMON_SETTINGS::GIT& gitSettings = Pgm().GetCommonSettings()->m_Git;
+
+    if( !gitSettings.enableGit || !m_TreeProject )
         return;
 
     thread_pool& tp = GetKiCadThreadPool();
@@ -2686,11 +2688,11 @@ void PROJECT_TREE_PANE::onGitSyncTimer( wxTimerEvent& aEvent )
         } );
     } );
 
-    if( ADVANCED_CFG::GetCfg().m_GitProjectStatusRefreshInterval > 0 )
+    if( gitSettings.updatInterval > 0 )
     {
         wxLogTrace( traceGit, "onGitSyncTimer: Restarting git sync timer" );
-        m_gitSyncTimer.Start( ADVANCED_CFG::GetCfg().m_GitProjectStatusRefreshInterval,
-                              wxTIMER_ONE_SHOT );
+        // We store the timer interval in minutes but wxTimer uses milliseconds
+        m_gitSyncTimer.Start( gitSettings.updatInterval * 60 * 1000, wxTIMER_ONE_SHOT );
     }
 }
 
@@ -2710,7 +2712,7 @@ void PROJECT_TREE_PANE::gitStatusTimerHandler()
 void PROJECT_TREE_PANE::onGitStatusTimer( wxTimerEvent& aEvent )
 {
     wxLogTrace( traceGit, "onGitStatusTimer" );
-    if( ADVANCED_CFG::GetCfg().m_EnableGit == false || !m_TreeProject )
+    if( !Pgm().GetCommonSettings()->m_Git.enableGit || !m_TreeProject )
         return;
 
     gitStatusTimerHandler();

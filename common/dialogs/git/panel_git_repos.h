@@ -49,10 +49,7 @@ public:
 
 private:
     void onDefaultClick( wxCommandEvent& event ) override;
-    void onGridDClick( wxGridEvent& event ) override;
-    void onAddClick( wxCommandEvent& event ) override;
-    void onEditClick( wxCommandEvent& event ) override;
-    void onDeleteClick( wxCommandEvent& event ) override;
+    void onEnableGitClick( wxCommandEvent& event ) override;
 
 };
 

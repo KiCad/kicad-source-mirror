@@ -489,15 +489,6 @@ public:
     bool m_EnableGenerators;
 
     /**
-     * Enable git integration.
-     *
-     * Setting name: "EnableGit"
-     * Valid values: 0 or 1
-     * Default value: 0
-     */
-    bool m_EnableGit;
-
-    /**
      * Enable option to load lib files with text editor.
      *
      * Setting name: "EnableLibWithText"
@@ -765,15 +756,6 @@ public:
      * Default value: 10000
      */
     int m_GitIconRefreshInterval;
-
-    /**
-     * The interval in milliseconds to refresh the project status by performing
-     * a git fetch on the remote project.  Set to 0 to disable.
-     *
-     * Setting name: "GitProjectStatusRefreshInterval"
-     * Default value: 60000
-     */
-    int m_GitProjectStatusRefreshInterval;
 
     ///@}
 

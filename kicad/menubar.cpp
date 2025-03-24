@@ -76,7 +76,7 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
     fileMenu->Add( KICAD_MANAGER_ACTIONS::newProject );
     fileMenu->Add( KICAD_MANAGER_ACTIONS::newFromTemplate );
 
-    if( ADVANCED_CFG::GetCfg().m_EnableGit )
+    if( Pgm().GetCommonSettings()->m_Git.enableGit )
     {
         fileMenu->Add( KICAD_MANAGER_ACTIONS::newFromRepository );
     }
