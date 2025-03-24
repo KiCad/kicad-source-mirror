@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-17 18:43+0300\n"
+"POT-Creation-Date: 2025-03-24 12:07-0700\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/kicad/master-"
@@ -238,7 +238,7 @@ msgstr "Izvozi trenutni pogled kot JPEG ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:62
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:661
-#: common/eda_base_frame.cpp:1215 common/hotkey_store.cpp:80
+#: common/eda_base_frame.cpp:1210 common/hotkey_store.cpp:80
 #: common/tool/actions.cpp:1073 pcbnew/footprint_chooser_frame.cpp:282
 #: pcbnew/footprint_viewer_frame.cpp:981 pcbnew/pcb_base_frame.cpp:682
 #, fuzzy
@@ -365,7 +365,7 @@ msgid "3D Image File Name"
 msgstr "Ime datoteke 3D slike"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:747
-#: common/eda_base_frame.cpp:1362 common/eda_base_frame.cpp:1366
+#: common/eda_base_frame.cpp:1357 common/eda_base_frame.cpp:1361
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:328
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:332
 #, fuzzy, c-format
@@ -2770,7 +2770,6 @@ msgstr "Spremenljivke okolja"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:39
 #: common/dialogs/git/dialog_git_auth.cpp:56
-#: common/dialogs/git/panel_git_repos_base.cpp:98
 #: common/dialogs/panel_design_block_lib_table.cpp:410
 #: common/dialogs/panel_setup_netclasses_base.cpp:51
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:88
@@ -2811,7 +2810,6 @@ msgid "Name"
 msgstr "Ime"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:40
-#: common/dialogs/git/panel_git_repos_base.cpp:99
 #, fuzzy
 msgid "Path"
 msgstr "Pot"
@@ -3119,6 +3117,7 @@ msgstr ""
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1398
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 #, fuzzy
 msgid "PCB"
 msgstr "PCB"
@@ -3126,6 +3125,7 @@ msgstr "PCB"
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1334 eeschema/sch_plotter.cpp:1060
 #: eeschema/widgets/symbol_diff_widget.cpp:44
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 #, fuzzy
 msgid "Schematic"
 msgstr "Shema"
@@ -4114,7 +4114,6 @@ msgid "Filename"
 msgstr "Ime datoteke:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:53
-#: common/dialogs/git/panel_git_repos_base.cpp:100
 #: eeschema/dialogs/dialog_migrate_buses.cpp:117
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:94
 #: pcbnew/dialogs/dialog_find_base.cpp:118 pcbnew/pad.cpp:1316
@@ -4160,70 +4159,70 @@ msgstr ""
 msgid "Commit message cannot be empty"
 msgstr "Ime omrežja ne sme biti prazno."
 
-#: common/dialogs/git/dialog_git_repository.cpp:74
-#: common/dialogs/git/dialog_git_repository.cpp:306
+#: common/dialogs/git/dialog_git_repository.cpp:75
+#: common/dialogs/git/dialog_git_repository.cpp:310
 #, fuzzy
 msgid "Test Connection"
 msgstr "Izberite Povezava"
 
-#: common/dialogs/git/dialog_git_repository.cpp:165
-#: common/dialogs/git/dialog_git_repository.cpp:357
+#: common/dialogs/git/dialog_git_repository.cpp:166
+#: common/dialogs/git/dialog_git_repository.cpp:361
 msgid "Enter the password for the SSH key"
 msgstr ""
 
-#: common/dialogs/git/dialog_git_repository.cpp:311
+#: common/dialogs/git/dialog_git_repository.cpp:315
 #, fuzzy
 msgid "Connection successful"
 msgstr "Shranjevanje datoteke ni uspelo."
 
-#: common/dialogs/git/dialog_git_repository.cpp:315
+#: common/dialogs/git/dialog_git_repository.cpp:319
 #, fuzzy, c-format
 msgid "Could not connect to '%s' "
 msgstr "Arhivske datoteke ni bilo mogoče odpreti\n"
 
-#: common/dialogs/git/dialog_git_repository.cpp:335
+#: common/dialogs/git/dialog_git_repository.cpp:339
 #, fuzzy, c-format
 msgid "Could not open private key '%s'"
 msgstr "Arhivske datoteke ni bilo mogoče odpreti\n"
 
-#: common/dialogs/git/dialog_git_repository.cpp:348
+#: common/dialogs/git/dialog_git_repository.cpp:352
 #, fuzzy
 msgid "Invalid SSH Key"
 msgstr "Neveljavno ime signala"
 
-#: common/dialogs/git/dialog_git_repository.cpp:349
+#: common/dialogs/git/dialog_git_repository.cpp:353
 #, fuzzy
 msgid "The selected file is not a valid SSH private key"
 msgstr "Izbrana datoteka ni veljavna ali je morda poškodovana!"
 
-#: common/dialogs/git/dialog_git_repository.cpp:373
+#: common/dialogs/git/dialog_git_repository.cpp:377
 #, fuzzy, c-format
 msgid "Could not open public key '%s'"
 msgstr "Datoteke knjižnice ni bilo mogoče najti %s"
 
-#: common/dialogs/git/dialog_git_repository.cpp:392
-#: common/dialogs/git/dialog_git_repository.cpp:399
+#: common/dialogs/git/dialog_git_repository.cpp:396
+#: common/dialogs/git/dialog_git_repository.cpp:403
 #, fuzzy
 msgid "Missing information"
 msgstr "Manjka odtis"
 
-#: common/dialogs/git/dialog_git_repository.cpp:393
+#: common/dialogs/git/dialog_git_repository.cpp:397
 #, fuzzy
 msgid "Please enter a name for the repository"
 msgstr "Datoteke %s ni mogoče naložiti"
 
-#: common/dialogs/git/dialog_git_repository.cpp:400
+#: common/dialogs/git/dialog_git_repository.cpp:404
 #, fuzzy
 msgid "Please enter a URL for the repository"
 msgstr "Datoteke %s ni mogoče naložiti"
 
-#: common/dialogs/git/dialog_git_repository.cpp:424
+#: common/dialogs/git/dialog_git_repository.cpp:428
 #: common/dialogs/git/dialog_git_repository_base.cpp:106
 #, fuzzy
 msgid "SSH key password:"
 msgstr "Ključne besede"
 
-#: common/dialogs/git/dialog_git_repository.cpp:432
+#: common/dialogs/git/dialog_git_repository.cpp:436
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
 msgid "Password:"
 msgstr ""
@@ -4307,55 +4306,52 @@ msgstr "Stikalne enote"
 msgid "Add"
 msgstr "Dodaj"
 
-#: common/dialogs/git/panel_git_repos_base.cpp:23
+#: common/dialogs/git/panel_git_repos_base.cpp:20
+#, fuzzy
+msgid "Enable Git Tracking"
+msgstr "Omogoči samodejno brisanje povezav"
+
+#: common/dialogs/git/panel_git_repos_base.cpp:28
+#, fuzzy
+msgid "Remote Tracking"
+msgstr "Briši povezavo"
+
+#: common/dialogs/git/panel_git_repos_base.cpp:41
+#, fuzzy
+msgid "Update interval:"
+msgstr "Posodobi polja"
+
+#: common/dialogs/git/panel_git_repos_base.cpp:46
+msgid ""
+"Number of minutes between remote update checks.  Zero disables automatic "
+"checks."
+msgstr ""
+
+#: common/dialogs/git/panel_git_repos_base.cpp:50
+#: common/dialogs/panel_common_settings_base.cpp:347
+#: common/dialogs/panel_common_settings_base.cpp:434
+#, fuzzy
+msgid "minutes"
+msgstr "minut"
+
+#: common/dialogs/git/panel_git_repos_base.cpp:65
 msgid "Git Commit Data"
 msgstr ""
 
-#: common/dialogs/git/panel_git_repos_base.cpp:33
+#: common/dialogs/git/panel_git_repos_base.cpp:78
 #, fuzzy
 msgid "Use default values"
 msgstr "Uporabi ime povezav"
 
-#: common/dialogs/git/panel_git_repos_base.cpp:40
+#: common/dialogs/git/panel_git_repos_base.cpp:85
 #, fuzzy
 msgid "Author name:"
 msgstr "Ime območja:"
 
-#: common/dialogs/git/panel_git_repos_base.cpp:51
+#: common/dialogs/git/panel_git_repos_base.cpp:96
 #, fuzzy
 msgid "Author e-mail:"
 msgstr "Avtor"
-
-#: common/dialogs/git/panel_git_repos_base.cpp:68
-#, fuzzy
-msgid "Git Repositories"
-msgstr "Upravljanje definicij vodila"
-
-#: common/dialogs/git/panel_git_repos_base.cpp:97
-#: common/dialogs/panel_design_block_lib_table_base.cpp:44
-#: common/dialogs/panel_design_block_lib_table_base.cpp:93
-#: eeschema/dialogs/panel_sym_lib_table_base.cpp:44
-#: eeschema/dialogs/panel_sym_lib_table_base.cpp:94
-#: include/lib_table_grid.h:215 pcbnew/dialogs/panel_fp_lib_table_base.cpp:44
-#: pcbnew/dialogs/panel_fp_lib_table_base.cpp:93
-#, fuzzy
-msgid "Active"
-msgstr "Dejaven"
-
-#: common/dialogs/git/panel_git_repos_base.cpp:122
-#, fuzzy
-msgid "Add new repository"
-msgstr "Dodajte repozitorij"
-
-#: common/dialogs/git/panel_git_repos_base.cpp:127
-#, fuzzy
-msgid "Edit repository properties"
-msgstr "Spremenite lastnosti odtisa"
-
-#: common/dialogs/git/panel_git_repos_base.cpp:135
-#, fuzzy
-msgid "Remove Git Repository"
-msgstr "Poročilo"
 
 #: common/dialogs/panel_color_settings.cpp:52
 #, fuzzy
@@ -4786,12 +4782,6 @@ msgstr ""
 "disku.\n"
 "Če je nastavljeno na 0, je samodejno varnostno kopiranje onemogočeno"
 
-#: common/dialogs/panel_common_settings_base.cpp:347
-#: common/dialogs/panel_common_settings_base.cpp:434
-#, fuzzy
-msgid "minutes"
-msgstr "minut"
-
 #: common/dialogs/panel_common_settings_base.cpp:351
 #, fuzzy
 msgid "File history size:"
@@ -5153,6 +5143,16 @@ msgstr ""
 "\n"
 "%s"
 
+#: common/dialogs/panel_design_block_lib_table_base.cpp:44
+#: common/dialogs/panel_design_block_lib_table_base.cpp:93
+#: eeschema/dialogs/panel_sym_lib_table_base.cpp:44
+#: eeschema/dialogs/panel_sym_lib_table_base.cpp:94
+#: include/lib_table_grid.h:215 pcbnew/dialogs/panel_fp_lib_table_base.cpp:44
+#: pcbnew/dialogs/panel_fp_lib_table_base.cpp:93
+#, fuzzy
+msgid "Active"
+msgstr "Dejaven"
+
 #: common/dialogs/panel_design_block_lib_table_base.cpp:45
 #: common/dialogs/panel_design_block_lib_table_base.cpp:94
 #: eeschema/dialogs/dialog_field_properties_base.cpp:97
@@ -5393,9 +5393,9 @@ msgid "Grid size '%s' already exists."
 msgstr "\"%s\" že obstaja."
 
 #: common/dialogs/panel_grid_settings_base.cpp:25
-#: common/eda_base_frame.cpp:1158 common/eda_base_frame.cpp:1167
-#: common/eda_base_frame.cpp:1193 common/eda_base_frame.cpp:1206
-#: common/eda_base_frame.cpp:1239 common/eda_base_frame.cpp:1261
+#: common/eda_base_frame.cpp:1153 common/eda_base_frame.cpp:1162
+#: common/eda_base_frame.cpp:1188 common/eda_base_frame.cpp:1201
+#: common/eda_base_frame.cpp:1234 common/eda_base_frame.cpp:1256
 #: common/tool/common_tools.cpp:608
 #, fuzzy
 msgid "Grids"
@@ -5776,7 +5776,7 @@ msgid "Reset to Trackpad Defaults"
 msgstr "Ponastavi na privzeto"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:17
-#: common/eda_base_frame.cpp:1216
+#: common/eda_base_frame.cpp:1211
 #: eeschema/dialogs/dialog_image_properties_base.cpp:66
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:165
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:295
@@ -6534,94 +6534,94 @@ msgstr "Miška in sledilna ploščica"
 msgid "Hotkeys"
 msgstr "Bližnjice"
 
-#: common/eda_base_frame.cpp:1125 kicad/project_tree_pane.cpp:1053
+#: common/eda_base_frame.cpp:1121 kicad/project_tree_pane.cpp:1053
 #, fuzzy
 msgid "Version Control"
 msgstr "& Samo izbira"
 
-#: common/eda_base_frame.cpp:1133
+#: common/eda_base_frame.cpp:1128
 #, fuzzy
 msgid "Data Collection"
 msgstr "Povezave blazinic"
 
-#: common/eda_base_frame.cpp:1156 common/tool/actions.cpp:1088
+#: common/eda_base_frame.cpp:1151 common/tool/actions.cpp:1088
 #: common/tool/common_tools.cpp:615 eeschema/symbol_editor/symbol_editor.cpp:84
 #: kicad/tools/kicad_manager_actions.cpp:125
 #, fuzzy
 msgid "Symbol Editor"
 msgstr "Urejevalnik simbolov"
 
-#: common/eda_base_frame.cpp:1157 common/eda_base_frame.cpp:1166
-#: common/eda_base_frame.cpp:1192 common/eda_base_frame.cpp:1205
-#: common/eda_base_frame.cpp:1237 common/eda_base_frame.cpp:1260
+#: common/eda_base_frame.cpp:1152 common/eda_base_frame.cpp:1161
+#: common/eda_base_frame.cpp:1187 common/eda_base_frame.cpp:1200
+#: common/eda_base_frame.cpp:1232 common/eda_base_frame.cpp:1255
 #, fuzzy
 msgid "Display Options"
 msgstr "Prikaži možnosti"
 
-#: common/eda_base_frame.cpp:1159 common/eda_base_frame.cpp:1168
-#: common/eda_base_frame.cpp:1195 common/eda_base_frame.cpp:1208
+#: common/eda_base_frame.cpp:1154 common/eda_base_frame.cpp:1163
+#: common/eda_base_frame.cpp:1190 common/eda_base_frame.cpp:1203
 #: pcbnew/dialogs/panel_edit_options_base.cpp:23
 #: pcbnew/tools/zone_filler_tool.cpp:283
 #, fuzzy
 msgid "Editing Options"
 msgstr "Možnosti urejanja"
 
-#: common/eda_base_frame.cpp:1160 common/eda_base_frame.cpp:1170
-#: common/eda_base_frame.cpp:1196 common/eda_base_frame.cpp:1209
-#: common/eda_base_frame.cpp:1238 common/eda_base_frame.cpp:1262
+#: common/eda_base_frame.cpp:1155 common/eda_base_frame.cpp:1165
+#: common/eda_base_frame.cpp:1191 common/eda_base_frame.cpp:1204
+#: common/eda_base_frame.cpp:1233 common/eda_base_frame.cpp:1257
 #, fuzzy
 msgid "Colors"
 msgstr "Barve"
 
-#: common/eda_base_frame.cpp:1165 common/hotkey_store.cpp:77
+#: common/eda_base_frame.cpp:1160 common/hotkey_store.cpp:77
 #: common/tool/common_tools.cpp:614 eeschema/menubar.cpp:133
 #: eeschema/sch_edit_frame.cpp:1748 kicad/tools/kicad_manager_actions.cpp:114
 #, fuzzy
 msgid "Schematic Editor"
 msgstr "Oštevilči shemo"
 
-#: common/eda_base_frame.cpp:1169
+#: common/eda_base_frame.cpp:1164
 #, fuzzy
 msgid "Annotation Options"
 msgstr "Pripisi"
 
-#: common/eda_base_frame.cpp:1172
+#: common/eda_base_frame.cpp:1167
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:20
 #, fuzzy
 msgid "Field Name Templates"
 msgstr "Predloge imen polj"
 
-#: common/eda_base_frame.cpp:1173 eeschema/sim/simulator_frame.cpp:115
+#: common/eda_base_frame.cpp:1168 eeschema/sim/simulator_frame.cpp:115
 #: eeschema/sim/toolbars_simulator_frame.cpp:114
 #: eeschema/tools/sch_actions.cpp:74
 #, fuzzy
 msgid "Simulator"
 msgstr "Simulator ..."
 
-#: common/eda_base_frame.cpp:1191 common/tool/actions.cpp:1105
+#: common/eda_base_frame.cpp:1186 common/tool/actions.cpp:1105
 #: common/tool/common_tools.cpp:617 kicad/tools/kicad_manager_actions.cpp:147
 #: pcbnew/footprint_edit_frame.cpp:1088 pcbnew/menubar_footprint_editor.cpp:92
 #, fuzzy
 msgid "Footprint Editor"
 msgstr "Footprint Editor"
 
-#: common/eda_base_frame.cpp:1194 common/eda_base_frame.cpp:1207
+#: common/eda_base_frame.cpp:1189 common/eda_base_frame.cpp:1202
 #, fuzzy
 msgid "Origins & Axes"
 msgstr "Izvor in osi"
 
-#: common/eda_base_frame.cpp:1197
+#: common/eda_base_frame.cpp:1192
 #, fuzzy
 msgid "Footprint Defaults"
 msgstr "Nov odtis"
 
-#: common/eda_base_frame.cpp:1199
+#: common/eda_base_frame.cpp:1194
 #, fuzzy
 msgid "Graphics Defaults"
 msgstr "Čiščenje grafike"
 
-#: common/eda_base_frame.cpp:1204 common/hotkey_store.cpp:78
+#: common/eda_base_frame.cpp:1199 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:616 kicad/tools/kicad_manager_actions.cpp:136
 #: pcbnew/menubar_pcb_editor.cpp:186 pcbnew/pcb_edit_frame.cpp:201
 #: pcbnew/pcb_edit_frame.cpp:1806 pcbnew/tools/zone_filler_tool.cpp:284
@@ -6629,22 +6629,22 @@ msgstr "Čiščenje grafike"
 msgid "PCB Editor"
 msgstr "&Urejevalnik ..."
 
-#: common/eda_base_frame.cpp:1210 common/eda_base_frame.cpp:1275
+#: common/eda_base_frame.cpp:1205 common/eda_base_frame.cpp:1270
 #, fuzzy
 msgid "Plugins"
 msgstr "Kršitve (%d)"
 
-#: common/eda_base_frame.cpp:1217
+#: common/eda_base_frame.cpp:1212
 #, fuzzy
 msgid "Realtime Renderer"
 msgstr "Razkrij v Finderju"
 
-#: common/eda_base_frame.cpp:1218
+#: common/eda_base_frame.cpp:1213
 #, fuzzy
 msgid "Raytracing Renderer"
 msgstr "Raytracing možnosti upodabljanja"
 
-#: common/eda_base_frame.cpp:1236 common/hotkey_store.cpp:81
+#: common/eda_base_frame.cpp:1231 common/hotkey_store.cpp:81
 #: common/tool/common_tools.cpp:619 gerbview/gerbview_frame.cpp:687
 #: gerbview/gerbview_frame.cpp:711 gerbview/menubar.cpp:159
 #: kicad/tools/kicad_manager_actions.cpp:158
@@ -6652,12 +6652,12 @@ msgstr "Raytracing možnosti upodabljanja"
 msgid "Gerber Viewer"
 msgstr "Datoteke Gerber"
 
-#: common/eda_base_frame.cpp:1241
+#: common/eda_base_frame.cpp:1236
 #, fuzzy
 msgid "Excellon Options"
 msgstr "Možnosti za Arc"
 
-#: common/eda_base_frame.cpp:1259 common/hotkey_store.cpp:79
+#: common/eda_base_frame.cpp:1254 common/hotkey_store.cpp:79
 #: common/tool/common_tools.cpp:618 kicad/tools/kicad_manager_actions.cpp:187
 #: pagelayout_editor/menubar.cpp:88 pagelayout_editor/menubar.cpp:89
 #: pagelayout_editor/pl_editor_frame.cpp:583
@@ -6665,17 +6665,17 @@ msgstr "Možnosti za Arc"
 msgid "Drawing Sheet Editor"
 msgstr "Urejevalnik knjižnic"
 
-#: common/eda_base_frame.cpp:1268
+#: common/eda_base_frame.cpp:1263
 #, fuzzy
 msgid "Packages and Updates"
 msgstr "Premer luknje:"
 
-#: common/eda_base_frame.cpp:1358 pcbnew/dialogs/dialog_export_odbpp.cpp:324
+#: common/eda_base_frame.cpp:1353 pcbnew/dialogs/dialog_export_odbpp.cpp:324
 #, fuzzy, c-format
 msgid "Insufficient permissions to folder '%s'."
 msgstr "Nezadostna dovoljenja za mapo \"%s\"."
 
-#: common/eda_base_frame.cpp:1399
+#: common/eda_base_frame.cpp:1394
 #, fuzzy, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
@@ -6691,14 +6691,14 @@ msgstr ""
 "ni bil pravilno shranjen. Ali želite obnoviti zadnje shranjene spremembe, ki "
 "ste jih naredili?"
 
-#: common/eda_base_frame.cpp:1420
+#: common/eda_base_frame.cpp:1415
 #, fuzzy
 msgid "The auto save file could not be renamed to the board file name."
 msgstr ""
 "Datoteke za samodejno shranjevanje ni bilo mogoče preimenovati v ime "
 "datoteke plošče."
 
-#: common/eda_base_frame.cpp:1653
+#: common/eda_base_frame.cpp:1648
 #, fuzzy
 msgid "Set Language"
 msgstr "Nastavi jezik"
@@ -7748,85 +7748,119 @@ msgstr "Datoteke \"%s\" ni bilo mogoče ustvariti."
 msgid "Could not create directory '%s'"
 msgstr "Izhodnega imenika \"%s\" ni mogoče ustvariti.\n"
 
-#: common/git/git_clone_handler.cpp:80
+#: common/git/git_clone_handler.cpp:81
 #, fuzzy, c-format
 msgid "Could not clone repository '%s'"
 msgstr "Slike iz »%s« ni bilo mogoče naložiti"
 
-#: common/git/git_pull_handler.cpp:63
+#: common/git/git_pull_handler.cpp:67
 #, fuzzy, c-format
 msgid "Could not lookup remote '%s'"
 msgstr "Slike iz »%s« ni bilo mogoče naložiti"
 
-#: common/git/git_pull_handler.cpp:81
+#: common/git/git_pull_handler.cpp:87
 #, fuzzy, c-format
 msgid "Could not connect to remote '%s': %s"
 msgstr "Datoteke knjižnice ni bilo mogoče najti %s"
 
-#: common/git/git_pull_handler.cpp:92
+#: common/git/git_pull_handler.cpp:99
 #, fuzzy, c-format
 msgid "Could not fetch data from remote '%s': %s"
 msgstr "Datoteke knjižnice ni bilo mogoče najti %s"
 
-#: common/git/git_pull_handler.cpp:120
+#: common/git/git_pull_handler.cpp:127
 #, fuzzy
 msgid "Could not read 'FETCH_HEAD'"
 msgstr "Datoteke \"%s\" ni bilo mogoče ustvariti."
 
-#: common/git/git_pull_handler.cpp:128
+#: common/git/git_pull_handler.cpp:135
 #, fuzzy
 msgid "Could not lookup commit"
 msgstr "CvPcb ni bilo mogoče odpreti"
 
-#: common/git/git_pull_handler.cpp:140
+#: common/git/git_pull_handler.cpp:146
 #, fuzzy
 msgid "Could not analyze merge"
 msgstr "Datoteke \"%s\" ni bilo mogoče ustvariti."
 
-#: common/git/git_pull_handler.cpp:146
+#: common/git/git_pull_handler.cpp:152
 msgid "Invalid HEAD.  Cannot merge."
 msgstr ""
 
-#: common/git/git_pull_handler.cpp:211 common/git/git_push_handler.cpp:91
+#: common/git/git_pull_handler.cpp:228 common/git/git_push_handler.cpp:91
 msgid "Could not get repository head"
 msgstr ""
 
-#: common/git/git_pull_handler.cpp:223
+#: common/git/git_pull_handler.cpp:242
 #, c-format
 msgid "Could not get reference OID for reference '%s'"
 msgstr ""
 
-#: common/git/git_pull_handler.cpp:234 common/git/kicad_git_errors.cpp:55
+#: common/git/git_pull_handler.cpp:252
+#, fuzzy
+msgid "Could not look up target commit"
+msgstr "CvPcb ni bilo mogoče odpreti"
+
+#: common/git/git_pull_handler.cpp:264
+#, fuzzy
+msgid "Could not get tree from target commit"
+msgstr "Datoteke \"%s\" ni bilo mogoče ustvariti."
+
+#: common/git/git_pull_handler.cpp:306 common/git/kicad_git_errors.cpp:55
 msgid "Failed to perform checkout operation."
 msgstr ""
 
-#: common/git/git_pull_handler.cpp:253
+#: common/git/git_pull_handler.cpp:315
+#, fuzzy, c-format
+msgid "Failed to update reference '%s' to point to '%s'"
+msgstr "potrebujete številko za '%s'"
+
+#: common/git/git_pull_handler.cpp:325
 #, fuzzy
-msgid "Could not lookup commit '{}'"
+msgid "Failed to clean up repository state after fast-forward."
+msgstr "Datoteke %s ni mogoče naložiti"
+
+#: common/git/git_pull_handler.cpp:334
+#, fuzzy
+msgid "Failed to initialize revision walker."
+msgstr "Ne najdem elementa"
+
+#: common/git/git_pull_handler.cpp:343
+#, fuzzy
+msgid "Failed to push reference to revision walker."
+msgstr "Ne morem odpreti %s"
+
+#: common/git/git_pull_handler.cpp:358
+#, fuzzy, c-format
+msgid "Could not lookup commit '%s'"
 msgstr "Slike iz »%s« ni bilo mogoče naložiti"
 
-#: common/git/git_pull_handler.cpp:290
+#: common/git/git_pull_handler.cpp:391
 #, fuzzy
 msgid "Could not merge commits"
 msgstr "Datoteke \"%s\" ni bilo mogoče ustvariti."
 
-#: common/git/git_pull_handler.cpp:299
+#: common/git/git_pull_handler.cpp:400
 #, fuzzy
 msgid "Could not get repository index"
 msgstr "Datoteke knjižnice ni bilo mogoče odpreti."
 
-#: common/git/git_pull_handler.cpp:310
+#: common/git/git_pull_handler.cpp:411
 #, fuzzy
 msgid "Could not get conflict iterator"
 msgstr "Konfiguracijske datoteke ni bilo mogoče odpreti"
 
-#: common/git/git_pull_handler.cpp:332 common/git/git_pull_handler.cpp:333
+#: common/git/git_pull_handler.cpp:433 common/git/git_pull_handler.cpp:434
 #, fuzzy
 msgid "Changed"
 msgstr "Zamenjaj"
 
-#: common/git/git_pull_handler.cpp:347 common/git/git_pull_handler.cpp:348
+#: common/git/git_pull_handler.cpp:448 common/git/git_pull_handler.cpp:449
 msgid "Added"
+msgstr ""
+
+#: common/git/git_pull_handler.cpp:527
+msgid "Conflicts detected during rebase"
 msgstr ""
 
 #: common/git/git_push_handler.cpp:56
@@ -7844,35 +7878,40 @@ msgstr "Datoteke knjižnice ni bilo mogoče najti %s"
 msgid "Could not push to remote: %s"
 msgstr "OpenGL ni bilo mogoče uporabiti"
 
-#: common/git/kicad_git_common.cpp:829
+#: common/git/kicad_git_common.cpp:840
 #, c-format
 msgid "Received %u of %u objects"
 msgstr ""
 
-#: common/git/kicad_git_common.cpp:858
+#: common/git/kicad_git_common.cpp:869
 #, fuzzy, c-format
 msgid "* [updated] %s..%s %s"
 msgstr "Posodobljeno %s s %s na %s"
 
-#: common/git/kicad_git_common.cpp:862
+#: common/git/kicad_git_common.cpp:873
 #, fuzzy, c-format
 msgid "* [new] %s %s"
 msgstr "Cona %s na %s"
 
-#: common/git/kicad_git_common.cpp:882
+#: common/git/kicad_git_common.cpp:893
 #, c-format
 msgid "Writing objects: %lld%% (%u/%u), %zu bytes"
 msgstr ""
 
-#: common/git/kicad_git_common.cpp:897
+#: common/git/kicad_git_common.cpp:908
 #, fuzzy, c-format
 msgid "* [rejected] %s (%s)"
 msgstr "Mreža: %s (%s)"
 
-#: common/git/kicad_git_common.cpp:902
+#: common/git/kicad_git_common.cpp:913
 #, fuzzy, c-format
 msgid "[updated] %s"
 msgstr "Posodobljeno"
+
+#: common/git/kicad_git_common.cpp:977
+#, fuzzy
+msgid "Unable to authenticate"
+msgstr "Ne morem ustvariti "
 
 #: common/git/kicad_git_errors.cpp:40
 #, fuzzy
@@ -20759,7 +20798,7 @@ msgid "Could not open CvPcb"
 msgstr "CvPcb ni bilo mogoče odpreti"
 
 #: eeschema/sch_edit_frame.cpp:1738 eeschema/sim/simulator_frame.cpp:341
-#: kicad/kicad_manager_frame.cpp:1041 pcbnew/footprint_edit_frame.cpp:1072
+#: kicad/kicad_manager_frame.cpp:1043 pcbnew/footprint_edit_frame.cpp:1072
 #: pcbnew/pcb_edit_frame.cpp:1801
 #, fuzzy
 msgid "[Read Only]"
@@ -30502,22 +30541,22 @@ msgstr "Napaka pri branju datoteke."
 msgid "Edit File in Text Editor"
 msgstr "Urejanje v urejevalniku besedil"
 
-#: kicad/kicad_manager_frame.cpp:1045
+#: kicad/kicad_manager_frame.cpp:1047
 #, fuzzy
 msgid "[no project loaded]"
 msgstr "Noben odtis ni naložen."
 
-#: kicad/kicad_manager_frame.cpp:1088
+#: kicad/kicad_manager_frame.cpp:1090
 #, fuzzy, c-format
 msgid "Project: %s"
 msgstr "Projekt: %s"
 
-#: kicad/kicad_manager_frame.cpp:1124
+#: kicad/kicad_manager_frame.cpp:1126
 #, fuzzy
 msgid "Restoring session"
 msgstr "Obnovitvena seja"
 
-#: kicad/kicad_manager_frame.cpp:1137
+#: kicad/kicad_manager_frame.cpp:1139
 #, fuzzy, c-format
 msgid "Restoring '%s'"
 msgstr "Obnavljanje \"%s\""
@@ -31487,62 +31526,67 @@ msgstr "Ali res želite izbrisati \"%s\"?"
 msgid "Failed to remove Git directory"
 msgstr "Ne morem ustvariti imenika \"%s\""
 
-#: kicad/project_tree_pane.cpp:2267
+#: kicad/project_tree_pane.cpp:2279
 #, fuzzy
 msgid "The selected directory is not a Git project."
 msgstr "Izbrana datoteka ni veljavna ali je morda poškodovana!"
 
-#: kicad/project_tree_pane.cpp:2412
+#: kicad/project_tree_pane.cpp:2425
 msgid "Discarding commit due to empty commit message."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2418
+#: kicad/project_tree_pane.cpp:2431
 msgid "Discarding commit due to empty file selection."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2424
+#: kicad/project_tree_pane.cpp:2437
 #, fuzzy, c-format
 msgid "Failed to get repository index: %s"
 msgstr "Ne morem odpreti %s"
 
-#: kicad/project_tree_pane.cpp:2435
+#: kicad/project_tree_pane.cpp:2448
 #, fuzzy, c-format
 msgid "Failed to add file to index: %s"
 msgstr "'%s' ni bilo mogoče izbrisati"
 
-#: kicad/project_tree_pane.cpp:2443
+#: kicad/project_tree_pane.cpp:2456
 #, fuzzy, c-format
 msgid "Failed to write index: %s"
 msgstr "Ne morem ustvariti datoteke <%s>"
 
-#: kicad/project_tree_pane.cpp:2450
+#: kicad/project_tree_pane.cpp:2463
 #, fuzzy, c-format
 msgid "Failed to write tree: %s"
 msgstr "'%s' ni bilo mogoče izbrisati"
 
-#: kicad/project_tree_pane.cpp:2457
+#: kicad/project_tree_pane.cpp:2470
 #, fuzzy, c-format
 msgid "Failed to lookup tree: %s"
 msgstr "'%s' ni bilo mogoče izbrisati"
 
-#: kicad/project_tree_pane.cpp:2469
+#: kicad/project_tree_pane.cpp:2482
 #, fuzzy, c-format
 msgid "Failed to get HEAD reference: %s"
 msgstr "Ne morem ustvariti imenika \"%s\""
 
-#: kicad/project_tree_pane.cpp:2478
+#: kicad/project_tree_pane.cpp:2491
 #, fuzzy, c-format
 msgid "Failed to get commit: %s"
 msgstr "Sheme \"%s\" ni bilo mogoče shraniti"
 
-#: kicad/project_tree_pane.cpp:2493
+#: kicad/project_tree_pane.cpp:2506
 #, fuzzy, c-format
 msgid "Failed to create author signature: %s"
 msgstr "Ustvarjanje začasne datoteke »%s« ni uspelo"
 
-#: kicad/project_tree_pane.cpp:2530
+#: kicad/project_tree_pane.cpp:2543
 #, fuzzy, c-format
 msgid "Failed to create commit: %s"
+msgstr "Ne morem ustvariti datoteke <%s>"
+
+#: kicad/project_tree_pane.cpp:2548
+#, fuzzy, c-format
+msgid "Created commit with id: %s"
 msgstr "Ne morem ustvariti datoteke <%s>"
 
 #: kicad/tools/kicad_manager_actions.cpp:43
@@ -57773,6 +57817,15 @@ msgstr ""
 msgid "An EDA suite for schematic and circuit board design"
 msgstr ""
 
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
+msgid "EDA"
+msgstr ""
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
+#, fuzzy
+msgid "Circuit board"
+msgstr "Natisni ploščo"
+
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
@@ -57832,6 +57885,22 @@ msgstr "Uredi shematske simbole"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Urejevalnik knjižnic"
+
+#, fuzzy
+#~ msgid "Git Repositories"
+#~ msgstr "Upravljanje definicij vodila"
+
+#, fuzzy
+#~ msgid "Add new repository"
+#~ msgstr "Dodajte repozitorij"
+
+#, fuzzy
+#~ msgid "Edit repository properties"
+#~ msgstr "Spremenite lastnosti odtisa"
+
+#, fuzzy
+#~ msgid "Remove Git Repository"
+#~ msgstr "Poročilo"
 
 #, fuzzy
 #~ msgid "Change sheet pin to hierarchical label"
@@ -57989,10 +58058,6 @@ msgstr "Urejevalnik knjižnic"
 #, fuzzy
 #~ msgid "Unable to load repository url"
 #~ msgstr "Datoteke %s ni mogoče naložiti"
-
-#, fuzzy
-#~ msgid "Circuit board"
-#~ msgstr "Natisni ploščo"
 
 #, fuzzy, c-format
 #~ msgid "Error loading designblock %s from library '%s'."
@@ -66470,9 +66535,6 @@ msgstr "Urejevalnik knjižnic"
 #~ "----------"
 #~ msgstr "Komponenta"
 
-#~ msgid "Unable to create "
-#~ msgstr "Ne morem ustvariti "
-
 #, fuzzy
 #~ msgid "Key Words: %s"
 #~ msgstr "Ključne besede:"
@@ -68186,9 +68248,6 @@ msgstr "Urejevalnik knjižnic"
 #, fuzzy
 #~ msgid "Change Segment Width"
 #~ msgstr "Širina segmenta"
-
-#~ msgid "Delete Track"
-#~ msgstr "Briši povezavo"
 
 #, fuzzy
 #~ msgid "Set Track and Via Sizes..."
@@ -70033,9 +70092,6 @@ msgstr "Urejevalnik knjižnic"
 # Monter le chevelu général
 #~ msgid "Show General Ratsnest"
 #~ msgstr "Show General Ratsnest"
-
-#~ msgid "Enable Auto Del Track"
-#~ msgstr "Omogoči samodejno brisanje povezav"
 
 #~ msgid ""
 #~ "Display auxiliary vertical toolbar (tools for micro wave applications)\n"

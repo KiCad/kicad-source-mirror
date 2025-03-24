@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-17 18:43+0300\n"
+"POT-Creation-Date: 2025-03-24 12:07-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2194,6 +2194,25 @@ msgstr "Switch"
 msgid "Add"
 msgstr "Add"
 
+msgid "Enable Git Tracking"
+msgstr "Enable Git Tracking"
+
+msgid "Remote Tracking"
+msgstr "Remote Tracking"
+
+msgid "Update interval:"
+msgstr "Update interval:"
+
+msgid ""
+"Number of minutes between remote update checks.  Zero disables automatic "
+"checks."
+msgstr ""
+"Number of minutes between remote update checks.  Zero disables automatic "
+"checks."
+
+msgid "minutes"
+msgstr "minutes"
+
 msgid "Git Commit Data"
 msgstr "Git Commit Data"
 
@@ -2205,21 +2224,6 @@ msgstr "Author name:"
 
 msgid "Author e-mail:"
 msgstr "Author e-mail:"
-
-msgid "Git Repositories"
-msgstr "Git Repositories"
-
-msgid "Active"
-msgstr "Active"
-
-msgid "Add new repository"
-msgstr "Add new repository"
-
-msgid "Edit repository properties"
-msgstr "Edit repository properties"
-
-msgid "Remove Git Repository"
-msgstr "Remove Git Repository"
 
 msgid "Reveal Themes in Finder"
 msgstr "Reveal Themes in Finder"
@@ -2489,9 +2493,6 @@ msgstr ""
 "Delay after the first change to create a backup file of the board on disk.\n"
 "If set to 0, auto backup is disabled"
 
-msgid "minutes"
-msgstr "minutes"
-
 msgid "File history size:"
 msgstr "File history size:"
 
@@ -2716,6 +2717,9 @@ msgstr ""
 "Error saving project-specific library table:\n"
 "\n"
 "%s"
+
+msgid "Active"
+msgstr "Active"
 
 msgid "Visible"
 msgstr "Visible"
@@ -4090,11 +4094,31 @@ msgstr "Could not get repository head"
 msgid "Could not get reference OID for reference '%s'"
 msgstr "Could not get reference OID for reference '%s'"
 
+msgid "Could not look up target commit"
+msgstr "Could not look up target commit"
+
+msgid "Could not get tree from target commit"
+msgstr "Could not get tree from target commit"
+
 msgid "Failed to perform checkout operation."
 msgstr "Failed to perform checkout operation."
 
-msgid "Could not lookup commit '{}'"
-msgstr "Could not lookup commit '{}'"
+#, c-format
+msgid "Failed to update reference '%s' to point to '%s'"
+msgstr "Failed to update reference '%s' to point to '%s'"
+
+msgid "Failed to clean up repository state after fast-forward."
+msgstr "Failed to clean up repository state after fast-forward."
+
+msgid "Failed to initialize revision walker."
+msgstr "Failed to initialize revision walker."
+
+msgid "Failed to push reference to revision walker."
+msgstr "Failed to push reference to revision walker."
+
+#, c-format
+msgid "Could not lookup commit '%s'"
+msgstr "Could not lookup commit '%s'"
 
 msgid "Could not merge commits"
 msgstr "Could not merge commits"
@@ -4110,6 +4134,9 @@ msgstr "Changed"
 
 msgid "Added"
 msgstr "Added"
+
+msgid "Conflicts detected during rebase"
+msgstr "Conflicts detected during rebase"
 
 msgid "Could not lookup remote"
 msgstr "Could not lookup remote"
@@ -4145,6 +4172,9 @@ msgstr "* [rejected] %s (%s)"
 #, c-format
 msgid "[updated] %s"
 msgstr "[updated] %s"
+
+msgid "Unable to authenticate"
+msgstr "Unable to authenticate"
 
 msgid "Invalid repository."
 msgstr "Invalid repository."
@@ -19017,6 +19047,10 @@ msgstr "Failed to create author signature: %s"
 #, c-format
 msgid "Failed to create commit: %s"
 msgstr "Failed to create commit: %s"
+
+#, c-format
+msgid "Created commit with id: %s"
+msgstr "Created commit with id: %s"
 
 msgid "New Project..."
 msgstr "New Project..."
@@ -36782,6 +36816,12 @@ msgstr "Standalone circuit board editor for KiCad boards"
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "An EDA suite for schematic and circuit board design"
 
+msgid "EDA"
+msgstr "EDA"
+
+msgid "Circuit board"
+msgstr "Circuit board"
+
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
 "It features schematic capture, integrated circuit simulation, printed "
@@ -36826,6 +36866,21 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Git Repositories"
+#~ msgstr "Git Repositories"
+
+#~ msgid "Add new repository"
+#~ msgstr "Add new repository"
+
+#~ msgid "Edit repository properties"
+#~ msgstr "Edit repository properties"
+
+#~ msgid "Remove Git Repository"
+#~ msgstr "Remove Git Repository"
+
+#~ msgid "Could not lookup commit '{}'"
+#~ msgstr "Could not lookup commit '{}'"
 
 #~ msgid "Change sheet pin to hierarchical label"
 #~ msgstr "Change sheet pin to hierarchical label"
@@ -37067,12 +37122,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "Unable to load repository url"
 #~ msgstr "Unable to load repository url"
-
-#~ msgid "EDA"
-#~ msgstr "EDA"
-
-#~ msgid "Circuit board"
-#~ msgstr "Circuit board"
 
 #~ msgid ""
 #~ "There are hierarchical sheets in the loaded schematic file from an older "

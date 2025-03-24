@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-17 18:43+0300\n"
+"POT-Creation-Date: 2025-03-24 12:07-0700\n"
 "PO-Revision-Date: 2025-02-19 03:14+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
@@ -208,7 +208,7 @@ msgstr "Експорт поточного виду в JPEG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:62
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:661
-#: common/eda_base_frame.cpp:1215 common/hotkey_store.cpp:80
+#: common/eda_base_frame.cpp:1210 common/hotkey_store.cpp:80
 #: common/tool/actions.cpp:1073 pcbnew/footprint_chooser_frame.cpp:282
 #: pcbnew/footprint_viewer_frame.cpp:981 pcbnew/pcb_base_frame.cpp:682
 msgid "3D Viewer"
@@ -317,7 +317,7 @@ msgid "3D Image File Name"
 msgstr "Ім'я файлу 3D-зображення"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:747
-#: common/eda_base_frame.cpp:1362 common/eda_base_frame.cpp:1366
+#: common/eda_base_frame.cpp:1357 common/eda_base_frame.cpp:1361
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:328
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:332
 #, c-format
@@ -2422,7 +2422,6 @@ msgstr "Змінні середовища"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:39
 #: common/dialogs/git/dialog_git_auth.cpp:56
-#: common/dialogs/git/panel_git_repos_base.cpp:98
 #: common/dialogs/panel_design_block_lib_table.cpp:410
 #: common/dialogs/panel_setup_netclasses_base.cpp:51
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:88
@@ -2462,7 +2461,6 @@ msgid "Name"
 msgstr "Ім'я"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:40
-#: common/dialogs/git/panel_git_repos_base.cpp:99
 msgid "Path"
 msgstr "Шлях"
 
@@ -2760,12 +2758,14 @@ msgstr "Назва проекту"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1398
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "PCB"
 msgstr "PCB"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1334 eeschema/sch_plotter.cpp:1060
 #: eeschema/widgets/symbol_diff_widget.cpp:44
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Schematic"
 msgstr "Схема"
 
@@ -3647,7 +3647,6 @@ msgid "Filename"
 msgstr "Назва файлу"
 
 #: common/dialogs/git/dialog_git_commit.cpp:53
-#: common/dialogs/git/panel_git_repos_base.cpp:100
 #: eeschema/dialogs/dialog_migrate_buses.cpp:117
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:94
 #: pcbnew/dialogs/dialog_find_base.cpp:118 pcbnew/pad.cpp:1316
@@ -3686,64 +3685,64 @@ msgstr "Закомітити"
 msgid "Commit message cannot be empty"
 msgstr "Повідомлення для запису до репозиторію не можу бути пустим"
 
-#: common/dialogs/git/dialog_git_repository.cpp:74
-#: common/dialogs/git/dialog_git_repository.cpp:306
+#: common/dialogs/git/dialog_git_repository.cpp:75
+#: common/dialogs/git/dialog_git_repository.cpp:310
 #, fuzzy
 msgid "Test Connection"
 msgstr "Тестування з'єднання"
 
-#: common/dialogs/git/dialog_git_repository.cpp:165
-#: common/dialogs/git/dialog_git_repository.cpp:357
+#: common/dialogs/git/dialog_git_repository.cpp:166
+#: common/dialogs/git/dialog_git_repository.cpp:361
 msgid "Enter the password for the SSH key"
 msgstr "Введіть пароль для SSH ключа"
 
-#: common/dialogs/git/dialog_git_repository.cpp:311
+#: common/dialogs/git/dialog_git_repository.cpp:315
 msgid "Connection successful"
 msgstr "З'єднання встановлено"
 
-#: common/dialogs/git/dialog_git_repository.cpp:315
+#: common/dialogs/git/dialog_git_repository.cpp:319
 #, c-format
 msgid "Could not connect to '%s' "
 msgstr "Не вдалося приєднатися до '%s' "
 
-#: common/dialogs/git/dialog_git_repository.cpp:335
+#: common/dialogs/git/dialog_git_repository.cpp:339
 #, c-format
 msgid "Could not open private key '%s'"
 msgstr "Не вдалося відкрити приватний ключ '%s'"
 
-#: common/dialogs/git/dialog_git_repository.cpp:348
+#: common/dialogs/git/dialog_git_repository.cpp:352
 msgid "Invalid SSH Key"
 msgstr "Некоректний SSH ключ"
 
-#: common/dialogs/git/dialog_git_repository.cpp:349
+#: common/dialogs/git/dialog_git_repository.cpp:353
 msgid "The selected file is not a valid SSH private key"
 msgstr "Вибраний приватний SSH ключ є недійсний або пошкоджений"
 
-#: common/dialogs/git/dialog_git_repository.cpp:373
+#: common/dialogs/git/dialog_git_repository.cpp:377
 #, c-format
 msgid "Could not open public key '%s'"
 msgstr "Не вдалося відкрити публічний ключ '%s'"
 
-#: common/dialogs/git/dialog_git_repository.cpp:392
-#: common/dialogs/git/dialog_git_repository.cpp:399
+#: common/dialogs/git/dialog_git_repository.cpp:396
+#: common/dialogs/git/dialog_git_repository.cpp:403
 msgid "Missing information"
 msgstr "Відсутня інформація"
 
-#: common/dialogs/git/dialog_git_repository.cpp:393
+#: common/dialogs/git/dialog_git_repository.cpp:397
 msgid "Please enter a name for the repository"
 msgstr "Будь ласка введіть ім'я для репозиторію"
 
-#: common/dialogs/git/dialog_git_repository.cpp:400
+#: common/dialogs/git/dialog_git_repository.cpp:404
 msgid "Please enter a URL for the repository"
 msgstr "Будь ласка, введіть URL-адресу репозиторію"
 
-#: common/dialogs/git/dialog_git_repository.cpp:424
+#: common/dialogs/git/dialog_git_repository.cpp:428
 #: common/dialogs/git/dialog_git_repository_base.cpp:106
 #, fuzzy
 msgid "SSH key password:"
 msgstr "Пароль до SSH ключа"
 
-#: common/dialogs/git/dialog_git_repository.cpp:432
+#: common/dialogs/git/dialog_git_repository.cpp:436
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
 msgid "Password:"
 msgstr "Пароль:"
@@ -3821,47 +3820,48 @@ msgstr "Перемкнути"
 msgid "Add"
 msgstr "Додати"
 
-#: common/dialogs/git/panel_git_repos_base.cpp:23
+#: common/dialogs/git/panel_git_repos_base.cpp:20
+#, fuzzy
+msgid "Enable Git Tracking"
+msgstr "Ввімкнути анімацію"
+
+#: common/dialogs/git/panel_git_repos_base.cpp:28
+#, fuzzy
+msgid "Remote Tracking"
+msgstr "Трасування доріжок"
+
+#: common/dialogs/git/panel_git_repos_base.cpp:41
+#, fuzzy
+msgid "Update interval:"
+msgstr "Оновити поля"
+
+#: common/dialogs/git/panel_git_repos_base.cpp:46
+msgid ""
+"Number of minutes between remote update checks.  Zero disables automatic "
+"checks."
+msgstr ""
+
+#: common/dialogs/git/panel_git_repos_base.cpp:50
+#: common/dialogs/panel_common_settings_base.cpp:347
+#: common/dialogs/panel_common_settings_base.cpp:434
+msgid "minutes"
+msgstr "хвилин"
+
+#: common/dialogs/git/panel_git_repos_base.cpp:65
 msgid "Git Commit Data"
 msgstr "Закомітити дані в Git"
 
-#: common/dialogs/git/panel_git_repos_base.cpp:33
+#: common/dialogs/git/panel_git_repos_base.cpp:78
 msgid "Use default values"
 msgstr "Використовувати типове значення"
 
-#: common/dialogs/git/panel_git_repos_base.cpp:40
+#: common/dialogs/git/panel_git_repos_base.cpp:85
 msgid "Author name:"
 msgstr "Ім'я автора:"
 
-#: common/dialogs/git/panel_git_repos_base.cpp:51
+#: common/dialogs/git/panel_git_repos_base.cpp:96
 msgid "Author e-mail:"
 msgstr "E-mail автора:"
-
-#: common/dialogs/git/panel_git_repos_base.cpp:68
-msgid "Git Repositories"
-msgstr "Git репозиторії"
-
-#: common/dialogs/git/panel_git_repos_base.cpp:97
-#: common/dialogs/panel_design_block_lib_table_base.cpp:44
-#: common/dialogs/panel_design_block_lib_table_base.cpp:93
-#: eeschema/dialogs/panel_sym_lib_table_base.cpp:44
-#: eeschema/dialogs/panel_sym_lib_table_base.cpp:94
-#: include/lib_table_grid.h:215 pcbnew/dialogs/panel_fp_lib_table_base.cpp:44
-#: pcbnew/dialogs/panel_fp_lib_table_base.cpp:93
-msgid "Active"
-msgstr "Активний"
-
-#: common/dialogs/git/panel_git_repos_base.cpp:122
-msgid "Add new repository"
-msgstr "Додати новий репозиторій"
-
-#: common/dialogs/git/panel_git_repos_base.cpp:127
-msgid "Edit repository properties"
-msgstr "Редагувати властивості репозиторію"
-
-#: common/dialogs/git/panel_git_repos_base.cpp:135
-msgid "Remove Git Repository"
-msgstr "Видалити Git репозиторій"
 
 #: common/dialogs/panel_color_settings.cpp:52
 msgid "Reveal Themes in Finder"
@@ -4250,11 +4250,6 @@ msgstr ""
 "диску.\n"
 "Якщо встановлено значення 0, автоматичне резервне копіювання вимкнено"
 
-#: common/dialogs/panel_common_settings_base.cpp:347
-#: common/dialogs/panel_common_settings_base.cpp:434
-msgid "minutes"
-msgstr "хвилин"
-
 #: common/dialogs/panel_common_settings_base.cpp:351
 msgid "File history size:"
 msgstr "Розмір файлу історії:"
@@ -4599,6 +4594,15 @@ msgstr ""
 "\n"
 "%s"
 
+#: common/dialogs/panel_design_block_lib_table_base.cpp:44
+#: common/dialogs/panel_design_block_lib_table_base.cpp:93
+#: eeschema/dialogs/panel_sym_lib_table_base.cpp:44
+#: eeschema/dialogs/panel_sym_lib_table_base.cpp:94
+#: include/lib_table_grid.h:215 pcbnew/dialogs/panel_fp_lib_table_base.cpp:44
+#: pcbnew/dialogs/panel_fp_lib_table_base.cpp:93
+msgid "Active"
+msgstr "Активний"
+
 #: common/dialogs/panel_design_block_lib_table_base.cpp:45
 #: common/dialogs/panel_design_block_lib_table_base.cpp:94
 #: eeschema/dialogs/dialog_field_properties_base.cpp:97
@@ -4824,9 +4828,9 @@ msgid "Grid size '%s' already exists."
 msgstr "Сітка розміром '%s' вже існує."
 
 #: common/dialogs/panel_grid_settings_base.cpp:25
-#: common/eda_base_frame.cpp:1158 common/eda_base_frame.cpp:1167
-#: common/eda_base_frame.cpp:1193 common/eda_base_frame.cpp:1206
-#: common/eda_base_frame.cpp:1239 common/eda_base_frame.cpp:1261
+#: common/eda_base_frame.cpp:1153 common/eda_base_frame.cpp:1162
+#: common/eda_base_frame.cpp:1188 common/eda_base_frame.cpp:1201
+#: common/eda_base_frame.cpp:1234 common/eda_base_frame.cpp:1256
 #: common/tool/common_tools.cpp:608
 msgid "Grids"
 msgstr "Сітки"
@@ -5149,7 +5153,7 @@ msgid "Reset to Trackpad Defaults"
 msgstr "Скинути параметри до типових для сенсорної панелі"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:17
-#: common/eda_base_frame.cpp:1216
+#: common/eda_base_frame.cpp:1211
 #: eeschema/dialogs/dialog_image_properties_base.cpp:66
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:165
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:295
@@ -5834,129 +5838,129 @@ msgstr "Миша та сенсорна панель"
 msgid "Hotkeys"
 msgstr "Гарячі клавіші"
 
-#: common/eda_base_frame.cpp:1125 kicad/project_tree_pane.cpp:1053
+#: common/eda_base_frame.cpp:1121 kicad/project_tree_pane.cpp:1053
 msgid "Version Control"
 msgstr "Контроль версій"
 
-#: common/eda_base_frame.cpp:1133
+#: common/eda_base_frame.cpp:1128
 msgid "Data Collection"
 msgstr "Набір даних"
 
-#: common/eda_base_frame.cpp:1156 common/tool/actions.cpp:1088
+#: common/eda_base_frame.cpp:1151 common/tool/actions.cpp:1088
 #: common/tool/common_tools.cpp:615 eeschema/symbol_editor/symbol_editor.cpp:84
 #: kicad/tools/kicad_manager_actions.cpp:125
 msgid "Symbol Editor"
 msgstr "Редактор символів"
 
-#: common/eda_base_frame.cpp:1157 common/eda_base_frame.cpp:1166
-#: common/eda_base_frame.cpp:1192 common/eda_base_frame.cpp:1205
-#: common/eda_base_frame.cpp:1237 common/eda_base_frame.cpp:1260
+#: common/eda_base_frame.cpp:1152 common/eda_base_frame.cpp:1161
+#: common/eda_base_frame.cpp:1187 common/eda_base_frame.cpp:1200
+#: common/eda_base_frame.cpp:1232 common/eda_base_frame.cpp:1255
 msgid "Display Options"
 msgstr "Параметри показу"
 
-#: common/eda_base_frame.cpp:1159 common/eda_base_frame.cpp:1168
-#: common/eda_base_frame.cpp:1195 common/eda_base_frame.cpp:1208
+#: common/eda_base_frame.cpp:1154 common/eda_base_frame.cpp:1163
+#: common/eda_base_frame.cpp:1190 common/eda_base_frame.cpp:1203
 #: pcbnew/dialogs/panel_edit_options_base.cpp:23
 #: pcbnew/tools/zone_filler_tool.cpp:283
 msgid "Editing Options"
 msgstr "Параметри редагування"
 
-#: common/eda_base_frame.cpp:1160 common/eda_base_frame.cpp:1170
-#: common/eda_base_frame.cpp:1196 common/eda_base_frame.cpp:1209
-#: common/eda_base_frame.cpp:1238 common/eda_base_frame.cpp:1262
+#: common/eda_base_frame.cpp:1155 common/eda_base_frame.cpp:1165
+#: common/eda_base_frame.cpp:1191 common/eda_base_frame.cpp:1204
+#: common/eda_base_frame.cpp:1233 common/eda_base_frame.cpp:1257
 msgid "Colors"
 msgstr "Кольори"
 
-#: common/eda_base_frame.cpp:1165 common/hotkey_store.cpp:77
+#: common/eda_base_frame.cpp:1160 common/hotkey_store.cpp:77
 #: common/tool/common_tools.cpp:614 eeschema/menubar.cpp:133
 #: eeschema/sch_edit_frame.cpp:1748 kicad/tools/kicad_manager_actions.cpp:114
 msgid "Schematic Editor"
 msgstr "Редактор схем"
 
-#: common/eda_base_frame.cpp:1169
+#: common/eda_base_frame.cpp:1164
 msgid "Annotation Options"
 msgstr "Параметри анотування"
 
-#: common/eda_base_frame.cpp:1172
+#: common/eda_base_frame.cpp:1167
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:20
 msgid "Field Name Templates"
 msgstr "Шаблони імен полів"
 
-#: common/eda_base_frame.cpp:1173 eeschema/sim/simulator_frame.cpp:115
+#: common/eda_base_frame.cpp:1168 eeschema/sim/simulator_frame.cpp:115
 #: eeschema/sim/toolbars_simulator_frame.cpp:114
 #: eeschema/tools/sch_actions.cpp:74
 msgid "Simulator"
 msgstr "Симулятор"
 
-#: common/eda_base_frame.cpp:1191 common/tool/actions.cpp:1105
+#: common/eda_base_frame.cpp:1186 common/tool/actions.cpp:1105
 #: common/tool/common_tools.cpp:617 kicad/tools/kicad_manager_actions.cpp:147
 #: pcbnew/footprint_edit_frame.cpp:1088 pcbnew/menubar_footprint_editor.cpp:92
 msgid "Footprint Editor"
 msgstr "Редактор посадкових місць"
 
-#: common/eda_base_frame.cpp:1194 common/eda_base_frame.cpp:1207
+#: common/eda_base_frame.cpp:1189 common/eda_base_frame.cpp:1202
 msgid "Origins & Axes"
 msgstr "Початок координат & Осі"
 
-#: common/eda_base_frame.cpp:1197
+#: common/eda_base_frame.cpp:1192
 #, fuzzy
 msgid "Footprint Defaults"
 msgstr "Нове посадкове місце"
 
-#: common/eda_base_frame.cpp:1199
+#: common/eda_base_frame.cpp:1194
 #, fuzzy
 msgid "Graphics Defaults"
 msgstr "Очищення графіки"
 
-#: common/eda_base_frame.cpp:1204 common/hotkey_store.cpp:78
+#: common/eda_base_frame.cpp:1199 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:616 kicad/tools/kicad_manager_actions.cpp:136
 #: pcbnew/menubar_pcb_editor.cpp:186 pcbnew/pcb_edit_frame.cpp:201
 #: pcbnew/pcb_edit_frame.cpp:1806 pcbnew/tools/zone_filler_tool.cpp:284
 msgid "PCB Editor"
 msgstr "Редактор друкованих плат"
 
-#: common/eda_base_frame.cpp:1210 common/eda_base_frame.cpp:1275
+#: common/eda_base_frame.cpp:1205 common/eda_base_frame.cpp:1270
 #, fuzzy
 msgid "Plugins"
 msgstr "Плагіни (%d)"
 
-#: common/eda_base_frame.cpp:1217
+#: common/eda_base_frame.cpp:1212
 msgid "Realtime Renderer"
 msgstr "Візуалізація в реальному часі"
 
-#: common/eda_base_frame.cpp:1218
+#: common/eda_base_frame.cpp:1213
 msgid "Raytracing Renderer"
 msgstr "Рендер трасування променів"
 
-#: common/eda_base_frame.cpp:1236 common/hotkey_store.cpp:81
+#: common/eda_base_frame.cpp:1231 common/hotkey_store.cpp:81
 #: common/tool/common_tools.cpp:619 gerbview/gerbview_frame.cpp:687
 #: gerbview/gerbview_frame.cpp:711 gerbview/menubar.cpp:159
 #: kicad/tools/kicad_manager_actions.cpp:158
 msgid "Gerber Viewer"
 msgstr "Переглядач Gerber"
 
-#: common/eda_base_frame.cpp:1241
+#: common/eda_base_frame.cpp:1236
 msgid "Excellon Options"
 msgstr "Параметри Excellon"
 
-#: common/eda_base_frame.cpp:1259 common/hotkey_store.cpp:79
+#: common/eda_base_frame.cpp:1254 common/hotkey_store.cpp:79
 #: common/tool/common_tools.cpp:618 kicad/tools/kicad_manager_actions.cpp:187
 #: pagelayout_editor/menubar.cpp:88 pagelayout_editor/menubar.cpp:89
 #: pagelayout_editor/pl_editor_frame.cpp:583
 msgid "Drawing Sheet Editor"
 msgstr "Редактор форматних рамок"
 
-#: common/eda_base_frame.cpp:1268
+#: common/eda_base_frame.cpp:1263
 msgid "Packages and Updates"
 msgstr "Пакети і оновлення"
 
-#: common/eda_base_frame.cpp:1358 pcbnew/dialogs/dialog_export_odbpp.cpp:324
+#: common/eda_base_frame.cpp:1353 pcbnew/dialogs/dialog_export_odbpp.cpp:324
 #, c-format
 msgid "Insufficient permissions to folder '%s'."
 msgstr "Недостатньо прав для теки '%s'."
 
-#: common/eda_base_frame.cpp:1399
+#: common/eda_base_frame.cpp:1394
 #, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
@@ -5973,11 +5977,11 @@ msgstr ""
 "\n"
 "Чи бажаєте ви відкрити автоматично збережений файл?"
 
-#: common/eda_base_frame.cpp:1420
+#: common/eda_base_frame.cpp:1415
 msgid "The auto save file could not be renamed to the board file name."
 msgstr "Не вдалося перейменувати файл автоматичного збереження."
 
-#: common/eda_base_frame.cpp:1653
+#: common/eda_base_frame.cpp:1648
 msgid "Set Language"
 msgstr "Встановити мову"
 
@@ -6910,78 +6914,113 @@ msgstr "Не вдалося прочитати файл "
 msgid "Could not create directory '%s'"
 msgstr "Не вдалося створити вихідну теку '%s'"
 
-#: common/git/git_clone_handler.cpp:80
+#: common/git/git_clone_handler.cpp:81
 #, c-format
 msgid "Could not clone repository '%s'"
 msgstr "Не вдалося клонувати репозиторій з '%s'"
 
-#: common/git/git_pull_handler.cpp:63
+#: common/git/git_pull_handler.cpp:67
 #, c-format
 msgid "Could not lookup remote '%s'"
 msgstr "Не вдалося знайти віддалений репозиторій '%s'"
 
-#: common/git/git_pull_handler.cpp:81
+#: common/git/git_pull_handler.cpp:87
 #, fuzzy, c-format
 msgid "Could not connect to remote '%s': %s"
 msgstr "Не вдалося приєднатися до віддаленого репозиторію '%s'"
 
-#: common/git/git_pull_handler.cpp:92
+#: common/git/git_pull_handler.cpp:99
 #, fuzzy, c-format
 msgid "Could not fetch data from remote '%s': %s"
 msgstr "Не вдалося отримати дані з віддаленого репозиторію '%s'"
 
-#: common/git/git_pull_handler.cpp:120
+#: common/git/git_pull_handler.cpp:127
 msgid "Could not read 'FETCH_HEAD'"
 msgstr "Не вдалося прочитати 'FETCH_HEAD'"
 
-#: common/git/git_pull_handler.cpp:128
+#: common/git/git_pull_handler.cpp:135
 msgid "Could not lookup commit"
 msgstr "Не вдалося знайти коміт"
 
-#: common/git/git_pull_handler.cpp:140
+#: common/git/git_pull_handler.cpp:146
 msgid "Could not analyze merge"
 msgstr "Не вдалося проаналізувати злиття"
 
-#: common/git/git_pull_handler.cpp:146
+#: common/git/git_pull_handler.cpp:152
 msgid "Invalid HEAD.  Cannot merge."
 msgstr "Неправильний HEAD.  Неможливо провести злиття."
 
-#: common/git/git_pull_handler.cpp:211 common/git/git_push_handler.cpp:91
+#: common/git/git_pull_handler.cpp:228 common/git/git_push_handler.cpp:91
 msgid "Could not get repository head"
 msgstr "Неможливо отримати останній коміт з репозиторію"
 
-#: common/git/git_pull_handler.cpp:223
+#: common/git/git_pull_handler.cpp:242
 #, c-format
 msgid "Could not get reference OID for reference '%s'"
 msgstr "Не вдалося знайти OID для посиланням на '%s'"
 
-#: common/git/git_pull_handler.cpp:234 common/git/kicad_git_errors.cpp:55
+#: common/git/git_pull_handler.cpp:252
+#, fuzzy
+msgid "Could not look up target commit"
+msgstr "Не вдалося знайти коміт"
+
+#: common/git/git_pull_handler.cpp:264
+#, fuzzy
+msgid "Could not get tree from target commit"
+msgstr "Не вдалося злити коміти"
+
+#: common/git/git_pull_handler.cpp:306 common/git/kicad_git_errors.cpp:55
 msgid "Failed to perform checkout operation."
 msgstr "Не вдалося виконати операцію checkout."
 
-#: common/git/git_pull_handler.cpp:253
-msgid "Could not lookup commit '{}'"
+#: common/git/git_pull_handler.cpp:315
+#, fuzzy, c-format
+msgid "Failed to update reference '%s' to point to '%s'"
+msgstr "потрібно число для '%s'"
+
+#: common/git/git_pull_handler.cpp:325
+#, fuzzy
+msgid "Failed to clean up repository state after fast-forward."
+msgstr "Не вдалося клонувати репозиторій."
+
+#: common/git/git_pull_handler.cpp:334
+#, fuzzy
+msgid "Failed to initialize revision walker."
+msgstr "Помилка виведення даних"
+
+#: common/git/git_pull_handler.cpp:343
+#, fuzzy
+msgid "Failed to push reference to revision walker."
+msgstr "Не вдалося записати зміни до віддаленого репозиторію."
+
+#: common/git/git_pull_handler.cpp:358
+#, fuzzy, c-format
+msgid "Could not lookup commit '%s'"
 msgstr "Не вдалося знайти коміт '{}'"
 
-#: common/git/git_pull_handler.cpp:290
+#: common/git/git_pull_handler.cpp:391
 msgid "Could not merge commits"
 msgstr "Не вдалося злити коміти"
 
-#: common/git/git_pull_handler.cpp:299
+#: common/git/git_pull_handler.cpp:400
 msgid "Could not get repository index"
 msgstr "Не вдалося отримати індекс репозиторія"
 
-#: common/git/git_pull_handler.cpp:310
+#: common/git/git_pull_handler.cpp:411
 msgid "Could not get conflict iterator"
 msgstr "Не вдалося отримати ітератор конфліктів"
 
-#: common/git/git_pull_handler.cpp:332 common/git/git_pull_handler.cpp:333
+#: common/git/git_pull_handler.cpp:433 common/git/git_pull_handler.cpp:434
 msgid "Changed"
 msgstr "Змінено"
 
-#: common/git/git_pull_handler.cpp:347 common/git/git_pull_handler.cpp:348
+#: common/git/git_pull_handler.cpp:448 common/git/git_pull_handler.cpp:449
 msgid "Added"
 msgstr "Додано"
+
+#: common/git/git_pull_handler.cpp:527
+msgid "Conflicts detected during rebase"
+msgstr ""
 
 #: common/git/git_push_handler.cpp:56
 msgid "Could not lookup remote"
@@ -6997,35 +7036,40 @@ msgstr "Не вдалося приєднатися до віддаленого �
 msgid "Could not push to remote: %s"
 msgstr "Не вдалося записати у віддалений репозиторій"
 
-#: common/git/kicad_git_common.cpp:829
+#: common/git/kicad_git_common.cpp:840
 #, c-format
 msgid "Received %u of %u objects"
 msgstr "Отримано об'єктів: %u з %u"
 
-#: common/git/kicad_git_common.cpp:858
+#: common/git/kicad_git_common.cpp:869
 #, c-format
 msgid "* [updated] %s..%s %s"
 msgstr "* [Оновлено] %s..%s %s"
 
-#: common/git/kicad_git_common.cpp:862
+#: common/git/kicad_git_common.cpp:873
 #, c-format
 msgid "* [new] %s %s"
 msgstr "*[нове]%s %s"
 
-#: common/git/kicad_git_common.cpp:882
+#: common/git/kicad_git_common.cpp:893
 #, c-format
 msgid "Writing objects: %lld%% (%u/%u), %zu bytes"
 msgstr "Записування об'єктів: %lld%% (%u/%u), %zu байтів"
 
-#: common/git/kicad_git_common.cpp:897
+#: common/git/kicad_git_common.cpp:908
 #, c-format
 msgid "* [rejected] %s (%s)"
 msgstr "*[відхилено]%s (%s)"
 
-#: common/git/kicad_git_common.cpp:902
+#: common/git/kicad_git_common.cpp:913
 #, c-format
 msgid "[updated] %s"
 msgstr "[оновлено]%s"
+
+#: common/git/kicad_git_common.cpp:977
+#, fuzzy
+msgid "Unable to authenticate"
+msgstr "Не вдалося відкрити файл"
 
 #: common/git/kicad_git_errors.cpp:40
 msgid "Invalid repository."
@@ -18619,7 +18663,7 @@ msgid "Could not open CvPcb"
 msgstr "Не вдалося відкрити CvPcb"
 
 #: eeschema/sch_edit_frame.cpp:1738 eeschema/sim/simulator_frame.cpp:341
-#: kicad/kicad_manager_frame.cpp:1041 pcbnew/footprint_edit_frame.cpp:1072
+#: kicad/kicad_manager_frame.cpp:1043 pcbnew/footprint_edit_frame.cpp:1072
 #: pcbnew/pcb_edit_frame.cpp:1801
 msgid "[Read Only]"
 msgstr "[Лише читання]"
@@ -27653,20 +27697,20 @@ msgstr "Помилка створення svg файла"
 msgid "Edit File in Text Editor"
 msgstr "Редагувати в текстовому редакторі"
 
-#: kicad/kicad_manager_frame.cpp:1045
+#: kicad/kicad_manager_frame.cpp:1047
 msgid "[no project loaded]"
 msgstr "[немає завантажених проектів]"
 
-#: kicad/kicad_manager_frame.cpp:1088
+#: kicad/kicad_manager_frame.cpp:1090
 #, c-format
 msgid "Project: %s"
 msgstr "Проект: %s"
 
-#: kicad/kicad_manager_frame.cpp:1124
+#: kicad/kicad_manager_frame.cpp:1126
 msgid "Restoring session"
 msgstr "Відновлення сесії"
 
-#: kicad/kicad_manager_frame.cpp:1137
+#: kicad/kicad_manager_frame.cpp:1139
 #, c-format
 msgid "Restoring '%s'"
 msgstr "Відновлення '%s'"
@@ -28558,62 +28602,67 @@ msgstr "Ви впевнені, що хочете видалити поле '%s'?
 msgid "Failed to remove Git directory"
 msgstr "Не вдалося видалити теку %s"
 
-#: kicad/project_tree_pane.cpp:2267
+#: kicad/project_tree_pane.cpp:2279
 #, fuzzy
 msgid "The selected directory is not a Git project."
 msgstr "Вибрана папка вже містить існуючий git проект."
 
-#: kicad/project_tree_pane.cpp:2412
+#: kicad/project_tree_pane.cpp:2425
 msgid "Discarding commit due to empty commit message."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2418
+#: kicad/project_tree_pane.cpp:2431
 msgid "Discarding commit due to empty file selection."
 msgstr ""
 
-#: kicad/project_tree_pane.cpp:2424
+#: kicad/project_tree_pane.cpp:2437
 #, fuzzy, c-format
 msgid "Failed to get repository index: %s"
 msgstr "Неможливо обробити репозиторій: %s"
 
-#: kicad/project_tree_pane.cpp:2435
+#: kicad/project_tree_pane.cpp:2448
 #, fuzzy, c-format
 msgid "Failed to add file to index: %s"
 msgstr "Не вдалося записати файли креслення до теки '%s'."
 
-#: kicad/project_tree_pane.cpp:2443
+#: kicad/project_tree_pane.cpp:2456
 #, fuzzy, c-format
 msgid "Failed to write index: %s"
 msgstr "Не вдалося створити файл '%s'."
 
-#: kicad/project_tree_pane.cpp:2450
+#: kicad/project_tree_pane.cpp:2463
 #, fuzzy, c-format
 msgid "Failed to write tree: %s"
 msgstr "Не вдалося створити файл '%s'."
 
-#: kicad/project_tree_pane.cpp:2457
+#: kicad/project_tree_pane.cpp:2470
 #, c-format
 msgid "Failed to lookup tree: %s"
 msgstr "Не вдалося знайти дерево: %s"
 
-#: kicad/project_tree_pane.cpp:2469
+#: kicad/project_tree_pane.cpp:2482
 #, fuzzy, c-format
 msgid "Failed to get HEAD reference: %s"
 msgstr "Не вдалося видалити теку %s"
 
-#: kicad/project_tree_pane.cpp:2478
+#: kicad/project_tree_pane.cpp:2491
 #, fuzzy, c-format
 msgid "Failed to get commit: %s"
 msgstr "Не вдалося зберегти схему '%s'"
 
-#: kicad/project_tree_pane.cpp:2493
+#: kicad/project_tree_pane.cpp:2506
 #, fuzzy, c-format
 msgid "Failed to create author signature: %s"
 msgstr "Не вдалося створити тимчасовий файл '%s'."
 
-#: kicad/project_tree_pane.cpp:2530
+#: kicad/project_tree_pane.cpp:2543
 #, fuzzy, c-format
 msgid "Failed to create commit: %s"
+msgstr "Не вдалося створити файл '%s'."
+
+#: kicad/project_tree_pane.cpp:2548
+#, fuzzy, c-format
+msgid "Created commit with id: %s"
 msgstr "Не вдалося створити файл '%s'."
 
 #: kicad/tools/kicad_manager_actions.cpp:43
@@ -52498,6 +52547,14 @@ msgstr "Автономний редактор схем для KiCad друков
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "Конструктор EDA для схеми та проектування друкованої плати"
 
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
+msgid "EDA"
+msgstr "EDA"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
+msgid "Circuit board"
+msgstr "Монтажна плата"
+
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
@@ -52557,6 +52614,18 @@ msgstr "KiCad схема"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Редактор форматних рамок KiCad"
+
+#~ msgid "Git Repositories"
+#~ msgstr "Git репозиторії"
+
+#~ msgid "Add new repository"
+#~ msgstr "Додати новий репозиторій"
+
+#~ msgid "Edit repository properties"
+#~ msgstr "Редагувати властивості репозиторію"
+
+#~ msgid "Remove Git Repository"
+#~ msgstr "Видалити Git репозиторій"
 
 #, fuzzy
 #~ msgid "Change sheet pin to hierarchical label"
@@ -52726,12 +52795,6 @@ msgstr "Редактор форматних рамок KiCad"
 
 #~ msgid "Unable to load repository url"
 #~ msgstr "Неможливо завантажити url репозиторію"
-
-#~ msgid "EDA"
-#~ msgstr "EDA"
-
-#~ msgid "Circuit board"
-#~ msgstr "Монтажна плата"
 
 #, fuzzy, c-format
 #~ msgid "Error loading designblock %s from library '%s'."
@@ -55342,9 +55405,6 @@ msgstr "Редактор форматних рамок KiCad"
 
 #~ msgid "Center pivot rotation"
 #~ msgstr "Встановити центр обертання"
-
-#~ msgid "Enable animation"
-#~ msgstr "Ввімкнути анімацію"
 
 #~ msgid "Animation speed:"
 #~ msgstr "Швидкість анімації:"

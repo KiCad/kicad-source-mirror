@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-17 18:43+0300\n"
+"POT-Creation-Date: 2025-03-24 12:07-0700\n"
 "PO-Revision-Date: 2025-02-19 03:14+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
@@ -220,7 +220,7 @@ msgstr "Exportar vista actual como JPG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:62
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:661
-#: common/eda_base_frame.cpp:1215 common/hotkey_store.cpp:80
+#: common/eda_base_frame.cpp:1210 common/hotkey_store.cpp:80
 #: common/tool/actions.cpp:1073 pcbnew/footprint_chooser_frame.cpp:282
 #: pcbnew/footprint_viewer_frame.cpp:981 pcbnew/pcb_base_frame.cpp:682
 msgid "3D Viewer"
@@ -329,7 +329,7 @@ msgid "3D Image File Name"
 msgstr "Nombre del archivo de imagen 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:747
-#: common/eda_base_frame.cpp:1362 common/eda_base_frame.cpp:1366
+#: common/eda_base_frame.cpp:1357 common/eda_base_frame.cpp:1361
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:328
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:332
 #, c-format
@@ -2446,7 +2446,6 @@ msgstr "Variables de entorno"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:39
 #: common/dialogs/git/dialog_git_auth.cpp:56
-#: common/dialogs/git/panel_git_repos_base.cpp:98
 #: common/dialogs/panel_design_block_lib_table.cpp:410
 #: common/dialogs/panel_setup_netclasses_base.cpp:51
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:88
@@ -2486,7 +2485,6 @@ msgid "Name"
 msgstr "Nombre"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:40
-#: common/dialogs/git/panel_git_repos_base.cpp:99
 msgid "Path"
 msgstr "Ruta"
 
@@ -2783,12 +2781,14 @@ msgstr "Nombre del proyecto"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1398
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "PCB"
 msgstr "PCB"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1334 eeschema/sch_plotter.cpp:1060
 #: eeschema/widgets/symbol_diff_widget.cpp:44
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Schematic"
 msgstr "Esquema"
 
@@ -3678,7 +3678,6 @@ msgid "Filename"
 msgstr "Nombre de archivo"
 
 #: common/dialogs/git/dialog_git_commit.cpp:53
-#: common/dialogs/git/panel_git_repos_base.cpp:100
 #: eeschema/dialogs/dialog_migrate_buses.cpp:117
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:94
 #: pcbnew/dialogs/dialog_find_base.cpp:118 pcbnew/pad.cpp:1316
@@ -3717,64 +3716,64 @@ msgstr "C&ommit"
 msgid "Commit message cannot be empty"
 msgstr "El mensaje del commit no puede estar vacío"
 
-#: common/dialogs/git/dialog_git_repository.cpp:74
-#: common/dialogs/git/dialog_git_repository.cpp:306
+#: common/dialogs/git/dialog_git_repository.cpp:75
+#: common/dialogs/git/dialog_git_repository.cpp:310
 #, fuzzy
 msgid "Test Connection"
 msgstr "Probar conexión"
 
-#: common/dialogs/git/dialog_git_repository.cpp:165
-#: common/dialogs/git/dialog_git_repository.cpp:357
+#: common/dialogs/git/dialog_git_repository.cpp:166
+#: common/dialogs/git/dialog_git_repository.cpp:361
 msgid "Enter the password for the SSH key"
 msgstr "Introduzca la contraseña para la clave SSH"
 
-#: common/dialogs/git/dialog_git_repository.cpp:311
+#: common/dialogs/git/dialog_git_repository.cpp:315
 msgid "Connection successful"
 msgstr "Conexión exitosa"
 
-#: common/dialogs/git/dialog_git_repository.cpp:315
+#: common/dialogs/git/dialog_git_repository.cpp:319
 #, c-format
 msgid "Could not connect to '%s' "
 msgstr "No se pudo conectar a '%s ' "
 
-#: common/dialogs/git/dialog_git_repository.cpp:335
+#: common/dialogs/git/dialog_git_repository.cpp:339
 #, c-format
 msgid "Could not open private key '%s'"
 msgstr "No se pudo abrir la llave privada '%s '"
 
-#: common/dialogs/git/dialog_git_repository.cpp:348
+#: common/dialogs/git/dialog_git_repository.cpp:352
 msgid "Invalid SSH Key"
 msgstr "Clave SSH inválida"
 
-#: common/dialogs/git/dialog_git_repository.cpp:349
+#: common/dialogs/git/dialog_git_repository.cpp:353
 msgid "The selected file is not a valid SSH private key"
 msgstr "El archivo seleccionado no es una clave privada SSH válida"
 
-#: common/dialogs/git/dialog_git_repository.cpp:373
+#: common/dialogs/git/dialog_git_repository.cpp:377
 #, c-format
 msgid "Could not open public key '%s'"
 msgstr "No se pudo abrir la clave pública '%s'"
 
-#: common/dialogs/git/dialog_git_repository.cpp:392
-#: common/dialogs/git/dialog_git_repository.cpp:399
+#: common/dialogs/git/dialog_git_repository.cpp:396
+#: common/dialogs/git/dialog_git_repository.cpp:403
 msgid "Missing information"
 msgstr "Información faltante"
 
-#: common/dialogs/git/dialog_git_repository.cpp:393
+#: common/dialogs/git/dialog_git_repository.cpp:397
 msgid "Please enter a name for the repository"
 msgstr "Por favor ingresa un nombre para el repositorio"
 
-#: common/dialogs/git/dialog_git_repository.cpp:400
+#: common/dialogs/git/dialog_git_repository.cpp:404
 msgid "Please enter a URL for the repository"
 msgstr "Por favor ingresa una URL para el repositorio"
 
-#: common/dialogs/git/dialog_git_repository.cpp:424
+#: common/dialogs/git/dialog_git_repository.cpp:428
 #: common/dialogs/git/dialog_git_repository_base.cpp:106
 #, fuzzy
 msgid "SSH key password:"
 msgstr "Contraseña de clave SSH"
 
-#: common/dialogs/git/dialog_git_repository.cpp:432
+#: common/dialogs/git/dialog_git_repository.cpp:436
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
 msgid "Password:"
 msgstr "Contraseña:"
@@ -3852,47 +3851,48 @@ msgstr "Cambiar"
 msgid "Add"
 msgstr "Agregar"
 
-#: common/dialogs/git/panel_git_repos_base.cpp:23
+#: common/dialogs/git/panel_git_repos_base.cpp:20
+#, fuzzy
+msgid "Enable Git Tracking"
+msgstr "Permitir el borrado automático de pistas"
+
+#: common/dialogs/git/panel_git_repos_base.cpp:28
+#, fuzzy
+msgid "Remote Tracking"
+msgstr "Enrutar pista"
+
+#: common/dialogs/git/panel_git_repos_base.cpp:41
+#, fuzzy
+msgid "Update interval:"
+msgstr "Actualizar campos"
+
+#: common/dialogs/git/panel_git_repos_base.cpp:46
+msgid ""
+"Number of minutes between remote update checks.  Zero disables automatic "
+"checks."
+msgstr ""
+
+#: common/dialogs/git/panel_git_repos_base.cpp:50
+#: common/dialogs/panel_common_settings_base.cpp:347
+#: common/dialogs/panel_common_settings_base.cpp:434
+msgid "minutes"
+msgstr "minutos"
+
+#: common/dialogs/git/panel_git_repos_base.cpp:65
 msgid "Git Commit Data"
 msgstr "Datos de git commit"
 
-#: common/dialogs/git/panel_git_repos_base.cpp:33
+#: common/dialogs/git/panel_git_repos_base.cpp:78
 msgid "Use default values"
 msgstr "Utilizar valores por defecto"
 
-#: common/dialogs/git/panel_git_repos_base.cpp:40
+#: common/dialogs/git/panel_git_repos_base.cpp:85
 msgid "Author name:"
 msgstr "Nombre de autor:"
 
-#: common/dialogs/git/panel_git_repos_base.cpp:51
+#: common/dialogs/git/panel_git_repos_base.cpp:96
 msgid "Author e-mail:"
 msgstr "E-mail de autor:"
-
-#: common/dialogs/git/panel_git_repos_base.cpp:68
-msgid "Git Repositories"
-msgstr "Repositorios Git"
-
-#: common/dialogs/git/panel_git_repos_base.cpp:97
-#: common/dialogs/panel_design_block_lib_table_base.cpp:44
-#: common/dialogs/panel_design_block_lib_table_base.cpp:93
-#: eeschema/dialogs/panel_sym_lib_table_base.cpp:44
-#: eeschema/dialogs/panel_sym_lib_table_base.cpp:94
-#: include/lib_table_grid.h:215 pcbnew/dialogs/panel_fp_lib_table_base.cpp:44
-#: pcbnew/dialogs/panel_fp_lib_table_base.cpp:93
-msgid "Active"
-msgstr "Activo"
-
-#: common/dialogs/git/panel_git_repos_base.cpp:122
-msgid "Add new repository"
-msgstr "Agregar repositorio nuevo"
-
-#: common/dialogs/git/panel_git_repos_base.cpp:127
-msgid "Edit repository properties"
-msgstr "Editar propiedades de repositorio"
-
-#: common/dialogs/git/panel_git_repos_base.cpp:135
-msgid "Remove Git Repository"
-msgstr "Eliminar repositorio Git"
 
 #: common/dialogs/panel_color_settings.cpp:52
 msgid "Reveal Themes in Finder"
@@ -4283,11 +4283,6 @@ msgstr ""
 "de la placa en disco.\n"
 "Si se indica 0, se desabilitará la copia de respaldo"
 
-#: common/dialogs/panel_common_settings_base.cpp:347
-#: common/dialogs/panel_common_settings_base.cpp:434
-msgid "minutes"
-msgstr "minutos"
-
 #: common/dialogs/panel_common_settings_base.cpp:351
 msgid "File history size:"
 msgstr "Tamaño del historial:"
@@ -4636,6 +4631,15 @@ msgstr ""
 "\n"
 "%s"
 
+#: common/dialogs/panel_design_block_lib_table_base.cpp:44
+#: common/dialogs/panel_design_block_lib_table_base.cpp:93
+#: eeschema/dialogs/panel_sym_lib_table_base.cpp:44
+#: eeschema/dialogs/panel_sym_lib_table_base.cpp:94
+#: include/lib_table_grid.h:215 pcbnew/dialogs/panel_fp_lib_table_base.cpp:44
+#: pcbnew/dialogs/panel_fp_lib_table_base.cpp:93
+msgid "Active"
+msgstr "Activo"
+
 #: common/dialogs/panel_design_block_lib_table_base.cpp:45
 #: common/dialogs/panel_design_block_lib_table_base.cpp:94
 #: eeschema/dialogs/dialog_field_properties_base.cpp:97
@@ -4863,9 +4867,9 @@ msgid "Grid size '%s' already exists."
 msgstr "El tamaño de cuadrícula '%s' ya existe."
 
 #: common/dialogs/panel_grid_settings_base.cpp:25
-#: common/eda_base_frame.cpp:1158 common/eda_base_frame.cpp:1167
-#: common/eda_base_frame.cpp:1193 common/eda_base_frame.cpp:1206
-#: common/eda_base_frame.cpp:1239 common/eda_base_frame.cpp:1261
+#: common/eda_base_frame.cpp:1153 common/eda_base_frame.cpp:1162
+#: common/eda_base_frame.cpp:1188 common/eda_base_frame.cpp:1201
+#: common/eda_base_frame.cpp:1234 common/eda_base_frame.cpp:1256
 #: common/tool/common_tools.cpp:608
 msgid "Grids"
 msgstr "Cuadrículas"
@@ -5191,7 +5195,7 @@ msgid "Reset to Trackpad Defaults"
 msgstr "Restablecer los valores predeterminados del trackpad"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:17
-#: common/eda_base_frame.cpp:1216
+#: common/eda_base_frame.cpp:1211
 #: eeschema/dialogs/dialog_image_properties_base.cpp:66
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:165
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:295
@@ -5881,129 +5885,129 @@ msgstr "Ratón y panel táctil"
 msgid "Hotkeys"
 msgstr "Atajos"
 
-#: common/eda_base_frame.cpp:1125 kicad/project_tree_pane.cpp:1053
+#: common/eda_base_frame.cpp:1121 kicad/project_tree_pane.cpp:1053
 msgid "Version Control"
 msgstr "Control de versión"
 
-#: common/eda_base_frame.cpp:1133
+#: common/eda_base_frame.cpp:1128
 msgid "Data Collection"
 msgstr "Recopilación de datos"
 
-#: common/eda_base_frame.cpp:1156 common/tool/actions.cpp:1088
+#: common/eda_base_frame.cpp:1151 common/tool/actions.cpp:1088
 #: common/tool/common_tools.cpp:615 eeschema/symbol_editor/symbol_editor.cpp:84
 #: kicad/tools/kicad_manager_actions.cpp:125
 msgid "Symbol Editor"
 msgstr "Editor de símbolos"
 
-#: common/eda_base_frame.cpp:1157 common/eda_base_frame.cpp:1166
-#: common/eda_base_frame.cpp:1192 common/eda_base_frame.cpp:1205
-#: common/eda_base_frame.cpp:1237 common/eda_base_frame.cpp:1260
+#: common/eda_base_frame.cpp:1152 common/eda_base_frame.cpp:1161
+#: common/eda_base_frame.cpp:1187 common/eda_base_frame.cpp:1200
+#: common/eda_base_frame.cpp:1232 common/eda_base_frame.cpp:1255
 msgid "Display Options"
 msgstr "Opciones de visualización"
 
-#: common/eda_base_frame.cpp:1159 common/eda_base_frame.cpp:1168
-#: common/eda_base_frame.cpp:1195 common/eda_base_frame.cpp:1208
+#: common/eda_base_frame.cpp:1154 common/eda_base_frame.cpp:1163
+#: common/eda_base_frame.cpp:1190 common/eda_base_frame.cpp:1203
 #: pcbnew/dialogs/panel_edit_options_base.cpp:23
 #: pcbnew/tools/zone_filler_tool.cpp:283
 msgid "Editing Options"
 msgstr "Opciones de edición"
 
-#: common/eda_base_frame.cpp:1160 common/eda_base_frame.cpp:1170
-#: common/eda_base_frame.cpp:1196 common/eda_base_frame.cpp:1209
-#: common/eda_base_frame.cpp:1238 common/eda_base_frame.cpp:1262
+#: common/eda_base_frame.cpp:1155 common/eda_base_frame.cpp:1165
+#: common/eda_base_frame.cpp:1191 common/eda_base_frame.cpp:1204
+#: common/eda_base_frame.cpp:1233 common/eda_base_frame.cpp:1257
 msgid "Colors"
 msgstr "Colores"
 
-#: common/eda_base_frame.cpp:1165 common/hotkey_store.cpp:77
+#: common/eda_base_frame.cpp:1160 common/hotkey_store.cpp:77
 #: common/tool/common_tools.cpp:614 eeschema/menubar.cpp:133
 #: eeschema/sch_edit_frame.cpp:1748 kicad/tools/kicad_manager_actions.cpp:114
 msgid "Schematic Editor"
 msgstr "Editor de esquemas"
 
-#: common/eda_base_frame.cpp:1169
+#: common/eda_base_frame.cpp:1164
 msgid "Annotation Options"
 msgstr "Opciones de anotación"
 
-#: common/eda_base_frame.cpp:1172
+#: common/eda_base_frame.cpp:1167
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:20
 msgid "Field Name Templates"
 msgstr "Plantillas de nombres de campos"
 
-#: common/eda_base_frame.cpp:1173 eeschema/sim/simulator_frame.cpp:115
+#: common/eda_base_frame.cpp:1168 eeschema/sim/simulator_frame.cpp:115
 #: eeschema/sim/toolbars_simulator_frame.cpp:114
 #: eeschema/tools/sch_actions.cpp:74
 msgid "Simulator"
 msgstr "Simulador"
 
-#: common/eda_base_frame.cpp:1191 common/tool/actions.cpp:1105
+#: common/eda_base_frame.cpp:1186 common/tool/actions.cpp:1105
 #: common/tool/common_tools.cpp:617 kicad/tools/kicad_manager_actions.cpp:147
 #: pcbnew/footprint_edit_frame.cpp:1088 pcbnew/menubar_footprint_editor.cpp:92
 msgid "Footprint Editor"
 msgstr "Editor de huellas"
 
-#: common/eda_base_frame.cpp:1194 common/eda_base_frame.cpp:1207
+#: common/eda_base_frame.cpp:1189 common/eda_base_frame.cpp:1202
 msgid "Origins & Axes"
 msgstr "Orígenes y ejes"
 
-#: common/eda_base_frame.cpp:1197
+#: common/eda_base_frame.cpp:1192
 #, fuzzy
 msgid "Footprint Defaults"
 msgstr "Nueva huella"
 
-#: common/eda_base_frame.cpp:1199
+#: common/eda_base_frame.cpp:1194
 #, fuzzy
 msgid "Graphics Defaults"
 msgstr "Limpieza de gráficos"
 
-#: common/eda_base_frame.cpp:1204 common/hotkey_store.cpp:78
+#: common/eda_base_frame.cpp:1199 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:616 kicad/tools/kicad_manager_actions.cpp:136
 #: pcbnew/menubar_pcb_editor.cpp:186 pcbnew/pcb_edit_frame.cpp:201
 #: pcbnew/pcb_edit_frame.cpp:1806 pcbnew/tools/zone_filler_tool.cpp:284
 msgid "PCB Editor"
 msgstr "Editor de placas"
 
-#: common/eda_base_frame.cpp:1210 common/eda_base_frame.cpp:1275
+#: common/eda_base_frame.cpp:1205 common/eda_base_frame.cpp:1270
 #, fuzzy
 msgid "Plugins"
 msgstr "Complementos (%d)"
 
-#: common/eda_base_frame.cpp:1217
+#: common/eda_base_frame.cpp:1212
 msgid "Realtime Renderer"
 msgstr "Renderizador en tiempo real"
 
-#: common/eda_base_frame.cpp:1218
+#: common/eda_base_frame.cpp:1213
 msgid "Raytracing Renderer"
 msgstr "Renderizador de trazado de rayos"
 
-#: common/eda_base_frame.cpp:1236 common/hotkey_store.cpp:81
+#: common/eda_base_frame.cpp:1231 common/hotkey_store.cpp:81
 #: common/tool/common_tools.cpp:619 gerbview/gerbview_frame.cpp:687
 #: gerbview/gerbview_frame.cpp:711 gerbview/menubar.cpp:159
 #: kicad/tools/kicad_manager_actions.cpp:158
 msgid "Gerber Viewer"
 msgstr "Visor Gerber"
 
-#: common/eda_base_frame.cpp:1241
+#: common/eda_base_frame.cpp:1236
 msgid "Excellon Options"
 msgstr "Opciones de Excellon"
 
-#: common/eda_base_frame.cpp:1259 common/hotkey_store.cpp:79
+#: common/eda_base_frame.cpp:1254 common/hotkey_store.cpp:79
 #: common/tool/common_tools.cpp:618 kicad/tools/kicad_manager_actions.cpp:187
 #: pagelayout_editor/menubar.cpp:88 pagelayout_editor/menubar.cpp:89
 #: pagelayout_editor/pl_editor_frame.cpp:583
 msgid "Drawing Sheet Editor"
 msgstr "Editor de hoja de trabajo"
 
-#: common/eda_base_frame.cpp:1268
+#: common/eda_base_frame.cpp:1263
 msgid "Packages and Updates"
 msgstr "Paquetes y actualizaciones"
 
-#: common/eda_base_frame.cpp:1358 pcbnew/dialogs/dialog_export_odbpp.cpp:324
+#: common/eda_base_frame.cpp:1353 pcbnew/dialogs/dialog_export_odbpp.cpp:324
 #, c-format
 msgid "Insufficient permissions to folder '%s'."
 msgstr "Permisos insuficientes para la carpeta '%s'."
 
-#: common/eda_base_frame.cpp:1399
+#: common/eda_base_frame.cpp:1394
 #, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
@@ -6020,13 +6024,13 @@ msgstr ""
 "\n"
 "¿Desea abrir el archivo guardado automáticamente en su lugar?"
 
-#: common/eda_base_frame.cpp:1420
+#: common/eda_base_frame.cpp:1415
 msgid "The auto save file could not be renamed to the board file name."
 msgstr ""
 "El archivo de guardado automático no ha podido ser renombrado con el nombre "
 "de la placa."
 
-#: common/eda_base_frame.cpp:1653
+#: common/eda_base_frame.cpp:1648
 msgid "Set Language"
 msgstr "Seleccionar idioma"
 
@@ -6960,78 +6964,113 @@ msgstr "No se puede leer el archivo "
 msgid "Could not create directory '%s'"
 msgstr "No se pudo crear el directorio '%s'"
 
-#: common/git/git_clone_handler.cpp:80
+#: common/git/git_clone_handler.cpp:81
 #, c-format
 msgid "Could not clone repository '%s'"
 msgstr "No se pudo clonar el repositorio '%s'"
 
-#: common/git/git_pull_handler.cpp:63
+#: common/git/git_pull_handler.cpp:67
 #, c-format
 msgid "Could not lookup remote '%s'"
 msgstr "No se pudo buscar el '%s' remoto"
 
-#: common/git/git_pull_handler.cpp:81
+#: common/git/git_pull_handler.cpp:87
 #, fuzzy, c-format
 msgid "Could not connect to remote '%s': %s"
 msgstr "No se pudo conectar al remoto '%s'"
 
-#: common/git/git_pull_handler.cpp:92
+#: common/git/git_pull_handler.cpp:99
 #, fuzzy, c-format
 msgid "Could not fetch data from remote '%s': %s"
 msgstr "No se pudieron recuperar datos del remoto '%s'"
 
-#: common/git/git_pull_handler.cpp:120
+#: common/git/git_pull_handler.cpp:127
 msgid "Could not read 'FETCH_HEAD'"
 msgstr "No se pudo leer 'FETCH_HEAD'"
 
-#: common/git/git_pull_handler.cpp:128
+#: common/git/git_pull_handler.cpp:135
 msgid "Could not lookup commit"
 msgstr "No se pudo buscar el commit"
 
-#: common/git/git_pull_handler.cpp:140
+#: common/git/git_pull_handler.cpp:146
 msgid "Could not analyze merge"
 msgstr "No se puede analizar la fusión"
 
-#: common/git/git_pull_handler.cpp:146
+#: common/git/git_pull_handler.cpp:152
 msgid "Invalid HEAD.  Cannot merge."
 msgstr "HEAD inválido.  No se puede unir."
 
-#: common/git/git_pull_handler.cpp:211 common/git/git_push_handler.cpp:91
+#: common/git/git_pull_handler.cpp:228 common/git/git_push_handler.cpp:91
 msgid "Could not get repository head"
 msgstr "No se pudo obtener el encabezado del repositorio"
 
-#: common/git/git_pull_handler.cpp:223
+#: common/git/git_pull_handler.cpp:242
 #, c-format
 msgid "Could not get reference OID for reference '%s'"
 msgstr "No se pudo obtener el OID de referencia para la referencia '%s'"
 
-#: common/git/git_pull_handler.cpp:234 common/git/kicad_git_errors.cpp:55
+#: common/git/git_pull_handler.cpp:252
+#, fuzzy
+msgid "Could not look up target commit"
+msgstr "No se pudo buscar el commit"
+
+#: common/git/git_pull_handler.cpp:264
+#, fuzzy
+msgid "Could not get tree from target commit"
+msgstr "No se pudo unir los commits"
+
+#: common/git/git_pull_handler.cpp:306 common/git/kicad_git_errors.cpp:55
 msgid "Failed to perform checkout operation."
 msgstr "No se pudo realizar la operación checkout."
 
-#: common/git/git_pull_handler.cpp:253
-msgid "Could not lookup commit '{}'"
+#: common/git/git_pull_handler.cpp:315
+#, fuzzy, c-format
+msgid "Failed to update reference '%s' to point to '%s'"
+msgstr "No se pudo actualizar la referencia HEAD para la rama '%s'"
+
+#: common/git/git_pull_handler.cpp:325
+#, fuzzy
+msgid "Failed to clean up repository state after fast-forward."
+msgstr "No se pudo clonar el repositorio."
+
+#: common/git/git_pull_handler.cpp:334
+#, fuzzy
+msgid "Failed to initialize revision walker."
+msgstr "No se pudo inicializar el proyecto git."
+
+#: common/git/git_pull_handler.cpp:343
+#, fuzzy
+msgid "Failed to push reference to revision walker."
+msgstr "No se pudieron enviar cambios al repositorio remoto."
+
+#: common/git/git_pull_handler.cpp:358
+#, fuzzy, c-format
+msgid "Could not lookup commit '%s'"
 msgstr "No se pudo buscar el commit '{}'"
 
-#: common/git/git_pull_handler.cpp:290
+#: common/git/git_pull_handler.cpp:391
 msgid "Could not merge commits"
 msgstr "No se pudo unir los commits"
 
-#: common/git/git_pull_handler.cpp:299
+#: common/git/git_pull_handler.cpp:400
 msgid "Could not get repository index"
 msgstr "No se pudo obtener el índice del repositorio"
 
-#: common/git/git_pull_handler.cpp:310
+#: common/git/git_pull_handler.cpp:411
 msgid "Could not get conflict iterator"
 msgstr "No se pudo obtener el iterador del conflicto"
 
-#: common/git/git_pull_handler.cpp:332 common/git/git_pull_handler.cpp:333
+#: common/git/git_pull_handler.cpp:433 common/git/git_pull_handler.cpp:434
 msgid "Changed"
 msgstr "Cambiado"
 
-#: common/git/git_pull_handler.cpp:347 common/git/git_pull_handler.cpp:348
+#: common/git/git_pull_handler.cpp:448 common/git/git_pull_handler.cpp:449
 msgid "Added"
 msgstr "Agregado"
+
+#: common/git/git_pull_handler.cpp:527
+msgid "Conflicts detected during rebase"
+msgstr ""
 
 #: common/git/git_push_handler.cpp:56
 msgid "Could not lookup remote"
@@ -7047,35 +7086,40 @@ msgstr "No se pudo conectar al remoto '%s'"
 msgid "Could not push to remote: %s"
 msgstr "No se pudo enviar al remoto"
 
-#: common/git/kicad_git_common.cpp:829
+#: common/git/kicad_git_common.cpp:840
 #, c-format
 msgid "Received %u of %u objects"
 msgstr "Se recibieron %u de %u objetos"
 
-#: common/git/kicad_git_common.cpp:858
+#: common/git/kicad_git_common.cpp:869
 #, c-format
 msgid "* [updated] %s..%s %s"
 msgstr "* [actualizado] %s..%s %s"
 
-#: common/git/kicad_git_common.cpp:862
+#: common/git/kicad_git_common.cpp:873
 #, c-format
 msgid "* [new] %s %s"
 msgstr "* [nuevo] %s %s"
 
-#: common/git/kicad_git_common.cpp:882
+#: common/git/kicad_git_common.cpp:893
 #, c-format
 msgid "Writing objects: %lld%% (%u/%u), %zu bytes"
 msgstr "Escribiendo objetos: %lld%% (%u/%u), %zu bytes"
 
-#: common/git/kicad_git_common.cpp:897
+#: common/git/kicad_git_common.cpp:908
 #, c-format
 msgid "* [rejected] %s (%s)"
 msgstr "* [rechazado] %s (%s)"
 
-#: common/git/kicad_git_common.cpp:902
+#: common/git/kicad_git_common.cpp:913
 #, c-format
 msgid "[updated] %s"
 msgstr "[actualizado] %s"
+
+#: common/git/kicad_git_common.cpp:977
+#, fuzzy
+msgid "Unable to authenticate"
+msgstr "Imposible crear "
 
 #: common/git/kicad_git_errors.cpp:40
 msgid "Invalid repository."
@@ -18657,7 +18701,7 @@ msgid "Could not open CvPcb"
 msgstr "No ha pudido abrirse CvPcb"
 
 #: eeschema/sch_edit_frame.cpp:1738 eeschema/sim/simulator_frame.cpp:341
-#: kicad/kicad_manager_frame.cpp:1041 pcbnew/footprint_edit_frame.cpp:1072
+#: kicad/kicad_manager_frame.cpp:1043 pcbnew/footprint_edit_frame.cpp:1072
 #: pcbnew/pcb_edit_frame.cpp:1801
 msgid "[Read Only]"
 msgstr "[Solo lectura]"
@@ -27667,20 +27711,20 @@ msgstr "Error al crear el archivo svg"
 msgid "Edit File in Text Editor"
 msgstr "Editar archivo en un editor de texto"
 
-#: kicad/kicad_manager_frame.cpp:1045
+#: kicad/kicad_manager_frame.cpp:1047
 msgid "[no project loaded]"
 msgstr "[sin proyecto cargado]"
 
-#: kicad/kicad_manager_frame.cpp:1088
+#: kicad/kicad_manager_frame.cpp:1090
 #, c-format
 msgid "Project: %s"
 msgstr "Proyecto: %s"
 
-#: kicad/kicad_manager_frame.cpp:1124
+#: kicad/kicad_manager_frame.cpp:1126
 msgid "Restoring session"
 msgstr "Restaurando sesión"
 
-#: kicad/kicad_manager_frame.cpp:1137
+#: kicad/kicad_manager_frame.cpp:1139
 #, c-format
 msgid "Restoring '%s'"
 msgstr "Restaurando '%s'"
@@ -28559,63 +28603,68 @@ msgstr ""
 msgid "Failed to remove Git directory"
 msgstr "No se pudo eliminar la carpeta git"
 
-#: kicad/project_tree_pane.cpp:2267
+#: kicad/project_tree_pane.cpp:2279
 #, fuzzy
 msgid "The selected directory is not a Git project."
 msgstr "El directorio seleccionado ya es un proyecto git."
 
-#: kicad/project_tree_pane.cpp:2412
+#: kicad/project_tree_pane.cpp:2425
 msgid "Discarding commit due to empty commit message."
 msgstr "Descartando confirmación debido a un mensaje de confirmación vacío."
 
-#: kicad/project_tree_pane.cpp:2418
+#: kicad/project_tree_pane.cpp:2431
 msgid "Discarding commit due to empty file selection."
 msgstr "Descartando confirmación debido a una selección de archivo vacía."
 
-#: kicad/project_tree_pane.cpp:2424
+#: kicad/project_tree_pane.cpp:2437
 #, c-format
 msgid "Failed to get repository index: %s"
 msgstr "No se pudo obtener el índice del repositorio: %s"
 
-#: kicad/project_tree_pane.cpp:2435
+#: kicad/project_tree_pane.cpp:2448
 #, c-format
 msgid "Failed to add file to index: %s"
 msgstr "No se pudo agregar el archivo al índice: %s"
 
-#: kicad/project_tree_pane.cpp:2443
+#: kicad/project_tree_pane.cpp:2456
 #, c-format
 msgid "Failed to write index: %s"
 msgstr "No se pudo escribir el índice: %s"
 
-#: kicad/project_tree_pane.cpp:2450
+#: kicad/project_tree_pane.cpp:2463
 #, c-format
 msgid "Failed to write tree: %s"
 msgstr "No se pudo escribir el árbol: %s"
 
-#: kicad/project_tree_pane.cpp:2457
+#: kicad/project_tree_pane.cpp:2470
 #, c-format
 msgid "Failed to lookup tree: %s"
 msgstr "No se pudo buscar en el árbol: %s"
 
-#: kicad/project_tree_pane.cpp:2469
+#: kicad/project_tree_pane.cpp:2482
 #, c-format
 msgid "Failed to get HEAD reference: %s"
 msgstr "No se pudo obtener la referencia HEAD: %s"
 
-#: kicad/project_tree_pane.cpp:2478
+#: kicad/project_tree_pane.cpp:2491
 #, c-format
 msgid "Failed to get commit: %s"
 msgstr "No se pudo obtener commit: %s"
 
-#: kicad/project_tree_pane.cpp:2493
+#: kicad/project_tree_pane.cpp:2506
 #, c-format
 msgid "Failed to create author signature: %s"
 msgstr "No se pudo crear la firma del autor: %s"
 
-#: kicad/project_tree_pane.cpp:2530
+#: kicad/project_tree_pane.cpp:2543
 #, c-format
 msgid "Failed to create commit: %s"
 msgstr "No se pudo crear la confirmación: %s"
+
+#: kicad/project_tree_pane.cpp:2548
+#, fuzzy, c-format
+msgid "Created commit with id: %s"
+msgstr "No se pudo escribir el índice: %s"
 
 #: kicad/tools/kicad_manager_actions.cpp:43
 msgid "New Project..."
@@ -52890,6 +52939,14 @@ msgstr "Editor de placas independiente para placas de KiCad"
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "Una suite EDA para el diseño de esquemas y placas de circuitos"
 
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
+msgid "EDA"
+msgstr "EDA"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
+msgid "Circuit board"
+msgstr "Placa de circuito impreso"
+
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
@@ -52946,6 +53003,18 @@ msgstr "Símbolo esquemático de KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "Hoja de dibujo de KiCad"
+
+#~ msgid "Git Repositories"
+#~ msgstr "Repositorios Git"
+
+#~ msgid "Add new repository"
+#~ msgstr "Agregar repositorio nuevo"
+
+#~ msgid "Edit repository properties"
+#~ msgstr "Editar propiedades de repositorio"
+
+#~ msgid "Remove Git Repository"
+#~ msgstr "Eliminar repositorio Git"
 
 #, fuzzy
 #~ msgid "Change sheet pin to hierarchical label"
@@ -53097,12 +53166,6 @@ msgstr "Hoja de dibujo de KiCad"
 
 #~ msgid "Unable to load repository url"
 #~ msgstr "No se pudo cargar la URL del repositorio"
-
-#~ msgid "EDA"
-#~ msgstr "EDA"
-
-#~ msgid "Circuit board"
-#~ msgstr "Placa de circuito impreso"
 
 #, fuzzy, c-format
 #~ msgid "Error loading designblock %s from library '%s'."
@@ -62501,9 +62564,6 @@ msgstr "Hoja de dibujo de KiCad"
 #~ "----------"
 #~ msgstr "Componentes"
 
-#~ msgid "Unable to create "
-#~ msgstr "Imposible crear "
-
 #~ msgid "Malformed keep-out zone at (%d, %d)"
 #~ msgstr "Área restringida mal conformada en (%d, %d)"
 
@@ -65905,9 +65965,6 @@ msgstr "Hoja de dibujo de KiCad"
 
 #~ msgid "Drags tracks and vias without breaking connections"
 #~ msgstr "Arrastrar pistas y vías sin eliminar conexiones"
-
-#~ msgid "Route Track"
-#~ msgstr "Enrutar pista"
 
 #~ msgid "Session file has 'reference' to non-existent symbol \"%s\""
 #~ msgstr ""
@@ -74652,9 +74709,6 @@ msgstr "Hoja de dibujo de KiCad"
 # Monter le chevelu du module pendant déplacement
 #~ msgid "Show Module Ratsnest when moving"
 #~ msgstr "Mostrar líneas aéreas al desplazar"
-
-#~ msgid "Enable Auto Del Track"
-#~ msgstr "Permitir el borrado automático de pistas"
 
 #~ msgid "Show Tracks Sketch"
 #~ msgstr "Mostrar pistas en contorno"

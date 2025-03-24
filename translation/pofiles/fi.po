@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-17 18:43+0300\n"
+"POT-Creation-Date: 2025-03-24 12:07-0700\n"
 "PO-Revision-Date: 2025-03-06 23:18+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v9/fi/>\n"
@@ -229,7 +229,7 @@ msgstr "Vie Nykyinen Näkymä JPEG-muodossa ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:62
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:661
-#: common/eda_base_frame.cpp:1215 common/hotkey_store.cpp:80
+#: common/eda_base_frame.cpp:1210 common/hotkey_store.cpp:80
 #: common/tool/actions.cpp:1073 pcbnew/footprint_chooser_frame.cpp:282
 #: pcbnew/footprint_viewer_frame.cpp:981 pcbnew/pcb_base_frame.cpp:682
 msgid "3D Viewer"
@@ -338,7 +338,7 @@ msgid "3D Image File Name"
 msgstr "3D-kuvatiedoston nimi"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:747
-#: common/eda_base_frame.cpp:1362 common/eda_base_frame.cpp:1366
+#: common/eda_base_frame.cpp:1357 common/eda_base_frame.cpp:1361
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:328
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:332
 #, c-format
@@ -2438,7 +2438,6 @@ msgstr "Ympäristömuuttujat"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:39
 #: common/dialogs/git/dialog_git_auth.cpp:56
-#: common/dialogs/git/panel_git_repos_base.cpp:98
 #: common/dialogs/panel_design_block_lib_table.cpp:410
 #: common/dialogs/panel_setup_netclasses_base.cpp:51
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:88
@@ -2478,7 +2477,6 @@ msgid "Name"
 msgstr "Nimi"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:40
-#: common/dialogs/git/panel_git_repos_base.cpp:99
 msgid "Path"
 msgstr "Polku"
 
@@ -2776,12 +2774,14 @@ msgstr "Projektin nimi"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1398
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "PCB"
 msgstr "Piirilevy"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1334 eeschema/sch_plotter.cpp:1060
 #: eeschema/widgets/symbol_diff_widget.cpp:44
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Schematic"
 msgstr "Kytkentäkaavio"
 
@@ -3664,7 +3664,6 @@ msgid "Filename"
 msgstr "Tiedostonimi"
 
 #: common/dialogs/git/dialog_git_commit.cpp:53
-#: common/dialogs/git/panel_git_repos_base.cpp:100
 #: eeschema/dialogs/dialog_migrate_buses.cpp:117
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:94
 #: pcbnew/dialogs/dialog_find_base.cpp:118 pcbnew/pad.cpp:1316
@@ -3703,63 +3702,63 @@ msgstr "M&uutos"
 msgid "Commit message cannot be empty"
 msgstr "Commit viesti ei voi olla tyhjä"
 
-#: common/dialogs/git/dialog_git_repository.cpp:74
-#: common/dialogs/git/dialog_git_repository.cpp:306
+#: common/dialogs/git/dialog_git_repository.cpp:75
+#: common/dialogs/git/dialog_git_repository.cpp:310
 #, fuzzy
 msgid "Test Connection"
 msgstr "Testaa yhteys"
 
-#: common/dialogs/git/dialog_git_repository.cpp:165
-#: common/dialogs/git/dialog_git_repository.cpp:357
+#: common/dialogs/git/dialog_git_repository.cpp:166
+#: common/dialogs/git/dialog_git_repository.cpp:361
 msgid "Enter the password for the SSH key"
 msgstr "Anna SSH-avaimen salasana"
 
-#: common/dialogs/git/dialog_git_repository.cpp:311
+#: common/dialogs/git/dialog_git_repository.cpp:315
 msgid "Connection successful"
 msgstr "Yhteys onnistui"
 
-#: common/dialogs/git/dialog_git_repository.cpp:315
+#: common/dialogs/git/dialog_git_repository.cpp:319
 #, c-format
 msgid "Could not connect to '%s' "
 msgstr "Ei voitu muodostaa yhteyttä kohteeseen '%s' "
 
-#: common/dialogs/git/dialog_git_repository.cpp:335
+#: common/dialogs/git/dialog_git_repository.cpp:339
 #, c-format
 msgid "Could not open private key '%s'"
 msgstr "Yksityistä avainta '%s' ei voitu avata"
 
-#: common/dialogs/git/dialog_git_repository.cpp:348
+#: common/dialogs/git/dialog_git_repository.cpp:352
 msgid "Invalid SSH Key"
 msgstr "Virheellinen SSH-avain"
 
-#: common/dialogs/git/dialog_git_repository.cpp:349
+#: common/dialogs/git/dialog_git_repository.cpp:353
 msgid "The selected file is not a valid SSH private key"
 msgstr "Valittu tiedosto ei ole kelvollinen yksityinen SSH-avain"
 
-#: common/dialogs/git/dialog_git_repository.cpp:373
+#: common/dialogs/git/dialog_git_repository.cpp:377
 #, c-format
 msgid "Could not open public key '%s'"
 msgstr "Julkista avainta %s ei voitu avata"
 
-#: common/dialogs/git/dialog_git_repository.cpp:392
-#: common/dialogs/git/dialog_git_repository.cpp:399
+#: common/dialogs/git/dialog_git_repository.cpp:396
+#: common/dialogs/git/dialog_git_repository.cpp:403
 msgid "Missing information"
 msgstr "Puuttuvat tiedot"
 
-#: common/dialogs/git/dialog_git_repository.cpp:393
+#: common/dialogs/git/dialog_git_repository.cpp:397
 msgid "Please enter a name for the repository"
 msgstr "Anna ohjelmistoarkiston nimi"
 
-#: common/dialogs/git/dialog_git_repository.cpp:400
+#: common/dialogs/git/dialog_git_repository.cpp:404
 msgid "Please enter a URL for the repository"
 msgstr "Anna ohjelmistoarkiston URL-osoite"
 
-#: common/dialogs/git/dialog_git_repository.cpp:424
+#: common/dialogs/git/dialog_git_repository.cpp:428
 #: common/dialogs/git/dialog_git_repository_base.cpp:106
 msgid "SSH key password:"
 msgstr "SSH-avaimen salasana:"
 
-#: common/dialogs/git/dialog_git_repository.cpp:432
+#: common/dialogs/git/dialog_git_repository.cpp:436
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
 msgid "Password:"
 msgstr "Salasana:"
@@ -3833,47 +3832,48 @@ msgstr "Vaihda"
 msgid "Add"
 msgstr "Lisää"
 
-#: common/dialogs/git/panel_git_repos_base.cpp:23
+#: common/dialogs/git/panel_git_repos_base.cpp:20
+#, fuzzy
+msgid "Enable Git Tracking"
+msgstr "Ota suunnittelusääntöjen tarkistus (DRC) käyttöön"
+
+#: common/dialogs/git/panel_git_repos_base.cpp:28
+#, fuzzy
+msgid "Remote Tracking"
+msgstr "Automaattireititetyt liuskat"
+
+#: common/dialogs/git/panel_git_repos_base.cpp:41
+#, fuzzy
+msgid "Update interval:"
+msgstr "Päivitä kentät"
+
+#: common/dialogs/git/panel_git_repos_base.cpp:46
+msgid ""
+"Number of minutes between remote update checks.  Zero disables automatic "
+"checks."
+msgstr ""
+
+#: common/dialogs/git/panel_git_repos_base.cpp:50
+#: common/dialogs/panel_common_settings_base.cpp:347
+#: common/dialogs/panel_common_settings_base.cpp:434
+msgid "minutes"
+msgstr "minuutit"
+
+#: common/dialogs/git/panel_git_repos_base.cpp:65
 msgid "Git Commit Data"
 msgstr "Git-commit data"
 
-#: common/dialogs/git/panel_git_repos_base.cpp:33
+#: common/dialogs/git/panel_git_repos_base.cpp:78
 msgid "Use default values"
 msgstr "Käytä oletusarvoja"
 
-#: common/dialogs/git/panel_git_repos_base.cpp:40
+#: common/dialogs/git/panel_git_repos_base.cpp:85
 msgid "Author name:"
 msgstr "Tekijän nimi:"
 
-#: common/dialogs/git/panel_git_repos_base.cpp:51
+#: common/dialogs/git/panel_git_repos_base.cpp:96
 msgid "Author e-mail:"
 msgstr "Tekijän sähköposti:"
-
-#: common/dialogs/git/panel_git_repos_base.cpp:68
-msgid "Git Repositories"
-msgstr "Git-ohjelmistovarastot"
-
-#: common/dialogs/git/panel_git_repos_base.cpp:97
-#: common/dialogs/panel_design_block_lib_table_base.cpp:44
-#: common/dialogs/panel_design_block_lib_table_base.cpp:93
-#: eeschema/dialogs/panel_sym_lib_table_base.cpp:44
-#: eeschema/dialogs/panel_sym_lib_table_base.cpp:94
-#: include/lib_table_grid.h:215 pcbnew/dialogs/panel_fp_lib_table_base.cpp:44
-#: pcbnew/dialogs/panel_fp_lib_table_base.cpp:93
-msgid "Active"
-msgstr "Aktiivinen"
-
-#: common/dialogs/git/panel_git_repos_base.cpp:122
-msgid "Add new repository"
-msgstr "Lisää uusi ohjelmistovarasto"
-
-#: common/dialogs/git/panel_git_repos_base.cpp:127
-msgid "Edit repository properties"
-msgstr "Muokkaa ohjelmistovaraston ominaisuuksia"
-
-#: common/dialogs/git/panel_git_repos_base.cpp:135
-msgid "Remove Git Repository"
-msgstr "Poista Git-ohjelmistovarasto"
 
 #: common/dialogs/panel_color_settings.cpp:52
 msgid "Reveal Themes in Finder"
@@ -4265,11 +4265,6 @@ msgstr ""
 "varmuuskopiotiedosto.\n"
 "Jos asetus on 0, automaattinen varmuuskopiointi ei ole käytössä"
 
-#: common/dialogs/panel_common_settings_base.cpp:347
-#: common/dialogs/panel_common_settings_base.cpp:434
-msgid "minutes"
-msgstr "minuutit"
-
 #: common/dialogs/panel_common_settings_base.cpp:351
 msgid "File history size:"
 msgstr "Tiedostohistorian koko:"
@@ -4614,6 +4609,15 @@ msgstr ""
 "\n"
 "%s"
 
+#: common/dialogs/panel_design_block_lib_table_base.cpp:44
+#: common/dialogs/panel_design_block_lib_table_base.cpp:93
+#: eeschema/dialogs/panel_sym_lib_table_base.cpp:44
+#: eeschema/dialogs/panel_sym_lib_table_base.cpp:94
+#: include/lib_table_grid.h:215 pcbnew/dialogs/panel_fp_lib_table_base.cpp:44
+#: pcbnew/dialogs/panel_fp_lib_table_base.cpp:93
+msgid "Active"
+msgstr "Aktiivinen"
+
 #: common/dialogs/panel_design_block_lib_table_base.cpp:45
 #: common/dialogs/panel_design_block_lib_table_base.cpp:94
 #: eeschema/dialogs/dialog_field_properties_base.cpp:97
@@ -4833,9 +4837,9 @@ msgid "Grid size '%s' already exists."
 msgstr "Ruudukkokoko '%s' on jo olemassa."
 
 #: common/dialogs/panel_grid_settings_base.cpp:25
-#: common/eda_base_frame.cpp:1158 common/eda_base_frame.cpp:1167
-#: common/eda_base_frame.cpp:1193 common/eda_base_frame.cpp:1206
-#: common/eda_base_frame.cpp:1239 common/eda_base_frame.cpp:1261
+#: common/eda_base_frame.cpp:1153 common/eda_base_frame.cpp:1162
+#: common/eda_base_frame.cpp:1188 common/eda_base_frame.cpp:1201
+#: common/eda_base_frame.cpp:1234 common/eda_base_frame.cpp:1256
 #: common/tool/common_tools.cpp:608
 msgid "Grids"
 msgstr "Ruudukot"
@@ -5159,7 +5163,7 @@ msgid "Reset to Trackpad Defaults"
 msgstr "Palauta kosketuslevyn oletukset"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:17
-#: common/eda_base_frame.cpp:1216
+#: common/eda_base_frame.cpp:1211
 #: eeschema/dialogs/dialog_image_properties_base.cpp:66
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:165
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:295
@@ -5837,126 +5841,126 @@ msgstr "Hiiri ja Kosketuslevy"
 msgid "Hotkeys"
 msgstr "Pikanäppäimet"
 
-#: common/eda_base_frame.cpp:1125 kicad/project_tree_pane.cpp:1053
+#: common/eda_base_frame.cpp:1121 kicad/project_tree_pane.cpp:1053
 msgid "Version Control"
 msgstr "Versiohallinta"
 
-#: common/eda_base_frame.cpp:1133
+#: common/eda_base_frame.cpp:1128
 msgid "Data Collection"
 msgstr "Tiedonkeruu"
 
-#: common/eda_base_frame.cpp:1156 common/tool/actions.cpp:1088
+#: common/eda_base_frame.cpp:1151 common/tool/actions.cpp:1088
 #: common/tool/common_tools.cpp:615 eeschema/symbol_editor/symbol_editor.cpp:84
 #: kicad/tools/kicad_manager_actions.cpp:125
 msgid "Symbol Editor"
 msgstr "Symbolieditori"
 
-#: common/eda_base_frame.cpp:1157 common/eda_base_frame.cpp:1166
-#: common/eda_base_frame.cpp:1192 common/eda_base_frame.cpp:1205
-#: common/eda_base_frame.cpp:1237 common/eda_base_frame.cpp:1260
+#: common/eda_base_frame.cpp:1152 common/eda_base_frame.cpp:1161
+#: common/eda_base_frame.cpp:1187 common/eda_base_frame.cpp:1200
+#: common/eda_base_frame.cpp:1232 common/eda_base_frame.cpp:1255
 msgid "Display Options"
 msgstr "Näyttöasetukset"
 
-#: common/eda_base_frame.cpp:1159 common/eda_base_frame.cpp:1168
-#: common/eda_base_frame.cpp:1195 common/eda_base_frame.cpp:1208
+#: common/eda_base_frame.cpp:1154 common/eda_base_frame.cpp:1163
+#: common/eda_base_frame.cpp:1190 common/eda_base_frame.cpp:1203
 #: pcbnew/dialogs/panel_edit_options_base.cpp:23
 #: pcbnew/tools/zone_filler_tool.cpp:283
 msgid "Editing Options"
 msgstr "Muokkausasetukset"
 
-#: common/eda_base_frame.cpp:1160 common/eda_base_frame.cpp:1170
-#: common/eda_base_frame.cpp:1196 common/eda_base_frame.cpp:1209
-#: common/eda_base_frame.cpp:1238 common/eda_base_frame.cpp:1262
+#: common/eda_base_frame.cpp:1155 common/eda_base_frame.cpp:1165
+#: common/eda_base_frame.cpp:1191 common/eda_base_frame.cpp:1204
+#: common/eda_base_frame.cpp:1233 common/eda_base_frame.cpp:1257
 msgid "Colors"
 msgstr "Värit"
 
-#: common/eda_base_frame.cpp:1165 common/hotkey_store.cpp:77
+#: common/eda_base_frame.cpp:1160 common/hotkey_store.cpp:77
 #: common/tool/common_tools.cpp:614 eeschema/menubar.cpp:133
 #: eeschema/sch_edit_frame.cpp:1748 kicad/tools/kicad_manager_actions.cpp:114
 msgid "Schematic Editor"
 msgstr "Kytkentäkaavioeditori"
 
-#: common/eda_base_frame.cpp:1169
+#: common/eda_base_frame.cpp:1164
 msgid "Annotation Options"
 msgstr "Huomautusasetukset"
 
-#: common/eda_base_frame.cpp:1172
+#: common/eda_base_frame.cpp:1167
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:20
 msgid "Field Name Templates"
 msgstr "Kentän Nimimallit"
 
-#: common/eda_base_frame.cpp:1173 eeschema/sim/simulator_frame.cpp:115
+#: common/eda_base_frame.cpp:1168 eeschema/sim/simulator_frame.cpp:115
 #: eeschema/sim/toolbars_simulator_frame.cpp:114
 #: eeschema/tools/sch_actions.cpp:74
 msgid "Simulator"
 msgstr "Simulaattori"
 
-#: common/eda_base_frame.cpp:1191 common/tool/actions.cpp:1105
+#: common/eda_base_frame.cpp:1186 common/tool/actions.cpp:1105
 #: common/tool/common_tools.cpp:617 kicad/tools/kicad_manager_actions.cpp:147
 #: pcbnew/footprint_edit_frame.cpp:1088 pcbnew/menubar_footprint_editor.cpp:92
 msgid "Footprint Editor"
 msgstr "Jalanjälkieditori"
 
-#: common/eda_base_frame.cpp:1194 common/eda_base_frame.cpp:1207
+#: common/eda_base_frame.cpp:1189 common/eda_base_frame.cpp:1202
 msgid "Origins & Axes"
 msgstr "Aloituspisteet & Akselit"
 
-#: common/eda_base_frame.cpp:1197
+#: common/eda_base_frame.cpp:1192
 msgid "Footprint Defaults"
 msgstr "Jalanjälkioletukset"
 
-#: common/eda_base_frame.cpp:1199
+#: common/eda_base_frame.cpp:1194
 msgid "Graphics Defaults"
 msgstr "Grafiikkaoletukset"
 
-#: common/eda_base_frame.cpp:1204 common/hotkey_store.cpp:78
+#: common/eda_base_frame.cpp:1199 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:616 kicad/tools/kicad_manager_actions.cpp:136
 #: pcbnew/menubar_pcb_editor.cpp:186 pcbnew/pcb_edit_frame.cpp:201
 #: pcbnew/pcb_edit_frame.cpp:1806 pcbnew/tools/zone_filler_tool.cpp:284
 msgid "PCB Editor"
 msgstr "Piirilevyeditori"
 
-#: common/eda_base_frame.cpp:1210 common/eda_base_frame.cpp:1275
+#: common/eda_base_frame.cpp:1205 common/eda_base_frame.cpp:1270
 msgid "Plugins"
 msgstr "Lisäosat"
 
-#: common/eda_base_frame.cpp:1217
+#: common/eda_base_frame.cpp:1212
 msgid "Realtime Renderer"
 msgstr "Realiaikainen Renderöinti"
 
-#: common/eda_base_frame.cpp:1218
+#: common/eda_base_frame.cpp:1213
 msgid "Raytracing Renderer"
 msgstr "Säteenseuranta Renderöinti"
 
-#: common/eda_base_frame.cpp:1236 common/hotkey_store.cpp:81
+#: common/eda_base_frame.cpp:1231 common/hotkey_store.cpp:81
 #: common/tool/common_tools.cpp:619 gerbview/gerbview_frame.cpp:687
 #: gerbview/gerbview_frame.cpp:711 gerbview/menubar.cpp:159
 #: kicad/tools/kicad_manager_actions.cpp:158
 msgid "Gerber Viewer"
 msgstr "Gerber-katseluohjelma"
 
-#: common/eda_base_frame.cpp:1241
+#: common/eda_base_frame.cpp:1236
 msgid "Excellon Options"
 msgstr "Excellon Vaihtoehdot"
 
-#: common/eda_base_frame.cpp:1259 common/hotkey_store.cpp:79
+#: common/eda_base_frame.cpp:1254 common/hotkey_store.cpp:79
 #: common/tool/common_tools.cpp:618 kicad/tools/kicad_manager_actions.cpp:187
 #: pagelayout_editor/menubar.cpp:88 pagelayout_editor/menubar.cpp:89
 #: pagelayout_editor/pl_editor_frame.cpp:583
 msgid "Drawing Sheet Editor"
 msgstr "Piirustusarkkieditori"
 
-#: common/eda_base_frame.cpp:1268
+#: common/eda_base_frame.cpp:1263
 msgid "Packages and Updates"
 msgstr "Paketit ja päivitykset"
 
-#: common/eda_base_frame.cpp:1358 pcbnew/dialogs/dialog_export_odbpp.cpp:324
+#: common/eda_base_frame.cpp:1353 pcbnew/dialogs/dialog_export_odbpp.cpp:324
 #, c-format
 msgid "Insufficient permissions to folder '%s'."
 msgstr "Ei riittäviä käyttöoikeuksia kansioon '%s'."
 
-#: common/eda_base_frame.cpp:1399
+#: common/eda_base_frame.cpp:1394
 #, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
@@ -5973,13 +5977,13 @@ msgstr ""
 "\n"
 "Haluatko avata sen sijaan automaattisesti tallennetun tiedoston?"
 
-#: common/eda_base_frame.cpp:1420
+#: common/eda_base_frame.cpp:1415
 msgid "The auto save file could not be renamed to the board file name."
 msgstr ""
 "Automaattitallennustiedostoa ei voitu uudelleennimetä piirilevytiedoston "
 "nimellä."
 
-#: common/eda_base_frame.cpp:1653
+#: common/eda_base_frame.cpp:1648
 msgid "Set Language"
 msgstr "Aseta Kieli"
 
@@ -6912,78 +6916,113 @@ msgstr "Tiedostoa %s ei voitu lukea"
 msgid "Could not create directory '%s'"
 msgstr "Hakemistoa '%s' ei voitu luoda"
 
-#: common/git/git_clone_handler.cpp:80
+#: common/git/git_clone_handler.cpp:81
 #, c-format
 msgid "Could not clone repository '%s'"
 msgstr "Ei voitu kloonata arkistoa '%s'"
 
-#: common/git/git_pull_handler.cpp:63
+#: common/git/git_pull_handler.cpp:67
 #, c-format
 msgid "Could not lookup remote '%s'"
 msgstr "Ei voitu etsiä etävarastoa '%s'"
 
-#: common/git/git_pull_handler.cpp:81
+#: common/git/git_pull_handler.cpp:87
 #, c-format
 msgid "Could not connect to remote '%s': %s"
 msgstr "Ei voitu muodostaa yhteyttä etätietovarastoon '%s':%s"
 
-#: common/git/git_pull_handler.cpp:92
+#: common/git/git_pull_handler.cpp:99
 #, c-format
 msgid "Could not fetch data from remote '%s': %s"
 msgstr "Tietoja ei voitu noutaa dataa etävarastosta '%s':%s"
 
-#: common/git/git_pull_handler.cpp:120
+#: common/git/git_pull_handler.cpp:127
 msgid "Could not read 'FETCH_HEAD'"
 msgstr "Ei voitu lukea 'FETCH_HEAD'"
 
-#: common/git/git_pull_handler.cpp:128
+#: common/git/git_pull_handler.cpp:135
 msgid "Could not lookup commit"
 msgstr "Commit:tia ei voitu etsiä"
 
-#: common/git/git_pull_handler.cpp:140
+#: common/git/git_pull_handler.cpp:146
 msgid "Could not analyze merge"
 msgstr "Yhdistämistä ei voitu analysoida"
 
-#: common/git/git_pull_handler.cpp:146
+#: common/git/git_pull_handler.cpp:152
 msgid "Invalid HEAD.  Cannot merge."
 msgstr "Virheellinen HEAD. Ei voi yhdistää."
 
-#: common/git/git_pull_handler.cpp:211 common/git/git_push_handler.cpp:91
+#: common/git/git_pull_handler.cpp:228 common/git/git_push_handler.cpp:91
 msgid "Could not get repository head"
 msgstr "Arkiston päätä ei voitu hakea"
 
-#: common/git/git_pull_handler.cpp:223
+#: common/git/git_pull_handler.cpp:242
 #, c-format
 msgid "Could not get reference OID for reference '%s'"
 msgstr "Viite-OID:tä ei voitu hakea viitteelle '%s'"
 
-#: common/git/git_pull_handler.cpp:234 common/git/kicad_git_errors.cpp:55
+#: common/git/git_pull_handler.cpp:252
+#, fuzzy
+msgid "Could not look up target commit"
+msgstr "Commit:tia ei voitu etsiä"
+
+#: common/git/git_pull_handler.cpp:264
+#, fuzzy
+msgid "Could not get tree from target commit"
+msgstr "Muutoksia ei voitu yhdistää"
+
+#: common/git/git_pull_handler.cpp:306 common/git/kicad_git_errors.cpp:55
 msgid "Failed to perform checkout operation."
 msgstr "Tarkistustoiminnon suorittaminen epäonnistui."
 
-#: common/git/git_pull_handler.cpp:253
-msgid "Could not lookup commit '{}'"
+#: common/git/git_pull_handler.cpp:315
+#, fuzzy, c-format
+msgid "Failed to update reference '%s' to point to '%s'"
+msgstr "Haaran '%s' HEAD-viitteen päivittäminen epäonnistui"
+
+#: common/git/git_pull_handler.cpp:325
+#, fuzzy
+msgid "Failed to clean up repository state after fast-forward."
+msgstr "Arkiston kloonaaminen epäonnistui."
+
+#: common/git/git_pull_handler.cpp:334
+#, fuzzy
+msgid "Failed to initialize revision walker."
+msgstr "Git-projektin alustaminen epäonnistui."
+
+#: common/git/git_pull_handler.cpp:343
+#, fuzzy
+msgid "Failed to push reference to revision walker."
+msgstr "Muutosten työntäminen etätietovarastoon epäonnistui."
+
+#: common/git/git_pull_handler.cpp:358
+#, fuzzy, c-format
+msgid "Could not lookup commit '%s'"
 msgstr "Ei voitu etsiä commit '{}'"
 
-#: common/git/git_pull_handler.cpp:290
+#: common/git/git_pull_handler.cpp:391
 msgid "Could not merge commits"
 msgstr "Muutoksia ei voitu yhdistää"
 
-#: common/git/git_pull_handler.cpp:299
+#: common/git/git_pull_handler.cpp:400
 msgid "Could not get repository index"
 msgstr "Arkistoindeksiä ei voitu hakea"
 
-#: common/git/git_pull_handler.cpp:310
+#: common/git/git_pull_handler.cpp:411
 msgid "Could not get conflict iterator"
 msgstr "Ristiriitaiteraattoria ei voitu saada"
 
-#: common/git/git_pull_handler.cpp:332 common/git/git_pull_handler.cpp:333
+#: common/git/git_pull_handler.cpp:433 common/git/git_pull_handler.cpp:434
 msgid "Changed"
 msgstr "Muutettu"
 
-#: common/git/git_pull_handler.cpp:347 common/git/git_pull_handler.cpp:348
+#: common/git/git_pull_handler.cpp:448 common/git/git_pull_handler.cpp:449
 msgid "Added"
 msgstr "Lisätty"
+
+#: common/git/git_pull_handler.cpp:527
+msgid "Conflicts detected during rebase"
+msgstr ""
 
 #: common/git/git_push_handler.cpp:56
 msgid "Could not lookup remote"
@@ -6999,35 +7038,40 @@ msgstr "Ei voitu muodostaa yhteyttä etävarastoon: %s"
 msgid "Could not push to remote: %s"
 msgstr "Ei voitu viedä etävarastoon: %s"
 
-#: common/git/kicad_git_common.cpp:829
+#: common/git/kicad_git_common.cpp:840
 #, c-format
 msgid "Received %u of %u objects"
 msgstr "Vastaanotettu %u / %u objektia"
 
-#: common/git/kicad_git_common.cpp:858
+#: common/git/kicad_git_common.cpp:869
 #, c-format
 msgid "* [updated] %s..%s %s"
 msgstr "* [päivitetty] %s..%s %s"
 
-#: common/git/kicad_git_common.cpp:862
+#: common/git/kicad_git_common.cpp:873
 #, c-format
 msgid "* [new] %s %s"
 msgstr "* [uusi] %s %s"
 
-#: common/git/kicad_git_common.cpp:882
+#: common/git/kicad_git_common.cpp:893
 #, c-format
 msgid "Writing objects: %lld%% (%u/%u), %zu bytes"
 msgstr "Kirjoitetaan objektit: %lld%% (%u/%u), %zu tavua"
 
-#: common/git/kicad_git_common.cpp:897
+#: common/git/kicad_git_common.cpp:908
 #, c-format
 msgid "* [rejected] %s (%s)"
 msgstr "* [hylätty] %s (%s)"
 
-#: common/git/kicad_git_common.cpp:902
+#: common/git/kicad_git_common.cpp:913
 #, c-format
 msgid "[updated] %s"
 msgstr "[päivitetty] %s"
+
+#: common/git/kicad_git_common.cpp:977
+#, fuzzy
+msgid "Unable to authenticate"
+msgstr "Luominen ei onnistu"
 
 #: common/git/kicad_git_errors.cpp:40
 msgid "Invalid repository."
@@ -18291,7 +18335,7 @@ msgid "Could not open CvPcb"
 msgstr "CvPcb: tä ei voitu avata"
 
 #: eeschema/sch_edit_frame.cpp:1738 eeschema/sim/simulator_frame.cpp:341
-#: kicad/kicad_manager_frame.cpp:1041 pcbnew/footprint_edit_frame.cpp:1072
+#: kicad/kicad_manager_frame.cpp:1043 pcbnew/footprint_edit_frame.cpp:1072
 #: pcbnew/pcb_edit_frame.cpp:1801
 msgid "[Read Only]"
 msgstr "[Lue ainoastaan]"
@@ -27027,20 +27071,20 @@ msgstr "Virhe avattaessa työtiedostoa"
 msgid "Edit File in Text Editor"
 msgstr "Muokkaa tiedostoa tekstieditorissa"
 
-#: kicad/kicad_manager_frame.cpp:1045
+#: kicad/kicad_manager_frame.cpp:1047
 msgid "[no project loaded]"
 msgstr "[ei projektia ladattuna]"
 
-#: kicad/kicad_manager_frame.cpp:1088
+#: kicad/kicad_manager_frame.cpp:1090
 #, c-format
 msgid "Project: %s"
 msgstr "Projekti: %s"
 
-#: kicad/kicad_manager_frame.cpp:1124
+#: kicad/kicad_manager_frame.cpp:1126
 msgid "Restoring session"
 msgstr "Palautetaan istunto"
 
-#: kicad/kicad_manager_frame.cpp:1137
+#: kicad/kicad_manager_frame.cpp:1139
 #, c-format
 msgid "Restoring '%s'"
 msgstr "Palautetaan '%s'"
@@ -27911,63 +27955,68 @@ msgstr "Haluatko varmasti poistaa git-seurannan tästä projektista?"
 msgid "Failed to remove Git directory"
 msgstr "Git-hakemiston poistaminen epäonnistui"
 
-#: kicad/project_tree_pane.cpp:2267
+#: kicad/project_tree_pane.cpp:2279
 #, fuzzy
 msgid "The selected directory is not a Git project."
 msgstr "Valittu hakemisto on jo git-projekti."
 
-#: kicad/project_tree_pane.cpp:2412
+#: kicad/project_tree_pane.cpp:2425
 msgid "Discarding commit due to empty commit message."
 msgstr "Hylätään muutos tyhjän toimitusviestin vuoksi."
 
-#: kicad/project_tree_pane.cpp:2418
+#: kicad/project_tree_pane.cpp:2431
 msgid "Discarding commit due to empty file selection."
 msgstr "Hylätään muutos tyhjän tiedoston valinnan vuoksi."
 
-#: kicad/project_tree_pane.cpp:2424
+#: kicad/project_tree_pane.cpp:2437
 #, c-format
 msgid "Failed to get repository index: %s"
 msgstr "Arkistoindeksin hakeminen epäonnistui: %s"
 
-#: kicad/project_tree_pane.cpp:2435
+#: kicad/project_tree_pane.cpp:2448
 #, c-format
 msgid "Failed to add file to index: %s"
 msgstr "Tiedoston lisääminen hakemistoon epäonnistui: %s"
 
-#: kicad/project_tree_pane.cpp:2443
+#: kicad/project_tree_pane.cpp:2456
 #, c-format
 msgid "Failed to write index: %s"
 msgstr "Indeksin kirjoittaminen epäonnistui: %s"
 
-#: kicad/project_tree_pane.cpp:2450
+#: kicad/project_tree_pane.cpp:2463
 #, c-format
 msgid "Failed to write tree: %s"
 msgstr "Hakemistopuun kirjoittaminen epäonnistui: %s"
 
-#: kicad/project_tree_pane.cpp:2457
+#: kicad/project_tree_pane.cpp:2470
 #, c-format
 msgid "Failed to lookup tree: %s"
 msgstr "Hakemistopuun haku epäonnistui: %s"
 
-#: kicad/project_tree_pane.cpp:2469
+#: kicad/project_tree_pane.cpp:2482
 #, c-format
 msgid "Failed to get HEAD reference: %s"
 msgstr "HEAD-viitteen hakeminen epäonnistui: %s"
 
-#: kicad/project_tree_pane.cpp:2478
+#: kicad/project_tree_pane.cpp:2491
 #, c-format
 msgid "Failed to get commit: %s"
 msgstr "Muutoksien saaminen epäonnistui: %s"
 
-#: kicad/project_tree_pane.cpp:2493
+#: kicad/project_tree_pane.cpp:2506
 #, c-format
 msgid "Failed to create author signature: %s"
 msgstr "Tekijän allekirjoituksen luominen epäonnistui: %s"
 
-#: kicad/project_tree_pane.cpp:2530
+#: kicad/project_tree_pane.cpp:2543
 #, c-format
 msgid "Failed to create commit: %s"
 msgstr "Ei onnistunut luoda commit: %s"
+
+#: kicad/project_tree_pane.cpp:2548
+#, fuzzy, c-format
+msgid "Created commit with id: %s"
+msgstr "Indeksin kirjoittaminen epäonnistui: %s"
 
 #: kicad/tools/kicad_manager_actions.cpp:43
 msgid "New Project..."
@@ -51176,6 +51225,14 @@ msgstr "Itsenäinen piirilevyeditori KiCad alustoille"
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "EDA-ohjelmisto kytkentäkaavioiden ja piirilevyjen suunnitteluun"
 
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
+msgid "EDA"
+msgstr "EDA"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
+msgid "Circuit board"
+msgstr "Piirilevy"
+
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
@@ -51233,6 +51290,18 @@ msgstr "KiCad kytkentäkaaviosymboli"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Piirustuslehti"
+
+#~ msgid "Git Repositories"
+#~ msgstr "Git-ohjelmistovarastot"
+
+#~ msgid "Add new repository"
+#~ msgstr "Lisää uusi ohjelmistovarasto"
+
+#~ msgid "Edit repository properties"
+#~ msgstr "Muokkaa ohjelmistovaraston ominaisuuksia"
+
+#~ msgid "Remove Git Repository"
+#~ msgstr "Poista Git-ohjelmistovarasto"
 
 #~ msgid "Change sheet pin to hierarchical label"
 #~ msgstr "Vaihda lehtinasta hierarkkiseksi nimiöksi"
@@ -51372,12 +51441,6 @@ msgstr "KiCad Piirustuslehti"
 
 #~ msgid "Unable to load repository url"
 #~ msgstr "Tietovaraston verkko-osoitetta ei voinut ladata"
-
-#~ msgid "EDA"
-#~ msgstr "EDA"
-
-#~ msgid "Circuit board"
-#~ msgstr "Piirilevy"
 
 #, c-format
 #~ msgid "Error loading designblock %s from library '%s'."
@@ -61368,9 +61431,6 @@ msgstr "KiCad Piirustuslehti"
 #~ "----------"
 #~ msgstr "Komponentit"
 
-#~ msgid "Unable to create "
-#~ msgstr "Luominen ei onnistu"
-
 #~ msgid ""
 #~ "Show active layer selections\n"
 #~ "and select layer pair for route and place via"
@@ -64172,10 +64232,6 @@ msgstr "KiCad Piirustuslehti"
 #~ msgstr "Lisää liuskoja"
 
 #, fuzzy
-#~ msgid "Route Track"
-#~ msgstr "Automaattireititetyt liuskat"
-
-#, fuzzy
 #~ msgid "New footprint"
 #~ msgstr "Lisää uusia liitoskuvia"
 
@@ -64241,9 +64297,6 @@ msgstr "KiCad Piirustuslehti"
 #, fuzzy
 #~ msgid "Open footprint viewer"
 #~ msgstr "Näytä 3D-esitys liitoskuvasta"
-
-#~ msgid "Enable design rule checking"
-#~ msgstr "Ota suunnittelusääntöjen tarkistus (DRC) käyttöön"
 
 #~ msgid "Display local ratsnest"
 #~ msgstr "Näytä paikallinen kytkentärisukko"
