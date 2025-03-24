@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:43+0300\n"
-"PO-Revision-Date: 2025-03-24 03:54+0000\n"
+"PO-Revision-Date: 2025-03-24 04:26+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v9/es/>\n"
 "Language: es\n"
@@ -847,59 +847,59 @@ msgstr "Mostrar u ocultar %s"
 #: pcbnew/widgets/appearance_controls.cpp:2607
 #, c-format
 msgid "Presets (%s+Tab):"
-msgstr "Ajustes por defecto (%s+Tab):"
+msgstr "Preconfiguraciones (%s+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:637
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1639
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2073
 #: pcbnew/widgets/appearance_controls.cpp:2632
 msgid "Save preset..."
-msgstr "Guardar ajuste por defecto..."
+msgstr "Guardar preconfiguración..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:638
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1640
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2074
 #: pcbnew/widgets/appearance_controls.cpp:2633
 msgid "Delete preset..."
-msgstr "Eliminar ajuste por defecto..."
+msgstr "Eliminar preconfiguración..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:738
 #: pcbnew/widgets/appearance_controls.cpp:2738
 msgid "Layer preset name:"
-msgstr "Nombre de ajuste por defecto de capa:"
+msgstr "Nombre de preconfiguración de capa:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:739
 #: pcbnew/widgets/appearance_controls.cpp:2739
 msgid "Save Layer Preset"
-msgstr "Guardar ajuste por defecto de capa"
+msgstr "Guardar preconfiguración de capa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:754
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1814
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2216
 #: pcbnew/widgets/appearance_controls.cpp:2772
 msgid "Overwrite existing preset?"
-msgstr "¿Sobrescribir ajuste por defecto existente?"
+msgstr "¿Quiere sobrescribir la preconfiguración existente?"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:780
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1839
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2241
 #: pcbnew/widgets/appearance_controls.cpp:2798
 msgid "Presets"
-msgstr "Ajustes por defecto"
+msgstr "Preconfiguraciones"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:789
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1851
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2253
 #: pcbnew/widgets/appearance_controls.cpp:2810
 msgid "Delete Preset"
-msgstr "Eliminar ajuste por defecto"
+msgstr "Eliminar preconfiguración"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:790
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1852
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2254
 #: pcbnew/widgets/appearance_controls.cpp:2811
 msgid "Select preset:"
-msgstr "Seleccionar ajuste por defecto:"
+msgstr "Seleccionar preconfiguración:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:859
 #: pcbnew/widgets/appearance_controls.cpp:2911
@@ -945,7 +945,7 @@ msgstr "Seleccionar vista:"
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:39
 #: pcbnew/widgets/appearance_controls_base.cpp:161
 msgid "Presets (Ctrl+Tab):"
-msgstr "Ajustes por defecto (Ctrl+Tab):"
+msgstr "Preconfiguraciones (Ctrl+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:58
 #: pcbnew/widgets/appearance_controls_base.cpp:180
@@ -4725,7 +4725,7 @@ msgstr "Copiar referencia incrustada"
 
 #: common/dialogs/panel_embedded_files.cpp:55
 msgid "Copy the reference for this embedded file"
-msgstr ""
+msgstr "Copiar la referencia de este archivo incrustado"
 
 #: common/dialogs/panel_embedded_files.cpp:284
 #: common/dialogs/panel_embedded_files.cpp:399
@@ -4764,9 +4764,8 @@ msgid "Select a file to embed"
 msgstr "Seleccione un archivo para incrustar"
 
 #: common/dialogs/panel_embedded_files.cpp:386
-#, fuzzy
 msgid "Select a directory to export files"
-msgstr "Seleccionar un nombre de archivo para exportar a GenCAD"
+msgstr "Seleccione un directorio para exportar archivos"
 
 #: common/dialogs/panel_embedded_files.cpp:418
 #, c-format
@@ -5521,7 +5520,7 @@ msgstr "Estilo de línea"
 #: pcbnew/pcb_tablecell.cpp:116 pcbnew/pcb_text.cpp:287
 #: pcbnew/pcb_textbox.cpp:565
 msgid "Default"
-msgstr "Por defecto"
+msgstr "Predeterminado"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:107
 msgid "Set color to transparent to use KiCad default color."
@@ -6869,7 +6868,7 @@ msgstr "No se ha podido encontrar un visor de PDF para '%s'."
 #: common/gestfich.cpp:280
 #, c-format
 msgid "Problem while running the PDF viewer '%s'."
-msgstr "Problema al ejecutar el visor PDF '%s'."
+msgstr "Problema al ejecutar el visor de PDF «%s»."
 
 #: common/gestfich.cpp:299 eeschema/eeschema.cpp:650 eeschema/eeschema.cpp:685
 #: gerbview/gerbview.cpp:243 kicad/project_template.cpp:309
@@ -6935,7 +6934,7 @@ msgstr "No se pudo crear el directorio «%s»"
 #: common/git/git_clone_handler.cpp:80
 #, c-format
 msgid "Could not clone repository '%s'"
-msgstr "No se pudo clonar el repositorio '%s'"
+msgstr "No se pudo clonar el repositorio «%s»"
 
 #: common/git/git_pull_handler.cpp:63
 #, c-format
@@ -8569,7 +8568,7 @@ msgstr "(Huellas)"
 #: common/settings/color_settings.cpp:433
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings.cpp:82
 msgid "KiCad Default"
-msgstr "Por defecto de KiCad"
+msgstr "Predeterminado de KiCad"
 
 #: common/settings/color_settings.cpp:438
 msgid "KiCad Classic"
@@ -8813,21 +8812,18 @@ msgid "Right-justify fields and text items"
 msgstr ""
 
 #: common/tool/actions.cpp:328
-#, fuzzy
 msgid "Expand All"
-msgstr "Actualizar todos"
+msgstr "Expandir todo"
 
 #: common/tool/actions.cpp:334
-#, fuzzy
 msgid "Collapse All"
-msgstr "Reemplazar todo"
+msgstr "Contraer todo"
 
 #: common/tool/actions.cpp:342 eeschema/tools/sch_edit_tool.cpp:3136
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1216
 #: pcbnew/tools/edit_tool.cpp:3105
-#, fuzzy
 msgid "Increment"
-msgstr "Paso incremental:"
+msgstr "Incremento"
 
 #: common/tool/actions.cpp:343
 #, fuzzy
@@ -15200,7 +15196,7 @@ msgstr "El nombre de campo '%s' ya está en uso."
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:774
 #, c-format
 msgid "Are you sure you want to remove the field '%s'?"
-msgstr "¿Está seguro de que desea eliminar el campo '%s'?"
+msgstr "¿Confirma que quiere quitar el campo «%s»?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:823
 msgid "Rename Field"
@@ -16125,7 +16121,7 @@ msgstr ""
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:67
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:20
 msgid "Defaults for New Objects"
-msgstr "Valores por defecto para nuevos elementos"
+msgstr "Valores predeterminados para objetos nuevos"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:77
 msgid "Sheet border:"
@@ -16316,7 +16312,7 @@ msgstr "­_1"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:55
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:48
 msgid "Default text size:"
-msgstr "Tamaño de texto por defecto:"
+msgstr "Tamaño de texto predeterminado:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
 msgid "Overbar offset ratio:"
@@ -17909,7 +17905,7 @@ msgstr "Parámetros DXF"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:169
 msgid "Default units:"
-msgstr "Unidades por defecto:"
+msgstr "Unidades predeterminadas:"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.h:77
 #: pcbnew/import_gfx/dialog_import_graphics_base.h:85
@@ -22112,14 +22108,14 @@ msgstr "Debe guardar en una ubicación distinta."
 #: eeschema/symbol_editor/symbol_editor.cpp:188
 #: eeschema/symbol_editor/symbol_editor.cpp:1494
 msgid "The current symbol has been modified.  Save changes?"
-msgstr "Se ha modificado el símbolo. ¿Desea guardar los cambios?"
+msgstr "Se ha modificado el símbolo actual. ¿Quiere guardar los cambios?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:369
 #: eeschema/symbol_editor/symbol_editor.cpp:1137
 #: eeschema/tools/symbol_editor_control.cpp:490
 #, c-format
 msgid "Symbol '%s' already exists in library '%s'."
-msgstr "El símbolo '%s' ya existe en la biblioteca '%s'."
+msgstr "El símbolo «%s» ya existe en la biblioteca «%s»."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:817
 msgid "Save Symbol As"
@@ -22170,13 +22166,13 @@ msgid ""
 msgstr "El símbolo '%s' ya existe en la librería '%s'"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1020
-#, fuzzy
 msgid ""
 "\n"
 "Do you want to overwrite all of them, or rename the new symbols?"
 msgstr ""
-"¿Está seguro de que desea sobreescribir los archivos en la carpeta de "
-"destinoi?"
+"\n"
+"¿Confirma que quiere sobrescribirlos todos, o prefiere cambiar el nombre de "
+"los símbolos nuevos?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1024
 msgid "Overwrite All"
@@ -24958,7 +24954,7 @@ msgstr "Obtener elección guardada"
 #: pcbnew/dialogs/dialog_set_offset_base.cpp:43
 #: pcbnew/dialogs/dialog_set_offset_base.cpp:60
 msgid "Reset"
-msgstr "Valor por defecto"
+msgstr "Restablecer"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.h:78
 msgid "Layer Selection"
@@ -25506,7 +25502,7 @@ msgstr "Capa gráfica"
 
 #: gerbview/gerber_file_image.cpp:354
 msgid "Img Rot."
-msgstr "Rotación de imagen"
+msgstr "Giro de img."
 
 #: gerbview/gerber_file_image.cpp:362
 msgid "X Justify"
@@ -27759,8 +27755,8 @@ msgid ""
 "Are you sure you want to close the package manager and discard pending "
 "changes?"
 msgstr ""
-"¿Está seguro de que quiere cerrar el administrador de paquetes y descartar "
-"los cambios pendientes?"
+"¿Confirma que quiere cerrar el gestor de paquetes y descartar los cambios "
+"pendientes?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:295
 msgid "Install Package"
@@ -28980,7 +28976,7 @@ msgstr "Propiedades del elemento"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:461
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:143
 msgid "Default Values"
-msgstr "Valores por defecto"
+msgstr "Valores predeterminados"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:497
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:385
@@ -32757,7 +32753,7 @@ msgstr "Texto y gráficos"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:127
 msgid "Defaults"
-msgstr "Valores por defecto"
+msgstr "Valores predeterminados"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:142
 msgid "Design Rules"
@@ -34714,19 +34710,16 @@ msgid "BREP (OCCT) files"
 msgstr "Archivos BREP (OCCT)"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:453
-#, fuzzy
 msgid "PLY files"
-msgstr "Archivos HTML"
+msgstr "Archivos PLY"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:455
-#, fuzzy
 msgid "STL files"
-msgstr "Archivos HTML"
+msgstr "Archivos STL"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:463
-#, fuzzy
 msgid "3D Model Output File"
-msgstr "Archivo de salida de BOM"
+msgstr "Archivo de salida de modelo 3D"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:540
 msgid "No filename for output file"
@@ -35012,7 +35005,7 @@ msgstr "Exportación 3D"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:127
 msgid "Are you sure you want to overwrite the existing file?"
-msgstr "¿Está seguro de que desea sobreescribir el archivo existente?"
+msgstr "¿Confirma que quiere sobrescribir el archivo existente?"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:216
 #, c-format
@@ -36938,9 +36931,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:86
-#, fuzzy
 msgid "Layer default"
-msgstr "Defecto"
+msgstr "Valor predeterminado de la capa"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:92
 #, fuzzy
@@ -38311,9 +38303,8 @@ msgid "x"
 msgstr "2×"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:70
-#, fuzzy
 msgid "Quality preset:"
-msgstr "Seleccionar ajuste por defecto:"
+msgstr "Preconfiguración de calidad:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:79
 msgid "Background style:"
@@ -38683,7 +38674,7 @@ msgstr "Propiedades de texto de huella"
 #: pcbnew/dialogs/dialog_text_properties.cpp:305
 #, c-format
 msgid "Footprint %s (%s), %s, rotated %.1f deg"
-msgstr "Huella %s (%s), %s, rotado %.1f deg"
+msgstr "Huella %s (%s), %s, girado %.1f°"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:96
 #: pcbnew/pcb_dimension.cpp:1930 pcbnew/pcb_dimension.cpp:1963
@@ -47586,7 +47577,7 @@ msgstr "pista existente"
 
 #: pcbnew/router/pns_kicad_iface.cpp:735
 msgid "netclass 'Default'"
-msgstr "clase de red 'Por defecto'"
+msgstr "clase de red «Predeterminado»"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1387
 #, c-format
