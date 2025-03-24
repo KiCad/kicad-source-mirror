@@ -6,15 +6,15 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-17 18:43+0300\n"
-"PO-Revision-Date: 2025-03-11 17:51+0000\n"
-"Last-Translator: Marc de Miguel <marc.demiguel.c@gmail.com>\n"
+"PO-Revision-Date: 2025-03-24 03:54+0000\n"
+"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v9/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: f:/kicad-svn/kicad\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -3552,9 +3552,8 @@ msgstr "JSON"
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:23
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:117
 #: pcbnew/dialogs/dialog_render_job_base.cpp:24
-#, fuzzy
 msgid "Output file:"
-msgstr "Carpeta de sortida:"
+msgstr "Fitxer de sortida:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:34
 #: kicad/dialogs/dialog_destination_base.cpp:35
@@ -3565,9 +3564,8 @@ msgid "Format:"
 msgstr "Format:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:43
-#, fuzzy
 msgid "Include:"
-msgstr "Inclou les pis&tes"
+msgstr "Inclou:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:56
 #: common/widgets/wx_html_report_panel_base.cpp:52
@@ -3599,14 +3597,12 @@ msgid "MyLabel"
 msgstr "LaMevaEtiqueta"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:77
-#, fuzzy
 msgid "X label:"
-msgstr "etiqueta"
+msgstr "Etiqueta X:"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:88
-#, fuzzy
 msgid "Y label:"
-msgstr "etiqueta"
+msgstr "Etiqueta Y:"
 
 #: common/dialogs/dialog_unit_entry_base.h:46
 msgid "Title"
@@ -3760,9 +3756,8 @@ msgstr "Sense canvis"
 
 #: common/dialogs/git/dialog_git_commit.cpp:52
 #: common/dialogs/panel_embedded_files_base.cpp:37
-#, fuzzy
 msgid "Filename"
-msgstr "Nom del fitxer:"
+msgstr "Nom del fitxer"
 
 #: common/dialogs/git/dialog_git_commit.cpp:53
 #: common/dialogs/git/panel_git_repos_base.cpp:100
@@ -3875,9 +3870,8 @@ msgid "Password:"
 msgstr "Contrasenya:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:42
-#, fuzzy
 msgid "Location:"
-msgstr "Gir"
+msgstr "Ubicació:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:49
 msgid "Connection type:"
@@ -10330,7 +10324,7 @@ msgstr "Estableix la drecera"
 #: common/widgets/widget_hotkey_list.cpp:386
 #, c-format
 msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
-msgstr "La drecera '%s' està reservada per KiCad i no pot ser assignada."
+msgstr "La drecera «%s» està reservada per al KiCad i no es pot assignar."
 
 #: common/widgets/widget_hotkey_list.cpp:450
 msgid "Edit..."
@@ -12510,9 +12504,8 @@ msgstr "Has de proporcionar un títol pel generador de llistes de xarxes"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:27
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:36
-#, fuzzy
 msgid "Output path:"
-msgstr "Sortida"
+msgstr "Camí de sortida:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:59
 #, fuzzy
@@ -12564,9 +12557,8 @@ msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:103
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:320
-#, fuzzy
 msgid "Show field name"
-msgstr "Nou nom del camp:"
+msgstr "Mostra el nom del camp"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:105
 msgid "Show the field name in addtion to its value"
