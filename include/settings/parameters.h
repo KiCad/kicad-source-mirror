@@ -731,7 +731,9 @@ public:
             PARAM_BASE( aJsonPath, aReadOnly ),
             m_ptr( aPtr ),
             m_default( aDefault )
-    { }
+    {
+        SetClearUnknownKeys( true );
+    }
 
     void Load( const JSON_SETTINGS& aSettings, bool aResetIfMissing = true ) const override
     {
