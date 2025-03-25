@@ -371,11 +371,15 @@ std::pair<std::set<wxString>,std::set<wxString>> KIGIT_COMMON::GetDifferentFiles
     }
 
     KIGIT::GitReferencePtr remoteHeadPtr( remote_head );
-    const git_oid*         head_oid = git_reference_target( head );
-    const git_oid*         remote_oid = git_reference_target( remote_head );
 
-    modified_files.first = get_modified_files( head_oid, remote_oid );
-    modified_files.second = get_modified_files( remote_oid, head_oid );
+    if( remote_head != nullptr && head != nullptr )
+    {
+        const git_oid*         head_oid = git_reference_target( head );
+        const git_oid*         remote_oid = git_reference_target( remote_head );
+
+        modified_files.first = get_modified_files( head_oid, remote_oid );
+        modified_files.second = get_modified_files( remote_oid, head_oid );
+    }
 
     return modified_files;
 }
