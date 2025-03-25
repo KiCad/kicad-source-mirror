@@ -48,7 +48,15 @@ PANEL_GRID_SETTINGS::PANEL_GRID_SETTINGS( wxWindow* aParent, UNITS_PROVIDER* aUn
 {
     m_currentGridCtrl->SetMinSize( FromDIP( m_currentGridCtrl->GetMinSize() ) );
 
-    if( m_frameType == FRAME_PCB_EDITOR || m_frameType == FRAME_FOOTPRINT_EDITOR )
+    if( m_frameType == FRAME_FOOTPRINT_EDITOR )
+    {
+        m_checkGridOverrideConnected->SetLabel( _( "Pads:" ) );
+        m_checkGridOverrideWires->Show( false );
+        m_gridOverrideWiresChoice->Show( false );
+        m_checkGridOverrideVias->Show( false );
+        m_gridOverrideViasChoice->Show( false );
+    }
+    else if( m_frameType == FRAME_PCB_EDITOR )
     {
         m_checkGridOverrideConnected->SetLabel( _( "Footprints/pads:" ) );
         m_checkGridOverrideWires->SetLabel( _( "Tracks:" ) );
