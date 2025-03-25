@@ -116,10 +116,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-24 12:07-0700\n"
-"PO-Revision-Date: 2025-03-23 16:05+0000\n"
+"PO-Revision-Date: 2025-03-25 19:16+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
-"source/it/>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
+"master-source/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2466,9 +2466,8 @@ msgid "Design block does not have a valid library ID."
 msgstr "Il blocco progetto non ha un ID libreria valido."
 
 #: common/design_block_io.cpp:379
-#, fuzzy
 msgid "Design block does not have a schematic or board file."
-msgstr "Il blocco progetto non ha un ID libreria valido."
+msgstr "Il blocco progetto non ha uno schema o un file scheda."
 
 #: common/design_block_io.cpp:388
 #, c-format
@@ -2476,9 +2475,9 @@ msgid "Schematic source file '%s' does not exist."
 msgstr "Il file schema sorgente '%s' non esiste."
 
 #: common/design_block_io.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid "Board source file '%s' does not exist."
-msgstr "Il file schema sorgente '%s' non esiste."
+msgstr "Il file scheda sorgente '%s' non esiste."
 
 #: common/design_block_io.cpp:406
 #, c-format
@@ -2492,10 +2491,10 @@ msgstr ""
 "Il file schema \"%s\" non può essere salvato come blocco progetto su '%s'."
 
 #: common/design_block_io.cpp:444
-#, fuzzy, c-format
+#, c-format
 msgid "Board file '%s' could not be saved as design block at '%s'."
 msgstr ""
-"Il file schema \"%s\" non può essere salvato come blocco progetto su '%s'."
+"Il file scheda '%s' non può essere salvato come blocco progetto su '%s'."
 
 #: common/design_block_io.cpp:478
 #, c-format
@@ -4367,23 +4366,23 @@ msgstr "Aggiungi"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
 msgid "Enable Git Tracking"
-msgstr ""
+msgstr "Abilita tracciamento Git"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:28
-#, fuzzy
 msgid "Remote Tracking"
-msgstr "Sbroglia piste"
+msgstr "Tracciamento remoto"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:41
-#, fuzzy
 msgid "Update interval:"
-msgstr "Aggiorna campi"
+msgstr "Intervallo di aggiornamento:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:46
 msgid ""
 "Number of minutes between remote update checks.  Zero disables automatic "
 "checks."
 msgstr ""
+"Numero di minuti tra i controlli di aggiornamento remoto.  Zero disabilita i "
+"controlli automatici."
 
 #: common/dialogs/git/panel_git_repos_base.cpp:50
 #: common/dialogs/panel_common_settings_base.cpp:347
@@ -5014,9 +5013,9 @@ msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr "Più librerie non possono condividere la stessa denominazione (\"%s\")."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:663
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' failed to load."
-msgstr "Fallito il caricamento della libreria di simboli \"%s\"."
+msgstr "Fallito caricamento libreria blocchi progetto '%s'."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:666
 #: eeschema/dialogs/panel_sym_lib_table.cpp:597
@@ -7389,14 +7388,12 @@ msgstr ""
 "impronte specifica del progetto di nome footprints.pretty."
 
 #: common/env_vars.cpp:141
-#, fuzzy
 msgid "A directory containing system-wide scripts installed with KiCad."
-msgstr "Una cartella contenente gli script di sistema installati con KiCad"
+msgstr "Una cartella contenente gli script di sistema installati con KiCad."
 
 #: common/env_vars.cpp:144
-#, fuzzy
 msgid "A directory containing user-specific scripts installed with KiCad."
-msgstr "Una cartella contenente gli script utente installati con KiCad"
+msgstr "Una cartella contenente gli script utente installati con KiCad."
 
 #: common/env_vars.cpp:147
 #, c-format
@@ -7629,43 +7626,38 @@ msgid "Could not get reference OID for reference '%s'"
 msgstr "Impossibile ottenere il riferimento OID come riferimento '%s'"
 
 #: common/git/git_pull_handler.cpp:252
-#, fuzzy
 msgid "Could not look up target commit"
-msgstr "Impossibile trovare il commit"
+msgstr "Impossibile trovare il commit di destinazione"
 
 #: common/git/git_pull_handler.cpp:264
-#, fuzzy
 msgid "Could not get tree from target commit"
-msgstr "Impossibile fare il merge dei commit"
+msgstr "Impossibile ottenere l'albero dal commit di destinazione"
 
 #: common/git/git_pull_handler.cpp:306 common/git/kicad_git_errors.cpp:55
 msgid "Failed to perform checkout operation."
 msgstr "Fallita l'operazione di checkout."
 
 #: common/git/git_pull_handler.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update reference '%s' to point to '%s'"
-msgstr "Fallito aggiornamento riferimento HEAD per la diramazione '%s'"
+msgstr "Fallito aggiornamento riferimento '%s' per puntare a '%s'"
 
 #: common/git/git_pull_handler.cpp:325
-#, fuzzy
 msgid "Failed to clean up repository state after fast-forward."
-msgstr "Fallita la clonazione dei repository."
+msgstr "Fallita pulizia dello stato del repository dopo l'avanzamento veloce."
 
 #: common/git/git_pull_handler.cpp:334
-#, fuzzy
 msgid "Failed to initialize revision walker."
-msgstr "Fallita inizializzazione progetto Git."
+msgstr "Fallita inizializzazione walker di revisione."
 
 #: common/git/git_pull_handler.cpp:343
-#, fuzzy
 msgid "Failed to push reference to revision walker."
-msgstr "Fallito il push dei cambiamenti sul repository remoto."
+msgstr "Fallito il push del riferimento sul walker di revisione."
 
 #: common/git/git_pull_handler.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup commit '%s'"
-msgstr "Impossibile trovare il commit '{}'"
+msgstr "Impossibile trovare il commit '%s'"
 
 #: common/git/git_pull_handler.cpp:391
 msgid "Could not merge commits"
@@ -7689,7 +7681,7 @@ msgstr "Aggiunto"
 
 #: common/git/git_pull_handler.cpp:527
 msgid "Conflicts detected during rebase"
-msgstr ""
+msgstr "Conflitti rilevati durante il rebase"
 
 #: common/git/git_push_handler.cpp:56
 msgid "Could not lookup remote"
@@ -7736,9 +7728,8 @@ msgid "[updated] %s"
 msgstr "[aggiornato] %s"
 
 #: common/git/kicad_git_common.cpp:977
-#, fuzzy
 msgid "Unable to authenticate"
-msgstr "Impossibile aprire il file"
+msgstr "Impossibile autenticare"
 
 #: common/git/kicad_git_errors.cpp:40
 msgid "Invalid repository."
@@ -8979,7 +8970,6 @@ msgid "Select Preferred Editor"
 msgstr "Scegli editor preferito"
 
 #: common/pgm_base.cpp:384
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs and help profile functionality to "
@@ -8989,28 +8979,24 @@ msgid ""
 "Your design files such as schematic and PCB are not shared in this process."
 msgstr ""
 "KiCad può segnalare in modo anonimo arresti o eventi anomali agli "
-"sviluppatori, per aiutare a identificare i difetti critici occorrenti alla "
-"base utenti, in modo più efficace e per aiutare ad individuare i profili di "
-"utilizzo per guidarne i miglioramenti.\n"
+"sviluppatori, per aiutare a identificare i difetti critici e per aiutare a "
+"individuare i profili di utilizzo per guidarne i miglioramenti.\n"
 "Se si sceglie di partecipare volontariamente, KiCad gestirà automaticamente "
-"l'invio di detti rapporti quando si verificano arresti anomali o eventi "
-"particolari.\n"
+"l'invio di detti rapporti quando si verificano detti eventi.\n"
 "I file di progettazione come schema o circuito stampato non verranno "
 "condivisi in questo processo."
 
 #: common/pgm_base.cpp:389
-#, fuzzy
 msgid "Data Collection Opt In"
-msgstr "Raccolta dati"
+msgstr "Consenso alla raccolta dati"
 
 #: common/pgm_base.cpp:391
 msgid "Opt In"
-msgstr ""
+msgstr "Adesione"
 
 #: common/pgm_base.cpp:391
-#, fuzzy
 msgid "Decline"
-msgstr "Schizza linee"
+msgstr "Rifiuto"
 
 #: common/pgm_base.cpp:498
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -10742,9 +10728,8 @@ msgid "Updating Design Block Libraries"
 msgstr "Aggiornamento librerie blocchi progetto"
 
 #: common/widgets/panel_design_block_chooser.cpp:427
-#, fuzzy
 msgid "Errors were encountered loading design blocks:"
-msgstr "Errori durante il caricamento di impronte:"
+msgstr "Errori nel caricamento blocchi progetto:"
 
 #: common/widgets/properties_panel.cpp:76
 #: common/widgets/properties_panel.cpp:185
@@ -19056,20 +19041,18 @@ msgid "Bus Alias %s Members"
 msgstr "Membri alias bus %s"
 
 #: eeschema/sch_design_block_utils.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' already has a schematic."
-msgstr "Il blocco progetto '%s' esiste già nella libreria '%s'."
+msgstr "Il blocco progetto '%s' ha già uno schema."
 
 #: eeschema/sch_design_block_utils.cpp:64
-#, fuzzy
 msgid "Overwrite existing schematic?"
-msgstr "Sovrescrivere preimpostazione esistente?"
+msgstr "Sovrascrivere lo schema esistente?"
 
 #: eeschema/sch_design_block_utils.cpp:162
 #: eeschema/sch_design_block_utils.cpp:362
-#, fuzzy
 msgid "Please select a design block to save the schematic to."
-msgstr "Selezionare una libreria sulla quale salvare il blocco progetto."
+msgstr "Selezionare un blocco progetto sul quale salvare lo schema."
 
 #: eeschema/sch_edit_frame.cpp:157
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:58
@@ -23198,24 +23181,20 @@ msgid "Create a new design block from the current selection"
 msgstr "Crea un nuovo blocco progetto dalla selezione corrente"
 
 #: eeschema/tools/sch_actions.cpp:172
-#, fuzzy
 msgid "Save Current Sheet to Design Block..."
-msgstr "Salva foglio corrente come blocco progetto..."
+msgstr "Salva foglio corrente sul blocco progetto..."
 
 #: eeschema/tools/sch_actions.cpp:173
-#, fuzzy
 msgid "Add current sheet to design block"
-msgstr "Salva foglio corrente come blocco progetto..."
+msgstr "Aggiungi foglio corrente al blocco progetto"
 
 #: eeschema/tools/sch_actions.cpp:179 pcbnew/tools/pcb_actions.cpp:489
-#, fuzzy
 msgid "Save Selection to Design Block..."
-msgstr "Salva selezione come blocco progetto..."
+msgstr "Salva selezione sul blocco progetto..."
 
 #: eeschema/tools/sch_actions.cpp:180 pcbnew/tools/pcb_actions.cpp:490
-#, fuzzy
 msgid "Add current selection to design block"
-msgstr "Sposta la selezione corrente in basso"
+msgstr "Aggiungi la selezione corrente al blocco progetto"
 
 #: eeschema/tools/sch_actions.cpp:186 pcbnew/tools/pcb_actions.cpp:496
 msgid "Delete Design Block"
@@ -28898,9 +28877,9 @@ msgid "Failed to create commit: %s"
 msgstr "Fallita creazione commit: %s"
 
 #: kicad/project_tree_pane.cpp:2548
-#, fuzzy, c-format
+#, c-format
 msgid "Created commit with id: %s"
-msgstr "Fallita scrittura indice: %s"
+msgstr "Creato commit con id: %s"
 
 #: kicad/tools/kicad_manager_actions.cpp:43
 msgid "New Project..."
@@ -34179,20 +34158,17 @@ msgid "Circular Array"
 msgstr "Schiere circolari"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:472
-#, fuzzy
 msgid "Item Source"
-msgstr "Sorgente"
+msgstr "Sorgente elemento"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:474
-#, fuzzy
 msgid "Duplicate selection"
-msgstr "Zona duplicata"
+msgstr "Selezione duplicata"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:478
 #: pcbnew/tools/array_tool.cpp:204
-#, fuzzy
 msgid "Arrange selection"
-msgstr "Commuta selezione"
+msgstr "Disponi la selezione"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:479
 #: pcbnew/dialogs/dialog_create_array_base.cpp:498
@@ -45735,21 +45711,19 @@ msgstr ""
 "Ricaricare l'impronta?"
 
 #: pcbnew/pcb_design_block_utils.cpp:68
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' already has a layout."
-msgstr "Il blocco progetto '%s' esiste già nella libreria '%s'."
+msgstr "Il blocco progetto '%s' ha già una disposizione."
 
 #: pcbnew/pcb_design_block_utils.cpp:70
-#, fuzzy
 msgid "Overwrite existing layout?"
-msgstr "Sovrescrivere preimpostazione esistente?"
+msgstr "Sovrascrivere la disposizione esistente?"
 
 #: pcbnew/pcb_design_block_utils.cpp:153 pcbnew/pcb_design_block_utils.cpp:212
 #: pcbnew/pcb_design_block_utils.cpp:285
-#, fuzzy
 msgid "Error saving temporary board file to create design block."
 msgstr ""
-"Errore salvando il file schema temporaneo per creare il blocco progetto."
+"Errore salvando il file scheda temporaneo per creare il blocco progetto."
 
 #: pcbnew/pcb_dimension.cpp:611 pcbnew/pcb_dimension.cpp:1826
 msgid "Prefix"
@@ -49785,9 +49759,8 @@ msgid "Some of the items could not be outset."
 msgstr "Alcune delle linee potrebbero non essere state stondate."
 
 #: pcbnew/tools/multichannel_tool.cpp:421
-#, fuzzy
 msgid "Select a reference Rule Area to copy from..."
-msgstr "Selezionare il punto di riferimento per la copia..."
+msgstr "Seleziona un'area regola di riferimento da cui copiare..."
 
 #: pcbnew/tools/multichannel_tool.cpp:440
 msgid "No Rule Areas to repeat layout to have been found."
@@ -50106,29 +50079,24 @@ msgid "Show the design rules checker window"
 msgstr "Mostra la finestra del controllo regole di progettazione"
 
 #: pcbnew/tools/pcb_actions.cpp:453
-#, fuzzy
 msgid "Add selected design block to current board"
-msgstr "Aggiungi blocco progetto selezionato al foglio corrente"
+msgstr "Aggiungi blocco progetto selezionato alla scheda corrente"
 
 #: pcbnew/tools/pcb_actions.cpp:468
-#, fuzzy
 msgid "Save Current Board as Design Block..."
-msgstr "Salva foglio corrente come blocco progetto..."
+msgstr "Salva la scheda corrente come blocco progetto..."
 
 #: pcbnew/tools/pcb_actions.cpp:469
-#, fuzzy
 msgid "Create a new design block from the current board"
-msgstr "Crea un nuovo blocco progetto dal foglio corrente"
+msgstr "Crea un nuovo blocco progetto dalla scheda corrente"
 
 #: pcbnew/tools/pcb_actions.cpp:482
-#, fuzzy
 msgid "Save Current Board to Design Block..."
-msgstr "Salva foglio corrente come blocco progetto..."
+msgstr "Salva la scheda corrente nel blocco progetto..."
 
 #: pcbnew/tools/pcb_actions.cpp:483
-#, fuzzy
 msgid "Add current board to design block"
-msgstr "Aggiungi blocco progetto"
+msgstr "Aggiungi la scheda corrente al blocco progetto"
 
 #: pcbnew/tools/pcb_actions.cpp:514
 msgid "Open in Footprint Editor"
@@ -52836,22 +52804,19 @@ msgid "Dimensions"
 msgstr "Dimensioni"
 
 #: pcbnew/widgets/pcb_design_block_pane.cpp:44
-#, fuzzy
 msgid "Place as group"
-msgstr "Piazza via"
+msgstr "Piazza come gruppo"
 
 #: pcbnew/widgets/pcb_design_block_pane.cpp:107
-#, fuzzy
 msgid "Place the design block as a group."
-msgstr "Posiziona blocco progetto come nuovo foglio."
+msgstr "Piazza il blocco progetto come gruppo."
 
 #: pcbnew/widgets/pcb_design_block_pane.cpp:113
-#, fuzzy
 msgid ""
 "Preserve reference designators in the source layout. Otherwise, clear them."
 msgstr ""
-"Mantieni i riferimenti nello schema sorgente. Oppure, cancella e riannota in "
-"base alle impostazioni."
+"Mantieni i riferimenti nella disposizione sorgente. Oppure, cancella e "
+"riannota."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:122
 #: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:708
