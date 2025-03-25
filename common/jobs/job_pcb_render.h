@@ -60,7 +60,8 @@ public:
     {
         BASIC,
         HIGH,
-        USER
+        USER,
+        JOB_SETTINGS
     };
 
     enum class BG_STYLE

@@ -124,7 +124,7 @@ bool DIALOG_RENDER_JOB::TransferDataFromWindow()
     m_job->SetConfiguredOutputPath( m_textCtrlOutputFile->GetValue() );
 
     m_job->m_format = getSelectedFormat();
-    m_job->m_quality = JOB_PCB_RENDER::QUALITY::USER;
+    m_job->m_quality = JOB_PCB_RENDER::QUALITY::JOB_SETTINGS;
     m_job->m_bgStyle = getSelectedBgStyle();
     m_job->m_side = getSelectedSide();
     m_job->m_zoom = m_spinCtrlZoom->GetValue();

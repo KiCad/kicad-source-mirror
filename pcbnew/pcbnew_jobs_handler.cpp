@@ -620,7 +620,7 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
         cfg.m_Render.raytrace_refractions = true;
         cfg.m_Render.differentiate_plated_copper = true;
     }
-    else
+    else if( aRenderJob->m_quality == JOB_PCB_RENDER::QUALITY::JOB_SETTINGS )
     {
         cfg.m_Render.raytrace_anti_aliasing = aRenderJob->m_antiAlias;
         cfg.m_Render.raytrace_backfloor = aRenderJob->m_floor;
