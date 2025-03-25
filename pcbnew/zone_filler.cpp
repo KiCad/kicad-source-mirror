@@ -1936,30 +1936,48 @@ bool ZONE_FILLER::fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
     aFillPolys = aSmoothedOutline;
     aFillPolys.BooleanSubtract( clearanceHoles );
 
+    auto subtractKeepout =
+            [&]( ZONE* candidate )
+            {
+                if( !candidate->GetIsRuleArea() )
+                    return;
+
+                if( !candidate->HasKeepoutParametersSet() )
+                    return;
+
+                if( candidate->GetDoNotAllowCopperPour() && candidate->IsOnLayer( aLayer ) )
+                {
+                    if( candidate->GetBoundingBox().Intersects( zone_boundingbox ) )
+                    {
+                        if( candidate->Outline()->ArcCount() == 0 )
+                        {
+                            aFillPolys.BooleanSubtract( *candidate->Outline() );
+                        }
+                        else
+                        {
+                            SHAPE_POLY_SET keepoutOutline( *candidate->Outline() );
+                            keepoutOutline.ClearArcs();
+                            aFillPolys.BooleanSubtract( keepoutOutline );
+                        }
+                    }
+                }
+            };
+
     for( ZONE* keepout : m_board->Zones() )
     {
-        if( !keepout->GetIsRuleArea() )
-            continue;
+        if( checkForCancel( m_progressReporter ) )
+            return false;
 
-        if( !keepout->HasKeepoutParametersSet() )
-            continue;
+        subtractKeepout( keepout );
+    }
 
-        if( keepout->GetDoNotAllowCopperPour() && keepout->IsOnLayer( aLayer ) )
-        {
-            if( keepout->GetBoundingBox().Intersects( zone_boundingbox ) )
-            {
-                if( keepout->Outline()->ArcCount() == 0 )
-                {
-                    aFillPolys.BooleanSubtract( *keepout->Outline() );
-                }
-                else
-                {
-                    SHAPE_POLY_SET keepoutOutline( *keepout->Outline() );
-                    keepoutOutline.ClearArcs();
-                    aFillPolys.BooleanSubtract( keepoutOutline );
-                }
-            }
-        }
+    for( FOOTPRINT* footprint : m_board->Footprints() )
+    {
+        if( checkForCancel( m_progressReporter ) )
+            return false;
+
+        for( ZONE* keepout : footprint->Zones() )
+            subtractKeepout( keepout );
     }
 
     // Features which are min_width should survive pruning; features that are *less* than

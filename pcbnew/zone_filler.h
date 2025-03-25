@@ -94,7 +94,7 @@ private:
                          const SHAPE_POLY_SET& aSmoothedOutline,
                          const SHAPE_POLY_SET& aMaxExtents, SHAPE_POLY_SET& aFillPolys );
 
-    bool fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
+    bool fillNonCopperZone( const ZONE* candidate, PCB_LAYER_ID aLayer,
                             const SHAPE_POLY_SET& aSmoothedOutline, SHAPE_POLY_SET& aFillPolys );
     /**
      * Function buildThermalSpokes
