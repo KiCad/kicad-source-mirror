@@ -345,6 +345,8 @@ protected:
     void restoreLastFootprint();
     void retainLastFootprint();
 
+    void updateEnabledLayers();
+
     /**
      * @brief (Re)Create the menubar for the Footprint Editor frame
      */
