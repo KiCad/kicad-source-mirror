@@ -1715,7 +1715,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     EESCHEMA_SETTINGS::PANEL_ANNOTATE& annotate = m_frame->eeconfig()->m_AnnotatePanel;
     int annotateStartNum = m_frame->Schematic().Settings().m_AnnotateStartNum;
 
-    PASTE_MODE pasteMode = PASTE_MODE::UNIQUE_ANNOTATIONS;
+    PASTE_MODE pasteMode = annotate.automatic ? PASTE_MODE::RESPECT_OPTIONS : PASTE_MODE::REMOVE_ANNOTATIONS;
 
     if( aEvent.IsAction( &ACTIONS::pasteSpecial ) )
     {
@@ -1863,6 +1863,17 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 symbol->SetLibSymbol( libSymbol );
             }
 
+            // If the symbol is already in the schematic we have to always keep the
+            // annotations. The exception is if the user has chosen to remove them.
+            for( const SCH_SYMBOL_INSTANCE& instance : symbol->GetInstances() )
+            {
+                if( !existingRefsSet.contains( instance.m_Reference ) )
+                {
+                    forceKeepAnnotations = ( pasteMode != PASTE_MODE::REMOVE_ANNOTATIONS );
+                    break;
+                }
+            }
+
             for( SCH_SHEET_PATH& sheetPath : sheetPathsForScreen )
                 updatePastedSymbol( symbol, sheetPath, clipPath, forceKeepAnnotations );
 
@@ -1871,7 +1882,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             // is not already in the hierarchy.  If we don't already have a copy of the
             // symbol, we just keep the existing KIID data as it is likely the same symbol
             // being moved around the schematic
-            bool needsNewKiid = ( pasteMode != PASTE_MODE::UNIQUE_ANNOTATIONS );
+            bool needsNewKiid = ( pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS );
 
             for( const SCH_SYMBOL_INSTANCE& instance : symbol->GetInstances() )
             {
