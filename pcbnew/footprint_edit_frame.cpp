@@ -1447,6 +1447,8 @@ void FOOTPRINT_EDIT_FRAME::CommonSettingsChanged( int aFlags )
     GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
 
     GetBoard()->GetDesignSettings() = cfg->m_DesignSettings;
+    GetBoard()->SetCopperLayerCount( 3 );
+    GetBoard()->SetLayerName( In1_Cu, _( "Inner layers" ) );
 
     GetCanvas()->GetView()->UpdateAllLayersColor();
     GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );

@@ -35,25 +35,18 @@ public:
     PANEL_FP_EDITOR_FIELD_DEFAULTS( wxWindow* aParent, UNITS_PROVIDER* aUnitsProvider );
     ~PANEL_FP_EDITOR_FIELD_DEFAULTS() override;
 
+    bool Show( bool aShow ) override;
+
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
     void ResetPanel() override;
 
 private:
-    virtual void OnAddTextItem( wxCommandEvent& event ) override;
-    virtual void OnDeleteTextItem( wxCommandEvent& event ) override;
-    virtual void OnAddLayerItem( wxCommandEvent& event ) override;
-    virtual void OnDeleteLayerItem( wxCommandEvent& event ) override;
-    virtual void onLayerChange( wxGridEvent& event ) override;
-
-    bool Show( bool aShow ) override;
+    void OnAddTextItem( wxCommandEvent& event ) override;
+    void OnDeleteTextItem( wxCommandEvent& event ) override;
 
     void loadFPSettings( const FOOTPRINT_EDITOR_SETTINGS* aCfg );
-
-    bool isLayerAvailable( int aLayerId ) const;
-    int getNextAvailableLayer() const;
-
 
 private:
     UNITS_PROVIDER*        m_unitProvider;

@@ -161,8 +161,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_multichannel_generate_rule_areas.cpp
     dialogs/dialog_multichannel_repeat_layout_base.cpp
     dialogs/dialog_multichannel_repeat_layout.cpp
-    dialogs/panel_pcb_display_options.cpp
-    dialogs/panel_pcb_display_options_base.cpp
+    dialogs/panel_display_options.cpp
+    dialogs/panel_display_options_base.cpp
     dialogs/panel_edit_options.cpp
     dialogs/panel_edit_options_base.cpp
     dialogs/panel_fp_lib_table.cpp

@@ -49,7 +49,7 @@
 #include <dialogs/dialog_configure_paths.h>
 #include <dialogs/panel_grid_settings.h>
 #include <dialog_global_fp_lib_table_config.h>
-#include <panel_pcb_display_options.h>
+#include <panel_display_options.h>
 #include <panel_edit_options.h>
 #include <panel_fp_editor_field_defaults.h>
 #include <panel_fp_editor_graphics_defaults.h>
@@ -157,7 +157,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
             FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
 
-            return new PANEL_PCB_DISPLAY_OPTIONS( aParent, cfg );
+            return new PANEL_DISPLAY_OPTIONS( aParent, cfg );
         }
 
         case PANEL_FP_GRIDS:
@@ -260,7 +260,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
             PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
-            return new PANEL_PCB_DISPLAY_OPTIONS( aParent, cfg );
+            return new PANEL_DISPLAY_OPTIONS( aParent, cfg );
         }
 
         case PANEL_PCB_GRIDS:

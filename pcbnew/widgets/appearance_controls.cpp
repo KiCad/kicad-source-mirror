@@ -33,6 +33,7 @@
 #include <pcb_edit_frame.h>
 #include <pcb_painter.h>
 #include <pcbnew_settings.h>
+#include <footprint_editor_settings.h>
 #include <project.h>
 #include <project/project_local_settings.h>
 #include <settings/color_settings.h>
@@ -60,6 +61,7 @@
 #include <wx/textdlg.h>
 #include <wx/bmpbuttn.h>        // needed on wxMSW for OnSetFocus()
 #include <core/profile.h>
+#include <pgm_base.h>
 
 
 NET_GRID_TABLE::NET_GRID_TABLE( PCB_BASE_FRAME* aFrame, wxColor aBackgroundColor ) :
@@ -1549,6 +1551,9 @@ void APPEARANCE_CONTROLS::rebuildLayers()
     COLOR4D         bgColor  = theme->GetColor( LAYER_PCB_BACKGROUND );
     bool            readOnly = theme->IsReadOnly();
 
+    SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
+    FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
+
 #ifdef __WXMAC__
     wxSizerItem* m_windowLayersSizerItem = m_panelLayersSizer->GetItem( m_windowLayers );
     m_windowLayersSizerItem->SetFlag( m_windowLayersSizerItem->GetFlag() & ~wxTOP );
@@ -1578,9 +1583,10 @@ void APPEARANCE_CONTROLS::rebuildLayers()
                 swatch->SetToolTip( _( "Double click or middle click for color change, "
                                        "right click for menu" ) );
 
-                BITMAP_TOGGLE* btn_visible = new BITMAP_TOGGLE(
-                        panel, layer, KiBitmapBundle( BITMAPS::visibility ),
-                        KiBitmapBundle( BITMAPS::visibility_off ), aSetting->visible );
+                BITMAP_TOGGLE* btn_visible = new BITMAP_TOGGLE( panel, layer,
+                                                                KiBitmapBundle( BITMAPS::visibility ),
+                                                                KiBitmapBundle( BITMAPS::visibility_off ),
+                                                                aSetting->visible );
                 btn_visible->SetToolTip( _( "Show or hide this layer" ) );
 
                 wxStaticText* label = new wxStaticText( panel, layer, aSetting->label );
@@ -1799,7 +1805,20 @@ void APPEARANCE_CONTROLS::rebuildLayers()
 
         std::unique_ptr<APPEARANCE_SETTING>& setting = *layer_it;
 
-        setting->label = board->GetLayerName( layer );
+        if( m_isFpEditor )
+        {
+            wxString canonicalName = LSET::Name( static_cast<PCB_LAYER_ID>( layer ) );
+
+            if( cfg->m_DesignSettings.m_UserLayerNames.contains( canonicalName.ToStdString() ) )
+                setting->label = cfg->m_DesignSettings.m_UserLayerNames[canonicalName.ToStdString()];
+            else
+                setting->label = board->GetStandardLayerName( layer );
+        }
+        else
+        {
+            setting->label = board->GetLayerName( layer );
+        }
+
         setting->id = layer;
         // Because non_cu_seq is created static, we must explicitly call wxGetTranslation for
         // texts which are internationalized

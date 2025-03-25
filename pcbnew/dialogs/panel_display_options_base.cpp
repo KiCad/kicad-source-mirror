@@ -1,15 +1,18 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "panel_pcb_display_options_base.h"
+#include "widgets/std_bitmap_button.h"
+#include "widgets/wx_grid.h"
+
+#include "panel_display_options_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-PANEL_PCB_DISPLAY_OPTIONS_BASE::PANEL_PCB_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : RESETTABLE_PANEL( parent, id, pos, size, style, name )
+PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : RESETTABLE_PANEL( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
@@ -23,9 +26,70 @@ PANEL_PCB_DISPLAY_OPTIONS_BASE::PANEL_PCB_DISPLAY_OPTIONS_BASE( wxWindow* parent
 	bupperSizer->Add( m_galOptionsSizer, 0, wxEXPAND|wxRIGHT, 10 );
 
 	m_optionsBook = new wxSimplebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	wxPanel* emptyPage;
-	emptyPage = new wxPanel( m_optionsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_optionsBook->AddPage( emptyPage, _("a page"), false );
+	wxPanel* fpEditorPage;
+	fpEditorPage = new wxPanel( m_optionsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* fpEditorOptionsSizer;
+	fpEditorOptionsSizer = new wxBoxSizer( wxVERTICAL );
+
+	m_layerNamesLabel = new wxStaticText( fpEditorPage, wxID_ANY, _("Layer Names"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_layerNamesLabel->Wrap( -1 );
+	fpEditorOptionsSizer->Add( m_layerNamesLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
+
+
+	fpEditorOptionsSizer->Add( 0, 3, 0, 0, 5 );
+
+	m_layerNameitemsGrid = new WX_GRID( fpEditorPage, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxTAB_TRAVERSAL );
+
+	// Grid
+	m_layerNameitemsGrid->CreateGrid( 0, 2 );
+	m_layerNameitemsGrid->EnableEditing( true );
+	m_layerNameitemsGrid->EnableGridLines( true );
+	m_layerNameitemsGrid->EnableDragGridSize( false );
+	m_layerNameitemsGrid->SetMargins( 0, 0 );
+
+	// Columns
+	m_layerNameitemsGrid->SetColSize( 0, 200 );
+	m_layerNameitemsGrid->SetColSize( 1, 220 );
+	m_layerNameitemsGrid->EnableDragColMove( false );
+	m_layerNameitemsGrid->EnableDragColSize( true );
+	m_layerNameitemsGrid->SetColLabelValue( 0, _("Layer") );
+	m_layerNameitemsGrid->SetColLabelValue( 1, _("Name") );
+	m_layerNameitemsGrid->SetColLabelSize( wxGRID_AUTOSIZE );
+	m_layerNameitemsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+
+	// Rows
+	m_layerNameitemsGrid->EnableDragRowSize( false );
+	m_layerNameitemsGrid->SetRowLabelSize( 0 );
+	m_layerNameitemsGrid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
+
+	// Label Appearance
+
+	// Cell Defaults
+	m_layerNameitemsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
+	m_layerNameitemsGrid->SetMinSize( wxSize( -1,140 ) );
+
+	fpEditorOptionsSizer->Add( m_layerNameitemsGrid, 0, wxEXPAND|wxLEFT, 10 );
+
+	wxBoxSizer* bButtonSize1;
+	bButtonSize1 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_bpAddLayer = new STD_BITMAP_BUTTON( fpEditorPage, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bButtonSize1->Add( m_bpAddLayer, 0, wxBOTTOM|wxLEFT|wxTOP, 5 );
+
+
+	bButtonSize1->Add( 20, 0, 0, 0, 5 );
+
+	m_bpDeleteLayer = new STD_BITMAP_BUTTON( fpEditorPage, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bButtonSize1->Add( m_bpDeleteLayer, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxTOP, 5 );
+
+
+	fpEditorOptionsSizer->Add( bButtonSize1, 0, wxLEFT, 5 );
+
+
+	fpEditorPage->SetSizer( fpEditorOptionsSizer );
+	fpEditorPage->Layout();
+	fpEditorOptionsSizer->Fit( fpEditorPage );
+	m_optionsBook->AddPage( fpEditorPage, _("a page"), false );
 	wxPanel* pcbPage;
 	pcbPage = new wxPanel( m_optionsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* pcbOptionsSizer;
@@ -175,8 +239,20 @@ PANEL_PCB_DISPLAY_OPTIONS_BASE::PANEL_PCB_DISPLAY_OPTIONS_BASE( wxWindow* parent
 	this->SetSizer( bMainSizer );
 	this->Layout();
 	bMainSizer->Fit( this );
+
+	// Connect Events
+	m_layerNameitemsGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( PANEL_DISPLAY_OPTIONS_BASE::onLayerChange ), NULL, this );
+	m_layerNameitemsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_DISPLAY_OPTIONS_BASE::OnGridSize ), NULL, this );
+	m_bpAddLayer->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_DISPLAY_OPTIONS_BASE::OnAddLayerItem ), NULL, this );
+	m_bpDeleteLayer->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_DISPLAY_OPTIONS_BASE::OnDeleteLayerItem ), NULL, this );
 }
 
-PANEL_PCB_DISPLAY_OPTIONS_BASE::~PANEL_PCB_DISPLAY_OPTIONS_BASE()
+PANEL_DISPLAY_OPTIONS_BASE::~PANEL_DISPLAY_OPTIONS_BASE()
 {
+	// Disconnect Events
+	m_layerNameitemsGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( PANEL_DISPLAY_OPTIONS_BASE::onLayerChange ), NULL, this );
+	m_layerNameitemsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_DISPLAY_OPTIONS_BASE::OnGridSize ), NULL, this );
+	m_bpAddLayer->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_DISPLAY_OPTIONS_BASE::OnAddLayerItem ), NULL, this );
+	m_bpDeleteLayer->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_DISPLAY_OPTIONS_BASE::OnDeleteLayerItem ), NULL, this );
+
 }
