@@ -36,13 +36,14 @@
 # HalfSweet <HalfSweet@halfsweet.cn>, 2024.
 # John Beard <john.j.beard@gmail.com>, 2025.
 # KK0571 <190506420@qq.com>, 2025.
+# yanzhen zhu <acme.zhuyanzhen@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-24 12:07-0700\n"
-"PO-Revision-Date: 2025-03-22 17:12+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"PO-Revision-Date: 2025-03-25 19:16+0000\n"
+"Last-Translator: yanzhen zhu <acme.zhuyanzhen@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -2352,9 +2353,8 @@ msgid "Design block does not have a valid library ID."
 msgstr "设计图块缺少有效的库标识。"
 
 #: common/design_block_io.cpp:379
-#, fuzzy
 msgid "Design block does not have a schematic or board file."
-msgstr "设计图块缺少有效的库标识。"
+msgstr "设计图块缺少原理图或者板级文件。"
 
 #: common/design_block_io.cpp:388
 #, c-format
@@ -2362,9 +2362,9 @@ msgid "Schematic source file '%s' does not exist."
 msgstr "原理图源文件 '%s' 不存在。"
 
 #: common/design_block_io.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid "Board source file '%s' does not exist."
-msgstr "原理图源文件 '%s' 不存在。"
+msgstr "板级源文件 '%s' 不存在。"
 
 #: common/design_block_io.cpp:406
 #, c-format
@@ -2377,9 +2377,9 @@ msgid "Schematic file '%s' could not be saved as design block at '%s'."
 msgstr "无法将原理图文件 '%s' 作为设计图块保存到 '%s'。"
 
 #: common/design_block_io.cpp:444
-#, fuzzy, c-format
+#, c-format
 msgid "Board file '%s' could not be saved as design block at '%s'."
-msgstr "无法将原理图文件 '%s' 作为设计图块保存到 '%s'。"
+msgstr "板级文件 '%s' 无法作为设计图块保存到 '%s'。"
 
 #: common/design_block_io.cpp:478
 #, c-format
@@ -4218,25 +4218,22 @@ msgid "Add"
 msgstr "添加"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
-#, fuzzy
 msgid "Enable Git Tracking"
-msgstr "启用动画"
+msgstr "启用Git追踪"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:28
-#, fuzzy
 msgid "Remote Tracking"
-msgstr "布线"
+msgstr "远程仓库跟踪"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:41
-#, fuzzy
 msgid "Update interval:"
-msgstr "更新字段"
+msgstr "更新间隔："
 
 #: common/dialogs/git/panel_git_repos_base.cpp:46
 msgid ""
 "Number of minutes between remote update checks.  Zero disables automatic "
 "checks."
-msgstr ""
+msgstr "远程仓库更新检查的时间间隔（分钟）。输入0则关闭自动检查。"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:50
 #: common/dialogs/panel_common_settings_base.cpp:347
@@ -4830,9 +4827,9 @@ msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr "不能在多个库中使用相同的名称 ('%s')。"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:663
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' failed to load."
-msgstr "符号库 '%s' 加载失败。"
+msgstr "设计图块库 '%s' 加载失败。"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:666
 #: eeschema/dialogs/panel_sym_lib_table.cpp:597
@@ -5736,7 +5733,7 @@ msgstr "网络类名已被使用。"
 #: common/dialogs/panel_setup_netclasses.cpp:603
 #, c-format
 msgid "Clearance was too large.  It has been clipped to %s."
-msgstr ""
+msgstr "间隔过大。被限制在%s。"
 
 #: common/dialogs/panel_setup_netclasses.cpp:669
 msgid "Minimum copper clearance"
@@ -5988,12 +5985,12 @@ msgstr "向右"
 
 #: common/dialogs/panel_toolbar_customization.cpp:48
 msgid "Top main"
-msgstr ""
+msgstr "顶层主要"
 
 #: common/dialogs/panel_toolbar_customization.cpp:49
 #, fuzzy
 msgid "Top auxillary"
-msgstr "顶层"
+msgstr "顶层辅助"
 
 #: common/dialogs/panel_toolbar_customization.cpp:133
 #: common/dialogs/panel_toolbar_customization_base.cpp:72
@@ -7397,14 +7394,12 @@ msgid "Could not get reference OID for reference '%s'"
 msgstr "无法获取参考 '%s' 的 OID 引用"
 
 #: common/git/git_pull_handler.cpp:252
-#, fuzzy
 msgid "Could not look up target commit"
-msgstr "无法找到提交"
+msgstr "无法找到目标的提交项"
 
 #: common/git/git_pull_handler.cpp:264
-#, fuzzy
 msgid "Could not get tree from target commit"
-msgstr "无法合并提交"
+msgstr "无法从目标的提交项获取树"
 
 #: common/git/git_pull_handler.cpp:306 common/git/kicad_git_errors.cpp:55
 msgid "Failed to perform checkout operation."
