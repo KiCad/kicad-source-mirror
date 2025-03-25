@@ -18,16 +18,16 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-24 12:07-0700\n"
-"PO-Revision-Date: 2025-02-19 03:14+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2025-03-25 19:16+0000\n"
+"Last-Translator: lylythechosenone <Lysander.mealy@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
-"master-source/es_MX/>\n"
+"v9/es_MX/>\n"
 "Language: es_MX\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.1-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -1767,6 +1767,8 @@ msgstr "Exportar al portapapeles"
 #: bitmap2component/bitmap2component.cpp:406
 msgid "No shape in black and white image to convert: no outline created."
 msgstr ""
+"No hay forma en la imagen en blanco y negro para convertir: no se creó "
+"ningún contorno."
 
 #: common/api/api_handler.cpp:27
 #, fuzzy
@@ -1997,8 +1999,9 @@ msgid "Design block metadata file '%s' could not be read."
 msgstr "No se puede crear el archivo '%s'."
 
 #: common/design_block_io.cpp:355
+#, fuzzy
 msgid "Design block does not have a valid library ID."
-msgstr ""
+msgstr "El bloque de diseño no tiene un identificador de biblioteca válido."
 
 #: common/design_block_io.cpp:362
 #, fuzzy, c-format
