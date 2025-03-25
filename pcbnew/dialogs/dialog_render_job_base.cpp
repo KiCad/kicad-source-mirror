@@ -17,7 +17,7 @@ DIALOG_RENDER_JOB_BASE::DIALOG_RENDER_JOB_BASE( wxWindow* parent, wxWindowID id,
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerTop;
-	fgSizerTop = new wxFlexGridSizer( 0, 2, 4, 5 );
+	fgSizerTop = new wxFlexGridSizer( 0, 2, 3, 5 );
 	fgSizerTop->AddGrowableCol( 1 );
 	fgSizerTop->SetFlexibleDirection( wxBOTH );
 	fgSizerTop->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -81,21 +81,21 @@ DIALOG_RENDER_JOB_BASE::DIALOG_RENDER_JOB_BASE( wxWindow* parent, wxWindowID id,
 	bSizerMain->Add( fgSizerTop, 1, wxALL|wxEXPAND, 10 );
 
 	wxGridSizer* gSizer1;
-	gSizer1 = new wxGridSizer( 0, 1, 5, 0 );
+	gSizer1 = new wxGridSizer( 0, 1, 6, 0 );
 
-	m_cbRaytracing_proceduralTextures = new wxCheckBox( this, wxID_ANY, _("Procedural textures (slow)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbRaytracing_proceduralTextures = new wxCheckBox( this, wxID_ANY, _("Procedural textures"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbRaytracing_proceduralTextures->SetValue(true);
 	gSizer1->Add( m_cbRaytracing_proceduralTextures, 0, wxRIGHT|wxLEFT, 5 );
 
-	m_cbRaytracing_addFloor = new wxCheckBox( this, wxID_ANY, _("Add floor (slow)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbRaytracing_addFloor = new wxCheckBox( this, wxID_ANY, _("Add floor"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbRaytracing_addFloor->SetValue(true);
 	gSizer1->Add( m_cbRaytracing_addFloor, 0, wxRIGHT|wxLEFT, 5 );
 
-	m_cbRaytracing_antiAliasing = new wxCheckBox( this, wxID_ANY, _("Anti-aliasing (slow)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbRaytracing_antiAliasing = new wxCheckBox( this, wxID_ANY, _("Anti-aliasing"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbRaytracing_antiAliasing->SetValue(true);
 	gSizer1->Add( m_cbRaytracing_antiAliasing, 0, wxRIGHT|wxLEFT, 5 );
 
-	m_cbRaytracing_postProcessing = new wxCheckBox( this, wxID_ANY, _("Screen space ambient occlusions and global illumination reflections (slow)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbRaytracing_postProcessing = new wxCheckBox( this, wxID_ANY, _("Screen space ambient occlusions and global illumination reflections"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbRaytracing_postProcessing->SetValue(true);
 	gSizer1->Add( m_cbRaytracing_postProcessing, 0, wxRIGHT|wxLEFT, 5 );
 
