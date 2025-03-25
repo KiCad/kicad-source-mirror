@@ -906,10 +906,22 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName,
             wxFFile file( fn.GetFullPath(), "wb" );
 
             if( file.IsOpened() )
-                file.Write( wxString::Format( "(kicad_sch (version %d) (generator \"eeschema\") (generator_version \"%s\")\n"
-                                              "  (paper \"A4\")\n  (lib_symbols)\n"
-                                              "  (symbol_instances)\n)\n",
-                                              SEXPR_SCHEMATIC_FILE_VERSION, GetMajorMinorVersion() ) );
+                file.Write( wxString::Format( "(kicad_sch\n"
+                                              "\t(version %d)\n"
+                                              "\t(generator \"eeschema\")\n"
+                                              "\t(generator_version \"%s\")\n"
+                                              "\t(uuid %s)\n"
+                                              "\t(paper \"A4\")\n"
+                                              "\t(lib_symbols)\n"
+                                              "\t(sheet_instances\n"
+                                              "\t\t(path \"/\"\n"
+                                              "\t\t\t(page \"1\")\n"
+                                              "\t\t)\n"
+                                              "\t)\n"
+                                              "\t(embedded_fonts no)\n"
+                                              ")",
+                                              SEXPR_SCHEMATIC_FILE_VERSION, GetMajorMinorVersion(),
+                                              KIID().AsString() ) );
 
             // wxFFile dtor will close the file
         }
