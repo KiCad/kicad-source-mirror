@@ -510,8 +510,8 @@ bool SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& aObstacleLine,
 
     if( aObstacleLine.PointCount() >= 2 )
     {
-        jtStart = m_currentNode->FindJoint( aObstacleLine.CPoint(0), &aObstacleLine );
-        jtEnd = m_currentNode->FindJoint( aObstacleLine.CPoint(-1), &aObstacleLine );
+        jtStart = m_currentNode->FindJoint( aObstacleLine.CPoint( 0 ), &aObstacleLine );
+        jtEnd = m_currentNode->FindJoint( aObstacleLine.CPoint( -1 ), &aObstacleLine );
     }
 
     if( jtStart )
@@ -2495,7 +2495,10 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
 
             currentHeadId++;
 
-            m_currentNode->LockJoint( head.CPoint( 0 ), &head, true );
+            if( head.PointCount() > 0 )
+            {
+                m_currentNode->LockJoint( head.CPoint( 0 ), &head, true );
+            }
 
             if( !head.EndsWithVia() )
                 m_currentNode->LockJoint( head.CPoint( -1 ), &head, true );
