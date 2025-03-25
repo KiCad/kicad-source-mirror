@@ -741,36 +741,35 @@ public:
     bool HasKeepoutParametersSet() const
     {
         return m_doNotAllowTracks || m_doNotAllowVias || m_doNotAllowPads || m_doNotAllowFootprints
-               || m_doNotAllowCopperPour;
+               || m_doNotAllowZoneFills;
     }
 
     /**
      * Accessors to parameters used in Rule Area zones:
      */
-    bool GetIsRuleArea() const { return m_isRuleArea; }
-    bool GetRuleAreaPlacementEnabled() const { return m_ruleAreaPlacementEnabled ; }
+    bool GetIsRuleArea() const                        { return m_isRuleArea; }
+    void SetIsRuleArea( bool aEnable )                { m_isRuleArea = aEnable; }
+    bool GetRuleAreaPlacementEnabled() const          { return m_ruleAreaPlacementEnabled ; }
+    void SetRuleAreaPlacementEnabled( bool aEnabled ) { m_ruleAreaPlacementEnabled = aEnabled; }
+
+    wxString GetRuleAreaPlacementSource() const                { return m_ruleAreaPlacementSource; }
+    void SetRuleAreaPlacementSource( const wxString& aSource ) { m_ruleAreaPlacementSource = aSource; }
     RULE_AREA_PLACEMENT_SOURCE_TYPE GetRuleAreaPlacementSourceType() const
     {
         return m_ruleAreaPlacementSourceType;
     }
-    wxString GetRuleAreaPlacementSource() const { return m_ruleAreaPlacementSource; }
-    bool GetDoNotAllowCopperPour() const { return m_doNotAllowCopperPour; }
+    void SetRuleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE aType )
+    {
+        m_ruleAreaPlacementSourceType = aType;
+    }
+
+    bool GetDoNotAllowZoneFills() const  { return m_doNotAllowZoneFills; }
     bool GetDoNotAllowVias() const       { return m_doNotAllowVias; }
     bool GetDoNotAllowTracks() const     { return m_doNotAllowTracks; }
     bool GetDoNotAllowPads() const       { return m_doNotAllowPads; }
     bool GetDoNotAllowFootprints() const { return m_doNotAllowFootprints; }
 
-    void SetIsRuleArea( bool aEnable ) { m_isRuleArea = aEnable; }
-    void SetRuleAreaPlacementEnabled( bool aEnabled ) { m_ruleAreaPlacementEnabled = aEnabled; }
-    void SetRuleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE aType )
-    {
-        m_ruleAreaPlacementSourceType = aType;
-    }
-    void SetRuleAreaPlacementSource( const wxString& aSource )
-    {
-        m_ruleAreaPlacementSource = aSource;
-    }
-    void SetDoNotAllowCopperPour( bool aEnable ) { m_doNotAllowCopperPour = aEnable; }
+    void SetDoNotAllowZoneFills( bool aEnable )  { m_doNotAllowZoneFills = aEnable; }
     void SetDoNotAllowVias( bool aEnable )       { m_doNotAllowVias = aEnable; }
     void SetDoNotAllowTracks( bool aEnable )     { m_doNotAllowTracks = aEnable; }
     void SetDoNotAllowPads( bool aEnable )       { m_doNotAllowPads = aEnable; }
@@ -897,7 +896,7 @@ protected:
     /* For keepout zones only:
      * what is not allowed inside the keepout ( pads, tracks and vias )
      */
-    bool                  m_doNotAllowCopperPour;
+    bool                  m_doNotAllowZoneFills;
     bool                  m_doNotAllowVias;
     bool                  m_doNotAllowTracks;
     bool                  m_doNotAllowPads;

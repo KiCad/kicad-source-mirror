@@ -979,7 +979,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryAreas( const SYMDEF_PCB& aComponent,
 
             //There is no distinction between tracks and copper pours in CADSTAR Keepout zones
             zone->SetDoNotAllowTracks( area.NoTracks );
-            zone->SetDoNotAllowCopperPour( area.NoTracks );
+            zone->SetDoNotAllowZoneFills( area.NoTracks );
 
             zone->SetDoNotAllowVias( area.NoVias );
         }
@@ -1715,7 +1715,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadAreas()
             zone->SetDoNotAllowFootprints( area.Keepout );
 
             zone->SetDoNotAllowTracks( area.NoTracks );
-            zone->SetDoNotAllowCopperPour( area.NoTracks );
+            zone->SetDoNotAllowZoneFills( area.NoTracks );
 
             zone->SetDoNotAllowVias( area.NoVias );
 

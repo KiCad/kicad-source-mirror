@@ -82,7 +82,7 @@ ZONE_SETTINGS::ZONE_SETTINGS()
 
     SetIsRuleArea( false );
     SetRuleAreaPlacementSourceType( RULE_AREA_PLACEMENT_SOURCE_TYPE::SHEETNAME );
-    SetDoNotAllowCopperPour( false );
+    SetDoNotAllowZoneFills( false );
     SetDoNotAllowVias( true );
     SetDoNotAllowTracks( true );
     SetDoNotAllowPads( true );
@@ -116,11 +116,10 @@ bool ZONE_SETTINGS::operator==( const ZONE_SETTINGS& aOther ) const
     if( m_cornerSmoothingType         != aOther.m_cornerSmoothingType ) return false;
     if( m_cornerRadius                != aOther.m_cornerRadius ) return false;
     if( m_isRuleArea                  != aOther.m_isRuleArea ) return false;
-    if( m_ruleAreaPlacementEnabled != aOther.m_ruleAreaPlacementEnabled )
-        return false;
+    if( m_ruleAreaPlacementEnabled    != aOther.m_ruleAreaPlacementEnabled ) return false;
     if( m_ruleAreaPlacementSourceType != aOther.m_ruleAreaPlacementSourceType ) return false;
     if( m_ruleAreaPlacementSource     != aOther.m_ruleAreaPlacementSource ) return false;
-    if( m_keepoutDoNotAllowCopperPour != aOther.m_keepoutDoNotAllowCopperPour ) return false;
+    if( m_keepoutDoNotAllowZoneFills  != aOther.m_keepoutDoNotAllowZoneFills ) return false;
     if( m_keepoutDoNotAllowVias       != aOther.m_keepoutDoNotAllowVias ) return false;
     if( m_keepoutDoNotAllowTracks     != aOther.m_keepoutDoNotAllowTracks ) return false;
     if( m_keepoutDoNotAllowPads       != aOther.m_keepoutDoNotAllowPads ) return false;
@@ -167,10 +166,10 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE& aSource )
     m_cornerSmoothingType         = aSource.GetCornerSmoothingType();
     m_cornerRadius                = aSource.GetCornerRadius();
     m_isRuleArea                  = aSource.GetIsRuleArea();
-    m_ruleAreaPlacementEnabled = aSource.GetRuleAreaPlacementEnabled();
+    m_ruleAreaPlacementEnabled    = aSource.GetRuleAreaPlacementEnabled();
     m_ruleAreaPlacementSourceType = aSource.GetRuleAreaPlacementSourceType();
     m_ruleAreaPlacementSource     = aSource.GetRuleAreaPlacementSource();
-    m_keepoutDoNotAllowCopperPour = aSource.GetDoNotAllowCopperPour();
+    m_keepoutDoNotAllowZoneFills  = aSource.GetDoNotAllowZoneFills();
     m_keepoutDoNotAllowVias       = aSource.GetDoNotAllowVias();
     m_keepoutDoNotAllowTracks     = aSource.GetDoNotAllowTracks();
     m_keepoutDoNotAllowPads       = aSource.GetDoNotAllowPads();
@@ -216,7 +215,7 @@ void ZONE_SETTINGS::ExportSetting( ZONE& aTarget, bool aFullExport ) const
     aTarget.SetRuleAreaPlacementEnabled( GetRuleAreaPlacementEnabled() );
     aTarget.SetRuleAreaPlacementSourceType( GetRuleAreaPlacementSourceType() );
     aTarget.SetRuleAreaPlacementSource( GetRuleAreaPlacementSource() );
-    aTarget.SetDoNotAllowCopperPour( GetDoNotAllowCopperPour() );
+    aTarget.SetDoNotAllowZoneFills( GetDoNotAllowZoneFills() );
     aTarget.SetDoNotAllowVias( GetDoNotAllowVias() );
     aTarget.SetDoNotAllowTracks( GetDoNotAllowTracks() );
     aTarget.SetDoNotAllowPads( GetDoNotAllowPads() );
@@ -277,7 +276,7 @@ void ZONE_SETTINGS::CopyFrom( const ZONE_SETTINGS& aOther, bool aCopyFull )
     m_ruleAreaPlacementEnabled    = aOther.m_ruleAreaPlacementEnabled;
     m_ruleAreaPlacementSourceType = aOther.m_ruleAreaPlacementSourceType;
     m_ruleAreaPlacementSource     = aOther.m_ruleAreaPlacementSource;
-    m_keepoutDoNotAllowCopperPour = aOther.m_keepoutDoNotAllowCopperPour;
+    m_keepoutDoNotAllowZoneFills  = aOther.m_keepoutDoNotAllowZoneFills;
     m_keepoutDoNotAllowVias       = aOther.m_keepoutDoNotAllowVias;
     m_keepoutDoNotAllowTracks     = aOther.m_keepoutDoNotAllowTracks;
     m_keepoutDoNotAllowPads       = aOther.m_keepoutDoNotAllowPads;

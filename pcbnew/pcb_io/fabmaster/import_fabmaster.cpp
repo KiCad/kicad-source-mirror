@@ -3392,7 +3392,7 @@ bool FABMASTER::loadZone( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
     zone->SetDoNotAllowVias( false );
     zone->SetDoNotAllowPads( false );
     zone->SetDoNotAllowFootprints( false );
-    zone->SetDoNotAllowCopperPour( false );
+    zone->SetDoNotAllowZoneFills( false );
 
     if( aLine->lclass == "ROUTE KEEPOUT")
     {

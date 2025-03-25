@@ -339,7 +339,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                     if( !zone->HasKeepoutParametersSet() )
                         continue;
 
-                    if( !zone->GetDoNotAllowCopperPour() )
+                    if( !zone->GetDoNotAllowZoneFills() )
                         continue;
 
                     if( !zone->IsOnLayer( itemLayer ) )
@@ -1500,7 +1500,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
 
         if( otherZone->GetIsRuleArea() )
         {
-            if( otherZone->GetDoNotAllowCopperPour() && !aZone->IsTeardropArea() )
+            if( otherZone->GetDoNotAllowZoneFills() && !aZone->IsTeardropArea() )
                 knockoutZoneClearance( otherZone );
         }
         else if( otherZone->HigherPriority( aZone ) )
@@ -1519,7 +1519,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
 
             if( otherZone->GetIsRuleArea() )
             {
-                if( otherZone->GetDoNotAllowCopperPour() && !aZone->IsTeardropArea() )
+                if( otherZone->GetDoNotAllowZoneFills() && !aZone->IsTeardropArea() )
                     knockoutZoneClearance( otherZone );
             }
             else if( otherZone->HigherPriority( aZone ) )
@@ -1903,7 +1903,7 @@ bool ZONE_FILLER::fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
                 return aReporter && ( ticker++ % 50 ) == 0 && aReporter->IsCancelled();
             };
 
-    auto knockoutGraphicClearance =
+    auto knockoutGraphicItem =
             [&]( BOARD_ITEM* aItem )
             {
                 if( aItem->IsKnockout() && aItem->IsOnLayer( aLayer )
@@ -1918,11 +1918,11 @@ bool ZONE_FILLER::fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
         if( checkForCancel( m_progressReporter ) )
             return false;
 
-        knockoutGraphicClearance( &footprint->Reference() );
-        knockoutGraphicClearance( &footprint->Value() );
+        knockoutGraphicItem( &footprint->Reference() );
+        knockoutGraphicItem( &footprint->Value() );
 
         for( BOARD_ITEM* item : footprint->GraphicalItems() )
-            knockoutGraphicClearance( item );
+            knockoutGraphicItem( item );
     }
 
     for( BOARD_ITEM* item : m_board->Drawings() )
@@ -1930,7 +1930,7 @@ bool ZONE_FILLER::fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
         if( checkForCancel( m_progressReporter ) )
             return false;
 
-        knockoutGraphicClearance( item );
+        knockoutGraphicItem( item );
     }
 
     aFillPolys = aSmoothedOutline;
@@ -1945,7 +1945,7 @@ bool ZONE_FILLER::fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
                 if( !candidate->HasKeepoutParametersSet() )
                     return;
 
-                if( candidate->GetDoNotAllowCopperPour() && candidate->IsOnLayer( aLayer ) )
+                if( candidate->GetDoNotAllowZoneFills() && candidate->IsOnLayer( aLayer ) )
                 {
                     if( candidate->GetBoundingBox().Intersects( zone_boundingbox ) )
                     {

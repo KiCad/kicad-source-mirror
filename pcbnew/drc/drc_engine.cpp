@@ -126,7 +126,7 @@ static bool isKeepoutZone( const BOARD_ITEM* aItem, bool aCheckFlags )
         if(    !zone->GetDoNotAllowTracks()
             && !zone->GetDoNotAllowVias()
             && !zone->GetDoNotAllowPads()
-            && !zone->GetDoNotAllowCopperPour()
+            && !zone->GetDoNotAllowZoneFills()
             && !zone->GetDoNotAllowFootprints() )
         {
             return false;
@@ -479,7 +479,7 @@ void DRC_ENGINE::loadImplicitRules()
         if( zone->GetDoNotAllowPads() )
             disallowFlags |= DRC_DISALLOW_PADS;
 
-        if( zone->GetDoNotAllowCopperPour() )
+        if( zone->GetDoNotAllowZoneFills() )
             disallowFlags |= DRC_DISALLOW_ZONES;
 
         if( zone->GetDoNotAllowFootprints() )

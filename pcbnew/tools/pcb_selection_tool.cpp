@@ -3386,21 +3386,19 @@ void PCB_SELECTION_TOOL::pruneObscuredSelectionCandidates( GENERAL_COLLECTOR& aC
 
     wxCHECK( !enabledLayerStack.empty(), /* void */ );
 
-    auto isCopperPourKeepoutZone = []( const BOARD_ITEM* aItem ) -> bool
-                                   {
-                                       if( aItem->Type() == PCB_ZONE_T )
-                                       {
-                                           const ZONE* zone = static_cast<const ZONE*>( aItem );
+    auto isZoneFillKeepout =
+            []( const BOARD_ITEM* aItem ) -> bool
+            {
+                if( aItem->Type() == PCB_ZONE_T )
+                {
+                    const ZONE* zone = static_cast<const ZONE*>( aItem );
 
-                                           wxCHECK( zone, false );
+                    if( zone->GetIsRuleArea() && zone->GetDoNotAllowZoneFills() )
+                        return true;
+                }
 
-                                           if( zone->GetIsRuleArea()
-                                             && zone->GetDoNotAllowCopperPour() )
-                                               return true;
-                                       }
-
-                                       return false;
-                                   };
+                return false;
+            };
 
     std::vector<LAYER_OPACITY_ITEM> opacityStackup;
 
@@ -3424,7 +3422,7 @@ void PCB_SELECTION_TOOL::pruneObscuredSelectionCandidates( GENERAL_COLLECTOR& aC
             opacityItem.m_Opacity = color.a;
             opacityItem.m_Item = item;
 
-            if( isCopperPourKeepoutZone( item ) )
+            if( isZoneFillKeepout( item ) )
                 opacityItem.m_Opacity = 0.0;
 
             opacityStackup.emplace_back( opacityItem );
@@ -3459,30 +3457,32 @@ void PCB_SELECTION_TOOL::pruneObscuredSelectionCandidates( GENERAL_COLLECTOR& aC
         }
 
         // Objects to ignore and fallback to the old selection behavior.
-        auto ignoreItem = [&]()
-                          {
-                              const BOARD_ITEM* item = opacityItem.m_Item;
+        auto ignoreItem =
+                [&]()
+                {
+                    const BOARD_ITEM* item = opacityItem.m_Item;
 
-                              wxCHECK( item, false );
+                    wxCHECK( item, false );
 
-                              // Check items that span multiple layers for visibility.
-                              if( visibleItems.count( item ) )
-                                  return true;
+                    // Check items that span multiple layers for visibility.
+                    if( visibleItems.count( item ) )
+                        return true;
 
-                              // Don't prune child items of a footprint that is already visible.
-                              if( item->GetParent()
-                                && ( item->GetParent()->Type() == PCB_FOOTPRINT_T )
-                                && visibleItems.count( item->GetParent() ) )
-                                  return true;
+                    // Don't prune child items of a footprint that is already visible.
+                    if( item->GetParent()
+                            && ( item->GetParent()->Type() == PCB_FOOTPRINT_T )
+                            && visibleItems.count( item->GetParent() ) )
+                    {
+                        return true;
+                    }
 
-                              // Keepout zones are transparent but for some reason,
-                              // PCB_PAINTER::GetColor() returns the color of the zone it
-                              // prevents from filling.
-                              if( isCopperPourKeepoutZone( item ) )
-                                  return true;
+                    // Keepout zones are transparent but for some reason, PCB_PAINTER::GetColor()
+                    // returns the color of the zone it prevents from filling.
+                    if( isZoneFillKeepout( item ) )
+                        return true;
 
-                              return false;
-                          };
+                    return false;
+                };
 
         // Everything on the currently selected layer is visible;
         if( opacityItem.m_Layer == enabledLayerStack[0] )

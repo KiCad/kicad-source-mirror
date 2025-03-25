@@ -232,7 +232,7 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
     m_keepoutProperties->m_cbViasCtrl->SetValue( m_zonesettings.GetDoNotAllowVias() );
     m_keepoutProperties->m_cbPadsCtrl->SetValue( m_zonesettings.GetDoNotAllowPads() );
     m_keepoutProperties->m_cbFootprintsCtrl->SetValue( m_zonesettings.GetDoNotAllowFootprints() );
-    m_keepoutProperties->m_cbCopperPourCtrl->SetValue( m_zonesettings.GetDoNotAllowCopperPour() );
+    m_keepoutProperties->m_cbCopperPourCtrl->SetValue( m_zonesettings.GetDoNotAllowZoneFills() );
 
     // Init placement parameters:
     m_placementProperties->m_DisabedlRb->SetValue( true );
@@ -384,7 +384,7 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataFromWindow()
     m_zonesettings.SetIsRuleArea( true );
     m_zonesettings.SetDoNotAllowTracks( m_keepoutProperties->m_cbTracksCtrl->GetValue() );
     m_zonesettings.SetDoNotAllowVias( m_keepoutProperties->m_cbViasCtrl->GetValue() );
-    m_zonesettings.SetDoNotAllowCopperPour( m_keepoutProperties->m_cbCopperPourCtrl->GetValue() );
+    m_zonesettings.SetDoNotAllowZoneFills( m_keepoutProperties->m_cbCopperPourCtrl->GetValue() );
     m_zonesettings.SetDoNotAllowPads( m_keepoutProperties->m_cbPadsCtrl->GetValue() );
     m_zonesettings.SetDoNotAllowFootprints( m_keepoutProperties->m_cbFootprintsCtrl->GetValue() );
 

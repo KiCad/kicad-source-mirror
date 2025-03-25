@@ -7269,7 +7269,7 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                     if( token != T_allowed && token != T_not_allowed )
                         Expecting( "allowed or not_allowed" );
 
-                    zone->SetDoNotAllowCopperPour( token == T_not_allowed );
+                    zone->SetDoNotAllowZoneFills( token == T_not_allowed );
                     break;
 
                 case T_pads:

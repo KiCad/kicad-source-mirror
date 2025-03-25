@@ -614,7 +614,7 @@ void CheckFpZone( const ZONE* expected, const ZONE* zone )
         BOOST_CHECK_EQUAL( expected->GetMinIslandArea(), zone->GetMinIslandArea() );
 
         BOOST_CHECK_EQUAL( expected->GetIsRuleArea(), zone->GetIsRuleArea() );
-        BOOST_CHECK_EQUAL( expected->GetDoNotAllowCopperPour(), zone->GetDoNotAllowCopperPour() );
+        BOOST_CHECK_EQUAL( expected->GetDoNotAllowZoneFills(), zone->GetDoNotAllowZoneFills() );
         BOOST_CHECK_EQUAL( expected->GetDoNotAllowVias(), zone->GetDoNotAllowVias() );
         BOOST_CHECK_EQUAL( expected->GetDoNotAllowTracks(), zone->GetDoNotAllowTracks() );
         BOOST_CHECK_EQUAL( expected->GetDoNotAllowPads(), zone->GetDoNotAllowPads() );

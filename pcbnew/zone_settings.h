@@ -140,7 +140,7 @@ private:
      * Keepout zones and keepout flags.
      * Note that DRC rules can set keepouts on zones whether they're a keepout or not.
      */
-    bool m_isRuleArea;
+    bool            m_isRuleArea;
 
     /**
      * Placement rule area data
@@ -149,11 +149,11 @@ private:
     RULE_AREA_PLACEMENT_SOURCE_TYPE m_ruleAreaPlacementSourceType;
     wxString                        m_ruleAreaPlacementSource;
 
-    bool            m_keepoutDoNotAllowCopperPour;
-    bool            m_keepoutDoNotAllowVias;
-    bool            m_keepoutDoNotAllowTracks;
-    bool            m_keepoutDoNotAllowPads;
-    bool            m_keepoutDoNotAllowFootprints;
+    bool                m_keepoutDoNotAllowZoneFills;
+    bool                m_keepoutDoNotAllowVias;
+    bool                m_keepoutDoNotAllowTracks;
+    bool                m_keepoutDoNotAllowPads;
+    bool                m_keepoutDoNotAllowFootprints;
 
     ISLAND_REMOVAL_MODE m_removeIslands;
     long long int       m_minIslandArea;
@@ -226,7 +226,7 @@ public:
     bool HasKeepoutParametersSet() const
     {
         return m_keepoutDoNotAllowTracks || m_keepoutDoNotAllowVias || m_keepoutDoNotAllowPads
-               || m_keepoutDoNotAllowFootprints || m_keepoutDoNotAllowCopperPour;
+               || m_keepoutDoNotAllowFootprints || m_keepoutDoNotAllowZoneFills;
     }
 
     /**
@@ -239,10 +239,10 @@ public:
         return m_ruleAreaPlacementSourceType;
     }
     wxString GetRuleAreaPlacementSource() const { return m_ruleAreaPlacementSource; }
-    bool GetDoNotAllowCopperPour() const { return m_keepoutDoNotAllowCopperPour; }
-    bool GetDoNotAllowVias() const { return m_keepoutDoNotAllowVias; }
-    bool GetDoNotAllowTracks() const { return m_keepoutDoNotAllowTracks; }
-    bool GetDoNotAllowPads() const { return m_keepoutDoNotAllowPads; }
+    bool GetDoNotAllowZoneFills() const  { return m_keepoutDoNotAllowZoneFills; }
+    bool GetDoNotAllowVias() const       { return m_keepoutDoNotAllowVias; }
+    bool GetDoNotAllowTracks() const     { return m_keepoutDoNotAllowTracks; }
+    bool GetDoNotAllowPads() const       { return m_keepoutDoNotAllowPads; }
     bool GetDoNotAllowFootprints() const { return m_keepoutDoNotAllowFootprints; }
 
     void SetIsRuleArea( bool aEnable ) { m_isRuleArea = aEnable; }
@@ -255,10 +255,10 @@ public:
     {
         m_ruleAreaPlacementSource = aSource;
     }
-    void SetDoNotAllowCopperPour( bool aEnable ) { m_keepoutDoNotAllowCopperPour = aEnable; }
-    void SetDoNotAllowVias( bool aEnable ) { m_keepoutDoNotAllowVias = aEnable; }
-    void SetDoNotAllowTracks( bool aEnable ) { m_keepoutDoNotAllowTracks = aEnable; }
-    void SetDoNotAllowPads( bool aEnable ) { m_keepoutDoNotAllowPads = aEnable; }
+    void SetDoNotAllowZoneFills( bool aEnable )  { m_keepoutDoNotAllowZoneFills = aEnable; }
+    void SetDoNotAllowVias( bool aEnable )       { m_keepoutDoNotAllowVias = aEnable; }
+    void SetDoNotAllowTracks( bool aEnable )     { m_keepoutDoNotAllowTracks = aEnable; }
+    void SetDoNotAllowPads( bool aEnable )       { m_keepoutDoNotAllowPads = aEnable; }
     void SetDoNotAllowFootprints( bool aEnable ) { m_keepoutDoNotAllowFootprints = aEnable; }
 
     ISLAND_REMOVAL_MODE GetIslandRemovalMode() const { return m_removeIslands; }

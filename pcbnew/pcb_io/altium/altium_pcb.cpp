@@ -2395,7 +2395,7 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItem( const AREGION6& aElem )
         }
         else if( aElem.kind == ALTIUM_REGION_KIND::POLYGON_CUTOUT )
         {
-            zone->SetDoNotAllowCopperPour( true );
+            zone->SetDoNotAllowZoneFills( true );
             zone->SetDoNotAllowVias( false );
             zone->SetDoNotAllowTracks( false );
             zone->SetDoNotAllowPads( false );
@@ -2502,7 +2502,7 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT*      aFoot
         }
         else if( aElem.kind == ALTIUM_REGION_KIND::POLYGON_CUTOUT )
         {
-            zone->SetDoNotAllowCopperPour( true );
+            zone->SetDoNotAllowZoneFills( true );
             zone->SetDoNotAllowVias( false );
             zone->SetDoNotAllowTracks( false );
             zone->SetDoNotAllowPads( false );
@@ -4816,7 +4816,7 @@ void ALTIUM_PCB::HelperSetZoneKeepoutRestrictions( ZONE& aZone, const uint8_t aK
 
     aZone.SetDoNotAllowVias( keepoutRestrictionVia );
     aZone.SetDoNotAllowTracks( keepoutRestrictionTrack );
-    aZone.SetDoNotAllowCopperPour( keepoutRestrictionCopper );
+    aZone.SetDoNotAllowZoneFills( keepoutRestrictionCopper );
     aZone.SetDoNotAllowPads( keepoutRestrictionSMDPad && keepoutRestrictionTHPad );
     aZone.SetDoNotAllowFootprints( false );
 }

@@ -146,7 +146,7 @@ void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone )
     m_ruleAreaPlacementSource = aZone.m_ruleAreaPlacementSource;
     SetLayerSet( aZone.GetLayerSet() );
 
-    m_doNotAllowCopperPour    = aZone.m_doNotAllowCopperPour;
+    m_doNotAllowZoneFills     = aZone.m_doNotAllowZoneFills;
     m_doNotAllowVias          = aZone.m_doNotAllowVias;
     m_doNotAllowTracks        = aZone.m_doNotAllowTracks;
     m_doNotAllowPads          = aZone.m_doNotAllowPads;
@@ -243,7 +243,7 @@ void ZONE::Serialize( google::protobuf::Any& aContainer ) const
     if( m_isRuleArea )
     {
         types::RuleAreaSettings* ra = zone.mutable_rule_area_settings();
-        ra->set_keepout_copper( m_doNotAllowCopperPour );
+        ra->set_keepout_copper( m_doNotAllowZoneFills );
         ra->set_keepout_footprints( m_doNotAllowFootprints );
         ra->set_keepout_pads( m_doNotAllowPads );
         ra->set_keepout_tracks( m_doNotAllowTracks );
@@ -348,7 +348,7 @@ bool ZONE::Deserialize( const google::protobuf::Any& aContainer )
     if( m_isRuleArea )
     {
         const types::RuleAreaSettings& ra = zone.rule_area_settings();
-        m_doNotAllowCopperPour = ra.keepout_copper();
+        m_doNotAllowZoneFills = ra.keepout_copper();
         m_doNotAllowFootprints = ra.keepout_footprints();
         m_doNotAllowPads = ra.keepout_pads();
         m_doNotAllowTracks = ra.keepout_tracks();
@@ -854,8 +854,8 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
         if( GetDoNotAllowPads() )
             AccumulateDescription( msg, _( "No pads" ) );
 
-        if( GetDoNotAllowCopperPour() )
-            AccumulateDescription( msg, _( "No copper zones" ) );
+        if( GetDoNotAllowZoneFills() )
+            AccumulateDescription( msg, _( "No zone fills" ) );
 
         if( GetDoNotAllowFootprints() )
             AccumulateDescription( msg, _( "No footprints" ) );
@@ -1653,7 +1653,7 @@ bool ZONE::operator==( const ZONE& aOther ) const
 
      if( GetIsRuleArea() )
      {
-         if( GetDoNotAllowCopperPour() != other.GetDoNotAllowCopperPour() )
+         if( GetDoNotAllowZoneFills() != other.GetDoNotAllowZoneFills() )
              return false;
 
          if( GetDoNotAllowTracks() != other.GetDoNotAllowTracks() )
@@ -1745,7 +1745,7 @@ double ZONE::Similarity( const BOARD_ITEM& aOther ) const
     }
     else
     {
-        if( GetDoNotAllowCopperPour() != other.GetDoNotAllowCopperPour() )
+        if( GetDoNotAllowZoneFills() != other.GetDoNotAllowZoneFills() )
             similarity *= 0.9;
         if( GetDoNotAllowTracks() != other.GetDoNotAllowTracks() )
             similarity *= 0.9;
@@ -1934,9 +1934,9 @@ static struct ZONE_DESC
                              groupKeepout )
                 .SetAvailableFunc( isRuleArea );
 
-        propMgr.AddProperty( new PROPERTY<ZONE, bool>( _HKI( "Keep Out Copper Pours" ),
-                                                       &ZONE::SetDoNotAllowCopperPour,
-                                                       &ZONE::GetDoNotAllowCopperPour ),
+        propMgr.AddProperty( new PROPERTY<ZONE, bool>( _HKI( "Keep Out Zone Fills" ),
+                                                       &ZONE::SetDoNotAllowZoneFills,
+                                                       &ZONE::GetDoNotAllowZoneFills ),
                              groupKeepout )
                 .SetAvailableFunc( isRuleArea );
 

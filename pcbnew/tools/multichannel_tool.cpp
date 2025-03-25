@@ -1136,7 +1136,7 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
         newZone->SetIsRuleArea( true );
         newZone->SetLayerSet( LSET::AllCuMask() );
         newZone->SetRuleAreaPlacementEnabled( true );
-        newZone->SetDoNotAllowCopperPour( false );
+        newZone->SetDoNotAllowZoneFills( false );
         newZone->SetDoNotAllowVias( false );
         newZone->SetDoNotAllowTracks( false );
         newZone->SetDoNotAllowPads( false );

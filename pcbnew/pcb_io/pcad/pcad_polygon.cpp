@@ -205,14 +205,14 @@ void PCAD_POLYGON::AddToBoard( FOOTPRINT* aFootprint )
                 zone->SetDoNotAllowTracks( true );
                 zone->SetDoNotAllowVias( true );
                 zone->SetDoNotAllowPads( true );
-                zone->SetDoNotAllowCopperPour( true );
+                zone->SetDoNotAllowZoneFills( true );
                 zone->SetDoNotAllowFootprints( false );
             }
             else if( m_ObjType == wxT( 'C' ) )
             {
                 // convert cutouts to keepouts because standalone cutouts are not supported in KiCad
                 zone->SetIsRuleArea( true );
-                zone->SetDoNotAllowCopperPour( true );
+                zone->SetDoNotAllowZoneFills( true );
                 zone->SetDoNotAllowTracks( false );
                 zone->SetDoNotAllowVias( false );
                 zone->SetDoNotAllowPads( false );

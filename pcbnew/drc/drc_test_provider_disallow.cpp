@@ -92,7 +92,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
             {
                 ZONE* zone = static_cast<ZONE*>( item );
 
-                if( zone->GetIsRuleArea() && zone->GetDoNotAllowCopperPour() )
+                if( zone->GetIsRuleArea() && zone->GetDoNotAllowZoneFills() )
                 {
                     antiCopperKeepouts.push_back( zone );
                 }

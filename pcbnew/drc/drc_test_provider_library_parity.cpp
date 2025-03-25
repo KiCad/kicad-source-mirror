@@ -498,8 +498,8 @@ bool zoneNeedsUpdate( const ZONE* a, const ZONE* b, REPORTER* aReporter )
 
     TEST( a->GetIsRuleArea(), b->GetIsRuleArea(),
           wxString::Format( _( "%s keep-out property differs." ), ITEM_DESC( a ) ) );
-    TEST( a->GetDoNotAllowCopperPour(), b->GetDoNotAllowCopperPour(),
-          wxString::Format( _( "%s keep out copper fill setting differs." ), ITEM_DESC( a ) ) );
+    TEST( a->GetDoNotAllowZoneFills(), b->GetDoNotAllowZoneFills(),
+          wxString::Format( _( "%s keep out zone fill setting differs." ), ITEM_DESC( a ) ) );
     TEST( a->GetDoNotAllowFootprints(), b->GetDoNotAllowFootprints(),
           wxString::Format( _( "%s keep out footprints setting differs." ), ITEM_DESC( a ) ) );
     TEST( a->GetDoNotAllowPads(), b->GetDoNotAllowPads(),

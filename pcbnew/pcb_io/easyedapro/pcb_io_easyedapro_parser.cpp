@@ -888,8 +888,8 @@ FOOTPRINT* PCB_IO_EASYEDAPRO_PARSER::ParseFootprint( const nlohmann::json&      
 
                 zone->SetIsRuleArea( true );
                 zone->SetDoNotAllowFootprints( !!flags.count( 2 ) );
-                zone->SetDoNotAllowCopperPour( !!flags.count( 7 ) || !!flags.count( 6 )
-                                               || !!flags.count( 8 ) );
+                zone->SetDoNotAllowZoneFills( !!flags.count( 7 ) || !!flags.count( 6 )
+                                              || !!flags.count( 8 ) );
                 zone->SetDoNotAllowPads( !!flags.count( 7 ) );
                 zone->SetDoNotAllowTracks( !!flags.count( 7 ) || !!flags.count( 5 ) );
                 zone->SetDoNotAllowVias( !!flags.count( 7 ) );
@@ -1282,8 +1282,8 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
 
                 zone->SetIsRuleArea( true );
                 zone->SetDoNotAllowFootprints( !!flags.count( 2 ) );
-                zone->SetDoNotAllowCopperPour( !!flags.count( 7 ) || !!flags.count( 6 )
-                                               || !!flags.count( 8 ) );
+                zone->SetDoNotAllowZoneFills( !!flags.count( 7 ) || !!flags.count( 6 )
+                                              || !!flags.count( 8 ) );
                 zone->SetDoNotAllowPads( !!flags.count( 7 ) );
                 zone->SetDoNotAllowTracks( !!flags.count( 7 ) || !!flags.count( 5 ) );
                 zone->SetDoNotAllowVias( !!flags.count( 7 ) );

@@ -67,7 +67,7 @@ bool ZONE::IsSame( const ZONE& aZoneToCompare )
     if( GetIsRuleArea() != aZoneToCompare.GetIsRuleArea() )
         return false;
 
-    if( GetDoNotAllowCopperPour() != aZoneToCompare.GetDoNotAllowCopperPour() )
+    if( GetDoNotAllowZoneFills() != aZoneToCompare.GetDoNotAllowZoneFills() )
         return false;
 
     if( GetDoNotAllowVias() != aZoneToCompare.GetDoNotAllowVias() )

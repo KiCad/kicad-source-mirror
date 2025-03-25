@@ -2513,7 +2513,7 @@ void PCB_IO_KICAD_LEGACY::loadZONE_CONTAINER()
                 else if( !strcmp( token, "copperpour" ) )
                 {
                     token = strtok_r( nullptr, delims, (char**) &data );
-                    zc->SetDoNotAllowCopperPour( token && *token == 'N' );
+                    zc->SetDoNotAllowZoneFills( token && *token == 'N' );
                 }
 
                 token = strtok_r( nullptr, delims, (char**) &data );

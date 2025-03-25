@@ -2608,7 +2608,7 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone ) const
                       aZone->GetDoNotAllowTracks() ? "not_allowed" : "allowed",
                       aZone->GetDoNotAllowVias() ? "not_allowed" : "allowed",
                       aZone->GetDoNotAllowPads() ? "not_allowed" : "allowed",
-                      aZone->GetDoNotAllowCopperPour() ? "not_allowed" : "allowed",
+                      aZone->GetDoNotAllowZoneFills() ? "not_allowed" : "allowed",
                       aZone->GetDoNotAllowFootprints() ? "not_allowed" : "allowed" );
 
         // Multichannel settings

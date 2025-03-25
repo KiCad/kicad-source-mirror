@@ -126,7 +126,7 @@ void PCB_IO_EAGLE::setKeepoutSettingsToZone( ZONE* aZone, int aLayer ) const
         aZone->SetIsRuleArea( true );
         aZone->SetDoNotAllowVias( true );
         aZone->SetDoNotAllowTracks( true );
-        aZone->SetDoNotAllowCopperPour( true );
+        aZone->SetDoNotAllowZoneFills( true );
         aZone->SetDoNotAllowPads( true );
         aZone->SetDoNotAllowFootprints( false );
 
@@ -140,7 +140,7 @@ void PCB_IO_EAGLE::setKeepoutSettingsToZone( ZONE* aZone, int aLayer ) const
         aZone->SetIsRuleArea( true );
         aZone->SetDoNotAllowVias( true );
         aZone->SetDoNotAllowTracks( false );
-        aZone->SetDoNotAllowCopperPour( false );
+        aZone->SetDoNotAllowZoneFills( false );
         aZone->SetDoNotAllowPads( false );
         aZone->SetDoNotAllowFootprints( false );
 
@@ -151,7 +151,7 @@ void PCB_IO_EAGLE::setKeepoutSettingsToZone( ZONE* aZone, int aLayer ) const
         aZone->SetIsRuleArea( true );
         aZone->SetDoNotAllowVias( false );
         aZone->SetDoNotAllowTracks( false );
-        aZone->SetDoNotAllowCopperPour( true );
+        aZone->SetDoNotAllowZoneFills( true );
         aZone->SetDoNotAllowPads( false );
         aZone->SetDoNotAllowFootprints( false );
 
@@ -1614,7 +1614,7 @@ ZONE* PCB_IO_EAGLE::loadPolygon( wxXmlNode* aPolyNode )
         zone->SetDoNotAllowTracks( false );
         zone->SetDoNotAllowPads( false );
         zone->SetDoNotAllowFootprints( false );
-        zone->SetDoNotAllowCopperPour( true );
+        zone->SetDoNotAllowZoneFills( true );
         zone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
     }
     else if( p.pour == EPOLYGON::EHATCH )

@@ -496,7 +496,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
                 if( arr[4].Lower() == wxS( "cutout" ) )
                 {
                     zone->SetIsRuleArea( true );
-                    zone->SetDoNotAllowCopperPour( true );
+                    zone->SetDoNotAllowZoneFills( true );
                     zone->SetDoNotAllowTracks( false );
                     zone->SetDoNotAllowVias( false );
                     zone->SetDoNotAllowPads( false );
