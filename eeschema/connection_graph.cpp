@@ -1213,20 +1213,23 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
                     }
                 };
 
-            if( symbol->GetLibSymbolRef()->GetDuplicatePinNumbersAreJumpers() )
+            if( symbol->GetLibSymbolRef() )
             {
-                for( const std::vector<SCH_PIN*>& group : pinNumberMap | std::views::values )
-                    linkPinsInVec( group );
-            }
+                if( symbol->GetLibSymbolRef()->GetDuplicatePinNumbersAreJumpers() )
+                {
+                    for( const std::vector<SCH_PIN*>& group : pinNumberMap | std::views::values )
+                        linkPinsInVec( group );
+                }
 
-            for( const std::set<wxString>& group : symbol->GetLibSymbolRef()->JumperPinGroups() )
-            {
-                std::vector<SCH_PIN*> pins;
+                for( const std::set<wxString>& group : symbol->GetLibSymbolRef()->JumperPinGroups() )
+                {
+                    std::vector<SCH_PIN*> pins;
 
-                for( const wxString& pinNumber : group )
-                    pins.emplace_back( symbol->GetPin( pinNumber ) );
+                    for( const wxString& pinNumber : group )
+                        pins.emplace_back( symbol->GetPin( pinNumber ) );
 
-                linkPinsInVec( pins );
+                    linkPinsInVec( pins );
+                }
             }
         }
         else
