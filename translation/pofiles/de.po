@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-24 12:07-0700\n"
-"PO-Revision-Date: 2025-03-22 13:49+0000\n"
+"PO-Revision-Date: 2025-03-25 19:16+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -3889,15 +3889,16 @@ msgid "Remote Tracking"
 msgstr "Leiterbahnen routen"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:41
-#, fuzzy
 msgid "Update interval:"
-msgstr "Felder aktualisieren"
+msgstr "Aktualisierungsinterval:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:46
 msgid ""
 "Number of minutes between remote update checks.  Zero disables automatic "
 "checks."
 msgstr ""
+"Anazahl der Minuten zwischen Überprüfungen auf Aktualisierungen.  \"Null\" "
+"deaktiviert die Überprüfungen."
 
 #: common/dialogs/git/panel_git_repos_base.cpp:50
 #: common/dialogs/panel_common_settings_base.cpp:347
@@ -7092,7 +7093,7 @@ msgstr "Hinzugefügt"
 
 #: common/git/git_pull_handler.cpp:527
 msgid "Conflicts detected during rebase"
-msgstr ""
+msgstr "Während des rebase wurden Konflikte erkannt"
 
 #: common/git/git_push_handler.cpp:56
 msgid "Could not lookup remote"
