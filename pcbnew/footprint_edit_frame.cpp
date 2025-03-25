@@ -528,6 +528,40 @@ void FOOTPRINT_EDIT_FRAME::restoreLastFootprint()
 }
 
 
+void FOOTPRINT_EDIT_FRAME::updateEnabledLayers()
+{
+    // Enable one internal layer, because footprints support keepout areas that can be on
+    // internal layers only (therefore on the first internal layer).  This is needed to handle
+    // these keepout in internal layers only.
+    GetBoard()->SetCopperLayerCount( 3 );
+    GetBoard()->SetLayerName( In1_Cu, _( "Inner layers" ) );
+
+    // Don't drop pre-existing user layers
+    LSET enabledLayers = GetBoard()->GetEnabledLayers();
+
+    m_originalFootprintCopy->RunOnDescendants(
+            [&]( BOARD_ITEM* child )
+            {
+                LSET childLayers = child->GetLayerSet() & LSET::UserDefinedLayersMask();
+
+                for( PCB_LAYER_ID layer : childLayers )
+                    enabledLayers.set( layer );
+            } );
+
+    // Enable any layers that the user has gone to the trouble to name
+    SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
+    FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
+
+    for( const PCB_LAYER_ID& user : LSET::UserDefinedLayersMask() )
+    {
+        if( cfg->m_DesignSettings.m_UserLayerNames.contains( LSET::Name( user ).ToStdString() ) )
+            enabledLayers.set( user );
+    }
+
+    GetBoard()->SetEnabledLayers( enabledLayers );
+}
+
+
 void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
 {
     GetBoard()->DeleteAllFootprints();
@@ -542,37 +576,18 @@ void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
     // ("old" footprints can have null uuids that create issues in fp editor)
     aFootprint->FixUuids();
 
-    // Enable one internal layer, because footprints support keepout areas that can be on
-    // internal layers only (therefore on the first internal layer).  This is needed to handle
-    // these keepout in internal layers only.
-    GetBoard()->SetCopperLayerCount( 3 );
-    GetBoard()->SetLayerName( In1_Cu, _( "Inner layers" ) );
-
-    // Don't drop pre-existing user layers
-    LSET enabledLayers = GetBoard()->GetEnabledLayers();
-
-    aFootprint->RunOnDescendants(
-            [&]( BOARD_ITEM* child )
-            {
-                LSET childLayers = child->GetLayerSet() & LSET::UserDefinedLayersMask();
-
-                for( PCB_LAYER_ID layer : childLayers )
-                    enabledLayers.set( layer );
-            } );
-
-    GetBoard()->SetEnabledLayers( enabledLayers );
+    updateEnabledLayers();
 
     // Footprint Editor layer visibility is kept in the view, not the board (because the board
     // just delegates to the project file, which we don't have).
-    for( PCB_LAYER_ID layer : enabledLayers )
+    for( PCB_LAYER_ID layer : GetBoard()->GetEnabledLayers() )
         GetCanvas()->GetView()->SetLayerVisible( layer, true );
 
     const wxString libName = aFootprint->GetFPID().GetLibNickname();
 
     if( IsCurrentFPFromBoard() )
     {
-        const wxString msg = wxString::Format( _( "Editing %s from board.  Saving will update the "
-                                                  "board only." ),
+        const wxString msg = wxString::Format( _( "Editing %s from board.  Saving will update the board only." ),
                                                aFootprint->GetReference() );
         const wxString openLibLink = wxString::Format( _( "Open in library %s" ),
                                                        UnescapeString( libName ) );
@@ -1447,8 +1462,7 @@ void FOOTPRINT_EDIT_FRAME::CommonSettingsChanged( int aFlags )
     GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
 
     GetBoard()->GetDesignSettings() = cfg->m_DesignSettings;
-    GetBoard()->SetCopperLayerCount( 3 );
-    GetBoard()->SetLayerName( In1_Cu, _( "Inner layers" ) );
+    updateEnabledLayers();
 
     GetCanvas()->GetView()->UpdateAllLayersColor();
     GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
