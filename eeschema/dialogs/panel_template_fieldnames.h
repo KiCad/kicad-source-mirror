@@ -67,12 +67,12 @@ private:
     bool TransferDataFromGrid();
 
 protected:
-    TEMPLATES*          m_templateMgr;
-    TEMPLATE_FIELDNAMES m_fields;
-    bool                m_global;        // Editing global (vs. project) fieldname templates
+    TEMPLATES*                      m_templateMgr;
+    std::vector<TEMPLATE_FIELDNAME> m_fields;
+    bool                            m_global;        // Editing global (vs. project) fieldname templates
 
-    int                 m_checkboxColWidth;
-    TEMPLATES           m_templateMgrInstance;
+    int                             m_checkboxColWidth;
+    TEMPLATES                       m_templateMgrInstance;
 };
 
 

@@ -139,8 +139,6 @@ struct TEMPLATE_FIELDNAME
     bool        m_URL;          // If field should have a browse button
 };
 
-typedef std::vector< TEMPLATE_FIELDNAME > TEMPLATE_FIELDNAMES;
-
 
 class TEMPLATES
 {
@@ -179,12 +177,12 @@ public:
     /**
      * Return a template field name list for read only access.
      */
-    const TEMPLATE_FIELDNAMES& GetTemplateFieldNames();
+    const std::vector<TEMPLATE_FIELDNAME>& GetTemplateFieldNames();
 
     /**
      * Return a specific list (global or project) for read only access.
      */
-    const TEMPLATE_FIELDNAMES& GetTemplateFieldNames( bool aGlobal );
+    const std::vector<TEMPLATE_FIELDNAME>& GetTemplateFieldNames( bool aGlobal );
 
     /**
      * Search for \a aName in the template field name list.
@@ -200,10 +198,10 @@ protected:
     void parse( TEMPLATE_FIELDNAMES_LEXER* in, bool aGlobal );
 
 private:
-    TEMPLATE_FIELDNAMES     m_globals;
-    TEMPLATE_FIELDNAMES     m_project;
+    std::vector<TEMPLATE_FIELDNAME> m_globals;
+    std::vector<TEMPLATE_FIELDNAME> m_project;
 
     // Combined list.  Project templates override global ones.
-    TEMPLATE_FIELDNAMES     m_resolved;
-    bool                    m_resolvedDirty;
+    std::vector<TEMPLATE_FIELDNAME> m_resolved;
+    bool                            m_resolvedDirty;
 };

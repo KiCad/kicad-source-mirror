@@ -161,7 +161,7 @@ void TEMPLATES::Format( OUTPUTFORMATTER* out, bool aGlobal ) const
     // use at this time will not want the newlines or the indentation.
     out->Print( "(templatefields" );
 
-    const TEMPLATE_FIELDNAMES& source = aGlobal ? m_globals : m_project;
+    const std::vector<TEMPLATE_FIELDNAME>& source = aGlobal ? m_globals : m_project;
 
     for( const TEMPLATE_FIELDNAME& temp : source )
     {
@@ -254,7 +254,7 @@ void TEMPLATES::AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName, bool
             return;
     }
 
-    TEMPLATE_FIELDNAMES& target = aGlobal ? m_globals : m_project;
+    std::vector<TEMPLATE_FIELDNAME>& target = aGlobal ? m_globals : m_project;
 
     // ensure uniqueness, overwrite any template fieldname by the same name.
     for( TEMPLATE_FIELDNAME& temp : target )
@@ -305,7 +305,7 @@ void TEMPLATES::DeleteAllFieldNameTemplates( bool aGlobal )
 }
 
 
-const TEMPLATE_FIELDNAMES& TEMPLATES::GetTemplateFieldNames()
+const std::vector<TEMPLATE_FIELDNAME>& TEMPLATES::GetTemplateFieldNames()
 {
     if( m_resolvedDirty )
         resolveTemplates();
@@ -314,7 +314,7 @@ const TEMPLATE_FIELDNAMES& TEMPLATES::GetTemplateFieldNames()
 }
 
 
-const TEMPLATE_FIELDNAMES& TEMPLATES::GetTemplateFieldNames( bool aGlobal )
+const std::vector<TEMPLATE_FIELDNAME>& TEMPLATES::GetTemplateFieldNames( bool aGlobal )
 {
     if( aGlobal )
         return m_globals;
