@@ -1,6 +1,7 @@
 {
   "appearance": {
     "color_theme": "_builtin_default",
+    "custom_toolbars": false,
     "left_frame_width": 200
   },
   "color_picker": {
@@ -11,6 +12,19 @@
     "center_on_items": true,
     "on_selection": true,
     "zoom_to_fit": true
+  },
+  "design_block_chooser": {
+    "height": -1,
+    "keep_annotations": false,
+    "lib_tree": {
+      "column_widths": null
+    },
+    "place_as_sheet": false,
+    "repeated_placement": false,
+    "sash_pos_h": -1,
+    "sash_pos_v": -1,
+    "sort_mode": 0,
+    "width": -1
   },
   "find_replace": {
     "find_history": [],

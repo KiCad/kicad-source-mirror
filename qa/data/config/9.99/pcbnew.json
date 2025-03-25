@@ -1,12 +1,17 @@
 {
   "action_plugins": [],
   "appearance": {
-    "color_theme": "_builtin_default"
+    "color_theme": "_builtin_default",
+    "custom_toolbars": false
   },
   "aui": {
     "appearance_expand_layer_display": false,
     "appearance_expand_net_display": false,
     "appearance_panel_tab": 0,
+    "design_blocks_panel_docked_width": -1,
+    "design_blocks_panel_float_height": -1,
+    "design_blocks_panel_float_width": -1,
+    "design_blocks_show": false,
     "net_inspector_width": -1,
     "properties_panel_width": -1,
     "properties_splitter_proportion": 0.5,
@@ -36,6 +41,19 @@
     "center_on_items": true,
     "on_selection": true,
     "zoom_to_fit": true
+  },
+  "design_block_chooser": {
+    "height": -1,
+    "keep_annotations": false,
+    "lib_tree": {
+      "column_widths": null
+    },
+    "place_as_sheet": false,
+    "repeated_placement": false,
+    "sash_pos_h": -1,
+    "sash_pos_v": -1,
+    "sort_mode": 0,
+    "width": -1
   },
   "drc_dialog": {
     "refill_zones": true,
@@ -441,6 +459,7 @@
   "gen_drill": {
     "drill_file_type": 0,
     "generate_map": false,
+    "generate_tenting": false,
     "map_file_type": 1,
     "merge_pth_npth": false,
     "minimal_header": false,
