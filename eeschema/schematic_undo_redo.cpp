@@ -287,7 +287,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
     bool                   rebuildHierarchyNavigator = false;
     bool                   refreshHierarchy = false;
     SCH_CLEANUP_FLAGS      connectivityCleanUp = NO_CLEANUP;
-    SCH_SHEET_LIST         sheets;
+    SCH_SHEET_LIST         sheets= m_schematic->Hierarchy();
     bool                   clearedRepeatItems = false;
 
     // Undo in the reverse order of list creation: (this can allow stacked changes like the
@@ -295,9 +295,10 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
     // After hitting 0, subtracting 1 will roll the value over to its max representation
     for( unsigned ii = aList->GetCount() - 1; ii < std::numeric_limits<unsigned>::max(); ii-- )
     {
-        UNDO_REDO   status = aList->GetPickedItemStatus( ii );
-        EDA_ITEM*   eda_item = aList->GetPickedItem( ii );
-        SCH_SCREEN* screen = dynamic_cast<SCH_SCREEN*>( aList->GetScreenForItem( ii ) );
+        UNDO_REDO      status = aList->GetPickedItemStatus( ii );
+        EDA_ITEM*      eda_item = aList->GetPickedItem( ii );
+        SCH_SCREEN*    screen = dynamic_cast<SCH_SCREEN*>( aList->GetScreenForItem( ii ) );
+        SCH_SHEET_PATH undoSheet = sheets.FindSheetForScreen( screen );
 
         eda_item->SetFlags( aList->GetPickerFlags( ii ) );
         eda_item->ClearEditFlags();
@@ -319,7 +320,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
                             wxCHECK( symbol, /* void */ );
 
-                            for( SCH_PIN* pin : symbol->GetPins() )
+                            for( SCH_PIN* pin : symbol->GetPins( &undoSheet ) )
                                 pin->SetConnectivityDirty();
                         }
                         else if( schItem->Type() == SCH_SHEET_T )
@@ -388,12 +389,6 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         }
         else if( status == UNDO_REDO::PAGESETTINGS )
         {
-            // Lazy eval of sheet list; this is expensive even when unsorted
-            if( sheets.empty() )
-                sheets = m_schematic->Hierarchy();
-
-            SCH_SHEET_PATH undoSheet = sheets.FindSheetForScreen( screen );
-
             if( GetCurrentSheet() != undoSheet )
             {
                 SetCurrentSheet( undoSheet );
