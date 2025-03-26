@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-24 12:07-0700\n"
-"PO-Revision-Date: 2025-03-24 15:13+0000\n"
+"PO-Revision-Date: 2025-03-27 04:58+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v9/es/>\n"
 "Language: es\n"
@@ -3454,7 +3454,7 @@ msgstr "Configuración de página..."
 
 #: common/dialogs/dialog_rc_job.cpp:28
 msgid "JSON"
-msgstr ""
+msgstr "JSON"
 
 #: common/dialogs/dialog_rc_job_base.cpp:25
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:277
@@ -5285,7 +5285,7 @@ msgstr "Seleccione la ruta hacia un intérprete de Python"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
 msgid "*.*"
-msgstr ""
+msgstr "*.*"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:52
 msgid "Detect Automatically"
@@ -7087,13 +7087,12 @@ msgid "[updated] %s"
 msgstr "[actualizado] %s"
 
 #: common/git/kicad_git_common.cpp:977
-#, fuzzy
 msgid "Unable to authenticate"
-msgstr "Imposible crear "
+msgstr "No se pudo autenticar"
 
 #: common/git/kicad_git_errors.cpp:40
 msgid "Invalid repository."
-msgstr "Repositorio inválido."
+msgstr "Repositorio no válido."
 
 #: common/git/kicad_git_errors.cpp:41
 msgid "Failed to commit changes."
@@ -7719,29 +7718,24 @@ msgid "Export HPGL Job Settings"
 msgstr "Editar opciones..."
 
 #: common/jobs/job_export_sch_plot.cpp:227
-#, fuzzy
 msgid "Schematic: Export SVG"
-msgstr "Editor de esquemas"
+msgstr "Esquema: exportar SVG"
 
 #: common/jobs/job_export_sch_plot.cpp:229
-#, fuzzy
 msgid "Schematic: Export HPGL"
-msgstr "EESchema Trazado HPGL"
+msgstr "Esquema: exportar HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:231
-#, fuzzy
 msgid "Schematic: Export Postscript"
-msgstr "Exportar listado de redes"
+msgstr "Esquema: exportar Postscript"
 
 #: common/jobs/job_export_sch_plot.cpp:233
-#, fuzzy
 msgid "Schematic: Export DXF"
-msgstr "Editor de esquemas"
+msgstr "Esquema: exportar DXF"
 
 #: common/jobs/job_export_sch_plot.cpp:235
-#, fuzzy
 msgid "Schematic: Export PDF"
-msgstr "Editor de esquemas"
+msgstr "Esquema: exportar PDF"
 
 #: common/jobs/job_export_sch_pythonbom.cpp:35
 #, fuzzy
@@ -18583,7 +18577,7 @@ msgstr "El nuevo archivo de esquema no está guardado"
 #: pcbnew/pcb_edit_frame.cpp:1184
 #, c-format
 msgid "Save changes to '%s' before closing?"
-msgstr "¿Guardar los cambios a '%s' antes de cerrar?"
+msgstr "¿Quiere guardar los cambios en «%s» antes de cerrar?"
 
 #: eeschema/sch_edit_frame.cpp:1186
 msgid ""
@@ -18625,7 +18619,7 @@ msgstr "[Solo lectura]"
 #: eeschema/sch_edit_frame.cpp:1741 eeschema/sim/simulator_frame.cpp:344
 #: pcbnew/footprint_edit_frame.cpp:1081 pcbnew/pcb_edit_frame.cpp:1804
 msgid "[Unsaved]"
-msgstr "[No Guardado]"
+msgstr "[No guardado]"
 
 #: eeschema/sch_edit_frame.cpp:1745
 msgid "[no schematic loaded]"
@@ -19273,7 +19267,7 @@ msgstr "Apertura cancelada por el usuario."
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:375
 #, c-format
 msgid "'%s' does not appear to be an Eeschema file."
-msgstr "'%s' no parece ser un archivo de Eeschema."
+msgstr "«%s» no parece ser un archivo de Eeschema."
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:405
 msgid "Missing 'EELAYER END'"
@@ -19317,7 +19311,7 @@ msgstr ""
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1651
 #, c-format
 msgid "Symbol library '%s' already exists."
-msgstr "La biblioteca de símbolos '%s' ya existe."
+msgstr "La biblioteca de símbolos «%s» ya existe."
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:2269
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1677
@@ -19548,7 +19542,7 @@ msgstr "Se espera CELL o BLOCK"
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:548
 #, c-format
 msgid "Symbol '%s.asy' not found"
-msgstr "No se ha encontrado el símbolo '%s.asy'"
+msgstr "No se ha encontrado el símbolo «%s.asy»"
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.h:49
 msgid "LTspice schematic files"
@@ -19654,7 +19648,7 @@ msgstr "Etiquetas jerárquicas"
 #: eeschema/sch_label.cpp:1487
 #, c-format
 msgid "Label '%s'"
-msgstr "Etiqueta '%s'"
+msgstr "Etiqueta «%s»"
 
 #: eeschema/sch_label.cpp:1765
 #, c-format
@@ -19664,12 +19658,12 @@ msgstr "Etiqueta de directiva [%s %s]"
 #: eeschema/sch_label.cpp:2008
 #, c-format
 msgid "Global Label '%s'"
-msgstr "Etiqueta global '%s'"
+msgstr "Etiqueta global «%s»"
 
 #: eeschema/sch_label.cpp:2155
 #, c-format
 msgid "Hierarchical Label '%s'"
-msgstr "Etiqueta jerárquica '%s'"
+msgstr "Etiqueta jerárquica «%s»"
 
 #: eeschema/sch_label.cpp:2268
 msgid "Pin length"
@@ -23067,30 +23061,25 @@ msgid "Place Global Labels"
 msgstr "Girar etiqueta global"
 
 #: eeschema/tools/sch_actions.cpp:610 pcbnew/tools/pcb_actions.cpp:199
-#, fuzzy
 msgid "Draw Tables"
-msgstr "Dibujar una línea"
+msgstr "Dibujar tablas"
 
 #: eeschema/tools/sch_actions.cpp:617 pagelayout_editor/tools/pl_actions.cpp:53
 #: pcbnew/tools/pcb_actions.cpp:125
-#, fuzzy
 msgid "Draw Rectangles"
-msgstr "Dibujar rectángulo"
+msgstr "Dibujar rectángulos"
 
 #: eeschema/tools/sch_actions.cpp:625 pcbnew/tools/pcb_actions.cpp:134
-#, fuzzy
 msgid "Draw Circles"
-msgstr "Dibujar círculo"
+msgstr "Dibujar círculos"
 
 #: eeschema/tools/sch_actions.cpp:633 pcbnew/tools/pcb_actions.cpp:143
-#, fuzzy
 msgid "Draw Arcs"
-msgstr "Dibujar arco"
+msgstr "Dibujar arcos"
 
 #: eeschema/tools/sch_actions.cpp:641 pcbnew/tools/pcb_actions.cpp:151
-#, fuzzy
 msgid "Draw Bezier Curve"
-msgstr "Curva Bézier"
+msgstr "Dibujar curva Bézier"
 
 #: eeschema/tools/sch_actions.cpp:649
 #, fuzzy
@@ -27535,23 +27524,20 @@ msgid "Export BREP"
 msgstr "Exportar STEP"
 
 #: kicad/kicad_cli.cpp:123
-#, fuzzy
 msgid "Export XAO"
-msgstr "Exportar DXF"
+msgstr "Exportar XAO"
 
 #: kicad/kicad_cli.cpp:124
 msgid "Export VRML"
 msgstr "Exportar VRML"
 
 #: kicad/kicad_cli.cpp:125
-#, fuzzy
 msgid "Export PLY"
-msgstr "Exportar HPGL"
+msgstr "Exportar PLY"
 
 #: kicad/kicad_cli.cpp:126
-#, fuzzy
 msgid "Export STL"
-msgstr "Exportar STEP"
+msgstr "Exportar STL"
 
 #: kicad/kicad_cli.cpp:146
 msgid "Export PS"
@@ -27603,7 +27589,7 @@ msgstr "Restaurando sesión"
 #: kicad/kicad_manager_frame.cpp:1139
 #, c-format
 msgid "Restoring '%s'"
-msgstr "Restaurando '%s'"
+msgstr "Restaurando «%s»"
 
 #: kicad/menubar.cpp:58
 msgid "Clear Recent Projects"
@@ -43575,7 +43561,7 @@ msgstr "No se encontró la biblioteca en la tabla de bibliotecas de huellas."
 
 #: pcbnew/footprint_editor_utils.cpp:378
 msgid "Footprint library not enabled."
-msgstr "Librería de huellas no habilitada."
+msgstr "Biblioteca de huellas no activada."
 
 #: pcbnew/footprint_info_impl.cpp:149
 msgid "Loading footprints..."
@@ -45084,9 +45070,8 @@ msgid "Corner Radius Size"
 msgstr "Radio de esquina %"
 
 #: pcbnew/pad.cpp:2674
-#, fuzzy
 msgid "Hole Shape"
-msgstr "Forma del orificio:"
+msgstr "Forma del orificio"
 
 #: pcbnew/pad.cpp:2678
 msgid "Hole Size X"
