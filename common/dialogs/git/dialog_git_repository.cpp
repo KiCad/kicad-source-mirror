@@ -391,13 +391,6 @@ void DIALOG_GIT_REPOSITORY::OnOKClick( wxCommandEvent& event )
 {
     // Save the repository details
 
-    if( m_txtName->GetValue().IsEmpty() )
-    {
-        DisplayErrorMessage( this, _( "Missing information" ),
-                             _( "Please enter a name for the repository" ) );
-        return;
-    }
-
     if( m_txtURL->GetValue().IsEmpty() )
     {
         DisplayErrorMessage( this, _( "Missing information" ),
