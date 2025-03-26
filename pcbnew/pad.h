@@ -950,7 +950,7 @@ private:
     mutable int                               m_effectiveBoundingRadius;
     // Last zoom level used to draw the pad: the LAYER_PAD_HOLEWALLS layer shape
     // depend on the zoom level. So keep trace on the last used zoom level
-    mutable double                            m_lastGalZoolLevel;
+    mutable double                            m_lastGalZoomLevel;
 
     int               m_subRatsnest;        // Variable used to handle subnet (block) number in
                                             //   ratsnest computations

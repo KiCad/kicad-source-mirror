@@ -110,7 +110,7 @@ PAD::PAD( FOOTPRINT* parent ) :
     for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, BoardCopperLayerCount() ) )
         m_zoneLayerOverrides[layer] = ZLO_NONE;
 
-    m_lastGalZoolLevel = 0.0;
+    m_lastGalZoomLevel = 0.0;
 }
 
 
@@ -1793,10 +1793,10 @@ double PAD::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
     // LAYER_PAD_HOLEWALLS shape rebuild
     if( aLayer == LAYER_PAD_HOLEWALLS )
     {
-        if( aView->GetGAL()->GetZoomFactor() != m_lastGalZoolLevel )
+        if( aView->GetGAL()->GetZoomFactor() != m_lastGalZoomLevel )
         {
             aView->Update( this, KIGFX::REPAINT );
-            m_lastGalZoolLevel = aView->GetGAL()->GetZoomFactor();
+            m_lastGalZoomLevel = aView->GetGAL()->GetZoomFactor();
         }
     }
 
