@@ -206,9 +206,9 @@ VECTOR2I SCH_TEXTBOX::GetDrawPos() const
 }
 
 
-void SCH_TEXTBOX::SwapData( SCH_ITEM* aItem )
+void SCH_TEXTBOX::swapData( SCH_ITEM* aItem )
 {
-    SCH_SHAPE::SwapData( aItem );
+    SCH_SHAPE::swapData( aItem );
 
     SCH_TEXTBOX* item = static_cast<SCH_TEXTBOX*>( aItem );
 

@@ -65,9 +65,9 @@ EDA_ITEM* SCH_SHEET_PIN::Clone() const
 }
 
 
-void SCH_SHEET_PIN::SwapData( SCH_ITEM* aItem )
+void SCH_SHEET_PIN::swapData( SCH_ITEM* aItem )
 {
-    SCH_HIERLABEL::SwapData( aItem );
+    SCH_HIERLABEL::swapData( aItem );
 
     wxCHECK_RET( aItem->Type() == SCH_SHEET_PIN_T,
                  wxString::Format( "SCH_SHEET_PIN object cannot swap data with %s object.",

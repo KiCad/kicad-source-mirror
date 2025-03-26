@@ -45,8 +45,6 @@ public:
         return wxT( "SCH_SHAPE" );
     }
 
-    void SwapData( SCH_ITEM* aItem ) override;
-
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
@@ -134,6 +132,8 @@ public:
 #endif
 
 protected:
+    void swapData( SCH_ITEM* aItem ) override;
+
     void setFilled( bool aFlag ) override
     {
         m_fill = aFlag ? FILL_T::FILLED_WITH_COLOR : FILL_T::NO_FILL;

@@ -796,7 +796,7 @@ bool SCH_LINE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) con
 }
 
 
-void SCH_LINE::SwapData( SCH_ITEM* aItem )
+void SCH_LINE::swapData( SCH_ITEM* aItem )
 {
     SCH_ITEM::SwapFlags( aItem );
 

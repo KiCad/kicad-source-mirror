@@ -145,8 +145,6 @@ public:
 
     bool IsType( const std::vector<KICAD_T>& aScanTypes ) const override;
 
-    void SwapData( SCH_ITEM* aItem ) override;
-
     bool CanConnect( const SCH_ITEM* aItem ) const override
     {
         switch( aItem->Type() )
@@ -361,6 +359,8 @@ public:
     bool operator==( const SCH_ITEM& aItem ) const override;
 
 protected:
+    void swapData( SCH_ITEM* aItem ) override;
+
     void cacheShownText() override;
 
 protected:
@@ -457,7 +457,7 @@ public:
         return new SCH_DIRECTIVE_LABEL( *this );
     }
 
-    void SwapData( SCH_ITEM* aItem ) override;
+    void swapData( SCH_ITEM* aItem ) override;
 
     FLAG_SHAPE GetFlagShape() const          { return (FLAG_SHAPE) m_shape; }
     void SetFlagShape( FLAG_SHAPE aShape )   { m_shape = (LABEL_FLAG_SHAPE) aShape; }

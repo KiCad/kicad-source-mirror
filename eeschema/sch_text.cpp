@@ -228,7 +228,7 @@ void SCH_TEXT::MirrorSpinStyle( bool aLeftRight )
 }
 
 
-void SCH_TEXT::SwapData( SCH_ITEM* aItem )
+void SCH_TEXT::swapData( SCH_ITEM* aItem )
 {
     SCH_ITEM::SwapFlags( aItem );
 

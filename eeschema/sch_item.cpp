@@ -78,7 +78,8 @@ SCH_ITEM::SCH_ITEM( EDA_ITEM* aParent, KICAD_T aType, int aUnit, int aBodyStyle 
         EDA_ITEM( aParent, aType, true, false ),
         m_unit( aUnit ),
         m_bodyStyle( aBodyStyle ),
-        m_private( false )
+        m_private( false ),
+        m_group( nullptr )
 {
     m_layer              = LAYER_WIRE;   // It's only a default, in fact
     m_fieldsAutoplaced   = AUTOPLACE_NONE;
@@ -94,6 +95,7 @@ SCH_ITEM::SCH_ITEM( const SCH_ITEM& aItem ) :
     m_bodyStyle          = aItem.m_bodyStyle;
     m_private            = aItem.m_private;
     m_fieldsAutoplaced   = aItem.m_fieldsAutoplaced;
+    m_group              = aItem.m_group;
     m_connectivity_dirty = aItem.m_connectivity_dirty;
 }
 
@@ -105,6 +107,7 @@ SCH_ITEM& SCH_ITEM::operator=( const SCH_ITEM& aItem )
     m_bodyStyle          = aItem.m_bodyStyle;
     m_private            = aItem.m_private;
     m_fieldsAutoplaced   = aItem.m_fieldsAutoplaced;
+    m_group              = aItem.m_group;
     m_connectivity_dirty = aItem.m_connectivity_dirty;
 
     return *this;
@@ -113,6 +116,8 @@ SCH_ITEM& SCH_ITEM::operator=( const SCH_ITEM& aItem )
 
 SCH_ITEM::~SCH_ITEM()
 {
+    wxASSERT( m_group == nullptr );
+
     for( const auto& it : m_connection_map )
         delete it.second;
 
@@ -343,9 +348,27 @@ const wxString& SCH_ITEM::GetCachedDriverName() const
 }
 
 
-void SCH_ITEM::SwapData( SCH_ITEM* aItem )
+void SCH_ITEM::swapData( SCH_ITEM* aItem )
 {
     UNIMPLEMENTED_FOR( GetClass() );
+}
+
+
+void SCH_ITEM::SwapItemData( SCH_ITEM* aImage )
+{
+    if( aImage == nullptr )
+        return;
+
+    EDA_ITEM*  parent = GetParent();
+    SCH_GROUP* group = GetParentGroup();
+
+    SetParentGroup( nullptr );
+    aImage->SetParentGroup( nullptr );
+    swapData( aImage );
+
+    // Restore pointers to be sure they are not broken
+    SetParent( parent );
+    SetParentGroup( group );
 }
 
 

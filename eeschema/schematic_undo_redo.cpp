@@ -460,7 +460,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                     }
                 }
 
-                schItem->SwapData( itemCopy );
+                schItem->SwapItemData( itemCopy );
                 bulkChangedItems.emplace_back( schItem );
 
                 // Special cases for items which have instance data

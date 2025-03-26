@@ -49,7 +49,7 @@ EDA_ITEM* SCH_SHAPE::Clone() const
 }
 
 
-void SCH_SHAPE::SwapData( SCH_ITEM* aItem )
+void SCH_SHAPE::swapData( SCH_ITEM* aItem )
 {
     SCH_ITEM::SwapFlags( aItem );
 

@@ -575,7 +575,7 @@ void SCH_COMMIT::Revert()
 
             bool unselect = !item->IsSelected();
 
-            item->SwapData( copy );
+            item->SwapItemData( copy );
 
             if( unselect )
             {

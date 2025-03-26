@@ -69,8 +69,6 @@ public:
 
     const BOX2I GetBoundingBox() const override;
 
-    void SwapData( SCH_ITEM* aItem ) override;
-
     /// @copydoc VIEW_ITEM::ViewGetLayers()
     virtual std::vector<int> ViewGetLayers() const override;
 
@@ -115,6 +113,9 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
+
+protected:
+    void swapData( SCH_ITEM* aItem ) override;
 
 private:
     friend struct SCH_BITMAP_DESC;

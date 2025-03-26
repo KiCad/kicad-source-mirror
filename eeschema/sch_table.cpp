@@ -76,7 +76,7 @@ SCH_TABLE::~SCH_TABLE()
 }
 
 
-void SCH_TABLE::SwapData( SCH_ITEM* aItem )
+void SCH_TABLE::swapData( SCH_ITEM* aItem )
 {
     SCH_ITEM::SwapFlags( aItem );
 

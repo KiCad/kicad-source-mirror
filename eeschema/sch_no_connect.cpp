@@ -55,7 +55,7 @@ EDA_ITEM* SCH_NO_CONNECT::Clone() const
 }
 
 
-void SCH_NO_CONNECT::SwapData( SCH_ITEM* aItem )
+void SCH_NO_CONNECT::swapData( SCH_ITEM* aItem )
 {
     SCH_ITEM::SwapFlags( aItem );
 

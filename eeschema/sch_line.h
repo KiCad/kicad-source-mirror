@@ -307,8 +307,6 @@ public:
 
     EDA_ITEM* Clone() const override;
 
-    void SwapData( SCH_ITEM* aItem ) override;
-
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     const wxString& GetOperatingPoint() const { return m_operatingPoint; }
@@ -342,6 +340,9 @@ public:
     double Similarity( const SCH_ITEM& aOther ) const override;
 
     bool operator==( const SCH_ITEM& aOther ) const override;
+
+protected:
+    void swapData( SCH_ITEM* aItem ) override;
 
 private:
     bool doIsConnected( const VECTOR2I& aPosition ) const override;

@@ -61,8 +61,6 @@ public:
 
     int GetPenWidth() const override;
 
-    void SwapData( SCH_ITEM* aItem ) override;
-
     std::vector<int> ViewGetLayers() const override;
 
     void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList ) override;
@@ -118,6 +116,9 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
+
+protected:
+    void swapData( SCH_ITEM* aItem ) override;
 
 private:
     bool doIsConnected( const VECTOR2I& aPosition ) const override;

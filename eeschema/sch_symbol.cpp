@@ -1198,7 +1198,7 @@ std::vector<SCH_PIN*> SCH_SYMBOL::GetPins() const
 }
 
 
-void SCH_SYMBOL::SwapData( SCH_ITEM* aItem )
+void SCH_SYMBOL::swapData( SCH_ITEM* aItem )
 {
     SCH_ITEM::SwapFlags( aItem );
 

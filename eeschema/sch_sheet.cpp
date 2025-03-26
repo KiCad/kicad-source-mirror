@@ -325,7 +325,7 @@ bool SCH_SHEET::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, in
 }
 
 
-void SCH_SHEET::SwapData( SCH_ITEM* aItem )
+void SCH_SHEET::swapData( SCH_ITEM* aItem )
 {
     SCH_ITEM::SwapFlags( aItem );
 

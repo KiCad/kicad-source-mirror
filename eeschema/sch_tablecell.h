@@ -50,8 +50,6 @@ public:
         return new SCH_TABLECELL( *this );
     }
 
-    void SwapData( SCH_ITEM* aItem ) override;
-
     int GetRow() const;
     int GetColumn() const;
 
@@ -75,6 +73,8 @@ public:
     bool operator==( const SCH_ITEM& aOther ) const override;
 
 protected:
+    void swapData( SCH_ITEM* aItem ) override;
+
     int m_colSpan;
     int m_rowSpan;
 };

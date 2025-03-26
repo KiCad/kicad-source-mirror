@@ -89,8 +89,6 @@ public:
     void SetExcludedFromSim( bool aExclude ) override { m_excludedFromSim = aExclude; }
     bool GetExcludedFromSim() const override { return m_excludedFromSim; }
 
-    void SwapData( SCH_ITEM* aItem ) override;
-
     bool operator<( const SCH_ITEM& aItem ) const override;
 
     void Move( const VECTOR2I& aMoveVector ) override
@@ -140,6 +138,8 @@ public:
     bool operator==( const SCH_ITEM& aOther ) const override;
 
 protected:
+    void swapData( SCH_ITEM* aItem ) override;
+
     KIFONT::FONT* getDrawFont() const override;
 
     const KIFONT::METRICS& getFontMetrics() const override { return GetFontMetrics(); }

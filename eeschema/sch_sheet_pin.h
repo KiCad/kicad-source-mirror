@@ -114,8 +114,6 @@ public:
     void CreateGraphicShape( const RENDER_SETTINGS* aSettings, std::vector<VECTOR2I>& aPoints,
                              const VECTOR2I& aPos ) const override;
 
-    void SwapData( SCH_ITEM* aItem ) override;
-
     int GetPenWidth() const override;
 
     /**
@@ -205,6 +203,9 @@ public:
     double Similarity( const SCH_ITEM& aOther ) const override;
 
     bool operator==( const SCH_ITEM& aOther ) const override;
+
+protected:
+    void swapData( SCH_ITEM* aItem ) override;
 
 private:
     int m_number;       ///< Label number use for saving sheet label to file.

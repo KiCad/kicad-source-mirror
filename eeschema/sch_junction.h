@@ -52,7 +52,7 @@ public:
         return wxT( "SCH_JUNCTION" );
     }
 
-    void SwapData( SCH_ITEM* aItem ) override;
+    void swapData( SCH_ITEM* aItem ) override;
 
     void SetLastResolvedState( const SCH_ITEM* aItem ) override
     {

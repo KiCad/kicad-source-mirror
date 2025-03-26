@@ -68,7 +68,7 @@ EDA_ITEM* SCH_MARKER::Clone() const
 }
 
 
-void SCH_MARKER::SwapData( SCH_ITEM* aItem )
+void SCH_MARKER::swapData( SCH_ITEM* aItem )
 {
     SCH_ITEM::SwapFlags( aItem );
 

@@ -266,9 +266,9 @@ bool SCH_LABEL_BASE::IsType( const std::vector<KICAD_T>& aScanTypes ) const
 }
 
 
-void SCH_LABEL_BASE::SwapData( SCH_ITEM* aItem )
+void SCH_LABEL_BASE::swapData( SCH_ITEM* aItem )
 {
-    SCH_TEXT::SwapData( aItem );
+    SCH_TEXT::swapData( aItem );
 
     SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( aItem );
 
@@ -1510,9 +1510,9 @@ SCH_DIRECTIVE_LABEL::SCH_DIRECTIVE_LABEL( const VECTOR2I& pos ) :
 }
 
 
-void SCH_DIRECTIVE_LABEL::SwapData( SCH_ITEM* aItem )
+void SCH_DIRECTIVE_LABEL::swapData( SCH_ITEM* aItem )
 {
-    SCH_LABEL_BASE::SwapData( aItem );
+    SCH_LABEL_BASE::swapData( aItem );
 
     SCH_DIRECTIVE_LABEL* label = static_cast<SCH_DIRECTIVE_LABEL*>( aItem );
 

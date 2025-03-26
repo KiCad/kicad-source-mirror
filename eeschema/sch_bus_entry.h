@@ -93,7 +93,7 @@ public:
     COLOR4D GetBusEntryColor() const;
     void SetBusEntryColor( const COLOR4D& aColor );
 
-    void SwapData( SCH_ITEM* aItem ) override;
+    void swapData( SCH_ITEM* aItem ) override;
 
     std::vector<int> ViewGetLayers() const override;
 

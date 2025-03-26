@@ -83,7 +83,7 @@ EDA_ITEM* SCH_BITMAP::Clone() const
 }
 
 
-void SCH_BITMAP::SwapData( SCH_ITEM* aItem )
+void SCH_BITMAP::swapData( SCH_ITEM* aItem )
 {
     SCH_ITEM::SwapFlags( aItem );
 

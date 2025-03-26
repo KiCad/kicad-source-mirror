@@ -36,9 +36,9 @@ SCH_TABLECELL::SCH_TABLECELL( int aLineWidth, FILL_T aFillType ) :
 }
 
 
-void SCH_TABLECELL::SwapData( SCH_ITEM* aItem )
+void SCH_TABLECELL::swapData( SCH_ITEM* aItem )
 {
-    SCH_TEXTBOX::SwapData( aItem );
+    SCH_TEXTBOX::swapData( aItem );
 
     SCH_TABLECELL* cell = static_cast<SCH_TABLECELL*>( aItem );
 

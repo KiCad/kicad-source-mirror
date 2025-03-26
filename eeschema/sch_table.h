@@ -48,8 +48,6 @@ public:
         return wxT( "SCH_TABLE" );
     }
 
-    void SwapData( SCH_ITEM* aItem ) override;
-
     void SetStrokeExternal( bool aDoStroke ) { m_strokeExternal = aDoStroke; }
     bool StrokeExternal() const              { return m_strokeExternal; }
 
@@ -240,6 +238,8 @@ public:
 #endif
 
 protected:
+    void swapData( SCH_ITEM* aItem ) override;
+
     bool                        m_strokeExternal;
     bool                        m_StrokeHeaderSeparator;
     STROKE_PARAMS               m_borderStroke;

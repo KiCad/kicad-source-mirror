@@ -270,7 +270,7 @@ public:
      */
     VECTOR2I GetRotationCenter() const;
 
-    void SwapData( SCH_ITEM* aItem ) override;
+    void swapData( SCH_ITEM* aItem ) override;
 
     /**
      * Count our own symbols, without the power symbols.

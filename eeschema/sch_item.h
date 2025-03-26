@@ -40,6 +40,7 @@
 
 class CONNECTION_GRAPH;
 class SCH_CONNECTION;
+class SCH_GROUP;
 class SCH_SHEET_PATH;
 class SCHEMATIC;
 class SYMBOL;
@@ -174,6 +175,9 @@ public:
 
     virtual ~SCH_ITEM();
 
+    void SetParentGroup( SCH_GROUP* aGroup ) { m_group = aGroup; }
+    SCH_GROUP* GetParentGroup() const { return m_group; }
+
     wxString GetClass() const override
     {
         return wxT( "SCH_ITEM" );
@@ -203,13 +207,16 @@ public:
     }
 
     /**
-     * Swap the internal data structures \a aItem with the schematic item.
+     * Swap data between \a aItem and \a aImage.
      *
-     * Obviously, aItem must have the same type than me.
+     * \a aItem and \a aImage should have the same type.
      *
-     * @param aItem The item to swap the data structures with.
+     * Used in undo and redo commands to swap values between an item and its copy.
+     * Only values like layer, size .. which are modified by editing are swapped.
+     *
+     * @param aImage the item image which contains data to swap.
      */
-    virtual void SwapData( SCH_ITEM* aItem );
+    void SwapItemData( SCH_ITEM* aImage );
 
     /**
      * Swap the non-temp and non-edit flags.
@@ -638,6 +645,15 @@ public:
     virtual bool operator<( const SCH_ITEM& aItem ) const;
 
 protected:
+    /**
+     * Swap the internal data structures \a aItem with the schematic item.
+     *
+     * Obviously, aItem must have the same type than me.
+     *
+     * @param aItem The item to swap the data structures with.
+     */
+    virtual void swapData( SCH_ITEM* aItem );
+
     SCH_RENDER_SETTINGS* getRenderSettings( PLOTTER* aPlotter ) const
     {
         return static_cast<SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
@@ -698,6 +714,7 @@ protected:
     AUTOPLACE_ALGO    m_fieldsAutoplaced;   // indicates status of field autoplacement
     VECTOR2I          m_storedPos;          // temp variable used in some move commands to store
                                             // an initial position of the item or mouse cursor
+    SCH_GROUP*        m_group;              // The group this item belongs to
 
     /// Store pointers to other items that are connected to this one, per sheet.
     std::map<SCH_SHEET_PATH, SCH_ITEM_VEC, SHEET_PATH_CMP> m_connected_items;

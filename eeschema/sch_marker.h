@@ -51,8 +51,6 @@ public:
 
     const KIID GetUUID() const override { return m_Uuid; }
 
-    void SwapData( SCH_ITEM* aItem ) override;
-
     wxString SerializeToString() const;
     static SCH_MARKER* DeserializeFromString( const SCH_SHEET_LIST& aSheetList,
                                               const wxString& data );
@@ -137,6 +135,8 @@ public:
 #endif
 
 protected:
+    void swapData( SCH_ITEM* aItem ) override;
+
     KIGFX::COLOR4D getColor() const override;
 
     bool m_isLegacyMarker; ///< True if marker was deserialized from a file version < 20230121.

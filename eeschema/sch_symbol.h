@@ -642,8 +642,6 @@ public:
 
     std::vector<std::unique_ptr<SCH_PIN>>& GetRawPins() { return m_pins; }
 
-    void SwapData( SCH_ITEM* aItem ) override;
-
     /**
      * Set the reference for the given sheet path for this symbol.
      *
@@ -839,6 +837,9 @@ public:
     std::unordered_set<wxString> GetComponentClassNames( const SCH_SHEET_PATH* aPath ) const;
 
     bool operator==( const SCH_ITEM& aOther ) const override;
+
+protected:
+    void swapData( SCH_ITEM* aItem ) override;
 
 private:
     BOX2I doGetBoundingBox( bool aIncludePins, bool aIncludeFields ) const;

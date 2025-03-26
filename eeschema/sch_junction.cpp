@@ -58,7 +58,7 @@ EDA_ITEM* SCH_JUNCTION::Clone() const
 }
 
 
-void SCH_JUNCTION::SwapData( SCH_ITEM* aItem )
+void SCH_JUNCTION::swapData( SCH_ITEM* aItem )
 {
     SCH_ITEM::SwapFlags( aItem );
 

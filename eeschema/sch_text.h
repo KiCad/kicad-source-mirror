@@ -93,8 +93,6 @@ public:
      */
     virtual VECTOR2I GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const;
 
-    void SwapData( SCH_ITEM* aItem ) override;
-
     const BOX2I GetBoundingBox() const override;
 
     bool operator<( const SCH_ITEM& aItem ) const override;
@@ -168,6 +166,8 @@ public:
     static HTML_MESSAGE_BOX* ShowSyntaxHelp( wxWindow* aParentWindow );
 
 protected:
+    void swapData( SCH_ITEM* aItem ) override;
+
     KIFONT::FONT* getDrawFont() const override;
 
     const KIFONT::METRICS& getFontMetrics() const override { return GetFontMetrics(); }

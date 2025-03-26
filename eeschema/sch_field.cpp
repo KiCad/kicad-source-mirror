@@ -404,7 +404,7 @@ void SCH_FIELD::ImportValues( const SCH_FIELD& aSource )
 }
 
 
-void SCH_FIELD::SwapData( SCH_ITEM* aItem )
+void SCH_FIELD::swapData( SCH_ITEM* aItem )
 {
     wxCHECK_RET( aItem && aItem->Type() == SCH_FIELD_T, wxT( "Cannot swap with invalid item." ) );
 

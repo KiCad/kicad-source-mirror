@@ -134,7 +134,7 @@ VECTOR2I SCH_BUS_ENTRY_BASE::GetEnd() const
 }
 
 
-void SCH_BUS_ENTRY_BASE::SwapData( SCH_ITEM* aItem )
+void SCH_BUS_ENTRY_BASE::swapData( SCH_ITEM* aItem )
 {
     SCH_ITEM::SwapFlags( aItem );
 
