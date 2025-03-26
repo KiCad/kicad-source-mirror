@@ -1807,12 +1807,6 @@ std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineCh
         break;
     }
 
-    if( IsHatchedFill() )
-    {
-        for( int ii = 0; ii < GetHatching().OutlineCount(); ++ii )
-            effectiveShapes.emplace_back( new SHAPE_SIMPLE( GetHatching().COutline( ii ) ) );
-    }
-
     return effectiveShapes;
 }
 
