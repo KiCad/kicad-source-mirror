@@ -1632,7 +1632,7 @@ void SIMULATOR_FRAME_UI::AddTuner( const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL*
             return;
     }
 
-    if( const SPICE_ITEM* item = GetExporter()->FindItem( ref ) )
+    if( [[maybe_unused]] const SPICE_ITEM* item = GetExporter()->FindItem( ref ) )
     {
         try
         {

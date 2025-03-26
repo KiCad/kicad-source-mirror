@@ -253,7 +253,7 @@ wxString GERBER_DRAW_ITEM::ShowGBRShape() const
 
 D_CODE* GERBER_DRAW_ITEM::GetDcodeDescr() const
 {
-    if( ( m_DCode < FIRST_DCODE ) || ( m_DCode > LAST_DCODE ) )
+    if( !D_CODE::IsValidDcodeValue( m_DCode ) )
         return nullptr;
 
     if( m_GerberImageFile == nullptr )
