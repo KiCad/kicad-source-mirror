@@ -633,7 +633,8 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
         if( footprint->IsDNP()
                 && !itemplotter.GetHideDNPFPsOnFabLayers()
                 && itemplotter.GetCrossoutDNPFPsOnFabLayers()
-                && ( onFrontFab || onBackFab ) )
+                && ( ( onFrontFab && footprint->GetLayer() == F_Cu ) ||
+                     ( onBackFab && footprint->GetLayer() == B_Cu ) ) )
         {
             BOX2I rect = footprint->GetBoundingHull().BBox();
             int   width = aBoard->GetDesignSettings().m_LineThickness[ LAYER_CLASS_FAB ];
