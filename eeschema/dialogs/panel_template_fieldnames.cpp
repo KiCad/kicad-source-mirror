@@ -61,6 +61,8 @@ PANEL_TEMPLATE_FIELDNAMES::PANEL_TEMPLATE_FIELDNAMES( wxWindow* aWindow,
 
     m_addFieldButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_deleteFieldButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+    m_bpMoveUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
+    m_bpMoveDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
 
     m_checkboxColWidth = m_grid->GetColSize( 1 );
 
@@ -105,6 +107,9 @@ void PANEL_TEMPLATE_FIELDNAMES::OnAddButtonClick( wxCommandEvent& event )
     // wx documentation is wrong, SetGridCursor does not make visible.
     m_grid->MakeCellVisible( row, 0 );
     m_grid->SetGridCursor( row, 0 );
+
+    m_grid->EnableCellEditControl( true );
+    m_grid->ShowCellEditControl();
 }
 
 
@@ -122,7 +127,11 @@ void PANEL_TEMPLATE_FIELDNAMES::OnDeleteButtonClick( wxCommandEvent& event )
         return;
 
     // Reverse sort so deleting a row doesn't change the indexes of the other rows.
-    selectedRows.Sort( []( int* first, int* second ) { return *second - *first; } );
+    selectedRows.Sort(
+            []( int* first, int* second )
+            {
+                return *second - *first;
+            } );
 
     for( int row : selectedRows )
     {
@@ -131,6 +140,59 @@ void PANEL_TEMPLATE_FIELDNAMES::OnDeleteButtonClick( wxCommandEvent& event )
 
         m_grid->MakeCellVisible( std::max( 0, row-1 ), m_grid->GetGridCursorCol() );
         m_grid->SetGridCursor( std::max( 0, row-1 ), m_grid->GetGridCursorCol() );
+    }
+}
+
+
+void swapRows( WX_GRID* aGrid, int aRowA, int aRowB )
+{
+    for( int col = 0; col < aGrid->GetNumberCols(); ++col )
+    {
+        wxString temp = aGrid->GetCellValue( aRowA, col );
+        aGrid->SetCellValue( aRowA, col, aGrid->GetCellValue( aRowB, col ) );
+        aGrid->SetCellValue( aRowB, col, temp );
+    }
+}
+
+
+void PANEL_TEMPLATE_FIELDNAMES::OnMoveUp( wxCommandEvent& event )
+{
+    if( !m_grid->CommitPendingChanges() )
+        return;
+
+    int i = m_grid->GetGridCursorRow();
+
+    if( i > 0 )
+    {
+        swapRows( m_grid, i, i - 1 );
+
+        m_grid->SetGridCursor( i - 1, m_grid->GetGridCursorCol() );
+        m_grid->MakeCellVisible( m_grid->GetGridCursorRow(), m_grid->GetGridCursorCol() );
+    }
+    else
+    {
+        wxBell();
+    }
+}
+
+
+void PANEL_TEMPLATE_FIELDNAMES::OnMoveDown( wxCommandEvent& event )
+{
+    if( !m_grid->CommitPendingChanges() )
+        return;
+
+    int i = m_grid->GetGridCursorRow();
+
+    if( i >= 0 && i + 1 < m_grid->GetNumberRows() )
+    {
+        swapRows( m_grid, i, i + 1 );
+
+        m_grid->SetGridCursor( i + 1, m_grid->GetGridCursorCol() );
+        m_grid->MakeCellVisible( m_grid->GetGridCursorRow(), m_grid->GetGridCursorCol() );
+    }
+    else
+    {
+        wxBell();
     }
 }
 
@@ -206,11 +268,10 @@ bool PANEL_TEMPLATE_FIELDNAMES::TransferDataFromWindow()
             {
                 wxString msg;
 
-                msg.Printf( _( "The field name \"%s\" contains trailing and/or leading white"
-                               "space." ), field.m_Name );
+                msg.Printf( _( "The field name '%s' contains trailing and/or leading white space." ),
+                            field.m_Name );
 
-                wxMessageDialog dlg( this, msg, _( "Warning" ),
-                                     wxOK | wxCANCEL | wxCENTER | wxICON_WARNING );
+                wxMessageDialog dlg( this, msg, _( "Warning" ), wxOK|wxCANCEL|wxCENTER|wxICON_WARNING );
 
                 dlg.SetExtendedMessage( _( "This may result in what appears to be duplicate field "
                                            "names but are actually unique names differing only by "
@@ -241,7 +302,7 @@ bool PANEL_TEMPLATE_FIELDNAMES::TransferDataFromWindow()
             m_templateMgr->Format( &sf, true );
 
             wxString record = From_UTF8( sf.GetString().c_str() );
-            record.Replace( wxT("  "), wxT(" "), true );  // double space to single
+            record.Replace( wxT( "  " ), wxT( " " ), true );  // double space to single
 
             cfg->m_Drawing.field_names = record.ToStdString();
         }

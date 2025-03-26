@@ -64,6 +64,16 @@ PANEL_TEMPLATE_FIELDNAMES_BASE::PANEL_TEMPLATE_FIELDNAMES_BASE( wxWindow* parent
 	m_addFieldButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer10->Add( m_addFieldButton, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
+	m_bpMoveUp = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpMoveUp->SetToolTip( _("Move up") );
+
+	bSizer10->Add( m_bpMoveUp, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+
+	m_bpMoveDown = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpMoveDown->SetToolTip( _("Move down") );
+
+	bSizer10->Add( m_bpMoveDown, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+
 
 	bSizer10->Add( 20, 0, 0, wxEXPAND, 5 );
 
@@ -81,6 +91,8 @@ PANEL_TEMPLATE_FIELDNAMES_BASE::PANEL_TEMPLATE_FIELDNAMES_BASE( wxWindow* parent
 	// Connect Events
 	m_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_TEMPLATE_FIELDNAMES_BASE::OnSizeGrid ), NULL, this );
 	m_addFieldButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TEMPLATE_FIELDNAMES_BASE::OnAddButtonClick ), NULL, this );
+	m_bpMoveUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TEMPLATE_FIELDNAMES_BASE::OnMoveUp ), NULL, this );
+	m_bpMoveDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TEMPLATE_FIELDNAMES_BASE::OnMoveDown ), NULL, this );
 	m_deleteFieldButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TEMPLATE_FIELDNAMES_BASE::OnDeleteButtonClick ), NULL, this );
 }
 
@@ -89,6 +101,8 @@ PANEL_TEMPLATE_FIELDNAMES_BASE::~PANEL_TEMPLATE_FIELDNAMES_BASE()
 	// Disconnect Events
 	m_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_TEMPLATE_FIELDNAMES_BASE::OnSizeGrid ), NULL, this );
 	m_addFieldButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TEMPLATE_FIELDNAMES_BASE::OnAddButtonClick ), NULL, this );
+	m_bpMoveUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TEMPLATE_FIELDNAMES_BASE::OnMoveUp ), NULL, this );
+	m_bpMoveDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TEMPLATE_FIELDNAMES_BASE::OnMoveDown ), NULL, this );
 	m_deleteFieldButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TEMPLATE_FIELDNAMES_BASE::OnDeleteButtonClick ), NULL, this );
 
 }

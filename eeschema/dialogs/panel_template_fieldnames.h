@@ -58,6 +58,8 @@ protected:
 private:
     void AdjustGridColumns( int aWidth );
 
+    void OnMoveUp( wxCommandEvent& event ) override;
+    void OnMoveDown( wxCommandEvent& event ) override;
     void OnSizeGrid( wxSizeEvent& event ) override;
 
     bool TransferDataToWindow() override;
