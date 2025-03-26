@@ -948,6 +948,9 @@ private:
     mutable std::mutex                        m_polyBuildingLock;
     mutable LAYER_POLYGON_MAP                 m_effectivePolygons;
     mutable int                               m_effectiveBoundingRadius;
+    // Last zoom level used to draw the pad: the LAYER_PAD_HOLEWALLS layer shape
+    // depend on the zoom level. So keep trace on the last used zoom level
+    mutable double                            m_lastGalZoolLevel;
 
     int               m_subRatsnest;        // Variable used to handle subnet (block) number in
                                             //   ratsnest computations

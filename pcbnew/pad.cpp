@@ -65,6 +65,7 @@
 #include "pcbnew_settings.h"
 
 #include <pcb_group.h>
+#include <gal/graphics_abstraction_layer.h>
 
 using KIGFX::PCB_PAINTER;
 using KIGFX::PCB_RENDER_SETTINGS;
@@ -108,6 +109,8 @@ PAD::PAD( FOOTPRINT* parent ) :
 
     for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, BoardCopperLayerCount() ) )
         m_zoneLayerOverrides[layer] = ZLO_NONE;
+
+    m_lastGalZoolLevel = 0.0;
 }
 
 
@@ -1786,9 +1789,16 @@ double PAD::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
         return lodScaleForThreshold( aView, minSize, pcbIUScale.mmToIU( 0.5 ) );
     }
 
-    // Hole walls always need a repaint when zoom changes
+    // Hole walls always need a repaint when zoom level changes after the last
+    // LAYER_PAD_HOLEWALLS shape rebuild
     if( aLayer == LAYER_PAD_HOLEWALLS )
-        aView->Update( this, KIGFX::REPAINT );
+    {
+        if( aView->GetGAL()->GetZoomFactor() != m_lastGalZoolLevel )
+        {
+            aView->Update( this, KIGFX::REPAINT );
+            m_lastGalZoolLevel = aView->GetGAL()->GetZoomFactor();
+        }
+    }
 
     VECTOR2L padSize = GetShape( pcbLayer ) != PAD_SHAPE::CUSTOM
                        ? VECTOR2L( GetSize( pcbLayer ) ) : GetBoundingBox().GetSize();
