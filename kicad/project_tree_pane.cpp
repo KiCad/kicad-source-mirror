@@ -1966,6 +1966,7 @@ void PROJECT_TREE_PANE::onGitRemoveVCS( wxCommandEvent& aEvent )
 
 void PROJECT_TREE_PANE::updateGitStatusIcons()
 {
+    wxLogTrace( traceGit, wxS( "updateGitStatusIcons: Updating git status icons" ) );
     std::unique_lock<std::mutex> lock( m_gitStatusMutex, std::try_to_lock );
 
     if( !lock.owns_lock() )
@@ -1981,10 +1982,34 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
         return;
     }
 
-    for( auto&[ item, status ] : m_gitStatusIcons )
-        m_TreeProject->SetItemState( item, static_cast<int>( status ) );
+    std::stack<wxTreeItemId> items;
+    items.push(m_TreeProject->GetRootItem());
 
-    if( !m_gitCurrentBranchName.empty() )
+    while( !items.empty() )
+    {
+        wxTreeItemId current = items.top();
+        items.pop();
+
+        if( m_TreeProject->ItemHasChildren( current ) )
+        {
+            wxTreeItemIdValue cookie;
+            wxTreeItemId      child = m_TreeProject->GetFirstChild( current, cookie );
+
+            while( child.IsOk() )
+            {
+                items.push( child );
+
+                if( auto it = m_gitStatusIcons.find( child ); it != m_gitStatusIcons.end() )
+                {
+                    m_TreeProject->SetItemState( child, static_cast<int>( it->second ) );
+                }
+
+                child = m_TreeProject->GetNextChild( current, cookie );
+            }
+        }
+    }
+
+    if (!m_gitCurrentBranchName.empty())
     {
         wxTreeItemId kid = m_TreeProject->GetRootItem();
         PROJECT_TREE_ITEM* rootItem = GetItemIdData( kid );
@@ -1992,6 +2017,8 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
         m_TreeProject->SetItemText( kid, filename + " [" + m_gitCurrentBranchName + "]" );
         m_gitIconsInitialized = true;
     }
+
+    wxLogTrace( traceGit, wxS( "updateGitStatusIcons: Git status icons updated" ) );
 }
 
 
@@ -2145,7 +2172,10 @@ void PROJECT_TREE_PANE::updateGitStatusIconMap()
         auto iter = m_gitTreeCache.find( absPath );
 
         if( iter == m_gitTreeCache.end() )
+        {
+            wxLogTrace( traceGit, wxS( "File '%s' not found in tree cache" ), absPath );
             continue;
+        }
 
         // If we are current, don't continue because we still need to check to see if the
         // current commit is ahead/behind the remote.  If the file is modified/added/deleted,
@@ -2221,8 +2251,6 @@ void PROJECT_TREE_PANE::updateGitStatusIconMap()
         }
         else
         {
-            wxLogTrace( traceGit, wxS( "File '%s' is status %d" ), absPath, entry->status );
-
             // If we are here, the file is unmodified and not ignored
             auto [it, inserted] = m_gitStatusIcons.try_emplace( iter->second,
                                         KIGIT_COMMON::GIT_STATUS::GIT_STATUS_CURRENT );
@@ -2256,6 +2284,7 @@ void PROJECT_TREE_PANE::updateGitStatusIconMap()
         m_gitLastError = giterr_last()->klass;
     }
 
+    wxLogTrace( traceGit, wxS( "updateGitStatusIconMap: Updated git status icons" ) );
     // If the icons are not changed, queue an event to update in the main thread
     if( updated || !m_gitIconsInitialized )
     {
