@@ -2263,8 +2263,8 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
     switch( mode )
     {
     case LENGTH_TUNING_MODE::SINGLE: meanderSettings = bds.m_SingleTrackMeanderSettings; break;
-    case DIFF_PAIR: meanderSettings = bds.m_DiffPairMeanderSettings; break;
-    case DIFF_PAIR_SKEW: meanderSettings = bds.m_SkewMeanderSettings; break;
+    case DIFF_PAIR:                  meanderSettings = bds.m_DiffPairMeanderSettings;    break;
+    case DIFF_PAIR_SKEW:             meanderSettings = bds.m_SkewMeanderSettings;        break;
     }
 
     KIGFX::VIEW_CONTROLS*    controls = getViewControls();
@@ -2286,19 +2286,20 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                 controls->ShowCursor( true );
             };
 
-    auto applyCommonSettings = [&]( PCB_TUNING_PATTERN* aPattern )
-    {
-        const auto& origTargetLength = aPattern->GetSettings().m_targetLength;
-        const auto& origTargetSkew   = aPattern->GetSettings().m_targetSkew;
+    auto applyCommonSettings =
+            [&]( PCB_TUNING_PATTERN* aPattern )
+            {
+                const auto& origTargetLength = aPattern->GetSettings().m_targetLength;
+                const auto& origTargetSkew   = aPattern->GetSettings().m_targetSkew;
 
-        aPattern->GetSettings() = meanderSettings;
+                aPattern->GetSettings() = meanderSettings;
 
-        if( meanderSettings.m_targetLength.IsNull() )
-            aPattern->GetSettings().m_targetLength = origTargetLength;
+                if( meanderSettings.m_targetLength.IsNull() )
+                    aPattern->GetSettings().m_targetLength = origTargetLength;
 
-        if( meanderSettings.m_targetSkew.IsNull() )
-            aPattern->GetSettings().m_targetSkew = origTargetSkew;
-    };
+                if( meanderSettings.m_targetSkew.IsNull() )
+                    aPattern->GetSettings().m_targetSkew = origTargetSkew;
+            };
 
     auto updateHoverStatus =
             [&]()
@@ -2347,11 +2348,8 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
 
                     m_preview.FreeItems();
 
-                    for( EDA_ITEM* item : m_tuningPattern->GetPreviewItems( generatorTool, m_frame,
-                                                                            true ) )
-                    {
+                    for( EDA_ITEM* item : m_tuningPattern->GetPreviewItems( generatorTool, m_frame, true ) )
                         m_preview.Add( item );
-                    }
 
                     m_view->Update( &m_preview );
                 }
@@ -2548,8 +2546,7 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                 }
             }
 
-            DIALOG_TUNING_PATTERN_PROPERTIES dlg( m_frame, meanderSettings, routerMode,
-                                                  constraint );
+            DIALOG_TUNING_PATTERN_PROPERTIES dlg( m_frame, meanderSettings, routerMode, constraint );
 
             if( dlg.ShowModal() == wxID_OK )
             {
