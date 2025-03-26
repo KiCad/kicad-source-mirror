@@ -268,7 +268,6 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
 
     if( m_itemList.IsDirty() )
     {
-
         std::vector<std::future<size_t>> returns( dirtyItems.size() );
 
         auto conn_lambda =
