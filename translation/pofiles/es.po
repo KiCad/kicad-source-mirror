@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-24 12:07-0700\n"
-"PO-Revision-Date: 2025-03-27 04:58+0000\n"
+"PO-Revision-Date: 2025-03-28 08:01+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v9/es/>\n"
 "Language: es\n"
@@ -581,12 +581,12 @@ msgstr "Mostrar ejes 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:338
 msgid "Show Appearance Manager"
-msgstr "Mostrar el administrador de apariencia"
+msgstr "Mostrar gestor de apariencia"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:339
 #: pcbnew/tools/pcb_actions.cpp:1333
 msgid "Show/hide the appearance manager"
-msgstr "Mostrar/ocultar el administrador de apariencia"
+msgstr "Mostrar/ocultar el gestor de apariencia"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
 msgid "Board Body"
@@ -1792,12 +1792,12 @@ msgstr "No puede hacerse la ruta '%s' absoluta con respecto a '%s'."
 #: common/common.cpp:404
 #, c-format
 msgid "Output directory '%s' created."
-msgstr "Se ha creado la carpeta de salida '%s'."
+msgstr "Se ha creado el directorio de salida «%s»."
 
 #: common/common.cpp:413 pcbnew/dialogs/dialog_export_odbpp.cpp:315
 #, c-format
 msgid "Cannot create output directory '%s'."
-msgstr "No se puede crear la carpeta de salida '%s'."
+msgstr "No se puede crear el directorio de salida «%s»."
 
 #: common/common.cpp:704
 msgid "This operating system is not supported by KiCad and its dependencies."
@@ -2042,7 +2042,7 @@ msgstr "La tabla fp-lib-table no contienen la biblioteca de nombre '%s'."
 #: common/design_block_lib_table.cpp:577 common/fp_lib_table.cpp:567
 #: eeschema/symbol_lib_table.cpp:605
 msgid "Added by Plugin and Content Manager"
-msgstr "Añadido por el Administrador de complementos y contenido"
+msgstr "Añadido por el Gestor de complementos y contenido"
 
 #: common/design_block_lib_table.cpp:603 common/fp_lib_table.cpp:593
 #: eeschema/symbol_lib_table.cpp:634
@@ -5194,7 +5194,7 @@ msgstr "Buscar actualizaciones de KiCad al inicio"
 #: kicad/pcm/dialogs/dialog_pcm.cpp:216
 #: kicad/tools/kicad_manager_actions.cpp:196
 msgid "Plugin and Content Manager"
-msgstr "Administrador de complementos y contenido"
+msgstr "Gestor de complementos y contenido"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:50
 msgid "Check for package updates on startup"
@@ -6182,7 +6182,7 @@ msgstr "Marcador"
 #: common/eda_item.cpp:364 pcbnew/pcb_dimension.cpp:609
 #: pcbnew/widgets/search_handlers.cpp:284
 msgid "Dimension"
-msgstr "Dimensión"
+msgstr "Cota"
 
 #: common/eda_item.cpp:365 pcbnew/pcb_dimension.cpp:1313
 #: pcbnew/pcb_dimension.cpp:1480
@@ -6233,7 +6233,7 @@ msgstr "Mapa de bits"
 #: common/eda_item.cpp:380 eeschema/sch_rule_area.cpp:50
 #: eeschema/sch_rule_area.cpp:374 pcbnew/zone.cpp:920
 msgid "Rule Area"
-msgstr "Área de Reglas"
+msgstr "Área de reglas"
 
 #: common/eda_item.cpp:385 eeschema/tools/sch_edit_tool.cpp:252
 msgid "Net Label"
@@ -7293,7 +7293,7 @@ msgstr "Salir"
 
 #: common/hotkey_store.cpp:76
 msgid "Project Manager"
-msgstr "Administrador de proyectos"
+msgstr "Gestor de proyectos"
 
 #: common/hotkey_store.cpp:159
 msgid "Gestures"
@@ -7357,7 +7357,7 @@ msgstr "Actualmente no se admiten los textos alineados a arcos de DXF."
 #: common/import_gfx/dxf_import_plugin.h:505
 #: common/import_gfx/dxf_import_plugin.h:510
 msgid "DXF dimensions not currently supported."
-msgstr "Actualmente no se admiten las dimensiones de DXF."
+msgstr "Actualmente no se admiten las cotas de DXF."
 
 #: common/import_gfx/dxf_import_plugin.h:516
 msgid "DXF hatches not currently supported."
@@ -7926,9 +7926,8 @@ msgid "Net class references"
 msgstr "Referencias de clase de red"
 
 #: common/layer_id.cpp:85
-#, fuzzy
 msgid "Rule areas"
-msgstr "Áreas de Reglas"
+msgstr "Áreas de reglas"
 
 #: common/layer_id.cpp:86
 msgid "Symbol body outlines"
@@ -9414,7 +9413,7 @@ msgstr "Medición interactiva de la distancia entre dos puntos"
 
 #: common/tool/actions.cpp:1064
 msgid "Switch to Project Manager"
-msgstr "Cambiar al administrador de proyectos"
+msgstr "Cambiar al gestor de proyectos"
 
 #: common/tool/actions.cpp:1065
 msgid "Show project window"
@@ -9446,7 +9445,7 @@ msgstr "Crear, eliminar y editar huellas"
 
 #: common/tool/actions.cpp:1115
 msgid "Show/hide the properties manager"
-msgstr "Mostrar/ocultar el administrador de propiedades"
+msgstr "Mostrar/ocultar el gestor de propiedades"
 
 #: common/tool/actions.cpp:1123
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:100
@@ -10143,7 +10142,7 @@ msgstr "Guardar informe"
 #: common/widgets/wx_html_report_panel.cpp:389
 #, c-format
 msgid "Cannot write report to file '%s'."
-msgstr "No puede escribirse el informe en el archivo '%s'."
+msgstr "No se puede escribir el informe en el archivo «%s»."
 
 #: common/widgets/wx_html_report_panel.cpp:391
 msgid "File save error"
@@ -10583,7 +10582,7 @@ msgstr "Archivo de proyecto: «%s»"
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
 #: kicad/project_tree_pane.cpp:1067
 msgid "No text editor selected in KiCad.  Please choose one."
-msgstr "No se ha seleccionado un editor en KiCad. Por favor, elija uno."
+msgstr "No se ha seleccionado ningún editor de texto en KiCad. Elija uno."
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:211
 msgid "Footprint Association File"
@@ -10665,9 +10664,8 @@ msgid "Footprint '%s' not found."
 msgstr "No se ha encontrado la huella '%s'."
 
 #: cvpcb/display_footprints_frame.cpp:445
-#, fuzzy
 msgid "Error loading footprint"
-msgstr "Error al cargar la fuente '%s'."
+msgstr "Error al cargar la huella"
 
 #: cvpcb/display_footprints_frame.cpp:508 pcbnew/footprint.cpp:1754
 #, c-format
@@ -10749,7 +10747,7 @@ msgstr "Mostrar huella seleccionada"
 
 #: cvpcb/tools/cvpcb_actions.cpp:63
 msgid "Manage Footprint Association Files..."
-msgstr "Administrar archivos de asociación de huellas..."
+msgstr "Gestionar archivos de asociación de huellas..."
 
 #: cvpcb/tools/cvpcb_actions.cpp:64
 #, fuzzy
@@ -11770,9 +11768,8 @@ msgid "Untitled Field"
 msgstr "Campo sin título"
 
 #: eeschema/dialogs/dialog_design_block_properties.cpp:234
-#, fuzzy
 msgid "Duplicate fields are not allowed."
-msgstr "No se permiten los nombres de clase de red duplicados."
+msgstr "No se permiten los campos duplicados."
 
 #: eeschema/dialogs/dialog_design_block_properties_base.cpp:26
 msgid "Default Fields"
@@ -16887,8 +16884,8 @@ msgid ""
 "Warning: schematic has annotation errors, please use the schematic editor to "
 "fix them\n"
 msgstr ""
-"Advertencia: el esquema tiene errores de anotación, por favor use el editor "
-"de esquemas para arreglarlos\n"
+"Atención: el esquema tiene errores de anotación; use el editor de esquemas "
+"para arreglarlos\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:406
 #: eeschema/eeschema_jobs_handler.cpp:528
@@ -17125,9 +17122,9 @@ msgstr ""
 "La biblioteca de símbolos «%s» no está activada en la configuración actual"
 
 #: eeschema/erc/erc.cpp:1429
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' was not found at '%s'."
-msgstr "No se ha encontrado la biblioteca de huellas '%s'."
+msgstr "No se encontró la biblioteca de símbolos «%s» en «%s»."
 
 #: eeschema/erc/erc.cpp:1449
 #, c-format
@@ -17713,9 +17710,9 @@ msgid ""
 "\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"No puede crearse la carpeta '%s'.\n"
+"No se puede crear la carpeta «%s».\n"
 "\n"
-"Por favor, confirme que tiene permisos de escritura e inténtelo de nuevo."
+"Cerciórese de que tiene permisos de escritura e inténtelo de nuevo."
 
 #: eeschema/files-io.cpp:1082
 #, c-format
@@ -18596,7 +18593,7 @@ msgstr "Nuevo esquema"
 #: eeschema/sch_edit_frame.cpp:1367
 #, c-format
 msgid "Schematic file '%s' already exists."
-msgstr "Ya existe el archivo de esquema '%s'."
+msgstr "Ya existe el archivo de esquema «%s»."
 
 #: eeschema/sch_edit_frame.cpp:1392
 msgid "Open Schematic"
@@ -18608,7 +18605,7 @@ msgstr "Para asignar huellas se requiere de un esquema anotado completamente."
 
 #: eeschema/sch_edit_frame.cpp:1489
 msgid "Could not open CvPcb"
-msgstr "No ha pudido abrirse CvPcb"
+msgstr "No se pudo abrir CvPcb"
 
 #: eeschema/sch_edit_frame.cpp:1738 eeschema/sim/simulator_frame.cpp:341
 #: kicad/kicad_manager_frame.cpp:1043 pcbnew/footprint_edit_frame.cpp:1072
@@ -20599,7 +20596,7 @@ msgstr "Crear nueva hoja"
 #: eeschema/sim/kibis/ibis_parser.cpp:68 eeschema/sim/kibis/ibis_parser.cpp:97
 #: eeschema/sim/kibis/ibis_parser.cpp:120
 msgid "Dimension of matrices should be >= 1."
-msgstr "La dimensión de las matrices debería ser mayor o igual a 1."
+msgstr "La cota de las matrices debería ser mayor o igual a 1."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:74
 msgid "Bandwidth of banded matrices should be >= 1."
@@ -21977,11 +21974,11 @@ msgid ""
 "to migrate to current format."
 msgstr ""
 "Los símbolos de las bibliotecas heredadas no se pueden editar. Utilice "
-"Administrar Bibliotecas de Símbolos para migrar al formato actual."
+"Gestionar bibliotecas de símbolos para migrar al formato actual."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:902
 msgid "Manage symbol libraries"
-msgstr "Administrar bibliotecas de símbolos"
+msgstr "Gestionar bibliotecas de símbolos"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:915
 #, fuzzy, c-format
@@ -22058,11 +22055,8 @@ msgstr "La configuración actual no incluye la biblioteca '%s'."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1536
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1547
-#, fuzzy
 msgid "Use Manage Symbol Libraries to edit the configuration."
-msgstr ""
-"La configuración actual no incluye la biblioteca de símbolos '%s'.\n"
-"Utilice 'Administrar bibliotecas de símbolos' para editar la configuración."
+msgstr "Utilice Gestionar bibliotecas de símbolos para editar la configuración."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1537
 msgid "Library not found in symbol library table."
@@ -25256,7 +25250,7 @@ msgstr "Normalmente: 3:3 en mm y 2:4 en pulgadas"
 
 #: gerbview/events_called_functions.cpp:162 gerbview/gerbview_frame.cpp:165
 msgid "Layers Manager"
-msgstr "Administrador de capas"
+msgstr "Gestor de capas"
 
 #: gerbview/excellon_read_drill_file.cpp:272
 #, c-format
@@ -25721,7 +25715,7 @@ msgstr "Abrir un archivo comprimido (Gerber y taladros)"
 
 #: gerbview/tools/gerbview_actions.cpp:76
 msgid "Show Layers Manager"
-msgstr "Mostrar administrador de capas"
+msgstr "Mostrar gestor de capas"
 
 #: gerbview/tools/gerbview_actions.cpp:82
 msgid "List DCodes..."
@@ -27694,7 +27688,7 @@ msgstr "Eliminar repositorio"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:62
 msgid "Manage Repositories"
-msgstr "Administrar repositorios"
+msgstr "Gestionar repositorios"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:51
 #, c-format
@@ -27783,7 +27777,7 @@ msgstr "Instalado (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
 msgid "Manage..."
-msgstr "Administrar..."
+msgstr "Gestionar..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:86
 msgid "Package"
@@ -27807,7 +27801,7 @@ msgstr "Abrir carpeta del paquete"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:76
 msgid "Plugin And Content Manager"
-msgstr "Administrador de complementos y contenido"
+msgstr "Gestor de complementos y contenido"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:53
 msgid "Aborting remaining tasks."
@@ -27988,8 +27982,8 @@ msgid ""
 "The given repository URL does not look like a valid KiCad package "
 "repository. Please double check the URL."
 msgstr ""
-"La URL provista no parece ser un repositorio de paquetes de KiCad válido. "
-"Por favor verifique la URL."
+"El URL provisto no parece apuntar a un repositorio de paquetes de KiCad "
+"válido. Verifique el URL."
 
 #: kicad/pcm/pcm.cpp:303
 msgid "Fetching repository packages"
@@ -28615,7 +28609,7 @@ msgstr "Editar marco de borde de hoja y bloque de título"
 
 #: kicad/tools/kicad_manager_actions.cpp:197
 msgid "Run Plugin and Content Manager"
-msgstr "Ejecutar el administrador de complementos y contenido"
+msgstr "Ejecutar el gestor de complementos y contenido"
 
 #: kicad/tools/kicad_manager_actions.cpp:203
 msgid "Open Text Editor"
@@ -28719,9 +28713,9 @@ msgid ""
 "\n"
 "Please make sure you have write permissions and try again."
 msgstr ""
-"No se puede crear la carpeta '%s'.\n"
+"No se puede crear la carpeta «%s».\n"
 "\n"
-"Por favor, confirme que tiene permisos de escritura e inténtelo de nuevo."
+"Cerciórese de que tiene permisos de escritura e inténtelo de nuevo."
 
 #: kicad/tools/kicad_manager_control.cpp:719
 msgid "Error!"
@@ -33847,9 +33841,8 @@ msgstr ""
 "Se ha movido a la primera capa definida."
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:318
-#, fuzzy
 msgid "Edit Dimension Properties"
-msgstr "Propiedades de dimensiones"
+msgstr "Editar propiedades de cota"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:22
 msgid "Leader Format"
@@ -33867,12 +33860,12 @@ msgstr "Dibuja una forma alrededor del texto directriz"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:69
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:89
 msgid "Dimension Format"
-msgstr "Formato de dimensiones"
+msgstr "Formato de cota"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:98
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:104
 msgid "Measured value of this dimension"
-msgstr "Valor medido para esta dimensión"
+msgstr "Valor medido para esta cota"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:108
 msgid "Override value"
@@ -33903,13 +33896,13 @@ msgid ""
 "Units of this dimension (\"automatic\" to follow the units selected in the "
 "editor)"
 msgstr ""
-"Unidades de esta dimensión (\"automático\" para seguir las unidades "
-"seleccionadas en el editor)"
+"Unidades de esta cota («automático» para seguir las unidades seleccionadas "
+"en el editor)"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:132
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:137
 msgid "Text to print before the dimension value"
-msgstr "Texto a imprimir antes del valor de dimensión"
+msgstr "Texto que imprimir antes del valor de cota"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:141
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:56
@@ -33939,7 +33932,7 @@ msgstr "1234 (mm)"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:157
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:162
 msgid "Text to print after the dimension value"
-msgstr "Texto a imprimir después del valor de dimensión"
+msgstr "Texto que imprimir después del valor de cota"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:166
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:67
@@ -34023,7 +34016,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:209
 msgid "Dimension Text"
-msgstr "Texto de dimensión"
+msgstr "Texto de cota"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:272
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:144
@@ -34176,7 +34169,7 @@ msgstr ""
 #: pcbnew/pcb_dimension.cpp:1806 pcbnew/pcb_dimension.cpp:1909
 #: pcbnew/pcb_dimension.cpp:1984 pcbnew/pcb_dimension.cpp:2027
 msgid "Dimension Properties"
-msgstr "Propiedades de dimensiones"
+msgstr "Propiedades de cotas"
 
 #: pcbnew/dialogs/dialog_drc.cpp:140
 msgid "Run DRC"
@@ -36263,7 +36256,7 @@ msgstr "Elementos gráficos"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:143
 msgid "Dimension items"
-msgstr "Elementos de dimensión"
+msgstr "Elementos de cota"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:272
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:63
@@ -38295,7 +38288,7 @@ msgstr "User1"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:42
 msgid "Dimensions:"
-msgstr "Dimensiones:"
+msgstr "Cotas:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:52
 #: pcbnew/dialogs/dialog_render_job_base.cpp:63
@@ -38914,7 +38907,7 @@ msgstr "Propiedades de pistas y vías"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:53
 msgid "Track and Via Dimensions"
-msgstr "Dimensiones de pistas y vías"
+msgstr "Cotas de pistas y vías"
 
 # Desvío deseado:
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:55
@@ -39812,9 +39805,8 @@ msgstr ""
 "altura del apilado para vías se ignora."
 
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:17
-#, fuzzy
 msgid "Default Properties for New Dimension Objects"
-msgstr "Propiedades por defecto para nuevos objetos de dimensión:"
+msgstr "Propiedades predeterminadas para objetos de cota nuevos"
 
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:37
 msgid ""
@@ -41776,7 +41768,7 @@ msgstr "Elementos no permitidos"
 
 #: pcbnew/drc/drc_item.cpp:64
 msgid "Text (or dimension) on Edge.Cuts layer"
-msgstr "Texto (o dimensión) en la capa Edge.Cuts"
+msgstr "Texto (o cota) en la capa Edge.Cuts"
 
 #: pcbnew/drc/drc_item.cpp:68
 msgid "Clearance violation"
@@ -42853,7 +42845,7 @@ msgstr "Comprobando integridad de red de máscara de soldadura..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:88
 msgid "Checking text dimensions..."
-msgstr "Comprobando dimensiones de texto..."
+msgstr "Comprobando cotas de texto..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:108
 #, c-format
@@ -44154,9 +44146,8 @@ msgid "Draw Microwave Shapes"
 msgstr "Añadir forma de microondas"
 
 #: pcbnew/menubar_pcb_editor.cpp:326
-#, fuzzy
 msgid "Draw Dimensions"
-msgstr "Dibujar dimensión"
+msgstr "Dibujar cotas"
 
 #: pcbnew/menubar_pcb_editor.cpp:347
 msgid "Auto-Place Footprints"
@@ -44319,9 +44310,9 @@ msgid "Changed %s component class to '%s'."
 msgstr "Se cambió la clase de componente de %s a «%s»."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:267
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s component class (was '%s')."
-msgstr "Eliminar componente de la librería activa"
+msgstr "Se quitó la clase de componente %s (era «%s»)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:273
 #, fuzzy, c-format
@@ -45124,7 +45115,7 @@ msgstr "Sufijo"
 #: pcbnew/pcb_dimension.cpp:763
 #, c-format
 msgid "Dimension '%s' on %s"
-msgstr "Dimensión '%s' en %s"
+msgstr "Cota «%s» en %s"
 
 #: pcbnew/pcb_dimension.cpp:1781
 msgid "1234.0"
@@ -45152,9 +45143,8 @@ msgid "Arrow Direction"
 msgstr "Dirección:"
 
 #: pcbnew/pcb_dimension.cpp:1874
-#, fuzzy
 msgid "Keep Aligned with Dimension"
-msgstr "Mantener alineado con la dimensión"
+msgstr "Mantener alineado con la cota"
 
 #: pcbnew/pcb_dimension.cpp:1911
 msgid "Crossbar Height"
@@ -45436,12 +45426,11 @@ msgstr ""
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1902
 msgid "Loading dimension drawings..."
-msgstr "Cargando dibujos de dimensión..."
+msgstr "Cargando dibujos de cota..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1920
-#, fuzzy
 msgid "Ignored Angular dimension (not yet supported)."
-msgstr "Dimensión de tipo %d ignorada (todavía no soportada)."
+msgstr "Se ignoró la cota angular (aún no admitida)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1934
 #, fuzzy
@@ -45449,24 +45438,21 @@ msgid "Ignored Datum dimension (not yet supported)."
 msgstr "Dimensión de tipo %d ignorada (todavía no soportada)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1943
-#, fuzzy
 msgid "Ignored Baseline dimension (not yet supported)."
-msgstr "Dimensión de tipo %d ignorada (todavía no soportada)."
+msgstr "Se ignoró la cota de línea de base (aún no admitida)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1954
-#, fuzzy
 msgid "Ignored Linear dimension (not yet supported)."
-msgstr "Dimensión de tipo %d ignorada (todavía no soportada)."
+msgstr "Se ignoró la cota lineal (aún no admitida)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1962
-#, fuzzy
 msgid "Ignored Radial dimension (not yet supported)."
-msgstr "Dimensión de tipo %d ignorada (todavía no soportada)."
+msgstr "Se ignoró la cota radial (aún no admitida)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1970
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
-msgstr "Dimensión de tipo %d ignorada (todavía no soportada)."
+msgstr "Se ignoró la cota de tipo %d (aún no admitida)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2019
 #, c-format
@@ -45943,7 +45929,7 @@ msgstr ""
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1549
 #, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported."
-msgstr "Tipo de dimensión inesperado (ID %s). Esto no fue importado."
+msgstr "Tipo de cota inesperado (id. %s). Esto no se ha importado."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1684
 #, c-format
@@ -45951,8 +45937,8 @@ msgid ""
 "Dimension %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
 msgstr ""
-"La dimensión %s es una dimensión en ángulo, que no tiene equivalente de "
-"KiCad. El objeto no fue importado."
+"La cota %s es una cota en ángulo, que no tiene equivalente de KiCad. El "
+"objeto no se ha importado."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1724
 #, c-format
@@ -47371,9 +47357,8 @@ msgid "Error exporting VRML"
 msgstr "Error al exportar VRML"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:471
-#, fuzzy
 msgid "Invalid image dimensions"
-msgstr "Definición de nombre de pines inválida"
+msgstr "Cotas de imagen no válidas"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:698
 #, fuzzy
@@ -47583,8 +47568,8 @@ msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
-"Esta área no puede ser manejada por el enrutador.\n"
-"Por favor verifique que el polígono no se intersecta a si mismo."
+"El enrutador no puede gestionar esta zona.\n"
+"Compruebe que no sea un polígono que se esté intersecando a sí mismo."
 
 # ¿Podría dejarse solo como Pista? Ver contexto
 #: pcbnew/router/pns_kicad_iface.cpp:2204
@@ -48672,7 +48657,7 @@ msgstr "Número de capas de cobre: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:426
 msgid "Board overall dimensions: "
-msgstr "Dimensiones generales de la placa: "
+msgstr "Cotas generales de la placa: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:436
 msgid "Min track/spacing: "
@@ -48751,7 +48736,7 @@ msgstr "Bezier"
 
 #: pcbnew/tools/drawing_tool.cpp:1597
 msgid "Draw Dimension"
-msgstr "Dibujar dimensión"
+msgstr "Dibujar cota"
 
 #: pcbnew/tools/drawing_tool.cpp:2082
 msgid "Move Footprint Anchor"
@@ -49335,9 +49320,8 @@ msgid "Decrease tuning pattern amplitude by one step."
 msgstr "Disminuir la amplitud del patrón de afinado en un paso."
 
 #: pcbnew/tools/pcb_actions.cpp:244
-#, fuzzy
 msgid "Draw Aligned Dimensions"
-msgstr "Dimensión alineada"
+msgstr "Dibujar cotas alineadas"
 
 #: pcbnew/tools/pcb_actions.cpp:251
 #, fuzzy
@@ -49345,14 +49329,12 @@ msgid "Draw Center Dimensions"
 msgstr "Centrar dimensión"
 
 #: pcbnew/tools/pcb_actions.cpp:258
-#, fuzzy
 msgid "Draw Radial Dimensions"
-msgstr "Añadir dimensión radial"
+msgstr "Dibujar cotas radiales"
 
 #: pcbnew/tools/pcb_actions.cpp:266
-#, fuzzy
 msgid "Draw Orthogonal Dimensions"
-msgstr "Dimensión ortogonal"
+msgstr "Dibujar cotas ortogonales"
 
 #: pcbnew/tools/pcb_actions.cpp:273
 #, fuzzy
@@ -50209,9 +50191,8 @@ msgstr "Mostrar el inspector de redes"
 
 #: pcbnew/tools/pcb_actions.cpp:1345
 #: pcbnew/zone_manager/dialog_zone_manager_base.h:78
-#, fuzzy
 msgid "Zone Manager"
-msgstr "Administrador de proyectos"
+msgstr "Gestor de zonas"
 
 #: pcbnew/tools/pcb_actions.cpp:1346
 #, fuzzy
@@ -50922,7 +50903,7 @@ msgstr "Abrir opciones del Enrutador interactivo"
 
 #: pcbnew/tools/pcb_actions.cpp:2283
 msgid "Differential Pair Dimensions..."
-msgstr "Dimensiones de par diferencial..."
+msgstr "Cotas de par diferencial..."
 
 #: pcbnew/tools/pcb_actions.cpp:2284
 msgid "Open Differential Pair Dimension settings"
@@ -52186,7 +52167,7 @@ msgstr "Áreas de Reglas"
 #: pcbnew/widgets/panel_selection_filter.cpp:204
 #: pcbnew/widgets/panel_selection_filter_base.cpp:61
 msgid "Dimensions"
-msgstr "Dimensiones"
+msgstr "Cotas"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:122
 #: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:708
