@@ -327,7 +327,8 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                                     testAssertion( symbol, sheet, screen, textboxItem->GetText(),
                                                    textboxItem->GetPosition() );
                                 }
-                            } );
+                            },
+                            RECURSE_MODE::NO_RECURSE );
                 }
             }
             else if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( item ) )
@@ -723,7 +724,8 @@ int ERC_TESTER::TestMissingNetclasses()
                         }
 
                         return true;
-                    } );
+                    },
+                RECURSE_MODE::NO_RECURSE );
         }
     }
 

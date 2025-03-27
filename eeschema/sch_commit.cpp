@@ -137,7 +137,8 @@ void SCH_COMMIT::pushLibEdit( const wxString& aMessage, int aCommitFlags )
                     [&]( SCH_ITEM* aChild )
                     {
                         view->Update( aChild );
-                    } );
+                    },
+                    RECURSE_MODE::NO_RECURSE );
         }
 
         if( !( aCommitFlags & SKIP_UNDO ) )
@@ -220,7 +221,8 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
                     {
                         if( aChild->IsSelected() )
                             selectedModified = true;
-                    } );
+                    },
+                    RECURSE_MODE::NO_RECURSE );
         }
 
         auto updateConnectivityFlag = [&]()
@@ -580,7 +582,7 @@ void SCH_COMMIT::Revert()
             if( unselect )
             {
                 item->ClearSelected();
-                item->RunOnChildren( []( SCH_ITEM* aChild ) { aChild->ClearSelected(); } );
+                item->RunOnChildren( []( SCH_ITEM* aChild ) { aChild->ClearSelected(); }, RECURSE_MODE::NO_RECURSE );
             }
 
             // Special cases for items which have instance data

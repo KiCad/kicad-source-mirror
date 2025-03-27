@@ -1138,7 +1138,7 @@ void SCH_SCREEN::TestDanglingEnds( const SCH_SHEET_PATH* aPath,
     for( SCH_ITEM* item : Items() )
     {
         get_ends( item );
-        item->RunOnChildren( get_ends );
+        item->RunOnChildren( get_ends, RECURSE_MODE::NO_RECURSE );
     }
 
     PROF_TIMER sortTimer( "SCH_SCREEN::TestDanglingEnds pre-sort" );
@@ -1152,7 +1152,7 @@ void SCH_SCREEN::TestDanglingEnds( const SCH_SHEET_PATH* aPath,
     for( SCH_ITEM* item : Items() )
     {
         update_state( item );
-        item->RunOnChildren( update_state );
+        item->RunOnChildren( update_state, RECURSE_MODE::NO_RECURSE );
     }
 
     if( wxLog::IsAllowedTraceMask( DanglingProfileMask ) )
@@ -1365,7 +1365,8 @@ void SCH_SCREEN::FixupEmbeddedData()
                 {
                     if( EDA_TEXT* textItem = dynamic_cast<EDA_TEXT*>( aChild ) )
                         textItem->ResolveFont( embeddedFonts );
-                } );
+                },
+                RECURSE_MODE::NO_RECURSE );
     }
 
     std::vector<SCH_ITEM*> items_to_update;
@@ -1382,7 +1383,8 @@ void SCH_SCREEN::FixupEmbeddedData()
                 {
                     if( EDA_TEXT* textItem = dynamic_cast<EDA_TEXT*>( aChild ) )
                         update |= textItem->ResolveFont( embeddedFonts );
-                } );
+                },
+                RECURSE_MODE::NO_RECURSE );
 
         if( update )
             items_to_update.push_back( item );

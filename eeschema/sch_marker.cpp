@@ -174,7 +174,8 @@ SCH_MARKER* SCH_MARKER::DeserializeFromString( const SCH_SHEET_LIST& aSheetList,
                             if( text_item->GetText() == props[4] )
                                 uuid = child->m_Uuid;
                         }
-                    } );
+                    },
+                    RECURSE_MODE::NO_RECURSE );
 
             // If it's a symbol, we must also check non-overridden LIB_SYMBOL text children
             if( uuid == niluuid && parent->Type() == SCH_SYMBOL_T )
@@ -191,7 +192,8 @@ SCH_MARKER* SCH_MARKER::DeserializeFromString( const SCH_SHEET_LIST& aSheetList,
                                 if( text_item->GetText() == props[4] )
                                     uuid = child->m_Uuid;
                             }
-                        } );
+                        },
+                        RECURSE_MODE::NO_RECURSE );
             }
 
             if( uuid != niluuid )

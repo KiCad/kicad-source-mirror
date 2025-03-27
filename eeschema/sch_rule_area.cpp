@@ -354,7 +354,8 @@ const std::vector<std::pair<wxString, SCH_ITEM*>> SCH_RULE_AREA::GetResolvedNetc
                     }
 
                     return true;
-                } );
+                },
+                RECURSE_MODE::NO_RECURSE );
     }
 
     return resolvedNetclasses;

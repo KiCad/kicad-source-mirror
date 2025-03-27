@@ -1058,7 +1058,8 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
                                 {
                                     if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aChild ) )
                                         invalidateTextVars( text );
-                                } );
+                                },
+                                RECURSE_MODE::NO_RECURSE );
 
                         if( flags & KIGFX::GEOMETRY )
                             m_frame->GetScreen()->Update( item, false );   // Refresh RTree
@@ -2659,7 +2660,8 @@ int SCH_EDITOR_CONTROL::MarkSimExclusions( const TOOL_EVENT& aEvent )
                             {
                                 if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aChild ) )
                                     invalidateTextVars( text );
-                            } );
+                            },
+                            RECURSE_MODE::NO_RECURSE );
 
                     if( item->GetExcludedFromSim() )
                         flags |= KIGFX::GEOMETRY | KIGFX::REPAINT;
@@ -2822,7 +2824,8 @@ int SCH_EDITOR_CONTROL::RepairSchematic( const TOOL_EVENT& aEvent )
                     [&]( SCH_ITEM* aChild )
                     {
                         processItem( item );
-                    } );
+                    },
+                    RECURSE_MODE::NO_RECURSE );
         }
     }
 

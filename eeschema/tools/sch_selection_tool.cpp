@@ -1970,7 +1970,8 @@ bool SCH_SELECTION_TOOL::selectMultiple()
                                         }
 
                                         nearbyChildren.push_back( aChild );
-                                    } );
+                                    },
+                                    RECURSE_MODE::NO_RECURSE );
                         }
                     }
                 }
@@ -2609,7 +2610,8 @@ void SCH_SELECTION_TOOL::RebuildSelection()
                         {
                             if( aChild->IsSelected() )
                                 select( aChild );
-                        } );
+                        },
+                        RECURSE_MODE::NO_RECURSE );
             }
         }
     }
@@ -2785,7 +2787,8 @@ void SCH_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, SELECTION* aGrou
                     {
                         aChild->SetBrightened();
                     }
-                } );
+                },
+                RECURSE_MODE::NO_RECURSE );
     }
 
     if( aGroup && aMode != BRIGHTENED )
@@ -2837,7 +2840,8 @@ void SCH_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, SELECTION* aGr
 
                     if( aGroup )
                         aGroup->Remove( aChild );
-                } );
+                },
+                RECURSE_MODE::NO_RECURSE );
     }
 
     if( aItem->GetParent() && aItem->GetParent()->Type() != SCHEMATIC_T )

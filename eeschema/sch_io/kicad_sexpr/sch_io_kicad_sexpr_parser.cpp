@@ -280,7 +280,8 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::ParseSymbol( LIB_SYMBOL_MAP& aSymbolLibMa
                     {
                         if( EDA_TEXT* textItem = dynamic_cast<EDA_TEXT*>( aChild ) )
                             textItem->ResolveFont( embeddedFonts );
-                    } );
+                    },
+                    RECURSE_MODE::NO_RECURSE );
         }
         else
         {
@@ -623,7 +624,8 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
             {
                 if( EDA_TEXT* textItem = dynamic_cast<EDA_TEXT*>( aChild ) )
                     textItem->ResolveFont( embeddedFonts );
-            } );
+            },
+            RECURSE_MODE::NO_RECURSE );
 
     return symbol.release();
 }

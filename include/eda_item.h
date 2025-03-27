@@ -45,6 +45,12 @@ enum class INSPECT_RESULT
     CONTINUE
 };
 
+enum RECURSE_MODE
+{
+    RECURSE,
+    NO_RECURSE,
+};
+
 
 /**
  * Additional flag values wxFindReplaceData::m_Flags

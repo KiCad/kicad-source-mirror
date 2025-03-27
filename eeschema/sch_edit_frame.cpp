@@ -1544,7 +1544,8 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
                             {
                                 if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aChild ) )
                                     invalidateTextVars( text );
-                            } );
+                            },
+                            RECURSE_MODE::NO_RECURSE );
                 }
 
                 if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem ) )
@@ -2069,7 +2070,8 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
                             {
                                 if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aChild ) )
                                     invalidateTextVars( text );
-                            } );
+                            },
+                            RECURSE_MODE::NO_RECURSE );
 
                     if( flags & KIGFX::GEOMETRY )
                         GetScreen()->Update( item, false );     // Refresh RTree
@@ -2464,7 +2466,8 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
                 [&]( SCH_ITEM* aChild )
                 {
                     visit( aChild );
-                } );
+                },
+                RECURSE_MODE::NO_RECURSE );
     }
 
     if( !screen->m_zoomInitialized )

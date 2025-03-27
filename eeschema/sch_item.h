@@ -567,7 +567,7 @@ public:
 
     virtual void AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo ) { }
 
-    virtual void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) { }
+    virtual void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction, RECURSE_MODE aMode ) { }
 
     virtual void ClearCaches();
 

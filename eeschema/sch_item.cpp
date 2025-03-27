@@ -146,7 +146,8 @@ SCH_ITEM* SCH_ITEM::Duplicate( bool doClone ) const
             []( SCH_ITEM* aChild )
             {
                 aChild->ClearFlags( SELECTED | BRIGHTENED );
-            } );
+            },
+            RECURSE_MODE::NO_RECURSE );
 
     return newItem;
 }
@@ -409,7 +410,7 @@ void SCH_ITEM::ClearCaches()
 
     clearTextCaches( this );
 
-    RunOnChildren( clearTextCaches );
+    RunOnChildren( clearTextCaches, RECURSE_MODE::NO_RECURSE );
 }
 
 

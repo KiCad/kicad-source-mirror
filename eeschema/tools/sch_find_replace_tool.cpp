@@ -75,7 +75,8 @@ int SCH_FIND_REPLACE_TOOL::UpdateFind( const TOOL_EVENT& aEvent )
                             [&]( SCH_ITEM* aChild )
                             {
                                 visit( aChild, &m_frame->GetCurrentSheet() );
-                            } );
+                            },
+                            RECURSE_MODE::NO_RECURSE );
                 }
             };
 

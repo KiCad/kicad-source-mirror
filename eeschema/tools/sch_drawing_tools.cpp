@@ -1852,7 +1852,8 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 item->RunOnChildren( [&]( SCH_ITEM* aChild )
                                      {
                                          m_view->AddToPreview( aChild, false );
-                                     } );
+                                     },
+                                     RECURSE_MODE::NO_RECURSE );
                 m_frame->SetMsgPanel( item );
             };
 

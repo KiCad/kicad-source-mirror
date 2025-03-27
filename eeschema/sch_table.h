@@ -100,7 +100,7 @@ public:
     void SetStrokeRows( bool aDoStroke ) { m_strokeRows = aDoStroke; }
     bool StrokeRows() const              { return m_strokeRows; }
 
-    void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;
+    void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction, RECURSE_MODE aMode ) override;
 
     bool operator<( const SCH_ITEM& aItem ) const override;
 

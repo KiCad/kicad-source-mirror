@@ -69,12 +69,6 @@ enum ZONE_LAYER_OVERRIDE
     ZLO_FORCE_NO_ZONE_CONNECTION
 };
 
-enum RECURSE_MODE
-{
-    RECURSE,
-    NO_RECURSE,
-};
-
 /**
  * A base class for any item which can be embedded within the #BOARD container class, and
  * therefore instances of derived classes should only be found in Pcbnew or other programs

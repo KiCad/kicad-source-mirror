@@ -378,7 +378,7 @@ public:
      */
     void AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo ) override;
 
-    void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;
+    void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction, RECURSE_MODE aMode ) override;
 
     /**
      * Resolve any references to system tokens supported by the symbol.

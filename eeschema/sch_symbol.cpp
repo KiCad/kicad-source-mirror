@@ -1083,7 +1083,7 @@ void SCH_SYMBOL::SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT&
 }
 
 
-void SCH_SYMBOL::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction )
+void SCH_SYMBOL::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction, RECURSE_MODE aMode )
 {
     for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
         aFunction( pin.get() );

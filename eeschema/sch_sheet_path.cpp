@@ -978,7 +978,8 @@ SCH_ITEM* SCH_SHEET_PATH::GetItem( const KIID& aID ) const
                 {
                     if( aChild->m_Uuid == aID )
                         childMatch = aChild;
-                } );
+                },
+                RECURSE_MODE::NO_RECURSE );
 
         if( childMatch )
             return childMatch;
@@ -1002,7 +1003,8 @@ void SCH_SHEET_LIST::FillItemMap( std::map<KIID, EDA_ITEM*>& aMap )
                     [&]( SCH_ITEM* aChild )
                     {
                         aMap[ aChild->m_Uuid ] = aChild;
-                    } );
+                    },
+                    RECURSE_MODE::NO_RECURSE );
         }
     }
 }

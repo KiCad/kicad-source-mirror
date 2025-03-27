@@ -245,7 +245,7 @@ bool SCH_TABLE::operator<( const SCH_ITEM& aItem ) const
 }
 
 
-void SCH_TABLE::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction )
+void SCH_TABLE::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction, RECURSE_MODE aMode )
 {
     for( SCH_TABLECELL* cell : m_cells )
         aFunction( cell );

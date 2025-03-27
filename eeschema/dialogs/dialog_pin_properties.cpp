@@ -146,7 +146,8 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, SCH_PIN
     m_dummyParent->RunOnChildren( [&]( SCH_ITEM* child )
                                   {
                                       child->SetUnit( 1 );
-                                  } );
+                                  },
+                                  RECURSE_MODE::NO_RECURSE );
 
     m_dummyPin = new SCH_PIN( *m_pin );
     m_dummyPin->SetUnit( 2 );

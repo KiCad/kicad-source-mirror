@@ -1156,7 +1156,7 @@ INSPECT_RESULT SCH_SHEET::Visit( INSPECTOR aInspector, void* testData,
 }
 
 
-void SCH_SHEET::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction )
+void SCH_SHEET::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction, RECURSE_MODE aMode )
 {
     for( SCH_FIELD& field : m_fields )
         aFunction( &field );

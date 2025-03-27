@@ -281,7 +281,7 @@ public:
     bool HasCachedDriverName() const override;
     const wxString& GetCachedDriverName() const override;
 
-    void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;
+    void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction, RECURSE_MODE aMode ) override;
 
     INSPECT_RESULT Visit( INSPECTOR inspector, void* testData,
                           const std::vector<KICAD_T>& scanTypes ) override;

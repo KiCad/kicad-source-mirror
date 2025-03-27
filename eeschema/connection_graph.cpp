@@ -478,7 +478,8 @@ CONNECTION_SUBGRAPH::GetNetclassesForDriver( SCH_ITEM* aItem ) const
                             foundNetclasses.push_back( { netclass, aItem } );
                     }
                 }
-            } );
+            },
+            RECURSE_MODE::NO_RECURSE );
 
     std::sort(
             foundNetclasses.begin(), foundNetclasses.end(),
