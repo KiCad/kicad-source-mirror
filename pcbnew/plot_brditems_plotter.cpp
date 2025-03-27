@@ -121,6 +121,8 @@ void BRDITEMS_PLOTTER::PlotPadNumber( const PAD* aPad, const COLOR4D& aColor )
 
     TEXT_ATTRIBUTES textAttrs;
 
+    textAttrs.m_Mirrored = m_plotter->GetPlotMirrored();
+
     if( padsize.x < ( padsize.y * 0.95 ) )
     {
         textAttrs.m_Angle = ANGLE_90;
