@@ -263,7 +263,8 @@ void BOARD::IncrementTimeStamp()
         || !m_LayerExpressionCache.empty()
         || !m_ZoneBBoxCache.empty()
         || m_CopperItemRTreeCache
-        || m_maxClearanceValue.has_value() )
+        || m_maxClearanceValue.has_value()
+        || !m_itemByIdCache.empty() )
     {
         std::unique_lock<std::shared_mutex> writeLock( m_CachesMutex );
 
@@ -288,6 +289,8 @@ void BOARD::IncrementTimeStamp()
         m_CopperZoneRTreeCache.clear();
 
         m_maxClearanceValue.reset();
+
+        m_itemByIdCache.clear();
     }
 }
 
@@ -1469,7 +1472,6 @@ void BOARD::DeleteAllFootprints()
 {
     for( FOOTPRINT* footprint : m_footprints )
     {
-        m_itemByIdCache.erase( footprint->m_Uuid );
         delete footprint;
     }
 
@@ -1482,7 +1484,6 @@ void BOARD::DetachAllFootprints()
 {
     for( FOOTPRINT* footprint : m_footprints )
     {
-        m_itemByIdCache.erase( footprint->m_Uuid );
         footprint->SetParent( nullptr );
     }
 
