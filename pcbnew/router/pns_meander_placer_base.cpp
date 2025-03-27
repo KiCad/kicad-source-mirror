@@ -321,60 +321,10 @@ VECTOR2I MEANDER_PLACER_BASE::getSnappedStartPoint( LINKED_ITEM* aStartItem, VEC
 
 long long int MEANDER_PLACER_BASE::lineLength( const ITEM_SET& aLine, const SOLID* aStartPad, const SOLID* aEndPad ) const
 {
-    long long int total = 0;
-
     if( aLine.Empty() )
         return 0;
 
-    const ITEM* start_item = aLine[0];
-    const ITEM* end_item = aLine[aLine.Size() - 1];
-    bool start_via = false;
-    bool end_via = false;
-
-
-    /**
-     * If there is a start pad but the pad's layers do not overlap the first track layer, then there must be a
-     * fanout via on the line.  If there isn't, we still need to have the via back to the pad, so count the distance
-     * in the line tuning
-     */
-    start_via = aStartPad && ( !aStartPad->LayersOverlap( start_item ) );
-    end_via = aEndPad && ( !aEndPad->LayersOverlap( end_item ) );
-
-    for( int idx = 0; idx < aLine.Size(); idx++ )
-    {
-        const ITEM* item = aLine[idx];
-
-        if( const LINE* l = dyn_cast<const LINE*>( item ) )
-        {
-            total += l->CLine().Length();
-        }
-        else if( item->OfKind( ITEM::VIA_T ) && idx > 0 && idx < aLine.Size() - 1 )
-        {
-            int layerPrev = aLine[idx - 1]->Layer();
-            int layerNext = aLine[idx + 1]->Layer();
-
-            if( layerPrev != layerNext )
-                total += m_router->GetInterface()->StackupHeight( layerPrev, layerNext );
-        }
-    }
-
-    if( start_via )
-    {
-        int layerPrev = aStartPad->Layer();
-        int layerNext = start_item->Layer();
-
-        total += m_router->GetInterface()->StackupHeight( layerPrev, layerNext );
-    }
-
-    if( end_via )
-    {
-        int layerPrev = end_item->Layer();
-        int layerNext = aEndPad->Layer();
-
-        total += m_router->GetInterface()->StackupHeight( layerPrev, layerNext );
-    }
-
-    return total;
+    ROUTER_IFACE* iface = Router()->GetInterface();
+    return iface->CalculateRoutedPathLength( aLine, aStartPad, aEndPad );
 }
-
 }

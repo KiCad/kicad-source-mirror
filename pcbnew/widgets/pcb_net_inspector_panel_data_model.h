@@ -152,7 +152,7 @@ public:
         m_via_count -= aValue;
     }
 
-    uint64_t GetViaLength() const { return m_via_length; }
+    int64_t GetViaLength() const { return m_via_length; }
 
     bool ViaLengthChanged() const { return m_column_changed[COLUMN_VIA_LENGTH]; }
 
@@ -174,7 +174,7 @@ public:
         m_via_length += aValue;
     }
 
-    void SubViaLength( uint64_t aValue )
+    void SubViaLength( int64_t aValue )
     {
         if( m_parent )
             m_parent->SubViaLength( aValue );
@@ -183,9 +183,9 @@ public:
         m_via_length -= aValue;
     }
 
-    uint64_t GetBoardWireLength() const
+    int64_t GetBoardWireLength() const
     {
-        uint64_t retval = 0;
+        int64_t retval = 0;
 
         for( auto& [layer, length] : m_layer_wire_length )
             retval += length;
@@ -193,7 +193,7 @@ public:
         return retval;
     }
 
-    uint64_t GetLayerWireLength( PCB_LAYER_ID aLayer ) const
+    int64_t GetLayerWireLength( PCB_LAYER_ID aLayer ) const
     {
         auto it = m_layer_wire_length.find( aLayer );
         return it != m_layer_wire_length.end() ? it->second : 0;
@@ -201,7 +201,7 @@ public:
 
     bool BoardWireLengthChanged() const { return m_column_changed[COLUMN_BOARD_LENGTH]; }
 
-    void SetLayerWireLength( const uint64_t aValue, PCB_LAYER_ID aLayer )
+    void SetLayerWireLength( const int64_t aValue, PCB_LAYER_ID aLayer )
     {
         auto it = m_layer_wire_length.find( aLayer );
 
@@ -219,14 +219,23 @@ public:
         length = aValue;
     }
 
-    std::map<PCB_LAYER_ID, uint64_t> GetLayerWireLength() const { return m_layer_wire_length; }
+    std::map<PCB_LAYER_ID, int64_t> GetLayerWireLengths() const { return m_layer_wire_length; }
 
-    void SetLayerWireLength( const std::map<PCB_LAYER_ID, uint64_t>& aValue )
+    void SetLayerWireLengths( const std::map<PCB_LAYER_ID, int64_t>& aValue )
     {
+        if( m_parent )
+        {
+            for( auto& [oldLayer, oldLength] : m_layer_wire_length )
+                m_parent->SubLayerWireLength( oldLength, oldLayer );
+
+            for( auto& [newLayer, newLength] : aValue )
+                m_parent->AddLayerWireLength( newLength, newLayer );
+        }
+
         m_layer_wire_length = aValue;
     }
 
-    void AddLayerWireLength( const uint64_t aValue, PCB_LAYER_ID aLayer )
+    void AddLayerWireLength( const int64_t aValue, PCB_LAYER_ID aLayer )
     {
         if( m_parent )
             m_parent->AddLayerWireLength( aValue, aLayer );
@@ -235,7 +244,7 @@ public:
         m_layer_wire_length[aLayer] += aValue;
     }
 
-    void SubLayerWireLength( const uint64_t aValue, PCB_LAYER_ID aLayer )
+    void SubLayerWireLength( const int64_t aValue, PCB_LAYER_ID aLayer )
     {
         if( m_parent )
             m_parent->SubLayerWireLength( aValue, aLayer );
@@ -244,11 +253,11 @@ public:
         m_layer_wire_length[aLayer] -= aValue;
     }
 
-    uint64_t GetPadDieLength() const { return m_pad_die_length; }
+    int64_t GetPadDieLength() const { return m_pad_die_length; }
 
     bool PadDieLengthChanged() const { return m_column_changed[COLUMN_PAD_DIE_LENGTH]; }
 
-    void SetPadDieLength( uint64_t aValue )
+    void SetPadDieLength( int64_t aValue )
     {
         if( m_parent )
             m_parent->SetPadDieLength( m_parent->GetPadDieLength() - m_pad_die_length + aValue );
@@ -257,7 +266,7 @@ public:
         m_pad_die_length = aValue;
     }
 
-    void AddPadDieLength( uint64_t aValue )
+    void AddPadDieLength( int64_t aValue )
     {
         if( m_parent )
             m_parent->AddPadDieLength( aValue );
@@ -266,7 +275,7 @@ public:
         m_pad_die_length += aValue;
     }
 
-    void SubPadDieLength( uint64_t aValue )
+    void SubPadDieLength( int64_t aValue )
     {
         if( m_parent )
             m_parent->SubPadDieLength( aValue );
@@ -334,10 +343,10 @@ private:
     NETINFO_ITEM* m_net = nullptr;
     unsigned int  m_pad_count = 0;
     unsigned int  m_via_count = 0;
-    uint64_t      m_via_length = 0;
-    uint64_t      m_pad_die_length = 0;
+    int64_t       m_via_length = 0;
+    int64_t       m_pad_die_length = 0;
 
-    std::map<PCB_LAYER_ID, uint64_t> m_layer_wire_length{};
+    std::map<PCB_LAYER_ID, int64_t> m_layer_wire_length{};
 
     // Dirty bits to record when some attribute has changed, in order to avoid unnecessary sort
     // operations.
@@ -514,7 +523,7 @@ public:
         }
 
         // Then add any netclass groups required by this item
-        if( m_parent.m_group_by_netclass && !groupMatched )
+        if( m_parent.m_groupByNetclass && !groupMatched )
         {
             LIST_ITEM_ITER groups_begin = m_items.begin();
             LIST_ITEM_ITER groups_end = std::find_if_not( m_items.begin(), m_items.end(),
@@ -544,7 +553,7 @@ public:
         return { new_iter };
     }
 
-    void addItems( std::vector<std::unique_ptr<LIST_ITEM>> aItems )
+    void addItems( std::vector<std::unique_ptr<LIST_ITEM>>& aItems )
     {
         m_items.reserve( m_items.size() + aItems.size() );
 
@@ -569,7 +578,7 @@ public:
         {
             ItemChanged( wxDataViewItem( parent ) );
 
-            if( m_parent.m_group_by_netclass && parent != nullptr && parent->ChildrenCount() == 0 )
+            if( m_parent.m_groupByNetclass && parent != nullptr && parent->ChildrenCount() == 0 )
             {
                 auto p = std::find_if( m_items.begin(), m_items.end(),
                                        [&]( std::unique_ptr<LIST_ITEM>& x )
@@ -604,7 +613,7 @@ public:
             std::unique_ptr<LIST_ITEM>& group = m_items.emplace_back( std::make_unique<LIST_ITEM>(
                     groupId, rule->GetPattern(), LIST_ITEM::GROUP_TYPE::USER_DEFINED ) );
             m_custom_group_map[ rule->GetPattern() ] = group.get();
-            group->SetLayerCount( m_parent.m_brd->GetCopperLayerCount() );
+            group->SetLayerCount( m_parent.m_board->GetCopperLayerCount() );
             ItemAdded( wxDataViewItem( group->Parent() ), wxDataViewItem( group.get() ) );
             ++groupId;
         }
@@ -750,7 +759,7 @@ protected:
         }
     }
 
-    static int compareUInt( uint64_t aValue1, uint64_t aValue2, bool aAsc )
+    static int compareUInt( int64_t aValue1, int64_t aValue2, bool aAsc )
     {
         if( aAsc )
             return aValue1 < aValue2 ? -1 : 1;

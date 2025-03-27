@@ -33,6 +33,7 @@
 #include <convert_shape_list_to_polygon.h> // for OUTLINE_ERROR_HANDLER
 #include <hash.h>
 #include <layer_ids.h>
+#include <length_calculation.h>
 #include <lset.h>
 #include <netinfo.h>
 #include <pcb_item_containers.h>
@@ -1305,6 +1306,11 @@ public:
     void EmbedFonts() override;
 
     /**
+     * Returns the track length calculator
+     */
+    LENGTH_CALCULATION* GetLengthCalculation() const { return m_lengthCalc.get(); }
+
+    /**
      * Gets the component class manager
      */
     COMPONENT_CLASS_MANAGER& GetComponentClassManager() { return *m_componentClassManager; }
@@ -1428,6 +1434,8 @@ private:
     bool                         m_embedFonts;
 
     std::unique_ptr<COMPONENT_CLASS_MANAGER> m_componentClassManager;
+
+    std::unique_ptr<LENGTH_CALCULATION> m_lengthCalc;
 };
 
 

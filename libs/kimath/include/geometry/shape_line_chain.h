@@ -409,10 +409,7 @@ public:
         return m_points[aIndex];
     }
 
-    const std::vector<VECTOR2I>& CPoints() const
-    {
-        return m_points;
-    }
+    const std::vector<VECTOR2I>& CPoints() const { return m_points; }
 
     /**
      * Return the last point in the line chain.

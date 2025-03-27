@@ -371,53 +371,7 @@ const ITEM_SET TOPOLOGY::AssembleTuningPath( ROUTER_IFACE* aRouterIface, ITEM* a
     if( !padA && !padB )
         return initialPath;
 
-    auto clipLineToPad =
-            []( SHAPE_LINE_CHAIN& aLine, PAD* aPad, PCB_LAYER_ID aLayer, bool aForward = true )
-            {
-                const auto& shape = aPad->GetEffectivePolygon( aLayer, ERROR_INSIDE );
-
-                int start = aForward ? 0 : aLine.PointCount() - 1;
-                int delta = aForward ? 1 : -1;
-
-                // Skip the "first" (or last) vertex, we already know it's contained in the pad
-                int clip = start;
-
-                for( int vertex = start + delta;
-                     aForward ? vertex < aLine.PointCount() : vertex >= 0;
-                     vertex += delta )
-                {
-                    SEG seg( aLine.GetPoint( vertex ), aLine.GetPoint( vertex - delta ) );
-
-                    bool containsA = shape->Contains( seg.A );
-                    bool containsB = shape->Contains( seg.B );
-
-                    if( containsA && containsB )
-                    {
-                        // Whole segment is inside: clip out this segment
-                        clip = vertex;
-                    }
-                    else if( containsB )
-                    {
-                        // Only one point inside: Find the intersection
-                        VECTOR2I loc;
-
-                        if( shape->Collide( seg, 0, nullptr, &loc ) )
-                        {
-                            aLine.Replace( vertex - delta, vertex - delta, loc );
-                        }
-                    }
-                }
-
-                if( !aForward && clip < start )
-                    aLine.Remove( clip + 1, start );
-                else if( clip > start )
-                    aLine.Remove( start, clip - 1 );
-
-                // Now connect the dots
-                aLine.Insert( aForward ? 0 : aLine.PointCount(), aPad->GetPosition() );
-            };
-
-    auto processPad = [&]( const JOINT* aJoint, PAD* aPad, int aLayer )
+    auto processPad = [&]( PAD* aPad, int aLayer )
     {
         for( int idx = 0; idx < initialPath.Size(); idx++ )
         {
@@ -425,32 +379,18 @@ const ITEM_SET TOPOLOGY::AssembleTuningPath( ROUTER_IFACE* aRouterIface, ITEM* a
                 continue;
 
             LINE*        line = static_cast<LINE*>( initialPath[idx] );
-            PCB_LAYER_ID pcbLayer = aRouterIface->GetBoardLayerFromPNSLayer( line->Layer() );
+            SHAPE_LINE_CHAIN&  slc = line->Line();
+            const PCB_LAYER_ID pcbLayer = aRouterIface->GetBoardLayerFromPNSLayer( line->Layer() );
 
-            if( !aPad->FlashLayer( pcbLayer ) )
-                continue;
-
-            const std::vector<VECTOR2I>& points = line->CLine().CPoints();
-
-            if( points.front() != aJoint->Pos() && points.back() != aJoint->Pos() )
-                continue;
-
-            const auto& shape = aPad->GetEffectivePolygon( pcbLayer, ERROR_INSIDE );
-
-            SHAPE_LINE_CHAIN& slc = line->Line();
-
-            if( shape->Contains( slc.CPoint( 0 ) ) )
-                clipLineToPad( slc, aPad, pcbLayer, true );
-            else if( shape->Contains( slc.CPoint( -1 ) ) )
-                clipLineToPad( slc, aPad, pcbLayer, false );
+            LENGTH_CALCULATION::OptimiseTraceInPad( slc, aPad, pcbLayer );
         }
     };
 
     if( padA )
-        processPad( joints.first, padA, joints.first->Layer() );
+        processPad( padA, joints.first->Layer() );
 
     if( padB )
-        processPad( joints.second, padB, joints.second->Layer() );
+        processPad( padB, joints.second->Layer() );
 
     return initialPath;
 }

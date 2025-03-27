@@ -345,20 +345,25 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                 return true;
             } );
 
+    LENGTH_CALCULATION* calc = m_board->GetLengthCalculation();
+
     std::map< DRC_RULE*, std::vector<CONNECTION> > matches;
 
-    for( const std::pair< DRC_RULE* const, std::set<BOARD_CONNECTED_ITEM*> >& it : itemSets )
+    for( const auto& [rule, ruleItems] : itemSets )
     {
         std::map<int, std::set<BOARD_CONNECTED_ITEM*> > netMap;
 
-        for( BOARD_CONNECTED_ITEM* citem : it.second )
-            netMap[ citem->GetNetCode() ].insert( citem );
+        for( BOARD_CONNECTED_ITEM* item : ruleItems )
+            netMap[item->GetNetCode()].insert( item );
 
-        for( const std::pair< const int, std::set<BOARD_CONNECTED_ITEM*> >& nitem : netMap )
+        for( const auto& [netCode, netItems] : netMap )
         {
+            std::vector<LENGTH_CALCULATION_ITEM> lengthItems;
+            lengthItems.reserve( netItems.size() );
+
             CONNECTION ent;
-            ent.items = nitem.second;
-            ent.netcode = nitem.first;
+            ent.items = netItems;
+            ent.netcode = netCode;
             ent.netname = m_board->GetNetInfo().GetNetItem( ent.netcode )->GetNetname();
             ent.netinfo = m_board->GetNetInfo().GetNetItem( ent.netcode );
 
@@ -369,43 +374,24 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
             ent.fromItem = nullptr;
             ent.toItem = nullptr;
 
-            for( BOARD_CONNECTED_ITEM* citem : nitem.second )
+            for( BOARD_CONNECTED_ITEM* item : netItems )
             {
-                if( citem->Type() == PCB_VIA_T )
-                {
-                    const BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-                    const BOARD_STACKUP&         stackup = bds.GetStackupDescriptor();
+                LENGTH_CALCULATION_ITEM lengthItem = calc->GetLengthCalculationItem( item );
 
-                    ent.viaCount++;
-
-                    if( bds.m_UseHeightForLengthCalcs )
-                    {
-                        const PCB_VIA* v = static_cast<PCB_VIA*>( citem );
-                        PCB_LAYER_ID   topmost;
-                        PCB_LAYER_ID   bottommost;
-
-                        v->GetOutermostConnectedLayers( &topmost, &bottommost );
-
-                        if( topmost != UNDEFINED_LAYER && topmost != bottommost )
-                            ent.totalVia += stackup.GetLayerDistance( topmost, bottommost );
-                    }
-                }
-                else if( citem->Type() == PCB_TRACE_T )
-                {
-                    ent.totalRoute += static_cast<PCB_TRACK*>( citem )->GetLength();
-                }
-                else if ( citem->Type() == PCB_ARC_T )
-                {
-                    ent.totalRoute += static_cast<PCB_ARC*>( citem )->GetLength();
-                }
-                else if( citem->Type() == PCB_PAD_T )
-                {
-                    ent.totalPadToDie += static_cast<PAD*>( citem )->GetPadToDieLength();
-                }
+                if( lengthItem.Type() != LENGTH_CALCULATION_ITEM::TYPE::UNKNOWN )
+                    lengthItems.emplace_back( lengthItem );
             }
 
+            constexpr PATH_OPTIMISATIONS opts = {
+                .OptimiseViaLayers = true, .MergeTracks = true, .OptimiseTracesInPads = true, .InferViaInPad = false
+            };
+            LENGTH_DETAILS details = calc->CalculateLengthDetails( lengthItems, opts );
+            ent.viaCount = details.NumVias;
+            ent.totalVia = details.ViaLength;
+            ent.totalRoute = static_cast<double>( details.TrackLength );
+            ent.totalPadToDie = details.PadToDieLength;
             ent.total = ent.totalRoute + ent.totalVia + ent.totalPadToDie;
-            ent.matchingRule = it.first;
+            ent.matchingRule = rule;
 
             // fixme: doesn't seem to work ;-)
             auto ftPath = ftCache->QueryFromToPath( ent.items );
@@ -421,7 +407,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
             }
 
             m_report.Add( ent );
-            matches[ it.first ].push_back(ent);
+            matches[rule].push_back( ent );
         }
     }
 
@@ -452,19 +438,14 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
 
             for( const DRC_LENGTH_REPORT::ENTRY& ent : matchedConnections )
             {
-                reportAux(wxString::Format( wxT( " - net: %s, from: %s, to: %s, "
-                                                 "%d matching items, "
-                                                 "total: %s (tracks: %s, vias: %s, pad-to-die: %s), "
-                                                 "vias: %d" ),
-                                            ent.netname,
-                                            ent.from,
-                                            ent.to,
-                                            (int) ent.items.size(),
-                                            MessageTextFromValue( ent.total ),
-                                            MessageTextFromValue( ent.totalRoute ),
-                                            MessageTextFromValue( ent.totalVia ),
-                                            MessageTextFromValue( ent.totalPadToDie ),
-                                            ent.viaCount ) );
+                reportAux( wxString::Format( wxT( " - net: %s, from: %s, to: %s, "
+                                                  "%d matching items, "
+                                                  "total: %s (tracks: %s, vias: %s, pad-to-die: %s), "
+                                                  "vias: %d" ),
+                                             ent.netname, ent.from, ent.to, static_cast<int>( ent.items.size() ),
+                                             MessageTextFromValue( ent.total ), MessageTextFromValue( ent.totalRoute ),
+                                             MessageTextFromValue( ent.totalVia ),
+                                             MessageTextFromValue( ent.totalPadToDie ), ent.viaCount ) );
             }
 
 

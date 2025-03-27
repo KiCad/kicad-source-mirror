@@ -75,12 +75,11 @@ VECTOR2I BOARD_ITEM::ZeroOffset( 0, 0 );
 
 BOARD::BOARD() :
         BOARD_ITEM_CONTAINER( (BOARD_ITEM*) nullptr, PCB_T ), m_LegacyDesignSettingsLoaded( false ),
-        m_LegacyCopperEdgeClearanceLoaded( false ), m_LegacyNetclassesLoaded( false ),
-        m_boardUse( BOARD_USE::NORMAL ), m_timeStamp( 1 ), m_paper( PAGE_INFO::A4 ),
-        m_project( nullptr ), m_userUnits( EDA_UNITS::MM ),
-        m_designSettings( new BOARD_DESIGN_SETTINGS( nullptr, "board.design_settings" ) ),
-        m_NetInfo( this ), m_embedFonts( false ),
-        m_componentClassManager( std::make_unique<COMPONENT_CLASS_MANAGER>( this ) )
+        m_LegacyCopperEdgeClearanceLoaded( false ), m_LegacyNetclassesLoaded( false ), m_boardUse( BOARD_USE::NORMAL ),
+        m_timeStamp( 1 ), m_paper( PAGE_INFO::A4 ), m_project( nullptr ), m_userUnits( EDA_UNITS::MM ),
+        m_designSettings( new BOARD_DESIGN_SETTINGS( nullptr, "board.design_settings" ) ), m_NetInfo( this ),
+        m_embedFonts( false ), m_componentClassManager( std::make_unique<COMPONENT_CLASS_MANAGER>( this ) ),
+        m_lengthCalc( std::make_unique<LENGTH_CALCULATION>( this ) )
 {
     // A too small value do not allow connecting 2 shapes (i.e. segments) not exactly connected
     // A too large value do not allow safely connecting 2 shapes like very short segments.
@@ -2399,82 +2398,24 @@ BOARD_STACKUP BOARD::GetStackupOrDefault() const
 
 std::tuple<int, double, double> BOARD::GetTrackLength( const PCB_TRACK& aTrack ) const
 {
-    int    count = 0;
-    double length = 0.0;
-    double package_length = 0.0;
+    auto connectivity = GetBoard()->GetConnectivity();
 
-    auto           connectivity = GetBoard()->GetConnectivity();
-    BOARD_STACKUP& stackup      = GetDesignSettings().GetStackupDescriptor();
-    bool           useHeight    = GetDesignSettings().m_UseHeightForLengthCalcs;
+    std::vector<LENGTH_CALCULATION_ITEM> items;
 
-    for( BOARD_CONNECTED_ITEM* item : connectivity->GetConnectedItems( &aTrack, EXCLUDE_ZONES ) )
+    for( BOARD_CONNECTED_ITEM* boardItem : connectivity->GetConnectedItems( &aTrack, EXCLUDE_ZONES ) )
     {
-        count++;
+        LENGTH_CALCULATION_ITEM item = GetLengthCalculation()->GetLengthCalculationItem( boardItem );
 
-        if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item ) )
-        {
-            if( track->Type() == PCB_VIA_T && useHeight )
-            {
-                PCB_VIA* via = static_cast<PCB_VIA*>( track );
-                length += stackup.GetLayerDistance( via->TopLayer(), via->BottomLayer() );
-                continue;
-            }
-            else if( track->Type() == PCB_ARC_T )
-            {
-                // Note: we don't apply the clip-to-pad optimization if an arc ends in a pad
-                // Room for future improvement.
-                length += track->GetLength();
-                continue;
-            }
-
-            bool   inPad = false;
-            SEG    trackSeg( track->GetStart(), track->GetEnd() );
-            double segLen      = trackSeg.Length();
-            double segInPadLen = 0;
-
-            for( auto pad_it : connectivity->GetConnectedPads( item ) )
-            {
-                PAD* pad = static_cast<PAD*>( pad_it );
-
-                bool hitStart = pad->HitTest( track->GetStart(), track->GetWidth() / 2 );
-                bool hitEnd   = pad->HitTest( track->GetEnd(), track->GetWidth() / 2 );
-
-                if( hitStart && hitEnd )
-                {
-                    inPad = true;
-                    break;
-                }
-                else if( hitStart || hitEnd )
-                {
-                    VECTOR2I loc;
-
-                    // We may not collide even if we passed the bounding-box hit test
-                    if( pad->GetEffectivePolygon( track->GetLayer(), ERROR_INSIDE )->Collide( trackSeg, 0, nullptr, &loc ) )
-                    {
-                        // Part 1: length of the seg to the intersection with the pad poly
-                        if( hitStart )
-                            trackSeg.A = loc;
-                        else
-                            trackSeg.B = loc;
-
-                        segLen = trackSeg.Length();
-
-                        // Part 2: length from the intersection to the pad anchor
-                        segInPadLen += ( loc - pad->GetPosition() ).EuclideanNorm();
-                    }
-                }
-            }
-
-            if( !inPad )
-                length += segLen + segInPadLen;
-        }
-        else if( PAD* pad = dynamic_cast<PAD*>( item ) )
-        {
-            package_length += pad->GetPadToDieLength();
-        }
+        if( item.Type() != LENGTH_CALCULATION_ITEM::TYPE::UNKNOWN )
+            items.push_back( item );
     }
 
-    return std::make_tuple( count, length, package_length );
+    constexpr PATH_OPTIMISATIONS opts = {
+        .OptimiseViaLayers = true, .MergeTracks = true, .OptimiseTracesInPads = true, .InferViaInPad = false
+    };
+    LENGTH_DETAILS details = GetLengthCalculation()->CalculateLengthDetails( items, opts );
+
+    return std::make_tuple( items.size(), details.TrackLength + details.ViaLength, details.PadToDieLength );
 }
 
 

@@ -117,6 +117,8 @@ enum DRAG_MODE
     virtual RULE_RESOLVER* GetRuleResolver() = 0;
     virtual DEBUG_DECORATOR* GetDebugDecorator() = 0;
 
+    virtual long long int CalculateRoutedPathLength( const ITEM_SET& aLine, const SOLID* aStartPad,
+                                                     const SOLID* aEndPad ) = 0;
     virtual PCB_LAYER_ID GetBoardLayerFromPNSLayer( int aLayer ) const = 0;
     virtual int GetPNSLayerFromBoardLayer( PCB_LAYER_ID aLayer ) const = 0;
 };

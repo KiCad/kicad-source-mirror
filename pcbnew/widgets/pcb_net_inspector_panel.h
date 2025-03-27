@@ -37,25 +37,10 @@ class PCB_TRACK;
 class EDA_COMBINED_MATCHER;
 
 /**
- * Net inspection panel for pcbnew
+ * PCB net inspection panel
  *
- * Provides a read-only view of net information, such as routed lengths. Data is updated after
- * every change of board items. Note that there is not always a 1:1 relationship between Nets and
- * displayed items in the inspector.. This can be the case where there is a constraint which
- * selects sub-sections of nets, for example consider a netclass used for a fly-by-routing
- * adddress bus. There could be two constraints, e.g.:
- * <p>
- *      FROM/TO=IC1-IC2, Netclass=DDR_ADDR, Net=ADDR_0
- *      FROM/TO=IC2-IC3, Netclass=DDR_ADDR, Net=ADDR_0
- * <p>
- * In this instance, a single address net within the DDR_ADDR netclass could have three entries in
- * the inspector, each tracking a different set of net statistics:
- * <p>
- *      1. The whole net
- *      2. IC1-IC2
- *      3. IC2-IC3
- * <p>
- * In this instance, all sub-nets as a result of a constraint will be grouped by the constraint.
+ * Provides a read-only view of net information, such as routed lengths. Data is updated after every change of board
+ * items.
  */
 class PCB_NET_INSPECTOR_PANEL : public NET_INSPECTOR_PANEL, public BOARD_LISTENER
 {
@@ -68,50 +53,41 @@ public:
      *
      * Called by PCB_EDIT_FRAME after displaying the Board Setup dialog
      */
-    virtual void OnParentSetupChanged() override;
+    void OnParentSetupChanged() override;
 
     /*
      * BOARD_LISTENER implementation
      */
-    virtual void OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardItem ) override;
-    virtual void OnBoardItemsAdded( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems ) override;
-    virtual void OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoardItem ) override;
-    virtual void OnBoardItemsRemoved( BOARD&                    aBoard,
-                                      std::vector<BOARD_ITEM*>& aBoardItems ) override;
-    virtual void OnBoardNetSettingsChanged( BOARD& aBoard ) override;
-    virtual void OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM* aBoardItem ) override;
-    virtual void OnBoardItemsChanged( BOARD&                    aBoard,
-                                      std::vector<BOARD_ITEM*>& aBoardItems ) override;
-    virtual void OnBoardHighlightNetChanged( BOARD& aBoard ) override;
-    virtual void OnBoardCompositeUpdate( BOARD& aBoard, std::vector<BOARD_ITEM*>& aAddedItems,
-                                         std::vector<BOARD_ITEM*>& aRemovedItems,
-                                         std::vector<BOARD_ITEM*>& aChangedItems ) override;
-    /**
-     * Update panel when board is changed
-     */
-    virtual void OnBoardChanged() override;
+    void OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardItem ) override;
+    void OnBoardItemsAdded( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems ) override;
+    void OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoardItem ) override;
+    void OnBoardItemsRemoved( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems ) override;
+    void OnBoardNetSettingsChanged( BOARD& aBoard ) override;
+    void OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM* aBoardItem ) override;
+    void OnBoardItemsChanged( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems ) override;
+    void OnBoardHighlightNetChanged( BOARD& aBoard ) override;
+    void OnBoardCompositeUpdate( BOARD& aBoard, std::vector<BOARD_ITEM*>& aAddedItems,
+                                 std::vector<BOARD_ITEM*>& aRemovedItems,
+                                 std::vector<BOARD_ITEM*>& aChangedItems ) override;
 
-    /**
-     * Prepare the panel when shown in the editor
-     */
-    virtual void OnShowPanel() override;
+    /// Update panel when board is changed
+    void OnBoardChanged() override;
 
-    /**
-     * Persist the net inspector configuration to project / global settings
-     */
-    virtual void SaveSettings() override;
+    /// Prepare the panel when shown in the editor
+    void OnShowPanel() override;
+
+    /// Persist the net inspector configuration to project / global settings
+    void SaveSettings() override;
 
 protected:
-    /**
-     * Reloads strings on an application language change
-     */
-    virtual void OnLanguageChangedImpl() override;
+    /// Reloads strings on an application language change
+    void OnLanguageChangedImpl() override;
 
     /*
      * UI events
      */
-    virtual void OnSearchTextChanged( wxCommandEvent& event ) override;
-    virtual void OnConfigButton( wxCommandEvent& event ) override;
+    void         OnSearchTextChanged( wxCommandEvent& event ) override;
+    void         OnConfigButton( wxCommandEvent& event ) override;
     void         OnExpandCollapseRow( wxCommandEvent& event );
     void         OnHeaderContextMenu( wxCommandEvent& event );
     void         OnNetsListContextMenu( wxDataViewEvent& event );
@@ -119,42 +95,36 @@ protected:
     void         OnColumnSorted( wxDataViewEvent& event );
 
 private:
+    /// Updates displayed statistics for the given nets
+    void updateNets( const std::vector<NETINFO_ITEM*>& aNets ) const;
+
+    /// Unified handling of added / deleted / modified board items
+    void updateBoardItems( const std::vector<BOARD_ITEM*>& aBoardItems );
+
     /*
-     * Helper methods for returning fornatted data
+     * Helper methods for returning formatted data
      */
-    wxString formatNetCode( const NETINFO_ITEM* aNet ) const;
-    wxString formatNetName( const NETINFO_ITEM* aNet ) const;
-    wxString formatCount( unsigned int aValue ) const;
+    static wxString formatNetCode( const NETINFO_ITEM* aNet );
+    static wxString formatNetName( const NETINFO_ITEM* aNet );
+    static wxString formatCount( unsigned int aValue );
     wxString formatLength( int64_t aValue ) const;
 
-    /**
-     * Generates a sub-menu for the show / hide columns submenu
-     */
+    /// Generates a sub-menu for the show / hide columns submenu
     void generateShowHideColumnMenu( wxMenu* target );
 
-    /**
-     * Filters connectivity items from a board update to remove those not related to
-     * net / track metrics
-     */
+    /// Fetches an ordered (by NetCode) list of all board connectivity items
     std::vector<CN_ITEM*> relevantConnectivityItems() const;
 
-    /**
-     * Filter to determine whether a board net should be included in the net inspector
-     */
+    /// Filter to determine whether a board net should be included in the net inspector
     bool netFilterMatches( NETINFO_ITEM* aNet, PANEL_NET_INSPECTOR_SETTINGS* cfg = nullptr ) const;
 
-    /**
-     * Updates the stored LIST_ITEMs for a given updated board net item
-     */
-    void updateNet( NETINFO_ITEM* aNet );
-
-    /**
-     * Calculates the length of a via from the board stackup
-     */
-    unsigned int calculateViaLength( const PCB_TRACK* ) const;
-
+    /// Rebuilds the net inspector list, removing all previous entries
     void buildNetsList( bool rebuildColumns = false );
+
+    /// Build the required columns in the net inspector grid
     void buildColumns();
+
+    /// Set sensible default column widths
     void setColumnWidths();
 
     /**
@@ -162,7 +132,7 @@ private:
      *
      * @param cfg the PANEL_NET_INSPECTOR_SETTINGS from which to read column widths
     */
-    void adjustListColumnSizes( PANEL_NET_INSPECTOR_SETTINGS* cfg );
+    void adjustListColumnSizes( PANEL_NET_INSPECTOR_SETTINGS* cfg ) const;
 
     /**
      * Sets the sort column in the grid to that showing the given model ID column
@@ -171,7 +141,7 @@ private:
      * @param sortOrderAsc True for ascending sort, False for descending sort
      * @returns true if the column was found
     */
-    bool restoreSortColumn( int sortingColumnId, bool sortOrderAsc );
+    bool restoreSortColumn( int sortingColumnId, bool sortOrderAsc ) const;
 
     /**
      * Fetches the displayed grid view column for the given model column ID
@@ -179,81 +149,84 @@ private:
      * @param columnId The ID (from column static IDs enum) to find
      * @returns Pointer to the wxDataViewColumn, or nullptr if not found
     */
-    wxDataViewColumn* getDisplayedColumnForModelField( int columnId );
+    wxDataViewColumn* getDisplayedColumnForModelField( int columnId ) const;
 
-    /**
-     * Generates a CSV report from currently disaplyed data
-     */
+    /// Generates a CSV report from currently disaplyed data
     void generateReport();
 
-    /**
-     * Highlight the currently selected net
-     */
+    /// Highlight the currently selected net
     void highlightSelectedNets();
 
+    /// Handle an application-level change of units
     void onUnitsChanged( wxCommandEvent& event );
-    void onSettingsMenu( wxCommandEvent& event );
+
+    /// Handle a net row(s) context menu selection
+    void onContextMenuSelection( wxCommandEvent& event );
+
+    /// Display a new row(s) context menu
     void onItemContextMenu( wxCommandEvent& event );
+
+    /// Adds a new user-specified net to the board
     void onAddNet();
+
+    /// Renames a selected net
     void onRenameSelectedNet();
+
+    /// Deletes a selected net
     void onDeleteSelectedNet();
-    void onRemoveSelectedGroup();
+
+    /// Adds a custom display grouping of nets
     void onAddGroup();
+
+    /// Removes a custom display grouping
+    void onRemoveSelectedGroup();
+
+    /// Clears highlighting from nets
     void onClearHighlighting();
 
-    /**
-     * Container class for a set of net data
-     */
+    /// Forward declaration: container class for a set of net data
     class LIST_ITEM;
 
     /**
-     * Ordered comparison of LIST_ITEMs by net code
-     */
+ * Calculates the length statistics for each given netcode
+ *
+ * @param aNetCodes is the list of netcodes to calculate statistics for. This must be sorted in ascending netcode order
+ * @param aIncludeZeroPadNets determines whether the results should include nets with no pads
+ * @returns a map of net code to net length detail objects
+*/
+    std::vector<std::unique_ptr<LIST_ITEM>> calculateNets( const std::vector<NETINFO_ITEM*>& aNetCodes,
+                                                           bool aIncludeZeroPadNets ) const;
+
+    /// Ordered comparison of LIST_ITEMs by net code
     struct LIST_ITEM_NETCODE_CMP_LESS;
 
-    /**
-     * Ordered comparison of LIST_ITEMs by group number
-     */
+    /// Ordered comparison of LIST_ITEMs by group number
     struct LIST_ITEM_GROUP_NUMBER_CMP_LESS;
 
     using LIST_ITEM_ITER = std::vector<std::unique_ptr<LIST_ITEM>>::iterator;
     using LIST_ITEM_CONST_ITER = std::vector<std::unique_ptr<LIST_ITEM>>::const_iterator;
 
-    /**
-     * Constructs a LIST_ITEM for storage in the data model from a board net item
-     */
-    std::unique_ptr<LIST_ITEM> buildNewItem( NETINFO_ITEM* aNet, unsigned int aPadCount,
-                                             const std::vector<CN_ITEM*>& aCNItems );
+    /// Refreshes displayed data for the given rows
+    void updateDisplayedRowValues( const std::optional<LIST_ITEM_ITER>& aRow ) const;
 
-    void updateDisplayedRowValues( const std::optional<LIST_ITEM_ITER>& aRow );
+    /// Parent BOARD
+    BOARD*          m_board = nullptr;
 
-    // special zero-netcode item. Unconnected pads etc might use different
-    // (dummy) NETINFO_ITEM. Redirect all of them to this item, which we get
-    // from the board object in buildNetsList.
-    NETINFO_ITEM* m_zero_netitem;
-
-    /*
-     * Current board and parent edit frame
-     */
-    BOARD*          m_brd = nullptr;
+    /// Owning edit frame
     PCB_EDIT_FRAME* m_frame = nullptr;
 
-    /**
-     * Data model which holds LIST_ITEMs
-     */
+    /// Data model which holds LIST_ITEMs
     class DATA_MODEL;
 
-    /*
-     * The bound data model to display
-     */
-    wxObjectDataPtr<DATA_MODEL> m_data_model;
+    /// The bound data model to display
+    wxObjectDataPtr<DATA_MODEL> m_dataModel;
     friend DATA_MODEL;
 
     /*
      * Status flags set during reporting and net rebuild operations
      */
-    bool m_in_reporting = false;
-    bool m_in_build_nets_list = false;
+    bool m_inReporting = false;
+    bool m_inBuildNetsList = false;
 
     /*
      * Status flags to indicate whether a board has been loaded in this control's
@@ -264,41 +237,36 @@ private:
      * settings calculated from an empty board. We do not save settings until the first
      * board load operation has occured.
      */
-    bool m_board_loaded = false;
-    bool m_board_loading = false;
+    bool m_boardLoaded = false;
+    bool m_boardLoading = false;
 
     /*
      * Flags to indicate whether certain events should be disabled during programmatic updates
      */
-    bool m_row_expanding = false;
-    bool m_highlighting_nets = false;
+    bool m_rowExpanding = false;
+    bool m_highlightingNets = false;
 
     /*
      * Configuration flags - these are all persisted to the project storage
      */
-    bool m_filter_by_net_name = true;
-    bool m_filter_by_netclass = true;
-    bool m_show_zero_pad_nets = false;
-    bool m_show_unconnected_nets = false;
-    bool m_group_by_netclass = false;
-    bool m_group_by_constraint = false;
+    bool m_filterByNetName = true;
+    bool m_filterByNetclass = true;
+    bool m_showZeroPadNets = false;
+    bool m_showUnconnectedNets = false;
+    bool m_groupByNetclass = false;
+    bool m_groupByConstraint = false;
 
-    int m_num_copper_layers = 0;
-
+    /// Custom net grouping rules
     std::vector<std::unique_ptr<EDA_COMBINED_MATCHER>> m_custom_group_rules;
 
-    /**
-     * CSV output control
-     */
+    /// CSV output control
     enum class CSV_COLUMN_DESC : int
     {
         CSV_NONE = 0,
         CSV_QUOTE = 1 << 0
     };
 
-    /**
-     * Column metadata
-     */
+    /// Column metadata
     struct COLUMN_DESC
     {
         COLUMN_DESC( unsigned aNum, PCB_LAYER_ID aLayer, const wxString& aDisp,
@@ -324,9 +292,7 @@ private:
      */
     std::vector<COLUMN_DESC> m_columns;
 
-    /*
-     * Column static IDs. Used to refer to columns as use re-ordering can occur.
-     */
+    /// Column static IDs. Used to refer to columns as user re-ordering can occur
     enum
     {
         COLUMN_NAME = 0,
@@ -340,9 +306,7 @@ private:
         COLUMN_LAST_STATIC_COL = COLUMN_PAD_COUNT
     };
 
-    /*
-     * Popup menu item IDs
-     */
+    /// Popup menu item IDs
     enum POPUP_MENU_OPTIONS
     {
         ID_ADD_NET = ID_POPUP_MENU_START,

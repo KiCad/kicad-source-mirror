@@ -861,6 +861,8 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_editor_conditions.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_viewer_tools.cpp
 
+    ${CMAKE_SOURCE_DIR}/pcbnew/length_calculation.cpp
+
     widgets/net_selector.cpp
 )
 

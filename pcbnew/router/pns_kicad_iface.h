@@ -83,6 +83,8 @@ public:
 
     void SetDebugDecorator( PNS::DEBUG_DECORATOR* aDec );
 
+    long long int CalculateRoutedPathLength( const PNS::ITEM_SET& aLine, const PNS::SOLID* aStartPad,
+                                             const PNS::SOLID* aEndPad ) override;
     PCB_LAYER_ID GetBoardLayerFromPNSLayer( int aLayer ) const override;
     int GetPNSLayerFromBoardLayer( PCB_LAYER_ID aLayer ) const override;
 

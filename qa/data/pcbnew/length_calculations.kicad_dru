@@ -1,0 +1,31 @@
+(version 1)
+
+(rule "CASE_1"
+   (condition "A.hasNetclass('CASE_1')")
+   (constraint length (min 13.3345mm) (max 13.3555mm))
+)
+
+(rule "CASE_2"
+   (condition "A.hasNetclass('CASE_2')")
+   (constraint length (min 14.8795mm) (max 14.8805mm))
+)
+
+(rule "CASE_3"
+   (condition "A.hasNetclass('CASE_3')")
+   (constraint length (min 14.8795mm) (max 14.8805mm))
+)
+
+(rule "CASE_4"
+   (condition "A.hasNetclass('CASE_4')")
+   (constraint length (min 16.4245mm) (max 16.4250mm))
+)
+
+(rule "CASE_5"
+   (condition "A.hasNetclass('CASE_5')")
+   (constraint length (min 13.5470mm) (max 13.5480mm))
+)
+
+(rule "CASE_6"
+   (condition "A.hasNetclass('CASE_6')")
+   (constraint length (min 13.3345mm) (max 13.3555mm))
+)

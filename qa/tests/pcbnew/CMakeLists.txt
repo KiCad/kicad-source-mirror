@@ -68,6 +68,7 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_incorrect_text_mirror.cpp
     drc/test_drc_starved_thermal.cpp
     drc/test_drc_orientation.cpp
+    drc/test_drc_lengths.cpp
 
     pcb_io/altium/test_altium_rule_transformer.cpp
     pcb_io/altium/test_altium_pcblib_import.cpp

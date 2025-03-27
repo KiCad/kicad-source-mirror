@@ -301,7 +301,7 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_MinimumMarkerSeparationDistance = 0.15;
 
-    m_NetInspectorBulkUpdateOptimisationThreshold = 25;
+    m_NetInspectorBulkUpdateOptimisationThreshold = 100;
 
     m_ExcludeFromSimulationLineWidth = 25;
 
