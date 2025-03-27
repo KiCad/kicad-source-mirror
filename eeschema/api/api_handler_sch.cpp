@@ -264,7 +264,7 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
 
             if( SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( edaItem ) )
             {
-                schItem->SwapData( static_cast<SCH_ITEM*>( item.get() ) );
+                schItem->SwapItemData( static_cast<SCH_ITEM*>( item.get() ) );
                 schItem->Serialize( newItem );
                 commit->Modify( schItem );
             }
