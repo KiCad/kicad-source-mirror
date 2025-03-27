@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-24 12:07-0700\n"
-"PO-Revision-Date: 2025-03-27 04:58+0000\n"
+"PO-Revision-Date: 2025-03-27 13:55+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -3926,7 +3926,7 @@ msgstr ""
 #: common/dialogs/panel_common_settings.cpp:352
 #, c-format
 msgid "Default 'explorer.exe /n,/select,%F' for this OS."
-msgstr "当前操作系统默认: 'explorer.exe /n,/select,%F'"
+msgstr "当前操作系统默认: 'explorer.exe /n,/select,%F'。"
 
 #: common/dialogs/panel_common_settings.cpp:356
 msgid ""
@@ -6727,7 +6727,7 @@ msgstr "加载封装时出错:"
 msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
-msgstr "在封装库表文件的行 %2$d 中出现了重复的库名称 '%1$s'。"
+msgstr "在封装库表文件的第 %2$d 行中出现了重复的库名称 '%1$s'。"
 
 #: common/gestfich.cpp:248
 #, c-format
@@ -6869,15 +6869,15 @@ msgstr "将将引用 '%s' 指向更新至 '%s' 失败"
 
 #: common/git/git_pull_handler.cpp:325
 msgid "Failed to clean up repository state after fast-forward."
-msgstr ""
+msgstr "Fast-forward 后存储库状态清理失败。"
 
 #: common/git/git_pull_handler.cpp:334
 msgid "Failed to initialize revision walker."
-msgstr ""
+msgstr "修订遍历器初始化失败。"
 
 #: common/git/git_pull_handler.cpp:343
 msgid "Failed to push reference to revision walker."
-msgstr ""
+msgstr "向修订遍历器推送引用失败。"
 
 #: common/git/git_pull_handler.cpp:358
 #, c-format
@@ -6906,7 +6906,7 @@ msgstr "已添加"
 
 #: common/git/git_pull_handler.cpp:527
 msgid "Conflicts detected during rebase"
-msgstr ""
+msgstr "检测到变基冲突"
 
 #: common/git/git_push_handler.cpp:56
 msgid "Could not lookup remote"
@@ -16643,7 +16643,7 @@ msgstr "当前配置中未启用封装库 '%s'。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:927
 #, c-format
 msgid "Footprint '%s' not found in library '%s'."
-msgstr "在库 %2$s 中未找到封装 '%1$s'。"
+msgstr "在库 '%2$s' 中未找到封装 '%1$s'。"
 
 #: eeschema/erc/erc.cpp:1635
 #, c-format
@@ -38683,7 +38683,7 @@ msgid ""
 "<br>\n"
 "\n"
 msgstr ""
-"###「对译文如有疑问, 请以原文为准」\n"
+"###「对译文如有疑问, 请以英文版本为准 (将程序语言切换到英语)」\n"
 "### 顶层子句\n"
 "\n"
 "    (version 1)\n"
