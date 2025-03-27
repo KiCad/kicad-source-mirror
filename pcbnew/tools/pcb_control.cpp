@@ -24,6 +24,7 @@
  */
 
 #include "pcb_control.h"
+#include "convert_basic_shapes_to_polygon.h"
 
 #include <kiplatform/ui.h>
 #include <tools/edit_tool.h>
@@ -1873,7 +1874,7 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
                 PCB_LAYER_ID layer = overlap.CuStack().front();
 
                 constraint = drcEngine->EvalRules( CLEARANCE_CONSTRAINT, a, b, layer );
-                msgItems.emplace_back( _( "Resolved clearance" ),
+                msgItems.emplace_back( _( "Resolved Clearance" ),
                                        m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
 
                 std::shared_ptr<SHAPE> a_shape( a_conn->GetEffectiveShape( layer ) );
@@ -1883,8 +1884,8 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
                 if( actual_clearance > -1 && actual_clearance < std::numeric_limits<int>::max() )
                 {
-                    msgItems.emplace_back( _( "Actual clearance" ),
-                                        m_frame->MessageTextFromValue( actual_clearance ) );
+                    msgItems.emplace_back( _( "Actual Clearance" ),
+                                           m_frame->MessageTextFromValue( actual_clearance ) );
                 }
             }
         }
@@ -1926,13 +1927,13 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
                 if( actual < std::numeric_limits<int>::max() )
                 {
                     constraint = drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, a, b, layer );
-                    msgItems.emplace_back( _( "Resolved hole clearance" ),
-                            m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
+                    msgItems.emplace_back( _( "Resolved Hole Clearance" ),
+                                           m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
 
                     if( actual > -1 && actual < std::numeric_limits<int>::max() )
                     {
-                        msgItems.emplace_back( _( "Actual hole clearance" ),
-                                m_frame->MessageTextFromValue( actual ) );
+                        msgItems.emplace_back( _( "Actual Hole Clearance" ),
+                                               m_frame->MessageTextFromValue( actual ) );
                     }
                 }
             }
@@ -1964,12 +1965,12 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
                 if( edgeLayer == Edge_Cuts )
                 {
-                    msgItems.emplace_back( _( "Resolved edge clearance" ),
+                    msgItems.emplace_back( _( "Resolved Edge Clearance" ),
                                            m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
                 }
                 else
                 {
-                    msgItems.emplace_back( _( "Resolved margin clearance" ),
+                    msgItems.emplace_back( _( "Resolved Margin Clearance" ),
                                            m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
                 }
             }
@@ -1993,8 +1994,7 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
                     if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
                     {
                         netNames.insert( UnescapeString( bci->GetNetname() ) );
-                        netClasses.insert( UnescapeString(
-                                bci->GetEffectiveNetClass()->GetHumanReadableName() ) );
+                        netClasses.insert( UnescapeString( bci->GetEffectiveNetClass()->GetHumanReadableName() ) );
 
                         if( netNames.size() > 1 && netClasses.size() > 1 )
                             break;
@@ -2020,16 +2020,21 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
             accumulateTrackLength =
                     [&]( EDA_ITEM* aItem )
                     {
-                        if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( aItem ) )
+                        if( aItem->Type() == PCB_TRACE_T || aItem->Type() == PCB_ARC_T )
                         {
-                            selectedLength += track->GetLength();
+                            selectedLength += static_cast<PCB_TRACK*>( aItem )->GetLength();
                         }
-                        else if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aItem ) )
+                        else if( aItem->Type() == PCB_VIA_T )
                         {
-                            const SHAPE_T shapeType = shape->GetShape();
+                            // zero 2D length
+                        }
+                        else if( aItem->Type() == PCB_SHAPE_T )
+                        {
+                            PCB_SHAPE*    shape = static_cast<PCB_SHAPE*>( aItem );
 
-                            if( shapeType == SHAPE_T::SEGMENT || shapeType == SHAPE_T::ARC
-                                || shapeType == SHAPE_T::BEZIER )
+                            if( shape->GetShape() == SHAPE_T::SEGMENT
+                                    || shape->GetShape() == SHAPE_T::ARC
+                                    || shape->GetShape() == SHAPE_T::BEZIER )
                             {
                                 selectedLength += shape->GetLength();
                             }
@@ -2038,6 +2043,7 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
                                 lengthValid = false;
                             }
                         }
+                        // Use dynamic_cast to include PCB_GENERATORs.
                         else if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( aItem ) )
                         {
                             group->RunOnChildren( accumulateTrackLength );
@@ -2049,12 +2055,81 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
                     };
 
             for( EDA_ITEM* item : selection )
-                accumulateTrackLength( item );
+            {
+                if( lengthValid )
+                    accumulateTrackLength( item );
+            }
 
             if( lengthValid )
             {
                 msgItems.emplace_back( _( "Selected 2D Length" ),
                                        m_frame->MessageTextFromValue( selectedLength ) );
+            }
+        }
+
+        if( selection.GetSize() >= 2 && selection.GetSize() < 100 )
+        {
+            LSET enabledCopper = LSET::AllCuMask( m_frame->GetBoard()->GetCopperLayerCount() );
+            bool areaValid = true;
+
+            std::map<PCB_LAYER_ID, SHAPE_POLY_SET> copperPolys;
+            SHAPE_POLY_SET                         holes;
+
+            std::function<void( EDA_ITEM* )> accumulateArea;
+
+            accumulateArea =
+                    [&]( EDA_ITEM* aItem )
+                    {
+                        if( aItem->Type() == PCB_FOOTPRINT_T )
+                        {
+                            areaValid = false;
+                            return;
+                        }
+
+                        if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( aItem ) )
+                        {
+                            boardItem->RunOnChildren( accumulateArea );
+
+                            for( PCB_LAYER_ID layer : LSET( boardItem->GetLayerSet() & enabledCopper ) )
+                            {
+                                boardItem->TransformShapeToPolySet( copperPolys[layer], layer, 0,
+                                                                    ARC_LOW_DEF, ERROR_INSIDE );
+                            }
+
+                            if( aItem->Type() == PCB_PAD_T && static_cast<PAD*>( aItem )->HasHole() )
+                            {
+                                static_cast<PAD*>( aItem )->TransformHoleToPolygon( holes, 0, ARC_LOW_DEF,
+                                                                                    ERROR_OUTSIDE );
+                            }
+                            else if( aItem->Type() == PCB_VIA_T )
+                            {
+                                PCB_VIA* via = static_cast<PCB_VIA*>( aItem );
+                                VECTOR2I center = via->GetPosition();
+                                int      R = via->GetDrillValue() / 2;
+
+                                TransformCircleToPolygon( holes, center, R, ARC_LOW_DEF, ERROR_OUTSIDE );
+                            }
+                        }
+                    };
+
+            for( EDA_ITEM* item : selection )
+            {
+                if( areaValid )
+                    accumulateArea( item );
+            }
+
+            if( areaValid )
+            {
+                double area = 0.0;
+
+                for( auto& [layer, copperPoly] : copperPolys )
+                {
+                    copperPoly.BooleanSubtract( holes );
+                    area += copperPoly.Area();
+                }
+
+                msgItems.emplace_back( _( "Selected 2D Copper Area" ),
+                                       m_frame->MessageTextFromValue( area, true, EDA_DATA_TYPE::AREA ) );
             }
         }
     }

@@ -1504,20 +1504,8 @@ double ZONE::CalculateFilledArea()
 {
     m_area = 0.0;
 
-    // Iterate over each outline polygon in the zone and then iterate over
-    // each hole it has to compute the total area.
-    for( std::pair<const PCB_LAYER_ID, std::shared_ptr<SHAPE_POLY_SET>>& pair : m_FilledPolysList )
-    {
-        std::shared_ptr<SHAPE_POLY_SET>& poly = pair.second;
-
-        for( int i = 0; i < poly->OutlineCount(); i++ )
-        {
-            m_area += poly->Outline( i ).Area();
-
-            for( int j = 0; j < poly->HoleCount( i ); j++ )
-                m_area -= poly->Hole( i, j ).Area();
-        }
-    }
+    for( const auto& [layer, poly] : m_FilledPolysList )
+        m_area += poly->Area();
 
     return m_area;
 }

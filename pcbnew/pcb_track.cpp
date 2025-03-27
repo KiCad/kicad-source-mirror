@@ -1749,6 +1749,11 @@ void PCB_TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
         }
     }
 
+    SHAPE_POLY_SET copper;
+    TransformShapeToPolySet( copper, GetLayer(), 0, ARC_LOW_DEF, ERROR_INSIDE );
+    aList.emplace_back( _( "Copper Area" ),
+                        aFrame->MessageTextFromValue( copper.Area(), true, EDA_DATA_TYPE::AREA ) );
+
     wxString source;
     int clearance = GetOwnClearance( GetLayer(), &source );
 
