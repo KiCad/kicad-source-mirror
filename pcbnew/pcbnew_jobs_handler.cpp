@@ -811,8 +811,12 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     loadOverrideDrawingSheet( brd, aSvgJob->m_drawingSheet );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
-    aSvgJob->m_plotLayerSequence = convertLayerArg( aSvgJob->m_argLayers, brd );
-    aSvgJob->m_plotOnAllLayersSequence = convertLayerArg( aSvgJob->m_argCommonLayers, brd );
+
+    if( aSvgJob->m_plotLayerSequence.empty() )
+    {
+        aSvgJob->m_plotLayerSequence = convertLayerArg( aSvgJob->m_argLayers, brd );
+        aSvgJob->m_plotOnAllLayersSequence = convertLayerArg( aSvgJob->m_argCommonLayers, brd );
+    }
 
     if( aSvgJob->m_plotLayerSequence.size() < 1 )
     {
@@ -868,8 +872,12 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
     loadOverrideDrawingSheet( brd, aDxfJob->m_drawingSheet );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
-    aDxfJob->m_plotLayerSequence = convertLayerArg( aDxfJob->m_argLayers, brd );
-    aDxfJob->m_plotOnAllLayersSequence = convertLayerArg( aDxfJob->m_argCommonLayers, brd );
+
+    if( aDxfJob->m_plotLayerSequence.empty() )
+    {
+        aDxfJob->m_plotLayerSequence = convertLayerArg( aDxfJob->m_argLayers, brd );
+        aDxfJob->m_plotOnAllLayersSequence = convertLayerArg( aDxfJob->m_argCommonLayers, brd );
+    }
 
     if( aDxfJob->m_plotLayerSequence.size() < 1 )
     {
@@ -946,8 +954,12 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     loadOverrideDrawingSheet( brd, pdfJob->m_drawingSheet );
     brd->GetProject()->ApplyTextVars( pdfJob->GetVarOverrides() );
     brd->SynchronizeProperties();
-    pdfJob->m_plotLayerSequence = convertLayerArg( pdfJob->m_argLayers, brd );
-    pdfJob->m_plotOnAllLayersSequence = convertLayerArg( pdfJob->m_argCommonLayers, brd );
+
+    if( pdfJob->m_plotLayerSequence.empty() )
+    {
+        pdfJob->m_plotLayerSequence = convertLayerArg( pdfJob->m_argLayers, brd );
+        pdfJob->m_plotOnAllLayersSequence = convertLayerArg( pdfJob->m_argCommonLayers, brd );
+    }
 
     if( pdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_FILE )
         plotAllLayersOneFile = true;
@@ -1040,12 +1052,15 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
 
-    if( !aGerberJob->m_argLayers.empty() )
-        aGerberJob->m_plotLayerSequence = convertLayerArg( aGerberJob->m_argLayers, nullptr );
-    else
-        aGerberJob->m_plotLayerSequence = LSET::AllLayersMask().SeqStackupForPlotting();
+    if( aGerberJob->m_plotLayerSequence.empty() )
+    {
+        if( !aGerberJob->m_argLayers.empty() )
+            aGerberJob->m_plotLayerSequence = convertLayerArg( aGerberJob->m_argLayers, nullptr );
+        else
+            aGerberJob->m_plotLayerSequence = LSET::AllLayersMask().SeqStackupForPlotting();
 
-    aGerberJob->m_plotOnAllLayersSequence = convertLayerArg( aGerberJob->m_argCommonLayers, brd );
+        aGerberJob->m_plotOnAllLayersSequence = convertLayerArg( aGerberJob->m_argCommonLayers, brd );
+    }
 
     PCB_PLOT_PARAMS       boardPlotOptions = brd->GetPlotOptions();
     GERBER_JOBFILE_WRITER jobfile_writer( brd );
@@ -1264,8 +1279,12 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
     aJob->SetTitleBlock( brd->GetTitleBlock() );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
-    aGerberJob->m_plotLayerSequence = convertLayerArg( aGerberJob->m_argLayers, brd );
-    aGerberJob->m_plotOnAllLayersSequence = convertLayerArg( aGerberJob->m_argCommonLayers, brd );
+
+    if( aGerberJob->m_plotLayerSequence.empty() )
+    {
+        aGerberJob->m_plotLayerSequence = convertLayerArg( aGerberJob->m_argLayers, brd );
+        aGerberJob->m_plotOnAllLayersSequence = convertLayerArg( aGerberJob->m_argCommonLayers, brd );
+    }
 
     if( aGerberJob->m_plotLayerSequence.size() < 1 )
     {
@@ -1749,10 +1768,13 @@ int PCBNEW_JOBS_HANDLER::JobExportFpSvg( JOB* aJob )
     PCB_IO_KICAD_SEXPR pcb_io( CTL_FOR_LIBRARY );
     FP_CACHE   fpLib( &pcb_io, svgJob->m_libraryPath );
 
-    if( !svgJob->m_argLayers.empty() )
-        svgJob->m_plotLayerSequence = convertLayerArg( svgJob->m_argLayers, nullptr );
-    else
-        svgJob->m_plotLayerSequence = LSET::AllLayersMask().SeqStackupForPlotting();
+    if( svgJob->m_plotLayerSequence.empty() )
+    {
+        if( !svgJob->m_argLayers.empty() )
+            svgJob->m_plotLayerSequence = convertLayerArg( svgJob->m_argLayers, nullptr );
+        else
+            svgJob->m_plotLayerSequence = LSET::AllLayersMask().SeqStackupForPlotting();
+    }
 
     try
     {
