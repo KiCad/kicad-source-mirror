@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-24 12:07-0700\n"
-"PO-Revision-Date: 2025-03-19 01:15+0000\n"
+"PO-Revision-Date: 2025-03-27 13:55+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/v9/pt_BR/>\n"
@@ -3860,25 +3860,24 @@ msgid "Add"
 msgstr "Adicione"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
-#, fuzzy
 msgid "Enable Git Tracking"
-msgstr "Ative a animação"
+msgstr "Ativar o rastreio Git"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:28
-#, fuzzy
 msgid "Remote Tracking"
-msgstr "Rotear Trilha"
+msgstr "Rastreio remoto"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:41
-#, fuzzy
 msgid "Update interval:"
-msgstr "Atualize os campos"
+msgstr "Atualização interna:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:46
 msgid ""
 "Number of minutes between remote update checks.  Zero disables automatic "
 "checks."
 msgstr ""
+"Quantidade de minutos entre as verificações de atualização remota.  O valor "
+"zero desativa as verificações automáticas."
 
 #: common/dialogs/git/panel_git_repos_base.cpp:50
 #: common/dialogs/panel_common_settings_base.cpp:347
@@ -7010,43 +7009,40 @@ msgid "Could not get reference OID for reference '%s'"
 msgstr "Não foi possível obter o OID de referência para a referência '%s'"
 
 #: common/git/git_pull_handler.cpp:252
-#, fuzzy
 msgid "Could not look up target commit"
-msgstr "Não foi possível procurar pelo commit"
+msgstr "Não foi possível localizar o commit"
 
 #: common/git/git_pull_handler.cpp:264
-#, fuzzy
 msgid "Could not get tree from target commit"
-msgstr "Não foi possível mesclar os commits"
+msgstr "Não foi possível obter a árvore do commit"
 
 #: common/git/git_pull_handler.cpp:306 common/git/kicad_git_errors.cpp:55
 msgid "Failed to perform checkout operation."
 msgstr "Houve uma falha ao executar a operação de checkout."
 
 #: common/git/git_pull_handler.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update reference '%s' to point to '%s'"
-msgstr "Houve uma falha atualizar a referência do HEAD para o ramo '%s'"
+msgstr "Houve uma falha atualizar a referência '%s' que aponta para '%s'"
 
 #: common/git/git_pull_handler.cpp:325
-#, fuzzy
 msgid "Failed to clean up repository state after fast-forward."
-msgstr "Houve uma falha ao clonar o repositório."
+msgstr ""
+"Houve uma falha ao limpar a condição do repositório depois de um avanço "
+"rápido (fast-forward)."
 
 #: common/git/git_pull_handler.cpp:334
-#, fuzzy
 msgid "Failed to initialize revision walker."
-msgstr "Houve uma falha ao inicializar o projeto Git."
+msgstr "Houve uma falha ao inicializar o revision walker."
 
 #: common/git/git_pull_handler.cpp:343
-#, fuzzy
 msgid "Failed to push reference to revision walker."
-msgstr "Houve um falha ao enviar as alterações para o repositório remoto."
+msgstr "Houve um falha ao enviar para o revision walker."
 
 #: common/git/git_pull_handler.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup commit '%s'"
-msgstr "Não foi possível procurar pelo commit '{}'"
+msgstr "Não foi possível procurar pelo commit '%s'"
 
 #: common/git/git_pull_handler.cpp:391
 msgid "Could not merge commits"
@@ -7070,7 +7066,7 @@ msgstr "Adicionado"
 
 #: common/git/git_pull_handler.cpp:527
 msgid "Conflicts detected during rebase"
-msgstr ""
+msgstr "Foram detectados conflitos durante o rebase"
 
 #: common/git/git_push_handler.cpp:56
 msgid "Could not lookup remote"
@@ -7117,9 +7113,8 @@ msgid "[updated] %s"
 msgstr "[atualizado] %s"
 
 #: common/git/kicad_git_common.cpp:977
-#, fuzzy
 msgid "Unable to authenticate"
-msgstr "Incapaz de criar "
+msgstr "Não foi possível autenticar"
 
 #: common/git/kicad_git_errors.cpp:40
 msgid "Invalid repository."
@@ -28238,9 +28233,9 @@ msgid "Failed to create commit: %s"
 msgstr "Houve uma falha ao criar o commit: %s"
 
 #: kicad/project_tree_pane.cpp:2548
-#, fuzzy, c-format
+#, c-format
 msgid "Created commit with id: %s"
-msgstr "Houve uma falha ao fazer o registro no índice: %s"
+msgstr "Criar um commit com a id: %s"
 
 #: kicad/tools/kicad_manager_actions.cpp:43
 msgid "New Project..."
