@@ -138,6 +138,9 @@ public:
     virtual void SetPageSettings( const PAGE_INFO& aPageSettings ) { m_pageInfo = aPageSettings; }
     PAGE_INFO& PageSettings() { return m_pageInfo; }
 
+    void SetPlotMirrored( bool aMirror ) { m_plotMirror = aMirror; };
+    bool GetPlotMirrored() const { return m_plotMirror; }
+
     /**
      * Set the line width for the next drawing.
      *
