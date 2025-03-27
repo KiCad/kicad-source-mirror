@@ -46,8 +46,8 @@ public:
     bool     m_sketchDNPFPsOnFabLayers;
     bool     m_crossoutDNPFPsOnFabLayers;
 
-    wxString m_argLayers;
-    LSEQ     m_plotLayerSequence;
+    std::optional<wxString> m_argLayers;
+    LSEQ                    m_plotLayerSequence;
 };
 
 #endif
