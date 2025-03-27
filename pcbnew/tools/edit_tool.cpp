@@ -2168,11 +2168,12 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     {
         if( item->Type() == PCB_GROUP_T )
         {
-            static_cast<PCB_GROUP*>( item )->RunOnDescendants(
+            static_cast<PCB_GROUP*>( item )->RunOnChildren(
                     [&]( BOARD_ITEM* descendant )
                     {
                         items.push_back( descendant );
-                    } );
+                    },
+                    RECURSE_MODE::RECURSE );
         }
         else
         {
@@ -2557,17 +2558,19 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
             break;
 
         case PCB_GROUP_T:
-            board_item->RunOnDescendants(
+            board_item->RunOnChildren(
                          [&commit]( BOARD_ITEM* aItem )
                          {
                              commit.Stage( aItem, CHT_UNGROUP );
-                         } );
+                         },
+                         RECURSE_MODE::RECURSE );
 
-            board_item->RunOnDescendants(
+            board_item->RunOnChildren(
                          [&commit]( BOARD_ITEM* aItem )
                          {
                              commit.Remove( aItem );
-                         } );
+                         },
+                         RECURSE_MODE::RECURSE );
 
             commit.Remove( board_item );
             itemsDeleted++;
@@ -2967,13 +2970,14 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             case PCB_GROUP_T:
                 dupe_item = static_cast<PCB_GROUP*>( orig_item )->DeepDuplicate();
 
-                dupe_item->RunOnDescendants(
+                dupe_item->RunOnChildren(
                         [&]( BOARD_ITEM* aItem )
                         {
                             aItem->ClearSelected();
                             new_items.push_back( aItem );
                             commit.Add( aItem );
-                        } );
+                        },
+                        RECURSE_MODE::RECURSE );
 
                 dupe_item->ClearSelected();
                 new_items.push_back( dupe_item );

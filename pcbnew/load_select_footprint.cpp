@@ -123,7 +123,7 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( FOOTPRINT* aFootprint )
 
     newFootprint->ClearFlags();
     recordAndUpdateUuid( newFootprint );
-    newFootprint->RunOnDescendants(
+    newFootprint->RunOnChildren(
             [&]( BOARD_ITEM* aItem )
             {
                 if( aItem->Type() == PCB_PAD_T )
@@ -131,7 +131,8 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( FOOTPRINT* aFootprint )
 
                 aItem->ClearFlags();
                 recordAndUpdateUuid( aItem );
-            } );
+            },
+            RECURSE_MODE::RECURSE );
 
     AddFootprintToBoard( newFootprint );
 

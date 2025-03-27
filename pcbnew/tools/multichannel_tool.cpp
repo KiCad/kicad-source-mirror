@@ -194,7 +194,7 @@ bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( ZONE* aRuleArea, std::set<BOAR
         // A group is cloned in its entirety if *all* children are contained
         bool addGroup = true;
 
-        group->RunOnDescendants(
+        group->RunOnChildren(
                 [&]( BOARD_ITEM* aItem )
                 {
                     if( aItem->IsType( { PCB_ZONE_T, PCB_SHAPE_T, PCB_DIMENSION_T } ) )
@@ -205,7 +205,8 @@ bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( ZONE* aRuleArea, std::set<BOAR
                         if( val->AsDouble() == 0.0 )
                             addGroup = false;
                     }
-                } );
+                },
+                RECURSE_MODE::RECURSE );
 
         if( addGroup )
             aItems.insert( group );
@@ -1019,7 +1020,7 @@ bool MULTICHANNEL_TOOL::pruneExistingGroups( COMMIT& aCommit,
 
             if( refItem->Type() == PCB_GROUP_T )
                 pending.push_back( static_cast<PCB_GROUP*>(refItem) );
-                
+
             for( BOARD_ITEM* testItem : aItemsToRemove )
             {
                 if( refItem->m_Uuid == testItem->m_Uuid )

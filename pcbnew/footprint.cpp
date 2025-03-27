@@ -2160,39 +2160,8 @@ EDA_ITEM* FOOTPRINT::Clone() const
 }
 
 
-void FOOTPRINT::RunOnChildren( const std::function<void ( BOARD_ITEM* )>& aFunction ) const
+void FOOTPRINT::RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFunction, RECURSE_MODE aMode ) const
 {
-    try
-    {
-        for( PCB_FIELD* field : m_fields )
-            aFunction( field );
-
-        for( PAD* pad : m_pads )
-            aFunction( pad );
-
-        for( ZONE* zone : m_zones )
-            aFunction( zone );
-
-        for( PCB_GROUP* group : m_groups )
-            aFunction( group );
-
-        for( BOARD_ITEM* drawing : m_drawings )
-            aFunction( drawing );
-    }
-    catch( std::bad_function_call& )
-    {
-        wxFAIL_MSG( wxT( "Error running FOOTPRINT::RunOnChildren" ) );
-    }
-}
-
-
-void FOOTPRINT::RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction,
-                                  int aDepth ) const
-{
-    // Avoid freezes with infinite recursion
-    if( aDepth > 20 )
-        return;
-
     try
     {
         for( PCB_FIELD* field : m_fields )
@@ -2210,12 +2179,14 @@ void FOOTPRINT::RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFun
         for( BOARD_ITEM* drawing : m_drawings )
         {
             aFunction( drawing );
-            drawing->RunOnDescendants( aFunction, aDepth + 1 );
+
+            if( aMode == RECURSE_MODE::RECURSE )
+                drawing->RunOnChildren( aFunction, RECURSE_MODE::RECURSE );
         }
     }
     catch( std::bad_function_call& )
     {
-        wxFAIL_MSG( wxT( "Error running FOOTPRINT::RunOnDescendants" ) );
+        wxFAIL_MSG( wxT( "Error running FOOTPRINT::RunOnChildren" ) );
     }
 }
 
@@ -2575,10 +2546,11 @@ BOARD_ITEM* FOOTPRINT::Duplicate() const
 {
     FOOTPRINT* dupe = static_cast<FOOTPRINT*>( BOARD_ITEM::Duplicate() );
 
-    dupe->RunOnDescendants( [&]( BOARD_ITEM* child )
+    dupe->RunOnChildren( [&]( BOARD_ITEM* child )
                             {
                                 const_cast<KIID&>( child->m_Uuid ) = KIID();
-                            });
+                            },
+                            RECURSE_MODE::RECURSE );
 
     return dupe;
 }
@@ -2683,11 +2655,12 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootpr
 
         if( aAddToFootprint )
         {
-            group->RunOnDescendants(
+            group->RunOnChildren(
                     [&]( BOARD_ITEM* aCurrItem )
                     {
                         Add( aCurrItem );
-                    } );
+                    },
+                    RECURSE_MODE::RECURSE );
 
             Add( group );
         }
@@ -3390,12 +3363,13 @@ void FOOTPRINT::CheckNetTies( const std::function<void( const BOARD_ITEM* aItem,
         if( item->IsOnCopperLayer() )
             copperItems.push_back( item );
 
-        item->RunOnDescendants(
+        item->RunOnChildren(
                 [&]( BOARD_ITEM* descendent )
                 {
                     if( descendent->IsOnCopperLayer() )
                         copperItems.push_back( descendent );
-                } );
+                },
+                RECURSE_MODE::RECURSE );
     }
 
     for( ZONE* zone : m_zones )
@@ -3557,13 +3531,15 @@ void FOOTPRINT::swapData( BOARD_ITEM* aImage )
             [&]( BOARD_ITEM* child )
             {
                 child->SetParent( this );
-            } );
+            },
+            RECURSE_MODE::NO_RECURSE );
 
     image->RunOnChildren(
             [&]( BOARD_ITEM* child )
             {
                 child->SetParent( image );
-            } );
+            },
+            RECURSE_MODE::NO_RECURSE );
 }
 
 

@@ -928,16 +928,17 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
 
     fixUuid( const_cast<KIID&>( newFootprint->m_Uuid ) );
 
-    newFootprint->RunOnDescendants(
+    newFootprint->RunOnChildren(
             [&]( BOARD_ITEM* aChild )
             {
                 fixUuid( const_cast<KIID&>( aChild->m_Uuid ) );
-            } );
+            },
+            RECURSE_MODE::RECURSE );
 
     // Right now, we only show the "Unconnected" net in the footprint editor, but this is still
     // referenced in the footprint.  So we need to update the net pointers in the footprint to
     // point to the nets in the main board.
-    newFootprint->RunOnDescendants(
+    newFootprint->RunOnChildren(
             [&]( BOARD_ITEM* aChild )
             {
                 if( BOARD_CONNECTED_ITEM* conn = dynamic_cast<BOARD_CONNECTED_ITEM*>( aChild ) )
@@ -954,7 +955,8 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
                     }
 
                 }
-            } );
+            },
+            RECURSE_MODE::RECURSE );
 
     BOARD_DESIGN_SETTINGS& bds = m_pcb->GetDesignSettings();
 
@@ -1314,7 +1316,7 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( wxString aFootprintName, const wx
     if( footprint->GetValue().IsEmpty() )
         footprint->SetValue( aFootprintName );
 
-    footprint->RunOnDescendants(
+    footprint->RunOnChildren(
             [&]( BOARD_ITEM* aChild )
             {
                 if( aChild->Type() == PCB_FIELD_T || aChild->Type() == PCB_TEXT_T )
@@ -1327,7 +1329,8 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( wxString aFootprintName, const wx
                     textItem->SetItalic( settings.GetTextItalic( layer ) );
                     textItem->SetKeepUpright( settings.GetTextUpright( layer ) );
                 }
-            } );
+            },
+            RECURSE_MODE::RECURSE );
 
     SetMsgPanel( footprint );
     return footprint;

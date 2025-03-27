@@ -306,11 +306,12 @@ void ARRAY_TOOL::onDialogClosed( wxCloseEvent& aEvent )
                     // it this state, reset the selected stated of aItem:
                     this_item->ClearSelected();
 
-                    this_item->RunOnDescendants(
+                    this_item->RunOnChildren(
                             []( BOARD_ITEM* aItem )
                             {
                                 aItem->ClearSelected();
-                            } );
+                            },
+                            RECURSE_MODE::RECURSE );
 
                     // We're iterating backwards, so the first item is the last in the array
                     TransformItem( *m_array_opts, arraySize - ptN - 1, *this_item );
@@ -318,11 +319,12 @@ void ARRAY_TOOL::onDialogClosed( wxCloseEvent& aEvent )
                     // If a group is duplicated, add also created members to the board
                     if( this_item->Type() == PCB_GROUP_T )
                     {
-                        this_item->RunOnDescendants(
+                        this_item->RunOnChildren(
                                 [&]( BOARD_ITEM* aItem )
                                 {
                                     commit.Add( aItem );
-                                } );
+                                },
+                                RECURSE_MODE::RECURSE );
                     }
 
                     commit.Add( this_item );

@@ -911,11 +911,12 @@ PCB_GRID_HELPER::queryVisible( const BOX2I& aArea, const std::vector<BOARD_ITEM*
             {
                 items.erase( aItem );
 
-                aItem->RunOnDescendants(
+                aItem->RunOnChildren(
                         [&]( BOARD_ITEM* aChild )
                         {
                             skipItem( aChild );
-                        } );
+                        },
+                        RECURSE_MODE::RECURSE );
             };
 
     for( BOARD_ITEM* item : aSkip )

@@ -69,6 +69,11 @@ enum ZONE_LAYER_OVERRIDE
     ZLO_FORCE_NO_ZONE_CONNECTION
 };
 
+enum RECURSE_MODE
+{
+    RECURSE,
+    NO_RECURSE,
+};
 
 /**
  * A base class for any item which can be embedded within the #BOARD container class, and
@@ -207,15 +212,7 @@ public:
      *
      * @note This function should not add or remove items to the parent.
      */
-    virtual void RunOnChildren( const std::function<void ( BOARD_ITEM* )>& aFunction ) const { }
-
-    /**
-     * Invoke a function on all descendants.
-     *
-     * @note This function should not add or remove items.
-     */
-    virtual void RunOnDescendants( const std::function<void ( BOARD_ITEM* )>& aFunction,
-                                   int aDepth = 0 ) const { }
+    virtual void RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFunction, RECURSE_MODE aMode ) const {}
 
     BOARD_ITEM_CONTAINER* GetParent() const { return (BOARD_ITEM_CONTAINER*) m_parent; }
 

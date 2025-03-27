@@ -1439,11 +1439,12 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM
         {
             const_cast<KIID&>( item->m_Uuid ) = KIID();
 
-            item->RunOnDescendants(
+            item->RunOnChildren(
                     []( BOARD_ITEM* aChild )
                     {
                         const_cast<KIID&>( aChild->m_Uuid ) = KIID();
-                    } );
+                    },
+                    RECURSE_MODE::RECURSE );
 
             // Even though BOARD_COMMIT::Push() will add any new items to the group, we're
             // going to run PCB_ACTIONS::move first, and the move tool will throw out any
@@ -2046,7 +2047,7 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
                         // Use dynamic_cast to include PCB_GENERATORs.
                         else if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( aItem ) )
                         {
-                            group->RunOnChildren( accumulateTrackLength );
+                            group->RunOnChildren( accumulateTrackLength, RECURSE_MODE::NO_RECURSE );
                         }
                         else
                         {
@@ -2088,7 +2089,7 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
                         if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( aItem ) )
                         {
-                            boardItem->RunOnChildren( accumulateArea );
+                            boardItem->RunOnChildren( accumulateArea, RECURSE_MODE::NO_RECURSE );
 
                             for( PCB_LAYER_ID layer : LSET( boardItem->GetLayerSet() & enabledCopper ) )
                             {

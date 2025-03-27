@@ -98,7 +98,8 @@ const std::vector<KIGFX::VIEW_ITEM*> PCB_SELECTION::updateDrawList() const
                     boardItem->RunOnChildren( [&]( BOARD_ITEM* childItem )
                                               {
                                                   addItem( childItem );
-                                              } );
+                                              },
+                                              RECURSE_MODE::NO_RECURSE );
                 }
             };
 

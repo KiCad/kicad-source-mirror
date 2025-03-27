@@ -870,11 +870,7 @@ public:
     EDA_ITEM* Clone() const override;
 
     ///< @copydoc BOARD_ITEM::RunOnChildren
-    void RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction ) const override;
-
-    ///< @copydoc BOARD_ITEM::RunOnDescendants
-    void RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction,
-                           int aDepth = 0 ) const override;
+    void RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFunction, RECURSE_MODE aMode ) const override;
 
     virtual std::vector<int> ViewGetLayers() const override;
 

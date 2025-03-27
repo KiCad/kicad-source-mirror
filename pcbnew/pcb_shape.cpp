@@ -346,7 +346,7 @@ void PCB_SHAPE::updateHatching() const
             holes.Append( footprint->GetCourtyard( layer ) );
 
             // Knockout footprint fields
-            footprint->RunOnDescendants(
+            footprint->RunOnChildren(
                     [&]( BOARD_ITEM* item )
                     {
                         if( item->Type() == PCB_FIELD_T
@@ -355,7 +355,8 @@ void PCB_SHAPE::updateHatching() const
                         {
                             knockoutItem( item );
                         }
-                    } );
+                    },
+                    RECURSE_MODE::RECURSE );
         }
 
         m_hatching.BooleanSubtract( holes );

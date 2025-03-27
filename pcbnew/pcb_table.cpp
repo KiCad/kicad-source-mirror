@@ -218,7 +218,7 @@ void PCB_TABLE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 }
 
 
-void PCB_TABLE::RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFunction ) const
+void PCB_TABLE::RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFunction, RECURSE_MODE aMode ) const
 {
     for( PCB_TABLECELL* cell : m_cells )
         aFunction( cell );

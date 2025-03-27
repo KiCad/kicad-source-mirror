@@ -97,7 +97,7 @@ public:
     void SetStrokeRows( bool aDoStroke ) { m_strokeRows = aDoStroke; }
     bool StrokeRows() const              { return m_strokeRows; }
 
-    void RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFunction ) const override;
+    void RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFunction, RECURSE_MODE aMode ) const override;
 
     void SetPosition( const VECTOR2I& aPos ) override;
     VECTOR2I GetPosition() const override;

@@ -126,8 +126,9 @@ void PCB_TEST_SELECTION_TOOL::highlightInternal( EDA_ITEM* aItem, int aMode, boo
     if( aItem->IsBOARD_ITEM() )
     {
         BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( aItem );
-        boardItem->RunOnDescendants( std::bind( &PCB_TEST_SELECTION_TOOL::highlightInternal, this,
-                                                std::placeholders::_1, aMode, aUsingOverlay ) );
+        boardItem->RunOnChildren( std::bind( &PCB_TEST_SELECTION_TOOL::highlightInternal, this, std::placeholders::_1,
+                                             aMode, aUsingOverlay ),
+                                  RECURSE_MODE::RECURSE );
     }
 }
 
@@ -162,8 +163,9 @@ void PCB_TEST_SELECTION_TOOL::unhighlightInternal( EDA_ITEM* aItem, int aMode, b
     if( aItem->IsBOARD_ITEM() )
     {
         BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( aItem );
-        boardItem->RunOnDescendants( std::bind( &PCB_TEST_SELECTION_TOOL::unhighlightInternal, this,
-                                                std::placeholders::_1, aMode, aUsingOverlay ) );
+        boardItem->RunOnChildren( std::bind( &PCB_TEST_SELECTION_TOOL::unhighlightInternal, this, std::placeholders::_1,
+                                             aMode, aUsingOverlay ),
+                                  RECURSE_MODE::RECURSE );
     }
 }
 

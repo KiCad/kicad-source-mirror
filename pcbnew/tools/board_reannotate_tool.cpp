@@ -91,12 +91,13 @@ int BOARD_REANNOTATE_TOOL::ReannotateDuplicates( const PCB_SELECTION& aSelection
         {
             PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
 
-            group->RunOnDescendants(
+            group->RunOnChildren(
                     [&]( BOARD_ITEM* aGroupItem )
                     {
                         if( aGroupItem->Type() == PCB_FOOTPRINT_T )
                             fpOnBoard.push_back( static_cast<FOOTPRINT*>( aGroupItem ) );
-                    } );
+                    },
+                    RECURSE_MODE::RECURSE );
         }
     }
 
@@ -115,12 +116,13 @@ int BOARD_REANNOTATE_TOOL::ReannotateDuplicates( const PCB_SELECTION& aSelection
         {
             PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
 
-            group->RunOnDescendants(
+            group->RunOnChildren(
                     [&]( BOARD_ITEM* aGroupItem )
                     {
                         if( aGroupItem->Type() == PCB_FOOTPRINT_T )
                             fpInSelection.push_back( static_cast<FOOTPRINT*>( aGroupItem ) );
-                    } );
+                    },
+                    RECURSE_MODE::RECURSE );
         }
     }
 

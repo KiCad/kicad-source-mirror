@@ -269,7 +269,7 @@ bool PCB_EDIT_FRAME::saveSelectionToDesignBlock( const wxString& aNickname, PCB_
         tempBoard->Add( static_cast<BOARD_ITEM*>( copy ), ADD_MODE::APPEND, false );
 
         if( FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( item ) )
-            fp->RunOnChildren( addNetIfNeeded );
+            fp->RunOnChildren( addNetIfNeeded, RECURSE_MODE::NO_RECURSE );
         else
             addNetIfNeeded( copy );
     }

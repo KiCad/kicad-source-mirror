@@ -2050,10 +2050,11 @@ void BOARD_INSPECTION_TOOL::calculateSelectionRatsnest( const VECTOR2I& aDelta )
         }
         else if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
         {
-            item->RunOnDescendants( [ &queued_items ]( BOARD_ITEM *aItem )
+            item->RunOnChildren( [ &queued_items ]( BOARD_ITEM *aItem )
                                     {
                                         queued_items.push_back( aItem );
-                                    } );
+                                    },
+                                    RECURSE_MODE::RECURSE );
         }
         else if( BOARD_CONNECTED_ITEM* boardItem = dyn_cast<BOARD_CONNECTED_ITEM*>( item ) )
         {

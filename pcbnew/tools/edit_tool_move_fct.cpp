@@ -585,11 +585,12 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
                         item->SetFlags( IS_MOVING );
 
-                        static_cast<BOARD_ITEM*>( item )->RunOnDescendants(
+                        static_cast<BOARD_ITEM*>( item )->RunOnChildren(
                                 [&]( BOARD_ITEM* bItem )
                                 {
                                     item->SetFlags( IS_MOVING );
-                                } );
+                                },
+                                RECURSE_MODE::RECURSE );
                     }
                 }
 
@@ -631,12 +632,13 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                             if( item->Type() == PCB_FOOTPRINT_T )
                                 FPs.push_back( static_cast<FOOTPRINT*>( item ) );
 
-                            item->RunOnDescendants(
+                            item->RunOnChildren(
                                     [&]( BOARD_ITEM* descendent )
                                     {
                                         if( descendent->Type() == PCB_FOOTPRINT_T )
                                             FPs.push_back( static_cast<FOOTPRINT*>( descendent ) );
-                                    } );
+                                    },
+                                    RECURSE_MODE::RECURSE );
                         }
                     }
 

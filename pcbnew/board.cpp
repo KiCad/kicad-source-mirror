@@ -523,8 +523,7 @@ void BOARD::Move( const VECTOR2I& aMoveVector ) // overload
 }
 
 
-void BOARD::RunOnDescendants( const std::function<void ( BOARD_ITEM* )>& aFunction,
-                              int aDepth ) const
+void BOARD::RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFunction, RECURSE_MODE aMode ) const
 {
     try
     {
@@ -543,18 +542,22 @@ void BOARD::RunOnDescendants( const std::function<void ( BOARD_ITEM* )>& aFuncti
         for( FOOTPRINT* footprint : m_footprints )
         {
             aFunction( footprint );
-            footprint->RunOnDescendants( aFunction, aDepth + 1 );
+
+            if( aMode == RECURSE_MODE::RECURSE )
+                footprint->RunOnChildren( aFunction, RECURSE_MODE::RECURSE );
         }
 
         for( BOARD_ITEM* drawing : m_drawings )
         {
             aFunction( drawing );
-            drawing->RunOnDescendants( aFunction, aDepth + 1 );
+
+            if( aMode == RECURSE_MODE::RECURSE )
+                drawing->RunOnChildren( aFunction, RECURSE_MODE::RECURSE );
         }
     }
     catch( std::bad_function_call& )
     {
-        wxFAIL_MSG( wxT( "Error running BOARD::RunOnDescendants" ) );
+        wxFAIL_MSG( wxT( "Error running BOARD::RunOnChildren" ) );
     }
 }
 
@@ -1121,7 +1124,8 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
         footprint->RunOnChildren( [&]( BOARD_ITEM* aChild )
                                   {
                                       m_itemByIdCache.insert( { aChild->m_Uuid, aChild } );
-                                  } );
+                                  },
+                                  RECURSE_MODE::NO_RECURSE );
         break;
     }
 
@@ -1150,7 +1154,8 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
             table->RunOnChildren( [&]( BOARD_ITEM* aChild )
                                   {
                                       m_itemByIdCache.insert( { aChild->m_Uuid, aChild } );
-                                  } );
+                                  },
+                                  RECURSE_MODE::NO_RECURSE );
         }
 
         break;
@@ -1254,7 +1259,8 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
         footprint->RunOnChildren( [&]( BOARD_ITEM* aChild )
                                   {
                                       m_itemByIdCache.erase( aChild->m_Uuid );
-                                  } );
+                                  },
+                                  RECURSE_MODE::NO_RECURSE );
 
         break;
     }
@@ -1287,7 +1293,8 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
             table->RunOnChildren( [&]( BOARD_ITEM* aChild )
                                   {
                                       m_itemByIdCache.erase( aChild->m_Uuid );
-                                  } );
+                                  },
+                                  RECURSE_MODE::NO_RECURSE );
         }
 
         break;

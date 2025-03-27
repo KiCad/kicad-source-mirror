@@ -465,7 +465,8 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                 group->RunOnChildren( [&]( BOARD_ITEM* child )
                                       {
                                           child->SetParentGroup( group );
-                                      } );
+                                      },
+                                      RECURSE_MODE::NO_RECURSE );
             }
 
             view->Add( item );
@@ -642,11 +643,12 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
     for( FOOTPRINT* footprint : GetBoard()->Footprints() )
     {
-        footprint->RunOnDescendants(
+        footprint->RunOnChildren(
                 [&]( BOARD_ITEM* item )
                 {
                     checkHatching( item );
-                } );
+                },
+                RECURSE_MODE::RECURSE );
     }
 
     if( added_items.size() > 0 || deleted_items.size() > 0 || changed_items.size() > 0 )

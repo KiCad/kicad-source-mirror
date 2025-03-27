@@ -396,8 +396,7 @@ public:
 
     void Move( const VECTOR2I& aMoveVector ) override;
 
-    void RunOnDescendants( const std::function<void ( BOARD_ITEM* )>& aFunction,
-                           int aDepth = 0 ) const override;
+    void RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFunction, RECURSE_MODE aMode ) const override;
 
     void SetFileFormatVersionAtLoad( int aVersion ) { m_fileFormatVersionAtLoad = aVersion; }
     int GetFileFormatVersionAtLoad() const { return m_fileFormatVersionAtLoad; }

@@ -106,7 +106,8 @@ COMMIT& BOARD_COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCRE
                     [&]( BOARD_ITEM* child )
                     {
                         Stage( child, aChangeType );
-                    } );
+                    },
+                    RECURSE_MODE::NO_RECURSE );
         }
     }
 
@@ -136,8 +137,9 @@ void BOARD_COMMIT::propagateDamage( BOARD_ITEM* aChangedItem, std::vector<ZONE*>
     if( aStaleZones && aChangedItem->Type() == PCB_ZONE_T )
         aStaleZones->push_back( static_cast<ZONE*>( aChangedItem ) );
 
-    aChangedItem->RunOnChildren( std::bind( &BOARD_COMMIT::propagateDamage, this, _1, aStaleZones,
-                                            aStaleHatchedShapes ) );
+    aChangedItem->RunOnChildren(
+            std::bind( &BOARD_COMMIT::propagateDamage, this, _1, aStaleZones, aStaleHatchedShapes ),
+            RECURSE_MODE::NO_RECURSE );
 
     BOARD* board = static_cast<BOARD*>( m_toolMgr->GetModel() );
     BOX2I  damageBBox = aChangedItem->GetBoundingBox();
@@ -202,11 +204,12 @@ void BOARD_COMMIT::propagateDamage( BOARD_ITEM* aChangedItem, std::vector<ZONE*>
 
         for( FOOTPRINT* footprint : board->Footprints() )
         {
-            footprint->RunOnDescendants(
+            footprint->RunOnChildren(
                     [&]( BOARD_ITEM* child )
                     {
                         checkItem( child );
-                    } );
+                    },
+                    RECURSE_MODE::RECURSE );
         }
 
         for( BOARD_ITEM* item : board->Drawings() )
@@ -542,11 +545,12 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         }
 
         boardItem->ClearEditFlags();
-        boardItem->RunOnDescendants(
+        boardItem->RunOnChildren(
                 [&]( BOARD_ITEM* item )
                 {
                     item->ClearEditFlags();
-                } );
+                },
+                RECURSE_MODE::RECURSE );
     } // ... and regenerate them.
 
     // Invalidate component classes
@@ -813,7 +817,8 @@ void BOARD_COMMIT::Revert()
                         [&]( BOARD_ITEM* child )
                         {
                             child->SetParentGroup( group );
-                        } );
+                        },
+                        RECURSE_MODE::NO_RECURSE );
             }
 
             view->Add( boardItem );

@@ -275,7 +275,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
 
             if( copy->Type() == PCB_GROUP_T || copy->Type() == PCB_GENERATOR_T )
             {
-                copy->RunOnDescendants(
+                copy->RunOnChildren(
                         [&]( BOARD_ITEM* descendant )
                         {
                             // One cannot add an additional mandatory field to a given footprint:
@@ -292,7 +292,8 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
                                 partialFootprint.Add( descendant );
                             else
                                 skipped_items.push_back( descendant );
-                        } );
+                        },
+                        RECURSE_MODE::RECURSE );
             }
 
             // locate the reference point at (0, 0) in the copied items
@@ -432,12 +433,13 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
 
                 if( copy->Type() == PCB_GROUP_T || copy->Type() == PCB_GENERATOR_T )
                 {
-                    copy->RunOnDescendants(
+                    copy->RunOnChildren(
                             [&]( BOARD_ITEM* descendant )
                             {
                                 descendant->SetLocked( false );
                                 Format( descendant );
-                            } );
+                            },
+                            RECURSE_MODE::NO_RECURSE );
                 }
 
                 copy->SetParentGroup( nullptr );

@@ -287,11 +287,12 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
         {
             lastItem->ClearBrightened();
 
-            lastItem->RunOnDescendants(
+            lastItem->RunOnChildren(
                     [&]( BOARD_ITEM* child )
                     {
                         child->ClearBrightened();
-                    } );
+                    },
+                    RECURSE_MODE::RECURSE );
 
             GetCanvas()->GetView()->Update( lastItem );
             lastBrightenedItemID = niluuid;
@@ -332,11 +333,12 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
         {
             item->SetBrightened();
 
-            item->RunOnDescendants(
+            item->RunOnChildren(
                     [&]( BOARD_ITEM* child )
                     {
                         child->SetBrightened();
-                    });
+                    },
+                    RECURSE_MODE::RECURSE );
 
             GetCanvas()->GetView()->Update( item );
             lastBrightenedItemIDs.push_back( item->m_Uuid );

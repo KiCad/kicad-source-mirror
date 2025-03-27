@@ -189,7 +189,8 @@ void PCB_GROUP::SetLocked( bool aLockState )
             [&]( BOARD_ITEM* child )
             {
                 child->SetLocked( aLockState );
-            } );
+            },
+            RECURSE_MODE::NO_RECURSE );
 }
 
 
@@ -397,40 +398,23 @@ void PCB_GROUP::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 }
 
 
-void PCB_GROUP::RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFunction ) const
+void PCB_GROUP::RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFunction, RECURSE_MODE aMode ) const
 {
-    try
-    {
-        for( BOARD_ITEM* item : m_items )
-            aFunction( item );
-    }
-    catch( std::bad_function_call& )
-    {
-        wxFAIL_MSG( wxT( "Error calling function in PCB_GROUP::RunOnChildren" ) );
-    }
-}
-
-
-void PCB_GROUP::RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction,
-                                  int aDepth ) const
-{
-    // Avoid freezes with infinite recursion
-    if( aDepth > 20 )
-        return;
-
     try
     {
         for( BOARD_ITEM* item : m_items )
         {
             aFunction( item );
 
-            if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
-                item->RunOnDescendants( aFunction, aDepth + 1 );
+            if( aMode == RECURSE_MODE::RECURSE && ( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T ) )
+            {
+                item->RunOnChildren( aFunction, RECURSE_MODE::RECURSE );
+            }
         }
     }
     catch( std::bad_function_call& )
     {
-        wxFAIL_MSG( wxT( "Error calling function in PCB_GROUP::RunOnDescendants" ) );
+        wxFAIL_MSG( wxT( "Error calling function in PCB_GROUP::RunOnChildren" ) );
     }
 }
 

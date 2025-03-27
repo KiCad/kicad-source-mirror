@@ -895,12 +895,13 @@ BOARD_ITEM* PCB_IO_KICAD_SEXPR_PARSER::Parse()
 
     const std::vector<wxString>* embeddedFonts = item->GetEmbeddedFiles()->UpdateFontFiles();
 
-    item->RunOnDescendants(
+    item->RunOnChildren(
             [&]( BOARD_ITEM* aChild )
             {
                 if( EDA_TEXT* textItem = dynamic_cast<EDA_TEXT*>( aChild ) )
                     textItem->ResolveFont( embeddedFonts );
-            } );
+            },
+            RECURSE_MODE::RECURSE );
 
     resolveGroups( item );
 
@@ -1285,7 +1286,8 @@ void PCB_IO_KICAD_SEXPR_PARSER::resolveGroups( BOARD_ITEM* aParent )
                             {
                                 if( child->m_Uuid == aId )
                                     aItem = child;
-                            } );
+                            },
+                            RECURSE_MODE::NO_RECURSE );
                 }
 
                 return aItem;

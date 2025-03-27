@@ -641,11 +641,12 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
                 {
                     item->SetLayer( destLayer );
 
-                    item->RunOnDescendants(
+                    item->RunOnChildren(
                             [&]( BOARD_ITEM* descendant )
                             {
                                 descendant->SetLayer( destLayer );
-                            } );
+                            },
+                            RECURSE_MODE::RECURSE );
                 }
             }
 
@@ -654,11 +655,12 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
                 item->Move( cursorPosition );
                 commit.Add( item );
 
-                item->RunOnDescendants(
+                item->RunOnChildren(
                         [&]( BOARD_ITEM* descendant )
                         {
                             commit.Add( descendant );
-                        } );
+                        },
+                        RECURSE_MODE::RECURSE );
             }
 
             commit.Push( _( "Place Items" ) );
