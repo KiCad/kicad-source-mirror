@@ -8,7 +8,7 @@
 # 撒景賢 <james.sa.2013@gmail.com>, 2024.
 # Oliver0804 <icetzsr@gmail.com>, 2024.
 # William Lin <unrealin01@gmail.com>, 2024.
-# pominglee <pominglee@gmail.com>, 2024.
+# pominglee <pominglee@gmail.com>, 2024, 2025.
 # Andrew <yenchang.lin@gmail.com>, 2024.
 # CloverGit <w991593239@163.com>, 2024, 2025.
 # Ricky From Hong Kong <lamricky11@hotmail.com>, 2024.
@@ -20,8 +20,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-24 12:07-0700\n"
-"PO-Revision-Date: 2025-03-14 10:01+0000\n"
-"Last-Translator: Shuwn Hsu <shuwn@sray.dev>\n"
+"PO-Revision-Date: 2025-03-27 01:09+0000\n"
+"Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -361,14 +361,12 @@ msgid "Reload board"
 msgstr "重新載入電路板"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:49
-#, fuzzy
 msgid "Reload board and refresh 3D view"
-msgstr "重新載入電路板和 3D 模型"
+msgstr "重新載入電路板以及更新 3D 視圖"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
-#, fuzzy
 msgid "Use raytracing"
-msgstr "光線追蹤"
+msgstr "使用光線追蹤"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:56
 msgid "Render current view using Raytracing"
@@ -379,27 +377,24 @@ msgid "Copy 3D image to clipboard"
 msgstr "複製 3D 影像到剪貼簿"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:64
-#, fuzzy
 msgid "Copy the current 3D image to the clipboard"
-msgstr "複製 3D 影像到剪貼簿"
+msgstr "複製目前 3D 影像到剪貼簿"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
 msgid "Export Current View as PNG..."
 msgstr "將當前視圖匯出為 PNG..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
-#, fuzzy
 msgid "Export the Current View as a PNG image"
-msgstr "將當前視圖匯出為 PNG..."
+msgstr "將目前視圖匯出為 PNG 圖檔"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
 msgid "Export Current View as JPEG..."
 msgstr "將當前視圖匯出為 JPEG..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:80
-#, fuzzy
 msgid "Export the Current View as a JPEG image"
-msgstr "將當前視圖匯出為 JPEG..."
+msgstr "將目前視圖匯出為 JPEG 圖檔"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:88
 msgid "Set Pivot"
@@ -719,106 +714,92 @@ msgid "User.1"
 msgstr "User.1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
-#, fuzzy
 msgid "Show user defined layer 1"
-msgstr "用戶定義層 1"
+msgstr "顯示使用者定義層 1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
 msgid "User.2"
 msgstr "User.2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Show user defined layer 2"
-msgstr "用戶定義層 2"
+msgstr "顯示使用者定義層 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
 msgid "User.3"
 msgstr "User.3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "Show user defined layer 3"
-msgstr "用戶定義層 3"
+msgstr "顯示使用者定義層 3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
 msgid "User.4"
 msgstr "User.4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Show user defined layer 4"
-msgstr "用戶定義層 4"
+msgstr "顯示使用者定義層 4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
 msgid "User.5"
 msgstr "User.5"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Show user defined layer 5"
-msgstr "用戶定義層 5"
+msgstr "顯示使用者定義層 5"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
 msgid "User.6"
 msgstr "User.6"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Show user defined layer 6"
-msgstr "用戶定義層 6"
+msgstr "顯示使用者定義層 6"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
 msgid "User.7"
 msgstr "User.7"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Show user defined layer 7"
-msgstr "用戶定義層 7"
+msgstr "顯示使用者定義層 7"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
 msgid "User.8"
 msgstr "User.8"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Show user defined layer 8"
-msgstr "用戶定義層 8"
+msgstr "顯示使用者定義層 8"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
 msgid "User.9"
 msgstr "User.9"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show user defined layer 9"
-msgstr "用戶定義層 9"
+msgstr "顯示使用者定義層 9"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "User.10"
-msgstr "User.1"
+msgstr "使用者 10"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Show user defined layer 10"
-msgstr "用戶定義層 1"
+msgstr "顯示使用者定義層 10"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "User.11"
-msgstr "User.1"
+msgstr "使用者 11"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Show user defined layer 11"
-msgstr "用戶定義層 1"
+msgstr "顯示使用者定義層 11"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "User.12"
-msgstr "User.1"
+msgstr "使用者 12"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 #, fuzzy
