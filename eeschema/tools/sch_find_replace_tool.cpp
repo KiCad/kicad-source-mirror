@@ -27,6 +27,7 @@
 #include <schematic.h>
 #include <tools/sch_find_replace_tool.h>
 #include <sch_sheet_path.h>
+#include "sch_actions.h"
 
 
 int SCH_FIND_REPLACE_TOOL::FindAndReplace( const TOOL_EVENT& aEvent )
@@ -290,11 +291,8 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
             {
                 if( m_frame->Schematic().CurrentSheet() != sheet )
                 {
-                    // Store the current zoom level into the current screen before switching
-                    m_frame->GetScreen()->m_LastZoomLevel = m_frame->GetCanvas()->GetView()->GetScale();
-
-                    m_frame->Schematic().SetCurrentSheet( sheet );
-                    m_frame->DisplayCurrentSheet();
+                    m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet,
+                                                                           &sheet );
                 }
 
                 break;

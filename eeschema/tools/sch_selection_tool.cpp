@@ -2540,8 +2540,8 @@ void SCH_SELECTION_TOOL::SyncSelection( const std::optional<SCH_SHEET_PATH>& tar
 
     if( targetSheetPath && targetSheetPath != editFrame->Schematic().CurrentSheet() )
     {
-        editFrame->Schematic().SetCurrentSheet( *targetSheetPath );
-        editFrame->DisplayCurrentSheet();
+        SCH_SHEET_PATH path = targetSheetPath.value();
+        m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, &path );
     }
 
     ClearSelection( items.size() > 0 ? true /*quiet mode*/ : false );

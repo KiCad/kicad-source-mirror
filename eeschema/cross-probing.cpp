@@ -123,8 +123,8 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString* aPath, const wx
     {
         if( *sheetWithSymbolFound != m_frame->GetCurrentSheet() )
         {
-            m_frame->Schematic().SetCurrentSheet( *sheetWithSymbolFound );
-            m_frame->DisplayCurrentSheet();
+            m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet,
+                                                                   sheetWithSymbolFound );
         }
 
         if( crossProbingSettings.center_on_items )

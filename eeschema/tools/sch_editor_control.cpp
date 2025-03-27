@@ -148,17 +148,11 @@ int SCH_EDITOR_CONTROL::Revert( const TOOL_EVENT& aEvent )
 
     if( m_frame->GetCurrentSheet().Last() != &root )
     {
-        m_toolMgr->RunAction( ACTIONS::cancelInteractive );
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
-
-        // Store the current zoom level into the current screen before switching
-        m_frame->GetScreen()->m_LastZoomLevel = m_frame->GetCanvas()->GetView()->GetScale();
-
         SCH_SHEET_PATH rootSheetPath;
         rootSheetPath.push_back( &root );
-        m_frame->SetCurrentSheet( rootSheetPath );
-        m_frame->DisplayCurrentSheet();
 
+        m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet,
+                                                               &rootSheetPath );
         wxSafeYield();
     }
 

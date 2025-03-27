@@ -128,11 +128,10 @@ void SCH_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
 
     if( allHitsOnSamePage && !selectedHits.empty() )
     {
-        if( m_frame->GetCurrentSheet() != *selectedHits.front().sheetPath )
-        {
-            m_frame->SetCurrentSheet( *selectedHits.front().sheetPath );
-            m_frame->DisplayCurrentSheet();
-        }
+        SCH_SHEET_PATH* sheet = selectedHits.front().sheetPath;
+
+        if( m_frame->GetCurrentSheet() != *sheet )
+            m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, sheet );
 
         if( selectedItems.size() )
             m_frame->GetToolManager()->RunAction<EDA_ITEMS*>( SCH_ACTIONS::addItemsToSel, &selectedItems );
