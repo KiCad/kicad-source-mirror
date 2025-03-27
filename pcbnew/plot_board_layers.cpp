@@ -135,9 +135,19 @@ void PlotBoardLayers( BOARD* aBoard, PLOTTER* aPlotter, const LSEQ& aLayers,
     // if a drill mark must be plotted,it must be plotted as a filled
     // white shape *after* all other shapes are plotted, provided that
     // the other shapes are not copper layers
+    int copperLayers = 0;
+    int nonCopperLayers = 0;
+
+    for( PCB_LAYER_ID layer : aLayers )
+    {
+        if( IsCopperLayer( layer ) )
+            copperLayers++;
+        else
+            nonCopperLayers++;
+    }
+
     bool plot_mark = ( aPlotOptions.GetDrillMarksType() != DRILL_MARKS::NO_DRILL_SHAPE
-                       && !aPlotOptions.GetLayerSelection().ClearCopperLayers().empty()
-                       && !aPlotOptions.GetLayerSelection().ClearNonCopperLayers().empty() );
+                       && copperLayers > 0 && nonCopperLayers > 0 );
 
     for( PCB_LAYER_ID layer : aLayers )
         PlotOneBoardLayer( aBoard, aPlotter, layer, aPlotOptions, layer == aLayers[0] );
