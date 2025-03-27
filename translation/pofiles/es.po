@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-24 12:07-0700\n"
-"PO-Revision-Date: 2025-03-27 01:09+0000\n"
+"PO-Revision-Date: 2025-03-27 04:58+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -359,9 +359,8 @@ msgid "Reload board"
 msgstr "Recargar la placa"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:49
-#, fuzzy
 msgid "Reload board and refresh 3D view"
-msgstr "Cargar de nuevo placa y modelos 3D"
+msgstr "Recargar placa y actualizar vista 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
 #, fuzzy
@@ -377,9 +376,8 @@ msgid "Copy 3D image to clipboard"
 msgstr "Copiar imagen 3D al portapapeles"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:64
-#, fuzzy
 msgid "Copy the current 3D image to the clipboard"
-msgstr "Copiar imagen 3D al portapapeles"
+msgstr "Copiar la imagen 3D actual en el portapapeles"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
 msgid "Export Current View as PNG..."
@@ -19362,7 +19360,7 @@ msgstr "[Solo lectura]"
 #: eeschema/sch_edit_frame.cpp:1733 eeschema/sim/simulator_frame.cpp:352
 #: pcbnew/footprint_edit_frame.cpp:1038 pcbnew/pcb_edit_frame.cpp:1881
 msgid "[Unsaved]"
-msgstr "[No Guardado]"
+msgstr "[No guardado]"
 
 #: eeschema/sch_edit_frame.cpp:1737
 msgid "[no schematic loaded]"
