@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-24 12:07-0700\n"
-"PO-Revision-Date: 2025-03-24 22:43+0000\n"
+"PO-Revision-Date: 2025-03-27 13:55+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -3825,7 +3825,7 @@ msgstr "Aktivera Git-övervakning"
 #: common/dialogs/git/panel_git_repos_base.cpp:28
 #, fuzzy
 msgid "Remote Tracking"
-msgstr "Dra ledare"
+msgstr "Fjärrspårning"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:41
 msgid "Update interval:"
@@ -6951,7 +6951,7 @@ msgstr "Det gick inte att slå upp överlämning"
 #: common/git/git_pull_handler.cpp:264
 #, fuzzy
 msgid "Could not get tree from target commit"
-msgstr "Kunde inte slå samman överlämningar"
+msgstr "Kunde inte hämta träd från överlämning"
 
 #: common/git/git_pull_handler.cpp:306 common/git/kicad_git_errors.cpp:55
 msgid "Failed to perform checkout operation."
@@ -6965,7 +6965,7 @@ msgstr "Lyckades inte uppdatera referens '%s' till att peka på '%s'"
 #: common/git/git_pull_handler.cpp:325
 #, fuzzy
 msgid "Failed to clean up repository state after fast-forward."
-msgstr "Kunde inte klona förvaret."
+msgstr "Kunde inte städa upp förvarets tillstånd efter framåtspolning."
 
 #: common/git/git_pull_handler.cpp:334
 #, fuzzy
@@ -7003,8 +7003,9 @@ msgid "Added"
 msgstr "Tillagd"
 
 #: common/git/git_pull_handler.cpp:527
+#, fuzzy
 msgid "Conflicts detected during rebase"
-msgstr ""
+msgstr "Konflikt upptäcktes under ombasering"
 
 #: common/git/git_push_handler.cpp:56
 msgid "Could not lookup remote"
