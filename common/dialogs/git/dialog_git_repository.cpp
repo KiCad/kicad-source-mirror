@@ -427,7 +427,6 @@ void DIALOG_GIT_REPOSITORY::updateAuthControls()
             m_txtUsername->Enable( true );
             m_txtPassword->Enable( true );
             m_labelPass1->SetLabel( _( "Password:" ) );
-            setDefaultSSHKey();
         }
     }
 }
