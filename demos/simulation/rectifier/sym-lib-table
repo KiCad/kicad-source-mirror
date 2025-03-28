@@ -1,3 +1,4 @@
 (sym_lib_table
+  (version 7)
   (lib (name "rectifier_schlib")(type "KiCad")(uri "${KIPRJMOD}/rectifier_schlib.kicad_sym")(options "")(descr ""))
 )
