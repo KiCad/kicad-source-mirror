@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-24 12:07-0700\n"
+"POT-Creation-Date: 2025-03-28 16:28-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2446,9 +2446,6 @@ msgstr "Could not open public key '%s'"
 msgid "Missing information"
 msgstr "Missing information"
 
-msgid "Please enter a name for the repository"
-msgstr "Please enter a name for the repository"
-
 msgid "Please enter a URL for the repository"
 msgstr "Please enter a URL for the repository"
 
@@ -3138,6 +3135,9 @@ msgstr "Store a copy of all fonts used"
 
 msgid "&Export..."
 msgstr "&Export..."
+
+msgid "Pads:"
+msgstr "Pads:"
 
 msgid "Footprints/pads:"
 msgstr "Footprints/pads:"
@@ -4451,6 +4451,9 @@ msgstr "Could not analyze merge"
 
 msgid "Invalid HEAD.  Cannot merge."
 msgstr "Invalid HEAD.  Cannot merge."
+
+msgid "Could not access repository configuration"
+msgstr "Could not access repository configuration"
 
 msgid "Could not get repository head"
 msgstr "Could not get repository head"
@@ -7316,18 +7319,6 @@ msgstr "%s not found"
 msgid "Selected net:"
 msgstr "Selected net:"
 
-msgid "Please select a library to save the design block to."
-msgstr "Please select a library to save the design block to."
-
-msgid "Design blocks with nested sheets are not supported."
-msgstr "Design blocks with nested sheets are not supported."
-
-msgid "Error saving temporary schematic file to create design block."
-msgstr "Error saving temporary schematic file to create design block."
-
-msgid "Please select some items to save as a design block."
-msgstr "Please select some items to save as a design block."
-
 msgid "Annotation Messages:"
 msgstr "Annotation Messages:"
 
@@ -8782,6 +8773,36 @@ msgstr "Delete footprint filter"
 
 msgid "Footprint Filters"
 msgstr "Footprint Filters"
+
+msgid "Pins with duplicate numbers are jumpers"
+msgstr "Pins with duplicate numbers are jumpers"
+
+msgid ""
+"When enabled, this symbol can have more than one pin with the same number, "
+"and pins with the same number will be considered to be jumpered together "
+"internally."
+msgstr ""
+"When enabled, this symbol can have more than one pin with the same number, "
+"and pins with the same number will be considered to be jumpered together "
+"internally."
+
+msgid "Jumper Pin Groups"
+msgstr "Jumper Pin Groups"
+
+msgid "Available pins"
+msgstr "Available pins"
+
+msgid "Create jumper group from the selected pins"
+msgstr "Create jumper group from the selected pins"
+
+msgid "Remove the selected jumper pin group"
+msgstr "Remove the selected jumper pin group"
+
+msgid "Grouped pins"
+msgstr "Grouped pins"
+
+msgid "Pin Connections"
+msgstr "Pin Connections"
 
 msgid "Edit Simulation Model..."
 msgstr "Edit Simulation Model..."
@@ -11044,8 +11065,8 @@ msgid "Global Field Name Templates"
 msgstr "Global Field Name Templates"
 
 #, c-format
-msgid "The field name \"%s\" contains trailing and/or leading whitespace."
-msgstr "The field name \"%s\" contains trailing and/or leading whitespace."
+msgid "The field name '%s' contains trailing and/or leading white space."
+msgstr "The field name '%s' contains trailing and/or leading white space."
 
 msgid ""
 "This may result in what appears to be duplicate field names but are actually "
@@ -12285,8 +12306,20 @@ msgstr "Design block '%s' already has a schematic."
 msgid "Overwrite existing schematic?"
 msgstr "Overwrite existing schematic?"
 
+msgid "Please select a library to save the design block to."
+msgstr "Please select a library to save the design block to."
+
+msgid "Design blocks with nested sheets are not supported."
+msgstr "Design blocks with nested sheets are not supported."
+
+msgid "Error saving temporary schematic file to create design block."
+msgstr "Error saving temporary schematic file to create design block."
+
 msgid "Please select a design block to save the schematic to."
 msgstr "Please select a design block to save the schematic to."
+
+msgid "Please select some items to save as a design block."
+msgstr "Please select some items to save as a design block."
 
 msgid "KiCad Schematic Editor"
 msgstr "KiCad Schematic Editor"
@@ -24619,6 +24652,36 @@ msgstr "Net Ties"
 msgid "Pad groups allowed to short different nets:"
 msgstr "Pad groups allowed to short different nets:"
 
+msgid "Pads with duplicate numbers are jumpers"
+msgstr "Pads with duplicate numbers are jumpers"
+
+msgid ""
+"When enabled, this footprint can have more than one pad with the same "
+"number, and pads with the same number will be considered to be jumpered "
+"together internally."
+msgstr ""
+"When enabled, this footprint can have more than one pad with the same "
+"number, and pads with the same number will be considered to be jumpered "
+"together internally."
+
+msgid "Jumper Pad Groups"
+msgstr "Jumper Pad Groups"
+
+msgid "Available pads"
+msgstr "Available pads"
+
+msgid "Create jumper group from the selected pads"
+msgstr "Create jumper group from the selected pads"
+
+msgid "Remove the selected jumper pad group"
+msgstr "Remove the selected jumper pad group"
+
+msgid "Grouped pads"
+msgstr "Grouped pads"
+
+msgid "Pad Connections"
+msgstr "Pad Connections"
+
 msgid "All footprint generator scripts were loaded"
 msgstr "All footprint generator scripts were loaded"
 
@@ -26434,12 +26497,6 @@ msgstr "Opaque"
 msgid "Transparent"
 msgstr "Transparent"
 
-msgid "High"
-msgstr "High"
-
-msgid "User"
-msgstr "User"
-
 msgid "Dimensions:"
 msgstr "Dimensions:"
 
@@ -26449,17 +26506,23 @@ msgstr "px"
 msgid "x"
 msgstr "x"
 
-msgid "Quality preset:"
-msgstr "Quality preset:"
-
 msgid "Background style:"
 msgstr "Background style:"
 
-msgid "View"
-msgstr "View"
+msgid "Procedural textures"
+msgstr "Procedural textures"
 
 msgid "Add floor"
 msgstr "Add floor"
+
+msgid "Anti-aliasing"
+msgstr "Anti-aliasing"
+
+msgid "Screen space ambient occlusions and global illumination reflections"
+msgstr "Screen space ambient occlusions and global illumination reflections"
+
+msgid "View"
+msgstr "View"
 
 msgid "Perspective"
 msgstr "Perspective"
@@ -26491,14 +26554,14 @@ msgstr "Pan:"
 msgid "°"
 msgstr "°"
 
-msgid "Lights intensity"
-msgstr "Lights intensity"
+msgid "Lights Intensity"
+msgstr "Lights Intensity"
 
 msgid "Camera:"
 msgstr "Camera:"
 
-msgid "Lights position"
-msgstr "Lights position"
+msgid "Lights Position"
+msgstr "Lights Position"
 
 msgid "Side lights elevation:"
 msgstr "Side lights elevation:"
@@ -27035,6 +27098,77 @@ msgstr "Field Value:"
 msgid "Sheet Name:"
 msgstr "Sheet Name:"
 
+#, c-format
+msgid "Layer name %s already in use."
+msgstr "Layer name %s already in use."
+
+msgid "Layer Names"
+msgstr "Layer Names"
+
+msgid "Net names:"
+msgstr "Net names:"
+
+msgid "Do not show"
+msgstr "Do not show"
+
+msgid "Show on pads"
+msgstr "Show on pads"
+
+msgid "Show on tracks"
+msgstr "Show on tracks"
+
+msgid "Show on pads & tracks"
+msgstr "Show on pads & tracks"
+
+msgid "Show pad numbers"
+msgstr "Show pad numbers"
+
+msgid "Clearance Outlines"
+msgstr "Clearance Outlines"
+
+msgid "Do not show clearances"
+msgstr "Do not show clearances"
+
+msgid "Show when routing"
+msgstr "Show when routing"
+
+msgid "Show when routing w/ via clearance at end"
+msgstr "Show when routing w/ via clearance at end"
+
+msgid "Show when routing and editing"
+msgstr "Show when routing and editing"
+
+msgid "Show always"
+msgstr "Show always"
+
+msgid "Show pad clearance"
+msgstr "Show pad clearance"
+
+msgid "Show all fields when parent footprint is selected"
+msgstr "Show all fields when parent footprint is selected"
+
+msgid "Select/highlight objects corresponding to schematic selection"
+msgstr "Select/highlight objects corresponding to schematic selection"
+
+msgid "Highlight footprints corresponding to selected symbols"
+msgstr "Highlight footprints corresponding to selected symbols"
+
+msgid "Ensures that cross-probed footprints are visible in the current view"
+msgstr "Ensures that cross-probed footprints are visible in the current view"
+
+msgid "Highlight nets when they are highlighted in the schematic editor"
+msgstr "Highlight nets when they are highlighted in the schematic editor"
+
+msgid "Refresh 3D view automatically"
+msgstr "Refresh 3D view automatically"
+
+msgid ""
+"When enabled, edits to the board will cause the 3D view to refresh (may be "
+"slow with larger boards)"
+msgstr ""
+"When enabled, edits to the board will cause the 3D view to refresh (may be "
+"slow with larger boards)"
+
 msgid "Constrain actions to H, V, 45 degrees"
 msgstr "Constrain actions to H, V, 45 degrees"
 
@@ -27149,10 +27283,6 @@ msgstr "If checked, zones will be re-filled after each edit operation"
 msgid "Internal Layers"
 msgstr "Internal Layers"
 
-#, c-format
-msgid "Layer name %s already in use."
-msgstr "Layer name %s already in use."
-
 msgid "Default Field Properties for New Footprints"
 msgstr "Default Field Properties for New Footprints"
 
@@ -27230,70 +27360,6 @@ msgstr "Unknown error"
 
 msgid "3D Model(s)"
 msgstr "3D Model(s)"
-
-msgid "Net names:"
-msgstr "Net names:"
-
-msgid "Do not show"
-msgstr "Do not show"
-
-msgid "Show on pads"
-msgstr "Show on pads"
-
-msgid "Show on tracks"
-msgstr "Show on tracks"
-
-msgid "Show on pads & tracks"
-msgstr "Show on pads & tracks"
-
-msgid "Show pad numbers"
-msgstr "Show pad numbers"
-
-msgid "Clearance Outlines"
-msgstr "Clearance Outlines"
-
-msgid "Do not show clearances"
-msgstr "Do not show clearances"
-
-msgid "Show when routing"
-msgstr "Show when routing"
-
-msgid "Show when routing w/ via clearance at end"
-msgstr "Show when routing w/ via clearance at end"
-
-msgid "Show when routing and editing"
-msgstr "Show when routing and editing"
-
-msgid "Show always"
-msgstr "Show always"
-
-msgid "Show pad clearance"
-msgstr "Show pad clearance"
-
-msgid "Show all fields when parent footprint is selected"
-msgstr "Show all fields when parent footprint is selected"
-
-msgid "Select/highlight objects corresponding to schematic selection"
-msgstr "Select/highlight objects corresponding to schematic selection"
-
-msgid "Highlight footprints corresponding to selected symbols"
-msgstr "Highlight footprints corresponding to selected symbols"
-
-msgid "Ensures that cross-probed footprints are visible in the current view"
-msgstr "Ensures that cross-probed footprints are visible in the current view"
-
-msgid "Highlight nets when they are highlighted in the schematic editor"
-msgstr "Highlight nets when they are highlighted in the schematic editor"
-
-msgid "Refresh 3D view automatically"
-msgstr "Refresh 3D view automatically"
-
-msgid ""
-"When enabled, edits to the board will cause the 3D view to refresh (may be "
-"slow with larger boards)"
-msgstr ""
-"When enabled, edits to the board will cause the 3D view to refresh (may be "
-"slow with larger boards)"
 
 msgid "Recreate Plugin Environment"
 msgstr "Recreate Plugin Environment"
@@ -29903,8 +29969,8 @@ msgid "%s keep-out property differs."
 msgstr "%s keep-out property differs."
 
 #, c-format
-msgid "%s keep out copper fill setting differs."
-msgstr "%s keep out copper fill setting differs."
+msgid "%s keep out zone fill setting differs."
+msgstr "%s keep out zone fill setting differs."
 
 #, c-format
 msgid "%s keep out footprints setting differs."
@@ -31360,6 +31426,30 @@ msgstr "Added %s 'Do not place' fabrication attribute."
 #, c-format
 msgid "Removed %s 'Do not place' fabrication attribute."
 msgstr "Removed %s 'Do not place' fabrication attribute."
+
+#, c-format
+msgid "Added %s 'duplicate pad numbers are jumpers' attribute."
+msgstr "Added %s 'duplicate pad numbers are jumpers' attribute."
+
+#, c-format
+msgid "Removed %s 'duplicate pad numbers are jumpers' attribute."
+msgstr "Removed %s 'duplicate pad numbers are jumpers' attribute."
+
+#, c-format
+msgid "Add %s 'duplicate pad numbers are jumpers' attribute."
+msgstr "Add %s 'duplicate pad numbers are jumpers' attribute."
+
+#, c-format
+msgid "Remove %s 'duplicate pad numbers are jumpers' attribute."
+msgstr "Remove %s 'duplicate pad numbers are jumpers' attribute."
+
+#, c-format
+msgid "Updated %s jumper pad groups"
+msgstr "Updated %s jumper pad groups"
+
+#, c-format
+msgid "Update %s jumper pad groups"
+msgstr "Update %s jumper pad groups"
 
 #, c-format
 msgid "Disconnect %s pin %s."
@@ -33471,6 +33561,9 @@ msgstr "Track (arc)"
 
 msgid "Segment Length"
 msgstr "Segment Length"
+
+msgid "Copper Area"
+msgstr "Copper Area"
 
 #, c-format
 msgid "Width Constraints: %s"
@@ -36458,29 +36551,32 @@ msgstr "Object Snapping"
 msgid "DP Gap Constraints: %s"
 msgstr "DP Gap Constraints: %s"
 
-msgid "Resolved clearance"
-msgstr "Resolved clearance"
+msgid "Resolved Clearance"
+msgstr "Resolved Clearance"
 
-msgid "Actual clearance"
-msgstr "Actual clearance"
+msgid "Actual Clearance"
+msgstr "Actual Clearance"
 
-msgid "Resolved hole clearance"
-msgstr "Resolved hole clearance"
+msgid "Resolved Hole Clearance"
+msgstr "Resolved Hole Clearance"
 
-msgid "Actual hole clearance"
-msgstr "Actual hole clearance"
+msgid "Actual Hole Clearance"
+msgstr "Actual Hole Clearance"
 
-msgid "Resolved edge clearance"
-msgstr "Resolved edge clearance"
+msgid "Resolved Edge Clearance"
+msgstr "Resolved Edge Clearance"
 
-msgid "Resolved margin clearance"
-msgstr "Resolved margin clearance"
+msgid "Resolved Margin Clearance"
+msgstr "Resolved Margin Clearance"
 
 msgid "Selected Items"
 msgstr "Selected Items"
 
 msgid "Selected 2D Length"
 msgstr "Selected 2D Length"
+
+msgid "Selected 2D Copper Area"
+msgstr "Selected 2D Copper Area"
 
 msgid "Resize Table Cells"
 msgstr "Resize Table Cells"
@@ -37296,8 +37392,8 @@ msgstr "No tracks"
 msgid "No pads"
 msgstr "No pads"
 
-msgid "No copper zones"
-msgstr "No copper zones"
+msgid "No zone fills"
+msgstr "No zone fills"
 
 msgid "No footprints"
 msgstr "No footprints"
@@ -37375,8 +37471,8 @@ msgstr "Keep Out Vias"
 msgid "Keep Out Pads"
 msgstr "Keep Out Pads"
 
-msgid "Keep Out Copper Pours"
-msgstr "Keep Out Copper Pours"
+msgid "Keep Out Zone Fills"
+msgstr "Keep Out Zone Fills"
 
 msgid "Keep Out Footprints"
 msgstr "Keep Out Footprints"
@@ -37419,9 +37515,6 @@ msgstr "Minimum Island Area"
 
 msgid "Minimum Width"
 msgstr "Minimum Width"
-
-msgid "Pad Connections"
-msgstr "Pad Connections"
 
 msgid "Checking zone fills..."
 msgstr "Checking zone fills…"
@@ -37603,6 +37696,56 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Please enter a name for the repository"
+#~ msgstr "Please enter a name for the repository"
+
+#, c-format
+#~ msgid "The field name \"%s\" contains trailing and/or leading whitespace."
+#~ msgstr "The field name \"%s\" contains trailing and/or leading whitespace."
+
+#~ msgid "High"
+#~ msgstr "High"
+
+#~ msgid "User"
+#~ msgstr "User"
+
+#~ msgid "Quality preset:"
+#~ msgstr "Quality preset:"
+
+#~ msgid "Lights intensity"
+#~ msgstr "Lights intensity"
+
+#~ msgid "Lights position"
+#~ msgstr "Lights position"
+
+#, c-format
+#~ msgid "%s keep out copper fill setting differs."
+#~ msgstr "%s keep out copper fill setting differs."
+
+#~ msgid "Resolved clearance"
+#~ msgstr "Resolved clearance"
+
+#~ msgid "Actual clearance"
+#~ msgstr "Actual clearance"
+
+#~ msgid "Resolved hole clearance"
+#~ msgstr "Resolved hole clearance"
+
+#~ msgid "Actual hole clearance"
+#~ msgstr "Actual hole clearance"
+
+#~ msgid "Resolved edge clearance"
+#~ msgstr "Resolved edge clearance"
+
+#~ msgid "Resolved margin clearance"
+#~ msgstr "Resolved margin clearance"
+
+#~ msgid "No copper zones"
+#~ msgstr "No copper zones"
+
+#~ msgid "Keep Out Copper Pours"
+#~ msgstr "Keep Out Copper Pours"
 
 #~ msgid "Git Repositories"
 #~ msgstr "Git Repositories"
@@ -67525,12 +67668,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "Raytracing Render Options"
 #~ msgstr "Raytracing Render Options"
-
-#~ msgid "Procedural textures"
-#~ msgstr "Procedural textures"
-
-#~ msgid "Anti-aliasing"
-#~ msgstr "Anti-aliasing"
 
 #~ msgid "Post-processing"
 #~ msgstr "Post-processing"
