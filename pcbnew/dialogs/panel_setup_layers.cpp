@@ -536,6 +536,11 @@ bool PANEL_SETUP_LAYERS::TransferDataToWindow()
 
 void PANEL_SETUP_LAYERS::SyncCopperLayers( int aNumCopperLayers )
 {
+    BOARD* savedBoard = m_pcb;
+    BOARD  temp;
+
+    m_pcb = &temp;
+    transferDataFromWindow();
 
     for( size_t ii = 0; ii < m_enabledLayers.size(); ii++ )
     {
@@ -553,6 +558,8 @@ void PANEL_SETUP_LAYERS::SyncCopperLayers( int aNumCopperLayers )
 
     showLayerTypes();
     setUserDefinedLayerCheckBoxes();
+
+    m_pcb = savedBoard;
 }
 
 
@@ -587,7 +594,7 @@ void PANEL_SETUP_LAYERS::showBoardLayerNames()
 }
 
 
-void PANEL_SETUP_LAYERS::showSelectedLayerCheckBoxes( LSET enabledLayers )
+void PANEL_SETUP_LAYERS::showSelectedLayerCheckBoxes( const LSET& enabledLayers )
 {
     for( auto& [layer,ctl] : m_layersControls )
         setLayerCheckBox( layer, enabledLayers.test( layer ) );
@@ -684,6 +691,112 @@ void PANEL_SETUP_LAYERS::setCopperLayerCheckBoxes( int copperCount )
 }
 
 
+bool PANEL_SETUP_LAYERS::transferDataFromWindow()
+{
+    bool modified = false;
+    LSET enabledLayers = GetUILayerMask();
+
+    LSET previousEnabled = m_pcb->GetEnabledLayers();
+
+    if( enabledLayers != previousEnabled )
+    {
+        m_pcb->SetEnabledLayers( enabledLayers );
+
+        LSET changedLayers = enabledLayers ^ previousEnabled;
+
+        /*
+         * Ensure enabled layers are also visible.  This is mainly to avoid mistakes if some
+         * enabled layers are not visible when exiting this dialog.
+         */
+        m_pcb->SetVisibleLayers( m_pcb->GetVisibleLayers() | changedLayers );
+
+        /*
+         * Ensure items with through holes have all inner copper layers.  (For historical reasons
+         * this is NOT trimmed to the currently-enabled inner layers.)
+         */
+        for( FOOTPRINT* fp : m_pcb->Footprints() )
+        {
+            for( PAD* pad : fp->Pads() )
+            {
+                if( pad->HasHole() && pad->IsOnCopperLayer() )
+                    pad->SetLayerSet( pad->GetLayerSet() | LSET::InternalCuMask() );
+            }
+        }
+
+        // Tracks do not change their layer
+        // Vias layers are defined by the starting layer and the ending layer, so
+        // they are not modified by adding a layer.
+        // So do nothing for tracks/vias
+
+        modified = true;
+    }
+
+    for( PCB_LAYER_ID layer : enabledLayers )
+    {
+        wxString newLayerName = getName( layer )->GetValue();
+
+        if( m_pcb->GetLayerName( layer ) != newLayerName )
+        {
+            m_pcb->SetLayerName( layer, newLayerName );
+            modified = true;
+        }
+
+        if( IsCopperLayer( layer ) )
+        {
+            LAYER_T t;
+
+            switch( getChoice( layer )->GetCurrentSelection() )
+            {
+            case 0:  t = LT_SIGNAL;    break;
+            case 1:  t = LT_POWER;     break;
+            case 2:  t = LT_MIXED;     break;
+            case 3:  t = LT_JUMPER;    break;
+            default: t = LT_UNDEFINED; break;
+            }
+
+            if( m_pcb->GetLayerType( layer ) != t )
+            {
+                m_pcb->SetLayerType( layer, t );
+                modified = true;
+            }
+        }
+        else if( layer >= User_1 && !IsCopperLayer( layer ) )
+        {
+            LAYER_T t;
+
+            switch( getChoice( layer )->GetCurrentSelection() )
+            {
+            case 0:  t = LT_AUX;       break;
+            case 1:  t = LT_FRONT;     break;
+            case 2:  t = LT_BACK;      break;
+            default: t = LT_UNDEFINED; break;
+            }
+
+            if( m_pcb->GetLayerType( layer ) != t )
+            {
+                m_pcb->SetLayerType( layer, t );
+                modified = true;
+            }
+        }
+    }
+
+    LSET layers = enabledLayers & LSET::UserDefinedLayersMask();
+
+    for( PCB_LAYER_ID layer : layers )
+    {
+        wxString newLayerName = getName( layer )->GetValue();
+
+        if( m_pcb->GetLayerName( layer ) != newLayerName )
+        {
+            m_pcb->SetLayerName( layer, newLayerName );
+            modified = true;
+        }
+    }
+
+    return modified;
+}
+
+
 bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
 {
     if( !testLayerNames() )
@@ -693,8 +806,9 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
     if( m_physicalStackup )
         SyncCopperLayers( m_physicalStackup->GetCopperLayerCount() );
 
-    wxString msg;
-    bool     modified = false;
+    wxString  msg;
+    bool      modified = false;
+    wxWindow* parent = wxGetTopLevelParent( this );
 
     // Check for removed layers with items which will get deleted from the board.
     LSEQ removedLayers = getRemovedLayersWithItems();
@@ -704,26 +818,27 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
 
     if( !notremovableLayers.empty() )
     {
-        for( unsigned int ii = 0; ii < notremovableLayers.size(); ii++ )
-            msg << m_pcb->GetLayerName( notremovableLayers[ii] ) << wxT( "\n" );
+        for( PCB_LAYER_ID layer : notremovableLayers )
+            msg << m_pcb->GetLayerName( layer ) << wxT( "\n" );
 
-        if( !IsOK( wxGetTopLevelParent( this ),
-                   wxString::Format( _( "Footprints have some items on removed layers:\n"
-                                        "%s\n"
-                                        "These items will be no longer accessible\n"
-                                        "Do you wish to continue?" ), msg ) ) )
+        if( !IsOK( parent, wxString::Format( _( "Footprints have some items on removed layers:\n"
+                                                "%s\n"
+                                                "These items will be no longer accessible\n"
+                                                "Do you wish to continue?" ),
+                                             msg ) ) )
         {
             return false;
         }
     }
 
-    if( !removedLayers.empty()
-      && !IsOK( wxGetTopLevelParent( this ),
-                _( "Items have been found on removed layers. This operation will "
-                   "delete all items from removed layers and cannot be undone.\n"
-                   "Do you wish to continue?" ) ) )
+    if( !removedLayers.empty() )
     {
-        return false;
+        if( !IsOK( parent, _( "Items have been found on removed layers. This operation will "
+                              "delete all items from removed layers and cannot be undone.\n"
+                              "Do you wish to continue?" ) ) )
+        {
+            return false;
+        }
     }
 
     // Delete all objects on layers that have been removed.  Leaving them in copper layers
@@ -804,104 +919,7 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
         m_frame->ClearUndoRedoList();
     }
 
-    m_enabledLayers = GetUILayerMask();
-
-    LSET previousEnabled = m_pcb->GetEnabledLayers();
-
-    if( m_enabledLayers != previousEnabled )
-    {
-        m_pcb->SetEnabledLayers( m_enabledLayers );
-
-        LSET changedLayers = m_enabledLayers ^ previousEnabled;
-
-        /*
-         * Ensure enabled layers are also visible.  This is mainly to avoid mistakes if some
-         * enabled layers are not visible when exiting this dialog.
-         */
-        m_pcb->SetVisibleLayers( m_pcb->GetVisibleLayers() | changedLayers );
-
-        /*
-         * Ensure items with through holes have all inner copper layers.  (For historical reasons
-         * this is NOT trimmed to the currently-enabled inner layers.)
-         */
-        for( FOOTPRINT* fp : m_pcb->Footprints() )
-        {
-            for( PAD* pad : fp->Pads() )
-            {
-                if( pad->HasHole() && pad->IsOnCopperLayer() )
-                    pad->SetLayerSet( pad->GetLayerSet() | LSET::InternalCuMask() );
-            }
-        }
-
-        // Tracks do not change their layer
-        // Vias layers are defined by the starting layer and the ending layer, so
-        // they are not modified by adding a layer.
-        // So do nothing for tracks/vias
-
-        modified = true;
-    }
-
-    for( PCB_LAYER_ID layer : m_enabledLayers )
-    {
-        wxString newLayerName = getName( layer )->GetValue();
-
-        if( m_pcb->GetLayerName( layer ) != newLayerName )
-        {
-            m_pcb->SetLayerName( layer, newLayerName );
-            modified = true;
-        }
-
-        if( IsCopperLayer( layer ) )
-        {
-            LAYER_T t;
-
-            switch( getChoice( layer )->GetCurrentSelection() )
-            {
-            case 0:  t = LT_SIGNAL;    break;
-            case 1:  t = LT_POWER;     break;
-            case 2:  t = LT_MIXED;     break;
-            case 3:  t = LT_JUMPER;    break;
-            default: t = LT_UNDEFINED; break;
-            }
-
-            if( m_pcb->GetLayerType( layer ) != t )
-            {
-                m_pcb->SetLayerType( layer, t );
-                modified = true;
-            }
-        }
-        else if( layer >= User_1 && !IsCopperLayer( layer ) )
-        {
-            LAYER_T t;
-
-            switch( getChoice( layer )->GetCurrentSelection() )
-            {
-            case 0:  t = LT_AUX;       break;
-            case 1:  t = LT_FRONT;     break;
-            case 2:  t = LT_BACK;      break;
-            default: t = LT_UNDEFINED; break;
-            }
-
-            if( m_pcb->GetLayerType( layer ) != t )
-            {
-                m_pcb->SetLayerType( layer, t );
-                modified = true;
-            }
-        }
-    }
-
-    LSET layers = m_enabledLayers & LSET::UserDefinedLayersMask();
-
-    for( PCB_LAYER_ID layer : layers )
-    {
-        wxString newLayerName = getName( layer )->GetValue();
-
-        if( m_pcb->GetLayerName( layer ) != newLayerName )
-        {
-            m_pcb->SetLayerName( layer, newLayerName );
-            modified = true;
-        }
-    }
+    modified |= transferDataFromWindow();
 
     // If some board items are deleted: Rebuild the connectivity, because it is likely some
     // tracks and vias were removed

@@ -97,8 +97,9 @@ private:
     void setUserDefinedLayerCheckBoxes();
 
     void showBoardLayerNames();
-    void showSelectedLayerCheckBoxes( LSET enableLayerMask );
+    void showSelectedLayerCheckBoxes( const LSET& enableLayerMask );
     void showLayerTypes();
+    bool transferDataFromWindow();
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
