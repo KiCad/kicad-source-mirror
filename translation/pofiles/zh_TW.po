@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-24 12:07-0700\n"
-"PO-Revision-Date: 2025-03-28 23:27+0000\n"
-"Last-Translator: pominglee <pominglee@gmail.com>\n"
+"PO-Revision-Date: 2025-03-28 23:29+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -36809,6 +36809,7 @@ msgid "User"
 msgstr "使用者 1"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:42
+#, fuzzy
 msgid "Dimensions:"
 msgstr "測量標註"
 
@@ -36826,6 +36827,7 @@ msgid "Quality preset:"
 msgstr "選擇預設:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:79
+#, fuzzy
 msgid "Background style:"
 msgstr "背景起始色"
 
@@ -36869,6 +36871,7 @@ msgid "Z"
 msgstr "阻抗"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:163
+#, fuzzy
 msgid "Pivot:"
 msgstr "設定 Pivot"
 
@@ -36886,6 +36889,7 @@ msgid "Lights intensity"
 msgstr "強度"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:264
+#, fuzzy
 msgid "Camera:"
 msgstr "相機縮放"
 
@@ -36941,6 +36945,7 @@ msgid "Reset this value to the original value."
 msgstr "將此值重置為初始值。"
 
 #: pcbnew/dialogs/dialog_set_offset_base.cpp:19
+#, fuzzy
 msgid "Set a new value for this offset:"
 msgstr "為專案建立一個新目錄"
 
@@ -37215,6 +37220,7 @@ msgid "Apply Anyway"
 msgstr "永遠套用"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
+#, fuzzy
 msgid "Cancel Changes"
 msgstr "取消變更嗎?"
 
@@ -37632,6 +37638,7 @@ msgid "When routing tracks"
 msgstr "建立新走線時啟用"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:337
+#, fuzzy
 msgid "Snap to tracks and vias:"
 msgstr "生成走線和貫孔"
 
@@ -37994,6 +38001,7 @@ msgid "No placement"
 msgstr "放置"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:24
+#, fuzzy
 msgid "Place items from sheet:"
 msgstr "放置文字"
 
@@ -38079,6 +38087,7 @@ msgstr "板邊與任意銅箔項目之間的最小間隙。一旦設定, 這是�
 "不能通過自定義規則或其他設定減少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:160
+#, fuzzy
 msgid "Minimum groove for creepage:"
 msgstr "最小銅皮間隙"
 
@@ -38534,6 +38543,7 @@ msgid ""
 msgstr "停用同一封裝內焊盤之間的阻焊孔橋接的 DRC 錯誤檢查。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:113
+#, fuzzy
 msgid "Tent vias:"
 msgstr "貫孔蓋油"
 
@@ -46791,6 +46801,7 @@ msgid "Fillet Tracks"
 msgstr "圓角走線"
 
 #: pcbnew/tools/edit_tool.cpp:1090 pcbnew/tools/edit_tool.cpp:1274
+#, fuzzy
 msgid "Radius:"
 msgstr "半徑"
 
@@ -46803,6 +46814,7 @@ msgid "Some of the track segments could not be filleted."
 msgstr "某些走線無法進行圓角處理。"
 
 #: pcbnew/tools/edit_tool.cpp:1296
+#, fuzzy
 msgid "Arc radius:"
 msgstr "弧線, 半徑 %s"
 
