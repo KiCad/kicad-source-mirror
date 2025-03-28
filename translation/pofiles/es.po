@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-24 12:07-0700\n"
-"PO-Revision-Date: 2025-03-28 08:01+0000\n"
+"PO-Revision-Date: 2025-03-28 23:27+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -6720,7 +6720,7 @@ msgstr "Seleccionar biblioteca"
 
 #: common/eda_draw_frame.cpp:1151
 msgid "New Library"
-msgstr "Nueva biblioteca"
+msgstr "Biblioteca nueva"
 
 #: common/eda_draw_frame.cpp:1212 common/tool/actions.cpp:478
 #: common/widgets/search_pane.cpp:120 eeschema/sch_edit_frame.cpp:268
@@ -9096,11 +9096,11 @@ msgstr "No se ha podido archivar el fichero '%s'."
 #: common/project/project_archiver.cpp:160
 #: common/project/project_archiver.cpp:193 kicad/pcm/pcm_task_manager.cpp:329
 msgid "Could not open archive file."
-msgstr "No se puede abrir el fichero archivo."
+msgstr "No se pudo abrir el archivador."
 
 #: common/project/project_archiver.cpp:202 kicad/pcm/pcm_task_manager.cpp:337
 msgid "Invalid archive file format."
-msgstr "Formato de fichero archivo inválido."
+msgstr "El formato del archivador no es válido."
 
 #: common/project/project_archiver.cpp:213
 #, c-format
@@ -9759,7 +9759,7 @@ msgstr "Actualizar"
 
 #: common/tool/actions.cpp:582
 msgid "Zoom to Fit"
-msgstr "Zoom a hoja"
+msgstr "Zum para encajar"
 
 #: common/tool/actions.cpp:589
 msgid "Zoom to Objects"
@@ -10209,9 +10209,8 @@ msgid "Edit the global and project footprint library lists"
 msgstr "Editar las listas de bibliotecas de símbolos globales y del proyecto"
 
 #: common/tool/actions.cpp:1224
-#, fuzzy
 msgid "Manage Design Block Libraries..."
-msgstr "Gestionar bibliotecas de símbolos..."
+msgstr "Gestionar bibliotecas de bloques de diseño..."
 
 #: common/tool/actions.cpp:1225
 #, fuzzy
@@ -10220,7 +10219,7 @@ msgstr "Editar las listas de bibliotecas de símbolos globales y de proyecto"
 
 #: common/tool/actions.cpp:1231
 msgid "Getting Started with KiCad"
-msgstr "Comenzando con KiCad"
+msgstr "Primeros pasos con KiCad"
 
 #: common/tool/actions.cpp:1232
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
@@ -10809,9 +10808,8 @@ msgid "Reset %s to Defaults"
 msgstr "Restablecer %s a predeterminados"
 
 #: common/widgets/panel_design_block_chooser.cpp:72
-#, fuzzy
 msgid "Loading Design Block Libraries"
-msgstr "Cargando bibliotecas de símbolos"
+msgstr "Cargando bibliotecas de bloques de diseño"
 
 #: common/widgets/panel_design_block_chooser.cpp:273
 #, fuzzy
@@ -11051,7 +11049,7 @@ msgstr "Archivos comprimidos de proyecto:"
 
 #: common/wildcards_and_files_ext.cpp:295
 msgid "CADSTAR Archive files"
-msgstr "Fichero archivo de CADSTAR"
+msgstr "Archivadores de CADSTAR"
 
 #: common/wildcards_and_files_ext.cpp:301
 msgid "Eagle XML files"
@@ -29557,11 +29555,11 @@ msgstr "¡Error!"
 
 #: kicad/tools/kicad_manager_control.cpp:820
 msgid "Create (or open) a project to edit a schematic."
-msgstr "Crear (o abrir) un proyecto para editar un esquema."
+msgstr "Cree (o abra) un proyecto para editar un esquema."
 
 #: kicad/tools/kicad_manager_control.cpp:826
 msgid "Create (or open) a project to edit a pcb."
-msgstr "Crear (o abrir) un proyecto para editar una placa."
+msgstr "Cree (o abra) un proyecto para editar una placa."
 
 #: kicad/tools/kicad_manager_control.cpp:843
 msgid "Application failed to load:\n"
@@ -47250,7 +47248,7 @@ msgstr ""
 
 #: pcbnew/pcb_io/cadstar/pcb_io_cadstar_archive.h:37
 msgid "CADSTAR PCB Archive files"
-msgstr "Ficheros archivos de PCB de CADSTAR"
+msgstr "Archivadores de placa de CADSTAR"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:362
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:222
@@ -49722,7 +49720,7 @@ msgstr "Crear desde la selección"
 
 #: pcbnew/tools/convert_tool.cpp:454
 msgid "Resulting polygon would be empty"
-msgstr ""
+msgstr "El polígono resultante quedaría vacío"
 
 #: pcbnew/tools/convert_tool.cpp:456
 msgid "Objects must form a closed shape"
