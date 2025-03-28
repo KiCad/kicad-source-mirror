@@ -2296,13 +2296,13 @@ static struct EDA_SHAPE_DESC
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Width" ),
                     &EDA_SHAPE::SetRectangleWidth, &EDA_SHAPE::GetRectangleWidth,
-                    PROPERTY_DISPLAY::PT_COORD, ORIGIN_TRANSFORMS::ABS_Y_COORD ),
+                    PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::NOT_A_COORD ),
                     shapeProps )
                 .SetAvailableFunc( isRectangle );
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Height" ),
                     &EDA_SHAPE::SetRectangleHeight, &EDA_SHAPE::GetRectangleHeight,
-                    PROPERTY_DISPLAY::PT_COORD, ORIGIN_TRANSFORMS::ABS_Y_COORD ),
+                    PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::NOT_A_COORD ),
                     shapeProps )
                 .SetAvailableFunc( isRectangle );
 
