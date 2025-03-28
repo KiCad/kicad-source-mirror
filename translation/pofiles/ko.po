@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-24 12:07-0700\n"
+"POT-Creation-Date: 2025-03-28 16:28-0700\n"
 "PO-Revision-Date: 2025-02-19 11:35+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
@@ -1320,7 +1320,7 @@ msgstr "Z:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:68
 #: gerbview/gerber_draw_item.cpp:722 pcbnew/footprint.cpp:1746
-#: pcbnew/pad.cpp:1378
+#: pcbnew/pad.cpp:1381
 msgid "Rotation"
 msgstr "회전"
 
@@ -3651,7 +3651,7 @@ msgstr "파일 이름"
 #: common/dialogs/git/dialog_git_commit.cpp:53
 #: eeschema/dialogs/dialog_migrate_buses.cpp:117
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:94
-#: pcbnew/dialogs/dialog_find_base.cpp:118 pcbnew/pad.cpp:1316
+#: pcbnew/dialogs/dialog_find_base.cpp:118 pcbnew/pad.cpp:1319
 #: pcbnew/pcb_dimension.cpp:673 pcbnew/pcb_group.cpp:396
 #: pcbnew/pcb_shape.cpp:642 pcbnew/pcb_tablecell.cpp:106
 #: pcbnew/pcb_text.cpp:279 pcbnew/pcb_textbox.cpp:559 pcbnew/pcb_track.cpp:1691
@@ -3726,25 +3726,20 @@ msgid "Could not open public key '%s'"
 msgstr "공개 키 '%s'를 열 수 없음"
 
 #: common/dialogs/git/dialog_git_repository.cpp:396
-#: common/dialogs/git/dialog_git_repository.cpp:403
 msgid "Missing information"
 msgstr "정보 누락"
 
 #: common/dialogs/git/dialog_git_repository.cpp:397
-msgid "Please enter a name for the repository"
-msgstr "저장소의 이름을 입력하세요"
-
-#: common/dialogs/git/dialog_git_repository.cpp:404
 msgid "Please enter a URL for the repository"
 msgstr "저장소의 URL을 입력하세요"
 
-#: common/dialogs/git/dialog_git_repository.cpp:428
+#: common/dialogs/git/dialog_git_repository.cpp:421
 #: common/dialogs/git/dialog_git_repository_base.cpp:106
 #, fuzzy
 msgid "SSH key password:"
 msgstr "SSH 키 비밀번호"
 
-#: common/dialogs/git/dialog_git_repository.cpp:436
+#: common/dialogs/git/dialog_git_repository.cpp:429
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
 msgid "Password:"
 msgstr "비밀번호:"
@@ -5030,7 +5025,7 @@ msgstr "줌"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:587
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:858
 #: pcbnew/dialogs/dialog_plot_base.cpp:118 pcbnew/footprint.cpp:4082
-#: pcbnew/pad.cpp:2526 pcbnew/pad.cpp:2545 pcbnew/pcb_dimension.cpp:2012
+#: pcbnew/pad.cpp:2536 pcbnew/pad.cpp:2555 pcbnew/pcb_dimension.cpp:2012
 #: pcbnew/widgets/appearance_controls.cpp:729
 #: pcbnew/widgets/appearance_controls.cpp:771
 #: pcbnew/widgets/appearance_controls.cpp:2576
@@ -5260,7 +5255,7 @@ msgstr "<정의되지 않음>"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:363
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:858 pcbnew/footprint.cpp:4084
-#: pcbnew/pad.cpp:2547 pcbnew/pcb_table.cpp:557 pcbnew/pcb_textbox.cpp:867
+#: pcbnew/pad.cpp:2557 pcbnew/pcb_table.cpp:557 pcbnew/pcb_textbox.cpp:867
 #: pcbnew/zone.cpp:857 pcbnew/zone.cpp:1837
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Solid"
@@ -5483,7 +5478,7 @@ msgstr "패턴"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:153
 #: eeschema/sch_field.cpp:1354 eeschema/sch_label.cpp:207
-#: pcbnew/board_connected_item.cpp:200 pcbnew/pad.cpp:2601 pcbnew/zone.cpp:1938
+#: pcbnew/board_connected_item.cpp:200 pcbnew/pad.cpp:2611 pcbnew/zone.cpp:1938
 msgid "Net Class"
 msgstr "네트 클래스"
 
@@ -5610,7 +5605,7 @@ msgstr "선"
 #: common/eda_shape.cpp:2203
 #: eeschema/dialogs/dialog_label_properties_base.cpp:178
 #: eeschema/sch_label.cpp:2253
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2518
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2528
 #: pcbnew/pcb_dimension.cpp:2013
 msgid "Rectangle"
 msgstr "직사각형"
@@ -6053,14 +6048,14 @@ msgstr "화면"
 #: common/eda_item.cpp:347 eeschema/sch_symbol.cpp:2104
 #: eeschema/widgets/search_handlers.cpp:162 pcbnew/build_BOM_from_board.cpp:111
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:141
-#: pcbnew/load_select_footprint.cpp:295 pcbnew/pad.cpp:1297
+#: pcbnew/load_select_footprint.cpp:295 pcbnew/pad.cpp:1300
 #: pcbnew/pcb_shape.cpp:636 pcbnew/pcb_text.cpp:267
 #: pcbnew/plot_board_layers.cpp:175
 msgid "Footprint"
 msgstr "풋프린트"
 
 #: common/eda_item.cpp:348 pcbnew/dialogs/dialog_board_statistics.cpp:515
-#: pcbnew/pad.cpp:1300
+#: pcbnew/pad.cpp:1303
 msgid "Pad"
 msgstr "패드"
 
@@ -6227,7 +6222,7 @@ msgstr "써멀 스포크"
 msgid "Number Box"
 msgstr "번호 상자"
 
-#: common/eda_shape.cpp:329 pcbnew/pad.cpp:1534
+#: common/eda_shape.cpp:329 pcbnew/pad.cpp:1537
 msgid "Rect"
 msgstr "사각형"
 
@@ -6239,8 +6234,8 @@ msgstr "호"
 #: common/eda_shape.cpp:331 common/eda_shape.cpp:970 common/eda_shape.cpp:2205
 #: eeschema/dialogs/dialog_label_properties_base.cpp:172
 #: eeschema/sch_label.cpp:2251 gerbview/gerber_draw_item.cpp:231
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1532
-#: pcbnew/pad.cpp:2517 pcbnew/pcb_dimension.cpp:2014
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1535
+#: pcbnew/pad.cpp:2527 pcbnew/pcb_dimension.cpp:2014
 msgid "Circle"
 msgstr "원"
 
@@ -6321,7 +6316,7 @@ msgstr "포인트"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:55
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:40
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:169
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2140 pcbnew/pad.cpp:1365
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2140 pcbnew/pad.cpp:1368
 #: pcbnew/pcb_fields_grid_table.cpp:146 pcbnew/pcb_reference_image.cpp:215
 #: pcbnew/pcb_reference_image.cpp:368 pcbnew/pcb_tablecell.cpp:197
 #: pcbnew/pcb_tablecell.cpp:203 pcbnew/pcb_target.cpp:156
@@ -6338,7 +6333,7 @@ msgstr "두께"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:56
-#: pcbnew/pad.cpp:1366 pcbnew/pcb_dimension.cpp:1033
+#: pcbnew/pad.cpp:1369 pcbnew/pcb_dimension.cpp:1033
 #: pcbnew/pcb_fields_grid_table.cpp:147 pcbnew/pcb_reference_image.cpp:217
 #: pcbnew/pcb_reference_image.cpp:375 pcbnew/pcb_tablecell.cpp:198
 #: pcbnew/pcb_tablecell.cpp:204 pcbnew/pcb_text.cpp:290
@@ -6531,7 +6526,7 @@ msgstr "하"
 #: eeschema/sch_text.cpp:794 eeschema/sch_textbox.cpp:731
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
-#: pcbnew/footprint.cpp:4114 pcbnew/pad.cpp:2564 pcbnew/pcb_dimension.cpp:1804
+#: pcbnew/footprint.cpp:4114 pcbnew/pad.cpp:2574 pcbnew/pcb_dimension.cpp:1804
 #: pcbnew/pcb_dimension.cpp:1879 pcbnew/pcb_fields_grid_table.cpp:151
 #: pcbnew/pcb_tablecell.cpp:206
 msgid "Orientation"
@@ -6981,37 +6976,37 @@ msgstr "원격에 연결할 수 없음: %s"
 msgid "Could not push to remote: %s"
 msgstr "원격으로 푸시할 수 없음: %s"
 
-#: common/git/kicad_git_common.cpp:840
+#: common/git/kicad_git_common.cpp:844
 #, c-format
 msgid "Received %u of %u objects"
 msgstr "%u 수신 %u 개체"
 
-#: common/git/kicad_git_common.cpp:869
+#: common/git/kicad_git_common.cpp:873
 #, c-format
 msgid "* [updated] %s..%s %s"
 msgstr "* [업데이트됨] %s..%s %s"
 
-#: common/git/kicad_git_common.cpp:873
+#: common/git/kicad_git_common.cpp:877
 #, c-format
 msgid "* [new] %s %s"
 msgstr "* [신규] %s %s"
 
-#: common/git/kicad_git_common.cpp:893
+#: common/git/kicad_git_common.cpp:897
 #, c-format
 msgid "Writing objects: %lld%% (%u/%u), %zu bytes"
 msgstr "개체 쓰기: %lld%% (%u/%u), %zu 바이트"
 
-#: common/git/kicad_git_common.cpp:908
+#: common/git/kicad_git_common.cpp:912
 #, c-format
 msgid "* [rejected] %s (%s)"
 msgstr "* [거절] %s (%s)"
 
-#: common/git/kicad_git_common.cpp:913
+#: common/git/kicad_git_common.cpp:917
 #, c-format
 msgid "[updated] %s"
 msgstr "[업데이트됨] %s"
 
-#: common/git/kicad_git_common.cpp:977
+#: common/git/kicad_git_common.cpp:981
 #, fuzzy
 msgid "Unable to authenticate"
 msgstr "다음을 생성할 수 없습니다: "
@@ -14226,7 +14221,7 @@ msgstr "SP"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:283 pcbnew/pad.cpp:2523
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:283 pcbnew/pad.cpp:2533
 #: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:711
 msgid "Custom"
 msgstr "사용자 정의"
@@ -18120,7 +18115,7 @@ msgstr "버스 항목 유형"
 
 #: eeschema/sch_bus_entry.cpp:543 eeschema/sch_junction.cpp:319
 #: eeschema/sch_label.cpp:1227 eeschema/sch_line.cpp:951
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2134 pcbnew/pad.cpp:1312
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2134 pcbnew/pad.cpp:1315
 #: pcbnew/pcb_track.cpp:1673 pcbnew/tools/pcb_control.cpp:1885
 #: pcbnew/zone.cpp:807
 msgid "Resolved Netclass"
@@ -19130,7 +19125,7 @@ msgstr "본체 유형"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:83
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:73
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:58
-#: pcbnew/footprint.cpp:1727 pcbnew/pad.cpp:1316 pcbnew/pad.cpp:2562
+#: pcbnew/footprint.cpp:1727 pcbnew/pad.cpp:1319 pcbnew/pad.cpp:2572
 #: pcbnew/pcb_dimension.cpp:673 pcbnew/pcb_group.cpp:396
 #: pcbnew/pcb_marker.cpp:381 pcbnew/pcb_shape.cpp:642
 #: pcbnew/pcb_tablecell.cpp:106 pcbnew/pcb_text.cpp:279
@@ -19148,7 +19143,7 @@ msgid "Size"
 msgstr "크기"
 
 #: eeschema/sch_junction.cpp:379
-#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:104 pcbnew/pad.cpp:1361
+#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:104 pcbnew/pad.cpp:1364
 #: pcbnew/pcb_track.cpp:1649 pcbnew/pcb_track.cpp:2121
 msgid "Diameter"
 msgstr "직경"
@@ -19174,8 +19169,8 @@ msgstr "위치 맞춤"
 #: pcbnew/board_connected_item.cpp:187
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
 #: pcbnew/generators/pcb_tuning_pattern.cpp:478
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2130 pcbnew/pad.cpp:1310
-#: pcbnew/pad.cpp:2599 pcbnew/pcb_shape.cpp:921 pcbnew/pcb_tablecell.cpp:186
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2130 pcbnew/pad.cpp:1313
+#: pcbnew/pad.cpp:2609 pcbnew/pcb_shape.cpp:921 pcbnew/pcb_tablecell.cpp:186
 #: pcbnew/pcb_track.cpp:1671 pcbnew/tools/pcb_control.cpp:1882
 #: pcbnew/widgets/pcb_properties_panel.cpp:273
 #: pcbnew/widgets/search_handlers.cpp:177 pcbnew/zone.cpp:805
@@ -19329,7 +19324,7 @@ msgstr "숨은 핀 %s [%s, %s, %s]"
 msgid "Hidden pin %s [%s, %s]"
 msgstr "숨은 핀 %s [%s, %s]"
 
-#: eeschema/sch_pin.cpp:2137 pcbnew/pad.cpp:1303 pcbnew/pad.cpp:2619
+#: eeschema/sch_pin.cpp:2137 pcbnew/pad.cpp:1306 pcbnew/pad.cpp:2629
 msgid "Pin Name"
 msgstr "핀 이름"
 
@@ -24370,8 +24365,8 @@ msgstr "레이어 선택: %s"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:98
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:167
 #: pcbnew/footprint.cpp:4109 pcbnew/footprint.cpp:4112
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2137 pcbnew/pad.cpp:1320
-#: pcbnew/pad.cpp:2561 pcbnew/pcb_dimension.cpp:675
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2137 pcbnew/pad.cpp:1323
+#: pcbnew/pad.cpp:2571 pcbnew/pcb_dimension.cpp:675
 #: pcbnew/pcb_dimension.cpp:1491 pcbnew/pcb_fields_grid_table.cpp:150
 #: pcbnew/pcb_group.cpp:503 pcbnew/pcb_marker.cpp:378
 #: pcbnew/pcb_reference_image.cpp:219 pcbnew/pcb_reference_image.cpp:342
@@ -27705,65 +27700,65 @@ msgstr "이 프로젝트에서 깃 추적을 제거하시겠습니까?"
 msgid "Failed to remove Git directory"
 msgstr "git 디렉토리를 제거하지 못함"
 
-#: kicad/project_tree_pane.cpp:2279
+#: kicad/project_tree_pane.cpp:2308
 #, fuzzy
 msgid "The selected directory is not a Git project."
 msgstr "선택한 디렉터리는 이미 git 프로젝트입니다."
 
-#: kicad/project_tree_pane.cpp:2425
+#: kicad/project_tree_pane.cpp:2454
 msgid "Discarding commit due to empty commit message."
 msgstr "커밋 메시지가 비어 있어 커밋을 취소합니다."
 
-#: kicad/project_tree_pane.cpp:2431
+#: kicad/project_tree_pane.cpp:2460
 msgid "Discarding commit due to empty file selection."
 msgstr "빈 파일 선택으로 인해 커밋을 삭제합니다."
 
-#: kicad/project_tree_pane.cpp:2437
+#: kicad/project_tree_pane.cpp:2466
 #, c-format
 msgid "Failed to get repository index: %s"
 msgstr "저장소 인덱스를 가져오지 못함: %s"
 
-#: kicad/project_tree_pane.cpp:2448
+#: kicad/project_tree_pane.cpp:2477
 #, c-format
 msgid "Failed to add file to index: %s"
 msgstr "인덱스에 파일을 추가하지 못함: %s"
 
-#: kicad/project_tree_pane.cpp:2456
+#: kicad/project_tree_pane.cpp:2485
 #, c-format
 msgid "Failed to write index: %s"
 msgstr "인덱스 작성에 실패함: %s"
 
-#: kicad/project_tree_pane.cpp:2463
+#: kicad/project_tree_pane.cpp:2492
 #, c-format
 msgid "Failed to write tree: %s"
 msgstr "트리 작성 실패: %s"
 
-#: kicad/project_tree_pane.cpp:2470
+#: kicad/project_tree_pane.cpp:2499
 #, c-format
 msgid "Failed to lookup tree: %s"
 msgstr "트리 조회 실패: %s"
 
-#: kicad/project_tree_pane.cpp:2482
+#: kicad/project_tree_pane.cpp:2511
 #, c-format
 msgid "Failed to get HEAD reference: %s"
 msgstr "HEAD 참조를 가져오지 못함: %s"
 
-#: kicad/project_tree_pane.cpp:2491
+#: kicad/project_tree_pane.cpp:2520
 #, c-format
 msgid "Failed to get commit: %s"
 msgstr "커밋을 가져오지 못함: %s"
 
-#: kicad/project_tree_pane.cpp:2506
+#: kicad/project_tree_pane.cpp:2535
 #, c-format
 msgid "Failed to create author signature: %s"
 msgstr "작성자 서명 생성에 실패함: %s"
 
-#: kicad/project_tree_pane.cpp:2543
+#: kicad/project_tree_pane.cpp:2572
 #, c-format
 msgid "Failed to create commit: %s"
 msgstr "커밋 생성에 실패함: %s"
 
-#: kicad/project_tree_pane.cpp:2548
+#: kicad/project_tree_pane.cpp:2577
 #, fuzzy, c-format
 msgid "Created commit with id: %s"
 msgstr "인덱스 작성에 실패함: %s"
@@ -32026,7 +32021,7 @@ msgid "Total:"
 msgstr "합계:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:491
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2536
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2546
 msgid "Round"
 msgstr "둥근"
 
@@ -32049,11 +32044,11 @@ msgstr "???"
 msgid "N/A"
 msgstr "N/A"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1548
+#: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1551
 msgid "PTH"
 msgstr "PTH"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1551
+#: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1554
 msgid "NPTH"
 msgstr "NPTH"
 
@@ -32074,7 +32069,7 @@ msgid "Board name"
 msgstr "보드 이름"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:689
-#: pcbnew/dialogs/dialog_board_statistics.cpp:697 pcbnew/pad.cpp:1330
+#: pcbnew/dialogs/dialog_board_statistics.cpp:697 pcbnew/pad.cpp:1333
 msgid "Area"
 msgstr "지역"
 
@@ -32503,7 +32498,7 @@ msgstr ""
 "이 설정은 지역 패드 설정에 의해 재정의될 수 있습니다"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:4083
-#: pcbnew/pad.cpp:2546 pcbnew/zone.cpp:1836
+#: pcbnew/pad.cpp:2556 pcbnew/zone.cpp:1836
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Thermal reliefs"
 msgstr "단열판"
@@ -34383,7 +34378,7 @@ msgstr "스루홀"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:193
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/footprint.cpp:1351
-#: pcbnew/pad.cpp:1549 pcbnew/pad.cpp:2512
+#: pcbnew/pad.cpp:1552 pcbnew/pad.cpp:2522
 msgid "SMD"
 msgstr "SMD"
 
@@ -35315,7 +35310,7 @@ msgstr "실크 레이어"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:273
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:64
-#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:60 pcbnew/pad.cpp:2703
+#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:60 pcbnew/pad.cpp:2713
 msgid "Copper Layers"
 msgstr "구리 레이어"
 
@@ -35468,7 +35463,7 @@ msgstr "환형 폭:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1075
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388 pcbnew/pad.cpp:2552
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388 pcbnew/pad.cpp:2562
 msgid "All copper layers"
 msgstr "모든 구리 레이어"
 
@@ -35479,7 +35474,7 @@ msgstr "시작, 끝 그리고 연결된 레이어"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1079
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388 pcbnew/pad.cpp:2553
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:388 pcbnew/pad.cpp:2563
 msgid "Connected layers only"
 msgstr "연결된 레이어만"
 
@@ -35960,7 +35955,7 @@ msgid "Outset Items"
 msgstr "시작 항목"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:179
-#: pcbnew/dialogs/dialog_pad_properties_base.h:287 pcbnew/pad.cpp:2603
+#: pcbnew/dialogs/dialog_pad_properties_base.h:287 pcbnew/pad.cpp:2613
 msgid "Pad Properties"
 msgstr "패드 속성"
 
@@ -36036,7 +36031,7 @@ msgstr "w"
 msgid "Pad type:"
 msgstr "패드 형식:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/pad.cpp:2511
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/pad.cpp:2521
 msgid "Through-hole"
 msgstr "스루홀"
 
@@ -36084,8 +36079,8 @@ msgstr "패드 형태:"
 msgid "Circular"
 msgstr "원형"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:1533
-#: pcbnew/pad.cpp:2519
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:1536
+#: pcbnew/pad.cpp:2529
 msgid "Oval"
 msgstr "타원형"
 
@@ -36097,11 +36092,11 @@ msgstr "직사각형"
 msgid "Trapezoidal"
 msgstr "사다리꼴"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2521
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2531
 msgid "Rounded rectangle"
 msgstr "모서리가 둥근 사각형"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2522
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2532
 msgid "Chamfered rectangle"
 msgstr "모따기 사각형"
 
@@ -36212,7 +36207,7 @@ msgstr "홀에서 오프셋 형상"
 msgid "Hole shape:"
 msgstr "홀 모양:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2537
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2547
 msgid "Oblong"
 msgstr "Oblong"
 
@@ -36301,23 +36296,23 @@ msgstr ""
 "캐스텔레이션은 기판 가장자리에 있는 성곽모양 스루홀 패드를 지정\n"
 "기계식(Mechanical)은 기계 지지에 사용되는 스루홀 패드를 지정"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2527
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2537
 msgid "BGA pad"
 msgstr "BGA 패드"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2529
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2539
 msgid "Fiducial, local to footprint"
 msgstr "풋프린트의 지역 기준"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2528
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2538
 msgid "Fiducial, global to board"
 msgstr "기판의 전역 기준"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2530
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2540
 msgid "Test point pad"
 msgstr "테스트 포인트 패드"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2531
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2541
 msgid "Heatsink pad"
 msgstr "히트 싱크 패드"
 
@@ -36325,7 +36320,7 @@ msgstr "히트 싱크 패드"
 msgid "Castellated pad (through hole only)"
 msgstr "성곽 패드 (스루홀 전용)"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:1349
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:1352
 msgid "Mechanical"
 msgstr "기계적인"
 
@@ -37835,7 +37830,7 @@ msgstr "대상 편향: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:95
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2197
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2219 pcbnew/pad.cpp:1412
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2219 pcbnew/pad.cpp:1415
 #: pcbnew/pcb_track.cpp:1618 pcbnew/pcb_track.cpp:1626
 #: pcbnew/pcb_track.cpp:1658 pcbnew/pcb_track.cpp:1664
 #: pcbnew/router/router_tool.cpp:2759 pcbnew/router/router_tool.cpp:2764
@@ -40240,7 +40235,7 @@ msgstr "차동 쌍 간격이 정의되지 않았습니다."
 msgid "7"
 msgstr "7"
 
-#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:105 pcbnew/pad.cpp:1392
+#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:105 pcbnew/pad.cpp:1395
 #: pcbnew/pcb_track.cpp:1651 pcbnew/pcb_track.cpp:2123
 #: pcbnew/tools/board_inspection_tool.cpp:1125
 #: pcbnew/tools/board_inspection_tool.cpp:1154
@@ -42304,11 +42299,11 @@ msgstr "(네트 타이 패드 그룹에 알 수 없는 패드 번호 %s가 포�
 msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr "(패드 %s는 하나 이상의 네트 타이 패드 그룹에 나타남)"
 
-#: pcbnew/footprint.cpp:4081 pcbnew/pad.cpp:2544 pcbnew/zone.cpp:1834
+#: pcbnew/footprint.cpp:4081 pcbnew/pad.cpp:2554 pcbnew/zone.cpp:1834
 msgid "Inherited"
 msgstr "상속"
 
-#: pcbnew/footprint.cpp:4085 pcbnew/pad.cpp:2548 pcbnew/zone.cpp:1838
+#: pcbnew/footprint.cpp:4085 pcbnew/pad.cpp:2558 pcbnew/zone.cpp:1838
 msgid "Thermal reliefs for PTH"
 msgstr "PTH용 단열판"
 
@@ -42320,23 +42315,23 @@ msgstr "회로도에 없음"
 msgid "Exclude From Position Files"
 msgstr "위치 파일에서 제외"
 
-#: pcbnew/footprint.cpp:4157 pcbnew/pad.cpp:2713
+#: pcbnew/footprint.cpp:4157 pcbnew/pad.cpp:2723
 msgid "Overrides"
 msgstr "재설정"
 
-#: pcbnew/footprint.cpp:4164 pcbnew/pad.cpp:2716
+#: pcbnew/footprint.cpp:4164 pcbnew/pad.cpp:2726
 msgid "Clearance Override"
 msgstr "공간거리 재정의"
 
-#: pcbnew/footprint.cpp:4169 pcbnew/pad.cpp:2726
+#: pcbnew/footprint.cpp:4169 pcbnew/pad.cpp:2736
 msgid "Solderpaste Margin Override"
 msgstr "솔더 페이스트 간격 재정의"
 
-#: pcbnew/footprint.cpp:4174 pcbnew/pad.cpp:2731
+#: pcbnew/footprint.cpp:4174 pcbnew/pad.cpp:2741
 msgid "Solderpaste Margin Ratio Override"
 msgstr "솔더 페이스트 간격 비율 재정의"
 
-#: pcbnew/footprint.cpp:4180 pcbnew/pad.cpp:2737
+#: pcbnew/footprint.cpp:4180 pcbnew/pad.cpp:2747
 msgid "Zone Connection Style"
 msgstr "영역 연결 스타일"
 
@@ -42656,7 +42651,7 @@ msgstr "배선 길이"
 msgid "Routed Length"
 msgstr "배선 길이"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2172 pcbnew/pad.cpp:2707
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2172 pcbnew/pad.cpp:2717
 #: pcbnew/pcb_track.cpp:1606
 msgid "Pad To Die Length"
 msgstr "패드에서 다이까지의 길이"
@@ -43551,203 +43546,203 @@ msgstr ""
 "파일: '%s'\n"
 "행: %d에서 발견됨"
 
-#: pcbnew/pad.cpp:1098 pcbnew/pad.cpp:1258 pcbnew/pad.cpp:1274
-#: pcbnew/pad.cpp:1283
+#: pcbnew/pad.cpp:1101 pcbnew/pad.cpp:1261 pcbnew/pad.cpp:1277
+#: pcbnew/pad.cpp:1286
 msgid "pad"
 msgstr "패드"
 
-#: pcbnew/pad.cpp:1306 pcbnew/pad.cpp:2622
+#: pcbnew/pad.cpp:1309 pcbnew/pad.cpp:2632
 msgid "Pin Type"
 msgstr "핀 유형"
 
-#: pcbnew/pad.cpp:1343
+#: pcbnew/pad.cpp:1346
 msgid "BGA"
 msgstr "BGA"
 
-#: pcbnew/pad.cpp:1344
+#: pcbnew/pad.cpp:1347
 msgid "Fiducial global"
 msgstr "전역 기준"
 
-#: pcbnew/pad.cpp:1345
+#: pcbnew/pad.cpp:1348
 msgid "Fiducial local"
 msgstr "지역 기준"
 
-#: pcbnew/pad.cpp:1346
+#: pcbnew/pad.cpp:1349
 msgid "Test point"
 msgstr "테스트 포인트"
 
-#: pcbnew/pad.cpp:1347
+#: pcbnew/pad.cpp:1350
 msgid "Heat sink"
 msgstr "히트 싱크"
 
-#: pcbnew/pad.cpp:1348
+#: pcbnew/pad.cpp:1351
 msgid "Castellated"
 msgstr "성곽"
 
-#: pcbnew/pad.cpp:1382
+#: pcbnew/pad.cpp:1385
 msgid "Length in Package"
 msgstr "패키지 내부 길이"
 
-#: pcbnew/pad.cpp:1398
+#: pcbnew/pad.cpp:1401
 msgid "Hole X / Y"
 msgstr "홀 X / Y"
 
-#: pcbnew/pad.cpp:1410 pcbnew/pcb_track.cpp:1616 pcbnew/pcb_track.cpp:1656
+#: pcbnew/pad.cpp:1413 pcbnew/pcb_track.cpp:1616 pcbnew/pcb_track.cpp:1656
 #: pcbnew/router/router_tool.cpp:2762 pcbnew/router/router_tool.cpp:2791
 #: pcbnew/zone.cpp:872
 #, c-format
 msgid "Min Clearance: %s"
 msgstr "최소 공간거리: %s"
 
-#: pcbnew/pad.cpp:1535
+#: pcbnew/pad.cpp:1538
 msgid "Trap"
 msgstr "트랩"
 
-#: pcbnew/pad.cpp:1536
+#: pcbnew/pad.cpp:1539
 msgid "Roundrect"
 msgstr "모서리를 둥글린 직사각형"
 
-#: pcbnew/pad.cpp:1537
+#: pcbnew/pad.cpp:1540
 msgid "Chamferedrect"
 msgstr "모따기된 직사각형"
 
-#: pcbnew/pad.cpp:1538
+#: pcbnew/pad.cpp:1541
 msgid "CustomShape"
 msgstr "사용자 정의 도형"
 
-#: pcbnew/pad.cpp:1550
+#: pcbnew/pad.cpp:1553
 msgid "Conn"
 msgstr "커넥터"
 
-#: pcbnew/pad.cpp:1569
+#: pcbnew/pad.cpp:1572
 #, c-format
 msgid "NPTH pad of %s"
 msgstr "%s의 NPTH 패드"
 
-#: pcbnew/pad.cpp:1574
+#: pcbnew/pad.cpp:1577
 msgid "NPTH pad"
 msgstr "PTH 패드"
 
-#: pcbnew/pad.cpp:1583
+#: pcbnew/pad.cpp:1586
 #, c-format
 msgid "Pad %s of %s on %s"
 msgstr "%s의 %s에 대한 패드 (%s 위)"
 
-#: pcbnew/pad.cpp:1590
+#: pcbnew/pad.cpp:1593
 #, c-format
 msgid "Pad on %s"
 msgstr "%s의 패드"
 
-#: pcbnew/pad.cpp:1598
+#: pcbnew/pad.cpp:1601
 #, c-format
 msgid "PTH pad %s of %s"
 msgstr "%s의 PTH 패드%s"
 
-#: pcbnew/pad.cpp:1604
+#: pcbnew/pad.cpp:1607
 msgid "PTH pad"
 msgstr "PTH 패드"
 
-#: pcbnew/pad.cpp:1614
+#: pcbnew/pad.cpp:1617
 #, c-format
 msgid "Pad %s %s of %s on %s"
 msgstr "패드 %s %s의 %s 위%s"
 
-#: pcbnew/pad.cpp:1622
+#: pcbnew/pad.cpp:1625
 #, c-format
 msgid "Pad %s on %s"
 msgstr "패드 %s 의 %s"
 
-#: pcbnew/pad.cpp:1631
+#: pcbnew/pad.cpp:1634
 #, c-format
 msgid "PTH pad %s %s of %s"
 msgstr "%s의 PTH 패드%s%s"
 
-#: pcbnew/pad.cpp:1638
+#: pcbnew/pad.cpp:1641
 #, c-format
 msgid "PTH pad %s"
 msgstr "PTH 패드 %s"
 
-#: pcbnew/pad.cpp:2204
+#: pcbnew/pad.cpp:2214
 msgid ""
 "(plated through holes normally have a copper pad on at least one outer layer)"
 msgstr ""
 "(도금된 관통 구멍에는 일반적으로 하나 이상의 외부 레이어에 구리 패드가 있음)"
 
-#: pcbnew/pad.cpp:2212
+#: pcbnew/pad.cpp:2222
 msgid "('fiducial' property makes no sense on NPTH pads)"
 msgstr "('fiducial' 속성은 NPTH 패드에서는 의미가 없음)"
 
-#: pcbnew/pad.cpp:2216
+#: pcbnew/pad.cpp:2226
 msgid "('testpoint' property makes no sense on NPTH pads)"
 msgstr "('testpoint' 속성은 NPTH 패드에서는 의미가 없음)"
 
-#: pcbnew/pad.cpp:2219
+#: pcbnew/pad.cpp:2229
 msgid "('heatsink' property makes no sense of NPTH pads)"
 msgstr "('히트싱크' 속성은 NPTH 패드에는 의미가 없음)"
 
-#: pcbnew/pad.cpp:2222
+#: pcbnew/pad.cpp:2232
 msgid "('castellated' property is for PTH pads)"
 msgstr "('성곽' 속성은 PTH 패드임)"
 
-#: pcbnew/pad.cpp:2225
+#: pcbnew/pad.cpp:2235
 msgid "('BGA' property is for SMD pads)"
 msgstr "('BGA' 속성은 SMD 패드용임)"
 
-#: pcbnew/pad.cpp:2228
+#: pcbnew/pad.cpp:2238
 msgid "('mechanical' property is for PTH pads)"
 msgstr "('기계적' 속성은 PTH 패드를 위한 것임)"
 
-#: pcbnew/pad.cpp:2244
+#: pcbnew/pad.cpp:2254
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
 msgstr ""
 "(커넥터 패드에는 일반적으로 솔더 페이스트가 없습니다. 대신에 SMD 패드 사용)"
 
-#: pcbnew/pad.cpp:2252
+#: pcbnew/pad.cpp:2262
 msgid "(SMD pad has a hole)"
 msgstr "(SMD 패드에 구멍이 있음)"
 
-#: pcbnew/pad.cpp:2258
+#: pcbnew/pad.cpp:2268
 msgid "(SMD pad has copper on both sides of the board)"
 msgstr "(SMD 패드는 보드 한쪽에 구리가 있음)"
 
-#: pcbnew/pad.cpp:2264 pcbnew/pad.cpp:2277
+#: pcbnew/pad.cpp:2274 pcbnew/pad.cpp:2287
 msgid "(SMD pad has copper and mask layers on different sides of the board)"
 msgstr "(SMD 패드는 기판의 다른 면에 구리와 마스크 레이어가 있음)"
 
-#: pcbnew/pad.cpp:2269 pcbnew/pad.cpp:2282
+#: pcbnew/pad.cpp:2279 pcbnew/pad.cpp:2292
 msgid "(SMD pad has copper and paste layers on different sides of the board)"
 msgstr "(SMD 패드는 기판의 다른 면에 구리와 페이스트 층이 있음)"
 
-#: pcbnew/pad.cpp:2288
+#: pcbnew/pad.cpp:2298
 msgid "(SMD pad has no outer layers)"
 msgstr "(SMD 패드에는 외부 레이어가 없음)"
 
-#: pcbnew/pad.cpp:2308
+#: pcbnew/pad.cpp:2318
 msgid "(Pad must have a positive size)"
 msgstr "(패드는 양수의 크기여야 함)"
 
-#: pcbnew/pad.cpp:2319
+#: pcbnew/pad.cpp:2329
 #, c-format
 msgid "(PTH pad hole size must be larger than %s)"
 msgstr "(PTH 패드 구멍 크기는 %s 보다 커야 합니다)"
 
-#: pcbnew/pad.cpp:2343
+#: pcbnew/pad.cpp:2353
 msgid "(PTH pad hole leaves no copper)"
 msgstr "(PTH 패드 구멍에 구리가 남지 않음)"
 
-#: pcbnew/pad.cpp:2353
+#: pcbnew/pad.cpp:2363
 msgid "(PTH pad hole not fully inside copper)"
 msgstr "(구리 내부에 PTH 패드 홀이 완전치 않음)"
 
-#: pcbnew/pad.cpp:2360
+#: pcbnew/pad.cpp:2370
 msgid "(pad hole not inside pad shape)"
 msgstr "(패드 내부에 패드 구멍이 없음)"
 
-#: pcbnew/pad.cpp:2365
+#: pcbnew/pad.cpp:2375
 msgid "(negative local clearance values have no effect)"
 msgstr "(음수의 로컬 클리어런스 값은 효과 없음)"
 
-#: pcbnew/pad.cpp:2384
+#: pcbnew/pad.cpp:2394
 msgid ""
 "(negative solder mask clearance is larger than some shape primitives; "
 "results may be surprising)"
@@ -43755,7 +43750,7 @@ msgstr ""
 "(음의 솔더 마스크 클리어런스는 일부 모양 기본형보다 큽니다. 결과가 놀라울 수 "
 "있음)"
 
-#: pcbnew/pad.cpp:2394
+#: pcbnew/pad.cpp:2404
 msgid ""
 "(negative solder mask clearance is larger than pad; no solder mask will be "
 "generated)"
@@ -43763,7 +43758,7 @@ msgstr ""
 "(음의 솔더 마스크 클리어런스가 패드보다 크기 때문에 솔더 마스크가 생성되지 않"
 "음)"
 
-#: pcbnew/pad.cpp:2413
+#: pcbnew/pad.cpp:2423
 msgid ""
 "(negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated)"
@@ -43771,111 +43766,111 @@ msgstr ""
 "(음의 솔더 페이스트 마진은 패드보다 큽니다. 솔더 페이스트 마스크가 생성되지 "
 "않음)"
 
-#: pcbnew/pad.cpp:2420
+#: pcbnew/pad.cpp:2430
 msgid "(negative corner radius is not allowed)"
 msgstr "(음의 모서리 반경은 허용되지 않음)"
 
-#: pcbnew/pad.cpp:2422
+#: pcbnew/pad.cpp:2432
 msgid "(corner size will make pad circular)"
 msgstr "(코너 크기를 지정하면 패드가 원형이 됨)"
 
-#: pcbnew/pad.cpp:2427
+#: pcbnew/pad.cpp:2437
 msgid "(negative corner chamfer is not allowed)"
 msgstr "(음의 모서리 모따기는 허용되지 않음)"
 
-#: pcbnew/pad.cpp:2429
+#: pcbnew/pad.cpp:2439
 msgid "(corner chamfer is too large)"
 msgstr "(코너 모따기가 너무 큼)"
 
-#: pcbnew/pad.cpp:2438
+#: pcbnew/pad.cpp:2448
 msgid "(trapezoid delta is too large)"
 msgstr "(사다리꼴 델타가 너무 큼)"
 
-#: pcbnew/pad.cpp:2448
+#: pcbnew/pad.cpp:2458
 msgid "(custom pad shape must resolve to a single polygon)"
 msgstr "(사용자 정의 패드 모양은 단일 다각형으로 해결되어야 함)"
 
-#: pcbnew/pad.cpp:2513
+#: pcbnew/pad.cpp:2523
 msgid "Edge connector"
 msgstr "모서리 커넥터"
 
-#: pcbnew/pad.cpp:2514
+#: pcbnew/pad.cpp:2524
 msgid "NPTH, mechanical"
 msgstr "NPTH, 기계 홀"
 
-#: pcbnew/pad.cpp:2520
+#: pcbnew/pad.cpp:2530
 msgid "Trapezoid"
 msgstr "사다리꼴"
 
-#: pcbnew/pad.cpp:2532
+#: pcbnew/pad.cpp:2542
 msgid "Castellated pad"
 msgstr "성곽 패드"
 
-#: pcbnew/pad.cpp:2533
+#: pcbnew/pad.cpp:2543
 msgid "Mechanical pad"
 msgstr "기계식 패드"
 
-#: pcbnew/pad.cpp:2555
+#: pcbnew/pad.cpp:2565
 msgid "Front, back and connected layers"
 msgstr "전면, 후면, 연결된 레이어"
 
-#: pcbnew/pad.cpp:2605
+#: pcbnew/pad.cpp:2615
 msgid "Pad Type"
 msgstr "패드 유형"
 
-#: pcbnew/pad.cpp:2609
+#: pcbnew/pad.cpp:2619
 msgid "Pad Shape"
 msgstr "패드 형상"
 
-#: pcbnew/pad.cpp:2614
+#: pcbnew/pad.cpp:2624
 msgid "Pad Number"
 msgstr "패드 번호"
 
-#: pcbnew/pad.cpp:2626
+#: pcbnew/pad.cpp:2636
 msgid "Size X"
 msgstr "X 크기"
 
-#: pcbnew/pad.cpp:2630
+#: pcbnew/pad.cpp:2640
 msgid "Size Y"
 msgstr "Y 크기"
 
-#: pcbnew/pad.cpp:2663
+#: pcbnew/pad.cpp:2673
 msgid "Corner Radius Ratio"
 msgstr "모서리 반경 비율"
 
-#: pcbnew/pad.cpp:2668
+#: pcbnew/pad.cpp:2678
 msgid "Corner Radius Size"
 msgstr "모서리 반경 크기"
 
-#: pcbnew/pad.cpp:2674
+#: pcbnew/pad.cpp:2684
 msgid "Hole Shape"
 msgstr "홀 모양"
 
-#: pcbnew/pad.cpp:2678
+#: pcbnew/pad.cpp:2688
 msgid "Hole Size X"
 msgstr "홀 크기 X"
 
-#: pcbnew/pad.cpp:2684
+#: pcbnew/pad.cpp:2694
 msgid "Hole Size Y"
 msgstr "홀 크기 Y"
 
-#: pcbnew/pad.cpp:2699
+#: pcbnew/pad.cpp:2709
 msgid "Fabrication Property"
 msgstr "기판 제조 속성"
 
-#: pcbnew/pad.cpp:2721 pcbnew/pcb_shape.cpp:999 pcbnew/pcb_track.cpp:2103
+#: pcbnew/pad.cpp:2731 pcbnew/pcb_shape.cpp:999 pcbnew/pcb_track.cpp:2103
 msgid "Soldermask Margin Override"
 msgstr "솔더 마스크 여백 재정의"
 
-#: pcbnew/pad.cpp:2743 pcbnew/zone.cpp:2104
+#: pcbnew/pad.cpp:2753 pcbnew/zone.cpp:2104
 msgid "Thermal Relief Spoke Width"
 msgstr "단열판 스포크 폭"
 
-#: pcbnew/pad.cpp:2749
+#: pcbnew/pad.cpp:2759
 msgid "Thermal Relief Spoke Angle"
 msgstr "단열판 스포크 각도"
 
-#: pcbnew/pad.cpp:2754 pcbnew/zone.cpp:2098
+#: pcbnew/pad.cpp:2764 pcbnew/zone.cpp:2098
 msgid "Thermal Relief Gap"
 msgstr "단열판 간격"
 
@@ -51249,6 +51244,9 @@ msgstr "KiCad 회로도 심볼"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad 도면 시트"
+
+#~ msgid "Please enter a name for the repository"
+#~ msgstr "저장소의 이름을 입력하세요"
 
 #~ msgid "Git Repositories"
 #~ msgstr "Git 저장소"

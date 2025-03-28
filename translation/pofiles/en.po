@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-24 12:07-0700\n"
+"POT-Creation-Date: 2025-03-28 16:28-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2133,9 +2133,6 @@ msgstr "Could not open public key '%s'"
 
 msgid "Missing information"
 msgstr "Missing information"
-
-msgid "Please enter a name for the repository"
-msgstr "Please enter a name for the repository"
 
 msgid "Please enter a URL for the repository"
 msgstr "Please enter a URL for the repository"
@@ -36866,6 +36863,9 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Please enter a name for the repository"
+#~ msgstr "Please enter a name for the repository"
 
 #~ msgid "Git Repositories"
 #~ msgstr "Git Repositories"
