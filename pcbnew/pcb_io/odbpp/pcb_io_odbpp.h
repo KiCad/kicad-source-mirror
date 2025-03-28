@@ -56,11 +56,12 @@ public:
 
     ~PCB_IO_ODBPP() override;
 
-    void                        SaveBoard( const wxString& aFileName, BOARD* aBoard,
-                                           const std::map<std::string, UTF8>* aProperties = nullptr ) override;
+    void SaveBoard( const wxString& aFileName, BOARD* aBoard,
+                    const std::map<std::string, UTF8>* aProperties = nullptr ) override;
+
     const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const override
     {
-        return IO_BASE::IO_FILE_DESC( _HKI( "ODB++ Production File" ), { "ZIP" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "ODB++ Production File" ), { "ZIP" }, {}, true, false, true );
     }
 
     const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
