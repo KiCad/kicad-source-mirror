@@ -120,7 +120,8 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
     {
         const SCH_GLOBALLABEL* label = static_cast<const SCH_GLOBALLABEL*>( aItem );
 
-        retv.Printf( _( "Global label '%s' at %s, %s" ), UnescapeString( label->GetText() ),
+        retv.Printf( _( "Global label '%s' at %s, %s" ),
+                     UnescapeString( label->GetText() ),
                      aUnitsProvider->MessageTextFromValue( label->GetPosition().x ),
                      aUnitsProvider->MessageTextFromValue( label->GetPosition().y ) );
         break;
@@ -129,7 +130,8 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
     {
         const SCH_HIERLABEL* label = static_cast<const SCH_HIERLABEL*>( aItem );
 
-        retv.Printf( _( "Hierarchical label '%s' at %s, %s" ), UnescapeString( label->GetText() ),
+        retv.Printf( _( "Hierarchical label '%s' at %s, %s" ),
+                     UnescapeString( label->GetText() ),
                      aUnitsProvider->MessageTextFromValue( label->GetPosition().x ),
                      aUnitsProvider->MessageTextFromValue( label->GetPosition().y ) );
         break;
@@ -178,7 +180,8 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
     {
         const SCH_DIRECTIVE_LABEL* entry = static_cast<const SCH_DIRECTIVE_LABEL*>( aItem );
 
-        retv.Printf( _( "Netclass label '%s' at %s, %s" ), UnescapeString( entry->GetText() ),
+        retv.Printf( _( "Netclass label '%s' at %s, %s" ),
+                     UnescapeString( entry->GetText() ),
                      aUnitsProvider->MessageTextFromValue( entry->GetPosition().x ),
                      aUnitsProvider->MessageTextFromValue( entry->GetPosition().y ) );
         break;
@@ -263,16 +266,17 @@ void SCH_EDIT_FRAME::MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemI
 
         for( const SCH_ITEM* item : subGraph->GetItems() )
         {
-            KICAD_T type = item->Type();
-
-            if( ( type == SCH_LINE_T ) || ( type == SCH_JUNCTION_T )
-              || ( type == SCH_BUS_WIRE_ENTRY_T ) || ( type == SCH_BUS_BUS_ENTRY_T ) )
+            if( item->Type() == SCH_LINE_T
+                    || item->Type() == SCH_JUNCTION_T
+                    || item->Type() == SCH_BUS_WIRE_ENTRY_T
+                    || item->Type() == SCH_BUS_BUS_ENTRY_T )
+            {
                 continue;
+            }
 
             itemData = new NET_NAVIGATOR_ITEM_DATA( sheetPath, item );
             wxTreeItemId id = m_netNavigator->AppendItem( sheetId,
-                                                          GetNetNavigatorItemText( item, sheetPath,
-                                                                                   this ),
+                                                          GetNetNavigatorItemText( item, sheetPath, this ),
                                                           -1, -1, itemData );
 
             if( aSelection && *aSelection == *itemData )
@@ -350,8 +354,7 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
             wxTreeItemId selection = m_netNavigator->GetSelection();
 
             if( selection.IsOk() )
-                itemData = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>(
-                        m_netNavigator->GetItemData( selection ) );
+                itemData = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( selection ) );
 
             m_netNavigator->DeleteAllItems();
             nodeCnt++;
@@ -444,8 +447,7 @@ const SCH_ITEM* SCH_EDIT_FRAME::SelectNextPrevNetNavigatorItem( bool aNext )
 
         m_netNavigator->SelectItem( nextId );
 
-        NET_NAVIGATOR_ITEM_DATA* data = static_cast<NET_NAVIGATOR_ITEM_DATA*>(
-            m_netNavigator->GetItemData( nextId ) );
+        auto* data = static_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( nextId ) );
 
         if( data && data->GetItem() )
             return data->GetItem();
@@ -457,17 +459,17 @@ const SCH_ITEM* SCH_EDIT_FRAME::SelectNextPrevNetNavigatorItem( bool aNext )
 
 void SCH_EDIT_FRAME::SelectNetNavigatorItem( const NET_NAVIGATOR_ITEM_DATA* aSelection )
 {
-    wxCHECK( m_netNavigator, /* void */ );
+    wxCHECK( m_netNavigator && !m_netNavigator->IsFrozen(), /* void */ );
 
     // Maybe in the future we can do something like collapse the tree for an empty selection.
     // For now, leave the tree selection in its current state.
     if( !aSelection )
         return;
 
-    wxTreeItemIdValue sheetCookie;
+    wxTreeItemIdValue        sheetCookie;
     NET_NAVIGATOR_ITEM_DATA* itemData = nullptr;
-    wxTreeItemId rootId = m_netNavigator->GetRootItem();
-    wxTreeItemId sheetId = m_netNavigator->GetFirstChild( rootId, sheetCookie );
+    wxTreeItemId             rootId = m_netNavigator->GetRootItem();
+    wxTreeItemId             sheetId = m_netNavigator->GetFirstChild( rootId, sheetCookie );
 
     while( sheetId.IsOk() )
     {
@@ -478,8 +480,7 @@ void SCH_EDIT_FRAME::SelectNetNavigatorItem( const NET_NAVIGATOR_ITEM_DATA* aSel
 
             while( itemId.IsOk() )
             {
-                itemData = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>(
-                        m_netNavigator->GetItemData( itemId ) );
+                itemData = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( itemId ) );
 
                 wxCHECK2( itemData, continue );
 
@@ -506,7 +507,7 @@ void SCH_EDIT_FRAME::SelectNetNavigatorItem( const NET_NAVIGATOR_ITEM_DATA* aSel
 
 const SCH_ITEM* SCH_EDIT_FRAME::GetSelectedNetNavigatorItem() const
 {
-    if( !m_netNavigator )
+    if( !m_netNavigator || m_netNavigator->IsFrozen() )
         return nullptr;
 
     wxTreeItemId id = m_netNavigator->GetSelection();
@@ -514,8 +515,7 @@ const SCH_ITEM* SCH_EDIT_FRAME::GetSelectedNetNavigatorItem() const
     if( !id.IsOk() || ( id == m_netNavigator->GetRootItem() ) )
         return nullptr;
 
-    NET_NAVIGATOR_ITEM_DATA* itemData =
-            dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( id ) );
+    auto* itemData = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( id ) );
 
     wxCHECK( itemData, nullptr );
 
@@ -525,7 +525,7 @@ const SCH_ITEM* SCH_EDIT_FRAME::GetSelectedNetNavigatorItem() const
 
 void SCH_EDIT_FRAME::onNetNavigatorSelection( wxTreeEvent& aEvent )
 {
-    wxCHECK( m_netNavigator, /* void */ );
+    wxCHECK( m_netNavigator && !m_netNavigator->IsFrozen(), /* void */ );
 
     wxTreeItemId id = aEvent.GetItem();
 
@@ -533,8 +533,7 @@ void SCH_EDIT_FRAME::onNetNavigatorSelection( wxTreeEvent& aEvent )
     if( id == m_netNavigator->GetRootItem() )
         return;
 
-    NET_NAVIGATOR_ITEM_DATA* itemData =
-            dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( id ) );
+    auto* itemData = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( id ) );
 
     // Just a net name when we have all nets displayed.
     if( !itemData )
@@ -548,14 +547,15 @@ void SCH_EDIT_FRAME::onNetNavigatorSelection( wxTreeEvent& aEvent )
 
     // Do not focus on item when a sheet tree node is selected.
     if( m_netNavigator->GetItemParent( id ) != m_netNavigator->GetRootItem()
-      && itemData->GetItem() )
+            && itemData->GetItem() )
     {
         // Make sure we didn't remove the item and/or the screen it resides on before we access it.
         const SCH_ITEM* item = itemData->GetItem();
 
         // Don't search for child items in screen r-tree.
-        item = ( ( item->Type() == SCH_SHEET_PIN_T ) || ( item->Type() == SCH_PIN_T ) ) ?
-               static_cast<const SCH_ITEM*>( item->GetParent() ) : item;
+        item = ( item->Type() == SCH_SHEET_PIN_T || item->Type() == SCH_PIN_T )
+                                                            ? static_cast<const SCH_ITEM*>( item->GetParent() )
+                                                            : item;
 
         const SCH_SCREEN* screen = itemData->GetSheetPath().LastScreen();
 
@@ -571,7 +571,7 @@ void SCH_EDIT_FRAME::onNetNavigatorSelection( wxTreeEvent& aEvent )
 
 void SCH_EDIT_FRAME::onNetNavigatorSelChanging( wxTreeEvent& aEvent )
 {
-    wxCHECK( m_netNavigator, /* void */ );
+    wxCHECK( m_netNavigator && !m_netNavigator->IsFrozen(), /* void */ );
 
     aEvent.Skip();
 }
@@ -611,8 +611,7 @@ void SCH_EDIT_FRAME::ToggleNetNavigator()
         wxTreeItemId selection = m_netNavigator->GetSelection();
 
         if( selection.IsOk() )
-            itemData = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>(
-                    m_netNavigator->GetItemData( selection ) );
+            itemData = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( selection ) );
 
         RefreshNetNavigator( itemData );
 
