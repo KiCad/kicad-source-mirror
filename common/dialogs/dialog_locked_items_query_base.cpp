@@ -27,7 +27,7 @@ DIALOG_LOCKED_ITEMS_QUERY_BASE::DIALOG_LOCKED_ITEMS_QUERY_BASE( wxWindow* parent
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
 
-	m_messageLine1 = new wxStaticText( this, wxID_ANY, _("The selection contains %lu locked items."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_messageLine1 = new wxStaticText( this, wxID_ANY, _("The selection contains %zu locked items."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_messageLine1->Wrap( -1 );
 	bSizer4->Add( m_messageLine1, 0, wxALL, 5 );
 
