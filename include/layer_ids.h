@@ -315,6 +315,10 @@ enum GAL_LAYER_ID: int
     LAYER_DRC_SHAPE2         = GAL_LAYER_ID_START + 43,  ///< Custom shape for DRC marker.
 
     LAYER_BOARD_OUTLINE_AREA = GAL_LAYER_ID_START + 44, ///< PCB board outline
+
+    /// PCB reference/manual snap points visibility
+    LAYER_POINTS             = GAL_LAYER_ID_START + 45,
+
     // Add layers below this point that do not have visibility controls, so don't need explicit
     // enum values
 
@@ -344,6 +348,10 @@ enum GAL_LAYER_ID: int
     LAYER_BITMAP_START,
     LAYER_BITMAP_END = LAYER_BITMAP_START + PCB_LAYER_ID_COUNT,
 
+    /// Virtual layers for points per board layer.
+    LAYER_POINT_START,
+    LAYER_POINT_END = LAYER_POINT_START + PCB_LAYER_ID_COUNT,
+
     // Layers for drawing on-canvas UI
     LAYER_UI_START,
     LAYER_UI_END = LAYER_UI_START + GAL_UI_LAYER_COUNT,
@@ -360,6 +368,7 @@ enum GAL_LAYER_ID: int
 #define PAD_COPPER_LAYER_FOR( boardLayer ) ( LAYER_PAD_COPPER_START + boardLayer )
 #define VIA_COPPER_LAYER_FOR( boardLayer ) ( LAYER_VIA_COPPER_START + boardLayer )
 #define CLEARANCE_LAYER_FOR( boardLayer ) ( LAYER_CLEARANCE_START + boardLayer )
+#define POINT_LAYER_FOR( boardLayer ) ( LAYER_POINT_START + boardLayer )
 
 constexpr int GAL_LAYER_ID_COUNT = GAL_LAYER_ID_END - GAL_LAYER_ID_START;
 
@@ -880,6 +889,12 @@ inline bool IsViaCopperLayer( int aLayer )
 inline bool IsClearanceLayer( int aLayer )
 {
     return aLayer >= LAYER_CLEARANCE_START && aLayer <= LAYER_CLEARANCE_END;
+}
+
+
+inline bool IsPointsLayer( int aLayer )
+{
+    return aLayer >= LAYER_POINT_START && aLayer <= LAYER_POINT_END;
 }
 
 

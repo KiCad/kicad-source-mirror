@@ -33,7 +33,6 @@ using namespace std::placeholders;
 #include <pcb_group.h>
 #include <pcb_shape.h>
 #include <pcb_generator.h>
-#include <pcb_target.h>
 #include <footprint.h>
 #include <lset.h>
 #include <pad.h>

@@ -36,6 +36,7 @@
 #include <increment.h>
 #include <pcb_shape.h>
 #include <pcb_group.h>
+#include <pcb_point.h>
 #include <pcb_target.h>
 #include <pcb_textbox.h>
 #include <pcb_table.h>
@@ -2268,6 +2269,7 @@ const std::vector<KICAD_T> EDIT_TOOL::MirrorableItems = {
         PCB_VIA_T,
         PCB_GROUP_T,
         PCB_GENERATOR_T,
+        PCB_POINT_T,
 };
 
 
@@ -2350,6 +2352,10 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
         case PCB_GENERATOR_T:
             static_cast<PCB_GENERATOR*>( item )->Mirror( mirrorPoint, flipDirection );
+            break;
+
+        case PCB_POINT_T:
+            static_cast<PCB_POINT*>( item )->Mirror( mirrorPoint, flipDirection );
             break;
 
         default:
@@ -2598,6 +2604,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         case PCB_DIM_CENTER_T:
         case PCB_DIM_RADIAL_T:
         case PCB_DIM_ORTHOGONAL_T:
+        case PCB_POINT_T:
             commit.Remove( board_item );
             itemsDeleted++;
             break;
@@ -2949,6 +2956,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             case PCB_VIA_T:
             case PCB_ZONE_T:
             case PCB_TARGET_T:
+            case PCB_POINT_T:
             case PCB_DIM_ALIGNED_T:
             case PCB_DIM_CENTER_T:
             case PCB_DIM_RADIAL_T:

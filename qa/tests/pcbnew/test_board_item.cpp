@@ -41,6 +41,7 @@
 #include <pcb_track.h>
 #include <pcb_marker.h>
 #include <pcb_dimension.h>
+#include <pcb_point.h>
 #include <pcb_target.h>
 #include <pcb_group.h>
 #include <pcb_board_outline.h>
@@ -111,6 +112,7 @@ public:
         case PCB_DIM_RADIAL_T:        return new PCB_DIM_RADIAL( &m_board );
         case PCB_DIM_ORTHOGONAL_T:    return new PCB_DIM_ORTHOGONAL( &m_board );
         case PCB_TARGET_T:            return new PCB_TARGET( &m_board );
+        case PCB_POINT_T:             return new PCB_POINT( &m_board );
 
         case PCB_ZONE_T:
         {

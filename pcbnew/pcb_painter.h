@@ -57,6 +57,7 @@ class PCB_TEXTBOX;
 class PCB_TABLE;
 class PCB_DIMENSION_BASE;
 class PCB_TARGET;
+class PCB_POINT;
 class PCB_MARKER;
 class NET_SETTINGS;
 class NETINFO_LIST;
@@ -210,6 +211,7 @@ protected:
     void draw( const PCB_GROUP* aGroup, int aLayer );
     void draw( const ZONE* aZone, int aLayer );
     void draw( const PCB_DIMENSION_BASE* aDimension, int aLayer );
+    void draw( const PCB_POINT* aPoint, int aLayer );
     void draw( const PCB_TARGET* aTarget );
     void draw( const PCB_MARKER* aMarker, int aLayer );
     void draw( const PCB_BOARD_OUTLINE* aBoardOutline, int aLayer );

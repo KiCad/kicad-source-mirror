@@ -433,6 +433,7 @@ static struct EDA_ITEM_DESC
             .Map( PCB_DIM_RADIAL_T,        _HKI( "Dimension" ) )
             .Map( PCB_DIM_LEADER_T,        _HKI( "Leader" ) )
             .Map( PCB_TARGET_T,            _HKI( "Target" ) )
+            .Map( PCB_POINT_T,             _HKI( "Point" ) )
             .Map( PCB_ZONE_T,              _HKI( "Zone" ) )
             .Map( PCB_ITEM_LIST_T,         _HKI( "ItemList" ) )
             .Map( PCB_NETINFO_T,           _HKI( "NetInfo" ) )

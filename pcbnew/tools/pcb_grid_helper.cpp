@@ -1561,6 +1561,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
         case PCB_MARKER_T:
         case PCB_TARGET_T:
+        case PCB_POINT_T:
             addAnchor( aItem->GetPosition(), ORIGIN | CORNER | SNAPPABLE, aItem, POINT_TYPE::PT_CENTER );
             break;
 

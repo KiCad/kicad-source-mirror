@@ -23,11 +23,11 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+#include "pcb_target.h"
 
 #include <bitmaps.h>
 #include <board.h>
 #include <board_design_settings.h>
-#include <pcb_target.h>
 #include <base_units.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
@@ -36,6 +36,7 @@
 #include <geometry/shape_circle.h>
 #include <eda_draw_frame.h>
 #include <pcb_shape.h>
+
 
 PCB_TARGET::PCB_TARGET( BOARD_ITEM* aParent ) :
     BOARD_ITEM( aParent, PCB_TARGET_T )

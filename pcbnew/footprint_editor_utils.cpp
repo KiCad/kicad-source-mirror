@@ -256,6 +256,9 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
         m_toolManager->GetTool<FOOTPRINT_EDITOR_CONTROL>()->CrossProbe( static_cast<PCB_MARKER*>( aItem ) );
         break;
 
+    case PCB_POINT_T:
+        break;
+
     default:
         wxFAIL_MSG( wxT( "FOOTPRINT_EDIT_FRAME::OnEditItemRequest: unsupported item type " )
                     + aItem->GetClass() );

@@ -348,6 +348,7 @@ const APPEARANCE_CONTROLS::APPEARANCE_SETTING APPEARANCE_CONTROLS::s_objectSetti
     RR( _HKI( "DRC Errors" ),           LAYER_DRC_ERROR,          _HKI( "DRC violations with an Error severity" ) ),
     RR( _HKI( "DRC Exclusions" ),       LAYER_DRC_EXCLUSION,      _HKI( "DRC violations which have been individually excluded" ) ),
     RR( _HKI( "Anchors" ),              LAYER_ANCHOR,             _HKI( "Show footprint and text origins as a cross" ) ),
+    RR( _HKI( "Points" ),               LAYER_POINTS,             _HKI( "Show explicit snap points as crosses" ) ),
     RR( _HKI( "Locked Item Shadow" ),   LAYER_LOCKED_ITEM_SHADOW, _HKI( "Show a shadow on locked items" ) ),
     RR( _HKI( "Colliding Courtyards" ), LAYER_CONFLICTS_SHADOW,   _HKI( "Show colliding footprint courtyards" ) ),
     RR( _HKI( "Board Area Shadow" ),    LAYER_BOARD_OUTLINE_AREA, _HKI( "Show board area shadow" ) ),
@@ -368,7 +369,8 @@ static std::set<int> s_allowedInFpEditor =
             LAYER_FP_REFERENCES,
             LAYER_FP_TEXT,
             LAYER_DRAW_BITMAPS,
-            LAYER_GRID
+            LAYER_GRID,
+            LAYER_POINTS,
         };
 
 // These are the built-in layer presets that cannot be deleted
@@ -2230,7 +2232,7 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                 COLOR4D color     = theme->GetColor( layer );
                 COLOR4D defColor  = theme->GetDefaultColor( layer );
 
-                if( color != COLOR4D::UNSPECIFIED )
+                if( color != COLOR4D::UNSPECIFIED || defColor != COLOR4D::UNSPECIFIED )
                 {
                     COLOR_SWATCH* swatch = new COLOR_SWATCH( m_windowObjects, color, layer,
                                                              bgColor, defColor, SWATCH_SMALL );

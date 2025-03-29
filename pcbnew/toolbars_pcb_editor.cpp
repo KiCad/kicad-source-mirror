@@ -227,9 +227,10 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
               .AppendAction( ACTIONS::deleteTool );
 
         config.AppendSeparator()
-              .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "PCB origins" ) )
+              .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "PCB origins and points" ) )
                             .AddAction( ACTIONS::gridSetOrigin )
                             .AddAction( PCB_ACTIONS::drillOrigin ) )
+                            .AppendAction( PCB_ACTIONS::placePoint )
               .AppendAction( ACTIONS::measureTool );
 
         /* TODO (ISM): Support context menus

@@ -46,6 +46,7 @@
 #include <pcb_reference_image.h>
 #include <pcb_group.h>
 #include <pcb_generator.h>
+#include <pcb_point.h>
 #include <pcb_target.h>
 #include <pcb_track.h>
 #include <pcb_textbox.h>
@@ -1087,6 +1088,12 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
 
         case T_target:
             item = parsePCB_TARGET();
+            m_board->Add( item, ADD_MODE::BULK_APPEND, true );
+            bulkAddedItems.push_back( item );
+            break;
+
+        case T_point:
+            item = parsePCB_POINT();
             m_board->Add( item, ADD_MODE::BULK_APPEND, true );
             bulkAddedItems.push_back( item );
             break;
@@ -5020,6 +5027,12 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
             parseGROUP( footprint.get() );
             break;
 
+        case T_point:
+        {
+            PCB_POINT* point = parsePCB_POINT();
+            footprint->Add( point, ADD_MODE::APPEND, true );
+            break;
+        }
         case T_embedded_fonts:
         {
             footprint->GetEmbeddedFiles()->SetAreFontsEmbedded( parseBool() );
@@ -7737,6 +7750,56 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
     zone->SetNeedRefill( false );
 
     return zone.release();
+}
+
+
+PCB_POINT* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_POINT()
+{
+    wxCHECK_MSG( CurTok() == T_point, nullptr,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_POINT." ) );
+
+    std::unique_ptr<PCB_POINT> point = std::make_unique<PCB_POINT>( nullptr );
+
+    for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token == T_LEFT )
+            token = NextTok();
+
+        switch( token )
+        {
+        case T_at:
+        {
+            VECTOR2I pt;
+            pt.x = parseBoardUnits( "point x position" );
+            pt.y = parseBoardUnits( "point y position" );
+            point->SetPosition( pt );
+            NeedRIGHT();
+            break;
+        }
+        case T_size:
+        {
+            point->SetSize( parseBoardUnits( "point size" ) );
+            NeedRIGHT();
+            break;
+        }
+        case T_layer:
+        {
+            point->SetLayer( parseBoardItemLayer() );
+            NeedRIGHT();
+            break;
+        }
+        case T_uuid:
+        {
+            NextTok();
+            const_cast<KIID&>( point->m_Uuid ) = CurStrToKIID();
+            NeedRIGHT();
+            break;
+        }
+        default: Expecting( "at, size, layer or uuid" );
+        }
+    }
+
+    return point.release();
 }
 
 

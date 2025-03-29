@@ -142,6 +142,7 @@ wxString LayerName( int aLayer )
     case LAYER_DRC_EXCLUSION:           return _( "DRC exclusions" );
     case LAYER_MARKER_SHADOWS:          return _( "DRC marker shadows" );
     case LAYER_ANCHOR:                  return _( "Anchors" );
+    case LAYER_POINTS:                  return _( "Points" );
     case LAYER_DRAWINGSHEET:            return _( "Drawing sheet" );
     case LAYER_PAGE_LIMITS:             return _( "Page limits" );
     case LAYER_CURSOR:                  return _( "Cursor" );

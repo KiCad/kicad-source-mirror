@@ -114,6 +114,7 @@ std::optional<TOOLBAR_CONFIGURATION> FOOTPRINT_EDIT_TOOLBAR_SETTINGS::DefaultToo
               .AppendAction( ACTIONS::deleteTool );
 
         config.AppendSeparator()
+              .AppendAction( PCB_ACTIONS::placePoint )
               .AppendAction( PCB_ACTIONS::setAnchor )
               .AppendAction( ACTIONS::gridSetOrigin )
               .AppendAction( ACTIONS::measureTool );

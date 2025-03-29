@@ -39,6 +39,7 @@ GAL_SET UserVisbilityLayers()
         LAYER_FP_REFERENCES,
         LAYER_FP_TEXT,
         LAYER_ANCHOR,
+        LAYER_POINTS,
         LAYER_RATSNEST,
         LAYER_DRC_WARNING,
         LAYER_DRC_ERROR,
@@ -71,6 +72,7 @@ GAL_LAYER_ID RenderLayerFromVisibilityLayer( VISIBILITY_LAYER aLayer )
     case VISIBILITY_LAYER::FOOTPRINT_REFERENCES:    return LAYER_FP_REFERENCES;
     case VISIBILITY_LAYER::FOOTPRINT_TEXT:          return LAYER_FP_TEXT;
     case VISIBILITY_LAYER::FOOTPRINT_ANCHORS:       return LAYER_ANCHOR;
+    case VISIBILITY_LAYER::POINTS:                  return LAYER_POINTS;
     case VISIBILITY_LAYER::RATSNEST:                return LAYER_RATSNEST;
     case VISIBILITY_LAYER::DRC_WARNINGS:            return LAYER_DRC_WARNING;
     case VISIBILITY_LAYER::DRC_ERRORS:              return LAYER_DRC_ERROR;
@@ -102,6 +104,7 @@ std::optional<VISIBILITY_LAYER> VisibilityLayerFromRenderLayer( GAL_LAYER_ID aLa
     case LAYER_FP_REFERENCES:       return VISIBILITY_LAYER::FOOTPRINT_REFERENCES;
     case LAYER_FP_TEXT:             return VISIBILITY_LAYER::FOOTPRINT_TEXT;
     case LAYER_ANCHOR:              return VISIBILITY_LAYER::FOOTPRINT_ANCHORS;
+    case LAYER_POINTS:              return VISIBILITY_LAYER::POINTS;
     case LAYER_RATSNEST:            return VISIBILITY_LAYER::RATSNEST;
     case LAYER_DRC_WARNING:         return VISIBILITY_LAYER::DRC_WARNINGS;
     case LAYER_DRC_ERROR:           return VISIBILITY_LAYER::DRC_ERRORS;

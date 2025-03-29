@@ -298,6 +298,7 @@ void ARRAY_TOOL::onDialogClosed( wxCloseEvent& aEvent )
                     case PCB_DIM_RADIAL_T:
                     case PCB_DIM_ORTHOGONAL_T:
                     case PCB_DIM_LEADER_T:
+                    case PCB_POINT_T:
                     case PCB_TARGET_T:
                     case PCB_ZONE_T:
                         this_item = item->Duplicate( true, &commit );

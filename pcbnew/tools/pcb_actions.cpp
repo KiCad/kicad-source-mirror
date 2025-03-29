@@ -177,6 +177,15 @@ TOOL_ACTION PCB_ACTIONS::placeStackup( TOOL_ACTION_ARGS()
         .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Flags( AF_ACTIVATE ) );
 
+TOOL_ACTION PCB_ACTIONS::placePoint( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.placePoint" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Place Point" ) )
+        .Tooltip( _( "Add reference/snap points" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .Icon( BITMAPS::add_point )
+        .Flags( AF_ACTIVATE ) );
+
 TOOL_ACTION PCB_ACTIONS::placeReferenceImage( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveDrawing.placeReferenceImage" )
         .Scope( AS_GLOBAL )

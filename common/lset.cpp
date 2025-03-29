@@ -806,7 +806,8 @@ GAL_SET GAL_SET::DefaultVisible()
         LAYER_FILLED_SHAPES,
         LAYER_LOCKED_ITEM_SHADOW,
         // LAYER_BOARD_OUTLINE_AREA,    // currently hidden by default
-        LAYER_CONFLICTS_SHADOW
+        LAYER_CONFLICTS_SHADOW,
+        LAYER_POINTS
     };
 
     static const GAL_SET saved( visible, arrayDim( visible ) );

@@ -42,6 +42,7 @@
 #include <pcb_tablecell.h>
 #include <pcb_marker.h>
 #include <pcb_dimension.h>
+#include <pcb_point.h>
 #include <pcb_target.h>
 #include <pcb_board_outline.h>
 
@@ -731,6 +732,10 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 
     case PCB_TARGET_T:
         draw( static_cast<const PCB_TARGET*>( item ) );
+        break;
+
+    case PCB_POINT_T:
+        draw( static_cast<const PCB_POINT*>( item ), aLayer );
         break;
 
     case PCB_MARKER_T:
@@ -2962,7 +2967,7 @@ void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
 
 void PCB_PAINTER::draw( const PCB_TARGET* aTarget )
 {
-    const COLOR4D& strokeColor = m_pcbSettings.GetColor( aTarget, aTarget->GetLayer() );
+    const COLOR4D strokeColor = m_pcbSettings.GetColor( aTarget, aTarget->GetLayer() );
     VECTOR2D position( aTarget->GetPosition() );
     double   size, radius;
 
@@ -2991,6 +2996,53 @@ void PCB_PAINTER::draw( const PCB_TARGET* aTarget )
     m_gal->DrawLine( VECTOR2D( -size, 0.0 ), VECTOR2D( size, 0.0 ) );
     m_gal->DrawLine( VECTOR2D( 0.0, -size ), VECTOR2D( 0.0,  size ) );
     m_gal->DrawCircle( VECTOR2D( 0.0, 0.0 ), radius );
+
+    m_gal->Restore();
+}
+
+
+void PCB_PAINTER::draw( const PCB_POINT* aPoint, int aLayer )
+{
+    // aLayer will be the virtual zone layer (LAYER_ZONE_START, ... in GAL_LAYER_ID)
+    // This is used for draw ordering in the GAL.
+    // The color for the point comes from the associated copper layer ( aLayer - LAYER_POINT_START )
+    // and the visibility comes from the combination of that copper layer and LAYER_POINT
+
+    double size = aPoint->GetSize() / 2;
+
+    // Keep the width constant, not related to the scale because the anchor
+    // is just a marker on screen, just draw in pixels
+    double thickness = m_pcbSettings.m_outlineWidth;
+
+    // The general "points" colour
+    COLOR4D crossColor = m_pcbSettings.GetColor( aPoint, LAYER_POINTS );
+    // The colour for the ring around the point follows the "real" layer of the point
+    COLOR4D ringColor = m_pcbSettings.GetColor( aPoint, aPoint->GetLayer() );
+
+    if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
+    {
+        thickness += m_lockedShadowMargin;
+        crossColor = m_pcbSettings.GetColor( aPoint, aLayer );
+        ringColor = m_pcbSettings.GetColor( aPoint, aLayer );
+    }
+
+    VECTOR2D position( aPoint->GetPosition() );
+
+    m_gal->SetLineWidth( thickness );
+    m_gal->SetStrokeColor( crossColor );
+    m_gal->SetIsFill( false );
+    m_gal->SetIsStroke( true );
+
+    m_gal->Save();
+    m_gal->Translate( position );
+
+    // Draw as X to make it clearer when overlaid on cursor or axes
+    m_gal->DrawLine( VECTOR2D( -size, -size ), VECTOR2D( size, size ) );
+    m_gal->DrawLine( VECTOR2D( size, -size ), VECTOR2D( -size, size ) );
+
+    // Draw the circle in the layer colour
+    m_gal->SetStrokeColor( ringColor );
+    m_gal->DrawCircle( VECTOR2D( 0.0, 0.0 ), size / 2 );
 
     m_gal->Restore();
 }

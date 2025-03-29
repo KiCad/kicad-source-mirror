@@ -56,6 +56,7 @@
 #include <pcb_field.h>
 #include <pcb_group.h>
 #include <pcb_marker.h>
+#include <pcb_point.h>
 #include <pcb_reference_image.h>
 #include <pcb_textbox.h>
 #include <pcb_track.h>
@@ -225,6 +226,13 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
         Add( newGroup, ADD_MODE::APPEND ); // Append to ensure indexes are identical
     }
 
+    for( PCB_POINT* point : aFootprint.Points() )
+    {
+        PCB_POINT* newPoint = static_cast<PCB_POINT*>( point->Clone() );
+        ptrMap[ point ] = newPoint;
+        Add( newPoint, ADD_MODE::APPEND ); // Append to ensure indexes are identical
+    }
+
     // Rebuild groups
     for( PCB_GROUP* group : aFootprint.Groups() )
     {
@@ -275,6 +283,11 @@ FOOTPRINT::~FOOTPRINT()
         delete group;
 
     m_groups.clear();
+
+    for( PCB_POINT* point : m_points )
+        delete point;
+
+    m_points.clear();
 
     for( BOARD_ITEM* d : m_drawings )
         delete d;
@@ -550,6 +563,7 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
     Zones().clear();
     Groups().clear();
     Models().clear();
+    Points().clear();
 
     for( const google::protobuf::Any& itemMsg : footprint.definition().items() )
     {
@@ -728,9 +742,13 @@ bool FOOTPRINT::FixUuids()
     for( PCB_GROUP* group : m_groups )
         item_list.push_back( group );
 
-    // Probably notneeded, because old fp do not have zones. But just in case.
+    // Probably not needed, because old fp do not have zones. But just in case.
     for( ZONE* zone : m_zones )
         item_list.push_back( zone );
+
+    // Ditto
+    for( PCB_POINT* point : m_points )
+        item_list.push_back( point );
 
     bool changed = false;
 
@@ -841,6 +859,17 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
 
     aOther.Groups().clear();
 
+    // Move the points
+    for( PCB_POINT* point : m_points )
+        delete point;
+
+    m_groups.clear();
+
+    for( PCB_POINT* point : aOther.Points() )
+        Add( point );
+
+    aOther.Points().clear();
+
     EMBEDDED_FILES::operator=( std::move( aOther ) );
 
     // Copy auxiliary data
@@ -949,6 +978,16 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
             newGroup->AddItem( ptrMap[ member ] );
 
         Add( newGroup );
+    }
+
+    // Copy drawings
+    m_points.clear();
+
+    for( PCB_POINT* point : aOther.Points() )
+    {
+        BOARD_ITEM* newItem = static_cast<BOARD_ITEM*>( point->Clone() );
+        ptrMap[ point ] = newItem;
+        Add( newItem );
     }
 
     // Copy auxiliary data
@@ -1141,6 +1180,14 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectiv
         wxFAIL_MSG( wxT( "FOOTPRINT::Add(): Nested footprints not supported" ) );
         return;
 
+    case PCB_POINT_T:
+        if( aMode == ADD_MODE::APPEND )
+            m_points.push_back( static_cast<PCB_POINT*>( aBoardItem ) );
+        else
+            m_points.insert( m_points.begin(), static_cast<PCB_POINT*>( aBoardItem ) );
+
+        break;
+
     default:
         wxFAIL_MSG( wxString::Format( wxT( "FOOTPRINT::Add(): BOARD_ITEM type (%d) not handled" ),
                                       aBoardItem->Type() ) );
@@ -1220,6 +1267,18 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
             if( *it == static_cast<PCB_GROUP*>( aBoardItem ) )
             {
                 m_groups.erase( it );
+                break;
+            }
+        }
+
+        break;
+
+    case PCB_POINT_T:
+        for( auto it = m_points.begin(); it != m_points.end(); ++it )
+        {
+            if( *it == static_cast<PCB_POINT*>( aBoardItem ) )
+            {
+                m_points.erase( it );
                 break;
             }
         }
@@ -1433,6 +1492,9 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText ) const
     for( ZONE* zone : m_zones )
         bbox.Merge( zone->GetBoundingBox() );
 
+    for( PCB_POINT* point : m_points )
+        bbox.Merge( point->GetBoundingBox() );
+
     bool noDrawItems = ( m_drawings.empty() && m_pads.empty() && m_zones.empty() );
 
     // Groups do not contribute to the rect, only their members
@@ -1540,6 +1602,17 @@ const BOX2I FOOTPRINT::GetLayerBoundingBox( const LSET& aLayers ) const
             continue;
 
         bbox.Merge( zone->GetBoundingBox() );
+    }
+
+    for( PCB_POINT* point : m_points )
+    {
+        if( m_privateLayers.test( point->GetLayer() ) && !isFPEdit )
+            continue;
+
+        if( ( aLayers & point->GetLayerSet() ).none() )
+            continue;
+
+        bbox.Merge( point->GetBoundingBox() );
     }
 
     return bbox;
@@ -1951,6 +2024,12 @@ bool FOOTPRINT::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
                 return true;
         }
 
+        for( PCB_POINT* point : m_points )
+        {
+            if( point->HitTest( arect, false, 0 ) )
+                return true;
+        }
+
         // PCB fields are selectable on their own, so they don't get tested
 
         for( BOARD_ITEM* item : m_drawings )
@@ -2228,6 +2307,15 @@ INSPECT_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData,
 
             break;
 
+        case PCB_POINT_T:
+            if( IterateForward<PCB_POINT*>( m_points, inspector, testData, { scanType } )
+                    == INSPECT_RESULT::QUIT )
+            {
+                return INSPECT_RESULT::QUIT;
+            }
+
+            break;
+
         default:
             break;
         }
@@ -2275,6 +2363,9 @@ void FOOTPRINT::RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFuncti
 
         for( PCB_GROUP* group : m_groups )
             aFunction( group );
+
+        for( PCB_POINT* point : m_points )
+            aFunction( point );
 
         for( BOARD_ITEM* drawing : m_drawings )
         {
@@ -2503,6 +2594,10 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
     for( BOARD_ITEM* item : m_drawings )
         item->Flip( m_pos, FLIP_DIRECTION::TOP_BOTTOM );
 
+    // Points move but don't flip layer
+    for( PCB_POINT* point : m_points )
+        point->Flip( m_pos, FLIP_DIRECTION::TOP_BOTTOM );
+
     // Now rotate 180 deg if required
     if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
         Rotate( aCentre, ANGLE_180 );
@@ -2534,6 +2629,9 @@ void FOOTPRINT::SetPosition( const VECTOR2I& aPos )
 
     for( BOARD_ITEM* item : m_drawings )
         item->Move( delta );
+
+    for( PCB_POINT* point : m_points )
+        point->Move( delta );
 
     m_cachedBoundingBox.Move( delta );
     m_cachedTextExcludedBBox.Move( delta );
@@ -2618,6 +2716,9 @@ void FOOTPRINT::SetOrientation( const EDA_ANGLE& aNewAngle )
     for( BOARD_ITEM* item : m_drawings )
         item->Rotate( GetPosition(), angleChange );
 
+    for( PCB_POINT* point : m_points )
+        point->Rotate( GetPosition(), angleChange );
+
     m_boundingBoxCacheTimeStamp = 0;
     m_textExcludedBBoxCacheTimeStamp = 0;
     m_hullCacheTimeStamp = 0;
@@ -2669,6 +2770,18 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( bool addToParentGroup, BOARD_COMMIT* aComm
             m_zones.push_back( new_zone );
 
         new_item = new_zone;
+        break;
+    }
+
+    case PCB_POINT_T:
+    {
+        PCB_POINT* new_point = new PCB_POINT( *static_cast<const PCB_POINT*>( aItem ) );
+        const_cast<KIID&>( new_point->m_Uuid ) = KIID();
+
+        if( addToFootprint )
+            m_points.push_back( new_point );
+
+        new_item = new_point;
         break;
     }
 
@@ -3695,6 +3808,9 @@ bool FOOTPRINT::operator==( const FOOTPRINT& aOther ) const
         if( !( *m_zones[ii] == *aOther.m_zones[ii] ) )
             return false;
     }
+
+    if( m_points.size() != aOther.m_points.size() )
+        return false;
 
     // Compare fields in ordinally-sorted order
     std::vector<PCB_FIELD*> fields, otherFields;

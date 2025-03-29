@@ -369,6 +369,8 @@ public:
 
     const MARKERS& Markers() const { return m_markers; }
 
+    const PCB_POINTS& Points() const { return m_points; }
+
     // SWIG requires non-const accessors for some reason to make the custom iterators in board.i
     // work.  It would be good to remove this if we can figure out how to fix that.
 #ifdef SWIG
@@ -414,10 +416,7 @@ public:
     void           SetPosition( const VECTOR2I& aPos ) override;
     const VECTOR2I GetFocusPosition() const override { return GetBoundingBox().GetCenter(); }
 
-    bool IsEmpty() const
-    {
-        return m_drawings.empty() && m_footprints.empty() && m_tracks.empty() && m_zones.empty();
-    }
+    bool IsEmpty() const;
 
     void Move( const VECTOR2I& aMoveVector ) override;
 
@@ -1423,6 +1422,7 @@ private:
     ZONES               m_zones;
     GENERATORS          m_generators;
     PCB_BOARD_OUTLINE*  m_boardOutline;
+    PCB_POINTS          m_points;
 
     // Cache for fast access to items in the containers above by KIID, including children
     std::unordered_map<KIID, BOARD_ITEM*> m_itemByIdCache;

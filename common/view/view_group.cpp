@@ -174,6 +174,10 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
         {
             draw = aView->IsLayerVisible( layer - LAYER_CLEARANCE_START );
         }
+        else if( IsPointsLayer( layer ) )
+        {
+            draw = aView->IsLayerVisible( layer - LAYER_POINT_START );
+        }
 
         if( isSelection )
         {

@@ -397,6 +397,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::add_line].emplace_back( BITMAPS::add_line, wxT( "add_line_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_orthogonal_dimension].emplace_back( BITMAPS::add_orthogonal_dimension, wxT( "add_orthogonal_dimension_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_pcb_target].emplace_back( BITMAPS::add_pcb_target, wxT( "add_pcb_target_24.png" ), 24, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::add_point].emplace_back( BITMAPS::add_point, wxT( "add_point_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_power].emplace_back( BITMAPS::add_power, wxT( "add_power_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_radial_dimension].emplace_back( BITMAPS::add_radial_dimension, wxT( "add_radial_dimension_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_rectangle].emplace_back( BITMAPS::add_rectangle, wxT( "add_rectangle_24.png" ), 24, wxT( "light" ) );
@@ -836,6 +837,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::add_line].emplace_back( BITMAPS::add_line, wxT( "add_line_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_orthogonal_dimension].emplace_back( BITMAPS::add_orthogonal_dimension, wxT( "add_orthogonal_dimension_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_pcb_target].emplace_back( BITMAPS::add_pcb_target, wxT( "add_pcb_target_dark_24.png" ), 24, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::add_point].emplace_back( BITMAPS::add_point, wxT( "add_point_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_power].emplace_back( BITMAPS::add_power, wxT( "add_power_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_radial_dimension].emplace_back( BITMAPS::add_radial_dimension, wxT( "add_radial_dimension_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_rectangle].emplace_back( BITMAPS::add_rectangle, wxT( "add_rectangle_dark_24.png" ), 24, wxT( "dark" ) );
@@ -1275,6 +1277,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::add_line].emplace_back( BITMAPS::add_line, wxT( "add_line_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_orthogonal_dimension].emplace_back( BITMAPS::add_orthogonal_dimension, wxT( "add_orthogonal_dimension_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_pcb_target].emplace_back( BITMAPS::add_pcb_target, wxT( "add_pcb_target_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::add_point].emplace_back( BITMAPS::add_point, wxT( "add_point_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_power].emplace_back( BITMAPS::add_power, wxT( "add_power_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_radial_dimension].emplace_back( BITMAPS::add_radial_dimension, wxT( "add_radial_dimension_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_rectangle].emplace_back( BITMAPS::add_rectangle, wxT( "add_rectangle_16.png" ), 16, wxT( "light" ) );
@@ -1714,6 +1717,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::add_line].emplace_back( BITMAPS::add_line, wxT( "add_line_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_orthogonal_dimension].emplace_back( BITMAPS::add_orthogonal_dimension, wxT( "add_orthogonal_dimension_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_pcb_target].emplace_back( BITMAPS::add_pcb_target, wxT( "add_pcb_target_dark_16.png" ), 16, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::add_point].emplace_back( BITMAPS::add_point, wxT( "add_point_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_power].emplace_back( BITMAPS::add_power, wxT( "add_power_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_radial_dimension].emplace_back( BITMAPS::add_radial_dimension, wxT( "add_radial_dimension_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_rectangle].emplace_back( BITMAPS::add_rectangle, wxT( "add_rectangle_dark_16.png" ), 16, wxT( "dark" ) );
@@ -2153,6 +2157,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::add_line].emplace_back( BITMAPS::add_line, wxT( "add_line_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_orthogonal_dimension].emplace_back( BITMAPS::add_orthogonal_dimension, wxT( "add_orthogonal_dimension_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_pcb_target].emplace_back( BITMAPS::add_pcb_target, wxT( "add_pcb_target_32.png" ), 32, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::add_point].emplace_back( BITMAPS::add_point, wxT( "add_point_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_power].emplace_back( BITMAPS::add_power, wxT( "add_power_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_radial_dimension].emplace_back( BITMAPS::add_radial_dimension, wxT( "add_radial_dimension_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_rectangle].emplace_back( BITMAPS::add_rectangle, wxT( "add_rectangle_32.png" ), 32, wxT( "light" ) );
@@ -2592,6 +2597,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::add_line].emplace_back( BITMAPS::add_line, wxT( "add_line_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_orthogonal_dimension].emplace_back( BITMAPS::add_orthogonal_dimension, wxT( "add_orthogonal_dimension_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_pcb_target].emplace_back( BITMAPS::add_pcb_target, wxT( "add_pcb_target_dark_32.png" ), 32, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::add_point].emplace_back( BITMAPS::add_point, wxT( "add_point_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_power].emplace_back( BITMAPS::add_power, wxT( "add_power_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_radial_dimension].emplace_back( BITMAPS::add_radial_dimension, wxT( "add_radial_dimension_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_rectangle].emplace_back( BITMAPS::add_rectangle, wxT( "add_rectangle_dark_32.png" ), 32, wxT( "dark" ) );
@@ -3031,6 +3037,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::add_line].emplace_back( BITMAPS::add_line, wxT( "add_line_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_orthogonal_dimension].emplace_back( BITMAPS::add_orthogonal_dimension, wxT( "add_orthogonal_dimension_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_pcb_target].emplace_back( BITMAPS::add_pcb_target, wxT( "add_pcb_target_48.png" ), 48, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::add_point].emplace_back( BITMAPS::add_point, wxT( "add_point_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_power].emplace_back( BITMAPS::add_power, wxT( "add_power_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_radial_dimension].emplace_back( BITMAPS::add_radial_dimension, wxT( "add_radial_dimension_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_rectangle].emplace_back( BITMAPS::add_rectangle, wxT( "add_rectangle_48.png" ), 48, wxT( "light" ) );
@@ -3470,6 +3477,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::add_line].emplace_back( BITMAPS::add_line, wxT( "add_line_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_orthogonal_dimension].emplace_back( BITMAPS::add_orthogonal_dimension, wxT( "add_orthogonal_dimension_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_pcb_target].emplace_back( BITMAPS::add_pcb_target, wxT( "add_pcb_target_dark_48.png" ), 48, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::add_point].emplace_back( BITMAPS::add_point, wxT( "add_point_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_power].emplace_back( BITMAPS::add_power, wxT( "add_power_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_radial_dimension].emplace_back( BITMAPS::add_radial_dimension, wxT( "add_radial_dimension_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_rectangle].emplace_back( BITMAPS::add_rectangle, wxT( "add_rectangle_dark_48.png" ), 48, wxT( "dark" ) );
@@ -3909,6 +3917,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::add_line].emplace_back( BITMAPS::add_line, wxT( "add_line_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_orthogonal_dimension].emplace_back( BITMAPS::add_orthogonal_dimension, wxT( "add_orthogonal_dimension_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_pcb_target].emplace_back( BITMAPS::add_pcb_target, wxT( "add_pcb_target_64.png" ), 64, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::add_point].emplace_back( BITMAPS::add_point, wxT( "add_point_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_power].emplace_back( BITMAPS::add_power, wxT( "add_power_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_radial_dimension].emplace_back( BITMAPS::add_radial_dimension, wxT( "add_radial_dimension_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_rectangle].emplace_back( BITMAPS::add_rectangle, wxT( "add_rectangle_64.png" ), 64, wxT( "light" ) );
@@ -4348,6 +4357,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::add_line].emplace_back( BITMAPS::add_line, wxT( "add_line_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_orthogonal_dimension].emplace_back( BITMAPS::add_orthogonal_dimension, wxT( "add_orthogonal_dimension_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_pcb_target].emplace_back( BITMAPS::add_pcb_target, wxT( "add_pcb_target_dark_64.png" ), 64, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::add_point].emplace_back( BITMAPS::add_point, wxT( "add_point_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_power].emplace_back( BITMAPS::add_power, wxT( "add_power_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_radial_dimension].emplace_back( BITMAPS::add_radial_dimension, wxT( "add_radial_dimension_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_rectangle].emplace_back( BITMAPS::add_rectangle, wxT( "add_rectangle_dark_64.png" ), 64, wxT( "dark" ) );

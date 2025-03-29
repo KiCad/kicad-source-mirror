@@ -60,6 +60,7 @@ class PCB_TABLE;
 class PCB_TABLECELL;
 class FOOTPRINT;
 class PCB_GROUP;
+class PCB_POINT;
 class PCB_TARGET;
 class PCB_VIA;
 class ZONE;
@@ -243,6 +244,7 @@ private:
     void        parseViastack( PCB_VIA* aVia );
     ZONE*       parseZONE( BOARD_ITEM_CONTAINER* aParent );
     PCB_TARGET* parsePCB_TARGET();
+    PCB_POINT*  parsePCB_POINT();
     BOARD*      parseBOARD();
     void        parseGROUP_members( GROUP_INFO& aGroupInfo );
     void        parseGROUP( BOARD_ITEM* aParent );

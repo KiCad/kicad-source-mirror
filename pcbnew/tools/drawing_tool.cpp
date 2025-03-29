@@ -67,6 +67,7 @@
 #include <gal/painter.h>
 #include <pcb_edit_frame.h>
 #include <pcb_group.h>
+#include <pcb_point.h>
 #include <pcb_reference_image.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
@@ -852,6 +853,61 @@ int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
     getViewControls()->SetAutoPan( false );
     getViewControls()->CaptureCursor( false );
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+
+    return 0;
+}
+
+struct POINT_PLACER : public INTERACTIVE_PLACER_BASE
+{
+    POINT_PLACER( DRAWING_TOOL& aDrawingTool, PCB_BASE_EDIT_FRAME& aFrame ) :
+            m_drawingTool( aDrawingTool ),
+            m_frame( aFrame ),
+            m_gridHelper( aDrawingTool.GetManager(), aFrame.GetMagneticItemsSettings() )
+    {
+    }
+
+    std::unique_ptr<BOARD_ITEM> CreateItem() override
+    {
+        std::unique_ptr<PCB_POINT> new_point = std::make_unique<PCB_POINT>( m_frame.GetModel() );
+
+        PCB_LAYER_ID layer = m_frame.GetActiveLayer();
+        new_point->SetLayer( layer );
+
+        return new_point;
+    }
+
+    void SnapItem( BOARD_ITEM* aItem ) override
+    {
+        m_gridHelper.SetSnap( !( m_modifiers & MD_SHIFT ) );
+        m_gridHelper.SetUseGrid( !( m_modifiers & MD_CTRL ) );
+
+        KIGFX::VIEW_CONTROLS& viewControls = *m_drawingTool.GetManager()->GetViewControls();
+        const VECTOR2I        position = viewControls.GetMousePosition();
+
+        VECTOR2I cursorPos = m_gridHelper.BestSnapAnchor( position, aItem->GetLayerSet() );
+        viewControls.ForceCursorPosition( true, cursorPos );
+        aItem->SetPosition( cursorPos );
+    }
+
+    DRAWING_TOOL&        m_drawingTool;
+    PCB_BASE_EDIT_FRAME& m_frame;
+    PCB_GRID_HELPER      m_gridHelper;
+};
+
+
+int DRAWING_TOOL::PlacePoint( const TOOL_EVENT& aEvent )
+{
+    if( m_isFootprintEditor && !m_frame->GetModel() )
+        return 0;
+
+    if( m_inDrawingTool )
+        return 0;
+
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
+
+    POINT_PLACER placer( *this, *frame() );
+
+    doInteractiveItemPlacement( aEvent, &placer, _( "Place point" ), IPO_REPEAT | IPO_SINGLE_CLICK );
 
     return 0;
 }
@@ -4154,6 +4210,7 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawZoneCutout.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawSimilarZone.MakeEvent() );
     Go( &DRAWING_TOOL::DrawVia,               PCB_ACTIONS::drawVia.MakeEvent() );
+    Go( &DRAWING_TOOL::PlacePoint,            PCB_ACTIONS::placePoint.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceReferenceImage,   PCB_ACTIONS::placeReferenceImage.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceText,             PCB_ACTIONS::placeText.MakeEvent() );
     Go( &DRAWING_TOOL::DrawTable,             PCB_ACTIONS::drawTable.MakeEvent() );

@@ -75,6 +75,7 @@ public:
         IMAGE,
         TEXT,
         ANCHOR,
+        POINT,
         DXF,
         DIMENSION,
         KEEPOUT,
@@ -149,6 +150,11 @@ public:
      * place the image in the editor.
      */
     int PlaceReferenceImage( const TOOL_EVENT& aEvent );
+
+    /**
+     * Place a reference 0D point
+     */
+    int PlacePoint( const TOOL_EVENT& aEvent );
 
     /**
      * Display a dialog that allows one to input text and its settings and then lets the user

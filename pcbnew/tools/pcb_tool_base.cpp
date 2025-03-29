@@ -358,4 +358,3 @@ bool INTERACTIVE_PLACER_BASE::PlaceItem( BOARD_ITEM *aItem, BOARD_COMMIT& aCommi
     aCommit.Add( aItem );
     return true;
 }
-

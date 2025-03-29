@@ -55,6 +55,7 @@ class MSG_PANEL_ITEM;
 class SHAPE;
 class REPORTER;
 class COMPONENT_CLASS_CACHE_PROXY;
+class PCB_POINT;
 
 namespace KIGFX {
 class VIEW;
@@ -231,6 +232,9 @@ public:
 
     GROUPS& Groups()                       { return m_groups; }
     const GROUPS& Groups() const           { return m_groups; }
+
+    PCB_POINTS& Points()                   { return m_points; }
+    const PCB_POINTS& Points() const       { return m_points; }
 
     bool HasThroughHolePads() const;
 
@@ -1098,6 +1102,7 @@ private:
     std::deque<PAD*>        m_pads;      // Pads, owned by pointer
     std::vector<ZONE*>      m_zones;     // Rule area zones, owned by pointer
     std::deque<PCB_GROUP*>  m_groups;    // Groups, owned by pointer
+    std::deque<PCB_POINT*>  m_points;    // Points, owned by pointer
 
     EDA_ANGLE       m_orient;            // Orientation
     VECTOR2I        m_pos;               // Position of footprint on the board in internal units.

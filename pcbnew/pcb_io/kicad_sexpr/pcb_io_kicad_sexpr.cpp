@@ -46,6 +46,7 @@
 #include <pcb_group.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.h>
+#include <pcb_point.h>
 #include <pcb_reference_image.h>
 #include <pcb_shape.h>
 #include <pcb_table.h>
@@ -371,6 +372,10 @@ void PCB_IO_KICAD_SEXPR::Format( const BOARD_ITEM* aItem ) const
 
     case PCB_REFERENCE_IMAGE_T:
         format( static_cast<const PCB_REFERENCE_IMAGE*>( aItem ) );
+        break;
+
+    case PCB_POINT_T:
+        format( static_cast<const PCB_POINT*>( aItem ) );
         break;
 
     case PCB_TARGET_T:
@@ -769,6 +774,8 @@ void PCB_IO_KICAD_SEXPR::format( const BOARD* aBoard ) const
                                                                 aBoard->Drawings().end() );
     std::set<PCB_TRACK*, PCB_TRACK::cmp_tracks> sorted_tracks( aBoard->Tracks().begin(),
                                                                aBoard->Tracks().end() );
+    std::set<PCB_POINT*, BOARD_ITEM::ptr_cmp> sorted_points( aBoard->Points().begin(),
+                                                               aBoard->Points().end() );
     std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_zones( aBoard->Zones().begin(),
                                                              aBoard->Zones().end() );
     std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_groups( aBoard->Groups().begin(),
@@ -784,6 +791,10 @@ void PCB_IO_KICAD_SEXPR::format( const BOARD* aBoard ) const
     // Save the graphical items on the board (not owned by a footprint)
     for( BOARD_ITEM* item : sorted_drawings )
         Format( item );
+
+    // Save the points
+    for( PCB_POINT* point : sorted_points )
+        Format( point );
 
     // Do not save PCB_MARKERs, they can be regenerated easily.
 
@@ -1101,6 +1112,20 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_REFERENCE_IMAGE* aBitmap ) const
 }
 
 
+void PCB_IO_KICAD_SEXPR::format( const PCB_POINT* aPoint ) const
+{
+    m_out->Print( "(point (at %s) (size %s)",
+        formatInternalUnits( aPoint->GetPosition() ).c_str(),
+        formatInternalUnits( aPoint->GetSize() ).c_str()
+    );
+
+    formatLayer( aPoint->GetLayer() );
+
+    KICAD_FORMAT::FormatUuid( m_out, aPoint->m_Uuid );
+    m_out->Print( ")" );
+}
+
+
 void PCB_IO_KICAD_SEXPR::format( const PCB_TARGET* aTarget ) const
 {
     m_out->Print( "(target %s (at %s) (size %s)",
@@ -1345,6 +1370,9 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
     std::set<BOARD_ITEM*, FOOTPRINT::cmp_drawings> sorted_drawings(
             aFootprint->GraphicalItems().begin(),
             aFootprint->GraphicalItems().end() );
+    std::set<PCB_POINT*, FOOTPRINT::ptr_cmp> sorted_points(
+            aFootprint->Points().begin(),
+            aFootprint->Points().end() );
     std::set<ZONE*, FOOTPRINT::cmp_zones> sorted_zones( aFootprint->Zones().begin(),
                                                         aFootprint->Zones().end() );
     std::set<BOARD_ITEM*, PCB_GROUP::ptr_cmp> sorted_groups( aFootprint->Groups().begin(),
@@ -1354,6 +1382,9 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
 
     for( BOARD_ITEM* gr : sorted_drawings )
         Format( gr );
+
+    for( PCB_POINT* point : sorted_points )
+        Format( point );
 
     // Save pads.
     for( PAD* pad : sorted_pads )

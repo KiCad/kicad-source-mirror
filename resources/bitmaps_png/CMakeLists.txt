@@ -188,6 +188,7 @@ set( BMAPS_MID
     add_line
     add_orthogonal_dimension
     add_pcb_target
+    add_point
     add_power
     add_radial_dimension
     add_rectangle

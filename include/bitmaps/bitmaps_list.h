@@ -69,6 +69,7 @@ enum class BITMAPS : unsigned int
     add_line_label,
     add_orthogonal_dimension,
     add_pcb_target,
+    add_point,
     add_power,
     add_radial_dimension,
     add_rectangle,
