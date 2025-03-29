@@ -364,9 +364,6 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         {
             if( GetBoard()->GetItem( eda_item->m_Uuid ) == DELETED_BOARD_ITEM::GetInstance() )
             {
-                // Checking if it ever happens
-                wxASSERT_MSG( false, wxT( "Item in the undo buffer does not exist" ) );
-
                 // Remove this non existent item
                 aList->RemovePicker( ii );
                 not_found = true;
