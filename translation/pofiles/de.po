@@ -30,10 +30,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-03-27 01:09+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2025-03-30 00:01+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -7335,11 +7335,10 @@ msgstr ""
 "sind"
 
 #: common/env_vars.cpp:144
-#, fuzzy
 msgid "A directory containing user-specific scripts installed with KiCad."
 msgstr ""
 "Ein Verzeichnis mit benutzerspezifischen Skripten, die mit KiCad installiert "
-"worden sind"
+"worden sind."
 
 #: common/env_vars.cpp:147
 #, c-format
@@ -23307,9 +23306,8 @@ msgid "Save Current Sheet to Design Block..."
 msgstr "Aktuelle Schaltplanseite als Designblock speichern..."
 
 #: eeschema/tools/sch_actions.cpp:173
-#, fuzzy
 msgid "Add current sheet to design block"
-msgstr "Aktuelle Schaltplanseite als Designblock speichern..."
+msgstr "Aktuelle Schaltplanseite zu Designblock hinzufügen"
 
 #: eeschema/tools/sch_actions.cpp:179 pcbnew/tools/pcb_actions.cpp:489
 #, fuzzy
@@ -45176,14 +45174,14 @@ msgid "Remove %s 'duplicate pad numbers are jumpers' attribute."
 msgstr "Entferne %s Fertigungsattribut \"Nicht bestücken\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:785
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s jumper pad groups"
-msgstr "%s Eigenschaften aktualisiert."
+msgstr "Jumperpadgruppen %s aktualisiert"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:789
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s jumper pad groups"
-msgstr "%s Eigenschaften aktualisieren."
+msgstr "Jumperpadgruppen %s aktualisieren"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:869
 #, c-format
