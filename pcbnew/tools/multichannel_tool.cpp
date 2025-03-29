@@ -747,6 +747,11 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
 
             BOARD_ITEM* copied = static_cast<BOARD_ITEM*>( item->Clone() );
 
+            if( item->Type() == PCB_VIA_T )
+            {
+                fixupNet( static_cast<BOARD_CONNECTED_ITEM*>( item ), static_cast<BOARD_CONNECTED_ITEM*>( copied ),
+                          aMatches );
+            }
             copied->Move( disp );
             copied->SetParentGroup( nullptr );
             aGroupableItems.insert( copied );
@@ -850,7 +855,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
                     continue;
 
                 ZONE* targetZone = static_cast<ZONE*>( item->Clone() );
-                fixupZoneNets( zone, targetZone, aMatches );
+                fixupNet( zone, targetZone, aMatches );
 
                 copied = targetZone;
             }
@@ -926,19 +931,18 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( TMATCH::COMPONENT_MATCHES& aMatche
     return true;
 }
 
-
 /**
- * @brief Attempts to modify the assigned net of a copied zone
+ * @brief Attempts to modify the assigned net of copied items, especially intended for zones and vias
  *
  */
-void MULTICHANNEL_TOOL::fixupZoneNets( ZONE* aRefZone, ZONE* aTargetZone,
-                                       TMATCH::COMPONENT_MATCHES& aComponentMatches )
+void MULTICHANNEL_TOOL::fixupNet( BOARD_CONNECTED_ITEM* aRef, BOARD_CONNECTED_ITEM* aTarget,
+                                  TMATCH::COMPONENT_MATCHES& aComponentMatches )
 {
     auto                                     connectivity = board()->GetConnectivity();
-    const std::vector<BOARD_CONNECTED_ITEM*> refZoneConnectedPads =
-            connectivity->GetNetItems( aRefZone->GetNetCode(), { PCB_PAD_T } );
+    const std::vector<BOARD_CONNECTED_ITEM*> refConnectedPads =
+            connectivity->GetNetItems( aRef->GetNetCode(), { PCB_PAD_T } );
 
-    for( const BOARD_CONNECTED_ITEM* refConItem : refZoneConnectedPads )
+    for( const BOARD_CONNECTED_ITEM* refConItem : refConnectedPads )
     {
         if( refConItem->Type() != PCB_PAD_T )
             continue;
@@ -954,7 +958,7 @@ void MULTICHANNEL_TOOL::fixupZoneNets( ZONE* aRefZone, ZONE* aTargetZone,
             if( !targetFpPads.empty() )
             {
                 int targetNetCode = targetFpPads[0]->GetNet()->GetNetCode();
-                aTargetZone->SetNetCode( targetNetCode );
+                aTarget->SetNetCode( targetNetCode );
 
                 break;
             }
