@@ -43,6 +43,8 @@ public:
 
     ~PCB_REFERENCE_IMAGE();
 
+    void CopyFrom( const BOARD_ITEM* aOther ) override;
+
     PCB_REFERENCE_IMAGE& operator=( const BOARD_ITEM& aItem );
 
     /**

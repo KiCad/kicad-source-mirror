@@ -81,6 +81,13 @@ PCB_REFERENCE_IMAGE& PCB_REFERENCE_IMAGE::operator=( const BOARD_ITEM& aItem )
 }
 
 
+void PCB_REFERENCE_IMAGE::CopyFrom( const BOARD_ITEM* aOther )
+{
+    wxCHECK( aOther && aOther->Type() == PCB_REFERENCE_IMAGE_T, /* void */ );
+    *this = *static_cast<const PCB_REFERENCE_IMAGE*>( aOther );
+}
+
+
 EDA_ITEM* PCB_REFERENCE_IMAGE::Clone() const
 {
     return new PCB_REFERENCE_IMAGE( *this );

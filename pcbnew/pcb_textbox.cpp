@@ -61,6 +61,14 @@ PCB_TEXTBOX::~PCB_TEXTBOX()
 {
 }
 
+
+void PCB_TEXTBOX::CopyFrom( const BOARD_ITEM* aOther )
+{
+    wxCHECK( aOther && aOther->Type() == PCB_TEXTBOX_T, /* void */ );
+    *this = *static_cast<const PCB_TEXTBOX*>( aOther );
+}
+
+
 void PCB_TEXTBOX::Serialize( google::protobuf::Any &aContainer ) const
 {
     using namespace kiapi::common::types;

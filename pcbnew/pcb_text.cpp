@@ -81,6 +81,13 @@ PCB_TEXT::~PCB_TEXT()
 }
 
 
+void PCB_TEXT::CopyFrom( const BOARD_ITEM* aOther )
+{
+    wxCHECK( aOther && aOther->Type() == PCB_TEXT_T, /* void */ );
+    *this = *static_cast<const PCB_TEXT*>( aOther );
+}
+
+
 void PCB_TEXT::Serialize( google::protobuf::Any &aContainer ) const
 {
     using namespace kiapi::common;

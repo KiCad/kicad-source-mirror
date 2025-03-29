@@ -69,6 +69,13 @@ PCB_SHAPE::~PCB_SHAPE()
 }
 
 
+void PCB_SHAPE::CopyFrom( const BOARD_ITEM* aOther )
+{
+    wxCHECK( aOther && aOther->Type() == PCB_SHAPE_T, /* void */ );
+    *this = *static_cast<const PCB_SHAPE*>( aOther );
+}
+
+
 void PCB_SHAPE::Serialize( google::protobuf::Any &aContainer ) const
 {
     using namespace kiapi::common;

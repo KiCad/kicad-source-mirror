@@ -113,6 +113,13 @@ ZONE& ZONE::operator=( const ZONE& aOther )
 }
 
 
+void ZONE::CopyFrom( const BOARD_ITEM* aOther )
+{
+    wxCHECK( aOther && aOther->Type() == PCB_ZONE_T, /* void */ );
+    *this = *static_cast<const ZONE*>( aOther );
+}
+
+
 ZONE::~ZONE()
 {
     delete m_Poly;

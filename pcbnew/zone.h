@@ -80,6 +80,8 @@ public:
 
     ~ZONE();
 
+    void CopyFrom( const BOARD_ITEM* aOther ) override;
+
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
         return aItem && aItem->Type() == PCB_ZONE_T;
