@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-03-28 23:27+0000\n"
+"PO-Revision-Date: 2025-03-30 04:00+0000\n"
 "Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hant/>\n"
@@ -816,9 +816,9 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
-"儲存並恢復相機位置和縮放參數。\n"
-"使用 %s+Tab 打開視圖選擇器。\n"
-"在按住 %s 的同時, 連續按下 Tab 鍵將在彈出的視窗中循環切換已儲存的視角。"
+"儲存並恢復相機位置和縮放。\n"
+"使用 %s+Tab 來啟動選擇器。\n"
+"在按住 %s 的同時按下連續的 Tab 鍵，將在彈出視窗中循環查看視窗。"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:493
 msgid "Left double click or middle click to change color"
@@ -2780,15 +2780,15 @@ msgstr "除非忽略鎖定設定, 否則將跳過這些項目。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 msgid "Remember decision for this session."
-msgstr "記住本次會話的決定。"
+msgstr "記住本次工作區間的決定。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:45
 msgid ""
 "Remember the option selected for the remainder of this session.\n"
 "This dialog will not be shown again until KiCad is restarted."
 msgstr ""
-"在本次會話的中內記住所選選項。\n"
-"在重新啟動 KiCad 之前, 此對話框不會再次顯示。"
+"在本次工作區間的中內記住所選選項。\n"
+"在重新啟動 KiCad 之前此對話框不會再次顯示。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
 msgid "Override Locks"
@@ -4158,7 +4158,7 @@ msgstr "如果未勾選，按下快捷鍵將立即執行動作，即使未選工
 
 #: common/dialogs/panel_common_settings_base.cpp:312
 msgid "Session"
-msgstr "會話"
+msgstr "工作區間"
 
 #: common/dialogs/panel_common_settings_base.cpp:322
 msgid "Remember open files for next project launch"
@@ -6548,11 +6548,11 @@ msgstr "最大"
 msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
-msgstr "本地安裝的系統封裝庫 (.pretty 資料夾) 的基礎路徑"
+msgstr "本地安裝的系統封裝庫 (.pretty 資料夾) 的基礎路徑。"
 
 #: common/env_vars.cpp:111
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
-msgstr "系統封裝 3D 模型 (.3Dshapes 資料夾) 的基礎路徑"
+msgstr "系統封裝 3D 模型 (.3Dshapes 資料夾) 的基礎路徑。"
 
 #: common/env_vars.cpp:113
 msgid "The base path of the locally installed symbol libraries."
@@ -10113,7 +10113,7 @@ msgstr "Specctra DSN 檔案"
 
 #: common/wildcards_and_files_ext.cpp:529
 msgid "Specctra Session file"
-msgstr "Specctra 會話檔案"
+msgstr "Specctra 工作區間檔案"
 
 #: common/wildcards_and_files_ext.cpp:536
 msgid "IPC-D-356 Test Files"
@@ -25599,9 +25599,8 @@ msgid "The new behavior will match --mode-multi"
 msgstr "新行為將與 --mode-multi 相符"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:38
-#, fuzzy
 msgid "Generate Gencad from a list of layers"
-msgstr "從層列表生成 DXF"
+msgstr "從圖層列表生成 Gencad"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:44
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:134
@@ -25857,7 +25856,7 @@ msgstr "側面光強度，格式為 'R,G,B' 或單一數字，範圍：0-1"
 
 #: kicad/cli/command_pcb_render.cpp:311
 msgid "Camera light intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr "鏡頭光強度，格式為 'R,G,B' 或單一數字，範圍：0-1"
+msgstr "相機光強度，格式為 'R,G,B' 或單一數字，範圍：0-1"
 
 #: kicad/cli/command_pcb_render.cpp:317
 msgid "Side lights elevation angle in degrees, range: 0-90"
@@ -25893,7 +25892,7 @@ msgstr "無效的圖像格式\n"
 
 #: kicad/cli/command_pcb_render.cpp:388
 msgid "Invalid light camera intensity format\n"
-msgstr "無效的圖像格式\n"
+msgstr "無效的光源相機強度格式\n"
 
 #: kicad/cli/command_pcb_render.cpp:403
 msgid "Invalid image format\n"
@@ -26506,7 +26505,7 @@ msgstr "專案: %s"
 
 #: kicad/kicad_manager_frame.cpp:1126
 msgid "Restoring session"
-msgstr "正在恢復會話"
+msgstr "正在恢復工作區間"
 
 #: kicad/kicad_manager_frame.cpp:1139
 #, c-format
@@ -35503,11 +35502,11 @@ msgstr "向外圓整到網格倍數（如有可能）"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:39
 msgid "This is only possible for rectangular outsets."
-msgstr ""
+msgstr "這僅適用於矩形外擴。"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:43
 msgid "Round corners (when possible)"
-msgstr ""
+msgstr "圓角（若可能）"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:46
 msgid "Grid size:"
@@ -35515,7 +35514,7 @@ msgstr "網格尺寸 (&G):"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:50
 msgid "0.01"
-msgstr ""
+msgstr "0.01"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:60
 msgid "Copy item layers"
@@ -35530,7 +35529,7 @@ msgstr "複製第一個物件的行寬"
 msgid ""
 "This is not possible for items like pads, which will still use the value "
 "below."
-msgstr ""
+msgstr "對像墊片這類項目來說不可行，這些項目仍將使用下方的數值。"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:86
 msgid "Layer default"
@@ -35654,7 +35653,7 @@ msgstr "繪製模式:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
 msgid "Front/Inner/Bottom"
-msgstr ""
+msgstr "前面/內部/底部"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:105
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:289
@@ -35799,7 +35798,7 @@ msgstr "鑽孔形狀:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:2547
 msgid "Oblong"
-msgstr ""
+msgstr "橢圓形"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:487
 msgid "Specify pad to die length"
@@ -36530,7 +36529,7 @@ msgstr "移除冗餘走線"
 msgid ""
 "If the new track has the same connection as an already existing track, the "
 "old track is removed."
-msgstr ""
+msgstr "如果新連接線與已存在的連接線相同，則舊的連接線會被移除。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:87
 msgid "Optimize pad connections"
@@ -36791,7 +36790,7 @@ msgstr "參考圖像屬性"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:28
 msgid "Opaque"
-msgstr ""
+msgstr "不透明"
 
 #: pcbnew/dialogs/dialog_render_job.cpp:29
 msgid "Transparent"
@@ -36806,9 +36805,8 @@ msgid "User"
 msgstr "使用者 1"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:42
-#, fuzzy
 msgid "Dimensions:"
-msgstr "測量標註"
+msgstr "標註尺寸:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:52
 #: pcbnew/dialogs/dialog_render_job_base.cpp:63
@@ -36824,9 +36822,8 @@ msgid "Quality preset:"
 msgstr "選擇預設:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:79
-#, fuzzy
 msgid "Background style:"
-msgstr "背景起始色"
+msgstr "背景樣式:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:103
 msgid "View"
@@ -36842,7 +36839,7 @@ msgstr "指令"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:128
 msgid "Orthogonal"
-msgstr ""
+msgstr "正交"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:130
 msgid "Projection"
@@ -36868,27 +36865,25 @@ msgid "Z"
 msgstr "阻抗"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:163
-#, fuzzy
 msgid "Pivot:"
-msgstr "設定 Pivot"
+msgstr "樞軸："
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:183
 msgid "Pan:"
-msgstr ""
+msgstr "平移："
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:219
 #: pcbnew/dialogs/dialog_render_job_base.cpp:297
 msgid "°"
-msgstr ""
+msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:233
 msgid "Lights intensity"
 msgstr "強度"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:264
-#, fuzzy
 msgid "Camera:"
-msgstr "相機縮放"
+msgstr "相機:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:282
 msgid "Lights position"
@@ -36896,7 +36891,7 @@ msgstr "燈光配置"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:290
 msgid "Side lights elevation:"
-msgstr ""
+msgstr "側燈高度："
 
 #: pcbnew/dialogs/dialog_render_job_base.h:100
 msgid "Render PCB Job Options"
@@ -36935,16 +36930,15 @@ msgstr "此規則區域的唯一名稱, 用於 DRC 規則"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:66
 msgid "Reset this value to zero."
-msgstr ""
+msgstr "將此值重設為零。"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:76
 msgid "Reset this value to the original value."
 msgstr "將此值重置為初始值。"
 
 #: pcbnew/dialogs/dialog_set_offset_base.cpp:19
-#, fuzzy
 msgid "Set a new value for this offset:"
-msgstr "為專案建立一個新目錄"
+msgstr "為此偏移設定新值："
 
 #: pcbnew/dialogs/dialog_set_offset_base.h:63
 msgid "Set Offset"
@@ -36960,7 +36954,7 @@ msgstr "弧的度數必須大於 0"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:460
 msgid "Arc must have 3 distinct points"
-msgstr ""
+msgstr "弧線必須有 3 個不同的點"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:474
 #, c-format
@@ -37049,7 +37043,7 @@ msgstr "圓角尺寸:"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:69
 msgid "By Center and Size"
-msgstr ""
+msgstr "以中心和大小為基準"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:85
 msgid "By Endpoints"
@@ -37065,11 +37059,11 @@ msgstr "起始點"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:133
 msgid "By Center/Start/Angle"
-msgstr ""
+msgstr "以中心/起始/角度為基準"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:149
 msgid "By Start/Mid/End"
-msgstr ""
+msgstr "以起始/中間/結束為基準"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:165
 msgid "By Center/Radius"
@@ -37217,9 +37211,8 @@ msgid "Apply Anyway"
 msgstr "永遠套用"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
-#, fuzzy
 msgid "Cancel Changes"
-msgstr "取消變更嗎?"
+msgstr "取消變更"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:571
 #, c-format
@@ -37290,7 +37283,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:283
 msgid "Front/Inner/Back"
-msgstr ""
+msgstr "前面/內部/背面"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:301
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
@@ -37330,9 +37323,8 @@ msgid "End layer:"
 msgstr "結束層:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:394
-#, fuzzy
 msgid "Front tenting:"
-msgstr "頂層前綴:"
+msgstr "前方遮蓋："
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:398
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:419
@@ -37354,20 +37346,19 @@ msgstr "無電鍍"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:402
 msgid "Whether to tent (cover with soldermask) this via on the front side"
-msgstr ""
+msgstr "是否在前面遮蓋（覆蓋焊接掩膜）此通孔"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:408
 msgid "Link front and back tenting settings"
-msgstr ""
+msgstr "鏈接前後遮蓋設置"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:415
-#, fuzzy
 msgid "Back tenting:"
-msgstr "底層前綴:"
+msgstr "後側遮蓋："
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:423
 msgid "Whether to tent (cover with soldermask) this via on the back side"
-msgstr ""
+msgstr "是否在後側遮蓋（覆蓋焊錫掩膜）此通孔"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:473
 msgid "Add teardrops on via's track connections"
@@ -37589,13 +37580,13 @@ msgstr "如果勾選該選項, 焊盤可相對於封裝的其他部分進行移�
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:108
 msgid "Do not prompt for lock overrides for this session"
-msgstr ""
+msgstr "在此工作期間，請勿提示鎖定覆寫"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:109
 msgid ""
 "If checked, no prompt will be shown when attempting to edit locked items.  "
 "This setting is reset when KiCad restarts."
-msgstr ""
+msgstr "如果勾選，嘗試編輯鎖定項目時將不會顯示提示。此設定會在 KiCad 重啟時重置。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:179
 #: pcbnew/dialogs/panel_edit_options_base.cpp:247
@@ -37635,9 +37626,8 @@ msgid "When routing tracks"
 msgstr "建立新走線時啟用"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:337
-#, fuzzy
 msgid "Snap to tracks and vias:"
-msgstr "生成走線和貫孔"
+msgstr "貼齊走線和貫孔:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:339
 #: pcbnew/dialogs/panel_edit_options_base.cpp:347
@@ -37998,9 +37988,8 @@ msgid "No placement"
 msgstr "放置"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:24
-#, fuzzy
 msgid "Place items from sheet:"
-msgstr "放置文字"
+msgstr "從圖紙放置項目:"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:33
 msgid "Place items matching component class:"
@@ -38090,9 +38079,8 @@ msgstr ""
 "定義規則或其他設定減少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:160
-#, fuzzy
 msgid "Minimum groove for creepage:"
-msgstr "最小銅皮間隙"
+msgstr "最小爬電距離槽："
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:165
 msgid "The minimum slot width from DRC creepage checks"
@@ -38421,7 +38409,7 @@ msgstr "電路板外, 測試"
 #: pcbnew/dialogs/panel_setup_layers.cpp:489
 msgid ""
 "Auxiliary layers do not flip with board side, while back and front layers do."
-msgstr ""
+msgstr "輔助層不會隨著板面翻轉，而前面和背面層則會。"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:711
 #, c-format
@@ -38539,6 +38527,8 @@ msgid ""
 "different net than the solder mask opening's parent.\n"
 "Distances smaller than this minimum will create a DRC error."
 msgstr ""
+"焊膜開口與具有不同網路的銅項目之間的最小距離。\n"
+"小於此最小距離將產生 DRC 錯誤。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:105
 msgid "Allow bridged solder mask apertures between pads within footprints"
@@ -38551,9 +38541,8 @@ msgid ""
 msgstr "停用同一封裝內焊盤之間的阻焊孔橋接的 DRC 錯誤檢查。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:113
-#, fuzzy
 msgid "Tent vias:"
-msgstr "貫孔蓋油"
+msgstr "覆蓋過孔："
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:118
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:123
@@ -38637,6 +38626,10 @@ msgid ""
 "For the full documentation see [https://docs.kicad.org](https://go.kicad.org/"
 "docs/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 msgstr ""
+"###文件\n"
+"\n"
+"完整文件請參閱 [https://docs.kicad.org](https://go.kicad.org/docs/"
+"GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)。"
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -39274,6 +39267,14 @@ msgid ""
 "<br>\n"
 "\n"
 msgstr ""
+"### 項目\n"
+"\n"
+" * `A` &nbsp;&nbsp; _測試中的第一個（或唯一）項目_\n"
+" * `B` &nbsp;&nbsp; _測試中的第二個項目（針對二進制測試）_\n"
+" * `L` &nbsp;&nbsp; _當前正在測試的層_\n"
+"\n"
+"<br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_4severity_names.h:2
 msgid ""
@@ -39287,6 +39288,15 @@ msgid ""
 "<br>\n"
 "\n"
 msgstr ""
+"### 嚴重性名稱\n"
+"\n"
+" * 警告\n"
+" * 錯誤\n"
+" * 排除\n"
+" * 忽略\n"
+"\n"
+"<br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_5examples.h:2
 msgid ""
@@ -39340,6 +39350,18 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
+"###注意事項\n"
+"\n"
+"版本子句必須是第一個子句。它表示檔案的語法版本，以便未來的規則解析器能夠自動"
+"更新。該值應設定為 \"1\"。\n"
+"\n"
+"規則應按照特定性排序。後面的規則優先於前面的規則；一旦找到匹配的規則，將不再"
+"檢查後續規則。\n"
+"\n"
+"使用 Ctrl+/ 來註解或取消註解行。\n"
+"\n"
+"<br><br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_7properties.h:2
 msgid ""
@@ -39352,6 +39374,14 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
+"###屬性\n"
+"\n"
+"許多物件的屬性可以在自訂規則表示式中測試。完整的屬性列表請參閱\n"
+" [https://docs.kicad.org](https://go.kicad.org/docs/GetMajorMinorVersion/en/"
+"pcbnew/pcbnew.html#custom_design_rules)\n"
+"\n"
+"<br><br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_8expression_functions.h:2
 msgid ""
@@ -40322,11 +40352,11 @@ msgstr "通孔焊盤沒有孔"
 
 #: pcbnew/drc/drc_item.cpp:293
 msgid "Mirrored text on front layer"
-msgstr ""
+msgstr "前層鏡像文字"
 
 #: pcbnew/drc/drc_item.cpp:297
 msgid "Non-Mirrored text on back layer"
-msgstr ""
+msgstr "背層非鏡像文字"
 
 #: pcbnew/drc/drc_item.cpp:304
 msgid "Drilled hole too close to other hole - deprecated"
@@ -40420,7 +40450,7 @@ msgstr "無法識別的項目 '%s'。| 應為帶引號的表達式。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:241
 msgid "'layer' keyword already present."
-msgstr ""
+msgstr "已存在 'layer' 關鍵字。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:263 pcbnew/drc/drc_rule_parser.cpp:378
 #: pcbnew/drc/drc_rule_parser.cpp:391 pcbnew/drc/drc_rule_parser.cpp:410
@@ -40449,7 +40479,7 @@ msgstr "缺少斷言表達。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:492
 msgid "within_diff_pairs option invalid for constraint type."
-msgstr ""
+msgstr "within_diff_pairs 選項對於此約束類型無效。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:510
 msgid "Missing min value."
@@ -41816,7 +41846,7 @@ msgstr "從庫 '%s' 載入封裝 %s 時出錯。"
 
 #: pcbnew/footprint_edit_frame.cpp:619
 msgid "Save as editable copy"
-msgstr ""
+msgstr "儲存為可編輯副本"
 
 #: pcbnew/footprint_edit_frame.cpp:1050
 #, c-format
@@ -42325,7 +42355,7 @@ msgstr "清除電路板並獲得 PCB 編輯器自動儲存的上個救援檔案"
 
 #: pcbnew/menubar_pcb_editor.cpp:115
 msgid "Specctra Session..."
-msgstr "Specctra 會話..."
+msgstr "Specctra 工作區間..."
 
 #: pcbnew/menubar_pcb_editor.cpp:117
 msgid "Non-KiCad Board File..."
@@ -42425,7 +42455,7 @@ msgstr "自動放置封裝"
 
 #: pcbnew/menubar_pcb_editor.cpp:440
 msgid "Multi-Channel"
-msgstr ""
+msgstr "多通道"
 
 #: pcbnew/menubar_pcb_editor.cpp:448
 msgid "External Plugins"
@@ -43656,7 +43686,7 @@ msgstr "正載入多邊形..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2114
 #, c-format
 msgid "Polygon outline count is %d, expected 1."
-msgstr ""
+msgstr "多邊形輪廓數量為 %d，預期為 1。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2241
 msgid "Loading rules..."
@@ -43893,7 +43923,7 @@ msgstr "封裝 %s 包含 Altium 層 %d 上的條形碼 (尚未支援)。"
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4427
 #, c-format
 msgid "Unknown textbox justification %d, aText %s"
-msgstr ""
+msgstr "未知的文字框對齊方式 %d，文字 %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4583
 msgid "Loading rectangles..."
@@ -44547,12 +44577,12 @@ msgstr "未識別的焊盤形狀基元 '%s', 位於列 %zu。"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1174
 #, c-format
 msgid "Circle with unequal x and y radii (x=%d, y=%d)"
-msgstr ""
+msgstr "圓形的 x 和 y 半徑不相等（x=%d, y=%d）"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1314
 #, c-format
 msgid "Expected x and y to be the same, got x = %f and y = %f "
-msgstr ""
+msgstr "預期 x 和 y 應該相同，得到 x = %f 和 y = %f "
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1415
 #, c-format
@@ -44586,7 +44616,8 @@ msgstr "ID %d 和序列 %d 的重複項位於列 %zu。"
 msgid ""
 "Missing X, Y, or rotation data in row %zu for refdes %s. This may be an "
 "unplaced component."
-msgstr ""
+msgstr "在第 %zu 行中缺少 X、Y 或旋轉資料，對應參考設計者為 "
+"%s。這可能是未放置的元件。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2647
 #, c-format
@@ -44612,19 +44643,19 @@ msgstr "期望蝕刻數據在銅層上。在層 '%s' 上找到列"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3271
 #, c-format
 msgid "Unhandled shape type %d in polygon on layer %s, seq %d %d"
-msgstr ""
+msgstr "在圖層 %s 的多邊形中遇到未處理的形狀類型 %d，序列 %d %d"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3430
 #, c-format
 msgid "Invalid hole with %d points in zone on layer %s with net %s"
-msgstr ""
+msgstr "在圖層 %s 上，網路 %s 的區域中存在無效的孔洞，包含 %d 個點"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3472
 #, c-format
 msgid ""
 "Outline seems discontinuous: last point was %s, start point of next segment "
 "is %s"
-msgstr ""
+msgstr "輪廓似乎不連續：上一個點是 %s，下一段的起點是 %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3488
 #, c-format
@@ -45966,17 +45997,17 @@ msgstr ""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:90
 msgid "Session file imported and merged OK."
-msgstr "會話檔案匯入與合併完成。"
+msgstr "工作區間檔案匯入與合併完成。"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:150
 #: pcbnew/specctra_import_export/specctra_import.cpp:180
 #, c-format
 msgid "Session file uses invalid layer id '%s'."
-msgstr "會話檔案使用了無效的層 ID '%s'。"
+msgstr "工作區間檔案使用了無效的層 ID '%s'。"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:242
 msgid "Session via padstack has no shapes"
-msgstr "貫孔的焊盤槽/孔會話沒有形狀"
+msgstr "工作區間的通孔墊片沒有形狀"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:251
 #, c-format
@@ -45992,19 +46023,19 @@ msgstr "不支援的貫孔樣式: %s"
 #: pcbnew/specctra_import_export/specctra_import.cpp:311
 #, c-format
 msgid "Session file uses invalid layer id '%s'"
-msgstr "會話檔案使用了無效的層 ID '%s'"
+msgstr "工作區間檔案使用了無效的層 ID '%s'"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:369
 msgid "Session file is missing the \"session\" section"
-msgstr "會話檔案缺少 \"session\" 部分"
+msgstr "工作區間檔案缺少 \"session\" 部分"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:372
 msgid "Session file is missing the \"routes\" section"
-msgstr "會話檔案缺少 \"routes\" 部分"
+msgstr "工作區間檔案缺少 \"routes\" 部分"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:375
 msgid "Session file is missing the \"library_out\" section"
-msgstr "會話檔案缺少 \"library_out\" 部分"
+msgstr "工作區間檔案缺少 \"library_out\" 部分"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:426
 #, c-format
@@ -46083,7 +46114,7 @@ msgstr "鎖定"
 
 #: pcbnew/tools/board_editor_control.cpp:391
 msgid "Specctra Session File"
-msgstr "Specctra 會話檔案"
+msgstr "Specctra 工作區間檔案"
 
 #: pcbnew/tools/board_editor_control.cpp:418
 msgid "Specctra DSN File"
@@ -46613,7 +46644,7 @@ msgstr "從選區建立"
 
 #: pcbnew/tools/convert_tool.cpp:454
 msgid "Resulting polygon would be empty"
-msgstr ""
+msgstr "結果產生的多邊形將是空的"
 
 #: pcbnew/tools/convert_tool.cpp:456
 msgid "Objects must form a closed shape"
@@ -46806,9 +46837,8 @@ msgid "Fillet Tracks"
 msgstr "圓角走線"
 
 #: pcbnew/tools/edit_tool.cpp:1090 pcbnew/tools/edit_tool.cpp:1274
-#, fuzzy
 msgid "Radius:"
-msgstr "半徑"
+msgstr "半徑:"
 
 #: pcbnew/tools/edit_tool.cpp:1254
 msgid "Unable to fillet the selected track segments."
@@ -46819,9 +46849,8 @@ msgid "Some of the track segments could not be filleted."
 msgstr "某些走線無法進行圓角處理。"
 
 #: pcbnew/tools/edit_tool.cpp:1296
-#, fuzzy
 msgid "Arc radius:"
-msgstr "弧線, 半徑 %s"
+msgstr "弧半徑:"
 
 #: pcbnew/tools/edit_tool.cpp:1301
 msgid "Add slots in acute corners"
@@ -46830,7 +46859,7 @@ msgstr "新增敷銅拐角"
 #: pcbnew/tools/edit_tool.cpp:1303
 msgid ""
 "Add slots in acute corners to allow access to a cutter of the given radius"
-msgstr ""
+msgstr "在銳角處添加槽，以允許使用指定半徑的切削刀具進行切割"
 
 #: pcbnew/tools/edit_tool.cpp:1307
 msgid "Dogbone Corner Settings"
@@ -46931,7 +46960,7 @@ msgstr "選擇要移動的參考點..."
 msgid ""
 "The footprint could not be added to the selected library ('%s'). This "
 "library is read-only."
-msgstr ""
+msgstr "無法將元件封裝添加到選擇的庫（'%s'）。此庫為唯讀。"
 
 #: pcbnew/tools/footprint_editor_control.cpp:405
 msgid "_copy"
@@ -47030,15 +47059,15 @@ msgstr "部分線段無法進行倒角處理。"
 msgid ""
 "Some of the dogbone corners are too narrow to fit a cutter of the specified "
 "radius."
-msgstr ""
+msgstr "某些狗骨角太狹窄，無法容納指定半徑的切割刀具。"
 
 #: pcbnew/tools/item_modification_routine.cpp:292
 msgid " Consider enabling the 'Add Slots' option."
-msgstr ""
+msgstr " 考慮啟用「新增插槽」選項。"
 
 #: pcbnew/tools/item_modification_routine.cpp:294
 msgid " Slots were added."
-msgstr ""
+msgstr " 已新增插槽。"
 
 #: pcbnew/tools/item_modification_routine.cpp:385
 #: pcbnew/tools/pcb_actions.cpp:637
@@ -47107,12 +47136,12 @@ msgstr "為副本選擇參考點..."
 
 #: pcbnew/tools/multichannel_tool.cpp:439
 msgid "No Rule Areas to repeat layout to have been found."
-msgstr ""
+msgstr "未找到要重複佈局的規則區域。"
 
 #: pcbnew/tools/multichannel_tool.cpp:510
 #, c-format
 msgid "Copy Rule Area contents failed between rule areas '%s' and '%s'."
-msgstr ""
+msgstr "複製規則區域內容在規則區域 '%s' 和 '%s' 之間失敗。"
 
 #: pcbnew/tools/multichannel_tool.cpp:527
 msgid "Repeat layout"
@@ -47129,7 +47158,7 @@ msgstr "轉換為規則區域"
 
 #: pcbnew/tools/multichannel_tool.cpp:982
 msgid "One or both of the areas has no components assigned."
-msgstr ""
+msgstr "其中一個或兩個區域未分配元件。"
 
 #: pcbnew/tools/multichannel_tool.cpp:986
 msgid "Component count mismatch"
@@ -47137,17 +47166,17 @@ msgstr "元件數量: %d。"
 
 #: pcbnew/tools/multichannel_tool.cpp:990
 msgid "Iteration count exceeded (timeout)"
-msgstr ""
+msgstr "超過迭代次數（超時）"
 
 #: pcbnew/tools/multichannel_tool.cpp:994
 msgid "Topology mismatch"
-msgstr ""
+msgstr "拓撲不匹配"
 
 #: pcbnew/tools/multichannel_tool.cpp:1051
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheet(s) or component classes."
-msgstr ""
+msgstr "無法自動生成任何放置區域，因為原理圖只有一個或沒有層次化工作表或元件類別。"
 
 #: pcbnew/tools/multichannel_tool.cpp:1169
 msgid "Auto-generate placement rule areas"
@@ -47540,7 +47569,7 @@ msgstr "切去所選線段之間的角落"
 
 #: pcbnew/tools/pcb_actions.cpp:625
 msgid "Simplify polygon outlines, removing superfluous points"
-msgstr ""
+msgstr "簡化多邊形輪廓，移除多餘的點"
 
 #: pcbnew/tools/pcb_actions.cpp:631
 msgid ""
@@ -47878,11 +47907,11 @@ msgstr "讀取網表並更新電路板連接"
 
 #: pcbnew/tools/pcb_actions.cpp:1009
 msgid "Import Specctra Session..."
-msgstr "匯入 Specctra (無網格自動佈線器) 會話..."
+msgstr "匯入 Specctra (無網格自動佈線器) 工作區間..."
 
 #: pcbnew/tools/pcb_actions.cpp:1010
 msgid "Import routed Specctra session (*.ses) file"
-msgstr "匯入佈線器會話(*.ses)檔案"
+msgstr "匯入佈線器工作區間(*.ses)檔案"
 
 #: pcbnew/tools/pcb_actions.cpp:1016
 msgid "Export Specctra DSN..."
@@ -48144,7 +48173,7 @@ msgstr "顯示飛線"
 
 #: pcbnew/tools/pcb_actions.cpp:1361
 msgid "Show lines/arcs representing missing connections on the board"
-msgstr ""
+msgstr "顯示代表板上缺少連接的線/弧"
 
 #: pcbnew/tools/pcb_actions.cpp:1367
 msgid "Curved Ratsnest Lines"
@@ -48761,7 +48790,7 @@ msgstr "重複數量"
 
 #: pcbnew/tools/pcb_actions.cpp:2242
 msgid "Clones placement & routing across multiple identical channels"
-msgstr ""
+msgstr "跨多個相同通道的克隆佈局和路由"
 
 #: pcbnew/tools/pcb_actions.cpp:2253
 msgid "Route Single Track"
@@ -49094,7 +49123,7 @@ msgstr "分割線段"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2849
 msgid "Split Arc"
-msgstr ""
+msgstr "分割弧"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2926
 msgid "Remove Zone Corner"
@@ -50037,7 +50066,7 @@ msgstr "新建分組"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1289
 msgid "(Use /.../ to indicate a regular expression.)"
-msgstr ""
+msgstr "使用 /.../ 表示正規表示式。）"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1362
 msgid "Filter by Net Name"
@@ -50369,7 +50398,7 @@ msgstr "層顯示選項"
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:91
 msgid ""
 "Update filled areas shown in dialog, according to the new current settings"
-msgstr ""
+msgstr "根據新的目前設定更新對話方塊中顯示的填滿區域"
 
 #: pcbnew/zones.h:61
 msgid "inherited"
