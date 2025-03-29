@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-03-06 16:10+0100\n"
+"POT-Creation-Date: 2025-03-29 12:46+0100\n"
+"PO-Revision-Date: 2025-03-29 12:46+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -786,17 +786,15 @@ msgid "Use board stackup colors"
 msgstr "Utiliser les couleurs du \"stackup\" du PCB"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:143
-#, fuzzy
 msgid "Use PCB editor copper colors"
 msgstr "Utiliser couleurs cuivre de l'éditeur de PCB"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:145
-#, fuzzy
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
 msgstr ""
-"Utiliser les couleurs des couches cuivre de l'éditeur de PCB (openGL "
-"uniquement)"
+"Utiliser les couleurs des couches cuivre de l'éditeur de PCB (rendu temps "
+"réel uniquement)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:163
 #, c-format
@@ -2784,14 +2782,12 @@ msgstr "Nom Projet"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1398
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "PCB"
 msgstr "PCB"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1334 eeschema/sch_plotter.cpp:1060
 #: eeschema/widgets/symbol_diff_widget.cpp:44
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Schematic"
 msgstr "Schématique"
 
@@ -3844,25 +3840,24 @@ msgid "Add"
 msgstr "Ajouter"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
-#, fuzzy
 msgid "Enable Git Tracking"
-msgstr "Activer l'animation"
+msgstr "Activer le Suivi Git"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:28
-#, fuzzy
 msgid "Remote Tracking"
-msgstr "Router Piste"
+msgstr "Suivi Distant"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:41
-#, fuzzy
 msgid "Update interval:"
-msgstr "Mise a Jour des Champs"
+msgstr "Intervalle de Mise à Jour :"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:46
 msgid ""
 "Number of minutes between remote update checks.  Zero disables automatic "
 "checks."
 msgstr ""
+"Nombre de minutes entre les tests de mise à jour du dépôt.  Zéro désactive "
+"les tests automatiques."
 
 #: common/dialogs/git/panel_git_repos_base.cpp:50
 #: common/dialogs/panel_common_settings_base.cpp:347
@@ -7006,43 +7001,38 @@ msgid "Could not get reference OID for reference '%s'"
 msgstr "Impossible d'obtenir l'OID de référence pour la référence '%s'"
 
 #: common/git/git_pull_handler.cpp:252
-#, fuzzy
 msgid "Could not look up target commit"
-msgstr "Impossible de rechercher le commit"
+msgstr "Impossible de rechercher le commit cible"
 
 #: common/git/git_pull_handler.cpp:264
-#, fuzzy
 msgid "Could not get tree from target commit"
-msgstr "Impossible de fusionner les commits"
+msgstr "Impossible d'obtenir l'arbre de la cible du commit"
 
 #: common/git/git_pull_handler.cpp:306 common/git/kicad_git_errors.cpp:55
 msgid "Failed to perform checkout operation."
 msgstr "Échec de l'opération d'extraction."
 
 #: common/git/git_pull_handler.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update reference '%s' to point to '%s'"
-msgstr "Échec de la mise à jour de la référence HEAD pour la branche '%s'"
+msgstr "Échec de mise à jour de la référence '%s' pour pointer vers '%s'"
 
 #: common/git/git_pull_handler.cpp:325
-#, fuzzy
 msgid "Failed to clean up repository state after fast-forward."
-msgstr "Échec du clonage du dépot."
+msgstr "Échec du nettoyage de l'état du dépôt après le \"fast-forward\"."
 
 #: common/git/git_pull_handler.cpp:334
-#, fuzzy
 msgid "Failed to initialize revision walker."
-msgstr "Échec de l'initialisation du projet git."
+msgstr "Échec de l'initialisation de l'outil d'examen de révision."
 
 #: common/git/git_pull_handler.cpp:343
-#, fuzzy
 msgid "Failed to push reference to revision walker."
-msgstr "Échec du transfert des modifications vers le dépôt distant."
+msgstr "Échec de l'envoi de la référence à l'outil d'examen de révision."
 
 #: common/git/git_pull_handler.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup commit '%s'"
-msgstr "Impossible de rechercher le commit '{}'"
+msgstr "Impossible de rechercher le commit '%s'"
 
 #: common/git/git_pull_handler.cpp:391
 msgid "Could not merge commits"
@@ -7066,7 +7056,7 @@ msgstr "Ajouté"
 
 #: common/git/git_pull_handler.cpp:527
 msgid "Conflicts detected during rebase"
-msgstr ""
+msgstr "Conflits détectés lors de git rebase"
 
 #: common/git/git_push_handler.cpp:56
 msgid "Could not lookup remote"
@@ -7113,9 +7103,8 @@ msgid "[updated] %s"
 msgstr "[mis à jour] %s"
 
 #: common/git/kicad_git_common.cpp:981
-#, fuzzy
 msgid "Unable to authenticate"
-msgstr "Impossible de créer "
+msgstr "Impossible de s'authentifier"
 
 #: common/git/kicad_git_errors.cpp:40
 msgid "Invalid repository."
@@ -8297,12 +8286,10 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Unités manquantes pour '%s'| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1161
-#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Non correspondance de type entre '%s' et %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1167
-#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Non correspondance de type entre %lf et '%s'"
 
@@ -10337,7 +10324,6 @@ msgid "DXF Files"
 msgstr "Fichiers DXF"
 
 #: common/wildcards_and_files_ext.cpp:516
-#: resources/linux/mime/kicad-gerbers.xml.in:22
 msgid "Gerber job file"
 msgstr "Fichier Gerber job"
 
@@ -15045,6 +15031,7 @@ msgid "Code"
 msgstr "Code"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:223
+#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Enregistrer {} dans le champ Valeur comme \"{}\""
 
@@ -22359,15 +22346,17 @@ msgid "Delete Hierarchical Labels"
 msgstr "Supprimer Labels Hiérarchiques"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:99
-#, fuzzy
 msgid ""
 "Associate selected sheet pin and hierarchical label using the label name"
-msgstr "Synchroniser les pins de feuille et les labels hiérarchiques"
+msgstr ""
+"Associer la pin de feuille sélectionnée et l'étiquette hiérarchique en "
+"utilisant le nom du label"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
-#, fuzzy
 msgid "Associate selected sheet pin and hierarchical label using the pin name"
-msgstr "Briser association(s) de label hiérarchique et de feuille"
+msgstr ""
+"Associer la pin de feuille sélectionnée et le label hiérarchique en "
+"utilisant le nom de pin"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
@@ -22916,14 +22905,12 @@ msgid "Place Sheet Pins"
 msgstr "Placer Pins de Hiérarchie"
 
 #: eeschema/tools/sch_actions.cpp:559 eeschema/tools/sch_actions.cpp:567
-#, fuzzy
 msgid "Sync Sheet Pins..."
-msgstr "Synchroniser Pins de Feuille"
+msgstr "Synchroniser Pins de Feuille..."
 
 #: eeschema/tools/sch_actions.cpp:575
-#, fuzzy
 msgid "Import Sheet..."
-msgstr "Importer Feuille"
+msgstr "Importer Feuille..."
 
 #: eeschema/tools/sch_actions.cpp:576
 msgid "Import sheet into project"
@@ -28052,9 +28039,9 @@ msgid "Create New Directory"
 msgstr "Créer un nouveau Répertoire"
 
 #: kicad/project_tree_pane.cpp:761
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get status list: %s"
-msgstr "Échec de l'obtention du commit : %s"
+msgstr "Échec de l'obtention de la liste d'état : %s"
 
 #: kicad/project_tree_pane.cpp:896
 msgid "Switch to this Project"
@@ -28223,18 +28210,16 @@ msgid "Local path: monitoring folder changes"
 msgstr "Chemin local : suivi des modifications du répertoire"
 
 #: kicad/project_tree_pane.cpp:1644
-#, fuzzy
 msgid "The selected directory is already a Git project."
-msgstr "Le répertoire sélectionné est déjà un projet git."
+msgstr "Le répertoire sélectionné est déjà un projet Git."
 
 #: kicad/project_tree_pane.cpp:1652
 msgid "Set default remote"
 msgstr "Définir le dépôt distant par défaut"
 
 #: kicad/project_tree_pane.cpp:1663
-#, fuzzy
 msgid "Failed to initialize Git project."
-msgstr "Échec de l'initialisation du projet git."
+msgstr "Échec de l'initialisation du projet Git."
 
 #: kicad/project_tree_pane.cpp:1721
 msgid "Failed to set default remote."
@@ -28274,19 +28259,16 @@ msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "Échec de la mise à jour de la référence HEAD pour la branche '%s'"
 
 #: kicad/project_tree_pane.cpp:1923
-#, fuzzy
 msgid "Are you sure you want to remove Git tracking from this project?"
-msgstr "Êtes-vous sûr de vouloir supprimer le suivi git de ce projet ?"
+msgstr "Êtes-vous sûr de vouloir supprimer le suivi Git de ce projet ?"
 
 #: kicad/project_tree_pane.cpp:1940
-#, fuzzy
 msgid "Failed to remove Git directory"
-msgstr "Échec de la suppression du répertoire git"
+msgstr "Échec de la suppression du répertoire Git"
 
 #: kicad/project_tree_pane.cpp:2308
-#, fuzzy
 msgid "The selected directory is not a Git project."
-msgstr "Le répertoire sélectionné est déjà un projet git."
+msgstr "Le répertoire sélectionné n'est pas un projet Git."
 
 #: kicad/project_tree_pane.cpp:2454
 msgid "Discarding commit due to empty commit message."
@@ -28342,9 +28324,9 @@ msgid "Failed to create commit: %s"
 msgstr "Échec de la création du commit: %s"
 
 #: kicad/project_tree_pane.cpp:2577
-#, fuzzy, c-format
+#, c-format
 msgid "Created commit with id: %s"
-msgstr "Échec de l'écriture de l'index : %s"
+msgstr "Création d'un commit avec l'id : %s"
 
 #: kicad/tools/kicad_manager_actions.cpp:43
 msgid "New Project..."
@@ -41450,9 +41432,9 @@ msgid "Condition not satisfied; rule ignored."
 msgstr "Condition non remplie; règle non appliquée."
 
 #: pcbnew/drc/drc_engine.cpp:1368
-#, fuzzy, c-format
+#, c-format
 msgid "Inheriting from parent: %s."
-msgstr "Dérivant du symbole '%s'."
+msgstr "Héritage du parent : %s."
 
 #: pcbnew/drc/drc_engine.cpp:1407 pcbnew/drc/drc_engine.cpp:1431
 #, c-format
@@ -48795,9 +48777,8 @@ msgid "Repeat layout"
 msgstr "Répéter placement/routage"
 
 #: pcbnew/tools/multichannel_tool.cpp:547
-#, fuzzy
 msgid "Group repeated items"
-msgstr "Grouper éléments importés"
+msgstr "Grouper les éléments répétés"
 
 #: pcbnew/tools/multichannel_tool.cpp:553
 #, c-format
@@ -52079,9 +52060,8 @@ msgid "Source Name"
 msgstr "Nom Source"
 
 #: pcbnew/zone.cpp:2008
-#, fuzzy
 msgid "Hatch Orientation"
-msgstr "Orientation"
+msgstr "Orientation Hachures"
 
 #: pcbnew/zone.cpp:2026
 msgid "Cannot be less than zone minimum width"
@@ -52287,14 +52267,6 @@ msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
-msgid "EDA"
-msgstr "EDA"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
-msgid "Circuit board"
-msgstr "Circuit Imprimé"
-
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
@@ -52320,38 +52292,6 @@ msgstr "Editeur de PCB KiCad"
 msgid "The KiCad Developers"
 msgstr "Développeurs KiCad"
 
-#: resources/linux/mime/kicad-gerbers.xml.in:5
-msgid "Gerber file"
-msgstr "Fichier Gerber"
-
-#: resources/linux/mime/kicad-gerbers.xml.in:27
-msgid "Excellon drill file"
-msgstr "Fichier de perçage Excellon"
-
-#: resources/linux/mime/kicad-kicad.xml.in:5
-msgid "KiCad Project"
-msgstr "Projet KiCad"
-
-#: resources/linux/mime/kicad-kicad.xml.in:12
-msgid "KiCad Schematic"
-msgstr "Schématique KiCad"
-
-#: resources/linux/mime/kicad-kicad.xml.in:27
-msgid "KiCad Printed Circuit Board"
-msgstr "Fichier Circuit Imprimé KiCad"
-
-#: resources/linux/mime/kicad-kicad.xml.in:41
-msgid "KiCad Footprint"
-msgstr "Empreintes KiCad"
-
-#: resources/linux/mime/kicad-kicad.xml.in:55
-msgid "KiCad Schematic Symbol"
-msgstr "Symbole Schématique KiCad"
-
-#: resources/linux/mime/kicad-kicad.xml.in:69
-msgid "KiCad Drawing Sheet"
-msgstr "Feuille de Dessin KiCad"
-
 #~ msgid "Please enter a name for the repository"
 #~ msgstr "Veuillez saisir un nom pour le dépôt"
 
@@ -52367,14 +52307,14 @@ msgstr "Feuille de Dessin KiCad"
 #~ msgid "Remove Git Repository"
 #~ msgstr "Supprimer le Dépôt Git"
 
+#~ msgid "All files|*.*"
+#~ msgstr "Tous les fichiers|*.*"
+
 #~ msgid "Change sheet pin to hierarchical label"
 #~ msgstr "Changer pin de feuille en label hiérarchique"
 
 #~ msgid "Change hierarchical label to sheet pin"
 #~ msgstr "Change label hiérarchique en pin de feuille"
-
-#~ msgid "All files|*.*"
-#~ msgstr "Tous les fichiers|*.*"
 
 #, c-format
 #~ msgid "%s Output Options"
@@ -52445,6 +52385,30 @@ msgstr "Feuille de Dessin KiCad"
 
 #~ msgid "Display"
 #~ msgstr "Affichage"
+
+#~ msgid "Gerber file"
+#~ msgstr "Fichier Gerber"
+
+#~ msgid "Excellon drill file"
+#~ msgstr "Fichier de perçage Excellon"
+
+#~ msgid "KiCad Project"
+#~ msgstr "Projet KiCad"
+
+#~ msgid "KiCad Schematic"
+#~ msgstr "Schématique KiCad"
+
+#~ msgid "KiCad Printed Circuit Board"
+#~ msgstr "Fichier Circuit Imprimé KiCad"
+
+#~ msgid "KiCad Footprint"
+#~ msgstr "Empreintes KiCad"
+
+#~ msgid "KiCad Schematic Symbol"
+#~ msgstr "Symbole Schématique KiCad"
+
+#~ msgid "KiCad Drawing Sheet"
+#~ msgstr "Feuille de Dessin KiCad"
 
 #~ msgid "Generates Placement Areas in easy way"
 #~ msgstr "Génère dZones de Placement de manière aisée"
@@ -53150,6 +53114,12 @@ msgstr "Feuille de Dessin KiCad"
 #, c-format
 #~ msgid "Plotting symbol '%s' to '%s'\n"
 #~ msgstr "Tracé du symbole '%s' sur '%s'\n"
+
+#~ msgid "EDA"
+#~ msgstr "EDA"
+
+#~ msgid "Circuit board"
+#~ msgstr "Circuit Imprimé"
 
 #~ msgid "Action Plugins"
 #~ msgstr "Plugins d'Action"
