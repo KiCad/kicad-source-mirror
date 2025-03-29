@@ -478,6 +478,16 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_PCB::handleCreateUpdateItemsIntern
         {
             BOARD_ITEM* boardItem = *optItem;
             commit->Modify( boardItem );
+
+            // Normally this is done by the footprint methods SetPosition, SetOrientation, etc
+            // Since the API is just using the assignment operator, we need to wipe out all the
+            // caches so that they will be rebuilt with any changes to the geometry made by the API
+            if( boardItem->Type() == PCB_FOOTPRINT_T )
+            {
+                auto boardFp = static_cast<FOOTPRINT*>( boardItem );
+                boardFp->InvalidateGeometryCaches();
+            }
+
             boardItem->CopyFrom( item.get() );
             boardItem->Serialize( newItem );
         }

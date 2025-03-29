@@ -145,6 +145,9 @@ public:
         return aItem && aItem->Type() == PCB_FOOTPRINT_T;
     }
 
+    /// Resets the caches for this footprint, for example if it was modified via the API
+    void InvalidateGeometryCaches();
+
     LSET GetPrivateLayers() const { return m_privateLayers; }
     void SetPrivateLayers( const LSET& aLayers ) { m_privateLayers = aLayers; }
 

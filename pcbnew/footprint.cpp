@@ -955,6 +955,17 @@ void FOOTPRINT::CopyFrom( const BOARD_ITEM* aOther )
 }
 
 
+void FOOTPRINT::InvalidateGeometryCaches()
+{
+    m_boundingBoxCacheTimeStamp = 0;
+    m_textExcludedBBoxCacheTimeStamp = 0;
+    m_hullCacheTimeStamp = 0;
+
+    m_courtyard_cache_back_hash.Clear();
+    m_courtyard_cache_front_hash.Clear();
+}
+
+
 bool FOOTPRINT::IsConflicting() const
 {
     return HasFlag( COURTYARD_CONFLICT );
