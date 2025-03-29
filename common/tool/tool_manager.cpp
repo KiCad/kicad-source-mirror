@@ -328,17 +328,13 @@ VECTOR2D TOOL_MANAGER::GetCursorPosition() const
 
 
 bool TOOL_MANAGER::doRunAction( const TOOL_ACTION& aAction, bool aNow, const ki::any& aParam,
-                                COMMIT* aCommit )
+                                COMMIT* aCommit, bool aFromAPI )
 {
     if( m_shuttingDown )
         return true;
 
     bool       retVal = false;
     TOOL_EVENT event = aAction.MakeEvent();
-
-    // We initialize the SYNCHRONOUS state to finished so that tools that don't have an event
-    // loop won't hang if someone forgets to set the state.
-    std::atomic<SYNCRONOUS_TOOL_STATE> synchronousControl = STS_FINISHED;
 
     if( event.Category() == TC_COMMAND )
         event.SetMousePosition( GetCursorPosition() );
@@ -347,20 +343,20 @@ bool TOOL_MANAGER::doRunAction( const TOOL_ACTION& aAction, bool aNow, const ki:
     if( aParam.has_value() )
         event.SetParameter( aParam );
 
-    // Pass the commit (if any)
-    if( aCommit )
-    {
-        event.SetSynchronous( &synchronousControl );
-        event.SetCommit( aCommit );
-    }
-
     if( aNow )
     {
         TOOL_STATE* current = m_activeState;
 
+        // An event with a commit must be run synchronously
         if( aCommit )
         {
-            // An event with a commit must be run synchronously
+            // We initialize the SYNCHRONOUS state to finished so that tools that don't have an
+            // event loop won't hang if someone forgets to set the state.
+            std::atomic<SYNCRONOUS_TOOL_STATE> synchronousControl = STS_FINISHED;
+
+            event.SetSynchronous( &synchronousControl );
+            event.SetCommit( aCommit );
+
             processEvent( event );
 
             while( synchronousControl == STS_RUNNING )
@@ -384,6 +380,17 @@ bool TOOL_MANAGER::doRunAction( const TOOL_ACTION& aAction, bool aNow, const ki:
     }
     else
     {
+        // It is really dangerous to pass a commit (whose lifetime we can't guarantee) to
+        // deferred event processing.  There is a possibility that user actions will get run
+        // in between, which might either affect the lifetime of the commit or push or pop
+        // other commits.  However, we don't currently have a better solution for the API.
+        if( aCommit )
+        {
+            wxASSERT_MSG( aFromAPI, wxT( "Deferred actions have no way of guaranteeing the "
+                                         "lifetime of the COMMIT object" ) );
+            event.SetCommit( aCommit );
+        }
+
         PostEvent( event );
     }
 
