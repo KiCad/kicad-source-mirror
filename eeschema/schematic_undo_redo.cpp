@@ -304,11 +304,9 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         eda_item->ClearEditFlags();
         eda_item->ClearTempFlags();
 
-        SCH_ITEM*   schItem = dynamic_cast<SCH_ITEM*>( eda_item );
-
         // Set connectable object connectivity status.
-        auto updateConnectivityFlag =
-                [&]()
+        auto propagateConnectivityDamage =
+                [&]( SCH_ITEM* schItem )
                 {
                     if( schItem->IsConnectable() )
                     {
@@ -350,10 +348,12 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                     }
                 };
 
+        SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( eda_item );
+
         if( status == UNDO_REDO::NEWITEM )
         {
             if( schItem )
-                updateConnectivityFlag();
+                propagateConnectivityDamage( schItem );
 
             // If we are removing the current sheet, get out first
             if( eda_item->Type() == SCH_SHEET_T )
@@ -379,7 +379,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             }
 
             if( schItem )
-                updateConnectivityFlag();
+                propagateConnectivityDamage( schItem );
 
             // deleted items are re-inserted on undo
             AddToScreen( eda_item, screen );
@@ -411,7 +411,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
             if( schItem )
             {
-                updateConnectivityFlag();
+                propagateConnectivityDamage( schItem );
                 AddCopyForRepeatItem( schItem );
 
                 if( schItem->Type() == SCH_SHEET_T )
@@ -428,7 +428,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             wxCHECK2( itemCopy, continue );
 
             if( schItem->HasConnectivityChanges( itemCopy, &GetCurrentSheet() ) )
-                updateConnectivityFlag();
+                propagateConnectivityDamage( schItem );
 
             // The root sheet is a pseudo object that owns the root screen object but is not on
             // the root screen so do not attempt to remove it from the screen it owns.
