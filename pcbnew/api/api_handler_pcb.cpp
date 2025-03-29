@@ -1138,7 +1138,7 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleInteractiveMoveItems(
     mgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &toSelect );
 
     COMMIT* commit = getCurrentCommit( aCtx.ClientName );
-    mgr->PostAction( PCB_ACTIONS::move, commit );
+    mgr->PostAPIAction( PCB_ACTIONS::move, commit );
 
     return Empty();
 }

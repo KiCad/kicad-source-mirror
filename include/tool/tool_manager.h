@@ -256,9 +256,10 @@ public:
      *
      * @param aAction is the action to be invoked.
      * @param aParam is an optional parameter that might be used by the invoked action. Its meaning
-     *               depends on the action.
+     *               depends on the action.  The parameter is not allowed to be a COMMIT as we have
+     *               no way of guaranteeing the lifetime of the COMMIT object.
      */
-    template<typename T>
+    template<typename T, std::enable_if_t<!std::is_convertible_v<T, COMMIT*>>* = nullptr>
     bool PostAction( const TOOL_ACTION& aAction, T aParam )
     {
         // Use a cast to ensure the proper type is stored inside the parameter
@@ -275,12 +276,15 @@ public:
         doRunAction( aAction, false, a, nullptr );
     }
 
-    bool PostAction( const TOOL_ACTION& aAction, COMMIT* aCommit )
+    // TODO: we need a way to guarantee that user events can't be processed in
+    // between API actions.  Otherwise the COMMITs will get tangled up and we'll
+    // crash on bad pointers.
+    bool PostAPIAction( const TOOL_ACTION& aAction, COMMIT* aCommit )
     {
         // Default initialize the parameter argument to an empty ki_any
         ki::any a;
 
-        return doRunAction( aAction, false, a, aCommit );
+        return doRunAction( aAction, false, a, aCommit, true );
     }
 
     /**
@@ -538,7 +542,7 @@ private:
      * Helper function to actually run an action.
      */
     bool doRunAction( const TOOL_ACTION& aAction, bool aNow, const ki::any& aParam,
-                      COMMIT* aCommit );
+                      COMMIT* aCommit, bool aFromAPI = false );
     bool doRunAction( const std::string& aActionName, bool aNow, const ki::any& aParam,
                       COMMIT* aCommit );
 
