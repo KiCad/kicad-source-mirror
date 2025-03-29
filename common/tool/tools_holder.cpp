@@ -114,8 +114,6 @@ void TOOLS_HOLDER::PopTool( const TOOL_EVENT& aEvent )
             return;
         }
     }
-
-    wxASSERT_MSG( false, wxS( "Popped a Tool Not on the Tool Stack!" ) );
 }
 
 
