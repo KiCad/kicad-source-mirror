@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-03-30 00:01+0000\n"
+"PO-Revision-Date: 2025-03-30 16:07+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -2394,9 +2394,8 @@ msgid "Design block does not have a valid library ID."
 msgstr "Designblock hat keine gültige Bibliotheks-ID."
 
 #: common/design_block_io.cpp:379
-#, fuzzy
 msgid "Design block does not have a schematic or board file."
-msgstr "Designblock hat keine gültige Bibliotheks-ID."
+msgstr "Designblock hat keine Schaltplan- oder Platinendatei."
 
 #: common/design_block_io.cpp:388
 #, c-format
@@ -2404,9 +2403,9 @@ msgid "Schematic source file '%s' does not exist."
 msgstr "Die Schaltplandatei \"%s\" ist nicht vorhanden."
 
 #: common/design_block_io.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid "Board source file '%s' does not exist."
-msgstr "Die Schaltplandatei \"%s\" ist nicht vorhanden."
+msgstr "Platinendatei \"%s\" existiert nicht."
 
 #: common/design_block_io.cpp:406
 #, c-format
@@ -2421,11 +2420,11 @@ msgstr ""
 "gespeichert werden."
 
 #: common/design_block_io.cpp:444
-#, fuzzy, c-format
+#, c-format
 msgid "Board file '%s' could not be saved as design block at '%s'."
 msgstr ""
-"Die Schaltplandatei \"%s\" konnte nicht als Designblock unter \"%s\" "
-"gespeichert werden."
+"Platinendatei \"%s\" konnte nicht als Designblock unter \"%s\" gespeichert "
+"werden."
 
 #: common/design_block_io.cpp:478
 #, c-format
@@ -4951,9 +4950,9 @@ msgstr ""
 "Es können nicht mehrere Bibliotheken denselben Aliasnamen (\"%s\") verwenden."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:663
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' failed to load."
-msgstr "Symbolbibliothek \"%s\" konnte nicht geladen werden."
+msgstr "Designblockbibliothek \"%s\" konnte nicht geladen werden."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:666
 #: eeschema/dialogs/panel_sym_lib_table.cpp:597
@@ -5310,9 +5309,8 @@ msgid "&Export..."
 msgstr "&Exportieren ..."
 
 #: common/dialogs/panel_grid_settings.cpp:53
-#, fuzzy
 msgid "Pads:"
-msgstr "Pads"
+msgstr "Pads:"
 
 #: common/dialogs/panel_grid_settings.cpp:61
 msgid "Footprints/pads:"
@@ -7328,11 +7326,9 @@ msgstr ""
 "Footprintbibliothek footprints.pretty enthält."
 
 #: common/env_vars.cpp:141
-#, fuzzy
 msgid "A directory containing system-wide scripts installed with KiCad."
 msgstr ""
-"Ein Verzeichnis mit systemweiten Skripten, die mit KiCad installiert worden "
-"sind"
+"Ein Verzeichnis mit systemweiten Skripten, die mit KiCad installiert wurden."
 
 #: common/env_vars.cpp:144
 msgid "A directory containing user-specific scripts installed with KiCad."
@@ -7563,9 +7559,8 @@ msgid "Invalid HEAD.  Cannot merge."
 msgstr "Ungültiger HEAD.  Kann nicht mergen."
 
 #: common/git/git_pull_handler.cpp:181
-#, fuzzy
 msgid "Could not access repository configuration"
-msgstr "Konnte Repository-Index nicht abrufen"
+msgstr "Konnte Repository-Konfiguration nicht abrufen"
 
 #: common/git/git_pull_handler.cpp:251 common/git/git_push_handler.cpp:91
 msgid "Could not get repository head"
@@ -7577,9 +7572,8 @@ msgid "Could not get reference OID for reference '%s'"
 msgstr "Konnte Referenz-OID für Referenz \"%s\" nicht abrufen"
 
 #: common/git/git_pull_handler.cpp:275
-#, fuzzy
 msgid "Could not look up target commit"
-msgstr "Konnte Commit nicht auflösen"
+msgstr "Konnte Ziel-Commit nicht auflösen"
 
 #: common/git/git_pull_handler.cpp:287
 #, fuzzy
@@ -7591,9 +7585,10 @@ msgid "Failed to perform checkout operation."
 msgstr "Checkout-Vorgang fehlgeschlagen."
 
 #: common/git/git_pull_handler.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update reference '%s' to point to '%s'"
-msgstr "Konnte HEAD-Referenz für Branch \"%s\" nicht aktualisieren"
+msgstr ""
+"Konnte Referenz \"%s\" nicht so aktualisieren, dass sie auf \"%s\" zeigt"
 
 #: common/git/git_pull_handler.cpp:348
 #, fuzzy
@@ -7612,9 +7607,9 @@ msgstr ""
 "Änderungen konnten nicht zum Remote-Repository übertragen werden (push)."
 
 #: common/git/git_pull_handler.cpp:381
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup commit '%s'"
-msgstr "Konnte Commit \"{}\" nicht auflösen"
+msgstr "Konnte Commit \"%s\" nicht finden"
 
 #: common/git/git_pull_handler.cpp:414
 msgid "Could not merge commits"
@@ -7685,9 +7680,8 @@ msgid "[updated] %s"
 msgstr "[aktualisiert] %s"
 
 #: common/git/kicad_git_common.cpp:981
-#, fuzzy
 msgid "Unable to authenticate"
-msgstr "Konnte die folgende Datei nicht erstellen"
+msgstr "Authentifizierung fehlgeschlagen"
 
 #: common/git/kicad_git_errors.cpp:40
 msgid "Invalid repository."
@@ -8936,7 +8930,6 @@ msgid "Select Preferred Editor"
 msgstr "Bevorzugten Editor wählen"
 
 #: common/pgm_base.cpp:384
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs and help profile functionality to "
@@ -8946,19 +8939,18 @@ msgid ""
 "Your design files such as schematic and PCB are not shared in this process."
 msgstr ""
 "KiCad kann Entwicklern Abstürze und Daten zu besonderen Ereignissen anonym "
-"melden, um die Identifizierung kritischer Fehler in der gesamten "
-"Benutzerbasis effektiver zu unterstützen und die Funktionalität zu "
-"untersuchen, um Verbesserungen zu steuern. \n"
-"Wenn Sie sich entscheiden, freiwillig teilzunehmen, dann wird KiCad "
-"automatisch solche Berichte senden, wenn das Programm abstürzt oder ein "
+"melden, um ein Auffinden kritischer Fehler zu vereinfachen und die genutzte "
+"Funktionalität zu untersuchen, um zukünftige Verbesserungen zu priorisieren. "
+"\n"
+"Wenn Sie sich entscheiden freiwillig teilzunehmen, dann wird KiCad "
+"automatisch obige Berichte senden, wenn das Programm abstürzt oder ein "
 "besonderes Ereignis eintritt. \n"
 "Ihre Projektdateien wie Schaltpläne oder Platinendaten werden bei diesem "
 "Vorgang nicht übermittelt."
 
 #: common/pgm_base.cpp:389
-#, fuzzy
 msgid "Data Collection Opt In"
-msgstr "Datensammlung"
+msgstr "Datenerfassungs Opt-In"
 
 #: common/pgm_base.cpp:391
 msgid "Opt In"
@@ -10713,9 +10705,8 @@ msgid "Updating Design Block Libraries"
 msgstr "Aktualisiere Designblock-Bibliotheken"
 
 #: common/widgets/panel_design_block_chooser.cpp:427
-#, fuzzy
 msgid "Errors were encountered loading design blocks:"
-msgstr "Fehler traten beim Laden der Symbole auf:"
+msgstr "Beim Laden der Designblöcke traten Fehler auf:"
 
 #: common/widgets/properties_panel.cpp:76
 #: common/widgets/properties_panel.cpp:185
@@ -13975,7 +13966,7 @@ msgstr "Footprintfilter"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:356
 msgid "Pins with duplicate numbers are jumpers"
-msgstr ""
+msgstr "Pins mit mehrfach vergebenen Nummern sind Jumper"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:357
 msgid ""
@@ -13983,15 +13974,16 @@ msgid ""
 "and pins with the same number will be considered to be jumpered together "
 "internally."
 msgstr ""
+"Sofern aktiv, kann dieses Symbol mehr als einen Pin mit der gleichen Nummer "
+"haben. In diesem Fall wird angenommen, dass sie intern verbunden sind."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:362
 msgid "Jumper Pin Groups"
-msgstr ""
+msgstr "Jumperpingruppen"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:370
-#, fuzzy
 msgid "Available pins"
-msgstr "Verfügbare Pfade:"
+msgstr "Verfügbare Pins"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:386
 #, fuzzy
@@ -19081,9 +19073,9 @@ msgid "Bus Alias %s Members"
 msgstr "Mitglieder von Bus-Alias %s"
 
 #: eeschema/sch_design_block_utils.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' already has a schematic."
-msgstr "Designblock \"%s\" existiert in Bibliothek \"%s\" bereits."
+msgstr "Designblock \"%s\" hat bereits einen Schaltplan."
 
 #: eeschema/sch_design_block_utils.cpp:64
 #, fuzzy
@@ -19118,10 +19110,9 @@ msgstr ""
 
 #: eeschema/sch_design_block_utils.cpp:162
 #: eeschema/sch_design_block_utils.cpp:362
-#, fuzzy
 msgid "Please select a design block to save the schematic to."
 msgstr ""
-"Wählen Sie bitte eine Bibliothek in der der Designblock gespeichert werden "
+"Bitte eine Bibliothek wählen, in welcher der Designblock gespeichert werden "
 "soll."
 
 #: eeschema/sch_design_block_utils.cpp:254
@@ -36169,7 +36160,7 @@ msgstr "Padgruppen, die unterschiedliche Netze kurzschließen dürfen:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:404
 msgid "Pads with duplicate numbers are jumpers"
-msgstr ""
+msgstr "Pads mit mehrfach vergebenen Nummern sind Jumper"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:405
 msgid ""
@@ -36177,6 +36168,8 @@ msgid ""
 "number, and pads with the same number will be considered to be jumpered "
 "together internally."
 msgstr ""
+"Sofern aktiv, kann dieser Footprint mehr als ein Pad mit der gleichen Nummer "
+"haben. In diesem Fall wird angenommen, dass sie intern verbunden sind."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:410
 #, fuzzy
@@ -36184,9 +36177,8 @@ msgid "Jumper Pad Groups"
 msgstr "Pads neu nummerieren"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:418
-#, fuzzy
 msgid "Available pads"
-msgstr "Verfügbare Pfade:"
+msgstr "Verfügbare Pads"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:434
 #, fuzzy
@@ -38837,9 +38829,8 @@ msgid "Add floor"
 msgstr "Boden hinzufügen"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:94
-#, fuzzy
 msgid "Anti-aliasing"
-msgstr "Anti-Aliasing:"
+msgstr "Anti-Aliasing"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:98
 #, fuzzy
@@ -41471,7 +41462,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_8expression_functions.h:2
-#, fuzzy
 msgid ""
 "### Expression functions\n"
 "\n"
@@ -41636,8 +41626,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.inDiffPair('<Netzname>')\n"
-"Wahr, wenn `A` ein Netz hat, das Teil des angegebenen Differentialpaares "
-"ist.\n"
+"Wahr, wenn `A` ein Netz hat, das Teil des angegebenen Differentialpaares ist."
+"\n"
 "`<Netzname>` ist der Basisname des Differentialpaares.  Zum Beispiel passt\n"
 "`inDiffPair('/CLK')` zu Elementen in den Netzen `/CLK_P` und `/CLK_N`.\n"
 "<br><br>\n"
@@ -41709,6 +41699,12 @@ msgstr ""
 "    A.memberOfSheet('<Schaltplanblatt-Pfad>')\n"
 "Wahr, wenn `A` ein Teil des angegebenen Schaltplanblatts ist. Der Pfad kann "
 "Wildcards enthalten.\n"
+"<br><br>\n"
+"\n"
+"    A.memberOfSheetOrChildren('<Schaltplanblatt-Pfad>')\n"
+"Wahr, wenn `A` ein Teil des angegebenen Schaltplanblatts oder eines "
+"hierarchischen Unterschaltplanblatts ist. Der Pfad kann Wildcards enthalten."
+"\n"
 "<br><br>\n"
 "\n"
 
@@ -45157,21 +45153,29 @@ msgstr "%s Fertigungsattribut \"Nicht bestücken\" entfernt."
 #, c-format
 msgid "Added %s 'duplicate pad numbers are jumpers' attribute."
 msgstr ""
+"%s Fertigungsattribut \"mehrfach vergebenen Pinnummern sind Jumper\" "
+"hinzugefügt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:758
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'duplicate pad numbers are jumpers' attribute."
-msgstr "%s Fertigungsattribut \"Nicht bestücken\" entfernt."
+msgstr ""
+"%s Fertigungsattribut \"mehrfach vergebenen Padnummern sind Jumper\" "
+"entfernt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:766
 #, c-format
 msgid "Add %s 'duplicate pad numbers are jumpers' attribute."
 msgstr ""
+"Füge %s Fertigungsattribut \"mehrfach vergebenen Padnummern sind Jumper\" "
+"hinzu."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:771
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'duplicate pad numbers are jumpers' attribute."
-msgstr "Entferne %s Fertigungsattribut \"Nicht bestücken\"."
+msgstr ""
+"Entferne %s Fertigungsattribut \"mehrfach vergebenen Padnummern sind Jumper\""
+"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:785
 #, c-format
@@ -45777,9 +45781,9 @@ msgstr ""
 "Möchten Sie den Footprint neu laden?"
 
 #: pcbnew/pcb_design_block_utils.cpp:68
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' already has a layout."
-msgstr "Designblock \"%s\" existiert in Bibliothek \"%s\" bereits."
+msgstr "Designblock \"%s\" hat bereits ein Layout."
 
 #: pcbnew/pcb_design_block_utils.cpp:70
 #, fuzzy
