@@ -18,10 +18,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-03-23 21:24+0000\n"
+"PO-Revision-Date: 2025-03-30 16:07+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4348,15 +4348,16 @@ msgid "Remote Tracking"
 msgstr "Trasowanie ścieżek"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:41
-#, fuzzy
 msgid "Update interval:"
-msgstr "Uaktualnij pola"
+msgstr "Interwał uaktualnienia:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:46
 msgid ""
 "Number of minutes between remote update checks.  Zero disables automatic "
 "checks."
 msgstr ""
+"Liczba minut między zdalnymi kontrolami aktualizacji.  Zero wyłącza kontrolę "
+"automatyczną."
 
 #: common/dialogs/git/panel_git_repos_base.cpp:50
 #: common/dialogs/panel_common_settings_base.cpp:347
@@ -5345,9 +5346,8 @@ msgid "&Export..."
 msgstr "Eksportuj..."
 
 #: common/dialogs/panel_grid_settings.cpp:53
-#, fuzzy
 msgid "Pads:"
-msgstr "Pola lutownicze"
+msgstr "Pola lutownicze:"
 
 #: common/dialogs/panel_grid_settings.cpp:61
 msgid "Footprints/pads:"
@@ -7358,16 +7358,14 @@ msgstr ""
 "footprintów."
 
 #: common/env_vars.cpp:141
-#, fuzzy
 msgid "A directory containing system-wide scripts installed with KiCad."
 msgstr ""
-"Folder zawierający szablony projektów zainstalowanych razem z programem"
+"Folder zawierający skrypty systemowe instalowane razem z programem KiCad."
 
 #: common/env_vars.cpp:144
-#, fuzzy
 msgid "A directory containing user-specific scripts installed with KiCad."
 msgstr ""
-"Folder zawierający szablony projektów zainstalowanych razem z programem"
+"Katalog zawierający skrypty użytkownika instalowane za pomocą programu KiCad."
 
 #: common/env_vars.cpp:147
 #, c-format
@@ -7620,9 +7618,9 @@ msgid "Failed to perform checkout operation."
 msgstr "Nie udało się wykonać operacji sprawdzenia."
 
 #: common/git/git_pull_handler.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update reference '%s' to point to '%s'"
-msgstr "Nie udało się zaktualizować odnośnika HEAD dla gałęzi '%s'"
+msgstr "Nie udało się zaktualizować odnośnika '%s' by wskazywał na '%s'"
 
 #: common/git/git_pull_handler.cpp:348
 #, fuzzy
@@ -7640,9 +7638,9 @@ msgid "Failed to push reference to revision walker."
 msgstr "Nie udało się wypchnąć zmian do zdalnego repozytorium."
 
 #: common/git/git_pull_handler.cpp:381
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup commit '%s'"
-msgstr "Nie można wyszukać zatwierdzenia '{}'"
+msgstr "Nie można zablokować zmian '%s'"
 
 #: common/git/git_pull_handler.cpp:414
 msgid "Could not merge commits"
@@ -7666,7 +7664,7 @@ msgstr "Dodano"
 
 #: common/git/git_pull_handler.cpp:550
 msgid "Conflicts detected during rebase"
-msgstr ""
+msgstr "Wykryto konflikty podczas odtwarzania bazy"
 
 #: common/git/git_push_handler.cpp:56
 msgid "Could not lookup remote"
@@ -7713,9 +7711,8 @@ msgid "[updated] %s"
 msgstr "[uaktualnione] %s"
 
 #: common/git/kicad_git_common.cpp:981
-#, fuzzy
 msgid "Unable to authenticate"
-msgstr "Nie mogę utworzyć "
+msgstr "Nie można uwierzytelnić"
 
 #: common/git/kicad_git_errors.cpp:40
 msgid "Invalid repository."
@@ -8981,7 +8978,7 @@ msgstr "Zbieranie danych"
 
 #: common/pgm_base.cpp:391
 msgid "Opt In"
-msgstr ""
+msgstr "Zapisz się"
 
 #: common/pgm_base.cpp:391
 #, fuzzy
@@ -13990,7 +13987,7 @@ msgstr "Filtry footprintów"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:356
 msgid "Pins with duplicate numbers are jumpers"
-msgstr ""
+msgstr "Piny z powtarzającymi się numerami traktuj jako zworki"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:357
 msgid ""
@@ -13998,15 +13995,16 @@ msgid ""
 "and pins with the same number will be considered to be jumpered together "
 "internally."
 msgstr ""
+"Gdy włączone, symbol może mieć więcej niż jeden pin o tym samym numerze, a "
+"piny o tym samym numerze będą traktowane jako wewnętrznie połączone."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:362
 msgid "Jumper Pin Groups"
-msgstr ""
+msgstr "Grupy pinów połączonych"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:370
-#, fuzzy
 msgid "Available pins"
-msgstr "Dostępne ścieżki:"
+msgstr "Dostępne piny"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:386
 #, fuzzy
@@ -19073,9 +19071,9 @@ msgid "Bus Alias %s Members"
 msgstr "Zawartość aliasu magistrali %s"
 
 #: eeschema/sch_design_block_utils.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' already has a schematic."
-msgstr "Blok projektowy '%s' istnieje już w bibliotece '%s'."
+msgstr "Blok projektowy '%s' posiada już schemat."
 
 #: eeschema/sch_design_block_utils.cpp:64
 #, fuzzy
@@ -22108,6 +22106,8 @@ msgid ""
 "The current analysis must have a plot in order to tune the value of a "
 "passive R, L, C model or voltage or current source."
 msgstr ""
+"Aktualna analiza musi posiadać wykres, aby móc dostroić wartości pasywnych "
+"modeli R, L, C lub źródła napięcia, lub prądu."
 
 #: eeschema/sim/simulator_frame_ui.cpp:1661
 #: eeschema/sim/simulator_frame_ui.cpp:1674
@@ -23268,9 +23268,8 @@ msgid "Save Current Sheet to Design Block..."
 msgstr "Zapisz bieżący arkusz jako blok projektowy..."
 
 #: eeschema/tools/sch_actions.cpp:173
-#, fuzzy
 msgid "Add current sheet to design block"
-msgstr "Zapisz bieżący arkusz jako blok projektowy..."
+msgstr "Dodaj bieżący blok jako blok projektowy"
 
 #: eeschema/tools/sch_actions.cpp:179 pcbnew/tools/pcb_actions.cpp:489
 #, fuzzy
@@ -36092,7 +36091,7 @@ msgstr "Grupy pól z zezwoleniem na zwarcie różnych sieci:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:404
 msgid "Pads with duplicate numbers are jumpers"
-msgstr ""
+msgstr "Pola z powieloną numeracją traktuj jako połączone"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:405
 msgid ""
@@ -36100,6 +36099,9 @@ msgid ""
 "number, and pads with the same number will be considered to be jumpered "
 "together internally."
 msgstr ""
+"Gdy włączone, footprint może mieć więcej niż jeden pad o tym samym numerze, "
+"a pady o tym samym numerze będą traktowane jako wewnętrznie ze sobą "
+"połączone."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:410
 #, fuzzy
@@ -36107,9 +36109,8 @@ msgid "Jumper Pad Groups"
 msgstr "Renumeracja pól lutowniczych"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:418
-#, fuzzy
 msgid "Available pads"
-msgstr "Dostępne ścieżki:"
+msgstr "Dostępne pola lutownicze"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:434
 #, fuzzy
@@ -38742,9 +38743,8 @@ msgid "Add floor"
 msgstr "Dodaj podłoże"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:94
-#, fuzzy
 msgid "Anti-aliasing"
-msgstr "Anty-aliasing:"
+msgstr "Anty-aliasing"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:98
 #, fuzzy
@@ -45044,14 +45044,14 @@ msgid "Remove %s 'duplicate pad numbers are jumpers' attribute."
 msgstr "Usuń dla %s atrybut 'Nie montowane'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:785
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s jumper pad groups"
-msgstr "Uaktualniono %s właściwości."
+msgstr "Uaktualniono %s grup pól zworkowych"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:789
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s jumper pad groups"
-msgstr "Uaktualniam %s właściwości."
+msgstr "Uaktualnianie %s grup pól zworkowych"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:869
 #, c-format
@@ -45641,9 +45641,9 @@ msgstr ""
 "Czy chcesz ponownie załadować footprint?"
 
 #: pcbnew/pcb_design_block_utils.cpp:68
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' already has a layout."
-msgstr "Blok projektowy '%s' istnieje już w bibliotece '%s'."
+msgstr "Blok projektowy '%s' posiada już trasowanie."
 
 #: pcbnew/pcb_design_block_utils.cpp:70
 #, fuzzy
