@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-03-27 13:55+0000\n"
+"PO-Revision-Date: 2025-03-30 16:07+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -6958,7 +6958,6 @@ msgid "Failed to update reference '%s' to point to '%s'"
 msgstr "Lyckades inte uppdatera referens '%s' till att peka på '%s'"
 
 #: common/git/git_pull_handler.cpp:325
-#, fuzzy
 msgid "Failed to clean up repository state after fast-forward."
 msgstr "Kunde inte städa upp förvarets tillstånd efter framåtspolning."
 
@@ -6998,7 +6997,6 @@ msgid "Added"
 msgstr "Tillagd"
 
 #: common/git/git_pull_handler.cpp:527
-#, fuzzy
 msgid "Conflicts detected during rebase"
 msgstr "Konflikt upptäcktes under ombasering"
 
