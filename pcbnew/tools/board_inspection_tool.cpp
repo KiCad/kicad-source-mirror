@@ -1218,60 +1218,67 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
     r = dialog->AddHTMLPage( _( "Physical Clearances" ) );
 
-    auto reportPhysicalClearance =
-            [&]( PCB_LAYER_ID aLayer )
+    if( compileError )
+    {
+        reportCompileError( r );
+    }
+    else if( !drcEngine->HasRulesForConstraintType( PHYSICAL_CLEARANCE_CONSTRAINT ) )
+    {
+        r->Report( "" );
+        r->Report( _( "No 'physical_clearance' constraints defined." ) );
+    }
+    else
+    {
+        LSET reportLayers = layerIntersection;
+        bool reported = false;
+
+        if( a->IsOnLayer( Edge_Cuts ) )
+        {
+            LSET edgeInteractingLayers = bFP ? LSET( { F_CrtYd, B_CrtYd } )
+                                             : LSET( b->GetLayerSet() & LSET::PhysicalLayersMask() );
+            reportLayers |= edgeInteractingLayers;
+        }
+
+        if( b->IsOnLayer( Edge_Cuts ) )
+        {
+            LSET edgeInteractingLayers = aFP ? LSET( { F_CrtYd, B_CrtYd } )
+                                             : LSET( a->GetLayerSet() & LSET::PhysicalLayersMask() );
+            reportLayers |= edgeInteractingLayers;
+        }
+
+        for( PCB_LAYER_ID layer : reportLayers )
+        {
+            reported = true;
+            reportHeader( _( "Physical clearance resolution for:" ), a, b, layer, r );
+
+            constraint = drcEngine->EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT, a, b, layer, r );
+            clearance = constraint.m_Value.Min();
+
+            if( constraint.IsNull() )
             {
-                reportHeader( _( "Physical clearance resolution for:" ), a, b, aLayer, r );
-
-                constraint = drcEngine->EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT, a, b, aLayer, r );
-                clearance = constraint.m_Value.Min();
-
-                if( compileError )
-                {
-                    reportCompileError( r );
-                }
-                else if( !drcEngine->HasRulesForConstraintType( PHYSICAL_CLEARANCE_CONSTRAINT ) )
-                {
-                    r->Report( "" );
-                    r->Report( _( "No 'physical_clearance' constraints defined." ) );
-                }
-                else
-                {
-                    r->Report( "" );
-                    r->Report( wxString::Format( _( "Resolved min clearance: %s." ),
-                                                 m_frame->StringFromValue( clearance, true ) ) );
-                }
-
                 r->Report( "" );
+                r->Report( wxString::Format( _( "No 'physical_clearance' constraints in effect on %s." ),
+                                             m_frame->GetBoard()->GetLayerName( layer ) ) );
+            }
+            else
+            {
                 r->Report( "" );
-                r->Report( "" );
-            };
+                r->Report( wxString::Format( _( "Resolved min clearance: %s." ),
+                                             m_frame->StringFromValue( clearance, true ) ) );
+            }
 
-    if( layerIntersection.any() )
-    {
-        PCB_LAYER_ID layer = active;
+            r->Report( "" );
+            r->Report( "" );
+            r->Report( "" );
+        }
 
-        if( !layerIntersection.test( layer ) )
-            layer = layerIntersection.Seq().front();
-
-        reportPhysicalClearance( layer );
-    }
-
-    if( aFP && b->IsOnLayer( Edge_Cuts ) )
-    {
-        if( !aFP->GetCourtyard( F_CrtYd ).IsEmpty() )
-            reportPhysicalClearance( F_CrtYd );
-
-        if( !aFP->GetCourtyard( B_CrtYd ).IsEmpty() )
-            reportPhysicalClearance( B_CrtYd );
-    }
-    else if( bFP && a->IsOnLayer( Edge_Cuts ) )
-    {
-        if( !bFP->GetCourtyard( F_CrtYd ).IsEmpty() )
-            reportPhysicalClearance( F_CrtYd );
-
-        if( !bFP->GetCourtyard( B_CrtYd ).IsEmpty() )
-            reportPhysicalClearance( B_CrtYd );
+        if( !reported )
+        {
+            reportHeader( _( "Physical clearance resolution for:" ), a, b, r );
+            r->Report( "" );
+            r->Report( _( "Items share no relevant layers.  No 'physical_clearance' constraints will "
+                          "be applied." ) );
+        }
     }
 
     if( a->HasHole() || b->HasHole() )

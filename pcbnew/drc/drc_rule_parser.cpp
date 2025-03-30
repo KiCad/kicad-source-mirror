@@ -239,8 +239,8 @@ std::shared_ptr<DRC_RULE> DRC_RULES_PARSER::parseDRC_RULE()
         case T_layer:
             if( rule->m_LayerCondition != LSET::AllLayersMask() )
                 reportError( _( "'layer' keyword already present." ) );
-            rule->m_LayerSource = FromUTF8();
-            rule->m_LayerCondition = parseLayer();
+
+            rule->m_LayerCondition = parseLayer( &rule->m_LayerSource );
             break;
 
         case T_severity:
@@ -615,7 +615,7 @@ void DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aResult,
 }
 
 
-LSET DRC_RULES_PARSER::parseLayer()
+LSET DRC_RULES_PARSER::parseLayer( wxString* aSource )
 {
     LSET retVal;
     int  token = NextTok();
@@ -627,10 +627,12 @@ LSET DRC_RULES_PARSER::parseLayer()
     }
     else if( token == T_outer )
     {
+        *aSource = GetTokenString( token );
         retVal = LSET::ExternalCuMask();
     }
     else if( token == T_inner )
     {
+        *aSource = GetTokenString( token );
         retVal = LSET::InternalCuMask();
     }
     else
@@ -643,7 +645,10 @@ LSET DRC_RULES_PARSER::parseLayer()
             wxPGChoiceEntry& entry = layerMap[ii];
 
             if( entry.GetText().Matches( layerName ) )
+            {
+                *aSource = layerName;
                 retVal.set( ToLAYER_ID( entry.GetValue() ) );
+            }
         }
 
         if( !retVal.any() )
