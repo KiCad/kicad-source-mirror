@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-03-27 13:55+0000\n"
+"PO-Revision-Date: 2025-03-30 16:07+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -5170,9 +5170,8 @@ msgid "&Export..."
 msgstr "导出 (&E)..."
 
 #: common/dialogs/panel_grid_settings.cpp:53
-#, fuzzy
 msgid "Pads:"
-msgstr "焊盘"
+msgstr "焊盘:"
 
 #: common/dialogs/panel_grid_settings.cpp:61
 msgid "Footprints/pads:"
@@ -7384,9 +7383,8 @@ msgid "Invalid HEAD.  Cannot merge."
 msgstr "HEAD 无效, 无法合并。"
 
 #: common/git/git_pull_handler.cpp:181
-#, fuzzy
 msgid "Could not access repository configuration"
-msgstr "无法获取仓库索引"
+msgstr "无法访问仓库配置"
 
 #: common/git/git_pull_handler.cpp:251 common/git/git_push_handler.cpp:91
 msgid "Could not get repository head"
@@ -38534,7 +38532,6 @@ msgid "Layer name %s already in use."
 msgstr "层名称 %s 已在使用中。"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:34
-#, fuzzy
 msgid "Layer Names"
 msgstr "层名称"
 
@@ -50321,32 +50318,26 @@ msgid "DP Gap Constraints: %s"
 msgstr "DP 间隙约束: %s"
 
 #: pcbnew/tools/pcb_control.cpp:1878
-#, fuzzy
 msgid "Resolved Clearance"
 msgstr "已解析的间距"
 
 #: pcbnew/tools/pcb_control.cpp:1888
-#, fuzzy
 msgid "Actual Clearance"
 msgstr "实际间距"
 
 #: pcbnew/tools/pcb_control.cpp:1931
-#, fuzzy
 msgid "Resolved Hole Clearance"
 msgstr "已解析的孔间距"
 
 #: pcbnew/tools/pcb_control.cpp:1936
-#, fuzzy
 msgid "Actual Hole Clearance"
 msgstr "实际孔间距"
 
 #: pcbnew/tools/pcb_control.cpp:1969
-#, fuzzy
 msgid "Resolved Edge Clearance"
 msgstr "已解析的边缘间距"
 
 #: pcbnew/tools/pcb_control.cpp:1974
-#, fuzzy
 msgid "Resolved Margin Clearance"
 msgstr "已解析的边界层间距"
 
