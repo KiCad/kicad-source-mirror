@@ -1251,31 +1251,39 @@ void SCH_FIELD::DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const
 
     if( IsHypertext() )
     {
-        SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( m_parent );
-        SCH_SHEET_PATH* sheet = &label->Schematic()->CurrentSheet();
-        wxMenu          menu;
-        wxString        href;
+        wxString         href;
+        SCH_GLOBALLABEL* global = dynamic_cast<SCH_GLOBALLABEL*>( m_parent );
 
-        std::vector<std::pair<wxString, wxString>> pages;
-
-        label->GetIntersheetRefs( sheet, &pages );
-
-        for( int i = 0; i < (int) pages.size(); ++i )
+        if( global && m_id == INTERSHEET_REFS )
         {
-            menu.Append( i + START_ID, wxString::Format( _( "Go to Page %s (%s)" ),
-                                                         pages[i].first,
-                                                         pages[i].second ) );
+            SCH_SHEET_PATH* sheet = &global->Schematic()->CurrentSheet();
+            wxMenu          menu;
+
+            std::vector<std::pair<wxString, wxString>> pages;
+
+            global->GetIntersheetRefs( sheet, &pages );
+
+            for( int i = 0; i < (int) pages.size(); ++i )
+            {
+                menu.Append( i + START_ID, wxString::Format( _( "Go to Page %s (%s)" ),
+                                                             pages[i].first,
+                                                             pages[i].second ) );
+            }
+
+            menu.AppendSeparator();
+            menu.Append( 999 + START_ID, _( "Back to Previous Selected Sheet" ) );
+
+            int sel = aFrame->GetPopupMenuSelectionFromUser( menu ) - START_ID;
+
+            if( sel >= 0 && sel < (int) pages.size() )
+                href = wxT( "#" ) + pages[ sel ].first;
+            else if( sel == 999 )
+                href = SCH_NAVIGATE_TOOL::g_BackLink;
         }
-
-        menu.AppendSeparator();
-        menu.Append( 999 + START_ID, _( "Back to Previous Selected Sheet" ) );
-
-        int sel = aFrame->GetPopupMenuSelectionFromUser( menu ) - START_ID;
-
-        if( sel >= 0 && sel < (int) pages.size() )
-            href = wxT( "#" ) + pages[ sel ].first;
-        else if( sel == 999 )
-            href = SCH_NAVIGATE_TOOL::g_BackLink;
+        else if( IsURL( GetShownText( false ) ) )
+        {
+            href = GetShownText( false );
+        }
 
         if( !href.IsEmpty() )
         {
