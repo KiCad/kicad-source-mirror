@@ -539,7 +539,9 @@ void FOOTPRINT_EDIT_FRAME::updateEnabledLayers()
     // Don't drop pre-existing user layers
     LSET enabledLayers = GetBoard()->GetEnabledLayers();
 
-    m_originalFootprintCopy->RunOnChildren(
+    if( m_originalFootprintCopy )
+    {
+        m_originalFootprintCopy->RunOnChildren(
             [&]( BOARD_ITEM* child )
             {
                 LSET childLayers = child->GetLayerSet() & LSET::UserDefinedLayersMask();
@@ -548,6 +550,7 @@ void FOOTPRINT_EDIT_FRAME::updateEnabledLayers()
                     enabledLayers.set( layer );
             },
             RECURSE_MODE::RECURSE );
+    }
 
     // Enable any layers that the user has gone to the trouble to name
     SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
