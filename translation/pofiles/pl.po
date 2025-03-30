@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-03-23 21:24+0000\n"
+"PO-Revision-Date: 2025-03-30 16:07+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
@@ -3840,15 +3840,16 @@ msgid "Remote Tracking"
 msgstr "Trasowanie ścieżek"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:41
-#, fuzzy
 msgid "Update interval:"
-msgstr "Uaktualnij pola"
+msgstr "Interwał uaktualnienia:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:46
 msgid ""
 "Number of minutes between remote update checks.  Zero disables automatic "
 "checks."
 msgstr ""
+"Liczba minut między zdalnymi kontrolami aktualizacji.  Zero wyłącza kontrolę "
+"automatyczną."
 
 #: common/dialogs/git/panel_git_repos_base.cpp:50
 #: common/dialogs/panel_common_settings_base.cpp:347
@@ -6987,9 +6988,9 @@ msgid "Failed to perform checkout operation."
 msgstr "Nie udało się wykonać operacji sprawdzenia."
 
 #: common/git/git_pull_handler.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update reference '%s' to point to '%s'"
-msgstr "Nie udało się zaktualizować odnośnika HEAD dla gałęzi '%s'"
+msgstr "Nie udało się zaktualizować odnośnika '%s' by wskazywał na '%s'"
 
 #: common/git/git_pull_handler.cpp:325
 #, fuzzy
@@ -7007,9 +7008,9 @@ msgid "Failed to push reference to revision walker."
 msgstr "Nie udało się wypchnąć zmian do zdalnego repozytorium."
 
 #: common/git/git_pull_handler.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup commit '%s'"
-msgstr "Nie można wyszukać zatwierdzenia '{}'"
+msgstr "Nie można zablokować zmian '%s'"
 
 #: common/git/git_pull_handler.cpp:391
 msgid "Could not merge commits"
@@ -7033,7 +7034,7 @@ msgstr "Dodano"
 
 #: common/git/git_pull_handler.cpp:527
 msgid "Conflicts detected during rebase"
-msgstr ""
+msgstr "Wykryto konflikty podczas odtwarzania bazy"
 
 #: common/git/git_push_handler.cpp:56
 msgid "Could not lookup remote"
@@ -7080,9 +7081,8 @@ msgid "[updated] %s"
 msgstr "[uaktualnione] %s"
 
 #: common/git/kicad_git_common.cpp:981
-#, fuzzy
 msgid "Unable to authenticate"
-msgstr "Nie mogę utworzyć "
+msgstr "Nie można uwierzytelnić"
 
 #: common/git/kicad_git_errors.cpp:40
 msgid "Invalid repository."
