@@ -1003,6 +1003,13 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
 }
 
 
+void FOOTPRINT::CopyFrom( const BOARD_ITEM* aOther )
+{
+    wxCHECK( aOther && aOther->Type() == PCB_FOOTPRINT_T, /* void */ );
+    *this = *static_cast<const FOOTPRINT*>( aOther );
+}
+
+
 bool FOOTPRINT::IsConflicting() const
 {
     return HasFlag( COURTYARD_CONFLICT );

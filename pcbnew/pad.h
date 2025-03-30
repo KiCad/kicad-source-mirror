@@ -60,6 +60,8 @@ public:
     PAD( const PAD& aPad );
     PAD& operator=( const PAD &aOther );
 
+    void CopyFrom( const BOARD_ITEM* aOther ) override;
+
     void Serialize( google::protobuf::Any &aContainer ) const override;
     bool Deserialize( const google::protobuf::Any &aContainer ) override;
 

@@ -46,6 +46,8 @@ public:
 
     ~PCB_SHAPE() override;
 
+    void CopyFrom( const BOARD_ITEM* aOther ) override;
+
     static bool ClassOf( const EDA_ITEM* aItem )
     {
         return aItem && PCB_SHAPE_T == aItem->Type();

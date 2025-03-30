@@ -43,6 +43,8 @@ public:
 
     ~PCB_TEXTBOX();
 
+    void CopyFrom( const BOARD_ITEM* aOther ) override;
+
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
         return aItem && PCB_TEXTBOX_T == aItem->Type();

@@ -141,6 +141,13 @@ PAD& PAD::operator=( const PAD &aOther )
 }
 
 
+void PAD::CopyFrom( const BOARD_ITEM* aOther )
+{
+    wxCHECK( aOther && aOther->Type() == PCB_PAD_T, /* void */ );
+    *this = *static_cast<const PAD*>( aOther );
+}
+
+
 void PAD::Serialize( google::protobuf::Any &aContainer ) const
 {
     using namespace kiapi::board::types;

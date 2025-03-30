@@ -71,6 +71,13 @@ EDA_ITEM* PCB_TRACK::Clone() const
 }
 
 
+void PCB_TRACK::CopyFrom( const BOARD_ITEM* aOther )
+{
+    wxCHECK( aOther && aOther->Type() == PCB_TRACE_T, /* void */ );
+    *this = *static_cast<const PCB_TRACK*>( aOther );
+}
+
+
 PCB_ARC::PCB_ARC( BOARD_ITEM* aParent, const SHAPE_ARC* aArc ) :
     PCB_TRACK( aParent, PCB_ARC_T )
 {
@@ -83,6 +90,13 @@ PCB_ARC::PCB_ARC( BOARD_ITEM* aParent, const SHAPE_ARC* aArc ) :
 EDA_ITEM* PCB_ARC::Clone() const
 {
     return new PCB_ARC( *this );
+}
+
+
+void PCB_ARC::CopyFrom( const BOARD_ITEM* aOther )
+{
+    wxCHECK( aOther && aOther->Type() == PCB_ARC_T, /* void */ );
+    *this = *static_cast<const PCB_ARC*>( aOther );
 }
 
 
@@ -133,6 +147,13 @@ PCB_VIA& PCB_VIA::operator=( const PCB_VIA &aOther )
     m_isFree = aOther.m_isFree;
 
     return *this;
+}
+
+
+void PCB_VIA::CopyFrom( const BOARD_ITEM* aOther )
+{
+    wxCHECK( aOther && aOther->Type() == PCB_VIA_T, /* void */ );
+    *this = *static_cast<const PCB_VIA*>( aOther );
 }
 
 

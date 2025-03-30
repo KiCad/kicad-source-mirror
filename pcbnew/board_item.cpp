@@ -44,6 +44,13 @@ BOARD_ITEM::~BOARD_ITEM()
 }
 
 
+void BOARD_ITEM::CopyFrom( const BOARD_ITEM* aOther )
+{
+    wxCHECK( aOther, /* void */ );
+    *this = *aOther;
+}
+
+
 const BOARD* BOARD_ITEM::GetBoard() const
 {
     if( Type() == PCB_T )
