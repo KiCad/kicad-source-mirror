@@ -477,19 +477,23 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_PCB::handleCreateUpdateItemsIntern
         else
         {
             BOARD_ITEM* boardItem = *optItem;
-            commit->Modify( boardItem );
 
-            // Normally this is done by the footprint methods SetPosition, SetOrientation, etc
-            // Since the API is just using the assignment operator, we need to wipe out all the
-            // caches so that they will be rebuilt with any changes to the geometry made by the API
+            // Footprints can't be modified by CopyFrom at the moment because the commit system
+            // doesn't currently know what to do with a footprint that has had its children
+            // replaced with other children; which results in things like the view not having its
+            // cached geometry for footprint children updated when you move a footprint around.
             if( boardItem->Type() == PCB_FOOTPRINT_T )
             {
-                auto boardFp = static_cast<FOOTPRINT*>( boardItem );
-                boardFp->InvalidateGeometryCaches();
+                commit->Remove( boardItem );
+                item->Serialize( newItem );
+                commit->Add( item.release() );
             }
-
-            boardItem->CopyFrom( item.get() );
-            boardItem->Serialize( newItem );
+            else
+            {
+                commit->Modify( boardItem );
+                boardItem->CopyFrom( item.get() );
+                boardItem->Serialize( newItem );
+            }
         }
 
         aItemHandler( status, newItem );
@@ -498,7 +502,7 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_PCB::handleCreateUpdateItemsIntern
     if( !m_activeClients.count( aClientName ) )
     {
         pushCurrentCommit( aClientName, aCreate ? _( "Created items via API" )
-                                                : _( "Added items via API" ) );
+                                                : _( "Modified items via API" ) );
     }
 
 

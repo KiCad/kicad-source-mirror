@@ -952,6 +952,9 @@ void FOOTPRINT::CopyFrom( const BOARD_ITEM* aOther )
 {
     wxCHECK( aOther && aOther->Type() == PCB_FOOTPRINT_T, /* void */ );
     *this = *static_cast<const FOOTPRINT*>( aOther );
+
+    for( PAD* pad : m_pads )
+        pad->SetDirty();
 }
 
 
