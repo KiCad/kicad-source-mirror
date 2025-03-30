@@ -1303,8 +1303,9 @@ void PCB_NET_INSPECTOR_PANEL::onAddGroup()
     if( std::find_if( m_custom_group_rules.begin(), m_custom_group_rules.end(),
                       [&]( std::unique_ptr<EDA_COMBINED_MATCHER>& rule )
                       {
-                          return rule->GetPattern().Upper() == newGroupName.Upper();
-                      } ) == m_custom_group_rules.end() )
+                          return rule->GetPattern() == newGroupName;
+                      } )
+        == m_custom_group_rules.end() )
     {
         m_custom_group_rules.push_back( std::make_unique<EDA_COMBINED_MATCHER>( newGroupName,
                                                                                 CTX_NET ) );
