@@ -500,11 +500,11 @@ public:
         // First see if item matches a group-by rule
         if( m_parent.m_custom_group_rules.size() > 0 )
         {
-            wxString searchName = aItem->GetNetName().Upper();
+            wxString searchName = aItem->GetNetName();
 
             for( const std::unique_ptr<EDA_COMBINED_MATCHER>& rule : m_parent.m_custom_group_rules )
             {
-                if( rule->Find( searchName.Upper() ) )
+                if( rule->Find( searchName ) )
                 {
                     aItem->SetParent( m_custom_group_map[ rule->GetPattern() ] );
                     groupMatched = true;
