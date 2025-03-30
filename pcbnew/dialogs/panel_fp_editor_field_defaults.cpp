@@ -127,7 +127,8 @@ public:
     long GetValueAsLong( int row, int col ) override { return m_items[row].m_Layer; }
     void SetValueAsLong( int row, int col, long value ) override
     {
-        if( col == 2 )
+        if( col == GetNumberCols() - 1 )    // only last column uses a long value
+                                            // (probably useless test)
             m_items[row].m_Layer = static_cast<PCB_LAYER_ID>( value );
     }
 
