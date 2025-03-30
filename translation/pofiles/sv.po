@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-03-27 13:55+0000\n"
+"PO-Revision-Date: 2025-03-30 16:07+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5267,9 +5267,8 @@ msgid "&Export..."
 msgstr "&Exportera..."
 
 #: common/dialogs/panel_grid_settings.cpp:53
-#, fuzzy
 msgid "Pads:"
-msgstr "Lödytor"
+msgstr "Lödytor:"
 
 #: common/dialogs/panel_grid_settings.cpp:61
 msgid "Footprints/pads:"
@@ -7508,9 +7507,8 @@ msgid "Invalid HEAD.  Cannot merge."
 msgstr "Ogiltig HEAS.  Kan inte slå samman."
 
 #: common/git/git_pull_handler.cpp:181
-#, fuzzy
 msgid "Could not access repository configuration"
-msgstr "Kunde inte hämta förvarets index"
+msgstr "Kunde inte komma åt förvarets konfiguration"
 
 #: common/git/git_pull_handler.cpp:251 common/git/git_push_handler.cpp:91
 msgid "Could not get repository head"
@@ -7541,7 +7539,6 @@ msgid "Failed to update reference '%s' to point to '%s'"
 msgstr "Lyckades inte uppdatera referens '%s' till att peka på '%s'"
 
 #: common/git/git_pull_handler.cpp:348
-#, fuzzy
 msgid "Failed to clean up repository state after fast-forward."
 msgstr "Kunde inte städa upp förvarets tillstånd efter framåtspolning."
 
@@ -7581,7 +7578,6 @@ msgid "Added"
 msgstr "Tillagd"
 
 #: common/git/git_pull_handler.cpp:550
-#, fuzzy
 msgid "Conflicts detected during rebase"
 msgstr "Konflikt upptäcktes under ombasering"
 
@@ -13876,7 +13872,7 @@ msgstr "Filter för fotavtryck"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:356
 msgid "Pins with duplicate numbers are jumpers"
-msgstr ""
+msgstr "Stift med samma nummer är byglar"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:357
 msgid ""
@@ -13884,35 +13880,32 @@ msgid ""
 "and pins with the same number will be considered to be jumpered together "
 "internally."
 msgstr ""
+"När aktiverat, kan denna symbol ha mera än ett stift med samma nummer, och "
+"stift med samma nummer kommer att anses vara internt sammankopplade."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:362
 msgid "Jumper Pin Groups"
-msgstr ""
+msgstr "Grupper av byglade stift"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:370
-#, fuzzy
 msgid "Available pins"
-msgstr "Tillgängliga sökvägar:"
+msgstr "Tillgängliga stift"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:386
-#, fuzzy
 msgid "Create jumper group from the selected pins"
-msgstr "Skapar en kopparzon från urvalet"
+msgstr "Skapar en grupp av sammankopplade stift från valda stift"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:391
-#, fuzzy
 msgid "Remove the selected jumper pin group"
-msgstr "Ta bort vald användardefinierad grupp"
+msgstr "Ta bort vald grupp av sammankopplade stift"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:401
-#, fuzzy
 msgid "Grouped pins"
-msgstr "Gruppering"
+msgstr "Grupperade stift"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:423
-#, fuzzy
 msgid "Pin Connections"
-msgstr "Lödyteanslutningar"
+msgstr "Stiftanslutningar"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:436
 msgid "Edit Simulation Model..."
@@ -17225,10 +17218,9 @@ msgid "Global Field Name Templates"
 msgstr "Globala fältnamnsmallar"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "The field name '%s' contains trailing and/or leading white space."
-msgstr ""
-"Fältnamnet \"%s\" innehåller efterföljande och/eller inledande blanksteg."
+msgstr "Fältnamnet '%s' innehåller efterföljande och/eller inledande blanksteg."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:276
 msgid ""
@@ -35869,7 +35861,7 @@ msgstr "Lödytegrupper som tillåts förbinda olika nät:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:404
 msgid "Pads with duplicate numbers are jumpers"
-msgstr ""
+msgstr "Lödytor med samma nummer är sammankopplade"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:405
 msgid ""
@@ -35877,31 +35869,28 @@ msgid ""
 "number, and pads with the same number will be considered to be jumpered "
 "together internally."
 msgstr ""
+"När aktiverat, kan detta fotavtryck ha mer än en lödyta med samma nummer, "
+"och lödytor med samma nummer kommer att anses vara internt sammankopplade."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:410
-#, fuzzy
 msgid "Jumper Pad Groups"
-msgstr "Numrera om lödytor"
+msgstr "Grupper av sammankopplade lödytor"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:418
-#, fuzzy
 msgid "Available pads"
-msgstr "Tillgängliga sökvägar:"
+msgstr "Tillgängliga lödytor"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:434
-#, fuzzy
 msgid "Create jumper group from the selected pads"
-msgstr "Skapa konturlinjer runt det valda objektet"
+msgstr "Skapa grupp av sammankopplade lödytor från valda lödytor"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:439
-#, fuzzy
 msgid "Remove the selected jumper pad group"
-msgstr "Ta bort vald användardefinierad grupp"
+msgstr "Ta bort vald grupp av sammankopplade lödytor"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:449
-#, fuzzy
 msgid "Grouped pads"
-msgstr "Grupperad efter värde"
+msgstr "Grupperade lödytor"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:471
 #: pcbnew/zone.cpp:2052
@@ -38501,16 +38490,12 @@ msgid "Add floor"
 msgstr "Lägg till golv"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:94
-#, fuzzy
 msgid "Anti-aliasing"
-msgstr "Kantutjämning:"
+msgstr "Kantutjämning"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:98
-#, fuzzy
 msgid "Screen space ambient occlusions and global illumination reflections"
-msgstr ""
-"Globala belysningsreflektioner och omgivande ocklusion för skärmutrymme "
-"(långsamt)"
+msgstr "Skärmutrymmets omgivande ocklusion och globala belysningsreflektioner"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:109
 msgid "View"
@@ -38561,7 +38546,6 @@ msgid "°"
 msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:244
-#, fuzzy
 msgid "Lights Intensity"
 msgstr "Belysingsintensitet"
 
@@ -38570,7 +38554,6 @@ msgid "Camera:"
 msgstr "Kamera:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:293
-#, fuzzy
 msgid "Lights Position"
 msgstr "Belysningsplacering"
 
@@ -39351,7 +39334,6 @@ msgid "Layer name %s already in use."
 msgstr "Lagernamnet %s används redan."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:34
-#, fuzzy
 msgid "Layer Names"
 msgstr "Lagernamn"
 
@@ -43106,7 +43088,7 @@ msgid "%s keep-out property differs."
 msgstr "%s spärr-egenskap skiljer sig."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:502
-#, fuzzy, c-format
+#, c-format
 msgid "%s keep out zone fill setting differs."
 msgstr "%s inställning spärrzon för kopparfyllning är olika."
 
@@ -45032,31 +45014,32 @@ msgstr "Tog bort tillverkningsattribut 'monteras ej' för %s."
 #, c-format
 msgid "Added %s 'duplicate pad numbers are jumpers' attribute."
 msgstr ""
+"Lagt till attribut \"lödytor med samma nummer är sammankopplade\" för %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:758
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'duplicate pad numbers are jumpers' attribute."
-msgstr "Tog bort tillverkningsattribut 'monteras ej' för %s."
+msgstr "Tog bort attribut 'lödytor med samma nummer är sammankopplade' för %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:766
 #, c-format
 msgid "Add %s 'duplicate pad numbers are jumpers' attribute."
-msgstr ""
+msgstr "Lägg till 'lödytor med samma nummer är sammankopplade' för %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:771
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'duplicate pad numbers are jumpers' attribute."
-msgstr "Ta bort tillverkningsattribut 'monteras ej' för %s."
+msgstr "Ta bort attribut 'lödytor med samma nummer är sammankopplade' för %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:785
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s jumper pad groups"
-msgstr "Uppdaterade egenskaper för %s."
+msgstr "Uppdaterade %s grupper av sammankopplade lödytor"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:789
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s jumper pad groups"
-msgstr "Uppdatera egenskaper för %s."
+msgstr "Uppdatera %s grupper av sammankopplade lödytor."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:869
 #, c-format
@@ -47717,9 +47700,8 @@ msgid "Segment Length"
 msgstr "Segmentlängd"
 
 #: pcbnew/pcb_track.cpp:1754
-#, fuzzy
 msgid "Copper Area"
-msgstr "Kopparzon"
+msgstr "Kopparyta"
 
 #: pcbnew/pcb_track.cpp:1769
 #, c-format
@@ -51723,34 +51705,28 @@ msgid "DP Gap Constraints: %s"
 msgstr "Diffpars ledaravståndsbegränsningar: %s"
 
 #: pcbnew/tools/pcb_control.cpp:1878
-#, fuzzy
 msgid "Resolved Clearance"
-msgstr "Löst avstånd"
+msgstr "Fastställt avstånd"
 
 #: pcbnew/tools/pcb_control.cpp:1888
-#, fuzzy
 msgid "Actual Clearance"
 msgstr "Faktisk frigång"
 
 #: pcbnew/tools/pcb_control.cpp:1931
-#, fuzzy
 msgid "Resolved Hole Clearance"
-msgstr "Löst frigång för hål"
+msgstr "Fastställd frigång för hål"
 
 #: pcbnew/tools/pcb_control.cpp:1936
-#, fuzzy
 msgid "Actual Hole Clearance"
 msgstr "Faktisk frigång för hål"
 
 #: pcbnew/tools/pcb_control.cpp:1969
-#, fuzzy
 msgid "Resolved Edge Clearance"
-msgstr "Löst frigång till mönsterkortets kant"
+msgstr "Fastställd frigång till mönsterkortets kant"
 
 #: pcbnew/tools/pcb_control.cpp:1974
-#, fuzzy
 msgid "Resolved Margin Clearance"
-msgstr "Löst frigång till marginal"
+msgstr "Fastställd frigång till marginal"
 
 #: pcbnew/tools/pcb_control.cpp:1985
 msgid "Selected Items"
@@ -51761,9 +51737,8 @@ msgid "Selected 2D Length"
 msgstr "Vald 2D-längd"
 
 #: pcbnew/tools/pcb_control.cpp:2132
-#, fuzzy
 msgid "Selected 2D Copper Area"
-msgstr "Välj Kopparskiktpar"
+msgstr "Vald 2D kopparyta"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2366
 msgid "Resize Table Cells"
@@ -52874,9 +52849,8 @@ msgid "No pads"
 msgstr "Inga lödytor"
 
 #: pcbnew/zone.cpp:858
-#, fuzzy
 msgid "No zone fills"
-msgstr "Spärrzon för kopparfyllning"
+msgstr "Inga kopparfyllningar"
 
 #: pcbnew/zone.cpp:861
 msgid "No footprints"
@@ -52977,9 +52951,8 @@ msgid "Keep Out Pads"
 msgstr "Spärrzon för lödytor"
 
 #: pcbnew/zone.cpp:1925
-#, fuzzy
 msgid "Keep Out Zone Fills"
-msgstr "Spärrzon för kopparfyllning"
+msgstr "Spärrzoner för kopparfyllning"
 
 #: pcbnew/zone.cpp:1931
 msgid "Keep Out Footprints"
