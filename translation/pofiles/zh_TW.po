@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-03-30 00:01+0000\n"
+"PO-Revision-Date: 2025-03-30 16:07+0000\n"
 "Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -7098,11 +7098,11 @@ msgstr "系統封裝 3D 模型 (.3Dshapes 資料夾) 的基礎路徑。"
 
 #: common/env_vars.cpp:123
 msgid "The base path of the locally installed symbol libraries."
-msgstr "本地安裝的符號庫的基礎路徑"
+msgstr "本機安裝的符號庫的基本路徑。"
 
 #: common/env_vars.cpp:126
 msgid "A directory containing project templates installed with KiCad."
-msgstr "隨 KiCad 安裝的專案模板目錄"
+msgstr "包含隨 KiCad 安裝的專案型版的目錄。"
 
 #: common/env_vars.cpp:129
 msgid ""
@@ -7131,11 +7131,11 @@ msgstr ""
 
 #: common/env_vars.cpp:141
 msgid "A directory containing system-wide scripts installed with KiCad."
-msgstr "隨 KiCad 安裝的系統級腳本目錄"
+msgstr "包含隨 KiCad 安裝的系統級腳本目錄。"
 
 #: common/env_vars.cpp:144
 msgid "A directory containing user-specific scripts installed with KiCad."
-msgstr "隨 KiCad 安裝的使用者腳本目錄"
+msgstr "包含隨 KiCad 安裝的使用者特定腳本的目錄。"
 
 #: common/env_vars.cpp:147
 #, c-format
@@ -7385,15 +7385,15 @@ msgstr "無法更新引用 '%s' 指向 '%s'"
 
 #: common/git/git_pull_handler.cpp:348
 msgid "Failed to clean up repository state after fast-forward."
-msgstr "快速前進後無法清理倉庫狀態"
+msgstr "快轉後無法清理儲存庫狀態。"
 
 #: common/git/git_pull_handler.cpp:357
 msgid "Failed to initialize revision walker."
-msgstr "無法初始化修訂遍歷器 (revision walker)"
+msgstr "無法初始化修訂遍歷器 (revision walker)。"
 
 #: common/git/git_pull_handler.cpp:366
 msgid "Failed to push reference to revision walker."
-msgstr "無法將引用推送至修訂遍歷器 (revision walker)"
+msgstr "無法將引用推送至修訂遍歷器 (revision walker)。"
 
 #: common/git/git_pull_handler.cpp:381
 #, c-format
@@ -22619,7 +22619,7 @@ msgstr "將目前圖紙儲存至設計區塊..."
 
 #: eeschema/tools/sch_actions.cpp:173
 msgid "Add current sheet to design block"
-msgstr "將目前圖紙新增為設計區塊..."
+msgstr "將目前圖紙新增為設計區塊"
 
 #: eeschema/tools/sch_actions.cpp:179 pcbnew/tools/pcb_actions.cpp:489
 msgid "Save Selection to Design Block..."
@@ -22940,7 +22940,7 @@ msgstr "匯入並自動放置所有頁面接腳"
 
 #: eeschema/tools/sch_actions.cpp:601 eeschema/tools/sch_actions.cpp:609
 msgid "Sync Sheet Pins..."
-msgstr "同步圖紙接腳"
+msgstr "同步圖紙接腳..."
 
 #: eeschema/tools/sch_actions.cpp:617
 msgid "Import Sheet..."
@@ -24578,7 +24578,10 @@ msgid ""
 "%s has simulation model of type '%s %s'.\n"
 "\n"
 "Only passvie R, L, C models and voltage and current sources may be tuned."
-msgstr "%s 具有類型為 '%s %s' 的模擬模型, 只能調整RLC無源元件"
+msgstr ""
+"%s 有類型為「%s %s」的模擬模型。\n"
+"\n"
+"只能調整 無源 R、L、C 模型以及電壓和電流源。"
 
 #: eeschema/widgets/tuner_slider_base.cpp:43
 msgid "Limit to E24 series values."
@@ -28764,7 +28767,7 @@ msgstr "原始圖片"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:161
 msgid "Select the origin of the status bar coordinates"
-msgstr "選擇用於 X, Y 座標顯示的原點。"
+msgstr "選擇狀態列座標原點"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:162
 msgid "Page Selector"
@@ -32325,7 +32328,7 @@ msgstr "長度調整模式"
 #: pcbnew/dialogs/dialog_board_setup.cpp:200
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:90
 msgid "Component Classes"
-msgstr "元件"
+msgstr "組件類別"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:218
 msgid "Board Data"
@@ -35260,9 +35263,7 @@ msgstr "輸出檔案:"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:61
 msgid "Enter a filename if you do not want to use default file names"
-msgstr ""
-"如果你不想使用預設檔案名,請輸入新的檔案名\n"
-"僅可在列印目前圖紙時可用"
+msgstr "如果您不想使用預設檔名，請輸入檔名"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:444
 #, c-format
@@ -36085,7 +36086,7 @@ msgstr "長度調整模式預設值"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:78
 msgid "Component classes"
-msgstr "元件"
+msgstr "組件類別"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:81
 msgid "Custom rules"
@@ -36245,7 +36246,7 @@ msgstr "圖紙"
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:88
 #: pcbnew/footprint.cpp:1725 pcbnew/footprint.cpp:4135 pcbnew/zone.cpp:1826
 msgid "Component Class"
-msgstr "元件"
+msgstr "組件類別"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:32
 msgid "Replace existing placement rule areas"
@@ -36711,7 +36712,7 @@ msgstr ""
 "測試點焊盤 (Test Point) 可用於在 Gerber 檔案中指定測試點\n"
 "散熱焊盤 (Heatsink) 指定熱焊盤\n"
 "半孔焊盤 (Castellated) 指定板邊緣金屬化半孔焊盤\n"
-"此屬性在 Gerber X2 檔案中指定。"
+"機械(Mechanical) 指定用於機械支撐的通孔墊"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:587 pcbnew/pad.cpp:2542
 msgid "BGA pad"
@@ -37728,7 +37729,7 @@ msgstr "算繪 PCB 作業選項"
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:126
 #: pcbnew/tools/board_inspection_tool.cpp:1468
 msgid "Keepouts"
-msgstr "Keepouts"
+msgstr "禁區"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:177
 msgid "Convert to Rule Area"
@@ -38400,11 +38401,11 @@ msgstr "從原理圖更新 PCB"
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:194
 #, c-format
 msgid "Error with conditions for component class assignment %s"
-msgstr "衝突的網路類分配"
+msgstr "組件類別分配 %s 的條件出錯"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:371
 msgid "Reference..."
-msgstr "參考"
+msgstr "參考..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:372
 #: pcbnew/menubar_footprint_editor.cpp:68
@@ -38414,11 +38415,11 @@ msgstr "封裝..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:373
 msgid "Side..."
-msgstr "側面:"
+msgstr "側面..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:374
 msgid "Rotation..."
-msgstr "旋轉"
+msgstr "旋轉..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:375
 msgid "Footprint Field..."
@@ -38426,7 +38427,7 @@ msgstr "編輯封裝欄位..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:376
 msgid "Sheet Name..."
-msgstr "圖紙名稱"
+msgstr "圖紙名稱..."
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:595
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:650
@@ -38445,7 +38446,7 @@ msgstr "從所選內容建立線路"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:19
 msgid "Assign component class per sheet"
-msgstr "元件"
+msgstr "為每張圖紙分配組件類別"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:31
 msgid "Custom Assignments:"
@@ -38457,7 +38458,7 @@ msgstr "添加網路類分配"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:84
 msgid "Component Class:"
-msgstr "元件類別："
+msgstr "組件類別："
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:118
 msgid "Match All"
@@ -38955,7 +38956,7 @@ msgstr "從圖紙放置項目:"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:33
 msgid "Place items matching component class:"
-msgstr "按網路類篩選項目:"
+msgstr "放置與組件類別相符的項目："
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:46
 msgid "Minimum clearance:"
@@ -39243,7 +39244,7 @@ msgstr "將電路板預設設定應用於 non-copper 封裝形狀"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:58
 msgid "This layer is required and cannot be disabled"
-msgstr "名稱 %s 是保留的, 不能使用。"
+msgstr "該層是必需的且無法停用"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:88
 #: pcbnew/dialogs/panel_setup_layers.cpp:294
@@ -39480,7 +39481,9 @@ msgstr "阻焊橋(綠油橋)最小寬度:"
 msgid ""
 "Minimum distance between openings in the solder mask.\n"
 "Pad openings closer than this distance will be plotted as a single opening."
-msgstr "阻焊層開窗之間的最小距離。小於此距離的焊盤開窗將繪製為一個整體的開窗。"
+msgstr ""
+"阻焊層開窗之間的最小距離。\n"
+"小於此距離的焊盤開窗將繪製為一個整體的開窗。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:90
 msgid "Solder mask to copper clearance:"
@@ -39621,6 +39624,26 @@ msgid ""
 "<br>\n"
 "\n"
 msgstr ""
+"###頂層條款\n"
+"\n"
+"    （版本 1）\n"
+"\n"
+"    （規則 <規則名稱> <規則條款> ...）\n"
+"\n"
+"<br>\n"
+"\n"
+"###規則條款\n"
+"    （約束條件 <約束類型> ...）\n"
+"\n"
+"    （條件 \"<表示式>\"）\n"
+"\n"
+"    （圖層 \"<圖層名稱>\"）\n"
+"\n"
+"    （嚴重性 <嚴重性名稱>）\n"
+"\n"
+"\n"
+"<br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_2constraints.h:2
 msgid ""
@@ -40298,6 +40321,37 @@ msgid ""
 "<br><br>\n"
 "\n"
 msgstr ""
+"####範例\n"
+"\n"
+"    （版本 1）\n"
+"\n"
+"    （規則 HV\n"
+"       （約束條件 間距 (最小 1.5mm)）\n"
+"       （條件 \"A.hasNetclass('HV')\"））\n"
+"\n"
+"\n"
+"    （規則 HV\n"
+"       （圖層 外層）\n"
+"       （約束條件 間距 (最小 1.5mm)）\n"
+"       （條件 \"A.hasNetclass('HV')\"））\n"
+"\n"
+"\n"
+"    （規則 HV_HV\n"
+"       # HV 導線之間的較大間距\n"
+"       （約束條件 間距 (最小 \"1.5mm + 2.0mm\")）\n"
+"       （條件 \"A.hasNetclass('HV') && B.hasNetclass('HV')\"））\n"
+"\n"
+"\n"
+"    （規則 HV_unshielded\n"
+"       （約束條件 間距 (最小 2mm)）\n"
+"       （條件 \"A.hasNetclass('HV') && !A.enclosedByArea('Shield*')\"））\n"
+"\n"
+"\n"
+"    （規則 heavy_thermals\n"
+"       （約束條件 散熱輻條寬度 (最小 0.5mm)）\n"
+"       （條件 \"A.hasNetclass('HV')\"））\n"
+"<br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_6notes.h:2
 msgid ""
@@ -40342,10 +40396,9 @@ msgid ""
 msgstr ""
 "###屬性\n"
 "\n"
-"許多物件的屬性可以在自訂規則表示式中測試。完整的屬性列表請參閱\n"
-" [https://docs.kicad.org](https://go.kicad.org/docs/GetMajorMinorVersion/en/"
+"許多物件的屬性可以在自訂規則表示式中測試。完整的屬性列表請參閱 "
+"[https://docs.kicad.org](https://go.kicad.org/docs/GetMajorMinorVersion/en/"
 "pcbnew/pcbnew.html#custom_design_rules)\n"
-"\n"
 "<br><br><br>\n"
 "\n"
 
@@ -40791,7 +40844,7 @@ msgstr "網路連線 %s；間隙：0。"
 
 #: pcbnew/drc/drc_engine.cpp:814
 msgid "net tie"
-msgstr "net tie"
+msgstr "網結"
 
 #: pcbnew/drc/drc_engine.cpp:841 pcbnew/drc/drc_engine.cpp:851
 #, c-format
@@ -41439,7 +41492,7 @@ msgstr "缺少 ')'。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:353
 msgid "Missing component class name."
-msgstr "缺少規則名稱。"
+msgstr "缺少組件類別名稱。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:381
 #, c-format
@@ -41762,27 +41815,27 @@ msgstr "%s 的大小在層 %s 上有所不同。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:329
 #, c-format
 msgid "%s trapezoid delta differs on layer %s."
-msgstr "%s 個 'trapezoid delta' 差異。"
+msgstr "%s 梯形增量在層 %s 上不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:334
 #, c-format
 msgid "%s rounded corners differ on layer %s."
-msgstr "%s 個 '圓角' 差異。"
+msgstr "%s 層 %s 上的圓角不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:339
 #, c-format
 msgid "%s chamfered corner sizes differ on layer %s."
-msgstr "%s 個 '倒角' 差異。"
+msgstr "%s 層 %s 上的倒角尺寸不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:344
 #, c-format
 msgid "%s chamfered corners differ on layer %s."
-msgstr "%s 個 '倒角' 差異。"
+msgstr "%s 層 %s 上的倒角不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:348
 #, c-format
 msgid "%s shape offset from hole differs on layer %s."
-msgstr "%s 個 '孔與形狀的偏移量' 差異。"
+msgstr "%s 形狀與孔的偏移在層 %s 上不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:353
 #, c-format
@@ -41797,7 +41850,7 @@ msgstr "%s 個 '鑽孔大小' 差異。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:406
 #, c-format
 msgid "%s shape primitives differ on layer %s."
-msgstr "%s 個 'shape primitives' 差異。"
+msgstr "%s 形狀基元在層 %s 上不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:491
 #, c-format
@@ -41998,7 +42051,7 @@ msgstr "正在根據庫檢查電路板封裝..."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:890
 #, c-format
 msgid "The footprint library '%s' was not found at '%s'."
-msgstr "找不到封裝庫 '%s'。"
+msgstr "在“%s”處找不到封裝庫“%s”。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:940
 #, c-format
@@ -42020,12 +42073,12 @@ msgstr "(%s 最大長度 %s; 實際 %s)"
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:175
 #, c-format
 msgid "(%s min skew %s; actual %s; target net length %s (from %s); actual %s)"
-msgstr "(%s 最小偏移 %s; 實際 %s; 平均網路長度 %s; 實際 %s)"
+msgstr "（%s 最小偏斜 %s；實際 %s；目標淨長度 %s（來自 %s）；實際 %s）"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:184
 #, c-format
 msgid "(%s max skew %s; actual %s; target net length %s (from %s); actual %s)"
-msgstr "(%s 最大偏移 %s; 實際偏移 %s; 平均網路長度 %s; 實際長度 %s)"
+msgstr "（%s 最大偏斜 %s；實際 %s；目標淨長度 %s（來自 %s）；實際 %s）"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:254
 #, c-format
@@ -42107,12 +42160,12 @@ msgstr "遺失的封裝 %s (%s)"
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:133
 #, c-format
 msgid "Value (%s) doesn't match symbol value (%s)."
-msgstr "封裝 %s 的值 (%s) 與對應符號的值 (%s) 不匹配。"
+msgstr "值 (%s) 與符號值 (%s) 不符。"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:147
 #, c-format
 msgid "%s doesn't match footprint given by symbol (%s)."
-msgstr "%s 的封裝 (%s) 與符號 (%s) 所指定的封裝不匹配。"
+msgstr "%s 與符號 (%s) 給出的封裝不符。"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:177
 #, c-format
@@ -42287,11 +42340,13 @@ msgstr "建立 IPC-D-356 網路檔案"
 msgid ""
 "IPC-D-356 netlist file created:\n"
 "'%s'."
-msgstr "IPC-D-356 網路列表檔案..."
+msgstr ""
+"建立的 IPC-D-356 網表檔案：\n"
+"“%s”。"
 
 #: pcbnew/exporters/export_d356.cpp:405
 msgid "IPC-D-356 Netlist File"
-msgstr "IPC-D-356 網路列表檔案..."
+msgstr "IPC-D-356 網表檔案"
 
 #: pcbnew/exporters/export_footprint_associations.cpp:73
 msgid "Save Footprint Association File"
@@ -42450,7 +42505,7 @@ msgstr "未完成的線條（輪廓點%d）：OCC錯誤%d\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:1714
 #, c-format
 msgid "z: %g; bounding box: %s\n"
-msgstr "顯示模型邊框\n"
+msgstr "z：%g；邊界框：%s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1711
 msgid ""
@@ -42588,7 +42643,7 @@ msgstr "載入電路板 '%s' 時記憶體耗盡"
 
 #: pcbnew/files.cpp:814 pcbnew/pcb_edit_frame.cpp:1402
 msgid "Could not load component class assignment rules"
-msgstr "無法編譯自定義設計規則。"
+msgstr "無法載入組件類別分配規則"
 
 #: pcbnew/files.cpp:875
 #, c-format
@@ -42828,12 +42883,12 @@ msgstr "正在從電路板編輯 %s。儲存只會更新電路板。"
 #: pcbnew/footprint_edit_frame.cpp:593
 #, c-format
 msgid "Open in library %s"
-msgstr "與庫更新符號"
+msgstr "在庫 %s 中打開"
 
 #: pcbnew/footprint_edit_frame.cpp:619
 #, c-format
 msgid "Editing footprint from read-only library %s."
-msgstr "從庫 '%s' 載入封裝 %s 時出錯。"
+msgstr "正在編輯唯讀庫 %s 中的封裝。"
 
 #: pcbnew/footprint_edit_frame.cpp:624
 msgid "Save as editable copy"
@@ -43539,32 +43594,32 @@ msgstr "添加了 %s (封裝 '%s')。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:237
 #, c-format
 msgid "Change %s component class to '%s'."
-msgstr "將元件路徑 \"%s:%s\" 改為 \"%s\"."
+msgstr "將 %s 組件類別變更為“%s”。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:243
 #, c-format
 msgid "Remove %s component class (currently '%s')."
-msgstr "將元件路徑 \"%s:%s\" 改為 \"%s\"."
+msgstr "刪除 %s 組件類別（目前為“%s”）。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:249
 #, c-format
 msgid "Change %s component class from '%s' to '%s'."
-msgstr "將接腳 %s 網路 %s 的標籤由 '%s' 更改為 '%s'。"
+msgstr "將 %s 組件類別從“%s”更改為“%s”。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:263
 #, c-format
 msgid "Changed %s component class to '%s'."
-msgstr "將元件路徑 \"%s:%s\" 改為 \"%s\"."
+msgstr "已將 %s 組件類別變更為“%s”。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:269
 #, c-format
 msgid "Removed %s component class (was '%s')."
-msgstr "將元件路徑 \"%s:%s\" 改為 \"%s\"."
+msgstr "已刪除 %s 組件類別（原為“%s”）。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:275
 #, c-format
 msgid "Changed %s component class from '%s' to '%s'."
-msgstr "已將 %s 的值從 '%s' 修改為 '%s'。"
+msgstr "已將 %s 組件類別從“%s”更改為“%s”。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:293
 #, c-format
@@ -43719,7 +43774,7 @@ msgstr "已為 %s 移除 'DNP (不作裝配)' 製造特性。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:753
 #, c-format
 msgid "Added %s 'duplicate pad numbers are jumpers' attribute."
-msgstr ""
+msgstr "已新增 %s「重複焊盤編號為跳線」屬性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:758
 #, c-format
@@ -43729,7 +43784,7 @@ msgstr "已移除 %s 的「重複的墊片編號為跳線」屬性。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:766
 #, c-format
 msgid "Add %s 'duplicate pad numbers are jumpers' attribute."
-msgstr ""
+msgstr "新增 %s「重複焊盤編號為跳線」屬性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:771
 #, c-format
@@ -43739,12 +43794,12 @@ msgstr "移除 %s 的「重複的墊片編號為跳線」屬性。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:785
 #, c-format
 msgid "Updated %s jumper pad groups"
-msgstr "已更新 %s 跳線墊片群組。"
+msgstr "更新了 %s 跳線墊組"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:789
 #, c-format
 msgid "Update %s jumper pad groups"
-msgstr "更新 %s 跳線墊片群組。"
+msgstr "更新 %s 跳線墊片群組"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:869
 #, c-format
@@ -44002,7 +44057,7 @@ msgstr "Test point"
 
 #: pcbnew/pad.cpp:1350
 msgid "Heat sink"
-msgstr "Heat sink"
+msgstr "散熱片"
 
 #: pcbnew/pad.cpp:1351
 msgid "Castellated"
@@ -44089,40 +44144,40 @@ msgstr "%s 的非金屬化焊盤 %s %s"
 #: pcbnew/pad.cpp:1641
 #, c-format
 msgid "PTH pad %s"
-msgstr "PTH 焊盤"
+msgstr "PTH 焊盤 %s"
 
 #: pcbnew/pad.cpp:2219
 msgid ""
 "(plated through holes normally have a copper pad on at least one outer layer)"
-msgstr "警告: 電鍍通孔通常應至少在一層上有銅焊盤。"
+msgstr "（電鍍通孔通常至少有一層外層有銅墊）"
 
 #: pcbnew/pad.cpp:2227
 msgid "('fiducial' property makes no sense on NPTH pads)"
-msgstr "警告: 基準點(Fiducial) 屬性在 NPTH 焊盤上沒有意義。"
+msgstr "（「基準」屬性在 NPTH 焊盤上沒有意義）"
 
 #: pcbnew/pad.cpp:2231
 msgid "('testpoint' property makes no sense on NPTH pads)"
-msgstr "警告: 測試點焊盤(Testpoint) 屬性在 NPTH 焊盤上沒有意義。"
+msgstr "（「測試點」屬性在 NPTH 焊盤上沒有意義）"
 
 #: pcbnew/pad.cpp:2234
 msgid "('heatsink' property makes no sense of NPTH pads)"
-msgstr "警告: 散熱焊盤(Heatsink) 屬性在 NPTH 焊盤上沒有意義。"
+msgstr "（「散熱器」屬性對 NPTH 焊盤沒有意義）"
 
 #: pcbnew/pad.cpp:2237
 msgid "('castellated' property is for PTH pads)"
-msgstr "警告: 半孔焊盤(Castellated) 屬性僅適用於 PTH 焊盤。"
+msgstr "（「城堡形」屬性適用於 PTH 焊盤）"
 
 #: pcbnew/pad.cpp:2240
 msgid "('BGA' property is for SMD pads)"
-msgstr "警告: BGA 屬性適用於表面黏著焊盤。"
+msgstr "（「BGA」屬性適用於 SMD 焊盤）"
 
 #: pcbnew/pad.cpp:2243
 msgid "('mechanical' property is for PTH pads)"
-msgstr "警告: 半孔焊盤(Castellated) 屬性僅適用於 PTH 焊盤。"
+msgstr "（「機械」屬性適用於 PTH 焊盤）"
 
 #: pcbnew/pad.cpp:2259
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
-msgstr "警告: 連接器焊盤上通常不會使用錫膏。請使用表面黏著焊盤。"
+msgstr "（連接器焊盤通常沒有焊膏；請使用 SMD 焊盤代替）"
 
 #: pcbnew/pad.cpp:2267
 msgid "(SMD pad has a hole)"
@@ -44193,7 +44248,7 @@ msgstr "(圓角半徑不允許為負值)"
 
 #: pcbnew/pad.cpp:2437
 msgid "(corner size will make pad circular)"
-msgstr "警告: 拐角大小將使焊盤呈圓形。"
+msgstr "（角的大小將使焊盤呈圓形）"
 
 #: pcbnew/pad.cpp:2442
 msgid "(negative corner chamfer is not allowed)"
@@ -44205,11 +44260,11 @@ msgstr "(倒角尺寸過大)"
 
 #: pcbnew/pad.cpp:2453
 msgid "(trapezoid delta is too large)"
-msgstr "錯誤: Trapazoid delta 過大。"
+msgstr "（梯形三角洲太大）"
 
 #: pcbnew/pad.cpp:2463
 msgid "(custom pad shape must resolve to a single polygon)"
-msgstr "錯誤: 自定義的焊盤形狀必須為單個多邊形。"
+msgstr "（自訂焊盤形狀必須解析為單一多邊形）"
 
 #: pcbnew/pad.cpp:2528
 msgid "Edge connector"
@@ -44311,7 +44366,7 @@ msgstr ""
 #: pcbnew/pcb_design_block_utils.cpp:68
 #, c-format
 msgid "Design block '%s' already has a layout."
-msgstr "符號 '%s' 已存在於庫 '%s' 中。"
+msgstr "設計區塊“%s”已具有佈局。"
 
 #: pcbnew/pcb_design_block_utils.cpp:70
 msgid "Overwrite existing layout?"
@@ -44471,12 +44526,12 @@ msgstr "使用者欄位"
 #: pcbnew/pcb_field.cpp:149
 #, c-format
 msgid "Reference field of %s"
-msgstr "參考欄位"
+msgstr "%s 的參考欄位"
 
 #: pcbnew/pcb_field.cpp:152
 #, c-format
 msgid "Value field of %s (%s)"
-msgstr "%2$s 的值 '%1$s'"
+msgstr "%s 的數值欄位 (%s)"
 
 #: pcbnew/pcb_field.cpp:155
 #, c-format
@@ -44486,17 +44541,17 @@ msgstr "封裝 %s (%s),"
 #: pcbnew/pcb_field.cpp:158
 #, c-format
 msgid "Datasheet field of %s (%s)"
-msgstr "%2$s 的數據手冊 %1$s"
+msgstr "%s (%s) 的資料表單欄位"
 
 #: pcbnew/pcb_field.cpp:162
 #, c-format
 msgid "Field of %s (%s)"
-msgstr "%2$s 的欄位'%1$s"
+msgstr "%s (%s) 的欄位"
 
 #: pcbnew/pcb_field.cpp:164
 #, c-format
 msgid "%s field of %s (%s)"
-msgstr "使用者網格： %s (%s)"
+msgstr "%s 的 %s 欄位 (%s)"
 
 #: pcbnew/pcb_generator.cpp:218 pcbnew/pcb_generator.cpp:255
 msgid "Update Order"
@@ -44554,9 +44609,7 @@ msgstr "Pads6 stream 中的 subrecord 6 數據的長度非法: %d。"
 msgid ""
 "Altium layer %s has no KiCad equivalent. It has been moved to KiCad layer "
 "Eco1_User."
-msgstr ""
-"Altium 層 ( %d ) 在 KiCad 中沒有對應的等效項。已將其移至 KiCad 的 Eco1_User "
-"層。"
+msgstr "Altium 層 %s 沒有 KiCad 等效項。它已移至 KiCad  Eco1_User 圖層。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:482
 #, c-format
@@ -44834,9 +44887,8 @@ msgstr "封裝 %s 焊盤 %s 使用未知的焊盤形狀。"
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
-msgstr ""
-"在 Altium 層 (%2$d) 上存在非銅焊盤 %1$s, 但在 KiCad 中沒有對應的等效項。已將"
-"其移至 KiCad 的 Eco1_User 層。"
+msgstr "在 Altium 層 (%d) 上發現非銅焊盤 %s，沒有 KiCad 等效項。它已移至 KiCad "
+"Eco1_User 圖層。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3609
 #, c-format
@@ -44845,18 +44897,17 @@ msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"正在載入 '%1$s' 庫:\n"
-"在封裝 %2$s 中發現在其 Altium 層 (%4$d) 上存在非銅焊盤 %3$s, 但在 KiCad 中沒"
-"有對應的等效項。已將其移至 KiCad 的 Eco1_User 層。"
+"正在載入 “%s” 庫：\n"
+"在 Altium 層 (%d) 上發現封裝 %s 非銅焊盤 %s，沒有 KiCad 等效項。它已移至 "
+"KiCad Eco1_User 圖層。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3624
 #, c-format
 msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
-msgstr ""
-"在封裝 %1$s 中發現在其 Altium 層 (%3$d) 上存在非銅焊盤 %2$s, 但在 KiCad 中沒"
-"有對應的等效項。已將其移至 KiCad 的 Eco1_User 層。"
+msgstr "在 Altium 層 (%d) 上發現封裝 %s 非銅焊盤 %s，沒有 KiCad 等效項。它已移至 "
+"KiCad Eco1_User 圖層。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3652
 #, c-format
@@ -44944,7 +44995,7 @@ msgstr "庫 '%s' 中沒有封裝"
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:340
 #, c-format
 msgid "Footprint '%s' not found in '%s'."
-msgstr "在庫 '%2$s' 中未找到封裝 '%1$s'。"
+msgstr "在“%s”中找不到封裝“%s”。"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.h:43
 msgid "Altium Designer PCB files"
@@ -46305,7 +46356,6 @@ msgid "Segment Length"
 msgstr "線段長度"
 
 #: pcbnew/pcb_track.cpp:1754
-#, fuzzy
 msgid "Copper Area"
 msgstr "覆銅區"
 
@@ -46377,7 +46427,7 @@ msgstr "找不到"
 
 #: pcbnew/pcb_track.cpp:2212
 msgid "Capped"
-msgstr ""
+msgstr "封頂"
 
 #: pcbnew/pcb_track.cpp:2213
 msgid "Not capped"
@@ -46429,7 +46479,7 @@ msgstr "佈線編輯"
 
 #: pcbnew/pcb_track.cpp:2310
 msgid "Capping"
-msgstr ""
+msgstr "封蓋"
 
 #: pcbnew/pcb_track.cpp:2312
 msgid "Filling"
@@ -46502,7 +46552,7 @@ msgstr "缺少 %s 的層名參數。"
 
 #: pcbnew/pcbexpr_functions.cpp:1316
 msgid "Missing component class name argument to hasComponentClass()"
-msgstr "缺少 %s 的層名參數。"
+msgstr "hasComponentClass() 缺少組件類別名稱參數"
 
 #: pcbnew/pcbnew.cpp:538
 msgid ""
@@ -47145,7 +47195,7 @@ msgstr "貫孔直徑解析:"
 
 #: pcbnew/toolbars_pcb_editor.cpp:127
 msgid "Control to select the via diameter"
-msgstr ""
+msgstr "控制選擇通孔直徑"
 
 #: pcbnew/toolbars_pcb_editor.cpp:195
 msgid "Track routing tools"
@@ -48259,7 +48309,7 @@ msgstr "拓撲不匹配"
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheet(s) or component classes."
-msgstr "無法自動生成任何放置區域，因為原理圖只有一個或沒有層次化工作表或元件類別。"
+msgstr "無法自動生成任何放置區域，因為原理圖只有一個或沒有階層圖紙或組件類別。"
 
 #: pcbnew/tools/multichannel_tool.cpp:1171
 msgid "Auto-generate placement rule areas"
@@ -50206,32 +50256,26 @@ msgid "DP Gap Constraints: %s"
 msgstr "DP 間隙約束: %s"
 
 #: pcbnew/tools/pcb_control.cpp:1878
-#, fuzzy
 msgid "Resolved Clearance"
 msgstr "已解析的間隙"
 
 #: pcbnew/tools/pcb_control.cpp:1888
-#, fuzzy
 msgid "Actual Clearance"
 msgstr "實際間隙"
 
 #: pcbnew/tools/pcb_control.cpp:1931
-#, fuzzy
 msgid "Resolved Hole Clearance"
 msgstr "已解析的孔間隙"
 
 #: pcbnew/tools/pcb_control.cpp:1936
-#, fuzzy
 msgid "Actual Hole Clearance"
 msgstr "實際孔間隙"
 
 #: pcbnew/tools/pcb_control.cpp:1969
-#, fuzzy
 msgid "Resolved Edge Clearance"
 msgstr "已解析的邊緣間隙"
 
 #: pcbnew/tools/pcb_control.cpp:1974
-#, fuzzy
 msgid "Resolved Margin Clearance"
 msgstr "已解析的邊界層間隙"
 
@@ -50244,9 +50288,8 @@ msgid "Selected 2D Length"
 msgstr "選擇的網路:"
 
 #: pcbnew/tools/pcb_control.cpp:2132
-#, fuzzy
 msgid "Selected 2D Copper Area"
-msgstr "選擇銅層對"
+msgstr "已選擇的 2D 覆銅區"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2366
 msgid "Resize Table Cells"
@@ -51164,7 +51207,7 @@ msgstr "取消區塊"
 #: pcbnew/widgets/pcb_design_block_pane.cpp:113
 msgid ""
 "Preserve reference designators in the source layout. Otherwise, clear them."
-msgstr ""
+msgstr "在來源佈局中保留參考指示符。否則，清除它們。"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:122
 #: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:708
@@ -51349,9 +51392,8 @@ msgid "No pads"
 msgstr "無焊盤"
 
 #: pcbnew/zone.cpp:858
-#, fuzzy
 msgid "No zone fills"
-msgstr "禁止區域填充"
+msgstr "沒有區域填充"
 
 #: pcbnew/zone.cpp:861
 msgid "No footprints"
@@ -51452,7 +51494,6 @@ msgid "Keep Out Pads"
 msgstr "禁止放置焊盤"
 
 #: pcbnew/zone.cpp:1925
-#, fuzzy
 msgid "Keep Out Zone Fills"
 msgstr "禁止區域填充"
 
@@ -51526,7 +51567,7 @@ msgstr "正在移除孤立的銅島..."
 
 #: pcbnew/zone_filler.cpp:889
 msgid "Prototype zone fill enabled. Disable setting and refill?"
-msgstr ""
+msgstr "原型區填充已啟用。是否停用此設定並重新填充？"
 
 #: pcbnew/zone_filler.cpp:891
 msgid "Disable and refill"
