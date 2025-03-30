@@ -478,7 +478,7 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_PCB::handleCreateUpdateItemsIntern
         {
             BOARD_ITEM* boardItem = *optItem;
             commit->Modify( boardItem );
-            *boardItem = *item;
+            boardItem->SwapItemData( item.get() );
             boardItem->Serialize( newItem );
         }
 
