@@ -143,7 +143,7 @@ int CLI::PCB_EXPORT_DXF_COMMAND::doPerform( KIWAY& aKiway )
         wxFprintf( stdout, DEPRECATED_ARD_PLOT_INVISIBLE_TEXT_WARNING );
 
     int drillShape = m_argParser.get<int>( ARG_DRILL_SHAPE_OPTION );
-    dxfJob->m_drillShapeOption = static_cast<JOB_EXPORT_PCB_DXF::DRILL_MARKS>( drillShape );
+    dxfJob->m_drillShapeOption = static_cast<DRILL_MARKS>( drillShape );
 
     wxString units = From_UTF8( m_argParser.get<std::string>( ARG_OUTPUT_UNITS ).c_str() );
 

@@ -150,7 +150,7 @@ int CLI::PCB_EXPORT_PDF_COMMAND::doPerform( KIWAY& aKiway )
     pdfJob->m_crossoutDNPFPsOnFabLayers = m_argParser.get<bool>( ARG_CROSSOUT_DNP_FPS_ON_FAB_LAYERS );
 
     int drillShape = m_argParser.get<int>( ARG_DRILL_SHAPE_OPTION );
-    pdfJob->m_drillShapeOption = static_cast<JOB_EXPORT_PCB_PDF::DRILL_MARKS>( drillShape );
+    pdfJob->m_drillShapeOption = static_cast<DRILL_MARKS>( drillShape );
 
     bool argModeMulti = m_argParser.get<bool>( ARG_MODE_MULTIPAGE );
     bool argModeSeparate = m_argParser.get<bool>( ARG_MODE_SEPARATE );
