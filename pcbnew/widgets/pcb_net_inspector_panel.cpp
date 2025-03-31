@@ -513,6 +513,8 @@ void PCB_NET_INSPECTOR_PANEL::buildNetsList( const bool rebuildColumns )
         }
     }
 
+    m_netsList->Thaw(); // Must thaw before reselecting to avoid windows selection bug
+
     if( !sel.IsEmpty() )
     {
         m_netsList->SetSelections( sel );
@@ -522,8 +524,6 @@ void PCB_NET_INSPECTOR_PANEL::buildNetsList( const bool rebuildColumns )
     {
         m_netsList->UnselectAll();
     }
-
-    m_netsList->Thaw();
 
     m_inBuildNetsList = false;
 }
