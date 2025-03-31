@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-03-30 16:07+0000\n"
+"PO-Revision-Date: 2025-03-31 05:08+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -26374,9 +26374,8 @@ msgid "The new behavior will match --mode-multi"
 msgstr "新行为将与 --mode-multi 相匹配"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:34
-#, fuzzy
 msgid "Export the PCB in Gencad format"
-msgstr "将网表导出为 KiCad 格式"
+msgstr "将 PCB 导出为 Gencad 格式"
 
 # Padstack  焊盘槽/孔
 #: kicad/cli/command_pcb_export_gencad.cpp:40
@@ -35145,9 +35144,8 @@ msgid "Remove the selected jumper pad group"
 msgstr "从自定义分组中移除选中项目"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:449
-#, fuzzy
 msgid "Grouped pads"
-msgstr "按值分组"
+msgstr "按焊盘分组"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:471
 #: pcbnew/zone.cpp:2052
@@ -36115,7 +36113,6 @@ msgid "Length-tuning pattern defaults"
 msgstr "长度调整规则默认值"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:78
-#, fuzzy
 msgid "Component classes"
 msgstr "元件类"
 
@@ -37677,7 +37674,6 @@ msgid "Background style:"
 msgstr "背景样式:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:86
-#, fuzzy
 msgid "Procedural textures"
 msgstr "过程纹理"
 
@@ -37686,9 +37682,8 @@ msgid "Add floor"
 msgstr "添加地面"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:94
-#, fuzzy
 msgid "Anti-aliasing"
-msgstr "抗锯齿:"
+msgstr "抗锯齿"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:98
 #, fuzzy
@@ -38505,14 +38500,12 @@ msgid "Component Class:"
 msgstr "元件类:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:118
-#, fuzzy
 msgid "Match All"
-msgstr "更新全部"
+msgstr "匹配全部"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:122
-#, fuzzy
 msgid "Match Any"
-msgstr "匹配的层"
+msgstr "匹配任意"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:294
 msgid "Footprint:"
