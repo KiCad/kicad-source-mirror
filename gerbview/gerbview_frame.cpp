@@ -232,7 +232,6 @@ void GERBVIEW_FRAME::doCloseWindow()
     // No more vetos
     m_isClosing = true;
     GetCanvas()->StopDrawing();
-    GetCanvas()->GetView()->Clear();
 
     if( m_toolManager )
         m_toolManager->DeactivateTool();
