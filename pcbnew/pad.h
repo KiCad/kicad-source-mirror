@@ -921,9 +921,6 @@ protected:
 private:
     const SHAPE_COMPOUND& buildEffectiveShape( PCB_LAYER_ID aLayer ) const;
 
-    void addPadPrimitivesToPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_SET* aMergedPolygon, int aError,
-                                    ERROR_LOC aErrorLoc ) const;
-
     void doCheckPad( PCB_LAYER_ID aLayer, UNITS_PROVIDER* aUnitsProvider, bool aForPadProperties,
                      const std::function<void( int aErrorCode,
                                                const wxString& aMsg )>& aErrorHandler ) const;

@@ -2612,27 +2612,6 @@ void PAD::DeletePrimitivesList( PCB_LAYER_ID aLayer )
 }
 
 
-void PAD::addPadPrimitivesToPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_SET* aMergedPolygon,
-                                     int aError, ERROR_LOC aErrorLoc ) const
-{
-    SHAPE_POLY_SET polyset;
-
-    for( const std::shared_ptr<PCB_SHAPE>& primitive : m_padStack.Primitives( aLayer ) )
-    {
-        if( !primitive->IsProxyItem() )
-            primitive->TransformShapeToPolygon( polyset, UNDEFINED_LAYER, 0, aError, aErrorLoc );
-    }
-
-    polyset.Simplify();
-
-    // Merge all polygons with the initial pad anchor shape
-    if( polyset.OutlineCount() )
-    {
-        aMergedPolygon->BooleanAdd( polyset );
-        aMergedPolygon->Fracture();
-    }
-}
-
 void PAD::MergePrimitivesAsPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_SET* aMergedPolygon,
                                     ERROR_LOC aErrorLoc ) const
 {
@@ -2651,8 +2630,8 @@ void PAD::MergePrimitivesAsPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_SET* aMerged
     {
         SHAPE_RECT rect( -padSize.x / 2, -padSize.y / 2, padSize.x, padSize.y );
         aMergedPolygon->AddOutline( rect.Outline() );
-    }
         break;
+    }
 
     default:
     case PAD_SHAPE::CIRCLE:
@@ -2661,7 +2640,22 @@ void PAD::MergePrimitivesAsPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_SET* aMerged
         break;
     }
 
-    addPadPrimitivesToPolygon( aLayer, aMergedPolygon, maxError, aErrorLoc );
+    SHAPE_POLY_SET polyset;
+
+    for( const std::shared_ptr<PCB_SHAPE>& primitive : m_padStack.Primitives( aLayer ) )
+    {
+        if( !primitive->IsProxyItem() )
+            primitive->TransformShapeToPolygon( polyset, UNDEFINED_LAYER, 0, maxError, aErrorLoc );
+    }
+
+    polyset.Simplify();
+
+    // Merge all polygons with the initial pad anchor shape
+    if( polyset.OutlineCount() )
+    {
+        aMergedPolygon->BooleanAdd( polyset );
+        aMergedPolygon->Fracture();
+    }
 }
 
 
