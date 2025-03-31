@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-03-27 13:55+0000\n"
+"PO-Revision-Date: 2025-04-01 00:35+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -5284,9 +5284,8 @@ msgid "&Export..."
 msgstr "&Exportar..."
 
 #: common/dialogs/panel_grid_settings.cpp:53
-#, fuzzy
 msgid "Pads:"
-msgstr "Ilhas"
+msgstr "Ilhas:"
 
 #: common/dialogs/panel_grid_settings.cpp:61
 msgid "Footprints/pads:"
@@ -7537,9 +7536,8 @@ msgid "Invalid HEAD.  Cannot merge."
 msgstr "HEAD inválido.  Não foi possível mesclar."
 
 #: common/git/git_pull_handler.cpp:181
-#, fuzzy
 msgid "Could not access repository configuration"
-msgstr "Não foi possível obter o índice do repositório"
+msgstr "Não foi possível acessar a configuração do repositório"
 
 #: common/git/git_pull_handler.cpp:251 common/git/git_push_handler.cpp:91
 msgid "Could not get repository head"
@@ -13934,7 +13932,7 @@ msgstr "Filtros do footprint"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:356
 msgid "Pins with duplicate numbers are jumpers"
-msgstr ""
+msgstr "Pinos com números duplicados são jumpers"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:357
 msgid ""
@@ -13942,35 +13940,33 @@ msgid ""
 "and pins with the same number will be considered to be jumpered together "
 "internally."
 msgstr ""
+"Quando ativado, esse símbolo pode ter mais de um pino com o mesmo número, e "
+"os pinos com o mesmo número serão considerados como estando conectados "
+"internamente."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:362
 msgid "Jumper Pin Groups"
-msgstr ""
+msgstr "Grupos de pinos de jumper"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:370
-#, fuzzy
 msgid "Available pins"
-msgstr "Caminhos disponíveis:"
+msgstr "Pinos disponíveis"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:386
-#, fuzzy
 msgid "Create jumper group from the selected pins"
-msgstr "Cria uma zona com cobre a partir da seleção"
+msgstr "Criar um grupo de jumpers a partir dos pinos selecionados"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:391
-#, fuzzy
 msgid "Remove the selected jumper pin group"
-msgstr "Remover o grupo personalizado selecionado"
+msgstr "Remover o grupo de pinos do jumper selecionado"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:401
-#, fuzzy
 msgid "Grouped pins"
-msgstr "Agrupamento"
+msgstr "Pinos agrupados"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:423
-#, fuzzy
 msgid "Pin Connections"
-msgstr "Conexões da ilha"
+msgstr "Conexões do pino"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:436
 msgid "Edit Simulation Model..."
@@ -17299,10 +17295,9 @@ msgid "Global Field Name Templates"
 msgstr "Modelos de nome global do campo"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "The field name '%s' contains trailing and/or leading white space."
-msgstr ""
-"O nome do campo \"%s\" contém espaços em branco à direita e/ou à esquerda."
+msgstr "O nome do campo '%s' contém espaço em branco à esquerda e/ou à direita."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:276
 msgid ""
@@ -36083,7 +36078,7 @@ msgstr "Grupos de ilhas autorizadas a encurtar as nets diferentes:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:404
 msgid "Pads with duplicate numbers are jumpers"
-msgstr ""
+msgstr "As ilhas com números duplicados são jumpers"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:405
 msgid ""
@@ -36091,31 +36086,29 @@ msgid ""
 "number, and pads with the same number will be considered to be jumpered "
 "together internally."
 msgstr ""
+"Quando ativada, esse footprint pode ter mais de uma ilha com o mesmo número, "
+"e as ilhas com o mesmo número serão consideradas como estando conectadas "
+"internamente."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:410
-#, fuzzy
 msgid "Jumper Pad Groups"
-msgstr "Renumerar as ilhas"
+msgstr "Grupos de ilhas de jumper"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:418
-#, fuzzy
 msgid "Available pads"
-msgstr "Caminhos disponíveis:"
+msgstr "Ilhas disponíveis"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:434
-#, fuzzy
 msgid "Create jumper group from the selected pads"
-msgstr "Gerar linhas a partir dos itens selecionados"
+msgstr "Criar jumper a partir das ilhas selecionadas"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:439
-#, fuzzy
 msgid "Remove the selected jumper pad group"
-msgstr "Remover o grupo personalizado selecionado"
+msgstr "Remova o grupo de ilhas de jumper selecionado"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:449
-#, fuzzy
 msgid "Grouped pads"
-msgstr "Agrupe por valor"
+msgstr "Ilhas agrupadas"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:471
 #: pcbnew/zone.cpp:2052
@@ -38734,25 +38727,20 @@ msgid "Background style:"
 msgstr "Estilo do plano de fundo:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:86
-#, fuzzy
 msgid "Procedural textures"
-msgstr "Texturas Procedurais"
+msgstr "Texturas procedural"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:90
 msgid "Add floor"
 msgstr "Adicionar andar"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:94
-#, fuzzy
 msgid "Anti-aliasing"
-msgstr "Anti Serrilhamento:"
+msgstr "Anti-serrilhamento"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:98
-#, fuzzy
 msgid "Screen space ambient occlusions and global illumination reflections"
-msgstr ""
-"As oclusões ambientais do espaço da tela e dos reflexos da iluminação global "
-"(lento)"
+msgstr "Oclusões ambientais no espaço da tela e reflexos de iluminação global"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:109
 msgid "View"
@@ -38803,16 +38791,14 @@ msgid "°"
 msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:244
-#, fuzzy
 msgid "Lights Intensity"
-msgstr "Intensidade da luz"
+msgstr "Intensidade das luzes"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:275
 msgid "Camera:"
 msgstr "Câmera:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:293
-#, fuzzy
 msgid "Lights Position"
 msgstr "Posição das luzes"
 
@@ -39599,9 +39585,8 @@ msgid "Layer name %s already in use."
 msgstr "A camada chamada '%s' já está em uso."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:34
-#, fuzzy
 msgid "Layer Names"
-msgstr "Nome da camada"
+msgstr "Nomes das camadas"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:113
 msgid "Net names:"
@@ -43092,9 +43077,9 @@ msgid "%s keep-out property differs."
 msgstr "%s propriedade(s) de isolamento diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:502
-#, fuzzy, c-format
+#, c-format
 msgid "%s keep out zone fill setting differs."
-msgstr "%s configuração(ões) de preenchimento do isolamento com cobre diferem."
+msgstr "A configuração de preenchimento da região de exclusão %s é diferente."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:504
 #, c-format
@@ -45032,31 +45017,33 @@ msgstr "Foi removido %s atributo(s), 'Não colocar' da fabricação."
 #, c-format
 msgid "Added %s 'duplicate pad numbers are jumpers' attribute."
 msgstr ""
+"Foi adicionado o atributo %s 'a quantidade de ilhas duplicadas são jumpers'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:758
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'duplicate pad numbers are jumpers' attribute."
-msgstr "Foi removido %s atributo(s), 'Não colocar' da fabricação."
+msgstr ""
+"Foi removido o atributo %s 'a quantidade de ilhas duplicadas são jumpers'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:766
 #, c-format
 msgid "Add %s 'duplicate pad numbers are jumpers' attribute."
-msgstr ""
+msgstr "Adicionar o atributo %s 'a quantidade de ilhas duplicadas são jumpers'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:771
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'duplicate pad numbers are jumpers' attribute."
-msgstr "Remove %s atributo 'Não colocar' da fabricação."
+msgstr "Remover o atributo %s 'a quantidade de ilhas duplicadas são jumpers'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:785
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s jumper pad groups"
-msgstr "As %s propriedades foram atualizadas."
+msgstr "%s grupos de ilhas de jumper foram atualizados"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:789
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s jumper pad groups"
-msgstr "Atualiza %s propriedades."
+msgstr "Atualizar %s grupos de ilhas de jumper"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:869
 #, c-format
@@ -47767,9 +47754,8 @@ msgid "Segment Length"
 msgstr "Comprimento do segmento"
 
 #: pcbnew/pcb_track.cpp:1754
-#, fuzzy
 msgid "Copper Area"
-msgstr "Zona com cobre"
+msgstr "Área de cobre"
 
 #: pcbnew/pcb_track.cpp:1769
 #, c-format
@@ -51812,34 +51798,28 @@ msgid "DP Gap Constraints: %s"
 msgstr "Restrição da lacuna DP: %s"
 
 #: pcbnew/tools/pcb_control.cpp:1878
-#, fuzzy
 msgid "Resolved Clearance"
-msgstr "Isolamento resolvido"
+msgstr "Folga resolvida"
 
 #: pcbnew/tools/pcb_control.cpp:1888
-#, fuzzy
 msgid "Actual Clearance"
-msgstr "Isolamento atual"
+msgstr "Folga atual"
 
 #: pcbnew/tools/pcb_control.cpp:1931
-#, fuzzy
 msgid "Resolved Hole Clearance"
-msgstr "Isolamento do furo resolvido"
+msgstr "Folga resolvida do furo"
 
 #: pcbnew/tools/pcb_control.cpp:1936
-#, fuzzy
 msgid "Actual Hole Clearance"
-msgstr "Isolamento atual do furo"
+msgstr "Folga atual do furo"
 
 #: pcbnew/tools/pcb_control.cpp:1969
-#, fuzzy
 msgid "Resolved Edge Clearance"
-msgstr "Isolamento resolvido da borda"
+msgstr "Folga resolvida da borda"
 
 #: pcbnew/tools/pcb_control.cpp:1974
-#, fuzzy
 msgid "Resolved Margin Clearance"
-msgstr "Isolamento resolvido da margem"
+msgstr "Folga resolvida da margem"
 
 #: pcbnew/tools/pcb_control.cpp:1985
 msgid "Selected Items"
@@ -51850,9 +51830,8 @@ msgid "Selected 2D Length"
 msgstr "Selecionar comprimento 2D"
 
 #: pcbnew/tools/pcb_control.cpp:2132
-#, fuzzy
 msgid "Selected 2D Copper Area"
-msgstr "Seleciona o par de camada com cobre"
+msgstr "Área selecionada de cobre 2D"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2366
 msgid "Resize Table Cells"
@@ -52971,9 +52950,8 @@ msgid "No pads"
 msgstr "Sem ilhas"
 
 #: pcbnew/zone.cpp:858
-#, fuzzy
 msgid "No zone fills"
-msgstr "Preenchimentos da região de exclusão"
+msgstr "Região sem preenchimentos"
 
 #: pcbnew/zone.cpp:861
 msgid "No footprints"
@@ -53074,9 +53052,8 @@ msgid "Keep Out Pads"
 msgstr "Mantenha as ilhas afastadas"
 
 #: pcbnew/zone.cpp:1925
-#, fuzzy
 msgid "Keep Out Zone Fills"
-msgstr "Preenchimentos da região de exclusão"
+msgstr "Preenchimentos da área de exclusão"
 
 #: pcbnew/zone.cpp:1931
 msgid "Keep Out Footprints"
