@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-03-24 03:54+0000\n"
+"PO-Revision-Date: 2025-03-31 20:32+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -3813,9 +3813,8 @@ msgid "Add"
 msgstr "追加"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
-#, fuzzy
 msgid "Enable Git Tracking"
-msgstr "デザイン ルール チェックを有効化"
+msgstr "Gitトラッキングを有効化"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:28
 #, fuzzy
@@ -3823,9 +3822,8 @@ msgid "Remote Tracking"
 msgstr "配線"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:41
-#, fuzzy
 msgid "Update interval:"
-msgstr "フィールドを更新"
+msgstr "更新間隔:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:46
 msgid ""
@@ -6959,13 +6957,13 @@ msgid "Failed to push reference to revision walker."
 msgstr "リモートリポジトリへの変更のプッシュが失敗しました。"
 
 #: common/git/git_pull_handler.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup commit '%s'"
-msgstr "コミット '{}' を参照できません"
+msgstr "コミット '%s' を参照できません"
 
 #: common/git/git_pull_handler.cpp:391
 msgid "Could not merge commits"
-msgstr "マージをコミットできません"
+msgstr "コミットをマージできません"
 
 #: common/git/git_pull_handler.cpp:400
 msgid "Could not get repository index"
