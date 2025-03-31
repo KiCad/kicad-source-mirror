@@ -41,6 +41,7 @@
 #include <sch_table.h>
 #include <sch_tablecell.h>
 #include <sch_field.h>
+#include <sch_group.h>
 #include <sch_symbol.h>
 #include <sch_sheet_pin.h>
 #include <sch_sheet.h>
@@ -54,6 +55,7 @@ public:
     SCH_SHEET                 m_sheet;
     LIB_SYMBOL                m_symbol;
     SCH_PIN                   m_pin;
+    SCH_TEXT                  m_text;
     std::shared_ptr<ERC_ITEM> m_ercItem;
 
     TEST_EE_ITEM_FIXTURE() :
@@ -64,6 +66,11 @@ public:
     {
         m_sheet.SetPosition( VECTOR2I( schIUScale.mmToIU( 5 ), schIUScale.mmToIU( 10 ) ) );
         m_sheet.SetSize( VECTOR2I( schIUScale.mmToIU( 50 ), schIUScale.mmToIU( 100 ) ) );
+    }
+
+    ~TEST_EE_ITEM_FIXTURE()
+    {
+        m_text.SetParentGroup( nullptr );
     }
 
     EDA_ITEM* Instantiate( KICAD_T aType )
@@ -132,6 +139,15 @@ public:
 
         case SCH_SHEET_T:           return new SCH_SHEET();
         case SCH_PIN_T:             return new SCH_PIN( &m_symbol );
+        case SCH_GROUP_T:
+        {
+            SCH_GROUP* group = new SCH_GROUP();
+
+            // Group position only makes sense if there's at least one item in the group.
+            group->AddItem( &m_text );
+
+            return group;
+        }
 
         case SCHEMATIC_T:
         case LIB_SYMBOL_T:          return nullptr;

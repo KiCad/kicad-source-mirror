@@ -384,6 +384,7 @@ set( EESCHEMA_SRCS
     sch_draw_panel.cpp
     sch_edit_frame.cpp
     sch_field.cpp
+    sch_group.cpp
     sch_item.cpp
     sch_junction.cpp
     sch_label.cpp

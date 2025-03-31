@@ -170,6 +170,7 @@ enum KICAD_T
     SCH_RULE_AREA_T,
     SCH_DIRECTIVE_LABEL_T,
     SCH_SYMBOL_T,
+    SCH_GROUP_T,
     SCH_SHEET_PIN_T,
     SCH_SHEET_T,
 
@@ -388,6 +389,7 @@ constexpr bool IsEeschemaType( const KICAD_T aType )
     case SCH_FIELD_T:
     case SCH_SYMBOL_T:
     case SCH_SHEET_PIN_T:
+    case SCH_GROUP_T:
     case SCH_SHEET_T:
     case SCH_PIN_T:
 
