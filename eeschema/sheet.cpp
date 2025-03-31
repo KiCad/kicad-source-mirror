@@ -248,23 +248,20 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
 
         for( const SCH_SHEET_PATH& sheetPath : loadedSheets )
         {
+            // Skip the loaded sheet since the user already determined if the file path should
+            // be relative or absolute.
+            if( sheetPath.size() == 1 )
+                continue;
+
             wxString lastSheetPath = Prj().GetProjectPath();
 
-            for( unsigned i = 0; i < sheetPath.size(); i++ )
+            for( unsigned i = 1; i < sheetPath.size(); i++ )
             {
                 SCH_SHEET* sheet = sheetPath.at( i );
                 wxCHECK2( sheet, continue );
 
                 SCH_SCREEN* screen = sheet->GetScreen();
                 wxCHECK2( screen, continue );
-
-                // Fix screen path to be based on the current project path.
-                // Basically, make an absolute screen path relative to the schematic file
-                // we started with, then make it absolute again using the current project path.
-                wxFileName screenFileName = screen->GetFileName();
-                screenFileName.MakeRelativeTo( fileName.GetPath() );
-                screenFileName.MakeAbsolute( Prj().GetProjectPath() );
-                screen->SetFileName( screenFileName.GetFullPath() );
 
                 // Use the screen file name which should always be absolute.
                 wxFileName loadedSheetFileName = screen->GetFileName();
@@ -278,6 +275,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
                 else
                     sheetFileName = loadedSheetFileName.GetFullPath();
 
+                sheetFileName.Replace( wxT( "\\" ), wxT( "/" ) );
                 sheet->SetFileName( sheetFileName );
                 lastSheetPath = loadedSheetFileName.GetPath();
             }
