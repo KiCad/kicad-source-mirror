@@ -399,6 +399,8 @@ void PCB_NET_INSPECTOR_PANEL::buildNetsList( bool rebuildColumns )
 
     m_in_build_nets_list = true;
 
+    m_netsList->Freeze();
+
     PROJECT_LOCAL_SETTINGS& localSettings = Pgm().GetSettingsManager().Prj().GetLocalSettings();
     PANEL_NET_INSPECTOR_SETTINGS* cfg = &localSettings.m_NetInspectorPanel;
 
@@ -582,6 +584,8 @@ void PCB_NET_INSPECTOR_PANEL::buildNetsList( bool rebuildColumns )
     }
 
     alg::delete_matching( prev_selected_netcodes, -1 );
+
+    m_netsList->Thaw();
 
     m_in_build_nets_list = false;
 }
