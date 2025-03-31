@@ -372,7 +372,7 @@ public:
 
     void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
 
-    void FocusOnItem( SCH_ITEM* aItem );
+    void FocusOnItem( EDA_ITEM* aItem ) override;
 
     /**
      * Load a symbol from the schematic to edit in place.

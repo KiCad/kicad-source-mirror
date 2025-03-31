@@ -1496,11 +1496,15 @@ const BOX2I SYMBOL_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) con
 }
 
 
-void SYMBOL_EDIT_FRAME::FocusOnItem( SCH_ITEM* aItem )
+void SYMBOL_EDIT_FRAME::FocusOnItem( EDA_ITEM* aItem )
 {
     static KIID lastBrightenedItemID( niluuid );
 
     SCH_ITEM* lastItem = nullptr;
+
+    // nullptr will clear the current focus
+    if( aItem != nullptr && !aItem->IsSCH_ITEM() )
+        return;
 
     if( m_symbol )
     {

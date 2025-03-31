@@ -471,7 +471,7 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             m_disambiguateTimer.Stop();
 
             if( SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
-                schframe->FocusOnItem( nullptr );
+                schframe->ClearFocus();
 
             // Collect items at the clicked location (doesn't select them yet)
             SCH_COLLECTOR collector;
@@ -558,7 +558,7 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
             // double click? Display the properties window
             if( SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
-                schframe->FocusOnItem( nullptr );
+                schframe->ClearFocus();
 
             if( m_selection.Empty() )
                 SelectPoint( evt->Position() );
@@ -594,7 +594,7 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             // drag with LMB? Select multiple objects (or at least draw a selection box) or
             // drag them
             if( SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
-                schframe->FocusOnItem( nullptr );
+                schframe->ClearFocus();
 
             SCH_COLLECTOR collector;
 
@@ -940,7 +940,7 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             getViewControls()->CaptureCursor( false );
 
             if( SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
-                schframe->FocusOnItem( nullptr );
+                schframe->ClearFocus();
 
             if( !GetSelection().Empty() )
             {
@@ -957,7 +957,7 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         else if( evt->Action() == TA_UNDO_REDO_PRE )
         {
             if( SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
-                schframe->FocusOnItem( nullptr );
+                schframe->ClearFocus();
         }
         else if( evt->IsMotion() && !m_isSymbolEditor && evt->FirstResponder() == this )
         {

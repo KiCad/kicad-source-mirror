@@ -1201,7 +1201,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& a
         }
         else
         {
-            m_parent->FocusOnItem( nullptr );
+            m_parent->ClearFocus();
         }
     }
     else if( m_radioSelect->GetValue() )
@@ -1553,7 +1553,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnClose( wxCloseEvent& aEvent )
         }
     }
 
-    m_parent->FocusOnItem( nullptr );
+    m_parent->ClearFocus();
 
     wxCommandEvent* evt = new wxCommandEvent( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, wxID_ANY );
 

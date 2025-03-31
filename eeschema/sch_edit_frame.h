@@ -814,7 +814,7 @@ public:
 
     int GetSchematicJunctionSize();
 
-    void FocusOnItem( SCH_ITEM* aItem );
+    void FocusOnItem( EDA_ITEM* aItem ) override;
 
     bool IsSyncingSelection() { return m_syncingPcbToSchSelection; }
 

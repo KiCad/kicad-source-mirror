@@ -877,7 +877,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::~DIALOG_LIB_EDIT_PIN_TABLE()
 
     WINDOW_THAWER thawer( m_editFrame );
 
-    m_editFrame->FocusOnItem( nullptr );
+    m_editFrame->ClearFocus();
     m_editFrame->GetCanvas()->Refresh();
 }
 

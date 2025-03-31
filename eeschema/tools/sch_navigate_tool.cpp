@@ -306,7 +306,7 @@ void SCH_NAVIGATE_TOOL::changeSheet( SCH_SHEET_PATH aPath )
 
     pushToHistory( aPath );
 
-    m_frame->FocusOnItem( nullptr );
+    m_frame->ClearFocus();
     m_frame->Schematic().SetCurrentSheet( aPath );
     m_frame->DisplayCurrentSheet();
 }

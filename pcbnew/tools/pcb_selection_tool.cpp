@@ -336,7 +336,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
                 else
                 {
-                    m_frame->FocusOnItem( nullptr );
+                    m_frame->ClearFocus();
                     selectPoint( evt->Position() );
                 }
             }
@@ -377,7 +377,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
 
             // Double click? Display the properties window
-            m_frame->FocusOnItem( nullptr );
+            m_frame->ClearFocus();
 
             if( m_selection.Empty() )
                 selectPoint( evt->Position() );
@@ -429,7 +429,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
             // Drag with LMB? Select multiple objects (or at least draw a selection box)
             // or drag them
-            m_frame->FocusOnItem( nullptr );
+            m_frame->ClearFocus();
             m_toolMgr->ProcessEvent( EVENTS::InhibitSelectionEditing );
 
             GENERAL_COLLECTORS_GUIDE guide = getCollectorsGuide();
@@ -539,7 +539,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         else if( evt->IsCancel() )
         {
             m_disambiguateTimer.Stop();
-            m_frame->FocusOnItem( nullptr );
+            m_frame->ClearFocus();
 
             if( !GetSelection().Empty() )
             {

@@ -163,7 +163,7 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
 
 DIALOG_DRC::~DIALOG_DRC()
 {
-    m_frame->FocusOnItem( nullptr );
+    m_frame->ClearFocus();
 
     g_lastDRCBoard = m_currentBoard;
     g_lastDRCRun = m_drcRun;
@@ -1097,7 +1097,7 @@ void DIALOG_DRC::OnCancelClick( wxCommandEvent& aEvent )
         return;
     }
 
-    m_frame->FocusOnItem( nullptr );
+    m_frame->ClearFocus();
 
     SetReturnCode( wxID_CANCEL );
 

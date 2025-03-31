@@ -306,6 +306,15 @@ public:
     void FocusOnLocation( const VECTOR2I& aPos );
 
     /**
+     * Focus on a particular canvas item.
+     *
+     * @param aItem is the item to focus on. nullptr clears the focus.
+     */
+    virtual void FocusOnItem( EDA_ITEM* aItem ) {}
+
+    virtual void ClearFocus() { FocusOnItem( nullptr ); }
+
+    /**
      * Construct a "basic" menu for a tool, containing only items that apply to all tools
      * (e.g. zoom and grid).
      */

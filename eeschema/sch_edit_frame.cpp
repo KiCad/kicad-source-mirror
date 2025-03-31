@@ -926,7 +926,7 @@ void SCH_EDIT_FRAME::SetCurrentSheet( const SCH_SHEET_PATH& aSheet )
 {
     if( aSheet != GetCurrentSheet() )
     {
-        FocusOnItem( nullptr );
+        ClearFocus();
 
         Schematic().SetCurrentSheet( aSheet );
         GetCanvas()->DisplaySheet( aSheet.LastScreen() );
@@ -950,7 +950,7 @@ void SCH_EDIT_FRAME::HardRedraw()
     if( Schematic().Settings().m_IntersheetRefsShow )
         RecomputeIntersheetRefs();
 
-    FocusOnItem( nullptr );
+    ClearFocus();
 
     GetCanvas()->DisplaySheet( GetCurrentSheet().LastScreen() );
 
@@ -2285,8 +2285,12 @@ bool SCH_EDIT_FRAME::GetShowAllPins() const
 }
 
 
-void SCH_EDIT_FRAME::FocusOnItem( SCH_ITEM* aItem )
+void SCH_EDIT_FRAME::FocusOnItem( EDA_ITEM* aItem )
 {
+    // nullptr will clear the current focus
+    if( aItem != nullptr && !aItem->IsSCH_ITEM() )
+        return;
+
     static KIID lastBrightenedItemID( niluuid );
 
     SCH_SHEET_PATH dummy;

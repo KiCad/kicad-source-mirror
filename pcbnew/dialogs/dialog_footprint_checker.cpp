@@ -69,7 +69,7 @@ DIALOG_FOOTPRINT_CHECKER::DIALOG_FOOTPRINT_CHECKER( FOOTPRINT_EDIT_FRAME* aParen
 
 DIALOG_FOOTPRINT_CHECKER::~DIALOG_FOOTPRINT_CHECKER()
 {
-    m_frame->FocusOnItem( nullptr );
+    m_frame->ClearFocus();
 
     g_lastFootprint = m_frame->GetBoard()->GetFirstFootprint();
     g_lastChecksRun = m_checksRun;
@@ -364,7 +364,7 @@ void DIALOG_FOOTPRINT_CHECKER::OnSeverity( wxCommandEvent& aEvent )
 
 void DIALOG_FOOTPRINT_CHECKER::OnCancelClick( wxCommandEvent& aEvent )
 {
-    m_frame->FocusOnItem( nullptr );
+    m_frame->ClearFocus();
 
     SetReturnCode( wxID_CANCEL );
 

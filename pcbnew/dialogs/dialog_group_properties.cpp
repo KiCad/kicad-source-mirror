@@ -65,7 +65,7 @@ DIALOG_GROUP_PROPERTIES::~DIALOG_GROUP_PROPERTIES()
     if( m_brdEditor->IsBeingDeleted() )
         return;
 
-    m_brdEditor->FocusOnItem( nullptr );
+    m_brdEditor->ClearFocus();
     m_brdEditor->GetCanvas()->Refresh();
 }
 
@@ -162,7 +162,7 @@ void DIALOG_GROUP_PROPERTIES::OnRemoveMember( wxCommandEvent& event )
     if( selected >= 0 )
         m_membersList->Delete( selected );
 
-    m_brdEditor->FocusOnItem( nullptr );
+    m_brdEditor->ClearFocus();
     m_brdEditor->GetCanvas()->Refresh();
 }
 

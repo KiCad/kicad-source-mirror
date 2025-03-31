@@ -343,7 +343,7 @@ void DIALOG_ERC::OnCancelClick( wxCommandEvent& aEvent )
         return;
     }
 
-    m_parent->FocusOnItem( nullptr );
+    m_parent->ClearFocus();
 
     aEvent.Skip();
 }
@@ -351,7 +351,7 @@ void DIALOG_ERC::OnCancelClick( wxCommandEvent& aEvent )
 
 void DIALOG_ERC::OnCloseErcDialog( wxCloseEvent& aEvent )
 {
-    m_parent->FocusOnItem( nullptr );
+    m_parent->ClearFocus();
 
     // Dialog is mode-less so let the parent know that it needs to be destroyed.
     if( !IsModal() && !IsQuasiModal() )
