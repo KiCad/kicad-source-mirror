@@ -199,8 +199,16 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
 
     m_fieldsCtrl->AppendTextColumn( _( "Field" ), wxDATAVIEW_CELL_INERT, 0, wxALIGN_LEFT, 0 );
     m_fieldsCtrl->AppendTextColumn( _( "Column Label" ), wxDATAVIEW_CELL_EDITABLE, 0, wxALIGN_LEFT, 0 );
+
+    // The two next columns look better when on 2 lines
+    // Unfortunately this is not handled on WXMSW
+    #ifdef __WXMSW__
+    m_fieldsCtrl->AppendToggleColumn( _( "Show Column" ), wxDATAVIEW_CELL_ACTIVATABLE, 0, wxALIGN_CENTER, 0 );
+    m_fieldsCtrl->AppendToggleColumn( _( "Group By" ), wxDATAVIEW_CELL_ACTIVATABLE, 0, wxALIGN_CENTER, 0 );
+    #else
     m_fieldsCtrl->AppendToggleColumn( _( "Show\nColumn" ), wxDATAVIEW_CELL_ACTIVATABLE, 0, wxALIGN_CENTER, 0 );
     m_fieldsCtrl->AppendToggleColumn( _( "Group\nBy" ), wxDATAVIEW_CELL_ACTIVATABLE, 0, wxALIGN_CENTER, 0 );
+    #endif
 
     // GTK asserts if the number of columns doesn't match the data, but we still don't want
     // to display the canonical names.  So we'll insert a column for them, but keep it 0 width.
@@ -209,14 +217,22 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
     // SetWidth( wxCOL_WIDTH_AUTOSIZE ) fails here on GTK, so we calculate the title sizes and
     // set the column widths ourselves.
     wxDataViewColumn* column = m_fieldsCtrl->GetColumn( SHOW_FIELD_COLUMN );
+    #ifdef __WXMSW__
+    m_showColWidth = KIUI::GetTextSize( column->GetTitle(), m_fieldsCtrl ).x,
+    #else
     m_showColWidth = std::max( KIUI::GetTextSize( column->GetTitle().Before( '\n' ), m_fieldsCtrl ).x,
                                KIUI::GetTextSize( column->GetTitle().After( '\n' ), m_fieldsCtrl ).x );
+    #endif
     m_showColWidth += COLUMN_MARGIN;
     column->SetMinWidth( m_showColWidth );
 
     column = m_fieldsCtrl->GetColumn( GROUP_BY_COLUMN );
+    #ifdef __WXMSW__
+    m_groupByColWidth = KIUI::GetTextSize( column->GetTitle(), m_fieldsCtrl ).x,
+    #else
     m_groupByColWidth = std::max( KIUI::GetTextSize( column->GetTitle().Before( '\n' ), m_fieldsCtrl ).x,
                                   KIUI::GetTextSize( column->GetTitle().After( '\n' ), m_fieldsCtrl ).x );
+    #endif
     m_groupByColWidth += COLUMN_MARGIN;
     column->SetMinWidth( m_groupByColWidth );
 
