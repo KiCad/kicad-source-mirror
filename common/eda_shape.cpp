@@ -1719,6 +1719,7 @@ std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineCh
 {
     std::vector<SHAPE*> effectiveShapes;
     int                 width = GetEffectiveWidth();
+    bool                solidFill = ( IsSolidFill() || IsHatchedFill() || IsProxyItem() ) && !aEdgeOnly;
 
     switch( m_shape )
     {
@@ -1734,10 +1735,10 @@ std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineCh
     {
         std::vector<VECTOR2I> pts = GetRectCorners();
 
-        if( ( IsSolidFill() || IsProxyItem() ) && !aEdgeOnly )
+        if( solidFill )
             effectiveShapes.emplace_back( new SHAPE_SIMPLE( pts ) );
 
-        if( width > 0 || !IsSolidFill() || aEdgeOnly )
+        if( width > 0 || !solidFill )
         {
             effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[0], pts[1], width ) );
             effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[1], pts[2], width ) );
@@ -1749,14 +1750,11 @@ std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineCh
 
     case SHAPE_T::CIRCLE:
     {
-        if( IsSolidFill() && !aEdgeOnly )
+        if( solidFill )
             effectiveShapes.emplace_back( new SHAPE_CIRCLE( getCenter(), GetRadius() ) );
 
-        if( width > 0 || !IsSolidFill() || aEdgeOnly )
-        {
-            effectiveShapes.emplace_back( new SHAPE_ARC( getCenter(), GetEnd(), ANGLE_360,
-                                                         width ) );
-        }
+        if( width > 0 || !solidFill )
+            effectiveShapes.emplace_back( new SHAPE_ARC( getCenter(), GetEnd(), ANGLE_360, width ) );
 
         break;
     }
@@ -1785,7 +1783,7 @@ std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineCh
         {
             const SHAPE_LINE_CHAIN& l = GetPolyShape().COutline( ii );
 
-            if( IsSolidFill() && !aEdgeOnly )
+            if( solidFill )
                 effectiveShapes.emplace_back( new SHAPE_SIMPLE( l ) );
 
             if( width > 0 || !IsSolidFill() || aEdgeOnly )
@@ -2179,7 +2177,8 @@ void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance
                                          ERROR_LOC aErrorLoc, bool ignoreLineWidth,
                                          bool includeFill ) const
 {
-    int width = ignoreLineWidth ? 0 : GetWidth();
+    bool solidFill = IsSolidFill() || ( IsHatchedFill() && !includeFill ) || IsProxyItem();
+    int  width = ignoreLineWidth ? 0 : GetWidth();
 
     width += 2 * aClearance;
 
@@ -2189,7 +2188,7 @@ void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance
     {
         int r = GetRadius();
 
-        if( IsSolidFill() )
+        if( solidFill )
             TransformCircleToPolygon( aBuffer, getCenter(), r + width / 2, aError, aErrorLoc );
         else
             TransformRingToPolygon( aBuffer, getCenter(), r, width, aError, aErrorLoc );
@@ -2201,7 +2200,7 @@ void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance
     {
         std::vector<VECTOR2I> pts = GetRectCorners();
 
-        if( IsSolidFill() || IsProxyItem() )
+        if( solidFill )
         {
             aBuffer.NewOutline();
 
@@ -2209,7 +2208,7 @@ void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance
                 aBuffer.Append( pt );
         }
 
-        if( width > 0 || !IsSolidFill() )
+        if( width > 0 || !solidFill )
         {
             // Add in segments
             TransformOvalToPolygon( aBuffer, pts[0], pts[1], width, aError, aErrorLoc );
@@ -2222,8 +2221,7 @@ void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance
     }
 
     case SHAPE_T::ARC:
-        TransformArcToPolygon( aBuffer, GetStart(), GetArcMid(), GetEnd(), width, aError,
-                               aErrorLoc );
+        TransformArcToPolygon( aBuffer, GetStart(), GetArcMid(), GetEnd(), width, aError, aErrorLoc );
         break;
 
     case SHAPE_T::SEGMENT:
@@ -2235,7 +2233,7 @@ void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance
         if( !IsPolyShapeValid() )
             break;
 
-        if( IsSolidFill() )
+        if( solidFill )
         {
             for( int ii = 0; ii < m_poly.OutlineCount(); ++ii )
             {
