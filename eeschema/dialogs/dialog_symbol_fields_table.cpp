@@ -198,11 +198,9 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
     m_labelBomExportPresets->SetFont( KIUI::GetInfoFont( this ) );
 
     m_fieldsCtrl->AppendTextColumn( _( "Field" ), wxDATAVIEW_CELL_INERT, 0, wxALIGN_LEFT, 0 );
-    m_fieldsCtrl->AppendTextColumn( _( "Label" ), wxDATAVIEW_CELL_EDITABLE, 0, wxALIGN_LEFT, 0 );
-    m_fieldsCtrl->AppendToggleColumn( _( "Show" ), wxDATAVIEW_CELL_ACTIVATABLE, 0,
-                                      wxALIGN_CENTER, 0 );
-    m_fieldsCtrl->AppendToggleColumn( _( "Group By" ), wxDATAVIEW_CELL_ACTIVATABLE, 0,
-                                      wxALIGN_CENTER, 0 );
+    m_fieldsCtrl->AppendTextColumn( _( "Column Label" ), wxDATAVIEW_CELL_EDITABLE, 0, wxALIGN_LEFT, 0 );
+    m_fieldsCtrl->AppendToggleColumn( _( "Show\nColumn" ), wxDATAVIEW_CELL_ACTIVATABLE, 0, wxALIGN_CENTER, 0 );
+    m_fieldsCtrl->AppendToggleColumn( _( "Group\nBy" ), wxDATAVIEW_CELL_ACTIVATABLE, 0, wxALIGN_CENTER, 0 );
 
     // GTK asserts if the number of columns doesn't match the data, but we still don't want
     // to display the canonical names.  So we'll insert a column for them, but keep it 0 width.
@@ -211,11 +209,15 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
     // SetWidth( wxCOL_WIDTH_AUTOSIZE ) fails here on GTK, so we calculate the title sizes and
     // set the column widths ourselves.
     wxDataViewColumn* column = m_fieldsCtrl->GetColumn( SHOW_FIELD_COLUMN );
-    m_showColWidth = KIUI::GetTextSize( column->GetTitle(), m_fieldsCtrl ).x + COLUMN_MARGIN;
+    m_showColWidth = std::max( KIUI::GetTextSize( column->GetTitle().Before( '\n' ), m_fieldsCtrl ).x,
+                               KIUI::GetTextSize( column->GetTitle().After( '\n' ), m_fieldsCtrl ).x );
+    m_showColWidth += COLUMN_MARGIN;
     column->SetMinWidth( m_showColWidth );
 
     column = m_fieldsCtrl->GetColumn( GROUP_BY_COLUMN );
-    m_groupByColWidth = KIUI::GetTextSize( column->GetTitle(), m_fieldsCtrl ).x + COLUMN_MARGIN;
+    m_groupByColWidth = std::max( KIUI::GetTextSize( column->GetTitle().Before( '\n' ), m_fieldsCtrl ).x,
+                                  KIUI::GetTextSize( column->GetTitle().After( '\n' ), m_fieldsCtrl ).x );
+    m_groupByColWidth += COLUMN_MARGIN;
     column->SetMinWidth( m_groupByColWidth );
 
     // The fact that we're a list should keep the control from reserving space for the
@@ -236,21 +238,18 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent,
     m_fieldNameColWidth = 0;
     m_labelColWidth = 0;
 
-    int colWidth = 0;
-
     for( int row = 0; row < m_fieldsCtrl->GetItemCount(); ++row )
     {
         const wxString& displayName = m_fieldsCtrl->GetTextValue( row, DISPLAY_NAME_COLUMN );
-        colWidth = std::max( colWidth, KIUI::GetTextSize( displayName, m_fieldsCtrl ).x );
+        m_fieldNameColWidth = std::max( m_fieldNameColWidth, KIUI::GetTextSize( displayName, m_fieldsCtrl ).x );
 
         const wxString& label = m_fieldsCtrl->GetTextValue( row, LABEL_COLUMN );
-        colWidth = std::max( colWidth, KIUI::GetTextSize( label, m_fieldsCtrl ).x );
+        m_labelColWidth = std::max( m_labelColWidth, KIUI::GetTextSize( label, m_fieldsCtrl ).x );
     }
 
-    m_fieldNameColWidth = colWidth + 20;
-    m_labelColWidth = colWidth + 20;
+    int colWidth = std::max( m_fieldNameColWidth, m_labelColWidth ) + 30;
 
-    int fieldsMinWidth = m_fieldNameColWidth + m_labelColWidth + m_groupByColWidth + m_showColWidth;
+    int fieldsMinWidth = colWidth + colWidth + m_groupByColWidth + m_showColWidth;
 
     m_fieldsCtrl->GetColumn( DISPLAY_NAME_COLUMN )->SetWidth( m_fieldNameColWidth );
     m_fieldsCtrl->GetColumn( LABEL_COLUMN )->SetWidth( m_labelColWidth );
