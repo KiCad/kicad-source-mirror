@@ -384,6 +384,8 @@ void PCB_NET_INSPECTOR_PANEL::buildNetsList( const bool rebuildColumns )
 
     m_inBuildNetsList = true;
 
+    m_netsList->Freeze();
+
     PROJECT_LOCAL_SETTINGS& localSettings = Pgm().GetSettingsManager().Prj().GetLocalSettings();
     PANEL_NET_INSPECTOR_SETTINGS* cfg = &localSettings.m_NetInspectorPanel;
 
@@ -520,6 +522,8 @@ void PCB_NET_INSPECTOR_PANEL::buildNetsList( const bool rebuildColumns )
     {
         m_netsList->UnselectAll();
     }
+
+    m_netsList->Thaw();
 
     m_inBuildNetsList = false;
 }
