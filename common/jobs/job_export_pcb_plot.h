@@ -21,7 +21,7 @@
 #pragma once
 
 #include <kicommon.h>
-#include <kicommon.h>
+#include <plotprint_opts.h>
 #include <layer_ids.h>
 #include <lseq.h>
 #include <wx/string.h>
@@ -73,13 +73,6 @@ public:
     LSEQ m_plotLayerSequence;
     ///< Layers to include on all individual layer prints
     LSEQ m_plotOnAllLayersSequence;
-
-    enum class DRILL_MARKS
-    {
-        NO_DRILL_SHAPE = 0,
-        SMALL_DRILL_SHAPE = 1,
-        FULL_DRILL_SHAPE = 2
-    };
 
     ///< Used by SVG & PDF
     DRILL_MARKS m_drillShapeOption;

@@ -498,16 +498,10 @@ void DIALOG_PLOT::transferPlotParamsToJob()
     {
         switch( m_plotOpts.GetDrillMarksType() )
         {
-        case DRILL_MARKS::NO_DRILL_SHAPE:
-            m_job->m_drillShapeOption = JOB_EXPORT_PCB_PLOT::DRILL_MARKS::NO_DRILL_SHAPE;
-            break;
-        case DRILL_MARKS::SMALL_DRILL_SHAPE:
-            m_job->m_drillShapeOption = JOB_EXPORT_PCB_PLOT::DRILL_MARKS::SMALL_DRILL_SHAPE;
-            break;
+        case DRILL_MARKS::NO_DRILL_SHAPE:    m_job->m_drillShapeOption = DRILL_MARKS::NO_DRILL_SHAPE;    break;
+        case DRILL_MARKS::SMALL_DRILL_SHAPE: m_job->m_drillShapeOption = DRILL_MARKS::SMALL_DRILL_SHAPE; break;
         default:
-        case DRILL_MARKS::FULL_DRILL_SHAPE:
-            m_job->m_drillShapeOption = JOB_EXPORT_PCB_PLOT::DRILL_MARKS::FULL_DRILL_SHAPE;
-            break;
+        case DRILL_MARKS::FULL_DRILL_SHAPE:  m_job->m_drillShapeOption = DRILL_MARKS::FULL_DRILL_SHAPE;  break;
         }
     }
 

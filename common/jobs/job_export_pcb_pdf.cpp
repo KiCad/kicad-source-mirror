@@ -22,13 +22,6 @@
 #include <jobs/job_registry.h>
 #include <i18n_utility.h>
 
-NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_PDF::DRILL_MARKS,
-                              {
-                                { JOB_EXPORT_PCB_PDF::DRILL_MARKS::NO_DRILL_SHAPE, "none" },
-                                { JOB_EXPORT_PCB_PDF::DRILL_MARKS::SMALL_DRILL_SHAPE, "small" },
-                                { JOB_EXPORT_PCB_PDF::DRILL_MARKS::FULL_DRILL_SHAPE, "full" }
-                              } )
-
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_PDF::GEN_MODE,
                               {
                                 { JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_FILE, "all-layers-one-file" },

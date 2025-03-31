@@ -434,16 +434,10 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT
 
     switch( aJob->m_drillShapeOption )
     {
-    case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::NO_DRILL_SHAPE:
-        aOpts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );
-        break;
-    case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::SMALL_DRILL_SHAPE:
-        aOpts.SetDrillMarksType( DRILL_MARKS::SMALL_DRILL_SHAPE );
-        break;
+    case DRILL_MARKS::NO_DRILL_SHAPE:    aOpts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );    break;
+    case DRILL_MARKS::SMALL_DRILL_SHAPE: aOpts.SetDrillMarksType( DRILL_MARKS::SMALL_DRILL_SHAPE ); break;
     default:
-    case JOB_EXPORT_PCB_PLOT::DRILL_MARKS::FULL_DRILL_SHAPE:
-        aOpts.SetDrillMarksType( DRILL_MARKS::FULL_DRILL_SHAPE );
-        break;
+    case DRILL_MARKS::FULL_DRILL_SHAPE:  aOpts.SetDrillMarksType( DRILL_MARKS::FULL_DRILL_SHAPE );  break;
     }
 
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();

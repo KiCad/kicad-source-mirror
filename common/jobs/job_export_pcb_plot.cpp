@@ -19,6 +19,13 @@
 
 #include <jobs/job_export_pcb_plot.h>
 
+NLOHMANN_JSON_SERIALIZE_ENUM( DRILL_MARKS,
+                              {
+                                { DRILL_MARKS::NO_DRILL_SHAPE, "none" },
+                                { DRILL_MARKS::SMALL_DRILL_SHAPE, "small" },
+                                { DRILL_MARKS::FULL_DRILL_SHAPE, "full" }
+                              } )
+
 JOB_EXPORT_PCB_PLOT::JOB_EXPORT_PCB_PLOT( PLOT_FORMAT aFormat, const std::string& aType,
                                           bool aOutputIsDirectory ) :
         JOB( aType, aOutputIsDirectory ),
