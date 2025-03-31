@@ -573,6 +573,8 @@ void PCB_NET_INSPECTOR_PANEL::buildNetsList( bool rebuildColumns )
         }
     }
 
+    m_netsList->Thaw(); // Must thaw before reselecting to avoid windows selection bug
+
     if( !sel.IsEmpty() )
     {
         m_netsList->SetSelections( sel );
@@ -584,8 +586,6 @@ void PCB_NET_INSPECTOR_PANEL::buildNetsList( bool rebuildColumns )
     }
 
     alg::delete_matching( prev_selected_netcodes, -1 );
-
-    m_netsList->Thaw();
 
     m_in_build_nets_list = false;
 }
