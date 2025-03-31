@@ -210,8 +210,8 @@ bool PCB_SELECTION_TOOL::Init()
 
     // "Cancel" goes at the top of the context menu when a tool is active
     menu.AddItem( ACTIONS::cancelInteractive,  activeToolCondition, 1 );
-    menu.AddItem( PCB_ACTIONS::groupEnter,     groupEnterCondition, 1 );
-    menu.AddItem( PCB_ACTIONS::groupLeave,     inGroupCondition,    1 );
+    menu.AddItem( ACTIONS::groupEnter,         groupEnterCondition, 1 );
+    menu.AddItem( ACTIONS::groupLeave,         inGroupCondition,    1 );
     menu.AddItem( PCB_ACTIONS::clearHighlight, haveHighlight,       1 );
     menu.AddSeparator(                         haveHighlight,       1 );
 

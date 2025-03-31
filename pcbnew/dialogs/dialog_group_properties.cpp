@@ -135,7 +135,7 @@ void DIALOG_GROUP_PROPERTIES::OnMemberSelected( wxCommandEvent& aEvent )
 
 void DIALOG_GROUP_PROPERTIES::OnAddMember( wxCommandEvent& event )
 {
-    m_toolMgr->RunAction( PCB_ACTIONS::pickNewGroupMember );
+    m_toolMgr->RunAction( ACTIONS::pickNewGroupMember );
 }
 
 

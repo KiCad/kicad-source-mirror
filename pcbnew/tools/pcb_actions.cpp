@@ -1311,41 +1311,6 @@ TOOL_ACTION PCB_ACTIONS::unlock( TOOL_ACTION_ARGS()
         .Tooltip( _( "Allow items to be moved and/or resized on the canvas" ) )
         .Icon( BITMAPS::unlocked ) );
 
-TOOL_ACTION PCB_ACTIONS::group( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.EditorControl.group" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Group Items" ) )
-        .Tooltip( _( "Group the selected items so that they are treated as a single item" ) )
-        .Icon( BITMAPS::group ) );
-
-TOOL_ACTION PCB_ACTIONS::ungroup( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.EditorControl.ungroup" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Ungroup Items" ) )
-        .Tooltip( _( "Ungroup any selected groups" ) )
-        .Icon( BITMAPS::group_ungroup ) );
-
-TOOL_ACTION PCB_ACTIONS::removeFromGroup( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.EditorControl.removeFromGroup" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Remove Items" ) )
-        .Tooltip( _( "Remove items from group" ) )
-        .Icon( BITMAPS::group_remove ) );
-
-TOOL_ACTION PCB_ACTIONS::groupEnter( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.EditorControl.groupEnter" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Enter Group" ) )
-        .Tooltip( _( "Enter the group to edit items" ) )
-        .Icon( BITMAPS::group_enter ) );
-
-TOOL_ACTION PCB_ACTIONS::groupLeave( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.EditorControl.groupLeave" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Leave Group" ) )
-        .Tooltip( _( "Leave the current group" ) )
-        .Icon( BITMAPS::group_leave ) );
-
 TOOL_ACTION PCB_ACTIONS::appendBoard( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.appendBoard" )
         .Scope( AS_GLOBAL )
@@ -2153,19 +2118,6 @@ TOOL_ACTION PCB_ACTIONS::pointEditorArcKeepEndpoint( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Keep Arc Endpoints or Direction of Starting Point" ) )
         .Tooltip( _( "Switch arc editing mode to keep endpoints, or to keep direction of the other point" ) )
         .Parameter( ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION ) );
-
-
-// GROUP_TOOL
-//
-TOOL_ACTION PCB_ACTIONS::groupProperties( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.Groups.groupProperties" )
-        .Scope( AS_GLOBAL ) );
-
-TOOL_ACTION PCB_ACTIONS::pickNewGroupMember( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.Groups.selectNewGroupMember" )
-        .Scope( AS_GLOBAL ) );
-
-
 
 // POSITION_RELATIVE_TOOL
 //

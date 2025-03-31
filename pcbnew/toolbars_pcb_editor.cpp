@@ -307,8 +307,8 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
               .AppendAction( PCB_ACTIONS::rotateCw )
               .AppendAction( PCB_ACTIONS::mirrorV )
               .AppendAction( PCB_ACTIONS::mirrorH )
-              .AppendAction( PCB_ACTIONS::group )
-              .AppendAction( PCB_ACTIONS::ungroup )
+              .AppendAction( ACTIONS::group )
+              .AppendAction( ACTIONS::ungroup )
               .AppendAction( PCB_ACTIONS::lock )
               .AppendAction( PCB_ACTIONS::unlock );
 

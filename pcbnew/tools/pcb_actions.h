@@ -306,12 +306,6 @@ public:
     static TOOL_ACTION pointEditorMoveCorner;
     static TOOL_ACTION pointEditorMoveMidpoint;
 
-
-    // Group Tool
-    static TOOL_ACTION groupProperties;
-    static TOOL_ACTION pickNewGroupMember;
-
-
     // Placement Tool
     static TOOL_ACTION alignTop;
     static TOOL_ACTION alignBottom;
@@ -547,13 +541,6 @@ public:
     static TOOL_ACTION toggleLock;
     static TOOL_ACTION lock;
     static TOOL_ACTION unlock;
-
-    // Grouping
-    static TOOL_ACTION group;
-    static TOOL_ACTION ungroup;
-    static TOOL_ACTION removeFromGroup;
-    static TOOL_ACTION groupEnter;
-    static TOOL_ACTION groupLeave;
 
     // Miscellaneous
     static TOOL_ACTION selectionTool;

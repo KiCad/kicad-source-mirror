@@ -202,6 +202,17 @@ public:
     static TOOL_ACTION togglePolarCoords;
     static TOOL_ACTION resetLocalCoords;
 
+    // Grouping
+    static TOOL_ACTION group;
+    static TOOL_ACTION ungroup;
+    static TOOL_ACTION removeFromGroup;
+    static TOOL_ACTION groupEnter;
+    static TOOL_ACTION groupLeave;
+
+    // Group Tool
+    static TOOL_ACTION groupProperties;
+    static TOOL_ACTION pickNewGroupMember;
+
     // Common Tools
     static TOOL_ACTION selectionTool;
     static TOOL_ACTION measureTool;

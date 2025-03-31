@@ -151,6 +151,51 @@ TOOL_ACTION ACTIONS::quit( TOOL_ACTION_ARGS()
         .Tooltip( _( "Close the current editor" ) )
         .Icon( BITMAPS::exit ) );
 
+// Group actions
+TOOL_ACTION ACTIONS::group( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.group" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Group Items" ) )
+        .Tooltip( _( "Group the selected items so that they are treated as a single item" ) )
+        .Icon( BITMAPS::group ) );
+
+TOOL_ACTION ACTIONS::ungroup( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.ungroup" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Ungroup Items" ) )
+        .Tooltip( _( "Ungroup any selected groups" ) )
+        .Icon( BITMAPS::group_ungroup ) );
+
+TOOL_ACTION ACTIONS::removeFromGroup( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.removeFromGroup" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Remove Items" ) )
+        .Tooltip( _( "Remove items from group" ) )
+        .Icon( BITMAPS::group_remove ) );
+
+TOOL_ACTION ACTIONS::groupEnter( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.groupEnter" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Enter Group" ) )
+        .Tooltip( _( "Enter the group to edit items" ) )
+        .Icon( BITMAPS::group_enter ) );
+
+TOOL_ACTION ACTIONS::groupLeave( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.groupLeave" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Leave Group" ) )
+        .Tooltip( _( "Leave the current group" ) )
+        .Icon( BITMAPS::group_leave ) );
+
+// GROUP_TOOL
+TOOL_ACTION ACTIONS::groupProperties( TOOL_ACTION_ARGS()
+        .Name( "common.Groups.groupProperties" )
+        .Scope( AS_GLOBAL ) );
+
+TOOL_ACTION ACTIONS::pickNewGroupMember( TOOL_ACTION_ARGS()
+        .Name( "common.Groups.selectNewGroupMember" )
+        .Scope( AS_GLOBAL ) );
+
 // Generic Edit Actions
 TOOL_ACTION ACTIONS::cancelInteractive( TOOL_ACTION_ARGS()
         .Name( "common.Interactive.cancel" )

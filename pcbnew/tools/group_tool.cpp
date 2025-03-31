@@ -43,9 +43,9 @@ public:
         SetIcon( BITMAPS::group ); // fixme
         SetTitle( _( "Grouping" ) );
 
-        Add( PCB_ACTIONS::group );
-        Add( PCB_ACTIONS::ungroup );
-        Add( PCB_ACTIONS::removeFromGroup );
+        Add( ACTIONS::group );
+        Add( ACTIONS::ungroup );
+        Add( ACTIONS::removeFromGroup );
     }
 
     ACTION_MENU* create() const override
@@ -66,9 +66,9 @@ private:
 
         BOARD::GroupLegalOpsField legalOps = board->GroupLegalOps( selection );
 
-        Enable( PCB_ACTIONS::group.GetUIId(),           legalOps.create );
-        Enable( PCB_ACTIONS::ungroup.GetUIId(),         legalOps.ungroup );
-        Enable( PCB_ACTIONS::removeFromGroup.GetUIId(), legalOps.removeItems );
+        Enable( ACTIONS::group.GetUIId(),           legalOps.create );
+        Enable( ACTIONS::ungroup.GetUIId(),         legalOps.ungroup );
+        Enable( ACTIONS::removeFromGroup.GetUIId(), legalOps.removeItems );
     }
 };
 
@@ -375,12 +375,12 @@ int GROUP_TOOL::LeaveGroup( const TOOL_EVENT& aEvent )
 
 void GROUP_TOOL::setTransitions()
 {
-    Go( &GROUP_TOOL::GroupProperties,         PCB_ACTIONS::groupProperties.MakeEvent() );
-    Go( &GROUP_TOOL::PickNewMember,           PCB_ACTIONS::pickNewGroupMember.MakeEvent() );
+    Go( &GROUP_TOOL::GroupProperties,         ACTIONS::groupProperties.MakeEvent() );
+    Go( &GROUP_TOOL::PickNewMember,           ACTIONS::pickNewGroupMember.MakeEvent() );
 
-    Go( &GROUP_TOOL::Group,                   PCB_ACTIONS::group.MakeEvent() );
-    Go( &GROUP_TOOL::Ungroup,                 PCB_ACTIONS::ungroup.MakeEvent() );
-    Go( &GROUP_TOOL::RemoveFromGroup,         PCB_ACTIONS::removeFromGroup.MakeEvent() );
-    Go( &GROUP_TOOL::EnterGroup,              PCB_ACTIONS::groupEnter.MakeEvent() );
-    Go( &GROUP_TOOL::LeaveGroup,              PCB_ACTIONS::groupLeave.MakeEvent() );
+    Go( &GROUP_TOOL::Group,                   ACTIONS::group.MakeEvent() );
+    Go( &GROUP_TOOL::Ungroup,                 ACTIONS::ungroup.MakeEvent() );
+    Go( &GROUP_TOOL::RemoveFromGroup,         ACTIONS::removeFromGroup.MakeEvent() );
+    Go( &GROUP_TOOL::EnterGroup,              ACTIONS::groupEnter.MakeEvent() );
+    Go( &GROUP_TOOL::LeaveGroup,              ACTIONS::groupLeave.MakeEvent() );
 }
