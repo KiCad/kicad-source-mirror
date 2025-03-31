@@ -650,8 +650,14 @@ foreach(file ${markdownFiles})
     add_dependencies(generate_headers ${filename}_gen)
 
     # Mark the output header as a dependency of the source file
+    get_source_file_property(existing_depends dialogs/panel_setup_rules.cpp OBJECT_DEPENDS)
+    if(NOT existing_depends OR existing_depends STREQUAL "NOTFOUND")
+        set(existing_depends "")
+    else()
+        set(existing_depends "${existing_depends};")
+    endif()
     set_source_files_properties(dialogs/panel_setup_rules.cpp
-        PROPERTIES OBJECT_DEPENDS "${outputHeader}")
+        PROPERTIES OBJECT_DEPENDS "${existing_depends}${outputHeader}")
 endforeach()
 
 if( APPLE )
