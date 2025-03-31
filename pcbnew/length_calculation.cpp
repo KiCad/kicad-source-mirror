@@ -416,7 +416,7 @@ void LENGTH_CALCULATION::optimiseViaLayers(
 
             auto padItr = aPadsPositionMap.find( via->GetVia()->GetPosition() );
 
-            if( padItr != aLinesPositionMap.end() )
+            if( padItr != aPadsPositionMap.end() )
             {
                 // This could be a via-in-pad - check for overlapping pads which are not on the line layer
                 const std::unordered_set<LENGTH_CALCULATION_ITEM*>& pads = padItr->second;
