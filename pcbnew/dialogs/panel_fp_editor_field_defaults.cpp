@@ -343,7 +343,7 @@ void PANEL_FP_EDITOR_FIELD_DEFAULTS::loadFPSettings( const FOOTPRINT_EDITOR_SETT
     m_fieldPropsGrid->GetTable()->DeleteRows( 0, m_fieldPropsGrid->GetNumberRows() );
     m_fieldPropsGrid->GetTable()->AppendRows( 2 );
 
-    for( int i : { REFERENCE_FIELD, VALUE_FIELD } )
+    for( int i = 0; i < std::min<int>( 2, (int) aCfg->m_DesignSettings.m_DefaultFPTextItems.size() ); ++i )
     {
         TEXT_ITEM_INFO item = aCfg->m_DesignSettings.m_DefaultFPTextItems[i];
 
@@ -356,7 +356,7 @@ void PANEL_FP_EDITOR_FIELD_DEFAULTS::loadFPSettings( const FOOTPRINT_EDITOR_SETT
 
     // if aCfg->m_DesignSettings.m_DefaultFPTextItems.size() is > 2 (0 and 1 are ref and value),
     // some extra texts must be added to the list of default texts
-    int extra_texts_cnt = aCfg->m_DesignSettings.m_DefaultFPTextItems.size() - 2;
+    int extra_texts_cnt = (int) aCfg->m_DesignSettings.m_DefaultFPTextItems.size() - 2;
 
     if( extra_texts_cnt > 0 )
         m_textItemsGrid->GetTable()->AppendRows( extra_texts_cnt );
