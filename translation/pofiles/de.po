@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-03-30 16:07+0000\n"
+"PO-Revision-Date: 2025-04-01 10:49+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -27055,7 +27055,6 @@ msgid "Running jobs"
 msgstr "Führe Aufträge aus"
 
 #: kicad/dialogs/panel_jobset.cpp:295
-#, fuzzy
 msgid "Edit Destination Options..."
 msgstr "Ausgabeoptionen bearbeiten..."
 
@@ -28286,9 +28285,9 @@ msgid "Failed to create commit: %s"
 msgstr "Konnte Commit nicht erstellen: %s"
 
 #: kicad/project_tree_pane.cpp:2577
-#, fuzzy, c-format
+#, c-format
 msgid "Created commit with id: %s"
-msgstr "Konnte Index nicht schreiben: %s"
+msgstr "Commit mit ID erstellt: %s"
 
 #: kicad/tools/kicad_manager_actions.cpp:43
 msgid "New Project..."
@@ -41393,9 +41392,9 @@ msgid "Condition not satisfied; rule ignored."
 msgstr "Bedingung nicht erfüllt; Regel ignoriert."
 
 #: pcbnew/drc/drc_engine.cpp:1368
-#, fuzzy, c-format
+#, c-format
 msgid "Inheriting from parent: %s."
-msgstr "Ableiten von Symbol \"%s\"."
+msgstr "Ableiten von Symbol: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1407 pcbnew/drc/drc_engine.cpp:1431
 #, c-format
