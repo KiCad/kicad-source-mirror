@@ -456,12 +456,17 @@ void PROPERTIES_PANEL::onShow( wxShowEvent& aEvent )
 
 void PROPERTIES_PANEL::onCharHook( wxKeyEvent& aEvent )
 {
-    if( aEvent.GetKeyCode() == WXK_TAB && !aEvent.ShiftDown() && m_grid->IsAnyModified() )
+    // m_grid->IsAnyModified() doesn't work for the first modification
+    if( aEvent.GetKeyCode() == WXK_TAB && !aEvent.ShiftDown() )
     {
+        wxVariant oldValue = m_grid->GetSelectedProperty()->GetValue();
+
         m_grid->CommitChangesFromEditor();
 
-        // Pass the tab key on so the default property grid tab behavior is honored.
-        aEvent.Skip();
+        // If there was no change, treat it as a navigation key
+        if( oldValue == m_grid->GetSelectedProperty()->GetValue() )
+            aEvent.Skip();
+
         return;
     }
 
