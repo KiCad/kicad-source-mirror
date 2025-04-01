@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-03-30 16:07+0000\n"
+"PO-Revision-Date: 2025-04-01 12:48+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -4338,14 +4338,12 @@ msgid "Add"
 msgstr "Dodaj"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
-#, fuzzy
 msgid "Enable Git Tracking"
-msgstr "Włącz animację"
+msgstr "Aktywuj śledzenie przez Git"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:28
-#, fuzzy
 msgid "Remote Tracking"
-msgstr "Trasowanie ścieżek"
+msgstr "Śledzenie repozytorium"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:41
 msgid "Update interval:"
@@ -7604,14 +7602,12 @@ msgid "Could not get reference OID for reference '%s'"
 msgstr "Nie można uzyskać referencyjnego identyfikatora OID '%s'"
 
 #: common/git/git_pull_handler.cpp:275
-#, fuzzy
 msgid "Could not look up target commit"
-msgstr "Nie można przejrzeć zmian"
+msgstr "Nie można wyszukać zatwierdzenia docelowego"
 
 #: common/git/git_pull_handler.cpp:287
-#, fuzzy
 msgid "Could not get tree from target commit"
-msgstr "Nie można scalić zmian"
+msgstr "Nie można pobrać drzewa zależności zatwierdzenia docelowego"
 
 #: common/git/git_pull_handler.cpp:329 common/git/kicad_git_errors.cpp:55
 msgid "Failed to perform checkout operation."
@@ -7623,19 +7619,17 @@ msgid "Failed to update reference '%s' to point to '%s'"
 msgstr "Nie udało się zaktualizować odnośnika '%s' by wskazywał na '%s'"
 
 #: common/git/git_pull_handler.cpp:348
-#, fuzzy
 msgid "Failed to clean up repository state after fast-forward."
-msgstr "Nie można sklonować repozytorium."
+msgstr ""
+"Nie powiodło się czyszczenie stanu repozytorium po szybkim przewinięciu."
 
 #: common/git/git_pull_handler.cpp:357
-#, fuzzy
 msgid "Failed to initialize revision walker."
-msgstr "Nie udało się zainicjować projektu Git."
+msgstr "Nie powiodła się inicjalizacja kontrolera zmian."
 
 #: common/git/git_pull_handler.cpp:366
-#, fuzzy
 msgid "Failed to push reference to revision walker."
-msgstr "Nie udało się wypchnąć zmian do zdalnego repozytorium."
+msgstr "Nie powiodło się wypchnąć odnośnika do kontrolera zmian."
 
 #: common/git/git_pull_handler.cpp:381
 #, c-format
@@ -28981,9 +28975,9 @@ msgid "Failed to create commit: %s"
 msgstr "Nie można było utworzyć bloku zmian: %s"
 
 #: kicad/project_tree_pane.cpp:2577
-#, fuzzy, c-format
+#, c-format
 msgid "Created commit with id: %s"
-msgstr "Nie można zapisać indeksu: '%s'"
+msgstr "Utworzono zatwierdzenie z identyfikatorem: %s"
 
 #: kicad/tools/kicad_manager_actions.cpp:43
 msgid "New Project..."
