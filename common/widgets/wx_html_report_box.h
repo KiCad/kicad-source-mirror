@@ -61,7 +61,7 @@ public:
     /**
      * Delete the stored messages
      */
-    void Clear();
+    void Clear() override;
 
 private:
     void onThemeChanged( wxSysColourChangedEvent &aEvent );

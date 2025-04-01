@@ -53,15 +53,10 @@ REPORTER& REPORTER::Report( const char* aText, SEVERITY aSeverity )
 }
 
 
-bool REPORTER::HasMessageOfSeverity( int aSeverityMask ) const
-{
-    wxFAIL_MSG( "HasMessageOfSeverity is not implemented in this reporter" );
-    return HasMessage();
-}
-
-
 REPORTER& WX_TEXT_CTRL_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
 {
+    REPORTER::Report( aText, aSeverity );
+
     wxCHECK_MSG( m_textCtrl != nullptr, *this,
                  wxT( "No wxTextCtrl object defined in WX_TEXT_CTRL_REPORTER." ) );
 
@@ -78,7 +73,8 @@ bool WX_TEXT_CTRL_REPORTER::HasMessage() const
 
 REPORTER& WX_STRING_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
 {
-    m_severityMask |= aSeverity;
+    REPORTER::Report( aText, aSeverity );
+
     m_string << aText << wxS( "\n" );
     return *this;
 }
@@ -92,7 +88,7 @@ const wxString& WX_STRING_REPORTER::GetMessages() const
 
 void WX_STRING_REPORTER::Clear()
 {
-    m_severityMask = 0;
+    REPORTER::Clear();
     m_string.clear();
 }
 
@@ -103,15 +99,9 @@ bool WX_STRING_REPORTER::HasMessage() const
 }
 
 
-bool WX_STRING_REPORTER::HasMessageOfSeverity( int aSeverityMask ) const
-{
-    return ( m_severityMask & aSeverityMask ) != 0;
-}
-
-
 REPORTER& NULL_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
 {
-    return *this;
+    return REPORTER::Report( aText, aSeverity );
 }
 
 
@@ -128,6 +118,8 @@ REPORTER& NULL_REPORTER::GetInstance()
 
 REPORTER& CLI_REPORTER::Report( const wxString& aMsg, SEVERITY aSeverity )
 {
+    REPORTER::Report( aMsg, aSeverity );
+
     FILE* target = stdout;
 
     if( aSeverity == RPT_SEVERITY_ERROR )
@@ -138,21 +130,7 @@ REPORTER& CLI_REPORTER::Report( const wxString& aMsg, SEVERITY aSeverity )
     else
         wxFprintf( target, aMsg + wxS( "\n" ) );
 
-    m_hasMessageMap[aSeverity] = true;
-
     return *this;
-}
-
-
-bool CLI_REPORTER::HasMessageOfSeverity( int aSeverityMask ) const
-{
-    for( const auto& [severity, flag] : m_hasMessageMap )
-    {
-        if( ( aSeverityMask & severity ) > 0 && flag )
-            return true;
-    }
-
-    return false;
 }
 
 
@@ -166,6 +144,8 @@ REPORTER& CLI_REPORTER::GetInstance()
 
 REPORTER& STDOUT_REPORTER::Report( const wxString& aMsg, SEVERITY aSeverity )
 {
+    REPORTER::Report( aMsg, aSeverity );
+
     switch( aSeverity )
     {
     case RPT_SEVERITY_UNDEFINED: std::cout << "SEVERITY_UNDEFINED: "; break;
@@ -197,6 +177,8 @@ REPORTER& STDOUT_REPORTER::GetInstance()
 
 REPORTER& WXLOG_REPORTER::Report( const wxString& aMsg, SEVERITY aSeverity )
 {
+    REPORTER::Report( aMsg, aSeverity );
+
     switch( aSeverity )
     {
     case RPT_SEVERITY_ERROR:     wxLogError( aMsg );                  break;
@@ -227,6 +209,8 @@ REPORTER& WXLOG_REPORTER::GetInstance()
 
 REPORTER& STATUSBAR_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
 {
+    REPORTER::Report( aText, aSeverity );
+
     if( m_statusBar )
         m_statusBar->SetStatusText( aText, m_position );
 

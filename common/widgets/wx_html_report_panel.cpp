@@ -48,8 +48,8 @@ WX_HTML_REPORT_PANEL::WX_HTML_REPORT_PANEL( wxWindow* parent, wxWindowID id, con
     m_htmlView->SetFont( KIUI::GetInfoFont( m_htmlView ) );
     Flush();
 
-    Connect( wxEVT_COMMAND_MENU_SELECTED,
-             wxMenuEventHandler( WX_HTML_REPORT_PANEL::onMenuEvent ), nullptr, this );
+    Connect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( WX_HTML_REPORT_PANEL::onMenuEvent ),
+             nullptr, this );
 
     m_htmlView->Bind( wxEVT_SYS_COLOUR_CHANGED,
                       wxSysColourChangedEventHandler( WX_HTML_REPORT_PANEL::onThemeChanged ),
@@ -190,7 +190,7 @@ wxString WX_HTML_REPORT_PANEL::generateHtml( const REPORT_LINE& aLine )
         {
         case RPT_SEVERITY_ERROR:
             retv = wxS( "<font color=#F04040 size=3>" ) + _( "Error:" ) + wxS( " </font>" )
-                   wxS( "<font size=3>" ) + aLine.message + wxS( "</font><br>" );
+                   + wxS( "<font size=3>" ) + aLine.message + wxS( "</font><br>" );
             break;
         case RPT_SEVERITY_WARNING:
             retv = wxS( "<font size=3>" ) + _( "Warning:" ) + wxS( " " ) + aLine.message
@@ -212,7 +212,7 @@ wxString WX_HTML_REPORT_PANEL::generateHtml( const REPORT_LINE& aLine )
         {
         case RPT_SEVERITY_ERROR:
             retv = wxS( "<font color=#D00000 size=3>" ) + _( "Error:" ) + wxS( " </font>" )
-                   wxS( "<font size=3>" ) + aLine.message + wxS( "</font><br>" );
+                   + wxS( "<font size=3>" ) + aLine.message + wxS( "</font><br>" );
             break;
         case RPT_SEVERITY_WARNING:
             retv = wxS( "<font size=3>" ) + _( "Warning:" ) + wxS( " " ) + aLine.message
@@ -393,7 +393,7 @@ void WX_HTML_REPORT_PANEL::onBtnSaveToFile( wxCommandEvent& event )
         return;
     }
 
-    for( REPORT_LINES section : { m_reportHead, m_report, m_reportTail } )
+    for( const REPORT_LINES& section : { m_reportHead, m_report, m_reportTail } )
     {
         for( const REPORT_LINE& l : section )
         {
@@ -466,6 +466,8 @@ void WX_HTML_REPORT_PANEL::SetShowSeverity( SEVERITY aSeverity, bool aValue )
 
 REPORTER& WX_HTML_PANEL_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
 {
+    REPORTER::Report( aText, aSeverity );
+
     wxCHECK_MSG( m_panel != nullptr, *this,
                  wxT( "No WX_HTML_REPORT_PANEL object defined in WX_HTML_PANEL_REPORTER." ) );
 
@@ -476,6 +478,8 @@ REPORTER& WX_HTML_PANEL_REPORTER::Report( const wxString& aText, SEVERITY aSever
 
 REPORTER& WX_HTML_PANEL_REPORTER::ReportTail( const wxString& aText, SEVERITY aSeverity )
 {
+    REPORTER::ReportTail( aText, aSeverity );
+
     wxCHECK_MSG( m_panel != nullptr, *this,
                  wxT( "No WX_HTML_REPORT_PANEL object defined in WX_HTML_PANEL_REPORTER." ) );
 
@@ -486,6 +490,8 @@ REPORTER& WX_HTML_PANEL_REPORTER::ReportTail( const wxString& aText, SEVERITY aS
 
 REPORTER& WX_HTML_PANEL_REPORTER::ReportHead( const wxString& aText, SEVERITY aSeverity )
 {
+    REPORTER::ReportHead( aText, aSeverity );
+
     wxCHECK_MSG( m_panel != nullptr, *this,
                  wxT( "No WX_HTML_REPORT_PANEL object defined in WX_HTML_PANEL_REPORTER." ) );
 
