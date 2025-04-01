@@ -214,6 +214,24 @@ int POSITION_RELATIVE_TOOL::PositionRelativeInteractively( const TOOL_EVENT& aEv
                 frame()->GetCanvas()->SetCurrentCursor( KICURSOR::MEASURE );
             };
 
+    const auto setInitialMsg =
+            [&]()
+            {
+                statusPopup.SetText( _( "Select the reference point on the item to move." ) );
+            };
+
+    const auto setDragMsg =
+            [&]()
+            {
+                statusPopup.SetText( _( "Select the point to define the new offset from." ) );
+            };
+
+    const auto setPopupPosition =
+            [&]()
+            {
+                statusPopup.Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, -50 ) );
+            };
+
     auto cleanup =
             [&] ()
             {
@@ -222,14 +240,16 @@ int POSITION_RELATIVE_TOOL::PositionRelativeInteractively( const TOOL_EVENT& aEv
                 controls.CaptureCursor( false );
                 controls.ForceCursorPosition( false );
                 originSet = false;
+                setInitialMsg();
             };
 
-    const auto applyVector = [&]( const VECTOR2I& aMoveVec )
-    {
-        BOARD_COMMIT commit( frame() );
-        moveSelectionBy( selection, aMoveVec, commit );
-        commit.Push( _( "Set Relative Position Interactively" ) );
-    };
+    const auto applyVector =
+            [&]( const VECTOR2I& aMoveVec )
+            {
+                BOARD_COMMIT commit( frame() );
+                moveSelectionBy( selection, aMoveVec, commit );
+                commit.Push( _( "Set Relative Position Interactively" ) );
+            };
 
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
@@ -240,21 +260,6 @@ int POSITION_RELATIVE_TOOL::PositionRelativeInteractively( const TOOL_EVENT& aEv
 
     // Set initial cursor
     setCursor();
-
-    const auto setInitialMsg = [&]()
-    {
-        statusPopup.SetText( _( "Select the reference point on the item to move." ) );
-    };
-
-    const auto setDragMsg = [&]()
-    {
-        statusPopup.SetText( _( "Select the point to define the new offset from." ) );
-    };
-
-    const auto setPopupPosition = [&]()
-    {
-        statusPopup.Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, -50 ) );
-    };
 
     setInitialMsg();
 
