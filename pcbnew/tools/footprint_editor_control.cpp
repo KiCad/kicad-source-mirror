@@ -529,8 +529,12 @@ int FOOTPRINT_EDITOR_CONTROL::RenameFootprint( const TOOL_EVENT& aEvent )
     }
 
     wxDataViewItem treeItem = m_frame->GetLibTreeAdapter()->FindItem( fpID );
-    m_frame->UpdateLibraryTree( treeItem, footprint );
-    m_frame->FocusOnLibID( LIB_ID( libraryName, newName ) );
+
+    if( footprint )
+    {
+        m_frame->UpdateLibraryTree( treeItem, footprint );
+        m_frame->FocusOnLibID( LIB_ID( libraryName, newName ) );
+    }
 
     return 0;
 }
@@ -636,6 +640,7 @@ int FOOTPRINT_EDITOR_CONTROL::OpenDirectory( const TOOL_EVENT& aEvent )
 
         if( !path.IsEmpty() && wxDirExists( path ) )
             LaunchExternal( path );
+
         return 0;
     }
 
