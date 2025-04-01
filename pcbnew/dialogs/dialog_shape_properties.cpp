@@ -62,7 +62,8 @@ class GEOM_SYNCER : public wxEvtHandler
 {
 public:
     GEOM_SYNCER( PCB_SHAPE& aShape, std::vector<BOUND_CONTROL>& aBoundCtrls ) :
-            m_shape( aShape ), m_boundCtrls( aBoundCtrls )
+            m_shape( aShape ),
+            m_boundCtrls( aBoundCtrls )
     {
     }
 
@@ -844,6 +845,9 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
     m_solderMaskMargin( aParent, m_solderMaskMarginLabel, m_solderMaskMarginCtrl, m_solderMaskMarginUnit ),
     m_workingCopy( *m_item )
 {
+    m_workingCopy.SetParentGroup( nullptr );
+    m_workingCopy.SetParent( nullptr );
+
     SetTitle( wxString::Format( GetTitle(), m_item->GetFriendlyName() ) );
     m_hash_key = TO_UTF8( GetTitle() );
 
