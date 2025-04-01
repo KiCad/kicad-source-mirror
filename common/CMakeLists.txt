@@ -363,6 +363,8 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_global_design_block_lib_table_config.cpp
     dialogs/dialog_grid_settings.cpp
     dialogs/dialog_grid_settings_base.cpp
+    dialogs/dialog_group_properties.cpp
+    dialogs/dialog_group_properties_base.cpp
     dialogs/dialog_hotkey_list.cpp
     dialogs/dialog_HTML_reporter_base.cpp
     dialogs/dialog_import_choose_project.cpp
@@ -600,6 +602,7 @@ set( COMMON_SRCS
     eda_dde.cpp
     eda_doc.cpp
     eda_draw_frame.cpp
+    eda_group.cpp
     eda_item.cpp
     eda_shape.cpp
     eda_text.cpp

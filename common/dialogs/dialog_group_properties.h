@@ -26,16 +26,17 @@
 
 #include <dialogs/dialog_group_properties_base.h>
 
-class PCB_BASE_EDIT_FRAME;
+class EDA_DRAW_FRAME;
 class TOOL_MANAGER;
-class PCB_GROUP;
+class EDA_GROUP;
+class EDA_ITEM;
 
 
 class DIALOG_GROUP_PROPERTIES : public DIALOG_GROUP_PROPERTIES_BASE
 {
 public:
-    DIALOG_GROUP_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PCB_GROUP* aTarget );
-    ~DIALOG_GROUP_PROPERTIES();
+    DIALOG_GROUP_PROPERTIES( EDA_DRAW_FRAME* aParent, EDA_GROUP* aTarget );
+    ~DIALOG_GROUP_PROPERTIES() override;
 
     void OnMemberSelected( wxCommandEvent& event ) override;
     void OnAddMember( wxCommandEvent& event ) override;
@@ -47,9 +48,9 @@ private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    PCB_BASE_EDIT_FRAME* m_brdEditor;
-    TOOL_MANAGER*        m_toolMgr;
-    PCB_GROUP*           m_group;
+    EDA_DRAW_FRAME* m_frame;
+    TOOL_MANAGER*   m_toolMgr;
+    EDA_GROUP*      m_group;
 };
 
 #endif  // DIALOG_GROUP_PROPERTIES_H

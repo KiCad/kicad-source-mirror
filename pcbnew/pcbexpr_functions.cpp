@@ -919,7 +919,7 @@ static void memberOfGroupFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     result->SetDeferredEval(
             [item, arg]() -> double
             {
-                PCB_GROUP* group = item->GetParentGroup();
+                EDA_GROUP* group = item->GetParentGroup();
 
                 if( !group && item->GetParent() && item->GetParent()->Type() == PCB_FOOTPRINT_T )
                     group = item->GetParent()->GetParentGroup();
@@ -929,7 +929,7 @@ static void memberOfGroupFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                     if( group->GetName().Matches( arg->AsString() ) )
                         return 1.0;
 
-                    group = group->GetParentGroup();
+                    group = group->AsEdaItem()->GetParentGroup();
                 }
 
                 return 0.0;

@@ -22,6 +22,7 @@
  */
 #include <bitmaps.h>
 #include <eda_draw_frame.h>
+#include <eda_group.h>
 #include <geometry/shape_compound.h>
 #include <sch_item.h>
 #include <sch_group.h>
@@ -74,8 +75,10 @@ bool SCH_GROUP::IsGroupableType( KICAD_T aType )
 }
 
 
-bool SCH_GROUP::AddItem( SCH_ITEM* aItem )
+bool SCH_GROUP::AddItem( EDA_ITEM* aItem )
 {
+    wxCHECK_MSG( aItem, false, wxT( "Nullptr added to group." ) );
+
     wxCHECK_MSG( IsGroupableType( aItem->Type() ), false,
                  wxT( "Invalid item type added to group: " ) + aItem->GetTypeDesc() );
 
@@ -89,8 +92,10 @@ bool SCH_GROUP::AddItem( SCH_ITEM* aItem )
 }
 
 
-bool SCH_GROUP::RemoveItem( SCH_ITEM* aItem )
+bool SCH_GROUP::RemoveItem( EDA_ITEM* aItem )
 {
+    wxCHECK_MSG( aItem, false, wxT( "Nullptr removed from group." ) );
+
     // Only clear the item's group field if it was inside this group
     if( m_items.erase( aItem ) == 1 )
     {
@@ -104,10 +109,28 @@ bool SCH_GROUP::RemoveItem( SCH_ITEM* aItem )
 
 void SCH_GROUP::RemoveAll()
 {
-    for( SCH_ITEM* item : m_items )
+    for( EDA_ITEM* item : m_items )
         item->SetParentGroup( nullptr );
 
     m_items.clear();
+}
+
+
+std::unordered_set<SCH_ITEM*> SCH_GROUP::GetSchItems() const
+{
+    std::unordered_set<SCH_ITEM*> items;
+
+    for( EDA_ITEM* item : m_items )
+    {
+        SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item );
+
+        if( sch_item )
+        {
+            items.insert( sch_item );
+        }
+    }
+
+    return items;
 }
 
 
@@ -115,7 +138,7 @@ void SCH_GROUP::RemoveAll()
  * @return if not in the symbol editor and aItem is in a symbol, returns the
  * symbol's parent group. Otherwise, returns the aItem's parent group.
  */
-SCH_GROUP* getClosestGroup( SCH_ITEM* aItem, bool isSymbolEditor )
+EDA_GROUP* getClosestGroup( SCH_ITEM* aItem, bool isSymbolEditor )
 {
     if( !isSymbolEditor && aItem->GetParent() && aItem->GetParent()->Type() == SCH_SYMBOL_T )
         return static_cast<SCH_SYMBOL*>( aItem->GetParent() )->GetParentGroup();
@@ -125,26 +148,26 @@ SCH_GROUP* getClosestGroup( SCH_ITEM* aItem, bool isSymbolEditor )
 
 
 /// Returns the top level group inside the aScope group, or nullptr
-SCH_GROUP* getNestedGroup( SCH_ITEM* aItem, SCH_GROUP* aScope, bool isSymbolEditor )
+EDA_GROUP* getNestedGroup( SCH_ITEM* aItem, EDA_GROUP* aScope, bool isSymbolEditor )
 {
-    SCH_GROUP* group = getClosestGroup( aItem, isSymbolEditor );
+    EDA_GROUP* group = getClosestGroup( aItem, isSymbolEditor );
 
     if( group == aScope )
         return nullptr;
 
-    while( group && group->GetParentGroup() && group->GetParentGroup() != aScope )
+    while( group && group->AsEdaItem()->GetParentGroup() && group->AsEdaItem()->GetParentGroup() != aScope )
     {
-        if( group->GetParent()->Type() == LIB_SYMBOL_T && isSymbolEditor )
+        if( group->AsEdaItem()->GetParent()->Type() == LIB_SYMBOL_T && isSymbolEditor )
             break;
 
-        group = group->GetParentGroup();
+        group = group->AsEdaItem()->GetParentGroup();
     }
 
     return group;
 }
 
 
-SCH_GROUP* SCH_GROUP::TopLevelGroup( SCH_ITEM* aItem, SCH_GROUP* aScope, bool isSymbolEditor )
+EDA_GROUP* SCH_GROUP::TopLevelGroup( SCH_ITEM* aItem, EDA_GROUP* aScope, bool isSymbolEditor )
 {
     return getNestedGroup( aItem, aScope, isSymbolEditor );
 }
@@ -152,14 +175,14 @@ SCH_GROUP* SCH_GROUP::TopLevelGroup( SCH_ITEM* aItem, SCH_GROUP* aScope, bool is
 
 bool SCH_GROUP::WithinScope( SCH_ITEM* aItem, SCH_GROUP* aScope, bool isSymbolEditor )
 {
-    SCH_GROUP* group = getClosestGroup( aItem, isSymbolEditor );
+    EDA_GROUP* group = getClosestGroup( aItem, isSymbolEditor );
 
     if( group && group == aScope )
         return true;
 
-    SCH_GROUP* nested = getNestedGroup( aItem, aScope, isSymbolEditor );
+    EDA_GROUP* nested = getNestedGroup( aItem, aScope, isSymbolEditor );
 
-    return nested && nested->GetParentGroup() && nested->GetParentGroup() == aScope;
+    return nested && nested->AsEdaItem()->GetParentGroup() && nested->AsEdaItem()->GetParentGroup() == aScope;
 }
 
 
@@ -191,7 +214,7 @@ SCH_GROUP* SCH_GROUP::DeepClone() const
     SCH_GROUP* newGroup = new SCH_GROUP( *this );
     newGroup->m_items.clear();
 
-    for( SCH_ITEM* member : m_items )
+    for( EDA_ITEM* member : m_items )
     {
         if( member->Type() == SCH_GROUP_T )
             newGroup->AddItem( static_cast<SCH_GROUP*>( member )->DeepClone() );
@@ -208,12 +231,12 @@ SCH_GROUP* SCH_GROUP::DeepDuplicate() const
     SCH_GROUP* newGroup = static_cast<SCH_GROUP*>( Duplicate() );
     newGroup->m_items.clear();
 
-    for( SCH_ITEM* member : m_items )
+    for( EDA_ITEM* member : m_items )
     {
         if( member->Type() == SCH_GROUP_T )
             newGroup->AddItem( static_cast<SCH_GROUP*>( member )->DeepDuplicate() );
         else
-            newGroup->AddItem( static_cast<SCH_ITEM*>( member->Duplicate() ) );
+            newGroup->AddItem( static_cast<SCH_ITEM*>( member )->Duplicate() );
     }
 
     return newGroup;
@@ -246,7 +269,7 @@ const BOX2I SCH_GROUP::GetBoundingBox() const
 {
     BOX2I bbox;
 
-    for( SCH_ITEM* item : m_items )
+    for( EDA_ITEM* item : m_items )
     {
         if( item->Type() == SCH_SYMBOL_T || item->Type() == LIB_SYMBOL_T )
             bbox.Merge( static_cast<SYMBOL*>( item )->GetBoundingBox() );
@@ -293,29 +316,29 @@ double SCH_GROUP::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
 
 void SCH_GROUP::Move( const VECTOR2I& aMoveVector )
 {
-    for( SCH_ITEM* member : m_items )
-        member->Move( aMoveVector );
+    for( EDA_ITEM* member : m_items )
+        static_cast<SCH_ITEM*>( member )->Move( aMoveVector );
 }
 
 
 void SCH_GROUP::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
-    for( SCH_ITEM* member : m_items )
-        member->Rotate( aCenter, aRotateCCW );
+    for( EDA_ITEM* member : m_items )
+        static_cast<SCH_ITEM*>( member )->Rotate( aCenter, aRotateCCW );
 }
 
 
 void SCH_GROUP::MirrorHorizontally( int aCenter )
 {
-    for( SCH_ITEM* item : m_items )
-        item->MirrorHorizontally( aCenter );
+    for( EDA_ITEM* item : m_items )
+        static_cast<SCH_ITEM*>( item )->MirrorHorizontally( aCenter );
 }
 
 
 void SCH_GROUP::MirrorVertically( int aCenter )
 {
-    for( SCH_ITEM* item : m_items )
-        item->MirrorVertically( aCenter );
+    for( EDA_ITEM* item : m_items )
+        static_cast<SCH_ITEM*>( item )->MirrorVertically( aCenter );
 }
 
 
@@ -345,12 +368,12 @@ void SCH_GROUP::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction
 {
     try
     {
-        for( SCH_ITEM* item : m_items )
+        for( EDA_ITEM* item : m_items )
         {
-            aFunction( item );
+            aFunction( static_cast<SCH_ITEM*>( item ) );
 
             if( item->Type() == SCH_GROUP_T )
-                item->RunOnChildren( aFunction, RECURSE_MODE::RECURSE );
+                static_cast<SCH_ITEM*>( item )->RunOnChildren( aFunction, RECURSE_MODE::RECURSE );
         }
     }
     catch( std::bad_function_call& )
@@ -402,11 +425,11 @@ double SCH_GROUP::Similarity( const SCH_ITEM& aOther ) const
 
     double similarity = 0.0;
 
-    for( SCH_ITEM* item : m_items )
+    for( EDA_ITEM* item : m_items )
     {
-        for( SCH_ITEM* otherItem : other.m_items )
+        for( EDA_ITEM* otherItem : other.m_items )
         {
-            similarity += item->Similarity( *otherItem );
+            similarity += static_cast<SCH_ITEM*>( item )->Similarity( *static_cast<SCH_ITEM*>( otherItem ) );
         }
     }
 
@@ -421,7 +444,9 @@ static struct SCH_GROUP_DESC
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( SCH_GROUP );
         propMgr.AddTypeCast( new TYPE_CAST<SCH_GROUP, SCH_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<SCH_GROUP, EDA_GROUP> );
         propMgr.InheritsAfter( TYPE_HASH( SCH_GROUP ), TYPE_HASH( SCH_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( SCH_GROUP ), TYPE_HASH( EDA_GROUP ) );
 
         propMgr.Mask( TYPE_HASH( SCH_GROUP ), TYPE_HASH( SCH_ITEM ), _HKI( "Position X" ) );
         propMgr.Mask( TYPE_HASH( SCH_GROUP ), TYPE_HASH( SCH_ITEM ), _HKI( "Position Y" ) );
@@ -429,7 +454,7 @@ static struct SCH_GROUP_DESC
         const wxString groupTab = _HKI( "Group Properties" );
 
         propMgr.AddProperty(
-                new PROPERTY<SCH_GROUP, wxString>( _HKI( "Name" ), &SCH_GROUP::SetName, &SCH_GROUP::GetName ),
+                new PROPERTY<EDA_GROUP, wxString>( _HKI( "Name" ), &SCH_GROUP::SetName, &SCH_GROUP::GetName ),
                 groupTab );
     }
 } _SCH_GROUP_DESC;

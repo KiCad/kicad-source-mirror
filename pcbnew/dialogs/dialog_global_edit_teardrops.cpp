@@ -387,10 +387,10 @@ void DIALOG_GLOBAL_EDIT_TEARDROPS::visitItem( BOARD_COMMIT* aCommit,
     {
         if( !aItem->IsSelected() )
         {
-            PCB_GROUP* group = aItem->GetParentGroup();
+            EDA_GROUP* group = aItem->GetParentGroup();
 
-            while( group && !group->IsSelected() )
-                group = group->GetParentGroup();
+            while( group && !group->AsEdaItem()->IsSelected() )
+                group = group->AsEdaItem()->GetParentGroup();
 
             if( !group )
                 return;

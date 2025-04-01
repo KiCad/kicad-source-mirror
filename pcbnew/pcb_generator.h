@@ -51,7 +51,7 @@ public:
     /*
      * Clone() this and all descendants
      */
-    PCB_GENERATOR* DeepClone() const;
+    PCB_GENERATOR* DeepClone() const override;
 
     virtual void EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit );
 
@@ -88,8 +88,6 @@ public:
     void Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
 
     void Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aMirrorDirection ) override;
-
-    bool AddItem( BOARD_ITEM* aItem ) override;
 
     LSET GetLayerSet() const override;
 

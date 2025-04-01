@@ -1606,7 +1606,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             break;
 
         case PCB_GROUP_T:
-            for( BOARD_ITEM* item : static_cast<const PCB_GROUP*>( aItem )->GetItems() )
+            for( BOARD_ITEM* item : static_cast<PCB_GROUP*>( aItem )->GetBoardItems() )
             {
                 if( checkVisibility( item ) )
                     computeAnchors( item, aRefPos, aFrom, nullptr );

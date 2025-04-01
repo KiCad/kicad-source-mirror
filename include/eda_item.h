@@ -57,6 +57,7 @@ enum RECURSE_MODE
  */
 class UNITS_PROVIDER;
 class EDA_DRAW_FRAME;
+class EDA_GROUP;
 class MSG_PANEL_ITEM;
 class EMBEDDED_FILES;
 
@@ -94,7 +95,7 @@ typedef const INSPECTOR_FUNC& INSPECTOR;
 class EDA_ITEM : public KIGFX::VIEW_ITEM, public SERIALIZABLE
 {
 public:
-    virtual ~EDA_ITEM() { };
+    virtual ~EDA_ITEM() { wxASSERT( m_group == nullptr ); };
 
     /**
      * Returns the type of object.
@@ -108,6 +109,9 @@ public:
 
     EDA_ITEM* GetParent() const { return m_parent; }
     virtual void SetParent( EDA_ITEM* aParent )   { m_parent = aParent; }
+
+    virtual void SetParentGroup( EDA_GROUP* aGroup ) { m_group = aGroup; }
+    EDA_GROUP*   GetParentGroup() const { return m_group; }
 
     inline bool IsModified() const { return m_flags & IS_CHANGED; }
     inline bool IsNew() const { return m_flags & IS_NEW; }
@@ -504,6 +508,7 @@ private:
 protected:
     EDA_ITEM_FLAGS m_flags;
     EDA_ITEM*      m_parent; ///< Linked list: Link (parent struct).
+    EDA_GROUP*     m_group;  ///< The group this item belongs to
     bool           m_forceVisible;
     bool           m_isRollover;
 };

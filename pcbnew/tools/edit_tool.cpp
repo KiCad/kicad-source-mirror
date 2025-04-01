@@ -2424,13 +2424,13 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 
 
 void EDIT_TOOL::getChildItemsOfGroupsAndGenerators( EDA_ITEM*                        item,
-                                                    std::unordered_set<BOARD_ITEM*>& children )
+                                                    std::unordered_set<EDA_ITEM*>& children )
 {
     wxASSERT( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T );
 
-    std::unordered_set<BOARD_ITEM*>& childItems = static_cast<PCB_GROUP*>( item )->GetItems();
+    std::unordered_set<EDA_ITEM*>& childItems = static_cast<PCB_GROUP*>( item )->GetItems();
 
-    for( BOARD_ITEM* childItem : childItems )
+    for( EDA_ITEM* childItem : childItems )
     {
         children.insert( childItem );
 
@@ -2454,7 +2454,7 @@ void EDIT_TOOL::removeNonRootItems( std::unordered_set<EDA_ITEM*>& items )
 
             if( curItem->Type() == PCB_GROUP_T || curItem->Type() == PCB_GENERATOR_T )
             {
-                std::unordered_set<BOARD_ITEM*> childItems;
+                std::unordered_set<EDA_ITEM*> childItems;
                 getChildItemsOfGroupsAndGenerators( curItem, childItems );
 
                 std::for_each( childItems.begin(), childItems.end(),
@@ -2633,10 +2633,10 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
             {
                 PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( board_item );
 
-                for( BOARD_ITEM* member : generator->GetItems() )
+                for( EDA_ITEM* member : generator->GetItems() )
                     commit.Stage( member, CHT_UNGROUP );
 
-                for( BOARD_ITEM* member : generator->GetItems() )
+                for( EDA_ITEM* member : generator->GetItems() )
                     commit.Remove( member );
 
                 commit.Remove( board_item );

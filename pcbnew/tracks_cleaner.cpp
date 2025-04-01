@@ -787,7 +787,7 @@ bool TRACKS_CLEANER::mergeCollinearSegments( PCB_TRACK* aSeg1, PCB_TRACK* aSeg2 
     {
         m_commit.Modify( aSeg1 );
 
-        PCB_GROUP* group = aSeg1->GetParentGroup();
+        EDA_GROUP* group = aSeg1->GetParentGroup();
         *aSeg1 = dummy_seg;
         aSeg1->SetParentGroup( group );
 

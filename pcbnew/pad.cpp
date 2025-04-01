@@ -2170,7 +2170,7 @@ std::vector<PCB_SHAPE*> PAD::Recombine( bool aIsDryRun, int maxError )
             // If the editor was inside a group when the pad was exploded, the added exploded shapes
             // will be part of the group.  Remove them here before duplicating; we don't want the
             // primitives to wind up in a group.
-            if( PCB_GROUP* group = fpShape->GetParentGroup(); group )
+            if( EDA_GROUP* group = fpShape->GetParentGroup(); group )
                 group->RemoveItem( fpShape );
 
             PCB_SHAPE* primitive = static_cast<PCB_SHAPE*>( fpShape->Duplicate() );

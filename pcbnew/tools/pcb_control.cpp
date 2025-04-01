@@ -918,7 +918,7 @@ static void pasteFootprintItemsToFootprintEditor( FOOTPRINT* aClipFootprint, BOA
     {
         if( field->IsMandatory() )
         {
-            if( PCB_GROUP* parentGroup = field->GetParentGroup() )
+            if( EDA_GROUP* parentGroup = field->GetParentGroup() )
                 parentGroup->RemoveItem( field );
         }
         else
@@ -1029,7 +1029,7 @@ void PCB_CONTROL::pruneItemLayers( std::vector<BOARD_ITEM*>& aItems )
             }
             else
             {
-                if( PCB_GROUP* parentGroup = item->GetParentGroup() )
+                if( EDA_GROUP* parentGroup = item->GetParentGroup() )
                     parentGroup->RemoveItem( item );
             }
         }
@@ -1186,7 +1186,7 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
                     default:
                         // Everything we *didn't* put into pastedItems is going to get nuked, so
                         // make sure it's not still included in its parent group.
-                        if( PCB_GROUP* parentGroup = clipDrawItem->GetParentGroup() )
+                        if( EDA_GROUP* parentGroup = clipDrawItem->GetParentGroup() )
                             parentGroup->RemoveItem( clipDrawItem );
 
                         break;
@@ -1203,7 +1203,7 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
                             // Anything still on the clipboard didn't get copied and needs to be
                             // removed from the pasted groups.
                             BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
-                            PCB_GROUP*  parentGroup = boardItem->GetParentGroup();
+                            EDA_GROUP*  parentGroup = boardItem->GetParentGroup();
 
                             if( parentGroup )
                                 parentGroup->RemoveItem( boardItem );
@@ -1478,7 +1478,7 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM
         // We only need to add the items that aren't inside a group currently selected
         // to the selection. If an item is inside a group and that group is selected,
         // then the selection tool will select it for us.
-        if( !item->GetParentGroup() || !alg::contains( aItems, item->GetParentGroup() ) )
+        if( !item->GetParentGroup() || !alg::contains( aItems, item->GetParentGroup()->AsEdaItem() ) )
             itemsToSel.push_back( item );
     }
 

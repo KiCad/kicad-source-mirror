@@ -214,10 +214,10 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
                 {
                     if( !aItem->IsSelected() )
                     {
-                        PCB_GROUP* group = aItem->GetParentGroup();
+                        EDA_GROUP* group = aItem->GetParentGroup();
 
-                        while( group && !group->IsSelected() )
-                            group = group->GetParentGroup();
+                        while( group && !group->AsEdaItem()->IsSelected() )
+                            group = group->AsEdaItem()->GetParentGroup();
 
                         if( !group )
                             return true;

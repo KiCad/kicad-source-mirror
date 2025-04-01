@@ -1138,7 +1138,7 @@ bool PCB_SELECTION_TOOL::selectMultiple()
 
             GENERAL_COLLECTOR collector;
             GENERAL_COLLECTOR padsCollector;
-            std::set<BOARD_ITEM*> group_items;
+            std::set<EDA_ITEM*> group_items;
 
             for( PCB_GROUP* group : board()->Groups() )
             {
@@ -1146,21 +1146,21 @@ bool PCB_SELECTION_TOOL::selectMultiple()
                 if( m_enteredGroup == group )
                     continue;
 
-                std::unordered_set<BOARD_ITEM*>& newset = group->GetItems();
+                std::unordered_set<EDA_ITEM*>& newset = group->GetItems();
 
                 // If we are not greedy and have selected the whole group, add just one item
                 // to allow it to be promoted to the group later
                 if( !greedySelection && selectionRect.Contains( group->GetBoundingBox() )
                         && newset.size() )
                 {
-                    for( BOARD_ITEM* group_item : newset )
+                    for( EDA_ITEM* group_item : newset )
                     {
-                        if( Selectable( group_item ) )
+                        if( Selectable( static_cast<BOARD_ITEM*>( group_item ) ) )
                             collector.Append( *newset.begin() );
                     }
                 }
 
-                for( BOARD_ITEM* group_item : newset )
+                for( EDA_ITEM* group_item : newset )
                     group_items.emplace( group_item );
             }
 
@@ -1466,7 +1466,7 @@ int PCB_SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
             }
             else if( item->Type() == PCB_GENERATOR_T )
             {
-                for( BOARD_ITEM* generatedItem : static_cast<PCB_GENERATOR*>( item )->GetItems() )
+                for( BOARD_ITEM* generatedItem : static_cast<PCB_GENERATOR*>( item )->GetBoardItems() )
                 {
                     if( BOARD_CONNECTED_ITEM::ClassOf( generatedItem ) )
                         startItems.push_back( static_cast<BOARD_CONNECTED_ITEM*>( generatedItem ) );
@@ -1767,14 +1767,14 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
             continue;
 
         BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
-        PCB_GROUP*  parent = boardItem->GetParentGroup();
+        EDA_GROUP*  parent = boardItem->GetParentGroup();
 
-        if( parent && parent->Type() == PCB_GENERATOR_T )
+        if( parent && parent->AsEdaItem()->Type() == PCB_GENERATOR_T )
         {
             toDeselect.insert( item );
 
-            if( !parent->IsSelected() )
-                toSelect.insert( parent );
+            if( !parent->AsEdaItem()->IsSelected() )
+                toSelect.insert( parent->AsEdaItem() );
         }
     }
 
@@ -2917,7 +2917,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
         // Similar to logic for footprint, a group is selectable if any of its members are.
         // (This recurses.)
-        for( BOARD_ITEM* item : group->GetItems() )
+        for( BOARD_ITEM* item : group->GetBoardItems() )
         {
             if( Selectable( item, true ) )
                 return true;
@@ -2926,7 +2926,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         return false;
     }
 
-    if( aItem->GetParentGroup() && aItem->GetParentGroup()->Type() == PCB_GENERATOR_T )
+    if( aItem->GetParentGroup() && aItem->GetParentGroup()->AsEdaItem()->Type() == PCB_GENERATOR_T )
         return false;
 
     const ZONE*     zone = nullptr;
@@ -3343,7 +3343,7 @@ int PCB_SELECTION_TOOL::hitTestDistance( const VECTOR2I& aWhere, BOARD_ITEM* aIt
     {
         PCB_GROUP* group = static_cast<PCB_GROUP*>( aItem );
 
-        for( BOARD_ITEM* member : group->GetItems() )
+        for( BOARD_ITEM* member : group->GetBoardItems() )
             distance = std::min( distance, hitTestDistance( aWhere, member, aMaxDistance ) );
 
         break;
@@ -3729,7 +3729,7 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
 void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollector,
                                                       bool aMultiselect ) const
 {
-    std::unordered_set<BOARD_ITEM*> toAdd;
+    std::unordered_set<EDA_ITEM*> toAdd;
 
     // Set CANDIDATE on all parents which are included in the GENERAL_COLLECTOR.  This
     // algorithm is O(3n), whereas checking for the parent inclusion could potentially be O(n^2).
@@ -3763,13 +3763,12 @@ void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollec
 
         // If any element is a member of a group, replace those elements with the top containing
         // group.
-        if( PCB_GROUP* top = PCB_GROUP::TopLevelGroup( start, m_enteredGroup,
-                                                       m_isFootprintEditor ) )
+        if( EDA_GROUP* top = PCB_GROUP::TopLevelGroup( start, m_enteredGroup, m_isFootprintEditor ) )
         {
-            if( top != item )
+            if( top->AsEdaItem() != item )
             {
-                toAdd.insert( top );
-                top->SetFlags(CANDIDATE );
+                toAdd.insert( top->AsEdaItem() );
+                top->AsEdaItem()->SetFlags( CANDIDATE );
 
                 aCollector.Remove( item );
                 continue;
@@ -3787,7 +3786,7 @@ void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollec
         ++j;
     }
 
-    for( BOARD_ITEM* item : toAdd )
+    for( EDA_ITEM* item : toAdd )
     {
         if( !aCollector.HasItem( item ) )
             aCollector.Append( item );

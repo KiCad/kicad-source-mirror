@@ -404,7 +404,7 @@ int MULTICHANNEL_TOOL::repeatLayout( const TOOL_EVENT& aEvent )
         {
             PCB_GROUP *group = static_cast<PCB_GROUP*>( item );
 
-            for( BOARD_ITEM* grpItem : group->GetItems() )
+            for( EDA_ITEM* grpItem : group->GetItems() )
             {
                 if( auto grpZone = isSelectedItemAnRA( grpItem ) )
                 {
@@ -1012,12 +1012,11 @@ bool MULTICHANNEL_TOOL::pruneExistingGroups( COMMIT& aCommit,
         auto grp = pending.front();
         pending.pop_front();
 
-        std::unordered_set<BOARD_ITEM*>& grpItems = grp->GetItems();
+        std::unordered_set<EDA_ITEM*>& grpItems = grp->GetItems();
         size_t n_erased = 0;
 
-        for( BOARD_ITEM* refItem : grpItems )
+        for( EDA_ITEM* refItem : grpItems )
         {
-
             if( refItem->Type() == PCB_GROUP_T )
                 pending.push_back( static_cast<PCB_GROUP*>(refItem) );
 

@@ -26,6 +26,7 @@
 #include <tools/pcb_picker_tool.h>
 #include <pcb_base_edit_frame.h>
 #include <pcb_group.h>
+#include <eda_group.h>
 #include <status_popup.h>
 #include <board_commit.h>
 #include <bitmaps.h>
@@ -33,10 +34,10 @@
 #include <dialogs/dialog_group_properties.h>
 
 
-DIALOG_GROUP_PROPERTIES::DIALOG_GROUP_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,
-                                                  PCB_GROUP* aGroup ) :
+DIALOG_GROUP_PROPERTIES::DIALOG_GROUP_PROPERTIES( EDA_DRAW_FRAME* aParent,
+                                                  EDA_GROUP* aGroup ) :
         DIALOG_GROUP_PROPERTIES_BASE( aParent ),
-        m_brdEditor( aParent ),
+        m_frame( aParent ),
         m_toolMgr( aParent->GetToolManager() ),
         m_group( aGroup )
 {
@@ -45,11 +46,19 @@ DIALOG_GROUP_PROPERTIES::DIALOG_GROUP_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,
 
     m_nameCtrl->SetValue( m_group->GetName() );
 
-    m_locked->SetValue( m_group->IsLocked() );
-    m_locked->Show( dynamic_cast<PCB_EDIT_FRAME*>( aParent ) != nullptr );
+    if( aGroup->AsEdaItem()->Type() == PCB_GROUP_T )
+    {
+        m_locked->SetValue( static_cast<PCB_GROUP*>( aGroup )->IsLocked() );
+        m_locked->Show( dynamic_cast<PCB_EDIT_FRAME*>( aParent ) != nullptr );
+    }
+    else
+    {
+        m_locked->SetValue( false );
+        m_locked->Hide();
+    }
 
-    for( BOARD_ITEM* item : m_group->GetItems() )
-        m_membersList->Append( item->GetItemDescription( m_brdEditor, true ), item );
+    for( EDA_ITEM* item : m_group->GetItems() )
+        m_membersList->Append( item->GetItemDescription( m_frame, true ), item );
 
     SetupStandardButtons();
 
@@ -62,11 +71,11 @@ DIALOG_GROUP_PROPERTIES::DIALOG_GROUP_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,
 
 DIALOG_GROUP_PROPERTIES::~DIALOG_GROUP_PROPERTIES()
 {
-    if( m_brdEditor->IsBeingDeleted() )
+    if( m_frame->IsBeingDeleted() )
         return;
 
-    m_brdEditor->ClearFocus();
-    m_brdEditor->GetCanvas()->Refresh();
+    m_frame->ClearFocus();
+    m_frame->GetCanvas()->Refresh();
 }
 
 
@@ -80,36 +89,40 @@ bool DIALOG_GROUP_PROPERTIES::TransferDataToWindow()
 
 bool DIALOG_GROUP_PROPERTIES::TransferDataFromWindow()
 {
-    BOARD_COMMIT commit( m_brdEditor );
-    commit.Modify( m_group );
+    BOARD_COMMIT commit( m_frame );
+    commit.Modify( m_group->AsEdaItem() );
 
     for( size_t ii = 0; ii < m_membersList->GetCount(); ++ii )
     {
-        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( m_membersList->GetClientData( ii ) );
-        PCB_GROUP*  existingGroup = item->GetParentGroup();
+        EDA_ITEM*  item = static_cast<EDA_ITEM*>( m_membersList->GetClientData( ii ) );
+        EDA_GROUP* existingGroup = item->GetParentGroup();
 
         if( existingGroup != m_group )
         {
             commit.Modify( item );
 
             if( existingGroup )
-                commit.Modify( existingGroup );
+                commit.Modify( existingGroup->AsEdaItem() );
         }
     }
 
     m_group->SetName( m_nameCtrl->GetValue() );
-    m_group->SetLocked( m_locked->GetValue() );
+
+    if( m_group->AsEdaItem()->Type() == PCB_GROUP_T )
+    {
+        static_cast<PCB_GROUP*>( m_group )->SetLocked( m_locked->GetValue() );
+    }
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
     m_group->RemoveAll();
 
     for( size_t ii = 0; ii < m_membersList->GetCount(); ++ii )
     {
-        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( m_membersList->GetClientData( ii ) );
+        EDA_ITEM* item = static_cast<EDA_ITEM*>( m_membersList->GetClientData( ii ) );
         m_group->AddItem( item );
     }
 
-    m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, m_group );
+    m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, m_group->AsEdaItem() );
 
     commit.Push( _( "Edit Group Properties" ) );
     return true;
@@ -122,11 +135,11 @@ void DIALOG_GROUP_PROPERTIES::OnMemberSelected( wxCommandEvent& aEvent )
 
     if( selected >= 0 )
     {
-        WINDOW_THAWER thawer( m_brdEditor );
-        BOARD_ITEM*   item = static_cast<BOARD_ITEM*>( m_membersList->GetClientData( selected ) );
+        WINDOW_THAWER thawer( m_frame );
+        EDA_ITEM*     item = static_cast<EDA_ITEM*>( m_membersList->GetClientData( selected ) );
 
-        m_brdEditor->FocusOnItem( item );
-        m_brdEditor->GetCanvas()->Refresh();
+        m_frame->FocusOnItem( item );
+        m_frame->GetCanvas()->Refresh();
     }
 
     aEvent.Skip();
@@ -144,14 +157,14 @@ void DIALOG_GROUP_PROPERTIES::DoAddMember( EDA_ITEM* aItem )
 
     for( size_t ii = 0; ii < m_membersList->GetCount(); ++ii )
     {
-        if( aItem == static_cast<BOARD_ITEM*>( m_membersList->GetClientData( ii ) ) )
+        if( aItem == static_cast<EDA_ITEM*>( m_membersList->GetClientData( ii ) ) )
             return;
     }
 
-    if( aItem == m_group )
+    if( aItem == m_group->AsEdaItem() )
         return;
 
-    m_membersList->Append( aItem->GetItemDescription( m_brdEditor, true ), aItem );
+    m_membersList->Append( aItem->GetItemDescription( m_frame, true ), aItem );
 }
 
 
@@ -162,8 +175,8 @@ void DIALOG_GROUP_PROPERTIES::OnRemoveMember( wxCommandEvent& event )
     if( selected >= 0 )
         m_membersList->Delete( selected );
 
-    m_brdEditor->ClearFocus();
-    m_brdEditor->GetCanvas()->Refresh();
+    m_frame->ClearFocus();
+    m_frame->GetCanvas()->Refresh();
 }
 
 

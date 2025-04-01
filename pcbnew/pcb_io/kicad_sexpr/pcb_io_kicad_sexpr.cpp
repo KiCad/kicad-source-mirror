@@ -2206,7 +2206,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GROUP* aGroup ) const
 
     wxArrayString memberIds;
 
-    for( BOARD_ITEM* member : aGroup->GetItems() )
+    for( EDA_ITEM* member : aGroup->GetItems() )
         memberIds.Add( member->m_Uuid.AsString() );
 
     memberIds.Sort();
@@ -2304,7 +2304,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GENERATOR* aGenerator ) const
 
     wxArrayString memberIds;
 
-    for( BOARD_ITEM* member : aGenerator->GetItems() )
+    for( EDA_ITEM* member : aGenerator->GetItems() )
         memberIds.Add( member->m_Uuid.AsString() );
 
     memberIds.Sort();

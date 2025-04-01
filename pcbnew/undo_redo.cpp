@@ -433,7 +433,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         {
             BOARD_ITEM*           item = (BOARD_ITEM*) eda_item;
             BOARD_ITEM_CONTAINER* parent = GetBoard();
-            PCB_GROUP*            parentGroup = item->GetParentGroup();
+            EDA_GROUP*            parentGroup = item->GetParentGroup();
 
             if( item->GetParentFootprint() )
             {
@@ -509,9 +509,9 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             {
                 BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( eda_item );
 
-                if( PCB_GROUP* group = boardItem->GetParentGroup() )
+                if( EDA_GROUP* group = boardItem->GetParentGroup() )
                 {
-                    aList->SetPickedItemGroupId( group->m_Uuid, ii );
+                    aList->SetPickedItemGroupId( group->AsEdaItem()->m_Uuid, ii );
 
                     group->RemoveItem( boardItem );
                 }

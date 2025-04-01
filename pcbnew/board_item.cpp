@@ -38,12 +38,6 @@
 #include <font/font.h>
 
 
-BOARD_ITEM::~BOARD_ITEM()
-{
-    wxASSERT( m_group == nullptr );
-}
-
-
 void BOARD_ITEM::CopyFrom( const BOARD_ITEM* aOther )
 {
     wxCHECK( aOther, /* void */ );
@@ -81,7 +75,7 @@ BOARD* BOARD_ITEM::GetBoard()
 
 bool BOARD_ITEM::IsLocked() const
 {
-    if( GetParentGroup() && GetParentGroup()->IsLocked() )
+    if( GetParentGroup() && static_cast<PCB_GROUP*>( GetParentGroup() )->IsLocked() )
         return true;
 
     const BOARD* board = GetBoard();
@@ -235,7 +229,7 @@ void BOARD_ITEM::SwapItemData( BOARD_ITEM* aImage )
         return;
 
     EDA_ITEM*  parent = GetParent();
-    PCB_GROUP* group = GetParentGroup();
+    EDA_GROUP* group = GetParentGroup();
 
     SetParentGroup( nullptr );
     aImage->SetParentGroup( nullptr );

@@ -305,7 +305,7 @@ int GROUP_TOOL::Ungroup( const TOOL_EVENT& aEvent )
 
         if( group )
         {
-            for( BOARD_ITEM* member : group->GetItems() )
+            for( EDA_ITEM* member : group->GetItems() )
             {
                 commit.Stage( member, CHT_UNGROUP );
                 toSelect.push_back( member );
@@ -339,7 +339,7 @@ int GROUP_TOOL::RemoveFromGroup( const TOOL_EVENT& aEvent )
     for( EDA_ITEM* item : selection )
     {
         BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
-        PCB_GROUP*  group = boardItem->GetParentGroup();
+        EDA_GROUP*  group = boardItem->GetParentGroup();
 
         if( group )
             commit.Stage( boardItem, CHT_UNGROUP );

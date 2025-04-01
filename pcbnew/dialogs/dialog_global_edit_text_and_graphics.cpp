@@ -480,7 +480,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( BOARD_COMMIT& aCommit, BOA
 {
     if( m_selectedItemsFilter->GetValue() )
     {
-        BOARD_ITEM* candidate = aItem;
+        EDA_ITEM* candidate = aItem;
 
         if( !candidate->IsSelected() )
         {
@@ -490,10 +490,10 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( BOARD_COMMIT& aCommit, BOA
 
         if( !candidate->IsSelected() )
         {
-            candidate = candidate->GetParentGroup();
+            candidate = ( candidate->GetParentGroup() ? candidate->GetParentGroup()->AsEdaItem() : nullptr );
 
             while( candidate && !candidate->IsSelected() )
-                candidate = candidate->GetParentGroup();
+                candidate = candidate->GetParentGroup()->AsEdaItem();
 
             if( !candidate )
                 return;

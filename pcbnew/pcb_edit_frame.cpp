@@ -2419,7 +2419,7 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
                                         bool resetTextContent, bool resetFabricationAttrs,
                                         bool reset3DModels, bool* aUpdated )
 {
-    PCB_GROUP* parentGroup = aExisting->GetParentGroup();
+    EDA_GROUP* parentGroup = aExisting->GetParentGroup();
     bool       dummyBool   = false;
 
     if( !aUpdated )

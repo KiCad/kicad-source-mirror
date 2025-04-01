@@ -40,7 +40,6 @@
 
 class CONNECTION_GRAPH;
 class SCH_CONNECTION;
-class SCH_GROUP;
 class SCH_SHEET_PATH;
 class SCHEMATIC;
 class SYMBOL;
@@ -174,9 +173,6 @@ public:
     SCH_ITEM& operator=( const SCH_ITEM& aPin );
 
     virtual ~SCH_ITEM();
-
-    void SetParentGroup( SCH_GROUP* aGroup ) { m_group = aGroup; }
-    SCH_GROUP* GetParentGroup() const { return m_group; }
 
     wxString GetClass() const override
     {
@@ -714,7 +710,6 @@ protected:
     AUTOPLACE_ALGO    m_fieldsAutoplaced;   // indicates status of field autoplacement
     VECTOR2I          m_storedPos;          // temp variable used in some move commands to store
                                             // an initial position of the item or mouse cursor
-    SCH_GROUP*        m_group;              // The group this item belongs to
 
     /// Store pointers to other items that are connected to this one, per sheet.
     std::map<SCH_SHEET_PATH, SCH_ITEM_VEC, SHEET_PATH_CMP> m_connected_items;

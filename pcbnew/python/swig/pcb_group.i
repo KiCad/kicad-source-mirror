@@ -11,7 +11,7 @@
     {
         std::deque<BOARD_ITEM*> result;
 
-        const std::unordered_set<BOARD_ITEM*> items = $self->GetItems();
+        const std::unordered_set<BOARD_ITEM*> items = $self->GetBoardItems();
 
         for(BOARD_ITEM* item: items)
             result.push_back(item);

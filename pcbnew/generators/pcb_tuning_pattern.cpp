@@ -1137,7 +1137,7 @@ void PCB_TUNING_PATTERN::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
     {
         PCB_GENERATOR*  group = this;
 
-        for( BOARD_ITEM* member : group->GetItems() )
+        for( EDA_ITEM* member : group->GetItems() )
             aCommit->Stage( member, CHT_UNGROUP );
 
         group->GetItems().clear();
@@ -2004,7 +2004,7 @@ void PCB_TUNING_PATTERN::ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame )
 
     if( !m_items.empty() )
     {
-        BOARD_ITEM*                  startItem = *m_items.begin();
+        BOARD_ITEM*                  startItem = static_cast<BOARD_ITEM*>( *m_items.begin() );
         std::shared_ptr<DRC_ENGINE>& drcEngine = GetBoard()->GetDesignSettings().m_DRCEngine;
 
         constraint = drcEngine->EvalRules( LENGTH_CONSTRAINT, startItem, nullptr, GetLayer() );
@@ -2094,7 +2094,7 @@ void PCB_TUNING_PATTERN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 
     aList.emplace_back( _( "Type" ), GetFriendlyName() );
 
-    for( BOARD_ITEM* member : GetItems() )
+    for( EDA_ITEM* member : GetItems() )
     {
         if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( member ) )
         {
@@ -2539,7 +2539,7 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
             {
                 if( !m_tuningPattern->GetItems().empty() )
                 {
-                    BOARD_ITEM* startItem = *m_tuningPattern->GetItems().begin();
+                    BOARD_ITEM* startItem = *m_tuningPattern->GetBoardItems().begin();
 
                     constraint = drcEngine->EvalRules( LENGTH_CONSTRAINT, startItem, nullptr,
                                                        startItem->GetLayer() );

@@ -602,7 +602,7 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
     auto resetGroup =
             []( FOOTPRINT* aFootprint )
             {
-                if( PCB_GROUP* parentGroup = aFootprint->GetParentGroup() )
+                if( EDA_GROUP* parentGroup = aFootprint->GetParentGroup() )
                     parentGroup->RemoveItem( aFootprint );
             };
 

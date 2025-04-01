@@ -164,15 +164,15 @@ void testGroupEqual( const PCB_GROUP& group1, const PCB_GROUP& group2 )
     BOOST_CHECK_EQUAL( group1.m_Uuid.AsString(), group2.m_Uuid.AsString() );
     BOOST_CHECK_EQUAL( group1.GetName(), group2.GetName() );
 
-    const std::unordered_set<BOARD_ITEM*>& items1 = group1.GetItems();
-    const std::unordered_set<BOARD_ITEM*>& items2 = group2.GetItems();
+    const std::unordered_set<EDA_ITEM*>& items1 = group1.GetItems();
+    const std::unordered_set<EDA_ITEM*>& items2 = group2.GetItems();
 
     BOOST_CHECK_EQUAL( items1.size(), items2.size() );
 
     // Test that the sets items1 and items2 are identical, by checking m_Uuid
-    for( BOARD_ITEM* item1 : items1 )
+    for( EDA_ITEM* item1 : items1 )
     {
-        auto cmp = [&]( BOARD_ITEM* elem )
+        auto cmp = [&]( EDA_ITEM* elem )
                    {
                        return elem->m_Uuid.AsString() == item1->m_Uuid.AsString();
                    };

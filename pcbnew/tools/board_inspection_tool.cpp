@@ -735,7 +735,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             return 0;
         }
 
-        a = *ag->GetItems().begin();
+        a = static_cast<BOARD_ITEM*>( *ag->GetItems().begin() );
     }
 
     if( b->Type() == PCB_GROUP_T )
@@ -748,7 +748,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             return 0;
         }
 
-        b = *bg->GetItems().begin();
+        b = static_cast<BOARD_ITEM*>( *bg->GetItems().begin() );
     }
 
     // a or b could be null after group tests above.

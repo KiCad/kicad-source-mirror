@@ -232,7 +232,7 @@ private:
 
     ///< Recursively adds any child items of the given item to the set
     void getChildItemsOfGroupsAndGenerators( EDA_ITEM*                        item,
-                                             std::unordered_set<BOARD_ITEM*>& children );
+                                             std::unordered_set<EDA_ITEM*>& children );
 
 
 private:

@@ -387,7 +387,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         case CHT_REMOVE:
         {
             FOOTPRINT* parentFP = boardItem->GetParentFootprint();
-            PCB_GROUP* parentGroup = boardItem->GetParentGroup();
+            EDA_GROUP* parentGroup = boardItem->GetParentGroup();
 
             if( !( aCommitFlags & SKIP_UNDO ) )
                 undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UNDO_REDO::DELETED ) );
@@ -400,7 +400,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 itemsDeselected = true;
             }
 
-            if( parentGroup && !( parentGroup->GetFlags() & STRUCT_DELETED ) )
+            if( parentGroup && !( parentGroup->AsEdaItem()->GetFlags() & STRUCT_DELETED ) )
                 parentGroup->RemoveItem( boardItem );
 
             if( parentFP && !( parentFP->GetFlags() & STRUCT_DELETED ) )
@@ -471,12 +471,12 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         }
 
         case CHT_UNGROUP:
-            if( PCB_GROUP* group = boardItem->GetParentGroup() )
+            if( EDA_GROUP* group = boardItem->GetParentGroup() )
             {
                 if( !( aCommitFlags & SKIP_UNDO ) )
                 {
                     ITEM_PICKER itemWrapper( nullptr, boardItem, UNDO_REDO::UNGROUP );
-                    itemWrapper.SetGroupId( group->m_Uuid );
+                    itemWrapper.SetGroupId( group->AsEdaItem()->m_Uuid );
                     undoList.PushItem( itemWrapper );
                 }
 
@@ -751,9 +751,9 @@ void BOARD_COMMIT::Revert()
         case CHT_ADD:
             // Items are auto-added to the parent group by BOARD_ITEM::Duplicate(), not when
             // the commit is pushed.
-            if( PCB_GROUP* parentGroup = boardItem->GetParentGroup() )
+            if( EDA_GROUP* parentGroup = boardItem->GetParentGroup() )
             {
-                if( GetStatus( parentGroup ) == 0 )
+                if( GetStatus( parentGroup->AsEdaItem() ) == 0 )
                     parentGroup->RemoveItem( boardItem );
             }
 

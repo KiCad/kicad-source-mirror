@@ -1301,9 +1301,9 @@ int BOARD_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
         if( board_item->Type() == PCB_PAD_T )
             continue;
 
-        PCB_GROUP* parent_group = board_item->GetParentGroup();
+        EDA_GROUP* parent_group = board_item->GetParentGroup();
 
-        if( parent_group && parent_group->Type() == PCB_GENERATOR_T )
+        if( parent_group && parent_group->AsEdaItem()->Type() == PCB_GENERATOR_T )
         {
             PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( parent_group );
 

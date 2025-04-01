@@ -78,8 +78,10 @@ bool PCB_GROUP::IsGroupableType( KICAD_T aType )
 }
 
 
-bool PCB_GROUP::AddItem( BOARD_ITEM* aItem )
+bool PCB_GROUP::AddItem( EDA_ITEM* aItem )
 {
+    wxCHECK_MSG( aItem, false, wxT( "Nullptr added to group." ) );
+
     wxCHECK_MSG( IsGroupableType( aItem->Type() ), false,
             wxT( "Invalid item type added to group: " ) + aItem->GetTypeDesc() );
 
@@ -93,8 +95,10 @@ bool PCB_GROUP::AddItem( BOARD_ITEM* aItem )
 }
 
 
-bool PCB_GROUP::RemoveItem( BOARD_ITEM* aItem )
+bool PCB_GROUP::RemoveItem( EDA_ITEM* aItem )
 {
+    wxCHECK_MSG( aItem, false, wxT( "Nullptr removed from group." ) );
+
     // Only clear the item's group field if it was inside this group
     if( m_items.erase( aItem ) == 1 )
     {
@@ -108,10 +112,28 @@ bool PCB_GROUP::RemoveItem( BOARD_ITEM* aItem )
 
 void PCB_GROUP::RemoveAll()
 {
-    for( BOARD_ITEM* item : m_items )
+    for( EDA_ITEM* item : m_items )
         item->SetParentGroup( nullptr );
 
     m_items.clear();
+}
+
+
+std::unordered_set<BOARD_ITEM*> PCB_GROUP::GetBoardItems() const
+{
+    std::unordered_set<BOARD_ITEM*> items;
+
+    for( EDA_ITEM* item : m_items )
+    {
+        BOARD_ITEM* board_item = dynamic_cast<BOARD_ITEM*>( item );
+
+        if( board_item )
+        {
+            items.insert( board_item );
+        }
+    }
+
+    return items;
 }
 
 
@@ -119,7 +141,7 @@ void PCB_GROUP::RemoveAll()
  * @return if not in the footprint editor and aItem is in a footprint, returns the
  * footprint's parent group. Otherwise, returns the aItem's parent group.
  */
-PCB_GROUP* getClosestGroup( BOARD_ITEM* aItem, bool isFootprintEditor )
+EDA_GROUP* getClosestGroup( BOARD_ITEM* aItem, bool isFootprintEditor )
 {
     if( !isFootprintEditor && aItem->GetParent() && aItem->GetParent()->Type() == PCB_FOOTPRINT_T )
         return aItem->GetParent()->GetParentGroup();
@@ -129,26 +151,26 @@ PCB_GROUP* getClosestGroup( BOARD_ITEM* aItem, bool isFootprintEditor )
 
 
 /// Returns the top level group inside the aScope group, or nullptr
-PCB_GROUP* getNestedGroup( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool isFootprintEditor )
+EDA_GROUP* getNestedGroup( BOARD_ITEM* aItem, EDA_GROUP* aScope, bool isFootprintEditor )
 {
-    PCB_GROUP* group = getClosestGroup( aItem, isFootprintEditor );
+    EDA_GROUP* group = getClosestGroup( aItem, isFootprintEditor );
 
     if( group == aScope )
         return nullptr;
 
-    while( group && group->GetParentGroup() && group->GetParentGroup() != aScope )
+    while( group && group->AsEdaItem()->GetParentGroup() && group->AsEdaItem()->GetParentGroup() != aScope )
     {
-        if( group->GetParent()->Type() == PCB_FOOTPRINT_T && isFootprintEditor )
+        if( group->AsEdaItem()->GetParent()->Type() == PCB_FOOTPRINT_T && isFootprintEditor )
             break;
 
-        group = group->GetParentGroup();
+        group = group->AsEdaItem()->GetParentGroup();
     }
 
     return group;
 }
 
 
-PCB_GROUP* PCB_GROUP::TopLevelGroup( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool isFootprintEditor )
+EDA_GROUP* PCB_GROUP::TopLevelGroup( BOARD_ITEM* aItem, EDA_GROUP* aScope, bool isFootprintEditor )
 {
     return getNestedGroup( aItem, aScope, isFootprintEditor );
 }
@@ -156,14 +178,14 @@ PCB_GROUP* PCB_GROUP::TopLevelGroup( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool 
 
 bool PCB_GROUP::WithinScope( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool isFootprintEditor )
 {
-    PCB_GROUP* group = getClosestGroup( aItem, isFootprintEditor );
+    EDA_GROUP* group = getClosestGroup( aItem, isFootprintEditor );
 
     if( group && group == aScope )
         return true;
 
-    PCB_GROUP* nested = getNestedGroup( aItem, aScope, isFootprintEditor );
+    EDA_GROUP* nested = getNestedGroup( aItem, aScope, isFootprintEditor );
 
-    return nested && nested->GetParentGroup() && nested->GetParentGroup() == aScope;
+    return nested && nested->AsEdaItem()->GetParentGroup() && ( nested->AsEdaItem()->GetParentGroup() == aScope );
 }
 
 
@@ -208,7 +230,7 @@ PCB_GROUP* PCB_GROUP::DeepClone() const
     PCB_GROUP* newGroup = new PCB_GROUP( *this );
     newGroup->m_items.clear();
 
-    for( BOARD_ITEM* member : m_items )
+    for( EDA_ITEM* member : m_items )
     {
         if( member->Type() == PCB_GROUP_T )
             newGroup->AddItem( static_cast<PCB_GROUP*>( member )->DeepClone() );
@@ -227,12 +249,12 @@ PCB_GROUP* PCB_GROUP::DeepDuplicate() const
     PCB_GROUP* newGroup = static_cast<PCB_GROUP*>( Duplicate() );
     newGroup->m_items.clear();
 
-    for( BOARD_ITEM* member : m_items )
+    for( EDA_ITEM* member : m_items )
     {
         if( member->Type() == PCB_GROUP_T )
             newGroup->AddItem( static_cast<PCB_GROUP*>( member )->DeepDuplicate() );
         else
-            newGroup->AddItem( static_cast<BOARD_ITEM*>( member->Duplicate() ) );
+            newGroup->AddItem( static_cast<BOARD_ITEM*>( static_cast<BOARD_ITEM*>( member )->Duplicate() ) );
     }
 
     return newGroup;
@@ -265,7 +287,7 @@ const BOX2I PCB_GROUP::GetBoundingBox() const
 {
     BOX2I bbox;
 
-    for( BOARD_ITEM* item : m_items )
+    for( EDA_ITEM* item : m_items )
     {
         if( item->Type() == PCB_FOOTPRINT_T )
             bbox.Merge( static_cast<FOOTPRINT*>( item )->GetBoundingBox( true ) );
@@ -283,8 +305,8 @@ std::shared_ptr<SHAPE> PCB_GROUP::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHI
 {
     std::shared_ptr<SHAPE_COMPOUND> shape = std::make_shared<SHAPE_COMPOUND>();
 
-    for( BOARD_ITEM* item : m_items )
-        shape->AddShape( item->GetEffectiveShape( aLayer, aFlash )->Clone() );
+    for( EDA_ITEM* item : m_items )
+        shape->AddShape( static_cast<BOARD_ITEM*>( item )->GetEffectiveShape( aLayer, aFlash )->Clone() );
 
     return shape;
 }
@@ -310,8 +332,8 @@ LSET PCB_GROUP::GetLayerSet() const
 {
     LSET aSet;
 
-    for( BOARD_ITEM* item : m_items )
-        aSet |= item->GetLayerSet();
+    for( EDA_ITEM* item : m_items )
+        aSet |= static_cast<BOARD_ITEM*>( item )->GetLayerSet();
 
     return aSet;
 }
@@ -320,9 +342,9 @@ LSET PCB_GROUP::GetLayerSet() const
 bool PCB_GROUP::IsOnLayer( PCB_LAYER_ID aLayer ) const
 {
     // A group is on a layer if any item is on the layer
-    for( BOARD_ITEM* item : m_items )
+    for( EDA_ITEM* item : m_items )
     {
-        if( item->IsOnLayer( aLayer ) )
+        if( static_cast<BOARD_ITEM*>( item )->IsOnLayer( aLayer ) )
             return true;
     }
 
@@ -347,29 +369,29 @@ double PCB_GROUP::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
 
 void PCB_GROUP::Move( const VECTOR2I& aMoveVector )
 {
-    for( BOARD_ITEM* member : m_items )
-        member->Move( aMoveVector );
+    for( EDA_ITEM* member : m_items )
+        static_cast<BOARD_ITEM*>( member )->Move( aMoveVector );
 }
 
 
 void PCB_GROUP::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
-    for( BOARD_ITEM* item : m_items )
-        item->Rotate( aRotCentre, aAngle );
+    for( EDA_ITEM* item : m_items )
+        static_cast<BOARD_ITEM*>( item )->Rotate( aRotCentre, aAngle );
 }
 
 
 void PCB_GROUP::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    for( BOARD_ITEM* item : m_items )
-        item->Flip( aCentre, aFlipDirection );
+    for( EDA_ITEM* item : m_items )
+        static_cast<BOARD_ITEM*>( item )->Flip( aCentre, aFlipDirection );
 }
 
 
 void PCB_GROUP::Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    for( BOARD_ITEM* item : m_items )
-        item->Mirror( aCentre, aFlipDirection );
+    for( EDA_ITEM* item : m_items )
+        static_cast<BOARD_ITEM*>( item )->Mirror( aCentre, aFlipDirection );
 }
 
 
@@ -402,7 +424,7 @@ void PCB_GROUP::RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFuncti
 {
     try
     {
-        for( BOARD_ITEM* item : m_items )
+        for( BOARD_ITEM* item : GetBoardItems() )
         {
             aFunction( item );
 
@@ -461,11 +483,11 @@ double PCB_GROUP::Similarity( const BOARD_ITEM& aOther ) const
 
     double similarity = 0.0;
 
-    for( BOARD_ITEM* item : m_items )
+    for( EDA_ITEM* item : m_items )
     {
-        for( BOARD_ITEM* otherItem : other.m_items )
+        for( EDA_ITEM* otherItem : other.m_items )
         {
-            similarity += item->Similarity( *otherItem );
+            similarity += static_cast<BOARD_ITEM*>( item )->Similarity( *static_cast<BOARD_ITEM*>( otherItem ) );
         }
     }
 
@@ -480,7 +502,9 @@ static struct PCB_GROUP_DESC
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( PCB_GROUP );
         propMgr.AddTypeCast( new TYPE_CAST<PCB_GROUP, BOARD_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_GROUP, EDA_GROUP> );
         propMgr.InheritsAfter( TYPE_HASH( PCB_GROUP ), TYPE_HASH( BOARD_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_GROUP ), TYPE_HASH( EDA_GROUP ) );
 
         propMgr.Mask( TYPE_HASH( PCB_GROUP ), TYPE_HASH( BOARD_ITEM ), _HKI( "Position X" ) );
         propMgr.Mask( TYPE_HASH( PCB_GROUP ), TYPE_HASH( BOARD_ITEM ), _HKI( "Position Y" ) );
@@ -488,8 +512,8 @@ static struct PCB_GROUP_DESC
 
         const wxString groupTab = _HKI( "Group Properties" );
 
-        propMgr.AddProperty( new PROPERTY<PCB_GROUP, wxString>( _HKI( "Name" ),
-                    &PCB_GROUP::SetName, &PCB_GROUP::GetName ),
-                    groupTab );
+        propMgr.AddProperty(
+                new PROPERTY<EDA_GROUP, wxString>( _HKI( "Name" ), &PCB_GROUP::SetName, &PCB_GROUP::GetName ),
+                groupTab );
     }
 } _PCB_GROUP_DESC;

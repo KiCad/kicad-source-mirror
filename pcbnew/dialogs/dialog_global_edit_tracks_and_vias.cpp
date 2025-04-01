@@ -352,10 +352,10 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::visitItem( PICKED_ITEMS_LIST* aUndoList
     {
         if( !aItem->IsSelected() )
         {
-            PCB_GROUP* group = aItem->GetParentGroup();
+            EDA_GROUP* group = aItem->GetParentGroup();
 
-            while( group && !group->IsSelected() )
-                group = group->GetParentGroup();
+            while( group && !group->AsEdaItem()->IsSelected() )
+                group = group->AsEdaItem()->GetParentGroup();
 
             if( !group )
                 return;

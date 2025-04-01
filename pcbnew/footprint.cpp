@@ -136,7 +136,7 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     std::ranges::copy( aFootprint.m_jumperPadGroups,
                        std::inserter( m_jumperPadGroups, m_jumperPadGroups.end() ) );
 
-    std::map<BOARD_ITEM*, BOARD_ITEM*> ptrMap;
+    std::map<EDA_ITEM*, EDA_ITEM*> ptrMap;
 
     // Copy fields
     for( PCB_FIELD* field : aFootprint.m_fields )
@@ -201,7 +201,7 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
 
         newGroup->GetItems().clear();
 
-        for( BOARD_ITEM* member : group->GetItems() )
+        for( EDA_ITEM* member : group->GetItems() )
         {
             if( ptrMap.count( member ) )
                 newGroup->AddItem( ptrMap[ member ] );
@@ -236,7 +236,7 @@ FOOTPRINT::~FOOTPRINT()
     // Untangle group parents before doing any deleting
     for( PCB_GROUP* group : m_groups )
     {
-        for( BOARD_ITEM* item : group->GetItems() )
+        for( EDA_ITEM* item : group->GetItems() )
             item->SetParentGroup( nullptr );
     }
 
@@ -871,7 +871,7 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
     m_zoneConnection                 = aOther.m_zoneConnection;
     m_netTiePadGroups                = aOther.m_netTiePadGroups;
 
-    std::map<BOARD_ITEM*, BOARD_ITEM*> ptrMap;
+    std::map<EDA_ITEM*, EDA_ITEM*> ptrMap;
 
     // Copy fields
     m_fields.clear();
@@ -927,7 +927,7 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
         PCB_GROUP* newGroup = static_cast<PCB_GROUP*>( group->Clone() );
         newGroup->GetItems().clear();
 
-        for( BOARD_ITEM* member : group->GetItems() )
+        for( EDA_ITEM* member : group->GetItems() )
             newGroup->AddItem( ptrMap[ member ] );
 
         Add( newGroup );
@@ -1211,9 +1211,9 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
 
     aBoardItem->SetFlags( STRUCT_DELETED );
 
-    PCB_GROUP* parentGroup = aBoardItem->GetParentGroup();
+    EDA_GROUP* parentGroup = aBoardItem->GetParentGroup();
 
-    if( parentGroup && !( parentGroup->GetFlags() & STRUCT_DELETED ) )
+    if( parentGroup && !( parentGroup->AsEdaItem()->GetFlags() & STRUCT_DELETED ) )
         parentGroup->RemoveItem( aBoardItem );
 }
 
@@ -2808,7 +2808,7 @@ double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLEC
     {
         double combinedArea = 0.0;
 
-        for( BOARD_ITEM* member : static_cast<const PCB_GROUP*>( aItem )->GetItems() )
+        for( BOARD_ITEM* member : static_cast<const PCB_GROUP*>( aItem )->GetBoardItems() )
             combinedArea += GetCoverageArea( member, aCollector );
 
         return combinedArea;

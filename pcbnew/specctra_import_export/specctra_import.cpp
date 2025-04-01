@@ -387,7 +387,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
         }
         else
         {
-            if( PCB_GROUP* group = track->GetParentGroup() )
+            if( EDA_GROUP* group = track->GetParentGroup() )
                 group->RemoveItem( track );
 
             delete track;

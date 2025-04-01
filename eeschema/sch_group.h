@@ -29,6 +29,7 @@
 #ifndef CLASS_SCH_GROUP_H_
 #define CLASS_SCH_GROUP_H_
 
+#include <eda_group.h>
 #include <sch_commit.h>
 #include <sch_item.h>
 #include <lset.h>
@@ -47,39 +48,36 @@ class VIEW;
  * containing a group implicitly contains its members. However other operations on sets of
  * items, like committing, updating the view, etc the set is explicit.
  */
-class SCH_GROUP : public SCH_ITEM
+class SCH_GROUP : public SCH_ITEM, public EDA_GROUP
 {
 public:
     SCH_GROUP();
 
     SCH_GROUP( SCH_ITEM* aParent );
 
+    EDA_ITEM* AsEdaItem() override { return this; }
+
     static inline bool ClassOf( const EDA_ITEM* aItem ) { return aItem && SCH_GROUP_T == aItem->Type(); }
 
     wxString GetClass() const override { return wxT( "SCH_GROUP" ); }
-
-    wxString GetName() const { return m_name; }
-    void     SetName( const wxString& aName ) { m_name = aName; }
-
-    std::unordered_set<SCH_ITEM*>& GetItems() { return m_items; }
-
-    const std::unordered_set<SCH_ITEM*>& GetItems() const { return m_items; }
 
     /**
      * Add item to group. Does not take ownership of item.
      *
      * @return true if item was added (false if item belongs to a different group).
      */
-    virtual bool AddItem( SCH_ITEM* aItem );
+    bool AddItem( EDA_ITEM* aItem ) override;
 
     /**
      * Remove item from group.
      *
      * @return true if item was removed (false if item was not in the group).
      */
-    virtual bool RemoveItem( SCH_ITEM* aItem );
+    bool RemoveItem( EDA_ITEM* aItem ) override;
 
-    void RemoveAll();
+    void RemoveAll() override;
+
+    std::unordered_set<SCH_ITEM*> GetSchItems() const;
 
     /*
      * Search for highest level group inside of aScope, containing item.
@@ -88,7 +86,7 @@ public:
      * @param isSymbolEditor true if we should stop promoting at the symbol level
      * @return group inside of aScope, containing item, if exists, otherwise, nullptr
      */
-    static SCH_GROUP* TopLevelGroup( SCH_ITEM* aItem, SCH_GROUP* aScope, bool isSymbolEditor );
+    static EDA_GROUP* TopLevelGroup( SCH_ITEM* aItem, EDA_GROUP* aScope, bool isSymbolEditor );
 
     static bool WithinScope( SCH_ITEM* aItem, SCH_GROUP* aScope, bool isSymbolEditor );
 
@@ -113,12 +111,12 @@ public:
     /*
      * Clone() this and all descendants
      */
-    SCH_GROUP* DeepClone() const;
+    SCH_GROUP* DeepClone() const override;
 
     /*
      * Duplicate() this and all descendants
      */
-    SCH_GROUP* DeepDuplicate() const;
+    SCH_GROUP* DeepDuplicate() const override;
 
     /// @copydoc EDA_ITEM::HitTest
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
@@ -172,10 +170,6 @@ public:
 
     /// @copydoc SCH_ITEM::swapData
     void swapData( SCH_ITEM* aImage ) override;
-
-protected:
-    std::unordered_set<SCH_ITEM*> m_items; // Members of the group
-    wxString                      m_name;  // Optional group name
 };
 
 #endif

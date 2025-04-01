@@ -141,13 +141,13 @@ BOARD::~BOARD()
     // Untangle group parents before doing any deleting
     for( PCB_GROUP* group : m_groups )
     {
-        for( BOARD_ITEM* item : group->GetItems() )
+        for( EDA_ITEM* item : group->GetItems() )
             item->SetParentGroup( nullptr );
     }
 
     for( PCB_GENERATOR* generator : m_generators )
     {
-        for( BOARD_ITEM* item : generator->GetItems() )
+        for( EDA_ITEM* item : generator->GetItems() )
             item->SetParentGroup( nullptr );
     }
 
@@ -1311,9 +1311,9 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
 
     aBoardItem->SetFlags( STRUCT_DELETED );
 
-    PCB_GROUP* parentGroup = aBoardItem->GetParentGroup();
+    EDA_GROUP* parentGroup = aBoardItem->GetParentGroup();
 
-    if( parentGroup && !( parentGroup->GetFlags() & STRUCT_DELETED ) )
+    if( parentGroup && !( parentGroup->AsEdaItem()->GetFlags() & STRUCT_DELETED ) )
         parentGroup->RemoveItem( aBoardItem );
 
     m_connectivity->Remove( aBoardItem );
@@ -2818,11 +2818,11 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
     // There may be extra time taken due to the container access calls and iterators.
     //
     // Groups we know are cycle free
-    std::unordered_set<PCB_GROUP*> knownCycleFreeGroups;
+    std::unordered_set<EDA_GROUP*> knownCycleFreeGroups;
     // Groups in the current chain we're exploring.
-    std::unordered_set<PCB_GROUP*> currentChainGroups;
+    std::unordered_set<EDA_GROUP*> currentChainGroups;
     // Groups we haven't checked yet.
-    std::unordered_set<PCB_GROUP*> toCheckGroups;
+    std::unordered_set<EDA_GROUP*> toCheckGroups;
 
     // Initialize set of groups and generators to check that could participate in a cycle.
     for( PCB_GROUP* group : Groups() )
@@ -2834,14 +2834,14 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
     while( !toCheckGroups.empty() )
     {
         currentChainGroups.clear();
-        PCB_GROUP* group = *toCheckGroups.begin();
+        EDA_GROUP* group = *toCheckGroups.begin();
 
         while( true )
         {
             if( currentChainGroups.find( group ) != currentChainGroups.end() )
             {
                 if( repair )
-                    Remove( group );
+                    Remove( static_cast<BOARD_ITEM*>( group->AsEdaItem() ) );
 
                 return "Cycle detected in group membership";
             }
@@ -2855,7 +2855,7 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
             // We haven't visited currIdx yet, so it must be in toCheckGroups
             toCheckGroups.erase( group );
 
-            group = group->GetParentGroup();
+            group = group->AsEdaItem()->GetParentGroup();
 
             if( !group )
             {

@@ -32,6 +32,7 @@
 
 #include <board_commit.h>
 #include <board_item.h>
+#include <eda_group.h>
 #include <lset.h>
 #include <unordered_set>
 
@@ -48,10 +49,12 @@ class VIEW;
  * containing a group implicitly contains its members. However other operations on sets of
  * items, like committing, updating the view, etc the set is explicit.
  */
-class PCB_GROUP : public BOARD_ITEM
+class PCB_GROUP : public BOARD_ITEM, public EDA_GROUP
 {
 public:
     PCB_GROUP( BOARD_ITEM* aParent );
+
+    EDA_ITEM* AsEdaItem() override { return this; }
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
@@ -63,34 +66,23 @@ public:
         return wxT( "PCB_GROUP" );
     }
 
-    wxString GetName() const { return m_name; }
-    void SetName( const wxString& aName ) { m_name = aName; }
-
-    std::unordered_set<BOARD_ITEM*>& GetItems()
-    {
-        return m_items;
-    }
-
-    const std::unordered_set<BOARD_ITEM*>& GetItems() const
-    {
-        return m_items;
-    }
-
     /**
      * Add item to group. Does not take ownership of item.
      *
      * @return true if item was added (false if item belongs to a different group).
      */
-    virtual bool AddItem( BOARD_ITEM* aItem );
+    bool AddItem( EDA_ITEM* aItem ) override;
 
     /**
      * Remove item from group.
      *
      * @return true if item was removed (false if item was not in the group).
      */
-    virtual bool RemoveItem( BOARD_ITEM* aItem );
+    bool RemoveItem( EDA_ITEM* aItem ) override;
 
-    void RemoveAll();
+    void RemoveAll() override;
+
+    std::unordered_set<BOARD_ITEM*> GetBoardItems() const;
 
     /*
      * Search for highest level group inside of aScope, containing item.
@@ -99,7 +91,7 @@ public:
      * @param isFootprintEditor true if we should stop promoting at the footprint level
      * @return group inside of aScope, containing item, if exists, otherwise, nullptr
      */
-    static PCB_GROUP* TopLevelGroup( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool isFootprintEditor );
+    static EDA_GROUP* TopLevelGroup( BOARD_ITEM* aItem, EDA_GROUP* aScope, bool isFootprintEditor );
 
     static bool WithinScope( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool isFootprintEditor );
 
@@ -144,12 +136,12 @@ public:
     /*
      * Clone() this and all descendants
      */
-    PCB_GROUP* DeepClone() const;
+    PCB_GROUP* DeepClone() const override;
 
     /*
      * Duplicate() this and all descendants
      */
-    PCB_GROUP* DeepDuplicate() const;
+    PCB_GROUP* DeepDuplicate() const override;
 
     /// @copydoc BOARD_ITEM::IsOnLayer
     bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;
@@ -213,9 +205,6 @@ protected:
 
     /// @copydoc BOARD_ITEM::swapData
     void swapData( BOARD_ITEM* aImage ) override;
-
-    std::unordered_set<BOARD_ITEM*> m_items;     // Members of the group
-    wxString                        m_name;      // Optional group name
 };
 
 #endif // CLASS_PCB_GROUP_H_
