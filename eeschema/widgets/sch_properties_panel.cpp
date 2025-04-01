@@ -154,6 +154,9 @@ PROPERTY_BASE* SCH_PROPERTIES_PANEL::getPropertyFromEvent( const wxPropertyGridE
 
 void SCH_PROPERTIES_PANEL::valueChanging( wxPropertyGridEvent& aEvent )
 {
+    if( m_SuppressGridChangeEvents )
+        return;
+
     SCH_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
     const SELECTION&    selection = selectionTool->GetSelection();
     EDA_ITEM*           item = selection.Front();
@@ -179,6 +182,9 @@ void SCH_PROPERTIES_PANEL::valueChanging( wxPropertyGridEvent& aEvent )
 
 void SCH_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
 {
+    if( m_SuppressGridChangeEvents )
+        return;
+
     SCH_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
     const SELECTION&    selection = selectionTool->GetSelection();
     PROPERTY_BASE*      property = getPropertyFromEvent( aEvent );

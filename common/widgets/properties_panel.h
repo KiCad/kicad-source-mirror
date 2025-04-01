@@ -104,11 +104,14 @@ protected:
     bool extractValueAndWritability( const SELECTION& aSelection, PROPERTY_BASE* aProperty,
                                      wxVariant& aValue, bool& aWritable );
 
+public:
+    int                         m_SuppressGridChangeEvents;
+
 protected:
     std::vector<PROPERTY_BASE*> m_displayed;
-    wxPropertyGrid* m_grid;
-    EDA_BASE_FRAME* m_frame;
-    wxStaticText* m_caption;
+    wxPropertyGrid*             m_grid;
+    EDA_BASE_FRAME*             m_frame;
+    wxStaticText*               m_caption;
 
     /// Proportion of the grid column splitter that is used for the key column (0.0 - 1.0)
     float m_splitter_key_proportion;
