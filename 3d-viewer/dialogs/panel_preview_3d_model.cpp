@@ -426,7 +426,9 @@ void PANEL_PREVIEW_3D_MODEL::View3DSettings( wxCommandEvent& event )
 
 void PANEL_PREVIEW_3D_MODEL::doIncrementScale( wxSpinEvent& event, double aSign )
 {
-    wxSpinButton* spinCtrl = (wxSpinButton*) event.GetEventObject();
+    wxSpinButton* spinCtrl = dynamic_cast<wxSpinButton*>( event.GetEventObject() );
+
+    wxCHECK( spinCtrl, /* void */ );
 
     wxTextCtrl * textCtrl = xscale;
 
@@ -453,7 +455,10 @@ void PANEL_PREVIEW_3D_MODEL::doIncrementScale( wxSpinEvent& event, double aSign 
 
 void PANEL_PREVIEW_3D_MODEL::doIncrementRotation( wxSpinEvent& aEvent, double aSign )
 {
-    wxSpinButton* spinCtrl = (wxSpinButton*) aEvent.GetEventObject();
+    wxSpinButton* spinCtrl = dynamic_cast<wxSpinButton*>( aEvent.GetEventObject() );
+
+    wxCHECK( spinCtrl, /* void */ );
+
     wxTextCtrl* textCtrl = xrot;
 
     if( spinCtrl == m_spinYrot )
@@ -479,7 +484,9 @@ void PANEL_PREVIEW_3D_MODEL::doIncrementRotation( wxSpinEvent& aEvent, double aS
 
 void PANEL_PREVIEW_3D_MODEL::doIncrementOffset( wxSpinEvent& event, double aSign )
 {
-    wxSpinButton* spinCtrl = (wxSpinButton*) event.GetEventObject();
+    wxSpinButton* spinCtrl = dynamic_cast<wxSpinButton*>( event.GetEventObject() );
+
+    wxCHECK( spinCtrl, /* void */ );
 
     wxTextCtrl * textCtrl = xoff;
 
@@ -515,7 +522,9 @@ void PANEL_PREVIEW_3D_MODEL::doIncrementOffset( wxSpinEvent& event, double aSign
 
 void PANEL_PREVIEW_3D_MODEL::onMouseWheelScale( wxMouseEvent& event )
 {
-    wxTextCtrl* textCtrl = (wxTextCtrl*) event.GetEventObject();
+    wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( event.GetEventObject() );
+
+    wxCHECK( textCtrl, /* void */ );
 
     double step = SCALE_INCREMENT;
 
@@ -538,7 +547,9 @@ void PANEL_PREVIEW_3D_MODEL::onMouseWheelScale( wxMouseEvent& event )
 
 void PANEL_PREVIEW_3D_MODEL::onMouseWheelRot( wxMouseEvent& event )
 {
-    wxTextCtrl* textCtrl = (wxTextCtrl*) event.GetEventObject();
+    wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( event.GetEventObject() );
+
+    wxCHECK( textCtrl, /* void */ );
 
     double step = ROTATION_INCREMENT;
 
@@ -561,7 +572,9 @@ void PANEL_PREVIEW_3D_MODEL::onMouseWheelRot( wxMouseEvent& event )
 
 void PANEL_PREVIEW_3D_MODEL::onMouseWheelOffset( wxMouseEvent& event )
 {
-    wxTextCtrl* textCtrl = (wxTextCtrl*) event.GetEventObject();
+    wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( event.GetEventObject() );
+
+    wxCHECK( textCtrl, /* void */ );
 
     double step_mm = OFFSET_INCREMENT_MM;
 
