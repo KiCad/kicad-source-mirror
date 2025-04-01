@@ -42,6 +42,7 @@ extern APIIMPORT wxPGGlobalVarsClass* wxPGGlobalVars;
 
 PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
         wxPanel( aParent ),
+        m_SuppressGridChangeEvents( 0 ),
         m_frame( aFrame ),
         m_splitter_key_proportion( -1 )
 {
@@ -168,13 +169,43 @@ void PROPERTIES_PANEL::OnLanguageChanged( wxCommandEvent& aEvent )
 }
 
 
+class SUPPRESS_GRID_CHANGED_EVENTS
+{
+public:
+    SUPPRESS_GRID_CHANGED_EVENTS( PROPERTIES_PANEL* aPanel ) :
+            m_panel( aPanel )
+    {
+        m_panel->m_SuppressGridChangeEvents++;
+    }
+
+    ~SUPPRESS_GRID_CHANGED_EVENTS()
+    {
+        m_panel->m_SuppressGridChangeEvents--;
+    }
+
+private:
+    PROPERTIES_PANEL* m_panel;
+};
+
+
 void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
 {
+    SUPPRESS_GRID_CHANGED_EVENTS raii( this );
+
+    auto reset =
+            [&]()
+            {
+                if( m_grid->IsEditorFocused() )
+                    m_grid->CommitChangesFromEditor();
+
+                m_grid->Clear();
+                m_displayed.clear();
+            };
+
     if( aSelection.Empty() )
     {
         m_caption->SetLabel( _( "No objects selected" ) );
-        m_grid->Clear();
-        m_displayed.clear();
+        reset();
         return;
     }
     else if( aSelection.Size() == 1 )
@@ -287,8 +318,7 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
         return;
 
     // Some difference exists:  start from scratch
-    m_grid->Clear();
-    m_displayed.clear();
+    reset();
 
     std::map<wxPGProperty*, int> pgPropOrders;
     std::map<wxString, std::vector<wxPGProperty*>> pgPropGroups;
