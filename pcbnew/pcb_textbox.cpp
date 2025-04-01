@@ -500,7 +500,13 @@ void PCB_TEXTBOX::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 
     if( GetTextAngle().IsCardinal() && GetShape() != SHAPE_T::RECTANGLE )
     {
+        // To convert the polygon to its equivalent rectangle, we use GetCornersInSequence()
+        // but this method uses the polygon bounding box.
+        // set the line thickness to 0 to get the actual rectangle corner
+        int lineWidth = GetWidth();
+        SetWidth( 0 );
         std::vector<VECTOR2I> corners = GetCornersInSequence();
+        SetWidth( lineWidth );
         VECTOR2I              diag = corners[2] - corners[0];
         EDA_ANGLE             angle = GetTextAngle();
 
