@@ -170,20 +170,11 @@ void PROPERTIES_PANEL::OnLanguageChanged( wxCommandEvent& aEvent )
 
 void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
 {
-    auto reset =
-            [&]()
-            {
-                if( m_grid->IsEditorFocused() )
-                    m_grid->CommitChangesFromEditor();
-
-                m_grid->Clear();
-                m_displayed.clear();
-            };
-
     if( aSelection.Empty() )
     {
         m_caption->SetLabel( _( "No objects selected" ) );
-        reset();
+        m_grid->Clear();
+        m_displayed.clear();
         return;
     }
     else if( aSelection.Size() == 1 )
@@ -296,7 +287,8 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
         return;
 
     // Some difference exists:  start from scratch
-    reset();
+    m_grid->Clear();
+    m_displayed.clear();
 
     std::map<wxPGProperty*, int> pgPropOrders;
     std::map<wxString, std::vector<wxPGProperty*>> pgPropGroups;
