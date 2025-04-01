@@ -35,7 +35,10 @@ class WX_HTML_REPORT_PANEL;
 class KICOMMON_API WX_HTML_PANEL_REPORTER : public REPORTER
 {
 public:
-    WX_HTML_PANEL_REPORTER( WX_HTML_REPORT_PANEL* aPanel ) : REPORTER(), m_panel( aPanel ) {}
+    WX_HTML_PANEL_REPORTER( WX_HTML_REPORT_PANEL* aPanel ) :
+            REPORTER(),
+            m_panel( aPanel )
+    {}
 
     virtual ~WX_HTML_PANEL_REPORTER() {}
 
@@ -64,8 +67,9 @@ class KICOMMON_API WX_HTML_REPORT_PANEL : public WX_HTML_REPORT_PANEL_BASE
 {
 public:
     WX_HTML_REPORT_PANEL( wxWindow* parent, wxWindowID id = wxID_ANY,
-            const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
+                          const wxPoint& pos = wxDefaultPosition,
+                          const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
+
     ~WX_HTML_REPORT_PANEL();
 
     /// Set the min size of the area which displays html messages.

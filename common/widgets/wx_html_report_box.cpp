@@ -136,6 +136,7 @@ wxString WX_HTML_REPORT_BOX::generateHtml( const wxString& aLine )
 
 void WX_HTML_REPORT_BOX::Clear()
 {
+    REPORTER::Clear();
     m_messages.clear();
 }
 

@@ -72,6 +72,13 @@ class WX_INFOBAR;
 class KICOMMON_API REPORTER
 {
 public:
+    REPORTER() :
+            m_severityMask( 0 )
+    { }
+
+    virtual ~REPORTER()
+    { }
+
     /**
      * Location where the message is to be reported.
      * LOC_HEAD messages are printed before all others (typically intro messages)
@@ -93,7 +100,11 @@ public:
      */
 
     virtual REPORTER& Report( const wxString& aText,
-                              SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) = 0;
+                              SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED )
+    {
+        m_severityMask |= aSeverity;
+        return *this;
+    }
 
     /**
      * Places the report at the end of the list, for objects that support report ordering
@@ -126,16 +137,23 @@ public:
      * Returns true if the reporter has one or more messages matching the specified
      * severity mask.
      */
-    virtual bool HasMessageOfSeverity( int aSeverityMask ) const;
+    virtual bool HasMessageOfSeverity( int aSeverityMask ) const
+    {
+        return ( m_severityMask & aSeverityMask ) != 0;
+    }
 
     virtual EDA_UNITS GetUnits() const
     {
         return EDA_UNITS::MM;
     }
 
-    virtual ~REPORTER()
+    virtual void Clear()
     {
+        m_severityMask = 0;
     }
+
+private:
+    int m_severityMask;
 };
 
 
@@ -172,26 +190,21 @@ class KICOMMON_API WX_STRING_REPORTER : public REPORTER
 {
 public:
     WX_STRING_REPORTER() :
-        REPORTER(),
-        m_severityMask( 0 )
-    {
-    }
+            REPORTER()
+    { }
 
     virtual ~WX_STRING_REPORTER()
-    {
-    }
+    { }
 
     REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
     bool HasMessage() const override;
-    bool HasMessageOfSeverity( int aSeverityMask ) const override;
 
     const wxString& GetMessages() const;
-    void            Clear();
+    void            Clear() override;
 
 private:
     wxString m_string;
-    int      m_severityMask;
 };
 
 
@@ -204,12 +217,10 @@ class KICOMMON_API NULL_REPORTER : public REPORTER
 {
 public:
     NULL_REPORTER()
-    {
-    }
+    { }
 
     virtual ~NULL_REPORTER()
-    {
-    }
+    { }
 
     static REPORTER& GetInstance();
 
@@ -227,22 +238,16 @@ class KICOMMON_API CLI_REPORTER : public REPORTER
 {
 public:
     CLI_REPORTER()
-    {
-    }
+    { }
 
     virtual ~CLI_REPORTER()
-    {
-    }
+    { }
 
     static REPORTER& GetInstance();
 
     REPORTER& Report( const wxString& aMsg, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
     bool HasMessage() const override { return false; }
-    bool HasMessageOfSeverity( int aSeverityMask ) const override;
-
-private:
-    std::map<SEVERITY, bool> m_hasMessageMap;
 };
 
 
@@ -253,12 +258,10 @@ class KICOMMON_API STDOUT_REPORTER : public REPORTER
 {
 public:
     STDOUT_REPORTER()
-    {
-    }
+    { }
 
     virtual ~STDOUT_REPORTER()
-    {
-    }
+    { }
 
     static REPORTER& GetInstance();
 
@@ -272,12 +275,10 @@ class KICOMMON_API WXLOG_REPORTER : public REPORTER
 {
 public:
     WXLOG_REPORTER()
-    {
-    }
+    { }
 
     virtual ~WXLOG_REPORTER()
-    {
-    }
+    { }
 
     static REPORTER& GetInstance();
 
@@ -297,8 +298,7 @@ public:
             : REPORTER(),
               m_statusBar( aStatusBar ),
               m_position( aPosition )
-    {
-    }
+    { }
 
     REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
