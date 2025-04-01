@@ -391,7 +391,13 @@ bool PROPERTIES_PANEL::getItemValue( EDA_ITEM* aItem, PROPERTY_BASE* aProperty, 
         converted = any.GetAs( &aValue );
 
     if( !converted )
-        wxFAIL_MSG( wxS( "Could not convert wxAny to wxVariant" ) );
+    {
+        wxString propName = aProperty->Name();
+        propName.Replace( ' ', '_' );
+        wxFAIL_MSG( wxString::Format( wxS( "Could not convert wxAny to wxVariant for %s::%s" ),
+                                      aItem->GetClass(),
+                                      propName ) );
+    }
 
     return converted;
 }
