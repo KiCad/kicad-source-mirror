@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-03-30 16:07+0000\n"
+"PO-Revision-Date: 2025-04-01 12:48+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -13986,24 +13986,20 @@ msgid "Available pins"
 msgstr "Verfügbare Pins"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:386
-#, fuzzy
 msgid "Create jumper group from the selected pins"
-msgstr "Erzeugt aus der Auswahl eine Kupferzone"
+msgstr "Jumpergruppe aus gewählten Pins erstellen"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:391
-#, fuzzy
 msgid "Remove the selected jumper pin group"
-msgstr "Ausgewählte benutzerdefinierte Gruppe löschen"
+msgstr "Gewählte Jumperpingruppe entfernen"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:401
-#, fuzzy
 msgid "Grouped pins"
-msgstr "Gruppierung"
+msgstr "Gruppierte Pins"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:423
-#, fuzzy
 msgid "Pin Connections"
-msgstr "Padverbindungen"
+msgstr "Pinverbindungen"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:436
 msgid "Edit Simulation Model..."
@@ -17336,7 +17332,7 @@ msgid "Global Field Name Templates"
 msgstr "Globale Feldnamenvorlagen"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "The field name '%s' contains trailing and/or leading white space."
 msgstr "Der Feldname \"%s\" enthält Leerzeichen am Anfang oder Ende."
 
@@ -19078,9 +19074,8 @@ msgid "Design block '%s' already has a schematic."
 msgstr "Designblock \"%s\" hat bereits einen Schaltplan."
 
 #: eeschema/sch_design_block_utils.cpp:64
-#, fuzzy
 msgid "Overwrite existing schematic?"
-msgstr "Bestehende Voreinstellung überschreiben?"
+msgstr "Bestehenden Schaltplan überschreiben?"
 
 #: eeschema/sch_design_block_utils.cpp:79
 #: eeschema/sch_design_block_utils.cpp:261
@@ -23292,7 +23287,6 @@ msgid "Create a new design block from the current selection"
 msgstr "Neuen Designblock aus aktueller Auswahl erstellen"
 
 #: eeschema/tools/sch_actions.cpp:172
-#, fuzzy
 msgid "Save Current Sheet to Design Block..."
 msgstr "Aktuelle Schaltplanseite als Designblock speichern..."
 
@@ -23301,14 +23295,12 @@ msgid "Add current sheet to design block"
 msgstr "Aktuelle Schaltplanseite zu Designblock hinzufügen"
 
 #: eeschema/tools/sch_actions.cpp:179 pcbnew/tools/pcb_actions.cpp:489
-#, fuzzy
 msgid "Save Selection to Design Block..."
 msgstr "Auswahl als Designblock speichern..."
 
 #: eeschema/tools/sch_actions.cpp:180 pcbnew/tools/pcb_actions.cpp:490
-#, fuzzy
 msgid "Add current selection to design block"
-msgstr "Aktuelle Auswahl nach unten verschieben"
+msgstr "Aktuelle Auswahl zum Designblock hinzufügen"
 
 #: eeschema/tools/sch_actions.cpp:186 pcbnew/tools/pcb_actions.cpp:496
 msgid "Delete Design Block"
@@ -27015,9 +27007,8 @@ msgid "Generate map / summary of drill hits"
 msgstr "Bohrplan / Zusammenfassung der Bohrvorgänge erzeugen"
 
 #: kicad/cli/command_pcb_export_drill.cpp:94
-#, fuzzy
 msgid "Generate a file specifically for tenting"
-msgstr "Stücklisten-Auftragseinstellungen exportieren"
+msgstr "Spez. Datei für Abdeckungen erzeugen"
 
 #: kicad/cli/command_pcb_export_drill.cpp:99
 msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
@@ -27148,9 +27139,8 @@ msgid "The new behavior will match --mode-multi"
 msgstr "Das neue Verhalten wird identisch zu \"--mode-multi\" sein"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:34
-#, fuzzy
 msgid "Export the PCB in Gencad format"
-msgstr "Netzliste in KiCad-Format exportieren"
+msgstr "PCB in Genad-Format exportieren"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:40
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:220
@@ -27831,7 +27821,6 @@ msgid "Running jobs"
 msgstr "Führe Aufträge aus"
 
 #: kicad/dialogs/panel_jobset.cpp:295
-#, fuzzy
 msgid "Edit Destination Options..."
 msgstr "Ausgabeoptionen bearbeiten..."
 
@@ -29029,9 +29018,9 @@ msgid "Failed to create commit: %s"
 msgstr "Konnte Commit nicht erstellen: %s"
 
 #: kicad/project_tree_pane.cpp:2577
-#, fuzzy, c-format
+#, c-format
 msgid "Created commit with id: %s"
-msgstr "Konnte Index nicht schreiben: %s"
+msgstr "Commit mit ID erstellt: %s"
 
 #: kicad/tools/kicad_manager_actions.cpp:43
 msgid "New Project..."
@@ -29675,9 +29664,8 @@ msgid "Page Selector"
 msgstr "Seitenauswahl"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:163
-#, fuzzy
 msgid "Select the page to simulate item displays"
-msgstr "Zu speichernden Elementtyp wählen"
+msgstr "Seite wählen um Elementdarstellung zu simulieren"
 
 #: pagelayout_editor/tools/pl_actions.cpp:72
 msgid "Place Bitmaps"
@@ -34330,20 +34318,17 @@ msgid "Circular Array"
 msgstr "Kreis Array"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:472
-#, fuzzy
 msgid "Item Source"
-msgstr "Quelle"
+msgstr "Elementquelle"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:474
-#, fuzzy
 msgid "Duplicate selection"
-msgstr "Doppelter Schaltplanname"
+msgstr "Auswahl duplizieren"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:478
 #: pcbnew/tools/array_tool.cpp:204
-#, fuzzy
 msgid "Arrange selection"
-msgstr "Auswahl umschalten"
+msgstr "Auswahl anordnen"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:479
 #: pcbnew/dialogs/dialog_create_array_base.cpp:498
@@ -36172,28 +36157,24 @@ msgstr ""
 "haben. In diesem Fall wird angenommen, dass sie intern verbunden sind."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:410
-#, fuzzy
 msgid "Jumper Pad Groups"
-msgstr "Pads neu nummerieren"
+msgstr "Jumperpadgruppen"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:418
 msgid "Available pads"
 msgstr "Verfügbare Pads"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:434
-#, fuzzy
 msgid "Create jumper group from the selected pads"
-msgstr "Außenlinien um gewähltes Element erzeugen"
+msgstr "Jumperpadgruppe aus gewählten Pads erzeugen"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:439
-#, fuzzy
 msgid "Remove the selected jumper pad group"
-msgstr "Ausgewählte benutzerdefinierte Gruppe löschen"
+msgstr "Gewählte Jumperpadgruppe entfernen"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:449
-#, fuzzy
 msgid "Grouped pads"
-msgstr "Nach Wert gruppieren"
+msgstr "Gruppierte Pads"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:471
 #: pcbnew/zone.cpp:2052
@@ -36405,9 +36386,8 @@ msgid "Gerber X2"
 msgstr "Gerber X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:92
-#, fuzzy
 msgid "Generate tenting layers"
-msgstr "Platzierungsdateien generieren"
+msgstr "Erzeuge Abdeckungslagen"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:106
 msgid "Generate map:"
@@ -37191,7 +37171,6 @@ msgid "Length-tuning pattern defaults"
 msgstr "Vorgaben für Längenabstimmungsmuster"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:78
-#, fuzzy
 msgid "Component classes"
 msgstr "Bauteilklassen"
 
@@ -38820,7 +38799,6 @@ msgid "Background style:"
 msgstr "Hintergrundstil:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:86
-#, fuzzy
 msgid "Procedural textures"
 msgstr "Prozeduale Texturen"
 
@@ -38833,10 +38811,8 @@ msgid "Anti-aliasing"
 msgstr "Anti-Aliasing"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:98
-#, fuzzy
 msgid "Screen space ambient occlusions and global illumination reflections"
-msgstr ""
-"Screen Space Ambient Occlusions und globale Beleuchtungsreflexionen (langsam)"
+msgstr "Screen Space Ambient Occlusions und globale Beleuchtungsreflexionen"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:109
 msgid "View"
@@ -38887,7 +38863,6 @@ msgid "°"
 msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:244
-#, fuzzy
 msgid "Lights Intensity"
 msgstr "Lichtintensität"
 
@@ -38896,7 +38871,6 @@ msgid "Camera:"
 msgstr "Kamera:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:293
-#, fuzzy
 msgid "Lights Position"
 msgstr "Lichtposition"
 
@@ -39211,9 +39185,8 @@ msgid "Border style:"
 msgstr "Umrandungsstil:"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:148
-#, fuzzy
 msgid "Unknown choice"
-msgstr "Unbekannte Methode"
+msgstr "Unbekannte Auswahl"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:628
 #, c-format
@@ -39273,9 +39246,8 @@ msgid "Edit Track/Via Properties"
 msgstr "Leiterbahn-/Via-Eigenschaften bearbeiten"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:178
-#, fuzzy
 msgid "From rules"
-msgstr "Aus Designregeln"
+msgstr "Aus Regeln"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:180
 msgid "Type I a ( tented top )"
@@ -39421,9 +39393,8 @@ msgid "End layer:"
 msgstr "Endlage:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:378
-#, fuzzy
 msgid "Protection features:"
-msgstr "Querschnittsfläche:"
+msgstr "Schutzmaßnahmen:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:385
 msgid ""
@@ -39642,23 +39613,20 @@ msgid "Footprint Field:"
 msgstr "Footprintfeld:"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:618
-#, fuzzy
 msgid "Import references from selection"
-msgstr "Leiterbahnen aus Auswahl erzeugen"
+msgstr "Referenzen aus Auswahl importieren"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:19
-#, fuzzy
 msgid "Assign component class per sheet"
-msgstr "Bauteilklassen"
+msgstr "Bauteilklassen pro Schaltplanseite zuweisen"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:31
 msgid "Custom Assignments:"
 msgstr "Benutzerdefinierte Zuweisungen:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:38
-#, fuzzy
 msgid "Add Custom Assignment"
-msgstr "Netzklassenzuweisung hinzufügen"
+msgstr "Benutzerdefinierte Zuweisung hinzufügen"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:84
 msgid "Component Class:"
@@ -39679,9 +39647,8 @@ msgid "Footprint:"
 msgstr "Footprint:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:358
-#, fuzzy
 msgid "Field Value:"
-msgstr "Endwert:"
+msgstr "Feldwert:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:442
 msgid "Sheet Name:"
@@ -39693,9 +39660,8 @@ msgid "Layer name %s already in use."
 msgstr "Lagenname %s wird bereits verwendet."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:34
-#, fuzzy
 msgid "Layer Names"
-msgstr "Lagenname"
+msgstr "Lagennamen"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:113
 msgid "Net names:"
@@ -42418,9 +42384,9 @@ msgid "Condition not satisfied; rule ignored."
 msgstr "Bedingung nicht erfüllt; Regel ignoriert."
 
 #: pcbnew/drc/drc_engine.cpp:1389
-#, fuzzy, c-format
+#, c-format
 msgid "Inheriting from parent: %s."
-msgstr "Ableiten von Symbol \"%s\"."
+msgstr "Ableiten von Symbol: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1428 pcbnew/drc/drc_engine.cpp:1452
 #, c-format
@@ -42824,9 +42790,8 @@ msgid "Missing ')'."
 msgstr "Fehlendes \")\"."
 
 #: pcbnew/drc/drc_rule_parser.cpp:353
-#, fuzzy
 msgid "Missing component class name."
-msgstr "Fehlender Regelname."
+msgstr "Fehlender Bauteilklassenname."
 
 #: pcbnew/drc/drc_rule_parser.cpp:381
 #, fuzzy, c-format
@@ -50219,9 +50184,8 @@ msgid "Add selected design block to current board"
 msgstr "Gewählten Designblock auf aktueller Schaltplanseite einfügen"
 
 #: pcbnew/tools/pcb_actions.cpp:468
-#, fuzzy
 msgid "Save Current Board as Design Block..."
-msgstr "Aktuelle Schaltplanseite als Designblock speichern..."
+msgstr "Aktuelle Platine als Designblock speichern..."
 
 #: pcbnew/tools/pcb_actions.cpp:469
 #, fuzzy
@@ -50229,9 +50193,8 @@ msgid "Create a new design block from the current board"
 msgstr "Neuen Designblock aus aktueller Schaltplanseite erstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:482
-#, fuzzy
 msgid "Save Current Board to Design Block..."
-msgstr "Aktuelle Schaltplanseite als Designblock speichern..."
+msgstr "Aktuelle Platine als Designblock speichern..."
 
 #: pcbnew/tools/pcb_actions.cpp:483
 #, fuzzy
