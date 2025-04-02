@@ -104,7 +104,7 @@ void SCH_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
     EDA_ITEMS                   selectedItems;
     std::vector<SCH_SEARCH_HIT> selectedHits;
 
-    m_frame->GetToolManager()->RunAction( SCH_ACTIONS::clearSelection );
+    m_frame->GetToolManager()->RunAction( ACTIONS::selectionClear );
 
     for( long row : aItemRows )
     {
@@ -134,7 +134,7 @@ void SCH_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
             m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, sheet );
 
         if( selectedItems.size() )
-            m_frame->GetToolManager()->RunAction<EDA_ITEMS*>( SCH_ACTIONS::addItemsToSel, &selectedItems );
+            m_frame->GetToolManager()->RunAction<EDA_ITEMS*>( ACTIONS::selectItems, &selectedItems );
 
         switch( settings.selection_zoom )
         {

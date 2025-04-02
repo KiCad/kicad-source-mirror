@@ -169,7 +169,7 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE& aZone, const ZONE& aCutout )
 
     // Clear the selection before removing the old zone
     auto toolMgr = m_tool.GetManager();
-    toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+    toolMgr->RunAction( ACTIONS::selectionClear );
 
     SHAPE_POLY_SET originalOutline( *aZone.Outline() );
     originalOutline.BooleanSubtract( *aCutout.Outline() );
@@ -206,7 +206,7 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE& aZone, const ZONE& aCutout )
     else
     {
         m_params.m_sourceZone = newZones[0];
-        toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, newZones[0] );
+        toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, newZones[0] );
     }
 }
 
@@ -230,7 +230,7 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE> aZone )
             commit.Add( aZone.get() );
             commit.Push( _( "Draw Zone" ) );
 
-            m_tool.GetManager()->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, aZone.release() );
+            m_tool.GetManager()->RunAction<EDA_ITEM*>( ACTIONS::selectItem, aZone.release() );
             break;
         }
 
@@ -252,7 +252,7 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE> aZone )
             commit.Add( poly );
             commit.Push( _( "Draw Polygon" ) );
 
-            m_tool.GetManager()->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, poly );
+            m_tool.GetManager()->RunAction<EDA_ITEM*>( ACTIONS::selectItem, poly );
             break;
         }
     }
@@ -271,7 +271,7 @@ bool ZONE_CREATE_HELPER::OnFirstPoint( POLYGON_GEOM_MANAGER& aMgr )
 
         if( m_zone )
         {
-            m_tool.GetManager()->RunAction( PCB_ACTIONS::selectionClear );
+            m_tool.GetManager()->RunAction( ACTIONS::selectionClear );
 
             // set up properties from zone
             const auto& settings = *m_parentView.GetPainter()->GetSettings();

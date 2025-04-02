@@ -791,7 +791,7 @@ void PCB_EDIT_FRAME::setupTools()
     }
 
     // Run the selection tool, it is supposed to be always active
-    m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
+    m_toolManager->InvokeTool( "common.InteractiveSelection" );
 }
 
 

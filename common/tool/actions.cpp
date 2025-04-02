@@ -151,6 +151,48 @@ TOOL_ACTION ACTIONS::quit( TOOL_ACTION_ARGS()
         .Tooltip( _( "Close the current editor" ) )
         .Icon( BITMAPS::exit ) );
 
+
+// Selection actions
+TOOL_ACTION ACTIONS::selectionActivate( TOOL_ACTION_ARGS()
+        .Name( "common.InteractiveSelection" )
+        .Scope( AS_GLOBAL )
+        // No description, not shown anywhere
+        .Flags( AF_ACTIVATE ) );
+
+TOOL_ACTION ACTIONS::selectionCursor( TOOL_ACTION_ARGS()
+        .Name( "common.InteractiveSelection.cursor" )
+        .Scope( AS_GLOBAL )
+        .Parameter<CLIENT_SELECTION_FILTER>( nullptr ) );
+
+TOOL_ACTION ACTIONS::selectItem( TOOL_ACTION_ARGS()
+        .Name( "common.InteractiveSelection.selectItem" )
+        .Scope( AS_GLOBAL ) );
+
+TOOL_ACTION ACTIONS::selectItems( TOOL_ACTION_ARGS()
+        .Name( "common.InteractiveSelection.selectItems" )
+        .Scope( AS_GLOBAL ) );
+
+TOOL_ACTION ACTIONS::unselectItem( TOOL_ACTION_ARGS()
+        .Name( "common.InteractiveSelection.unselectItem" )
+        .Scope( AS_GLOBAL ) );
+
+TOOL_ACTION ACTIONS::unselectItems( TOOL_ACTION_ARGS()
+        .Name( "common.InteractiveSelection.unselectItems" )
+        .Scope( AS_GLOBAL ) );
+
+TOOL_ACTION ACTIONS::reselectItem( TOOL_ACTION_ARGS()
+        .Name( "common.InteractiveSelection.reselectItem" )
+        .Scope( AS_GLOBAL ) );
+
+TOOL_ACTION ACTIONS::selectionClear( TOOL_ACTION_ARGS()
+        .Name( "common.InteractiveSelection.clear" )
+        .Scope( AS_GLOBAL ) );
+
+TOOL_ACTION ACTIONS::selectionMenu( TOOL_ACTION_ARGS()
+        .Name( "common.InteractiveSelection.selectionMenu" )
+        .Scope( AS_GLOBAL ) );
+
+
 // Group actions
 TOOL_ACTION ACTIONS::group( TOOL_ACTION_ARGS()
         .Name( "common.Interactive.group" )

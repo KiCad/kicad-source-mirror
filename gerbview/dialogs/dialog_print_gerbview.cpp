@@ -307,7 +307,7 @@ void DIALOG_PRINT_GERBVIEW::saveSettings()
 int GERBVIEW_CONTROL::Print( const TOOL_EVENT& aEvent )
 {
     // Selection affects the original item visibility
-    m_toolMgr->RunAction( GERBVIEW_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     BOARD_PRINTOUT_SETTINGS settings( m_frame->GetPageSettings() );
     settings.m_colorSettings = m_frame->GetColorSettings();

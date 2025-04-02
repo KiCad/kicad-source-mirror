@@ -118,7 +118,7 @@ void PCB_TEST_FRAME_BASE::SetBoard( std::shared_ptr<BOARD> b )
     m_galPanel->SetEventDispatcher( m_toolDispatcher );
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
-    m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
+    m_toolManager->InvokeTool( "common.InteractiveSelection" );
 #endif
 }
 
@@ -208,7 +208,7 @@ void PCB_TEST_FRAME_BASE::LoadSettings()
 
 void PCB_TEST_FRAME_BASE::SetSelectionHook( std::function<void(PCB_TEST_FRAME_BASE*, PCB_SELECTION*)> aHook )
 {
-    auto tool = m_toolManager->FindTool("pcbnew.InteractiveSelection");
+    auto tool = m_toolManager->FindTool( "common.InteractiveSelection" );
     if (!tool)
         return;
 

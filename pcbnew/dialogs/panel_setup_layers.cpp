@@ -848,7 +848,7 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
 
     if( !removedLayers.empty() )
     {
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
+        m_frame->GetToolManager()->RunAction( ACTIONS::selectionClear );
 
         PCB_LAYER_COLLECTOR collector;
 

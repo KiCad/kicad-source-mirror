@@ -45,7 +45,7 @@
 
 
 PL_SELECTION_TOOL::PL_SELECTION_TOOL() :
-        SELECTION_TOOL( "plEditor.InteractiveSelection" ),
+        SELECTION_TOOL( "common.InteractiveSelection" ),
         m_frame( nullptr )
 {
 }
@@ -549,14 +549,14 @@ void PL_SELECTION_TOOL::setTransitions()
 {
     Go( &PL_SELECTION_TOOL::UpdateMenu,            ACTIONS::updateMenu.MakeEvent() );
 
-    Go( &PL_SELECTION_TOOL::Main,                  PL_ACTIONS::selectionActivate.MakeEvent() );
-    Go( &PL_SELECTION_TOOL::ClearSelection,        PL_ACTIONS::clearSelection.MakeEvent() );
+    Go( &PL_SELECTION_TOOL::Main,                  ACTIONS::selectionActivate.MakeEvent() );
+    Go( &PL_SELECTION_TOOL::ClearSelection,        ACTIONS::selectionClear.MakeEvent() );
 
-    Go( &PL_SELECTION_TOOL::AddItemToSel,          PL_ACTIONS::addItemToSel.MakeEvent() );
-    Go( &PL_SELECTION_TOOL::AddItemsToSel,         PL_ACTIONS::addItemsToSel.MakeEvent() );
-    Go( &PL_SELECTION_TOOL::RemoveItemFromSel,     PL_ACTIONS::removeItemFromSel.MakeEvent() );
-    Go( &PL_SELECTION_TOOL::RemoveItemsFromSel,    PL_ACTIONS::removeItemsFromSel.MakeEvent() );
-    Go( &PL_SELECTION_TOOL::SelectionMenu,         PL_ACTIONS::selectionMenu.MakeEvent() );
+    Go( &PL_SELECTION_TOOL::AddItemToSel,          ACTIONS::selectItem.MakeEvent() );
+    Go( &PL_SELECTION_TOOL::AddItemsToSel,         ACTIONS::selectItems.MakeEvent() );
+    Go( &PL_SELECTION_TOOL::RemoveItemFromSel,     ACTIONS::unselectItem.MakeEvent() );
+    Go( &PL_SELECTION_TOOL::RemoveItemsFromSel,    ACTIONS::unselectItems.MakeEvent() );
+    Go( &PL_SELECTION_TOOL::SelectionMenu,         ACTIONS::selectionMenu.MakeEvent() );
 
     Go( &PL_SELECTION_TOOL::disambiguateCursor,    EVENTS::DisambiguatePoint );
 }

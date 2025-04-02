@@ -399,7 +399,7 @@ void SYMBOL_EDIT_FRAME::setupTools()
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active
-    m_toolManager->InvokeTool( "eeschema.InteractiveSelection" );
+    m_toolManager->InvokeTool( "common.InteractiveSelection" );
 
     GetCanvas()->SetEventDispatcher( m_toolDispatcher );
 }
@@ -857,7 +857,7 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
 {
     wxCHECK( m_toolManager, /* void */ );
 
-    m_toolManager->RunAction( SCH_ACTIONS::clearSelection );
+    m_toolManager->RunAction( ACTIONS::selectionClear );
     GetCanvas()->GetView()->Clear();
     delete m_symbol;
 
@@ -1052,7 +1052,7 @@ void SYMBOL_EDIT_FRAME::SetUnit( int aUnit )
         return;
 
     m_toolManager->RunAction( ACTIONS::cancelInteractive );
-    m_toolManager->RunAction( SCH_ACTIONS::clearSelection );
+    m_toolManager->RunAction( ACTIONS::selectionClear );
 
     m_unit = aUnit;
 

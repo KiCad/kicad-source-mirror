@@ -75,7 +75,7 @@ int SCH_EDIT_TABLE_TOOL::EditTable( const TOOL_EVENT& aEvent )
     }
 
     if( clearSelection )
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     return 0;
 }

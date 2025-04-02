@@ -111,7 +111,7 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
     if( !aDryRun )
     {
         m_frame->GetToolManager()->DeactivateTool();
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
+        m_frame->GetToolManager()->RunAction( ACTIONS::selectionClear );
     }
 
     BOARD_NETLIST_UPDATER updater( m_frame, m_frame->GetBoard() );

@@ -1045,7 +1045,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
     BOARD*                board = getModel<BOARD>();
     COMMON_SETTINGS*      common_settings = Pgm().GetCommonSettings();
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     m_frame->PushTool( aEvent );
 
@@ -1058,7 +1058,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
     auto cleanup =
             [&] ()
             {
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
                 commit.Revert();
 
                 if( fromOtherCommand )
@@ -1092,7 +1092,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
     {
         m_placingFootprint = true;
         fp->SetPosition( cursorPos );
-        m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, fp );
+        m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, fp );
         m_toolMgr->PostAction( ACTIONS::refreshPreview );
     }
     else if( aEvent.HasPosition() )
@@ -1112,7 +1112,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
         cursorPos = controls->GetCursorPosition( !evt->DisableGridSnapping() );
 
         if( reselect && fp )
-            m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, fp );
+            m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, fp );
 
         if( evt->IsCancelInteractive() || ( fp && evt->IsAction( &ACTIONS::undo ) ) )
         {
@@ -1193,13 +1193,13 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
                 fp->SetPosition( cursorPos );
 
                 commit.Add( fp );
-                m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, fp );
+                m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, fp );
 
                 m_toolMgr->PostAction( ACTIONS::refreshPreview );
             }
             else
             {
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
                 commit.Push( _( "Place Footprint" ) );
                 fp = nullptr;  // to indicate that there is no footprint that we currently modify
                 m_placingFootprint = false;
@@ -1269,7 +1269,7 @@ int BOARD_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
     BOARD_COMMIT         commit( m_frame );
 
     if( selection.Empty() )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor );
+        m_toolMgr->RunAction( ACTIONS::selectionCursor );
 
     // Resolve TOGGLE mode
     if( aMode == TOGGLE )
@@ -1444,7 +1444,7 @@ int BOARD_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
         toMerge.push_back( curr_area );
     }
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     if( !toMerge.empty() )
     {
@@ -1453,7 +1453,7 @@ int BOARD_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
             commit.Push( _( "Merge Zones" ) );
 
             for( EDA_ITEM* item : merged )
-                m_toolMgr->RunAction( PCB_ACTIONS::selectItem, item );
+                m_toolMgr->RunAction( ACTIONS::selectItem, item );
         }
     }
 
@@ -1650,7 +1650,7 @@ int BOARD_EDITOR_CONTROL::EditFpInFpEditor( const TOOL_EVENT& aEvent )
     }
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     return 0;
 }

@@ -319,7 +319,7 @@ int PCB_PICKER_TOOL::SelectItemInteractively( const TOOL_EVENT& aEvent )
     SetClickHandler(
             [&]( const VECTOR2D& aPoint ) -> bool
             {
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
                 const PCB_SELECTION& sel = selectionTool->RequestSelection(
                         []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector,
                             PCB_SELECTION_TOOL* sTool )

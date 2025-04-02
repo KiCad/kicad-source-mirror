@@ -1110,7 +1110,7 @@ void GERBVIEW_FRAME::setupTools()
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active
-    m_toolManager->InvokeTool( "gerbview.InteractiveSelection" );
+    m_toolManager->InvokeTool( "common.InteractiveSelection" );
 }
 
 

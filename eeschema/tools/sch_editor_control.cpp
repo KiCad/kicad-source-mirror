@@ -699,7 +699,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                 // ( avoid crash in some cases when the SimProbe tool is deselected )
                 SCH_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
                 selectionTool->ClearSelection();
-                m_toolMgr->PostAction( SCH_ACTIONS::selectionActivate );
+                m_toolMgr->PostAction( ACTIONS::selectionActivate );
             } );
 
     m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
@@ -792,7 +792,7 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
                 // ( avoid crash in some cases when the SimTune tool is deselected )
                 SCH_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
                 selectionTool->ClearSelection();
-                m_toolMgr->PostAction( SCH_ACTIONS::selectionActivate );
+                m_toolMgr->PostAction( ACTIONS::selectionActivate );
             } );
 
     m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
@@ -1369,7 +1369,7 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
     KICAD_FORMAT::Prettify( prettyData, true );
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     if( aUseDuplicateClipboard )
     {
@@ -1447,7 +1447,7 @@ int SCH_EDITOR_CONTROL::CopyAsText( const TOOL_EVENT& aEvent )
     wxString itemsAsText = GetSelectedItemsAsText( selection );
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     return SaveClipboard( itemsAsText.ToStdString() );
 }
@@ -2171,8 +2171,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     allScreens.PruneOrphanedSheetInstances( m_frame->Prj().GetProjectName(), sheets );
 
     // Now clear the previous selection, select the pasted items, and fire up the "move" tool.
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
-    m_toolMgr->RunAction<EDA_ITEMS*>( SCH_ACTIONS::addItemsToSel, &loadedItems );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
+    m_toolMgr->RunAction<EDA_ITEMS*>( ACTIONS::selectItems, &loadedItems );
 
     SCH_SELECTION& selection = selTool->GetSelection();
 
@@ -2307,7 +2307,7 @@ int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
         symbol = (SCH_SYMBOL*) selection.Front();
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     if( !symbol )
     {

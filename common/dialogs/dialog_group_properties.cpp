@@ -113,7 +113,7 @@ bool DIALOG_GROUP_PROPERTIES::TransferDataFromWindow()
         static_cast<PCB_GROUP*>( m_group )->SetLocked( m_locked->GetValue() );
     }
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
     m_group->RemoveAll();
 
     for( size_t ii = 0; ii < m_membersList->GetCount(); ++ii )
@@ -122,7 +122,7 @@ bool DIALOG_GROUP_PROPERTIES::TransferDataFromWindow()
         m_group->AddItem( item );
     }
 
-    m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, m_group->AsEdaItem() );
+    m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, m_group->AsEdaItem() );
 
     commit.Push( _( "Edit Group Properties" ) );
     return true;

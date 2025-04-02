@@ -553,7 +553,7 @@ void SCH_EDIT_FRAME::setupTools()
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active
-    m_toolManager->PostAction( SCH_ACTIONS::selectionActivate );
+    m_toolManager->PostAction( ACTIONS::selectionActivate );
 
     GetCanvas()->SetEventDispatcher( m_toolDispatcher );
 }
@@ -2233,7 +2233,7 @@ void SCH_EDIT_FRAME::UpdateNetHighlightStatus()
 void SCH_EDIT_FRAME::SetScreen( BASE_SCREEN* aScreen )
 {
     if( m_toolManager )
-        m_toolManager->RunAction( SCH_ACTIONS::clearSelection );
+        m_toolManager->RunAction( ACTIONS::selectionClear );
 
     SCH_BASE_FRAME::SetScreen( aScreen );
     GetCanvas()->DisplaySheet( static_cast<SCH_SCREEN*>( aScreen ) );
@@ -2420,12 +2420,12 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     wxCHECK( m_toolManager, /* void */ );
 
     m_toolManager->RunAction( ACTIONS::cancelInteractive );
-    m_toolManager->RunAction( SCH_ACTIONS::clearSelection );
+    m_toolManager->RunAction( ACTIONS::selectionClear );
     SCH_SCREEN* screen = GetCurrentSheet().LastScreen();
 
     wxCHECK( screen, /* void */ );
 
-    m_toolManager->RunAction( SCH_ACTIONS::clearSelection );
+    m_toolManager->RunAction( ACTIONS::selectionClear );
 
     SCH_BASE_FRAME::SetScreen( screen );
 

@@ -146,7 +146,7 @@ int GROUP_TOOL::PickNewMember( const TOOL_EVENT& aEvent  )
     picker->SetClickHandler(
             [&]( const VECTOR2D& aPoint ) -> bool
             {
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
 
                 const PCB_SELECTION& sel = m_selectionTool->RequestSelection(
                         []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector,
@@ -294,10 +294,10 @@ int GROUP_TOOL::Ungroup( const TOOL_EVENT& aEvent )
     EDA_ITEMS            toSelect;
 
     if( selection.Empty() )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor );
+        m_toolMgr->RunAction( ACTIONS::selectionCursor );
 
     PCB_SELECTION selCopy = selection;
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     for( EDA_ITEM* item : selCopy )
     {
@@ -318,7 +318,7 @@ int GROUP_TOOL::Ungroup( const TOOL_EVENT& aEvent )
 
     commit.Push( _( "Ungroup Items" ) );
 
-    m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &toSelect );
+    m_toolMgr->RunAction<EDA_ITEMS*>( ACTIONS::selectItems, &toSelect );
 
     m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
     m_frame->OnModify();
@@ -334,7 +334,7 @@ int GROUP_TOOL::RemoveFromGroup( const TOOL_EVENT& aEvent )
     BOARD_COMMIT         commit( m_frame );
 
     if( selection.Empty() )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor );
+        m_toolMgr->RunAction( ACTIONS::selectionCursor );
 
     for( EDA_ITEM* item : selection )
     {

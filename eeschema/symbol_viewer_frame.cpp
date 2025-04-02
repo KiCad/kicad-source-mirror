@@ -339,7 +339,7 @@ void SYMBOL_VIEWER_FRAME::setupTools()
 
     // Run the selection tool, it is supposed to be always active
     // It also manages the mouse right click to show the context menu
-    m_toolManager->InvokeTool( "eeschema.InteractiveSelection" );
+    m_toolManager->InvokeTool( "common.InteractiveSelection" );
 
     GetCanvas()->SetEventDispatcher( m_toolDispatcher );
 }

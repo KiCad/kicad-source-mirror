@@ -212,7 +212,7 @@ void SCH_EDIT_FRAME::FlipBodyStyle( SCH_SYMBOL* aSymbol )
 
     // If selected make sure all the now-included pins are selected
     if( aSymbol->IsSelected() )
-        m_toolManager->RunAction<EDA_ITEM*>( SCH_ACTIONS::addItemToSel, aSymbol );
+        m_toolManager->RunAction<EDA_ITEM*>( ACTIONS::selectItem, aSymbol );
 
     commit.Push( _( "Change Body Style" ) );
 }

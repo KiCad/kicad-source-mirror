@@ -252,7 +252,7 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
     if( !aDryRun )
     {
         // Clear current selection list to avoid selection of deleted items
-        m_parentFrame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
+        m_parentFrame->GetToolManager()->RunAction( ACTIONS::selectionClear );
 
         // ... and to keep the treeModel from trying to refresh a deleted item
         m_changesTreeModel->Update( nullptr, RPT_SEVERITY_ACTION );

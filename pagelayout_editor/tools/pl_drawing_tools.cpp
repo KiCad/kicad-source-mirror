@@ -76,7 +76,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
     DS_DRAW_ITEM_BASE*         item   = nullptr;
     bool                       isText = aEvent.IsAction( &PL_ACTIONS::placeText );
 
-    m_toolMgr->RunAction( PL_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     m_frame->PushTool( aEvent );
 
@@ -102,7 +102,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
     auto cleanup =
             [&] ()
             {
-                m_toolMgr->RunAction( PL_ACTIONS::clearSelection );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
                 item = nullptr;
 
                 // There's nothing to roll-back, but we still need to pop the undo stack
@@ -165,7 +165,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
                 {
                     m_frame->SaveCopyInUndoList();
 
-                    m_toolMgr->RunAction( PL_ACTIONS::clearSelection );
+                    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
                     item = dataItem->GetDrawItems()[0];
                     item->SetFlags( IS_NEW | IS_MOVING );
@@ -192,7 +192,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
 
                 // Now we re-select and inform other tools, so that the Properties panel
                 // is updated.
-                m_toolMgr->RunAction( PL_ACTIONS::clearSelection );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
                 m_selectionTool->AddItemToSel( item, false );
 
                 item = nullptr;
@@ -240,7 +240,7 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     // gets whacked.
     m_toolMgr->DeactivateTool();
 
-    m_toolMgr->RunAction( PL_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     m_frame->PushTool( aEvent );
 
@@ -268,7 +268,7 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
         if( evt->IsCancelInteractive() || ( item && evt->IsAction( &ACTIONS::undo ) )  )
         {
-            m_toolMgr->RunAction( PL_ACTIONS::clearSelection );
+            m_toolMgr->RunAction( ACTIONS::selectionClear );
 
             if( item )
             {
@@ -303,7 +303,7 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             if( !item ) // start drawing
             {
                 m_frame->SaveCopyInUndoList();
-                m_toolMgr->RunAction( PL_ACTIONS::clearSelection );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
 
                 DS_DATA_ITEM* dataItem = m_frame->AddDrawingSheetItem( type );
                 dataItem->MoveToIU( cursorPos );
@@ -319,7 +319,7 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             {
                 // Now we re-select and inform other tools, so that the Properties panel
                 // is updated.
-                m_toolMgr->RunAction( PL_ACTIONS::clearSelection );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
                 m_selectionTool->AddItemToSel( item, false );
 
                 item->ClearEditFlags();

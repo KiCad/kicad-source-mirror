@@ -1014,7 +1014,7 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
         item->ClearEditFlags();
 
     if( unselect )
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
     else
         m_selectionTool->RebuildSelection();  // Schematic cleanup might have merged lines, etc.
 

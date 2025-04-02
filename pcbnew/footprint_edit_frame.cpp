@@ -1212,7 +1212,7 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     m_toolManager->GetTool<PCB_VIEWER_TOOLS>()->SetFootprintFrame( true );
     m_toolManager->InitTools();
 
-    m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
+    m_toolManager->InvokeTool( "common.InteractiveSelection" );
 
     // Load or reload wizard plugins in case they changed since the last time the frame opened
     // Because the board editor has also a plugin python menu,

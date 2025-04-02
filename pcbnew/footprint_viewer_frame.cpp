@@ -216,7 +216,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_toolManager->GetTool<PCB_VIEWER_TOOLS>()->SetFootprintFrame( true );
 
     m_toolManager->InitTools();
-    m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
+    m_toolManager->InvokeTool( "common.InteractiveSelection" );
 
     setupUIConditions();
 
@@ -749,7 +749,7 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB()
         if( blocking_dialog )
             blocking_dialog->Close( true );
 
-        toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+        toolMgr->RunAction( ACTIONS::selectionClear );
         BOARD_COMMIT commit( pcbframe );
 
         // Create the "new" footprint

@@ -149,7 +149,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_toolManager->InitTools();
 
     // Run the control tool, it is supposed to be always active
-    m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
+    m_toolManager->InvokeTool( "common.InteractiveSelection" );
 
     // Create the toolbars
     m_toolbarSettings = Pgm().GetSettingsManager().GetToolbarSettings<FOOTPRINT_WIZARD_TOOLBAR_SETTINGS>( "fpwizard-toolbars" );

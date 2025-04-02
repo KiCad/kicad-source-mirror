@@ -799,7 +799,7 @@ int PCB_CONTROL::InteractiveDelete( const TOOL_EVENT& aEvent )
     PCB_PICKER_TOOL* picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
 
     m_pickerItem = nullptr;
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     // Deactivate other tools; particularly important if another PICKER is currently running
     Activate();
@@ -1426,7 +1426,7 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, BOARD* aBoard, bool aA
 bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM*>& aItems,
                                    bool aIsNew, bool aAnchorAtOrigin, bool aReannotateDuplicates )
 {
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
@@ -1484,7 +1484,7 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM
 
     // Select the items that should be selected
     EDA_ITEMS toSel( itemsToSel.begin(), itemsToSel.end() );
-    m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &toSel );
+    m_toolMgr->RunAction<EDA_ITEMS*>( ACTIONS::selectItems, &toSel );
 
     // Reannotate duplicate footprints (make sense only in board editor )
     if( aReannotateDuplicates && m_isBoardEditor )

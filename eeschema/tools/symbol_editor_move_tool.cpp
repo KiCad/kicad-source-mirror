@@ -368,7 +368,7 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
         item->ClearEditFlags();
 
     if( unselect )
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     m_moveInProgress = false;
     m_frame->PopTool( aEvent );

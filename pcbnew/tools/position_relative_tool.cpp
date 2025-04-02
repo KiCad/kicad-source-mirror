@@ -435,7 +435,7 @@ int POSITION_RELATIVE_TOOL::RelativeItemSelectionMove( const VECTOR2I& aPosAncho
     m_commit->Push( _( "Position Relative" ) );
 
     if( m_selection.IsHover() )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 

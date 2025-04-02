@@ -1578,7 +1578,7 @@ int ROUTER_TOOL::RouteSelected( const TOOL_EVENT& aEvent )
     if( selection.Size() == 0 )
         return 0;
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     frame->PushTool( aEvent );
 
@@ -1712,7 +1712,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     }
 
     // Deselect all items
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     frame->PushTool( aEvent );
 
@@ -2072,7 +2072,7 @@ void ROUTER_TOOL::NeighboringSegmentFilter( const VECTOR2I& aPt, GENERAL_COLLECT
 
 bool ROUTER_TOOL::CanInlineDrag( int aDragMode )
 {
-    m_toolMgr->RunAction<CLIENT_SELECTION_FILTER>( PCB_ACTIONS::selectionCursor,
+    m_toolMgr->RunAction<CLIENT_SELECTION_FILTER>( ACTIONS::selectionCursor,
                                                    NeighboringSegmentFilter );
     const PCB_SELECTION& selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
@@ -2098,7 +2098,7 @@ void ROUTER_TOOL::restoreSelection( const PCB_SELECTION& aOriginalSelection )
 {
     EDA_ITEMS selItems;
     std::copy( aOriginalSelection.Items().begin(), aOriginalSelection.Items().end(), std::back_inserter( selItems ) );
-    m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &selItems );
+    m_toolMgr->RunAction<EDA_ITEMS*>( ACTIONS::selectItems, &selItems );
 }
 
 
@@ -2109,7 +2109,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     if( selection.Empty() )
     {
-        m_toolMgr->RunAction<CLIENT_SELECTION_FILTER>( PCB_ACTIONS::selectionCursor,
+        m_toolMgr->RunAction<CLIENT_SELECTION_FILTER>( ACTIONS::selectionCursor,
                                                        NeighboringSegmentFilter );
     }
 
@@ -2159,7 +2159,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         item->SetLocked( false );
     }
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     frame()->PushTool( aEvent );
     Activate();
@@ -2543,7 +2543,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         for( auto lseg : leaderSegments )
             newItems.push_back( lseg->Parent() );
 
-        m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &newItems );
+        m_toolMgr->RunAction<EDA_ITEMS*>( ACTIONS::selectItems, &newItems );
     }
 
     m_gridHelper->SetAuxAxes( false );
@@ -2572,7 +2572,7 @@ int ROUTER_TOOL::InlineBreakTrack( const TOOL_EVENT& aEvent )
     if( item->Type() != PCB_TRACE_T && item->Type() != PCB_ARC_T )
         return 0;
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     Activate();
 

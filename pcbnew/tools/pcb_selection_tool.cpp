@@ -127,7 +127,7 @@ public:
 
 
 PCB_SELECTION_TOOL::PCB_SELECTION_TOOL() :
-        SELECTION_TOOL( "pcbnew.InteractiveSelection" ),
+        SELECTION_TOOL( "common.InteractiveSelection" ),
         m_frame( nullptr ),
         m_isFootprintEditor( false ),
         m_nonModifiedCursor( KICURSOR::ARROW ),
@@ -661,7 +661,7 @@ PCB_SELECTION& PCB_SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCl
 
     if( selectionEmpty )
     {
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, aClientFilter );
+        m_toolMgr->RunAction( ACTIONS::selectionCursor, aClientFilter );
         m_selection.ClearReferencePoint();
     }
 
@@ -4113,16 +4113,16 @@ void PCB_SELECTION_TOOL::setTransitions()
 {
     Go( &PCB_SELECTION_TOOL::UpdateMenu,          ACTIONS::updateMenu.MakeEvent() );
 
-    Go( &PCB_SELECTION_TOOL::Main,                PCB_ACTIONS::selectionActivate.MakeEvent() );
-    Go( &PCB_SELECTION_TOOL::CursorSelection,     PCB_ACTIONS::selectionCursor.MakeEvent() );
-    Go( &PCB_SELECTION_TOOL::ClearSelection,      PCB_ACTIONS::selectionClear.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::Main,                ACTIONS::selectionActivate.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::CursorSelection,     ACTIONS::selectionCursor.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::ClearSelection,      ACTIONS::selectionClear.MakeEvent() );
 
-    Go( &PCB_SELECTION_TOOL::AddItemToSel,        PCB_ACTIONS::selectItem.MakeEvent() );
-    Go( &PCB_SELECTION_TOOL::AddItemsToSel,       PCB_ACTIONS::selectItems.MakeEvent() );
-    Go( &PCB_SELECTION_TOOL::RemoveItemFromSel,   PCB_ACTIONS::unselectItem.MakeEvent() );
-    Go( &PCB_SELECTION_TOOL::RemoveItemsFromSel,  PCB_ACTIONS::unselectItems.MakeEvent() );
-    Go( &PCB_SELECTION_TOOL::ReselectItem,        PCB_ACTIONS::reselectItem.MakeEvent() );
-    Go( &PCB_SELECTION_TOOL::SelectionMenu,       PCB_ACTIONS::selectionMenu.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::AddItemToSel,        ACTIONS::selectItem.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::AddItemsToSel,       ACTIONS::selectItems.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::RemoveItemFromSel,   ACTIONS::unselectItem.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::RemoveItemsFromSel,  ACTIONS::unselectItems.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::ReselectItem,        ACTIONS::reselectItem.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::SelectionMenu,       ACTIONS::selectionMenu.MakeEvent() );
 
     Go( &PCB_SELECTION_TOOL::filterSelection,     PCB_ACTIONS::filterSelection.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::expandConnection,    PCB_ACTIONS::selectConnection.MakeEvent() );

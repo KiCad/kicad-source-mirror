@@ -2373,7 +2373,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             inDrag = false;
             frame()->UndoRedoBlock( false );
 
-            m_toolMgr->PostAction<EDA_ITEM*>( PCB_ACTIONS::reselectItem,
+            m_toolMgr->PostAction<EDA_ITEM*>( ACTIONS::reselectItem,
                                               item ); // FIXME: Needed for generators
         }
         else if( evt->IsCancelInteractive() || evt->IsActivate() )
@@ -2916,7 +2916,7 @@ int PCB_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
                 commit.Remove( item );
             }
         }

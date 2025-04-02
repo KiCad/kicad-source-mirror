@@ -65,7 +65,7 @@ private:
     BASE_SCREEN* getScreen() override { return m_frame->GetScreen(); }
 
     const SELECTION& getTableCellSelection() override;
-    void clearSelection() override { m_toolMgr->RunAction( SCH_ACTIONS::clearSelection ); };
+    void             clearSelection() override { m_toolMgr->RunAction( ACTIONS::selectionClear ); };
 
     SCH_TABLECELL* copyCell( SCH_TABLECELL* aSource ) override;
 };

@@ -204,7 +204,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     else
     {
         if( selection.IsHover() )
-            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+            m_toolMgr->RunAction( ACTIONS::selectionClear );
 
         if( !localCommit.Empty() )
             localCommit.Push( _( "Rotate" ) );
@@ -282,7 +282,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     else
     {
         if( selection.IsHover() )
-            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+            m_toolMgr->RunAction( ACTIONS::selectionClear );
 
         m_frame->OnModify();
     }
@@ -364,7 +364,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
     else
     {
         if( selection.IsHover() )
-            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+            m_toolMgr->RunAction( ACTIONS::selectionClear );
 
         m_frame->OnModify();
     }
@@ -393,7 +393,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
         return 0;
 
     // Don't leave a freed pointer in the selection
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     commit.Modify( symbol, m_frame->GetScreen() );
 
@@ -490,7 +490,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::InteractiveDelete( const TOOL_EVENT& aEvent )
 {
     PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
 
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
     m_pickerItem = nullptr;
 
     // Deactivate other tools; particularly important if another PICKER is currently running
@@ -552,7 +552,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::InteractiveDelete( const TOOL_EVENT& aEvent )
                     m_toolMgr->GetTool<SCH_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
 
                 // Wake the selection tool after exiting to ensure the cursor gets updated
-                m_toolMgr->PostAction( SCH_ACTIONS::selectionActivate );
+                m_toolMgr->PostAction( ACTIONS::selectionActivate );
             } );
 
     m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
@@ -622,7 +622,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     }
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     return 0;
 }
@@ -721,7 +721,7 @@ void SYMBOL_EDITOR_EDIT_TOOL::editSymbolProperties()
     bool        partLocked = symbol->UnitsLocked();
 
     m_toolMgr->RunAction( ACTIONS::cancelInteractive );
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     DIALOG_LIB_SYMBOL_PROPERTIES dlg( m_frame, symbol );
 
@@ -772,7 +772,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::PinTable( const TOOL_EVENT& aEvent )
 
     commit.Modify( symbol );
 
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     DIALOG_LIB_EDIT_PIN_TABLE dlg( m_frame, symbol );
 
@@ -943,7 +943,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::CopyAsText( const TOOL_EVENT& aEvent )
     wxString itemsAsText = GetSelectedItemsAsText( selection );
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     return SaveClipboard( itemsAsText.ToStdString() );
 }
@@ -1094,8 +1094,8 @@ int SYMBOL_EDITOR_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         getView()->Add( newItem );
     }
 
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
-    m_toolMgr->RunAction<EDA_ITEMS*>( SCH_ACTIONS::addItemsToSel, &newItems );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
+    m_toolMgr->RunAction<EDA_ITEMS*>( ACTIONS::selectItems, &newItems );
 
     selection.SetReferencePoint( getViewControls()->GetCursorPosition( true ) );
 

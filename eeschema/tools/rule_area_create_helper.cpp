@@ -68,7 +68,7 @@ void RULE_AREA_CREATE_HELPER::commitRuleArea( std::unique_ptr<SCH_RULE_AREA> aRu
     commit.Add( ruleArea, m_frame->GetScreen() );
     commit.Push( _( "Draw Rule Area" ) );
 
-    m_toolManager->RunAction<EDA_ITEM*>( SCH_ACTIONS::addItemToSel, ruleArea );
+    m_toolManager->RunAction<EDA_ITEM*>( ACTIONS::selectItem, ruleArea );
 
     m_parentView.ClearPreview();
 }
@@ -80,7 +80,7 @@ bool RULE_AREA_CREATE_HELPER::OnFirstPoint( POLYGON_GEOM_MANAGER& aMgr )
 
     if( m_rule_area )
     {
-        m_toolManager->RunAction( SCH_ACTIONS::clearSelection );
+        m_toolManager->RunAction( ACTIONS::selectionClear );
 
         SCH_RENDER_SETTINGS renderSettings;
         COLOR_SETTINGS*     colorSettings = m_frame->GetColorSettings();

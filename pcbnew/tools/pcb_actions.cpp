@@ -2150,47 +2150,6 @@ TOOL_ACTION PCB_ACTIONS::selectPointInteractively( TOOL_ACTION_ARGS()
         .Parameter<PCB_PICKER_TOOL::INTERACTIVE_PARAMS>( {} ));
 
 
-// PCB_SELECTION_TOOL
-//
-TOOL_ACTION PCB_ACTIONS::selectionActivate( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.InteractiveSelection" )
-        .Scope( AS_GLOBAL )
-        // No description, not shown anywhere
-        .Flags( AF_ACTIVATE ) );
-
-TOOL_ACTION PCB_ACTIONS::selectionCursor( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.InteractiveSelection.Cursor" )
-        .Scope( AS_GLOBAL )
-        .Parameter<CLIENT_SELECTION_FILTER>( nullptr ) );
-
-TOOL_ACTION PCB_ACTIONS::selectItem( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.InteractiveSelection.SelectItem" )
-        .Scope( AS_GLOBAL ) );
-
-TOOL_ACTION PCB_ACTIONS::selectItems( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.InteractiveSelection.SelectItems" )
-        .Scope( AS_GLOBAL ) );
-
-TOOL_ACTION PCB_ACTIONS::unselectItem( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.InteractiveSelection.UnselectItem" )
-        .Scope( AS_GLOBAL ) );
-
-TOOL_ACTION PCB_ACTIONS::unselectItems( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.InteractiveSelection.UnselectItems" )
-        .Scope( AS_GLOBAL ) );
-
-TOOL_ACTION PCB_ACTIONS::reselectItem( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.InteractiveSelection.ReselectItem" )
-        .Scope( AS_GLOBAL ) );
-
-TOOL_ACTION PCB_ACTIONS::selectionClear( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.InteractiveSelection.Clear" )
-        .Scope( AS_GLOBAL ) );
-
-TOOL_ACTION PCB_ACTIONS::selectionMenu( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.InteractiveSelection.SelectionMenu" )
-        .Scope( AS_GLOBAL ) );
-
 TOOL_ACTION PCB_ACTIONS::selectConnection( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveSelection.SelectConnection" )
         .Scope( AS_GLOBAL )

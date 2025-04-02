@@ -292,7 +292,7 @@ void DIALOG_ERC::OnDeleteOneClick( wxCommandEvent& aEvent )
     if( m_notebook->GetSelection() == 0 )
     {
         // Clear the selection.  It may be the selected ERC marker.
-        m_parent->GetToolManager()->RunAction( SCH_ACTIONS::clearSelection );
+        m_parent->GetToolManager()->RunAction( ACTIONS::selectionClear );
 
         m_markerTreeModel->DeleteCurrentItem( true );
 
@@ -830,7 +830,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
 
         // Clear the selection before deleting markers. It may be some selected ERC markers.
         // Deleting a selected marker without deselecting it first generates a crash
-        m_parent->GetToolManager()->RunAction( SCH_ACTIONS::clearSelection );
+        m_parent->GetToolManager()->RunAction( ACTIONS::selectionClear );
 
         SCH_SCREENS ScreenList( m_parent->Schematic().Root() );
         ScreenList.DeleteMarkers( MARKER_BASE::MARKER_ERC, rcItem->GetErrorCode() );
@@ -1010,7 +1010,7 @@ void DIALOG_ERC::deleteAllMarkers( bool aIncludeExclusions )
     // Freeze to avoid repainting the dialog, which can cause a RePaint()
     // of the screen as well
     Freeze();
-    m_parent->GetToolManager()->RunAction( SCH_ACTIONS::clearSelection );
+    m_parent->GetToolManager()->RunAction( ACTIONS::selectionClear );
 
     m_markerTreeModel->DeleteItems( false, aIncludeExclusions, false );
 

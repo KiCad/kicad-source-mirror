@@ -188,7 +188,7 @@ public:
 
 
 PCB_SELECTION_TOOL::PCB_SELECTION_TOOL() :
-        SELECTION_TOOL( "pcbnew.InteractiveSelection" ),
+        SELECTION_TOOL( "common.InteractiveSelection" ),
         m_frame( NULL ),
         m_enteredGroup( NULL ),
         m_nonModifiedCursor( KICURSOR::ARROW ),

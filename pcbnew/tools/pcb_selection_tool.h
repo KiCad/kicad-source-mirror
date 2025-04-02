@@ -31,6 +31,7 @@
 #include <functional>
 #include <memory>
 
+#include <tool/actions.h>
 #include <math/vector2d.h>
 #include <project/board_project_settings.h>
 #include <tool/action_menu.h>
@@ -49,10 +50,6 @@ namespace KIGFX
 {
     class GAL;
 }
-
-
-using CLIENT_SELECTION_FILTER =
-        std::function<void( const VECTOR2I&, GENERAL_COLLECTOR&, PCB_SELECTION_TOOL* )>;
 
 
 /**

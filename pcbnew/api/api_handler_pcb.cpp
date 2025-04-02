@@ -733,7 +733,7 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleClearSelection(
     }
 
     TOOL_MANAGER* mgr = frame()->GetToolManager();
-    mgr->RunAction( PCB_ACTIONS::selectionClear );
+    mgr->RunAction( ACTIONS::selectionClear );
     frame()->Refresh();
 
     return Empty();
@@ -1138,8 +1138,8 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleInteractiveMoveItems(
     PCB_SELECTION_TOOL* selectionTool = mgr->GetTool<PCB_SELECTION_TOOL>();
     selectionTool->GetSelection().SetReferencePoint( toSelect[0]->GetPosition() );
 
-    mgr->RunAction( PCB_ACTIONS::selectionClear );
-    mgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &toSelect );
+    mgr->RunAction( ACTIONS::selectionClear );
+    mgr->RunAction<EDA_ITEMS*>( ACTIONS::selectItems, &toSelect );
 
     COMMIT* commit = getCurrentCommit( aCtx.ClientName );
     mgr->PostAPIAction( PCB_ACTIONS::move, commit );

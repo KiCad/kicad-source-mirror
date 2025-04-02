@@ -366,8 +366,8 @@ void ARRAY_TOOL::onDialogClosed( wxCloseEvent& aEvent )
         all_added_items.push_back( selection[i] );
     }
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
-    m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &all_added_items );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
+    m_toolMgr->RunAction<EDA_ITEMS*>( ACTIONS::selectItems, &all_added_items );
 
     commit.Push( _( "Create Array" ) );
 

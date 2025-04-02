@@ -31,6 +31,13 @@
 
 #define LEGACY_HK_NAME( x ) x
 
+class PCB_SELECTION_TOOL;
+class GENERAL_COLLECTOR;
+
+using CLIENT_SELECTION_FILTER =
+        std::function<void( const VECTOR2I&, GENERAL_COLLECTOR&, PCB_SELECTION_TOOL* )>;
+
+
 /**
  * Gather all the actions that are shared by tools.
  *
@@ -201,6 +208,28 @@ public:
     static TOOL_ACTION toggleUnits;
     static TOOL_ACTION togglePolarCoords;
     static TOOL_ACTION resetLocalCoords;
+
+    // Selection
+    /// Activation of the selection tool
+    static TOOL_ACTION selectionActivate;
+
+    /// Select a single item under the cursor position
+    static TOOL_ACTION selectionCursor;
+
+    /// Clear the current selection
+    static TOOL_ACTION selectionClear;
+
+    /// Select an item (specified as the event parameter).
+    static TOOL_ACTION selectItem;
+    static TOOL_ACTION unselectItem;
+    static TOOL_ACTION reselectItem;
+
+    /// Select a list of items (specified as the event parameter)
+    static TOOL_ACTION selectItems;
+    static TOOL_ACTION unselectItems;
+
+    /// Run a selection menu to select from a list of items
+    static TOOL_ACTION selectionMenu;
 
     // Grouping
     static TOOL_ACTION group;

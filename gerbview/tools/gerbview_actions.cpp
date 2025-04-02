@@ -253,26 +253,6 @@ TOOL_ACTION GERBVIEW_ACTIONS::flipGerberView( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::flip_board ) );
 
 
-// GERBVIEW_SELECTION_TOOL
-//
-TOOL_ACTION GERBVIEW_ACTIONS::selectionActivate( TOOL_ACTION_ARGS()
-        .Name( "gerbview.InteractiveSelection" )
-        .Scope( AS_GLOBAL )
-        .Flags( AF_ACTIVATE ) );
-
-TOOL_ACTION GERBVIEW_ACTIONS::selectItem( TOOL_ACTION_ARGS()
-        .Name( "gerbview.InteractiveSelection.SelectItem" )
-        .Scope( AS_GLOBAL ) );
-
-TOOL_ACTION GERBVIEW_ACTIONS::unselectItem( TOOL_ACTION_ARGS()
-        .Name( "gerbview.InteractiveSelection.UnselectItem" )
-        .Scope( AS_GLOBAL ) );
-
-TOOL_ACTION GERBVIEW_ACTIONS::selectionClear( TOOL_ACTION_ARGS()
-        .Name( "gerbview.InteractiveSelection.Clear" )
-        .Scope( AS_GLOBAL ) );
-
-
 // Drag and drop
 //
 TOOL_ACTION GERBVIEW_ACTIONS::loadZipFile( TOOL_ACTION_ARGS()

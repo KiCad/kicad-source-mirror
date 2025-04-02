@@ -51,7 +51,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT&        aTool,
 
     BOARD_COMMIT commit( frame() );
 
-    GetManager()->RunAction( PCB_ACTIONS::selectionClear );
+    GetManager()->RunAction( ACTIONS::selectionClear );
 
     Activate();
     // Must be done after Activate() so that it gets set into the correct context

@@ -89,11 +89,11 @@ void PCB_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
             selectedItems.push_back( m_hitlist[row] );
     }
 
-    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
+    m_frame->GetToolManager()->RunAction( ACTIONS::selectionClear );
 
     if( selectedItems.size() )
     {
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, &selectedItems );
+        m_frame->GetToolManager()->RunAction( ACTIONS::selectItems, &selectedItems );
 
         switch( settings.selection_zoom )
         {

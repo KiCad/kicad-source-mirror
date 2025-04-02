@@ -127,37 +127,3 @@ TOOL_ACTION PL_ACTIONS::layoutEditMode( TOOL_ACTION_ARGS()
         .Tooltip( _( "Text placeholders are shown as ${keyword} tokens" ) )
         .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Icon( BITMAPS::pagelayout_special_view_mode  ) );
-
-
-// PL_SELECTION_TOOL
-//
-TOOL_ACTION PL_ACTIONS::selectionActivate( TOOL_ACTION_ARGS()
-        .Name( "plEditor.InteractiveSelection" )
-        .Scope( AS_GLOBAL )
-        .Flags( AF_ACTIVATE ) );
-
-TOOL_ACTION PL_ACTIONS::selectionMenu( TOOL_ACTION_ARGS()
-        .Name( "plEditor.InteractiveSelection.SelectionMenu" )
-        .Scope( AS_GLOBAL ) );
-
-TOOL_ACTION PL_ACTIONS::addItemToSel( TOOL_ACTION_ARGS()
-        .Name( "plEditor.InteractiveSelection.AddItemToSel" )
-        .Scope( AS_GLOBAL ) );
-
-TOOL_ACTION PL_ACTIONS::addItemsToSel( TOOL_ACTION_ARGS()
-        .Name( "plEditor.InteractiveSelection.AddItemsToSel" )
-        .Scope( AS_GLOBAL ) );
-
-TOOL_ACTION PL_ACTIONS::removeItemFromSel( TOOL_ACTION_ARGS()
-        .Name( "plEditor.InteractiveSelection.RemoveItemFromSel" )
-        .Scope( AS_GLOBAL ) );
-
-TOOL_ACTION PL_ACTIONS::removeItemsFromSel( TOOL_ACTION_ARGS()
-        .Name( "plEditor.InteractiveSelection.RemoveItemsFromSel" )
-        .Scope( AS_GLOBAL ) );
-
-TOOL_ACTION PL_ACTIONS::clearSelection( TOOL_ACTION_ARGS()
-        .Name( "plEditor.InteractiveSelection.ClearSelection" )
-        .Scope( AS_GLOBAL ) );
-
-

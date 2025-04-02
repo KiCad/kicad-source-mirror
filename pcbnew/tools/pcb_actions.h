@@ -59,24 +59,6 @@ public:
     static TOOL_ACTION* LayerIDToAction( PCB_LAYER_ID aLayerID );
 
     // Selection Tool
-    /// Activation of the selection tool
-    static TOOL_ACTION selectionActivate;
-
-    /// Select a single item under the cursor position
-    static TOOL_ACTION selectionCursor;
-
-    /// Clear the current selection
-    static TOOL_ACTION selectionClear;
-
-    /// Select an item (specified as the event parameter).
-    static TOOL_ACTION selectItem;
-    static TOOL_ACTION unselectItem;
-    static TOOL_ACTION reselectItem;
-
-    /// Select a list of items (specified as the event parameter)
-    static TOOL_ACTION selectItems;
-    static TOOL_ACTION unselectItems;
-
     /// Sets selection to specified items, zooms to fit, if enabled
     static TOOL_ACTION syncSelection;
 

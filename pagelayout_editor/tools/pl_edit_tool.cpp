@@ -314,7 +314,7 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         m_frame->OnModify();
 
     if( unselect )
-        m_toolMgr->RunAction( PL_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
     else
         m_toolMgr->PostEvent( EVENTS::SelectedEvent );
 
@@ -477,7 +477,7 @@ int PL_EDIT_TOOL::InteractiveDelete( const TOOL_EVENT& aEvent )
                 m_toolMgr->GetTool<PL_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
 
             // Wake the selection tool after exiting to ensure the cursor gets updated
-            m_toolMgr->PostAction( PL_ACTIONS::selectionActivate );
+            m_toolMgr->PostAction( ACTIONS::selectionActivate );
         } );
 
     m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );

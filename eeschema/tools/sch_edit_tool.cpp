@@ -1041,7 +1041,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         SCH_SELECTION selectionCopy = selection;
 
         if( selection.IsHover() )
-            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+            m_toolMgr->RunAction( ACTIONS::selectionClear );
 
         SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
         lwbTool->TrimOverLappingWires( commit, &selectionCopy );
@@ -1236,7 +1236,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         SCH_SELECTION selectionCopy = selection;
 
         if( selection.IsHover() )
-            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+            m_toolMgr->RunAction( ACTIONS::selectionClear );
 
         if( connections )
         {
@@ -1475,7 +1475,7 @@ int SCH_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
     else
     {
         if( selection.IsHover() )
-            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+            m_toolMgr->RunAction( ACTIONS::selectionClear );
 
         if( connections )
             m_frame->TestDanglingEnds();
@@ -1494,7 +1494,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
     if( sourceItems.empty() )
         return 0;
 
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     SCH_COMMIT    commit( m_toolMgr );
     SCH_SELECTION newItems;
@@ -1554,7 +1554,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
             }
         }
 
-        m_toolMgr->RunAction<EDA_ITEM*>( SCH_ACTIONS::addItemToSel, newItem );
+        m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, newItem );
         newItem->SetFlags( IS_NEW );
         m_frame->AddToScreen( newItem, m_frame->GetScreen() );
         commit.Added( newItem, m_frame->GetScreen() );
@@ -1576,7 +1576,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
             }
 
             // Annotation clears the selection so re-add the item
-            m_toolMgr->RunAction<EDA_ITEM*>( SCH_ACTIONS::addItemToSel, newItem );
+            m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, newItem );
 
             restore_state = !m_toolMgr->RunSynchronousAction( SCH_ACTIONS::move, &commit );
         }
@@ -1647,7 +1647,7 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
         return 0;
 
     // Don't leave a freed pointer in the selection
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     for( EDA_ITEM* item : items )
         item->ClearFlags( STRUCT_DELETED );
@@ -1733,7 +1733,7 @@ int SCH_EDIT_TOOL::InteractiveDelete( const TOOL_EVENT& aEvent )
 {
     PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
 
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
     m_pickerItem = nullptr;
 
     // Deactivate other tools; particularly important if another PICKER is currently running
@@ -1788,7 +1788,7 @@ int SCH_EDIT_TOOL::InteractiveDelete( const TOOL_EVENT& aEvent )
                     m_toolMgr->GetTool<SCH_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
 
                 // Wake the selection tool after exiting to ensure the cursor gets updated
-                m_toolMgr->PostAction( SCH_ACTIONS::selectionActivate );
+                m_toolMgr->PostAction( ACTIONS::selectionActivate );
             } );
 
     m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
@@ -1920,7 +1920,7 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
     }
 
     if( clearSelection )
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     return 0;
 }
@@ -1968,7 +1968,7 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
             commit.Push( _( "Autoplace Fields" ) );
 
         if( selection.IsHover() )
-            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+            m_toolMgr->RunAction( ACTIONS::selectionClear );
     }
 
     return 0;
@@ -1997,7 +1997,7 @@ int SCH_EDIT_TOOL::ChangeSymbols( const TOOL_EVENT& aEvent )
     dlg.ShowQuasiModal();
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     return 0;
 }
@@ -2038,7 +2038,7 @@ int SCH_EDIT_TOOL::ChangeBodyStyle( const TOOL_EVENT& aEvent )
         commit.Push( _( "Change Body Style" ) );
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     return 0;
 }
@@ -2409,7 +2409,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     updateItem( curr_item, true );
 
     if( clearSelection )
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     return 0;
 }
@@ -2755,7 +2755,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             }
 
             if( selected )
-                m_toolMgr->RunAction<EDA_ITEM*>( SCH_ACTIONS::removeItemFromSel, item );
+                m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::unselectItem, item );
 
             if( !item->IsNew() )
             {
@@ -2767,7 +2767,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             }
 
             if( selected )
-                m_toolMgr->RunAction<EDA_ITEM*>( SCH_ACTIONS::addItemToSel, newtext );
+                m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, newtext );
 
             // Otherwise, pointer is owned by the undo stack
             if( item->IsNew() )
@@ -2779,7 +2779,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
         commit.Push( _( "Change To" ) );
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     return 0;
 }
@@ -2864,7 +2864,7 @@ int SCH_EDIT_TOOL::JustifyText( const TOOL_EVENT& aEvent )
         SCH_SELECTION selectionCopy = selection;
 
         if( selection.IsHover() )
-            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+            m_toolMgr->RunAction( ACTIONS::selectionClear );
 
         if( !localCommit.Empty() )
         {
@@ -2942,7 +2942,7 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
     }
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     return 0;
 }
@@ -2969,7 +2969,7 @@ int SCH_EDIT_TOOL::CleanupSheetPins( const TOOL_EVENT& aEvent )
     commit.Push( _( "Cleanup Sheet Pins" ) );
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     return 0;
 }
@@ -3043,7 +3043,7 @@ int SCH_EDIT_TOOL::EditPageNumber( const TOOL_EVENT& aEvent )
     commit.Push( wxS( "Change Sheet Page Number" ) );
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     return 0;
 }
@@ -3128,7 +3128,7 @@ int SCH_EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
     commit->Push( _( "Increment" ) );
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     return 0;
 }
@@ -3218,7 +3218,7 @@ int SCH_EDIT_TOOL::SetAttribute( const TOOL_EVENT& aEvent )
         commit.Push( _( "Toggle Attribute" ) );
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     return 0;
 }

@@ -38,7 +38,6 @@ class CVPCB_ACTIONS : public ACTIONS
 {
 public:
     /// Activation actions
-    static TOOL_ACTION selectionActivate;
     static TOOL_ACTION controlActivate;
 
     /// Window control actions

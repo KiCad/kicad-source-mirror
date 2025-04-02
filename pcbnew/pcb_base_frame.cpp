@@ -1270,7 +1270,7 @@ void PCB_BASE_FRAME::OnFpChangeDebounceTimer( wxTimerEvent& aEvent )
                 }
 
                 if( !sel.empty() )
-                    m_toolManager->RunAction( PCB_ACTIONS::selectItems, &sel );
+                    m_toolManager->RunAction( ACTIONS::selectItems, &sel );
             }
         }
         catch( const IO_ERROR& ioe )

@@ -76,7 +76,7 @@ const SELECTION& PCB_EDIT_TABLE_TOOL::getTableCellSelection()
 
 void PCB_EDIT_TABLE_TOOL::clearSelection()
 {
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 };
 
 
@@ -112,7 +112,7 @@ int PCB_EDIT_TABLE_TOOL::EditTable( const TOOL_EVENT& aEvent )
     }
 
     if( clearSelection )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     return 0;
 }

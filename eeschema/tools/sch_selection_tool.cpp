@@ -152,7 +152,7 @@ SELECTION_CONDITION SCH_CONDITIONS::AllPinsOrSheetPins = []( const SELECTION& aS
 
 
 SCH_SELECTION_TOOL::SCH_SELECTION_TOOL() :
-        SELECTION_TOOL( "eeschema.InteractiveSelection" ),
+        SELECTION_TOOL( "common.InteractiveSelection" ),
         m_frame( nullptr ),
         m_nonModifiedCursor( KICURSOR::ARROW ),
         m_isSymbolEditor( false ),
@@ -1301,7 +1301,7 @@ bool SCH_SELECTION_TOOL::selectPoint( SCH_COLLECTOR& aCollector, const VECTOR2I&
         // Try to call selectionMenu via RunAction() to avoid event-loop contention
         // But it we cannot handle the event, then we don't have an active tool loop, so
         // handle it directly.
-        if( !m_toolMgr->RunAction<COLLECTOR*>( SCH_ACTIONS::selectionMenu, &aCollector ) )
+        if( !m_toolMgr->RunAction<COLLECTOR*>( ACTIONS::selectionMenu, &aCollector ) )
         {
             if( !doSelectionMenu( &aCollector ) )
                 aCollector.m_MenuCancelled = true;
@@ -2918,23 +2918,23 @@ void SCH_SELECTION_TOOL::setTransitions()
 {
     Go( &SCH_SELECTION_TOOL::UpdateMenu,          ACTIONS::updateMenu.MakeEvent() );
 
-    Go( &SCH_SELECTION_TOOL::Main,                SCH_ACTIONS::selectionActivate.MakeEvent() );
+    Go( &SCH_SELECTION_TOOL::Main,                ACTIONS::selectionActivate.MakeEvent() );
     Go( &SCH_SELECTION_TOOL::SelectNode,          SCH_ACTIONS::selectNode.MakeEvent() );
     Go( &SCH_SELECTION_TOOL::SelectConnection,    SCH_ACTIONS::selectConnection.MakeEvent() );
     Go( &SCH_SELECTION_TOOL::SelectColumns,       ACTIONS::selectColumns.MakeEvent() );
     Go( &SCH_SELECTION_TOOL::SelectRows,          ACTIONS::selectRows.MakeEvent() );
     Go( &SCH_SELECTION_TOOL::SelectTable,         ACTIONS::selectTable.MakeEvent() );
 
-    Go( &SCH_SELECTION_TOOL::ClearSelection,      SCH_ACTIONS::clearSelection.MakeEvent() );
+    Go( &SCH_SELECTION_TOOL::ClearSelection,      ACTIONS::selectionClear.MakeEvent() );
 
-    Go( &SCH_SELECTION_TOOL::AddItemToSel,        SCH_ACTIONS::addItemToSel.MakeEvent() );
-    Go( &SCH_SELECTION_TOOL::AddItemsToSel,       SCH_ACTIONS::addItemsToSel.MakeEvent() );
-    Go( &SCH_SELECTION_TOOL::RemoveItemFromSel,   SCH_ACTIONS::removeItemFromSel.MakeEvent() );
-    Go( &SCH_SELECTION_TOOL::RemoveItemsFromSel,  SCH_ACTIONS::removeItemsFromSel.MakeEvent() );
-    Go( &SCH_SELECTION_TOOL::SelectionMenu,       SCH_ACTIONS::selectionMenu.MakeEvent() );
+    Go( &SCH_SELECTION_TOOL::AddItemToSel,        ACTIONS::selectItem.MakeEvent() );
+    Go( &SCH_SELECTION_TOOL::AddItemsToSel,       ACTIONS::selectItems.MakeEvent() );
+    Go( &SCH_SELECTION_TOOL::RemoveItemFromSel,   ACTIONS::unselectItem.MakeEvent() );
+    Go( &SCH_SELECTION_TOOL::RemoveItemsFromSel,  ACTIONS::unselectItems.MakeEvent() );
+    Go( &SCH_SELECTION_TOOL::SelectionMenu,       ACTIONS::selectionMenu.MakeEvent() );
 
-    Go( &SCH_SELECTION_TOOL::SelectAll,           SCH_ACTIONS::selectAll.MakeEvent() );
-    Go( &SCH_SELECTION_TOOL::UnselectAll,         SCH_ACTIONS::unselectAll.MakeEvent() );
+    Go( &SCH_SELECTION_TOOL::SelectAll,           ACTIONS::selectAll.MakeEvent() );
+    Go( &SCH_SELECTION_TOOL::UnselectAll,         ACTIONS::unselectAll.MakeEvent() );
 
     Go( &SCH_SELECTION_TOOL::SelectNext,          SCH_ACTIONS::nextNetItem.MakeEvent() );
     Go( &SCH_SELECTION_TOOL::SelectPrevious,      SCH_ACTIONS::previousNetItem.MakeEvent() );

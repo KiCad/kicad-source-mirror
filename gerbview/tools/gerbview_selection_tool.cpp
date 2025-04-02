@@ -111,7 +111,7 @@ private:
 
 
 GERBVIEW_SELECTION_TOOL::GERBVIEW_SELECTION_TOOL() :
-        SELECTION_TOOL( "gerbview.InteractiveSelection" ),
+        SELECTION_TOOL( "common.InteractiveSelection" ),
         m_frame( nullptr )
 {
 }
@@ -269,10 +269,10 @@ bool GERBVIEW_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere )
 void GERBVIEW_SELECTION_TOOL::setTransitions()
 {
     Go( &GERBVIEW_SELECTION_TOOL::UpdateMenu,     ACTIONS::updateMenu.MakeEvent() );
-    Go( &GERBVIEW_SELECTION_TOOL::Main,           GERBVIEW_ACTIONS::selectionActivate.MakeEvent() );
-    Go( &GERBVIEW_SELECTION_TOOL::ClearSelection, GERBVIEW_ACTIONS::selectionClear.MakeEvent() );
-    Go( &GERBVIEW_SELECTION_TOOL::SelectItem,     GERBVIEW_ACTIONS::selectItem.MakeEvent() );
-    Go( &GERBVIEW_SELECTION_TOOL::UnselectItem,   GERBVIEW_ACTIONS::unselectItem.MakeEvent() );
+    Go( &GERBVIEW_SELECTION_TOOL::Main,           ACTIONS::selectionActivate.MakeEvent() );
+    Go( &GERBVIEW_SELECTION_TOOL::ClearSelection, ACTIONS::selectionClear.MakeEvent() );
+    Go( &GERBVIEW_SELECTION_TOOL::SelectItem,     ACTIONS::selectItem.MakeEvent() );
+    Go( &GERBVIEW_SELECTION_TOOL::UnselectItem,   ACTIONS::unselectItem.MakeEvent() );
 }
 
 

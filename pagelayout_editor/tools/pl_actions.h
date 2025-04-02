@@ -35,24 +35,6 @@
 class PL_ACTIONS : public ACTIONS
 {
 public:
-    // Selection Tool
-    /// Activation of the selection tool
-    static TOOL_ACTION selectionActivate;
-
-    /// Clear the current selection
-    static TOOL_ACTION clearSelection;
-
-    /// Select an item (specified as the event parameter).
-    static TOOL_ACTION addItemToSel;
-    static TOOL_ACTION removeItemFromSel;
-
-    /// Select a list of items (specified as the event parameter)
-    static TOOL_ACTION addItemsToSel;
-    static TOOL_ACTION removeItemsFromSel;
-
-    /// Run a selection menu to select from a list of items
-    static TOOL_ACTION selectionMenu;
-
     // Tools
     static TOOL_ACTION pickerTool;
     static TOOL_ACTION placeText;

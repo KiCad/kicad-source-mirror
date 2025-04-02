@@ -266,7 +266,7 @@ void DIALOG_FIND::search( bool aDirection )
     // Search parameters
     m_frame->GetFindReplaceData().findString = searchString;
 
-    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
+    m_frame->GetToolManager()->RunAction( ACTIONS::selectionClear );
     m_frame->GetCanvas()->GetViewStart( &screen->m_StartVisu.x, &screen->m_StartVisu.y );
 
     BOARD* board = m_frame->GetBoard();
@@ -420,7 +420,7 @@ void DIALOG_FIND::search( bool aDirection )
     }
     else
     {
-        m_frame->GetToolManager()->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, *m_it );
+        m_frame->GetToolManager()->RunAction<EDA_ITEM*>( ACTIONS::selectItem, *m_it );
 
         msg.Printf( _( "'%s' found" ), searchString );
         m_frame->SetStatusText( msg );

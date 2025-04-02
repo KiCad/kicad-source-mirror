@@ -292,7 +292,7 @@ int SCH_LINE_WIRE_BUS_TOOL::DrawSegments( const TOOL_EVENT& aEvent )
     const DRAW_SEGMENT_EVENT_PARAMS* params = aEvent.Parameter<const DRAW_SEGMENT_EVENT_PARAMS*>();
 
     m_frame->PushTool( aEvent );
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     if( aEvent.HasPosition() )
     {
@@ -411,7 +411,7 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString&                aN
     // it might not be, but it won't be a broken connection (and the user asked for it!)
     pos = bus->GetSeg().NearestPoint( pos );
 
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     m_busUnfold.entry = new SCH_BUS_WIRE_ENTRY( pos );
     m_busUnfold.entry->SetParent( screen );
@@ -626,7 +626,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, int aType, 
     auto cleanup =
             [&] ()
             {
-                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
 
                 for( SCH_LINE* wire : m_wires )
                     delete wire;
@@ -1169,7 +1169,7 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
     // Clear selection when done so that a new wire can be started.
     // NOTE: this must be done before simplifyWireList is called or we might end up with
     // freed selected items.
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     SCH_SCREEN* screen = m_frame->GetScreen();
     SCH_COMMIT  commit( m_toolMgr );

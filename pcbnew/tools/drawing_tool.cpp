@@ -444,7 +444,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
                 commit.Add( rect );
                 commit.Push( isTextBox ? _( "Draw Text Box" ) : _( "Draw Rectangle" ) );
 
-                m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, rect );
+                m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, rect );
             }
         }
 
@@ -492,7 +492,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
             commit.Add( circle );
             commit.Push( _( "Draw Circle" ) );
 
-            m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, circle );
+            m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, circle );
         }
 
         circle = new PCB_SHAPE( parent );
@@ -539,7 +539,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
             commit.Add( arc );
             commit.Push( _( "Draw Arc" ) );
 
-            m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, arc );
+            m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, arc );
         }
 
         arc = new PCB_SHAPE( parent );
@@ -629,7 +629,7 @@ int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
     PCB_SELECTION_TOOL*  selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
     BOARD_COMMIT         commit( m_frame );
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     // Add all the drawable symbols to preview
     if( image )
@@ -653,7 +653,7 @@ int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
     auto cleanup =
             [&] ()
             {
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
                 m_view->ClearPreview();
                 m_view->RecacheAllItems();
                 delete image;
@@ -745,7 +745,7 @@ int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
         {
             if( !image )
             {
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
 
                 wxFileDialog dlg( m_frame, _( "Choose Image" ), wxEmptyString, wxEmptyString,
                                   _( "Image Files" ) + wxS( " " ) + wxImage::GetImageExtWildcard(),
@@ -800,7 +800,7 @@ int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
                 commit.Add( image );
                 commit.Push( _( "Place Image" ) );
 
-                m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, image );
+                m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, image );
 
                 image = nullptr;
                 m_toolMgr->PostAction( ACTIONS::activatePointEditor );
@@ -887,7 +887,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     auto cleanup =
             [&]()
             {
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
                 m_controls->ForceCursorPosition( false );
                 m_controls->ShowCursor( true );
                 m_controls->SetAutoPan( false );
@@ -896,7 +896,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 text = nullptr;
             };
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     m_frame->PushTool( aEvent );
 
@@ -976,7 +976,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
             if( !text )
             {
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
 
                 m_controls->ForceCursorPosition( true, m_controls->GetCursorPosition() );
 
@@ -1032,7 +1032,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                         m_frame->GetCanvas()->Refresh();
                     }
 
-                    m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, text );
+                    m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, text );
                     m_view->Update( &selection() );
 
                     // update the cursor so it looks correct before another event
@@ -1043,12 +1043,12 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
             if( placing )
             {
                 text->ClearFlags();
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
 
                 commit.Add( text );
                 commit.Push( _( "Draw Text" ) );
 
-                m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, text );
+                m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, text );
 
                 text = nullptr;
             }
@@ -1139,7 +1139,7 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
     auto cleanup =
             [&] ()
             {
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
                 m_controls->ForceCursorPosition( false );
                 m_controls->ShowCursor( true );
                 m_controls->SetAutoPan( false );
@@ -1148,7 +1148,7 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
                 table = nullptr;
             };
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     m_frame->PushTool( aEvent );
 
@@ -1215,7 +1215,7 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
         {
             if( !table )
             {
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
 
                 PCB_LAYER_ID layer = m_frame->GetActiveLayer();
 
@@ -1234,7 +1234,7 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
                     m_frame->GetCanvas()->Refresh();
                 }
 
-                m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, table );
+                m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, table );
                 m_view->Update( &selection() );
 
                 // update the cursor so it looks correct before another event
@@ -1242,7 +1242,7 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
 
                 table->Normalize();
 
@@ -1254,7 +1254,7 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
                     commit.Add( table, m_frame->GetScreen() );
                     commit.Push( _( "Draw Table" ) );
 
-                    m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, table );
+                    m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, table );
                     m_toolMgr->PostAction( ACTIONS::activatePointEditor );
                 }
                 else
@@ -1392,7 +1392,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MEASURE );
             };
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     m_frame->PushTool( aEvent );
 
@@ -1500,7 +1500,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             {
             case SET_ORIGIN:
             {
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
 
                 PCB_LAYER_ID layer = m_frame->GetActiveLayer();
 
@@ -1605,7 +1605,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 if( t == PCB_DIM_LEADER_T )
                     frame()->OnEditItemRequest( dimension );
 
-                m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, dimension );
+                m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, dimension );
 
                 break;
             }
@@ -1897,10 +1897,10 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     }
 
     // Clear the current selection then select the drawings so that edit tools work on them
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     EDA_ITEMS selItems( selectedItems.begin(), selectedItems.end() );
-    m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &selItems );
+    m_toolMgr->RunAction<EDA_ITEMS*>( ACTIONS::selectItems, &selItems );
 
     if( !dlg.IsPlacementInteractive() )
     {
@@ -1967,7 +1967,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+            m_toolMgr->RunAction( ACTIONS::selectionClear );
 
             if( group )
             {
@@ -2045,7 +2045,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ANCHOR );
     PCB_GRID_HELPER  grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     m_frame->PushTool( aEvent );
 
@@ -2337,7 +2337,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
 
             if( !started )
             {
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
 
                 if( aStartingPoint )
                 {
@@ -2391,7 +2391,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
 
                     commit.Add( graphic );
                     commit.Push( _( "Draw Line" ) );
-                    m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, graphic );
+                    m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, graphic );
 
                     graphic = nullptr;
                 }
@@ -2677,7 +2677,7 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
         {
             if( !started )
             {
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
 
                 m_controls->SetAutoPan( true );
                 m_controls->CaptureCursor( true );
@@ -3010,7 +3010,7 @@ std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aToo
         {
             if( !started() )
             {
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
 
                 m_controls->SetAutoPan( true );
                 m_controls->CaptureCursor( true );
@@ -3210,7 +3210,7 @@ bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode, ZONE** aZone )
     if( selection.Empty() )
     {
         clearSelection = true;
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor );
+        m_toolMgr->RunAction( ACTIONS::selectionCursor );
     }
 
     // we want a single zone
@@ -3221,7 +3221,7 @@ bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode, ZONE** aZone )
     if( !*aZone )
     {
         if( clearSelection )
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+            m_toolMgr->RunAction( ACTIONS::selectionClear );
 
         return false;
     }

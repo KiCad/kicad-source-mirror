@@ -83,7 +83,7 @@ void DRC_TOOL::ShowDRCDialog( wxWindow* aParent )
     }
 
     Activate();
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     if( !m_drcDialog )
     {

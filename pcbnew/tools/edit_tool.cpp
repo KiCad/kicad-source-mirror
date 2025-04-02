@@ -472,8 +472,8 @@ int EDIT_TOOL::GetAndPlace( const TOOL_EVENT& aEvent )
 
     if( fp )
     {
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
-        m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, fp );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
+        m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, fp );
 
         selectionTool->GetSelection().SetReferencePoint( fp->GetPosition() );
         m_toolMgr->PostAction( PCB_ACTIONS::move );
@@ -1052,7 +1052,7 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
 
     if( selection.IsHover() )
     {
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
         // Notify other tools of the changes -- This updates the visual ratsnest
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
@@ -1922,7 +1922,7 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     if( selection.IsHover() )
     {
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
     }
     else
     {
@@ -2069,7 +2069,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             localCommit.Push( _( "Rotate" ) );
 
         if( is_hover && !m_dragging )
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+            m_toolMgr->RunAction( ACTIONS::selectionClear );
 
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
@@ -2237,7 +2237,7 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         localCommit.Push( _( "Mirror" ) );
 
     if( selection.IsHover() && !m_dragging )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
@@ -2315,7 +2315,7 @@ int EDIT_TOOL::JustifyText( const TOOL_EVENT& aEvent )
     }
 
     if( selection.IsHover() && !m_dragging )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
@@ -2402,7 +2402,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
         localCommit.Push( _( "Change Side / Flip" ) );
 
     if( selection.IsHover() && !m_dragging )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
@@ -2476,7 +2476,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
     BOARD_COMMIT         commit( this );
 
     // As we are about to remove items, they have to be removed from the selection first
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     // Only delete items that are the root of a selected set (e.g. only delete grouped / generated
     // items from the parent item, not individually) - issue #17527
@@ -2610,7 +2610,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
                     canvas()->Refresh();
 
                     // Restore the selection on the original zone
-                    m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, zone );
+                    m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, zone );
 
                     break;
                 }
@@ -2832,7 +2832,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
         commit.Push( _( "Move Exactly" ) );
 
         if( selection.IsHover() )
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+            m_toolMgr->RunAction( ACTIONS::selectionClear );
 
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
@@ -2993,11 +2993,11 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     }
 
     // Clear the old selection first
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     // Select the new items
     EDA_ITEMS nItems( new_items.begin(), new_items.end() );
-    m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &nItems );
+    m_toolMgr->RunAction<EDA_ITEMS*>( ACTIONS::selectItems, &nItems );
 
     // record the new items as added
     if( !selection.Empty() )
@@ -3013,7 +3013,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
         // Deselect the duplicated item if we originally started as a hover selection
         if( is_hover )
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+            m_toolMgr->RunAction( ACTIONS::selectionClear );
     }
 
     return 0;

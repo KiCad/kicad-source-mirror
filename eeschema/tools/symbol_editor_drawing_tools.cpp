@@ -101,7 +101,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     bool                  isText = aEvent.IsAction( &SCH_ACTIONS::placeSymbolText );
     COMMON_SETTINGS*      common_settings = Pgm().GetCommonSettings();
 
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     m_frame->PushTool( aEvent );
 
@@ -119,7 +119,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     auto cleanup =
             [&] ()
             {
-                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
                 m_view->ClearPreview();
                 delete item;
                 item = nullptr;
@@ -211,7 +211,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             // First click creates...
             if( !item )
             {
-                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
 
                 switch( type )
                 {
@@ -385,7 +385,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::opt
     // gets whacked.
     m_toolMgr->DeactivateTool();
 
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     m_frame->PushTool( aEvent );
 
@@ -398,7 +398,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::opt
     auto cleanup =
             [&] ()
             {
-                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
                 m_view->ClearPreview();
                 delete item;
                 item = nullptr;
@@ -467,7 +467,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::opt
             if( !symbol )
                 continue;
 
-            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+            m_toolMgr->RunAction( ACTIONS::selectionClear );
 
             int lineWidth = schIUScale.MilsToIU( cfg->m_Defaults.line_width );
 
@@ -732,10 +732,10 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::ImportGraphics( const TOOL_EVENT& aEvent )
     m_view->Add( &preview );
 
     // Clear the current selection then select the drawings so that edit tools work on them
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     EDA_ITEMS selItems( selectedItems.begin(), selectedItems.end() );
-    m_toolMgr->RunAction<EDA_ITEMS*>( SCH_ACTIONS::addItemsToSel, &selItems );
+    m_toolMgr->RunAction<EDA_ITEMS*>( ACTIONS::selectItems, &selItems );
 
     m_frame->PushTool( aEvent );
 
@@ -779,7 +779,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::ImportGraphics( const TOOL_EVENT& aEvent )
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
-            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+            m_toolMgr->RunAction( ACTIONS::selectionClear );
 
             for( SCH_ITEM* item : newItems )
                 delete item;
@@ -860,10 +860,10 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem( const TOOL_EVENT& aEvent )
         if( pin )
             g_lastPin = pin->m_Uuid;
 
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
         if( pin )
-            m_toolMgr->RunAction<EDA_ITEM*>( SCH_ACTIONS::addItemToSel, pin );
+            m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, pin );
     }
 
     return 0;

@@ -34,22 +34,6 @@ class TOOL_MANAGER;
 class GERBVIEW_ACTIONS : public ACTIONS
 {
 public:
-    // Selection Tool
-    /// Activation of the selection tool
-    static TOOL_ACTION selectionActivate;
-
-    /// Select a single item under the cursor position
-    static TOOL_ACTION selectionCursor;
-
-    /// Clear the current selection
-    static TOOL_ACTION selectionClear;
-
-    /// Selects an item (specified as the event parameter).
-    static TOOL_ACTION selectItem;
-
-    /// Unselects an item (specified as the event parameter).
-    static TOOL_ACTION unselectItem;
-
     /// Activation of the edit tool
     static TOOL_ACTION properties;
     static TOOL_ACTION showDCodes;

@@ -419,8 +419,8 @@ void DIALOG_GENERATORS::OnItemSelected( wxDataViewEvent& aEvent )
         edaItems.push_back( brdItem );
     }
 
-    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
-    m_frame->GetToolManager()->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &edaItems );
+    m_frame->GetToolManager()->RunAction( ACTIONS::selectionClear );
+    m_frame->GetToolManager()->RunAction<EDA_ITEMS*>( ACTIONS::selectItems, &edaItems );
     m_frame->FocusOnItems( boardItems );
 }
 
@@ -455,8 +455,8 @@ void DIALOG_GENERATORS::OnRebuildTypeClick( wxCommandEvent& event )
         items.push_back( item );
     }
 
-    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
-    m_frame->GetToolManager()->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &items );
+    m_frame->GetToolManager()->RunAction( ACTIONS::selectionClear );
+    m_frame->GetToolManager()->RunAction<EDA_ITEMS*>( ACTIONS::selectItems, &items );
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::regenerateSelected );
     RebuildModels();
 }

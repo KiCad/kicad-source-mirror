@@ -5,8 +5,7 @@
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
 
-PCB_TEST_SELECTION_TOOL::PCB_TEST_SELECTION_TOOL()
-    : SELECTION_TOOL( "pcbnew.InteractiveSelection" )
+PCB_TEST_SELECTION_TOOL::PCB_TEST_SELECTION_TOOL() : SELECTION_TOOL( "common.InteractiveSelection" )
 {
 }
 
@@ -109,7 +108,7 @@ bool PCB_TEST_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere )
 
 void PCB_TEST_SELECTION_TOOL::setTransitions()
 {
-    Go( &PCB_TEST_SELECTION_TOOL::Main, PCB_ACTIONS::selectionActivate.MakeEvent() );
+    Go( &PCB_TEST_SELECTION_TOOL::Main, ACTIONS::selectionActivate.MakeEvent() );
 }
 
 

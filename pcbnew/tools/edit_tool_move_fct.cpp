@@ -392,7 +392,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                                                   pickedReferencePoint ) )
     {
         if( selection.IsHover() )
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+            m_toolMgr->RunAction( ACTIONS::selectionClear );
 
         editFrame->PopTool( aEvent );
         return false;
@@ -805,7 +805,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
     // Unselect all items to clear selection flags and then re-select the originally selected
     // items.
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     if( restore_state )
     {
@@ -824,7 +824,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
         }
 
         EDA_ITEMS oItems( orig_items.begin(), orig_items.end() );
-        m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &oItems );
+        m_toolMgr->RunAction<EDA_ITEMS*>( ACTIONS::selectItems, &oItems );
     }
 
     // Remove the dynamic ratsnest from the screen

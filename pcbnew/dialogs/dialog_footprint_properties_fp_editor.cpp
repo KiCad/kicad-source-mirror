@@ -609,7 +609,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
     m_footprint->SetKeywords( m_KeywordCtrl->GetValue() );
 
     // Update fields
-    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
+    m_frame->GetToolManager()->RunAction( ACTIONS::selectionClear );
 
     while( !m_footprint->GetFields().empty() )
     {

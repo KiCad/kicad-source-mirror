@@ -1209,7 +1209,7 @@ void DIALOG_DRC::deleteAllMarkers( bool aIncludeExclusions )
 {
     // Clear current selection list to avoid selection of deleted items
     Freeze();
-    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
+    m_frame->GetToolManager()->RunAction( ACTIONS::selectionClear );
 
     m_markersTreeModel->DeleteItems( false, aIncludeExclusions, false );
     m_unconnectedTreeModel->DeleteItems( false, aIncludeExclusions, false );
@@ -1225,7 +1225,7 @@ void DIALOG_DRC::OnDeleteOneClick( wxCommandEvent& aEvent )
     if( m_Notebook->GetSelection() == 0 )
     {
         // Clear the selection.  It may be the selected DRC marker.
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
+        m_frame->GetToolManager()->RunAction( ACTIONS::selectionClear );
 
         m_markersTreeModel->DeleteCurrentItem( true );
 

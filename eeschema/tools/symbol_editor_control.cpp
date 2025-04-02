@@ -573,7 +573,7 @@ int SYMBOL_EDITOR_CONTROL::OnDeMorgan( const TOOL_EVENT& aEvent )
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
         m_toolMgr->RunAction( ACTIONS::cancelInteractive );
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
         SYMBOL_EDIT_FRAME* symbolEditor = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
         symbolEditor->SetBodyStyle( bodyStyle );

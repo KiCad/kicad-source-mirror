@@ -908,7 +908,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         return false;
     }
 
-    m_toolManager->RunAction( PCB_ACTIONS::selectionClear );
+    m_toolManager->RunAction( ACTIONS::selectionClear );
     BOARD_COMMIT commit( pcbframe );
 
     // Create a copy for the board, first using Clone() to keep existing Uuids, and then either

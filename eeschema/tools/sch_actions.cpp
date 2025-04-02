@@ -94,11 +94,6 @@ TOOL_ACTION SCH_ACTIONS::pointEditorRemoveCorner( TOOL_ACTION_ARGS()
 
 // SCH_SELECTION_TOOL
 //
-TOOL_ACTION SCH_ACTIONS::selectionActivate( TOOL_ACTION_ARGS()
-        .Name( "eeschema.InteractiveSelection" )
-        .Scope( AS_GLOBAL )
-        .Flags( AF_ACTIVATE ) );
-
 TOOL_ACTION SCH_ACTIONS::selectNode( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveSelection.SelectNode" )
         .Scope( AS_GLOBAL )
@@ -115,30 +110,6 @@ TOOL_ACTION SCH_ACTIONS::selectConnection( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Select Connection" ) )
         .Tooltip( _( "Select a complete connection" ) )
         .Icon( BITMAPS::net_highlight_schematic ) );
-
-TOOL_ACTION SCH_ACTIONS::selectionMenu( TOOL_ACTION_ARGS()
-        .Name( "eeschema.InteractiveSelection.SelectionMenu" )
-        .Scope( AS_GLOBAL ) );
-
-TOOL_ACTION SCH_ACTIONS::addItemToSel( TOOL_ACTION_ARGS()
-        .Name( "eeschema.InteractiveSelection.AddItemToSel" )
-        .Scope( AS_GLOBAL ) );
-
-TOOL_ACTION SCH_ACTIONS::addItemsToSel( TOOL_ACTION_ARGS()
-        .Name( "eeschema.InteractiveSelection.AddItemsToSel" )
-        .Scope( AS_GLOBAL ) );
-
-TOOL_ACTION SCH_ACTIONS::removeItemFromSel( TOOL_ACTION_ARGS()
-        .Name( "eeschema.InteractiveSelection.RemoveItemFromSel" )
-        .Scope( AS_GLOBAL ) );
-
-TOOL_ACTION SCH_ACTIONS::removeItemsFromSel( TOOL_ACTION_ARGS()
-        .Name( "eeschema.InteractiveSelection.RemoveItemsFromSel" )
-        .Scope( AS_GLOBAL ) );
-
-TOOL_ACTION SCH_ACTIONS::clearSelection( TOOL_ACTION_ARGS()
-        .Name( "eeschema.InteractiveSelection.ClearSelection" )
-        .Scope( AS_GLOBAL ) );
 
 TOOL_ACTION SCH_ACTIONS::syncSelection( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveSelection.SyncSelection" )

@@ -328,7 +328,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     std::deque<int>                              storedPadNumbers;
     std::map<wxString, std::pair<int, wxString>> oldNumbers;
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     frame()->PushTool( aEvent );
 
@@ -424,7 +424,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
 
         if( evt->IsCancelInteractive() )
         {
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+            m_toolMgr->RunAction( ACTIONS::selectionClear );
             commit.Revert();
 
             frame()->PopTool( aEvent );
@@ -757,7 +757,7 @@ int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
         explodePad( pad, &layer, commit );
         commit.Push( _( "Edit Pad" ) );
 
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
         frame()->SetActiveLayer( layer );
 
         settings->m_PadEditModePad = pad;
@@ -920,7 +920,7 @@ std::vector<PCB_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun )
     int        maxError = board()->GetDesignSettings().m_MaxError;
 
     // Don't leave an object in the point editor that might no longer exist after recombining.
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     return aPad->Recombine( aIsDryRun, maxError );
 }

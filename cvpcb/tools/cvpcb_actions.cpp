@@ -34,13 +34,6 @@
 #define _(s) s
 
 
-// Selection tool action for the footprint viewer window
-// No description, it is not supposed to be shown anywhere
-TOOL_ACTION CVPCB_ACTIONS::selectionActivate( TOOL_ACTION_ARGS()
-        .Name( "cvpcb.FootprintViewerInteractiveSelection" )
-        .Scope( AS_GLOBAL )
-        .Flags( AF_ACTIVATE ) );
-
 // No description, it is not supposed to be shown anywhere
 TOOL_ACTION CVPCB_ACTIONS::controlActivate( TOOL_ACTION_ARGS()
         .Name( "cvpcb.Control" )

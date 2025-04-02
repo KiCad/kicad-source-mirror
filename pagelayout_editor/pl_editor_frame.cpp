@@ -281,7 +281,7 @@ void PL_EDITOR_FRAME::setupTools()
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active
-    m_toolManager->InvokeTool( "plEditor.InteractiveSelection" );
+    m_toolManager->InvokeTool( "common.InteractiveSelection" );
 }
 
 

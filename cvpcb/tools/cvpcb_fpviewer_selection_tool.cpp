@@ -27,7 +27,7 @@ using namespace std::placeholders;
 
 
 CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL() :
-        TOOL_INTERACTIVE( "cvpcb.FootprintViewerInteractiveSelection" ),
+        TOOL_INTERACTIVE( "common.InteractiveSelection" ),
         m_frame( nullptr )
 {
 }
@@ -98,6 +98,5 @@ int CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::UpdateMenu( const TOOL_EVENT& aEvent 
 void CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::setTransitions()
 {
     Go( &CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::UpdateMenu, ACTIONS::updateMenu.MakeEvent() );
-    Go( &CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::Main,
-        CVPCB_ACTIONS::selectionActivate.MakeEvent() );
+    Go( &CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::Main, ACTIONS::selectionActivate.MakeEvent() );
 }
