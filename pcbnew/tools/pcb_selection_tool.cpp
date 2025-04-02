@@ -3720,6 +3720,9 @@ void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollec
     {
         if( aCollector[j]->GetParent() )
             aCollector[j]->GetParent()->ClearFlags( CANDIDATE );
+
+        if( aCollector[j]->GetParentFootprint() )
+            aCollector[j]->GetParentFootprint()->ClearFlags( CANDIDATE );
     }
 
     if( aMultiselect )
@@ -3731,11 +3734,11 @@ void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollec
     for( int j = 0; j < aCollector.GetCount(); )
     {
         BOARD_ITEM* item = aCollector[j];
-        BOARD_ITEM* parent = item->GetParent();
+        FOOTPRINT*  fp = item->GetParentFootprint();
         BOARD_ITEM* start = item;
 
-        if( !m_isFootprintEditor && parent && parent->Type() == PCB_FOOTPRINT_T )
-            start = parent;
+        if( !m_isFootprintEditor && fp )
+            start = fp;
 
         // If a group is entered, disallow selections of objects outside the group.
         if( m_enteredGroup && !PCB_GROUP::WithinScope( item, m_enteredGroup, m_isFootprintEditor ) )
@@ -3760,7 +3763,7 @@ void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollec
         }
 
         // Footprints are a bit easier as they can't be nested.
-        if( parent && ( parent->GetFlags() & CANDIDATE ) )
+        if( fp && ( fp->GetFlags() & CANDIDATE ) )
         {
             // Remove children of selected items
             aCollector.Remove( item );
