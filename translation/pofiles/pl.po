@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-04-01 12:48+0000\n"
+"PO-Revision-Date: 2025-04-03 00:32+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -39181,78 +39181,76 @@ msgid "Edit Track/Via Properties"
 msgstr "Edycja właściwości ścieżki/przelotki"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:178
-#, fuzzy
 msgid "From rules"
-msgstr "Z reguł projektowych"
+msgstr "Z reguł"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:180
 msgid "Type I a ( tented top )"
-msgstr ""
+msgstr "Typ I a ( maskowane z góry )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:181
 msgid "Type I b ( tented both sides )"
-msgstr ""
+msgstr "Typ I b ( maskowane z obu stron )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:182
 msgid "Type I a ( tented bottom )"
-msgstr ""
+msgstr "Typ I a ( maskowane z dołu )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:183
 msgid "Type II a ( covered and tented top )"
-msgstr ""
+msgstr "Typ II a ( zakryte i maskowane z góry )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:184
 msgid "Type II b ( covered and tented both sides )"
-msgstr ""
+msgstr "Typ II b ( zakryte i maskowane z obu stron )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:185
 msgid "Type II a ( covered and tented bottom )"
-msgstr ""
+msgstr "Typ II a ( zakryte i maskowane z dołu )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:186
 msgid "Type III a ( plugged top )"
-msgstr ""
+msgstr "Typ III a ( zatkane z góry )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:187
 msgid "Type III b ( plugged both sides )"
-msgstr ""
+msgstr "Typ III b ( zatkane z obu stron )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:188
 msgid "Type III a ( plugged bottom )"
-msgstr ""
+msgstr "Typ III a ( zatkane z dołu )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:189
 msgid "Type IV a ( plugged and tented top )"
-msgstr ""
+msgstr "Typ IV a ( zatkane i maskowane z góry )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:190
 msgid "Type IV b ( plugged and tented both sides )"
-msgstr ""
+msgstr "Typ IV b ( zatkane i maskowane z obu stron )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:191
 msgid "Type IV a ( plugged and tented bottom )"
-msgstr ""
+msgstr "Typ IV a ( zatkane i maskowane z dołu )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:192
-#, fuzzy
 msgid "Type V ( filled )"
-msgstr "Wpisz formułę filtra"
+msgstr "Typ V ( wypełnione )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:193
 msgid "Type VI a ( filled and tented top )"
-msgstr ""
+msgstr "Typ VI a (wypełnione oraz zakryte z góry )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:194
 msgid "Type VI b ( filled and tented both sides )"
-msgstr ""
+msgstr "Typ VI b ( wypełnione oraz zakryte z obu stron )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:195
 msgid "Type VI a ( filled and tented bottom )"
-msgstr ""
+msgstr "Typ VI a ( wypełnione oraz zakryte z dołu )"
 
 #: pcbnew/dialogs/dialog_track_via_properties.h:196
 msgid "Type VII ( filled and capped )"
-msgstr ""
+msgstr "Typ VII ( wypełnione oraz zatkane )"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:41
 msgid "Automatically update via nets"
@@ -39337,6 +39335,7 @@ msgstr "Powierzchnia przekroju:"
 msgid ""
 "Select which protection feature according to IPC-4761 the via should have."
 msgstr ""
+"Wybiera w jaki sposób mają być zabezpieczone przelotki wg normy IPC-4761."
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:437
 msgid "Add teardrops on via's track connections"
@@ -45020,7 +45019,7 @@ msgstr "Usunięto dla %s atrybut 'Nie montowane'."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:753
 #, c-format
 msgid "Added %s 'duplicate pad numbers are jumpers' attribute."
-msgstr ""
+msgstr "Dodano %s atrybutów \"duplikujące się numery padów tworzą zwory\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:758
 #, fuzzy, c-format
@@ -45030,7 +45029,7 @@ msgstr "Usunięto dla %s atrybut 'Nie montowane'."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:766
 #, c-format
 msgid "Add %s 'duplicate pad numbers are jumpers' attribute."
-msgstr ""
+msgstr "Dodaję %s atrybutów \"duplikujące się numery padów tworzą zwory\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:771
 #, fuzzy, c-format
@@ -47815,14 +47814,12 @@ msgid "Not tented"
 msgstr "Niemaskowane"
 
 #: pcbnew/pcb_track.cpp:2200
-#, fuzzy
 msgid "Covered"
-msgstr "Elementy podświetlone"
+msgstr "Zakryte"
 
 #: pcbnew/pcb_track.cpp:2201
-#, fuzzy
 msgid "Not covered"
-msgstr "Nie odbite"
+msgstr "Niezakryte"
 
 #: pcbnew/pcb_track.cpp:2206
 #, fuzzy
@@ -47844,9 +47841,8 @@ msgid "Not capped"
 msgstr "Niepołączone"
 
 #: pcbnew/pcb_track.cpp:2219
-#, fuzzy
 msgid "Not filled"
-msgstr "<Niezdefiniowane>"
+msgstr "Niewypełnione"
 
 #: pcbnew/pcb_track.cpp:2283
 msgid "Via Properties"
