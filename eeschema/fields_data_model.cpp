@@ -138,18 +138,19 @@ std::vector<BOM_FIELD> FIELDS_EDITOR_GRID_DATA_MODEL::GetFieldsOrdered()
 
 void FIELDS_EDITOR_GRID_DATA_MODEL::SetFieldsOrder( const std::vector<wxString>& aNewOrder )
 {
-    size_t foundCount = 0;
-
-    wxCHECK( aNewOrder.size() == m_cols.size(), /* void */ );
-
-    for( const wxString& newField : aNewOrder )
+    if( aNewOrder.size() == m_cols.size() )
     {
-        for( size_t i = 0; i < m_cols.size(); i++ )
+        size_t foundCount = 0;
+
+        for( const wxString& newField : aNewOrder )
         {
-            if( m_cols[i].m_fieldName == newField )
+            for( DATA_MODEL_COL& col : m_cols)
             {
-                std::swap( m_cols[foundCount], m_cols[i] );
-                foundCount++;
+                if( col.m_fieldName == newField )
+                {
+                    std::swap( m_cols[foundCount], col );
+                    foundCount++;
+                }
             }
         }
     }
