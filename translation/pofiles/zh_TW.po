@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-03-30 16:07+0000\n"
+"PO-Revision-Date: 2025-04-03 12:49+0000\n"
 "Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -31138,7 +31138,7 @@ msgstr "mil"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:195
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:67
 msgid "inch"
-msgstr "inch"
+msgstr "英吋"
 
 #: pcb_calculator/widgets/unit_selector.cpp:100
 msgid "GHz"
