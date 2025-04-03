@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-03-28 23:27+0000\n"
+"PO-Revision-Date: 2025-04-04 00:32+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v9/es/>\n"
 "Language: es\n"
@@ -51130,11 +51130,8 @@ msgid "Invalid clipboard contents"
 msgstr "Contenido del portapapeles no válido"
 
 #: pcbnew/tools/pcb_control.cpp:1525
-#, fuzzy
 msgid "Error loading board."
-msgstr ""
-"Error al cargar la placa.\n"
-"%s"
+msgstr "Error al cargar la placa."
 
 #: pcbnew/tools/pcb_control.cpp:1559
 msgid "Append Board"
