@@ -43,6 +43,7 @@
 #include <sch_symbol.h>
 #include <sch_edit_frame.h>
 #include <sch_field.h>
+#include <sch_group.h>
 #include <sch_junction.h>
 #include <sch_line.h>
 #include <sch_shape.h>
@@ -210,6 +211,9 @@ void SCH_PAINTER::draw( const EDA_ITEM* aItem, int aLayer, bool aDimmed )
         break;
     case SCH_MARKER_T:
         draw( static_cast<const SCH_MARKER*>( aItem ), aLayer );
+        break;
+    case SCH_GROUP_T:
+        draw( static_cast<const SCH_GROUP*>( aItem ), aLayer );
         break;
 
     default: return;
@@ -801,7 +805,7 @@ void SCH_PAINTER::drawPinDanglingIndicator( const SCH_PIN& aPin, const COLOR4D& 
  * Draw an local power pin indicator icon.
  */
 void SCH_PAINTER::drawLocalPowerIcon( const VECTOR2D& aPos, double aSize, bool aRotate,
-                                      const COLOR4D& aColor, bool aDrawingShadows, 
+                                      const COLOR4D& aColor, bool aDrawingShadows,
                                       bool aBrightened )
 {
     m_gal->Save();
@@ -3038,5 +3042,74 @@ void SCH_PAINTER::draw( const SCH_MARKER* aMarker, int aLayer )
     m_gal->Restore();
 }
 
+
+void SCH_PAINTER::draw( const SCH_GROUP* aGroup, int aLayer )
+{
+    const bool drawingShadows = false;
+
+    if( aLayer == LAYER_SCHEMATIC_ANCHOR )
+    {
+        if( aGroup->IsSelected() && !( aGroup->GetParent() && aGroup->GetParent()->IsSelected() ) )
+        {
+            // Selected on our own; draw enclosing box
+        }
+        else if( aGroup->IsEntered() )
+        {
+            // Entered group; draw enclosing box
+        }
+        else
+        {
+            // Neither selected nor entered; draw nothing at the group level (ie: only draw
+            // its members)
+            return;
+        }
+
+        const COLOR4D color = getRenderColor( aGroup, LAYER_SCHEMATIC_ANCHOR, drawingShadows );
+
+        m_gal->SetStrokeColor( color );
+        m_gal->SetLineWidth( m_schSettings.GetOutlineWidth() * 2.0f );
+
+        BOX2I    bbox = aGroup->GetBoundingBox();
+        VECTOR2I topLeft = bbox.GetPosition();
+        VECTOR2I width = VECTOR2I( bbox.GetWidth(), 0 );
+        VECTOR2I height = VECTOR2I( 0, bbox.GetHeight() );
+
+        m_gal->DrawLine( topLeft, topLeft + width );
+        m_gal->DrawLine( topLeft + width, topLeft + width + height );
+        m_gal->DrawLine( topLeft + width + height, topLeft + height );
+        m_gal->DrawLine( topLeft + height, topLeft );
+
+        wxString name = aGroup->GetName();
+
+        if( name.IsEmpty() )
+            return;
+
+        int ptSize = 12;
+        int scaledSize = abs( KiROUND( m_gal->GetScreenWorldMatrix().GetScale().x * ptSize ) );
+        int unscaledSize = schIUScale.MilsToIU( ptSize );
+
+        // Scale by zoom a bit, but not too much
+        int      textSize = ( scaledSize + ( unscaledSize * 2 ) ) / 3;
+        VECTOR2I textOffset = VECTOR2I( width.x / 2, -KiROUND( textSize * 0.5 ) );
+        VECTOR2I titleHeight = VECTOR2I( 0, KiROUND( textSize * 2.0 ) );
+
+        if( PrintableCharCount( name ) * textSize < bbox.GetWidth() )
+        {
+            m_gal->DrawLine( topLeft, topLeft - titleHeight );
+            m_gal->DrawLine( topLeft - titleHeight, topLeft + width - titleHeight );
+            m_gal->DrawLine( topLeft + width - titleHeight, topLeft + width );
+
+            TEXT_ATTRIBUTES attrs;
+            attrs.m_Italic = true;
+            attrs.m_Halign = GR_TEXT_H_ALIGN_CENTER;
+            attrs.m_Valign = GR_TEXT_V_ALIGN_BOTTOM;
+            attrs.m_Size = VECTOR2I( textSize, textSize );
+            attrs.m_StrokeWidth = GetPenSizeForNormal( textSize );
+
+            KIFONT::FONT::GetFont()->Draw( m_gal, aGroup->GetName(), topLeft + textOffset, attrs,
+                                           aGroup->GetFontMetrics() );
+        }
+    }
+}
 
 }; // namespace KIGFX
