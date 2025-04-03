@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-03-24 15:13+0000\n"
+"PO-Revision-Date: 2025-04-03 07:45+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17977,9 +17977,9 @@ msgid "Global Field Name Templates"
 msgstr "Plantilles de nom de camp global:"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "The field name '%s' contains trailing and/or leading white space."
-msgstr "L'entrada conté un espai en blanc al final."
+msgstr "El nom del camp «%s» conté espais en blanc a l'inici o al final."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:276
 msgid ""
