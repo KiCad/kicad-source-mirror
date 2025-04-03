@@ -627,7 +627,7 @@ int COMMON_TOOLS::GridProperties( const TOOL_EVENT& aEvent )
 int COMMON_TOOLS::GridOrigin( const TOOL_EVENT& aEvent )
 {
     VECTOR2I           origin = m_frame->GetGridOrigin();
-    WX_PT_ENTRY_DIALOG dlg( m_frame, _( "Grid Origin" ), _( "X:" ), _( "Y:" ), origin );
+    WX_PT_ENTRY_DIALOG dlg( m_frame, _( "Grid Origin" ), _( "X:" ), _( "Y:" ), origin, true );
 
     if( dlg.ShowModal() == wxID_OK )
     {

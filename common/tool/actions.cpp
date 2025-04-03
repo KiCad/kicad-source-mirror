@@ -1051,7 +1051,8 @@ TOOL_ACTION ACTIONS::gridOrigin(  TOOL_ACTION_ARGS()
         .Name( "common.Control.editGridOrigin" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Grid Origin..." ) )
-        .Tooltip( _( "Set the grid origin point" ) ) );
+        .Tooltip( _( "Set the grid origin point" ) )
+        .Icon( BITMAPS::grid_select_axis ) );
 
 TOOL_ACTION ACTIONS::inchesUnits( TOOL_ACTION_ARGS()
         .Name( "common.Control.imperialUnits" )

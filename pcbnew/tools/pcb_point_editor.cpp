@@ -2457,7 +2457,7 @@ int PCB_POINT_EDITOR::movePoint( const TOOL_EVENT& aEvent )
         msg = _( "Move Corner" );
     }
 
-    WX_PT_ENTRY_DIALOG dlg( editFrame, title, _( "X:" ), _( "Y:" ), pt );
+    WX_PT_ENTRY_DIALOG dlg( editFrame, title, _( "X:" ), _( "Y:" ), pt, false );
 
     if( dlg.ShowModal() == wxID_OK )
     {

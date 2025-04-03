@@ -52,12 +52,14 @@ class WX_PT_ENTRY_DIALOG : public WX_PT_ENTRY_DIALOG_BASE
 {
 public:
     WX_PT_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aCaption, const wxString& aLabelX,
-                        const wxString& aLabelY, const VECTOR2I& aDefaultValue );
+                        const wxString& aLabelY, const VECTOR2I& aDefaultValue, bool aShowResetButt );
 
     /**
      * Return the value in internal units.
      */
     VECTOR2I GetValue();
+
+	void ResetValues( wxCommandEvent& event ) override;
 
 private:
     UNIT_BINDER m_unit_binder_x;
