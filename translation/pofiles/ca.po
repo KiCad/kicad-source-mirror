@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-03-24 15:13+0000\n"
+"PO-Revision-Date: 2025-04-04 00:32+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v9/ca/>\n"
 "Language: ca\n"
@@ -792,9 +792,8 @@ msgid "Do not clip silk layers to board outline"
 msgstr ""
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "3D Axis"
-msgstr "Mostra els Eixos 3D"
+msgstr "Eix 3D"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
 msgid "Background Start"
@@ -1391,20 +1390,17 @@ msgstr "Torna a carregar la placa i els models 3D"
 #: bitmap2component/bitmap2cmp_frame.cpp:293
 #: bitmap2component/bitmap2cmp_frame.cpp:356
 #: kicad/tools/kicad_manager_actions.cpp:168
-#, fuzzy
 msgid "Image Converter"
-msgstr "Convertit"
+msgstr "Conversor d'imatges"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:155
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
-#, fuzzy
 msgid "KiCad Image Converter"
-msgstr "Convertit"
+msgstr "Conversor d'imatges del KiCad"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:232
-#, fuzzy
 msgid "Image files"
-msgstr "Fitxers d'imatges"
+msgstr "Fitxers d'imatge"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:282 eeschema/menubar.cpp:72
 #: kicad/menubar.cpp:74 pagelayout_editor/menubar.cpp:63
@@ -1415,9 +1411,8 @@ msgstr "Obre recent"
 #: bitmap2component/bitmap2cmp_frame.cpp:283 eeschema/menubar.cpp:73
 #: include/file_history.h:54 pagelayout_editor/menubar.cpp:64
 #: pcbnew/menubar_pcb_editor.cpp:74
-#, fuzzy
 msgid "Clear Recent Files"
-msgstr "Obre un fitxer de &treball recent"
+msgstr "Neteja els fitxers recents"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:396
 #: eeschema/tools/sch_drawing_tools.cpp:1035
@@ -1668,9 +1663,8 @@ msgid "Image Information"
 msgstr "Informació del mapa de bits"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:45
-#, fuzzy
 msgid "Image size:"
-msgstr "Mida de pàgina:"
+msgstr "Mida d'imatge:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:49
 #: bitmap2component/bitmap2cmp_panel_base.cpp:53
@@ -1687,9 +1681,8 @@ msgid "pixels"
 msgstr "píxels"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:61
-#, fuzzy
 msgid "Image PPI:"
-msgstr "PPI del mapa de bits:"
+msgstr "PPI d'imatge:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:73 eeschema/sch_bitmap.cpp:196
 #: pcbnew/pcb_reference_image.cpp:210
@@ -2065,9 +2058,9 @@ msgid "Schematic source file '%s' does not exist."
 msgstr "Ja existeix el fitxer de esquemàtic '%s'."
 
 #: common/design_block_io.cpp:376
-#, fuzzy, c-format
+#, c-format
 msgid "Design block folder '%s' could not be created."
-msgstr "No s'ha pogut crear el fitxer '%s'."
+msgstr "No s'ha pogut crear la carpeta de blocs de disseny «%s»."
 
 #: common/design_block_io.cpp:393
 #, fuzzy, c-format
@@ -2210,9 +2203,8 @@ msgid "Librarian Team"
 msgstr "Equip de llibreters de KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:906
-#, fuzzy
 msgid "3D models"
-msgstr "Models 3D per"
+msgstr "Models 3D"
 
 #: common/dialog_about/AboutDialog_main.cpp:907
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
@@ -2234,14 +2226,12 @@ msgid "Footprints"
 msgstr "Empremtes"
 
 #: common/dialog_about/AboutDialog_main.cpp:928
-#, fuzzy
 msgid "Icons"
-msgstr "Icones per"
+msgstr "Icones"
 
 #: common/dialog_about/AboutDialog_main.cpp:935
-#, fuzzy
 msgid "Package Developers"
-msgstr "Desenvolupadors"
+msgstr "Desenvolupadors de paquets"
 
 #: common/dialog_about/dialog_about.cpp:114
 #, c-format
@@ -2752,9 +2742,8 @@ msgid "Name:"
 msgstr "Nom:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:32
-#, fuzzy
 msgid "(optional)"
-msgstr "(opcional; 0 per defecte)"
+msgstr "(opcional)"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:43
 #: common/dialogs/dialog_grid_settings_base.cpp:66
@@ -2847,11 +2836,8 @@ msgid "Hotkey List"
 msgstr "Llista de dreceres"
 
 #: common/dialogs/dialog_import_choose_project.cpp:33
-#, fuzzy
 msgid "Project Name"
-msgstr ""
-"Nom del projecte:\n"
-"%s\n"
+msgstr "Nom del projecte"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1398
@@ -3697,7 +3683,7 @@ msgstr ""
 #: common/dialogs/git/dialog_git_auth.cpp:46
 #: common/dialogs/git/dialog_git_repository_base.cpp:58
 msgid "SSH"
-msgstr ""
+msgstr "SSH"
 
 #: common/dialogs/git/dialog_git_auth.cpp:52
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:85
@@ -3730,22 +3716,20 @@ msgstr "Cancel·la"
 
 #: common/dialogs/git/dialog_git_auth.cpp:58
 msgid "Url"
-msgstr ""
+msgstr "URL"
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
 #: common/dialogs/git/dialog_git_repository_base.cpp:79
-#, fuzzy
 msgid "Authentication"
-msgstr "Justificació"
+msgstr "Autenticació"
 
 #: common/dialogs/git/dialog_git_auth.cpp:62
-#, fuzzy
 msgid "User Name"
-msgstr "Nom base"
+msgstr "Nom d'usuari"
 
 #: common/dialogs/git/dialog_git_auth.cpp:64
 msgid "Password"
-msgstr ""
+msgstr "Contrasenya"
 
 #: common/dialogs/git/dialog_git_commit.cpp:41
 #, fuzzy
@@ -4802,9 +4786,8 @@ msgstr "Afegeix una fila buida a la taula"
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:58
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:130
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:131
-#, fuzzy
 msgid "Add Existing"
-msgstr "Afegeix una acotació"
+msgstr "Afegeix un d'existent"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:149
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:152
@@ -4844,9 +4827,9 @@ msgstr ""
 
 #: common/dialogs/panel_embedded_files.cpp:284
 #: common/dialogs/panel_embedded_files.cpp:399
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists."
-msgstr "El fitxer %s ja existeix."
+msgstr "El fitxer «%s» ja existeix."
 
 #: common/dialogs/panel_embedded_files.cpp:287
 #: common/dialogs/panel_embedded_files.cpp:404
@@ -4870,9 +4853,9 @@ msgid "Overwrite"
 msgstr "Sobreescriu"
 
 #: common/dialogs/panel_embedded_files.cpp:306
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add file '%s'."
-msgstr "No s'ha pogut crear del fitxer '%s'."
+msgstr "No s'ha pogut afegir el fitxer «%s»."
 
 #: common/dialogs/panel_embedded_files.cpp:320
 #, fuzzy
@@ -5383,9 +5366,8 @@ msgid "Not a valid Python 3 interpreter"
 msgstr ""
 
 #: common/dialogs/panel_plugin_settings_base.cpp:21
-#, fuzzy
 msgid "KiCad API"
-msgstr "KiCad"
+msgstr "API del KiCad"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:23
 msgid ""
@@ -6041,9 +6023,8 @@ msgstr "Plantilles dels noms dels camps"
 #: common/eda_base_frame.cpp:1168 eeschema/sim/simulator_frame.cpp:115
 #: eeschema/sim/toolbars_simulator_frame.cpp:114
 #: eeschema/tools/sch_actions.cpp:74
-#, fuzzy
 msgid "Simulator"
-msgstr "Simulador..."
+msgstr "Simulador"
 
 #: common/eda_base_frame.cpp:1186 common/tool/actions.cpp:1105
 #: common/tool/common_tools.cpp:617 kicad/tools/kicad_manager_actions.cpp:147
@@ -6625,9 +6606,8 @@ msgstr "Omplert"
 
 #: common/eda_shape.cpp:2369 eeschema/sch_shape.cpp:754
 #: pcbnew/pcb_shape.cpp:909
-#, fuzzy
 msgid "Fill Color"
-msgstr "Color de l'ompliment:"
+msgstr "Color d'emplenament"
 
 #: common/eda_text.cpp:977 common/eda_text.cpp:1364
 #: eeschema/dialogs/dialog_field_properties_base.cpp:152
@@ -6819,7 +6799,7 @@ msgstr "Justificat vertical"
 #: pcbnew/pcb_tablecell.cpp:207 pcbnew/pcb_text.cpp:644
 #: pcbnew/pcb_textbox.cpp:930
 msgid "Hyperlink"
-msgstr ""
+msgstr "Hiperenllaç"
 
 #: common/eda_units.cpp:419
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:143
@@ -12032,9 +12012,8 @@ msgid "Description:"
 msgstr "Descripció:"
 
 #: eeschema/dialogs/dialog_design_block_properties_base.h:70
-#, fuzzy
 msgid "Design Block Properties"
-msgstr "Desa la biblioteca"
+msgstr "Propietats del bloc de disseny"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:550
 #, c-format
