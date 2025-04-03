@@ -596,6 +596,8 @@ int PADSTACK::Compare( const PADSTACK* aPadstackRef, const PADSTACK* aPadstackCm
         };
 
     aPadstackRef->ForEachUniqueLayer( compareCopperProps );
+    if( diff )
+        return diff;
 
     if( ( diff = static_cast<int>( aPadstackRef->DrillShape() ) -
           static_cast<int>( aPadstackCmp->DrillShape() ) ) != 0 )
