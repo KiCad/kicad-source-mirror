@@ -32,7 +32,7 @@ PANEL_3D_OPENGL_OPTIONS_BASE::PANEL_3D_OPENGL_OPTIONS_BASE( wxWindow* parent, wx
 	m_checkBoxBoundingBoxes = new wxCheckBox( this, wxID_ANY, _("Show model bounding boxes"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerMargins->Add( m_checkBoxBoundingBoxes, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_checkBoxCuThickness = new wxCheckBox( this, wxID_ANY, _("Show copper and tech layers thickness (very slow)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxCuThickness = new wxCheckBox( this, wxID_ANY, _("Show copper and tech layers thickness (slow)"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerMargins->Add( m_checkBoxCuThickness, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_checkBoxHighlightOnRollOver = new wxCheckBox( this, wxID_ANY, _("Highlight items on rollover"), wxDefaultPosition, wxDefaultSize, 0 );
