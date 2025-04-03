@@ -28,6 +28,7 @@
 #include <schematic.h>
 #include <sch_bus_entry.h>
 #include <sch_commit.h>
+#include <sch_group.h>
 #include <sch_junction.h>
 #include <sch_line.h>
 #include <sch_bitmap.h>
@@ -254,6 +255,8 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
         case UNDO_REDO::DELETED:
         case UNDO_REDO::PAGESETTINGS:
         case UNDO_REDO::REPEAT_ITEM:
+        case UNDO_REDO::REGROUP:
+        case UNDO_REDO::UNGROUP:
             break;
 
         default:
@@ -387,6 +390,26 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
             bulkAddedItems.emplace_back( schItem );
         }
+        else if( status == UNDO_REDO::REGROUP ) /* grouped items are ungrouped */
+        {
+            aList->SetPickedItemStatus( UNDO_REDO::UNGROUP, ii );
+
+            if( EDA_GROUP* group = eda_item->GetParentGroup() )
+            {
+                aList->SetPickedItemGroupId( group->AsEdaItem()->m_Uuid, ii );
+
+                group->RemoveItem( eda_item );
+            }
+        }
+        else if( status == UNDO_REDO::UNGROUP ) /* ungrouped items are re-added to their previuos groups */
+        {
+            aList->SetPickedItemStatus( UNDO_REDO::REGROUP, ii );
+
+            EDA_GROUP* group = dynamic_cast<EDA_GROUP*>( Schematic().GetItem( aList->GetPickedItemGroupId( ii ) ) );
+
+            if( group )
+                group->AddItem( eda_item );
+        }
         else if( status == UNDO_REDO::PAGESETTINGS )
         {
             if( GetCurrentSheet() != undoSheet )
@@ -427,6 +450,8 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
             wxCHECK2( itemCopy, continue );
 
+            EDA_GROUP* parentGroup = schItem->GetParentGroup();
+
             if( schItem->HasConnectivityChanges( itemCopy, &GetCurrentSheet() ) )
                 propagateConnectivityDamage( schItem );
 
@@ -460,7 +485,24 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                     }
                 }
 
+                if( parentGroup )
+                    parentGroup->RemoveItem( schItem );
+
                 schItem->SwapItemData( itemCopy );
+
+                if( SCH_GROUP* group = dynamic_cast<SCH_GROUP*>( schItem ) )
+                {
+                    group->RunOnChildren( [&]( SCH_ITEM* child )
+                                          {
+                                              child->SetParentGroup( group );
+                                          },
+                                          RECURSE_MODE::NO_RECURSE );
+                }
+
+                if( parentGroup )
+                    parentGroup->AddItem( schItem );
+
+
                 bulkChangedItems.emplace_back( schItem );
 
                 // Special cases for items which have instance data

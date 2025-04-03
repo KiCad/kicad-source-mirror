@@ -27,6 +27,7 @@
 
 #include <lib_symbol.h>
 
+#include <sch_group.h>
 #include <sch_screen.h>
 #include <schematic.h>
 
@@ -79,6 +80,21 @@ COMMIT& SCH_COMMIT::Stage( EDA_ITEM *aItem, CHANGE_TYPE aChangeType, BASE_SCREEN
     {
         aItem = aItem->GetParent();
         aChangeType = CHT_MODIFY;
+    }
+
+    // Many operations (move, rotate, etc.) are applied directly to a group's children, so they
+    // must be staged as well.
+    if( aChangeType == CHT_MODIFY )
+    {
+        if( SCH_GROUP* group = dynamic_cast<SCH_GROUP*>( aItem ) )
+        {
+            group->RunOnChildren(
+                    [&]( EDA_ITEM* child )
+                    {
+                        Stage( child, aChangeType, aScreen );
+                    },
+                    RECURSE_MODE::NO_RECURSE );
+        }
     }
 
     // IS_SELECTED flag should not be set on undo items which were added for
@@ -187,6 +203,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
     bool                dirtyConnectivity = false;
     bool                refreshHierarchy = false;
     SCH_CLEANUP_FLAGS   connectivityCleanUp = NO_CLEANUP;
+    SCH_GROUP*          addedGroup = nullptr;
 
     if( Empty() )
         return;
@@ -258,6 +275,9 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
                 if( view )
                     view->Add( schItem );
             }
+
+            if( schItem->Type() == SCH_GROUP_T )
+                addedGroup = static_cast<SCH_GROUP*>( schItem );
 
             if( frame )
                 frame->UpdateItem( schItem, true, true );
@@ -362,6 +382,32 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
             break;
         }
+
+        case CHT_UNGROUP:
+            if( EDA_GROUP* group = schItem->GetParentGroup() )
+            {
+                if( !( aCommitFlags & SKIP_UNDO ) )
+                {
+                    ITEM_PICKER itemWrapper( nullptr, schItem, UNDO_REDO::UNGROUP );
+                    itemWrapper.SetGroupId( group->AsEdaItem()->m_Uuid );
+                    undoList.PushItem( itemWrapper );
+                }
+
+                group->RemoveItem( schItem );
+            }
+
+            break;
+
+        case CHT_GROUP:
+            if( addedGroup )
+            {
+                addedGroup->AddItem( schItem );
+
+                if( !( aCommitFlags & SKIP_UNDO ) )
+                    undoList.PushItem( ITEM_PICKER( nullptr, schItem, UNDO_REDO::REGROUP ) );
+            }
+
+            break;
 
         default:
             wxASSERT( false );
