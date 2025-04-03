@@ -300,21 +300,59 @@ bool SEG::Collide( const SEG& aSeg, int aClearance, int* aActual ) const
     }
 
     ecoord dist_sq = VECTOR2I::ECOORD_MAX;
+    ecoord clearance_sq = (ecoord) aClearance * aClearance;
+
+    auto checkCollision =
+            [&]( bool aFinal )
+            {
+                if( dist_sq == 0 )
+                {
+                    if( aActual )
+                        *aActual = 0;
+
+                    return true;
+                }
+                else if( dist_sq < clearance_sq )
+                {
+                    if( aActual )
+                    {
+                        if( aFinal )
+                        {
+                            *aActual = int( isqrt( dist_sq ) );
+                            return true;
+                        }
+                        else
+                        {
+                            // We have to keep going to ensure we have the lowest value
+                            // for aActual
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+
+                return false;
+            };
 
     dist_sq = std::min( dist_sq, SquaredDistance( aSeg.A ) );
+
+    if( checkCollision( false ) )
+        return true;
+
     dist_sq = std::min( dist_sq, SquaredDistance( aSeg.B ) );
+
+    if( checkCollision( false ) )
+        return true;
+
     dist_sq = std::min( dist_sq, aSeg.SquaredDistance( A ) );
+
+    if( checkCollision( false ) )
+        return true;
+
     dist_sq = std::min( dist_sq, aSeg.SquaredDistance( B ) );
 
-    if( dist_sq == 0 || dist_sq < (ecoord) aClearance * aClearance )
-    {
-        if( aActual )
-            *aActual = int( isqrt( dist_sq ) );
-
-        return true;
-    }
-
-    return false;
+    return checkCollision( true );
 }
 
 
@@ -327,7 +365,10 @@ bool SEG::Contains( const VECTOR2I& aP ) const
 const VECTOR2I SEG::NearestPoint( const VECTOR2I& aP ) const
 {
     // Inlined for performance reasons
-    VECTOR2L d( B.x - A.x, B.y - A.y );
+    VECTOR2L d;
+    d.x = static_cast<int64_t>( B.x ) - A.x;
+    d.y = static_cast<int64_t>( B.y ) - A.y;
+
     ecoord   l_squared( d.x * d.x + d.y * d.y );
 
     if( l_squared == 0 )
@@ -399,8 +440,13 @@ int SEG::Distance( const VECTOR2I& aP ) const
 
 SEG::ecoord SEG::SquaredDistance( const VECTOR2I& aP ) const
 {
-    VECTOR2L ab = VECTOR2L( B ) - A;
-    VECTOR2L ap = VECTOR2L( aP ) - A;
+    // Using the VECTOR2L() reflexive c'tor is a performance hit.
+    // Even sticking these in a lambda still invokes it.
+    VECTOR2L ab, ap;
+    ab.x = static_cast<int64_t>( B.x ) - A.x;
+    ab.y = static_cast<int64_t>( B.y ) - A.y;
+    ap.x = static_cast<int64_t>( aP.x ) - A.x;
+    ap.y = static_cast<int64_t>( aP.y ) - A.y;
 
     ecoord e = ap.Dot( ab );
 
@@ -410,7 +456,12 @@ SEG::ecoord SEG::SquaredDistance( const VECTOR2I& aP ) const
     ecoord f = ab.SquaredEuclideanNorm();
 
     if( e >= f )
-        return ( VECTOR2L( aP ) - B ).Dot( VECTOR2L( aP ) - B );
+    {
+        VECTOR2L bp;
+        bp.x = static_cast<int64_t>( aP.x ) - B.x;
+        bp.y = static_cast<int64_t>( aP.y ) - B.y;
+        return bp.Dot( bp );
+    }
 
     const double g = ap.SquaredEuclideanNorm() - ( double( e ) * e ) / f;
 
