@@ -77,6 +77,9 @@ public:
 
     SELECTION& GetSelection() { return selection(); }
 
+    virtual void EnterGroup() {}
+    virtual void ExitGroup( bool aSelectGroup = false ) {}
+
 protected:
     /**
      * Return a reference to the selection.

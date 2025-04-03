@@ -30,12 +30,13 @@ class EDA_DRAW_FRAME;
 class TOOL_MANAGER;
 class EDA_GROUP;
 class EDA_ITEM;
+class COMMIT;
 
 
 class DIALOG_GROUP_PROPERTIES : public DIALOG_GROUP_PROPERTIES_BASE
 {
 public:
-    DIALOG_GROUP_PROPERTIES( EDA_DRAW_FRAME* aParent, EDA_GROUP* aTarget );
+    DIALOG_GROUP_PROPERTIES( EDA_DRAW_FRAME* aParent, EDA_GROUP* aTarget, COMMIT& aCommit );
     ~DIALOG_GROUP_PROPERTIES() override;
 
     void OnMemberSelected( wxCommandEvent& event ) override;
@@ -51,6 +52,7 @@ private:
     EDA_DRAW_FRAME* m_frame;
     TOOL_MANAGER*   m_toolMgr;
     EDA_GROUP*      m_group;
+    COMMIT&         m_commit;
 };
 
 #endif  // DIALOG_GROUP_PROPERTIES_H

@@ -74,7 +74,7 @@
 #include <tools/pcb_point_editor.h>
 #include <tools/edit_tool.h>
 #include <tools/pcb_edit_table_tool.h>
-#include <tools/group_tool.h>
+#include <tools/pcb_group_tool.h>
 #include <tools/generator_tool.h>
 #include <tools/drc_tool.h>
 #include <tools/global_edit_tool.h>
@@ -776,7 +776,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new DRC_TOOL );
     m_toolManager->RegisterTool( new PCB_VIEWER_TOOLS );
     m_toolManager->RegisterTool( new CONVERT_TOOL );
-    m_toolManager->RegisterTool( new GROUP_TOOL );
+    m_toolManager->RegisterTool( new PCB_GROUP_TOOL );
     m_toolManager->RegisterTool( new GENERATOR_TOOL );
     m_toolManager->RegisterTool( new SCRIPTING_TOOL );
     m_toolManager->RegisterTool( new PROPERTIES_TOOL );

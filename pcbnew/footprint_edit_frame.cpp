@@ -66,7 +66,7 @@
 #include <tools/pcb_grid_helper.h>
 #include <tools/pcb_editor_conditions.h>
 #include <tools/pcb_viewer_tools.h>
-#include <tools/group_tool.h>
+#include <tools/pcb_group_tool.h>
 #include <tools/position_relative_tool.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/lib_tree.h>
@@ -1197,7 +1197,7 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new POSITION_RELATIVE_TOOL );
     m_toolManager->RegisterTool( new ARRAY_TOOL );
     m_toolManager->RegisterTool( new PCB_VIEWER_TOOLS );
-    m_toolManager->RegisterTool( new GROUP_TOOL );
+    m_toolManager->RegisterTool( new PCB_GROUP_TOOL );
     m_toolManager->RegisterTool( new CONVERT_TOOL );
     m_toolManager->RegisterTool( new SCRIPTING_TOOL );
     m_toolManager->RegisterTool( new PROPERTIES_TOOL );

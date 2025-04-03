@@ -22,40 +22,33 @@
  */
 
 #include <tool/tool_manager.h>
-#include <tools/pcb_actions.h>
-#include <tools/pcb_picker_tool.h>
-#include <pcb_base_edit_frame.h>
-#include <pcb_group.h>
+#include <tool/actions.h>
+#include <eda_draw_frame.h>
 #include <eda_group.h>
 #include <status_popup.h>
-#include <board_commit.h>
+#include <commit.h>
 #include <bitmaps.h>
 #include <widgets/std_bitmap_button.h>
 #include <dialogs/dialog_group_properties.h>
 
 
 DIALOG_GROUP_PROPERTIES::DIALOG_GROUP_PROPERTIES( EDA_DRAW_FRAME* aParent,
-                                                  EDA_GROUP* aGroup ) :
+                                                  EDA_GROUP* aGroup,
+                                                  COMMIT& aCommit ) :
         DIALOG_GROUP_PROPERTIES_BASE( aParent ),
         m_frame( aParent ),
         m_toolMgr( aParent->GetToolManager() ),
-        m_group( aGroup )
+        m_group( aGroup ),
+        m_commit( aCommit )
 {
     m_bpAddMember->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_bpRemoveMember->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
     m_nameCtrl->SetValue( m_group->GetName() );
+    m_locked->SetValue( aGroup->AsEdaItem()->IsLocked() );
 
-    if( aGroup->AsEdaItem()->Type() == PCB_GROUP_T )
-    {
-        m_locked->SetValue( static_cast<PCB_GROUP*>( aGroup )->IsLocked() );
-        m_locked->Show( dynamic_cast<PCB_EDIT_FRAME*>( aParent ) != nullptr );
-    }
-    else
-    {
-        m_locked->SetValue( false );
+    if( aGroup->AsEdaItem()->Type() != PCB_GROUP_T )
         m_locked->Hide();
-    }
 
     for( EDA_ITEM* item : m_group->GetItems() )
         m_membersList->Append( item->GetItemDescription( m_frame, true ), item );
@@ -89,8 +82,7 @@ bool DIALOG_GROUP_PROPERTIES::TransferDataToWindow()
 
 bool DIALOG_GROUP_PROPERTIES::TransferDataFromWindow()
 {
-    BOARD_COMMIT commit( m_frame );
-    commit.Modify( m_group->AsEdaItem() );
+    m_commit.Modify( m_group->AsEdaItem() );
 
     for( size_t ii = 0; ii < m_membersList->GetCount(); ++ii )
     {
@@ -99,19 +91,15 @@ bool DIALOG_GROUP_PROPERTIES::TransferDataFromWindow()
 
         if( existingGroup != m_group )
         {
-            commit.Modify( item );
+            m_commit.Modify( item );
 
             if( existingGroup )
-                commit.Modify( existingGroup->AsEdaItem() );
+                m_commit.Modify( existingGroup->AsEdaItem() );
         }
     }
 
     m_group->SetName( m_nameCtrl->GetValue() );
-
-    if( m_group->AsEdaItem()->Type() == PCB_GROUP_T )
-    {
-        static_cast<PCB_GROUP*>( m_group )->SetLocked( m_locked->GetValue() );
-    }
+    m_group->AsEdaItem()->SetLocked( m_locked->GetValue() );
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
     m_group->RemoveAll();
@@ -124,7 +112,7 @@ bool DIALOG_GROUP_PROPERTIES::TransferDataFromWindow()
 
     m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, m_group->AsEdaItem() );
 
-    commit.Push( _( "Edit Group Properties" ) );
+    m_commit.Push( _( "Edit Group Properties" ) );
     return true;
 }
 

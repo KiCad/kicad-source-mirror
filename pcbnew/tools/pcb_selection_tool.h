@@ -180,14 +180,14 @@ public:
     /**
      * Enter the group at the head of the current selection.
      */
-    void EnterGroup();
+    void EnterGroup() override;
 
     /**
      * Leave the currently-entered group.
      *
      * @param aSelectGroup [optional] Select the group after leaving.
      */
-    void ExitGroup( bool aSelectGroup = false );
+    void ExitGroup( bool aSelectGroup = false ) override;
 
     /**
      * @return the currently-entered group.

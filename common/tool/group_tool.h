@@ -24,17 +24,12 @@
 #ifndef GROUP_TOOL_H
 #define GROUP_TOOL_H
 
-#include <math/vector2d.h>
-#include <tools/pcb_tool_base.h>
-#include "pcb_selection_tool.h"
-#include "dialogs/dialog_group_properties_base.h"
+#include <tool/selection_tool.h>
 
-class BOARD_COMMIT;
-class BOARD_ITEM;
-class PCB_SELECTION_TOOL;
+class COMMIT;
 class DIALOG_GROUP_PROPERTIES;
 
-class GROUP_TOOL : public PCB_TOOL_BASE
+class GROUP_TOOL : public TOOL_INTERACTIVE
 {
 public:
     GROUP_TOOL();
@@ -44,36 +39,40 @@ public:
     /// @copydoc TOOL_BASE::Init()
     bool Init() override;
 
-    int GroupProperties( const TOOL_EVENT& aEvent );
+    virtual int GroupProperties( const TOOL_EVENT& aEvent );
 
     /**
      * Invoke the picker tool to select a new member of the group.
      */
-    int PickNewMember( const TOOL_EVENT& aEvent  );
+    virtual int PickNewMember( const TOOL_EVENT& aEvent ) = 0;
 
     ///< Group selected items.
-    int Group( const TOOL_EVENT& aEvent );
+    virtual int Group( const TOOL_EVENT& aEvent ) = 0;
 
     ///< Ungroup selected items.
-    int Ungroup( const TOOL_EVENT& aEvent );
+    virtual int Ungroup( const TOOL_EVENT& aEvent );
 
     ///< Remove selection from group.
-    int RemoveFromGroup( const TOOL_EVENT& aEvent );
+    virtual int RemoveFromGroup( const TOOL_EVENT& aEvent );
 
     ///< Restrict selection to only member of the group.
-    int EnterGroup( const TOOL_EVENT& aEvent );
+    virtual int EnterGroup( const TOOL_EVENT& aEvent );
 
     ///< Leave the current group (deselect its members and select the group as a whole).
-    int LeaveGroup( const TOOL_EVENT& aEvent );
+    virtual int LeaveGroup( const TOOL_EVENT& aEvent );
 
-private:
+protected:
     ///< Set up handlers for various events.
     void setTransitions() override;
 
-    PCB_BASE_EDIT_FRAME*          m_frame;
-    DIALOG_GROUP_PROPERTIES*      m_propertiesDialog;
-    PCB_SELECTION_TOOL*           m_selectionTool;
-    std::unique_ptr<BOARD_COMMIT> m_commit;
+    ///< Subclasses implement to provide correct *_COMMIT object type
+    virtual std::unique_ptr<COMMIT> createCommit() = 0;
+
+    EDA_DRAW_FRAME*          m_frame = nullptr;
+    DIALOG_GROUP_PROPERTIES* m_propertiesDialog = nullptr;
+    SELECTION_TOOL*          m_selectionTool = nullptr;
+    std::unique_ptr<COMMIT>  m_commit = nullptr;
+    bool                     m_isFootprintEditor = false;
 };
 
 #endif

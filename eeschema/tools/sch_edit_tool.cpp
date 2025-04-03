@@ -38,6 +38,7 @@
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
 #include <sch_commit.h>
+#include <sch_group.h>
 #include <sch_junction.h>
 #include <sch_marker.h>
 #include <sch_rule_area.h>
@@ -414,6 +415,7 @@ bool SCH_EDIT_TOOL::Init()
                 case SCH_FIELD_T:
                 case SCH_SHAPE_T:
                 case SCH_BITMAP_T:
+                case SCH_GROUP_T:
                     return aSel.GetSize() == 1;
 
                 case SCH_LINE_T:
@@ -2395,6 +2397,12 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     case SCH_NO_CONNECT_T:
     case SCH_PIN_T:
+        break;
+
+    case SCH_GROUP_T:
+        m_toolMgr->RunAction( ACTIONS::groupProperties,
+                              static_cast<EDA_GROUP*>( static_cast<SCH_GROUP*>( curr_item ) ) );
+
         break;
 
     default:                // Unexpected item

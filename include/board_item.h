@@ -316,8 +316,8 @@ public:
     virtual bool IsKnockout() const { return m_isKnockout; }
     virtual void SetIsKnockout( bool aKnockout ) { m_isKnockout = aKnockout; }
 
-    virtual bool IsLocked() const;
-    virtual void SetLocked( bool aLocked ) { m_isLocked = aLocked; }
+    bool IsLocked() const override;
+    void SetLocked( bool aLocked ) override { m_isLocked = aLocked; }
 
     virtual void StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings ) { }
 

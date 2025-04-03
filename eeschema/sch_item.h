@@ -277,9 +277,6 @@ public:
     const SYMBOL* GetParentSymbol() const;
     SYMBOL* GetParentSymbol();
 
-    virtual bool IsLocked() const { return false; }
-    virtual void SetLocked( bool aLocked ) {}
-
     /**
      * Allow items to support hypertext actions when hovered/clicked.
      */

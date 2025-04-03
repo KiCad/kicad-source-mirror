@@ -391,13 +391,13 @@ set( PCBNEW_CLASS_SRCS
     tools/edit_tool_move_fct.cpp
     tools/pcb_edit_table_tool.cpp
     tools/global_edit_tool.cpp
-    tools/group_tool.cpp
     tools/footprint_editor_control.cpp
     tools/footprint_chooser_selection_tool.cpp
     tools/item_modification_routine.cpp
     tools/pad_tool.cpp
     tools/pcb_control.cpp
     tools/pcb_design_block_control.cpp
+    tools/pcb_group_tool.cpp
     tools/pcb_picker_tool.cpp
     tools/pcb_selection.cpp
     tools/pcb_selection_conditions.cpp

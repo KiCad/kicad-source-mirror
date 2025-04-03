@@ -23,7 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "thread_pool.h"
 #include <macros.h>
 #include <board.h>
 #include <footprint.h>

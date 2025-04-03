@@ -1264,20 +1264,6 @@ public:
      */
     wxString GroupsSanityCheckInternal( bool repair );
 
-    struct GroupLegalOpsField
-    {
-        bool create      : 1;
-        bool ungroup     : 1;
-        bool removeItems : 1;
-    };
-
-    /**
-     * Check which selection tool group operations are legal given the selection.
-     *
-     * @return bit field of legal ops.
-     */
-    GroupLegalOpsField GroupLegalOps( const PCB_SELECTION& selection ) const;
-
     bool LegacyTeardrops() const { return m_legacyTeardrops; }
     void SetLegacyTeardrops( bool aFlag ) { m_legacyTeardrops = aFlag; }
 

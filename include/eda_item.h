@@ -113,6 +113,9 @@ public:
     virtual void SetParentGroup( EDA_GROUP* aGroup ) { m_group = aGroup; }
     EDA_GROUP*   GetParentGroup() const { return m_group; }
 
+    virtual bool IsLocked() const { return false; }
+    virtual void SetLocked( bool aLocked ) {}
+
     inline bool IsModified() const { return m_flags & IS_CHANGED; }
     inline bool IsNew() const { return m_flags & IS_NEW; }
     inline bool IsMoving() const { return m_flags & IS_MOVING; }

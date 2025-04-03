@@ -2855,35 +2855,6 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
 }
 
 
-BOARD::GroupLegalOpsField BOARD::GroupLegalOps( const PCB_SELECTION& selection ) const
-{
-    bool hasGroup = false;
-    bool hasMember = false;
-
-    for( EDA_ITEM* item : selection )
-    {
-        if( item->IsBOARD_ITEM() )
-        {
-            BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( item );
-
-            if( board_item->Type() == PCB_GROUP_T )
-                hasGroup = true;
-
-            if( board_item->GetParentGroup() )
-                hasMember = true;
-        }
-    }
-
-    GroupLegalOpsField legalOps;
-
-    legalOps.create      = true;
-    legalOps.removeItems = hasMember;
-    legalOps.ungroup     = hasGroup;
-
-    return legalOps;
-}
-
-
 bool BOARD::cmp_items::operator() ( const BOARD_ITEM* a, const BOARD_ITEM* b ) const
 {
     if( a->Type() != b->Type() )

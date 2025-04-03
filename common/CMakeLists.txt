@@ -665,6 +665,7 @@ set( COMMON_SRCS
     tool/embed_tool.cpp
     tool/grid_helper.cpp
     tool/grid_menu.cpp
+    tool/group_tool.cpp
     tool/library_editor_control.cpp
     tool/picker_tool.cpp
     tool/point_editor_behavior.cpp
