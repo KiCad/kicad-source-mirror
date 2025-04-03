@@ -264,6 +264,16 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
                     point -= shape->GetPosition();
             }
 
+            //Basic sort of start/end points to try to always draw the same direction (left to right, down to up)
+            //The hashes are summed, so it doesn't matter what order the lines are drawn, only that the same points are used
+            if( points.size() > 1 )
+            {
+                if( points[0].x > points[1].x || points[0].y > points[1].y )
+                {
+                    std::swap( points[0], points[1] );
+                }
+            }
+
             for( VECTOR2I& point : points )
                 hash_combine( ret, point.x, point.y );
         }
