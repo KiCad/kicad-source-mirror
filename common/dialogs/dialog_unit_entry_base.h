@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,9 +21,11 @@
 #include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 
 ///////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class WX_UNIT_ENTRY_DIALOG_BASE
@@ -64,9 +66,14 @@ class WX_PT_ENTRY_DIALOG_BASE : public DIALOG_SHIM
 		wxStaticText* m_labelY;
 		wxTextCtrl* m_textCtrlY;
 		wxStaticText* m_unitsY;
+		wxButton* m_ButtonReset;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
+
+		// Virtual event handlers, override them in your derived class
+		virtual void ResetValues( wxCommandEvent& event ) { event.Skip(); }
+
 
 	public:
 

@@ -50,11 +50,13 @@ int WX_UNIT_ENTRY_DIALOG::GetValue()
 
 WX_PT_ENTRY_DIALOG::WX_PT_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aCaption,
                                         const wxString& aLabelX, const wxString& aLabelY,
-                                        const VECTOR2I& aDefaultValue ) :
+                                        const VECTOR2I& aDefaultValue, bool aShowResetButt ) :
         WX_PT_ENTRY_DIALOG_BASE( ( wxWindow* ) aParent, wxID_ANY, aCaption ),
         m_unit_binder_x( aParent, m_labelX, m_textCtrlX, m_unitsX, true ),
         m_unit_binder_y( aParent, m_labelY, m_textCtrlY, m_unitsY, true )
 {
+    m_ButtonReset->Show( aShowResetButt );
+
     m_labelX->SetLabel( aLabelX );
     m_labelY->SetLabel( aLabelY );
 
@@ -67,12 +69,17 @@ WX_PT_ENTRY_DIALOG::WX_PT_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxString&
     SetInitialFocus( m_textCtrlX );
     SetupStandardButtons();
 
-	Layout();
-	bSizerMain->Fit( this );
+	finishDialogSettings();
 }
 
 
 VECTOR2I WX_PT_ENTRY_DIALOG::GetValue()
 {
     return VECTOR2I( m_unit_binder_x.GetIntValue(), m_unit_binder_y.GetIntValue() );
+}
+
+void WX_PT_ENTRY_DIALOG::ResetValues( wxCommandEvent& event )
+{
+    m_unit_binder_x.SetValue( 0 );
+    m_unit_binder_y.SetValue( 0 );
 }
