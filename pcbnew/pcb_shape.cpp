@@ -697,7 +697,7 @@ std::vector<int> PCB_SHAPE::ViewGetLayers() const
         }
     }
 
-    if( IsLocked() )
+    if( IsLocked() || ( GetParentFootprint() && GetParentFootprint()->IsLocked() ) )
         layers.push_back( LAYER_LOCKED_ITEM_SHADOW );
 
     return layers;

@@ -2235,9 +2235,6 @@ std::vector<int> FOOTPRINT::ViewGetLayers() const
         break;
     }
 
-    if( IsLocked() )
-        layers.push_back( LAYER_LOCKED_ITEM_SHADOW );
-
     if( IsConflicting() )
         layers.push_back( LAYER_CONFLICTS_SHADOW );
 
@@ -2270,18 +2267,6 @@ std::vector<int> FOOTPRINT::ViewGetLayers() const
 
 double FOOTPRINT::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
 {
-    if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
-    {
-        // The locked shadow shape is shown only if the footprint itself is visible
-        if( ( m_layer == F_Cu ) && aView->IsLayerVisible( LAYER_FOOTPRINTS_FR ) )
-            return LOD_SHOW;
-
-        if( ( m_layer == B_Cu ) && aView->IsLayerVisible( LAYER_FOOTPRINTS_BK ) )
-            return LOD_SHOW;
-
-        return LOD_HIDE;
-    }
-
     if( aLayer == LAYER_CONFLICTS_SHADOW && IsConflicting() )
     {
         // The locked shadow shape is shown only if the footprint itself is visible

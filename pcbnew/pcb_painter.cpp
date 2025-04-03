@@ -201,9 +201,11 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
     int netCode = -1;
     int originalLayer = aLayer;
 
-    // Marker shadows
     if( aLayer == LAYER_MARKER_SHADOWS )
         return m_backgroundColor.WithAlpha( 0.6 );
+
+    if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
+        return m_layerColors.at( aLayer );
 
     // SMD pads use the copper netname layer
     if( aLayer == LAYER_PAD_FR_NETNAMES )
@@ -297,10 +299,10 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
 
     // Some graphic objects are BOARD_CONNECTED_ITEM, but they are seen here as
     // actually board connected objects only if on a copper layer
-    const BOARD_CONNECTED_ITEM* conItem =
-            aItem->IsConnected() && aItem->IsOnCopperLayer()
-                    ? static_cast<const BOARD_CONNECTED_ITEM*>( aItem )
-                    : nullptr;
+    const BOARD_CONNECTED_ITEM* conItem = nullptr;
+
+    if( aItem->IsConnected() && aItem->IsOnCopperLayer() )
+        conItem = static_cast<const BOARD_CONNECTED_ITEM*>( aItem );
 
     // Try to obtain the netcode for the aItem
     if( conItem )
@@ -1461,6 +1463,28 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
     if( m_pcbSettings.m_ForcePadSketchModeOn )
         outline_mode = true;
 
+    bool drawShape = false;
+
+    if( m_pcbSettings.IsPrinting() )
+    {
+        drawShape = aPad->FlashLayer( m_pcbSettings.GetPrintLayers() );
+    }
+    else if( ( aLayer < PCB_LAYER_ID_COUNT || IsPadCopperLayer( aLayer ) )
+             && aPad->FlashLayer( pcbLayer ) )
+    {
+        drawShape = true;
+    }
+    else if( aPad->IsSelected() )
+    {
+        drawShape = true;
+        outline_mode = true;
+    }
+    else if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
+    {
+        drawShape = true;
+        outline_mode = false;
+    }
+
     if( outline_mode )
     {
         // Outline mode
@@ -1477,8 +1501,6 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         m_gal->SetFillColor( color );
     }
 
-    bool drawShape = false;
-
     if( aLayer == LAYER_PAD_PLATEDHOLES || aLayer == LAYER_NON_PLATEDHOLES )
     {
         SHAPE_SEGMENT slot = getPadHoleShape( aPad );
@@ -1488,50 +1510,51 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         else
             m_gal->DrawSegment( slot.GetSeg().A, slot.GetSeg().B, slot.GetWidth() );
     }
-    else if( m_pcbSettings.IsPrinting() )
-    {
-        drawShape = aPad->FlashLayer( m_pcbSettings.GetPrintLayers() );
-    }
-    else if( ( aLayer < PCB_LAYER_ID_COUNT || IsPadCopperLayer( aLayer ) )
-             && aPad->FlashLayer( pcbLayer ) )
-    {
-        drawShape = true;
-    }
-    else if( aPad->IsSelected() )
-    {
-        drawShape = true;
-        outline_mode = true;
-    }
-
-    if( outline_mode )
-    {
-        // Outline mode
-        m_gal->SetIsFill( false );
-        m_gal->SetIsStroke( true );
-        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-        m_gal->SetStrokeColor( color );
-    }
-
-    if( drawShape )
+    else if( drawShape )
     {
         VECTOR2I pad_size = aPad->GetSize( pcbLayer );
         VECTOR2I margin;
 
-        switch( aLayer )
+        auto getExpansion =
+                [&]( PCB_LAYER_ID layer )
+                {
+                    VECTOR2I expansion;
+
+                    switch( aLayer )
+                    {
+                    case F_Mask:
+                    case B_Mask:
+                        expansion.x = expansion.y = aPad->GetSolderMaskExpansion( layer );
+                        break;
+
+                    case F_Paste:
+                    case B_Paste:
+                        expansion = aPad->GetSolderPasteMargin( layer );
+                        break;
+
+                    default:
+                        expansion.x = expansion.y = 0;
+                        break;
+                    }
+
+                    return expansion;
+                };
+
+        if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
         {
-        case F_Mask:
-        case B_Mask:
-            margin.x = margin.y = aPad->GetSolderMaskExpansion( pcbLayer );
-            break;
+            LSET visibleLayers = aPad->GetBoard()->GetVisibleLayers()
+                                        & aPad->GetBoard()->GetEnabledLayers()
+                                        & aPad->GetLayerSet();
 
-        case F_Paste:
-        case B_Paste:
-            margin = aPad->GetSolderPasteMargin( pcbLayer );
-            break;
+            for( PCB_LAYER_ID layer : visibleLayers )
+                margin = std::max( margin, getExpansion( layer ) );
 
-        default:
-            margin.x = margin.y = 0;
-            break;
+            margin.x += m_lockedShadowMargin / 2;
+            margin.y += m_lockedShadowMargin / 2;
+        }
+        else
+        {
+            margin = getExpansion( pcbLayer );
         }
 
         std::unique_ptr<PAD>            dummyPad;

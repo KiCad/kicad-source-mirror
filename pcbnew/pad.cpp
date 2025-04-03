@@ -1692,6 +1692,10 @@ std::vector<int> PAD::ViewGetLayers() const
     if( m_attribute == PAD_ATTRIB::NPTH )
         layers.push_back( LAYER_NON_PLATEDHOLES );
 
+
+    if( IsLocked() || ( GetParentFootprint() && GetParentFootprint()->IsLocked() ) )
+        layers.push_back( LAYER_LOCKED_ITEM_SHADOW );
+
     LSET cuLayers = ( m_padStack.LayerSet() & LSET::AllCuMask() );
 
     // Don't spend cycles rendering layers that aren't visible
