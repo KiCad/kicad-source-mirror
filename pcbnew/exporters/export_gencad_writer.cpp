@@ -928,12 +928,25 @@ void GENCAD_EXPORTER::CreateRoutesSection()
     std::sort( tracks.begin(), tracks.end(),
             []( const PCB_TRACK* a, const PCB_TRACK* b )
             {
+                int widthA = 0;
+                int widthB = 0;
+
+                if( a->Type() == PCB_VIA_T )
+                    widthA = static_cast<const PCB_VIA*>( a )->GetWidth( PADSTACK::ALL_LAYERS );
+                else
+                    widthA = a->GetWidth();
+
+                if( b->Type() == PCB_VIA_T )
+                    widthB = static_cast<const PCB_VIA*>( b )->GetWidth( PADSTACK::ALL_LAYERS );
+                else
+                    widthB = b->GetWidth();
+
                 if( a->GetNetCode() == b->GetNetCode() )
                 {
-                    if( a->GetWidth() == b->GetWidth() )
+                    if( widthA == widthB )
                         return ( a->GetLayer() < b->GetLayer() );
 
-                    return ( a->GetWidth() < b->GetWidth() );
+                    return ( widthA < widthB );
                 }
 
                 return ( a->GetNetCode() < b->GetNetCode() );
@@ -959,10 +972,17 @@ void GENCAD_EXPORTER::CreateRoutesSection()
             fprintf( m_file, "ROUTE \"%s\"\n", TO_UTF8( escapeString( netname ) ) );
         }
 
-        if( old_width != track->GetWidth() )
+        int currentWidth = 0;
+
+        if( track->Type() == PCB_VIA_T )
+            currentWidth = static_cast<const PCB_VIA*>( track )->GetWidth( PADSTACK::ALL_LAYERS );
+        else
+            currentWidth = track->GetWidth();
+
+        if( old_width != currentWidth )
         {
-            old_width = track->GetWidth();
-            fprintf( m_file, "TRACK TRACK%d\n", track->GetWidth() );
+            old_width = currentWidth;
+            fprintf( m_file, "TRACK TRACK%d\n", currentWidth );
         }
 
         if( track->Type() == PCB_TRACE_T )
@@ -981,7 +1001,7 @@ void GENCAD_EXPORTER::CreateRoutesSection()
 
         if( track->Type() == PCB_VIA_T )
         {
-            const PCB_VIA* via = static_cast<const PCB_VIA*>(track);
+            const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
 
             LSET vset = via->GetLayerSet() & master_layermask;
 
@@ -1081,7 +1101,12 @@ void GENCAD_EXPORTER::CreateTracksInfoData()
     std::set<int> trackinfo;
 
     for( PCB_TRACK* track : m_board->Tracks() )
+    {
+        if( track->Type() == PCB_VIA_T )
+            continue;
+
         trackinfo.insert( track->GetWidth() );
+    }
 
     // Write data
     fputs( "$TRACKS\n", m_file );
