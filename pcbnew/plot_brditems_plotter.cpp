@@ -648,6 +648,21 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
             break;
         }
 
+        case PCB_TABLE_T:
+        {
+            const PCB_TABLE* table = static_cast<const PCB_TABLE*>( item );
+
+            m_plotter->SetTextMode( PLOT_TEXT_MODE::STROKE );
+
+            for( const PCB_TABLECELL* cell : table->GetCells() )
+                PlotText( cell, cell->GetLayer(), cell->IsKnockout(), cell->GetFontMetrics() );
+
+            PlotTableBorders( table );
+
+            m_plotter->SetTextMode( GetTextMode() );
+            break;
+        }
+
         case PCB_DIM_ALIGNED_T:
         case PCB_DIM_CENTER_T:
         case PCB_DIM_RADIAL_T:
