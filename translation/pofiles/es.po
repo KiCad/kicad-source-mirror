@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-04-04 00:32+0000\n"
+"PO-Revision-Date: 2025-04-04 12:49+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v9/es/>\n"
 "Language: es\n"
@@ -5731,7 +5731,7 @@ msgstr "Comentario"
 #: common/drawing_sheet/ds_draw_item.cpp:242
 #, c-format
 msgid "Text '%s'"
-msgstr "Texto '%s'"
+msgstr "Texto «%s»"
 
 #: common/drawing_sheet/ds_draw_item.cpp:439 eeschema/sch_shape.cpp:537
 #, c-format
