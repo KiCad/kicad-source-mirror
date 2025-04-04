@@ -161,7 +161,7 @@ bool primitiveNeedsUpdate( const std::shared_ptr<PCB_SHAPE>& a,
 
         // Arc center is calculated and so may have round-off errors when parents are
         // differentially rotated.
-        if( ( a->GetCenter() - b->GetCenter() ).EuclideanNorm() > pcbIUScale.mmToIU( 0.0005 ) )
+        if( ( a->GetArcMid() - b->GetArcMid() ).EuclideanNorm() > pcbIUScale.mmToIU( 0.0005 ) )
             return true;
 
         break;
@@ -448,7 +448,7 @@ bool shapeNeedsUpdate( const PCB_SHAPE& curr_shape, const PCB_SHAPE& ref_shape )
 
         // Arc center is calculated and so may have round-off errors when parents are
         // differentially rotated.
-        if( ( curr_shape.GetCenter() - ref_shape.GetCenter() ).EuclideanNorm() > pcbIUScale.mmToIU( 0.0005 ) )
+        if( ( curr_shape.GetArcMid() - ref_shape.GetArcMid() ).EuclideanNorm() > pcbIUScale.mmToIU( 0.0005 ) )
             return true;
 
         break;
