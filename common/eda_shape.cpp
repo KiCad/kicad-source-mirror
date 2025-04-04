@@ -2005,7 +2005,7 @@ int EDA_SHAPE::Compare( const EDA_SHAPE* aOther ) const
 
     if( m_shape == SHAPE_T::ARC )
     {
-        TEST_PT( m_arcCenter, aOther->m_arcCenter );
+        TEST_PT( GetArcMid(), aOther->GetArcMid() );
     }
     else if( m_shape == SHAPE_T::BEZIER )
     {
