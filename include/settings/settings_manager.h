@@ -101,7 +101,7 @@ public:
      * @return a pointer to a loaded settings object.
      */
     template<typename T>
-    T* GetAppSettings( const wxString& aFilename )
+    T* GetAppSettings( const char* aFilename )
     {
         std::lock_guard lock( m_app_settings_mutex );
 
