@@ -416,7 +416,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
                 }
 
                 copy->SetLocked( false );
-                copy->SetParent( nullptr );
+                copy->SetParent( m_board );
                 copy->SetParentGroup( nullptr );
 
                 // locate the reference point at (0, 0) in the copied items
