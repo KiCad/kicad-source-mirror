@@ -933,18 +933,19 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
 
 
 /**
- * Add a knockout for a pad.  The knockout is 'aGap' larger than the pad (which might be
+ * Add a knockout for a pad or via.  The knockout is 'aGap' larger than the pad (which might be
  * either the thermal clearance or the electrical clearance).
  */
-void ZONE_FILLER::addKnockout( PAD* aPad, PCB_LAYER_ID aLayer, int aGap, SHAPE_POLY_SET& aHoles )
+void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap, SHAPE_POLY_SET& aHoles )
 {
-    if( aPad->GetShape( aLayer ) == PAD_SHAPE::CUSTOM )
+    if( aItem->Type() == PCB_PAD_T && static_cast<PAD*>( aItem )->GetShape( aLayer ) == PAD_SHAPE::CUSTOM )
     {
+        PAD* pad = static_cast<PAD*>( aItem );
         SHAPE_POLY_SET poly;
-        aPad->TransformShapeToPolygon( poly, aLayer, aGap, m_maxError, ERROR_OUTSIDE );
+        pad->TransformShapeToPolygon( poly, aLayer, aGap, m_maxError, ERROR_OUTSIDE );
 
         // the pad shape in zone can be its convex hull or the shape itself
-        if( aPad->GetCustomShapeInZoneOpt() == PADSTACK::CUSTOM_SHAPE_ZONE_MODE::CONVEXHULL )
+        if( pad->GetCustomShapeInZoneOpt() == PADSTACK::CUSTOM_SHAPE_ZONE_MODE::CONVEXHULL )
         {
             std::vector<VECTOR2I> convex_hull;
             BuildConvexHull( convex_hull, poly );
@@ -959,7 +960,7 @@ void ZONE_FILLER::addKnockout( PAD* aPad, PCB_LAYER_ID aLayer, int aGap, SHAPE_P
     }
     else
     {
-        aPad->TransformShapeToPolygon( aHoles, aLayer, aGap, m_maxError, ERROR_OUTSIDE );
+        aItem->TransformShapeToPolygon( aHoles, aLayer, aGap, m_maxError, ERROR_OUTSIDE );
     }
 }
 
@@ -970,6 +971,28 @@ void ZONE_FILLER::addKnockout( PAD* aPad, PCB_LAYER_ID aLayer, int aGap, SHAPE_P
 void ZONE_FILLER::addHoleKnockout( PAD* aPad, int aGap, SHAPE_POLY_SET& aHoles )
 {
     aPad->TransformHoleToPolygon( aHoles, aGap, m_maxError, ERROR_OUTSIDE );
+}
+
+
+int getHatchFillThermalClearance( const ZONE* aZone, BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
+{
+    int minorAxis = 0;
+
+    if( aItem->Type() == PCB_PAD_T )
+    {
+        PAD*     pad = static_cast<PAD*>( aItem );
+        VECTOR2I padSize = pad->GetSize( aLayer );
+
+        minorAxis = std::min( padSize.x, padSize.y );
+    }
+    else if( aItem->Type() == PCB_VIA_T )
+    {
+        PCB_VIA* via = static_cast<PCB_VIA*>( aItem );
+
+        minorAxis = via->GetWidth( aLayer );
+    }
+
+    return ( aZone->GetHatchGap() - aZone->GetHatchThickness() - minorAxis ) / 2;
 }
 
 
@@ -1039,7 +1062,7 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
  */
 void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer,
                                           SHAPE_POLY_SET& aFill,
-                                          std::vector<PAD*>& aThermalConnectionPads,
+                                          std::vector<BOARD_ITEM*>& aThermalConnectionPads,
                                           std::vector<PAD*>& aNoConnectionPads )
 {
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
@@ -1075,6 +1098,17 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
             {
                 // collect these for knockout in buildCopperItemClearances()
                 aNoConnectionPads.push_back( pad );
+                continue;
+            }
+
+            // We put thermal reliefs on all connected items in a hatch fill zone as a way of
+            // guaranteeing that they connect to the webbing.  (The thermal gap is the hatch
+            // gap minus the pad/via size, making it impossible for the pad/via to be isolated
+            // within the center of a hole.)
+            if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
+            {
+                aThermalConnectionPads.push_back( pad );
+                addKnockout( pad, aLayer, getHatchFillThermalClearance( aZone, pad, aLayer ), holes );
                 continue;
             }
 
@@ -1139,6 +1173,34 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
             default:
                 // No knockout
                 continue;
+            }
+        }
+    }
+
+    // We put thermal reliefs on all connected items in a hatch fill zone as a way of guaranteeing
+    // that they connect to the webbing.  (The thermal gap is the hatch gap minus the pad/via size,
+    // making it impossible for the pad/via to be isolated within the center of a hole.)
+    if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
+    {
+        for( PCB_TRACK* track : m_board->Tracks() )
+        {
+            if( track->Type() == PCB_VIA_T )
+            {
+                PCB_VIA* via = static_cast<PCB_VIA*>( track );
+
+                BOX2I viaBBox = via->GetBoundingBox();
+                viaBBox.Inflate( m_worstClearance );
+
+                if( !viaBBox.Intersects( aZone->GetBoundingBox() ) )
+                    continue;
+
+                bool noConnection = via->GetNetCode() != aZone->GetNetCode();
+
+                if( noConnection )
+                    continue;
+
+                aThermalConnectionPads.push_back( via );
+                addKnockout( via, aLayer, getHatchFillThermalClearance( aZone, via, aLayer ), holes );
             }
         }
     }
@@ -1680,7 +1742,7 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
     CORNER_STRATEGY fastCornerStrategy = CORNER_STRATEGY::CHAMFER_ALL_CORNERS;
     CORNER_STRATEGY cornerStrategy = CORNER_STRATEGY::ROUND_ALL_CORNERS;
 
-    std::vector<PAD*>            thermalConnectionPads;
+    std::vector<BOARD_ITEM*>     thermalConnectionPads;
     std::vector<PAD*>            noConnectionPads;
     std::deque<SHAPE_LINE_CHAIN> thermalSpokes;
     SHAPE_POLY_SET               clearanceHoles;
@@ -1869,8 +1931,11 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
      * islands
      */
 
-    for( PAD* pad : thermalConnectionPads )
-        addHoleKnockout( pad, 0, clearanceHoles );
+    for( BOARD_ITEM* item : thermalConnectionPads )
+    {
+        if( item->Type() == PCB_PAD_T )
+            addHoleKnockout( static_cast<PAD*>( item ), 0, clearanceHoles );
+    }
 
     aFillPolys.BooleanIntersection( aMaxExtents );
     DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In16_Cu, wxT( "after-trim-to-outline" ) );
@@ -2047,7 +2112,7 @@ bool ZONE_FILLER::fillSingleZone( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_S
  * Function buildThermalSpokes
  */
 void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
-                                      const std::vector<PAD*>& aSpokedPadsList,
+                                      const std::vector<BOARD_ITEM*>& aSpokedPadsList,
                                       std::deque<SHAPE_LINE_CHAIN>& aSpokesList )
 {
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
@@ -2061,36 +2126,80 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
     // The boundary may be off by MaxError
     int epsilon = bds.m_MaxError;
 
-    for( PAD* pad : aSpokedPadsList )
+    for( BOARD_ITEM* item : aSpokedPadsList )
     {
         // We currently only connect to pads, not pad holes
-        if( !pad->IsOnLayer( aLayer ) )
+        if( !item->IsOnLayer( aLayer ) )
             continue;
 
-        constraint = bds.m_DRCEngine->EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, pad, aZone, aLayer );
-        int thermalReliefGap = constraint.GetValue().Min();
+        int       thermalReliefGap = 0;
+        int       spoke_w = 0;
+        PAD*      pad = nullptr;
+        PCB_VIA*  via = nullptr;
+        bool      circular = false;
 
-        constraint = bds.m_DRCEngine->EvalRules( THERMAL_SPOKE_WIDTH_CONSTRAINT, pad, aZone, aLayer );
-        int spoke_w = constraint.GetValue().Opt();
+        if( item->Type() == PCB_PAD_T )
+        {
+            pad = static_cast<PAD*>( item );
+            VECTOR2I padSize = pad->GetSize( aLayer );
 
-        // Spoke width should ideally be smaller than the pad minor axis.
-        // Otherwise the thermal shape is not really a thermal relief,
-        // and the algo to count the actual number of spokes can fail
-        int spoke_max_allowed_w = std::min( pad->GetSize( aLayer ).x, pad->GetSize( aLayer ).y );
+            if( pad->GetShape( aLayer) == PAD_SHAPE::CIRCLE
+                    || ( pad->GetShape( aLayer ) == PAD_SHAPE::OVAL && padSize.x == padSize.y ) )
+            {
+                circular = true;
+            }
+        }
+        else if( item->Type() == PCB_VIA_T )
+        {
+            via = static_cast<PCB_VIA*>( item );
+            circular = true;
+        }
 
-        spoke_w = std::clamp( spoke_w, constraint.Value().Min(), constraint.Value().Max() );
+        // Thermal connections in a hatched zone are based on the hatch.  Their primary function is to
+        // guarantee that pads/vias connect to the webbing.  (The thermal gap is the hatch gap width minus
+        // the pad/via size, making it impossible for the pad/via to be isolated within the center of a
+        // hole.)
 
-        // ensure the spoke width is smaller than the pad minor size
-        spoke_w = std::min( spoke_w, spoke_max_allowed_w );
+        if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
+        {
+            spoke_w = aZone->GetHatchThickness();
+            thermalReliefGap = getHatchFillThermalClearance( aZone, item, aLayer );
 
-        // Cannot create stubs having a width < zone min thickness
-        if( spoke_w < aZone->GetMinThickness() )
+            if( thermalReliefGap < 0 )
+                continue;
+        }
+        else if( pad )
+        {
+            constraint = bds.m_DRCEngine->EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, pad, aZone, aLayer );
+            thermalReliefGap = constraint.GetValue().Min();
+
+            constraint = bds.m_DRCEngine->EvalRules( THERMAL_SPOKE_WIDTH_CONSTRAINT, pad, aZone, aLayer );
+            spoke_w = constraint.GetValue().Opt();
+
+            // Spoke width should ideally be smaller than the pad minor axis.
+            // Otherwise the thermal shape is not really a thermal relief,
+            // and the algo to count the actual number of spokes can fail
+            int spoke_max_allowed_w = std::min( pad->GetSize( aLayer ).x, pad->GetSize( aLayer ).y );
+
+            spoke_w = std::clamp( spoke_w, constraint.Value().Min(), constraint.Value().Max() );
+
+            // ensure the spoke width is smaller than the pad minor size
+            spoke_w = std::min( spoke_w, spoke_max_allowed_w );
+
+            // Cannot create stubs having a width < zone min thickness
+            if( spoke_w < aZone->GetMinThickness() )
+                continue;
+        }
+        else
+        {
+            // We don't currently support via thermal connections *except* in a hatched zone.
             continue;
+        }
 
         int spoke_half_w = spoke_w / 2;
 
         // Quick test here to possibly save us some work
-        BOX2I itemBB = pad->GetBoundingBox();
+        BOX2I itemBB = item->GetBoundingBox();
         itemBB.Inflate( thermalReliefGap + epsilon );
 
         if( !( itemBB.Intersects( zoneBB ) ) )
@@ -2098,7 +2207,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
 
         bool customSpokes = false;
 
-        if( pad->GetShape( aLayer ) == PAD_SHAPE::CUSTOM )
+        if( pad && pad->GetShape( aLayer ) == PAD_SHAPE::CUSTOM )
         {
             for( const std::shared_ptr<PCB_SHAPE>& primitive : pad->GetPrimitives( aLayer ) )
             {
@@ -2259,18 +2368,44 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
         }
         else
         {
+            EDA_ANGLE thermalSpokeAngle;
+
+            if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
+                thermalSpokeAngle = aZone->GetHatchOrientation();
+            else if( pad )
+                thermalSpokeAngle = pad->GetThermalSpokeAngle();
+
+            BOX2I     spokesBox;
+            VECTOR2I  position;
+            EDA_ANGLE orientation;
+
             // Since the bounding-box needs to be correclty rotated we use a dummy pad to keep
             // from dirtying the real pad's cached shapes.
-            PAD dummy_pad( *pad );
-            dummy_pad.SetOrientation( ANGLE_0 );
+            if( pad )
+            {
+                PAD dummy_pad( *pad );
+                dummy_pad.SetOrientation( ANGLE_0 );
 
-            // Spokes are from center of pad shape, not from hole. So the dummy pad has no shape
-            // offset and is at position 0,0
-            dummy_pad.SetPosition( VECTOR2I( 0, 0 ) );
-            dummy_pad.SetOffset( aLayer, VECTOR2I( 0, 0 ) );
+                // Spokes are from center of pad shape, not from hole. So the dummy pad has no shape
+                // offset and is at position 0,0
+                dummy_pad.SetPosition( VECTOR2I( 0, 0 ) );
+                dummy_pad.SetOffset( aLayer, VECTOR2I( 0, 0 ) );
 
-            BOX2I    spokesBox = dummy_pad.GetBoundingBox( aLayer );
-            VECTOR2I padSize = pad->GetSize( aLayer );
+                spokesBox = dummy_pad.GetBoundingBox( aLayer );
+                position = pad->ShapePos( aLayer );
+                orientation = pad->GetOrientation();
+
+                // Remove group membership from dummy item before deleting
+                dummy_pad.SetParentGroup( nullptr );
+            }
+            else if( via )
+            {
+                PCB_VIA dummy_via( *via );
+                dummy_via.SetPosition( VECTOR2I( 0, 0 ) );
+
+                spokesBox = dummy_via.GetBoundingBox( aLayer );
+                position = via->GetPosition();
+            }
 
             // Add the half width of the zone mininum width to the inflate amount to account for
             // the fact that the deflation procedure will shrink the results by half the half the
@@ -2280,33 +2415,29 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
             // This is a touchy case because the bounding box for circles overshoots the mark
             // when rotated at 45 degrees.  So we just build spokes at 0 degrees and rotate
             // them later.
-            if( pad->GetShape( aLayer ) == PAD_SHAPE::CIRCLE
-                    || ( pad->GetShape( aLayer ) == PAD_SHAPE::OVAL && padSize.x == padSize.y ) )
+            if( circular )
             {
                 buildSpokesFromOrigin( spokesBox, ANGLE_0 );
 
-                if( pad->GetThermalSpokeAngle() != ANGLE_0 )
+                if( thermalSpokeAngle != ANGLE_0 )
                 {
                     //Rotate the last four elements of aspokeslist
                     for( auto it = aSpokesList.rbegin(); it != aSpokesList.rbegin() + 4; ++it )
-                        it->Rotate( pad->GetThermalSpokeAngle() );
+                        it->Rotate( thermalSpokeAngle );
                 }
             }
             else
             {
-                buildSpokesFromOrigin( spokesBox, pad->GetThermalSpokeAngle() );
+                buildSpokesFromOrigin( spokesBox, thermalSpokeAngle );
             }
 
             auto spokeIter = aSpokesList.rbegin();
 
             for( int ii = 0; ii < 4; ++ii, ++spokeIter )
             {
-                spokeIter->Rotate( pad->GetOrientation() );
-                spokeIter->Move( pad->ShapePos( aLayer ) );
+                spokeIter->Rotate( orientation );
+                spokeIter->Move( position );
             }
-
-            // Remove group membership from dummy item before deleting
-            dummy_pad.SetParentGroup( nullptr );
         }
     }
 
@@ -2329,7 +2460,6 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
     int thickness = std::max( aZone->GetHatchThickness(),
                               aZone->GetMinThickness() + pcbIUScale.mmToIU( 0.001 ) );
 
-    int linethickness = thickness - aZone->GetMinThickness();
     int gridsize = thickness + aZone->GetHatchGap();
     int maxError = m_board->GetDesignSettings().m_MaxError;
 
@@ -2469,83 +2599,22 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
 
     DUMP_POLYS_TO_COPPER_LAYER( holes, In10_Cu, wxT( "hatch-holes" ) );
 
-    int outline_margin = aZone->GetMinThickness() * 1.1;
+    int deflated_thickness = aZone->GetHatchThickness() - aZone->GetMinThickness();
 
-    // Using GetHatchThickness() can look more consistent than GetMinThickness().
-    if( aZone->GetHatchBorderAlgorithm() && aZone->GetHatchThickness() > outline_margin )
-        outline_margin = aZone->GetHatchThickness();
+    // Don't let thickness drop below maxError * 2 or it might not get reinflated.
+    deflated_thickness = std::max( deflated_thickness, maxError * 2 );
 
     // The fill has already been deflated to ensure GetMinThickness() so we just have to
     // account for anything beyond that.
     SHAPE_POLY_SET deflatedFilledPolys = aFillPolys.CloneDropTriangulation();
-    deflatedFilledPolys.Deflate( outline_margin - aZone->GetMinThickness(),
-                                 CORNER_STRATEGY::CHAMFER_ALL_CORNERS, maxError );
+    deflatedFilledPolys.Deflate( deflated_thickness, CORNER_STRATEGY::CHAMFER_ALL_CORNERS, maxError );
     holes.BooleanIntersection( deflatedFilledPolys );
     DUMP_POLYS_TO_COPPER_LAYER( holes, In11_Cu, wxT( "fill-clipped-hatch-holes" ) );
 
     SHAPE_POLY_SET deflatedOutline = aZone->Outline()->CloneDropTriangulation();
-    deflatedOutline.Deflate( outline_margin, CORNER_STRATEGY::CHAMFER_ALL_CORNERS, maxError );
+    deflatedOutline.Deflate( aZone->GetMinThickness(), CORNER_STRATEGY::CHAMFER_ALL_CORNERS, maxError );
     holes.BooleanIntersection( deflatedOutline );
     DUMP_POLYS_TO_COPPER_LAYER( holes, In12_Cu, wxT( "outline-clipped-hatch-holes" ) );
-
-    if( aZone->GetNetCode() != 0 )
-    {
-        // Vias and pads connected to the zone must not be allowed to become isolated inside
-        // one of the holes.  Effectively this means their copper outline needs to be expanded
-        // to be at least as wide as the gap so that it is guaranteed to touch at least one
-        // edge.
-        BOX2I          zone_boundingbox = aZone->GetBoundingBox();
-        SHAPE_POLY_SET aprons;
-        int            min_apron_radius = ( aZone->GetHatchGap() * 10 ) / 19;
-
-        for( PCB_TRACK* track : m_board->Tracks() )
-        {
-            if( track->Type() == PCB_VIA_T )
-            {
-                PCB_VIA* via = static_cast<PCB_VIA*>( track );
-
-                if( via->GetNetCode() == aZone->GetNetCode()
-                    && via->IsOnLayer( aLayer )
-                    && via->GetBoundingBox().Intersects( zone_boundingbox ) )
-                {
-                    int r = std::max( min_apron_radius,
-                                      via->GetDrillValue() / 2 + outline_margin );
-
-                    TransformCircleToPolygon( aprons, via->GetPosition(), r, maxError,
-                                              ERROR_OUTSIDE );
-                }
-            }
-        }
-
-        for( FOOTPRINT* footprint : m_board->Footprints() )
-        {
-            for( PAD* pad : footprint->Pads() )
-            {
-                if( pad->GetNetCode() == aZone->GetNetCode()
-                    && pad->IsOnLayer( aLayer )
-                    && pad->GetBoundingBox().Intersects( zone_boundingbox ) )
-                {
-                    // What we want is to bulk up the pad shape so that the narrowest bit of
-                    // copper between the hole and the apron edge is at least outline_margin
-                    // wide (and that the apron itself meets min_apron_radius.  But that would
-                    // take a lot of code and math, and the following approximation is close
-                    // enough.
-                    int pad_width = std::min( pad->GetSize( aLayer ).x, pad->GetSize( aLayer ).y );
-                    int slot_width = std::min( pad->GetDrillSize().x, pad->GetDrillSize().y );
-                    int min_annular_ring_width = ( pad_width - slot_width ) / 2;
-                    int clearance = std::max( min_apron_radius - pad_width / 2,
-                                              outline_margin - min_annular_ring_width );
-
-                    clearance = std::max( 0, clearance - linethickness / 2 );
-                    pad->TransformShapeToPolygon( aprons, aLayer, clearance, maxError,
-                                                  ERROR_OUTSIDE );
-                }
-            }
-        }
-
-        holes.BooleanSubtract( aprons );
-    }
-    DUMP_POLYS_TO_COPPER_LAYER( holes, In13_Cu, wxT( "pad-via-clipped-hatch-holes" ) );
 
     // Now filter truncated holes to avoid small holes in pattern
     // It happens for holes near the zone outline

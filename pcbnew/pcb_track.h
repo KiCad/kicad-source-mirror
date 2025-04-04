@@ -448,6 +448,7 @@ public:
     void SetPadstack( const PADSTACK& aPadstack ) { m_padStack = aPadstack; }
 
     const BOX2I GetBoundingBox() const override;
+    const BOX2I GetBoundingBox( PCB_LAYER_ID aLayer ) const;
 
     void SetWidth( int aWidth ) override;
     int GetWidth() const override;

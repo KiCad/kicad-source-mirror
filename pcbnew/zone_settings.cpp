@@ -54,7 +54,7 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     m_HatchOrientation = ANGLE_0;   // Grid style: orientation of grid lines
     m_HatchSmoothingLevel = 0;      // Grid pattern smoothing type. 0 = no smoothing
     m_HatchSmoothingValue = 0.1;    // Grid pattern chamfer value relative to the gap value
-    m_HatchHoleMinArea = 0.3;       // Min size before holes are dropped (ratio of hole size)
+    m_HatchHoleMinArea = 0.15;      // Min size before holes are dropped (ratio of hole size)
     m_HatchBorderAlgorithm = 1;     // 0 = use zone min thickness; 1 = use hatch width
     m_NetcodeSelection = 0;         // Net code selection for the current zone
     m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE; // Option to show the zone

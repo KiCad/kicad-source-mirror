@@ -748,6 +748,25 @@ const BOX2I PCB_VIA::GetBoundingBox() const
 }
 
 
+const BOX2I PCB_VIA::GetBoundingBox( PCB_LAYER_ID aLayer ) const
+{
+    int radius = GetWidth( aLayer );
+
+    // via is round, this is its radius, rounded up
+    radius = ( radius + 1 ) / 2;
+
+    int ymax = m_Start.y + radius;
+    int xmax = m_Start.x + radius;
+
+    int ymin = m_Start.y - radius;
+    int xmin = m_Start.x - radius;
+
+    // return a rectangle which is [pos,dim) in nature.  therefore the +1
+    return BOX2ISafe( VECTOR2I( xmin, ymin ),
+                      VECTOR2L( (int64_t) xmax - xmin + 1, (int64_t) ymax - ymin + 1 ) );
+}
+
+
 double PCB_TRACK::GetLength() const
 {
     return m_Start.Distance( m_End );
