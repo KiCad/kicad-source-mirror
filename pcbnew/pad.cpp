@@ -1812,12 +1812,8 @@ double PAD::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
         }
     }
 
-    /*VECTOR2L padSize = GetShape( pcbLayer ) != PAD_SHAPE::CUSTOM
-                       ? VECTOR2L( GetSize( pcbLayer ) ) : GetBoundingBox().GetSize();*/
-
     VECTOR2L padSize = GetBoundingBox().GetSize();
-
-    int64_t minSide = std::min( padSize.x, padSize.y );
+    int64_t  minSide = std::min( padSize.x, padSize.y );
 
     if( minSide > 0 )
         return std::min( lodScaleForThreshold( aView, minSide, pcbIUScale.mmToIU( 0.2 ) ), 3.5 );
