@@ -1688,7 +1688,7 @@ double PCB_VIA::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
         }
 
         // The hole won't be visible anyway at this scale
-        return (double) pcbIUScale.mmToIU( 0.25 ) / GetDrillValue();
+        return lodScaleForThreshold( aView, GetDrillValue(), pcbIUScale.mmToIU( 0.25 ) );
     }
     else if( IsNetnameLayer( aLayer ) )
     {
