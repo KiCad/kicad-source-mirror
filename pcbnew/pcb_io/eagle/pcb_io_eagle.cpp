@@ -2495,7 +2495,7 @@ void PCB_IO_EAGLE::packageHole( FOOTPRINT* aFootprint, wxXmlNode* aTree, bool aC
     pad->SetDrillSize( sz );
     pad->SetSize( PADSTACK::ALL_LAYERS, sz );
 
-    pad->SetLayerSet( LSET::AllCuMask().set( B_Mask ).set( F_Mask ) );
+    pad->SetLayerSet( LSET( LSET::AllCuMask() ).set( B_Mask ).set( F_Mask ) );
 }
 
 

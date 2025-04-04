@@ -148,10 +148,10 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                 if( item->HasHole() )
                 {
                     if( layers.Contains( F_Cu ) )
-                        layers |= LSET::FrontBoardTechMask().set( F_CrtYd );
+                        layers |= LSET( LSET::FrontBoardTechMask() ).set( F_CrtYd );
 
                     if( layers.Contains( B_Cu ) )
-                        layers |= LSET::BackBoardTechMask().set( B_CrtYd );
+                        layers |= LSET( LSET::BackBoardTechMask() ).set( B_CrtYd );
 
                     if( layers.Contains( F_Cu ) && layers.Contains( B_Cu ) )
                         layers |= LSET::AllCuMask();
@@ -671,10 +671,10 @@ int DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aItem
             LSET layers = aItem->GetLayerSet();
 
             if( layers.Contains( F_Cu ) )
-                layers |= LSET::FrontBoardTechMask().set( F_CrtYd );
+                layers |= LSET( LSET::FrontBoardTechMask() ).set( F_CrtYd );
 
             if( layers.Contains( B_Cu ) )
-                layers |= LSET::BackBoardTechMask().set( B_CrtYd );
+                layers |= LSET( LSET::BackBoardTechMask() ).set( B_CrtYd );
 
             if( layers.Contains( F_Cu ) && layers.Contains( B_Cu ) )
                 layers |= LSET::AllCuMask();
@@ -694,10 +694,10 @@ int DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aItem
             LSET layers = aOther->GetLayerSet();
 
             if( layers.Contains( F_Cu ) )
-                layers |= LSET::FrontBoardTechMask().set( F_CrtYd );
+                layers |= LSET( LSET::FrontBoardTechMask() ).set( F_CrtYd );
 
             if( layers.Contains( B_Cu ) )
-                layers |= LSET::BackBoardTechMask().set( B_CrtYd );
+                layers |= LSET( LSET::BackBoardTechMask() ).set( B_CrtYd );
 
             if( layers.Contains( F_Cu ) && layers.Contains( B_Cu ) )
                 layers |= LSET::AllCuMask();

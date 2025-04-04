@@ -607,7 +607,7 @@ public:
      *
      * @return the enabled layers in bit-mapped form.
      */
-    LSET GetEnabledLayers() const;
+    const LSET& GetEnabledLayers() const;
     LSET GetLayerSet() const override { return GetEnabledLayers(); }
 
     /**
@@ -640,7 +640,7 @@ public:
      *
      * @return the visible layers in bit-mapped form.
      */
-    LSET  GetVisibleLayers() const;
+    const LSET& GetVisibleLayers() const;
 
     /**
      * A proxy function that calls the correspondent function in m_BoardSettings
