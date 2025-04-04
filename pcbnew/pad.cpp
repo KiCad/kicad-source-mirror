@@ -855,6 +855,13 @@ const BOX2I PAD::GetBoundingBox() const
 }
 
 
+// Thermal spokes are built on the bounding box, so we must have a layer-specific version
+const BOX2I PAD::GetBoundingBox( PCB_LAYER_ID aLayer ) const
+{
+    return buildEffectiveShape( aLayer ).BBox();
+}
+
+
 void PAD::SetAttribute( PAD_ATTRIB aAttribute )
 {
     if( m_attribute != aAttribute )

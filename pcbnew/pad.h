@@ -840,6 +840,7 @@ public:
      * The bounding box is cached, so this will be efficient most of the time.
      */
     const BOX2I GetBoundingBox() const override;
+    const BOX2I GetBoundingBox( PCB_LAYER_ID aLayer ) const;
 
     /**
      * Compare two pads and return 0 if they are equal.
