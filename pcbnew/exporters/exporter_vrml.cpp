@@ -1110,7 +1110,7 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
             aOutputFile->precision( m_precision );
 
             wxFileName srcFile =
-                    m_Cache3Dmodels->GetResolver()->ResolvePath( sM->m_Filename, wxEmptyString, aFootprint );
+                    m_Cache3Dmodels->GetResolver()->ResolvePath( sM->m_Filename, footprintBasePath, aFootprint );
             wxFileName dstFile;
             dstFile.SetPath( m_Subdir3DFpModels );
             dstFile.SetName( srcFile.GetName() );
