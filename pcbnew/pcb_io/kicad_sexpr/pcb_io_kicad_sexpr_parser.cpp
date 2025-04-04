@@ -5705,10 +5705,11 @@ bool PCB_IO_KICAD_SEXPR_PARSER::parsePAD_option( PAD* aPad )
             // Custom shaped pads have a "anchor pad", which is the reference
             // for connection calculations.
             // Because this is an anchor, only the 2 very basic shapes are managed:
-            // circle and rect. The default is circle
+            // circle and rect.
             switch( token )
             {
-                case T_circle:  // default
+                case T_circle:
+                    aPad->SetAnchorPadShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
                     break;
 
                 case T_rect:
@@ -6014,10 +6015,11 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePadstack( PAD* aPad )
                              // Custom shaped pads have a "anchor pad", which is the reference
                              // for connection calculations.
                              // Because this is an anchor, only the 2 very basic shapes are managed:
-                             // circle and rect. The default is circle
+                             // circle and rect.
                              switch( token )
                              {
-                             case T_circle: // default
+                             case T_circle:
+                                 padstack.SetAnchorShape( PAD_SHAPE::CIRCLE, curLayer );
                                  break;
 
                              case T_rect:
