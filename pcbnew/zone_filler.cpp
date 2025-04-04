@@ -2122,23 +2122,25 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
                     VECTOR2I half_size( box.GetWidth() / 2, box.GetHeight() / 2 );
 
                     // Function to find intersection of line with box edge
-                    auto intersectLineBox = [&](const VECTOR2D& direction) -> VECTOR2I {
-                        double dx = direction.x;
-                        double dy = direction.y;
+                    auto intersectLineBox =
+                            [&](const VECTOR2D& direction) -> VECTOR2I
+                            {
+                                double dx = direction.x;
+                                double dy = direction.y;
 
-                        // Short-circuit the axis cases because they will be degenerate in the
-                        // intersection test
-                        if( direction.x == 0 )
-                            return VECTOR2I( 0, dy * half_size.y );
-                        else if( direction.y == 0 )
-                            return VECTOR2I( dx * half_size.x, 0 );
+                                // Short-circuit the axis cases because they will be degenerate in the
+                                // intersection test
+                                if( direction.x == 0 )
+                                    return VECTOR2I( 0, dy * half_size.y );
+                                else if( direction.y == 0 )
+                                    return VECTOR2I( dx * half_size.x, 0 );
 
-                        // We are going to intersect with one side or the other.  Whichever
-                        // we hit first is the fraction of the spoke length we keep
-                        double tx = std::min( half_size.x / std::abs( dx ),
-                                              half_size.y / std::abs( dy ) );
-                        return VECTOR2I( dx * tx, dy * tx );
-                    };
+                                // We are going to intersect with one side or the other.  Whichever
+                                // we hit first is the fraction of the spoke length we keep
+                                double tx = std::min( half_size.x / std::abs( dx ),
+                                                      half_size.y / std::abs( dy ) );
+                                return VECTOR2I( dx * tx, dy * tx );
+                            };
 
                     // Precalculate angles for four cardinal directions
                     const EDA_ANGLE angles[4] = {
@@ -2216,9 +2218,8 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
                     {
                         // Do not create this spoke if neither point is in the pad.
                         if( !pad->GetEffectivePolygon( aLayer, ERROR_OUTSIDE )->Contains( seg.B ) )
-                        {
                             continue;
-                        }
+
                         seg.Reverse();
                     }
 
@@ -2228,13 +2229,16 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
                     {
                         VECTOR2I direction = ( seg.B - seg.A ).Resize( spoke_half_w );
                         VECTOR2I offset = direction.Perpendicular().Resize( spoke_half_w );
-                        // Extend the spoke edges by half the spoke width to capture convex pad shapes with a maximum of 45 degrees.
+                        // Extend the spoke edges by half the spoke width to capture convex pad shapes
+                        // with a maximum of 45 degrees.
                         SEG segL( seg.A - direction - offset, seg.B + direction - offset );
                         SEG segR( seg.A - direction + offset, seg.B + direction + offset );
+
                         // Only create this spoke if both edges intersect the pad and thermal outline
                         if( trimToOutline( segL ) && trimToOutline( segR ) )
                         {
-                            // Extend the spoke by the minimum thickness for the zone to ensure full connection width
+                            // Extend the spoke by the minimum thickness for the zone to ensure full
+                            // connection width
                             direction = direction.Resize( aZone->GetMinThickness() );
 
                             SHAPE_LINE_CHAIN spoke;
@@ -2265,7 +2269,8 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
             dummy_pad.SetPosition( VECTOR2I( 0, 0 ) );
             dummy_pad.SetOffset( aLayer, VECTOR2I( 0, 0 ) );
 
-            BOX2I spokesBox = dummy_pad.GetBoundingBox();
+            BOX2I    spokesBox = dummy_pad.GetBoundingBox( aLayer );
+            VECTOR2I padSize = pad->GetSize( aLayer );
 
             // Add the half width of the zone mininum width to the inflate amount to account for
             // the fact that the deflation procedure will shrink the results by half the half the
@@ -2276,8 +2281,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
             // when rotated at 45 degrees.  So we just build spokes at 0 degrees and rotate
             // them later.
             if( pad->GetShape( aLayer ) == PAD_SHAPE::CIRCLE
-                || ( pad->GetShape( aLayer ) == PAD_SHAPE::OVAL
-                     && pad->GetSizeX() == pad->GetSizeY() ) )
+                    || ( pad->GetShape( aLayer ) == PAD_SHAPE::OVAL && padSize.x == padSize.y ) )
             {
                 buildSpokesFromOrigin( spokesBox, ANGLE_0 );
 
