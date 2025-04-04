@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-04-04 00:32+0000\n"
+"PO-Revision-Date: 2025-04-04 12:49+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
@@ -5075,9 +5075,9 @@ msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr "No hi poden haver diverses biblioteques amb el mateix sobrenom ('%s')."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:663
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' failed to load."
-msgstr "No s'ha pogut carregar la biblioteca de símbols '%s'."
+msgstr "No s'ha pogut carregar la biblioteca de blocs de disseny «%s»."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:666
 #: eeschema/dialogs/panel_sym_lib_table.cpp:597
@@ -5115,13 +5115,15 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:873
 #, c-format
 msgid "Library '%s' not found."
-msgstr "No s'ha trobat la biblioteca '%s'."
+msgstr "No s'ha trobat la biblioteca «%s»."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:896
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing design blocks?"
-msgstr "El fitxer '%s' ja existeix. Vols sobreescriure'l?"
+msgstr ""
+"La carpeta «%s» ja existeix. Voleu sobreescriure els blocs de disseny "
+"existents?"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:900
 #: eeschema/dialogs/panel_sym_lib_table.cpp:989
@@ -5410,9 +5412,9 @@ msgid "Failed to open file '%s'."
 msgstr "Ha fallat l'obertura del fitxer «%s»"
 
 #: common/dialogs/panel_embedded_files.cpp:466
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write file '%s'."
-msgstr "No s'ha pogut crear del fitxer '%s'."
+msgstr "No s'ha pogut escriure el fitxer «%s»."
 
 #: common/dialogs/panel_embedded_files_base.cpp:38
 #, fuzzy
@@ -5429,9 +5431,8 @@ msgid "Remove embedded file"
 msgstr "Símbol d'alimentació"
 
 #: common/dialogs/panel_embedded_files_base.cpp:76
-#, fuzzy
 msgid "Embed fonts"
-msgstr "Model de codi"
+msgstr "Incrusta tipus de lletra"
 
 #: common/dialogs/panel_embedded_files_base.cpp:77
 msgid "Store a copy of all fonts used"
@@ -6479,7 +6480,7 @@ msgstr "Comentari"
 #: common/drawing_sheet/ds_draw_item.cpp:242
 #, c-format
 msgid "Text '%s'"
-msgstr "Text '%s'"
+msgstr "Text «%s»"
 
 #: common/drawing_sheet/ds_draw_item.cpp:439 eeschema/sch_shape.cpp:333
 #, c-format
@@ -6509,7 +6510,7 @@ msgstr "S'està esperant %s"
 #: common/dsnlexer.cpp:337
 #, c-format
 msgid "Expecting '%s'"
-msgstr "S'està esperant '%s'"
+msgstr "S'esperava «%s»"
 
 #: common/dsnlexer.cpp:344
 #, c-format
@@ -6767,7 +6768,7 @@ msgstr "Fitxer de documentació"
 #: common/eda_doc.cpp:158
 #, c-format
 msgid "Documentation file '%s' not found."
-msgstr "No s'ha trobat el fitxer de documentació '%s'."
+msgstr "No s'ha trobat el fitxer de documentació «%s»."
 
 #: common/eda_doc.cpp:204
 #, c-format
@@ -7599,12 +7600,12 @@ msgstr "Tipus de lletra predefinit"
 #: common/font/fontconfig.cpp:360
 #, c-format
 msgid "Error loading font '%s'."
-msgstr "Error en carregar el tipus de lletra '%s'."
+msgstr "Error en carregar el tipus de lletra «%s»."
 
 #: common/font/fontconfig.cpp:372
 #, c-format
 msgid "Font '%s' not found; substituting '%s'."
-msgstr "No s'ha trobat el tipus de lletra '%s'; es substituirà per '%s'."
+msgstr "No s'ha trobat el tipus de lletra «%s»; se substituirà per «%s»."
 
 #: common/footprint_info.cpp:119
 #: common/widgets/panel_design_block_chooser.cpp:425
@@ -13302,7 +13303,7 @@ msgstr "Tipus de lletra:"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:111
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:89
 msgid "KiCad Font"
-msgstr "Tipus de Lletra de KiCad"
+msgstr "Tipus de lletra del KiCad"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:162
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:112
@@ -15726,9 +15727,8 @@ msgid "(optional; default GND)"
 msgstr "(opcional; per defecte GND)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:384
-#, fuzzy
 msgid "Noise source:"
-msgstr "Font de soroll"
+msgstr "Font de soroll:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:459
 msgid "Save contributions from all noise generators"
@@ -17394,9 +17394,8 @@ msgid "Alias"
 msgstr "Àlies"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:76
-#, fuzzy
 msgid "(source)"
-msgstr "Font"
+msgstr "(font)"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:94
 #, fuzzy, c-format
@@ -35467,9 +35466,8 @@ msgid "Circular Array"
 msgstr "Matriu circular"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:472
-#, fuzzy
 msgid "Item Source"
-msgstr "Font"
+msgstr "Font de l'element"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:474
 #, fuzzy
@@ -54766,12 +54764,11 @@ msgstr "Habilitat:"
 
 #: pcbnew/zone.cpp:1947
 msgid "Source Type"
-msgstr "Tipus de Font"
+msgstr "Tipus de font"
 
 #: pcbnew/zone.cpp:1952
-#, fuzzy
 msgid "Source Name"
-msgstr "Font 2"
+msgstr "Nom de la font"
 
 #: pcbnew/zone.cpp:1966
 #, fuzzy
