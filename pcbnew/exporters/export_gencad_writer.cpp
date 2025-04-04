@@ -998,8 +998,27 @@ void GENCAD_EXPORTER::CreateRoutesSection()
                     MapXTo( track->GetStart().x ), MapYTo( track->GetStart().y ),
                     MapXTo( track->GetEnd().x ), MapYTo( track->GetEnd().y ) );
         }
+        else if( track->Type() == PCB_ARC_T )
+        {
+            VECTOR2I start = track->GetStart();
+            VECTOR2I end = track->GetEnd();
 
-        if( track->Type() == PCB_VIA_T )
+            const PCB_ARC* arc = static_cast<const PCB_ARC*>( track );
+
+            if( arc->GetAngle() > ANGLE_0 )
+                std::swap( start, end );
+
+            VECTOR2I center = arc->GetCenter();
+
+            fprintf( m_file, "ARC %g %g %g %g %g %g\n",
+                     start.x / SCALE_FACTOR,
+                     -start.y / SCALE_FACTOR,
+                     end.x / SCALE_FACTOR,
+                     -end.y / SCALE_FACTOR,
+                     center.x / SCALE_FACTOR,
+                     -center.y / SCALE_FACTOR );
+        }
+        else if( track->Type() == PCB_VIA_T )
         {
             const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
 
