@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-28 16:28-0700\n"
-"PO-Revision-Date: 2025-03-31 05:08+0000\n"
+"PO-Revision-Date: 2025-04-04 06:01+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -35129,9 +35129,8 @@ msgid "Jumper Pad Groups"
 msgstr "为焊盘重新编号"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:418
-#, fuzzy
 msgid "Available pads"
-msgstr "可用路径:"
+msgstr "可用焊盘"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:434
 #, fuzzy
