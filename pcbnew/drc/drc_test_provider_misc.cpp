@@ -168,7 +168,7 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
                 return true;
             };
 
-    LSET disabledLayers = m_board->GetEnabledLayers().flip();
+    LSET disabledLayers = LSET( m_board->GetEnabledLayers() ).flip();
 
     // Perform the test only for copper layers
     disabledLayers &= LSET::AllCuMask();

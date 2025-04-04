@@ -826,7 +826,7 @@ int BOARD::LayerDepth( PCB_LAYER_ID aStartLayer, PCB_LAYER_ID aEndLayer ) const
 }
 
 
-LSET BOARD::GetEnabledLayers() const
+const LSET& BOARD::GetEnabledLayers() const
 {
     return GetDesignSettings().GetEnabledLayers();
 }
@@ -840,7 +840,7 @@ bool BOARD::IsLayerVisible( PCB_LAYER_ID aLayer ) const
 }
 
 
-LSET BOARD::GetVisibleLayers() const
+const LSET& BOARD::GetVisibleLayers() const
 {
     return m_project ? m_project->GetLocalSettings().m_VisibleLayers : LSET::AllLayersMask();
 }

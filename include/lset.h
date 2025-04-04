@@ -102,17 +102,17 @@ public:
      * Return a complete set of internal copper layers which is all Cu layers
      * except #F_Cu and #B_Cu.
      */
-    static LSET InternalCuMask();
+    static const LSET& InternalCuMask();
 
     /**
      * Return a complete set of all top assembly layers which is all #F_SilkS and #F_Mask.
      */
-    static LSET FrontAssembly();
+    static const LSET& FrontAssembly();
 
     /**
      * Return a complete set of all bottom assembly layers which is all #B_SilkS and #B_Mask.
      */
-    static LSET BackAssembly();
+    static const LSET& BackAssembly();
 
     /**
      * Return a mask holding the requested number of Cu PCB_LAYER_IDs.
@@ -122,67 +122,67 @@ public:
     /**
      * Return a mask holding the Front and Bottom layers.
      */
-    static LSET ExternalCuMask();
+    static const LSET& ExternalCuMask();
 
     /**
      * Return a mask holding all layer minus CU layers.
      */
     static LSET AllNonCuMask();
 
-    static LSET AllLayersMask();
+    static const LSET& AllLayersMask();
 
     /**
      * Return a mask holding all technical layers (no CU layer) on front side.
      */
-    static LSET FrontTechMask();
+    static const LSET& FrontTechMask();
 
     /**
      * Return a mask holding technical layers used in a board fabrication
      * (no CU layer) on front side.
      */
-    static LSET FrontBoardTechMask();
+    static const LSET& FrontBoardTechMask();
 
     /**
      * Return a mask holding all technical layers (no CU layer) on back side.
      */
-    static LSET BackTechMask();
+    static const LSET& BackTechMask();
 
     /**
      * Return a mask holding technical layers used in a board fabrication
      * (no CU layer) on Back side.
      */
-    static LSET BackBoardTechMask();
+    static const LSET& BackBoardTechMask();
 
     /**
      * Return a mask holding all technical layers (no CU layer) on both side.
      */
-    static LSET AllTechMask();
+    static const LSET& AllTechMask();
 
     /**
      * Return a mask holding board technical layers (no CU layer) on both side.
      */
-    static LSET AllBoardTechMask();
+    static const LSET& AllBoardTechMask();
 
     /**
      * Return a mask holding all technical layers and the external CU layer on front side.
      */
-    static LSET FrontMask();
+    static const LSET& FrontMask();
 
     /**
      * Return a mask holding all technical layers and the external CU layer on back side.
      */
-    static LSET BackMask();
+    static const LSET& BackMask();
 
-    static LSET SideSpecificMask();
+    static const LSET& SideSpecificMask();
 
-    static LSET UserMask();
+    static const LSET& UserMask();
 
     /**
      * Return a mask holding all layers which are physically realized.
      *
      * Equivalent to the copper layers + the board tech mask.
      */
-    static LSET PhysicalLayersMask();
+    static const LSET& PhysicalLayersMask();
 
     /**
      * Return a mask with the requested number of user defined layers.
@@ -197,7 +197,7 @@ public:
      * Currently internal copper layers and Margin.
      */
 
-    static LSET ForbiddenFootprintLayers();
+    static const LSET& ForbiddenFootprintLayers();
 
     /**
      * Return a sequence of copper layers in starting from the front/top

@@ -1367,15 +1367,10 @@ void PCB_VIA::SanitizeLayers()
 
 bool PCB_VIA::FlashLayer( const LSET& aLayers ) const
 {
-    for( size_t ii = 0; ii < aLayers.size(); ++ii )
+    for( PCB_LAYER_ID layer : aLayers )
     {
-        if( aLayers.test( ii ) )
-        {
-            PCB_LAYER_ID layer = PCB_LAYER_ID( ii );
-
-            if( FlashLayer( layer ) )
-                return true;
-        }
+        if( FlashLayer( layer ) )
+            return true;
     }
 
     return false;

@@ -342,7 +342,7 @@ PCB_LAYER_ID PAD::GetPrincipalLayer() const
 
 bool PAD::FlashLayer( const LSET& aLayers ) const
 {
-    for( PCB_LAYER_ID layer : aLayers.Seq() )
+    for( PCB_LAYER_ID layer : aLayers )
     {
         if( FlashLayer( layer ) )
             return true;
@@ -1764,7 +1764,7 @@ double PAD::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
         return LOD_HIDE;
 
     // Handle Render tab switches
-    const PCB_LAYER_ID& pcbLayer = static_cast<PCB_LAYER_ID>( aLayer );
+    //const PCB_LAYER_ID& pcbLayer = static_cast<PCB_LAYER_ID>( aLayer );
 
     if( !IsFlipped() && !aView->IsLayerVisible( LAYER_FOOTPRINTS_FR ) )
         return LOD_HIDE;
@@ -1772,11 +1772,13 @@ double PAD::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
     if( IsFlipped() && !aView->IsLayerVisible( LAYER_FOOTPRINTS_BK ) )
         return LOD_HIDE;
 
-    LSET visible = board->GetVisibleLayers() & board->GetEnabledLayers();
-
     if( IsHoleLayer( aLayer ) )
     {
-        if( !( visible & LSET::PhysicalLayersMask() ).any() )
+        LSET visiblePhysical = board->GetVisibleLayers();
+        visiblePhysical &= board->GetEnabledLayers();
+        visiblePhysical &= LSET::PhysicalLayersMask();
+
+        if( !visiblePhysical.any() )
             return LOD_HIDE;
     }
     else if( IsNetnameLayer( aLayer ) )
@@ -1789,6 +1791,9 @@ double PAD::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
         }
         else
         {
+            LSET visible = board->GetVisibleLayers();
+            visible &= board->GetEnabledLayers();
+
             // Hide netnames unless pad is flashed to a visible layer
             if( !FlashLayer( visible ) )
                 return LOD_HIDE;
@@ -1811,10 +1816,8 @@ double PAD::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
         }
     }
 
-    VECTOR2L padSize = GetShape( pcbLayer ) != PAD_SHAPE::CUSTOM
-                       ? VECTOR2L( GetSize( pcbLayer ) ) : GetBoundingBox().GetSize();
-
-    int64_t minSide = std::min( padSize.x, padSize.y );
+    VECTOR2L padSize = GetBoundingBox().GetSize();
+    int64_t  minSide = std::min( padSize.x, padSize.y );
 
     if( minSide > 0 )
         return std::min( lodScaleForThreshold( aView, minSide, pcbIUScale.mmToIU( 0.2 ) ), 3.5 );

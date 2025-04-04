@@ -376,22 +376,22 @@ LAYER_PRESET APPEARANCE_CONTROLS::presetAllLayers( _HKI( "All Layers" ),
         LSET::AllLayersMask(), false );
 
 LAYER_PRESET APPEARANCE_CONTROLS::presetAllCopper( _HKI( "All Copper Layers" ),
-        LSET::AllCuMask().set( Edge_Cuts ), false );
+        LSET( LSET::AllCuMask() ).set( Edge_Cuts ), false );
 
 LAYER_PRESET APPEARANCE_CONTROLS::presetInnerCopper( _HKI( "Inner Copper Layers" ),
-        LSET::InternalCuMask().set( Edge_Cuts ), false );
+        LSET( LSET::InternalCuMask() ).set( Edge_Cuts ), false );
 
 LAYER_PRESET APPEARANCE_CONTROLS::presetFront( _HKI( "Front Layers" ),
-        LSET::FrontMask().set( Edge_Cuts ), false );
+        LSET( LSET::FrontMask() ).set( Edge_Cuts ), false );
 
 LAYER_PRESET APPEARANCE_CONTROLS::presetFrontAssembly( _HKI( "Front Assembly View" ),
-        LSET::FrontAssembly().set( Edge_Cuts ), GAL_SET::DefaultVisible(), F_SilkS, false );
+        LSET( LSET::FrontAssembly() ).set( Edge_Cuts ), GAL_SET::DefaultVisible(), F_SilkS, false );
 
 LAYER_PRESET APPEARANCE_CONTROLS::presetBack( _HKI( "Back Layers" ),
-        LSET::BackMask().set( Edge_Cuts ), true );
+        LSET( LSET::BackMask() ).set( Edge_Cuts ), true );
 
 LAYER_PRESET APPEARANCE_CONTROLS::presetBackAssembly( _HKI( "Back Assembly View" ),
-        LSET::BackAssembly().set( Edge_Cuts ), GAL_SET::DefaultVisible(), B_SilkS, true );
+        LSET( LSET::BackAssembly() ).set( Edge_Cuts ), GAL_SET::DefaultVisible(), B_SilkS, true );
 
 // this one is only used to store the object visibility settings  of the last used
 // built-in layer preset

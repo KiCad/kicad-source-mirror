@@ -573,7 +573,7 @@ public:
      *
      * @return the enabled layers in bit-mapped form.
      */
-    inline LSET GetEnabledLayers() const
+    inline const LSET& GetEnabledLayers() const
     {
         return m_enabledLayers;
     }
