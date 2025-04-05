@@ -1057,10 +1057,15 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
     brd->SynchronizeProperties();
 
+    bool hasLayerListSpecified = false; // will be true if the user layer list is not empty
+
     if( aGerberJob->m_argLayers )
     {
         if( !aGerberJob->m_argLayers.value().empty() )
+        {
             aGerberJob->m_plotLayerSequence = convertLayerArg( aGerberJob->m_argLayers.value(), nullptr );
+            hasLayerListSpecified = true;
+        }
         else
             aGerberJob->m_plotLayerSequence = LSET::AllLayersMask().SeqStackupForPlotting();
     }
@@ -1086,8 +1091,9 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     }
     else
     {
-        // default to the board enabled layers
-        if( aGerberJob->m_plotLayerSequence.empty() )
+        // default to the board enabled layers, but only if the user has not specifed a layer list
+        // ( m_plotLayerSequence can be empty with a broken user layer list)
+        if( aGerberJob->m_plotLayerSequence.empty() && !hasLayerListSpecified )
             aGerberJob->m_plotLayerSequence = brd->GetEnabledLayers().SeqStackupForPlotting();
     }
 
