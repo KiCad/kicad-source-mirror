@@ -2243,25 +2243,6 @@ PAD* BOARD::GetPad( const PCB_TRACK* aTrace, ENDPOINT_T aEndPoint ) const
 }
 
 
-PAD* BOARD::GetPadFast( const VECTOR2I& aPosition, const LSET& aLayerSet ) const
-{
-    for( FOOTPRINT* footprint : Footprints() )
-    {
-        for( PAD* pad : footprint->Pads() )
-        {
-        if( pad->GetPosition() != aPosition )
-            continue;
-
-        // Pad found, it must be on the correct layer
-        if( ( pad->GetLayerSet() & aLayerSet ).any() )
-            return pad;
-        }
-    }
-
-    return nullptr;
-}
-
-
 PAD* BOARD::GetPad( std::vector<PAD*>& aPadList, const VECTOR2I& aPosition, const LSET& aLayerSet ) const
 {
     // Search aPadList for aPosition

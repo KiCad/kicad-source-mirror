@@ -1126,17 +1126,6 @@ public:
     PAD* GetPad( const PCB_TRACK* aTrace, ENDPOINT_T aEndPoint ) const;
 
     /**
-     * Return pad found at \a aPosition on \a aLayerMask using the fast search method.
-     * <p>
-     * The fast search method only works if the pad list has already been built.
-     * </p>
-     * @param aPosition A VECTOR2I object containing the position to hit test.
-     * @param aLayerMask A layer or layers to mask the hit test.
-     * @return A pointer to a PAD object if found or NULL if not found.
-     */
-    PAD* GetPadFast( const VECTOR2I& aPosition, const LSET& aLayerMask ) const;
-
-    /**
      * Locate the pad connected at \a aPosition on \a aLayer starting at list position
      * \a aPad
      * <p>
