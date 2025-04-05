@@ -1325,7 +1325,7 @@ bool SETTINGS_MANAGER::TriggerBackupIfNeeded( REPORTER& aReporter ) const
                 return dt;
             };
 
-    wxFileName projectPath( Prj().GetProjectPath() );
+    wxFileName projectPath( Prj().GetProjectPath(), wxEmptyString, wxEmptyString );
 
     // Skip backup if project path isn't valid or writable
     if( !projectPath.IsOk() || !projectPath.Exists() || !projectPath.IsDirWritable() )
