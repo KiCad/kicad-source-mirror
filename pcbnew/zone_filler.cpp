@@ -2120,6 +2120,9 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
     DRC_CONSTRAINT         constraint;
     int                    zone_half_width = aZone->GetMinThickness() / 2;
 
+    if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
+        zone_half_width = aZone->GetHatchThickness() / 2;
+
     zoneBB.Inflate( std::max( bds.GetBiggestClearanceValue(), aZone->GetLocalClearance().value() ) );
 
     // Is a point on the boundary of the polygon inside or outside?
@@ -2159,7 +2162,6 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
         // guarantee that pads/vias connect to the webbing.  (The thermal gap is the hatch gap width minus
         // the pad/via size, making it impossible for the pad/via to be isolated within the center of a
         // hole.)
-
         if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
         {
             spoke_w = aZone->GetHatchThickness();
