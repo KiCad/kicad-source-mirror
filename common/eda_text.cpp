@@ -1371,6 +1371,21 @@ static struct EDA_TEXT_DESC
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Mirrored" ),
                 &EDA_TEXT::SetMirrored, &EDA_TEXT::IsMirrored ),
                 textProps );
+
+        auto isField =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( EDA_ITEM* item = dynamic_cast<EDA_ITEM*>( aItem ) )
+                        return item->Type() == SCH_FIELD_T || item->Type() == PCB_FIELD_T;
+
+                    return false;
+                };
+
+        propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Visible" ),
+                &EDA_TEXT::SetVisible, &EDA_TEXT::IsVisible ),
+                textProps )
+            .SetAvailableFunc( isField );
+
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _HKI( "Width" ),
                 &EDA_TEXT::SetTextWidth, &EDA_TEXT::GetTextWidth,
                 PROPERTY_DISPLAY::PT_SIZE ),

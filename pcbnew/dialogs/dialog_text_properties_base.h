@@ -56,6 +56,7 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		PCB_LAYER_BOX_SELECTOR* m_LayerSelectionCtrl;
 		wxCheckBox* m_cbKnockout;
 		wxCheckBox* m_KeepUpright;
+		wxCheckBox* m_Visible;
 		wxStaticText* m_fontLabel;
 		FONT_CHOICE* m_fontCtrl;
 		BITMAP_BUTTON* m_bold;
