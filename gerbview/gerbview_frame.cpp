@@ -774,7 +774,7 @@ LSET GERBVIEW_FRAME::GetVisibleLayers() const
 }
 
 
-void GERBVIEW_FRAME::SetVisibleLayers( LSET aLayerMask )
+void GERBVIEW_FRAME::SetVisibleLayers( const LSET& aLayerMask )
 {
     if( GetCanvas() )
     {

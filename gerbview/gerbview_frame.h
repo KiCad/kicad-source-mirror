@@ -132,7 +132,7 @@ public:
      *
      * @param aLayerMask The new set of visible layers
      */
-    void SetVisibleLayers( LSET aLayerMask );
+    void SetVisibleLayers( const LSET& aLayerMask );
 
     /**
      * Test whether a given layer is visible.

@@ -848,7 +848,7 @@ const LSET& BOARD::GetVisibleLayers() const
 }
 
 
-void BOARD::SetEnabledLayers( LSET aLayerSet )
+void BOARD::SetEnabledLayers( const LSET& aLayerSet )
 {
     GetDesignSettings().SetEnabledLayers( aLayerSet );
 }
@@ -860,7 +860,7 @@ bool BOARD::IsLayerEnabled( PCB_LAYER_ID aLayer ) const
 }
 
 
-void BOARD::SetVisibleLayers( LSET aLayerSet )
+void BOARD::SetVisibleLayers( const LSET& aLayerSet )
 {
     if( m_project )
         m_project->GetLocalSettings().m_VisibleLayers = aLayerSet;
@@ -2224,25 +2224,6 @@ PAD* BOARD::GetPad( const PCB_TRACK* aTrace, ENDPOINT_T aEndPoint ) const
     LSET lset( { aTrace->GetLayer() } );
 
     return GetPad( aPosition, lset );
-}
-
-
-PAD* BOARD::GetPadFast( const VECTOR2I& aPosition, LSET aLayerSet ) const
-{
-    for( FOOTPRINT* footprint : Footprints() )
-    {
-        for( PAD* pad : footprint->Pads() )
-        {
-        if( pad->GetPosition() != aPosition )
-            continue;
-
-        // Pad found, it must be on the correct layer
-        if( ( pad->GetLayerSet() & aLayerSet ).any() )
-            return pad;
-        }
-    }
-
-    return nullptr;
 }
 
 

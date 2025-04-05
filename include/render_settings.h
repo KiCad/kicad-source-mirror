@@ -117,7 +117,7 @@ public:
     void SetLayerName( const wxString& aLayerName ) { m_layerName = aLayerName; }
 
     LSET GetPrintLayers() const { return m_printLayers; }
-    void SetPrintLayers( LSET aLayerSet ) { m_printLayers = aLayerSet; }
+    void SetPrintLayers( const LSET& aLayerSet ) { m_printLayers = aLayerSet; }
 
     /**
      * Clear the list of active layers.
