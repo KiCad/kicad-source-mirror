@@ -3499,7 +3499,11 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
         {
             size_t i = 0;
 
-            for( PCB_LAYER_ID layer : LAYER_RANGE( In2_Cu, In30_Cu, MAX_CU_LAYERS ) )
+            LSET intLayers = aFootprint->BoardLayerSet();
+            intLayers &= LSET::InternalCuMask();
+            intLayers.set( In1_Cu, false ); // Already handled above
+
+            for( PCB_LAYER_ID layer : intLayers )
             {
                 setCopperGeometry( layer, aElem.sizeAndShape->inner_shape[i],
                                    VECTOR2I( aElem.sizeAndShape->inner_size[i].x,
