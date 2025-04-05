@@ -991,6 +991,8 @@ PCB_LAYER_ID PADSTACK::EffectiveLayerFor( PCB_LAYER_ID aLayer ) const
 
             // We're asked for an inner copper layer not present in the board.  There is no right
             // answer here, so fall back on the front shape
+            wxFAIL_MSG( "Asked for inner padstack layer not present on the board" );
+
             return ALL_LAYERS;
         }
 
