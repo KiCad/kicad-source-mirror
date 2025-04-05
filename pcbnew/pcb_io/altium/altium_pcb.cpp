@@ -2046,6 +2046,39 @@ void ALTIUM_PCB::ParseModelsData( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcb
                                                      std::move( stepContent ) ) ) );
     }
 
+    // Append _<index> to duplicate filenames
+    std::map<wxString, std::vector<wxString>> nameIdMap;
+
+    for( auto& [id, data] : m_EmbeddedModels )
+        nameIdMap[data.m_modelname].push_back( id );
+
+    for( auto& [name, ids] : nameIdMap )
+    {
+        for( size_t i = 1; i < ids.size(); i++ )
+        {
+            const wxString& id = ids[i];
+
+            auto modelTuple = m_EmbeddedModels.find( id );
+
+            if( modelTuple == m_EmbeddedModels.end() )
+                continue;
+
+            wxString modelName = modelTuple->second.m_modelname;
+
+            if( modelName.Contains( "." ) )
+            {
+                wxString ext;
+                wxString baseName = modelName.BeforeLast( '.', &ext );
+
+                modelTuple->second.m_modelname = baseName + '_' + std::to_string( i ) + '.' + ext;
+            }
+            else
+            {
+                modelTuple->second.m_modelname = modelName + '_' + std::to_string( i );
+            }
+        }
+    }
+
     if( reader.GetRemainingBytes() != 0 )
         THROW_IO_ERROR( wxT( "Models stream is not fully parsed" ) );
 }
