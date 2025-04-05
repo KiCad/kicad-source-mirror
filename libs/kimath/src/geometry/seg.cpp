@@ -374,7 +374,12 @@ const VECTOR2I SEG::NearestPoint( const VECTOR2I& aP ) const
     if( l_squared == 0 )
         return A;
 
-    ecoord t = d.Dot( aP - A );
+    // Inlined for performance reasons
+    VECTOR2L pa;
+    pa.x = static_cast<int64_t>( aP.x ) - A.x;
+    pa.y = static_cast<int64_t>( aP.y ) - A.y;
+
+    ecoord t = d.Dot( pa );
 
     if( t < 0 )
         return A;
