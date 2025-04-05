@@ -21,6 +21,7 @@
 #include <wx/dir.h>
 #include <wx/filedlg.h>
 #include <wx/fs_zip.h>
+#include <wx/regex.h>
 #include <wx/uri.h>
 #include <wx/wfstream.h>
 #include <wx/zipstrm.h>
@@ -43,33 +44,13 @@
 class PROJECT_ARCHIVER_DIR_ZIP_TRAVERSER : public wxDirTraverser
 {
 public:
-    PROJECT_ARCHIVER_DIR_ZIP_TRAVERSER( const std::string& aExtRegex, const wxString& aPrjDir, wxZipOutputStream& aZipFileOutput,
-                                        REPORTER& aReporter, bool aVerbose ) :
-        m_zipFile( aZipFileOutput ),
-        m_prjDir( aPrjDir ),
-        m_fileExtRegex( aExtRegex, std::regex_constants::ECMAScript | std::regex_constants::icase ),
-        m_reporter( aReporter ),
-        m_errorOccurred( false ),
-        m_verbose( aVerbose )
+    PROJECT_ARCHIVER_DIR_ZIP_TRAVERSER( const wxString& aPrjDir ) :
+        m_prjDir( aPrjDir )
     {}
 
     virtual wxDirTraverseResult OnFile( const wxString& aFilename ) override
     {
-        if( std::regex_search( aFilename.ToStdString(), m_fileExtRegex ) )
-        {
-            addFileToZip( aFilename );
-
-            // Special processing for IBIS files to include the corresponding pkg file
-            if( aFilename.EndsWith( FILEEXT::IbisFileExtension ) )
-            {
-                wxFileName package( aFilename );
-                package.MakeRelativeTo( m_prjDir );
-                package.SetExt( wxS( "pkg" ) );
-
-                if( package.Exists() )
-                    addFileToZip( package.GetFullPath() );
-            }
-        }
+        m_files.emplace_back( aFilename );
 
         return wxDIR_CONTINUE;
     }
@@ -79,75 +60,21 @@ public:
         return wxDIR_CONTINUE;
     }
 
-    unsigned long GetUncompressedBytes() const
+    const std::vector<wxString>& GetFilesToArchive() const
     {
-        return m_uncompressedBytes;
-    }
-
-    bool GetErrorOccurred() const
-    {
-        return m_errorOccurred;
+        return m_files;
     }
 
 private:
-    void addFileToZip( const wxString& aFilename)
-    {
-        wxString msg;
-        wxFileSystem fsfile;
-
-        wxFileName curr_fn( aFilename );
-        curr_fn.MakeRelativeTo( m_prjDir );
-
-        wxString currFilename = curr_fn.GetFullPath();
-
-        // Read input file and add it to the zip file:
-        wxFSFile* infile = fsfile.OpenFile( currFilename );
-
-        if( infile )
-        {
-            m_zipFile.PutNextEntry( currFilename, infile->GetModificationTime() );
-            infile->GetStream()->Read( m_zipFile );
-            m_zipFile.CloseEntry();
-
-            m_uncompressedBytes += infile->GetStream()->GetSize();
-
-            if( m_verbose )
-            {
-                msg.Printf( _( "Archived file '%s'." ), currFilename );
-                m_reporter.Report( msg, RPT_SEVERITY_INFO );
-            }
-
-            delete infile;
-        }
-        else
-        {
-            if( m_verbose )
-            {
-                msg.Printf( _( "Failed to archive file '%s'." ), currFilename );
-                m_reporter.Report( msg, RPT_SEVERITY_ERROR );
-            }
-
-            m_errorOccurred = true;
-        }
-    }
-
-private:
-    wxZipOutputStream& m_zipFile;
-
-    wxString       m_prjDir;
-    std::regex     m_fileExtRegex;
-    REPORTER&      m_reporter;
-
-    bool           m_errorOccurred;     // True if an error archiving the file
-    bool           m_verbose;           // True to enable verbose logging
-
-    // Keep track of how many bytes would have been used without compression
-    unsigned long m_uncompressedBytes = 0;
+    wxString              m_prjDir;
+    std::vector<wxString> m_files;
 };
+
 
 PROJECT_ARCHIVER::PROJECT_ARCHIVER()
 {
 }
+
 
 bool PROJECT_ARCHIVER::AreZipArchivesIdentical( const wxString& aZipFileA,
                                                 const wxString& aZipFileB, REPORTER& aReporter )
@@ -238,6 +165,7 @@ bool PROJECT_ARCHIVER::Unarchive( const wxString& aSrcFile, const wxString& aDes
         // Now let's set the filetimes based on what's in the zip
         wxFileName outputFileName( fullname );
         wxDateTime fileTime = entry->GetDateTime();
+
         // For now we set access, mod, create to the same datetime
         // create (third arg) is only used on Windows
         outputFileName.SetTimes( &fileTime, &fileTime, &fileTime );
@@ -252,74 +180,68 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
                                 REPORTER& aReporter, bool aVerbose, bool aIncludeExtraFiles )
 {
 
-#define EXT( ext )              "\\." + ext + "|"
-#define NAME( name )            name + "|"
-#define EXT_NO_PIPE( ext )      "\\." + ext
-#define NAME_NO_PIPE( name )    name
+    std::set<wxString> extensions;
+    std::set<wxString> files;                // File names without extensions such as fp-lib-table.
 
-    // List of file extensions that are always archived
-    std::string fileExtensionRegex = "("
-            EXT( FILEEXT::ProjectFileExtension )
-            EXT( FILEEXT::ProjectLocalSettingsFileExtension )
-            EXT( FILEEXT::KiCadSchematicFileExtension )
-            EXT( FILEEXT::KiCadSymbolLibFileExtension )
-            EXT( FILEEXT::KiCadPcbFileExtension )
-            EXT( FILEEXT::KiCadFootprintFileExtension )
-            EXT( FILEEXT::DesignRulesFileExtension )
-            EXT( FILEEXT::DrawingSheetFileExtension )
-            EXT( FILEEXT::KiCadJobSetFileExtension )
-            EXT( FILEEXT::JsonFileExtension )                  // for design blocks
-            EXT( FILEEXT::WorkbookFileExtension ) +
-            NAME( FILEEXT::FootprintLibraryTableFileName ) +
-            NAME( FILEEXT::SymbolLibraryTableFileName ) +
-            NAME_NO_PIPE( FILEEXT::DesignBlockLibraryTableFileName );
+    extensions.emplace( FILEEXT::ProjectFileExtension );
+    extensions.emplace( FILEEXT::ProjectLocalSettingsFileExtension );
+    extensions.emplace( FILEEXT::KiCadSchematicFileExtension );
+    extensions.emplace( FILEEXT::KiCadSymbolLibFileExtension );
+    extensions.emplace( FILEEXT::KiCadPcbFileExtension );
+    extensions.emplace( FILEEXT::KiCadFootprintFileExtension );
+    extensions.emplace( FILEEXT::DesignRulesFileExtension );
+    extensions.emplace( FILEEXT::DrawingSheetFileExtension );
+    extensions.emplace( FILEEXT::KiCadJobSetFileExtension );
+    extensions.emplace( FILEEXT::JsonFileExtension );                  // for design blocks
+    extensions.emplace( FILEEXT::WorkbookFileExtension );
+
+    files.emplace( FILEEXT::FootprintLibraryTableFileName );
+    files.emplace( FILEEXT::SymbolLibraryTableFileName );
+    files.emplace( FILEEXT::DesignBlockLibraryTableFileName );
 
     // List of additional file extensions that are only archived when aIncludeExtraFiles is true
     if( aIncludeExtraFiles )
     {
-        fileExtensionRegex += "|"
-            EXT( FILEEXT::LegacyProjectFileExtension )
-            EXT( FILEEXT::LegacySchematicFileExtension )
-            EXT( FILEEXT::LegacySymbolLibFileExtension )
-            EXT( FILEEXT::LegacySymbolDocumentFileExtension )
-            EXT( FILEEXT::FootprintAssignmentFileExtension )
-            EXT( FILEEXT::LegacyPcbFileExtension )
-            EXT( FILEEXT::LegacyFootprintLibPathExtension )
-            EXT( FILEEXT::StepFileAbrvExtension )                   // 3d files
-            EXT( FILEEXT::StepFileExtension )                       // 3d files
-            EXT( FILEEXT::VrmlFileExtension )                       // 3d files
-            EXT( FILEEXT::GerberFileExtensionsRegex )               // Gerber files (g?, g??, .gm12 (from protel export))
-            EXT( FILEEXT::GerberJobFileExtension )                  // Gerber job files
-            EXT( FILEEXT::FootprintPlaceFileExtension )             // Our position files
-            EXT( FILEEXT::DrillFileExtension )                      // Fab drill files
-            EXT( "nc" )                                             // Fab drill files
-            EXT( "xnc" )                                            // Fab drill files
-            EXT( FILEEXT::IpcD356FileExtension )
-            EXT( FILEEXT::ReportFileExtension )
-            EXT( FILEEXT::NetlistFileExtension )
-            EXT( FILEEXT::PythonFileExtension )
-            EXT( FILEEXT::PdfFileExtension )
-            EXT( FILEEXT::TextFileExtension )
-            EXT( FILEEXT::SpiceFileExtension )                      // SPICE files
-            EXT( FILEEXT::SpiceSubcircuitFileExtension )            // SPICE files
-            EXT( FILEEXT::SpiceModelFileExtension )                 // SPICE files
-            EXT_NO_PIPE( FILEEXT::IbisFileExtension );
+        extensions.emplace( FILEEXT::LegacyProjectFileExtension );
+        extensions.emplace( FILEEXT::LegacySchematicFileExtension );
+        extensions.emplace( FILEEXT::LegacySymbolLibFileExtension );
+        extensions.emplace( FILEEXT::LegacySymbolDocumentFileExtension );
+        extensions.emplace( FILEEXT::FootprintAssignmentFileExtension );
+        extensions.emplace( FILEEXT::LegacyPcbFileExtension );
+        extensions.emplace( FILEEXT::LegacyFootprintLibPathExtension );
+        extensions.emplace( FILEEXT::StepFileAbrvExtension );
+        extensions.emplace( FILEEXT::StepFileExtension );                       // 3d files
+        extensions.emplace( FILEEXT::VrmlFileExtension );                       // 3d files
+        extensions.emplace( FILEEXT::GerberJobFileExtension );                  // Gerber job files
+        extensions.emplace( FILEEXT::FootprintPlaceFileExtension );             // Our position files
+        extensions.emplace( FILEEXT::DrillFileExtension );                      // Fab drill files
+        extensions.emplace( "nc" );                                             // Fab drill files
+        extensions.emplace( "xnc" );                                            // Fab drill files
+        extensions.emplace( FILEEXT::IpcD356FileExtension );
+        extensions.emplace( FILEEXT::ReportFileExtension );
+        extensions.emplace( FILEEXT::NetlistFileExtension );
+        extensions.emplace( FILEEXT::PythonFileExtension );
+        extensions.emplace( FILEEXT::PdfFileExtension );
+        extensions.emplace( FILEEXT::TextFileExtension );
+        extensions.emplace( FILEEXT::SpiceFileExtension );                      // SPICE files
+        extensions.emplace( FILEEXT::SpiceSubcircuitFileExtension );            // SPICE files
+        extensions.emplace( FILEEXT::SpiceModelFileExtension );                 // SPICE files
+        extensions.emplace( FILEEXT::IbisFileExtension );
+        extensions.emplace( "pkg" );
+        extensions.emplace( FILEEXT::GencadFileExtension );
     }
 
-    fileExtensionRegex += ")";
-
-#undef EXT
-#undef NAME
-#undef EXT_NO_PIPE
-#undef NAME_NO_PIPE
+    // Gerber files (g?, g??, .gm12 (from protel export)).
+    wxRegEx gerberFiles( FILEEXT::GerberFileExtensionsRegex );
+    wxASSERT( gerberFiles.IsValid() );
 
     bool     success = true;
     wxString msg;
     wxString oldCwd = wxGetCwd();
 
-    wxFileName sourceDir( aSrcDir );
+    wxFileName sourceDir( aSrcDir, wxEmptyString, wxEmptyString );
 
-    wxSetWorkingDirectory( sourceDir.GetFullPath() );
+    wxSetWorkingDirectory( aSrcDir );
 
     wxFFileOutputStream ostream( aDestFile );
 
@@ -334,7 +256,6 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
 
     wxDir         projectDir( aSrcDir );
     wxString      currFilename;
-    wxArrayString files;
 
     if( !projectDir.IsOpened() )
     {
@@ -348,58 +269,92 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
         return false;
     }
 
-    try
+    size_t uncompressedBytes = 0;
+    PROJECT_ARCHIVER_DIR_ZIP_TRAVERSER traverser( aSrcDir );
+
+    projectDir.Traverse( traverser );
+
+    for( const wxString& fileName : traverser.GetFilesToArchive() )
     {
-        PROJECT_ARCHIVER_DIR_ZIP_TRAVERSER traverser( fileExtensionRegex, aSrcDir, zipstream,
-                                                        aReporter, aVerbose );
+        wxFileName fn( fileName );
+        wxString extLower = fn.GetExt().Lower();
+        wxString fileNameLower = fn.GetName().Lower();
+        bool archive = false;
 
-        projectDir.Traverse( traverser );
-
-        success = !traverser.GetErrorOccurred();
-
-        auto reportSize =
-                []( unsigned long aSize ) -> wxString
-                {
-                    constexpr float KB = 1024.0;
-                    constexpr float MB = KB * 1024.0;
-
-                    if( aSize >= MB )
-                        return wxString::Format( wxT( "%0.2f MB" ), aSize / MB );
-                    else if( aSize >= KB )
-                        return wxString::Format( wxT( "%0.2f KB" ), aSize / KB );
-                    else
-                        return wxString::Format( wxT( "%lu bytes" ), aSize );
-                };
-
-        size_t        zipBytesCnt       = ostream.GetSize();
-        unsigned long uncompressedBytes = traverser.GetUncompressedBytes();
-
-        if( zipstream.Close() )
+        if( !extLower.IsEmpty() )
         {
-            msg.Printf( _( "Zip archive '%s' created (%s uncompressed, %s compressed)." ),
-                        aDestFile,
-                        reportSize( uncompressedBytes ),
-                        reportSize( zipBytesCnt ) );
-            aReporter.Report( msg, RPT_SEVERITY_INFO );
+            if( ( extensions.find( extLower ) != extensions.end() )
+              || ( aIncludeExtraFiles && gerberFiles.Matches( extLower ) ) )
+                archive = true;
+        }
+        else if( !fileNameLower.IsEmpty() && ( files.find( fileNameLower ) != files.end() ) )
+        {
+                archive = true;
+        }
+
+        if( !archive )
+            continue;
+
+        wxFileSystem fsFile;
+        fn.MakeRelativeTo( aSrcDir );
+
+        wxString relativeFn = fn.GetFullPath();
+
+        // Read input file and add it to the zip file:
+        wxFSFile* infile = fsFile.OpenFile( relativeFn );
+
+        if( infile )
+        {
+            zipstream.PutNextEntry( relativeFn, infile->GetModificationTime() );
+            infile->GetStream()->Read( zipstream );
+            zipstream.CloseEntry();
+
+            uncompressedBytes += infile->GetStream()->GetSize();
+
+            if( aVerbose )
+            {
+                msg.Printf( _( "Archived file '%s'." ), relativeFn );
+                aReporter.Report( msg, RPT_SEVERITY_INFO );
+            }
         }
         else
         {
-            msg.Printf( wxT( "Failed to create file '%s'." ), aDestFile );
-            aReporter.Report( msg, RPT_SEVERITY_ERROR );
-            success = false;
+            if( aVerbose )
+            {
+                msg.Printf( _( "Failed to archive file '%s'." ), relativeFn );
+                aReporter.Report( msg, RPT_SEVERITY_ERROR );
+            }
         }
     }
-    catch( const std::regex_error& e )
+
+    auto reportSize =
+            []( size_t aSize ) -> wxString
+            {
+                constexpr float KB = 1024.0;
+                constexpr float MB = KB * 1024.0;
+
+                if( aSize >= MB )
+                    return wxString::Format( wxT( "%0.2f MB" ), aSize / MB );
+                else if( aSize >= KB )
+                    return wxString::Format( wxT( "%0.2f KB" ), aSize / KB );
+                else
+                    return wxString::Format( wxT( "%zu bytes" ), aSize );
+            };
+
+    size_t        zipBytesCnt       = ostream.GetSize();
+
+    if( zipstream.Close() )
     {
-        // Something bad happened here with the regex
-        wxASSERT_MSG( false, e.what() );
-
-        if( aVerbose )
-        {
-            msg.Printf( _( "Error: '%s'." ), e.what() );
-            aReporter.Report( msg, RPT_SEVERITY_ERROR );
-        }
-
+        msg.Printf( _( "Zip archive '%s' created (%s uncompressed, %s compressed)." ),
+                    aDestFile,
+                    reportSize( uncompressedBytes ),
+                    reportSize( zipBytesCnt ) );
+        aReporter.Report( msg, RPT_SEVERITY_INFO );
+    }
+    else
+    {
+        msg.Printf( wxT( "Failed to create file '%s'." ), aDestFile );
+        aReporter.Report( msg, RPT_SEVERITY_ERROR );
         success = false;
     }
 
